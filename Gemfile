@@ -39,6 +39,7 @@ group :development, :test do
   gem 'rspec-rails'
   gem 'capybara'
   gem 'rubocop-rails'
+  gem 'dxw-utils', git: 'https://github.com/dxw/dxw-utils'
 end
 
 group :development do
