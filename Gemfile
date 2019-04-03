@@ -38,6 +38,7 @@ group :development, :test do
 
   gem 'rspec-rails'
   gem 'capybara'
+  gem 'rubocop-rails'
 end
 
 group :development do
