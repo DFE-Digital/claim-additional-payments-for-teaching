@@ -1,0 +1,19 @@
+inherit_gem:
+  dxw-utils:
+    - dxw-rubocop.yml
+  rubocop-rails:
+    - config/rails.yml
+
+AllCops:
+  TargetRubyVersion: 2.5
+  Exclude:
+    - 'db/migrate/**/*'
+    - 'db/schema.rb'
+    - 'db/seeds.rb'
+    - 'bin/**/*'
+
+Style/StringLiterals:
+  Enabled: false
+
+Style/TrailingCommaInHashLiteral:
+  Enabled: false
