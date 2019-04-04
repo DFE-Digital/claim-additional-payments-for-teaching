@@ -1,7 +1,7 @@
 inherit_gem:
   dxw-utils:
     - dxw-rubocop.yml
-  rubocop-rails:
+  rubocop-rails_config:
     - config/rails.yml
 
 AllCops:

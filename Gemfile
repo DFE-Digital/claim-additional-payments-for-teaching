@@ -39,7 +39,7 @@ group :development, :test do
 
   gem 'rspec-rails'
   gem 'capybara'
-  gem 'rubocop-rails'
+  gem 'rubocop-rails_config'
   gem 'dxw-utils', git: 'https://github.com/dxw/dxw-utils'
   gem 'brakeman', require: false
 end
