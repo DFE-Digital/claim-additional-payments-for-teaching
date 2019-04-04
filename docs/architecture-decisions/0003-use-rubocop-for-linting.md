@@ -1,4 +1,4 @@
-# 2. Use RuboCop for linting Ruby code
+# 3. Use RuboCop for linting Ruby code
 
 Date: 2019-04-03
 
