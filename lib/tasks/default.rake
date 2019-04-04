@@ -1,1 +1,1 @@
-task default: %i[rubocop spec] if Rails.env.test? || Rails.env.development?
+task default: %i[rubocop brakeman:run spec] if Rails.env.test? || Rails.env.development?
