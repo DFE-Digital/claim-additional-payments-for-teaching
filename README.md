@@ -1,24 +1,39 @@
-# README
+# Teacher’s Payment Service
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+## Documentation
+Documentation can be found in the [docs](docs) directory.
 
-Things you may want to cover:
+### ADRs
+Architecture decision records can be found in the [architecture-decisions](docs/architecture-decisions) directory.
 
-* Ruby version
 
-* System dependencies
 
-* Configuration
+## Prerequisites
+- Ruby 2.5.3
+- PostgreSQL
 
-* Database creation
+## Setting up the app in development
 
-* Database initialization
+1. Run `bundle install` to install the gem dependencies
+2. Run `bundle exec rails db:setup` to set up the database development
+3. Run `bundle exec rails server` to launch the app on http://localhost:3000
 
-* How to run the test suite
+## Running specs and Rubocop
 
-* Services (job queues, cache servers, search engines, etc.)
+```bundle exec rake```
 
-* Deployment instructions
+### Rubocop rules
+From the dxw utils project:
 
-* ...
+https://github.com/dxw/dxw-utils
+
+## Access
+Both staging and production are protected by HTTP Basic Authentication, these details are pinned in the *dfe-teacher-payments* slack channel or can be found in the *Config Vars* in Heroku.
+
+### Staging
+
+https://dfe-teachers-payment-staging.herokuapp.com/
+
+### Production
+
+https://dfe-teachers-payment-prod.herokuapp.com/
