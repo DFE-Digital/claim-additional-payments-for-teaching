@@ -1,7 +1,9 @@
 <!DOCTYPE html>
 <html lang="en" class="govuk-template app-html-class">
   <head>
-    <title>DfeTeachersPaymentService</title>
+    <title>
+      <%= content_for(:page_title) || t(:service_name) %>
+    </title>
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
