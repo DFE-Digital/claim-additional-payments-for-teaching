@@ -9,7 +9,7 @@ Architecture decision records can be found in the [architecture-decisions](docs/
 
 
 ## Prerequisites
-- Ruby 2.5.3
+- Ruby 2.6.2
 - PostgreSQL
 
 ## Setting up the app in development
