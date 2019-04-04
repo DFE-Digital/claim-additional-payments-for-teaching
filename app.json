@@ -3,7 +3,10 @@
     "test": {
       "addons": [
         "heroku-postgresql:in-dyno"
-      ]
+      ],
+      "scripts": {
+        "test": "bundle exec rake default"
+      }
     }
   }
 }
