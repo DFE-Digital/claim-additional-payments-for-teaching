@@ -40,6 +40,7 @@ group :development, :test do
   gem 'rspec-rails'
   gem 'capybara'
   gem 'brakeman', require: false
+  gem "standard"
 end
 
 group :development do
