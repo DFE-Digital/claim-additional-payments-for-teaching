@@ -1,14 +1,16 @@
 # Teacher’s Payment Service
 
 ## Documentation
+
 Documentation can be found in the [docs](docs) directory.
 
 ### ADRs
-Architecture decision records can be found in the [architecture-decisions](docs/architecture-decisions) directory.
 
-
+Architecture decision records can be found in the
+[architecture-decisions](docs/architecture-decisions) directory.
 
 ## Prerequisites
+
 - Ruby 2.6.2
 - PostgreSQL
 
@@ -23,12 +25,16 @@ Architecture decision records can be found in the [architecture-decisions](docs/
 ```bundle exec rake```
 
 ### Code linting rules
+
 Using the standardrb gem:
 
 https://github.com/testdouble/standard
 
 ## Access
-Both staging and production are protected by HTTP Basic Authentication, these details are pinned in the *dfe-teacher-payments* slack channel or can be found in the *Config Vars* in Heroku.
+
+Both staging and production are protected by HTTP Basic Authentication, these
+details are pinned in the *dfe-teacher-payments* slack channel or can be found
+in the *Config Vars* in Heroku.
 
 ### Staging
 
