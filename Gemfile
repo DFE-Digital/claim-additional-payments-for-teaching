@@ -41,6 +41,7 @@ group :development, :test do
   gem "capybara"
   gem "brakeman", require: false
   gem "standard"
+  gem "bullet"
 end
 
 group :development do

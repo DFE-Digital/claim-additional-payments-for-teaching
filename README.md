@@ -27,6 +27,11 @@ From the dxw utils project:
 
 https://github.com/dxw/dxw-utils
 
+### N+1 query detection
+
+[Bullet](https://github.com/flyerhzm/bullet) runs around each spec. If it detects an N+1 query it will raise an
+exception and the tests will fail.
+
 ## Access
 Both staging and production are protected by HTTP Basic Authentication, these details are pinned in the *dfe-teacher-payments* slack channel or can be found in the *Config Vars* in Heroku.
 
