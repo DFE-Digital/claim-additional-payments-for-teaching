@@ -1,14 +1,16 @@
 # Teacher’s Payment Service
 
 ## Documentation
+
 Documentation can be found in the [docs](docs) directory.
 
 ### ADRs
-Architecture decision records can be found in the [architecture-decisions](docs/architecture-decisions) directory.
 
-
+Architecture decision records can be found in the
+[architecture-decisions](docs/architecture-decisions) directory.
 
 ## Prerequisites
+
 - Ruby 2.6.2
 - PostgreSQL
 
@@ -18,14 +20,15 @@ Architecture decision records can be found in the [architecture-decisions](docs/
 2. Run `bundle exec rails db:setup` to set up the database development
 3. Run `bundle exec rails server` to launch the app on http://localhost:3000
 
-## Running specs and Rubocop
+## Running specs, brakeman, and code linting
 
 ```bundle exec rake```
 
-### Rubocop rules
-From the dxw utils project:
+### Code linting rules
 
-https://github.com/dxw/dxw-utils
+Using the standardrb gem:
+
+https://github.com/testdouble/standard
 
 ### N+1 query detection
 
@@ -33,7 +36,10 @@ https://github.com/dxw/dxw-utils
 exception and the tests will fail.
 
 ## Access
-Both staging and production are protected by HTTP Basic Authentication, these details are pinned in the *dfe-teacher-payments* slack channel or can be found in the *Config Vars* in Heroku.
+
+Both staging and production are protected by HTTP Basic Authentication, these
+details are pinned in the *dfe-teacher-payments* slack channel or can be found
+in the *Config Vars* in Heroku.
 
 ### Staging
 
