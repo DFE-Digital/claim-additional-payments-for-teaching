@@ -1,0 +1,76 @@
+class School < ApplicationRecord
+  belongs_to :local_authority
+
+  validates :urn, presence: true
+  validates :name, presence: true
+  validates :phase, presence: true
+  validates :school_type_group, presence: true
+  validates :school_type, presence: true
+
+  PHASES = {
+    not_applicable: 0,
+    nursery: 1,
+    primary: 2,
+    middle_deemed_primary: 3,
+    secondary: 4,
+    middle_deemed_secondary: 5,
+    sixteen_plus: 6,
+    all_through: 7,
+  }
+
+  SCHOOL_TYPE_GROUPS = {
+    colleges: 1,
+    universities: 2,
+    independent_schools: 3,
+    la_maintained: 4,
+    special_schools: 5,
+    welsh_schools: 6,
+    other: 9,
+    academies: 10,
+    free_schools: 11,
+  }
+
+  SCHOOL_TYPES = {
+    community_school: 1,
+    voluntary_aided_school: 2,
+    voluntary_controlled_school: 3,
+    foundation_school: 5,
+    city_technology_college: 6,
+    community_special_school: 7,
+    non_maintained_special_school: 8,
+    other_independent_special_school: 10,
+    other_independent_school: 11,
+    foundation_special_school: 12,
+    pupil_referral_unit: 14,
+    local_authority_nursery_school: 15,
+    further_education: 18,
+    secure_unit: 24,
+    offshore_school: 25,
+    service_childrens_education: 26,
+    miscellaneous: 27,
+    academy_sponsor_led: 28,
+    higher_education_institution: 29,
+    welsh_establishment: 30,
+    sixth_form_centre: 31,
+    special_post_16_institutions: 32,
+    academy_special_sponsor_led: 33,
+    academy_converter: 34,
+    free_school: 35,
+    free_school_special: 36,
+    british_school_oversea: 37,
+    free_school_alternative_provider: 38,
+    free_school_16_to_19: 39,
+    university_technical_college: 40,
+    studio_school: 41,
+    academy_alternative_provision_converter: 42,
+    academy_alternative_provision_sponsor_led: 43,
+    academy_special_converter: 44,
+    academy_16_to_19_converter: 45,
+    academy_16_to_19_sponsor_led: 46,
+    institution_funded_by_other_government_department: 56,
+  }
+
+  enum phase: PHASES
+  enum school_type_group: SCHOOL_TYPE_GROUPS
+  enum school_type: SCHOOL_TYPES
+end
