@@ -42,6 +42,7 @@ group :development, :test do
   gem "brakeman", require: false
   gem "standard"
   gem "bullet"
+  gem "webmock"
 end
 
 group :development do
