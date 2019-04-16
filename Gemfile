@@ -43,6 +43,7 @@ group :development, :test do
   gem "standard"
   gem "bullet"
   gem "webmock"
+  gem "shoulda-matchers"
 end
 
 group :development do
