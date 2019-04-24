@@ -3,9 +3,9 @@ require "csv"
 
 class SchoolDataImporter
   def run
-    temp_csv_file = URI.parse(schools_csv_url).open
+    temp_csv_file = URI.parse(schools_csv_url).open("r:ISO-8859-1")
 
-    CSV.parse(temp_csv_file, headers: true, encoding: "windows-1251:utf-8").each do |row|
+    CSV.parse(temp_csv_file, headers: true).each do |row|
       school = row_to_school(row)
       school.save!
     end

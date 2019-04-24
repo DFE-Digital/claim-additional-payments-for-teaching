@@ -18,7 +18,7 @@ RSpec.describe SchoolDataImporter do
 
     context "when the download is successful" do
       it "imports each row as a school with associated Local Authority" do
-        school_data_importer.run
+        expect { school_data_importer.run }.to change { School.count }.by 2
 
         imported_school = School.find_by(urn: 106653)
         expect(imported_school.name).to eql("Penistone Grammar School")
@@ -28,6 +28,13 @@ RSpec.describe SchoolDataImporter do
         expect(imported_school.school_type_group).to eql("la_maintained")
         expect(imported_school.local_authority.code).to eql(370)
         expect(imported_school.local_authority.name).to eql("Barnsley")
+      end
+
+      it "correctly handles any Latin1 encoded characters in the data file" do
+        school_data_importer.run
+
+        imported_school = School.find_by(urn: 126416)
+        expect(imported_school.name).to eql("St Thomas à Becket Church of England Aided Primary School")
       end
 
       context "when the school data is invalid" do
