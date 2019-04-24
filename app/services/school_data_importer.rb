@@ -7,7 +7,7 @@ class SchoolDataImporter
 
     CSV.parse(temp_csv_file, headers: true, encoding: "windows-1251:utf-8").each do |row|
       school = row_to_school(row)
-      school.save
+      school.save!
     end
   end
 

@@ -30,6 +30,14 @@ RSpec.describe SchoolDataImporter do
         expect(imported_school.local_authority.name).to eql("Barnsley")
       end
 
+      context "when the school data is invalid" do
+        let(:example_csv_file) { File.open("spec/fixtures/example_bad_schools_data.csv") }
+
+        it "raises an ActiveRecord::RecordInvalid exception" do
+          expect { school_data_importer.run }.to raise_error(ActiveRecord::RecordInvalid)
+        end
+      end
+
       context "when the school already exists" do
         let!(:existing_school) { create(:school, urn: 106653, name: "Penistone Secondary School") }
 
