@@ -10,9 +10,34 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 0) do
+ActiveRecord::Schema.define(version: 2019_04_16_104000) do
 
   # These are extensions that must be enabled in order to support this database
+  enable_extension "pgcrypto"
   enable_extension "plpgsql"
+
+  create_table "local_authorities", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.integer "code"
+    t.string "name"
+    t.index ["code"], name: "index_local_authorities_on_code", unique: true
+  end
+
+  create_table "schools", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.integer "urn", null: false
+    t.string "name", null: false
+    t.string "street"
+    t.string "locality"
+    t.string "town"
+    t.string "county"
+    t.string "postcode"
+    t.integer "phase", null: false
+    t.integer "school_type_group", null: false
+    t.integer "school_type", null: false
+    t.uuid "local_authority_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["local_authority_id"], name: "index_schools_on_local_authority_id"
+    t.index ["urn"], name: "index_schools_on_urn", unique: true
+  end
 
 end
