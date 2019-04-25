@@ -35,6 +35,12 @@ https://github.com/testdouble/standard
 [Bullet](https://github.com/flyerhzm/bullet) runs around each spec. If it detects an N+1 query it will raise an
 exception and the tests will fail.
 
+## Service architecture
+
+The service architecture is currently defined and maintained here:
+
+  https://miro.com/app/board/o9J_kxw-xdU=/
+
 ## Access
 
 Both staging and production are protected by HTTP Basic Authentication, these
