@@ -1,4 +1,6 @@
 class ClaimsController < ApplicationController
+  before_action :send_unstarted_claiments_to_the_start, only: [:show, :update]
+
   def new
   end
 
@@ -25,7 +27,11 @@ class ClaimsController < ApplicationController
   end
 
   def current_claim
-    @current_claim ||= TslrClaim.find(session[:tslr_claim_id])
+    @current_claim ||= TslrClaim.find(session[:tslr_claim_id]) if session.key?(:tslr_claim_id)
   end
   helper_method :current_claim
+
+  def send_unstarted_claiments_to_the_start
+    redirect_to root_url unless current_claim.present?
+  end
 end

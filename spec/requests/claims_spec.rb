@@ -32,6 +32,13 @@ RSpec.describe "Claims", type: :request do
         expect(response.body).to include("Which school were you employed at")
       end
     end
+
+    context "when a claim hasn’t been started yet" do
+      it "redirects to the start page" do
+        get claim_path(:qts_year)
+        expect(:response).to redirect_to(root_path)
+      end
+    end
   end
 
   describe "claims#update request" do
@@ -44,6 +51,13 @@ RSpec.describe "Claims", type: :request do
         put claim_path(:qts_year), params: {tslr_claim: {qts_award_year: "2014-2015"}}
 
         expect(in_progress_claim.qts_award_year).to eq "2014-2015"
+      end
+    end
+
+    context "when a claim hasn’t been started yet" do
+      it "redirects to the start page" do
+        put claim_path(:qts_year), params: {tslr_claim: {qts_award_year: "2014-2015"}}
+        expect(:response).to redirect_to(root_path)
       end
     end
   end
