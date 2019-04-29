@@ -12,9 +12,25 @@ RSpec.describe "Claims", type: :request do
 
   describe "claims#create request" do
     it "creates a new TslrClaim and redirects to the QTS question" do
-      expect { post claim_path }.to change { TslrClaim.count }.by(1)
+      expect { post claims_path }.to change { TslrClaim.count }.by(1)
 
-      expect(response).to redirect_to(qts_year_claim_path)
+      expect(response).to redirect_to(claim_path(:qts_year))
+    end
+  end
+
+  describe "claims#show request" do
+    context "when a claim is already in progress" do
+      let(:in_progress_claim) { TslrClaim.order(:created_at).last }
+
+      before { post claims_path }
+
+      it "renders the requested page in the sequence" do
+        get claim_path(:qts_year)
+        expect(response.body).to include("Which academic year were you awarded qualified teacher status")
+
+        get claim_path(:claim_school)
+        expect(response.body).to include("Which school were you employed at")
+      end
     end
   end
 
@@ -22,10 +38,10 @@ RSpec.describe "Claims", type: :request do
     context "when a claim is already in progress" do
       let(:in_progress_claim) { TslrClaim.order(:created_at).last }
 
-      before { post claim_path }
+      before { post claims_path }
 
       it "updates the claim with the submitted form data" do
-        put claim_path, params: {tslr_claim: {qts_award_year: "2014-2015"}}
+        put claim_path(:qts_year), params: {tslr_claim: {qts_award_year: "2014-2015"}}
 
         expect(in_progress_claim.qts_award_year).to eq "2014-2015"
       end
