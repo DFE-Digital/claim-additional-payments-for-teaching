@@ -5,6 +5,8 @@
         <%= form.label :qts_award_year, "Which academic year were you awarded qualified teacher status (QTS)?" %>
       </h1>
 
+      <%= render("shared/error_summary", instance: current_claim) if current_claim.errors.any? %>
+
       <span id="tslr_claim_qts_award_year-hint" class="govuk-hint">
         You are only eligable to claim back student loan repayments if you qualified
         on or after September 1st 2013.

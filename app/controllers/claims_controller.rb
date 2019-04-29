@@ -16,8 +16,12 @@ class ClaimsController < ApplicationController
   end
 
   def update
-    current_claim.update_attributes(claim_params)
-    redirect_to claim_path("claim-school")
+    current_claim.attributes = claim_params
+    if current_claim.save(context: params[:slug].to_sym)
+      redirect_to claim_path("claim-school")
+    else
+      render claim_page_template
+    end
   end
 
   private

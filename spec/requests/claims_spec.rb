@@ -52,6 +52,12 @@ RSpec.describe "Claims", type: :request do
 
         expect(in_progress_claim.qts_award_year).to eq "2014-2015"
       end
+
+      it "makes sure validations appropriate to the context are run" do
+        put claim_path("qts-year"), params: {tslr_claim: {qts_award_year: nil}}
+
+        expect(response.body).to include("Select the academic year you were awarded qualified teacher status")
+      end
     end
 
     context "when a claim hasn’t been started yet" do
