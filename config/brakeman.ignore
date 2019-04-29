@@ -1,0 +1,26 @@
+{
+  "ignored_warnings": [
+    {
+      "warning_type": "Dynamic Render Path",
+      "warning_code": 15,
+      "fingerprint": "d295fbb2c23775e4923257fd12543b72b959f0b21fd678dc50373e1c62e2ce24",
+      "check_name": "Render",
+      "message": "Render path contains parameter value",
+      "file": "app/controllers/claims_controller.rb",
+      "line": 15,
+      "link": "https://brakemanscanner.org/docs/warning_types/dynamic_render_path/",
+      "code": "render(action => params[:slug], {})",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "ClaimsController",
+        "method": "show"
+      },
+      "user_input": "params[:slug]",
+      "confidence": "High",
+      "note": "We are using a routing constraint to only route slugs that are in a whitelist, making this a false-positive"
+    }
+  ],
+  "updated": "2019-04-29 15:28:26 +0100",
+  "brakeman_version": "4.5.0"
+}
