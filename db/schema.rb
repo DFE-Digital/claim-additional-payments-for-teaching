@@ -40,4 +40,9 @@ ActiveRecord::Schema.define(version: 2019_04_16_104000) do
     t.index ["urn"], name: "index_schools_on_urn", unique: true
   end
 
+  create_table "tslr_claims", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
 end

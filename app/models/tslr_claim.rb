@@ -1,0 +1,2 @@
+class TslrClaim < ApplicationRecord
+end
