@@ -3,9 +3,10 @@ Rails.application.routes.draw do
   get "start/index"
   root "claims#new"
 
-  resource :claim, only: [:new, :create] do
+  resource :claim, only: [:new, :create, :update] do
     member do
       get :qts_year
+      get :claim_school
     end
   end
 end

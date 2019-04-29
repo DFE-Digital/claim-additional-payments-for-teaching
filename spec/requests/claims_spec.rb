@@ -17,4 +17,18 @@ RSpec.describe "Claims", type: :request do
       expect(response).to redirect_to(qts_year_claim_path)
     end
   end
+
+  describe "claims#update request" do
+    context "when a claim is already in progress" do
+      let(:in_progress_claim) { TslrClaim.order(:created_at).last }
+
+      before { post claim_path }
+
+      it "updates the claim with the submitted form data" do
+        put claim_path, params: {tslr_claim: {qts_award_year: "2014-2015"}}
+
+        expect(in_progress_claim.qts_award_year).to eq "2014-2015"
+      end
+    end
+  end
 end

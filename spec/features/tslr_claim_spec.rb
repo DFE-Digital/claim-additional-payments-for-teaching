@@ -6,6 +6,13 @@ RSpec.feature "Teacher Student Loan Repayments claims" do
 
     click_on "Agree and continue"
 
+    claim = TslrClaim.order(:created_at).last
+
     expect(page).to have_text("Which academic year were you awarded qualified teacher status")
+    select "September 1 2014 - August 31 2015", from: :tslr_claim_qts_award_year
+    click_on "Continue"
+
+    expect(claim.reload.qts_award_year).to eql("2014-2015")
+    expect(page).to have_text("Which school were you employed at between")
   end
 end

@@ -1,8 +1,22 @@
-<h1 class="govuk-heading-xl">
-  Which academic year were you awarded qualified teacher status (QTS)?
-</h1>
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= form_for current_claim, url: claim_path do |form| %>
+      <h1 class="govuk-heading-xl">
+        <%= form.label :qts_award_year, "Which academic year were you awarded qualified teacher status (QTS)?" %>
+      </h1>
 
-<p class="govuk-body">
-  You are only eligable to claim back student loan repayments if you qualified
-  after September 1st 2013.
-</p>
+      <span id="tslr_claim_qts_award_year-hint" class="govuk-hint">
+        You are only eligable to claim back student loan repayments if you qualified
+        on or after September 1st 2013.
+      </span>
+
+      <div class="govuk-form-group">
+        <%= form.select :qts_award_year, options_for_qts_award_year, { include_blank: true }, class: "govuk-select" %>
+      </div>
+
+      <div class="govuk-form-group">
+        <%= form.submit "Continue", class: "govuk-button" %>
+      </div>
+    <% end %>
+  </div>
+</div>
