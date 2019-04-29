@@ -17,7 +17,7 @@ RSpec.feature "Teacher Student Loan Repayments claims" do
   end
 
   scenario "Teacher cannot go to mid-claim page before starting a claim" do
-    visit claim_path(:qts_year)
+    visit claim_path("qts-year")
     expect(page).to have_current_path(root_path)
   end
 end

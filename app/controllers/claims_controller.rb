@@ -8,22 +8,26 @@ class ClaimsController < ApplicationController
     claim = TslrClaim.create!
     session[:tslr_claim_id] = claim.to_param
 
-    redirect_to claim_path(:qts_year)
+    redirect_to claim_path("qts-year")
   end
 
   def show
-    render params[:slug]
+    render claim_page_template
   end
 
   def update
     current_claim.update_attributes(claim_params)
-    redirect_to claim_path(:claim_school)
+    redirect_to claim_path("claim-school")
   end
 
   private
 
   def claim_params
     params.require(:tslr_claim).permit(:qts_award_year)
+  end
+
+  def claim_page_template
+    params[:slug].underscore
   end
 
   def current_claim
