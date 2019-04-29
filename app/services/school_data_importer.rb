@@ -1,13 +1,22 @@
-require "open-uri"
+require "net/http"
 require "csv"
 
 class SchoolDataImporter
   def run
-    temp_csv_file = URI.parse(schools_csv_url).open("r:ISO-8859-1")
-
-    CSV.parse(temp_csv_file, headers: true).each do |row|
+    CSV.foreach(schools_data_file.path, headers: true, encoding: "ISO-8859-1:UTF-8") do |row|
       school = row_to_school(row)
       school.save!
+    end
+  end
+
+  def schools_data_file
+    @schools_data_file ||= begin
+      response = Net::HTTP.get_response(URI(schools_csv_url))
+      body = response.body.force_encoding("ISO-8859-1")
+      file = Tempfile.new(["school_data_", ".csv"], encoding: "ISO-8859-1")
+      file.write(body)
+      file.close
+      file
     end
   end
 

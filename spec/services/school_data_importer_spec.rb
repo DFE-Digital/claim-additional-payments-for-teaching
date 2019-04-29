@@ -68,4 +68,18 @@ RSpec.describe SchoolDataImporter do
       end
     end
   end
+
+  describe "#schools_data_file" do
+    let(:date_string) { Time.zone.now.strftime("%Y%m%d") }
+    let(:gias_csv_url) { "http://ea-edubase-api-prod.azurewebsites.net/edubase/edubasealldata#{date_string}.csv" }
+    let(:example_csv_file) { File.open("spec/fixtures/example_schools_data.csv") }
+    let!(:request) { stub_request(:get, gias_csv_url).to_return(body: example_csv_file) }
+
+    it "returns the GIAS data as a Tempfile (and not StringIO) so CSV.foreach can be used to stream-read the data" do
+      file = school_data_importer.schools_data_file
+
+      expect(file).to be_a(Tempfile)
+      expect(FileUtils.identical?(file.path, example_csv_file.path)).to be_truthy
+    end
+  end
 end
