@@ -40,4 +40,10 @@ ActiveRecord::Schema.define(version: 2019_04_16_104000) do
     t.index ["urn"], name: "index_schools_on_urn", unique: true
   end
 
+  create_table "tslr_claims", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "qts_award_year"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
 end
