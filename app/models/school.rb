@@ -73,4 +73,8 @@ class School < ApplicationRecord
   enum phase: PHASES
   enum school_type_group: SCHOOL_TYPE_GROUPS
   enum school_type: SCHOOL_TYPES
+
+  def self.search(search_term)
+    where("name ILIKE ?", "%#{sanitize_sql_like(search_term)}%")
+  end
 end

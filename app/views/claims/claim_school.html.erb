@@ -4,6 +4,23 @@
       Which school were you employed at between 6 April XXXX and 5 April XXXX?
     </h1>
 
-    <p class="govuk-body">Coming next...</p>
+    <%= form_tag(claim_path("claim-school"), method: :get) do %>
+      <div class="govuk-form-group">
+        <%= label_tag :school_search, "School name", class: "govuk-label" %>
+        <%= text_field_tag :school_search, params[:school_search], class: "govuk-input" %>
+      </div>
+
+      <div class="govuk-form-group">
+        <%= submit_tag "Search", class: "govuk-button" %>
+      </div>
+    <% end %>
+
+    <% if @schools.present? %>
+      <ul>
+        <% @schools.each do |school| %>
+          <li><%= school.name %></li>
+        <% end %>
+      </ul>
+    <% end %>
   </div>
 </div>

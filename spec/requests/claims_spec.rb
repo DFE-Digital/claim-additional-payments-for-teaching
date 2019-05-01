@@ -31,6 +31,15 @@ RSpec.describe "Claims", type: :request do
         get claim_path("claim-school")
         expect(response.body).to include("Which school were you employed at")
       end
+
+      context "when searching for a school on the claim-school page" do
+        it "searchers for schools using the search term" do
+          get claim_path("claim-school"), params: {school_search: "Penistone"}
+
+          expect(response.body).to include schools(:penistone_grammer_school).name
+          expect(response.body).not_to include schools(:hampstead_school).name
+        end
+      end
     end
 
     context "when a claim hasn’t been started yet" do

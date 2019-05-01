@@ -14,6 +14,11 @@ RSpec.feature "Teacher Student Loan Repayments claims" do
 
     expect(claim.reload.qts_award_year).to eql("2014-2015")
     expect(page).to have_text("Which school were you employed at between")
+
+    fill_in "School name", with: "Penistone"
+    click_on "Search"
+
+    expect(page).to have_text("Penistone Grammer School")
   end
 
   scenario "Teacher cannot go to mid-claim page before starting a claim" do

@@ -12,6 +12,9 @@ class ClaimsController < ApplicationController
   end
 
   def show
+    if params[:school_search]
+      @schools = School.search(params[:school_search])
+    end
     render claim_page_template
   end
 
