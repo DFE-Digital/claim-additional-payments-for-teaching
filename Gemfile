@@ -24,6 +24,9 @@ gem "jbuilder", "~> 2.5"
 # Use Gov UK Kit
 gem "dxw_govuk_frontend_rails"
 
+# Use Rollbar
+gem "rollbar"
+
 # Use ActiveStorage variant
 # gem 'mini_magick', '~> 4.8'
 
