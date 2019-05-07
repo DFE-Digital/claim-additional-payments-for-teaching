@@ -11,7 +11,7 @@ RSpec.describe School, type: :model do
 
   describe ".search" do
     it "return schools matching the search term" do
-      expect(School.search("Penistone")).to match_array([schools(:penistone_grammer_school)])
+      expect(School.search("Penistone")).to match_array([schools(:penistone_grammar_school)])
     end
   end
 end

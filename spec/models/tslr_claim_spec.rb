@@ -13,4 +13,13 @@ RSpec.describe TslrClaim, type: :model do
       end
     end
   end
+
+  context "when saving in the “claim-school” validation context" do
+    let(:custom_validation_context) { :"claim-school" }
+
+    it "it validates the claim_school" do
+      expect(TslrClaim.new).not_to be_valid(custom_validation_context)
+      expect(TslrClaim.new(claim_school: schools(:penistone_grammar_school))).to be_valid(custom_validation_context)
+    end
+  end
 end

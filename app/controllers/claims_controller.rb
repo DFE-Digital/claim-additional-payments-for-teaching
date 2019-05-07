@@ -21,7 +21,11 @@ class ClaimsController < ApplicationController
   def update
     current_claim.attributes = claim_params
     if current_claim.save(context: params[:slug].to_sym)
-      redirect_to claim_path("claim-school")
+      if params[:slug] == "qts-year"
+        redirect_to claim_path("claim-school")
+      elsif params[:slug] == "claim-school"
+        redirect_to claim_path("still-teaching")
+      end
     else
       render claim_page_template
     end
@@ -30,7 +34,7 @@ class ClaimsController < ApplicationController
   private
 
   def claim_params
-    params.require(:tslr_claim).permit(:qts_award_year)
+    params.require(:tslr_claim).permit(:qts_award_year, :claim_school_id)
   end
 
   def claim_page_template

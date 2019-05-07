@@ -3,7 +3,7 @@ Rails.application.routes.draw do
   get "start/index"
   root "claims#new"
 
-  constraints slug: /qts-year|claim-school/ do
+  constraints slug: /qts-year|claim-school|still-teaching/ do
     resources :claims, only: [:new, :create, :show, :update], param: :slug
   end
 end

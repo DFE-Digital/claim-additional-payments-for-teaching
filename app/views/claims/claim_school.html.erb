@@ -4,23 +4,43 @@
       Which school were you employed at between 6 April XXXX and 5 April XXXX?
     </h1>
 
-    <%= form_tag(claim_path("claim-school"), method: :get) do %>
-      <div class="govuk-form-group">
-        <%= label_tag :school_search, "School name", class: "govuk-label" %>
-        <%= text_field_tag :school_search, params[:school_search], class: "govuk-input" %>
-      </div>
+    <% if @schools.blank? %>
 
-      <div class="govuk-form-group">
-        <%= submit_tag "Search", class: "govuk-button" %>
-      </div>
-    <% end %>
+      <span id="school-search-hint" class="govuk-hint">
+        Search for the school name.
+      </span>
+      <%= form_tag(claim_path("claim-school"), method: :get) do %>
+        <div class="govuk-form-group">
+          <%= label_tag :school_search, "School name", class: "govuk-label" %>
+          <%= text_field_tag :school_search, params[:school_search], class: "govuk-input" %>
+        </div>
+        <div class="govuk-form-group">
+          <%= submit_tag "Search", class: "govuk-button" %>
+        </div>
+      <% end %>
 
-    <% if @schools.present? %>
-      <ul>
-        <% @schools.each do |school| %>
-          <li><%= school.name %></li>
-        <% end %>
-      </ul>
+    <% else %>
+
+      <span id="school-search-result-hint" class="govuk-hint">
+        Select your school from the search results.
+      </span>
+      <%= form_for current_claim, url: claim_path do |form| %>
+        <div class="govuk-form-group">
+          <fieldset class="govuk-fieldset" aria-describedby="school-search-result-hint">
+            <div class="govuk-radios">
+              <%= form.collection_radio_buttons :claim_school_id, @schools, :id, :name do |b| %>
+                <div class="govuk-radios__item">
+                  <%= b.radio_button( class: "govuk-radios__input") %>
+                  <%= b.label class: "govuk-label govuk-radios__label"  %>
+                </div>
+              <% end %>
+            </div>
+          </fieldset>
+        </div>
+        <%= form.submit "Continue", class: "govuk-button" %>
+        <%= link_to "Search again", claim_path, class: "govuk-button govuk-button--secondary" %>
+      <% end %>
+
     <% end %>
   </div>
 </div>

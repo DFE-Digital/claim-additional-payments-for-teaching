@@ -36,8 +36,9 @@ RSpec.describe "Claims", type: :request do
         it "searchers for schools using the search term" do
           get claim_path("claim-school"), params: {school_search: "Penistone"}
 
-          expect(response.body).to include schools(:penistone_grammer_school).name
+          expect(response.body).to include schools(:penistone_grammar_school).name
           expect(response.body).not_to include schools(:hampstead_school).name
+          expect(response.body).to include "Continue"
         end
       end
     end
