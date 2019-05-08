@@ -77,4 +77,8 @@ class School < ApplicationRecord
   def self.search(search_term)
     where("name ILIKE ?", "%#{sanitize_sql_like(search_term)}%")
   end
+
+  def address
+    [street, locality, town, county, postcode].reject(&:blank?).join(", ")
+  end
 end

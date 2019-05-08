@@ -33,8 +33,9 @@
             <div class="govuk-radios">
               <%= form.collection_radio_buttons :claim_school_id, @schools, :id, :name do |b| %>
                 <div class="govuk-radios__item">
-                  <%= b.radio_button( class: "govuk-radios__input") %>
-                  <%= b.label class: "govuk-label govuk-radios__label"  %>
+                  <%= b.radio_button class: "govuk-radios__input" %>
+                  <%= b.label class: "govuk-label govuk-radios__label govuk-label--s" %>
+                  <span class="govuk-hint govuk-radios__hint"><%= b.object.address %></span>
                 </div>
               <% end %>
             </div>
