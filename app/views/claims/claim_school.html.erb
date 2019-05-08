@@ -28,6 +28,8 @@
         Select your school from the search results.
       </span>
       <%= form_for current_claim, url: claim_path do |form| %>
+        <%= hidden_field_tag :school_search, params[:school_search] %>
+
         <div class="govuk-form-group">
           <fieldset class="govuk-fieldset" aria-describedby="school-search-result-hint">
             <div class="govuk-radios">

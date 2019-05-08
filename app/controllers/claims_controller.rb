@@ -25,7 +25,7 @@ class ClaimsController < ApplicationController
         redirect_to claim_path("still-teaching")
       end
     else
-      render claim_page_template
+      show
     end
   end
 

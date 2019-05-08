@@ -76,6 +76,17 @@ RSpec.describe "Claims", type: :request do
 
         expect(response.body).to include("Select the academic year you were awarded qualified teacher status")
       end
+
+      context "having searched for a school but not selected a school from the results on the claim-school page" do
+        it "re-renders the school search results with an error message" do
+          put claim_path("claim-school"), params: {school_search: "peniston", tslr_claim: {claim_school_id: ""}}
+
+          expect(response).to be_successful
+          expect(response.body).to include("There is a problem")
+          expect(response.body).to include("Select a school from the list")
+          expect(response.body).to include(schools(:penistone_grammar_school).name)
+        end
+      end
     end
 
     context "when a claim hasn’t been started yet" do
