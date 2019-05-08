@@ -12,9 +12,7 @@ class ClaimsController < ApplicationController
   end
 
   def show
-    if params[:school_search]
-      @schools = School.search(params[:school_search])
-    end
+    perform_non_js_school_search if params[:school_search]
     render claim_page_template
   end
 
@@ -32,6 +30,14 @@ class ClaimsController < ApplicationController
   end
 
   private
+
+  def perform_non_js_school_search
+    if params[:school_search].length > 3
+      @schools = School.search(params[:school_search])
+    else
+      current_claim.errors.add(:base, "Search for the school name with a minimum of four characters")
+    end
+  end
 
   def claim_params
     params.require(:tslr_claim).permit(:qts_award_year, :claim_school_id)

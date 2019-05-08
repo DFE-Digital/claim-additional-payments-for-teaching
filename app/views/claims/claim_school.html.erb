@@ -1,5 +1,8 @@
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
+
+    <%= render("shared/error_summary", instance: current_claim) if current_claim.errors.any? %>
+
     <h1 class="govuk-heading-xl">
       Which school were you employed at between 6 April XXXX and 5 April XXXX?
     </h1>
@@ -7,7 +10,7 @@
     <% if @schools.blank? %>
 
       <span id="school-search-hint" class="govuk-hint">
-        Search for the school name.
+        Search for the school name, use at least four characters.
       </span>
       <%= form_tag(claim_path("claim-school"), method: :get) do %>
         <div class="govuk-form-group">
