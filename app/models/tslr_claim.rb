@@ -9,6 +9,12 @@ class TslrClaim < ApplicationRecord
     "2019-2020",
   ].freeze
 
+  enum employment_status: {
+    claim_school: 0,
+    different_school: 1,
+    no_school: 2,
+  }, _prefix: :employed_at
+
   belongs_to :claim_school, optional: true, class_name: "School"
   validates :claim_school, presence: {message: "Select a school from the list"}, on: :"claim-school"
 

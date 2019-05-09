@@ -22,4 +22,19 @@ RSpec.describe TslrClaim, type: :model do
       expect(TslrClaim.new(claim_school: schools(:penistone_grammar_school))).to be_valid(custom_validation_context)
     end
   end
+
+  describe "#employment_status" do
+    it "provides an enum that captures the claiment’s employment status" do
+      claim = TslrClaim.new
+
+      claim.employment_status = :claim_school
+      expect(claim.employed_at_claim_school?).to eq true
+      expect(claim.employed_at_different_school?).to eq false
+      expect(claim.employed_at_no_school?).to eq false
+    end
+
+    it "rejects invalid employment statuses" do
+      expect { TslrClaim.new(employment_status: :nonsense) }.to raise_error(ArgumentError)
+    end
+  end
 end
