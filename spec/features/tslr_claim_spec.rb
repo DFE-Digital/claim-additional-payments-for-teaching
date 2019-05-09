@@ -22,7 +22,7 @@ RSpec.feature "Teacher Student Loan Repayments claims" do
     click_on "Continue"
 
     expect(claim.reload.claim_school).to eql schools(:penistone_grammar_school)
-    expect(page).to have_text("Are you still employed to teach at a school in the UK")
+    expect(page).to have_text("Are you still employed to teach at a school in England")
   end
 
   scenario "Teacher cannot go to mid-claim page before starting a claim" do
