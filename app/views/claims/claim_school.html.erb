@@ -9,9 +9,16 @@
 
     <% if @schools.blank? %>
 
-      <span id="school-search-hint" class="govuk-hint">
-        Search for the school name, use at least four characters.
-      </span>
+      <% if params[:school_search].present? && current_claim.errors.empty? %>
+        <p class="govuk-body">
+          <strong>No results match that search term. Try again.</strong>
+        </p>
+      <% else %>
+        <span id="school-search-hint" class="govuk-hint">
+          Search for the school name, use at least four characters.
+        </span>
+      <% end %>
+
       <%= form_tag(claim_path("claim-school"), method: :get) do %>
         <div class="govuk-form-group">
           <%= label_tag :school_search, "School name", class: "govuk-label" %>
