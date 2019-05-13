@@ -1,6 +1,9 @@
 require "rails_helper"
 
 RSpec.describe TslrClaim, type: :model do
+  it { should belong_to(:claim_school).optional }
+  it { should belong_to(:current_school).optional }
+
   context "when saving in the “qts-year” validation context" do
     let(:custom_validation_context) { :"qts-year" }
 

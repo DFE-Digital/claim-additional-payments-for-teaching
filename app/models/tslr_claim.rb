@@ -23,6 +23,7 @@ class TslrClaim < ApplicationRecord
   }, _prefix: :employed_at
 
   belongs_to :claim_school, optional: true, class_name: "School"
+  belongs_to :current_school, optional: true, class_name: "School"
 
   validates :claim_school,      on: :"claim-school", presence: {message: "Select a school from the list"}
   validates :qts_award_year,    on: :"qts-year", inclusion: {in: VALID_QTS_YEARS, message: "Select the academic year you were awarded qualified teacher status"}
