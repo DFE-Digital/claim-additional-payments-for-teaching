@@ -9,5 +9,8 @@ class TslrClaim < ApplicationRecord
     "2019-2020",
   ].freeze
 
+  belongs_to :claim_school, optional: true, class_name: "School"
+  validates :claim_school, presence: {message: "Select a school from the list"}, on: :"claim-school"
+
   validates :qts_award_year, inclusion: {in: VALID_QTS_YEARS, message: "Select the academic year you were awarded qualified teacher status"}, on: :"qts-year"
 end

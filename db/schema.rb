@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_04_16_104000) do
+ActiveRecord::Schema.define(version: 2019_05_02_093523) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -44,6 +44,9 @@ ActiveRecord::Schema.define(version: 2019_04_16_104000) do
     t.string "qts_award_year"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.uuid "claim_school_id"
+    t.index ["claim_school_id"], name: "index_tslr_claims_on_claim_school_id"
   end
 
+  add_foreign_key "tslr_claims", "schools", column: "claim_school_id"
 end
