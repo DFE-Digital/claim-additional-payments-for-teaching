@@ -3,6 +3,7 @@ class TslrClaim < ApplicationRecord
     "qts-year",
     "claim-school",
     "still-teaching",
+    "current-school",
     "subject-percentage",
   ].freeze
 
@@ -30,4 +31,10 @@ class TslrClaim < ApplicationRecord
   validates :employment_status, on: :"still-teaching", presence: {message: "Choose the option that describes your current employment status"}
 
   delegate :name, to: :claim_school, prefix: true, allow_nil: true
+
+  def page_sequence
+    PAGE_SEQUENCE.dup.tap do |sequence|
+      sequence.delete("current-school") if employed_at_claim_school?
+    end
+  end
 end

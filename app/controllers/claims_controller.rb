@@ -28,8 +28,8 @@ class ClaimsController < ApplicationController
   private
 
   def next_slug
-    current_slug_index = TslrClaim::PAGE_SEQUENCE.index(params[:slug])
-    TslrClaim::PAGE_SEQUENCE[current_slug_index + 1]
+    current_slug_index = current_claim.page_sequence.index(params[:slug])
+    current_claim.page_sequence[current_slug_index + 1]
   end
 
   def perform_non_js_school_search
@@ -41,7 +41,7 @@ class ClaimsController < ApplicationController
   end
 
   def claim_params
-    params.require(:tslr_claim).permit(:qts_award_year, :claim_school_id, :employment_status)
+    params.require(:tslr_claim).permit(:qts_award_year, :claim_school_id, :employment_status, :current_school_id)
   end
 
   def claim_page_template
