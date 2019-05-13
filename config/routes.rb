@@ -7,4 +7,7 @@ Rails.application.routes.draw do
   end
   get "/claim/ineligible", to: "claims#ineligible", as: :ineligible_claim
   get "/claim/timeout", to: "claims#timeout", as: :timeout_claim
+
+  get "admin", to: "admin#index"
+  resource :sessions, only: [:new, :create]
 end
