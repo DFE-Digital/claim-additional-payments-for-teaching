@@ -28,9 +28,8 @@ class ClaimsController < ApplicationController
   private
 
   def next_slug
-    sequence = ["qts-year", "claim-school", "still-teaching", "subject-percentage"]
-    current_slug_index = sequence.index(params[:slug])
-    sequence[current_slug_index + 1]
+    current_slug_index = TslrClaim::PAGE_SEQUENCE.index(params[:slug])
+    TslrClaim::PAGE_SEQUENCE[current_slug_index + 1]
   end
 
   def perform_non_js_school_search

@@ -1,4 +1,11 @@
 class TslrClaim < ApplicationRecord
+  PAGE_SEQUENCE = [
+    "qts-year",
+    "claim-school",
+    "still-teaching",
+    "subject-percentage",
+  ].freeze
+
   VALID_QTS_YEARS = [
     "2013-2014",
     "2014-2015",
