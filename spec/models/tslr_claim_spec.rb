@@ -46,6 +46,36 @@ RSpec.describe TslrClaim, type: :model do
     it "rejects invalid employment statuses" do
       expect { TslrClaim.new(employment_status: :nonsense) }.to raise_error(ArgumentError)
     end
+
+    context "when set to :claim_school" do
+      it "automatically sets current_school to the claim_school" do
+        claim = TslrClaim.new(claim_school: schools(:penistone_grammar_school))
+        claim.employment_status = :claim_school
+        claim.save!
+
+        expect(claim.current_school).to eql(schools(:penistone_grammar_school))
+      end
+    end
+
+    context "when changed to :different_school" do
+      it "automatically resets current_school to nil" do
+        claim = TslrClaim.new(claim_school: schools(:penistone_grammar_school), current_school: schools(:penistone_grammar_school), employment_status: :claim_school)
+        claim.employment_status = :different_school
+        claim.save!
+
+        expect(claim.current_school).to be_nil
+      end
+    end
+
+    context "when value is :different_school" do
+      it "does not automatically reset current_school if employment_status hasn’t changed" do
+        claim = TslrClaim.create!(claim_school: schools(:penistone_grammar_school), employment_status: :different_school)
+        claim.current_school = schools(:hampstead_school)
+        claim.save!
+
+        expect(claim.current_school).to eql(schools(:hampstead_school))
+      end
+    end
   end
 
   describe "#claim_school_name" do

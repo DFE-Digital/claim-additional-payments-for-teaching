@@ -51,5 +51,6 @@ Rails.application.configure do
     Bullet.enable = true
     Bullet.bullet_logger = true
     Bullet.raise = true
+    Bullet.add_whitelist type: :unused_eager_loading, class_name: "TslrClaim", association: :current_school
   end
 end

@@ -30,11 +30,17 @@ class TslrClaim < ApplicationRecord
   validates :qts_award_year,    on: :"qts-year", inclusion: {in: VALID_QTS_YEARS, message: "Select the academic year you were awarded qualified teacher status"}
   validates :employment_status, on: :"still-teaching", presence: {message: "Choose the option that describes your current employment status"}
 
+  before_save :update_current_school, if: :employment_status_changed?
+
   delegate :name, to: :claim_school, prefix: true, allow_nil: true
 
   def page_sequence
     PAGE_SEQUENCE.dup.tap do |sequence|
       sequence.delete("current-school") if employed_at_claim_school?
     end
+  end
+
+  def update_current_school
+    self.current_school = employed_at_claim_school? ? claim_school : nil
   end
 end
