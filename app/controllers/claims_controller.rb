@@ -19,19 +19,19 @@ class ClaimsController < ApplicationController
   def update
     current_claim.attributes = claim_params
     if current_claim.save(context: params[:slug].to_sym)
-      if params[:slug] == "qts-year"
-        redirect_to claim_path("claim-school")
-      elsif params[:slug] == "claim-school"
-        redirect_to claim_path("still-teaching")
-      elsif params[:slug] == "still-teaching"
-        redirect_to claim_path("subject-percentage")
-      end
+      redirect_to claim_path(next_slug)
     else
       show
     end
   end
 
   private
+
+  def next_slug
+    sequence = ["qts-year", "claim-school", "still-teaching", "subject-percentage"]
+    current_slug_index = sequence.index(params[:slug])
+    sequence[current_slug_index + 1]
+  end
 
   def perform_non_js_school_search
     if params[:school_search].length > 3
