@@ -23,6 +23,8 @@ class ClaimsController < ApplicationController
         redirect_to claim_path("claim-school")
       elsif params[:slug] == "claim-school"
         redirect_to claim_path("still-teaching")
+      elsif params[:slug] == "still-teaching"
+        redirect_to claim_path("subject-percentage")
       end
     else
       show
@@ -40,7 +42,7 @@ class ClaimsController < ApplicationController
   end
 
   def claim_params
-    params.require(:tslr_claim).permit(:qts_award_year, :claim_school_id)
+    params.require(:tslr_claim).permit(:qts_award_year, :claim_school_id, :employment_status)
   end
 
   def claim_page_template

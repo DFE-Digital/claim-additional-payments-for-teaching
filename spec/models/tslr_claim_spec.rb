@@ -23,6 +23,13 @@ RSpec.describe TslrClaim, type: :model do
     end
   end
 
+  context "when saving in the “still-teaching” validation context" do
+    it "validates employment_status has been provided" do
+      expect(TslrClaim.new).not_to be_valid(:"still-teaching")
+      expect(TslrClaim.new(employment_status: :claim_school)).to be_valid(:"still-teaching")
+    end
+  end
+
   describe "#employment_status" do
     it "provides an enum that captures the claiment’s employment status" do
       claim = TslrClaim.new
@@ -35,6 +42,17 @@ RSpec.describe TslrClaim, type: :model do
 
     it "rejects invalid employment statuses" do
       expect { TslrClaim.new(employment_status: :nonsense) }.to raise_error(ArgumentError)
+    end
+  end
+
+  describe "#claim_school_name" do
+    it "returns the name of the claim school" do
+      claim = TslrClaim.new(claim_school: schools(:penistone_grammar_school))
+      expect(claim.claim_school_name).to eq schools(:penistone_grammar_school).name
+    end
+
+    it "does not error if the claim school is not set" do
+      expect(TslrClaim.new.claim_school_name).to be_nil
     end
   end
 end
