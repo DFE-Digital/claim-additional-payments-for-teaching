@@ -57,13 +57,15 @@ RSpec.describe SchoolDataImporter do
       end
 
       context "when the local authority already exists" do
-        let!(:existing_la) { create(:local_authority, code: 370, name: "South Yorkshire") }
+        before do
+          local_authorities(:barnsley).update!(name: "South Yorkshire")
+        end
 
         it "updates the local authority record" do
           school_data_importer.run
-          existing_la.reload
+          local_authorities(:barnsley).reload
 
-          expect(existing_la.name).to eql("Barnsley")
+          expect(local_authorities(:barnsley).name).to eql("Barnsley")
         end
       end
     end
