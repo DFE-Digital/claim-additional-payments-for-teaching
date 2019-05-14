@@ -81,4 +81,8 @@ class School < ApplicationRecord
   def address
     [street, locality, town, county, postcode].reject(&:blank?).join(", ")
   end
+
+  def eligible_for_tslr?
+    Tslr::SchoolEligibility.new(self).check
+  end
 end
