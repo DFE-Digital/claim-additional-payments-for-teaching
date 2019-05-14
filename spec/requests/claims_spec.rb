@@ -20,8 +20,6 @@ RSpec.describe "Claims", type: :request do
 
   describe "claims#show request" do
     context "when a claim is already in progress" do
-      let(:in_progress_claim) { TslrClaim.order(:created_at).last }
-
       before { post claims_path }
 
       it "renders the requested page in the sequence" do
