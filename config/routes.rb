@@ -9,5 +9,5 @@ Rails.application.routes.draw do
   get "/claim/timeout", to: "claims#timeout", as: :timeout_claim
 
   get "admin", to: "admin#index"
-  resource :sessions, only: [:new, :create]
+  resource :sessions, only: [:new, :create, :destroy]
 end

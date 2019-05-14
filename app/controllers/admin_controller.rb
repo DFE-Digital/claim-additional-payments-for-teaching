@@ -7,6 +7,6 @@ class AdminController < ApplicationController
   private
 
   def ensure_authenticated_user
-    redirect_to new_sessions_path unless session.key?(:authenticated)
+    redirect_to new_sessions_path unless signed_in?
   end
 end

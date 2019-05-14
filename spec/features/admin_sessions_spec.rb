@@ -7,4 +7,12 @@ RSpec.feature "Admin sessions" do
 
     expect(page).to have_content("Admin")
   end
+
+  scenario "Signing out" do
+    visit new_sessions_path
+    click_on "Sign in"
+
+    click_on "Sign out"
+    expect(page).to have_content("You've been signed out")
+  end
 end
