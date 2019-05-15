@@ -8,6 +8,6 @@ class ApplicationController < ActionController::Base
   helper_method :signed_in?
 
   def signed_in?
-    session.key?(:authenticated)
+    session.key?(:login)
   end
 end

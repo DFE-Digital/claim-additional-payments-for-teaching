@@ -20,6 +20,24 @@ Architecture decision records can be found in the
 2. Run `bundle exec rails db:setup` to set up the database development
 3. Run `bundle exec rails server` to launch the app on http://localhost:3000
 
+### DfE Sign In credentials
+
+By default in development OmniAuth will run in test mode. This means that you 
+don't need to authenticate with DfE Sign In. If you need to run development with 
+integration with DfE Sign In, you need to provide the relevant environment
+variables.
+ 
+Create a `.env.local` file with the following variables:
+
+```
+DFE_SIGN_IN_ISSUER=https://pp-oidc.signin.education.gov.uk:443
+DFE_SIGN_IN_REDIRECT_URL=https://localhost:3000/auth/callback
+DFE_SIGN_IN_IDENTIFIER=<paste identifier>
+DFE_SIGN_IN_SECRET=<paste secret>
+```
+
+The identifier and secret are stored in Heroku.
+
 ## Running specs, brakeman, and code linting
 
 ```bundle exec rake```

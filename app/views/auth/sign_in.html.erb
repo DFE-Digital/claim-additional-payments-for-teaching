@@ -3,8 +3,6 @@
     <h1 class="govuk-heading-xl">
       Sign in with DfE Sign In
     </h1>
-    <%= form_tag(sessions_path, method: :post) do %>
-      <%= submit_tag "Sign in", class: "govuk-button" %>
-    <% end %>
+    <%= link_to "Sign in", dfe_sign_in_path, class: "govuk-button" %>
   </div>
 </div>

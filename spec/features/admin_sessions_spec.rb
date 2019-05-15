@@ -9,7 +9,7 @@ RSpec.feature "Admin sessions" do
   end
 
   scenario "Signing out" do
-    visit new_sessions_path
+    visit admin_path
     click_on "Sign in"
 
     click_on "Sign out"

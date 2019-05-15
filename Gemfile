@@ -27,6 +27,10 @@ gem "dxw_govuk_frontend_rails"
 # Use Rollbar
 gem "rollbar"
 
+# Use OmniAuth with OpenIDConnect
+gem "omniauth"
+gem "omniauth_openid_connect"
+
 # Use ActiveStorage variant
 # gem 'mini_magick', '~> 4.8'
 
@@ -48,6 +52,7 @@ group :development, :test do
   gem "webmock"
   gem "shoulda-matchers"
   gem "factory_bot_rails"
+  gem "dotenv-rails"
 end
 
 group :development do
