@@ -40,6 +40,8 @@ class TslrClaim < ApplicationRecord
     end
   end
 
+  private
+
   def update_current_school
     self.current_school = employed_at_claim_school? ? claim_school : nil
   end
