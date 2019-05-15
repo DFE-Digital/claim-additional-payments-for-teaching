@@ -4,6 +4,7 @@ class TslrClaim < ApplicationRecord
     "claim-school",
     "still-teaching",
     "current-school",
+    "full-name",
     "complete",
   ].freeze
 
@@ -29,6 +30,7 @@ class TslrClaim < ApplicationRecord
   validates :claim_school,      on: :"claim-school", presence: {message: "Select a school from the list"}
   validates :qts_award_year,    on: :"qts-year", inclusion: {in: VALID_QTS_YEARS, message: "Select the academic year you were awarded qualified teacher status"}
   validates :employment_status, on: :"still-teaching", presence: {message: "Choose the option that describes your current employment status"}
+  validates :full_name,         on: :"full-name", presence: {message: "Enter your full name"}
 
   before_save :update_current_school, if: :employment_status_changed?
 

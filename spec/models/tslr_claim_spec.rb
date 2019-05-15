@@ -33,6 +33,13 @@ RSpec.describe TslrClaim, type: :model do
     end
   end
 
+  context "when saving in the “name” validation context" do
+    it "validates the presence of full_name" do
+      expect(TslrClaim.new).not_to be_valid(:"full-name")
+      expect(TslrClaim.new(full_name: "John Kimble")).to be_valid(:"full-name")
+    end
+  end
+
   describe "#ineligible?" do
     subject { TslrClaim.new(claim_attributes).ineligible? }
 
