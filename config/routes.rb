@@ -3,6 +3,6 @@ Rails.application.routes.draw do
   root "claims#new"
 
   constraints slug: /qts-year|claim-school|still-teaching/ do
-    resources :claims, only: [:new, :create, :show, :update], param: :slug
+    resources :claims, only: [:new, :create, :show, :update], param: :slug, path: "/claim"
   end
 end
