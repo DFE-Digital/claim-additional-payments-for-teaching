@@ -1,7 +1,30 @@
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-      <h1 class="govuk-heading-xl">
-        Are you still employed to teach at a school in the UK?
-      </h1>
+    <%= render("shared/error_summary", instance: current_claim) if current_claim.errors.any? %>
+    <%= form_for current_claim, url: claim_path do |form| %>
+      <div class="govuk-form-group">
+        <fieldset class="govuk-fieldset">
+          <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl">
+            <h1 class="govuk-fieldset__heading">Are you still employed to teach at a school in England?</h1>
+          </legend>
+          <div class="govuk-radios">
+            <%= form.hidden_field :employment_status %>
+            <div class="govuk-radios__item">
+              <%= form.radio_button(:employment_status, :claim_school, class: "govuk-radios__input") %>
+              <%= form.label :employment_status_claim_school, "Yes, at #{current_claim.claim_school_name}", class: "govuk-label govuk-radios__label" %>
+            </div>
+            <div class="govuk-radios__item">
+              <%= form.radio_button(:employment_status, :different_school, class: "govuk-radios__input") %>
+              <%= form.label :employment_status_different_school, "Yes, at another school", class: "govuk-label govuk-radios__label" %>
+            </div>
+            <div class="govuk-radios__item">
+              <%= form.radio_button(:employment_status, :no_school, class: "govuk-radios__input") %>
+              <%= form.label :employment_status_no_school, "No", class: "govuk-label govuk-radios__label" %>
+            </div>
+          </div>
+        </fieldset>
+      </div>
+      <%= form.submit "Continue", class: "govuk-button" %>
+    <% end %>
   </div>
 </div>

@@ -1,6 +1,9 @@
 require "rails_helper"
 
 RSpec.describe TslrClaim, type: :model do
+  it { should belong_to(:claim_school).optional }
+  it { should belong_to(:current_school).optional }
+
   context "when saving in the “qts-year” validation context" do
     let(:custom_validation_context) { :"qts-year" }
 
@@ -20,6 +23,86 @@ RSpec.describe TslrClaim, type: :model do
     it "it validates the claim_school" do
       expect(TslrClaim.new).not_to be_valid(custom_validation_context)
       expect(TslrClaim.new(claim_school: schools(:penistone_grammar_school))).to be_valid(custom_validation_context)
+    end
+  end
+
+  context "when saving in the “still-teaching” validation context" do
+    it "validates employment_status has been provided" do
+      expect(TslrClaim.new).not_to be_valid(:"still-teaching")
+      expect(TslrClaim.new(employment_status: :claim_school)).to be_valid(:"still-teaching")
+    end
+  end
+
+  describe "#employment_status" do
+    it "provides an enum that captures the claiment’s employment status" do
+      claim = TslrClaim.new
+
+      claim.employment_status = :claim_school
+      expect(claim.employed_at_claim_school?).to eq true
+      expect(claim.employed_at_different_school?).to eq false
+      expect(claim.employed_at_no_school?).to eq false
+    end
+
+    it "rejects invalid employment statuses" do
+      expect { TslrClaim.new(employment_status: :nonsense) }.to raise_error(ArgumentError)
+    end
+
+    context "when set to :claim_school" do
+      it "automatically sets current_school to the claim_school" do
+        claim = TslrClaim.new(claim_school: schools(:penistone_grammar_school))
+        claim.employment_status = :claim_school
+        claim.save!
+
+        expect(claim.current_school).to eql(schools(:penistone_grammar_school))
+      end
+    end
+
+    context "when changed to :different_school" do
+      it "automatically resets current_school to nil" do
+        claim = TslrClaim.new(claim_school: schools(:penistone_grammar_school), current_school: schools(:penistone_grammar_school), employment_status: :claim_school)
+        claim.employment_status = :different_school
+        claim.save!
+
+        expect(claim.current_school).to be_nil
+      end
+    end
+
+    context "when value is :different_school" do
+      it "does not automatically reset current_school if employment_status hasn’t changed" do
+        claim = TslrClaim.create!(claim_school: schools(:penistone_grammar_school), employment_status: :different_school)
+        claim.current_school = schools(:hampstead_school)
+        claim.save!
+
+        expect(claim.current_school).to eql(schools(:hampstead_school))
+      end
+    end
+  end
+
+  describe "#claim_school_name" do
+    it "returns the name of the claim school" do
+      claim = TslrClaim.new(claim_school: schools(:penistone_grammar_school))
+      expect(claim.claim_school_name).to eq schools(:penistone_grammar_school).name
+    end
+
+    it "does not error if the claim school is not set" do
+      expect(TslrClaim.new.claim_school_name).to be_nil
+    end
+  end
+
+  describe "#page_sequence" do
+    let(:tslr_claim) { TslrClaim.new }
+    it "returns all the pages in the sequence" do
+      expect(tslr_claim.page_sequence).to eq TslrClaim::PAGE_SEQUENCE
+    end
+
+    context "when the claimant still works at the school they are claiming against" do
+      let(:tslr_claim) do
+        TslrClaim.new(claim_school: schools(:penistone_grammar_school), employment_status: :claim_school)
+      end
+
+      it "excludes the “current-school” page from the sequence" do
+        expect(tslr_claim.page_sequence).not_to include("current-school")
+      end
     end
   end
 end
