@@ -92,6 +92,7 @@ RSpec.feature "Teacher Student Loan Repayments claims" do
 
     expect(claim.reload.claim_school).to eq schools(:hampstead_school)
     expect(page).to have_text("You’re not eligible")
+    expect(page).to have_text("Hampstead School is not an eligible school")
   end
 
   scenario "no longer teaching" do
@@ -122,6 +123,7 @@ RSpec.feature "Teacher Student Loan Repayments claims" do
 
     expect(claim.reload.employment_status).to eq("no_school")
     expect(page).to have_text("You’re not eligible")
+    expect(page).to have_text("You must be still working as a teacher to be eligible")
   end
 
   scenario "Teacher cannot go to mid-claim page before starting a claim" do

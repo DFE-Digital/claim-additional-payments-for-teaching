@@ -71,6 +71,14 @@ RSpec.describe "Claims", type: :request do
         get ineligible_claim_path
         expect(response.body).to include("You’re not eligible")
       end
+
+      it "tailors the message to the claim" do
+        TslrClaim.order(:created_at).last.update(employment_status: "no_school")
+
+        get ineligible_claim_path
+        expect(response.body).to include("You’re not eligible")
+        expect(response.body).to include("You must be still working as a teacher to be eligible")
+      end
     end
 
     context "when a claim hasn’t been started yet" do
