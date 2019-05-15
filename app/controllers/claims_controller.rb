@@ -1,5 +1,5 @@
 class ClaimsController < ApplicationController
-  before_action :send_unstarted_claiments_to_the_start, only: [:show, :update]
+  before_action :send_unstarted_claiments_to_the_start, only: [:show, :update, :ineligible]
 
   def new
   end
@@ -23,6 +23,9 @@ class ClaimsController < ApplicationController
     else
       show
     end
+  end
+
+  def ineligible
   end
 
   private
