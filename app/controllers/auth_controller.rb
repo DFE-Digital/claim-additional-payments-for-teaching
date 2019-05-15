@@ -12,6 +12,9 @@ class AuthController < ApplicationController
     redirect_to admin_path
   end
 
+  def failure
+  end
+
   private
 
   def auth_hash

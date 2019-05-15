@@ -14,4 +14,5 @@ Rails.application.routes.draw do
   delete "/auth/sign-out" => "auth#sign_out", :as => :sign_out
   get "/auth/dfe", as: :dfe_sign_in
   get "/auth/callback", to: "auth#callback"
+  get "/auth/failure", to: "auth#failure"
 end
