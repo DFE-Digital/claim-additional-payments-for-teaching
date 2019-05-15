@@ -40,6 +40,10 @@ class TslrClaim < ApplicationRecord
     end
   end
 
+  def ineligible?
+    claim_school.present? && !claim_school.eligible_for_tslr?
+  end
+
   private
 
   def update_current_school

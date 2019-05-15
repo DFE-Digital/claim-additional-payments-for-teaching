@@ -109,6 +109,14 @@ RSpec.describe "Claims", type: :request do
           expect(response.body).to include(schools(:penistone_grammar_school).name)
         end
       end
+
+      context "when the update makes the claim ineligible" do
+        it "redirects to the “ineligible” page" do
+          put claim_path("claim-school"), params: {tslr_claim: {claim_school_id: schools(:hampstead_school).to_param}}
+
+          expect(response).to redirect_to(ineligible_claim_path)
+        end
+      end
     end
 
     context "when a claim hasn’t been started yet" do
