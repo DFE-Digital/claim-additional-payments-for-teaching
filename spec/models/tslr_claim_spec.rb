@@ -34,20 +34,25 @@ RSpec.describe TslrClaim, type: :model do
   end
 
   describe "#ineligible?" do
-    subject { TslrClaim.new(claim_school: claim_school).ineligible? }
+    subject { TslrClaim.new(claim_attributes).ineligible? }
 
     context "with no claim_school" do
-      let(:claim_school) { nil }
+      let(:claim_attributes) { {claim_school: nil} }
       it { is_expected.to be false }
     end
 
     context "with an eligible claim school" do
-      let(:claim_school) { schools(:penistone_grammar_school) }
+      let(:claim_attributes) { {claim_school: schools(:penistone_grammar_school)} }
       it { is_expected.to be false }
     end
 
     context "with an ineligible claim_school" do
-      let(:claim_school) { schools(:hampstead_school) }
+      let(:claim_attributes) { {claim_school: schools(:hampstead_school)} }
+      it { is_expected.to be true }
+    end
+
+    context "when no longer teaching" do
+      let(:claim_attributes) { {employment_status: :no_school} }
       it { is_expected.to be true }
     end
   end
