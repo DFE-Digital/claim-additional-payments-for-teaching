@@ -6,7 +6,7 @@ RSpec.describe Tslr::SchoolEligibility do
     let(:school) { build(:school, school_attributes.merge({local_authority: local_authority})) }
 
     context "when it is in an eligible area" do
-      let(:local_authority) { build(:local_authority, :eligible) }
+      let(:local_authority) { local_authorities(:barnsley) }
 
       context "and it is an academy" do
         let(:academy_school_attributes) { {school_type_group: :academies} }
@@ -95,7 +95,7 @@ RSpec.describe Tslr::SchoolEligibility do
     end
 
     context "when it is not in an eligible area" do
-      let(:local_authority) { build(:local_authority, :ineligible) }
+      let(:local_authority) { local_authorities(:camden) }
       let(:school_attributes) { {} }
       it { is_expected.to be false }
     end

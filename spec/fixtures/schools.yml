@@ -1,13 +1,16 @@
+# TSLR Eligible
 penistone_grammar_school:
   name: Penistone Grammar School
   urn: 1234
   phase: secondary
   school_type_group: la_maintained
   school_type: community_school
-
+  local_authority: barnsley
+# TSLR Ineligible
 hampstead_school:
   name: Hampstead School
   urn: 4567
   phase: secondary
   school_type_group: la_maintained
   school_type: community_school
+  local_authority: camden

@@ -20,8 +20,6 @@ RSpec.describe "Claims", type: :request do
 
   describe "claims#show request" do
     context "when a claim is already in progress" do
-      let(:in_progress_claim) { TslrClaim.order(:created_at).last }
-
       before { post claims_path }
 
       it "renders the requested page in the sequence" do
@@ -60,7 +58,7 @@ RSpec.describe "Claims", type: :request do
     context "when a claim hasn’t been started yet" do
       it "redirects to the start page" do
         get claim_path("qts-year")
-        expect(:response).to redirect_to(root_path)
+        expect(response).to redirect_to(root_path)
       end
     end
   end
@@ -98,7 +96,7 @@ RSpec.describe "Claims", type: :request do
     context "when a claim hasn’t been started yet" do
       it "redirects to the start page" do
         put claim_path("qts-year"), params: {tslr_claim: {qts_award_year: "2014-2015"}}
-        expect(:response).to redirect_to(root_path)
+        expect(response).to redirect_to(root_path)
       end
     end
   end

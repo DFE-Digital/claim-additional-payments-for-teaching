@@ -1,0 +1,8 @@
+# TSLR Eligible
+barnsley:
+  code: 370
+  name: Barnsley
+# TSLR Ineligible
+camden:
+  code: 202
+  name: Camden

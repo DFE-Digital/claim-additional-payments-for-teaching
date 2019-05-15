@@ -5,6 +5,6 @@ FactoryBot.define do
     school_type { :community_school }
     school_type_group { :la_maintained }
     phase { :secondary }
-    local_authority { build(:local_authority, :eligible) }
+    local_authority
   end
 end
