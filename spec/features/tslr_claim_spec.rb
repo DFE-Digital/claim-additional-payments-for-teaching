@@ -2,25 +2,14 @@ require "rails_helper"
 
 RSpec.feature "Teacher Student Loan Repayments claims" do
   scenario "Teacher claims back student loan repayments" do
-    visit root_path
-
-    click_on "Agree and continue"
-
-    claim = TslrClaim.order(:created_at).last
-
+    claim = start_tslr_claim
     expect(page).to have_text("Which academic year were you awarded qualified teacher status")
-    select "September 1 2014 - August 31 2015", from: :tslr_claim_qts_award_year
-    click_on "Continue"
 
+    choose_qts_year
     expect(claim.reload.qts_award_year).to eql("2014-2015")
     expect(page).to have_text("Which school were you employed at between")
 
-    fill_in "School name", with: "Penistone"
-    click_on "Search"
-
-    choose "Penistone Grammar School"
-    click_on "Continue"
-
+    choose_school schools(:penistone_grammar_school)
     expect(claim.reload.claim_school).to eql schools(:penistone_grammar_school)
     expect(page).to have_text("Are you still employed to teach at a school in England")
 
@@ -33,27 +22,9 @@ RSpec.feature "Teacher Student Loan Repayments claims" do
   end
 
   scenario "Teacher now works for a different school" do
-    visit root_path
-
-    click_on "Agree and continue"
-
-    claim = TslrClaim.order(:created_at).last
-
-    expect(page).to have_text("Which academic year were you awarded qualified teacher status")
-    select "September 1 2014 - August 31 2015", from: :tslr_claim_qts_award_year
-    click_on "Continue"
-
-    expect(claim.reload.qts_award_year).to eql("2014-2015")
-    expect(page).to have_text("Which school were you employed at between")
-
-    fill_in "School name", with: "Penistone"
-    click_on "Search"
-
-    choose "Penistone Grammar School"
-    click_on "Continue"
-
-    expect(claim.reload.claim_school).to eql schools(:penistone_grammar_school)
-    expect(page).to have_text("Are you still employed to teach at a school in England")
+    claim = start_tslr_claim
+    choose_qts_year
+    choose_school schools(:penistone_grammar_school)
 
     choose "Yes, at another school"
     click_on "Continue"
@@ -71,24 +42,9 @@ RSpec.feature "Teacher Student Loan Repayments claims" do
   end
 
   scenario "chooses an ineligible school" do
-    visit root_path
-
-    click_on "Agree and continue"
-
-    claim = TslrClaim.order(:created_at).last
-
-    expect(page).to have_text("Which academic year were you awarded qualified teacher status")
-    select "September 1 2014 - August 31 2015", from: :tslr_claim_qts_award_year
-    click_on "Continue"
-
-    expect(claim.reload.qts_award_year).to eql("2014-2015")
-    expect(page).to have_text("Which school were you employed at between")
-
-    fill_in "School name", with: "Hampstead"
-    click_on "Search"
-
-    choose "Hampstead School"
-    click_on "Continue"
+    claim = start_tslr_claim
+    choose_qts_year
+    choose_school schools(:hampstead_school)
 
     expect(claim.reload.claim_school).to eq schools(:hampstead_school)
     expect(page).to have_text("You’re not eligible")
@@ -96,27 +52,9 @@ RSpec.feature "Teacher Student Loan Repayments claims" do
   end
 
   scenario "no longer teaching" do
-    visit root_path
-
-    click_on "Agree and continue"
-
-    claim = TslrClaim.order(:created_at).last
-
-    expect(page).to have_text("Which academic year were you awarded qualified teacher status")
-    select "September 1 2014 - August 31 2015", from: :tslr_claim_qts_award_year
-    click_on "Continue"
-
-    expect(claim.reload.qts_award_year).to eql("2014-2015")
-    expect(page).to have_text("Which school were you employed at between")
-
-    fill_in "School name", with: "Penistone"
-    click_on "Search"
-
-    choose "Penistone Grammar School"
-    click_on "Continue"
-
-    expect(claim.reload.claim_school).to eql schools(:penistone_grammar_school)
-    expect(page).to have_text("Are you still employed to teach at a school in England")
+    claim = start_tslr_claim
+    choose_qts_year
+    choose_school schools(:penistone_grammar_school)
 
     choose "No"
     click_on "Continue"
