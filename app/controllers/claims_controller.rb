@@ -58,6 +58,11 @@ class ClaimsController < ApplicationController
       :employment_status,
       :current_school_id,
       :full_name,
+      :address_line_1,
+      :address_line_2,
+      :address_line_3,
+      :address_line_4,
+      :postcode,
     )
   end
 
