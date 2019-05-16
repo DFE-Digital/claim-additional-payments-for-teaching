@@ -41,6 +41,14 @@ RSpec.feature "Teacher Student Loan Repayments claims" do
     expect(claim.address_line_4).to eql("Washington")
     expect(claim.postcode).to eql("M1 7HL")
 
+    expect(page).to have_text("What is your date of birth?")
+    fill_in "Day", with: "03"
+    fill_in "Month", with: "7"
+    fill_in "Year", with: "1990"
+    click_on "Continue"
+
+    expect(claim.reload.date_of_birth).to eq(Date.new(1990, 7, 3))
+
     expect(page).to have_text("Claim complete")
   end
 

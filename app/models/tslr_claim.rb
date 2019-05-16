@@ -6,6 +6,7 @@ class TslrClaim < ApplicationRecord
     "current-school",
     "full-name",
     "address",
+    "date-of-birth",
     "complete",
   ].freeze
 
@@ -35,6 +36,7 @@ class TslrClaim < ApplicationRecord
   validates :address_line_1,    on: :address, presence: {message: "Enter your building and street address"}
   validates :address_line_3,    on: :address, presence: {message: "Enter your town or city"}
   validates :postcode,          on: :address, presence: {message: "Enter your postcode"}
+  validates :date_of_birth,     on: :"date-of-birth", presence: {message: "Enter your date of birth"}
 
   before_save :update_current_school, if: :employment_status_changed?
 

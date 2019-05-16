@@ -49,6 +49,13 @@ RSpec.describe TslrClaim, type: :model do
     end
   end
 
+  context "when saving in the “date-of-birth” validation context" do
+    it "validates the presence of date_of_birth" do
+      expect(TslrClaim.new).not_to be_valid(:"date-of-birth")
+      expect(TslrClaim.new(date_of_birth: Date.new(2000, 2, 1))).to be_valid(:"date-of-birth")
+    end
+  end
+
   describe "#ineligible?" do
     subject { TslrClaim.new(claim_attributes).ineligible? }
 
