@@ -1,0 +1,14 @@
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <h1 class="govuk-heading-xl">
+      You’re not eligible to for this service
+    </h1>
+
+    <p class="govuk-body">
+      <%= tslr_claim_ineligibility_reason(current_claim) %>
+    </p>
+
+    <p class="govuk-body">
+      You can find more information on the <%= link_to "guidance for this service", tslr_guidance_url %>.
+    </p>
+</div>

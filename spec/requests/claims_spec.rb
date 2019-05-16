@@ -63,6 +63,32 @@ RSpec.describe "Claims", type: :request do
     end
   end
 
+  describe "claim#ineligible request" do
+    context "when a claim is already in progress" do
+      before { post claims_path }
+
+      it "renders a static ineligibility page" do
+        get ineligible_claim_path
+        expect(response.body).to include("You’re not eligible")
+      end
+
+      it "tailors the message to the claim" do
+        TslrClaim.order(:created_at).last.update(employment_status: "no_school")
+
+        get ineligible_claim_path
+        expect(response.body).to include("You’re not eligible")
+        expect(response.body).to include("You must be still working as a teacher to be eligible")
+      end
+    end
+
+    context "when a claim hasn’t been started yet" do
+      it "redirects to the start page" do
+        get ineligible_claim_path
+        expect(response).to redirect_to(root_path)
+      end
+    end
+  end
+
   describe "claims#update request" do
     context "when a claim is already in progress" do
       let(:in_progress_claim) { TslrClaim.order(:created_at).last }
@@ -89,6 +115,14 @@ RSpec.describe "Claims", type: :request do
           expect(response.body).to include("There is a problem")
           expect(response.body).to include("Select a school from the list")
           expect(response.body).to include(schools(:penistone_grammar_school).name)
+        end
+      end
+
+      context "when the update makes the claim ineligible" do
+        it "redirects to the “ineligible” page" do
+          put claim_path("claim-school"), params: {tslr_claim: {claim_school_id: schools(:hampstead_school).to_param}}
+
+          expect(response).to redirect_to(ineligible_claim_path)
         end
       end
     end

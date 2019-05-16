@@ -5,4 +5,5 @@ Rails.application.routes.draw do
   constraints slug: %r{#{TslrClaim::PAGE_SEQUENCE.join("|")}} do
     resources :claims, only: [:new, :create, :show, :update], param: :slug, path: "/claim"
   end
+  get "/claim/ineligible", to: "claims#ineligible", as: :ineligible_claim
 end

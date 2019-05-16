@@ -1,5 +1,5 @@
 class ClaimsController < ApplicationController
-  before_action :send_unstarted_claiments_to_the_start, only: [:show, :update]
+  before_action :send_unstarted_claiments_to_the_start, only: [:show, :update, :ineligible]
 
   def new
   end
@@ -19,13 +19,24 @@ class ClaimsController < ApplicationController
   def update
     current_claim.attributes = claim_params
     if current_claim.save(context: params[:slug].to_sym)
-      redirect_to claim_path(next_slug)
+      redirect_to next_claim_path
     else
       show
     end
   end
 
+  def ineligible
+  end
+
   private
+
+  def next_claim_path
+    if current_claim.ineligible?
+      ineligible_claim_path
+    else
+      claim_path(next_slug)
+    end
+  end
 
   def next_slug
     current_slug_index = current_claim.page_sequence.index(params[:slug])

@@ -33,6 +33,49 @@ RSpec.describe TslrClaim, type: :model do
     end
   end
 
+  describe "#ineligible?" do
+    subject { TslrClaim.new(claim_attributes).ineligible? }
+
+    context "with no claim_school" do
+      let(:claim_attributes) { {claim_school: nil} }
+      it { is_expected.to be false }
+    end
+
+    context "with an eligible claim school" do
+      let(:claim_attributes) { {claim_school: schools(:penistone_grammar_school)} }
+      it { is_expected.to be false }
+    end
+
+    context "with an ineligible claim_school" do
+      let(:claim_attributes) { {claim_school: schools(:hampstead_school)} }
+      it { is_expected.to be true }
+    end
+
+    context "when no longer teaching" do
+      let(:claim_attributes) { {employment_status: :no_school} }
+      it { is_expected.to be true }
+    end
+  end
+
+  describe "#ineligibility_reason" do
+    subject { TslrClaim.new(claim_attributes).ineligibility_reason }
+
+    context "with an ineligible claim_school" do
+      let(:claim_attributes) { {claim_school: schools(:hampstead_school)} }
+      it { is_expected.to eql :ineligible_claim_school }
+    end
+
+    context "when no longer teaching" do
+      let(:claim_attributes) { {employment_status: :no_school} }
+      it { is_expected.to eql :employed_at_no_school }
+    end
+
+    context "when not ineligible" do
+      let(:claim_attributes) { {} }
+      it { is_expected.to be_nil }
+    end
+  end
+
   describe "#employment_status" do
     it "provides an enum that captures the claiment’s employment status" do
       claim = TslrClaim.new
