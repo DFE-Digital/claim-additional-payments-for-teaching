@@ -52,7 +52,19 @@ class ClaimsController < ApplicationController
   end
 
   def claim_params
-    params.require(:tslr_claim).permit(:qts_award_year, :claim_school_id, :employment_status, :current_school_id)
+    params.require(:tslr_claim).permit(
+      :qts_award_year,
+      :claim_school_id,
+      :employment_status,
+      :current_school_id,
+      :full_name,
+      :address_line_1,
+      :address_line_2,
+      :address_line_3,
+      :address_line_4,
+      :postcode,
+      :date_of_birth
+    )
   end
 
   def claim_page_template

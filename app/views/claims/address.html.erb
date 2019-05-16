@@ -1,0 +1,55 @@
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= render("shared/error_summary", instance: current_claim) if current_claim.errors.any? %>
+
+    <%= form_for current_claim, url: claim_path do |form| %>
+      <fieldset class="govuk-fieldset">
+        <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl">
+          <h1 class="govuk-fieldset__heading">
+            What is your address?
+          </h1>
+        </legend>
+
+        <div class="govuk-form-group">
+          <%= form.label :address_line_1, class: "govuk-label" do %>
+            Building and street <span class="govuk-visually-hidden">line 1 of 2</span>
+          <% end %>
+          <%= form.text_field :address_line_1, autocomplete: "address-line1", class: "govuk-input" %>
+        </div>
+
+
+        <div class="govuk-form-group">
+          <%= form.label :address_line_2, class: "govuk-label" do %>
+            <span class="govuk-visually-hidden">Building and street line 2 of 2</span>
+          <% end %>
+          <%= form.text_field :address_line_2, autocomplete: "address-line2", class: "govuk-input" %>
+        </div>
+
+        <div class="govuk-form-group">
+          <%= form.label :address_line_3, class: "govuk-label" do %>
+            Town or city
+          <% end %>
+          <%= form.text_field :address_line_3, autocomplete: "address-line3", class: "govuk-input govuk-!-width-two-thirds" %>
+        </div>
+
+        <div class="govuk-form-group">
+          <%= form.label :address_line_4, class: "govuk-label" do %>
+            County
+          <% end %>
+          <%= form.text_field :address_line_4, autocomplete: "region", class: "govuk-input govuk-!-width-two-thirds" %>
+        </div>
+
+        <div class="govuk-form-group">
+          <%= form.label :postcode, class: "govuk-label" do %>
+            Postcode
+          <% end %>
+          <%= form.text_field :postcode, autocomplete: "postal-code", class: "govuk-input govuk-input--width-10" %>
+        </div>
+      </fieldset>
+
+      <div class="govuk-form-group">
+        <%= form.submit "Continue", class: "govuk-button" %>
+      </div>
+    <% end %>
+  </div>
+</div>
