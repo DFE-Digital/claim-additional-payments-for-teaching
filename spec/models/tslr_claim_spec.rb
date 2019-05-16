@@ -59,7 +59,15 @@ RSpec.describe TslrClaim, type: :model do
   context "when saving in the “teacher-reference-number” validation context" do
     it "validates the presence of teacher_reference_number" do
       expect(TslrClaim.new).not_to be_valid(:"teacher-reference-number")
-      expect(TslrClaim.new(teacher_reference_number: "123456")).to be_valid(:"teacher-reference-number")
+      expect(TslrClaim.new(teacher_reference_number: "1234567")).to be_valid(:"teacher-reference-number")
+    end
+  end
+
+  context "when saving a record that has a teacher_reference_number" do
+    it "validates the length of the teacher reference number" do
+      expect(TslrClaim.new(teacher_reference_number: "1/2/3/4/5/6/7")).to be_valid
+      expect(TslrClaim.new(teacher_reference_number: "1/2/3/4/5")).not_to be_valid
+      expect(TslrClaim.new(teacher_reference_number: "12/345678")).not_to be_valid
     end
   end
 
