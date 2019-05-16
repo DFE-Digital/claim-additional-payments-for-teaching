@@ -44,6 +44,10 @@ class TslrClaim < ApplicationRecord
 
   delegate :name, to: :claim_school, prefix: true, allow_nil: true
 
+  def teacher_reference_number=(teacher_reference_number)
+    super(teacher_reference_number.gsub(/\D/, ""))
+  end
+
   def page_sequence
     PAGE_SEQUENCE.dup.tap do |sequence|
       sequence.delete("current-school") if employed_at_claim_school?
