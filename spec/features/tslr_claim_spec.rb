@@ -18,7 +18,8 @@ RSpec.feature "Teacher Student Loan Repayments claims" do
 
     expect(claim.reload.employment_status).to eql("claim_school")
     expect(claim.current_school).to eql(schools(:penistone_grammar_school))
-    expect(page).to have_text("Did you teach")
+
+    expect(page).to have_text("Claim complete")
   end
 
   scenario "Teacher now works for a different school" do
@@ -38,7 +39,8 @@ RSpec.feature "Teacher Student Loan Repayments claims" do
     click_on "Continue"
 
     expect(claim.reload.current_school).to eql schools(:hampstead_school)
-    expect(page).to have_text("Did you teach")
+
+    expect(page).to have_text("Claim complete")
   end
 
   scenario "chooses an ineligible school" do

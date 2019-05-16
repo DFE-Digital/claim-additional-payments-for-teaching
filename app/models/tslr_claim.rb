@@ -4,7 +4,7 @@ class TslrClaim < ApplicationRecord
     "claim-school",
     "still-teaching",
     "current-school",
-    "subject-percentage",
+    "complete",
   ].freeze
 
   VALID_QTS_YEARS = [
