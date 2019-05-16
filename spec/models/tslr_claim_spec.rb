@@ -56,6 +56,13 @@ RSpec.describe TslrClaim, type: :model do
     end
   end
 
+  context "when saving in the “teacher-reference-number” validation context" do
+    it "validates the presence of teacher_reference_number" do
+      expect(TslrClaim.new).not_to be_valid(:"teacher-reference-number")
+      expect(TslrClaim.new(teacher_reference_number: "123456")).to be_valid(:"teacher-reference-number")
+    end
+  end
+
   describe "#ineligible?" do
     subject { TslrClaim.new(claim_attributes).ineligible? }
 

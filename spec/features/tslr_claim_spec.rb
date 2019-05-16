@@ -49,6 +49,12 @@ RSpec.feature "Teacher Student Loan Repayments claims" do
 
     expect(claim.reload.date_of_birth).to eq(Date.new(1990, 7, 3))
 
+    expect(page).to have_text("What is your teacher reference number?")
+    fill_in :tslr_claim_teacher_reference_number, with: "123456"
+    click_on "Continue"
+
+    expect(claim.reload.teacher_reference_number).to eql("123456")
+
     expect(page).to have_text("Claim complete")
   end
 
