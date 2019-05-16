@@ -41,6 +41,7 @@ class TslrClaim < ApplicationRecord
   validates :teacher_reference_number, on: :"teacher-reference-number", presence: {message: "Enter your teacher reference number"}
 
   before_save :update_current_school, if: :employment_status_changed?
+  before_save :normalise_teacher_reference_number, if: :teacher_reference_number_changed?
 
   delegate :name, to: :claim_school, prefix: true, allow_nil: true
 
@@ -66,5 +67,9 @@ class TslrClaim < ApplicationRecord
 
   def update_current_school
     self.current_school = employed_at_claim_school? ? claim_school : nil
+  end
+
+  def normalise_teacher_reference_number
+    teacher_reference_number.gsub!(/\D/, "")
   end
 end

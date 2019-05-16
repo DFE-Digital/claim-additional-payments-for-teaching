@@ -63,6 +63,25 @@ RSpec.describe TslrClaim, type: :model do
     end
   end
 
+  describe "#teacher_reference_number" do
+    let(:claim) { TslrClaim.new(teacher_reference_number: teacher_reference_number) }
+
+    context "when the teacher reference number is stored and contains non digits" do
+      let(:teacher_reference_number) { "12\\23 /232 " }
+      it "strips out the non digits" do
+        claim.save!
+        expect(claim.teacher_reference_number).to eql("1223232")
+      end
+    end
+
+    context "before the teacher reference number is stored" do
+      let(:teacher_reference_number) { "12/34567" }
+      it "is not modified" do
+        expect(claim.teacher_reference_number).to eql("12/34567")
+      end
+    end
+  end
+
   describe "#ineligible?" do
     subject { TslrClaim.new(claim_attributes).ineligible? }
 
