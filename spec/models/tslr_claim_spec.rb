@@ -97,6 +97,14 @@ RSpec.describe TslrClaim, type: :model do
     end
   end
 
+  describe "#national_insurance_number" do
+    it "saves with white space stripped out" do
+      claim = TslrClaim.create!(national_insurance_number: "QQ 12 34 56 C")
+
+      expect(claim.national_insurance_number).to eql("QQ123456C")
+    end
+  end
+
   describe "#ineligible?" do
     subject { TslrClaim.new(claim_attributes).ineligible? }
 

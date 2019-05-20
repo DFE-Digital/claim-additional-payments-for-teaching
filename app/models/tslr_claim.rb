@@ -47,6 +47,7 @@ class TslrClaim < ApplicationRecord
 
   before_save :update_current_school, if: :employment_status_changed?
   before_save :normalise_trn, if: :teacher_reference_number_changed?
+  before_save :normalise_ni_number, if: :national_insurance_number_changed?
 
   delegate :name, to: :claim_school, prefix: true, allow_nil: true
 
@@ -84,5 +85,9 @@ class TslrClaim < ApplicationRecord
 
   def trn_must_be_seven_digits
     errors.add(:teacher_reference_number, "Teacher reference number must contain seven digits") if teacher_reference_number.present? && normalised_trn.length != TRN_LENGTH
+  end
+
+  def normalise_ni_number
+    national_insurance_number.gsub!(/\s/, "")
   end
 end
