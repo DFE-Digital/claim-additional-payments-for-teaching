@@ -56,6 +56,40 @@ RSpec.describe TslrClaim, type: :model do
     end
   end
 
+  context "when saving in the “teacher-reference-number” validation context" do
+    it "validates the presence of teacher_reference_number" do
+      expect(TslrClaim.new).not_to be_valid(:"teacher-reference-number")
+      expect(TslrClaim.new(teacher_reference_number: "1234567")).to be_valid(:"teacher-reference-number")
+    end
+  end
+
+  context "when saving a record that has a teacher_reference_number" do
+    it "validates the length of the teacher reference number" do
+      expect(TslrClaim.new(teacher_reference_number: "1/2/3/4/5/6/7")).to be_valid
+      expect(TslrClaim.new(teacher_reference_number: "1/2/3/4/5")).not_to be_valid
+      expect(TslrClaim.new(teacher_reference_number: "12/345678")).not_to be_valid
+    end
+  end
+
+  describe "#teacher_reference_number" do
+    let(:claim) { TslrClaim.new(teacher_reference_number: teacher_reference_number) }
+
+    context "when the teacher reference number is stored and contains non digits" do
+      let(:teacher_reference_number) { "12\\23 /232 " }
+      it "strips out the non digits" do
+        claim.save!
+        expect(claim.teacher_reference_number).to eql("1223232")
+      end
+    end
+
+    context "before the teacher reference number is stored" do
+      let(:teacher_reference_number) { "12/34567" }
+      it "is not modified" do
+        expect(claim.teacher_reference_number).to eql("12/34567")
+      end
+    end
+  end
+
   describe "#ineligible?" do
     subject { TslrClaim.new(claim_attributes).ineligible? }
 

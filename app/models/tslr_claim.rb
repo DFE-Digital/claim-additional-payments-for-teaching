@@ -7,6 +7,7 @@ class TslrClaim < ApplicationRecord
     "full-name",
     "address",
     "date-of-birth",
+    "teacher-reference-number",
     "complete",
   ].freeze
 
@@ -19,6 +20,8 @@ class TslrClaim < ApplicationRecord
     "2018-2019",
     "2019-2020",
   ].freeze
+
+  TRN_LENGTH = 7
 
   enum employment_status: {
     claim_school: 0,
@@ -37,8 +40,11 @@ class TslrClaim < ApplicationRecord
   validates :address_line_3,    on: :address, presence: {message: "Enter your town or city"}
   validates :postcode,          on: :address, presence: {message: "Enter your postcode"}
   validates :date_of_birth,     on: :"date-of-birth", presence: {message: "Enter your date of birth"}
+  validates :teacher_reference_number, on: :"teacher-reference-number", presence: {message: "Enter your teacher reference number"}
+  validate :trn_must_be_seven_digits
 
   before_save :update_current_school, if: :employment_status_changed?
+  before_save :normalise_trn, if: :teacher_reference_number_changed?
 
   delegate :name, to: :claim_school, prefix: true, allow_nil: true
 
@@ -64,5 +70,17 @@ class TslrClaim < ApplicationRecord
 
   def update_current_school
     self.current_school = employed_at_claim_school? ? claim_school : nil
+  end
+
+  def normalise_trn
+    self.teacher_reference_number = normalised_trn
+  end
+
+  def normalised_trn
+    teacher_reference_number.gsub(/\D/, "")
+  end
+
+  def trn_must_be_seven_digits
+    errors.add(:teacher_reference_number, "Teacher reference number must contain seven digits") if teacher_reference_number.present? && normalised_trn.length != TRN_LENGTH
   end
 end
