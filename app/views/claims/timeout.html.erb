@@ -1,0 +1,13 @@
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <h1 class="govuk-heading-xl">
+      Your session has ended due to inactivity
+    </h1>
+
+    <h2 class="govuk-heading-m">
+      Your session ended because you haven't done anything for <%= claim_timeout_in_minutes %> minutes
+    </h2>
+
+    <%= link_to "Start your application again", root_path, class: "govuk-button" %>
+  </div>
+</div>

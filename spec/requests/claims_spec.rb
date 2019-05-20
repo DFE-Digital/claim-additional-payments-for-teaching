@@ -89,6 +89,13 @@ RSpec.describe "Claims", type: :request do
     end
   end
 
+  describe "claim#timeout" do
+    it "displays session timeout content" do
+      get timeout_claim_path
+      expect(response.body).to include("Your session has ended due to inactivity")
+    end
+  end
+
   describe "claims#update request" do
     context "when a claim is already in progress" do
       let(:in_progress_claim) { TslrClaim.order(:created_at).last }
