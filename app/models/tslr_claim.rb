@@ -33,17 +33,18 @@ class TslrClaim < ApplicationRecord
   belongs_to :claim_school, optional: true, class_name: "School"
   belongs_to :current_school, optional: true, class_name: "School"
 
-  validates :claim_school,      on: :"claim-school", presence: {message: "Select a school from the list"}
-  validates :qts_award_year,    on: :"qts-year", inclusion: {in: VALID_QTS_YEARS, message: "Select the academic year you were awarded qualified teacher status"}
-  validates :employment_status, on: :"still-teaching", presence: {message: "Choose the option that describes your current employment status"}
-  validates :full_name,         on: :"full-name", presence: {message: "Enter your full name"}
-  validates :address_line_1,    on: :address, presence: {message: "Enter your building and street address"}
-  validates :address_line_3,    on: :address, presence: {message: "Enter your town or city"}
-  validates :postcode,          on: :address, presence: {message: "Enter your postcode"}
-  validates :date_of_birth,     on: :"date-of-birth", presence: {message: "Enter your date of birth"}
-  validates :teacher_reference_number, on: :"teacher-reference-number", presence: {message: "Enter your teacher reference number"}
+  validates :claim_school,              on: :"claim-school", presence: {message: "Select a school from the list"}
+  validates :qts_award_year,            on: :"qts-year", inclusion: {in: VALID_QTS_YEARS, message: "Select the academic year you were awarded qualified teacher status"}
+  validates :employment_status,         on: :"still-teaching", presence: {message: "Choose the option that describes your current employment status"}
+  validates :full_name,                 on: :"full-name", presence: {message: "Enter your full name"}
+  validates :address_line_1,            on: :address, presence: {message: "Enter your building and street address"}
+  validates :address_line_3,            on: :address, presence: {message: "Enter your town or city"}
+  validates :postcode,                  on: :address, presence: {message: "Enter your postcode"}
+  validates :date_of_birth,             on: :"date-of-birth", presence: {message: "Enter your date of birth"}
+  validates :teacher_reference_number,  on: :"teacher-reference-number", presence: {message: "Enter your teacher reference number"}
   validate :trn_must_be_seven_digits
-  validates :national_insurance_number,   on: :"national-insurance-number", presence: {message: "Enter your National Insurance number"}
+  validates :national_insurance_number, on: :"national-insurance-number", presence: {message: "Enter your National Insurance number"}
+  validate  :ni_number_is_correct_format
 
   before_save :update_current_school, if: :employment_status_changed?
   before_save :normalise_trn, if: :teacher_reference_number_changed?
@@ -88,6 +89,15 @@ class TslrClaim < ApplicationRecord
   end
 
   def normalise_ni_number
-    national_insurance_number.gsub!(/\s/, "")
+    self.national_insurance_number = normalised_ni_number
+  end
+
+  def normalised_ni_number
+    national_insurance_number.gsub(/\s/, "")
+  end
+
+  def ni_number_is_correct_format
+    errors.add(:national_insurance_number, "Enter a National Insurance number in the correct format") \
+      if national_insurance_number.present? && !normalised_ni_number.match(/\A[a-z]{2}[0-9]{6}[a-d]{1}\Z/i)
   end
 end
