@@ -8,6 +8,7 @@ class TslrClaim < ApplicationRecord
     "address",
     "date-of-birth",
     "teacher-reference-number",
+    "national-insurance-number",
     "complete",
   ].freeze
 
@@ -42,6 +43,7 @@ class TslrClaim < ApplicationRecord
   validates :date_of_birth,     on: :"date-of-birth", presence: {message: "Enter your date of birth"}
   validates :teacher_reference_number, on: :"teacher-reference-number", presence: {message: "Enter your teacher reference number"}
   validate :trn_must_be_seven_digits
+  validates :national_insurance_number,   on: :"national-insurance-number", presence: {message: "Enter your National Insurance number"}
 
   before_save :update_current_school, if: :employment_status_changed?
   before_save :normalise_trn, if: :teacher_reference_number_changed?

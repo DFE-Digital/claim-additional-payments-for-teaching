@@ -90,6 +90,13 @@ RSpec.describe TslrClaim, type: :model do
     end
   end
 
+  context "when saving in the “national-insurance-number” validation context" do
+    it "validates the presence of national_insurance_number" do
+      expect(TslrClaim.new).not_to be_valid(:"national-insurance-number")
+      expect(TslrClaim.new(national_insurance_number: "QQ123456C")).to be_valid(:"national-insurance-number")
+    end
+  end
+
   describe "#ineligible?" do
     subject { TslrClaim.new(claim_attributes).ineligible? }
 

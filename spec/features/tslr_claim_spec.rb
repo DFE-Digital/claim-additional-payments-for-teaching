@@ -55,6 +55,12 @@ RSpec.feature "Teacher Student Loan Repayments claims" do
 
     expect(claim.reload.teacher_reference_number).to eql("1234567")
 
+    expect(page).to have_text("What is your National Insurance number?")
+    fill_in "National Insurance number", with: "QQ123456C"
+    click_on "Continue"
+
+    expect(claim.reload.national_insurance_number).to eq("QQ123456C")
+
     expect(page).to have_text("Claim complete")
   end
 
