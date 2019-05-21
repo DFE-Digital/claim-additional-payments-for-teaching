@@ -61,6 +61,7 @@ class ClaimsController < ApplicationController
       :claim_school_id,
       :employment_status,
       :current_school_id,
+      :mostly_teaching_eligible_subjects,
       :full_name,
       :address_line_1,
       :address_line_2,

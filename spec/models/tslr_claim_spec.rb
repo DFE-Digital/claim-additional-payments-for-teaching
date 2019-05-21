@@ -33,6 +33,13 @@ RSpec.describe TslrClaim, type: :model do
     end
   end
 
+  context "when saving in the “subjects-taught” validation context" do
+    it "validates mostly_teaching_eligible_subjects has been provided" do
+      expect(TslrClaim.new).not_to be_valid(:"subjects-taught")
+      expect(TslrClaim.new(mostly_teaching_eligible_subjects: true)).to be_valid(:"subjects-taught")
+    end
+  end
+
   context "when saving in the “name” validation context" do
     it "validates the presence of full_name" do
       expect(TslrClaim.new).not_to be_valid(:"full-name")

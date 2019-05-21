@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_05_21_123756) do
+ActiveRecord::Schema.define(version: 2019_05_21_160036) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -57,6 +57,7 @@ ActiveRecord::Schema.define(version: 2019_05_21_123756) do
     t.string "teacher_reference_number", limit: 11
     t.string "national_insurance_number", limit: 9
     t.string "email_address", limit: 256
+    t.boolean "mostly_teaching_eligible_subjects"
     t.index ["claim_school_id"], name: "index_tslr_claims_on_claim_school_id"
     t.index ["current_school_id"], name: "index_tslr_claims_on_current_school_id"
     t.index ["employment_status"], name: "index_tslr_claims_on_employment_status"

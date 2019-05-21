@@ -19,6 +19,12 @@ RSpec.feature "Teacher Student Loan Repayments claims" do
     expect(claim.reload.employment_status).to eql("claim_school")
     expect(claim.current_school).to eql(schools(:penistone_grammar_school))
 
+    expect(page).to have_text("Did you teach eligible subjects for more than 50% of your teaching time")
+    choose "Yes"
+    click_on "Continue"
+
+    expect(claim.reload.mostly_teaching_eligible_subjects).to eq(true)
+
     expect(page).to have_text("What is your full name")
 
     fill_in "What is your full name?", with: "Margaret Honeycutt"
@@ -89,7 +95,7 @@ RSpec.feature "Teacher Student Loan Repayments claims" do
 
     expect(claim.reload.current_school).to eql schools(:hampstead_school)
 
-    expect(page).to have_text("What is your full name")
+    expect(page).to have_text("Did you teach eligible subjects for more than 50% of your teaching time")
   end
 
   scenario "chooses an ineligible school" do

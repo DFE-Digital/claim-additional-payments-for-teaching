@@ -4,6 +4,7 @@ class TslrClaim < ApplicationRecord
     "claim-school",
     "still-teaching",
     "current-school",
+    "subjects-taught",
     "full-name",
     "address",
     "date-of-birth",
@@ -37,6 +38,7 @@ class TslrClaim < ApplicationRecord
   validates :claim_school,              on: :"claim-school", presence: {message: "Select a school from the list"}
   validates :qts_award_year,            on: :"qts-year", inclusion: {in: VALID_QTS_YEARS, message: "Select the academic year you were awarded qualified teacher status"}
   validates :employment_status,         on: :"still-teaching", presence: {message: "Choose the option that describes your current employment status"}
+  validates :mostly_teaching_eligible_subjects, on: :"subjects-taught", inclusion: {in: [true, false], message: "Select either Yes or No"}
   validates :full_name,                 on: :"full-name", presence: {message: "Enter your full name"}
   validates :address_line_1,            on: :address, presence: {message: "Enter your building and street address"}
   validates :address_line_3,            on: :address, presence: {message: "Enter your town or city"}
