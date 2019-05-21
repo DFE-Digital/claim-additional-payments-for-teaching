@@ -68,7 +68,8 @@ class ClaimsController < ApplicationController
       :address_line_4,
       :postcode,
       :date_of_birth,
-      :teacher_reference_number
+      :teacher_reference_number,
+      :national_insurance_number,
     )
   end
 

@@ -90,6 +90,30 @@ RSpec.describe TslrClaim, type: :model do
     end
   end
 
+  context "when saving in the “national-insurance-number” validation context" do
+    it "validates the presence of national_insurance_number" do
+      expect(TslrClaim.new).not_to be_valid(:"national-insurance-number")
+      expect(TslrClaim.new(national_insurance_number: "QQ123456C")).to be_valid(:"national-insurance-number")
+    end
+  end
+
+  context "when saving a record that has a National Insurance number" do
+    it "validates that the National Insurance number is in the correct format" do
+      expect(TslrClaim.new(national_insurance_number: "12 34 56 78 C")).not_to be_valid
+      expect(TslrClaim.new(national_insurance_number: "QQ 11 56 78 DE")).not_to be_valid
+
+      expect(TslrClaim.new(national_insurance_number: "QQ 34 56 78 C")).to be_valid
+    end
+  end
+
+  describe "#national_insurance_number" do
+    it "saves with white space stripped out" do
+      claim = TslrClaim.create!(national_insurance_number: "QQ 12 34 56 C")
+
+      expect(claim.national_insurance_number).to eql("QQ123456C")
+    end
+  end
+
   describe "#ineligible?" do
     subject { TslrClaim.new(claim_attributes).ineligible? }
 
