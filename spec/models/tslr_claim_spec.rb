@@ -114,6 +114,24 @@ RSpec.describe TslrClaim, type: :model do
     end
   end
 
+  context "when saving in the “email-address” validation context" do
+    it "validates the presence of email_address" do
+      expect(TslrClaim.new).not_to be_valid(:"email-address")
+      expect(TslrClaim.new(email_address: "name@example.tld")).to be_valid(:"email-address")
+    end
+  end
+
+  context "when saving a record that has a email address" do
+    it "validates that the value is in the correct format" do
+      expect(TslrClaim.new(email_address: "notan email@address.com")).not_to be_valid
+      expect(TslrClaim.new(email_address: "name@example.com")).to be_valid
+    end
+
+    it "checks that the email address in not longer than 256 characters" do
+      expect(TslrClaim.new(email_address: "#{"e" * 256}@example.com")).not_to be_valid
+    end
+  end
+
   describe "#ineligible?" do
     subject { TslrClaim.new(claim_attributes).ineligible? }
 
