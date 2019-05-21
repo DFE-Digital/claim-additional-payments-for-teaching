@@ -1,11 +1,11 @@
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
+    <%= render("shared/error_summary", instance: current_claim) if current_claim.errors.any? %>
+
     <%= form_for current_claim, url: claim_path do |form| %>
       <h1 class="govuk-heading-xl">
         <%= form.label :qts_award_year, "Which academic year were you awarded qualified teacher status (QTS)?" %>
       </h1>
-
-      <%= render("shared/error_summary", instance: current_claim) if current_claim.errors.any? %>
 
       <span id="tslr_claim_qts_award_year-hint" class="govuk-hint">
         You are only eligable to claim back student loan repayments if you qualified
