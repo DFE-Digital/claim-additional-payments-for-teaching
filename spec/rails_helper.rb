@@ -61,4 +61,5 @@ RSpec.configure do |config|
   # config.filter_gems_from_backtrace("gem name")
 
   config.include FeatureHelpers, type: :feature
+  config.include ActiveSupport::Testing::TimeHelpers
 end

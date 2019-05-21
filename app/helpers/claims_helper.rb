@@ -17,4 +17,8 @@ module ClaimsHelper
   def tslr_guidance_url
     "https://www.gov.uk/guidance/teachers-student-loan-reimbursement-guidance-for-teachers-and-schools"
   end
+
+  def claim_timeout_in_minutes
+    ClaimsController::TIMEOUT_LENGTH_IN_MINUTES
+  end
 end
