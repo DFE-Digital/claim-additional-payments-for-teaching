@@ -70,6 +70,7 @@ class ClaimsController < ApplicationController
       :date_of_birth,
       :teacher_reference_number,
       :national_insurance_number,
+      :email_address,
     )
   end
 

@@ -9,6 +9,7 @@ class TslrClaim < ApplicationRecord
     "date-of-birth",
     "teacher-reference-number",
     "national-insurance-number",
+    "email-address",
     "complete",
   ].freeze
 

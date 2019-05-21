@@ -61,6 +61,13 @@ RSpec.feature "Teacher Student Loan Repayments claims" do
 
     expect(claim.reload.national_insurance_number).to eq("QQ123456C")
 
+    expect(page).to have_text("What is your email address?")
+    expect(page).to have_text("We will only use your email address to update you about your claim.")
+    fill_in "What is your email address?", with: "name@example.tld"
+    click_on "Continue"
+
+    expect(claim.reload.email_address).to eq("name@example.tld")
+
     expect(page).to have_text("Claim complete")
   end
 
