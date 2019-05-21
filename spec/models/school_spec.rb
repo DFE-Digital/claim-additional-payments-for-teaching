@@ -13,6 +13,11 @@ RSpec.describe School, type: :model do
     it "return schools matching the search term" do
       expect(School.search("Penistone")).to match_array([schools(:penistone_grammar_school)])
     end
+
+    it "limits the results" do
+      stub_const("School::SEARCH_RESULTS_LIMIT", 1)
+      expect(School.search("a").count).to eql(1)
+    end
   end
 
   describe "#address" do

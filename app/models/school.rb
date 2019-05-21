@@ -1,4 +1,6 @@
 class School < ApplicationRecord
+  SEARCH_RESULTS_LIMIT = 50
+
   belongs_to :local_authority
 
   validates :urn, presence: true
@@ -75,7 +77,7 @@ class School < ApplicationRecord
   enum school_type: SCHOOL_TYPES
 
   def self.search(search_term)
-    where("name ILIKE ?", "%#{sanitize_sql_like(search_term)}%")
+    where("name ILIKE ?", "%#{sanitize_sql_like(search_term)}%").limit(SEARCH_RESULTS_LIMIT)
   end
 
   def address
