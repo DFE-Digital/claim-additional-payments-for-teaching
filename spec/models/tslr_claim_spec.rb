@@ -47,6 +47,10 @@ RSpec.describe TslrClaim, type: :model do
       valid_address_attributes = {address_line_1: "123 Main Street", address_line_3: "Twin Peaks", postcode: "12345"}
       expect(TslrClaim.new(valid_address_attributes)).to be_valid(:address)
     end
+    it "validates the length of postcode is not greater than 11" do
+      expect(TslrClaim.new(address_line_1: "123 Main Street", address_line_3: "Twin Peaks", postcode: "M12345 23453WD")).not_to be_valid(:address)
+      expect(TslrClaim.new(address_line_1: "123 Main Street", address_line_3: "Twin Peaks", postcode: "M1 2WD")).to be_valid(:address)
+    end
   end
 
   context "when saving in the “date-of-birth” validation context" do

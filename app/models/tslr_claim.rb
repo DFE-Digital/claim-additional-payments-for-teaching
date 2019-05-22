@@ -40,7 +40,8 @@ class TslrClaim < ApplicationRecord
   validates :full_name,                 on: :"full-name", presence: {message: "Enter your full name"}
   validates :address_line_1,            on: :address, presence: {message: "Enter your building and street address"}
   validates :address_line_3,            on: :address, presence: {message: "Enter your town or city"}
-  validates :postcode,                  on: :address, presence: {message: "Enter your postcode"}
+  validates :postcode,                  on: :address, presence: {message: "Enter your postcode"}, \
+                                        length: {maximum: 11, message: "Postcode must be 11 characters or less"}
   validates :date_of_birth,             on: :"date-of-birth", presence: {message: "Enter your date of birth"}
   validates :teacher_reference_number,  on: :"teacher-reference-number", presence: {message: "Enter your teacher reference number"}
   validate :trn_must_be_seven_digits
