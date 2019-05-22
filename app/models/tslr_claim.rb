@@ -9,6 +9,7 @@ class TslrClaim < ApplicationRecord
     "date-of-birth",
     "teacher-reference-number",
     "national-insurance-number",
+    "email-address",
     "complete",
   ].freeze
 
@@ -45,6 +46,10 @@ class TslrClaim < ApplicationRecord
   validate :trn_must_be_seven_digits
   validates :national_insurance_number, on: :"national-insurance-number", presence: {message: "Enter your National Insurance number"}
   validate  :ni_number_is_correct_format
+  validates :email_address, on: :"email-address", presence: {message: "Enter an email address"}
+  validates :email_address, format: {with: URI::MailTo::EMAIL_REGEXP, message: "Enter an email address in the correct format, like name@example.com"}, \
+                            length: {maximum: 256, message: "Email address must be 256 characters or less"}, \
+                            allow_nil: true
 
   before_save :update_current_school, if: :employment_status_changed?
   before_save :normalise_trn, if: :teacher_reference_number_changed?
