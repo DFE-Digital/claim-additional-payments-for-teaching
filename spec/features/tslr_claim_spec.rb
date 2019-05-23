@@ -13,9 +13,7 @@ RSpec.feature "Teacher Student Loan Repayments claims" do
     expect(claim.reload.claim_school).to eql schools(:penistone_grammar_school)
     expect(page).to have_text("Are you still employed to teach at a school in England")
 
-    choose "Yes, at Penistone Grammar School"
-    click_on "Continue"
-
+    choose_still_teaching
     expect(claim.reload.employment_status).to eql("claim_school")
     expect(claim.current_school).to eql(schools(:penistone_grammar_school))
 
@@ -82,8 +80,7 @@ RSpec.feature "Teacher Student Loan Repayments claims" do
     choose_qts_year
     choose_school schools(:penistone_grammar_school)
 
-    choose "Yes, at another school"
-    click_on "Continue"
+    choose_still_teaching "Yes, at another school"
 
     expect(claim.reload.employment_status).to eql("different_school")
 
@@ -113,8 +110,7 @@ RSpec.feature "Teacher Student Loan Repayments claims" do
     choose_qts_year
     choose_school schools(:penistone_grammar_school)
 
-    choose "No"
-    click_on "Continue"
+    choose_still_teaching "No"
 
     expect(claim.reload.employment_status).to eq("no_school")
     expect(page).to have_text("You’re not eligible")
@@ -125,9 +121,7 @@ RSpec.feature "Teacher Student Loan Repayments claims" do
     claim = start_tslr_claim
     choose_qts_year
     choose_school schools(:penistone_grammar_school)
-
-    choose "Yes, at Penistone Grammar School"
-    click_on "Continue"
+    choose_still_teaching
 
     expect(page).to have_text("Did you teach eligible subjects for more than 50% of your teaching time")
     choose "No"
