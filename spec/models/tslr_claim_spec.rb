@@ -161,6 +161,16 @@ RSpec.describe TslrClaim, type: :model do
       let(:claim_attributes) { {employment_status: :no_school} }
       it { is_expected.to be true }
     end
+
+    context "when taught less than half time in eligible subjects" do
+      let(:claim_attributes) { {mostly_teaching_eligible_subjects: false} }
+      it { is_expected.to be true }
+    end
+
+    context "when taught at least half time in eligible subjects" do
+      let(:claim_attributes) { {mostly_teaching_eligible_subjects: true} }
+      it { is_expected.to be false }
+    end
   end
 
   describe "#ineligibility_reason" do
@@ -174,6 +184,11 @@ RSpec.describe TslrClaim, type: :model do
     context "when no longer teaching" do
       let(:claim_attributes) { {employment_status: :no_school} }
       it { is_expected.to eql :employed_at_no_school }
+    end
+
+    context "when taught less than half time in eligible subjects" do
+      let(:claim_attributes) { {mostly_teaching_eligible_subjects: false} }
+      it { is_expected.to eql :not_taught_eligible_subjects_enough }
     end
 
     context "when not ineligible" do

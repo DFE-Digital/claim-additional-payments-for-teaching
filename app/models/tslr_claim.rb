@@ -66,17 +66,25 @@ class TslrClaim < ApplicationRecord
   end
 
   def ineligible?
-    ineligible_claim_school? || employed_at_no_school?
+    ineligible_claim_school? || employed_at_no_school? || not_taught_eligible_subjects_enough?
   end
 
   def ineligibility_reason
-    [:ineligible_claim_school, :employed_at_no_school].find { |eligibility_check| send("#{eligibility_check}?") }
+    [
+      :ineligible_claim_school,
+      :employed_at_no_school,
+      :not_taught_eligible_subjects_enough,
+    ].find { |eligibility_check| send("#{eligibility_check}?") }
   end
 
   private
 
   def ineligible_claim_school?
     claim_school.present? && !claim_school.eligible_for_tslr?
+  end
+
+  def not_taught_eligible_subjects_enough?
+    mostly_teaching_eligible_subjects == false
   end
 
   def update_current_school
