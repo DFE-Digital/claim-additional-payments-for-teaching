@@ -17,4 +17,9 @@ module FeatureHelpers
     choose school.name
     click_on "Continue"
   end
+
+  def choose_still_teaching(teaching_at = "Yes, at Penistone Grammar School")
+    choose teaching_at
+    click_on "Continue"
+  end
 end

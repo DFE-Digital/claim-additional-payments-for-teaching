@@ -13,11 +13,15 @@ RSpec.feature "Teacher Student Loan Repayments claims" do
     expect(claim.reload.claim_school).to eql schools(:penistone_grammar_school)
     expect(page).to have_text("Are you still employed to teach at a school in England")
 
-    choose "Yes, at Penistone Grammar School"
-    click_on "Continue"
-
+    choose_still_teaching
     expect(claim.reload.employment_status).to eql("claim_school")
     expect(claim.current_school).to eql(schools(:penistone_grammar_school))
+
+    expect(page).to have_text("Did you teach eligible subjects for more than 50% of your teaching time")
+    choose "Yes"
+    click_on "Continue"
+
+    expect(claim.reload.mostly_teaching_eligible_subjects).to eq(true)
 
     expect(page).to have_text("What is your full name")
 
@@ -76,8 +80,7 @@ RSpec.feature "Teacher Student Loan Repayments claims" do
     choose_qts_year
     choose_school schools(:penistone_grammar_school)
 
-    choose "Yes, at another school"
-    click_on "Continue"
+    choose_still_teaching "Yes, at another school"
 
     expect(claim.reload.employment_status).to eql("different_school")
 
@@ -89,7 +92,7 @@ RSpec.feature "Teacher Student Loan Repayments claims" do
 
     expect(claim.reload.current_school).to eql schools(:hampstead_school)
 
-    expect(page).to have_text("What is your full name")
+    expect(page).to have_text("Did you teach eligible subjects for more than 50% of your teaching time")
   end
 
   scenario "chooses an ineligible school" do
@@ -107,12 +110,26 @@ RSpec.feature "Teacher Student Loan Repayments claims" do
     choose_qts_year
     choose_school schools(:penistone_grammar_school)
 
-    choose "No"
-    click_on "Continue"
+    choose_still_teaching "No"
 
     expect(claim.reload.employment_status).to eq("no_school")
     expect(page).to have_text("You’re not eligible")
     expect(page).to have_text("You must be still working as a teacher to be eligible")
+  end
+
+  scenario "did not teach at least half their time in an eligible subject" do
+    claim = start_tslr_claim
+    choose_qts_year
+    choose_school schools(:penistone_grammar_school)
+    choose_still_teaching
+
+    expect(page).to have_text("Did you teach eligible subjects for more than 50% of your teaching time")
+    choose "No"
+    click_on "Continue"
+
+    expect(claim.reload.mostly_teaching_eligible_subjects).to eq(false)
+    expect(page).to have_text("You’re not eligible")
+    expect(page).to have_text("You must have spent at least half your time teaching an eligible subject.")
   end
 
   scenario "Teacher cannot go to mid-claim page before starting a claim" do

@@ -10,6 +10,7 @@ module ClaimsHelper
     case claim.ineligibility_reason
     when :ineligible_claim_school then "#{claim.claim_school_name} is not an eligible school."
     when :employed_at_no_school then "You must be still working as a teacher to be eligible."
+    when :not_taught_eligible_subjects_enough then "You must have spent at least half your time teaching an eligible subject."
     else "You can only apply for this payment if you meet the eligibility criteria."
     end
   end
