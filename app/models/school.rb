@@ -88,4 +88,8 @@ class School < ApplicationRecord
   def eligible_for_tslr?
     Tslr::SchoolEligibility.new(self).check
   end
+
+  def eligible_for_mptr?
+    Mps::SchoolEligibility.new(self).check
+  end
 end
