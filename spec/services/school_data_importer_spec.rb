@@ -28,6 +28,8 @@ RSpec.describe SchoolDataImporter do
         expect(imported_school.school_type_group).to eql("la_maintained")
         expect(imported_school.local_authority.code).to eql(370)
         expect(imported_school.local_authority.name).to eql("Barnsley")
+        expect(imported_school.local_authority_district.code).to eql("E08000016")
+        expect(imported_school.local_authority_district.name).to eql("Barnsley")
       end
 
       it "correctly handles any Latin1 encoded characters in the data file" do
@@ -66,6 +68,19 @@ RSpec.describe SchoolDataImporter do
           local_authorities(:barnsley).reload
 
           expect(local_authorities(:barnsley).name).to eql("Barnsley")
+        end
+      end
+
+      context "when the local authority district already exists" do
+        before do
+          local_authority_districts(:barnsley).update!(name: "South Yorkshire")
+        end
+
+        it "updates the local authority district" do
+          school_data_importer.run
+          local_authority_districts(:barnsley).reload
+
+          expect(local_authority_districts(:barnsley).name).to eql("Barnsley")
         end
       end
     end

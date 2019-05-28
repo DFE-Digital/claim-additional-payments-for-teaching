@@ -22,6 +22,12 @@ ActiveRecord::Schema.define(version: 2019_05_29_103851) do
     t.index ["code"], name: "index_local_authorities_on_code", unique: true
   end
 
+  create_table "local_authority_districts", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "name"
+    t.string "code"
+    t.index ["code"], name: "index_local_authority_districts_on_code", unique: true
+  end
+
   create_table "schools", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.integer "urn", null: false
     t.string "name", null: false
@@ -36,6 +42,8 @@ ActiveRecord::Schema.define(version: 2019_05_29_103851) do
     t.uuid "local_authority_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.uuid "local_authority_district_id"
+    t.index ["local_authority_district_id"], name: "index_schools_on_local_authority_district_id"
     t.index ["local_authority_id"], name: "index_schools_on_local_authority_id"
     t.index ["urn"], name: "index_schools_on_urn", unique: true
   end
@@ -65,6 +73,7 @@ ActiveRecord::Schema.define(version: 2019_05_29_103851) do
     t.index ["submitted_at"], name: "index_tslr_claims_on_submitted_at"
   end
 
+  add_foreign_key "schools", "local_authority_districts"
   add_foreign_key "tslr_claims", "schools", column: "claim_school_id"
   add_foreign_key "tslr_claims", "schools", column: "current_school_id"
 end
