@@ -28,3 +28,8 @@
 
 # Ignore secrets
 .env.local
+.env
+
+# Ignore development certificates
+localhost.crt
+localhost.key
