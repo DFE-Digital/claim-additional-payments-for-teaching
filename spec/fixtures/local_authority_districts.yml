@@ -1,0 +1,8 @@
+#MPTR Eligible
+barnsley:
+  code: E08000016
+  name: Barnsley
+#MPTR Ineligible
+camden:
+  code: E09000007
+  name: Camden

@@ -26,6 +26,11 @@ class SchoolDataImporter
     local_authority = LocalAuthority.find_or_initialize_by(code: row.fetch("LA (code)"))
     local_authority.name = row.fetch("LA (name)")
     local_authority.save!
+
+    local_authority_district = LocalAuthorityDistrict.find_or_initialize_by(code: row.fetch("DistrictAdministrative (code)"))
+    local_authority_district.name = row.fetch("DistrictAdministrative (name)")
+    local_authority_district.save!
+
     school = School.find_or_initialize_by(urn: row.fetch("URN"))
     school.name = row.fetch("EstablishmentName")
     school.street = row.fetch("Street")
@@ -37,6 +42,7 @@ class SchoolDataImporter
     school.school_type_group = row.fetch("EstablishmentTypeGroup (code)").to_i
     school.school_type = row.fetch("TypeOfEstablishment (code)").to_i
     school.local_authority = local_authority
+    school.local_authority_district = local_authority_district
     school
   end
 

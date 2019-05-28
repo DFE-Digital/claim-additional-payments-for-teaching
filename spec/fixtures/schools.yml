@@ -1,4 +1,4 @@
-# TSLR Eligible
+# TSLR and MPTR Eligible
 penistone_grammar_school:
   name: Penistone Grammar School
   urn: 1234
@@ -6,7 +6,8 @@ penistone_grammar_school:
   school_type_group: la_maintained
   school_type: community_school
   local_authority: barnsley
-# TSLR Ineligible
+  local_authority_district: barnsley
+# TSLR and MPTR Ineligible
 hampstead_school:
   name: Hampstead School
   urn: 4567
@@ -14,3 +15,4 @@ hampstead_school:
   school_type_group: la_maintained
   school_type: community_school
   local_authority: camden
+  local_authority_district: camden

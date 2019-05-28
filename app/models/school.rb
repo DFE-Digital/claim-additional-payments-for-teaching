@@ -2,6 +2,7 @@ class School < ApplicationRecord
   SEARCH_RESULTS_LIMIT = 50
 
   belongs_to :local_authority
+  belongs_to :local_authority_district
 
   validates :urn, presence: true
   validates :name, presence: true
