@@ -3,34 +3,34 @@ require "rails_helper"
 RSpec.feature "Teacher Student Loan Repayments claims" do
   scenario "Teacher claims back student loan repayments" do
     claim = start_tslr_claim
-    expect(page).to have_text("Which academic year were you awarded qualified teacher status")
+    expect(page).to have_text(I18n.t("tslr.questions.qts_award_year"))
 
     choose_qts_year
     expect(claim.reload.qts_award_year).to eql("2014-2015")
-    expect(page).to have_text("Which school were you employed at between")
+    expect(page).to have_text(I18n.t("tslr.questions.claim_school"))
 
     choose_school schools(:penistone_grammar_school)
     expect(claim.reload.claim_school).to eql schools(:penistone_grammar_school)
-    expect(page).to have_text("Are you still employed to teach at a school in England")
+    expect(page).to have_text(I18n.t("tslr.questions.employment_status"))
 
     choose_still_teaching
     expect(claim.reload.employment_status).to eql("claim_school")
     expect(claim.current_school).to eql(schools(:penistone_grammar_school))
 
-    expect(page).to have_text("Did you teach eligible subjects for more than 50% of your teaching time")
+    expect(page).to have_text(I18n.t("tslr.questions.mostly_teaching_eligible_subjects"))
     choose "Yes"
     click_on "Continue"
 
     expect(claim.reload.mostly_teaching_eligible_subjects).to eq(true)
 
-    expect(page).to have_text("What is your full name")
+    expect(page).to have_text(I18n.t("tslr.questions.full_name"))
 
-    fill_in "What is your full name?", with: "Margaret Honeycutt"
+    fill_in I18n.t("tslr.questions.full_name"), with: "Margaret Honeycutt"
     click_on "Continue"
 
     expect(claim.reload.full_name).to eql("Margaret Honeycutt")
 
-    expect(page).to have_text("What is your address?")
+    expect(page).to have_text(I18n.t("tslr.questions.address"))
 
     fill_in :tslr_claim_address_line_1, with: "123 Main Street"
     fill_in :tslr_claim_address_line_2, with: "Downtown"
@@ -45,7 +45,7 @@ RSpec.feature "Teacher Student Loan Repayments claims" do
     expect(claim.address_line_4).to eql("Washington")
     expect(claim.postcode).to eql("M1 7HL")
 
-    expect(page).to have_text("What is your date of birth?")
+    expect(page).to have_text(I18n.t("tslr.questions.date_of_birth"))
     fill_in "Day", with: "03"
     fill_in "Month", with: "7"
     fill_in "Year", with: "1990"
@@ -53,21 +53,21 @@ RSpec.feature "Teacher Student Loan Repayments claims" do
 
     expect(claim.reload.date_of_birth).to eq(Date.new(1990, 7, 3))
 
-    expect(page).to have_text("What is your teacher reference number?")
+    expect(page).to have_text(I18n.t("tslr.questions.teacher_reference_number"))
     fill_in :tslr_claim_teacher_reference_number, with: "1234567"
     click_on "Continue"
 
     expect(claim.reload.teacher_reference_number).to eql("1234567")
 
-    expect(page).to have_text("What is your National Insurance number?")
+    expect(page).to have_text(I18n.t("tslr.questions.national_insurance_number"))
     fill_in "National Insurance number", with: "QQ123456C"
     click_on "Continue"
 
     expect(claim.reload.national_insurance_number).to eq("QQ123456C")
 
-    expect(page).to have_text("What is your email address?")
+    expect(page).to have_text(I18n.t("tslr.questions.email_address"))
     expect(page).to have_text("We will only use your email address to update you about your claim.")
-    fill_in "What is your email address?", with: "name@example.tld"
+    fill_in I18n.t("tslr.questions.email_address"), with: "name@example.tld"
     click_on "Continue"
 
     expect(claim.reload.email_address).to eq("name@example.tld")
@@ -92,7 +92,7 @@ RSpec.feature "Teacher Student Loan Repayments claims" do
 
     expect(claim.reload.current_school).to eql schools(:hampstead_school)
 
-    expect(page).to have_text("Did you teach eligible subjects for more than 50% of your teaching time")
+    expect(page).to have_text(I18n.t("tslr.questions.mostly_teaching_eligible_subjects"))
   end
 
   scenario "chooses an ineligible school" do
@@ -123,7 +123,7 @@ RSpec.feature "Teacher Student Loan Repayments claims" do
     choose_school schools(:penistone_grammar_school)
     choose_still_teaching
 
-    expect(page).to have_text("Did you teach eligible subjects for more than 50% of your teaching time")
+    expect(page).to have_text(I18n.t("tslr.questions.mostly_teaching_eligible_subjects"))
     choose "No"
     click_on "Continue"
 
