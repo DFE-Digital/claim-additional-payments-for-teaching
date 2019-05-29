@@ -61,6 +61,23 @@ RSpec.describe "Claims", type: :request do
         expect(response).to redirect_to(root_path)
       end
     end
+
+    context "when the user reaches the confirmation page after submitting their claim" do
+      before do
+        post claims_path
+
+        claim = TslrClaim.order(:created_at).last
+        claim.update_attributes(attributes_for(:tslr_claim, :eligible_and_submittable))
+        claim.submit!
+
+        get claim_path("confirmation")
+      end
+
+      it "clears the claim from the session" do
+        expect(session[:tslr_claim_id]).to be_nil
+        expect(session[:last_seen_at]).to be_nil
+      end
+    end
   end
 
   describe "claim#ineligible request" do

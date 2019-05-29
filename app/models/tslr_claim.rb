@@ -95,6 +95,10 @@ class TslrClaim < ApplicationRecord
     touch(:submitted_at) if valid?(:submit)
   end
 
+  def submitted?
+    submitted_at.present?
+  end
+
   def ineligible?
     ineligible_claim_school? || employed_at_no_school? || not_taught_eligible_subjects_enough?
   end

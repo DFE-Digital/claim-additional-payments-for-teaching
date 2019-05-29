@@ -5,6 +5,8 @@ class ClaimsController < ApplicationController
   before_action :end_expired_sessions
   before_action :update_last_seen_at
 
+  after_action :clear_claim_session, if: :submission_complete?
+
   def new
   end
 
@@ -53,6 +55,10 @@ class ClaimsController < ApplicationController
   def next_slug
     current_slug_index = current_claim.page_sequence.index(params[:slug])
     current_claim.page_sequence[current_slug_index + 1]
+  end
+
+  def submission_complete?
+    params[:slug] == "confirmation" && current_claim.submitted?
   end
 
   def perform_non_js_school_search
