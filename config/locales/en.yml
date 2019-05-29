@@ -30,4 +30,5 @@
 # available at http://guides.rubyonrails.org/i18n.html.
 
 en:
-  service_name: "Teachers: claim back student loan repayments"
+  tslr:
+    service_name: "Teachers: claim back student loan repayments"
