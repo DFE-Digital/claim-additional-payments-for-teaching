@@ -11,7 +11,7 @@ class TslrClaim < ApplicationRecord
     "teacher-reference-number",
     "national-insurance-number",
     "email-address",
-    "complete",
+    "confirmation",
   ].freeze
 
   VALID_QTS_YEARS = [
