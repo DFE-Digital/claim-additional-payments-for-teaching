@@ -78,15 +78,16 @@ class TslrClaim < ApplicationRecord
                                         allow_nil: true
 
   validates :bank_sort_code,            on: :"bank-details", presence: {message: "Enter a sort code"}
-  validates :bank_sort_code,            length: {is: 6, message: "Sort code must be 6 digits"},
-                                        allow_nil: true
   validates :bank_account_number,       on: :"bank-details", presence: {message: "Enter an account number"}
-  validates :bank_account_number,       length: {is: 8, message: "Account number must be 8 digits"},
-                                        allow_nil: true
+
+  validate  :bank_account_number_must_be_eight_digits
+  validate  :bank_sort_code_must_be_six_digits
 
   before_save :update_current_school, if: :employment_status_changed?
   before_save :normalise_trn, if: :teacher_reference_number_changed?
   before_save :normalise_ni_number, if: :national_insurance_number_changed?
+  before_save :normalise_bank_account_number, if: :bank_account_number_changed?
+  before_save :normalise_bank_sort_code, if: :bank_sort_code_changed?
 
   delegate :name, to: :claim_school, prefix: true, allow_nil: true
   delegate :name, to: :current_school, prefix: true, allow_nil: true
@@ -176,5 +177,27 @@ class TslrClaim < ApplicationRecord
   def ni_number_is_correct_format
     errors.add(:national_insurance_number, "Enter a National Insurance number in the correct format") \
       if national_insurance_number.present? && !normalised_ni_number.match(/\A[a-z]{2}[0-9]{6}[a-d]{1}\Z/i)
+  end
+
+  def normalise_bank_account_number
+    self.bank_account_number = normalised_bank_detail(bank_account_number)
+  end
+
+  def normalise_bank_sort_code
+    self.bank_sort_code = normalised_bank_detail(bank_sort_code)
+  end
+
+  def normalised_bank_detail(bank_detail)
+    bank_detail.gsub(/\s|-/, "")
+  end
+
+  def bank_account_number_must_be_eight_digits
+    errors.add(:bank_account_number, "Bank account number must contain eight digits") \
+      if bank_account_number.present? && normalised_bank_detail(bank_account_number) !~ /\A\d{8}\z/
+  end
+
+  def bank_sort_code_must_be_six_digits
+    errors.add(:bank_sort_code, "Sort code must contain six digits") \
+      if bank_sort_code.present? && normalised_bank_detail(bank_sort_code) !~ /\A\d{6}\z/
   end
 end
