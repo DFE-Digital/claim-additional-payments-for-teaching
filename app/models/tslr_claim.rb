@@ -11,6 +11,7 @@ class TslrClaim < ApplicationRecord
     "teacher-reference-number",
     "national-insurance-number",
     "email-address",
+    "check-your-answers",
     "confirmation",
   ].freeze
 
@@ -35,39 +36,39 @@ class TslrClaim < ApplicationRecord
   belongs_to :claim_school, optional: true, class_name: "School"
   belongs_to :current_school, optional: true, class_name: "School"
 
-  validates :claim_school,              on: :"claim-school", presence: {message: "Select a school from the list"}
+  validates :claim_school,              on: [:"claim-school", :submit], presence: {message: "Select a school from the list"}
 
-  validates :qts_award_year,            on: :"qts-year", inclusion: {in: VALID_QTS_YEARS, message: "Select the academic year you were awarded qualified teacher status"}
+  validates :qts_award_year,            on: [:"qts-year", :submit], inclusion: {in: VALID_QTS_YEARS, message: "Select the academic year you were awarded qualified teacher status"}
 
-  validates :employment_status,         on: :"still-teaching", presence: {message: "Choose the option that describes your current employment status"}
+  validates :employment_status,         on: [:"still-teaching", :submit], presence: {message: "Choose the option that describes your current employment status"}
 
-  validates :mostly_teaching_eligible_subjects, on: :"subjects-taught", inclusion: {in: [true, false], message: "Select either Yes or No"}
+  validates :mostly_teaching_eligible_subjects, on: [:"subjects-taught", :submit], inclusion: {in: [true, false], message: "Select either Yes or No"}
 
-  validates :full_name,                 on: :"full-name", presence: {message: "Enter your full name"}
+  validates :full_name,                 on: [:"full-name", :submit], presence: {message: "Enter your full name"}
   validates :full_name,                 length: {maximum: 200, message: "Full name must be 200 characters or less"}
 
-  validates :address_line_1,            on: :address, presence: {message: "Enter your building and street address"}
+  validates :address_line_1,            on: [:address, :submit], presence: {message: "Enter your building and street address"}
   validates :address_line_1,            length: {maximum: 100, message: "Address lines must be 100 characters or less"}
 
   validates :address_line_2,            length: {maximum: 100, message: "Address lines must be 100 characters or less"}
 
-  validates :address_line_3,            on: :address, presence: {message: "Enter your town or city"}
+  validates :address_line_3,            on: [:address, :submit], presence: {message: "Enter your town or city"}
   validates :address_line_3,            length: {maximum: 100, message: "Address lines must be 100 characters or less"}
 
-  validates :postcode,                  on: :address, presence: {message: "Enter your postcode"}
+  validates :postcode,                  on: [:address, :submit], presence: {message: "Enter your postcode"}
   validates :postcode,                  length: {maximum: 11, message: "Postcode must be 11 characters or less"}
 
-  validates :date_of_birth,             on: :"date-of-birth", presence: {message: "Enter your date of birth"}
+  validates :date_of_birth,             on: [:"date-of-birth", :submit], presence: {message: "Enter your date of birth"}
 
-  validates :teacher_reference_number,  on: :"teacher-reference-number", presence: {message: "Enter your teacher reference number"}
+  validates :teacher_reference_number,  on: [:"teacher-reference-number", :submit], presence: {message: "Enter your teacher reference number"}
 
   validate :trn_must_be_seven_digits
 
-  validates :national_insurance_number, on: :"national-insurance-number", presence: {message: "Enter your National Insurance number"}
+  validates :national_insurance_number, on: [:"national-insurance-number", :submit], presence: {message: "Enter your National Insurance number"}
 
   validate  :ni_number_is_correct_format
 
-  validates :email_address,             on: :"email-address", presence: {message: "Enter an email address"}
+  validates :email_address,             on: [:"email-address", :submit], presence: {message: "Enter an email address"}
   validates :email_address,             format: {with: URI::MailTo::EMAIL_REGEXP, message: "Enter an email address in the correct format, like name@example.com"},
                                         length: {maximum: 256, message: "Email address must be 256 characters or less"},
                                         allow_nil: true
@@ -77,11 +78,21 @@ class TslrClaim < ApplicationRecord
   before_save :normalise_ni_number, if: :national_insurance_number_changed?
 
   delegate :name, to: :claim_school, prefix: true, allow_nil: true
+  delegate :name, to: :current_school, prefix: true, allow_nil: true
 
   def page_sequence
     PAGE_SEQUENCE.dup.tap do |sequence|
       sequence.delete("current-school") if employed_at_claim_school?
     end
+  end
+
+  def submit!
+    if ineligible?
+      errors.add(:base, full_ineligibility_reason)
+      return false
+    end
+
+    touch(:submitted_at) if valid?(:submit)
   end
 
   def ineligible?
@@ -94,6 +105,19 @@ class TslrClaim < ApplicationRecord
       :employed_at_no_school,
       :not_taught_eligible_subjects_enough,
     ].find { |eligibility_check| send("#{eligibility_check}?") }
+  end
+
+  def full_ineligibility_reason
+    case ineligibility_reason
+    when :ineligible_claim_school then "#{claim_school_name} is not an eligible school."
+    when :employed_at_no_school then "You must be still working as a teacher to be eligible."
+    when :not_taught_eligible_subjects_enough then "You must have spent at least half your time teaching an eligible subject."
+    else "You can only apply for this payment if you meet the eligibility criteria."
+    end
+  end
+
+  def address
+    [address_line_1, address_line_2, address_line_3, address_line_4, postcode].reject(&:blank?).join(", ")
   end
 
   private

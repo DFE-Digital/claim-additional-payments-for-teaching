@@ -21,8 +21,7 @@ class ClaimsController < ApplicationController
   end
 
   def update
-    current_claim.attributes = claim_params
-    if current_claim.save(context: params[:slug].to_sym)
+    if update_current_claim!
       redirect_to next_claim_path
     else
       show
@@ -33,6 +32,15 @@ class ClaimsController < ApplicationController
   end
 
   private
+
+  def update_current_claim!
+    if params[:slug] == "check-your-answers"
+      current_claim.submit!
+    else
+      current_claim.attributes = claim_params
+      current_claim.save(context: params[:slug].to_sym)
+    end
+  end
 
   def next_claim_path
     if current_claim.ineligible?

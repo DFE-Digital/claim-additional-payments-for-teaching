@@ -132,6 +132,64 @@ RSpec.describe "Claims", type: :request do
           expect(response).to redirect_to(ineligible_claim_path)
         end
       end
+
+      context "when updating from check-your-answers" do
+        context "with an eligible and submittable claim" do
+          before :each do
+            in_progress_claim.update!(attributes_for(:tslr_claim, :eligible_and_submittable))
+
+            put claim_path("check-your-answers")
+
+            in_progress_claim.reload
+          end
+
+          it "submits the claim" do
+            expect(in_progress_claim.submitted_at).to be_present
+          end
+
+          it "redirects to the confirmation page" do
+            expect(response).to redirect_to(claim_path("confirmation"))
+          end
+        end
+
+        context "with an eligible but unsubmittable claim" do
+          before :each do
+            in_progress_claim.update!(attributes_for(:tslr_claim, :eligible_and_submittable, email_address: nil))
+
+            put claim_path("check-your-answers")
+
+            in_progress_claim.reload
+          end
+
+          it "doesn't submit the claim" do
+            expect(in_progress_claim.submitted_at).to be_nil
+          end
+
+          it "re-renders the check-your-answers page with errors" do
+            expect(response.body).to include("Check your answers before sending your application")
+            expect(response.body).to include("Enter an email address")
+          end
+        end
+
+        context "with an ineligible claim" do
+          before :each do
+            in_progress_claim.update!(attributes_for(:tslr_claim, :eligible_and_submittable, mostly_teaching_eligible_subjects: false))
+
+            put claim_path("check-your-answers")
+
+            in_progress_claim.reload
+          end
+
+          it "doesn't submit the claim" do
+            expect(in_progress_claim.submitted_at).to be_nil
+          end
+
+          it "re-renders the check-your-answers page with errors" do
+            expect(response.body).to include("Check your answers before sending your application")
+            expect(response.body).to include("You must have spent at least half your time teaching an eligible subject.")
+          end
+        end
+      end
     end
 
     context "when a claim hasn’t been started yet" do

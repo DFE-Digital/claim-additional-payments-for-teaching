@@ -72,7 +72,15 @@ RSpec.feature "Teacher Student Loan Repayments claims" do
 
     expect(claim.reload.email_address).to eq("name@example.tld")
 
-    expect(page).to have_text("Claim complete")
+    expect(page).to have_text("Check your answers before sending your application")
+
+    freeze_time do
+      click_on "Confirm and send"
+
+      expect(claim.reload.submitted_at).to eq(Time.zone.now)
+    end
+
+    expect(page).to have_text("Claim submitted")
   end
 
   scenario "Teacher now works for a different school" do
