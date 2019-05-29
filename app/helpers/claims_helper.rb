@@ -1,9 +1,6 @@
 module ClaimsHelper
   def options_for_qts_award_year
-    TslrClaim::VALID_QTS_YEARS.map do |academic_years|
-      start_year, end_year = academic_years.split("-")
-      ["September 1 #{start_year} - August 31 #{end_year}", academic_years]
-    end
+    TslrClaim::VALID_QTS_YEARS.map { |year_range| [academic_years(year_range), year_range] }
   end
 
   def tslr_claim_ineligibility_reason(claim)
@@ -21,5 +18,13 @@ module ClaimsHelper
 
   def claim_timeout_in_minutes
     ClaimsController::TIMEOUT_LENGTH_IN_MINUTES
+  end
+
+  private
+
+  def academic_years(year_range)
+    start_year, end_year = year_range.split("-")
+
+    "September 1 #{start_year} - August 31 #{end_year}"
   end
 end
