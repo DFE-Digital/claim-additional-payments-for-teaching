@@ -78,6 +78,15 @@ RSpec.feature "Teacher Student Loan Repayments claims" do
 
     expect(claim.reload.email_address).to eq("name@example.tld")
 
+    expect(page).to have_text("Your bank account details")
+    expect(page).to have_text("We need to collect this information to pay you.")
+    fill_in "Sort code", with: "123456"
+    fill_in "Account number", with: "87654321"
+    click_on "Continue"
+
+    expect(claim.reload.bank_sort_code).to eq("123456")
+    expect(claim.reload.bank_account_number).to eq("87654321")
+
     expect(page).to have_text("Check your answers before sending your application")
 
     freeze_time do

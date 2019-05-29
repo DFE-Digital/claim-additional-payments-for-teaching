@@ -60,6 +60,16 @@ RSpec.describe TslrClaim, type: :model do
         expect(TslrClaim.new(valid_address_attributes)).not_to be_valid
       end
     end
+
+    context "that has bank details" do
+      it "validates the length of account_number and account_sort_code" do
+        expect(TslrClaim.new(bank_account_number: "123456789")).not_to be_valid
+        expect(TslrClaim.new(bank_sort_code: "10111213")).not_to be_valid
+
+        expect(TslrClaim.new(bank_account_number: "12345678")).to be_valid
+        expect(TslrClaim.new(bank_sort_code: "101112")).to be_valid
+      end
+    end
   end
 
   context "when saving in the “qts-year” validation context" do
@@ -146,6 +156,13 @@ RSpec.describe TslrClaim, type: :model do
     it "validates the presence of email_address" do
       expect(TslrClaim.new).not_to be_valid(:"email-address")
       expect(TslrClaim.new(email_address: "name@example.tld")).to be_valid(:"email-address")
+    end
+  end
+
+  context "when saving in the “bank-details” validation context" do
+    it "validates that the bank_account_number and bank_sort_code are present" do
+      expect(TslrClaim.new).not_to be_valid(:"bank-details")
+      expect(TslrClaim.new(bank_sort_code: "123456", bank_account_number: "87654321")).to be_valid(:"bank-details")
     end
   end
 

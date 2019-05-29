@@ -66,6 +66,8 @@ ActiveRecord::Schema.define(version: 2019_05_31_101710) do
     t.string "national_insurance_number", limit: 9
     t.string "email_address", limit: 256
     t.boolean "mostly_teaching_eligible_subjects"
+    t.string "bank_sort_code", limit: 6
+    t.string "bank_account_number", limit: 8
     t.datetime "submitted_at"
     t.decimal "student_loan_repayment_amount", precision: 7, scale: 2
     t.index ["claim_school_id"], name: "index_tslr_claims_on_claim_school_id"

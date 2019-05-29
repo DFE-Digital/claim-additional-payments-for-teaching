@@ -87,6 +87,8 @@ class ClaimsController < ApplicationController
       :national_insurance_number,
       :student_loan_repayment_amount,
       :email_address,
+      :bank_sort_code,
+      :bank_account_number,
     )
   end
 

@@ -12,6 +12,7 @@ class TslrClaim < ApplicationRecord
     "national-insurance-number",
     "student-loan-amount",
     "email-address",
+    "bank-details",
     "check-your-answers",
     "confirmation",
   ].freeze
@@ -74,6 +75,13 @@ class TslrClaim < ApplicationRecord
   validates :email_address,             on: [:"email-address", :submit], presence: {message: "Enter an email address"}
   validates :email_address,             format: {with: URI::MailTo::EMAIL_REGEXP, message: "Enter an email address in the correct format, like name@example.com"},
                                         length: {maximum: 256, message: "Email address must be 256 characters or less"},
+                                        allow_nil: true
+
+  validates :bank_sort_code,            on: :"bank-details", presence: {message: "Enter a sort code"}
+  validates :bank_sort_code,            length: {is: 6, message: "Sort code must be 6 digits"},
+                                        allow_nil: true
+  validates :bank_account_number,       on: :"bank-details", presence: {message: "Enter an account number"}
+  validates :bank_account_number,       length: {is: 8, message: "Account number must be 8 digits"},
                                         allow_nil: true
 
   before_save :update_current_school, if: :employment_status_changed?
