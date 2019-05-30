@@ -61,6 +61,23 @@ RSpec.describe "Claims", type: :request do
         expect(response).to redirect_to(root_path)
       end
     end
+
+    context "when the user reaches the confirmation page after submitting their claim" do
+      before do
+        post claims_path
+
+        claim = TslrClaim.order(:created_at).last
+        claim.update_attributes(attributes_for(:tslr_claim, :eligible_and_submittable))
+        claim.submit!
+
+        get claim_path("confirmation")
+      end
+
+      it "clears the claim from the session" do
+        expect(session[:tslr_claim_id]).to be_nil
+        expect(session[:last_seen_at]).to be_nil
+      end
+    end
   end
 
   describe "claim#ineligible request" do
@@ -130,6 +147,64 @@ RSpec.describe "Claims", type: :request do
           put claim_path("claim-school"), params: {tslr_claim: {claim_school_id: schools(:hampstead_school).to_param}}
 
           expect(response).to redirect_to(ineligible_claim_path)
+        end
+      end
+
+      context "when updating from check-your-answers" do
+        context "with an eligible and submittable claim" do
+          before :each do
+            in_progress_claim.update!(attributes_for(:tslr_claim, :eligible_and_submittable))
+
+            put claim_path("check-your-answers")
+
+            in_progress_claim.reload
+          end
+
+          it "submits the claim" do
+            expect(in_progress_claim.submitted_at).to be_present
+          end
+
+          it "redirects to the confirmation page" do
+            expect(response).to redirect_to(claim_path("confirmation"))
+          end
+        end
+
+        context "with an eligible but unsubmittable claim" do
+          before :each do
+            in_progress_claim.update!(attributes_for(:tslr_claim, :eligible_and_submittable, email_address: nil))
+
+            put claim_path("check-your-answers")
+
+            in_progress_claim.reload
+          end
+
+          it "doesn't submit the claim" do
+            expect(in_progress_claim.submitted_at).to be_nil
+          end
+
+          it "re-renders the check-your-answers page with errors" do
+            expect(response.body).to include("Check your answers before sending your application")
+            expect(response.body).to include("Enter an email address")
+          end
+        end
+
+        context "with an ineligible claim" do
+          before :each do
+            in_progress_claim.update!(attributes_for(:tslr_claim, :eligible_and_submittable, mostly_teaching_eligible_subjects: false))
+
+            put claim_path("check-your-answers")
+
+            in_progress_claim.reload
+          end
+
+          it "doesn't submit the claim" do
+            expect(in_progress_claim.submitted_at).to be_nil
+          end
+
+          it "re-renders the check-your-answers page with errors" do
+            expect(response.body).to include("Check your answers before sending your application")
+            expect(response.body).to include("You must have spent at least half your time teaching an eligible subject.")
+          end
         end
       end
     end

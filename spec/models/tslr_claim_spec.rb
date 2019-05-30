@@ -134,6 +134,13 @@ RSpec.describe TslrClaim, type: :model do
     end
   end
 
+  context "when saving in the “submit” validation context" do
+    it "validates the presence of all required fields" do
+      expect(TslrClaim.new).not_to be_valid(:submit)
+      expect(TslrClaim.new(attributes_for(:tslr_claim, :eligible_and_submittable))).to be_valid(:submit)
+    end
+  end
+
   describe "#teacher_reference_number" do
     let(:claim) { TslrClaim.new(teacher_reference_number: teacher_reference_number) }
 
@@ -288,6 +295,42 @@ RSpec.describe TslrClaim, type: :model do
 
       it "excludes the “current-school” page from the sequence" do
         expect(tslr_claim.page_sequence).not_to include("current-school")
+      end
+    end
+  end
+
+  describe "#submit!" do
+    around do |example|
+      freeze_time { example.run }
+    end
+
+    before { tslr_claim.submit! }
+
+    context "when the claim is eligible and submittable" do
+      let(:tslr_claim) { create(:tslr_claim, :eligible_and_submittable) }
+
+      it "sets submitted_at to now" do
+        expect(tslr_claim.submitted_at).to eq Time.zone.now
+      end
+    end
+
+    context "when the claim is eligible but unsubmittable" do
+      let(:tslr_claim) { create(:tslr_claim, :eligible_but_unsubmittable) }
+
+      it "doesn't set submitted_at" do
+        expect(tslr_claim.submitted_at).to be_nil
+      end
+    end
+
+    context "when the claim is ineligible" do
+      let(:tslr_claim) { create(:tslr_claim, :eligible_and_submittable, mostly_teaching_eligible_subjects: false) }
+
+      it "doesn't set submitted_at" do
+        expect(tslr_claim.submitted_at).to be_nil
+      end
+
+      it "adds an error" do
+        expect(tslr_claim.errors.messages[:base]).to include("You must have spent at least half your time teaching an eligible subject.")
       end
     end
   end

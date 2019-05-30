@@ -4,7 +4,7 @@
 
     <%= form_for current_claim, url: claim_path do |form| %>
       <h1 class="govuk-heading-xl">
-        <%= form.label :teacher_reference_number, "What is your teacher reference number?"  %>
+        <%= form.label :teacher_reference_number, t("tslr.questions.teacher_reference_number")  %>
       </h1>
 
       <span class="govuk-hint">This is on the certificate you got when you qualified as a teacher, or your school can tell you.</span>

@@ -4,7 +4,7 @@
 
     <%= form_for current_claim, url: claim_path do |form| %>
       <h1 class="govuk-heading-xl">
-        <%= form.label :national_insurance_number, "What is your National Insurance number?"  %>
+        <%= form.label :national_insurance_number, t("tslr.questions.national_insurance_number")  %>
       </h1>
 
       <span class="govuk-hint">It’s on your National Insurance card, benefit letter, payslip or P60. For example, ‘QQ 12 34 56 C’.</span>

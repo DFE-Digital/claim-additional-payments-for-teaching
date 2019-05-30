@@ -4,7 +4,7 @@
     <%= render("shared/error_summary", instance: current_claim) if current_claim.errors.any? %>
 
     <h1 class="govuk-heading-xl">
-      Which school were you employed at between 6 April XXXX and 5 April XXXX?
+      <%= t("tslr.questions.claim_school") %>
     </h1>
 
     <% if @schools.blank? %>

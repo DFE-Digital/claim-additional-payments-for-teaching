@@ -2,7 +2,7 @@
 <html lang="en" class="govuk-template app-html-class">
   <head>
     <title>
-      <%= content_for(:page_title) || t(:service_name) %>
+      <%= content_for(:page_title) || t("tslr.service_name") %>
     </title>
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
@@ -52,7 +52,7 @@
         <div class="govuk-header__content">
 
           <a href="#" class="govuk-header__link govuk-header__link--service-name">
-            <%= t(:service_name) %>
+            <%= t("tslr.service_name") %>
           </a>
 
         </div>

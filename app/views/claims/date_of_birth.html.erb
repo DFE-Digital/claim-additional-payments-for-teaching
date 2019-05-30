@@ -5,7 +5,9 @@
     <%= form_for current_claim, url: claim_path do |form| %>
       <fieldset class="govuk-fieldset" aria-describedby="date-of-birth-hint" role="group">
         <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl">
-          <h1 class="govuk-fieldset__heading">What is your date of birth?</h1>
+          <h1 class="govuk-fieldset__heading">
+            <%= t("tslr.questions.date_of_birth") %>
+          </h1>
         </legend>
 
         <span id="date-of-birth-hint" class="govuk-hint">

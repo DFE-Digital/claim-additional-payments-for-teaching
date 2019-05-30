@@ -5,6 +5,8 @@ class ClaimsController < ApplicationController
   before_action :end_expired_sessions
   before_action :update_last_seen_at
 
+  after_action :clear_claim_session, if: :submission_complete?
+
   def new
   end
 
@@ -21,8 +23,7 @@ class ClaimsController < ApplicationController
   end
 
   def update
-    current_claim.attributes = claim_params
-    if current_claim.save(context: params[:slug].to_sym)
+    if update_current_claim!
       redirect_to next_claim_path
     else
       show
@@ -33,6 +34,15 @@ class ClaimsController < ApplicationController
   end
 
   private
+
+  def update_current_claim!
+    if params[:slug] == "check-your-answers"
+      current_claim.submit!
+    else
+      current_claim.attributes = claim_params
+      current_claim.save(context: params[:slug].to_sym)
+    end
+  end
 
   def next_claim_path
     if current_claim.ineligible?
@@ -45,6 +55,10 @@ class ClaimsController < ApplicationController
   def next_slug
     current_slug_index = current_claim.page_sequence.index(params[:slug])
     current_claim.page_sequence[current_slug_index + 1]
+  end
+
+  def submission_complete?
+    params[:slug] == "confirmation" && current_claim.submitted?
   end
 
   def perform_non_js_school_search

@@ -4,7 +4,7 @@
 
     <%= form_for current_claim, url: claim_path do |form| %>
       <h1 class="govuk-heading-xl">
-        <%= form.label :email_address, "What is your email address?"  %>
+        <%= form.label :email_address, t("tslr.questions.email_address")  %>
       </h1>
 
       <span class="govuk-hint">We will only use your email address to update you about your claim.</span>

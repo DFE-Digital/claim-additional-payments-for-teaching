@@ -4,7 +4,7 @@
 
     <%= form_for current_claim, url: claim_path do |form| %>
       <h1 class="govuk-heading-xl">
-        <%= form.label :full_name, "What is your full name?"  %>
+        <%= form.label :full_name, t("tslr.questions.full_name")  %>
       </h1>
 
       <span class="govuk-hint">We need this information to verify your identity.</span>
