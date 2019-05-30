@@ -6,7 +6,7 @@ RSpec.describe "Admin", type: :request do
       it "redirects to the sign in page and doesn’t set a session" do
         get admin_path
 
-        expect(response).to redirect_to(sign_in_path)
+        expect(response).to redirect_to(admin_sign_in_path)
         expect(session[:login]).to be_nil
       end
     end
@@ -17,7 +17,7 @@ RSpec.describe "Admin", type: :request do
           "provider" => "dfe",
           "info" => {"email" => "test-dfe-sign-in@host.tld"}
         )
-        get dfe_sign_in_path
+        get admin_dfe_sign_in_path
         follow_redirect!
       end
 
@@ -31,7 +31,7 @@ RSpec.describe "Admin", type: :request do
 
       context "and they sign out" do
         it "unsets the session" do
-          delete sign_out_path
+          delete admin_sign_out_path
 
           expect(session[:login]).to be_nil
         end
@@ -44,12 +44,12 @@ RSpec.describe "Admin", type: :request do
       end
 
       it "shows a not authorised page and doesn’t set a session" do
-        get dfe_sign_in_path
+        get admin_dfe_sign_in_path
         follow_redirect!
 
         expect(session[:login]).to be_nil
         expect(response.body).to redirect_to(
-          auth_failure_path(message: :invalid_credentials, strategy: :dfe)
+          admin_auth_failure_path(message: :invalid_credentials, strategy: :dfe)
         )
       end
     end

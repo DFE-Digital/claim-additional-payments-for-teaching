@@ -8,11 +8,13 @@ Rails.application.routes.draw do
   get "/claim/ineligible", to: "claims#ineligible", as: :ineligible_claim
   get "/claim/timeout", to: "claims#timeout", as: :timeout_claim
 
-  get "admin", to: "admin#index"
+  namespace :admin do
+    get "/", to: "page#index"
 
-  get "/auth/sign-in" => "auth#sign_in", :as => :sign_in
-  delete "/auth/sign-out" => "auth#sign_out", :as => :sign_out
-  get "/auth/dfe", as: :dfe_sign_in
-  get "/auth/callback", to: "auth#callback"
-  get "/auth/failure", to: "auth#failure"
+    get "/auth/sign-in" => "auth#sign_in", :as => :sign_in
+    delete "/auth/sign-out" => "auth#sign_out", :as => :sign_out
+    get "/auth/dfe", as: :dfe_sign_in
+    get "/auth/callback", to: "auth#callback"
+    get "/auth/failure", to: "auth#failure"
+  end
 end

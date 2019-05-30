@@ -10,7 +10,8 @@ options = {
   discovery: true,
   response_type: :code,
   scope: %i[openid email organisation],
-  callback_path: "/auth/callback",
+  path_prefix: "/admin/auth",
+  callback_path: "/admin/auth/callback",
   client_options: {
     port: dfe_sign_in_issuer_uri.port,
     scheme: dfe_sign_in_issuer_uri.scheme,
