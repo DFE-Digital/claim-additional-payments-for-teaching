@@ -1,9 +1,12 @@
+@import "govuk-frontend-rails";
+
 %govuk-flash {
   padding: $govuk-gutter-half;
   margin-bottom: $govuk-gutter;
   border: 5px solid;
   font-weight: 700;
 }
+
 .govuk-flash {
   &__notice {
     @extend %govuk-flash;
