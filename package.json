@@ -2,7 +2,8 @@
   "name": "dfe-teachers-payment-service",
   "private": true,
   "dependencies": {
-    "a11y-dialog": "^5.2.0"
+    "a11y-dialog": "^5.2.0",
+    "accessible-autocomplete": "^1.6.2"
   },
   "devDependencies": {
     "prettier": "^1.18.2"
