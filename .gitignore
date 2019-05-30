@@ -25,3 +25,11 @@
 
 # Ignore master key for decrypting credentials and more.
 /config/master.key
+
+# Ignore secrets
+.env.local
+.env
+
+# Ignore development certificates
+localhost.crt
+localhost.key

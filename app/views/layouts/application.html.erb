@@ -55,6 +55,17 @@
             <%= t("tslr.service_name") %>
           </a>
 
+          <% if signed_in? %>
+          <button type="button" role="button" class="govuk-header__menu-button js-header-toggle" aria-controls="navigation" aria-label="Show or hide Top Level Navigation">Menu</button>
+          <nav>
+            <ul id="navigation" class="govuk-header__navigation " aria-label="Top Level Navigation">
+              <li class="govuk-header__navigation-item">
+                <%= link_to "Sign out", admin_sign_out_path, method: :delete, class: "govuk-header__link" %>
+              </li>
+            </ul>
+          </nav>
+          <% end %>
+
         </div>
       </div>
     </header>
@@ -71,6 +82,11 @@
       </div>
 
       <main class="govuk-main-wrapper app-main-class" id="main-content" role="main">
+        <% flash.each do |name, msg| %>
+          <div class="govuk-body-l govuk-flash__<%= name %>">
+            <%= msg %>
+          </div>
+        <% end %>
         <%= yield %>
       </main>
     </div>

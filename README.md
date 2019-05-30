@@ -16,9 +16,36 @@ Architecture decision records can be found in the
 
 ## Setting up the app in development
 
-1. Run `bundle install` to install the gem dependencies
-2. Run `bundle exec rails db:setup` to set up the database development
-3. Run `bundle exec rails server` to launch the app on http://localhost:3000
+1. In order to integrate with DfE Sign-in's Open ID Connect service we are
+   required to communicate over https in development. Create a self-signed
+   development certificate.
+   - Run `openssl req -x509 -sha256 -nodes -newkey rsa:2048 -days 365 -keyout localhost.key -out localhost.crt`
+   - Open Keychain Access on your Mac and go to the Certificates category in
+     your System keychain. Once there, import the `localhost.crt`
+     `File > Import Items`. Double click the imported certificate and change the
+     “When using this certificate:” dropdown to `Always Trust` in the Trust
+     section.
+2. Run `bundle install` to install the gem dependencies
+3. Run `bundle exec rails db:setup` to set up the database development
+4. Run `bundle exec foreman start` to launch the app on https://localhost:3000
+
+### DfE Sign In credentials
+
+By default in development OmniAuth will run in test mode. This means that you
+don't need to authenticate with DfE Sign In. If you need to run development with
+integration with DfE Sign In, you need to provide the relevant environment
+variables.
+
+Create a `.env` file with the following variables:
+
+```
+DFE_SIGN_IN_ISSUER=https://pp-oidc.signin.education.gov.uk:443
+DFE_SIGN_IN_REDIRECT_URL=https://localhost:3000/admin/auth/callback
+DFE_SIGN_IN_IDENTIFIER=<paste identifier>
+DFE_SIGN_IN_SECRET=<paste secret>
+```
+
+The identifier and secret are stored in Heroku.
 
 ## Running specs, brakeman, and code linting
 

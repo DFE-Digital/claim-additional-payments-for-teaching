@@ -4,4 +4,10 @@ class ApplicationController < ActionController::Base
     password: ENV["BASIC_AUTH_PASSWORD"],
     if: -> { ENV.key?("BASIC_AUTH_USERNAME") },
   )
+
+  helper_method :signed_in?
+
+  def signed_in?
+    session.key?(:login)
+  end
 end
