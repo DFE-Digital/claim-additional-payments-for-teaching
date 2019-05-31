@@ -10,6 +10,7 @@ class TslrClaim < ApplicationRecord
     "date-of-birth",
     "teacher-reference-number",
     "national-insurance-number",
+    "student-loan-amount",
     "email-address",
     "check-your-answers",
     "confirmation",
