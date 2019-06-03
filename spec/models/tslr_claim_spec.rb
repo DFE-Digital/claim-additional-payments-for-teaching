@@ -33,6 +33,13 @@ RSpec.describe TslrClaim, type: :model do
       end
     end
 
+    context "that has a student loan repayment amount" do
+      it "validates that the loan repayment amount is numerical" do
+        expect(TslrClaim.new(student_loan_repayment_amount: "don’t know")).not_to be_valid
+        expect(TslrClaim.new(student_loan_repayment_amount: "£1,234.56")).to be_valid
+      end
+    end
+
     context "that has a full name" do
       it "validates the length of name is 200 characters or less" do
         expect(TslrClaim.new(full_name: "Name " * 50)).not_to be_valid
@@ -46,6 +53,7 @@ RSpec.describe TslrClaim, type: :model do
         expect(TslrClaim.new(address_line_1: "123 Main Street", address_line_3: "Twin Peaks", postcode: "M1 2WD")).to be_valid
       end
     end
+
     context "that has a address" do
       it "validates the length of address_line_1 is 100 characters or less" do
         valid_address_attributes = {address_line_1: "123 Main Street" * 25, address_line_3: "Twin Peaks", postcode: "12345"}
@@ -124,6 +132,13 @@ RSpec.describe TslrClaim, type: :model do
     it "validates the presence of national_insurance_number" do
       expect(TslrClaim.new).not_to be_valid(:"national-insurance-number")
       expect(TslrClaim.new(national_insurance_number: "QQ123456C")).to be_valid(:"national-insurance-number")
+    end
+  end
+
+  context "when saving in the “student-loan-amount” validation context" do
+    it "validates the presence of student_loan_repayment_amount" do
+      expect(TslrClaim.new).not_to be_valid(:"student-loan-amount")
+      expect(TslrClaim.new(student_loan_repayment_amount: "£1,100")).to be_valid(:"student-loan-amount")
     end
   end
 
