@@ -168,6 +168,14 @@ RSpec.describe TslrClaim, type: :model do
     end
   end
 
+  describe "#student_loan_repayment_amount=" do
+    it "sets loan repayment amount with monetary characters stripped out" do
+      claim = TslrClaim.new
+      claim.student_loan_repayment_amount = "£ 5,000.40"
+      expect(claim.student_loan_repayment_amount).to eql(5000.40)
+    end
+  end
+
   describe "#ineligible?" do
     subject { TslrClaim.new(claim_attributes).ineligible? }
 

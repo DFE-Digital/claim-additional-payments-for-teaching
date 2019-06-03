@@ -125,6 +125,10 @@ class TslrClaim < ApplicationRecord
     [address_line_1, address_line_2, address_line_3, address_line_4, postcode].reject(&:blank?).join(", ")
   end
 
+  def student_loan_repayment_amount=(value)
+    super(value.to_s.gsub(/[£,\s]/, ""))
+  end
+
   private
 
   def ineligible_claim_school?
