@@ -33,6 +33,10 @@ en:
   date:
     formats:
       default: "%d %B %Y"
+  number:
+    currency:
+      format:
+        unit: "£"
   tslr:
     service_name: "Teachers: claim back student loan repayments"
     questions:

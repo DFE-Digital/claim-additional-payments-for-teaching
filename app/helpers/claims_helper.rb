@@ -17,6 +17,7 @@ module ClaimsHelper
       [t("tslr.questions.claim_school"), claim.claim_school_name],
       [t("tslr.questions.current_school"), claim.current_school_name],
       [t("tslr.questions.mostly_teaching_eligible_subjects"), claim.mostly_teaching_eligible_subjects? ? "Yes" : "No"],
+      [t("tslr.questions.student_loan_amount", claim_school_name: claim.claim_school_name), number_to_currency(claim.student_loan_repayment_amount)],
     ]
   end
 
