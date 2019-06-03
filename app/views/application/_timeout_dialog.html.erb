@@ -1,0 +1,18 @@
+<div id="timeout_dialog" data-timeout-in-minutes="<%= claim_timeout_in_minutes %>" data-warning-in-minutes="<%= claim_timeout_warning_in_minutes %>" data-claim-in-progress="<%= claim_in_progress? %>">
+  <div tabindex="-1" data-a11y-dialog-hide></div>
+  <dialog aria-labelledby="timeout_dialog_title">
+    <button type="button" data-a11y-dialog-hide aria-label="Close this dialog window">
+      &times;
+    </button>
+    <h1 id="timeout_dialog_title" class="govuk-heading-l">
+      Your session will expire in <%= claim_timeout_warning_in_minutes %> minutes
+    </h1>
+    <p class="govuk-body">
+      We won't be able to save what you have done and you will lose
+      your progress.
+    </p>
+    <button class="govuk-button" id="continue_session">
+      Continue session
+    </button>
+  </dialog>
+</div>

@@ -1,0 +1,41 @@
+(function (win, A11yDialog) {
+  var dialogElement = document.getElementById("timeout_dialog"),
+      continueButtonElement = document.getElementById("continue_session"),
+      warningTimeInMinutes =(dialogElement.getAttribute("data-warning-in-minutes")),
+      timeoutInMinutes = (dialogElement.getAttribute("data-timeout-in-minutes")),
+      claimInProgress = dialogElement.getAttribute("data-claim-in-progress"),
+      timeoutInMilliseconds = (timeoutInMinutes - warningTimeInMinutes) * 60 * 1000,
+      dialog = new A11yDialog(dialogElement);
+
+  continueButtonElement.onclick = function() { dialog.hide() };
+
+  dialog.on('hide', refreshSession);
+
+  function refreshSession() {
+    Rails.ajax({
+      url: "<%= Rails.application.routes.url_helpers.claim_refresh_session_path %>",
+      type: "get",
+      success: function() {
+        clearInterval(win.timeoutTimer);
+        win.timeoutTimer = setInterval(showTimeoutDialog, timeoutInMilliseconds);
+      }
+    });
+  }
+
+  function sessionTimedOut() {
+    clearInterval(win.timeoutTimer);
+    win.location = "<%= Rails.application.routes.url_helpers.timeout_claim_path %>";
+  }
+
+  function showTimeoutDialog() {
+    if (claimInProgress === "true") {
+      dialog.show();
+      setTimeout(sessionTimedOut, warningTimeInMinutes * 60 * 1000);
+    }
+  }
+
+  win.timeoutTimer = setInterval(showTimeoutDialog, timeoutInMilliseconds);
+}(window, A11yDialog));
+
+
+

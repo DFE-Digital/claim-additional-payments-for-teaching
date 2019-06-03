@@ -11,6 +11,10 @@ module ClaimsHelper
     ClaimsController::TIMEOUT_LENGTH_IN_MINUTES
   end
 
+  def claim_timeout_warning_in_minutes
+    ClaimsController::TIMEOUT_WARNING_LENGTH_IN_MINUTES
+  end
+
   def claim_answers(claim)
     [
       [t("tslr.questions.qts_award_year"), academic_years(claim.qts_award_year), "qts-year"],
