@@ -29,6 +29,8 @@ module ClaimsHelper
       ["Teacher reference number", claim.teacher_reference_number],
       ["National Insurance number", claim.national_insurance_number],
       ["Email address", claim.email_address],
+      ["Account number", claim.bank_account_number],
+      ["Sort code", claim.bank_sort_code],
     ]
   end
 
