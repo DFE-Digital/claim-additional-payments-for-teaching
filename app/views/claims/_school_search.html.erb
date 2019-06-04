@@ -1,0 +1,81 @@
+<% if @schools.blank? %>
+
+  <%= render("shared/error_summary", instance: current_claim) if current_claim.errors.any? %>
+
+  <%= form_for current_claim, url: claim_path, method: :get, data: { "school-search-url": claim_search_schools_path(params[:slug], format: "json"), "school-id-param": school_id_param } do |form| %>
+
+    <%= hidden_field_tag :_method, "get", id: nil %>
+    <%= hidden_field_tag :authenticity_token, form_authenticity_token %>
+    <%= form.hidden_field school_id_param %>
+
+    <%= form_group_tag current_claim, :school_search do %>
+
+      <h1 class="govuk-label-wrapper">
+        <%= label_tag :tslr_claim_school_search, question, class: "govuk-label govuk-label--xl" %>
+      </h1>
+
+      <% if params[:school_search].present? && current_claim.errors.empty? %>
+        <p class="govuk-body">
+          <strong>No results match that search term. Try again.</strong>
+        </p>
+      <% else %>
+        <span id="school-search-hint" class="govuk-hint">
+          Enter the school name. Use at least four characters.
+        </span>
+      <% end %>
+
+      <div id="school-search-container">
+
+        <%= errors_tag current_claim, :school_search %>
+        <%= text_field_tag :school_search, params[:school_search], id: :tslr_claim_school_search, class: css_classes_for_input(current_claim, :school_search), value: school_search_value %>
+
+      </div>
+
+    <% end %>
+
+    <%= submit_tag "Search", class: "govuk-button" %>
+
+  <% end %>
+
+<% else %>
+
+  <%= render("shared/error_summary", instance: current_claim, errored_field_id_overrides: { claim_school: "tslr_claim_#{school_id_param}_#{@schools.first.id}" }) if current_claim.errors.any?
+  %>
+
+  <%= form_for current_claim, url: claim_path do |form| %>
+    <%= form_group_tag current_claim, :claim_school do %>
+      <fieldset class="govuk-fieldset" aria-describedby="school-search-result-hint">
+
+        <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl">
+          <h1 class="govuk-fieldset__heading">
+            <%= question %>
+          </h1>
+        </legend>
+
+        <span id="school-search-result-hint" class="govuk-hint">
+          Select your school from the search results.
+        </span>
+
+        <%= hidden_field_tag :school_search, params[:school_search] %>
+
+        <%= errors_tag current_claim, :claim_school %>
+
+        <div class="govuk-radios">
+          <%= form.collection_radio_buttons school_id_param, @schools, :id, :name do |b| %>
+            <div class="govuk-radios__item">
+              <%= b.radio_button class: "govuk-radios__input" %>
+              <%= b.label class: "govuk-label govuk-radios__label govuk-label--s" %>
+              <span class="govuk-hint govuk-radios__hint"><%= b.object.address %></span>
+            </div>
+          <% end %>
+        </div>
+
+      </fieldset>
+    <% end %>
+
+    <%= form.submit "Continue", class: "govuk-button" %>
+    <%= link_to "Search again", claim_path, class: "govuk-button govuk-button--secondary" %>
+
+  <% end %>
+
+<% end %>

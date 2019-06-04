@@ -19,17 +19,8 @@ class ClaimsController < ApplicationController
   end
 
   def show
-    respond_to do |format|
-      format.html do
-        search_schools if params[:school_search]
-        render claim_page_template
-      end
-
-      format.json do
-        success = search_schools if params[:school_search]
-        render claim_page_template, status: success ? :ok : :bad_request
-      end
-    end
+    perform_school_search if params[:school_search]
+    render claim_page_template
   end
 
   def update
@@ -37,6 +28,15 @@ class ClaimsController < ApplicationController
       redirect_to next_claim_path
     else
       show
+    end
+  end
+
+  def search_schools
+    if params[:school_search]
+      success = perform_school_search
+      render "school_search", status: success ? :ok : :bad_request
+    else
+      head :bad_request
     end
   end
 
@@ -84,7 +84,7 @@ class ClaimsController < ApplicationController
     params[:slug] == "confirmation" && current_claim.submitted?
   end
 
-  def search_schools
+  def perform_school_search
     if params[:school_search].length > 3
       @schools = School.search(params[:school_search])
       true
