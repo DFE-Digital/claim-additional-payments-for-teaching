@@ -6,5 +6,6 @@ FactoryBot.define do
     school_type_group { :la_maintained }
     phase { :secondary }
     local_authority
+    local_authority_district
   end
 end

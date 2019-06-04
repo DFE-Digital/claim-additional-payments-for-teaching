@@ -2,6 +2,7 @@ class School < ApplicationRecord
   SEARCH_RESULTS_LIMIT = 50
 
   belongs_to :local_authority
+  belongs_to :local_authority_district
 
   validates :urn, presence: true
   validates :name, presence: true
@@ -86,5 +87,9 @@ class School < ApplicationRecord
 
   def eligible_for_tslr?
     Tslr::SchoolEligibility.new(self).check
+  end
+
+  def eligible_for_maths_and_physics?
+    MathsAndPhysics::SchoolEligibility.new(self).check
   end
 end

@@ -1,0 +1,8 @@
+#Maths and Physics Eligible
+barnsley:
+  code: E08000016
+  name: Barnsley
+#Maths and Physics Ineligible
+camden:
+  code: E09000007
+  name: Camden
