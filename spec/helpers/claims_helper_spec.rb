@@ -20,13 +20,20 @@ describe ClaimsHelper do
   describe "#claim_answers" do
     it "returns an array of questions and answers for displaying to the user for review" do
       school = create(:school)
-      claim = TslrClaim.create(qts_award_year: "2013-2014", claim_school: school, current_school: school, mostly_teaching_eligible_subjects: true)
+      claim = TslrClaim.create(
+        qts_award_year: "2013-2014",
+        claim_school: school,
+        current_school: school,
+        mostly_teaching_eligible_subjects: true,
+        student_loan_repayment_amount: 1987.65,
+      )
 
       expected_answers = [
         [I18n.t("tslr.questions.qts_award_year"), "September 1 2013 - August 31 2014"],
         [I18n.t("tslr.questions.claim_school"), school.name],
         [I18n.t("tslr.questions.current_school"), school.name],
         [I18n.t("tslr.questions.mostly_teaching_eligible_subjects"), "Yes"],
+        [I18n.t("tslr.questions.student_loan_amount", claim_school_name: school.name), "£1,987.65"],
       ]
 
       expect(helper.claim_answers(claim)).to eq expected_answers
@@ -35,7 +42,17 @@ describe ClaimsHelper do
 
   describe "#identity_answers" do
     it "returns an array of questions and answers for displaying to the user for review" do
-      claim = TslrClaim.create(full_name: "Jo Bloggs", address_line_1: "Flat 1", address_line_2: "1 Test Road", address_line_3: "Test Town", postcode: "AB1 2CD", date_of_birth: 20.years.ago.to_date, teacher_reference_number: "1234567", national_insurance_number: "QQ 12 34 56 C", email_address: "test@email.com")
+      claim = TslrClaim.create(
+        full_name: "Jo Bloggs",
+        address_line_1: "Flat 1",
+        address_line_2: "1 Test Road",
+        address_line_3: "Test Town",
+        postcode: "AB1 2CD",
+        date_of_birth: 20.years.ago.to_date,
+        teacher_reference_number: "1234567",
+        national_insurance_number: "QQ 12 34 56 C",
+        email_address: "test@email.com",
+      )
 
       expected_answers = [
         ["Full name", "Jo Bloggs"],

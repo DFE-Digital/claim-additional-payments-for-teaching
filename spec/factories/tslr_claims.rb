@@ -12,6 +12,7 @@ FactoryBot.define do
       date_of_birth { 20.years.ago.to_date }
       teacher_reference_number { "1234567" }
       national_insurance_number { "QQ123456C" }
+      student_loan_repayment_amount { 1000 }
       email_address { "test@email.com" }
     end
 
