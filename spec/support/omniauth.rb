@@ -9,3 +9,6 @@ OmniAuth.config.mock_auth[:dfe] = OmniAuth::AuthHash.new(
     },
   }
 )
+OmniAuth.config.on_failure = proc { |env|
+  OmniAuth::FailureEndpoint.new(env).redirect_to_failure
+}
