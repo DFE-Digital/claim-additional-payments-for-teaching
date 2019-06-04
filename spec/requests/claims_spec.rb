@@ -57,8 +57,17 @@ RSpec.describe "Claims", type: :request do
           it "searches for schools using the search term" do
             get claim_path("claim-school"), params: {format: :json, school_search: "Penistone"}
 
+            expect(response.status).to eq(200)
             expect(response.body).to include(schools(:penistone_grammar_school).name)
             expect(response.body).not_to include(schools(:hampstead_school).name)
+          end
+
+          it "only returns results if the search term is more than three characters" do
+            get claim_path("claim-school"), params: {format: :json, school_search: "Pen"}
+
+            expect(response.status).to eq(400)
+            expect(response.body).to include("Search for the school name with a minimum of four characters")
+            expect(response.body).not_to include(schools(:penistone_grammar_school).name)
           end
         end
       end
