@@ -4,60 +4,78 @@ RSpec.describe TslrClaim, type: :model do
   it { should belong_to(:claim_school).optional }
   it { should belong_to(:current_school).optional }
 
-  context "when saving a TslrClaim" do
-    context "that has a teacher_reference_number" do
-      it "validates the length of the teacher reference number" do
-        expect(TslrClaim.new(teacher_reference_number: "1/2/3/4/5/6/7")).to be_valid
-        expect(TslrClaim.new(teacher_reference_number: "1/2/3/4/5")).not_to be_valid
-        expect(TslrClaim.new(teacher_reference_number: "12/345678")).not_to be_valid
-      end
+  context "that has a teacher_reference_number" do
+    it "validates the length of the teacher reference number" do
+      expect(TslrClaim.new(teacher_reference_number: "1/2/3/4/5/6/7")).to be_valid
+      expect(TslrClaim.new(teacher_reference_number: "1/2/3/4/5")).not_to be_valid
+      expect(TslrClaim.new(teacher_reference_number: "12/345678")).not_to be_valid
+    end
+  end
+
+  context "that has a email address" do
+    it "validates that the value is in the correct format" do
+      expect(TslrClaim.new(email_address: "notan email@address.com")).not_to be_valid
+      expect(TslrClaim.new(email_address: "name@example.com")).to be_valid
     end
 
-    context "that has a email address" do
-      it "validates that the value is in the correct format" do
-        expect(TslrClaim.new(email_address: "notan email@address.com")).not_to be_valid
-        expect(TslrClaim.new(email_address: "name@example.com")).to be_valid
-      end
+    it "checks that the email address in not longer than 256 characters" do
+      expect(TslrClaim.new(email_address: "#{"e" * 256}@example.com")).not_to be_valid
+    end
+  end
 
-      it "checks that the email address in not longer than 256 characters" do
-        expect(TslrClaim.new(email_address: "#{"e" * 256}@example.com")).not_to be_valid
-      end
+  context "that has a National Insurance number" do
+    it "validates that the National Insurance number is in the correct format" do
+      expect(TslrClaim.new(national_insurance_number: "12 34 56 78 C")).not_to be_valid
+      expect(TslrClaim.new(national_insurance_number: "QQ 11 56 78 DE")).not_to be_valid
+
+      expect(TslrClaim.new(national_insurance_number: "QQ 34 56 78 C")).to be_valid
+    end
+  end
+
+  context "that has a student loan repayment amount" do
+    it "validates that the loan repayment amount is numerical" do
+      expect(TslrClaim.new(student_loan_repayment_amount: "don’t know")).not_to be_valid
+      expect(TslrClaim.new(student_loan_repayment_amount: "£1,234.56")).to be_valid
+    end
+  end
+
+  context "that has a full name" do
+    it "validates the length of name is 200 characters or less" do
+      expect(TslrClaim.new(full_name: "Name " * 50)).not_to be_valid
+      expect(TslrClaim.new(full_name: "John Kimble")).to be_valid
+    end
+  end
+
+  context "that has a postcode" do
+    it "validates the length of postcode is not greater than 11" do
+      expect(TslrClaim.new(address_line_1: "123 Main Street", address_line_3: "Twin Peaks", postcode: "M12345 23453WD")).not_to be_valid
+      expect(TslrClaim.new(address_line_1: "123 Main Street", address_line_3: "Twin Peaks", postcode: "M1 2WD")).to be_valid
+    end
+  end
+
+  context "that has a address" do
+    it "validates the length of address_line_1 is 100 characters or less" do
+      valid_address_attributes = {address_line_1: "123 Main Street" * 25, address_line_3: "Twin Peaks", postcode: "12345"}
+      expect(TslrClaim.new(valid_address_attributes)).not_to be_valid
+    end
+  end
+
+  context "that has bank details" do
+    it "validates the format of bank_account_number and bank_sort_code" do
+      expect(TslrClaim.new(bank_account_number: "ABC12 34 56 789")).not_to be_valid
+      expect(TslrClaim.new(bank_account_number: "12-34-56-78")).to be_valid
+
+      expect(TslrClaim.new(bank_sort_code: "ABC12 34 567")).not_to be_valid
+      expect(TslrClaim.new(bank_sort_code: "12 34 56")).to be_valid
     end
 
-    context "that has a National Insurance number" do
-      it "validates that the National Insurance number is in the correct format" do
-        expect(TslrClaim.new(national_insurance_number: "12 34 56 78 C")).not_to be_valid
-        expect(TslrClaim.new(national_insurance_number: "QQ 11 56 78 DE")).not_to be_valid
+    context "on save" do
+      it "strips out white space and the “-” character from bank_account_number and bank_sort_code" do
+        claim = TslrClaim.new(bank_sort_code: "12 34 56", bank_account_number: "12-34-56-78")
+        claim.save!
 
-        expect(TslrClaim.new(national_insurance_number: "QQ 34 56 78 C")).to be_valid
-      end
-    end
-
-    context "that has a student loan repayment amount" do
-      it "validates that the loan repayment amount is numerical" do
-        expect(TslrClaim.new(student_loan_repayment_amount: "don’t know")).not_to be_valid
-        expect(TslrClaim.new(student_loan_repayment_amount: "£1,234.56")).to be_valid
-      end
-    end
-
-    context "that has a full name" do
-      it "validates the length of name is 200 characters or less" do
-        expect(TslrClaim.new(full_name: "Name " * 50)).not_to be_valid
-        expect(TslrClaim.new(full_name: "John Kimble")).to be_valid
-      end
-    end
-
-    context "that has a postcode" do
-      it "validates the length of postcode is not greater than 11" do
-        expect(TslrClaim.new(address_line_1: "123 Main Street", address_line_3: "Twin Peaks", postcode: "M12345 23453WD")).not_to be_valid
-        expect(TslrClaim.new(address_line_1: "123 Main Street", address_line_3: "Twin Peaks", postcode: "M1 2WD")).to be_valid
-      end
-    end
-
-    context "that has a address" do
-      it "validates the length of address_line_1 is 100 characters or less" do
-        valid_address_attributes = {address_line_1: "123 Main Street" * 25, address_line_3: "Twin Peaks", postcode: "12345"}
-        expect(TslrClaim.new(valid_address_attributes)).not_to be_valid
+        expect(claim.bank_sort_code).to eql("123456")
+        expect(claim.bank_account_number).to eql("12345678")
       end
     end
   end
@@ -146,6 +164,13 @@ RSpec.describe TslrClaim, type: :model do
     it "validates the presence of email_address" do
       expect(TslrClaim.new).not_to be_valid(:"email-address")
       expect(TslrClaim.new(email_address: "name@example.tld")).to be_valid(:"email-address")
+    end
+  end
+
+  context "when saving in the “bank-details” validation context" do
+    it "validates that the bank_account_number and bank_sort_code are present" do
+      expect(TslrClaim.new).not_to be_valid(:"bank-details")
+      expect(TslrClaim.new(bank_sort_code: "123456", bank_account_number: "87654321")).to be_valid(:"bank-details")
     end
   end
 

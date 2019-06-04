@@ -52,6 +52,8 @@ describe ClaimsHelper do
         teacher_reference_number: "1234567",
         national_insurance_number: "QQ 12 34 56 C",
         email_address: "test@email.com",
+        bank_account_number: "12 34 56 78",
+        bank_sort_code: "12 34 56",
       )
 
       expected_answers = [
@@ -61,6 +63,8 @@ describe ClaimsHelper do
         ["Teacher reference number", "1234567"],
         ["National Insurance number", "QQ123456C"],
         ["Email address", "test@email.com"],
+        ["Account number", "12345678"],
+        ["Sort code", "123456"],
       ]
 
       expect(helper.identity_answers(claim)).to eq expected_answers
