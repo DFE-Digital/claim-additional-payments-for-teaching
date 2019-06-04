@@ -59,6 +59,7 @@ RSpec.describe "Claims", type: :request do
 
             expect(response.status).to eq(200)
             expect(response.body).to include(schools(:penistone_grammar_school).name)
+            expect(response.body).to include(schools(:penistone_grammar_school).address)
             expect(response.body).not_to include(schools(:hampstead_school).name)
           end
 
