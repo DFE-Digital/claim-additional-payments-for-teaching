@@ -89,7 +89,13 @@ COPY db ${APP_HOME}/db
 COPY app ${APP_HOME}/app
 # End
 
-RUN RAILS_ENV=production DFE_SIGN_IN_ISSUER= DFE_SIGN_IN_REDIRECT_URL= DFE_SIGN_IN_IDENTIFIER= DFE_SIGN_IN_SECRET= bundle exec rake assets:precompile
+RUN if [ ${RAILS_ENV} = "production" ]; then \
+  DFE_SIGN_IN_ISSUER= \
+  DFE_SIGN_IN_REDIRECT_URL= \
+  DFE_SIGN_IN_IDENTIFIER= \
+  DFE_SIGN_IN_SECRET= \
+  bundle exec rake assets:precompile; \
+  fi
 
 EXPOSE 3000
 
