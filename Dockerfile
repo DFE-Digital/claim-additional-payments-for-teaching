@@ -4,10 +4,17 @@
 
 FROM ruby:2.6.2-alpine AS base
 
-RUN apk add build-base
-RUN apk add tzdata
 RUN apk add postgresql-dev
-RUN apk add yarn
+RUN apk add tzdata
+RUN apk add nodejs
+
+ENV APP_HOME /app
+ENV DEPS_HOME /deps
+
+ARG RAILS_ENV
+ENV RAILS_ENV ${RAILS_ENV:-production}
+ENV RACK_ENV ${RAILS_ENV:-production}
+ENV NODE_ENV ${RAILS_ENV:-production}
 
 # ------------------------------------------------------------------------------
 # dependencies
@@ -15,11 +22,22 @@ RUN apk add yarn
 
 FROM base AS dependencies
 
-# Set up install environment
-ENV DEPS_HOME /deps
+RUN echo "Building with RAILS_ENV=${RAILS_ENV}, RACK_ENV=${RACK_ENV}, NODE_ENV=${NODE_ENV}"
 
+RUN apk add build-base
+RUN apk add yarn
+
+# Set up install environment
 RUN mkdir -p ${DEPS_HOME}
 WORKDIR ${DEPS_HOME}
+# End
+
+# Install Ruby dependencies
+COPY Gemfile ${DEPS_HOME}/Gemfile
+COPY Gemfile.lock ${DEPS_HOME}/Gemfile.lock
+
+RUN gem install bundler
+RUN bundle install --frozen --retry 3 --without development test
 # End
 
 # Install JavaScript dependencies
@@ -35,29 +53,19 @@ RUN yarn install --frozen-lockfile --production
 
 FROM base AS web
 
-# Set up install environment
-ENV APP_HOME /app
+RUN echo "Building with RAILS_ENV=${RAILS_ENV}, RACK_ENV=${RACK_ENV}, NODE_ENV=${NODE_ENV}"
 
+# Set up install environment
 RUN mkdir -p ${APP_HOME}
 WORKDIR ${APP_HOME}
-
-ARG RAILS_ENV
-ENV RAILS_ENV ${RAILS_ENV:-production}
-ENV NODE_ENV ${RAILS_ENV:-production}
-
-RUN echo "Building with RAILS_ENV=${RAILS_ENV}"
 # End
 
-# Install Ruby dependencies
-COPY Gemfile ${APP_HOME}/Gemfile
-COPY Gemfile.lock ${APP_HOME}/Gemfile.lock
+# Copy dependencies (relying on dependencies using the same base image as this)
+COPY --from=dependencies ${DEPS_HOME}/Gemfile ${APP_HOME}/Gemfile
+COPY --from=dependencies ${DEPS_HOME}/Gemfile.lock ${APP_HOME}/Gemfile.lock
+COPY --from=dependencies ${GEM_HOME} ${GEM_HOME}
 
-RUN gem install bundler
-RUN bundle install --frozen --retry 3 --without development test
-# End
-
-# Copy JavaScript dependencies
-COPY --from=dependencies /deps/node_modules ${APP_HOME}/node_modules
+COPY --from=dependencies ${DEPS_HOME}/node_modules ${APP_HOME}/node_modules
 # End
 
 # Copy app code (sorted by vague frequency of change for caching)
