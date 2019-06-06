@@ -1,0 +1,28 @@
+version: "3.7"
+services:
+  web:
+    build:
+      context: .
+      args:
+        RAILS_ENV: development
+    image: local/dfe-teachers-payment-service:development
+    depends_on:
+      - db
+    env_file:
+      - .env.development
+    environment:
+      DB_USERNAME: postgres
+      DB_HOST: db
+    volumes:
+      - ./localhost.key:/app/localhost.key
+      - ./localhost.crt:/app/localhost.crt
+    ports:
+      - 3000:3000
+    tty: true
+    stdin_open: true
+    command: rails server -b ssl://web:3000?key=localhost.key&cert=localhost.crt
+
+  db:
+    image: postgres
+    volumes:
+      - ./tmp/db:/var/lib/postgresql/data
