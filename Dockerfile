@@ -1,9 +1,39 @@
-FROM ruby:2.6.2-alpine AS web
+# ------------------------------------------------------------------------------
+# base
+# ------------------------------------------------------------------------------
+
+FROM ruby:2.6.2-alpine AS base
 
 RUN apk add build-base
 RUN apk add tzdata
 RUN apk add postgresql-dev
 RUN apk add yarn
+
+# ------------------------------------------------------------------------------
+# dependencies
+# ------------------------------------------------------------------------------
+
+FROM base AS dependencies
+
+# Set up install environment
+ENV DEPS_HOME /deps
+
+RUN mkdir -p ${DEPS_HOME}
+WORKDIR ${DEPS_HOME}
+# End
+
+# Install JavaScript dependencies
+COPY package.json ${DEPS_HOME}/package.json
+COPY yarn.lock ${DEPS_HOME}/yarn.lock
+
+RUN yarn install --frozen-lockfile --production
+# End
+
+# ------------------------------------------------------------------------------
+# web
+# ------------------------------------------------------------------------------
+
+FROM base AS web
 
 # Set up install environment
 ENV APP_HOME /app
@@ -26,11 +56,8 @@ RUN gem install bundler
 RUN bundle install --frozen --retry 3 --without development test
 # End
 
-# Install JavaScript dependencies
-COPY package.json ${APP_HOME}/package.json
-COPY yarn.lock ${APP_HOME}/yarn.lock
-
-RUN yarn install --frozen-lockfile --production
+# Copy JavaScript dependencies
+COPY --from=dependencies /deps/node_modules ${APP_HOME}/node_modules
 # End
 
 # Copy app code (sorted by vague frequency of change for caching)
