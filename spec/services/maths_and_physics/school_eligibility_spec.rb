@@ -78,12 +78,12 @@ RSpec.describe MathsAndPhysics::SchoolEligibility do
         end
 
         context "and it is a state funded special school" do
-          let(:school_attributes) { special_school_attributes.merge({school_type: :community_school})}
+          let(:school_attributes) { special_school_attributes.merge({school_type: :community_school}) }
           it { is_expected.to be true }
         end
 
         context "and it is an independent special school" do
-          let(:school_attributes) { special_school_attributes.merge({school_type: :other_independent_special_school})}
+          let(:school_attributes) { special_school_attributes.merge({school_type: :other_independent_special_school}) }
           it { is_expected.to be false }
         end
 
@@ -96,7 +96,7 @@ RSpec.describe MathsAndPhysics::SchoolEligibility do
 
     context "when it is not in an eligible local authority district" do
       let(:local_authority_district) { local_authority_districts(:camden) }
-      let(:school_attributes) {{}}
+      let(:school_attributes) { {} }
       it { is_expected.to be false }
     end
   end

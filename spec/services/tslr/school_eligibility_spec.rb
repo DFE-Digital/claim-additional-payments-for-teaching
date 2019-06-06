@@ -78,12 +78,12 @@ RSpec.describe Tslr::SchoolEligibility do
         end
 
         context "and it is a state funded special school" do
-          let(:school_attributes) { special_school_attributes.merge({school_type: :community_school})}
+          let(:school_attributes) { special_school_attributes.merge({school_type: :community_school}) }
           it { is_expected.to be true }
         end
 
         context "and it is an independent special school" do
-          let(:school_attributes) { special_school_attributes.merge({school_type: :other_independent_special_school})}
+          let(:school_attributes) { special_school_attributes.merge({school_type: :other_independent_special_school}) }
           it { is_expected.to be false }
         end
       end
