@@ -45,11 +45,14 @@ class ClaimsController < ApplicationController
   end
 
   def next_claim_path
-    if current_claim.ineligible?
-      ineligible_claim_path
-    else
-      claim_path(next_slug)
-    end
+    return ineligible_claim_path if current_claim.ineligible?
+    return claim_path("check-your-answers") if edited_answer?
+
+    claim_path(next_slug)
+  end
+
+  def edited_answer?
+    current_claim.can_be_submitted? && !current_claim.submitted?
   end
 
   def next_slug

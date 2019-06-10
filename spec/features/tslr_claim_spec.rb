@@ -159,4 +159,19 @@ RSpec.feature "Teacher Student Loan Repayments claims" do
     visit claim_path("qts-year")
     expect(page).to have_current_path(root_path)
   end
+
+  scenario "Teacher can edit their response" do
+    claim = create(:tslr_claim, :eligible_and_submittable)
+    allow_any_instance_of(ClaimsController).to receive(:current_claim) { claim }
+
+    visit claim_path("check-your-answers")
+
+    find("a[href='#{claim_path("national-insurance-number")}']").click
+
+    fill_in "National Insurance number", with: "AB123456C"
+    click_on "Continue"
+
+    expect(claim.reload.national_insurance_number).to eq("AB123456C")
+    expect(page).to have_content("Check your answers before sending your application")
+  end
 end

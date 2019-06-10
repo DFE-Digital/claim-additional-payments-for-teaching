@@ -14,6 +14,8 @@ FactoryBot.define do
       national_insurance_number { "QQ123456C" }
       student_loan_repayment_amount { 1000 }
       email_address { "test@email.com" }
+      bank_sort_code { 123456 }
+      bank_account_number { 12345678 }
     end
 
     trait :eligible_but_unsubmittable do

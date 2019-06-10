@@ -77,8 +77,8 @@ class TslrClaim < ApplicationRecord
                                         length: {maximum: 256, message: "Email address must be 256 characters or less"},
                                         allow_nil: true
 
-  validates :bank_sort_code,            on: :"bank-details", presence: {message: "Enter a sort code"}
-  validates :bank_account_number,       on: :"bank-details", presence: {message: "Enter an account number"}
+  validates :bank_sort_code,            on: [:"bank-details", :submit], presence: {message: "Enter a sort code"}
+  validates :bank_account_number,       on: [:"bank-details", :submit], presence: {message: "Enter an account number"}
 
   validate  :bank_account_number_must_be_eight_digits
   validate  :bank_sort_code_must_be_six_digits
@@ -109,6 +109,10 @@ class TslrClaim < ApplicationRecord
 
   def submitted?
     submitted_at.present?
+  end
+
+  def can_be_submitted?
+    valid?(:submit)
   end
 
   def ineligible?
