@@ -52,7 +52,13 @@ class ClaimsController < ApplicationController
   end
 
   def edited_answer?
-    current_claim.can_be_submitted? && !current_claim.submitted?
+    current_claim.can_be_submitted? && !current_claim.submitted? && !on_school_flow?
+  end
+
+  def on_school_flow?
+    return true if params[:slug] == "claim-school"
+    return true if params[:slug] == "still-teaching" && current_claim.employment_status != "claim_school"
+    false
   end
 
   def next_slug
