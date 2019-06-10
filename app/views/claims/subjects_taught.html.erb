@@ -3,7 +3,7 @@
     <%= render("shared/error_summary", instance: current_claim) if current_claim.errors.any? %>
     <%= form_for current_claim, url: claim_path do |form| %>
       <%= form.hidden_field :mostly_teaching_eligible_subjects %>
-      <div class="govuk-form-group">
+      <%= form_group_tag current_claim do %>
         <fieldset class="govuk-fieldset">
           <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl">
             <h1 class="govuk-fieldset__heading">
@@ -25,6 +25,7 @@
               If you've been off on long-term leave or sick, include the time you were scheduled to teach these subjects.
             </span>
           </p>
+          <%= errors_tag current_claim, :mostly_teaching_eligible_subjects %>
           <div class="govuk-radios">
             <div class="govuk-radios__item">
               <%= form.radio_button(:mostly_teaching_eligible_subjects, true, class: "govuk-radios__input") %>
@@ -36,7 +37,7 @@
             </div>
           </div>
         </fieldset>
-      </div>
+      <% end %>
       <%= form.submit "Continue", class: "govuk-button" %>
     <% end %>
   </div>

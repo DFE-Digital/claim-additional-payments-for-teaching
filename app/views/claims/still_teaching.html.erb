@@ -2,11 +2,12 @@
   <div class="govuk-grid-column-two-thirds">
     <%= render("shared/error_summary", instance: current_claim) if current_claim.errors.any? %>
     <%= form_for current_claim, url: claim_path do |form| %>
-      <div class="govuk-form-group">
+      <%= form_group_tag current_claim do %>
         <fieldset class="govuk-fieldset">
           <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl">
             <h1 class="govuk-fieldset__heading">Are you still employed to teach at a school in England?</h1>
           </legend>
+          <%= errors_tag current_claim, :employment_status %>
           <div class="govuk-radios">
             <%= form.hidden_field :employment_status %>
             <div class="govuk-radios__item">
@@ -23,7 +24,7 @@
             </div>
           </div>
         </fieldset>
-      </div>
+      <% end %>
       <%= form.submit "Continue", class: "govuk-button" %>
     <% end %>
   </div>

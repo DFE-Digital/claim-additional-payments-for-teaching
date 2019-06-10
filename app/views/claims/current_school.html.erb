@@ -20,13 +20,11 @@
       <% end %>
 
       <%= form_tag(claim_path("current-school"), method: :get) do %>
-        <div class="govuk-form-group">
+        <%= form_group_tag current_claim, :school_search do %>
           <%= label_tag :school_search, "School name", class: "govuk-label" %>
-          <%= text_field_tag :school_search, params[:school_search], class: "govuk-input", value: current_claim.current_school&.name %>
-        </div>
-        <div class="govuk-form-group">
-          <%= submit_tag "Search", class: "govuk-button" %>
-        </div>
+          <%= text_field_tag :school_search, params[:school_search], class: css_classes_for_input(current_claim, :school_search), value: current_claim.current_school&.name %>
+        <% end %>
+        <%= submit_tag "Search", class: "govuk-button" %>
       <% end %>
 
     <% else %>

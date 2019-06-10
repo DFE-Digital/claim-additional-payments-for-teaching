@@ -3,19 +3,16 @@
     <%= render("shared/error_summary", instance: current_claim) if current_claim.errors.any? %>
 
     <%= form_for current_claim, url: claim_path do |form| %>
-      <h1 class="govuk-heading-xl">
-        <%= form.label :full_name, t("tslr.questions.full_name")  %>
-      </h1>
+      <%= form_group_tag current_claim do %>
+        <h1 class="govuk-label-wrapper">
+          <%= form.label :full_name, t("tslr.questions.full_name"), class: "govuk-label govuk-label govuk-label--xl" %>
+        </h1>
+        <span class="govuk-hint">We need this information to verify your identity.</span>
+        <%= errors_tag current_claim, :full_name %>
+        <%= form.text_field :full_name, autocomplete: "name", spellcheck: "false", class: css_classes_for_input(current_claim, :full_name) %>
+      <% end %>
+      <%= form.submit "Continue", class: "govuk-button" %>
 
-      <span class="govuk-hint">We need this information to verify your identity.</span>
-
-      <div class="govuk-form-group">
-        <%= form.text_field :full_name, autocomplete: "name", spellcheck: "false", class: "govuk-input" %>
-      </div>
-
-      <div class="govuk-form-group">
-        <%= form.submit "Continue", class: "govuk-button" %>
-      </div>
     <% end %>
   </div>
 </div>
