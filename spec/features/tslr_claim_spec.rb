@@ -160,18 +160,42 @@ RSpec.feature "Teacher Student Loan Repayments claims" do
     expect(page).to have_current_path(root_path)
   end
 
-  scenario "Teacher can edit their response" do
-    claim = create(:tslr_claim, :eligible_and_submittable)
-    allow_any_instance_of(ClaimsController).to receive(:current_claim) { claim }
+  context "editing a response" do
+    let(:claim_school) { create(:school, :tslr_eligible, name: "Claim School") }
+    let(:current_school) { create(:school, :tslr_eligible, name: "Current School") }
 
-    visit claim_path("check-your-answers")
+    let(:claim) { create(:tslr_claim, :eligible_and_submittable, claim_school: claim_school, current_school: current_school) }
 
-    find("a[href='#{claim_path("national-insurance-number")}']").click
+    before do
+      allow_any_instance_of(ClaimsController).to receive(:current_claim) { claim }
+    end
 
-    fill_in "National Insurance number", with: "AB123456C"
-    click_on "Continue"
+    scenario "Teacher can edit a field" do
+      visit claim_path("check-your-answers")
 
-    expect(claim.reload.national_insurance_number).to eq("AB123456C")
-    expect(page).to have_content("Check your answers before sending your application")
+      find("a[href='#{claim_path("national-insurance-number")}']").click
+
+      fill_in "National Insurance number", with: "AB123456C"
+      click_on "Continue"
+
+      expect(claim.reload.national_insurance_number).to eq("AB123456C")
+      expect(page).to have_content("Check your answers before sending your application")
+    end
+
+    scenario "Teacher sees their original claim school when editing" do
+      visit claim_path("check-your-answers")
+
+      find("a[href='#{claim_path("claim-school")}']").click
+
+      expect(find("input[name='school_search']").value).to eq(claim.claim_school.name)
+    end
+
+    scenario "Teacher sees their original current school when editing" do
+      visit claim_path("check-your-answers")
+
+      find("a[href='#{claim_path("current-school")}']").click
+
+      expect(find("input[name='school_search']").value).to eq(claim.current_school.name)
+    end
   end
 end
