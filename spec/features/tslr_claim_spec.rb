@@ -183,12 +183,17 @@ RSpec.feature "Teacher Student Loan Repayments claims" do
     end
 
     scenario "Teacher can edit a field" do
-      find("a[href='#{claim_path("national-insurance-number")}']").click
+      old_number = claim.national_insurance_number
+      new_number = "AB123456C"
 
-      fill_in "National Insurance number", with: "AB123456C"
-      click_on "Continue"
+      expect {
+        find("a[href='#{claim_path("national-insurance-number")}']").click
+        fill_in "National Insurance number", with: new_number
+        click_on "Continue"
+      }.to change {
+        claim.reload.national_insurance_number
+      }.from(old_number).to(new_number)
 
-      expect(claim.reload.national_insurance_number).to eq("AB123456C")
       expect(page).to have_content("Check your answers before sending your application")
     end
 
