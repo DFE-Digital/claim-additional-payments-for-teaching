@@ -12,7 +12,7 @@
 #       Install PostgreSQL and put its /bin directory on your path.
 #
 # Configure Using Gemfile
-# gem 'pg'
+# gem "pg"
 #
 default: &default
   adapter: postgresql
@@ -23,21 +23,21 @@ default: &default
 
 development: &development
   <<: *default
-  database: dfe-teachers-payment-service_development
+  database: <%= ENV["DFE_TEACHERS_PAYMENT_SERVICE_DATABASE_NAME"] || "dfe-teachers-payment-service_development" %>
 
   # The specified database role being used to connect to postgres.
   # To create additional roles in postgres see `$ createuser --help`.
   # When left blank, postgres will use the default role. This is
   # the same name as the operating system user that initialized the database.
-  username: <%= ENV["DB_USERNAME"] %>
+  username: <%= ENV["DFE_TEACHERS_PAYMENT_SERVICE_DATABASE_USERNAME"] %>
 
   # The password associated with the postgres role (username).
-  #password:
+  password: <%= ENV["DFE_TEACHERS_PAYMENT_SERVICE_DATABASE_PASSWORD"] %>
 
   # Connect on a TCP socket. Omitted by default since the client uses a
   # domain socket that doesn't need configuration. Windows does not have
   # domain sockets, so uncomment these lines.
-  host: <%= ENV["DB_HOST"] %>
+  host: <%= ENV["DFE_TEACHERS_PAYMENT_SERVICE_DATABASE_HOST"] %>
 
   # The TCP port the server listens on. Defaults to 5432.
   # If your server runs on a different port number, change accordingly.
@@ -80,6 +80,7 @@ test:
 #
 production:
   <<: *default
-  database: dfe-teachers-payment-service_production
-  username: dfe-teachers-payment-service
-  password: <%= ENV["DFE-TEACHERS-PAYMENT-SERVICE_DATABASE_PASSWORD"] %>
+  database: <%= ENV["DFE_TEACHERS_PAYMENT_SERVICE_DATABASE_NAME"] || "dfe-teachers-payment-service_production" %>
+  username: <%= ENV["DFE_TEACHERS_PAYMENT_SERVICE_DATABASE_USERNAME"] || "dfe-teachers-payment-service" %>
+  password: <%= ENV["DFE_TEACHERS_PAYMENT_SERVICE_DATABASE_PASSWORD"] %>
+  host: <%= ENV["DFE_TEACHERS_PAYMENT_SERVICE_DATABASE_HOST"] %>
