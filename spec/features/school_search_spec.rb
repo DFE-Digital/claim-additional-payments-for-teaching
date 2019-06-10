@@ -5,7 +5,7 @@ RSpec.feature "Searching for school during Teacher Student Loan Repayments claim
     claim = start_tslr_claim
     choose_qts_year
 
-    fill_in "School name", with: "Penistone"
+    fill_in :school_search, with: "Penistone"
     click_on "Search"
 
     click_on "Continue"
@@ -24,12 +24,12 @@ RSpec.feature "Searching for school during Teacher Student Loan Repayments claim
     claim = start_tslr_claim
     choose_qts_year
 
-    fill_in "School name", with: "hamp"
+    fill_in :school_search, with: "hamp"
     click_on "Search"
 
     click_on "Search again"
 
-    fill_in "School name", with: "penistone"
+    fill_in :school_search, with: "penistone"
     click_on "Search"
 
     choose "Penistone Grammar School"

@@ -74,7 +74,7 @@ class ClaimsController < ApplicationController
     if params[:school_search].length > 3
       @schools = School.search(params[:school_search])
     else
-      current_claim.errors.add(:base, "Search for the school name with a minimum of four characters")
+      current_claim.errors.add(:school_search, "Search for the school name with a minimum of four characters")
     end
   end
 

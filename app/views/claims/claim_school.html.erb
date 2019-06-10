@@ -3,27 +3,27 @@
 
     <%= render("shared/error_summary", instance: current_claim) if current_claim.errors.any? %>
 
-    <h1 class="govuk-heading-xl">
-      <%= t("tslr.questions.claim_school") %>
-    </h1>
+
+      <h1 class="govuk-heading-xl">
+        <%= t("tslr.questions.claim_school") %>
+      </h1>
 
     <% if @schools.blank? %>
-
-      <% if params[:school_search].present? && current_claim.errors.empty? %>
-        <p class="govuk-body">
-          <strong>No results match that search term. Try again.</strong>
-        </p>
-      <% else %>
-        <span id="school-search-hint" class="govuk-hint">
-          Search for the school name, use at least four characters.
-        </span>
-      <% end %>
-
+        <% if params[:school_search].present? && current_claim.errors.empty? %>
+          <p class="govuk-body">
+            <strong>No results match that search term. Try again.</strong>
+          </p>
+        <% else %>
+          <span id="school-search-hint" class="govuk-hint">
+            Search for the school name, use at least four characters.
+          </span>
+        <% end %>
       <%= form_tag(claim_path("claim-school"), method: :get) do %>
-        <div class="govuk-form-group">
-          <%= label_tag :school_search, "School name", class: "govuk-label" %>
-          <%= text_field_tag :school_search, params[:school_search], class: "govuk-input", value: current_claim.claim_school&.name %>
-        </div>
+          <%= form_group_tag current_claim, :school_search do %>
+            <%= label_tag :school_search, "School name", class: "govuk-label" %>
+            <%= errors_tag current_claim, :school_search %>
+            <%= text_field_tag :school_search, params[:school_search], id: :tslr_claim_school_search, class: css_classes_for_input(current_claim, :school_search), value: current_claim.claim_school&.name  %>
+          <% end %>
         <div class="govuk-form-group">
           <%= submit_tag "Search", class: "govuk-button" %>
         </div>
@@ -37,8 +37,10 @@
       <%= form_for current_claim, url: claim_path do |form| %>
         <%= hidden_field_tag :school_search, params[:school_search] %>
 
-        <div class="govuk-form-group">
+        <%= form_group_tag current_claim do %>
           <fieldset class="govuk-fieldset" aria-describedby="school-search-result-hint">
+            <%= errors_tag current_claim, :claim_school %>
+
             <div class="govuk-radios">
               <%= form.collection_radio_buttons :claim_school_id, @schools, :id, :name do |b| %>
                 <div class="govuk-radios__item">
@@ -49,7 +51,7 @@
               <% end %>
             </div>
           </fieldset>
-        </div>
+        <% end %>
         <%= form.submit "Continue", class: "govuk-button" %>
         <%= link_to "Search again", claim_path, class: "govuk-button govuk-button--secondary" %>
       <% end %>
