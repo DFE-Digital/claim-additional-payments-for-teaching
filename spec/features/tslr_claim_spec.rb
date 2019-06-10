@@ -203,16 +203,16 @@ RSpec.feature "Teacher Student Loan Repayments claims" do
       expect(find("input[name='school_search']").value).to eq(current_school.name)
     end
 
-    context "Teacher goes to change their claim school" do
+    context "When changing claim school" do
       before do
         find("a[href='#{claim_path("claim-school")}']").click
       end
 
-      scenario "sees their original claim school" do
+      scenario "Teacher sees their original claim school" do
         expect(find("input[name='school_search']").value).to eq(claim.claim_school.name)
       end
 
-      context "changes their claim school" do
+      context "When choosing a new claim school" do
         before do
           choose_school schools(:penistone_grammar_school)
         end
@@ -225,22 +225,22 @@ RSpec.feature "Teacher Student Loan Repayments claims" do
           expect(current_path).to eq(claim_path("still-teaching"))
         end
 
-        context "is still teaching at the same school" do
+        context "When still teaching at the claim school" do
           before do
             choose_still_teaching
           end
 
-          it "current school is set correctly" do
+          scenario "current school is set correctly" do
             expect(claim.reload.employment_status).to eql("claim_school")
             expect(claim.reload.current_school).to eql schools(:penistone_grammar_school)
           end
 
-          it "Teacher is redirected to the check your answers page" do
+          scenario "Teacher is redirected to the check your answers page" do
             expect(current_path).to eq(claim_path("check-your-answers"))
           end
         end
 
-        context "is still teaching at another school" do
+        context "When still teaching but at a different school" do
           before do
             choose_still_teaching "Yes, at another school"
 
@@ -251,26 +251,26 @@ RSpec.feature "Teacher Student Loan Repayments claims" do
             click_on "Continue"
           end
 
-          it "sets school and status correctly" do
+          scenario "School and employment status are set correctly" do
             expect(claim.reload.employment_status).to eql("different_school")
             expect(claim.reload.current_school).to eql schools(:hampstead_school)
           end
 
-          it "Teacher is redirected to the check your answers page" do
+          scenario "Teacher is redirected to the check your answers page" do
             expect(current_path).to eq(claim_path("check-your-answers"))
           end
         end
 
-        context "is no longer teaching" do
+        context "When no longer teaching" do
           before do
             choose_still_teaching "No"
           end
 
-          it "sets the status" do
+          scenario "Employment status is set correctly" do
             expect(claim.reload.employment_status).to eq("no_school")
           end
 
-          it "tells the teacher they are not eligible" do
+          scenario "Teacher is told they are not eligible" do
             expect(page).to have_text("You’re not eligible")
             expect(page).to have_text("You must be still working as a teacher to be eligible")
           end
