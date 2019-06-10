@@ -7,5 +7,11 @@ FactoryBot.define do
     phase { :secondary }
     local_authority
     local_authority_district
+
+    trait :tslr_eligible do
+      local_authority { create(:local_authority, code: Tslr::SchoolEligibility::ELIGIBLE_LOCAL_AUTHORITY_CODES.sample) }
+      school_type_group { Tslr::SchoolEligibility::STATE_FUNDED_TYPE_GROUPS.sample }
+      phase { Tslr::SchoolEligibility::ELIGIBLE_PHASES.sample }
+    end
   end
 end

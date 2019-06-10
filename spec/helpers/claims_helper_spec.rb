@@ -29,11 +29,11 @@ describe ClaimsHelper do
       )
 
       expected_answers = [
-        [I18n.t("tslr.questions.qts_award_year"), "September 1 2013 - August 31 2014"],
-        [I18n.t("tslr.questions.claim_school"), school.name],
-        [I18n.t("tslr.questions.current_school"), school.name],
-        [I18n.t("tslr.questions.mostly_teaching_eligible_subjects"), "Yes"],
-        [I18n.t("tslr.questions.student_loan_amount", claim_school_name: school.name), "£1,987.65"],
+        [I18n.t("tslr.questions.qts_award_year"), "September 1 2013 - August 31 2014", "qts-year"],
+        [I18n.t("tslr.questions.claim_school"), school.name, "claim-school"],
+        [I18n.t("tslr.questions.current_school"), school.name, "current-school"],
+        [I18n.t("tslr.questions.mostly_teaching_eligible_subjects"), "Yes", "subjects-taught"],
+        [I18n.t("tslr.questions.student_loan_amount", claim_school_name: school.name), "£1,987.65", "student-loan-amount"],
       ]
 
       expect(helper.claim_answers(claim)).to eq expected_answers
@@ -57,14 +57,14 @@ describe ClaimsHelper do
       )
 
       expected_answers = [
-        ["Full name", "Jo Bloggs"],
-        ["Address", "Flat 1, 1 Test Road, Test Town, AB1 2CD"],
-        ["Date of birth", I18n.l(20.years.ago.to_date)],
-        ["Teacher reference number", "1234567"],
-        ["National Insurance number", "QQ123456C"],
-        ["Email address", "test@email.com"],
-        ["Account number", "12345678"],
-        ["Sort code", "123456"],
+        ["Full name", "Jo Bloggs", "full-name"],
+        ["Address", "Flat 1, 1 Test Road, Test Town, AB1 2CD", "address"],
+        ["Date of birth", I18n.l(20.years.ago.to_date), "date-of-birth"],
+        ["Teacher reference number", "1234567", "teacher-reference-number"],
+        ["National Insurance number", "QQ123456C", "national-insurance-number"],
+        ["Email address", "test@email.com", "email-address"],
+        ["Account number", "12345678", "bank-details"],
+        ["Sort code", "123456", "bank-details"],
       ]
 
       expect(helper.identity_answers(claim)).to eq expected_answers

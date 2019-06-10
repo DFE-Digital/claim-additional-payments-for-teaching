@@ -13,24 +13,24 @@ module ClaimsHelper
 
   def claim_answers(claim)
     [
-      [t("tslr.questions.qts_award_year"), academic_years(claim.qts_award_year)],
-      [t("tslr.questions.claim_school"), claim.claim_school_name],
-      [t("tslr.questions.current_school"), claim.current_school_name],
-      [t("tslr.questions.mostly_teaching_eligible_subjects"), claim.mostly_teaching_eligible_subjects? ? "Yes" : "No"],
-      [t("tslr.questions.student_loan_amount", claim_school_name: claim.claim_school_name), number_to_currency(claim.student_loan_repayment_amount)],
+      [t("tslr.questions.qts_award_year"), academic_years(claim.qts_award_year), "qts-year"],
+      [t("tslr.questions.claim_school"), claim.claim_school_name, "claim-school"],
+      [t("tslr.questions.current_school"), claim.current_school_name, "current-school"],
+      [t("tslr.questions.mostly_teaching_eligible_subjects"), (claim.mostly_teaching_eligible_subjects? ? "Yes" : "No"), "subjects-taught"],
+      [t("tslr.questions.student_loan_amount", claim_school_name: claim.claim_school_name), number_to_currency(claim.student_loan_repayment_amount), "student-loan-amount"],
     ]
   end
 
   def identity_answers(claim)
     [
-      ["Full name", claim.full_name],
-      ["Address", claim.address],
-      ["Date of birth", l(claim.date_of_birth)],
-      ["Teacher reference number", claim.teacher_reference_number],
-      ["National Insurance number", claim.national_insurance_number],
-      ["Email address", claim.email_address],
-      ["Account number", claim.bank_account_number],
-      ["Sort code", claim.bank_sort_code],
+      ["Full name", claim.full_name, "full-name"],
+      ["Address", claim.address, "address"],
+      ["Date of birth", l(claim.date_of_birth), "date-of-birth"],
+      ["Teacher reference number", claim.teacher_reference_number, "teacher-reference-number"],
+      ["National Insurance number", claim.national_insurance_number, "national-insurance-number"],
+      ["Email address", claim.email_address, "email-address"],
+      ["Account number", claim.bank_account_number, "bank-details"],
+      ["Sort code", claim.bank_sort_code, "bank-details"],
     ]
   end
 

@@ -3,14 +3,18 @@
 </h2>
 
 <dl class="govuk-summary-list govuk-!-margin-bottom-9">
-  <%- answers.each do |(key, value)| %>
+  <%- answers.each do |(label, answer, slug)| %>
     <div class="govuk-summary-list__row">
       <dt class="govuk-summary-list__key">
-        <%= key %>
+        <%= label %>
       </dt>
 
       <dd class="govuk-summary-list__value">
-        <%= value %>
+        <%= answer %>
+      </dd>
+
+      <dd class="govuk-summary-list__actions">
+        <%= link_to 'Change', claim_path(slug) %>
       </dd>
     </div>
   <% end %>
