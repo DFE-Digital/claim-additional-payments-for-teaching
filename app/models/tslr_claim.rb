@@ -104,7 +104,7 @@ class TslrClaim < ApplicationRecord
       return false
     end
 
-    touch(:submitted_at) if valid?(:submit)
+    touch(:submitted_at) if can_be_submitted?
   end
 
   def submitted?
