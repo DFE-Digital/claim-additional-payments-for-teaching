@@ -109,6 +109,13 @@ RSpec.describe TslrClaim, type: :model do
     end
   end
 
+  context "when saving in the “current-school” validation context" do
+    it "it validates the current_school" do
+      expect(TslrClaim.new).not_to be_valid(:"current-school")
+      expect(TslrClaim.new(current_school: schools(:hampstead_school))).to be_valid(:"current-school")
+    end
+  end
+
   context "when saving in the “subjects-taught” validation context" do
     it "validates mostly_teaching_eligible_subjects has been provided" do
       expect(TslrClaim.new).not_to be_valid(:"subjects-taught")
