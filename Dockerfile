@@ -99,4 +99,5 @@ RUN if [ ${RAILS_ENV} = "production" ]; then \
 
 EXPOSE 3000
 
+ENTRYPOINT [ "bin/docker-entrypoint" ]
 CMD [ "rails", "server" ]
