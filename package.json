@@ -1,5 +1,7 @@
 {
   "name": "dfe-teachers-payment-service",
   "private": true,
-  "dependencies": {}
+  "dependencies": {
+    "a11y-dialog": "^5.2.0"
+  }
 }

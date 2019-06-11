@@ -113,6 +113,20 @@ RSpec.describe "Claims", type: :request do
     end
   end
 
+  describe "claim#refresh_session" do
+    it "updates the last seen at timestamp" do
+      freeze_time do
+        get claim_refresh_session_path
+        expect(session[:last_seen_at]).to eql(Time.zone.now)
+      end
+    end
+
+    it "gives a successful response" do
+      get claim_refresh_session_path
+      expect(response).to have_http_status(:ok)
+    end
+  end
+
   describe "claims#update request" do
     context "when a claim is already in progress" do
       let(:in_progress_claim) { TslrClaim.order(:created_at).last }

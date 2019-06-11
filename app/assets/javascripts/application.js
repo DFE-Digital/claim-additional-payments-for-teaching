@@ -11,5 +11,6 @@
 // about supported directives.
 //
 //= require rails-ujs
+//= require a11y-dialog/a11y-dialog.min.js
 //= require_tree .
 //= require govuk_frontend_rails

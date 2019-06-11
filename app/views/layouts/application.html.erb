@@ -19,7 +19,6 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 
     <%= stylesheet_link_tag    'application', media: 'all' %>
-    <%= javascript_include_tag 'application' %>
   </head>
 
   <body class="govuk-template__body app-body-class">
@@ -28,6 +27,8 @@
       document.body.className = ((document.body.className) ? document.body.className + ' js-enabled' : 'js-enabled');
 
     </script>
+
+    <%= render partial: "timeout_dialog" %>
 
     <a href="#main-content" class="govuk-skip-link">Skip to main content</a>
 
@@ -134,7 +135,7 @@
         </div>
       </div>
     </footer>
-
+    <%= javascript_include_tag 'application' %>
   </body>
 
 </html>

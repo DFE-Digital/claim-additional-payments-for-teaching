@@ -1,5 +1,6 @@
 class ClaimsController < ApplicationController
   TIMEOUT_LENGTH_IN_MINUTES = 30
+  TIMEOUT_WARNING_LENGTH_IN_MINUTES = 2
 
   before_action :send_unstarted_claiments_to_the_start, only: [:show, :update, :ineligible]
   before_action :end_expired_sessions
@@ -31,6 +32,10 @@ class ClaimsController < ApplicationController
   end
 
   def ineligible
+  end
+
+  def refresh_session
+    head :ok
   end
 
   private

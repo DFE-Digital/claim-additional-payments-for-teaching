@@ -4,6 +4,11 @@
       "addons": [
         "heroku-postgresql:in-dyno"
       ],
+      "buildpacks": [
+        { "url": "heroku/nodejs" },
+        { "url": "https://github.com/heroku/heroku-buildpack-google-chrome" },
+        { "url": "heroku/ruby" }
+      ],
       "scripts": {
         "test": "bundle exec rake default"
       }

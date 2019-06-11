@@ -13,4 +13,5 @@
  *= require_tree .
  *= require_self
  *= require govuk_frontend_rails
+ *= require govuk_frontend_custom
  */
