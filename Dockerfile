@@ -14,7 +14,6 @@ ENV DEPS_HOME /deps
 
 ARG RAILS_ENV
 ENV RAILS_ENV ${RAILS_ENV:-production}
-ENV RACK_ENV ${RAILS_ENV:-production}
 ENV NODE_ENV ${RAILS_ENV:-production}
 
 # ------------------------------------------------------------------------------
@@ -23,7 +22,7 @@ ENV NODE_ENV ${RAILS_ENV:-production}
 
 FROM base AS dependencies
 
-RUN echo "Building with RAILS_ENV=${RAILS_ENV}, RACK_ENV=${RACK_ENV}, NODE_ENV=${NODE_ENV}"
+RUN echo "Building with RAILS_ENV=${RAILS_ENV}, NODE_ENV=${NODE_ENV}"
 
 RUN apk add build-base
 RUN apk add yarn
@@ -59,7 +58,7 @@ RUN yarn install --frozen-lockfile --production
 
 FROM base AS web
 
-RUN echo "Building with RAILS_ENV=${RAILS_ENV}, RACK_ENV=${RACK_ENV}, NODE_ENV=${NODE_ENV}"
+RUN echo "Building with RAILS_ENV=${RAILS_ENV}, NODE_ENV=${NODE_ENV}"
 
 # Set up install environment
 RUN mkdir -p ${APP_HOME}
