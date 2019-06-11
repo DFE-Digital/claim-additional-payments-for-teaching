@@ -22,4 +22,10 @@ module FeatureHelpers
     choose teaching_at
     click_on "Continue"
   end
+
+  def wait_until_visible(element)
+    page.document.synchronize do
+      raise Capybara::ElementNotFound unless element.visible?
+    end
+  end
 end
