@@ -1,0 +1,13 @@
+.autocomplete__wrapper {
+  .autocomplete__menu {
+    .autocomplete__option {
+      &:hover,
+      &--focused {
+        .govuk-label,
+        .govuk-hint {
+          color: #ffffff;
+        }
+      }
+    }
+  }
+}
