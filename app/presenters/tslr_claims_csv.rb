@@ -5,6 +5,7 @@ class TslrClaimsCsv
 
   FIELDS = [
     :reference,
+    :submitted_at,
     :qts_award_year,
     :claim_school_name,
     :employment_status,

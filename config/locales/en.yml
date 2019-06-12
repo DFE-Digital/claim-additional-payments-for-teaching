@@ -55,6 +55,7 @@ en:
       bank_details: "Your bank account details"
     csv_headers:
       reference: "Reference"
+      submitted_at: "Submitted at"
       qts_award_year: "Award Year"
       claim_school_name: "Claim School"
       employment_status: "Employment Status"

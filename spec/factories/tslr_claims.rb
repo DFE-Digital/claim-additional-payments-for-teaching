@@ -28,5 +28,11 @@ FactoryBot.define do
       eligible_and_submittable
       email_address { nil }
     end
+
+    trait :submitted do
+      eligible_and_submittable
+      submitted_at { Time.zone.now }
+      reference { Reference.new.to_s }
+    end
   end
 end

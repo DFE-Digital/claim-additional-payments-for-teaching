@@ -28,6 +28,10 @@ class TslrClaimCsvRow < SimpleDelegator
     "£#{model.student_loan_repayment_amount}"
   end
 
+  def submitted_at
+    model.submitted_at.strftime("%d/%m/%Y %H:%M")
+  end
+
   def model
     __getobj__
   end

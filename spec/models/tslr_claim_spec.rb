@@ -417,7 +417,7 @@ RSpec.describe TslrClaim, type: :model do
   end
 
   describe "submitted" do
-    let!(:submitted_claims) { create_list(:tslr_claim, 5, :eligible_and_submittable, submitted_at: DateTime.now) }
+    let!(:submitted_claims) { create_list(:tslr_claim, 5, :submitted) }
     let!(:unsubmitted_claims) { create_list(:tslr_claim, 2, :eligible_and_submittable) }
 
     it "returns submitted claims" do
