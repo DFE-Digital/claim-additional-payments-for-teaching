@@ -1,6 +1,6 @@
 class School < ApplicationRecord
   SEARCH_RESULTS_LIMIT = 50
-  SEARCH_NOT_ENOUGH_CHARACTERS_ERROR = "search_term must have a minimum of 4 characters"
+  SEARCH_NOT_ENOUGH_CHARACTERS_ERROR = "search_term must have a minimum of 4 characters".freeze
 
   belongs_to :local_authority
   belongs_to :local_authority_district
