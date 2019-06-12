@@ -41,7 +41,7 @@ Create a `.env` file with the following variables:
 
 ```
 DFE_SIGN_IN_ISSUER=https://pp-oidc.signin.education.gov.uk:443
-DFE_SIGN_IN_REDIRECT_URL=https://localhost:3000/admin/auth/callback
+DFE_SIGN_IN_REDIRECT_BASE_URL=https://localhost:3000
 DFE_SIGN_IN_IDENTIFIER=<paste identifier>
 DFE_SIGN_IN_SECRET=<paste secret>
 ```

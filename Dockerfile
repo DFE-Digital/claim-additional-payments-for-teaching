@@ -90,10 +90,6 @@ COPY app ${APP_HOME}/app
 # End
 
 RUN if [ ${RAILS_ENV} = "production" ]; then \
-  DFE_SIGN_IN_ISSUER= \
-  DFE_SIGN_IN_REDIRECT_URL= \
-  DFE_SIGN_IN_IDENTIFIER= \
-  DFE_SIGN_IN_SECRET= \
   bundle exec rake assets:precompile; \
   fi
 
