@@ -39,7 +39,7 @@ class TslrClaim < ApplicationRecord
   belongs_to :current_school, optional: true, class_name: "School"
 
   validates :claim_school,              on: [:"claim-school", :submit], presence: {message: "Select a school from the list"}
-  validates :current_school,            on: [:"current-school"], presence: {message: "Select a school from the list"}
+  validates :current_school,            on: [:"current-school", :submit], presence: {message: "Select a school from the list"}
 
   validates :qts_award_year,            on: [:"qts-year", :submit], inclusion: {in: VALID_QTS_YEARS, message: "Select the academic year you were awarded qualified teacher status"}
 
@@ -84,7 +84,8 @@ class TslrClaim < ApplicationRecord
   validate  :bank_account_number_must_be_eight_digits
   validate  :bank_sort_code_must_be_six_digits
 
-  before_save :update_current_school, if: :employment_status_changed?
+  before_validation :update_current_school, if: :employment_status_changed?
+
   before_save :normalise_trn, if: :teacher_reference_number_changed?
   before_save :normalise_ni_number, if: :national_insurance_number_changed?
   before_save :normalise_bank_account_number, if: :bank_account_number_changed?
