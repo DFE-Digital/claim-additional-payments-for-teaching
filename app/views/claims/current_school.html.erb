@@ -1,9 +1,9 @@
   <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
 
-    <%= render("shared/error_summary", instance: current_claim) if current_claim.errors.any? %>
-
     <% if @schools.blank? %>
+
+      <%= render("shared/error_summary", instance: current_claim) if current_claim.errors.any? %>
 
       <%= form_tag(claim_path("current-school"), method: :get) do %>
         <%= form_group_tag current_claim, :school_search do %>
@@ -21,12 +21,26 @@
             </span>
           <% end %>
           <%= errors_tag current_claim, :school_search %>
-          <%= text_field_tag :school_search, params[:school_search], id: :tslr_claim_school_search, class: css_classes_for_input(current_claim, :school_search), value: current_claim.current_school&.name %>
+          <%=
+            text_field_tag  :school_search,
+                            params[:school_search],
+                            id: :tslr_claim_school_search,
+                            class: css_classes_for_input(current_claim, :school_search),
+                            value: current_claim.current_school&.name
+          %>
         <% end %>
         <%= submit_tag "Search", class: "govuk-button" %>
       <% end %>
 
     <% else %>
+
+      <%=
+        render(
+          "shared/error_summary",
+          instance: current_claim,
+          errored_field_id_overrides: { current_school: "tslr_claim_current_school_id_#{@schools.first.id}"}
+        ) if current_claim.errors.any?
+      %>
 
       <%= form_for current_claim, url: claim_path do |form| %>
         <%= form_group_tag current_claim, :current_school do %>
