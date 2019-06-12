@@ -20,6 +20,12 @@
     "SECRET_KEY_BASE": {
       "value": "827a46887bf03dfbe280c10dc00110ef44c7608e0dadbb16f2fbdd1cace12c005801d847c04db0a132f2f2b9de861eee5dd5b43a979613cb985ff857bdbb7a6b"
     },
+    "BASIC_AUTH_USERNAME": {
+      "value": "user"
+    },
+    "BASIC_AUTH_PASSWORD": {
+      "value": "password"
+    },
     "DFE_SIGN_IN_ISSUER": {
       "value": ""
     },
