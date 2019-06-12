@@ -102,6 +102,7 @@ GEM
       activesupport (>= 4.2)
       aes_key_wrap
       bindata
+    jwt (2.2.1)
     launchy (2.4.3)
       addressable (~> 2.3)
     listen (3.1.5)
@@ -113,6 +114,9 @@ GEM
       nokogiri (>= 1.5.9)
     mail (2.7.1)
       mini_mime (>= 0.1.1)
+    mail-notify (0.1.0)
+      actionmailer (~> 5.0)
+      notifications-ruby-client (~> 3.1)
     marcel (0.3.3)
       mimemagic (~> 0.3.2)
     method_source (0.9.2)
@@ -126,6 +130,8 @@ GEM
     nio4r (2.3.1)
     nokogiri (1.10.3)
       mini_portile2 (~> 2.4.0)
+    notifications-ruby-client (3.1.0)
+      jwt (>= 1.5, < 3)
     omniauth (1.9.0)
       hashie (>= 3.4.6, < 3.7.0)
       rack (>= 1.6.2, < 3)
@@ -308,6 +314,7 @@ DEPENDENCIES
   jbuilder (~> 2.9)
   launchy
   listen (>= 3.0.5, < 3.2)
+  mail-notify
   nanoid
   omniauth
   omniauth_openid_connect

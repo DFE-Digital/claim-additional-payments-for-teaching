@@ -44,6 +44,11 @@ Rails.application.configure do
   # Raises error for missing translations
   # config.action_view.raise_on_missing_translations = true
 
+  config.action_mailer.delivery_method = :test
+  config.action_mailer.default_options = {
+    from: "mail@example.com",
+  }
+
   config.after_initialize do
     Bullet.enable = true
     Bullet.bullet_logger = true
