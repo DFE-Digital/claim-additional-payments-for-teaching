@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_05_31_101710) do
+ActiveRecord::Schema.define(version: 2019_06_06_152321) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -70,9 +70,11 @@ ActiveRecord::Schema.define(version: 2019_05_31_101710) do
     t.string "bank_account_number", limit: 8
     t.datetime "submitted_at"
     t.decimal "student_loan_repayment_amount", precision: 7, scale: 2
+    t.string "reference", limit: 8
     t.index ["claim_school_id"], name: "index_tslr_claims_on_claim_school_id"
     t.index ["current_school_id"], name: "index_tslr_claims_on_current_school_id"
     t.index ["employment_status"], name: "index_tslr_claims_on_employment_status"
+    t.index ["reference"], name: "index_tslr_claims_on_reference", unique: true
     t.index ["submitted_at"], name: "index_tslr_claims_on_submitted_at"
   end
 

@@ -24,6 +24,9 @@ gem "jbuilder", "~> 2.9"
 # Use Gov UK Kit
 gem "dxw_govuk_frontend_rails"
 
+# Generate human-readable reference numbers
+gem "nanoid"
+
 # Use Rollbar
 gem "rollbar"
 
