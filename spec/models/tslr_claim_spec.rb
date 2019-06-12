@@ -415,4 +415,13 @@ RSpec.describe TslrClaim, type: :model do
       end
     end
   end
+
+  describe "submitted" do
+    let!(:submitted_claims) { create_list(:tslr_claim, 5, :eligible_and_submittable, submitted_at: DateTime.now) }
+    let!(:unsubmitted_claims) { create_list(:tslr_claim, 2, :eligible_and_submittable) }
+
+    it "returns submitted claims" do
+      expect(subject.class.submitted).to match_array(submitted_claims)
+    end
+  end
 end
