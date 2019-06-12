@@ -3,14 +3,18 @@ Rails.application.routes.draw do
   root "claims#new"
 
   constraints slug: %r{#{TslrClaim::PAGE_SEQUENCE.join("|")}} do
-    resources :claims, only: [:new, :create, :show, :update], param: :slug, path: "/claim" do
-      get "/search-schools", to: "claims#search_schools", constraints: lambda { |req| req.format == :json }
-    end
+    resources :claims, only: [:new, :create, :show, :update], param: :slug, path: "/claim"
   end
 
   get "/claim/ineligible", to: "claims#ineligible", as: :ineligible_claim
   get "/claim/timeout", to: "claims#timeout", as: :timeout_claim
   get "/claim/refresh-session", to: "claims#refresh_session"
+
+  constraints lambda { |req| req.format == :json } do
+    defaults format: :json do
+      resources :school_search, only: [:create]
+    end
+  end
 
   namespace :admin do
     get "/", to: "page#index"

@@ -19,7 +19,7 @@ class ClaimsController < ApplicationController
   end
 
   def show
-    perform_school_search if params[:school_search]
+    search_schools if params[:school_search]
     render claim_page_template
   end
 
@@ -28,15 +28,6 @@ class ClaimsController < ApplicationController
       redirect_to next_claim_path
     else
       show
-    end
-  end
-
-  def search_schools
-    if params[:school_search]
-      success = perform_school_search
-      render "school_search", status: success ? :ok : :bad_request
-    else
-      head :bad_request
     end
   end
 
@@ -84,14 +75,12 @@ class ClaimsController < ApplicationController
     params[:slug] == "confirmation" && current_claim.submitted?
   end
 
-  def perform_school_search
-    if params[:school_search].length > 3
-      @schools = School.search(params[:school_search])
-      true
-    else
-      current_claim.errors.add(:school_search, "Search for the school name with a minimum of four characters")
-      false
-    end
+  def search_schools
+    @schools = School.search(params[:school_search])
+  rescue ArgumentError => e
+    raise unless e.message == School::SEARCH_NOT_ENOUGH_CHARACTERS_ERROR
+
+    current_claim.errors.add(:school_search, "Search for the school name with a minimum of four characters")
   end
 
   def claim_params

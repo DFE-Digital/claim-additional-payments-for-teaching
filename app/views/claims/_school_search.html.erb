@@ -2,8 +2,7 @@
 
   <%= render("shared/error_summary", instance: current_claim) if current_claim.errors.any? %>
 
-  <%= form_for current_claim, url: claim_path, method: :get, data: { "school-search-url": claim_search_schools_path(params[:slug], format: "json"), "school-id-param": school_id_param } do |form| %>
-
+  <%= form_for current_claim, url: claim_path, method: :get, data: { "school-id-param": school_id_param } do |form| %>
     <%= hidden_field_tag :_method, "get", id: nil %>
     <%= hidden_field_tag :authenticity_token, form_authenticity_token %>
     <%= form.hidden_field school_id_param %>

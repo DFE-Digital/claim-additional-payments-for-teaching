@@ -13,9 +13,7 @@ document.addEventListener("DOMContentLoaded", function() {
     return;
   }
 
-  var schoolSearchUrl = form.attributes["data-school-search-url"].nodeValue;
-  var schoolIdParam = form.attributes["data-school-id-param"].nodeValue;
-
+  var schoolIdParam = form.getAttribute("data-school-id-param");
   var schoolIdInput = form.querySelector("#tslr_claim_" + schoolIdParam);
 
   if (!schoolIdInput) {
@@ -55,8 +53,9 @@ document.addEventListener("DOMContentLoaded", function() {
     name: "school_search",
     source: function(query, populateResults) {
       Rails.ajax({
-        type: "get",
-        url: schoolSearchUrl + "?school_search=" + query,
+        type: "post",
+        url: "<%= Rails.application.routes.url_helpers.school_search_index_path %>",
+        data: "query=" + query,
         success: function(response) {
           schools = response.data;
 
