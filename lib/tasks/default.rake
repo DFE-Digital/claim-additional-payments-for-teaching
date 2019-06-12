@@ -1,1 +1,1 @@
-task default: %i[standard brakeman:run spec] if Rails.env.test? || Rails.env.development?
+task default: %i[standard prettier brakeman:run spec] if Rails.env.test? || Rails.env.development?

@@ -16,4 +16,4 @@ We will use RuboCop for linting our Ruby code
 
 ## Consequences
 
-The team will have a set of code styles to write their code against 
+The team will have a set of code styles to write their code against

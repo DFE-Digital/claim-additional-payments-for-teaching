@@ -1,0 +1,13 @@
+{
+  "printWidth": 120,
+  "overrides": [
+    {
+      "files": "*.js.erb",
+      "options": { "parser": "babel" }
+    },
+    {
+      "files": "*.md",
+      "options": { "printWidth": 80 }
+    }
+  ]
+}

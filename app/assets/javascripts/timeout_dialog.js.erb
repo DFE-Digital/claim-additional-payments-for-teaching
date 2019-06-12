@@ -1,15 +1,17 @@
-(function (win, A11yDialog) {
+(function(win, A11yDialog) {
   var dialogElement = document.getElementById("timeout_dialog"),
-      continueButtonElement = document.getElementById("continue_session"),
-      warningTimeInMinutes =(dialogElement.getAttribute("data-warning-in-minutes")),
-      timeoutInMinutes = (dialogElement.getAttribute("data-timeout-in-minutes")),
-      claimInProgress = dialogElement.getAttribute("data-claim-in-progress"),
-      timeoutInMilliseconds = (timeoutInMinutes - warningTimeInMinutes) * 60 * 1000,
-      dialog = new A11yDialog(dialogElement);
+    continueButtonElement = document.getElementById("continue_session"),
+    warningTimeInMinutes = dialogElement.getAttribute("data-warning-in-minutes"),
+    timeoutInMinutes = dialogElement.getAttribute("data-timeout-in-minutes"),
+    claimInProgress = dialogElement.getAttribute("data-claim-in-progress"),
+    timeoutInMilliseconds = (timeoutInMinutes - warningTimeInMinutes) * 60 * 1000,
+    dialog = new A11yDialog(dialogElement);
 
-  continueButtonElement.onclick = function() { dialog.hide() };
+  continueButtonElement.onclick = function() {
+    dialog.hide();
+  };
 
-  dialog.on('hide', refreshSession);
+  dialog.on("hide", refreshSession);
 
   function refreshSession() {
     Rails.ajax({
@@ -35,7 +37,4 @@
   }
 
   win.timeoutTimer = setInterval(showTimeoutDialog, timeoutInMilliseconds);
-}(window, A11yDialog));
-
-
-
+})(window, A11yDialog);
