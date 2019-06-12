@@ -11,7 +11,7 @@ RSpec.feature "Teacher Student Loan Repayments claims" do
 
     choose_school schools(:penistone_grammar_school)
     expect(claim.reload.claim_school).to eql schools(:penistone_grammar_school)
-    expect(page).to have_text(I18n.t("tslr.questions.employment_status"))
+    expect(page).to have_text(I18n.t("tslr.questions.still_teaching"))
 
     choose_still_teaching
     expect(claim.reload.employment_status).to eql("claim_school")
@@ -107,7 +107,7 @@ RSpec.feature "Teacher Student Loan Repayments claims" do
 
     expect(claim.reload.employment_status).to eql("different_school")
 
-    fill_in "School name", with: "Hampstead"
+    fill_in :school_search, with: "Hampstead"
     click_on "Search"
 
     choose "Hampstead School"
@@ -244,7 +244,7 @@ RSpec.feature "Teacher Student Loan Repayments claims" do
           before do
             choose_still_teaching "Yes, at another school"
 
-            fill_in "School name", with: "Hampstead"
+            fill_in :school_search, with: "Hampstead"
             click_on "Search"
 
             choose "Hampstead School"

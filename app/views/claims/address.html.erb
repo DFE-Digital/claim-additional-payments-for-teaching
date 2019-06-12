@@ -10,46 +10,53 @@
           </h1>
         </legend>
 
-        <div class="govuk-form-group">
+        <%= form_group_tag current_claim, :address_line_1 do %>
           <%= form.label :address_line_1, class: "govuk-label" do %>
             Building and street <span class="govuk-visually-hidden">line 1 of 2</span>
           <% end %>
-          <%= form.text_field :address_line_1, autocomplete: "address-line1", class: "govuk-input" %>
-        </div>
+          <%= errors_tag current_claim, :address_line_1 %>
+          <%= form.text_field :address_line_1, autocomplete: "address-line1",
+            class: css_classes_for_input(current_claim, :address_line_1) %>
+        <% end %>
 
-
-        <div class="govuk-form-group">
+        <%= form_group_tag current_claim, :address_line_2 do %>
           <%= form.label :address_line_2, class: "govuk-label" do %>
             <span class="govuk-visually-hidden">Building and street line 2 of 2</span>
           <% end %>
-          <%= form.text_field :address_line_2, autocomplete: "address-line2", class: "govuk-input" %>
-        </div>
+          <%= errors_tag current_claim, :address_line_2 %>
+          <%= form.text_field :address_line_2, autocomplete: "address-line2",
+            class: "govuk-input" %>
+        <% end %>
 
-        <div class="govuk-form-group">
+        <%= form_group_tag current_claim, :address_line_3 do %>
           <%= form.label :address_line_3, class: "govuk-label" do %>
             Town or city
           <% end %>
-          <%= form.text_field :address_line_3, autocomplete: "address-line3", class: "govuk-input govuk-!-width-two-thirds" %>
-        </div>
+          <%= errors_tag current_claim, :address_line_3 %>
+          <%= form.text_field :address_line_3, autocomplete: "address-line3",
+            class: css_classes_for_input(current_claim, :address_line_3, "govuk-!-width-two-thirds") %>
+        <% end %>
 
-        <div class="govuk-form-group">
+        <%= form_group_tag current_claim, :address_line_4 do %>
           <%= form.label :address_line_4, class: "govuk-label" do %>
             County
           <% end %>
-          <%= form.text_field :address_line_4, autocomplete: "region", class: "govuk-input govuk-!-width-two-thirds" %>
-        </div>
+          <%= errors_tag current_claim, :address_line_4 %>
+          <%= form.text_field :address_line_4, autocomplete: "region",
+            class: "govuk-input govuk-!-width-two-thirds" %>
+        <% end %>
 
-        <div class="govuk-form-group">
+        <%= form_group_tag current_claim, :postcode do %>
           <%= form.label :postcode, class: "govuk-label" do %>
             Postcode
           <% end %>
-          <%= form.text_field :postcode, autocomplete: "postal-code", class: "govuk-input govuk-input--width-10" %>
-        </div>
-      </fieldset>
+          <%= errors_tag current_claim, :postcode %>
+          <%= form.text_field :postcode, autocomplete: "postal-code",
+            class: css_classes_for_input(current_claim, :postcode, "govuk-input--width-10") %>
+        <% end %>
 
-      <div class="govuk-form-group">
-        <%= form.submit "Continue", class: "govuk-button" %>
-      </div>
+      </fieldset>
+      <%= form.submit "Continue", class: "govuk-button" %>
     <% end %>
   </div>
 </div>

@@ -5,7 +5,9 @@
   <div class="govuk-error-summary__body">
     <ul class="govuk-list govuk-error-summary__list">
       <% instance.errors.each do |attribute, error| %>
-        <li><%= link_to error, "##{instance.class.model_name.singular}_#{attribute}" %></li>
+        <li>
+          <%= link_to error, "##{local_assigns.dig(:errored_field_id_overrides, attribute) || "#{instance.class.model_name.singular}_#{attribute}"}" %>
+        </li>
       <% end %>
     </ul>
   </div>

@@ -3,19 +3,18 @@
     <%= render("shared/error_summary", instance: current_claim) if current_claim.errors.any? %>
 
     <%= form_for current_claim, url: claim_path do |form| %>
-      <h1 class="govuk-heading-xl">
-        <%= form.label :national_insurance_number, t("tslr.questions.national_insurance_number")  %>
-      </h1>
+      <%= form_group_tag current_claim do %>
+        <h1 class="govuk-heading-xl">
+          <%= form.label :national_insurance_number, t("tslr.questions.national_insurance_number")  %>
+        </h1>
 
-      <span class="govuk-hint">It’s on your National Insurance card, benefit letter, payslip or P60. For example, ‘QQ 12 34 56 C’.</span>
+        <span class="govuk-hint">It’s on your National Insurance card, benefit letter, payslip or P60. For example, ‘QQ 12 34 56 C’.</span>
 
-      <div class="govuk-form-group">
-        <%= form.text_field :national_insurance_number, spellcheck: "false", class: "govuk-input" %>
-      </div>
+        <%= errors_tag current_claim, :national_insurance_number %>
 
-      <div class="govuk-form-group">
-        <%= form.submit "Continue", class: "govuk-button" %>
-      </div>
+        <%= form.text_field :national_insurance_number, spellcheck: "false", class: css_classes_for_input(current_claim, :national_insurance_number) %>
+      <% end %>
+      <%= form.submit "Continue", class: "govuk-button" %>
     <% end %>
   </div>
 </div>

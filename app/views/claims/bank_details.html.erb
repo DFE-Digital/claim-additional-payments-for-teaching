@@ -11,33 +11,29 @@
             </h1>
           </legend>
 
-          <p class="govuk-body govuk-hint">
+          <span class="govuk-hint">
             We need to collect this information to pay you.
-          </p>
+          </span>
 
-          <div class="govuk-form-group">
+          <%= form_group_tag current_claim, :bank_sort_code do %>
             <%= form.label :bank_sort_code, "Sort code", class: "govuk-label" %>
-            <span  id="sort-code-hint" class="govuk-hint">For example: 44 00 26</span>
+            <span id="sort-code-hint" class="govuk-hint">For example: 44 00 26</span>
+            <%= errors_tag current_claim, :bank_sort_code %>
             <%= form.text_field :bank_sort_code,
-              class: "govuk-input govuk-!-width-one-quarter",
-              "aria-describedby" => "sort-code-hint"
-            %>
-          </div>
+              class: css_classes_for_input(current_claim, :bank_sort_code, "govuk-!-width-one-quarter"),
+              "aria-describedby" => "sort-code-hint" %>
+          <% end %>
 
-          <div class="govuk-form-group">
+          <%= form_group_tag current_claim, :bank_account_number do %>
             <%= form.label :bank_account_number, "Account number", class: "govuk-label" %>
-            <span  id="account-number-hint" class="govuk-hint">For example: 70 87 24 90</span>
+            <span id="account-number-hint" class="govuk-hint">For example: 70 87 24 90</span>
+            <%= errors_tag current_claim, :bank_account_number %>
             <%= form.text_field :bank_account_number,
-              class: "govuk-input govuk-input--width-20",
-              "aria-describedby" => "account-number-hint"
-            %>
-          </div>
-
+              class: css_classes_for_input(current_claim, :bank_account_number, "govuk-input--width-20"),
+              "aria-describedby" => "account-number-hint" %>
+          <% end %>
         </fieldset>
-
-        <div class="govuk-form-group">
-          <%= form.submit "Continue", class: "govuk-button" %>
-        </div>
+        <%= form.submit "Continue", class: "govuk-button" %>
       <% end %>
   </div>
 </div>

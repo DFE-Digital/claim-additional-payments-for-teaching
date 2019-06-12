@@ -1,17 +1,13 @@
 .govuk-currency-input {
-  &__inner {
-    position: relative;
-    font-family: "nta", Arial, sans-serif;
+  position: relative;
+  &__unit {
+    position: absolute;
+    bottom: 8px;
+    left: 10px;
+    @include govuk-font(19, bold);
+  }
 
-    &__unit {
-      position: absolute;
-      bottom: 9px;
-      left: 10px;
-      font-weight: bold;
-    }
-
-    &__input.govuk-input {
-      padding-left: 25px;
-    }
+  &__input.govuk-input {
+    padding-left: 25px;
   }
 }
