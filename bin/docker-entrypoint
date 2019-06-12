@@ -1,0 +1,10 @@
+#!/bin/bash
+set -e
+
+if rake db:migrate:status > /dev/null; then
+  rails db:migrate
+elif [ "$RAILS_ENV" != "production" ]; then
+  rake db:create db:setup
+fi
+
+exec "$@"

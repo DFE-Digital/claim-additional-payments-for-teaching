@@ -1,0 +1,243 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "resourceNamePrefix": {
+      "type": "string",
+      "defaultValue": "[resourceGroup().name]"
+    },
+    "appServiceDockerImage": {
+      "type": "string"
+    },
+    "databaseName": {
+      "type": "string"
+    },
+    "databaseUsername": {
+      "type": "string"
+    },
+    "databasePassword": {
+      "type": "securestring"
+    },
+    "securityAlertEmailAddress": {
+      "type": "string"
+    },
+    "RAILS_ENV": {
+      "type": "string",
+      "defaultValue": "production"
+    },
+    "RAILS_SERVE_STATIC_FILES": {
+      "type": "string",
+      "defaultValue": "true"
+    },
+    "SECRET_KEY_BASE": {
+      "type": "securestring"
+    },
+    "DFE_SIGN_IN_ISSUER": {
+      "type": "string"
+    },
+    "DFE_SIGN_IN_REDIRECT_URL": {
+      "type": "string"
+    },
+    "DFE_SIGN_IN_IDENTIFIER": {
+      "type": "securestring"
+    },
+    "DFE_SIGN_IN_SECRET": {
+      "type": "securestring"
+    }
+  },
+  "variables": {
+    "deploymentUrlBase": "https://raw.githubusercontent.com/DFE-Digital/bat-platform-building-blocks/master/templates/",
+    "storageAccountName": "[replace(concat(parameters('resourceNamePrefix'), 'storage'), '-', '')]",
+    "databaseServerName": "[concat(parameters('resourceNamePrefix'), '-db')]",
+    "appServicePlanName": "[concat(parameters('resourceNamePrefix'), '-asp')]",
+    "appServiceName": "[concat(parameters('resourceNamePrefix'), '-as')]",
+    "appServiceRuntimeStack": "[concat('DOCKER|', parameters('appServiceDockerImage'))]"
+  },
+  "resources": [
+    {
+      "apiVersion": "2017-05-10",
+      "name": "storage-account",
+      "type": "Microsoft.Resources/deployments",
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[concat(variables('deploymentUrlBase'), 'storage-account.json')]",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "storageAccountName": {
+            "value": "[variables('storageAccountName')]"
+          }
+        }
+      }
+    },
+    {
+      "apiVersion": "2017-05-10",
+      "name": "database-server",
+      "type": "Microsoft.Resources/deployments",
+      "dependsOn": ["storage-account"],
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[concat(variables('deploymentUrlBase'), 'postgresql-server.json')]",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "postgresServerName": {
+            "value": "[variables('databaseServerName')]"
+          },
+          "postgresAdminLogin": {
+            "value": "[parameters('databaseUsername')]"
+          },
+          "postgresAdminPassword": {
+            "value": "[parameters('databasePassword')]"
+          },
+          "securityAlertEmailAddress": {
+            "value": "[parameters('securityAlertEmailAddress')]"
+          },
+          "storageAccountName": {
+            "value": "[variables('storageAccountName')]"
+          }
+        }
+      }
+    },
+    {
+      "apiVersion": "2017-05-10",
+      "name": "database",
+      "type": "Microsoft.Resources/deployments",
+      "dependsOn": ["database-server"],
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[concat(variables('deploymentUrlBase'), 'postgresql-database.json')]",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "serverName": {
+            "value": "[variables('databaseServerName')]"
+          },
+          "databaseName": {
+            "value": "[parameters('databaseName')]"
+          }
+        }
+      }
+    },
+    {
+      "apiVersion": "2017-05-10",
+      "name": "app-service-plan",
+      "type": "Microsoft.Resources/deployments",
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[concat(variables('deploymentUrlBase'), 'app-service-plan.json')]",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "appServicePlanName": {
+            "value": "[variables('appServicePlanName')]"
+          }
+        }
+      }
+    },
+    {
+      "apiVersion": "2017-05-10",
+      "name": "app-service",
+      "type": "Microsoft.Resources/deployments",
+      "dependsOn": ["app-service-plan", "database", "database-server"],
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[concat(variables('deploymentUrlBase'), 'app-service-linux.json')]",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "appServiceName": {
+            "value": "[variables('appServiceName')]"
+          },
+          "appServicePlanName": {
+            "value": "[variables('appServicePlanName')]"
+          },
+          "appServicePlanResourceGroup": {
+            "value": "[resourceGroup().name]"
+          },
+          "runtimeStack": {
+            "value": "[variables('appServiceRuntimeStack')]"
+          },
+          "appServiceAppSettings": {
+            "value": [
+              {
+                "name": "RAILS_ENV",
+                "value": "[parameters('RAILS_ENV')]"
+              },
+              {
+                "name": "RAILS_SERVE_STATIC_FILES",
+                "value": "[parameters('RAILS_SERVE_STATIC_FILES')]"
+              },
+              {
+                "name": "DFE_TEACHERS_PAYMENT_SERVICE_DATABASE_USERNAME",
+                "value": "[concat(parameters('databaseUsername'), '@', variables('databaseServerName'))]"
+              },
+              {
+                "name": "DFE_TEACHERS_PAYMENT_SERVICE_DATABASE_PASSWORD",
+                "value": "[parameters('databasePassword')]"
+              },
+              {
+                "name": "DFE_TEACHERS_PAYMENT_SERVICE_DATABASE_HOST",
+                "value": "[reference('database-server').outputs.fullyQualifiedDomainName.value]"
+              },
+              {
+                "name": "DFE_TEACHERS_PAYMENT_SERVICE_DATABASE_NAME",
+                "value": "[parameters('databaseName')]"
+              },
+              {
+                "name": "SECRET_KEY_BASE",
+                "value": "[parameters('SECRET_KEY_BASE')]"
+              },
+              {
+                "name": "DFE_SIGN_IN_ISSUER",
+                "value": "[parameters('DFE_SIGN_IN_ISSUER')]"
+              },
+              {
+                "name": "DFE_SIGN_IN_REDIRECT_URL",
+                "value": "[parameters('DFE_SIGN_IN_REDIRECT_URL')]"
+              },
+              {
+                "name": "DFE_SIGN_IN_IDENTIFIER",
+                "value": "[parameters('DFE_SIGN_IN_IDENTIFIER')]"
+              },
+              {
+                "name": "DFE_SIGN_IN_SECRET",
+                "value": "[parameters('DFE_SIGN_IN_SECRET')]"
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "apiVersion": "2017-05-10",
+      "name": "database-server-firewall-rules",
+      "type": "Microsoft.Resources/deployments",
+      "dependsOn": ["app-service", "database-server"],
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[concat(variables('deploymentUrlBase'),'postgresql-server-firewall-rules.json')]",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "firewallRuleNamePrefix": {
+            "value": "[concat(parameters('resourceNamePrefix'), '-')]"
+          },
+          "ipAddresses": {
+            "value": "[reference('app-service').outputs.possibleOutboundIpAddresses.value]"
+          },
+          "serverName": {
+            "value": "[variables('databaseServerName')]"
+          }
+        }
+      }
+    }
+  ],
+  "outputs": {}
+}
