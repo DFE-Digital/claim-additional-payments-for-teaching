@@ -1,1 +1,19 @@
-@import "govuk-frontend-rails";
+@import "settings/all";
+
+// Using Rails with the asset pipeline so set the helper methods
+$govuk-font-url-function: "image-url";
+$govuk-image-url-function: "font-url";
+
+@import "tools/all";
+@import "helpers/all";
+
+@import "core/all";
+@import "objects/all";
+
+@import "components/flash";
+@import "components/currency_input";
+@import "components/a11y-dialog";
+@import "components/all";
+
+@import "utilities/all";
+@import "overrides/all";
