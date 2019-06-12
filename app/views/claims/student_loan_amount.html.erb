@@ -12,9 +12,9 @@
 
         <%= errors_tag current_claim, :student_loan_repayment_amount %>
 
-        <div class="govuk-currency-input__inner">
-          <span class="govuk-currency-input__inner__unit">&pound;</span>
-          <%= form.text_field :student_loan_repayment_amount, class: css_classes_for_input(current_claim, :student_loan_repayment_amount, "govuk-currency-input__inner__input govuk-input--width-5") %>
+        <div class="govuk-currency-input">
+          <span class="govuk-currency-input__unit">&pound;</span>
+          <%= form.text_field :student_loan_repayment_amount, class: css_classes_for_input(current_claim, :student_loan_repayment_amount, "govuk-currency-input__input govuk-input--width-5") %>
         </div>
       <% end %>
       <%= form.submit "Continue", class: "govuk-button" %>
