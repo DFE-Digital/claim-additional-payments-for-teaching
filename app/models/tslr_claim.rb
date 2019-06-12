@@ -105,7 +105,11 @@ class TslrClaim < ApplicationRecord
       return false
     end
 
-    touch(:submitted_at) if can_be_submitted?
+    if can_be_submitted?
+      self.submitted_at = Time.zone.now
+      self.reference = unique_reference
+      save!
+    end
   end
 
   def submitted?
@@ -204,5 +208,12 @@ class TslrClaim < ApplicationRecord
   def bank_sort_code_must_be_six_digits
     errors.add(:bank_sort_code, "Sort code must contain six digits") \
       if bank_sort_code.present? && normalised_bank_detail(bank_sort_code) !~ /\A\d{6}\z/
+  end
+
+  def unique_reference
+    loop {
+      ref = Reference.new.to_s
+      break ref unless self.class.exists?(reference: ref)
+    }
   end
 end

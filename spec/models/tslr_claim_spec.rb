@@ -367,6 +367,24 @@ RSpec.describe TslrClaim, type: :model do
       it "sets submitted_at to now" do
         expect(tslr_claim.submitted_at).to eq Time.zone.now
       end
+
+      it "generates a reference" do
+        expect(tslr_claim.reference).to_not eq nil
+      end
+
+      context "when a claim with the same reference already exists" do
+        let(:reference) { "12345678" }
+        let!(:other_claim) { create(:tslr_claim, :eligible_and_submittable, reference: reference) }
+
+        before do
+          expect(Reference).to receive(:new).once.and_return(double(to_s: reference), double(to_s: "87654321"))
+          tslr_claim.submit!
+        end
+
+        it "generates a unique reference" do
+          expect(tslr_claim.reference).to eq("87654321")
+        end
+      end
     end
 
     context "when the claim is eligible but unsubmittable" do
@@ -375,6 +393,10 @@ RSpec.describe TslrClaim, type: :model do
       it "doesn't set submitted_at" do
         expect(tslr_claim.submitted_at).to be_nil
       end
+
+      it "doesn't generate a reference" do
+        expect(tslr_claim.reference).to eq nil
+      end
     end
 
     context "when the claim is ineligible" do
@@ -382,6 +404,10 @@ RSpec.describe TslrClaim, type: :model do
 
       it "doesn't set submitted_at" do
         expect(tslr_claim.submitted_at).to be_nil
+      end
+
+      it "doesn't generate a reference" do
+        expect(tslr_claim.reference).to eq nil
       end
 
       it "adds an error" do
