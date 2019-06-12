@@ -3,5 +3,8 @@
   "private": true,
   "dependencies": {
     "a11y-dialog": "^5.2.0"
+  },
+  "devDependencies": {
+    "prettier": "^1.18.2"
   }
 }

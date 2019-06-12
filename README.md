@@ -50,13 +50,16 @@ The identifier and secret are stored in Heroku.
 
 ## Running specs, brakeman, and code linting
 
-```bundle exec rake```
+```
+bundle exec rake
+```
 
 ### Code linting rules
 
-Using the standardrb gem:
+Code linting is performed using:
 
-https://github.com/testdouble/standard
+- [Standard](https://github.com/testdouble/standard) for Ruby
+- [Prettier](https://prettier.io/) for everything else
 
 ### N+1 query detection
 
@@ -67,13 +70,13 @@ exception and the tests will fail.
 
 The service architecture is currently defined and maintained here:
 
-  https://miro.com/app/board/o9J_kxw-xdU=/
+https://miro.com/app/board/o9J_kxw-xdU=/
 
 ## Access
 
 Both staging and production are protected by HTTP Basic Authentication, these
-details are pinned in the *dfe-teacher-payments* slack channel or can be found
-in the *Config Vars* in Heroku.
+details are pinned in the _dfe-teacher-payments_ slack channel or can be found
+in the _Config Vars_ in Heroku.
 
 ### Staging
 
