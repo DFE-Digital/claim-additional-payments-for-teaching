@@ -23,8 +23,9 @@ module FeatureHelpers
     click_on "Continue"
   end
 
-  def wait_until_visible(element)
+  def wait_until_visible(&block)
     page.document.synchronize do
+      element = yield
       raise Capybara::ElementNotFound unless element.visible?
     end
   end
