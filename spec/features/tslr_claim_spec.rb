@@ -96,6 +96,8 @@ RSpec.feature "Teacher Student Loan Repayments claims" do
     end
 
     expect(page).to have_text("Claim submitted")
+    expect(page).to have_text(claim.reference)
+    expect(page).to have_text(claim.email_address)
   end
 
   scenario "Teacher now works for a different school" do

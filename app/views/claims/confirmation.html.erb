@@ -5,12 +5,12 @@
       <h1 class="govuk-panel__title">Claim submitted</h1>
       <div class="govuk-panel__body">
         Your reference number<br>
-        <strong>XXXXXXX</strong>
+        <strong><%= current_claim.reference %></strong>
       </div>
     </div>
 
     <p class="govuk-body">
-      We have sent you a confirmation email to blah@blah.co.uk.
+      We have sent you a confirmation email to <%= current_claim.email_address %>.
     </p>
 
     <h2 class="govuk-heading-m">What happens next</h2>
