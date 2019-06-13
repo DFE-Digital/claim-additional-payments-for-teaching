@@ -60,7 +60,7 @@ Rails.application.configure do
   config.file_watcher = ActiveSupport::EventedFileUpdateChecker
 end
 
-if ENV["DFE_SIGN_IN_ISSUER"].empty?
+if ENV["DFE_SIGN_IN_ISSUER"].blank?
   OmniAuth.config.test_mode = true
   OmniAuth.config.mock_auth[:dfe] = OmniAuth::AuthHash.new(
     "provider" => "dfe",

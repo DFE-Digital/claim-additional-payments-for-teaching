@@ -29,7 +29,7 @@
     "DFE_SIGN_IN_ISSUER": {
       "value": ""
     },
-    "DFE_SIGN_IN_REDIRECT_URL": {
+    "DFE_SIGN_IN_REDIRECT_BASE_URL": {
       "value": ""
     },
     "DFE_SIGN_IN_IDENTIFIER": {
