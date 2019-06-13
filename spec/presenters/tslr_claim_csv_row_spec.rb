@@ -11,6 +11,7 @@ RSpec.describe TslrClaimCsvRow do
     let(:employment_status) { "Different school" }
     let(:mostly_teaching_eligible_subjects) { "Yes" }
     let(:student_loan_repayment_amount) { "£1000.0" }
+    let(:row) { CSV.parse(subject.to_s).first }
 
     let(:claim) do
       create(:tslr_claim, :eligible_and_submittable,
@@ -23,7 +24,7 @@ RSpec.describe TslrClaimCsvRow do
     end
 
     it "generates a csv row" do
-      expect(subject.data).to eq([
+      expect(row).to eq([
         claim.reference,
         claim.qts_award_year,
         claim_school,

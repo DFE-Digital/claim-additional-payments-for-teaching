@@ -2,31 +2,19 @@ require "delegate"
 require "csv"
 
 class TslrClaimCsvRow < SimpleDelegator
-  def data
-    [
-      reference,
-      qts_award_year,
-      claim_school_name,
-      employment_status.humanize,
-      current_school_name,
-      full_name,
-      address_line_1,
-      address_line_2,
-      address_line_3,
-      address_line_4,
-      postcode,
-      date_of_birth,
-      teacher_reference_number,
-      national_insurance_number,
-      email_address,
-      mostly_teaching_eligible_subjects,
-      bank_sort_code,
-      bank_account_number,
-      student_loan_repayment_amount,
-    ]
+  def to_s
+    CSV.generate_line(data)
   end
 
   private
+
+  def data
+    TslrClaimsCsv::FIELDS.map { |f| send(f) }
+  end
+
+  def employment_status
+    model.employment_status.humanize
+  end
 
   def date_of_birth
     model.date_of_birth.strftime("%d/%m/%Y")
