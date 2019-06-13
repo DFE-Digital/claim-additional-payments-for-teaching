@@ -17,5 +17,7 @@ Rails.application.routes.draw do
     get "/auth/dfe", as: :dfe_sign_in
     get "/auth/callback", to: "auth#callback"
     get "/auth/failure", to: "auth#failure"
+
+    resources :claims, only: [:index]
   end
 end
