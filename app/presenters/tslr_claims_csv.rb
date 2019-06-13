@@ -29,11 +29,25 @@ class TslrClaimsCsv
     self.claims = claims
   end
 
-  def csv_headers
-    FIELDS.map { |h| header_string_for_field(h) }
+  def file
+    Tempfile.new.tap do |file|
+      file.write(header_row)
+      claims.find_each do |claim|
+        file.write(TslrClaimCsvRow.new(claim).to_s)
+      end
+      file.rewind
+    end
   end
 
   private
+
+  def header_row
+    CSV.generate_line(csv_headers)
+  end
+
+  def csv_headers
+    FIELDS.map { |h| header_string_for_field(h) }
+  end
 
   def header_string_for_field(header)
     I18n.t("tslr.csv_headers.#{header}")

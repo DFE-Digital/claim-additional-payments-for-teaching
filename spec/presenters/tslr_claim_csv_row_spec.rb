@@ -4,7 +4,7 @@ RSpec.describe TslrClaimCsvRow do
   subject { described_class.new(claim) }
   let(:claim) { create(:tslr_claim) }
 
-  describe "data" do
+  describe "to_s" do
     let(:claim_school) { "Claim School" }
     let(:current_school) { "Current School" }
     let(:date_of_birth) { "01/12/1980" }
