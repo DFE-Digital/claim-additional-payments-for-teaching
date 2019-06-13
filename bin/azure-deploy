@@ -2,7 +2,7 @@
 set -e
 
 ENVIRONMENT_NAME=$1
-DEPLOYMENT_NAME="core"
+DEPLOYMENT_NAME="app"
 RESOURCE_LOCATION="West Europe"
 TEMPLATE_FILE_PATH="azure/template.json"
 PARAMETERS_FILE_PATH="azure/parameters/$ENVIRONMENT_NAME.json"
