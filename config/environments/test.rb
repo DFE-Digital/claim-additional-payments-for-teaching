@@ -49,6 +49,8 @@ Rails.application.configure do
     from: "mail@example.com",
   }
 
+  config.active_job.queue_adapter = :inline
+
   config.after_initialize do
     Bullet.enable = true
     Bullet.bullet_logger = true
