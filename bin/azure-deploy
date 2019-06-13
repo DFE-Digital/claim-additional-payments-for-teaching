@@ -11,7 +11,7 @@ case $ENVIRONMENT_NAME in
   "development")
     # Use `az account show --out json` to find the subscription ID.
     SUBSCRIPTION_ID="8655985a-2f87-44d7-a541-0be9a8c2779d"
-    RESOURCE_GROUP_NAME="s118d02-core"
+    RESOURCE_GROUP_NAME="s118d01-app"
     ;;
   *)
     echo "Could not find an known environment with the name: $ENVIRONMENT_NAME"
