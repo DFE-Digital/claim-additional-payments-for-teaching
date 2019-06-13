@@ -107,7 +107,7 @@ class ClaimsController < ApplicationController
   end
 
   def mail_claim_submitted
-    ClaimMailer.submitted(current_claim).deliver_now
+    ClaimMailer.submitted(current_claim).deliver_later
   end
 
   def claim_page_template
