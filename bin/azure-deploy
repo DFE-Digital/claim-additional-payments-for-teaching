@@ -44,6 +44,7 @@ az group deployment create \
   --template-file $TEMPLATE_FILE_PATH \
   --parameters "@$PARAMETERS_FILE_PATH" \
   --mode Complete \
+  --rollback-on-error \
   --verbose
 
 echo "Template has been successfully deployed"
