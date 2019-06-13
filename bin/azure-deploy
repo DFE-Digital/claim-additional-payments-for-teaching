@@ -43,6 +43,7 @@ az group deployment create \
   --resource-group $RESOURCE_GROUP_NAME \
   --template-file $TEMPLATE_FILE_PATH \
   --parameters "@$PARAMETERS_FILE_PATH" \
+  --mode Complete \
   --verbose
 
 echo "Template has been successfully deployed"
