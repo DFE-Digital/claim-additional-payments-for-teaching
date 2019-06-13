@@ -1,6 +1,12 @@
 FactoryBot.define do
   factory :tslr_claim do
     trait :eligible_and_submittable do
+      # This skips out the `update_current_school` callback, which is used when a user is
+      # filling out a form, but stamps all over our definition of a `current_school`
+      # if we try to define it in tests
+      before(:create) { |claim| claim.class.skip_callback(:save, :before, :update_current_school) }
+      after(:create) { |claim| claim.class.set_callback(:save, :before, :update_current_school, if: :employment_status_changed?) }
+
       claim_school { School.find(ActiveRecord::FixtureSet.identify(:penistone_grammar_school, :uuid)) }
       qts_award_year { "2013-2014" }
       employment_status { :claim_school }
