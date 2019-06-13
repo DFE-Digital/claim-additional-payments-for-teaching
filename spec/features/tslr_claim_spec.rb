@@ -11,7 +11,7 @@ RSpec.feature "Teacher Student Loan Repayments claims" do
 
     choose_school schools(:penistone_grammar_school)
     expect(claim.reload.claim_school).to eql schools(:penistone_grammar_school)
-    expect(page).to have_text(I18n.t("tslr.questions.still_teaching"))
+    expect(page).to have_text(I18n.t("tslr.questions.employment_status"))
 
     choose_still_teaching
     expect(claim.reload.employment_status).to eql("claim_school")
@@ -162,7 +162,7 @@ RSpec.feature "Teacher Student Loan Repayments claims" do
     expect(page).to have_current_path(root_path)
   end
 
-  context "editing a response" do
+  context "When editing a response" do
     let(:claim_school) { create(:school, :tslr_eligible, name: "Claim School") }
     let(:current_school) { create(:school, :tslr_eligible, name: "Current School") }
 
@@ -279,6 +279,101 @@ RSpec.feature "Teacher Student Loan Repayments claims" do
         end
       end
     end
+  end
+
+  scenario "Claim school search autocompletes", js: true do
+    start_tslr_claim
+    choose_qts_year
+
+    expect(page).to have_text(I18n.t("tslr.questions.claim_school"))
+    expect(page).to have_button("Search")
+
+    fill_in :school_search, with: "Penistone"
+    find("li", text: schools(:penistone_grammar_school).name).click
+
+    expect(page).to have_button("Continue")
+
+    click_button "Continue"
+
+    expect(page).to have_text(I18n.t("tslr.questions.employment_status"))
+  end
+
+  scenario "Current school search autocompletes", js: true do
+    start_tslr_claim
+    choose_qts_year
+    choose_school schools(:penistone_grammar_school)
+    choose_still_teaching "Yes, at another school"
+
+    expect(page).to have_text(I18n.t("tslr.questions.current_school"))
+    expect(page).to have_button("Search")
+
+    fill_in :school_search, with: "Penistone"
+    find("li", text: schools(:penistone_grammar_school).name).click
+
+    expect(page).to have_button("Continue")
+
+    click_button "Continue"
+
+    expect(page).to have_text(I18n.t("tslr.questions.mostly_teaching_eligible_subjects"))
+  end
+
+  scenario "School search autocomplete without JavaScript falls back to searching", js: false do
+    start_tslr_claim
+    choose_qts_year
+
+    expect(page).to have_text(I18n.t("tslr.questions.claim_school"))
+    expect(page).to have_button("Search")
+
+    fill_in :school_search, with: "Penistone"
+
+    expect(page).not_to have_text(schools(:penistone_grammar_school).name)
+    expect(page).to have_button("Search")
+
+    click_button "Search"
+
+    expect(page).to have_text("Select your school from the search results.")
+    expect(page).to have_text(schools(:penistone_grammar_school).name)
+  end
+
+  scenario "School search autocomplete falls back to searching when no school is selected", js: true do
+    start_tslr_claim
+    choose_qts_year
+
+    expect(page).to have_text(I18n.t("tslr.questions.claim_school"))
+    expect(page).to have_button("Search")
+
+    fill_in :school_search, with: "Penistone"
+
+    expect(page).to have_text(schools(:penistone_grammar_school).name)
+    expect(page).to have_button("Search")
+
+    click_button "Search"
+
+    expect(page).to have_text("Select your school from the search results.")
+    expect(page).to have_text(schools(:penistone_grammar_school).name)
+  end
+
+  scenario "Editing school search after autocompletion clears last selection", js: true do
+    start_tslr_claim
+    choose_qts_year
+
+    expect(page).to have_text(I18n.t("tslr.questions.claim_school"))
+    expect(page).to have_button("Search")
+
+    fill_in :school_search, with: "Penistone"
+    find("li", text: schools(:penistone_grammar_school).name).click
+
+    expect(page).to have_button("Continue")
+
+    fill_in :school_search, with: "Hampstead"
+
+    expect(page).to have_text(schools(:hampstead_school).name)
+    expect(page).to have_button("Search")
+
+    click_button "Search"
+
+    expect(page).to have_text("Select your school from the search results.")
+    expect(page).to have_text(schools(:hampstead_school).name)
   end
 
   context "Timeout dialog", js: true do

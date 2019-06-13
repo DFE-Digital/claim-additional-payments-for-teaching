@@ -18,3 +18,5 @@ Capybara.configure do |config|
   config.javascript_driver = :headless_chrome
   config.default_max_wait_time = 5
 end
+
+Capybara.automatic_label_click = true

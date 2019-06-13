@@ -7,6 +7,18 @@ a11y-dialog@^5.2.0:
   resolved "https://registry.yarnpkg.com/a11y-dialog/-/a11y-dialog-5.2.0.tgz#bc3f9ccb7154a840bffd61b9385edbd093f7f209"
   integrity sha512-vymlarVdoDKNwQPq513D5IANZu7fdOiWjQJG0FuEFI77RfJUGrxpfI6puwXy7hxKmVTSf4bNq6ZgCb+EikIl8g==
 
+accessible-autocomplete@^1.6.2:
+  version "1.6.2"
+  resolved "https://registry.yarnpkg.com/accessible-autocomplete/-/accessible-autocomplete-1.6.2.tgz#cb69d37748ba5b0351c84422468538890e25759c"
+  integrity sha512-7S+6Vi82LQFSSd5feKedu46tiY2/DShpdXiRp0NY3cLwc+DKe1ayWd66mb3JVi8LTQubRM7jco+u92e6w0bbvg==
+  dependencies:
+    preact "^8.3.1"
+
+preact@^8.3.1:
+  version "8.4.2"
+  resolved "https://registry.yarnpkg.com/preact/-/preact-8.4.2.tgz#1263b974a17d1ea80b66590e41ef786ced5d6a23"
+  integrity sha512-TsINETWiisfB6RTk0wh3/mvxbGRvx+ljeBccZ4Z6MPFKgu/KFGyf2Bmw3Z/jlXhL5JlNKY6QAbA9PVyzIy9//A==
+
 prettier@^1.18.2:
   version "1.18.2"
   resolved "https://registry.yarnpkg.com/prettier/-/prettier-1.18.2.tgz#6823e7c5900017b4bd3acf46fe9ac4b4d7bda9ea"

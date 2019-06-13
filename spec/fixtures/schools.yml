@@ -7,6 +7,12 @@ penistone_grammar_school:
   school_type: community_school
   local_authority: barnsley
   local_authority_district: barnsley
+  street: Huddersfield Road
+  locality: Penistone
+  town: Sheffield
+  county: South Yorkshire
+  postcode: S36 7BX
+
 # TSLR and Maths and Physics Ineligible
 hampstead_school:
   name: Hampstead School
@@ -16,3 +22,7 @@ hampstead_school:
   school_type: community_school
   local_authority: camden
   local_authority_district: camden
+  street: Westbere Road
+  locality: Hampstead
+  town: London
+  postcode: NW2 3RT

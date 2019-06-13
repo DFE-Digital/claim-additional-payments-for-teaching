@@ -31,7 +31,7 @@ RSpec.describe "Claims", type: :request do
       end
 
       context "when searching for a school on the claim-school page" do
-        it "searchers for schools using the search term" do
+        it "searches for schools using the search term" do
           get claim_path("claim-school"), params: {school_search: "Penistone"}
 
           expect(response.body).to include schools(:penistone_grammar_school).name
@@ -80,7 +80,7 @@ RSpec.describe "Claims", type: :request do
     end
   end
 
-  describe "claim#ineligible request" do
+  describe "claims#ineligible request" do
     context "when a claim is already in progress" do
       before { post claims_path }
 
@@ -106,7 +106,7 @@ RSpec.describe "Claims", type: :request do
     end
   end
 
-  describe "claim#timeout" do
+  describe "claims#timeout" do
     it "displays session timeout content" do
       get timeout_claim_path
       expect(response.body).to include("Your session has ended due to inactivity")

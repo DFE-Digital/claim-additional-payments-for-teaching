@@ -19,7 +19,7 @@ class ClaimsController < ApplicationController
   end
 
   def show
-    perform_non_js_school_search if params[:school_search]
+    search_schools if params[:school_search]
     render claim_page_template
   end
 
@@ -75,12 +75,12 @@ class ClaimsController < ApplicationController
     params[:slug] == "confirmation" && current_claim.submitted?
   end
 
-  def perform_non_js_school_search
-    if params[:school_search].length > 3
-      @schools = School.search(params[:school_search])
-    else
-      current_claim.errors.add(:school_search, "Search for the school name with a minimum of four characters")
-    end
+  def search_schools
+    @schools = School.search(params[:school_search])
+  rescue ArgumentError => e
+    raise unless e.message == School::SEARCH_NOT_ENOUGH_CHARACTERS_ERROR
+
+    current_claim.errors.add(:school_search, "Search for the school name with a minimum of four characters")
   end
 
   def claim_params

@@ -1,5 +1,6 @@
 class School < ApplicationRecord
   SEARCH_RESULTS_LIMIT = 50
+  SEARCH_NOT_ENOUGH_CHARACTERS_ERROR = "search_term must have a minimum of 4 characters".freeze
 
   belongs_to :local_authority
   belongs_to :local_authority_district
@@ -78,6 +79,8 @@ class School < ApplicationRecord
   enum school_type: SCHOOL_TYPES
 
   def self.search(search_term)
+    raise ArgumentError, SEARCH_NOT_ENOUGH_CHARACTERS_ERROR if search_term.length < 4
+
     where("name ILIKE ?", "%#{sanitize_sql_like(search_term)}%").limit(SEARCH_RESULTS_LIMIT)
   end
 

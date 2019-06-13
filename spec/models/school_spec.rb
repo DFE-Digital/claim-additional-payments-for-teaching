@@ -10,13 +10,17 @@ RSpec.describe School, type: :model do
   it { should validate_presence_of(:phase) }
 
   describe ".search" do
-    it "return schools matching the search term" do
+    it "returns schools matching the search term" do
       expect(School.search("Penistone")).to match_array([schools(:penistone_grammar_school)])
+    end
+
+    it "raises an ArgumentError when the search term has fewer than 4 characters" do
+      expect(lambda { School.search("Pen") }).to raise_error(ArgumentError, School::SEARCH_NOT_ENOUGH_CHARACTERS_ERROR)
     end
 
     it "limits the results" do
       stub_const("School::SEARCH_RESULTS_LIMIT", 1)
-      expect(School.search("a").count).to eql(1)
+      expect(School.search("School").count).to eql(1)
     end
   end
 
