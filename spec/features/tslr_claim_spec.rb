@@ -300,7 +300,7 @@ RSpec.feature "Teacher Student Loan Repayments claims" do
     end
 
     scenario "Claimants are automatically redirected to the timeout page" do
-      wait_until_visible find("h1", text: "Your session has ended due to inactivity")
+      wait_until_visible { find("h1", text: "Your session has ended due to inactivity") }
       expect(current_path).to eql(timeout_claim_path)
     end
   end
