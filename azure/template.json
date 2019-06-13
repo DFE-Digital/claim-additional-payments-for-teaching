@@ -56,6 +56,7 @@
     "storageAccountName": "[replace(concat(parameters('resourceNamePrefix'), 'storage'), '-', '')]",
     "databaseServerName": "[concat(parameters('resourceNamePrefix'), '-db')]",
     "appServicePlanName": "[concat(parameters('resourceNamePrefix'), '-asp')]",
+    "appServicePlanId": "[resourceId('Microsoft.Web/serverfarms', variables('appServicePlanName'))]",
     "appServiceName": "[concat(parameters('resourceNamePrefix'), '-as')]",
     "appServiceRuntimeStack": "[concat('DOCKER|', parameters('appServiceDockerImage'))]"
   },
@@ -146,85 +147,72 @@
       }
     },
     {
-      "apiVersion": "2017-05-10",
-      "name": "app-service",
-      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2016-08-01",
+      "name": "[variables('appServiceName')]",
+      "type": "Microsoft.Web/sites",
+      "kind": "app,linux,container",
+      "location": "[resourceGroup().location]",
       "dependsOn": ["app-service-plan", "database", "database-server"],
       "properties": {
-        "mode": "Incremental",
-        "templateLink": {
-          "uri": "[concat(variables('deploymentUrlBase'), 'app-service-linux.json')]",
-          "contentVersion": "1.0.0.0"
-        },
-        "parameters": {
-          "appServiceName": {
-            "value": "[variables('appServiceName')]"
-          },
-          "appServicePlanName": {
-            "value": "[variables('appServicePlanName')]"
-          },
-          "appServicePlanResourceGroup": {
-            "value": "[resourceGroup().name]"
-          },
-          "runtimeStack": {
-            "value": "[variables('appServiceRuntimeStack')]"
-          },
-          "appServiceAppSettings": {
-            "value": [
-              {
-                "name": "RAILS_ENV",
-                "value": "[parameters('RAILS_ENV')]"
-              },
-              {
-                "name": "RAILS_SERVE_STATIC_FILES",
-                "value": "[parameters('RAILS_SERVE_STATIC_FILES')]"
-              },
-              {
-                "name": "DFE_TEACHERS_PAYMENT_SERVICE_DATABASE_USERNAME",
-                "value": "[concat(parameters('databaseUsername'), '@', variables('databaseServerName'))]"
-              },
-              {
-                "name": "DFE_TEACHERS_PAYMENT_SERVICE_DATABASE_PASSWORD",
-                "value": "[parameters('databasePassword')]"
-              },
-              {
-                "name": "DFE_TEACHERS_PAYMENT_SERVICE_DATABASE_HOST",
-                "value": "[reference('database-server').outputs.fullyQualifiedDomainName.value]"
-              },
-              {
-                "name": "DFE_TEACHERS_PAYMENT_SERVICE_DATABASE_NAME",
-                "value": "[parameters('databaseName')]"
-              },
-              {
-                "name": "SECRET_KEY_BASE",
-                "value": "[parameters('SECRET_KEY_BASE')]"
-              },
-              {
-                "name": "BASIC_AUTH_USERNAME",
-                "value": "[parameters('BASIC_AUTH_USERNAME')]"
-              },
-              {
-                "name": "BASIC_AUTH_PASSWORD",
-                "value": "[parameters('BASIC_AUTH_PASSWORD')]"
-              },
-              {
-                "name": "DFE_SIGN_IN_ISSUER",
-                "value": "[parameters('DFE_SIGN_IN_ISSUER')]"
-              },
-              {
-                "name": "DFE_SIGN_IN_REDIRECT_BASE_URL",
-                "value": "[parameters('DFE_SIGN_IN_REDIRECT_BASE_URL')]"
-              },
-              {
-                "name": "DFE_SIGN_IN_IDENTIFIER",
-                "value": "[parameters('DFE_SIGN_IN_IDENTIFIER')]"
-              },
-              {
-                "name": "DFE_SIGN_IN_SECRET",
-                "value": "[parameters('DFE_SIGN_IN_SECRET')]"
-              }
-            ]
-          }
+        "httpsOnly": true,
+        "serverFarmId": "[variables('appServicePlanId')]",
+        "siteConfig": {
+          "alwaysOn": false,
+          "linuxFxVersion": "[variables('appServiceRuntimeStack')]",
+          "appSettings": [
+            {
+              "name": "RAILS_ENV",
+              "value": "[parameters('RAILS_ENV')]"
+            },
+            {
+              "name": "RAILS_SERVE_STATIC_FILES",
+              "value": "[parameters('RAILS_SERVE_STATIC_FILES')]"
+            },
+            {
+              "name": "DFE_TEACHERS_PAYMENT_SERVICE_DATABASE_USERNAME",
+              "value": "[concat(parameters('databaseUsername'), '@', variables('databaseServerName'))]"
+            },
+            {
+              "name": "DFE_TEACHERS_PAYMENT_SERVICE_DATABASE_PASSWORD",
+              "value": "[parameters('databasePassword')]"
+            },
+            {
+              "name": "DFE_TEACHERS_PAYMENT_SERVICE_DATABASE_HOST",
+              "value": "[reference('database-server').outputs.fullyQualifiedDomainName.value]"
+            },
+            {
+              "name": "DFE_TEACHERS_PAYMENT_SERVICE_DATABASE_NAME",
+              "value": "[parameters('databaseName')]"
+            },
+            {
+              "name": "SECRET_KEY_BASE",
+              "value": "[parameters('SECRET_KEY_BASE')]"
+            },
+            {
+              "name": "BASIC_AUTH_USERNAME",
+              "value": "[parameters('BASIC_AUTH_USERNAME')]"
+            },
+            {
+              "name": "BASIC_AUTH_PASSWORD",
+              "value": "[parameters('BASIC_AUTH_PASSWORD')]"
+            },
+            {
+              "name": "DFE_SIGN_IN_ISSUER",
+              "value": "[parameters('DFE_SIGN_IN_ISSUER')]"
+            },
+            {
+              "name": "DFE_SIGN_IN_REDIRECT_BASE_URL",
+              "value": "[parameters('DFE_SIGN_IN_REDIRECT_BASE_URL')]"
+            },
+            {
+              "name": "DFE_SIGN_IN_IDENTIFIER",
+              "value": "[parameters('DFE_SIGN_IN_IDENTIFIER')]"
+            },
+            {
+              "name": "DFE_SIGN_IN_SECRET",
+              "value": "[parameters('DFE_SIGN_IN_SECRET')]"
+            }
+          ]
         }
       }
     },
@@ -232,7 +220,7 @@
       "apiVersion": "2017-05-10",
       "name": "database-server-firewall-rules",
       "type": "Microsoft.Resources/deployments",
-      "dependsOn": ["app-service", "database-server"],
+      "dependsOn": ["database-server", "[variables('appServiceName')]"],
       "properties": {
         "mode": "Incremental",
         "templateLink": {
@@ -244,7 +232,7 @@
             "value": "[concat(parameters('resourceNamePrefix'), '-')]"
           },
           "ipAddresses": {
-            "value": "[reference('app-service').outputs.possibleOutboundIpAddresses.value]"
+            "value": "[split(reference(variables('appServiceName')).possibleOutboundIpAddresses, ',')]"
           },
           "serverName": {
             "value": "[variables('databaseServerName')]"
