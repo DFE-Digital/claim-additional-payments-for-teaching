@@ -86,14 +86,10 @@ https://miro.com/app/board/o9J_kxw-xdU=/
 
 ## Access
 
-Both staging and production are protected by HTTP Basic Authentication, these
-details are pinned in the _dfe-teacher-payments_ slack channel or can be found
+Staging is protected by HTTP Basic Authentication. The username and password
+are pinned in the _dfe-teacher-payments_ slack channel or can be found
 in the _Config Vars_ in Heroku.
 
 ### Staging
 
 https://dfe-teachers-payment-staging.herokuapp.com/
-
-### Production
-
-https://dfe-teachers-payment-prod.herokuapp.com/
