@@ -34,6 +34,12 @@ gem "rollbar"
 gem "omniauth"
 gem "omniauth_openid_connect"
 
+# ActionMailer support for GOV.UK Notify
+gem "mail-notify"
+
+# Database based asynchronous priority queue system
+gem "delayed_job_active_record"
+
 # Use ActiveStorage variant
 # gem 'mini_magick', '~> 4.8'
 

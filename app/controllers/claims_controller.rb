@@ -42,7 +42,7 @@ class ClaimsController < ApplicationController
 
   def update_current_claim!
     if params[:slug] == "check-your-answers"
-      current_claim.submit!
+      mail_claim_submitted if current_claim.submit!
     else
       current_claim.attributes = claim_params
       current_claim.save(context: params[:slug].to_sym)
@@ -104,6 +104,10 @@ class ClaimsController < ApplicationController
       :bank_sort_code,
       :bank_account_number,
     )
+  end
+
+  def mail_claim_submitted
+    ClaimMailer.submitted(current_claim).deliver_later
   end
 
   def claim_page_template

@@ -178,6 +178,13 @@ RSpec.describe "Claims", type: :request do
             expect(in_progress_claim.submitted_at).to be_present
           end
 
+          it "sends an email" do
+            email = ActionMailer::Base.deliveries.first
+            expect(email.to).to eql([in_progress_claim.email_address])
+            expect(email.subject).to eql("Your claim was received")
+            expect(email.body).to include("Your reference number is #{in_progress_claim.reference}")
+          end
+
           it "redirects to the confirmation page" do
             expect(response).to redirect_to(claim_path("confirmation"))
           end
@@ -194,6 +201,10 @@ RSpec.describe "Claims", type: :request do
 
           it "doesn't submit the claim" do
             expect(in_progress_claim.submitted_at).to be_nil
+          end
+
+          it "doesn't send an email" do
+            expect(ActionMailer::Base.deliveries).to be_empty
           end
 
           it "re-renders the check-your-answers page with errors" do
