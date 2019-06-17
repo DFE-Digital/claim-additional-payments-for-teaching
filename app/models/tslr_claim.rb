@@ -94,6 +94,8 @@ class TslrClaim < ApplicationRecord
   delegate :name, to: :claim_school, prefix: true, allow_nil: true
   delegate :name, to: :current_school, prefix: true, allow_nil: true
 
+  scope :submitted, -> { where.not(submitted_at: nil) }
+
   def page_sequence
     PAGE_SEQUENCE.dup.tap do |sequence|
       sequence.delete("current-school") if employed_at_claim_school?

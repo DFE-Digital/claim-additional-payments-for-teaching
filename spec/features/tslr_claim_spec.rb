@@ -168,17 +168,12 @@ RSpec.feature "Teacher Student Loan Repayments claims" do
     let(:claim_school) { create(:school, :tslr_eligible, name: "Claim School") }
     let(:current_school) { create(:school, :tslr_eligible, name: "Current School") }
 
-    # `current_school` cannot be set in the create, because we have a callback that
-    # sets `current_school` to `nil` if `employed_at_claim_school?` is false. We could
-    # skip the callback here, but it makes more sense to force it here
     let(:claim) do
-      claim = create(:tslr_claim,
+      create(:tslr_claim,
         :eligible_and_submittable,
         employment_status: :different_school,
-        claim_school: claim_school)
-      claim.current_school = current_school
-      claim.save
-      claim
+        claim_school: claim_school,
+        current_school: current_school)
     end
 
     before do
