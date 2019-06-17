@@ -1,4 +1,4 @@
-# Teacher’s Payment Service
+# Claim Additional Payments for Teaching
 
 ## Documentation
 
