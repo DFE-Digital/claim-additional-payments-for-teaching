@@ -2,7 +2,9 @@
 
 ## Documentation
 
-Documentation can be found in the [docs](docs) directory.
+Most documentation for the service can be found on the [project's confluence
+wiki](https://dfedigital.atlassian.net/wiki/spaces/TP). Some app-specific
+technical documentation can be found in the [docs](docs) directory.
 
 ### ADRs
 
@@ -80,9 +82,7 @@ exception and the tests will fail.
 
 ## Service architecture
 
-The service architecture is currently defined and maintained here:
-
-https://miro.com/app/board/o9J_kxw-xdU=/
+The service architecture is currently defined and [on confluence](https://dfedigital.atlassian.net/wiki/spaces/TP/pages/1049559041/Service+Architecture).
 
 ## Access
 
