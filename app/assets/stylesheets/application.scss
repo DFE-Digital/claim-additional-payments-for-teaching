@@ -1,4 +1,27 @@
-@import "govuk-frontend-rails";
-@import "accessible-autocomplete/dist/accessible-autocomplete.min.css";
+@import "settings/all";
 
-@import "**/*";
+// Using Rails with the asset pipeline so set the helper methods
+$govuk-font-url-function: 'image-url';
+$govuk-image-url-function: 'font-url';
+
+@import "tools/all";
+@import "helpers/all";
+
+@import "core/all";
+@import "objects/all";
+
+// autocomplete from node_modules, must be included in the pre-compile list
+// see config/inisatlizers/assets.rb
+@import "accessible-autocomplete/src/autocomplete";
+
+// app components
+@import "components/accessible_autocomplete_tweaks";
+@import "components/a11y_dialog";
+@import "components/currency_input";
+@import "components/flash";
+
+// GOVUK Frontend components
+@import "components/all";
+
+@import "utilities/all";
+@import "overrides/all";
