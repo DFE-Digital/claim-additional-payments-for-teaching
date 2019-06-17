@@ -33,6 +33,7 @@ gem "rollbar"
 # Use OmniAuth with OpenIDConnect
 gem "omniauth"
 gem "omniauth_openid_connect"
+gem "omniauth-rails_csrf_protection"
 
 # ActionMailer support for GOV.UK Notify
 gem "mail-notify"

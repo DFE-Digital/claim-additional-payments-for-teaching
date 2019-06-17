@@ -21,7 +21,9 @@ Rails.application.routes.draw do
 
     get "/auth/sign-in" => "auth#sign_in", :as => :sign_in
     delete "/auth/sign-out" => "auth#sign_out", :as => :sign_out
-    get "/auth/dfe", as: :dfe_sign_in
+
+    # DfE Sign-in OpenID routes
+    post "/auth/dfe", as: :dfe_sign_in
     get "/auth/callback", to: "auth#callback"
     get "/auth/failure", to: "auth#failure"
 

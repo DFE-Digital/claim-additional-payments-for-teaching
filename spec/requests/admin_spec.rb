@@ -17,7 +17,7 @@ RSpec.describe "Admin", type: :request do
           "provider" => "dfe",
           "info" => {"email" => "test-dfe-sign-in@host.tld"}
         )
-        get admin_dfe_sign_in_path
+        post admin_dfe_sign_in_path
         follow_redirect!
       end
 
@@ -44,7 +44,7 @@ RSpec.describe "Admin", type: :request do
       end
 
       it "shows a not authorised page and doesn’t set a session" do
-        get admin_dfe_sign_in_path
+        post admin_dfe_sign_in_path
         follow_redirect!
 
         expect(session[:login]).to be_nil
