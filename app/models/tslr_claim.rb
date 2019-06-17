@@ -84,7 +84,7 @@ class TslrClaim < ApplicationRecord
   validate  :bank_account_number_must_be_eight_digits
   validate  :bank_sort_code_must_be_six_digits
 
-  before_validation :update_current_school, if: :employment_status_changed?
+  before_validation :reset_inferred_current_school, if: ->(record) { record.persisted? && record.employment_status_changed? }
 
   before_save :normalise_trn, if: :teacher_reference_number_changed?
   before_save :normalise_ni_number, if: :national_insurance_number_changed?
@@ -162,7 +162,7 @@ class TslrClaim < ApplicationRecord
     mostly_teaching_eligible_subjects == false
   end
 
-  def update_current_school
+  def reset_inferred_current_school
     self.current_school = employed_at_claim_school? ? claim_school : nil
   end
 
