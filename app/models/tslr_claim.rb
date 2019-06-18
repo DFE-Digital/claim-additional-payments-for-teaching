@@ -71,7 +71,8 @@ class TslrClaim < ApplicationRecord
 
   validates :student_loan_repayment_amount, on: [:"student-loan-amount", :submit], presence: {message: "Enter your student loan repayment amount"}
   validates_numericality_of :student_loan_repayment_amount, message: "Enter a valid monetary amount",
-                                                            allow_nil: true
+                                                            allow_nil: true,
+                                                            less_than_or_equal_to: 99999
 
   validates :email_address,             on: [:"email-address", :submit], presence: {message: "Enter an email address"}
   validates :email_address,             format: {with: URI::MailTo::EMAIL_REGEXP, message: "Enter an email address in the correct format, like name@example.com"},
