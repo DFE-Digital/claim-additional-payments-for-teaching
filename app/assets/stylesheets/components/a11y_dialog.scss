@@ -4,6 +4,11 @@
   display: none;
 }
 
+body:not(.js-enabled) .dialog-overlay,
+.dialog[aria-hidden="true"] .dialog-overlay {
+  display: none;
+}
+
 dialog[open] {
   display: block;
 }
@@ -93,16 +98,16 @@ dialog::backdrop {
   }
 }
 
-.dialog:not([aria-hidden="true"]) > .dialog-overlay {
-  animation: fade-in 200ms 1 forwards;
+.js-enabled .dialog:not([aria-hidden="true"]) > .dialog-overlay {
+  animation: fade-in 200ms 1 both;
 }
 
-.dialog > .dialog-overlay {
+.js-enabled .dialog > .dialog-overlay {
   opacity: 0;
 }
 
-.dialog:not([aria-hidden="true"]) > .dialog-content {
-  animation: appear 400ms 150ms 1 both;
+.js-enabled .dialog:not([aria-hidden="true"]) > .dialog-content {
+  animation: appear 200ms 200ms 1 both;
 }
 
 .dialog-content {

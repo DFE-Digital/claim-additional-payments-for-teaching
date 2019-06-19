@@ -11,7 +11,10 @@
     dialog.hide();
   };
 
-  dialog.on("hide", refreshSession);
+  dialog.on("hide", function() {
+    dialogElement.setAttribute("aria-hidden", "true");
+    refreshSession();
+  });
 
   function refreshSession() {
     Rails.ajax({
@@ -31,6 +34,7 @@
 
   function showTimeoutDialog() {
     if (claimInProgress === "true") {
+      dialogElement.setAttribute("aria-hidden", "false");
       dialog.show();
       setTimeout(sessionTimedOut, warningTimeInMinutes * 60 * 1000);
     }
