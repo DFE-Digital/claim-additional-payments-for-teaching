@@ -23,6 +23,10 @@ RSpec.feature "Teacher Student Loan Repayments claims" do
 
     expect(claim.reload.mostly_teaching_eligible_subjects).to eq(true)
 
+    expect(page).to have_text("You are eligible to claim back student loan repayments")
+
+    click_on "Skip GOV.UK Verify"
+
     expect(page).to have_text(I18n.t("tslr.questions.full_name"))
 
     fill_in I18n.t("tslr.questions.full_name"), with: "Margaret Honeycutt"
