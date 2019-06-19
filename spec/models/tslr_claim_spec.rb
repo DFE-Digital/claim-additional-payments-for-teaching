@@ -37,6 +37,16 @@ RSpec.describe TslrClaim, type: :model do
       expect(TslrClaim.new(student_loan_repayment_amount: "don’t know")).not_to be_valid
       expect(TslrClaim.new(student_loan_repayment_amount: "£1,234.56")).to be_valid
     end
+
+    it "validates that the loan repayment is under £99,999" do
+      expect(TslrClaim.new(student_loan_repayment_amount: "100000000")).not_to be_valid
+      expect(TslrClaim.new(student_loan_repayment_amount: "99999")).to be_valid
+    end
+
+    it "validates that the loan repayment a positive number" do
+      expect(TslrClaim.new(student_loan_repayment_amount: "-99")).not_to be_valid
+      expect(TslrClaim.new(student_loan_repayment_amount: "150")).to be_valid
+    end
   end
 
   context "that has a full name" do
