@@ -75,7 +75,7 @@ RSpec.feature "Searching for school during Teacher Student Loan Repayments claim
     expect(page).to have_text(I18n.t("tslr.questions.mostly_teaching_eligible_subjects"))
   end
 
-  scenario "School search autocomplete falls back to searching when no school is selected", js: true do
+  scenario "School search form still works like a normal form if submitted", js: true do
     start_tslr_claim
     choose_qts_year
 
