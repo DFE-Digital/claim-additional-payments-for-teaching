@@ -75,24 +75,6 @@ RSpec.feature "Searching for school during Teacher Student Loan Repayments claim
     expect(page).to have_text(I18n.t("tslr.questions.mostly_teaching_eligible_subjects"))
   end
 
-  scenario "School search autocomplete without JavaScript falls back to searching", js: false do
-    start_tslr_claim
-    choose_qts_year
-
-    expect(page).to have_text(I18n.t("tslr.questions.claim_school"))
-    expect(page).to have_button("Search")
-
-    fill_in :school_search, with: "Penistone"
-
-    expect(page).not_to have_text(schools(:penistone_grammar_school).name)
-    expect(page).to have_button("Search")
-
-    click_button "Search"
-
-    expect(page).to have_text("Select your school from the search results.")
-    expect(page).to have_text(schools(:penistone_grammar_school).name)
-  end
-
   scenario "School search autocomplete falls back to searching when no school is selected", js: true do
     start_tslr_claim
     choose_qts_year
