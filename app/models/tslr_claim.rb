@@ -5,6 +5,7 @@ class TslrClaim < ApplicationRecord
     "still-teaching",
     "current-school",
     "subjects-taught",
+    "eligibility-confirmed",
     "full-name",
     "address",
     "date-of-birth",
