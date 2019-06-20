@@ -10,6 +10,13 @@ on the ukgovernmentdigital.slack.com slack workspace.
 
 ## Running locally in development
 
+Currently GOV.UK Verify integration is under active development and can be
+enabled by setting an environment variable in your `.env` file:
+
+```bash
+  GOVUK_VERIFY_ENABLED=1
+```
+
 GOV.UK Verify integration requires using a Verify Service Providor (VSP)
 to handle SAML secure messaging. To run a VSP in development, you will
 need to download the latest release ZIP from the [project on Gitub](https://github.com/alphagov/verify-service-provider/releases).

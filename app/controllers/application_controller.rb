@@ -5,9 +5,13 @@ class ApplicationController < ActionController::Base
     if: -> { ENV.key?("BASIC_AUTH_USERNAME") },
   )
 
-  helper_method :signed_in?
+  helper_method :signed_in?, :govuk_verify_enabled?
 
   def signed_in?
     session.key?(:login)
+  end
+
+  def govuk_verify_enabled?
+    ENV["GOVUK_VERIFY_ENABLED"]
   end
 end

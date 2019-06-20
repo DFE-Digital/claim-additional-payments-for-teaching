@@ -46,6 +46,7 @@ DFE_SIGN_IN_ISSUER=https://pp-oidc.signin.education.gov.uk:443
 DFE_SIGN_IN_REDIRECT_BASE_URL=https://localhost:3000
 DFE_SIGN_IN_IDENTIFIER=<paste identifier>
 DFE_SIGN_IN_SECRET=<paste secret>
+GOVUK_VERIFY_ENABLED=1
 ```
 
 The identifier and secret are stored in Heroku.
