@@ -2,6 +2,7 @@
 set -e
 
 ENVIRONMENT_NAME=$1
+SCRIPTPATH="$( cd "$(dirname "$0")" ; pwd -P )"
 DEPLOYMENT_NAME="app"
 RESOURCE_LOCATION="West Europe"
 TEMPLATE_FILE_PATH="azure/template.json"
@@ -60,6 +61,11 @@ if ! az keyvault show --name $KEYVAULT_NAME > /dev/null; then
 else
   echo "Using existing keyvault with name $KEYVAULT_NAME..."
 fi
+
+sed -e "s/\${subscriptionId}/${SUBSCRIPTION_ID}/" \
+    -e "s/\${vaultGroup}/${KEYVAULT_RESOURCE_GROUP_NAME}/" \
+    -e "s/\${vaultName}/${KEYVAULT_NAME}/" \
+    $SCRIPTPATH/../azure/parameters/$ENVIRONMENT_NAME.json.txt > $SCRIPTPATH/../azure/parameters/$ENVIRONMENT_NAME.json
 
 echo "Starting deployment..."
 az group deployment create \

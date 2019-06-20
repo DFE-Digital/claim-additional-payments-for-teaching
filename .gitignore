@@ -33,3 +33,6 @@
 # Ignore development certificates
 localhost.crt
 localhost.key
+
+# Ignore parameter files
+/azure/parameters/*.json

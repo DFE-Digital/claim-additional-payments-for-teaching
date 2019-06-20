@@ -41,7 +41,7 @@
     "DFE_SIGN_IN_ISSUER": {
       "type": "string"
     },
-    "DFE_SIGN_IN_REDIRECT_BASE_URL": {
+    "DFE_SIGN_IN_REDIRECT_URL": {
       "type": "string"
     },
     "DFE_SIGN_IN_IDENTIFIER": {
@@ -212,8 +212,8 @@
                 "value": "[parameters('DFE_SIGN_IN_ISSUER')]"
               },
               {
-                "name": "DFE_SIGN_IN_REDIRECT_BASE_URL",
-                "value": "[parameters('DFE_SIGN_IN_REDIRECT_BASE_URL')]"
+                "name": "DFE_SIGN_IN_REDIRECT_URL",
+                "value": "[parameters('DFE_SIGN_IN_REDIRECT_URL')]"
               },
               {
                 "name": "DFE_SIGN_IN_IDENTIFIER",
