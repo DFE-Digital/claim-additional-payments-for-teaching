@@ -80,12 +80,12 @@
         "secretName": "DfeSignInSecret"
       }
     },
-    "DFE_SIGN_IN_REDIRECT_URL": {
+    "DFE_SIGN_IN_REDIRECT_BASE_URL": {
       "reference": {
         "keyVault": {
           "id": "/subscriptions/${subscriptionId}/resourceGroups/${vaultGroup}/providers/Microsoft.KeyVault/vaults/${vaultName}"
         },
-        "secretName": "DfeSignInRedirectUrl"
+        "secretName": "DfeSignInRedirectBaseUrl"
       }
     }
   }
