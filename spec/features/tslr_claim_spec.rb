@@ -106,11 +106,6 @@ RSpec.feature "Teacher Student Loan Repayments claims" do
     expect(page).to have_text(claim.email_address)
   end
 
-  scenario "Teacher cannot go to mid-claim page before starting a claim" do
-    visit claim_path("qts-year")
-    expect(page).to have_current_path(root_path)
-  end
-
   context "When editing a response" do
     let(:claim_school) { create(:school, :tslr_eligible, name: "Claim School") }
     let(:current_school) { create(:school, :tslr_eligible, name: "Current School") }
