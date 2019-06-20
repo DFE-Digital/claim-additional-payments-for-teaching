@@ -23,6 +23,14 @@ module FeatureHelpers
     click_on "Continue"
   end
 
+  def choose_subjects_taught
+    check "eligible_subjects_biology_taught"
+    click_on "Continue"
+
+    choose "Yes"
+    click_on "Continue"
+  end
+
   def wait_until_visible(&block)
     page.document.synchronize do
       element = yield
