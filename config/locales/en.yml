@@ -48,7 +48,7 @@ en:
       full_name: "What is your full name?"
       address: "What is your address?"
       date_of_birth: "What is your date of birth?"
-      teacher_reference_number: "What is your teacher reference number?"
+      teacher_reference_number: "What's your teacher reference number?"
       national_insurance_number: "What is your National Insurance number?"
       student_loan_amount: "How much student loan did you repay while you were at %{claim_school_name} between 6 April XXXX and 5 April XXXX?"
       email_address: "What is your email address?"

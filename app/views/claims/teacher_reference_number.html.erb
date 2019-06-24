@@ -8,11 +8,11 @@
           <%= form.label :teacher_reference_number, t("tslr.questions.teacher_reference_number"), class: "govuk-label govuk-label--xl" %>
         </h1>
 
-        <span class="govuk-hint">This is on the certificate you got when you qualified as a teacher, or your school can tell you.</span>
+        <span class="govuk-hint">You can get this from your school, the certificate you got when you qualified as a teacher or from the <a href="https://www.gov.uk/guidance/individual-teacher-records-information-for-teachers#contact">teacher qualifications helpdesk</a>.</span>
 
         <div class="govuk-form-group">
           <%= errors_tag current_claim, :teacher_reference_number %>
-          <%= form.text_field :teacher_reference_number, spellcheck: "false", class: css_classes_for_input(current_claim, :teacher_reference_number) %>
+          <%= form.text_field :teacher_reference_number, spellcheck: "false", class: css_classes_for_input(current_claim, :teacher_reference_number, 'govuk-input--width-10') %>
         </div>
       <% end %>
       <%= form.submit "Continue", class: "govuk-button" %>
