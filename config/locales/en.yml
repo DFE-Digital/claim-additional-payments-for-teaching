@@ -40,7 +40,7 @@ en:
   tslr:
     service_name: "Teachers: claim back your student loan repayments"
     questions:
-      qts_award_year: "Which academic year were you awarded qualified teacher status (QTS)?"
+      qts_award_year: "Which academic year were you awarded qualified teacher status?"
       claim_school: "Which school were you employed at between 6 April XXXX and 5 April XXXX?"
       employment_status: "Are you still employed to teach at a school in England?"
       current_school: "Which school are you currently employed at?"
