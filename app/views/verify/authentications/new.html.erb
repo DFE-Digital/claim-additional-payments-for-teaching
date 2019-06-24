@@ -1,0 +1,11 @@
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= form_tag @verify_authentication_request.sso_location, authenticity_token: false do %>
+      <h1 class="govuk-heading-xl">Continue to next step</h1>
+      <%= hidden_field_tag "relayState" %>
+      <%= hidden_field_tag "SAMLRequest", @verify_authentication_request.saml_request %>
+      <p class="govuk-body">Because JavaScript is not enabled on your browser, you must press the continue button</p>
+      <%= submit_tag "Continue", class: "govuk-button" %>
+    <% end %>
+  </div>
+</div>

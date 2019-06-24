@@ -1,5 +1,3 @@
-require "verify/service_provider"
-
 module Verify
   class AuthenticationRequest
     attr_reader :saml_request, :request_id, :sso_location

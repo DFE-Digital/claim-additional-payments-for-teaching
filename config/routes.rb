@@ -16,6 +16,10 @@ Rails.application.routes.draw do
     end
   end
 
+  namespace :verify do
+    resources :authentications, only: [:new]
+  end
+
   namespace :admin do
     get "/", to: "page#index"
 
