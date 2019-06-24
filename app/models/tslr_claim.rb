@@ -1,4 +1,6 @@
 class TslrClaim < ApplicationRecord
+  extend ArrayEnum
+
   PAGE_SEQUENCE = [
     "qts-year",
     "claim-school",
@@ -35,6 +37,14 @@ class TslrClaim < ApplicationRecord
     different_school: 1,
     no_school: 2,
   }, _prefix: :employed_at
+
+  array_enum eligible_subjects: {
+    biology: 0,
+    chemistry: 1,
+    physics: 2,
+    computer_science: 3,
+    languages: 4
+  }
 
   belongs_to :claim_school, optional: true, class_name: "School"
   belongs_to :current_school, optional: true, class_name: "School"
