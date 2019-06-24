@@ -1,0 +1,39 @@
+# Ruby
+# Package your Ruby project.
+# Add steps that install rails, analyze code, save build artifacts, deploy, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/languages/ruby
+
+trigger:
+  - master
+
+pool:
+  vmImage: ubuntu-latest
+
+variables:
+  POSTGRES_IMAGE: postgres
+  POSTGRESS_USER: postgres
+  POSTGRESS_PASSWORD: secret
+
+steps:
+- script: docker run --name=postgres -e $(POSTGRES_USER) -e $(POSTGRES_PASSWORD) -p 5432:5432 -d $(POSTGRES_IMAGE)
+  displayName: Launch Postgres
+
+- script: 'sudo apt-get update && sudo apt-get install postgresql postgresql-contrib libpq-dev'
+  displayName: Install Postgres
+
+- task: UseRubyVersion@0
+  inputs:
+    versionSpec: '>= 2.5'
+
+- script: |
+    gem install bundler
+    bundle install --retry=3 --jobs=4
+  displayName: 'bundle install'
+
+- script: 'docker ps'
+
+- script: DFE_TEACHERS_PAYMENT_SERVICE_DATABASE_HOST=postgres DFE_TEACHERS_PAYMENT_SERVICE_DATABASE_USERNAME=$POSTGRES_USER DFE_TEACHERS_PAYMENT_SERVICE_DATABASE_PASSWORD=$POSTGRES_PASSWORD bundle exec rake db:create db:test:prepare
+  displayName: 'bundle exec rake db:create db:test:prepare'
+
+- script: DFE_TEACHERS_PAYMENT_SERVICE_DATABASE_HOST=postgres DFE_TEACHERS_PAYMENT_SERVICE_DATABASE_USERNAME=$POSTGRES_USER DFE_TEACHERS_PAYMENT_SERVICE_DATABASE_PASSWORD=$POSTGRES_PASSWORD bundle exec rake
+  displayName: 'bundle exec rake'
