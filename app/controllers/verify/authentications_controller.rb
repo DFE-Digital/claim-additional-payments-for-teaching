@@ -8,6 +8,7 @@ module Verify
     #   https://www.docs.verify.service.gov.uk/get-started/set-up-successful-verification-journey/#generate-an-authentication-request
     def new
       @verify_authentication_request = Verify::AuthenticationRequest.generate
+      session[:verify_request_id] = @verify_authentication_request.request_id
     end
   end
 end
