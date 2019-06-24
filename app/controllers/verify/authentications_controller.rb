@@ -7,11 +7,7 @@ module Verify
     #
     #   https://www.docs.verify.service.gov.uk/get-started/set-up-successful-verification-journey/#generate-an-authentication-request
     def new
-      @verify_authentication_request = Verify::AuthenticationRequest.new(
-        saml_request: "SAML_REQUEST",
-        request_id: "REQUEST_ID",
-        sso_location: "SSO_LOCATION"
-      )
+      @verify_authentication_request = Verify::AuthenticationRequest.generate
     end
   end
 end

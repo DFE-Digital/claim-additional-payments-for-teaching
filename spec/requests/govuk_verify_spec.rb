@@ -7,10 +7,11 @@ RSpec.describe "GOV.UK Verify requests", type: :request do
     end
 
     it "renders a form that will submit an authentication request to Verify" do
+      stub_vsp_generate_request
       get new_verify_authentication_path
 
-      expect(response.body).to include("action=\"SSO_LOCATION\"")
-      expect(response.body).to include("SAML_REQUEST")
+      expect(response.body).to include("action=\"#{stubbed_auth_request_response["ssoLocation"]}\"")
+      expect(response.body).to include(stubbed_auth_request_response["samlRequest"])
     end
   end
 end
