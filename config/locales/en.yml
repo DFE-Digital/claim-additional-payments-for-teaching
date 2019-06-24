@@ -52,7 +52,7 @@ en:
       national_insurance_number: "What is your National Insurance number?"
       student_loan_amount: "How much student loan did you repay while you were at %{claim_school_name} between 6 April XXXX and 5 April XXXX?"
       email_address: "What is your email address?"
-      bank_details: "Your bank account details"
+      bank_details: "Enter bank account details"
     csv_headers:
       reference: "Reference"
       submitted_at: "Submitted at"
