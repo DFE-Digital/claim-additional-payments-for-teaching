@@ -18,6 +18,11 @@ Rails.application.routes.draw do
 
   namespace :verify do
     resources :authentications, only: [:new]
+
+    if Rails.env.test?
+      require "verify/fake_sso"
+      mount Verify::FakeSso.new("/verify/response"), at: "/fake_sso"
+    end
   end
 
   namespace :admin do
