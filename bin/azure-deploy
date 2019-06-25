@@ -65,7 +65,7 @@ fi
 sed -e "s/\${subscriptionId}/${SUBSCRIPTION_ID}/" \
     -e "s/\${vaultGroup}/${KEYVAULT_RESOURCE_GROUP_NAME}/" \
     -e "s/\${vaultName}/${KEYVAULT_NAME}/" \
-    $SCRIPTPATH/../azure/parameters/$ENVIRONMENT_NAME.json.txt > $SCRIPTPATH/../azure/parameters/$ENVIRONMENT_NAME.json
+    $SCRIPTPATH/../azure/parameters/$ENVIRONMENT_NAME.template.json > $SCRIPTPATH/../azure/parameters/$ENVIRONMENT_NAME.json
 
 echo "Starting deployment..."
 az group deployment create \

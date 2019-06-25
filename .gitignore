@@ -36,3 +36,4 @@ localhost.key
 
 # Ignore parameter files
 /azure/parameters/*.json
+!/azure/parameters/*.template.json
