@@ -18,7 +18,7 @@ RSpec.feature "Ineligible Teacher Student Loan Repayments claims" do
 
     expect(claim.reload.current_school).to eql schools(:hampstead_school)
 
-    expect(page).to have_text(I18n.t("tslr.questions.mostly_teaching_eligible_subjects"))
+    expect(page).to have_text(I18n.t("tslr.questions.subjects_taught"))
   end
 
   scenario "chooses an ineligible school" do
@@ -43,13 +43,29 @@ RSpec.feature "Ineligible Teacher Student Loan Repayments claims" do
     expect(page).to have_text("You must be still working as a teacher to be eligible")
   end
 
-  scenario "did not teach at least half their time in an eligible subject" do
+  scenario "does not teach an eligible subject" do
     claim = start_tslr_claim
     choose_qts_year
     choose_school schools(:penistone_grammar_school)
     choose_still_teaching
 
-    expect(page).to have_text(I18n.t("tslr.questions.mostly_teaching_eligible_subjects"))
+    check "tslr_claim_mostly_teaching_eligible_subjects"
+    click_on "Continue"
+
+    expect(claim.reload.mostly_teaching_eligible_subjects).to eq(false)
+    expect(page).to have_text("You’re not eligible")
+    expect(page).to have_text("You must have spent at least half your time teaching an eligible subject.")
+  end
+
+  scenario "does not teach an eligible subject" do
+    claim = start_tslr_claim
+    choose_qts_year
+    choose_school schools(:penistone_grammar_school)
+    choose_still_teaching
+
+    check "Biology"
+    click_on "Continue"
+
     choose "No"
     click_on "Continue"
 

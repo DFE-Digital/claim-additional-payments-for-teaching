@@ -38,6 +38,12 @@ module ClaimsHelper
     ]
   end
 
+  def subject_list(subjects)
+    connector = " or "
+    subjects.map! { |subject| I18n.t("tslr.questions.eligible_subjects.#{subject}") }
+    subjects.to_sentence(last_word_connector: connector, two_words_connector: connector)
+  end
+
   private
 
   def academic_years(year_range)
