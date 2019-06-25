@@ -46,6 +46,8 @@ GEM
       public_suffix (>= 2.0.2, < 4.0)
     aes_key_wrap (1.0.1)
     arel (9.0.0)
+    array_enum (1.1.0)
+      activemodel
     ast (2.4.0)
     attr_required (1.0.1)
     bindata (2.4.4)
@@ -309,6 +311,7 @@ PLATFORMS
   x86_64-darwin-18
 
 DEPENDENCIES
+  array_enum
   bootsnap (>= 1.1.0)
   brakeman
   bullet
