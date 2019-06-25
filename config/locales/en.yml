@@ -44,7 +44,6 @@ en:
       claim_school: "Which school were you employed at between 6 April XXXX and 5 April XXXX?"
       employment_status: "Are you still employed to teach at a school in England?"
       current_school: "Which school are you currently employed at?"
-      mostly_teaching_eligible_subjects: "Did you teach eligible subjects for more than 50% of your teaching time between 6 April XXXX and 5 April XXXX?"
       subjects_taught: "Did you teach any of the following subjects between 6 April XXXX and 5 April XXXX?"
       mostly_teaching_eligible_subjects: "Did you teach %{subjects} for more than 50% of your teaching time between 6 April XXXX and 5 April XXXX?"
       full_name: "What is your full name?"

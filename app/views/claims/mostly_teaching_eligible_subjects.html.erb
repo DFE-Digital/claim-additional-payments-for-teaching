@@ -1,0 +1,34 @@
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= render("shared/error_summary", instance: current_claim, errored_field_id_overrides: { mostly_teaching_eligible_subjects: "tslr_claim_mostly_teaching_eligible_subjects_true"}) if current_claim.errors.any? %>
+      <%= form_for current_claim, url: claim_path do |form| %>
+        <%= form.hidden_field :mostly_teaching_eligible_subjects %>
+        <%= form_group_tag current_claim do %>
+          <fieldset class="govuk-fieldset">
+            <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl">
+              <h1 class="govuk-fieldset__heading">
+                <%= t("tslr.questions.mostly_teaching_eligible_subjects", subjects: subject_list(current_claim.eligible_subjects)) %>
+              </h1>
+            </legend>
+            <p class="govuk-body">
+              <span class="govuk-hint">
+                If you've been off on long-term leave or sick, include the time you were scheduled to teach these subjects.
+              </span>
+            </p>
+            <%= errors_tag current_claim, :mostly_teaching_eligible_subjects %>
+            <div class="govuk-radios">
+              <div class="govuk-radios__item">
+                <%= form.radio_button(:mostly_teaching_eligible_subjects, true, class: "govuk-radios__input") %>
+                <%= form.label :mostly_teaching_eligible_subjects_true, "Yes", class: "govuk-label govuk-radios__label" %>
+              </div>
+              <div class="govuk-radios__item">
+                <%= form.radio_button(:mostly_teaching_eligible_subjects, false, class: "govuk-radios__input") %>
+                <%= form.label :mostly_teaching_eligible_subjects_false, "No", class: "govuk-label govuk-radios__label" %>
+              </div>
+            </div>
+        </fieldset>
+      <% end %>
+    <%= form.submit "Continue", class: "govuk-button" %>
+    <% end %>
+  </div>
+</div>
