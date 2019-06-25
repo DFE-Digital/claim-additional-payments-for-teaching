@@ -5,7 +5,7 @@ class ApplicationController < ActionController::Base
     if: -> { ENV.key?("BASIC_AUTH_USERNAME") },
   )
 
-  helper_method :signed_in?, :govuk_verify_enabled?
+  helper_method :signed_in?, :govuk_verify_enabled?, :current_claim
 
   def signed_in?
     session.key?(:login)
@@ -13,5 +13,9 @@ class ApplicationController < ActionController::Base
 
   def govuk_verify_enabled?
     ENV["GOVUK_VERIFY_ENABLED"]
+  end
+
+  def current_claim
+    @current_claim ||= TslrClaim.find(session[:tslr_claim_id]) if session.key?(:tslr_claim_id)
   end
 end

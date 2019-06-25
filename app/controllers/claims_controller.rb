@@ -115,11 +115,6 @@ class ClaimsController < ApplicationController
     params[:slug].underscore
   end
 
-  def current_claim
-    @current_claim ||= TslrClaim.find(session[:tslr_claim_id]) if session.key?(:tslr_claim_id)
-  end
-  helper_method :current_claim
-
   def send_unstarted_claiments_to_the_start
     redirect_to root_url unless current_claim.present?
   end
