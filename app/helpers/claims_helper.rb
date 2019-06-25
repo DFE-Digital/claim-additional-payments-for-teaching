@@ -29,9 +29,9 @@ module ClaimsHelper
   def identity_answers(claim)
     [
       ["Full name", claim.full_name, "full-name"],
-      ["Address", claim.address, "address"],
-      ["Date of birth", l(claim.date_of_birth), "date-of-birth"],
-      ["Teacher reference number", claim.teacher_reference_number, "teacher-reference-number"],
+      ["What is your address?", claim.address, "address"],
+      ["What is your date of birth?", l(claim.date_of_birth), "date-of-birth"],
+      ["What's your teacher reference number?", claim.teacher_reference_number, "teacher-reference-number"],
       ["National Insurance number", claim.national_insurance_number, "national-insurance-number"],
       ["Email address", claim.email_address, "email-address"],
       ["Account number", claim.bank_account_number, "bank-details"],

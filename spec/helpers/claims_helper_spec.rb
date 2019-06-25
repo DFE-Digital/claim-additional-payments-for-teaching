@@ -61,9 +61,9 @@ describe ClaimsHelper do
 
       expected_answers = [
         ["Full name", "Jo Bloggs", "full-name"],
-        ["Address", "Flat 1, 1 Test Road, Test Town, AB1 2CD", "address"],
-        ["Date of birth", I18n.l(20.years.ago.to_date), "date-of-birth"],
-        ["Teacher reference number", "1234567", "teacher-reference-number"],
+        ["What is your address?", "Flat 1, 1 Test Road, Test Town, AB1 2CD", "address"],
+        ["What is your date of birth?", I18n.l(20.years.ago.to_date), "date-of-birth"],
+        ["What's your teacher reference number?", "1234567", "teacher-reference-number"],
         ["National Insurance number", "QQ123456C", "national-insurance-number"],
         ["Email address", "test@email.com", "email-address"],
         ["Account number", "12345678", "bank-details"],
