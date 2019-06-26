@@ -1,5 +1,4 @@
 require "rails_helper"
-require "verify/service_provider"
 
 RSpec.describe Verify::ServiceProvider do
   describe "#generate_request" do

@@ -1,5 +1,3 @@
-require "verify/service_provider"
-
 module Verify
   # SAML Authentication Request used to start the verification user journey.
   #

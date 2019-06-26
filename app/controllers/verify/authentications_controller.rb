@@ -1,5 +1,3 @@
-require "verify/authentication_request"
-
 module Verify
   class AuthenticationsController < ApplicationController
     # Page where a new Verify authentication request is generated and posted, as

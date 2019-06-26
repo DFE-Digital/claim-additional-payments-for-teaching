@@ -1,5 +1,3 @@
-require "verify/service_provider"
-
 def stub_vsp_generate_request
   stub_request(:post, Verify::ServiceProvider::GENERATE_REQUEST_URL)
     .with(headers: {"Content-Type" => "application/json"})

@@ -1,5 +1,4 @@
 require "rails_helper"
-require "verify/authentication_request"
 
 RSpec.describe Verify::AuthenticationRequest do
   it "can be initialised with authentication request parameters" do
