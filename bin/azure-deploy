@@ -5,8 +5,9 @@ ENVIRONMENT_NAME=$1
 SCRIPT_PATH=$( cd "$( dirname "$0" )" ; pwd -P )
 DEPLOYMENT_NAME="app"
 RESOURCE_LOCATION="West Europe"
-TEMPLATE_FILE_PATH="azure/template.json"
-PARAMETERS_FILE_PATH="azure/parameters/$ENVIRONMENT_NAME.json"
+TEMPLATE_FILE_PATH="$SCRIPT_PATH/../azure/template.json"
+PARAMETERS_TEMPLATE_FILE_PATH="$SCRIPT_PATH/../azure/parameters/$ENVIRONMENT_NAME.template.json"
+PARAMETERS_FILE_PATH="$SCRIPT_PATH/../azure/parameters/$ENVIRONMENT_NAME.json"
 
 case $ENVIRONMENT_NAME in
   "development")
@@ -65,7 +66,7 @@ fi
 sed -e "s/\${subscriptionId}/${SUBSCRIPTION_ID}/" \
     -e "s/\${vaultGroup}/${KEYVAULT_RESOURCE_GROUP_NAME}/" \
     -e "s/\${vaultName}/${KEYVAULT_NAME}/" \
-    "$SCRIPT_PATH/../azure/parameters/$ENVIRONMENT_NAME.template.json" > "$SCRIPT_PATH/../azure/parameters/$ENVIRONMENT_NAME.json"
+    "$PARAMETERS_TEMPLATE_FILE_PATH" > "$PARAMETERS_FILE_PATH"
 
 echo "Starting deployment..."
 az group deployment create \
