@@ -2,39 +2,33 @@
 
 document.addEventListener("DOMContentLoaded", function() {
   var fieldset = document.querySelector("#tslr_claim_eligible_subjects");
-  var el;
-  var eligibleSubjectsSelector;
-  var notTeachingSubjectsSelector;
 
   if (!fieldset) {
     return;
   }
 
-  fieldset.addEventListener(
-    "click",
-    function(e) {
-      el = e.target;
+  function toggleSubjectValues(event) {
+    var el = event.target;
+    var eligibleSubjectsName = "tslr_claim[eligible_subjects][]";
+    var notTeachingSubjectsName = "tslr_claim[mostly_teaching_eligible_subjects]";
 
-      if (!el) {
-        return;
-      }
-      if (el.checked === false) {
-        return;
-      }
+    if (!el) {
+      return;
+    }
+    if (el.checked === false) {
+      return;
+    }
 
-      eligibleSubjectsSelector = "tslr_claim[eligible_subjects][]";
-      notTeachingSubjectsSelector = "tslr_claim[mostly_teaching_eligible_subjects]";
+    if (el.name == eligibleSubjectsName) {
+      var radioButton = document.querySelector("input[type='radio'][name='" + notTeachingSubjectsName + "']");
+      radioButton.checked = false;
+    } else if (el.name == notTeachingSubjectsName) {
+      var checkboxes = document.querySelectorAll("input[name='" + eligibleSubjectsName + "']");
+      checkboxes.forEach(function(item, index) {
+        item.checked = false;
+      });
+    }
+  }
 
-      if (el.name == eligibleSubjectsSelector) {
-        var radioButton = document.querySelector("input[type='radio'][name='" + notTeachingSubjectsSelector + "']");
-        radioButton.checked = false;
-      } else if (el.name == notTeachingSubjectsSelector) {
-        var checkboxes = document.querySelectorAll("input[name='" + eligibleSubjectsSelector + "']");
-        checkboxes.forEach(function(item, index) {
-          item.checked = false;
-        });
-      }
-    },
-    false
-  );
+  fieldset.addEventListener("click", toggleSubjectValues, false);
 });
