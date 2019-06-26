@@ -63,6 +63,7 @@ else
   echo "Using existing keyvault with name $KEYVAULT_NAME..."
 fi
 
+echo "Rewriting parameters file for $ENVIRONMENT_NAME..."
 sed -e "s/\${subscriptionId}/${SUBSCRIPTION_ID}/" \
     -e "s/\${vaultGroup}/${KEYVAULT_RESOURCE_GROUP_NAME}/" \
     -e "s/\${vaultName}/${KEYVAULT_NAME}/" \
