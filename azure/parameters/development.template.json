@@ -1,0 +1,92 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "appServiceDockerImage": {
+      "value": "pezholio/teacher-payment-service"
+    },
+    "databaseName": {
+      "value": "development"
+    },
+    "databaseUsername": {
+      "reference": {
+        "keyVault": {
+          "id": "/subscriptions/${subscriptionId}/resourceGroups/${vaultGroup}/providers/Microsoft.KeyVault/vaults/${vaultName}"
+        },
+        "secretName": "DatabaseUsername"
+      }
+    },
+    "databasePassword": {
+      "reference": {
+        "keyVault": {
+          "id": "/subscriptions/${subscriptionId}/resourceGroups/${vaultGroup}/providers/Microsoft.KeyVault/vaults/${vaultName}"
+        },
+        "secretName": "DatabasePassword"
+      }
+    },
+    "securityAlertEmailAddress": {
+      "reference": {
+        "keyVault": {
+          "id": "/subscriptions/${subscriptionId}/resourceGroups/${vaultGroup}/providers/Microsoft.KeyVault/vaults/${vaultName}"
+        },
+        "secretName": "SecurityAlertEmailAddress"
+      }
+    },
+    "SECRET_KEY_BASE": {
+      "reference": {
+        "keyVault": {
+          "id": "/subscriptions/${subscriptionId}/resourceGroups/${vaultGroup}/providers/Microsoft.KeyVault/vaults/${vaultName}"
+        },
+        "secretName": "SecretKeyBase"
+      }
+    },
+    "BASIC_AUTH_USERNAME": {
+      "reference": {
+        "keyVault": {
+          "id": "/subscriptions/${subscriptionId}/resourceGroups/${vaultGroup}/providers/Microsoft.KeyVault/vaults/${vaultName}"
+        },
+        "secretName": "BasicAuthUsername"
+      }
+    },
+    "BASIC_AUTH_PASSWORD": {
+      "reference": {
+        "keyVault": {
+          "id": "/subscriptions/${subscriptionId}/resourceGroups/${vaultGroup}/providers/Microsoft.KeyVault/vaults/${vaultName}"
+        },
+        "secretName": "BasicAuthPassword"
+      }
+    },
+    "DFE_SIGN_IN_ISSUER": {
+      "reference": {
+        "keyVault": {
+          "id": "/subscriptions/${subscriptionId}/resourceGroups/${vaultGroup}/providers/Microsoft.KeyVault/vaults/${vaultName}"
+        },
+        "secretName": "DfeSignInIssuer"
+      }
+    },
+    "DFE_SIGN_IN_IDENTIFIER": {
+      "reference": {
+        "keyVault": {
+          "id": "/subscriptions/${subscriptionId}/resourceGroups/${vaultGroup}/providers/Microsoft.KeyVault/vaults/${vaultName}"
+        },
+        "secretName": "DfeSignInIdentifier"
+      }
+    },
+    "DFE_SIGN_IN_SECRET": {
+      "reference": {
+        "keyVault": {
+          "id": "/subscriptions/${subscriptionId}/resourceGroups/${vaultGroup}/providers/Microsoft.KeyVault/vaults/${vaultName}"
+        },
+        "secretName": "DfeSignInSecret"
+      }
+    },
+    "DFE_SIGN_IN_REDIRECT_BASE_URL": {
+      "reference": {
+        "keyVault": {
+          "id": "/subscriptions/${subscriptionId}/resourceGroups/${vaultGroup}/providers/Microsoft.KeyVault/vaults/${vaultName}"
+        },
+        "secretName": "DfeSignInRedirectBaseUrl"
+      }
+    }
+  }
+}

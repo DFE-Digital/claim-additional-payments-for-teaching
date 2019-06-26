@@ -2,16 +2,19 @@
 set -e
 
 ENVIRONMENT_NAME=$1
-DEPLOYMENT_NAME="core"
+SCRIPT_PATH=$( cd "$( dirname "$0" )" ; pwd -P )
+DEPLOYMENT_NAME="app"
 RESOURCE_LOCATION="West Europe"
-TEMPLATE_FILE_PATH="azure/template.json"
-PARAMETERS_FILE_PATH="azure/parameters/$ENVIRONMENT_NAME.json"
+TEMPLATE_FILE_PATH="$SCRIPT_PATH/../azure/template.json"
+PARAMETERS_TEMPLATE_FILE_PATH="$SCRIPT_PATH/../azure/parameters/$ENVIRONMENT_NAME.template.json"
+PARAMETERS_FILE_PATH="$SCRIPT_PATH/../azure/parameters/$ENVIRONMENT_NAME.json"
 
 case $ENVIRONMENT_NAME in
   "development")
     # Use `az account show --out json` to find the subscription ID.
     SUBSCRIPTION_ID="8655985a-2f87-44d7-a541-0be9a8c2779d"
     RESOURCE_GROUP_NAME="s118d01-app"
+    KEYVAULT_RESOURCE_GROUP_NAME="s118d01-secrets"
     ;;
   *)
     echo "Could not find an known environment with the name: $ENVIRONMENT_NAME"
@@ -19,29 +22,65 @@ case $ENVIRONMENT_NAME in
     ;;
 esac
 
+KEYVAULT_NAME="$KEYVAULT_RESOURCE_GROUP_NAME-kv"
+
 if ! az account show > /dev/null; then
   echo "Logging in..."
   az login
 fi
 
 echo "Setting default subscription to $SUBSCRIPTION_ID..."
-az account set --subscription $SUBSCRIPTION_ID
+az account set --subscription "$SUBSCRIPTION_ID"
 
-if ! az group show --name $RESOURCE_GROUP_NAME > /dev/null; then
+if ! az group show --name "$KEYVAULT_RESOURCE_GROUP_NAME" > /dev/null; then
+  echo "Creating new resource group for keyvault with name $KEYVAULT_RESOURCE_GROUP_NAME..."
+  az group create \
+    --name "$KEYVAULT_RESOURCE_GROUP_NAME" \
+    --location "$RESOURCE_LOCATION" \
+    > /dev/null
+else
+  echo "Using existing keyvault resource group with name $KEYVAULT_RESOURCE_GROUP_NAME..."
+fi
+
+if ! az keyvault show --name "$KEYVAULT_NAME" > /dev/null; then
+  echo "Creating a new keyvault with name $KEYVAULT_NAME..."
+  az keyvault create \
+    --name "$KEYVAULT_NAME" \
+    --resource-group "$KEYVAULT_RESOURCE_GROUP_NAME" \
+    --enabled-for-template-deployment true \
+    > /dev/null
+else
+  echo "Using existing keyvault with name $KEYVAULT_NAME..."
+fi
+
+if ! az group show --name "$RESOURCE_GROUP_NAME" > /dev/null; then
   echo "Creating new resource group with name $RESOURCE_GROUP_NAME..."
   az group create \
-    --name $RESOURCE_GROUP_NAME \
+    --name "$RESOURCE_GROUP_NAME" \
     --location "$RESOURCE_LOCATION" \
     > /dev/null
 else
   echo "Using existing resource group with name $RESOURCE_GROUP_NAME..."
 fi
 
+echo "Rewriting parameters file for $ENVIRONMENT_NAME..."
+sed -e "s/\${subscriptionId}/${SUBSCRIPTION_ID}/" \
+    -e "s/\${vaultGroup}/${KEYVAULT_RESOURCE_GROUP_NAME}/" \
+    -e "s/\${vaultName}/${KEYVAULT_NAME}/" \
+    "$PARAMETERS_TEMPLATE_FILE_PATH" > "$PARAMETERS_FILE_PATH"
+
+echo
+echo "Are all the secrets up to date? Are you ready to deploy? Hit return to continue, or CTRL+C to stop."
+read -r
+
 echo "Starting deployment..."
 az group deployment create \
-  --name $DEPLOYMENT_NAME \
-  --resource-group $RESOURCE_GROUP_NAME \
-  --template-file $TEMPLATE_FILE_PATH \
-  --parameters "@$PARAMETERS_FILE_PATH"
+  --name "$DEPLOYMENT_NAME" \
+  --resource-group "$RESOURCE_GROUP_NAME" \
+  --template-file "$TEMPLATE_FILE_PATH" \
+  --parameters "@$PARAMETERS_FILE_PATH" \
+  --mode Complete \
+  --rollback-on-error \
+  --verbose
 
 echo "Template has been successfully deployed"

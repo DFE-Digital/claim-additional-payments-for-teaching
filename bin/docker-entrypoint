@@ -1,10 +1,18 @@
 #!/bin/bash
 set -e
 
-if rake db:migrate:status > /dev/null; then
-  rails db:migrate
-elif [ "$RAILS_ENV" != "production" ]; then
+if [ "$RAILS_ENV" != "production" ]; then
+  echo "In Dev / Test - Initializing database"
   rake db:create db:setup
+else
+  DB_STATUS=$(rake db:migrate:status 2>&1 | tail -n 1)
+  if [ "$DB_STATUS" == "Schema migrations table does not exist yet."  ]; then
+    echo "No tables exist - setting up the database"
+    rails db:setup
+  else
+    echo "Running the migrations"
+    rails db:migrate
+  fi
 fi
 
 exec "$@"
