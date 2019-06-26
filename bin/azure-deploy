@@ -2,7 +2,7 @@
 set -e
 
 ENVIRONMENT_NAME=$1
-SCRIPTPATH="$( cd "$(dirname "$0")" ; pwd -P )"
+SCRIPT_PATH=$( cd "$( dirname "$0" )" ; pwd -P )
 DEPLOYMENT_NAME="app"
 RESOURCE_LOCATION="West Europe"
 TEMPLATE_FILE_PATH="azure/template.json"
@@ -29,33 +29,33 @@ if ! az account show > /dev/null; then
 fi
 
 echo "Setting default subscription to $SUBSCRIPTION_ID..."
-az account set --subscription $SUBSCRIPTION_ID
+az account set --subscription "$SUBSCRIPTION_ID"
 
-if ! az group show --name $RESOURCE_GROUP_NAME > /dev/null; then
+if ! az group show --name "$RESOURCE_GROUP_NAME" > /dev/null; then
   echo "Creating new resource group with name $RESOURCE_GROUP_NAME..."
   az group create \
-    --name $RESOURCE_GROUP_NAME \
+    --name "$RESOURCE_GROUP_NAME" \
     --location "$RESOURCE_LOCATION" \
     > /dev/null
 else
   echo "Using existing resource group with name $RESOURCE_GROUP_NAME..."
 fi
 
-if ! az group show --name $KEYVAULT_RESOURCE_GROUP_NAME > /dev/null; then
+if ! az group show --name "$KEYVAULT_RESOURCE_GROUP_NAME" > /dev/null; then
   echo "Creating new resource group for keyvault with name $KEYVAULT_RESOURCE_GROUP_NAME..."
   az group create \
-    --name $KEYVAULT_RESOURCE_GROUP_NAME \
+    --name "$KEYVAULT_RESOURCE_GROUP_NAME" \
     --location "$RESOURCE_LOCATION" \
     > /dev/null
 else
   echo "Using existing keyvault resource group with name $KEYVAULT_RESOURCE_GROUP_NAME..."
 fi
 
-if ! az keyvault show --name $KEYVAULT_NAME > /dev/null; then
+if ! az keyvault show --name "$KEYVAULT_NAME" > /dev/null; then
   echo "Creating a new keyvault with name $KEYVAULT_NAME..."
   az keyvault create \
-    --name $KEYVAULT_NAME \
-    --resource-group $KEYVAULT_RESOURCE_GROUP_NAME \
+    --name "$KEYVAULT_NAME" \
+    --resource-group "$KEYVAULT_RESOURCE_GROUP_NAME" \
     --enabled-for-template-deployment true \
     > /dev/null
 else
@@ -65,13 +65,13 @@ fi
 sed -e "s/\${subscriptionId}/${SUBSCRIPTION_ID}/" \
     -e "s/\${vaultGroup}/${KEYVAULT_RESOURCE_GROUP_NAME}/" \
     -e "s/\${vaultName}/${KEYVAULT_NAME}/" \
-    $SCRIPTPATH/../azure/parameters/$ENVIRONMENT_NAME.template.json > $SCRIPTPATH/../azure/parameters/$ENVIRONMENT_NAME.json
+    "$SCRIPT_PATH/../azure/parameters/$ENVIRONMENT_NAME.template.json" > "$SCRIPT_PATH/../azure/parameters/$ENVIRONMENT_NAME.json"
 
 echo "Starting deployment..."
 az group deployment create \
-  --name $DEPLOYMENT_NAME \
-  --resource-group $RESOURCE_GROUP_NAME \
-  --template-file $TEMPLATE_FILE_PATH \
+  --name "$DEPLOYMENT_NAME" \
+  --resource-group "$RESOURCE_GROUP_NAME" \
+  --template-file "$TEMPLATE_FILE_PATH" \
   --parameters "@$PARAMETERS_FILE_PATH" \
   --mode Complete \
   --rollback-on-error \
