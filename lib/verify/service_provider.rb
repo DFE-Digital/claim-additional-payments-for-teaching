@@ -1,7 +1,17 @@
 module Verify
+  # Interface for interacting with an instance of a Verify Service Provider.
+  #
+  # Make sure the VSP host is configured, for example:
+  #
+  #   Verify.vsp_host= "https://vsp.host:50300"
   class ServiceProvider
-    GENERATE_REQUEST_URL = "http://localhost:50300/generate-request".freeze
-    TRANSLATE_RESPONSE_URL = "http://localhost:50300/translate-response".freeze
+    def self.generate_request_url
+      "#{Verify.vsp_host}/generate-request"
+    end
+
+    def self.translate_response_url
+      "#{Verify.vsp_host}/translate-response"
+    end
 
     # Makes a request to the Verify Service Provider to generate an
     # authentication request, as described here:
@@ -20,7 +30,7 @@ module Verify
     #   }
     #
     def generate_request
-      uri = URI(GENERATE_REQUEST_URL)
+      uri = URI(self.class.generate_request_url)
       request = Net::HTTP::Post.new(uri, {})
       request.content_type = "application/json"
       response = Net::HTTP.start(uri.hostname, uri.port) { |http| http.request(request) }
@@ -46,7 +56,7 @@ module Verify
     #   }
     #
     def translate_response(saml_response, request_id, level_of_assurance)
-      uri = URI(TRANSLATE_RESPONSE_URL)
+      uri = URI(self.class.translate_response_url)
       request = Net::HTTP::Post.new(uri)
       request.body = {"samlResponse" => saml_response, "requestId" => request_id, "levelOfAssurance" => level_of_assurance}.to_json
       request.content_type = "application/json"

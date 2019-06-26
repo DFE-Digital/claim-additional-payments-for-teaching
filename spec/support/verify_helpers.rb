@@ -1,5 +1,5 @@
 def stub_vsp_generate_request
-  stub_request(:post, Verify::ServiceProvider::GENERATE_REQUEST_URL)
+  stub_request(:post, Verify::ServiceProvider.generate_request_url)
     .with(headers: {"Content-Type" => "application/json"})
     .to_return(status: 200, body: stubbed_auth_request_response.to_json, headers: {})
 end
@@ -13,7 +13,7 @@ def stubbed_auth_request_response
 end
 
 def stub_vsp_translate_response_request(expected_request_payload)
-  stub_request(:post, Verify::ServiceProvider::TRANSLATE_RESPONSE_URL)
+  stub_request(:post, Verify::ServiceProvider.translate_response_url)
     .with(body: expected_request_payload.to_json, headers: {"Content-Type" => "application/json"})
     .to_return(status: 200, body: stubbed_vsp_translated_response.to_json, headers: {})
 end

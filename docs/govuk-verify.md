@@ -8,6 +8,14 @@ The email address for Verify support is idasupport@digital.cabinet-office.gov.uk
 (which goes through to Zendesk). There is also a #govuk-verify slack channel
 on the ukgovernmentdigital.slack.com slack workspace.
 
+## Environment variables
+
+Verify integration requires certain environment variables be set:
+
+```bash
+  GOVUK_VERIFY_VSP_HOST=http://URL.FOR.VSP:12345
+```
+
 ## Running locally in development
 
 Currently GOV.UK Verify integration is under active development and can be
