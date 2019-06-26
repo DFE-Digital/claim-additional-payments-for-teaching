@@ -28,14 +28,19 @@ module ClaimsHelper
 
   def identity_answers(claim)
     [
-      ["What's your full name?", claim.full_name, "full-name"],
-      ["What's your address?", claim.address, "address"],
-      ["What's your date of birth?", l(claim.date_of_birth), "date-of-birth"],
-      ["What's your teacher reference number?", claim.teacher_reference_number, "teacher-reference-number"],
-      ["What's your National Insurance number?", claim.national_insurance_number, "national-insurance-number"],
-      ["What's your email address?", claim.email_address, "email-address"],
-      ["Account number", claim.bank_account_number, "bank-details"],
-      ["Sort code", claim.bank_sort_code, "bank-details"],
+      [t("tslr.questions.full_name"), claim.full_name, "full-name"],
+      [t("tslr.questions.address"), claim.address, "address"],
+      [t("tslr.questions.date_of_birth"), l(claim.date_of_birth), "date-of-birth"],
+      [t("tslr.questions.teacher_reference_number"), claim.teacher_reference_number, "teacher-reference-number"],
+      [t("tslr.questions.national_insurance_number"), claim.national_insurance_number, "national-insurance-number"],
+      [t("tslr.questions.email_address"), claim.email_address, "email-address"],
+    ]
+  end
+
+  def payment_answers(claim)
+    [
+      ["Bank sort code", claim.bank_sort_code, "bank-details"],
+      ["Bank account number", claim.bank_account_number, "bank-details"],
     ]
   end
 

@@ -55,22 +55,34 @@ describe ClaimsHelper do
         teacher_reference_number: "1234567",
         national_insurance_number: "QQ 12 34 56 C",
         email_address: "test@email.com",
-        bank_account_number: "12 34 56 78",
-        bank_sort_code: "12 34 56",
       )
 
       expected_answers = [
-        ["What's your full name?", "Jo Bloggs", "full-name"],
-        ["What's your address?", "Flat 1, 1 Test Road, Test Town, AB1 2CD", "address"],
-        ["What's your date of birth?", I18n.l(20.years.ago.to_date), "date-of-birth"],
-        ["What's your teacher reference number?", "1234567", "teacher-reference-number"],
-        ["What's your National Insurance number?", "QQ123456C", "national-insurance-number"],
-        ["What's your email address?", "test@email.com", "email-address"],
-        ["Account number", "12345678", "bank-details"],
-        ["Sort code", "123456", "bank-details"],
+        [I18n.t("tslr.questions.full_name"), "Jo Bloggs", "full-name"],
+        [I18n.t("tslr.questions.address"), "Flat 1, 1 Test Road, Test Town, AB1 2CD", "address"],
+        [I18n.t("tslr.questions.date_of_birth"), I18n.l(20.years.ago.to_date), "date-of-birth"],
+        [I18n.t("tslr.questions.teacher_reference_number"), "1234567", "teacher-reference-number"],
+        [I18n.t("tslr.questions.national_insurance_number"), "QQ123456C", "national-insurance-number"],
+        [I18n.t("tslr.questions.email_address"), "test@email.com", "email-address"],
       ]
 
       expect(helper.identity_answers(claim)).to eq expected_answers
+    end
+
+    describe "#payment_answers" do
+      it "returns an array of questions and answers for displaying to the user for review" do
+        claim = TslrClaim.create(
+          bank_sort_code: "12 34 56",
+          bank_account_number: "12 34 56 78",
+        )
+
+        expected_answers = [
+          ["Bank sort code", "123456", "bank-details"],
+          ["Bank account number", "12345678", "bank-details"],
+        ]
+
+        expect(helper.payment_answers(claim)).to eq expected_answers
+      end
     end
   end
 
