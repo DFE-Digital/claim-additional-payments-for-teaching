@@ -69,6 +69,10 @@ sed -e "s/\${subscriptionId}/${SUBSCRIPTION_ID}/" \
     -e "s/\${vaultName}/${KEYVAULT_NAME}/" \
     "$PARAMETERS_TEMPLATE_FILE_PATH" > "$PARAMETERS_FILE_PATH"
 
+echo
+echo "Are all the secrets up to date? Are you ready to deploy? Hit return to continue, or CTRL+C to stop."
+read -r
+
 echo "Starting deployment..."
 az group deployment create \
   --name "$DEPLOYMENT_NAME" \
