@@ -32,16 +32,6 @@ fi
 echo "Setting default subscription to $SUBSCRIPTION_ID..."
 az account set --subscription "$SUBSCRIPTION_ID"
 
-if ! az group show --name "$RESOURCE_GROUP_NAME" > /dev/null; then
-  echo "Creating new resource group with name $RESOURCE_GROUP_NAME..."
-  az group create \
-    --name "$RESOURCE_GROUP_NAME" \
-    --location "$RESOURCE_LOCATION" \
-    > /dev/null
-else
-  echo "Using existing resource group with name $RESOURCE_GROUP_NAME..."
-fi
-
 if ! az group show --name "$KEYVAULT_RESOURCE_GROUP_NAME" > /dev/null; then
   echo "Creating new resource group for keyvault with name $KEYVAULT_RESOURCE_GROUP_NAME..."
   az group create \
@@ -61,6 +51,16 @@ if ! az keyvault show --name "$KEYVAULT_NAME" > /dev/null; then
     > /dev/null
 else
   echo "Using existing keyvault with name $KEYVAULT_NAME..."
+fi
+
+if ! az group show --name "$RESOURCE_GROUP_NAME" > /dev/null; then
+  echo "Creating new resource group with name $RESOURCE_GROUP_NAME..."
+  az group create \
+    --name "$RESOURCE_GROUP_NAME" \
+    --location "$RESOURCE_LOCATION" \
+    > /dev/null
+else
+  echo "Using existing resource group with name $RESOURCE_GROUP_NAME..."
 fi
 
 echo "Rewriting parameters file for $ENVIRONMENT_NAME..."
