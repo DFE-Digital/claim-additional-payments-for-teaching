@@ -127,9 +127,21 @@ RSpec.describe TslrClaim, type: :model do
   end
 
   context "when saving in the “subjects-taught” validation context" do
+    it "validates that a subject has been provided" do
+      expect(TslrClaim.new).not_to be_valid(:"subjects-taught")
+      expect(TslrClaim.new(eligible_subjects: [:computer_science, :physics])).to be_valid(:"subjects-taught")
+    end
+
+    it "does not validate that a subject has been provided when mostly_teaching_eligible_subjects is false" do
+      expect(TslrClaim.new).not_to be_valid(:"subjects-taught")
+      expect(TslrClaim.new(mostly_teaching_eligible_subjects: false)).to be_valid(:"subjects-taught")
+    end
+  end
+
+  context "when saving in the “mostly-teaching-eligible-subjects” validation context" do
     it "validates mostly_teaching_eligible_subjects has been provided" do
       expect(TslrClaim.new).not_to be_valid(:"subjects-taught")
-      expect(TslrClaim.new(mostly_teaching_eligible_subjects: true)).to be_valid(:"subjects-taught")
+      expect(TslrClaim.new(mostly_teaching_eligible_subjects: true)).to be_valid(:"mostly-teaching-eligible-subjects")
     end
   end
 

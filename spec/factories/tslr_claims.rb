@@ -5,6 +5,7 @@ FactoryBot.define do
       current_school { claim_school }
       qts_award_year { "2013-2014" }
       employment_status { :claim_school }
+      eligible_subjects { [:physics] }
       mostly_teaching_eligible_subjects { true }
       full_name { "Jo Bloggs" }
       address_line_1 { "1 Test Road" }

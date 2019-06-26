@@ -43,7 +43,7 @@ class TslrClaim < ApplicationRecord
     chemistry: 1,
     physics: 2,
     computer_science: 3,
-    languages: 4
+    languages: 4,
   }
 
   belongs_to :claim_school, optional: true, class_name: "School"
@@ -56,7 +56,9 @@ class TslrClaim < ApplicationRecord
 
   validates :employment_status,         on: [:"still-teaching", :submit], presence: {message: "Choose the option that describes your current employment status"}
 
-  validates :mostly_teaching_eligible_subjects, on: [:"subjects-taught", :submit], inclusion: {in: [true, false], message: "Select either Yes or No"}
+  validates :eligible_subjects,         on: [:"subjects-taught", :submit], presence: {message: "Choose a subject, or select \"not applicable\""}, unless: ->(c) { c.mostly_teaching_eligible_subjects == false }
+
+  validates :mostly_teaching_eligible_subjects, on: [:"mostly-teaching-eligible-subjects", :submit], inclusion: {in: [true, false], message: "Select either Yes or No"}
 
   validates :full_name,                 on: [:"full-name", :submit], presence: {message: "Enter your full name"}
   validates :full_name,                 length: {maximum: 200, message: "Full name must be 200 characters or less"}
