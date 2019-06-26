@@ -60,6 +60,7 @@ en:
         physics: "Physics"
         computer_science: "Computer Science"
         languages: "Languages"
+        not_applicable: "Not applicable, I didn't teach any of these subjects"
     csv_headers:
       reference: "Reference"
       submitted_at: "Submitted at"

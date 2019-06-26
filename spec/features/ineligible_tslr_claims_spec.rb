@@ -49,7 +49,7 @@ RSpec.feature "Ineligible Teacher Student Loan Repayments claims" do
     choose_school schools(:penistone_grammar_school)
     choose_still_teaching
 
-    check "tslr_claim_mostly_teaching_eligible_subjects"
+    choose I18n.t("tslr.questions.eligible_subjects.not_applicable")
     click_on "Continue"
 
     expect(claim.reload.mostly_teaching_eligible_subjects).to eq(false)

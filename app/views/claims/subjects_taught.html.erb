@@ -16,9 +16,11 @@
                 <%= label_tag "tslr_claim[eligible_subjects][]", t("tslr.questions.eligible_subjects.#{subject}"), class: "govuk-label govuk-checkboxes__label", for: "eligible_subjects_#{subject}"  %>
               </div>
             <% end %>
-            <div class="govuk-checkboxes__item">
-              <%= form.check_box(:mostly_teaching_eligible_subjects, {class: "govuk-checkboxes__input"}, false, '')  %>
-              <%= form.label :mostly_teaching_eligible_subjects_false, "Not applicable, I didn't teach any of these subjects", class: "govuk-label govuk-checkboxes__label" %>
+            <div class="govuk-radios__divider">or</div>
+            <div class="govuk-radios__item">
+              <%= form.hidden_field :mostly_teaching_eligible_subjects, value: '' %>
+              <%= form.radio_button(:mostly_teaching_eligible_subjects, false, class: "govuk-radios__input")  %>
+              <%= form.label :mostly_teaching_eligible_subjects_false, "Not applicable, I didn't teach any of these subjects", class: "govuk-label govuk-radios__label" %>
             </div>
           </div>
         </fieldset>

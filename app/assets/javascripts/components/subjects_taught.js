@@ -26,8 +26,8 @@ document.addEventListener("DOMContentLoaded", function() {
       notTeachingSubjectsSelector = "tslr_claim[mostly_teaching_eligible_subjects]";
 
       if (el.name == eligibleSubjectsSelector) {
-        var checkbox = document.querySelector("input[type='checkbox'][name='" + notTeachingSubjectsSelector + "']");
-        checkbox.checked = false;
+        var radioButton = document.querySelector("input[type='radio'][name='" + notTeachingSubjectsSelector + "']");
+        radioButton.checked = false;
       } else if (el.name == notTeachingSubjectsSelector) {
         var checkboxes = document.querySelectorAll("input[name='" + eligibleSubjectsSelector + "']");
         checkboxes.forEach(function(item, index) {
