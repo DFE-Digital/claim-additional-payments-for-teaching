@@ -18,7 +18,7 @@
     <p class="govuk-body">A certified identity provider will check your identity when you register with GOV.UK Verify.
       They have met all security standards set by the government.</p>
 
-    <%= button_tag "Continue to GOV.UK Verify", {class: "govuk-button  govuk-!-margin-right-1", disabled: "disabled", "aria-disabled": "true"} %>
-    <%= link_to "Skip GOV.UK Verify", claim_path("full-name"), class: "govuk-button" %>
+    <%= link_to "Continue to GOV.UK Verify", "https://govuk-verify.herokuapp.com/intro?requestId=dfe-teachers-payment-staging", class: "govuk-button" %>
+    <%= link_to "Skip GOV.UK Verify", claim_path("full-name"), class: "govuk-button govuk-button--secondary" %>
   </div>
 </div>
