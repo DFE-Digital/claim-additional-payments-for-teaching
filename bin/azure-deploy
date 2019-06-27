@@ -5,7 +5,7 @@ ENVIRONMENT_NAME=$1
 SCRIPT_PATH=$( cd "$( dirname "$0" )" ; pwd -P )
 DEPLOYMENT_NAME="app"
 RESOURCE_LOCATION="West Europe"
-TEMPLATE_FILE_PATH="$SCRIPT_PATH/../azure/template.json"
+APP_TEMPLATE_FILE_PATH="$SCRIPT_PATH/../azure/templates/app.json"
 PARAMETERS_TEMPLATE_FILE_PATH="$SCRIPT_PATH/../azure/parameters/$ENVIRONMENT_NAME.template.json"
 PARAMETERS_FILE_PATH="$SCRIPT_PATH/../azure/parameters/$ENVIRONMENT_NAME.json"
 
@@ -77,7 +77,7 @@ echo "Starting deployment..."
 az group deployment create \
   --name "$DEPLOYMENT_NAME" \
   --resource-group "$RESOURCE_GROUP_NAME" \
-  --template-file "$TEMPLATE_FILE_PATH" \
+  --template-file "$APP_TEMPLATE_FILE_PATH" \
   --parameters "@$PARAMETERS_FILE_PATH" \
   --mode Complete \
   --rollback-on-error \
