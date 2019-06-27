@@ -73,11 +73,11 @@ group :development do
   gem "spring"
   gem "spring-watcher-listen", "~> 2.0.0"
   gem "foreman"
+  gem "webdrivers"
 end
 
 group :test do
   gem "selenium-webdriver"
-  gem "webdrivers"
   gem "launchy"
 end
 

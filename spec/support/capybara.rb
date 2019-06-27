@@ -1,9 +1,11 @@
 require "capybara/rspec"
-
-chrome_bin = ENV.fetch("GOOGLE_CHROME_BIN", nil)
+begin
+  require "webdrivers"
+rescue LoadError
+  nil
+end
 
 Capybara.register_driver :headless_chrome do |app|
-  Selenium::WebDriver::Chrome.path = chrome_bin if chrome_bin.present?
   Capybara::Selenium::Driver.new(
     app,
     browser: :chrome,

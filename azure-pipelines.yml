@@ -1,0 +1,16 @@
+# Ruby
+# Package your Ruby project.
+# Add steps that install rails, analyze code, save build artifacts, deploy, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/languages/ruby
+
+trigger:
+  - master
+
+pool:
+  vmImage: ubuntu-latest
+
+steps:
+  - script: docker-compose -f docker-compose.test.yml build
+    displayName: Building Docker container
+  - script: docker-compose -f docker-compose.test.yml run --rm web bundle exec rake
+    displayName: Running rake default
