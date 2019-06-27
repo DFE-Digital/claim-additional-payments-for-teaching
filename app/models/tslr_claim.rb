@@ -165,6 +165,10 @@ class TslrClaim < ApplicationRecord
     super(value.to_s.gsub(/[£,\s]/, ""))
   end
 
+  def subjects_taught
+    SUBJECT_FIELDS.select { |s| send(s) == true }
+  end
+
   private
 
   def ineligible_claim_school?

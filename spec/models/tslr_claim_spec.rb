@@ -461,4 +461,21 @@ RSpec.describe TslrClaim, type: :model do
       expect(subject.class.submitted).to match_array(submitted_claims)
     end
   end
+
+  describe "#subjects_taught" do
+    context "when a claim has subjects" do
+      let(:claim) { create(:tslr_claim, biology_taught: true, chemistry_taught: true) }
+
+      it "returns the correct fields" do
+        expect(claim.subjects_taught).to eq([:biology_taught, :chemistry_taught])
+      end
+    end
+    context "when a claim has no subjects" do
+      let(:claim) { create(:tslr_claim) }
+
+      it "returns an empty array" do
+        expect(claim.subjects_taught).to eq([])
+      end
+    end
+  end
 end

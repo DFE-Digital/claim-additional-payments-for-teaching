@@ -70,4 +70,24 @@ describe ClaimsHelper do
       expect(helper.identity_answers(claim)).to eq expected_answers
     end
   end
+
+  describe "subject_list" do
+    let(:list) { subject_list(subjects) }
+
+    context "with two subjects" do
+      let(:subjects) { [:biology_taught, :chemistry_taught] }
+
+      it "seperates the subjects with 'and" do
+        expect(list).to eq("Biology and Chemistry")
+      end
+    end
+
+    context "with three subjects" do
+      let(:subjects) { [:biology_taught, :chemistry_taught, :physics_taught] }
+
+      it "returns a comma separated list with a final 'and'" do
+        expect(list).to eq("Biology, Chemistry and Physics")
+      end
+    end
+  end
 end
