@@ -68,6 +68,8 @@ NOTIFY_TEMPLATE_ID=d72e2ff9-b228-4f16-9099-fd9d411c0334
 bundle exec rake
 ```
 
+To run the feature specs you will need Chrome installed.
+
 ### Code linting rules
 
 Code linting is performed using:
