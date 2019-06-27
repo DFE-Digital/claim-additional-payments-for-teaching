@@ -45,7 +45,7 @@ en:
       employment_status: "Are you still employed to teach at a school in England?"
       current_school: "Which school are you currently employed at?"
       subjects_taught: "Did you teach any of the following subjects between 6 April XXXX and 5 April XXXX?"
-      mostly_teaching_eligible_subjects: "Did you teach %{subjects} for more than 50% of your teaching time between 6 April XXXX and 5 April XXXX?"
+      mostly_teaching_eligible_subjects: "Did teaching %{subjects} cover 50% of your teaching time between 6 April XXXX and 5 April XXXX?"
       full_name: "What is your full name?"
       address: "What is your address?"
       date_of_birth: "What is your date of birth?"
