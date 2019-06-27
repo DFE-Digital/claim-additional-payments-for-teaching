@@ -162,6 +162,7 @@
         "serverFarmId": "[variables('appServicePlanId')]",
         "siteConfig": {
           "alwaysOn": "[parameters('appServiceAlwaysOn')]",
+          "httpLoggingEnabled": true,
           "linuxFxVersion": "[variables('appServiceRuntimeStack')]",
           "appSettings": [
             {
