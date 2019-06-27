@@ -103,6 +103,7 @@ class ClaimsController < ApplicationController
       :email_address,
       :bank_sort_code,
       :bank_account_number,
+      TslrClaim::SUBJECT_FIELDS
     )
   end
 
