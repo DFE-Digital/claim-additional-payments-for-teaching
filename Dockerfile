@@ -41,7 +41,7 @@ RUN gem install bundler
 RUN if [ ${RAILS_ENV} = "production" ]; then \
   bundle install --frozen --retry 3 --without development test; \
   elif [ ${RAILS_ENV} = "test" ]; then \
-  bundle install --frozen --retry 3; \
+  bundle install --frozen --retry 3 --without development; \
   else \
   bundle install --frozen --retry 3 --without test; \
   fi

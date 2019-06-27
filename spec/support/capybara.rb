@@ -1,4 +1,9 @@
 require "capybara/rspec"
+begin
+  require "webdrivers"
+rescue LoadError
+  nil
+end
 
 Capybara.register_driver :headless_chrome do |app|
   Capybara::Selenium::Driver.new(
