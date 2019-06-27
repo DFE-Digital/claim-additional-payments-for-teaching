@@ -1,26 +1,26 @@
 {
   "ignored_warnings": [
     {
-      "warning_type": "Dynamic Render Path",
-      "warning_code": 15,
-      "fingerprint": "d295fbb2c23775e4923257fd12543b72b959f0b21fd678dc50373e1c62e2ce24",
-      "check_name": "Render",
-      "message": "Render path contains parameter value",
-      "file": "app/controllers/claims_controller.rb",
-      "line": 15,
-      "link": "https://brakemanscanner.org/docs/warning_types/dynamic_render_path/",
-      "code": "render(action => params[:slug], {})",
+      "warning_type": "File Access",
+      "warning_code": 16,
+      "fingerprint": "986bcf3b3075cf77a2c4b4b4d382be6fb3d5233bd0c9b943bfd3274bc4099145",
+      "check_name": "SendFile",
+      "message": "Model attribute used in file name",
+      "file": "app/controllers/admin/claims_controller.rb",
+      "line": 7,
+      "link": "https://brakemanscanner.org/docs/warning_types/file_access/",
+      "code": "send_file(TslrClaimsCsv.new(TslrClaim.includes(:claim_school, :current_school).submitted.order(:submitted_at)).file, :type => \"text/csv\", :filename => \"claims.csv\")",
       "render_path": null,
       "location": {
         "type": "method",
-        "class": "ClaimsController",
-        "method": "show"
+        "class": "Admin::ClaimsController",
+        "method": "index"
       },
-      "user_input": "params[:slug]",
-      "confidence": "High",
-      "note": "We are using a routing constraint to only route slugs that are in a whitelist, making this a false-positive"
+      "user_input": "TslrClaim.includes(:claim_school, :current_school).submitted",
+      "confidence": "Weak",
+      "note": ""
     }
   ],
-  "updated": "2019-04-29 15:28:26 +0100",
-  "brakeman_version": "4.5.0"
+  "updated": "2019-06-27 17:40:58 +0100",
+  "brakeman_version": "4.5.1"
 }
