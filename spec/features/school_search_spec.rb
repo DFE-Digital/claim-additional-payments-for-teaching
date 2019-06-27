@@ -72,7 +72,7 @@ RSpec.feature "Searching for school during Teacher Student Loan Repayments claim
 
     click_button "Continue"
 
-    expect(page).to have_text(I18n.t("tslr.questions.mostly_teaching_eligible_subjects"))
+    expect(page).to have_text(I18n.t("tslr.questions.subjects_taught"))
   end
 
   scenario "School search form still works like a normal form if submitted", js: true do
