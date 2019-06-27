@@ -20,4 +20,7 @@ services:
   db:
     image: postgres
     volumes:
-      - ./tmp/db_test:/var/lib/postgresql/data
+      - db-data:/var/lib/postgresql/data
+
+volumes:
+  db-data:
