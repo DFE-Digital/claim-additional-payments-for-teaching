@@ -82,6 +82,17 @@ Code linting is performed using:
 [Bullet](https://github.com/flyerhzm/bullet) runs around each spec. If it detects an N+1 query it will raise an
 exception and the tests will fail.
 
+## Production
+
+### Building the Docker container
+
+Make sure you build the image with the target of `web` to ensure that only
+production assets are added.
+
+```
+docker build --target web .
+```
+
 ## Service architecture
 
 The service architecture is currently defined and [on confluence](https://dfedigital.atlassian.net/wiki/spaces/TP/pages/1049559041/Service+Architecture).
