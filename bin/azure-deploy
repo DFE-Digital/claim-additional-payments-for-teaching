@@ -6,6 +6,7 @@ SCRIPT_PATH=$( cd "$( dirname "$0" )" ; pwd -P )
 DEPLOYMENT_NAME="app"
 RESOURCE_LOCATION="West Europe"
 APP_TEMPLATE_FILE_PATH="$SCRIPT_PATH/../azure/templates/app.json"
+APP_DOCKER_COMPOSE_FILE_PATH="$SCRIPT_PATH/../azure/files/app/docker-compose.yml"
 PARAMETERS_TEMPLATE_FILE_PATH="$SCRIPT_PATH/../azure/parameters/$ENVIRONMENT_NAME.template.json"
 PARAMETERS_FILE_PATH="$SCRIPT_PATH/../azure/parameters/$ENVIRONMENT_NAME.json"
 
@@ -64,10 +65,14 @@ else
 fi
 
 echo "Rewriting parameters file for $ENVIRONMENT_NAME..."
-sed -e "s/\${subscriptionId}/${SUBSCRIPTION_ID}/" \
-    -e "s/\${vaultGroup}/${KEYVAULT_RESOURCE_GROUP_NAME}/" \
-    -e "s/\${vaultName}/${KEYVAULT_NAME}/" \
-    "$PARAMETERS_TEMPLATE_FILE_PATH" > "$PARAMETERS_FILE_PATH"
+ruby \
+    -ne "BEGIN { @body = File.open(\"$APP_DOCKER_COMPOSE_FILE_PATH\").read.gsub(\"\n\", \"\\\n\").gsub(\"\\\"\", \"\\\\\\\"\") } ; puts gsub(/\\\${dockerCompose}/, @body)" \
+    < "$PARAMETERS_TEMPLATE_FILE_PATH" \
+  | sed \
+    -e "s/\${subscriptionId}/$SUBSCRIPTION_ID/g" \
+    -e "s/\${vaultGroup}/$KEYVAULT_RESOURCE_GROUP_NAME/g" \
+    -e "s/\${vaultName}/$KEYVAULT_NAME/g" \
+    > "$PARAMETERS_FILE_PATH"
 
 echo
 echo "Are all the secrets up to date? Are you ready to deploy? Hit return to continue, or CTRL+C to stop."
