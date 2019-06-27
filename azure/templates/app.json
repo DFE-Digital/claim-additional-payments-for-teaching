@@ -9,6 +9,10 @@
     "appServiceDockerImage": {
       "type": "string"
     },
+    "appServiceAlwaysOn": {
+      "type": "bool",
+      "defaultValue": true
+    },
     "databaseName": {
       "type": "string"
     },
@@ -157,7 +161,7 @@
         "httpsOnly": true,
         "serverFarmId": "[variables('appServicePlanId')]",
         "siteConfig": {
-          "alwaysOn": false,
+          "alwaysOn": "[parameters('appServiceAlwaysOn')]",
           "linuxFxVersion": "[variables('appServiceRuntimeStack')]",
           "appSettings": [
             {
