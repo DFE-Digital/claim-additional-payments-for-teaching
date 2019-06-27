@@ -8,6 +8,9 @@
     "databaseName": {
       "value": "development"
     },
+    "appServiceAlwaysOn": {
+      "value": false
+    },
     "databaseUsername": {
       "reference": {
         "keyVault": {
