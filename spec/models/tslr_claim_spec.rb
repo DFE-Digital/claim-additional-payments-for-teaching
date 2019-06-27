@@ -127,9 +127,21 @@ RSpec.describe TslrClaim, type: :model do
   end
 
   context "when saving in the “subjects-taught” validation context" do
+    it "validates that a subject has been provided" do
+      expect(TslrClaim.new).not_to be_valid(:"subjects-taught")
+      expect(TslrClaim.new(computer_science_taught: true, physics_taught: true)).to be_valid(:"subjects-taught")
+    end
+
+    it "does not validate that a subject has been provided when mostly_teaching_eligible_subjects is false" do
+      expect(TslrClaim.new).not_to be_valid(:"subjects-taught")
+      expect(TslrClaim.new(mostly_teaching_eligible_subjects: false)).to be_valid(:"subjects-taught")
+    end
+  end
+
+  context "when saving in the “mostly-teaching-eligible-subjects” validation context" do
     it "validates mostly_teaching_eligible_subjects has been provided" do
       expect(TslrClaim.new).not_to be_valid(:"subjects-taught")
-      expect(TslrClaim.new(mostly_teaching_eligible_subjects: true)).to be_valid(:"subjects-taught")
+      expect(TslrClaim.new(mostly_teaching_eligible_subjects: true)).to be_valid(:"mostly-teaching-eligible-subjects")
     end
   end
 
@@ -447,6 +459,23 @@ RSpec.describe TslrClaim, type: :model do
 
     it "returns submitted claims" do
       expect(subject.class.submitted).to match_array(submitted_claims)
+    end
+  end
+
+  describe "#subjects_taught" do
+    context "when a claim has subjects" do
+      let(:claim) { create(:tslr_claim, biology_taught: true, chemistry_taught: true) }
+
+      it "returns the correct fields" do
+        expect(claim.subjects_taught).to eq([:biology_taught, :chemistry_taught])
+      end
+    end
+    context "when a claim has no subjects" do
+      let(:claim) { create(:tslr_claim) }
+
+      it "returns an empty array" do
+        expect(claim.subjects_taught).to eq([])
+      end
     end
   end
 end

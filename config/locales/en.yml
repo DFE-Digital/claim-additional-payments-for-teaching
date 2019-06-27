@@ -44,7 +44,8 @@ en:
       claim_school: "Which school were you employed at between 6 April XXXX and 5 April XXXX?"
       employment_status: "Are you still employed to teach at a school in England?"
       current_school: "Which school are you currently employed at?"
-      mostly_teaching_eligible_subjects: "Did you teach eligible subjects for more than 50% of your teaching time between 6 April XXXX and 5 April XXXX?"
+      subjects_taught: "Did you teach any of the following subjects between 6 April XXXX and 5 April XXXX?"
+      mostly_teaching_eligible_subjects: "Did teaching %{subjects} cover 50% of your teaching time between 6 April XXXX and 5 April XXXX?"
       full_name: "What is your full name?"
       address: "What is your address?"
       date_of_birth: "What is your date of birth?"
@@ -53,6 +54,13 @@ en:
       student_loan_amount: "How much student loan did you repay while you were at %{claim_school_name} between 6 April XXXX and 5 April XXXX?"
       email_address: "What is your email address?"
       bank_details: "Enter bank account details"
+      eligible_subjects:
+        biology_taught: "Biology"
+        chemistry_taught: "Chemistry"
+        physics_taught: "Physics"
+        computer_science_taught: "Computer Science"
+        languages_taught: "Languages"
+        not_applicable: "Not applicable, I didn't teach any of these subjects"
     csv_headers:
       reference: "Reference"
       submitted_at: "Submitted at"

@@ -24,6 +24,8 @@ describe ClaimsHelper do
         qts_award_year: "2013-2014",
         claim_school: school,
         current_school: school,
+        chemistry_taught: true,
+        physics_taught: true,
         mostly_teaching_eligible_subjects: true,
         student_loan_repayment_amount: 1987.65,
       )
@@ -32,7 +34,8 @@ describe ClaimsHelper do
         [I18n.t("tslr.questions.qts_award_year"), "September 1 2013 - August 31 2014", "qts-year"],
         [I18n.t("tslr.questions.claim_school"), school.name, "claim-school"],
         [I18n.t("tslr.questions.current_school"), school.name, "current-school"],
-        [I18n.t("tslr.questions.mostly_teaching_eligible_subjects"), "Yes", "subjects-taught"],
+        [I18n.t("tslr.questions.subjects_taught"), "Chemistry and Physics", "subjects-taught"],
+        [I18n.t("tslr.questions.mostly_teaching_eligible_subjects", subjects: "Chemistry and Physics"), "Yes", "mostly-teaching-eligible-subjects"],
         [I18n.t("tslr.questions.student_loan_amount", claim_school_name: school.name), "£1,987.65", "student-loan-amount"],
       ]
 
@@ -68,6 +71,26 @@ describe ClaimsHelper do
       ]
 
       expect(helper.identity_answers(claim)).to eq expected_answers
+    end
+  end
+
+  describe "subject_list" do
+    let(:list) { subject_list(subjects) }
+
+    context "with two subjects" do
+      let(:subjects) { [:biology_taught, :chemistry_taught] }
+
+      it "seperates the subjects with 'and" do
+        expect(list).to eq("Biology and Chemistry")
+      end
+    end
+
+    context "with three subjects" do
+      let(:subjects) { [:biology_taught, :chemistry_taught, :physics_taught] }
+
+      it "returns a comma separated list with a final 'and'" do
+        expect(list).to eq("Biology, Chemistry and Physics")
+      end
     end
   end
 end
