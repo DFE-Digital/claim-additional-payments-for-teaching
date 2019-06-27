@@ -20,6 +20,17 @@ services:
     stdin_open: true
     command: rails server -b ssl://web:3000?key=localhost.key&cert=localhost.crt
 
+  worker:
+    image: local/dfe-teachers-payment-service:development
+    depends_on:
+      - db
+    environment:
+      DFE_TEACHERS_PAYMENT_SERVICE_DATABASE_USERNAME: postgres
+      DFE_TEACHERS_PAYMENT_SERVICE_DATABASE_HOST: db
+    tty: true
+    stdin_open: true
+    command: rake jobs:work
+
   db:
     image: postgres
     volumes:
