@@ -12,6 +12,7 @@
           <div class="govuk-checkboxes">
             <% TslrClaim::SUBJECT_FIELDS.each do |subject| -%>
               <div class="govuk-checkboxes__item">
+                <%= form.hidden_field subject, value: false %>
                 <%= form.check_box subject, class: "govuk-checkboxes__input subject", id: "eligible_subjects_#{subject}"  %>
                 <%= form.label subject, t("tslr.questions.eligible_subjects.#{subject}"), class: "govuk-label govuk-checkboxes__label", for: "eligible_subjects_#{subject}"  %>
               </div>

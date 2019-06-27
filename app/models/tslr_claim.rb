@@ -34,7 +34,7 @@ class TslrClaim < ApplicationRecord
     :chemistry_taught,
     :physics_taught,
     :computer_science_taught,
-    :languages_taught
+    :languages_taught,
   ].freeze
 
   TRN_LENGTH = 7
@@ -78,10 +78,10 @@ class TslrClaim < ApplicationRecord
   validates :teacher_reference_number,          on: [:"teacher-reference-number", :submit], presence: {message: "Enter your teacher reference number"}
   validate :trn_must_be_seven_digits
 
-  validates :national_insurance_number,         on: [:"national-insurance-number", :submit], presence: {message: "Enter your National Insurance number"}
+  validates :national_insurance_number, on: [:"national-insurance-number", :submit], presence: {message: "Enter your National Insurance number"}
   validate  :ni_number_is_correct_format
 
-  validates :student_loan_repayment_amount,     on: [:"student-loan-amount", :submit], presence: {message: "Enter your student loan repayment amount"}
+  validates :student_loan_repayment_amount, on: [:"student-loan-amount", :submit], presence: {message: "Enter your student loan repayment amount"}
   validates_numericality_of :student_loan_repayment_amount, message: "Enter a valid monetary amount",
                                                             allow_nil: true,
                                                             greater_than_or_equal_to: 0,

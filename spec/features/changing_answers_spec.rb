@@ -8,6 +8,7 @@ RSpec.feature "Changing the answers on a submittable claim" do
     create(:tslr_claim,
       :eligible_and_submittable,
       employment_status: :different_school,
+      physics_taught: true,
       claim_school: claim_school,
       current_school: current_school)
   end
@@ -36,6 +37,74 @@ RSpec.feature "Changing the answers on a submittable claim" do
     find("a[href='#{claim_path("current-school")}']").click
 
     expect(find("input[name='school_search']").value).to eq(current_school.name)
+  end
+
+  context "when changing subjects taught" do
+    before do
+      find("a[href='#{claim_path("subjects-taught")}']").click
+    end
+
+    scenario "Teacher sees their original choices" do
+      expect(find("#eligible_subjects_physics_taught").checked?).to eq(true)
+    end
+
+    context "Teacher changes their subjects" do
+      before do
+        uncheck I18n.t("tslr.questions.eligible_subjects.physics_taught"), visible: false
+
+        check I18n.t("tslr.questions.eligible_subjects.biology_taught"), visible: false
+        check I18n.t("tslr.questions.eligible_subjects.chemistry_taught"), visible: false
+
+        click_on "Continue"
+      end
+
+      scenario "Eligible subjects are set correctly" do
+        expect(claim.reload.physics_taught).to eq(false)
+        expect(claim.reload.biology_taught).to eq(true)
+        expect(claim.reload.chemistry_taught).to eq(true)
+      end
+
+      scenario "Teacher is redirected to ask if they were mostly teaching eligible subjects" do
+        expect(current_path).to eq(claim_path("mostly-teaching-eligible-subjects"))
+      end
+
+      scenario "Teacher sees the the correct subjects in the question" do
+        expect(page).to have_text("Biology and Chemistry")
+      end
+
+      context "Teacher taught subjects for more than 50% of their time" do
+        before do
+          choose "Yes"
+
+          click_on "Continue"
+        end
+
+        scenario "Sets mostly teaching elibile subjects correctly" do
+          expect(claim.reload.mostly_teaching_eligible_subjects).to eq(true)
+        end
+
+        scenario "Teacher is redirected to the check your answers page" do
+          expect(current_path).to eq(claim_path("check-your-answers"))
+        end
+      end
+
+      context "Teacher taught subjects for less than 50% of their time" do
+        before do
+          choose "No"
+
+          click_on "Continue"
+        end
+
+        scenario "Sets mostly teaching elibile subjects correctly" do
+          expect(claim.reload.mostly_teaching_eligible_subjects).to eq(false)
+        end
+
+        scenario "Teacher is told they are not eligible" do
+          expect(page).to have_text("You’re not eligible")
+          expect(page).to have_text("You must have spent at least half your time teaching an eligible subject")
+        end
+      end
+    end
   end
 
   context "When changing claim school" do
