@@ -1,0 +1,22 @@
+version: "3.7"
+services:
+  web:
+    build:
+      context: .
+      target: test
+      args:
+        RAILS_ENV: test
+    image: local/dfe-teachers-payment-service:test
+    depends_on:
+      - db
+    environment:
+      DFE_TEACHERS_PAYMENT_SERVICE_DATABASE_USERNAME: postgres
+      DFE_TEACHERS_PAYMENT_SERVICE_DATABASE_HOST: db
+    tty: true
+    stdin_open: true
+    command: bundle exec spring server
+
+  db:
+    image: postgres
+    volumes:
+      - ./tmp/db_test:/var/lib/postgresql/data

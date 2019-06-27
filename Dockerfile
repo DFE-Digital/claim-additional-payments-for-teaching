@@ -40,6 +40,8 @@ RUN gem install bundler
 
 RUN if [ ${RAILS_ENV} = "production" ]; then \
   bundle install --frozen --retry 3 --without development test; \
+  elif [ ${RAILS_ENV} = "test" ]; then \
+  bundle install --frozen --retry 3; \
   else \
   bundle install --frozen --retry 3 --without test; \
   fi
@@ -49,7 +51,11 @@ RUN if [ ${RAILS_ENV} = "production" ]; then \
 COPY package.json ${DEPS_HOME}/package.json
 COPY yarn.lock ${DEPS_HOME}/yarn.lock
 
-RUN yarn install --frozen-lockfile --production
+RUN if [ ${RAILS_ENV} = "production" ]; then \
+  yarn install --frozen-lockfile --production; \
+  else \
+  yarn install --frozen-lockfile; \
+  fi
 # End
 
 # ------------------------------------------------------------------------------
@@ -97,3 +103,13 @@ EXPOSE 3000
 
 ENTRYPOINT [ "bin/docker-entrypoint" ]
 CMD [ "rails", "server" ]
+
+# ------------------------------------------------------------------------------
+# test
+# ------------------------------------------------------------------------------
+
+FROM web AS test
+
+RUN echo "Building with RAILS_ENV=${RAILS_ENV}, NODE_ENV=${NODE_ENV}"
+RUN apk add chromium chromium-chromedriver
+COPY spec ${APP_HOME}/spec
