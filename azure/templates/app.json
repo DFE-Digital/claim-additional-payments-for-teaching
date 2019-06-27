@@ -6,7 +6,7 @@
       "type": "string",
       "defaultValue": "[resourceGroup().name]"
     },
-    "appServiceDockerImage": {
+    "appServiceDockerCompose": {
       "type": "string"
     },
     "appServiceAlwaysOn": {
@@ -62,7 +62,7 @@
     "appServicePlanName": "[concat(parameters('resourceNamePrefix'), '-asp')]",
     "appServicePlanId": "[resourceId('Microsoft.Web/serverfarms', variables('appServicePlanName'))]",
     "appServiceName": "[concat(parameters('resourceNamePrefix'), '-as')]",
-    "appServiceRuntimeStack": "[concat('DOCKER|', parameters('appServiceDockerImage'))]"
+    "appServiceRuntimeStack": "[concat('COMPOSE|', base64(parameters('appServiceDockerCompose')))]"
   },
   "resources": [
     {
