@@ -28,6 +28,14 @@ class TslrClaim < ApplicationRecord
     "2019-2020",
   ].freeze
 
+  SUBJECT_FIELDS = [
+    :biology_taught,
+    :chemistry_taught,
+    :physics_taught,
+    :computer_science_taught,
+    :languages_taught
+  ].freeze
+
   TRN_LENGTH = 7
 
   enum employment_status: {
@@ -39,38 +47,40 @@ class TslrClaim < ApplicationRecord
   belongs_to :claim_school, optional: true, class_name: "School"
   belongs_to :current_school, optional: true, class_name: "School"
 
-  validates :claim_school,              on: [:"claim-school", :submit], presence: {message: "Select a school from the list"}
-  validates :current_school,            on: [:"current-school", :submit], presence: {message: "Select a school from the list"}
+  validates :claim_school,                      on: [:"claim-school", :submit], presence: {message: "Select a school from the list"}
+  validates :current_school,                    on: [:"current-school", :submit], presence: {message: "Select a school from the list"}
 
-  validates :qts_award_year,            on: [:"qts-year", :submit], inclusion: {in: VALID_QTS_YEARS, message: "Select the academic year you were awarded qualified teacher status"}
+  validates :qts_award_year,                    on: [:"qts-year", :submit], inclusion: {in: VALID_QTS_YEARS, message: "Select the academic year you were awarded qualified teacher status"}
 
-  validates :employment_status,         on: [:"still-teaching", :submit], presence: {message: "Choose the option that describes your current employment status"}
+  validates :employment_status,                 on: [:"still-teaching", :submit], presence: {message: "Choose the option that describes your current employment status"}
 
-  validates :mostly_teaching_eligible_subjects, on: [:"subjects-taught", :submit], inclusion: {in: [true, false], message: "Select either Yes or No"}
+  validate :at_least_one_subject_chosen,        on: [:"subjects-taught", :submit], unless: ->(c) { c.mostly_teaching_eligible_subjects == false }
 
-  validates :full_name,                 on: [:"full-name", :submit], presence: {message: "Enter your full name"}
-  validates :full_name,                 length: {maximum: 200, message: "Full name must be 200 characters or less"}
+  validates :mostly_teaching_eligible_subjects, on: [:"mostly-teaching-eligible-subjects", :submit], inclusion: {in: [true, false], message: "Select either Yes or No"}
 
-  validates :address_line_1,            on: [:address, :submit], presence: {message: "Enter your building and street address"}
-  validates :address_line_1,            length: {maximum: 100, message: "Address lines must be 100 characters or less"}
+  validates :full_name,                         on: [:"full-name", :submit], presence: {message: "Enter your full name"}
+  validates :full_name,                         length: {maximum: 200, message: "Full name must be 200 characters or less"}
 
-  validates :address_line_2,            length: {maximum: 100, message: "Address lines must be 100 characters or less"}
+  validates :address_line_1,                    on: [:address, :submit], presence: {message: "Enter your building and street address"}
+  validates :address_line_1,                    length: {maximum: 100, message: "Address lines must be 100 characters or less"}
 
-  validates :address_line_3,            on: [:address, :submit], presence: {message: "Enter your town or city"}
-  validates :address_line_3,            length: {maximum: 100, message: "Address lines must be 100 characters or less"}
+  validates :address_line_2,                    length: {maximum: 100, message: "Address lines must be 100 characters or less"}
 
-  validates :postcode,                  on: [:address, :submit], presence: {message: "Enter your postcode"}
-  validates :postcode,                  length: {maximum: 11, message: "Postcode must be 11 characters or less"}
+  validates :address_line_3,                    on: [:address, :submit], presence: {message: "Enter your town or city"}
+  validates :address_line_3,                    length: {maximum: 100, message: "Address lines must be 100 characters or less"}
 
-  validates :date_of_birth,             on: [:"date-of-birth", :submit], presence: {message: "Enter your date of birth"}
+  validates :postcode,                          on: [:address, :submit], presence: {message: "Enter your postcode"}
+  validates :postcode,                          length: {maximum: 11, message: "Postcode must be 11 characters or less"}
 
-  validates :teacher_reference_number,  on: [:"teacher-reference-number", :submit], presence: {message: "Enter your teacher reference number"}
+  validates :date_of_birth,                     on: [:"date-of-birth", :submit], presence: {message: "Enter your date of birth"}
+
+  validates :teacher_reference_number,          on: [:"teacher-reference-number", :submit], presence: {message: "Enter your teacher reference number"}
   validate :trn_must_be_seven_digits
 
-  validates :national_insurance_number, on: [:"national-insurance-number", :submit], presence: {message: "Enter your National Insurance number"}
+  validates :national_insurance_number,         on: [:"national-insurance-number", :submit], presence: {message: "Enter your National Insurance number"}
   validate  :ni_number_is_correct_format
 
-  validates :student_loan_repayment_amount, on: [:"student-loan-amount", :submit], presence: {message: "Enter your student loan repayment amount"}
+  validates :student_loan_repayment_amount,     on: [:"student-loan-amount", :submit], presence: {message: "Enter your student loan repayment amount"}
   validates_numericality_of :student_loan_repayment_amount, message: "Enter a valid monetary amount",
                                                             allow_nil: true,
                                                             greater_than_or_equal_to: 0,
@@ -221,5 +231,13 @@ class TslrClaim < ApplicationRecord
       ref = Reference.new.to_s
       break ref unless self.class.exists?(reference: ref)
     }
+  end
+
+  def at_least_one_subject_chosen
+    errors.add(:subjects_taught, "Choose a subject, or select \"not applicable\"") unless at_least_one_subject_chosen?
+  end
+
+  def at_least_one_subject_chosen?
+    SUBJECT_FIELDS.find { |s| send(s) == true }.present?
   end
 end
