@@ -21,7 +21,7 @@ module Verify
     def identity_verified_form
       <<~HEREDOC
         <html><body>
-          <form action="#{@callback_path}" method="POST">
+          <form action="#{@callback_path}" method="POST" id="verify_auth_request">
             <input type="hidden" name="SAMLResponse" value="#{IDENTITY_VERIFIED_SAML_RESPONSE}">
             <input type="submit" value="Perform identity check">
           </form>

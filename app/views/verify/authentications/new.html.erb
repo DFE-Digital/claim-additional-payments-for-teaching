@@ -1,6 +1,6 @@
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-    <%= form_tag @verify_authentication_request.sso_location, authenticity_token: false do %>
+    <%= form_tag @verify_authentication_request.sso_location, authenticity_token: false, id: "verify_auth_request" do %>
       <h1 class="govuk-heading-xl">Continue to next step</h1>
       <%= hidden_field_tag "relayState" %>
       <%= hidden_field_tag "SAMLRequest", @verify_authentication_request.saml_request %>

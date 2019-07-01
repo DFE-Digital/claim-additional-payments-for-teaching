@@ -14,7 +14,7 @@ RSpec.describe Verify::FakeSso do
 
       expect(last_response.status).to eq(200)
       expect(last_response.content_type).to eq "text/html"
-      expect(last_response.body).to include "<form action=\"#{callback_url}\" method=\"POST\">"
+      expect(last_response.body).to include "<form action=\"#{callback_url}\" method=\"POST\" id=\"verify_auth_request\">"
       expect(last_response.body).to include "<input type=\"hidden\" name=\"SAMLResponse\" value=\"#{success_response}\">"
     end
   end
