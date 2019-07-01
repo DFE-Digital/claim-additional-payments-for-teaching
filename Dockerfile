@@ -110,6 +110,10 @@ CMD [ "rails", "server" ]
 
 FROM web AS test
 
+COPY .prettierignore ${APP_HOME}/.prettierignore
+COPY .prettierrc ${APP_HOME}/.prettierrc
+COPY .rspec ${APP_HOME}/.rspec
+
 RUN echo "Building with RAILS_ENV=${RAILS_ENV}, NODE_ENV=${NODE_ENV}"
 RUN apk add chromium chromium-chromedriver
 COPY spec ${APP_HOME}/spec
