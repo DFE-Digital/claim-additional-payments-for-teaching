@@ -28,12 +28,18 @@ enabled by setting an environment variable in your `.env` file:
 GOV.UK Verify integration requires using a Verify Service Providor (VSP)
 to handle SAML secure messaging. To run a VSP in development, you will
 need to download the latest release ZIP from the [project on Gitub](https://github.com/alphagov/verify-service-provider/releases).
-Note: only work with the pre-compiled releases and don't try and build from
-source. The VSP can be started in development mode with:
+
+Note: you should only work with the pre-compiled releases. Don't try and build
+from source.
+
+To run the VSP in development mode with sample data for LOA 2, navigate to the
+downloaded directory and execute the following command:
 
 ```bash
-  $ ./bin/verify-service-provider development -u https://localhost:3000/verify/response
+  $ ./bin/verify-service-provider development -u https://localhost:3000/verify/authentications --identityDataset "$(cat PATH/TO/dfe-teachers-payment-service/spec/fixtures/verify/test-identity-dataset.json)"
 ```
+
+Replacing PATH/TO with the location of the repository for the main application.
 
 This will start the VSP on port 50300. You can check that it is running ok by
 hitting the healthcheck URL:
