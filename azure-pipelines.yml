@@ -9,8 +9,20 @@ trigger:
 pool:
   vmImage: ubuntu-latest
 
+variables:
+  - group: docker-settings
+
 steps:
   - script: docker-compose -f docker-compose.test.yml build
-    displayName: Building Docker container
+    displayName: Build Docker image for testing
   - script: docker-compose -f docker-compose.test.yml run --rm web bundle exec rake
-    displayName: Running rake default
+    displayName: Run tests via rake default
+
+  - script: docker login -u $(dockerId) -p $pass
+    env:
+      pass: $(dockerPassword)
+    displayName: Login to DockerHub
+    condition: eq(variables['Build.SourceBranch'], 'refs/heads/master')
+  - script: docker build --file=Dockerfile --tag=$(dockerRegistry)/$(dockerImageName):latest --target=web .
+    displayName: Build Docker image for deployment
+    condition: eq(variables['Build.SourceBranch'], 'refs/heads/master')
