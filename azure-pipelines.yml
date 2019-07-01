@@ -26,3 +26,6 @@ steps:
   - script: docker build --file=Dockerfile --tag=$(dockerRegistry)/$(dockerImageName):latest --target=web .
     displayName: Build Docker image for deployment
     condition: eq(variables['Build.SourceBranch'], 'refs/heads/master')
+  - script: docker push $(dockerRegistry)/$(dockerImageName):latest
+    displayName: Push Docker image
+    condition: eq(variables['Build.SourceBranch'], 'refs/heads/master')
