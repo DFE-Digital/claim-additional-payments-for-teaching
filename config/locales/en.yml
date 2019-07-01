@@ -50,9 +50,9 @@ en:
       address: "What is your address?"
       date_of_birth: "What is your date of birth?"
       teacher_reference_number: "What's your teacher reference number?"
-      national_insurance_number: "What is your National Insurance number?"
+      national_insurance_number: "What's your National Insurance number?"
       student_loan_amount: "How much student loan did you repay while you were at %{claim_school_name} between 6 April XXXX and 5 April XXXX?"
-      email_address: "What is your email address?"
+      email_address: "Email address"
       bank_details: "Enter bank account details"
       eligible_subjects:
         biology_taught: "Biology"
