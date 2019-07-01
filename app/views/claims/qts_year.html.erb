@@ -4,10 +4,9 @@
 
     <%= form_for current_claim, url: claim_path do |form| %>
       <%= form_group_tag current_claim do %>
-        <h1 class="govuk-heading-xl">
-          <%= form.label :qts_award_year, t("tslr.questions.qts_award_year") %>
+        <h1 class="govuk-label-wrapper">
+          <%= form.label :qts_award_year, t("tslr.questions.qts_award_year"), {class: "govuk-label govuk-label--xl"} %>
         </h1>
-
         <span id="tslr_claim_qts_award_year-hint" class="govuk-hint">
           You are only eligible to claim back student loan repayments if you qualified on or after September 1st 2013.
         </span>

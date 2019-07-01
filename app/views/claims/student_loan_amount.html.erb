@@ -8,7 +8,7 @@
           <%= form.label :student_loan_repayment_amount, t("tslr.questions.student_loan_amount", claim_school_name: current_claim.claim_school_name), class: "govuk-label govuk-label--xl" %>
         </h1>
 
-        <span class="govuk-hint">You can find this on your annual student loan statement, your P60 or from the <a href="https://www.slc.co.uk/students-and-customers/contact-information-for-customers/loan-repayment-enquiries.aspx">student loans company</a>.</span>
+        <span class="govuk-hint">You can find this on your annual student loan statement, your P60 or from the <a href="https://www.slc.co.uk/students-and-customers/contact-information-for-customers/loan-repayment-enquiries.aspx" class="govuk-link">student loans company</a>.</span>
 
         <%= errors_tag current_claim, :student_loan_repayment_amount %>
 
