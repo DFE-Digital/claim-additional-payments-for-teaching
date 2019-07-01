@@ -12,10 +12,18 @@ def stubbed_auth_request_response
   }
 end
 
-def stub_vsp_translate_response_request(expected_request_payload)
+def stub_vsp_translate_response_request(expected_request_payload = example_vsp_translate_request_payload)
   stub_request(:post, Verify::ServiceProvider.translate_response_url)
     .with(body: expected_request_payload.to_json, headers: {"Content-Type" => "application/json"})
     .to_return(status: 200, body: stubbed_vsp_translated_response.to_json, headers: {})
+end
+
+def example_vsp_translate_request_payload
+  {
+    "samlResponse" => Verify::FakeSso::IDENTITY_VERIFIED_SAML_RESPONSE,
+    "requestId" => "REQUEST_ID",
+    "levelOfAssurance" => "LEVEL_2",
+  }
 end
 
 def stubbed_vsp_translated_response

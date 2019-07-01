@@ -3,6 +3,7 @@ require "rails_helper"
 RSpec.feature "Teacher verifies identity using GOV.UK Verify" do
   before do
     stub_vsp_generate_request
+    stub_vsp_translate_response_request
   end
 
   scenario "successful verification" do
