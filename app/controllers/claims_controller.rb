@@ -115,10 +115,6 @@ class ClaimsController < ApplicationController
     params[:slug].underscore
   end
 
-  def send_unstarted_claiments_to_the_start
-    redirect_to root_url unless current_claim.present?
-  end
-
   def update_last_seen_at
     session[:last_seen_at] = Time.zone.now
   end

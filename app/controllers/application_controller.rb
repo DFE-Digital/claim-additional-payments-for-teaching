@@ -7,6 +7,12 @@ class ApplicationController < ActionController::Base
 
   helper_method :signed_in?, :govuk_verify_enabled?, :current_claim
 
+  private
+
+  def send_unstarted_claiments_to_the_start
+    redirect_to root_url unless current_claim.present?
+  end
+
   def signed_in?
     session.key?(:login)
   end
