@@ -1,5 +1,5 @@
 if Rails.env.development? || Rails.env.test?
-  file_glob = "./**/*.{css,html,js,js.erb,json,md,scss}"
+  file_glob = "'./**/*.{css,html,js,js.erb,json,md,scss}'"
 
   desc "Lint with Prettier"
   task prettier: :environment do
