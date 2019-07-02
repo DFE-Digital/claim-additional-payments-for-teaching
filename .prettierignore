@@ -1,3 +1,4 @@
 /.apt/
 /.heroku/
 /vendor/
+/bin/vsp/
