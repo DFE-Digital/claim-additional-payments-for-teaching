@@ -17,6 +17,9 @@ Architecture decision records can be found in the
 - PostgreSQL
 - [Yarn](https://yarnpkg.com/en/docs/install)
 
+You will also need Java 11 or a long term supported version of Java 8 installed
+for the Verify Service Provider to run. We recommend [OpenJDK][openjdk].
+
 ## Setting up the app in development
 
 1. In order to integrate with DfE Sign-in's Open ID Connect service we are
@@ -114,3 +117,5 @@ in the _Config Vars_ in Heroku.
 ### Staging
 
 https://dfe-teachers-payment-staging.herokuapp.com/
+
+[openjdk]: https://adoptopenjdk.net/

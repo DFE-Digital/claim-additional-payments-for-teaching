@@ -37,3 +37,6 @@ localhost.key
 # Ignore parameter files
 /azure/parameters/*.json
 !/azure/parameters/*.template.json
+
+# Ignore Verify Service Provider
+bin/vsp/*
