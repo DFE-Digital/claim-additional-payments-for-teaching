@@ -5,7 +5,13 @@ class VerifyResponse
     @parameters = parameters
   end
 
+  def valid?
+    parameters.fetch("scenario") == "IDENTITY_VERIFIED"
+  end
+
   def claim_parameters
+    return {} unless valid?
+
     {
       full_name: full_name,
       address_line_1: address_lines[0],

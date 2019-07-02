@@ -7,6 +7,10 @@ RSpec.describe VerifyResponse, type: :model do
   context "with a valid response" do
     let(:response_filename) { "identity-verified.json" }
 
+    it "is valid" do
+      expect(subject.valid?).to eq(true)
+    end
+
     it "returns the expected parameters" do
       expect(subject.claim_parameters[:full_name]).to eq("Isambard Kingdom Brunel")
       expect(subject.claim_parameters[:address_line_1]).to eq("Verified Street")
