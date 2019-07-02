@@ -133,7 +133,8 @@ class ClaimsController < ApplicationController
   end
 
   def clear_claim_session
-    session[:tslr_claim_id] = nil
-    session[:last_seen_at] = nil
+    session.delete(:tslr_claim_id)
+    session.delete(:last_seen_at)
+    session.delete(:verify_request_id)
   end
 end
