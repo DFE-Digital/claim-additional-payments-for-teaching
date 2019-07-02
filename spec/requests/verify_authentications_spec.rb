@@ -1,7 +1,7 @@
 require "rails_helper"
 require "verify/fake_sso"
 
-RSpec.describe "GOV.UK Verify requests", type: :request do
+RSpec.describe "GOV.UK Verify::AuthenticationsController requests", type: :request do
   context "when a claim is in progress" do
     before { post claims_path }
 
