@@ -115,15 +115,6 @@ class ClaimsController < ApplicationController
     params[:slug].underscore
   end
 
-  def current_claim
-    @current_claim ||= TslrClaim.find(session[:tslr_claim_id]) if session.key?(:tslr_claim_id)
-  end
-  helper_method :current_claim
-
-  def send_unstarted_claiments_to_the_start
-    redirect_to root_url unless current_claim.present?
-  end
-
   def update_last_seen_at
     session[:last_seen_at] = Time.zone.now
   end
@@ -142,7 +133,8 @@ class ClaimsController < ApplicationController
   end
 
   def clear_claim_session
-    session[:tslr_claim_id] = nil
-    session[:last_seen_at] = nil
+    session.delete(:tslr_claim_id)
+    session.delete(:last_seen_at)
+    session.delete(:verify_request_id)
   end
 end

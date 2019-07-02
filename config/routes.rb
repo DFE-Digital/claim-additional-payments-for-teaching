@@ -16,6 +16,15 @@ Rails.application.routes.draw do
     end
   end
 
+  namespace :verify do
+    resources :authentications, only: [:new, :create]
+
+    if Rails.env.test?
+      require "verify/fake_sso"
+      mount Verify::FakeSso.new("/verify/authentications"), at: "/fake_sso"
+    end
+  end
+
   namespace :admin do
     get "/", to: "page#index"
 
