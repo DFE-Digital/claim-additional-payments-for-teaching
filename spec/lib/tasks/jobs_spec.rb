@@ -13,6 +13,15 @@ RSpec.describe "rake db:schedule_jobs" do
     Rake.application.rake_require "tasks/jobs"
   end
 
+  it "schedules and enqueues SchoolDataImporterJob" do
+    Rake::Task["db:schedule_jobs"].invoke
+
+    jobs = SchoolDataImporterJob.send(:jobs)
+
+    expect(jobs.where(cron: nil).count).to eq(1)
+    expect(jobs.where.not(cron: nil).count).to eq(1)
+  end
+
   it "runs automatically after db:migrate" do
     expect(Rake::Task["db:schedule_jobs"]).to receive(:invoke)
 
