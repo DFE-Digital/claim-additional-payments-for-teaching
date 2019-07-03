@@ -37,6 +37,14 @@ en:
     currency:
       format:
         unit: "£"
+  verify:
+    errors:
+      no_authentication:
+        title: "You've exited the Verify process early"
+        description: "It looks like you've exited the process for verifying who you are too early."
+      authentication_failed:
+        title: "We can't verify your identity"
+        description: "Verify has told us that it can't verify your identity"
   tslr:
     service_name: "Teachers: claim back your student loan repayments"
     questions:

@@ -6,7 +6,7 @@ class VerifyResponse
   end
 
   def valid?
-    parameters.fetch("scenario") == "IDENTITY_VERIFIED"
+    scenario == "IDENTITY_VERIFIED"
   end
 
   def claim_parameters
@@ -20,6 +20,16 @@ class VerifyResponse
       postcode: address.fetch("postCode"),
       date_of_birth: parameters.fetch("attributes").fetch("datesOfBirth").first.fetch("value"),
     }
+  end
+
+  def scenario
+    @scenario ||= parameters["scenario"]
+  end
+
+  def error
+    return nil if valid?
+
+    scenario.nil? ? "error" : scenario.downcase
   end
 
   private

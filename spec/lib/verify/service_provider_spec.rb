@@ -18,14 +18,15 @@ RSpec.describe Verify::ServiceProvider do
     let(:request_id) { "THE_REQUEST_ID" }
     let(:level_of_assurance) { "LEVEL_1" }
 
-    let!(:stubbed_translate_request) { stub_vsp_translate_response_request(translate_request_payload) }
+    let!(:stubbed_translate_request) { stub_vsp_translate_response_request("identity-verified", translate_request_payload) }
     let(:translate_request_payload) { {"samlResponse" => saml_response, "requestId" => request_id, "levelOfAssurance" => level_of_assurance} }
 
     it "makes a POST request to the VSP to translate the SAML response and returns the result as a Hash" do
       response = Verify::ServiceProvider.new.translate_response(saml_response, request_id, level_of_assurance)
+      translated_response = JSON.parse(stubbed_vsp_translated_response("identity-verified"))
 
       expect(stubbed_translate_request).to have_been_requested
-      expect(response).to eql(stubbed_vsp_translated_response)
+      expect(response).to eql(translated_response)
     end
   end
 end
