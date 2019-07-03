@@ -70,7 +70,7 @@ NOTIFY_TEMPLATE_ID=d72e2ff9-b228-4f16-9099-fd9d411c0334
 ### GOV.UK Verify
 
 The service uses GOV.UK Verify to verify the identity of teachers that are
-claiming. See [docs/govuk-verify](/docs/govuk-verify) for details on this,
+claiming. See [docs/govuk-verify](/docs/govuk-verify.md) for details on this,
 including how to run the verify dependencies locally.
 
 ## Running specs, brakeman, and code linting
