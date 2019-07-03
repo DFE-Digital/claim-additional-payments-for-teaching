@@ -18,9 +18,14 @@ module Verify
     #   https://www.docs.verify.service.gov.uk/get-started/set-up-successful-verification-journey/#handle-a-response
     def create
       verify_authentication_response = Verify::ServiceProvider.new.translate_response(params["SAMLResponse"], session[:verify_request_id], "LEVEL_2")
-      response = VerifyResponse.new(verify_authentication_response)
-      current_claim.update!(response.claim_parameters)
-      redirect_to claim_path("teacher-reference-number")
+      @response = VerifyResponse.new(verify_authentication_response)
+
+      if @response.valid?
+        current_claim.update!(@response.claim_parameters)
+        redirect_to claim_path("teacher-reference-number")
+      else
+        render "failure"
+      end
     end
   end
 end
