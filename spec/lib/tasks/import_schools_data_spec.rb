@@ -8,8 +8,8 @@ RSpec.describe "rake schools_data:import" do
   end
 
   it "enqueues SchoolDataImporterJob" do
-    expect(SchoolDataImporterJob).to receive(:perform_later)
-
     Rake::Task["schools_data:import"].invoke
+
+    expect(SchoolDataImporterJob).to have_been_enqueued.on_queue("school_data")
   end
 end

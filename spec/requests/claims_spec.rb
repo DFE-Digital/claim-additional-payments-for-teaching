@@ -169,7 +169,9 @@ RSpec.describe "Claims", type: :request do
           before :each do
             in_progress_claim.update!(attributes_for(:tslr_claim, :eligible_and_submittable))
 
-            put claim_path("check-your-answers")
+            perform_enqueued_jobs do
+              put claim_path("check-your-answers")
+            end
 
             in_progress_claim.reload
           end
