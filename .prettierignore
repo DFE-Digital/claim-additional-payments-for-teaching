@@ -2,3 +2,4 @@
 /.heroku/
 /vendor/
 /bin/vsp/
+/tmp
