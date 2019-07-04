@@ -8,8 +8,10 @@ namespace :db do
   end
 end
 
-%w[db:migrate db:schema:load].each do |task|
-  Rake::Task[task].enhance do
-    Rake::Task["db:schedule_jobs"].invoke
+unless Rails.env.development?
+  %w[db:migrate db:schema:load].each do |task|
+    Rake::Task[task].enhance do
+      Rake::Task["db:schedule_jobs"].invoke
+    end
   end
 end

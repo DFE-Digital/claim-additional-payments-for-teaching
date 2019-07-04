@@ -73,6 +73,16 @@ The service uses GOV.UK Verify to verify the identity of teachers that are
 claiming. See [docs/govuk-verify](/docs/govuk-verify.md) for details on this,
 including how to run the verify dependencies locally.
 
+### Running `CronJob`s
+
+Recurring jobs are scheduled by the `db:schedule_jobs` rake task. This task
+normally runs as part of `db:migrate` or `db:schema:load`, but is disabled in
+development environments. To schedule them during development, run:
+
+```
+rake db:schedule_jobs
+```
+
 ## Running specs, brakeman, and code linting
 
 ```
