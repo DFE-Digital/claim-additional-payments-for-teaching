@@ -13,6 +13,12 @@ variables:
   - group: docker-settings
 
 steps:
+  - task: UseRubyVersion@0
+    inputs:
+      versionSpec: "2.6.2"
+      addToPath: true
+    displayName: Use Ruby 2.6.2
+
   - script: docker-compose -f docker-compose.test.yml build
     displayName: Build Docker image for testing
   - script: docker-compose -f docker-compose.test.yml run --rm web bundle exec rake
