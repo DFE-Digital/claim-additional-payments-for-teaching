@@ -20,12 +20,22 @@ module Verify
       verify_authentication_response = Verify::ServiceProvider.new.translate_response(params["SAMLResponse"], session[:verify_request_id], "LEVEL_2")
       @response = VerifyResponse.new(verify_authentication_response)
 
-      if @response.valid?
+      if @response.verified?
         current_claim.update!(@response.claim_parameters)
         redirect_to claim_path("teacher-reference-number")
       else
-        render "failure"
+        redirect_to @response.error_path
       end
+    end
+
+    def failed
+    end
+
+    def exited
+    end
+
+    def error
+      render :error, head: :bad_request
     end
   end
 end

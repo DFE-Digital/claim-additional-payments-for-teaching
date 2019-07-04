@@ -1,16 +1,19 @@
 class VerifyResponse
-  attr_reader :parameters
+  include Rails.application.routes.url_helpers
+
+  attr_reader :parameters, :scenario
 
   def initialize(parameters)
     @parameters = parameters
+    @scenario = parameters["scenario"]
   end
 
-  def valid?
+  def verified?
     scenario == "IDENTITY_VERIFIED"
   end
 
   def claim_parameters
-    return {} unless valid?
+    return {} unless verified?
 
     {
       full_name: full_name,
@@ -22,14 +25,11 @@ class VerifyResponse
     }
   end
 
-  def scenario
-    @scenario ||= parameters["scenario"]
-  end
-
-  def error
-    return nil if valid?
-
-    scenario.nil? ? "error" : scenario.downcase
+  def error_path
+    return nil if verified?
+    return failed_verify_authentications_path if scenario == "AUTHENTICATION_FAILED"
+    return exited_verify_authentications_path if scenario == "NO_AUTHENTICATION"
+    error_verify_authentications_path
   end
 
   private
