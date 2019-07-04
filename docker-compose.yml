@@ -3,6 +3,7 @@ services:
   web:
     build:
       context: .
+      target: web
       args:
         RAILS_ENV: development
     image: local/dfe-teachers-payment-service:development
