@@ -1,12 +1,13 @@
 # GOV.UK Verify Integration
 
-A good place to start is to read the [GOV.UK Verify technical documentation](https://www.docs.verify.service.gov.uk/#gov-uk-verify-technical-documentation).
+A good place to start is to read the
+[GOV.UK Verify technical documentation](https://www.docs.verify.service.gov.uk/#gov-uk-verify-technical-documentation).
 
 ## Getting support
 
 The email address for Verify support is idasupport@digital.cabinet-office.gov.uk
-(which goes through to Zendesk). There is also a #govuk-verify slack channel
-on the ukgovernmentdigital.slack.com slack workspace.
+(which goes through to Zendesk). There is also a #govuk-verify slack channel on
+the ukgovernmentdigital.slack.com slack workspace.
 
 ## Environment variables
 
@@ -25,12 +26,13 @@ enabled by setting an environment variable in your `.env` file:
   GOVUK_VERIFY_ENABLED=1
 ```
 
-GOV.UK Verify integration requires using a Verify Service Provider (VSP)
-to handle SAML secure messaging.
+GOV.UK Verify integration requires using a Verify Service Provider (VSP) to
+handle SAML secure messaging.
 
-By default, Foreman downloads and runs the VSP via `foreman start` in development
-with sample data for LOA 2. You must have Java 11, or a long-term supported version
-of Java 8 installed for this to run successfully. We recommend [OpenJDK][openjdk].
+By default, Foreman downloads and runs the VSP via `foreman start` in
+development with sample data for LOA 2. You must have Java 11, or a long-term
+supported version of Java 8 installed for this to run successfully. We recommend
+[OpenJDK][openjdk].
 
 You can check that the VSP is running ok by hitting the healthcheck URL:
 
@@ -41,8 +43,8 @@ You can check that the VSP is running ok by hitting the healthcheck URL:
 ## Managing Certificates for the IDAP PKI
 
 In development mode, there is no need for key management. For the live service
-we need to run the key rotation process to update certificates when they are
-due to expire:
+we need to run the key rotation process to update certificates when they are due
+to expire:
 
 https://www.docs.verify.service.gov.uk/maintain-your-connection/rotate-keys/
 

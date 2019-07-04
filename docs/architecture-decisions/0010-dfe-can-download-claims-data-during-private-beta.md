@@ -8,8 +8,8 @@ Accepted
 
 ## Context
 
-DfE will need to verify claims to confirm eligibility before they can be approved
-and paid. To help design and test the business process for checking and
+DfE will need to verify claims to confirm eligibility before they can be
+approved and paid. To help design and test the business process for checking and
 verifying claims, the team will carry out a private beta where a limited set of
 teachers will make real claims. The claims will be checked and processed
 manually during the private beta, enabling the team to learn the best way to

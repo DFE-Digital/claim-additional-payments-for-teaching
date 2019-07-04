@@ -26,8 +26,8 @@ GOVUK Verify recommend any services that ‘gives users money or benefits’ use
 Using GOVUK Verify requires DfE to sign GOVUK Verify’s agreements.
 
 Integrating with GOVUK Verify requires the hosting and management of a ‘Verify
-Service Provider’ or VSP. DfE only needs a single VSP to integrate GOVUK
-Verify with any number of services, including ours.
+Service Provider’ or VSP. DfE only needs a single VSP to integrate GOVUK Verify
+with any number of services, including ours.
 
 There will be on-going management of the VSP including security key rotation on
 a regular basis.

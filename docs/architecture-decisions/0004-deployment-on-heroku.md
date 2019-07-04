@@ -8,9 +8,9 @@ Accepted
 
 ## Context
 
-Department for Education have a Cloud Infrastructure Program based on Azure
-that they would like digital services to use. Access to Azure is heavily
-restricted for production, and slightly restricted for lower environments.
+Department for Education have a Cloud Infrastructure Program based on Azure that
+they would like digital services to use. Access to Azure is heavily restricted
+for production, and slightly restricted for lower environments.
 
 We need to be able to work quickly, particularly in the early stages of this
 project.

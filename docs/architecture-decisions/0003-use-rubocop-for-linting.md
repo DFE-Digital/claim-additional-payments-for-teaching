@@ -8,7 +8,8 @@ Accepted
 
 ## Context
 
-We need to lint our Ruby code, the team has previous experience working with RuboCop.
+We need to lint our Ruby code, the team has previous experience working with
+RuboCop.
 
 ## Decision
 
