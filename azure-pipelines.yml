@@ -18,6 +18,11 @@ steps:
   - script: docker-compose -f docker-compose.test.yml run --rm web bundle exec rake
     displayName: Run tests via rake default
 
+  - script: |
+      git reset --hard
+      git clean -xdf
+    displayName: Clean repository
+    condition: eq(variables['Build.SourceBranch'], 'refs/heads/master')
   - script: docker login -u $(dockerId) -p $pass
     env:
       pass: $(dockerPassword)
