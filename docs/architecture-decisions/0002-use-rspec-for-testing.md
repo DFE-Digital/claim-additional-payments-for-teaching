@@ -8,7 +8,8 @@ Accepted
 
 ## Context
 
-We need to test the code we're writing, the team has previous experience working with these frameworks.
+We need to test the code we're writing, the team has previous experience working
+with these frameworks.
 
 ## Decision
 

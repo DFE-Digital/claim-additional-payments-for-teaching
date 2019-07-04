@@ -2,9 +2,10 @@
 
 ## Documentation
 
-Most documentation for the service can be found on the [project's confluence
-wiki](https://dfedigital.atlassian.net/wiki/spaces/TP). Some app-specific
-technical documentation can be found in the [docs](docs) directory.
+Most documentation for the service can be found on the
+[project's confluence wiki](https://dfedigital.atlassian.net/wiki/spaces/TP).
+Some app-specific technical documentation can be found in the [docs](docs)
+directory.
 
 ### ADRs
 
@@ -25,7 +26,8 @@ for the Verify Service Provider to run. We recommend [OpenJDK][openjdk].
 1. In order to integrate with DfE Sign-in's Open ID Connect service we are
    required to communicate over https in development. Create a self-signed
    development certificate.
-   - Run `openssl req -x509 -sha256 -nodes -newkey rsa:2048 -days 365 -keyout localhost.key -out localhost.crt`
+   - Run
+     `openssl req -x509 -sha256 -nodes -newkey rsa:2048 -days 365 -keyout localhost.key -out localhost.crt`
    - Open Keychain Access on your Mac and go to the Certificates category in
      your System keychain. Once there, import the `localhost.crt`
      `File > Import Items`. Double click the imported certificate and change the
@@ -90,8 +92,8 @@ Code linting is performed using:
 
 ### N+1 query detection
 
-[Bullet](https://github.com/flyerhzm/bullet) runs around each spec. If it detects an N+1 query it will raise an
-exception and the tests will fail.
+[Bullet](https://github.com/flyerhzm/bullet) runs around each spec. If it
+detects an N+1 query it will raise an exception and the tests will fail.
 
 ## Production
 
@@ -106,13 +108,14 @@ docker build --target web .
 
 ## Service architecture
 
-The service architecture is currently defined and [on confluence](https://dfedigital.atlassian.net/wiki/spaces/TP/pages/1049559041/Service+Architecture).
+The service architecture is currently defined and
+[on confluence](https://dfedigital.atlassian.net/wiki/spaces/TP/pages/1049559041/Service+Architecture).
 
 ## Access
 
-Staging is protected by HTTP Basic Authentication. The username and password
-are pinned in the _dfe-teacher-payments_ slack channel or can be found
-in the _Config Vars_ in Heroku.
+Staging is protected by HTTP Basic Authentication. The username and password are
+pinned in the _dfe-teacher-payments_ slack channel or can be found in the
+_Config Vars_ in Heroku.
 
 ### Staging
 

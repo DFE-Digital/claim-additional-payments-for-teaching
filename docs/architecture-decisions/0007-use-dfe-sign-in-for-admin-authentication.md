@@ -13,8 +13,9 @@ the service for checking and processing claims.
 
 ## Decision
 
-We will use DfE's single sign-on service [DfE Sign In](https://services.signin.education.gov.uk/)
-and authenticate through OpenID Connect.
+We will use DfE's single sign-on service
+[DfE Sign In](https://services.signin.education.gov.uk/) and authenticate
+through OpenID Connect.
 
 ## Consequences
 
