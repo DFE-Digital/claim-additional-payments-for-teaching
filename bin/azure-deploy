@@ -7,14 +7,17 @@ case $ENVIRONMENT_NAME in
   "development")
     SUBSCRIPTION_ID="8655985a-2f87-44d7-a541-0be9a8c2779d"
     RESOURCE_GROUP_PREFIX="s118d01"
+    DOCKER_IMAGE_TAG="latest"
     ;;
   "test")
     SUBSCRIPTION_ID="e9299169-9666-4f15-9da9-5332680145af"
     RESOURCE_GROUP_PREFIX="s118t01"
+    DOCKER_IMAGE_TAG="test"
     ;;
   "production")
     SUBSCRIPTION_ID="88bd392f-df19-458b-a100-22b4429060ed"
     RESOURCE_GROUP_PREFIX="s118p01"
+    DOCKER_IMAGE_TAG="production"
     ;;
   *)
     echo "Could not find an known environment with the name: $ENVIRONMENT_NAME"
@@ -95,7 +98,7 @@ fi
 
 echo "Rewriting app parameters file for $ENVIRONMENT_NAME..."
 ruby \
-    -ne "BEGIN { @body = File.open(\"$APP_DOCKER_COMPOSE_FILE_PATH\").read.gsub(\"\n\", \"\\\n\").gsub(\"\\\"\", \"\\\\\\\"\") } ; puts gsub(/\\\${dockerCompose}/, @body)" \
+    -ne "BEGIN { @body = File.open(\"$APP_DOCKER_COMPOSE_FILE_PATH\").read.gsub(\"\${dockerImageTag}\", \"$DOCKER_IMAGE_TAG\").gsub(\"\n\", \"\\\n\").gsub(\"\\\"\", \"\\\\\\\"\") } ; puts gsub(/\\\${dockerCompose}/, @body)" \
     < "$APP_PARAMETERS_TEMPLATE_FILE_PATH" \
   | sed \
     -e "s/\${subscriptionId}/$SUBSCRIPTION_ID/g" \
