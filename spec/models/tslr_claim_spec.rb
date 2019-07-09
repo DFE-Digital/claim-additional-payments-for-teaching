@@ -185,6 +185,14 @@ RSpec.describe TslrClaim, type: :model do
     end
   end
 
+  context "when saving in the “student-loan” validation context" do
+    it "validates the presence of student_loan" do
+      expect(TslrClaim.new).not_to be_valid(:"student-loan")
+      expect(TslrClaim.new(has_student_loan: true)).to be_valid(:"student-loan")
+      expect(TslrClaim.new(has_student_loan: false)).to be_valid(:"student-loan")
+    end
+  end
+
   context "when saving in the “student-loan-amount” validation context" do
     it "validates the presence of student_loan_repayment_amount" do
       expect(TslrClaim.new).not_to be_valid(:"student-loan-amount")

@@ -1,0 +1,36 @@
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= render("shared/error_summary", instance: current_claim, errored_field_id_overrides: { has_student_loan: "tslr_claim_has_student_loan_true" }) if current_claim.errors.any? %>
+
+    <%= form_for current_claim, url: claim_path do |form| %>
+      <%= form.hidden_field :has_student_loan %>
+        <%= form_group_tag current_claim do %>
+          <fieldset class="govuk-fieldset">
+            <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl">
+              <h1 class="govuk-fieldset__heading">
+                <%= t("tslr.questions.has_student_loan") %>
+              </h1>
+            </legend>
+            <span class="govuk-hint">
+              We need this information to make sure you do not pay any tax on this payment.
+            </span>
+
+            <%= errors_tag current_claim, :has_student_loan %>
+
+            <div class="govuk-radios govuk-radios--inline">
+              <div class="govuk-radios__item">
+                <%= form.radio_button(:has_student_loan, true, class: "govuk-radios__input")%>
+                <%= form.label :has_student_loan_true, "Yes", class: "govuk-label govuk-radios__label" %>
+              </div>
+              <div class="govuk-radios__item">
+                <%= form.radio_button(:has_student_loan, false, class: "govuk-radios__input")%>
+                <%= form.label :has_student_loan_false, "No", class: "govuk-label govuk-radios__label" %>
+              </div>
+            </div>
+
+          </fieldset>
+        <% end %>
+        <%= form.submit "Continue", class: "govuk-button" %>
+      <% end %>
+  </div>
+</div>

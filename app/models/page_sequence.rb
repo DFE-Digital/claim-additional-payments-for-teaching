@@ -21,6 +21,7 @@ class PageSequence
     "date-of-birth",
     "teacher-reference-number",
     "national-insurance-number",
+    "student-loan",
     "student-loan-amount",
     "email-address",
     "bank-details",

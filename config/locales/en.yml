@@ -52,6 +52,7 @@ en:
       date_of_birth: "What is your date of birth?"
       teacher_reference_number: "What's your teacher reference number?"
       national_insurance_number: "What's your National Insurance number?"
+      has_student_loan: "Have ever taken out a student loan and not paid it off yet?"
       student_loan_amount:
         "Exactly how much student loan did you repay while you worked at %{claim_school_name} between 6 April 2018 and 5
         April 2019?"
