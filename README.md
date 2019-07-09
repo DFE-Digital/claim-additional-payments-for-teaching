@@ -77,12 +77,10 @@ including how to run the verify dependencies locally.
 
 ### Running `CronJob`s
 
-Recurring jobs are scheduled by the `db:schedule_jobs` rake task. This task
-normally runs as part of `db:migrate` or `db:schema:load`, but is disabled in
-development environments. To schedule them during development, run:
+To schedule recurring jobs, run the following:
 
 ```
-rake db:schedule_jobs
+rake jobs:schedule
 ```
 
 ## Running specs, brakeman, and code linting
