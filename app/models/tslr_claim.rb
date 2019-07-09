@@ -152,7 +152,7 @@ class TslrClaim < ApplicationRecord
   def full_ineligibility_reason
     case ineligibility_reason
     when :ineligible_claim_school then "#{claim_school_name} is not an eligible school."
-    when :employed_at_no_school then "You must be still working as a teacher to be eligible."
+    when :employed_at_no_school then "You can only get this payment if you’re still working as a teacher."
     when :not_taught_eligible_subjects_enough then "You must have spent at least half your time teaching an eligible subject."
     else "You can only apply for this payment if you meet the eligibility criteria."
     end

@@ -94,7 +94,7 @@ RSpec.describe "Claims", type: :request do
 
         get ineligible_claim_path
         expect(response.body).to include("You’re not eligible")
-        expect(response.body).to include("You must be still working as a teacher to be eligible")
+        expect(response.body).to include("You can only get this payment if you’re still working as a teacher")
       end
     end
 
