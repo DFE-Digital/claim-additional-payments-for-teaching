@@ -25,7 +25,7 @@ class ClaimsController < ApplicationController
 
   def update
     if update_current_claim!
-      redirect_to next_claim_path
+      redirect_to claim_path(next_slug)
     else
       show
     end
@@ -49,26 +49,8 @@ class ClaimsController < ApplicationController
     end
   end
 
-  def next_claim_path
-    return ineligible_claim_path if current_claim.ineligible?
-    return claim_path("check-your-answers") if edited_answer?
-
-    claim_path(next_slug)
-  end
-
-  def edited_answer?
-    current_claim.can_be_submitted? && !current_claim.submitted? && !on_school_flow?
-  end
-
-  def on_school_flow?
-    return true if params[:slug] == "claim-school"
-    return true if params[:slug] == "still-teaching" && current_claim.employment_status != "claim_school"
-    false
-  end
-
   def next_slug
-    current_slug_index = current_claim.page_sequence.index(params[:slug])
-    current_claim.page_sequence[current_slug_index + 1]
+    PageSequence.new(current_claim, params[:slug]).next_slug
   end
 
   def submission_complete?
