@@ -67,8 +67,7 @@ class ClaimsController < ApplicationController
   end
 
   def next_slug
-    current_slug_index = current_claim.page_sequence.index(params[:slug])
-    current_claim.page_sequence[current_slug_index + 1]
+    PageSequence.new(current_claim, params[:slug]).next_slug
   end
 
   def submission_complete?

@@ -374,23 +374,6 @@ RSpec.describe TslrClaim, type: :model do
     end
   end
 
-  describe "#page_sequence" do
-    let(:tslr_claim) { TslrClaim.new }
-    it "returns all the pages in the sequence" do
-      expect(tslr_claim.page_sequence).to eq TslrClaim::PAGE_SEQUENCE
-    end
-
-    context "when the claimant still works at the school they are claiming against" do
-      let(:tslr_claim) do
-        TslrClaim.new(claim_school: schools(:penistone_grammar_school), employment_status: :claim_school)
-      end
-
-      it "excludes the “current-school” page from the sequence" do
-        expect(tslr_claim.page_sequence).not_to include("current-school")
-      end
-    end
-  end
-
   describe "#submit!" do
     around do |example|
       freeze_time { example.run }

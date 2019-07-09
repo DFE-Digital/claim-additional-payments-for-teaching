@@ -1,24 +1,4 @@
 class TslrClaim < ApplicationRecord
-  PAGE_SEQUENCE = [
-    "qts-year",
-    "claim-school",
-    "still-teaching",
-    "current-school",
-    "subjects-taught",
-    "mostly-teaching-eligible-subjects",
-    "eligibility-confirmed",
-    "full-name",
-    "address",
-    "date-of-birth",
-    "teacher-reference-number",
-    "national-insurance-number",
-    "student-loan-amount",
-    "email-address",
-    "bank-details",
-    "check-your-answers",
-    "confirmation",
-  ].freeze
-
   VALID_QTS_YEARS = [
     "2013-2014",
     "2014-2015",
@@ -109,12 +89,6 @@ class TslrClaim < ApplicationRecord
   delegate :name, to: :current_school, prefix: true, allow_nil: true
 
   scope :submitted, -> { where.not(submitted_at: nil) }
-
-  def page_sequence
-    PAGE_SEQUENCE.dup.tap do |sequence|
-      sequence.delete("current-school") if employed_at_claim_school?
-    end
-  end
 
   def submit!
     if ineligible?
