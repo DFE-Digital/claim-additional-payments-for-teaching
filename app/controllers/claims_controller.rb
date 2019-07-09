@@ -25,7 +25,7 @@ class ClaimsController < ApplicationController
 
   def update
     if update_current_claim!
-      redirect_to next_claim_path
+      redirect_to claim_path(next_slug)
     else
       show
     end
@@ -47,22 +47,6 @@ class ClaimsController < ApplicationController
       current_claim.attributes = claim_params
       current_claim.save(context: params[:slug].to_sym)
     end
-  end
-
-  def next_claim_path
-    return claim_path("check-your-answers") if !current_claim.ineligible? && edited_answer?  && !on_school_flow?
-
-    claim_path(next_slug)
-  end
-
-  def edited_answer?
-    current_claim.can_be_submitted? && !current_claim.submitted?
-  end
-
-  def on_school_flow?
-    return true if params[:slug] == "claim-school"
-    return true if params[:slug] == "still-teaching" && current_claim.employment_status != "claim_school"
-    false
   end
 
   def next_slug
