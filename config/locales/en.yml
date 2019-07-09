@@ -45,13 +45,16 @@ en:
       employment_status: "Are you still employed to teach at a school in England?"
       current_school: "Which school are you currently employed at?"
       subjects_taught: "Did you teach any of the following subjects between 6 April XXXX and 5 April XXXX?"
-      mostly_teaching_eligible_subjects: "Did teaching %{subjects} cover 50% of your teaching time between 6 April XXXX and 5 April XXXX?"
+      mostly_teaching_eligible_subjects:
+        "Were half of your working hours spent teaching %{subjects} between 6 April XXXX and 5 April XXXX?"
       full_name: "What is your full name?"
       address: "What is your address?"
       date_of_birth: "What is your date of birth?"
       teacher_reference_number: "What's your teacher reference number?"
       national_insurance_number: "What's your National Insurance number?"
-      student_loan_amount: "How much student loan did you repay while you were at %{claim_school_name} between 6 April XXXX and 5 April XXXX?"
+      student_loan_amount:
+        "How much student loan did you repay while you were at %{claim_school_name} between 6 April XXXX and 5 April
+        XXXX?"
       email_address: "Email address"
       bank_details: "Enter bank account details"
       eligible_subjects:
