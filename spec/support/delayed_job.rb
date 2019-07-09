@@ -17,7 +17,6 @@ end
 
 class TestWithPerformOnScheduleCronJob < CronJob
   self.cron_expression = "* * * * *"
-  self.perform_on_schedule = true
 
   def perform
   end
