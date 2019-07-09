@@ -176,7 +176,7 @@ RSpec.feature "Changing the answers on a submittable claim" do
 
         scenario "Teacher is told they are not eligible" do
           expect(page).to have_text("You’re not eligible")
-          expect(page).to have_text("You must be still working as a teacher to be eligible")
+          expect(page).to have_text("You can only get this payment if you’re still working as a teacher")
         end
       end
     end

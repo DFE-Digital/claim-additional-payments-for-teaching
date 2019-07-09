@@ -40,7 +40,7 @@ RSpec.feature "Ineligible Teacher Student Loan Repayments claims" do
 
     expect(claim.reload.employment_status).to eq("no_school")
     expect(page).to have_text("You’re not eligible")
-    expect(page).to have_text("You must be still working as a teacher to be eligible")
+    expect(page).to have_text("You can only get this payment if you’re still working as a teacher")
   end
 
   scenario "does not teach an eligible subject" do
