@@ -26,6 +26,7 @@ class PageSequence
     "bank-details",
     "check-your-answers",
     "confirmation",
+    "ineligible",
   ].freeze
 
   attr_reader :claim, :current_slug
@@ -42,6 +43,8 @@ class PageSequence
   end
 
   def next_slug
+    return "ineligible" if claim.ineligible?
+
     slugs[current_slug_index + 1]
   end
 

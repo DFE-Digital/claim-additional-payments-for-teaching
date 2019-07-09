@@ -6,7 +6,6 @@ Rails.application.routes.draw do
     resources :claims, only: [:new, :create, :show, :update], param: :slug, path: "/claim"
   end
 
-  get "/claim/ineligible", to: "claims#ineligible", as: :ineligible_claim
   get "/claim/timeout", to: "claims#timeout", as: :timeout_claim
   get "/claim/refresh-session", to: "claims#refresh_session"
 

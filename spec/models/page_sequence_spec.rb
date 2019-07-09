@@ -19,5 +19,13 @@ RSpec.describe PageSequence do
       expect(PageSequence.new(claim, "qts-year").next_slug).to eq "claim-school"
       expect(PageSequence.new(claim, "claim-school").next_slug).to eq "still-teaching"
     end
+
+    context "with an ineligible claim" do
+      let(:claim) { TslrClaim.new(employment_status: :no_school) }
+
+      it "returns the ineligible slug as the next slug" do
+        expect(PageSequence.new(claim, "still-teaching").next_slug).to eq "ineligible"
+      end
+    end
   end
 end

@@ -50,8 +50,7 @@ class ClaimsController < ApplicationController
   end
 
   def next_claim_path
-    return ineligible_claim_path if current_claim.ineligible?
-    return claim_path("check-your-answers") if edited_answer?  && !on_school_flow?
+    return claim_path("check-your-answers") if !current_claim.ineligible? && edited_answer?  && !on_school_flow?
 
     claim_path(next_slug)
   end
