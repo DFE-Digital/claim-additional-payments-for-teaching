@@ -9,6 +9,13 @@ class TslrClaim < ApplicationRecord
 
   TRN_LENGTH = 7
 
+  enum student_loan_country: {
+    england: 0,
+    northern_ireland: 1,
+    scotland: 2,
+    wales: 3,
+  }
+
   enum employment_status: {
     claim_school: 0,
     different_school: 1,
@@ -63,6 +70,7 @@ class TslrClaim < ApplicationRecord
   validate  :ni_number_is_correct_format
 
   validates :has_student_loan,                  on: [:"student-loan", :submit], inclusion: {in: [true, false], message: "Select yes if you have a student loan"}
+  validates :student_loan_country,              on: [:"student-loan-country", :submit], presence: {message: "Select the country in which you first applied for your student loan"}
 
   validates :student_loan_repayment_amount, on: [:"student-loan-amount", :submit], presence: {message: "Enter your student loan repayment amount"}
   validates_numericality_of :student_loan_repayment_amount, message: "Enter a valid monetary amount",

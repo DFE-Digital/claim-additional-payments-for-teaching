@@ -193,6 +193,13 @@ RSpec.describe TslrClaim, type: :model do
     end
   end
 
+  context "when saving in the “student-loan-country” validation context" do
+    it "validates the presence of student_loan_country" do
+      expect(TslrClaim.new).not_to be_valid(:"student-loan-country")
+      expect(TslrClaim.new(student_loan_country: :england)).to be_valid(:"student-loan-country")
+    end
+  end
+
   context "when saving in the “student-loan-amount” validation context" do
     it "validates the presence of student_loan_repayment_amount" do
       expect(TslrClaim.new).not_to be_valid(:"student-loan-amount")
@@ -333,6 +340,17 @@ RSpec.describe TslrClaim, type: :model do
     context "when not ineligible" do
       let(:claim_attributes) { {} }
       it { is_expected.to be_nil }
+    end
+  end
+
+  describe "#student_loan_country" do
+    it "captures the country the student loan was received in" do
+      claim = TslrClaim.new(student_loan_country: :england)
+      expect(claim.student_loan_country).to eq("england")
+    end
+
+    it "rejects invalid countries" do
+      expect { TslrClaim.new(student_loan_country: :brazil) }.to raise_error(ArgumentError)
     end
   end
 

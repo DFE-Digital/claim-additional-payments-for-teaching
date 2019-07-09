@@ -15,6 +15,7 @@ RSpec.describe TslrClaimsCsv do
       date_of_birth: Date.parse("1939-01-01"),
       teacher_reference_number: "1234567",
       national_insurance_number: "QQ123456C",
+      student_loan_country: :england,
       email_address: "batman@bat.com",
       mostly_teaching_eligible_subjects: true,
       bank_sort_code: "440026",

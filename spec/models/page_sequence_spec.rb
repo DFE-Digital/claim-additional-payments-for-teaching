@@ -12,6 +12,16 @@ RSpec.describe PageSequence do
 
       expect(page_sequence.slugs).not_to include("current-school")
     end
+
+    it "excludes “student-loan-country” when the claimant no longer has a student loan" do
+      claim.has_student_loan = false
+      page_sequence = PageSequence.new(claim, "still-teaching")
+      expect(page_sequence.slugs).not_to include("student-loan-country")
+
+      claim.has_student_loan = true
+      page_sequence = PageSequence.new(claim, "still-teaching")
+      expect(page_sequence.slugs).to include("student-loan-country")
+    end
   end
 
   describe "#next_slug" do
