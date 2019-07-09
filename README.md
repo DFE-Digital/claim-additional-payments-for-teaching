@@ -77,6 +77,14 @@ The service uses GOV.UK Verify to verify the identity of teachers that are
 claiming. See [docs/govuk-verify](/docs/govuk-verify.md) for details on this,
 including how to run the verify dependencies locally.
 
+### Running `CronJob`s
+
+To schedule recurring jobs, run the following:
+
+```
+rake jobs:schedule
+```
+
 ## Running specs, brakeman, and code linting
 
 ```

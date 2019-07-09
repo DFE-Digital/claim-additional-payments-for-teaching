@@ -98,9 +98,11 @@ RSpec.feature "Teacher Student Loan Repayments claims" do
     expect(page).to have_text("Check your answers before sending your application")
 
     freeze_time do
-      expect {
-        click_on "Confirm and send"
-      }.to change { ActionMailer::Base.deliveries.count }.by(1)
+      perform_enqueued_jobs do
+        expect {
+          click_on "Confirm and send"
+        }.to change { ActionMailer::Base.deliveries.count }.by(1)
+      end
 
       expect(claim.reload.submitted_at).to eq(Time.zone.now)
     end

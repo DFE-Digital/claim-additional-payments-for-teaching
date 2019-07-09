@@ -15,4 +15,7 @@ else
   fi
 fi
 
+echo "Scheduling Cron Jobs"
+rake jobs:schedule
+
 exec "$@"
