@@ -29,6 +29,7 @@ class CronJob < ApplicationJob
     def jobs
       Delayed::Job
         .where("handler LIKE ?", "%job_class: #{name}%")
+        .where.not(cron: nil)
     end
   end
 end

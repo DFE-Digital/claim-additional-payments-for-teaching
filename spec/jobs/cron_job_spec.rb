@@ -52,5 +52,22 @@ RSpec.describe "CronJob" do
         expect(new_job.cron).to eq("* 1 * * *")
       end
     end
+
+    context "when job was previously scheduled without a cron expression" do
+      let(:jobs) { Delayed::Job.where("handler LIKE ?", "%job_class: TestCronJob%") }
+
+      before :each do
+        TestCronJob.perform_later
+      end
+
+      it "does not replace the scheduled job" do
+        TestCronJob.schedule
+
+        expect(jobs.count).to eq(2)
+
+        expect(jobs.first.cron).to eq(nil)
+        expect(jobs.last.cron).to eq(TestCronJob.cron_expression)
+      end
+    end
   end
 end
