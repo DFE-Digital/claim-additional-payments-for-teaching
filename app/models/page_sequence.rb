@@ -24,6 +24,7 @@ class PageSequence
     "student-loan",
     "student-loan-country",
     "student-loan-how-many-courses",
+    "student-loan-start-date",
     "student-loan-amount",
     "email-address",
     "bank-details",
@@ -44,6 +45,7 @@ class PageSequence
       sequence.delete("current-school") if claim.employed_at_claim_school?
       sequence.delete("student-loan-country") if claim.no_student_loan?
       sequence.delete("student-loan-how-many-courses") if claim.no_student_loan? || claim.student_loan_country_with_one_plan?
+      sequence.delete("student-loan-start-date") if claim.no_student_loan? || claim.student_loan_country_with_one_plan?
     end
   end
 

@@ -18,26 +18,30 @@ RSpec.describe PageSequence do
       page_sequence = PageSequence.new(claim, "still-teaching")
       expect(page_sequence.slugs).not_to include("student-loan-country")
       expect(page_sequence.slugs).not_to include("student-loan-how-many-courses")
+      expect(page_sequence.slugs).not_to include("student-loan-start-date")
 
       claim.has_student_loan = true
       page_sequence = PageSequence.new(claim, "still-teaching")
       expect(page_sequence.slugs).to include("student-loan-country")
       expect(page_sequence.slugs).to include("student-loan-how-many-courses")
+      expect(page_sequence.slugs).to include("student-loan-start-date")
     end
 
-    it "excludes “student-loan-how-many-courses” when the claimant received their student loan in Scotland or Northern Ireland" do
+    it "excludes the remaining student loan-related pages when the claimant received their student loan in Scotland or Northern Ireland" do
       claim.has_student_loan = true
 
       TslrClaim::STUDENT_LOAN_COUNTRIES_WITH_ONE_PLAN.each do |plan_1_country|
         claim.student_loan_country = plan_1_country
         page_sequence = PageSequence.new(claim, "student-loan-country")
         expect(page_sequence.slugs).not_to include("student-loan-how-many-courses")
+        expect(page_sequence.slugs).not_to include("student-loan-start-date")
       end
 
       %w[england wales].each do |variable_plan_country|
         claim.student_loan_country = variable_plan_country
         page_sequence = PageSequence.new(claim, "student-loan-country")
         expect(page_sequence.slugs).to include("student-loan-how-many-courses")
+        expect(page_sequence.slugs).to include("student-loan-start-date")
       end
     end
   end

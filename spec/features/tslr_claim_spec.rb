@@ -91,6 +91,12 @@ RSpec.feature "Teacher Student Loan Repayments claims" do
 
     expect(claim.reload.student_loan_courses).to eq("one_course")
 
+    expect(page).to have_text(I18n.t("tslr.questions.student_loan_start_date.single_course"))
+    choose "Before 1 September 2012"
+    click_on "Continue"
+
+    expect(claim.reload.student_loan_start_date).to eq("before_first_september_2012")
+
     expect(page).to have_text(I18n.t("tslr.questions.student_loan_amount", claim_school_name: claim.claim_school_name))
     fill_in I18n.t("tslr.questions.student_loan_amount", claim_school_name: claim.claim_school_name), with: "1100"
     click_on "Continue"

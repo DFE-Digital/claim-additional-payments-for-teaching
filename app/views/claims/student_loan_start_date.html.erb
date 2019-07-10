@@ -1,0 +1,62 @@
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= render("shared/error_summary", instance: current_claim, errored_field_id_overrides: { student_loan_start_date: "tslr_claim_student_loan_start_date_before_first_september_2012" }) if current_claim.errors.any? %>
+
+    <%= form_for current_claim, url: claim_path do |form| %>
+      <%= form.hidden_field :student_loan_start_date %>
+        <%= form_group_tag current_claim do %>
+          <fieldset class="govuk-fieldset">
+          <% if current_claim.student_loan_courses == "one_course" %>
+
+            <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl">
+              <h1 class="govuk-fieldset__heading">
+                <%= t("tslr.questions.student_loan_start_date.single_course") %>
+              </h1>
+            </legend>
+
+            <%= errors_tag current_claim, :student_loan_start_date %>
+
+            <div class="govuk-radios">
+              <div class="govuk-radios__item">
+                <%= form.radio_button(:student_loan_start_date, :before_first_september_2012, class: "govuk-radios__input")%>
+                <%= form.label :student_loan_start_date_before_first_september_2012, "Before 1 September 2012", class: "govuk-label govuk-radios__label" %>
+              </div>
+              <div class="govuk-radios__item">
+                <%= form.radio_button(:student_loan_start_date, :on_or_after_first_september_2012, class: "govuk-radios__input")%>
+                <%= form.label :student_loan_start_date_on_or_after_first_september_2012, "On or after 1 September 2012", class: "govuk-label govuk-radios__label" %>
+              </div>
+            </div>
+
+          <% else %>
+
+            <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl">
+              <h1 class="govuk-fieldset__heading">
+                <%= t("tslr.questions.student_loan_start_date.multiple_courses") %>
+              </h1>
+            </legend>
+
+            <%= errors_tag current_claim, :student_loan_start_date %>
+
+            <div class="govuk-radios">
+              <div class="govuk-radios__item">
+                <%= form.radio_button(:student_loan_start_date, :before_first_september_2012, class: "govuk-radios__input")%>
+                <%= form.label :student_loan_start_date_before_first_september_2012, "All my degree courses started before 1 September 2012", class: "govuk-label govuk-radios__label" %>
+              </div>
+              <div class="govuk-radios__item">
+                <%= form.radio_button(:student_loan_start_date, :some_before_some_after_first_september_2012, class: "govuk-radios__input")%>
+                <%= form.label :student_loan_start_date_some_before_some_after_first_september_2012, "Some of my degree courses started before 1 September 2012 and some started after 1 September 2012", class: "govuk-label govuk-radios__label" %>
+              </div>
+              <div class="govuk-radios__item">
+                <%= form.radio_button(:student_loan_start_date, :on_or_after_first_september_2012, class: "govuk-radios__input")%>
+                <%= form.label :student_loan_start_date_on_or_after_first_september_2012, "All of my degree courses started after 1 September 2012", class: "govuk-label govuk-radios__label" %>
+              </div>
+            </div>
+
+          <% end %>
+
+          </fieldset>
+        <% end %>
+        <%= form.submit "Continue", class: "govuk-button" %>
+      <% end %>
+  </div>
+</div>

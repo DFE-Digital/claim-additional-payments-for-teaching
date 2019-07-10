@@ -95,6 +95,7 @@ ActiveRecord::Schema.define(version: 2019_07_22_101055) do
     t.boolean "has_student_loan"
     t.integer "student_loan_country"
     t.integer "student_loan_courses"
+    t.integer "student_loan_start_date"
     t.index ["claim_school_id"], name: "index_tslr_claims_on_claim_school_id"
     t.index ["current_school_id"], name: "index_tslr_claims_on_current_school_id"
     t.index ["employment_status"], name: "index_tslr_claims_on_employment_status"

@@ -17,6 +17,7 @@ FactoryBot.define do
       has_student_loan { true }
       student_loan_country { :england }
       student_loan_courses { :one_course }
+      student_loan_start_date { :before_first_september_2012 }
       student_loan_repayment_amount { 1000 }
       email_address { "test@email.com" }
       bank_sort_code { 123456 }
