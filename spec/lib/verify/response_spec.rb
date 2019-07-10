@@ -1,7 +1,7 @@
 require "rails_helper"
 
-RSpec.describe VerifyResponse, type: :model do
-  subject { VerifyResponse.new(response) }
+RSpec.describe Verify::Response, type: :model do
+  subject { Verify::Response.new(response) }
   let(:response) { JSON.parse File.read(Rails.root.join("spec", "fixtures", "verify", response_filename)) }
 
   context "with a valid response" do
