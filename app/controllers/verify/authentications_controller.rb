@@ -37,11 +37,11 @@ module Verify
 
     def verify_path_for_response_scenario(scenario)
       case scenario
-      when "IDENTITY_VERIFIED"
+      when Verify::IDENTITY_VERIFIED_SCENARIO
         verified_verify_authentications_path
-      when "AUTHENTICATION_FAILED"
+      when Verify::AUTHENTICATION_FAILED_SCENARIO
         failed_verify_authentications_path
-      when "NO_AUTHENTICATION"
+      when Verify::NO_AUTHENTICATION_SCENARIO
         no_auth_verify_authentications_path
       end
     end

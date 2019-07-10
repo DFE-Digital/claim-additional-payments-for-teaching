@@ -19,7 +19,7 @@ module Verify
     end
 
     def verified?
-      scenario == "IDENTITY_VERIFIED"
+      scenario == Verify::IDENTITY_VERIFIED_SCENARIO
     end
 
     def claim_parameters
