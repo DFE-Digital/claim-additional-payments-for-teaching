@@ -8,7 +8,7 @@ RSpec.describe "GOV.UK Verify::AuthenticationsController requests", type: :reque
     describe "verify/authentications/new" do
       before do
         stub_vsp_generate_request
-        get new_verify_authentication_path
+        get new_verify_authentications_path
       end
 
       it "renders a form that will submit an authentication request to Verify" do
@@ -26,7 +26,7 @@ RSpec.describe "GOV.UK Verify::AuthenticationsController requests", type: :reque
         post claims_path
 
         stub_vsp_generate_request
-        get new_verify_authentication_path # sets the authentication request request_id in the session
+        get new_verify_authentications_path # sets the authentication request request_id in the session
       end
 
       let(:current_claim) { TslrClaim.order(:created_at).last }
@@ -57,7 +57,7 @@ RSpec.describe "GOV.UK Verify::AuthenticationsController requests", type: :reque
     before { stub_vsp_generate_request }
 
     it "redirects to the start page" do
-      get new_verify_authentication_path
+      get new_verify_authentications_path
       expect(response).to redirect_to(root_path)
 
       post verify_authentications_path
