@@ -1,6 +1,7 @@
 module Verify
   class AuthenticationsController < ApplicationController
     before_action :send_unstarted_claiments_to_the_start
+    before_action :update_last_seen_at
     skip_before_action :verify_authenticity_token, only: [:create]
 
     # Page where a new Verify authentication request is generated and posted, as

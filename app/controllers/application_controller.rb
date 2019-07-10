@@ -24,4 +24,8 @@ class ApplicationController < ActionController::Base
   def current_claim
     @current_claim ||= TslrClaim.find(session[:tslr_claim_id]) if session.key?(:tslr_claim_id)
   end
+
+  def update_last_seen_at
+    session[:last_seen_at] = Time.zone.now
+  end
 end
