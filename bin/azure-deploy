@@ -2,19 +2,12 @@
 set -e
 
 ENVIRONMENT_NAME=$1
-SCRIPT_PATH=$( cd "$( dirname "$0" )" ; pwd -P )
-DEPLOYMENT_NAME="app"
-RESOURCE_LOCATION="West Europe"
-TEMPLATE_FILE_PATH="$SCRIPT_PATH/../azure/template.json"
-PARAMETERS_TEMPLATE_FILE_PATH="$SCRIPT_PATH/../azure/parameters/$ENVIRONMENT_NAME.template.json"
-PARAMETERS_FILE_PATH="$SCRIPT_PATH/../azure/parameters/$ENVIRONMENT_NAME.json"
 
 case $ENVIRONMENT_NAME in
   "development")
     # Use `az account show --out json` to find the subscription ID.
     SUBSCRIPTION_ID="8655985a-2f87-44d7-a541-0be9a8c2779d"
-    RESOURCE_GROUP_NAME="s118d01-app"
-    KEYVAULT_RESOURCE_GROUP_NAME="s118d01-secrets"
+    RESOURCE_GROUP_PREFIX="s118d01"
     ;;
   *)
     echo "Could not find an known environment with the name: $ENVIRONMENT_NAME"
@@ -22,7 +15,24 @@ case $ENVIRONMENT_NAME in
     ;;
 esac
 
-KEYVAULT_NAME="$KEYVAULT_RESOURCE_GROUP_NAME-kv"
+SCRIPT_PATH=$( cd "$( dirname "$0" )" ; pwd -P )
+
+RESOURCE_LOCATION="West Europe"
+
+SECRETS_RESOURCE_GROUP_NAME="$RESOURCE_GROUP_PREFIX-secrets"
+SECRETS_DEPLOYMENT_NAME="secrets"
+SECRETS_TEMPLATE_FILE_PATH="$SCRIPT_PATH/../azure/secrets/template.json"
+SECRETS_PARAMETERS_TEMPLATE_FILE_PATH="$SCRIPT_PATH/../azure/secrets/parameters/$ENVIRONMENT_NAME.template.json"
+SECRETS_PARAMETERS_FILE_PATH="$SCRIPT_PATH/../azure/secrets/parameters/$ENVIRONMENT_NAME.json"
+
+APP_RESOURCE_GROUP_NAME="$RESOURCE_GROUP_PREFIX-app"
+APP_DEPLOYMENT_NAME="app"
+APP_TEMPLATE_FILE_PATH="$SCRIPT_PATH/../azure/app/template.json"
+APP_DOCKER_COMPOSE_FILE_PATH="$SCRIPT_PATH/../azure/app/files/docker-compose.yml"
+APP_PARAMETERS_TEMPLATE_FILE_PATH="$SCRIPT_PATH/../azure/app/parameters/$ENVIRONMENT_NAME.template.json"
+APP_PARAMETERS_FILE_PATH="$SCRIPT_PATH/../azure/app/parameters/$ENVIRONMENT_NAME.json"
+
+KEYVAULT_NAME="$SECRETS_RESOURCE_GROUP_NAME-kv"
 
 if ! az account show > /dev/null; then
   echo "Logging in..."
@@ -32,55 +42,75 @@ fi
 echo "Setting default subscription to $SUBSCRIPTION_ID..."
 az account set --subscription "$SUBSCRIPTION_ID"
 
-if ! az group show --name "$KEYVAULT_RESOURCE_GROUP_NAME" > /dev/null; then
-  echo "Creating new resource group for keyvault with name $KEYVAULT_RESOURCE_GROUP_NAME..."
+if ! az group show --name "$SECRETS_RESOURCE_GROUP_NAME" > /dev/null; then
+  echo "Creating new resource group for secrets with name $SECRETS_RESOURCE_GROUP_NAME..."
   az group create \
-    --name "$KEYVAULT_RESOURCE_GROUP_NAME" \
+    --name "$SECRETS_RESOURCE_GROUP_NAME" \
     --location "$RESOURCE_LOCATION" \
     > /dev/null
 else
-  echo "Using existing keyvault resource group with name $KEYVAULT_RESOURCE_GROUP_NAME..."
+  echo "Using existing secrets resource group with name $SECRETS_RESOURCE_GROUP_NAME..."
 fi
 
-if ! az keyvault show --name "$KEYVAULT_NAME" > /dev/null; then
-  echo "Creating a new keyvault with name $KEYVAULT_NAME..."
-  az keyvault create \
-    --name "$KEYVAULT_NAME" \
-    --resource-group "$KEYVAULT_RESOURCE_GROUP_NAME" \
-    --enabled-for-template-deployment true \
-    > /dev/null
-else
-  echo "Using existing keyvault with name $KEYVAULT_NAME..."
-fi
-
-if ! az group show --name "$RESOURCE_GROUP_NAME" > /dev/null; then
-  echo "Creating new resource group with name $RESOURCE_GROUP_NAME..."
-  az group create \
-    --name "$RESOURCE_GROUP_NAME" \
-    --location "$RESOURCE_LOCATION" \
-    > /dev/null
-else
-  echo "Using existing resource group with name $RESOURCE_GROUP_NAME..."
-fi
-
-echo "Rewriting parameters file for $ENVIRONMENT_NAME..."
-sed -e "s/\${subscriptionId}/${SUBSCRIPTION_ID}/" \
-    -e "s/\${vaultGroup}/${KEYVAULT_RESOURCE_GROUP_NAME}/" \
-    -e "s/\${vaultName}/${KEYVAULT_NAME}/" \
-    "$PARAMETERS_TEMPLATE_FILE_PATH" > "$PARAMETERS_FILE_PATH"
+echo "Rewriting secrets parameters file for $ENVIRONMENT_NAME..."
+sed \
+  -e "s/\${keyVaultName}/$KEYVAULT_NAME/g" \
+  "$SECRETS_PARAMETERS_TEMPLATE_FILE_PATH" > "$SECRETS_PARAMETERS_FILE_PATH"
 
 echo
-echo "Are all the secrets up to date? Are you ready to deploy? Hit return to continue, or CTRL+C to stop."
+echo "Are you ready to deploy secrets?"
+echo "  Hit return to continue, or CTRL+C to stop."
 read -r
 
-echo "Starting deployment..."
+echo "Starting secrets deployment..."
 az group deployment create \
-  --name "$DEPLOYMENT_NAME" \
-  --resource-group "$RESOURCE_GROUP_NAME" \
-  --template-file "$TEMPLATE_FILE_PATH" \
-  --parameters "@$PARAMETERS_FILE_PATH" \
+  --name "$SECRETS_DEPLOYMENT_NAME" \
+  --resource-group "$SECRETS_RESOURCE_GROUP_NAME" \
+  --template-file "$SECRETS_TEMPLATE_FILE_PATH" \
+  --parameters "@$SECRETS_PARAMETERS_FILE_PATH" \
   --mode Complete \
   --rollback-on-error \
   --verbose
 
-echo "Template has been successfully deployed"
+echo
+echo "secrets deployed!"
+echo
+
+if ! az group show --name "$APP_RESOURCE_GROUP_NAME" > /dev/null; then
+  echo "Creating new resource group for app with name $APP_RESOURCE_GROUP_NAME..."
+  az group create \
+    --name "$APP_RESOURCE_GROUP_NAME" \
+    --location "$RESOURCE_LOCATION" \
+    > /dev/null
+else
+  echo "Using existing app resource group with name $APP_RESOURCE_GROUP_NAME..."
+fi
+
+echo "Rewriting app parameters file for $ENVIRONMENT_NAME..."
+ruby \
+    -ne "BEGIN { @body = File.open(\"$APP_DOCKER_COMPOSE_FILE_PATH\").read.gsub(\"\n\", \"\\\n\").gsub(\"\\\"\", \"\\\\\\\"\") } ; puts gsub(/\\\${dockerCompose}/, @body)" \
+    < "$APP_PARAMETERS_TEMPLATE_FILE_PATH" \
+  | sed \
+    -e "s/\${subscriptionId}/$SUBSCRIPTION_ID/g" \
+    -e "s/\${keyVaultResourceGroupName}/$SECRETS_RESOURCE_GROUP_NAME/g" \
+    -e "s/\${keyVaultName}/$KEYVAULT_NAME/g" \
+    > "$APP_PARAMETERS_FILE_PATH"
+
+echo
+echo "Are all the secrets up to date?"
+echo "Are you ready to deploy app?"
+echo "  Hit return to continue, or CTRL+C to stop."
+read -r
+
+echo "Starting app deployment..."
+az group deployment create \
+  --name "$APP_DEPLOYMENT_NAME" \
+  --resource-group "$APP_RESOURCE_GROUP_NAME" \
+  --template-file "$APP_TEMPLATE_FILE_PATH" \
+  --parameters "@$APP_PARAMETERS_FILE_PATH" \
+  --mode Complete \
+  --rollback-on-error \
+  --verbose
+
+echo
+echo "app deployed!"

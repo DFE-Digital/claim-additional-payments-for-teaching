@@ -2,16 +2,19 @@
   "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
   "contentVersion": "1.0.0.0",
   "parameters": {
-    "appServiceDockerImage": {
-      "value": "pezholio/teacher-payment-service"
+    "appServiceDockerCompose": {
+      "value": "${dockerCompose}"
     },
     "databaseName": {
       "value": "development"
     },
+    "appServiceAlwaysOn": {
+      "value": false
+    },
     "databaseUsername": {
       "reference": {
         "keyVault": {
-          "id": "/subscriptions/${subscriptionId}/resourceGroups/${vaultGroup}/providers/Microsoft.KeyVault/vaults/${vaultName}"
+          "id": "/subscriptions/${subscriptionId}/resourceGroups/${keyVaultResourceGroupName}/providers/Microsoft.KeyVault/vaults/${keyVaultName}"
         },
         "secretName": "DatabaseUsername"
       }
@@ -19,7 +22,7 @@
     "databasePassword": {
       "reference": {
         "keyVault": {
-          "id": "/subscriptions/${subscriptionId}/resourceGroups/${vaultGroup}/providers/Microsoft.KeyVault/vaults/${vaultName}"
+          "id": "/subscriptions/${subscriptionId}/resourceGroups/${keyVaultResourceGroupName}/providers/Microsoft.KeyVault/vaults/${keyVaultName}"
         },
         "secretName": "DatabasePassword"
       }
@@ -27,7 +30,7 @@
     "securityAlertEmailAddress": {
       "reference": {
         "keyVault": {
-          "id": "/subscriptions/${subscriptionId}/resourceGroups/${vaultGroup}/providers/Microsoft.KeyVault/vaults/${vaultName}"
+          "id": "/subscriptions/${subscriptionId}/resourceGroups/${keyVaultResourceGroupName}/providers/Microsoft.KeyVault/vaults/${keyVaultName}"
         },
         "secretName": "SecurityAlertEmailAddress"
       }
@@ -35,7 +38,7 @@
     "SECRET_KEY_BASE": {
       "reference": {
         "keyVault": {
-          "id": "/subscriptions/${subscriptionId}/resourceGroups/${vaultGroup}/providers/Microsoft.KeyVault/vaults/${vaultName}"
+          "id": "/subscriptions/${subscriptionId}/resourceGroups/${keyVaultResourceGroupName}/providers/Microsoft.KeyVault/vaults/${keyVaultName}"
         },
         "secretName": "SecretKeyBase"
       }
@@ -43,7 +46,7 @@
     "BASIC_AUTH_USERNAME": {
       "reference": {
         "keyVault": {
-          "id": "/subscriptions/${subscriptionId}/resourceGroups/${vaultGroup}/providers/Microsoft.KeyVault/vaults/${vaultName}"
+          "id": "/subscriptions/${subscriptionId}/resourceGroups/${keyVaultResourceGroupName}/providers/Microsoft.KeyVault/vaults/${keyVaultName}"
         },
         "secretName": "BasicAuthUsername"
       }
@@ -51,7 +54,7 @@
     "BASIC_AUTH_PASSWORD": {
       "reference": {
         "keyVault": {
-          "id": "/subscriptions/${subscriptionId}/resourceGroups/${vaultGroup}/providers/Microsoft.KeyVault/vaults/${vaultName}"
+          "id": "/subscriptions/${subscriptionId}/resourceGroups/${keyVaultResourceGroupName}/providers/Microsoft.KeyVault/vaults/${keyVaultName}"
         },
         "secretName": "BasicAuthPassword"
       }
@@ -59,7 +62,7 @@
     "DFE_SIGN_IN_ISSUER": {
       "reference": {
         "keyVault": {
-          "id": "/subscriptions/${subscriptionId}/resourceGroups/${vaultGroup}/providers/Microsoft.KeyVault/vaults/${vaultName}"
+          "id": "/subscriptions/${subscriptionId}/resourceGroups/${keyVaultResourceGroupName}/providers/Microsoft.KeyVault/vaults/${keyVaultName}"
         },
         "secretName": "DfeSignInIssuer"
       }
@@ -67,7 +70,7 @@
     "DFE_SIGN_IN_IDENTIFIER": {
       "reference": {
         "keyVault": {
-          "id": "/subscriptions/${subscriptionId}/resourceGroups/${vaultGroup}/providers/Microsoft.KeyVault/vaults/${vaultName}"
+          "id": "/subscriptions/${subscriptionId}/resourceGroups/${keyVaultResourceGroupName}/providers/Microsoft.KeyVault/vaults/${keyVaultName}"
         },
         "secretName": "DfeSignInIdentifier"
       }
@@ -75,7 +78,7 @@
     "DFE_SIGN_IN_SECRET": {
       "reference": {
         "keyVault": {
-          "id": "/subscriptions/${subscriptionId}/resourceGroups/${vaultGroup}/providers/Microsoft.KeyVault/vaults/${vaultName}"
+          "id": "/subscriptions/${subscriptionId}/resourceGroups/${keyVaultResourceGroupName}/providers/Microsoft.KeyVault/vaults/${keyVaultName}"
         },
         "secretName": "DfeSignInSecret"
       }
@@ -83,7 +86,7 @@
     "DFE_SIGN_IN_REDIRECT_BASE_URL": {
       "reference": {
         "keyVault": {
-          "id": "/subscriptions/${subscriptionId}/resourceGroups/${vaultGroup}/providers/Microsoft.KeyVault/vaults/${vaultName}"
+          "id": "/subscriptions/${subscriptionId}/resourceGroups/${keyVaultResourceGroupName}/providers/Microsoft.KeyVault/vaults/${keyVaultName}"
         },
         "secretName": "DfeSignInRedirectBaseUrl"
       }
