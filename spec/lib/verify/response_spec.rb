@@ -4,11 +4,11 @@ RSpec.describe Verify::Response, type: :model do
   subject { Verify::Response.new(response) }
   let(:response) { JSON.parse File.read(Rails.root.join("spec", "fixtures", "verify", response_filename)) }
 
-  context "with a valid response" do
+  context "with a verified response" do
     let(:response_filename) { "identity-verified.json" }
 
-    it "is valid" do
-      expect(subject.valid?).to eq(true)
+    it "is verified" do
+      expect(subject.verified?).to eq(true)
     end
 
     it "returns the expected parameters" do
@@ -28,8 +28,8 @@ RSpec.describe Verify::Response, type: :model do
   context "with a cancelled response" do
     let(:response_filename) { "no-authentication.json" }
 
-    it "is not valid" do
-      expect(subject.valid?).to eq(false)
+    it "is not verified" do
+      expect(subject.verified?).to eq(false)
     end
 
     it "returns the correct error" do
@@ -40,8 +40,8 @@ RSpec.describe Verify::Response, type: :model do
   context "with a failed response" do
     let(:response_filename) { "authentication-failed.json" }
 
-    it "is not valid" do
-      expect(subject.valid?).to eq(false)
+    it "is not verified" do
+      expect(subject.verified?).to eq(false)
     end
 
     it "returns the correct error" do
@@ -52,8 +52,8 @@ RSpec.describe Verify::Response, type: :model do
   context "with an errored response" do
     let(:response_filename) { "error.json" }
 
-    it "is not valid" do
-      expect(subject.valid?).to eq(false)
+    it "is not verified" do
+      expect(subject.verified?).to eq(false)
     end
 
     it "returns the correct error" do

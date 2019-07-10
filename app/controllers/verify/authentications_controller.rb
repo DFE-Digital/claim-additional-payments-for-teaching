@@ -20,7 +20,7 @@ module Verify
       verify_authentication_response = Verify::ServiceProvider.new.translate_response(params["SAMLResponse"], session[:verify_request_id], "LEVEL_2")
       @response = Verify::Response.new(verify_authentication_response)
 
-      if @response.valid?
+      if @response.verified?
         current_claim.update!(@response.claim_parameters)
         redirect_to claim_path("teacher-reference-number")
       else

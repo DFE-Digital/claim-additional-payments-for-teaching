@@ -6,12 +6,12 @@ module Verify
       @parameters = parameters
     end
 
-    def valid?
+    def verified?
       scenario == "IDENTITY_VERIFIED"
     end
 
     def claim_parameters
-      return {} unless valid?
+      return {} unless verified?
 
       {
         full_name: full_name,
@@ -28,7 +28,7 @@ module Verify
     end
 
     def error
-      return nil if valid?
+      return nil if verified?
 
       scenario.nil? ? "error" : scenario.downcase
     end
