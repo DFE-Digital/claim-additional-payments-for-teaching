@@ -4,6 +4,22 @@ RSpec.describe Verify::Response, type: :model do
   subject { Verify::Response.new(response) }
   let(:response) { JSON.parse File.read(Rails.root.join("spec", "fixtures", "verify", response_filename)) }
 
+  describe ".translate" do
+    let(:saml_response) { example_vsp_translate_request_payload.fetch("samlResponse") }
+    let(:request_id) { example_vsp_translate_request_payload.fetch("requestId") }
+    let(:level_of_assurance) { example_vsp_translate_request_payload.fetch("levelOfAssurance") }
+
+    it "returns a Verify::Response with the results of the translation from the ServiceProvider" do
+      stub_vsp_translate_response_request
+
+      verify_response = Verify::Response.translate(saml_response: saml_response, request_id: request_id, level_of_assurance: level_of_assurance)
+
+      expect(verify_response).to be_kind_of(Verify::Response)
+      expect(verify_response).to be_verified
+      expect(verify_response.claim_parameters[:full_name]).to eq("Isambard Kingdom Brunel")
+    end
+  end
+
   context "with a verified response" do
     let(:response_filename) { "identity-verified.json" }
 

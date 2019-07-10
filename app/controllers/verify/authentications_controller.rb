@@ -17,8 +17,7 @@ module Verify
     #
     #   https://www.docs.verify.service.gov.uk/get-started/set-up-successful-verification-journey/#handle-a-response
     def create
-      verify_authentication_response = Verify::ServiceProvider.new.translate_response(params["SAMLResponse"], session[:verify_request_id], "LEVEL_2")
-      @response = Verify::Response.new(verify_authentication_response)
+      @response = Verify::Response.translate(saml_response: params["SAMLResponse"], request_id: session[:verify_request_id], level_of_assurance: "LEVEL_2")
 
       if @response.verified?
         current_claim.update!(@response.claim_parameters)
