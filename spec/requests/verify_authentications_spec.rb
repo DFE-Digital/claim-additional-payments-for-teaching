@@ -39,8 +39,8 @@ RSpec.describe "GOV.UK Verify::AuthenticationsController requests", type: :reque
           post verify_authentications_path, params: {"SAMLResponse" => saml_response}
         end
 
-        it "saves the translated identity attributes on the current claim and redirects to the next question" do
-          expect(response).to redirect_to(claim_path("teacher-reference-number"))
+        it "saves the translated identity attributes on the current claim and redirects to the verify confirmation" do
+          expect(response).to redirect_to(verified_verify_authentications_path)
 
           expect(current_claim.full_name).to eq("Isambard Kingdom Brunel")
           expect(current_claim.address_line_1).to eq("Verified Street")

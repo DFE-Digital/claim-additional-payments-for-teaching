@@ -18,6 +18,7 @@ Rails.application.routes.draw do
   namespace :verify do
     resource :authentications, only: [:new, :create] do
       member do
+        get "verified"
         get "failed"
         get "no_auth"
       end
