@@ -50,6 +50,54 @@ RSpec.describe "GOV.UK Verify::AuthenticationsController requests", type: :reque
           expect(current_claim.date_of_birth).to eq(Date.new(1806, 4, 9))
         end
       end
+
+      context "given an AUTHENTICATION_FAILURE SAML response" do
+        let(:saml_response) { example_vsp_translate_request_payload.fetch("samlResponse") }
+
+        before do
+          stub_vsp_translate_response_request("authentication-failed")
+          post verify_authentications_path, params: {"SAMLResponse" => saml_response}
+        end
+
+        it "redirects to the failure page" do
+          expect(response).to redirect_to(failed_verify_authentications_path)
+        end
+      end
+
+      context "given a NO_AUTHENTICATION SAML response" do
+        let(:saml_response) { example_vsp_translate_request_payload.fetch("samlResponse") }
+
+        before do
+          stub_vsp_translate_response_request("no-authentication")
+          post verify_authentications_path, params: {"SAMLResponse" => saml_response}
+        end
+
+        it "redirects to the no_auth page" do
+          expect(response).to redirect_to(no_auth_verify_authentications_path)
+        end
+      end
+    end
+  end
+
+  describe "GET verify/authentications/failed" do
+    before { post claims_path }
+
+    it "renders the failure content" do
+      get failed_verify_authentications_path
+
+      expect(response).to be_successful
+      expect(response.body).to include("Your identity could not be verified")
+    end
+  end
+
+  describe "GET verify/authentications/no_auth" do
+    before { post claims_path }
+
+    it "renders the no-auth content" do
+      get no_auth_verify_authentications_path
+
+      expect(response).to be_successful
+      expect(response.body).to include("exiting the Verify process before it was complete")
     end
   end
 

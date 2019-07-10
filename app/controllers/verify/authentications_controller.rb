@@ -23,7 +23,23 @@ module Verify
         current_claim.update!(@response.claim_parameters)
         redirect_to claim_path("teacher-reference-number")
       else
-        render "failure"
+        redirect_to not_verified_path_for(@response.scenario)
+      end
+    end
+
+    def failed
+    end
+
+    def no_auth
+    end
+
+    private
+
+    def not_verified_path_for(scenario)
+      if scenario == "AUTHENTICATION_FAILED"
+        failed_verify_authentications_path
+      else
+        no_auth_verify_authentications_path
       end
     end
   end

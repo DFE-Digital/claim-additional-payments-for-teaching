@@ -39,12 +39,6 @@ module Verify
       @scenario ||= parameters["scenario"]
     end
 
-    def error
-      return nil if verified?
-
-      scenario.nil? ? "error" : scenario.downcase
-    end
-
     private
 
     def address

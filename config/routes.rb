@@ -16,7 +16,12 @@ Rails.application.routes.draw do
   end
 
   namespace :verify do
-    resource :authentications, only: [:new, :create]
+    resource :authentications, only: [:new, :create] do
+      member do
+        get "failed"
+        get "no_auth"
+      end
+    end
 
     if Rails.env.test?
       require "verify/fake_sso"

@@ -35,10 +35,6 @@ RSpec.describe Verify::Response, type: :model do
       expect(subject.claim_parameters[:postcode]).to eq("M12 345")
       expect(subject.claim_parameters[:date_of_birth]).to eq("1806-04-09")
     end
-
-    it "returns nil for an error" do
-      expect(subject.error).to eq(nil)
-    end
   end
 
   context "with a cancelled response" do
@@ -46,10 +42,6 @@ RSpec.describe Verify::Response, type: :model do
 
     it "is not verified" do
       expect(subject.verified?).to eq(false)
-    end
-
-    it "returns the correct error" do
-      expect(subject.error).to eq("no_authentication")
     end
   end
 
@@ -59,10 +51,6 @@ RSpec.describe Verify::Response, type: :model do
     it "is not verified" do
       expect(subject.verified?).to eq(false)
     end
-
-    it "returns the correct error" do
-      expect(subject.error).to eq("authentication_failed")
-    end
   end
 
   context "with an errored response" do
@@ -70,10 +58,6 @@ RSpec.describe Verify::Response, type: :model do
 
     it "is not verified" do
       expect(subject.verified?).to eq(false)
-    end
-
-    it "returns the correct error" do
-      expect(subject.error).to eq("error")
     end
   end
 end
