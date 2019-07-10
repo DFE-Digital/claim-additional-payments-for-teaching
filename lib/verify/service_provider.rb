@@ -29,13 +29,14 @@ module Verify
     #     "ssoLocation" => "https://compliance-tool-reference.ida.digital.cabinet-office.gov.uk/SAML2/SSO"
     #   }
     #
+    # Raises Verify::ResponseError if the VSP responds with an error response.
     def generate_request
       uri = URI(self.class.generate_request_url)
       request = Net::HTTP::Post.new(uri, {})
       request.content_type = "application/json"
       response = Net::HTTP.start(uri.hostname, uri.port) { |http| http.request(request) }
 
-      JSON.parse(response.body)
+      handle_response response.body
     end
 
     # Makes a request to the Verify Service Provider to translate a SAML
@@ -55,6 +56,7 @@ module Verify
     #       "attributes" => {...}
     #   }
     #
+    # Raises Verify::ResponseError if the VSP responds with an error response.
     def translate_response(saml_response, request_id, level_of_assurance)
       uri = URI(self.class.translate_response_url)
       request = Net::HTTP::Post.new(uri)
@@ -62,7 +64,15 @@ module Verify
       request.content_type = "application/json"
       response = Net::HTTP.start(uri.hostname, uri.port) { |http| http.request(request) }
 
-      JSON.parse(response.body)
+      handle_response response.body
+    end
+
+    private
+
+    def handle_response(json_response)
+      JSON.parse(json_response).tap do |parameters|
+        raise ResponseError.new(parameters["message"], parameters["code"]) if parameters.key?("code")
+      end
     end
   end
 end

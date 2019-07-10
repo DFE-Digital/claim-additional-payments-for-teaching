@@ -1,7 +1,7 @@
-def stub_vsp_generate_request
+def stub_vsp_generate_request(expected_response = stubbed_auth_request_response)
   stub_request(:post, Verify::ServiceProvider.generate_request_url)
     .with(headers: {"Content-Type" => "application/json"})
-    .to_return(status: 200, body: stubbed_auth_request_response.to_json, headers: {})
+    .to_return(status: 200, body: expected_response.to_json, headers: {})
 end
 
 def stubbed_auth_request_response
@@ -9,6 +9,13 @@ def stubbed_auth_request_response
     "samlRequest" => "PD94bWwg",
     "requestId" => "REQUEST_ID",
     "ssoLocation" => "/verify/fake_sso",
+  }
+end
+
+def stubbed_auth_request_error_response
+  {
+    "code" => 422,
+    "message" => "Some error message",
   }
 end
 
