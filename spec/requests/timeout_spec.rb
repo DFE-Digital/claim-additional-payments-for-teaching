@@ -52,6 +52,6 @@ RSpec.describe "Claim session timing out", type: :request do
 
   def start_verify_authentication_process
     stub_vsp_generate_request
-    get new_verify_authentication_path
+    get new_verify_authentications_path
   end
 end

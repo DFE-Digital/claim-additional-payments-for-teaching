@@ -7,7 +7,7 @@
     <p class="govuk-body">If you do not have an account already, you’ll have to sign up for one. This usually takes around 15 minutes. You'll need a passport or photocard driving licence and a debit or credit card.</p>
 
     <% if govuk_verify_enabled? %>
-      <%= link_to "Continue to GOV.UK Verify", new_verify_authentication_path, class: "govuk-button" %>
+      <%= link_to "Continue to GOV.UK Verify", new_verify_authentications_path, class: "govuk-button" %>
     <% else %>
       <%= link_to "Continue to GOV.UK Verify", "https://govuk-verify.herokuapp.com/intro?requestId=dfe-teachers-payment-staging", class: "govuk-button" %>
     <% end %>
