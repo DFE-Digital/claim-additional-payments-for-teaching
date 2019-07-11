@@ -57,17 +57,27 @@
   },
   "variables": {
     "deploymentUrlBase": "https://raw.githubusercontent.com/DFE-Digital/bat-platform-building-blocks/master/templates/",
+
+    "appServicePlanDeploymentName": "[concat(parameters('resourceNamePrefix'), '-app-service-plan')]",
+    "databaseServerFirewallRulesDeploymentName": "[concat(parameters('resourceNamePrefix'), '-database-server-firewall-rules')]",
+    "databaseServerDeploymentName": "[concat(parameters('resourceNamePrefix'), '-database-server')]",
+    "databaseDeploymentName": "[concat(parameters('resourceNamePrefix'), '-database')]",
+    "storageAccountDeploymentName": "[concat(parameters('resourceNamePrefix'), '-storage-account')]",
+
     "storageAccountName": "[replace(concat(parameters('resourceNamePrefix'), 'storage'), '-', '')]",
+
     "databaseServerName": "[concat(parameters('resourceNamePrefix'), '-db')]",
+
     "appServicePlanName": "[concat(parameters('resourceNamePrefix'), '-asp')]",
     "appServicePlanId": "[resourceId('Microsoft.Web/serverfarms', variables('appServicePlanName'))]",
+
     "appServiceName": "[concat(parameters('resourceNamePrefix'), '-as')]",
     "appServiceRuntimeStack": "[concat('COMPOSE|', base64(parameters('appServiceDockerCompose')))]"
   },
   "resources": [
     {
       "apiVersion": "2017-05-10",
-      "name": "storage-account",
+      "name": "[variables('storageAccountDeploymentName')]",
       "type": "Microsoft.Resources/deployments",
       "properties": {
         "mode": "Incremental",
@@ -84,9 +94,9 @@
     },
     {
       "apiVersion": "2017-05-10",
-      "name": "database-server",
+      "name": "[variables('databaseServerDeploymentName')]",
       "type": "Microsoft.Resources/deployments",
-      "dependsOn": ["storage-account"],
+      "dependsOn": ["[variables('storageAccountDeploymentName')]"],
       "properties": {
         "mode": "Incremental",
         "templateLink": {
@@ -114,9 +124,9 @@
     },
     {
       "apiVersion": "2017-05-10",
-      "name": "database",
+      "name": "[variables('databaseDeploymentName')]",
       "type": "Microsoft.Resources/deployments",
-      "dependsOn": ["database-server"],
+      "dependsOn": ["[variables('databaseServerDeploymentName')]"],
       "properties": {
         "mode": "Incremental",
         "templateLink": {
@@ -135,7 +145,7 @@
     },
     {
       "apiVersion": "2017-05-10",
-      "name": "app-service-plan",
+      "name": "[variables('appServicePlanDeploymentName')]",
       "type": "Microsoft.Resources/deployments",
       "properties": {
         "mode": "Incremental",
@@ -156,7 +166,11 @@
       "type": "Microsoft.Web/sites",
       "kind": "app,linux,container",
       "location": "[resourceGroup().location]",
-      "dependsOn": ["app-service-plan", "database", "database-server"],
+      "dependsOn": [
+        "[variables('appServicePlanDeploymentName')]",
+        "[variables('databaseDeploymentName')]",
+        "[variables('databaseServerDeploymentName')]"
+      ],
       "properties": {
         "httpsOnly": true,
         "serverFarmId": "[variables('appServicePlanId')]",
@@ -183,7 +197,7 @@
             },
             {
               "name": "DFE_TEACHERS_PAYMENT_SERVICE_DATABASE_HOST",
-              "value": "[reference('database-server').outputs.fullyQualifiedDomainName.value]"
+              "value": "[reference(variables('databaseServerDeploymentName')).outputs.fullyQualifiedDomainName.value]"
             },
             {
               "name": "DFE_TEACHERS_PAYMENT_SERVICE_DATABASE_NAME",
@@ -223,9 +237,9 @@
     },
     {
       "apiVersion": "2017-05-10",
-      "name": "database-server-firewall-rules",
+      "name": "[variables('databaseServerFirewallRulesDeploymentName')]",
       "type": "Microsoft.Resources/deployments",
-      "dependsOn": ["database-server", "[variables('appServiceName')]"],
+      "dependsOn": ["[variables('appServiceName')]", "[variables('databaseServerDeploymentName')]"],
       "properties": {
         "mode": "Incremental",
         "templateLink": {
