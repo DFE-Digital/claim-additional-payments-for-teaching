@@ -41,20 +41,20 @@ en:
     service_name: "Teachers: claim back your student loan repayments"
     questions:
       qts_award_year: "Which academic year did you complete your initial teacher training?"
-      claim_school: "Which school were you employed at between 6 April XXXX and 5 April XXXX?"
+      claim_school: "Which school were you employed at between 6 April 2018 and 5 April 2019?"
       employment_status: "Are you still employed to teach at a school in England?"
       current_school: "Which school are you currently employed at?"
-      subjects_taught: "Did you teach any of the following subjects between 6 April XXXX and 5 April XXXX?"
+      subjects_taught: "Did you teach any of the following subjects between 6 April 2018 and 5 April 2019?"
       mostly_teaching_eligible_subjects:
-        "Were half of your working hours spent teaching %{subjects} between 6 April XXXX and 5 April XXXX?"
+        "Were half of your working hours spent teaching %{subjects} between 6 April 2018 and 5 April 2019?"
       full_name: "What is your full name?"
       address: "What is your address?"
       date_of_birth: "What is your date of birth?"
       teacher_reference_number: "What's your teacher reference number?"
       national_insurance_number: "What's your National Insurance number?"
       student_loan_amount:
-        "How much student loan did you repay while you were at %{claim_school_name} between 6 April XXXX and 5 April
-        XXXX?"
+        "How much student loan did you repay while you were at %{claim_school_name} between 6 April 2018 and 5 April
+        2019?"
       email_address: "Email address"
       bank_details: "Enter bank account details"
       eligible_subjects:
