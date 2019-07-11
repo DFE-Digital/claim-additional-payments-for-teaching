@@ -82,9 +82,9 @@ ActiveRecord::Schema.define(version: 2019_06_27_143657) do
     t.string "national_insurance_number", limit: 9
     t.string "email_address", limit: 256
     t.boolean "mostly_teaching_eligible_subjects"
-    t.datetime "submitted_at"
     t.string "bank_sort_code", limit: 6
     t.string "bank_account_number", limit: 8
+    t.datetime "submitted_at"
     t.decimal "student_loan_repayment_amount", precision: 7, scale: 2
     t.string "reference", limit: 8
     t.boolean "biology_taught", default: false
