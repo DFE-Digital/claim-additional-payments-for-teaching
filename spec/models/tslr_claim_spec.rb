@@ -440,6 +440,19 @@ RSpec.describe TslrClaim, type: :model do
     end
   end
 
+  describe "#submittable?" do
+    it "returns true when the claim is valid and has not been submitted" do
+      claim = build(:tslr_claim, :submittable)
+
+      expect(claim.submittable?).to eq true
+    end
+    it "returns false when it has already been submitted" do
+      claim = build(:tslr_claim, :submitted)
+
+      expect(claim.submittable?).to eq false
+    end
+  end
+
   describe "#subjects_taught" do
     context "when a claim has subjects" do
       let(:claim) { create(:tslr_claim, biology_taught: true, chemistry_taught: true) }

@@ -106,6 +106,10 @@ class TslrClaim < ApplicationRecord
     submitted_at.present?
   end
 
+  def submittable?
+    valid?(:submit) && !submitted?
+  end
+
   def ineligible?
     ineligible_claim_school? || employed_at_no_school? || not_taught_eligible_subjects_enough?
   end
