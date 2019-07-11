@@ -29,6 +29,11 @@ steps:
       git clean -xdf
     displayName: Clean repository
     condition: eq(variables['Build.SourceBranch'], 'refs/heads/master')
+
+  - publish: $(System.DefaultWorkingDirectory)
+    artifact: repository
+    displayName: Publish repository as artifact
+
   - script: docker login -u $(dockerId) -p $pass
     env:
       pass: $(dockerPassword)
