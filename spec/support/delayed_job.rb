@@ -14,10 +14,3 @@ class TestCronJob < CronJob
   def perform
   end
 end
-
-class TestWithPerformOnScheduleCronJob < CronJob
-  self.cron_expression = "* * * * *"
-
-  def perform
-  end
-end
