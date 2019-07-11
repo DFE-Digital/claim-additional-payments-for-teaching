@@ -97,10 +97,6 @@ class ClaimsController < ApplicationController
     params[:slug].underscore
   end
 
-  def update_last_seen_at
-    session[:last_seen_at] = Time.zone.now
-  end
-
   def end_expired_sessions
     if claim_session_timed_out?
       clear_claim_session

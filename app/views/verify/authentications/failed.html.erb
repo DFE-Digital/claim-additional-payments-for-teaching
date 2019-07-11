@@ -1,0 +1,26 @@
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+
+    <h1 class="govuk-heading-xl">
+      Your identity could not be verified
+    </h1>
+
+    <p class="govuk-body">
+      There are a few reasons why this might happen, including:
+    </p>
+
+    <ul class="govuk-list govuk-list--bullet">
+      <li>
+        your answer to a question doesn't match the records held by the Verify provider
+      </li>
+      <li>
+        the Verify provider that you chose does not have access to enough information about you
+      </li>
+      <li>
+        you've recently had a change in circumstances, and they are not up to date online
+      </li>
+    </ul>
+
+    <%= link_to "Try GOV.UK Verify again", new_verify_authentications_path, class: "govuk-button" %>
+  </div>
+</div>

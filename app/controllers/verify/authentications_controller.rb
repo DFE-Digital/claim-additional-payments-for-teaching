@@ -1,6 +1,7 @@
 module Verify
   class AuthenticationsController < ApplicationController
     before_action :send_unstarted_claiments_to_the_start
+    before_action :update_last_seen_at
     skip_before_action :verify_authenticity_token, only: [:create]
 
     # Page where a new Verify authentication request is generated and posted, as
@@ -17,30 +18,32 @@ module Verify
     #
     #   https://www.docs.verify.service.gov.uk/get-started/set-up-successful-verification-journey/#handle-a-response
     def create
-      verify_authentication_response = Verify::ServiceProvider.new.translate_response(params["SAMLResponse"], session[:verify_request_id], "LEVEL_2")
-      current_claim.update!(claim_parameters_from_response(verify_authentication_response))
-      redirect_to claim_path("teacher-reference-number")
+      @response = Verify::Response.translate(saml_response: params["SAMLResponse"], request_id: session[:verify_request_id], level_of_assurance: "LEVEL_2")
+      current_claim.update!(@response.claim_parameters) if @response.verified?
+
+      redirect_to verify_path_for_response_scenario(@response.scenario)
+    end
+
+    def verified
+    end
+
+    def failed
+    end
+
+    def no_auth
     end
 
     private
 
-    def claim_parameters_from_response(response)
-      {
-        full_name: full_name_from_response(response),
-        address_line_1: response.fetch("attributes").fetch("addresses").first.fetch("value").fetch("lines")[0],
-        address_line_2: response.fetch("attributes").fetch("addresses").first.fetch("value").fetch("lines")[1],
-        address_line_3: response.fetch("attributes").fetch("addresses").first.fetch("value").fetch("lines")[2],
-        postcode: response.fetch("attributes").fetch("addresses").first.fetch("value").fetch("postCode"),
-        date_of_birth: response.fetch("attributes").fetch("datesOfBirth").first.fetch("value"),
-      }
-    end
-
-    def full_name_from_response(response)
-      first_name = response.fetch("attributes").fetch("firstNames").first.fetch("value")
-      middle_name = response.fetch("attributes").fetch("middleNames").first.fetch("value")
-      surname = response.fetch("attributes").fetch("surnames").first.fetch("value")
-
-      [first_name, middle_name, surname].join(" ")
+    def verify_path_for_response_scenario(scenario)
+      case scenario
+      when Verify::IDENTITY_VERIFIED_SCENARIO
+        verified_verify_authentications_path
+      when Verify::AUTHENTICATION_FAILED_SCENARIO
+        failed_verify_authentications_path
+      when Verify::NO_AUTHENTICATION_SCENARIO
+        no_auth_verify_authentications_path
+      end
     end
   end
 end

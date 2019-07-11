@@ -8,7 +8,7 @@ else
   DB_STATUS=$(rake db:migrate:status 2>&1 | tail -n 1)
   if [ "$DB_STATUS" == "Schema migrations table does not exist yet."  ]; then
     echo "No tables exist - setting up the database"
-    rails db:setup
+    rails db:setup schools_data:import
   else
     echo "Running the migrations"
     rails db:migrate
