@@ -206,11 +206,11 @@ RSpec.describe TslrClaim, type: :model do
   context "when saving in the “submit” validation context" do
     it "validates the presence of all required fields" do
       expect(TslrClaim.new).not_to be_valid(:submit)
-      expect(build(:tslr_claim, :eligible_and_submittable)).to be_valid(:submit)
+      expect(build(:tslr_claim, :submittable)).to be_valid(:submit)
     end
 
     it "validates the claim is not ineligible" do
-      ineligible_claim = build(:tslr_claim, :eligible_and_submittable, mostly_teaching_eligible_subjects: false)
+      ineligible_claim = build(:tslr_claim, :submittable, mostly_teaching_eligible_subjects: false)
 
       expect(ineligible_claim).not_to be_valid(:submit)
       expect(ineligible_claim.errors[:base]).to include("You must have spent at least half your time teaching an eligible subject.")
@@ -401,7 +401,7 @@ RSpec.describe TslrClaim, type: :model do
 
       context "when a claim with the same reference already exists" do
         let(:reference) { "12345678" }
-        let!(:other_claim) { create(:tslr_claim, :eligible_and_submittable, reference: reference) }
+        let!(:other_claim) { create(:tslr_claim, :submittable, reference: reference) }
 
         before do
           expect(Reference).to receive(:new).once.and_return(double(to_s: reference), double(to_s: "87654321"))
@@ -415,7 +415,7 @@ RSpec.describe TslrClaim, type: :model do
     end
 
     context "when the claim is ineligible" do
-      let(:tslr_claim) { create(:tslr_claim, :eligible_and_submittable, mostly_teaching_eligible_subjects: false) }
+      let(:tslr_claim) { create(:tslr_claim, :submittable, mostly_teaching_eligible_subjects: false) }
 
       it "doesn't set submitted_at" do
         expect(tslr_claim.submitted_at).to be_nil
@@ -433,7 +433,7 @@ RSpec.describe TslrClaim, type: :model do
 
   describe "submitted" do
     let!(:submitted_claims) { create_list(:tslr_claim, 5, :submitted) }
-    let!(:unsubmitted_claims) { create_list(:tslr_claim, 2, :eligible_and_submittable) }
+    let!(:unsubmitted_claims) { create_list(:tslr_claim, 2, :submittable) }
 
     it "returns submitted claims" do
       expect(subject.class.submitted).to match_array(submitted_claims)

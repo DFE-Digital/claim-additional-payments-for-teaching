@@ -2,7 +2,7 @@ require "rails_helper"
 
 RSpec.describe TslrClaimsCsv do
   before do
-    create(:tslr_claim, :eligible_and_submittable,
+    create(:tslr_claim, :submittable,
       reference: "B2W4L0KC",
       submitted_at: Time.zone.parse("2019-01-01 17:30:00"),
       qts_award_year: "2013-2014",

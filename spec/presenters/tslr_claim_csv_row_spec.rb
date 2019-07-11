@@ -15,7 +15,7 @@ RSpec.describe TslrClaimCsvRow do
     let(:row) { CSV.parse(subject.to_s).first }
 
     let(:claim) do
-      create(:tslr_claim, :eligible_and_submittable,
+      create(:tslr_claim, :submittable,
         claim_school: create(:school, name: claim_school),
         current_school: create(:school, name: current_school),
         employment_status: TslrClaim.employment_statuses[employment_status.parameterize.underscore],

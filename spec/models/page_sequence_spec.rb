@@ -29,7 +29,7 @@ RSpec.describe PageSequence do
     end
 
     context "when the claim is in a submittable state (i.e. all questions have been answered)" do
-      let(:claim) { build(:tslr_claim, :eligible_and_submittable) }
+      let(:claim) { build(:tslr_claim, :submittable) }
 
       it "returns “check-your-answers” as the next slug" do
         expect(PageSequence.new(claim, "qts-year").next_slug).to eq "check-your-answers"
