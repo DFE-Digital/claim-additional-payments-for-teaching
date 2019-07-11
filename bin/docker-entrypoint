@@ -3,12 +3,12 @@ set -e
 
 if [ "$RAILS_ENV" != "production" ]; then
   echo "In Dev / Test - Initializing database"
-  rake db:create db:setup
+  rake db:create db:schema:load
 else
   DB_STATUS=$(rake db:migrate:status 2>&1 | tail -n 1)
   if [ "$DB_STATUS" == "Schema migrations table does not exist yet."  ]; then
     echo "No tables exist - setting up the database"
-    rails db:setup schools_data:import
+    rails db:setup
   else
     echo "Running the migrations"
     rails db:migrate
