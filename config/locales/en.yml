@@ -53,8 +53,8 @@ en:
       teacher_reference_number: "What's your teacher reference number?"
       national_insurance_number: "What's your National Insurance number?"
       student_loan_amount:
-        "Exactly how much student loan did you repay while you worked at Penistone Grammar School between 6 April XXXX
-        and 5 April XXXX?"
+        "Exactly how much student loan did you repay while you worked at %{claim_school_name} between 6 April XXXX and 5
+        April XXXX?"
       email_address: "Email address"
       bank_details: "Enter bank account details"
       eligible_subjects:
