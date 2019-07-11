@@ -52,7 +52,7 @@ class PageSequence
   private
 
   def claim_is_ready_for_submission?
-    claim.can_be_submitted? && !claim.submitted?
+    claim.valid?(:submit) && !claim.submitted?
   end
 
   def updating_schools_answers?

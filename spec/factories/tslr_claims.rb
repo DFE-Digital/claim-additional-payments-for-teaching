@@ -20,11 +20,6 @@ FactoryBot.define do
       bank_account_number { 12345678 }
     end
 
-    trait :eligible_but_unsubmittable do
-      eligible_and_submittable
-      email_address { nil }
-    end
-
     trait :submitted do
       eligible_and_submittable
       submitted_at { Time.zone.now }
