@@ -53,8 +53,6 @@ DFE_SIGN_IN_ISSUER=https://pp-oidc.signin.education.gov.uk:443
 DFE_SIGN_IN_REDIRECT_BASE_URL=https://localhost:3000
 DFE_SIGN_IN_IDENTIFIER=<paste identifier>
 DFE_SIGN_IN_SECRET=<paste secret>
-GOVUK_VERIFY_ENABLED=1
-GOVUK_VERIFY_VSP_HOST=http://localhost:50300
 ```
 
 The identifier and secret are stored in Heroku.
@@ -63,8 +61,8 @@ The identifier and secret are stored in Heroku.
 
 We use Notify to send emails however it is turned off by default in development.
 If you want to test Notify in development you will need an API key and template
-ID and add them to your `.env`. Make sure you use a 'test' or 'team' API key
-only.
+ID and add them to your `.env` file. Make sure you use a 'test' or 'team' API
+key only.
 
 ```
 NOTIFY_API_KEY=<paste api key>
@@ -74,8 +72,17 @@ NOTIFY_TEMPLATE_ID=d72e2ff9-b228-4f16-9099-fd9d411c0334
 ### GOV.UK Verify
 
 The service uses GOV.UK Verify to verify the identity of teachers that are
-claiming. See [docs/govuk-verify](/docs/govuk-verify.md) for details on this,
-including how to run the verify dependencies locally.
+claiming.
+
+If you want to test Verify in development, add the following to your `.env`
+file.
+
+```
+GOVUK_VERIFY_ENABLED=1
+GOVUK_VERIFY_VSP_HOST=http://localhost:50300
+```
+
+See [docs/govuk-verify](/docs/govuk-verify.md) for more details on this.
 
 ### Running `CronJob`s
 
