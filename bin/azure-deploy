@@ -68,7 +68,7 @@ sed \
   "$SECRETS_PARAMETERS_TEMPLATE_FILE_PATH" > "$SECRETS_PARAMETERS_FILE_PATH"
 
 echo
-echo "Are you ready to deploy secrets?"
+echo "Are you ready to deploy $SECRETS_RESOURCE_GROUP_NAME?"
 echo "  Hit return to continue, or CTRL+C to stop."
 read -r
 
@@ -108,7 +108,7 @@ ruby \
 
 echo
 echo "Are all the secrets up to date?"
-echo "Are you ready to deploy app?"
+echo "Are you ready to deploy $APP_RESOURCE_GROUP_NAME?"
 echo "  Hit return to continue, or CTRL+C to stop."
 read -r
 
