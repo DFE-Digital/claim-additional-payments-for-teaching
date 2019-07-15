@@ -398,19 +398,20 @@ RSpec.describe TslrClaim, type: :model do
       it "generates a reference" do
         expect(tslr_claim.reference).to_not eq nil
       end
+    end
 
-      context "when a claim with the same reference already exists" do
-        let(:reference) { "12345678" }
-        let!(:other_claim) { create(:tslr_claim, :submittable, reference: reference) }
+    context "when a claim with the same reference already exists" do
+      let(:tslr_claim) { create(:tslr_claim, :submittable) }
+      let(:reference) { "12345678" }
+      let!(:other_claim) { create(:tslr_claim, :submittable, reference: reference) }
 
-        before do
-          expect(Reference).to receive(:new).once.and_return(double(to_s: reference), double(to_s: "87654321"))
-          tslr_claim.submit!
-        end
+      before do
+        expect(Reference).to receive(:new).once.and_return(double(to_s: reference), double(to_s: "87654321"))
+        tslr_claim.submit!
+      end
 
-        it "generates a unique reference" do
-          expect(tslr_claim.reference).to eq("87654321")
-        end
+      it "generates a unique reference" do
+        expect(tslr_claim.reference).to eq("87654321")
       end
     end
 
