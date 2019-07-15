@@ -29,14 +29,19 @@ steps:
       git clean -xdf
     displayName: Clean repository
     condition: eq(variables['Build.SourceBranch'], 'refs/heads/master')
+
+  - publish: $(System.DefaultWorkingDirectory)
+    artifact: repository
+    displayName: Publish repository as artifact
+
   - script: docker login -u $(dockerId) -p $pass
     env:
       pass: $(dockerPassword)
     displayName: Login to DockerHub
     condition: eq(variables['Build.SourceBranch'], 'refs/heads/master')
-  - script: docker build --file=Dockerfile --tag=$(dockerRegistry)/$(dockerImageName):latest --target=web .
+  - script: docker build --file=Dockerfile --tag=$(dockerRegistry)/$(dockerImageName):$(Build.BuildNumber) --target=web .
     displayName: Build Docker image for deployment
     condition: eq(variables['Build.SourceBranch'], 'refs/heads/master')
-  - script: docker push $(dockerRegistry)/$(dockerImageName):latest
+  - script: docker push $(dockerRegistry)/$(dockerImageName):$(Build.BuildNumber)
     displayName: Push Docker image
     condition: eq(variables['Build.SourceBranch'], 'refs/heads/master')
