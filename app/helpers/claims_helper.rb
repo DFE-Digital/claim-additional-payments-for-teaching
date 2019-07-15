@@ -19,7 +19,7 @@ module ClaimsHelper
     [
       [t("tslr.questions.qts_award_year"), academic_years(claim.qts_award_year), "qts-year"],
       [t("tslr.questions.claim_school"), claim.claim_school_name, "claim-school"],
-      [t("tslr.questions.current_school"), claim.current_school_name, "current-school"],
+      [t("tslr.questions.current_school"), claim.current_school_name, "still-teaching"],
       [t("tslr.questions.subjects_taught"), subject_list(claim.subjects_taught), "subjects-taught"],
       [t("tslr.questions.mostly_teaching_eligible_subjects", subjects: subject_list(claim.subjects_taught)), (claim.mostly_teaching_eligible_subjects? ? "Yes" : "No"), "mostly-teaching-eligible-subjects"],
       [t("tslr.questions.student_loan_amount", claim_school_name: claim.claim_school_name), number_to_currency(claim.student_loan_repayment_amount), "student-loan-amount"],

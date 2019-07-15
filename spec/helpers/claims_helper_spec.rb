@@ -33,7 +33,7 @@ describe ClaimsHelper do
       expected_answers = [
         [I18n.t("tslr.questions.qts_award_year"), "September 1 2013 - August 31 2014", "qts-year"],
         [I18n.t("tslr.questions.claim_school"), school.name, "claim-school"],
-        [I18n.t("tslr.questions.current_school"), school.name, "current-school"],
+        [I18n.t("tslr.questions.current_school"), school.name, "still-teaching"],
         [I18n.t("tslr.questions.subjects_taught"), "Chemistry and Physics", "subjects-taught"],
         [I18n.t("tslr.questions.mostly_teaching_eligible_subjects", subjects: "Chemistry and Physics"), "Yes", "mostly-teaching-eligible-subjects"],
         [I18n.t("tslr.questions.student_loan_amount", claim_school_name: school.name), "£1,987.65", "student-loan-amount"],
