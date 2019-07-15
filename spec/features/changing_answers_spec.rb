@@ -6,7 +6,7 @@ RSpec.feature "Changing the answers on a submittable claim" do
 
   let(:claim) do
     create(:tslr_claim,
-      :eligible_and_submittable,
+      :submittable,
       employment_status: :different_school,
       physics_taught: true,
       claim_school: claim_school,

@@ -67,7 +67,7 @@ RSpec.describe "Claims", type: :request do
         post claims_path
 
         claim = TslrClaim.order(:created_at).last
-        claim.update_attributes(attributes_for(:tslr_claim, :eligible_and_submittable))
+        claim.update_attributes(attributes_for(:tslr_claim, :submittable))
         claim.submit!
 
         get claim_path("confirmation")
@@ -167,7 +167,7 @@ RSpec.describe "Claims", type: :request do
       context "when updating from check-your-answers" do
         context "with an eligible and submittable claim" do
           before :each do
-            in_progress_claim.update!(attributes_for(:tslr_claim, :eligible_and_submittable))
+            in_progress_claim.update!(attributes_for(:tslr_claim, :submittable))
 
             perform_enqueued_jobs do
               put claim_path("check-your-answers")
@@ -194,7 +194,7 @@ RSpec.describe "Claims", type: :request do
 
         context "with an eligible but unsubmittable claim" do
           before :each do
-            in_progress_claim.update!(attributes_for(:tslr_claim, :eligible_and_submittable, email_address: nil))
+            in_progress_claim.update!(attributes_for(:tslr_claim, :submittable, email_address: nil))
 
             put claim_path("check-your-answers")
 
@@ -217,7 +217,7 @@ RSpec.describe "Claims", type: :request do
 
         context "with an ineligible claim" do
           before :each do
-            in_progress_claim.update!(attributes_for(:tslr_claim, :eligible_and_submittable, mostly_teaching_eligible_subjects: false))
+            in_progress_claim.update!(attributes_for(:tslr_claim, :submittable, mostly_teaching_eligible_subjects: false))
 
             put claim_path("check-your-answers")
 

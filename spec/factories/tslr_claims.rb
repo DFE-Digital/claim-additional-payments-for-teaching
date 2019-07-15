@@ -1,6 +1,6 @@
 FactoryBot.define do
   factory :tslr_claim do
-    trait :eligible_and_submittable do
+    trait :submittable do
       claim_school { School.find(ActiveRecord::FixtureSet.identify(:penistone_grammar_school, :uuid)) }
       current_school { claim_school }
       qts_award_year { "2013-2014" }
@@ -20,13 +20,8 @@ FactoryBot.define do
       bank_account_number { 12345678 }
     end
 
-    trait :eligible_but_unsubmittable do
-      eligible_and_submittable
-      email_address { nil }
-    end
-
     trait :submitted do
-      eligible_and_submittable
+      submittable
       submitted_at { Time.zone.now }
       reference { Reference.new.to_s }
     end

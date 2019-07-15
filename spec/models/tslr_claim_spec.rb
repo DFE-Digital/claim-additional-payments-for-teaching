@@ -206,7 +206,14 @@ RSpec.describe TslrClaim, type: :model do
   context "when saving in the “submit” validation context" do
     it "validates the presence of all required fields" do
       expect(TslrClaim.new).not_to be_valid(:submit)
-      expect(TslrClaim.new(attributes_for(:tslr_claim, :eligible_and_submittable))).to be_valid(:submit)
+      expect(build(:tslr_claim, :submittable)).to be_valid(:submit)
+    end
+
+    it "validates the claim is not ineligible" do
+      ineligible_claim = build(:tslr_claim, :submittable, mostly_teaching_eligible_subjects: false)
+
+      expect(ineligible_claim).not_to be_valid(:submit)
+      expect(ineligible_claim.errors[:base]).to include("You must have spent at least half your time teaching an eligible subject.")
     end
   end
 
@@ -379,10 +386,10 @@ RSpec.describe TslrClaim, type: :model do
       freeze_time { example.run }
     end
 
-    before { tslr_claim.submit! }
+    context "when the claim is submittable" do
+      let(:tslr_claim) { create(:tslr_claim, :submittable) }
 
-    context "when the claim is eligible and submittable" do
-      let(:tslr_claim) { create(:tslr_claim, :eligible_and_submittable) }
+      before { tslr_claim.submit! }
 
       it "sets submitted_at to now" do
         expect(tslr_claim.submitted_at).to eq Time.zone.now
@@ -391,36 +398,26 @@ RSpec.describe TslrClaim, type: :model do
       it "generates a reference" do
         expect(tslr_claim.reference).to_not eq nil
       end
-
-      context "when a claim with the same reference already exists" do
-        let(:reference) { "12345678" }
-        let!(:other_claim) { create(:tslr_claim, :eligible_and_submittable, reference: reference) }
-
-        before do
-          expect(Reference).to receive(:new).once.and_return(double(to_s: reference), double(to_s: "87654321"))
-          tslr_claim.submit!
-        end
-
-        it "generates a unique reference" do
-          expect(tslr_claim.reference).to eq("87654321")
-        end
-      end
     end
 
-    context "when the claim is eligible but unsubmittable" do
-      let(:tslr_claim) { create(:tslr_claim, :eligible_but_unsubmittable) }
+    context "when a Reference clash with an existing claim occurs" do
+      let(:tslr_claim) { create(:tslr_claim, :submittable) }
 
-      it "doesn't set submitted_at" do
-        expect(tslr_claim.submitted_at).to be_nil
+      before do
+        other_claim = create(:tslr_claim, :submittable, reference: "12345678")
+        expect(Reference).to receive(:new).once.and_return(double(to_s: other_claim.reference), double(to_s: "87654321"))
+        tslr_claim.submit!
       end
 
-      it "doesn't generate a reference" do
-        expect(tslr_claim.reference).to eq nil
+      it "generates a unique reference" do
+        expect(tslr_claim.reference).to eq("87654321")
       end
     end
 
     context "when the claim is ineligible" do
-      let(:tslr_claim) { create(:tslr_claim, :eligible_and_submittable, mostly_teaching_eligible_subjects: false) }
+      let(:tslr_claim) { create(:tslr_claim, :submittable, mostly_teaching_eligible_subjects: false) }
+
+      before { tslr_claim.submit! }
 
       it "doesn't set submitted_at" do
         expect(tslr_claim.submitted_at).to be_nil
@@ -434,14 +431,43 @@ RSpec.describe TslrClaim, type: :model do
         expect(tslr_claim.errors.messages[:base]).to include("You must have spent at least half your time teaching an eligible subject.")
       end
     end
+
+    context "when the claim has already been submitted" do
+      let(:tslr_claim) { create(:tslr_claim, :submitted, submitted_at: 2.days.ago) }
+
+      it "returns false" do
+        expect(tslr_claim.submit!).to eq false
+      end
+
+      it "doesn't change the reference number" do
+        expect { tslr_claim.submit! }.not_to(change { tslr_claim.reference })
+      end
+
+      it "doesn't change the submitted_at" do
+        expect { tslr_claim.submit! }.not_to(change { tslr_claim.submitted_at })
+      end
+    end
   end
 
   describe "submitted" do
     let!(:submitted_claims) { create_list(:tslr_claim, 5, :submitted) }
-    let!(:unsubmitted_claims) { create_list(:tslr_claim, 2, :eligible_and_submittable) }
+    let!(:unsubmitted_claims) { create_list(:tslr_claim, 2, :submittable) }
 
     it "returns submitted claims" do
       expect(subject.class.submitted).to match_array(submitted_claims)
+    end
+  end
+
+  describe "#submittable?" do
+    it "returns true when the claim is valid and has not been submitted" do
+      claim = build(:tslr_claim, :submittable)
+
+      expect(claim.submittable?).to eq true
+    end
+    it "returns false when it has already been submitted" do
+      claim = build(:tslr_claim, :submitted)
+
+      expect(claim.submittable?).to eq false
     end
   end
 

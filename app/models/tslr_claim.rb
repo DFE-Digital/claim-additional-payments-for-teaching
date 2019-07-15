@@ -78,6 +78,8 @@ class TslrClaim < ApplicationRecord
   validate  :bank_account_number_must_be_eight_digits
   validate  :bank_sort_code_must_be_six_digits
 
+  validate :claim_must_not_be_ineligible, on: :submit
+
   before_validation :reset_inferred_current_school, if: ->(record) { record.persisted? && record.employment_status_changed? }
 
   before_save :normalise_trn, if: :teacher_reference_number_changed?
@@ -91,15 +93,12 @@ class TslrClaim < ApplicationRecord
   scope :submitted, -> { where.not(submitted_at: nil) }
 
   def submit!
-    if ineligible?
-      errors.add(:base, full_ineligibility_reason)
-      return false
-    end
-
-    if can_be_submitted?
+    if submittable?
       self.submitted_at = Time.zone.now
       self.reference = unique_reference
       save!
+    else
+      false
     end
   end
 
@@ -107,8 +106,8 @@ class TslrClaim < ApplicationRecord
     submitted_at.present?
   end
 
-  def can_be_submitted?
-    valid?(:submit)
+  def submittable?
+    valid?(:submit) && !submitted?
   end
 
   def ineligible?
@@ -218,5 +217,9 @@ class TslrClaim < ApplicationRecord
 
   def at_least_one_subject_chosen?
     SUBJECT_FIELDS.find { |s| send(s) == true }.present?
+  end
+
+  def claim_must_not_be_ineligible
+    errors.add(:base, full_ineligibility_reason) if ineligible?
   end
 end
