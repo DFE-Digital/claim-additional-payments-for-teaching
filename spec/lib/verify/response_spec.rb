@@ -27,7 +27,7 @@ RSpec.describe Verify::Response, type: :model do
       expect(subject.verified?).to eq(true)
     end
 
-    it "returns the expected parameters" do
+    it "returns the expected verified parameters" do
       expect(subject.claim_parameters[:full_name]).to eq("Isambard Kingdom Brunel")
       expect(subject.claim_parameters[:address_line_1]).to eq("Verified Street")
       expect(subject.claim_parameters[:address_line_2]).to eq("Verified Town")
