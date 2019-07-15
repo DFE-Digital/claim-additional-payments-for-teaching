@@ -400,7 +400,7 @@ RSpec.describe TslrClaim, type: :model do
       end
     end
 
-    context "when a claim with the same reference already exists" do
+    context "when a Reference clash with an existing claim occurs" do
       let(:tslr_claim) { create(:tslr_claim, :submittable) }
 
       before do
