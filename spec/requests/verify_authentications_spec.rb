@@ -86,7 +86,7 @@ RSpec.describe "GOV.UK Verify::AuthenticationsController requests", type: :reque
       get failed_verify_authentications_path
 
       expect(response).to be_successful
-      expect(response.body).to include("Your identity could not be verified")
+      expect(response.body).to include("the company you chose does not have enough information about you")
     end
   end
 
@@ -97,7 +97,7 @@ RSpec.describe "GOV.UK Verify::AuthenticationsController requests", type: :reque
       get no_auth_verify_authentications_path
 
       expect(response).to be_successful
-      expect(response.body).to include("exiting the Verify process before it was complete")
+      expect(response.body).to include("you did not complete the process")
     end
   end
 
