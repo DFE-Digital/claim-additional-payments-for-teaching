@@ -132,7 +132,6 @@ GEM
     mini_portile2 (2.4.0)
     minitest (5.11.3)
     msgpack (1.2.10)
-    multi_json (1.13.1)
     nanoid (2.0.0)
     nio4r (2.4.0)
     nokogiri (1.10.3)
@@ -205,8 +204,7 @@ GEM
     rb-inotify (0.10.0)
       ffi (~> 1.0)
     regexp_parser (1.5.1)
-    rollbar (2.20.2)
-      multi_json
+    rollbar (2.21.0)
     rspec-core (3.8.0)
       rspec-support (~> 3.8.0)
     rspec-expectations (3.8.2)
