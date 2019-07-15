@@ -402,11 +402,10 @@ RSpec.describe TslrClaim, type: :model do
 
     context "when a claim with the same reference already exists" do
       let(:tslr_claim) { create(:tslr_claim, :submittable) }
-      let(:reference) { "12345678" }
-      let!(:other_claim) { create(:tslr_claim, :submittable, reference: reference) }
 
       before do
-        expect(Reference).to receive(:new).once.and_return(double(to_s: reference), double(to_s: "87654321"))
+        other_claim = create(:tslr_claim, :submittable, reference: "12345678")
+        expect(Reference).to receive(:new).once.and_return(double(to_s: other_claim.reference), double(to_s: "87654321"))
         tslr_claim.submit!
       end
 
