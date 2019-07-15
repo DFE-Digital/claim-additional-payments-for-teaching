@@ -42,7 +42,7 @@ module Verify
     private
 
     def address
-      @address ||= parameters.fetch("attributes").fetch("addresses").first.fetch("value")
+      @address ||= most_recent_verified_value(parameters.fetch("attributes").fetch("addresses"))
     end
 
     def address_lines
@@ -50,11 +50,18 @@ module Verify
     end
 
     def full_name
-      first_name = parameters.fetch("attributes").fetch("firstNames").first.fetch("value")
-      middle_name = parameters.fetch("attributes").fetch("middleNames").first.fetch("value")
-      surname = parameters.fetch("attributes").fetch("surnames").first.fetch("value")
+      first_name = most_recent_verified_value(parameters.fetch("attributes").fetch("firstNames"))
+      middle_name = most_recent_verified_value(parameters.fetch("attributes").fetch("middleNames"))
+      surname = most_recent_verified_value(parameters.fetch("attributes").fetch("surnames"))
 
       [first_name, middle_name, surname].join(" ")
+    end
+
+    def most_recent_verified_value(attributes)
+      attributes.sort_by { |attribute| Date.strptime(attribute["to"], "%Y-%m-%d") }
+        .reverse
+        .find { |attribute| attribute["verified"] }
+        .fetch("value")
     end
   end
 end

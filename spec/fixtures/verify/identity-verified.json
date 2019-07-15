@@ -8,7 +8,19 @@
         "value": "Isambard",
         "verified": true,
         "from": "2019-06-25",
+        "to": "2019-06-30"
+      },
+      {
+        "value": "Thomas",
+        "verified": true,
+        "from": "2015-03-01",
         "to": "2019-06-25"
+      },
+      {
+        "value": "Sam",
+        "verified": false,
+        "from": "2019-06-30",
+        "to": "2019-07-09"
       }
     ],
     "middleNames": [
@@ -17,14 +29,32 @@
         "verified": true,
         "from": "2019-06-25",
         "to": "2019-06-25"
+      },
+      {
+        "value": "K.",
+        "verified": false,
+        "from": "2019-06-25",
+        "to": "2019-07-09"
       }
     ],
     "surnames": [
+      {
+        "value": "Telford",
+        "verified": true,
+        "from": "2015-03-01",
+        "to": "2019-06-24"
+      },
       {
         "value": "Brunel",
         "verified": true,
         "from": "2019-06-25",
         "to": "2019-06-25"
+      },
+      {
+        "value": "",
+        "verified": false,
+        "from": "2019-06-25",
+        "to": "2019-07-09"
       }
     ],
     "datesOfBirth": [
@@ -48,6 +78,15 @@
         "verified": true,
         "from": "2019-06-25",
         "to": "2019-06-25"
+      },
+      {
+        "value": {
+          "lines": ["Unverified Street", "Unverified Town", "Unverified County"],
+          "postCode": "L12 345"
+        },
+        "verified": false,
+        "from": "2019-06-25",
+        "to": "2019-07-25"
       }
     ]
   }
