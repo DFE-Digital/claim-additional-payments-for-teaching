@@ -431,6 +431,22 @@ RSpec.describe TslrClaim, type: :model do
         expect(tslr_claim.errors.messages[:base]).to include("You must have spent at least half your time teaching an eligible subject.")
       end
     end
+
+    context "when the claim has already been submitted" do
+      let(:tslr_claim) { create(:tslr_claim, :submitted, submitted_at: 2.days.ago) }
+
+      it "returns false" do
+        expect(tslr_claim.submit!).to eq false
+      end
+
+      it "doesn't change the reference number" do
+        expect { tslr_claim.submit! }.not_to(change { tslr_claim.reference })
+      end
+
+      it "doesn't change the submitted_at" do
+        expect { tslr_claim.submit! }.not_to(change { tslr_claim.submitted_at })
+      end
+    end
   end
 
   describe "submitted" do

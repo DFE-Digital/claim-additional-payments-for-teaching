@@ -93,7 +93,7 @@ class TslrClaim < ApplicationRecord
   scope :submitted, -> { where.not(submitted_at: nil) }
 
   def submit!
-    if valid?(:submit)
+    if submittable?
       self.submitted_at = Time.zone.now
       self.reference = unique_reference
       save!
