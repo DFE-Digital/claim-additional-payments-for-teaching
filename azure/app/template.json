@@ -53,6 +53,12 @@
     },
     "DFE_SIGN_IN_SECRET": {
       "type": "securestring"
+    },
+    "NOTIFY_API_KEY": {
+      "type": "securestring"
+    },
+    "NOTIFY_TEMPLATE_ID": {
+      "type": "string"
     }
   },
   "variables": {
@@ -230,6 +236,14 @@
             {
               "name": "DFE_SIGN_IN_SECRET",
               "value": "[parameters('DFE_SIGN_IN_SECRET')]"
+            },
+            {
+              "name": "NOTIFY_API_KEY",
+              "value": "[parameters('NOTIFY_API_KEY')]"
+            },
+            {
+              "name": "NOTIFY_TEMPLATE_ID",
+              "value": "[parameters('NOTIFY_TEMPLATE_ID')]"
             }
           ]
         }

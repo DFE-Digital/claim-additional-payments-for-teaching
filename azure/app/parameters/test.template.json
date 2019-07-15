@@ -90,6 +90,22 @@
         },
         "secretName": "DfeSignInRedirectBaseUrl"
       }
+    },
+    "NOTIFY_API_KEY": {
+      "reference": {
+        "keyVault": {
+          "id": "/subscriptions/${subscriptionId}/resourceGroups/${keyVaultResourceGroupName}/providers/Microsoft.KeyVault/vaults/${keyVaultName}"
+        },
+        "secretName": "NotifyApiKey"
+      }
+    },
+    "NOTIFY_TEMPLATE_ID": {
+      "reference": {
+        "keyVault": {
+          "id": "/subscriptions/${subscriptionId}/resourceGroups/${keyVaultResourceGroupName}/providers/Microsoft.KeyVault/vaults/${keyVaultName}"
+        },
+        "secretName": "NotifyTemplateID"
+      }
     }
   }
 }
