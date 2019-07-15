@@ -386,10 +386,10 @@ RSpec.describe TslrClaim, type: :model do
       freeze_time { example.run }
     end
 
-    before { tslr_claim.submit! }
-
     context "when the claim is submittable" do
       let(:tslr_claim) { create(:tslr_claim, :submittable) }
+
+      before { tslr_claim.submit! }
 
       it "sets submitted_at to now" do
         expect(tslr_claim.submitted_at).to eq Time.zone.now
@@ -416,6 +416,8 @@ RSpec.describe TslrClaim, type: :model do
 
     context "when the claim is ineligible" do
       let(:tslr_claim) { create(:tslr_claim, :submittable, mostly_teaching_eligible_subjects: false) }
+
+      before { tslr_claim.submit! }
 
       it "doesn't set submitted_at" do
         expect(tslr_claim.submitted_at).to be_nil
