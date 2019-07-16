@@ -31,36 +31,6 @@ RSpec.feature "Teacher Student Loan Repayments claims" do
 
     click_on "Skip GOV.UK Verify"
 
-    expect(page).to have_text(I18n.t("tslr.questions.full_name"))
-
-    fill_in I18n.t("tslr.questions.full_name"), with: "Margaret Honeycutt"
-    click_on "Continue"
-
-    expect(claim.reload.full_name).to eql("Margaret Honeycutt")
-
-    expect(page).to have_text(I18n.t("tslr.questions.address"))
-
-    fill_in :tslr_claim_address_line_1, with: "123 Main Street"
-    fill_in :tslr_claim_address_line_2, with: "Downtown"
-    fill_in "Town or city", with: "Twin Peaks"
-    fill_in "County", with: "Washington"
-    fill_in "Postcode", with: "M1 7HL"
-    click_on "Continue"
-
-    expect(claim.reload.address_line_1).to eql("123 Main Street")
-    expect(claim.address_line_2).to eql("Downtown")
-    expect(claim.address_line_3).to eql("Twin Peaks")
-    expect(claim.address_line_4).to eql("Washington")
-    expect(claim.postcode).to eql("M1 7HL")
-
-    expect(page).to have_text(I18n.t("tslr.questions.date_of_birth"))
-    fill_in "Day", with: "03"
-    fill_in "Month", with: "7"
-    fill_in "Year", with: "1990"
-    click_on "Continue"
-
-    expect(claim.reload.date_of_birth).to eq(Date.new(1990, 7, 3))
-
     expect(page).to have_text(I18n.t("tslr.questions.teacher_reference_number"))
     fill_in :tslr_claim_teacher_reference_number, with: "1234567"
     click_on "Continue"

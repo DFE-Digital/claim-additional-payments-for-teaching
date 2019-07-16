@@ -14,7 +14,9 @@
       </dd>
 
       <dd class="govuk-summary-list__actions">
-        <%= link_to 'Change', claim_path(slug), class: 'govuk-link' %>
+        <% if slug.present? %>
+          <%= link_to 'Change', claim_path(slug), class: 'govuk-link' %>
+        <% end %>
       </dd>
     </div>
   <% end %>
