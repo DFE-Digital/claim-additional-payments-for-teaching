@@ -50,21 +50,21 @@ class TslrClaim < ApplicationRecord
 
   validates :mostly_teaching_eligible_subjects, on: [:"mostly-teaching-eligible-subjects", :submit], inclusion: {in: [true, false], message: "Select either Yes or No"}
 
-  validates :full_name,                         on: [:"full-name", :submit], presence: {message: "Enter your full name"}
+  validates :full_name,                         on: :submit, presence: {message: "Enter your full name"}
   validates :full_name,                         length: {maximum: 200, message: "Full name must be 200 characters or less"}
 
-  validates :address_line_1,                    on: [:address, :submit], presence: {message: "Enter your building and street address"}
+  validates :address_line_1,                    on: :submit, presence: {message: "Enter your building and street address"}
   validates :address_line_1,                    length: {maximum: 100, message: "Address lines must be 100 characters or less"}
 
   validates :address_line_2,                    length: {maximum: 100, message: "Address lines must be 100 characters or less"}
 
-  validates :address_line_3,                    on: [:address, :submit], presence: {message: "Enter your town or city"}
+  validates :address_line_3,                    on: :submit, presence: {message: "Enter your town or city"}
   validates :address_line_3,                    length: {maximum: 100, message: "Address lines must be 100 characters or less"}
 
-  validates :postcode,                          on: [:address, :submit], presence: {message: "Enter your postcode"}
+  validates :postcode,                          on: :submit, presence: {message: "Enter your postcode"}
   validates :postcode,                          length: {maximum: 11, message: "Postcode must be 11 characters or less"}
 
-  validates :date_of_birth,                     on: [:"date-of-birth", :submit], presence: {message: "Enter your date of birth"}
+  validates :date_of_birth,                     on: :submit, presence: {message: "Enter your date of birth"}
 
   validates :teacher_reference_number,          on: [:"teacher-reference-number", :submit], presence: {message: "Enter your teacher reference number"}
   validate :trn_must_be_seven_digits
