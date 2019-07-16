@@ -30,6 +30,26 @@ case $ENVIRONMENT_NAME in
     ;;
 esac
 
+LOGIN_TO_AZURE=1
+CONFIRM_BEFORE_DEPLOY=1
+
+while [ "$2" ]; do
+  case $2 in
+    "--skip-login")
+      LOGIN_TO_AZURE=
+      ;;
+    "--skip-confirmation")
+      CONFIRM_BEFORE_DEPLOY=
+      ;;
+    *)
+      echo "Unexpected argument: $2"
+      exit 1
+      ;;
+  esac
+
+  shift
+done
+
 SCRIPT_PATH=$( cd "$( dirname "$0" )" ; pwd -P )
 
 RESOURCE_LOCATION="West Europe"
@@ -49,7 +69,7 @@ APP_PARAMETERS_FILE_PATH="$SCRIPT_PATH/../azure/app/parameters/$ENVIRONMENT_NAME
 
 KEYVAULT_NAME="$SECRETS_RESOURCE_GROUP_NAME-kv"
 
-if ! az account show > /dev/null; then
+if [ $LOGIN_TO_AZURE ] && ! az account show > /dev/null; then
   echo "Logging in..."
   az login
 fi
@@ -72,10 +92,12 @@ sed \
   -e "s/\${keyVaultName}/$KEYVAULT_NAME/g" \
   "$SECRETS_PARAMETERS_TEMPLATE_FILE_PATH" > "$SECRETS_PARAMETERS_FILE_PATH"
 
-echo
-echo "Are you ready to deploy $SECRETS_RESOURCE_GROUP_NAME?"
-echo "  Hit return to continue, or CTRL+C to stop."
-read -r
+if [ $CONFIRM_BEFORE_DEPLOY ]; then
+  echo
+  echo "Are you ready to deploy $SECRETS_RESOURCE_GROUP_NAME?"
+  echo "  Hit return to continue, or CTRL+C to stop."
+  read -r
+fi
 
 echo "Starting secrets deployment..."
 az group deployment create \
@@ -111,11 +133,13 @@ ruby \
     -e "s/\${keyVaultName}/$KEYVAULT_NAME/g" \
     > "$APP_PARAMETERS_FILE_PATH"
 
-echo
-echo "Are all the secrets up to date?"
-echo "Are you ready to deploy $APP_RESOURCE_GROUP_NAME?"
-echo "  Hit return to continue, or CTRL+C to stop."
-read -r
+if [ $CONFIRM_BEFORE_DEPLOY ]; then
+  echo
+  echo "Are all the secrets up to date?"
+  echo "Are you ready to deploy $APP_RESOURCE_GROUP_NAME?"
+  echo "  Hit return to continue, or CTRL+C to stop."
+  read -r
+fi
 
 echo "Starting app deployment..."
 az group deployment create \
