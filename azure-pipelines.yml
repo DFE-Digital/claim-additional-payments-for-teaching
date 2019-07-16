@@ -39,9 +39,13 @@ steps:
       pass: $(dockerPassword)
     displayName: Login to DockerHub
     condition: eq(variables['Build.SourceBranch'], 'refs/heads/master')
-  - script: docker build --file=Dockerfile --tag=$(dockerRegistry)/$(dockerImageName):$(Build.BuildNumber) --target=web .
+  - script:
+      docker build --file=Dockerfile --tag=$(dockerRegistry)/$(dockerImageName):$(Build.BuildNumber) --target=web .
     displayName: Build Docker image for deployment
     condition: eq(variables['Build.SourceBranch'], 'refs/heads/master')
-  - script: docker push $(dockerRegistry)/$(dockerImageName):$(Build.BuildNumber)
+  - script: |
+      docker tag $(dockerRegistry)/$(dockerImageName):$(Build.BuildNumber) $(dockerRegistry)/$(dockerImageName):latest
+      docker push $(dockerRegistry)/$(dockerImageName):$(Build.BuildNumber)
+      docker push $(dockerRegistry)/$(dockerImageName):latest
     displayName: Push Docker image
     condition: eq(variables['Build.SourceBranch'], 'refs/heads/master')
