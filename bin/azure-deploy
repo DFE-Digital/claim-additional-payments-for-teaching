@@ -1,6 +1,11 @@
 #!/bin/bash
 set -e
 
+if [ $# -lt 1 ]; then
+  echo "Usage: $0 ENVIRONMENT_NAME"
+  exit 1
+fi
+
 ENVIRONMENT_NAME=$1
 
 case $ENVIRONMENT_NAME in
