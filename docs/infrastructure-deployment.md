@@ -12,8 +12,8 @@ the [Becoming A Teacher team](building_blocks).
 
 ## Automated deployment
 
-[Azure DevOps](https://dfe-ssp.visualstudio.com/S118-Teacher-Payments-Service)
-is responsible for automated infrastructure deployments as part of deploying a
+[Azure DevOps](https://dev.azure.com/dfe-ssp/S118-Teacher-Payments-Service) is
+responsible for automated infrastructure deployments as part of deploying a
 version of the app.
 
 ## Manual deployment
