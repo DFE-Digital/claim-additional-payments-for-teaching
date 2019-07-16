@@ -6,11 +6,6 @@
     <p class="govuk-body">So we can pay you, we need to check your identity using GOV.UK Verify – our secure way to prove who you are online.</p>
     <p class="govuk-body">If you do not have an account already, you’ll have to sign up for one. This usually takes around 15 minutes. You'll need a passport or photocard driving licence and a debit or credit card.</p>
 
-    <% if govuk_verify_enabled? %>
-      <%= link_to "Continue to GOV.UK Verify", new_verify_authentications_path, class: "govuk-button" %>
-    <% else %>
-      <%= link_to "Continue to GOV.UK Verify", "https://govuk-verify.herokuapp.com/intro?requestId=dfe-teachers-payment-staging", class: "govuk-button" %>
-    <% end %>
-    <%= link_to "Skip GOV.UK Verify", claim_path("teacher-reference-number"), class: "govuk-button govuk-button--secondary" %>
+    <%= link_to "Continue to GOV.UK Verify", new_verify_authentications_path, class: "govuk-button" %>
   </div>
 </div>
