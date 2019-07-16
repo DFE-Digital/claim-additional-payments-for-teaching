@@ -106,7 +106,6 @@ az group deployment create \
   --template-file "$SECRETS_TEMPLATE_FILE_PATH" \
   --parameters "@$SECRETS_PARAMETERS_FILE_PATH" \
   --mode Complete \
-  --rollback-on-error \
   --verbose
 
 echo
@@ -148,7 +147,6 @@ az group deployment create \
   --template-file "$APP_TEMPLATE_FILE_PATH" \
   --parameters "@$APP_PARAMETERS_FILE_PATH" \
   --mode Complete \
-  --rollback-on-error \
   --verbose
 
 echo
