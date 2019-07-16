@@ -110,7 +110,7 @@ az group deployment create \
   --verbose
 
 echo
-echo "secrets deployed!"
+echo "$SECRETS_RESOURCE_GROUP_NAME deployed!"
 echo
 
 if ! az group show --name "$APP_RESOURCE_GROUP_NAME" > /dev/null; then
@@ -152,4 +152,4 @@ az group deployment create \
   --verbose
 
 echo
-echo "app deployed!"
+echo "$APP_RESOURCE_GROUP_NAME deployed!"
