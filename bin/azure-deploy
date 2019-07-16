@@ -1,6 +1,11 @@
 #!/bin/bash
 set -e
 
+if [ $# -lt 1 ]; then
+  echo "Usage: $0 ENVIRONMENT_NAME"
+  exit 1
+fi
+
 ENVIRONMENT_NAME=$1
 
 case $ENVIRONMENT_NAME in
@@ -25,6 +30,26 @@ case $ENVIRONMENT_NAME in
     ;;
 esac
 
+LOGIN_TO_AZURE=1
+CONFIRM_BEFORE_DEPLOY=1
+
+while [ "$2" ]; do
+  case $2 in
+    "--skip-login")
+      LOGIN_TO_AZURE=
+      ;;
+    "--skip-confirmation")
+      CONFIRM_BEFORE_DEPLOY=
+      ;;
+    *)
+      echo "Unexpected argument: $2"
+      exit 1
+      ;;
+  esac
+
+  shift
+done
+
 SCRIPT_PATH=$( cd "$( dirname "$0" )" ; pwd -P )
 
 RESOURCE_LOCATION="West Europe"
@@ -44,7 +69,7 @@ APP_PARAMETERS_FILE_PATH="$SCRIPT_PATH/../azure/app/parameters/$ENVIRONMENT_NAME
 
 KEYVAULT_NAME="$SECRETS_RESOURCE_GROUP_NAME-kv"
 
-if ! az account show > /dev/null; then
+if [ $LOGIN_TO_AZURE ] && ! az account show > /dev/null; then
   echo "Logging in..."
   az login
 fi
@@ -67,10 +92,12 @@ sed \
   -e "s/\${keyVaultName}/$KEYVAULT_NAME/g" \
   "$SECRETS_PARAMETERS_TEMPLATE_FILE_PATH" > "$SECRETS_PARAMETERS_FILE_PATH"
 
-echo
-echo "Are you ready to deploy $SECRETS_RESOURCE_GROUP_NAME?"
-echo "  Hit return to continue, or CTRL+C to stop."
-read -r
+if [ $CONFIRM_BEFORE_DEPLOY ]; then
+  echo
+  echo "Are you ready to deploy $SECRETS_RESOURCE_GROUP_NAME?"
+  echo "  Hit return to continue, or CTRL+C to stop."
+  read -r
+fi
 
 echo "Starting secrets deployment..."
 az group deployment create \
@@ -79,11 +106,10 @@ az group deployment create \
   --template-file "$SECRETS_TEMPLATE_FILE_PATH" \
   --parameters "@$SECRETS_PARAMETERS_FILE_PATH" \
   --mode Complete \
-  --rollback-on-error \
   --verbose
 
 echo
-echo "secrets deployed!"
+echo "$SECRETS_RESOURCE_GROUP_NAME deployed!"
 echo
 
 if ! az group show --name "$APP_RESOURCE_GROUP_NAME" > /dev/null; then
@@ -106,11 +132,13 @@ ruby \
     -e "s/\${keyVaultName}/$KEYVAULT_NAME/g" \
     > "$APP_PARAMETERS_FILE_PATH"
 
-echo
-echo "Are all the secrets up to date?"
-echo "Are you ready to deploy $APP_RESOURCE_GROUP_NAME?"
-echo "  Hit return to continue, or CTRL+C to stop."
-read -r
+if [ $CONFIRM_BEFORE_DEPLOY ]; then
+  echo
+  echo "Are all the secrets up to date?"
+  echo "Are you ready to deploy $APP_RESOURCE_GROUP_NAME?"
+  echo "  Hit return to continue, or CTRL+C to stop."
+  read -r
+fi
 
 echo "Starting app deployment..."
 az group deployment create \
@@ -119,8 +147,7 @@ az group deployment create \
   --template-file "$APP_TEMPLATE_FILE_PATH" \
   --parameters "@$APP_PARAMETERS_FILE_PATH" \
   --mode Complete \
-  --rollback-on-error \
   --verbose
 
 echo
-echo "app deployed!"
+echo "$APP_RESOURCE_GROUP_NAME deployed!"
