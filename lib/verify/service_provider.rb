@@ -3,14 +3,14 @@ module Verify
   #
   # Make sure the VSP host is configured, for example:
   #
-  #   Verify.vsp_host= "https://vsp.host:50300"
+  #   Verify.configuration.vsp_host= "https://vsp.host:50300"
   class ServiceProvider
     def self.generate_request_url
-      "#{Verify.vsp_host}/generate-request"
+      "#{Verify.configuration.vsp_host}/generate-request"
     end
 
     def self.translate_response_url
-      "#{Verify.vsp_host}/translate-response"
+      "#{Verify.configuration.vsp_host}/translate-response"
     end
 
     # Makes a request to the Verify Service Provider to generate an
