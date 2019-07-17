@@ -83,7 +83,9 @@
     "appServiceName": "[concat(parameters('resourceNamePrefix'), '-as')]",
     "appServiceRuntimeStack": "[concat('COMPOSE|', base64(parameters('appServiceDockerCompose')))]",
 
-    "alertActionGroupName": "[concat(parameters('resourceNamePrefix'), '-alerts-ag')]"
+    "alertActionGroupName": "[concat(parameters('resourceNamePrefix'), '-alerts-ag')]",
+
+    "serviceHealthAlertName": "[concat(parameters('resourceNamePrefix'), '-alerts-service-health')]"
   },
   "resources": [
     {
@@ -292,6 +294,32 @@
             "emailAddress": "[parameters('alertEmailAddress')]"
           }
         ]
+      }
+    },
+    {
+      "apiVersion": "2017-04-01",
+      "type": "Microsoft.Insights/activityLogAlerts",
+      "name": "[variables('serviceHealthAlertName')]",
+      "location": "global",
+      "dependsOn": ["[variables('alertActionGroupName')]"],
+      "properties": {
+        "scopes": ["[resourceGroup().id]"],
+        "enabled": true,
+        "condition": {
+          "allOf": [
+            {
+              "field": "Category",
+              "equals": "ServiceHealth"
+            }
+          ]
+        },
+        "actions": {
+          "actionGroups": [
+            {
+              "actionGroupId": "[resourceId('Microsoft.Insights/actionGroups', variables('alertActionGroupName'))]"
+            }
+          ]
+        }
       }
     }
   ],
