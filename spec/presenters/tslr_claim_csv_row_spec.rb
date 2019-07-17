@@ -10,7 +10,7 @@ RSpec.describe TslrClaimCsvRow do
     let(:date_of_birth) { "01/12/1980" }
     let(:employment_status) { "Different school" }
     let(:mostly_teaching_eligible_subjects) { "Yes" }
-    let(:student_loan_repayment_amount) { "£1000.0" }
+    let(:student_loan_repayment_amount) { "£1,000.00" }
     let(:submitted_at) { "01/01/2019 13:00" }
     let(:row) { CSV.parse(subject.to_s).first }
 
@@ -21,7 +21,7 @@ RSpec.describe TslrClaimCsvRow do
         employment_status: TslrClaim.employment_statuses[employment_status.parameterize.underscore],
         date_of_birth: Date.parse(date_of_birth),
         mostly_teaching_eligible_subjects: mostly_teaching_eligible_subjects == "Yes",
-        student_loan_repayment_amount: student_loan_repayment_amount.delete("£").to_i,
+        student_loan_repayment_amount: student_loan_repayment_amount.delete("£").delete(",").to_i,
         submitted_at: DateTime.parse(submitted_at))
     end
 

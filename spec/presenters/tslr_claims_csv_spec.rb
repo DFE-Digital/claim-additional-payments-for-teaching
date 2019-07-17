@@ -19,7 +19,7 @@ RSpec.describe TslrClaimsCsv do
       mostly_teaching_eligible_subjects: true,
       bank_sort_code: "440026",
       bank_account_number: "70872490",
-      student_loan_repayment_amount: "1500.00")
+      student_loan_repayment_amount: "1500")
   end
 
   subject { described_class.new(claims) }
@@ -75,7 +75,7 @@ RSpec.describe TslrClaimsCsv do
         "Yes",
         "440026",
         "70872490",
-        "£1500.0",
+        "£1,500.00",
       ])
     end
   end

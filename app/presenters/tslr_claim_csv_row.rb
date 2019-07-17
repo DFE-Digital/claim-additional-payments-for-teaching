@@ -2,6 +2,8 @@ require "delegate"
 require "csv"
 
 class TslrClaimCsvRow < SimpleDelegator
+  include ActiveSupport::NumberHelper
+
   def to_s
     CSV.generate_line(data)
   end
@@ -25,7 +27,7 @@ class TslrClaimCsvRow < SimpleDelegator
   end
 
   def student_loan_repayment_amount
-    "£#{model.student_loan_repayment_amount}"
+    number_to_currency(model.student_loan_repayment_amount)
   end
 
   def submitted_at
