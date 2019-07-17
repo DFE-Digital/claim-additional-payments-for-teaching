@@ -52,9 +52,7 @@
         </div>
         <div class="govuk-header__content">
 
-          <a href="#" class="govuk-header__link govuk-header__link--service-name">
-            <%= t("tslr.service_name") %>
-          </a>
+          <%= link_to t("tslr.service_name"), root_path, class: "govuk-header__link govuk-header__link--service-name" %>
 
           <% if signed_in? %>
           <button type="button" role="button" class="govuk-header__menu-button js-header-toggle" aria-controls="navigation" aria-label="Show or hide Top Level Navigation">Menu</button>
