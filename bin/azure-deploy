@@ -30,8 +30,15 @@ case $ENVIRONMENT_NAME in
     ;;
 esac
 
+SECRETS_RESOURCE_GROUP_NAME="$RESOURCE_GROUP_PREFIX-secrets"
+SECRETS_DEPLOYMENT_NAME=$SECRETS_RESOURCE_GROUP_NAME
+
+APP_RESOURCE_GROUP_NAME="$RESOURCE_GROUP_PREFIX-app"
+APP_DEPLOYMENT_NAME=$APP_RESOURCE_GROUP_NAME
+
 LOGIN_TO_AZURE=1
 CONFIRM_BEFORE_DEPLOY=1
+DEPLOY_SECRETS=1
 
 while [ "$2" ]; do
   case $2 in
@@ -41,6 +48,16 @@ while [ "$2" ]; do
     "--skip-confirmation")
       CONFIRM_BEFORE_DEPLOY=
       ;;
+    "--skip-secrets")
+      DEPLOY_SECRETS=
+      ;;
+    "--scratch-secrets")
+      SECRETS_RESOURCE_GROUP_NAME="$SECRETS_RESOURCE_GROUP_NAME-scratch"
+      SECRETS_DEPLOYMENT_NAME="$SECRETS_DEPLOYMENT_NAME-scratch"
+      ;;
+    "--scratch-app")
+      APP_RESOURCE_GROUP_NAME="$APP_RESOURCE_GROUP_NAME-scratch"
+      APP_DEPLOYMENT_NAME="$APP_DEPLOYMENT_NAME-scratch"      ;;
     *)
       echo "Unexpected argument: $2"
       exit 1
@@ -54,14 +71,10 @@ SCRIPT_PATH=$( cd "$( dirname "$0" )" ; pwd -P )
 
 RESOURCE_LOCATION="West Europe"
 
-SECRETS_RESOURCE_GROUP_NAME="$RESOURCE_GROUP_PREFIX-secrets"
-SECRETS_DEPLOYMENT_NAME="$RESOURCE_GROUP_PREFIX-secrets"
 SECRETS_TEMPLATE_FILE_PATH="$SCRIPT_PATH/../azure/secrets/template.json"
 SECRETS_PARAMETERS_TEMPLATE_FILE_PATH="$SCRIPT_PATH/../azure/secrets/parameters/$ENVIRONMENT_NAME.template.json"
 SECRETS_PARAMETERS_FILE_PATH="$SCRIPT_PATH/../azure/secrets/parameters/$ENVIRONMENT_NAME.json"
 
-APP_RESOURCE_GROUP_NAME="$RESOURCE_GROUP_PREFIX-app"
-APP_DEPLOYMENT_NAME="$RESOURCE_GROUP_PREFIX-app"
 APP_TEMPLATE_FILE_PATH="$SCRIPT_PATH/../azure/app/template.json"
 APP_DOCKER_COMPOSE_FILE_PATH="$SCRIPT_PATH/../azure/app/files/docker-compose.yml"
 APP_PARAMETERS_TEMPLATE_FILE_PATH="$SCRIPT_PATH/../azure/app/parameters/$ENVIRONMENT_NAME.template.json"
@@ -77,40 +90,42 @@ fi
 echo "Setting default subscription to $SUBSCRIPTION_ID..."
 az account set --subscription "$SUBSCRIPTION_ID"
 
-if ! az group show --name "$SECRETS_RESOURCE_GROUP_NAME" > /dev/null; then
-  echo "Creating new resource group for secrets with name $SECRETS_RESOURCE_GROUP_NAME..."
-  az group create \
-    --name "$SECRETS_RESOURCE_GROUP_NAME" \
-    --location "$RESOURCE_LOCATION" \
-    > /dev/null
-else
-  echo "Using existing secrets resource group with name $SECRETS_RESOURCE_GROUP_NAME..."
-fi
+if [ $DEPLOY_SECRETS ]; then
+  if ! az group show --name "$SECRETS_RESOURCE_GROUP_NAME" > /dev/null; then
+    echo "Creating new resource group for secrets with name $SECRETS_RESOURCE_GROUP_NAME..."
+    az group create \
+      --name "$SECRETS_RESOURCE_GROUP_NAME" \
+      --location "$RESOURCE_LOCATION" \
+      > /dev/null
+  else
+    echo "Using existing secrets resource group with name $SECRETS_RESOURCE_GROUP_NAME..."
+  fi
 
-echo "Rewriting secrets parameters file for $ENVIRONMENT_NAME..."
-sed \
-  -e "s/\${keyVaultName}/$KEYVAULT_NAME/g" \
-  "$SECRETS_PARAMETERS_TEMPLATE_FILE_PATH" > "$SECRETS_PARAMETERS_FILE_PATH"
+  echo "Rewriting secrets parameters file for $ENVIRONMENT_NAME..."
+  sed \
+    -e "s/\${keyVaultName}/$KEYVAULT_NAME/g" \
+    "$SECRETS_PARAMETERS_TEMPLATE_FILE_PATH" > "$SECRETS_PARAMETERS_FILE_PATH"
 
-if [ $CONFIRM_BEFORE_DEPLOY ]; then
+  if [ $CONFIRM_BEFORE_DEPLOY ]; then
+    echo
+    echo "Are you ready to deploy $SECRETS_RESOURCE_GROUP_NAME?"
+    echo "  Hit return to continue, or CTRL+C to stop."
+    read -r
+  fi
+
+  echo "Starting secrets deployment..."
+  az group deployment create \
+    --name "$SECRETS_DEPLOYMENT_NAME" \
+    --resource-group "$SECRETS_RESOURCE_GROUP_NAME" \
+    --template-file "$SECRETS_TEMPLATE_FILE_PATH" \
+    --parameters "@$SECRETS_PARAMETERS_FILE_PATH" \
+    --mode Complete \
+    --verbose
+
   echo
-  echo "Are you ready to deploy $SECRETS_RESOURCE_GROUP_NAME?"
-  echo "  Hit return to continue, or CTRL+C to stop."
-  read -r
+  echo "$SECRETS_RESOURCE_GROUP_NAME deployed!"
+  echo
 fi
-
-echo "Starting secrets deployment..."
-az group deployment create \
-  --name "$SECRETS_DEPLOYMENT_NAME" \
-  --resource-group "$SECRETS_RESOURCE_GROUP_NAME" \
-  --template-file "$SECRETS_TEMPLATE_FILE_PATH" \
-  --parameters "@$SECRETS_PARAMETERS_FILE_PATH" \
-  --mode Complete \
-  --verbose
-
-echo
-echo "$SECRETS_RESOURCE_GROUP_NAME deployed!"
-echo
 
 if ! az group show --name "$APP_RESOURCE_GROUP_NAME" > /dev/null; then
   echo "Creating new resource group for app with name $APP_RESOURCE_GROUP_NAME..."
