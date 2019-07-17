@@ -85,7 +85,8 @@
 
     "alertActionGroupName": "[concat(parameters('resourceNamePrefix'), '-alerts-ag')]",
 
-    "serviceHealthAlertName": "[concat(parameters('resourceNamePrefix'), '-alerts-service-health')]"
+    "serviceHealthAlertName": "[concat(parameters('resourceNamePrefix'), '-alerts-service-health')]",
+    "appServiceResponseTimeAlertName": "[concat(parameters('resourceNamePrefix'), '-alerts-', variables('appServiceName'), '-response-time')]"
   },
   "resources": [
     {
@@ -320,6 +321,42 @@
             }
           ]
         }
+      }
+    },
+    {
+      "apiVersion": "2018-03-01",
+      "type": "Microsoft.Insights/metricAlerts",
+      "name": "[variables('appServiceResponseTimeAlertName')]",
+      "location": "global",
+      "dependsOn": ["[variables('alertActionGroupName')]", "[variables('appServiceName')]"],
+      "properties": {
+        "scopes": ["[resourceId('Microsoft.Web/sites', variables('appServiceName'))]"],
+        "enabled": true,
+        "description": "[concat('Alert when average response times for ', variables('appServiceName'), ' are greater than 2 seconds.')]",
+        "severity": 1,
+        "evaluationFrequency": "PT1M",
+        "windowSize": "PT1M",
+        "targetResourceType": "Microsoft.Web/sites",
+        "targetResourceRegion": "[resourceGroup().location]",
+        "criteria": {
+          "odata.type": "Microsoft.Azure.Monitor.SingleResourceMultipleMetricCriteria",
+          "allOf": [
+            {
+              "criterionType": "StaticThresholdCriterion",
+              "name": "high-response-time",
+              "metricNamespace": "Microsoft.Web/sites",
+              "metricName": "AverageResponseTime",
+              "operator": "GreaterThan",
+              "threshold": 2,
+              "timeAggregation": "Average"
+            }
+          ]
+        },
+        "actions": [
+          {
+            "actionGroupId": "[resourceId('Microsoft.Insights/actionGroups', variables('alertActionGroupName'))]"
+          }
+        ]
       }
     }
   ],
