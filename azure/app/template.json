@@ -6,6 +6,9 @@
       "type": "string",
       "defaultValue": "[resourceGroup().name]"
     },
+    "alertActionGroupShortName": {
+      "type": "string"
+    },
     "appServiceDockerCompose": {
       "type": "string"
     },
@@ -22,7 +25,7 @@
     "databasePassword": {
       "type": "securestring"
     },
-    "securityAlertEmailAddress": {
+    "alertEmailAddress": {
       "type": "string"
     },
     "RAILS_ENV": {
@@ -78,7 +81,9 @@
     "appServicePlanId": "[resourceId('Microsoft.Web/serverfarms', variables('appServicePlanName'))]",
 
     "appServiceName": "[concat(parameters('resourceNamePrefix'), '-as')]",
-    "appServiceRuntimeStack": "[concat('COMPOSE|', base64(parameters('appServiceDockerCompose')))]"
+    "appServiceRuntimeStack": "[concat('COMPOSE|', base64(parameters('appServiceDockerCompose')))]",
+
+    "alertActionGroupName": "[concat(parameters('resourceNamePrefix'), '-alerts-ag')]"
   },
   "resources": [
     {
@@ -120,7 +125,7 @@
             "value": "[parameters('databasePassword')]"
           },
           "securityAlertEmailAddress": {
-            "value": "[parameters('securityAlertEmailAddress')]"
+            "value": "[parameters('alertEmailAddress')]"
           },
           "storageAccountName": {
             "value": "[variables('storageAccountName')]"
@@ -271,6 +276,22 @@
             "value": "[variables('databaseServerName')]"
           }
         }
+      }
+    },
+    {
+      "apiVersion": "2018-03-01",
+      "type": "Microsoft.Insights/actionGroups",
+      "name": "[variables('alertActionGroupName')]",
+      "location": "global",
+      "properties": {
+        "groupShortName": "[parameters('alertActionGroupShortName')]",
+        "enabled": true,
+        "emailReceivers": [
+          {
+            "name": "email",
+            "emailAddress": "[parameters('alertEmailAddress')]"
+          }
+        ]
       }
     }
   ],
