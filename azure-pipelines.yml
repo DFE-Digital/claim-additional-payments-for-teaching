@@ -25,7 +25,6 @@ steps:
       git reset --hard
       git clean -xdf
     displayName: Clean repository
-    condition: eq(variables['Build.SourceBranch'], 'refs/heads/master')
 
   - publish: $(System.DefaultWorkingDirectory)
     artifact: repository
