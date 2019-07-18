@@ -112,6 +112,33 @@ Code linting is performed using:
 [Bullet](https://github.com/flyerhzm/bullet) runs around each spec. If it
 detects an N+1 query it will raise an exception and the tests will fail.
 
+## Deployment
+
+### Development
+
+Development is automatically built and deployed when commits are pushed to
+`master`.
+
+### Production
+
+To do a production release:
+
+1. Log in to this project on [Azure DevOps](azure-devops).
+2. Navigate to _Pipelines_ > _Builds_.
+3. Find the build you want to release and note its _Build #_ (e.g.
+   `20190717.2`). You can filter by branch using the filter / funnel icon in the
+   top right.
+4. Navigate to _Pipelines_ > _Releases_.
+5. Click on the _Deploy_ release pipeline.
+6. Click on the release matching the _Build #_ of the build you want to release.
+7. Click on _Deploy Production_ and manually trigger the deployment.
+
+This will release to production using the same configuration as the matching
+development release. If that configuration is no longer valid, you could create
+a new release using the most up to date configuration, or you could modify the
+configuration of the matching release found in step 6, depending on needs.
+Further related steps are left as an exercise for the reader.
+
 ## Service architecture
 
 The service architecture is currently defined and
@@ -127,4 +154,5 @@ _Config Vars_ in Heroku.
 
 https://dfe-teachers-payment-staging.herokuapp.com/
 
+[azure-devops]: https://dev.azure.com/dfe-ssp/S118-Teacher-Payments-Service
 [openjdk]: https://adoptopenjdk.net/
