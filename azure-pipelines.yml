@@ -3,9 +3,6 @@
 # Add steps that install rails, analyze code, save build artifacts, deploy, and more:
 # https://docs.microsoft.com/azure/devops/pipelines/languages/ruby
 
-trigger:
-  - master
-
 pool:
   vmImage: ubuntu-latest
 
@@ -28,7 +25,6 @@ steps:
       git reset --hard
       git clean -xdf
     displayName: Clean repository
-    condition: eq(variables['Build.SourceBranch'], 'refs/heads/master')
 
   - publish: $(System.DefaultWorkingDirectory)
     artifact: repository
