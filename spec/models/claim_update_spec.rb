@@ -92,4 +92,29 @@ RSpec.describe ClaimUpdate do
       end
     end
   end
+
+  describe "setting/resetting employment_status when the claim_school changes" do
+    let(:claim) { create(:tslr_claim, claim_school: schools(:penistone_grammar_school), employment_status: :different_school, current_school: schools(:hampstead_school)) }
+    let(:context) { "claim-school" }
+
+    context "when the update changes the claim_school" do
+      let(:params) { {claim_school_id: schools(:hampstead_school).id} }
+
+      it "resets the subsequent employment_status and current_school answers" do
+        expect(claim_update.perform).to be_truthy
+        expect(claim.reload.employment_status).to be_nil
+        expect(claim.current_school).to be_nil
+      end
+    end
+
+    context "when the update does not change the claim_school" do
+      let(:params) { {claim_school_id: claim.claim_school_id} }
+
+      it "does not reset the subsequent employment_status and current_school answers" do
+        expect(claim_update.perform).to be_truthy
+        expect(claim.reload.employment_status).to eq "different_school"
+        expect(claim.current_school).to eq schools(:hampstead_school)
+      end
+    end
+  end
 end

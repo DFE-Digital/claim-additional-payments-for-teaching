@@ -34,28 +34,6 @@ RSpec.describe PageSequence do
       it "returns “check-your-answers” as the next slug" do
         expect(PageSequence.new(claim, "qts-year").next_slug).to eq "check-your-answers"
       end
-
-      context "but they are updating their claim_school" do
-        it "returns the next slug in the schools sequence" do
-          expect(PageSequence.new(claim, "claim-school").next_slug).to eq "still-teaching"
-        end
-      end
-
-      context "they’ve specified they’re still teaching at their claim school" do
-        before { claim.employment_status = :claim_school }
-
-        it "returns “check-your-answers” as the next slug (i.e. skips the current-school question)" do
-          expect(PageSequence.new(claim, "still-teaching").next_slug).to eq "check-your-answers"
-        end
-      end
-
-      context "they’ve specified they’re teaching at a different school" do
-        before { claim.employment_status = :different_school }
-
-        it "returns the final slug in the schools sequence" do
-          expect(PageSequence.new(claim, "still-teaching").next_slug).to eq "current-school"
-        end
-      end
     end
   end
 end
