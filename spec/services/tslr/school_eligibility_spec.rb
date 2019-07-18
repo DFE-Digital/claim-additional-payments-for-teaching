@@ -64,8 +64,8 @@ RSpec.describe Tslr::SchoolEligibility do
         end
       end
 
-      context "and it is a special school" do
-        let(:special_school_attributes) { {school_type_group: :special_schools} }
+      context "and it is a state funded special school" do
+        let(:special_school_attributes) { {school_type: :community_special_school, school_type_group: :special_schools} }
 
         context "and it has an education phase of secondary or middle deemed secondary" do
           let(:school_attributes) { special_school_attributes.merge({phase: :secondary}) }
@@ -77,13 +77,46 @@ RSpec.describe Tslr::SchoolEligibility do
           it { is_expected.to be false }
         end
 
-        context "and it is a state funded special school" do
-          let(:school_attributes) { special_school_attributes.merge({school_type: :community_school}) }
+        context "and it doesn't have an education phase" do
+          let(:school_attributes) { special_school_attributes.merge({phase: :not_applicable}) }
+          it { is_expected.to be true }
+        end
+      end
+
+      context "and it is a special free school" do
+        let(:special_free_school_attributes) { {school_type: :free_school_special, school_type_group: :free_schools} }
+
+        context "and it has an education phase of secondary or middle deemed secondary" do
+          let(:school_attributes) { special_free_school_attributes.merge({phase: :secondary}) }
           it { is_expected.to be true }
         end
 
-        context "and it is an independent special school" do
-          let(:school_attributes) { special_school_attributes.merge({school_type: :other_independent_special_school}) }
+        context "and it has an education phase of nursery, primary, middle deemed primary, 16+ or all through" do
+          let(:school_attributes) { special_free_school_attributes.merge({phase: :nursery}) }
+          it { is_expected.to be false }
+        end
+
+        context "and it doesn't have an education phase" do
+          let(:school_attributes) { special_free_school_attributes.merge({phase: :not_applicable}) }
+          it { is_expected.to be true }
+        end
+      end
+
+      context "and it is an independent special school" do
+        let(:special_school_attributes) { {school_type: :other_independent_special_school, school_type_group: :special_schools} }
+
+        context "and it has an education phase of secondary or middle deemed secondary" do
+          let(:school_attributes) { special_school_attributes.merge({phase: :secondary}) }
+          it { is_expected.to be false }
+        end
+
+        context "and it has an education phase of nursery, primary, middle deemed primary, 16+ or all through" do
+          let(:school_attributes) { special_school_attributes.merge({phase: :nursery}) }
+          it { is_expected.to be false }
+        end
+
+        context "and it doesn't have an education phase" do
+          let(:school_attributes) { special_school_attributes.merge({phase: :not_applicable}) }
           it { is_expected.to be false }
         end
       end

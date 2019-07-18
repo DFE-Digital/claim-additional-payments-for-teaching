@@ -82,6 +82,17 @@ class School < ApplicationRecord
     institution_funded_by_other_government_department: 56,
   }.freeze
 
+  SPECIAL_SCHOOL_TYPES = %w[
+    community_special_school
+    non_maintained_special_school
+    other_independent_special_school
+    foundation_special_school
+    special_post_16_institutions
+    academy_special_sponsor_led
+    free_school_special
+    academy_special_converter
+  ].freeze
+
   enum phase: PHASES
   enum school_type_group: SCHOOL_TYPE_GROUPS
   enum school_type: SCHOOL_TYPES
@@ -106,5 +117,9 @@ class School < ApplicationRecord
 
   def state_funded?
     STATE_FUNDED_SCHOOL_TYPE_GROUPS.include?(school_type_group) && school_type != "other_independent_special_school"
+  end
+
+  def special?
+    SPECIAL_SCHOOL_TYPES.include?(school_type)
   end
 end

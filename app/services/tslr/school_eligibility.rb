@@ -34,7 +34,7 @@ module Tslr
     end
 
     def check
-      eligible_local_authority? && @school.state_funded? && eligible_phase?
+      eligible_local_authority? && @school.state_funded? && (eligible_phase? || eligible_special_school?)
     end
 
     private
@@ -45,6 +45,10 @@ module Tslr
 
     def eligible_phase?
       ELIGIBLE_PHASES.include?(@school.phase)
+    end
+
+    def eligible_special_school?
+      @school.phase == "not_applicable" && @school.special?
     end
   end
 end

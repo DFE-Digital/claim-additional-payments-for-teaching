@@ -52,7 +52,7 @@ module MathsAndPhysics
     end
 
     def check
-      eligible_local_authority_district? && @school.state_funded? && eligible_phase?
+      eligible_local_authority_district? && @school.state_funded? && (eligible_phase? || eligible_special_school?)
     end
 
     private
@@ -63,6 +63,10 @@ module MathsAndPhysics
 
     def eligible_phase?
       ELIGIBLE_PHASES.include?(@school.phase)
+    end
+
+    def eligible_special_school?
+      @school.phase == "not_applicable" && @school.special?
     end
   end
 end
