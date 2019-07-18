@@ -1,14 +1,4 @@
 class TslrClaim < ApplicationRecord
-  VALID_QTS_YEARS = [
-    "2013-2014",
-    "2014-2015",
-    "2015-2016",
-    "2016-2017",
-    "2017-2018",
-    "2018-2019",
-    "2019-2020",
-  ].freeze
-
   SUBJECT_FIELDS = [
     :biology_taught,
     :chemistry_taught,
@@ -31,7 +21,7 @@ class TslrClaim < ApplicationRecord
   validates :claim_school,                      on: [:"claim-school", :submit], presence: {message: "Select a school from the list"}
   validates :current_school,                    on: [:"current-school", :submit], presence: {message: "Select a school from the list"}
 
-  validates :qts_award_year,                    on: [:"qts-year", :submit], inclusion: {in: ClaimsController.helpers.options_for_qts_award_year.map(&:last), message: "Select the academic year you were awarded qualified teacher status"}
+  validates :qts_award_year,                    on: [:"qts-year", :submit], inclusion: {in: QtsYears.option_values, message: "Select the academic year you were awarded qualified teacher status"}
 
   validates :employment_status,                 on: [:"still-teaching", :submit], presence: {message: "Choose the option that describes your current employment status"}
 
@@ -125,7 +115,7 @@ class TslrClaim < ApplicationRecord
 
   def full_ineligibility_reason
     case ineligibility_reason
-    when :ineligible_qts_award_year then "You are only eligible to claim back student loan repayments if you qualified on or after September 1st #{ClaimsController.helpers.first_eligible_year}."
+    when :ineligible_qts_award_year then "You are only eligible to claim back student loan repayments if you qualified on or after September 1st #{QtsYears.first_eligible_year}."
     when :ineligible_claim_school then "#{claim_school_name} is not an eligible school."
     when :employed_at_no_school then "You can only get this payment if you’re still working as a teacher."
     when :not_taught_eligible_subjects_enough then "You must have spent at least half your time teaching an eligible subject."
@@ -148,7 +138,7 @@ class TslrClaim < ApplicationRecord
   private
 
   def ineligible_qts_award_year?
-    qts_award_year.present? && qts_award_year.match?("before")
+    qts_award_year.present? && !QtsYears.eligible?(qts_award_year)
   end
 
   def ineligible_claim_school?

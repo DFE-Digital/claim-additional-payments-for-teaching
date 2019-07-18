@@ -106,11 +106,4 @@ describe ClaimsHelper do
       end
     end
   end
-
-  describe "#first_eligible_year" do
-    it "returns the first year of the eligible QTS years" do
-      stub_const("TslrClaim::VALID_QTS_YEARS", ["2018-2019", "2019-2020"])
-      expect(helper.first_eligible_year).to eq "2018"
-    end
-  end
 end

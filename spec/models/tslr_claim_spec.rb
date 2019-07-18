@@ -97,7 +97,7 @@ RSpec.describe TslrClaim, type: :model do
       expect(TslrClaim.new).not_to be_valid(custom_validation_context)
       expect(TslrClaim.new(qts_award_year: "123")).not_to be_valid(custom_validation_context)
 
-      TslrClaim::VALID_QTS_YEARS.each do |academic_year|
+      QtsYears.option_values.each do |academic_year|
         expect(TslrClaim.new(qts_award_year: academic_year)).to be_valid(custom_validation_context)
       end
     end
