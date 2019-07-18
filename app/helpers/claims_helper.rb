@@ -1,6 +1,7 @@
 module ClaimsHelper
   def options_for_qts_award_year
     TslrClaim::VALID_QTS_YEARS.map { |year_range| [academic_years(year_range), year_range] }
+      .unshift(["Before September 1 #{first_eligible_year}", "before_#{first_eligible_year}"])
   end
 
   def tslr_guidance_url
@@ -51,6 +52,10 @@ module ClaimsHelper
       last_word_connector: connector,
       two_words_connector: connector
     )
+  end
+
+  def first_eligible_year
+    TslrClaim::VALID_QTS_YEARS.first.split("-").first
   end
 
   private

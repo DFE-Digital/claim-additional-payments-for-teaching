@@ -2,8 +2,9 @@ require "rails_helper"
 
 describe ClaimsHelper do
   describe "#options_for_qts_award_year" do
-    it "returns an array of the valid years as label/value pairs for use as select options" do
+    it "returns an array of options as label/value pairs for use as radio buttons" do
       expected_options = [
+        ["Before September 1 2013", "before_2013"],
         ["September 1 2013 - August 31 2014", "2013-2014"],
         ["September 1 2014 - August 31 2015", "2014-2015"],
         ["September 1 2015 - August 31 2016", "2015-2016"],
@@ -103,6 +104,13 @@ describe ClaimsHelper do
       it "returns a comma separated list with a final 'and'" do
         expect(list).to eq("Biology, Chemistry and Physics")
       end
+    end
+  end
+
+  describe "#first_eligible_year" do
+    it "returns the first year of the eligible QTS years" do
+      stub_const("TslrClaim::VALID_QTS_YEARS", ["2018-2019", "2019-2020"])
+      expect(helper.first_eligible_year).to eq "2018"
     end
   end
 end

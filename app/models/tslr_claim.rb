@@ -31,7 +31,7 @@ class TslrClaim < ApplicationRecord
   validates :claim_school,                      on: [:"claim-school", :submit], presence: {message: "Select a school from the list"}
   validates :current_school,                    on: [:"current-school", :submit], presence: {message: "Select a school from the list"}
 
-  validates :qts_award_year,                    on: [:"qts-year", :submit], inclusion: {in: VALID_QTS_YEARS, message: "Select the academic year you were awarded qualified teacher status"}
+  validates :qts_award_year,                    on: [:"qts-year", :submit], inclusion: {in: ClaimsController.helpers.options_for_qts_award_year.map(&:last), message: "Select the academic year you were awarded qualified teacher status"}
 
   validates :employment_status,                 on: [:"still-teaching", :submit], presence: {message: "Choose the option that describes your current employment status"}
 
