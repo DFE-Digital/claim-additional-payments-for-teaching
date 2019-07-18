@@ -62,6 +62,12 @@
     },
     "NOTIFY_TEMPLATE_ID": {
       "type": "string"
+    },
+    "ROLLBAR_ACCESS_TOKEN": {
+      "type": "securestring"
+    },
+    "ROLLBAR_ENV": {
+      "type": "string"
     }
   },
   "variables": {
@@ -252,6 +258,14 @@
             {
               "name": "NOTIFY_TEMPLATE_ID",
               "value": "[parameters('NOTIFY_TEMPLATE_ID')]"
+            },
+            {
+              "name": "ROLLBAR_ACCESS_TOKEN",
+              "value": "[parameters('ROLLBAR_ACCESS_TOKEN')]"
+            },
+            {
+              "name": "ROLLBAR_ENV",
+              "value": "[parameters('ROLLBAR_ENV')]"
             }
           ]
         }
