@@ -6,7 +6,7 @@ module FeatureHelpers
   end
 
   def choose_qts_year(year = "September 1 2014 - August 31 2015")
-    select year, from: :tslr_claim_qts_award_year
+    choose year
     click_on "Continue"
   end
 
