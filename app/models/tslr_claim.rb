@@ -111,11 +111,12 @@ class TslrClaim < ApplicationRecord
   end
 
   def ineligible?
-    ineligible_claim_school? || employed_at_no_school? || not_taught_eligible_subjects_enough?
+    ineligible_qts_award_year? || ineligible_claim_school? || employed_at_no_school? || not_taught_eligible_subjects_enough?
   end
 
   def ineligibility_reason
     [
+      :ineligible_qts_award_year,
       :ineligible_claim_school,
       :employed_at_no_school,
       :not_taught_eligible_subjects_enough,
@@ -124,6 +125,7 @@ class TslrClaim < ApplicationRecord
 
   def full_ineligibility_reason
     case ineligibility_reason
+    when :ineligible_qts_award_year then "You are only eligible to claim back student loan repayments if you qualified on or after September 1st #{ClaimsController.helpers.first_eligible_year}."
     when :ineligible_claim_school then "#{claim_school_name} is not an eligible school."
     when :employed_at_no_school then "You can only get this payment if you’re still working as a teacher."
     when :not_taught_eligible_subjects_enough then "You must have spent at least half your time teaching an eligible subject."
@@ -144,6 +146,10 @@ class TslrClaim < ApplicationRecord
   end
 
   private
+
+  def ineligible_qts_award_year?
+    qts_award_year.present? && qts_award_year.match?("before")
+  end
 
   def ineligible_claim_school?
     claim_school.present? && !claim_school.eligible_for_tslr?

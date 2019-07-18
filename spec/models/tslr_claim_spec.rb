@@ -255,6 +255,16 @@ RSpec.describe TslrClaim, type: :model do
   describe "#ineligible?" do
     subject { TslrClaim.new(claim_attributes).ineligible? }
 
+    context "with an ineligible QTS award year" do
+      let(:claim_attributes) { {qts_award_year: "before_2013"} }
+      it { is_expected.to be true }
+    end
+
+    context "with an eligible QTS award year" do
+      let(:claim_attributes) { {qts_award_year: "2013-2014"} }
+      it { is_expected.to be false }
+    end
+
     context "with no claim_school" do
       let(:claim_attributes) { {claim_school: nil} }
       it { is_expected.to be false }
@@ -288,6 +298,11 @@ RSpec.describe TslrClaim, type: :model do
 
   describe "#ineligibility_reason" do
     subject { TslrClaim.new(claim_attributes).ineligibility_reason }
+
+    context "with an ineligible qts_award_year" do
+      let(:claim_attributes) { {qts_award_year: "before_2013"} }
+      it { is_expected.to eql :ineligible_qts_award_year }
+    end
 
     context "with an ineligible claim_school" do
       let(:claim_attributes) { {claim_school: schools(:hampstead_school)} }
