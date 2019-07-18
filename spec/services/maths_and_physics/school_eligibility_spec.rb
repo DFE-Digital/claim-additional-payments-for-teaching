@@ -86,11 +86,11 @@ RSpec.describe MathsAndPhysics::SchoolEligibility do
           let(:school_attributes) { special_school_attributes.merge({school_type: :other_independent_special_school}) }
           it { is_expected.to be false }
         end
+      end
 
-        context "and it is not a state funded school" do
-          let(:school_attributes) { {school_type_group: :independent_schools} }
-          it { is_expected.to be false }
-        end
+      context "and it is not a state funded school" do
+        let(:school_attributes) { {school_type_group: :independent_schools} }
+        it { is_expected.to be false }
       end
     end
 
