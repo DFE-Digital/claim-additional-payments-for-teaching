@@ -44,16 +44,12 @@ class PageSequence
 
   def next_slug
     return "ineligible" if claim.ineligible?
-    return "check-your-answers" if claim.submittable? && !updating_schools_answers?
+    return "check-your-answers" if claim.submittable?
 
     slugs[current_slug_index + 1]
   end
 
   private
-
-  def updating_schools_answers?
-    current_slug == "claim-school" || current_slug == "still-teaching" && claim.employed_at_different_school?
-  end
 
   def current_slug_index
     slugs.index(current_slug)

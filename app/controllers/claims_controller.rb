@@ -41,12 +41,7 @@ class ClaimsController < ApplicationController
   private
 
   def update_current_claim!
-    if params[:slug] == "check-your-answers"
-      mail_claim_submitted if current_claim.submit!
-    else
-      current_claim.attributes = claim_params
-      current_claim.save(context: params[:slug].to_sym)
-    end
+    ClaimUpdate.new(current_claim, claim_params, params[:slug]).perform
   end
 
   def next_slug
@@ -66,7 +61,7 @@ class ClaimsController < ApplicationController
   end
 
   def claim_params
-    params.require(:tslr_claim).permit(
+    params.fetch(:tslr_claim, {}).permit(
       :qts_award_year,
       :claim_school_id,
       :employment_status,
@@ -87,10 +82,6 @@ class ClaimsController < ApplicationController
       :bank_account_number,
       TslrClaim::SUBJECT_FIELDS
     )
-  end
-
-  def mail_claim_submitted
-    ClaimMailer.submitted(current_claim).deliver_later
   end
 
   def claim_page_template

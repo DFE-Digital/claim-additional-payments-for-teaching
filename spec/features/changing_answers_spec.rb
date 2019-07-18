@@ -33,12 +33,6 @@ RSpec.feature "Changing the answers on a submittable claim" do
     expect(page).to have_content("Check your answers before sending your application")
   end
 
-  scenario "Teacher sees their original current school when editing" do
-    find("a[href='#{claim_path("current-school")}']").click
-
-    expect(find("input[name='school_search']").value).to eq(current_school.name)
-  end
-
   context "when changing subjects taught" do
     before do
       find("a[href='#{claim_path("subjects-taught")}']").click
@@ -180,5 +174,34 @@ RSpec.feature "Changing the answers on a submittable claim" do
         end
       end
     end
+  end
+
+  scenario "changing the are you still employed question (employment_status)" do
+    find("a[href='#{claim_path("still-teaching")}']").click
+
+    choose "Yes, at Claim School"
+    click_on "Continue"
+
+    expect(current_path).to eq(claim_path("check-your-answers"))
+    expect(claim.reload.employment_status).to eq("claim_school")
+    expect(claim.current_school).to eq(claim_school)
+  end
+
+  scenario "going from same school to different school" do
+    claim.update!(employment_status: "claim_school")
+
+    find("a[href='#{claim_path("still-teaching")}']").click
+
+    choose "Yes, at another school"
+    click_on "Continue"
+
+    fill_in :school_search, with: "Hampstead"
+    click_on "Search"
+
+    choose "Hampstead School"
+    click_on "Continue"
+    expect(current_path).to eq(claim_path("check-your-answers"))
+    expect(claim.reload.employment_status).to eq("different_school")
+    expect(claim.current_school).to eq(schools(:hampstead_school))
   end
 end
