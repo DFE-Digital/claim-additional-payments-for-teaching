@@ -54,4 +54,42 @@ RSpec.describe ClaimUpdate do
       expect(ActionMailer::DeliveryJob).not_to have_been_enqueued
     end
   end
+
+  describe "setting/resetting current_school based on the answer to employment_status" do
+    context "when the update sets the employment_status to :claim_school" do
+      let(:claim) { create(:tslr_claim, claim_school: schools(:penistone_grammar_school)) }
+      let(:context) { "still-teaching" }
+      let(:params) { {employment_status: "claim_school"} }
+
+      it "automatically sets current_school to match the claim_school" do
+        expect(claim_update.perform).to be_truthy
+        expect(claim.reload.employment_status).to eq "claim_school"
+        expect(claim.current_school).to eq schools(:penistone_grammar_school)
+      end
+    end
+
+    context "when the update changes employment_status to :different_school" do
+      let(:claim) { create(:tslr_claim, claim_school: schools(:penistone_grammar_school), employment_status: :claim_school, current_school: schools(:penistone_grammar_school)) }
+      let(:context) { "still-teaching" }
+      let(:params) { {employment_status: "different_school"} }
+
+      it "resets the inferrred current_school to nil" do
+        expect(claim_update.perform).to be_truthy
+        expect(claim.reload.employment_status).to eq "different_school"
+        expect(claim.current_school).to be_nil
+      end
+    end
+
+    context "when the update does not actually change the employment_status" do
+      let(:claim) { create(:tslr_claim, claim_school: schools(:penistone_grammar_school), employment_status: :different_school, current_school: schools(:hampstead_school)) }
+      let(:context) { "still-teaching" }
+      let(:params) { {employment_status: claim.employment_status} }
+
+      it "does not reset the current_school" do
+        expect(claim_update.perform).to be_truthy
+        expect(claim.reload.employment_status).to eq "different_school"
+        expect(claim.current_school).to eq schools(:hampstead_school)
+      end
+    end
+  end
 end

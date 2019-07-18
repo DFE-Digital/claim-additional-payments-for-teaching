@@ -20,6 +20,7 @@ class ClaimUpdate
       claim.submit! && send_confirmation_email
     else
       claim.attributes = params
+      update_employment_status_dependent_attributes
       claim.save(context: context)
     end
   end
@@ -32,5 +33,11 @@ class ClaimUpdate
 
   def send_confirmation_email
     ClaimMailer.submitted(claim).deliver_later
+  end
+
+  def update_employment_status_dependent_attributes
+    if claim.employment_status_changed?
+      claim.current_school = claim.employed_at_claim_school? ? claim.claim_school : nil
+    end
   end
 end
