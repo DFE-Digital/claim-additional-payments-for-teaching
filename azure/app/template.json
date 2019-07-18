@@ -6,6 +6,9 @@
       "type": "string",
       "defaultValue": "[resourceGroup().name]"
     },
+    "alertActionGroupShortName": {
+      "type": "string"
+    },
     "appServiceDockerCompose": {
       "type": "string"
     },
@@ -22,7 +25,7 @@
     "databasePassword": {
       "type": "securestring"
     },
-    "securityAlertEmailAddress": {
+    "alertEmailAddress": {
       "type": "string"
     },
     "RAILS_ENV": {
@@ -78,7 +81,12 @@
     "appServicePlanId": "[resourceId('Microsoft.Web/serverfarms', variables('appServicePlanName'))]",
 
     "appServiceName": "[concat(parameters('resourceNamePrefix'), '-as')]",
-    "appServiceRuntimeStack": "[concat('COMPOSE|', base64(parameters('appServiceDockerCompose')))]"
+    "appServiceRuntimeStack": "[concat('COMPOSE|', base64(parameters('appServiceDockerCompose')))]",
+
+    "alertActionGroupName": "[concat(parameters('resourceNamePrefix'), '-alerts-ag')]",
+
+    "serviceHealthAlertName": "[concat(parameters('resourceNamePrefix'), '-alerts-service-health')]",
+    "appServiceResponseTimeAlertName": "[concat(parameters('resourceNamePrefix'), '-alerts-', variables('appServiceName'), '-response-time')]"
   },
   "resources": [
     {
@@ -120,7 +128,7 @@
             "value": "[parameters('databasePassword')]"
           },
           "securityAlertEmailAddress": {
-            "value": "[parameters('securityAlertEmailAddress')]"
+            "value": "[parameters('alertEmailAddress')]"
           },
           "storageAccountName": {
             "value": "[variables('storageAccountName')]"
@@ -271,6 +279,84 @@
             "value": "[variables('databaseServerName')]"
           }
         }
+      }
+    },
+    {
+      "apiVersion": "2018-03-01",
+      "type": "Microsoft.Insights/actionGroups",
+      "name": "[variables('alertActionGroupName')]",
+      "location": "global",
+      "properties": {
+        "groupShortName": "[parameters('alertActionGroupShortName')]",
+        "enabled": true,
+        "emailReceivers": [
+          {
+            "name": "email",
+            "emailAddress": "[parameters('alertEmailAddress')]"
+          }
+        ]
+      }
+    },
+    {
+      "apiVersion": "2017-04-01",
+      "type": "Microsoft.Insights/activityLogAlerts",
+      "name": "[variables('serviceHealthAlertName')]",
+      "location": "global",
+      "dependsOn": ["[variables('alertActionGroupName')]"],
+      "properties": {
+        "scopes": ["[resourceGroup().id]"],
+        "enabled": true,
+        "condition": {
+          "allOf": [
+            {
+              "field": "Category",
+              "equals": "ServiceHealth"
+            }
+          ]
+        },
+        "actions": {
+          "actionGroups": [
+            {
+              "actionGroupId": "[resourceId('Microsoft.Insights/actionGroups', variables('alertActionGroupName'))]"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "apiVersion": "2018-03-01",
+      "type": "Microsoft.Insights/metricAlerts",
+      "name": "[variables('appServiceResponseTimeAlertName')]",
+      "location": "global",
+      "dependsOn": ["[variables('alertActionGroupName')]", "[variables('appServiceName')]"],
+      "properties": {
+        "scopes": ["[resourceId('Microsoft.Web/sites', variables('appServiceName'))]"],
+        "enabled": true,
+        "description": "[concat('Alert when average response times for ', variables('appServiceName'), ' are greater than 2 seconds.')]",
+        "severity": 1,
+        "evaluationFrequency": "PT1M",
+        "windowSize": "PT1M",
+        "targetResourceType": "Microsoft.Web/sites",
+        "targetResourceRegion": "[resourceGroup().location]",
+        "criteria": {
+          "odata.type": "Microsoft.Azure.Monitor.SingleResourceMultipleMetricCriteria",
+          "allOf": [
+            {
+              "criterionType": "StaticThresholdCriterion",
+              "name": "high-response-time",
+              "metricNamespace": "Microsoft.Web/sites",
+              "metricName": "AverageResponseTime",
+              "operator": "GreaterThan",
+              "threshold": 2,
+              "timeAggregation": "Average"
+            }
+          ]
+        },
+        "actions": [
+          {
+            "actionGroupId": "[resourceId('Microsoft.Insights/actionGroups', variables('alertActionGroupName'))]"
+          }
+        ]
       }
     }
   ],
