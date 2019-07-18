@@ -16,6 +16,7 @@ FactoryBot.define do
       national_insurance_number { "QQ123456C" }
       has_student_loan { true }
       student_loan_country { :england }
+      student_loan_courses { :one_course }
       student_loan_repayment_amount { 1000 }
       email_address { "test@email.com" }
       bank_sort_code { 123456 }

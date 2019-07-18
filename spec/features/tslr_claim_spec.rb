@@ -85,6 +85,12 @@ RSpec.feature "Teacher Student Loan Repayments claims" do
 
     expect(claim.reload.student_loan_country).to eq("england")
 
+    expect(page).to have_text(I18n.t("tslr.questions.student_loan_how_many_courses"))
+    choose("1")
+    click_on "Continue"
+
+    expect(claim.reload.student_loan_courses).to eq("one_course")
+
     expect(page).to have_text(I18n.t("tslr.questions.student_loan_amount", claim_school_name: claim.claim_school_name))
     fill_in I18n.t("tslr.questions.student_loan_amount", claim_school_name: claim.claim_school_name), with: "1100"
     click_on "Continue"
