@@ -106,6 +106,17 @@
         },
         "secretName": "NotifyTemplateID"
       }
+    },
+    "ROLLBAR_ACCESS_TOKEN": {
+      "reference": {
+        "keyVault": {
+          "id": "/subscriptions/${subscriptionId}/resourceGroups/${keyVaultResourceGroupName}/providers/Microsoft.KeyVault/vaults/${keyVaultName}"
+        },
+        "secretName": "RollbarAccessToken"
+      }
+    },
+    "ROLLBAR_ENV": {
+      "value": "test"
     }
   }
 }
