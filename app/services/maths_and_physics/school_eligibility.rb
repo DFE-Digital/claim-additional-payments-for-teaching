@@ -66,7 +66,7 @@ module MathsAndPhysics
     end
 
     def eligible_special_school?
-      @school.phase == "not_applicable" && @school.special?
+      @school.phase == "not_applicable" && @school.special? && @school.school_type != "special_post_16_institutions"
     end
   end
 end

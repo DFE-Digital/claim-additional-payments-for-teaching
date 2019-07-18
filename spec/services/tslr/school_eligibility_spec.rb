@@ -121,6 +121,11 @@ RSpec.describe Tslr::SchoolEligibility do
         end
       end
 
+      context "and it is a special post 16 institution" do
+        let(:school_attributes) { {school_type: :special_post_16_institutions, school_type_group: :special_schools, phase: :not_applicable} }
+        it { is_expected.to be false }
+      end
+
       context "and it is not a state funded school" do
         let(:school_attributes) { {school_type_group: :independent_schools} }
         it { is_expected.to be false }
