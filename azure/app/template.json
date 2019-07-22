@@ -92,7 +92,7 @@
     "alertActionGroupName": "[concat(parameters('resourceNamePrefix'), '-alerts-ag')]",
 
     "serviceHealthAlertName": "[concat(parameters('resourceNamePrefix'), '-alerts-service-health')]",
-    "appServiceResponseTimeAlertName": "[concat(parameters('resourceNamePrefix'), '-alerts-', variables('appServiceName'), '-response-time')]"
+    "appServiceHighResponseTimeAlertName": "[concat(parameters('resourceNamePrefix'), '-alerts-', variables('appServiceName'), '-high-response-time')]"
   },
   "resources": [
     {
@@ -340,7 +340,7 @@
     {
       "apiVersion": "2018-03-01",
       "type": "Microsoft.Insights/metricAlerts",
-      "name": "[variables('appServiceResponseTimeAlertName')]",
+      "name": "[variables('appServiceHighResponseTimeAlertName')]",
       "location": "global",
       "dependsOn": ["[variables('alertActionGroupName')]", "[variables('appServiceName')]"],
       "properties": {
