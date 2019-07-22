@@ -1,6 +1,17 @@
 require "rails_helper"
 
 RSpec.feature "Ineligible Teacher Student Loan Repayments claims" do
+  scenario "qualified before the first eligible year" do
+    claim = start_tslr_claim
+
+    choose "Before September 1 2013"
+    click_on "Continue"
+
+    expect(claim.reload.qts_award_year).to eql("before_2013")
+    expect(page).to have_text("You’re not eligible")
+    expect(page).to have_text("You are only eligible to claim back student loan repayments if you qualified on or after September 1st 2013")
+  end
+
   scenario "now works for a different school" do
     claim = start_tslr_claim
     choose_qts_year

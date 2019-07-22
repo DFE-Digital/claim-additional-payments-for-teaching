@@ -3,7 +3,7 @@ FactoryBot.define do
     trait :submittable do
       claim_school { School.find(ActiveRecord::FixtureSet.identify(:penistone_grammar_school, :uuid)) }
       current_school { claim_school }
-      qts_award_year { "2013-2014" }
+      qts_award_year { "2013_2014" }
       employment_status { :claim_school }
       physics_taught { true }
       mostly_teaching_eligible_subjects { true }

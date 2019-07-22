@@ -5,7 +5,7 @@ RSpec.describe TslrClaimsCsv do
     create(:tslr_claim, :submittable,
       reference: "B2W4L0KC",
       submitted_at: Time.zone.parse("2019-01-01 17:30:00"),
-      qts_award_year: "2013-2014",
+      qts_award_year: "2013_2014",
       current_school: create(:school, name: "Penistone Grammar School"),
       employment_status: :claim_school,
       full_name: "Bruce Wayne",
@@ -58,7 +58,7 @@ RSpec.describe TslrClaimsCsv do
       expect(csv[1]).to eq([
         "B2W4L0KC",
         "01/01/2019 17:30",
-        "2013-2014",
+        "2013_2014",
         "Penistone Grammar School",
         "Claim school",
         "Penistone Grammar School",

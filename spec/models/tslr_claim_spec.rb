@@ -93,11 +93,14 @@ RSpec.describe TslrClaim, type: :model do
   context "when saving in the “qts-year” validation context" do
     let(:custom_validation_context) { :"qts-year" }
 
+    it "rejects invalid QTS award years" do
+      expect { TslrClaim.new(qts_award_year: "123") }.to raise_error(ArgumentError)
+    end
+
     it "validates the qts_award_year is one of the allowable values" do
       expect(TslrClaim.new).not_to be_valid(custom_validation_context)
-      expect(TslrClaim.new(qts_award_year: "123")).not_to be_valid(custom_validation_context)
 
-      TslrClaim::VALID_QTS_YEARS.each do |academic_year|
+      TslrClaim.qts_award_years.each_key do |academic_year|
         expect(TslrClaim.new(qts_award_year: academic_year)).to be_valid(custom_validation_context)
       end
     end
@@ -255,6 +258,16 @@ RSpec.describe TslrClaim, type: :model do
   describe "#ineligible?" do
     subject { TslrClaim.new(claim_attributes).ineligible? }
 
+    context "with an ineligible QTS award year" do
+      let(:claim_attributes) { {qts_award_year: "before_2013"} }
+      it { is_expected.to be true }
+    end
+
+    context "with an eligible QTS award year" do
+      let(:claim_attributes) { {qts_award_year: "2013_2014"} }
+      it { is_expected.to be false }
+    end
+
     context "with no claim_school" do
       let(:claim_attributes) { {claim_school: nil} }
       it { is_expected.to be false }
@@ -288,6 +301,11 @@ RSpec.describe TslrClaim, type: :model do
 
   describe "#ineligibility_reason" do
     subject { TslrClaim.new(claim_attributes).ineligibility_reason }
+
+    context "with an ineligible qts_award_year" do
+      let(:claim_attributes) { {qts_award_year: "before_2013"} }
+      it { is_expected.to eql :ineligible_qts_award_year }
+    end
 
     context "with an ineligible claim_school" do
       let(:claim_attributes) { {claim_school: schools(:hampstead_school)} }

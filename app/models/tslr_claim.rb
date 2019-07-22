@@ -1,14 +1,4 @@
 class TslrClaim < ApplicationRecord
-  VALID_QTS_YEARS = [
-    "2013-2014",
-    "2014-2015",
-    "2015-2016",
-    "2016-2017",
-    "2017-2018",
-    "2018-2019",
-    "2019-2020",
-  ].freeze
-
   SUBJECT_FIELDS = [
     :biology_taught,
     :chemistry_taught,
@@ -25,13 +15,24 @@ class TslrClaim < ApplicationRecord
     no_school: 2,
   }, _prefix: :employed_at
 
+  enum qts_award_year: {
+    "before_2013": 0,
+    "2013_2014": 1,
+    "2014_2015": 2,
+    "2015_2016": 3,
+    "2016_2017": 4,
+    "2017_2018": 5,
+    "2018_2019": 6,
+    "2019_2020": 7,
+  }, _prefix: :awarded_qualified_status
+
   belongs_to :claim_school, optional: true, class_name: "School"
   belongs_to :current_school, optional: true, class_name: "School"
 
   validates :claim_school,                      on: [:"claim-school", :submit], presence: {message: "Select a school from the list"}
   validates :current_school,                    on: [:"current-school", :submit], presence: {message: "Select a school from the list"}
 
-  validates :qts_award_year,                    on: [:"qts-year", :submit], inclusion: {in: VALID_QTS_YEARS, message: "Select the academic year you were awarded qualified teacher status"}
+  validates :qts_award_year,                    on: [:"qts-year", :submit], presence: {message: "Select the academic year you were awarded qualified teacher status"}
 
   validates :employment_status,                 on: [:"still-teaching", :submit], presence: {message: "Choose the option that describes your current employment status"}
 
@@ -109,11 +110,12 @@ class TslrClaim < ApplicationRecord
   end
 
   def ineligible?
-    ineligible_claim_school? || employed_at_no_school? || not_taught_eligible_subjects_enough?
+    ineligible_qts_award_year? || ineligible_claim_school? || employed_at_no_school? || not_taught_eligible_subjects_enough?
   end
 
   def ineligibility_reason
     [
+      :ineligible_qts_award_year,
       :ineligible_claim_school,
       :employed_at_no_school,
       :not_taught_eligible_subjects_enough,
@@ -122,6 +124,7 @@ class TslrClaim < ApplicationRecord
 
   def full_ineligibility_reason
     case ineligibility_reason
+    when :ineligible_qts_award_year then "You are only eligible to claim back student loan repayments if you qualified on or after September 1st 2013."
     when :ineligible_claim_school then "#{claim_school_name} is not an eligible school."
     when :employed_at_no_school then "You can only get this payment if you’re still working as a teacher."
     when :not_taught_eligible_subjects_enough then "You must have spent at least half your time teaching an eligible subject."
@@ -142,6 +145,10 @@ class TslrClaim < ApplicationRecord
   end
 
   private
+
+  def ineligible_qts_award_year?
+    awarded_qualified_status_before_2013?
+  end
 
   def ineligible_claim_school?
     claim_school.present? && !claim_school.eligible_for_tslr?
