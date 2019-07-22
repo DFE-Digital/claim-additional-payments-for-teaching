@@ -13,10 +13,11 @@
 
         <%= errors_tag current_claim, :qts_award_year %>
         <div class="govuk-radios">
-          <%= form.collection_radio_buttons :qts_award_year, options_for_qts_award_year, :last, :first do |b| %>
+          <%= form.hidden_field :qts_award_year %>
+          <% TslrClaim.qts_award_years.each_key do |option| %>
             <div class="govuk-radios__item">
-              <%= b.radio_button class: "govuk-radios__input" %>
-              <%= b.label class: "govuk-label govuk-radios__label" %>
+              <%= form.radio_button(:qts_award_year, option, class: "govuk-radios__input") %>
+              <%= form.label "qts_award_year_#{option}", t("tslr.questions.qts_award_years.#{option}"), class: "govuk-label govuk-radios__label" %>
             </div>
           <% end %>
         </div>

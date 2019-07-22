@@ -1,9 +1,4 @@
 module ClaimsHelper
-  def options_for_qts_award_year
-    QtsYears::ELIGIBLE_YEARS.map { |year_range| [academic_years(year_range), year_range] }
-      .unshift(["Before September 1 #{QtsYears.first_eligible_year}", QtsYears.option_values.first])
-  end
-
   def tslr_guidance_url
     "https://www.gov.uk/guidance/teachers-student-loan-reimbursement-guidance-for-teachers-and-schools"
   end

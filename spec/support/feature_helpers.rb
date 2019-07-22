@@ -5,7 +5,7 @@ module FeatureHelpers
     TslrClaim.order(:created_at).last
   end
 
-  def choose_qts_year(year = "September 1 2014 - August 31 2015")
+  def choose_qts_year(year = "September 1 2014 – August 31 2015")
     choose year
     click_on "Continue"
   end
