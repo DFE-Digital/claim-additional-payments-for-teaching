@@ -264,7 +264,7 @@ RSpec.describe TslrClaim, type: :model do
     end
 
     context "with an eligible QTS award year" do
-      let(:claim_attributes) { {qts_award_year: "2013-2014"} }
+      let(:claim_attributes) { {qts_award_year: "2013_2014"} }
       it { is_expected.to be false }
     end
 

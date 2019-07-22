@@ -6,7 +6,7 @@ RSpec.feature "Choosing subjects taught during Teacher Student Loan Repayments c
     create(:tslr_claim,
       claim_school: school,
       current_school: school,
-      qts_award_year: "2013-2014",
+      qts_award_year: "2013_2014",
       employment_status: :claim_school)
   end
 

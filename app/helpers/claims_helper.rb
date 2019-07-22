@@ -52,7 +52,7 @@ module ClaimsHelper
   private
 
   def academic_years(year_range)
-    start_year, end_year = year_range.split("-")
+    start_year, end_year = year_range.split("_")
 
     "September 1 #{start_year} - August 31 #{end_year}"
   end

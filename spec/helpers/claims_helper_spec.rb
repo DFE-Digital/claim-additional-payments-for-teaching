@@ -5,7 +5,7 @@ describe ClaimsHelper do
     it "returns an array of questions and answers for displaying to the user for review" do
       school = create(:school)
       claim = TslrClaim.create(
-        qts_award_year: "2013-2014",
+        qts_award_year: "2013_2014",
         claim_school: school,
         current_school: school,
         chemistry_taught: true,

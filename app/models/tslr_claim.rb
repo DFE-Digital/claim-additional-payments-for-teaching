@@ -17,13 +17,13 @@ class TslrClaim < ApplicationRecord
 
   enum qts_award_year: {
     "before_2013": 0,
-    "2013-2014": 1,
-    "2014-2015": 2,
-    "2015-2016": 3,
-    "2016-2017": 4,
-    "2017-2018": 5,
-    "2018-2019": 6,
-    "2019-2020": 7,
+    "2013_2014": 1,
+    "2014_2015": 2,
+    "2015_2016": 3,
+    "2016_2017": 4,
+    "2017_2018": 5,
+    "2018_2019": 6,
+    "2019_2020": 7,
   }, _prefix: :awarded_qualified_status
 
   belongs_to :claim_school, optional: true, class_name: "School"
