@@ -8,6 +8,9 @@
     "appServiceDockerCompose": {
       "value": "${dockerCompose}"
     },
+    "appServiceHostName": {
+      "value": "test.additional-teaching-payment.education.gov.uk"
+    },
     "databaseName": {
       "value": "development"
     },
