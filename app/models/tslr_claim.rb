@@ -12,6 +12,7 @@ class TslrClaim < ApplicationRecord
   enum student_loan_country: StudentLoans::COUNTRIES
   enum student_loan_start_date: StudentLoans::COURSE_START_DATES
   enum student_loan_courses: {one_course: 0, two_or_more_courses: 1}
+  enum student_loan_plan: StudentLoans::PLANS
 
   enum employment_status: {
     claim_school: 0,

@@ -90,6 +90,14 @@ RSpec.describe TslrClaim, type: :model do
     end
   end
 
+  context "that has a student loan plan" do
+    it "validates the plan" do
+      expect(TslrClaim.new(student_loan_plan: StudentLoans::PLAN_1)).to be_valid
+
+      expect { TslrClaim.new(student_loan_plan: "plan_42") }.to raise_error(ArgumentError)
+    end
+  end
+
   context "when saving in the “qts-year” validation context" do
     let(:custom_validation_context) { :"qts-year" }
 
