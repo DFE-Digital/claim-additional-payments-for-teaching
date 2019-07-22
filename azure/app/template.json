@@ -84,7 +84,6 @@
     "databaseServerName": "[concat(parameters('resourceNamePrefix'), '-db')]",
 
     "appServicePlanName": "[concat(parameters('resourceNamePrefix'), '-asp')]",
-    "appServicePlanId": "[resourceId('Microsoft.Web/serverfarms', variables('appServicePlanName'))]",
 
     "appServiceName": "[concat(parameters('resourceNamePrefix'), '-as')]",
     "appServiceRuntimeStack": "[concat('COMPOSE|', base64(parameters('appServiceDockerCompose')))]",
@@ -97,6 +96,10 @@
     "databaseServerHighCpuAlertName": "[concat(variables('databaseServerAlertPrefix'), '-high-cpu')]",
     "databaseServerHighMemoryAlertName": "[concat(variables('databaseServerAlertPrefix'), '-high-memory')]",
     "databaseServerHighStorageAlertName": "[concat(variables('databaseServerAlertPrefix'), '-high-storage')]",
+
+    "appServicePlanAlertPrefix": "[concat(parameters('resourceNamePrefix'), '-alerts', replace(variables('appServicePlanName'), parameters('resourceNamePrefix'), ''))]",
+    "appServicePlanHighCpuAlertName": "[concat(variables('appServicePlanAlertPrefix'), '-high-cpu')]",
+    "appServicePlanHighMemoryAlertName": "[concat(variables('appServicePlanAlertPrefix'), '-high-memory')]",
 
     "appServiceAlertPrefix": "[concat(parameters('resourceNamePrefix'), '-alerts', replace(variables('appServiceName'), parameters('resourceNamePrefix'), ''))]",
     "appServiceHighResponseTimeAlertName": "[concat(variables('appServiceAlertPrefix'), '-high-response-time')]"
@@ -200,7 +203,7 @@
       ],
       "properties": {
         "httpsOnly": true,
-        "serverFarmId": "[variables('appServicePlanId')]",
+        "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', variables('appServicePlanName'))]",
         "siteConfig": {
           "alwaysOn": "[parameters('appServiceAlwaysOn')]",
           "httpLoggingEnabled": true,
@@ -452,6 +455,84 @@
               "name": "high-storage",
               "metricNamespace": "Microsoft.DBforPostgreSQL/servers",
               "metricName": "storage_percent",
+              "operator": "GreaterThan",
+              "threshold": 80,
+              "timeAggregation": "Average"
+            }
+          ]
+        },
+        "actions": [
+          {
+            "actionGroupId": "[resourceId('Microsoft.Insights/actionGroups', variables('alertActionGroupName'))]"
+          }
+        ]
+      }
+    },
+    {
+      "apiVersion": "2018-03-01",
+      "type": "Microsoft.Insights/metricAlerts",
+      "name": "[variables('appServicePlanHighCpuAlertName')]",
+      "location": "global",
+      "dependsOn": [
+        "[resourceId('Microsoft.Insights/actionGroups', variables('alertActionGroupName'))]",
+        "[resourceId('Microsoft.Resources/deployments', variables('appServicePlanDeploymentName'))]"
+      ],
+      "properties": {
+        "scopes": ["[resourceId('Microsoft.Web/serverfarms', variables('appServicePlanName'))]"],
+        "enabled": true,
+        "description": "[concat('Alert when average CPU utilization for ', variables('appServicePlanName'), ' is greater than 80%.')]",
+        "severity": 1,
+        "evaluationFrequency": "PT1M",
+        "windowSize": "PT1M",
+        "targetResourceType": "Microsoft.Web/serverfarms",
+        "targetResourceRegion": "[resourceGroup().location]",
+        "criteria": {
+          "odata.type": "Microsoft.Azure.Monitor.SingleResourceMultipleMetricCriteria",
+          "allOf": [
+            {
+              "criterionType": "StaticThresholdCriterion",
+              "name": "high-cpu",
+              "metricNamespace": "Microsoft.Web/serverfarms",
+              "metricName": "CpuPercentage",
+              "operator": "GreaterThan",
+              "threshold": 80,
+              "timeAggregation": "Average"
+            }
+          ]
+        },
+        "actions": [
+          {
+            "actionGroupId": "[resourceId('Microsoft.Insights/actionGroups', variables('alertActionGroupName'))]"
+          }
+        ]
+      }
+    },
+    {
+      "apiVersion": "2018-03-01",
+      "type": "Microsoft.Insights/metricAlerts",
+      "name": "[variables('appServicePlanHighMemoryAlertName')]",
+      "location": "global",
+      "dependsOn": [
+        "[resourceId('Microsoft.Insights/actionGroups', variables('alertActionGroupName'))]",
+        "[resourceId('Microsoft.Resources/deployments', variables('appServicePlanDeploymentName'))]"
+      ],
+      "properties": {
+        "scopes": ["[resourceId('Microsoft.Web/serverfarms', variables('appServicePlanName'))]"],
+        "enabled": true,
+        "description": "[concat('Alert when average memory utilization for ', variables('appServicePlanName'), ' is greater than 80%.')]",
+        "severity": 1,
+        "evaluationFrequency": "PT1M",
+        "windowSize": "PT1M",
+        "targetResourceType": "Microsoft.Web/serverfarms",
+        "targetResourceRegion": "[resourceGroup().location]",
+        "criteria": {
+          "odata.type": "Microsoft.Azure.Monitor.SingleResourceMultipleMetricCriteria",
+          "allOf": [
+            {
+              "criterionType": "StaticThresholdCriterion",
+              "name": "high-memory",
+              "metricNamespace": "Microsoft.Web/serverfarms",
+              "metricName": "MemoryPercentage",
               "operator": "GreaterThan",
               "threshold": 80,
               "timeAggregation": "Average"
