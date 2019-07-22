@@ -296,13 +296,14 @@
       }
     },
     {
-      "apiVersion": "2018-03-01",
+      "apiVersion": "2019-06-01",
       "type": "Microsoft.Insights/actionGroups",
       "name": "[variables('alertActionGroupName')]",
       "location": "global",
       "properties": {
         "groupShortName": "[parameters('alertActionGroupShortName')]",
         "enabled": true,
+        "useCommonAlertSchema": true,
         "emailReceivers": [
           {
             "name": "email",
