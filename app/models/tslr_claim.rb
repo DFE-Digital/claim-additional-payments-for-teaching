@@ -7,30 +7,11 @@ class TslrClaim < ApplicationRecord
     :languages_taught,
   ].freeze
 
-  STUDENT_LOAN_COUNTRIES_WITH_ONE_PLAN = [
-    "scotland",
-    "northern_ireland",
-  ].freeze
-
   TRN_LENGTH = 7
 
-  enum student_loan_country: {
-    england: 0,
-    northern_ireland: 1,
-    scotland: 2,
-    wales: 3,
-  }
-
-  enum student_loan_courses: {
-    one_course: 0,
-    two_or_more_courses: 1,
-  }
-
-  enum student_loan_start_date: {
-    before_first_september_2012: 0,
-    on_or_after_first_september_2012: 1,
-    some_before_some_after_first_september_2012: 2,
-  }
+  enum student_loan_country: StudentLoans::COUNTRIES
+  enum student_loan_start_date: StudentLoans::COURSE_START_DATES
+  enum student_loan_courses: {one_course: 0, two_or_more_courses: 1}
 
   enum employment_status: {
     claim_school: 0,
@@ -177,7 +158,7 @@ class TslrClaim < ApplicationRecord
   end
 
   def student_loan_country_with_one_plan?
-    STUDENT_LOAN_COUNTRIES_WITH_ONE_PLAN.include?(student_loan_country)
+    StudentLoans::PLAN_1_COUNTRIES.include?(student_loan_country)
   end
 
   private

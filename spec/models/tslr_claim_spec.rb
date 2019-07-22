@@ -210,7 +210,7 @@ RSpec.describe TslrClaim, type: :model do
   context "when saving in the “student-loan-start-date” validation context" do
     it "validates the presence of the student_loan_how_many_courses" do
       expect(TslrClaim.new).not_to be_valid(:"student-loan-start-date")
-      expect(TslrClaim.new(student_loan_start_date: :before_first_september_2012)).to be_valid(:"student-loan-start-date")
+      expect(TslrClaim.new(student_loan_start_date: StudentLoans::BEFORE_1_SEPT_2012)).to be_valid(:"student-loan-start-date")
     end
   end
 
@@ -390,7 +390,7 @@ RSpec.describe TslrClaim, type: :model do
     it "returns true when the student_loan_country is one with only a single student loan plan" do
       expect(TslrClaim.new.student_loan_country_with_one_plan?).to eq false
 
-      TslrClaim::STUDENT_LOAN_COUNTRIES_WITH_ONE_PLAN.each do |country|
+      StudentLoans::PLAN_1_COUNTRIES.each do |country|
         expect(TslrClaim.new(student_loan_country: country).student_loan_country_with_one_plan?).to eq true
       end
     end

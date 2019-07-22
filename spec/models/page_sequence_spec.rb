@@ -30,7 +30,7 @@ RSpec.describe PageSequence do
     it "excludes the remaining student loan-related pages when the claimant received their student loan in Scotland or Northern Ireland" do
       claim.has_student_loan = true
 
-      TslrClaim::STUDENT_LOAN_COUNTRIES_WITH_ONE_PLAN.each do |plan_1_country|
+      StudentLoans::PLAN_1_COUNTRIES.each do |plan_1_country|
         claim.student_loan_country = plan_1_country
         page_sequence = PageSequence.new(claim, "student-loan-country")
         expect(page_sequence.slugs).not_to include("student-loan-how-many-courses")
