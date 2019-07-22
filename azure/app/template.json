@@ -92,10 +92,14 @@
     "alertActionGroupName": "[concat(parameters('resourceNamePrefix'), '-alerts-ag')]",
 
     "serviceHealthAlertName": "[concat(parameters('resourceNamePrefix'), '-alerts-service-health')]",
-    "databaseServerHighCpuAlertName": "[concat(parameters('resourceNamePrefix'), '-alerts-', variables('databaseServerName'), '-high-cpu')]",
-    "databaseServerHighMemoryAlertName": "[concat(parameters('resourceNamePrefix'), '-alerts-', variables('databaseServerName'), '-high-memory')]",
-    "databaseServerHighStorageAlertName": "[concat(parameters('resourceNamePrefix'), '-alerts-', variables('databaseServerName'), '-high-storage')]",
-    "appServiceHighResponseTimeAlertName": "[concat(parameters('resourceNamePrefix'), '-alerts-', variables('appServiceName'), '-high-response-time')]"
+
+    "databaseServerAlertPrefix": "[concat(parameters('resourceNamePrefix'), '-alerts', replace(variables('databaseServerName'), parameters('resourceNamePrefix'), ''))]",
+    "databaseServerHighCpuAlertName": "[concat(variables('databaseServerAlertPrefix'), '-high-cpu')]",
+    "databaseServerHighMemoryAlertName": "[concat(variables('databaseServerAlertPrefix'), '-high-memory')]",
+    "databaseServerHighStorageAlertName": "[concat(variables('databaseServerAlertPrefix'), '-high-storage')]",
+
+    "appServiceAlertPrefix": "[concat(parameters('resourceNamePrefix'), '-alerts', replace(variables('appServiceName'), parameters('resourceNamePrefix'), ''))]",
+    "appServiceHighResponseTimeAlertName": "[concat(variables('appServiceAlertPrefix'), '-high-response-time')]"
   },
   "resources": [
     {
