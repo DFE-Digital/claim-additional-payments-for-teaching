@@ -141,4 +141,74 @@ RSpec.describe ClaimUpdate do
       end
     end
   end
+
+  describe "changing the answer to the student_loan_courses question" do
+    let(:claim) do
+      create(
+        :tslr_claim,
+        has_student_loan: true,
+        student_loan_country: StudentLoans::ENGLAND,
+        student_loan_courses: :one_course,
+        student_loan_start_date: StudentLoans::ON_OR_AFTER_1_SEPT_2012,
+        student_loan_plan: StudentLoans::PLAN_1
+      )
+    end
+
+    let(:context) { "student-loan-courses" }
+    let(:params) { {student_loan_courses: :two_or_more_courses} }
+
+    it "resets the answer to the dependent student_loan_start_date answer and re-calculates the student loan plan" do
+      expect(claim_update.perform).to be_truthy
+      expect(claim.reload.student_loan_start_date).to be_nil
+      expect(claim.student_loan_plan).to be_nil
+    end
+  end
+
+  describe "changing the answer to the student_loan_country question" do
+    let(:claim) do
+      create(
+        :tslr_claim,
+        has_student_loan: true,
+        student_loan_country: StudentLoans::ENGLAND,
+        student_loan_courses: :one_course,
+        student_loan_start_date: StudentLoans::ON_OR_AFTER_1_SEPT_2012,
+        student_loan_plan: StudentLoans::PLAN_2
+      )
+    end
+
+    let(:context) { "student-loan-country" }
+    let(:params) { {student_loan_country: StudentLoans::SCOTLAND} }
+
+    it "resets the answer to the subsequent student-loan-related answers and re-calculates the student loan plan" do
+      expect(claim_update.perform).to be_truthy
+      expect(claim.reload.student_loan_courses).to be_nil
+      expect(claim.student_loan_start_date).to be_nil
+      expect(claim.student_loan_plan).to eq StudentLoans::PLAN_1
+    end
+  end
+
+  describe "changing the answer to the student_loan_country question" do
+    let(:claim) do
+      create(
+        :tslr_claim,
+        has_student_loan: true,
+        student_loan_country: StudentLoans::ENGLAND,
+        student_loan_courses: :one_course,
+        student_loan_start_date: StudentLoans::ON_OR_AFTER_1_SEPT_2012,
+        student_loan_plan: StudentLoans::PLAN_2
+      )
+    end
+
+    let(:context) { "student-loan" }
+    let(:params) { {has_student_loan: false} }
+
+    it "resets the answer to the subsequent student-loan-related answers and re-calculates the student loan plan" do
+      expect(claim_update.perform).to be_truthy
+      expect(claim.reload.has_student_loan).to eq false
+      expect(claim.student_loan_country).to be_nil
+      expect(claim.student_loan_courses).to be_nil
+      expect(claim.student_loan_start_date).to be_nil
+      expect(claim.student_loan_plan).to eq TslrClaim::NO_STUDENT_LOAN
+    end
+  end
 end
