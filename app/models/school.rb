@@ -20,7 +20,7 @@ class School < ApplicationRecord
     middle_deemed_secondary: 5,
     sixteen_plus: 6,
     all_through: 7,
-  }
+  }.freeze
 
   SCHOOL_TYPE_GROUPS = {
     colleges: 1,
@@ -32,7 +32,15 @@ class School < ApplicationRecord
     other: 9,
     academies: 10,
     free_schools: 11,
-  }
+  }.freeze
+
+  STATE_FUNDED_SCHOOL_TYPE_GROUPS = %w[
+    colleges
+    la_maintained
+    special_schools
+    academies
+    free_schools
+  ].freeze
 
   SCHOOL_TYPES = {
     community_school: 1,
@@ -72,7 +80,18 @@ class School < ApplicationRecord
     academy_16_to_19_converter: 45,
     academy_16_to_19_sponsor_led: 46,
     institution_funded_by_other_government_department: 56,
-  }
+  }.freeze
+
+  SPECIAL_SCHOOL_TYPES = %w[
+    community_special_school
+    non_maintained_special_school
+    other_independent_special_school
+    foundation_special_school
+    special_post_16_institutions
+    academy_special_sponsor_led
+    free_school_special
+    academy_special_converter
+  ].freeze
 
   enum phase: PHASES
   enum school_type_group: SCHOOL_TYPE_GROUPS
@@ -94,5 +113,13 @@ class School < ApplicationRecord
 
   def eligible_for_maths_and_physics?
     MathsAndPhysics::SchoolEligibility.new(self).check
+  end
+
+  def state_funded?
+    STATE_FUNDED_SCHOOL_TYPE_GROUPS.include?(school_type_group) && school_type != "other_independent_special_school"
+  end
+
+  def special?
+    SPECIAL_SCHOOL_TYPES.include?(school_type)
   end
 end
