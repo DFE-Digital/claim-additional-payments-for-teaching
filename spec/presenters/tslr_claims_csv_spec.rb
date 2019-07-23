@@ -20,6 +20,7 @@ RSpec.describe TslrClaimsCsv do
       mostly_teaching_eligible_subjects: true,
       bank_sort_code: "440026",
       bank_account_number: "70872490",
+      student_loan_plan: StudentLoans::PLAN_1,
       student_loan_repayment_amount: "1500.00")
   end
 
@@ -47,6 +48,7 @@ RSpec.describe TslrClaimsCsv do
         "Date of Birth",
         "Teacher Reference",
         "NI Number",
+        "Student Loan Repayment Plan",
         "Email",
         "Mostly Teaching Eligible Subjects?",
         "Sort Code",
@@ -72,6 +74,7 @@ RSpec.describe TslrClaimsCsv do
         "01/01/1939",
         "1234567",
         "QQ123456C",
+        "Plan 1",
         "batman@bat.com",
         "Yes",
         "440026",

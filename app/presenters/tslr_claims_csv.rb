@@ -19,6 +19,7 @@ class TslrClaimsCsv
     :date_of_birth,
     :teacher_reference_number,
     :national_insurance_number,
+    :student_loan_repayment_plan,
     :email_address,
     :mostly_teaching_eligible_subjects,
     :bank_sort_code,

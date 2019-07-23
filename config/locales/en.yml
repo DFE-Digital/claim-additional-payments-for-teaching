@@ -95,6 +95,7 @@ en:
       date_of_birth: "Date of Birth"
       teacher_reference_number: "Teacher Reference"
       national_insurance_number: "NI Number"
+      student_loan_repayment_plan: "Student Loan Repayment Plan"
       email_address: "Email"
       mostly_teaching_eligible_subjects: "Mostly Teaching Eligible Subjects?"
       bank_sort_code: "Sort Code"

@@ -22,6 +22,7 @@ RSpec.describe TslrClaimCsvRow do
         date_of_birth: Date.parse(date_of_birth),
         mostly_teaching_eligible_subjects: mostly_teaching_eligible_subjects == "Yes",
         student_loan_repayment_amount: student_loan_repayment_amount.delete("£").to_i,
+        student_loan_plan: StudentLoans::PLAN_2,
         submitted_at: DateTime.parse(submitted_at))
     end
 
@@ -42,6 +43,7 @@ RSpec.describe TslrClaimCsvRow do
         date_of_birth,
         claim.teacher_reference_number,
         claim.national_insurance_number,
+        "Plan 2",
         claim.email_address,
         mostly_teaching_eligible_subjects,
         claim.bank_sort_code,
