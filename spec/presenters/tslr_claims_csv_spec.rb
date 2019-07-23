@@ -15,10 +15,12 @@ RSpec.describe TslrClaimsCsv do
       date_of_birth: Date.parse("1939-01-01"),
       teacher_reference_number: "1234567",
       national_insurance_number: "QQ123456C",
+      student_loan_country: :england,
       email_address: "batman@bat.com",
       mostly_teaching_eligible_subjects: true,
       bank_sort_code: "440026",
       bank_account_number: "70872490",
+      student_loan_plan: StudentLoans::PLAN_1,
       student_loan_repayment_amount: "1500.00")
   end
 
@@ -46,6 +48,7 @@ RSpec.describe TslrClaimsCsv do
         "Date of Birth",
         "Teacher Reference",
         "NI Number",
+        "Student Loan Repayment Plan",
         "Email",
         "Mostly Teaching Eligible Subjects?",
         "Sort Code",
@@ -71,6 +74,7 @@ RSpec.describe TslrClaimsCsv do
         "01/01/1939",
         "1234567",
         "QQ123456C",
+        "Plan 1",
         "batman@bat.com",
         "Yes",
         "440026",

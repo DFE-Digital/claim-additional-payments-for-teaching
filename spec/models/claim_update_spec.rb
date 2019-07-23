@@ -28,6 +28,30 @@ RSpec.describe ClaimUpdate do
     end
   end
 
+  describe "determining the student_loan_plan" do
+    context "when the claimant has a plan" do
+      let(:claim) { create(:tslr_claim, has_student_loan: true, student_loan_country: StudentLoans::ENGLAND) }
+      let(:context) { "student-loan-start-date" }
+      let(:params) { {student_loan_start_date: StudentLoans::ON_OR_AFTER_1_SEPT_2012} }
+
+      it "determines the plan based on the answers" do
+        expect(claim_update.perform).to be_truthy
+        expect(claim.student_loan_plan).to eq StudentLoans::PLAN_2
+      end
+    end
+
+    context "when the claimant does not have a plan" do
+      let(:claim) { create(:tslr_claim) }
+      let(:context) { "student-loan" }
+      let(:params) { {has_student_loan: false} }
+
+      it "sets the student_loan_plan to indicate it is not applicable" do
+        expect(claim_update.perform).to be_truthy
+        expect(claim.student_loan_plan).to eq TslrClaim::NO_STUDENT_LOAN
+      end
+    end
+  end
+
   context "when updating claim that is submittable in the “check-your-answers” context" do
     let(:claim) { create(:tslr_claim, :submittable) }
     let(:context) { "check-your-answers" }

@@ -22,6 +22,7 @@ class ClaimUpdate
       claim.attributes = params
       update_claim_school_dependent_attributes
       update_employment_status_dependent_attributes
+      determine_student_loan_plan
       claim.save(context: context)
     end
   end
@@ -45,6 +46,14 @@ class ClaimUpdate
   def update_employment_status_dependent_attributes
     if claim.employment_status_changed?
       claim.current_school = claim.employed_at_claim_school? ? claim.claim_school : nil
+    end
+  end
+
+  def determine_student_loan_plan
+    claim.student_loan_plan = if claim.has_student_loan?
+      StudentLoans.determine_plan(claim.student_loan_country, claim.student_loan_start_date)
+    else
+      TslrClaim::NO_STUDENT_LOAN
     end
   end
 end

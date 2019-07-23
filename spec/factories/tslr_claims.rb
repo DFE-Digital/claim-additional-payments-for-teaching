@@ -14,6 +14,11 @@ FactoryBot.define do
       date_of_birth { 20.years.ago.to_date }
       teacher_reference_number { "1234567" }
       national_insurance_number { "QQ123456C" }
+      has_student_loan { true }
+      student_loan_country { :england }
+      student_loan_courses { :one_course }
+      student_loan_start_date { StudentLoans::BEFORE_1_SEPT_2012 }
+      student_loan_plan { StudentLoans::PLAN_1 }
       student_loan_repayment_amount { 1000 }
       email_address { "test@email.com" }
       bank_sort_code { 123456 }

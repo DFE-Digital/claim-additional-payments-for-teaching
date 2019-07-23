@@ -52,6 +52,12 @@ en:
       date_of_birth: "What is your date of birth?"
       teacher_reference_number: "What's your teacher reference number?"
       national_insurance_number: "What's your National Insurance number?"
+      has_student_loan: "Have ever taken out a student loan and not paid it off yet?"
+      student_loan_country: "When you applied for your student loan where was your home address?"
+      student_loan_how_many_courses: "How many higher education courses have you studied?"
+      student_loan_start_date:
+        single_course: "When did the first year of your higher education course start?"
+        multiple_courses: "When did the first year of each higher education course start?"
       student_loan_amount:
         "Exactly how much student loan did you repay while you worked at %{claim_school_name} between 6 April 2018 and 5
         April 2019?"
@@ -89,6 +95,7 @@ en:
       date_of_birth: "Date of Birth"
       teacher_reference_number: "Teacher Reference"
       national_insurance_number: "NI Number"
+      student_loan_repayment_plan: "Student Loan Repayment Plan"
       email_address: "Email"
       mostly_teaching_eligible_subjects: "Mostly Teaching Eligible Subjects?"
       bank_sort_code: "Sort Code"

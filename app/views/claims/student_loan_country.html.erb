@@ -1,0 +1,41 @@
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= render("shared/error_summary", instance: current_claim, errored_field_id_overrides: { student_loan_country: "tslr_claim_student_loan_country_england" }) if current_claim.errors.any? %>
+
+    <%= form_for current_claim, url: claim_path do |form| %>
+      <%= form.hidden_field :student_loan_country %>
+        <%= form_group_tag current_claim do %>
+          <fieldset class="govuk-fieldset">
+            <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl">
+              <h1 class="govuk-fieldset__heading">
+                <%= t("tslr.questions.student_loan_country") %>
+              </h1>
+            </legend>
+
+            <%= errors_tag current_claim, :student_loan_country %>
+
+            <div class="govuk-radios">
+              <div class="govuk-radios__item">
+                <%= form.radio_button(:student_loan_country, StudentLoans::ENGLAND, class: "govuk-radios__input")%>
+                <%= form.label :student_loan_country_england, "England", class: "govuk-label govuk-radios__label" %>
+              </div>
+              <div class="govuk-radios__item">
+                <%= form.radio_button(:student_loan_country, StudentLoans::NORTHERN_IRELAND, class: "govuk-radios__input")%>
+                <%= form.label :student_loan_country_northern_ireland, "Northern Ireland", class: "govuk-label govuk-radios__label" %>
+              </div>
+              <div class="govuk-radios__item">
+                <%= form.radio_button(:student_loan_country, StudentLoans::SCOTLAND, class: "govuk-radios__input")%>
+                <%= form.label :student_loan_country_scotland, "Scotland", class: "govuk-label govuk-radios__label" %>
+              </div>
+              <div class="govuk-radios__item">
+                <%= form.radio_button(:student_loan_country, StudentLoans::WALES, class: "govuk-radios__input")%>
+                <%= form.label :student_loan_country_wales, "Wales", class: "govuk-label govuk-radios__label" %>
+              </div>
+            </div>
+
+          </fieldset>
+        <% end %>
+        <%= form.submit "Continue", class: "govuk-button" %>
+      <% end %>
+  </div>
+</div>

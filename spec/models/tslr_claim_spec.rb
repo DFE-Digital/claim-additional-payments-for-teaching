@@ -90,6 +90,33 @@ RSpec.describe TslrClaim, type: :model do
     end
   end
 
+  context "that has a student loan plan" do
+    it "validates the plan" do
+      expect(TslrClaim.new(student_loan_plan: StudentLoans::PLAN_1)).to be_valid
+
+      expect { TslrClaim.new(student_loan_plan: "plan_42") }.to raise_error(ArgumentError)
+    end
+  end
+
+  it "is not submittable without a value for the student_loan_plan present" do
+    expect(build(:tslr_claim, :submittable, student_loan_plan: nil)).not_to be_valid(:submit)
+    expect(build(:tslr_claim, :submittable, student_loan_plan: TslrClaim::NO_STUDENT_LOAN)).to be_valid(:submit)
+  end
+
+  it "is submittable with optional student loan questions not answered" do
+    claim = build(
+      :tslr_claim,
+      :submittable,
+      has_student_loan: false,
+      student_loan_plan: TslrClaim::NO_STUDENT_LOAN,
+      student_loan_country: nil,
+      student_loan_courses: nil,
+      student_loan_start_date: nil
+    )
+
+    expect(claim).to be_valid(:submit)
+  end
+
   context "when saving in the “qts-year” validation context" do
     let(:custom_validation_context) { :"qts-year" }
 
@@ -185,6 +212,35 @@ RSpec.describe TslrClaim, type: :model do
     end
   end
 
+  context "when saving in the “student-loan” validation context" do
+    it "validates the presence of student_loan" do
+      expect(TslrClaim.new).not_to be_valid(:"student-loan")
+      expect(TslrClaim.new(has_student_loan: true)).to be_valid(:"student-loan")
+      expect(TslrClaim.new(has_student_loan: false)).to be_valid(:"student-loan")
+    end
+  end
+
+  context "when saving in the “student-loan-country” validation context" do
+    it "validates the presence of student_loan_country" do
+      expect(TslrClaim.new).not_to be_valid(:"student-loan-country")
+      expect(TslrClaim.new(student_loan_country: :england)).to be_valid(:"student-loan-country")
+    end
+  end
+
+  context "when saving in the “student-loan-how-many-courses” validation context" do
+    it "validates the presence of the student_loan_how_many_courses" do
+      expect(TslrClaim.new).not_to be_valid(:"student-loan-how-many-courses")
+      expect(TslrClaim.new(student_loan_courses: :one_course)).to be_valid(:"student-loan-how-many-courses")
+    end
+  end
+
+  context "when saving in the “student-loan-start-date” validation context" do
+    it "validates the presence of the student_loan_how_many_courses" do
+      expect(TslrClaim.new).not_to be_valid(:"student-loan-start-date")
+      expect(TslrClaim.new(student_loan_start_date: StudentLoans::BEFORE_1_SEPT_2012)).to be_valid(:"student-loan-start-date")
+    end
+  end
+
   context "when saving in the “student-loan-amount” validation context" do
     it "validates the presence of student_loan_repayment_amount" do
       expect(TslrClaim.new).not_to be_valid(:"student-loan-amount")
@@ -207,7 +263,7 @@ RSpec.describe TslrClaim, type: :model do
   end
 
   context "when saving in the “submit” validation context" do
-    it "validates the presence of all required fields" do
+    it "validates the claim is in a submittable state" do
       expect(TslrClaim.new).not_to be_valid(:submit)
       expect(build(:tslr_claim, :submittable)).to be_valid(:submit)
     end
@@ -325,6 +381,45 @@ RSpec.describe TslrClaim, type: :model do
     context "when not ineligible" do
       let(:claim_attributes) { {} }
       it { is_expected.to be_nil }
+    end
+  end
+
+  describe "#student_loan_country" do
+    it "captures the country the student loan was received in" do
+      claim = TslrClaim.new(student_loan_country: :england)
+      expect(claim.student_loan_country).to eq("england")
+    end
+
+    it "rejects invalid countries" do
+      expect { TslrClaim.new(student_loan_country: :brazil) }.to raise_error(ArgumentError)
+    end
+  end
+
+  describe "#student_loan_how_many_courses" do
+    it "captures how many courses" do
+      claim = TslrClaim.new(student_loan_courses: :one_course)
+      expect(claim.student_loan_courses).to eq("one_course")
+    end
+
+    it "rejects invalid responses" do
+      expect { TslrClaim.new(student_loan_courses: :one_hundred_courses) }.to raise_error(ArgumentError)
+    end
+  end
+
+  describe "#no_student_loan?" do
+    it "returns true if the claim has no student loan" do
+      expect(TslrClaim.new(has_student_loan: false).no_student_loan?).to eq true
+      expect(TslrClaim.new(has_student_loan: true).no_student_loan?).to eq false
+    end
+  end
+
+  describe "#student_loan_country_with_one_plan?" do
+    it "returns true when the student_loan_country is one with only a single student loan plan" do
+      expect(TslrClaim.new.student_loan_country_with_one_plan?).to eq false
+
+      StudentLoans::PLAN_1_COUNTRIES.each do |country|
+        expect(TslrClaim.new(student_loan_country: country).student_loan_country_with_one_plan?).to eq true
+      end
     end
   end
 

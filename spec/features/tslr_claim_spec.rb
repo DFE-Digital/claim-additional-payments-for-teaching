@@ -73,6 +73,31 @@ RSpec.feature "Teacher Student Loan Repayments claims" do
 
     expect(claim.reload.national_insurance_number).to eq("QQ123456C")
 
+    expect(page).to have_text(I18n.t("tslr.questions.has_student_loan"))
+    choose("Yes")
+    click_on "Continue"
+
+    expect(claim.reload).to have_student_loan
+
+    expect(page).to have_text(I18n.t("tslr.questions.student_loan_country"))
+    choose("England")
+    click_on "Continue"
+
+    expect(claim.reload.student_loan_country).to eq("england")
+
+    expect(page).to have_text(I18n.t("tslr.questions.student_loan_how_many_courses"))
+    choose("1")
+    click_on "Continue"
+
+    expect(claim.reload.student_loan_courses).to eq("one_course")
+
+    expect(page).to have_text(I18n.t("tslr.questions.student_loan_start_date.single_course"))
+    choose "Before 1 September 2012"
+    click_on "Continue"
+
+    expect(claim.reload.student_loan_start_date).to eq(StudentLoans::BEFORE_1_SEPT_2012)
+    expect(claim.student_loan_plan).to eq(StudentLoans::PLAN_1)
+
     expect(page).to have_text(I18n.t("tslr.questions.student_loan_amount", claim_school_name: claim.claim_school_name))
     fill_in I18n.t("tslr.questions.student_loan_amount", claim_school_name: claim.claim_school_name), with: "1100"
     click_on "Continue"
