@@ -26,9 +26,9 @@ module DfeSignIn
           http.request(request)
         }
 
-        raise ExternalServerError if response.code.eql?("500")
+        raise ExternalServerError, "#{response.code}: #{response.body}" unless response.code.eql?("200")
 
-        JSON.parse(response.body) if response.code.eql?("200")
+        JSON.parse(response.body)
       end
     end
 

@@ -54,11 +54,13 @@ RSpec.describe DfeSignIn::UserAccess do
 
   context "with an invalid response" do
     let(:status) { 500 }
-    let(:response) { {} }
+    let(:response) { {"error": "An error occurred"} }
 
     describe "has_role?" do
       it "raises an error" do
-        expect { subject.has_role?("my_role") }.to raise_error(DfeSignIn::ExternalServerError)
+        expect { subject.has_role?("my_role") }.to raise_error(
+          DfeSignIn::ExternalServerError, "500: {\"error\":\"An error occurred\"}"
+        )
       end
     end
   end
