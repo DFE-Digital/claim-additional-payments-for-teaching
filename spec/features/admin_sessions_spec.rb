@@ -2,7 +2,7 @@ require "rails_helper"
 
 RSpec.feature "Admin sessions" do
   before do
-    allow_any_instance_of(DfeSignIn::UserAccess).to receive(:has_role?) { true }
+    stub_authorised_user!
   end
 
   scenario "Redirected to admin page after signing in" do

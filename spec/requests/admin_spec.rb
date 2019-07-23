@@ -2,18 +2,7 @@ require "rails_helper"
 
 RSpec.describe "Admin", type: :request do
   describe "admin#index request" do
-    let(:organisation_id) { "3bb6e3d7-64a9-42d8-b3f7-cf26101f3e82" }
-    let(:stub_url) { "#{DfeSignIn.configuration.base_url}/services/#{DfeSignIn.configuration.client_id}/organisations/#{organisation_id}/users/" }
-    let(:stub_response) do
-      {
-        "roles" => roles,
-      }
-    end
-    let(:roles) { [] }
-
-    before do
-      stub_request(:get, stub_url).to_return(status: 200, body: stub_response.to_json)
-    end
+    let(:organisation_id) { "14ab3563-f7cc-4106-b217-ef35b04cb860" }
 
     context "when the user is not authenticated" do
       it "redirects to the sign in page and doesn’t set a session" do
@@ -40,21 +29,8 @@ RSpec.describe "Admin", type: :request do
       end
 
       context "when the user is authorised to access the service" do
-        let(:roles) do
-          [
-            {
-              "id" => "role-id",
-              "name" => "My role",
-              "code" => Admin::AuthController::DFE_SIGN_IN_ADMIN_ROLE_CODE,
-              "numericId" => "9999",
-              "status" => {
-                "id" => 1,
-              },
-            },
-          ]
-        end
-
         before do
+          stub_authorised_user!(organisation_id)
           post admin_dfe_sign_in_path
           follow_redirect!
         end
@@ -77,21 +53,8 @@ RSpec.describe "Admin", type: :request do
       end
 
       context "when the user is not authorised to access the service" do
-        let(:roles) do
-          [
-            {
-              "id" => "role-id",
-              "name" => "My role",
-              "code" => "another_role",
-              "numericId" => "9999",
-              "status" => {
-                "id" => 1,
-              },
-            },
-          ]
-        end
-
         before do
+          stub_unauthorised_user!(organisation_id)
           post admin_dfe_sign_in_path
           follow_redirect!
         end
