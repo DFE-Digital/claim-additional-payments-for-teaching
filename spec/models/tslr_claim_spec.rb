@@ -98,6 +98,25 @@ RSpec.describe TslrClaim, type: :model do
     end
   end
 
+  it "is not submittable without a value for the student_loan_plan present" do
+    expect(build(:tslr_claim, :submittable, student_loan_plan: nil)).not_to be_valid(:submit)
+    expect(build(:tslr_claim, :submittable, student_loan_plan: TslrClaim::NO_STUDENT_LOAN)).to be_valid(:submit)
+  end
+
+  it "is submittable with optional student loan questions not answered" do
+    claim = build(
+      :tslr_claim,
+      :submittable,
+      has_student_loan: false,
+      student_loan_plan: TslrClaim::NO_STUDENT_LOAN,
+      student_loan_country: nil,
+      student_loan_courses: nil,
+      student_loan_start_date: nil
+    )
+
+    expect(claim).to be_valid(:submit)
+  end
+
   context "when saving in the “qts-year” validation context" do
     let(:custom_validation_context) { :"qts-year" }
 
@@ -244,7 +263,7 @@ RSpec.describe TslrClaim, type: :model do
   end
 
   context "when saving in the “submit” validation context" do
-    it "validates the presence of all required fields" do
+    it "validates the claim is in a submittable state" do
       expect(TslrClaim.new).not_to be_valid(:submit)
       expect(build(:tslr_claim, :submittable)).to be_valid(:submit)
     end

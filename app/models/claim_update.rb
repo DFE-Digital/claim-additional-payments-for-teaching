@@ -50,6 +50,10 @@ class ClaimUpdate
   end
 
   def determine_student_loan_plan
-    claim.student_loan_plan = StudentLoans.determine_plan(claim.student_loan_country, claim.student_loan_start_date)
+    claim.student_loan_plan = if claim.has_student_loan?
+      StudentLoans.determine_plan(claim.student_loan_country, claim.student_loan_start_date)
+    else
+      TslrClaim::NO_STUDENT_LOAN
+    end
   end
 end

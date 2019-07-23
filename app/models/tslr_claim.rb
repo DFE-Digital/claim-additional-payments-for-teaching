@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class TslrClaim < ApplicationRecord
   SUBJECT_FIELDS = [
     :biology_taught,
@@ -9,10 +11,13 @@ class TslrClaim < ApplicationRecord
 
   TRN_LENGTH = 7
 
+  NO_STUDENT_LOAN = "not_applicable"
+  STUDENT_LOAN_PLAN_OPTIONS = StudentLoans::PLANS.dup << NO_STUDENT_LOAN
+
   enum student_loan_country: StudentLoans::COUNTRIES
   enum student_loan_start_date: StudentLoans::COURSE_START_DATES
   enum student_loan_courses: {one_course: 0, two_or_more_courses: 1}
-  enum student_loan_plan: StudentLoans::PLANS
+  enum student_loan_plan: STUDENT_LOAN_PLAN_OPTIONS
 
   enum employment_status: {
     claim_school: 0,
@@ -68,9 +73,10 @@ class TslrClaim < ApplicationRecord
   validate  :ni_number_is_correct_format
 
   validates :has_student_loan,                  on: [:"student-loan", :submit], inclusion: {in: [true, false], message: "Select yes if you have a student loan"}
-  validates :student_loan_country,              on: [:"student-loan-country", :submit], presence: {message: "Select the country in which you first applied for your student loan"}
-  validates :student_loan_courses,              on: [:"student-loan-how-many-courses", :submit], presence: {message: "Select the number of higher education courses you have studied"}
-  validates :student_loan_start_date,           on: [:"student-loan-start-date", :submit], presence: {message: "Select when the first year of your higher education course started"}
+  validates :student_loan_country,              on: [:"student-loan-country"], presence: {message: "Select the country in which you first applied for your student loan"}
+  validates :student_loan_courses,              on: [:"student-loan-how-many-courses"], presence: {message: "Select the number of higher education courses you have studied"}
+  validates :student_loan_start_date,           on: [:"student-loan-start-date"], presence: {message: "Select when the first year of your higher education course started"}
+  validates :student_loan_plan,                 on: [:submit], presence: {message: "We have not been able determined your student loan repayment plan. Answer all questions about your student loan."}
 
   validates :student_loan_repayment_amount, on: [:"student-loan-amount", :submit], presence: {message: "Enter your student loan repayment amount"}
   validates_numericality_of :student_loan_repayment_amount, message: "Enter a valid monetary amount",
