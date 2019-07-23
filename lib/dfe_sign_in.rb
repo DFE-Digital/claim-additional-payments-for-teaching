@@ -13,3 +13,5 @@ module DfeSignIn
                   :secret
   end
 end
+
+require_relative "dfe_sign_in/utils"
