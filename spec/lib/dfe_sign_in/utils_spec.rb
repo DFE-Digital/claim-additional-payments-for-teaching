@@ -1,13 +1,6 @@
 require "rails_helper"
 
 RSpec.describe DfeSignIn::Utils do
-  before do
-    DfeSignIn.configure do |config|
-      config.client_id = "123"
-      config.secret = "sekrit"
-    end
-  end
-
   let(:dummy_class) { Class.new { extend DfeSignIn::Utils } }
 
   describe "generate_jwt_token" do
@@ -21,9 +14,9 @@ RSpec.describe DfeSignIn::Utils do
     end
 
     it "has the correct information" do
-      payload = JWT.decode(jwt_token, "sekrit", true, {algorithm: "HS256"})
+      payload = JWT.decode(jwt_token, DfeSignIn.configuration.secret, true, {algorithm: "HS256"})
       expect(payload.first).to eq({
-        "iss" => "123",
+        "iss" => DfeSignIn.configuration.client_id,
         "exp" => (Time.now.getlocal + 60).to_i,
         "aud" => "signin.education.gov.uk",
       })

@@ -1,4 +1,6 @@
 module DfeSignIn
+  class ExternalServerError < StandardError; end
+
   class << self
     attr_accessor :configuration
   end
@@ -10,8 +12,10 @@ module DfeSignIn
 
   class Configuration
     attr_accessor :client_id,
-                  :secret
+                  :secret,
+                  :base_url
   end
 end
 
 require_relative "dfe_sign_in/utils"
+require_relative "dfe_sign_in/user_access"

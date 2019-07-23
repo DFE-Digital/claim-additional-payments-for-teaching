@@ -53,6 +53,9 @@ DFE_SIGN_IN_ISSUER=https://pp-oidc.signin.education.gov.uk:443
 DFE_SIGN_IN_REDIRECT_BASE_URL=https://localhost:3000
 DFE_SIGN_IN_IDENTIFIER=<paste identifier>
 DFE_SIGN_IN_SECRET=<paste secret>
+DFE_SIGN_IN_API_CLIENT_ID=teacherpayments
+DFE_SIGN_IN_API_SECRET=<paste secret>
+DFE_SIGN_IN_API_ENDPOINT=https://pp-api.signin.education.gov.uk
 ```
 
 The identifier and secret are stored in Heroku.
