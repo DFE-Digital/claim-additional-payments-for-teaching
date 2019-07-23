@@ -5,7 +5,9 @@ OmniAuth.config.mock_auth[:dfe] = OmniAuth::AuthHash.new(
   "info" => {"email" => "test@example.com"},
   "extra" => {
     "raw_info" => {
-      "organisation" => {},
+      "organisation" => {
+        "id" => "3bb6e3d7-64a9-42d8-b3f7-cf26101f3e82",
+      },
     },
   }
 )

@@ -3,6 +3,7 @@ require "rails_helper"
 RSpec.feature "Download CSV of claims" do
   context "User is logged in" do
     before do
+      allow_any_instance_of(DfeSignIn::UserAccess).to receive(:has_role?) { true }
       visit admin_path
       click_on "Sign in"
     end

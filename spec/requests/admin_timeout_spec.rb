@@ -8,6 +8,7 @@ RSpec.describe "Admin session timing out", type: :request do
       "provider" => "dfe",
       "info" => {"email" => "test-dfe-sign-in@host.tld"}
     )
+    allow_any_instance_of(DfeSignIn::UserAccess).to receive(:has_role?) { true }
     post admin_dfe_sign_in_path
     follow_redirect!
   end
