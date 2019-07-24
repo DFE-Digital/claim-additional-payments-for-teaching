@@ -10,8 +10,8 @@ module DfeSignIn
       self.user_id = user_id
     end
 
-    def has_role?(role)
-      roles.include?(role)
+    def has_role?(role_code)
+      role_codes.include?(role_code)
     end
 
     private
@@ -32,7 +32,7 @@ module DfeSignIn
       end
     end
 
-    def roles
+    def role_codes
       body["roles"].map { |r| r["code"] }
     end
 
