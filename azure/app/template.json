@@ -12,6 +12,9 @@
     "appServiceDockerCompose": {
       "type": "string"
     },
+    "appServiceHostName": {
+      "type": "string"
+    },
     "appServiceAlwaysOn": {
       "type": "bool",
       "defaultValue": true
@@ -191,7 +194,7 @@
       }
     },
     {
-      "apiVersion": "2016-08-01",
+      "apiVersion": "2018-11-01",
       "name": "[variables('appServiceName')]",
       "type": "Microsoft.Web/sites",
       "kind": "app,linux,container",
@@ -202,8 +205,14 @@
         "[resourceId('Microsoft.Resources/deployments', variables('databaseServerDeploymentName'))]"
       ],
       "properties": {
-        "httpsOnly": true,
         "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', variables('appServicePlanName'))]",
+        "httpsOnly": true,
+        "hostNameSslStates": {
+          "name": "[parameters('appServiceHostName')]",
+          "sslState": "Disabled",
+          "toUpdate": true,
+          "hostType": "Standard"
+        },
         "siteConfig": {
           "alwaysOn": "[parameters('appServiceAlwaysOn')]",
           "httpLoggingEnabled": true,
@@ -227,7 +236,7 @@
             },
             {
               "name": "DFE_TEACHERS_PAYMENT_SERVICE_DATABASE_HOST",
-              "value": "[reference(variables('databaseServerDeploymentName')).outputs.fullyQualifiedDomainName.value]"
+              "value": "[reference(resourceId('Microsoft.Resources/deployments', variables('databaseServerDeploymentName'))).outputs.fullyQualifiedDomainName.value]"
             },
             {
               "name": "DFE_TEACHERS_PAYMENT_SERVICE_DATABASE_NAME",
@@ -300,7 +309,7 @@
             "value": "[concat(parameters('resourceNamePrefix'), '-')]"
           },
           "ipAddresses": {
-            "value": "[split(reference(variables('appServiceName')).possibleOutboundIpAddresses, ',')]"
+            "value": "[split(reference(resourceId('Microsoft.Web/sites', variables('appServiceName'))).possibleOutboundIpAddresses, ',')]"
           },
           "serverName": {
             "value": "[variables('databaseServerName')]"
