@@ -147,6 +147,25 @@
     },
     "ROLLBAR_ENV": {
       "value": "test"
+    },
+    "VSP.VERIFY_ENVIRONMENT": {
+      "value": "INTEGRATION"
+    },
+    "VSP.SAML_SIGNING_KEY": {
+      "reference": {
+        "keyVault": {
+          "id": "${keyVaultId}"
+        },
+        "secretName": "VspSamlSigningKey"
+      }
+    },
+    "VSP.SAML_PRIMARY_ENCRYPTION_KEY": {
+      "reference": {
+        "keyVault": {
+          "id": "${keyVaultId}"
+        },
+        "secretName": "VspSamlPrimaryEncryptionKey"
+      }
     }
   }
 }
