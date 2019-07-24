@@ -2,8 +2,6 @@ require "rails_helper"
 
 RSpec.describe "Admin", type: :request do
   describe "admin#index request" do
-    let(:organisation_id) { "14ab3563-f7cc-4106-b217-ef35b04cb860" }
-
     context "when the user is not authenticated" do
       it "redirects to the sign in page and doesn’t set a session" do
         get admin_path
@@ -14,23 +12,9 @@ RSpec.describe "Admin", type: :request do
     end
 
     context "when the user is authenticated" do
-      before do
-        OmniAuth.config.mock_auth[:dfe] = OmniAuth::AuthHash.new(
-          "provider" => "dfe",
-          "info" => {"email" => "test-dfe-sign-in@host.tld"},
-          "extra" => {
-            "raw_info" => {
-              "organisation" => {
-                "id" => organisation_id,
-              },
-            },
-          }
-        )
-      end
-
       context "when the user is authorised to access the service" do
         before do
-          stub_authorised_user!(organisation_id)
+          stub_dfe_sign_in_with_role(Admin::AuthController::DFE_SIGN_IN_ADMIN_ROLE_CODE)
           post admin_dfe_sign_in_path
           follow_redirect!
         end
@@ -54,7 +38,7 @@ RSpec.describe "Admin", type: :request do
 
       context "when the user is not authorised to access the service" do
         before do
-          stub_unauthorised_user!(organisation_id)
+          stub_dfe_sign_in_with_role("not-the-role-code-we-expect")
           post admin_dfe_sign_in_path
           follow_redirect!
         end

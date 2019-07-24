@@ -4,8 +4,7 @@ RSpec.describe "Admin session timing out", type: :request do
   let(:timeout_length_in_minutes) { Admin::BaseAdminController::TIMEOUT_LENGTH_IN_MINUTES }
 
   before do
-    stub_dfe_sign_in_authentication_response
-    stub_authorised_user!
+    stub_dfe_sign_in_with_role(Admin::AuthController::DFE_SIGN_IN_ADMIN_ROLE_CODE)
     post admin_dfe_sign_in_path
     follow_redirect!
   end

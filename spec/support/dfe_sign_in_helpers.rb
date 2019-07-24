@@ -1,35 +1,26 @@
 module DfeSignInHelpers
-  def stub_dfe_sign_in_authentication_response
+  # Stubs the DfE Sign-in OpenID response and the call to the DfE Sign-in API
+  # that we use to determine the roles that the user is authorised with.
+  def stub_dfe_sign_in_with_role(role_code)
+    organisation_id = "1234"
+
     OmniAuth.config.mock_auth[:dfe] = OmniAuth::AuthHash.new(
       "provider" => "dfe",
       "info" => {"email" => "test-dfe-sign-in@host.tld"},
       "extra" => {
         "raw_info" => {
           "organisation" => {
-            "id" => "3bb6e3d7-64a9-42d8-b3f7-cf26101f3e82",
+            "id" => organisation_id,
           },
         },
       }
     )
-  end
 
-  def stub_authorised_user!(organisation_id = "3bb6e3d7-64a9-42d8-b3f7-cf26101f3e82")
-    stub_with_role_code(Admin::AuthController::DFE_SIGN_IN_ADMIN_ROLE_CODE, organisation_id)
-  end
+    api_client_id = DfeSignIn.configuration.client_id
+    api_base_url = DfeSignIn.configuration.base_url
+    api_response = {roles: [{code: role_code}]}.to_json
 
-  def stub_unauthorised_user!(organisation_id = "3bb6e3d7-64a9-42d8-b3f7-cf26101f3e82")
-    stub_with_role_code("some_code", organisation_id)
-  end
-
-  def stub_with_role_code(code, organisation_id)
-    stub_url = "#{DfeSignIn.configuration.base_url}/services/#{DfeSignIn.configuration.client_id}/organisations/#{organisation_id}/users/"
-    body = {
-      roles: [
-        {
-          code: code,
-        },
-      ],
-    }
-    stub_request(:get, stub_url).to_return(status: 200, body: body.to_json)
+    stub_request(:get, "#{api_base_url}/services/#{api_client_id}/organisations/#{organisation_id}/users/")
+      .to_return(status: 200, body: api_response)
   end
 end
