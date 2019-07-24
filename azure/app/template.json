@@ -57,6 +57,15 @@
     "DFE_SIGN_IN_SECRET": {
       "type": "securestring"
     },
+    "DFE_SIGN_IN_API_CLIENT_ID": {
+      "type": "securestring"
+    },
+    "DFE_SIGN_IN_API_SECRET": {
+      "type": "securestring"
+    },
+    "DFE_SIGN_IN_API_ENDPOINT": {
+      "type": "string"
+    },
     "NOTIFY_API_KEY": {
       "type": "securestring"
     },
@@ -260,6 +269,18 @@
             {
               "name": "DFE_SIGN_IN_SECRET",
               "value": "[parameters('DFE_SIGN_IN_SECRET')]"
+            },
+            {
+              "name": "DFE_SIGN_IN_API_CLIENT_ID",
+              "value": "[parameters('DFE_SIGN_IN_API_CLIENT_ID')]"
+            },
+            {
+              "name": "DFE_SIGN_IN_API_SECRET",
+              "value": "[parameters('DFE_SIGN_IN_API_SECRET')]"
+            },
+            {
+              "name": "DFE_SIGN_IN_API_ENDPOINT",
+              "value": "[parameters('DFE_SIGN_IN_API_ENDPOINT')]"
             },
             {
               "name": "NOTIFY_API_KEY",
