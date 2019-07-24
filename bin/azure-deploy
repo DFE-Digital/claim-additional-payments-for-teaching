@@ -77,7 +77,6 @@ SCRIPT_PATH=$( cd "$( dirname "$0" )" ; pwd -P )
 RESOURCE_LOCATION="West Europe"
 
 SECRETS_TEMPLATE_FILE_PATH="$SCRIPT_PATH/../azure/secrets/template.json"
-SECRETS_PARAMETERS_TEMPLATE_FILE_PATH="$SCRIPT_PATH/../azure/secrets/parameters/$ENVIRONMENT_NAME.template.json"
 SECRETS_PARAMETERS_FILE_PATH="$SCRIPT_PATH/../azure/secrets/parameters/$ENVIRONMENT_NAME.json"
 
 APP_TEMPLATE_FILE_PATH="$SCRIPT_PATH/../azure/app/template.json"
@@ -102,9 +101,6 @@ if ! az group show --name "$SECRETS_RESOURCE_GROUP_NAME" > /dev/null; then
 else
   echo "Using existing secrets resource group with name $SECRETS_RESOURCE_GROUP_NAME..."
 fi
-
-echo "Rewriting secrets parameters file for $ENVIRONMENT_NAME..."
-cat "$SECRETS_PARAMETERS_TEMPLATE_FILE_PATH" > "$SECRETS_PARAMETERS_FILE_PATH"
 
 if [ $CONFIRM_BEFORE_DEPLOY ]; then
   echo
