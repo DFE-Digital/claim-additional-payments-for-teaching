@@ -79,6 +79,15 @@ en:
         "2017_2018": "September 1 2017 – August 31 2018"
         "2018_2019": "September 1 2018 – August 31 2019"
         "2019_2020": "September 1 2019 – August 31 2020"
+    answers:
+      student_loan_start_date:
+        one_course:
+          before_first_september_2012: "Before 1 September 2012"
+          on_or_after_first_september_2012: "On or after 1 September 2012"
+        two_or_more_courses:
+          before_first_september_2012: "All my degree courses started before 1 September 2012"
+          some_before_some_after_first_september_2012: "Some of my degree courses started before 1 September 2012 and some started after 1 September 2012"
+          on_or_after_first_september_2012: "All of my degree courses started after 1 September 2012"
     csv_headers:
       reference: "Reference"
       submitted_at: "Submitted at"
