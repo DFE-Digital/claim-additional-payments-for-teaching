@@ -1,6 +1,14 @@
 #!/bin/bash
 set -e
 
+function fetch-azure-output-value {
+  echo "$1" | ruby -r json -e "
+    puts JSON.parse(STDIN.read)['properties']['outputs']
+             .fetch('$2')
+             .fetch('value')
+  "
+}
+
 if [ $# -lt 1 ]; then
   echo "Usage: $0 ENVIRONMENT_NAME"
   exit 1
@@ -38,7 +46,6 @@ APP_DEPLOYMENT_NAME=$APP_RESOURCE_GROUP_NAME
 
 LOGIN_TO_AZURE=1
 CONFIRM_BEFORE_DEPLOY=1
-DEPLOY_SECRETS=1
 
 while [ "$2" ]; do
   case $2 in
@@ -47,9 +54,6 @@ while [ "$2" ]; do
       ;;
     "--skip-confirmation")
       CONFIRM_BEFORE_DEPLOY=
-      ;;
-    "--skip-secrets")
-      DEPLOY_SECRETS=
       ;;
     "--tmp-secrets")
       SECRETS_RESOURCE_GROUP_NAME="$SECRETS_RESOURCE_GROUP_NAME-tmp"
@@ -77,11 +81,9 @@ SECRETS_PARAMETERS_TEMPLATE_FILE_PATH="$SCRIPT_PATH/../azure/secrets/parameters/
 SECRETS_PARAMETERS_FILE_PATH="$SCRIPT_PATH/../azure/secrets/parameters/$ENVIRONMENT_NAME.json"
 
 APP_TEMPLATE_FILE_PATH="$SCRIPT_PATH/../azure/app/template.json"
-APP_DOCKER_COMPOSE_FILE_PATH="$SCRIPT_PATH/../azure/app/files/docker-compose.yml"
+APP_DOCKER_COMPOSE_TEMPLATE_FILE_PATH="$SCRIPT_PATH/../azure/app/files/docker-compose.template.yml"
 APP_PARAMETERS_TEMPLATE_FILE_PATH="$SCRIPT_PATH/../azure/app/parameters/$ENVIRONMENT_NAME.template.json"
 APP_PARAMETERS_FILE_PATH="$SCRIPT_PATH/../azure/app/parameters/$ENVIRONMENT_NAME.json"
-
-KEYVAULT_NAME="$SECRETS_RESOURCE_GROUP_NAME-kv"
 
 if [ $LOGIN_TO_AZURE ] && ! az account show > /dev/null; then
   echo "Logging in..."
@@ -91,30 +93,29 @@ fi
 echo "Setting default subscription to $SUBSCRIPTION_ID..."
 az account set --subscription "$SUBSCRIPTION_ID"
 
-if [ $DEPLOY_SECRETS ]; then
-  if ! az group show --name "$SECRETS_RESOURCE_GROUP_NAME" > /dev/null; then
-    echo "Creating new resource group for secrets with name $SECRETS_RESOURCE_GROUP_NAME..."
-    az group create \
-      --name "$SECRETS_RESOURCE_GROUP_NAME" \
-      --location "$RESOURCE_LOCATION" \
-      > /dev/null
-  else
-    echo "Using existing secrets resource group with name $SECRETS_RESOURCE_GROUP_NAME..."
-  fi
+if ! az group show --name "$SECRETS_RESOURCE_GROUP_NAME" > /dev/null; then
+  echo "Creating new resource group for secrets with name $SECRETS_RESOURCE_GROUP_NAME..."
+  az group create \
+    --name "$SECRETS_RESOURCE_GROUP_NAME" \
+    --location "$RESOURCE_LOCATION" \
+    > /dev/null
+else
+  echo "Using existing secrets resource group with name $SECRETS_RESOURCE_GROUP_NAME..."
+fi
 
-  echo "Rewriting secrets parameters file for $ENVIRONMENT_NAME..."
-  sed \
-    -e "s/\${keyVaultName}/$KEYVAULT_NAME/g" \
-    "$SECRETS_PARAMETERS_TEMPLATE_FILE_PATH" > "$SECRETS_PARAMETERS_FILE_PATH"
+echo "Rewriting secrets parameters file for $ENVIRONMENT_NAME..."
+cat "$SECRETS_PARAMETERS_TEMPLATE_FILE_PATH" > "$SECRETS_PARAMETERS_FILE_PATH"
 
-  if [ $CONFIRM_BEFORE_DEPLOY ]; then
-    echo
-    echo "Are you ready to deploy $SECRETS_RESOURCE_GROUP_NAME?"
-    echo "  Hit return to continue, or CTRL+C to stop."
-    read -r
-  fi
+if [ $CONFIRM_BEFORE_DEPLOY ]; then
+  echo
+  echo "Are you ready to deploy $SECRETS_RESOURCE_GROUP_NAME?"
+  echo "  Hit return to continue, or CTRL+C to stop."
+  read -r
+fi
 
-  echo "Starting secrets deployment..."
+echo "Starting secrets deployment..."
+
+SECRETS_DEPLOYMENT_RESULT=$(
   az group deployment create \
     --name "$SECRETS_DEPLOYMENT_NAME" \
     --resource-group "$SECRETS_RESOURCE_GROUP_NAME" \
@@ -122,11 +123,15 @@ if [ $DEPLOY_SECRETS ]; then
     --parameters "@$SECRETS_PARAMETERS_FILE_PATH" \
     --mode Complete \
     --verbose
+)
 
-  echo
-  echo "$SECRETS_RESOURCE_GROUP_NAME deployed!"
-  echo
-fi
+echo "$SECRETS_DEPLOYMENT_RESULT"
+
+echo
+echo "$SECRETS_RESOURCE_GROUP_NAME deployed!"
+echo
+
+KEY_VAULT_ID=$(fetch-azure-output-value "$SECRETS_DEPLOYMENT_RESULT" keyVaultId)
 
 if ! az group show --name "$APP_RESOURCE_GROUP_NAME" > /dev/null; then
   echo "Creating new resource group for app with name $APP_RESOURCE_GROUP_NAME..."
@@ -139,14 +144,21 @@ else
 fi
 
 echo "Rewriting app parameters file for $ENVIRONMENT_NAME..."
-ruby \
-    -ne "BEGIN { @body = File.open(\"$APP_DOCKER_COMPOSE_FILE_PATH\").read.gsub(\"\${dockerImageTag}\", \"$DOCKER_IMAGE_TAG\").gsub(\"\n\", \"\\\n\").gsub(\"\\\"\", \"\\\\\\\"\") } ; puts gsub(/\\\${dockerCompose}/, @body)" \
-    < "$APP_PARAMETERS_TEMPLATE_FILE_PATH" \
-  | sed \
-    -e "s/\${subscriptionId}/$SUBSCRIPTION_ID/g" \
-    -e "s/\${keyVaultResourceGroupName}/$SECRETS_RESOURCE_GROUP_NAME/g" \
-    -e "s/\${keyVaultName}/$KEYVAULT_NAME/g" \
-    > "$APP_PARAMETERS_FILE_PATH"
+sed \
+    -e "s|\${keyVaultId}|$KEY_VAULT_ID|g" \
+    "$APP_PARAMETERS_TEMPLATE_FILE_PATH" \
+  | ruby \
+    -e "
+      puts STDIN.read.gsub(
+        /\\\${dockerCompose}/,
+        File.open(\"$APP_DOCKER_COMPOSE_TEMPLATE_FILE_PATH\")
+            .read
+            .gsub(\"\${dockerImageTag}\", \"$DOCKER_IMAGE_TAG\")
+            .gsub(\"\n\", \"\\\n\")
+            .gsub(\"\\\"\", \"\\\\\\\"\")
+      )
+    " \
+  > "$APP_PARAMETERS_FILE_PATH"
 
 if [ $CONFIRM_BEFORE_DEPLOY ]; then
   echo

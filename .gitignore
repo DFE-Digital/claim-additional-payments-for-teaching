@@ -34,7 +34,7 @@
 localhost.crt
 localhost.key
 
-# Ignore parameter files
+# Ignore azure build artifacts
 /azure/**/parameters/*.json
 !/azure/**/parameters/*.template.json
 
