@@ -4,8 +4,9 @@ RSpec.describe DfeSignIn::Utils do
   let(:dummy_class) { Class.new { extend DfeSignIn::Utils } }
 
   describe "generate_jwt_token" do
-    before { freeze_time }
-    after { travel_back }
+    around do |example|
+      freeze_time { example.run }
+    end
 
     let(:jwt_token) { dummy_class.generate_jwt_token }
 
