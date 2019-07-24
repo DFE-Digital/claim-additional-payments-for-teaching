@@ -20,11 +20,11 @@ class ClaimUpdate
       claim.submit! && send_confirmation_email
     else
       claim.attributes = params
-      update_claim_school_dependent_attributes
-      update_employment_status_dependent_attributes
-      update_has_student_loan_dependent_attribute
-      update_student_loan_country_dependent_attribute
-      update_student_loan_courses_dependent_attribute
+      reset_claim_school_dependent_attributes
+      reset_has_student_loan_dependent_attribute
+      reset_student_loan_country_dependent_attribute
+      reset_student_loan_courses_dependent_attribute
+      infer_current_school
       determine_student_loan_plan
       claim.save(context: context)
     end
@@ -40,33 +40,33 @@ class ClaimUpdate
     ClaimMailer.submitted(claim).deliver_later
   end
 
-  def update_claim_school_dependent_attributes
+  def reset_claim_school_dependent_attributes
     if claim.claim_school_id_changed?
       claim.employment_status = nil
     end
   end
 
-  def update_employment_status_dependent_attributes
-    if claim.employment_status_changed?
-      claim.current_school = claim.employed_at_claim_school? ? claim.claim_school : nil
+  def reset_has_student_loan_dependent_attribute
+    if claim.has_student_loan_changed?
+      claim.student_loan_country = nil
     end
   end
 
-  def update_student_loan_courses_dependent_attribute
-    if claim.student_loan_courses_changed?
-      claim.student_loan_start_date = nil
-    end
-  end
-
-  def update_student_loan_country_dependent_attribute
+  def reset_student_loan_country_dependent_attribute
     if claim.student_loan_country_changed?
       claim.student_loan_courses = nil
     end
   end
 
-  def update_has_student_loan_dependent_attribute
-    if claim.has_student_loan_changed?
-      claim.student_loan_country = nil
+  def reset_student_loan_courses_dependent_attribute
+    if claim.student_loan_courses_changed?
+      claim.student_loan_start_date = nil
+    end
+  end
+
+  def infer_current_school
+    if claim.employment_status_changed?
+      claim.current_school = claim.employed_at_claim_school? ? claim.claim_school : nil
     end
   end
 
