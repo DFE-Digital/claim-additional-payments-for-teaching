@@ -615,6 +615,45 @@
           }
         ]
       }
+    },
+    {
+      "type": "Microsoft.Insights/metricAlerts",
+      "apiVersion": "2018-03-01",
+      "name": "[variables('appServiceHttpServerErrorAlertName')]",
+      "location": "global",
+      "dependsOn": [
+        "[resourceId('Microsoft.Insights/actionGroups', variables('alertActionGroupName'))]",
+        "[resourceId('Microsoft.Web/sites', variables('appServiceName'))]"
+      ],
+      "properties": {
+        "scopes": ["[resourceId('Microsoft.Web/sites', variables('appServiceName'))]"],
+        "enabled": true,
+        "description": "[concat('Alert when any HTTP server errors occur for ', variables('appServiceName'), '.')]",
+        "severity": 1,
+        "evaluationFrequency": "PT1M",
+        "windowSize": "PT1M",
+        "targetResourceType": "Microsoft.Web/sites",
+        "targetResourceRegion": "[resourceGroup().location]",
+        "criteria": {
+          "odata.type": "Microsoft.Azure.Monitor.SingleResourceMultipleMetricCriteria",
+          "allOf": [
+            {
+              "criterionType": "StaticThresholdCriterion",
+              "name": "http-server-error",
+              "metricNamespace": "Microsoft.Web/sites",
+              "metricName": "Http5xx",
+              "operator": "GreaterThan",
+              "threshold": 1,
+              "timeAggregation": "Total"
+            }
+          ]
+        },
+        "actions": [
+          {
+            "actionGroupId": "[resourceId('Microsoft.Insights/actionGroups', variables('alertActionGroupName'))]"
+          }
+        ]
+      }
     }
   ],
   "outputs": {}
