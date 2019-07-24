@@ -2,6 +2,7 @@ require "rails_helper"
 
 RSpec.feature "Admin sessions" do
   before do
+    stub_dfe_sign_in_authentication_response
     stub_authorised_user!
   end
 

@@ -1,4 +1,18 @@
 module DfeSignInHelpers
+  def stub_dfe_sign_in_authentication_response
+    OmniAuth.config.mock_auth[:dfe] = OmniAuth::AuthHash.new(
+      "provider" => "dfe",
+      "info" => {"email" => "test-dfe-sign-in@host.tld"},
+      "extra" => {
+        "raw_info" => {
+          "organisation" => {
+            "id" => "3bb6e3d7-64a9-42d8-b3f7-cf26101f3e82",
+          },
+        },
+      }
+    )
+  end
+
   def stub_authorised_user!(organisation_id = "3bb6e3d7-64a9-42d8-b3f7-cf26101f3e82")
     stub_with_role_code(Admin::AuthController::DFE_SIGN_IN_ADMIN_ROLE_CODE, organisation_id)
   end

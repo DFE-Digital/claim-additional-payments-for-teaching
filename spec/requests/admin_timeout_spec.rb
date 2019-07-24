@@ -4,17 +4,7 @@ RSpec.describe "Admin session timing out", type: :request do
   let(:timeout_length_in_minutes) { Admin::BaseAdminController::TIMEOUT_LENGTH_IN_MINUTES }
 
   before do
-    OmniAuth.config.mock_auth[:dfe] = OmniAuth::AuthHash.new(
-      "provider" => "dfe",
-      "info" => {"email" => "test-dfe-sign-in@host.tld"},
-      "extra" => {
-        "raw_info" => {
-          "organisation" => {
-            "id" => "3bb6e3d7-64a9-42d8-b3f7-cf26101f3e82",
-          },
-        },
-      }
-    )
+    stub_dfe_sign_in_authentication_response
     stub_authorised_user!
     post admin_dfe_sign_in_path
     follow_redirect!
