@@ -6,7 +6,21 @@
 # validations on the claim that are appropriate to that context. For example,
 # Performing an update in the "check-your-answers" context will attempt to
 # submit the claim and send the confirmation email to the claimant.
+#
+# The `DEPENDENT_ANSWERS` hash defines the attributes that depend on the value
+# of another attribute such that if the value of the other attribute changes
+# the dependent attribute should be reset because the value will no longer hold,
+# or may be an answer to a question that should no longer be asked. For example,
+# the `student_loan_course` attribute should only be set if the user
+# `has_student_loan`.
 class ClaimUpdate
+  DEPENDENT_ANSWERS = {
+    "claim_school_id" => "employment_status",
+    "has_student_loan" => "student_loan_country",
+    "student_loan_country" => "student_loan_courses",
+    "student_loan_courses" => "student_loan_start_date",
+  }.freeze
+
   attr_reader :claim, :context, :params
 
   def initialize(claim, params, context)
@@ -20,9 +34,12 @@ class ClaimUpdate
       claim.submit! && send_confirmation_email
     else
       claim.attributes = params
-      update_claim_school_dependent_attributes
-      update_employment_status_dependent_attributes
+
+      reset_dependent_answers
+
+      infer_current_school
       determine_student_loan_plan
+
       claim.save(context: context)
     end
   end
@@ -37,13 +54,15 @@ class ClaimUpdate
     ClaimMailer.submitted(claim).deliver_later
   end
 
-  def update_claim_school_dependent_attributes
-    if claim.claim_school_id_changed?
-      claim.employment_status = nil
+  def reset_dependent_answers
+    DEPENDENT_ANSWERS.each do |attribute_name, dependent_attribute_name|
+      if claim.changed.include?(attribute_name)
+        claim.attributes = {dependent_attribute_name => nil}
+      end
     end
   end
 
-  def update_employment_status_dependent_attributes
+  def infer_current_school
     if claim.employment_status_changed?
       claim.current_school = claim.employed_at_claim_school? ? claim.claim_school : nil
     end

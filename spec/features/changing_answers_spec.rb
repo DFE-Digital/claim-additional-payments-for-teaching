@@ -204,4 +204,42 @@ RSpec.feature "Changing the answers on a submittable claim" do
     expect(claim.reload.employment_status).to eq("different_school")
     expect(claim.current_school).to eq(schools(:hampstead_school))
   end
+
+  scenario "changing student loan answer to “No” resets the other student loan-related answers" do
+    visit claim_path("check-your-answers")
+
+    find("a[href='#{claim_path("student-loan")}']").click
+
+    choose "No"
+    click_on "Continue"
+
+    expect(current_path).to eq(claim_path("check-your-answers"))
+    expect(claim.reload.has_student_loan).to eq false
+    expect(claim.student_loan_country).to be_nil
+    expect(claim.student_loan_courses).to be_nil
+    expect(claim.student_loan_start_date).to be_nil
+    expect(claim.student_loan_plan).to eq TslrClaim::NO_STUDENT_LOAN
+  end
+
+  scenario "changing student loan country forces dependent questions to be re-answered" do
+    visit claim_path("check-your-answers")
+
+    find("a[href='#{claim_path("student-loan-country")}']").click
+
+    choose "Wales"
+    click_on "Continue"
+
+    choose "1"
+    click_on "Continue"
+
+    choose "Before 1 September 2012"
+    click_on "Continue"
+
+    expect(current_path).to eq(claim_path("check-your-answers"))
+    expect(claim.reload.has_student_loan).to eq true
+    expect(claim.student_loan_country).to eq StudentLoans::WALES
+    expect(claim.student_loan_courses).to eq "one_course"
+    expect(claim.student_loan_start_date).to eq StudentLoans::BEFORE_1_SEPT_2012
+    expect(claim.student_loan_plan).to eq StudentLoans::PLAN_1
+  end
 end

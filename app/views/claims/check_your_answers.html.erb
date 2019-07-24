@@ -10,6 +10,8 @@
 
     <%= render partial: "check_your_answers_section", locals: {heading: "Identity details", answers: identity_answers(current_claim)} %>
 
+    <%= render partial: "check_your_answers_section", locals: {heading: "Student loan details", answers: student_loan_answers(current_claim)} %>
+
     <%= render partial: "check_your_answers_section", locals: {heading: "Payment details", answers: payment_answers(current_claim)} %>
 
     <%= form_for current_claim, url: claim_path do |form| %>
