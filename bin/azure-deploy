@@ -51,13 +51,14 @@ while [ "$2" ]; do
     "--skip-secrets")
       DEPLOY_SECRETS=
       ;;
-    "--scratch-secrets")
-      SECRETS_RESOURCE_GROUP_NAME="$SECRETS_RESOURCE_GROUP_NAME-scratch"
-      SECRETS_DEPLOYMENT_NAME="$SECRETS_DEPLOYMENT_NAME-scratch"
+    "--tmp-secrets")
+      SECRETS_RESOURCE_GROUP_NAME="$SECRETS_RESOURCE_GROUP_NAME-tmp"
+      SECRETS_DEPLOYMENT_NAME="$SECRETS_DEPLOYMENT_NAME-tmp"
       ;;
-    "--scratch-app")
-      APP_RESOURCE_GROUP_NAME="$APP_RESOURCE_GROUP_NAME-scratch"
-      APP_DEPLOYMENT_NAME="$APP_DEPLOYMENT_NAME-scratch"      ;;
+    "--tmp-app")
+      APP_RESOURCE_GROUP_NAME="$APP_RESOURCE_GROUP_NAME-tmp"
+      APP_DEPLOYMENT_NAME="$APP_DEPLOYMENT_NAME-tmp"
+      ;;
     *)
       echo "Unexpected argument: $2"
       exit 1
