@@ -1,6 +1,18 @@
 #!/bin/bash
 set -e
 
+function ensure-resource-group-exists {
+  if ! az group show --name "$1" > /dev/null; then
+    echo "Creating new resource group: $1..."
+    az group create \
+      --name "$1" \
+      --location "$RESOURCE_LOCATION" \
+      > /dev/null
+  else
+    echo "Using existing resource group: $1..."
+  fi
+}
+
 function fetch-azure-output-value {
   echo "$1" | ruby -r json -e "
     puts JSON.parse(STDIN.read)['properties']['outputs']
@@ -92,15 +104,7 @@ fi
 echo "Setting default subscription to $SUBSCRIPTION_ID..."
 az account set --subscription "$SUBSCRIPTION_ID"
 
-if ! az group show --name "$SECRETS_RESOURCE_GROUP_NAME" > /dev/null; then
-  echo "Creating new resource group for secrets with name $SECRETS_RESOURCE_GROUP_NAME..."
-  az group create \
-    --name "$SECRETS_RESOURCE_GROUP_NAME" \
-    --location "$RESOURCE_LOCATION" \
-    > /dev/null
-else
-  echo "Using existing secrets resource group with name $SECRETS_RESOURCE_GROUP_NAME..."
-fi
+ensure-resource-group-exists $SECRETS_RESOURCE_GROUP_NAME
 
 if [ $CONFIRM_BEFORE_DEPLOY ]; then
   echo
@@ -129,15 +133,7 @@ echo
 
 KEY_VAULT_ID=$(fetch-azure-output-value "$SECRETS_DEPLOYMENT_RESULT" keyVaultId)
 
-if ! az group show --name "$APP_RESOURCE_GROUP_NAME" > /dev/null; then
-  echo "Creating new resource group for app with name $APP_RESOURCE_GROUP_NAME..."
-  az group create \
-    --name "$APP_RESOURCE_GROUP_NAME" \
-    --location "$RESOURCE_LOCATION" \
-    > /dev/null
-else
-  echo "Using existing app resource group with name $APP_RESOURCE_GROUP_NAME..."
-fi
+ensure-resource-group-exists $APP_RESOURCE_GROUP_NAME
 
 echo "Rewriting app parameters file for $ENVIRONMENT_NAME..."
 sed \
