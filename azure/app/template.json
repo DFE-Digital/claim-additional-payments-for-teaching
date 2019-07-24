@@ -6,9 +6,6 @@
       "type": "string",
       "defaultValue": "[resourceGroup().name]"
     },
-    "alertActionGroupShortName": {
-      "type": "string"
-    },
     "appServiceDockerCompose": {
       "type": "string"
     },
@@ -27,6 +24,10 @@
     },
     "databasePassword": {
       "type": "securestring"
+    },
+    "alertActionGroupShortName": {
+      "type": "string",
+      "defaultValue": "[take(resourceGroup().name, 12)]"
     },
     "alertEmailAddress": {
       "type": "string"
