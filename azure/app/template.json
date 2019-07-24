@@ -25,10 +25,6 @@
     "databasePassword": {
       "type": "securestring"
     },
-    "alertActionGroupShortName": {
-      "type": "string",
-      "defaultValue": "[take(resourceGroup().name, 12)]"
-    },
     "alertEmailAddress": {
       "type": "string"
     },
@@ -99,24 +95,7 @@
     "appServicePlanName": "[concat(parameters('resourceNamePrefix'), '-asp')]",
 
     "appServiceName": "[concat(parameters('resourceNamePrefix'), '-as')]",
-    "appServiceRuntimeStack": "[concat('COMPOSE|', base64(parameters('appServiceDockerCompose')))]",
-
-    "alertActionGroupName": "[concat(parameters('resourceNamePrefix'), '-alerts-ag')]",
-
-    "serviceHealthAlertName": "[concat(parameters('resourceNamePrefix'), '-alerts-service-health')]",
-
-    "databaseServerAlertPrefix": "[concat(parameters('resourceNamePrefix'), '-alerts', replace(variables('databaseServerName'), parameters('resourceNamePrefix'), ''))]",
-    "databaseServerHighCpuAlertName": "[concat(variables('databaseServerAlertPrefix'), '-high-cpu')]",
-    "databaseServerHighMemoryAlertName": "[concat(variables('databaseServerAlertPrefix'), '-high-memory')]",
-    "databaseServerHighStorageAlertName": "[concat(variables('databaseServerAlertPrefix'), '-high-storage')]",
-
-    "appServicePlanAlertPrefix": "[concat(parameters('resourceNamePrefix'), '-alerts', replace(variables('appServicePlanName'), parameters('resourceNamePrefix'), ''))]",
-    "appServicePlanHighCpuAlertName": "[concat(variables('appServicePlanAlertPrefix'), '-high-cpu')]",
-    "appServicePlanHighMemoryAlertName": "[concat(variables('appServicePlanAlertPrefix'), '-high-memory')]",
-
-    "appServiceAlertPrefix": "[concat(parameters('resourceNamePrefix'), '-alerts', replace(variables('appServiceName'), parameters('resourceNamePrefix'), ''))]",
-    "appServiceHighResponseTimeAlertName": "[concat(variables('appServiceAlertPrefix'), '-high-response-time')]",
-    "appServiceHttpServerErrorAlertName": "[concat(variables('appServiceAlertPrefix'), '-http-server-error')]"
+    "appServiceRuntimeStack": "[concat('COMPOSE|', base64(parameters('appServiceDockerCompose')))]"
   },
   "resources": [
     {
@@ -339,323 +318,24 @@
           }
         }
       }
-    },
-    {
-      "type": "Microsoft.Insights/actionGroups",
-      "apiVersion": "2019-06-01",
-      "name": "[variables('alertActionGroupName')]",
-      "location": "global",
-      "properties": {
-        "groupShortName": "[parameters('alertActionGroupShortName')]",
-        "enabled": true,
-        "useCommonAlertSchema": true,
-        "emailReceivers": [
-          {
-            "name": "email",
-            "emailAddress": "[parameters('alertEmailAddress')]"
-          }
-        ]
-      }
-    },
-    {
-      "type": "Microsoft.Insights/activityLogAlerts",
-      "apiVersion": "2017-04-01",
-      "name": "[variables('serviceHealthAlertName')]",
-      "location": "global",
-      "dependsOn": ["[resourceId('Microsoft.Insights/actionGroups', variables('alertActionGroupName'))]"],
-      "properties": {
-        "scopes": ["[resourceGroup().id]"],
-        "enabled": true,
-        "condition": {
-          "allOf": [
-            {
-              "field": "Category",
-              "equals": "ServiceHealth"
-            }
-          ]
-        },
-        "actions": {
-          "actionGroups": [
-            {
-              "actionGroupId": "[resourceId('Microsoft.Insights/actionGroups', variables('alertActionGroupName'))]"
-            }
-          ]
-        }
-      }
-    },
-    {
-      "type": "Microsoft.Insights/metricAlerts",
-      "apiVersion": "2018-03-01",
-      "name": "[variables('databaseServerHighCpuAlertName')]",
-      "location": "global",
-      "dependsOn": [
-        "[resourceId('Microsoft.Insights/actionGroups', variables('alertActionGroupName'))]",
-        "[resourceId('Microsoft.Resources/deployments', variables('databaseServerDeploymentName'))]"
-      ],
-      "properties": {
-        "scopes": ["[resourceId('Microsoft.DBforPostgreSQL/servers', variables('databaseServerName'))]"],
-        "enabled": true,
-        "description": "[concat('Alert when average CPU utilization for ', variables('databaseServerName'), ' is greater than 80%.')]",
-        "severity": 0,
-        "evaluationFrequency": "PT1M",
-        "windowSize": "PT5M",
-        "targetResourceType": "Microsoft.DBforPostgreSQL/servers",
-        "targetResourceRegion": "[resourceGroup().location]",
-        "criteria": {
-          "odata.type": "Microsoft.Azure.Monitor.SingleResourceMultipleMetricCriteria",
-          "allOf": [
-            {
-              "criterionType": "StaticThresholdCriterion",
-              "name": "high-cpu",
-              "metricNamespace": "Microsoft.DBforPostgreSQL/servers",
-              "metricName": "cpu_percent",
-              "operator": "GreaterThan",
-              "threshold": 80,
-              "timeAggregation": "Average"
-            }
-          ]
-        },
-        "actions": [
-          {
-            "actionGroupId": "[resourceId('Microsoft.Insights/actionGroups', variables('alertActionGroupName'))]"
-          }
-        ]
-      }
-    },
-    {
-      "type": "Microsoft.Insights/metricAlerts",
-      "apiVersion": "2018-03-01",
-      "name": "[variables('databaseServerHighMemoryAlertName')]",
-      "location": "global",
-      "dependsOn": [
-        "[resourceId('Microsoft.Insights/actionGroups', variables('alertActionGroupName'))]",
-        "[resourceId('Microsoft.Resources/deployments', variables('databaseServerDeploymentName'))]"
-      ],
-      "properties": {
-        "scopes": ["[resourceId('Microsoft.DBforPostgreSQL/servers', variables('databaseServerName'))]"],
-        "enabled": true,
-        "description": "[concat('Alert when average memory utilization for ', variables('databaseServerName'), ' is greater than 80%.')]",
-        "severity": 0,
-        "evaluationFrequency": "PT1M",
-        "windowSize": "PT5M",
-        "targetResourceType": "Microsoft.DBforPostgreSQL/servers",
-        "targetResourceRegion": "[resourceGroup().location]",
-        "criteria": {
-          "odata.type": "Microsoft.Azure.Monitor.SingleResourceMultipleMetricCriteria",
-          "allOf": [
-            {
-              "criterionType": "StaticThresholdCriterion",
-              "name": "high-memory",
-              "metricNamespace": "Microsoft.DBforPostgreSQL/servers",
-              "metricName": "memory_percent",
-              "operator": "GreaterThan",
-              "threshold": 80,
-              "timeAggregation": "Average"
-            }
-          ]
-        },
-        "actions": [
-          {
-            "actionGroupId": "[resourceId('Microsoft.Insights/actionGroups', variables('alertActionGroupName'))]"
-          }
-        ]
-      }
-    },
-    {
-      "type": "Microsoft.Insights/metricAlerts",
-      "apiVersion": "2018-03-01",
-      "name": "[variables('databaseServerHighStorageAlertName')]",
-      "location": "global",
-      "dependsOn": [
-        "[resourceId('Microsoft.Insights/actionGroups', variables('alertActionGroupName'))]",
-        "[resourceId('Microsoft.Resources/deployments', variables('databaseServerDeploymentName'))]"
-      ],
-      "properties": {
-        "scopes": ["[resourceId('Microsoft.DBforPostgreSQL/servers', variables('databaseServerName'))]"],
-        "enabled": true,
-        "description": "[concat('Alert when average storage utilization for ', variables('databaseServerName'), ' is greater than 80%.')]",
-        "severity": 0,
-        "evaluationFrequency": "PT1M",
-        "windowSize": "PT5M",
-        "targetResourceType": "Microsoft.DBforPostgreSQL/servers",
-        "targetResourceRegion": "[resourceGroup().location]",
-        "criteria": {
-          "odata.type": "Microsoft.Azure.Monitor.SingleResourceMultipleMetricCriteria",
-          "allOf": [
-            {
-              "criterionType": "StaticThresholdCriterion",
-              "name": "high-storage",
-              "metricNamespace": "Microsoft.DBforPostgreSQL/servers",
-              "metricName": "storage_percent",
-              "operator": "GreaterThan",
-              "threshold": 80,
-              "timeAggregation": "Average"
-            }
-          ]
-        },
-        "actions": [
-          {
-            "actionGroupId": "[resourceId('Microsoft.Insights/actionGroups', variables('alertActionGroupName'))]"
-          }
-        ]
-      }
-    },
-    {
-      "type": "Microsoft.Insights/metricAlerts",
-      "apiVersion": "2018-03-01",
-      "name": "[variables('appServicePlanHighCpuAlertName')]",
-      "location": "global",
-      "dependsOn": [
-        "[resourceId('Microsoft.Insights/actionGroups', variables('alertActionGroupName'))]",
-        "[resourceId('Microsoft.Resources/deployments', variables('appServicePlanDeploymentName'))]"
-      ],
-      "properties": {
-        "scopes": ["[resourceId('Microsoft.Web/serverfarms', variables('appServicePlanName'))]"],
-        "enabled": true,
-        "description": "[concat('Alert when average CPU utilization for ', variables('appServicePlanName'), ' is greater than 80%.')]",
-        "severity": 1,
-        "evaluationFrequency": "PT1M",
-        "windowSize": "PT5M",
-        "targetResourceType": "Microsoft.Web/serverfarms",
-        "targetResourceRegion": "[resourceGroup().location]",
-        "criteria": {
-          "odata.type": "Microsoft.Azure.Monitor.SingleResourceMultipleMetricCriteria",
-          "allOf": [
-            {
-              "criterionType": "StaticThresholdCriterion",
-              "name": "high-cpu",
-              "metricNamespace": "Microsoft.Web/serverfarms",
-              "metricName": "CpuPercentage",
-              "operator": "GreaterThan",
-              "threshold": 80,
-              "timeAggregation": "Average"
-            }
-          ]
-        },
-        "actions": [
-          {
-            "actionGroupId": "[resourceId('Microsoft.Insights/actionGroups', variables('alertActionGroupName'))]"
-          }
-        ]
-      }
-    },
-    {
-      "type": "Microsoft.Insights/metricAlerts",
-      "apiVersion": "2018-03-01",
-      "name": "[variables('appServicePlanHighMemoryAlertName')]",
-      "location": "global",
-      "dependsOn": [
-        "[resourceId('Microsoft.Insights/actionGroups', variables('alertActionGroupName'))]",
-        "[resourceId('Microsoft.Resources/deployments', variables('appServicePlanDeploymentName'))]"
-      ],
-      "properties": {
-        "scopes": ["[resourceId('Microsoft.Web/serverfarms', variables('appServicePlanName'))]"],
-        "enabled": true,
-        "description": "[concat('Alert when average memory utilization for ', variables('appServicePlanName'), ' is greater than 80%.')]",
-        "severity": 1,
-        "evaluationFrequency": "PT1M",
-        "windowSize": "PT5M",
-        "targetResourceType": "Microsoft.Web/serverfarms",
-        "targetResourceRegion": "[resourceGroup().location]",
-        "criteria": {
-          "odata.type": "Microsoft.Azure.Monitor.SingleResourceMultipleMetricCriteria",
-          "allOf": [
-            {
-              "criterionType": "StaticThresholdCriterion",
-              "name": "high-memory",
-              "metricNamespace": "Microsoft.Web/serverfarms",
-              "metricName": "MemoryPercentage",
-              "operator": "GreaterThan",
-              "threshold": 80,
-              "timeAggregation": "Average"
-            }
-          ]
-        },
-        "actions": [
-          {
-            "actionGroupId": "[resourceId('Microsoft.Insights/actionGroups', variables('alertActionGroupName'))]"
-          }
-        ]
-      }
-    },
-    {
-      "type": "Microsoft.Insights/metricAlerts",
-      "apiVersion": "2018-03-01",
-      "name": "[variables('appServiceHighResponseTimeAlertName')]",
-      "location": "global",
-      "dependsOn": [
-        "[resourceId('Microsoft.Insights/actionGroups', variables('alertActionGroupName'))]",
-        "[resourceId('Microsoft.Web/sites', variables('appServiceName'))]"
-      ],
-      "properties": {
-        "scopes": ["[resourceId('Microsoft.Web/sites', variables('appServiceName'))]"],
-        "enabled": true,
-        "description": "[concat('Alert when average response times for ', variables('appServiceName'), ' are greater than 2 seconds.')]",
-        "severity": 1,
-        "evaluationFrequency": "PT1M",
-        "windowSize": "PT5M",
-        "targetResourceType": "Microsoft.Web/sites",
-        "targetResourceRegion": "[resourceGroup().location]",
-        "criteria": {
-          "odata.type": "Microsoft.Azure.Monitor.SingleResourceMultipleMetricCriteria",
-          "allOf": [
-            {
-              "criterionType": "StaticThresholdCriterion",
-              "name": "high-response-time",
-              "metricNamespace": "Microsoft.Web/sites",
-              "metricName": "AverageResponseTime",
-              "operator": "GreaterThan",
-              "threshold": 2,
-              "timeAggregation": "Average"
-            }
-          ]
-        },
-        "actions": [
-          {
-            "actionGroupId": "[resourceId('Microsoft.Insights/actionGroups', variables('alertActionGroupName'))]"
-          }
-        ]
-      }
-    },
-    {
-      "type": "Microsoft.Insights/metricAlerts",
-      "apiVersion": "2018-03-01",
-      "name": "[variables('appServiceHttpServerErrorAlertName')]",
-      "location": "global",
-      "dependsOn": [
-        "[resourceId('Microsoft.Insights/actionGroups', variables('alertActionGroupName'))]",
-        "[resourceId('Microsoft.Web/sites', variables('appServiceName'))]"
-      ],
-      "properties": {
-        "scopes": ["[resourceId('Microsoft.Web/sites', variables('appServiceName'))]"],
-        "enabled": true,
-        "description": "[concat('Alert when any HTTP server errors occur for ', variables('appServiceName'), '.')]",
-        "severity": 1,
-        "evaluationFrequency": "PT1M",
-        "windowSize": "PT1M",
-        "targetResourceType": "Microsoft.Web/sites",
-        "targetResourceRegion": "[resourceGroup().location]",
-        "criteria": {
-          "odata.type": "Microsoft.Azure.Monitor.SingleResourceMultipleMetricCriteria",
-          "allOf": [
-            {
-              "criterionType": "StaticThresholdCriterion",
-              "name": "http-server-error",
-              "metricNamespace": "Microsoft.Web/sites",
-              "metricName": "Http5xx",
-              "operator": "GreaterThan",
-              "threshold": 1,
-              "timeAggregation": "Total"
-            }
-          ]
-        },
-        "actions": [
-          {
-            "actionGroupId": "[resourceId('Microsoft.Insights/actionGroups', variables('alertActionGroupName'))]"
-          }
-        ]
-      }
     }
   ],
-  "outputs": {}
+  "outputs": {
+    "resourceGroupId": {
+      "type": "string",
+      "value": "[resourceGroup().id]"
+    },
+    "databaseServerId": {
+      "type": "string",
+      "value": "[resourceId('Microsoft.DBforPostgreSQL/servers', variables('databaseServerName'))]"
+    },
+    "appServicePlanId": {
+      "type": "string",
+      "value": "[resourceId('Microsoft.Web/serverfarms', variables('appServicePlanName'))]"
+    },
+    "appServiceId": {
+      "type": "string",
+      "value": "[resourceId('Microsoft.Web/sites', variables('appServiceName'))]"
+    }
+  }
 }

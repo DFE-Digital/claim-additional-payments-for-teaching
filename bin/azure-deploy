@@ -13,6 +13,17 @@ function ensure-resource-group-exists {
   fi
 }
 
+function filter-azure-outputs {
+  echo "$1" | ruby -r json -e "
+    puts JSON.parse(STDIN.read)['properties']['outputs']
+             .map { |k, v| [k, { 'value' => v.fetch('value') }] }
+             .select { |(k, v)| $2.include?(k) || ${3:-"{}"}.keys.include?(k) }
+             .map { |(k, v)| [${3:-"{}"}.fetch(k, k), v] }
+             .to_h
+             .to_json
+  "
+}
+
 function fetch-azure-output-value {
   echo "$1" | ruby -r json -e "
     puts JSON.parse(STDIN.read)['properties']['outputs']
@@ -56,8 +67,12 @@ SECRETS_DEPLOYMENT_NAME=$SECRETS_RESOURCE_GROUP_NAME
 APP_RESOURCE_GROUP_NAME="$RESOURCE_GROUP_PREFIX-app"
 APP_DEPLOYMENT_NAME=$APP_RESOURCE_GROUP_NAME
 
+ALERTS_RESOURCE_GROUP_NAME="$RESOURCE_GROUP_PREFIX-alerts"
+ALERTS_DEPLOYMENT_NAME=$ALERTS_RESOURCE_GROUP_NAME
+
 LOGIN_TO_AZURE=1
 CONFIRM_BEFORE_DEPLOY=1
+DEPLOY_ALERTS=1
 
 while [ "$2" ]; do
   case $2 in
@@ -67,6 +82,9 @@ while [ "$2" ]; do
     "--skip-confirmation")
       CONFIRM_BEFORE_DEPLOY=
       ;;
+    "--skip-alerts")
+      DEPLOY_ALERTS=
+      ;;
     "--tmp-secrets")
       SECRETS_RESOURCE_GROUP_NAME="$SECRETS_RESOURCE_GROUP_NAME-tmp"
       SECRETS_DEPLOYMENT_NAME="$SECRETS_DEPLOYMENT_NAME-tmp"
@@ -74,6 +92,10 @@ while [ "$2" ]; do
     "--tmp-app")
       APP_RESOURCE_GROUP_NAME="$APP_RESOURCE_GROUP_NAME-tmp"
       APP_DEPLOYMENT_NAME="$APP_DEPLOYMENT_NAME-tmp"
+      ;;
+    "--tmp-alerts")
+      ALERTS_RESOURCE_GROUP_NAME="$ALERTS_RESOURCE_GROUP_NAME-tmp"
+      ALERTS_DEPLOYMENT_NAME="$ALERTS_DEPLOYMENT_NAME-tmp"
       ;;
     *)
       echo "Unexpected argument: $2"
@@ -95,6 +117,10 @@ APP_TEMPLATE_FILE_PATH="$SCRIPT_PATH/../azure/app/template.json"
 APP_DOCKER_COMPOSE_TEMPLATE_FILE_PATH="$SCRIPT_PATH/../azure/app/files/docker-compose.template.yml"
 APP_PARAMETERS_TEMPLATE_FILE_PATH="$SCRIPT_PATH/../azure/app/parameters/$ENVIRONMENT_NAME.template.json"
 APP_PARAMETERS_FILE_PATH="$SCRIPT_PATH/../azure/app/parameters/$ENVIRONMENT_NAME.json"
+
+ALERTS_TEMPLATE_FILE_PATH="$SCRIPT_PATH/../azure/alerts/template.json"
+ALERTS_PARAMETERS_TEMPLATE_FILE_PATH="$SCRIPT_PATH/../azure/alerts/parameters/$ENVIRONMENT_NAME.template.json"
+ALERTS_PARAMETERS_FILE_PATH="$SCRIPT_PATH/../azure/alerts/parameters/$ENVIRONMENT_NAME.json"
 
 if [ $LOGIN_TO_AZURE ] && ! az account show > /dev/null; then
   echo "Logging in..."
@@ -161,13 +187,50 @@ if [ $CONFIRM_BEFORE_DEPLOY ]; then
 fi
 
 echo "Starting app deployment..."
-az group deployment create \
-  --name "$APP_DEPLOYMENT_NAME" \
-  --resource-group "$APP_RESOURCE_GROUP_NAME" \
-  --template-file "$APP_TEMPLATE_FILE_PATH" \
-  --parameters "@$APP_PARAMETERS_FILE_PATH" \
-  --mode Complete \
-  --verbose
+
+APP_DEPLOYMENT_RESULT=$(
+  az group deployment create \
+    --name "$APP_DEPLOYMENT_NAME" \
+    --resource-group "$APP_RESOURCE_GROUP_NAME" \
+    --template-file "$APP_TEMPLATE_FILE_PATH" \
+    --parameters "@$APP_PARAMETERS_FILE_PATH" \
+    --mode Complete \
+    --verbose
+)
+
+echo "$APP_DEPLOYMENT_RESULT"
 
 echo
 echo "$APP_RESOURCE_GROUP_NAME deployed!"
+echo
+
+if [ $DEPLOY_ALERTS ]; then
+  ensure-resource-group-exists $ALERTS_RESOURCE_GROUP_NAME
+
+  echo "Rewriting alerts parameters file for $ENVIRONMENT_NAME..."
+  sed \
+    -e "s|\${appResourceGroupId}|$APP_RESOURCE_GROUP_NAME|g" \
+    -e "s|\${keyVaultId}|$KEY_VAULT_ID|g" \
+    "$ALERTS_PARAMETERS_TEMPLATE_FILE_PATH" > "$ALERTS_PARAMETERS_FILE_PATH"
+
+  echo "Starting alerts deployment..."
+  az group deployment create \
+    --name "$ALERTS_DEPLOYMENT_NAME" \
+    --resource-group "$ALERTS_RESOURCE_GROUP_NAME" \
+    --template-file "$ALERTS_TEMPLATE_FILE_PATH" \
+    --parameters "@$ALERTS_PARAMETERS_FILE_PATH" \
+    --parameters "$(
+      filter-azure-outputs \
+        "$APP_DEPLOYMENT_RESULT" \
+        "['appServiceId', 'appServicePlanId', 'databaseServerId']" \
+        "{'resourceGroupId' => 'appResourceGroupId'}"
+    )" \
+    --mode Complete \
+    --verbose
+
+  echo
+  echo "$ALERTS_RESOURCE_GROUP_NAME deployed!"
+  echo
+fi
+
+echo "All done. Deployment complete!"
