@@ -397,7 +397,7 @@
         "description": "[concat('Alert when average CPU utilization for ', variables('databaseServerName'), ' is greater than 80%.')]",
         "severity": 0,
         "evaluationFrequency": "PT1M",
-        "windowSize": "PT1M",
+        "windowSize": "PT5M",
         "targetResourceType": "Microsoft.DBforPostgreSQL/servers",
         "targetResourceRegion": "[resourceGroup().location]",
         "criteria": {
@@ -436,7 +436,7 @@
         "description": "[concat('Alert when average memory utilization for ', variables('databaseServerName'), ' is greater than 80%.')]",
         "severity": 0,
         "evaluationFrequency": "PT1M",
-        "windowSize": "PT1M",
+        "windowSize": "PT5M",
         "targetResourceType": "Microsoft.DBforPostgreSQL/servers",
         "targetResourceRegion": "[resourceGroup().location]",
         "criteria": {
@@ -475,7 +475,7 @@
         "description": "[concat('Alert when average storage utilization for ', variables('databaseServerName'), ' is greater than 80%.')]",
         "severity": 0,
         "evaluationFrequency": "PT1M",
-        "windowSize": "PT1M",
+        "windowSize": "PT5M",
         "targetResourceType": "Microsoft.DBforPostgreSQL/servers",
         "targetResourceRegion": "[resourceGroup().location]",
         "criteria": {
@@ -514,7 +514,7 @@
         "description": "[concat('Alert when average CPU utilization for ', variables('appServicePlanName'), ' is greater than 80%.')]",
         "severity": 1,
         "evaluationFrequency": "PT1M",
-        "windowSize": "PT1M",
+        "windowSize": "PT5M",
         "targetResourceType": "Microsoft.Web/serverfarms",
         "targetResourceRegion": "[resourceGroup().location]",
         "criteria": {
@@ -553,7 +553,7 @@
         "description": "[concat('Alert when average memory utilization for ', variables('appServicePlanName'), ' is greater than 80%.')]",
         "severity": 1,
         "evaluationFrequency": "PT1M",
-        "windowSize": "PT1M",
+        "windowSize": "PT5M",
         "targetResourceType": "Microsoft.Web/serverfarms",
         "targetResourceRegion": "[resourceGroup().location]",
         "criteria": {
@@ -592,7 +592,7 @@
         "description": "[concat('Alert when average response times for ', variables('appServiceName'), ' are greater than 2 seconds.')]",
         "severity": 1,
         "evaluationFrequency": "PT1M",
-        "windowSize": "PT1M",
+        "windowSize": "PT5M",
         "targetResourceType": "Microsoft.Web/sites",
         "targetResourceRegion": "[resourceGroup().location]",
         "criteria": {
