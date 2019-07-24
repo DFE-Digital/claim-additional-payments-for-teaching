@@ -8,6 +8,9 @@
     "appServiceHostName": {
       "value": "development.additional-teaching-payment.education.gov.uk"
     },
+    "appServiceCertificateSecretName": {
+      "value": "AppServiceCertificate"
+    },
     "databaseName": {
       "value": "development"
     },

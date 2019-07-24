@@ -6,10 +6,19 @@
       "type": "string",
       "defaultValue": "[resourceGroup().name]"
     },
+    "secretsResourceGroupName": {
+      "type": "string"
+    },
+    "keyVaultName": {
+      "type": "string"
+    },
     "appServiceDockerCompose": {
       "type": "string"
     },
     "appServiceHostName": {
+      "type": "string"
+    },
+    "appServiceCertificateSecretName": {
       "type": "string"
     },
     "appServiceAlwaysOn": {
@@ -82,6 +91,7 @@
   "variables": {
     "deploymentUrlBase": "https://raw.githubusercontent.com/DFE-Digital/bat-platform-building-blocks/master/templates/",
 
+    "appServiceCertificateDeploymentName": "[concat(parameters('resourceNamePrefix'), '-app-service-certificate')]",
     "appServicePlanDeploymentName": "[concat(parameters('resourceNamePrefix'), '-app-service-plan')]",
     "databaseServerFirewallRulesDeploymentName": "[concat(parameters('resourceNamePrefix'), '-database-server-firewall-rules')]",
     "databaseServerDeploymentName": "[concat(parameters('resourceNamePrefix'), '-database-server')]",
@@ -184,12 +194,39 @@
       }
     },
     {
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2017-05-10",
+      "name": "[variables('appServiceCertificateDeploymentName')]",
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[concat(variables('deploymentUrlBase'), 'app-service-certificate.json')]",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "keyVaultCertificateName": {
+            "value": "[parameters('appServiceCertificateSecretName')]"
+          },
+          "keyVaultName": {
+            "value": "[parameters('keyVaultName')]"
+          },
+          "keyVaultResourceGroup": {
+            "value": "[parameters('secretsResourceGroupName')]"
+          },
+          "serverFarmId": {
+            "value": "[resourceId('Microsoft.Web/serverfarms', variables('appServicePlanName'))]"
+          }
+        }
+      }
+    },
+    {
       "type": "Microsoft.Web/sites",
       "apiVersion": "2018-11-01",
       "name": "[variables('appServiceName')]",
       "kind": "app,linux,container",
       "location": "[resourceGroup().location]",
       "dependsOn": [
+        "[resourceId('Microsoft.Resources/deployments', variables('appServiceCertificateDeploymentName'))]",
         "[resourceId('Microsoft.Resources/deployments', variables('appServicePlanDeploymentName'))]",
         "[resourceId('Microsoft.Resources/deployments', variables('databaseDeploymentName'))]",
         "[resourceId('Microsoft.Resources/deployments', variables('databaseServerDeploymentName'))]"
@@ -293,7 +330,8 @@
       "location": "[resourceGroup().location]",
       "dependsOn": ["[resourceId('Microsoft.Web/sites', variables('appServiceName'))]"],
       "properties": {
-        "sslState": "Disabled"
+        "sslState": "SniEnabled",
+        "thumbprint": "[reference(resourceId('Microsoft.Resources/deployments', variables('appServiceCertificateDeploymentName')), '2018-11-01').outputs.certificateThumbprint.value]"
       }
     },
     {
