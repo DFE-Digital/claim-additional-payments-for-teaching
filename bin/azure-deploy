@@ -221,6 +221,12 @@ if [ $DEPLOY_ALERTS ]; then
     --parameters "@$ALERTS_PARAMETERS_FILE_PATH" \
     --parameters "$(
       filter-azure-outputs \
+        "$SECRETS_DEPLOYMENT_RESULT" \
+        "[]" \
+        "{'resourceGroupId' => 'secretsResourceGroupId'}"
+    )" \
+    --parameters "$(
+      filter-azure-outputs \
         "$APP_DEPLOYMENT_RESULT" \
         "['appServiceId', 'appServicePlanId', 'databaseServerId']" \
         "{'resourceGroupId' => 'appResourceGroupId'}"

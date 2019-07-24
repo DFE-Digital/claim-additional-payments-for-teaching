@@ -16,6 +16,9 @@
     "appResourceGroupId": {
       "type": "string"
     },
+    "secretsResourceGroupId": {
+      "type": "string"
+    },
     "appServiceId": {
       "type": "string"
     },
@@ -72,7 +75,11 @@
       "location": "global",
       "dependsOn": ["[resourceId('Microsoft.Insights/actionGroups', variables('alertActionGroupName'))]"],
       "properties": {
-        "scopes": ["[resourceGroup().id]", "[parameters('appResourceGroupId')]"],
+        "scopes": [
+          "[resourceGroup().id]",
+          "[parameters('appResourceGroupId')]",
+          "[parameters('secretsResourceGroupId')]"
+        ],
         "enabled": true,
         "condition": {
           "allOf": [

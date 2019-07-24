@@ -12,6 +12,9 @@
     },
     "appResourceGroupId": {
       "value": "${appResourceGroupId}"
+    },
+    "secretsResourceGroupId": {
+      "value": "${secretsResourceGroupId}"
     }
   }
 }
