@@ -64,8 +64,10 @@ RSpec.configure do |config|
   config.include FeatureHelpers, type: :feature
   config.include ActiveSupport::Testing::TimeHelpers
   config.include ActiveJob::TestHelper
+  config.include DfeSignInHelpers
 
   config.before :each do
     clear_enqueued_jobs
+    OmniAuth.config.mock_auth[:dfe] = nil
   end
 end

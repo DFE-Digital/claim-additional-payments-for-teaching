@@ -3,20 +3,17 @@ module Verify
   AUTHENTICATION_FAILED_SCENARIO = "AUTHENTICATION_FAILED".freeze
   NO_AUTHENTICATION_SCENARIO = "NO_AUTHENTICATION".freeze
 
+  class << self
+    attr_accessor :configuration
+  end
+
   def self.configure
-    yield self
+    self.configuration ||= Configuration.new
+    yield(configuration)
   end
 
-  def self.config
-    @config ||= {}
-  end
-
-  def self.vsp_host=(vsp_host)
-    config[:vsp_host] = vsp_host
-  end
-
-  def self.vsp_host
-    config[:vsp_host]
+  class Configuration
+    attr_accessor :vsp_host
   end
 end
 

@@ -3,6 +3,7 @@ require "rails_helper"
 RSpec.feature "Download CSV of claims" do
   context "User is logged in" do
     before do
+      stub_dfe_sign_in_with_role(Admin::AuthController::DFE_SIGN_IN_ADMIN_ROLE_CODE)
       visit admin_path
       click_on "Sign in"
     end

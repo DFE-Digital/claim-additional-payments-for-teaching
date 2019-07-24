@@ -94,6 +94,30 @@
         "secretName": "DfeSignInRedirectBaseUrl"
       }
     },
+    "DFE_SIGN_IN_API_CLIENT_ID": {
+      "reference": {
+        "keyVault": {
+          "id": "/subscriptions/${subscriptionId}/resourceGroups/${keyVaultResourceGroupName}/providers/Microsoft.KeyVault/vaults/${keyVaultName}"
+        },
+        "secretName": "DfeSignInApiClientId"
+      }
+    },
+    "DFE_SIGN_IN_API_SECRET": {
+      "reference": {
+        "keyVault": {
+          "id": "/subscriptions/${subscriptionId}/resourceGroups/${keyVaultResourceGroupName}/providers/Microsoft.KeyVault/vaults/${keyVaultName}"
+        },
+        "secretName": "DfeSignInApiSecret"
+      }
+    },
+    "DFE_SIGN_IN_API_ENDPOINT": {
+      "reference": {
+        "keyVault": {
+          "id": "/subscriptions/${subscriptionId}/resourceGroups/${keyVaultResourceGroupName}/providers/Microsoft.KeyVault/vaults/${keyVaultName}"
+        },
+        "secretName": "DfeSignInApiEndpoint"
+      }
+    },
     "NOTIFY_API_KEY": {
       "reference": {
         "keyVault": {
