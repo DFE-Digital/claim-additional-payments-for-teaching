@@ -70,6 +70,58 @@ describe ClaimsHelper do
     end
   end
 
+  describe "#student_loan_answers" do
+    it "returns an array of question and answers for the student loan questions" do
+      claim = TslrClaim.new(
+        has_student_loan: true,
+        student_loan_country: StudentLoans::ENGLAND,
+        student_loan_courses: :one_course,
+        student_loan_start_date: StudentLoans::ON_OR_AFTER_1_SEPT_2012
+      )
+
+      expected_answers = [
+        [t("tslr.questions.has_student_loan"), "Yes", "student-loan"],
+        [t("tslr.questions.student_loan_country"), "England", "student-loan-country"],
+        [t("tslr.questions.student_loan_how_many_courses"), "One course", "student-loan-how-many-courses"],
+        [t("tslr.questions.student_loan_start_date.one_course"), t("tslr.answers.student_loan_start_date.one_course.on_or_after_first_september_2012"), "student-loan-start-date"],
+      ]
+
+      expect(helper.student_loan_answers(claim)).to eq expected_answers
+    end
+
+    it "adjusts the loan start date question and answer according to the number of courses answer" do
+      claim = TslrClaim.new(
+        has_student_loan: true,
+        student_loan_country: StudentLoans::ENGLAND,
+        student_loan_courses: :two_or_more_courses,
+        student_loan_start_date: StudentLoans::BEFORE_1_SEPT_2012
+      )
+
+      expected_answers = [
+        [t("tslr.questions.has_student_loan"), "Yes", "student-loan"],
+        [t("tslr.questions.student_loan_country"), "England", "student-loan-country"],
+        [t("tslr.questions.student_loan_how_many_courses"), "Two or more courses", "student-loan-how-many-courses"],
+        [t("tslr.questions.student_loan_start_date.two_or_more_courses"), t("tslr.answers.student_loan_start_date.two_or_more_courses.before_first_september_2012"), "student-loan-start-date"],
+      ]
+
+      expect(helper.student_loan_answers(claim)).to eq expected_answers
+    end
+
+    it "excludes unanswered questions" do
+      claim = TslrClaim.new(
+        has_student_loan: true,
+        student_loan_country: StudentLoans::SCOTLAND,
+      )
+
+      expected_answers = [
+        [t("tslr.questions.has_student_loan"), "Yes", "student-loan"],
+        [t("tslr.questions.student_loan_country"), "Scotland", "student-loan-country"],
+      ]
+
+      expect(helper.student_loan_answers(claim)).to eq expected_answers
+    end
+  end
+
   describe "subject_list" do
     let(:list) { subject_list(subjects) }
 
