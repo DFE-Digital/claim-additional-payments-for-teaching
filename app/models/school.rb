@@ -108,7 +108,7 @@ class School < ApplicationRecord
   end
 
   def eligible_for_tslr?
-    Tslr::SchoolEligibility.new(self).check
+    StudentLoans::SchoolEligibility.new(self).check
   end
 
   def eligible_for_maths_and_physics?

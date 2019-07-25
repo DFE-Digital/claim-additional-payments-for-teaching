@@ -1,8 +1,8 @@
 require "rails_helper"
 
-RSpec.describe Tslr::SchoolEligibility do
+RSpec.describe StudentLoans::SchoolEligibility do
   describe "#check" do
-    subject { Tslr::SchoolEligibility.new(school).check }
+    subject { StudentLoans::SchoolEligibility.new(school).check }
     let(:school) { build(:school, school_attributes.merge({local_authority: local_authority})) }
 
     context "when it is in an eligible area" do
