@@ -4,10 +4,10 @@
 
 FROM ruby:2.6.2-alpine AS base
 
-RUN apk add bash
-RUN apk add postgresql-dev
-RUN apk add tzdata
-RUN apk add nodejs
+RUN apk --no-cache add bash
+RUN apk --no-cache add postgresql-dev
+RUN apk --no-cache add tzdata
+RUN apk --no-cache add nodejs
 
 ENV APP_HOME /app
 ENV DEPS_HOME /deps
@@ -24,8 +24,8 @@ FROM base AS dependencies
 
 RUN echo "Building with RAILS_ENV=${RAILS_ENV}, NODE_ENV=${NODE_ENV}"
 
-RUN apk add build-base
-RUN apk add yarn
+RUN apk --no-cache add build-base
+RUN apk --no-cache add yarn
 
 # Set up install environment
 RUN mkdir -p ${DEPS_HOME}
@@ -112,7 +112,7 @@ FROM web AS test
 
 RUN echo "Building with RAILS_ENV=${RAILS_ENV}, NODE_ENV=${NODE_ENV}"
 
-RUN apk add chromium chromium-chromedriver
+RUN apk --no-cache add chromium chromium-chromedriver
 
 # Copy test code (sorted by vague frequency of change for caching)
 COPY .prettierignore ${APP_HOME}/.prettierignore
