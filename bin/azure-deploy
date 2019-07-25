@@ -169,11 +169,11 @@ sed \
     -e "
       puts STDIN.read.gsub(
         /\\\${dockerCompose}/,
-        File.open(\"$APP_DOCKER_COMPOSE_TEMPLATE_FILE_PATH\")
+        File.open('$APP_DOCKER_COMPOSE_TEMPLATE_FILE_PATH')
             .read
-            .gsub(\"\${dockerImageTag}\", \"$DOCKER_IMAGE_TAG\")
-            .gsub(\"\n\", \"\\\n\")
-            .gsub(\"\\\"\", \"\\\\\\\"\")
+            .gsub('\${dockerImageTag}', '$DOCKER_IMAGE_TAG')
+            .gsub(\"\n\", '\n')
+            .gsub('\"', '\\\"')
       )
     " \
   > "$APP_PARAMETERS_FILE_PATH"
