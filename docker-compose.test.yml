@@ -12,10 +12,8 @@ services:
     environment:
       DFE_TEACHERS_PAYMENT_SERVICE_DATABASE_USERNAME: postgres
       DFE_TEACHERS_PAYMENT_SERVICE_DATABASE_HOST: db
-      DFE_SIGN_IN_API_CLIENT_ID: teacherpayments
-      DFE_SIGN_IN_API_SECRET: secret
-      DFE_SIGN_IN_API_ENDPOINT: https://example.com
-    env_file: .env.test
+    env_file:
+      - .env.test
     tty: true
     stdin_open: true
     command: bundle exec spring server

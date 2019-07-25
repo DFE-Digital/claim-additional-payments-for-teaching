@@ -12,6 +12,8 @@ services:
     environment:
       DFE_TEACHERS_PAYMENT_SERVICE_DATABASE_USERNAME: postgres
       DFE_TEACHERS_PAYMENT_SERVICE_DATABASE_HOST: db
+    env_file:
+      - .env
     volumes:
       - ./bin/vsp/:/app/bin/vsp/
       - ./localhost.key:/app/localhost.key
