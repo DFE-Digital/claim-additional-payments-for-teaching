@@ -1,4 +1,4 @@
-module Tslr
+module StudentLoans
   class SchoolEligibility
     ELIGIBLE_PHASES = %w[secondary middle_deemed_secondary].freeze
     ELIGIBLE_LOCAL_AUTHORITY_CODES = [
