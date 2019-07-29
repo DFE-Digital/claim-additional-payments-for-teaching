@@ -21,6 +21,12 @@ module StudentLoans
       ineligible_qts_award_year?
     end
 
+    def ineligibility_reason
+      [
+        :ineligible_qts_award_year,
+      ].find { |eligibility_check| send("#{eligibility_check}?") }
+    end
+
     private
 
     def ineligible_qts_award_year?

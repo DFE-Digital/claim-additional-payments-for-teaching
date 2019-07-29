@@ -27,6 +27,16 @@ RSpec.describe StudentLoans::Eligibility, type: :model do
     end
   end
 
+  describe "#ineligibility_reason" do
+    it "returns nil when the reason for ineligibility cannot be determined" do
+      expect(StudentLoans::Eligibility.new.ineligibility_reason).to be_nil
+    end
+
+    it "returns a symbol indicating the reason for ineligibility" do
+      expect(StudentLoans::Eligibility.new(qts_award_year: "before_2013").ineligibility_reason).to eq :ineligible_qts_award_year
+    end
+  end
+
   # Validation contexts
   context "when saving in the “qts-year” context" do
     it "is not valid without a value for qts_award_year" do
