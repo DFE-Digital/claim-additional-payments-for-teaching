@@ -138,16 +138,6 @@ class TslrClaim < ApplicationRecord
     ].find { |eligibility_check| send("#{eligibility_check}?") }
   end
 
-  def full_ineligibility_reason
-    case ineligibility_reason
-    when :ineligible_qts_award_year then "You are only eligible to claim back student loan repayments if you qualified on or after September 1st 2013."
-    when :ineligible_claim_school then "#{claim_school_name} is not an eligible school."
-    when :employed_at_no_school then "You can only get this payment if you’re still working as a teacher."
-    when :not_taught_eligible_subjects_enough then "You must have spent at least half your time teaching an eligible subject."
-    else "You can only apply for this payment if you meet the eligibility criteria."
-    end
-  end
-
   def address
     [address_line_1, address_line_2, address_line_3, address_line_4, postcode].reject(&:blank?).join(", ")
   end
@@ -245,6 +235,6 @@ class TslrClaim < ApplicationRecord
   end
 
   def claim_must_not_be_ineligible
-    errors.add(:base, full_ineligibility_reason) if ineligible?
+    errors.add(:base, ineligibility_reason) if ineligible?
   end
 end

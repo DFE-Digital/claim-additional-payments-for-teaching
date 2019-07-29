@@ -37,6 +37,13 @@ en:
     currency:
       format:
         unit: "£"
+  activerecord:
+    errors:
+      messages:
+        ineligible_qts_award_year: "You are only eligible to claim back student loan repayments if you qualified on or after September 1st 2013"
+        ineligible_claim_school: "The school you were employed at is not eligible"
+        employed_at_no_school: "You can only get this payment if you’re still working as a teacher"
+        not_taught_eligible_subjects_enough: "You must have spent at least half your time teaching an eligible subject"
   tslr:
     service_name: "Teachers: claim back your student loan repayments"
     questions:

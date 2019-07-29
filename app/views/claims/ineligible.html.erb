@@ -5,7 +5,7 @@
     </h1>
 
     <p class="govuk-body">
-      <%= current_claim.full_ineligibility_reason %>
+      <%= t("activerecord.errors.messages.#{current_claim.ineligibility_reason}") %>.
     </p>
 
     <p class="govuk-body">

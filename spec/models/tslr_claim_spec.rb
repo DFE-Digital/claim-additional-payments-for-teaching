@@ -272,7 +272,7 @@ RSpec.describe TslrClaim, type: :model do
       ineligible_claim = build(:tslr_claim, :submittable, mostly_teaching_eligible_subjects: false)
 
       expect(ineligible_claim).not_to be_valid(:submit)
-      expect(ineligible_claim.errors[:base]).to include("You must have spent at least half your time teaching an eligible subject.")
+      expect(ineligible_claim.errors[:base]).to include(I18n.t("activerecord.errors.messages.not_taught_eligible_subjects_enough"))
     end
   end
 
@@ -496,7 +496,7 @@ RSpec.describe TslrClaim, type: :model do
       end
 
       it "adds an error" do
-        expect(tslr_claim.errors.messages[:base]).to include("You must have spent at least half your time teaching an eligible subject.")
+        expect(tslr_claim.errors.messages[:base]).to include(I18n.t("activerecord.errors.messages.not_taught_eligible_subjects_enough"))
       end
     end
 
