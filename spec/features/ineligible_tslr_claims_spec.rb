@@ -9,7 +9,7 @@ RSpec.feature "Ineligible Teacher Student Loan Repayments claims" do
 
     expect(claim.reload.qts_award_year).to eql("before_2013")
     expect(page).to have_text("You’re not eligible")
-    expect(page).to have_text("You are only eligible to claim back student loan repayments if you qualified on or after September 1st 2013")
+    expect(page).to have_text(I18n.t("activerecord.errors.messages.ineligible_qts_award_year"))
   end
 
   scenario "now works for a different school" do
@@ -39,7 +39,7 @@ RSpec.feature "Ineligible Teacher Student Loan Repayments claims" do
 
     expect(claim.reload.claim_school).to eq schools(:hampstead_school)
     expect(page).to have_text("You’re not eligible")
-    expect(page).to have_text("Hampstead School is not an eligible school")
+    expect(page).to have_text(I18n.t("activerecord.errors.messages.ineligible_claim_school"))
   end
 
   scenario "no longer teaching" do
@@ -51,7 +51,7 @@ RSpec.feature "Ineligible Teacher Student Loan Repayments claims" do
 
     expect(claim.reload.employment_status).to eq("no_school")
     expect(page).to have_text("You’re not eligible")
-    expect(page).to have_text("You can only get this payment if you’re still working as a teacher")
+    expect(page).to have_text(I18n.t("activerecord.errors.messages.employed_at_no_school"))
   end
 
   scenario "does not teach an eligible subject" do
@@ -65,7 +65,7 @@ RSpec.feature "Ineligible Teacher Student Loan Repayments claims" do
 
     expect(claim.reload.mostly_teaching_eligible_subjects).to eq(false)
     expect(page).to have_text("You’re not eligible")
-    expect(page).to have_text("You must have spent at least half your time teaching an eligible subject.")
+    expect(page).to have_text(I18n.t("activerecord.errors.messages.not_taught_eligible_subjects_enough"))
   end
 
   scenario "does not teach an eligible subject for at least half of their time" do
@@ -82,6 +82,6 @@ RSpec.feature "Ineligible Teacher Student Loan Repayments claims" do
 
     expect(claim.reload.mostly_teaching_eligible_subjects).to eq(false)
     expect(page).to have_text("You’re not eligible")
-    expect(page).to have_text("You must have spent at least half your time teaching an eligible subject.")
+    expect(page).to have_text(I18n.t("activerecord.errors.messages.not_taught_eligible_subjects_enough"))
   end
 end
