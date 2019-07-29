@@ -16,6 +16,17 @@ RSpec.describe StudentLoans::Eligibility, type: :model do
     end
   end
 
+  describe "#ineligible?" do
+    it "returns false when the eligibility cannot be determined" do
+      expect(StudentLoans::Eligibility.new.ineligible?).to eql false
+    end
+
+    it "returns true when the qts_award_year is before 2013" do
+      expect(StudentLoans::Eligibility.new(qts_award_year: "before_2013").ineligible?).to eql true
+      expect(StudentLoans::Eligibility.new(qts_award_year: "2013_2014").ineligible?).to eql false
+    end
+  end
+
   # Validation contexts
   context "when saving in the “qts-year” context" do
     it "is not valid without a value for qts_award_year" do

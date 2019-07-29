@@ -16,5 +16,15 @@ module StudentLoans
     }, _prefix: :awarded_qualified_status
 
     validates :qts_award_year, on: [:"qts-year", :submit], presence: {message: "Select the academic year you were awarded qualified teacher status"}
+
+    def ineligible?
+      ineligible_qts_award_year?
+    end
+
+    private
+
+    def ineligible_qts_award_year?
+      awarded_qualified_status_before_2013?
+    end
   end
 end
