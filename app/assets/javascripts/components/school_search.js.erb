@@ -1,7 +1,7 @@
 "use strict";
 
 document.addEventListener("DOMContentLoaded", function() {
-  var form = document.querySelector("form.edit_tslr_claim");
+  var form = document.querySelector("form.school_search_form");
 
   if (!form) {
     return;
@@ -13,8 +13,7 @@ document.addEventListener("DOMContentLoaded", function() {
     return;
   }
 
-  var schoolIdParam = form.getAttribute("data-school-id-param");
-  var schoolIdInput = form.querySelector("#tslr_claim_" + schoolIdParam);
+  var schoolIdInput = form.querySelector("#" + form.getAttribute("data-school-id-param"));
 
   if (!schoolIdInput) {
     return;
@@ -55,7 +54,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
   accessibleAutocomplete({
     element: searchInputContainer,
-    id: "tslr_claim_school_search",
+    id: "school_search",
     name: "school_search",
     source: function(query, populateResults) {
       function handleResponse(response) {
