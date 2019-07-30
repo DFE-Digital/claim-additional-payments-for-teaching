@@ -197,12 +197,6 @@
       "properties": {
         "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', variables('appServicePlanName'))]",
         "httpsOnly": true,
-        "hostNameSslStates": {
-          "name": "[parameters('appServiceHostName')]",
-          "sslState": "Disabled",
-          "toUpdate": true,
-          "hostType": "Standard"
-        },
         "siteConfig": {
           "alwaysOn": "[parameters('appServiceAlwaysOn')]",
           "httpLoggingEnabled": true,
@@ -290,6 +284,18 @@
             }
           ]
         }
+      }
+    },
+    {
+      "type": "Microsoft.Web/sites/hostNameBindings",
+      "apiVersion": "2018-11-01",
+      "name": "[concat(variables('appServiceName'), '/', parameters('appServiceHostName'))]",
+      "location": "[resourceGroup().location]",
+      "dependsOn": [
+        "[resourceId('Microsoft.Web/sites', variables('appServiceName'))]"
+      ],
+      "properties": {
+        "sslState": "Disabled"
       }
     },
     {
