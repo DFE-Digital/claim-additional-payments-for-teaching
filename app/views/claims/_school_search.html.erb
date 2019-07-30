@@ -1,8 +1,8 @@
 <% if @schools.blank? %>
 
-  <%= render("shared/error_summary", instance: current_claim) if current_claim.errors.any? %>
+  <%= render("shared/error_summary", instance: current_claim, errored_field_id_overrides: { school_search: "school_search" }) if current_claim.errors.any? %>
 
-  <%= form_for current_claim, url: claim_path, method: :get, data: { "school-id-param": school_id_param } do |form| %>
+  <%= form_for current_claim, url: claim_path, method: :get,  data: { "school-id-param": "tslr_claim_#{school_id_param}" }, html: { class: "school_search_form" } do |form| %>
     <%= hidden_field_tag :_method, "get", id: nil %>
     <%= hidden_field_tag :authenticity_token, form_authenticity_token %>
     <%= form.hidden_field school_id_param %>
@@ -10,7 +10,7 @@
     <%= form_group_tag current_claim, :school_search do %>
 
       <h1 class="govuk-label-wrapper">
-        <%= label_tag :tslr_claim_school_search, question, class: "govuk-label govuk-label--xl" %>
+        <%= label_tag :school_search, question, class: "govuk-label govuk-label--xl" %>
       </h1>
 
       <% if params[:school_search].present? && current_claim.errors.empty? %>
@@ -26,7 +26,7 @@
       <div id="school-search-container">
 
         <%= errors_tag current_claim, :school_search %>
-        <%= text_field_tag :school_search, params[:school_search], id: :tslr_claim_school_search, class: css_classes_for_input(current_claim, :school_search), value: school_search_value %>
+        <%= text_field_tag :school_search, params[:school_search], id: :school_search, class: css_classes_for_input(current_claim, :school_search), value: school_search_value %>
 
       </div>
 
