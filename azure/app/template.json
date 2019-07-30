@@ -250,6 +250,10 @@
               "value": "[parameters('VSP.VERIFY_ENVIRONMENT')]"
             },
             {
+              "name": "SERVICE_ENTITY_IDS",
+              "value": "[string(createArray(parameters('appServiceHostName')))]"
+            },
+            {
               "name": "SAML_SIGNING_KEY",
               "value": "[parameters('VSP.SAML_SIGNING_KEY')]"
             },
