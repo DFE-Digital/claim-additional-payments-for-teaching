@@ -10,8 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-
-ActiveRecord::Schema.define(version: 2019_07_25_145000) do
+ActiveRecord::Schema.define(version: 2019_07_29_143440) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -103,8 +102,11 @@ ActiveRecord::Schema.define(version: 2019_07_25_145000) do
     t.integer "student_loan_courses"
     t.integer "student_loan_start_date"
     t.integer "student_loan_plan"
+    t.string "eligibility_type"
+    t.uuid "eligibility_id"
     t.index ["claim_school_id"], name: "index_tslr_claims_on_claim_school_id"
     t.index ["current_school_id"], name: "index_tslr_claims_on_current_school_id"
+    t.index ["eligibility_type", "eligibility_id"], name: "index_tslr_claims_on_eligibility_type_and_eligibility_id"
     t.index ["employment_status"], name: "index_tslr_claims_on_employment_status"
     t.index ["reference"], name: "index_tslr_claims_on_reference", unique: true
     t.index ["submitted_at"], name: "index_tslr_claims_on_submitted_at"

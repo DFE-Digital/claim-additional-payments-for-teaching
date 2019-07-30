@@ -12,7 +12,7 @@ class ClaimsController < ApplicationController
   end
 
   def create
-    claim = TslrClaim.create!
+    claim = TslrClaim.create!(eligibility: StudentLoans::Eligibility.new)
     session[:tslr_claim_id] = claim.to_param
 
     redirect_to claim_path("qts-year")

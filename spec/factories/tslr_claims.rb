@@ -1,5 +1,7 @@
 FactoryBot.define do
   factory :tslr_claim do
+    association(:eligibility, factory: :student_loans_eligibility)
+
     trait :submittable do
       claim_school { School.find(ActiveRecord::FixtureSet.identify(:penistone_grammar_school, :uuid)) }
       current_school { claim_school }

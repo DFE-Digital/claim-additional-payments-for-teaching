@@ -36,6 +36,8 @@ class TslrClaim < ApplicationRecord
     "2019_2020": 7,
   }, _prefix: :awarded_qualified_status
 
+  belongs_to :eligibility, polymorphic: true
+
   belongs_to :claim_school, optional: true, class_name: "School"
   belongs_to :current_school, optional: true, class_name: "School"
 
