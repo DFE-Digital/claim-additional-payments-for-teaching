@@ -17,9 +17,9 @@ steps:
     displayName: Use Ruby 2.6.2
 
   - script: docker-compose -f docker-compose.test.yml build
-    displayName: Build Docker image for testing
+    displayName: Build test Docker image
   - script: docker-compose -f docker-compose.test.yml run --rm web bundle exec rake
-    displayName: Run tests via rake default
+    displayName: Run tests on Docker via rake default
 
   - script: |
       git reset --hard
@@ -30,18 +30,18 @@ steps:
     artifact: repository
     displayName: Publish repository as artifact
 
+  - script:
+      docker build --file=Dockerfile --tag=$(dockerRegistry)/$(dockerImageName):$(Build.BuildNumber) --target=web .
+    displayName: Build web Docker image
+
   - script: docker login -u $(dockerId) -p $pass
     env:
       pass: $(dockerPassword)
     displayName: Login to DockerHub
     condition: eq(variables['Build.SourceBranch'], 'refs/heads/master')
-  - script:
-      docker build --file=Dockerfile --tag=$(dockerRegistry)/$(dockerImageName):$(Build.BuildNumber) --target=web .
-    displayName: Build Docker image for deployment
-    condition: eq(variables['Build.SourceBranch'], 'refs/heads/master')
   - script: |
       docker tag $(dockerRegistry)/$(dockerImageName):$(Build.BuildNumber) $(dockerRegistry)/$(dockerImageName):latest
       docker push $(dockerRegistry)/$(dockerImageName):$(Build.BuildNumber)
       docker push $(dockerRegistry)/$(dockerImageName):latest
-    displayName: Push Docker image
+    displayName: Push web Docker image
     condition: eq(variables['Build.SourceBranch'], 'refs/heads/master')
