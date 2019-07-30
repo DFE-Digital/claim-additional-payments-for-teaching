@@ -1,0 +1,112 @@
+#!/bin/bash
+set -e
+
+if [ $# -lt 2 ]; then
+  echo "Usage: $0 ENVIRONMENT_NAME VERSION_NUMBER"
+  exit 1
+fi
+
+ENVIRONMENT_NAME=$1
+VERSION_NUMBER=$2
+
+case $ENVIRONMENT_NAME in
+  "development")
+    ENVIRONMENT_SHORT_NAME="Dev"
+    AZURE_SUBSCRIPTION_ID="8655985a-2f87-44d7-a541-0be9a8c2779d"
+    KEY_VAULT_NAME="s118d01-secrets-kv"
+    ;;
+  "production")
+    ENVIRONMENT_SHORT_NAME="Prod"
+    AZURE_SUBSCRIPTION_ID="88bd392f-df19-458b-a100-22b4429060ed"
+    KEY_VAULT_NAME="s118p01-secrets-kv"
+    ;;
+  *)
+    echo "Could not find an known environment with the name: $ENVIRONMENT_NAME"
+    exit 1
+    ;;
+esac
+
+function generate_key_and_csr {
+  local FILE_PREFIX=$1
+  local CSR_COMMON_NAME=$2
+  local CSR_SUBJECT="/C=GB/ST=Greater Manchester/L=Manchester/O=DfE/OU=Teaching Workforce Directorate/CN=$CSR_COMMON_NAME"
+
+  openssl genrsa -out "$FILE_PREFIX-tmp.key" 2048
+  openssl pkcs8 -topk8 -inform PEM -outform PEM -nocrypt -in "$FILE_PREFIX-tmp.key" -out "$FILE_PREFIX.key"
+  rm "$FILE_PREFIX-tmp.key"
+
+  openssl req -new -batch -key "$FILE_PREFIX.key" -subj "$CSR_SUBJECT" -out "$FILE_PREFIX.csr"
+}
+
+function store_key_and_csr {
+  local FILE_PREFIX=$1
+
+  az keyvault secret set \
+    --vault-name $KEY_VAULT_NAME \
+    --name "${FILE_PREFIX}Key" \
+    --file "${FILE_PREFIX}.key"
+
+  az keyvault secret set \
+    --vault-name $KEY_VAULT_NAME \
+    --name "${FILE_PREFIX}Csr" \
+    --file "${FILE_PREFIX}.csr"
+}
+
+function store_challenge_phrase {
+  local FILE_PREFIX=$1
+  local CHALLENGE_PHRASE=$2
+
+  az keyvault secret set \
+    --vault-name $KEY_VAULT_NAME \
+    --name "${FILE_PREFIX}ChallengePhrase" \
+    --value "$CHALLENGE_PHRASE"
+}
+
+SIGNING_FILE_PREFIX="TeacherPayments${ENVIRONMENT_SHORT_NAME}VspSamlSigning${VERSION_NUMBER}"
+SIGNING_CSR_COMMON_NAME="Teacher Payments Service $ENVIRONMENT_SHORT_NAME VSP SAML Signing $VERSION_NUMBER"
+
+ENCRYPTION_FILE_PREFIX="TeacherPayments${ENVIRONMENT_SHORT_NAME}VspSamlEncryption${VERSION_NUMBER}"
+ENCRYPTION_CSR_COMMON_NAME="Teacher Payments Service $ENVIRONMENT_SHORT_NAME VSP SAML Encryption $VERSION_NUMBER"
+
+if ! az account show > /dev/null; then
+  echo "Logging in to Azure..."
+  az login
+fi
+
+echo "Setting default Azure subscription to $AZURE_SUBSCRIPTION_ID..."
+az account set --subscription "$AZURE_SUBSCRIPTION_ID"
+
+echo
+echo "Generating signing key and CSR..."
+generate_key_and_csr "$SIGNING_FILE_PREFIX" "$SIGNING_CSR_COMMON_NAME"
+
+echo
+echo "Storing signing key and CSR in $KEY_VAULT_NAME..."
+store_key_and_csr "$SIGNING_FILE_PREFIX"
+
+echo
+echo "Now enrol the generated signing CSR to Verify."
+read -rsp "Enter the \"Challenge Phrase\" used in the request: " SIGNING_CHALLENGE_PHRASE
+
+echo
+echo "Storing encryption challenge phrase in $KEY_VAULT_NAME..."
+store_challenge_phrase "$SIGNING_FILE_PREFIX" "$SIGNING_CHALLENGE_PHRASE"
+
+echo
+echo "Generating encryption key and CSR..."
+generate_key_and_csr "$ENCRYPTION_FILE_PREFIX" "$ENCRYPTION_CSR_COMMON_NAME"
+
+echo
+echo "Storing encryption key and CSR in $KEY_VAULT_NAME..."
+store_key_and_csr "$ENCRYPTION_FILE_PREFIX"
+
+echo
+echo "Now enrol the generated encryption CSR to Verify."
+read -rsp "Enter the \"Challenge Phrase\" used in the request: " ENCRYPTION_CHALLENGE_PHRASE
+
+echo
+echo "Storing encryption challenge phrase in $KEY_VAULT_NAME..."
+store_challenge_phrase "$ENCRYPTION_FILE_PREFIX" "$ENCRYPTION_CHALLENGE_PHRASE"
+
+echo
+echo "Done!"
