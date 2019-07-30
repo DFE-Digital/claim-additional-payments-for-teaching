@@ -291,9 +291,7 @@
       "apiVersion": "2018-11-01",
       "name": "[concat(variables('appServiceName'), '/', parameters('appServiceHostName'))]",
       "location": "[resourceGroup().location]",
-      "dependsOn": [
-        "[resourceId('Microsoft.Web/sites', variables('appServiceName'))]"
-      ],
+      "dependsOn": ["[resourceId('Microsoft.Web/sites', variables('appServiceName'))]"],
       "properties": {
         "sslState": "Disabled"
       }
