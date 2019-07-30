@@ -1,26 +1,28 @@
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-    <%= render("shared/error_summary", instance: current_claim, errored_field_id_overrides: {qts_award_year: "tslr_claim_qts_award_year_before_2013"}) if current_claim.errors.any? %>
+    <%= render("shared/error_summary", instance: current_claim, errored_field_id_overrides: {:"eligibility.qts_award_year" => "tslr_claim_eligibility_attributes_qts_award_year_before_2013"}) if current_claim.errors.any? %>
 
     <%= form_for current_claim, url: claim_path do |form| %>
       <%= form_group_tag current_claim do %>
-        <h1 class="govuk-label-wrapper">
-          <%= form.label :qts_award_year, t("tslr.questions.qts_award_year"), {class: "govuk-label govuk-label--xl"} %>
-        </h1>
-        <span id="tslr_claim_qts_award_year-hint" class="govuk-hint">
-          You are only eligible to claim back student loan repayments if you qualified on or after September 1st 2013.
-        </span>
+        <%= form.fields_for :eligibility, include_id: false do |fields| %>
+          <h1 class="govuk-label-wrapper">
+            <%= fields.label :qts_award_year, t("tslr.questions.qts_award_year"), {class: "govuk-label govuk-label--xl"} %>
+          </h1>
+          <span id="tslr_claim_qts_award_year-hint" class="govuk-hint">
+            You are only eligible to claim back student loan repayments if you qualified on or after September 1st 2013.
+          </span>
 
-        <%= errors_tag current_claim, :qts_award_year %>
-        <div class="govuk-radios">
-          <%= form.hidden_field :qts_award_year %>
-          <% TslrClaim.qts_award_years.each_key do |option| %>
-            <div class="govuk-radios__item">
-              <%= form.radio_button(:qts_award_year, option, class: "govuk-radios__input") %>
-              <%= form.label "qts_award_year_#{option}", t("tslr.questions.qts_award_years.#{option}"), class: "govuk-label govuk-radios__label" %>
-            </div>
-          <% end %>
-        </div>
+          <%= errors_tag current_claim, :qts_award_year %>
+          <div class="govuk-radios">
+            <%= fields.hidden_field :qts_award_year %>
+            <% StudentLoans::Eligibility.qts_award_years.each_key do |option| %>
+              <div class="govuk-radios__item">
+                <%= fields.radio_button(:qts_award_year, option, class: "govuk-radios__input") %>
+                <%= fields.label "qts_award_year_#{option}", t("tslr.questions.qts_award_years.#{option}"), class: "govuk-label govuk-radios__label" %>
+              </div>
+            <% end %>
+          </div>
+        <% end %>
       <% end %>
       <%= form.submit "Continue", class: "govuk-button" %>
     <% end %>

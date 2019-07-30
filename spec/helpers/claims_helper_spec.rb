@@ -6,13 +6,13 @@ describe ClaimsHelper do
       school = schools(:penistone_grammar_school)
       claim = build(
         :tslr_claim,
-        qts_award_year: "2013_2014",
         claim_school: school,
         current_school: school,
         chemistry_taught: true,
         physics_taught: true,
         mostly_teaching_eligible_subjects: true,
         student_loan_repayment_amount: 1987.65,
+        eligibility_attributes: {qts_award_year: "2013_2014"},
       )
 
       expected_answers = [

@@ -27,8 +27,6 @@ module StudentLoans
       ].find { |eligibility_check| send("#{eligibility_check}?") }
     end
 
-    private
-
     def ineligible_qts_award_year?
       awarded_qualified_status_before_2013?
     end

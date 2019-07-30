@@ -121,14 +121,14 @@ RSpec.describe TslrClaim, type: :model do
     let(:custom_validation_context) { :"qts-year" }
 
     it "rejects invalid QTS award years" do
-      expect { build(:tslr_claim, qts_award_year: "123") }.to raise_error(ArgumentError)
+      expect { build(:tslr_claim, eligibility: build(:student_loans_eligibility, qts_award_year: "123")) }.to raise_error(ArgumentError)
     end
 
     it "validates the qts_award_year is one of the allowable values" do
       expect(build(:tslr_claim)).not_to be_valid(custom_validation_context)
 
-      TslrClaim.qts_award_years.each_key do |academic_year|
-        expect(build(:tslr_claim, qts_award_year: academic_year)).to be_valid(custom_validation_context)
+      StudentLoans::Eligibility.qts_award_years.each_key do |academic_year|
+        expect(build(:tslr_claim, eligibility: build(:student_loans_eligibility, qts_award_year: academic_year))).to be_valid(custom_validation_context)
       end
     end
   end
@@ -315,12 +315,12 @@ RSpec.describe TslrClaim, type: :model do
     subject { build(:tslr_claim, claim_attributes).ineligible? }
 
     context "with an ineligible QTS award year" do
-      let(:claim_attributes) { {qts_award_year: "before_2013"} }
+      let(:claim_attributes) { {eligibility: build(:student_loans_eligibility, qts_award_year: "before_2013")} }
       it { is_expected.to be true }
     end
 
     context "with an eligible QTS award year" do
-      let(:claim_attributes) { {qts_award_year: "2013_2014"} }
+      let(:claim_attributes) { {eligibility: build(:student_loans_eligibility, qts_award_year: "2013_2014")} }
       it { is_expected.to be false }
     end
 
@@ -359,7 +359,7 @@ RSpec.describe TslrClaim, type: :model do
     subject { build(:tslr_claim, claim_attributes).ineligibility_reason }
 
     context "with an ineligible qts_award_year" do
-      let(:claim_attributes) { {qts_award_year: "before_2013"} }
+      let(:claim_attributes) { {eligibility: build(:student_loans_eligibility, qts_award_year: "before_2013")} }
       it { is_expected.to eql :ineligible_qts_award_year }
     end
 

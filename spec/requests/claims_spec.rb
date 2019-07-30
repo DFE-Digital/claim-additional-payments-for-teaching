@@ -68,6 +68,8 @@ RSpec.describe "Claims", type: :request do
 
         claim = TslrClaim.order(:created_at).last
         claim.update_attributes(attributes_for(:tslr_claim, :submittable))
+        claim.eligibility.update_attributes(attributes_for(:student_loans_eligibility, :submittable))
+
         claim.submit!
 
         get claim_path("confirmation")
@@ -134,13 +136,13 @@ RSpec.describe "Claims", type: :request do
       before { post claims_path }
 
       it "updates the claim with the submitted form data" do
-        put claim_path("qts-year"), params: {tslr_claim: {qts_award_year: "2014_2015"}}
+        put claim_path("qts-year"), params: {tslr_claim: {eligibility_attributes: {qts_award_year: "2014_2015"}}}
 
         expect(in_progress_claim.qts_award_year).to eq "2014_2015"
       end
 
       it "makes sure validations appropriate to the context are run" do
-        put claim_path("qts-year"), params: {tslr_claim: {qts_award_year: nil}}
+        put claim_path("qts-year"), params: {tslr_claim: {eligibility_attributes: {qts_award_year: nil}}}
 
         expect(response.body).to include("Select the academic year you were awarded qualified teacher status")
       end
@@ -167,7 +169,9 @@ RSpec.describe "Claims", type: :request do
       context "when updating from check-your-answers" do
         context "with a submittable claim" do
           before :each do
+            # Make the claim submittable
             in_progress_claim.update!(attributes_for(:tslr_claim, :submittable))
+            in_progress_claim.eligibility.update!(attributes_for(:student_loans_eligibility, :submittable))
 
             perform_enqueued_jobs do
               put claim_path("check-your-answers")
@@ -194,6 +198,7 @@ RSpec.describe "Claims", type: :request do
 
         context "with an unsubmittable claim" do
           before :each do
+            # Make the claim _almost_ submittable
             in_progress_claim.update!(attributes_for(:tslr_claim, :submittable, email_address: nil))
 
             put claim_path("check-your-answers")
@@ -219,7 +224,7 @@ RSpec.describe "Claims", type: :request do
 
     context "when a claim hasn’t been started yet" do
       it "redirects to the start page" do
-        put claim_path("qts-year"), params: {tslr_claim: {qts_award_year: "2014_2015"}}
+        put claim_path("qts-year"), params: {tslr_claim: {eligibility_attributes: {qts_award_year: "2014_2015"}}}
         expect(response).to redirect_to(root_path)
       end
     end

@@ -25,26 +25,20 @@ class TslrClaim < ApplicationRecord
     no_school: 2,
   }, _prefix: :employed_at
 
-  enum qts_award_year: {
-    "before_2013": 0,
-    "2013_2014": 1,
-    "2014_2015": 2,
-    "2015_2016": 3,
-    "2016_2017": 4,
-    "2017_2018": 5,
-    "2018_2019": 6,
-    "2019_2020": 7,
-  }, _prefix: :awarded_qualified_status
+  # NOTE: Attribute migration in progress
+  delegate :qts_award_year, to: :eligibility
+
+  # NOTE: Temporary delegation of eligibility methods
+  delegate :ineligible_qts_award_year?, to: :eligibility, allow_nil: nil
 
   belongs_to :eligibility, polymorphic: true
+  accepts_nested_attributes_for :eligibility, update_only: true
 
   belongs_to :claim_school, optional: true, class_name: "School"
   belongs_to :current_school, optional: true, class_name: "School"
 
   validates :claim_school,                      on: [:"claim-school", :submit], presence: {message: "Select a school from the list"}
   validates :current_school,                    on: [:"current-school", :submit], presence: {message: "Select a school from the list"}
-
-  validates :qts_award_year,                    on: [:"qts-year", :submit], presence: {message: "Select the academic year you were awarded qualified teacher status"}
 
   validates :employment_status,                 on: [:"still-teaching", :submit], presence: {message: "Choose the option that describes your current employment status"}
 
@@ -161,10 +155,6 @@ class TslrClaim < ApplicationRecord
   end
 
   private
-
-  def ineligible_qts_award_year?
-    awarded_qualified_status_before_2013?
-  end
 
   def ineligible_claim_school?
     claim_school.present? && !claim_school.eligible_for_tslr?
