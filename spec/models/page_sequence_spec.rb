@@ -3,7 +3,7 @@
 require "rails_helper"
 
 RSpec.describe PageSequence do
-  let(:claim) { TslrClaim.new }
+  let(:claim) { build(:tslr_claim) }
 
   describe "#slugs" do
     it "excludes “current-school” when the claimant still works at the school they are claiming against" do
@@ -53,7 +53,7 @@ RSpec.describe PageSequence do
     end
 
     context "with an ineligible claim" do
-      let(:claim) { TslrClaim.new(employment_status: :no_school) }
+      let(:claim) { build(:tslr_claim, employment_status: :no_school) }
 
       it "returns “ineligible” as the next slug" do
         expect(PageSequence.new(claim, "still-teaching").next_slug).to eq "ineligible"
