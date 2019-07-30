@@ -3,8 +3,8 @@ require "rails_helper"
 describe ClaimsHelper do
   describe "#claim_answers" do
     it "returns an array of questions and answers for displaying to the user for review" do
-      school = create(:school)
-      claim = create(
+      school = schools(:penistone_grammar_school)
+      claim = build(
         :tslr_claim,
         qts_award_year: "2013_2014",
         claim_school: school,
@@ -30,7 +30,7 @@ describe ClaimsHelper do
 
   describe "#identity_answers" do
     it "returns an array of questions and answers for displaying to the user for review" do
-      claim = create(
+      claim = build(
         :tslr_claim,
         full_name: "Jo Bloggs",
         address_line_1: "Flat 1",
@@ -39,7 +39,7 @@ describe ClaimsHelper do
         postcode: "AB1 2CD",
         date_of_birth: 20.years.ago.to_date,
         teacher_reference_number: "1234567",
-        national_insurance_number: "QQ 12 34 56 C",
+        national_insurance_number: "QQ123456C",
         email_address: "test@email.com",
       )
 
