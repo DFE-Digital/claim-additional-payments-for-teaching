@@ -1,0 +1,158 @@
+#!/bin/bash
+set -e
+
+if [ $# -lt 2 ]; then
+  echo "Usage: $0 ENVIRONMENT_NAME VERSION_NUMBER"
+  exit 1
+fi
+
+ENVIRONMENT_NAME=$1
+VERSION_NUMBER=$2
+
+case $ENVIRONMENT_NAME in
+  "development")
+    ENVIRONMENT_SHORT_NAME="Dev"
+    AZURE_SUBSCRIPTION_ID="8655985a-2f87-44d7-a541-0be9a8c2779d"
+    KEY_VAULT_NAME="s118d01-secrets-kv"
+    ;;
+  "production")
+    ENVIRONMENT_SHORT_NAME="Prod"
+    AZURE_SUBSCRIPTION_ID="88bd392f-df19-458b-a100-22b4429060ed"
+    KEY_VAULT_NAME="s118p01-secrets-kv"
+    ;;
+  *)
+    echo "Could not find an known environment with the name: $ENVIRONMENT_NAME"
+    exit 1
+    ;;
+esac
+
+function fetch_or_generate_key_and_csr {
+  local FILE_PREFIX=$1
+  local CSR_COMMON_NAME=$2
+  local CSR_SUBJECT="/C=GB/ST=Greater Manchester/L=Manchester/O=DfE/OU=Teaching Workforce Directorate/CN=$CSR_COMMON_NAME"
+
+  if [ -f "$FILE_PREFIX.key" ]; then
+    rm "$FILE_PREFIX.key"
+  fi
+
+  echo "Attempting to fetch key..."
+
+  if ! az keyvault secret download \
+    --vault-name $KEY_VAULT_NAME \
+    --name "${FILE_PREFIX}Key" \
+    --file "$FILE_PREFIX.key"
+  then
+    KEY_EXISTED=
+
+    echo "Generating key..."
+
+    openssl genrsa -out "$FILE_PREFIX-tmp.key" 2048
+    openssl pkcs8 -topk8 -inform PEM -outform PEM -nocrypt -in "$FILE_PREFIX-tmp.key" -out "$FILE_PREFIX.key"
+
+    rm "$FILE_PREFIX-tmp.key"
+  else
+    echo "Key found."
+
+    KEY_EXISTED=1
+  fi
+
+  if [ -f "$FILE_PREFIX.csr" ]; then
+    rm "$FILE_PREFIX.csr"
+  fi
+
+  echo "Attempting to fetch CSR..."
+
+  if ! az keyvault secret download \
+    --vault-name $KEY_VAULT_NAME \
+    --name "${FILE_PREFIX}Csr" \
+    --file "$FILE_PREFIX.csr"
+  then
+    CSR_EXISTED=
+
+    echo "Generating CSR..."
+
+    openssl req -new -batch -key "$FILE_PREFIX.key" -subj "$CSR_SUBJECT" -out "$FILE_PREFIX.csr"
+  else
+    echo "CSR found."
+
+    CSR_EXISTED=1
+  fi
+}
+
+function store_key_and_csr_and_challenge_phrase {
+  local FILE_PREFIX=$1
+  local CHALLENGE_PHRASE=$2
+
+  if ! [ "$KEY_EXISTED" ]; then
+    az keyvault secret set \
+      --vault-name $KEY_VAULT_NAME \
+      --name "${FILE_PREFIX}Key" \
+      --file "${FILE_PREFIX}.key"
+  fi
+
+  if ! [ "$CSR_EXISTED" ]; then
+    az keyvault secret set \
+      --vault-name $KEY_VAULT_NAME \
+      --name "${FILE_PREFIX}Csr" \
+      --file "${FILE_PREFIX}.csr"
+  fi
+
+  az keyvault secret set \
+    --vault-name $KEY_VAULT_NAME \
+    --name "${FILE_PREFIX}ChallengePhrase" \
+    --value "$CHALLENGE_PHRASE"
+}
+
+function request_cert {
+  local TYPE=$1
+  local FILE_PREFIX=$2
+  local CSR_COMMON_NAME=$3
+
+  echo "Fetching or generating $TYPE key and CSR..."
+  fetch_or_generate_key_and_csr "$FILE_PREFIX" "$CSR_COMMON_NAME"
+
+  if [ "$KEY_EXISTED" ]; then
+    echo "A $TYPE key already existed for $ENVIRONMENT_NAME version $VERSION_NUMBER."
+    read -rp "  Hit return to continue with the pre-existing key, or CTRL+C to stop."
+  fi
+
+  if [ "$CSR_EXISTED" ]; then
+    echo "A $TYPE CSR already existed for $ENVIRONMENT_NAME version $VERSION_NUMBER."
+    read -rp "  Hit return to continue with the pre-existing CSR, or CTRL+C to stop."
+  fi
+
+  echo "Now enrol the generated $TYPE CSR to Verify."
+
+  CHALLENGE_PHRASE=
+
+  while ! [ "$CHALLENGE_PHRASE" ]; do
+    read -rsp "  Enter the \"Challenge Phrase\" used in the enrollment request: " CHALLENGE_PHRASE
+    echo
+  done
+
+  echo "Storing $TYPE key, CSR, and challenge phrase in $KEY_VAULT_NAME..."
+  store_key_and_csr_and_challenge_phrase "$FILE_PREFIX" "$CHALLENGE_PHRASE"
+}
+
+if ! az account show > /dev/null; then
+  echo "Logging in to Azure..."
+  az login
+fi
+
+echo "Setting default Azure subscription to $AZURE_SUBSCRIPTION_ID..."
+az account set --subscription "$AZURE_SUBSCRIPTION_ID"
+
+SIGNING_FILE_PREFIX="TeacherPayments${ENVIRONMENT_SHORT_NAME}VspSamlSigning${VERSION_NUMBER}"
+SIGNING_CSR_COMMON_NAME="Teacher Payments Service $ENVIRONMENT_SHORT_NAME VSP SAML Signing $VERSION_NUMBER"
+
+ENCRYPTION_FILE_PREFIX="TeacherPayments${ENVIRONMENT_SHORT_NAME}VspSamlEncryption${VERSION_NUMBER}"
+ENCRYPTION_CSR_COMMON_NAME="Teacher Payments Service $ENVIRONMENT_SHORT_NAME VSP SAML Encryption $VERSION_NUMBER"
+
+echo
+request_cert signing "$SIGNING_FILE_PREFIX" "$SIGNING_CSR_COMMON_NAME"
+
+echo
+request_cert encryption "$ENCRYPTION_FILE_PREFIX" "$ENCRYPTION_CSR_COMMON_NAME"
+
+echo
+echo "Done!"
