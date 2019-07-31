@@ -135,9 +135,14 @@ if [ "$CSR_EXISTED" ]; then
 fi
 
 echo "Now enrol the generated signing CSR to Verify."
-read -rsp "  Enter the \"Challenge Phrase\" used in the request: " SIGNING_CHALLENGE_PHRASE
 
-echo
+SIGNING_CHALLENGE_PHRASE=
+
+while ! [ "$SIGNING_CHALLENGE_PHRASE" ]; do
+  read -rsp "  Enter the \"Challenge Phrase\" used in the request: " SIGNING_CHALLENGE_PHRASE
+  echo
+done
+
 echo "Storing signing key, CSR, and challenge phrase in $KEY_VAULT_NAME..."
 store_key_and_csr_and_challenge_phrase "$SIGNING_FILE_PREFIX" "$SIGNING_CHALLENGE_PHRASE"
 
@@ -159,9 +164,14 @@ if [ "$CSR_EXISTED" ]; then
 fi
 
 echo "Now enrol the generated encryption CSR to Verify."
-read -rsp "  Enter the \"Challenge Phrase\" used in the request: " ENCRYPTION_CHALLENGE_PHRASE
 
-echo
+ENCRYPTION_CHALLENGE_PHRASE=
+
+while ! [ "$ENCRYPTION_CHALLENGE_PHRASE" ]; do
+  read -rsp "  Enter the \"Challenge Phrase\" used in the request: " ENCRYPTION_CHALLENGE_PHRASE
+  echo
+done
+
 echo "Storing encryption key, CSR, and challenge phrase in $KEY_VAULT_NAME..."
 store_key_and_csr_and_challenge_phrase "$ENCRYPTION_FILE_PREFIX" "$ENCRYPTION_CHALLENGE_PHRASE"
 
