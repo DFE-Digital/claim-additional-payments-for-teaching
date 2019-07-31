@@ -157,13 +157,13 @@ echo
 echo "$SECRETS_RESOURCE_GROUP_NAME deployed!"
 echo
 
-KEY_VAULT_ID=$(fetch-azure-output-value "$SECRETS_DEPLOYMENT_RESULT" keyVaultId)
+MAIN_KEY_VAULT_ID=$(fetch-azure-output-value "$SECRETS_DEPLOYMENT_RESULT" mainKeyVaultId)
 
 ensure-resource-group-exists $APP_RESOURCE_GROUP_NAME
 
 echo "Rewriting app parameters file for $ENVIRONMENT_NAME..."
 sed \
-    -e "s|\${keyVaultId}|$KEY_VAULT_ID|g" \
+    -e "s|\${mainKeyVaultId}|$MAIN_KEY_VAULT_ID|g" \
     "$APP_PARAMETERS_TEMPLATE_FILE_PATH" \
   | ruby \
     -e "
@@ -210,7 +210,7 @@ if [ $DEPLOY_ALERTS ]; then
   echo "Rewriting alerts parameters file for $ENVIRONMENT_NAME..."
   sed \
     -e "s|\${appResourceGroupId}|$APP_RESOURCE_GROUP_NAME|g" \
-    -e "s|\${keyVaultId}|$KEY_VAULT_ID|g" \
+    -e "s|\${mainKeyVaultId}|$MAIN_KEY_VAULT_ID|g" \
     "$ALERTS_PARAMETERS_TEMPLATE_FILE_PATH" > "$ALERTS_PARAMETERS_FILE_PATH"
 
   echo "Starting alerts deployment..."
@@ -222,7 +222,7 @@ if [ $DEPLOY_ALERTS ]; then
     --parameters "$(
       filter-azure-outputs \
         "$SECRETS_DEPLOYMENT_RESULT" \
-        "['keyVaultId']" \
+        "['mainKeyVaultId']" \
         "{'resourceGroupId' => 'secretsResourceGroupId'}"
     )" \
     --parameters "$(

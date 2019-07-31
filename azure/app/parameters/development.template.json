@@ -17,7 +17,7 @@
     "databaseUsername": {
       "reference": {
         "keyVault": {
-          "id": "${keyVaultId}"
+          "id": "${mainKeyVaultId}"
         },
         "secretName": "DatabaseUsername"
       }
@@ -25,7 +25,7 @@
     "databasePassword": {
       "reference": {
         "keyVault": {
-          "id": "${keyVaultId}"
+          "id": "${mainKeyVaultId}"
         },
         "secretName": "DatabasePassword"
       }
@@ -33,7 +33,7 @@
     "alertEmailAddress": {
       "reference": {
         "keyVault": {
-          "id": "${keyVaultId}"
+          "id": "${mainKeyVaultId}"
         },
         "secretName": "AlertEmailAddress"
       }
@@ -41,7 +41,7 @@
     "SECRET_KEY_BASE": {
       "reference": {
         "keyVault": {
-          "id": "${keyVaultId}"
+          "id": "${mainKeyVaultId}"
         },
         "secretName": "SecretKeyBase"
       }
@@ -49,7 +49,7 @@
     "BASIC_AUTH_USERNAME": {
       "reference": {
         "keyVault": {
-          "id": "${keyVaultId}"
+          "id": "${mainKeyVaultId}"
         },
         "secretName": "BasicAuthUsername"
       }
@@ -57,7 +57,7 @@
     "BASIC_AUTH_PASSWORD": {
       "reference": {
         "keyVault": {
-          "id": "${keyVaultId}"
+          "id": "${mainKeyVaultId}"
         },
         "secretName": "BasicAuthPassword"
       }
@@ -65,7 +65,7 @@
     "DFE_SIGN_IN_ISSUER": {
       "reference": {
         "keyVault": {
-          "id": "${keyVaultId}"
+          "id": "${mainKeyVaultId}"
         },
         "secretName": "DfeSignInIssuer"
       }
@@ -73,7 +73,7 @@
     "DFE_SIGN_IN_IDENTIFIER": {
       "reference": {
         "keyVault": {
-          "id": "${keyVaultId}"
+          "id": "${mainKeyVaultId}"
         },
         "secretName": "DfeSignInIdentifier"
       }
@@ -81,7 +81,7 @@
     "DFE_SIGN_IN_SECRET": {
       "reference": {
         "keyVault": {
-          "id": "${keyVaultId}"
+          "id": "${mainKeyVaultId}"
         },
         "secretName": "DfeSignInSecret"
       }
@@ -89,7 +89,7 @@
     "DFE_SIGN_IN_REDIRECT_BASE_URL": {
       "reference": {
         "keyVault": {
-          "id": "${keyVaultId}"
+          "id": "${mainKeyVaultId}"
         },
         "secretName": "DfeSignInRedirectBaseUrl"
       }
@@ -97,7 +97,7 @@
     "DFE_SIGN_IN_API_CLIENT_ID": {
       "reference": {
         "keyVault": {
-          "id": "${keyVaultId}"
+          "id": "${mainKeyVaultId}"
         },
         "secretName": "DfeSignInApiClientId"
       }
@@ -105,7 +105,7 @@
     "DFE_SIGN_IN_API_SECRET": {
       "reference": {
         "keyVault": {
-          "id": "${keyVaultId}"
+          "id": "${mainKeyVaultId}"
         },
         "secretName": "DfeSignInApiSecret"
       }
@@ -113,7 +113,7 @@
     "DFE_SIGN_IN_API_ENDPOINT": {
       "reference": {
         "keyVault": {
-          "id": "${keyVaultId}"
+          "id": "${mainKeyVaultId}"
         },
         "secretName": "DfeSignInApiEndpoint"
       }
@@ -121,7 +121,7 @@
     "NOTIFY_API_KEY": {
       "reference": {
         "keyVault": {
-          "id": "${keyVaultId}"
+          "id": "${mainKeyVaultId}"
         },
         "secretName": "NotifyApiKey"
       }
@@ -129,7 +129,7 @@
     "NOTIFY_TEMPLATE_ID": {
       "reference": {
         "keyVault": {
-          "id": "${keyVaultId}"
+          "id": "${mainKeyVaultId}"
         },
         "secretName": "NotifyTemplateID"
       }
@@ -137,7 +137,7 @@
     "ROLLBAR_ACCESS_TOKEN": {
       "reference": {
         "keyVault": {
-          "id": "${keyVaultId}"
+          "id": "${mainKeyVaultId}"
         },
         "secretName": "RollbarAccessToken"
       }

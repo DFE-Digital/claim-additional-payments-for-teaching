@@ -5,7 +5,7 @@
     "alertEmailAddress": {
       "reference": {
         "keyVault": {
-          "id": "${keyVaultId}"
+          "id": "${mainKeyVaultId}"
         },
         "secretName": "AlertEmailAddress"
       }
