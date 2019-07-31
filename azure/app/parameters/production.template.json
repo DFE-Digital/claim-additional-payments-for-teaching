@@ -9,7 +9,7 @@
       "value": "additional-teaching-payment.education.gov.uk"
     },
     "appServiceCertificateSecretName": {
-      "value": "AppServiceCertificate"
+      "value": "sslCertificate-additional-teaching-payment-education-gov-uk"
     },
     "databaseName": {
       "value": "production"

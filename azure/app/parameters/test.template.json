@@ -9,7 +9,7 @@
       "value": "test.additional-teaching-payment.education.gov.uk"
     },
     "appServiceCertificateSecretName": {
-      "value": "AppServiceCertificate"
+      "value": "sslCertificate-wildcard-additional-teaching-payment-education-gov-uk"
     },
     "databaseName": {
       "value": "test"
