@@ -103,11 +103,36 @@ function store_key_and_csr_and_challenge_phrase {
     --value "$CHALLENGE_PHRASE"
 }
 
-SIGNING_FILE_PREFIX="TeacherPayments${ENVIRONMENT_SHORT_NAME}VspSamlSigning${VERSION_NUMBER}"
-SIGNING_CSR_COMMON_NAME="Teacher Payments Service $ENVIRONMENT_SHORT_NAME VSP SAML Signing $VERSION_NUMBER"
+function request_cert {
+  local TYPE=$1
+  local FILE_PREFIX=$2
+  local CSR_COMMON_NAME=$3
 
-ENCRYPTION_FILE_PREFIX="TeacherPayments${ENVIRONMENT_SHORT_NAME}VspSamlEncryption${VERSION_NUMBER}"
-ENCRYPTION_CSR_COMMON_NAME="Teacher Payments Service $ENVIRONMENT_SHORT_NAME VSP SAML Encryption $VERSION_NUMBER"
+  echo "Fetching or generating $TYPE key and CSR..."
+  fetch_or_generate_key_and_csr "$FILE_PREFIX" "$CSR_COMMON_NAME"
+
+  if [ "$KEY_EXISTED" ]; then
+    echo "A $TYPE key already existed for $ENVIRONMENT_NAME version $VERSION_NUMBER."
+    read -rp "  Hit return to continue with the pre-existing key, or CTRL+C to stop."
+  fi
+
+  if [ "$CSR_EXISTED" ]; then
+    echo "A $TYPE CSR already existed for $ENVIRONMENT_NAME version $VERSION_NUMBER."
+    read -rp "  Hit return to continue with the pre-existing CSR, or CTRL+C to stop."
+  fi
+
+  echo "Now enrol the generated $TYPE CSR to Verify."
+
+  CHALLENGE_PHRASE=
+
+  while ! [ "$CHALLENGE_PHRASE" ]; do
+    read -rsp "  Enter the \"Challenge Phrase\" used in the enrollment request: " CHALLENGE_PHRASE
+    echo
+  done
+
+  echo "Storing $TYPE key, CSR, and challenge phrase in $KEY_VAULT_NAME..."
+  store_key_and_csr_and_challenge_phrase "$FILE_PREFIX" "$CHALLENGE_PHRASE"
+}
 
 if ! az account show > /dev/null; then
   echo "Logging in to Azure..."
@@ -117,63 +142,17 @@ fi
 echo "Setting default Azure subscription to $AZURE_SUBSCRIPTION_ID..."
 az account set --subscription "$AZURE_SUBSCRIPTION_ID"
 
-echo
-echo "Fetching or generating signing key and CSR..."
-fetch_or_generate_key_and_csr "$SIGNING_FILE_PREFIX" "$SIGNING_CSR_COMMON_NAME"
-echo
+SIGNING_FILE_PREFIX="TeacherPayments${ENVIRONMENT_SHORT_NAME}VspSamlSigning${VERSION_NUMBER}"
+SIGNING_CSR_COMMON_NAME="Teacher Payments Service $ENVIRONMENT_SHORT_NAME VSP SAML Signing $VERSION_NUMBER"
 
-if [ "$KEY_EXISTED" ]; then
-  echo "A signing key already existed for $ENVIRONMENT_NAME version $VERSION_NUMBER."
-  echo "  Hit return to continue with the pre-existing key, or CTRL+C to stop."
-  read -r
-fi
-
-if [ "$CSR_EXISTED" ]; then
-  echo "A signing CSR already existed for $ENVIRONMENT_NAME version $VERSION_NUMBER."
-  echo "  Hit return to continue with the pre-existing CSR, or CTRL+C to stop."
-  read -r
-fi
-
-echo "Now enrol the generated signing CSR to Verify."
-
-SIGNING_CHALLENGE_PHRASE=
-
-while ! [ "$SIGNING_CHALLENGE_PHRASE" ]; do
-  read -rsp "  Enter the \"Challenge Phrase\" used in the request: " SIGNING_CHALLENGE_PHRASE
-  echo
-done
-
-echo "Storing signing key, CSR, and challenge phrase in $KEY_VAULT_NAME..."
-store_key_and_csr_and_challenge_phrase "$SIGNING_FILE_PREFIX" "$SIGNING_CHALLENGE_PHRASE"
+ENCRYPTION_FILE_PREFIX="TeacherPayments${ENVIRONMENT_SHORT_NAME}VspSamlEncryption${VERSION_NUMBER}"
+ENCRYPTION_CSR_COMMON_NAME="Teacher Payments Service $ENVIRONMENT_SHORT_NAME VSP SAML Encryption $VERSION_NUMBER"
 
 echo
-echo "Fetching or generating encryption key and CSR..."
-fetch_or_generate_key_and_csr "$ENCRYPTION_FILE_PREFIX" "$ENCRYPTION_CSR_COMMON_NAME"
+request_cert signing "$SIGNING_FILE_PREFIX" "$SIGNING_CSR_COMMON_NAME"
+
 echo
-
-if [ "$KEY_EXISTED" ]; then
-  echo "A encryption key already existed for $ENVIRONMENT_NAME version $VERSION_NUMBER."
-  echo "  Hit return to continue with the pre-existing key, or CTRL+C to stop."
-  read -r
-fi
-
-if [ "$CSR_EXISTED" ]; then
-  echo "A encryption CSR already existed for $ENVIRONMENT_NAME version $VERSION_NUMBER."
-  echo "  Hit return to continue with the pre-existing CSR, or CTRL+C to stop."
-  read -r
-fi
-
-echo "Now enrol the generated encryption CSR to Verify."
-
-ENCRYPTION_CHALLENGE_PHRASE=
-
-while ! [ "$ENCRYPTION_CHALLENGE_PHRASE" ]; do
-  read -rsp "  Enter the \"Challenge Phrase\" used in the request: " ENCRYPTION_CHALLENGE_PHRASE
-  echo
-done
-
-echo "Storing encryption key, CSR, and challenge phrase in $KEY_VAULT_NAME..."
-store_key_and_csr_and_challenge_phrase "$ENCRYPTION_FILE_PREFIX" "$ENCRYPTION_CHALLENGE_PHRASE"
+request_cert encryption "$ENCRYPTION_FILE_PREFIX" "$ENCRYPTION_CSR_COMMON_NAME"
 
 echo
 echo "Done!"
