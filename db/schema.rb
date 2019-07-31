@@ -70,7 +70,6 @@ ActiveRecord::Schema.define(version: 2019_07_29_143440) do
   end
 
   create_table "tslr_claims", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.integer "qts_award_year"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.uuid "claim_school_id"
