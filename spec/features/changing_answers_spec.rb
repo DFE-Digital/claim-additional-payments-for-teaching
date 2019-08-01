@@ -234,4 +234,28 @@ RSpec.feature "Changing the answers on a submittable claim" do
     expect(claim.student_loan_start_date).to eq StudentLoans::BEFORE_1_SEPT_2012
     expect(claim.student_loan_plan).to eq StudentLoans::PLAN_1
   end
+
+  context "with a field that can be verified" do
+    context "when the answer has come from Verify" do
+      before do
+        claim.verified_fields = ["gender"]
+        visit claim_path("check-your-answers")
+      end
+
+      scenario "user cannot change their answer" do
+        expect(page).to_not have_selector(:css, "a[href='#{claim_path("gender")}']")
+      end
+    end
+
+    context "when the answer has been manually completed" do
+      before do
+        claim.verified_fields = []
+        visit claim_path("check-your-answers")
+      end
+
+      scenario "user can change their answer" do
+        expect(page).to have_selector(:css, "a[href='#{claim_path("gender")}']")
+      end
+    end
+  end
 end
