@@ -33,7 +33,7 @@ bin/azure-deploy development
 This creates (if one does not already exist) a KeyVault (where all application
 secrets are added) and applies any new changes to the Azure CIP infrastructure.
 
-### Deploying to test or production
+### Deploying to production or test
 
 Before deploying to production or test, you need to be added to the production
 or test subscription as a contributor. These permissions are transient and
