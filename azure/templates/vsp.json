@@ -1,0 +1,90 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "appServicePlanName": {
+      "type": "string"
+    },
+    "appServiceName": {
+      "type": "string"
+    },
+    "appServiceRuntimeStack": {
+      "type": "string"
+    },
+    "appServiceAlwaysOn": {
+      "type": "bool"
+    },
+    "VERIFY_ENVIRONMENT": {
+      "type": "string"
+    },
+    "SERVICE_ENTITY_IDS": {
+      "type": "string"
+    },
+    "SAML_SIGNING_KEY": {
+      "type": "securestring"
+    },
+    "SAML_PRIMARY_ENCRYPTION_KEY": {
+      "type": "securestring"
+    }
+  },
+  "variables": {
+    "deploymentUrlBase": "https://raw.githubusercontent.com/DFE-Digital/bat-platform-building-blocks/master/templates/",
+
+    "appServicePlanDeploymentName": "[concat(deployment().name, '-app-service-plan')]"
+  },
+  "resources": [
+    {
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2017-05-10",
+      "name": "[variables('appServicePlanDeploymentName')]",
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[concat(variables('deploymentUrlBase'), 'app-service-plan.json')]",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "appServicePlanName": {
+            "value": "[parameters('appServicePlanName')]"
+          }
+        }
+      }
+    },
+    {
+      "type": "Microsoft.Web/sites",
+      "apiVersion": "2016-08-01",
+      "name": "[parameters('appServiceName')]",
+      "kind": "app,linux,container",
+      "location": "[resourceGroup().location]",
+      "dependsOn": ["[resourceId('Microsoft.Resources/deployments', variables('appServicePlanDeploymentName'))]"],
+      "properties": {
+        "httpsOnly": true,
+        "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', parameters('appServicePlanName'))]",
+        "siteConfig": {
+          "alwaysOn": "[parameters('appServiceAlwaysOn')]",
+          "httpLoggingEnabled": true,
+          "linuxFxVersion": "[parameters('appServiceRuntimeStack')]",
+          "appSettings": [
+            {
+              "name": "VERIFY_ENVIRONMENT",
+              "value": "[parameters('VERIFY_ENVIRONMENT')]"
+            },
+            {
+              "name": "SERVICE_ENTITY_IDS",
+              "value": "[parameters('SERVICE_ENTITY_IDS')]"
+            },
+            {
+              "name": "SAML_SIGNING_KEY",
+              "value": "[parameters('SAML_SIGNING_KEY')]"
+            },
+            {
+              "name": "SAML_PRIMARY_ENCRYPTION_KEY",
+              "value": "[parameters('SAML_PRIMARY_ENCRYPTION_KEY')]"
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "outputs": {}
+}

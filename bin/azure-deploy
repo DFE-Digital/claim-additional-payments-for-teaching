@@ -103,7 +103,8 @@ while [ "$2" ]; do
   shift
 done
 
-SCRIPT_PATH=$( cd "$( dirname "$0" )" ; pwd -P )
+GIT_COMMIT_HASH=$(git rev-parse --verify HEAD)
+SCRIPT_PATH=$(cd "$(dirname "$0")" ; pwd -P)
 
 RESOURCE_LOCATION="West Europe"
 
@@ -192,6 +193,7 @@ APP_DEPLOYMENT_RESULT=$(
     --resource-group "$APP_RESOURCE_GROUP_NAME" \
     --template-file "$APP_TEMPLATE_FILE_PATH" \
     --parameters "@$APP_PARAMETERS_FILE_PATH" \
+    --parameters "gitCommitHash=$GIT_COMMIT_HASH" \
     --parameters "secretsResourceGroupName=$SECRETS_RESOURCE_GROUP_NAME" \
     --parameters "$(
       filter-azure-outputs \
