@@ -50,18 +50,18 @@ In local development mode, nothing needs to be done here.
 
 #### Requesting certificates
 
-For non-production (integration) environments (`development` and `test`) and
-production environments (`production`), we need to request certificates from
-Verify. The following will guide you though the process of generating and
-enrolling certificate requests.
+For non-production (integration) environments (`development`) and production
+environments (`production`), we need to request certificates from Verify. The
+following will guide you though the process of generating and enrolling
+certificate requests.
 
 ```bash
 bin/request-vsp-certs <environment> <version>
 ```
 
-Where `<environment>` is one of `development` or `production` (we reuse
-`development` certs for the `test` environment) and `<version>` is an integer,
-usually 1 higher than the version of the certificates currently in use.
+Where `<environment>` is one of `development` or `production` and `<version>` is
+an integer, usually 1 higher than the version of the certificates currently in
+use.
 
 When `bin/request-vsp-certs` refers to "enrolling" the requests, follow the
 process detailed in the section "2. Submit certificate signing requests" in the
