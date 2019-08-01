@@ -48,6 +48,8 @@ In local development mode, nothing needs to be done here.
 
 ### Live environments
 
+#### Requesting certificates
+
 For non-production (integration) environments (`development` and `test`) and
 production environments (`production`), we need to request certificates from
 Verify. The following will guide you though the process of generating and
@@ -75,5 +77,18 @@ Integration certificates expire after 2 years, while production certificates
 expire after 6 months. See the
 [Verify docs for how to rotate keys](https://www.docs.verify.service.gov.uk/maintain-your-connection/rotate-keys/)
 for more information. `bin/request-vsp-certs` will probably be helpful.
+
+#### Importing certificates
+
+Once we get certificates back from Verify, we want to store them in the Key
+Vault alongside the keys and requests. Run the following to automate that
+process.
+
+```bash
+bin/import-vsp-certs <environment> <version>
+```
+
+Where `<environment>` and `<version>` match the values used to generate the
+certificate request above.
 
 [openjdk]: https://adoptopenjdk.net/
