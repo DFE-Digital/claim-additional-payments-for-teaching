@@ -162,7 +162,7 @@
         "keyVault": {
           "id": "${keyVaultId}"
         },
-        "secretName": "VspSamlSigningKey"
+        "secretName": "TeacherPaymentsDevVspSamlSigning2KeyBase64"
       }
     },
     "VSP.SAML_PRIMARY_ENCRYPTION_KEY": {
@@ -170,7 +170,7 @@
         "keyVault": {
           "id": "${keyVaultId}"
         },
-        "secretName": "VspSamlPrimaryEncryptionKey"
+        "secretName": "TeacherPaymentsDevVspSamlEncryption2KeyBase64"
       }
     }
   }
