@@ -34,7 +34,7 @@ module Verify
       uri = URI(self.class.generate_request_url)
       request = Net::HTTP::Post.new(uri, {})
       request.content_type = "application/json"
-      response = Net::HTTP.start(uri.hostname, uri.port) { |http| http.request(request) }
+      response = Net::HTTP.start(uri.hostname, uri.port, use_ssl: uri_uses_ssl?(uri)) { |http| http.request(request) }
 
       handle_response response.body
     end
@@ -62,7 +62,7 @@ module Verify
       request = Net::HTTP::Post.new(uri)
       request.body = {"samlResponse" => saml_response, "requestId" => request_id, "levelOfAssurance" => level_of_assurance}.to_json
       request.content_type = "application/json"
-      response = Net::HTTP.start(uri.hostname, uri.port) { |http| http.request(request) }
+      response = Net::HTTP.start(uri.hostname, uri.port, use_ssl: uri_uses_ssl?(uri)) { |http| http.request(request) }
 
       handle_response response.body
     end
@@ -73,6 +73,10 @@ module Verify
       JSON.parse(json_response).tap do |parameters|
         raise ResponseError.new(parameters["message"], parameters["code"]) if parameters.key?("code")
       end
+    end
+
+    def uri_uses_ssl?(uri)
+      uri.port == 443
     end
   end
 end
