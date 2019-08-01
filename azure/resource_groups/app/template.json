@@ -397,6 +397,7 @@
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2017-05-10",
       "name": "[variables('vspDeploymentName')]",
+      "dependsOn": ["[resourceId('Microsoft.Web/sites', variables('appServiceName'))]"],
       "properties": {
         "mode": "Incremental",
         "templateLink": {
@@ -415,6 +416,9 @@
           },
           "appServiceAlwaysOn": {
             "value": "[parameters('appServiceAlwaysOn')]"
+          },
+          "appServiceAllowedIngressIpAddresses": {
+            "value": "[split(reference(resourceId('Microsoft.Web/sites', variables('appServiceName'))).possibleOutboundIpAddresses, ',')]"
           },
           "VERIFY_ENVIRONMENT": {
             "value": "[parameters('VSP.VERIFY_ENVIRONMENT')]"

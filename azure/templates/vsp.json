@@ -14,6 +14,9 @@
     "appServiceAlwaysOn": {
       "type": "bool"
     },
+    "appServiceAllowedIngressIpAddresses": {
+      "type": "array"
+    },
     "VERIFY_ENVIRONMENT": {
       "type": "string"
     },
@@ -80,6 +83,16 @@
             {
               "name": "SAML_PRIMARY_ENCRYPTION_KEY",
               "value": "[parameters('SAML_PRIMARY_ENCRYPTION_KEY')]"
+            }
+          ],
+          "copy": [
+            {
+              "name": "ipSecurityRestrictions",
+              "count": "[length(parameters('appServiceAllowedIngressIpAddresses'))]",
+              "input": {
+                "ipAddress": "[last(take(parameters('appServiceAllowedIngressIpAddresses'), copyIndex('ipSecurityRestrictions', 1)))]",
+                "action": "Allow"
+              }
             }
           ]
         }
