@@ -107,17 +107,17 @@ SCRIPT_PATH=$( cd "$( dirname "$0" )" ; pwd -P )
 
 RESOURCE_LOCATION="West Europe"
 
-SECRETS_TEMPLATE_FILE_PATH="$SCRIPT_PATH/../azure/secrets/template.json"
-SECRETS_PARAMETERS_FILE_PATH="$SCRIPT_PATH/../azure/secrets/parameters/$ENVIRONMENT_NAME.json"
+SECRETS_TEMPLATE_FILE_PATH="$SCRIPT_PATH/../azure/resource_groups/secrets/template.json"
+SECRETS_PARAMETERS_FILE_PATH="$SCRIPT_PATH/../azure/resource_groups/secrets/parameters/$ENVIRONMENT_NAME.json"
 
-APP_TEMPLATE_FILE_PATH="$SCRIPT_PATH/../azure/app/template.json"
-APP_DOCKER_COMPOSE_TEMPLATE_FILE_PATH="$SCRIPT_PATH/../azure/app/files/docker-compose.template.yml"
-APP_PARAMETERS_TEMPLATE_FILE_PATH="$SCRIPT_PATH/../azure/app/parameters/$ENVIRONMENT_NAME.template.json"
-APP_PARAMETERS_FILE_PATH="$SCRIPT_PATH/../azure/app/parameters/$ENVIRONMENT_NAME.json"
+APP_TEMPLATE_FILE_PATH="$SCRIPT_PATH/../azure/resource_groups/app/template.json"
+APP_DOCKER_COMPOSE_TEMPLATE_FILE_PATH="$SCRIPT_PATH/../azure/resource_groups/app/files/docker-compose.template.yml"
+APP_PARAMETERS_TEMPLATE_FILE_PATH="$SCRIPT_PATH/../azure/resource_groups/app/parameters/$ENVIRONMENT_NAME.template.json"
+APP_PARAMETERS_FILE_PATH="$SCRIPT_PATH/../azure/resource_groups/app/parameters/$ENVIRONMENT_NAME.json"
 
-ALERTS_TEMPLATE_FILE_PATH="$SCRIPT_PATH/../azure/alerts/template.json"
-ALERTS_PARAMETERS_TEMPLATE_FILE_PATH="$SCRIPT_PATH/../azure/alerts/parameters/$ENVIRONMENT_NAME.template.json"
-ALERTS_PARAMETERS_FILE_PATH="$SCRIPT_PATH/../azure/alerts/parameters/$ENVIRONMENT_NAME.json"
+ALERTS_TEMPLATE_FILE_PATH="$SCRIPT_PATH/../azure/resource_groups/alerts/template.json"
+ALERTS_PARAMETERS_TEMPLATE_FILE_PATH="$SCRIPT_PATH/../azure/resource_groups/alerts/parameters/$ENVIRONMENT_NAME.template.json"
+ALERTS_PARAMETERS_FILE_PATH="$SCRIPT_PATH/../azure/resource_groups/alerts/parameters/$ENVIRONMENT_NAME.json"
 
 if [ $LOGIN_TO_AZURE ] && ! az account show > /dev/null; then
   echo "Logging in..."
