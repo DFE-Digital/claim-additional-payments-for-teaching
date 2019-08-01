@@ -42,9 +42,6 @@ describe ClaimsHelper do
       )
 
       expected_answers = [
-        [I18n.t("tslr.questions.full_name"), "Jo Bloggs", nil],
-        [I18n.t("tslr.questions.address"), "Flat 1, 1 Test Road, Test Town, AB1 2CD", nil],
-        [I18n.t("tslr.questions.date_of_birth"), I18n.l(20.years.ago.to_date), nil],
         [I18n.t("tslr.questions.teacher_reference_number"), "1234567", "teacher-reference-number"],
         [I18n.t("tslr.questions.national_insurance_number"), "QQ123456C", "national-insurance-number"],
         [I18n.t("tslr.questions.email_address"), "test@email.com", "email-address"],

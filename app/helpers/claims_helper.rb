@@ -24,9 +24,6 @@ module ClaimsHelper
 
   def identity_answers(claim)
     [
-      [t("tslr.questions.full_name"), claim.full_name, nil],
-      [t("tslr.questions.address"), claim.address, nil],
-      [t("tslr.questions.date_of_birth"), l(claim.date_of_birth), nil],
       [t("tslr.questions.teacher_reference_number"), claim.teacher_reference_number, "teacher-reference-number"],
       [t("tslr.questions.national_insurance_number"), claim.national_insurance_number, "national-insurance-number"],
       [t("tslr.questions.email_address"), claim.email_address, "email-address"],
