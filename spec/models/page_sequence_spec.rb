@@ -44,6 +44,15 @@ RSpec.describe PageSequence do
         expect(page_sequence.slugs).to include("student-loan-start-date")
       end
     end
+
+    it "excludes the gender page if a response has been returned from Verify" do
+      claim.verified_fields = ["gender"]
+      page_sequence = PageSequence.new(claim, "student-loan-country")
+      expect(page_sequence.slugs).to_not include("gender")
+
+      claim.verified_fields = []
+      expect(page_sequence.slugs).to include("gender")
+    end
   end
 
   describe "#next_slug" do
