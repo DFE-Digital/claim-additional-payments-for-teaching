@@ -194,6 +194,12 @@ APP_DEPLOYMENT_RESULT=$(
     --resource-group "$APP_RESOURCE_GROUP_NAME" \
     --template-file "$APP_TEMPLATE_FILE_PATH" \
     --parameters "@$APP_PARAMETERS_FILE_PATH" \
+    --parameters "secretsResourceGroupName=$SECRETS_RESOURCE_GROUP_NAME" \
+    --parameters "$(
+      filter-azure-outputs \
+        "$SECRETS_DEPLOYMENT_RESULT" \
+        "['keyVaultName']"
+    )" \
     --mode Complete \
     --verbose
 )

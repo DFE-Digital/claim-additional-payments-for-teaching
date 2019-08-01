@@ -8,6 +8,9 @@
     "appServiceHostName": {
       "value": "development.additional-teaching-payment.education.gov.uk"
     },
+    "appServiceCertificateSecretName": {
+      "value": "sslCertificate-wildcard-additional-teaching-payment-education-gov-uk"
+    },
     "databaseName": {
       "value": "development"
     },
