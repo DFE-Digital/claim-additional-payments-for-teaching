@@ -155,20 +155,10 @@
       "value": "PRODUCTION"
     },
     "VSP.SAML_SIGNING_KEY": {
-      "reference": {
-        "keyVault": {
-          "id": "${keyVaultId}"
-        },
-        "secretName": "VspSamlSigningKey"
-      }
+      "value": ""
     },
     "VSP.SAML_PRIMARY_ENCRYPTION_KEY": {
-      "reference": {
-        "keyVault": {
-          "id": "${keyVaultId}"
-        },
-        "secretName": "VspSamlPrimaryEncryptionKey"
-      }
+      "value": ""
     }
   }
 }
