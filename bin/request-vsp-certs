@@ -56,6 +56,33 @@ function fetch_or_generate_key_and_csr {
     KEY_EXISTED=1
   fi
 
+  if [ -f "$FILE_PREFIX.key.base64" ]; then
+    rm "$FILE_PREFIX.key.base64"
+  fi
+
+  echo "Attempting to fetch base64 encoded key..."
+
+  if ! az keyvault secret download \
+    --vault-name $KEY_VAULT_NAME \
+    --name "${FILE_PREFIX}KeyBase64" \
+    --file "$FILE_PREFIX.key.base64"
+  then
+    BASE64_KEY_EXISTED=
+
+    echo "Converting base64 encoded key..."
+    
+    sed \
+        -e "s|-----BEGIN PRIVATE KEY-----||g" \
+        -e "s|-----END PRIVATE KEY-----||g" \
+        "$FILE_PREFIX.key" \
+      | tr -d '\n' \
+      > "$FILE_PREFIX.key.base64"
+  else
+    echo "Base64 encoded key found."
+
+    BASE64_KEY_EXISTED=1
+  fi
+
   if [ -f "$FILE_PREFIX.csr" ]; then
     rm "$FILE_PREFIX.csr"
   fi
@@ -88,6 +115,13 @@ function store_key_and_csr_and_challenge_phrase {
       --vault-name $KEY_VAULT_NAME \
       --name "${FILE_PREFIX}Key" \
       --file "${FILE_PREFIX}.key"
+  fi
+
+  if ! [ "$KEY_EXISTED" ] || ! [ "$BASE64_KEY_EXISTED" ]; then
+    az keyvault secret set \
+      --vault-name $KEY_VAULT_NAME \
+      --name "${FILE_PREFIX}KeyBase64" \
+      --file "${FILE_PREFIX}.key.base64"
   fi
 
   if ! [ "$CSR_EXISTED" ]; then

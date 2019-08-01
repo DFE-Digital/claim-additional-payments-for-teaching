@@ -44,16 +44,19 @@ case $ENVIRONMENT_NAME in
     SUBSCRIPTION_ID="8655985a-2f87-44d7-a541-0be9a8c2779d"
     RESOURCE_GROUP_PREFIX="s118d01"
     DOCKER_IMAGE_TAG="development"
+    VSP_DOCKER_IMAGE_TAG="20190729.3"
     ;;
   "test")
     SUBSCRIPTION_ID="e9299169-9666-4f15-9da9-5332680145af"
     RESOURCE_GROUP_PREFIX="s118t01"
     DOCKER_IMAGE_TAG="test"
+    VSP_DOCKER_IMAGE_TAG="20190729.3"
     ;;
   "production")
     SUBSCRIPTION_ID="88bd392f-df19-458b-a100-22b4429060ed"
     RESOURCE_GROUP_PREFIX="s118p01"
     DOCKER_IMAGE_TAG="production"
+    VSP_DOCKER_IMAGE_TAG="20190729.3"
     ;;
   *)
     echo "Could not find an known environment with the name: $ENVIRONMENT_NAME"
@@ -164,6 +167,7 @@ ensure-resource-group-exists $APP_RESOURCE_GROUP_NAME
 echo "Rewriting app parameters file for $ENVIRONMENT_NAME..."
 sed \
     -e "s|\${keyVaultId}|$KEY_VAULT_ID|g" \
+    -e "s|\${vspDockerImageTag}|$VSP_DOCKER_IMAGE_TAG|g" \
     "$APP_PARAMETERS_TEMPLATE_FILE_PATH" \
   | ruby \
     -e "

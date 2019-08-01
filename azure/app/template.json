@@ -21,6 +21,9 @@
     "appServiceCertificateSecretName": {
       "type": "string"
     },
+    "vspAppServiceDockerImage": {
+      "type": "string"
+    },
     "appServiceAlwaysOn": {
       "type": "bool",
       "defaultValue": true
@@ -86,6 +89,18 @@
     },
     "ROLLBAR_ENV": {
       "type": "string"
+    },
+    "GOVUK_VERIFY_ENABLED": {
+      "type": "string"
+    },
+    "VSP.VERIFY_ENVIRONMENT": {
+      "type": "string"
+    },
+    "VSP.SAML_SIGNING_KEY": {
+      "type": "securestring"
+    },
+    "VSP.SAML_PRIMARY_ENCRYPTION_KEY": {
+      "type": "securestring"
     }
   },
   "variables": {
@@ -97,10 +112,17 @@
     "databaseServerDeploymentName": "[concat(parameters('resourceNamePrefix'), '-database-server')]",
     "databaseDeploymentName": "[concat(parameters('resourceNamePrefix'), '-database')]",
     "storageAccountDeploymentName": "[concat(parameters('resourceNamePrefix'), '-storage-account')]",
+    "vspAppServicePlanDeploymentName": "[concat(parameters('resourceNamePrefix'), '-vsp-app-service-plan')]",
 
     "storageAccountName": "[replace(concat(parameters('resourceNamePrefix'), 'storage'), '-', '')]",
 
     "databaseServerName": "[concat(parameters('resourceNamePrefix'), '-db')]",
+
+    "vspAppServicePlanName": "[concat(parameters('resourceNamePrefix'), '-vsp-asp')]",
+    "vspAppServicePlanId": "[resourceId('Microsoft.Web/serverfarms', variables('vspAppServicePlanName'))]",
+
+    "vspAppServiceName": "[concat(parameters('resourceNamePrefix'), '-vsp-as')]",
+    "vspAppServiceRuntimeStack": "[concat('DOCKER|', parameters('vspAppServiceDockerImage'))]",
 
     "appServicePlanName": "[concat(parameters('resourceNamePrefix'), '-asp')]",
 
@@ -193,6 +215,59 @@
         }
       }
     },
+
+    {
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2017-05-10",
+      "name": "[variables('vspAppServicePlanDeploymentName')]",
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[concat(variables('deploymentUrlBase'), 'app-service-plan.json')]",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "appServicePlanName": {
+            "value": "[variables('vspAppServicePlanName')]"
+          }
+        }
+      }
+    },
+    {
+      "type": "Microsoft.Web/sites",
+      "apiVersion": "2016-08-01",
+      "name": "[variables('vspAppServiceName')]",
+      "kind": "app,linux,container",
+      "location": "[resourceGroup().location]",
+      "dependsOn": ["[variables('vspAppServicePlanDeploymentName')]"],
+      "properties": {
+        "httpsOnly": true,
+        "serverFarmId": "[variables('vspAppServicePlanId')]",
+        "siteConfig": {
+          "alwaysOn": "[parameters('appServiceAlwaysOn')]",
+          "httpLoggingEnabled": true,
+          "linuxFxVersion": "[variables('vspAppServiceRuntimeStack')]",
+          "appSettings": [
+            {
+              "name": "VERIFY_ENVIRONMENT",
+              "value": "[parameters('VSP.VERIFY_ENVIRONMENT')]"
+            },
+            {
+              "name": "SERVICE_ENTITY_IDS",
+              "value": "[string(createArray(parameters('appServiceHostName')))]"
+            },
+            {
+              "name": "SAML_SIGNING_KEY",
+              "value": "[parameters('VSP.SAML_SIGNING_KEY')]"
+            },
+            {
+              "name": "SAML_PRIMARY_ENCRYPTION_KEY",
+              "value": "[parameters('VSP.SAML_PRIMARY_ENCRYPTION_KEY')]"
+            }
+          ]
+        }
+      }
+    },
     {
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2017-05-10",
@@ -229,7 +304,9 @@
         "[resourceId('Microsoft.Resources/deployments', variables('appServiceCertificateDeploymentName'))]",
         "[resourceId('Microsoft.Resources/deployments', variables('appServicePlanDeploymentName'))]",
         "[resourceId('Microsoft.Resources/deployments', variables('databaseDeploymentName'))]",
-        "[resourceId('Microsoft.Resources/deployments', variables('databaseServerDeploymentName'))]"
+        "[resourceId('Microsoft.Resources/deployments', variables('databaseServerDeploymentName'))]",
+        "[resourceId('Microsoft.Resources/deployments', variables('vspAppServicePlanDeploymentName'))]",
+        "[resourceId('Microsoft.Web/sites', variables('vspAppServiceName'))]"
       ],
       "properties": {
         "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', variables('appServicePlanName'))]",
@@ -318,6 +395,14 @@
             {
               "name": "ROLLBAR_ENV",
               "value": "[parameters('ROLLBAR_ENV')]"
+            },
+            {
+              "name": "GOVUK_VERIFY_ENABLED",
+              "value": "[parameters('GOVUK_VERIFY_ENABLED')]"
+            },
+            {
+              "name": "GOVUK_VERIFY_VSP_HOST",
+              "value": "[concat('https://', reference(resourceId('Microsoft.Web/sites', variables('vspAppServiceName'))).defaultHostName)]"
             }
           ]
         }

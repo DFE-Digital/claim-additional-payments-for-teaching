@@ -11,6 +11,9 @@
     "appServiceCertificateSecretName": {
       "value": "sslCertificate-additional-teaching-payment-education-gov-uk"
     },
+    "vspAppServiceDockerImage": {
+      "value": "dfedigital/teacher-payments-service-verify:${vspDockerImageTag}"
+    },
     "databaseName": {
       "value": "production"
     },
@@ -144,6 +147,18 @@
     },
     "ROLLBAR_ENV": {
       "value": "production"
+    },
+    "GOVUK_VERIFY_ENABLED": {
+      "value": ""
+    },
+    "VSP.VERIFY_ENVIRONMENT": {
+      "value": "PRODUCTION"
+    },
+    "VSP.SAML_SIGNING_KEY": {
+      "value": ""
+    },
+    "VSP.SAML_PRIMARY_ENCRYPTION_KEY": {
+      "value": ""
     }
   }
 }

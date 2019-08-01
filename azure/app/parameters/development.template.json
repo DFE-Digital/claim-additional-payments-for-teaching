@@ -11,6 +11,9 @@
     "appServiceCertificateSecretName": {
       "value": "sslCertificate-wildcard-additional-teaching-payment-education-gov-uk"
     },
+    "vspAppServiceDockerImage": {
+      "value": "dfedigital/teacher-payments-service-verify:${vspDockerImageTag}"
+    },
     "databaseName": {
       "value": "development"
     },
@@ -147,6 +150,28 @@
     },
     "ROLLBAR_ENV": {
       "value": "development"
+    },
+    "GOVUK_VERIFY_ENABLED": {
+      "value": "1"
+    },
+    "VSP.VERIFY_ENVIRONMENT": {
+      "value": "INTEGRATION"
+    },
+    "VSP.SAML_SIGNING_KEY": {
+      "reference": {
+        "keyVault": {
+          "id": "${keyVaultId}"
+        },
+        "secretName": "TeacherPaymentsDevVspSamlSigning2KeyBase64"
+      }
+    },
+    "VSP.SAML_PRIMARY_ENCRYPTION_KEY": {
+      "reference": {
+        "keyVault": {
+          "id": "${keyVaultId}"
+        },
+        "secretName": "TeacherPaymentsDevVspSamlEncryption2KeyBase64"
+      }
     }
   }
 }
