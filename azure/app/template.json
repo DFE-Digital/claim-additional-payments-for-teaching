@@ -215,7 +215,6 @@
         }
       }
     },
-
     {
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2017-05-10",
@@ -239,7 +238,7 @@
       "name": "[variables('vspAppServiceName')]",
       "kind": "app,linux,container",
       "location": "[resourceGroup().location]",
-      "dependsOn": ["[variables('vspAppServicePlanDeploymentName')]"],
+      "dependsOn": ["[resourceId('Microsoft.Resources/deployments', variables('vspAppServicePlanDeploymentName'))]"],
       "properties": {
         "httpsOnly": true,
         "serverFarmId": "[variables('vspAppServicePlanId')]",
