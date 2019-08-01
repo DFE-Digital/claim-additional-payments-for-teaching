@@ -111,6 +111,7 @@ en:
       address_line_4: "Address 4"
       postcode: "Postcode"
       date_of_birth: "Date of Birth"
+      gender: "Gender"
       teacher_reference_number: "Teacher Reference"
       national_insurance_number: "NI Number"
       student_loan_repayment_plan: "Student Loan Repayment Plan"
