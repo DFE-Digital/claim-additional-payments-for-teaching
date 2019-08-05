@@ -24,12 +24,15 @@
     "appServiceCertificateSecretName": {
       "type": "string"
     },
-    "vspAppServiceDockerImage": {
-      "type": "string"
-    },
     "appServiceAlwaysOn": {
       "type": "bool",
       "defaultValue": true
+    },
+    "vspAppServiceDockerImage": {
+      "type": "string"
+    },
+    "verifyHubPossibleOutboundIpAddresses": {
+      "type": "array"
     },
     "databaseName": {
       "type": "string"
@@ -418,7 +421,7 @@
             "value": "[parameters('appServiceAlwaysOn')]"
           },
           "appServiceAllowedIngressIpAddresses": {
-            "value": "[split(reference(resourceId('Microsoft.Web/sites', variables('appServiceName'))).possibleOutboundIpAddresses, ',')]"
+            "value": "[union(split(reference(resourceId('Microsoft.Web/sites', variables('appServiceName'))).possibleOutboundIpAddresses, ','), parameters('verifyHubPossibleOutboundIpAddresses'))]"
           },
           "VERIFY_ENVIRONMENT": {
             "value": "[parameters('VSP.VERIFY_ENVIRONMENT')]"

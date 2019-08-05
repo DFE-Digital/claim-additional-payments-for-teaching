@@ -14,6 +14,9 @@
     "vspAppServiceDockerImage": {
       "value": "dfedigital/teacher-payments-service-verify:${vspDockerImageTag}"
     },
+    "verifyHubPossibleOutboundIpAddresses": {
+      "value": ["18.130.47.107", "18.130.64.77", "35.176.149.113"]
+    },
     "databaseName": {
       "value": "production"
     },

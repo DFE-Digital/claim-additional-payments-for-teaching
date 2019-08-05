@@ -11,14 +11,17 @@
     "appServiceCertificateSecretName": {
       "value": "sslCertificate-wildcard-additional-teaching-payment-education-gov-uk"
     },
+    "appServiceAlwaysOn": {
+      "value": false
+    },
     "vspAppServiceDockerImage": {
       "value": "dfedigital/teacher-payments-service-verify:${vspDockerImageTag}"
     },
+    "verifyHubPossibleOutboundIpAddresses": {
+      "value": ["35.176.130.173", "18.130.112.6", "3.8.225.78"]
+    },
     "databaseName": {
       "value": "development"
-    },
-    "appServiceAlwaysOn": {
-      "value": false
     },
     "databaseUsername": {
       "reference": {
