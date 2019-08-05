@@ -103,7 +103,7 @@ while [ "$2" ]; do
   shift
 done
 
-GIT_COMMIT_HASH=$(git rev-parse --verify HEAD)
+GIT_COMMIT_HASH=${GIT_COMMIT_HASH:-$(git rev-parse --verify HEAD)}
 SCRIPT_PATH=$(cd "$(dirname "$0")" ; pwd -P)
 
 RESOURCE_LOCATION="West Europe"
