@@ -247,6 +247,7 @@
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2017-05-10",
       "name": "[variables('appServiceCertificateDeploymentName')]",
+      "dependsOn": ["[resourceId('Microsoft.Resources/deployments', variables('appServicePlanDeploymentName'))]"],
       "properties": {
         "mode": "Incremental",
         "templateLink": {
@@ -277,7 +278,6 @@
       "location": "[resourceGroup().location]",
       "dependsOn": [
         "[resourceId('Microsoft.Resources/deployments', variables('applicationInsightsDeploymentName'))]",
-        "[resourceId('Microsoft.Resources/deployments', variables('appServiceCertificateDeploymentName'))]",
         "[resourceId('Microsoft.Resources/deployments', variables('appServicePlanDeploymentName'))]",
         "[resourceId('Microsoft.Resources/deployments', variables('databaseDeploymentName'))]",
         "[resourceId('Microsoft.Resources/deployments', variables('databaseServerDeploymentName'))]"
@@ -391,7 +391,10 @@
       "apiVersion": "2018-11-01",
       "name": "[concat(variables('appServiceName'), '/', parameters('appServiceHostName'))]",
       "location": "[resourceGroup().location]",
-      "dependsOn": ["[resourceId('Microsoft.Web/sites', variables('appServiceName'))]"],
+      "dependsOn": [
+        "[resourceId('Microsoft.Resources/deployments', variables('appServiceCertificateDeploymentName'))]",
+        "[resourceId('Microsoft.Web/sites', variables('appServiceName'))]"
+      ],
       "properties": {
         "sslState": "SniEnabled",
         "thumbprint": "[reference(resourceId('Microsoft.Resources/deployments', variables('appServiceCertificateDeploymentName')), '2018-11-01').outputs.certificateThumbprint.value]"
