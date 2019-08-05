@@ -76,7 +76,7 @@ module Verify
     end
 
     def uri_uses_ssl?(uri)
-      uri.port == 443
+      uri.default_port == 443
     end
   end
 end
