@@ -44,12 +44,12 @@
   "variables": {
     "deploymentUrlBase": "[concat('https://raw.githubusercontent.com/DFE-Digital/dfe-teachers-payment-service/', parameters('gitCommitHash'), '/azure/templates/')]",
 
-    "appAlertsDeploymentName": "[concat(parameters('resourceNamePrefix'), '-alerts-app')]",
-    "vspAlertsDeploymentName": "[concat(parameters('resourceNamePrefix'), '-alerts-vsp')]",
+    "appAlertsDeploymentName": "[concat(parameters('resourceNamePrefix'), '-app')]",
+    "vspAlertsDeploymentName": "[concat(parameters('resourceNamePrefix'), '-vsp')]",
 
-    "alertActionGroupName": "[concat(parameters('resourceNamePrefix'), '-alerts-ag')]",
+    "alertActionGroupName": "[concat(parameters('resourceNamePrefix'), '-ag')]",
 
-    "alertNamePrefix": "[concat(parameters('resourceNamePrefix'), '-alerts')]",
+    "alertNamePrefix": "[parameters('resourceNamePrefix')]",
 
     "serviceHealthAlertName": "[concat(variables('alertNamePrefix'), '-service-health')]",
 
