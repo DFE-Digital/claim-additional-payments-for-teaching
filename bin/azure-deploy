@@ -70,6 +70,7 @@ ALERTS_DEPLOYMENT_NAME=$ALERTS_RESOURCE_GROUP_NAME
 LOGIN_TO_AZURE=1
 CONFIRM_BEFORE_DEPLOY=1
 DEPLOY_ALERTS=1
+EXTRA_APP_DEPLOYMENT_OPTIONS=()
 
 while [ "$2" ]; do
   case $2 in
@@ -89,6 +90,7 @@ while [ "$2" ]; do
     "--tmp-app")
       APP_RESOURCE_GROUP_NAME="$APP_RESOURCE_GROUP_NAME-tmp"
       APP_DEPLOYMENT_NAME="$APP_DEPLOYMENT_NAME-tmp"
+      EXTRA_APP_DEPLOYMENT_OPTIONS+=(--parameters "useAppServiceHostName=false")
       ;;
     "--tmp-alerts")
       ALERTS_RESOURCE_GROUP_NAME="$ALERTS_RESOURCE_GROUP_NAME-tmp"
@@ -200,6 +202,7 @@ APP_DEPLOYMENT_RESULT=$(
         "$SECRETS_DEPLOYMENT_RESULT" \
         "['keyVaultName']"
     )" \
+    "${EXTRA_APP_DEPLOYMENT_OPTIONS[@]}" \
     --mode Complete \
     --verbose
 )
