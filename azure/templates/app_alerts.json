@@ -1,0 +1,172 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "alertNamePrefix": {
+      "type": "string"
+    },
+    "actionGroupId": {
+      "type": "string"
+    },
+    "appServiceId": {
+      "type": "string"
+    },
+    "appServicePlanId": {
+      "type": "string"
+    }
+  },
+  "variables": {
+    "appServiceName": "[last(split(parameters('appServiceId'), '/'))]",
+    "appServiceAlertPrefix": "[concat(parameters('alertNamePrefix'), '-', variables('appServiceName'))]",
+    "appServiceHighResponseTimeAlertName": "[concat(variables('appServiceAlertPrefix'), '-high-response-time')]",
+    "appServiceHttpServerErrorAlertName": "[concat(variables('appServiceAlertPrefix'), '-http-server-error')]",
+
+    "appServicePlanName": "[last(split(parameters('appServicePlanId'), '/'))]",
+    "appServicePlanAlertPrefix": "[concat(parameters('alertNamePrefix'), '-', variables('appServicePlanName'))]",
+    "appServicePlanHighCpuAlertName": "[concat(variables('appServicePlanAlertPrefix'), '-high-cpu')]",
+    "appServicePlanHighMemoryAlertName": "[concat(variables('appServicePlanAlertPrefix'), '-high-memory')]"
+  },
+  "resources": [
+    {
+      "type": "Microsoft.Insights/metricAlerts",
+      "apiVersion": "2018-03-01",
+      "name": "[variables('appServiceHighResponseTimeAlertName')]",
+      "location": "global",
+      "properties": {
+        "scopes": ["[parameters('appServiceId')]"],
+        "enabled": true,
+        "description": "[concat('Alert when average response times for ', variables('appServiceName'), ' are greater than 2 seconds.')]",
+        "severity": 1,
+        "evaluationFrequency": "PT1M",
+        "windowSize": "PT5M",
+        "targetResourceType": "Microsoft.Web/sites",
+        "targetResourceRegion": "[resourceGroup().location]",
+        "criteria": {
+          "odata.type": "Microsoft.Azure.Monitor.SingleResourceMultipleMetricCriteria",
+          "allOf": [
+            {
+              "criterionType": "StaticThresholdCriterion",
+              "name": "high-response-time",
+              "metricNamespace": "Microsoft.Web/sites",
+              "metricName": "AverageResponseTime",
+              "operator": "GreaterThan",
+              "threshold": 2,
+              "timeAggregation": "Average"
+            }
+          ]
+        },
+        "actions": [
+          {
+            "actionGroupId": "[parameters('actionGroupId')]"
+          }
+        ]
+      }
+    },
+    {
+      "type": "Microsoft.Insights/metricAlerts",
+      "apiVersion": "2018-03-01",
+      "name": "[variables('appServiceHttpServerErrorAlertName')]",
+      "location": "global",
+      "properties": {
+        "scopes": ["[parameters('appServiceId')]"],
+        "enabled": true,
+        "description": "[concat('Alert when any HTTP server errors occur for ', variables('appServiceName'), '.')]",
+        "severity": 1,
+        "evaluationFrequency": "PT1M",
+        "windowSize": "PT1M",
+        "targetResourceType": "Microsoft.Web/sites",
+        "targetResourceRegion": "[resourceGroup().location]",
+        "criteria": {
+          "odata.type": "Microsoft.Azure.Monitor.SingleResourceMultipleMetricCriteria",
+          "allOf": [
+            {
+              "criterionType": "StaticThresholdCriterion",
+              "name": "http-server-error",
+              "metricNamespace": "Microsoft.Web/sites",
+              "metricName": "Http5xx",
+              "operator": "GreaterThan",
+              "threshold": 1,
+              "timeAggregation": "Total"
+            }
+          ]
+        },
+        "actions": [
+          {
+            "actionGroupId": "[parameters('actionGroupId')]"
+          }
+        ]
+      }
+    },
+    {
+      "type": "Microsoft.Insights/metricAlerts",
+      "apiVersion": "2018-03-01",
+      "name": "[variables('appServicePlanHighCpuAlertName')]",
+      "location": "global",
+      "properties": {
+        "scopes": ["[parameters('appServicePlanId')]"],
+        "enabled": true,
+        "description": "[concat('Alert when average CPU utilization for ', variables('appServicePlanName'), ' is greater than 80%.')]",
+        "severity": 1,
+        "evaluationFrequency": "PT1M",
+        "windowSize": "PT5M",
+        "targetResourceType": "Microsoft.Web/serverfarms",
+        "targetResourceRegion": "[resourceGroup().location]",
+        "criteria": {
+          "odata.type": "Microsoft.Azure.Monitor.SingleResourceMultipleMetricCriteria",
+          "allOf": [
+            {
+              "criterionType": "StaticThresholdCriterion",
+              "name": "high-cpu",
+              "metricNamespace": "Microsoft.Web/serverfarms",
+              "metricName": "CpuPercentage",
+              "operator": "GreaterThan",
+              "threshold": 80,
+              "timeAggregation": "Average"
+            }
+          ]
+        },
+        "actions": [
+          {
+            "actionGroupId": "[parameters('actionGroupId')]"
+          }
+        ]
+      }
+    },
+    {
+      "type": "Microsoft.Insights/metricAlerts",
+      "apiVersion": "2018-03-01",
+      "name": "[variables('appServicePlanHighMemoryAlertName')]",
+      "location": "global",
+      "properties": {
+        "scopes": ["[parameters('appServicePlanId')]"],
+        "enabled": true,
+        "description": "[concat('Alert when average memory utilization for ', variables('appServicePlanName'), ' is greater than 80%.')]",
+        "severity": 1,
+        "evaluationFrequency": "PT1M",
+        "windowSize": "PT5M",
+        "targetResourceType": "Microsoft.Web/serverfarms",
+        "targetResourceRegion": "[resourceGroup().location]",
+        "criteria": {
+          "odata.type": "Microsoft.Azure.Monitor.SingleResourceMultipleMetricCriteria",
+          "allOf": [
+            {
+              "criterionType": "StaticThresholdCriterion",
+              "name": "high-memory",
+              "metricNamespace": "Microsoft.Web/serverfarms",
+              "metricName": "MemoryPercentage",
+              "operator": "GreaterThan",
+              "threshold": 80,
+              "timeAggregation": "Average"
+            }
+          ]
+        },
+        "actions": [
+          {
+            "actionGroupId": "[parameters('actionGroupId')]"
+          }
+        ]
+      }
+    }
+  ],
+  "outputs": {}
+}
