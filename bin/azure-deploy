@@ -225,6 +225,7 @@ if [ $DEPLOY_ALERTS ]; then
     --resource-group "$ALERTS_RESOURCE_GROUP_NAME" \
     --template-file "$ALERTS_TEMPLATE_FILE_PATH" \
     --parameters "@$ALERTS_PARAMETERS_FILE_PATH" \
+    --parameters "gitCommitHash=$GIT_COMMIT_HASH" \
     --parameters "$(
       filter-azure-outputs \
         "$SECRETS_DEPLOYMENT_RESULT" \
@@ -234,7 +235,7 @@ if [ $DEPLOY_ALERTS ]; then
     --parameters "$(
       filter-azure-outputs \
         "$APP_DEPLOYMENT_RESULT" \
-        "['appServiceId', 'appServicePlanId', 'databaseServerId']" \
+        "['appServiceId', 'appServicePlanId', 'databaseServerId', 'vspAppServiceId', 'vspAppServicePlanId']" \
         "{'resourceGroupId' => 'appResourceGroupId'}"
     )" \
     --mode Complete \
