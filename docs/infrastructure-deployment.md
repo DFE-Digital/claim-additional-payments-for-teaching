@@ -66,6 +66,18 @@ Where `<environment>` is the environment you want to deploy to.
 This script runs in the same way as the development deployment. Once the script
 has finished running the changes will be applied to your environment!
 
+## Testing deployment
+
+If you want to test changes to infrastructure with minimal impact to existing
+environments, `bin/azure-deploy` has `--tmp-*` arguments for each resource group
+(e.g. `--tmp-app`), which deploys a new resource group with a `-tmp` suffix.
+
+Deployments rely on having web access to the current version of the Git
+repository (they attempt to fetch the current commit hash from GitHub). To test
+changes, you'll need to push them up to GitHub in a work in progress commit
+before running `bin/azure-deploy`. **Beware of accidentally pushing up secrets
+when doing this.**
+
 [azure]: https://azure.microsoft.com/en-gb/
 [iac]: https://en.wikipedia.org/wiki/Infrastructure_as_code
 [arm]: https://azure.microsoft.com/en-gb/resources/templates/

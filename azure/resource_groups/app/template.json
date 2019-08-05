@@ -6,6 +6,9 @@
       "type": "string",
       "defaultValue": "[resourceGroup().name]"
     },
+    "gitCommitHash": {
+      "type": "string"
+    },
     "secretsResourceGroupName": {
       "type": "string"
     },
@@ -21,12 +24,15 @@
     "appServiceCertificateSecretName": {
       "type": "string"
     },
-    "vspAppServiceDockerImage": {
-      "type": "string"
-    },
     "appServiceAlwaysOn": {
       "type": "bool",
       "defaultValue": true
+    },
+    "vspAppServiceDockerImage": {
+      "type": "string"
+    },
+    "verifyHubPossibleOutboundIpAddresses": {
+      "type": "array"
     },
     "databaseName": {
       "type": "string"
@@ -104,7 +110,8 @@
     }
   },
   "variables": {
-    "deploymentUrlBase": "https://raw.githubusercontent.com/DFE-Digital/bat-platform-building-blocks/master/templates/",
+    "batPlatformDeploymentUrlBase": "https://raw.githubusercontent.com/DFE-Digital/bat-platform-building-blocks/master/templates/",
+    "deploymentUrlBase": "[concat('https://raw.githubusercontent.com/DFE-Digital/dfe-teachers-payment-service/', parameters('gitCommitHash'), '/azure/templates/')]",
 
     "appServiceCertificateDeploymentName": "[concat(parameters('resourceNamePrefix'), '-app-service-certificate')]",
     "appServicePlanDeploymentName": "[concat(parameters('resourceNamePrefix'), '-app-service-plan')]",
@@ -112,22 +119,20 @@
     "databaseServerDeploymentName": "[concat(parameters('resourceNamePrefix'), '-database-server')]",
     "databaseDeploymentName": "[concat(parameters('resourceNamePrefix'), '-database')]",
     "storageAccountDeploymentName": "[concat(parameters('resourceNamePrefix'), '-storage-account')]",
-    "vspAppServicePlanDeploymentName": "[concat(parameters('resourceNamePrefix'), '-vsp-app-service-plan')]",
+    "vspDeploymentName": "[concat(parameters('resourceNamePrefix'), '-vsp')]",
 
     "storageAccountName": "[replace(concat(parameters('resourceNamePrefix'), 'storage'), '-', '')]",
 
     "databaseServerName": "[concat(parameters('resourceNamePrefix'), '-db')]",
 
-    "vspAppServicePlanName": "[concat(parameters('resourceNamePrefix'), '-vsp-asp')]",
-    "vspAppServicePlanId": "[resourceId('Microsoft.Web/serverfarms', variables('vspAppServicePlanName'))]",
-
-    "vspAppServiceName": "[concat(parameters('resourceNamePrefix'), '-vsp-as')]",
-    "vspAppServiceRuntimeStack": "[concat('DOCKER|', parameters('vspAppServiceDockerImage'))]",
-
     "appServicePlanName": "[concat(parameters('resourceNamePrefix'), '-asp')]",
 
     "appServiceName": "[concat(parameters('resourceNamePrefix'), '-as')]",
-    "appServiceRuntimeStack": "[concat('COMPOSE|', base64(parameters('appServiceDockerCompose')))]"
+    "appServiceRuntimeStack": "[concat('COMPOSE|', base64(parameters('appServiceDockerCompose')))]",
+
+    "vspAppServicePlanName": "[concat(parameters('resourceNamePrefix'), '-vsp-asp')]",
+    "vspAppServiceName": "[concat(parameters('resourceNamePrefix'), '-vsp-as')]",
+    "vspAppServiceRuntimeStack": "[concat('DOCKER|', parameters('vspAppServiceDockerImage'))]"
   },
   "resources": [
     {
@@ -137,7 +142,7 @@
       "properties": {
         "mode": "Incremental",
         "templateLink": {
-          "uri": "[concat(variables('deploymentUrlBase'), 'storage-account.json')]",
+          "uri": "[concat(variables('batPlatformDeploymentUrlBase'), 'storage-account.json')]",
           "contentVersion": "1.0.0.0"
         },
         "parameters": {
@@ -155,7 +160,7 @@
       "properties": {
         "mode": "Incremental",
         "templateLink": {
-          "uri": "[concat(variables('deploymentUrlBase'), 'postgresql-server.json')]",
+          "uri": "[concat(variables('batPlatformDeploymentUrlBase'), 'postgresql-server.json')]",
           "contentVersion": "1.0.0.0"
         },
         "parameters": {
@@ -185,7 +190,7 @@
       "properties": {
         "mode": "Incremental",
         "templateLink": {
-          "uri": "[concat(variables('deploymentUrlBase'), 'postgresql-database.json')]",
+          "uri": "[concat(variables('batPlatformDeploymentUrlBase'), 'postgresql-database.json')]",
           "contentVersion": "1.0.0.0"
         },
         "parameters": {
@@ -205,66 +210,13 @@
       "properties": {
         "mode": "Incremental",
         "templateLink": {
-          "uri": "[concat(variables('deploymentUrlBase'), 'app-service-plan.json')]",
+          "uri": "[concat(variables('batPlatformDeploymentUrlBase'), 'app-service-plan.json')]",
           "contentVersion": "1.0.0.0"
         },
         "parameters": {
           "appServicePlanName": {
             "value": "[variables('appServicePlanName')]"
           }
-        }
-      }
-    },
-
-    {
-      "type": "Microsoft.Resources/deployments",
-      "apiVersion": "2017-05-10",
-      "name": "[variables('vspAppServicePlanDeploymentName')]",
-      "properties": {
-        "mode": "Incremental",
-        "templateLink": {
-          "uri": "[concat(variables('deploymentUrlBase'), 'app-service-plan.json')]",
-          "contentVersion": "1.0.0.0"
-        },
-        "parameters": {
-          "appServicePlanName": {
-            "value": "[variables('vspAppServicePlanName')]"
-          }
-        }
-      }
-    },
-    {
-      "type": "Microsoft.Web/sites",
-      "apiVersion": "2016-08-01",
-      "name": "[variables('vspAppServiceName')]",
-      "kind": "app,linux,container",
-      "location": "[resourceGroup().location]",
-      "dependsOn": ["[variables('vspAppServicePlanDeploymentName')]"],
-      "properties": {
-        "httpsOnly": true,
-        "serverFarmId": "[variables('vspAppServicePlanId')]",
-        "siteConfig": {
-          "alwaysOn": "[parameters('appServiceAlwaysOn')]",
-          "httpLoggingEnabled": true,
-          "linuxFxVersion": "[variables('vspAppServiceRuntimeStack')]",
-          "appSettings": [
-            {
-              "name": "VERIFY_ENVIRONMENT",
-              "value": "[parameters('VSP.VERIFY_ENVIRONMENT')]"
-            },
-            {
-              "name": "SERVICE_ENTITY_IDS",
-              "value": "[string(createArray(concat('https://', parameters('appServiceHostName'))))]"
-            },
-            {
-              "name": "SAML_SIGNING_KEY",
-              "value": "[parameters('VSP.SAML_SIGNING_KEY')]"
-            },
-            {
-              "name": "SAML_PRIMARY_ENCRYPTION_KEY",
-              "value": "[parameters('VSP.SAML_PRIMARY_ENCRYPTION_KEY')]"
-            }
-          ]
         }
       }
     },
@@ -275,7 +227,7 @@
       "properties": {
         "mode": "Incremental",
         "templateLink": {
-          "uri": "[concat(variables('deploymentUrlBase'), 'app-service-certificate.json')]",
+          "uri": "[concat(variables('batPlatformDeploymentUrlBase'), 'app-service-certificate.json')]",
           "contentVersion": "1.0.0.0"
         },
         "parameters": {
@@ -304,9 +256,7 @@
         "[resourceId('Microsoft.Resources/deployments', variables('appServiceCertificateDeploymentName'))]",
         "[resourceId('Microsoft.Resources/deployments', variables('appServicePlanDeploymentName'))]",
         "[resourceId('Microsoft.Resources/deployments', variables('databaseDeploymentName'))]",
-        "[resourceId('Microsoft.Resources/deployments', variables('databaseServerDeploymentName'))]",
-        "[resourceId('Microsoft.Resources/deployments', variables('vspAppServicePlanDeploymentName'))]",
-        "[resourceId('Microsoft.Web/sites', variables('vspAppServiceName'))]"
+        "[resourceId('Microsoft.Resources/deployments', variables('databaseServerDeploymentName'))]"
       ],
       "properties": {
         "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', variables('appServicePlanName'))]",
@@ -402,7 +352,7 @@
             },
             {
               "name": "GOVUK_VERIFY_VSP_HOST",
-              "value": "[concat('https://', reference(resourceId('Microsoft.Web/sites', variables('vspAppServiceName'))).defaultHostName)]"
+              "value": "[concat('https://', variables('vspAppServiceName'), '.azurewebsites.net')]"
             }
           ]
         }
@@ -430,7 +380,7 @@
       "properties": {
         "mode": "Incremental",
         "templateLink": {
-          "uri": "[concat(variables('deploymentUrlBase'),'postgresql-server-firewall-rules.json')]",
+          "uri": "[concat(variables('batPlatformDeploymentUrlBase'),'postgresql-server-firewall-rules.json')]",
           "contentVersion": "1.0.0.0"
         },
         "parameters": {
@@ -442,6 +392,48 @@
           },
           "serverName": {
             "value": "[variables('databaseServerName')]"
+          }
+        }
+      }
+    },
+    {
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2017-05-10",
+      "name": "[variables('vspDeploymentName')]",
+      "dependsOn": ["[resourceId('Microsoft.Web/sites', variables('appServiceName'))]"],
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[concat(variables('deploymentUrlBase'), 'vsp.json')]",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "appServicePlanName": {
+            "value": "[variables('vspAppServicePlanName')]"
+          },
+          "appServiceName": {
+            "value": "[variables('vspAppServiceName')]"
+          },
+          "appServiceRuntimeStack": {
+            "value": "[variables('vspAppServiceRuntimeStack')]"
+          },
+          "appServiceAlwaysOn": {
+            "value": "[parameters('appServiceAlwaysOn')]"
+          },
+          "appServiceAllowedIngressIpAddresses": {
+            "value": "[union(split(reference(resourceId('Microsoft.Web/sites', variables('appServiceName'))).possibleOutboundIpAddresses, ','), parameters('verifyHubPossibleOutboundIpAddresses'))]"
+          },
+          "VERIFY_ENVIRONMENT": {
+            "value": "[parameters('VSP.VERIFY_ENVIRONMENT')]"
+          },
+          "SERVICE_ENTITY_IDS": {
+            "value": "[string(createArray(concat('https://', parameters('appServiceHostName'))))]"
+          },
+          "SAML_SIGNING_KEY": {
+            "value": "[parameters('VSP.SAML_SIGNING_KEY')]"
+          },
+          "SAML_PRIMARY_ENCRYPTION_KEY": {
+            "value": "[parameters('VSP.SAML_PRIMARY_ENCRYPTION_KEY')]"
           }
         }
       }
