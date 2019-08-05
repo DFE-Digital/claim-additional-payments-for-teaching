@@ -455,6 +455,14 @@
     "appServiceId": {
       "type": "string",
       "value": "[resourceId('Microsoft.Web/sites', variables('appServiceName'))]"
+    },
+    "vspAppServicePlanId": {
+      "type": "string",
+      "value": "[reference(resourceId('Microsoft.Resources/deployments', variables('vspDeploymentName'))).outputs.appServicePlanId.value]"
+    },
+    "vspAppServiceId": {
+      "type": "string",
+      "value": "[reference(resourceId('Microsoft.Resources/deployments', variables('vspDeploymentName'))).outputs.appServiceId.value]"
     }
   }
 }
