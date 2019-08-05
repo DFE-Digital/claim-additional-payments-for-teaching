@@ -55,7 +55,7 @@ gem "bootsnap", ">= 1.1.0", require: false
 gem "jwt"
 
 # Send app telemetry to Azure Application Insights
-gem "application_insights"
+gem "application_insights", git: "https://github.com/microsoft/ApplicationInsights-Ruby.git", ref: "5db6b4ad65262d23f26b678143a4a1fd7939e5c2"
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
