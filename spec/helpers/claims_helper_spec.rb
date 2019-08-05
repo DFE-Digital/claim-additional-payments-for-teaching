@@ -3,15 +3,16 @@ require "rails_helper"
 describe ClaimsHelper do
   describe "#claim_answers" do
     it "returns an array of questions and answers for displaying to the user for review" do
-      school = create(:school)
-      claim = TslrClaim.create(
-        qts_award_year: "2013_2014",
+      school = schools(:penistone_grammar_school)
+      claim = build(
+        :tslr_claim,
         claim_school: school,
         current_school: school,
         chemistry_taught: true,
         physics_taught: true,
         mostly_teaching_eligible_subjects: true,
         student_loan_repayment_amount: 1987.65,
+        eligibility_attributes: {qts_award_year: "2013_2014"},
       )
 
       expected_answers = [
@@ -29,7 +30,8 @@ describe ClaimsHelper do
 
   describe "#identity_answers" do
     it "returns an array of questions and answers for displaying to the user for review" do
-      claim = TslrClaim.create(
+      claim = build(
+        :tslr_claim,
         full_name: "Jo Bloggs",
         address_line_1: "Flat 1",
         address_line_2: "1 Test Road",
@@ -37,7 +39,7 @@ describe ClaimsHelper do
         postcode: "AB1 2CD",
         date_of_birth: 20.years.ago.to_date,
         teacher_reference_number: "1234567",
-        national_insurance_number: "QQ 12 34 56 C",
+        national_insurance_number: "QQ123456C",
         email_address: "test@email.com",
       )
 
@@ -55,10 +57,7 @@ describe ClaimsHelper do
 
     describe "#payment_answers" do
       it "returns an array of questions and answers for displaying to the user for review" do
-        claim = TslrClaim.create(
-          bank_sort_code: "12 34 56",
-          bank_account_number: "12 34 56 78",
-        )
+        claim = create(:tslr_claim, bank_sort_code: "12 34 56", bank_account_number: "12 34 56 78")
 
         expected_answers = [
           ["Bank sort code", "123456", "bank-details"],
@@ -72,7 +71,8 @@ describe ClaimsHelper do
 
   describe "#student_loan_answers" do
     it "returns an array of question and answers for the student loan questions" do
-      claim = TslrClaim.new(
+      claim = build(
+        :tslr_claim,
         has_student_loan: true,
         student_loan_country: StudentLoans::ENGLAND,
         student_loan_courses: :one_course,
@@ -90,7 +90,8 @@ describe ClaimsHelper do
     end
 
     it "adjusts the loan start date question and answer according to the number of courses answer" do
-      claim = TslrClaim.new(
+      claim = build(
+        :tslr_claim,
         has_student_loan: true,
         student_loan_country: StudentLoans::ENGLAND,
         student_loan_courses: :two_or_more_courses,
@@ -108,10 +109,7 @@ describe ClaimsHelper do
     end
 
     it "excludes unanswered questions" do
-      claim = TslrClaim.new(
-        has_student_loan: true,
-        student_loan_country: StudentLoans::SCOTLAND,
-      )
+      claim = build(:tslr_claim, has_student_loan: true, student_loan_country: StudentLoans::SCOTLAND)
 
       expected_answers = [
         [t("tslr.questions.has_student_loan"), "Yes", "student-loan"],
@@ -139,6 +137,16 @@ describe ClaimsHelper do
       it "returns a comma separated list with a final 'and'" do
         expect(list).to eq("Biology, Chemistry and Physics")
       end
+    end
+  end
+
+  describe "#academic_years" do
+    it "returns a string showing the date range for the academic year based on the qts_award_year input" do
+      expect(helper.academic_years("2012_2013")).to eq "September 1 2012 - August 31 2013"
+    end
+
+    it "doesn't fall over if the qts_award_year has not been set yet" do
+      expect(helper.academic_years(nil)).to be_nil
     end
   end
 end

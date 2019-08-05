@@ -1,9 +1,10 @@
 FactoryBot.define do
   factory :tslr_claim do
+    association(:eligibility, factory: :student_loans_eligibility)
+
     trait :submittable do
       claim_school { School.find(ActiveRecord::FixtureSet.identify(:penistone_grammar_school, :uuid)) }
       current_school { claim_school }
-      qts_award_year { "2013_2014" }
       employment_status { :claim_school }
       physics_taught { true }
       mostly_teaching_eligible_subjects { true }
@@ -23,6 +24,8 @@ FactoryBot.define do
       email_address { "test@email.com" }
       bank_sort_code { 123456 }
       bank_account_number { 12345678 }
+
+      association(:eligibility, factory: [:student_loans_eligibility, :submittable])
     end
 
     trait :submitted do

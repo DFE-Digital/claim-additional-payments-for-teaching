@@ -12,7 +12,7 @@ class ClaimsController < ApplicationController
   end
 
   def create
-    claim = TslrClaim.create!
+    claim = TslrClaim.create!(eligibility: StudentLoans::Eligibility.new)
     session[:tslr_claim_id] = claim.to_param
 
     redirect_to claim_path("qts-year")
@@ -62,7 +62,6 @@ class ClaimsController < ApplicationController
 
   def claim_params
     params.fetch(:tslr_claim, {}).permit(
-      :qts_award_year,
       :claim_school_id,
       :employment_status,
       :current_school_id,
@@ -84,7 +83,8 @@ class ClaimsController < ApplicationController
       :email_address,
       :bank_sort_code,
       :bank_account_number,
-      TslrClaim::SUBJECT_FIELDS
+      TslrClaim::SUBJECT_FIELDS,
+      eligibility_attributes: [:qts_award_year],
     )
   end
 

@@ -3,24 +3,24 @@
     {
       "warning_type": "File Access",
       "warning_code": 16,
-      "fingerprint": "986bcf3b3075cf77a2c4b4b4d382be6fb3d5233bd0c9b943bfd3274bc4099145",
+      "fingerprint": "4b211194d02b7ce69b81b6f7f9232bf911beaf094d9cb272098d62f31bc9f983",
       "check_name": "SendFile",
       "message": "Model attribute used in file name",
       "file": "app/controllers/admin/claims_controller.rb",
       "line": 7,
       "link": "https://brakemanscanner.org/docs/warning_types/file_access/",
-      "code": "send_file(TslrClaimsCsv.new(TslrClaim.includes(:claim_school, :current_school).submitted.order(:submitted_at)).file, :type => \"text/csv\", :filename => \"claims.csv\")",
+      "code": "send_file(TslrClaimsCsv.new(TslrClaim.includes(:claim_school, :current_school, :eligibility).submitted.order(:submitted_at)).file, :type => \"text/csv\", :filename => \"claims.csv\")",
       "render_path": null,
       "location": {
         "type": "method",
         "class": "Admin::ClaimsController",
         "method": "index"
       },
-      "user_input": "TslrClaim.includes(:claim_school, :current_school).submitted",
+      "user_input": "TslrClaim.includes(:claim_school, :current_school, :eligibility).submitted",
       "confidence": "Weak",
       "note": ""
     }
   ],
-  "updated": "2019-06-27 17:40:58 +0100",
-  "brakeman_version": "4.5.1"
+  "updated": "2019-07-30 11:24:07 +0100",
+  "brakeman_version": "4.6.1"
 }

@@ -1,17 +1,8 @@
 require "rails_helper"
 
 RSpec.feature "Choosing subjects taught during Teacher Student Loan Repayments claims" do
-  let(:school) { School.find(ActiveRecord::FixtureSet.identify(:penistone_grammar_school, :uuid)) }
-  let(:claim) do
-    create(:tslr_claim,
-      claim_school: school,
-      current_school: school,
-      qts_award_year: "2013_2014",
-      employment_status: :claim_school)
-  end
-
   before do
-    allow_any_instance_of(ClaimsController).to receive(:current_claim) { claim }
+    start_tslr_claim
     visit claim_path("subjects-taught")
   end
 

@@ -187,7 +187,7 @@ RSpec.describe ClaimUpdate do
     end
   end
 
-  describe "changing the answer to the student_loan_country question" do
+  describe "changing the answer to the student_loan question" do
     let(:claim) do
       create(
         :tslr_claim,
