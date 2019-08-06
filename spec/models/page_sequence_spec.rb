@@ -77,4 +77,24 @@ RSpec.describe PageSequence do
       end
     end
   end
+
+  describe "in_sequence?" do
+    let(:page_sequence) { PageSequence.new(claim, "gender") }
+
+    context "when the page is not in the sequence" do
+      before do
+        claim.verified_fields = ["gender"]
+      end
+
+      it { expect(page_sequence.in_sequence?("gender")).to eq(false) }
+    end
+
+    context "when the page is in the sequence" do
+      before do
+        claim.verified_fields = []
+      end
+
+      it { expect(page_sequence.in_sequence?("gender")).to eq(true) }
+    end
+  end
 end

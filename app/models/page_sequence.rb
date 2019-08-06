@@ -58,6 +58,10 @@ class PageSequence
     slugs[current_slug_index + 1]
   end
 
+  def in_sequence?(slug)
+    slugs.include?(slug)
+  end
+
   private
 
   def current_slug_index

@@ -5,6 +5,7 @@ class ClaimsController < ApplicationController
   before_action :send_unstarted_claiments_to_the_start, only: [:show, :update, :ineligible]
   before_action :end_expired_sessions
   before_action :update_last_seen_at
+  before_action :check_page_is_in_sequence, only: [:show, :update]
 
   after_action :clear_claim_session, if: :submission_complete?
 
@@ -45,7 +46,7 @@ class ClaimsController < ApplicationController
   end
 
   def next_slug
-    PageSequence.new(current_claim, params[:slug]).next_slug
+    page_sequence.next_slug
   end
 
   def submission_complete?
@@ -110,5 +111,13 @@ class ClaimsController < ApplicationController
     session.delete(:tslr_claim_id)
     session.delete(:last_seen_at)
     session.delete(:verify_request_id)
+  end
+
+  def check_page_is_in_sequence
+    raise ActionController::RoutingError.new("Not Found") unless page_sequence.in_sequence?(params[:slug])
+  end
+
+  def page_sequence
+    @page_sequence ||= PageSequence.new(current_claim, params[:slug])
   end
 end

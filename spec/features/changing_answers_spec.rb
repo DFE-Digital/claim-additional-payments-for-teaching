@@ -244,6 +244,10 @@ RSpec.feature "Changing the answers on a submittable claim" do
 
       scenario "user cannot change their answer" do
         expect(page).to_not have_selector(:css, "a[href='#{claim_path("gender")}']")
+
+        expect {
+          visit claim_path("gender")
+        }.to raise_error(ActionController::RoutingError)
       end
     end
 
@@ -255,6 +259,12 @@ RSpec.feature "Changing the answers on a submittable claim" do
 
       scenario "user can change their answer" do
         expect(page).to have_selector(:css, "a[href='#{claim_path("gender")}']")
+
+        find("a[href='#{claim_path("gender")}']").click
+        choose "I don't know"
+        click_on "Continue"
+
+        expect(claim.reload.gender).to eq("dont_know")
       end
     end
   end
