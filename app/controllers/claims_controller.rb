@@ -73,6 +73,7 @@ class ClaimsController < ApplicationController
       :address_line_4,
       :postcode,
       :date_of_birth,
+      :gender,
       :teacher_reference_number,
       :national_insurance_number,
       :has_student_loan,

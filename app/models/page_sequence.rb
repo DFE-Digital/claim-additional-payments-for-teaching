@@ -19,6 +19,7 @@ class PageSequence
     "full-name",
     "address",
     "date-of-birth",
+    "gender",
     "teacher-reference-number",
     "national-insurance-number",
     "student-loan",

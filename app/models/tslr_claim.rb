@@ -52,7 +52,7 @@ class TslrClaim < ApplicationRecord
 
   validates :mostly_teaching_eligible_subjects, on: [:"mostly-teaching-eligible-subjects", :submit], inclusion: {in: [true, false], message: "Select either Yes or No"}
 
-  validates :gender,                            on: [:"gender", :submit], presence: {message: "Please select an option for the gender your school's payroll system associates you with. If you don't know, select \"Don't know\""}
+  validates :gender,                            on: [:gender, :submit], presence: {message: "Choose the option for the gender your school’s payroll system associates with you"}
 
   validates :full_name,                         on: [:"full-name", :submit], presence: {message: "Enter your full name"}
   validates :full_name,                         length: {maximum: 200, message: "Full name must be 200 characters or less"}

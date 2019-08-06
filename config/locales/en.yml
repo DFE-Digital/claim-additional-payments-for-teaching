@@ -71,6 +71,7 @@ en:
         April 2019?"
       email_address: "Email address"
       bank_details: "Enter bank account details"
+      gender: "What gender does your school's payroll system associate with you?"
       eligible_subjects:
         biology_taught: "Biology"
         chemistry_taught: "Chemistry"

@@ -14,6 +14,8 @@ module FeatureHelpers
     click_on "Continue"
     fill_in_address
     fill_in_date_of_birth
+    choose "Male"
+    click_on "Continue"
     fill_in :tslr_claim_teacher_reference_number, with: "1234567"
     click_on "Continue"
     fill_in "National Insurance number", with: "QQ123456C"
