@@ -40,12 +40,7 @@ RSpec.feature "Teacher Student Loan Repayments claims" do
 
     expect(page).to have_text(I18n.t("tslr.questions.address"))
 
-    fill_in :tslr_claim_address_line_1, with: "123 Main Street"
-    fill_in :tslr_claim_address_line_2, with: "Downtown"
-    fill_in "Town or city", with: "Twin Peaks"
-    fill_in "County", with: "Washington"
-    fill_in "Postcode", with: "M1 7HL"
-    click_on "Continue"
+    fill_in_address
 
     expect(claim.reload.address_line_1).to eql("123 Main Street")
     expect(claim.address_line_2).to eql("Downtown")
@@ -54,10 +49,8 @@ RSpec.feature "Teacher Student Loan Repayments claims" do
     expect(claim.postcode).to eql("M1 7HL")
 
     expect(page).to have_text(I18n.t("tslr.questions.date_of_birth"))
-    fill_in "Day", with: "03"
-    fill_in "Month", with: "7"
-    fill_in "Year", with: "1990"
-    click_on "Continue"
+
+    fill_in_date_of_birth
 
     expect(claim.reload.date_of_birth).to eq(Date.new(1990, 7, 3))
 
@@ -74,28 +67,13 @@ RSpec.feature "Teacher Student Loan Repayments claims" do
     expect(claim.reload.national_insurance_number).to eq("QQ123456C")
 
     expect(page).to have_text(I18n.t("tslr.questions.has_student_loan"))
-    choose("Yes")
-    click_on "Continue"
+
+    answer_student_loan_plan_questions
 
     expect(claim.reload).to have_student_loan
-
-    expect(page).to have_text(I18n.t("tslr.questions.student_loan_country"))
-    choose("England")
-    click_on "Continue"
-
-    expect(claim.reload.student_loan_country).to eq("england")
-
-    expect(page).to have_text(I18n.t("tslr.questions.student_loan_how_many_courses"))
-    choose("1")
-    click_on "Continue"
-
-    expect(claim.reload.student_loan_courses).to eq("one_course")
-
-    expect(page).to have_text(I18n.t("tslr.questions.student_loan_start_date.one_course"))
-    choose I18n.t("tslr.answers.student_loan_start_date.one_course.before_first_september_2012")
-    click_on "Continue"
-
-    expect(claim.reload.student_loan_start_date).to eq(StudentLoans::BEFORE_1_SEPT_2012)
+    expect(claim.student_loan_country).to eq("england")
+    expect(claim.student_loan_courses).to eq("one_course")
+    expect(claim.student_loan_start_date).to eq(StudentLoans::BEFORE_1_SEPT_2012)
     expect(claim.student_loan_plan).to eq(StudentLoans::PLAN_1)
 
     expect(page).to have_text(I18n.t("tslr.questions.student_loan_amount", claim_school_name: claim.claim_school_name))
