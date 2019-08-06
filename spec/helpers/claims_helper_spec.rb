@@ -41,12 +41,14 @@ describe ClaimsHelper do
         teacher_reference_number: "1234567",
         national_insurance_number: "QQ123456C",
         email_address: "test@email.com",
+        gender: :female
       )
 
       expected_answers = [
         [I18n.t("tslr.questions.full_name"), "Jo Bloggs", "full-name"],
         [I18n.t("tslr.questions.address"), "Flat 1, 1 Test Road, Test Town, AB1 2CD", "address"],
         [I18n.t("tslr.questions.date_of_birth"), I18n.l(20.years.ago.to_date), "date-of-birth"],
+        [I18n.t("tslr.questions.gender"), "female", "gender"],
         [I18n.t("tslr.questions.teacher_reference_number"), "1234567", "teacher-reference-number"],
         [I18n.t("tslr.questions.national_insurance_number"), "QQ123456C", "national-insurance-number"],
         [I18n.t("tslr.questions.email_address"), "test@email.com", "email-address"],
