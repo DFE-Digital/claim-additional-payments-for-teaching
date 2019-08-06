@@ -1,21 +1,10 @@
 require "rails_helper"
 
 RSpec.feature "Changing the answers on a submittable claim" do
-  let(:claim_school) { create(:school, :tslr_eligible, name: "Claim School") }
-  let(:current_school) { create(:school, :tslr_eligible, name: "Current School") }
-
-  let(:claim) do
-    create(:tslr_claim,
-      :submittable,
-      employment_status: :different_school,
-      physics_taught: true,
-      claim_school: claim_school,
-      current_school: current_school)
-  end
+  let(:claim) { TslrClaim.order(:created_at).last }
 
   before do
-    allow_any_instance_of(ClaimsController).to receive(:current_claim) { claim }
-    visit claim_path("check-your-answers")
+    answer_all_student_loans_claim_questions
   end
 
   scenario "Teacher can edit a field" do
@@ -73,7 +62,7 @@ RSpec.feature "Changing the answers on a submittable claim" do
           click_on "Continue"
         end
 
-        scenario "Sets mostly teaching elibile subjects correctly" do
+        scenario "Sets mostly teaching eligible subjects correctly" do
           expect(claim.reload.mostly_teaching_eligible_subjects).to eq(true)
         end
 
@@ -89,7 +78,7 @@ RSpec.feature "Changing the answers on a submittable claim" do
           click_on "Continue"
         end
 
-        scenario "Sets mostly teaching elibile subjects correctly" do
+        scenario "Sets mostly teaching eligible subjects correctly" do
           expect(claim.reload.mostly_teaching_eligible_subjects).to eq(false)
         end
 
@@ -102,21 +91,23 @@ RSpec.feature "Changing the answers on a submittable claim" do
   end
 
   context "When changing claim school" do
+    let!(:new_claim_school) { create(:school, :tslr_eligible, name: "Claim School") }
+
     before do
       find("a[href='#{claim_path("claim-school")}']").click
     end
 
     scenario "Teacher sees their original claim school" do
-      expect(find("input[name='school_search']").value).to eq(claim.claim_school.name)
+      expect(find("input[name='school_search']").value).to eq(claim.claim_school_name)
     end
 
     context "When choosing a new claim school" do
       before do
-        choose_school schools(:penistone_grammar_school)
+        choose_school new_claim_school
       end
 
       scenario "school is changed correctly" do
-        expect(claim.reload.claim_school).to eql schools(:penistone_grammar_school)
+        expect(claim.reload.claim_school).to eql new_claim_school
       end
 
       scenario "Teacher is redirected to the are you still employed screen" do
@@ -125,12 +116,13 @@ RSpec.feature "Changing the answers on a submittable claim" do
 
       context "When still teaching at the claim school" do
         before do
-          choose_still_teaching
+          choose "Yes, at Claim School"
+          click_on "Continue"
         end
 
         scenario "current school is set correctly" do
           expect(claim.reload.employment_status).to eql("claim_school")
-          expect(claim.reload.current_school).to eql schools(:penistone_grammar_school)
+          expect(claim.reload.current_school).to eql new_claim_school
         end
 
         scenario "Teacher is redirected to the check your answers page" do
@@ -179,12 +171,12 @@ RSpec.feature "Changing the answers on a submittable claim" do
   scenario "changing the are you still employed question (employment_status)" do
     find("a[href='#{claim_path("still-teaching")}']").click
 
-    choose "Yes, at Claim School"
+    choose "Yes, at Penistone Grammar School"
     click_on "Continue"
 
     expect(current_path).to eq(claim_path("check-your-answers"))
     expect(claim.reload.employment_status).to eq("claim_school")
-    expect(claim.current_school).to eq(claim_school)
+    expect(claim.current_school).to eq(schools(:penistone_grammar_school))
   end
 
   scenario "going from same school to different school" do
