@@ -6,8 +6,7 @@ describe ClaimsHelper do
       school = schools(:penistone_grammar_school)
       claim = build(
         :tslr_claim,
-        claim_school: school,
-        current_school: school,
+        eligibility: build(:student_loans_eligibility, claim_school: school, current_school: school),
         chemistry_taught: true,
         physics_taught: true,
         mostly_teaching_eligible_subjects: true,

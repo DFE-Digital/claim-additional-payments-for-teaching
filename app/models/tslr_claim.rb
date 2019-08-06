@@ -19,17 +19,23 @@ class TslrClaim < ApplicationRecord
   enum student_loan_courses: {one_course: 0, two_or_more_courses: 1}
   enum student_loan_plan: STUDENT_LOAN_PLAN_OPTIONS
 
-  enum employment_status: {
-    claim_school: 0,
-    different_school: 1,
-    no_school: 2,
-  }, _prefix: :employed_at
-
   # NOTE: Attribute migration in progress
-  delegate :qts_award_year, to: :eligibility
+  delegate :qts_award_year,
+           :claim_school,
+           :employment_status,
+           :current_school,
+           to: :eligibility
 
   # NOTE: Temporary delegation of eligibility methods
-  delegate :ineligible_qts_award_year?, to: :eligibility, allow_nil: nil
+  delegate :ineligible_qts_award_year?,
+           :ineligible_claim_school?,
+           :employed_at_claim_school?,
+           :employed_at_no_school?,
+           to: :eligibility, allow_nil: nil
+
+  # NOTE: Temporary delegation of left over methods
+  delegate :claim_school_name, to: :eligibility
+  delegate :current_school_name, to: :eligibility
 
   belongs_to :eligibility, polymorphic: true
   accepts_nested_attributes_for :eligibility, update_only: true
@@ -39,14 +45,6 @@ class TslrClaim < ApplicationRecord
     female: 1,
     male: 2,
   }
-
-  belongs_to :claim_school, optional: true, class_name: "School"
-  belongs_to :current_school, optional: true, class_name: "School"
-
-  validates :claim_school,                      on: [:"claim-school", :submit], presence: {message: "Select a school from the list"}
-  validates :current_school,                    on: [:"current-school", :submit], presence: {message: "Select a school from the list"}
-
-  validates :employment_status,                 on: [:"still-teaching", :submit], presence: {message: "Choose the option that describes your current employment status"}
 
   validate :at_least_one_subject_chosen,        on: [:"subjects-taught", :submit], unless: ->(c) { c.mostly_teaching_eligible_subjects == false }
 
@@ -106,9 +104,6 @@ class TslrClaim < ApplicationRecord
   before_save :normalise_bank_account_number, if: :bank_account_number_changed?
   before_save :normalise_bank_sort_code, if: :bank_sort_code_changed?
 
-  delegate :name, to: :claim_school, prefix: true, allow_nil: true
-  delegate :name, to: :current_school, prefix: true, allow_nil: true
-
   scope :submitted, -> { where.not(submitted_at: nil) }
 
   def submit!
@@ -163,10 +158,6 @@ class TslrClaim < ApplicationRecord
   end
 
   private
-
-  def ineligible_claim_school?
-    claim_school.present? && !claim_school.eligible_for_tslr?
-  end
 
   def not_taught_eligible_subjects_enough?
     mostly_teaching_eligible_subjects == false

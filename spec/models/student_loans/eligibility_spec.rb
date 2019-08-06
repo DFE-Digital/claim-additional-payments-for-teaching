@@ -16,6 +16,41 @@ RSpec.describe StudentLoans::Eligibility, type: :model do
     end
   end
 
+  describe "employment_status attribute" do
+    it "rejects invalid values" do
+      expect { StudentLoans::Eligibility.new(employment_status: "non-existence") }.to raise_error(ArgumentError)
+    end
+
+    it "has handily named boolean methods for the possible values" do
+      eligibility = StudentLoans::Eligibility.new(employment_status: :claim_school)
+
+      expect(eligibility.employed_at_claim_school?).to eq true
+      expect(eligibility.employed_at_different_school?).to eq false
+    end
+  end
+
+  describe "#claim_school_name" do
+    it "returns the name of the claim school" do
+      claim = StudentLoans::Eligibility.new(claim_school: schools(:penistone_grammar_school))
+      expect(claim.claim_school_name).to eq schools(:penistone_grammar_school).name
+    end
+
+    it "does not error if the claim school is not set" do
+      expect(StudentLoans::Eligibility.new.claim_school_name).to be_nil
+    end
+  end
+
+  describe "#current_school_name" do
+    it "returns the name of the claim school" do
+      claim = StudentLoans::Eligibility.new(current_school: schools(:penistone_grammar_school))
+      expect(claim.current_school_name).to eq schools(:penistone_grammar_school).name
+    end
+
+    it "does not error if the claim school is not set" do
+      expect(StudentLoans::Eligibility.new.current_school_name).to be_nil
+    end
+  end
+
   describe "#ineligible?" do
     it "returns false when the eligibility cannot be determined" do
       expect(StudentLoans::Eligibility.new.ineligible?).to eql false
@@ -24,6 +59,16 @@ RSpec.describe StudentLoans::Eligibility, type: :model do
     it "returns true when the qts_award_year is before 2013" do
       expect(StudentLoans::Eligibility.new(qts_award_year: "before_2013").ineligible?).to eql true
       expect(StudentLoans::Eligibility.new(qts_award_year: "2013_2014").ineligible?).to eql false
+    end
+
+    it "returns true when the claim_school is not eligible" do
+      expect(StudentLoans::Eligibility.new(claim_school: schools(:hampstead_school)).ineligible?).to eql true
+      expect(StudentLoans::Eligibility.new(claim_school: schools(:penistone_grammar_school)).ineligible?).to eql false
+    end
+
+    it "returns true when no longer teaching" do
+      expect(StudentLoans::Eligibility.new(employment_status: :no_school).ineligible?).to eql true
+      expect(StudentLoans::Eligibility.new(employment_status: :claim_school).ineligible?).to eql false
     end
   end
 
@@ -34,6 +79,8 @@ RSpec.describe StudentLoans::Eligibility, type: :model do
 
     it "returns a symbol indicating the reason for ineligibility" do
       expect(StudentLoans::Eligibility.new(qts_award_year: "before_2013").ineligibility_reason).to eq :ineligible_qts_award_year
+      expect(StudentLoans::Eligibility.new(claim_school: schools(:hampstead_school)).ineligibility_reason).to eq :ineligible_claim_school
+      expect(StudentLoans::Eligibility.new(employment_status: :no_school).ineligibility_reason).to eq :employed_at_no_school
     end
   end
 
@@ -48,13 +95,50 @@ RSpec.describe StudentLoans::Eligibility, type: :model do
     end
   end
 
+  context "when saving in the “claim-school” context" do
+    it "validates the presence of the claim_school" do
+      expect(StudentLoans::Eligibility.new).not_to be_valid(:"claim-school")
+      expect(StudentLoans::Eligibility.new(claim_school: schools(:penistone_grammar_school))).to be_valid(:"claim-school")
+    end
+  end
+
+  context "when saving in the “still-teaching” context" do
+    it "validates the presence of employment_status" do
+      expect(StudentLoans::Eligibility.new).not_to be_valid(:"still-teaching")
+      expect(StudentLoans::Eligibility.new(employment_status: :claim_school)).to be_valid(:"still-teaching")
+    end
+  end
+
+  context "when saving in the “current-school” context" do
+    it "validates the presence of the current_school" do
+      expect(StudentLoans::Eligibility.new).not_to be_valid(:"current-school")
+      expect(StudentLoans::Eligibility.new(current_school: schools(:hampstead_school))).to be_valid(:"current-school")
+    end
+  end
+
   context "when saving in the “submit” context" do
+    it "is valid when all attributes are present" do
+      expect(build(:student_loans_eligibility, :submittable)).to be_valid(:submit)
+    end
+
     it "is not valid without a value for qts_award_year" do
-      expect(StudentLoans::Eligibility.new).not_to be_valid(:submit)
+      expect(build(:student_loans_eligibility, :submittable, qts_award_year: nil)).not_to be_valid(:submit)
 
       StudentLoans::Eligibility.qts_award_years.each_key do |academic_year|
-        expect(StudentLoans::Eligibility.new(qts_award_year: academic_year)).to be_valid(:submit)
+        expect(build(:student_loans_eligibility, :submittable, qts_award_year: academic_year)).to be_valid(:submit)
       end
+    end
+
+    it "is not valid without a value for claim_school" do
+      expect(build(:student_loans_eligibility, :submittable, claim_school: nil)).not_to be_valid(:submit)
+    end
+
+    it "is not valid without a value for employment_status" do
+      expect(build(:student_loans_eligibility, :submittable, employment_status: nil)).not_to be_valid(:submit)
+    end
+
+    it "is not valid without a value for current_school" do
+      expect(build(:student_loans_eligibility, :submittable, current_school: nil)).not_to be_valid(:submit)
     end
   end
 end

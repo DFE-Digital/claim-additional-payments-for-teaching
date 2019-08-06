@@ -15,20 +15,41 @@ module StudentLoans
       "2019_2020": 7,
     }, _prefix: :awarded_qualified_status
 
+    enum employment_status: {
+      claim_school: 0,
+      different_school: 1,
+      no_school: 2,
+    }, _prefix: :employed_at
+
+    belongs_to :claim_school, optional: true, class_name: "School"
+    belongs_to :current_school, optional: true, class_name: "School"
+
     validates :qts_award_year, on: [:"qts-year", :submit], presence: {message: "Select the academic year you were awarded qualified teacher status"}
+    validates :claim_school, on: [:"claim-school", :submit], presence: {message: "Select a school from the list"}
+    validates :employment_status, on: [:"still-teaching", :submit], presence: {message: "Choose the option that describes your current employment status"}
+    validates :current_school, on: [:"current-school", :submit], presence: {message: "Select a school from the list"}
+
+    delegate :name, to: :claim_school, prefix: true, allow_nil: true
+    delegate :name, to: :current_school, prefix: true, allow_nil: true
 
     def ineligible?
-      ineligible_qts_award_year?
+      ineligible_qts_award_year? || ineligible_claim_school? || employed_at_no_school?
     end
 
     def ineligibility_reason
       [
         :ineligible_qts_award_year,
+        :ineligible_claim_school,
+        :employed_at_no_school,
       ].find { |eligibility_check| send("#{eligibility_check}?") }
     end
 
     def ineligible_qts_award_year?
       awarded_qualified_status_before_2013?
+    end
+
+    def ineligible_claim_school?
+      claim_school.present? && !claim_school.eligible_for_tslr?
     end
   end
 end

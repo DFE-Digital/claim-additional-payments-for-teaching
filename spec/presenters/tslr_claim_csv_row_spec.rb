@@ -5,10 +5,7 @@ RSpec.describe TslrClaimCsvRow do
   let(:claim) { create(:tslr_claim) }
 
   describe "to_s" do
-    let(:claim_school) { "Claim School" }
-    let(:current_school) { "Current School" }
     let(:date_of_birth) { "01/12/1980" }
-    let(:employment_status) { "Different school" }
     let(:mostly_teaching_eligible_subjects) { "Yes" }
     let(:student_loan_repayment_amount) { "£1000.0" }
     let(:submitted_at) { "01/01/2019 13:00" }
@@ -16,9 +13,6 @@ RSpec.describe TslrClaimCsvRow do
 
     let(:claim) do
       create(:tslr_claim, :submittable,
-        claim_school: create(:school, name: claim_school),
-        current_school: create(:school, name: current_school),
-        employment_status: TslrClaim.employment_statuses[employment_status.parameterize.underscore],
         date_of_birth: Date.parse(date_of_birth),
         mostly_teaching_eligible_subjects: mostly_teaching_eligible_subjects == "Yes",
         student_loan_repayment_amount: student_loan_repayment_amount.delete("£").to_i,
@@ -31,9 +25,9 @@ RSpec.describe TslrClaimCsvRow do
         claim.reference,
         submitted_at,
         claim.qts_award_year,
-        claim_school,
-        employment_status,
-        current_school,
+        claim.eligibility.claim_school.name,
+        claim.eligibility.employment_status.humanize,
+        claim.eligibility.current_school.name,
         claim.full_name,
         claim.address_line_1,
         claim.address_line_2,

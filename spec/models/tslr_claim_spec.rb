@@ -1,9 +1,6 @@
 require "rails_helper"
 
 RSpec.describe TslrClaim, type: :model do
-  it { should belong_to(:claim_school).optional }
-  it { should belong_to(:current_school).optional }
-
   context "that has a teacher_reference_number" do
     it "validates the length of the teacher reference number" do
       expect(build(:tslr_claim, teacher_reference_number: "1/2/3/4/5/6/7")).to be_valid
@@ -118,43 +115,11 @@ RSpec.describe TslrClaim, type: :model do
     expect(claim).to be_valid(:submit)
   end
 
-  context "when saving in the “qts-year” validation context" do
-    let(:custom_validation_context) { :"qts-year" }
+  it "triggers validations on the eligibility appropriate to the context" do
+    claim = build(:tslr_claim)
 
-    it "rejects invalid QTS award years" do
-      expect { build(:tslr_claim, eligibility: build(:student_loans_eligibility, qts_award_year: "123")) }.to raise_error(ArgumentError)
-    end
-
-    it "validates the qts_award_year is one of the allowable values" do
-      expect(build(:tslr_claim)).not_to be_valid(custom_validation_context)
-
-      StudentLoans::Eligibility.qts_award_years.each_key do |academic_year|
-        expect(build(:tslr_claim, eligibility: build(:student_loans_eligibility, qts_award_year: academic_year))).to be_valid(custom_validation_context)
-      end
-    end
-  end
-
-  context "when saving in the “claim-school” validation context" do
-    let(:custom_validation_context) { :"claim-school" }
-
-    it "it validates the claim_school" do
-      expect(build(:tslr_claim)).not_to be_valid(custom_validation_context)
-      expect(build(:tslr_claim, claim_school: schools(:penistone_grammar_school))).to be_valid(custom_validation_context)
-    end
-  end
-
-  context "when saving in the “still-teaching” validation context" do
-    it "validates employment_status has been provided" do
-      expect(build(:tslr_claim)).not_to be_valid(:"still-teaching")
-      expect(build(:tslr_claim, employment_status: :claim_school)).to be_valid(:"still-teaching")
-    end
-  end
-
-  context "when saving in the “current-school” validation context" do
-    it "it validates the current_school" do
-      expect(build(:tslr_claim)).not_to be_valid(:"current-school")
-      expect(build(:tslr_claim, current_school: schools(:hampstead_school))).to be_valid(:"current-school")
-    end
+    expect(claim).not_to be_valid(:"qts-year")
+    expect(claim.errors.values).to include(["Select the academic year you were awarded qualified teacher status"])
   end
 
   context "when saving in the “subjects-taught” validation context" do
@@ -333,22 +298,22 @@ RSpec.describe TslrClaim, type: :model do
     end
 
     context "with no claim_school" do
-      let(:claim_attributes) { {claim_school: nil} }
+      let(:claim_attributes) { {eligibility: build(:student_loans_eligibility, claim_school: nil)} }
       it { is_expected.to be false }
     end
 
     context "with an eligible claim school" do
-      let(:claim_attributes) { {claim_school: schools(:penistone_grammar_school)} }
+      let(:claim_attributes) { {eligibility: build(:student_loans_eligibility, claim_school: schools(:penistone_grammar_school))} }
       it { is_expected.to be false }
     end
 
     context "with an ineligible claim_school" do
-      let(:claim_attributes) { {claim_school: schools(:hampstead_school)} }
+      let(:claim_attributes) { {eligibility: build(:student_loans_eligibility, claim_school: schools(:hampstead_school))} }
       it { is_expected.to be true }
     end
 
     context "when no longer teaching" do
-      let(:claim_attributes) { {employment_status: :no_school} }
+      let(:claim_attributes) { {eligibility: build(:student_loans_eligibility, employment_status: :no_school)} }
       it { is_expected.to be true }
     end
 
@@ -372,12 +337,12 @@ RSpec.describe TslrClaim, type: :model do
     end
 
     context "with an ineligible claim_school" do
-      let(:claim_attributes) { {claim_school: schools(:hampstead_school)} }
+      let(:claim_attributes) { {eligibility: build(:student_loans_eligibility, claim_school: schools(:hampstead_school))} }
       it { is_expected.to eql :ineligible_claim_school }
     end
 
     context "when no longer teaching" do
-      let(:claim_attributes) { {employment_status: :no_school} }
+      let(:claim_attributes) { {eligibility: build(:student_loans_eligibility, employment_status: :no_school)} }
       it { is_expected.to eql :employed_at_no_school }
     end
 
@@ -428,32 +393,6 @@ RSpec.describe TslrClaim, type: :model do
       StudentLoans::PLAN_1_COUNTRIES.each do |country|
         expect(build(:tslr_claim, student_loan_country: country).student_loan_country_with_one_plan?).to eq true
       end
-    end
-  end
-
-  describe "#employment_status" do
-    it "provides an enum that captures the claimant’s employment status" do
-      claim = build(:tslr_claim)
-
-      claim.employment_status = :claim_school
-      expect(claim.employed_at_claim_school?).to eq true
-      expect(claim.employed_at_different_school?).to eq false
-      expect(claim.employed_at_no_school?).to eq false
-    end
-
-    it "rejects invalid employment statuses" do
-      expect { build(:tslr_claim, employment_status: :nonsense) }.to raise_error(ArgumentError)
-    end
-  end
-
-  describe "#claim_school_name" do
-    it "returns the name of the claim school" do
-      claim = build(:tslr_claim, claim_school: schools(:penistone_grammar_school))
-      expect(claim.claim_school_name).to eq schools(:penistone_grammar_school).name
-    end
-
-    it "does not error if the claim school is not set" do
-      expect(build(:tslr_claim).claim_school_name).to be_nil
     end
   end
 

@@ -3,9 +3,6 @@ FactoryBot.define do
     association(:eligibility, factory: :student_loans_eligibility)
 
     trait :submittable do
-      claim_school { School.find(ActiveRecord::FixtureSet.identify(:penistone_grammar_school, :uuid)) }
-      current_school { claim_school }
-      employment_status { :claim_school }
       physics_taught { true }
       mostly_teaching_eligible_subjects { true }
       full_name { "Jo Bloggs" }

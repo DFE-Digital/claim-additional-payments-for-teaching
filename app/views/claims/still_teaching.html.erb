@@ -4,27 +4,29 @@
 
     <%= form_for current_claim, url: claim_path do |form| %>
       <%= form_group_tag current_claim do %>
-        <fieldset class="govuk-fieldset">
-          <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl">
-            <h1 class="govuk-fieldset__heading"><%= t("tslr.questions.employment_status") %></h1>
-          </legend>
-          <%= errors_tag current_claim, :employment_status %>
-          <div class="govuk-radios">
-            <%= form.hidden_field :employment_status %>
-            <div class="govuk-radios__item">
-              <%= form.radio_button(:employment_status, :claim_school, class: "govuk-radios__input") %>
-              <%= form.label :employment_status_claim_school, "Yes, at #{current_claim.claim_school_name}", class: "govuk-label govuk-radios__label" %>
+        <%= form.fields_for :eligibility, include_id: false do |fields| %>
+          <fieldset class="govuk-fieldset">
+            <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl">
+              <h1 class="govuk-fieldset__heading"><%= t("tslr.questions.employment_status") %></h1>
+            </legend>
+            <%= errors_tag current_claim, :employment_status %>
+            <div class="govuk-radios">
+              <%= fields.hidden_field :employment_status %>
+              <div class="govuk-radios__item">
+                <%= fields.radio_button(:employment_status, :claim_school, class: "govuk-radios__input") %>
+                <%= fields.label :employment_status_claim_school, "Yes, at #{current_claim.claim_school_name}", class: "govuk-label govuk-radios__label" %>
+              </div>
+              <div class="govuk-radios__item">
+                <%= fields.radio_button(:employment_status, :different_school, class: "govuk-radios__input") %>
+                <%= fields.label :employment_status_different_school, "Yes, at another school", class: "govuk-label govuk-radios__label" %>
+              </div>
+              <div class="govuk-radios__item">
+                <%= fields.radio_button(:employment_status, :no_school, class: "govuk-radios__input") %>
+                <%= fields.label :employment_status_no_school, "No", class: "govuk-label govuk-radios__label" %>
+              </div>
             </div>
-            <div class="govuk-radios__item">
-              <%= form.radio_button(:employment_status, :different_school, class: "govuk-radios__input") %>
-              <%= form.label :employment_status_different_school, "Yes, at another school", class: "govuk-label govuk-radios__label" %>
-            </div>
-            <div class="govuk-radios__item">
-              <%= form.radio_button(:employment_status, :no_school, class: "govuk-radios__input") %>
-              <%= form.label :employment_status_no_school, "No", class: "govuk-label govuk-radios__label" %>
-            </div>
-          </div>
-        </fieldset>
+          </fieldset>
+        <% end %>
       <% end %>
       <%= form.submit "Continue", class: "govuk-button" %>
     <% end %>
