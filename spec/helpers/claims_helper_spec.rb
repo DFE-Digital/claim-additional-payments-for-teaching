@@ -29,8 +29,8 @@ describe ClaimsHelper do
   end
 
   describe "#identity_answers" do
-    it "returns an array of questions and answers for displaying to the user for review" do
-      claim = build(
+    let(:claim) do
+      build(
         :tslr_claim,
         full_name: "Jo Bloggs",
         address_line_1: "Flat 1",
@@ -43,7 +43,9 @@ describe ClaimsHelper do
         email_address: "test@email.com",
         gender: :female
       )
+    end
 
+    it "returns an array of questions and answers for displaying to the user for review" do
       expected_answers = [
         [I18n.t("tslr.questions.full_name"), "Jo Bloggs", "full-name"],
         [I18n.t("tslr.questions.address"), "Flat 1, 1 Test Road, Test Town, AB1 2CD", "address"],
@@ -57,17 +59,29 @@ describe ClaimsHelper do
       expect(helper.identity_answers(claim)).to eq expected_answers
     end
 
-    describe "#payment_answers" do
-      it "returns an array of questions and answers for displaying to the user for review" do
-        claim = create(:tslr_claim, bank_sort_code: "12 34 56", bank_account_number: "12 34 56 78")
-
-        expected_answers = [
-          ["Bank sort code", "123456", "bank-details"],
-          ["Bank account number", "12345678", "bank-details"],
-        ]
-
-        expect(helper.payment_answers(claim)).to eq expected_answers
+    context "when a field has come from verify" do
+      before do
+        claim.verified_fields = ["gender"]
       end
+
+      it "does not return that field" do
+        expect(helper.identity_answers(claim)).to_not include(
+          [I18n.t("tslr.questions.gender"), "female", "gender"]
+        )
+      end
+    end
+  end
+
+  describe "#payment_answers" do
+    it "returns an array of questions and answers for displaying to the user for review" do
+      claim = create(:tslr_claim, bank_sort_code: "12 34 56", bank_account_number: "12 34 56 78")
+
+      expected_answers = [
+        ["Bank sort code", "123456", "bank-details"],
+        ["Bank account number", "12345678", "bank-details"],
+      ]
+
+      expect(helper.payment_answers(claim)).to eq expected_answers
     end
   end
 

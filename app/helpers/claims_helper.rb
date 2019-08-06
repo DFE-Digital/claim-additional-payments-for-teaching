@@ -23,15 +23,15 @@ module ClaimsHelper
   end
 
   def identity_answers(claim)
-    [
-      [t("tslr.questions.full_name"), claim.full_name, "full-name"],
-      [t("tslr.questions.address"), claim.address, "address"],
-      [t("tslr.questions.date_of_birth"), l(claim.date_of_birth), "date-of-birth"],
-      [t("tslr.questions.gender"), claim.gender, "gender"],
-      [t("tslr.questions.teacher_reference_number"), claim.teacher_reference_number, "teacher-reference-number"],
-      [t("tslr.questions.national_insurance_number"), claim.national_insurance_number, "national-insurance-number"],
-      [t("tslr.questions.email_address"), claim.email_address, "email-address"],
-    ]
+    [].tap do |a|
+      a << [t("tslr.questions.full_name"), claim.full_name, "full-name"]
+      a << [t("tslr.questions.address"), claim.address, "address"]
+      a << [t("tslr.questions.date_of_birth"), l(claim.date_of_birth), "date-of-birth"]
+      a << [t("tslr.questions.gender"), claim.gender, "gender"] unless claim.verified_fields.include?("gender")
+      a << [t("tslr.questions.teacher_reference_number"), claim.teacher_reference_number, "teacher-reference-number"]
+      a << [t("tslr.questions.national_insurance_number"), claim.national_insurance_number, "national-insurance-number"]
+      a << [t("tslr.questions.email_address"), claim.email_address, "email-address"]
+    end
   end
 
   def student_loan_answers(claim)

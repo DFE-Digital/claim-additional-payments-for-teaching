@@ -243,6 +243,7 @@ RSpec.feature "Changing the answers on a submittable claim" do
       end
 
       scenario "user cannot change their answer" do
+        expect(page).to_not have_content(I18n.t("tslr.questions.gender"))
         expect(page).to_not have_selector(:css, "a[href='#{claim_path("gender")}']")
 
         expect {
@@ -258,6 +259,7 @@ RSpec.feature "Changing the answers on a submittable claim" do
       end
 
       scenario "user can change their answer" do
+        expect(page).to have_content(I18n.t("tslr.questions.gender"))
         expect(page).to have_selector(:css, "a[href='#{claim_path("gender")}']")
 
         find("a[href='#{claim_path("gender")}']").click

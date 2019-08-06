@@ -14,9 +14,7 @@
       </dd>
 
       <dd class="govuk-summary-list__actions">
-        <% unless current_claim.verified_fields.include?(slug) %>
-          <%= link_to 'Change', claim_path(slug), class: 'govuk-link' %>
-        <% end %>
+        <%= link_to 'Change', claim_path(slug), class: 'govuk-link' %>
       </dd>
     </div>
   <% end %>
