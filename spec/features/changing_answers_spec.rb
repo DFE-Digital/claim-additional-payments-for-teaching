@@ -73,7 +73,7 @@ RSpec.feature "Changing the answers on a submittable claim" do
           click_on "Continue"
         end
 
-        scenario "Sets mostly teaching elibile subjects correctly" do
+        scenario "Sets mostly teaching eligible subjects correctly" do
           expect(claim.reload.mostly_teaching_eligible_subjects).to eq(true)
         end
 
@@ -89,7 +89,7 @@ RSpec.feature "Changing the answers on a submittable claim" do
           click_on "Continue"
         end
 
-        scenario "Sets mostly teaching elibile subjects correctly" do
+        scenario "Sets mostly teaching eligible subjects correctly" do
           expect(claim.reload.mostly_teaching_eligible_subjects).to eq(false)
         end
 
