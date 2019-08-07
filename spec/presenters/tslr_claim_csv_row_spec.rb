@@ -41,7 +41,7 @@ RSpec.describe TslrClaimCsvRow do
         claim.address_line_4,
         claim.postcode,
         date_of_birth,
-        claim.gender,
+        claim.payroll_gender,
         claim.teacher_reference_number,
         claim.national_insurance_number,
         "Plan 2",

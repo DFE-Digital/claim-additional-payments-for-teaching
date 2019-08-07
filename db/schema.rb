@@ -102,7 +102,7 @@ ActiveRecord::Schema.define(version: 2019_08_01_134306) do
     t.integer "student_loan_courses"
     t.integer "student_loan_start_date"
     t.integer "student_loan_plan"
-    t.integer "gender"
+    t.integer "payroll_gender"
     t.text "verified_fields", default: [], array: true
     t.string "eligibility_type"
     t.uuid "eligibility_id"

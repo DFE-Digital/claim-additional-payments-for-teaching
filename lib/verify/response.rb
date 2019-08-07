@@ -45,7 +45,7 @@ module Verify
         address_line_3: address_lines[2],
         postcode: address.fetch("postCode"),
         date_of_birth: attributes.fetch("datesOfBirth").first.fetch("value"),
-        gender: gender,
+        payroll_gender: gender,
       }
     end
 

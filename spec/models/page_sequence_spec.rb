@@ -46,7 +46,7 @@ RSpec.describe PageSequence do
     end
 
     it "excludes the gender page if a response has been returned from Verify" do
-      claim.verified_fields = ["gender"]
+      claim.verified_fields = ["payroll_gender"]
       page_sequence = PageSequence.new(claim, "student-loan-country")
       expect(page_sequence.slugs).to_not include("gender")
 
@@ -83,7 +83,7 @@ RSpec.describe PageSequence do
 
     context "when the page is not in the sequence" do
       before do
-        claim.verified_fields = ["gender"]
+        claim.verified_fields = ["payroll_gender"]
       end
 
       it { expect(page_sequence.in_sequence?("gender")).to eq(false) }

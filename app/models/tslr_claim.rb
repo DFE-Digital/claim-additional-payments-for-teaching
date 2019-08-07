@@ -34,7 +34,7 @@ class TslrClaim < ApplicationRecord
   belongs_to :eligibility, polymorphic: true
   accepts_nested_attributes_for :eligibility, update_only: true
 
-  enum gender: {
+  enum payroll_gender: {
     dont_know: 0,
     female: 1,
     male: 2,
@@ -52,7 +52,7 @@ class TslrClaim < ApplicationRecord
 
   validates :mostly_teaching_eligible_subjects, on: [:"mostly-teaching-eligible-subjects", :submit], inclusion: {in: [true, false], message: "Select either Yes or No"}
 
-  validates :gender,                            on: [:gender, :submit], presence: {message: "Choose the option for the gender your school’s payroll system associates with you"}
+  validates :payroll_gender,                    on: [:gender, :submit], presence: {message: "Choose the option for the gender your school’s payroll system associates with you"}
 
   validates :full_name,                         on: [:"full-name", :submit], presence: {message: "Enter your full name"}
   validates :full_name,                         length: {maximum: 200, message: "Full name must be 200 characters or less"}

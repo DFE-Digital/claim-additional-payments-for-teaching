@@ -47,7 +47,7 @@ class PageSequence
       sequence.delete("student-loan-country") if claim.no_student_loan?
       sequence.delete("student-loan-how-many-courses") if claim.no_student_loan? || claim.student_loan_country_with_one_plan?
       sequence.delete("student-loan-start-date") if claim.no_student_loan? || claim.student_loan_country_with_one_plan?
-      sequence.delete("gender") if claim.verified_fields.include?("gender")
+      sequence.delete("gender") if claim.verified_fields.include?("payroll_gender")
     end
   end
 

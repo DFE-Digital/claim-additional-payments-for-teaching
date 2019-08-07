@@ -48,7 +48,7 @@ RSpec.describe "GOV.UK Verify::AuthenticationsController requests", type: :reque
           expect(current_claim.address_line_3).to eq("Verified County")
           expect(current_claim.postcode).to eq("M12 345")
           expect(current_claim.date_of_birth).to eq(Date.new(1806, 4, 9))
-          expect(current_claim.gender).to eq("male")
+          expect(current_claim.payroll_gender).to eq("male")
 
           expect(current_claim.verified_fields).to match_array([
             "full_name",
@@ -57,7 +57,7 @@ RSpec.describe "GOV.UK Verify::AuthenticationsController requests", type: :reque
             "address_line_3",
             "postcode",
             "date_of_birth",
-            "gender",
+            "payroll_gender",
           ])
         end
       end

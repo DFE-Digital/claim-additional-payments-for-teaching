@@ -179,7 +179,7 @@ RSpec.describe TslrClaim, type: :model do
   context "when saving in the “gender” validation context" do
     it "validates the presence of gender" do
       expect(build(:tslr_claim)).not_to be_valid(:gender)
-      expect(build(:tslr_claim, gender: :male)).to be_valid(:gender)
+      expect(build(:tslr_claim, payroll_gender: :male)).to be_valid(:gender)
     end
   end
 

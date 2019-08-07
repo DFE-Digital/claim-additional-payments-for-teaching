@@ -52,7 +52,7 @@ RSpec.feature "Teacher Student Loan Repayments claims" do
 
     fill_in_date_of_birth
 
-    expect(page).to have_text(I18n.t("tslr.questions.gender"))
+    expect(page).to have_text(I18n.t("tslr.questions.payroll_gender"))
     choose "Male"
     click_on "Continue"
 

@@ -15,11 +15,11 @@ RSpec.describe StudentLoans::PermittedParameters do
 
     context "when fields have come from verify" do
       before do
-        claim.verified_fields = ["gender"]
+        claim.verified_fields = ["payroll_gender"]
       end
 
       it "excludes the verified fields" do
-        expect(permitted_parameters.keys).to eq(StudentLoans::PermittedParameters::PARAMETERS.dup - [:gender])
+        expect(permitted_parameters.keys).to eq(StudentLoans::PermittedParameters::PARAMETERS.dup - [:payroll_gender])
       end
     end
   end

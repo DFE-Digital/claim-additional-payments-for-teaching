@@ -13,7 +13,7 @@ module StudentLoans
       :address_line_4,
       :postcode,
       :date_of_birth,
-      :gender,
+      :payroll_gender,
       :teacher_reference_number,
       :national_insurance_number,
       :has_student_loan,
@@ -36,7 +36,7 @@ module StudentLoans
 
     def keys
       PARAMETERS.dup.tap do |parameters|
-        parameters.delete(:gender) if claim.verified_fields.include?("gender")
+        parameters.delete(:payroll_gender) if claim.verified_fields.include?("payroll_gender")
       end
     end
   end

@@ -168,12 +168,12 @@ RSpec.describe "Claims", type: :request do
 
       context "when a field has come from Verify" do
         before do
-          in_progress_claim.update!(verified_fields: ["gender"])
+          in_progress_claim.update!(verified_fields: ["payroll_gender"])
         end
 
         it "raises an error when trying to update via the controller" do
           expect {
-            put claim_path("claim-school"), params: {tslr_claim: {gender: "female"}}
+            put claim_path("claim-school"), params: {tslr_claim: {payroll_gender: "female"}}
           }.to raise_error(
             ActionController::UnpermittedParameters
           )

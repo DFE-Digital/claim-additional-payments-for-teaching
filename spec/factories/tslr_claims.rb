@@ -26,7 +26,7 @@ FactoryBot.define do
       bank_account_number { 12345678 }
 
       association(:eligibility, factory: [:student_loans_eligibility, :submittable])
-      gender { :female }
+      payroll_gender { :female }
     end
 
     trait :submitted do

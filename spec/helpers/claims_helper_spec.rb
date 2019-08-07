@@ -41,7 +41,7 @@ describe ClaimsHelper do
         teacher_reference_number: "1234567",
         national_insurance_number: "QQ123456C",
         email_address: "test@email.com",
-        gender: :female
+        payroll_gender: :female
       )
     end
 
@@ -50,7 +50,7 @@ describe ClaimsHelper do
         [I18n.t("tslr.questions.full_name"), "Jo Bloggs", "full-name"],
         [I18n.t("tslr.questions.address"), "Flat 1, 1 Test Road, Test Town, AB1 2CD", "address"],
         [I18n.t("tslr.questions.date_of_birth"), I18n.l(20.years.ago.to_date), "date-of-birth"],
-        [I18n.t("tslr.questions.gender"), "female", "gender"],
+        [I18n.t("tslr.questions.payroll_gender"), "female", "gender"],
         [I18n.t("tslr.questions.teacher_reference_number"), "1234567", "teacher-reference-number"],
         [I18n.t("tslr.questions.national_insurance_number"), "QQ123456C", "national-insurance-number"],
         [I18n.t("tslr.questions.email_address"), "test@email.com", "email-address"],
@@ -61,12 +61,12 @@ describe ClaimsHelper do
 
     context "when a field has come from verify" do
       before do
-        claim.verified_fields = ["gender"]
+        claim.verified_fields = ["payroll_gender"]
       end
 
       it "does not return that field" do
         expect(helper.identity_answers(claim)).to_not include(
-          [I18n.t("tslr.questions.gender"), "female", "gender"]
+          [I18n.t("tslr.questions.payroll_gender"), "female", "gender"]
         )
       end
     end

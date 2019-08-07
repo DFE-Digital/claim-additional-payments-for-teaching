@@ -1,10 +1,10 @@
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-    <%= render("shared/error_summary", instance: current_claim, errored_field_id_overrides: {gender: "tslr_claim_gender_female"}) if current_claim.errors.any? %>
+    <%= render("shared/error_summary", instance: current_claim, errored_field_id_overrides: {payroll_gender: "tslr_claim_payroll_gender_female"}) if current_claim.errors.any? %>
     <%= form_for current_claim, url: claim_path do |form| %>
       <%= form_group_tag current_claim do %>
         <h1 class="govuk-label-wrapper">
-          <%= form.label :gender, t("tslr.questions.gender"), {class: "govuk-label govuk-label--xl"} %>
+          <%= form.label :payroll_gender, t("tslr.questions.payroll_gender"), {class: "govuk-label govuk-label--xl"} %>
         </h1>
 
         <span class="govuk-hint">
@@ -17,17 +17,17 @@
 
         <div class="govuk-radios">
           <div class="govuk-radios__item">
-            <%= form.radio_button(:gender, :female, class: "govuk-radios__input") %>
-            <%= form.label :gender_female, "Female", class: "govuk-label govuk-radios__label" %>
+            <%= form.radio_button(:payroll_gender, :female, class: "govuk-radios__input") %>
+            <%= form.label :payroll_gender_female, "Female", class: "govuk-label govuk-radios__label" %>
           </div>
           <div class="govuk-radios__item">
-            <%= form.radio_button(:gender, :male, class: "govuk-radios__input") %>
-            <%= form.label :gender_male, "Male", class: "govuk-label govuk-radios__label" %>
+            <%= form.radio_button(:payroll_gender, :male, class: "govuk-radios__input") %>
+            <%= form.label :payroll_gender_male, "Male", class: "govuk-label govuk-radios__label" %>
           </div>
           <div class="govuk-radios__divider">or</div>
           <div class="govuk-radios__item">
-            <%= form.radio_button(:gender, :dont_know, class: "govuk-radios__input") %>
-            <%= form.label :gender_dont_know, "I don't know", class: "govuk-label govuk-radios__label" %>
+            <%= form.radio_button(:payroll_gender, :dont_know, class: "govuk-radios__input") %>
+            <%= form.label :payroll_gender_dont_know, "I don't know", class: "govuk-label govuk-radios__label" %>
           </div>
         </div>
       <% end %>
