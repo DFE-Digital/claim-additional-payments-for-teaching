@@ -19,8 +19,7 @@
       {
         "value": "Sam",
         "verified": false,
-        "from": "2019-06-30",
-        "to": "2019-07-09"
+        "from": "2019-06-30"
       }
     ],
     "middleNames": [
@@ -33,8 +32,7 @@
       {
         "value": "K.",
         "verified": false,
-        "from": "2019-06-25",
-        "to": "2019-07-09"
+        "from": "2019-06-25"
       }
     ],
     "surnames": [
@@ -53,16 +51,14 @@
       {
         "value": "",
         "verified": false,
-        "from": "2019-06-25",
-        "to": "2019-07-09"
+        "from": "2019-06-25"
       }
     ],
     "datesOfBirth": [
       {
         "value": "1806-04-09",
         "verified": true,
-        "from": "1806-04-09",
-        "to": "1806-04-09"
+        "from": "1806-04-09"
       }
     ],
     "gender": {
@@ -85,8 +81,7 @@
           "postCode": "L12 345"
         },
         "verified": false,
-        "from": "2019-06-25",
-        "to": "2019-07-25"
+        "from": "2019-06-25"
       }
     ]
   }

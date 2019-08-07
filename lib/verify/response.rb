@@ -71,7 +71,8 @@ module Verify
 
     def most_recent_verified_value(attributes)
       return if attributes.empty?
-      attributes.sort_by { |attribute| attribute["to"].present? ? Date.strptime(attribute["to"], "%Y-%m-%d") : 0 }
+
+      attributes.sort_by { |attribute| attribute["from"].present? ? Date.strptime(attribute["from"], "%Y-%m-%d") : 0 }
         .reverse
         .find { |attribute| attribute["verified"] }
         .fetch("value")
