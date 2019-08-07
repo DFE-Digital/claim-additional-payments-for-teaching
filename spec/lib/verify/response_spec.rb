@@ -34,6 +34,31 @@ RSpec.describe Verify::Response, type: :model do
       expect(subject.claim_parameters[:address_line_3]).to eq("Verified County")
       expect(subject.claim_parameters[:postcode]).to eq("M12 345")
       expect(subject.claim_parameters[:date_of_birth]).to eq("1806-04-09")
+      expect(subject.claim_parameters[:gender]).to eq(:male)
+    end
+
+    context "when the gender is female" do
+      let(:response_filename) { "identity-verified-female.json" }
+
+      it "returns the expected gender" do
+        expect(subject.claim_parameters[:gender]).to eq(:female)
+      end
+    end
+
+    context "when the gender is not specified" do
+      let(:response_filename) { "identity-verified-not-specified-gender.json" }
+
+      it "returns the expected gender" do
+        expect(subject.claim_parameters[:gender]).to eq(nil)
+      end
+    end
+
+    context "when the gender is other" do
+      let(:response_filename) { "identity-verified-other-gender.json" }
+
+      it "returns the expected gender" do
+        expect(subject.claim_parameters[:gender]).to eq(nil)
+      end
     end
   end
 

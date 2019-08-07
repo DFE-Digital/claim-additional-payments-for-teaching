@@ -32,7 +32,8 @@ module Verify
         address_line_2: address_lines[1],
         address_line_3: address_lines[2],
         postcode: address.fetch("postCode"),
-        date_of_birth: parameters.fetch("attributes").fetch("datesOfBirth").first.fetch("value"),
+        date_of_birth: attributes.fetch("datesOfBirth").first.fetch("value"),
+        gender: gender,
       }
     end
 
@@ -43,7 +44,7 @@ module Verify
     private
 
     def address
-      @address ||= most_recent_verified_value(parameters.fetch("attributes").fetch("addresses"))
+      @address ||= most_recent_verified_value(attributes.dig("addresses"))
     end
 
     def address_lines
@@ -51,9 +52,9 @@ module Verify
     end
 
     def full_name
-      first_name = most_recent_verified_value(parameters.fetch("attributes").fetch("firstNames"))
-      middle_name = most_recent_verified_value(parameters.fetch("attributes").fetch("middleNames"))
-      surname = most_recent_verified_value(parameters.fetch("attributes").fetch("surnames"))
+      first_name = most_recent_verified_value(attributes.fetch("firstNames"))
+      middle_name = most_recent_verified_value(attributes.fetch("middleNames"))
+      surname = most_recent_verified_value(attributes.fetch("surnames"))
 
       [first_name, middle_name, surname].join(" ")
     end
@@ -63,6 +64,17 @@ module Verify
         .reverse
         .find { |attribute| attribute["verified"] }
         .fetch("value")
+    end
+
+    def gender
+      gender = attributes.dig("gender", "value")
+
+      return :female if gender == "FEMALE"
+      return :male if gender == "MALE"
+    end
+
+    def attributes
+      @attributes ||= parameters.fetch("attributes")
     end
   end
 end
