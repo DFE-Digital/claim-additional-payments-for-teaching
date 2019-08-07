@@ -2,9 +2,6 @@
   "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
   "contentVersion": "1.0.0.0",
   "parameters": {
-    "appServiceDockerCompose": {
-      "value": "${dockerCompose}"
-    },
     "appServiceHostName": {
       "value": "development.additional-teaching-payment.education.gov.uk"
     },
@@ -14,11 +11,18 @@
     "appServiceAlwaysOn": {
       "value": false
     },
+    "webAppServiceDockerImage": {
+      "value": "dfedigital/teacher-payments-service:${dockerImageTag}"
+    },
     "vspAppServiceDockerImage": {
       "value": "dfedigital/teacher-payments-service-verify:${vspDockerImageTag}"
     },
     "verifyHubPossibleOutboundIpAddresses": {
-      "value": ["35.176.130.173", "18.130.112.6", "3.8.225.78"]
+      "value": [
+        "35.176.130.173",
+        "18.130.112.6",
+        "3.8.225.78"
+      ]
     },
     "databaseName": {
       "value": "development"

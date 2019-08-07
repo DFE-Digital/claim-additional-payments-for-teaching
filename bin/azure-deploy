@@ -114,7 +114,6 @@ SECRETS_TEMPLATE_FILE_PATH="$SCRIPT_PATH/../azure/resource_groups/secrets/templa
 SECRETS_PARAMETERS_FILE_PATH="$SCRIPT_PATH/../azure/resource_groups/secrets/parameters/$ENVIRONMENT_NAME.json"
 
 APP_TEMPLATE_FILE_PATH="$SCRIPT_PATH/../azure/resource_groups/app/template.json"
-APP_DOCKER_COMPOSE_TEMPLATE_FILE_PATH="$SCRIPT_PATH/../azure/resource_groups/app/files/docker-compose.template.yml"
 APP_PARAMETERS_TEMPLATE_FILE_PATH="$SCRIPT_PATH/../azure/resource_groups/app/parameters/$ENVIRONMENT_NAME.template.json"
 APP_PARAMETERS_FILE_PATH="$SCRIPT_PATH/../azure/resource_groups/app/parameters/$ENVIRONMENT_NAME.json"
 
@@ -165,18 +164,8 @@ echo "Rewriting app parameters file for $ENVIRONMENT_NAME..."
 sed \
     -e "s|\${keyVaultId}|$KEY_VAULT_ID|g" \
     -e "s|\${vspDockerImageTag}|$VSP_DOCKER_IMAGE_TAG|g" \
+    -e "s|\${dockerImageTag}|$DOCKER_IMAGE_TAG|g" \
     "$APP_PARAMETERS_TEMPLATE_FILE_PATH" \
-  | ruby \
-    -e "
-      puts STDIN.read.gsub(
-        /\\\${dockerCompose}/,
-        File.open('$APP_DOCKER_COMPOSE_TEMPLATE_FILE_PATH')
-            .read
-            .gsub('\${dockerImageTag}', '$DOCKER_IMAGE_TAG')
-            .gsub(\"\n\", '\n')
-            .gsub('\"', '\\\"')
-      )
-    " \
   > "$APP_PARAMETERS_FILE_PATH"
 
 if [ $CONFIRM_BEFORE_DEPLOY ]; then
