@@ -26,7 +26,19 @@ module Verify
     def claim_parameters
       return {} unless verified?
 
-      {
+      identity_paramteters.merge(
+        verified_fields: verified_fields
+      )
+    end
+
+    def scenario
+      @scenario ||= parameters["scenario"]
+    end
+
+    private
+
+    def identity_paramteters
+      @identity_paramteters ||= {
         full_name: full_name,
         address_line_1: address_lines[0],
         address_line_2: address_lines[1],
@@ -37,11 +49,9 @@ module Verify
       }
     end
 
-    def scenario
-      @scenario ||= parameters["scenario"]
+    def verified_fields
+      identity_paramteters.reject { |k, v| v.blank? }.keys
     end
-
-    private
 
     def address
       @address ||= most_recent_verified_value(attributes.dig("addresses"))

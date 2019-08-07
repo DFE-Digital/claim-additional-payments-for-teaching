@@ -35,6 +35,15 @@ RSpec.describe Verify::Response, type: :model do
       expect(subject.claim_parameters[:postcode]).to eq("M12 345")
       expect(subject.claim_parameters[:date_of_birth]).to eq("1806-04-09")
       expect(subject.claim_parameters[:gender]).to eq(:male)
+      expect(subject.claim_parameters[:verified_fields]).to match_array([
+        :full_name,
+        :address_line_1,
+        :address_line_2,
+        :address_line_3,
+        :postcode,
+        :date_of_birth,
+        :gender,
+      ])
     end
 
     context "when the gender is female" do
@@ -43,21 +52,33 @@ RSpec.describe Verify::Response, type: :model do
       it "returns the expected gender" do
         expect(subject.claim_parameters[:gender]).to eq(:female)
       end
+
+      it "returns gender in the verified fields" do
+        expect(subject.claim_parameters[:verified_fields]).to include(:gender)
+      end
     end
 
     context "when the gender is not specified" do
       let(:response_filename) { "identity-verified-not-specified-gender.json" }
 
-      it "returns the expected gender" do
+      it "returns nil for gender" do
         expect(subject.claim_parameters[:gender]).to eq(nil)
+      end
+
+      it "does not return gender in the verified fields" do
+        expect(subject.claim_parameters[:verified_fields]).to_not include(:gender)
       end
     end
 
     context "when the gender is other" do
       let(:response_filename) { "identity-verified-other-gender.json" }
 
-      it "returns the expected gender" do
+      it "returns nil for gender" do
         expect(subject.claim_parameters[:gender]).to eq(nil)
+      end
+
+      it "does not return gender in the verified fields" do
+        expect(subject.claim_parameters[:verified_fields]).to_not include(:gender)
       end
     end
   end
