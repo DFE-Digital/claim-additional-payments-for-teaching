@@ -235,39 +235,29 @@ RSpec.feature "Changing the answers on a submittable claim" do
     expect(claim.student_loan_plan).to eq StudentLoans::PLAN_1
   end
 
-  context "with a field that can be verified" do
-    context "when the answer has come from Verify" do
-      before do
-        claim.verified_fields = ["gender"]
-        visit claim_path("check-your-answers")
-      end
+  scenario "user cannot change the value of an identity field that was acquired from Verify" do
+    claim.update!(verified_fields: ["gender"])
+    visit claim_path("check-your-answers")
 
-      scenario "user cannot change their answer" do
-        expect(page).to_not have_content(I18n.t("tslr.questions.gender"))
-        expect(page).to_not have_selector(:css, "a[href='#{claim_path("gender")}']")
+    expect(page).to_not have_content(I18n.t("tslr.questions.gender"))
+    expect(page).to_not have_selector(:css, "a[href='#{claim_path("gender")}']")
 
-        expect {
-          visit claim_path("gender")
-        }.to raise_error(ActionController::RoutingError)
-      end
-    end
+    expect {
+      visit claim_path("gender")
+    }.to raise_error(ActionController::RoutingError)
+  end
 
-    context "when the answer has been manually completed" do
-      before do
-        claim.verified_fields = []
-        visit claim_path("check-your-answers")
-      end
+  scenario "user can change the answer to an identity question that wasn't acquired from Verify" do
+    claim.update!(verified_fields: [])
+    visit claim_path("check-your-answers")
 
-      scenario "user can change their answer" do
-        expect(page).to have_content(I18n.t("tslr.questions.gender"))
-        expect(page).to have_selector(:css, "a[href='#{claim_path("gender")}']")
+    expect(page).to have_content(I18n.t("tslr.questions.gender"))
+    expect(page).to have_selector(:css, "a[href='#{claim_path("gender")}']")
 
-        find("a[href='#{claim_path("gender")}']").click
-        choose "I don't know"
-        click_on "Continue"
+    find("a[href='#{claim_path("gender")}']").click
+    choose "I don't know"
+    click_on "Continue"
 
-        expect(claim.reload.gender).to eq("dont_know")
-      end
-    end
+    expect(claim.reload.gender).to eq("dont_know")
   end
 end
