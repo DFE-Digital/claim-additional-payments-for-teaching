@@ -25,6 +25,7 @@ FROM base AS dependencies
 RUN echo "Building with RAILS_ENV=${RAILS_ENV}, NODE_ENV=${NODE_ENV}"
 
 RUN apk --no-cache add build-base
+RUN apk --no-cache add git
 RUN apk --no-cache add yarn
 
 # Set up install environment

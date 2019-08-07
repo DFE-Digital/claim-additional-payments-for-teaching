@@ -1,3 +1,10 @@
+GIT
+  remote: https://github.com/microsoft/ApplicationInsights-Ruby.git
+  revision: 5db6b4ad65262d23f26b678143a4a1fd7939e5c2
+  ref: 5db6b4ad65262d23f26b678143a4a1fd7939e5c2
+  specs:
+    application_insights (0.5.7)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -311,6 +318,7 @@ PLATFORMS
   x86_64-darwin-18
 
 DEPENDENCIES
+  application_insights!
   bootsnap (>= 1.1.0)
   brakeman
   bullet

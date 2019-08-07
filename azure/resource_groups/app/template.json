@@ -21,6 +21,10 @@
     "appServiceHostName": {
       "type": "string"
     },
+    "useAppServiceHostName": {
+      "type": "bool",
+      "defaultValue": true
+    },
     "appServiceCertificateSecretName": {
       "type": "string"
     },
@@ -113,6 +117,7 @@
     "batPlatformDeploymentUrlBase": "https://raw.githubusercontent.com/DFE-Digital/bat-platform-building-blocks/master/templates/",
     "deploymentUrlBase": "[concat('https://raw.githubusercontent.com/DFE-Digital/dfe-teachers-payment-service/', parameters('gitCommitHash'), '/azure/templates/')]",
 
+    "applicationInsightsDeploymentName": "[concat(parameters('resourceNamePrefix'), '-application-insights')]",
     "appServiceCertificateDeploymentName": "[concat(parameters('resourceNamePrefix'), '-app-service-certificate')]",
     "appServicePlanDeploymentName": "[concat(parameters('resourceNamePrefix'), '-app-service-plan')]",
     "databaseServerFirewallRulesDeploymentName": "[concat(parameters('resourceNamePrefix'), '-database-server-firewall-rules')]",
@@ -124,6 +129,8 @@
     "storageAccountName": "[replace(concat(parameters('resourceNamePrefix'), 'storage'), '-', '')]",
 
     "databaseServerName": "[concat(parameters('resourceNamePrefix'), '-db')]",
+
+    "applicationInsightsName": "[concat(parameters('resourceNamePrefix'), '-ai')]",
 
     "appServicePlanName": "[concat(parameters('resourceNamePrefix'), '-asp')]",
 
@@ -205,6 +212,26 @@
     },
     {
       "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2015-01-01",
+      "name": "[variables('applicationInsightsDeploymentName')]",
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[concat(variables('batPlatformDeploymentUrlBase'), 'application-insights.json')]",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "appInsightsName": {
+            "value": "[variables('applicationInsightsName')]"
+          },
+          "attachedService": {
+            "value": "[variables('appServiceName')]"
+          }
+        }
+      }
+    },
+    {
+      "type": "Microsoft.Resources/deployments",
       "apiVersion": "2017-05-10",
       "name": "[variables('appServicePlanDeploymentName')]",
       "properties": {
@@ -221,9 +248,11 @@
       }
     },
     {
+      "condition": "[parameters('useAppServiceHostName')]",
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2017-05-10",
       "name": "[variables('appServiceCertificateDeploymentName')]",
+      "dependsOn": ["[resourceId('Microsoft.Resources/deployments', variables('appServicePlanDeploymentName'))]"],
       "properties": {
         "mode": "Incremental",
         "templateLink": {
@@ -253,7 +282,7 @@
       "kind": "app,linux,container",
       "location": "[resourceGroup().location]",
       "dependsOn": [
-        "[resourceId('Microsoft.Resources/deployments', variables('appServiceCertificateDeploymentName'))]",
+        "[resourceId('Microsoft.Resources/deployments', variables('applicationInsightsDeploymentName'))]",
         "[resourceId('Microsoft.Resources/deployments', variables('appServicePlanDeploymentName'))]",
         "[resourceId('Microsoft.Resources/deployments', variables('databaseDeploymentName'))]",
         "[resourceId('Microsoft.Resources/deployments', variables('databaseServerDeploymentName'))]"
@@ -289,6 +318,10 @@
             {
               "name": "DFE_TEACHERS_PAYMENT_SERVICE_DATABASE_NAME",
               "value": "[parameters('databaseName')]"
+            },
+            {
+              "name": "APPINSIGHTS_INSTRUMENTATIONKEY",
+              "value": "[reference(resourceId('Microsoft.Resources/deployments', variables('applicationInsightsDeploymentName'))).outputs.instrumentationKey.value]"
             },
             {
               "name": "SECRET_KEY_BASE",
@@ -359,11 +392,15 @@
       }
     },
     {
+      "condition": "[parameters('useAppServiceHostName')]",
       "type": "Microsoft.Web/sites/hostNameBindings",
       "apiVersion": "2018-11-01",
       "name": "[concat(variables('appServiceName'), '/', parameters('appServiceHostName'))]",
       "location": "[resourceGroup().location]",
-      "dependsOn": ["[resourceId('Microsoft.Web/sites', variables('appServiceName'))]"],
+      "dependsOn": [
+        "[resourceId('Microsoft.Resources/deployments', variables('appServiceCertificateDeploymentName'))]",
+        "[resourceId('Microsoft.Web/sites', variables('appServiceName'))]"
+      ],
       "properties": {
         "sslState": "SniEnabled",
         "thumbprint": "[reference(resourceId('Microsoft.Resources/deployments', variables('appServiceCertificateDeploymentName')), '2018-11-01').outputs.certificateThumbprint.value]"
@@ -427,7 +464,7 @@
             "value": "[parameters('VSP.VERIFY_ENVIRONMENT')]"
           },
           "SERVICE_ENTITY_IDS": {
-            "value": "[string(createArray(concat('https://', parameters('appServiceHostName'))))]"
+            "value": "[string(createArray(concat('https://', if(parameters('useAppServiceHostName'), parameters('appServiceHostName'), reference(resourceId('Microsoft.Web/sites', variables('appServiceName'))).defaultHostName))))]"
           },
           "SAML_SIGNING_KEY": {
             "value": "[parameters('VSP.SAML_SIGNING_KEY')]"
