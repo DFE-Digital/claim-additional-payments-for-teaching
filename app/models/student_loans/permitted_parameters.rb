@@ -1,7 +1,6 @@
 module StudentLoans
   class PermittedParameters
     PARAMETERS = [
-      :qts_award_year,
       :mostly_teaching_eligible_subjects,
       :full_name,
       :address_line_1,
