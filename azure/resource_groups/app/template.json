@@ -113,6 +113,7 @@
     "batPlatformDeploymentUrlBase": "https://raw.githubusercontent.com/DFE-Digital/bat-platform-building-blocks/master/templates/",
     "deploymentUrlBase": "[concat('https://raw.githubusercontent.com/DFE-Digital/dfe-teachers-payment-service/', parameters('gitCommitHash'), '/azure/templates/')]",
 
+    "applicationInsightsDeploymentName": "[concat(parameters('resourceNamePrefix'), '-application-insights')]",
     "appServiceCertificateDeploymentName": "[concat(parameters('resourceNamePrefix'), '-app-service-certificate')]",
     "appServicePlanDeploymentName": "[concat(parameters('resourceNamePrefix'), '-app-service-plan')]",
     "databaseServerFirewallRulesDeploymentName": "[concat(parameters('resourceNamePrefix'), '-database-server-firewall-rules')]",
@@ -124,6 +125,8 @@
     "storageAccountName": "[replace(concat(parameters('resourceNamePrefix'), 'storage'), '-', '')]",
 
     "databaseServerName": "[concat(parameters('resourceNamePrefix'), '-db')]",
+
+    "applicationInsightsName": "[concat(parameters('resourceNamePrefix'), '-ai')]",
 
     "appServicePlanName": "[concat(parameters('resourceNamePrefix'), '-asp')]",
 
@@ -205,6 +208,26 @@
     },
     {
       "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2015-01-01",
+      "name": "[variables('applicationInsightsDeploymentName')]",
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[concat(variables('batPlatformDeploymentUrlBase'), 'application-insights.json')]",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "appInsightsName": {
+            "value": "[variables('applicationInsightsName')]"
+          },
+          "attachedService": {
+            "value": "[variables('appServiceName')]"
+          }
+        }
+      }
+    },
+    {
+      "type": "Microsoft.Resources/deployments",
       "apiVersion": "2017-05-10",
       "name": "[variables('appServicePlanDeploymentName')]",
       "properties": {
@@ -253,6 +276,7 @@
       "kind": "app,linux,container",
       "location": "[resourceGroup().location]",
       "dependsOn": [
+        "[resourceId('Microsoft.Resources/deployments', variables('applicationInsightsDeploymentName'))]",
         "[resourceId('Microsoft.Resources/deployments', variables('appServiceCertificateDeploymentName'))]",
         "[resourceId('Microsoft.Resources/deployments', variables('appServicePlanDeploymentName'))]",
         "[resourceId('Microsoft.Resources/deployments', variables('databaseDeploymentName'))]",
@@ -289,6 +313,10 @@
             {
               "name": "DFE_TEACHERS_PAYMENT_SERVICE_DATABASE_NAME",
               "value": "[parameters('databaseName')]"
+            },
+            {
+              "name": "APPINSIGHTS_INSTRUMENTATIONKEY",
+              "value": "[reference(resourceId('Microsoft.Resources/deployments', variables('applicationInsightsDeploymentName'))).outputs.instrumentationKey.value]"
             },
             {
               "name": "SECRET_KEY_BASE",
