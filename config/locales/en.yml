@@ -71,6 +71,7 @@ en:
         April 2019?"
       email_address: "Email address"
       bank_details: "Enter bank account details"
+      payroll_gender: "What gender does your school's payroll system associate with you?"
       eligible_subjects:
         biology_taught: "Biology"
         chemistry_taught: "Chemistry"
@@ -110,6 +111,7 @@ en:
       address_line_4: "Address 4"
       postcode: "Postcode"
       date_of_birth: "Date of Birth"
+      payroll_gender: "Payroll Gender"
       teacher_reference_number: "Teacher Reference"
       national_insurance_number: "NI Number"
       student_loan_repayment_plan: "Student Loan Repayment Plan"

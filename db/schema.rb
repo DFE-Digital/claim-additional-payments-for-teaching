@@ -10,7 +10,8 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_07_29_143440) do
+ActiveRecord::Schema.define(version: 2019_08_01_134306) do
+
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -101,6 +102,8 @@ ActiveRecord::Schema.define(version: 2019_07_29_143440) do
     t.integer "student_loan_courses"
     t.integer "student_loan_start_date"
     t.integer "student_loan_plan"
+    t.integer "payroll_gender"
+    t.text "verified_fields", default: [], array: true
     t.string "eligibility_type"
     t.uuid "eligibility_id"
     t.index ["claim_school_id"], name: "index_tslr_claims_on_claim_school_id"

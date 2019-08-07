@@ -17,6 +17,7 @@ class TslrClaimsCsv
     :address_line_4,
     :postcode,
     :date_of_birth,
+    :payroll_gender,
     :teacher_reference_number,
     :national_insurance_number,
     :student_loan_repayment_plan,

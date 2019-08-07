@@ -1,0 +1,53 @@
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= render("shared/error_summary", instance: current_claim, errored_field_id_overrides: {payroll_gender: "tslr_claim_payroll_gender_female"}) if current_claim.errors.any? %>
+    <%= form_for current_claim, url: claim_path do |form| %>
+      <%= form_group_tag current_claim do %>
+        <h1 class="govuk-label-wrapper">
+          <%= form.label :payroll_gender, t("tslr.questions.payroll_gender"), {class: "govuk-label govuk-label--xl"} %>
+        </h1>
+
+        <span class="govuk-hint">
+          Your school will need to send HMRC a "Male" or
+          "Female" gender to pay you. We ask so we can
+          provide this information to HMRC who use it
+          along with other data to find you in their
+          database, allowing us to make a payment to you.
+        </span>
+
+        <div class="govuk-radios">
+          <div class="govuk-radios__item">
+            <%= form.radio_button(:payroll_gender, :female, class: "govuk-radios__input") %>
+            <%= form.label :payroll_gender_female, "Female", class: "govuk-label govuk-radios__label" %>
+          </div>
+          <div class="govuk-radios__item">
+            <%= form.radio_button(:payroll_gender, :male, class: "govuk-radios__input") %>
+            <%= form.label :payroll_gender_male, "Male", class: "govuk-label govuk-radios__label" %>
+          </div>
+          <div class="govuk-radios__divider">or</div>
+          <div class="govuk-radios__item">
+            <%= form.radio_button(:payroll_gender, :dont_know, class: "govuk-radios__input") %>
+            <%= form.label :payroll_gender_dont_know, "I don't know", class: "govuk-label govuk-radios__label" %>
+          </div>
+        </div>
+      <% end %>
+      <%= form.submit "Continue", class: "govuk-button" %>
+
+      <details class="govuk-details" data-module="govuk-details">
+        <summary class="govuk-details__summary">
+          <span class="govuk-details__summary-text">
+            If you don't know
+          </span>
+        </summary>
+        <div class="govuk-details__text">
+          If you don't know what gender is held on record
+          we will contact HMRC or the Teachers Pension
+          Scheme. We don't need to record this information
+          but it is required to make tax contributions on
+          your behalf to HMRC.
+        </div>
+      </details>
+
+    <% end %>
+  </div>
+</div>

@@ -5,6 +5,7 @@ class ClaimsController < ApplicationController
   before_action :send_unstarted_claiments_to_the_start, only: [:show, :update, :ineligible]
   before_action :end_expired_sessions
   before_action :update_last_seen_at
+  before_action :check_page_is_in_sequence, only: [:show, :update]
 
   after_action :clear_claim_session, if: :submission_complete?
 
@@ -45,7 +46,7 @@ class ClaimsController < ApplicationController
   end
 
   def next_slug
-    PageSequence.new(current_claim, params[:slug]).next_slug
+    page_sequence.next_slug
   end
 
   def submission_complete?
@@ -61,31 +62,7 @@ class ClaimsController < ApplicationController
   end
 
   def claim_params
-    params.fetch(:tslr_claim, {}).permit(
-      :claim_school_id,
-      :employment_status,
-      :current_school_id,
-      :mostly_teaching_eligible_subjects,
-      :full_name,
-      :address_line_1,
-      :address_line_2,
-      :address_line_3,
-      :address_line_4,
-      :postcode,
-      :date_of_birth,
-      :teacher_reference_number,
-      :national_insurance_number,
-      :has_student_loan,
-      :student_loan_country,
-      :student_loan_courses,
-      :student_loan_start_date,
-      :student_loan_repayment_amount,
-      :email_address,
-      :bank_sort_code,
-      :bank_account_number,
-      TslrClaim::SUBJECT_FIELDS,
-      eligibility_attributes: [:qts_award_year],
-    )
+    params.fetch(:tslr_claim, {}).permit(StudentLoans::PermittedParameters.new(current_claim).keys)
   end
 
   def claim_page_template
@@ -109,5 +86,13 @@ class ClaimsController < ApplicationController
     session.delete(:tslr_claim_id)
     session.delete(:last_seen_at)
     session.delete(:verify_request_id)
+  end
+
+  def check_page_is_in_sequence
+    raise ActionController::RoutingError.new("Not Found") unless page_sequence.in_sequence?(params[:slug])
+  end
+
+  def page_sequence
+    @page_sequence ||= PageSequence.new(current_claim, params[:slug])
   end
 end

@@ -234,4 +234,30 @@ RSpec.feature "Changing the answers on a submittable claim" do
     expect(claim.student_loan_start_date).to eq StudentLoans::BEFORE_1_SEPT_2012
     expect(claim.student_loan_plan).to eq StudentLoans::PLAN_1
   end
+
+  scenario "user cannot change the value of an identity field that was acquired from Verify" do
+    claim.update!(verified_fields: ["payroll_gender"])
+    visit claim_path("check-your-answers")
+
+    expect(page).to_not have_content(I18n.t("tslr.questions.payroll_gender"))
+    expect(page).to_not have_selector(:css, "a[href='#{claim_path("gender")}']")
+
+    expect {
+      visit claim_path("gender")
+    }.to raise_error(ActionController::RoutingError)
+  end
+
+  scenario "user can change the answer to an identity question that wasn't acquired from Verify" do
+    claim.update!(verified_fields: [])
+    visit claim_path("check-your-answers")
+
+    expect(page).to have_content(I18n.t("tslr.questions.payroll_gender"))
+    expect(page).to have_selector(:css, "a[href='#{claim_path("gender")}']")
+
+    find("a[href='#{claim_path("gender")}']").click
+    choose "I don't know"
+    click_on "Continue"
+
+    expect(claim.reload.payroll_gender).to eq("dont_know")
+  end
 end
