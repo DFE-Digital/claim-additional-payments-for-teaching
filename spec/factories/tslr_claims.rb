@@ -3,8 +3,6 @@ FactoryBot.define do
     association(:eligibility, factory: :student_loans_eligibility)
 
     trait :submittable do
-      physics_taught { true }
-      mostly_teaching_eligible_subjects { true }
       full_name { "Jo Bloggs" }
       address_line_1 { "1 Test Road" }
       address_line_3 { "Test Town" }

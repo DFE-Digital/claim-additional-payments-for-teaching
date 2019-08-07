@@ -122,25 +122,6 @@ RSpec.describe TslrClaim, type: :model do
     expect(claim.errors.values).to include(["Select the academic year you were awarded qualified teacher status"])
   end
 
-  context "when saving in the “subjects-taught” validation context" do
-    it "validates that a subject has been provided" do
-      expect(build(:tslr_claim)).not_to be_valid(:"subjects-taught")
-      expect(build(:tslr_claim, computer_science_taught: true, physics_taught: true)).to be_valid(:"subjects-taught")
-    end
-
-    it "does not validate that a subject has been provided when mostly_teaching_eligible_subjects is false" do
-      expect(build(:tslr_claim)).not_to be_valid(:"subjects-taught")
-      expect(build(:tslr_claim, mostly_teaching_eligible_subjects: false)).to be_valid(:"subjects-taught")
-    end
-  end
-
-  context "when saving in the “mostly-teaching-eligible-subjects” validation context" do
-    it "validates mostly_teaching_eligible_subjects has been provided" do
-      expect(build(:tslr_claim)).not_to be_valid(:"subjects-taught")
-      expect(build(:tslr_claim, mostly_teaching_eligible_subjects: true)).to be_valid(:"mostly-teaching-eligible-subjects")
-    end
-  end
-
   context "when saving in the “gender” validation context" do
     it "validates the presence of gender" do
       expect(build(:tslr_claim)).not_to be_valid(:gender)
@@ -241,8 +222,9 @@ RSpec.describe TslrClaim, type: :model do
       expect(build(:tslr_claim, :submittable)).to be_valid(:submit)
     end
 
-    it "validates the claim is not ineligible" do
-      ineligible_claim = build(:tslr_claim, :submittable, mostly_teaching_eligible_subjects: false)
+    it "validates the claim’s eligibility" do
+      ineligible_claim = build(:tslr_claim, :submittable)
+      ineligible_claim.eligibility.mostly_teaching_eligible_subjects = false
 
       expect(ineligible_claim).not_to be_valid(:submit)
       expect(ineligible_claim.errors[:base]).to include(I18n.t("activerecord.errors.messages.not_taught_eligible_subjects_enough"))
@@ -318,12 +300,12 @@ RSpec.describe TslrClaim, type: :model do
     end
 
     context "when taught less than half time in eligible subjects" do
-      let(:claim_attributes) { {mostly_teaching_eligible_subjects: false} }
+      let(:claim_attributes) { {eligibility: build(:student_loans_eligibility, mostly_teaching_eligible_subjects: false)} }
       it { is_expected.to be true }
     end
 
     context "when taught at least half time in eligible subjects" do
-      let(:claim_attributes) { {mostly_teaching_eligible_subjects: true} }
+      let(:claim_attributes) { {eligibility: build(:student_loans_eligibility, mostly_teaching_eligible_subjects: true)} }
       it { is_expected.to be false }
     end
   end
@@ -347,7 +329,7 @@ RSpec.describe TslrClaim, type: :model do
     end
 
     context "when taught less than half time in eligible subjects" do
-      let(:claim_attributes) { {mostly_teaching_eligible_subjects: false} }
+      let(:claim_attributes) { {eligibility: build(:student_loans_eligibility, mostly_teaching_eligible_subjects: false)} }
       it { is_expected.to eql :not_taught_eligible_subjects_enough }
     end
 
@@ -430,7 +412,8 @@ RSpec.describe TslrClaim, type: :model do
     end
 
     context "when the claim is ineligible" do
-      let(:tslr_claim) { create(:tslr_claim, :submittable, mostly_teaching_eligible_subjects: false) }
+      let(:ineligible_eligibility) { build(:student_loans_eligibility, :submittable, mostly_teaching_eligible_subjects: false) }
+      let(:tslr_claim) { create(:tslr_claim, :submittable, eligibility: ineligible_eligibility) }
 
       before { tslr_claim.submit! }
 
@@ -483,23 +466,6 @@ RSpec.describe TslrClaim, type: :model do
       claim = build(:tslr_claim, :submitted)
 
       expect(claim.submittable?).to eq false
-    end
-  end
-
-  describe "#subjects_taught" do
-    context "when a claim has subjects" do
-      let(:claim) { create(:tslr_claim, biology_taught: true, chemistry_taught: true) }
-
-      it "returns the correct fields" do
-        expect(claim.subjects_taught).to eq([:biology_taught, :chemistry_taught])
-      end
-    end
-    context "when a claim has no subjects" do
-      let(:claim) { create(:tslr_claim) }
-
-      it "returns an empty array" do
-        expect(claim.subjects_taught).to eq([])
-      end
     end
   end
 end

@@ -4,12 +4,17 @@ describe ClaimsHelper do
   describe "#claim_answers" do
     it "returns an array of questions and answers for displaying to the user for review" do
       school = schools(:penistone_grammar_school)
-      claim = build(
-        :tslr_claim,
-        eligibility: build(:student_loans_eligibility, claim_school: school, current_school: school),
+      eligibility = build(
+        :student_loans_eligibility,
+        claim_school: school,
+        current_school: school,
         chemistry_taught: true,
         physics_taught: true,
         mostly_teaching_eligible_subjects: true,
+      )
+      claim = build(
+        :tslr_claim,
+        eligibility: eligibility,
         student_loan_repayment_amount: 1987.65,
         eligibility_attributes: {qts_award_year: "2013_2014"},
       )

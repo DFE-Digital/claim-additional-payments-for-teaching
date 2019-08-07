@@ -1,7 +1,15 @@
 module StudentLoans
   class PermittedParameters
-    PARAMETERS = [
+    ELIGIBILITY_PARAMETERS = [
+      :qts_award_year,
+      :claim_school_id,
+      :employment_status,
+      :current_school_id,
       :mostly_teaching_eligible_subjects,
+      StudentLoans::Eligibility::SUBJECT_ATTRIBUTES,
+    ].flatten.freeze
+
+    PARAMETERS = [
       :full_name,
       :address_line_1,
       :address_line_2,
@@ -20,8 +28,7 @@ module StudentLoans
       :email_address,
       :bank_sort_code,
       :bank_account_number,
-      TslrClaim::SUBJECT_FIELDS,
-      eligibility_attributes: [:qts_award_year, :claim_school_id, :employment_status, :current_school_id],
+      eligibility_attributes: ELIGIBILITY_PARAMETERS,
     ].freeze
 
     attr_reader :claim

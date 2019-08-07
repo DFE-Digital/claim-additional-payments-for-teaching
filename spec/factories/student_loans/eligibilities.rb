@@ -7,6 +7,8 @@ FactoryBot.define do
       claim_school { School.find(ActiveRecord::FixtureSet.identify(:penistone_grammar_school, :uuid)) }
       employment_status { :claim_school }
       current_school { claim_school }
+      physics_taught { true }
+      mostly_teaching_eligible_subjects { true }
     end
   end
 end
