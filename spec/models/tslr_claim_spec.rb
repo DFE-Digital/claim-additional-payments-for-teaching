@@ -16,6 +16,7 @@ RSpec.describe TslrClaim, type: :model do
     it "validates that the value is in the correct format" do
       expect(build(:tslr_claim, email_address: "notan email@address.com")).not_to be_valid
       expect(build(:tslr_claim, email_address: "name@example.com")).to be_valid
+      expect(build(:tslr_claim, email_address: "")).to be_valid
     end
 
     it "checks that the email address in not longer than 256 characters" do
