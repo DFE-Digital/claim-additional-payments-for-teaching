@@ -15,8 +15,7 @@
       "type": "bool"
     },
     "appServiceAllowedIpAddresses": {
-      "type": "array",
-      "defaultValue": []
+      "type": "array"
     },
     "VERIFY_ENVIRONMENT": {
       "type": "string"
@@ -56,7 +55,7 @@
     },
     {
       "type": "Microsoft.Web/sites",
-      "apiVersion": "2016-08-01",
+      "apiVersion": "2018-11-01",
       "name": "[parameters('appServiceName')]",
       "kind": "app,linux,container",
       "location": "[resourceGroup().location]",
@@ -89,10 +88,12 @@
           "copy": [
             {
               "name": "ipSecurityRestrictions",
-              "count": "[length(parameters('appServiceAllowedIpAddresses'))]",
+              "count": "[add(length(parameters('appServiceAllowedIpAddresses')), 1)]",
               "input": {
-                "ipAddress": "[last(take(parameters('appServiceAllowedIpAddresses'), copyIndex('ipSecurityRestrictions', 1)))]",
-                "action": "Allow"
+                "ipAddress": "[if(less(copyIndex('ipSecurityRestrictions'), length(parameters('appServiceAllowedIpAddresses'))), concat(last(take(parameters('appServiceAllowedIpAddresses'), copyIndex('ipSecurityRestrictions', 1))), '/32'), '0.0.0.0/1')]",
+                "action": "[if(less(copyIndex('ipSecurityRestrictions'), length(parameters('appServiceAllowedIpAddresses'))), 'Allow', 'Deny')]",
+                "priority": "[if(less(copyIndex('ipSecurityRestrictions'), length(parameters('appServiceAllowedIpAddresses'))), 65000, 2147483647)]",
+                "name": "[if(less(copyIndex('ipSecurityRestrictions'), length(parameters('appServiceAllowedIpAddresses'))), concat('Allow ', last(take(parameters('appServiceAllowedIpAddresses'), copyIndex('ipSecurityRestrictions', 1)))), 'Deny all')]"
               }
             }
           ]
