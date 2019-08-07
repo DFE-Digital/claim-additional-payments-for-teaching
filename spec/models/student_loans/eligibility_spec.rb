@@ -173,6 +173,15 @@ RSpec.describe StudentLoans::Eligibility, type: :model do
     end
   end
 
+  context "when saving in the “leadership-position” context" do
+    it "is not valid without a value for had_leadership_position" do
+      expect(StudentLoans::Eligibility.new).not_to be_valid(:"leadership-position")
+
+      expect(StudentLoans::Eligibility.new(had_leadership_position: true)).to be_valid(:"leadership-position")
+      expect(StudentLoans::Eligibility.new(had_leadership_position: false)).to be_valid(:"leadership-position")
+    end
+  end
+
   context "when saving in the “mostly-teaching-eligible-subjects” context" do
     it "is valid when mostly_teaching_eligible_subjects is present as a boolean value" do
       expect(StudentLoans::Eligibility.new).not_to be_valid(:"mostly-teaching-eligible-subjects")
@@ -215,6 +224,13 @@ RSpec.describe StudentLoans::Eligibility, type: :model do
 
     it "is not valid without at least one subject being taught selected" do
       expect(build(:student_loans_eligibility, :eligible, physics_taught: nil)).not_to be_valid(:submit)
+    end
+
+    it "is not valid without a value for had_leadership_position" do
+      expect(build(:student_loans_eligibility, :eligible, had_leadership_position: nil)).not_to be_valid(:submit)
+
+      expect(build(:student_loans_eligibility, :eligible, had_leadership_position: true)).to be_valid(:submit)
+      expect(build(:student_loans_eligibility, :eligible, had_leadership_position: false)).to be_valid(:submit)
     end
 
     it "is not valid without a value for mostly_teaching_eligible_subjects" do

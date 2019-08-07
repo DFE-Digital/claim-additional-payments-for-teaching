@@ -91,6 +91,7 @@ en:
       claim_school: "Which school were you employed at between 6 April 2018 and 5 April 2019?"
       employment_status: "Are you still employed to teach at a school in England?"
       subjects_taught: "Did you teach any of the following subjects between 6 April 2018 and 5 April 2019?"
+      leadership_position: "Were you employed in a leadership position between 6 April 2018 and 5 April 2019?"
       mostly_teaching_eligible_subjects:
         "Were half of your working hours spent teaching %{subjects} between 6 April 2018 and 5 April 2019?"
       eligible_subjects:
@@ -122,6 +123,7 @@ en:
       national_insurance_number: "NI Number"
       student_loan_repayment_plan: "Student Loan Repayment Plan"
       email_address: "Email"
+      had_leadership_position: "Had Leadership Position?"
       mostly_teaching_eligible_subjects: "Mostly Teaching Eligible Subjects?"
       bank_sort_code: "Sort Code"
       bank_account_number: "Account Number"

@@ -5,6 +5,7 @@ module StudentLoans
       :claim_school_id,
       :employment_status,
       :current_school_id,
+      :had_leadership_position,
       :mostly_teaching_eligible_subjects,
       :student_loan_repayment_amount,
       StudentLoans::Eligibility::SUBJECT_ATTRIBUTES,

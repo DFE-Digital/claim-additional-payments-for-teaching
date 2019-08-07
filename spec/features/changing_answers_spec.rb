@@ -48,44 +48,68 @@ RSpec.feature "Changing the answers on a submittable claim" do
         expect(eligibility.chemistry_taught).to eq(true)
       end
 
-      scenario "Teacher is redirected to ask if they were mostly teaching eligible subjects" do
-        expect(current_path).to eq(claim_path("mostly-teaching-eligible-subjects"))
+      scenario "Teacher is redirected to ask if they had a leadership position" do
+        expect(current_path).to eq(claim_path("leadership-position"))
       end
 
-      scenario "Teacher sees the the correct subjects in the question" do
-        expect(page).to have_text("Biology and Chemistry")
-      end
-
-      context "Teacher taught subjects for more than 50% of their time" do
+      context "Teacher had a leadership position" do
         before do
           choose "Yes"
 
           click_on "Continue"
         end
 
-        scenario "Sets mostly teaching eligible subjects correctly" do
-          expect(eligibility.reload.mostly_teaching_eligible_subjects).to eq(true)
+        scenario "Teacher is redirected to ask if they were mostly teaching eligible subjects" do
+          expect(current_path).to eq(claim_path("mostly-teaching-eligible-subjects"))
         end
 
-        scenario "Teacher is redirected to the check your answers page" do
-          expect(current_path).to eq(claim_path("check-your-answers"))
+        scenario "Teacher sees the the correct subjects in the question" do
+          expect(page).to have_text("Biology and Chemistry")
+        end
+
+        context "Teacher taught subjects for more than 50% of their time" do
+          before do
+            choose "Yes"
+
+            click_on "Continue"
+          end
+
+          scenario "Sets mostly teaching eligible subjects correctly" do
+            expect(eligibility.reload.mostly_teaching_eligible_subjects).to eq(true)
+          end
+
+          scenario "Teacher is redirected to the check your answers page" do
+            expect(current_path).to eq(claim_path("check-your-answers"))
+          end
+        end
+
+        context "Teacher taught subjects for less than 50% of their time" do
+          before do
+            choose "No"
+
+            click_on "Continue"
+          end
+
+          scenario "Sets mostly teaching eligible subjects correctly" do
+            expect(eligibility.reload.mostly_teaching_eligible_subjects).to eq(false)
+          end
+
+          scenario "Teacher is told they are not eligible" do
+            expect(page).to have_text("You’re not eligible")
+            expect(page).to have_text("You must have spent at least half your time teaching an eligible subject")
+          end
         end
       end
 
-      context "Teacher taught subjects for less than 50% of their time" do
+      context "Teacher didn't have a leadership position" do
         before do
           choose "No"
 
           click_on "Continue"
         end
 
-        scenario "Sets mostly teaching eligible subjects correctly" do
-          expect(eligibility.reload.mostly_teaching_eligible_subjects).to eq(false)
-        end
-
-        scenario "Teacher is told they are not eligible" do
-          expect(page).to have_text("You’re not eligible")
-          expect(page).to have_text("You must have spent at least half your time teaching an eligible subject")
+        scenario "Teacher is redirected to ask if they were mostly teaching eligible subjects" do
+          expect(current_path).to eq(claim_path("mostly-teaching-eligible-subjects"))
         end
       end
     end

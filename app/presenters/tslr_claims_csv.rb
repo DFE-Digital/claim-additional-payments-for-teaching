@@ -22,6 +22,7 @@ class TslrClaimsCsv
     :national_insurance_number,
     :student_loan_repayment_plan,
     :email_address,
+    :had_leadership_position,
     :mostly_teaching_eligible_subjects,
     :bank_sort_code,
     :bank_account_number,

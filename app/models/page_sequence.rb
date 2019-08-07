@@ -14,6 +14,7 @@ class PageSequence
     "still-teaching",
     "current-school",
     "subjects-taught",
+    "leadership-position",
     "mostly-teaching-eligible-subjects",
     "eligibility-confirmed",
     "verified",

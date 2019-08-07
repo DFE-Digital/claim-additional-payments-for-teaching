@@ -8,6 +8,7 @@ FactoryBot.define do
       employment_status { :claim_school }
       current_school { claim_school }
       physics_taught { true }
+      had_leadership_position { true }
       mostly_teaching_eligible_subjects { true }
       student_loan_repayment_amount { 1000 }
     end

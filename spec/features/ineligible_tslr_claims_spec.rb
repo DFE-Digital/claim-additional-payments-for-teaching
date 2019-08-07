@@ -54,7 +54,7 @@ RSpec.feature "Ineligible Teacher Student Loan Repayments claims" do
     expect(page).to have_text(I18n.t("activerecord.errors.messages.employed_at_no_school"))
   end
 
-  scenario "does not teach an eligible subject" do
+  scenario "did not teach an eligible subject" do
     claim = start_claim
     choose_qts_year
     choose_school schools(:penistone_grammar_school)
@@ -68,13 +68,16 @@ RSpec.feature "Ineligible Teacher Student Loan Repayments claims" do
     expect(page).to have_text(I18n.t("activerecord.errors.messages.not_taught_eligible_subjects_enough"))
   end
 
-  scenario "does not teach an eligible subject for at least half of their time" do
+  scenario "was in a leadership position and did not teach an eligible subject for at least half of their time" do
     claim = start_claim
     choose_qts_year
     choose_school schools(:penistone_grammar_school)
     choose_still_teaching
 
     check "Biology"
+    click_on "Continue"
+
+    choose "Yes"
     click_on "Continue"
 
     choose "No"
