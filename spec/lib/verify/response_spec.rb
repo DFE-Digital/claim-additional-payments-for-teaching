@@ -83,6 +83,23 @@ RSpec.describe Verify::Response, type: :model do
     end
   end
 
+  context "with the minimum verified response" do
+    let(:response_filename) { "identity-verified-minimum.json" }
+
+    it "is verified" do
+      expect(subject.verified?).to eq(true)
+    end
+
+    it "returns the expected verified parameters" do
+      expect(subject.claim_parameters[:full_name]).to eq("Isambard Brunel")
+      expect(subject.claim_parameters[:address_line_1]).to eq("Verified Street")
+      expect(subject.claim_parameters[:address_line_2]).to eq("Verified Town")
+      expect(subject.claim_parameters[:address_line_3]).to be_nil
+      expect(subject.claim_parameters[:postcode]).to eq("M12 345")
+      expect(subject.claim_parameters[:date_of_birth]).to eq("1806-04-09")
+    end
+  end
+
   context "with a cancelled response" do
     let(:response_filename) { "no-authentication.json" }
 
