@@ -8,8 +8,18 @@ class TslrClaimCsvRow < SimpleDelegator
 
   private
 
+  DANGEROUS_STRINGS = [
+    "-",
+    "+",
+    "=",
+    "@",
+  ].freeze
+
   def data
-    TslrClaimsCsv::FIELDS.map { |f| send(f) }
+    TslrClaimsCsv::FIELDS.map do |f|
+      field = send(f)
+      sanitize_field(field)
+    end
   end
 
   def employment_status
@@ -34,6 +44,13 @@ class TslrClaimCsvRow < SimpleDelegator
 
   def submitted_at
     model.submitted_at.strftime("%d/%m/%Y %H:%M")
+  end
+
+  def sanitize_field(field)
+    return field if field.blank?
+
+    field = "=\"#{field}\"" if DANGEROUS_STRINGS.any? { |string| field.include?(string) }
+    field
   end
 
   def model
