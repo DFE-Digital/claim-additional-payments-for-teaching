@@ -83,7 +83,7 @@ class TslrClaim < ApplicationRecord
   validates :email_address,             on: [:"email-address", :submit], presence: {message: "Enter an email address"}
   validates :email_address,             format: {with: URI::MailTo::EMAIL_REGEXP, message: "Enter an email address in the correct format, like name@example.com"},
                                         length: {maximum: 256, message: "Email address must be 256 characters or less"},
-                                        allow_nil: true
+                                        allow_blank: true
 
   validates :bank_sort_code,            on: [:"bank-details", :submit], presence: {message: "Enter a sort code"}
   validates :bank_account_number,       on: [:"bank-details", :submit], presence: {message: "Enter an account number"}
