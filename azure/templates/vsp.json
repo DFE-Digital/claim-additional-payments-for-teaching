@@ -14,8 +14,9 @@
     "appServiceAlwaysOn": {
       "type": "bool"
     },
-    "appServiceAllowedIngressIpAddresses": {
-      "type": "array"
+    "appServiceAllowedIpAddresses": {
+      "type": "array",
+      "defaultValue": []
     },
     "VERIFY_ENVIRONMENT": {
       "type": "string"
@@ -88,9 +89,9 @@
           "copy": [
             {
               "name": "ipSecurityRestrictions",
-              "count": "[length(parameters('appServiceAllowedIngressIpAddresses'))]",
+              "count": "[length(parameters('appServiceAllowedIpAddresses'))]",
               "input": {
-                "ipAddress": "[last(take(parameters('appServiceAllowedIngressIpAddresses'), copyIndex('ipSecurityRestrictions', 1)))]",
+                "ipAddress": "[last(take(parameters('appServiceAllowedIpAddresses'), copyIndex('ipSecurityRestrictions', 1)))]",
                 "action": "Allow"
               }
             }
