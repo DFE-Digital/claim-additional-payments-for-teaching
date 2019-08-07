@@ -7,18 +7,22 @@
 # Performing an update in the "check-your-answers" context will attempt to
 # submit the claim and send the confirmation email to the claimant.
 #
-# The `DEPENDENT_ANSWERS` hash defines the attributes that depend on the value
-# of another attribute such that if the value of the other attribute changes
-# the dependent attribute should be reset because the value will no longer hold,
-# or may be an answer to a question that should no longer be asked. For example,
-# the `student_loan_course` attribute should only be set if the user
-# `has_student_loan`.
+# The `DEPENDENT_CLAIM_ANSWERS` and `DEPENDENT_ELIGIBILITY_ANSWERS` hashes
+# define the attributes that depend on the value of another attribute
+# such that if the value of the other attribute changes the dependent
+# attribute should be reset because the value will no longer hold, or
+# may be an answer to a question that should no longer be asked. For
+# example the `student_loan_course` attribute should only be set if the
+# user `has_student_loan`.
 class ClaimUpdate
-  DEPENDENT_ANSWERS = {
-    "claim_school_id" => "employment_status",
+  DEPENDENT_CLAIM_ANSWERS = {
     "has_student_loan" => "student_loan_country",
     "student_loan_country" => "student_loan_courses",
     "student_loan_courses" => "student_loan_start_date",
+  }.freeze
+
+  DEPENDENT_ELIGIBILITY_ANSWERS = {
+    "claim_school_id" => "employment_status",
   }.freeze
 
   attr_reader :claim, :context, :params
@@ -38,6 +42,7 @@ class ClaimUpdate
       reset_dependent_answers
 
       infer_current_school
+
       determine_student_loan_plan
 
       claim.save(context: context)
@@ -55,16 +60,21 @@ class ClaimUpdate
   end
 
   def reset_dependent_answers
-    DEPENDENT_ANSWERS.each do |attribute_name, dependent_attribute_name|
+    DEPENDENT_CLAIM_ANSWERS.each do |attribute_name, dependent_attribute_name|
       if claim.changed.include?(attribute_name)
         claim.attributes = {dependent_attribute_name => nil}
+      end
+    end
+    DEPENDENT_ELIGIBILITY_ANSWERS.each do |attribute_name, dependent_attribute_name|
+      if claim.eligibility.changed.include?(attribute_name)
+        claim.eligibility.attributes = {dependent_attribute_name => nil}
       end
     end
   end
 
   def infer_current_school
-    if claim.employment_status_changed?
-      claim.current_school = claim.employed_at_claim_school? ? claim.claim_school : nil
+    if claim.eligibility.employment_status_changed?
+      claim.eligibility.current_school = claim.eligibility.employed_at_claim_school? ? claim.eligibility.claim_school : nil
     end
   end
 

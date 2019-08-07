@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_08_01_134306) do
+ActiveRecord::Schema.define(version: 2019_08_06_133855) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -68,14 +68,16 @@ ActiveRecord::Schema.define(version: 2019_08_01_134306) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "qts_award_year"
+    t.uuid "claim_school_id"
+    t.uuid "current_school_id"
+    t.integer "employment_status"
+    t.index ["claim_school_id"], name: "index_student_loans_eligibilities_on_claim_school_id"
+    t.index ["current_school_id"], name: "index_student_loans_eligibilities_on_current_school_id"
   end
 
   create_table "tslr_claims", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.uuid "claim_school_id"
-    t.integer "employment_status"
-    t.uuid "current_school_id"
     t.string "full_name", limit: 200
     t.string "address_line_1", limit: 100
     t.string "address_line_2", limit: 100
@@ -106,15 +108,12 @@ ActiveRecord::Schema.define(version: 2019_08_01_134306) do
     t.text "verified_fields", default: [], array: true
     t.string "eligibility_type"
     t.uuid "eligibility_id"
-    t.index ["claim_school_id"], name: "index_tslr_claims_on_claim_school_id"
-    t.index ["current_school_id"], name: "index_tslr_claims_on_current_school_id"
     t.index ["eligibility_type", "eligibility_id"], name: "index_tslr_claims_on_eligibility_type_and_eligibility_id"
-    t.index ["employment_status"], name: "index_tslr_claims_on_employment_status"
     t.index ["reference"], name: "index_tslr_claims_on_reference", unique: true
     t.index ["submitted_at"], name: "index_tslr_claims_on_submitted_at"
   end
 
   add_foreign_key "schools", "local_authority_districts"
-  add_foreign_key "tslr_claims", "schools", column: "claim_school_id"
-  add_foreign_key "tslr_claims", "schools", column: "current_school_id"
+  add_foreign_key "student_loans_eligibilities", "schools", column: "claim_school_id"
+  add_foreign_key "student_loans_eligibilities", "schools", column: "current_school_id"
 end

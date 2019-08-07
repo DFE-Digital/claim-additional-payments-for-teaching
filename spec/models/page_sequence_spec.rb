@@ -7,7 +7,7 @@ RSpec.describe PageSequence do
 
   describe "#slugs" do
     it "excludes “current-school” when the claimant still works at the school they are claiming against" do
-      claim.employment_status = :claim_school
+      claim.eligibility.employment_status = :claim_school
       page_sequence = PageSequence.new(claim, "still-teaching")
 
       expect(page_sequence.slugs).not_to include("current-school")
@@ -62,7 +62,7 @@ RSpec.describe PageSequence do
     end
 
     context "with an ineligible claim" do
-      let(:claim) { build(:tslr_claim, employment_status: :no_school) }
+      let(:claim) { build(:tslr_claim, eligibility: build(:student_loans_eligibility, employment_status: :no_school)) }
 
       it "returns “ineligible” as the next slug" do
         expect(PageSequence.new(claim, "still-teaching").next_slug).to eq "ineligible"

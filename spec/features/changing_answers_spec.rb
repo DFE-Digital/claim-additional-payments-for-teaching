@@ -180,7 +180,7 @@ RSpec.feature "Changing the answers on a submittable claim" do
   end
 
   scenario "going from same school to different school" do
-    claim.update!(employment_status: "claim_school")
+    claim.eligibility.update!(employment_status: "claim_school")
 
     find("a[href='#{claim_path("still-teaching")}']").click
 
