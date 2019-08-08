@@ -1,7 +1,7 @@
 require "rails_helper"
 
 describe GovukFormHelper do
-  let(:claim) { TslrClaim.new }
+  let(:claim) { Claim.new }
 
   describe "#form_group_tag" do
     it "wraps the supplied block in a form group <div> tag" do
@@ -30,7 +30,7 @@ describe GovukFormHelper do
   end
 
   describe "#errors_tag" do
-    let(:claim) { TslrClaim.new }
+    let(:claim) { Claim.new }
 
     it "returns correctly formatted error messages" do
       claim.errors.add(:attribute, "Test error one")

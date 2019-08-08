@@ -1,5 +1,5 @@
 FactoryBot.define do
-  factory :claim, class: TslrClaim do
+  factory :claim do
     association(:eligibility, factory: :student_loans_eligibility)
 
     trait :submittable do

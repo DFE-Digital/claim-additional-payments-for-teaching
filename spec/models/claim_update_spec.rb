@@ -47,7 +47,7 @@ RSpec.describe ClaimUpdate do
 
       it "sets the student_loan_plan to indicate it is not applicable" do
         expect(claim_update.perform).to be_truthy
-        expect(claim.student_loan_plan).to eq TslrClaim::NO_STUDENT_LOAN
+        expect(claim.student_loan_plan).to eq Claim::NO_STUDENT_LOAN
       end
     end
   end
@@ -208,7 +208,7 @@ RSpec.describe ClaimUpdate do
       expect(claim.student_loan_country).to be_nil
       expect(claim.student_loan_courses).to be_nil
       expect(claim.student_loan_start_date).to be_nil
-      expect(claim.student_loan_plan).to eq TslrClaim::NO_STUDENT_LOAN
+      expect(claim.student_loan_plan).to eq Claim::NO_STUDENT_LOAN
     end
   end
 end

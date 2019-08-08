@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe TslrClaim, type: :model do
+RSpec.describe Claim, type: :model do
   context "that has a teacher_reference_number" do
     it "validates the length of the teacher reference number" do
       expect(build(:claim, teacher_reference_number: "1/2/3/4/5/6/7")).to be_valid
@@ -96,7 +96,7 @@ RSpec.describe TslrClaim, type: :model do
 
   it "is not submittable without a value for the student_loan_plan present" do
     expect(build(:claim, :submittable, student_loan_plan: nil)).not_to be_valid(:submit)
-    expect(build(:claim, :submittable, student_loan_plan: TslrClaim::NO_STUDENT_LOAN)).to be_valid(:submit)
+    expect(build(:claim, :submittable, student_loan_plan: Claim::NO_STUDENT_LOAN)).to be_valid(:submit)
   end
 
   it "is submittable with optional student loan questions not answered" do
@@ -104,7 +104,7 @@ RSpec.describe TslrClaim, type: :model do
       :claim,
       :submittable,
       has_student_loan: false,
-      student_loan_plan: TslrClaim::NO_STUDENT_LOAN,
+      student_loan_plan: Claim::NO_STUDENT_LOAN,
       student_loan_country: nil,
       student_loan_courses: nil,
       student_loan_start_date: nil
@@ -380,18 +380,18 @@ RSpec.describe TslrClaim, type: :model do
 
   describe "#address_verified?" do
     it "returns true if any address attributes are in the list of verified fields" do
-      expect(TslrClaim.new.payroll_gender_verified?).to eq false
-      expect(TslrClaim.new(verified_fields: ["gender"]).payroll_gender_verified?).to eq false
+      expect(Claim.new.payroll_gender_verified?).to eq false
+      expect(Claim.new(verified_fields: ["gender"]).payroll_gender_verified?).to eq false
 
-      expect(TslrClaim.new(verified_fields: ["address_line_1"]).address_verified?).to eq true
-      expect(TslrClaim.new(verified_fields: ["address_line_1", "postcode"]).address_verified?).to eq true
+      expect(Claim.new(verified_fields: ["address_line_1"]).address_verified?).to eq true
+      expect(Claim.new(verified_fields: ["address_line_1", "postcode"]).address_verified?).to eq true
     end
   end
 
   describe "#payroll_gender_verified?" do
     it "returns true if payroll_gender is in the list of verified fields" do
-      expect(TslrClaim.new(verified_fields: ["payroll_gender"]).payroll_gender_verified?).to eq true
-      expect(TslrClaim.new(verified_fields: ["address_line_1"]).payroll_gender_verified?).to eq false
+      expect(Claim.new(verified_fields: ["payroll_gender"]).payroll_gender_verified?).to eq true
+      expect(Claim.new(verified_fields: ["address_line_1"]).payroll_gender_verified?).to eq false
     end
   end
 end

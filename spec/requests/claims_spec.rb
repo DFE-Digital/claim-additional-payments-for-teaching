@@ -11,8 +11,8 @@ RSpec.describe "Claims", type: :request do
   end
 
   describe "claims#create request" do
-    it "creates a new TslrClaim and redirects to the QTS question" do
-      expect { post claims_path }.to change { TslrClaim.count }.by(1)
+    it "creates a new Claim and redirects to the QTS question" do
+      expect { post claims_path }.to change { Claim.count }.by(1)
 
       expect(response).to redirect_to(claim_path("qts-year"))
     end
@@ -66,7 +66,7 @@ RSpec.describe "Claims", type: :request do
       before do
         post claims_path
 
-        claim = TslrClaim.order(:created_at).last
+        claim = Claim.order(:created_at).last
         claim.update_attributes(attributes_for(:claim, :submittable))
         claim.eligibility.update_attributes(attributes_for(:student_loans_eligibility, :eligible))
 
@@ -92,7 +92,7 @@ RSpec.describe "Claims", type: :request do
       end
 
       it "tailors the message to the claim" do
-        TslrClaim.order(:created_at).last.eligibility.update(employment_status: "no_school")
+        Claim.order(:created_at).last.eligibility.update(employment_status: "no_school")
 
         get claim_path("ineligible")
         expect(response.body).to include("You’re not eligible")
@@ -131,18 +131,18 @@ RSpec.describe "Claims", type: :request do
 
   describe "claims#update request" do
     context "when a claim is already in progress" do
-      let(:in_progress_claim) { TslrClaim.order(:created_at).last }
+      let(:in_progress_claim) { Claim.order(:created_at).last }
 
       before { post claims_path }
 
       it "updates the claim with the submitted form data" do
-        put claim_path("qts-year"), params: {tslr_claim: {eligibility_attributes: {qts_award_year: "2014_2015"}}}
+        put claim_path("qts-year"), params: {claim: {eligibility_attributes: {qts_award_year: "2014_2015"}}}
 
         expect(in_progress_claim.qts_award_year).to eq "2014_2015"
       end
 
       it "makes sure validations appropriate to the context are run" do
-        put claim_path("qts-year"), params: {tslr_claim: {eligibility_attributes: {qts_award_year: nil}}}
+        put claim_path("qts-year"), params: {claim: {eligibility_attributes: {qts_award_year: nil}}}
 
         expect(response.body).to include("Select the academic year you were awarded qualified teacher status")
       end
@@ -160,7 +160,7 @@ RSpec.describe "Claims", type: :request do
 
       context "when the update makes the claim ineligible" do
         it "redirects to the “ineligible” page" do
-          put claim_path("claim-school"), params: {tslr_claim: {eligibility_attributes: {claim_school_id: schools(:hampstead_school).to_param}}}
+          put claim_path("claim-school"), params: {claim: {eligibility_attributes: {claim_school_id: schools(:hampstead_school).to_param}}}
 
           expect(response).to redirect_to(claim_path("ineligible"))
         end
@@ -173,7 +173,7 @@ RSpec.describe "Claims", type: :request do
 
         it "raises an error when trying to update via the controller" do
           expect {
-            put claim_path("claim-school"), params: {tslr_claim: {payroll_gender: "female"}}
+            put claim_path("claim-school"), params: {claim: {payroll_gender: "female"}}
           }.to raise_error(
             ActionController::UnpermittedParameters
           )
@@ -238,7 +238,7 @@ RSpec.describe "Claims", type: :request do
 
     context "when a claim hasn’t been started yet" do
       it "redirects to the start page" do
-        put claim_path("qts-year"), params: {tslr_claim: {eligibility_attributes: {qts_award_year: "2014_2015"}}}
+        put claim_path("qts-year"), params: {claim: {eligibility_attributes: {qts_award_year: "2014_2015"}}}
         expect(response).to redirect_to(root_path)
       end
     end

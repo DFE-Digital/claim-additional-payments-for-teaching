@@ -6,7 +6,7 @@ RSpec.describe TslrClaimsCsv do
   end
 
   subject { described_class.new(claims) }
-  let(:claims) { TslrClaim.all.order(:submitted_at) }
+  let(:claims) { Claim.all.order(:submitted_at) }
   let(:claim) { claims.first }
 
   describe "file" do

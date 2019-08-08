@@ -13,7 +13,7 @@ class ClaimsController < ApplicationController
   end
 
   def create
-    claim = TslrClaim.create!(eligibility: StudentLoans::Eligibility.new)
+    claim = Claim.create!(eligibility: StudentLoans::Eligibility.new)
     session[:claim_id] = claim.to_param
 
     redirect_to claim_path("qts-year")
@@ -62,7 +62,7 @@ class ClaimsController < ApplicationController
   end
 
   def claim_params
-    params.fetch(:tslr_claim, {}).permit(StudentLoans::PermittedParameters.new(current_claim).keys)
+    params.fetch(:claim, {}).permit(StudentLoans::PermittedParameters.new(current_claim).keys)
   end
 
   def claim_page_template

@@ -12,7 +12,7 @@ module FeatureHelpers
 
     perform_verify_step
 
-    fill_in :tslr_claim_teacher_reference_number, with: "1234567"
+    fill_in :claim_teacher_reference_number, with: "1234567"
     click_on "Continue"
     fill_in "National Insurance number", with: "QQ123456C"
     click_on "Continue"
@@ -29,7 +29,7 @@ module FeatureHelpers
   def start_claim
     visit root_path
     click_on "Agree and continue"
-    TslrClaim.order(:created_at).last
+    Claim.order(:created_at).last
   end
 
   def choose_qts_year(year = "September 1 2014 – August 31 2015")
@@ -80,8 +80,8 @@ module FeatureHelpers
   end
 
   def fill_in_address
-    fill_in :tslr_claim_address_line_1, with: "123 Main Street"
-    fill_in :tslr_claim_address_line_2, with: "Downtown"
+    fill_in :claim_address_line_1, with: "123 Main Street"
+    fill_in :claim_address_line_2, with: "Downtown"
     fill_in "Town or city", with: "Twin Peaks"
     fill_in "County", with: "Washington"
     fill_in "Postcode", with: "M1 7HL"

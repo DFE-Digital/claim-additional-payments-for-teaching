@@ -1,6 +1,6 @@
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-    <%= render("shared/error_summary", instance: current_claim, errored_field_id_overrides: {payroll_gender: "tslr_claim_payroll_gender_female"}) if current_claim.errors.any? %>
+    <%= render("shared/error_summary", instance: current_claim, errored_field_id_overrides: {payroll_gender: "claim_payroll_gender_female"}) if current_claim.errors.any? %>
     <%= form_for current_claim, url: claim_path do |form| %>
       <%= form_group_tag current_claim do %>
         <h1 class="govuk-label-wrapper">
