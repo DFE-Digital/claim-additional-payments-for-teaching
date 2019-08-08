@@ -32,6 +32,10 @@
       "type": "bool",
       "defaultValue": true
     },
+    "appServicePlanInstances": {
+      "type": "int",
+      "defaultValue": 2
+    },
     "vspAppServiceDockerImage": {
       "type": "string"
     },
@@ -243,6 +247,9 @@
         "parameters": {
           "appServicePlanName": {
             "value": "[variables('appServicePlanName')]"
+          },
+          "appServicePlanInstances": {
+            "value": "[parameters('appServicePlanInstances')]"
           }
         }
       }
