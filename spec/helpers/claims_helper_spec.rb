@@ -11,11 +11,11 @@ describe ClaimsHelper do
         chemistry_taught: true,
         physics_taught: true,
         mostly_teaching_eligible_subjects: true,
+        student_loan_repayment_amount: 1987.65,
       )
       claim = build(
         :tslr_claim,
         eligibility: eligibility,
-        student_loan_repayment_amount: 1987.65,
         eligibility_attributes: {qts_award_year: "2013_2014"},
       )
 

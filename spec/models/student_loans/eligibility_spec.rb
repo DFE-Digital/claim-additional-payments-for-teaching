@@ -29,6 +29,23 @@ RSpec.describe StudentLoans::Eligibility, type: :model do
     end
   end
 
+  describe "student_loan_repayment_amount attribute" do
+    it "validates that the loan repayment amount is numerical" do
+      expect(StudentLoans::Eligibility.new(student_loan_repayment_amount: "don’t know")).not_to be_valid
+      expect(StudentLoans::Eligibility.new(student_loan_repayment_amount: "£1,234.56")).to be_valid
+    end
+
+    it "validates that the loan repayment is under £99,999" do
+      expect(StudentLoans::Eligibility.new(student_loan_repayment_amount: "100000000")).not_to be_valid
+      expect(StudentLoans::Eligibility.new(student_loan_repayment_amount: "99999")).to be_valid
+    end
+
+    it "validates that the loan repayment a positive number" do
+      expect(StudentLoans::Eligibility.new(student_loan_repayment_amount: "-99")).not_to be_valid
+      expect(StudentLoans::Eligibility.new(student_loan_repayment_amount: "150")).to be_valid
+    end
+  end
+
   describe "#claim_school_name" do
     it "returns the name of the claim school" do
       claim = StudentLoans::Eligibility.new(claim_school: schools(:penistone_grammar_school))
@@ -55,6 +72,14 @@ RSpec.describe StudentLoans::Eligibility, type: :model do
     it "returns an array of the subject attributes that are true" do
       expect(StudentLoans::Eligibility.new.subjects_taught).to eq []
       expect(StudentLoans::Eligibility.new(biology_taught: true, physics_taught: true, chemistry_taught: false).subjects_taught).to eq [:biology_taught, :physics_taught]
+    end
+  end
+
+  describe "#student_loan_repayment_amount=" do
+    it "sets loan repayment amount with monetary characters stripped out" do
+      eligibility = build(:student_loans_eligibility)
+      eligibility.student_loan_repayment_amount = "£ 5,000.40"
+      expect(eligibility.student_loan_repayment_amount).to eql(5000.40)
     end
   end
 
@@ -156,6 +181,13 @@ RSpec.describe StudentLoans::Eligibility, type: :model do
     end
   end
 
+  context "when saving in the “student-loan-amount” validation context" do
+    it "validates the presence of student_loan_repayment_amount" do
+      expect(StudentLoans::Eligibility.new).not_to be_valid(:"student-loan-amount")
+      expect(StudentLoans::Eligibility.new(student_loan_repayment_amount: "£1,100")).to be_valid(:"student-loan-amount")
+    end
+  end
+
   context "when saving in the “submit” context" do
     it "is valid when all attributes are present" do
       expect(build(:student_loans_eligibility, :eligible)).to be_valid(:submit)
@@ -187,6 +219,10 @@ RSpec.describe StudentLoans::Eligibility, type: :model do
 
     it "is not valid without a value for mostly_teaching_eligible_subjects" do
       expect(build(:student_loans_eligibility, :eligible, mostly_teaching_eligible_subjects: nil)).not_to be_valid(:submit)
+    end
+
+    it "is not valid without a value for student_loan_repayment_amount" do
+      expect(build(:student_loans_eligibility, student_loan_repayment_amount: nil)).not_to be_valid(:submit)
     end
   end
 end
