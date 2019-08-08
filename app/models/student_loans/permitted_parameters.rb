@@ -6,6 +6,7 @@ module StudentLoans
       :employment_status,
       :current_school_id,
       :mostly_teaching_eligible_subjects,
+      :student_loan_repayment_amount,
       StudentLoans::Eligibility::SUBJECT_ATTRIBUTES,
     ].flatten.freeze
 
@@ -24,7 +25,6 @@ module StudentLoans
       :student_loan_country,
       :student_loan_courses,
       :student_loan_start_date,
-      :student_loan_repayment_amount,
       :email_address,
       :bank_sort_code,
       :bank_account_number,

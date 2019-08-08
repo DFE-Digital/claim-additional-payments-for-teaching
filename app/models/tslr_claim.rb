@@ -18,6 +18,7 @@ class TslrClaim < ApplicationRecord
            :current_school,
            :subjects_taught,
            :mostly_teaching_eligible_subjects?,
+           :student_loan_repayment_amount,
            to: :eligibility
 
   # NOTE: Temporary delegation of left over methods
@@ -60,12 +61,6 @@ class TslrClaim < ApplicationRecord
   validates :student_loan_start_date,           on: [:"student-loan-start-date"], presence: {message: "Select when the first year of your higher education course started"}
   validates :student_loan_plan,                 on: [:submit], presence: {message: "We have not been able determined your student loan repayment plan. Answer all questions about your student loan."}
 
-  validates :student_loan_repayment_amount, on: [:"student-loan-amount", :submit], presence: {message: "Enter your student loan repayment amount"}
-  validates_numericality_of :student_loan_repayment_amount, message: "Enter a valid monetary amount",
-                                                            allow_nil: true,
-                                                            greater_than_or_equal_to: 0,
-                                                            less_than_or_equal_to: 99999
-
   validates :email_address,             on: [:"email-address", :submit], presence: {message: "Enter an email address"}
   validates :email_address,             format: {with: URI::MailTo::EMAIL_REGEXP, message: "Enter an email address in the correct format, like name@example.com"},
                                         length: {maximum: 256, message: "Email address must be 256 characters or less"},
@@ -106,10 +101,6 @@ class TslrClaim < ApplicationRecord
 
   def address
     [address_line_1, address_line_2, address_line_3, address_line_4, postcode].reject(&:blank?).join(", ")
-  end
-
-  def student_loan_repayment_amount=(value)
-    super(value.to_s.gsub(/[£,\s]/, ""))
   end
 
   def no_student_loan?

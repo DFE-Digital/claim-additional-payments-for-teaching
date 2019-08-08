@@ -14,7 +14,6 @@ FactoryBot.define do
       student_loan_courses { :one_course }
       student_loan_start_date { StudentLoans::BEFORE_1_SEPT_2012 }
       student_loan_plan { StudentLoans::PLAN_1 }
-      student_loan_repayment_amount { 1000 }
       email_address { "test@email.com" }
       bank_sort_code { 123456 }
       bank_account_number { 12345678 }

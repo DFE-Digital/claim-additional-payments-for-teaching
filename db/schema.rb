@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_08_07_110948) do
+ActiveRecord::Schema.define(version: 2019_08_08_121222) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -77,6 +77,7 @@ ActiveRecord::Schema.define(version: 2019_08_07_110948) do
     t.boolean "languages_taught"
     t.boolean "physics_taught"
     t.boolean "mostly_teaching_eligible_subjects"
+    t.decimal "student_loan_repayment_amount", precision: 7, scale: 2
     t.index ["claim_school_id"], name: "index_student_loans_eligibilities_on_claim_school_id"
     t.index ["current_school_id"], name: "index_student_loans_eligibilities_on_current_school_id"
   end
@@ -97,7 +98,6 @@ ActiveRecord::Schema.define(version: 2019_08_07_110948) do
     t.string "bank_sort_code", limit: 6
     t.string "bank_account_number", limit: 8
     t.datetime "submitted_at"
-    t.decimal "student_loan_repayment_amount", precision: 7, scale: 2
     t.string "reference", limit: 8
     t.boolean "has_student_loan"
     t.integer "student_loan_country"

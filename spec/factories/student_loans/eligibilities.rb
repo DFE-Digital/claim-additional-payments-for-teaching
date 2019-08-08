@@ -9,6 +9,7 @@ FactoryBot.define do
       current_school { claim_school }
       physics_taught { true }
       mostly_teaching_eligible_subjects { true }
+      student_loan_repayment_amount { 1000 }
     end
 
     trait :ineligible do
