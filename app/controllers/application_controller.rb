@@ -18,7 +18,7 @@ class ApplicationController < ActionController::Base
   end
 
   def current_claim
-    @current_claim ||= TslrClaim.find(session[:tslr_claim_id]) if session.key?(:tslr_claim_id)
+    @current_claim ||= TslrClaim.find(session[:claim_id]) if session.key?(:claim_id)
   end
 
   def update_last_seen_at

@@ -76,7 +76,7 @@ RSpec.describe "Claims", type: :request do
       end
 
       it "clears the claim from the session" do
-        expect(session[:tslr_claim_id]).to be_nil
+        expect(session[:claim_id]).to be_nil
         expect(session[:last_seen_at]).to be_nil
       end
     end

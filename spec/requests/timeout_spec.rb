@@ -13,7 +13,7 @@ RSpec.describe "Claim session timing out", type: :request do
     let(:after_expiry) { timeout_length_in_minutes.minutes + 1.second }
 
     it "clears the session and redirects to the timeout page" do
-      expect(session[:tslr_claim_id]).to eql current_claim.to_param
+      expect(session[:claim_id]).to eql current_claim.to_param
       expect(session[:last_seen_at]).not_to be_nil
       expect(session[:verify_request_id]).not_to be_nil
 
@@ -21,7 +21,7 @@ RSpec.describe "Claim session timing out", type: :request do
         put claim_path("qts-year"), params: {claim: {qts_award_year: "2014_2015"}}
 
         expect(response).to redirect_to(timeout_claim_path)
-        expect(session[:tslr_claim_id]).to be_nil
+        expect(session[:claim_id]).to be_nil
         expect(session[:last_seen_at]).to be_nil
         expect(session[:verify_request_id]).to be_nil
       end
