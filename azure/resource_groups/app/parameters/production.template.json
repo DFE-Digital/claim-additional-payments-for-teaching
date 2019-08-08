@@ -158,10 +158,20 @@
       "value": "PRODUCTION"
     },
     "VSP.SAML_SIGNING_KEY": {
-      "value": ""
+      "reference": {
+        "keyVault": {
+          "id": "${keyVaultId}"
+        },
+        "secretName": "TeacherPaymentsProdVspSamlSigning1KeyBase64"
+      }
     },
     "VSP.SAML_PRIMARY_ENCRYPTION_KEY": {
-      "value": ""
+      "reference": {
+        "keyVault": {
+          "id": "${keyVaultId}"
+        },
+        "secretName": "TeacherPaymentsProdVspSamlEncryption1KeyBase64"
+      }
     }
   }
 }
