@@ -11,13 +11,11 @@ module StudentLoans
     ].flatten.freeze
 
     PARAMETERS = [
-      :full_name,
       :address_line_1,
       :address_line_2,
       :address_line_3,
       :address_line_4,
       :postcode,
-      :date_of_birth,
       :payroll_gender,
       :teacher_reference_number,
       :national_insurance_number,
@@ -38,9 +36,7 @@ module StudentLoans
     end
 
     def keys
-      PARAMETERS.dup.tap do |parameters|
-        parameters.delete(:payroll_gender) if claim.verified_fields.include?("payroll_gender")
-      end
+      PARAMETERS.dup - claim.verified_fields.map(&:to_sym)
     end
   end
 end

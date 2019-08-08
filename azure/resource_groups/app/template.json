@@ -100,9 +100,6 @@
     "ROLLBAR_ENV": {
       "type": "string"
     },
-    "GOVUK_VERIFY_ENABLED": {
-      "type": "string"
-    },
     "VSP.VERIFY_ENVIRONMENT": {
       "type": "string"
     },
@@ -378,10 +375,6 @@
             {
               "name": "ROLLBAR_ENV",
               "value": "[parameters('ROLLBAR_ENV')]"
-            },
-            {
-              "name": "GOVUK_VERIFY_ENABLED",
-              "value": "[parameters('GOVUK_VERIFY_ENABLED')]"
             },
             {
               "name": "GOVUK_VERIFY_VSP_HOST",

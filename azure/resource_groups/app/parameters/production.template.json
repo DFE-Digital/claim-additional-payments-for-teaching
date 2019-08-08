@@ -151,9 +151,6 @@
     "ROLLBAR_ENV": {
       "value": "production"
     },
-    "GOVUK_VERIFY_ENABLED": {
-      "value": ""
-    },
     "VSP.VERIFY_ENVIRONMENT": {
       "value": "PRODUCTION"
     },

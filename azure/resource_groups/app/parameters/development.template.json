@@ -154,9 +154,6 @@
     "ROLLBAR_ENV": {
       "value": "development"
     },
-    "GOVUK_VERIFY_ENABLED": {
-      "value": "1"
-    },
     "VSP.VERIFY_ENVIRONMENT": {
       "value": "INTEGRATION"
     },

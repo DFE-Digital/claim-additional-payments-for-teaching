@@ -53,6 +53,12 @@ RSpec.describe PageSequence do
       claim.verified_fields = []
       expect(page_sequence.slugs).to include("gender")
     end
+
+    it "excludes the address page if the address was returned by verify" do
+      claim.verified_fields = ["postcode"]
+      page_sequence = PageSequence.new(claim, "student-loan-country")
+      expect(page_sequence.slugs).to_not include("address")
+    end
   end
 
   describe "#next_slug" do

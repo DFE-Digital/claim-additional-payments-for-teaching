@@ -2,9 +2,9 @@
 
 class TslrClaim < ApplicationRecord
   TRN_LENGTH = 7
-
   NO_STUDENT_LOAN = "not_applicable"
   STUDENT_LOAN_PLAN_OPTIONS = StudentLoans::PLANS.dup << NO_STUDENT_LOAN
+  ADDRESS_ATTRIBUTES = %w[address_line_1 address_line_2 address_line_3 address_line_4 postcode].freeze
 
   enum student_loan_country: StudentLoans::COUNTRIES
   enum student_loan_start_date: StudentLoans::COURSE_START_DATES
@@ -110,6 +110,14 @@ class TslrClaim < ApplicationRecord
 
   def student_loan_country_with_one_plan?
     StudentLoans::PLAN_1_COUNTRIES.include?(student_loan_country)
+  end
+
+  def address_verified?
+    (ADDRESS_ATTRIBUTES & verified_fields).any?
+  end
+
+  def payroll_gender_verified?
+    verified_fields.include?("payroll_gender")
   end
 
   private
