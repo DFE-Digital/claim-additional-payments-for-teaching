@@ -6,7 +6,7 @@ RSpec.feature "Teacher Student Loan Repayments claims", js: true do
   before do
     allow_any_instance_of(ClaimsHelper).to receive(:claim_timeout_in_minutes) { one_second_in_minutes }
     allow_any_instance_of(ClaimsHelper).to receive(:claim_timeout_warning_in_minutes) { one_second_in_minutes }
-    start_tslr_claim
+    start_claim
   end
 
   scenario "Dialog warns claimants their session will timeout" do

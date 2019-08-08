@@ -2,7 +2,7 @@ require "rails_helper"
 
 RSpec.feature "Searching for school during Teacher Student Loan Repayments claims" do
   scenario "doesn't select a school from the search results the first time around" do
-    claim = start_tslr_claim
+    claim = start_claim
     choose_qts_year
 
     fill_in :school_search, with: "Penistone"
@@ -21,7 +21,7 @@ RSpec.feature "Searching for school during Teacher Student Loan Repayments claim
   end
 
   scenario "searches again to find school" do
-    claim = start_tslr_claim
+    claim = start_claim
     choose_qts_year
 
     fill_in :school_search, with: "hamp"
@@ -40,7 +40,7 @@ RSpec.feature "Searching for school during Teacher Student Loan Repayments claim
   end
 
   scenario "Claim school search with autocomplete", js: true do
-    start_tslr_claim
+    start_claim
     choose_qts_year
 
     expect(page).to have_text(I18n.t("tslr.questions.claim_school"))
@@ -57,7 +57,7 @@ RSpec.feature "Searching for school during Teacher Student Loan Repayments claim
   end
 
   scenario "Current school search with autocomplete", js: true do
-    start_tslr_claim
+    start_claim
     choose_qts_year
     choose_school schools(:penistone_grammar_school)
     choose_still_teaching "Yes, at another school"
@@ -76,7 +76,7 @@ RSpec.feature "Searching for school during Teacher Student Loan Repayments claim
   end
 
   scenario "School search form still works like a normal form if submitted", js: true do
-    start_tslr_claim
+    start_claim
     choose_qts_year
 
     expect(page).to have_text(I18n.t("tslr.questions.claim_school"))
@@ -94,7 +94,7 @@ RSpec.feature "Searching for school during Teacher Student Loan Repayments claim
   end
 
   scenario "Editing school search after autocompletion clears last selection", js: true do
-    start_tslr_claim
+    start_claim
     choose_qts_year
 
     expect(page).to have_text(I18n.t("tslr.questions.claim_school"))

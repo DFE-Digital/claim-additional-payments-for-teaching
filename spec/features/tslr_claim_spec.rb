@@ -2,7 +2,7 @@ require "rails_helper"
 
 RSpec.feature "Teacher Student Loan Repayments claims" do
   scenario "Teacher claims back student loan repayments" do
-    claim = start_tslr_claim
+    claim = start_claim
     expect(page).to have_text(I18n.t("tslr.questions.qts_award_year"))
 
     choose_qts_year

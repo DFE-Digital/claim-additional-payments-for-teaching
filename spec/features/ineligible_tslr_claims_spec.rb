@@ -2,7 +2,7 @@ require "rails_helper"
 
 RSpec.feature "Ineligible Teacher Student Loan Repayments claims" do
   scenario "qualified before the first eligible year" do
-    claim = start_tslr_claim
+    claim = start_claim
 
     choose "Before September 1 2013"
     click_on "Continue"
@@ -13,7 +13,7 @@ RSpec.feature "Ineligible Teacher Student Loan Repayments claims" do
   end
 
   scenario "now works for a different school" do
-    claim = start_tslr_claim
+    claim = start_claim
     choose_qts_year
     choose_school schools(:penistone_grammar_school)
 
@@ -33,7 +33,7 @@ RSpec.feature "Ineligible Teacher Student Loan Repayments claims" do
   end
 
   scenario "chooses an ineligible school" do
-    claim = start_tslr_claim
+    claim = start_claim
     choose_qts_year
     choose_school schools(:hampstead_school)
 
@@ -43,7 +43,7 @@ RSpec.feature "Ineligible Teacher Student Loan Repayments claims" do
   end
 
   scenario "no longer teaching" do
-    claim = start_tslr_claim
+    claim = start_claim
     choose_qts_year
     choose_school schools(:penistone_grammar_school)
 
@@ -55,7 +55,7 @@ RSpec.feature "Ineligible Teacher Student Loan Repayments claims" do
   end
 
   scenario "does not teach an eligible subject" do
-    claim = start_tslr_claim
+    claim = start_claim
     choose_qts_year
     choose_school schools(:penistone_grammar_school)
     choose_still_teaching
@@ -69,7 +69,7 @@ RSpec.feature "Ineligible Teacher Student Loan Repayments claims" do
   end
 
   scenario "does not teach an eligible subject for at least half of their time" do
-    claim = start_tslr_claim
+    claim = start_claim
     choose_qts_year
     choose_school schools(:penistone_grammar_school)
     choose_still_teaching

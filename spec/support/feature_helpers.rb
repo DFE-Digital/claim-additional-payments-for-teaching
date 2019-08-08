@@ -1,6 +1,6 @@
 module FeatureHelpers
   def answer_all_student_loans_claim_questions
-    start_tslr_claim
+    start_claim
     choose_qts_year
     choose_school schools(:penistone_grammar_school)
     choose_still_teaching "Yes, at another school"
@@ -26,7 +26,7 @@ module FeatureHelpers
     click_on "Continue"
   end
 
-  def start_tslr_claim
+  def start_claim
     visit root_path
     click_on "Agree and continue"
     TslrClaim.order(:created_at).last

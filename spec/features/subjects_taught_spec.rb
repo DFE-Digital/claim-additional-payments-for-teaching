@@ -2,7 +2,7 @@ require "rails_helper"
 
 RSpec.feature "Choosing subjects taught during Teacher Student Loan Repayments claims" do
   before do
-    start_tslr_claim
+    start_claim
     visit claim_path("subjects-taught")
   end
 
