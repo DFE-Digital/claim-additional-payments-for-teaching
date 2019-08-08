@@ -66,11 +66,13 @@ module Verify
       middle_name = most_recent_verified_value(attributes.fetch("middleNames"))
       surname = most_recent_verified_value(attributes.fetch("surnames"))
 
-      [first_name, middle_name, surname].join(" ")
+      [first_name, middle_name, surname].compact.join(" ")
     end
 
     def most_recent_verified_value(attributes)
-      attributes.sort_by { |attribute| Date.strptime(attribute["to"], "%Y-%m-%d") }
+      return if attributes.empty?
+
+      attributes.sort_by { |attribute| attribute["from"].present? ? Date.strptime(attribute["from"], "%Y-%m-%d") : 0 }
         .reverse
         .find { |attribute| attribute["verified"] }
         .fetch("value")
