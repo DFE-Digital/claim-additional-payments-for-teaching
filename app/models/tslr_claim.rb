@@ -42,6 +42,7 @@ class TslrClaim < ApplicationRecord
   validates :address_line_1,                    length: {maximum: 100, message: "Address lines must be 100 characters or less"}
   validates :address_line_2,                    length: {maximum: 100, message: "Address lines must be 100 characters or less"}
   validates :address_line_3,                    length: {maximum: 100, message: "Address lines must be 100 characters or less"}
+  validates :address_line_4,                    length: {maximum: 100, message: "Address lines must be 100 characters or less"}
 
   validates :postcode,                          on: [:address, :submit], presence: {message: "Enter your postcode"}
   validates :postcode,                          length: {maximum: 11, message: "Postcode must be 11 characters or less"}

@@ -56,15 +56,30 @@ RSpec.describe TslrClaim, type: :model do
 
   context "that has a postcode" do
     it "validates the length of postcode is not greater than 11" do
-      expect(build(:tslr_claim, address_line_1: "123 Main Street", address_line_3: "Twin Peaks", postcode: "M12345 23453WD")).not_to be_valid
-      expect(build(:tslr_claim, address_line_1: "123 Main Street", address_line_3: "Twin Peaks", postcode: "M1 2WD")).to be_valid
+      expect(build(:tslr_claim, postcode: "M12345 23453WD")).not_to be_valid
+      expect(build(:tslr_claim, postcode: "M1 2WD")).to be_valid
     end
   end
 
-  context "that has a address" do
+  context "that has an address" do
     it "validates the length of address_line_1 is 100 characters or less" do
-      valid_address_attributes = {address_line_1: "123 Main Street" * 25, address_line_3: "Twin Peaks", postcode: "12345"}
-      expect(build(:tslr_claim, valid_address_attributes)).not_to be_valid
+      expect(build(:tslr_claim, address_line_1: "Test Line" * 25)).not_to be_valid
+      expect(build(:tslr_claim, address_line_1: "Test Line")).to be_valid
+    end
+
+    it "validates the length of address_line_2 is 100 characters or less" do
+      expect(build(:tslr_claim, address_line_2: "Test Line" * 25)).not_to be_valid
+      expect(build(:tslr_claim, address_line_2: "Test Line")).to be_valid
+    end
+
+    it "validates the length of address_line_3 is 100 characters or less" do
+      expect(build(:tslr_claim, address_line_3: "Test Line" * 25)).not_to be_valid
+      expect(build(:tslr_claim, address_line_3: "Test Line")).to be_valid
+    end
+
+    it "validates the length of address_line_4 is 100 characters or less" do
+      expect(build(:tslr_claim, address_line_4: "Test Line" * 25)).not_to be_valid
+      expect(build(:tslr_claim, address_line_4: "Test Line")).to be_valid
     end
   end
 
