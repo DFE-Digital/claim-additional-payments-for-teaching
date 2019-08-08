@@ -7,7 +7,6 @@ FactoryBot.define do
       mostly_teaching_eligible_subjects { true }
       full_name { "Jo Bloggs" }
       address_line_1 { "1 Test Road" }
-      address_line_3 { "Test Town" }
       postcode { "AB1 2CD" }
       date_of_birth { 20.years.ago.to_date }
       teacher_reference_number { "1234567" }
