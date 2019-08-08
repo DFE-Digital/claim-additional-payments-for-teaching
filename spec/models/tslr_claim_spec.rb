@@ -137,10 +137,10 @@ RSpec.describe TslrClaim, type: :model do
   end
 
   context "when saving in the “address” validation context" do
-    it "validates the presence of address_line_1, address_line_3 (i.e. the town or city), and postcode" do
+    it "validates the presence of address_line_1 and postcode" do
       expect(build(:tslr_claim)).not_to be_valid(:address)
 
-      valid_address_attributes = {address_line_1: "123 Main Street", address_line_3: "Twin Peaks", postcode: "12345"}
+      valid_address_attributes = {address_line_1: "123 Main Street", postcode: "12345"}
       expect(build(:tslr_claim, valid_address_attributes)).to be_valid(:address)
     end
   end
