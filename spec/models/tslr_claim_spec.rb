@@ -394,4 +394,11 @@ RSpec.describe TslrClaim, type: :model do
       expect(claim.submittable?).to eq false
     end
   end
+
+  describe "#payroll_gender_verified?" do
+    it "returns true if payroll_gender is in the list of verified fields" do
+      expect(TslrClaim.new(verified_fields: ["payroll_gender"]).payroll_gender_verified?).to eq true
+      expect(TslrClaim.new(verified_fields: ["address_line_1"]).payroll_gender_verified?).to eq false
+    end
+  end
 end

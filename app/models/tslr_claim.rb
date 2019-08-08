@@ -120,6 +120,10 @@ class TslrClaim < ApplicationRecord
     StudentLoans::PLAN_1_COUNTRIES.include?(student_loan_country)
   end
 
+  def payroll_gender_verified?
+    verified_fields.include?("payroll_gender")
+  end
+
   private
 
   def normalise_trn
