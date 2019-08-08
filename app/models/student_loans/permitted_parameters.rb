@@ -36,9 +36,7 @@ module StudentLoans
     end
 
     def keys
-      PARAMETERS.dup.tap do |parameters|
-        parameters.delete(:payroll_gender) if claim.verified_fields.include?("payroll_gender")
-      end
+      PARAMETERS.dup - claim.verified_fields.map(&:to_sym)
     end
   end
 end
