@@ -10,5 +10,10 @@ FactoryBot.define do
       physics_taught { true }
       mostly_teaching_eligible_subjects { true }
     end
+
+    trait :ineligible do
+      eligible
+      mostly_teaching_eligible_subjects { false }
+    end
   end
 end

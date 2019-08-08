@@ -29,5 +29,10 @@ FactoryBot.define do
       submitted_at { Time.zone.now }
       reference { Reference.new.to_s }
     end
+
+    trait :ineligible do
+      submittable
+      association(:eligibility, factory: [:student_loans_eligibility, :ineligible])
+    end
   end
 end

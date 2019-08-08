@@ -266,79 +266,6 @@ RSpec.describe TslrClaim, type: :model do
     end
   end
 
-  describe "#ineligible?" do
-    subject { build(:tslr_claim, claim_attributes).ineligible? }
-
-    context "with an ineligible QTS award year" do
-      let(:claim_attributes) { {eligibility: build(:student_loans_eligibility, qts_award_year: "before_2013")} }
-      it { is_expected.to be true }
-    end
-
-    context "with an eligible QTS award year" do
-      let(:claim_attributes) { {eligibility: build(:student_loans_eligibility, qts_award_year: "2013_2014")} }
-      it { is_expected.to be false }
-    end
-
-    context "with no claim_school" do
-      let(:claim_attributes) { {eligibility: build(:student_loans_eligibility, claim_school: nil)} }
-      it { is_expected.to be false }
-    end
-
-    context "with an eligible claim school" do
-      let(:claim_attributes) { {eligibility: build(:student_loans_eligibility, claim_school: schools(:penistone_grammar_school))} }
-      it { is_expected.to be false }
-    end
-
-    context "with an ineligible claim_school" do
-      let(:claim_attributes) { {eligibility: build(:student_loans_eligibility, claim_school: schools(:hampstead_school))} }
-      it { is_expected.to be true }
-    end
-
-    context "when no longer teaching" do
-      let(:claim_attributes) { {eligibility: build(:student_loans_eligibility, employment_status: :no_school)} }
-      it { is_expected.to be true }
-    end
-
-    context "when taught less than half time in eligible subjects" do
-      let(:claim_attributes) { {eligibility: build(:student_loans_eligibility, mostly_teaching_eligible_subjects: false)} }
-      it { is_expected.to be true }
-    end
-
-    context "when taught at least half time in eligible subjects" do
-      let(:claim_attributes) { {eligibility: build(:student_loans_eligibility, mostly_teaching_eligible_subjects: true)} }
-      it { is_expected.to be false }
-    end
-  end
-
-  describe "#ineligibility_reason" do
-    subject { build(:tslr_claim, claim_attributes).ineligibility_reason }
-
-    context "with an ineligible qts_award_year" do
-      let(:claim_attributes) { {eligibility: build(:student_loans_eligibility, qts_award_year: "before_2013")} }
-      it { is_expected.to eql :ineligible_qts_award_year }
-    end
-
-    context "with an ineligible claim_school" do
-      let(:claim_attributes) { {eligibility: build(:student_loans_eligibility, claim_school: schools(:hampstead_school))} }
-      it { is_expected.to eql :ineligible_claim_school }
-    end
-
-    context "when no longer teaching" do
-      let(:claim_attributes) { {eligibility: build(:student_loans_eligibility, employment_status: :no_school)} }
-      it { is_expected.to eql :employed_at_no_school }
-    end
-
-    context "when taught less than half time in eligible subjects" do
-      let(:claim_attributes) { {eligibility: build(:student_loans_eligibility, mostly_teaching_eligible_subjects: false)} }
-      it { is_expected.to eql :not_taught_eligible_subjects_enough }
-    end
-
-    context "when not ineligible" do
-      let(:claim_attributes) { {} }
-      it { is_expected.to be_nil }
-    end
-  end
-
   describe "#student_loan_country" do
     it "captures the country the student loan was received in" do
       claim = build(:tslr_claim, student_loan_country: :england)
@@ -412,8 +339,7 @@ RSpec.describe TslrClaim, type: :model do
     end
 
     context "when the claim is ineligible" do
-      let(:ineligible_eligibility) { build(:student_loans_eligibility, :eligible, mostly_teaching_eligible_subjects: false) }
-      let(:tslr_claim) { create(:tslr_claim, :submittable, eligibility: ineligible_eligibility) }
+      let(:tslr_claim) { create(:tslr_claim, :ineligible) }
 
       before { tslr_claim.submit! }
 

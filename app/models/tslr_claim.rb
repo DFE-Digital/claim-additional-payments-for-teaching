@@ -20,14 +20,6 @@ class TslrClaim < ApplicationRecord
            :mostly_teaching_eligible_subjects?,
            to: :eligibility
 
-  # NOTE: Temporary delegation of eligibility methods
-  delegate :ineligible_qts_award_year?,
-           :ineligible_claim_school?,
-           :employed_at_claim_school?,
-           :employed_at_no_school?,
-           :not_taught_eligible_subjects_enough?,
-           to: :eligibility, allow_nil: nil
-
   # NOTE: Temporary delegation of left over methods
   delegate :claim_school_name, to: :eligibility
   delegate :current_school_name, to: :eligibility
@@ -115,19 +107,6 @@ class TslrClaim < ApplicationRecord
     valid?(:submit) && !submitted?
   end
 
-  def ineligible?
-    ineligible_qts_award_year? || ineligible_claim_school? || employed_at_no_school? || not_taught_eligible_subjects_enough?
-  end
-
-  def ineligibility_reason
-    [
-      :ineligible_qts_award_year,
-      :ineligible_claim_school,
-      :employed_at_no_school,
-      :not_taught_eligible_subjects_enough,
-    ].find { |eligibility_check| send("#{eligibility_check}?") }
-  end
-
   def address
     [address_line_1, address_line_2, address_line_3, address_line_4, postcode].reject(&:blank?).join(", ")
   end
@@ -201,6 +180,6 @@ class TslrClaim < ApplicationRecord
   end
 
   def claim_must_not_be_ineligible
-    errors.add(:base, ineligibility_reason) if ineligible?
+    errors.add(:base, eligibility.ineligibility_reason) if eligibility.ineligible?
   end
 end

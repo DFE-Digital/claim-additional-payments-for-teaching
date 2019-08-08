@@ -59,6 +59,8 @@ module StudentLoans
       ].find { |eligibility_check| send("#{eligibility_check}?") }
     end
 
+    private
+
     def ineligible_qts_award_year?
       awarded_qualified_status_before_2013?
     end
@@ -70,8 +72,6 @@ module StudentLoans
     def not_taught_eligible_subjects_enough?
       mostly_teaching_eligible_subjects == false
     end
-
-    private
 
     def one_subject_must_be_selected
       errors.add(:subjects_taught, "Choose a subject, or select “not applicable”") if subjects_taught.empty?
