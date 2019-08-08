@@ -1,4 +1,4 @@
-# TSLR and Maths and Physics Eligible
+# Student loans and Maths and Physics Eligible
 penistone_grammar_school:
   name: Penistone Grammar School
   urn: 1234
@@ -13,7 +13,7 @@ penistone_grammar_school:
   county: South Yorkshire
   postcode: S36 7BX
 
-# TSLR and Maths and Physics Ineligible
+# Student loans and Maths and Physics Ineligible
 hampstead_school:
   name: Hampstead School
   urn: 4567
