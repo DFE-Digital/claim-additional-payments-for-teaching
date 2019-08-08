@@ -457,7 +457,7 @@
           "appServiceAlwaysOn": {
             "value": "[parameters('appServiceAlwaysOn')]"
           },
-          "appServiceAllowedIngressIpAddresses": {
+          "appServiceAllowedIpAddresses": {
             "value": "[union(split(reference(resourceId('Microsoft.Web/sites', variables('appServiceName'))).possibleOutboundIpAddresses, ','), parameters('verifyHubPossibleOutboundIpAddresses'))]"
           },
           "VERIFY_ENVIRONMENT": {
