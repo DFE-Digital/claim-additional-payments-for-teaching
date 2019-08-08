@@ -2,7 +2,7 @@ require "rails_helper"
 
 RSpec.describe ClaimMailer, type: :mailer do
   describe "#submitted" do
-    let(:claim) { create(:tslr_claim, :submittable) }
+    let(:claim) { create(:claim, :submittable) }
     let(:mail) { ClaimMailer.submitted(claim) }
 
     it "renders the headers" do

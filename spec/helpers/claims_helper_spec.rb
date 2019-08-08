@@ -14,7 +14,7 @@ describe ClaimsHelper do
         student_loan_repayment_amount: 1987.65,
       )
       claim = build(
-        :tslr_claim,
+        :claim,
         eligibility: eligibility,
         eligibility_attributes: {qts_award_year: "2013_2014"},
       )
@@ -35,7 +35,7 @@ describe ClaimsHelper do
   describe "#identity_answers" do
     let(:claim) do
       build(
-        :tslr_claim,
+        :claim,
         full_name: "Jo Bloggs",
         address_line_1: "Flat 1",
         address_line_2: "1 Test Road",
@@ -72,7 +72,7 @@ describe ClaimsHelper do
 
   describe "#payment_answers" do
     it "returns an array of questions and answers for displaying to the user for review" do
-      claim = create(:tslr_claim, bank_sort_code: "12 34 56", bank_account_number: "12 34 56 78")
+      claim = create(:claim, bank_sort_code: "12 34 56", bank_account_number: "12 34 56 78")
 
       expected_answers = [
         ["Bank sort code", "123456", "bank-details"],
@@ -86,7 +86,7 @@ describe ClaimsHelper do
   describe "#student_loan_answers" do
     it "returns an array of question and answers for the student loan questions" do
       claim = build(
-        :tslr_claim,
+        :claim,
         has_student_loan: true,
         student_loan_country: StudentLoans::ENGLAND,
         student_loan_courses: :one_course,
@@ -105,7 +105,7 @@ describe ClaimsHelper do
 
     it "adjusts the loan start date question and answer according to the number of courses answer" do
       claim = build(
-        :tslr_claim,
+        :claim,
         has_student_loan: true,
         student_loan_country: StudentLoans::ENGLAND,
         student_loan_courses: :two_or_more_courses,
@@ -123,7 +123,7 @@ describe ClaimsHelper do
     end
 
     it "excludes unanswered questions" do
-      claim = build(:tslr_claim, has_student_loan: true, student_loan_country: StudentLoans::SCOTLAND)
+      claim = build(:claim, has_student_loan: true, student_loan_country: StudentLoans::SCOTLAND)
 
       expected_answers = [
         [t("tslr.questions.has_student_loan"), "Yes", "student-loan"],

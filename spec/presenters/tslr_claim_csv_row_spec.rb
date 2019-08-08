@@ -2,7 +2,7 @@ require "rails_helper"
 
 RSpec.describe TslrClaimCsvRow do
   subject { described_class.new(claim) }
-  let(:claim) { build(:tslr_claim) }
+  let(:claim) { build(:claim) }
 
   describe "to_s" do
     let(:date_of_birth) { "01/12/1980" }
@@ -10,7 +10,7 @@ RSpec.describe TslrClaimCsvRow do
     let(:row) { CSV.parse(subject.to_s).first }
 
     let(:claim) do
-      build(:tslr_claim, :submittable,
+      build(:claim, :submittable,
         date_of_birth: Date.parse(date_of_birth),
         student_loan_plan: StudentLoans::PLAN_2,
         submitted_at: DateTime.parse(submitted_at),
