@@ -149,7 +149,7 @@ RSpec.describe "Claims", type: :request do
 
       context "having searched for a school but not selected a school from the results on the claim-school page" do
         it "re-renders the school search results with an error message" do
-          put claim_path("claim-school"), params: {school_search: "peniston", tslr_claim: {eligibility_attributes: {claim_school_id: ""}}}
+          put claim_path("claim-school"), params: {school_search: "peniston", claim: {eligibility_attributes: {claim_school_id: ""}}}
 
           expect(response).to be_successful
           expect(response.body).to include("There is a problem")

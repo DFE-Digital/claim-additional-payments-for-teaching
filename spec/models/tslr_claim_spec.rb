@@ -294,64 +294,64 @@ RSpec.describe TslrClaim, type: :model do
     end
 
     context "when the claim is submittable" do
-      let(:tslr_claim) { create(:claim, :submittable) }
+      let(:claim) { create(:claim, :submittable) }
 
-      before { tslr_claim.submit! }
+      before { claim.submit! }
 
       it "sets submitted_at to now" do
-        expect(tslr_claim.submitted_at).to eq Time.zone.now
+        expect(claim.submitted_at).to eq Time.zone.now
       end
 
       it "generates a reference" do
-        expect(tslr_claim.reference).to_not eq nil
+        expect(claim.reference).to_not eq nil
       end
     end
 
     context "when a Reference clash with an existing claim occurs" do
-      let(:tslr_claim) { create(:claim, :submittable) }
+      let(:claim) { create(:claim, :submittable) }
 
       before do
         other_claim = create(:claim, :submittable, reference: "12345678")
         expect(Reference).to receive(:new).once.and_return(double(to_s: other_claim.reference), double(to_s: "87654321"))
-        tslr_claim.submit!
+        claim.submit!
       end
 
       it "generates a unique reference" do
-        expect(tslr_claim.reference).to eq("87654321")
+        expect(claim.reference).to eq("87654321")
       end
     end
 
     context "when the claim is ineligible" do
-      let(:tslr_claim) { create(:claim, :ineligible) }
+      let(:claim) { create(:claim, :ineligible) }
 
-      before { tslr_claim.submit! }
+      before { claim.submit! }
 
       it "doesn't set submitted_at" do
-        expect(tslr_claim.submitted_at).to be_nil
+        expect(claim.submitted_at).to be_nil
       end
 
       it "doesn't generate a reference" do
-        expect(tslr_claim.reference).to eq nil
+        expect(claim.reference).to eq nil
       end
 
       it "adds an error" do
-        expect(tslr_claim.errors.messages[:base]).to include(I18n.t("activerecord.errors.messages.not_taught_eligible_subjects_enough"))
+        expect(claim.errors.messages[:base]).to include(I18n.t("activerecord.errors.messages.not_taught_eligible_subjects_enough"))
       end
     end
 
     context "when the claim has already been submitted" do
-      let(:tslr_claim) { create(:claim, :submitted, submitted_at: 2.days.ago) }
+      let(:claim) { create(:claim, :submitted, submitted_at: 2.days.ago) }
 
       it "returns false" do
-        expect(tslr_claim.submit!).to eq false
+        expect(claim.submit!).to eq false
       end
 
       it "doesn't change the reference number" do
-        expect { tslr_claim.submit! }.not_to(change { tslr_claim.reference })
+        expect { claim.submit! }.not_to(change { claim.reference })
       end
 
       it "doesn't change the submitted_at" do
-        expect { tslr_claim.submit! }.not_to(change { tslr_claim.submitted_at })
+        expect { claim.submit! }.not_to(change { claim.submitted_at })
       end
     end
   end

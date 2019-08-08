@@ -18,7 +18,7 @@ RSpec.describe "Claim session timing out", type: :request do
       expect(session[:verify_request_id]).not_to be_nil
 
       travel after_expiry do
-        put claim_path("qts-year"), params: {tslr_claim: {qts_award_year: "2014_2015"}}
+        put claim_path("qts-year"), params: {claim: {qts_award_year: "2014_2015"}}
 
         expect(response).to redirect_to(timeout_claim_path)
         expect(session[:tslr_claim_id]).to be_nil
