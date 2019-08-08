@@ -97,6 +97,10 @@ en:
           before_first_september_2012: "All my degree courses started before 1 September 2012"
           some_before_some_after_first_september_2012: "Some of my degree courses started before 1 September 2012 and some started after 1 September 2012"
           on_or_after_first_september_2012: "All of my degree courses started after 1 September 2012"
+      payroll_gender:
+        male: "Male"
+        female: "Female"
+        dont_know: "Don’t know"
     csv_headers:
       reference: "Reference"
       submitted_at: "Submitted at"
