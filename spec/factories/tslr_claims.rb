@@ -20,7 +20,7 @@ FactoryBot.define do
       bank_sort_code { 123456 }
       bank_account_number { 12345678 }
 
-      association(:eligibility, factory: [:student_loans_eligibility, :submittable])
+      association(:eligibility, factory: [:student_loans_eligibility, :eligible])
       payroll_gender { :female }
     end
 

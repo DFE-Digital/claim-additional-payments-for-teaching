@@ -412,7 +412,7 @@ RSpec.describe TslrClaim, type: :model do
     end
 
     context "when the claim is ineligible" do
-      let(:ineligible_eligibility) { build(:student_loans_eligibility, :submittable, mostly_teaching_eligible_subjects: false) }
+      let(:ineligible_eligibility) { build(:student_loans_eligibility, :eligible, mostly_teaching_eligible_subjects: false) }
       let(:tslr_claim) { create(:tslr_claim, :submittable, eligibility: ineligible_eligibility) }
 
       before { tslr_claim.submit! }

@@ -158,35 +158,35 @@ RSpec.describe StudentLoans::Eligibility, type: :model do
 
   context "when saving in the “submit” context" do
     it "is valid when all attributes are present" do
-      expect(build(:student_loans_eligibility, :submittable)).to be_valid(:submit)
+      expect(build(:student_loans_eligibility, :eligible)).to be_valid(:submit)
     end
 
     it "is not valid without a value for qts_award_year" do
-      expect(build(:student_loans_eligibility, :submittable, qts_award_year: nil)).not_to be_valid(:submit)
+      expect(build(:student_loans_eligibility, :eligible, qts_award_year: nil)).not_to be_valid(:submit)
 
       StudentLoans::Eligibility.qts_award_years.each_key do |academic_year|
-        expect(build(:student_loans_eligibility, :submittable, qts_award_year: academic_year)).to be_valid(:submit)
+        expect(build(:student_loans_eligibility, :eligible, qts_award_year: academic_year)).to be_valid(:submit)
       end
     end
 
     it "is not valid without a value for claim_school" do
-      expect(build(:student_loans_eligibility, :submittable, claim_school: nil)).not_to be_valid(:submit)
+      expect(build(:student_loans_eligibility, :eligible, claim_school: nil)).not_to be_valid(:submit)
     end
 
     it "is not valid without a value for employment_status" do
-      expect(build(:student_loans_eligibility, :submittable, employment_status: nil)).not_to be_valid(:submit)
+      expect(build(:student_loans_eligibility, :eligible, employment_status: nil)).not_to be_valid(:submit)
     end
 
     it "is not valid without a value for current_school" do
-      expect(build(:student_loans_eligibility, :submittable, current_school: nil)).not_to be_valid(:submit)
+      expect(build(:student_loans_eligibility, :eligible, current_school: nil)).not_to be_valid(:submit)
     end
 
     it "is not valid without at least one subject being taught selected" do
-      expect(build(:student_loans_eligibility, :submittable, physics_taught: nil)).not_to be_valid(:submit)
+      expect(build(:student_loans_eligibility, :eligible, physics_taught: nil)).not_to be_valid(:submit)
     end
 
     it "is not valid without a value for mostly_teaching_eligible_subjects" do
-      expect(build(:student_loans_eligibility, :submittable, mostly_teaching_eligible_subjects: nil)).not_to be_valid(:submit)
+      expect(build(:student_loans_eligibility, :eligible, mostly_teaching_eligible_subjects: nil)).not_to be_valid(:submit)
     end
   end
 end
