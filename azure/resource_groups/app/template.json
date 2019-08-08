@@ -114,31 +114,28 @@
     }
   },
   "variables": {
-    "batPlatformDeploymentUrlBase": "https://raw.githubusercontent.com/DFE-Digital/bat-platform-building-blocks/master/templates/",
+    "batPlatformDeploymentUrlBase": "https://raw.githubusercontent.com/dxw/bat-platform-building-blocks/130-create-a-release-pipeline-for-background-web-app/templates/",
     "deploymentUrlBase": "[concat('https://raw.githubusercontent.com/DFE-Digital/dfe-teachers-payment-service/', parameters('gitCommitHash'), '/azure/templates/')]",
-
     "applicationInsightsDeploymentName": "[concat(parameters('resourceNamePrefix'), '-application-insights')]",
     "appServiceCertificateDeploymentName": "[concat(parameters('resourceNamePrefix'), '-app-service-certificate')]",
     "appServiceDeploymentName": "[concat(parameters('resourceNamePrefix'), '-app-service-web')]",
-    "appServiceWorkerDeploymentName": "[concat(parameters('resourceNamePrefix'), '-app-service-worker')]",
-    "appServicePlanDeploymentName": "[concat(parameters('resourceNamePrefix'), '-app-service-plan')]",
-    "appServicePlanWorkerDeploymentName": "[concat(parameters('resourceNamePrefix'), '-worker-app-service-plan')]",
     "databaseServerFirewallRulesDeploymentName": "[concat(parameters('resourceNamePrefix'), '-database-server-firewall-rules')]",
     "databaseServerDeploymentName": "[concat(parameters('resourceNamePrefix'), '-database-server')]",
     "databaseDeploymentName": "[concat(parameters('resourceNamePrefix'), '-database')]",
+    "appServicePlanDeploymentName": "[concat(parameters('resourceNamePrefix'), '-app-service-plan')]",
     "storageAccountDeploymentName": "[concat(parameters('resourceNamePrefix'), '-storage-account')]",
     "vspDeploymentName": "[concat(parameters('resourceNamePrefix'), '-vsp')]",
     "storageAccountName": "[replace(concat(parameters('resourceNamePrefix'), 'storage'), '-', '')]",
     "databaseServerName": "[concat(parameters('resourceNamePrefix'), '-db')]",
     "applicationInsightsName": "[concat(parameters('resourceNamePrefix'), '-ai')]",
     "appServicePlanName": "[concat(parameters('resourceNamePrefix'), '-asp')]",
-    "appServicePlanWorkerName": "[concat(parameters('resourceNamePrefix'), '-wkr-asp')]",
     "appServiceName": "[concat(parameters('resourceNamePrefix'), '-as')]",
-    "appServiceWorkerName": "[concat(parameters('resourceNamePrefix'), '-wkr-as')]",
     "webAppServiceRuntimeStack": "[concat('DOCKER|', parameters('webAppServiceDockerImage'))]",
     "vspAppServicePlanName": "[concat(parameters('resourceNamePrefix'), '-vsp-asp')]",
     "vspAppServiceName": "[concat(parameters('resourceNamePrefix'), '-vsp-as')]",
-    "vspAppServiceRuntimeStack": "[concat('DOCKER|', parameters('vspAppServiceDockerImage'))]"
+    "vspAppServiceRuntimeStack": "[concat('DOCKER|', parameters('vspAppServiceDockerImage'))]",
+    "workerContainerInstanceDeploymentName": "[concat(parameters('resourceNamePrefix'), '-worker-container-instance')]",
+    "workerContainerInstanceName": "[concat(parameters('resourceNamePrefix'), '-ci-worker')]"
   },
   "resources": [
     {
@@ -229,23 +226,6 @@
           },
           "attachedService": {
             "value": "[variables('appServiceName')]"
-          }
-        }
-      }
-    },
-    {
-      "type": "Microsoft.Resources/deployments",
-      "apiVersion": "2017-05-10",
-      "name": "[variables('appServicePlanWorkerDeploymentName')]",
-      "properties": {
-        "mode": "Incremental",
-        "templateLink": {
-          "uri": "[concat(variables('batPlatformDeploymentUrlBase'), 'app-service-plan.json')]",
-          "contentVersion": "1.0.0.0"
-        },
-        "parameters": {
-          "appServicePlanName": {
-            "value": "[variables('appServicePlanWorkerName')]"
           }
         }
       }
@@ -426,35 +406,31 @@
     {
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2017-05-10",
-      "name": "[variables('appServiceWorkerDeploymentName')]",
+      "name": "[variables('workerContainerInstanceDeploymentName')]",
       "dependsOn": [
-        "[resourceId('Microsoft.Resources/deployments', variables('appServicePlanWorkerDeploymentName'))]",
         "[resourceId('Microsoft.Resources/deployments', variables('databaseDeploymentName'))]",
         "[resourceId('Microsoft.Resources/deployments', variables('databaseServerDeploymentName'))]"
       ],
       "properties": {
         "mode": "Incremental",
         "templateLink": {
-          "uri": "[concat(variables('batPlatformDeploymentUrlBase'),'app-service-linux.json')]",
+          "uri": "[concat(variables('batPlatformDeploymentUrlBase'),'container-instances.json')]",
           "contentVersion": "1.0.0.0"
         },
         "parameters": {
-          "appServiceName": {
-            "value": "[variables('appServiceWorkerName')]"
+          "containerName": {
+            "value": "[variables('workerContainerInstanceName')]"
           },
-          "appServicePlanResourceGroup": {
-            "value": "[resourceGroup().name]"
+          "imageName": {
+            "value": "[parameters('webAppServiceDockerImage')]"
           },
-          "appServicePlanName": {
-            "value": "[variables('appServicePlanWorkerName')]"
+          "command": {
+            "value": [
+              "rake",
+              "jobs:work"
+            ]
           },
-          "runtimeStack": {
-            "value": "[variables('webAppServiceRuntimeStack')]"
-          },
-          "customStartupCommand": {
-            "value": "rake jobs:work"
-          },
-          "appServiceAppSettings": {
+          "environmentVariables": {
             "value": [
               {
                 "name": "RAILS_ENV",
@@ -505,9 +481,6 @@
                 "value": "[parameters('ROLLBAR_ENV')]"
               }
             ]
-          },
-          "deploymentUsingSlots": {
-            "value": false
           }
         }
       }
@@ -531,7 +504,10 @@
             "value": "[concat(parameters('resourceNamePrefix'), '-')]"
           },
           "ipAddresses": {
-            "value": "[reference(variables('appServiceDeploymentName')).outputs.possibleOutboundIpAddresses.value]"
+            "value": [
+              "[reference(variables('appServiceDeploymentName')).outputs.possibleOutboundIpAddresses.value]",
+              "[reference(variables('workerContainerInstanceDeploymentName')).outputs.possibleOutboundIpAddresses.value]"
+            ]
           },
           "serverName": {
             "value": "[variables('databaseServerName')]"
