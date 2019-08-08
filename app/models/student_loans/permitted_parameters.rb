@@ -10,13 +10,11 @@ module StudentLoans
     ].flatten.freeze
 
     PARAMETERS = [
-      :full_name,
       :address_line_1,
       :address_line_2,
       :address_line_3,
       :address_line_4,
       :postcode,
-      :date_of_birth,
       :payroll_gender,
       :teacher_reference_number,
       :national_insurance_number,

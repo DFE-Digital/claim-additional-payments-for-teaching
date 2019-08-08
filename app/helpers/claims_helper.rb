@@ -24,9 +24,7 @@ module ClaimsHelper
 
   def identity_answers(claim)
     [].tap do |a|
-      a << [t("tslr.questions.full_name"), claim.full_name, "full-name"]
       a << [t("tslr.questions.address"), claim.address, "address"]
-      a << [t("tslr.questions.date_of_birth"), l(claim.date_of_birth), "date-of-birth"]
       a << [t("tslr.questions.payroll_gender"), t("tslr.answers.payroll_gender.#{claim.payroll_gender}"), "gender"] unless claim.verified_fields.include?("payroll_gender")
       a << [t("tslr.questions.teacher_reference_number"), claim.teacher_reference_number, "teacher-reference-number"]
       a << [t("tslr.questions.national_insurance_number"), claim.national_insurance_number, "national-insurance-number"]
