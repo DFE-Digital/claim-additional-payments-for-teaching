@@ -59,7 +59,7 @@ RSpec.describe TslrClaimsCsv do
         claim.teacher_reference_number,
         claim.national_insurance_number,
         claim.student_loan_plan.humanize,
-        claim.email_address,
+        "=\"#{claim.email_address}\"",
         claim.mostly_teaching_eligible_subjects ? "Yes" : "No",
         claim.bank_sort_code,
         claim.bank_account_number,
