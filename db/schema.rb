@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_08_06_133855) do
+ActiveRecord::Schema.define(version: 2019_08_07_110948) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -71,6 +71,12 @@ ActiveRecord::Schema.define(version: 2019_08_06_133855) do
     t.uuid "claim_school_id"
     t.uuid "current_school_id"
     t.integer "employment_status"
+    t.boolean "biology_taught"
+    t.boolean "chemistry_taught"
+    t.boolean "computer_science_taught"
+    t.boolean "languages_taught"
+    t.boolean "physics_taught"
+    t.boolean "mostly_teaching_eligible_subjects"
     t.index ["claim_school_id"], name: "index_student_loans_eligibilities_on_claim_school_id"
     t.index ["current_school_id"], name: "index_student_loans_eligibilities_on_current_school_id"
   end
@@ -88,17 +94,11 @@ ActiveRecord::Schema.define(version: 2019_08_06_133855) do
     t.string "teacher_reference_number", limit: 11
     t.string "national_insurance_number", limit: 9
     t.string "email_address", limit: 256
-    t.boolean "mostly_teaching_eligible_subjects"
     t.string "bank_sort_code", limit: 6
     t.string "bank_account_number", limit: 8
     t.datetime "submitted_at"
     t.decimal "student_loan_repayment_amount", precision: 7, scale: 2
     t.string "reference", limit: 8
-    t.boolean "biology_taught", default: false
-    t.boolean "chemistry_taught", default: false
-    t.boolean "physics_taught", default: false
-    t.boolean "computer_science_taught", default: false
-    t.boolean "languages_taught", default: false
     t.boolean "has_student_loan"
     t.integer "student_loan_country"
     t.integer "student_loan_courses"

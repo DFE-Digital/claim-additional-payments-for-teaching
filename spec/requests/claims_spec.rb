@@ -68,7 +68,7 @@ RSpec.describe "Claims", type: :request do
 
         claim = TslrClaim.order(:created_at).last
         claim.update_attributes(attributes_for(:tslr_claim, :submittable))
-        claim.eligibility.update_attributes(attributes_for(:student_loans_eligibility, :submittable))
+        claim.eligibility.update_attributes(attributes_for(:student_loans_eligibility, :eligible))
 
         claim.submit!
 
@@ -185,7 +185,7 @@ RSpec.describe "Claims", type: :request do
           before :each do
             # Make the claim submittable
             in_progress_claim.update!(attributes_for(:tslr_claim, :submittable))
-            in_progress_claim.eligibility.update!(attributes_for(:student_loans_eligibility, :submittable))
+            in_progress_claim.eligibility.update!(attributes_for(:student_loans_eligibility, :eligible))
 
             perform_enqueued_jobs do
               put claim_path("check-your-answers")

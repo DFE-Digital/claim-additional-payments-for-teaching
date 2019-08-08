@@ -43,7 +43,7 @@ class PageSequence
 
   def slugs
     SLUGS.dup.tap do |sequence|
-      sequence.delete("current-school") if claim.employed_at_claim_school?
+      sequence.delete("current-school") if claim.eligibility.employed_at_claim_school?
       sequence.delete("student-loan-country") if claim.no_student_loan?
       sequence.delete("student-loan-how-many-courses") if claim.no_student_loan? || claim.student_loan_country_with_one_plan?
       sequence.delete("student-loan-start-date") if claim.no_student_loan? || claim.student_loan_country_with_one_plan?
@@ -52,7 +52,7 @@ class PageSequence
   end
 
   def next_slug
-    return "ineligible" if claim.ineligible?
+    return "ineligible" if claim.eligibility.ineligible?
     return "check-your-answers" if claim.submittable?
 
     slugs[current_slug_index + 1]

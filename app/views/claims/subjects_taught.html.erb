@@ -1,30 +1,33 @@
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
     <%= render("shared/error_summary", instance: current_claim) if current_claim.errors.any? %>
+
     <%= form_for current_claim, url: claim_path do |form| %>
       <%= form_group_tag current_claim do %>
-        <fieldset class="govuk-fieldset" id="tslr_claim_subjects_taught">
-          <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl">
-            <h1 class="govuk-fieldset__heading">
-              <%= t("tslr.questions.subjects_taught") %>
-            </h1>
-          </legend>
-          <div class="govuk-checkboxes">
-            <% TslrClaim::SUBJECT_FIELDS.each do |subject| -%>
-              <div class="govuk-checkboxes__item">
-                <%= form.hidden_field subject, value: false %>
-                <%= form.check_box subject, class: "govuk-checkboxes__input subject", id: "eligible_subjects_#{subject}"  %>
-                <%= form.label subject, t("tslr.questions.eligible_subjects.#{subject}"), class: "govuk-label govuk-checkboxes__label", for: "eligible_subjects_#{subject}"  %>
+        <%= form.fields_for :eligibility, include_id: false do |fields| %>
+          <fieldset class="govuk-fieldset" id="tslr_claim_subjects_taught">
+            <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl">
+              <h1 class="govuk-fieldset__heading">
+                <%= t("tslr.questions.subjects_taught") %>
+              </h1>
+            </legend>
+            <div class="govuk-checkboxes">
+              <% StudentLoans::Eligibility::SUBJECT_ATTRIBUTES.each do |subject| -%>
+                <div class="govuk-checkboxes__item">
+                  <%= fields.hidden_field subject, value: false %>
+                  <%= fields.check_box subject, class: "govuk-checkboxes__input subject", id: "eligible_subjects_#{subject}"  %>
+                  <%= fields.label subject, t("tslr.questions.eligible_subjects.#{subject}"), class: "govuk-label govuk-checkboxes__label", for: "eligible_subjects_#{subject}"  %>
+                </div>
+              <% end %>
+              <div class="govuk-radios__divider">or</div>
+              <div class="govuk-radios__item">
+                <%= fields.hidden_field :mostly_teaching_eligible_subjects, value: '' %>
+                <%= fields.radio_button(:mostly_teaching_eligible_subjects, false, class: "govuk-radios__input")  %>
+                <%= fields.label :mostly_teaching_eligible_subjects_false, t('tslr.questions.eligible_subjects.not_applicable'), class: "govuk-label govuk-radios__label" %>
               </div>
-            <% end %>
-            <div class="govuk-radios__divider">or</div>
-            <div class="govuk-radios__item">
-              <%= form.hidden_field :mostly_teaching_eligible_subjects, value: '' %>
-              <%= form.radio_button(:mostly_teaching_eligible_subjects, false, class: "govuk-radios__input")  %>
-              <%= form.label :mostly_teaching_eligible_subjects_false, t('tslr.questions.eligible_subjects.not_applicable'), class: "govuk-label govuk-radios__label" %>
             </div>
-          </div>
-        </fieldset>
+          </fieldset>
+        <% end %>
       <% end %>
       <%= form.submit "Continue", class: "govuk-button" %>
     <% end %>

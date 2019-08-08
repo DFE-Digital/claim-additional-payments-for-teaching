@@ -3,8 +3,6 @@ FactoryBot.define do
     association(:eligibility, factory: :student_loans_eligibility)
 
     trait :submittable do
-      physics_taught { true }
-      mostly_teaching_eligible_subjects { true }
       full_name { "Jo Bloggs" }
       address_line_1 { "1 Test Road" }
       address_line_3 { "Test Town" }
@@ -22,7 +20,7 @@ FactoryBot.define do
       bank_sort_code { 123456 }
       bank_account_number { 12345678 }
 
-      association(:eligibility, factory: [:student_loans_eligibility, :submittable])
+      association(:eligibility, factory: [:student_loans_eligibility, :eligible])
       payroll_gender { :female }
     end
 
@@ -30,6 +28,11 @@ FactoryBot.define do
       submittable
       submitted_at { Time.zone.now }
       reference { Reference.new.to_s }
+    end
+
+    trait :ineligible do
+      submittable
+      association(:eligibility, factory: [:student_loans_eligibility, :ineligible])
     end
   end
 end

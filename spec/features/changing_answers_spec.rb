@@ -2,6 +2,7 @@ require "rails_helper"
 
 RSpec.feature "Changing the answers on a submittable claim" do
   let(:claim) { TslrClaim.order(:created_at).last }
+  let(:eligibility) { claim.eligibility }
 
   before do
     answer_all_student_loans_claim_questions
@@ -42,9 +43,9 @@ RSpec.feature "Changing the answers on a submittable claim" do
       end
 
       scenario "Eligible subjects are set correctly" do
-        expect(claim.reload.physics_taught).to eq(false)
-        expect(claim.reload.biology_taught).to eq(true)
-        expect(claim.reload.chemistry_taught).to eq(true)
+        expect(eligibility.reload.physics_taught).to eq(false)
+        expect(eligibility.biology_taught).to eq(true)
+        expect(eligibility.chemistry_taught).to eq(true)
       end
 
       scenario "Teacher is redirected to ask if they were mostly teaching eligible subjects" do
@@ -63,7 +64,7 @@ RSpec.feature "Changing the answers on a submittable claim" do
         end
 
         scenario "Sets mostly teaching eligible subjects correctly" do
-          expect(claim.reload.mostly_teaching_eligible_subjects).to eq(true)
+          expect(eligibility.reload.mostly_teaching_eligible_subjects).to eq(true)
         end
 
         scenario "Teacher is redirected to the check your answers page" do
@@ -79,7 +80,7 @@ RSpec.feature "Changing the answers on a submittable claim" do
         end
 
         scenario "Sets mostly teaching eligible subjects correctly" do
-          expect(claim.reload.mostly_teaching_eligible_subjects).to eq(false)
+          expect(eligibility.reload.mostly_teaching_eligible_subjects).to eq(false)
         end
 
         scenario "Teacher is told they are not eligible" do
@@ -180,7 +181,7 @@ RSpec.feature "Changing the answers on a submittable claim" do
   end
 
   scenario "going from same school to different school" do
-    claim.eligibility.update!(employment_status: "claim_school")
+    eligibility.update!(employment_status: "claim_school")
 
     find("a[href='#{claim_path("still-teaching")}']").click
 

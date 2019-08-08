@@ -1,14 +1,6 @@
 # frozen_string_literal: true
 
 class TslrClaim < ApplicationRecord
-  SUBJECT_FIELDS = [
-    :biology_taught,
-    :chemistry_taught,
-    :physics_taught,
-    :computer_science_taught,
-    :languages_taught,
-  ].freeze
-
   TRN_LENGTH = 7
 
   NO_STUDENT_LOAN = "not_applicable"
@@ -24,14 +16,9 @@ class TslrClaim < ApplicationRecord
            :claim_school,
            :employment_status,
            :current_school,
+           :subjects_taught,
+           :mostly_teaching_eligible_subjects?,
            to: :eligibility
-
-  # NOTE: Temporary delegation of eligibility methods
-  delegate :ineligible_qts_award_year?,
-           :ineligible_claim_school?,
-           :employed_at_claim_school?,
-           :employed_at_no_school?,
-           to: :eligibility, allow_nil: nil
 
   # NOTE: Temporary delegation of left over methods
   delegate :claim_school_name, to: :eligibility
@@ -45,10 +32,6 @@ class TslrClaim < ApplicationRecord
     female: 1,
     male: 2,
   }
-
-  validate :at_least_one_subject_chosen,        on: [:"subjects-taught", :submit], unless: ->(c) { c.mostly_teaching_eligible_subjects == false }
-
-  validates :mostly_teaching_eligible_subjects, on: [:"mostly-teaching-eligible-subjects", :submit], inclusion: {in: [true, false], message: "Select either Yes or No"}
 
   validates :payroll_gender,                    on: [:gender, :submit], presence: {message: "Choose the option for the gender your school’s payroll system associates with you"}
 
@@ -124,29 +107,12 @@ class TslrClaim < ApplicationRecord
     valid?(:submit) && !submitted?
   end
 
-  def ineligible?
-    ineligible_qts_award_year? || ineligible_claim_school? || employed_at_no_school? || not_taught_eligible_subjects_enough?
-  end
-
-  def ineligibility_reason
-    [
-      :ineligible_qts_award_year,
-      :ineligible_claim_school,
-      :employed_at_no_school,
-      :not_taught_eligible_subjects_enough,
-    ].find { |eligibility_check| send("#{eligibility_check}?") }
-  end
-
   def address
     [address_line_1, address_line_2, address_line_3, address_line_4, postcode].reject(&:blank?).join(", ")
   end
 
   def student_loan_repayment_amount=(value)
     super(value.to_s.gsub(/[£,\s]/, ""))
-  end
-
-  def subjects_taught
-    SUBJECT_FIELDS.select { |s| send(s) == true }
   end
 
   def no_student_loan?
@@ -158,10 +124,6 @@ class TslrClaim < ApplicationRecord
   end
 
   private
-
-  def not_taught_eligible_subjects_enough?
-    mostly_teaching_eligible_subjects == false
-  end
 
   def normalise_trn
     self.teacher_reference_number = normalised_trn
@@ -217,15 +179,7 @@ class TslrClaim < ApplicationRecord
     }
   end
 
-  def at_least_one_subject_chosen
-    errors.add(:subjects_taught, "Choose a subject, or select \"not applicable\"") unless at_least_one_subject_chosen?
-  end
-
-  def at_least_one_subject_chosen?
-    SUBJECT_FIELDS.find { |s| send(s) == true }.present?
-  end
-
   def claim_must_not_be_ineligible
-    errors.add(:base, ineligibility_reason) if ineligible?
+    errors.add(:base, eligibility.ineligibility_reason) if eligibility.ineligible?
   end
 end
