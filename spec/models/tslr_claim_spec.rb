@@ -395,6 +395,16 @@ RSpec.describe TslrClaim, type: :model do
     end
   end
 
+  describe "#address_verified?" do
+    it "returns true if any address attributes are in the list of verified fields" do
+      expect(TslrClaim.new.payroll_gender_verified?).to eq false
+      expect(TslrClaim.new(verified_fields: ["gender"]).payroll_gender_verified?).to eq false
+
+      expect(TslrClaim.new(verified_fields: ["address_line_1"]).address_verified?).to eq true
+      expect(TslrClaim.new(verified_fields: ["address_line_1", "postcode"]).address_verified?).to eq true
+    end
+  end
+
   describe "#payroll_gender_verified?" do
     it "returns true if payroll_gender is in the list of verified fields" do
       expect(TslrClaim.new(verified_fields: ["payroll_gender"]).payroll_gender_verified?).to eq true

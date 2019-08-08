@@ -61,16 +61,12 @@ describe ClaimsHelper do
       expect(helper.identity_answers(claim)).to eq expected_answers
     end
 
-    context "when a field has come from verify" do
-      before do
-        claim.verified_fields = ["payroll_gender"]
-      end
+    it "excludes questions answered by verify" do
+      claim.verified_fields = ["payroll_gender"]
+      expect(helper.identity_answers(claim)).to_not include([I18n.t("tslr.questions.payroll_gender"), "female", "gender"])
 
-      it "does not return that field" do
-        expect(helper.identity_answers(claim)).to_not include(
-          [I18n.t("tslr.questions.payroll_gender"), "female", "gender"]
-        )
-      end
+      claim.verified_fields = ["postcode"]
+      expect(helper.identity_answers(claim)).to_not include([I18n.t("tslr.questions.address"), "Flat 1, 1 Test Road, Test Town, AB1 2CD", "address"])
     end
   end
 
