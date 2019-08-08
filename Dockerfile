@@ -125,3 +125,8 @@ COPY .rspec ${APP_HOME}/.rspec
 
 COPY spec ${APP_HOME}/spec
 # End
+
+# Copy files for linting (sorted by vague frequency of change for caching)
+COPY docs ${APP_HOME}/docs
+COPY azure ${APP_HOME}/azure
+# End
