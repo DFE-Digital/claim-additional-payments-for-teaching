@@ -77,11 +77,10 @@ NOTIFY_TEMPLATE_ID=d72e2ff9-b228-4f16-9099-fd9d411c0334
 The service uses GOV.UK Verify to verify the identity of teachers that are
 claiming.
 
-If you want to test Verify in development, add the following to your `.env`
-file.
+Add the following to your `.env` file to point at the local VSP in development
+mode.
 
 ```
-GOVUK_VERIFY_ENABLED=1
 GOVUK_VERIFY_VSP_HOST=http://localhost:50300
 ```
 

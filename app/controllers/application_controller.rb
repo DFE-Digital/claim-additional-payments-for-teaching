@@ -5,7 +5,7 @@ class ApplicationController < ActionController::Base
     if: -> { ENV.key?("BASIC_AUTH_USERNAME") },
   )
 
-  helper_method :signed_in?, :govuk_verify_enabled?, :current_claim
+  helper_method :signed_in?, :current_claim
 
   private
 
@@ -15,10 +15,6 @@ class ApplicationController < ActionController::Base
 
   def signed_in?
     session.key?(:login)
-  end
-
-  def govuk_verify_enabled?
-    ENV["GOVUK_VERIFY_ENABLED"]
   end
 
   def current_claim

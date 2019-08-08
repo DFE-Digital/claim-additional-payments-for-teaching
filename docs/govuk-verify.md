@@ -19,13 +19,6 @@ GOVUK_VERIFY_VSP_HOST=http://URL.FOR.VSP:12345
 
 ## Running locally in development
 
-Currently GOV.UK Verify integration is under active development and can be
-enabled by setting an environment variable in your `.env` file:
-
-```bash
-GOVUK_VERIFY_ENABLED=1
-```
-
 GOV.UK Verify integration requires using a Verify Service Provider (VSP) to
 handle SAML secure messaging.
 

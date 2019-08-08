@@ -29,34 +29,15 @@ RSpec.feature "Teacher Student Loan Repayments claims" do
 
     expect(page).to have_text("You are eligible to claim back student loan repayments")
 
-    click_on "Skip GOV.UK Verify"
+    perform_verify_step
 
-    expect(page).to have_text(I18n.t("tslr.questions.full_name"))
-
-    fill_in I18n.t("tslr.questions.full_name"), with: "Margaret Honeycutt"
-    click_on "Continue"
-
-    expect(claim.reload.full_name).to eql("Margaret Honeycutt")
-
-    expect(page).to have_text(I18n.t("tslr.questions.address"))
-
-    fill_in_address
-
-    expect(claim.reload.address_line_1).to eql("123 Main Street")
-    expect(claim.address_line_2).to eql("Downtown")
-    expect(claim.address_line_3).to eql("Twin Peaks")
-    expect(claim.address_line_4).to eql("Washington")
-    expect(claim.postcode).to eql("M1 7HL")
-
-    expect(page).to have_text(I18n.t("tslr.questions.date_of_birth"))
-
-    fill_in_date_of_birth
-
-    expect(page).to have_text(I18n.t("tslr.questions.payroll_gender"))
-    choose "Male"
-    click_on "Continue"
-
-    expect(claim.reload.date_of_birth).to eq(Date.new(1990, 7, 3))
+    expect(claim.reload.full_name).to eql("Isambard Kingdom Brunel")
+    expect(claim.address_line_1).to eql("Verified Street")
+    expect(claim.address_line_2).to eql("Verified Town")
+    expect(claim.address_line_3).to eql("Verified County")
+    expect(claim.postcode).to eql("M12 345")
+    expect(claim.date_of_birth).to eq(Date.new(1806, 4, 9))
+    expect(claim.payroll_gender).to eq("male")
 
     expect(page).to have_text(I18n.t("tslr.questions.teacher_reference_number"))
     fill_in :tslr_claim_teacher_reference_number, with: "1234567"
@@ -100,7 +81,7 @@ RSpec.feature "Teacher Student Loan Repayments claims" do
     click_on "Continue"
 
     expect(claim.reload.bank_sort_code).to eq("123456")
-    expect(claim.reload.bank_account_number).to eq("87654321")
+    expect(claim.bank_account_number).to eq("87654321")
 
     expect(page).to have_text("Check your answers before sending your application")
 
