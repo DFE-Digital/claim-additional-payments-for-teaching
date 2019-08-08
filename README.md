@@ -49,16 +49,11 @@ variables.
 Create a `.env` file with the following variables:
 
 ```
-DFE_SIGN_IN_ISSUER=https://pp-oidc.signin.education.gov.uk:443
-DFE_SIGN_IN_REDIRECT_BASE_URL=https://localhost:3000
-DFE_SIGN_IN_IDENTIFIER=<paste identifier>
 DFE_SIGN_IN_SECRET=<paste secret>
-DFE_SIGN_IN_API_CLIENT_ID=teacherpayments
 DFE_SIGN_IN_API_SECRET=<paste secret>
-DFE_SIGN_IN_API_ENDPOINT=https://pp-api.signin.education.gov.uk
 ```
 
-The identifier and secret are stored in Heroku.
+The secrets are stored in the development key vault on Azure.
 
 ### GOV.UK Notify
 
@@ -76,13 +71,6 @@ NOTIFY_TEMPLATE_ID=d72e2ff9-b228-4f16-9099-fd9d411c0334
 
 The service uses GOV.UK Verify to verify the identity of teachers that are
 claiming.
-
-Add the following to your `.env` file to point at the local VSP in development
-mode.
-
-```
-GOVUK_VERIFY_VSP_HOST=http://localhost:50300
-```
 
 See [docs/govuk-verify](/docs/govuk-verify.md) for more details on this.
 
