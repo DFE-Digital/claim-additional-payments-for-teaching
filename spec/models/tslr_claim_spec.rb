@@ -45,24 +45,11 @@ RSpec.describe Claim, type: :model do
   end
 
   context "that has an address" do
-    it "validates the length of address_line_1 is 100 characters or less" do
-      expect(build(:claim, address_line_1: "Test Line" * 25)).not_to be_valid
-      expect(build(:claim, address_line_1: "Test Line")).to be_valid
-    end
-
-    it "validates the length of address_line_2 is 100 characters or less" do
-      expect(build(:claim, address_line_2: "Test Line" * 25)).not_to be_valid
-      expect(build(:claim, address_line_2: "Test Line")).to be_valid
-    end
-
-    it "validates the length of address_line_3 is 100 characters or less" do
-      expect(build(:claim, address_line_3: "Test Line" * 25)).not_to be_valid
-      expect(build(:claim, address_line_3: "Test Line")).to be_valid
-    end
-
-    it "validates the length of address_line_4 is 100 characters or less" do
-      expect(build(:claim, address_line_4: "Test Line" * 25)).not_to be_valid
-      expect(build(:claim, address_line_4: "Test Line")).to be_valid
+    it "validates the length of each address line is not greater than 100 characters" do
+      %i[address_line_1 address_line_2 address_line_3 address_line_4].each do |attribute_name|
+        expect(build(:claim, attribute_name => "X" + "ABCD" * 25)).not_to be_valid
+        expect(build(:claim, attribute_name => "ABCD" * 25)).to be_valid
+      end
     end
   end
 
