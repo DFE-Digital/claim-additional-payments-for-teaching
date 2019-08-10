@@ -34,44 +34,44 @@ class Claim < ApplicationRecord
     male: 2,
   }
 
-  validates :payroll_gender,                    on: [:gender, :submit], presence: {message: "Choose the option for the gender your school’s payroll system associates with you"}
+  validates :payroll_gender, on: [:gender, :submit], presence: {message: "Choose the option for the gender your school’s payroll system associates with you"}
 
-  validates :full_name,                         on: [:"full-name", :submit], presence: {message: "Enter your full name"}
-  validates :full_name,                         length: {maximum: 200, message: "Full name must be 200 characters or less"}
+  validates :full_name, on: [:"full-name", :submit], presence: {message: "Enter your full name"}
+  validates :full_name, length: {maximum: 200, message: "Full name must be 200 characters or less"}
 
-  validates :address_line_1,                    on: [:address, :submit], presence: {message: "Enter your building and street address"}
-  validates :address_line_1,                    length: {maximum: 100, message: "Address lines must be 100 characters or less"}
-  validates :address_line_2,                    length: {maximum: 100, message: "Address lines must be 100 characters or less"}
-  validates :address_line_3,                    length: {maximum: 100, message: "Address lines must be 100 characters or less"}
-  validates :address_line_4,                    length: {maximum: 100, message: "Address lines must be 100 characters or less"}
+  validates :address_line_1, on: [:address, :submit], presence: {message: "Enter your building and street address"}
+  validates :address_line_1, length: {maximum: 100, message: "Address lines must be 100 characters or less"}
+  validates :address_line_2, length: {maximum: 100, message: "Address lines must be 100 characters or less"}
+  validates :address_line_3, length: {maximum: 100, message: "Address lines must be 100 characters or less"}
+  validates :address_line_4, length: {maximum: 100, message: "Address lines must be 100 characters or less"}
 
-  validates :postcode,                          on: [:address, :submit], presence: {message: "Enter your postcode"}
-  validates :postcode,                          length: {maximum: 11, message: "Postcode must be 11 characters or less"}
+  validates :postcode, on: [:address, :submit], presence: {message: "Enter your postcode"}
+  validates :postcode, length: {maximum: 11, message: "Postcode must be 11 characters or less"}
 
-  validates :date_of_birth,                     on: [:"date-of-birth", :submit], presence: {message: "Enter your date of birth"}
+  validates :date_of_birth, on: [:"date-of-birth", :submit], presence: {message: "Enter your date of birth"}
 
-  validates :teacher_reference_number,          on: [:"teacher-reference-number", :submit], presence: {message: "Enter your teacher reference number"}
+  validates :teacher_reference_number, on: [:"teacher-reference-number", :submit], presence: {message: "Enter your teacher reference number"}
   validate :trn_must_be_seven_digits
 
   validates :national_insurance_number, on: [:"national-insurance-number", :submit], presence: {message: "Enter your National Insurance number"}
-  validate  :ni_number_is_correct_format
+  validate :ni_number_is_correct_format
 
-  validates :has_student_loan,                  on: [:"student-loan", :submit], inclusion: {in: [true, false], message: "Select yes if you have a student loan"}
-  validates :student_loan_country,              on: [:"student-loan-country"], presence: {message: "Select the country in which you first applied for your student loan"}
-  validates :student_loan_courses,              on: [:"student-loan-how-many-courses"], presence: {message: "Select the number of higher education courses you have studied"}
-  validates :student_loan_start_date,           on: [:"student-loan-start-date"], presence: {message: "Select when the first year of your higher education course started"}
-  validates :student_loan_plan,                 on: [:submit], presence: {message: "We have not been able determined your student loan repayment plan. Answer all questions about your student loan."}
+  validates :has_student_loan, on: [:"student-loan", :submit], inclusion: {in: [true, false], message: "Select yes if you have a student loan"}
+  validates :student_loan_country, on: [:"student-loan-country"], presence: {message: "Select the country in which you first applied for your student loan"}
+  validates :student_loan_courses, on: [:"student-loan-how-many-courses"], presence: {message: "Select the number of higher education courses you have studied"}
+  validates :student_loan_start_date, on: [:"student-loan-start-date"], presence: {message: "Select when the first year of your higher education course started"}
+  validates :student_loan_plan, on: [:submit], presence: {message: "We have not been able determined your student loan repayment plan. Answer all questions about your student loan."}
 
-  validates :email_address,             on: [:"email-address", :submit], presence: {message: "Enter an email address"}
-  validates :email_address,             format: {with: URI::MailTo::EMAIL_REGEXP, message: "Enter an email address in the correct format, like name@example.com"},
-                                        length: {maximum: 256, message: "Email address must be 256 characters or less"},
-                                        allow_blank: true
+  validates :email_address, on: [:"email-address", :submit], presence: {message: "Enter an email address"}
+  validates :email_address, format: {with: URI::MailTo::EMAIL_REGEXP, message: "Enter an email address in the correct format, like name@example.com"},
+                            length: {maximum: 256, message: "Email address must be 256 characters or less"},
+                            allow_blank: true
 
-  validates :bank_sort_code,            on: [:"bank-details", :submit], presence: {message: "Enter a sort code"}
-  validates :bank_account_number,       on: [:"bank-details", :submit], presence: {message: "Enter an account number"}
+  validates :bank_sort_code, on: [:"bank-details", :submit], presence: {message: "Enter a sort code"}
+  validates :bank_account_number, on: [:"bank-details", :submit], presence: {message: "Enter an account number"}
 
-  validate  :bank_account_number_must_be_eight_digits
-  validate  :bank_sort_code_must_be_six_digits
+  validate :bank_account_number_must_be_eight_digits
+  validate :bank_sort_code_must_be_six_digits
 
   validate :claim_must_not_be_ineligible, on: :submit
 

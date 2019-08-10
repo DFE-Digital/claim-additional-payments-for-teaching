@@ -1,9 +1,9 @@
 OmniAuth.config.logger = Rails.logger
 
-dfe_sign_in_issuer            = ENV["DFE_SIGN_IN_ISSUER"]
+dfe_sign_in_issuer = ENV["DFE_SIGN_IN_ISSUER"]
 dfe_sign_in_redirect_base_url = ENV["DFE_SIGN_IN_REDIRECT_BASE_URL"]
-dfe_sign_in_identifier        = ENV["DFE_SIGN_IN_IDENTIFIER"]
-dfe_sign_in_secret            = ENV["DFE_SIGN_IN_SECRET"]
+dfe_sign_in_identifier = ENV["DFE_SIGN_IN_IDENTIFIER"]
+dfe_sign_in_secret = ENV["DFE_SIGN_IN_SECRET"]
 
 dfe_sign_in_issuer_uri = dfe_sign_in_issuer.present? ? URI(dfe_sign_in_issuer) : nil
 dfe_sign_in_redirect_uri = dfe_sign_in_redirect_base_url.present? ? URI.join(dfe_sign_in_redirect_base_url, "/admin/auth/callback") : nil
