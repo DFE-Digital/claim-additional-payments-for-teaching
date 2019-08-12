@@ -11,7 +11,6 @@ module Verify
 
     def initialize(parameters)
       @parameters = parameters
-      Rollbar.debug("Verify::Response", parameters: parameters)
     end
 
     def self.translate(saml_response:, request_id:, level_of_assurance:)
