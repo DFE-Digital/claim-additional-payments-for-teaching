@@ -58,9 +58,9 @@ module FeatureHelpers
     click_on "Continue"
   end
 
-  def perform_verify_step
+  def perform_verify_step(response_type = "identity-verified")
     stub_vsp_generate_request
-    stub_vsp_translate_response_request
+    stub_vsp_translate_response_request(response_type)
 
     click_on "Continue to GOV.UK Verify"
     # non-JS means we need to manually submit the /verify/authentications/new form
