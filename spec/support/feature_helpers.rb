@@ -19,7 +19,7 @@ module FeatureHelpers
     answer_student_loan_plan_questions
     fill_in I18n.t("student_loans.questions.student_loan_amount", claim_school_name: claim.claim_school_name), with: "1100"
     click_on "Continue"
-    fill_in I18n.t("student_loans.questions.email_address"), with: "name@example.tld"
+    fill_in I18n.t("questions.email_address"), with: "name@example.tld"
     click_on "Continue"
     fill_in "Sort code", with: "123456"
     fill_in "Account number", with: "87654321"
@@ -95,7 +95,7 @@ module FeatureHelpers
     click_on "Continue"
     choose("1")
     click_on "Continue"
-    choose I18n.t("student_loans.answers.student_loan_start_date.one_course.before_first_september_2012")
+    choose I18n.t("answers.student_loan_start_date.one_course.before_first_september_2012")
     click_on "Continue"
   end
 

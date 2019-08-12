@@ -5,7 +5,7 @@
     <%= form_for current_claim, url: claim_path do |form| %>
       <%= form_group_tag current_claim do %>
         <h1 class="govuk-label-wrapper">
-          <%= form.label :teacher_reference_number, t("student_loans.questions.teacher_reference_number"), class: "govuk-label govuk-label--xl" %>
+          <%= form.label :teacher_reference_number, t("questions.teacher_reference_number"), class: "govuk-label govuk-label--xl" %>
         </h1>
 
         <span class="govuk-hint">You can get this from your school, the certificate you got when you qualified as a teacher or from the <a href="https://www.gov.uk/guidance/individual-teacher-records-information-for-teachers#contact"  class="govuk-link">teacher qualifications helpdesk</a>.</span>

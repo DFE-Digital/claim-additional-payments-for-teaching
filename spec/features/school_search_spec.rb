@@ -62,7 +62,7 @@ RSpec.feature "Searching for school during Teacher Student Loan Repayments claim
     choose_school schools(:penistone_grammar_school)
     choose_still_teaching "Yes, at another school"
 
-    expect(page).to have_text(I18n.t("student_loans.questions.current_school"))
+    expect(page).to have_text(I18n.t("questions.current_school"))
     expect(page).to have_button("Search")
 
     fill_in :school_search, with: "Penistone"

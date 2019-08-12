@@ -45,38 +45,37 @@ en:
         employed_at_no_school: "You can only get this payment if you’re still working as a teacher"
         not_taught_eligible_subjects_enough: "You must have spent at least half your time teaching an eligible subject"
   service_name: "Claim additional payments for teaching"
+  questions:
+    current_school: "Which school are you currently employed at?"
+    address: "What is your address?"
+    teacher_reference_number: "What's your teacher reference number?"
+    national_insurance_number: "What's your National Insurance number?"
+    has_student_loan: "Are you still paying off your student loan?"
+    student_loan_country: "When you applied for your student loan where was your home address?"
+    student_loan_how_many_courses: "How many higher education courses have you studied?"
+    student_loan_start_date:
+      one_course: "When did the first year of your higher education course start?"
+      two_or_more_courses: "When did the first year of each higher education course start?"
+    email_address: "Email address"
+    bank_details: "Enter bank account details"
+    payroll_gender: "What gender does your school's payroll system associate with you?"
+  answers:
+    student_loan_start_date:
+      one_course:
+        before_first_september_2012: "Before 1 September 2012"
+        on_or_after_first_september_2012: "On or after 1 September 2012"
+      two_or_more_courses:
+        before_first_september_2012: "All my degree courses started before 1 September 2012"
+        some_before_some_after_first_september_2012: "Some of my degree courses started before 1 September 2012 and some started after 1 September 2012"
+        on_or_after_first_september_2012: "All of my degree courses started after 1 September 2012"
+    payroll_gender:
+      male: "Male"
+      female: "Female"
+      dont_know: "Don’t know"
   student_loans:
     journey_name: "Teachers: claim back your student loan repayments"
     questions:
       qts_award_year: "Which academic year did you complete your initial teacher training?"
-      claim_school: "Which school were you employed at between 6 April 2018 and 5 April 2019?"
-      employment_status: "Are you still employed to teach at a school in England?"
-      current_school: "Which school are you currently employed at?"
-      subjects_taught: "Did you teach any of the following subjects between 6 April 2018 and 5 April 2019?"
-      mostly_teaching_eligible_subjects:
-        "Were half of your working hours spent teaching %{subjects} between 6 April 2018 and 5 April 2019?"
-      address: "What is your address?"
-      teacher_reference_number: "What's your teacher reference number?"
-      national_insurance_number: "What's your National Insurance number?"
-      has_student_loan: "Are you still paying off your student loan?"
-      student_loan_country: "When you applied for your student loan where was your home address?"
-      student_loan_how_many_courses: "How many higher education courses have you studied?"
-      student_loan_start_date:
-        one_course: "When did the first year of your higher education course start?"
-        two_or_more_courses: "When did the first year of each higher education course start?"
-      student_loan_amount:
-        "Exactly how much student loan did you repay while you worked at %{claim_school_name} between 6 April 2018 and 5
-        April 2019?"
-      email_address: "Email address"
-      bank_details: "Enter bank account details"
-      payroll_gender: "What gender does your school's payroll system associate with you?"
-      eligible_subjects:
-        biology_taught: "Biology"
-        chemistry_taught: "Chemistry"
-        physics_taught: "Physics"
-        computer_science_taught: "Computer Science"
-        languages_taught: "Languages"
-        not_applicable: "Not applicable, I didn't teach any of these subjects"
       qts_award_years:
         before_2013: "Before September 1 2013"
         "2013_2014": "September 1 2013 – August 31 2014"
@@ -86,19 +85,21 @@ en:
         "2017_2018": "September 1 2017 – August 31 2018"
         "2018_2019": "September 1 2018 – August 31 2019"
         "2019_2020": "September 1 2019 – August 31 2020"
-    answers:
-      student_loan_start_date:
-        one_course:
-          before_first_september_2012: "Before 1 September 2012"
-          on_or_after_first_september_2012: "On or after 1 September 2012"
-        two_or_more_courses:
-          before_first_september_2012: "All my degree courses started before 1 September 2012"
-          some_before_some_after_first_september_2012: "Some of my degree courses started before 1 September 2012 and some started after 1 September 2012"
-          on_or_after_first_september_2012: "All of my degree courses started after 1 September 2012"
-      payroll_gender:
-        male: "Male"
-        female: "Female"
-        dont_know: "Don’t know"
+      claim_school: "Which school were you employed at between 6 April 2018 and 5 April 2019?"
+      employment_status: "Are you still employed to teach at a school in England?"
+      subjects_taught: "Did you teach any of the following subjects between 6 April 2018 and 5 April 2019?"
+      mostly_teaching_eligible_subjects:
+        "Were half of your working hours spent teaching %{subjects} between 6 April 2018 and 5 April 2019?"
+      eligible_subjects:
+        biology_taught: "Biology"
+        chemistry_taught: "Chemistry"
+        physics_taught: "Physics"
+        computer_science_taught: "Computer Science"
+        languages_taught: "Languages"
+        not_applicable: "Not applicable, I didn't teach any of these subjects"
+      student_loan_amount:
+        "Exactly how much student loan did you repay while you worked at %{claim_school_name} between 6 April 2018 and 5
+        April 2019?"
     csv_headers:
       reference: "Reference"
       submitted_at: "Submitted at"

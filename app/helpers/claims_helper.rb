@@ -15,7 +15,7 @@ module ClaimsHelper
     [
       [t("student_loans.questions.qts_award_year"), academic_years(claim.qts_award_year), "qts-year"],
       [t("student_loans.questions.claim_school"), claim.claim_school_name, "claim-school"],
-      [t("student_loans.questions.current_school"), claim.current_school_name, "still-teaching"],
+      [t("questions.current_school"), claim.current_school_name, "still-teaching"],
       [t("student_loans.questions.subjects_taught"), subject_list(claim.subjects_taught), "subjects-taught"],
       [t("student_loans.questions.mostly_teaching_eligible_subjects", subjects: subject_list(claim.subjects_taught)), (claim.mostly_teaching_eligible_subjects? ? "Yes" : "No"), "mostly-teaching-eligible-subjects"],
       [t("student_loans.questions.student_loan_amount", claim_school_name: claim.claim_school_name), number_to_currency(claim.student_loan_repayment_amount), "student-loan-amount"],
@@ -24,19 +24,19 @@ module ClaimsHelper
 
   def identity_answers(claim)
     [].tap do |a|
-      a << [t("student_loans.questions.address"), claim.address, "address"] unless claim.address_verified?
-      a << [t("student_loans.questions.payroll_gender"), t("student_loans.answers.payroll_gender.#{claim.payroll_gender}"), "gender"] unless claim.payroll_gender_verified?
-      a << [t("student_loans.questions.teacher_reference_number"), claim.teacher_reference_number, "teacher-reference-number"]
-      a << [t("student_loans.questions.national_insurance_number"), claim.national_insurance_number, "national-insurance-number"]
-      a << [t("student_loans.questions.email_address"), claim.email_address, "email-address"]
+      a << [t("questions.address"), claim.address, "address"] unless claim.address_verified?
+      a << [t("questions.payroll_gender"), t("answers.payroll_gender.#{claim.payroll_gender}"), "gender"] unless claim.payroll_gender_verified?
+      a << [t("questions.teacher_reference_number"), claim.teacher_reference_number, "teacher-reference-number"]
+      a << [t("questions.national_insurance_number"), claim.national_insurance_number, "national-insurance-number"]
+      a << [t("questions.email_address"), claim.email_address, "email-address"]
     end
   end
 
   def student_loan_answers(claim)
-    [[t("student_loans.questions.has_student_loan"), (claim.has_student_loan ? "Yes" : "No"), "student-loan"]].tap do |answers|
+    [[t("questions.has_student_loan"), (claim.has_student_loan ? "Yes" : "No"), "student-loan"]].tap do |answers|
       answers << [t("student_loans.questions.student_loan_country"), claim.student_loan_country.humanize, "student-loan-country"] if claim.student_loan_country.present?
-      answers << [t("student_loans.questions.student_loan_how_many_courses"), claim.student_loan_courses.humanize, "student-loan-how-many-courses"] if claim.student_loan_courses.present?
-      answers << [t("student_loans.questions.student_loan_start_date.#{claim.student_loan_courses}"), t("student_loans.answers.student_loan_start_date.#{claim.student_loan_courses}.#{claim.student_loan_start_date}"), "student-loan-start-date"] if claim.student_loan_courses.present?
+      answers << [t("questions.student_loan_how_many_courses"), claim.student_loan_courses.humanize, "student-loan-how-many-courses"] if claim.student_loan_courses.present?
+      answers << [t("questions.student_loan_start_date.#{claim.student_loan_courses}"), t("answers.student_loan_start_date.#{claim.student_loan_courses}.#{claim.student_loan_start_date}"), "student-loan-start-date"] if claim.student_loan_courses.present?
     end
   end
 

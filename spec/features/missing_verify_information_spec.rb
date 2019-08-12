@@ -13,7 +13,7 @@ RSpec.feature "Missing information from GOV.UK Verify" do
 
     perform_verify_step("identity-verified-other-gender")
 
-    expect(page).to have_text(I18n.t("tslr.questions.payroll_gender"))
+    expect(page).to have_text(I18n.t("questions.payroll_gender"))
     choose "Female"
     click_on "Continue"
 
@@ -27,10 +27,10 @@ RSpec.feature "Missing information from GOV.UK Verify" do
 
     answer_student_loan_plan_questions
 
-    fill_in I18n.t("tslr.questions.student_loan_amount", claim_school_name: claim.claim_school_name), with: "1100"
+    fill_in I18n.t("student_loans.questions.student_loan_amount", claim_school_name: claim.claim_school_name), with: "1100"
     click_on "Continue"
 
-    fill_in I18n.t("tslr.questions.email_address"), with: "name@example.tld"
+    fill_in I18n.t("questions.email_address"), with: "name@example.tld"
     click_on "Continue"
 
     fill_in "Sort code", with: "123456"
