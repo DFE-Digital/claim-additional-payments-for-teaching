@@ -6,7 +6,7 @@
       Check your answers before sending your application
     </h1>
 
-    <%= render partial: "check_your_answers_section", locals: {heading: "Claim details", answers: claim_answers(current_claim)} %>
+    <%= render partial: "check_your_answers_section", locals: {heading: "Claim details", answers: eligibility_answers(current_claim.eligibility)} %>
 
     <%= render partial: "check_your_answers_section", locals: {heading: "Identity details", answers: identity_answers(current_claim)} %>
 
