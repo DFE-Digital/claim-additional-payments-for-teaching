@@ -35,7 +35,7 @@ class TslrClaimCsvRow < SimpleDelegator
   end
 
   def employment_status
-    model.employment_status.humanize
+    model.eligibility.employment_status.humanize
   end
 
   def date_of_birth

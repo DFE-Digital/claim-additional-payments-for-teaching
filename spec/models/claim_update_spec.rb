@@ -107,7 +107,7 @@ RSpec.describe ClaimUpdate do
     context "when the update does not actually change the employment_status" do
       let(:claim) { create(:claim, eligibility: build(:student_loans_eligibility, claim_school: schools(:penistone_grammar_school), employment_status: :different_school, current_school: schools(:hampstead_school))) }
       let(:context) { "still-teaching" }
-      let(:params) { {eligibility_attributes: {employment_status: claim.employment_status}} }
+      let(:params) { {eligibility_attributes: {employment_status: claim.eligibility.employment_status}} }
 
       it "does not reset the current_school" do
         expect(claim_update.perform).to be_truthy

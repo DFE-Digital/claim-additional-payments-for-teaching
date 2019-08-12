@@ -19,7 +19,7 @@ RSpec.feature "Ineligible Teacher Student Loan Repayments claims" do
 
     choose_still_teaching "Yes, at another school"
 
-    expect(claim.reload.employment_status).to eql("different_school")
+    expect(claim.eligibility.reload.employment_status).to eql("different_school")
 
     fill_in :school_search, with: "Hampstead"
     click_on "Search"
@@ -49,7 +49,7 @@ RSpec.feature "Ineligible Teacher Student Loan Repayments claims" do
 
     choose_still_teaching "No"
 
-    expect(claim.reload.employment_status).to eq("no_school")
+    expect(claim.eligibility.reload.employment_status).to eq("no_school")
     expect(page).to have_text("You’re not eligible")
     expect(page).to have_text(I18n.t("activerecord.errors.messages.employed_at_no_school"))
   end

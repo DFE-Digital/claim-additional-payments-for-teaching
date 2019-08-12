@@ -12,8 +12,7 @@ class Claim < ApplicationRecord
   enum student_loan_plan: STUDENT_LOAN_PLAN_OPTIONS
 
   # NOTE: Attribute migration in progress
-  delegate :employment_status,
-           :subjects_taught,
+  delegate :subjects_taught,
            :mostly_teaching_eligible_subjects?,
            :student_loan_repayment_amount,
            to: :eligibility
