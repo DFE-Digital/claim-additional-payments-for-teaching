@@ -138,7 +138,7 @@ RSpec.describe "Claims", type: :request do
       it "updates the claim with the submitted form data" do
         put claim_path("qts-year"), params: {claim: {eligibility_attributes: {qts_award_year: "2014_2015"}}}
 
-        expect(in_progress_claim.qts_award_year).to eq "2014_2015"
+        expect(in_progress_claim.eligibility.qts_award_year).to eq "2014_2015"
       end
 
       it "makes sure validations appropriate to the context are run" do

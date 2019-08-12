@@ -8,6 +8,7 @@ RSpec.describe TslrClaimsCsv do
   subject { described_class.new(claims) }
   let(:claims) { Claim.all.order(:submitted_at) }
   let(:claim) { claims.first }
+  let(:eligibility) { claim.eligibility }
 
   describe "file" do
     let(:file) { subject.file }
@@ -44,7 +45,7 @@ RSpec.describe TslrClaimsCsv do
       expect(csv[1]).to eq([
         claim.reference,
         claim.submitted_at.strftime("%d/%m/%Y %H:%M"),
-        claim.qts_award_year,
+        eligibility.qts_award_year,
         claim.claim_school_name,
         claim.employment_status.humanize,
         claim.current_school_name,

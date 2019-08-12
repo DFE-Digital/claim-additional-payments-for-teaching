@@ -7,7 +7,7 @@ RSpec.feature "Ineligible Teacher Student Loan Repayments claims" do
     choose "Before September 1 2013"
     click_on "Continue"
 
-    expect(claim.reload.qts_award_year).to eql("before_2013")
+    expect(claim.eligibility.reload.qts_award_year).to eql("before_2013")
     expect(page).to have_text("You’re not eligible")
     expect(page).to have_text(I18n.t("activerecord.errors.messages.ineligible_qts_award_year"))
   end

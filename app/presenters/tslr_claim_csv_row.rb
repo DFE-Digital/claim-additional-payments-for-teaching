@@ -22,6 +22,10 @@ class TslrClaimCsvRow < SimpleDelegator
     end
   end
 
+  def qts_award_year
+    model.eligibility.qts_award_year
+  end
+
   def employment_status
     model.employment_status.humanize
   end

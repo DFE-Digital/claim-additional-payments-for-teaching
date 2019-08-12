@@ -6,7 +6,7 @@ RSpec.feature "Teacher Student Loan Repayments claims" do
     expect(page).to have_text(I18n.t("student_loans.questions.qts_award_year"))
 
     choose_qts_year
-    expect(claim.reload.qts_award_year).to eql("2014_2015")
+    expect(claim.eligibility.reload.qts_award_year).to eql("2014_2015")
     expect(page).to have_text(I18n.t("student_loans.questions.claim_school"))
 
     choose_school schools(:penistone_grammar_school)
