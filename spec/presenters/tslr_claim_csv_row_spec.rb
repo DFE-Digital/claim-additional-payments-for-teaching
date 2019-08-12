@@ -16,15 +16,16 @@ RSpec.describe TslrClaimCsvRow do
         submitted_at: DateTime.parse(submitted_at),
         eligibility: build(:student_loans_eligibility, :eligible, mostly_teaching_eligible_subjects: true))
     end
+    let(:eligibility) { claim.eligibility }
 
     it "generates a csv row" do
       expect(row).to eq([
         claim.reference,
         submitted_at,
-        claim.qts_award_year,
-        claim.eligibility.claim_school.name,
-        claim.eligibility.employment_status.humanize,
-        claim.eligibility.current_school.name,
+        eligibility.qts_award_year,
+        eligibility.claim_school.name,
+        eligibility.employment_status.humanize,
+        eligibility.current_school.name,
         claim.full_name,
         claim.address_line_1,
         claim.address_line_2,
@@ -40,7 +41,7 @@ RSpec.describe TslrClaimCsvRow do
         "Yes",
         claim.bank_sort_code,
         claim.bank_account_number,
-        "£#{claim.eligibility.student_loan_repayment_amount}",
+        "£#{eligibility.student_loan_repayment_amount}",
       ])
     end
 

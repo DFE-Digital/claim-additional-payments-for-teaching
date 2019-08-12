@@ -99,7 +99,7 @@ RSpec.feature "Changing the answers on a submittable claim" do
     end
 
     scenario "Teacher sees their original claim school" do
-      expect(find("input[name='school_search']").value).to eq(claim.claim_school_name)
+      expect(find("input[name='school_search']").value).to eq(eligibility.claim_school_name)
     end
 
     context "When choosing a new claim school" do
@@ -108,7 +108,7 @@ RSpec.feature "Changing the answers on a submittable claim" do
       end
 
       scenario "school is changed correctly" do
-        expect(claim.reload.claim_school).to eql new_claim_school
+        expect(eligibility.reload.claim_school).to eql new_claim_school
       end
 
       scenario "Teacher is redirected to the are you still employed screen" do
@@ -122,8 +122,8 @@ RSpec.feature "Changing the answers on a submittable claim" do
         end
 
         scenario "current school is set correctly" do
-          expect(claim.reload.employment_status).to eql("claim_school")
-          expect(claim.reload.current_school).to eql new_claim_school
+          expect(eligibility.reload.employment_status).to eql("claim_school")
+          expect(eligibility.current_school).to eql new_claim_school
         end
 
         scenario "Teacher is redirected to the check your answers page" do
@@ -143,8 +143,8 @@ RSpec.feature "Changing the answers on a submittable claim" do
         end
 
         scenario "School and employment status are set correctly" do
-          expect(claim.reload.employment_status).to eql("different_school")
-          expect(claim.reload.current_school).to eql schools(:hampstead_school)
+          expect(eligibility.reload.employment_status).to eql("different_school")
+          expect(eligibility.reload.current_school).to eql schools(:hampstead_school)
         end
 
         scenario "Teacher is redirected to the check your answers page" do
@@ -158,7 +158,7 @@ RSpec.feature "Changing the answers on a submittable claim" do
         end
 
         scenario "Employment status is set correctly" do
-          expect(claim.reload.employment_status).to eq("no_school")
+          expect(eligibility.reload.employment_status).to eq("no_school")
         end
 
         scenario "Teacher is told they are not eligible" do
@@ -176,8 +176,8 @@ RSpec.feature "Changing the answers on a submittable claim" do
     click_on "Continue"
 
     expect(current_path).to eq(claim_path("check-your-answers"))
-    expect(claim.reload.employment_status).to eq("claim_school")
-    expect(claim.current_school).to eq(schools(:penistone_grammar_school))
+    expect(eligibility.reload.employment_status).to eq("claim_school")
+    expect(eligibility.current_school).to eq(schools(:penistone_grammar_school))
   end
 
   scenario "going from same school to different school" do
@@ -194,8 +194,8 @@ RSpec.feature "Changing the answers on a submittable claim" do
     choose "Hampstead School"
     click_on "Continue"
     expect(current_path).to eq(claim_path("check-your-answers"))
-    expect(claim.reload.employment_status).to eq("different_school")
-    expect(claim.current_school).to eq(schools(:hampstead_school))
+    expect(eligibility.reload.employment_status).to eq("different_school")
+    expect(eligibility.current_school).to eq(schools(:hampstead_school))
   end
 
   scenario "changing student loan answer to “No” resets the other student loan-related answers" do

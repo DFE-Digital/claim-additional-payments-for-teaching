@@ -22,8 +22,20 @@ class TslrClaimCsvRow < SimpleDelegator
     end
   end
 
+  def qts_award_year
+    model.eligibility.qts_award_year
+  end
+
+  def claim_school_name
+    model.eligibility.claim_school_name
+  end
+
+  def current_school_name
+    model.eligibility.claim_school_name
+  end
+
   def employment_status
-    model.employment_status.humanize
+    model.eligibility.employment_status.humanize
   end
 
   def date_of_birth
@@ -31,11 +43,11 @@ class TslrClaimCsvRow < SimpleDelegator
   end
 
   def mostly_teaching_eligible_subjects
-    model.mostly_teaching_eligible_subjects? ? "Yes" : "No"
+    model.eligibility.mostly_teaching_eligible_subjects? ? "Yes" : "No"
   end
 
   def student_loan_repayment_amount
-    "£#{model.student_loan_repayment_amount}"
+    "£#{model.eligibility.student_loan_repayment_amount}"
   end
 
   def student_loan_repayment_plan

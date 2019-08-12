@@ -6,16 +6,16 @@ RSpec.feature "Teacher Student Loan Repayments claims" do
     expect(page).to have_text(I18n.t("student_loans.questions.qts_award_year"))
 
     choose_qts_year
-    expect(claim.reload.qts_award_year).to eql("2014_2015")
+    expect(claim.eligibility.reload.qts_award_year).to eql("2014_2015")
     expect(page).to have_text(I18n.t("student_loans.questions.claim_school"))
 
     choose_school schools(:penistone_grammar_school)
-    expect(claim.reload.claim_school).to eql schools(:penistone_grammar_school)
+    expect(claim.eligibility.reload.claim_school).to eql schools(:penistone_grammar_school)
     expect(page).to have_text(I18n.t("student_loans.questions.employment_status"))
 
     choose_still_teaching
-    expect(claim.reload.employment_status).to eql("claim_school")
-    expect(claim.current_school).to eql(schools(:penistone_grammar_school))
+    expect(claim.eligibility.reload.employment_status).to eql("claim_school")
+    expect(claim.eligibility.current_school).to eql(schools(:penistone_grammar_school))
 
     expect(page).to have_text(I18n.t("student_loans.questions.subjects_taught"))
     check "Physics"
@@ -25,7 +25,7 @@ RSpec.feature "Teacher Student Loan Repayments claims" do
     choose "Yes"
     click_on "Continue"
 
-    expect(claim.reload.mostly_teaching_eligible_subjects?).to eq(true)
+    expect(claim.eligibility.reload.mostly_teaching_eligible_subjects?).to eq(true)
 
     expect(page).to have_text("You are eligible to claim back student loan repayments")
 
@@ -61,11 +61,11 @@ RSpec.feature "Teacher Student Loan Repayments claims" do
     expect(claim.student_loan_start_date).to eq(StudentLoans::BEFORE_1_SEPT_2012)
     expect(claim.student_loan_plan).to eq(StudentLoans::PLAN_1)
 
-    expect(page).to have_text(I18n.t("student_loans.questions.student_loan_amount", claim_school_name: claim.claim_school_name))
-    fill_in I18n.t("student_loans.questions.student_loan_amount", claim_school_name: claim.claim_school_name), with: "1100"
+    expect(page).to have_text(I18n.t("student_loans.questions.student_loan_amount", claim_school_name: claim.eligibility.claim_school_name))
+    fill_in I18n.t("student_loans.questions.student_loan_amount", claim_school_name: claim.eligibility.claim_school_name), with: "1100"
     click_on "Continue"
 
-    expect(claim.reload.student_loan_repayment_amount).to eql(1100.00)
+    expect(claim.eligibility.reload.student_loan_repayment_amount).to eql(1100.00)
 
     expect(page).to have_text(I18n.t("questions.email_address"))
     expect(page).to have_text("We will only use your email address to update you about your claim.")

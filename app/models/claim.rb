@@ -11,20 +11,6 @@ class Claim < ApplicationRecord
   enum student_loan_courses: {one_course: 0, two_or_more_courses: 1}
   enum student_loan_plan: STUDENT_LOAN_PLAN_OPTIONS
 
-  # NOTE: Attribute migration in progress
-  delegate :qts_award_year,
-           :claim_school,
-           :employment_status,
-           :current_school,
-           :subjects_taught,
-           :mostly_teaching_eligible_subjects?,
-           :student_loan_repayment_amount,
-           to: :eligibility
-
-  # NOTE: Temporary delegation of left over methods
-  delegate :claim_school_name, to: :eligibility
-  delegate :current_school_name, to: :eligibility
-
   belongs_to :eligibility, polymorphic: true
   accepts_nested_attributes_for :eligibility, update_only: true
 

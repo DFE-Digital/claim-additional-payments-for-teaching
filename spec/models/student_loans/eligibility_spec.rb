@@ -48,8 +48,8 @@ RSpec.describe StudentLoans::Eligibility, type: :model do
 
   describe "#claim_school_name" do
     it "returns the name of the claim school" do
-      claim = StudentLoans::Eligibility.new(claim_school: schools(:penistone_grammar_school))
-      expect(claim.claim_school_name).to eq schools(:penistone_grammar_school).name
+      eligibility = StudentLoans::Eligibility.new(claim_school: schools(:penistone_grammar_school))
+      expect(eligibility.claim_school_name).to eq schools(:penistone_grammar_school).name
     end
 
     it "does not error if the claim school is not set" do

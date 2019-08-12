@@ -16,7 +16,7 @@ RSpec.feature "Searching for school during Teacher Student Loan Repayments claim
     choose "Penistone Grammar School"
     click_on "Continue"
 
-    expect(claim.reload.claim_school).to eql schools(:penistone_grammar_school)
+    expect(claim.eligibility.reload.claim_school).to eql schools(:penistone_grammar_school)
     expect(page).to have_text("Are you still employed to teach at a school in England")
   end
 
@@ -35,7 +35,7 @@ RSpec.feature "Searching for school during Teacher Student Loan Repayments claim
     choose "Penistone Grammar School"
     click_on "Continue"
 
-    expect(claim.reload.claim_school).to eql schools(:penistone_grammar_school)
+    expect(claim.eligibility.reload.claim_school).to eql schools(:penistone_grammar_school)
     expect(page).to have_text("Are you still employed to teach at a school in England")
   end
 

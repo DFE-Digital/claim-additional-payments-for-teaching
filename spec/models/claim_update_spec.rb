@@ -87,8 +87,8 @@ RSpec.describe ClaimUpdate do
 
       it "automatically sets current_school to match the claim_school" do
         expect(claim_update.perform).to be_truthy
-        expect(claim.reload.employment_status).to eq "claim_school"
-        expect(claim.current_school).to eq schools(:penistone_grammar_school)
+        expect(claim.eligibility.reload.employment_status).to eq "claim_school"
+        expect(claim.eligibility.current_school).to eq schools(:penistone_grammar_school)
       end
     end
 
@@ -99,20 +99,20 @@ RSpec.describe ClaimUpdate do
 
       it "resets the inferrred current_school to nil" do
         expect(claim_update.perform).to be_truthy
-        expect(claim.reload.eligibility.employment_status).to eq "different_school"
-        expect(claim.current_school).to be_nil
+        expect(claim.eligibility.reload.employment_status).to eq "different_school"
+        expect(claim.eligibility.current_school).to be_nil
       end
     end
 
     context "when the update does not actually change the employment_status" do
       let(:claim) { create(:claim, eligibility: build(:student_loans_eligibility, claim_school: schools(:penistone_grammar_school), employment_status: :different_school, current_school: schools(:hampstead_school))) }
       let(:context) { "still-teaching" }
-      let(:params) { {eligibility_attributes: {employment_status: claim.employment_status}} }
+      let(:params) { {eligibility_attributes: {employment_status: claim.eligibility.employment_status}} }
 
       it "does not reset the current_school" do
         expect(claim_update.perform).to be_truthy
-        expect(claim.reload.employment_status).to eq "different_school"
-        expect(claim.current_school).to eq schools(:hampstead_school)
+        expect(claim.eligibility.reload.employment_status).to eq "different_school"
+        expect(claim.eligibility.current_school).to eq schools(:hampstead_school)
       end
     end
   end
@@ -126,8 +126,8 @@ RSpec.describe ClaimUpdate do
 
       it "resets the subsequent employment_status and current_school answers" do
         expect(claim_update.perform).to be_truthy
-        expect(claim.reload.employment_status).to be_nil
-        expect(claim.current_school).to be_nil
+        expect(claim.eligibility.reload.employment_status).to be_nil
+        expect(claim.eligibility.current_school).to be_nil
       end
     end
 
@@ -136,8 +136,8 @@ RSpec.describe ClaimUpdate do
 
       it "does not reset the subsequent employment_status and current_school answers" do
         expect(claim_update.perform).to be_truthy
-        expect(claim.reload.employment_status).to eq "different_school"
-        expect(claim.current_school).to eq schools(:hampstead_school)
+        expect(claim.eligibility.reload.employment_status).to eq "different_school"
+        expect(claim.eligibility.current_school).to eq schools(:hampstead_school)
       end
     end
   end
