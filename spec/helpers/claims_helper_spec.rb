@@ -20,12 +20,12 @@ describe ClaimsHelper do
       )
 
       expected_answers = [
-        [I18n.t("tslr.questions.qts_award_year"), "September 1 2013 - August 31 2014", "qts-year"],
-        [I18n.t("tslr.questions.claim_school"), school.name, "claim-school"],
-        [I18n.t("tslr.questions.current_school"), school.name, "still-teaching"],
-        [I18n.t("tslr.questions.subjects_taught"), "Chemistry and Physics", "subjects-taught"],
-        [I18n.t("tslr.questions.mostly_teaching_eligible_subjects", subjects: "Chemistry and Physics"), "Yes", "mostly-teaching-eligible-subjects"],
-        [I18n.t("tslr.questions.student_loan_amount", claim_school_name: school.name), "£1,987.65", "student-loan-amount"],
+        [I18n.t("student_loans.questions.qts_award_year"), "September 1 2013 - August 31 2014", "qts-year"],
+        [I18n.t("student_loans.questions.claim_school"), school.name, "claim-school"],
+        [I18n.t("questions.current_school"), school.name, "still-teaching"],
+        [I18n.t("student_loans.questions.subjects_taught"), "Chemistry and Physics", "subjects-taught"],
+        [I18n.t("student_loans.questions.mostly_teaching_eligible_subjects", subjects: "Chemistry and Physics"), "Yes", "mostly-teaching-eligible-subjects"],
+        [I18n.t("student_loans.questions.student_loan_amount", claim_school_name: school.name), "£1,987.65", "student-loan-amount"],
       ]
 
       expect(helper.claim_answers(claim)).to eq expected_answers
@@ -51,11 +51,11 @@ describe ClaimsHelper do
 
     it "returns an array of questions and answers for displaying to the user for review" do
       expected_answers = [
-        [I18n.t("tslr.questions.address"), "Flat 1, 1 Test Road, Test Town, AB1 2CD", "address"],
-        [I18n.t("tslr.questions.payroll_gender"), "Don’t know", "gender"],
-        [I18n.t("tslr.questions.teacher_reference_number"), "1234567", "teacher-reference-number"],
-        [I18n.t("tslr.questions.national_insurance_number"), "QQ123456C", "national-insurance-number"],
-        [I18n.t("tslr.questions.email_address"), "test@email.com", "email-address"],
+        [I18n.t("questions.address"), "Flat 1, 1 Test Road, Test Town, AB1 2CD", "address"],
+        [I18n.t("questions.payroll_gender"), "Don’t know", "gender"],
+        [I18n.t("questions.teacher_reference_number"), "1234567", "teacher-reference-number"],
+        [I18n.t("questions.national_insurance_number"), "QQ123456C", "national-insurance-number"],
+        [I18n.t("questions.email_address"), "test@email.com", "email-address"],
       ]
 
       expect(helper.identity_answers(claim)).to eq expected_answers
@@ -63,10 +63,10 @@ describe ClaimsHelper do
 
     it "excludes questions answered by verify" do
       claim.verified_fields = ["payroll_gender"]
-      expect(helper.identity_answers(claim)).to_not include([I18n.t("tslr.questions.payroll_gender"), "female", "gender"])
+      expect(helper.identity_answers(claim)).to_not include([I18n.t("questions.payroll_gender"), "female", "gender"])
 
       claim.verified_fields = ["postcode"]
-      expect(helper.identity_answers(claim)).to_not include([I18n.t("tslr.questions.address"), "Flat 1, 1 Test Road, Test Town, AB1 2CD", "address"])
+      expect(helper.identity_answers(claim)).to_not include([I18n.t("questions.address"), "Flat 1, 1 Test Road, Test Town, AB1 2CD", "address"])
     end
   end
 
@@ -94,10 +94,10 @@ describe ClaimsHelper do
       )
 
       expected_answers = [
-        [t("tslr.questions.has_student_loan"), "Yes", "student-loan"],
-        [t("tslr.questions.student_loan_country"), "England", "student-loan-country"],
-        [t("tslr.questions.student_loan_how_many_courses"), "One course", "student-loan-how-many-courses"],
-        [t("tslr.questions.student_loan_start_date.one_course"), t("tslr.answers.student_loan_start_date.one_course.on_or_after_first_september_2012"), "student-loan-start-date"],
+        [t("questions.has_student_loan"), "Yes", "student-loan"],
+        [t("student_loans.questions.student_loan_country"), "England", "student-loan-country"],
+        [t("questions.student_loan_how_many_courses"), "One course", "student-loan-how-many-courses"],
+        [t("questions.student_loan_start_date.one_course"), t("answers.student_loan_start_date.one_course.on_or_after_first_september_2012"), "student-loan-start-date"],
       ]
 
       expect(helper.student_loan_answers(claim)).to eq expected_answers
@@ -113,10 +113,10 @@ describe ClaimsHelper do
       )
 
       expected_answers = [
-        [t("tslr.questions.has_student_loan"), "Yes", "student-loan"],
-        [t("tslr.questions.student_loan_country"), "England", "student-loan-country"],
-        [t("tslr.questions.student_loan_how_many_courses"), "Two or more courses", "student-loan-how-many-courses"],
-        [t("tslr.questions.student_loan_start_date.two_or_more_courses"), t("tslr.answers.student_loan_start_date.two_or_more_courses.before_first_september_2012"), "student-loan-start-date"],
+        [t("questions.has_student_loan"), "Yes", "student-loan"],
+        [t("student_loans.questions.student_loan_country"), "England", "student-loan-country"],
+        [t("questions.student_loan_how_many_courses"), "Two or more courses", "student-loan-how-many-courses"],
+        [t("questions.student_loan_start_date.two_or_more_courses"), t("answers.student_loan_start_date.two_or_more_courses.before_first_september_2012"), "student-loan-start-date"],
       ]
 
       expect(helper.student_loan_answers(claim)).to eq expected_answers
@@ -126,8 +126,8 @@ describe ClaimsHelper do
       claim = build(:claim, has_student_loan: true, student_loan_country: StudentLoans::SCOTLAND)
 
       expected_answers = [
-        [t("tslr.questions.has_student_loan"), "Yes", "student-loan"],
-        [t("tslr.questions.student_loan_country"), "Scotland", "student-loan-country"],
+        [t("questions.has_student_loan"), "Yes", "student-loan"],
+        [t("student_loans.questions.student_loan_country"), "Scotland", "student-loan-country"],
       ]
 
       expect(helper.student_loan_answers(claim)).to eq expected_answers

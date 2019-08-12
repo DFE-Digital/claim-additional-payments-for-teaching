@@ -26,7 +26,7 @@ RSpec.feature "Teacher verifies identity using GOV.UK Verify" do
       expect(page).to have_text("We have verified your identity")
       click_on "Continue"
 
-      expect(page).to have_text(I18n.t("tslr.questions.teacher_reference_number"))
+      expect(page).to have_text(I18n.t("questions.teacher_reference_number"))
 
       @claim.reload
       expect(@claim.full_name).to eql("Isambard Kingdom Brunel")
@@ -48,7 +48,7 @@ RSpec.feature "Teacher verifies identity using GOV.UK Verify" do
       expect(page).to have_text("We have verified your identity")
       click_on "Continue"
 
-      expect(page).to have_text(I18n.t("tslr.questions.teacher_reference_number"))
+      expect(page).to have_text(I18n.t("questions.teacher_reference_number"))
 
       @claim.reload
       expect(@claim.full_name).to eql("Isambard Kingdom Brunel")

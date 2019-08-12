@@ -7,7 +7,7 @@
         <%= form.fields_for :eligibility, include_id: false do |fields| %>
           <fieldset class="govuk-fieldset">
             <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl">
-              <h1 class="govuk-fieldset__heading"><%= t("tslr.questions.employment_status") %></h1>
+              <h1 class="govuk-fieldset__heading"><%= t("student_loans.questions.employment_status") %></h1>
             </legend>
             <%= errors_tag current_claim, :employment_status %>
             <div class="govuk-radios">

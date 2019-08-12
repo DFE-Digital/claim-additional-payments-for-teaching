@@ -53,6 +53,6 @@ class TslrClaimsCsv
   end
 
   def header_string_for_field(header)
-    I18n.t("tslr.csv_headers.#{header}")
+    I18n.t("student_loans.csv_headers.#{header}")
   end
 end

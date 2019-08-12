@@ -6,7 +6,7 @@
       <%= form_group_tag current_claim do %>
         <%= form.fields_for :eligibility, include_id: false do |fields| %>
           <h1 class="govuk-label-wrapper">
-            <%= fields.label :qts_award_year, t("tslr.questions.qts_award_year"), {class: "govuk-label govuk-label--xl"} %>
+            <%= fields.label :qts_award_year, t("student_loans.questions.qts_award_year"), {class: "govuk-label govuk-label--xl"} %>
           </h1>
 
           <%= errors_tag current_claim, :qts_award_year %>
@@ -15,7 +15,7 @@
             <% StudentLoans::Eligibility.qts_award_years.each_key do |option| %>
               <div class="govuk-radios__item">
                 <%= fields.radio_button(:qts_award_year, option, class: "govuk-radios__input") %>
-                <%= fields.label "qts_award_year_#{option}", t("tslr.questions.qts_award_years.#{option}"), class: "govuk-label govuk-radios__label" %>
+                <%= fields.label "qts_award_year_#{option}", t("student_loans.questions.qts_award_years.#{option}"), class: "govuk-label govuk-radios__label" %>
               </div>
             <% end %>
           </div>

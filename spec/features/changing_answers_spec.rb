@@ -34,10 +34,10 @@ RSpec.feature "Changing the answers on a submittable claim" do
 
     context "Teacher changes their subjects" do
       before do
-        uncheck I18n.t("tslr.questions.eligible_subjects.physics_taught"), visible: false
+        uncheck I18n.t("student_loans.questions.eligible_subjects.physics_taught"), visible: false
 
-        check I18n.t("tslr.questions.eligible_subjects.biology_taught"), visible: false
-        check I18n.t("tslr.questions.eligible_subjects.chemistry_taught"), visible: false
+        check I18n.t("student_loans.questions.eligible_subjects.biology_taught"), visible: false
+        check I18n.t("student_loans.questions.eligible_subjects.chemistry_taught"), visible: false
 
         click_on "Continue"
       end
@@ -240,7 +240,7 @@ RSpec.feature "Changing the answers on a submittable claim" do
     claim.update!(verified_fields: ["payroll_gender"])
     visit claim_path("check-your-answers")
 
-    expect(page).to_not have_content(I18n.t("tslr.questions.payroll_gender"))
+    expect(page).to_not have_content(I18n.t("questions.payroll_gender"))
     expect(page).to_not have_selector(:css, "a[href='#{claim_path("gender")}']")
 
     expect {
@@ -252,7 +252,7 @@ RSpec.feature "Changing the answers on a submittable claim" do
     claim.update!(verified_fields: [])
     visit claim_path("check-your-answers")
 
-    expect(page).to have_content(I18n.t("tslr.questions.payroll_gender"))
+    expect(page).to have_content(I18n.t("questions.payroll_gender"))
     expect(page).to have_selector(:css, "a[href='#{claim_path("gender")}']")
 
     find("a[href='#{claim_path("gender")}']").click
