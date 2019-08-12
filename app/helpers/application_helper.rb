@@ -4,6 +4,6 @@ module ApplicationHelper
   end
 
   def claim_in_progress?
-    session.key?(:tslr_claim_id)
+    session.key?(:claim_id)
   end
 end

@@ -9,19 +9,19 @@ RSpec.describe "Claim session timing out", type: :request do
       start_verify_authentication_process
     end
 
-    let(:current_claim) { TslrClaim.order(:created_at).last }
+    let(:current_claim) { Claim.order(:created_at).last }
     let(:after_expiry) { timeout_length_in_minutes.minutes + 1.second }
 
     it "clears the session and redirects to the timeout page" do
-      expect(session[:tslr_claim_id]).to eql current_claim.to_param
+      expect(session[:claim_id]).to eql current_claim.to_param
       expect(session[:last_seen_at]).not_to be_nil
       expect(session[:verify_request_id]).not_to be_nil
 
       travel after_expiry do
-        put claim_path("qts-year"), params: {tslr_claim: {qts_award_year: "2014_2015"}}
+        put claim_path("qts-year"), params: {claim: {qts_award_year: "2014_2015"}}
 
         expect(response).to redirect_to(timeout_claim_path)
-        expect(session[:tslr_claim_id]).to be_nil
+        expect(session[:claim_id]).to be_nil
         expect(session[:last_seen_at]).to be_nil
         expect(session[:verify_request_id]).to be_nil
       end
@@ -34,12 +34,12 @@ RSpec.describe "Claim session timing out", type: :request do
       start_verify_authentication_process
     end
 
-    let(:current_claim) { TslrClaim.order(:created_at).last }
+    let(:current_claim) { Claim.order(:created_at).last }
     let(:before_expiry) { timeout_length_in_minutes.minutes - 2.seconds }
 
     it "does not timeout the session" do
       travel before_expiry do
-        put claim_path("qts-year"), params: {tslr_claim: {eligibility_attributes: {qts_award_year: "2014_2015"}}}
+        put claim_path("qts-year"), params: {claim: {eligibility_attributes: {qts_award_year: "2014_2015"}}}
 
         expect(response).to redirect_to(claim_path("claim-school"))
         expect(session[:last_seen_at]).not_to be_nil

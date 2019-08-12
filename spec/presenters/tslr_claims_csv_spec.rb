@@ -2,11 +2,11 @@ require "rails_helper"
 
 RSpec.describe TslrClaimsCsv do
   before do
-    create(:tslr_claim, :submitted)
+    create(:claim, :submitted)
   end
 
   subject { described_class.new(claims) }
-  let(:claims) { TslrClaim.all.order(:submitted_at) }
+  let(:claims) { Claim.all.order(:submitted_at) }
   let(:claim) { claims.first }
 
   describe "file" do

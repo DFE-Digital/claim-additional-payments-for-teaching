@@ -3,7 +3,7 @@
 require "rails_helper"
 
 RSpec.describe StudentLoans::PermittedParameters do
-  let(:claim) { TslrClaim.new }
+  let(:claim) { Claim.new }
   let(:permitted_parameters) { described_class.new(claim) }
 
   describe "#keys" do

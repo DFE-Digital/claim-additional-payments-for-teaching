@@ -82,7 +82,7 @@ class ClaimUpdate
     claim.student_loan_plan = if claim.has_student_loan?
       StudentLoans.determine_plan(claim.student_loan_country, claim.student_loan_start_date)
     else
-      TslrClaim::NO_STUDENT_LOAN
+      Claim::NO_STUDENT_LOAN
     end
   end
 end

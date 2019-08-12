@@ -1,7 +1,7 @@
 "use strict";
 
 document.addEventListener("DOMContentLoaded", function() {
-  var fieldset = document.querySelector("#tslr_claim_subjects_taught");
+  var fieldset = document.querySelector("#claim_subjects_taught");
 
   if (!fieldset) {
     return;
@@ -10,7 +10,7 @@ document.addEventListener("DOMContentLoaded", function() {
   function toggleSubjectValues(event) {
     var el = event.target;
     var eligibleSubjectsClass = "subject";
-    var notTeachingSubjectsName = "tslr_claim[eligibility_attributes][mostly_teaching_eligible_subjects]";
+    var notTeachingSubjectsName = "claim[eligibility_attributes][mostly_teaching_eligible_subjects]";
 
     if (!el) {
       return;

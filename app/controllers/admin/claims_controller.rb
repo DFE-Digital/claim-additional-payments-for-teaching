@@ -1,6 +1,6 @@
 class Admin::ClaimsController < Admin::BaseAdminController
   def index
-    claims = TslrClaim.includes(eligibility: [:claim_school, :current_school]).submitted.order(:submitted_at)
+    claims = Claim.includes(eligibility: [:claim_school, :current_school]).submitted.order(:submitted_at)
     csv = TslrClaimsCsv.new(claims)
 
     respond_to do |format|

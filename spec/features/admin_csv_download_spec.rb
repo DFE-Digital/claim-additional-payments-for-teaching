@@ -9,8 +9,8 @@ RSpec.feature "Download CSV of claims" do
     end
 
     scenario "User downloads a CSV" do
-      submitted_claims = create_list(:tslr_claim, 5, :submittable, submitted_at: DateTime.now)
-      create_list(:tslr_claim, 2, :submittable)
+      submitted_claims = create_list(:claim, 5, :submittable, submitted_at: DateTime.now)
+      create_list(:claim, 2, :submittable)
 
       click_on "Download claims"
 

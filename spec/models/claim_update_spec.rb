@@ -6,7 +6,7 @@ RSpec.describe ClaimUpdate do
   let(:claim_update) { ClaimUpdate.new(claim, params, context) }
 
   context "with parameters that are valid for the context" do
-    let(:claim) { create(:tslr_claim) }
+    let(:claim) { create(:claim) }
     let(:context) { "bank-details" }
     let(:params) { {bank_sort_code: "123456", bank_account_number: "12345678"} }
 
@@ -18,7 +18,7 @@ RSpec.describe ClaimUpdate do
   end
 
   context "with parameters missing for the context" do
-    let(:claim) { create(:tslr_claim) }
+    let(:claim) { create(:claim) }
     let(:context) { "bank-details" }
     let(:params) { {bank_sort_code: nil, bank_account_number: "12345678"} }
 
@@ -30,7 +30,7 @@ RSpec.describe ClaimUpdate do
 
   describe "determining the student_loan_plan" do
     context "when the claimant has a plan" do
-      let(:claim) { create(:tslr_claim, has_student_loan: true, student_loan_country: StudentLoans::ENGLAND) }
+      let(:claim) { create(:claim, has_student_loan: true, student_loan_country: StudentLoans::ENGLAND) }
       let(:context) { "student-loan-start-date" }
       let(:params) { {student_loan_start_date: StudentLoans::ON_OR_AFTER_1_SEPT_2012} }
 
@@ -41,19 +41,19 @@ RSpec.describe ClaimUpdate do
     end
 
     context "when the claimant does not have a plan" do
-      let(:claim) { create(:tslr_claim) }
+      let(:claim) { create(:claim) }
       let(:context) { "student-loan" }
       let(:params) { {has_student_loan: false} }
 
       it "sets the student_loan_plan to indicate it is not applicable" do
         expect(claim_update.perform).to be_truthy
-        expect(claim.student_loan_plan).to eq TslrClaim::NO_STUDENT_LOAN
+        expect(claim.student_loan_plan).to eq Claim::NO_STUDENT_LOAN
       end
     end
   end
 
   context "when updating claim that is submittable in the “check-your-answers” context" do
-    let(:claim) { create(:tslr_claim, :submittable) }
+    let(:claim) { create(:claim, :submittable) }
     let(:context) { "check-your-answers" }
     let(:params) { {} }
 
@@ -69,7 +69,7 @@ RSpec.describe ClaimUpdate do
   end
 
   context "when updating an unsubmittable claim in the “check-your-answers” context" do
-    let(:claim) { create(:tslr_claim, :submittable, full_name: nil) }
+    let(:claim) { create(:claim, :submittable, full_name: nil) }
     let(:context) { "check-your-answers" }
     let(:params) { {} }
 
@@ -81,7 +81,7 @@ RSpec.describe ClaimUpdate do
 
   describe "setting/resetting current_school based on the answer to employment_status" do
     context "when the update sets the employment_status to :claim_school" do
-      let(:claim) { create(:tslr_claim, eligibility: build(:student_loans_eligibility, claim_school: schools(:penistone_grammar_school))) }
+      let(:claim) { create(:claim, eligibility: build(:student_loans_eligibility, claim_school: schools(:penistone_grammar_school))) }
       let(:context) { "still-teaching" }
       let(:params) { {eligibility_attributes: {employment_status: "claim_school"}} }
 
@@ -93,7 +93,7 @@ RSpec.describe ClaimUpdate do
     end
 
     context "when the update changes employment_status to :different_school" do
-      let(:claim) { create(:tslr_claim, eligibility: build(:student_loans_eligibility, claim_school: schools(:penistone_grammar_school), employment_status: :claim_school, current_school: schools(:penistone_grammar_school))) }
+      let(:claim) { create(:claim, eligibility: build(:student_loans_eligibility, claim_school: schools(:penistone_grammar_school), employment_status: :claim_school, current_school: schools(:penistone_grammar_school))) }
       let(:context) { "still-teaching" }
       let(:params) { {eligibility_attributes: {employment_status: "different_school"}} }
 
@@ -105,7 +105,7 @@ RSpec.describe ClaimUpdate do
     end
 
     context "when the update does not actually change the employment_status" do
-      let(:claim) { create(:tslr_claim, eligibility: build(:student_loans_eligibility, claim_school: schools(:penistone_grammar_school), employment_status: :different_school, current_school: schools(:hampstead_school))) }
+      let(:claim) { create(:claim, eligibility: build(:student_loans_eligibility, claim_school: schools(:penistone_grammar_school), employment_status: :different_school, current_school: schools(:hampstead_school))) }
       let(:context) { "still-teaching" }
       let(:params) { {eligibility_attributes: {employment_status: claim.employment_status}} }
 
@@ -118,7 +118,7 @@ RSpec.describe ClaimUpdate do
   end
 
   describe "setting/resetting employment_status when the claim_school changes" do
-    let(:claim) { create(:tslr_claim, eligibility: build(:student_loans_eligibility, claim_school: schools(:penistone_grammar_school), employment_status: :different_school, current_school: schools(:hampstead_school))) }
+    let(:claim) { create(:claim, eligibility: build(:student_loans_eligibility, claim_school: schools(:penistone_grammar_school), employment_status: :different_school, current_school: schools(:hampstead_school))) }
     let(:context) { "claim-school" }
 
     context "when the update changes the claim_school" do
@@ -145,7 +145,7 @@ RSpec.describe ClaimUpdate do
   describe "changing the answer to the student_loan_courses question" do
     let(:claim) do
       create(
-        :tslr_claim,
+        :claim,
         has_student_loan: true,
         student_loan_country: StudentLoans::ENGLAND,
         student_loan_courses: :one_course,
@@ -167,7 +167,7 @@ RSpec.describe ClaimUpdate do
   describe "changing the answer to the student_loan_country question" do
     let(:claim) do
       create(
-        :tslr_claim,
+        :claim,
         has_student_loan: true,
         student_loan_country: StudentLoans::ENGLAND,
         student_loan_courses: :one_course,
@@ -190,7 +190,7 @@ RSpec.describe ClaimUpdate do
   describe "changing the answer to the student_loan question" do
     let(:claim) do
       create(
-        :tslr_claim,
+        :claim,
         has_student_loan: true,
         student_loan_country: StudentLoans::ENGLAND,
         student_loan_courses: :one_course,
@@ -208,7 +208,7 @@ RSpec.describe ClaimUpdate do
       expect(claim.student_loan_country).to be_nil
       expect(claim.student_loan_courses).to be_nil
       expect(claim.student_loan_start_date).to be_nil
-      expect(claim.student_loan_plan).to eq TslrClaim::NO_STUDENT_LOAN
+      expect(claim.student_loan_plan).to eq Claim::NO_STUDENT_LOAN
     end
   end
 end

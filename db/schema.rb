@@ -10,11 +10,42 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_08_08_121222) do
+ActiveRecord::Schema.define(version: 2019_08_08_153656) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
+
+  create_table "claims", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "full_name", limit: 200
+    t.string "address_line_1", limit: 100
+    t.string "address_line_2", limit: 100
+    t.string "address_line_3", limit: 100
+    t.string "address_line_4", limit: 100
+    t.string "postcode", limit: 11
+    t.date "date_of_birth"
+    t.string "teacher_reference_number", limit: 11
+    t.string "national_insurance_number", limit: 9
+    t.string "email_address", limit: 256
+    t.string "bank_sort_code", limit: 6
+    t.string "bank_account_number", limit: 8
+    t.datetime "submitted_at"
+    t.string "reference", limit: 8
+    t.boolean "has_student_loan"
+    t.integer "student_loan_country"
+    t.integer "student_loan_courses"
+    t.integer "student_loan_start_date"
+    t.integer "student_loan_plan"
+    t.integer "payroll_gender"
+    t.text "verified_fields", default: [], array: true
+    t.string "eligibility_type"
+    t.uuid "eligibility_id"
+    t.index ["eligibility_type", "eligibility_id"], name: "index_claims_on_eligibility_type_and_eligibility_id"
+    t.index ["reference"], name: "index_claims_on_reference", unique: true
+    t.index ["submitted_at"], name: "index_claims_on_submitted_at"
+  end
 
   create_table "delayed_jobs", force: :cascade do |t|
     t.integer "priority", default: 0, null: false
@@ -80,37 +111,6 @@ ActiveRecord::Schema.define(version: 2019_08_08_121222) do
     t.decimal "student_loan_repayment_amount", precision: 7, scale: 2
     t.index ["claim_school_id"], name: "index_student_loans_eligibilities_on_claim_school_id"
     t.index ["current_school_id"], name: "index_student_loans_eligibilities_on_current_school_id"
-  end
-
-  create_table "tslr_claims", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.string "full_name", limit: 200
-    t.string "address_line_1", limit: 100
-    t.string "address_line_2", limit: 100
-    t.string "address_line_3", limit: 100
-    t.string "address_line_4", limit: 100
-    t.string "postcode", limit: 11
-    t.date "date_of_birth"
-    t.string "teacher_reference_number", limit: 11
-    t.string "national_insurance_number", limit: 9
-    t.string "email_address", limit: 256
-    t.string "bank_sort_code", limit: 6
-    t.string "bank_account_number", limit: 8
-    t.datetime "submitted_at"
-    t.string "reference", limit: 8
-    t.boolean "has_student_loan"
-    t.integer "student_loan_country"
-    t.integer "student_loan_courses"
-    t.integer "student_loan_start_date"
-    t.integer "student_loan_plan"
-    t.integer "payroll_gender"
-    t.text "verified_fields", default: [], array: true
-    t.string "eligibility_type"
-    t.uuid "eligibility_id"
-    t.index ["eligibility_type", "eligibility_id"], name: "index_tslr_claims_on_eligibility_type_and_eligibility_id"
-    t.index ["reference"], name: "index_tslr_claims_on_reference", unique: true
-    t.index ["submitted_at"], name: "index_tslr_claims_on_submitted_at"
   end
 
   add_foreign_key "schools", "local_authority_districts"

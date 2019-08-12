@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.feature "Changing the answers on a submittable claim" do
-  let(:claim) { TslrClaim.order(:created_at).last }
+  let(:claim) { Claim.order(:created_at).last }
   let(:eligibility) { claim.eligibility }
 
   before do
@@ -211,7 +211,7 @@ RSpec.feature "Changing the answers on a submittable claim" do
     expect(claim.student_loan_country).to be_nil
     expect(claim.student_loan_courses).to be_nil
     expect(claim.student_loan_start_date).to be_nil
-    expect(claim.student_loan_plan).to eq TslrClaim::NO_STUDENT_LOAN
+    expect(claim.student_loan_plan).to eq Claim::NO_STUDENT_LOAN
   end
 
   scenario "changing student loan country forces dependent questions to be re-answered" do

@@ -5,7 +5,7 @@
     <%= form_for current_claim, url: claim_path do |form| %>
       <%= form_group_tag current_claim do %>
         <%= form.fields_for :eligibility, include_id: false do |fields| %>
-          <fieldset class="govuk-fieldset" id="tslr_claim_subjects_taught">
+          <fieldset class="govuk-fieldset" id="claim_subjects_taught">
             <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl">
               <h1 class="govuk-fieldset__heading">
                 <%= t("tslr.questions.subjects_taught") %>

@@ -13,8 +13,8 @@ class ClaimsController < ApplicationController
   end
 
   def create
-    claim = TslrClaim.create!(eligibility: StudentLoans::Eligibility.new)
-    session[:tslr_claim_id] = claim.to_param
+    claim = Claim.create!(eligibility: StudentLoans::Eligibility.new)
+    session[:claim_id] = claim.to_param
 
     redirect_to claim_path("qts-year")
   end
@@ -62,7 +62,7 @@ class ClaimsController < ApplicationController
   end
 
   def claim_params
-    params.fetch(:tslr_claim, {}).permit(StudentLoans::PermittedParameters.new(current_claim).keys)
+    params.fetch(:claim, {}).permit(StudentLoans::PermittedParameters.new(current_claim).keys)
   end
 
   def claim_page_template
@@ -77,13 +77,13 @@ class ClaimsController < ApplicationController
   end
 
   def claim_session_timed_out?
-    session.key?(:tslr_claim_id) &&
+    session.key?(:claim_id) &&
       session.key?(:last_seen_at) &&
       session[:last_seen_at] < TIMEOUT_LENGTH_IN_MINUTES.minutes.ago
   end
 
   def clear_claim_session
-    session.delete(:tslr_claim_id)
+    session.delete(:claim_id)
     session.delete(:last_seen_at)
     session.delete(:verify_request_id)
   end

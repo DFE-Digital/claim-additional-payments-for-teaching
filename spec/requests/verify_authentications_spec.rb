@@ -29,7 +29,7 @@ RSpec.describe "GOV.UK Verify::AuthenticationsController requests", type: :reque
         get new_verify_authentications_path # sets the authentication request request_id in the session
       end
 
-      let(:current_claim) { TslrClaim.order(:created_at).last }
+      let(:current_claim) { Claim.order(:created_at).last }
 
       context "given an IDENTITY_VERIFIED SAML response" do
         let(:saml_response) { Verify::FakeSso::IDENTITY_VERIFIED_SAML_RESPONSE }

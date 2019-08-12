@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class TslrClaim < ApplicationRecord
+class Claim < ApplicationRecord
   TRN_LENGTH = 7
   NO_STUDENT_LOAN = "not_applicable"
   STUDENT_LOAN_PLAN_OPTIONS = StudentLoans::PLANS.dup << NO_STUDENT_LOAN

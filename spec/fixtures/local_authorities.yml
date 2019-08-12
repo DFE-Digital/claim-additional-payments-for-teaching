@@ -1,8 +1,8 @@
-# TSLR Eligible
+# Student loans and Maths and Physics Eligible
 barnsley:
   code: 370
   name: Barnsley
-# TSLR Ineligible
+# Student loans and Maths and Physics Ineligible
 camden:
   code: 202
   name: Camden
