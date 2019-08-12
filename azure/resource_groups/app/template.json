@@ -36,6 +36,10 @@
       "type": "int",
       "defaultValue": 2
     },
+    "vspAppServicePlanInstances": {
+      "type": "int",
+      "defaultValue": 2
+    },
     "vspAppServiceDockerImage": {
       "type": "string"
     },
@@ -463,6 +467,9 @@
           },
           "appServiceAlwaysOn": {
             "value": "[parameters('appServiceAlwaysOn')]"
+          },
+          "appServicePlanInstances": {
+            "value": "[parameters('vspAppServicePlanInstances')]"
           },
           "appServiceAllowedIpAddresses": {
             "value": "[union(split(reference(resourceId('Microsoft.Web/sites', variables('appServiceName'))).possibleOutboundIpAddresses, ','), parameters('verifyHubPossibleOutboundIpAddresses'))]"

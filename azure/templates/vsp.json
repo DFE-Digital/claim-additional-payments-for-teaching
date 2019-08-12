@@ -14,6 +14,9 @@
     "appServiceAlwaysOn": {
       "type": "bool"
     },
+    "appServicePlanInstances": {
+      "type": "int"
+    },
     "appServiceAllowedIpAddresses": {
       "type": "array"
     },
@@ -49,6 +52,9 @@
         "parameters": {
           "appServicePlanName": {
             "value": "[parameters('appServicePlanName')]"
+          },
+          "appServicePlanInstances": {
+            "value": "[parameters('appServicePlanInstances')]"
           }
         }
       }
