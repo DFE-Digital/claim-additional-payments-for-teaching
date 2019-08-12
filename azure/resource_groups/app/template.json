@@ -36,6 +36,14 @@
       "type": "int",
       "defaultValue": 2
     },
+    "appServicePlanTier": {
+      "type": "string",
+      "defaultValue": "Standard"
+    },
+    "appServicePlanSize": {
+      "type": "string",
+      "defaultValue": "1"
+    },
     "vspAppServicePlanInstances": {
       "type": "int",
       "defaultValue": 2
@@ -254,6 +262,12 @@
           },
           "appServicePlanInstances": {
             "value": "[parameters('appServicePlanInstances')]"
+          },
+          "appServicePlanTier": {
+            "value": "[parameters('appServicePlanTier')]"
+          },
+          "appServicePlanSize": {
+            "value": "[parameters('appServicePlanSize')]"
           }
         }
       }

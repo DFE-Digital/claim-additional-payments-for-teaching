@@ -17,6 +17,9 @@
     "appServicePlanInstances": {
       "value": 1
     },
+    "appServicePlanSize": {
+      "value": "1"
+    },
     "vspAppServicePlanInstances": {
       "value": 1
     },
