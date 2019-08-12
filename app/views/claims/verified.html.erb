@@ -8,6 +8,6 @@
       You can now continue with your claim
     </p>
 
-    <%= link_to "Continue", claim_path("teacher-reference-number"), class: "govuk-button" %>
+    <%= button_to "Continue", claim_path, method: :put, class: "govuk-button" %>
   </div>
 </div>
