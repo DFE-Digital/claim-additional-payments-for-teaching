@@ -47,7 +47,7 @@ class TslrClaimCsvRow < SimpleDelegator
   end
 
   def student_loan_repayment_amount
-    "£#{model.student_loan_repayment_amount}"
+    "£#{model.eligibility.student_loan_repayment_amount}"
   end
 
   def student_loan_repayment_plan
