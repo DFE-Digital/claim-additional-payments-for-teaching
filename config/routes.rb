@@ -2,6 +2,9 @@ Rails.application.routes.draw do
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
   root "claims#new"
 
+  # setup a simple healthcheck endpoint for monitoring purposes
+  get "/healthcheck", to: proc { [200, {}, ["OK"]] }
+
   # setup static pages
   get "/privacy_policy", to: "static_pages#privacy_policy", as: :privacy_policy
   get "/terms_conditions", to: "static_pages#terms_conditions", as: :terms_conditions
