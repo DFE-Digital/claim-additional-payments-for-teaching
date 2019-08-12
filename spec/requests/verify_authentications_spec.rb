@@ -40,7 +40,7 @@ RSpec.describe "GOV.UK Verify::AuthenticationsController requests", type: :reque
         end
 
         it "saves the translated identity attributes on the current claim and redirects to the verify confirmation" do
-          expect(response).to redirect_to(verified_verify_authentications_path)
+          expect(response).to redirect_to(claim_path("verified"))
 
           expect(current_claim.full_name).to eq("Isambard Kingdom Brunel")
           expect(current_claim.address_line_1).to eq("Verified Street")

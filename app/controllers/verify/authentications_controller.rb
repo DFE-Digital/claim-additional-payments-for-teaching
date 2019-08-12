@@ -19,12 +19,12 @@ module Verify
     #   https://www.docs.verify.service.gov.uk/get-started/set-up-successful-verification-journey/#handle-a-response
     def create
       @response = Verify::Response.translate(saml_response: params["SAMLResponse"], request_id: session[:verify_request_id], level_of_assurance: "LEVEL_2")
-      current_claim.update!(@response.claim_parameters) if @response.verified?
-
-      redirect_to verify_path_for_response_scenario(@response.scenario)
-    end
-
-    def verified
+      if @response.verified?
+        current_claim.update!(@response.claim_parameters)
+        redirect_to claim_url("verified")
+      else
+        redirect_to verify_path_for_response_scenario(@response.scenario)
+      end
     end
 
     def failed
@@ -37,8 +37,6 @@ module Verify
 
     def verify_path_for_response_scenario(scenario)
       case scenario
-      when Verify::IDENTITY_VERIFIED_SCENARIO
-        verified_verify_authentications_path
       when Verify::AUTHENTICATION_FAILED_SCENARIO
         failed_verify_authentications_path
       when Verify::NO_AUTHENTICATION_SCENARIO

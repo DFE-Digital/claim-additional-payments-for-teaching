@@ -16,6 +16,7 @@ class PageSequence
     "subjects-taught",
     "mostly-teaching-eligible-subjects",
     "eligibility-confirmed",
+    "verified",
     "address",
     "gender",
     "teacher-reference-number",
