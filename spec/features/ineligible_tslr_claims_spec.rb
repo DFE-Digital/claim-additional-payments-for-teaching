@@ -27,7 +27,7 @@ RSpec.feature "Ineligible Teacher Student Loan Repayments claims" do
     choose "Hampstead School"
     click_on "Continue"
 
-    expect(claim.reload.current_school).to eql schools(:hampstead_school)
+    expect(claim.eligibility.reload.current_school).to eql schools(:hampstead_school)
 
     expect(page).to have_text(I18n.t("student_loans.questions.subjects_taught"))
   end
@@ -37,7 +37,7 @@ RSpec.feature "Ineligible Teacher Student Loan Repayments claims" do
     choose_qts_year
     choose_school schools(:hampstead_school)
 
-    expect(claim.reload.claim_school).to eq schools(:hampstead_school)
+    expect(claim.eligibility.reload.claim_school).to eq schools(:hampstead_school)
     expect(page).to have_text("You’re not eligible")
     expect(page).to have_text(I18n.t("activerecord.errors.messages.ineligible_claim_school"))
   end

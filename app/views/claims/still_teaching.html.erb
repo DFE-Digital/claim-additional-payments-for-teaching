@@ -14,7 +14,7 @@
               <%= fields.hidden_field :employment_status %>
               <div class="govuk-radios__item">
                 <%= fields.radio_button(:employment_status, :claim_school, class: "govuk-radios__input") %>
-                <%= fields.label :employment_status_claim_school, "Yes, at #{current_claim.claim_school_name}", class: "govuk-label govuk-radios__label" %>
+                <%= fields.label :employment_status_claim_school, "Yes, at #{current_claim.eligibility.claim_school_name}", class: "govuk-label govuk-radios__label" %>
               </div>
               <div class="govuk-radios__item">
                 <%= fields.radio_button(:employment_status, :different_school, class: "govuk-radios__input") %>

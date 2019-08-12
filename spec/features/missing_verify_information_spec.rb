@@ -27,7 +27,7 @@ RSpec.feature "Missing information from GOV.UK Verify" do
 
     answer_student_loan_plan_questions
 
-    fill_in I18n.t("student_loans.questions.student_loan_amount", claim_school_name: claim.claim_school_name), with: "1100"
+    fill_in I18n.t("student_loans.questions.student_loan_amount", claim_school_name: claim.eligibility.claim_school_name), with: "1100"
     click_on "Continue"
 
     fill_in I18n.t("questions.email_address"), with: "name@example.tld"

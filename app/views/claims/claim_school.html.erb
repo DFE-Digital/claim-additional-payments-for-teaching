@@ -1,5 +1,5 @@
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-    <%= render partial: "school_search", locals: {question: t("student_loans.questions.claim_school"), school_id_param: :claim_school_id, school_search_value: current_claim.claim_school_name} %>
+    <%= render "school_search", question: t("student_loans.questions.claim_school"), school_id_param: :claim_school_id, school_search_value: current_claim.eligibility.claim_school_name %>
   </div>
 </div>
