@@ -17,6 +17,12 @@
     "appServicePlanInstances": {
       "type": "int"
     },
+    "appServicePlanTier": {
+      "type": "string"
+    },
+    "appServicePlanSize": {
+      "type": "string"
+    },
     "appServiceAllowedIpAddresses": {
       "type": "array"
     },
@@ -55,6 +61,12 @@
           },
           "appServicePlanInstances": {
             "value": "[parameters('appServicePlanInstances')]"
+          },
+          "appServicePlanTier": {
+            "value": "[parameters('appServicePlanTier')]"
+          },
+          "appServicePlanSize": {
+            "value": "[parameters('appServicePlanSize')]"
           }
         }
       }
