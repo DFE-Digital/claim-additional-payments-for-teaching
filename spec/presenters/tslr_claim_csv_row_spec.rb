@@ -37,7 +37,7 @@ RSpec.describe TslrClaimCsvRow do
         claim.teacher_reference_number,
         claim.national_insurance_number,
         StudentLoans::PLAN_2.humanize,
-        "=\"#{claim.email_address}\"",
+        claim.email_address,
         "Yes",
         claim.bank_sort_code,
         claim.bank_account_number,
@@ -46,25 +46,9 @@ RSpec.describe TslrClaimCsvRow do
     end
 
     it "escapes fields with strings that could be dangerous in Microsoft Excel and friends" do
-      claim.address_line_1 = "equals=sign"
-      claim.address_line_2 = "minus-sign"
-      claim.address_line_3 = "plus+sign"
-      claim.address_line_4 = "at@symbol"
-      claim.postcode = "=SUM(A1, A2)"
-      claim.email_address = "valid=email@domain.tld"
+      claim.address_line_1 = "=ActiveCell.Row-1,14"
 
-      expect(row[TslrClaimsCsv::FIELDS.index(:address_line_1)]).to eq("=\"#{claim.address_line_1}\"")
-      expect(row[TslrClaimsCsv::FIELDS.index(:address_line_2)]).to eq("=\"#{claim.address_line_2}\"")
-      expect(row[TslrClaimsCsv::FIELDS.index(:address_line_3)]).to eq("=\"#{claim.address_line_3}\"")
-      expect(row[TslrClaimsCsv::FIELDS.index(:address_line_4)]).to eq("=\"#{claim.address_line_4}\"")
-      expect(row[TslrClaimsCsv::FIELDS.index(:postcode)]).to eq("=\"#{claim.postcode}\"")
-      expect(row[TslrClaimsCsv::FIELDS.index(:email_address)]).to eq("=\"#{claim.email_address}\"")
-    end
-
-    it "escaped fields are properly quoted when converted to CSV" do
-      claim.postcode = "=SUM(A1, A2)"
-
-      expect(CSV.generate_line(row)).to include('"=""' + claim.postcode + '"""')
+      expect(row[TslrClaimsCsv::FIELDS.index(:address_line_1)]).to eq("\\#{claim.address_line_1}")
     end
   end
 end
