@@ -2,7 +2,7 @@
 <html lang="en" class="govuk-template app-html-class">
   <head>
     <title>
-      <%= content_for(:page_title) || t("tslr.journey_name") %>
+      <%= content_for(:page_title) || t("student_loans.journey_name") %>
     </title>
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
@@ -52,7 +52,7 @@
         </div>
         <div class="govuk-header__content">
 
-          <%= link_to t("tslr.journey_name"), root_path, class: "govuk-header__link govuk-header__link--service-name" %>
+          <%= link_to t("student_loans.journey_name"), root_path, class: "govuk-header__link govuk-header__link--service-name" %>
 
           <% if signed_in? %>
           <button type="button" role="button" class="govuk-header__menu-button js-header-toggle" aria-controls="navigation" aria-label="Show or hide Top Level Navigation">Menu</button>

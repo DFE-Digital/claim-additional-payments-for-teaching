@@ -45,7 +45,7 @@ en:
         employed_at_no_school: "You can only get this payment if you’re still working as a teacher"
         not_taught_eligible_subjects_enough: "You must have spent at least half your time teaching an eligible subject"
   service_name: "Claim additional payments for teaching"
-  tslr:
+  student_loans:
     journey_name: "Teachers: claim back your student loan repayments"
     questions:
       qts_award_year: "Which academic year did you complete your initial teacher training?"

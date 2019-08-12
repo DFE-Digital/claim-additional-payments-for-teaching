@@ -24,7 +24,7 @@ RSpec.describe "Claims", type: :request do
 
       it "renders the requested page in the sequence" do
         get claim_path("qts-year")
-        expect(response.body).to include(I18n.t("tslr.questions.qts_award_year"))
+        expect(response.body).to include(I18n.t("student_loans.questions.qts_award_year"))
 
         get claim_path("claim-school")
         expect(response.body).to include("Which school were you employed at")

@@ -29,7 +29,7 @@ RSpec.feature "Ineligible Teacher Student Loan Repayments claims" do
 
     expect(claim.reload.current_school).to eql schools(:hampstead_school)
 
-    expect(page).to have_text(I18n.t("tslr.questions.subjects_taught"))
+    expect(page).to have_text(I18n.t("student_loans.questions.subjects_taught"))
   end
 
   scenario "chooses an ineligible school" do
@@ -60,7 +60,7 @@ RSpec.feature "Ineligible Teacher Student Loan Repayments claims" do
     choose_school schools(:penistone_grammar_school)
     choose_still_teaching
 
-    choose I18n.t("tslr.questions.eligible_subjects.not_applicable")
+    choose I18n.t("student_loans.questions.eligible_subjects.not_applicable")
     click_on "Continue"
 
     expect(claim.reload.mostly_teaching_eligible_subjects?).to eq(false)

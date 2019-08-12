@@ -43,7 +43,7 @@ RSpec.feature "Searching for school during Teacher Student Loan Repayments claim
     start_claim
     choose_qts_year
 
-    expect(page).to have_text(I18n.t("tslr.questions.claim_school"))
+    expect(page).to have_text(I18n.t("student_loans.questions.claim_school"))
     expect(page).to have_button("Search")
 
     fill_in :school_search, with: "Penistone"
@@ -53,7 +53,7 @@ RSpec.feature "Searching for school during Teacher Student Loan Repayments claim
 
     click_button "Continue"
 
-    expect(page).to have_text(I18n.t("tslr.questions.employment_status"))
+    expect(page).to have_text(I18n.t("student_loans.questions.employment_status"))
   end
 
   scenario "Current school search with autocomplete", js: true do
@@ -62,7 +62,7 @@ RSpec.feature "Searching for school during Teacher Student Loan Repayments claim
     choose_school schools(:penistone_grammar_school)
     choose_still_teaching "Yes, at another school"
 
-    expect(page).to have_text(I18n.t("tslr.questions.current_school"))
+    expect(page).to have_text(I18n.t("student_loans.questions.current_school"))
     expect(page).to have_button("Search")
 
     fill_in :school_search, with: "Penistone"
@@ -72,14 +72,14 @@ RSpec.feature "Searching for school during Teacher Student Loan Repayments claim
 
     click_button "Continue"
 
-    expect(page).to have_text(I18n.t("tslr.questions.subjects_taught"))
+    expect(page).to have_text(I18n.t("student_loans.questions.subjects_taught"))
   end
 
   scenario "School search form still works like a normal form if submitted", js: true do
     start_claim
     choose_qts_year
 
-    expect(page).to have_text(I18n.t("tslr.questions.claim_school"))
+    expect(page).to have_text(I18n.t("student_loans.questions.claim_school"))
     expect(page).to have_button("Search")
 
     fill_in :school_search, with: "Penistone"
@@ -97,7 +97,7 @@ RSpec.feature "Searching for school during Teacher Student Loan Repayments claim
     start_claim
     choose_qts_year
 
-    expect(page).to have_text(I18n.t("tslr.questions.claim_school"))
+    expect(page).to have_text(I18n.t("student_loans.questions.claim_school"))
     expect(page).to have_button("Search")
 
     fill_in :school_search, with: "Penistone"
