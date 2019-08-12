@@ -43,7 +43,7 @@ class TslrClaimCsvRow < SimpleDelegator
   end
 
   def mostly_teaching_eligible_subjects
-    model.mostly_teaching_eligible_subjects? ? "Yes" : "No"
+    model.eligibility.mostly_teaching_eligible_subjects? ? "Yes" : "No"
   end
 
   def student_loan_repayment_amount

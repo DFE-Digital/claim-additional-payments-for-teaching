@@ -63,7 +63,7 @@ RSpec.feature "Ineligible Teacher Student Loan Repayments claims" do
     choose I18n.t("student_loans.questions.eligible_subjects.not_applicable")
     click_on "Continue"
 
-    expect(claim.reload.mostly_teaching_eligible_subjects?).to eq(false)
+    expect(claim.eligibility.reload.mostly_teaching_eligible_subjects?).to eq(false)
     expect(page).to have_text("You’re not eligible")
     expect(page).to have_text(I18n.t("activerecord.errors.messages.not_taught_eligible_subjects_enough"))
   end
@@ -80,7 +80,7 @@ RSpec.feature "Ineligible Teacher Student Loan Repayments claims" do
     choose "No"
     click_on "Continue"
 
-    expect(claim.reload.mostly_teaching_eligible_subjects?).to eq(false)
+    expect(claim.eligibility.reload.mostly_teaching_eligible_subjects?).to eq(false)
     expect(page).to have_text("You’re not eligible")
     expect(page).to have_text(I18n.t("activerecord.errors.messages.not_taught_eligible_subjects_enough"))
   end
