@@ -15,3 +15,4 @@
 //= require a11y-dialog/a11y-dialog.min.js
 //= require accessible-autocomplete/dist/accessible-autocomplete.min.js
 //= require_tree .
+//= stub js_check.js
