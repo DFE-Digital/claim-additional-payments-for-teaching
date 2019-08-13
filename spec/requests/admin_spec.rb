@@ -7,7 +7,7 @@ RSpec.describe "Admin", type: :request do
         get admin_path
 
         expect(response).to redirect_to(admin_sign_in_path)
-        expect(session[:login]).to be_nil
+        expect(session[:admin_auth]).to be_nil
       end
     end
 
@@ -24,14 +24,14 @@ RSpec.describe "Admin", type: :request do
 
           expect(response).to be_successful
           expect(response.body).to include("Admin")
-          expect(session[:login]).to eql({"email" => "test-dfe-sign-in@host.tld"})
+          expect(session[:admin_auth]).to eql({"email" => "test-dfe-sign-in@host.tld"})
         end
 
         context "and they sign out" do
           it "unsets the session" do
             delete admin_sign_out_path
 
-            expect(session[:login]).to be_nil
+            expect(session[:admin_auth]).to be_nil
           end
         end
       end
@@ -44,7 +44,7 @@ RSpec.describe "Admin", type: :request do
         end
 
         it "shows a not authorised page and doesn’t set a session" do
-          expect(session[:login]).to be_nil
+          expect(session[:admin_auth]).to be_nil
           expect(response.code).to eq("401")
           expect(response.body).to include("Not authorised")
         end
@@ -60,7 +60,7 @@ RSpec.describe "Admin", type: :request do
         post admin_dfe_sign_in_path
         follow_redirect!
 
-        expect(session[:login]).to be_nil
+        expect(session[:admin_auth]).to be_nil
         expect(response.body).to redirect_to(
           admin_auth_failure_path(message: :invalid_credentials, strategy: :dfe)
         )

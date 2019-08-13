@@ -13,13 +13,13 @@ RSpec.describe "Admin session timing out", type: :request do
     let(:after_expiry) { timeout_length_in_minutes.minutes + 1.second }
 
     it "clears the session and redirects to the login page" do
-      expect(session[:login]).to eql({"email" => "test-dfe-sign-in@host.tld"})
+      expect(session[:admin_auth]).to eql({"email" => "test-dfe-sign-in@host.tld"})
 
       travel after_expiry do
         get admin_claims_path(format: :csv)
 
         expect(response).to redirect_to(admin_sign_in_path)
-        expect(session[:login]).to be_nil
+        expect(session[:admin_auth]).to be_nil
 
         follow_redirect!
         expect(response.body).to include("Your session has timed out due to inactivity")
@@ -31,12 +31,12 @@ RSpec.describe "Admin session timing out", type: :request do
     let(:after_expiry) { timeout_length_in_minutes.minutes + 1.second }
 
     it "still clears the admin session" do
-      expect(session[:login]).to eql({"email" => "test-dfe-sign-in@host.tld"})
+      expect(session[:admin_auth]).to eql({"email" => "test-dfe-sign-in@host.tld"})
 
       travel after_expiry do
         get root_path
 
-        expect(session[:login]).to be_nil
+        expect(session[:admin_auth]).to be_nil
         expect(response).to be_successful
       end
     end
@@ -50,7 +50,7 @@ RSpec.describe "Admin session timing out", type: :request do
         get admin_claims_path(format: :csv)
 
         expect(response.code).to eq("200")
-        expect(session[:login]).to_not be_nil
+        expect(session[:admin_auth]).to_not be_nil
       end
     end
   end

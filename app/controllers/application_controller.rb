@@ -21,7 +21,7 @@ class ApplicationController < ActionController::Base
   end
 
   def admin_signed_in?
-    session.key?(:login)
+    session.key?(:admin_auth)
   end
 
   def current_claim
@@ -50,7 +50,7 @@ class ApplicationController < ActionController::Base
 
   def end_expired_admin_sessions
     if admin_session_timed_out?
-      session.delete(:login)
+      session.delete(:admin_auth)
       flash[:notice] = "Your session has timed out due to inactivity, please sign-in again"
     end
   end
