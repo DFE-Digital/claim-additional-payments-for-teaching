@@ -1,6 +1,7 @@
 class ApplicationController < ActionController::Base
   CLAIM_TIMEOUT_LENGTH_IN_MINUTES = 30
   CLAIM_TIMEOUT_WARNING_LENGTH_IN_MINUTES = 2
+  ADMIN_TIMEOUT_LENGTH_IN_MINUTES = 30
 
   http_basic_authenticate_with(
     name: ENV["BASIC_AUTH_USERNAME"],
@@ -9,6 +10,7 @@ class ApplicationController < ActionController::Base
   )
 
   helper_method :signed_in?, :current_claim
+  before_action :end_expired_admin_sessions
   before_action :end_expired_claim_sessions
   before_action :update_last_seen_at
 
@@ -40,6 +42,17 @@ class ApplicationController < ActionController::Base
   def clear_claim_session
     session.delete(:claim_id)
     session.delete(:verify_request_id)
+  end
+
+  def admin_session_timed_out?
+    signed_in? && session[:last_seen_at] < ADMIN_TIMEOUT_LENGTH_IN_MINUTES.minutes.ago
+  end
+
+  def end_expired_admin_sessions
+    if admin_session_timed_out?
+      session.delete(:login)
+      flash[:notice] = "Your session has timed out due to inactivity, please sign-in again"
+    end
   end
 
   def update_last_seen_at
