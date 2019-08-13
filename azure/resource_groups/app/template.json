@@ -32,8 +32,32 @@
       "type": "bool",
       "defaultValue": true
     },
+    "appServicePlanInstances": {
+      "type": "int",
+      "defaultValue": 2
+    },
+    "appServicePlanTier": {
+      "type": "string",
+      "defaultValue": "Standard"
+    },
+    "appServicePlanSize": {
+      "type": "string",
+      "defaultValue": "1"
+    },
     "vspAppServiceDockerImage": {
       "type": "string"
+    },
+    "vspAppServicePlanTier": {
+      "type": "string",
+      "defaultValue": "Standard"
+    },
+    "vspAppServicePlanSize": {
+      "type": "string",
+      "defaultValue": "2"
+    },
+    "vspAppServicePlanInstances": {
+      "type": "int",
+      "defaultValue": 2
     },
     "verifyHubPossibleOutboundIpAddresses": {
       "type": "array"
@@ -240,6 +264,15 @@
         "parameters": {
           "appServicePlanName": {
             "value": "[variables('appServicePlanName')]"
+          },
+          "appServicePlanInstances": {
+            "value": "[parameters('appServicePlanInstances')]"
+          },
+          "appServicePlanTier": {
+            "value": "[parameters('appServicePlanTier')]"
+          },
+          "appServicePlanSize": {
+            "value": "[parameters('appServicePlanSize')]"
           }
         }
       }
@@ -449,6 +482,15 @@
           },
           "appServiceAlwaysOn": {
             "value": "[parameters('appServiceAlwaysOn')]"
+          },
+          "appServicePlanInstances": {
+            "value": "[parameters('vspAppServicePlanInstances')]"
+          },
+          "appServicePlanTier": {
+            "value": "[parameters('vspAppServicePlanTier')]"
+          },
+          "appServicePlanSize": {
+            "value": "[parameters('vspAppServicePlanSize')]"
           },
           "appServiceAllowedIpAddresses": {
             "value": "[union(split(reference(resourceId('Microsoft.Web/sites', variables('appServiceName'))).possibleOutboundIpAddresses, ','), parameters('verifyHubPossibleOutboundIpAddresses'))]"

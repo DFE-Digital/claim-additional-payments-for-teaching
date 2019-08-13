@@ -14,6 +14,15 @@
     "appServiceAlwaysOn": {
       "type": "bool"
     },
+    "appServicePlanInstances": {
+      "type": "int"
+    },
+    "appServicePlanTier": {
+      "type": "string"
+    },
+    "appServicePlanSize": {
+      "type": "string"
+    },
     "appServiceAllowedIpAddresses": {
       "type": "array"
     },
@@ -49,6 +58,15 @@
         "parameters": {
           "appServicePlanName": {
             "value": "[parameters('appServicePlanName')]"
+          },
+          "appServicePlanInstances": {
+            "value": "[parameters('appServicePlanInstances')]"
+          },
+          "appServicePlanTier": {
+            "value": "[parameters('appServicePlanTier')]"
+          },
+          "appServicePlanSize": {
+            "value": "[parameters('appServicePlanSize')]"
           }
         }
       }

@@ -14,6 +14,18 @@
     "appServiceAlwaysOn": {
       "value": false
     },
+    "appServicePlanInstances": {
+      "value": 1
+    },
+    "appServicePlanSize": {
+      "value": "1"
+    },
+    "vspAppServicePlanInstances": {
+      "value": 1
+    },
+    "vspAppServicePlanSize": {
+      "value": "1"
+    },
     "vspAppServiceDockerImage": {
       "value": "dfedigital/teacher-payments-service-verify:${vspDockerImageTag}"
     },
