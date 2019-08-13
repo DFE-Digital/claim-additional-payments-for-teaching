@@ -34,14 +34,11 @@ class ApplicationController < ActionController::Base
   end
 
   def claim_session_timed_out?
-    session.key?(:claim_id) &&
-      session.key?(:last_seen_at) &&
-      session[:last_seen_at] < CLAIM_TIMEOUT_LENGTH_IN_MINUTES.minutes.ago
+    session.key?(:claim_id) && session[:last_seen_at] < CLAIM_TIMEOUT_LENGTH_IN_MINUTES.minutes.ago
   end
 
   def clear_claim_session
     session.delete(:claim_id)
-    session.delete(:last_seen_at)
     session.delete(:verify_request_id)
   end
 

@@ -12,14 +12,13 @@ module Admin
 
     def end_expired_sessions
       if admin_session_timed_out?
-        session.destroy
+        session.delete(:login)
         redirect_to admin_sign_in_path, notice: "Your session has timed out due to inactivity, please sign-in again"
       end
     end
 
     def admin_session_timed_out?
-      signed_in? && session.key?(:last_seen_at) &&
-        session[:last_seen_at] < TIMEOUT_LENGTH_IN_MINUTES.minutes.ago
+      signed_in? && session[:last_seen_at] < TIMEOUT_LENGTH_IN_MINUTES.minutes.ago
     end
   end
 end
