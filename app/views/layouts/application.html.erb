@@ -50,7 +50,7 @@
 
           <%= link_to t("student_loans.journey_name"), root_path, class: "govuk-header__link govuk-header__link--service-name" %>
 
-          <% if signed_in? %>
+          <% if admin_signed_in? %>
           <button type="button" role="button" class="govuk-header__menu-button js-header-toggle" aria-controls="navigation" aria-label="Show or hide Top Level Navigation">Menu</button>
           <nav>
             <ul id="navigation" class="govuk-header__navigation " aria-label="Top Level Navigation">

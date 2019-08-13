@@ -9,7 +9,7 @@ class ApplicationController < ActionController::Base
     if: -> { ENV.key?("BASIC_AUTH_USERNAME") },
   )
 
-  helper_method :signed_in?, :current_claim
+  helper_method :admin_signed_in?, :current_claim
   before_action :end_expired_admin_sessions
   before_action :end_expired_claim_sessions
   before_action :update_last_seen_at
@@ -20,7 +20,7 @@ class ApplicationController < ActionController::Base
     redirect_to root_url unless current_claim.present?
   end
 
-  def signed_in?
+  def admin_signed_in?
     session.key?(:login)
   end
 
@@ -45,7 +45,7 @@ class ApplicationController < ActionController::Base
   end
 
   def admin_session_timed_out?
-    signed_in? && session[:last_seen_at] < ADMIN_TIMEOUT_LENGTH_IN_MINUTES.minutes.ago
+    admin_signed_in? && session[:last_seen_at] < ADMIN_TIMEOUT_LENGTH_IN_MINUTES.minutes.ago
   end
 
   def end_expired_admin_sessions
