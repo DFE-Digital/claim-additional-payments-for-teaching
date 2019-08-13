@@ -3,7 +3,7 @@ class ClaimsController < ApplicationController
   TIMEOUT_WARNING_LENGTH_IN_MINUTES = 2
 
   before_action :send_unstarted_claiments_to_the_start, only: [:show, :update, :ineligible]
-  before_action :end_expired_sessions
+  before_action :end_expired_claim_sessions
   before_action :update_last_seen_at
   before_action :check_page_is_in_sequence, only: [:show, :update]
 
@@ -69,7 +69,7 @@ class ClaimsController < ApplicationController
     params[:slug].underscore
   end
 
-  def end_expired_sessions
+  def end_expired_claim_sessions
     if claim_session_timed_out?
       clear_claim_session
       redirect_to timeout_claim_path
