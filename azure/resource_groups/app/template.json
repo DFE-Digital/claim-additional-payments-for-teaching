@@ -429,7 +429,7 @@
       ],
       "properties": {
         "sslState": "SniEnabled",
-        "thumbprint": "[reference(resourceId('Microsoft.Resources/deployments', variables('appServiceCertificateDeploymentName')), '2018-11-01').outputs.certificateThumbprint.value]"
+        "thumbprint": "[if(parameters('useAppServiceHostName'), reference(variables('appServiceCertificateDeploymentName'), '2018-11-01').outputs.certificateThumbprint.value, 'PLACEHOLDER')]"
       }
     },
     {
