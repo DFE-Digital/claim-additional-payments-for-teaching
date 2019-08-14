@@ -4,11 +4,11 @@ module ClaimsHelper
   end
 
   def claim_timeout_in_minutes
-    ClaimsController::TIMEOUT_LENGTH_IN_MINUTES
+    ApplicationController::CLAIM_TIMEOUT_LENGTH_IN_MINUTES
   end
 
   def claim_timeout_warning_in_minutes
-    ClaimsController::TIMEOUT_WARNING_LENGTH_IN_MINUTES
+    ApplicationController::CLAIM_TIMEOUT_WARNING_LENGTH_IN_MINUTES
   end
 
   def eligibility_answers(eligibility)

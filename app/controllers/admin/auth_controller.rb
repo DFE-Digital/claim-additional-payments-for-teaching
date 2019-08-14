@@ -14,7 +14,7 @@ module Admin
 
     def callback
       if authorised?
-        session[:login] = auth_hash.fetch("info").to_h
+        session[:admin_auth] = auth_hash.fetch("info").to_h
         redirect_to admin_path
       else
         render "failure", status: :unauthorized
