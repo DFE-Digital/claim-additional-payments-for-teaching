@@ -16,7 +16,9 @@ else
   fi
 fi
 
-echo "Scheduling Cron Jobs"
-rake jobs:schedule
+if [ "$RAILS_ENV" != "test" ]; then
+  echo "Scheduling Cron Jobs"
+  rake jobs:schedule
+fi
 
 exec "$@"
