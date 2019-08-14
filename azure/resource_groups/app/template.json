@@ -47,6 +47,10 @@
     "vspAppServiceDockerImage": {
       "type": "string"
     },
+    "vspAppServicePlanInstances": {
+      "type": "int",
+      "defaultValue": 2
+    },
     "vspAppServicePlanTier": {
       "type": "string",
       "defaultValue": "Standard"
@@ -54,10 +58,6 @@
     "vspAppServicePlanSize": {
       "type": "string",
       "defaultValue": "2"
-    },
-    "vspAppServicePlanInstances": {
-      "type": "int",
-      "defaultValue": 2
     },
     "verifyHubPossibleOutboundIpAddresses": {
       "type": "array"
