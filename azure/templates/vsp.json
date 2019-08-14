@@ -40,7 +40,7 @@
     }
   },
   "variables": {
-    "deploymentUrlBase": "https://raw.githubusercontent.com/DFE-Digital/bat-platform-building-blocks/master/templates/",
+    "platformBuildingBlocksDeploymentUrlBase": "https://raw.githubusercontent.com/DFE-Digital/bat-platform-building-blocks/7a4748a0cf366193d31434bd7796d483bd281385/templates/",
 
     "appServicePlanDeploymentName": "[concat(deployment().name, '-app-service-plan')]"
   },
@@ -52,7 +52,7 @@
       "properties": {
         "mode": "Incremental",
         "templateLink": {
-          "uri": "[concat(variables('deploymentUrlBase'), 'app-service-plan.json')]",
+          "uri": "[concat(variables('platformBuildingBlocksDeploymentUrlBase'), 'app-service-plan.json')]",
           "contentVersion": "1.0.0.0"
         },
         "parameters": {
