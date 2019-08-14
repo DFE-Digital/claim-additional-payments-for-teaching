@@ -109,6 +109,12 @@ ENTRYPOINT [ "bin/docker-entrypoint" ]
 CMD [ "rails", "server" ]
 
 # ------------------------------------------------------------------------------
+# shellcheck
+# ------------------------------------------------------------------------------
+
+FROM koalaman/shellcheck:stable AS shellcheck
+
+# ------------------------------------------------------------------------------
 # test
 # ------------------------------------------------------------------------------
 
@@ -117,6 +123,12 @@ FROM web AS test
 RUN echo "Building with RAILS_ENV=${RAILS_ENV}, NODE_ENV=${NODE_ENV}"
 
 RUN apk --no-cache add chromium chromium-chromedriver
+
+# Install ShellCheck
+COPY --from=shellcheck / /opt/shellcheck/
+
+ENV PATH /opt/shellcheck/bin:${PATH}
+# End
 
 # Copy test code (sorted by vague frequency of change for caching)
 COPY .prettierignore ${APP_HOME}/.prettierignore
