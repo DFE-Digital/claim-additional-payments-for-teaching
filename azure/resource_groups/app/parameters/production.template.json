@@ -175,6 +175,9 @@
         },
         "secretName": "TeacherPaymentsProdVspSamlEncryption1KeyBase64"
       }
+    },
+    "VSP.EUROPEAN_IDENTITY_ENABLED": {
+      "value": "false"
     }
   }
 }

@@ -506,6 +506,9 @@
           },
           "SAML_PRIMARY_ENCRYPTION_KEY": {
             "value": "[parameters('VSP.SAML_PRIMARY_ENCRYPTION_KEY')]"
+          },
+          "EUROPEAN_IDENTITY_ENABLED": {
+            "value": "[parameters('VSP.EUROPEAN_IDENTITY_ENABLED')]"
           }
         }
       }
