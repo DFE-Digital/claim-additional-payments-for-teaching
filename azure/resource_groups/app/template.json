@@ -397,6 +397,10 @@
               "value": "[parameters('DFE_SIGN_IN_API_ENDPOINT')]"
             },
             {
+              "name": "GOOGLE_ANALYTICS_ID",
+              "value": "[parameters('GOOGLE_ANALYTICS_ID')]"
+            },
+            {
               "name": "NOTIFY_API_KEY",
               "value": "[parameters('NOTIFY_API_KEY')]"
             },
