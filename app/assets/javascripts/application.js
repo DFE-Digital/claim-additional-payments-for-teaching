@@ -16,3 +16,4 @@
 //= require accessible-autocomplete/dist/accessible-autocomplete.min.js
 //= require_tree .
 //= stub js_check.js
+//= stub google_analytics.js

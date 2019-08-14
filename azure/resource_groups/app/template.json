@@ -112,6 +112,9 @@
     "DFE_SIGN_IN_API_ENDPOINT": {
       "type": "string"
     },
+    "GOOGLE_ANALYTICS_ID": {
+      "type": "string"
+    },
     "NOTIFY_API_KEY": {
       "type": "securestring"
     },

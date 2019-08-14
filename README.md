@@ -74,6 +74,14 @@ claiming.
 
 See [docs/govuk-verify](/docs/govuk-verify.md) for more details on this.
 
+### Google Analytics
+
+To enable Google Analytics set the following environment variable:
+
+```
+GOOGLE_ANALYTICS_ID=<UA PROPERTY>
+```
+
 ### Running `CronJob`s
 
 To schedule recurring jobs, run the following:

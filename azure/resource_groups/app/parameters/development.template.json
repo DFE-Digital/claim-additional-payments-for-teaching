@@ -139,6 +139,14 @@
         "secretName": "DfeSignInApiEndpoint"
       }
     },
+    "GOOGLE_ANALYTICS_ID": {
+      "reference": {
+        "keyVault": {
+          "id": "${keyVaultId}"
+        },
+        "secretName": "GoogleAnalyticsId"
+      }
+    },
     "NOTIFY_API_KEY": {
       "reference": {
         "keyVault": {
