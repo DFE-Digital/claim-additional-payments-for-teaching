@@ -16,12 +16,11 @@ Architecture decision records can be found in the
 
 ## Prerequisites
 
+- Java 11 or 8 (LTS) - we recommend [OpenJDK][openjdk]
 - Ruby 2.6.2
 - PostgreSQL
+- [ShellCheck](https://www.shellcheck.net/)
 - [Yarn](https://yarnpkg.com/en/docs/install)
-
-You will also need Java 11 or a long term supported version of Java 8 installed
-for the Verify Service Provider to run. We recommend [OpenJDK][openjdk].
 
 ## Setting up the app in development
 
@@ -103,6 +102,7 @@ To run the feature specs you will need Chrome installed.
 Code linting is performed using:
 
 - [Standard](https://github.com/testdouble/standard) for Ruby
+- [ShellCheck](https://www.shellcheck.net/) for shell scripts
 - [Prettier](https://prettier.io/) for everything else
 
 ### N+1 query detection
