@@ -32,9 +32,10 @@ RSpec.feature "Teacher Student Loan Repayments claims" do
     perform_verify_step
 
     expect(claim.reload.full_name).to eql("Isambard Kingdom Brunel")
-    expect(claim.address_line_1).to eql("Verified Street")
-    expect(claim.address_line_2).to eql("Verified Town")
-    expect(claim.address_line_3).to eql("Verified County")
+    expect(claim.address_line_1).to eq("Verified Building")
+    expect(claim.address_line_2).to eq("Verified Street")
+    expect(claim.address_line_3).to eq("Verified Town")
+    expect(claim.address_line_4).to eq("Verified County")
     expect(claim.postcode).to eql("M12 345")
     expect(claim.date_of_birth).to eq(Date.new(1806, 4, 9))
     expect(claim.payroll_gender).to eq("male")

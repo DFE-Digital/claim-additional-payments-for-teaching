@@ -29,9 +29,10 @@ RSpec.describe Verify::Response, type: :model do
 
     it "returns the expected verified parameters" do
       expect(subject.claim_parameters[:full_name]).to eq("Isambard Kingdom Brunel")
-      expect(subject.claim_parameters[:address_line_1]).to eq("Verified Street")
-      expect(subject.claim_parameters[:address_line_2]).to eq("Verified Town")
-      expect(subject.claim_parameters[:address_line_3]).to eq("Verified County")
+      expect(subject.claim_parameters[:address_line_1]).to eq("Verified Building")
+      expect(subject.claim_parameters[:address_line_2]).to eq("Verified Street")
+      expect(subject.claim_parameters[:address_line_3]).to eq("Verified Town")
+      expect(subject.claim_parameters[:address_line_4]).to eq("Verified County")
       expect(subject.claim_parameters[:postcode]).to eq("M12 345")
       expect(subject.claim_parameters[:date_of_birth]).to eq("1806-04-09")
       expect(subject.claim_parameters[:payroll_gender]).to eq(:male)
@@ -40,6 +41,7 @@ RSpec.describe Verify::Response, type: :model do
         :address_line_1,
         :address_line_2,
         :address_line_3,
+        :address_line_4,
         :postcode,
         :date_of_birth,
         :payroll_gender,
