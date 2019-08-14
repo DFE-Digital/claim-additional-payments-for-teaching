@@ -47,13 +47,9 @@
     </h2>
 
     <p class="govuk-body">
-      If you need information on this website in a different format or cannot use the service:
+      If you need information on this website in a different format or cannot use the service,
+      contact us at <%= mail_to t("support_email_address"), t("support_email_address"), class: "govuk-link" %>.
     </p>
-
-    <ul class="govuk-list govuk-list--bullet">
-      <li>email [XXXX]</li>
-      <li>call [XXXX]</li>
-    </ul>
 
     <p class="govuk-body">
       We’ll consider your request and get back to you in [XXXX] days.
@@ -65,7 +61,7 @@
 
     <p class="govuk-body">
       We’re always looking to improve the accessibility of this website. If you find any problems that aren’t listed on
-      this page or think we’re not meeting accessibility requirements, contact: [XXXX].
+      this page or think we’re not meeting accessibility requirements, contact: <%= mail_to t("support_email_address"), t("support_email_address"), class: "govuk-link" %>.
     </p>
 
     <h2 class="govuk-heading-l">

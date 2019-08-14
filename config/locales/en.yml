@@ -45,6 +45,7 @@ en:
         employed_at_no_school: "You can only get this payment if you’re still working as a teacher"
         not_taught_eligible_subjects_enough: "You must have spent at least half your time teaching an eligible subject"
   service_name: "Claim additional payments for teaching"
+  support_email_address: "additionalteachingpayment@digital.education.gov.uk"
   questions:
     current_school: "Which school are you currently employed at?"
     address: "What is your address?"
