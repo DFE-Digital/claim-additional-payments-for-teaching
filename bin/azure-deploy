@@ -232,7 +232,7 @@ if [ $DEPLOY_ALERTS ]; then
     --parameters "$(
       filter-azure-outputs \
         "$SECRETS_DEPLOYMENT_RESULT" \
-        "['keyVaultId']" \
+        "[]" \
         "{'resourceGroupId' => 'secretsResourceGroupId'}"
     )" \
     --parameters "$(
