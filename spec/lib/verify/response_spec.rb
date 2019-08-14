@@ -81,6 +81,26 @@ RSpec.describe Verify::Response, type: :model do
         expect(subject.claim_parameters[:verified_fields]).to_not include(:payroll_gender)
       end
     end
+
+    context "when the address is missing (for EU citizens)" do
+      let(:response_filename) { "identity-verified-no-address.json" }
+
+      it "returns nil for address attributes" do
+        expect(subject.claim_parameters[:address_line_1]).to eq(nil)
+        expect(subject.claim_parameters[:address_line_2]).to eq(nil)
+        expect(subject.claim_parameters[:address_line_3]).to eq(nil)
+        expect(subject.claim_parameters[:postcode]).to eq(nil)
+      end
+
+      it "does not return any address attributes in the verified fields" do
+        expect(subject.claim_parameters[:verified_fields]).to_not include(
+          :address_line_1,
+          :address_line_2,
+          :address_line_3,
+          :postcode
+        )
+      end
+    end
   end
 
   context "with the minimum verified response" do
