@@ -18,8 +18,8 @@ steps:
 
   - script: docker-compose -f docker-compose.test.yml build
     displayName: Build test Docker image
-  - script: docker-compose -f docker-compose.test.yml run --rm web bundle exec rake
-    displayName: Run tests on Docker via rake default
+  - script: docker-compose -f docker-compose.test.yml run --rm test
+    displayName: Run tests on Docker
 
   - script: |
       git reset --hard

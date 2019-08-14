@@ -130,3 +130,5 @@ COPY spec ${APP_HOME}/spec
 COPY docs ${APP_HOME}/docs
 COPY azure ${APP_HOME}/azure
 # End
+
+CMD [ "rake" ]
