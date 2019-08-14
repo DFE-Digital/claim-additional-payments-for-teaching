@@ -4,4 +4,4 @@ function gtag() {
 }
 gtag("js", new Date());
 
-gtag("config", "UA-145681604-1");
+gtag("config", document.currentScript.getAttribute("data-ga-id"));
