@@ -36,9 +36,6 @@
     },
     "databaseServerId": {
       "type": "string"
-    },
-    "keyVaultId": {
-      "type": "string"
     }
   },
   "variables": {
@@ -57,11 +54,7 @@
     "databaseServerAlertPrefix": "[concat(variables('alertNamePrefix'), '-', variables('databaseServerName'))]",
     "databaseServerHighCpuAlertName": "[concat(variables('databaseServerAlertPrefix'), '-high-cpu')]",
     "databaseServerHighMemoryAlertName": "[concat(variables('databaseServerAlertPrefix'), '-high-memory')]",
-    "databaseServerHighStorageAlertName": "[concat(variables('databaseServerAlertPrefix'), '-high-storage')]",
-
-    "keyVaultName": "[last(split(parameters('keyVaultId'), '/'))]",
-    "keyVaultAlertPrefix": "[concat(variables('alertNamePrefix'), '-', variables('keyVaultName'))]",
-    "keyVaultActivityAlertName": "[concat(variables('keyVaultAlertPrefix'), '-activity')]"
+    "databaseServerHighStorageAlertName": "[concat(variables('databaseServerAlertPrefix'), '-high-storage')]"
   },
   "resources": [
     {
@@ -244,36 +237,6 @@
             "actionGroupId": "[resourceId('Microsoft.Insights/actionGroups', variables('alertActionGroupName'))]"
           }
         ]
-      }
-    },
-    {
-      "type": "Microsoft.Insights/activityLogAlerts",
-      "apiVersion": "2017-04-01",
-      "name": "[variables('keyVaultActivityAlertName')]",
-      "location": "global",
-      "dependsOn": ["[resourceId('Microsoft.Insights/actionGroups', variables('alertActionGroupName'))]"],
-      "properties": {
-        "scopes": ["[parameters('keyVaultId')]"],
-        "enabled": true,
-        "condition": {
-          "allOf": [
-            {
-              "field": "category",
-              "equals": "Administrative"
-            },
-            {
-              "field": "resourceId",
-              "equals": "[parameters('keyVaultId')]"
-            }
-          ]
-        },
-        "actions": {
-          "actionGroups": [
-            {
-              "actionGroupId": "[resourceId('Microsoft.Insights/actionGroups', variables('alertActionGroupName'))]"
-            }
-          ]
-        }
       }
     },
     {
