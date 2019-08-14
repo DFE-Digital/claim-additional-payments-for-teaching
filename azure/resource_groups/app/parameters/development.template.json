@@ -140,12 +140,7 @@
       }
     },
     "GOOGLE_ANALYTICS_ID": {
-      "reference": {
-        "keyVault": {
-          "id": "${keyVaultId}"
-        },
-        "secretName": "GoogleAnalyticsId"
-      }
+      "value": ""
     },
     "NOTIFY_API_KEY": {
       "reference": {
