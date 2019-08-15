@@ -29,11 +29,16 @@
     "appServiceEnvironmentVariables": {
       "type": "array",
       "defaultValue": []
+    },
+    "enableLogs": {
+      "type": "bool",
+      "defaultValue": true
     }
   },
   "variables": {
     "platformBuildingBlocksDeploymentUrlBase": "https://raw.githubusercontent.com/DFE-Digital/bat-platform-building-blocks/7a4748a0cf366193d31434bd7796d483bd281385/templates/",
 
+    "appServiceLogsDeploymentName": "[concat(deployment().name, '-app-service-logs')]",
     "appServicePlanDeploymentName": "[concat(deployment().name, '-app-service-plan')]"
   },
   "resources": [
@@ -75,7 +80,6 @@
         "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', parameters('appServicePlanName'))]",
         "siteConfig": {
           "alwaysOn": "[parameters('appServiceAlwaysOn')]",
-          "httpLoggingEnabled": true,
           "linuxFxVersion": "[parameters('appServiceRuntimeStack')]",
           "appSettings": "[parameters('appServiceEnvironmentVariables')]",
           "copy": [
@@ -90,6 +94,34 @@
               }
             }
           ]
+        }
+      }
+    },
+    {
+      "condition": "[parameters('enableLogs')]",
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2017-05-10",
+      "name": "[variables('appServiceLogsDeploymentName')]",
+      "dependsOn": ["[resourceId('Microsoft.Web/sites', parameters('appServiceName'))]"],
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[concat(variables('platformBuildingBlocksDeploymentUrlBase'), 'app-service-logs.json')]",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "appServiceName": {
+            "value": "[parameters('appServiceName')]"
+          },
+          "httpLoggingEnabled": {
+            "value": true
+          },
+          "requestTracingEnabled": {
+            "value": true
+          },
+          "detailedErrorLoggingEnabled": {
+            "value": true
+          }
         }
       }
     }
