@@ -26,20 +26,9 @@
     "appServiceAllowedIpAddresses": {
       "type": "array"
     },
-    "VERIFY_ENVIRONMENT": {
-      "type": "string"
-    },
-    "SERVICE_ENTITY_IDS": {
-      "type": "string"
-    },
-    "SAML_SIGNING_KEY": {
-      "type": "securestring"
-    },
-    "SAML_PRIMARY_ENCRYPTION_KEY": {
-      "type": "securestring"
-    },
-    "EUROPEAN_IDENTITY_ENABLED": {
-      "type": "string"
+    "appServiceEnvironmentVariables": {
+      "type": "array",
+      "defaultValue": []
     }
   },
   "variables": {
@@ -88,28 +77,7 @@
           "alwaysOn": "[parameters('appServiceAlwaysOn')]",
           "httpLoggingEnabled": true,
           "linuxFxVersion": "[parameters('appServiceRuntimeStack')]",
-          "appSettings": [
-            {
-              "name": "VERIFY_ENVIRONMENT",
-              "value": "[parameters('VERIFY_ENVIRONMENT')]"
-            },
-            {
-              "name": "SERVICE_ENTITY_IDS",
-              "value": "[parameters('SERVICE_ENTITY_IDS')]"
-            },
-            {
-              "name": "SAML_SIGNING_KEY",
-              "value": "[parameters('SAML_SIGNING_KEY')]"
-            },
-            {
-              "name": "SAML_PRIMARY_ENCRYPTION_KEY",
-              "value": "[parameters('SAML_PRIMARY_ENCRYPTION_KEY')]"
-            },
-            {
-              "name": "EUROPEAN_IDENTITY_ENABLED",
-              "value": "[parameters('EUROPEAN_IDENTITY_ENABLED')]"
-            }
-          ],
+          "appSettings": "[parameters('appServiceEnvironmentVariables')]",
           "copy": [
             {
               "name": "ipSecurityRestrictions",

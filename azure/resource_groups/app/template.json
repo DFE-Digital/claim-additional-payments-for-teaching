@@ -494,20 +494,29 @@
           "appServiceAllowedIpAddresses": {
             "value": "[union(split(reference(resourceId('Microsoft.Web/sites', variables('appServiceName'))).possibleOutboundIpAddresses, ','), parameters('verifyHubPossibleOutboundIpAddresses'))]"
           },
-          "VERIFY_ENVIRONMENT": {
-            "value": "[parameters('VSP.VERIFY_ENVIRONMENT')]"
-          },
-          "SERVICE_ENTITY_IDS": {
-            "value": "[string(createArray(concat('https://', if(parameters('useAppServiceHostName'), parameters('appServiceHostName'), reference(resourceId('Microsoft.Web/sites', variables('appServiceName'))).defaultHostName))))]"
-          },
-          "SAML_SIGNING_KEY": {
-            "value": "[parameters('VSP.SAML_SIGNING_KEY')]"
-          },
-          "SAML_PRIMARY_ENCRYPTION_KEY": {
-            "value": "[parameters('VSP.SAML_PRIMARY_ENCRYPTION_KEY')]"
-          },
-          "EUROPEAN_IDENTITY_ENABLED": {
-            "value": "[parameters('VSP.EUROPEAN_IDENTITY_ENABLED')]"
+          "appServiceEnvironmentVariables": {
+            "value": [
+              {
+                "name": "VERIFY_ENVIRONMENT",
+                "value": "[parameters('VSP.VERIFY_ENVIRONMENT')]"
+              },
+              {
+                "name": "SERVICE_ENTITY_IDS",
+                "value": "[string(createArray(concat('https://', if(parameters('useAppServiceHostName'), parameters('appServiceHostName'), reference(resourceId('Microsoft.Web/sites', variables('appServiceName'))).defaultHostName))))]"
+              },
+              {
+                "name": "SAML_SIGNING_KEY",
+                "value": "[parameters('VSP.SAML_SIGNING_KEY')]"
+              },
+              {
+                "name": "SAML_PRIMARY_ENCRYPTION_KEY",
+                "value": "[parameters('VSP.SAML_PRIMARY_ENCRYPTION_KEY')]"
+              },
+              {
+                "name": "EUROPEAN_IDENTITY_ENABLED",
+                "value": "[parameters('VSP.EUROPEAN_IDENTITY_ENABLED')]"
+              }
+            ]
           }
         }
       }
