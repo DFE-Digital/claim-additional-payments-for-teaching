@@ -1,0 +1,159 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "appServicePlanName": {
+      "type": "string"
+    },
+    "appServiceName": {
+      "type": "string"
+    },
+    "appServiceRuntimeStack": {
+      "type": "string"
+    },
+    "appServiceAlwaysOn": {
+      "type": "bool"
+    },
+    "appServicePlanInstances": {
+      "type": "int"
+    },
+    "appServicePlanTier": {
+      "type": "string"
+    },
+    "appServicePlanSize": {
+      "type": "string"
+    },
+    "appServiceCertificateSecretName": {
+      "type": "string"
+    },
+    "appServiceHostName": {
+      "type": "string",
+      "defaultValue": ""
+    },
+    "appServiceEnvironmentVariables": {
+      "type": "array",
+      "defaultValue": []
+    },
+    "keyVaultResourceGroupName": {
+      "type": "string"
+    },
+    "keyVaultName": {
+      "type": "string"
+    }
+  },
+  "variables": {
+    "platformBuildingBlocksDeploymentUrlBase": "https://raw.githubusercontent.com/DFE-Digital/bat-platform-building-blocks/7a4748a0cf366193d31434bd7796d483bd281385/templates/",
+
+    "appServiceCertificateDeploymentName": "[concat(deployment().name, '-app-service-certificate')]",
+    "appServicePlanDeploymentName": "[concat(deployment().name, '-app-service-plan')]",
+
+    "hasCustomHostName": "[greater(length(parameters('appServiceHostName')), 0)]"
+  },
+  "resources": [
+    {
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2017-05-10",
+      "name": "[variables('appServicePlanDeploymentName')]",
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[concat(variables('platformBuildingBlocksDeploymentUrlBase'), 'app-service-plan.json')]",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "appServicePlanName": {
+            "value": "[parameters('appServicePlanName')]"
+          },
+          "appServicePlanInstances": {
+            "value": "[parameters('appServicePlanInstances')]"
+          },
+          "appServicePlanTier": {
+            "value": "[parameters('appServicePlanTier')]"
+          },
+          "appServicePlanSize": {
+            "value": "[parameters('appServicePlanSize')]"
+          }
+        }
+      }
+    },
+    {
+      "condition": "[variables('hasCustomHostName')]",
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2017-05-10",
+      "name": "[variables('appServiceCertificateDeploymentName')]",
+      "dependsOn": ["[resourceId('Microsoft.Resources/deployments', variables('appServicePlanDeploymentName'))]"],
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[concat(variables('platformBuildingBlocksDeploymentUrlBase'), 'app-service-certificate.json')]",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "keyVaultCertificateName": {
+            "value": "[parameters('appServiceCertificateSecretName')]"
+          },
+          "keyVaultName": {
+            "value": "[parameters('keyVaultName')]"
+          },
+          "keyVaultResourceGroup": {
+            "value": "[parameters('keyVaultResourceGroupName')]"
+          },
+          "serverFarmId": {
+            "value": "[resourceId('Microsoft.Web/serverfarms', parameters('appServicePlanName'))]"
+          }
+        }
+      }
+    },
+    {
+      "type": "Microsoft.Web/sites",
+      "apiVersion": "2018-11-01",
+      "name": "[parameters('appServiceName')]",
+      "kind": "app,linux,container",
+      "location": "[resourceGroup().location]",
+      "dependsOn": ["[resourceId('Microsoft.Resources/deployments', variables('appServicePlanDeploymentName'))]"],
+      "properties": {
+        "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', parameters('appServicePlanName'))]",
+        "httpsOnly": true,
+        "siteConfig": {
+          "alwaysOn": "[parameters('appServiceAlwaysOn')]",
+          "httpLoggingEnabled": true,
+          "linuxFxVersion": "[parameters('appServiceRuntimeStack')]",
+          "appSettings": "[parameters('appServiceEnvironmentVariables')]"
+        }
+      }
+    },
+    {
+      "condition": "[variables('hasCustomHostName')]",
+      "type": "Microsoft.Web/sites/hostNameBindings",
+      "apiVersion": "2018-11-01",
+      "name": "[concat(parameters('appServiceName'), '/', if(variables('hasCustomHostName'), parameters('appServiceHostName'), 'PLACEHOLDER'))]",
+      "location": "[resourceGroup().location]",
+      "dependsOn": [
+        "[resourceId('Microsoft.Resources/deployments', variables('appServiceCertificateDeploymentName'))]",
+        "[resourceId('Microsoft.Web/sites', parameters('appServiceName'))]"
+      ],
+      "properties": {
+        "sslState": "SniEnabled",
+        "thumbprint": "[if(variables('hasCustomHostName'), reference(variables('appServiceCertificateDeploymentName'), '2018-11-01').outputs.certificateThumbprint.value, 'PLACEHOLDER')]"
+      }
+    }
+  ],
+  "outputs": {
+    "appServicePlanId": {
+      "type": "string",
+      "value": "[resourceId('Microsoft.Web/serverfarms', parameters('appServicePlanName'))]"
+    },
+    "appServiceId": {
+      "type": "string",
+      "value": "[resourceId('Microsoft.Web/sites', parameters('appServiceName'))]"
+    },
+    "appServicePossibleOutboundIpAddresses": {
+      "type": "array",
+      "value": "[split(reference(resourceId('Microsoft.Web/sites', parameters('appServiceName'))).possibleOutboundIpAddresses, ',')]"
+    },
+    "appServiceHostName": {
+      "type": "string",
+      "value": "[if(variables('hasCustomHostName'), parameters('appServiceHostName'), reference(resourceId('Microsoft.Web/sites', parameters('appServiceName'))).defaultHostName)]"
+    }
+  }
+}
