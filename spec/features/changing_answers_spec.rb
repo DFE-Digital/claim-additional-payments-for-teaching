@@ -108,8 +108,8 @@ RSpec.feature "Changing the answers on a submittable claim" do
           click_on "Continue"
         end
 
-        scenario "Teacher is redirected to ask if they were mostly teaching eligible subjects" do
-          expect(current_path).to eq(claim_path("mostly-teaching-eligible-subjects"))
+        scenario "Teacher skips being asked if they were mostly teaching eligible subjects" do
+          expect(current_path).to eq(claim_path("eligibility-confirmed"))
         end
       end
     end

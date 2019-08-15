@@ -2,9 +2,9 @@ require "rails_helper"
 
 describe ClaimsHelper do
   describe "#eligibility_answers" do
-    it "returns an array of questions and answers for displaying to the user for review" do
-      school = schools(:penistone_grammar_school)
-      eligibility = build(
+    let(:school) { schools(:penistone_grammar_school) }
+    let(:eligibility) do
+      build(
         :student_loans_eligibility,
         qts_award_year: "2013_2014",
         claim_school: school,
@@ -15,7 +15,9 @@ describe ClaimsHelper do
         mostly_teaching_eligible_subjects: true,
         student_loan_repayment_amount: 1987.65,
       )
+    end
 
+    it "returns an array of questions and answers for displaying to the user for review" do
       expected_answers = [
         [I18n.t("student_loans.questions.qts_award_year"), "1 September 2013 to 31 August 2014", "qts-year"],
         [I18n.t("student_loans.questions.claim_school"), school.name, "claim-school"],
@@ -27,6 +29,12 @@ describe ClaimsHelper do
       ]
 
       expect(helper.eligibility_answers(eligibility)).to eq expected_answers
+    end
+
+    it "excludes questions skipped from the flow" do
+      eligibility.had_leadership_position = false
+      expect(helper.eligibility_answers(eligibility)).to_not include([I18n.t("student_loans.questions.mostly_teaching_eligible_subjects", subjects: "Chemistry and Physics"), "Yes", "mostly-teaching-eligible-subjects"])
+      expect(helper.eligibility_answers(eligibility)).to_not include([I18n.t("student_loans.questions.mostly_teaching_eligible_subjects", subjects: "Chemistry and Physics"), "No", "mostly-teaching-eligible-subjects"])
     end
   end
 

@@ -12,15 +12,15 @@ module ClaimsHelper
   end
 
   def eligibility_answers(eligibility)
-    [
-      [t("student_loans.questions.qts_award_year"), academic_years(eligibility.qts_award_year), "qts-year"],
-      [t("student_loans.questions.claim_school"), eligibility.claim_school_name, "claim-school"],
-      [t("questions.current_school"), eligibility.current_school_name, "still-teaching"],
-      [t("student_loans.questions.subjects_taught"), subject_list(eligibility.subjects_taught), "subjects-taught"],
-      [t("student_loans.questions.leadership_position"), (eligibility.had_leadership_position? ? "Yes" : "No"), "leadership-position"],
-      [t("student_loans.questions.mostly_teaching_eligible_subjects", subjects: subject_list(eligibility.subjects_taught)), (eligibility.mostly_teaching_eligible_subjects? ? "Yes" : "No"), "mostly-teaching-eligible-subjects"],
-      [t("student_loans.questions.student_loan_amount", claim_school_name: eligibility.claim_school_name), number_to_currency(eligibility.student_loan_repayment_amount), "student-loan-amount"],
-    ]
+    [].tap do |a|
+      a << [t("student_loans.questions.qts_award_year"), academic_years(eligibility.qts_award_year), "qts-year"]
+      a << [t("student_loans.questions.claim_school"), eligibility.claim_school_name, "claim-school"]
+      a << [t("questions.current_school"), eligibility.current_school_name, "still-teaching"]
+      a << [t("student_loans.questions.subjects_taught"), subject_list(eligibility.subjects_taught), "subjects-taught"]
+      a << [t("student_loans.questions.leadership_position"), (eligibility.had_leadership_position? ? "Yes" : "No"), "leadership-position"]
+      a << [t("student_loans.questions.mostly_teaching_eligible_subjects", subjects: subject_list(eligibility.subjects_taught)), (eligibility.mostly_teaching_eligible_subjects? ? "Yes" : "No"), "mostly-teaching-eligible-subjects"] if eligibility.had_leadership_position?
+      a << [t("student_loans.questions.student_loan_amount", claim_school_name: eligibility.claim_school_name), number_to_currency(eligibility.student_loan_repayment_amount), "student-loan-amount"]
+    end
   end
 
   def identity_answers(claim)
