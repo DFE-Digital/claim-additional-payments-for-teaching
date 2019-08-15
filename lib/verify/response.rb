@@ -26,7 +26,8 @@ module Verify
       return {} unless verified?
 
       identity_paramteters.merge(
-        verified_fields: verified_fields
+        verified_fields: verified_fields,
+        verify_response: parameters
       )
     end
 

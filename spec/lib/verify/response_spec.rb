@@ -46,6 +46,7 @@ RSpec.describe Verify::Response, type: :model do
         :date_of_birth,
         :payroll_gender,
       ])
+      expect(subject.claim_parameters[:verify_response]).to eq(response)
     end
 
     context "when the gender from Verify is female" do

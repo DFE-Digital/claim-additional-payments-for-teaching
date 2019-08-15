@@ -37,6 +37,7 @@ RSpec.feature "Teacher verifies identity using GOV.UK Verify" do
       expect(@claim.postcode).to eq("M12 345")
       expect(@claim.date_of_birth).to eq(Date.new(1806, 4, 9))
       expect(@claim.payroll_gender).to eq("male")
+      expect(@claim.verify_response).to eq(parsed_vsp_translated_response("identity-verified"))
     end
 
     scenario "successful verification with JavaScript disabled" do

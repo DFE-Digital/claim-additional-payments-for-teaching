@@ -36,3 +36,7 @@ end
 def stubbed_vsp_translated_response(type)
   File.read(Rails.root.join("spec", "fixtures", "verify", "#{type}.json"))
 end
+
+def parsed_vsp_translated_response(type)
+  JSON.parse(stubbed_vsp_translated_response(type))
+end
