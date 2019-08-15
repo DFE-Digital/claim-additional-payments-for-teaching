@@ -149,13 +149,10 @@
     "appServicePlanDeploymentName": "[concat(parameters('resourceNamePrefix'), '-app-service-plan')]",
     "appServiceWebTestDeploymentName": "[concat(parameters('resourceNamePrefix'), '-app-service-web-test')]",
     "databaseServerFirewallRulesDeploymentName": "[concat(parameters('resourceNamePrefix'), '-database-server-firewall-rules')]",
-    "databaseServerDeploymentName": "[concat(parameters('resourceNamePrefix'), '-database-server')]",
     "databaseDeploymentName": "[concat(parameters('resourceNamePrefix'), '-database')]",
-    "storageAccountDeploymentName": "[concat(parameters('resourceNamePrefix'), '-storage-account')]",
     "vspDeploymentName": "[concat(parameters('resourceNamePrefix'), '-vsp')]",
 
     "storageAccountName": "[replace(concat(parameters('resourceNamePrefix'), 'storage'), '-', '')]",
-
     "databaseServerName": "[concat(parameters('resourceNamePrefix'), '-db')]",
 
     "applicationInsightsName": "[concat(parameters('resourceNamePrefix'), '-ai')]",
@@ -175,67 +172,31 @@
     {
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2017-05-10",
-      "name": "[variables('storageAccountDeploymentName')]",
-      "properties": {
-        "mode": "Incremental",
-        "templateLink": {
-          "uri": "[concat(variables('platformBuildingBlocksDeploymentUrlBase'), 'storage-account.json')]",
-          "contentVersion": "1.0.0.0"
-        },
-        "parameters": {
-          "storageAccountName": {
-            "value": "[variables('storageAccountName')]"
-          }
-        }
-      }
-    },
-    {
-      "type": "Microsoft.Resources/deployments",
-      "apiVersion": "2017-05-10",
-      "name": "[variables('databaseServerDeploymentName')]",
-      "dependsOn": ["[resourceId('Microsoft.Resources/deployments', variables('storageAccountDeploymentName'))]"],
-      "properties": {
-        "mode": "Incremental",
-        "templateLink": {
-          "uri": "[concat(variables('platformBuildingBlocksDeploymentUrlBase'), 'postgresql-server.json')]",
-          "contentVersion": "1.0.0.0"
-        },
-        "parameters": {
-          "postgresServerName": {
-            "value": "[variables('databaseServerName')]"
-          },
-          "postgresAdminLogin": {
-            "value": "[parameters('databaseUsername')]"
-          },
-          "postgresAdminPassword": {
-            "value": "[parameters('databasePassword')]"
-          },
-          "securityAlertEmailAddress": {
-            "value": "[parameters('alertEmailAddress')]"
-          },
-          "storageAccountName": {
-            "value": "[variables('storageAccountName')]"
-          }
-        }
-      }
-    },
-    {
-      "type": "Microsoft.Resources/deployments",
-      "apiVersion": "2017-05-10",
       "name": "[variables('databaseDeploymentName')]",
-      "dependsOn": ["[resourceId('Microsoft.Resources/deployments', variables('databaseServerDeploymentName'))]"],
       "properties": {
         "mode": "Incremental",
         "templateLink": {
-          "uri": "[concat(variables('platformBuildingBlocksDeploymentUrlBase'), 'postgresql-database.json')]",
+          "uri": "[concat(variables('deploymentUrlBase'), 'database.json')]",
           "contentVersion": "1.0.0.0"
         },
         "parameters": {
-          "serverName": {
+          "storageAccountName": {
+            "value": "[variables('storageAccountName')]"
+          },
+          "databaseServerName": {
             "value": "[variables('databaseServerName')]"
           },
           "databaseName": {
             "value": "[parameters('databaseName')]"
+          },
+          "databaseUsername": {
+            "value": "[parameters('databaseUsername')]"
+          },
+          "databasePassword": {
+            "value": "[parameters('databasePassword')]"
+          },
+          "alertEmailAddress": {
+            "value": "[parameters('alertEmailAddress')]"
           }
         }
       }
@@ -323,8 +284,7 @@
       "dependsOn": [
         "[resourceId('Microsoft.Resources/deployments', variables('applicationInsightsDeploymentName'))]",
         "[resourceId('Microsoft.Resources/deployments', variables('appServicePlanDeploymentName'))]",
-        "[resourceId('Microsoft.Resources/deployments', variables('databaseDeploymentName'))]",
-        "[resourceId('Microsoft.Resources/deployments', variables('databaseServerDeploymentName'))]"
+        "[resourceId('Microsoft.Resources/deployments', variables('databaseDeploymentName'))]"
       ],
       "properties": {
         "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', variables('appServicePlanName'))]",
@@ -352,7 +312,7 @@
             },
             {
               "name": "DFE_TEACHERS_PAYMENT_SERVICE_DATABASE_HOST",
-              "value": "[reference(resourceId('Microsoft.Resources/deployments', variables('databaseServerDeploymentName'))).outputs.fullyQualifiedDomainName.value]"
+              "value": "[reference(resourceId('Microsoft.Resources/deployments', variables('databaseDeploymentName'))).outputs.databaseServerFullyQualifiedDomainName.value]"
             },
             {
               "name": "DFE_TEACHERS_PAYMENT_SERVICE_DATABASE_NAME",
@@ -450,7 +410,7 @@
       "apiVersion": "2017-05-10",
       "name": "[variables('databaseServerFirewallRulesDeploymentName')]",
       "dependsOn": [
-        "[resourceId('Microsoft.Resources/deployments', variables('databaseServerDeploymentName'))]",
+        "[resourceId('Microsoft.Resources/deployments', variables('databaseDeploymentName'))]",
         "[resourceId('Microsoft.Web/sites', variables('appServiceName'))]"
       ],
       "properties": {
@@ -560,7 +520,7 @@
     },
     "databaseServerId": {
       "type": "string",
-      "value": "[resourceId('Microsoft.DBforPostgreSQL/servers', variables('databaseServerName'))]"
+      "value": "[reference(resourceId('Microsoft.Resources/deployments', variables('databaseDeploymentName'))).outputs.databaseServerId.value]"
     },
     "appServicePlanId": {
       "type": "string",
