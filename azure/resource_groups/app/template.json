@@ -135,6 +135,9 @@
     },
     "VSP.SAML_PRIMARY_ENCRYPTION_KEY": {
       "type": "securestring"
+    },
+    "VSP.EUROPEAN_IDENTITY_ENABLED": {
+      "type": "string"
     }
   },
   "variables": {
