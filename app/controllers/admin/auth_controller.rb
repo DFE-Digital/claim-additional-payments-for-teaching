@@ -26,11 +26,15 @@ module Admin
 
     private
 
-    def authorised?
-      DfeSignIn::UserAccess.new(
+    def role_codes
+      @role_codes ||= DfeSignIn::UserAccess.new(
         user_id: user_id,
         organisation_id: organisation_id
-      ).has_role?(DFE_SIGN_IN_ADMIN_ROLE_CODE)
+      ).role_codes
+    end
+
+    def authorised?
+      ([DFE_SIGN_IN_ADMIN_ROLE_CODE] & role_codes).present?
     end
 
     def auth_hash

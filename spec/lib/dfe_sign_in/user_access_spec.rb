@@ -10,24 +10,14 @@ RSpec.describe DfeSignIn::UserAccess do
       .to_return(body: response.to_json, status: status)
   end
 
-  context "with a valid response" do
-    let(:status) { 200 }
+  describe "role_codes" do
+    let(:role_ids) { subject.role_codes }
     let(:response) do
       {
         "userId" => "999",
         "serviceId" => "123",
         "organisationId" => "456",
-        "roles" => [
-          {
-            "id" => "role-id",
-            "name" => "My role",
-            "code" => "my_role",
-            "numericId" => "9999",
-            "status" => {
-              "id" => 1,
-            },
-          },
-        ],
+        "roles" => roles,
         "identifiers" => [
           {
             "key" => "identifier-key",
@@ -37,28 +27,63 @@ RSpec.describe DfeSignIn::UserAccess do
       }
     end
 
-    describe "has_role?" do
-      let(:has_role?) { subject.has_role?(role) }
-
-      context "when a role exists" do
-        let(:role) { "my_role" }
-        it { expect(has_role?).to eq(true) }
+    context "with a valid response" do
+      let(:status) { 200 }
+      let(:roles) do
+        [
+          {
+            "id" => "role-id",
+            "name" => "My role",
+            "code" => "my_role",
+            "numericId" => "9999",
+            "status" => {
+              "id" => 1,
+            },
+          },
+        ]
       end
 
-      context "when a role does not exist" do
-        let(:role) { "other_role" }
-        it { expect(has_role?).to eq(false) }
+      it "returns the role code" do
+        expect(role_ids).to eq(["my_role"])
       end
     end
-  end
 
-  context "with an invalid response" do
-    let(:status) { 500 }
-    let(:response) { {"error": "An error occurred"} }
+    context "with multiple roles" do
+      let(:status) { 200 }
+      let(:roles) do
+        [
+          {
+            "id" => "role-id",
+            "name" => "My role",
+            "code" => "my_role",
+            "numericId" => "9999",
+            "status" => {
+              "id" => 1,
+            },
+          },
+          {
+            "id" => "another-role",
+            "name" => "Another role",
+            "code" => "another_role",
+            "numericId" => "1234",
+            "status" => {
+              "id" => 5,
+            },
+          },
+        ]
+      end
 
-    describe "has_role?" do
+      it "returns both role codes" do
+        expect(role_ids).to eq(["my_role", "another_role"])
+      end
+    end
+
+    context "with an invalid response" do
+      let(:status) { 500 }
+      let(:response) { {"error": "An error occurred"} }
+
       it "raises an error" do
-        expect { subject.has_role?("my_role") }.to raise_error(
+        expect { role_ids }.to raise_error(
           DfeSignIn::ExternalServerError, "500: {\"error\":\"An error occurred\"}"
         )
       end

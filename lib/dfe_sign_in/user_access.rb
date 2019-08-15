@@ -10,8 +10,8 @@ module DfeSignIn
       self.user_id = user_id
     end
 
-    def has_role?(role_code)
-      role_codes.include?(role_code)
+    def role_codes
+      @role_codes ||= body["roles"].map { |r| r["code"] }
     end
 
     private
@@ -30,10 +30,6 @@ module DfeSignIn
 
         JSON.parse(response.body)
       end
-    end
-
-    def role_codes
-      body["roles"].map { |r| r["code"] }
     end
 
     def uri
