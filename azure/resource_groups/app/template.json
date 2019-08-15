@@ -47,6 +47,10 @@
     "vspAppServiceDockerImage": {
       "type": "string"
     },
+    "vspAppServicePlanInstances": {
+      "type": "int",
+      "defaultValue": 2
+    },
     "vspAppServicePlanTier": {
       "type": "string",
       "defaultValue": "Standard"
@@ -54,10 +58,6 @@
     "vspAppServicePlanSize": {
       "type": "string",
       "defaultValue": "2"
-    },
-    "vspAppServicePlanInstances": {
-      "type": "int",
-      "defaultValue": 2
     },
     "verifyHubPossibleOutboundIpAddresses": {
       "type": "array"
@@ -144,6 +144,7 @@
     "applicationInsightsDeploymentName": "[concat(parameters('resourceNamePrefix'), '-application-insights')]",
     "appServiceCertificateDeploymentName": "[concat(parameters('resourceNamePrefix'), '-app-service-certificate')]",
     "appServicePlanDeploymentName": "[concat(parameters('resourceNamePrefix'), '-app-service-plan')]",
+    "appServiceWebTestDeploymentName": "[concat(parameters('resourceNamePrefix'), '-app-service-web-test')]",
     "databaseServerFirewallRulesDeploymentName": "[concat(parameters('resourceNamePrefix'), '-database-server-firewall-rules')]",
     "databaseServerDeploymentName": "[concat(parameters('resourceNamePrefix'), '-database-server')]",
     "databaseDeploymentName": "[concat(parameters('resourceNamePrefix'), '-database')]",
@@ -160,6 +161,8 @@
 
     "appServiceName": "[concat(parameters('resourceNamePrefix'), '-as')]",
     "appServiceRuntimeStack": "[concat('COMPOSE|', base64(parameters('appServiceDockerCompose')))]",
+
+    "appServiceWebTestName": "[concat(variables('appServiceName'), '-webtest')]",
 
     "vspAppServicePlanName": "[concat(parameters('resourceNamePrefix'), '-vsp-asp')]",
     "vspAppServiceName": "[concat(parameters('resourceNamePrefix'), '-vsp-as')]",
@@ -462,6 +465,32 @@
           },
           "serverName": {
             "value": "[variables('databaseServerName')]"
+          }
+        }
+      }
+    },
+    {
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2017-05-10",
+      "name": "[variables('appServiceWebTestDeploymentName')]",
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[concat(variables('deploymentUrlBase'), 'web_test.json')]",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "webTestName": {
+            "value": "[variables('appServiceWebTestName')]"
+          },
+          "appServiceHealthcheckUrl": {
+            "value": "[concat('https://', if(parameters('useAppServiceHostName'), parameters('appServiceHostName'), reference(resourceId('Microsoft.Web/sites', variables('appServiceName'))).defaultHostName), '/healthcheck')]"
+          },
+          "alertEmailAddress": {
+            "value": "[parameters('alertEmailAddress')]"
+          },
+          "applicationInsightsId": {
+            "value": "[resourceId('Microsoft.Insights/components', variables('applicationInsightsName'))]"
           }
         }
       }
