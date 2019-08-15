@@ -16,7 +16,7 @@ describe ClaimsHelper do
       )
 
       expected_answers = [
-        [I18n.t("student_loans.questions.qts_award_year"), "September 1 2013 - August 31 2014", "qts-year"],
+        [I18n.t("student_loans.questions.qts_award_year"), "1 September 2013 to 31 August 2014", "qts-year"],
         [I18n.t("student_loans.questions.claim_school"), school.name, "claim-school"],
         [I18n.t("questions.current_school"), school.name, "still-teaching"],
         [I18n.t("student_loans.questions.subjects_taught"), "Chemistry and Physics", "subjects-taught"],
@@ -152,7 +152,7 @@ describe ClaimsHelper do
 
   describe "#academic_years" do
     it "returns a string showing the date range for the academic year based on the qts_award_year input" do
-      expect(helper.academic_years("2012_2013")).to eq "September 1 2012 - August 31 2013"
+      expect(helper.academic_years("2012_2013")).to eq "1 September 2012 to 31 August 2013"
     end
 
     it "doesn't fall over if the qts_award_year has not been set yet" do

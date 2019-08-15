@@ -4,7 +4,7 @@ RSpec.feature "Ineligible Teacher Student Loan Repayments claims" do
   scenario "qualified before the first eligible year" do
     claim = start_claim
 
-    choose "Before September 1 2013"
+    choose "Before 1 September 2013"
     click_on "Continue"
 
     expect(claim.eligibility.reload.qts_award_year).to eql("before_2013")
