@@ -30,9 +30,10 @@ RSpec.feature "Teacher verifies identity using GOV.UK Verify" do
 
       @claim.reload
       expect(@claim.full_name).to eql("Isambard Kingdom Brunel")
-      expect(@claim.address_line_1).to eq("Verified Street")
-      expect(@claim.address_line_2).to eq("Verified Town")
-      expect(@claim.address_line_3).to eq("Verified County")
+      expect(@claim.address_line_1).to eq("Verified Building")
+      expect(@claim.address_line_2).to eq("Verified Street")
+      expect(@claim.address_line_3).to eq("Verified Town")
+      expect(@claim.address_line_4).to eq("Verified County")
       expect(@claim.postcode).to eq("M12 345")
       expect(@claim.date_of_birth).to eq(Date.new(1806, 4, 9))
       expect(@claim.payroll_gender).to eq("male")

@@ -68,7 +68,7 @@
     "addresses": [
       {
         "value": {
-          "lines": ["Verified Street", "Verified Town", "Verified County"],
+          "lines": ["Verified Building", "Verified Street", "Verified Town", "Verified County"],
           "postCode": "M12 345"
         },
         "verified": true,

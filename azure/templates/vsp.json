@@ -37,6 +37,9 @@
     },
     "SAML_PRIMARY_ENCRYPTION_KEY": {
       "type": "securestring"
+    },
+    "EUROPEAN_IDENTITY_ENABLED": {
+      "type": "string"
     }
   },
   "variables": {
@@ -101,6 +104,10 @@
             {
               "name": "SAML_PRIMARY_ENCRYPTION_KEY",
               "value": "[parameters('SAML_PRIMARY_ENCRYPTION_KEY')]"
+            },
+            {
+              "name": "EUROPEAN_IDENTITY_ENABLED",
+              "value": "[parameters('EUROPEAN_IDENTITY_ENABLED')]"
             }
           ],
           "copy": [

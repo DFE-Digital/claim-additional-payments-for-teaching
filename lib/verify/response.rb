@@ -39,10 +39,11 @@ module Verify
     def identity_paramteters
       @identity_paramteters ||= {
         full_name: full_name,
-        address_line_1: address_lines[0],
-        address_line_2: address_lines[1],
-        address_line_3: address_lines[2],
-        postcode: address.fetch("postCode"),
+        address_line_1: address_line(1),
+        address_line_2: address_line(2),
+        address_line_3: address_line(3),
+        address_line_4: address_line(4),
+        postcode: postcode,
         date_of_birth: attributes.fetch("datesOfBirth").first.fetch("value"),
         payroll_gender: gender,
       }
@@ -60,6 +61,18 @@ module Verify
       @address_lines ||= address.fetch("lines")
     end
 
+    def address_line(line)
+      address_lines[line - 1] unless address_missing?
+    end
+
+    def postcode
+      address.fetch("postCode") unless address_missing?
+    end
+
+    def address_missing?
+      address.nil?
+    end
+
     def full_name
       first_name = most_recent_verified_value(attributes.fetch("firstNames"))
       middle_name = most_recent_verified_value(attributes.fetch("middleNames"))
@@ -69,7 +82,7 @@ module Verify
     end
 
     def most_recent_verified_value(attributes)
-      return if attributes.empty?
+      return if attributes.blank?
 
       attributes.sort_by { |attribute| attribute["from"].present? ? Date.strptime(attribute["from"], "%Y-%m-%d") : 0 }
         .reverse
