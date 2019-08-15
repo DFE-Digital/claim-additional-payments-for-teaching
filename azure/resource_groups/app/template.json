@@ -145,23 +145,18 @@
     "deploymentUrlBase": "[concat('https://raw.githubusercontent.com/DFE-Digital/dfe-teachers-payment-service/', parameters('gitCommitHash'), '/azure/templates/')]",
 
     "applicationInsightsDeploymentName": "[concat(parameters('resourceNamePrefix'), '-application-insights')]",
-    "appServiceCertificateDeploymentName": "[concat(parameters('resourceNamePrefix'), '-app-service-certificate')]",
-    "appServicePlanDeploymentName": "[concat(parameters('resourceNamePrefix'), '-app-service-plan')]",
+    "appDeploymentName": "[concat(parameters('resourceNamePrefix'), '-app')]",
     "appServiceWebTestDeploymentName": "[concat(parameters('resourceNamePrefix'), '-app-service-web-test')]",
     "databaseServerFirewallRulesDeploymentName": "[concat(parameters('resourceNamePrefix'), '-database-server-firewall-rules')]",
-    "databaseServerDeploymentName": "[concat(parameters('resourceNamePrefix'), '-database-server')]",
     "databaseDeploymentName": "[concat(parameters('resourceNamePrefix'), '-database')]",
-    "storageAccountDeploymentName": "[concat(parameters('resourceNamePrefix'), '-storage-account')]",
     "vspDeploymentName": "[concat(parameters('resourceNamePrefix'), '-vsp')]",
 
     "storageAccountName": "[replace(concat(parameters('resourceNamePrefix'), 'storage'), '-', '')]",
-
     "databaseServerName": "[concat(parameters('resourceNamePrefix'), '-db')]",
 
     "applicationInsightsName": "[concat(parameters('resourceNamePrefix'), '-ai')]",
 
     "appServicePlanName": "[concat(parameters('resourceNamePrefix'), '-asp')]",
-
     "appServiceName": "[concat(parameters('resourceNamePrefix'), '-as')]",
     "appServiceRuntimeStack": "[concat('COMPOSE|', base64(parameters('appServiceDockerCompose')))]",
 
@@ -175,67 +170,31 @@
     {
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2017-05-10",
-      "name": "[variables('storageAccountDeploymentName')]",
-      "properties": {
-        "mode": "Incremental",
-        "templateLink": {
-          "uri": "[concat(variables('platformBuildingBlocksDeploymentUrlBase'), 'storage-account.json')]",
-          "contentVersion": "1.0.0.0"
-        },
-        "parameters": {
-          "storageAccountName": {
-            "value": "[variables('storageAccountName')]"
-          }
-        }
-      }
-    },
-    {
-      "type": "Microsoft.Resources/deployments",
-      "apiVersion": "2017-05-10",
-      "name": "[variables('databaseServerDeploymentName')]",
-      "dependsOn": ["[resourceId('Microsoft.Resources/deployments', variables('storageAccountDeploymentName'))]"],
-      "properties": {
-        "mode": "Incremental",
-        "templateLink": {
-          "uri": "[concat(variables('platformBuildingBlocksDeploymentUrlBase'), 'postgresql-server.json')]",
-          "contentVersion": "1.0.0.0"
-        },
-        "parameters": {
-          "postgresServerName": {
-            "value": "[variables('databaseServerName')]"
-          },
-          "postgresAdminLogin": {
-            "value": "[parameters('databaseUsername')]"
-          },
-          "postgresAdminPassword": {
-            "value": "[parameters('databasePassword')]"
-          },
-          "securityAlertEmailAddress": {
-            "value": "[parameters('alertEmailAddress')]"
-          },
-          "storageAccountName": {
-            "value": "[variables('storageAccountName')]"
-          }
-        }
-      }
-    },
-    {
-      "type": "Microsoft.Resources/deployments",
-      "apiVersion": "2017-05-10",
       "name": "[variables('databaseDeploymentName')]",
-      "dependsOn": ["[resourceId('Microsoft.Resources/deployments', variables('databaseServerDeploymentName'))]"],
       "properties": {
         "mode": "Incremental",
         "templateLink": {
-          "uri": "[concat(variables('platformBuildingBlocksDeploymentUrlBase'), 'postgresql-database.json')]",
+          "uri": "[concat(variables('deploymentUrlBase'), 'database.json')]",
           "contentVersion": "1.0.0.0"
         },
         "parameters": {
-          "serverName": {
+          "storageAccountName": {
+            "value": "[variables('storageAccountName')]"
+          },
+          "databaseServerName": {
             "value": "[variables('databaseServerName')]"
           },
           "databaseName": {
             "value": "[parameters('databaseName')]"
+          },
+          "databaseUsername": {
+            "value": "[parameters('databaseUsername')]"
+          },
+          "databasePassword": {
+            "value": "[parameters('databasePassword')]"
+          },
+          "alertEmailAddress": {
+            "value": "[parameters('alertEmailAddress')]"
           }
         }
       }
@@ -263,16 +222,29 @@
     {
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2017-05-10",
-      "name": "[variables('appServicePlanDeploymentName')]",
+      "name": "[variables('appDeploymentName')]",
+      "dependsOn": [
+        "[resourceId('Microsoft.Resources/deployments', variables('applicationInsightsDeploymentName'))]",
+        "[resourceId('Microsoft.Resources/deployments', variables('databaseDeploymentName'))]"
+      ],
       "properties": {
         "mode": "Incremental",
         "templateLink": {
-          "uri": "[concat(variables('platformBuildingBlocksDeploymentUrlBase'), 'app-service-plan.json')]",
+          "uri": "[concat(variables('deploymentUrlBase'), 'app.json')]",
           "contentVersion": "1.0.0.0"
         },
         "parameters": {
           "appServicePlanName": {
             "value": "[variables('appServicePlanName')]"
+          },
+          "appServiceName": {
+            "value": "[variables('appServiceName')]"
+          },
+          "appServiceRuntimeStack": {
+            "value": "[variables('appServiceRuntimeStack')]"
+          },
+          "appServiceAlwaysOn": {
+            "value": "[parameters('appServiceAlwaysOn')]"
           },
           "appServicePlanInstances": {
             "value": "[parameters('appServicePlanInstances')]"
@@ -282,167 +254,116 @@
           },
           "appServicePlanSize": {
             "value": "[parameters('appServicePlanSize')]"
-          }
-        }
-      }
-    },
-    {
-      "condition": "[parameters('useAppServiceHostName')]",
-      "type": "Microsoft.Resources/deployments",
-      "apiVersion": "2017-05-10",
-      "name": "[variables('appServiceCertificateDeploymentName')]",
-      "dependsOn": ["[resourceId('Microsoft.Resources/deployments', variables('appServicePlanDeploymentName'))]"],
-      "properties": {
-        "mode": "Incremental",
-        "templateLink": {
-          "uri": "[concat(variables('platformBuildingBlocksDeploymentUrlBase'), 'app-service-certificate.json')]",
-          "contentVersion": "1.0.0.0"
-        },
-        "parameters": {
-          "keyVaultCertificateName": {
+          },
+          "appServiceCertificateSecretName": {
             "value": "[parameters('appServiceCertificateSecretName')]"
+          },
+          "appServiceHostName": {
+            "value": "[if(parameters('useAppServiceHostName'), parameters('appServiceHostName'), '')]"
+          },
+          "keyVaultResourceGroupName": {
+            "value": "[parameters('secretsResourceGroupName')]"
           },
           "keyVaultName": {
             "value": "[parameters('keyVaultName')]"
           },
-          "keyVaultResourceGroup": {
-            "value": "[parameters('secretsResourceGroupName')]"
-          },
-          "serverFarmId": {
-            "value": "[resourceId('Microsoft.Web/serverfarms', variables('appServicePlanName'))]"
+          "appServiceEnvironmentVariables": {
+            "value": [
+              {
+                "name": "RAILS_ENV",
+                "value": "[parameters('RAILS_ENV')]"
+              },
+              {
+                "name": "RAILS_SERVE_STATIC_FILES",
+                "value": "[parameters('RAILS_SERVE_STATIC_FILES')]"
+              },
+              {
+                "name": "DFE_TEACHERS_PAYMENT_SERVICE_DATABASE_USERNAME",
+                "value": "[concat(parameters('databaseUsername'), '@', variables('databaseServerName'))]"
+              },
+              {
+                "name": "DFE_TEACHERS_PAYMENT_SERVICE_DATABASE_PASSWORD",
+                "value": "[parameters('databasePassword')]"
+              },
+              {
+                "name": "DFE_TEACHERS_PAYMENT_SERVICE_DATABASE_HOST",
+                "value": "[reference(resourceId('Microsoft.Resources/deployments', variables('databaseDeploymentName'))).outputs.databaseServerFullyQualifiedDomainName.value]"
+              },
+              {
+                "name": "DFE_TEACHERS_PAYMENT_SERVICE_DATABASE_NAME",
+                "value": "[parameters('databaseName')]"
+              },
+              {
+                "name": "APPINSIGHTS_INSTRUMENTATIONKEY",
+                "value": "[reference(resourceId('Microsoft.Resources/deployments', variables('applicationInsightsDeploymentName'))).outputs.instrumentationKey.value]"
+              },
+              {
+                "name": "SECRET_KEY_BASE",
+                "value": "[parameters('SECRET_KEY_BASE')]"
+              },
+              {
+                "name": "BASIC_AUTH_USERNAME",
+                "value": "[parameters('BASIC_AUTH_USERNAME')]"
+              },
+              {
+                "name": "BASIC_AUTH_PASSWORD",
+                "value": "[parameters('BASIC_AUTH_PASSWORD')]"
+              },
+              {
+                "name": "DFE_SIGN_IN_ISSUER",
+                "value": "[parameters('DFE_SIGN_IN_ISSUER')]"
+              },
+              {
+                "name": "DFE_SIGN_IN_REDIRECT_BASE_URL",
+                "value": "[parameters('DFE_SIGN_IN_REDIRECT_BASE_URL')]"
+              },
+              {
+                "name": "DFE_SIGN_IN_IDENTIFIER",
+                "value": "[parameters('DFE_SIGN_IN_IDENTIFIER')]"
+              },
+              {
+                "name": "DFE_SIGN_IN_SECRET",
+                "value": "[parameters('DFE_SIGN_IN_SECRET')]"
+              },
+              {
+                "name": "DFE_SIGN_IN_API_CLIENT_ID",
+                "value": "[parameters('DFE_SIGN_IN_API_CLIENT_ID')]"
+              },
+              {
+                "name": "DFE_SIGN_IN_API_SECRET",
+                "value": "[parameters('DFE_SIGN_IN_API_SECRET')]"
+              },
+              {
+                "name": "DFE_SIGN_IN_API_ENDPOINT",
+                "value": "[parameters('DFE_SIGN_IN_API_ENDPOINT')]"
+              },
+              {
+                "name": "GOOGLE_ANALYTICS_ID",
+                "value": "[parameters('GOOGLE_ANALYTICS_ID')]"
+              },
+              {
+                "name": "NOTIFY_API_KEY",
+                "value": "[parameters('NOTIFY_API_KEY')]"
+              },
+              {
+                "name": "NOTIFY_TEMPLATE_ID",
+                "value": "[parameters('NOTIFY_TEMPLATE_ID')]"
+              },
+              {
+                "name": "ROLLBAR_ACCESS_TOKEN",
+                "value": "[parameters('ROLLBAR_ACCESS_TOKEN')]"
+              },
+              {
+                "name": "ROLLBAR_ENV",
+                "value": "[parameters('ROLLBAR_ENV')]"
+              },
+              {
+                "name": "GOVUK_VERIFY_VSP_HOST",
+                "value": "[concat('https://', variables('vspAppServiceName'), '.azurewebsites.net')]"
+              }
+            ]
           }
         }
-      }
-    },
-    {
-      "type": "Microsoft.Web/sites",
-      "apiVersion": "2018-11-01",
-      "name": "[variables('appServiceName')]",
-      "kind": "app,linux,container",
-      "location": "[resourceGroup().location]",
-      "dependsOn": [
-        "[resourceId('Microsoft.Resources/deployments', variables('applicationInsightsDeploymentName'))]",
-        "[resourceId('Microsoft.Resources/deployments', variables('appServicePlanDeploymentName'))]",
-        "[resourceId('Microsoft.Resources/deployments', variables('databaseDeploymentName'))]",
-        "[resourceId('Microsoft.Resources/deployments', variables('databaseServerDeploymentName'))]"
-      ],
-      "properties": {
-        "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', variables('appServicePlanName'))]",
-        "httpsOnly": true,
-        "siteConfig": {
-          "alwaysOn": "[parameters('appServiceAlwaysOn')]",
-          "httpLoggingEnabled": true,
-          "linuxFxVersion": "[variables('appServiceRuntimeStack')]",
-          "appSettings": [
-            {
-              "name": "RAILS_ENV",
-              "value": "[parameters('RAILS_ENV')]"
-            },
-            {
-              "name": "RAILS_SERVE_STATIC_FILES",
-              "value": "[parameters('RAILS_SERVE_STATIC_FILES')]"
-            },
-            {
-              "name": "DFE_TEACHERS_PAYMENT_SERVICE_DATABASE_USERNAME",
-              "value": "[concat(parameters('databaseUsername'), '@', variables('databaseServerName'))]"
-            },
-            {
-              "name": "DFE_TEACHERS_PAYMENT_SERVICE_DATABASE_PASSWORD",
-              "value": "[parameters('databasePassword')]"
-            },
-            {
-              "name": "DFE_TEACHERS_PAYMENT_SERVICE_DATABASE_HOST",
-              "value": "[reference(resourceId('Microsoft.Resources/deployments', variables('databaseServerDeploymentName'))).outputs.fullyQualifiedDomainName.value]"
-            },
-            {
-              "name": "DFE_TEACHERS_PAYMENT_SERVICE_DATABASE_NAME",
-              "value": "[parameters('databaseName')]"
-            },
-            {
-              "name": "APPINSIGHTS_INSTRUMENTATIONKEY",
-              "value": "[reference(resourceId('Microsoft.Resources/deployments', variables('applicationInsightsDeploymentName'))).outputs.instrumentationKey.value]"
-            },
-            {
-              "name": "SECRET_KEY_BASE",
-              "value": "[parameters('SECRET_KEY_BASE')]"
-            },
-            {
-              "name": "BASIC_AUTH_USERNAME",
-              "value": "[parameters('BASIC_AUTH_USERNAME')]"
-            },
-            {
-              "name": "BASIC_AUTH_PASSWORD",
-              "value": "[parameters('BASIC_AUTH_PASSWORD')]"
-            },
-            {
-              "name": "DFE_SIGN_IN_ISSUER",
-              "value": "[parameters('DFE_SIGN_IN_ISSUER')]"
-            },
-            {
-              "name": "DFE_SIGN_IN_REDIRECT_BASE_URL",
-              "value": "[parameters('DFE_SIGN_IN_REDIRECT_BASE_URL')]"
-            },
-            {
-              "name": "DFE_SIGN_IN_IDENTIFIER",
-              "value": "[parameters('DFE_SIGN_IN_IDENTIFIER')]"
-            },
-            {
-              "name": "DFE_SIGN_IN_SECRET",
-              "value": "[parameters('DFE_SIGN_IN_SECRET')]"
-            },
-            {
-              "name": "DFE_SIGN_IN_API_CLIENT_ID",
-              "value": "[parameters('DFE_SIGN_IN_API_CLIENT_ID')]"
-            },
-            {
-              "name": "DFE_SIGN_IN_API_SECRET",
-              "value": "[parameters('DFE_SIGN_IN_API_SECRET')]"
-            },
-            {
-              "name": "DFE_SIGN_IN_API_ENDPOINT",
-              "value": "[parameters('DFE_SIGN_IN_API_ENDPOINT')]"
-            },
-            {
-              "name": "GOOGLE_ANALYTICS_ID",
-              "value": "[parameters('GOOGLE_ANALYTICS_ID')]"
-            },
-            {
-              "name": "NOTIFY_API_KEY",
-              "value": "[parameters('NOTIFY_API_KEY')]"
-            },
-            {
-              "name": "NOTIFY_TEMPLATE_ID",
-              "value": "[parameters('NOTIFY_TEMPLATE_ID')]"
-            },
-            {
-              "name": "ROLLBAR_ACCESS_TOKEN",
-              "value": "[parameters('ROLLBAR_ACCESS_TOKEN')]"
-            },
-            {
-              "name": "ROLLBAR_ENV",
-              "value": "[parameters('ROLLBAR_ENV')]"
-            },
-            {
-              "name": "GOVUK_VERIFY_VSP_HOST",
-              "value": "[concat('https://', variables('vspAppServiceName'), '.azurewebsites.net')]"
-            }
-          ]
-        }
-      }
-    },
-    {
-      "condition": "[parameters('useAppServiceHostName')]",
-      "type": "Microsoft.Web/sites/hostNameBindings",
-      "apiVersion": "2018-11-01",
-      "name": "[concat(variables('appServiceName'), '/', parameters('appServiceHostName'))]",
-      "location": "[resourceGroup().location]",
-      "dependsOn": [
-        "[resourceId('Microsoft.Resources/deployments', variables('appServiceCertificateDeploymentName'))]",
-        "[resourceId('Microsoft.Web/sites', variables('appServiceName'))]"
-      ],
-      "properties": {
-        "sslState": "SniEnabled",
-        "thumbprint": "[if(parameters('useAppServiceHostName'), reference(variables('appServiceCertificateDeploymentName'), '2018-11-01').outputs.certificateThumbprint.value, 'PLACEHOLDER')]"
       }
     },
     {
@@ -450,8 +371,8 @@
       "apiVersion": "2017-05-10",
       "name": "[variables('databaseServerFirewallRulesDeploymentName')]",
       "dependsOn": [
-        "[resourceId('Microsoft.Resources/deployments', variables('databaseServerDeploymentName'))]",
-        "[resourceId('Microsoft.Web/sites', variables('appServiceName'))]"
+        "[resourceId('Microsoft.Resources/deployments', variables('appDeploymentName'))]",
+        "[resourceId('Microsoft.Resources/deployments', variables('databaseDeploymentName'))]"
       ],
       "properties": {
         "mode": "Incremental",
@@ -464,7 +385,7 @@
             "value": "[concat(parameters('resourceNamePrefix'), '-')]"
           },
           "ipAddresses": {
-            "value": "[split(reference(resourceId('Microsoft.Web/sites', variables('appServiceName'))).possibleOutboundIpAddresses, ',')]"
+            "value": "[reference(resourceId('Microsoft.Resources/deployments', variables('appDeploymentName'))).outputs.appServicePossibleOutboundIpAddresses.value]"
           },
           "serverName": {
             "value": "[variables('databaseServerName')]"
@@ -476,6 +397,7 @@
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2017-05-10",
       "name": "[variables('appServiceWebTestDeploymentName')]",
+      "dependsOn": ["[resourceId('Microsoft.Resources/deployments', variables('appDeploymentName'))]"],
       "properties": {
         "mode": "Incremental",
         "templateLink": {
@@ -487,7 +409,7 @@
             "value": "[variables('appServiceWebTestName')]"
           },
           "appServiceHealthcheckUrl": {
-            "value": "[concat('https://', if(parameters('useAppServiceHostName'), parameters('appServiceHostName'), reference(resourceId('Microsoft.Web/sites', variables('appServiceName'))).defaultHostName), '/healthcheck')]"
+            "value": "[concat('https://', reference(resourceId('Microsoft.Resources/deployments', variables('appDeploymentName'))).outputs.appServiceHostName.value, '/healthcheck')]"
           },
           "alertEmailAddress": {
             "value": "[parameters('alertEmailAddress')]"
@@ -502,7 +424,7 @@
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2017-05-10",
       "name": "[variables('vspDeploymentName')]",
-      "dependsOn": ["[resourceId('Microsoft.Web/sites', variables('appServiceName'))]"],
+      "dependsOn": ["[resourceId('Microsoft.Resources/deployments', variables('appDeploymentName'))]"],
       "properties": {
         "mode": "Incremental",
         "templateLink": {
@@ -532,22 +454,31 @@
             "value": "[parameters('vspAppServicePlanSize')]"
           },
           "appServiceAllowedIpAddresses": {
-            "value": "[union(split(reference(resourceId('Microsoft.Web/sites', variables('appServiceName'))).possibleOutboundIpAddresses, ','), parameters('verifyHubPossibleOutboundIpAddresses'))]"
+            "value": "[union(reference(resourceId('Microsoft.Resources/deployments', variables('appDeploymentName'))).outputs.appServicePossibleOutboundIpAddresses.value, parameters('verifyHubPossibleOutboundIpAddresses'))]"
           },
-          "VERIFY_ENVIRONMENT": {
-            "value": "[parameters('VSP.VERIFY_ENVIRONMENT')]"
-          },
-          "SERVICE_ENTITY_IDS": {
-            "value": "[string(createArray(concat('https://', if(parameters('useAppServiceHostName'), parameters('appServiceHostName'), reference(resourceId('Microsoft.Web/sites', variables('appServiceName'))).defaultHostName))))]"
-          },
-          "SAML_SIGNING_KEY": {
-            "value": "[parameters('VSP.SAML_SIGNING_KEY')]"
-          },
-          "SAML_PRIMARY_ENCRYPTION_KEY": {
-            "value": "[parameters('VSP.SAML_PRIMARY_ENCRYPTION_KEY')]"
-          },
-          "EUROPEAN_IDENTITY_ENABLED": {
-            "value": "[parameters('VSP.EUROPEAN_IDENTITY_ENABLED')]"
+          "appServiceEnvironmentVariables": {
+            "value": [
+              {
+                "name": "VERIFY_ENVIRONMENT",
+                "value": "[parameters('VSP.VERIFY_ENVIRONMENT')]"
+              },
+              {
+                "name": "SERVICE_ENTITY_IDS",
+                "value": "[string(createArray(concat('https://', reference(resourceId('Microsoft.Resources/deployments', variables('appDeploymentName'))).outputs.appServiceHostName.value)))]"
+              },
+              {
+                "name": "SAML_SIGNING_KEY",
+                "value": "[parameters('VSP.SAML_SIGNING_KEY')]"
+              },
+              {
+                "name": "SAML_PRIMARY_ENCRYPTION_KEY",
+                "value": "[parameters('VSP.SAML_PRIMARY_ENCRYPTION_KEY')]"
+              },
+              {
+                "name": "EUROPEAN_IDENTITY_ENABLED",
+                "value": "[parameters('VSP.EUROPEAN_IDENTITY_ENABLED')]"
+              }
+            ]
           }
         }
       }
@@ -560,15 +491,15 @@
     },
     "databaseServerId": {
       "type": "string",
-      "value": "[resourceId('Microsoft.DBforPostgreSQL/servers', variables('databaseServerName'))]"
+      "value": "[reference(resourceId('Microsoft.Resources/deployments', variables('databaseDeploymentName'))).outputs.databaseServerId.value]"
     },
     "appServicePlanId": {
       "type": "string",
-      "value": "[resourceId('Microsoft.Web/serverfarms', variables('appServicePlanName'))]"
+      "value": "[reference(resourceId('Microsoft.Resources/deployments', variables('appDeploymentName'))).outputs.appServicePlanId.value]"
     },
     "appServiceId": {
       "type": "string",
-      "value": "[resourceId('Microsoft.Web/sites', variables('appServiceName'))]"
+      "value": "[reference(resourceId('Microsoft.Resources/deployments', variables('appDeploymentName'))).outputs.appServiceId.value]"
     },
     "vspAppServicePlanId": {
       "type": "string",

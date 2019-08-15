@@ -1,0 +1,111 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "storageAccountName": {
+      "type": "string"
+    },
+    "databaseServerName": {
+      "type": "string"
+    },
+    "databaseName": {
+      "type": "string"
+    },
+    "databaseUsername": {
+      "type": "string"
+    },
+    "databasePassword": {
+      "type": "securestring"
+    },
+    "alertEmailAddress": {
+      "type": "string"
+    }
+  },
+  "variables": {
+    "batPlatformDeploymentUrlBase": "https://raw.githubusercontent.com/DFE-Digital/bat-platform-building-blocks/master/templates/",
+
+    "databaseServerDeploymentName": "[concat(deployment().name, '-database-server')]",
+    "databaseDeploymentName": "[concat(deployment().name, '-database')]",
+    "storageAccountDeploymentName": "[concat(deployment().name, '-storage-account')]"
+  },
+  "resources": [
+    {
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2017-05-10",
+      "name": "[variables('storageAccountDeploymentName')]",
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[concat(variables('batPlatformDeploymentUrlBase'), 'storage-account.json')]",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "storageAccountName": {
+            "value": "[parameters('storageAccountName')]"
+          }
+        }
+      }
+    },
+    {
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2017-05-10",
+      "name": "[variables('databaseServerDeploymentName')]",
+      "dependsOn": ["[resourceId('Microsoft.Resources/deployments', variables('storageAccountDeploymentName'))]"],
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[concat(variables('batPlatformDeploymentUrlBase'), 'postgresql-server.json')]",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "postgresServerName": {
+            "value": "[parameters('databaseServerName')]"
+          },
+          "postgresAdminLogin": {
+            "value": "[parameters('databaseUsername')]"
+          },
+          "postgresAdminPassword": {
+            "value": "[parameters('databasePassword')]"
+          },
+          "securityAlertEmailAddress": {
+            "value": "[parameters('alertEmailAddress')]"
+          },
+          "storageAccountName": {
+            "value": "[parameters('storageAccountName')]"
+          }
+        }
+      }
+    },
+    {
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2017-05-10",
+      "name": "[variables('databaseDeploymentName')]",
+      "dependsOn": ["[resourceId('Microsoft.Resources/deployments', variables('databaseServerDeploymentName'))]"],
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[concat(variables('batPlatformDeploymentUrlBase'), 'postgresql-database.json')]",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "serverName": {
+            "value": "[parameters('databaseServerName')]"
+          },
+          "databaseName": {
+            "value": "[parameters('databaseName')]"
+          }
+        }
+      }
+    }
+  ],
+  "outputs": {
+    "databaseServerId": {
+      "type": "string",
+      "value": "[resourceId('Microsoft.DBforPostgreSQL/servers', parameters('databaseServerName'))]"
+    },
+    "databaseServerFullyQualifiedDomainName": {
+      "type": "string",
+      "value": "[reference(resourceId('Microsoft.Resources/deployments', variables('databaseServerDeploymentName'))).outputs.fullyQualifiedDomainName.value]"
+    }
+  }
+}
