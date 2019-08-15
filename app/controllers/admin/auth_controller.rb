@@ -1,6 +1,7 @@
 module Admin
   class AuthController < BaseAdminController
     DFE_SIGN_IN_ADMIN_ROLE_CODE = "teacher_payments_access"
+    DFE_SIGN_IN_SUPPORT_ROLE_CODE = "teacher_payments_support"
 
     skip_before_action :ensure_authenticated_user
 
@@ -14,6 +15,7 @@ module Admin
 
     def callback
       if authorised?
+        session[:role_codes] = role_codes
         session[:admin_auth] = auth_hash.fetch("info").to_h
         redirect_to admin_path
       else
@@ -34,7 +36,11 @@ module Admin
     end
 
     def authorised?
-      ([DFE_SIGN_IN_ADMIN_ROLE_CODE] & role_codes).present?
+      (valid_roles & role_codes).present?
+    end
+
+    def valid_roles
+      [DFE_SIGN_IN_ADMIN_ROLE_CODE, DFE_SIGN_IN_SUPPORT_ROLE_CODE]
     end
 
     def auth_hash
