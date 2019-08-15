@@ -138,7 +138,7 @@
     }
   },
   "variables": {
-    "batPlatformDeploymentUrlBase": "https://raw.githubusercontent.com/DFE-Digital/bat-platform-building-blocks/master/templates/",
+    "platformBuildingBlocksDeploymentUrlBase": "https://raw.githubusercontent.com/DFE-Digital/bat-platform-building-blocks/7a4748a0cf366193d31434bd7796d483bd281385/templates/",
     "deploymentUrlBase": "[concat('https://raw.githubusercontent.com/DFE-Digital/dfe-teachers-payment-service/', parameters('gitCommitHash'), '/azure/templates/')]",
 
     "applicationInsightsDeploymentName": "[concat(parameters('resourceNamePrefix'), '-application-insights')]",
@@ -173,7 +173,7 @@
       "properties": {
         "mode": "Incremental",
         "templateLink": {
-          "uri": "[concat(variables('batPlatformDeploymentUrlBase'), 'storage-account.json')]",
+          "uri": "[concat(variables('platformBuildingBlocksDeploymentUrlBase'), 'storage-account.json')]",
           "contentVersion": "1.0.0.0"
         },
         "parameters": {
@@ -191,7 +191,7 @@
       "properties": {
         "mode": "Incremental",
         "templateLink": {
-          "uri": "[concat(variables('batPlatformDeploymentUrlBase'), 'postgresql-server.json')]",
+          "uri": "[concat(variables('platformBuildingBlocksDeploymentUrlBase'), 'postgresql-server.json')]",
           "contentVersion": "1.0.0.0"
         },
         "parameters": {
@@ -221,7 +221,7 @@
       "properties": {
         "mode": "Incremental",
         "templateLink": {
-          "uri": "[concat(variables('batPlatformDeploymentUrlBase'), 'postgresql-database.json')]",
+          "uri": "[concat(variables('platformBuildingBlocksDeploymentUrlBase'), 'postgresql-database.json')]",
           "contentVersion": "1.0.0.0"
         },
         "parameters": {
@@ -241,7 +241,7 @@
       "properties": {
         "mode": "Incremental",
         "templateLink": {
-          "uri": "[concat(variables('batPlatformDeploymentUrlBase'), 'application-insights.json')]",
+          "uri": "[concat(variables('platformBuildingBlocksDeploymentUrlBase'), 'application-insights.json')]",
           "contentVersion": "1.0.0.0"
         },
         "parameters": {
@@ -261,7 +261,7 @@
       "properties": {
         "mode": "Incremental",
         "templateLink": {
-          "uri": "[concat(variables('batPlatformDeploymentUrlBase'), 'app-service-plan.json')]",
+          "uri": "[concat(variables('platformBuildingBlocksDeploymentUrlBase'), 'app-service-plan.json')]",
           "contentVersion": "1.0.0.0"
         },
         "parameters": {
@@ -289,7 +289,7 @@
       "properties": {
         "mode": "Incremental",
         "templateLink": {
-          "uri": "[concat(variables('batPlatformDeploymentUrlBase'), 'app-service-certificate.json')]",
+          "uri": "[concat(variables('platformBuildingBlocksDeploymentUrlBase'), 'app-service-certificate.json')]",
           "contentVersion": "1.0.0.0"
         },
         "parameters": {
@@ -450,7 +450,7 @@
       "properties": {
         "mode": "Incremental",
         "templateLink": {
-          "uri": "[concat(variables('batPlatformDeploymentUrlBase'),'postgresql-server-firewall-rules.json')]",
+          "uri": "[concat(variables('platformBuildingBlocksDeploymentUrlBase'),'postgresql-server-firewall-rules.json')]",
           "contentVersion": "1.0.0.0"
         },
         "parameters": {
