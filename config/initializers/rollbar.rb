@@ -7,6 +7,9 @@ Rollbar.configure do |config|
   # Disable Rollbar in "test" and "development" environments
   config.enabled = false if Rails.env.test? || Rails.env.development?
 
+  config.anonymize_user_ip = true
+  config.scrub_fields |= Rails.application.config.filter_parameters
+
   # By default, Rollbar will try to call the `current_user` controller method
   # to fetch the logged-in user object, and then call that object"s `id`
   # method to fetch this property. To customize:

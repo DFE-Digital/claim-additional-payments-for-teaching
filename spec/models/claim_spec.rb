@@ -381,4 +381,30 @@ RSpec.describe Claim, type: :model do
       expect(Claim.new(verified_fields: ["address_line_1"]).payroll_gender_verified?).to eq false
     end
   end
+
+  describe ".filtered_params" do
+    it "returns a list of sensitive params to be filtered" do
+      expect(Claim.filtered_params).to match_array([
+        :address_line_1,
+        :address_line_2,
+        :address_line_3,
+        :address_line_4,
+        :postcode,
+        :payroll_gender,
+        :teacher_reference_number,
+        :national_insurance_number,
+        :email_address,
+        :bank_sort_code,
+        :bank_account_number,
+        :date_of_birth,
+        :full_name,
+      ])
+    end
+  end
+
+  describe "::FILTER_PARAMS" do
+    it "has a value for every claim attribute" do
+      expect(Claim::FILTER_PARAMS.keys).to match_array(Claim.new.attribute_names.map(&:to_sym))
+    end
+  end
 end
