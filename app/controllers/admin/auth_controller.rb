@@ -1,8 +1,5 @@
 module Admin
   class AuthController < BaseAdminController
-    DFE_SIGN_IN_ADMIN_ROLE_CODE = "teacher_payments_access"
-    DFE_SIGN_IN_SUPPORT_ROLE_CODE = "teacher_payments_support"
-
     skip_before_action :ensure_authenticated_user
 
     def sign_in

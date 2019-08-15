@@ -4,6 +4,6 @@
       Admin
     </h1>
 
-    <%= link_to 'Download claims', admin_claims_path(format: :csv), class: "govuk-button" %>
+    <%= link_to 'Download claims', admin_claims_path(format: :csv), class: "govuk-button" if is_admin_user? %>
   </div>
 </div>
