@@ -39,12 +39,17 @@
     },
     "keyVaultName": {
       "type": "string"
+    },
+    "enableLogs": {
+      "type": "bool",
+      "defaultValue": true
     }
   },
   "variables": {
     "platformBuildingBlocksDeploymentUrlBase": "https://raw.githubusercontent.com/DFE-Digital/bat-platform-building-blocks/7a4748a0cf366193d31434bd7796d483bd281385/templates/",
 
     "appServiceCertificateDeploymentName": "[concat(deployment().name, '-app-service-certificate')]",
+    "appServiceLogsDeploymentName": "[concat(deployment().name, '-app-service-logs')]",
     "appServicePlanDeploymentName": "[concat(deployment().name, '-app-service-plan')]",
 
     "hasCustomHostName": "[greater(length(parameters('appServiceHostName')), 0)]"
@@ -116,7 +121,6 @@
         "httpsOnly": true,
         "siteConfig": {
           "alwaysOn": "[parameters('appServiceAlwaysOn')]",
-          "httpLoggingEnabled": true,
           "linuxFxVersion": "[parameters('appServiceRuntimeStack')]",
           "appSettings": "[parameters('appServiceEnvironmentVariables')]"
         }
@@ -135,6 +139,34 @@
       "properties": {
         "sslState": "SniEnabled",
         "thumbprint": "[if(variables('hasCustomHostName'), reference(variables('appServiceCertificateDeploymentName'), '2018-11-01').outputs.certificateThumbprint.value, 'PLACEHOLDER')]"
+      }
+    },
+    {
+      "condition": "[parameters('enableLogs')]",
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2017-05-10",
+      "name": "[variables('appServiceLogsDeploymentName')]",
+      "dependsOn": ["[resourceId('Microsoft.Web/sites', parameters('appServiceName'))]"],
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[concat(variables('platformBuildingBlocksDeploymentUrlBase'), 'app-service-logs.json')]",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "appServiceName": {
+            "value": "[parameters('appServiceName')]"
+          },
+          "httpLoggingEnabled": {
+            "value": true
+          },
+          "requestTracingEnabled": {
+            "value": true
+          },
+          "detailedErrorLoggingEnabled": {
+            "value": true
+          }
+        }
       }
     }
   ],
