@@ -68,6 +68,9 @@ RSpec.feature "Teacher verifies identity using GOV.UK Verify" do
       click_on "Perform identity check"
 
       expect(page).to have_text("you did not complete the process")
+
+      @claim.reload
+      expect(@claim.verify_response).to eq(parsed_vsp_translated_response("no-authentication"))
     end
   end
 
@@ -82,6 +85,9 @@ RSpec.feature "Teacher verifies identity using GOV.UK Verify" do
       click_on "Perform identity check"
 
       expect(page).to have_text("the company you chose does not have enough information about you")
+
+      @claim.reload
+      expect(@claim.verify_response).to eq(parsed_vsp_translated_response("authentication-failed"))
     end
   end
 end
