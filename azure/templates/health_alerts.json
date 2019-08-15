@@ -1,0 +1,46 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "alertNamePrefix": {
+      "type": "string"
+    },
+    "actionGroupId": {
+      "type": "string"
+    },
+    "resourceGroupIds": {
+      "type": "array"
+    }
+  },
+  "variables": {
+    "serviceHealthAlertName": "[concat(parameters('alertNamePrefix'), '-service-health')]"
+  },
+  "resources": [
+    {
+      "type": "Microsoft.Insights/activityLogAlerts",
+      "apiVersion": "2017-04-01",
+      "name": "[variables('serviceHealthAlertName')]",
+      "location": "global",
+      "properties": {
+        "scopes": "[parameters('resourceGroupIds')]",
+        "enabled": true,
+        "condition": {
+          "allOf": [
+            {
+              "field": "category",
+              "equals": "ServiceHealth"
+            }
+          ]
+        },
+        "actions": {
+          "actionGroups": [
+            {
+              "actionGroupId": "[parameters('actionGroupId')]"
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "outputs": {}
+}

@@ -42,19 +42,13 @@
     "deploymentUrlBase": "[concat('https://raw.githubusercontent.com/DFE-Digital/dfe-teachers-payment-service/', parameters('gitCommitHash'), '/azure/templates/')]",
 
     "appAlertsDeploymentName": "[concat(parameters('resourceNamePrefix'), '-app')]",
+    "healthAlertsDeploymentName": "[concat(parameters('resourceNamePrefix'), '-health')]",
+    "databaseAlertsDeploymentName": "[concat(parameters('resourceNamePrefix'), '-database')]",
     "vspAlertsDeploymentName": "[concat(parameters('resourceNamePrefix'), '-vsp')]",
 
     "alertActionGroupName": "[concat(parameters('resourceNamePrefix'), '-ag')]",
 
-    "alertNamePrefix": "[parameters('resourceNamePrefix')]",
-
-    "serviceHealthAlertName": "[concat(variables('alertNamePrefix'), '-service-health')]",
-
-    "databaseServerName": "[last(split(parameters('databaseServerId'), '/'))]",
-    "databaseServerAlertPrefix": "[concat(variables('alertNamePrefix'), '-', variables('databaseServerName'))]",
-    "databaseServerHighCpuAlertName": "[concat(variables('databaseServerAlertPrefix'), '-high-cpu')]",
-    "databaseServerHighMemoryAlertName": "[concat(variables('databaseServerAlertPrefix'), '-high-memory')]",
-    "databaseServerHighStorageAlertName": "[concat(variables('databaseServerAlertPrefix'), '-high-storage')]"
+    "alertNamePrefix": "[parameters('resourceNamePrefix')]"
   },
   "resources": [
     {
@@ -75,32 +69,30 @@
       }
     },
     {
-      "type": "Microsoft.Insights/activityLogAlerts",
-      "apiVersion": "2017-04-01",
-      "name": "[variables('serviceHealthAlertName')]",
-      "location": "global",
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2017-05-10",
+      "name": "[variables('healthAlertsDeploymentName')]",
       "dependsOn": ["[resourceId('Microsoft.Insights/actionGroups', variables('alertActionGroupName'))]"],
       "properties": {
-        "scopes": [
-          "[resourceGroup().id]",
-          "[parameters('appResourceGroupId')]",
-          "[parameters('secretsResourceGroupId')]"
-        ],
-        "enabled": true,
-        "condition": {
-          "allOf": [
-            {
-              "field": "category",
-              "equals": "ServiceHealth"
-            }
-          ]
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[concat(variables('deploymentUrlBase'), 'health_alerts.json')]",
+          "contentVersion": "1.0.0.0"
         },
-        "actions": {
-          "actionGroups": [
-            {
-              "actionGroupId": "[resourceId('Microsoft.Insights/actionGroups', variables('alertActionGroupName'))]"
-            }
-          ]
+        "parameters": {
+          "alertNamePrefix": {
+            "value": "[variables('alertNamePrefix')]"
+          },
+          "actionGroupId": {
+            "value": "[resourceId('Microsoft.Insights/actionGroups', variables('alertActionGroupName'))]"
+          },
+          "resourceGroupIds": {
+            "value": [
+              "[resourceGroup().id]",
+              "[parameters('appResourceGroupId')]",
+              "[parameters('secretsResourceGroupId')]"
+            ]
+          }
         }
       }
     },
@@ -132,111 +124,27 @@
       }
     },
     {
-      "type": "Microsoft.Insights/metricAlerts",
-      "apiVersion": "2018-03-01",
-      "name": "[variables('databaseServerHighCpuAlertName')]",
-      "location": "global",
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2017-05-10",
+      "name": "[variables('databaseAlertsDeploymentName')]",
       "dependsOn": ["[resourceId('Microsoft.Insights/actionGroups', variables('alertActionGroupName'))]"],
       "properties": {
-        "scopes": ["[parameters('databaseServerId')]"],
-        "enabled": true,
-        "description": "[concat('Alert when average CPU utilization for ', variables('databaseServerName'), ' is greater than 80%.')]",
-        "severity": 0,
-        "evaluationFrequency": "PT1M",
-        "windowSize": "PT5M",
-        "targetResourceType": "Microsoft.DBforPostgreSQL/servers",
-        "targetResourceRegion": "[resourceGroup().location]",
-        "criteria": {
-          "odata.type": "Microsoft.Azure.Monitor.SingleResourceMultipleMetricCriteria",
-          "allOf": [
-            {
-              "criterionType": "StaticThresholdCriterion",
-              "name": "high-cpu",
-              "metricNamespace": "Microsoft.DBforPostgreSQL/servers",
-              "metricName": "cpu_percent",
-              "operator": "GreaterThan",
-              "threshold": 80,
-              "timeAggregation": "Average"
-            }
-          ]
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[concat(variables('deploymentUrlBase'), 'database_alerts.json')]",
+          "contentVersion": "1.0.0.0"
         },
-        "actions": [
-          {
-            "actionGroupId": "[resourceId('Microsoft.Insights/actionGroups', variables('alertActionGroupName'))]"
+        "parameters": {
+          "alertNamePrefix": {
+            "value": "[variables('alertNamePrefix')]"
+          },
+          "actionGroupId": {
+            "value": "[resourceId('Microsoft.Insights/actionGroups', variables('alertActionGroupName'))]"
+          },
+          "databaseServerId": {
+            "value": "[parameters('databaseServerId')]"
           }
-        ]
-      }
-    },
-    {
-      "type": "Microsoft.Insights/metricAlerts",
-      "apiVersion": "2018-03-01",
-      "name": "[variables('databaseServerHighMemoryAlertName')]",
-      "location": "global",
-      "dependsOn": ["[resourceId('Microsoft.Insights/actionGroups', variables('alertActionGroupName'))]"],
-      "properties": {
-        "scopes": ["[parameters('databaseServerId')]"],
-        "enabled": true,
-        "description": "[concat('Alert when average memory utilization for ', variables('databaseServerName'), ' is greater than 80%.')]",
-        "severity": 0,
-        "evaluationFrequency": "PT1M",
-        "windowSize": "PT5M",
-        "targetResourceType": "Microsoft.DBforPostgreSQL/servers",
-        "targetResourceRegion": "[resourceGroup().location]",
-        "criteria": {
-          "odata.type": "Microsoft.Azure.Monitor.SingleResourceMultipleMetricCriteria",
-          "allOf": [
-            {
-              "criterionType": "StaticThresholdCriterion",
-              "name": "high-memory",
-              "metricNamespace": "Microsoft.DBforPostgreSQL/servers",
-              "metricName": "memory_percent",
-              "operator": "GreaterThan",
-              "threshold": 80,
-              "timeAggregation": "Average"
-            }
-          ]
-        },
-        "actions": [
-          {
-            "actionGroupId": "[resourceId('Microsoft.Insights/actionGroups', variables('alertActionGroupName'))]"
-          }
-        ]
-      }
-    },
-    {
-      "type": "Microsoft.Insights/metricAlerts",
-      "apiVersion": "2018-03-01",
-      "name": "[variables('databaseServerHighStorageAlertName')]",
-      "location": "global",
-      "dependsOn": ["[resourceId('Microsoft.Insights/actionGroups', variables('alertActionGroupName'))]"],
-      "properties": {
-        "scopes": ["[parameters('databaseServerId')]"],
-        "enabled": true,
-        "description": "[concat('Alert when average storage utilization for ', variables('databaseServerName'), ' is greater than 80%.')]",
-        "severity": 0,
-        "evaluationFrequency": "PT1M",
-        "windowSize": "PT5M",
-        "targetResourceType": "Microsoft.DBforPostgreSQL/servers",
-        "targetResourceRegion": "[resourceGroup().location]",
-        "criteria": {
-          "odata.type": "Microsoft.Azure.Monitor.SingleResourceMultipleMetricCriteria",
-          "allOf": [
-            {
-              "criterionType": "StaticThresholdCriterion",
-              "name": "high-storage",
-              "metricNamespace": "Microsoft.DBforPostgreSQL/servers",
-              "metricName": "storage_percent",
-              "operator": "GreaterThan",
-              "threshold": 80,
-              "timeAggregation": "Average"
-            }
-          ]
-        },
-        "actions": [
-          {
-            "actionGroupId": "[resourceId('Microsoft.Insights/actionGroups', variables('alertActionGroupName'))]"
-          }
-        ]
+        }
       }
     },
     {
