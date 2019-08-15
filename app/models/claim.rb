@@ -5,6 +5,34 @@ class Claim < ApplicationRecord
   NO_STUDENT_LOAN = "not_applicable"
   STUDENT_LOAN_PLAN_OPTIONS = StudentLoans::PLANS.dup << NO_STUDENT_LOAN
   ADDRESS_ATTRIBUTES = %w[address_line_1 address_line_2 address_line_3 address_line_4 postcode].freeze
+  FILTER_PARAMS = {
+    address_line_1: true,
+    address_line_2: true,
+    address_line_3: true,
+    address_line_4: true,
+    postcode: true,
+    payroll_gender: true,
+    teacher_reference_number: true,
+    national_insurance_number: true,
+    has_student_loan: false,
+    student_loan_country: false,
+    student_loan_courses: false,
+    student_loan_start_date: false,
+    email_address: true,
+    bank_sort_code: true,
+    bank_account_number: true,
+    created_at: false,
+    date_of_birth: true,
+    eligibility_id: false,
+    eligibility_type: false,
+    full_name: true,
+    id: false,
+    reference: false,
+    student_loan_plan: false,
+    submitted_at: false,
+    updated_at: false,
+    verified_fields: false,
+  }.freeze
 
   enum student_loan_country: StudentLoans::COUNTRIES
   enum student_loan_start_date: StudentLoans::COURSE_START_DATES
@@ -104,6 +132,10 @@ class Claim < ApplicationRecord
 
   def payroll_gender_verified?
     verified_fields.include?("payroll_gender")
+  end
+
+  def self.filtered_params
+    FILTER_PARAMS.select { |_, v| v }.keys
   end
 
   private
