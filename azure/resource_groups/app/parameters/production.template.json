@@ -185,7 +185,7 @@
       }
     },
     "VSP.EUROPEAN_IDENTITY_ENABLED": {
-      "value": "false"
+      "value": "true"
     }
   }
 }
