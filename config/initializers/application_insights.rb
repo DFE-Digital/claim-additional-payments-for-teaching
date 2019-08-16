@@ -5,6 +5,6 @@ if instrumentation_key.present?
     buffer_size = 1
     config.middleware.use ApplicationInsights::Rack::TrackRequest, instrumentation_key, buffer_size
 
-    ApplicationInsights::UnhandledException.collect(app_insights_key)
+    ApplicationInsights::UnhandledException.collect(instrumentation_key)
   end
 end
