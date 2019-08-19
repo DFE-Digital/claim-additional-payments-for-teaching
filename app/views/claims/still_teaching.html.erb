@@ -1,15 +1,18 @@
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-    <%= render("shared/error_summary", instance: current_claim) if current_claim.errors.any? %>
+    <%= render("shared/error_summary", instance: current_claim, errored_field_id_overrides: { "eligibility.employment_status": "claim_eligibility_attributes_employment_status_claim_school" }) if current_claim.errors.any? %>
 
     <%= form_for current_claim, url: claim_path do |form| %>
       <%= form_group_tag current_claim do %>
         <%= form.fields_for :eligibility, include_id: false do |fields| %>
           <fieldset class="govuk-fieldset">
+
             <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl">
               <h1 class="govuk-fieldset__heading"><%= t("student_loans.questions.employment_status") %></h1>
             </legend>
-            <%= errors_tag current_claim, :employment_status %>
+
+            <%= errors_tag current_claim.eligibility, :employment_status %>
+
             <div class="govuk-radios">
               <%= fields.hidden_field :employment_status %>
               <div class="govuk-radios__item">
@@ -25,6 +28,7 @@
                 <%= fields.label :employment_status_no_school, "No", class: "govuk-label govuk-radios__label" %>
               </div>
             </div>
+
           </fieldset>
         <% end %>
       <% end %>

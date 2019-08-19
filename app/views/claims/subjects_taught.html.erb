@@ -1,6 +1,6 @@
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-    <%= render("shared/error_summary", instance: current_claim) if current_claim.errors.any? %>
+    <%= render("shared/error_summary", instance: current_claim, errored_field_id_overrides: { "eligibility.subjects_taught": "eligible_subjects_biology_taught" }) if current_claim.errors.any? %>
 
     <%= form_for current_claim, url: claim_path do |form| %>
 
@@ -13,6 +13,8 @@
                 <%= t("student_loans.questions.subjects_taught") %>
               </h1>
             </legend>
+
+            <%= errors_tag current_claim.eligibility, :subjects_taught %>
 
             <div class="govuk-checkboxes">
 

@@ -12,7 +12,7 @@
 
           <span class="govuk-hint">If you do not know the exact amount, check your P60, your annual student loan statement, or contact the <a href="https://www.slc.co.uk/students-and-customers/contact-information-for-customers/loan-repayment-enquiries.aspx" class="govuk-link">student loans company</a>.</span>
 
-          <%= errors_tag current_claim, :student_loan_repayment_amount %>
+          <%= errors_tag current_claim.eligibility, :student_loan_repayment_amount %>
 
           <div class="govuk-currency-input">
             <span class="govuk-currency-input__unit">&pound;</span>

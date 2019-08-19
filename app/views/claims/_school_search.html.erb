@@ -41,11 +41,11 @@
 
 <% else %>
 
-  <%= render("shared/error_summary", instance: current_claim, errored_field_id_overrides: { claim_school: "claim_eligibility_attributes_#{school_id_param}_#{@schools.first.id}" }) if current_claim.errors.any?
+  <%= render("shared/error_summary", instance: current_claim, errored_field_id_overrides: { "eligibility.#{school_param}": "claim_eligibility_attributes_#{school_id_param}_#{@schools.first.id}" }) if current_claim.errors.any?
   %>
 
   <%= form_for current_claim, url: claim_path do |form| %>
-    <%= form_group_tag current_claim, :claim_school do %>
+    <%= form_group_tag current_claim, school_param do %>
       <fieldset class="govuk-fieldset" aria-describedby="school-search-result-hint">
 
         <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl">
@@ -60,7 +60,7 @@
 
         <%= hidden_field_tag :school_search, params[:school_search] %>
 
-        <%= errors_tag current_claim, :claim_school %>
+        <%= errors_tag current_claim.eligibility, school_param %>
 
         <div class="govuk-radios">
           <%= form.fields_for :eligibility, include_id: false do |fields| %>
