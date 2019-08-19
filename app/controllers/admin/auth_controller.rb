@@ -27,7 +27,7 @@ module Admin
     private
 
     def authorised?
-      DfeSignIn::UserAccess.new(
+      DfeSignIn::Api::User.new(
         user_id: user_id,
         organisation_id: organisation_id
       ).has_role?(DFE_SIGN_IN_ADMIN_ROLE_CODE)

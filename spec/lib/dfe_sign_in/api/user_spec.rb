@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe DfeSignIn::UserAccess do
+RSpec.describe DfeSignIn::Api::User do
   subject { described_class.new(user_id: 999, organisation_id: 456) }
 
   let(:url) { "#{DfeSignIn.configuration.base_url}/services/#{DfeSignIn.configuration.client_id}/organisations/456/users/999" }
