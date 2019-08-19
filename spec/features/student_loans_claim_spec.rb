@@ -21,11 +21,19 @@ RSpec.feature "Teacher Student Loan Repayments claims" do
     check "Physics"
     click_on "Continue"
 
-    expect(page).to have_text(I18n.t("student_loans.questions.mostly_teaching_eligible_subjects", subjects: "Physics"))
+    expect(claim.eligibility.reload.subjects_taught).to eq([:physics_taught])
+
+    expect(page).to have_text(I18n.t("student_loans.questions.leadership_position"))
     choose "Yes"
     click_on "Continue"
 
-    expect(claim.eligibility.reload.mostly_teaching_eligible_subjects?).to eq(true)
+    expect(claim.eligibility.reload.had_leadership_position?).to eq(true)
+
+    expect(page).to have_text(I18n.t("student_loans.questions.mostly_performed_leadership_duties"))
+    choose "No"
+    click_on "Continue"
+
+    expect(claim.eligibility.reload.mostly_performed_leadership_duties?).to eq(false)
 
     expect(page).to have_text("You are eligible to claim back student loan repayments")
 

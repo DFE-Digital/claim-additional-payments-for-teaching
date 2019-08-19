@@ -54,21 +54,21 @@ RSpec.feature "Ineligible Teacher Student Loan Repayments claims" do
     expect(page).to have_text(I18n.t("activerecord.errors.messages.employed_at_no_school"))
   end
 
-  scenario "does not teach an eligible subject" do
+  scenario "did not teach an eligible subject" do
     claim = start_claim
     choose_qts_year
     choose_school schools(:penistone_grammar_school)
     choose_still_teaching
 
-    choose I18n.t("student_loans.questions.eligible_subjects.not_applicable")
+    choose I18n.t("student_loans.questions.eligible_subjects.none_taught")
     click_on "Continue"
 
-    expect(claim.eligibility.reload.mostly_teaching_eligible_subjects?).to eq(false)
+    expect(claim.eligibility.reload.taught_eligible_subjects?).to eq(false)
     expect(page).to have_text("You’re not eligible")
-    expect(page).to have_text(I18n.t("activerecord.errors.messages.not_taught_eligible_subjects_enough"))
+    expect(page).to have_text(I18n.t("activerecord.errors.messages.not_taught_eligible_subjects"))
   end
 
-  scenario "does not teach an eligible subject for at least half of their time" do
+  scenario "was in a leadership position and performed leadership duties for more than half of their time" do
     claim = start_claim
     choose_qts_year
     choose_school schools(:penistone_grammar_school)
@@ -77,11 +77,14 @@ RSpec.feature "Ineligible Teacher Student Loan Repayments claims" do
     check "Biology"
     click_on "Continue"
 
-    choose "No"
+    choose "Yes"
     click_on "Continue"
 
-    expect(claim.eligibility.reload.mostly_teaching_eligible_subjects?).to eq(false)
+    choose "Yes"
+    click_on "Continue"
+
+    expect(claim.eligibility.reload.mostly_performed_leadership_duties?).to eq(true)
     expect(page).to have_text("You’re not eligible")
-    expect(page).to have_text(I18n.t("activerecord.errors.messages.not_taught_eligible_subjects_enough"))
+    expect(page).to have_text(I18n.t("activerecord.errors.messages.not_taught_enough"))
   end
 end

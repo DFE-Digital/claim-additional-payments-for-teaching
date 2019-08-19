@@ -1,6 +1,6 @@
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-    <%= render("shared/error_summary", instance: current_claim, errored_field_id_overrides: {:"eligibility.qts_award_year" => "claim_eligibility_attributes_qts_award_year_before_2013"}) if current_claim.errors.any? %>
+    <%= render("shared/error_summary", instance: current_claim, errored_field_id_overrides: { "eligibility.qts_award_year": "claim_eligibility_attributes_qts_award_year_before_2013" }) if current_claim.errors.any? %>
 
     <%= form_for current_claim, url: claim_path do |form| %>
       <%= form_group_tag current_claim do %>
@@ -9,7 +9,8 @@
             <%= fields.label :qts_award_year, t("student_loans.questions.qts_award_year"), {class: "govuk-label govuk-label--xl"} %>
           </h1>
 
-          <%= errors_tag current_claim, :qts_award_year %>
+          <%= errors_tag current_claim.eligibility, :qts_award_year %>
+
           <div class="govuk-radios">
             <%= fields.hidden_field :qts_award_year %>
             <% StudentLoans::Eligibility.qts_award_years.each_key do |option| %>

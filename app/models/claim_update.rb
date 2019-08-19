@@ -23,6 +23,7 @@ class ClaimUpdate
 
   DEPENDENT_ELIGIBILITY_ANSWERS = {
     "claim_school_id" => "employment_status",
+    "had_leadership_position" => "mostly_performed_leadership_duties",
   }.freeze
 
   attr_reader :claim, :context, :params

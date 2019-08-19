@@ -8,15 +8,15 @@ RSpec.feature "Choosing subjects taught during Teacher Student Loan Repayments c
 
   context "with JS enabled", js: true do
     scenario "checks subjects and then chooses not applicable" do
-      check "eligible_subjects_biology_taught"
-      check "eligible_subjects_physics_taught"
+      check "Biology"
+      check "Physics"
 
       expect(page).to have_checked_field("eligible_subjects_biology_taught", visible: false)
       expect(page).to have_checked_field("eligible_subjects_physics_taught", visible: false)
 
-      choose I18n.t("student_loans.questions.eligible_subjects.not_applicable")
+      choose I18n.t("student_loans.questions.eligible_subjects.none_taught")
 
-      expect(page).to have_checked_field("claim_eligibility_attributes_mostly_teaching_eligible_subjects_false", visible: false)
+      expect(page).to have_checked_field("claim_eligibility_attributes_taught_eligible_subjects_false", visible: false)
 
       expect(page).to_not have_checked_field("eligible_subjects_biology_taught", visible: false)
       expect(page).to_not have_checked_field("eligible_subjects_physics_taught", visible: false)
@@ -24,45 +24,48 @@ RSpec.feature "Choosing subjects taught during Teacher Student Loan Repayments c
       click_on "Continue"
 
       expect(page).to have_text("You’re not eligible")
-      expect(page).to have_text("You must have spent at least half your time teaching an eligible subject.")
+      expect(page).to have_text(I18n.t("activerecord.errors.messages.not_taught_eligible_subjects"))
     end
 
     scenario "checks not applicable and then chooses a subject" do
-      choose I18n.t("student_loans.questions.eligible_subjects.not_applicable")
+      choose I18n.t("student_loans.questions.eligible_subjects.none_taught")
 
-      expect(page).to have_checked_field("claim_eligibility_attributes_mostly_teaching_eligible_subjects_false", visible: false)
+      expect(page).to have_checked_field("claim_eligibility_attributes_taught_eligible_subjects_false", visible: false)
 
-      check "eligible_subjects_biology_taught"
+      check "Biology"
 
       expect(page).to have_checked_field("eligible_subjects_biology_taught", visible: false)
-      expect(page).to_not have_checked_field("claim_eligibility_attributes_mostly_teaching_eligible_subjects_false", visible: false)
+      expect(page).to_not have_checked_field("claim_eligibility_attributes_taught_eligible_subjects_false", visible: false)
 
       click_on "Continue"
 
-      expect(page).to have_text(I18n.t("student_loans.questions.mostly_teaching_eligible_subjects", subjects: "Biology"))
+      choose "Yes"
+      click_on "Continue"
+
+      expect(page).to have_text(I18n.t("student_loans.questions.mostly_performed_leadership_duties"))
     end
   end
 
   context "with JS disabled" do
     scenario "checks subjects and then chooses not applicable" do
-      check "eligible_subjects_biology_taught"
-      check "eligible_subjects_physics_taught"
+      check "Biology"
+      check "Physics"
 
-      choose I18n.t("student_loans.questions.eligible_subjects.not_applicable")
+      choose I18n.t("student_loans.questions.eligible_subjects.none_taught")
       click_on "Continue"
 
       expect(page).to have_text("You’re not eligible")
-      expect(page).to have_text("You must have spent at least half your time teaching an eligible subject.")
+      expect(page).to have_text(I18n.t("activerecord.errors.messages.not_taught_eligible_subjects"))
     end
 
     scenario "checks not applicable and then chooses a subject" do
-      choose I18n.t("student_loans.questions.eligible_subjects.not_applicable")
+      choose I18n.t("student_loans.questions.eligible_subjects.none_taught")
 
-      check "eligible_subjects_biology_taught"
+      check "Biology"
       click_on "Continue"
 
       expect(page).to have_text("You’re not eligible")
-      expect(page).to have_text("You must have spent at least half your time teaching an eligible subject.")
+      expect(page).to have_text(I18n.t("activerecord.errors.messages.not_taught_eligible_subjects"))
     end
   end
 end

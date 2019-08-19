@@ -10,11 +10,12 @@ document.addEventListener("DOMContentLoaded", function() {
   function toggleSubjectValues(event) {
     var el = event.target;
     var eligibleSubjectsClass = "subject";
-    var notTeachingSubjectsName = "claim[eligibility_attributes][mostly_teaching_eligible_subjects]";
+    var notTeachingSubjectsName = "claim[eligibility_attributes][taught_eligible_subjects]";
 
     if (!el) {
       return;
     }
+
     if (el.checked === false) {
       return;
     }
@@ -24,7 +25,7 @@ document.addEventListener("DOMContentLoaded", function() {
       radioButton.checked = false;
     } else if (el.name == notTeachingSubjectsName) {
       var checkboxes = document.querySelectorAll("input." + eligibleSubjectsClass);
-      checkboxes.forEach(function(item, index) {
+      checkboxes.forEach(function(item, _index) {
         item.checked = false;
       });
     }

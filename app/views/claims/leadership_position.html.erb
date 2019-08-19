@@ -1,0 +1,50 @@
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= render("shared/error_summary", instance: current_claim, errored_field_id_overrides: { "eligibility.had_leadership_position": "claim_eligibility_attributes_had_leadership_position_true" }) if current_claim.errors.any? %>
+
+    <%= form_for current_claim, url: claim_path do |form| %>
+      <%= form_group_tag current_claim do %>
+        <%= form.fields_for :eligibility, include_id: false do |fields| %>
+
+          <%= fields.hidden_field :had_leadership_position %>
+
+          <fieldset class="govuk-fieldset">
+
+            <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl">
+              <h1 class="govuk-fieldset__heading">
+                <%= t("student_loans.questions.leadership_position") %>
+              </h1>
+            </legend>
+
+            <p class="govuk-body">
+              <span class="govuk-hint">
+                This includes head of subject, head of year, head of department,
+                deputy head, head teacher or other middle leader role.
+              </span>
+            </p>
+
+            <%= errors_tag current_claim.eligibility, :had_leadership_position %>
+
+            <div class="govuk-radios govuk-radios--inline">
+
+              <div class="govuk-radios__item">
+                <%= fields.radio_button(:had_leadership_position, true, class: "govuk-radios__input") %>
+                <%= fields.label :had_leadership_position_true, "Yes", class: "govuk-label govuk-radios__label" %>
+              </div>
+
+              <div class="govuk-radios__item">
+                <%= fields.radio_button(:had_leadership_position, false, class: "govuk-radios__input") %>
+                <%= fields.label :had_leadership_position_false, "No", class: "govuk-label govuk-radios__label" %>
+              </div>
+
+            </div>
+
+          </fieldset>
+
+        <% end %>
+      <% end %>
+
+      <%= form.submit "Continue", class: "govuk-button" %>
+    <% end %>
+  </div>
+</div>

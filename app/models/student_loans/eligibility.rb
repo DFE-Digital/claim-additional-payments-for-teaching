@@ -36,8 +36,9 @@ module StudentLoans
     validates :claim_school, on: [:"claim-school", :submit], presence: {message: "Select a school from the list"}
     validates :employment_status, on: [:"still-teaching", :submit], presence: {message: "Choose the option that describes your current employment status"}
     validates :current_school, on: [:"current-school", :submit], presence: {message: "Select a school from the list"}
-    validate :one_subject_must_be_selected, on: [:"subjects-taught", :submit], unless: :not_taught_eligible_subjects_enough?
-    validates :mostly_teaching_eligible_subjects, on: [:"mostly-teaching-eligible-subjects", :submit], inclusion: {in: [true, false], message: "Select either Yes or No"}
+    validate :one_subject_must_be_selected, on: [:"subjects-taught", :submit], unless: :not_taught_eligible_subjects?
+    validates :had_leadership_position, on: [:"leadership-position", :submit], inclusion: {in: [true, false], message: "Select either Yes or No"}
+    validates :mostly_performed_leadership_duties, on: [:"mostly-performed-leadership-duties", :submit], inclusion: {in: [true, false], message: "Select either Yes or No"}, if: :had_leadership_position?
     validates :student_loan_repayment_amount, on: [:"student-loan-amount", :submit], presence: {message: "Enter your student loan repayment amount"}
     validates_numericality_of :student_loan_repayment_amount, message: "Enter a valid monetary amount", allow_nil: true, greater_than_or_equal_to: 0, less_than_or_equal_to: 99999
 
@@ -53,7 +54,11 @@ module StudentLoans
     end
 
     def ineligible?
-      ineligible_qts_award_year? || ineligible_claim_school? || employed_at_no_school? || not_taught_eligible_subjects_enough?
+      ineligible_qts_award_year? ||
+        ineligible_claim_school? ||
+        employed_at_no_school? ||
+        not_taught_eligible_subjects? ||
+        not_taught_enough?
     end
 
     def ineligibility_reason
@@ -61,7 +66,8 @@ module StudentLoans
         :ineligible_qts_award_year,
         :ineligible_claim_school,
         :employed_at_no_school,
-        :not_taught_eligible_subjects_enough,
+        :not_taught_eligible_subjects,
+        :not_taught_enough,
       ].find { |eligibility_check| send("#{eligibility_check}?") }
     end
 
@@ -75,12 +81,16 @@ module StudentLoans
       claim_school.present? && !claim_school.eligible_for_tslr?
     end
 
-    def not_taught_eligible_subjects_enough?
-      mostly_teaching_eligible_subjects == false
+    def not_taught_eligible_subjects?
+      taught_eligible_subjects == false
+    end
+
+    def not_taught_enough?
+      mostly_performed_leadership_duties == true
     end
 
     def one_subject_must_be_selected
-      errors.add(:subjects_taught, "Choose a subject, or select “not applicable”") if subjects_taught.empty?
+      errors.add(:subjects_taught, "Choose a subject, or select No") if subjects_taught.empty?
     end
   end
 end

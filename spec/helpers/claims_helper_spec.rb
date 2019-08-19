@@ -2,29 +2,39 @@ require "rails_helper"
 
 describe ClaimsHelper do
   describe "#eligibility_answers" do
-    it "returns an array of questions and answers for displaying to the user for review" do
-      school = schools(:penistone_grammar_school)
-      eligibility = build(
+    let(:school) { schools(:penistone_grammar_school) }
+    let(:eligibility) do
+      build(
         :student_loans_eligibility,
         qts_award_year: "2013_2014",
         claim_school: school,
         current_school: school,
         chemistry_taught: true,
         physics_taught: true,
-        mostly_teaching_eligible_subjects: true,
+        had_leadership_position: true,
+        mostly_performed_leadership_duties: false,
         student_loan_repayment_amount: 1987.65,
       )
+    end
 
+    it "returns an array of questions and answers for displaying to the user for review" do
       expected_answers = [
         [I18n.t("student_loans.questions.qts_award_year"), "1 September 2013 to 31 August 2014", "qts-year"],
         [I18n.t("student_loans.questions.claim_school"), school.name, "claim-school"],
         [I18n.t("questions.current_school"), school.name, "still-teaching"],
         [I18n.t("student_loans.questions.subjects_taught"), "Chemistry and Physics", "subjects-taught"],
-        [I18n.t("student_loans.questions.mostly_teaching_eligible_subjects", subjects: "Chemistry and Physics"), "Yes", "mostly-teaching-eligible-subjects"],
+        [I18n.t("student_loans.questions.leadership_position"), "Yes", "leadership-position"],
+        [I18n.t("student_loans.questions.mostly_performed_leadership_duties"), "No", "mostly-performed-leadership-duties"],
         [I18n.t("student_loans.questions.student_loan_amount", claim_school_name: school.name), "£1,987.65", "student-loan-amount"],
       ]
 
       expect(helper.eligibility_answers(eligibility)).to eq expected_answers
+    end
+
+    it "excludes questions skipped from the flow" do
+      eligibility.had_leadership_position = false
+      expect(helper.eligibility_answers(eligibility)).to_not include([I18n.t("student_loans.questions.mostly_performed_leadership_duties"), "Yes", "mostly-performed-leadership-duties"])
+      expect(helper.eligibility_answers(eligibility)).to_not include([I18n.t("student_loans.questions.mostly_performed_leadership_duties"), "No", "mostly-performed-leadership-duties"])
     end
   end
 

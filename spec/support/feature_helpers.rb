@@ -5,22 +5,23 @@ module FeatureHelpers
     choose_school schools(:penistone_grammar_school)
     choose_still_teaching "Yes, at another school"
     choose_school schools(:hampstead_school)
-    check "Physics"
-    click_on "Continue"
-    choose "Yes"
-    click_on "Continue"
+    choose_subjects_taught
 
     perform_verify_step
 
     fill_in :claim_teacher_reference_number, with: "1234567"
     click_on "Continue"
+
     fill_in "National Insurance number", with: "QQ123456C"
     click_on "Continue"
+
     answer_student_loan_plan_questions
     fill_in I18n.t("student_loans.questions.student_loan_amount", claim_school_name: claim.eligibility.claim_school_name), with: "1100"
     click_on "Continue"
+
     fill_in I18n.t("questions.email_address"), with: "name@example.tld"
     click_on "Continue"
+
     fill_in "Sort code", with: "123456"
     fill_in "Account number", with: "87654321"
     click_on "Continue"
@@ -52,10 +53,13 @@ module FeatureHelpers
   end
 
   def choose_subjects_taught
-    check "eligible_subjects_biology_taught"
+    check "Physics"
     click_on "Continue"
 
     choose "Yes"
+    click_on "Continue"
+
+    choose "No"
     click_on "Continue"
   end
 

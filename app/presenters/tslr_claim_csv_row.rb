@@ -36,8 +36,12 @@ class TslrClaimCsvRow < SimpleDelegator
     model.date_of_birth.strftime("%d/%m/%Y")
   end
 
-  def mostly_teaching_eligible_subjects
-    model.eligibility.mostly_teaching_eligible_subjects? ? "Yes" : "No"
+  def had_leadership_position
+    model.eligibility.had_leadership_position? ? "Yes" : "No"
+  end
+
+  def mostly_performed_leadership_duties
+    model.eligibility.mostly_performed_leadership_duties? ? "Yes" : "No"
   end
 
   def student_loan_repayment_amount

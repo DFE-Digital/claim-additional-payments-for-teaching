@@ -48,23 +48,68 @@ RSpec.feature "Changing the answers on a submittable claim" do
         expect(eligibility.chemistry_taught).to eq(true)
       end
 
-      scenario "Teacher is redirected to ask if they were mostly teaching eligible subjects" do
-        expect(current_path).to eq(claim_path("mostly-teaching-eligible-subjects"))
+      scenario "Teacher is redirected to the check your answers page" do
+        expect(current_path).to eq(claim_path("check-your-answers"))
+      end
+    end
+  end
+
+  context "when changing whether they had a leadership position" do
+    context "when changing their answer to no" do
+      before do
+        claim.eligibility.had_leadership_position = true
+        claim.save!
+
+        find("a[href='#{claim_path("leadership-position")}']").click
+
+        choose "No"
+        click_on "Continue"
       end
 
-      scenario "Teacher sees the the correct subjects in the question" do
-        expect(page).to have_text("Biology and Chemistry")
+      scenario "Sets had leadership position correctly" do
+        expect(eligibility.reload.had_leadership_position).to eq(false)
       end
 
-      context "Teacher taught subjects for more than 50% of their time" do
+      scenario "Sets mostly performed leadership duties correctly" do
+        expect(eligibility.reload.mostly_performed_leadership_duties).to eq(nil)
+      end
+
+      scenario "Teacher is redirected to the check your answers page" do
+        expect(current_path).to eq(claim_path("check-your-answers"))
+      end
+    end
+
+    context "when changing their answer to yes" do
+      before do
+        claim.eligibility.had_leadership_position = false
+        claim.save!
+
+        find("a[href='#{claim_path("leadership-position")}']").click
+
+        choose "Yes"
+        click_on "Continue"
+      end
+
+      scenario "Sets had leadership position correctly" do
+        expect(eligibility.reload.had_leadership_position).to eq(true)
+      end
+
+      scenario "Sets mostly performed leadership duties correctly" do
+        expect(eligibility.reload.mostly_performed_leadership_duties).to eq(nil)
+      end
+
+      scenario "Teacher is redirected to ask if they were mostly performing leadership duties" do
+        expect(current_path).to eq(claim_path("mostly-performed-leadership-duties"))
+      end
+
+      context "Teacher spent less than half their time performing leadership duties" do
         before do
-          choose "Yes"
-
+          choose "No"
           click_on "Continue"
         end
 
-        scenario "Sets mostly teaching eligible subjects correctly" do
-          expect(eligibility.reload.mostly_teaching_eligible_subjects).to eq(true)
+        scenario "Sets mostly performed leadership duties correctly" do
+          expect(eligibility.reload.mostly_performed_leadership_duties).to eq(false)
         end
 
         scenario "Teacher is redirected to the check your answers page" do
@@ -72,20 +117,19 @@ RSpec.feature "Changing the answers on a submittable claim" do
         end
       end
 
-      context "Teacher taught subjects for less than 50% of their time" do
+      context "Teacher spent more than half their time performing leadership duties" do
         before do
-          choose "No"
-
+          choose "Yes"
           click_on "Continue"
         end
 
-        scenario "Sets mostly teaching eligible subjects correctly" do
-          expect(eligibility.reload.mostly_teaching_eligible_subjects).to eq(false)
+        scenario "Sets mostly performed leadership duties correctly" do
+          expect(eligibility.reload.mostly_performed_leadership_duties).to eq(true)
         end
 
         scenario "Teacher is told they are not eligible" do
           expect(page).to have_text("You’re not eligible")
-          expect(page).to have_text("You must have spent at least half your time teaching an eligible subject")
+          expect(page).to have_text(I18n.t("activerecord.errors.messages.not_taught_enough"))
         end
       end
     end

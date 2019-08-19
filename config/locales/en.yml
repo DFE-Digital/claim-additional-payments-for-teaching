@@ -40,10 +40,12 @@ en:
   activerecord:
     errors:
       messages:
-        ineligible_qts_award_year: "You are only eligible to claim back student loan repayments if you qualified on or after September 1st 2013"
+        ineligible_qts_award_year:
+          "You are only eligible to claim back student loan repayments if you qualified on or after September 1st 2013"
         ineligible_claim_school: "The school you were employed at is not eligible"
         employed_at_no_school: "You can only get this payment if you’re still working as a teacher"
-        not_taught_eligible_subjects_enough: "You must have spent at least half your time teaching an eligible subject"
+        not_taught_eligible_subjects: "You must have been teaching an eligible subject"
+        not_taught_enough: "You must not have spent more than half your working hours performing leadership duties"
   service_name: "Claim additional payments for teaching"
   support_email_address: "additionalteachingpayment@digital.education.gov.uk"
   questions:
@@ -67,7 +69,8 @@ en:
         on_or_after_first_september_2012: "On or after 1 September 2012"
       two_or_more_courses:
         before_first_september_2012: "All my degree courses started before 1 September 2012"
-        some_before_some_after_first_september_2012: "Some of my degree courses started before 1 September 2012 and some started after 1 September 2012"
+        some_before_some_after_first_september_2012:
+          "Some of my degree courses started before 1 September 2012 and some started after 1 September 2012"
         on_or_after_first_september_2012: "All of my degree courses started after 1 September 2012"
     payroll_gender:
       male: "Male"
@@ -89,15 +92,16 @@ en:
       claim_school: "Which school were you employed at between 6 April 2018 and 5 April 2019?"
       employment_status: "Are you still employed to teach at a school in England?"
       subjects_taught: "Did you teach any of the following subjects between 6 April 2018 and 5 April 2019?"
-      mostly_teaching_eligible_subjects:
-        "Were half of your working hours spent teaching %{subjects} between 6 April 2018 and 5 April 2019?"
+      leadership_position: "Were you employed in a leadership position between 6 April 2018 and 5 April 2019?"
+      mostly_performed_leadership_duties:
+        "Were more than half your working hours spent on leadership duties betwen 6 April 2018 and 5 April 2019?"
       eligible_subjects:
         biology_taught: "Biology"
         chemistry_taught: "Chemistry"
         physics_taught: "Physics"
         computer_science_taught: "Computer Science"
         languages_taught: "Languages"
-        not_applicable: "Not applicable, I didn't teach any of these subjects"
+        none_taught: "No, I didn't teach any of these subjects"
       student_loan_amount:
         "Exactly how much student loan did you repay while you worked at %{claim_school_name} between 6 April 2018 and 5
         April 2019?"
@@ -120,7 +124,8 @@ en:
       national_insurance_number: "NI Number"
       student_loan_repayment_plan: "Student Loan Repayment Plan"
       email_address: "Email"
-      mostly_teaching_eligible_subjects: "Mostly Teaching Eligible Subjects?"
+      had_leadership_position: "Had Leadership Position?"
+      mostly_performed_leadership_duties: "Mostly Performed Leadership Duties?"
       bank_sort_code: "Sort Code"
       bank_account_number: "Account Number"
       student_loan_repayment_amount: "Repayment Amount"
