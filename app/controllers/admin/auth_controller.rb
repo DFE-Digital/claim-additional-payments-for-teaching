@@ -27,22 +27,16 @@ module Admin
     private
 
     def authorised?
+      authenticated_session = DfeSignIn::AuthenticatedSession.from_auth_hash(auth_hash)
+
       DfeSignIn::Api::User.new(
-        user_id: user_id,
-        organisation_id: organisation_id
+        user_id: authenticated_session.user_id,
+        organisation_id: authenticated_session.organisation_id
       ).has_role?(DFE_SIGN_IN_ADMIN_ROLE_CODE)
     end
 
     def auth_hash
       request.env.fetch("omniauth.auth")
-    end
-
-    def organisation_id
-      auth_hash.dig("extra", "raw_info", "organisation", "id")
-    end
-
-    def user_id
-      auth_hash["uid"]
     end
   end
 end
