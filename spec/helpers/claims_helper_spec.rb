@@ -38,6 +38,55 @@ describe ClaimsHelper do
     end
   end
 
+  describe "#verify_answers" do
+    let(:claim) do
+      build(
+        :claim,
+        full_name: "Jo Bloggs",
+        address_line_1: "Flat 1",
+        address_line_2: "1 Test Road",
+        address_line_3: "Test Town",
+        postcode: "AB1 2CD",
+        date_of_birth: Date.new(1901, 1, 1),
+        teacher_reference_number: "1234567",
+        national_insurance_number: "QQ123456C",
+        email_address: "test@email.com",
+        payroll_gender: :female,
+        verified_fields: [
+          "full_name",
+          "address_line_1",
+          "address_line_2",
+          "address_line_3",
+          "postcode",
+          "date_of_birth",
+          "payroll_gender",
+        ]
+      )
+    end
+
+    it "returns an array of questions and answers for displaying to the user for review" do
+      expected_answers = [
+        ["Full name", "Jo Bloggs"],
+        ["Address", "Flat 1, 1 Test Road, Test Town, AB1 2CD"],
+        ["Date of birth", "1 January 1901"],
+        ["Gender", "Female"],
+      ]
+
+      expect(helper.verify_answers(claim)).to eq expected_answers
+    end
+
+    it "excludes questions not answered by verify" do
+      claim.verified_fields = []
+
+      expected_answers = [
+        ["Full name", "Jo Bloggs"],
+        ["Date of birth", "1 January 1901"],
+      ]
+
+      expect(helper.verify_answers(claim)).to eq expected_answers
+    end
+  end
+
   describe "#identity_answers" do
     let(:claim) do
       build(
@@ -68,11 +117,15 @@ describe ClaimsHelper do
     end
 
     it "excludes questions answered by verify" do
-      claim.verified_fields = ["payroll_gender"]
-      expect(helper.identity_answers(claim)).to_not include([I18n.t("questions.payroll_gender"), "female", "gender"])
+      claim.verified_fields = ["payroll_gender", "postcode"]
 
-      claim.verified_fields = ["postcode"]
-      expect(helper.identity_answers(claim)).to_not include([I18n.t("questions.address"), "Flat 1, 1 Test Road, Test Town, AB1 2CD", "address"])
+      expected_answers = [
+        [I18n.t("questions.teacher_reference_number"), "1234567", "teacher-reference-number"],
+        [I18n.t("questions.national_insurance_number"), "QQ123456C", "national-insurance-number"],
+        [I18n.t("questions.email_address"), "test@email.com", "email-address"],
+      ]
+
+      expect(helper.identity_answers(claim)).to eq expected_answers
     end
   end
 
