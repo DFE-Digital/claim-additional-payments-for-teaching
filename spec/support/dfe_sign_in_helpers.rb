@@ -63,7 +63,28 @@ module DfeSignInHelpers
   def stub_dfe_sign_in_user_info_request(user_id, organisation_id, role_code)
     api_client_id = DfeSignIn.configuration.client_id
     api_base_url = DfeSignIn.configuration.base_url
-    api_response = {roles: [{code: role_code}]}.to_json
+    api_response = {
+      "userId" => user_id,
+      "serviceId" => "XXXXXXX",
+      "organisationId" => organisation_id,
+      "roles" => [
+        {
+          "id" => "YYYYYYY",
+          "name" => "Access to Teacher Payments",
+          "code" => role_code,
+          "numericId" => "162",
+          "status" => {
+            "id" => 1,
+          },
+        },
+      ],
+      "identifiers" => [
+        {
+          "key" => "groups",
+          "value" => "teacher_payments_access",
+        },
+      ],
+    }.to_json
 
     stub_request(:get, "#{api_base_url}/services/#{api_client_id}/organisations/#{organisation_id}/users/#{user_id}")
       .to_return(status: 200, body: api_response)
