@@ -16,7 +16,7 @@ RSpec.describe TslrClaimCsvRow do
         submitted_at: DateTime.parse(submitted_at),
         eligibility: build(:student_loans_eligibility, :eligible,
           had_leadership_position: true,
-          mostly_teaching_eligible_subjects: true))
+          mostly_performed_leadership_duties: false))
     end
     let(:eligibility) { claim.eligibility }
 
@@ -41,7 +41,7 @@ RSpec.describe TslrClaimCsvRow do
         StudentLoans::PLAN_2.humanize,
         claim.email_address,
         "Yes",
-        "Yes",
+        "No",
         claim.bank_sort_code,
         claim.bank_account_number,
         "£#{eligibility.student_loan_repayment_amount}",

@@ -40,8 +40,8 @@ class TslrClaimCsvRow < SimpleDelegator
     model.eligibility.had_leadership_position? ? "Yes" : "No"
   end
 
-  def mostly_teaching_eligible_subjects
-    model.eligibility.mostly_teaching_eligible_subjects? ? "Yes" : "No"
+  def mostly_performed_leadership_duties
+    model.eligibility.mostly_performed_leadership_duties? ? "Yes" : "No"
   end
 
   def student_loan_repayment_amount

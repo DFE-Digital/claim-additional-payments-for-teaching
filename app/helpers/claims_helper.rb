@@ -18,7 +18,7 @@ module ClaimsHelper
       a << [t("questions.current_school"), eligibility.current_school_name, "still-teaching"]
       a << [t("student_loans.questions.subjects_taught"), subject_list(eligibility.subjects_taught), "subjects-taught"]
       a << [t("student_loans.questions.leadership_position"), (eligibility.had_leadership_position? ? "Yes" : "No"), "leadership-position"]
-      a << [t("student_loans.questions.mostly_teaching_eligible_subjects", subjects: subject_list(eligibility.subjects_taught)), (eligibility.mostly_teaching_eligible_subjects? ? "Yes" : "No"), "mostly-teaching-eligible-subjects"] if eligibility.had_leadership_position?
+      a << [t("student_loans.questions.mostly_performed_leadership_duties"), (eligibility.mostly_performed_leadership_duties? ? "Yes" : "No"), "mostly-performed-leadership-duties"] if eligibility.had_leadership_position?
       a << [t("student_loans.questions.student_loan_amount", claim_school_name: eligibility.claim_school_name), number_to_currency(eligibility.student_loan_repayment_amount), "student-loan-amount"]
     end
   end

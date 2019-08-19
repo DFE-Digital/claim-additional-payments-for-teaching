@@ -15,7 +15,7 @@ class PageSequence
     "current-school",
     "subjects-taught",
     "leadership-position",
-    "mostly-teaching-eligible-subjects",
+    "mostly-performed-leadership-duties",
     "eligibility-confirmed",
     "verified",
     "address",
@@ -44,7 +44,7 @@ class PageSequence
   def slugs
     SLUGS.dup.tap do |sequence|
       sequence.delete("current-school") if claim.eligibility.employed_at_claim_school?
-      sequence.delete("mostly-teaching-eligible-subjects") unless claim.eligibility.had_leadership_position?
+      sequence.delete("mostly-performed-leadership-duties") unless claim.eligibility.had_leadership_position?
       sequence.delete("student-loan-country") if claim.no_student_loan?
       sequence.delete("student-loan-how-many-courses") if claim.no_student_loan? || claim.student_loan_country_with_one_plan?
       sequence.delete("student-loan-start-date") if claim.no_student_loan? || claim.student_loan_country_with_one_plan?

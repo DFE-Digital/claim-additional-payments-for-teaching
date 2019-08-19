@@ -12,7 +12,7 @@ describe ClaimsHelper do
         chemistry_taught: true,
         physics_taught: true,
         had_leadership_position: true,
-        mostly_teaching_eligible_subjects: true,
+        mostly_performed_leadership_duties: false,
         student_loan_repayment_amount: 1987.65,
       )
     end
@@ -24,7 +24,7 @@ describe ClaimsHelper do
         [I18n.t("questions.current_school"), school.name, "still-teaching"],
         [I18n.t("student_loans.questions.subjects_taught"), "Chemistry and Physics", "subjects-taught"],
         [I18n.t("student_loans.questions.leadership_position"), "Yes", "leadership-position"],
-        [I18n.t("student_loans.questions.mostly_teaching_eligible_subjects", subjects: "Chemistry and Physics"), "Yes", "mostly-teaching-eligible-subjects"],
+        [I18n.t("student_loans.questions.mostly_performed_leadership_duties"), "No", "mostly-performed-leadership-duties"],
         [I18n.t("student_loans.questions.student_loan_amount", claim_school_name: school.name), "£1,987.65", "student-loan-amount"],
       ]
 
@@ -33,8 +33,8 @@ describe ClaimsHelper do
 
     it "excludes questions skipped from the flow" do
       eligibility.had_leadership_position = false
-      expect(helper.eligibility_answers(eligibility)).to_not include([I18n.t("student_loans.questions.mostly_teaching_eligible_subjects", subjects: "Chemistry and Physics"), "Yes", "mostly-teaching-eligible-subjects"])
-      expect(helper.eligibility_answers(eligibility)).to_not include([I18n.t("student_loans.questions.mostly_teaching_eligible_subjects", subjects: "Chemistry and Physics"), "No", "mostly-teaching-eligible-subjects"])
+      expect(helper.eligibility_answers(eligibility)).to_not include([I18n.t("student_loans.questions.mostly_performed_leadership_duties"), "Yes", "mostly-performed-leadership-duties"])
+      expect(helper.eligibility_answers(eligibility)).to_not include([I18n.t("student_loans.questions.mostly_performed_leadership_duties"), "No", "mostly-performed-leadership-duties"])
     end
   end
 

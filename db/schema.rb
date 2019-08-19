@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_08_15_161351) do
+ActiveRecord::Schema.define(version: 2019_08_19_095423) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -108,9 +108,10 @@ ActiveRecord::Schema.define(version: 2019_08_15_161351) do
     t.boolean "computer_science_taught"
     t.boolean "languages_taught"
     t.boolean "physics_taught"
-    t.boolean "mostly_teaching_eligible_subjects"
+    t.boolean "taught_eligible_subjects"
     t.decimal "student_loan_repayment_amount", precision: 7, scale: 2
     t.boolean "had_leadership_position"
+    t.boolean "mostly_performed_leadership_duties"
     t.index ["claim_school_id"], name: "index_student_loans_eligibilities_on_claim_school_id"
     t.index ["current_school_id"], name: "index_student_loans_eligibilities_on_current_school_id"
   end

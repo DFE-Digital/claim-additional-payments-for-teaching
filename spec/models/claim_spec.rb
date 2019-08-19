@@ -202,10 +202,10 @@ RSpec.describe Claim, type: :model do
 
     it "validates the claim’s eligibility" do
       ineligible_claim = build(:claim, :submittable)
-      ineligible_claim.eligibility.mostly_teaching_eligible_subjects = false
+      ineligible_claim.eligibility.mostly_performed_leadership_duties = true
 
       expect(ineligible_claim).not_to be_valid(:submit)
-      expect(ineligible_claim.errors[:base]).to include(I18n.t("activerecord.errors.messages.not_taught_eligible_subjects_enough"))
+      expect(ineligible_claim.errors[:base]).to include(I18n.t("activerecord.errors.messages.not_taught_enough"))
     end
   end
 
@@ -322,7 +322,7 @@ RSpec.describe Claim, type: :model do
       end
 
       it "adds an error" do
-        expect(claim.errors.messages[:base]).to include(I18n.t("activerecord.errors.messages.not_taught_eligible_subjects_enough"))
+        expect(claim.errors.messages[:base]).to include(I18n.t("activerecord.errors.messages.not_taught_enough"))
       end
     end
 

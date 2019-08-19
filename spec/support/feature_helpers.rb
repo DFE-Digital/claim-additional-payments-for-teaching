@@ -59,7 +59,7 @@ module FeatureHelpers
     choose "Yes"
     click_on "Continue"
 
-    choose "Yes"
+    choose "No"
     click_on "Continue"
   end
 

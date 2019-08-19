@@ -103,9 +103,14 @@ RSpec.describe StudentLoans::Eligibility, type: :model do
       expect(StudentLoans::Eligibility.new(employment_status: :claim_school).ineligible?).to eql false
     end
 
-    it "returns true when less than half time is spent teaching eligible subjects" do
-      expect(StudentLoans::Eligibility.new(mostly_teaching_eligible_subjects: false).ineligible?).to eql true
-      expect(StudentLoans::Eligibility.new(mostly_teaching_eligible_subjects: true).ineligible?).to eql false
+    it "returns true when not teaching an eligible subject" do
+      expect(StudentLoans::Eligibility.new(taught_eligible_subjects: false).ineligible?).to eql true
+      expect(StudentLoans::Eligibility.new(biology_taught: true).ineligible?).to eql false
+    end
+
+    it "returns true when more than half time is spent performing leadership duties" do
+      expect(StudentLoans::Eligibility.new(mostly_performed_leadership_duties: true).ineligible?).to eql true
+      expect(StudentLoans::Eligibility.new(mostly_performed_leadership_duties: false).ineligible?).to eql false
     end
   end
 
@@ -118,7 +123,7 @@ RSpec.describe StudentLoans::Eligibility, type: :model do
       expect(StudentLoans::Eligibility.new(qts_award_year: "before_2013").ineligibility_reason).to eq :ineligible_qts_award_year
       expect(StudentLoans::Eligibility.new(claim_school: schools(:hampstead_school)).ineligibility_reason).to eq :ineligible_claim_school
       expect(StudentLoans::Eligibility.new(employment_status: :no_school).ineligibility_reason).to eq :employed_at_no_school
-      expect(StudentLoans::Eligibility.new(mostly_teaching_eligible_subjects: false).ineligibility_reason).to eq :not_taught_eligible_subjects_enough
+      expect(StudentLoans::Eligibility.new(mostly_performed_leadership_duties: true).ineligibility_reason).to eq :not_taught_enough
     end
   end
 
@@ -161,32 +166,35 @@ RSpec.describe StudentLoans::Eligibility, type: :model do
       expect(StudentLoans::Eligibility.new(biology_taught: false, physics_taught: false)).not_to be_valid(:"subjects-taught")
     end
 
-    it "validates when one or more of the subjects-taught attributes are true" do
+    it "is valid when one or more of the subjects-taught attributes are true" do
       expect(StudentLoans::Eligibility.new(biology_taught: true)).to be_valid(:"subjects-taught")
       expect(StudentLoans::Eligibility.new(biology_taught: true, computer_science_taught: false)).to be_valid(:"subjects-taught")
       expect(StudentLoans::Eligibility.new(chemistry_taught: true, languages_taught: true)).to be_valid(:"subjects-taught")
     end
 
-    it "is valid with no subjects present if mostly_teaching_eligible_subjects is false" do
-      expect(StudentLoans::Eligibility.new(mostly_teaching_eligible_subjects: false)).to be_valid(:"subjects-taught")
-      expect(StudentLoans::Eligibility.new(mostly_teaching_eligible_subjects: true)).not_to be_valid(:"subjects-taught")
+    it "is valid with no subjects present if taught_eligible_subjects is false" do
+      expect(StudentLoans::Eligibility.new(taught_eligible_subjects: false)).to be_valid(:"subjects-taught")
+      expect(StudentLoans::Eligibility.new(taught_eligible_subjects: true)).not_to be_valid(:"subjects-taught")
     end
   end
 
   context "when saving in the “leadership-position” context" do
     it "is not valid without a value for had_leadership_position" do
       expect(StudentLoans::Eligibility.new).not_to be_valid(:"leadership-position")
-
       expect(StudentLoans::Eligibility.new(had_leadership_position: true)).to be_valid(:"leadership-position")
       expect(StudentLoans::Eligibility.new(had_leadership_position: false)).to be_valid(:"leadership-position")
     end
   end
 
-  context "when saving in the “mostly-teaching-eligible-subjects” context" do
-    it "is valid when mostly_teaching_eligible_subjects is present as a boolean value" do
-      expect(StudentLoans::Eligibility.new).not_to be_valid(:"mostly-teaching-eligible-subjects")
-      expect(StudentLoans::Eligibility.new(mostly_teaching_eligible_subjects: true)).to be_valid(:"mostly-teaching-eligible-subjects")
-      expect(StudentLoans::Eligibility.new(mostly_teaching_eligible_subjects: false)).to be_valid(:"mostly-teaching-eligible-subjects")
+  context "when saving in the “mostly-performed-leadership-duties” context" do
+    it "is valid when mostly_performed_leadership_duties is present as a boolean value and had_leadership_position is true" do
+      expect(StudentLoans::Eligibility.new(had_leadership_position: true)).not_to be_valid(:"mostly-performed-leadership-duties")
+      expect(StudentLoans::Eligibility.new(had_leadership_position: true, mostly_performed_leadership_duties: true)).to be_valid(:"mostly-performed-leadership-duties")
+      expect(StudentLoans::Eligibility.new(had_leadership_position: true, mostly_performed_leadership_duties: false)).to be_valid(:"mostly-performed-leadership-duties")
+    end
+
+    it "is valid when missing if had_leadership_position is false" do
+      expect(StudentLoans::Eligibility.new(had_leadership_position: false)).to be_valid(:"mostly-performed-leadership-duties")
     end
   end
 
@@ -233,8 +241,8 @@ RSpec.describe StudentLoans::Eligibility, type: :model do
       expect(build(:student_loans_eligibility, :eligible, had_leadership_position: false)).to be_valid(:submit)
     end
 
-    it "is not valid without a value for mostly_teaching_eligible_subjects" do
-      expect(build(:student_loans_eligibility, :eligible, mostly_teaching_eligible_subjects: nil)).not_to be_valid(:submit)
+    it "is not valid without a value for mostly_performed_leadership_duties" do
+      expect(build(:student_loans_eligibility, :eligible, mostly_performed_leadership_duties: nil)).not_to be_valid(:submit)
     end
 
     it "is not valid without a value for student_loan_repayment_amount" do

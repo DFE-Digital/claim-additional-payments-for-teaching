@@ -3,33 +3,43 @@
     <%= render("shared/error_summary", instance: current_claim) if current_claim.errors.any? %>
 
     <%= form_for current_claim, url: claim_path do |form| %>
+
       <%= form_group_tag current_claim do %>
         <%= form.fields_for :eligibility, include_id: false do |fields| %>
           <fieldset class="govuk-fieldset" id="claim_subjects_taught">
+
             <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl">
               <h1 class="govuk-fieldset__heading">
                 <%= t("student_loans.questions.subjects_taught") %>
               </h1>
             </legend>
+
             <div class="govuk-checkboxes">
-              <% StudentLoans::Eligibility::SUBJECT_ATTRIBUTES.each do |subject| -%>
+
+              <%- StudentLoans::Eligibility::SUBJECT_ATTRIBUTES.each do |subject| %>
                 <div class="govuk-checkboxes__item">
                   <%= fields.hidden_field subject, value: false %>
-                  <%= fields.check_box subject, class: "govuk-checkboxes__input subject", id: "eligible_subjects_#{subject}"  %>
-                  <%= fields.label subject, t("student_loans.questions.eligible_subjects.#{subject}"), class: "govuk-label govuk-checkboxes__label", for: "eligible_subjects_#{subject}"  %>
+                  <%= fields.check_box subject, class: "govuk-checkboxes__input subject", id: "eligible_subjects_#{subject}" %>
+                  <%= fields.label subject, t("student_loans.questions.eligible_subjects.#{subject}"), class: "govuk-label govuk-checkboxes__label", for: "eligible_subjects_#{subject}" %>
                 </div>
               <% end %>
+
               <div class="govuk-radios__divider">or</div>
+
               <div class="govuk-radios__item">
-                <%= fields.hidden_field :mostly_teaching_eligible_subjects, value: '' %>
-                <%= fields.radio_button(:mostly_teaching_eligible_subjects, false, class: "govuk-radios__input")  %>
-                <%= fields.label :mostly_teaching_eligible_subjects_false, t('student_loans.questions.eligible_subjects.not_applicable'), class: "govuk-label govuk-radios__label" %>
+                <%= fields.hidden_field :taught_eligible_subjects, value: true %>
+                <%= fields.radio_button :taught_eligible_subjects, false, class: "govuk-radios__input" %>
+                <%= fields.label :taught_eligible_subjects_false, t('student_loans.questions.eligible_subjects.none_taught'), class: "govuk-label govuk-radios__label" %>
               </div>
+
             </div>
+
           </fieldset>
         <% end %>
       <% end %>
+
       <%= form.submit "Continue", class: "govuk-button" %>
+
     <% end %>
   </div>
 </div>

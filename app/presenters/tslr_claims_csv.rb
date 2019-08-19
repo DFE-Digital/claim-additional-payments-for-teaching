@@ -23,7 +23,7 @@ class TslrClaimsCsv
     :student_loan_repayment_plan,
     :email_address,
     :had_leadership_position,
-    :mostly_teaching_eligible_subjects,
+    :mostly_performed_leadership_duties,
     :bank_sort_code,
     :bank_account_number,
     :student_loan_repayment_amount,

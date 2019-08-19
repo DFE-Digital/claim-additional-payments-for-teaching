@@ -6,7 +6,8 @@ module StudentLoans
       :employment_status,
       :current_school_id,
       :had_leadership_position,
-      :mostly_teaching_eligible_subjects,
+      :taught_eligible_subjects,
+      :mostly_performed_leadership_duties,
       :student_loan_repayment_amount,
       StudentLoans::Eligibility::SUBJECT_ATTRIBUTES,
     ].flatten.freeze
