@@ -398,6 +398,7 @@ RSpec.describe Claim, type: :model do
         :bank_account_number,
         :date_of_birth,
         :full_name,
+        :verify_response,
       ])
     end
   end
