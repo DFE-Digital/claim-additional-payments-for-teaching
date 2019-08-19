@@ -142,15 +142,5 @@ Further related steps are left as an exercise for the reader.
 The service architecture is currently defined and
 [on confluence](https://dfedigital.atlassian.net/wiki/spaces/TP/pages/1049559041/Service+Architecture).
 
-## Access
-
-Staging is protected by HTTP Basic Authentication. The username and password are
-pinned in the _dfe-teacher-payments_ slack channel or can be found in the
-_Config Vars_ in Heroku.
-
-### Staging
-
-https://dfe-teachers-payment-staging.herokuapp.com/
-
 [azure-devops]: https://dev.azure.com/dfe-ssp/S118-Teacher-Payments-Service
 [openjdk]: https://adoptopenjdk.net/
