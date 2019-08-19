@@ -10,7 +10,11 @@ module DfeSignInHelpers
   end
 
   def mock_dfe_sign_in_auth_session(user_id, organisation_id)
-    OmniAuth.config.mock_auth[:dfe] = OmniAuth::AuthHash.new({
+    OmniAuth.config.mock_auth[:dfe] = OmniAuth::AuthHash.new(dfe_sign_in_auth_hash(user_id, organisation_id))
+  end
+
+  def dfe_sign_in_auth_hash(user_id, organisation_id)
+    {
       "provider" => :dfe,
       "uid" => user_id,
       "info" => {
@@ -57,7 +61,7 @@ module DfeSignInHelpers
           },
         },
       },
-    })
+    }
   end
 
   def stub_dfe_sign_in_user_info_request(user_id, organisation_id, role_code)
