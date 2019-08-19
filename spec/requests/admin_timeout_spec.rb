@@ -13,7 +13,7 @@ RSpec.describe "Admin session timing out", type: :request do
     let(:after_expiry) { timeout_length_in_minutes.minutes + 1.second }
 
     it "clears the session and redirects to the login page" do
-      expect(session[:admin_auth]).to eql({"email" => "test-dfe-sign-in@host.tld"})
+      expect(session[:admin_auth]).to include({"email" => "test-dfe-sign-in@host.tld"})
 
       travel after_expiry do
         get admin_claims_path(format: :csv)
@@ -31,7 +31,7 @@ RSpec.describe "Admin session timing out", type: :request do
     let(:after_expiry) { timeout_length_in_minutes.minutes + 1.second }
 
     it "still clears the admin session" do
-      expect(session[:admin_auth]).to eql({"email" => "test-dfe-sign-in@host.tld"})
+      expect(session[:admin_auth]).to include({"email" => "test-dfe-sign-in@host.tld"})
 
       travel after_expiry do
         get root_path

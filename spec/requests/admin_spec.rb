@@ -24,7 +24,7 @@ RSpec.describe "Admin", type: :request do
 
           expect(response).to be_successful
           expect(response.body).to include("Admin")
-          expect(session[:admin_auth]).to eql({"email" => "test-dfe-sign-in@host.tld"})
+          expect(session[:admin_auth]).to include({"email" => "test-dfe-sign-in@host.tld"})
         end
 
         context "and they sign out" do
