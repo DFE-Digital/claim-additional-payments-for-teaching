@@ -36,7 +36,7 @@
 
     <div id="global-cookie-message" class="govuk-cookie-banner" role="region" aria-label="cookie banner">
       <div class="govuk-width-container">
-        <p class="govuk-cookie-banner__message">This service uses cookies to make the site simpler.</p>
+        <p class="govuk-cookie-banner__message"><%= t("service_name") %> uses cookies to make the site simpler.</p>
         <div class="govuk-cookie-banner__buttons">
           <button class="govuk-button govuk-button--secondary" type="submit" id="accept-cookies">Accept cookies</button>
           <%= link_to('Cookie information', cookies_path, class: "govuk-button govuk-button--secondary ") %>
