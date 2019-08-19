@@ -28,11 +28,7 @@ module Admin
 
     def authorised?
       authenticated_session = DfeSignIn::AuthenticatedSession.from_auth_hash(auth_hash)
-
-      DfeSignIn::Api::User.new(
-        user_id: authenticated_session.user_id,
-        organisation_id: authenticated_session.organisation_id
-      ).has_role?(DFE_SIGN_IN_ADMIN_ROLE_CODE)
+      authenticated_session.role_codes.include?(DFE_SIGN_IN_ADMIN_ROLE_CODE)
     end
 
     def auth_hash
