@@ -1,10 +1,7 @@
 module DfeSignInHelpers
   # Stubs the DfE Sign-in OpenID response and the call to the DfE Sign-in API
   # that we use to determine the roles that the user is authorised with.
-  def stub_dfe_sign_in_with_role(role_code)
-    organisation_id = "1234"
-    user_id = "123"
-
+  def stub_dfe_sign_in_with_role(role_code, user_id = "123", organisation_id = "1234")
     mock_dfe_sign_in_auth_session(user_id, organisation_id)
     stub_dfe_sign_in_user_info_request(user_id, organisation_id, role_code)
   end

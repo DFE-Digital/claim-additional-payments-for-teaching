@@ -13,8 +13,11 @@ module Admin
     end
 
     def callback
-      if authorised?
-        session[:admin_auth] = auth_hash.fetch("info").to_h
+      authenticated_session = DfeSignIn::AuthenticatedSession.from_auth_hash(request.env.fetch("omniauth.auth"))
+
+      if authenticated_session.role_codes.include?(DFE_SIGN_IN_ADMIN_ROLE_CODE)
+        session[:user_id] = authenticated_session.user_id
+        session[:organisation_id] = authenticated_session.organisation_id
         redirect_to admin_path
       else
         render "failure", status: :unauthorized
@@ -22,17 +25,6 @@ module Admin
     end
 
     def failure
-    end
-
-    private
-
-    def authorised?
-      authenticated_session = DfeSignIn::AuthenticatedSession.from_auth_hash(auth_hash)
-      authenticated_session.role_codes.include?(DFE_SIGN_IN_ADMIN_ROLE_CODE)
-    end
-
-    def auth_hash
-      request.env.fetch("omniauth.auth")
     end
   end
 end
