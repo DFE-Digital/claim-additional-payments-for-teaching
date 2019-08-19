@@ -15,6 +15,10 @@ module DfeSignIn
         role_codes.include?(role_code)
       end
 
+      def role_codes
+        body["roles"].map { |r| r["code"] }
+      end
+
       private
 
       def body
@@ -31,10 +35,6 @@ module DfeSignIn
 
           JSON.parse(response.body)
         end
-      end
-
-      def role_codes
-        body["roles"].map { |r| r["code"] }
       end
 
       def uri

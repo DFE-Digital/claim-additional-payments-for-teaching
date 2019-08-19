@@ -50,6 +50,12 @@ RSpec.describe DfeSignIn::Api::User do
         it { expect(has_role?).to eq(false) }
       end
     end
+
+    describe "#role_codes" do
+      it "returns the role codes" do
+        expect(subject.role_codes).to eq(["my_role"])
+      end
+    end
   end
 
   context "with an invalid response" do
