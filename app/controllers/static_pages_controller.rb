@@ -1,4 +1,7 @@
 class StaticPagesController < ApplicationController
+  def start_page
+  end
+
   def accessibility_statement
   end
 
