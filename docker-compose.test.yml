@@ -1,6 +1,6 @@
 version: "3.7"
 services:
-  web:
+  test:
     build:
       context: .
       target: test
@@ -16,7 +16,6 @@ services:
       - .env.test
     tty: true
     stdin_open: true
-    command: bundle exec spring server
 
   db:
     image: postgres
