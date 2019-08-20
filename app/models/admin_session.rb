@@ -11,4 +11,8 @@ class AdminSession < DfeSignIn::AuthenticatedSession
   def is_support_agent?
     role_codes.include?(SUPPORT_AGENT_DFE_SIGN_IN_ROLE_CODE)
   end
+
+  def has_admin_access?
+    is_service_operator? || is_support_agent?
+  end
 end
