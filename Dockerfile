@@ -4,10 +4,10 @@
 
 FROM ruby:2.6.2-alpine AS base
 
-RUN apk --no-cache add bash
-RUN apk --no-cache add postgresql-dev
-RUN apk --no-cache add tzdata
-RUN apk --no-cache add nodejs
+RUN apk add bash
+RUN apk add postgresql-dev
+RUN apk add tzdata
+RUN apk add nodejs
 
 ENV APP_HOME /app
 ENV DEPS_HOME /deps
@@ -24,9 +24,9 @@ FROM base AS dependencies
 
 RUN echo "Building with RAILS_ENV=${RAILS_ENV}, NODE_ENV=${NODE_ENV}"
 
-RUN apk --no-cache add build-base
-RUN apk --no-cache add git
-RUN apk --no-cache add yarn
+RUN apk add build-base
+RUN apk add git
+RUN apk add yarn
 
 # Set up install environment
 RUN mkdir -p ${DEPS_HOME}
@@ -122,7 +122,7 @@ FROM web AS test
 
 RUN echo "Building with RAILS_ENV=${RAILS_ENV}, NODE_ENV=${NODE_ENV}"
 
-RUN apk --no-cache add chromium chromium-chromedriver
+RUN apk add chromium chromium-chromedriver
 
 # Install ShellCheck
 COPY --from=shellcheck / /opt/shellcheck/
