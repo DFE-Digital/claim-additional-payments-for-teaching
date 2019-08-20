@@ -43,10 +43,11 @@ module ClaimsHelper
   end
 
   def student_loan_answers(claim)
-    [[t("questions.has_student_loan"), (claim.has_student_loan ? "Yes" : "No"), "student-loan"]].tap do |answers|
-      answers << [t("student_loans.questions.student_loan_country"), claim.student_loan_country.humanize, "student-loan-country"] if claim.student_loan_country.present?
-      answers << [t("questions.student_loan_how_many_courses"), claim.student_loan_courses.humanize, "student-loan-how-many-courses"] if claim.student_loan_courses.present?
-      answers << [t("questions.student_loan_start_date.#{claim.student_loan_courses}"), t("answers.student_loan_start_date.#{claim.student_loan_courses}.#{claim.student_loan_start_date}"), "student-loan-start-date"] if claim.student_loan_courses.present?
+    [].tap do |a|
+      a << [t("questions.has_student_loan"), (claim.has_student_loan ? "Yes" : "No"), "student-loan"]
+      a << [t("questions.student_loan_country"), claim.student_loan_country.titleize, "student-loan-country"] if claim.student_loan_country.present?
+      a << [t("questions.student_loan_how_many_courses"), claim.student_loan_courses.humanize, "student-loan-how-many-courses"] if claim.student_loan_courses.present?
+      a << [t("questions.student_loan_start_date.#{claim.student_loan_courses}"), t("answers.student_loan_start_date.#{claim.student_loan_courses}.#{claim.student_loan_start_date}"), "student-loan-start-date"] if claim.student_loan_courses.present?
     end
   end
 
