@@ -5,6 +5,14 @@ $govuk-cookie-banner-text-green: #00823b;
 
 .js-enabled .govuk-cookie-banner {
   display: none;
+
+  &.govuk-cookie-banner--visible {
+    display: block;
+  }
+
+  #accept-cookies {
+    display: inline-block;
+  }
 }
 
 .govuk-cookie-banner {
@@ -12,6 +20,10 @@ $govuk-cookie-banner-text-green: #00823b;
   padding: govuk-spacing(4) 0;
   background-color: $govuk-cookie-banner-background;
   border: 2px solid govuk-colour("black");
+
+  #accept-cookies {
+    display: none;
+  }
 }
 
 .govuk-cookie-banner__message {
