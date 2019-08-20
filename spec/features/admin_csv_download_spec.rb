@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.feature "Download CSV of claims" do
-  context "User is logged in" do
+  context "User is logged in as a service operator" do
     before do
       stub_dfe_sign_in_with_role(AdminSession::SERVICE_OPERATOR_DFE_SIGN_IN_ROLE_CODE)
       visit admin_path
@@ -18,6 +18,21 @@ RSpec.feature "Download CSV of claims" do
 
       csv = CSV.parse(body)
       expect(csv.count).to eq(submitted_claims.count + 1)
+    end
+  end
+
+  context "User is logged in as a support user" do
+    before do
+      stub_dfe_sign_in_with_role(AdminSession::SUPPORT_AGENT_DFE_SIGN_IN_ROLE_CODE)
+      visit admin_path
+      click_on "Sign in"
+    end
+
+    scenario "User cannot download a CSV" do
+      visit admin_claims_path(format: :csv)
+
+      expect(page.status_code).to eq(401)
+      expect(page).to have_content("Not authorised")
     end
   end
 
