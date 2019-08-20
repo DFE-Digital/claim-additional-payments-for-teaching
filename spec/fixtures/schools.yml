@@ -26,3 +26,18 @@ hampstead_school:
   locality: Hampstead
   town: London
   postcode: NW2 3RT
+
+## Closed school
+great_creaton_primary_school:
+  name: Great Creaton Primary School
+  urn: 121820
+  phase: primary
+  close_date: 2018-12-31
+  school_type_group: la_maintained
+  school_type: community_school
+  local_authority: northamptonshire
+  local_authority_district: daventry
+  street: Welford Road
+  locality: Creaton
+  town: Northampton
+  postcode: NN6 8NH
