@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+- Add static error pages for 400, 500 and 422 errors
+
 ## [Release 001] - 2019-08-21
 
 - First release for student loan repayments private beta
