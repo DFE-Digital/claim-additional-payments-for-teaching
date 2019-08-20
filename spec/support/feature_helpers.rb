@@ -6,6 +6,7 @@ module FeatureHelpers
     choose_still_teaching "Yes, at another school"
     choose_school schools(:hampstead_school)
     choose_subjects_taught
+    click_on "Continue"
 
     perform_verify_step
 

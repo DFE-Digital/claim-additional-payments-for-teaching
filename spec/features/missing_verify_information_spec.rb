@@ -7,6 +7,7 @@ RSpec.feature "Missing information from GOV.UK Verify" do
     choose_school schools(:penistone_grammar_school)
     choose_still_teaching
     choose_subjects_taught
+    click_on "Continue"
 
     perform_verify_step("identity-verified-other-gender")
 
@@ -53,6 +54,7 @@ RSpec.feature "Missing information from GOV.UK Verify" do
     choose_school schools(:penistone_grammar_school)
     choose_still_teaching
     choose_subjects_taught
+    click_on "Continue"
 
     perform_verify_step("identity-verified-no-address")
 
