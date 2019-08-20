@@ -8,6 +8,8 @@
 
     <%= render partial: "check_your_answers_section", locals: {heading: "Claim details", answers: eligibility_answers(current_claim.eligibility)} %>
 
+    <%= render partial: "check_your_answers_section", locals: {heading: "GOV.UK Verify details", answers: verify_answers(current_claim)} %>
+
     <%= render partial: "check_your_answers_section", locals: {heading: "Identity details", answers: identity_answers(current_claim)} %>
 
     <%= render partial: "check_your_answers_section", locals: {heading: "Student loan details", answers: student_loan_answers(current_claim)} %>

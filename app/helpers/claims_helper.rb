@@ -23,6 +23,15 @@ module ClaimsHelper
     end
   end
 
+  def verify_answers(claim)
+    [].tap do |a|
+      a << ["Full name", claim.full_name]
+      a << ["Address", claim.address] if claim.address_verified?
+      a << ["Date of birth", l(claim.date_of_birth)]
+      a << ["Gender", t("answers.payroll_gender.#{claim.payroll_gender}")] if claim.payroll_gender_verified?
+    end
+  end
+
   def identity_answers(claim)
     [].tap do |a|
       a << [t("questions.address"), claim.address, "address"] unless claim.address_verified?
