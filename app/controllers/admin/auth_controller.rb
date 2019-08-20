@@ -1,7 +1,5 @@
 module Admin
   class AuthController < BaseAdminController
-    DFE_SIGN_IN_ADMIN_ROLE_CODE = "teacher_payments_access"
-
     skip_before_action :ensure_authenticated_user
 
     def sign_in
@@ -13,8 +11,11 @@ module Admin
     end
 
     def callback
-      if authorised?
-        session[:admin_auth] = auth_hash.fetch("info").to_h
+      admin_session = AdminSession.from_auth_hash(request.env.fetch("omniauth.auth"))
+
+      if admin_session.is_service_operator?
+        session[:user_id] = admin_session.user_id
+        session[:organisation_id] = admin_session.organisation_id
         redirect_to admin_path
       else
         render "failure", status: :unauthorized
@@ -22,27 +23,6 @@ module Admin
     end
 
     def failure
-    end
-
-    private
-
-    def authorised?
-      DfeSignIn::UserAccess.new(
-        user_id: user_id,
-        organisation_id: organisation_id
-      ).has_role?(DFE_SIGN_IN_ADMIN_ROLE_CODE)
-    end
-
-    def auth_hash
-      request.env.fetch("omniauth.auth")
-    end
-
-    def organisation_id
-      auth_hash.dig("extra", "raw_info", "organisation", "id")
-    end
-
-    def user_id
-      auth_hash["uid"]
     end
   end
 end

@@ -17,5 +17,6 @@ module DfeSignIn
   end
 end
 
+require_relative "dfe_sign_in/authenticated_session"
 require_relative "dfe_sign_in/utils"
-require_relative "dfe_sign_in/user_access"
+require_relative "dfe_sign_in/api/user"

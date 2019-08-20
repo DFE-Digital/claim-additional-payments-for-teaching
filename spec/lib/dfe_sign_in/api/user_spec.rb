@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe DfeSignIn::UserAccess do
+RSpec.describe DfeSignIn::Api::User do
   subject { described_class.new(user_id: 999, organisation_id: 456) }
 
   let(:url) { "#{DfeSignIn.configuration.base_url}/services/#{DfeSignIn.configuration.client_id}/organisations/456/users/999" }
@@ -48,6 +48,12 @@ RSpec.describe DfeSignIn::UserAccess do
       context "when a role does not exist" do
         let(:role) { "other_role" }
         it { expect(has_role?).to eq(false) }
+      end
+    end
+
+    describe "#role_codes" do
+      it "returns the role codes" do
+        expect(subject.role_codes).to eq(["my_role"])
       end
     end
   end
