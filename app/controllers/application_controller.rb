@@ -52,6 +52,7 @@ class ApplicationController < ActionController::Base
     if admin_session_timed_out?
       session.delete(:user_id)
       session.delete(:organisation_id)
+      session.delete(:role_codes)
       flash[:notice] = "Your session has timed out due to inactivity, please sign-in again"
     end
   end

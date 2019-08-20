@@ -9,6 +9,7 @@ RSpec.describe "Admin", type: :request do
         expect(response).to redirect_to(admin_sign_in_path)
         expect(session[:user_id]).to be_nil
         expect(session[:organisation_id]).to be_nil
+        expect(session[:role_codes]).to be_nil
       end
     end
 
@@ -30,6 +31,7 @@ RSpec.describe "Admin", type: :request do
           expect(response.body).to include("Admin")
           expect(session[:user_id]).to eq(user_id)
           expect(session[:organisation_id]).to eq(organisation_id)
+          expect(session[:role_codes]).to eq([AdminSession::SERVICE_OPERATOR_DFE_SIGN_IN_ROLE_CODE])
         end
 
         context "and they sign out" do
@@ -38,6 +40,7 @@ RSpec.describe "Admin", type: :request do
 
             expect(session[:user_id]).to be_nil
             expect(session[:organisation_id]).to be_nil
+            expect(session[:role_codes]).to be_nil
           end
         end
       end
@@ -56,6 +59,7 @@ RSpec.describe "Admin", type: :request do
           expect(response.body).to include("Admin")
           expect(session[:user_id]).to eq(user_id)
           expect(session[:organisation_id]).to eq(organisation_id)
+          expect(session[:role_codes]).to eq([AdminSession::SUPPORT_AGENT_DFE_SIGN_IN_ROLE_CODE])
         end
       end
 
@@ -69,6 +73,7 @@ RSpec.describe "Admin", type: :request do
         it "shows a not authorised page and doesn’t set a session" do
           expect(session[:user_id]).to be_nil
           expect(session[:organisation_id]).to be_nil
+          expect(session[:role_codes]).to be_nil
 
           expect(response.code).to eq("401")
           expect(response.body).to include("Not authorised")
@@ -87,6 +92,7 @@ RSpec.describe "Admin", type: :request do
 
         expect(session[:user_id]).to be_nil
         expect(session[:organisation_id]).to be_nil
+        expect(session[:role_codes]).to be_nil
 
         expect(response.body).to redirect_to(
           admin_auth_failure_path(message: :invalid_credentials, strategy: :dfe)
