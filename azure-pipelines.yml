@@ -10,35 +10,62 @@ variables:
   - group: docker-settings
 
 steps:
+  # Pin Ruby version
   - task: UseRubyVersion@0
     inputs:
       versionSpec: "2.6.2"
       addToPath: true
     displayName: Use Ruby 2.6.2
 
+  # Build and run tests
   - script: docker-compose -f docker-compose.test.yml build
     displayName: Build test Docker image
   - script: docker-compose -f docker-compose.test.yml run --rm test
     displayName: Run tests on Docker
 
+  # Clean up
   - script: |
       git reset --hard
       git clean -xdf
     displayName: Clean repository
 
+  # Publish
   - publish: $(System.DefaultWorkingDirectory)
     artifact: repository
     displayName: Publish repository as artifact
 
+  # Login to DockerHub
   - script: docker login -u $(dockerId) -p $pass
     env:
       pass: $(dockerPassword)
     displayName: Login to DockerHub
 
+  # Build web dependencies
+  - script: |
+      docker pull $(dockerRegistry)/$(dockerImageName):cache-web-dependencies || true
+      docker build \
+        --file=Dockerfile \
+        --cache-from=$(dockerRegistry)/$(dockerImageName):cache-web-dependencies \
+        --tag=local/dfe-teachers-payment-service:web-dependencies \
+        --target=dependencies \
+        .
+    displayName: Build web dependencies Docker image using 'cache-web-dependencies' as cache
+    condition: ne(variables['Build.SourceBranch'], 'refs/heads/master')
+  - script: |
+      docker build \
+        --file=Dockerfile \
+        --tag=local/dfe-teachers-payment-service:web-dependencies \
+        --target=dependencies \
+        .
+    displayName: Build web dependencies Docker image without cache
+    condition: eq(variables['Build.SourceBranch'], 'refs/heads/master')
+
+  # Build web
   - script: |
       docker pull $(dockerRegistry)/$(dockerImageName):latest || true
       docker build \
         --file=Dockerfile \
+        --cache-from=local/dfe-teachers-payment-service:web-dependencies \
         --cache-from=$(dockerRegistry)/$(dockerImageName):latest \
         --tag=$(dockerRegistry)/$(dockerImageName):$(Build.BuildNumber) \
         --target=web \
@@ -48,12 +75,19 @@ steps:
   - script: |
       docker build \
         --file=Dockerfile \
+        --cache-from=local/dfe-teachers-payment-service:web-dependencies \
         --tag=$(dockerRegistry)/$(dockerImageName):$(Build.BuildNumber) \
         --target=web \
         .
     displayName: Build web Docker image without cache
     condition: eq(variables['Build.SourceBranch'], 'refs/heads/master')
 
+  # Push web images
+  - script: |
+      docker tag local/dfe-teachers-payment-service:web-dependencies $(dockerRegistry)/$(dockerImageName):cache-web-dependencies
+      docker push $(dockerRegistry)/$(dockerImageName):cache-web-dependencies
+    displayName: Push web dependencies Docker image for caching
+    condition: eq(variables['Build.SourceBranch'], 'refs/heads/master')
   - script: |
       docker tag $(dockerRegistry)/$(dockerImageName):$(Build.BuildNumber) $(dockerRegistry)/$(dockerImageName):latest
       docker push $(dockerRegistry)/$(dockerImageName):$(Build.BuildNumber)
