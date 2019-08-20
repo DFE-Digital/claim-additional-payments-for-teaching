@@ -14,6 +14,7 @@
 //= require govuk_frontend_rails
 //= require a11y-dialog/a11y-dialog.min.js
 //= require accessible-autocomplete/dist/accessible-autocomplete.min.js
+//= require cookie_functions.js
 //= require_tree .
 //= stub js_check.js
 //= stub google_analytics.js
