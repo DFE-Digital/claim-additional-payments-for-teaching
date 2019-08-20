@@ -22,8 +22,6 @@ ENV NODE_ENV ${RAILS_ENV:-production}
 
 FROM base AS dependencies
 
-RUN echo "Building with RAILS_ENV=${RAILS_ENV}, NODE_ENV=${NODE_ENV}"
-
 RUN apk add build-base
 RUN apk add git
 RUN apk add yarn
@@ -64,8 +62,6 @@ RUN if [ ${RAILS_ENV} = "production" ]; then \
 # ------------------------------------------------------------------------------
 
 FROM base AS web
-
-RUN echo "Building with RAILS_ENV=${RAILS_ENV}, NODE_ENV=${NODE_ENV}"
 
 # Set up install environment
 RUN mkdir -p ${APP_HOME}
@@ -119,8 +115,6 @@ FROM koalaman/shellcheck:stable AS shellcheck
 # ------------------------------------------------------------------------------
 
 FROM web AS test
-
-RUN echo "Building with RAILS_ENV=${RAILS_ENV}, NODE_ENV=${NODE_ENV}"
 
 RUN apk add chromium chromium-chromedriver
 
