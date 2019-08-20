@@ -13,7 +13,7 @@ module Admin
     def callback
       admin_session = AdminSession.from_auth_hash(request.env.fetch("omniauth.auth"))
 
-      if admin_session.is_service_operator?
+      if admin_session.has_admin_access?
         session[:user_id] = admin_session.user_id
         session[:organisation_id] = admin_session.organisation_id
         redirect_to admin_path

@@ -13,10 +13,10 @@ RSpec.describe "Admin", type: :request do
     end
 
     context "when the user is authenticated" do
-      context "when the user is authorised to access the service" do
-        let(:user_id) { "userid-345" }
-        let(:organisation_id) { "organisationid-6789" }
+      let(:user_id) { "userid-345" }
+      let(:organisation_id) { "organisationid-6789" }
 
+      context "when the user is a service operator" do
         before do
           stub_dfe_sign_in_with_role(AdminSession::SERVICE_OPERATOR_DFE_SIGN_IN_ROLE_CODE, user_id, organisation_id)
           post admin_dfe_sign_in_path
@@ -39,6 +39,23 @@ RSpec.describe "Admin", type: :request do
             expect(session[:user_id]).to be_nil
             expect(session[:organisation_id]).to be_nil
           end
+        end
+      end
+
+      context "when the user is a support user" do
+        before do
+          stub_dfe_sign_in_with_role(AdminSession::SUPPORT_AGENT_DFE_SIGN_IN_ROLE_CODE, user_id, organisation_id)
+          post admin_dfe_sign_in_path
+          follow_redirect!
+        end
+
+        it "renders the admin page and sets a session" do
+          get admin_path
+
+          expect(response).to be_successful
+          expect(response.body).to include("Admin")
+          expect(session[:user_id]).to eq(user_id)
+          expect(session[:organisation_id]).to eq(organisation_id)
         end
       end
 
