@@ -79,7 +79,7 @@
         </tr>
         <tr>
           <tr class="govuk-table__row">
-          <td class="govuk-table__cell">_gat_gtag_[ua-code]</td>
+          <td class="govuk-table__cell">_gat_gtag_<%= ENV["GOOGLE_ANALYTICS_ID"]&.underscore %></td>
           <td class="govuk-table__cell">This is used by Google Analytics to limit the amount of requests they receive</td>
           <td class="govuk-table__cell">After 1 minute</td>
         </tr>
