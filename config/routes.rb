@@ -6,7 +6,7 @@ Rails.application.routes.draw do
   get "/healthcheck", to: proc { [200, {}, ["OK"]] }
 
   # setup static pages
-  get "/privacy_policy", to: "static_pages#privacy_policy", as: :privacy_policy
+  get "/privacy_notice", to: "static_pages#privacy_notice", as: :privacy_notice
   get "/terms_conditions", to: "static_pages#terms_conditions", as: :terms_conditions
   get "/cookies", to: "static_pages#cookies", as: :cookies
   get "/accessibility_statement", to: "static_pages#accessibility_statement", as: :accessibility_statement

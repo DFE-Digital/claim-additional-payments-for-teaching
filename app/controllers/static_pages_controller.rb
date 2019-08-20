@@ -8,7 +8,7 @@ class StaticPagesController < ApplicationController
   def cookies
   end
 
-  def privacy_policy
+  def privacy_notice
   end
 
   def terms_conditions
