@@ -17,10 +17,19 @@ steps:
       addToPath: true
     displayName: Use Ruby 2.6.2
 
+  # Login to DockerHub
+  - script: docker login -u $(dockerId) -p $pass
+    env:
+      pass: $(dockerPassword)
+    displayName: Login to DockerHub
+
   # Build and run tests
-  - script: docker-compose -f docker-compose.test.yml build
+  - script: |
+      docker pull $(dockerRegistry)/$(dockerImageName):cache-test-dependencies || true
+      docker pull $(dockerRegistry)/$(dockerImageName):cache-test || true
+      docker-compose --file=docker-compose.test.yml build
     displayName: Build test Docker image
-  - script: docker-compose -f docker-compose.test.yml run --rm test
+  - script: docker-compose --file=docker-compose.test.yml run --rm test
     displayName: Run tests on Docker
 
   # Clean up
@@ -33,12 +42,6 @@ steps:
   - publish: $(System.DefaultWorkingDirectory)
     artifact: repository
     displayName: Publish repository as artifact
-
-  # Login to DockerHub
-  - script: docker login -u $(dockerId) -p $pass
-    env:
-      pass: $(dockerPassword)
-    displayName: Login to DockerHub
 
   # Build web dependencies
   - script: |
@@ -80,6 +83,18 @@ steps:
         --target=web \
         .
     displayName: Build web Docker image without cache
+    condition: eq(variables['Build.SourceBranch'], 'refs/heads/master')
+
+  # Push test images
+  - script: |
+      docker tag local/dfe-teachers-payment-service:test-dependencies $(dockerRegistry)/$(dockerImageName):cache-test-dependencies
+      docker push $(dockerRegistry)/$(dockerImageName):cache-test-dependencies
+    displayName: Push test dependencies Docker image for caching
+    condition: eq(variables['Build.SourceBranch'], 'refs/heads/master')
+  - script: |
+      docker tag local/dfe-teachers-payment-service:test $(dockerRegistry)/$(dockerImageName):cache-test
+      docker push $(dockerRegistry)/$(dockerImageName):cache-test
+    displayName: Push test Docker image for caching
     condition: eq(variables['Build.SourceBranch'], 'refs/heads/master')
 
   # Push web images
