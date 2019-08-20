@@ -101,7 +101,7 @@ describe ClaimsHelper do
 
       expected_answers = [
         [t("questions.has_student_loan"), "Yes", "student-loan"],
-        [t("student_loans.questions.student_loan_country"), "England", "student-loan-country"],
+        [t("questions.student_loan_country"), "England", "student-loan-country"],
         [t("questions.student_loan_how_many_courses"), "One course", "student-loan-how-many-courses"],
         [t("questions.student_loan_start_date.one_course"), t("answers.student_loan_start_date.one_course.on_or_after_first_september_2012"), "student-loan-start-date"],
       ]
@@ -120,7 +120,7 @@ describe ClaimsHelper do
 
       expected_answers = [
         [t("questions.has_student_loan"), "Yes", "student-loan"],
-        [t("student_loans.questions.student_loan_country"), "England", "student-loan-country"],
+        [t("questions.student_loan_country"), "England", "student-loan-country"],
         [t("questions.student_loan_how_many_courses"), "Two or more courses", "student-loan-how-many-courses"],
         [t("questions.student_loan_start_date.two_or_more_courses"), t("answers.student_loan_start_date.two_or_more_courses.before_first_september_2012"), "student-loan-start-date"],
       ]
@@ -133,7 +133,7 @@ describe ClaimsHelper do
 
       expected_answers = [
         [t("questions.has_student_loan"), "Yes", "student-loan"],
-        [t("student_loans.questions.student_loan_country"), "Scotland", "student-loan-country"],
+        [t("questions.student_loan_country"), "Scotland", "student-loan-country"],
       ]
 
       expect(helper.student_loan_answers(claim)).to eq expected_answers
