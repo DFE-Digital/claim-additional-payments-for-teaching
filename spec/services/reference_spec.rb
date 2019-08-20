@@ -10,8 +10,8 @@ RSpec.describe Reference do
       expect(reference.length).to eq(8)
     end
 
-    it "only contains the specified characters" do
-      expect(reference).to match(/\A[0-9A-Z]+\Z/)
+    it "contains only numbers and capital letters, excluding 0 and O" do
+      expect(reference).to match(/\A[1-9A-NP-Z]+\Z/)
     end
   end
 end
