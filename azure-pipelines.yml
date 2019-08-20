@@ -30,15 +30,30 @@ steps:
     artifact: repository
     displayName: Publish repository as artifact
 
-  - script:
-      docker build --file=Dockerfile --tag=$(dockerRegistry)/$(dockerImageName):$(Build.BuildNumber) --target=web .
-    displayName: Build web Docker image
-
   - script: docker login -u $(dockerId) -p $pass
     env:
       pass: $(dockerPassword)
     displayName: Login to DockerHub
+
+  - script: |
+      docker pull $(dockerRegistry)/$(dockerImageName):latest || true
+      docker build \
+        --file=Dockerfile \
+        --cache-from=$(dockerRegistry)/$(dockerImageName):latest \
+        --tag=$(dockerRegistry)/$(dockerImageName):$(Build.BuildNumber) \
+        --target=web \
+        .
+    displayName: Build web Docker image using 'latest' as cache
+    condition: ne(variables['Build.SourceBranch'], 'refs/heads/master')
+  - script: |
+      docker build \
+        --file=Dockerfile \
+        --tag=$(dockerRegistry)/$(dockerImageName):$(Build.BuildNumber) \
+        --target=web \
+        .
+    displayName: Build web Docker image without cache
     condition: eq(variables['Build.SourceBranch'], 'refs/heads/master')
+
   - script: |
       docker tag $(dockerRegistry)/$(dockerImageName):$(Build.BuildNumber) $(dockerRegistry)/$(dockerImageName):latest
       docker push $(dockerRegistry)/$(dockerImageName):$(Build.BuildNumber)
