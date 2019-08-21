@@ -4,6 +4,7 @@ if @schools.present?
       json.id school.id
       json.name school.name
       json.address school.address
+      json.closeDate l(school.close_date) unless school.close_date.blank?
     end
   end
 end

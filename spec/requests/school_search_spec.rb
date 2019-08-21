@@ -11,6 +11,12 @@ RSpec.describe "School search", type: :request do
       expect(response.body).not_to include(schools(:hampstead_school).name)
     end
 
+    it "includes the close date when the school is closed" do
+      post school_search_index_path, params: {query: "Great Creaton Primary School"}
+
+      expect(response.body).to include(schools(:great_creaton_primary_school).close_date.strftime("%-d %B %Y"))
+    end
+
     it "returns an error if the query parameter is more than three characters" do
       post school_search_index_path, params: {query: "Pen"}
 

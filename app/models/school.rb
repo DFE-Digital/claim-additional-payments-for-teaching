@@ -100,7 +100,7 @@ class School < ApplicationRecord
   def self.search(search_term)
     raise ArgumentError, SEARCH_NOT_ENOUGH_CHARACTERS_ERROR if search_term.length < 4
 
-    where("name ILIKE ?", "%#{sanitize_sql_like(search_term)}%").limit(SEARCH_RESULTS_LIMIT)
+    where("name ILIKE ?", "%#{sanitize_sql_like(search_term)}%").order(:name, close_date: :desc).limit(SEARCH_RESULTS_LIMIT)
   end
 
   def address

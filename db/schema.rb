@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_08_19_095423) do
+ActiveRecord::Schema.define(version: 2019_08_20_082129) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -91,6 +91,7 @@ ActiveRecord::Schema.define(version: 2019_08_19_095423) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.uuid "local_authority_district_id"
+    t.date "close_date"
     t.index ["local_authority_district_id"], name: "index_schools_on_local_authority_district_id"
     t.index ["local_authority_id"], name: "index_schools_on_local_authority_id"
     t.index ["urn"], name: "index_schools_on_urn", unique: true

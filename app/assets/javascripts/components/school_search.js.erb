@@ -36,17 +36,17 @@ document.addEventListener("DOMContentLoaded", function() {
 
   var schools = [];
 
-  function getSchoolNames() {
+  function getSchoolIds() {
     return schools.map(function(school) {
-      return school.name;
+      return school.id;
     });
   }
 
-  function findSchool(name) {
+  function findSchool(id) {
     for (var i = 0; i < schools.length; i++) {
       var school = schools[i];
 
-      if (school.name === name) {
+      if (school.id === id) {
         return school;
       }
     }
@@ -60,7 +60,7 @@ document.addEventListener("DOMContentLoaded", function() {
       function handleResponse(response) {
         schools = response.data || [];
 
-        populateResults(getSchoolNames());
+        populateResults(getSchoolIds());
       }
 
       Rails.ajax({
@@ -75,21 +75,28 @@ document.addEventListener("DOMContentLoaded", function() {
     showNoOptionsFound: false,
     confirmOnBlur: false,
     templates: {
-      suggestion: function(name) {
-        var school = findSchool(name);
+      inputValue: function(id) {
+        var school = findSchool(id);
+        if (school) return school.name;
+      },
+      suggestion: function(id) {
+        var school = findSchool(id);
 
-        return (
+        var suggestion =
           '<label class="govuk-label govuk-label--s">' +
           school.name +
           "</label>" +
           '<span class="govuk-hint">' +
           school.address +
-          "</span>"
-        );
+          "</span>";
+
+        if (school.closeDate) suggestion += '<span class="govuk-hint">' + "Closed on " + school.closeDate + "</span>";
+
+        return suggestion;
       }
     },
-    onConfirm: function(name) {
-      var school = findSchool(name);
+    onConfirm: function(id) {
+      var school = findSchool(id);
 
       if (!school) {
         resetForm();
