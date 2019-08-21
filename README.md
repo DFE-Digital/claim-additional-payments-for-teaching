@@ -127,7 +127,7 @@ Development is automatically built and deployed when commits are pushed to
 
 ### Production
 
-The release process for Production is documented in [`docs/release-process.md`]
+The release process for Production is documented in [`docs/release-process.md`](docs/release-process.md)
 
 ## Service architecture
 
