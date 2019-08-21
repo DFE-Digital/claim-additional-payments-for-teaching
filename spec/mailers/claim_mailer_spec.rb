@@ -11,8 +11,8 @@ RSpec.describe ClaimMailer, type: :mailer do
     end
 
     it "renders the body" do
-      expect(mail.body.encoded).to match("We‘ve received your claim to get back the student loan repayments you")
-      expect(mail.body.encoded).to match("Your reference number is #{claim.reference}")
+      expect(mail.body.encoded).to match("We've received your application to claim back your student loan repayments for the time you spent at #{claim.eligibility.claim_school.name}.")
+      expect(mail.body.encoded).to match("Your unique reference is #{claim.reference}. You will need this if you contact us about your claim.")
     end
   end
 end

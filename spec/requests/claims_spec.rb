@@ -201,7 +201,7 @@ RSpec.describe "Claims", type: :request do
             email = ActionMailer::Base.deliveries.first
             expect(email.to).to eql([in_progress_claim.email_address])
             expect(email.subject).to eql("Your claim was received")
-            expect(email.body).to include("Your reference number is #{in_progress_claim.reference}")
+            expect(email.body).to include("Your unique reference is #{in_progress_claim.reference}.")
           end
 
           it "redirects to the confirmation page" do
