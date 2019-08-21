@@ -1,6 +1,7 @@
 module Admin
   class BaseAdminController < ApplicationController
     before_action :ensure_authenticated_user
+    helper_method :service_operator_signed_in?
 
     private
 

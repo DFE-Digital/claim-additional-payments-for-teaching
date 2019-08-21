@@ -12,6 +12,7 @@ RSpec.feature "Download CSV of claims" do
       submitted_claims = create_list(:claim, 5, :submittable, submitted_at: DateTime.now)
       create_list(:claim, 2, :submittable)
 
+      expect(page).to have_link(nil, href: admin_claims_path(format: :csv))
       click_on "Download claims"
 
       expect(page.response_headers["Content-Type"]).to eq("text/csv")
@@ -29,6 +30,8 @@ RSpec.feature "Download CSV of claims" do
     end
 
     scenario "User cannot download a CSV" do
+      expect(page).to_not have_link(nil, href: admin_claims_path(format: :csv))
+
       visit admin_claims_path(format: :csv)
 
       expect(page.status_code).to eq(401)
