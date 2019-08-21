@@ -11,5 +11,16 @@
     <%= render partial: "check_your_answers_section", locals: {answers: verify_answers(current_claim), heading: nil} %>
 
     <%= button_to "Continue", claim_path, method: :put, class: "govuk-button" %>
+
+    <details class="govuk-details" data-module="govuk-details">
+      <summary class="govuk-details__summary">
+        <span class="govuk-details__summary-text">
+          Some of this information is wrong
+        </span>
+      </summary>
+      <div class="govuk-details__text">
+        If you find that some of this information is incorrect please contact support at <%= mail_to "studentloanteacherpayment@digital.education.gov.uk", "studentloanteacherpayment@digital.education.gov.uk", class: "govuk-link" %> as this could affect your application.
+      </div>
+    </details>
   </div>
 </div>
