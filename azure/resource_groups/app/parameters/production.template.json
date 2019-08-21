@@ -11,12 +11,6 @@
     "appServiceCertificateSecretName": {
       "value": "sslCertificate-additional-teaching-payment-education-gov-uk"
     },
-    "appServicePlanSize": {
-      "value": "3"
-    },
-    "vspAppServicePlanSize": {
-      "value": "3"
-    },
     "vspAppServiceDockerImage": {
       "value": "dfedigital/teacher-payments-service-verify:${vspDockerImageTag}"
     },
