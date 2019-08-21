@@ -76,8 +76,14 @@ en:
       male: "Male"
       female: "Female"
       dont_know: "Don’t know"
+  verified_fields:
+    full_name: "full name"
+    date_of_birth: "date of birth"
+    payroll_gender: "gender"
+    address: "address"
   student_loans:
     journey_name: "Teachers: claim back your student loan repayments"
+    support_email: "studentloanteacherpayment@digital.education.gov.uk"
     questions:
       qts_award_year: "Which academic year did you complete your initial teacher training?"
       qts_award_years:

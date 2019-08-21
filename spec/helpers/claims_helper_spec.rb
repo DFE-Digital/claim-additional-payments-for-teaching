@@ -67,7 +67,7 @@ describe ClaimsHelper do
     it "returns an array of questions and answers for displaying to the user for review" do
       expected_answers = [
         ["Full name", "Jo Bloggs"],
-        ["Address", "Flat 1, 1 Test Road, Test Town, AB1 2CD"],
+        ["Address", "Flat 1<br>1 Test Road<br>Test Town<br>AB1 2CD"],
         ["Date of birth", "1 January 1901"],
         ["Gender", "Female"],
       ]

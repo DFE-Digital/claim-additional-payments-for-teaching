@@ -40,6 +40,7 @@ RSpec.feature "Teacher Student Loan Repayments claims" do
 
     expect(page).to have_text("How we will use the information you provide")
     perform_verify_step
+    click_on "Continue"
 
     expect(claim.reload.full_name).to eql("Isambard Kingdom Brunel")
     expect(claim.address_line_1).to eq("Verified Building")
