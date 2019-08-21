@@ -1,15 +1,6 @@
 require "rails_helper"
 
 RSpec.describe "Claims", type: :request do
-  describe "claims#new request" do
-    it "renders the consent form" do
-      get new_claim_path
-
-      expect(response).to be_successful
-      expect(response.body).to include("Consent to us contacting your school")
-    end
-  end
-
   describe "claims#create request" do
     it "creates a new Claim and redirects to the QTS question" do
       expect { post claims_path }.to change { Claim.count }.by(1)
