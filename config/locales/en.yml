@@ -83,6 +83,7 @@ en:
     address: "address"
   student_loans:
     journey_name: "Teachers: claim back your student loan repayments"
+    support_email: "studentloanteacherpayment@digital.education.gov.uk"
     questions:
       qts_award_year: "Which academic year did you complete your initial teacher training?"
       qts_award_years:
