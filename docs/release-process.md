@@ -8,20 +8,20 @@ To deploy to production, we take the following steps.
 
 ## 1. Update the Changelog and create a pull request
 
-- Create a branch from `master` for the release called `release-x` where `x` is
-  the release number
+- Create a branch from `master` for the release called `release-xxx` where `xxx`
+  is the release number (a 3 digit number padded with zeros)
 - Move all features from the `Unreleased` section of
   [`CHANGELOG.md`](../CHANGELOG.md) to a new heading with the release number
   linked to a diff of the two latest versions, together with the date in the
   following format:
 
   ```markdown
-  ## [Release X] - 2019-01-01
+  ## [Release XXX] - 2019-01-01
 
   ...
 
-  [release x]:
-    https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/previous-release...release-x
+  [release xxx]:
+    https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/previous-release...release-xxx
   ```
 
 - Create a commit for the release, including the changes for the release in the
@@ -43,11 +43,11 @@ reflects the changes included in the release:
 ## 3. Push the tag
 
 Once the pull request has been merged, create a tag against the merge commit in
-the format `release-x` and push it to GitHub:
+the format `release-xxx` (zero-padded again) and push it to GitHub:
 
 ```
-git tag release-x merge-commit-for-release
-git push origin release-x
+git tag release-xxx merge-commit-for-release
+git push origin release-xxx
 ```
 
 ## 4. Trigger a production release in Azure DevOps
