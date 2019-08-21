@@ -36,7 +36,9 @@ RSpec.feature "Teacher Student Loan Repayments claims" do
     expect(claim.eligibility.reload.mostly_performed_leadership_duties?).to eq(false)
 
     expect(page).to have_text("You are eligible to claim back student loan repayments")
+    click_on "Continue"
 
+    expect(page).to have_text("How we will use the information you provide")
     perform_verify_step
 
     expect(claim.reload.full_name).to eql("Isambard Kingdom Brunel")

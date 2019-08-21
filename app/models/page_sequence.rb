@@ -17,6 +17,7 @@ class PageSequence
     "leadership-position",
     "mostly-performed-leadership-duties",
     "eligibility-confirmed",
+    "information-provided",
     "verified",
     "address",
     "gender",
