@@ -32,7 +32,6 @@ module FeatureHelpers
   def start_claim
     visit root_path
     click_on "Start now"
-    click_on "Agree and continue"
     Claim.order(:created_at).last
   end
 

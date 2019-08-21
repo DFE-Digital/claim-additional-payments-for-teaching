@@ -4,9 +4,6 @@ class ClaimsController < ApplicationController
 
   after_action :clear_claim_session, if: :submission_complete?
 
-  def new
-  end
-
   def create
     claim = Claim.create!(eligibility: StudentLoans::Eligibility.new)
     session[:claim_id] = claim.to_param

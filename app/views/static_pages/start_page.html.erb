@@ -31,6 +31,6 @@
         <li>sign in details for ‘Verify’ – the government’s secure way of proving who you are, if you do not have a Verify account, you’ll need your passport or photocard driving licence to sign up</li>
       </ul>
 
-      <%= link_to "Start now", new_claim_path, class: "govuk-button govuk-!-margin-top-2 govuk-!-margin-bottom-8 govuk-button--start", role: "button" %>
+      <%= button_to "Start now", claims_path, method: :post, class: "govuk-button govuk-!-margin-top-2 govuk-!-margin-bottom-8 govuk-button--start", role: "button" %>
     </div>
 </div>
