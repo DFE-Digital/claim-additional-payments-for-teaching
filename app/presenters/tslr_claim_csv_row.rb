@@ -52,6 +52,26 @@ class TslrClaimCsvRow < SimpleDelegator
     model.student_loan_plan&.humanize
   end
 
+  def biology_taught
+    model.eligibility.biology_taught? ? "Yes" : "No"
+  end
+
+  def chemistry_taught
+    model.eligibility.chemistry_taught? ? "Yes" : "No"
+  end
+
+  def computer_science_taught
+    model.eligibility.computer_science_taught? ? "Yes" : "No"
+  end
+
+  def languages_taught
+    model.eligibility.languages_taught? ? "Yes" : "No"
+  end
+
+  def physics_taught
+    model.eligibility.physics_taught? ? "Yes" : "No"
+  end
+
   def submitted_at
     model.submitted_at.strftime("%d/%m/%Y %H:%M")
   end
