@@ -1,7 +1,14 @@
-window.dataLayer = window.dataLayer || [];
-function gtag() {
-  dataLayer.push(arguments);
-}
-gtag("js", new Date());
+var currentScript = document.currentScript;
 
-gtag("config", document.currentScript.getAttribute("data-ga-id"), { anonymize_ip: true });
+document.addEventListener("DOMContentLoaded", function() {
+  if (!window.TeacherPayments.cookies.checkNonEssentialCookiesAccepted()) {
+    return;
+  }
+  window.dataLayer = window.dataLayer || [];
+  function gtag() {
+    dataLayer.push(arguments);
+  }
+  gtag("js", new Date());
+
+  gtag("config", currentScript.getAttribute("data-ga-id"), { anonymize_ip: true });
+});
