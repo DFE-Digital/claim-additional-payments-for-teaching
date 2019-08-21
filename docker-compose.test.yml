@@ -1,13 +1,27 @@
 version: "3.7"
 services:
+  dependencies:
+    build:
+      context: .
+      cache_from:
+        - dfedigital/teacher-payments-service:cache-test-dependencies
+      target: dependencies
+      args:
+        RAILS_ENV: test
+    image: local/dfe-teachers-payment-service:test-dependencies
+
   test:
     build:
       context: .
+      cache_from:
+        - local/dfe-teachers-payment-service:test-dependencies
+        - dfedigital/teacher-payments-service:cache-test
       target: test
       args:
         RAILS_ENV: test
     image: local/dfe-teachers-payment-service:test
     depends_on:
+      - dependencies
       - db
     environment:
       DFE_TEACHERS_PAYMENT_SERVICE_DATABASE_USERNAME: postgres

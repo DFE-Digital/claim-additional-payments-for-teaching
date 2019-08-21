@@ -10,37 +10,109 @@ variables:
   - group: docker-settings
 
 steps:
+  # Pin Ruby version
   - task: UseRubyVersion@0
     inputs:
       versionSpec: "2.6.2"
       addToPath: true
     displayName: Use Ruby 2.6.2
 
-  - script: docker-compose -f docker-compose.test.yml build
+  # Login to DockerHub
+  - script: docker login -u $(dockerId) -p $pass
+    env:
+      pass: $(dockerPassword)
+    displayName: Login to DockerHub
+
+  # Build and run tests
+  - script: |
+      docker pull $(dockerRegistry)/$(dockerImageName):cache-test-dependencies || true
+      docker pull $(dockerRegistry)/$(dockerImageName):cache-test || true
+
+      docker-compose --file=docker-compose.test.yml build
     displayName: Build test Docker image
-  - script: docker-compose -f docker-compose.test.yml run --rm test
+  - script: docker-compose --file=docker-compose.test.yml run --rm test
     displayName: Run tests on Docker
 
+  # Clean up
   - script: |
       git reset --hard
       git clean -xdf
     displayName: Clean repository
 
+  # Publish
   - publish: $(System.DefaultWorkingDirectory)
     artifact: repository
     displayName: Publish repository as artifact
 
-  - script:
-      docker build --file=Dockerfile --tag=$(dockerRegistry)/$(dockerImageName):$(Build.BuildNumber) --target=web .
-    displayName: Build web Docker image
+  # Build web dependencies
+  - script: |
+      docker pull $(dockerRegistry)/$(dockerImageName):cache-web-dependencies || true
 
-  - script: docker login -u $(dockerId) -p $pass
-    env:
-      pass: $(dockerPassword)
-    displayName: Login to DockerHub
+      docker build \
+        --file=Dockerfile \
+        --cache-from=$(dockerRegistry)/$(dockerImageName):cache-web-dependencies \
+        --tag=local/dfe-teachers-payment-service:web-dependencies \
+        --target=dependencies \
+        .
+    displayName: Build web dependencies Docker image using 'cache-web-dependencies' as cache
+    condition: ne(variables['Build.SourceBranch'], 'refs/heads/master')
+  - script: |
+      docker build \
+        --file=Dockerfile \
+        --tag=local/dfe-teachers-payment-service:web-dependencies \
+        --target=dependencies \
+        .
+    displayName: Build web dependencies Docker image without cache
+    condition: eq(variables['Build.SourceBranch'], 'refs/heads/master')
+
+  # Build web
+  - script: |
+      docker pull $(dockerRegistry)/$(dockerImageName):latest || true
+
+      docker build \
+        --file=Dockerfile \
+        --cache-from=local/dfe-teachers-payment-service:web-dependencies \
+        --cache-from=$(dockerRegistry)/$(dockerImageName):latest \
+        --tag=local/dfe-teachers-payment-service:web \
+        --target=web \
+        .
+    displayName: Build web Docker image using 'latest' as cache
+    condition: ne(variables['Build.SourceBranch'], 'refs/heads/master')
+  - script: |
+      docker build \
+        --file=Dockerfile \
+        --cache-from=local/dfe-teachers-payment-service:web-dependencies \
+        --tag=local/dfe-teachers-payment-service:web \
+        --target=web \
+        .
+    displayName: Build web Docker image without cache
+    condition: eq(variables['Build.SourceBranch'], 'refs/heads/master')
+
+  # Push test images
+  - script: |
+      docker tag local/dfe-teachers-payment-service:test-dependencies $(dockerRegistry)/$(dockerImageName):cache-test-dependencies
+
+      docker push $(dockerRegistry)/$(dockerImageName):cache-test-dependencies
+    displayName: Push test dependencies Docker image for caching
     condition: eq(variables['Build.SourceBranch'], 'refs/heads/master')
   - script: |
-      docker tag $(dockerRegistry)/$(dockerImageName):$(Build.BuildNumber) $(dockerRegistry)/$(dockerImageName):latest
+      docker tag local/dfe-teachers-payment-service:test $(dockerRegistry)/$(dockerImageName):cache-test
+
+      docker push $(dockerRegistry)/$(dockerImageName):cache-test
+    displayName: Push test Docker image for caching
+    condition: eq(variables['Build.SourceBranch'], 'refs/heads/master')
+
+  # Push web images
+  - script: |
+      docker tag local/dfe-teachers-payment-service:web-dependencies $(dockerRegistry)/$(dockerImageName):cache-web-dependencies
+
+      docker push $(dockerRegistry)/$(dockerImageName):cache-web-dependencies
+    displayName: Push web dependencies Docker image for caching
+    condition: eq(variables['Build.SourceBranch'], 'refs/heads/master')
+  - script: |
+      docker tag local/dfe-teachers-payment-service:web $(dockerRegistry)/$(dockerImageName):$(Build.BuildNumber)
+      docker tag local/dfe-teachers-payment-service:web $(dockerRegistry)/$(dockerImageName):latest
+
       docker push $(dockerRegistry)/$(dockerImageName):$(Build.BuildNumber)
       docker push $(dockerRegistry)/$(dockerImageName):latest
     displayName: Push web Docker image
