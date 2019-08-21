@@ -134,6 +134,7 @@ COPY spec ${APP_HOME}/spec
 
 # Copy files for linting (sorted by vague frequency of change for caching)
 COPY docs ${APP_HOME}/docs
+COPY *.md ${APP_HOME}/
 COPY azure ${APP_HOME}/azure
 # End
 
