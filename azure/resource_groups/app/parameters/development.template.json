@@ -14,20 +14,32 @@
     "appServiceAlwaysOn": {
       "value": false
     },
-    "appServicePlanInstances": {
+    "appServicePlanSkuTier": {
+      "value": "Standard"
+    },
+    "appServicePlanSkuSize": {
+      "value": "S1"
+    },
+    "appServicePlanSkuFamily": {
+      "value": "S"
+    },
+    "appServicePlanSkuCapacity": {
       "value": 1
-    },
-    "appServicePlanSize": {
-      "value": "1"
-    },
-    "vspAppServicePlanInstances": {
-      "value": 1
-    },
-    "vspAppServicePlanSize": {
-      "value": "1"
     },
     "vspAppServiceDockerImage": {
       "value": "dfedigital/teacher-payments-service-verify:${vspDockerImageTag}"
+    },
+    "vspAppServicePlanSkuTier": {
+      "value": "Standard"
+    },
+    "vspAppServicePlanSkuSize": {
+      "value": "S1"
+    },
+    "vspAppServicePlanSkuFamily": {
+      "value": "S"
+    },
+    "vspAppServicePlanSkuCapacity": {
+      "value": 1
     },
     "verifyHubPossibleOutboundIpAddresses": {
       "value": ["35.176.130.173", "18.130.112.6", "3.8.225.78"]

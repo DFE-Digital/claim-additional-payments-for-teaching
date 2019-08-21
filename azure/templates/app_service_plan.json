@@ -1,0 +1,47 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "appServicePlanName": {
+      "type": "string"
+    },
+    "appServicePlanSkuTier": {
+      "type": "string",
+      "defaultValue": "Standard"
+    },
+    "appServicePlanSkuSize": {
+      "type": "string",
+      "defaultValue": "S1"
+    },
+    "appServicePlanSkuFamily": {
+      "type": "string",
+      "defaultValue": "S"
+    },
+    "appServicePlanSkuCapacity": {
+      "type": "int",
+      "defaultValue": 1
+    }
+  },
+  "variables": {},
+  "resources": [
+    {
+      "type": "Microsoft.Web/serverfarms",
+      "apiVersion": "2018-02-01",
+      "name": "[parameters('appServicePlanName')]",
+      "kind": "Linux",
+      "location": "[resourceGroup().location]",
+      "sku": {
+        "name": "[parameters('appServicePlanSkuSize')]",
+        "tier": "[parameters('appServicePlanSkuTier')]",
+        "size": "[parameters('appServicePlanSkuSize')]",
+        "family": "[parameters('appServicePlanSkuFamily')]",
+        "capacity": "[parameters('appServicePlanSkuCapacity')]"
+      },
+      "properties": {
+        "name": "[parameters('appServicePlanName')]",
+        "reserved": true
+      }
+    }
+  ],
+  "outputs": {}
+}

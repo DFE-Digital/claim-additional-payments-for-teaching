@@ -32,32 +32,40 @@
       "type": "bool",
       "defaultValue": true
     },
-    "appServicePlanInstances": {
-      "type": "int",
-      "defaultValue": 2
-    },
-    "appServicePlanTier": {
+    "appServicePlanSkuTier": {
       "type": "string",
       "defaultValue": "Standard"
     },
-    "appServicePlanSize": {
+    "appServicePlanSkuSize": {
       "type": "string",
-      "defaultValue": "1"
+      "defaultValue": "S3"
+    },
+    "appServicePlanSkuFamily": {
+      "type": "string",
+      "defaultValue": "S"
+    },
+    "appServicePlanSkuCapacity": {
+      "type": "int",
+      "defaultValue": 2
     },
     "vspAppServiceDockerImage": {
       "type": "string"
     },
-    "vspAppServicePlanInstances": {
-      "type": "int",
-      "defaultValue": 2
-    },
-    "vspAppServicePlanTier": {
+    "vspAppServicePlanSkuTier": {
       "type": "string",
       "defaultValue": "Standard"
     },
-    "vspAppServicePlanSize": {
+    "vspAppServicePlanSkuSize": {
       "type": "string",
-      "defaultValue": "2"
+      "defaultValue": "S3"
+    },
+    "vspAppServicePlanSkuFamily": {
+      "type": "string",
+      "defaultValue": "S"
+    },
+    "vspAppServicePlanSkuCapacity": {
+      "type": "int",
+      "defaultValue": 2
     },
     "verifyHubPossibleOutboundIpAddresses": {
       "type": "array"
@@ -234,8 +242,23 @@
           "contentVersion": "1.0.0.0"
         },
         "parameters": {
+          "gitCommitHash": {
+            "value": "[parameters('gitCommitHash')]"
+          },
           "appServicePlanName": {
             "value": "[variables('appServicePlanName')]"
+          },
+          "appServicePlanSkuTier": {
+            "value": "[parameters('appServicePlanSkuTier')]"
+          },
+          "appServicePlanSkuSize": {
+            "value": "[parameters('appServicePlanSkuSize')]"
+          },
+          "appServicePlanSkuFamily": {
+            "value": "[parameters('appServicePlanSkuFamily')]"
+          },
+          "appServicePlanSkuCapacity": {
+            "value": "[parameters('appServicePlanSkuCapacity')]"
           },
           "appServiceName": {
             "value": "[variables('appServiceName')]"
@@ -245,15 +268,6 @@
           },
           "appServiceAlwaysOn": {
             "value": "[parameters('appServiceAlwaysOn')]"
-          },
-          "appServicePlanInstances": {
-            "value": "[parameters('appServicePlanInstances')]"
-          },
-          "appServicePlanTier": {
-            "value": "[parameters('appServicePlanTier')]"
-          },
-          "appServicePlanSize": {
-            "value": "[parameters('appServicePlanSize')]"
           },
           "appServiceCertificateSecretName": {
             "value": "[parameters('appServiceCertificateSecretName')]"
@@ -432,8 +446,23 @@
           "contentVersion": "1.0.0.0"
         },
         "parameters": {
+          "gitCommitHash": {
+            "value": "[parameters('gitCommitHash')]"
+          },
           "appServicePlanName": {
             "value": "[variables('vspAppServicePlanName')]"
+          },
+          "appServicePlanSkuTier": {
+            "value": "[parameters('vspAppServicePlanSkuTier')]"
+          },
+          "appServicePlanSkuSize": {
+            "value": "[parameters('vspAppServicePlanSkuSize')]"
+          },
+          "appServicePlanSkuFamily": {
+            "value": "[parameters('vspAppServicePlanSkuFamily')]"
+          },
+          "appServicePlanSkuCapacity": {
+            "value": "[parameters('vspAppServicePlanSkuCapacity')]"
           },
           "appServiceName": {
             "value": "[variables('vspAppServiceName')]"
@@ -443,15 +472,6 @@
           },
           "appServiceAlwaysOn": {
             "value": "[parameters('appServiceAlwaysOn')]"
-          },
-          "appServicePlanInstances": {
-            "value": "[parameters('vspAppServicePlanInstances')]"
-          },
-          "appServicePlanTier": {
-            "value": "[parameters('vspAppServicePlanTier')]"
-          },
-          "appServicePlanSize": {
-            "value": "[parameters('vspAppServicePlanSize')]"
           },
           "appServiceAllowedIpAddresses": {
             "value": "[union(reference(resourceId('Microsoft.Resources/deployments', variables('appDeploymentName'))).outputs.appServicePossibleOutboundIpAddresses.value, parameters('verifyHubPossibleOutboundIpAddresses'))]"

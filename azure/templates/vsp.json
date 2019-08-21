@@ -2,8 +2,23 @@
   "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
   "contentVersion": "1.0.0.0",
   "parameters": {
+    "gitCommitHash": {
+      "type": "string"
+    },
     "appServicePlanName": {
       "type": "string"
+    },
+    "appServicePlanSkuTier": {
+      "type": "string"
+    },
+    "appServicePlanSkuSize": {
+      "type": "string"
+    },
+    "appServicePlanSkuFamily": {
+      "type": "string"
+    },
+    "appServicePlanSkuCapacity": {
+      "type": "int"
     },
     "appServiceName": {
       "type": "string"
@@ -13,15 +28,6 @@
     },
     "appServiceAlwaysOn": {
       "type": "bool"
-    },
-    "appServicePlanInstances": {
-      "type": "int"
-    },
-    "appServicePlanTier": {
-      "type": "string"
-    },
-    "appServicePlanSize": {
-      "type": "string"
     },
     "appServiceAllowedIpAddresses": {
       "type": "array"
@@ -37,6 +43,7 @@
   },
   "variables": {
     "platformBuildingBlocksDeploymentUrlBase": "https://raw.githubusercontent.com/DFE-Digital/bat-platform-building-blocks/7a4748a0cf366193d31434bd7796d483bd281385/templates/",
+    "deploymentUrlBase": "[concat('https://raw.githubusercontent.com/DFE-Digital/dfe-teachers-payment-service/', parameters('gitCommitHash'), '/azure/templates/')]",
 
     "appServiceLogsDeploymentName": "[concat(deployment().name, '-app-service-logs')]",
     "appServicePlanDeploymentName": "[concat(deployment().name, '-app-service-plan')]"
@@ -49,21 +56,24 @@
       "properties": {
         "mode": "Incremental",
         "templateLink": {
-          "uri": "[concat(variables('platformBuildingBlocksDeploymentUrlBase'), 'app-service-plan.json')]",
+          "uri": "[concat(variables('deploymentUrlBase'), 'app_service_plan.json')]",
           "contentVersion": "1.0.0.0"
         },
         "parameters": {
           "appServicePlanName": {
             "value": "[parameters('appServicePlanName')]"
           },
-          "appServicePlanInstances": {
-            "value": "[parameters('appServicePlanInstances')]"
+          "appServicePlanSkuTier": {
+            "value": "[parameters('appServicePlanSkuTier')]"
           },
-          "appServicePlanTier": {
-            "value": "[parameters('appServicePlanTier')]"
+          "appServicePlanSkuSize": {
+            "value": "[parameters('appServicePlanSkuSize')]"
           },
-          "appServicePlanSize": {
-            "value": "[parameters('appServicePlanSize')]"
+          "appServicePlanSkuFamily": {
+            "value": "[parameters('appServicePlanSkuFamily')]"
+          },
+          "appServicePlanSkuCapacity": {
+            "value": "[parameters('appServicePlanSkuCapacity')]"
           }
         }
       }
