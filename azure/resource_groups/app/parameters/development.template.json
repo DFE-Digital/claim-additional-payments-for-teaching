@@ -15,31 +15,31 @@
       "value": false
     },
     "appServicePlanSkuTier": {
-      "value": "Standard"
+      "value": "PremiumV2"
     },
     "appServicePlanSkuSize": {
-      "value": "S1"
+      "value": "P1v2"
     },
     "appServicePlanSkuFamily": {
-      "value": "S"
+      "value": "Pv2"
     },
     "appServicePlanSkuCapacity": {
-      "value": 1
+      "value": 2
     },
     "vspAppServiceDockerImage": {
       "value": "dfedigital/teacher-payments-service-verify:${vspDockerImageTag}"
     },
     "vspAppServicePlanSkuTier": {
-      "value": "Standard"
+      "value": "PremiumV2"
     },
     "vspAppServicePlanSkuSize": {
-      "value": "S1"
+      "value": "P1v2"
     },
     "vspAppServicePlanSkuFamily": {
-      "value": "S"
+      "value": "Pv2"
     },
     "vspAppServicePlanSkuCapacity": {
-      "value": 1
+      "value": 2
     },
     "verifyHubPossibleOutboundIpAddresses": {
       "value": ["35.176.130.173", "18.130.112.6", "3.8.225.78"]
