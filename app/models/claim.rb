@@ -115,8 +115,8 @@ class Claim < ApplicationRecord
     valid?(:submit) && !submitted?
   end
 
-  def address
-    [address_line_1, address_line_2, address_line_3, address_line_4, postcode].reject(&:blank?).join(", ")
+  def address(seperator = ", ")
+    Claim::ADDRESS_ATTRIBUTES.map { |attr| send(attr) }.reject(&:blank?).join(seperator)
   end
 
   def no_student_loan?

@@ -34,10 +34,10 @@ module ClaimsHelper
 
   def verify_answers(claim)
     [].tap do |a|
-      a << ["Full name", claim.full_name]
-      a << ["Address", claim.address] if claim.address_verified?
-      a << ["Date of birth", l(claim.date_of_birth)]
-      a << ["Gender", t("answers.payroll_gender.#{claim.payroll_gender}")] if claim.payroll_gender_verified?
+      a << [I18n.t("verified_fields.full_name").capitalize, claim.full_name]
+      a << [I18n.t("verified_fields.address").capitalize, claim.address("<br>").html_safe] if claim.address_verified?
+      a << [I18n.t("verified_fields.date_of_birth").capitalize, l(claim.date_of_birth)]
+      a << [I18n.t("verified_fields.payroll_gender").capitalize, t("answers.payroll_gender.#{claim.payroll_gender}")] if claim.payroll_gender_verified?
     end
   end
 
