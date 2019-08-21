@@ -1,4 +1,6 @@
 class Admin::ClaimsController < Admin::BaseAdminController
+  before_action :ensure_service_operator
+
   def index
     claims = Claim.includes(eligibility: [:claim_school, :current_school]).submitted.order(:submitted_at)
     csv = TslrClaimsCsv.new(claims)
@@ -6,5 +8,11 @@ class Admin::ClaimsController < Admin::BaseAdminController
     respond_to do |format|
       format.csv { send_file csv.file, type: "text/csv", filename: "claims.csv" }
     end
+  end
+
+  private
+
+  def ensure_service_operator
+    render "admin/auth/failure", status: :unauthorized unless service_operator_signed_in?
   end
 end
