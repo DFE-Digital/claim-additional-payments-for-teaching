@@ -76,6 +76,11 @@ en:
       male: "Male"
       female: "Female"
       dont_know: "Don’t know"
+  verified_fields:
+    full_name: "full name"
+    date_of_birth: "date of birth"
+    payroll_gender: "gender"
+    address: "address"
   student_loans:
     journey_name: "Teachers: claim back your student loan repayments"
     questions:

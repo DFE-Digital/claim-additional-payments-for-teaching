@@ -5,7 +5,7 @@
     </h1>
 
     <p class="govuk-body">
-      You can now continue with your claim
+      This is your <%= verified_fields(current_claim) %> from your digital identity:
     </p>
 
     <%= button_to "Continue", claim_path, method: :put, class: "govuk-button" %>

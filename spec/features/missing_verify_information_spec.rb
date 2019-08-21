@@ -10,6 +10,8 @@ RSpec.feature "Missing information from GOV.UK Verify" do
     click_on "Continue"
 
     perform_verify_step("identity-verified-other-gender")
+    expect(page).to have_text("This is your full name, address, and date of birth from your digital identity")
+    click_on "Continue"
 
     expect(page).to have_text(I18n.t("questions.payroll_gender"))
     choose "Female"
@@ -57,6 +59,8 @@ RSpec.feature "Missing information from GOV.UK Verify" do
     click_on "Continue"
 
     perform_verify_step("identity-verified-no-address")
+    expect(page).to have_text("This is your full name, date of birth, and gender from your digital identity")
+    click_on "Continue"
 
     expect(page).to have_text(I18n.t("questions.address"))
     fill_in_address

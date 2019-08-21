@@ -11,6 +11,15 @@ module ClaimsHelper
     ApplicationController::CLAIM_TIMEOUT_WARNING_LENGTH_IN_MINUTES
   end
 
+  def verified_fields(claim)
+    fields = []
+    fields << I18n.t("verified_fields.full_name") if claim.verified_fields.include?("full_name")
+    fields << I18n.t("verified_fields.address") if claim.address_verified?
+    fields << I18n.t("verified_fields.date_of_birth") if claim.verified_fields.include?("date_of_birth")
+    fields << I18n.t("verified_fields.payroll_gender") if claim.payroll_gender_verified?
+    fields.to_sentence
+  end
+
   def eligibility_answers(eligibility)
     [].tap do |a|
       a << [t("student_loans.questions.qts_award_year"), academic_years(eligibility.qts_award_year), "qts-year"]
