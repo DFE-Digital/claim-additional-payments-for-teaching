@@ -34,15 +34,15 @@
     },
     "appServicePlanSkuTier": {
       "type": "string",
-      "defaultValue": "Standard"
+      "defaultValue": "PremiumV2"
     },
     "appServicePlanSkuSize": {
       "type": "string",
-      "defaultValue": "S3"
+      "defaultValue": "P2v2"
     },
     "appServicePlanSkuFamily": {
       "type": "string",
-      "defaultValue": "S"
+      "defaultValue": "Pv2"
     },
     "appServicePlanSkuCapacity": {
       "type": "int",
@@ -53,15 +53,15 @@
     },
     "vspAppServicePlanSkuTier": {
       "type": "string",
-      "defaultValue": "Standard"
+      "defaultValue": "PremiumV2"
     },
     "vspAppServicePlanSkuSize": {
       "type": "string",
-      "defaultValue": "S3"
+      "defaultValue": "P2v2"
     },
     "vspAppServicePlanSkuFamily": {
       "type": "string",
-      "defaultValue": "S"
+      "defaultValue": "Pv2"
     },
     "vspAppServicePlanSkuCapacity": {
       "type": "int",
