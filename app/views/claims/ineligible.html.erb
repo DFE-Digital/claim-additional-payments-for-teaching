@@ -4,7 +4,7 @@
       You’re not eligible for this payment
     </h1>
 
-    <%= render "ineligibility_reason_#{current_claim.eligibility.ineligibility_reason}" %>
+    <%= render partial: "ineligibility_reason_#{current_claim.eligibility.ineligibility_reason}", locals: { claim_school_name: current_claim.eligibility.claim_school_name } %>
 
     <p class="govuk-body">
       You can find more information on the <%= link_to "guidance for this service", tslr_guidance_url, class: 'govuk-link' %>.

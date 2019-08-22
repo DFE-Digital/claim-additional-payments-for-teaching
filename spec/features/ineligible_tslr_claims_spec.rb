@@ -39,7 +39,7 @@ RSpec.feature "Ineligible Teacher Student Loan Repayments claims" do
 
     expect(claim.eligibility.reload.claim_school).to eq schools(:hampstead_school)
     expect(page).to have_text("You’re not eligible")
-    expect(page).to have_text("The school you were employed at between 6 April 2018 and 5 April 2019 is not eligible.")
+    expect(page).to have_text("Hampstead School, where you were employed between 6 April 2018 and 5 April 2019, is not an eligible school.")
   end
 
   scenario "no longer teaching" do
