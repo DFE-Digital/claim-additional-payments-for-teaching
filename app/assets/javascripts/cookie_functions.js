@@ -1,3 +1,5 @@
+"use strict";
+
 window.TeacherPayments = window.TeacherPayments || {};
 
 window.TeacherPayments.cookies = {
