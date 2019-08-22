@@ -6,6 +6,7 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+- Record Google Analytics page views immediately after the user accepts
 - Update ineligibility page content for clarity
 - Ignore unverified middle names from Verify response
 - Report redacted GOV.UK Verify responses to help debug issues with our response

@@ -1,19 +1,29 @@
 "use strict";
 
-var currentScript = document.currentScript;
+(function() {
+  window.TeacherPayments = window.TeacherPayments || {};
+  window.TeacherPayments.cookies = window.TeacherPayments.cookies || {};
+  window.TeacherPayments.cookies.postNonEssentialCookieAcceptanceFunctions =
+    window.TeacherPayments.cookies.postNonEssentialCookieAcceptanceFunctions || [];
 
-document.addEventListener("DOMContentLoaded", function() {
-  if (!window.TeacherPayments.cookies.checkNonEssentialCookiesAccepted()) {
-    return;
+  var currentScript = document.currentScript;
+
+  function enableGoogleAnalytics() {
+    window.dataLayer = window.dataLayer || [];
+
+    function gtag() {
+      window.dataLayer.push(arguments);
+    }
+
+    gtag("js", new Date());
+    gtag("config", currentScript.getAttribute("data-ga-id"), { anonymize_ip: true });
   }
 
-  window.dataLayer = window.dataLayer || [];
-
-  function gtag() {
-    window.dataLayer.push(arguments);
-  }
-
-  gtag("js", new Date());
-
-  gtag("config", currentScript.getAttribute("data-ga-id"), { anonymize_ip: true });
-});
+  document.addEventListener("DOMContentLoaded", function() {
+    if (window.TeacherPayments.cookies.checkNonEssentialCookiesAccepted()) {
+      enableGoogleAnalytics();
+    } else {
+      window.TeacherPayments.cookies.postNonEssentialCookieAcceptanceFunctions.push(enableGoogleAnalytics);
+    }
+  });
+})();
