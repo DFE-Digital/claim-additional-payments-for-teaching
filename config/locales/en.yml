@@ -37,15 +37,6 @@ en:
     currency:
       format:
         unit: "£"
-  activerecord:
-    errors:
-      messages:
-        ineligible_qts_award_year:
-          "You are only eligible to claim back student loan repayments if you completed your initial teacher training on or after September 1st 2013"
-        ineligible_claim_school: "The school you were employed at is not eligible"
-        employed_at_no_school: "You can only get this payment if you’re still working as a teacher"
-        not_taught_eligible_subjects: "You must have been teaching an eligible subject"
-        not_taught_enough: "You must not have spent more than half your working hours performing leadership duties"
   service_name: "Claim additional payments for teaching"
   support_email_address: "additionalteachingpayment@digital.education.gov.uk"
   questions:
@@ -97,7 +88,7 @@ en:
         "2019_2020": "1 September 2019 to 31 August 2020"
       claim_school: "Which school were you employed at between 6 April 2018 and 5 April 2019?"
       employment_status: "Are you still employed to teach at a school in England?"
-      subjects_taught: "Did you teach any of the following subjects between 6 April 2018 and 5 April 2019?"
+      subjects_taught: "Did you teach any of these subjects between 6 April 2018 and 5 April 2019?"
       leadership_position: "Were you employed in a leadership position between 6 April 2018 and 5 April 2019?"
       mostly_performed_leadership_duties:
         "Were more than half your working hours spent on leadership duties betwen 6 April 2018 and 5 April 2019?"
