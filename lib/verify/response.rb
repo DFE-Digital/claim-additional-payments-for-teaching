@@ -76,19 +76,20 @@ module Verify
 
     def full_name
       first_name = most_recent_verified_value(attributes.fetch("firstNames"))
-      middle_name = most_recent_verified_value(attributes.fetch("middleNames"))
+      middle_name = most_recent_verified_value(attributes.fetch("middleNames"), required: false)
       surname = most_recent_verified_value(attributes.fetch("surnames"))
 
       [first_name, middle_name, surname].compact.join(" ")
     end
 
-    def most_recent_verified_value(attributes)
+    def most_recent_verified_value(attributes, required: true)
       return if attributes.blank?
 
-      attributes.sort_by { |attribute| attribute["from"].present? ? Date.strptime(attribute["from"], "%Y-%m-%d") : 0 }
+      most_recent_verified_attribute = attributes.sort_by { |attribute| attribute["from"].present? ? Date.strptime(attribute["from"], "%Y-%m-%d") : 0 }
         .reverse
         .find { |attribute| attribute["verified"] }
-        .fetch("value")
+
+      required ? most_recent_verified_attribute.fetch("value") : most_recent_verified_attribute&.fetch("value")
     end
 
     def gender

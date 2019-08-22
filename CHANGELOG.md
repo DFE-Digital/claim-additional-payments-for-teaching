@@ -6,6 +6,7 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+- Verified middle names are now optional in Verify response
 - Report redacted GOV.UK Verify responses to help debug issues with our response
   handling
 - Add static error pages for 400, 500 and 422 errors
