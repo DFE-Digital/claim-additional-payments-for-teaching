@@ -8,6 +8,26 @@
           color: #ffffff;
         }
       }
+      table {
+        width: 100%;
+      }
+      table tr td:nth-of-type(2) {
+        min-width: 8em;
+        .govuk-hint {
+          margin-bottom: 5px;
+          text-align: right;
+        }
+      }
+    }
+  }
+}
+
+@media (min-width: 40.0625em) {
+  .autocomplete__wrapper {
+    .autocomplete__menu {
+      table tr td:nth-of-type(2) {
+        width: 40%;
+      }
     }
   }
 }

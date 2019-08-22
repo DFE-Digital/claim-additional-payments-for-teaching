@@ -82,15 +82,13 @@ document.addEventListener("DOMContentLoaded", function() {
       suggestion: function(id) {
         var school = findSchool(id);
 
-        var suggestion =
-          '<label class="govuk-label govuk-label--s">' +
-          school.name +
-          "</label>" +
-          '<span class="govuk-hint">' +
-          school.address +
-          "</span>";
+        var suggestion = '<table><tr><td><label class="govuk-label govuk-label--s">' + school.name + "</label></td>";
 
-        if (school.closeDate) suggestion += '<span class="govuk-hint">' + "Closed on " + school.closeDate + "</span>";
+        if (school.closeDate)
+          suggestion += '<td><span class="govuk-hint">' + "Closed on " + school.closeDate + "</span></td>";
+
+        suggestion +=
+          '</tr><tr><td colspan="2"><span class="govuk-hint">' + school.address + "</span></td><tr></table>";
 
         return suggestion;
       }
