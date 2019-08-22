@@ -129,7 +129,7 @@ RSpec.feature "Changing the answers on a submittable claim" do
 
         scenario "Teacher is told they are not eligible" do
           expect(page).to have_text("You’re not eligible")
-          expect(page).to have_text(I18n.t("activerecord.errors.messages.not_taught_enough"))
+          expect(page).to have_text("You must not have spent more than half your working hours performing leadership duties.")
         end
       end
     end

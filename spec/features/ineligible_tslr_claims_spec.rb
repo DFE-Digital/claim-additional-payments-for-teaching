@@ -9,7 +9,7 @@ RSpec.feature "Ineligible Teacher Student Loan Repayments claims" do
 
     expect(claim.eligibility.reload.qts_award_year).to eql("before_2013")
     expect(page).to have_text("You’re not eligible")
-    expect(page).to have_text(I18n.t("activerecord.errors.messages.ineligible_qts_award_year"))
+    expect(page).to have_text("You are only eligible to claim back student loan repayments if you completed your initial teacher training on or after September 1st 2013.")
   end
 
   scenario "now works for a different school" do
@@ -39,7 +39,7 @@ RSpec.feature "Ineligible Teacher Student Loan Repayments claims" do
 
     expect(claim.eligibility.reload.claim_school).to eq schools(:hampstead_school)
     expect(page).to have_text("You’re not eligible")
-    expect(page).to have_text(I18n.t("activerecord.errors.messages.ineligible_claim_school"))
+    expect(page).to have_text("The school you were employed at is not eligible.")
   end
 
   scenario "no longer teaching" do
@@ -51,7 +51,7 @@ RSpec.feature "Ineligible Teacher Student Loan Repayments claims" do
 
     expect(claim.eligibility.reload.employment_status).to eq("no_school")
     expect(page).to have_text("You’re not eligible")
-    expect(page).to have_text(I18n.t("activerecord.errors.messages.employed_at_no_school"))
+    expect(page).to have_text("You can only get this payment if you’re still working as a teacher.")
   end
 
   scenario "did not teach an eligible subject" do
@@ -65,7 +65,7 @@ RSpec.feature "Ineligible Teacher Student Loan Repayments claims" do
 
     expect(claim.eligibility.reload.taught_eligible_subjects?).to eq(false)
     expect(page).to have_text("You’re not eligible")
-    expect(page).to have_text(I18n.t("activerecord.errors.messages.not_taught_eligible_subjects"))
+    expect(page).to have_text("You must have been teaching an eligible subject.")
   end
 
   scenario "was in a leadership position and performed leadership duties for more than half of their time" do
@@ -85,6 +85,6 @@ RSpec.feature "Ineligible Teacher Student Loan Repayments claims" do
 
     expect(claim.eligibility.reload.mostly_performed_leadership_duties?).to eq(true)
     expect(page).to have_text("You’re not eligible")
-    expect(page).to have_text(I18n.t("activerecord.errors.messages.not_taught_enough"))
+    expect(page).to have_text("You must not have spent more than half your working hours performing leadership duties.")
   end
 end

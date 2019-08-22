@@ -24,7 +24,7 @@ RSpec.feature "Choosing subjects taught during Teacher Student Loan Repayments c
       click_on "Continue"
 
       expect(page).to have_text("You’re not eligible")
-      expect(page).to have_text(I18n.t("activerecord.errors.messages.not_taught_eligible_subjects"))
+      expect(page).to have_text("You must have been teaching an eligible subject.")
     end
 
     scenario "checks not applicable and then chooses a subject" do
@@ -55,7 +55,7 @@ RSpec.feature "Choosing subjects taught during Teacher Student Loan Repayments c
       click_on "Continue"
 
       expect(page).to have_text("You’re not eligible")
-      expect(page).to have_text(I18n.t("activerecord.errors.messages.not_taught_eligible_subjects"))
+      expect(page).to have_text("You must have been teaching an eligible subject.")
     end
 
     scenario "checks not applicable and then chooses a subject" do
@@ -65,7 +65,7 @@ RSpec.feature "Choosing subjects taught during Teacher Student Loan Repayments c
       click_on "Continue"
 
       expect(page).to have_text("You’re not eligible")
-      expect(page).to have_text(I18n.t("activerecord.errors.messages.not_taught_eligible_subjects"))
+      expect(page).to have_text("You must have been teaching an eligible subject.")
     end
   end
 end

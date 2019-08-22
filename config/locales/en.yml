@@ -37,15 +37,6 @@ en:
     currency:
       format:
         unit: "£"
-  activerecord:
-    errors:
-      messages:
-        ineligible_qts_award_year:
-          "You are only eligible to claim back student loan repayments if you completed your initial teacher training on or after September 1st 2013"
-        ineligible_claim_school: "The school you were employed at is not eligible"
-        employed_at_no_school: "You can only get this payment if you’re still working as a teacher"
-        not_taught_eligible_subjects: "You must have been teaching an eligible subject"
-        not_taught_enough: "You must not have spent more than half your working hours performing leadership duties"
   service_name: "Claim additional payments for teaching"
   support_email_address: "additionalteachingpayment@digital.education.gov.uk"
   questions:

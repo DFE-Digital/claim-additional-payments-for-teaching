@@ -77,14 +77,10 @@ RSpec.describe "Claims", type: :request do
       before { post claims_path }
 
       it "renders a static ineligibility page" do
-        get claim_path("ineligible")
-        expect(response.body).to include("You’re not eligible")
-      end
-
-      it "tailors the message to the claim" do
         Claim.order(:created_at).last.eligibility.update(employment_status: "no_school")
 
         get claim_path("ineligible")
+
         expect(response.body).to include("You’re not eligible")
         expect(response.body).to include("You can only get this payment if you’re still working as a teacher")
       end
