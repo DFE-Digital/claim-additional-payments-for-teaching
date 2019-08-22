@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+## [Release 002] - 2019-08-22
+
 - Record Google Analytics page views immediately after the user accepts
 - Update ineligibility page content for clarity
 - Ignore unverified middle names from Verify response
@@ -18,7 +20,9 @@ The format is based on [Keep a Changelog]
 - First release for student loan repayments private beta
 
 [unreleased]:
-  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-001...HEAD
+  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-002...HEAD
+[release 002]:
+  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-001...release-002
 [release 001]:
   https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/44b074c01db4b3dd1fcab1e3b73a521208a862ad...release-001
 [keep a changelog]: https://keepachangelog.com/en/1.0.0/
