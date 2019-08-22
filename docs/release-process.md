@@ -47,7 +47,7 @@ the format `release-xxx` (zero-padded again) and push it to GitHub:
 
 ```
 git tag release-xxx merge-commit-for-release
-git push origin release-xxx
+git push origin refs/tags/release-xxx
 ```
 
 ## 4. Trigger a production release in Azure DevOps
