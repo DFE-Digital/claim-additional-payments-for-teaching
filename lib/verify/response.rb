@@ -7,6 +7,7 @@ module Verify
   #   Verify::Response.translate(saml_response: "SOME SAML", request_id: "REQUEST_ID", level_of_assurance: "LEVEL_2")
   #
   class Response
+    class MissingResponseAttribute < StandardError; end
     attr_reader :parameters
 
     def initialize(parameters)
@@ -88,7 +89,7 @@ module Verify
       most_recent_verified_attribute = attributes.sort_by { |attribute| attribute["from"].present? ? Date.strptime(attribute["from"], "%Y-%m-%d") : 0 }
         .reverse
         .find { |attribute| attribute["verified"] }
-
+      raise MissingResponseAttribute, "No verified value found" if required && most_recent_verified_attribute.nil?
       required ? most_recent_verified_attribute.fetch("value") : most_recent_verified_attribute&.fetch("value")
     end
 
