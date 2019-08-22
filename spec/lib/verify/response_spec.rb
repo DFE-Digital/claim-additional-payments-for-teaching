@@ -104,6 +104,24 @@ RSpec.describe Verify::Response, type: :model do
         )
       end
     end
+
+    context "when the middle name isn't verified" do
+      let(:response_filename) { "identity-verified-unverified-middlename.json" }
+
+      it "returns the full name without the unverified middle name" do
+        expect(subject.claim_parameters[:full_name]).to eq("Isambard Brunel")
+      end
+    end
+
+    context "when the last name isn't verified" do
+      let(:response_filename) { "identity-verified-unverified-lastname.json" }
+
+      it "raises an exception" do
+        expect { subject.claim_parameters[:full_name] }.to raise_exception(
+          Verify::Response::MissingResponseAttribute, "No verified value found for surnames"
+        )
+      end
+    end
   end
 
   context "with the minimum verified response" do

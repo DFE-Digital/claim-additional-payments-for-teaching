@@ -7,6 +7,7 @@ module Verify
   #   Verify::Response.translate(saml_response: "SOME SAML", request_id: "REQUEST_ID", level_of_assurance: "LEVEL_2")
   #
   class Response
+    class MissingResponseAttribute < StandardError; end
     attr_reader :parameters
 
     def initialize(parameters)
@@ -55,7 +56,7 @@ module Verify
     end
 
     def address
-      @address ||= most_recent_verified_value(attributes.dig("addresses"))
+      @address ||= most_recent_verified_value("addresses", required: false)
     end
 
     def address_lines
@@ -75,20 +76,22 @@ module Verify
     end
 
     def full_name
-      first_name = most_recent_verified_value(attributes.fetch("firstNames"))
-      middle_name = most_recent_verified_value(attributes.fetch("middleNames"))
-      surname = most_recent_verified_value(attributes.fetch("surnames"))
+      first_name = most_recent_verified_value("firstNames")
+      middle_name = most_recent_verified_value("middleNames", required: false)
+      surname = most_recent_verified_value("surnames")
 
       [first_name, middle_name, surname].compact.join(" ")
     end
 
-    def most_recent_verified_value(attributes)
-      return if attributes.blank?
+    def most_recent_verified_value(attribute_name, required: true)
+      attrs = required ? attributes.fetch(attribute_name) : attributes.dig(attribute_name)
+      return if attrs.blank?
 
-      attributes.sort_by { |attribute| attribute["from"].present? ? Date.strptime(attribute["from"], "%Y-%m-%d") : 0 }
+      most_recent_verified_attribute = attrs.sort_by { |attribute| attribute["from"].present? ? Date.strptime(attribute["from"], "%Y-%m-%d") : 0 }
         .reverse
         .find { |attribute| attribute["verified"] }
-        .fetch("value")
+      raise MissingResponseAttribute, "No verified value found for #{attribute_name}" if required && most_recent_verified_attribute.nil?
+      required ? most_recent_verified_attribute.fetch("value") : most_recent_verified_attribute&.fetch("value")
     end
 
     def gender
