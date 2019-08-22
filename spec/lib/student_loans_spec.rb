@@ -15,11 +15,11 @@ RSpec.describe StudentLoans do
       expect(StudentLoans.determine_plan(StudentLoans::ENGLAND, StudentLoans::BEFORE_1_SEPT_2012)).to eq StudentLoans::PLAN_1
     end
 
-    it "returns PLAN_2 when the course(s) started on or after 1 Semptember 2012" do
+    it "returns PLAN_2 when the course(s) started on or after 1 September 2012" do
       expect(StudentLoans.determine_plan(StudentLoans::ENGLAND, StudentLoans::ON_OR_AFTER_1_SEPT_2012)).to eq StudentLoans::PLAN_2
     end
 
-    it "returns PLAN_1_AND_2 when courses started both before and after 1st Semptember 2012" do
+    it "returns PLAN_1_AND_2 when courses started both before and after 1 September 2012" do
       expect(StudentLoans.determine_plan(StudentLoans::ENGLAND, StudentLoans::BEFORE_AND_AFTER_1_SEPT_2012)).to eq StudentLoans::PLAN_1_AND_2
     end
   end
