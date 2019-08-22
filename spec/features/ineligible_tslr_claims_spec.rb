@@ -39,7 +39,7 @@ RSpec.feature "Ineligible Teacher Student Loan Repayments claims" do
 
     expect(claim.eligibility.reload.claim_school).to eq schools(:hampstead_school)
     expect(page).to have_text("You’re not eligible")
-    expect(page).to have_text("The school you were employed at is not eligible.")
+    expect(page).to have_text("The school you were employed at between 6 April 2018 and 5 April 2019 is not eligible.")
   end
 
   scenario "no longer teaching" do
@@ -65,7 +65,7 @@ RSpec.feature "Ineligible Teacher Student Loan Repayments claims" do
 
     expect(claim.eligibility.reload.taught_eligible_subjects?).to eq(false)
     expect(page).to have_text("You’re not eligible")
-    expect(page).to have_text("You can only get this payment if you taught at least one of:")
+    expect(page).to have_text("You can only get this payment if you taught one or more of the following subjects between 6 April 2018 and 5 April 2019:")
   end
 
   scenario "was in a leadership position and performed leadership duties for more than half of their time" do
@@ -85,6 +85,6 @@ RSpec.feature "Ineligible Teacher Student Loan Repayments claims" do
 
     expect(claim.eligibility.reload.mostly_performed_leadership_duties?).to eq(true)
     expect(page).to have_text("You’re not eligible")
-    expect(page).to have_text("You can only get this payment if you spent less than half your working hours performing leadership duties.")
+    expect(page).to have_text("You can only get this payment if you spent less than half your working hours performing leadership duties between 6 April 2018 and 5 April 2019.")
   end
 end

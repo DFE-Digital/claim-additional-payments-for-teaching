@@ -129,7 +129,7 @@ RSpec.feature "Changing the answers on a submittable claim" do
 
         scenario "Teacher is told they are not eligible" do
           expect(page).to have_text("You’re not eligible")
-          expect(page).to have_text("You can only get this payment if you spent less than half your working hours performing leadership duties.")
+          expect(page).to have_text("You can only get this payment if you spent less than half your working hours performing leadership duties between 6 April 2018 and 5 April 2019.")
         end
       end
     end
