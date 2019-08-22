@@ -66,3 +66,13 @@ production as follows:
 - Click on the release matching the Build number of the build you want to
   release.
 - Click on 'Deploy Production' and manually trigger the deployment.
+
+## 5. Move the cards that relate to the release from "Done" to "Live" on Trello
+
+The cards in the "Done" column that relate to code that has just been released
+should be moved to the top of the "Live" column.
+
+## 6. Announce the release in #twd_claim_payments
+
+Post an update in the team's main Slack chnanel #twd_claim_payments to let
+people know about the new release and the changes that have just gone out.
