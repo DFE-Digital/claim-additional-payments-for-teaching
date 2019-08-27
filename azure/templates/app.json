@@ -59,7 +59,9 @@
     "appServiceLogsDeploymentName": "[concat(deployment().name, '-app-service-logs')]",
     "appServicePlanDeploymentName": "[concat(deployment().name, '-app-service-plan')]",
 
-    "hasCustomHostName": "[greater(length(parameters('appServiceHostName')), 0)]"
+    "hasCustomHostName": "[greater(length(parameters('appServiceHostName')), 0)]",
+
+    "appServiceHostNameBindingsName": "[concat(parameters('appServiceName'), '/', if(variables('hasCustomHostName'), parameters('appServiceHostName'), 'PLACEHOLDER'))]"
   },
   "resources": [
     {
@@ -140,7 +142,7 @@
       "condition": "[variables('hasCustomHostName')]",
       "type": "Microsoft.Web/sites/hostNameBindings",
       "apiVersion": "2018-11-01",
-      "name": "[concat(parameters('appServiceName'), '/', if(variables('hasCustomHostName'), parameters('appServiceHostName'), 'PLACEHOLDER'))]",
+      "name": "[variables('appServiceHostNameBindingsName')]",
       "location": "[resourceGroup().location]",
       "dependsOn": [
         "[resourceId('Microsoft.Resources/deployments', variables('appServiceCertificateDeploymentName'))]",
