@@ -2,7 +2,7 @@ require "rails_helper"
 
 RSpec.describe Verify::Response, type: :model do
   subject { Verify::Response.new(response) }
-  let(:response) { JSON.parse File.read(Rails.root.join("spec", "fixtures", "verify", response_filename)) }
+  let(:response) { JSON.parse(File.read(Rails.root.join("spec", "fixtures", "verify", response_filename))) }
 
   describe ".translate" do
     let(:saml_response) { example_vsp_translate_request_payload.fetch("samlResponse") }
@@ -133,6 +133,25 @@ RSpec.describe Verify::Response, type: :model do
 
     it "returns the expected verified parameters" do
       expect(subject.claim_parameters[:full_name]).to eq("Isambard Brunel")
+      expect(subject.claim_parameters[:gender]).to be_nil
+      expect(subject.claim_parameters[:address_line_1]).to eq("Verified Street")
+      expect(subject.claim_parameters[:address_line_2]).to eq("Verified Town")
+      expect(subject.claim_parameters[:address_line_3]).to be_nil
+      expect(subject.claim_parameters[:postcode]).to eq("M12 345")
+      expect(subject.claim_parameters[:date_of_birth]).to eq("1806-04-09")
+    end
+  end
+
+  context "with date ranges missing from some verified response" do
+    let(:response_filename) { "identity-verified-without-some-dates.json" }
+
+    it "is verified" do
+      expect(subject.verified?).to eq(true)
+    end
+
+    it "returns the expected verified parameters" do
+      expect(subject.claim_parameters[:full_name]).to eq("Isambard Kingdom Brunel")
+      expect(subject.claim_parameters[:gender]).to be_nil
       expect(subject.claim_parameters[:address_line_1]).to eq("Verified Street")
       expect(subject.claim_parameters[:address_line_2]).to eq("Verified Town")
       expect(subject.claim_parameters[:address_line_3]).to be_nil
