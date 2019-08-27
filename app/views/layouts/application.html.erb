@@ -108,29 +108,19 @@
             <h2 class="govuk-visually-hidden">Support links</h2>
             <ul class="govuk-footer__inline-list">
               <li class="govuk-footer__inline-list-item">
-                <a class="govuk-footer__link" href="<%= contact_us_path %>">
-                  Contact us
-                </a>
+                <%= link_to "Contact us", contact_us_path, class: "govuk-footer__link" %>
               </li>
               <li class="govuk-footer__inline-list-item">
-                <a class="govuk-footer__link" href="<%= cookies_path %>">
-                  Cookies
-                </a>
+                <%= link_to "Cookie", cookies_path, class: "govuk-footer__link" %>
               </li>
               <li class="govuk-footer__inline-list-item">
-                <a class="govuk-footer__link" href="<%= terms_conditions_path %>">
-                  Terms and conditions
-                </a>
+                <%= link_to "Terms and conditions", terms_conditions_path, class: "govuk-footer__link" %>
               </li>
               <li class="govuk-footer__inline-list-item">
-                <a class="govuk-footer__link" href="<%= privacy_notice_path %>">
-                  Privacy Notice
-                </a>
+                <%= link_to "Privacy notice", privacy_notice_path, class: "govuk-footer__link" %>
               </li>
               <li class="govuk-footer__inline-list-item">
-                <a class="govuk-footer__link" href="<%= accessibility_statement_path %>">
-                  Accessibility Statement
-                </a>
+                <%= link_to "Accessibility statement", accessibility_statement_path, class: "govuk-footer__link" %>
               </li>
             </ul>
 
