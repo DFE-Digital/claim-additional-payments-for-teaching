@@ -5,6 +5,9 @@ class StaticPagesController < ApplicationController
   def accessibility_statement
   end
 
+  def contact_us
+  end
+
   def cookies
   end
 

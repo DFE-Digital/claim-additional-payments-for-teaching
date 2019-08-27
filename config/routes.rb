@@ -8,6 +8,7 @@ Rails.application.routes.draw do
   # setup static pages
   get "/privacy_notice", to: "static_pages#privacy_notice", as: :privacy_notice
   get "/terms_conditions", to: "static_pages#terms_conditions", as: :terms_conditions
+  get "/contact_us", to: "static_pages#contact_us", as: :contact_us
   get "/cookies", to: "static_pages#cookies", as: :cookies
   get "/accessibility_statement", to: "static_pages#accessibility_statement", as: :accessibility_statement
 

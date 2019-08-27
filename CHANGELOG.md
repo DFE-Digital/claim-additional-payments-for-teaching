@@ -8,6 +8,7 @@ The format is based on [Keep a Changelog]
 
 - fixed a bug in the GOVUK logotype svg src url
 - Improve layout of closed schools in search results
+- Add contact us page
 
 ## [Release 002] - 2019-08-22
 
