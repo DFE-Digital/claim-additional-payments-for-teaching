@@ -82,14 +82,27 @@ document.addEventListener("DOMContentLoaded", function() {
       suggestion: function(id) {
         var school = findSchool(id);
 
-        var suggestion = '<table><tr><td><label class="govuk-label govuk-label--s">' + school.name + "</label></td>";
+        var suggestion =
+          '<div class="school-search__suggestion">' +
+          '<div class="school-search__suggestion-main-section">' +
+          '<label class="govuk-label govuk-label--s">' +
+          school.name +
+          "</label>" +
+          '<span class="govuk-hint">' +
+          school.address +
+          "</span>" +
+          "</div>";
 
-        if (school.closeDate)
-          suggestion += '<td><span class="govuk-hint">' + "Closed on " + school.closeDate + "</span></td>";
+        if (school.closeDate) {
+          suggestion +=
+            '<div class="school-search__closed-status"><span class="govuk-hint govuk-!-margin-bottom-1">' +
+            "Closed on<br>" +
+            school.closeDate +
+            "</span>" +
+            "</div>";
+        }
 
-        suggestion +=
-          '</tr><tr><td colspan="2"><span class="govuk-hint">' + school.address + "</span></td><tr></table>";
-
+        suggestion += "</div>";
         return suggestion;
       }
     },

@@ -1,0 +1,14 @@
+.school-search__suggestion {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+.school-search__suggestion-main-section {
+  flex: 1 1 70%;
+}
+.school-search__closed-status {
+  flex: 0 0 9em;
+  text-align: right;
+  padding-left: 1em;
+  padding-top: 6px;
+}
