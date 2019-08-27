@@ -84,14 +84,31 @@ module Verify
     end
 
     def most_recent_verified_value(attribute_name, required: true)
-      attrs = required ? attributes.fetch(attribute_name) : attributes.dig(attribute_name)
-      return if attrs.blank?
+      if required
+        attrs = attributes.fetch(attribute_name)
 
-      most_recent_verified_attribute = attrs.sort_by { |attribute| attribute["from"].present? ? Date.strptime(attribute["from"], "%Y-%m-%d") : 0 }
-        .reverse
-        .find { |attribute| attribute["verified"] }
-      raise MissingResponseAttribute, "No verified value found for #{attribute_name}" if required && most_recent_verified_attribute.nil?
-      required ? most_recent_verified_attribute.fetch("value") : most_recent_verified_attribute&.fetch("value")
+        raise MissingResponseAttribute, "No values found for #{attribute_name}" if attrs.blank?
+      else
+        attrs = attributes.dig(attribute_name)
+
+        return if attrs.blank?
+      end
+
+      verified_attributes = attrs.select { |attribute| attribute["verified"] }
+
+      raise MissingResponseAttribute, "No verified values found for #{attribute_name}" if required && verified_attributes.empty?
+
+      # If it exists, assume the first (and only) attribute without "from" is always the most recent.
+      most_recent_verified_attribute = verified_attributes.find { |attribute| attribute["from"].nil? }
+      most_recent_verified_attribute = verified_attributes.max_by { |attribute| Date.strptime(attribute["from"], "%Y-%m-%d") } if most_recent_verified_attribute.nil?
+
+      if required
+        raise MissingResponseAttribute, "No most recent verified value found for #{attribute_name}" if most_recent_verified_attribute.nil?
+
+        return most_recent_verified_attribute.fetch("value")
+      else
+        return most_recent_verified_attribute&.fetch("value")
+      end
     end
 
     def gender

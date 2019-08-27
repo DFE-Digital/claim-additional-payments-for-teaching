@@ -118,7 +118,7 @@ RSpec.describe Verify::Response, type: :model do
 
       it "raises an exception" do
         expect { subject.claim_parameters[:full_name] }.to raise_exception(
-          Verify::Response::MissingResponseAttribute, "No verified value found for surnames"
+          Verify::Response::MissingResponseAttribute, "No verified values found for surnames"
         )
       end
     end
