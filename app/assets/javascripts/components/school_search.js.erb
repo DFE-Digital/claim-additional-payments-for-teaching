@@ -83,15 +83,26 @@ document.addEventListener("DOMContentLoaded", function() {
         var school = findSchool(id);
 
         var suggestion =
+          '<div class="school-search__suggestion">' +
+          '<div class="school-search__suggestion-main-section">' +
           '<label class="govuk-label govuk-label--s">' +
           school.name +
           "</label>" +
           '<span class="govuk-hint">' +
           school.address +
-          "</span>";
+          "</span>" +
+          "</div>";
 
-        if (school.closeDate) suggestion += '<span class="govuk-hint">' + "Closed on " + school.closeDate + "</span>";
+        if (school.closeDate) {
+          suggestion +=
+            '<div class="school-search__closed-status"><span class="govuk-hint govuk-!-margin-bottom-1">' +
+            "Closed on<br>" +
+            school.closeDate +
+            "</span>" +
+            "</div>";
+        }
 
+        suggestion += "</div>";
         return suggestion;
       }
     },

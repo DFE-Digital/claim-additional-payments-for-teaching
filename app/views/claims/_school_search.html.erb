@@ -67,11 +67,17 @@
             <%= fields.collection_radio_buttons school_id_param, @schools, :id, :name do |b| %>
               <div class="govuk-radios__item">
                 <%= b.radio_button class: "govuk-radios__input" %>
-                <%= b.label class: "govuk-label govuk-radios__label govuk-label--s" %>
-                <span class="govuk-hint govuk-radios__hint"><%= b.object.address %></span>
-                <% unless b.object.close_date.blank? %>
-                  <span class="govuk-hint govuk-radios__hint">Closed on <%= l(b.object.close_date) %></span>
-                <% end %>
+                <div class="school-search__suggestion">
+                  <div class"school-search__suggestion-main-section>
+                    <%= b.label class: "govuk-label govuk-radios__label govuk-label--s" %>
+                    <span class="govuk-hint govuk-radios__hint"><%= b.object.address %></span>
+                  </div>
+                  <% unless b.object.close_date.blank? %>
+                    <div class="school-search__closed-status">
+                      <span class="govuk-hint govuk-radios__hint govuk-!-margin-bottom-1">Closed on <%= l(b.object.close_date) %></span>
+                    </div>
+                  <% end %>
+                </div>
               </div>
             <% end %>
           <% end %>
