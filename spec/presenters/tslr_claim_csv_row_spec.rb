@@ -16,6 +16,8 @@ RSpec.describe TslrClaimCsvRow do
         submitted_at: DateTime.parse(submitted_at),
         eligibility: build(:student_loans_eligibility, :eligible,
           had_leadership_position: true,
+          employment_status: :different_school,
+          current_school: School.find(ActiveRecord::FixtureSet.identify(:hampstead_school, :uuid)),
           mostly_performed_leadership_duties: false))
     end
     let(:eligibility) { claim.eligibility }
