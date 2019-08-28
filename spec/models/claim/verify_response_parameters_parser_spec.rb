@@ -154,6 +154,70 @@ RSpec.describe Claim::VerifyResponseParametersParser do
     end
   end
 
+  describe "#postcode" do
+    it "returns the 'postCode' from the most recent 'verified' address" do
+      multi_address_parameters = sample_response_parameters({
+        addresses: [
+          {
+            value: {lines: ["Old Street", "Old Town"], postCode: "M21 1GP"},
+            verified: true,
+            from: "1991-12-12",
+            to: "2018-08-08",
+          },
+          {
+            value: {lines: ["Verified Street", "Verified Town"], postCode: "M1 7GL"},
+            verified: true,
+            from: "2018-08-08",
+          },
+        ],
+      })
+      parser = Claim::VerifyResponseParametersParser.new(multi_address_parameters)
+
+      expect(parser.postcode).to eq "M1 7GL"
+    end
+
+    it "returns nil if there is no address" do
+      parser = Claim::VerifyResponseParametersParser.new(sample_response_parameters(addresses: []))
+
+      expect(parser.postcode).to be_nil
+    end
+  end
+
+  describe "the address_line_X methods" do
+    it "returns address lines that are present from the most recent 'verified' address" do
+      short_address_parameters = sample_response_parameters({addresses: [{value: {lines: ["Old Street", "Old Town"], postCode: "M21 1GP"}, verified: true}]})
+      parser = Claim::VerifyResponseParametersParser.new(short_address_parameters)
+      expect(parser.address_line_1).to eq "Old Street"
+      expect(parser.address_line_2).to eq "Old Town"
+      expect(parser.address_line_3).to be_nil
+      expect(parser.address_line_4).to be_nil
+
+      full_address_parameters = sample_response_parameters({
+        addresses: [
+          {
+            value: {lines: ["Some house", "Verified Street", "Verified Town", "Verified County"], postCode: "M1 7GL"},
+            verified: true,
+            from: "2018-08-08",
+          },
+        ],
+      })
+      parser = Claim::VerifyResponseParametersParser.new(full_address_parameters)
+      expect(parser.address_line_1).to eq "Some house"
+      expect(parser.address_line_2).to eq "Verified Street"
+      expect(parser.address_line_3).to eq "Verified Town"
+      expect(parser.address_line_4).to eq "Verified County"
+    end
+
+    it "returns nil if there are no 'addresses'" do
+      parser = Claim::VerifyResponseParametersParser.new(sample_response_parameters(addresses: []))
+
+      expect(parser.address_line_1).to be_nil
+      expect(parser.address_line_2).to be_nil
+      expect(parser.address_line_3).to be_nil
+      expect(parser.address_line_4).to be_nil
+    end
+  end
+
   private
 
   def sample_response_parameters(overrides = {})

@@ -30,6 +30,26 @@ class Claim
       [first_name, middle_name, surname].compact.join(" ")
     end
 
+    def postcode
+      most_recent_address&.fetch("postCode")
+    end
+
+    def address_line_1
+      address_lines[0]
+    end
+
+    def address_line_2
+      address_lines[1]
+    end
+
+    def address_line_3
+      address_lines[2]
+    end
+
+    def address_line_4
+      address_lines[3]
+    end
+
     private
 
     def attributes
@@ -46,6 +66,14 @@ class Claim
 
     def no_verified_values?(attribute_name)
       attributes.fetch(attribute_name).none? { |value| value["verified"] }
+    end
+
+    def most_recent_address
+      @most_recent_address ||= most_recent_verified("addresses", required: false)
+    end
+
+    def address_lines
+      most_recent_address&.fetch("lines") || []
     end
   end
 end
