@@ -25,7 +25,7 @@ class TslrClaimCsvRow < SimpleDelegator
   end
 
   def current_school_name
-    model.eligibility.claim_school_name
+    model.eligibility.current_school_name
   end
 
   def employment_status
