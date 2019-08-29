@@ -1,8 +1,3 @@
-# Ruby
-# Package your Ruby project.
-# Add steps that install rails, analyze code, save build artifacts, deploy, and more:
-# https://docs.microsoft.com/azure/devops/pipelines/languages/ruby
-
 pool:
   vmImage: ubuntu-latest
 
@@ -10,13 +5,6 @@ variables:
   - group: docker-settings
 
 steps:
-  # Pin Ruby version
-  - task: UseRubyVersion@0
-    inputs:
-      versionSpec: "2.6.2"
-      addToPath: true
-    displayName: Use Ruby 2.6.2
-
   # Login to DockerHub
   - script: docker login -u $(dockerId) -p $pass
     env:
