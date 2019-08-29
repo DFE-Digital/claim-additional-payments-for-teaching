@@ -6,11 +6,13 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+## [Release 003] - 2019-08-29
+
 - Fixed a bug where missing "from" dates on Verify attributes caused a crash
-- stop user IP address appearing in Rollbar
-- redact all from dates in Verify response
-- fixed a bug where the no JS school contact was not selectable
-- fixed a bug in the GOVUK logotype svg src url
+- Stop user IP address appearing in Rollbar
+- Redact all from dates in Verify response
+- Fixed a bug where the no JS school contact was not selectable
+- Fixed a bug in the GOVUK logotype svg src url
 - Improve layout of closed schools in search results
 - Add contact us page
 - Fix an error in the claim CSV where the current school was displaying
@@ -31,7 +33,9 @@ The format is based on [Keep a Changelog]
 - First release for student loan repayments private beta
 
 [unreleased]:
-  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-002...HEAD
+  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-003...HEAD
+[release 003]:
+  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-002...release-003
 [release 002]:
   https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-001...release-002
 [release 001]:
