@@ -6,6 +6,7 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+- fixed a bug where the no JS school contact was not selectable
 - fixed a bug in the GOVUK logotype svg src url
 - Improve layout of closed schools in search results
 - Add contact us page
