@@ -28,7 +28,6 @@ module ClaimsHelper
       a << [t("student_loans.questions.subjects_taught"), subject_list(eligibility.subjects_taught), "subjects-taught"]
       a << [t("student_loans.questions.leadership_position"), (eligibility.had_leadership_position? ? "Yes" : "No"), "leadership-position"]
       a << [t("student_loans.questions.mostly_performed_leadership_duties"), (eligibility.mostly_performed_leadership_duties? ? "Yes" : "No"), "mostly-performed-leadership-duties"] if eligibility.had_leadership_position?
-      a << [t("student_loans.questions.student_loan_amount", claim_school_name: eligibility.claim_school_name), number_to_currency(eligibility.student_loan_repayment_amount), "student-loan-amount"]
     end
   end
 
@@ -57,6 +56,7 @@ module ClaimsHelper
       a << [t("questions.student_loan_country"), claim.student_loan_country.titleize, "student-loan-country"] if claim.student_loan_country.present?
       a << [t("questions.student_loan_how_many_courses"), claim.student_loan_courses.humanize, "student-loan-how-many-courses"] if claim.student_loan_courses.present?
       a << [t("questions.student_loan_start_date.#{claim.student_loan_courses}"), t("answers.student_loan_start_date.#{claim.student_loan_courses}.#{claim.student_loan_start_date}"), "student-loan-start-date"] if claim.student_loan_courses.present?
+      a << [t("student_loans.questions.student_loan_amount", claim_school_name: claim.eligibility.claim_school_name), number_to_currency(claim.eligibility.student_loan_repayment_amount), "student-loan-amount"]
     end
   end
 

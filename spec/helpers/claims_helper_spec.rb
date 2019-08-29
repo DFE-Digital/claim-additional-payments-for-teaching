@@ -25,7 +25,6 @@ describe ClaimsHelper do
         [I18n.t("student_loans.questions.subjects_taught"), "Chemistry and Physics", "subjects-taught"],
         [I18n.t("student_loans.questions.leadership_position"), "Yes", "leadership-position"],
         [I18n.t("student_loans.questions.mostly_performed_leadership_duties"), "No", "mostly-performed-leadership-duties"],
-        [I18n.t("student_loans.questions.student_loan_amount", claim_school_name: school.name), "£1,987.65", "student-loan-amount"],
       ]
 
       expect(helper.eligibility_answers(eligibility)).to eq expected_answers
@@ -149,7 +148,8 @@ describe ClaimsHelper do
         has_student_loan: true,
         student_loan_country: StudentLoans::ENGLAND,
         student_loan_courses: :one_course,
-        student_loan_start_date: StudentLoans::ON_OR_AFTER_1_SEPT_2012
+        student_loan_start_date: StudentLoans::ON_OR_AFTER_1_SEPT_2012,
+        eligibility: build(:student_loans_eligibility, student_loan_repayment_amount: 1987.65),
       )
 
       expected_answers = [
@@ -157,6 +157,7 @@ describe ClaimsHelper do
         [t("questions.student_loan_country"), "England", "student-loan-country"],
         [t("questions.student_loan_how_many_courses"), "One course", "student-loan-how-many-courses"],
         [t("questions.student_loan_start_date.one_course"), t("answers.student_loan_start_date.one_course.on_or_after_first_september_2012"), "student-loan-start-date"],
+        [t("student_loans.questions.student_loan_amount", claim_school_name: claim.eligibility.claim_school_name), "£1,987.65", "student-loan-amount"],
       ]
 
       expect(helper.student_loan_answers(claim)).to eq expected_answers
@@ -168,7 +169,8 @@ describe ClaimsHelper do
         has_student_loan: true,
         student_loan_country: StudentLoans::ENGLAND,
         student_loan_courses: :two_or_more_courses,
-        student_loan_start_date: StudentLoans::BEFORE_1_SEPT_2012
+        student_loan_start_date: StudentLoans::BEFORE_1_SEPT_2012,
+        eligibility: build(:student_loans_eligibility, student_loan_repayment_amount: 1987.65),
       )
 
       expected_answers = [
@@ -176,17 +178,24 @@ describe ClaimsHelper do
         [t("questions.student_loan_country"), "England", "student-loan-country"],
         [t("questions.student_loan_how_many_courses"), "Two or more courses", "student-loan-how-many-courses"],
         [t("questions.student_loan_start_date.two_or_more_courses"), t("answers.student_loan_start_date.two_or_more_courses.before_first_september_2012"), "student-loan-start-date"],
+        [t("student_loans.questions.student_loan_amount", claim_school_name: claim.eligibility.claim_school_name), "£1,987.65", "student-loan-amount"],
       ]
 
       expect(helper.student_loan_answers(claim)).to eq expected_answers
     end
 
     it "excludes unanswered questions" do
-      claim = build(:claim, has_student_loan: true, student_loan_country: StudentLoans::SCOTLAND)
+      claim = build(
+        :claim,
+        has_student_loan: true,
+        student_loan_country: StudentLoans::SCOTLAND,
+        eligibility: build(:student_loans_eligibility, student_loan_repayment_amount: 1987.65),
+      )
 
       expected_answers = [
         [t("questions.has_student_loan"), "Yes", "student-loan"],
         [t("questions.student_loan_country"), "Scotland", "student-loan-country"],
+        [t("student_loans.questions.student_loan_amount", claim_school_name: claim.eligibility.claim_school_name), "£1,987.65", "student-loan-amount"],
       ]
 
       expect(helper.student_loan_answers(claim)).to eq expected_answers
