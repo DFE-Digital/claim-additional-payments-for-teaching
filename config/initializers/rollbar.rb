@@ -7,7 +7,9 @@ Rollbar.configure do |config|
   # Disable Rollbar in "test" and "development" environments
   config.enabled = false if Rails.env.test? || Rails.env.development?
 
-  config.anonymize_user_ip = true
+  # removing personally identifiable information
+  config.collect_user_ip = false
+  config.scrub_headers |= ["X-Client-Ip", "Client-Ip"]
   config.scrub_fields |= Rails.application.config.filter_parameters
 
   # By default, Rollbar will try to call the `current_user` controller method

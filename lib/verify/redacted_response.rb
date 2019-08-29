@@ -7,7 +7,7 @@ module Verify
   #   => {"value" => "XXXXXX"}
   #
   class RedactedResponse
-    KEYS_TO_REDACT = %w[value postCode].freeze
+    KEYS_TO_REDACT = %w[value postCode from].freeze
 
     attr_reader :parameters
 
