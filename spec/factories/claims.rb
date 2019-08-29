@@ -3,7 +3,8 @@ FactoryBot.define do
     association(:eligibility, factory: :student_loans_eligibility)
 
     trait :submittable do
-      full_name { "Jo Bloggs" }
+      first_name { "Jo" }
+      surname { "Bloggs" }
       address_line_1 { "1 Test Road" }
       postcode { "AB1 2CD" }
       date_of_birth { 20.years.ago.to_date }

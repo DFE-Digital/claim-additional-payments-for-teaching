@@ -68,7 +68,9 @@ en:
       female: "Female"
       dont_know: "Don’t know"
   verified_fields:
-    full_name: "full name"
+    first_name: "first name"
+    middle_name: "middle name"
+    surname: "surname"
     date_of_birth: "date of birth"
     payroll_gender: "gender"
     address: "address"

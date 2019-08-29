@@ -42,7 +42,9 @@ RSpec.feature "Teacher Student Loan Repayments claims" do
     perform_verify_step
     click_on "Continue"
 
-    expect(claim.reload.full_name).to eql("Isambard Kingdom Brunel")
+    expect(claim.reload.first_name).to eql("Isambard")
+    expect(claim.reload.middle_name).to eql("Kingdom")
+    expect(claim.reload.surname).to eql("Brunel")
     expect(claim.address_line_1).to eq("Verified Building")
     expect(claim.address_line_2).to eq("Verified Street")
     expect(claim.address_line_3).to eq("Verified Town")

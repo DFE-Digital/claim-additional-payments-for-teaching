@@ -5,7 +5,7 @@ class Claim
   # attributes Hash that can be used to update a claim. For example,
   #
   #   Claim::VerifyResponseParametersParser.new(verify_response.parameters).attributes
-  #   => { full_name: "Margaret Elaine Heafield Hamilton", date_of_birth: "1936-08-17", ...}
+  #   => { first_name: "Margaret", last_name: "Hamilton", date_of_birth: "1936-08-17", ...}
   #
   # As well as keys for the personal information of the user (name, address,
   # etc) the returned Hash includes two additional keys:
@@ -50,10 +50,6 @@ class Claim
 
     def middle_name
       most_recent_verified("middleNames", required: false)
-    end
-
-    def full_name
-      [first_name, middle_name, surname].compact.join(" ")
     end
 
     def postcode
@@ -104,7 +100,9 @@ class Claim
 
     def identity_attributes
       @identity_attributes ||= {
-        full_name: full_name,
+        first_name: first_name,
+        middle_name: middle_name,
+        surname: surname,
         date_of_birth: date_of_birth,
         payroll_gender: gender,
         address_line_1: address_line_1,

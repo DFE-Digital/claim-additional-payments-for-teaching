@@ -30,10 +30,24 @@ RSpec.describe Claim, type: :model do
     end
   end
 
-  context "that has a full name" do
-    it "validates the length of name is 200 characters or less" do
-      expect(build(:claim, full_name: "Name " * 50)).not_to be_valid
-      expect(build(:claim, full_name: "John Kimble")).to be_valid
+  context "that has a first name" do
+    it "validates the length of name is 100 characters or less" do
+      expect(build(:claim, first_name: "Name " * 50)).not_to be_valid
+      expect(build(:claim, first_name: "John")).to be_valid
+    end
+  end
+
+  context "that has a middle name" do
+    it "validates the length of middle name is 100 characters or less" do
+      expect(build(:claim, middle_name: "Name " * 50)).not_to be_valid
+      expect(build(:claim, middle_name: "Arnold")).to be_valid
+    end
+  end
+
+  context "that has a surname" do
+    it "validates the length of surname is 100 characters or less" do
+      expect(build(:claim, surname: "Name " * 50)).not_to be_valid
+      expect(build(:claim, surname: "Kimble")).to be_valid
     end
   end
 
@@ -111,13 +125,6 @@ RSpec.describe Claim, type: :model do
     it "validates the presence of gender" do
       expect(build(:claim)).not_to be_valid(:gender)
       expect(build(:claim, payroll_gender: :male)).to be_valid(:gender)
-    end
-  end
-
-  context "when saving in the “name” validation context" do
-    it "validates the presence of full_name" do
-      expect(build(:claim)).not_to be_valid(:"full-name")
-      expect(build(:claim, full_name: "John Kimble")).to be_valid(:"full-name")
     end
   end
 
@@ -398,6 +405,9 @@ RSpec.describe Claim, type: :model do
         :bank_account_number,
         :date_of_birth,
         :full_name,
+        :first_name,
+        :middle_name,
+        :surname,
         :verify_response,
       ])
     end

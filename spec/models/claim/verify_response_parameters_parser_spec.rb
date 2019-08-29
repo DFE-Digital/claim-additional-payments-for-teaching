@@ -142,18 +142,6 @@ RSpec.describe Claim::VerifyResponseParametersParser do
     end
   end
 
-  describe "#full_name" do
-    it "joins the first name and surname together" do
-      parser = Claim::VerifyResponseParametersParser.new(sample_response_parameters)
-      expect(parser.full_name).to eq "Isambard Brunel"
-    end
-
-    it "includes a middle name when present" do
-      parser = Claim::VerifyResponseParametersParser.new(sample_response_parameters(middleNames: [{value: "Kingdom", verified: true}]))
-      expect(parser.full_name).to eq "Isambard Kingdom Brunel"
-    end
-  end
-
   describe "#postcode" do
     it "returns the 'postCode' from the most recent 'verified' address" do
       multi_address_parameters = sample_response_parameters({
@@ -222,12 +210,13 @@ RSpec.describe Claim::VerifyResponseParametersParser do
     it "returns a compact attributes hash ready to be mass-assigned to a Claim record, including the keys of the verified fields and verify response" do
       parser = Claim::VerifyResponseParametersParser.new(sample_response_parameters)
       expected_attributes = {
-        full_name: "Isambard Brunel",
+        first_name: "Isambard",
+        surname: "Brunel",
         date_of_birth: "1806-04-09",
         address_line_1: "Verified Street",
         address_line_2: "Verified Town",
         postcode: "M12 345",
-        verified_fields: %i[full_name date_of_birth address_line_1 address_line_2 postcode],
+        verified_fields: %i[first_name surname date_of_birth address_line_1 address_line_2 postcode],
         verify_response: sample_response_parameters,
       }
 

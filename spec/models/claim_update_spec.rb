@@ -69,7 +69,7 @@ RSpec.describe ClaimUpdate do
   end
 
   context "when updating an unsubmittable claim in the “check-your-answers” context" do
-    let(:claim) { create(:claim, :submittable, full_name: nil) }
+    let(:claim) { create(:claim, :submittable, first_name: nil) }
     let(:context) { "check-your-answers" }
     let(:params) { {} }
 

@@ -41,7 +41,8 @@ describe ClaimsHelper do
     let(:claim) do
       build(
         :claim,
-        full_name: "Jo Bloggs",
+        first_name: "Jo",
+        surname: "Bloggs",
         address_line_1: "Flat 1",
         address_line_2: "1 Test Road",
         address_line_3: "Test Town",
@@ -52,7 +53,8 @@ describe ClaimsHelper do
         email_address: "test@email.com",
         payroll_gender: :female,
         verified_fields: [
-          "full_name",
+          "first_name",
+          "surname",
           "address_line_1",
           "address_line_2",
           "address_line_3",
@@ -65,7 +67,8 @@ describe ClaimsHelper do
 
     it "returns an array of questions and answers for displaying to the user for review" do
       expected_answers = [
-        ["Full name", "Jo Bloggs"],
+        ["First name", "Jo"],
+        ["Surname", "Bloggs"],
         ["Address", "Flat 1<br>1 Test Road<br>Test Town<br>AB1 2CD"],
         ["Date of birth", "1 January 1901"],
         ["Gender", "Female"],
@@ -78,7 +81,8 @@ describe ClaimsHelper do
       claim.verified_fields = []
 
       expected_answers = [
-        ["Full name", "Jo Bloggs"],
+        ["First name", "Jo"],
+        ["Surname", "Bloggs"],
         ["Date of birth", "1 January 1901"],
       ]
 
@@ -90,7 +94,8 @@ describe ClaimsHelper do
     let(:claim) do
       build(
         :claim,
-        full_name: "Jo Bloggs",
+        first_name: "Jo",
+        surname: "Bloggs",
         address_line_1: "Flat 1",
         address_line_2: "1 Test Road",
         address_line_3: "Test Town",
