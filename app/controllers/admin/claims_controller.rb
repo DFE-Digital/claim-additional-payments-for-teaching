@@ -10,6 +10,10 @@ class Admin::ClaimsController < Admin::BaseAdminController
     end
   end
 
+  def show
+    @claim = Claim.find(params[:id])
+  end
+
   private
 
   def ensure_service_operator

@@ -59,6 +59,6 @@ Rails.application.routes.draw do
     get "/auth/callback", to: "auth#callback"
     get "/auth/failure", to: "auth#failure"
 
-    resources :claims, only: [:index]
+    resources :claims, only: [:index, :show]
   end
 end
