@@ -7,11 +7,11 @@ class Claim
     end
 
     def gender
-      {"MALE" => :male, "FEMALE" => :female}[attributes.dig("gender", "value")]
+      {"MALE" => :male, "FEMALE" => :female}[verify_attributes.dig("gender", "value")]
     end
 
     def date_of_birth
-      attributes.fetch("datesOfBirth").first.fetch("value")
+      verify_attributes.fetch("datesOfBirth").first.fetch("value")
     end
 
     def first_name
@@ -52,20 +52,20 @@ class Claim
 
     private
 
-    def attributes
+    def verify_attributes
       @response_parameters.fetch("attributes")
     end
 
     def most_recent_verified(attribute_name, required: true)
       raise MissingResponseAttribute, "No verified value found for #{attribute_name}" if required && no_verified_values?(attribute_name)
 
-      attributes.fetch(attribute_name)
+      verify_attributes.fetch(attribute_name)
         .select { |value| value["verified"] }
         .max_by { |value| Date.parse(value.fetch("from", Date.today.to_s)) }&.fetch("value")
     end
 
     def no_verified_values?(attribute_name)
-      attributes.fetch(attribute_name).none? { |value| value["verified"] }
+      verify_attributes.fetch(attribute_name).none? { |value| value["verified"] }
     end
 
     def most_recent_address
