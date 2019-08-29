@@ -218,6 +218,23 @@ RSpec.describe Claim::VerifyResponseParametersParser do
     end
   end
 
+  describe "#attributes" do
+    it "returns a compact attributes hash ready to be mass-assigned to a Claim record, including the keys of the verified fields and verify response" do
+      parser = Claim::VerifyResponseParametersParser.new(sample_response_parameters)
+      expected_attributes = {
+        full_name: "Isambard Brunel",
+        date_of_birth: "1806-04-09",
+        address_line_1: "Verified Street",
+        address_line_2: "Verified Town",
+        postcode: "M12 345",
+        verified_fields: %i[full_name date_of_birth address_line_1 address_line_2 postcode],
+        verify_response: sample_response_parameters,
+      }
+
+      expect(parser.attributes).to eq expected_attributes
+    end
+  end
+
   private
 
   def sample_response_parameters(overrides = {})

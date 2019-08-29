@@ -1,9 +1,35 @@
+# frozen_string_literal: true
+
 class Claim
+  # Used to convert the parameters from a successful Verify::Response into an
+  # attributes Hash that can be used to update a claim. For example,
+  #
+  #   Claim::VerifyResponseParametersParser.new(verify_response.parameters).attributes
+  #   => { full_name: "Margaret Elaine Heafield Hamilton", date_of_birth: "1936-08-17", ...}
+  #
+  # As well as keys for the personal information of the user (name, address,
+  # etc) the returned Hash includes two additional keys:
+  #
+  #   verified_fields – these are the keys for the attributes that have come
+  #                     back in the Verify response. Recording these allows us
+  #                     to determine which attributes came from Verify and
+  #                     therefore should not be editable by the user.
+  #
+  #   verify_response – this is the entire Verify response payload. We record
+  #                     this so that we can examine the original payload to
+  #                     debug issues in the way we parse responses, but also so
+  #                     we can retrospectively re-parse responses in future if
+  #                     necessary.
+  #
   class VerifyResponseParametersParser
     class MissingResponseAttribute < StandardError; end
 
     def initialize(response_parameters)
       @response_parameters = response_parameters
+    end
+
+    def attributes
+      identity_attributes.merge(verified_fields: verified_fields, verify_response: @response_parameters)
     end
 
     def gender
@@ -74,6 +100,23 @@ class Claim
 
     def address_lines
       most_recent_address&.fetch("lines") || []
+    end
+
+    def identity_attributes
+      @identity_attributes ||= {
+        full_name: full_name,
+        date_of_birth: date_of_birth,
+        payroll_gender: gender,
+        address_line_1: address_line_1,
+        address_line_2: address_line_2,
+        address_line_3: address_line_3,
+        address_line_4: address_line_4,
+        postcode: postcode,
+      }.compact
+    end
+
+    def verified_fields
+      identity_attributes.keys
     end
   end
 end
