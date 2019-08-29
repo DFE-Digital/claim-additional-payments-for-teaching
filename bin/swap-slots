@@ -1,0 +1,39 @@
+#!/bin/bash
+
+ENVIRONMENT_NAME=$1
+
+case $ENVIRONMENT_NAME in
+  "development")
+    SUBSCRIPTION_ID="8655985a-2f87-44d7-a541-0be9a8c2779d"
+    RESOURCE_GROUP="s118d01-app"
+    ;;
+  "production")
+    SUBSCRIPTION_ID="88bd392f-df19-458b-a100-22b4429060ed"
+    RESOURCE_GROUP="s118p01-app"
+    ;;
+  *)
+    echo "Could not find an known environment with the name: $ENVIRONMENT_NAME"
+    exit 1
+    ;;
+esac
+
+while [ "$2" ]; do
+  case $2 in
+    "--tmp-app")
+      RESOURCE_GROUP="$RESOURCE_GROUP-tmp"
+      ;;
+    *)
+      echo "Unexpected argument: $2"
+      exit 1
+      ;;
+  esac
+
+  shift
+done
+
+APP_NAME="$RESOURCE_GROUP-as"
+
+echo "Restarting staging slot for $RESOURCE_GROUP"
+az webapp restart --name "$APP_NAME" --resource-group "$RESOURCE_GROUP" --slot staging --subscription="$SUBSCRIPTION_ID"
+echo "Swapping staging slot to production for $RESOURCE_GROUP"
+az webapp deployment slot swap --name "$APP_NAME" --slot staging --resource-group "$RESOURCE_GROUP" --subscription="$SUBSCRIPTION_ID"

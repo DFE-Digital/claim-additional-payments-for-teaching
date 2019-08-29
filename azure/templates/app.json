@@ -59,7 +59,10 @@
     "appServiceLogsDeploymentName": "[concat(deployment().name, '-app-service-logs')]",
     "appServicePlanDeploymentName": "[concat(deployment().name, '-app-service-plan')]",
 
-    "hasCustomHostName": "[greater(length(parameters('appServiceHostName')), 0)]"
+    "hasCustomHostName": "[greater(length(parameters('appServiceHostName')), 0)]",
+
+    "appServiceStagingSlotName": "[concat(parameters('appServiceName'), '/staging')]",
+    "appServiceHostNameBindingsName": "[concat(parameters('appServiceName'), '/', if(variables('hasCustomHostName'), parameters('appServiceHostName'), 'PLACEHOLDER'))]"
   },
   "resources": [
     {
@@ -137,10 +140,26 @@
       }
     },
     {
+      "type": "Microsoft.Web/sites/slots",
+      "apiVersion": "2018-11-01",
+      "name": "[variables('appServiceStagingSlotName')]",
+      "location": "[resourceGroup().location]",
+      "dependsOn": ["[resourceId('Microsoft.Web/sites', parameters('appServiceName'))]"],
+      "properties": {
+        "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', parameters('appServicePlanName'))]",
+        "httpsOnly": true,
+        "siteConfig": {
+          "alwaysOn": false,
+          "linuxFxVersion": "[parameters('appServiceRuntimeStack')]",
+          "appSettings": "[parameters('appServiceEnvironmentVariables')]"
+        }
+      }
+    },
+    {
       "condition": "[variables('hasCustomHostName')]",
       "type": "Microsoft.Web/sites/hostNameBindings",
       "apiVersion": "2018-11-01",
-      "name": "[concat(parameters('appServiceName'), '/', if(variables('hasCustomHostName'), parameters('appServiceHostName'), 'PLACEHOLDER'))]",
+      "name": "[variables('appServiceHostNameBindingsName')]",
       "location": "[resourceGroup().location]",
       "dependsOn": [
         "[resourceId('Microsoft.Resources/deployments', variables('appServiceCertificateDeploymentName'))]",

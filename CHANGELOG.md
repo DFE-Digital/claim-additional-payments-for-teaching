@@ -15,6 +15,7 @@ The format is based on [Keep a Changelog]
 - Add contact us page
 - Fix an error in the claim CSV where the current school was displaying
   incorrectly
+- Switch to using deployment slots for "zero-downtime" deployment
 
 ## [Release 002] - 2019-08-22
 
