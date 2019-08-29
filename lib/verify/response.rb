@@ -23,86 +23,8 @@ module Verify
       scenario == Verify::IDENTITY_VERIFIED_SCENARIO
     end
 
-    def claim_parameters
-      return {} unless verified?
-
-      identity_paramteters.merge(
-        verified_fields: verified_fields,
-        verify_response: parameters
-      )
-    end
-
     def scenario
       @scenario ||= parameters["scenario"]
-    end
-
-    private
-
-    def identity_paramteters
-      @identity_paramteters ||= {
-        full_name: full_name,
-        address_line_1: address_line(1),
-        address_line_2: address_line(2),
-        address_line_3: address_line(3),
-        address_line_4: address_line(4),
-        postcode: postcode,
-        date_of_birth: attributes.fetch("datesOfBirth").first.fetch("value"),
-        payroll_gender: gender,
-      }
-    end
-
-    def verified_fields
-      identity_paramteters.reject { |k, v| v.blank? }.keys
-    end
-
-    def address
-      @address ||= most_recent_verified_value("addresses", required: false)
-    end
-
-    def address_lines
-      @address_lines ||= address.fetch("lines")
-    end
-
-    def address_line(line)
-      address_lines[line - 1] unless address_missing?
-    end
-
-    def postcode
-      address.fetch("postCode") unless address_missing?
-    end
-
-    def address_missing?
-      address.nil?
-    end
-
-    def full_name
-      first_name = most_recent_verified_value("firstNames")
-      middle_name = most_recent_verified_value("middleNames", required: false)
-      surname = most_recent_verified_value("surnames")
-
-      [first_name, middle_name, surname].compact.join(" ")
-    end
-
-    def most_recent_verified_value(attribute_name, required: true)
-      attrs = required ? attributes.fetch(attribute_name) : attributes.dig(attribute_name)
-      return if attrs.blank?
-
-      most_recent_verified_attribute = attrs.sort_by { |attribute| attribute["from"].present? ? Date.strptime(attribute["from"], "%Y-%m-%d") : 0 }
-        .reverse
-        .find { |attribute| attribute["verified"] }
-      raise MissingResponseAttribute, "No verified value found for #{attribute_name}" if required && most_recent_verified_attribute.nil?
-      required ? most_recent_verified_attribute.fetch("value") : most_recent_verified_attribute&.fetch("value")
-    end
-
-    def gender
-      gender = attributes.dig("gender", "value")
-
-      return :female if gender == "FEMALE"
-      return :male if gender == "MALE"
-    end
-
-    def attributes
-      @attributes ||= parameters.fetch("attributes")
     end
   end
 end
