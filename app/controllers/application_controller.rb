@@ -9,7 +9,7 @@ class ApplicationController < ActionController::Base
     if: -> { ENV.key?("BASIC_AUTH_USERNAME") },
   )
 
-  helper_method :admin_signed_in?, :current_claim
+  helper_method :admin_signed_in?, :current_claim, :claim_timeout_in_minutes, :claim_timeout_warning_in_minutes
   before_action :end_expired_admin_sessions
   before_action :end_expired_claim_sessions
   before_action :update_last_seen_at
@@ -28,6 +28,14 @@ class ApplicationController < ActionController::Base
     @current_claim ||= Claim.find(session[:claim_id]) if session.key?(:claim_id)
   end
 
+  def claim_timeout_in_minutes
+    self.class::CLAIM_TIMEOUT_LENGTH_IN_MINUTES
+  end
+
+  def claim_timeout_warning_in_minutes
+    self.class::CLAIM_TIMEOUT_WARNING_LENGTH_IN_MINUTES
+  end
+
   def end_expired_claim_sessions
     if claim_session_timed_out?
       clear_claim_session
@@ -36,7 +44,7 @@ class ApplicationController < ActionController::Base
   end
 
   def claim_session_timed_out?
-    session.key?(:claim_id) && session[:last_seen_at] < CLAIM_TIMEOUT_LENGTH_IN_MINUTES.minutes.ago
+    session.key?(:claim_id) && session[:last_seen_at] < claim_timeout_in_minutes.minutes.ago
   end
 
   def clear_claim_session

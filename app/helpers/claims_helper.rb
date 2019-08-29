@@ -3,14 +3,6 @@ module ClaimsHelper
     "https://www.gov.uk/guidance/teachers-student-loan-reimbursement-guidance-for-teachers-and-schools"
   end
 
-  def claim_timeout_in_minutes
-    ApplicationController::CLAIM_TIMEOUT_LENGTH_IN_MINUTES
-  end
-
-  def claim_timeout_warning_in_minutes
-    ApplicationController::CLAIM_TIMEOUT_WARNING_LENGTH_IN_MINUTES
-  end
-
   def verified_fields(claim)
     fields = []
     fields << I18n.t("verified_fields.full_name") if claim.verified_fields.include?("full_name")

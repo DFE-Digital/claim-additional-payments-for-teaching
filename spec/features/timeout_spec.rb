@@ -4,8 +4,8 @@ RSpec.feature "Teacher Student Loan Repayments claims", js: true do
   let(:one_second_in_minutes) { 1 / 60.to_f }
 
   before do
-    allow_any_instance_of(ClaimsHelper).to receive(:claim_timeout_in_minutes) { one_second_in_minutes }
-    allow_any_instance_of(ClaimsHelper).to receive(:claim_timeout_warning_in_minutes) { one_second_in_minutes }
+    allow_any_instance_of(ApplicationController).to receive(:claim_timeout_in_minutes) { one_second_in_minutes }
+    allow_any_instance_of(ApplicationController).to receive(:claim_timeout_warning_in_minutes) { one_second_in_minutes }
     start_claim
   end
 
