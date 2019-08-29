@@ -28,6 +28,13 @@ RSpec.describe Claim::VerifyResponseParametersParser do
     end
   end
 
+  describe "#date_of_birth" do
+    it "returns the raw String value for the 'datesOfBirth' reported by Verify" do
+      parser = Claim::VerifyResponseParametersParser.new(sample_response_parameters(datesOfBirth: [{value: "1994-08-09"}]))
+      expect(parser.date_of_birth).to eq "1994-08-09"
+    end
+  end
+
   private
 
   def sample_response_parameters(overrides = {})

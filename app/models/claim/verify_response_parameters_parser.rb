@@ -8,6 +8,9 @@ class Claim
       {"MALE" => :male, "FEMALE" => :female}[attributes.dig("gender", "value")]
     end
 
+    def date_of_birth
+      attributes.fetch("datesOfBirth").first.fetch("value")
+    end
 
     private
 
