@@ -107,7 +107,7 @@ class School < ApplicationRecord
     [street, locality, town, county, postcode].reject(&:blank?).join(", ")
   end
 
-  def eligible_for_tslr?
+  def eligible_for_student_loans?
     StudentLoans::SchoolEligibility.new(self).check
   end
 
