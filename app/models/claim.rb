@@ -143,6 +143,10 @@ class Claim < ApplicationRecord
     verified_fields.include?("payroll_gender")
   end
 
+  def full_name
+    [first_name, middle_name, surname].compact.join(" ")
+  end
+
   def self.filtered_params
     FILTER_PARAMS.select { |_, v| v }.keys
   end

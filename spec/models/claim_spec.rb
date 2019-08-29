@@ -389,6 +389,18 @@ RSpec.describe Claim, type: :model do
     end
   end
 
+  describe "#full_name" do
+    it "joins the first name and surname together" do
+      expect(Claim.new(first_name: "Isambard", surname: "Brunel").full_name).to eq "Isambard Brunel"
+    end
+
+    it "includes a middle name when present" do
+      expect(
+        Claim.new(first_name: "Isambard", middle_name: "Kingdom", surname: "Brunel").full_name
+      ).to eq "Isambard Kingdom Brunel"
+    end
+  end
+
   describe ".filtered_params" do
     it "returns a list of sensitive params to be filtered" do
       expect(Claim.filtered_params).to match_array([
