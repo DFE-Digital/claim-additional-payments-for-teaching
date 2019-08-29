@@ -21,7 +21,8 @@ module Verify
       @response = Verify::Response.translate(saml_response: params["SAMLResponse"], request_id: session[:verify_request_id], level_of_assurance: "LEVEL_2")
       report_redacted_response
       if @response.verified?
-        current_claim.update!(@response.claim_parameters)
+        parser = Claim::VerifyResponseParametersParser.new(@response.parameters)
+        current_claim.update!(parser.attributes)
         redirect_to claim_url("verified")
       else
         current_claim.update!(verify_response: @response.parameters)

@@ -6,6 +6,7 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+- Fixed a bug where missing "from" dates on Verify attributes caused a crash
 - stop user IP address appearing in Rollbar
 - redact all from dates in Verify response
 - fixed a bug where the no JS school contact was not selectable

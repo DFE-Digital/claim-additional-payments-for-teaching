@@ -25,6 +25,7 @@
     "gender": {
       "value": "FEMALE",
       "verified": true
-    }
+    },
+    "addresses": []
   }
 }
