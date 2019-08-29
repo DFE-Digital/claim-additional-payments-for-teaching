@@ -11,8 +11,8 @@ else
     echo "No tables exist - setting up the database"
     rails db:setup
   else
-    echo "Running the migrations"
-    rails db:migrate
+    echo "Running the schema & data migrations"
+    rails db:migrate:with_data
   fi
 fi
 
