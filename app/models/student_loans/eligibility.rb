@@ -78,7 +78,7 @@ module StudentLoans
     end
 
     def ineligible_claim_school?
-      claim_school.present? && !claim_school.eligible_for_tslr?
+      claim_school.present? && !claim_school.eligible_for_student_loans?
     end
 
     def not_taught_eligible_subjects?

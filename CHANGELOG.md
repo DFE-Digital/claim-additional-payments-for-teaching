@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+- Introduced rake tasks to export eligible schools to csv
+
 ## [Release 003] - 2019-08-29
 
 - Fixed a bug where missing "from" dates on Verify attributes caused a crash
