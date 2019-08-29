@@ -100,4 +100,20 @@ RSpec.feature "Teacher verifies identity using GOV.UK Verify" do
       expect(@claim.verify_response).to eq(parsed_vsp_translated_response("authentication-failed"))
     end
   end
+
+  context "user takes a particularly long time to get through verify" do
+    before do
+      stub_vsp_translate_response_request
+    end
+
+    scenario "Does not time the user out", js: true do
+      click_on "Continue"
+
+      travel 80.minutes do
+        click_on "Perform identity check"
+        expect(page).to_not have_text("Your session has ended due to inactivity")
+        expect(page).to have_text("This is your full name, address, date of birth, and gender from your digital identity")
+      end
+    end
+  end
 end
