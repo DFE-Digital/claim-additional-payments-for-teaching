@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe TslrClaimCsvRow do
+RSpec.describe StudentLoansClaimCsvRow do
   subject { described_class.new(claim) }
   let(:claim) { build(:claim) }
 
@@ -60,7 +60,7 @@ RSpec.describe TslrClaimCsvRow do
     it "escapes fields with strings that could be dangerous in Microsoft Excel and friends" do
       claim.address_line_1 = "=ActiveCell.Row-1,14"
 
-      expect(row[TslrClaimsCsv::FIELDS.index(:address_line_1)]).to eq("\\#{claim.address_line_1}")
+      expect(row[StudentLoansClaimsCsv::FIELDS.index(:address_line_1)]).to eq("\\#{claim.address_line_1}")
     end
   end
 end

@@ -2,7 +2,7 @@ require "delegate"
 require "csv"
 require "excel_utils"
 
-class TslrClaimCsvRow < SimpleDelegator
+class StudentLoansClaimCsvRow < SimpleDelegator
   def to_s
     CSV.generate_line(data)
   end
@@ -10,7 +10,7 @@ class TslrClaimCsvRow < SimpleDelegator
   private
 
   def data
-    TslrClaimsCsv::FIELDS.map do |f|
+    StudentLoansClaimsCsv::FIELDS.map do |f|
       field = send(f)
       ExcelUtils.escape_formulas(field)
     end

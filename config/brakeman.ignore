@@ -3,13 +3,13 @@
     {
       "warning_type": "File Access",
       "warning_code": 16,
-      "fingerprint": "90be2b07d9e5f2d315b61636f82d1eca0860981c392bed7534ddc4402545e1fe",
+      "fingerprint": "0f7caf94a4d10732370ca8ed4bfc190952e1c90075fdb2790006bbc5ac57c055",
       "check_name": "SendFile",
       "message": "Model attribute used in file name",
       "file": "app/controllers/admin/claims_controller.rb",
-      "line": 7,
+      "line": 9,
       "link": "https://brakemanscanner.org/docs/warning_types/file_access/",
-      "code": "send_file(TslrClaimsCsv.new(Claim.includes(:eligibility => ([:claim_school, :current_school])).submitted.order(:submitted_at)).file, :type => \"text/csv\", :filename => \"claims.csv\")",
+      "code": "send_file(StudentLoansClaimsCsv.new(Claim.includes(:eligibility => ([:claim_school, :current_school])).submitted.order(:submitted_at)).file, :type => \"text/csv\", :filename => \"claims.csv\")",
       "render_path": null,
       "location": {
         "type": "method",
@@ -21,6 +21,6 @@
       "note": ""
     }
   ],
-  "updated": "2019-08-08 16:48:55 +0100",
+  "updated": "2019-09-02 13:45:06 +0100",
   "brakeman_version": "4.6.1"
 }

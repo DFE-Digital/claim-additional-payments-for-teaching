@@ -1,6 +1,6 @@
 require "csv"
 
-class TslrClaimsCsv
+class StudentLoansClaimsCsv
   attr_accessor :claims
 
   FIELDS = [
@@ -44,7 +44,7 @@ class TslrClaimsCsv
     Tempfile.new.tap do |file|
       file.write(header_row)
       claims.each do |claim|
-        file.write(TslrClaimCsvRow.new(claim).to_s)
+        file.write(StudentLoansClaimCsvRow.new(claim).to_s)
       end
       file.rewind
     end
