@@ -5,7 +5,9 @@ module ClaimsHelper
 
   def verified_fields(claim)
     fields = []
-    fields << I18n.t("verified_fields.full_name") if claim.verified_fields.include?("full_name")
+    fields << I18n.t("verified_fields.first_name") if claim.verified_fields.include?("first_name")
+    fields << I18n.t("verified_fields.middle_name") if claim.verified_fields.include?("middle_name")
+    fields << I18n.t("verified_fields.surname") if claim.verified_fields.include?("surname")
     fields << I18n.t("verified_fields.address") if claim.address_verified?
     fields << I18n.t("verified_fields.date_of_birth") if claim.verified_fields.include?("date_of_birth")
     fields << I18n.t("verified_fields.payroll_gender") if claim.payroll_gender_verified?
@@ -25,7 +27,9 @@ module ClaimsHelper
 
   def verify_answers(claim)
     [].tap do |a|
-      a << [I18n.t("verified_fields.full_name").capitalize, claim.full_name]
+      a << [I18n.t("verified_fields.first_name").capitalize, claim.first_name]
+      a << [I18n.t("verified_fields.middle_name").capitalize, claim.middle_name] if claim.middle_name.present?
+      a << [I18n.t("verified_fields.surname").capitalize, claim.surname]
       a << [I18n.t("verified_fields.address").capitalize, sanitize(claim.address("<br>").html_safe, tags: %w[br])] if claim.address_verified?
       a << [I18n.t("verified_fields.date_of_birth").capitalize, l(claim.date_of_birth)]
       a << [I18n.t("verified_fields.payroll_gender").capitalize, t("answers.payroll_gender.#{claim.payroll_gender}")] if claim.payroll_gender_verified?

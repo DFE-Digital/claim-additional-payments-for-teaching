@@ -118,6 +118,22 @@ Code linting is performed using:
 [Bullet](https://github.com/flyerhzm/bullet) runs around each spec. If it
 detects an N+1 query it will raise an exception and the tests will fail.
 
+### Creating data migrations
+
+When running a live service sometimes you're required to change existing data in
+some way. Using the gem [data_migrate](https://github.com/ilyakatz/data-migrate)
+we can write data migrations in a similar way we do with schema migrations.
+
+The migrations are stored in the `db/data` folder.
+
+- To generate a migration: `rails g data_migration add_this_to_that`
+- To run the data migration: `rails data:migrate` run this separately from the
+  schema migration
+
+When the service deploys it will run these data migrations after the schema
+ones. Any schema clean-up as a result of the data migration will need to be done
+as a separate change.
+
 ## Deployment
 
 ### Development

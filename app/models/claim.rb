@@ -26,6 +26,9 @@ class Claim < ApplicationRecord
     eligibility_id: false,
     eligibility_type: false,
     full_name: true,
+    first_name: true,
+    middle_name: true,
+    surname: true,
     id: false,
     reference: false,
     student_loan_plan: false,
@@ -51,8 +54,13 @@ class Claim < ApplicationRecord
 
   validates :payroll_gender, on: [:gender, :submit], presence: {message: "Choose the option for the gender your school’s payroll system associates with you"}
 
-  validates :full_name, on: [:"full-name", :submit], presence: {message: "Enter your full name"}
-  validates :full_name, length: {maximum: 200, message: "Full name must be 200 characters or less"}
+  validates :first_name, on: :submit, presence: {message: "Enter your first name"}
+  validates :first_name, length: {maximum: 100, message: "First name must be 100 characters or less"}
+
+  validates :middle_name, length: {maximum: 100, message: "Middle name must be 100 characters or less"}
+
+  validates :surname, on: :submit, presence: {message: "Enter your surname"}
+  validates :surname, length: {maximum: 100, message: "Surname must be 100 characters or less"}
 
   validates :address_line_1, on: [:address, :submit], presence: {message: "Enter your building and street address"}
   validates :address_line_1, length: {maximum: 100, message: "Address lines must be 100 characters or less"}
@@ -133,6 +141,10 @@ class Claim < ApplicationRecord
 
   def payroll_gender_verified?
     verified_fields.include?("payroll_gender")
+  end
+
+  def full_name
+    [first_name, middle_name, surname].compact.join(" ")
   end
 
   def self.filtered_params

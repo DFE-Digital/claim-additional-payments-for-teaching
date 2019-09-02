@@ -6,6 +6,9 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+- Store claimants' names as separate fields
+- Add ability to run data migrations
+- Add data migration to back fill claimant's full name, middle name and surname
 - Introduced rake tasks to export eligible schools to csv
 
 ## [Release 003] - 2019-08-29

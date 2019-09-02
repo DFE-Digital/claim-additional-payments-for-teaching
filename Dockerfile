@@ -128,6 +128,7 @@ ENV PATH /opt/shellcheck/bin:${PATH}
 COPY .prettierignore ${APP_HOME}/.prettierignore
 COPY .prettierrc ${APP_HOME}/.prettierrc
 COPY .rspec ${APP_HOME}/.rspec
+COPY .standard.yml ${APP_HOME}/.standard.yml
 
 COPY spec ${APP_HOME}/spec
 # End

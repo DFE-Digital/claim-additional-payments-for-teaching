@@ -10,7 +10,7 @@ RSpec.feature "Missing information from GOV.UK Verify" do
     click_on "Continue"
 
     perform_verify_step("identity-verified-other-gender")
-    expect(page).to have_text("This is your full name, address, and date of birth from your digital identity")
+    expect(page).to have_text("This is your first name, middle name, surname, address, and date of birth from your digital identity")
     expect(page).to_not have_text("Gender")
 
     click_on "Continue"
@@ -61,7 +61,7 @@ RSpec.feature "Missing information from GOV.UK Verify" do
     click_on "Continue"
 
     perform_verify_step("identity-verified-no-address")
-    expect(page).to have_text("This is your full name, date of birth, and gender from your digital identity")
+    expect(page).to have_text("This is your first name, surname, date of birth, and gender from your digital identity")
     expect(page).to_not have_text("Address")
 
     click_on "Continue"
