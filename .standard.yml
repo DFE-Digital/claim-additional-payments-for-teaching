@@ -1,0 +1,4 @@
+ignore:
+  - 'db/data_schema.rb':
+    - Style/Encoding
+    - Layout/EmptyLineAfterMagicComment
