@@ -127,12 +127,12 @@ we can write data migrations in a similar way we do with schema migrations.
 The migrations are stored in the `db/data` folder.
 
 - To generate a migration: `rails g data_migration add_this_to_that`
-- To run the data migration by itself: `rails data:migrate`
-- To run the data migration with the schema migration:
-  `rails db:migrate:with_data`
+- To run the data migration: `rails data:migrate` run this separately from the
+  schema migration
 
-When the service deploys it will run these data migrations at the same time as
-the schema ones.
+When the service deploys it will run these data migrations after the schema
+ones. Any schema clean-up as a result of the data migration will need to be done
+as a separate change.
 
 ## Deployment
 
