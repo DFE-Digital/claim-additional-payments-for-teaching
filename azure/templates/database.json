@@ -96,6 +96,16 @@
           }
         }
       }
+    },
+    {
+      "type": "Microsoft.DBforPostgreSQL/servers/configurations",
+      "apiVersion": "2017-12-01",
+      "name": "[concat(parameters('databaseServerName'), '/log_disconnections')]",
+      "dependsOn": ["[resourceId('Microsoft.Resources/deployments', variables('databaseServerDeploymentName'))]"],
+      "properties": {
+        "value": "ON",
+        "source": "user-override"
+      }
     }
   ],
   "outputs": {
