@@ -8,7 +8,7 @@ RSpec.feature "Download CSV of claims" do
       click_on "Sign in"
     end
 
-    scenario "User downloads a CSV" do
+    scenario "User downloads a CSV of submitted claims" do
       submitted_claims = create_list(:claim, 5, :submittable, submitted_at: DateTime.now)
       create_list(:claim, 2, :submittable)
 
@@ -29,7 +29,7 @@ RSpec.feature "Download CSV of claims" do
       click_on "Sign in"
     end
 
-    scenario "User cannot download a CSV" do
+    scenario "User cannot download a CSV of submitted claims" do
       expect(page).to_not have_link(nil, href: admin_claims_path(format: :csv))
 
       visit admin_claims_path(format: :csv)
@@ -40,7 +40,7 @@ RSpec.feature "Download CSV of claims" do
   end
 
   context "User is not logged in" do
-    scenario "User cannot download claims" do
+    scenario "User cannot download submitted claims" do
       visit admin_claims_path(format: :csv)
 
       expect(page).to have_content("Sign in with DfE Sign In")
