@@ -8,6 +8,7 @@ RSpec.describe PayrollDataCsv do
   subject { described_class.new(claims) }
   let(:claims) { Claim.all.order(:submitted_at) }
   let(:claim) { claims.first }
+  let(:start_of_month) { Date.today.at_beginning_of_month }
 
   describe "file" do
     let(:file) { subject.file }
@@ -55,8 +56,8 @@ RSpec.describe PayrollDataCsv do
         claim.surname,
         claim.national_insurance_number,
         "F",
-        nil,
-        nil,
+        start_of_month.strftime("%m/%d/%Y"),
+        (start_of_month + 7.days).strftime("%m/%d/%Y"),
         claim.date_of_birth.strftime("%m/%d/%Y"),
         claim.email_address,
         claim.address_line_1,

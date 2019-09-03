@@ -26,9 +26,15 @@ class PayrollDataCsvRow < SimpleDelegator
   end
 
   def start_date
+    start_of_month.strftime(DATE_FORMAT)
   end
 
   def end_date
+    (start_of_month + 7.days).strftime(DATE_FORMAT)
+  end
+
+  def start_of_month
+    Date.today.at_beginning_of_month
   end
 
   def date_of_birth

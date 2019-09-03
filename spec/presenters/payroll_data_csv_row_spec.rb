@@ -6,6 +6,7 @@ RSpec.describe PayrollDataCsvRow do
 
   describe "to_s" do
     let(:row) { CSV.parse(subject.to_s).first }
+    let(:start_of_month) { Date.today.at_beginning_of_month }
 
     let(:claim) do
       build(:claim, :submittable,
@@ -25,8 +26,8 @@ RSpec.describe PayrollDataCsvRow do
         claim.surname,
         claim.national_insurance_number,
         "F",
-        nil,
-        nil,
+        start_of_month.strftime("%m/%d/%Y"),
+        (start_of_month + 7.days).strftime("%m/%d/%Y"),
         claim.date_of_birth.strftime("%m/%d/%Y"),
         claim.email_address,
         claim.address_line_1,
