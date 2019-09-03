@@ -155,3 +155,74 @@ en:
       bank_sort_code: "Sort Code"
       bank_account_number: "Account Number"
       student_loan_repayment_amount: "Repayment Amount"
+  payroll_data_csv:
+    title:
+      header: "TITLE"
+    first_name:
+      header: "FORENAME"
+    middle_name:
+      header: "FORENAME2"
+    surname:
+      header: "SURNAME"
+    national_insurance_number:
+      header: "SS_NO"
+    payroll_gender:
+      header: "GENDER"
+    start_date:
+      header: "START_DATE"
+    end_date:
+      header: "END_DATE"
+    date_of_birth:
+      header: "BIRTH_DATE"
+    email_address:
+      header: "EMAIL"
+    address_line_1:
+      header: "ADDR_LINE_1"
+    address_line_2:
+      header: "ADDR_LINE_2"
+    address_line_3:
+      header: "ADDR_LINE_3"
+    address_line_4:
+      header: "ADDR_LINE_4"
+    county:
+      header: "ADDR_LINE_5"
+    postcode:
+      header: "ADDR_LINE_6"
+    country:
+      header: "ADDRESS_COUNTRY"
+      united_kingdom: "United Kingdom"
+    tax_code:
+      header: "TAX_CODE"
+      basic_rate: "BR"
+    tax_basis:
+      header: "TAX_BASIS"
+      cumulative: "0"
+    student_loan_plan:
+      header: "PLAN_TYPE"
+      plan_1: "1"
+      plan_2: "2"
+      plan_1_and_2: "1"
+      not_applicable: ""
+    has_student_loan:
+      header: "CON_STU_LOAN_I"
+      true: "T"
+    new_employee:
+      header: "NEW_EMP_Q_VL"
+      not_only_job: "3"
+    ni_category:
+      header: "NI_CATEGORY"
+      all_employees: "A"
+    bank_name:
+      header: "BANK_NAME"
+    bank_sort_code:
+      header: "SORT_CODE"
+    bank_account_number:
+      header: "ACCOUNT_NUMBER"
+    scheme_name:
+      header: "SCHEME_NAME"
+      scheme_b: "Scheme B"
+    scheme_amount:
+      header: "SCHEME_AMOUNT"
+    reference:
+      header: "CLAIM_ID"
+

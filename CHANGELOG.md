@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+- Add ability for service operators to download data for payroll
+- Allow service operators to approve claims
 - Update school eligibility checkers to also check when a school closed
 - Increase contrast on hint text to AAA standard
 - Turned off autocomplete setting on National Insurance number and bank inputs
@@ -25,7 +27,6 @@ The format is based on [Keep a Changelog]
 
 ## [Release 004] - 2019-09-04
 
-- Allow service operators to approve claims
 - Fix claims export ordering
 - Store claimants' names as separate fields
 - Add ability to run data migrations

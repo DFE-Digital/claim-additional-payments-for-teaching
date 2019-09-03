@@ -60,6 +60,7 @@ Rails.application.routes.draw do
     get "/auth/failure", to: "auth#failure"
 
     resources :claims, only: [:index, :show] do
+      get "payroll", on: :collection
       resources :approvals, only: [:create], controller: "claim_approvals"
     end
   end
