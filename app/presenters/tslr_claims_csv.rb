@@ -43,7 +43,7 @@ class TslrClaimsCsv
   def file
     Tempfile.new.tap do |file|
       file.write(header_row)
-      claims.find_each do |claim|
+      claims.each do |claim|
         file.write(TslrClaimCsvRow.new(claim).to_s)
       end
       file.rewind
