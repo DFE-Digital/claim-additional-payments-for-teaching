@@ -6,6 +6,7 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+- Fix claims export ordering
 - Store claimants' names as separate fields
 - Add ability to run data migrations
 - Add data migration to back fill claimant's full name, middle name and surname
