@@ -96,6 +96,7 @@ RUN if [ ${RAILS_ENV} = "production" ]; then \
   DFE_SIGN_IN_API_CLIENT_ID= \
   DFE_SIGN_IN_API_SECRET= \
   DFE_SIGN_IN_API_ENDPOINT= \
+  ADMIN_ALLOWED_IPS= \
   bundle exec rake assets:precompile; \
   fi
 
