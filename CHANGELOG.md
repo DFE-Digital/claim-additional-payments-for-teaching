@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+## [Release 004] - 2019-09-04
+
 - Fix claims export ordering
 - Store claimants' names as separate fields
 - Add ability to run data migrations
@@ -39,7 +41,9 @@ The format is based on [Keep a Changelog]
 - First release for student loan repayments private beta
 
 [unreleased]:
-  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-003...HEAD
+  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-004...HEAD
+[release 004]:
+  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-003...release-004
 [release 003]:
   https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-002...release-003
 [release 002]:
