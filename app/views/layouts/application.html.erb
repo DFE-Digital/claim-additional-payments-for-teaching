@@ -19,7 +19,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 
     <% if ENV["GOOGLE_ANALYTICS_ID"] %>
-      <%= javascript_include_tag "https://www.googletagmanager.com/gtag/js?id=#{ENV["GOOGLE_ANALYTICS_ID"]}" %>
+      <%= javascript_include_tag "google_analytics/analytics" %>
       <%= javascript_include_tag "google_analytics", data: { "ga-id" => ENV["GOOGLE_ANALYTICS_ID"] } %>
     <% end %>
 
