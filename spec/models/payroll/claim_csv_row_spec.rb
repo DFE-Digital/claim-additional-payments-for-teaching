@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe PayrollDataCsvRow do
+RSpec.describe Payroll::ClaimCsvRow do
   subject { described_class.new(claim) }
   let(:claim) { build(:claim) }
 
@@ -55,7 +55,7 @@ RSpec.describe PayrollDataCsvRow do
     it "escapes fields with strings that could be dangerous in Microsoft Excel and friends" do
       claim.address_line_1 = "=ActiveCell.Row-1,14"
 
-      expect(row[PayrollDataCsv::FIELDS_WITH_HEADERS.find_index { |k, _| k == :address_line_1 }]).to eq("\\#{claim.address_line_1}")
+      expect(row[Payroll::ClaimsCsv::FIELDS_WITH_HEADERS.find_index { |k, _| k == :address_line_1 }]).to eq("\\#{claim.address_line_1}")
     end
   end
 end

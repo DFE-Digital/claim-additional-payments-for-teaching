@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe PayrollDataCsv do
+RSpec.describe Payroll::ClaimsCsv do
   before do
     create(:claim, :submitted)
   end

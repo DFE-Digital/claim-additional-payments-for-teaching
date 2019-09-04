@@ -3,41 +3,21 @@
     {
       "warning_type": "File Access",
       "warning_code": 16,
-      "fingerprint": "0f7caf94a4d10732370ca8ed4bfc190952e1c90075fdb2790006bbc5ac57c055",
-      "check_name": "SendFile",
-      "message": "Model attribute used in file name",
-      "file": "app/controllers/admin/claims_controller.rb",
-      "line": 9,
-      "link": "https://brakemanscanner.org/docs/warning_types/file_access/",
-      "code": "send_file(StudentLoansClaimsCsv.new(Claim.includes(:eligibility => ([:claim_school, :current_school])).submitted.order(:submitted_at)).file, :type => \"text/csv\", :filename => \"claims.csv\")",
-      "render_path": null,
-      "location": {
-        "type": "method",
-        "class": "Admin::ClaimsController",
-        "method": "index"
-      },
-      "user_input": "Claim.includes(:eligibility => ([:claim_school, :current_school])).submitted",
-      "confidence": "Weak",
-      "note": ""
-    },
-    {
-      "warning_type": "File Access",
-      "warning_code": 16,
-      "fingerprint": "916448948cf011a4637df0eb1a149848550ff3520b1d6af9848be9f9ef25a5a3",
+      "fingerprint": "5a6811456abe76e2101e305b57165df28773ba8c5320f93db1638f774e02162d",
       "check_name": "SendFile",
       "message": "Model attribute used in file name",
       "file": "app/controllers/admin/claims_controller.rb",
       "line": 18,
       "link": "https://brakemanscanner.org/docs/warning_types/file_access/",
-      "code": "send_file(PayrollDataCsv.new(Claim.includes(:eligibility => ([:claim_school, :current_school])).submitted.order(:submitted_at)).file, :type => \"text/csv\", :filename => \"payroll_data.csv\")",
+      "code": "send_file(Payroll::ClaimsCsv.new(Claim.includes(:eligibility => ([:claim_school, :current_school])).submitted.order(:submitted_at)).file, :type => \"text/csv\", :filename => \"payroll_data.csv\")",
       "render_path": null,
       "location": {
         "type": "method",
         "class": "Admin::ClaimsController",
         "method": "payroll"
       },
-      "user_input": "Claim.includes(:eligibility => ([:claim_school, :current_school])).submitted",
-      "confidence": "Weak",
+      "user_input": "Payroll::ClaimsCsv.new(Claim.includes(:eligibility => ([:claim_school, :current_school])).submitted.order(:submitted_at)).file",
+      "confidence": "Medium",
       "note": ""
     },
     {
@@ -61,6 +41,6 @@
       "note": ""
     }
   ],
-  "updated": "2019-09-04 14:12:40 +0100",
+  "updated": "2019-09-04 14:19:40 +0100",
   "brakeman_version": "4.6.1"
 }

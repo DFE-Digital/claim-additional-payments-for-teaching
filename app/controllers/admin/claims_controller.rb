@@ -16,7 +16,7 @@ class Admin::ClaimsController < Admin::BaseAdminController
 
   def payroll
     claims = Claim.includes(eligibility: [:claim_school, :current_school]).awaiting_approval.order(:submitted_at)
-    csv = PayrollDataCsv.new(claims)
+    csv = Payroll::ClaimsCsv.new(claims)
 
     respond_to do |format|
       format.csv { send_file csv.file, type: "text/csv", filename: "payroll_data.csv" }
