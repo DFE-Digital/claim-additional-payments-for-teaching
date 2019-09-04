@@ -1,9 +1,23 @@
+# frozen_string_literal: true
+
 require "delegate"
 require "csv"
 require "excel_utils"
 
 class PayrollDataCsvRow < SimpleDelegator
-  DATE_FORMAT = "%m/%d/%Y".freeze
+  DATE_FORMAT = "%m/%d/%Y"
+
+  VALUES = [
+    UNITED_KINGDOM = "United Kingdom",
+    BASIC_RATE_TAX_CODE = "BR",
+    CUMULATIVE_TAX_BASIS = "0",
+    NOT_EMPLOYEES_ONLY_JOB = "3",
+    ALL_EMPLOYEES_NI_CATEGORY = "A",
+    HAS_STUDENT_LOAN = "T",
+    SCHEME_B_NAME = "Scheme B",
+    STUDENT_LOAN_PLAN_1 = "1",
+    STUDENT_LOAN_PLAN_2 = "2",
+  ].freeze
 
   def to_s
     CSV.generate_line(data)
@@ -12,7 +26,7 @@ class PayrollDataCsvRow < SimpleDelegator
   private
 
   def data
-    PayrollDataCsv::FIELDS.map do |f|
+    PayrollDataCsv::FIELDS_WITH_HEADERS.keys.map do |f|
       field = send(f)
       ExcelUtils.escape_formulas(field)
     end
@@ -45,31 +59,35 @@ class PayrollDataCsvRow < SimpleDelegator
   end
 
   def country
-    I18n.t("payroll_data_csv.country.united_kingdom")
+    UNITED_KINGDOM
   end
 
   def tax_code
-    I18n.t("payroll_data_csv.tax_code.basic_rate")
+    BASIC_RATE_TAX_CODE
   end
 
   def tax_basis
-    I18n.t("payroll_data_csv.tax_basis.cumulative")
+    CUMULATIVE_TAX_BASIS
   end
 
   def new_employee
-    I18n.t("payroll_data_csv.new_employee.not_only_job")
+    NOT_EMPLOYEES_ONLY_JOB
   end
 
   def ni_category
-    I18n.t("payroll_data_csv.ni_category.all_employees")
+    ALL_EMPLOYEES_NI_CATEGORY
   end
 
   def has_student_loan
-    model.has_student_loan ? I18n.t("payroll_data_csv.has_student_loan.true") : ""
+    HAS_STUDENT_LOAN if model.has_student_loan
   end
 
   def student_loan_plan
-    I18n.t("payroll_data_csv.student_loan_plan.#{model.student_loan_plan}")
+    if model.student_loan_plan == "plan_1" || model.student_loan_plan == "plan_1_and_2"
+      STUDENT_LOAN_PLAN_1
+    elsif model.student_loan_plan == "plan_2"
+      STUDENT_LOAN_PLAN_2
+    end
   end
 
   def bank_name
@@ -77,7 +95,7 @@ class PayrollDataCsvRow < SimpleDelegator
   end
 
   def scheme_name
-    I18n.t("payroll_data_csv.scheme_name.scheme_b")
+    SCHEME_B_NAME
   end
 
   def scheme_amount
