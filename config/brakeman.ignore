@@ -39,8 +39,28 @@
       "user_input": "Claim.includes(:eligibility => ([:claim_school, :current_school])).submitted",
       "confidence": "Weak",
       "note": ""
+    },
+    {
+      "warning_type": "File Access",
+      "warning_code": 16,
+      "fingerprint": "a4d344b6e66967f7f08a26b34bef4eeb9cc8438b1872e57a24efc3e835fa0cd0",
+      "check_name": "SendFile",
+      "message": "Model attribute used in file name",
+      "file": "app/controllers/admin/claims_controller.rb",
+      "line": 9,
+      "link": "https://brakemanscanner.org/docs/warning_types/file_access/",
+      "code": "send_file(StudentLoans::ClaimsCsv.new(Claim.includes(:eligibility => ([:claim_school, :current_school])).submitted.order(:submitted_at)).file, :type => \"text/csv\", :filename => \"claims.csv\")",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "Admin::ClaimsController",
+        "method": "index"
+      },
+      "user_input": "StudentLoans::ClaimsCsv.new(Claim.includes(:eligibility => ([:claim_school, :current_school])).submitted.order(:submitted_at)).file",
+      "confidence": "Medium",
+      "note": ""
     }
   ],
-  "updated": "2019-09-03 16:40:19 +0100",
+  "updated": "2019-09-04 14:12:40 +0100",
   "brakeman_version": "4.6.1"
 }
