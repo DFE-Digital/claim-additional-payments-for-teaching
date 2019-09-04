@@ -55,8 +55,7 @@ git push origin refs/tags/release-xxx
 Once the build has passed for the newly tagged commit, you can deploy to
 production as follows:
 
-- Log in to this project on
-  [Azure DevOps](https://github.com/DFE-Digital/dfe-teachers-payment-service/blob/master/azure-devops).
+- Log in to this project on [Azure DevOps](https://dfe-ssp.visualstudio.com/)
 - Navigate to Pipelines > Builds.
 - Find the build you want to release and note its build number (for example,
   `20190717.2`). You can filter by branch using the filter / funnel icon in the
