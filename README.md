@@ -40,10 +40,8 @@ Architecture decision records can be found in the
 
 ### DfE Sign In credentials
 
-By default in development OmniAuth will run in test mode. This means that you
-don't need to authenticate with DfE Sign In. If you need to run development with
-integration with DfE Sign In, you need to provide the relevant environment
-variables.
+The service uses DfE Sign In to handle admin users. To run in development, you
+need the credentials for DfE Sign In's pre-production environment.
 
 Create a `.env` file with the following variables:
 
@@ -52,7 +50,10 @@ DFE_SIGN_IN_SECRET=<paste secret>
 DFE_SIGN_IN_API_SECRET=<paste secret>
 ```
 
-The secrets are stored in the development key vault on Azure.
+The secrets are stored in the development Key Vault on Azure.
+
+To access the admin routes, you will also need to request an account on DfE Sign
+In's pre-production environment.
 
 ### GOV.UK Notify
 
