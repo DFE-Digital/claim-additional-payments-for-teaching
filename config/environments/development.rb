@@ -65,16 +65,3 @@ Rails.application.configure do
   # routes, locales, etc. This feature depends on the listen gem.
   config.file_watcher = ActiveSupport::EventedFileUpdateChecker
 end
-
-if ENV["DFE_SIGN_IN_ISSUER"].blank?
-  OmniAuth.config.test_mode = true
-  OmniAuth.config.mock_auth[:dfe] = OmniAuth::AuthHash.new(
-    "provider" => "dfe",
-    "info" => {"email" => "dfe@example.com"},
-    "extra" => {
-      "raw_info" => {
-        "organisation" => {},
-      },
-    }
-  )
-end
