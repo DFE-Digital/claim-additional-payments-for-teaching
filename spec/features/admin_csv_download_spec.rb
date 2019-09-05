@@ -32,6 +32,7 @@ RSpec.feature "Download CSV of claims" do
 
       csv = CSV.parse(body)
       expect(csv.count).to eq(submitted_claims.count + 1)
+      expect(csv.first).to eq(Payroll::ClaimsCsv::FIELDS_WITH_HEADERS.values)
     end
   end
 
