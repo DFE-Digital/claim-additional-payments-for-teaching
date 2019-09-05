@@ -181,9 +181,19 @@ RSpec.describe Claim, type: :model do
   end
 
   context "when saving in the “student-loan-start-date” validation context" do
-    it "validates the presence of the student_loan_how_many_courses" do
-      expect(build(:claim)).not_to be_valid(:"student-loan-start-date")
+    it "validates the presence of the student_loan_start_date" do
+      expect(build(:claim, student_loan_courses: :one_course)).not_to be_valid(:"student-loan-start-date")
       expect(build(:claim, student_loan_start_date: StudentLoans::BEFORE_1_SEPT_2012)).to be_valid(:"student-loan-start-date")
+    end
+
+    it "the validation error message is pluralized or not based on student_loan_how_many_courses" do
+      claim = build(:claim, student_loan_courses: :one_course)
+      claim.valid?(:"student-loan-start-date")
+      expect(claim.errors[:student_loan_start_date]).to eq [I18n.t("validation_errors.student_loan_start_date.#{claim.student_loan_courses}")]
+
+      claim = build(:claim, student_loan_courses: :two_or_more_courses)
+      claim.valid?(:"student-loan-start-date")
+      expect(claim.errors[:student_loan_start_date]).to eq [I18n.t("validation_errors.student_loan_start_date.#{claim.student_loan_courses}")]
     end
   end
 

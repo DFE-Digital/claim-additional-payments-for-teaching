@@ -7,6 +7,7 @@ The format is based on [Keep a Changelog]
 ## [Unreleased]
 
 - Restrict access to `/admin` by IP
+- Fix student_loan_start_date validation error message
 
 ## [Release 004] - 2019-09-04
 
