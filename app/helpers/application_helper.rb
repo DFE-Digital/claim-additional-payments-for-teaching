@@ -6,4 +6,10 @@ module ApplicationHelper
   def claim_in_progress?
     session.key?(:claim_id)
   end
+
+  def currency_value_for_number_field(value)
+    return if value.nil?
+
+    number_to_currency(value, delimiter: "", unit: "")
+  end
 end

@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+- Fix a bug displaying incorrect number of decimal places on monetary number
+  form fields
 - Restrict access to `/admin` by IP
 
 ## [Release 004] - 2019-09-04
