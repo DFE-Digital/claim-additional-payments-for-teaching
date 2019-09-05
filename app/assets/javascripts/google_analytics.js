@@ -8,22 +8,16 @@
 
   var currentScript = document.currentScript;
 
-  function enableGoogleAnalytics() {
-    window.dataLayer = window.dataLayer || [];
-
-    function gtag() {
-      window.dataLayer.push(arguments);
-    }
-
-    gtag("js", new Date());
-    gtag("config", currentScript.getAttribute("data-ga-id"), { anonymize_ip: true });
+  function trackPageView() {
+    ga("create", currentScript.getAttribute("data-ga-id"), "auto");
+    ga("send", "pageview", { anonymizeIp: true });
   }
 
   document.addEventListener("DOMContentLoaded", function() {
     if (window.TeacherPayments.cookies.checkNonEssentialCookiesAccepted()) {
-      enableGoogleAnalytics();
+      trackPageView();
     } else {
-      window.TeacherPayments.cookies.postNonEssentialCookieAcceptanceFunctions.push(enableGoogleAnalytics);
+      window.TeacherPayments.cookies.postNonEssentialCookieAcceptanceFunctions.push(trackPageView);
     }
   });
 })();
