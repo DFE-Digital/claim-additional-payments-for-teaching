@@ -55,7 +55,37 @@ module Payroll
       model.date_of_birth.strftime(DATE_FORMAT)
     end
 
-    def county
+    def address_lines
+      [
+        model.address_line_1,
+        model.address_line_2,
+        model.address_line_3,
+        model.address_line_4,
+        model.postcode,
+      ].compact
+    end
+
+    def address_line_1
+      address_lines[0]
+    end
+
+    def address_line_2
+      address_lines[1]
+    end
+
+    def address_line_3
+      address_lines[2]
+    end
+
+    def address_line_4
+      address_lines[3]
+    end
+
+    def address_line_5
+      address_lines[4]
+    end
+
+    def address_line_6
     end
 
     def country

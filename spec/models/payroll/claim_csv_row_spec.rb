@@ -15,6 +15,8 @@ RSpec.describe Payroll::ClaimCsvRow do
         student_loan_plan: StudentLoans::PLAN_2,
         bank_sort_code: "001122",
         bank_account_number: "01234567",
+        address_line_1: "1 Test Road",
+        postcode: "AB1 2CD",
         eligibility: build(:student_loans_eligibility, :eligible))
     end
 
@@ -31,11 +33,11 @@ RSpec.describe Payroll::ClaimCsvRow do
         claim.date_of_birth.strftime("%m/%d/%Y"),
         claim.email_address,
         claim.address_line_1,
-        claim.address_line_2,
-        claim.address_line_3,
-        claim.address_line_4,
-        nil,
         claim.postcode,
+        nil,
+        nil,
+        nil,
+        nil,
         "United Kingdom",
         "BR",
         "0",

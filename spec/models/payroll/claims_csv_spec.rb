@@ -2,7 +2,7 @@ require "rails_helper"
 
 RSpec.describe Payroll::ClaimsCsv do
   before do
-    create(:claim, :submitted)
+    create(:claim, :submitted, address_line_1: "1 Test Road", address_line_2: "Test Town", postcode: "AB1 2CD")
   end
 
   subject { described_class.new(claims) }
@@ -62,10 +62,10 @@ RSpec.describe Payroll::ClaimsCsv do
         claim.email_address,
         claim.address_line_1,
         claim.address_line_2,
-        claim.address_line_3,
-        claim.address_line_4,
-        nil,
         claim.postcode,
+        nil,
+        nil,
+        nil,
         "United Kingdom",
         "BR",
         "0",
