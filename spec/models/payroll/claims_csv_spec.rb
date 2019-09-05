@@ -76,7 +76,7 @@ RSpec.describe Payroll::ClaimsCsv do
         claim.full_name,
         claim.bank_sort_code,
         claim.bank_account_number,
-        "Scheme B",
+        "Student Loans",
         claim.eligibility.student_loan_repayment_amount.to_s,
         claim.reference,
       ])

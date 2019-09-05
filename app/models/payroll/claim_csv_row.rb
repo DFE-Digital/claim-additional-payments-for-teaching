@@ -15,7 +15,6 @@ module Payroll
       NOT_EMPLOYEES_ONLY_JOB = "3",
       NI_CATEGORY_FOR_ALL_EMPLOYEES = "A",
       HAS_STUDENT_LOAN = "T",
-      SCHEME_B_NAME = "Scheme B",
       STUDENT_LOAN_PLAN_1 = "1",
       STUDENT_LOAN_PLAN_2 = "2",
     ].freeze
@@ -96,7 +95,7 @@ module Payroll
     end
 
     def scheme_name
-      SCHEME_B_NAME
+      model.eligibility.class.name.deconstantize.titlecase
     end
 
     def scheme_amount
