@@ -13,7 +13,7 @@ module Payroll
       BASIC_RATE_TAX_CODE = "BR",
       CUMULATIVE_TAX_BASIS = "0",
       NOT_EMPLOYEES_ONLY_JOB = "3",
-      ALL_EMPLOYEES_NI_CATEGORY = "A",
+      NI_CATEGORY_FOR_ALL_EMPLOYEES = "A",
       HAS_STUDENT_LOAN = "T",
       SCHEME_B_NAME = "Scheme B",
       STUDENT_LOAN_PLAN_1 = "1",
@@ -76,7 +76,7 @@ module Payroll
     end
 
     def ni_category
-      ALL_EMPLOYEES_NI_CATEGORY
+      NI_CATEGORY_FOR_ALL_EMPLOYEES
     end
 
     def has_student_loan
