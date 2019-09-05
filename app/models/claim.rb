@@ -82,7 +82,7 @@ class Claim < ApplicationRecord
   validates :has_student_loan, on: [:"student-loan", :submit], inclusion: {in: [true, false], message: "Select yes if you have a student loan"}
   validates :student_loan_country, on: [:"student-loan-country"], presence: {message: "Select the country in which you first applied for your student loan"}
   validates :student_loan_courses, on: [:"student-loan-how-many-courses"], presence: {message: "Select the number of higher education courses you have studied"}
-  validates :student_loan_start_date, on: [:"student-loan-start-date"], presence: {message: "Select when the first year of your higher education course started"}
+  validates :student_loan_start_date, on: [:"student-loan-start-date"], presence: {message: ->(object, data) { I18n.t("validation_errors.student_loan_start_date.#{object.student_loan_courses}") }}
   validates :student_loan_plan, on: [:submit], presence: {message: "We have not been able determined your student loan repayment plan. Answer all questions about your student loan."}
 
   validates :email_address, on: [:"email-address", :submit], presence: {message: "Enter an email address"}
