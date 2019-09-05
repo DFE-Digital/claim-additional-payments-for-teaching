@@ -1,5 +1,7 @@
 /.apt/
 /.heroku/
-/vendor/
 /bin/vsp/
-/tmp
+/public/assets/
+/public/**/*.min.*
+/tmp/
+/vendor/
