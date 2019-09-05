@@ -120,7 +120,7 @@ module Payroll
       end
     end
 
-    def bank_name
+    def banking_name
       model.full_name
     end
 

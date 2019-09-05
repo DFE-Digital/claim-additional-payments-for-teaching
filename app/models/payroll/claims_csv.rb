@@ -28,7 +28,7 @@ module Payroll
       ni_category: "NI_CATEGORY",
       has_student_loan: "CON_STU_LOAN_I",
       student_loan_plan: "PLAN_TYPE",
-      bank_name: "BANK_NAME",
+      banking_name: "BANK_NAME",
       bank_sort_code: "SORT_CODE",
       bank_account_number: "ACCOUNT_NUMBER",
       scheme_name: "SCHEME_NAME",
