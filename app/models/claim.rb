@@ -36,6 +36,7 @@ class Claim < ApplicationRecord
     updated_at: false,
     verified_fields: false,
     verify_response: true,
+    approved_at: false,
   }.freeze
 
   enum student_loan_country: StudentLoans::COUNTRIES
