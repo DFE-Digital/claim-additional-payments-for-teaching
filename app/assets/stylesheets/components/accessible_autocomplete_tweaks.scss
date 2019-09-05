@@ -1,3 +1,5 @@
+@import "govuk-frontend-rails";
+
 .autocomplete__wrapper {
   .autocomplete__menu {
     .autocomplete__option {
@@ -5,7 +7,7 @@
       &--focused {
         .govuk-label,
         .govuk-hint {
-          color: #ffffff;
+          color: govuk-colour("white");
         }
       }
     }
