@@ -120,6 +120,9 @@
     "DFE_SIGN_IN_API_ENDPOINT": {
       "type": "string"
     },
+    "ADMIN_ALLOWED_IPS": {
+      "type": "string"
+    },
     "GOOGLE_ANALYTICS_ID": {
       "type": "string"
     },
@@ -350,6 +353,10 @@
               {
                 "name": "DFE_SIGN_IN_API_ENDPOINT",
                 "value": "[parameters('DFE_SIGN_IN_API_ENDPOINT')]"
+              },
+              {
+                "name": "ADMIN_ALLOWED_IPS",
+                "value": "[parameters('ADMIN_ALLOWED_IPS')]"
               },
               {
                 "name": "GOOGLE_ANALYTICS_ID",

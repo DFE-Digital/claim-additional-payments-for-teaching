@@ -6,13 +6,15 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+- Restrict access to `/admin` by IP
+
 ## [Release 004] - 2019-09-04
 
 - Fix claims export ordering
 - Store claimants' names as separate fields
 - Add ability to run data migrations
 - Add data migration to back fill claimant's full name, middle name and surname
-- Introduced rake tasks to export eligible schools to csv
+- Introduced rake tasks to export eligible schools to CSV
 
 ## [Release 003] - 2019-08-29
 

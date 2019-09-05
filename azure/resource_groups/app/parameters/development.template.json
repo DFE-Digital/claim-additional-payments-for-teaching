@@ -151,6 +151,9 @@
         "secretName": "DfeSignInApiEndpoint"
       }
     },
+    "ADMIN_ALLOWED_IPS": {
+      "value": "::/0,0.0.0.0/0"
+    },
     "GOOGLE_ANALYTICS_ID": {
       "value": ""
     },
