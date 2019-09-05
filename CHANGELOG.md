@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+- Redirect `www.` to the base URL
+
 ## [Release 008] - 2019-09-12
 
 - Fix broken middleware blocking `/admin` access
