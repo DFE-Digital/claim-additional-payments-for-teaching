@@ -9,5 +9,11 @@
     <%= render partial: "answer_section", locals: {heading: "Personal details", answers: verify_answers(@claim)} %>
 
     <%= render partial: "answer_section", locals: {heading: "Identity details", answers: admin_identity_answers(@claim)} %>
+
+    <%= button_to "Approve",
+                  approve_admin_claim_path(@claim),
+                  method: :put,
+                  class: "govuk-button",
+                  data: { confirm: "Are you sure you want to approve this claim?" } %>
   </div>
 </div>
