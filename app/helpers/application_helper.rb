@@ -1,7 +1,12 @@
 module ApplicationHelper
-  def page_title(title)
+  def page_title(title, show_error: false)
     content_for :page_title do
-      "#{title} – #{t("student_loans.journey_name")} – GOV.UK"
+      [].tap do |a|
+        a << "Error" if show_error
+        a << title
+        a << t("student_loans.journey_name")
+        a << "GOV.UK"
+      end.join(" - ")
     end
   end
 

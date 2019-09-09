@@ -1,4 +1,4 @@
-<%= page_title(t("student_loans.questions.claim_school")) %>
+<%= page_title(t("student_loans.questions.claim_school"), show_error: current_claim.errors.any?) %>
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
