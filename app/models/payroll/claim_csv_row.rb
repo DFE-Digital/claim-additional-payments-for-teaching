@@ -7,17 +7,14 @@ require "excel_utils"
 module Payroll
   class ClaimCsvRow < SimpleDelegator
     DATE_FORMAT = "%m/%d/%Y"
-
-    VALUES = [
-      UNITED_KINGDOM = "United Kingdom",
-      BASIC_RATE_TAX_CODE = "BR",
-      CUMULATIVE_TAX_BASIS = "0",
-      NOT_EMPLOYEES_ONLY_JOB = "3",
-      NI_CATEGORY_FOR_ALL_EMPLOYEES = "A",
-      HAS_STUDENT_LOAN = "T",
-      STUDENT_LOAN_PLAN_1 = "1",
-      STUDENT_LOAN_PLAN_2 = "2",
-    ].freeze
+    UNITED_KINGDOM = "United Kingdom"
+    BASIC_RATE_TAX_CODE = "BR"
+    CUMULATIVE_TAX_BASIS = "0"
+    NOT_EMPLOYEES_ONLY_JOB = "3"
+    NI_CATEGORY_FOR_ALL_EMPLOYEES = "A"
+    HAS_STUDENT_LOAN = "T"
+    STUDENT_LOAN_PLAN_1 = "1"
+    STUDENT_LOAN_PLAN_2 = "2"
 
     def to_s
       CSV.generate_line(data)
