@@ -1,5 +1,12 @@
 @import "govuk-frontend-rails";
 
+.autocomplete__input:focus {
+  // standard focus state from govuk frontend input component
+  outline: $govuk-focus-width solid $govuk-focus-colour;
+  outline-offset: 0;
+  box-shadow: inset 0 0 0 $govuk-border-width-form-element;
+}
+
 .autocomplete__wrapper {
   .autocomplete__menu {
     .autocomplete__option {
