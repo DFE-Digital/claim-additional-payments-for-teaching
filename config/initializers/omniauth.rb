@@ -1,4 +1,7 @@
-OmniAuth.config.logger = Rails.logger
+OmniAuth.configure do |config|
+  config.logger = Rails.logger
+  config.path_prefix = "/admin/auth"
+end
 
 dfe_sign_in_issuer = ENV["DFE_SIGN_IN_ISSUER"]
 dfe_sign_in_redirect_base_url = ENV["DFE_SIGN_IN_REDIRECT_BASE_URL"]
@@ -13,7 +16,6 @@ options = {
   discovery: true,
   response_type: :code,
   scope: %i[openid email organisation],
-  path_prefix: "/admin/auth",
   callback_path: "/admin/auth/callback",
   client_options: {
     port: dfe_sign_in_issuer_uri&.port,
