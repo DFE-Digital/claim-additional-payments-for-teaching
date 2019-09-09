@@ -23,6 +23,7 @@
             <%= errors_tag current_claim, :bank_sort_code %>
             <%= form.text_field :bank_sort_code,
               class: css_classes_for_input(current_claim, :bank_sort_code, "govuk-!-width-one-quarter"),
+              autocomplete: "off",
               "aria-describedby" => "sort-code-hint" %>
           <% end %>
 
@@ -32,6 +33,7 @@
             <%= errors_tag current_claim, :bank_account_number %>
             <%= form.text_field :bank_account_number,
               class: css_classes_for_input(current_claim, :bank_account_number, "govuk-input--width-20"),
+              autocomplete: "off",
               "aria-describedby" => "account-number-hint" %>
           <% end %>
         </fieldset>
