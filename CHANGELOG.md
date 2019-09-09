@@ -6,6 +6,7 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+- Redirect requests from any domain other than the canonical one
 - Fix admin IP restriction bug due to port numbers
 - Fix add clear and helpful page titles
 - Fix a bug displaying incorrect number of decimal places on monetary number
