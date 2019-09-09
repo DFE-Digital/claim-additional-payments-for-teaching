@@ -305,4 +305,20 @@ RSpec.feature "Changing the answers on a submittable claim" do
 
     expect(claim.reload.payroll_gender).to eq("dont_know")
   end
+
+  context "when changing the student loan repayment amount" do
+    scenario "user can change answer and it preserves two decimal places" do
+      claim.eligibility.update!(student_loan_repayment_amount: 100.1)
+      visit claim_path("check-your-answers")
+
+      expect(page).to have_content("£100.10")
+      find("a[href='#{claim_path("student-loan-amount")}']").click
+
+      expect(find("#claim_eligibility_attributes_student_loan_repayment_amount").value).to eq("100.10")
+      fill_in I18n.t("student_loans.questions.student_loan_amount", claim_school_name: claim.eligibility.claim_school_name), with: "150.20"
+      click_on "Continue"
+
+      expect(page).to have_content("£150.20")
+    end
+  end
 end
