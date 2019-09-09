@@ -6,6 +6,7 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+- Fix add clear and helpful page titles
 - Fix a bug displaying incorrect number of decimal places on monetary number
   form fields
 - Restrict access to `/admin` by IP

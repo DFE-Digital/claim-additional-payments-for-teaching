@@ -2,7 +2,7 @@
 <html lang="en" class="govuk-template app-html-class">
   <head>
     <title>
-      <%= content_for(:page_title) || t("student_loans.journey_name") %>
+      <%= content_for(:page_title) || "#{t("student_loans.journey_name")} – GOV.UK" %>
     </title>
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
