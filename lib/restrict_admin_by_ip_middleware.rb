@@ -25,6 +25,7 @@ class RestrictAdminByIpMiddleware
   end
 
   def allowed_ip?(req)
-    @allowed_ips.any? { |ip| ip.include?(req.ip) }
+    request_ip = req.ip.split(":").first
+    @allowed_ips.any? { |ip| ip.include?(request_ip) }
   end
 end

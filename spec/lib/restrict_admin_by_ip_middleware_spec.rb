@@ -38,6 +38,18 @@ RSpec.describe RestrictAdminByIpMiddleware do
     end
   end
 
+  it "handles IP addresses that arrive with a PORT number" do
+    unblessed_ip_with_port = "2.2.2.2:41234"
+
+    code, _env, body = middleware.call(mock_request("/test", unblessed_ip_with_port))
+    expect(code).to eq 200
+    expect(body).to eq ["OK"]
+
+    code, _env, body = middleware.call(mock_request("/admin/something", unblessed_ip_with_port))
+    expect(code).to eq 403
+    expect(body).to eq ["Forbidden"]
+  end
+
   private
 
   def mock_request(url, remote_ip)
