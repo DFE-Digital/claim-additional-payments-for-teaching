@@ -1,3 +1,5 @@
+<%= page_title(t("student_loans.questions.mostly_performed_leadership_duties")) %>
+
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
     <%= render("shared/error_summary", instance: current_claim, errored_field_id_overrides: { "eligibility.mostly_performed_leadership_duties": "claim_eligibility_attributes_mostly_performed_leadership_duties_true"}) if current_claim.errors.any? %>

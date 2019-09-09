@@ -1,3 +1,5 @@
+<%= page_title(t("questions.email_address")) %>
+
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
     <%= render("shared/error_summary", instance: current_claim) if current_claim.errors.any? %>

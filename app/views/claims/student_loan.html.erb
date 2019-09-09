@@ -1,3 +1,5 @@
+<%= page_title(t("questions.has_student_loan")) %>
+
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
     <%= render("shared/error_summary", instance: current_claim, errored_field_id_overrides: { has_student_loan: "claim_has_student_loan_true" }) if current_claim.errors.any? %>
