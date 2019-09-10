@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+- Fix for allowing IPv6 addresses to visit the admin area
+
 ## [Release 006] - 2019-09-10
 
 - Add ability for service operators to download data for payroll
