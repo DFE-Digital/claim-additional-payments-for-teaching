@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe TslrClaimsCsv do
+RSpec.describe StudentLoans::ClaimsCsv do
   before do
     create(:claim, :submitted)
   end
