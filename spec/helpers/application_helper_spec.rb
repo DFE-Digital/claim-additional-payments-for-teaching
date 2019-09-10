@@ -16,4 +16,20 @@ describe ApplicationHelper do
       end
     end
   end
+
+  describe "page_title" do
+    it "Returns a title without an error prefix" do
+      page_title("Some Title", show_error: false)
+      title = content_for(:page_title)
+
+      expect(title).to eq("Some Title - #{I18n.t("student_loans.journey_name")} - GOV.UK")
+    end
+
+    it "Returns an error prefix" do
+      page_title("Some Title", show_error: true)
+      title = content_for(:page_title)
+
+      expect(title).to eq("Error - Some Title - #{I18n.t("student_loans.journey_name")} - GOV.UK")
+    end
+  end
 end

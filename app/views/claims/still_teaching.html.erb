@@ -1,4 +1,4 @@
-<%= page_title(t("student_loans.questions.employment_status")) %>
+<%= page_title(t("student_loans.questions.employment_status"), show_error: current_claim.errors.any?) %>
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">

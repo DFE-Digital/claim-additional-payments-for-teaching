@@ -6,6 +6,7 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+- Prefix titles with an error notification if an error is present
 - Fix html validation issues with qts year and address views
 
 ## [Release 005] - 2019-09-10
