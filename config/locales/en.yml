@@ -53,6 +53,13 @@ en:
     email_address: "Email address"
     bank_details: "Enter bank account details"
     payroll_gender: "What gender does your school's payroll system associate with you?"
+    admin:
+      current_school: "Current school"
+      address: "Address"
+      teacher_reference_number: "Teacher reference number"
+      national_insurance_number: "National Insurance Number"
+      email_address: "Email address"
+      payroll_gender: "What gender does your school's payroll system associate with you?"
   answers:
     student_loan_start_date:
       one_course:
@@ -108,6 +115,12 @@ en:
       student_loan_amount:
         "Exactly how much student loan did you repay while you worked at %{claim_school_name} between 6 April 2018 and 5
         April 2019?"
+      admin:
+        qts_award_year: "Award year"
+        claim_school: "Claim school"
+        subjects_taught: "Subjects taught"
+        had_leadership_position: "Had leadership position?"
+        mostly_performed_leadership_duties: "Mostly performed leadership duties?"
     csv_headers:
       reference: "Reference"
       submitted_at: "Submitted at"
@@ -122,6 +135,7 @@ en:
       address_line_2: "Address 2"
       address_line_3: "Address 3"
       address_line_4: "Address 4"
+      address: "Address"
       postcode: "Postcode"
       date_of_birth: "Date of Birth"
       payroll_gender: "Payroll Gender"
@@ -135,6 +149,7 @@ en:
       computer_science_taught: "Computer Science Taught?"
       languages_taught: "Languages Taught?"
       physics_taught: "Physics Taught?"
+      subjects_taught: "Subjects Taught"
       mostly_performed_leadership_duties: "Mostly Performed Leadership Duties?"
       bank_sort_code: "Sort Code"
       bank_account_number: "Account Number"
