@@ -13,16 +13,4 @@ class Admin::ClaimsController < Admin::BaseAdminController
   def show
     @claim = Claim.find(params[:id])
   end
-
-  def approve
-    @claim = Claim.find(params[:id])
-    @claim.approve!(approved_by: admin_session.user_id)
-    redirect_to admin_claims_path, notice: "Claim has been approved successfully"
-  end
-
-  private
-
-  def ensure_service_operator
-    render "admin/auth/failure", status: :unauthorized unless service_operator_signed_in?
-  end
 end

@@ -16,5 +16,9 @@ module Admin
     def service_operator_signed_in?
       admin_session.is_service_operator?
     end
+
+    def ensure_service_operator
+      render "admin/auth/failure", status: :unauthorized unless service_operator_signed_in?
+    end
   end
 end
