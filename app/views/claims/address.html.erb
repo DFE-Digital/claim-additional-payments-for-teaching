@@ -44,8 +44,7 @@
             County
           <% end %>
           <%= errors_tag current_claim, :address_line_4 %>
-          <%= form.text_field :address_line_4, autocomplete: "region",
-            class: "govuk-input govuk-!-width-two-thirds" %>
+          <%= form.text_field :address_line_4, class: "govuk-input govuk-!-width-two-thirds" %>
         <% end %>
 
         <%= form_group_tag current_claim, :postcode do %>

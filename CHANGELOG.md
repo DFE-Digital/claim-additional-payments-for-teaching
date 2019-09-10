@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+- Fix html validation issues with qts year and address views
+
 ## [Release 005] - 2019-09-10
 
 - Redirect requests from any domain other than the canonical one
