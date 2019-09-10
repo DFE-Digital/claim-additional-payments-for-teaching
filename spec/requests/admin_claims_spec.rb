@@ -7,6 +7,18 @@ RSpec.describe "Admin claims", type: :request do
     follow_redirect!
   end
 
+  describe "claims#index" do
+    let!(:claims) { create_list(:claim, 3, :submitted) }
+
+    it "lists all claims" do
+      get admin_claims_path
+
+      claims.each do |c|
+        expect(response.body).to include(c.reference)
+      end
+    end
+  end
+
   describe "claims#show" do
     let(:claim) { create(:claim, :submitted) }
 
