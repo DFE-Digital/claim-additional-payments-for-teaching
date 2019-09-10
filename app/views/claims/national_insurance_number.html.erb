@@ -14,7 +14,12 @@
 
         <%= errors_tag current_claim, :national_insurance_number %>
 
-        <%= form.text_field :national_insurance_number, spellcheck: "false", :minlength => 9, class: css_classes_for_input(current_claim, :national_insurance_number, 'govuk-input--width-10') %>
+        <%= form.text_field :national_insurance_number,
+              spellcheck: "false",
+              autocomplete: "off",
+              minlength: 9,
+              class: css_classes_for_input(current_claim, :national_insurance_number, 'govuk-input--width-10')
+        %>
       <% end %>
       <%= form.submit "Continue", class: "govuk-button" %>
     <% end %>
