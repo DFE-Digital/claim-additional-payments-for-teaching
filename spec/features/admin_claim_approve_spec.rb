@@ -10,16 +10,19 @@ RSpec.feature "Admin approves a claim" do
 
     scenario "User can approve a claim" do
       freeze_time do
-        submitted_claims = create_list(:claim, 5, :submittable, submitted_at: DateTime.now)
+        submitted_claims = create_list(:claim, 5, :submitted, submitted_at: DateTime.now, approved_at: nil)
         claim_to_approve = submitted_claims.first
 
         visit admin_claims_path
+
+        expect(page).to have_content(claim_to_approve.reference)
 
         find("a[href='#{admin_claim_path(claim_to_approve)}']").click
         click_on "Approve"
 
         expect(claim_to_approve.reload.approved_at).to eq(DateTime.now)
         expect(page).to have_content("Claim has been approved successfully")
+        expect(page).to_not have_content(claim_to_approve.reference)
       end
     end
   end

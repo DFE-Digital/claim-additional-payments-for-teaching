@@ -104,7 +104,7 @@ class Claim < ApplicationRecord
   before_save :normalise_bank_account_number, if: :bank_account_number_changed?
   before_save :normalise_bank_sort_code, if: :bank_sort_code_changed?
 
-  scope :submitted, -> { where.not(submitted_at: nil) }
+  scope :awaiting_approval, -> { where.not(submitted_at: nil).where(approved_at: nil) }
 
   def submit!
     if submittable?
