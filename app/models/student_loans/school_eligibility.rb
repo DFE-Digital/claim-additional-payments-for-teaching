@@ -35,10 +35,10 @@ module StudentLoans
     end
 
     def check
-      eligible_local_authority? &&
+      !closed_before_policy_start? &&
+        eligible_local_authority? &&
         @school.state_funded? &&
-        (eligible_phase? || eligible_special_school?) &&
-        !closed_before_policy_start?
+        (eligible_phase? || eligible_special_school?)
     end
 
     private

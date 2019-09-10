@@ -14,11 +14,6 @@ RSpec.describe MathsAndPhysics::SchoolEligibility do
         context "and it has an education phase of secondary or middle deemed secondary" do
           let(:school_attributes) { college_attributes.merge({phase: :middle_deemed_secondary}) }
           it { is_expected.to be true }
-
-          context "and it is closed" do
-            let(:school_attributes) { college_attributes.merge({phase: :middle_deemed_secondary, close_date: Date.yesterday}) }
-            it { is_expected.to be false }
-          end
         end
 
         context "and it has an education phase of nursery, primary, middle deemed primary, 16+ or all through" do
@@ -33,11 +28,6 @@ RSpec.describe MathsAndPhysics::SchoolEligibility do
         context "and it has an education phase of secondary or middle deemed secondary" do
           let(:school_attributes) { academy_school_attributes.merge({phase: :secondary}) }
           it { is_expected.to be true }
-
-          context "and it is closed" do
-            let(:school_attributes) { academy_school_attributes.merge({phase: :secondary, close_date: Date.yesterday}) }
-            it { is_expected.to be false }
-          end
         end
 
         context "and it has an education phase of nursery, primary, middle deemed primary, 16+ or all through" do
@@ -52,11 +42,6 @@ RSpec.describe MathsAndPhysics::SchoolEligibility do
         context "and it has an education phase of secondary or middle deemed secondary" do
           let(:school_attributes) { free_school_attributes.merge({phase: :secondary}) }
           it { is_expected.to be true }
-
-          context "and it is closed" do
-            let(:school_attributes) { free_school_attributes.merge({phase: :secondary, close_date: Date.yesterday}) }
-            it { is_expected.to be false }
-          end
         end
 
         context "and it has an education phase of nursery, primary, middle deemed primary, 16+ or all through" do
@@ -71,11 +56,6 @@ RSpec.describe MathsAndPhysics::SchoolEligibility do
         context "and it has an education phase of secondary or middle deemed secondary" do
           let(:school_attributes) { la_maintained_attributes.merge({phase: :secondary}) }
           it { is_expected.to be true }
-
-          context "and it is closed" do
-            let(:school_attributes) { la_maintained_attributes.merge({phase: :secondary, close_date: Date.yesterday}) }
-            it { is_expected.to be false }
-          end
         end
 
         context "and it has an education phase of nursery, primary, middle deemed primary, 16+ or all through" do
@@ -90,11 +70,6 @@ RSpec.describe MathsAndPhysics::SchoolEligibility do
         context "and it has an education phase of secondary or middle deemed secondary" do
           let(:school_attributes) { special_school_attributes.merge({phase: :secondary}) }
           it { is_expected.to be true }
-
-          context "and it is closed" do
-            let(:school_attributes) { special_school_attributes.merge({phase: :secondary, close_date: Date.yesterday}) }
-            it { is_expected.to be false }
-          end
         end
 
         context "and it has an education phase of nursery, primary, middle deemed primary, 16+ or all through" do
@@ -105,11 +80,6 @@ RSpec.describe MathsAndPhysics::SchoolEligibility do
         context "and it doesn't have an education phase" do
           let(:school_attributes) { special_school_attributes.merge({phase: :not_applicable}) }
           it { is_expected.to be true }
-
-          context "and it is closed" do
-            let(:school_attributes) { special_school_attributes.merge({phase: :not_applicable, close_date: Date.yesterday}) }
-            it { is_expected.to be false }
-          end
         end
       end
 
@@ -119,11 +89,6 @@ RSpec.describe MathsAndPhysics::SchoolEligibility do
         context "and it has an education phase of secondary or middle deemed secondary" do
           let(:school_attributes) { special_free_school_attributes.merge({phase: :secondary}) }
           it { is_expected.to be true }
-
-          context "and it is closed" do
-            let(:school_attributes) { special_free_school_attributes.merge({phase: :secondary, close_date: Date.yesterday}) }
-            it { is_expected.to be false }
-          end
         end
 
         context "and it has an education phase of nursery, primary, middle deemed primary, 16+ or all through" do
@@ -134,11 +99,6 @@ RSpec.describe MathsAndPhysics::SchoolEligibility do
         context "and it doesn't have an education phase" do
           let(:school_attributes) { special_free_school_attributes.merge({phase: :not_applicable}) }
           it { is_expected.to be true }
-
-          context "and it is closed" do
-            let(:school_attributes) { special_free_school_attributes.merge({phase: :not_applicable, close_date: Date.yesterday}) }
-            it { is_expected.to be false }
-          end
         end
       end
 
@@ -175,6 +135,11 @@ RSpec.describe MathsAndPhysics::SchoolEligibility do
     context "when it is not in an eligible local authority district" do
       let(:local_authority_district) { local_authority_districts(:camden) }
       let(:school_attributes) { {} }
+      it { is_expected.to be false }
+    end
+
+    context "when the school is otherwise eligible but is closed" do
+      let(:school) { build(:school, :maths_and_physics_eligible, close_date: Date.yesterday) }
       it { is_expected.to be false }
     end
   end
