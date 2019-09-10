@@ -136,7 +136,7 @@ RSpec.feature "Changing the answers on a submittable claim" do
   end
 
   context "When changing claim school" do
-    let!(:new_claim_school) { create(:school, :tslr_eligible, name: "Claim School") }
+    let!(:new_claim_school) { create(:school, :student_loan_eligible, name: "Claim School") }
 
     before do
       find("a[href='#{claim_path("claim-school")}']").click
