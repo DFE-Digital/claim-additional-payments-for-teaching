@@ -137,5 +137,10 @@ RSpec.describe MathsAndPhysics::SchoolEligibility do
       let(:school_attributes) { {} }
       it { is_expected.to be false }
     end
+
+    context "when the school is otherwise eligible but is closed" do
+      let(:school) { build(:school, :maths_and_physics_eligible, close_date: Date.yesterday) }
+      it { is_expected.to be false }
+    end
   end
 end

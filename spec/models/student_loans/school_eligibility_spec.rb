@@ -137,5 +137,17 @@ RSpec.describe StudentLoans::SchoolEligibility do
       let(:school_attributes) { {} }
       it { is_expected.to be false }
     end
+
+    context "when it is otherwise eligible but closed before the start of the policy" do
+      let(:before_start_of_policy) { StudentLoans::SchoolEligibility::POLICY_START_DATE - 1.day }
+      let(:school) { build(:school, :student_loan_eligible, close_date: before_start_of_policy) }
+      it { is_expected.to be false }
+    end
+
+    context "when it is otherwise eligible but closed after the start of the policy" do
+      let(:after_start_of_policy) { StudentLoans::SchoolEligibility::POLICY_START_DATE + 1.day }
+      let(:school) { build(:school, :student_loan_eligible, close_date: after_start_of_policy) }
+      it { is_expected.to be true }
+    end
   end
 end

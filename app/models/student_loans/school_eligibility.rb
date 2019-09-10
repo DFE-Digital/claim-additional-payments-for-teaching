@@ -1,5 +1,6 @@
 module StudentLoans
   class SchoolEligibility
+    POLICY_START_DATE = Date.new(2018, 4, 6)
     ELIGIBLE_PHASES = %w[secondary middle_deemed_secondary].freeze
     ELIGIBLE_LOCAL_AUTHORITY_CODES = [
       370, # Barnsley
@@ -34,7 +35,10 @@ module StudentLoans
     end
 
     def check
-      eligible_local_authority? && @school.state_funded? && (eligible_phase? || eligible_special_school?)
+      !closed_before_policy_start? &&
+        eligible_local_authority? &&
+        @school.state_funded? &&
+        (eligible_phase? || eligible_special_school?)
     end
 
     private
@@ -49,6 +53,10 @@ module StudentLoans
 
     def eligible_special_school?
       @school.phase == "not_applicable" && @school.special? && @school.school_type != "special_post_16_institutions"
+    end
+
+    def closed_before_policy_start?
+      @school.close_date.present? && @school.close_date < POLICY_START_DATE
     end
   end
 end

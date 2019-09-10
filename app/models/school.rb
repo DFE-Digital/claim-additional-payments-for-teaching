@@ -122,4 +122,8 @@ class School < ApplicationRecord
   def special?
     SPECIAL_SCHOOL_TYPES.include?(school_type)
   end
+
+  def open?
+    close_date.nil?
+  end
 end

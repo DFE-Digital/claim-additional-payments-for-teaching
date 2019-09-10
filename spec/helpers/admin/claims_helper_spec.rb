@@ -2,7 +2,7 @@ require "rails_helper"
 
 describe Admin::ClaimsHelper do
   let(:claim_school) { schools(:penistone_grammar_school) }
-  let(:current_school) { create(:school, :tslr_eligible) }
+  let(:current_school) { create(:school, :student_loan_eligible) }
 
   describe "eligibility_answers" do
     let(:eligibility) do
