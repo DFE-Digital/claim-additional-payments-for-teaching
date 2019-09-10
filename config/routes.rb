@@ -1,5 +1,14 @@
 Rails.application.routes.draw do
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
+
+  # If the CANONICAL_HOSTNAME env var is present, and the request doesn't come from that
+  # hostname, redirect us to the canonical hostname with the path and query string present
+  if ENV["CANONICAL_HOSTNAME"].present?
+    constraints(host: Regexp.new("^(?!#{Regexp.escape(ENV["CANONICAL_HOSTNAME"])})")) do
+      match "/(*path)" => redirect(host: ENV["CANONICAL_HOSTNAME"]), :via => [:all]
+    end
+  end
+
   root "static_pages#start_page"
 
   # setup a simple healthcheck endpoint for monitoring purposes
