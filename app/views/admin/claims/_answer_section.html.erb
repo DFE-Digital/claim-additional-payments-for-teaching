@@ -1,0 +1,17 @@
+<h2 class="govuk-heading-m">
+  <%= heading %>
+</h2>
+
+<dl class="govuk-summary-list govuk-!-margin-bottom-9">
+  <%- answers.each do |(label, answer)| %>
+    <div class="govuk-summary-list__row">
+      <dt class="govuk-summary-list__key">
+        <%= label %>
+      </dt>
+
+      <dd class="govuk-summary-list__value">
+        <%= answer %>
+      </dd>
+    </div>
+  <% end %>
+</dl>

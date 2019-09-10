@@ -23,6 +23,7 @@ The format is based on [Keep a Changelog]
 
 ## [Release 004] - 2019-09-04
 
+- Allow service operators to approve claims
 - Fix claims export ordering
 - Store claimants' names as separate fields
 - Add ability to run data migrations

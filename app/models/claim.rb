@@ -36,6 +36,8 @@ class Claim < ApplicationRecord
     updated_at: false,
     verified_fields: false,
     verify_response: true,
+    approved_at: false,
+    approved_by: false,
   }.freeze
 
   enum student_loan_country: StudentLoans::COUNTRIES
@@ -103,7 +105,7 @@ class Claim < ApplicationRecord
   before_save :normalise_bank_account_number, if: :bank_account_number_changed?
   before_save :normalise_bank_sort_code, if: :bank_sort_code_changed?
 
-  scope :submitted, -> { where.not(submitted_at: nil) }
+  scope :awaiting_approval, -> { where.not(submitted_at: nil).where(approved_at: nil) }
 
   def submit!
     if submittable?
@@ -115,12 +117,27 @@ class Claim < ApplicationRecord
     end
   end
 
+  def approve!(approved_by:)
+    if approvable?
+      update(
+        approved_at: Time.zone.now,
+        approved_by: approved_by
+      )
+    else
+      false
+    end
+  end
+
   def submitted?
     submitted_at.present?
   end
 
   def submittable?
     valid?(:submit) && !submitted?
+  end
+
+  def approvable?
+    submitted? && approved_at.nil?
   end
 
   def address(seperator = ", ")

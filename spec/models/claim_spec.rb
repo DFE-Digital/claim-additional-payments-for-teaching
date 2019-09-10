@@ -360,12 +360,13 @@ RSpec.describe Claim, type: :model do
     end
   end
 
-  describe "submitted" do
+  describe "awaiting_approval" do
     let!(:submitted_claims) { create_list(:claim, 5, :submitted) }
     let!(:unsubmitted_claims) { create_list(:claim, 2, :submittable) }
+    let!(:approved_claims) { create_list(:claim, 5, :submitted, approved_at: Time.zone.now) }
 
-    it "returns submitted claims" do
-      expect(subject.class.submitted).to match_array(submitted_claims)
+    it "returns submitted claims awaiting approval" do
+      expect(subject.class.awaiting_approval).to match_array(submitted_claims)
     end
   end
 
@@ -438,6 +439,43 @@ RSpec.describe Claim, type: :model do
   describe "::FILTER_PARAMS" do
     it "has a value for every claim attribute" do
       expect(Claim::FILTER_PARAMS.keys).to match_array(Claim.new.attribute_names.map(&:to_sym))
+    end
+  end
+
+  describe "approvable?" do
+    it "returns false when it has not been submitted" do
+      claim = build(:claim)
+
+      expect(claim.approvable?).to eq false
+    end
+    it "returns true when it has been submitted and has not been approved" do
+      claim = build(:claim, :submitted)
+
+      expect(claim.approvable?).to eq true
+    end
+    it "returns false when it has been submitted and approved" do
+      claim = build(:claim, :approved)
+
+      expect(claim.approvable?).to eq false
+    end
+  end
+
+  describe "approve!" do
+    it "approves a claim" do
+      claim = create(:claim, :submitted)
+
+      freeze_time do
+        claim.approve!(approved_by: "12345")
+
+        expect(claim.approved_at).to eq(Time.zone.now)
+        expect(claim.approved_by).to eq("12345")
+      end
+    end
+
+    it "returns false when claim is not approvable" do
+      claim = create(:claim, :approved)
+
+      expect(claim.approve!(approved_by: "12345")).to eq(false)
     end
   end
 end

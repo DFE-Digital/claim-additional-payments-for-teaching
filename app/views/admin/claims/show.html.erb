@@ -1,0 +1,17 @@
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <h1 class="govuk-heading-xl">
+      Claim <%= @claim.reference %>
+    </h1>
+
+    <%= render partial: "answer_section", locals: {heading: "Personal details", answers: admin_personal_details(@claim)} %>
+
+    <%= render partial: "answer_section", locals: {heading: "Eligibility details", answers: admin_eligibility_answers(@claim.eligibility)} %>
+
+    <%= button_to "Approve",
+                  admin_claim_approvals_path(@claim),
+                  method: :post,
+                  class: "govuk-button",
+                  data: { confirm: "Are you sure you want to approve this claim?" } %>
+  </div>
+</div>
