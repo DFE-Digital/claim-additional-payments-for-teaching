@@ -4,23 +4,31 @@
       Claims
     </h1>
 
-    <table class="govuk-table">
-      <thead class="govuk-table__head">
-        <tr class="govuk-table__row">
-          <th scope="col" class="govuk-table__header">Reference</th>
-          <th scope="col" class="govuk-table__header">Applicant Name</th>
-          <th scope="col" class="govuk-table__header"></th>
-        </tr>
-      </thead>
-      <tbody class="govuk-table__body">
-        <% @claims.each do |claim| %>
+    <% if @claims.any? %>
+
+      <table class="govuk-table">
+        <thead class="govuk-table__head">
           <tr class="govuk-table__row">
-            <th scope="row" class="govuk-table__header"><%= claim.reference %></th>
-            <td class="govuk-table__cell"><%= claim.full_name %></td>
-            <td class="govuk-table__cell"><%= link_to 'View claim', admin_claim_path(claim), class: "govuk-link" %></td>
+            <th scope="col" class="govuk-table__header">Reference</th>
+            <th scope="col" class="govuk-table__header">Applicant Name</th>
+            <th scope="col" class="govuk-table__header"></th>
           </tr>
-        <% end %>
-      </tbody>
-    </table>
+        </thead>
+        <tbody class="govuk-table__body">
+          <% @claims.each do |claim| %>
+            <tr class="govuk-table__row">
+              <th scope="row" class="govuk-table__header"><%= claim.reference %></th>
+              <td class="govuk-table__cell"><%= claim.full_name %></td>
+              <td class="govuk-table__cell"><%= link_to 'View claim', admin_claim_path(claim), class: "govuk-link" %></td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+
+    <% else %>
+
+      <p class="govuk-body-l">There are currently no claims to approve.</p>
+
+    <% end %>
   </div>
 </div>
