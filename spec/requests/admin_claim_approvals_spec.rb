@@ -15,10 +15,26 @@ RSpec.describe "Admin claim approvals", type: :request do
         freeze_time do
           post admin_claim_approvals_path(claim_id: claim.id)
 
+          follow_redirect!
+
+          expect(response.body).to include("Claim has been approved successfully")
+
           claim.reload
 
           expect(claim.approved_at).to eq(Time.zone.now)
           expect(claim.approved_by).to eq("123")
+        end
+      end
+
+      context "when claim is unapprovable" do
+        let(:claim) { create(:claim, :approved) }
+
+        it "shows an error" do
+          post admin_claim_approvals_path(claim_id: claim.id)
+
+          follow_redirect!
+
+          expect(response.body).to include("Claim cannot be approved")
         end
       end
     end
