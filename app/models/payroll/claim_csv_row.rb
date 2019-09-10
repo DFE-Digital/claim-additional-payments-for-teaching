@@ -53,7 +53,7 @@ module Payroll
     end
 
     def address_lines
-      [
+      @address_lines ||= [
         model.address_line_1,
         model.address_line_2,
         model.address_line_3,
