@@ -16,7 +16,10 @@ class Admin::ClaimsController < Admin::BaseAdminController
 
   def approve
     @claim = Claim.find(params[:id])
-    @claim.update(approved_at: DateTime.now)
+    @claim.update(
+      approved_at: Time.zone.now,
+      approved_by: admin_session.user_id
+    )
     redirect_to admin_claims_path, notice: "Claim has been approved successfully"
   end
 
