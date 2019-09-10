@@ -29,12 +29,28 @@
     "appServiceAlwaysOn": {
       "type": "bool"
     },
-    "appServiceCertificateSecretName": {
-      "type": "string"
+    "appServiceHostNames": {
+      "type": "array",
+      "defaultValue": ["PLACEHOLDER"],
+      "metadata": {
+        "description": "This must include at least 1 entry. The first host name will be treated as canonical, assuming that all later host names redirect to the canonical one. Include 'PLACEHOLDER' to skip all."
+      }
     },
-    "appServiceHostName": {
-      "type": "string",
-      "defaultValue": ""
+    "appServiceCertificateSecretNames": {
+      "type": "array",
+      "defaultValue": ["PLACEHOLDER"],
+      "metadata": {
+        "description": "This must include least 1 entry. It will be ignored if appServiceHostNames contains 'PLACEHOLDER'."
+      }
+    },
+    "appServiceHostNameToCertificateSecretNameIndexMap": {
+      "type": "object",
+      "defaultValue": {
+        "PLACEHOLDER": 0
+      },
+      "metadata": {
+        "description": "This is a map from host name to appServiceCertificateSecretNames index. It must include values for all appServiceHostNames."
+      }
     },
     "appServiceEnvironmentVariables": {
       "type": "array",
@@ -55,14 +71,19 @@
     "platformBuildingBlocksDeploymentUrlBase": "https://raw.githubusercontent.com/DFE-Digital/bat-platform-building-blocks/7a4748a0cf366193d31434bd7796d483bd281385/templates/",
     "deploymentUrlBase": "[concat('https://raw.githubusercontent.com/DFE-Digital/dfe-teachers-payment-service/', parameters('gitCommitHash'), '/azure/templates/')]",
 
-    "appServiceCertificateDeploymentName": "[concat(deployment().name, '-app-service-certificate')]",
+    "appServiceCertificateDeploymentNamePrefix": "[concat(deployment().name, '-app-service-certificate-')]",
+
     "appServiceLogsDeploymentName": "[concat(deployment().name, '-app-service-logs')]",
     "appServicePlanDeploymentName": "[concat(deployment().name, '-app-service-plan')]",
 
-    "hasCustomHostName": "[greater(length(parameters('appServiceHostName')), 0)]",
+    "appServiceCertificateDeploymentCopyLoopName": "[concat(parameters('appServiceName'),'-certificate-deployment-copy')]",
+    "appServiceHostNameBindingsCopyLoopName": "[concat(parameters('appServiceName'),'-host-name-bindings-copy')]",
 
     "appServiceStagingSlotName": "[concat(parameters('appServiceName'), '/staging')]",
-    "appServiceHostNameBindingsName": "[concat(parameters('appServiceName'), '/', if(variables('hasCustomHostName'), parameters('appServiceHostName'), 'PLACEHOLDER'))]"
+
+    "appServiceHostNameBindingsNamePrefix": "[concat(parameters('appServiceName'), '/')]",
+
+    "hasCustomHostNames": "[and(greater(length(parameters('appServiceHostNames')), 0), not(contains(parameters('appServiceHostNames'), 'PLACEHOLDER')))]"
   },
   "resources": [
     {
@@ -95,11 +116,16 @@
       }
     },
     {
-      "condition": "[variables('hasCustomHostName')]",
+      "condition": "[variables('hasCustomHostNames')]",
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2017-05-10",
-      "name": "[variables('appServiceCertificateDeploymentName')]",
+      "name": "[concat(variables('appServiceCertificateDeploymentNamePrefix'), copyIndex())]",
       "dependsOn": ["[resourceId('Microsoft.Resources/deployments', variables('appServicePlanDeploymentName'))]"],
+      "copy": {
+        "name": "[variables('appServiceCertificateDeploymentCopyLoopName')]",
+        "count": "[length(parameters('appServiceCertificateSecretNames'))]",
+        "mode": "Parallel"
+      },
       "properties": {
         "mode": "Incremental",
         "templateLink": {
@@ -108,7 +134,7 @@
         },
         "parameters": {
           "keyVaultCertificateName": {
-            "value": "[parameters('appServiceCertificateSecretName')]"
+            "value": "[parameters('appServiceCertificateSecretNames')[copyIndex()]]"
           },
           "keyVaultName": {
             "value": "[parameters('keyVaultName')]"
@@ -156,18 +182,23 @@
       }
     },
     {
-      "condition": "[variables('hasCustomHostName')]",
+      "condition": "[variables('hasCustomHostNames')]",
       "type": "Microsoft.Web/sites/hostNameBindings",
       "apiVersion": "2018-11-01",
-      "name": "[variables('appServiceHostNameBindingsName')]",
+      "name": "[concat(variables('appServiceHostNameBindingsNamePrefix'), parameters('appServiceHostNames')[copyIndex()])]",
       "location": "[resourceGroup().location]",
       "dependsOn": [
-        "[resourceId('Microsoft.Resources/deployments', variables('appServiceCertificateDeploymentName'))]",
+        "[resourceId('Microsoft.Resources/deployments', concat(variables('appServiceCertificateDeploymentNamePrefix'), parameters('appServiceHostNameToCertificateSecretNameIndexMap')[parameters('appServiceHostNames')[copyIndex()]]))]",
         "[resourceId('Microsoft.Web/sites', parameters('appServiceName'))]"
       ],
+      "copy": {
+        "name": "[variables('appServiceHostNameBindingsCopyLoopName')]",
+        "count": "[length(parameters('appServiceHostNames'))]",
+        "mode": "Parallel"
+      },
       "properties": {
         "sslState": "SniEnabled",
-        "thumbprint": "[if(variables('hasCustomHostName'), reference(variables('appServiceCertificateDeploymentName'), '2018-11-01').outputs.certificateThumbprint.value, 'PLACEHOLDER')]"
+        "thumbprint": "[if(variables('hasCustomHostNames'), reference(resourceId('Microsoft.Resources/deployments', concat(variables('appServiceCertificateDeploymentNamePrefix'), parameters('appServiceHostNameToCertificateSecretNameIndexMap')[parameters('appServiceHostNames')[copyIndex()]]))).outputs.certificateThumbprint.value, 'PLACEHOLDER')]"
       }
     },
     {
@@ -212,9 +243,9 @@
       "type": "array",
       "value": "[split(reference(resourceId('Microsoft.Web/sites', parameters('appServiceName'))).possibleOutboundIpAddresses, ',')]"
     },
-    "appServiceHostName": {
+    "appServiceCanonicalHostName": {
       "type": "string",
-      "value": "[if(variables('hasCustomHostName'), parameters('appServiceHostName'), reference(resourceId('Microsoft.Web/sites', parameters('appServiceName'))).defaultHostName)]"
+      "value": "[if(variables('hasCustomHostNames'), first(parameters('appServiceHostNames')), reference(resourceId('Microsoft.Web/sites', parameters('appServiceName'))).defaultHostName)]"
     }
   }
 }

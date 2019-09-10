@@ -5,11 +5,16 @@
     "appServiceDockerCompose": {
       "value": "${dockerCompose}"
     },
-    "appServiceHostName": {
-      "value": "development.additional-teaching-payment.education.gov.uk"
+    "appServiceHostNames": {
+      "value": ["development.additional-teaching-payment.education.gov.uk"]
     },
-    "appServiceCertificateSecretName": {
-      "value": "sslCertificate-wildcard-additional-teaching-payment-education-gov-uk"
+    "appServiceCertificateSecretNames": {
+      "value": ["sslCertificate-wildcard-additional-teaching-payment-education-gov-uk"]
+    },
+    "appServiceHostNameToCertificateSecretNameIndexMap": {
+      "value": {
+        "development.additional-teaching-payment.education.gov.uk": 0
+      }
     },
     "appServiceAlwaysOn": {
       "value": false
