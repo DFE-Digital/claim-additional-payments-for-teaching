@@ -4,6 +4,8 @@ RSpec.describe StudentLoans::SchoolEligibility do
   describe "#check" do
     subject { StudentLoans::SchoolEligibility.new(school).check }
     let(:school) { build(:school, school_attributes.merge({local_authority: local_authority})) }
+    let(:after_start_of_policy) { StudentLoans::SchoolEligibility::POLICY_START_DATE + 1.day }
+    let(:before_start_of_policy) { StudentLoans::SchoolEligibility::POLICY_START_DATE - 1.day }
 
     context "when it is in an eligible area" do
       let(:local_authority) { local_authorities(:barnsley) }
@@ -14,6 +16,16 @@ RSpec.describe StudentLoans::SchoolEligibility do
         context "and it has an education phase of secondary or middle deemed secondary" do
           let(:school_attributes) { academy_school_attributes.merge({phase: :secondary}) }
           it { is_expected.to be true }
+
+          context "and it closed after the start of the policy" do
+            let(:school_attributes) { academy_school_attributes.merge({phase: :secondary, close_date: after_start_of_policy}) }
+            it { is_expected.to be true }
+          end
+
+          context "and it closed before the start of the policy" do
+            let(:school_attributes) { academy_school_attributes.merge({phase: :secondary, close_date: before_start_of_policy}) }
+            it { is_expected.to be false }
+          end
         end
 
         context "and it has an education phase of nursery, primary, middle deemed primary, 16+ or all through" do
@@ -28,6 +40,16 @@ RSpec.describe StudentLoans::SchoolEligibility do
         context "and it has an education phase of secondary or middle deemed secondary" do
           let(:school_attributes) { free_school_attributes.merge({phase: :secondary}) }
           it { is_expected.to be true }
+
+          context "and it closed after the start of the policy" do
+            let(:school_attributes) { free_school_attributes.merge({phase: :secondary, close_date: after_start_of_policy}) }
+            it { is_expected.to be true }
+          end
+
+          context "and it closed before the start of the policy" do
+            let(:school_attributes) { free_school_attributes.merge({phase: :secondary, close_date: before_start_of_policy}) }
+            it { is_expected.to be false }
+          end
         end
 
         context "and it has an education phase of nursery, primary, middle deemed primary, 16+ or all through" do
@@ -42,6 +64,16 @@ RSpec.describe StudentLoans::SchoolEligibility do
         context "and it has an education phase of secondary or middle deemed secondary" do
           let(:school_attributes) { college_attributes.merge({phase: :middle_deemed_secondary}) }
           it { is_expected.to be true }
+
+          context "and it closed after the start of the policy" do
+            let(:school_attributes) { college_attributes.merge({phase: :secondary, close_date: after_start_of_policy}) }
+            it { is_expected.to be true }
+          end
+
+          context "and it closed before the start of the policy" do
+            let(:school_attributes) { college_attributes.merge({phase: :secondary, close_date: before_start_of_policy}) }
+            it { is_expected.to be false }
+          end
         end
 
         context "and it has an education phase of nursery, primary, middle deemed primary, 16+ or all through" do
@@ -56,6 +88,16 @@ RSpec.describe StudentLoans::SchoolEligibility do
         context "and it has an education phase of secondary or middle deemed secondary" do
           let(:school_attributes) { la_maintained_attributes.merge({phase: :secondary}) }
           it { is_expected.to be true }
+
+          context "and it closed after the start of the policy" do
+            let(:school_attributes) { la_maintained_attributes.merge({phase: :secondary, close_date: after_start_of_policy}) }
+            it { is_expected.to be true }
+          end
+
+          context "and it closed before the start of the policy" do
+            let(:school_attributes) { la_maintained_attributes.merge({phase: :secondary, close_date: before_start_of_policy}) }
+            it { is_expected.to be false }
+          end
         end
 
         context "and it has an education phase of nursery, primary, middle deemed primary, 16+ or all through" do
@@ -70,6 +112,16 @@ RSpec.describe StudentLoans::SchoolEligibility do
         context "and it has an education phase of secondary or middle deemed secondary" do
           let(:school_attributes) { special_school_attributes.merge({phase: :secondary}) }
           it { is_expected.to be true }
+
+          context "and it closed after the start of the policy" do
+            let(:school_attributes) { special_school_attributes.merge({phase: :secondary, close_date: after_start_of_policy}) }
+            it { is_expected.to be true }
+          end
+
+          context "and it closed before the start of the policy" do
+            let(:school_attributes) { special_school_attributes.merge({phase: :secondary, close_date: before_start_of_policy}) }
+            it { is_expected.to be false }
+          end
         end
 
         context "and it has an education phase of nursery, primary, middle deemed primary, 16+ or all through" do
@@ -80,6 +132,16 @@ RSpec.describe StudentLoans::SchoolEligibility do
         context "and it doesn't have an education phase" do
           let(:school_attributes) { special_school_attributes.merge({phase: :not_applicable}) }
           it { is_expected.to be true }
+
+          context "and it closed after the start of the policy" do
+            let(:school_attributes) { special_school_attributes.merge({phase: :not_applicable, close_date: after_start_of_policy}) }
+            it { is_expected.to be true }
+          end
+
+          context "and it closed before the start of the policy" do
+            let(:school_attributes) { special_school_attributes.merge({phase: :not_applicable, close_date: before_start_of_policy}) }
+            it { is_expected.to be false }
+          end
         end
       end
 
@@ -89,6 +151,16 @@ RSpec.describe StudentLoans::SchoolEligibility do
         context "and it has an education phase of secondary or middle deemed secondary" do
           let(:school_attributes) { special_free_school_attributes.merge({phase: :secondary}) }
           it { is_expected.to be true }
+
+          context "and it closed after the start of the policy" do
+            let(:school_attributes) { special_free_school_attributes.merge({phase: :secondary, close_date: after_start_of_policy}) }
+            it { is_expected.to be true }
+          end
+
+          context "and it closed before the start of the policy" do
+            let(:school_attributes) { special_free_school_attributes.merge({phase: :secondary, close_date: before_start_of_policy}) }
+            it { is_expected.to be false }
+          end
         end
 
         context "and it has an education phase of nursery, primary, middle deemed primary, 16+ or all through" do
@@ -99,6 +171,16 @@ RSpec.describe StudentLoans::SchoolEligibility do
         context "and it doesn't have an education phase" do
           let(:school_attributes) { special_free_school_attributes.merge({phase: :not_applicable}) }
           it { is_expected.to be true }
+
+          context "and it closed after the start of the policy" do
+            let(:school_attributes) { special_free_school_attributes.merge({phase: :not_applicable, close_date: after_start_of_policy}) }
+            it { is_expected.to be true }
+          end
+
+          context "and it closed before the start of the policy" do
+            let(:school_attributes) { special_free_school_attributes.merge({phase: :not_applicable, close_date: before_start_of_policy}) }
+            it { is_expected.to be false }
+          end
         end
       end
 
