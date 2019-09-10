@@ -6,6 +6,7 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+- Update school eligibility checkers to also check when a school closed
 - Increase contrast on hint text to AAA standard
 - Turned off autocomplete setting on National Insurance number and bank inputs
 - Prefix titles with an error notification if an error is present

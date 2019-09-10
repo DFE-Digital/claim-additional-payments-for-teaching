@@ -52,7 +52,10 @@ module MathsAndPhysics
     end
 
     def check
-      eligible_local_authority_district? && @school.state_funded? && (eligible_phase? || eligible_special_school?)
+      eligible_local_authority_district? &&
+        @school.state_funded? &&
+        (eligible_phase? || eligible_special_school?) &&
+        @school.open?
     end
 
     private
