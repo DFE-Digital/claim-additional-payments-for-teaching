@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+## [Release 005] - 2019-09-10
+
 - Redirect requests from any domain other than the canonical one
 - Fix admin IP restriction bug due to port numbers
 - Fix add clear and helpful page titles
@@ -50,7 +52,9 @@ The format is based on [Keep a Changelog]
 - First release for student loan repayments private beta
 
 [unreleased]:
-  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-004...HEAD
+  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-005...HEAD
+[release 005]:
+  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-004...release-005
 [release 004]:
   https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-003...release-004
 [release 003]:
