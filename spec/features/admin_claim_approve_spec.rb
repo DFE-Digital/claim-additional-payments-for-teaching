@@ -18,7 +18,7 @@ RSpec.feature "Admin approves a claim" do
         expect(page).to have_content(claim_to_approve.reference)
 
         find("a[href='#{admin_claim_path(claim_to_approve)}']").click
-        click_on "Approve"
+        perform_enqueued_jobs { click_on "Approve" }
 
         claim_to_approve.reload
 
@@ -27,6 +27,17 @@ RSpec.feature "Admin approves a claim" do
 
         expect(page).to have_content("Claim has been approved successfully")
         expect(page).to_not have_content(claim_to_approve.reference)
+
+        expect(ActionMailer::Base.deliveries.count).to eq(1)
+
+        mail = ActionMailer::Base.deliveries.first
+
+        expect(mail.subject).to eq(
+          "Your claim to get your student loan repayments back has been approved, reference number: #{claim_to_approve.reference}"
+        )
+        expect(mail.body.raw_source).to match(
+          "Your claim to get your student loan repayments back has been approved"
+        )
       end
     end
   end
