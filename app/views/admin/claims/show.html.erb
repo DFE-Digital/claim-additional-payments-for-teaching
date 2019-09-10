@@ -4,11 +4,9 @@
       Claim <%= @claim.reference %>
     </h1>
 
+    <%= render partial: "answer_section", locals: {heading: "Personal details", answers: admin_personal_details(@claim)} %>
+
     <%= render partial: "answer_section", locals: {heading: "Eligibility details", answers: admin_eligibility_answers(@claim.eligibility)} %>
-
-    <%= render partial: "answer_section", locals: {heading: "Personal details", answers: verify_answers(@claim)} %>
-
-    <%= render partial: "answer_section", locals: {heading: "Identity details", answers: admin_identity_answers(@claim)} %>
 
     <%= button_to "Approve",
                   admin_claim_approvals_path(@claim),

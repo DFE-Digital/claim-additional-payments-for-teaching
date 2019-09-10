@@ -39,24 +39,34 @@ describe Admin::ClaimsHelper do
     end
   end
 
-  describe "identity_answers" do
+  describe "admin_personal_details" do
     let(:claim) do
       build(
         :claim,
+        first_name: "Bruce",
+        surname: "Wayne",
         teacher_reference_number: "1234567",
         national_insurance_number: "QQ123456C",
-        email_address: "test@email.com"
+        email_address: "test@email.com",
+        address_line_1: "Flat 1",
+        address_line_2: "1 Test Road",
+        address_line_3: "Test Town",
+        postcode: "AB1 2CD",
+        date_of_birth: Date.new(1901, 1, 1),
       )
     end
 
     it "includes an array of questions and answers" do
       expected_answers = [
         [I18n.t("questions.admin.teacher_reference_number"), "1234567"],
+        [I18n.t("verified_fields.full_name").capitalize, "Bruce Wayne"],
         [I18n.t("questions.admin.national_insurance_number"), "QQ123456C"],
+        [I18n.t("verified_fields.date_of_birth").capitalize, "1 January 1901"],
+        [I18n.t("verified_fields.address").capitalize, "Flat 1<br>1 Test Road<br>Test Town<br>AB1 2CD"],
         [I18n.t("questions.admin.email_address"), "test@email.com"],
       ]
 
-      expect(helper.admin_identity_answers(claim)).to eq expected_answers
+      expect(helper.admin_personal_details(claim)).to eq expected_answers
     end
   end
 end
