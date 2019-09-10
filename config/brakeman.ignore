@@ -3,44 +3,44 @@
     {
       "warning_type": "File Access",
       "warning_code": 16,
-      "fingerprint": "5a6811456abe76e2101e305b57165df28773ba8c5320f93db1638f774e02162d",
+      "fingerprint": "111f5af521375402b31a9df450b49640d88661d1c8303595e3e4fcd6189f3cc1",
       "check_name": "SendFile",
       "message": "Model attribute used in file name",
       "file": "app/controllers/admin/claims_controller.rb",
-      "line": 18,
+      "line": 22,
       "link": "https://brakemanscanner.org/docs/warning_types/file_access/",
-      "code": "send_file(Payroll::ClaimsCsv.new(Claim.includes(:eligibility => ([:claim_school, :current_school])).submitted.order(:submitted_at)).file, :type => \"text/csv\", :filename => \"payroll_data.csv\")",
+      "code": "send_file(Payroll::ClaimsCsv.new(Claim.includes(:eligibility => ([:claim_school, :current_school])).approved.order(:approved_at)).file, :type => \"text/csv\", :filename => \"payroll_data.csv\")",
       "render_path": null,
       "location": {
         "type": "method",
         "class": "Admin::ClaimsController",
         "method": "payroll"
       },
-      "user_input": "Payroll::ClaimsCsv.new(Claim.includes(:eligibility => ([:claim_school, :current_school])).submitted.order(:submitted_at)).file",
+      "user_input": "Payroll::ClaimsCsv.new(Claim.includes(:eligibility => ([:claim_school, :current_school])).approved.order(:approved_at)).file",
       "confidence": "Medium",
       "note": ""
     },
     {
       "warning_type": "File Access",
       "warning_code": 16,
-      "fingerprint": "a4d344b6e66967f7f08a26b34bef4eeb9cc8438b1872e57a24efc3e835fa0cd0",
+      "fingerprint": "13024d811f4dfede142a0dc2e0c9c9aca0c52c6014df0d25e3dff8104584aa53",
       "check_name": "SendFile",
       "message": "Model attribute used in file name",
       "file": "app/controllers/admin/claims_controller.rb",
-      "line": 9,
+      "line": 8,
       "link": "https://brakemanscanner.org/docs/warning_types/file_access/",
-      "code": "send_file(StudentLoans::ClaimsCsv.new(Claim.includes(:eligibility => ([:claim_school, :current_school])).submitted.order(:submitted_at)).file, :type => \"text/csv\", :filename => \"claims.csv\")",
+      "code": "send_file(StudentLoans::ClaimsCsv.new(Claim.includes(:eligibility => ([:claim_school, :current_school])).awaiting_approval.order(:submitted_at)).file, :type => \"text/csv\", :filename => \"claims.csv\")",
       "render_path": null,
       "location": {
         "type": "method",
         "class": "Admin::ClaimsController",
         "method": "index"
       },
-      "user_input": "StudentLoans::ClaimsCsv.new(Claim.includes(:eligibility => ([:claim_school, :current_school])).submitted.order(:submitted_at)).file",
+      "user_input": "StudentLoans::ClaimsCsv.new(Claim.includes(:eligibility => ([:claim_school, :current_school])).awaiting_approval.order(:submitted_at)).file",
       "confidence": "Medium",
       "note": ""
     }
   ],
-  "updated": "2019-09-04 14:19:40 +0100",
+  "updated": "2019-09-10 16:17:28 +0100",
   "brakeman_version": "4.6.1"
 }

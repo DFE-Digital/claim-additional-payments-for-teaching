@@ -22,7 +22,7 @@ RSpec.feature "Download CSV of claims" do
     end
 
     scenario "User downloads a CSV for the payroll provider" do
-      submitted_claims = create_list(:claim, 5, :submittable, submitted_at: DateTime.now)
+      approved_claims = create_list(:claim, 5, :approved)
       create_list(:claim, 2, :submittable)
 
       expect(page).to have_link(nil, href: payroll_admin_claims_path(format: :csv))
@@ -31,7 +31,7 @@ RSpec.feature "Download CSV of claims" do
       expect(page.response_headers["Content-Type"]).to eq("text/csv")
 
       csv = CSV.parse(body)
-      expect(csv.count).to eq(submitted_claims.count + 1)
+      expect(csv.count).to eq(approved_claims.count + 1)
       expect(csv.first).to eq(Payroll::ClaimsCsv::FIELDS_WITH_HEADERS.values)
     end
   end
