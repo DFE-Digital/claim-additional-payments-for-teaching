@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+## [Release 006] - 2019-09-10
+
 - Add ability for service operators to download data for payroll
 - Allow service operators to approve claims
 - Update school eligibility checkers to also check when a school closed
@@ -60,7 +62,9 @@ The format is based on [Keep a Changelog]
 - First release for student loan repayments private beta
 
 [unreleased]:
-  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-005...HEAD
+  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-006...HEAD
+[release 006]:
+  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-005...release-006
 [release 005]:
   https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-004...release-005
 [release 004]:
