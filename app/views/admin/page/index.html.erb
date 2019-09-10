@@ -4,6 +4,12 @@
       Admin
     </h1>
 
-    <%= link_to 'Download claims', admin_claims_path(format: :csv), class: "govuk-button" if service_operator_signed_in? %>
+    <% if service_operator_signed_in? %>
+      <ul>
+        <li><%= link_to 'Approve claims', admin_claims_path, class: "govuk-link" %></li>
+        <li><%= link_to 'Download claims', admin_claims_path(format: :csv), class: "govuk-link" %></li>
+      </ul>
+    <% end %>
+
   </div>
 </div>
