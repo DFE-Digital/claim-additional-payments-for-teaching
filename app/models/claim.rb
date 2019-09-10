@@ -117,12 +117,27 @@ class Claim < ApplicationRecord
     end
   end
 
+  def approve!(approved_by:)
+    if approvable?
+      update(
+        approved_at: Time.zone.now,
+        approved_by: approved_by
+      )
+    else
+      false
+    end
+  end
+
   def submitted?
     submitted_at.present?
   end
 
   def submittable?
     valid?(:submit) && !submitted?
+  end
+
+  def approvable?
+    submitted? && approved_at.nil?
   end
 
   def address(seperator = ", ")

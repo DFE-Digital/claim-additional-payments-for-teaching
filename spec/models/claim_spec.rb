@@ -441,4 +441,41 @@ RSpec.describe Claim, type: :model do
       expect(Claim::FILTER_PARAMS.keys).to match_array(Claim.new.attribute_names.map(&:to_sym))
     end
   end
+
+  describe "approvable?" do
+    it "returns false when it has not been submitted" do
+      claim = build(:claim)
+
+      expect(claim.approvable?).to eq false
+    end
+    it "returns true when it has been submitted and has not been approved" do
+      claim = build(:claim, :submitted)
+
+      expect(claim.approvable?).to eq true
+    end
+    it "returns false when it has been submitted and approved" do
+      claim = build(:claim, :approved)
+
+      expect(claim.approvable?).to eq false
+    end
+  end
+
+  describe "approve!" do
+    it "approves a claim" do
+      claim = create(:claim, :submitted)
+
+      freeze_time do
+        claim.approve!(approved_by: "12345")
+
+        expect(claim.approved_at).to eq(Time.zone.now)
+        expect(claim.approved_by).to eq("12345")
+      end
+    end
+
+    it "returns false when claim is not approvable" do
+      claim = create(:claim, :approved)
+
+      expect(claim.approve!(approved_by: "12345")).to eq(false)
+    end
+  end
 end
