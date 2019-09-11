@@ -50,6 +50,18 @@ RSpec.describe RestrictAdminByIpMiddleware do
     expect(body).to eq ["Forbidden"]
   end
 
+  it "handles IPv6 addresses" do
+    unblessed_ipv6 = "2001:0db8:85a3:0000:0000:8a2e:0370:7334"
+
+    code, _env, body = middleware.call(mock_request("/test", unblessed_ipv6))
+    expect(code).to eq 200
+    expect(body).to eq ["OK"]
+
+    code, _env, body = middleware.call(mock_request("/admin/something", unblessed_ipv6))
+    expect(code).to eq 403
+    expect(body).to eq ["Forbidden"]
+  end
+
   private
 
   def mock_request(url, remote_ip)
