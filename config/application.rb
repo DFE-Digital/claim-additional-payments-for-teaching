@@ -41,5 +41,7 @@ module DfeTeachersPaymentService
 
     # Set a css_compressor so sassc-rails does not overwrite the compressor
     config.assets.css_compressor = nil
+
+    config.exceptions_app = routes
   end
 end
