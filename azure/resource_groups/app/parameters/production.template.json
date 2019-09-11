@@ -9,15 +9,12 @@
       "value": ["additional-teaching-payment.education.gov.uk", "www.additional-teaching-payment.education.gov.uk"]
     },
     "appServiceCertificateSecretNames": {
-      "value": [
-        "sslCertificate-additional-teaching-payment-education-gov-uk",
-        "sslCertificate-wildcard-additional-teaching-payment-education-gov-uk"
-      ]
+      "value": ["sslCertificate-additional-teaching-payment-education-gov-uk"]
     },
     "appServiceHostNameToCertificateSecretNameIndexMap": {
       "value": {
         "additional-teaching-payment.education.gov.uk": 0,
-        "www.additional-teaching-payment.education.gov.uk": 1
+        "www.additional-teaching-payment.education.gov.uk": 0
       }
     },
     "vspAppServiceDockerImage": {
