@@ -6,6 +6,7 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+- Fix missing assets for error pages
 - Fix for allowing IPv6 addresses to visit the admin area
 
 ## [Release 006] - 2019-09-10
