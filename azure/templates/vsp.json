@@ -176,6 +176,10 @@
     "appServiceId": {
       "type": "string",
       "value": "[resourceId('Microsoft.Web/sites', parameters('appServiceName'))]"
+    },
+    "appServiceHostName": {
+      "type": "string",
+      "value": "[reference(resourceId('Microsoft.Web/sites', parameters('appServiceName'))).defaultHostName]"
     }
   }
 }

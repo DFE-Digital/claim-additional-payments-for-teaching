@@ -6,6 +6,7 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+- Monitor VSP availability
 - Use slots to make VSP deployment zero-downtime
 - Redirect `www.` to the base URL
 

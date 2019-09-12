@@ -5,6 +5,9 @@
     "webTestName": {
       "type": "string"
     },
+    "webTestLocations": {
+      "type": "array"
+    },
     "appServiceHealthcheckUrl": {
       "type": "string"
     },
@@ -21,16 +24,6 @@
     "webTestExpectedReturnCode": {
       "type": "int",
       "defaultValue": 200
-    },
-    "webTestLocations": {
-      "type": "array",
-      "defaultValue": [
-        { "Id": "us-il-ch1-azr" },
-        { "Id": "us-ca-sjc-azr" },
-        { "Id": "emea-fr-pra-edge" },
-        { "Id": "emea-nl-ams-azr" },
-        { "Id": "emea-gb-db3-azr" }
-      ]
     },
     "webTestAlertFailedLocationCount": {
       "type": "int",
@@ -84,7 +77,7 @@
             "metricName": "GSMT_AvRaW"
           },
           "windowSize": "PT5M",
-          "failedLocationCount": "[parameters('webTestAlertFailedLocationCount')]"
+          "failedLocationCount": "[min(parameters('webTestAlertFailedLocationCount'), length(parameters('webTestLocations')))]"
         },
         "actions": [
           {
