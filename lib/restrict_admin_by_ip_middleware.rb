@@ -1,3 +1,5 @@
+require "resolv"
+
 class RestrictAdminByIpMiddleware
   def initialize(app, allowed_ips)
     @app = app

@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+- Fix broken middleware blocking `/admin` access
+
 ## [Release 007] - 2019-09-12
 
 - Make content-security-policy more restrictive
