@@ -10,7 +10,9 @@
           <%= form.label :national_insurance_number, t("questions.national_insurance_number"), {class: "govuk-label govuk-label--xl"}  %>
         </h1>
 
-        <span class="govuk-hint">It’s on your National Insurance card, benefit letter, payslip or P60. For example, ‘QQ 12 34 56 C’.</span>
+        <span class="govuk-hint">
+          It’s on your National Insurance card, benefit letter, payslip or P60. For example, ‘QQ 12 34 56 C’.
+        </span>
 
         <%= errors_tag current_claim, :national_insurance_number %>
 
