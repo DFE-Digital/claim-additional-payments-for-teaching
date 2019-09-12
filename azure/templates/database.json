@@ -22,7 +22,7 @@
     }
   },
   "variables": {
-    "batPlatformDeploymentUrlBase": "https://raw.githubusercontent.com/DFE-Digital/bat-platform-building-blocks/master/templates/",
+    "platformBuildingBlocksDeploymentUrlBase": "https://raw.githubusercontent.com/DFE-Digital/bat-platform-building-blocks/master/templates/",
 
     "databaseServerDeploymentName": "[concat(deployment().name, '-database-server')]",
     "databaseDeploymentName": "[concat(deployment().name, '-database')]",
@@ -36,7 +36,7 @@
       "properties": {
         "mode": "Incremental",
         "templateLink": {
-          "uri": "[concat(variables('batPlatformDeploymentUrlBase'), 'storage-account.json')]",
+          "uri": "[concat(variables('platformBuildingBlocksDeploymentUrlBase'), 'storage-account.json')]",
           "contentVersion": "1.0.0.0"
         },
         "parameters": {
@@ -54,7 +54,7 @@
       "properties": {
         "mode": "Incremental",
         "templateLink": {
-          "uri": "[concat(variables('batPlatformDeploymentUrlBase'), 'postgresql-server.json')]",
+          "uri": "[concat(variables('platformBuildingBlocksDeploymentUrlBase'), 'postgresql-server.json')]",
           "contentVersion": "1.0.0.0"
         },
         "parameters": {
@@ -84,7 +84,7 @@
       "properties": {
         "mode": "Incremental",
         "templateLink": {
-          "uri": "[concat(variables('batPlatformDeploymentUrlBase'), 'postgresql-database.json')]",
+          "uri": "[concat(variables('platformBuildingBlocksDeploymentUrlBase'), 'postgresql-database.json')]",
           "contentVersion": "1.0.0.0"
         },
         "parameters": {
