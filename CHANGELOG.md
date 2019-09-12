@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+## [Release 007] - 2019-09-12
+
 - Make content-security-policy more restrictive
 - Use a fieldset for the gender question to improve accessibility
 - Make "Continue" links appear as buttons to screen readers
@@ -68,7 +70,9 @@ The format is based on [Keep a Changelog]
 - First release for student loan repayments private beta
 
 [unreleased]:
-  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-006...HEAD
+  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-007...HEAD
+[release 007]:
+  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-006...release-007
 [release 006]:
   https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-005...release-006
 [release 005]:
