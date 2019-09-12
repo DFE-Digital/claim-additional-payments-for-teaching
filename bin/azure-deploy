@@ -90,7 +90,6 @@ while [ "$2" ]; do
     "--tmp-app")
       APP_RESOURCE_GROUP_NAME="$APP_RESOURCE_GROUP_NAME-tmp"
       APP_DEPLOYMENT_NAME="$APP_DEPLOYMENT_NAME-tmp"
-      EXTRA_APP_DEPLOYMENT_OPTIONS+=(--parameters "useAppServiceHostName=false")
       ;;
     "--tmp-alerts")
       ALERTS_RESOURCE_GROUP_NAME="$ALERTS_RESOURCE_GROUP_NAME-tmp"

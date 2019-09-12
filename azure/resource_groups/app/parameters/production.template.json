@@ -5,11 +5,17 @@
     "appServiceDockerCompose": {
       "value": "${dockerCompose}"
     },
-    "appServiceHostName": {
-      "value": "additional-teaching-payment.education.gov.uk"
+    "appServiceHostNames": {
+      "value": ["additional-teaching-payment.education.gov.uk", "www.additional-teaching-payment.education.gov.uk"]
     },
-    "appServiceCertificateSecretName": {
-      "value": "sslCertificate-additional-teaching-payment-education-gov-uk"
+    "appServiceCertificateSecretNames": {
+      "value": ["sslCertificate-additional-teaching-payment-education-gov-uk"]
+    },
+    "appServiceHostNameToCertificateSecretNameIndexMap": {
+      "value": {
+        "additional-teaching-payment.education.gov.uk": 0,
+        "www.additional-teaching-payment.education.gov.uk": 0
+      }
     },
     "vspAppServiceDockerImage": {
       "value": "dfedigital/teacher-payments-service-verify:${vspDockerImageTag}"

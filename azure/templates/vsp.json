@@ -46,7 +46,9 @@
     "deploymentUrlBase": "[concat('https://raw.githubusercontent.com/DFE-Digital/dfe-teachers-payment-service/', parameters('gitCommitHash'), '/azure/templates/')]",
 
     "appServiceLogsDeploymentName": "[concat(deployment().name, '-app-service-logs')]",
-    "appServicePlanDeploymentName": "[concat(deployment().name, '-app-service-plan')]"
+    "appServicePlanDeploymentName": "[concat(deployment().name, '-app-service-plan')]",
+
+    "appServiceAllowedIpAddressCount": "[length(parameters('appServiceAllowedIpAddresses'))]"
   },
   "resources": [
     {
@@ -95,12 +97,12 @@
           "copy": [
             {
               "name": "ipSecurityRestrictions",
-              "count": "[add(length(parameters('appServiceAllowedIpAddresses')), 1)]",
+              "count": "[add(variables('appServiceAllowedIpAddressCount'), 1)]",
               "input": {
-                "ipAddress": "[if(less(copyIndex('ipSecurityRestrictions'), length(parameters('appServiceAllowedIpAddresses'))), concat(last(take(parameters('appServiceAllowedIpAddresses'), copyIndex('ipSecurityRestrictions', 1))), '/32'), '0.0.0.0/1')]",
-                "action": "[if(less(copyIndex('ipSecurityRestrictions'), length(parameters('appServiceAllowedIpAddresses'))), 'Allow', 'Deny')]",
-                "priority": "[if(less(copyIndex('ipSecurityRestrictions'), length(parameters('appServiceAllowedIpAddresses'))), 65000, 2147483647)]",
-                "name": "[if(less(copyIndex('ipSecurityRestrictions'), length(parameters('appServiceAllowedIpAddresses'))), concat('Allow ', last(take(parameters('appServiceAllowedIpAddresses'), copyIndex('ipSecurityRestrictions', 1)))), 'Deny all')]"
+                "ipAddress": "[if(less(copyIndex('ipSecurityRestrictions'), variables('appServiceAllowedIpAddressCount')), concat(parameters('appServiceAllowedIpAddresses')[copyIndex('ipSecurityRestrictions')], '/32'), '0.0.0.0/1')]",
+                "action": "[if(less(copyIndex('ipSecurityRestrictions'), variables('appServiceAllowedIpAddressCount')), 'Allow', 'Deny')]",
+                "priority": "[if(less(copyIndex('ipSecurityRestrictions'), variables('appServiceAllowedIpAddressCount')), 65000, 2147483647)]",
+                "name": "[if(less(copyIndex('ipSecurityRestrictions'), variables('appServiceAllowedIpAddressCount')), concat('Allow ', parameters('appServiceAllowedIpAddresses')[copyIndex('ipSecurityRestrictions')]), 'Deny all')]"
               }
             }
           ]

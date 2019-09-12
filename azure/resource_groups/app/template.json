@@ -18,15 +18,27 @@
     "appServiceDockerCompose": {
       "type": "string"
     },
-    "appServiceHostName": {
-      "type": "string"
+    "appServiceHostNames": {
+      "type": "array",
+      "metadata": {
+        "description": "This must include at least 1 entry. The first host name will be treated as canonical, assuming that all later host names redirect to the canonical one. Include 'PLACEHOLDER' to skip all."
+      }
     },
-    "useAppServiceHostName": {
+    "appServiceCertificateSecretNames": {
+      "type": "array",
+      "metadata": {
+        "description": "This must include least 1 entry. It will be ignored if appServiceHostNames contains 'PLACEHOLDER'."
+      }
+    },
+    "appServiceHostNameToCertificateSecretNameIndexMap": {
+      "type": "object",
+      "metadata": {
+        "description": "This is a map from host name to appServiceCertificateSecretNames index. It must include values for all appServiceHostNames."
+      }
+    },
+    "useAppServiceHostNames": {
       "type": "bool",
       "defaultValue": true
-    },
-    "appServiceCertificateSecretName": {
-      "type": "string"
     },
     "appServiceAlwaysOn": {
       "type": "bool",
@@ -272,11 +284,14 @@
           "appServiceAlwaysOn": {
             "value": "[parameters('appServiceAlwaysOn')]"
           },
-          "appServiceCertificateSecretName": {
-            "value": "[parameters('appServiceCertificateSecretName')]"
+          "appServiceHostNames": {
+            "value": "[if(parameters('useAppServiceHostNames'), parameters('appServiceHostNames'), createArray('PLACEHOLDER'))]"
           },
-          "appServiceHostName": {
-            "value": "[if(parameters('useAppServiceHostName'), parameters('appServiceHostName'), '')]"
+          "appServiceCertificateSecretNames": {
+            "value": "[if(parameters('useAppServiceHostNames'), parameters('appServiceCertificateSecretNames'), createArray('PLACEHOLDER'))]"
+          },
+          "appServiceHostNameToCertificateSecretNameIndexMap": {
+            "value": "[parameters('appServiceHostNameToCertificateSecretNameIndexMap')]"
           },
           "keyVaultResourceGroupName": {
             "value": "[parameters('secretsResourceGroupName')]"
@@ -296,7 +311,7 @@
               },
               {
                 "name": "CANONICAL_HOSTNAME",
-                "value": "[if(parameters('useAppServiceHostName'), parameters('appServiceHostName'), '')]"
+                "value": "[if(parameters('useAppServiceHostNames'), first(parameters('appServiceHostNames')), concat(variables('appServiceName'), '.azurewebsites.net'))]"
               },
               {
                 "name": "DFE_TEACHERS_PAYMENT_SERVICE_DATABASE_USERNAME",
@@ -434,7 +449,7 @@
             "value": "[variables('appServiceWebTestName')]"
           },
           "appServiceHealthcheckUrl": {
-            "value": "[concat('https://', reference(resourceId('Microsoft.Resources/deployments', variables('appDeploymentName'))).outputs.appServiceHostName.value, '/healthcheck')]"
+            "value": "[concat('https://', reference(resourceId('Microsoft.Resources/deployments', variables('appDeploymentName'))).outputs.appServiceCanonicalHostName.value, '/healthcheck')]"
           },
           "alertEmailAddress": {
             "value": "[parameters('alertEmailAddress')]"
@@ -495,7 +510,7 @@
               },
               {
                 "name": "SERVICE_ENTITY_IDS",
-                "value": "[string(createArray(concat('https://', reference(resourceId('Microsoft.Resources/deployments', variables('appDeploymentName'))).outputs.appServiceHostName.value)))]"
+                "value": "[string(createArray(concat('https://', reference(resourceId('Microsoft.Resources/deployments', variables('appDeploymentName'))).outputs.appServiceCanonicalHostName.value)))]"
               },
               {
                 "name": "SAML_SIGNING_KEY",
