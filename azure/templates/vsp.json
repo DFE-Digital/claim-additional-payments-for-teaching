@@ -101,7 +101,7 @@
               "name": "ipSecurityRestrictions",
               "count": "[add(variables('appServiceAllowedIpAddressCount'), 1)]",
               "input": {
-                "ipAddress": "[if(less(copyIndex('ipSecurityRestrictions'), variables('appServiceAllowedIpAddressCount')), concat(parameters('appServiceAllowedIpAddresses')[copyIndex('ipSecurityRestrictions')], '/32'), '0.0.0.0/1')]",
+                "ipAddress": "[if(less(copyIndex('ipSecurityRestrictions'), variables('appServiceAllowedIpAddressCount')), if(contains(parameters('appServiceAllowedIpAddresses')[copyIndex('ipSecurityRestrictions')], '/'), parameters('appServiceAllowedIpAddresses')[copyIndex('ipSecurityRestrictions')], concat(parameters('appServiceAllowedIpAddresses')[copyIndex('ipSecurityRestrictions')], '/32')), '0.0.0.0/1')]",
                 "action": "[if(less(copyIndex('ipSecurityRestrictions'), variables('appServiceAllowedIpAddressCount')), 'Allow', 'Deny')]",
                 "priority": "[if(less(copyIndex('ipSecurityRestrictions'), variables('appServiceAllowedIpAddressCount')), 65000, 2147483647)]",
                 "name": "[if(less(copyIndex('ipSecurityRestrictions'), variables('appServiceAllowedIpAddressCount')), concat('Allow ', parameters('appServiceAllowedIpAddresses')[copyIndex('ipSecurityRestrictions')]), 'Deny all')]"
@@ -129,7 +129,7 @@
               "name": "ipSecurityRestrictions",
               "count": "[add(variables('appServiceAllowedIpAddressCount'), 1)]",
               "input": {
-                "ipAddress": "[if(less(copyIndex('ipSecurityRestrictions'), variables('appServiceAllowedIpAddressCount')), concat(parameters('appServiceAllowedIpAddresses')[copyIndex('ipSecurityRestrictions')], '/32'), '0.0.0.0/1')]",
+                "ipAddress": "[if(less(copyIndex('ipSecurityRestrictions'), variables('appServiceAllowedIpAddressCount')), if(contains(parameters('appServiceAllowedIpAddresses')[copyIndex('ipSecurityRestrictions')], '/'), parameters('appServiceAllowedIpAddresses')[copyIndex('ipSecurityRestrictions')], concat(parameters('appServiceAllowedIpAddresses')[copyIndex('ipSecurityRestrictions')], '/32')), '0.0.0.0/1')]",
                 "action": "[if(less(copyIndex('ipSecurityRestrictions'), variables('appServiceAllowedIpAddressCount')), 'Allow', 'Deny')]",
                 "priority": "[if(less(copyIndex('ipSecurityRestrictions'), variables('appServiceAllowedIpAddressCount')), 65000, 2147483647)]",
                 "name": "[if(less(copyIndex('ipSecurityRestrictions'), variables('appServiceAllowedIpAddressCount')), concat('Allow ', parameters('appServiceAllowedIpAddresses')[copyIndex('ipSecurityRestrictions')]), 'Deny all')]"
