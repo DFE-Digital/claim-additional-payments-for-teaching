@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+## [Release 008] - 2019-09-12
+
 - Fix broken middleware blocking `/admin` access
 
 ## [Release 007] - 2019-09-12
@@ -72,7 +74,9 @@ The format is based on [Keep a Changelog]
 - First release for student loan repayments private beta
 
 [unreleased]:
-  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-007...HEAD
+  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-008...HEAD
+[release 008]:
+  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-007...release-008
 [release 007]:
   https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-006...release-007
 [release 006]:
