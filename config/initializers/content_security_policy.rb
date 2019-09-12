@@ -9,7 +9,8 @@ Rails.application.config.content_security_policy do |policy|
   policy.font_src :self, :https, :data
   policy.img_src :self, :https, :data
   policy.object_src :none
-  policy.script_src :self, "https://*.google-analytics.com", "https://www.googletagmanager.com"
+  policy.script_src :self
+  policy.connect_src :self, "https://www.google-analytics.com"
   policy.style_src :self
 
   # Specify URI for violation reports

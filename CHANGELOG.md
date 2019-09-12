@@ -6,6 +6,7 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+- Make content-security-policy more restrictive
 - Use a fieldset for the gender question to improve accessibility
 - Make "Continue" links appear as buttons to screen readers
 - Fix missing assets for error pages
