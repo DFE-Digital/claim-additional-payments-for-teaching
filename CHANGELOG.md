@@ -6,6 +6,7 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+- Make "Continue" links appear as buttons to screen readers
 - Fix missing assets for error pages
 - Fix for allowing IPv6 addresses to visit the admin area
 
