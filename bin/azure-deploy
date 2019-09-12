@@ -148,8 +148,15 @@ SECRETS_DEPLOYMENT_RESULT=$(
     --template-file "$SECRETS_TEMPLATE_FILE_PATH" \
     --parameters "@$SECRETS_PARAMETERS_FILE_PATH" \
     --mode Complete \
-    --verbose
+    --verbose \
+    <&- || true
 )
+
+if ! [ "$SECRETS_DEPLOYMENT_RESULT" ]; then
+  echo "Deployment failed!"
+  echo "There may be some parameters missing from $SECRETS_PARAMETERS_FILE_PATH or something else might have gone wrong."
+  exit 1
+fi
 
 echo "$SECRETS_DEPLOYMENT_RESULT"
 
@@ -204,8 +211,15 @@ APP_DEPLOYMENT_RESULT=$(
     )" \
     "${EXTRA_APP_DEPLOYMENT_OPTIONS[@]}" \
     --mode Complete \
-    --verbose
+    --verbose \
+    <&- || true
 )
+
+if ! [ "$APP_DEPLOYMENT_RESULT" ]; then
+  echo "Deployment failed!"
+  echo "There may be some parameters missing from $APP_PARAMETERS_FILE_PATH or something else might have gone wrong."
+  exit 1
+fi
 
 echo "$APP_DEPLOYMENT_RESULT"
 
@@ -223,26 +237,38 @@ if [ $DEPLOY_ALERTS ]; then
     "$ALERTS_PARAMETERS_TEMPLATE_FILE_PATH" > "$ALERTS_PARAMETERS_FILE_PATH"
 
   echo "Starting alerts deployment..."
-  az group deployment create \
-    --name "$ALERTS_DEPLOYMENT_NAME" \
-    --resource-group "$ALERTS_RESOURCE_GROUP_NAME" \
-    --template-file "$ALERTS_TEMPLATE_FILE_PATH" \
-    --parameters "@$ALERTS_PARAMETERS_FILE_PATH" \
-    --parameters "gitCommitHash=$GIT_COMMIT_HASH" \
-    --parameters "$(
-      filter-azure-outputs \
-        "$SECRETS_DEPLOYMENT_RESULT" \
-        "[]" \
-        "{'resourceGroupId' => 'secretsResourceGroupId'}"
-    )" \
-    --parameters "$(
-      filter-azure-outputs \
-        "$APP_DEPLOYMENT_RESULT" \
-        "['appServiceId', 'appServicePlanId', 'databaseServerId', 'vspAppServiceId', 'vspAppServicePlanId']" \
-        "{'resourceGroupId' => 'appResourceGroupId'}"
-    )" \
-    --mode Complete \
-    --verbose
+
+  ALERTS_DEPLOYMENT_RESULT=$(
+    az group deployment create \
+      --name "$ALERTS_DEPLOYMENT_NAME" \
+      --resource-group "$ALERTS_RESOURCE_GROUP_NAME" \
+      --template-file "$ALERTS_TEMPLATE_FILE_PATH" \
+      --parameters "@$ALERTS_PARAMETERS_FILE_PATH" \
+      --parameters "gitCommitHash=$GIT_COMMIT_HASH" \
+      --parameters "$(
+        filter-azure-outputs \
+          "$SECRETS_DEPLOYMENT_RESULT" \
+          "[]" \
+          "{'resourceGroupId' => 'secretsResourceGroupId'}"
+      )" \
+      --parameters "$(
+        filter-azure-outputs \
+          "$APP_DEPLOYMENT_RESULT" \
+          "['appServiceId', 'appServicePlanId', 'databaseServerId', 'vspAppServiceId', 'vspAppServicePlanId']" \
+          "{'resourceGroupId' => 'appResourceGroupId'}"
+      )" \
+      --mode Complete \
+      --verbose \
+      <&- || true
+  )
+
+  if ! [ "$ALERTS_DEPLOYMENT_RESULT" ]; then
+    echo "Deployment failed!"
+    echo "There may be some parameters missing from $ALERTS_PARAMETERS_FILE_PATH or something else might have gone wrong."
+    exit 1
+  fi
+
+  echo "$ALERTS_DEPLOYMENT_RESULT"
 
   echo
   echo "$ALERTS_RESOURCE_GROUP_NAME deployed!"
