@@ -54,17 +54,6 @@ RSpec.feature "Ineligible Teacher Student Loan Repayments claims" do
     expect(page).to have_text("You can only get this payment if you’re still employed at a school.")
   end
 
-  scenario "current school is closed" do
-    claim = start_claim
-    choose_qts_year
-    choose_school schools(:the_samuel_lister_academy)
-
-    choose_still_teaching "Yes, at The Samuel Lister Academy"
-
-    expect(page).to have_text("You’re not eligible")
-    expect(page).to have_text("The Samuel Lister Academy is closed. You can only get this payment if you’re still employed at a school.")
-  end
-
   scenario "did not teach an eligible subject" do
     claim = start_claim
     choose_qts_year
