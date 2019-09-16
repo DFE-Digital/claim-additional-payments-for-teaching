@@ -115,4 +115,56 @@ RSpec.feature "Searching for school during Teacher Student Loan Repayments claim
     expect(page).to have_text("Select your school from the search results.")
     expect(page).to have_text(schools(:hampstead_school).name)
   end
+
+  scenario "Claim school search includes closed schools" do
+    start_claim
+    choose_qts_year
+
+    expect(page).to have_text(I18n.t("student_loans.questions.claim_school"))
+    expect(page).to have_button("Search")
+
+    fill_in :school_search, with: "Creaton"
+    click_button "Search"
+
+    expect(page).to have_text(schools(:great_creaton_primary_school).name)
+  end
+
+  scenario "Current school search excludes closed schools" do
+    start_claim
+    choose_qts_year
+    choose_school schools(:penistone_grammar_school)
+    choose_still_teaching "Yes, at another school"
+
+    expect(page).to have_text(I18n.t("questions.current_school"))
+    expect(page).to have_button("Search")
+
+    fill_in :school_search, with: "Creaton"
+    click_button "Search"
+
+    expect(page).not_to have_text(schools(:great_creaton_primary_school).name)
+  end
+
+  scenario "Claim school search with autocomplete includes closed schools", js: true do
+    start_claim
+    choose_qts_year
+
+    expect(page).to have_text(I18n.t("student_loans.questions.claim_school"))
+    expect(page).to have_button("Search")
+
+    fill_in :school_search, with: "Creaton"
+    expect(page).to have_text(schools(:great_creaton_primary_school).name)
+  end
+
+  scenario "Current school search with autocomplete excludes closed schools", js: true do
+    start_claim
+    choose_qts_year
+    choose_school schools(:penistone_grammar_school)
+    choose_still_teaching "Yes, at another school"
+
+    expect(page).to have_text(I18n.t("questions.current_school"))
+    expect(page).to have_button("Search")
+
+    fill_in :school_search, with: "Creaton"
+    expect(page).not_to have_text(schools(:great_creaton_primary_school).name)
+  end
 end

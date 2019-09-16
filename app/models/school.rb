@@ -97,6 +97,9 @@ class School < ApplicationRecord
   enum school_type_group: SCHOOL_TYPE_GROUPS
   enum school_type: SCHOOL_TYPES
 
+  scope :open, -> { where(close_date: nil) }
+  scope :closed, -> { where.not(close_date: nil) }
+
   def self.search(search_term)
     raise ArgumentError, SEARCH_NOT_ENOUGH_CHARACTERS_ERROR if search_term.length < 4
 

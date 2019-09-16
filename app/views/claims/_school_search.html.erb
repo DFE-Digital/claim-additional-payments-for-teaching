@@ -2,7 +2,15 @@
 
   <%= render("shared/error_summary", instance: current_claim, errored_field_id_overrides: { school_search: "school_search" }) if current_claim.errors.any? %>
 
-  <%= form_for current_claim, url: claim_path, method: :get,  data: { "school-id-param": "claim_eligibility_attributes_#{school_id_param}" }, html: { class: "school_search_form" } do |form| %>
+  <%= form_for current_claim,
+               url: claim_path,
+               method: :get,
+               data: {
+                 "school-id-param": "claim_eligibility_attributes_#{school_id_param}",
+                 "exclude-closed": exclude_closed
+               },
+               html: { class: "school_search_form" } do |form|
+  %>
     <%= hidden_field_tag :_method, "get", id: nil %>
     <%= hidden_field_tag :authenticity_token, form_authenticity_token %>
 
@@ -11,6 +19,8 @@
     <% end %>
 
     <%= form_group_tag current_claim, :school_search do %>
+
+      <%= hidden_field_tag :exclude_closed, exclude_closed, id: nil %>
 
       <h1 class="govuk-label-wrapper">
         <%= label_tag :school_search, question, class: "govuk-label govuk-label--xl" %>
@@ -21,7 +31,7 @@
           <strong>No results match that search term. Try again.</strong>
         </p>
       <% else %>
-        <span id="school-search-hint" class="govuk-hint">
+        <span class="govuk-hint">
           Enter the school name. Use at least four characters.
         </span>
       <% end %>
@@ -75,7 +85,7 @@
                       </div>
                       <span class="govuk-hint govuk-radios__hint"><%= b.object.address %></span>
                     </div>
-                    <% unless b.object.close_date.blank? %>
+                    <% if b.object.close_date.present? %>
                       <div class="school-search__closed-status">
                         <span class="govuk-hint govuk-radios__hint govuk-!-margin-bottom-1">Closed on <%= l(b.object.close_date) %></span>
                       </div>

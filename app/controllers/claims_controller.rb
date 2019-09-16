@@ -46,7 +46,8 @@ class ClaimsController < ApplicationController
   end
 
   def search_schools
-    @schools = School.search(params[:school_search])
+    schools = ActiveModel::Type::Boolean.new.cast(params[:exclude_closed]) ? School.open : School
+    @schools = schools.search(params[:school_search])
   rescue ArgumentError => e
     raise unless e.message == School::SEARCH_NOT_ENOUGH_CHARACTERS_ERROR
 

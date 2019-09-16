@@ -19,6 +19,8 @@ document.addEventListener("DOMContentLoaded", function() {
     return;
   }
 
+  var excludeClosedSchools = form.getAttribute("data-exclude-closed") || false;
+
   var methodInput = form.querySelector('input[name="_method"]');
   var formSubmit = form.querySelector('input[type="submit"]');
 
@@ -66,7 +68,7 @@ document.addEventListener("DOMContentLoaded", function() {
       Rails.ajax({
         type: "post",
         url: "<%= Rails.application.routes.url_helpers.school_search_index_path %>",
-        data: "query=" + query,
+        data: "query=" + query + "&exclude_closed=" + excludeClosedSchools.toString(),
         success: handleResponse,
         error: handleResponse
       });
@@ -95,7 +97,8 @@ document.addEventListener("DOMContentLoaded", function() {
 
         if (school.closeDate) {
           suggestion +=
-            '<div class="school-search__closed-status"><span class="govuk-hint govuk-!-margin-bottom-1">' +
+            '<div class="school-search__closed-status">' +
+            '<span class="govuk-hint govuk-!-margin-bottom-1">' +
             "Closed on<br>" +
             school.closeDate +
             "</span>" +
