@@ -45,7 +45,7 @@ reflects the changes included in the release:
 Once the pull request has been merged, create a tag against the merge commit in
 the format `release-xxx` (zero-padded again) and push it to GitHub:
 
-```
+```sh
 git tag release-xxx merge-commit-for-release
 git push origin refs/tags/release-xxx
 ```
@@ -62,15 +62,15 @@ production as follows:
   `20190717.2`). You can filter by branch using the filter / funnel icon in the
   top right.
 - Navigate to Pipelines > Releases.
-- Click on the 'Deploy release' pipeline.
-- Click on the release matching the Build number of the build you want to
+- Click on the "Deploy" pipeline.
+- Click on the release matching the build number of the build you want to
   release.
-- Click on 'Deploy Production' and manually trigger the deployment.
+- Click on "Deploy Production" and manually trigger the deployment.
 
-## 5. Move the cards that relate to the release from "Done" to "Live" on Trello
+## 5. Update Trello
 
-The cards in the "Done" column that relate to code that has just been released
-should be moved to the top of the "Live" column.
+The cards in the "Next release" column that relate to code that has just been
+released should be moved to the top of the "Done" column.
 
 ## 6. Announce the release in #twd_claim_payments
 
