@@ -48,7 +48,9 @@
     "appServiceLogsDeploymentName": "[concat(deployment().name, '-app-service-logs')]",
     "appServicePlanDeploymentName": "[concat(deployment().name, '-app-service-plan')]",
 
-    "appServiceAllowedIpAddressCount": "[length(parameters('appServiceAllowedIpAddresses'))]"
+    "appServiceAllowedIpAddressCount": "[length(parameters('appServiceAllowedIpAddresses'))]",
+
+    "appServiceStagingSlotName": "[concat(parameters('appServiceName'), '/staging')]"
   },
   "resources": [
     {
@@ -99,7 +101,35 @@
               "name": "ipSecurityRestrictions",
               "count": "[add(variables('appServiceAllowedIpAddressCount'), 1)]",
               "input": {
-                "ipAddress": "[if(less(copyIndex('ipSecurityRestrictions'), variables('appServiceAllowedIpAddressCount')), concat(parameters('appServiceAllowedIpAddresses')[copyIndex('ipSecurityRestrictions')], '/32'), '0.0.0.0/1')]",
+                "ipAddress": "[if(less(copyIndex('ipSecurityRestrictions'), variables('appServiceAllowedIpAddressCount')), if(contains(parameters('appServiceAllowedIpAddresses')[copyIndex('ipSecurityRestrictions')], '/'), parameters('appServiceAllowedIpAddresses')[copyIndex('ipSecurityRestrictions')], concat(parameters('appServiceAllowedIpAddresses')[copyIndex('ipSecurityRestrictions')], '/32')), '0.0.0.0/1')]",
+                "action": "[if(less(copyIndex('ipSecurityRestrictions'), variables('appServiceAllowedIpAddressCount')), 'Allow', 'Deny')]",
+                "priority": "[if(less(copyIndex('ipSecurityRestrictions'), variables('appServiceAllowedIpAddressCount')), 65000, 2147483647)]",
+                "name": "[if(less(copyIndex('ipSecurityRestrictions'), variables('appServiceAllowedIpAddressCount')), concat('Allow ', parameters('appServiceAllowedIpAddresses')[copyIndex('ipSecurityRestrictions')]), 'Deny all')]"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "type": "Microsoft.Web/sites/slots",
+      "apiVersion": "2018-11-01",
+      "name": "[variables('appServiceStagingSlotName')]",
+      "location": "[resourceGroup().location]",
+      "dependsOn": ["[resourceId('Microsoft.Web/sites', parameters('appServiceName'))]"],
+      "properties": {
+        "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', parameters('appServicePlanName'))]",
+        "httpsOnly": true,
+        "siteConfig": {
+          "alwaysOn": false,
+          "linuxFxVersion": "[parameters('appServiceRuntimeStack')]",
+          "appSettings": "[parameters('appServiceEnvironmentVariables')]",
+          "copy": [
+            {
+              "name": "ipSecurityRestrictions",
+              "count": "[add(variables('appServiceAllowedIpAddressCount'), 1)]",
+              "input": {
+                "ipAddress": "[if(less(copyIndex('ipSecurityRestrictions'), variables('appServiceAllowedIpAddressCount')), if(contains(parameters('appServiceAllowedIpAddresses')[copyIndex('ipSecurityRestrictions')], '/'), parameters('appServiceAllowedIpAddresses')[copyIndex('ipSecurityRestrictions')], concat(parameters('appServiceAllowedIpAddresses')[copyIndex('ipSecurityRestrictions')], '/32')), '0.0.0.0/1')]",
                 "action": "[if(less(copyIndex('ipSecurityRestrictions'), variables('appServiceAllowedIpAddressCount')), 'Allow', 'Deny')]",
                 "priority": "[if(less(copyIndex('ipSecurityRestrictions'), variables('appServiceAllowedIpAddressCount')), 65000, 2147483647)]",
                 "name": "[if(less(copyIndex('ipSecurityRestrictions'), variables('appServiceAllowedIpAddressCount')), concat('Allow ', parameters('appServiceAllowedIpAddresses')[copyIndex('ipSecurityRestrictions')]), 'Deny all')]"
@@ -146,6 +176,10 @@
     "appServiceId": {
       "type": "string",
       "value": "[resourceId('Microsoft.Web/sites', parameters('appServiceName'))]"
+    },
+    "appServiceHostName": {
+      "type": "string",
+      "value": "[reference(resourceId('Microsoft.Web/sites', parameters('appServiceName'))).defaultHostName]"
     }
   }
 }

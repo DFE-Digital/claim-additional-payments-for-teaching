@@ -167,12 +167,48 @@
     "platformBuildingBlocksDeploymentUrlBase": "https://raw.githubusercontent.com/DFE-Digital/bat-platform-building-blocks/7a4748a0cf366193d31434bd7796d483bd281385/templates/",
     "deploymentUrlBase": "[concat('https://raw.githubusercontent.com/DFE-Digital/dfe-teachers-payment-service/', parameters('gitCommitHash'), '/azure/templates/')]",
 
+    "azureAvailabilityTestLocations": [
+      { "id": "emea-nl-ams-azr" },
+      { "id": "emea-ru-msa-edge" },
+      { "id": "emea-se-sto-edge" },
+      { "id": "emea-gb-db3-azr" },
+      { "id": "emea-fr-pra-edge" }
+    ],
+    "azureAvailabilityTestIpAddresses": [
+      "51.144.56.96/28",
+      "51.144.56.112/28",
+      "51.144.56.128/28",
+      "51.144.56.144/28",
+      "51.144.56.160/28",
+      "51.144.56.176/28",
+
+      "51.105.9.128/28",
+      "51.105.9.144/28",
+      "51.105.9.160/28",
+
+      "20.40.104.96/28",
+      "20.40.104.112/28",
+      "20.40.104.128/28",
+      "20.40.104.144/28",
+
+      "52.158.28.64/28",
+      "52.158.28.80/28",
+      "52.158.28.96/28",
+      "52.158.28.112/28",
+
+      "20.40.129.32/28",
+      "20.40.129.48/28",
+      "20.40.129.64/28",
+      "20.40.129.80/28"
+    ],
+
     "applicationInsightsDeploymentName": "[concat(parameters('resourceNamePrefix'), '-application-insights')]",
     "appDeploymentName": "[concat(parameters('resourceNamePrefix'), '-app')]",
     "appServiceWebTestDeploymentName": "[concat(parameters('resourceNamePrefix'), '-app-service-web-test')]",
     "databaseServerFirewallRulesDeploymentName": "[concat(parameters('resourceNamePrefix'), '-database-server-firewall-rules')]",
     "databaseDeploymentName": "[concat(parameters('resourceNamePrefix'), '-database')]",
     "vspDeploymentName": "[concat(parameters('resourceNamePrefix'), '-vsp')]",
+    "vspAppServiceWebTestDeploymentName": "[concat(parameters('resourceNamePrefix'), '-vsp-app-service-web-test')]",
 
     "storageAccountName": "[replace(concat(parameters('resourceNamePrefix'), 'storage'), '-', '')]",
     "databaseServerName": "[concat(parameters('resourceNamePrefix'), '-db')]",
@@ -187,7 +223,9 @@
 
     "vspAppServicePlanName": "[concat(parameters('resourceNamePrefix'), '-vsp-asp')]",
     "vspAppServiceName": "[concat(parameters('resourceNamePrefix'), '-vsp-as')]",
-    "vspAppServiceRuntimeStack": "[concat('DOCKER|', parameters('vspAppServiceDockerImage'))]"
+    "vspAppServiceRuntimeStack": "[concat('DOCKER|', parameters('vspAppServiceDockerImage'))]",
+
+    "vspAppServiceWebTestName": "[concat(variables('vspAppServiceName'), '-webtest')]"
   },
   "resources": [
     {
@@ -437,7 +475,10 @@
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2017-05-10",
       "name": "[variables('appServiceWebTestDeploymentName')]",
-      "dependsOn": ["[resourceId('Microsoft.Resources/deployments', variables('appDeploymentName'))]"],
+      "dependsOn": [
+        "[resourceId('Microsoft.Resources/deployments', variables('appDeploymentName'))]",
+        "[resourceId('Microsoft.Resources/deployments', variables('applicationInsightsDeploymentName'))]"
+      ],
       "properties": {
         "mode": "Incremental",
         "templateLink": {
@@ -447,6 +488,9 @@
         "parameters": {
           "webTestName": {
             "value": "[variables('appServiceWebTestName')]"
+          },
+          "webTestLocations": {
+            "value": "[variables('azureAvailabilityTestLocations')]"
           },
           "appServiceHealthcheckUrl": {
             "value": "[concat('https://', reference(resourceId('Microsoft.Resources/deployments', variables('appDeploymentName'))).outputs.appServiceCanonicalHostName.value, '/healthcheck')]"
@@ -500,7 +544,7 @@
             "value": "[parameters('appServiceAlwaysOn')]"
           },
           "appServiceAllowedIpAddresses": {
-            "value": "[union(reference(resourceId('Microsoft.Resources/deployments', variables('appDeploymentName'))).outputs.appServicePossibleOutboundIpAddresses.value, parameters('verifyHubPossibleOutboundIpAddresses'))]"
+            "value": "[union(reference(resourceId('Microsoft.Resources/deployments', variables('appDeploymentName'))).outputs.appServicePossibleOutboundIpAddresses.value, parameters('verifyHubPossibleOutboundIpAddresses'), variables('azureAvailabilityTestIpAddresses'))]"
           },
           "appServiceEnvironmentVariables": {
             "value": [
@@ -525,6 +569,39 @@
                 "value": "[parameters('VSP.EUROPEAN_IDENTITY_ENABLED')]"
               }
             ]
+          }
+        }
+      }
+    },
+    {
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2017-05-10",
+      "name": "[variables('vspAppServiceWebTestDeploymentName')]",
+      "dependsOn": [
+        "[resourceId('Microsoft.Resources/deployments', variables('applicationInsightsDeploymentName'))]",
+        "[resourceId('Microsoft.Resources/deployments', variables('vspDeploymentName'))]"
+      ],
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[concat(variables('deploymentUrlBase'), 'web_test.json')]",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "webTestName": {
+            "value": "[variables('vspAppServiceWebTestName')]"
+          },
+          "webTestLocations": {
+            "value": "[variables('azureAvailabilityTestLocations')]"
+          },
+          "appServiceHealthcheckUrl": {
+            "value": "[concat('https://', reference(resourceId('Microsoft.Resources/deployments', variables('vspDeploymentName'))).outputs.appServiceHostName.value, '/admin/healthcheck')]"
+          },
+          "alertEmailAddress": {
+            "value": "[parameters('alertEmailAddress')]"
+          },
+          "applicationInsightsId": {
+            "value": "[resourceId('Microsoft.Insights/components', variables('applicationInsightsName'))]"
           }
         }
       }

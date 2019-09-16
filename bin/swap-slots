@@ -1,6 +1,7 @@
 #!/bin/bash
 
 ENVIRONMENT_NAME=$1
+APP_SERVICE_TYPE=$2
 
 case $ENVIRONMENT_NAME in
   "development")
@@ -12,13 +13,26 @@ case $ENVIRONMENT_NAME in
     RESOURCE_GROUP="s118p01-app"
     ;;
   *)
-    echo "Could not find an known environment with the name: $ENVIRONMENT_NAME"
+    echo "Could not find a known environment with the name: $ENVIRONMENT_NAME"
     exit 1
     ;;
 esac
 
-while [ "$2" ]; do
-  case $2 in
+case $APP_SERVICE_TYPE in
+  "main")
+    APP_SERVICE_NAME="$RESOURCE_GROUP-as"
+    ;;
+  "vsp")
+    APP_SERVICE_NAME="$RESOURCE_GROUP-vsp-as"
+    ;;
+  *)
+    echo "Could not find a known app service with the type: $APP_SERVICE_TYPE"
+    exit 1
+    ;;
+esac
+
+while [ "$3" ]; do
+  case $3 in
     "--tmp-app")
       RESOURCE_GROUP="$RESOURCE_GROUP-tmp"
       ;;
@@ -31,9 +45,10 @@ while [ "$2" ]; do
   shift
 done
 
-APP_NAME="$RESOURCE_GROUP-as"
+SOURCE_SLOT_NAME="staging"
 
-echo "Restarting staging slot for $RESOURCE_GROUP"
-az webapp restart --name "$APP_NAME" --resource-group "$RESOURCE_GROUP" --slot staging --subscription="$SUBSCRIPTION_ID"
-echo "Swapping staging slot to production for $RESOURCE_GROUP"
-az webapp deployment slot swap --name "$APP_NAME" --slot staging --resource-group "$RESOURCE_GROUP" --subscription="$SUBSCRIPTION_ID"
+echo "Restarting $APP_SERVICE_TYPE app service $SOURCE_SLOT_NAME slot for $RESOURCE_GROUP..."
+az webapp restart --name "$APP_SERVICE_NAME" --resource-group "$RESOURCE_GROUP" --slot "$SOURCE_SLOT_NAME" --subscription="$SUBSCRIPTION_ID"
+
+echo "Swapping $APP_SERVICE_TYPE app service $SOURCE_SLOT_NAME slot to production for $RESOURCE_GROUP..."
+az webapp deployment slot swap --name "$APP_SERVICE_NAME" --slot "$SOURCE_SLOT_NAME" --resource-group "$RESOURCE_GROUP" --subscription="$SUBSCRIPTION_ID"
