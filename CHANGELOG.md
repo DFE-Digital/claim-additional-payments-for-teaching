@@ -6,6 +6,7 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+- Link to Get Information About Schools from the admin view of a claim
 - Monitor VSP availability
 - Use slots to make VSP deployment zero-downtime
 - Redirect `www.` to the base URL

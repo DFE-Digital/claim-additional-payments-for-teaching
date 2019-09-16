@@ -22,8 +22,8 @@ describe Admin::ClaimsHelper do
     it "returns an array of questions and answers for displaying to approver" do
       expected_answers = [
         [I18n.t("student_loans.questions.admin.qts_award_year"), "1 September 2013 to 31 August 2014"],
-        [I18n.t("student_loans.questions.admin.claim_school"), claim_school.name],
-        [I18n.t("questions.admin.current_school"), current_school.name],
+        [I18n.t("student_loans.questions.admin.claim_school"), "<a class=\"govuk-link\" href=\"https://get-information-schools.service.gov.uk/Establishments/Establishment/Details/#{claim_school.urn}\">#{claim_school.name}</a>"],
+        [I18n.t("questions.admin.current_school"), "<a class=\"govuk-link\" href=\"https://get-information-schools.service.gov.uk/Establishments/Establishment/Details/#{current_school.urn}\">#{current_school.name}</a>"],
         [I18n.t("student_loans.questions.admin.subjects_taught"), "Chemistry and Physics"],
         [I18n.t("student_loans.questions.admin.had_leadership_position"), "Yes"],
         [I18n.t("student_loans.questions.admin.mostly_performed_leadership_duties"), "No"],
