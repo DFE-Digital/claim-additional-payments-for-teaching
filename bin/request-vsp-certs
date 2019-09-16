@@ -21,7 +21,7 @@ case $ENVIRONMENT_NAME in
     KEY_VAULT_NAME="s118p01-secrets-kv"
     ;;
   *)
-    echo "Could not find an known environment with the name: $ENVIRONMENT_NAME"
+    echo "Could not find a known environment with the name: $ENVIRONMENT_NAME"
     exit 1
     ;;
 esac
@@ -70,7 +70,7 @@ function fetch_or_generate_key_and_csr {
     BASE64_KEY_EXISTED=
 
     echo "Converting base64 encoded key..."
-    
+
     sed \
         -e "s|-----BEGIN PRIVATE KEY-----||g" \
         -e "s|-----END PRIVATE KEY-----||g" \

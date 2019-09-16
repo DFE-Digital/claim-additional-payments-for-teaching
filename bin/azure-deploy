@@ -53,7 +53,7 @@ case $ENVIRONMENT_NAME in
     VSP_DOCKER_IMAGE_TAG="20190729.3"
     ;;
   *)
-    echo "Could not find an known environment with the name: $ENVIRONMENT_NAME"
+    echo "Could not find a known environment with the name: $ENVIRONMENT_NAME"
     exit 1
     ;;
 esac
