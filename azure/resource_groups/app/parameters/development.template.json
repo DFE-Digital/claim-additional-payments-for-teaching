@@ -208,6 +208,9 @@
         "secretName": "TeacherPaymentsDevVspSamlEncryption2KeyBase64"
       }
     },
+    "VSP.SAML_SECONDARY_ENCRYPTION_KEY": {
+      "value": ""
+    },
     "VSP.EUROPEAN_IDENTITY_ENABLED": {
       "value": "true"
     }
