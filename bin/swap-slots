@@ -18,6 +18,20 @@ case $ENVIRONMENT_NAME in
     ;;
 esac
 
+while [ "$3" ]; do
+  case $3 in
+    "--tmp-app")
+      RESOURCE_GROUP="$RESOURCE_GROUP-tmp"
+      ;;
+    *)
+      echo "Unexpected argument: $3"
+      exit 1
+      ;;
+  esac
+
+  shift
+done
+
 case $APP_SERVICE_TYPE in
   "main")
     APP_SERVICE_NAME="$RESOURCE_GROUP-as"
@@ -30,20 +44,6 @@ case $APP_SERVICE_TYPE in
     exit 1
     ;;
 esac
-
-while [ "$3" ]; do
-  case $3 in
-    "--tmp-app")
-      RESOURCE_GROUP="$RESOURCE_GROUP-tmp"
-      ;;
-    *)
-      echo "Unexpected argument: $2"
-      exit 1
-      ;;
-  esac
-
-  shift
-done
 
 SOURCE_SLOT_NAME="staging"
 
