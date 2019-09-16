@@ -123,10 +123,10 @@ RSpec.feature "Searching for school during Teacher Student Loan Repayments claim
     expect(page).to have_text(I18n.t("student_loans.questions.claim_school"))
     expect(page).to have_button("Search")
 
-    fill_in :school_search, with: "Creaton"
+    fill_in :school_search, with: "Lister"
     click_button "Search"
 
-    expect(page).to have_text(schools(:great_creaton_primary_school).name)
+    expect(page).to have_text(schools(:the_samuel_lister_academy).name)
   end
 
   scenario "Current school search excludes closed schools" do
@@ -138,10 +138,10 @@ RSpec.feature "Searching for school during Teacher Student Loan Repayments claim
     expect(page).to have_text(I18n.t("questions.current_school"))
     expect(page).to have_button("Search")
 
-    fill_in :school_search, with: "Creaton"
+    fill_in :school_search, with: "Lister"
     click_button "Search"
 
-    expect(page).not_to have_text(schools(:great_creaton_primary_school).name)
+    expect(page).not_to have_text(schools(:the_samuel_lister_academy).name)
   end
 
   scenario "Claim school search with autocomplete includes closed schools", js: true do
@@ -151,8 +151,8 @@ RSpec.feature "Searching for school during Teacher Student Loan Repayments claim
     expect(page).to have_text(I18n.t("student_loans.questions.claim_school"))
     expect(page).to have_button("Search")
 
-    fill_in :school_search, with: "Creaton"
-    expect(page).to have_text(schools(:great_creaton_primary_school).name)
+    fill_in :school_search, with: "Lister"
+    expect(page).to have_text(schools(:the_samuel_lister_academy).name)
   end
 
   scenario "Current school search with autocomplete excludes closed schools", js: true do
@@ -164,7 +164,7 @@ RSpec.feature "Searching for school during Teacher Student Loan Repayments claim
     expect(page).to have_text(I18n.t("questions.current_school"))
     expect(page).to have_button("Search")
 
-    fill_in :school_search, with: "Creaton"
-    expect(page).not_to have_text(schools(:great_creaton_primary_school).name)
+    fill_in :school_search, with: "Lister"
+    expect(page).not_to have_text(schools(:the_samuel_lister_academy).name)
   end
 end

@@ -28,27 +28,27 @@ RSpec.describe "School search", type: :request do
     end
 
     it "includes closed schools by default" do
-      post school_search_index_path, params: {query: "Great Creaton Primary School"}
+      post school_search_index_path, params: {query: "The Samuel Lister Academy"}
 
-      expect(response.body).to include(schools(:great_creaton_primary_school).name)
+      expect(response.body).to include(schools(:the_samuel_lister_academy).name)
     end
 
     it "includes the close date when the school is closed" do
-      post school_search_index_path, params: {query: "Great Creaton Primary School"}
+      post school_search_index_path, params: {query: "The Samuel Lister Academy"}
 
-      expect(response.body).to include(schools(:great_creaton_primary_school).close_date.strftime("%-d %B %Y"))
+      expect(response.body).to include(schools(:the_samuel_lister_academy).close_date.strftime("%-d %B %Y"))
     end
 
     it "includes closed schools when requested" do
-      post school_search_index_path, params: {query: "Great Creaton Primary School", exclude_closed: false}
+      post school_search_index_path, params: {query: "The Samuel Lister Academy", exclude_closed: false}
 
-      expect(response.body).to include(schools(:great_creaton_primary_school).name)
+      expect(response.body).to include(schools(:the_samuel_lister_academy).name)
     end
 
     it "excludes closed schools when requested" do
-      post school_search_index_path, params: {query: "Great Creaton Primary School", exclude_closed: true}
+      post school_search_index_path, params: {query: "The Samuel Lister Academy", exclude_closed: true}
 
-      expect(response.body).not_to include(schools(:great_creaton_primary_school).name)
+      expect(response.body).not_to include(schools(:the_samuel_lister_academy).name)
     end
   end
 end
