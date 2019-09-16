@@ -6,6 +6,7 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+- Make closed schools ineligibile for current school
 - Exclude closed schools from current school search
 
 ## [Release 009] - 2019-09-17

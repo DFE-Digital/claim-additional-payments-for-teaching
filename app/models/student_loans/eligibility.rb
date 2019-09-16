@@ -57,6 +57,7 @@ module StudentLoans
       ineligible_qts_award_year? ||
         ineligible_claim_school? ||
         employed_at_no_school? ||
+        current_school_closed? ||
         not_taught_eligible_subjects? ||
         not_taught_enough?
     end
@@ -66,6 +67,7 @@ module StudentLoans
         :ineligible_qts_award_year,
         :ineligible_claim_school,
         :employed_at_no_school,
+        :current_school_closed,
         :not_taught_eligible_subjects,
         :not_taught_enough,
       ].find { |eligibility_check| send("#{eligibility_check}?") }
@@ -91,6 +93,10 @@ module StudentLoans
 
     def one_subject_must_be_selected
       errors.add(:subjects_taught, "Choose a subject, or select No") if subjects_taught.empty?
+    end
+
+    def current_school_closed?
+      current_school.present? && !current_school.open?
     end
   end
 end
