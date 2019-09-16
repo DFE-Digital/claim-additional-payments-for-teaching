@@ -159,6 +159,9 @@
     "VSP.SAML_PRIMARY_ENCRYPTION_KEY": {
       "type": "securestring"
     },
+    "VSP.SAML_SECONDARY_ENCRYPTION_KEY": {
+      "type": "securestring"
+    },
     "VSP.EUROPEAN_IDENTITY_ENABLED": {
       "type": "string"
     }
@@ -519,6 +522,10 @@
               {
                 "name": "SAML_PRIMARY_ENCRYPTION_KEY",
                 "value": "[parameters('VSP.SAML_PRIMARY_ENCRYPTION_KEY')]"
+              },
+              {
+                "name": "SAML_SECONDARY_ENCRYPTION_KEY",
+                "value": "[parameters('VSP.SAML_SECONDARY_ENCRYPTION_KEY')]"
               },
               {
                 "name": "EUROPEAN_IDENTITY_ENABLED",
