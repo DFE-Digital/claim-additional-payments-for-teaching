@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+- Update privacy notice to include the collection of IP address
+
 ## [Release 009] - 2019-09-17
 
 - Add student loan plan and amount to approver view of a claim
