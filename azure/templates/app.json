@@ -124,7 +124,7 @@
       "copy": {
         "name": "[variables('appServiceCertificateDeploymentCopyLoopName')]",
         "count": "[length(parameters('appServiceCertificateSecretNames'))]",
-        "mode": "Parallel"
+        "mode": "Serial"
       },
       "properties": {
         "mode": "Incremental",
@@ -194,7 +194,7 @@
       "copy": {
         "name": "[variables('appServiceHostNameBindingsCopyLoopName')]",
         "count": "[length(parameters('appServiceHostNames'))]",
-        "mode": "Parallel"
+        "mode": "Serial"
       },
       "properties": {
         "sslState": "SniEnabled",

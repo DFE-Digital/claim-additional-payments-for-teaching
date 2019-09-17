@@ -6,7 +6,8 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
-- Make closed schools ineligibile for current school
+- Fix deployment template conflict
+- Make closed schools ineligible for current school
 - Exclude closed schools from current school search
 
 ## [Release 009] - 2019-09-17
