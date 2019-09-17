@@ -16,19 +16,35 @@
             <%= errors_tag current_claim.eligibility, :employment_status %>
 
             <div class="govuk-radios">
+
               <%= fields.hidden_field :employment_status %>
-              <div class="govuk-radios__item">
-                <%= fields.radio_button(:employment_status, :claim_school, class: "govuk-radios__input") %>
-                <%= fields.label :employment_status_claim_school, "Yes, at #{current_claim.eligibility.claim_school_name}", class: "govuk-label govuk-radios__label" %>
-              </div>
-              <div class="govuk-radios__item">
-                <%= fields.radio_button(:employment_status, :different_school, class: "govuk-radios__input") %>
-                <%= fields.label :employment_status_different_school, "Yes, at another school", class: "govuk-label govuk-radios__label" %>
-              </div>
+
+              <% if current_claim.eligibility.claim_school.open? %>
+
+                <div class="govuk-radios__item">
+                  <%= fields.radio_button(:employment_status, :claim_school, class: "govuk-radios__input") %>
+                  <%= fields.label :employment_status_claim_school, "Yes, at #{current_claim.eligibility.claim_school_name}", class: "govuk-label govuk-radios__label" %>
+                </div>
+
+                <div class="govuk-radios__item">
+                  <%= fields.radio_button(:employment_status, :different_school, class: "govuk-radios__input") %>
+                  <%= fields.label :employment_status_different_school, "Yes, at another school", class: "govuk-label govuk-radios__label" %>
+                </div>
+
+              <% else %>
+
+                <div class="govuk-radios__item">
+                  <%= fields.radio_button(:employment_status, :different_school, class: "govuk-radios__input") %>
+                  <%= fields.label :employment_status_different_school, "Yes", class: "govuk-label govuk-radios__label" %>
+                </div>
+
+              <% end %>
+
               <div class="govuk-radios__item">
                 <%= fields.radio_button(:employment_status, :no_school, class: "govuk-radios__input") %>
                 <%= fields.label :employment_status_no_school, "No", class: "govuk-label govuk-radios__label" %>
               </div>
+
             </div>
 
           </fieldset>

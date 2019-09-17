@@ -2,6 +2,10 @@
 barnsley:
   code: 370
   name: Barnsley
+bradford:
+  code: 380
+  name: Bradford
+
 # Student loans and Maths and Physics Ineligible
 camden:
   code: 202

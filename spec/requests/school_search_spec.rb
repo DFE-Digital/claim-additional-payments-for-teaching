@@ -11,13 +11,7 @@ RSpec.describe "School search", type: :request do
       expect(response.body).not_to include(schools(:hampstead_school).name)
     end
 
-    it "includes the close date when the school is closed" do
-      post school_search_index_path, params: {query: "Great Creaton Primary School"}
-
-      expect(response.body).to include(schools(:great_creaton_primary_school).close_date.strftime("%-d %B %Y"))
-    end
-
-    it "returns an error if the query parameter is more than three characters" do
+    it "returns an error if the query parameter is less than four characters" do
       post school_search_index_path, params: {query: "Pen"}
 
       expect(response.status).to eq(400)
@@ -31,6 +25,30 @@ RSpec.describe "School search", type: :request do
       expect(response.status).to eq(400)
       expect(response.body).to include({errors: ["Expected required parameter 'query' to be set"]}.to_json)
       expect(response.body).not_to include(schools(:penistone_grammar_school).name)
+    end
+
+    it "includes closed schools by default" do
+      post school_search_index_path, params: {query: "The Samuel Lister Academy"}
+
+      expect(response.body).to include(schools(:the_samuel_lister_academy).name)
+    end
+
+    it "includes the close date when the school is closed" do
+      post school_search_index_path, params: {query: "The Samuel Lister Academy"}
+
+      expect(response.body).to include(schools(:the_samuel_lister_academy).close_date.strftime("%-d %B %Y"))
+    end
+
+    it "includes closed schools when requested" do
+      post school_search_index_path, params: {query: "The Samuel Lister Academy", exclude_closed: false}
+
+      expect(response.body).to include(schools(:the_samuel_lister_academy).name)
+    end
+
+    it "excludes closed schools when requested" do
+      post school_search_index_path, params: {query: "The Samuel Lister Academy", exclude_closed: true}
+
+      expect(response.body).not_to include(schools(:the_samuel_lister_academy).name)
     end
   end
 end
