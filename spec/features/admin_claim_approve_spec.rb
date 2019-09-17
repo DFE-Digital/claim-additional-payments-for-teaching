@@ -13,7 +13,7 @@ RSpec.feature "Admin approves a claim" do
         submitted_claims = create_list(:claim, 5, :submitted)
         claim_to_approve = submitted_claims.first
 
-        click_on "Approve claims"
+        click_on "Manage claims"
 
         expect(page).to have_content(claim_to_approve.reference)
 

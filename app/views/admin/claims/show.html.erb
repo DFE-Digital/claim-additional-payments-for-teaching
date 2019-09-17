@@ -12,8 +12,11 @@
 
     <%= button_to "Approve",
                   admin_claim_approvals_path(@claim),
-                  method: :post,
                   class: "govuk-button",
                   data: { confirm: "Are you sure you want to approve this claim?" } %>
+
+    <%= button_to "Reject", admin_claim_rejections_path(@claim),
+                  class: "govuk-button govuk-button--warning",
+                  data: { confirm: "Are you sure you want to reject this claim?" } %>
   </div>
 </div>

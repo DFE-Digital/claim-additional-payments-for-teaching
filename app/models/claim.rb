@@ -134,7 +134,7 @@ class Claim < ApplicationRecord
     if needs_checking?
       update(
         rejected_at: Time.zone.now,
-        rejected_by: rejected_by
+        rejected_by: rejected_by,
       )
     else
       false

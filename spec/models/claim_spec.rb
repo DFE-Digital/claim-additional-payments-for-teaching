@@ -502,8 +502,11 @@ RSpec.describe Claim, type: :model do
 
     it "returns false when claim is not checkable" do
       claim = create(:claim, :approved)
+      result = claim.reject!(rejected_by: "12345")
 
-      expect(claim.reject!(rejected_by: "12345")).to eq(false)
+      expect(result).to eq(false)
+      expect(claim.rejected_at).to eq(nil)
+      expect(claim.rejected_by).to eq(nil)
     end
   end
 end

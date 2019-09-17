@@ -62,6 +62,7 @@ Rails.application.routes.draw do
     resources :claims, only: [:index, :show] do
       get "payroll", on: :collection
       resources :approvals, only: [:create], controller: "claim_approvals"
+      resources :rejections, only: [:create], controller: "claim_rejections"
     end
   end
 end
