@@ -4,7 +4,7 @@ module DfeSignIn
       include DfeSignIn::Utils
 
       attr_accessor :organisation_id,
-                    :user_id
+        :user_id
 
       def initialize(organisation_id:, user_id:)
         self.organisation_id = organisation_id
