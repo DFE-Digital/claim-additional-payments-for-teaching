@@ -24,6 +24,13 @@ module Admin
       ]
     end
 
+    def admin_student_loan_details(claim)
+      [
+        [t("student_loans.csv_headers.student_loan_repayment_amount"), number_to_currency(claim.eligibility.student_loan_repayment_amount)],
+        [t("student_loans.csv_headers.student_loan_repayment_plan"), claim.student_loan_plan&.humanize],
+      ]
+    end
+
     def link_to_school(school)
       url = "https://get-information-schools.service.gov.uk/Establishments/Establishment/Details/#{school.urn}"
       link_to(school.name, url, class: "govuk-link")
