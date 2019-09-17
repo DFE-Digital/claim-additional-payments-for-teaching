@@ -69,4 +69,21 @@ describe Admin::ClaimsHelper do
       expect(helper.admin_personal_details(claim)).to eq expected_answers
     end
   end
+
+  describe "admin_student_loan_details" do
+    let(:claim) do
+      build(
+        :claim,
+        student_loan_plan: :plan_1,
+        eligibility: build(:student_loans_eligibility, student_loan_repayment_amount: 1234),
+      )
+    end
+
+    it "includes an array of questions and answers" do
+      expect(helper.admin_student_loan_details(claim)).to eq([
+        [I18n.t("student_loans.csv_headers.student_loan_repayment_amount"), "£1,234.00"],
+        [I18n.t("student_loans.csv_headers.student_loan_repayment_plan"), "Plan 1"],
+      ])
+    end
+  end
 end

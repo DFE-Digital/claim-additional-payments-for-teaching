@@ -6,6 +6,7 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+- Add student loan plan and amount to approver view of a claim
 - Link to Get Information About Schools from the admin view of a claim
 - Monitor VSP availability
 - Use slots to make VSP deployment zero-downtime

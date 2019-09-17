@@ -8,6 +8,8 @@
 
     <%= render partial: "answer_section", locals: {heading: "Eligibility details", answers: admin_eligibility_answers(@claim.eligibility)} %>
 
+    <%= render partial: "answer_section", locals: {heading: "Student loan details", answers: admin_student_loan_details(@claim)} %>
+
     <%= button_to "Approve",
                   admin_claim_approvals_path(@claim),
                   method: :post,
