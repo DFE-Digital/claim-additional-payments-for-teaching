@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+## [Release 009] - 2019-09-17
+
 - Add student loan plan and amount to approver view of a claim
 - Link to Get Information About Schools from the admin view of a claim
 - Monitor VSP availability
@@ -80,7 +82,9 @@ The format is based on [Keep a Changelog]
 - First release for student loan repayments private beta
 
 [unreleased]:
-  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-008...HEAD
+  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-009...HEAD
+[release 009]:
+  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-008...release-009
 [release 008]:
   https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-007...release-008
 [release 007]:
