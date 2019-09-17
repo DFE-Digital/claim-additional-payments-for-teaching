@@ -441,21 +441,31 @@ RSpec.describe Claim, type: :model do
     end
   end
 
-  describe "approvable?" do
+  describe "needs_checking?" do
     it "returns false when it has not been submitted" do
       claim = build(:claim)
 
-      expect(claim.approvable?).to eq false
+      expect(claim.needs_checking?).to eq false
     end
-    it "returns true when it has been submitted and has not been approved" do
+
+    it "returns true when it has been submitted and has not been approved or rejected" do
       claim = build(:claim, :submitted)
 
-      expect(claim.approvable?).to eq true
+      expect(claim.needs_checking?).to eq true
     end
+
     it "returns false when it has been submitted and approved" do
       claim = build(:claim, :approved)
 
-      expect(claim.approvable?).to eq false
+      expect(claim.needs_checking?).to eq false
+    end
+
+    it "returns false when it has been submitted and rejected" do
+      claim = build(:claim, :submitted)
+
+      claim.reject!(rejected_by: "12345")
+
+      expect(claim.needs_checking?).to eq false
     end
   end
 
@@ -475,6 +485,25 @@ RSpec.describe Claim, type: :model do
       claim = create(:claim, :approved)
 
       expect(claim.approve!(approved_by: "12345")).to eq(false)
+    end
+  end
+
+  describe "reject!" do
+    it "rejects a claim" do
+      claim = create(:claim, :submitted)
+
+      freeze_time do
+        claim.reject!(rejected_by: "12345")
+
+        expect(claim.rejected_at).to eq(Time.zone.now)
+        expect(claim.rejected_by).to eq("12345")
+      end
+    end
+
+    it "returns false when claim is not checkable" do
+      claim = create(:claim, :approved)
+
+      expect(claim.reject!(rejected_by: "12345")).to eq(false)
     end
   end
 end

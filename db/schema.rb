@@ -47,6 +47,8 @@ ActiveRecord::Schema.define(version: 2019_09_18_142241) do
     t.string "surname", limit: 100
     t.datetime "approved_at"
     t.string "approved_by"
+    t.datetime "rejected_at"
+    t.string "rejected_by"
     t.index ["eligibility_type", "eligibility_id"], name: "index_claims_on_eligibility_type_and_eligibility_id"
     t.index ["reference"], name: "index_claims_on_reference", unique: true
     t.index ["submitted_at"], name: "index_claims_on_submitted_at"

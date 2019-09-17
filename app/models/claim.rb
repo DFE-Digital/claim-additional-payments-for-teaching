@@ -37,6 +37,8 @@ class Claim < ApplicationRecord
     verify_response: true,
     approved_at: false,
     approved_by: false,
+    rejected_at: false,
+    rejected_by: false,
   }.freeze
 
   enum student_loan_country: StudentLoans::COUNTRIES
@@ -118,10 +120,21 @@ class Claim < ApplicationRecord
   end
 
   def approve!(approved_by:)
-    if approvable?
+    if needs_checking?
       update(
         approved_at: Time.zone.now,
         approved_by: approved_by
+      )
+    else
+      false
+    end
+  end
+
+  def reject!(rejected_by:)
+    if needs_checking?
+      update(
+        rejected_at: Time.zone.now,
+        rejected_by: rejected_by
       )
     else
       false
@@ -136,8 +149,8 @@ class Claim < ApplicationRecord
     valid?(:submit) && !submitted?
   end
 
-  def approvable?
-    submitted? && approved_at.nil?
+  def needs_checking?
+    submitted? && approved_at.nil? && rejected_at.nil?
   end
 
   def address(seperator = ", ")
