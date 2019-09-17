@@ -12,8 +12,8 @@ module DfeSignIn
 
   class Configuration
     attr_accessor :client_id,
-                  :secret,
-                  :base_url
+      :secret,
+      :base_url
   end
 end
 
