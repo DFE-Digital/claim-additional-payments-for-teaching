@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+## [Release 010] - 2019-09-17
+
 - Fix deployment template conflict
 - Make closed schools ineligible for current school
 - Exclude closed schools from current school search
@@ -86,7 +88,9 @@ The format is based on [Keep a Changelog]
 - First release for student loan repayments private beta
 
 [unreleased]:
-  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-009...HEAD
+  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-010...HEAD
+[release 010]:
+  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-009...release-010
 [release 009]:
   https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-008...release-009
 [release 008]:
