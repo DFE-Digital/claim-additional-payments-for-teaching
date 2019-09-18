@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+- Drop redundant full_name column from claims table
+
 ## [Release 010] - 2019-09-17
 
 - Fix deployment template conflict
