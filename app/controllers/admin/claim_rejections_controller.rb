@@ -3,6 +3,7 @@ class Admin::ClaimRejectionsController < Admin::BaseAdminController
 
   def create
     if @claim.reject!(rejected_by: admin_session.user_id)
+      ClaimMailer.rejected(@claim).deliver_later
       redirect_to admin_claims_path, notice: "Claim has been rejected successfully"
     else
       redirect_to admin_claim_path(@claim), notice: "Claim cannot be rejected"

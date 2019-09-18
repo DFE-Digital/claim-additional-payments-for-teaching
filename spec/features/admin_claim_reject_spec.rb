@@ -18,7 +18,8 @@ RSpec.feature "Rejecting a claim" do
         expect(page).to have_content(claim_to_reject.reference)
 
         find("a[href='#{admin_claim_path(claim_to_reject)}']").click
-        click_on "Reject"
+
+        perform_enqueued_jobs { click_on "Reject" }
 
         expect(page).to have_content("Claim has been rejected successfully")
 
@@ -26,6 +27,15 @@ RSpec.feature "Rejecting a claim" do
 
         expect(claim_to_reject.rejected_at).to eq(Time.zone.now)
         expect(claim_to_reject.rejected_by).to eq("12345")
+
+        mail = ActionMailer::Base.deliveries.last
+
+        expect(mail.subject).to eq(
+          "Your claim to get your student loan repayments back has been rejected, reference number: #{claim_to_reject.reference}"
+        )
+        expect(mail.body.raw_source).to match(
+          "Unfortunately your claim to get your student loan payments back has been denied."
+        )
       end
     end
   end
