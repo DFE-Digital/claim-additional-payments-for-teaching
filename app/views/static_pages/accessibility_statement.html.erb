@@ -66,7 +66,8 @@
 
     <p class="govuk-body">
       We’re always looking to improve the accessibility of this website. If you find any problems that aren’t listed on
-      this page or think we’re not meeting accessibility requirements, contact: <%= mail_to t("support_email_address"), t("support_email_address"), class: "govuk-link" %>.
+      this page or think we’re not meeting accessibility requirements, contact us at <%= mail_to t("support_email_address"),
+      t("support_email_address"), class: "govuk-link" %>.
     </p>
 
     <h2 class="govuk-heading-l">
@@ -88,14 +89,34 @@
     </p>
 
     <p class="govuk-body">
-      This website is partially compliant with the Web Content Accessibility Guidelines version 2.1 AA standard, due to
-      the non-compliances listed below.
+      This website is partially compliant with the Web Content Accessibility Guidelines version 2.1 A and AA standards,
+      due to the non-compliances listed below.
     </p>
 
     <ul class="govuk-list govuk-list--bullet">
       <li>
-        <a href="https://www.w3.org/TR/UNDERSTANDING-WCAG20/minimize-error-suggestions.html" class="govuk-link">
-          3.3.3 – Error Suggestion
+        <a href="https://www.w3.org/WAI/WCAG21/Understanding/info-and-relationships.html" class="govuk-link">
+          1.3.1 - Info and Relationships
+        </a>
+      </li>
+      <li>
+        <a href="https://www.w3.org/WAI/WCAG21/Understanding/identify-input-purpose.html" class="govuk-link">
+          1.3.5 - Identify Input Purpose
+        </a>
+      </li>
+      <li>
+        <a href="https://www.w3.org/WAI/WCAG21/Understanding/headings-and-labels.html" class="govuk-link">
+        2.4.6 - Headings and Labels
+        </a>
+      </li>
+      <li>
+        <a href="https://www.w3.org/WAI/WCAG21/Understanding/labels-or-instructions.html" class="govuk-link">
+        3.3.2 - Labels or Instructions
+        </a>
+      </li>
+      <li>
+        <a href="https://www.w3.org/WAI/WCAG21/Understanding/name-role-value.html" class="govuk-link">
+          4.1.2 - Name, Role, Value
         </a>
       </li>
     </ul>
@@ -103,32 +124,40 @@
     <h2 class="govuk-heading-l">Non accessible content</h2>
 
     <p class="govuk-body">
-      The content listed below is non-accessible for the following reasons.
+      The content listed below is non-accessible for the following reasons:
     </p>
 
     <ul class="govuk-list govuk-list--bullet">
       <li>
-        some error messages are inconsistently formatted
+        issues with the school search Accessible Autocomplete plugin
       </li>
     </ul>
 
     <h2 class="govuk-heading-l">Non compliance with the accessibility regulations</h2>
 
     <p class="govuk-body">
-      Some error messages are inconsistently formatted. There is a list of all errors at the top of each page, but some
-      pages to not provide guidance on how to resolve the error next to the relevant input.  This doesn’t meet WCAG 2.1
-      success criterion 3.3.3 (error suggestion).
+      The school search plugin, Accessible Autocomplete has no associated label. The text input used to search for schools
+      does not have an associated label so when a user navigates to it, depending on the software used the question may
+      not be announced. This does not meet WCAG 2.1 success criterion 1.3.1 (info and relationships), 1.3.5 (identity
+      input purpose), 2.4.6 (headings and labels), 3.3.2 (labels or instructions), and 4.1.2 (name, role, value).
     </p>
 
     <p class="govuk-body">
-      We plan to amend the error messages by December 2020. When we create new pages we will make sure to use
-      consistently formatted error messages.
+      The school search plugin, Accessible Autocomplete has incorrectly formatted autocompletes within it. When users of
+      the software JAWS search for a school they do not hear an announcement of the number of search results. This does
+      not meet WCAG 2.1 success criterion 1.3.5 (identity input purpose) and 4.1.2 (name, role, value).
+    </p>
+
+    <p class="govuk-body">
+      We plan to amend the Accessible Autocomplete plugin when an update is released. We expect this to be before
+      December 2020.
     </p>
 
     <h2 class="govuk-heading-l">How we tested this website</h2>
 
     <p class="govuk-body">
-      This website was last tested on 29 July 2019. The test was carried out internally.
+      This website was last tested on 2 September 2019. The test was carried out by the <a href="https://digitalaccessibilitycentre.org/">
+      Digital Accessibility Centre</a>.
     </p>
 
     <p class="govuk-body">
@@ -142,7 +171,7 @@
     </ul>
 
     <p class="govuk-body">
-      This statement was prepared on 31 July 2019. It was last updated on 9 September 2019.
+      This statement was prepared on 31 July 2019. It was last updated on 18 September 2019.
     </p>
 
   </div>

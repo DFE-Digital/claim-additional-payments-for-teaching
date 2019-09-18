@@ -8,6 +8,7 @@ The format is based on [Keep a Changelog]
 
 - Show DfE number against school in approver view of claim
 - Drop redundant full_name column from claims table
+- Updated Accessibility statement to show current issues
 
 ## [Release 010] - 2019-09-17
 
