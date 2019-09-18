@@ -32,4 +32,20 @@ RSpec.describe ClaimMailer, type: :mailer do
       expect(mail.body.encoded).to match("Email studentloanteacherpayment@digital.education.gov.uk giving your reference number: #{claim.reference} if you have any questions.")
     end
   end
+
+  describe "#rejected" do
+    let(:claim) { create(:claim, :submitted, first_name: "John", middle_name: "Fitzgerald", surname: "Kennedy") }
+    let(:mail) { ClaimMailer.rejected(claim) }
+
+    it "renders the headers" do
+      expect(mail.subject).to eq("Your claim to get your student loan repayments back has been rejected, reference number: #{claim.reference}")
+      expect(mail.to).to eq([claim.email_address])
+    end
+
+    it "renders the body" do
+      expect(mail.body.encoded).to match("Dear John Kennedy,")
+      expect(mail.body.encoded).to match("Unfortunately your claim to get your student loan payments back has been denied.")
+      expect(mail.body.encoded).to match("If you feel that we have made a mistake in the processing of your application or something is incorrect please email studentloanteacherpayment@digital.education.gov.uk giving your reference number: #{claim.reference} if you have any questions about your claim.")
+    end
+  end
 end

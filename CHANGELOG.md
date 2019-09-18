@@ -6,7 +6,7 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
-- A service operator can reject a claim
+- A service operator can reject a claim and an email is sent to the claimant
 - Make sure claimants cannot make a claim of £0
 
 ## [Release 015] - 2019-10-07

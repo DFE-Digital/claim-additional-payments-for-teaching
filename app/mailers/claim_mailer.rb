@@ -7,6 +7,10 @@ class ClaimMailer < Mail::Notify::Mailer
     view_mail_with_claim_and_subject(claim, "Your claim to get your student loan repayments back has been approved, reference number: #{claim.reference}")
   end
 
+  def rejected(claim)
+    view_mail_with_claim_and_subject(claim, "Your claim to get your student loan repayments back has been rejected, reference number: #{claim.reference}")
+  end
+
   private
 
   def view_mail_with_claim_and_subject(claim, subject)
