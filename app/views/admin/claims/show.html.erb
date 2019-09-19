@@ -16,5 +16,7 @@
                   data: { confirm: "Are you sure you want to approve this claim?", module: "govuk-button" } %>
 
     <%= link_to "Reject", new_admin_claim_rejection_path(@claim), class: "govuk-link" %>
+
+    <%= link_to "Escalate", new_admin_claim_escalation_path(@claim), class: "govuk-link" %>
   </div>
 </div>

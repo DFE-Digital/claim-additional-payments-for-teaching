@@ -1,0 +1,17 @@
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <h1 class="govuk-heading-xl">
+      Escalate claim <%= @claim.reference %>
+    </h1>
+
+    <%= form_for @claim, url: admin_claim_escalations_path(@claim), method: :post do |form| %>
+      <%= form.fields_for @claim.notes.first do |note_fields| %>
+        <%= note_fields.label :body, "Escalation note", class: "govuk-label" %>
+        <span class="govuk-hint">This will be recorded against the claim but not sent to the user.</span>
+        <%= note_fields.text_area :body, class: "govuk-textarea" %>
+      <% end %>
+
+      <%= form.submit "Escalate claim", class: "govuk-button" %>
+    <% end %>
+  </div>
+</div>
