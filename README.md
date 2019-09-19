@@ -135,6 +135,14 @@ identifiers may clash. See the School factory for how the eligible school traits
 make use of the local authority and district fixtures to create eligible
 schools.
 
+## Loading the full schools list in development
+
+In development we do not automatically seed the database with the full list of
+schools (as supplied by the Get Information About Schools service). To import
+the full list, run `rake schools_data:import`. This enqueues the import as an
+Active Job, so you will need to be running the worker for this to have any
+effect.
+
 ## Creating data migrations
 
 When running a live service sometimes you're required to change existing data in
