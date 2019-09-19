@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_09_19_110103) do
+ActiveRecord::Schema.define(version: 2019_09_19_133826) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -49,6 +49,8 @@ ActiveRecord::Schema.define(version: 2019_09_19_110103) do
     t.string "approved_by"
     t.datetime "rejected_at"
     t.string "rejected_by"
+    t.datetime "escalated_at"
+    t.string "escalated_by"
     t.index ["eligibility_type", "eligibility_id"], name: "index_claims_on_eligibility_type_and_eligibility_id"
     t.index ["reference"], name: "index_claims_on_reference", unique: true
     t.index ["submitted_at"], name: "index_claims_on_submitted_at"

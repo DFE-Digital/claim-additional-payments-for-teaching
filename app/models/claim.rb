@@ -39,6 +39,8 @@ class Claim < ApplicationRecord
     approved_by: false,
     rejected_at: false,
     rejected_by: false,
+    escalated_at: false,
+    escalated_by: false,
   }.freeze
 
   enum student_loan_country: StudentLoans::COUNTRIES
