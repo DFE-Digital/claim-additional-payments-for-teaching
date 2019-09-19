@@ -1,0 +1,22 @@
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= render("shared/error_summary", instance: @note) if @note.errors.any? %>
+
+    <h1 class="govuk-heading-xl">
+      Reject claim <%= @claim.reference %>
+    </h1>
+
+    <%= form_for @claim, url: admin_claim_rejections_path(@claim), method: :post do |form| %>
+      <%= fields_for @note do |note_fields| %>
+        <%= form_group_tag @note do %>
+          <%= note_fields.label :body, "Rejection note", class: "govuk-label" %>
+          <span class="govuk-hint">This will be recorded against the claim but not sent to the user.</span>
+          <%= errors_tag note_fields.object, :body %>
+          <%= note_fields.text_area :body, class: "govuk-textarea" %>
+        <% end %>
+
+        <%= form.submit "Reject claim", class: "govuk-button" %>
+      <% end %>
+    <% end %>
+  </div>
+</div>
