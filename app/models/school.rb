@@ -129,4 +129,11 @@ class School < ApplicationRecord
   def open?
     close_date.nil?
   end
+
+  def dfe_number
+    [
+      local_authority.code,
+      establishment_number,
+    ].join("/")
+  end
 end

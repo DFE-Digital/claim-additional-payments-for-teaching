@@ -47,4 +47,18 @@ RSpec.describe School, type: :model do
       expect(school.address).to eql("10 The Street, Town, County, PC1 4TE")
     end
   end
+
+  describe "dfe_number" do
+    let(:school) do
+      build(:school,
+        name: "Bash Street School",
+        urn: "1234",
+        establishment_number: 4567,
+        local_authority: build(:local_authority, code: 123))
+    end
+
+    it "returns a combination of local authority code and establishment number" do
+      expect(school.dfe_number).to eq("123/4567")
+    end
+  end
 end
