@@ -1,5 +1,7 @@
 <div class="govuk-grid-row">
+
   <div class="govuk-grid-column-two-thirds">
+
     <h1 class="govuk-heading-xl">
       Admin
     </h1>
@@ -13,4 +15,15 @@
     <% end %>
 
   </div>
+
+  <div class="govuk-grid-column-one-third">
+    <h2 class="govuk-heading-m">Total claims received</h2>
+    <p class="govuk-body govuk-!-font-size-36"><%= Claim.submitted.count %></p>
+
+    <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
+
+    <h2 class="govuk-heading-m">Claims awaiting approval</h2>
+    <p class="govuk-body govuk-!-font-size-36"><%= Claim.awaiting_approval.count %></p>
+  </div>
+
 </div>
