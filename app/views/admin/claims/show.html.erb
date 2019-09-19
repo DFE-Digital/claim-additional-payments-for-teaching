@@ -13,10 +13,10 @@
     <%= button_to "Approve",
                   admin_claim_approvals_path(@claim),
                   class: "govuk-button",
-                  data: { confirm: "Are you sure you want to approve this claim?" } %>
+                  data: { confirm: "Are you sure you want to approve this claim?", module: "govuk-button" } %>
 
     <%= button_to "Reject", admin_claim_rejections_path(@claim),
                   class: "govuk-button govuk-button--warning",
-                  data: { confirm: "Are you sure you want to reject this claim?" } %>
+                  data: { confirm: "Are you sure you want to reject this claim?", module: "govuk-button" } %>
   </div>
 </div>
