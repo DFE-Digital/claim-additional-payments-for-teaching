@@ -6,6 +6,8 @@
 
     <% if @claims.any? %>
 
+      <h2 class="govuk-heading-m"><%= pluralize(@claims.count, "claim") %> awaiting approval</h2>
+
       <table class="govuk-table">
         <thead class="govuk-table__head">
           <tr class="govuk-table__row">
@@ -27,7 +29,7 @@
 
     <% else %>
 
-      <p class="govuk-body-l">There are currently no claims to approve.</p>
+      <h2 class="govuk-heading-m">There are currently no claims to approve.</h2>
 
     <% end %>
   </div>
