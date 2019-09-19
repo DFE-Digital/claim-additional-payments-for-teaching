@@ -10,7 +10,7 @@ RSpec.feature "Teacher Student Loan Repayments claims" do
     expect(page).to have_text(I18n.t("student_loans.questions.claim_school"))
 
     choose_school schools(:penistone_grammar_school)
-    expect(claim.eligibility.reload.claim_school).to eql schools(:penistone_grammar_school)
+    expect(claim.eligibility.selected_employment.reload.school).to eql schools(:penistone_grammar_school)
     expect(page).to have_text(I18n.t("student_loans.questions.employment_status"))
 
     choose_still_teaching
@@ -21,7 +21,7 @@ RSpec.feature "Teacher Student Loan Repayments claims" do
     check "Physics"
     click_on "Continue"
 
-    expect(claim.eligibility.reload.subjects_taught).to eq([:physics_taught])
+    expect(claim.eligibility.selected_employment.reload.subjects_taught).to eq([:physics_taught])
 
     expect(page).to have_text(I18n.t("student_loans.questions.leadership_position"))
     choose "Yes"
@@ -75,8 +75,8 @@ RSpec.feature "Teacher Student Loan Repayments claims" do
     expect(claim.student_loan_start_date).to eq(StudentLoans::BEFORE_1_SEPT_2012)
     expect(claim.student_loan_plan).to eq(StudentLoans::PLAN_1)
 
-    expect(page).to have_text(I18n.t("student_loans.questions.student_loan_amount", claim_school_name: claim.eligibility.claim_school_name))
-    fill_in I18n.t("student_loans.questions.student_loan_amount", claim_school_name: claim.eligibility.claim_school_name), with: "1100"
+    expect(page).to have_text(I18n.t("student_loans.questions.student_loan_amount", claim_school_name: claim.eligibility.selected_employment.school_name))
+    fill_in I18n.t("student_loans.questions.student_loan_amount", claim_school_name: claim.eligibility.selected_employment.school_name), with: "1100"
     click_on "Continue"
 
     expect(claim.eligibility.reload.student_loan_repayment_amount).to eql(1100.00)

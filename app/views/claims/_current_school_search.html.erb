@@ -1,0 +1,48 @@
+<%= render("shared/error_summary", instance: current_claim, errored_field_id_overrides: { school_search: "school_search" }) if current_claim.errors.any? %>
+
+<%= form_for current_claim,
+      url: claim_path,
+      method: :get,
+      data: {
+        "school-id-param": "claim_eligibility_attributes_current_school_id",
+        "exclude-closed": true
+      },
+      html: { class: "school_search_form" } do |form|
+%>
+  <%= hidden_field_tag :_method, "get", id: nil %>
+  <%= hidden_field_tag :authenticity_token, form_authenticity_token %>
+
+  <%= form.fields_for :eligibility, include_id: false do |eligibility_fields| %>
+    <%= eligibility_fields.hidden_field :current_school_id %>
+  <% end %>
+
+  <%= form_group_tag current_claim, :school_search do %>
+
+    <%= hidden_field_tag :exclude_closed, true, id: nil %>
+
+    <h1 class="govuk-label-wrapper">
+      <%= label_tag :school_search, t("questions.current_school"), class: "govuk-label govuk-label--xl" %>
+    </h1>
+
+    <% if params[:school_search].present? && current_claim.errors.empty? %>
+      <p class="govuk-body">
+        <strong>No results match that search term. Try again.</strong>
+      </p>
+    <% else %>
+      <span class="govuk-hint">
+        Enter the school name. Use at least four characters.
+      </span>
+    <% end %>
+
+    <div id="school-search-container">
+
+      <%= errors_tag current_claim, :school_search %>
+      <%= text_field_tag :school_search, params[:school_search], id: :school_search, class: css_classes_for_input(current_claim, :school_search), value: current_claim.eligibility.current_school_name %>
+
+    </div>
+
+  <% end %>
+
+  <%= submit_tag "Search", class: "govuk-button", data: { module: "govuk-button" } %>
+
+<% end %>

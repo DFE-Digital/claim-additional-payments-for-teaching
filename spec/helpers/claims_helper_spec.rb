@@ -3,17 +3,23 @@ require "rails_helper"
 describe ClaimsHelper do
   describe "#eligibility_answers" do
     let(:school) { schools(:penistone_grammar_school) }
+
     let(:eligibility) do
       build(
         :student_loans_eligibility,
         qts_award_year: "2013_2014",
-        claim_school: school,
         current_school: school,
-        chemistry_taught: true,
-        physics_taught: true,
         had_leadership_position: true,
         mostly_performed_leadership_duties: false,
-        student_loan_repayment_amount: 1987.65,
+        employments: [
+          build(
+            :student_loans_employment,
+            school: school,
+            chemistry_taught: true,
+            physics_taught: true,
+            student_loan_repayment_amount: 1987.65,
+          ),
+        ]
       )
     end
 
@@ -27,7 +33,7 @@ describe ClaimsHelper do
         [I18n.t("student_loans.questions.mostly_performed_leadership_duties"), "No", "mostly-performed-leadership-duties"],
       ]
 
-      expect(helper.eligibility_answers(eligibility)).to eq expected_answers
+      expect(helper.eligibility_answers(eligibility)).to eq(expected_answers)
     end
 
     it "excludes questions skipped from the flow" do
@@ -147,60 +153,66 @@ describe ClaimsHelper do
   end
 
   describe "#student_loan_answers" do
-    it "returns an array of question and answers for the student loan questions" do
-      claim = build(
+    let(:claim) do
+      build(
         :claim,
+        @claim_attributes.merge(eligibility: build(:student_loans_eligibility, employments: [
+          build(
+            :student_loans_employment,
+            student_loan_repayment_amount: 1987.65,
+          ),
+        ])),
+      )
+    end
+
+    it "returns an array of question and answers for the student loan questions" do
+      @claim_attributes = {
         has_student_loan: true,
         student_loan_country: StudentLoans::ENGLAND,
         student_loan_courses: :one_course,
         student_loan_start_date: StudentLoans::ON_OR_AFTER_1_SEPT_2012,
-        eligibility: build(:student_loans_eligibility, student_loan_repayment_amount: 1987.65),
-      )
+      }
 
       expected_answers = [
         [t("questions.has_student_loan"), "Yes", "student-loan"],
         [t("questions.student_loan_country"), "England", "student-loan-country"],
         [t("questions.student_loan_how_many_courses"), "One course", "student-loan-how-many-courses"],
         [t("questions.student_loan_start_date.one_course"), t("answers.student_loan_start_date.one_course.on_or_after_first_september_2012"), "student-loan-start-date"],
-        [t("student_loans.questions.student_loan_amount", claim_school_name: claim.eligibility.claim_school_name), "£1,987.65", "student-loan-amount"],
+        [t("student_loans.questions.student_loan_amount", claim_school_name: claim.eligibility.selected_employment.school_name), "£1,987.65", "student-loan-amount"],
       ]
 
       expect(helper.student_loan_answers(claim)).to eq expected_answers
     end
 
     it "adjusts the loan start date question and answer according to the number of courses answer" do
-      claim = build(
-        :claim,
+      @claim_attributes = {
         has_student_loan: true,
         student_loan_country: StudentLoans::ENGLAND,
         student_loan_courses: :two_or_more_courses,
         student_loan_start_date: StudentLoans::BEFORE_1_SEPT_2012,
-        eligibility: build(:student_loans_eligibility, student_loan_repayment_amount: 1987.65),
-      )
+      }
 
       expected_answers = [
         [t("questions.has_student_loan"), "Yes", "student-loan"],
         [t("questions.student_loan_country"), "England", "student-loan-country"],
         [t("questions.student_loan_how_many_courses"), "Two or more courses", "student-loan-how-many-courses"],
         [t("questions.student_loan_start_date.two_or_more_courses"), t("answers.student_loan_start_date.two_or_more_courses.before_first_september_2012"), "student-loan-start-date"],
-        [t("student_loans.questions.student_loan_amount", claim_school_name: claim.eligibility.claim_school_name), "£1,987.65", "student-loan-amount"],
+        [t("student_loans.questions.student_loan_amount", claim_school_name: claim.eligibility.selected_employment.school_name), "£1,987.65", "student-loan-amount"],
       ]
 
       expect(helper.student_loan_answers(claim)).to eq expected_answers
     end
 
     it "excludes unanswered questions" do
-      claim = build(
-        :claim,
+      @claim_attributes = {
         has_student_loan: true,
         student_loan_country: StudentLoans::SCOTLAND,
-        eligibility: build(:student_loans_eligibility, student_loan_repayment_amount: 1987.65),
-      )
+      }
 
       expected_answers = [
         [t("questions.has_student_loan"), "Yes", "student-loan"],
         [t("questions.student_loan_country"), "Scotland", "student-loan-country"],
-        [t("student_loans.questions.student_loan_amount", claim_school_name: claim.eligibility.claim_school_name), "£1,987.65", "student-loan-amount"],
+        [t("student_loans.questions.student_loan_amount", claim_school_name: claim.eligibility.selected_employment.school_name), "£1,987.65", "student-loan-amount"],
       ]
 
       expect(helper.student_loan_answers(claim)).to eq expected_answers

@@ -4,24 +4,26 @@
       url: claim_path,
       method: :get,
       data: {
-        "school-id-param": "claim_eligibility_attributes_#{school_id_param}",
-        "exclude-closed": exclude_closed
+        "school-id-param": "claim_eligibility_attributes_employments_attributes_0_school_id",
+        "exclude-closed": false
       },
       html: { class: "school_search_form" } do |form|
 %>
   <%= hidden_field_tag :_method, "get", id: nil %>
   <%= hidden_field_tag :authenticity_token, form_authenticity_token %>
 
-  <%= form.fields_for :eligibility, include_id: false do |eligibility_fields| %>
-    <%= eligibility_fields.hidden_field school_id_param %>
+  <%= form.fields_for :eligibility do |eligibility_fields| %>
+    <%= eligibility_fields.fields_for :employments, current_claim.eligibility.selected_employment do |employment_fields| %>
+      <%= employment_fields.hidden_field :school_id %>
+    <% end %>
   <% end %>
 
   <%= form_group_tag current_claim, :school_search do %>
 
-    <%= hidden_field_tag :exclude_closed, exclude_closed, id: nil %>
+    <%= hidden_field_tag :exclude_closed, false, id: nil %>
 
     <h1 class="govuk-label-wrapper">
-      <%= label_tag :school_search, question, class: "govuk-label govuk-label--xl" %>
+      <%= label_tag :school_search, t("student_loans.questions.claim_school"), class: "govuk-label govuk-label--xl" %>
     </h1>
 
     <% if params[:school_search].present? && current_claim.errors.empty? %>
@@ -37,7 +39,7 @@
     <div id="school-search-container">
 
       <%= errors_tag current_claim, :school_search %>
-      <%= text_field_tag :school_search, params[:school_search], id: :school_search, class: css_classes_for_input(current_claim, :school_search), value: school_search_value %>
+      <%= text_field_tag :school_search, params[:school_search], id: :school_search, class: css_classes_for_input(current_claim, :school_search), value: current_claim.eligibility.selected_employment.school_name %>
 
     </div>
 

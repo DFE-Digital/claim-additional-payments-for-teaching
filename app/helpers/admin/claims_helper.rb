@@ -5,9 +5,9 @@ module Admin
     def admin_eligibility_answers(eligibility)
       [].tap do |a|
         a << [t("student_loans.questions.admin.qts_award_year"), academic_years(eligibility.qts_award_year)]
-        a << [t("student_loans.questions.admin.claim_school"), display_school(eligibility.claim_school)]
+        a << [t("student_loans.questions.admin.claim_school"), display_school(eligibility.selected_employment.school)]
         a << [t("questions.admin.current_school"), display_school(eligibility.current_school)]
-        a << [t("student_loans.questions.admin.subjects_taught"), subject_list(eligibility.subjects_taught)]
+        a << [t("student_loans.questions.admin.subjects_taught"), subject_list(eligibility.selected_employment.subjects_taught)]
         a << [t("student_loans.questions.admin.had_leadership_position"), (eligibility.had_leadership_position? ? "Yes" : "No")]
         a << [t("student_loans.questions.admin.mostly_performed_leadership_duties"), (eligibility.mostly_performed_leadership_duties? ? "Yes" : "No")] if eligibility.had_leadership_position?
       end

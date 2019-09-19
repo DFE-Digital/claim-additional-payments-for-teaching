@@ -3,19 +3,18 @@
 FactoryBot.define do
   factory :student_loans_eligibility, class: "StudentLoans::Eligibility" do
     trait :eligible do
+      employments { [build(:student_loans_employment, :eligible)] }
+
       qts_award_year { "2013_2014" }
-      claim_school { School.find(ActiveRecord::FixtureSet.identify(:penistone_grammar_school, :uuid)) }
-      employment_status { :claim_school }
-      current_school { claim_school }
-      physics_taught { true }
+      employment_status { :different_school }
+      current_school { School.find(ActiveRecord::FixtureSet.identify(:penistone_grammar_school, :uuid)) }
       had_leadership_position { true }
       mostly_performed_leadership_duties { false }
-      student_loan_repayment_amount { 1000 }
     end
 
     trait :ineligible do
       eligible
-      mostly_performed_leadership_duties { true }
+      employment_status { :no_school }
     end
   end
 end

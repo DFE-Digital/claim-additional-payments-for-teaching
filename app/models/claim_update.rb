@@ -7,7 +7,7 @@
 # Performing an update in the "check-your-answers" context will attempt to
 # submit the claim and send the confirmation email to the claimant.
 #
-# The `DEPENDENT_CLAIM_ANSWERS` and `DEPENDENT_ELIGIBILITY_ANSWERS` hashes
+# `DEPENDENT_CLAIM_ANSWERS`, `DEPENDENT_ELIGIBILITY_ANSWERS`, etc.
 # define the attributes that depend on the value of another attribute
 # such that if the value of the other attribute changes the dependent
 # attribute should be reset because the value will no longer hold, or
@@ -22,8 +22,13 @@ class ClaimUpdate
   }.freeze
 
   DEPENDENT_ELIGIBILITY_ANSWERS = {
-    "claim_school_id" => "employment_status",
     "had_leadership_position" => "mostly_performed_leadership_duties",
+  }.freeze
+
+  DEPENDENT_EMPLOYMENT_ANSWERS = {}.freeze
+
+  ELIGIBILITY_ANSWERS_DEPENDENT_ON_EMPLOYMENT_ANSWERS = {
+    "school_id" => "employment_status",
   }.freeze
 
   attr_reader :claim, :context, :params
@@ -66,8 +71,23 @@ class ClaimUpdate
         claim.attributes = {dependent_attribute_name => nil}
       end
     end
+
     DEPENDENT_ELIGIBILITY_ANSWERS.each do |attribute_name, dependent_attribute_name|
       if claim.eligibility.changed.include?(attribute_name)
+        claim.eligibility.attributes = {dependent_attribute_name => nil}
+      end
+    end
+
+    DEPENDENT_EMPLOYMENT_ANSWERS.each do |attribute_name, dependent_attribute_name|
+      claim.eligibility.employments.each do |employment|
+        if employment.changed.include?(attribute_name)
+          employment.attributes = {dependent_attribute_name => nil}
+        end
+      end
+    end
+
+    ELIGIBILITY_ANSWERS_DEPENDENT_ON_EMPLOYMENT_ANSWERS.each do |attribute_name, dependent_attribute_name|
+      if claim.eligibility.employments.any? { |employment| employment.changed.include?(attribute_name) }
         claim.eligibility.attributes = {dependent_attribute_name => nil}
       end
     end
@@ -75,7 +95,7 @@ class ClaimUpdate
 
   def infer_current_school
     if claim.eligibility.employment_status_changed?
-      claim.eligibility.current_school = claim.eligibility.employed_at_claim_school? ? claim.eligibility.claim_school : nil
+      claim.eligibility.current_school = claim.eligibility.employed_at_claim_school? ? claim.eligibility.selected_employment.school : nil
     end
   end
 

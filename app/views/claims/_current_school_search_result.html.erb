@@ -1,4 +1,4 @@
-<%= render("shared/error_summary", instance: current_claim, errored_field_id_overrides: { "eligibility.#{school_param}": "claim_eligibility_attributes_#{school_id_param}_#{@schools.first.id}" }) if current_claim.errors.any?
+<%= render("shared/error_summary", instance: current_claim, errored_field_id_overrides: { "eligibility.current_school": "claim_eligibility_attributes_current_school_id_#{@schools.first.id}" }) if current_claim.errors.any?
 %>
 
 <%= form_for current_claim, url: claim_path do |form| %>
@@ -7,7 +7,7 @@
 
       <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl">
         <h1 class="govuk-fieldset__heading">
-          <%= question %>
+          <%= t("questions.current_school") %>
         </h1>
       </legend>
 
@@ -17,11 +17,11 @@
 
       <%= hidden_field_tag :school_search, params[:school_search] %>
 
-      <%= errors_tag current_claim.eligibility, school_param %>
+      <%= errors_tag current_claim.eligibility, :current_school %>
 
       <div class="govuk-radios">
         <%= form.fields_for :eligibility, include_id: false do |eligibility_fields| %>
-          <%= eligibility_fields.collection_radio_buttons school_id_param, @schools, :id, :name do |b| %>
+          <%= eligibility_fields.collection_radio_buttons :current_school_id, @schools, :id, :name do |b| %>
             <div class="govuk-radios__item">
               <%= b.radio_button class: "govuk-radios__input" %>
               <%= b.label class: "govuk-radios__label govuk-label--s govuk-radios__label govuk-!-padding-0" do %>

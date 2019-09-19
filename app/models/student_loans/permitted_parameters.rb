@@ -1,16 +1,22 @@
 module StudentLoans
   class PermittedParameters
+    EMPLOYMENT_PARAMETERS = [
+      :id,
+      :school_id,
+      :taught_eligible_subjects,
+      :student_loan_repayment_amount,
+      StudentLoans::Employment::SUBJECT_ATTRIBUTES,
+    ].flatten.freeze
+
     ELIGIBILITY_PARAMETERS = [
+      :id,
       :qts_award_year,
-      :claim_school_id,
       :employment_status,
       :current_school_id,
       :had_leadership_position,
-      :taught_eligible_subjects,
       :mostly_performed_leadership_duties,
-      :student_loan_repayment_amount,
-      StudentLoans::Eligibility::SUBJECT_ATTRIBUTES,
-    ].flatten.freeze
+      employments_attributes: EMPLOYMENT_PARAMETERS,
+    ].freeze
 
     PARAMETERS = [
       :address_line_1,

@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.feature "Searching for school during Teacher Student Loan Repayments claims" do
-  scenario "doesn't select a school from the search results the first time around" do
+  scenario "User doesn't select a school from the search results" do
     claim = start_claim
     choose_qts_year
 
@@ -16,7 +16,7 @@ RSpec.feature "Searching for school during Teacher Student Loan Repayments claim
     choose "Penistone Grammar School"
     click_on "Continue"
 
-    expect(claim.eligibility.reload.claim_school).to eql schools(:penistone_grammar_school)
+    expect(claim.eligibility.selected_employment.reload.school).to eql schools(:penistone_grammar_school)
     expect(page).to have_text("Are you still employed to teach at a school in England")
   end
 
@@ -35,7 +35,7 @@ RSpec.feature "Searching for school during Teacher Student Loan Repayments claim
     choose "Penistone Grammar School"
     click_on "Continue"
 
-    expect(claim.eligibility.reload.claim_school).to eql schools(:penistone_grammar_school)
+    expect(claim.eligibility.selected_employment.reload.school).to eql schools(:penistone_grammar_school)
     expect(page).to have_text("Are you still employed to teach at a school in England")
   end
 

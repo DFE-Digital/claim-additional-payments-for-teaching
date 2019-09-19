@@ -2,43 +2,45 @@
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-    <%= render("shared/error_summary", instance: current_claim, errored_field_id_overrides: { "eligibility.subjects_taught": "eligible_subjects_biology_taught" }) if current_claim.errors.any? %>
+    <%= render("shared/error_summary", instance: current_claim, errored_field_id_overrides: { "eligibility.employments.subjects_taught": "eligible_subjects_#{StudentLoans::Employment::SUBJECT_ATTRIBUTES.first}" }) if current_claim.errors.any? %>
 
     <%= form_for current_claim, url: claim_path do |form| %>
 
       <%= form_group_tag current_claim do %>
-        <%= form.fields_for :eligibility, include_id: false do |fields| %>
-          <fieldset class="govuk-fieldset" id="claim_subjects_taught">
+        <%= form.fields_for :eligibility do |eligibility_fields| %>
+          <%= eligibility_fields.fields_for :employments, current_claim.eligibility.selected_employment do |employment_fields| %>
+            <fieldset class="govuk-fieldset" id="claim_subjects_taught">
 
-            <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl">
-              <h1 class="govuk-fieldset__heading">
-                <%= t("student_loans.questions.subjects_taught") %>
-              </h1>
-            </legend>
+              <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl">
+                <h1 class="govuk-fieldset__heading">
+                  <%= t("student_loans.questions.subjects_taught") %>
+                </h1>
+              </legend>
 
-            <%= errors_tag current_claim.eligibility, :subjects_taught %>
+              <%= errors_tag current_claim.eligibility.selected_employment, :subjects_taught %>
 
-            <div class="govuk-checkboxes">
+              <div class="govuk-checkboxes">
 
-              <%- StudentLoans::Eligibility::SUBJECT_ATTRIBUTES.each do |subject| %>
-                <div class="govuk-checkboxes__item">
-                  <%= fields.hidden_field subject, value: false %>
-                  <%= fields.check_box subject, class: "govuk-checkboxes__input subject", id: "eligible_subjects_#{subject}" %>
-                  <%= fields.label subject, t("student_loans.questions.eligible_subjects.#{subject}"), class: "govuk-label govuk-checkboxes__label", for: "eligible_subjects_#{subject}" %>
+                <%- StudentLoans::Employment::SUBJECT_ATTRIBUTES.each do |subject| %>
+                  <div class="govuk-checkboxes__item">
+                    <%= employment_fields.hidden_field subject, value: false %>
+                    <%= employment_fields.check_box subject, class: "govuk-checkboxes__input subject", id: "eligible_subjects_#{subject}" %>
+                    <%= employment_fields.label subject, t("student_loans.questions.eligible_subjects.#{subject}"), class: "govuk-label govuk-checkboxes__label", for: "eligible_subjects_#{subject}" %>
+                  </div>
+                <% end %>
+
+                <div class="govuk-radios__divider">or</div>
+
+                <div class="govuk-radios__item">
+                  <%= employment_fields.hidden_field :taught_eligible_subjects, value: true %>
+                  <%= employment_fields.radio_button :taught_eligible_subjects, false, class: "govuk-radios__input" %>
+                  <%= employment_fields.label :taught_eligible_subjects_false, t('student_loans.questions.eligible_subjects.none_taught'), class: "govuk-label govuk-radios__label" %>
                 </div>
-              <% end %>
 
-              <div class="govuk-radios__divider">or</div>
-
-              <div class="govuk-radios__item">
-                <%= fields.hidden_field :taught_eligible_subjects, value: true %>
-                <%= fields.radio_button :taught_eligible_subjects, false, class: "govuk-radios__input" %>
-                <%= fields.label :taught_eligible_subjects_false, t('student_loans.questions.eligible_subjects.none_taught'), class: "govuk-label govuk-radios__label" %>
               </div>
 
-            </div>
-
-          </fieldset>
+            </fieldset>
+          <% end %>
         <% end %>
       <% end %>
 

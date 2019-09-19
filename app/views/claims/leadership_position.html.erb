@@ -6,9 +6,9 @@
 
     <%= form_for current_claim, url: claim_path do |form| %>
       <%= form_group_tag current_claim do %>
-        <%= form.fields_for :eligibility, include_id: false do |fields| %>
+        <%= form.fields_for :eligibility, include_id: false do |eligibility_fields| %>
 
-          <%= fields.hidden_field :had_leadership_position %>
+          <%= eligibility_fields.hidden_field :had_leadership_position %>
 
           <fieldset class="govuk-fieldset">
 
@@ -28,13 +28,13 @@
             <div class="govuk-radios govuk-radios--inline">
 
               <div class="govuk-radios__item">
-                <%= fields.radio_button(:had_leadership_position, true, class: "govuk-radios__input") %>
-                <%= fields.label :had_leadership_position_true, "Yes", class: "govuk-label govuk-radios__label" %>
+                <%= eligibility_fields.radio_button(:had_leadership_position, true, class: "govuk-radios__input") %>
+                <%= eligibility_fields.label :had_leadership_position_true, "Yes", class: "govuk-label govuk-radios__label" %>
               </div>
 
               <div class="govuk-radios__item">
-                <%= fields.radio_button(:had_leadership_position, false, class: "govuk-radios__input") %>
-                <%= fields.label :had_leadership_position_false, "No", class: "govuk-label govuk-radios__label" %>
+                <%= eligibility_fields.radio_button(:had_leadership_position, false, class: "govuk-radios__input") %>
+                <%= eligibility_fields.label :had_leadership_position_false, "No", class: "govuk-label govuk-radios__label" %>
               </div>
 
             </div>

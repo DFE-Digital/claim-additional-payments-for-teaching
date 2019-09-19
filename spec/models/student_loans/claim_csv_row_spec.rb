@@ -18,6 +18,13 @@ RSpec.describe StudentLoans::ClaimCsvRow do
           had_leadership_position: true,
           employment_status: :different_school,
           current_school: School.find(ActiveRecord::FixtureSet.identify(:hampstead_school, :uuid)),
+          employments: [
+            build(
+              :student_loans_employment,
+              school: School.find(ActiveRecord::FixtureSet.identify(:penistone_grammar_school, :uuid)),
+              physics_taught: true,
+            ),
+          ],
           mostly_performed_leadership_duties: false))
     end
     let(:eligibility) { claim.eligibility }
@@ -27,7 +34,7 @@ RSpec.describe StudentLoans::ClaimCsvRow do
         claim.reference,
         submitted_at,
         eligibility.qts_award_year,
-        eligibility.claim_school.name,
+        eligibility.selected_employment.school_name,
         eligibility.employment_status.humanize,
         eligibility.current_school.name,
         claim.first_name,

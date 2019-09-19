@@ -37,7 +37,7 @@ RSpec.feature "Ineligible Teacher Student Loan Repayments claims" do
     choose_qts_year
     choose_school schools(:hampstead_school)
 
-    expect(claim.eligibility.reload.claim_school).to eq schools(:hampstead_school)
+    expect(claim.eligibility.selected_employment.reload.school).to eq schools(:hampstead_school)
     expect(page).to have_text("You’re not eligible")
     expect(page).to have_text("Hampstead School, where you were employed between 6 April 2018 and 5 April 2019, is not an eligible school.")
   end
@@ -63,7 +63,7 @@ RSpec.feature "Ineligible Teacher Student Loan Repayments claims" do
     choose I18n.t("student_loans.questions.eligible_subjects.none_taught")
     click_on "Continue"
 
-    expect(claim.eligibility.reload.taught_eligible_subjects?).to eq(false)
+    expect(claim.eligibility.selected_employment.reload.taught_eligible_subjects?).to eq(false)
     expect(page).to have_text("You’re not eligible")
     expect(page).to have_text("You can only get this payment if you taught one or more of the following subjects between 6 April 2018 and 5 April 2019:")
   end

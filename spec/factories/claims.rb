@@ -5,6 +5,7 @@ FactoryBot.define do
     trait :submittable do
       first_name { "Jo" }
       surname { "Bloggs" }
+      payroll_gender { :female }
       address_line_1 { "1 Test Road" }
       postcode { "AB1 2CD" }
       date_of_birth { 20.years.ago.to_date }
@@ -20,7 +21,6 @@ FactoryBot.define do
       bank_account_number { 12345678 }
 
       association(:eligibility, factory: [:student_loans_eligibility, :eligible])
-      payroll_gender { :female }
     end
 
     trait :submitted do

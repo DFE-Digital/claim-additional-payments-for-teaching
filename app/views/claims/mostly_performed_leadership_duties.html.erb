@@ -6,9 +6,10 @@
 
     <%= form_for current_claim, url: claim_path do |form| %>
       <%= form_group_tag current_claim do %>
-        <%= form.fields_for :eligibility, include_id: false do |fields| %>
-          <%= fields.hidden_field :mostly_performed_leadership_duties %>
+        <%= form.fields_for :eligibility, include_id: false do |eligibility_fields| %>
           <fieldset class="govuk-fieldset">
+
+            <%= eligibility_fields.hidden_field :mostly_performed_leadership_duties %>
 
             <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl">
               <h1 class="govuk-fieldset__heading">
@@ -24,12 +25,12 @@
 
             <div class="govuk-radios govuk-radios--inline">
               <div class="govuk-radios__item">
-                <%= fields.radio_button(:mostly_performed_leadership_duties, true, class: "govuk-radios__input") %>
-                <%= fields.label :mostly_performed_leadership_duties_true, "Yes", class: "govuk-label govuk-radios__label" %>
+                <%= eligibility_fields.radio_button(:mostly_performed_leadership_duties, true, class: "govuk-radios__input") %>
+                <%= eligibility_fields.label :mostly_performed_leadership_duties_true, "Yes", class: "govuk-label govuk-radios__label" %>
               </div>
               <div class="govuk-radios__item">
-                <%= fields.radio_button(:mostly_performed_leadership_duties, false, class: "govuk-radios__input") %>
-                <%= fields.label :mostly_performed_leadership_duties_false, "No", class: "govuk-label govuk-radios__label" %>
+                <%= eligibility_fields.radio_button(:mostly_performed_leadership_duties, false, class: "govuk-radios__input") %>
+                <%= eligibility_fields.label :mostly_performed_leadership_duties_false, "No", class: "govuk-label govuk-radios__label" %>
               </div>
             </div>
 

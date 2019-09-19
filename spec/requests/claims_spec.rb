@@ -135,7 +135,19 @@ RSpec.describe "Claims", type: :request do
 
       context "having searched for a school but not selected a school from the results on the claim-school page" do
         it "re-renders the school search results with an error message" do
-          put claim_path("claim-school"), params: {school_search: "peniston", claim: {eligibility_attributes: {claim_school_id: ""}}}
+          put claim_path("claim-school"), params: {
+            school_search: "peniston",
+            claim: {
+              eligibility_attributes: {
+                employments_attributes: {
+                  "0" => {
+                    id: in_progress_claim.eligibility.selected_employment.id,
+                    school_id: "",
+                  },
+                },
+              },
+            },
+          }
 
           expect(response).to be_successful
           expect(response.body).to include("There is a problem")
@@ -146,7 +158,19 @@ RSpec.describe "Claims", type: :request do
 
       context "when the update makes the claim ineligible" do
         it "redirects to the “ineligible” page" do
-          put claim_path("claim-school"), params: {claim: {eligibility_attributes: {claim_school_id: schools(:hampstead_school).to_param}}}
+          put claim_path("claim-school"), params: {
+            school_search: "peniston",
+            claim: {
+              eligibility_attributes: {
+                employments_attributes: {
+                  "0" => {
+                    id: in_progress_claim.eligibility.selected_employment.id,
+                    school_id: schools(:hampstead_school).id,
+                  },
+                },
+              },
+            },
+          }
 
           expect(response).to redirect_to(claim_path("ineligible"))
         end

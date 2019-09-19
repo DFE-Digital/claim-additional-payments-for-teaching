@@ -1,6 +1,6 @@
 module FeatureHelpers
   def answer_all_student_loans_claim_questions
-    start_claim
+    claim = start_claim
     choose_qts_year
     choose_school schools(:penistone_grammar_school)
     choose_still_teaching "Yes, at another school"
@@ -18,7 +18,7 @@ module FeatureHelpers
     click_on "Continue"
 
     answer_student_loan_plan_questions
-    fill_in I18n.t("student_loans.questions.student_loan_amount", claim_school_name: claim.eligibility.claim_school_name), with: "1100"
+    fill_in I18n.t("student_loans.questions.student_loan_amount", claim_school_name: claim.eligibility.selected_employment.school_name), with: "1100"
     click_on "Continue"
 
     fill_in I18n.t("questions.email_address"), with: "name@example.tld"

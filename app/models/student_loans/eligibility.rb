@@ -2,14 +2,6 @@
 
 module StudentLoans
   class Eligibility < ApplicationRecord
-    SUBJECT_ATTRIBUTES = [
-      :biology_taught,
-      :chemistry_taught,
-      :physics_taught,
-      :computer_science_taught,
-      :languages_taught,
-    ].freeze
-
     self.table_name = "student_loans_eligibilities"
 
     enum qts_award_year: {
@@ -32,45 +24,93 @@ module StudentLoans
     belongs_to :claim_school, optional: true, class_name: "School"
     belongs_to :current_school, optional: true, class_name: "School"
 
+    has_many :employments
+    accepts_nested_attributes_for :employments
+
     validates :qts_award_year, on: [:"qts-year", :submit], presence: {message: "Select the academic year you were awarded qualified teacher status"}
-    validates :claim_school, on: [:"claim-school", :submit], presence: {message: "Select a school from the list"}
     validates :employment_status, on: [:"still-teaching", :submit], presence: {message: "Choose the option that describes your current employment status"}
     validates :current_school, on: [:"current-school", :submit], presence: {message: "Select a school from the list"}
-    validate :one_subject_must_be_selected, on: [:"subjects-taught", :submit], unless: :not_taught_eligible_subjects?
     validates :had_leadership_position, on: [:"leadership-position", :submit], inclusion: {in: [true, false], message: "Select either Yes or No"}
     validates :mostly_performed_leadership_duties, on: [:"mostly-performed-leadership-duties", :submit], inclusion: {in: [true, false], message: "Select either Yes or No"}, if: :had_leadership_position?
-    validates :student_loan_repayment_amount, on: [:"student-loan-amount", :submit], presence: {message: "Enter your student loan repayment amount"}
-    validates_numericality_of :student_loan_repayment_amount, message: "Enter a valid monetary amount", allow_nil: true, greater_than_or_equal_to: 0, less_than_or_equal_to: 99999
 
-    delegate :name, to: :claim_school, prefix: true, allow_nil: true
     delegate :name, to: :current_school, prefix: true, allow_nil: true
 
-    def subjects_taught
-      SUBJECT_ATTRIBUTES.select { |attribute_name| public_send("#{attribute_name}?") }
+    # Represents the claimant's employment that they are filling out details for
+    # TODO: Support multiple employments.
+    def selected_employment
+      employments.any? ? employments.last : Employment.new
     end
 
-    def student_loan_repayment_amount=(value)
-      super(value.to_s.gsub(/[£,\s]/, ""))
+    # TODO: Remove this temporary delegation.
+    def claim_school
+      current_employment.school
+    end
+
+    # TODO: Remove this temporary delegation.
+    def claim_school_name
+      claim_school&.name
+    end
+
+    # TODO: Remove this temporary delegation.
+    def biology_taught?
+      current_employment.biology_taught?
+    end
+
+    # TODO: Remove this temporary delegation.
+    def chemistry_taught?
+      current_employment.chemistry_taught?
+    end
+
+    # TODO: Remove this temporary delegation.
+    def computer_science_taught?
+      current_employment.computer_science_taught?
+    end
+
+    # TODO: Remove this temporary delegation.
+    def languages_taught?
+      current_employment.languages_taught?
+    end
+
+    # TODO: Remove this temporary delegation.
+    def physics_taught?
+      current_employment.physics_taught?
+    end
+
+    # TODO: Remove this temporary delegation.
+    def taught_eligible_subjects
+      current_employment.taught_eligible_subjects
+    end
+
+    # TODO: Remove this temporary delegation.
+    def subjects_taught
+      current_employment.subjects_taught
+    end
+
+    def student_loan_repayment_amount
+      selected_employment.student_loan_repayment_amount
     end
 
     def ineligible?
-      ineligible_qts_award_year? ||
-        ineligible_claim_school? ||
+      # TODO: Support multiple employments.
+      selected_employment.ineligible? ||
+        ineligible_qts_award_year? ||
         employed_at_no_school? ||
         current_school_closed? ||
-        not_taught_eligible_subjects? ||
         not_taught_enough?
     end
 
     def ineligibility_reason
-      [
-        :ineligible_qts_award_year,
-        :ineligible_claim_school,
-        :employed_at_no_school,
-        :current_school_closed,
-        :not_taught_eligible_subjects,
-        :not_taught_enough,
-      ].find { |eligibility_check| send("#{eligibility_check}?") }
+      # TODO: Support multiple employments.
+      if selected_employment.ineligible?
+        selected_employment.ineligibility_reason
+      else
+        [
+          :ineligible_qts_award_year,
+          :employed_at_no_school,
+          :current_school_closed,
+          :not_taught_enough,
+        ].find { |eligibility_check| send("#{eligibility_check}?") }
+      end
     end
 
     private
@@ -79,24 +119,12 @@ module StudentLoans
       awarded_qualified_status_before_2013?
     end
 
-    def ineligible_claim_school?
-      claim_school.present? && !claim_school.eligible_for_student_loans?
-    end
-
-    def not_taught_eligible_subjects?
-      taught_eligible_subjects == false
+    def current_school_closed?
+      current_school.present? && !current_school.open?
     end
 
     def not_taught_enough?
-      mostly_performed_leadership_duties == true
-    end
-
-    def one_subject_must_be_selected
-      errors.add(:subjects_taught, "Choose a subject, or select No") if subjects_taught.empty?
-    end
-
-    def current_school_closed?
-      current_school.present? && !current_school.open?
+      mostly_performed_leadership_duties?
     end
   end
 end

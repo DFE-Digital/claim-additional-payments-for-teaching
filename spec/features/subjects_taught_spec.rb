@@ -3,6 +3,11 @@ require "rails_helper"
 RSpec.feature "Choosing subjects taught during Teacher Student Loan Repayments claims" do
   before do
     start_claim
+    choose_qts_year
+    choose_school schools(:penistone_grammar_school)
+    choose_still_teaching "Yes, at another school"
+    choose_school schools(:hampstead_school)
+
     visit claim_path("subjects-taught")
   end
 
@@ -16,7 +21,7 @@ RSpec.feature "Choosing subjects taught during Teacher Student Loan Repayments c
 
       choose I18n.t("student_loans.questions.eligible_subjects.none_taught")
 
-      expect(page).to have_checked_field("claim_eligibility_attributes_taught_eligible_subjects_false", visible: false)
+      expect(page).to have_checked_field("claim_eligibility_attributes_employments_attributes_0_taught_eligible_subjects_false", visible: false)
 
       expect(page).to_not have_checked_field("eligible_subjects_biology_taught", visible: false)
       expect(page).to_not have_checked_field("eligible_subjects_physics_taught", visible: false)
@@ -30,12 +35,12 @@ RSpec.feature "Choosing subjects taught during Teacher Student Loan Repayments c
     scenario "checks not applicable and then chooses a subject" do
       choose I18n.t("student_loans.questions.eligible_subjects.none_taught")
 
-      expect(page).to have_checked_field("claim_eligibility_attributes_taught_eligible_subjects_false", visible: false)
+      expect(page).to have_checked_field("claim_eligibility_attributes_employments_attributes_0_taught_eligible_subjects_false", visible: false)
 
       check "Biology"
 
       expect(page).to have_checked_field("eligible_subjects_biology_taught", visible: false)
-      expect(page).to_not have_checked_field("claim_eligibility_attributes_taught_eligible_subjects_false", visible: false)
+      expect(page).to_not have_checked_field("claim_eligibility_attributes_employments_attributes_0_taught_eligible_subjects_false", visible: false)
 
       click_on "Continue"
 

@@ -38,6 +38,13 @@ en:
     currency:
       format:
         unit: "£"
+  activerecord:
+    errors:
+      models:
+        student_loans/employment:
+          attributes:
+            school:
+              required: "Select a school from the list"
   service_name: "Claim additional payments for teaching"
   support_email_address: "additionalteachingpayment@digital.education.gov.uk"
   questions:

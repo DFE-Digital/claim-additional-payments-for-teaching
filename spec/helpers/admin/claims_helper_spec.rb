@@ -9,13 +9,16 @@ describe Admin::ClaimsHelper do
       build(
         :student_loans_eligibility,
         qts_award_year: "2013_2014",
-        claim_school: claim_school,
         current_school: current_school,
-        chemistry_taught: true,
-        physics_taught: true,
         had_leadership_position: true,
         mostly_performed_leadership_duties: false,
-        student_loan_repayment_amount: 1987.65,
+        employments: [build(
+          :student_loans_employment,
+          school: claim_school,
+          chemistry_taught: true,
+          physics_taught: true,
+          student_loan_repayment_amount: 1987.65,
+        )]
       )
     end
 
@@ -75,7 +78,12 @@ describe Admin::ClaimsHelper do
       build(
         :claim,
         student_loan_plan: :plan_1,
-        eligibility: build(:student_loans_eligibility, student_loan_repayment_amount: 1234),
+        eligibility: build(
+          :student_loans_eligibility,
+          employments: [
+            build(:student_loans_employment, student_loan_repayment_amount: 1234),
+          ]
+        )
       )
     end
 

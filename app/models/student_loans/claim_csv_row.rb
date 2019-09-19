@@ -22,7 +22,7 @@ module StudentLoans
     end
 
     def claim_school_name
-      model.eligibility.claim_school_name
+      model.eligibility.selected_employment.school_name
     end
 
     def current_school_name
@@ -46,7 +46,7 @@ module StudentLoans
     end
 
     def student_loan_repayment_amount
-      "£#{model.eligibility.student_loan_repayment_amount}"
+      "£#{model.eligibility.selected_employment.student_loan_repayment_amount}"
     end
 
     def student_loan_repayment_plan
@@ -54,23 +54,23 @@ module StudentLoans
     end
 
     def biology_taught
-      model.eligibility.biology_taught? ? "Yes" : "No"
+      model.eligibility.selected_employment.biology_taught? ? "Yes" : "No"
     end
 
     def chemistry_taught
-      model.eligibility.chemistry_taught? ? "Yes" : "No"
+      model.eligibility.selected_employment.chemistry_taught? ? "Yes" : "No"
     end
 
     def computer_science_taught
-      model.eligibility.computer_science_taught? ? "Yes" : "No"
+      model.eligibility.selected_employment.computer_science_taught? ? "Yes" : "No"
     end
 
     def languages_taught
-      model.eligibility.languages_taught? ? "Yes" : "No"
+      model.eligibility.selected_employment.languages_taught? ? "Yes" : "No"
     end
 
     def physics_taught
-      model.eligibility.physics_taught? ? "Yes" : "No"
+      model.eligibility.selected_employment.physics_taught? ? "Yes" : "No"
     end
 
     def submitted_at

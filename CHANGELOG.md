@@ -6,6 +6,9 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+- Refactor claim school and employment questions to allow for multiple
+  employments over the past financial year
+
 ## [Release 011] - 2019-09-23
 
 - Show how many claims are awaiting approval

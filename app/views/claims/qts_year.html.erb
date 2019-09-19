@@ -13,15 +13,15 @@
             </h1>
           </legend>
 
-          <%= form.fields_for :eligibility, include_id: false do |fields| %>
+          <%= form.fields_for :eligibility, include_id: false do |eligibility_fields| %>
             <%= errors_tag current_claim.eligibility, :qts_award_year %>
 
             <div class="govuk-radios">
-              <%= fields.hidden_field :qts_award_year %>
+              <%= eligibility_fields.hidden_field :qts_award_year %>
               <% StudentLoans::Eligibility.qts_award_years.each_key do |option| %>
                 <div class="govuk-radios__item">
-                  <%= fields.radio_button(:qts_award_year, option, class: "govuk-radios__input") %>
-                  <%= fields.label "qts_award_year_#{option}", t("student_loans.questions.qts_award_years.#{option}"), class: "govuk-label govuk-radios__label" %>
+                  <%= eligibility_fields.radio_button(:qts_award_year, option, class: "govuk-radios__input") %>
+                  <%= eligibility_fields.label "qts_award_year_#{option}", t("student_loans.questions.qts_award_years.#{option}"), class: "govuk-label govuk-radios__label" %>
                 </div>
               <% end %>
             </div>

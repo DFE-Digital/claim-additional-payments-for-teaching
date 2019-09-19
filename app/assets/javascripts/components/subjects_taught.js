@@ -10,7 +10,7 @@ document.addEventListener("DOMContentLoaded", function() {
   function toggleSubjectValues(event) {
     var el = event.target;
     var eligibleSubjectsClass = "subject";
-    var notTeachingSubjectsName = "claim[eligibility_attributes][taught_eligible_subjects]";
+    var notTeachingSubjectsName = "claim[eligibility_attributes][employments_attributes][0][taught_eligible_subjects]";
 
     if (!el) {
       return;
