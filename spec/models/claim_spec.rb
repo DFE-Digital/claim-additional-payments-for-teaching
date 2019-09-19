@@ -509,4 +509,26 @@ RSpec.describe Claim, type: :model do
       expect(claim.rejected_by).to eq(nil)
     end
   end
+
+  describe "escalate!" do
+    it "escalates a claim" do
+      claim = create(:claim, :submitted)
+
+      freeze_time do
+        claim.escalate!(escalated_by: "12345")
+
+        expect(claim.escalated_at).to eq(Time.zone.now)
+        expect(claim.escalated_by).to eq("12345")
+      end
+    end
+
+    it "returns false when claim is not checkable" do
+      claim = create(:claim, :approved)
+      result = claim.escalate!(escalated_by: "12345")
+
+      expect(result).to eq(false)
+      expect(claim.escalated_at).to eq(nil)
+      expect(claim.escalated_by).to eq(nil)
+    end
+  end
 end

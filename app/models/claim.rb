@@ -145,6 +145,17 @@ class Claim < ApplicationRecord
     end
   end
 
+  def escalate!(escalated_by:)
+    if needs_checking?
+      update(
+        escalated_at: Time.zone.now,
+        escalated_by: escalated_by
+      )
+    else
+      false
+    end
+  end
+
   def submitted?
     submitted_at.present?
   end
