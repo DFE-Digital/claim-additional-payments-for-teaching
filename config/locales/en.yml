@@ -33,6 +33,7 @@ en:
   date:
     formats:
       default: "%-d %B %Y"
+      day_month_year: "%d/%m/%Y"
   number:
     currency:
       format:
