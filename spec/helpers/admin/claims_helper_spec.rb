@@ -22,8 +22,8 @@ describe Admin::ClaimsHelper do
     it "returns an array of questions and answers for displaying to approver" do
       expected_answers = [
         [I18n.t("student_loans.questions.admin.qts_award_year"), "1 September 2013 to 31 August 2014"],
-        [I18n.t("student_loans.questions.admin.claim_school"), "<a class=\"govuk-link\" href=\"https://get-information-schools.service.gov.uk/Establishments/Establishment/Details/#{claim_school.urn}\">#{claim_school.name}</a>"],
-        [I18n.t("questions.admin.current_school"), "<a class=\"govuk-link\" href=\"https://get-information-schools.service.gov.uk/Establishments/Establishment/Details/#{current_school.urn}\">#{current_school.name}</a>"],
+        [I18n.t("student_loans.questions.admin.claim_school"), helper.display_school(claim_school)],
+        [I18n.t("questions.admin.current_school"), helper.display_school(current_school)],
         [I18n.t("student_loans.questions.admin.subjects_taught"), "Chemistry and Physics"],
         [I18n.t("student_loans.questions.admin.had_leadership_position"), "Yes"],
         [I18n.t("student_loans.questions.admin.mostly_performed_leadership_duties"), "No"],
@@ -84,6 +84,23 @@ describe Admin::ClaimsHelper do
         [I18n.t("student_loans.csv_headers.student_loan_repayment_amount"), "£1,234.00"],
         [I18n.t("student_loans.csv_headers.student_loan_repayment_plan"), "Plan 1"],
       ])
+    end
+  end
+
+  describe "display_school" do
+    let(:school) do
+      build(:school,
+        name: "Bash Street School",
+        urn: "1234",
+        establishment_number: 4567,
+        local_authority: build(:local_authority, code: 123))
+    end
+
+    it "shows a school with a link and the DfE number" do
+      gias_url = "https://get-information-schools.service.gov.uk/Establishments/Establishment/Details/#{school.urn}"
+      expect(helper.display_school(school)).to eq(
+        "<a class=\"govuk-link\" href=\"#{gias_url}\">#{school.name}</a> <span class=\"govuk-body-s\">(#{school.dfe_number})</span>"
+      )
     end
   end
 end

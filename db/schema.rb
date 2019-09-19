@@ -99,6 +99,7 @@ ActiveRecord::Schema.define(version: 2019_09_18_142241) do
     t.datetime "updated_at", null: false
     t.uuid "local_authority_district_id"
     t.date "close_date"
+    t.integer "establishment_number"
     t.index ["local_authority_district_id"], name: "index_schools_on_local_authority_district_id"
     t.index ["local_authority_id"], name: "index_schools_on_local_authority_id"
     t.index ["urn"], name: "index_schools_on_urn", unique: true

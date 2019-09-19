@@ -44,6 +44,7 @@ class SchoolDataImporter
     school.local_authority = local_authority
     school.local_authority_district = local_authority_district
     school.close_date = row.fetch("CloseDate")
+    school.establishment_number = row.fetch("EstablishmentNumber")
     school
   end
 
