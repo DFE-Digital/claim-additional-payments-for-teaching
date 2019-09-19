@@ -13,16 +13,18 @@ RSpec.describe "Admin claim rejections", type: :request do
 
       it "rejects a claim" do
         freeze_time do
-          post admin_claim_rejections_path(claim_id: claim.id)
+          post admin_claim_rejections_path(claim_id: claim.id, claim: {note: {body: "some reason."}})
 
           follow_redirect!
 
           expect(response.body).to include("Claim has been rejected successfully")
 
           claim.reload
-
           expect(claim.rejected_at).to eq(Time.zone.now)
           expect(claim.rejected_by).to eq("123")
+          note = claim.notes.last
+          expect(note.body).to eq("some reason.")
+          expect(note.created_by).to eq("123")
         end
       end
 
