@@ -427,7 +427,6 @@ RSpec.describe Claim, type: :model do
         :bank_sort_code,
         :bank_account_number,
         :date_of_birth,
-        :full_name,
         :first_name,
         :middle_name,
         :surname,

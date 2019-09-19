@@ -1,6 +1,6 @@
 class BackfillFirstMiddleSurnames < ActiveRecord::Migration[5.2]
   def up
-    claims_with_full_names.each do |claim|
+    claims_with_verify_info.each do |claim|
       parser = Claim::VerifyResponseParametersParser.new(claim.verify_response)
       claim.update!(
         first_name: parser.first_name,
@@ -11,7 +11,7 @@ class BackfillFirstMiddleSurnames < ActiveRecord::Migration[5.2]
   end
 
   def down
-    claims_with_full_names.update_all(
+    claims_with_verify_info.update_all(
       first_name: nil,
       middle_name: nil,
       surname: nil
@@ -20,7 +20,7 @@ class BackfillFirstMiddleSurnames < ActiveRecord::Migration[5.2]
 
   private
 
-  def claims_with_full_names
-    Claim.where.not(verify_response: nil).where.not(full_name: nil)
+  def claims_with_verify_info
+    Claim.where.not(verify_response: nil)
   end
 end

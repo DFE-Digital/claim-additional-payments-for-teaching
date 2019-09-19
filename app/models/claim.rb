@@ -25,7 +25,6 @@ class Claim < ApplicationRecord
     date_of_birth: true,
     eligibility_id: false,
     eligibility_type: false,
-    full_name: true,
     first_name: true,
     middle_name: true,
     surname: true,
