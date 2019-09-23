@@ -1,4 +1,4 @@
-class Admin::ClaimApprovalsController < Admin::BaseAdminController
+class Admin::ClaimChecksController < Admin::BaseAdminController
   before_action :ensure_service_operator
 
   def create

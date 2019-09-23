@@ -8,12 +8,12 @@ RSpec.describe "Admin claim approvals", type: :request do
       follow_redirect!
     end
 
-    describe "claim_approvals#create" do
+    describe "claim_checks#create" do
       let(:claim) { create(:claim, :submitted) }
 
       it "approves a claim" do
         freeze_time do
-          post admin_claim_approvals_path(claim_id: claim.id)
+          post admin_claim_checks_path(claim_id: claim.id)
 
           follow_redirect!
 
@@ -27,7 +27,7 @@ RSpec.describe "Admin claim approvals", type: :request do
         let(:claim) { create(:claim, :approved) }
 
         it "shows an error" do
-          post admin_claim_approvals_path(claim_id: claim.id)
+          post admin_claim_checks_path(claim_id: claim.id)
 
           follow_redirect!
 
@@ -44,11 +44,11 @@ RSpec.describe "Admin claim approvals", type: :request do
       follow_redirect!
     end
 
-    describe "claim_approvals#create" do
+    describe "claim_checks#create" do
       let(:claim) { create(:claim, :submitted) }
 
       it "does not allow a claim to be approved" do
-        post admin_claim_approvals_path(claim_id: claim.id)
+        post admin_claim_checks_path(claim_id: claim.id)
 
         expect(response.code).to eq("401")
       end

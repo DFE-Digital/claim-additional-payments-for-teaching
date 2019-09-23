@@ -13,7 +13,7 @@
     <%= render partial: "answer_section", locals: {heading: "Submission details", answers: admin_submission_details(@claim)} %>
 
     <%= button_to "Approve",
-                  admin_claim_approvals_path(@claim),
+                  admin_claim_checks_path(@claim),
                   method: :post,
                   class: "govuk-button",
                   data: { confirm: "Are you sure you want to approve this claim?" } %>
