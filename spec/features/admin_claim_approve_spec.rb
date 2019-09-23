@@ -16,6 +16,7 @@ RSpec.feature "Admin approves a claim" do
         click_on "Approve claims"
 
         expect(page).to have_content(claim_to_approve.reference)
+        expect(page).to have_content("5 claims awaiting approval")
 
         find("a[href='#{admin_claim_path(claim_to_approve)}']").click
         perform_enqueued_jobs { click_on "Approve" }

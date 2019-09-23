@@ -6,6 +6,7 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+- Show how many claims are awaiting approval
 - Show date of birth in a better place and format for claim checking
 - Show DfE number against school in approver view of claim
 - Drop redundant full_name column from claims table
