@@ -21,10 +21,7 @@ RSpec.feature "Admin approves a claim" do
         find("a[href='#{admin_claim_path(claim_to_approve)}']").click
         perform_enqueued_jobs { click_on "Approve" }
 
-        claim_to_approve.reload
-
-        expect(claim_to_approve.approved_at).to eq(Time.zone.now)
-        expect(claim_to_approve.approved_by).to eq("12345")
+        expect(claim_to_approve.check.checked_by).to eq("12345")
 
         expect(page).to have_content("Claim has been approved successfully")
         expect(page).to_not have_content(claim_to_approve.reference)

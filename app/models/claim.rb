@@ -107,8 +107,8 @@ class Claim < ApplicationRecord
   before_save :normalise_bank_sort_code, if: :bank_sort_code_changed?
 
   scope :submitted, -> { where.not(submitted_at: nil) }
-  scope :awaiting_approval, -> { submitted.where(approved_at: nil) }
-  scope :approved, -> { where.not(approved_at: nil).where.not(approved_by: nil) }
+  scope :awaiting_approval, -> { submitted.left_outer_joins(:check).where(checks: {claim_id: nil}) }
+  scope :approved, -> { joins(:check).where("checks.result" => :approved) }
 
   def submit!
     if submittable?
@@ -122,9 +122,9 @@ class Claim < ApplicationRecord
 
   def approve!(approved_by:)
     if approvable?
-      update(
-        approved_at: Time.zone.now,
-        approved_by: approved_by
+      create_check(
+        result: :approved,
+        checked_by: approved_by
       )
     else
       false
@@ -140,7 +140,7 @@ class Claim < ApplicationRecord
   end
 
   def approvable?
-    submitted? && approved_at.nil?
+    submitted? && check.nil?
   end
 
   def address(seperator = ", ")

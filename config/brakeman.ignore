@@ -3,24 +3,24 @@
     {
       "warning_type": "File Access",
       "warning_code": 16,
-      "fingerprint": "111f5af521375402b31a9df450b49640d88661d1c8303595e3e4fcd6189f3cc1",
+      "fingerprint": "e8849ac5d4c15723fcde9994dd67c5bc9f5333b127889ea96a12d26d86d5e32f",
       "check_name": "SendFile",
       "message": "Model attribute used in file name",
       "file": "app/controllers/admin/claims_controller.rb",
       "line": 17,
       "link": "https://brakemanscanner.org/docs/warning_types/file_access/",
-      "code": "send_file(Payroll::ClaimsCsv.new(Claim.includes(:eligibility => ([:claim_school, :current_school])).approved.order(:approved_at)).file, :type => \"text/csv\", :filename => \"payroll_data.csv\")",
+      "code": "send_file(Payroll::ClaimsCsv.new(Claim.includes(:eligibility => ([:claim_school, :current_school])).approved.order(\"checks.created_at\")).file, :type => \"text/csv\", :filename => \"payroll_data.csv\")",
       "render_path": null,
       "location": {
         "type": "method",
         "class": "Admin::ClaimsController",
         "method": "payroll"
       },
-      "user_input": "Payroll::ClaimsCsv.new(Claim.includes(:eligibility => ([:claim_school, :current_school])).approved.order(:approved_at)).file",
+      "user_input": "Payroll::ClaimsCsv.new(Claim.includes(:eligibility => ([:claim_school, :current_school])).approved.order(\"checks.created_at\")).file",
       "confidence": "Medium",
       "note": ""
     }
   ],
-  "updated": "2019-09-26 16:26:58 +0100",
+  "updated": "2019-09-30 14:22:47 +0100",
   "brakeman_version": "4.6.1"
 }

@@ -466,8 +466,7 @@ RSpec.describe Claim, type: :model do
       freeze_time do
         claim.approve!(approved_by: "12345")
 
-        expect(claim.approved_at).to eq(Time.zone.now)
-        expect(claim.approved_by).to eq("12345")
+        expect(claim.check.checked_by).to eq("12345")
       end
     end
 

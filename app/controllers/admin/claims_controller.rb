@@ -10,7 +10,7 @@ class Admin::ClaimsController < Admin::BaseAdminController
   end
 
   def payroll
-    claims = Claim.includes(eligibility: [:claim_school, :current_school]).approved.order(:approved_at)
+    claims = Claim.includes(eligibility: [:claim_school, :current_school]).approved.order("checks.created_at")
     csv = Payroll::ClaimsCsv.new(claims)
 
     respond_to do |format|

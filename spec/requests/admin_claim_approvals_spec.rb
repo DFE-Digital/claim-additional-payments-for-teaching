@@ -19,10 +19,7 @@ RSpec.describe "Admin claim approvals", type: :request do
 
           expect(response.body).to include("Claim has been approved successfully")
 
-          claim.reload
-
-          expect(claim.approved_at).to eq(Time.zone.now)
-          expect(claim.approved_by).to eq("123")
+          expect(claim.check.checked_by).to eq("123")
         end
       end
 
