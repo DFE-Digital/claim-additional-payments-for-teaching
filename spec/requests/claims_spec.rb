@@ -176,6 +176,60 @@ RSpec.describe "Claims", type: :request do
         end
       end
 
+      context "when attempting to update an someone else’s records" do
+        before do
+          in_progress_claim.update!(
+            eligibility: create(:student_loans_eligibility, employments: [claimant_employment])
+          )
+        end
+        let(:claimant_employment) { build(:student_loans_employment) }
+        let(:someone_elses_employment) do
+          build(
+            :student_loans_employment,
+            student_loan_repayment_amount: 200
+          )
+        end
+        let!(:someone_elses_eligibility) do
+          create(
+            :student_loans_eligibility,
+            had_leadership_position: false,
+            employments: [someone_elses_employment]
+          )
+        end
+
+        it "doesn’t update their eligibility" do
+          put claim_path("leadership-position"), params: {
+            claim: {
+              eligibility_attributes: {
+                id: someone_elses_eligibility.id,
+                had_leadership_position: "true",
+              },
+            },
+          }
+          expect(in_progress_claim.reload.eligibility.id).not_to eql(someone_elses_eligibility.id)
+          expect(someone_elses_eligibility.had_leadership_position).to eql(false)
+        end
+
+        it "doesn’t update their employment" do
+          expect {
+            put claim_path("student-loan-amount"), params: {
+              claim: {
+                eligibility_attributes: {
+                  id: someone_elses_eligibility.id,
+                  employments_attributes: {
+                    "0" => {
+                      id: someone_elses_employment.id,
+                      student_loan_repayment_amount: 1,
+                    },
+                  },
+                },
+              },
+            }
+          }.to raise_exception(ActiveRecord::RecordNotFound)
+          expect(someone_elses_employment.reload.student_loan_repayment_amount).to eql(200)
+        end
+      end
+
       context "when a field has come from Verify" do
         before do
           in_progress_claim.update!(verified_fields: ["payroll_gender"])
