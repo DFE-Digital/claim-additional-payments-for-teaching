@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+## [Release 011] - 2019-09-23
+
 - Show how many claims are awaiting approval
 - Show date of birth in a better place and format for claim checking
 - Show DfE number against school in approver view of claim
@@ -94,7 +96,9 @@ The format is based on [Keep a Changelog]
 - First release for student loan repayments private beta
 
 [unreleased]:
-  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-010...HEAD
+  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-011...HEAD
+[release 011]:
+  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-010...release-011
 [release 010]:
   https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-009...release-010
 [release 009]:
