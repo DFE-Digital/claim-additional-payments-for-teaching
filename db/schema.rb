@@ -125,7 +125,25 @@ ActiveRecord::Schema.define(version: 2019_09_18_142241) do
     t.index ["current_school_id"], name: "index_student_loans_eligibilities_on_current_school_id"
   end
 
+  create_table "student_loans_employments", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "eligibility_id"
+    t.uuid "school_id"
+    t.boolean "biology_taught"
+    t.boolean "chemistry_taught"
+    t.boolean "computer_science_taught"
+    t.boolean "languages_taught"
+    t.boolean "physics_taught"
+    t.boolean "taught_eligible_subjects"
+    t.decimal "student_loan_repayment_amount", precision: 7, scale: 2
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["eligibility_id"], name: "student_loans_employments_on_eligibility_id"
+    t.index ["school_id"], name: "index_student_loans_employments_on_school_id"
+  end
+
   add_foreign_key "schools", "local_authority_districts"
   add_foreign_key "student_loans_eligibilities", "schools", column: "claim_school_id"
   add_foreign_key "student_loans_eligibilities", "schools", column: "current_school_id"
+  add_foreign_key "student_loans_employments", "schools"
+  add_foreign_key "student_loans_employments", "student_loans_eligibilities", column: "eligibility_id"
 end
