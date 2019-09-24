@@ -15,6 +15,7 @@
     <%= button_to "Approve",
                   admin_claim_checks_path(@claim),
                   method: :post,
+                  params: { result: "approved" },
                   class: "govuk-button",
                   data: { confirm: "Are you sure you want to approve this claim?" } %>
   </div>

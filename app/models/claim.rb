@@ -120,27 +120,12 @@ class Claim < ApplicationRecord
     end
   end
 
-  def approve!(approved_by:)
-    if approvable?
-      create_check(
-        result: :approved,
-        checked_by: approved_by
-      )
-    else
-      false
-    end
-  end
-
   def submitted?
     submitted_at.present?
   end
 
   def submittable?
     valid?(:submit) && !submitted?
-  end
-
-  def approvable?
-    submitted? && check.nil?
   end
 
   def address(seperator = ", ")
