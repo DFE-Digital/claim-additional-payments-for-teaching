@@ -68,6 +68,7 @@ RSpec.configure do |config|
 
   config.before :each do
     clear_enqueued_jobs
+    ActionMailer::Base.deliveries.clear
     OmniAuth.config.mock_auth[:dfe] = nil
   end
 end
