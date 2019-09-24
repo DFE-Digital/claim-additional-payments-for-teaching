@@ -60,7 +60,7 @@ RSpec.describe StudentLoans::ClaimCsvRow do
         "Yes",
         claim.bank_sort_code,
         claim.bank_account_number,
-        "£#{eligibility.student_loan_repayment_amount}",
+        "£#{eligibility.selected_employment.student_loan_repayment_amount}",
       ])
     end
 

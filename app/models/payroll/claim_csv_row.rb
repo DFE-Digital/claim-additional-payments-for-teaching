@@ -126,7 +126,7 @@ module Payroll
     end
 
     def scheme_amount
-      model.eligibility.student_loan_repayment_amount.to_s
+      model.eligibility.selected_employment.student_loan_repayment_amount.to_s
     end
 
     def model

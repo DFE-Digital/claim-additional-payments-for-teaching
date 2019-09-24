@@ -41,10 +41,6 @@ module StudentLoans
       employments.any? ? employments.last : Employment.new
     end
 
-    def student_loan_repayment_amount
-      selected_employment.student_loan_repayment_amount
-    end
-
     def ineligible?
       # TODO: Support multiple employments.
       selected_employment.ineligible? ||

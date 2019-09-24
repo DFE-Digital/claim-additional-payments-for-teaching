@@ -79,7 +79,7 @@ RSpec.feature "Teacher Student Loan Repayments claims" do
     fill_in I18n.t("student_loans.questions.student_loan_amount", claim_school_name: claim.eligibility.selected_employment.school_name), with: "1100"
     click_on "Continue"
 
-    expect(claim.eligibility.reload.student_loan_repayment_amount).to eql(1100.00)
+    expect(claim.eligibility.selected_employment.reload.student_loan_repayment_amount).to eql(1100.00)
 
     expect(page).to have_text(I18n.t("questions.email_address"))
     expect(page).to have_text("We will only use your email address to update you about your claim.")
