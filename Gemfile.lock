@@ -172,7 +172,7 @@ GEM
       ast (~> 2.4.0)
     pg (1.1.4)
     public_suffix (4.0.1)
-    puma (4.1.1)
+    puma (4.2.0)
       nio4r (~> 2.0)
     rack (2.0.7)
     rack-oauth2 (1.10.0)
@@ -343,7 +343,7 @@ DEPENDENCIES
   omniauth-rails_csrf_protection
   omniauth_openid_connect
   pg (>= 0.18, < 2.0)
-  puma (~> 4.1)
+  puma (~> 4.2)
   rails (~> 5.2.2)
   rollbar
   rspec-rails
