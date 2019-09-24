@@ -363,7 +363,7 @@ RSpec.describe Claim, type: :model do
   describe "awaiting_approval" do
     let!(:submitted_claims) { create_list(:claim, 5, :submitted) }
     let!(:unsubmitted_claims) { create_list(:claim, 2, :submittable) }
-    let!(:approved_claims) { create_list(:claim, 5, :submitted, approved_at: Time.zone.now) }
+    let!(:approved_claims) { create_list(:claim, 5, :approved) }
 
     it "returns submitted claims awaiting approval" do
       expect(subject.class.awaiting_approval).to match_array(submitted_claims)
