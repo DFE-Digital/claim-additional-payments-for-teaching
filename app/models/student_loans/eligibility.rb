@@ -41,51 +41,6 @@ module StudentLoans
       employments.any? ? employments.last : Employment.new
     end
 
-    # TODO: Remove this temporary delegation.
-    def claim_school
-      current_employment.school
-    end
-
-    # TODO: Remove this temporary delegation.
-    def claim_school_name
-      claim_school&.name
-    end
-
-    # TODO: Remove this temporary delegation.
-    def biology_taught?
-      current_employment.biology_taught?
-    end
-
-    # TODO: Remove this temporary delegation.
-    def chemistry_taught?
-      current_employment.chemistry_taught?
-    end
-
-    # TODO: Remove this temporary delegation.
-    def computer_science_taught?
-      current_employment.computer_science_taught?
-    end
-
-    # TODO: Remove this temporary delegation.
-    def languages_taught?
-      current_employment.languages_taught?
-    end
-
-    # TODO: Remove this temporary delegation.
-    def physics_taught?
-      current_employment.physics_taught?
-    end
-
-    # TODO: Remove this temporary delegation.
-    def taught_eligible_subjects
-      current_employment.taught_eligible_subjects
-    end
-
-    # TODO: Remove this temporary delegation.
-    def subjects_taught
-      current_employment.subjects_taught
-    end
-
     def student_loan_repayment_amount
       selected_employment.student_loan_repayment_amount
     end
