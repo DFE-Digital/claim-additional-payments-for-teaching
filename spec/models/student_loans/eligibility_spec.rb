@@ -64,6 +64,16 @@ RSpec.describe StudentLoans::Eligibility, type: :model do
       expect(build(:student_loans_eligibility, current_school: schools(:the_samuel_lister_academy)).ineligible?).to eql true
       expect(build(:student_loans_eligibility, current_school: schools(:penistone_grammar_school)).ineligible?).to eql false
     end
+
+    it "returns true when the school is not eligible" do
+      expect(build(:student_loans_eligibility, employments: [build(:student_loans_employment, school: schools(:hampstead_school))]).ineligible?).to eql true
+      expect(build(:student_loans_eligibility, employments: [build(:student_loans_employment, school: schools(:penistone_grammar_school))]).ineligible?).to eql false
+    end
+
+    it "returns true when not teaching an eligible subject" do
+      expect(build(:student_loans_eligibility, employments: [build(:student_loans_employment, taught_eligible_subjects: false)]).ineligible?).to eql true
+      expect(build(:student_loans_eligibility, employments: [build(:student_loans_employment, biology_taught: true)]).ineligible?).to eql false
+    end
   end
 
   describe "#ineligibility_reason" do
@@ -76,6 +86,8 @@ RSpec.describe StudentLoans::Eligibility, type: :model do
       expect(build(:student_loans_eligibility, employment_status: :no_school).ineligibility_reason).to eq :employed_at_no_school
       expect(build(:student_loans_eligibility, current_school: schools(:the_samuel_lister_academy)).ineligibility_reason).to eq :current_school_closed
       expect(build(:student_loans_eligibility, mostly_performed_leadership_duties: true).ineligibility_reason).to eq :not_taught_enough
+      expect(build(:student_loans_eligibility, employments: [build(:student_loans_employment, school: schools(:hampstead_school))]).ineligibility_reason).to eq :ineligible_claim_school
+      expect(build(:student_loans_eligibility, employments: [build(:student_loans_employment, taught_eligible_subjects: false)]).ineligibility_reason).to eq :not_taught_eligible_subjects
     end
   end
 
