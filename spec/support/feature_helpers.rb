@@ -7,6 +7,7 @@ module FeatureHelpers
     choose_school schools(:hampstead_school)
     choose_subjects_taught
     click_on "Continue"
+    fill_in_repayment_amount "1100"
 
     perform_verify_step
     click_on "Continue"
@@ -18,8 +19,6 @@ module FeatureHelpers
     click_on "Continue"
 
     answer_student_loan_plan_questions
-    fill_in I18n.t("student_loans.questions.student_loan_amount", claim_school_name: claim.eligibility.claim_school_name), with: "1100"
-    click_on "Continue"
 
     fill_in I18n.t("questions.email_address"), with: "name@example.tld"
     click_on "Continue"
@@ -88,6 +87,11 @@ module FeatureHelpers
     fill_in "Town or city", with: "Twin Peaks"
     fill_in "County", with: "Washington"
     fill_in "Postcode", with: "M1 7HL"
+    click_on "Continue"
+  end
+
+  def fill_in_repayment_amount(amount)
+    fill_in :claim_eligibility_attributes_student_loan_repayment_amount, with: amount
     click_on "Continue"
   end
 

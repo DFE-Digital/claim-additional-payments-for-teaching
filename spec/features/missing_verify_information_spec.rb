@@ -8,6 +8,7 @@ RSpec.feature "Missing information from GOV.UK Verify" do
     choose_still_teaching
     choose_subjects_taught
     click_on "Continue"
+    fill_in_repayment_amount "1100"
 
     perform_verify_step("identity-verified-other-gender")
     expect(page).to have_text("This is your first name, middle name, surname, address, and date of birth from your digital identity")
@@ -28,9 +29,6 @@ RSpec.feature "Missing information from GOV.UK Verify" do
     click_on "Continue"
 
     answer_student_loan_plan_questions
-
-    fill_in I18n.t("student_loans.questions.student_loan_amount", claim_school_name: claim.eligibility.claim_school_name), with: "1100"
-    click_on "Continue"
 
     fill_in I18n.t("questions.email_address"), with: "name@example.tld"
     click_on "Continue"
@@ -59,6 +57,7 @@ RSpec.feature "Missing information from GOV.UK Verify" do
     choose_still_teaching
     choose_subjects_taught
     click_on "Continue"
+    fill_in_repayment_amount "1100"
 
     perform_verify_step("identity-verified-no-address")
     expect(page).to have_text("This is your first name, surname, date of birth, and gender from your digital identity")
@@ -82,9 +81,6 @@ RSpec.feature "Missing information from GOV.UK Verify" do
     click_on "Continue"
 
     answer_student_loan_plan_questions
-
-    fill_in I18n.t("student_loans.questions.student_loan_amount", claim_school_name: claim.eligibility.claim_school_name), with: "1100"
-    click_on "Continue"
 
     fill_in I18n.t("questions.email_address"), with: "name@example.tld"
     click_on "Continue"

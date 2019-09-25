@@ -37,6 +37,7 @@ class ClaimsController < ApplicationController
     ClaimUpdate.new(current_claim, claim_params, params[:slug]).perform
   end
 
+  helper_method :next_slug
   def next_slug
     page_sequence.next_slug
   end

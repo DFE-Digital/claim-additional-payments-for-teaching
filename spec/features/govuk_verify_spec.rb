@@ -10,6 +10,7 @@ RSpec.feature "Teacher verifies identity using GOV.UK Verify" do
     choose_still_teaching
     choose_subjects_taught
     click_on "Continue"
+    fill_in_repayment_amount "1100"
   end
 
   context "successful verification" do
