@@ -6,57 +6,65 @@ RSpec.describe PageSequence do
   let(:claim) { build(:claim) }
 
   describe "#slugs" do
-    it "excludes “current-school” when the claimant still works at the school they are claiming against" do
-      claim.eligibility.employment_status = :claim_school
+    it "excludes “current-school” if and only if the claimant still works at the school they are claiming against" do
       page_sequence = PageSequence.new(claim, "still-teaching")
 
+      claim.eligibility.employment_status = :different_school
+      expect(page_sequence.slugs).to include("current-school")
+
+      claim.eligibility.employment_status = :claim_school
       expect(page_sequence.slugs).not_to include("current-school")
     end
 
-    it "excludes student loan-related pages when the claimant no longer has a student loan" do
-      claim.has_student_loan = false
+    it "excludes student loan related pages if and only if the claimant no longer has a student loan" do
       page_sequence = PageSequence.new(claim, "still-teaching")
+
+      claim.has_student_loan = false
       expect(page_sequence.slugs).not_to include("student-loan-country")
       expect(page_sequence.slugs).not_to include("student-loan-how-many-courses")
       expect(page_sequence.slugs).not_to include("student-loan-start-date")
 
       claim.has_student_loan = true
-      page_sequence = PageSequence.new(claim, "still-teaching")
       expect(page_sequence.slugs).to include("student-loan-country")
       expect(page_sequence.slugs).to include("student-loan-how-many-courses")
       expect(page_sequence.slugs).to include("student-loan-start-date")
     end
 
-    it "excludes the remaining student loan-related pages when the claimant received their student loan in Scotland or Northern Ireland" do
+    it "excludes the remaining student loan-related pages if and only if the claimant received their student loan in Scotland or Northern Ireland" do
+      page_sequence = PageSequence.new(claim, "student-loan-country")
+
       claim.has_student_loan = true
 
       StudentLoans::PLAN_1_COUNTRIES.each do |plan_1_country|
         claim.student_loan_country = plan_1_country
-        page_sequence = PageSequence.new(claim, "student-loan-country")
         expect(page_sequence.slugs).not_to include("student-loan-how-many-courses")
         expect(page_sequence.slugs).not_to include("student-loan-start-date")
       end
 
       %w[england wales].each do |variable_plan_country|
         claim.student_loan_country = variable_plan_country
-        page_sequence = PageSequence.new(claim, "student-loan-country")
         expect(page_sequence.slugs).to include("student-loan-how-many-courses")
         expect(page_sequence.slugs).to include("student-loan-start-date")
       end
     end
 
-    it "excludes the gender page if a response has been returned from Verify" do
-      claim.verified_fields = ["payroll_gender"]
+    it "excludes the gender page if and only if a response has been returned from Verify" do
       page_sequence = PageSequence.new(claim, "student-loan-country")
-      expect(page_sequence.slugs).to_not include("gender")
 
       claim.verified_fields = []
       expect(page_sequence.slugs).to include("gender")
+
+      claim.verified_fields = ["payroll_gender"]
+      expect(page_sequence.slugs).to_not include("gender")
     end
 
-    it "excludes the address page if the address was returned by verify" do
-      claim.verified_fields = ["postcode"]
+    it "excludes the address page if and only if the address was returned by verify" do
       page_sequence = PageSequence.new(claim, "student-loan-country")
+
+      claim.verified_fields = []
+      expect(page_sequence.slugs).to include("address")
+
+      claim.verified_fields = ["postcode"]
       expect(page_sequence.slugs).to_not include("address")
     end
   end
