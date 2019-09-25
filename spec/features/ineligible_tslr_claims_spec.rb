@@ -15,9 +15,10 @@ RSpec.feature "Ineligible Teacher Student Loan Repayments claims" do
   scenario "now works for a different school" do
     claim = start_claim
     choose_qts_year
+    choose_currently_teaching
     choose_school schools(:penistone_grammar_school)
 
-    choose_still_teaching "Yes, at another school"
+    choose_where_teaching "At another school"
 
     expect(claim.eligibility.reload.employment_status).to eql("different_school")
 
@@ -35,6 +36,8 @@ RSpec.feature "Ineligible Teacher Student Loan Repayments claims" do
   scenario "chooses an ineligible school" do
     claim = start_claim
     choose_qts_year
+    choose_currently_teaching
+
     choose_school schools(:hampstead_school)
 
     expect(claim.eligibility.reload.claim_school).to eq schools(:hampstead_school)
@@ -42,23 +45,23 @@ RSpec.feature "Ineligible Teacher Student Loan Repayments claims" do
     expect(page).to have_text("Hampstead School, where you were employed between 6 April 2018 and 5 April 2019, is not an eligible school.")
   end
 
-  scenario "no longer teaching" do
+  scenario "not currently teaching" do
     claim = start_claim
     choose_qts_year
-    choose_school schools(:penistone_grammar_school)
 
-    choose_still_teaching "No"
+    choose_currently_teaching "No"
 
-    expect(claim.eligibility.reload.employment_status).to eq("no_school")
+    expect(claim.eligibility.reload.currently_teaching).to eq(false)
     expect(page).to have_text("You’re not eligible")
-    expect(page).to have_text("You can only get this payment if you’re still employed at a school.")
+    expect(page).to have_text("You can only get this payment if you’re currently employed to teach at a school.")
   end
 
   scenario "did not teach an eligible subject" do
     claim = start_claim
     choose_qts_year
+    choose_currently_teaching
     choose_school schools(:penistone_grammar_school)
-    choose_still_teaching
+    choose_where_teaching
 
     choose I18n.t("student_loans.questions.eligible_subjects.none_taught")
     click_on "Continue"
@@ -71,8 +74,9 @@ RSpec.feature "Ineligible Teacher Student Loan Repayments claims" do
   scenario "was in a leadership position and performed leadership duties for more than half of their time" do
     claim = start_claim
     choose_qts_year
+    choose_currently_teaching
     choose_school schools(:penistone_grammar_school)
-    choose_still_teaching
+    choose_where_teaching
 
     check "Biology"
     click_on "Continue"

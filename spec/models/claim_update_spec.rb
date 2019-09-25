@@ -82,7 +82,7 @@ RSpec.describe ClaimUpdate do
   describe "setting/resetting current_school based on the answer to employment_status" do
     context "when the update sets the employment_status to :claim_school" do
       let(:claim) { create(:claim, eligibility: build(:student_loans_eligibility, claim_school: schools(:penistone_grammar_school))) }
-      let(:context) { "still-teaching" }
+      let(:context) { "where-teaching" }
       let(:params) { {eligibility_attributes: {employment_status: "claim_school"}} }
 
       it "automatically sets current_school to match the claim_school" do
@@ -94,7 +94,7 @@ RSpec.describe ClaimUpdate do
 
     context "when the update changes employment_status to :different_school" do
       let(:claim) { create(:claim, eligibility: build(:student_loans_eligibility, claim_school: schools(:penistone_grammar_school), employment_status: :claim_school, current_school: schools(:penistone_grammar_school))) }
-      let(:context) { "still-teaching" }
+      let(:context) { "where-teaching" }
       let(:params) { {eligibility_attributes: {employment_status: "different_school"}} }
 
       it "resets the inferrred current_school to nil" do
@@ -106,7 +106,7 @@ RSpec.describe ClaimUpdate do
 
     context "when the update does not actually change the employment_status" do
       let(:claim) { create(:claim, eligibility: build(:student_loans_eligibility, claim_school: schools(:penistone_grammar_school), employment_status: :different_school, current_school: schools(:hampstead_school))) }
-      let(:context) { "still-teaching" }
+      let(:context) { "where-teaching" }
       let(:params) { {eligibility_attributes: {employment_status: claim.eligibility.employment_status}} }
 
       it "does not reset the current_school" do

@@ -6,6 +6,7 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+- Split the employment status question into two questions
 - Move student loan repayment amount question to after leadership
 
 ## [Release 011] - 2019-09-23

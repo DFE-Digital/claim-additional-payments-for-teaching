@@ -101,8 +101,9 @@ en:
         "2017_2018": "1 September 2017 to 31 August 2018"
         "2018_2019": "1 September 2018 to 31 August 2019"
         "2019_2020": "1 September 2019 to 31 August 2020"
+      currently_teaching: "Are you currently employed to teach in England?"
       claim_school: "Which school were you employed at between 6 April 2018 and 5 April 2019?"
-      employment_status: "Are you still employed to teach at a school in England?"
+      where_teaching: "Where are you currently employed to teach in England?"
       subjects_taught: "Did you teach any of these subjects between 6 April 2018 and 5 April 2019?"
       leadership_position: "Were you employed in a leadership position between 6 April 2018 and 5 April 2019?"
       mostly_performed_leadership_duties:

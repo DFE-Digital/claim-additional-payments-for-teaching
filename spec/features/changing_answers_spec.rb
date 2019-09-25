@@ -156,12 +156,12 @@ RSpec.feature "Changing the answers on a submittable claim" do
       end
 
       scenario "Teacher is redirected to the are you still employed screen" do
-        expect(current_path).to eq(claim_path("still-teaching"))
+        expect(current_path).to eq(claim_path("where-teaching"))
       end
 
       context "When still teaching at the claim school" do
         before do
-          choose "Yes, at Claim School"
+          choose "At Claim School"
           click_on "Continue"
         end
 
@@ -177,7 +177,7 @@ RSpec.feature "Changing the answers on a submittable claim" do
 
       context "When still teaching but at a different school" do
         before do
-          choose_still_teaching "Yes, at another school"
+          choose_where_teaching "At another school"
 
           fill_in :school_search, with: "Hampstead"
           click_on "Search"
@@ -195,28 +195,13 @@ RSpec.feature "Changing the answers on a submittable claim" do
           expect(current_path).to eq(claim_path("check-your-answers"))
         end
       end
-
-      context "When no longer teaching" do
-        before do
-          choose_still_teaching "No"
-        end
-
-        scenario "Employment status is set correctly" do
-          expect(eligibility.reload.employment_status).to eq("no_school")
-        end
-
-        scenario "Teacher is told they are not eligible" do
-          expect(page).to have_text("You’re not eligible")
-          expect(page).to have_text("You can only get this payment if you’re still employed at a school.")
-        end
-      end
     end
   end
 
-  scenario "changing the are you still employed question (employment_status)" do
-    find("a[href='#{claim_path("still-teaching")}']").click
+  scenario "changing the where teaching question" do
+    find("a[href='#{claim_path("where-teaching")}']").click
 
-    choose "Yes, at Penistone Grammar School"
+    choose "At Penistone Grammar School"
     click_on "Continue"
 
     expect(current_path).to eq(claim_path("check-your-answers"))
@@ -227,9 +212,9 @@ RSpec.feature "Changing the answers on a submittable claim" do
   scenario "going from same school to different school" do
     eligibility.update!(employment_status: "claim_school")
 
-    find("a[href='#{claim_path("still-teaching")}']").click
+    find("a[href='#{claim_path("where-teaching")}']").click
 
-    choose "Yes, at another school"
+    choose "At another school"
     click_on "Continue"
 
     fill_in :school_search, with: "Hampstead"

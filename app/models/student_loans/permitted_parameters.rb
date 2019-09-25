@@ -2,6 +2,7 @@ module StudentLoans
   class PermittedParameters
     ELIGIBILITY_PARAMETERS = [
       :qts_award_year,
+      :currently_teaching,
       :claim_school_id,
       :employment_status,
       :current_school_id,

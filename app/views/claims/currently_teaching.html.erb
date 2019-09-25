@@ -1,0 +1,46 @@
+<%= page_title(t("student_loans.questions.currently_teaching"), show_error: current_claim.errors.any?) %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+
+    <%= render("shared/error_summary", instance: current_claim, errored_field_id_overrides: { "eligibility.currently_teaching": "claim_eligibility_attributes_currently_teaching_true"}) if current_claim.errors.any? %>
+
+    <%= form_for current_claim, url: claim_path do |form| %>
+
+      <%= form_group_tag current_claim do %>
+        <%= form.fields_for :eligibility, include_id: false do |eligibility_fields| %>
+
+          <%= eligibility_fields.hidden_field :currently_teaching %>
+
+          <fieldset class="govuk-fieldset">
+
+            <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl">
+              <h1 class="govuk-fieldset__heading">
+                <%= t("student_loans.questions.currently_teaching") %>
+              </h1>
+            </legend>
+
+            <%= errors_tag current_claim.eligibility, :currently_teaching %>
+
+            <div class="govuk-radios govuk-radios--inline">
+              <div class="govuk-radios__item">
+                <%= eligibility_fields.radio_button(:currently_teaching, true, class: "govuk-radios__input") %>
+                <%= eligibility_fields.label :currently_teaching_true, "Yes", class: "govuk-label govuk-radios__label" %>
+              </div>
+              <div class="govuk-radios__item">
+                <%= eligibility_fields.radio_button(:currently_teaching, false, class: "govuk-radios__input") %>
+                <%= eligibility_fields.label :currently_teaching_false, "No", class: "govuk-label govuk-radios__label" %>
+              </div>
+            </div>
+
+          </fieldset>
+
+        <% end %>
+      <% end %>
+
+      <%= form.submit "Continue", class: "govuk-button" %>
+
+    <% end %>
+
+  </div>
+</div>

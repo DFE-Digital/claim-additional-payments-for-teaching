@@ -98,9 +98,9 @@ RSpec.describe StudentLoans::Eligibility, type: :model do
       expect(StudentLoans::Eligibility.new(claim_school: schools(:penistone_grammar_school)).ineligible?).to eql false
     end
 
-    it "returns true when no longer teaching" do
-      expect(StudentLoans::Eligibility.new(employment_status: :no_school).ineligible?).to eql true
-      expect(StudentLoans::Eligibility.new(employment_status: :claim_school).ineligible?).to eql false
+    it "returns true when not currently teaching" do
+      expect(StudentLoans::Eligibility.new(currently_teaching: false).ineligible?).to eql true
+      expect(StudentLoans::Eligibility.new(currently_teaching: true).ineligible?).to eql false
     end
 
     it "returns true when not teaching an eligible subject" do
@@ -122,7 +122,7 @@ RSpec.describe StudentLoans::Eligibility, type: :model do
     it "returns a symbol indicating the reason for ineligibility" do
       expect(StudentLoans::Eligibility.new(qts_award_year: "before_2013").ineligibility_reason).to eq :ineligible_qts_award_year
       expect(StudentLoans::Eligibility.new(claim_school: schools(:hampstead_school)).ineligibility_reason).to eq :ineligible_claim_school
-      expect(StudentLoans::Eligibility.new(employment_status: :no_school).ineligibility_reason).to eq :employed_at_no_school
+      expect(StudentLoans::Eligibility.new(currently_teaching: false).ineligibility_reason).to eq :not_currently_teaching
       expect(StudentLoans::Eligibility.new(current_school: schools(:the_samuel_lister_academy)).ineligibility_reason).to eq :current_school_closed
       expect(StudentLoans::Eligibility.new(taught_eligible_subjects: false).ineligibility_reason).to eq :not_taught_eligible_subjects
       expect(StudentLoans::Eligibility.new(mostly_performed_leadership_duties: true).ineligibility_reason).to eq :not_taught_enough
@@ -140,6 +140,14 @@ RSpec.describe StudentLoans::Eligibility, type: :model do
     end
   end
 
+  context "when saving in the “currently-teaching” context" do
+    it "validates the presence of currently_teaching" do
+      expect(StudentLoans::Eligibility.new).not_to be_valid(:"currently-teaching")
+      expect(StudentLoans::Eligibility.new(currently_teaching: false)).to be_valid(:"currently-teaching")
+      expect(StudentLoans::Eligibility.new(currently_teaching: true)).to be_valid(:"currently-teaching")
+    end
+  end
+
   context "when saving in the “claim-school” context" do
     it "validates the presence of the claim_school" do
       expect(StudentLoans::Eligibility.new).not_to be_valid(:"claim-school")
@@ -147,10 +155,10 @@ RSpec.describe StudentLoans::Eligibility, type: :model do
     end
   end
 
-  context "when saving in the “still-teaching” context" do
+  context "when saving in the “where-teaching” context" do
     it "validates the presence of employment_status" do
-      expect(StudentLoans::Eligibility.new).not_to be_valid(:"still-teaching")
-      expect(StudentLoans::Eligibility.new(employment_status: :claim_school)).to be_valid(:"still-teaching")
+      expect(StudentLoans::Eligibility.new).not_to be_valid(:"where-teaching")
+      expect(StudentLoans::Eligibility.new(employment_status: :claim_school)).to be_valid(:"where-teaching")
     end
   end
 

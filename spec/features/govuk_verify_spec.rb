@@ -6,8 +6,9 @@ RSpec.feature "Teacher verifies identity using GOV.UK Verify" do
 
     @claim = start_claim
     choose_qts_year
+    choose_currently_teaching
     choose_school schools(:penistone_grammar_school)
-    choose_still_teaching
+    choose_where_teaching
     choose_subjects_taught
     click_on "Continue"
     fill_in_repayment_amount "1100"

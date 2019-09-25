@@ -130,6 +130,10 @@ class School < ApplicationRecord
     close_date.nil?
   end
 
+  def closed?
+    !open?
+  end
+
   def dfe_number
     [
       local_authority.code,

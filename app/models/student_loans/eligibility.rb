@@ -26,15 +26,15 @@ module StudentLoans
     enum employment_status: {
       claim_school: 0,
       different_school: 1,
-      no_school: 2,
     }, _prefix: :employed_at
 
     belongs_to :claim_school, optional: true, class_name: "School"
     belongs_to :current_school, optional: true, class_name: "School"
 
     validates :qts_award_year, on: [:"qts-year", :submit], presence: {message: "Select the academic year you were awarded qualified teacher status"}
+    validates :currently_teaching, on: [:"currently-teaching", :submit], inclusion: {in: [true, false], message: "Select either Yes or No"}
     validates :claim_school, on: [:"claim-school", :submit], presence: {message: "Select a school from the list"}
-    validates :employment_status, on: [:"still-teaching", :submit], presence: {message: "Choose the option that describes your current employment status"}
+    validates :employment_status, on: [:"where-teaching", :submit], presence: {message: "Choose the option that describes where you currently teach"}
     validates :current_school, on: [:"current-school", :submit], presence: {message: "Select a school from the list"}
     validate :one_subject_must_be_selected, on: [:"subjects-taught", :submit], unless: :not_taught_eligible_subjects?
     validates :had_leadership_position, on: [:"leadership-position", :submit], inclusion: {in: [true, false], message: "Select either Yes or No"}
@@ -56,7 +56,7 @@ module StudentLoans
     def ineligible?
       ineligible_qts_award_year? ||
         ineligible_claim_school? ||
-        employed_at_no_school? ||
+        not_currently_teaching? ||
         current_school_closed? ||
         not_taught_eligible_subjects? ||
         not_taught_enough?
@@ -66,7 +66,7 @@ module StudentLoans
       [
         :ineligible_qts_award_year,
         :ineligible_claim_school,
-        :employed_at_no_school,
+        :not_currently_teaching,
         :current_school_closed,
         :not_taught_eligible_subjects,
         :not_taught_enough,
@@ -81,6 +81,10 @@ module StudentLoans
 
     def ineligible_claim_school?
       claim_school.present? && !claim_school.eligible_for_student_loans?
+    end
+
+    def not_currently_teaching?
+      currently_teaching == false
     end
 
     def not_taught_eligible_subjects?

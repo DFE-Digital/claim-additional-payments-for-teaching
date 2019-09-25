@@ -2,16 +2,17 @@
 
 # Represents the pages in the claim process.
 #
-# Depending on the state of `claim`,  the sequence of slugs will change,
+# Depending on the state of `claim`, the sequence of slugs will change,
 # filtering out pages that are not relevant. For example, the sequence for a
 # claim that states it is still employed at the same school as the
-# `claim_school` will skip the `current-school` page as `current_school` is
-# inferred to be the same as `claim_school.
+# claim school will skip the `current-school` page as the current school is
+# inferred to be the same as claim school.
 class PageSequence
   SLUGS = [
     "qts-year",
+    "currently-teaching",
     "claim-school",
-    "still-teaching",
+    "where-teaching",
     "current-school",
     "subjects-taught",
     "leadership-position",
@@ -44,6 +45,7 @@ class PageSequence
 
   def slugs
     SLUGS.dup.tap do |sequence|
+      sequence.delete("where-teaching") if claim.eligibility.claim_school&.closed?
       sequence.delete("current-school") if claim.eligibility.employed_at_claim_school?
       sequence.delete("mostly-performed-leadership-duties") unless claim.eligibility.had_leadership_position?
       sequence.delete("student-loan-country") if claim.no_student_loan?

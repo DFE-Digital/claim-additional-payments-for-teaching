@@ -18,7 +18,7 @@ module ClaimsHelper
     [].tap do |a|
       a << [t("student_loans.questions.qts_award_year"), academic_years(eligibility.qts_award_year), "qts-year"]
       a << [t("student_loans.questions.claim_school"), eligibility.claim_school_name, "claim-school"]
-      a << [t("questions.current_school"), eligibility.current_school_name, "still-teaching"]
+      a << [t("questions.current_school"), eligibility.current_school_name, "where-teaching"]
       a << [t("student_loans.questions.subjects_taught"), subject_list(eligibility.subjects_taught), "subjects-taught"]
       a << [t("student_loans.questions.leadership_position"), (eligibility.had_leadership_position? ? "Yes" : "No"), "leadership-position"]
       a << [t("student_loans.questions.mostly_performed_leadership_duties"), (eligibility.mostly_performed_leadership_duties? ? "Yes" : "No"), "mostly-performed-leadership-duties"] if eligibility.had_leadership_position?

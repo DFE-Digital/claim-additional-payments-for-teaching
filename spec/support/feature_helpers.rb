@@ -2,8 +2,9 @@ module FeatureHelpers
   def answer_all_student_loans_claim_questions
     start_claim
     choose_qts_year
+    choose_currently_teaching
     choose_school schools(:penistone_grammar_school)
-    choose_still_teaching "Yes, at another school"
+    choose_where_teaching "At another school"
     choose_school schools(:hampstead_school)
     choose_subjects_taught
     click_on "Continue"
@@ -39,6 +40,11 @@ module FeatureHelpers
     click_on "Continue"
   end
 
+  def choose_currently_teaching(answer = "Yes")
+    choose answer
+    click_on "Continue"
+  end
+
   def choose_school(school)
     fill_in :school_search, with: school.name.sub("The ", "").split(" ").first
     click_on "Search"
@@ -47,7 +53,7 @@ module FeatureHelpers
     click_on "Continue"
   end
 
-  def choose_still_teaching(teaching_at = "Yes, at Penistone Grammar School")
+  def choose_where_teaching(teaching_at = "At Penistone Grammar School")
     choose teaching_at
     click_on "Continue"
   end

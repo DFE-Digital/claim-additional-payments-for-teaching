@@ -6,8 +6,21 @@ RSpec.describe PageSequence do
   let(:claim) { build(:claim) }
 
   describe "#slugs" do
+    it "excludes “where-teaching” if and only if the claim school is closed" do
+      page_sequence = PageSequence.new(claim, "claim-school")
+
+      claim.eligibility.claim_school = nil
+      expect(page_sequence.slugs).to include("where-teaching")
+
+      claim.eligibility.claim_school = schools(:penistone_grammar_school)
+      expect(page_sequence.slugs).to include("where-teaching")
+
+      claim.eligibility.claim_school = schools(:the_samuel_lister_academy)
+      expect(page_sequence.slugs).not_to include("where-teaching")
+    end
+
     it "excludes “current-school” if and only if the claimant still works at the school they are claiming against" do
-      page_sequence = PageSequence.new(claim, "still-teaching")
+      page_sequence = PageSequence.new(claim, "where-teaching")
 
       claim.eligibility.employment_status = :different_school
       expect(page_sequence.slugs).to include("current-school")
@@ -17,7 +30,7 @@ RSpec.describe PageSequence do
     end
 
     it "excludes student loan related pages if and only if the claimant no longer has a student loan" do
-      page_sequence = PageSequence.new(claim, "still-teaching")
+      page_sequence = PageSequence.new(claim, "where-teaching")
 
       claim.has_student_loan = false
       expect(page_sequence.slugs).not_to include("student-loan-country")
@@ -71,15 +84,14 @@ RSpec.describe PageSequence do
 
   describe "#next_slug" do
     it "returns the next slug in the sequence" do
-      expect(PageSequence.new(claim, "qts-year").next_slug).to eq "claim-school"
-      expect(PageSequence.new(claim, "claim-school").next_slug).to eq "still-teaching"
+      expect(PageSequence.new(claim, PageSequence::SLUGS[0]).next_slug).to eq PageSequence::SLUGS[1]
     end
 
     context "with an ineligible claim" do
-      let(:claim) { build(:claim, eligibility: build(:student_loans_eligibility, employment_status: :no_school)) }
+      let(:claim) { build(:claim, eligibility: build(:student_loans_eligibility, currently_teaching: false)) }
 
       it "returns “ineligible” as the next slug" do
-        expect(PageSequence.new(claim, "still-teaching").next_slug).to eq "ineligible"
+        expect(PageSequence.new(claim, "currently-teaching").next_slug).to eq "ineligible"
       end
     end
 

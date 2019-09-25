@@ -21,7 +21,7 @@ describe ClaimsHelper do
       expected_answers = [
         [I18n.t("student_loans.questions.qts_award_year"), "1 September 2013 to 31 August 2014", "qts-year"],
         [I18n.t("student_loans.questions.claim_school"), school.name, "claim-school"],
-        [I18n.t("questions.current_school"), school.name, "still-teaching"],
+        [I18n.t("questions.current_school"), school.name, "where-teaching"],
         [I18n.t("student_loans.questions.subjects_taught"), "Chemistry and Physics", "subjects-taught"],
         [I18n.t("student_loans.questions.leadership_position"), "Yes", "leadership-position"],
         [I18n.t("student_loans.questions.mostly_performed_leadership_duties"), "No", "mostly-performed-leadership-duties"],
