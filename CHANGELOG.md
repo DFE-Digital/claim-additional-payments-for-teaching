@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+- Remove the admin claims CSV download
+
 ## [Release 011] - 2019-09-23
 
 - Show how many claims are awaiting approval

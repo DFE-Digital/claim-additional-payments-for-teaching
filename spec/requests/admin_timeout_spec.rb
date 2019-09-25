@@ -20,7 +20,7 @@ RSpec.describe "Admin session timing out", type: :request do
       expect(session[:role_codes]).to eq([AdminSession::SERVICE_OPERATOR_DFE_SIGN_IN_ROLE_CODE])
 
       travel after_expiry do
-        get admin_claims_path(format: :csv)
+        get admin_claims_path
 
         expect(response).to redirect_to(admin_sign_in_path)
         expect(session[:user_id]).to be_nil
@@ -58,7 +58,7 @@ RSpec.describe "Admin session timing out", type: :request do
 
     it "does not timeout the session" do
       travel before_expiry do
-        get admin_claims_path(format: :csv)
+        get admin_claims_path
 
         expect(response.code).to eq("200")
         expect(session[:user_id]).to_not be_nil
