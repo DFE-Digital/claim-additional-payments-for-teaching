@@ -4,7 +4,7 @@ describe Admin::ClaimsHelper do
   let(:claim_school) { schools(:penistone_grammar_school) }
   let(:current_school) { create(:school, :student_loan_eligible) }
 
-  describe "eligibility_answers" do
+  describe "#eligibility_answers" do
     let(:eligibility) do
       build(
         :student_loans_eligibility,
@@ -39,7 +39,7 @@ describe Admin::ClaimsHelper do
     end
   end
 
-  describe "admin_personal_details" do
+  describe "#admin_personal_details" do
     let(:claim) do
       build(
         :claim,
@@ -70,7 +70,7 @@ describe Admin::ClaimsHelper do
     end
   end
 
-  describe "admin_student_loan_details" do
+  describe "#admin_student_loan_details" do
     let(:claim) do
       build(
         :claim,
@@ -87,7 +87,7 @@ describe Admin::ClaimsHelper do
     end
   end
 
-  describe "display_school" do
+  describe "#display_school" do
     let(:school) do
       build(:school,
         name: "Bash Street School",
