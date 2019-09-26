@@ -60,6 +60,8 @@ en:
     teacher_reference_number: "Teacher reference number"
     national_insurance_number: "National Insurance number"
     email_address: "Email address"
+    started_at: "Started at"
+    submitted_at: "Submitted at"
   answers:
     student_loan_start_date:
       one_course:

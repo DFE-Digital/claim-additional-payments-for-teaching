@@ -87,6 +87,17 @@ describe Admin::ClaimsHelper do
     end
   end
 
+  describe "#admin_submission_details" do
+    let(:claim) { create(:claim, :submitted) }
+
+    it "includes an array of questions and answers" do
+      expect(helper.admin_submission_details(claim)).to eq([
+        [I18n.t("admin.started_at"), l(claim.created_at)],
+        [I18n.t("admin.submitted_at"), l(claim.submitted_at)],
+      ])
+    end
+  end
+
   describe "#display_school" do
     let(:school) do
       build(:school,

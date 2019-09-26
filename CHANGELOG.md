@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+- Add started at and submitted at times to the admin view of a claim
+
 ## [Release 012] - 2019-09-30
 
 - Add all-through schools to the eligible schools list
