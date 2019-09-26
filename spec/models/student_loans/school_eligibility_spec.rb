@@ -11,12 +11,12 @@ RSpec.describe StudentLoans::SchoolEligibility do
       context "and it is an academy" do
         let(:academy_school_attributes) { {school_type_group: :academies} }
 
-        context "and it has an education phase of secondary or middle deemed secondary" do
+        context "and it has an education phase of secondary, middle deemed secondary, or all-through" do
           let(:school_attributes) { academy_school_attributes.merge({phase: :secondary}) }
           it { is_expected.to be true }
         end
 
-        context "and it has an education phase of nursery, primary, middle deemed primary, 16+ or all through" do
+        context "and it has an education phase of nursery, primary, middle deemed primary, or 16+" do
           let(:school_attributes) { academy_school_attributes.merge({phase: :primary}) }
           it { is_expected.to be false }
         end
@@ -25,12 +25,12 @@ RSpec.describe StudentLoans::SchoolEligibility do
       context "and it is a free school" do
         let(:free_school_attributes) { {school_type_group: :free_schools} }
 
-        context "and it has an education phase of secondary or middle deemed secondary" do
+        context "and it has an education phase of secondary, middle deemed secondary, or all-through" do
           let(:school_attributes) { free_school_attributes.merge({phase: :secondary}) }
           it { is_expected.to be true }
         end
 
-        context "and it has an education phase of nursery, primary, middle deemed primary, 16+ or all through" do
+        context "and it has an education phase of nursery, primary, middle deemed primary, or 16+" do
           let(:school_attributes) { free_school_attributes.merge({phase: :middle_deemed_primary}) }
           it { is_expected.to be false }
         end
@@ -39,12 +39,12 @@ RSpec.describe StudentLoans::SchoolEligibility do
       context "and it is a college" do
         let(:college_attributes) { {school_type_group: :colleges} }
 
-        context "and it has an education phase of secondary or middle deemed secondary" do
+        context "and it has an education phase of secondary, middle deemed secondary, or all-through" do
           let(:school_attributes) { college_attributes.merge({phase: :middle_deemed_secondary}) }
           it { is_expected.to be true }
         end
 
-        context "and it has an education phase of nursery, primary, middle deemed primary, 16+ or all through" do
+        context "and it has an education phase of nursery, primary, middle deemed primary, or 16+" do
           let(:school_attributes) { college_attributes.merge({phase: :sixteen_plus}) }
           it { is_expected.to be false }
         end
@@ -53,12 +53,12 @@ RSpec.describe StudentLoans::SchoolEligibility do
       context "and it is a LA maintained school" do
         let(:la_maintained_attributes) { {school_type_group: :la_maintained} }
 
-        context "and it has an education phase of secondary or middle deemed secondary" do
-          let(:school_attributes) { la_maintained_attributes.merge({phase: :secondary}) }
+        context "and it has an education phase of secondary, middle deemed secondary, or all-through" do
+          let(:school_attributes) { la_maintained_attributes.merge({phase: :all_through}) }
           it { is_expected.to be true }
         end
 
-        context "and it has an education phase of nursery, primary, middle deemed primary, 16+ or all through" do
+        context "and it has an education phase of nursery, primary, middle deemed primary, or 16+" do
           let(:school_attributes) { la_maintained_attributes.merge({phase: :nursery}) }
           it { is_expected.to be false }
         end
@@ -67,12 +67,12 @@ RSpec.describe StudentLoans::SchoolEligibility do
       context "and it is a state funded special school" do
         let(:special_school_attributes) { {school_type: :community_special_school, school_type_group: :special_schools} }
 
-        context "and it has an education phase of secondary or middle deemed secondary" do
+        context "and it has an education phase of secondary, middle deemed secondary, or all-through" do
           let(:school_attributes) { special_school_attributes.merge({phase: :secondary}) }
           it { is_expected.to be true }
         end
 
-        context "and it has an education phase of nursery, primary, middle deemed primary, 16+ or all through" do
+        context "and it has an education phase of nursery, primary, middle deemed primary, or 16+" do
           let(:school_attributes) { special_school_attributes.merge({phase: :nursery}) }
           it { is_expected.to be false }
         end
@@ -86,12 +86,12 @@ RSpec.describe StudentLoans::SchoolEligibility do
       context "and it is a special free school" do
         let(:special_free_school_attributes) { {school_type: :free_school_special, school_type_group: :free_schools} }
 
-        context "and it has an education phase of secondary or middle deemed secondary" do
+        context "and it has an education phase of secondary, middle deemed secondary, or all-through" do
           let(:school_attributes) { special_free_school_attributes.merge({phase: :secondary}) }
           it { is_expected.to be true }
         end
 
-        context "and it has an education phase of nursery, primary, middle deemed primary, 16+ or all through" do
+        context "and it has an education phase of nursery, primary, middle deemed primary, or 16+" do
           let(:school_attributes) { special_free_school_attributes.merge({phase: :nursery}) }
           it { is_expected.to be false }
         end
@@ -105,12 +105,12 @@ RSpec.describe StudentLoans::SchoolEligibility do
       context "and it is an independent special school" do
         let(:special_school_attributes) { {school_type: :other_independent_special_school, school_type_group: :special_schools} }
 
-        context "and it has an education phase of secondary or middle deemed secondary" do
+        context "and it has an education phase of secondary, middle deemed secondary, or all-through" do
           let(:school_attributes) { special_school_attributes.merge({phase: :secondary}) }
           it { is_expected.to be false }
         end
 
-        context "and it has an education phase of nursery, primary, middle deemed primary, 16+ or all through" do
+        context "and it has an education phase of nursery, primary, middle deemed primary, or 16+" do
           let(:school_attributes) { special_school_attributes.merge({phase: :nursery}) }
           it { is_expected.to be false }
         end
