@@ -35,3 +35,6 @@ localhost.key
 
 # Ignore Verify Service Provider
 bin/vsp/*
+
+# Ignore RSpec example status persistence file
+spec/examples.txt
