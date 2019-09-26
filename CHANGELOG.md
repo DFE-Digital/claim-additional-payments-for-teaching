@@ -6,6 +6,7 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+- Add all-through schools to the eligible schools list
 - Update privacy notice to include the collection of IP address
 - Remove the admin claims CSV download
 

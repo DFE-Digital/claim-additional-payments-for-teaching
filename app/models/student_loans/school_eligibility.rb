@@ -1,7 +1,7 @@
 module StudentLoans
   class SchoolEligibility
     POLICY_START_DATE = Date.new(2018, 4, 6)
-    ELIGIBLE_PHASES = %w[secondary middle_deemed_secondary].freeze
+    ELIGIBLE_PHASES = %w[secondary middle_deemed_secondary all_through].freeze
     ELIGIBLE_LOCAL_AUTHORITY_CODES = [
       370, # Barnsley
       890, # Blackpool
