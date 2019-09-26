@@ -21,12 +21,12 @@ describe Admin::ClaimsHelper do
 
     it "returns an array of questions and answers for displaying to approver" do
       expected_answers = [
-        [I18n.t("student_loans.questions.admin.qts_award_year"), "1 September 2013 to 31 August 2014"],
-        [I18n.t("student_loans.questions.admin.claim_school"), helper.display_school(claim_school)],
-        [I18n.t("questions.admin.current_school"), helper.display_school(current_school)],
-        [I18n.t("student_loans.questions.admin.subjects_taught"), "Chemistry and Physics"],
-        [I18n.t("student_loans.questions.admin.had_leadership_position"), "Yes"],
-        [I18n.t("student_loans.questions.admin.mostly_performed_leadership_duties"), "No"],
+        [I18n.t("student_loans.admin.qts_award_year"), "1 September 2013 to 31 August 2014"],
+        [I18n.t("student_loans.admin.claim_school"), helper.display_school(claim_school)],
+        [I18n.t("admin.current_school"), helper.display_school(current_school)],
+        [I18n.t("student_loans.admin.subjects_taught"), "Chemistry and Physics"],
+        [I18n.t("student_loans.admin.had_leadership_position"), "Yes"],
+        [I18n.t("student_loans.admin.mostly_performed_leadership_duties"), "No"],
       ]
 
       expect(helper.admin_eligibility_answers(eligibility)).to eq expected_answers
@@ -34,8 +34,8 @@ describe Admin::ClaimsHelper do
 
     it "excludes questions skipped from the flow" do
       eligibility.had_leadership_position = false
-      expect(helper.admin_eligibility_answers(eligibility)).to include([I18n.t("student_loans.questions.admin.had_leadership_position"), "No"])
-      expect(helper.admin_eligibility_answers(eligibility)).to_not include([I18n.t("student_loans.questions.admin.mostly_performed_leadership_duties"), "No"])
+      expect(helper.admin_eligibility_answers(eligibility)).to include([I18n.t("student_loans.admin.had_leadership_position"), "No"])
+      expect(helper.admin_eligibility_answers(eligibility)).to_not include([I18n.t("student_loans.admin.mostly_performed_leadership_duties"), "No"])
     end
   end
 
@@ -58,12 +58,12 @@ describe Admin::ClaimsHelper do
 
     it "includes an array of questions and answers" do
       expected_answers = [
-        [I18n.t("questions.admin.teacher_reference_number"), "1234567"],
+        [I18n.t("admin.teacher_reference_number"), "1234567"],
         [I18n.t("verified_fields.full_name").capitalize, "Bruce Wayne"],
         [I18n.t("verified_fields.date_of_birth").capitalize, "01/01/1901"],
-        [I18n.t("questions.admin.national_insurance_number"), "QQ123456C"],
+        [I18n.t("admin.national_insurance_number"), "QQ123456C"],
         [I18n.t("verified_fields.address").capitalize, "Flat 1<br>1 Test Road<br>Test Town<br>AB1 2CD"],
-        [I18n.t("questions.admin.email_address"), "test@email.com"],
+        [I18n.t("admin.email_address"), "test@email.com"],
       ]
 
       expect(helper.admin_personal_details(claim)).to eq expected_answers
@@ -81,8 +81,8 @@ describe Admin::ClaimsHelper do
 
     it "includes an array of questions and answers" do
       expect(helper.admin_student_loan_details(claim)).to eq([
-        [I18n.t("student_loans.csv_headers.student_loan_repayment_amount"), "£1,234.00"],
-        [I18n.t("student_loans.csv_headers.student_loan_repayment_plan"), "Plan 1"],
+        [I18n.t("student_loans.admin.student_loan_repayment_amount"), "£1,234.00"],
+        [I18n.t("student_loans.admin.student_loan_repayment_plan"), "Plan 1"],
       ])
     end
   end
