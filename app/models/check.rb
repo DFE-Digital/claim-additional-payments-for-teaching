@@ -6,4 +6,8 @@ class Check < ApplicationRecord
   enum result: {
     approved: 0,
   }
+
+  def readonly?
+    persisted?
+  end
 end
