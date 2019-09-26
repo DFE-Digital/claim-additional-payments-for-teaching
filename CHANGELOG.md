@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+## [Release 012] - 2019-09-30
+
 - Add all-through schools to the eligible schools list
 - Update privacy notice to include the collection of IP address
 - Remove the admin claims CSV download
@@ -100,7 +102,9 @@ The format is based on [Keep a Changelog]
 - First release for student loan repayments private beta
 
 [unreleased]:
-  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-011...HEAD
+  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-012...HEAD
+[release 012]:
+  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-011...release-12
 [release 011]:
   https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-010...release-011
 [release 010]:
