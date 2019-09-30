@@ -31,6 +31,13 @@ module Admin
       ]
     end
 
+    def admin_submission_details(claim)
+      [
+        [t("admin.started_at"), l(claim.created_at)],
+        [t("admin.submitted_at"), l(claim.submitted_at)],
+      ]
+    end
+
     def link_to_school(school)
       url = "https://get-information-schools.service.gov.uk/Establishments/Establishment/Details/#{school.urn}"
       link_to(school.name, url, class: "govuk-link")

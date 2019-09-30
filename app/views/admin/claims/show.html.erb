@@ -10,6 +10,8 @@
 
     <%= render partial: "answer_section", locals: {heading: "Student loan details", answers: admin_student_loan_details(@claim)} %>
 
+    <%= render partial: "answer_section", locals: {heading: "Submission details", answers: admin_submission_details(@claim)} %>
+
     <%= button_to "Approve",
                   admin_claim_approvals_path(@claim),
                   method: :post,
