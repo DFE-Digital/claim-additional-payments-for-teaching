@@ -119,7 +119,23 @@ Code linting is performed using:
 [Bullet](https://github.com/flyerhzm/bullet) runs around each spec. If it
 detects an N+1 query it will raise an exception and the tests will fail.
 
-### Creating data migrations
+## The use of Rails fixtures in the test suite
+
+The application test suite makes use of a small number of
+[Rails fixtures](https://api.rubyonrails.org/v5.2.1/classes/ActiveRecord/FixtureSet.html)
+for some key models: School, LocalAuthority, and LocalAuthorityDistrict. This is
+because these models map to real-world entities with unique identifiers, and
+these identifiers are used as constants in the eligibility code. For example,
+the local authority of Barnsley is eligible for student loans as it's local
+authority code is listed in
+`StudentLoans::StudentLoans::ELIGIBLE_LOCAL_AUTHORITY_CODES`. By using fixtures
+for a small number of these real-world entities we avoid potentially flaky
+fixtures for things like eligible schools or districts where these unique
+identifiers may clash. See the School factory for how the eligible school traits
+make use of the local authority and district fixtures to create eligible
+schools.
+
+## Creating data migrations
 
 When running a live service sometimes you're required to change existing data in
 some way. Using the gem [data_migrate](https://github.com/ilyakatz/data-migrate)
