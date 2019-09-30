@@ -9,13 +9,13 @@ FactoryBot.define do
     local_authority_district
 
     trait :student_loan_eligible do
-      local_authority { create(:local_authority, code: StudentLoans::SchoolEligibility::ELIGIBLE_LOCAL_AUTHORITY_CODES.sample) }
+      local_authority { LocalAuthority.find(ActiveRecord::FixtureSet.identify(:barnsley, :uuid)) }
       school_type_group { School::STATE_FUNDED_SCHOOL_TYPE_GROUPS.sample }
       phase { StudentLoans::SchoolEligibility::ELIGIBLE_PHASES.sample }
     end
 
     trait :maths_and_physics_eligible do
-      local_authority_district { create(:local_authority_district, code: MathsAndPhysics::SchoolEligibility::ELIGIBLE_LOCAL_AUTHORITY_DISTRICT_CODES.sample) }
+      local_authority_district { LocalAuthorityDistrict.find(ActiveRecord::FixtureSet.identify(:barnsley, :uuid)) }
       school_type_group { School::STATE_FUNDED_SCHOOL_TYPE_GROUPS.sample }
       phase { StudentLoans::SchoolEligibility::ELIGIBLE_PHASES.sample }
     end
