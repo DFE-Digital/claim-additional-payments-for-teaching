@@ -159,17 +159,17 @@ function request_cert {
     read -rp "  Hit return to continue with the pre-existing CSR, or CTRL+C to stop."
   fi
 
-  echo "Now enrol the generated $TYPE CSR to Verify."
-
   CHALLENGE_PHRASE=
 
   while ! [ "$CHALLENGE_PHRASE" ]; do
-    read -rsp "  Enter the \"Challenge Phrase\" used in the enrollment request: " CHALLENGE_PHRASE
+    read -rsp "  Enter the \"Challenge Phrase\" you will use in the enrollment request: " CHALLENGE_PHRASE
     echo
   done
 
   echo "Storing $TYPE key, CSR, and challenge phrase in $KEY_VAULT_NAME..."
   store_key_and_csr_and_challenge_phrase "$FILE_PREFIX" "$CHALLENGE_PHRASE"
+
+  echo "Now enrol the generated $TYPE CSR to Verify."
 }
 
 if ! az account show > /dev/null; then
