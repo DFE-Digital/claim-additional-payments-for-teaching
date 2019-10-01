@@ -8,6 +8,7 @@ fi
 
 ENVIRONMENT_NAME=$1
 VERSION_NUMBER=$2
+EMAIL_ADDRESS="capt-dev@digital.education.gov.uk"
 
 case $ENVIRONMENT_NAME in
   "development")
@@ -29,7 +30,7 @@ esac
 function fetch_or_generate_key_and_csr {
   local FILE_PREFIX=$1
   local CSR_COMMON_NAME=$2
-  local CSR_SUBJECT="/C=GB/ST=Greater Manchester/L=Manchester/O=DfE/OU=Teaching Workforce Directorate/CN=$CSR_COMMON_NAME"
+  local CSR_SUBJECT="/emailAddress=$EMAIL_ADDRESS/C=GB/ST=Greater Manchester/L=Manchester/O=DfE/OU=Teaching Workforce Directorate/CN=$CSR_COMMON_NAME"
 
   if [ -f "$FILE_PREFIX.key" ]; then
     rm "$FILE_PREFIX.key"
