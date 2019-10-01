@@ -10,6 +10,9 @@ ENVIRONMENT_NAME=$1
 VERSION_NUMBER=$2
 EMAIL_ADDRESS="capt-dev@digital.education.gov.uk"
 
+RAILS_ROOT="$(bundle exec rails runner "puts Rails.root")"
+CERTS_DIR="${RAILS_ROOT}/tmp/certs/"
+
 case $ENVIRONMENT_NAME in
   "development")
     ENVIRONMENT_SHORT_NAME="Dev"
@@ -32,8 +35,8 @@ function fetch_or_generate_key_and_csr {
   local CSR_COMMON_NAME=$2
   local CSR_SUBJECT="/emailAddress=$EMAIL_ADDRESS/C=GB/ST=Greater Manchester/L=Manchester/O=DfE/OU=Teaching Workforce Directorate/CN=$CSR_COMMON_NAME"
 
-  if [ -f "$FILE_PREFIX.key" ]; then
-    rm "$FILE_PREFIX.key"
+  if [ -f "${CERTS_DIR}${FILE_PREFIX}.key" ]; then
+    rm "${CERTS_DIR}${FILE_PREFIX}.key"
   fi
 
   echo "Attempting to fetch key..."
@@ -41,24 +44,24 @@ function fetch_or_generate_key_and_csr {
   if ! az keyvault secret download \
     --vault-name $KEY_VAULT_NAME \
     --name "${FILE_PREFIX}Key" \
-    --file "$FILE_PREFIX.key"
+    --file "${CERTS_DIR}${FILE_PREFIX}.key"
   then
     KEY_EXISTED=
 
     echo "Generating key..."
 
-    openssl genrsa -out "$FILE_PREFIX-tmp.key" 2048
-    openssl pkcs8 -topk8 -inform PEM -outform PEM -nocrypt -in "$FILE_PREFIX-tmp.key" -out "$FILE_PREFIX.key"
+    openssl genrsa -out "${CERTS_DIR}${FILE_PREFIX}-tmp.key" 2048
+    openssl pkcs8 -topk8 -inform PEM -outform PEM -nocrypt -in "${CERTS_DIR}${FILE_PREFIX}-tmp.key" -out "${CERTS_DIR}${FILE_PREFIX}.key"
 
-    rm "$FILE_PREFIX-tmp.key"
+    rm "${CERTS_DIR}${FILE_PREFIX}-tmp.key"
   else
     echo "Key found."
 
     KEY_EXISTED=1
   fi
 
-  if [ -f "$FILE_PREFIX.key.base64" ]; then
-    rm "$FILE_PREFIX.key.base64"
+  if [ -f "${CERTS_DIR}${FILE_PREFIX}.key.base64" ]; then
+    rm "${CERTS_DIR}${FILE_PREFIX}.key.base64"
   fi
 
   echo "Attempting to fetch base64 encoded key..."
@@ -66,7 +69,7 @@ function fetch_or_generate_key_and_csr {
   if ! az keyvault secret download \
     --vault-name $KEY_VAULT_NAME \
     --name "${FILE_PREFIX}KeyBase64" \
-    --file "$FILE_PREFIX.key.base64"
+    --file "${CERTS_DIR}${FILE_PREFIX}.key.base64"
   then
     BASE64_KEY_EXISTED=
 
@@ -75,17 +78,17 @@ function fetch_or_generate_key_and_csr {
     sed \
         -e "s|-----BEGIN PRIVATE KEY-----||g" \
         -e "s|-----END PRIVATE KEY-----||g" \
-        "$FILE_PREFIX.key" \
+        "${CERTS_DIR}${FILE_PREFIX}.key" \
       | tr -d '\n' \
-      > "$FILE_PREFIX.key.base64"
+      > "${CERTS_DIR}${FILE_PREFIX}.key.base64"
   else
     echo "Base64 encoded key found."
 
     BASE64_KEY_EXISTED=1
   fi
 
-  if [ -f "$FILE_PREFIX.csr" ]; then
-    rm "$FILE_PREFIX.csr"
+  if [ -f "${CERTS_DIR}${FILE_PREFIX}.csr" ]; then
+    rm "${CERTS_DIR}${FILE_PREFIX}.csr"
   fi
 
   echo "Attempting to fetch CSR..."
@@ -93,13 +96,13 @@ function fetch_or_generate_key_and_csr {
   if ! az keyvault secret download \
     --vault-name $KEY_VAULT_NAME \
     --name "${FILE_PREFIX}Csr" \
-    --file "$FILE_PREFIX.csr"
+    --file "${CERTS_DIR}${FILE_PREFIX}.csr"
   then
     CSR_EXISTED=
 
     echo "Generating CSR..."
 
-    openssl req -new -batch -key "$FILE_PREFIX.key" -subj "$CSR_SUBJECT" -out "$FILE_PREFIX.csr"
+    openssl req -new -batch -key "${CERTS_DIR}${FILE_PREFIX}.key" -subj "$CSR_SUBJECT" -out "${CERTS_DIR}${FILE_PREFIX}.csr"
   else
     echo "CSR found."
 
@@ -115,21 +118,21 @@ function store_key_and_csr_and_challenge_phrase {
     az keyvault secret set \
       --vault-name $KEY_VAULT_NAME \
       --name "${FILE_PREFIX}Key" \
-      --file "${FILE_PREFIX}.key"
+      --file "${CERTS_DIR}${FILE_PREFIX}.key"
   fi
 
   if ! [ "$KEY_EXISTED" ] || ! [ "$BASE64_KEY_EXISTED" ]; then
     az keyvault secret set \
       --vault-name $KEY_VAULT_NAME \
       --name "${FILE_PREFIX}KeyBase64" \
-      --file "${FILE_PREFIX}.key.base64"
+      --file "${CERTS_DIR}${FILE_PREFIX}.key.base64"
   fi
 
   if ! [ "$CSR_EXISTED" ]; then
     az keyvault secret set \
       --vault-name $KEY_VAULT_NAME \
       --name "${FILE_PREFIX}Csr" \
-      --file "${FILE_PREFIX}.csr"
+      --file "${CERTS_DIR}${FILE_PREFIX}.csr"
   fi
 
   az keyvault secret set \
@@ -174,6 +177,8 @@ if ! az account show > /dev/null; then
   az login
 fi
 
+mkdir -p "${CERTS_DIR}"
+
 echo "Setting default Azure subscription to $AZURE_SUBSCRIPTION_ID..."
 az account set --subscription "$AZURE_SUBSCRIPTION_ID"
 
@@ -190,4 +195,4 @@ echo
 request_cert encryption "$ENCRYPTION_FILE_PREFIX" "$ENCRYPTION_CSR_COMMON_NAME"
 
 echo
-echo "Done!"
+echo "Done! Files are in tmp/certs. Do not forget to remove them when you are done!"
