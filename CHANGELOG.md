@@ -6,6 +6,9 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+## [Release 013] - 2019-10-01
+
+- Updated accessible-autocomplete to 2.0.0
 - Use a Check model to record the status of a claim
 - Add started at and submitted at times to the admin view of a claim
 
@@ -105,7 +108,9 @@ The format is based on [Keep a Changelog]
 - First release for student loan repayments private beta
 
 [unreleased]:
-  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-012...HEAD
+  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-013...HEAD
+[release 013]:
+  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-012...release-13
 [release 012]:
   https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-011...release-12
 [release 011]:
