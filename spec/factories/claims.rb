@@ -31,8 +31,7 @@ FactoryBot.define do
 
     trait :approved do
       submitted
-      approved_at { Time.zone.now }
-      approved_by { "12345" }
+      association(:check, factory: [:check, :approved], strategy: :build)
     end
 
     trait :ineligible do

@@ -10,11 +10,20 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_09_18_142241) do
+ActiveRecord::Schema.define(version: 2019_09_23_145104) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
+
+  create_table "checks", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.integer "result"
+    t.string "checked_by"
+    t.uuid "claim_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["claim_id"], name: "index_checks_on_claim_id"
+  end
 
   create_table "claims", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.datetime "created_at", null: false
@@ -45,8 +54,6 @@ ActiveRecord::Schema.define(version: 2019_09_18_142241) do
     t.string "first_name", limit: 100
     t.string "middle_name", limit: 100
     t.string "surname", limit: 100
-    t.datetime "approved_at"
-    t.string "approved_by"
     t.index ["eligibility_type", "eligibility_id"], name: "index_claims_on_eligibility_type_and_eligibility_id"
     t.index ["reference"], name: "index_claims_on_reference", unique: true
     t.index ["submitted_at"], name: "index_claims_on_submitted_at"

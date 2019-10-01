@@ -35,14 +35,14 @@ class Claim < ApplicationRecord
     updated_at: false,
     verified_fields: false,
     verify_response: true,
-    approved_at: false,
-    approved_by: false,
   }.freeze
 
   enum student_loan_country: StudentLoans::COUNTRIES
   enum student_loan_start_date: StudentLoans::COURSE_START_DATES
   enum student_loan_courses: {one_course: 0, two_or_more_courses: 1}
   enum student_loan_plan: STUDENT_LOAN_PLAN_OPTIONS
+
+  has_one :check
 
   belongs_to :eligibility, polymorphic: true
   accepts_nested_attributes_for :eligibility, update_only: true
@@ -105,8 +105,8 @@ class Claim < ApplicationRecord
   before_save :normalise_bank_sort_code, if: :bank_sort_code_changed?
 
   scope :submitted, -> { where.not(submitted_at: nil) }
-  scope :awaiting_approval, -> { submitted.where(approved_at: nil) }
-  scope :approved, -> { where.not(approved_at: nil).where.not(approved_by: nil) }
+  scope :awaiting_approval, -> { submitted.left_outer_joins(:check).where(checks: {claim_id: nil}) }
+  scope :approved, -> { joins(:check).where("checks.result" => :approved) }
 
   def submit!
     if submittable?
@@ -118,27 +118,12 @@ class Claim < ApplicationRecord
     end
   end
 
-  def approve!(approved_by:)
-    if approvable?
-      update(
-        approved_at: Time.zone.now,
-        approved_by: approved_by
-      )
-    else
-      false
-    end
-  end
-
   def submitted?
     submitted_at.present?
   end
 
   def submittable?
     valid?(:submit) && !submitted?
-  end
-
-  def approvable?
-    submitted? && approved_at.nil?
   end
 
   def address(seperator = ", ")

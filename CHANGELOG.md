@@ -6,6 +6,7 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+- Use a Check model to record the status of a claim
 - Add started at and submitted at times to the admin view of a claim
 
 ## [Release 012] - 2019-09-30
