@@ -21,7 +21,7 @@ Rails.application.routes.draw do
   get "/cookies", to: "static_pages#cookies", as: :cookies
   get "/accessibility_statement", to: "static_pages#accessibility_statement", as: :accessibility_statement
 
-  constraints slug: %r{#{PageSequence::SLUGS.join("|")}} do
+  constraints slug: %r{#{PageSequence.all_slugs.join("|")}} do
     resources :claims, only: [:new, :create, :show, :update], param: :slug, path: "/claim"
   end
 

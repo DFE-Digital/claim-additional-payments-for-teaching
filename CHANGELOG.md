@@ -6,6 +6,7 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+- Add support for multiple page sequences
 - Update Cantium CSV fields
 
 ## [Release 013] - 2019-10-01

@@ -7,6 +7,7 @@ class ClaimsController < ApplicationController
   def create
     claim = Claim.create!(eligibility: StudentLoans::Eligibility.new)
     session[:claim_id] = claim.to_param
+    session[:sequence_version] = PageSequence::CURRENT_SEQUENCE_VERSION
 
     redirect_to claim_path("qts-year")
   end
@@ -68,6 +69,6 @@ class ClaimsController < ApplicationController
   end
 
   def page_sequence
-    @page_sequence ||= PageSequence.new(current_claim, params[:slug])
+    @page_sequence ||= PageSequence.new(current_claim, params[:slug], sequence_version: session[:sequence_version])
   end
 end

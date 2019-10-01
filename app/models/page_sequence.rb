@@ -8,42 +8,54 @@
 # `claim_school` will skip the `current-school` page as `current_school` is
 # inferred to be the same as `claim_school.
 class PageSequence
-  SLUGS = [
-    "qts-year",
-    "claim-school",
-    "still-teaching",
-    "current-school",
-    "subjects-taught",
-    "leadership-position",
-    "mostly-performed-leadership-duties",
-    "eligibility-confirmed",
-    "information-provided",
-    "verified",
-    "address",
-    "gender",
-    "teacher-reference-number",
-    "national-insurance-number",
-    "student-loan",
-    "student-loan-country",
-    "student-loan-how-many-courses",
-    "student-loan-start-date",
-    "student-loan-amount",
-    "email-address",
-    "bank-details",
+  CURRENT_SEQUENCE_VERSION = 0
+
+  NON_QUESTION_SLUGS = [
     "check-your-answers",
     "confirmation",
     "ineligible",
   ].freeze
 
-  attr_reader :claim, :current_slug
+  QUESTION_SLUGS = {
+    0 => [
+      "qts-year",
+      "claim-school",
+      "still-teaching",
+      "current-school",
+      "subjects-taught",
+      "leadership-position",
+      "mostly-performed-leadership-duties",
+      "eligibility-confirmed",
+      "information-provided",
+      "verified",
+      "address",
+      "gender",
+      "teacher-reference-number",
+      "national-insurance-number",
+      "student-loan",
+      "student-loan-country",
+      "student-loan-how-many-courses",
+      "student-loan-start-date",
+      "student-loan-amount",
+      "email-address",
+      "bank-details",
+    ],
+  }.freeze
 
-  def initialize(claim, current_slug)
+  attr_reader :claim, :current_slug, :sequence_version
+
+  def self.all_slugs
+    [QUESTION_SLUGS.values, NON_QUESTION_SLUGS].flatten.uniq
+  end
+
+  def initialize(claim, current_slug, sequence_version:)
     @claim = claim
     @current_slug = current_slug
+    @sequence_version = sequence_version
   end
 
   def slugs
-    SLUGS.dup.tap do |sequence|
+    QUESTION_SLUGS[sequence_version].dup.tap do |sequence|
       sequence.delete("current-school") if claim.eligibility.employed_at_claim_school?
       sequence.delete("mostly-performed-leadership-duties") unless claim.eligibility.had_leadership_position?
       sequence.delete("student-loan-country") if claim.no_student_loan?
@@ -56,13 +68,14 @@ class PageSequence
 
   def next_slug
     return "ineligible" if claim.eligibility.ineligible?
+    return "confirmation" if claim.submitted?
     return "check-your-answers" if claim.submittable?
 
     slugs[current_slug_index + 1]
   end
 
   def in_sequence?(slug)
-    slugs.include?(slug)
+    slugs.include?(slug) || NON_QUESTION_SLUGS.include?(slug)
   end
 
   private
