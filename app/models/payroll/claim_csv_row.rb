@@ -30,6 +30,10 @@ module Payroll
     end
 
     def title
+      # Hardcoded as HMRC require it, but we don't collect it. As HMRC will already hold
+      # a record for teachers, they will be able to match to their existing record based
+      # on other fields such as name, dob, NI number
+      "Captain"
     end
 
     def payroll_gender

@@ -22,7 +22,7 @@ RSpec.describe Payroll::ClaimCsvRow do
 
     it "generates a csv row" do
       expect(row).to eq([
-        nil,
+        "Captain",
         claim.first_name,
         claim.middle_name,
         claim.surname,
