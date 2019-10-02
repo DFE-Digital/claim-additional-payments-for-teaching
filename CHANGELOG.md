@@ -110,9 +110,9 @@ The format is based on [Keep a Changelog]
 [unreleased]:
   https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-013...HEAD
 [release 013]:
-  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-012...release-13
+  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-012...release-013
 [release 012]:
-  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-011...release-12
+  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-011...release-012
 [release 011]:
   https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-010...release-011
 [release 010]:
