@@ -6,7 +6,7 @@ require "excel_utils"
 
 module Payroll
   class ClaimCsvRow < SimpleDelegator
-    DATE_FORMAT = "%m/%d/%Y"
+    DATE_FORMAT = "%Y%m%d"
     UNITED_KINGDOM = "United Kingdom"
     BASIC_RATE_TAX_CODE = "BR"
     CUMULATIVE_TAX_BASIS = "0"
