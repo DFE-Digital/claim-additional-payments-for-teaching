@@ -39,11 +39,11 @@ RSpec.describe PageSequence do
 
   describe "#slugs" do
     it "only returns slugs in the given sequence" do
-      stub_const("PageSequence::QUESTION_SLUGS", PageSequence::QUESTION_SLUGS.merge(test_version: ["test-slug"]))
+      stub_const("PageSequence::QUESTION_SLUGS", PageSequence::QUESTION_SLUGS.merge("test_version" => ["test-slug"]))
 
       page_sequence = PageSequence.new(claim, "qts-year", sequence_version: sequence_version)
 
-      expect(PageSequence::QUESTION_SLUGS[:test_version]).to include("test-slug")
+      expect(PageSequence::QUESTION_SLUGS["test_version"]).to include("test-slug")
       expect(page_sequence.slugs).not_to include("test-slug")
     end
 
@@ -109,6 +109,23 @@ RSpec.describe PageSequence do
       claim.eligibility.qts_award_year = :"2013_2014"
 
       expect(PageSequence.new(claim, "claim-school", sequence_version: sequence_version).next_slug).to eq "still-teaching"
+    end
+
+    it "returns the slug of an unanswered question if the sequence has skipped one" do
+      expect(PageSequence.new(claim, "claim-school", sequence_version: sequence_version).next_slug).to eq("qts-year")
+    end
+
+    it "returns the slug of an unanswered question if the sequence has reached the end" do
+      expect(PageSequence.new(build(:claim, :submittable, email_address: nil), "check-your-answers", sequence_version: sequence_version).next_slug).to eq("email-address")
+    end
+
+    it "returns the slug of a question missing from the sequence if the sequence has reached the end and the claim is not submittable" do
+      stub_const("PageSequence::QUESTION_SLUGS", {
+        sequence_version => PageSequence::QUESTION_SLUGS[sequence_version] - ["email-address"],
+        "new_version" => ["email-address"],
+      })
+
+      expect(PageSequence.new(build(:claim, :submittable, email_address: nil), "check-your-answers", sequence_version: sequence_version).next_slug).to eq("email-address")
     end
 
     context "with an ineligible claim" do

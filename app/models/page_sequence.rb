@@ -71,7 +71,19 @@ class PageSequence
     return "confirmation" if claim.submitted?
     return "check-your-answers" if claim.submittable?
 
-    slugs[current_slug_index + 1]
+    slugs.each do |slug|
+      break if slug == current_slug
+
+      return slug if claim.invalid?(slug.to_sym)
+    end
+
+    next_slug = current_slug_index.nil? ? nil : slugs[current_slug_index + 1]
+
+    if next_slug.nil?
+      self.class.all_slugs.detect { |slug| claim.invalid?(slug.to_sym) }
+    else
+      next_slug
+    end
   end
 
   def in_sequence?(slug)
