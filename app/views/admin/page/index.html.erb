@@ -8,7 +8,7 @@
 
     <% if service_operator_signed_in? %>
       <ul>
-        <li><%= link_to 'Approve claims', admin_claims_path, class: "govuk-link" %></li>
+        <li><%= link_to 'Check claims', admin_claims_path, class: "govuk-link" %></li>
         <li><%= link_to 'Download payroll data', payroll_admin_claims_path(format: :csv), class: "govuk-link" %></li>
       </ul>
     <% end %>
@@ -21,8 +21,8 @@
 
     <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
 
-    <h2 class="govuk-heading-m">Claims awaiting approval</h2>
-    <p class="govuk-body govuk-!-font-size-36"><%= Claim.awaiting_approval.count %></p>
+    <h2 class="govuk-heading-m">Claims awaiting checking</h2>
+    <p class="govuk-body govuk-!-font-size-36"><%= Claim.awaiting_checking.count %></p>
   </div>
 
 </div>

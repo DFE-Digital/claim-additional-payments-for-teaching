@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "Admin claim approvals", type: :request do
+RSpec.describe "Admin claim checks", type: :request do
   context "when signed in as a service operator" do
     before do
       stub_dfe_sign_in_with_role(AdminSession::SERVICE_OPERATOR_DFE_SIGN_IN_ROLE_CODE)
