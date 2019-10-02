@@ -17,9 +17,12 @@
     "platformBuildingBlocksDeploymentUrlBase": "https://raw.githubusercontent.com/DFE-Digital/bat-platform-building-blocks/7a4748a0cf366193d31434bd7796d483bd281385/templates/",
 
     "vnetDeploymentName": "[concat(parameters('resourceNamePrefix'), '-virtual-network')]",
+    "workerNetworkProfileDeploymentName": "[concat(parameters('resourceNamePrefix'), '-worker-network-profile')]",
 
     "vnetName": "[concat(parameters('resourceNamePrefix'), '-vn')]",
-    "workerSubnetName": "worker"
+    "workerSubnetName": "worker",
+
+    "workerNetworkProfileName": "[concat(parameters('resourceNamePrefix'), '-worker-np')]"
   },
   "resources": [
     {
@@ -65,6 +68,30 @@
           }
         }
       }
+    },
+    {
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2017-05-10",
+      "name": "[variables('workerNetworkProfileDeploymentName')]",
+      "dependsOn": ["[resourceId('Microsoft.Resources/deployments', variables('vnetDeploymentName'))]"],
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[concat(variables('platformBuildingBlocksDeploymentUrlBase'), 'container-instance-network-profile.json')]",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "vnetName": {
+            "value": "[variables('vnetName')]"
+          },
+          "subnetName": {
+            "value": "[variables('workerSubnetName')]"
+          },
+          "networkProfileName": {
+            "value": "[variables('workerNetworkProfileName')]"
+          }
+        }
+      }
     }
   ],
   "outputs": {
@@ -75,6 +102,10 @@
     "workerSubnetId": {
       "type": "string",
       "value": "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('vnetName'), variables('workerSubnetName'))]"
+    },
+    "workerNetworkProfileId": {
+      "type": "string",
+      "value": "[resourceId('Microsoft.Network/networkProfiles', variables('workerNetworkProfileName'))]"
     }
   }
 }
