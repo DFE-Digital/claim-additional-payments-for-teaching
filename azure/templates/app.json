@@ -65,6 +65,15 @@
     "enableLogs": {
       "type": "bool",
       "defaultValue": true
+    },
+    "workerContainerName": {
+      "type": "string"
+    },
+    "workerContainerInstanceName": {
+      "type": "string"
+    },
+    "workerNetworkProfileId": {
+      "type": "string"
     }
   },
   "variables": {
@@ -75,6 +84,7 @@
 
     "appServiceLogsDeploymentName": "[concat(deployment().name, '-app-service-logs')]",
     "appServicePlanDeploymentName": "[concat(deployment().name, '-app-service-plan')]",
+    "workerDeploymentName": "[concat(deployment().name, '-worker')]",
 
     "appServiceCertificateDeploymentCopyLoopName": "[concat(parameters('appServiceName'),'-certificate-deployment-copy')]",
     "appServiceHostNameBindingsCopyLoopName": "[concat(parameters('appServiceName'),'-host-name-bindings-copy')]",
@@ -225,6 +235,35 @@
           },
           "detailedErrorLoggingEnabled": {
             "value": true
+          }
+        }
+      }
+    },
+    {
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2017-05-10",
+      "name": "[variables('workerDeploymentName')]",
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[concat(variables('deploymentUrlBase'), 'worker.json')]",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "containerInstanceName": {
+            "value": "[parameters('workerContainerInstanceName')]"
+          },
+          "containerName": {
+            "value": "[parameters('workerContainerName')]"
+          },
+          "imageName": {
+            "value": "dfedigital/teacher-payments-service:development"
+          },
+          "environmentVariables": {
+            "value": "[parameters('appServiceEnvironmentVariables')]"
+          },
+          "networkProfileId": {
+            "value": "[parameters('workerNetworkProfileId')]"
           }
         }
       }

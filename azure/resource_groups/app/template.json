@@ -85,6 +85,9 @@
     "workerSubnetId": {
       "type": "string"
     },
+    "workerNetworkProfileId": {
+      "type": "string"
+    },
     "databaseName": {
       "type": "string"
     },
@@ -237,7 +240,10 @@
     "vspAppServiceName": "[concat(parameters('resourceNamePrefix'), '-vsp-as')]",
     "vspAppServiceRuntimeStack": "[concat('DOCKER|', parameters('vspAppServiceDockerImage'))]",
 
-    "vspAppServiceWebTestName": "[concat(variables('vspAppServiceName'), '-webtest')]"
+    "vspAppServiceWebTestName": "[concat(variables('vspAppServiceName'), '-webtest')]",
+
+    "workerContainerName": "[concat(parameters('resourceNamePrefix'), '-worker-container')]",
+    "workerContainerInstanceName": "[concat(parameters('resourceNamePrefix'), '-worker-aci')]"
   },
   "resources": [
     {
@@ -348,6 +354,15 @@
           },
           "keyVaultName": {
             "value": "[parameters('keyVaultName')]"
+          },
+          "workerContainerName": {
+            "value": "[variables('workerContainerName')]"
+          },
+          "workerContainerInstanceName": {
+            "value": "[variables('workerContainerInstanceName')]"
+          },
+          "workerNetworkProfileId": {
+            "value": "[parameters('workerNetworkProfileId')]"
           },
           "appServiceEnvironmentVariables": {
             "value": [

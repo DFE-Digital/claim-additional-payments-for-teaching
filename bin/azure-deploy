@@ -247,7 +247,7 @@ APP_DEPLOYMENT_RESULT=$(
     --parameters "$(
       filter-azure-outputs \
         "$PROJECT_CORE_DEPLOYMENT_RESULT" \
-        "['workerSubnetId']"
+        "['workerSubnetId', 'workerNetworkProfileId']"
     )" \
     "${EXTRA_APP_DEPLOYMENT_OPTIONS[@]}" \
     --mode Complete \
