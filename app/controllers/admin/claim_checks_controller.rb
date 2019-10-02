@@ -5,8 +5,8 @@ class Admin::ClaimChecksController < Admin::BaseAdminController
 
   def create
     @claim.create_check!(checked_by: admin_session.user_id, result: params[:result])
-    ClaimMailer.approved(@claim).deliver_later
-    redirect_to admin_claims_path, notice: "Claim has been approved successfully"
+    ClaimMailer.approved(@claim).deliver_later if @claim.check.result == "approved"
+    redirect_to admin_claims_path, notice: "Claim has been #{@claim.check.result} successfully"
   end
 
   private
