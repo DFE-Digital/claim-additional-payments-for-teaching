@@ -6,6 +6,7 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+- Reword the question about how many courses the user studied
 - Update Cantium CSV fields
 
 ## [Release 013] - 2019-10-01
