@@ -13,6 +13,7 @@ RSpec.describe Payroll::ClaimsCsv do
   describe "file" do
     let(:file) { subject.file }
     let(:csv) { CSV.read(file) }
+    let(:row) { Payroll::ClaimCsvRow.new(claim).to_s }
 
     it "returns the correct headers" do
       expect(csv[0]).to match_array([
@@ -42,6 +43,7 @@ RSpec.describe Payroll::ClaimsCsv do
         "BANK_NAME",
         "SORT_CODE",
         "ACCOUNT_NUMBER",
+        "ROLL_NUMBER",
         "SCHEME_NAME",
         "SCHEME_AMOUNT",
         "CLAIM_ID",
@@ -49,37 +51,8 @@ RSpec.describe Payroll::ClaimsCsv do
     end
 
     it "returns the correct rows" do
-      expect(csv[1]).to eq([
-        nil,
-        claim.first_name,
-        claim.middle_name,
-        claim.surname,
-        claim.national_insurance_number,
-        "F",
-        start_of_month.strftime("%m/%d/%Y"),
-        (start_of_month + 7.days).strftime("%m/%d/%Y"),
-        claim.date_of_birth.strftime("%m/%d/%Y"),
-        claim.email_address,
-        claim.address_line_1,
-        claim.address_line_2,
-        claim.postcode,
-        nil,
-        nil,
-        nil,
-        "United Kingdom",
-        "BR",
-        "0",
-        "3",
-        "A",
-        "T",
-        "1",
-        claim.full_name,
-        claim.bank_sort_code,
-        claim.bank_account_number,
-        "Student Loans",
-        claim.eligibility.student_loan_repayment_amount.to_s,
-        claim.reference,
-      ])
+      expect(csv.count).to eq(2)
+      expect(csv[1]).to eq(CSV.parse_line(row))
     end
   end
 end

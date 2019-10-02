@@ -22,15 +22,15 @@ RSpec.describe Payroll::ClaimCsvRow do
 
     it "generates a csv row" do
       expect(row).to eq([
-        nil,
+        "Captain",
         claim.first_name,
         claim.middle_name,
         claim.surname,
         claim.national_insurance_number,
         "F",
-        start_of_month.strftime("%m/%d/%Y"),
-        (start_of_month + 7.days).strftime("%m/%d/%Y"),
-        claim.date_of_birth.strftime("%m/%d/%Y"),
+        start_of_month.strftime("%Y%m%d"),
+        (start_of_month + 7.days).strftime("%Y%m%d"),
+        claim.date_of_birth.strftime("%Y%m%d"),
         claim.email_address,
         claim.address_line_1,
         claim.postcode,
@@ -48,6 +48,7 @@ RSpec.describe Payroll::ClaimCsvRow do
         claim.full_name,
         claim.bank_sort_code,
         claim.bank_account_number,
+        nil,
         "Student Loans",
         claim.eligibility.student_loan_repayment_amount.to_s,
         claim.reference,

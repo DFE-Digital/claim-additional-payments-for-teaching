@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+- Update Cantium CSV fields
+
 ## [Release 013] - 2019-10-01
 
 - Updated accessible-autocomplete to 2.0.0

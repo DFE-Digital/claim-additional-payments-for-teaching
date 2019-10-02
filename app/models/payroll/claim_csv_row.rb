@@ -6,7 +6,7 @@ require "excel_utils"
 
 module Payroll
   class ClaimCsvRow < SimpleDelegator
-    DATE_FORMAT = "%m/%d/%Y"
+    DATE_FORMAT = "%Y%m%d"
     UNITED_KINGDOM = "United Kingdom"
     BASIC_RATE_TAX_CODE = "BR"
     CUMULATIVE_TAX_BASIS = "0"
@@ -30,6 +30,10 @@ module Payroll
     end
 
     def title
+      # Hardcoded as HMRC require it, but we don't collect it. As HMRC will already hold
+      # a record for teachers, they will be able to match to their existing record based
+      # on other fields such as name, dob, NI number
+      "Captain"
     end
 
     def payroll_gender
@@ -127,6 +131,11 @@ module Payroll
 
     def scheme_amount
       model.eligibility.student_loan_repayment_amount.to_s
+    end
+
+    def roll_number
+      # This is intentionally left blank as we don't currently collect it, but this
+      # should be removed when we start collecting the data
     end
 
     def model
