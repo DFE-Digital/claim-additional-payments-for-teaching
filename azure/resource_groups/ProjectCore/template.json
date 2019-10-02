@@ -8,13 +8,18 @@
     },
     "vnetAddressSpaceCIDR": {
       "type": "string"
+    },
+    "workerSubnetAddressPrefix": {
+      "type": "string"
     }
   },
   "variables": {
     "platformBuildingBlocksDeploymentUrlBase": "https://raw.githubusercontent.com/DFE-Digital/bat-platform-building-blocks/7a4748a0cf366193d31434bd7796d483bd281385/templates/",
-    "vnetDeploymentName": "[concat(parameters('resourceNamePrefix'), '-virtualnetwork')]",
+
+    "vnetDeploymentName": "[concat(parameters('resourceNamePrefix'), '-virtual-network')]",
+
     "vnetName": "[concat(parameters('resourceNamePrefix'), '-vn')]",
-    "defaultSubnetAddressPrefix": "[parameters('vnetAddressSpaceCIDR')]"
+    "workerSubnetName": "worker"
   },
   "resources": [
     {
@@ -37,11 +42,22 @@
           "subnetConfiguration": {
             "value": [
               {
-                "name": "default",
+                "name": "[variables('workerSubnetName')]",
                 "properties": {
-                  "addressPrefix": "[variables('defaultSubnetAddressPrefix')]",
-                  "serviceEndpoints": [],
-                  "delegations": [],
+                  "addressPrefix": "[parameters('workerSubnetAddressPrefix')]",
+                  "delegations": [
+                    {
+                      "name": "DelegationService",
+                      "properties": {
+                        "serviceName": "Microsoft.ContainerInstance/containerGroups"
+                      }
+                    }
+                  ],
+                  "serviceEndpoints": [
+                    {
+                      "service": "Microsoft.Sql"
+                    }
+                  ],
                   "privateEndpointNetworkPolicies": "Enabled"
                 }
               }
@@ -55,6 +71,10 @@
     "resourceGroupId": {
       "type": "string",
       "value": "[resourceGroup().id]"
+    },
+    "workerSubnetId": {
+      "type": "string",
+      "value": "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('vnetName'), variables('workerSubnetName'))]"
     }
   }
 }
