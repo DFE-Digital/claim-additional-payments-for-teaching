@@ -282,6 +282,12 @@ if [ $DEPLOY_ALERTS ]; then
       --parameters "gitCommitHash=$GIT_COMMIT_HASH" \
       --parameters "$(
         filter-azure-outputs \
+          "$PROJECT_CORE_DEPLOYMENT_RESULT" \
+          "[]" \
+          "{'resourceGroupId' => 'projectCoreResourceGroupId'}"
+      )" \
+      --parameters "$(
+        filter-azure-outputs \
           "$SECRETS_DEPLOYMENT_RESULT" \
           "[]" \
           "{'resourceGroupId' => 'secretsResourceGroupId'}"
