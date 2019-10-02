@@ -48,6 +48,7 @@ RSpec.describe Payroll::ClaimCsvRow do
         claim.full_name,
         claim.bank_sort_code,
         claim.bank_account_number,
+        nil,
         "Student Loans",
         claim.eligibility.student_loan_repayment_amount.to_s,
         claim.reference,

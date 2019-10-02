@@ -31,6 +31,7 @@ module Payroll
       banking_name: "BANK_NAME",
       bank_sort_code: "SORT_CODE",
       bank_account_number: "ACCOUNT_NUMBER",
+      roll_number: "ROLL_NUMBER",
       scheme_name: "SCHEME_NAME",
       scheme_amount: "SCHEME_AMOUNT",
       reference: "CLAIM_ID",

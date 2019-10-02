@@ -133,6 +133,11 @@ module Payroll
       model.eligibility.student_loan_repayment_amount.to_s
     end
 
+    def roll_number
+      # This is intentionally left blank as we don't currently collect it, but this
+      # should be removed when we start collecting the data
+    end
+
     def model
       __getobj__
     end

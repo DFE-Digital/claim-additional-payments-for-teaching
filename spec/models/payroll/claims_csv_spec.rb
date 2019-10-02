@@ -43,6 +43,7 @@ RSpec.describe Payroll::ClaimsCsv do
         "BANK_NAME",
         "SORT_CODE",
         "ACCOUNT_NUMBER",
+        "ROLL_NUMBER",
         "SCHEME_NAME",
         "SCHEME_AMOUNT",
         "CLAIM_ID",
