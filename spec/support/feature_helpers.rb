@@ -1,12 +1,6 @@
 module FeatureHelpers
   def answer_all_student_loans_claim_questions
-    start_claim
-    choose_qts_year
-    choose_school schools(:penistone_grammar_school)
-    choose_still_teaching "Yes, at another school"
-    choose_school schools(:hampstead_school)
-    choose_subjects_taught
-    click_on "Continue"
+    claim = answer_all_student_loans_eligibility_questions
 
     perform_verify_step
     click_on "Continue"
@@ -27,6 +21,21 @@ module FeatureHelpers
     fill_in "Sort code", with: "123456"
     fill_in "Account number", with: "87654321"
     click_on "Continue"
+
+    claim
+  end
+
+  def answer_all_student_loans_eligibility_questions
+    claim = start_claim
+    choose_qts_year
+    choose_school schools(:penistone_grammar_school)
+    choose_still_teaching "Yes, at another school"
+    choose_school schools(:hampstead_school)
+    choose_subjects_taught
+    choose_mostly_not_leadership
+    click_on "Continue"
+
+    claim
   end
 
   def start_claim
@@ -56,7 +65,9 @@ module FeatureHelpers
   def choose_subjects_taught
     check "Physics"
     click_on "Continue"
+  end
 
+  def choose_mostly_not_leadership
     choose "Yes"
     click_on "Continue"
 

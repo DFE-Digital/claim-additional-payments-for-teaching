@@ -2,12 +2,7 @@ require "rails_helper"
 
 RSpec.feature "Missing information from GOV.UK Verify" do
   scenario "Claimant is asked a payroll gender question when Verify doesn’t provide their gender" do
-    claim = start_claim
-    choose_qts_year
-    choose_school schools(:penistone_grammar_school)
-    choose_still_teaching
-    choose_subjects_taught
-    click_on "Continue"
+    claim = answer_all_student_loans_eligibility_questions
 
     perform_verify_step("identity-verified-other-gender")
     expect(page).to have_text("This is your first name, middle name, surname, address, and date of birth from your digital identity")
@@ -53,12 +48,7 @@ RSpec.feature "Missing information from GOV.UK Verify" do
   end
 
   scenario "Claimant is asked an address question when Verify doesn’t provide their address" do
-    claim = start_claim
-    choose_qts_year
-    choose_school schools(:penistone_grammar_school)
-    choose_still_teaching
-    choose_subjects_taught
-    click_on "Continue"
+    claim = answer_all_student_loans_eligibility_questions
 
     perform_verify_step("identity-verified-no-address")
     expect(page).to have_text("This is your first name, surname, date of birth, and gender from your digital identity")
