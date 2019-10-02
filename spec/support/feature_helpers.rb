@@ -30,7 +30,7 @@ module FeatureHelpers
     choose_qts_year
     choose_school schools(:penistone_grammar_school)
     choose_still_teaching "Yes, at another school"
-    choose_school schools(:hampstead_school)
+    choose_school schools(:penistone_grammar_school)
     choose_subjects_taught
     choose_mostly_not_leadership
     click_on "Continue"
