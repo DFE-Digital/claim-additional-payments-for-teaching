@@ -82,6 +82,9 @@
     "verifyHubPossibleOutboundIpAddresses": {
       "type": "array"
     },
+    "workerSubnetId": {
+      "type": "string"
+    },
     "databaseName": {
       "type": "string"
     },
@@ -480,6 +483,9 @@
           },
           "serverName": {
             "value": "[variables('databaseServerName')]"
+          },
+          "subnetResourceIdList": {
+            "value": ["[parameters('workerSubnetId')]"]
           }
         }
       }
