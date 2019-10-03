@@ -20,7 +20,7 @@
 
   function refreshSession() {
     Rails.ajax({
-      url: "<%= Rails.application.routes.url_helpers.claim_refresh_session_path(policy: "student-loans") %>",
+      url: "<%= claim_refresh_session_path %>",
       type: "get",
       success: function() {
         clearInterval(window.sessionTimeoutTimer);
@@ -31,7 +31,7 @@
 
   function sessionTimedOut() {
     clearInterval(window.sessionTimeoutTimer);
-    window.location = "<%= Rails.application.routes.url_helpers.timeout_claim_path(policy: "student-loans") %>";
+    window.location = "<%= timeout_claim_path %>";
   }
 
   function showTimeoutDialog() {
