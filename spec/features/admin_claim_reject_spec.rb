@@ -1,9 +1,11 @@
 require "rails_helper"
 
 RSpec.feature "Rejecting a claim" do
+  let(:user_id) { "userid-345" }
+
   context "when a user is logged in as a service operator" do
     before do
-      stub_dfe_sign_in_with_role(AdminSession::SERVICE_OPERATOR_DFE_SIGN_IN_ROLE_CODE, "12345")
+      stub_dfe_sign_in_with_role(AdminSession::SERVICE_OPERATOR_DFE_SIGN_IN_ROLE_CODE, user_id)
       visit admin_path
       click_on "Sign in"
     end
@@ -22,7 +24,6 @@ RSpec.feature "Rejecting a claim" do
       perform_enqueued_jobs { click_on "Reject" }
 
       expect(claim_to_reject.check.checked_by).to eq(user_id)
-
       expect(page).to have_content("Claim has been rejected successfully")
       expect(page).to_not have_content(claim_to_reject.reference)
 
