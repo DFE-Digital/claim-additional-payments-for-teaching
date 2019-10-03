@@ -2,10 +2,9 @@ require "rails_helper"
 
 RSpec.feature "Ineligible Teacher Student Loan Repayments claims" do
   scenario "qualified before the first eligible year" do
-    claim = start_claim
-
-    choose "Before 1 September 2013"
-    click_on "Continue"
+    visit new_claim_path
+    choose_qts_year("Before 1 September 2013")
+    claim = Claim.order(:created_at).last
 
     expect(claim.eligibility.reload.qts_award_year).to eql("before_2013")
     expect(page).to have_text("You’re not eligible")
@@ -14,7 +13,7 @@ RSpec.feature "Ineligible Teacher Student Loan Repayments claims" do
 
   scenario "now works for a different school" do
     claim = start_claim
-    choose_qts_year
+
     choose_school schools(:penistone_grammar_school)
 
     choose_still_teaching "Yes, at another school"
@@ -34,7 +33,6 @@ RSpec.feature "Ineligible Teacher Student Loan Repayments claims" do
 
   scenario "chooses an ineligible school" do
     claim = start_claim
-    choose_qts_year
     choose_school schools(:hampstead_school)
 
     expect(claim.eligibility.reload.claim_school).to eq schools(:hampstead_school)
@@ -44,7 +42,6 @@ RSpec.feature "Ineligible Teacher Student Loan Repayments claims" do
 
   scenario "no longer teaching" do
     claim = start_claim
-    choose_qts_year
     choose_school schools(:penistone_grammar_school)
 
     choose_still_teaching "No"
@@ -56,7 +53,6 @@ RSpec.feature "Ineligible Teacher Student Loan Repayments claims" do
 
   scenario "did not teach an eligible subject" do
     claim = start_claim
-    choose_qts_year
     choose_school schools(:penistone_grammar_school)
     choose_still_teaching
 
@@ -70,7 +66,6 @@ RSpec.feature "Ineligible Teacher Student Loan Repayments claims" do
 
   scenario "was in a leadership position and performed leadership duties for more than half of their time" do
     claim = start_claim
-    choose_qts_year
     choose_school schools(:penistone_grammar_school)
     choose_still_teaching
 

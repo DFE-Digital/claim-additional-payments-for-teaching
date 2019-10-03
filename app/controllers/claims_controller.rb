@@ -10,10 +10,14 @@ class ClaimsController < ApplicationController
   end
 
   def create
-    claim = Claim.create!(eligibility: StudentLoans::Eligibility.new)
-    session[:claim_id] = claim.to_param
+    @current_claim = Claim.new(eligibility: StudentLoans::Eligibility.new)
 
-    redirect_to claim_path("qts-year")
+    if update_current_claim!
+      session[:claim_id] = @current_claim.to_param
+      redirect_to claim_path(next_slug)
+    else
+      render claim_page_template
+    end
   end
 
   def show

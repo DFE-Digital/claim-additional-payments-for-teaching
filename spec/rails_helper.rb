@@ -62,6 +62,7 @@ RSpec.configure do |config|
   # config.filter_gems_from_backtrace("gem name")
 
   config.include FeatureHelpers, type: :feature
+  config.include RequestHelpers, type: :request
   config.include ActiveSupport::Testing::TimeHelpers
   config.include ActiveJob::TestHelper
   config.include DfeSignInHelpers

@@ -5,7 +5,6 @@ RSpec.feature "Current school with closed claim school" do
 
   scenario "Still teaching only has two options" do
     start_claim
-    choose_qts_year
     choose_school claim_school
 
     expect(page).to have_text("Yes")
@@ -16,7 +15,6 @@ RSpec.feature "Current school with closed claim school" do
 
   scenario "Choosing yes to still teaching prompts to search for a school" do
     claim = start_claim
-    choose_qts_year
     choose_school claim_school
 
     choose_still_teaching "Yes"

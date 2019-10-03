@@ -1,7 +1,6 @@
 module FeatureHelpers
   def answer_all_student_loans_claim_questions
     start_claim
-    choose_qts_year
     choose_school schools(:penistone_grammar_school)
     choose_still_teaching "Yes, at another school"
     choose_school schools(:hampstead_school)
@@ -30,8 +29,8 @@ module FeatureHelpers
   end
 
   def start_claim
-    visit root_path
-    click_on "Start now"
+    visit new_claim_path
+    choose_qts_year
     Claim.order(:created_at).last
   end
 

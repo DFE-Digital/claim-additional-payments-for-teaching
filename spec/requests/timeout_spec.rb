@@ -5,7 +5,7 @@ RSpec.describe "Claim session timing out", type: :request do
 
   context "no actions performed for more than the timeout period" do
     before do
-      post claims_path
+      start_claim
       start_verify_authentication_process
     end
 
@@ -28,7 +28,7 @@ RSpec.describe "Claim session timing out", type: :request do
 
   context "no action performed just within the timeout period" do
     before do
-      post claims_path
+      start_claim
       start_verify_authentication_process
     end
 
