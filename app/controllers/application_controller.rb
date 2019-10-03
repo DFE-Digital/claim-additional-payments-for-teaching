@@ -25,7 +25,11 @@ class ApplicationController < ActionController::Base
   end
 
   def current_claim
-    @current_claim ||= Claim.find(session[:claim_id]) if session.key?(:claim_id)
+    @current_claim ||= current_claim_from_session
+  end
+
+  def current_claim_from_session
+    Claim.find(session[:claim_id]) if session.key?(:claim_id)
   end
 
   def claim_timeout_in_minutes
