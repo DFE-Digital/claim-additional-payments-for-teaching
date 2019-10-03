@@ -6,6 +6,7 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+- Rework URL structure in preparation for Maths & Physics policy
 - Changes to accessibility statement as we think we now meet AA standard
 
 ## [Release 014] - 2019-10-03
