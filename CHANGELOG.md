@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+## [Release 014] - 2019-10-03
+
 - Reword the question about how many courses the user studied
 - Update Cantium CSV fields
 
@@ -111,7 +113,9 @@ The format is based on [Keep a Changelog]
 - First release for student loan repayments private beta
 
 [unreleased]:
-  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-013...HEAD
+  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-014...HEAD
+[release 014]:
+  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-013...release-014
 [release 013]:
   https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-012...release-013
 [release 012]:
