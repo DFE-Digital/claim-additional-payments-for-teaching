@@ -113,6 +113,8 @@ class Claim < ApplicationRecord
   scope :awaiting_checking, -> { submitted.left_outer_joins(:check).where(checks: {claim_id: nil}) }
   scope :approved, -> { joins(:check).where("checks.result" => :approved) }
 
+  delegate :award_amount, to: :eligibility
+
   def submit!
     if submittable?
       self.submitted_at = Time.zone.now

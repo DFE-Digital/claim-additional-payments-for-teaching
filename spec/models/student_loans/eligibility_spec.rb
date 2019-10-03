@@ -133,6 +133,13 @@ RSpec.describe StudentLoans::Eligibility, type: :model do
     end
   end
 
+  describe "#award_amount" do
+    it "returns the student loan repayment amount" do
+      eligibility = StudentLoans::Eligibility.new(student_loan_repayment_amount: 1000)
+      expect(eligibility.award_amount).to eq(1000)
+    end
+  end
+
   # Validation contexts
   context "when saving in the “qts-year” context" do
     it "is not valid without a value for qts_award_year" do
