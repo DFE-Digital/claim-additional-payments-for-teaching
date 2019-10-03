@@ -37,6 +37,7 @@ class Claim < ApplicationRecord
     verify_response: true,
     banking_name: true,
     building_society_roll_number: true,
+    payroll_run_id: false,
   }.freeze
 
   enum student_loan_country: StudentLoans::COUNTRIES
