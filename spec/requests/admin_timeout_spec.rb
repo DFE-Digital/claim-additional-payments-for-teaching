@@ -6,9 +6,7 @@ RSpec.describe "Admin session timing out", type: :request do
   let(:organisation_id) { "organisationid-6789" }
 
   before do
-    stub_dfe_sign_in_with_role(AdminSession::SERVICE_OPERATOR_DFE_SIGN_IN_ROLE_CODE, user_id, organisation_id)
-    post admin_dfe_sign_in_path
-    follow_redirect!
+    sign_in_to_admin_with_role(AdminSession::SERVICE_OPERATOR_DFE_SIGN_IN_ROLE_CODE, user_id, organisation_id)
   end
 
   context "no actions performed for more than the timeout period" do

@@ -19,9 +19,7 @@ RSpec.describe "Admin", type: :request do
 
       context "when the user is a service operator" do
         before do
-          stub_dfe_sign_in_with_role(AdminSession::SERVICE_OPERATOR_DFE_SIGN_IN_ROLE_CODE, user_id, organisation_id)
-          post admin_dfe_sign_in_path
-          follow_redirect!
+          sign_in_to_admin_with_role(AdminSession::SERVICE_OPERATOR_DFE_SIGN_IN_ROLE_CODE, user_id, organisation_id)
         end
 
         it "renders the admin page and sets a session" do
@@ -47,9 +45,7 @@ RSpec.describe "Admin", type: :request do
 
       context "when the user is a support user" do
         before do
-          stub_dfe_sign_in_with_role(AdminSession::SUPPORT_AGENT_DFE_SIGN_IN_ROLE_CODE, user_id, organisation_id)
-          post admin_dfe_sign_in_path
-          follow_redirect!
+          sign_in_to_admin_with_role(AdminSession::SUPPORT_AGENT_DFE_SIGN_IN_ROLE_CODE, user_id, organisation_id)
         end
 
         it "renders the admin page and sets a session" do
@@ -65,9 +61,7 @@ RSpec.describe "Admin", type: :request do
 
       context "when the user is not authorised to access the service" do
         before do
-          stub_dfe_sign_in_with_role("not-the-role-code-we-expect")
-          post admin_dfe_sign_in_path
-          follow_redirect!
+          sign_in_to_admin_with_role("not-the-role-code-we-expect")
         end
 
         it "shows a not authorised page and doesn’t set a session" do
