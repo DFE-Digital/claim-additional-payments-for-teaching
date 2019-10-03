@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+- Changes to accessibility statement as we think we now meet AA standard
+
 ## [Release 014] - 2019-10-03
 
 - Reword the question about how many courses the user studied
