@@ -29,12 +29,9 @@ RSpec.feature "Rejecting a claim" do
 
       mail = ActionMailer::Base.deliveries.last
 
-      expect(mail.subject).to eq(
-        "Your claim to get your student loan repayments back has been rejected, reference number: #{claim_to_reject.reference}"
-      )
-      expect(mail.body.raw_source).to match(
-        "Unfortunately your claim to get your student loan payments back has been denied."
-      )
+      expect(mail.subject).to match("been rejected")
+      expect(mail.to).to eq([claim_to_reject.email_address])
+      expect(mail.body.raw_source).to match("been denied.")
     end
   end
 end

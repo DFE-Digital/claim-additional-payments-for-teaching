@@ -32,12 +32,9 @@ RSpec.feature "Admin approves a claim" do
 
         mail = ActionMailer::Base.deliveries.first
 
-        expect(mail.subject).to eq(
-          "Your claim to get your student loan repayments back has been approved, reference number: #{claim_to_approve.reference}"
-        )
-        expect(mail.body.raw_source).to match(
-          "Your claim to get your student loan repayments back has been approved"
-        )
+        expect(mail.subject).to match("been approved")
+        expect(mail.to).to eq([claim_to_approve.email_address])
+        expect(mail.body.raw_source).to match("been approved")
       end
     end
   end
