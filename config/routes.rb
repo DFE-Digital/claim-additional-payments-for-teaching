@@ -21,12 +21,14 @@ Rails.application.routes.draw do
   get "/cookies", to: "static_pages#cookies", as: :cookies
   get "/accessibility_statement", to: "static_pages#accessibility_statement", as: :accessibility_statement
 
-  constraints slug: %r{#{PageSequence::SLUGS.join("|")}} do
-    resources :claims, only: [:new, :create, :show, :update], param: :slug, path: "/claim"
-  end
+  scope path: ":policy", defaults: {policy: "student-loans"}, constraints: {policy: %r{student-loans}} do
+    constraints slug: %r{#{PageSequence::SLUGS.join("|")}} do
+      resources :claims, only: [:new, :create, :show, :update], param: :slug, path: "/"
+    end
 
-  get "/claim/timeout", to: "claims#timeout", as: :timeout_claim
-  get "/claim/refresh-session", to: "claims#refresh_session"
+    get "timeout", to: "claims#timeout", as: :timeout_claim
+    get "refresh-session", to: "claims#refresh_session", as: :claim_refresh_session
+  end
 
   constraints lambda { |req| req.format == :json } do
     defaults format: :json do
