@@ -15,6 +15,18 @@ if [ ! -d $VSP_PATH ]; then
   echo "Verify Service provider successfully installed!"
 fi
 
+echo "Checking for any running VSP processes"
+echo
+
+PORT=50300
+PID=$(lsof -t -i :$PORT)
+
+if [ ${#PID} -ne 0 ]; then
+  echo "Cleaning up running VSP processes..."
+  echo
+  kill -9 "$PID"
+fi
+
 echo "Launching Verify Service Provider..."
 echo
 
