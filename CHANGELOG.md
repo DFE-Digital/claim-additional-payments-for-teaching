@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+- Make sure claimants cannot make a claim of £0
+
 ## [Release 015] - 2019-10-07
 
 - Update the first page of the claim to initialise, rather than create a claim
