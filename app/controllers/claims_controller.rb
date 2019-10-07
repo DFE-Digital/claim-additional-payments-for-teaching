@@ -41,7 +41,7 @@ class ClaimsController < ApplicationController
   private
 
   def update_current_claim!
-    ClaimUpdate.new(current_claim, claim_params, params[:slug]).perform
+    ClaimUpdate.new(current_claim, claim_params, page_sequence.current_slug).perform
   end
 
   def next_slug
@@ -49,7 +49,7 @@ class ClaimsController < ApplicationController
   end
 
   def submission_complete?
-    params[:slug] == "confirmation" && current_claim.submitted?
+    page_sequence.current_slug == "confirmation" && current_claim.submitted?
   end
 
   def search_schools
@@ -66,7 +66,7 @@ class ClaimsController < ApplicationController
   end
 
   def current_template
-    params[:slug].underscore
+    page_sequence.current_slug.underscore
   end
 
   def first_template_in_sequence
