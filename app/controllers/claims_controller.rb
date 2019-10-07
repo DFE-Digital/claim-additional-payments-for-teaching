@@ -5,7 +5,7 @@ class ClaimsController < ApplicationController
   after_action :clear_claim_session, if: :submission_complete?
 
   def new
-    render current_template
+    render first_template_in_sequence
   end
 
   def create
@@ -66,6 +66,10 @@ class ClaimsController < ApplicationController
 
   def current_template
     params[:slug].underscore
+  end
+
+  def first_template_in_sequence
+    page_sequence.slugs.first.underscore
   end
 
   def check_page_is_in_sequence
