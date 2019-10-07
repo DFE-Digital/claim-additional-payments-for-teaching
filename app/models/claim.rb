@@ -126,6 +126,10 @@ class Claim < ApplicationRecord
     valid?(:submit) && !submitted?
   end
 
+  def payroll_gender_missing?
+    %w[male female].exclude?(payroll_gender)
+  end
+
   def address(seperator = ", ")
     Claim::ADDRESS_ATTRIBUTES.map { |attr| send(attr) }.reject(&:blank?).join(seperator)
   end

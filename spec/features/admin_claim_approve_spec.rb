@@ -37,6 +37,17 @@ RSpec.feature "Admin approves a claim" do
         expect(mail.body.raw_source).to match("been approved")
       end
     end
+
+    context "When the payroll gender is missing" do
+      let!(:claim_missing_payroll_gender) { create(:claim, :submitted, payroll_gender: :dont_know) }
+
+      scenario "User is informed that the claim cannot be approved" do
+        click_on "Check claims"
+        find("a[href='#{admin_claim_path(claim_missing_payroll_gender)}']").click
+
+        expect(page).to have_button("Approve", disabled: true)
+      end
+    end
   end
 
   context "User is logged in as a support user" do

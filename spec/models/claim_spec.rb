@@ -383,6 +383,20 @@ RSpec.describe Claim, type: :model do
     end
   end
 
+  describe "#payroll_gender_missing?" do
+    it "returns true when the claimant doesn't know their payroll gender" do
+      claim = build(:claim, payroll_gender: :dont_know)
+
+      expect(claim.payroll_gender_missing?).to eq true
+    end
+
+    it "returns false when the payroll gender is one accepted by the payroll provider" do
+      claim = build(:claim, payroll_gender: :female)
+
+      expect(claim.payroll_gender_missing?).to eq false
+    end
+  end
+
   describe "#address_verified?" do
     it "returns true if any address attributes are in the list of verified fields" do
       expect(Claim.new.payroll_gender_verified?).to eq false
