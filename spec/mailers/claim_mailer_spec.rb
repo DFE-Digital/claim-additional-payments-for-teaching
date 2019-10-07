@@ -45,7 +45,7 @@ RSpec.describe ClaimMailer, type: :mailer do
 
     it "renders the body" do
       expect(mail.body.encoded).to match("Dear John Kennedy,")
-      expect(mail.body.encoded).to match("been denied")
+      expect(mail.body.encoded).to match("been rejected")
     end
   end
 end

@@ -31,7 +31,7 @@ RSpec.feature "Rejecting a claim" do
 
       expect(mail.subject).to match("been rejected")
       expect(mail.to).to eq([claim_to_reject.email_address])
-      expect(mail.body.raw_source).to match("been denied.")
+      expect(mail.body.raw_source).to match("been rejected.")
     end
   end
 end
