@@ -5,7 +5,7 @@ class ClaimsController < ApplicationController
   after_action :clear_claim_session, if: :submission_complete?
 
   def new
-    render claim_page_template
+    render current_template
   end
 
   def create
@@ -13,13 +13,13 @@ class ClaimsController < ApplicationController
       session[:claim_id] = @current_claim.to_param
       redirect_to claim_path(next_slug)
     else
-      render claim_page_template
+      render current_template
     end
   end
 
   def show
     search_schools if params[:school_search]
-    render claim_page_template
+    render current_template
   end
 
   def update
@@ -64,7 +64,7 @@ class ClaimsController < ApplicationController
     params.fetch(:claim, {}).permit(StudentLoans::PermittedParameters.new(current_claim).keys)
   end
 
-  def claim_page_template
+  def current_template
     params[:slug].underscore
   end
 
