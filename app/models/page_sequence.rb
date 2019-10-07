@@ -68,6 +68,6 @@ class PageSequence
   private
 
   def current_slug_index
-    slugs.index(current_slug)
+    slugs.index(current_slug) || 0
   end
 end

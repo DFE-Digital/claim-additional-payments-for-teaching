@@ -10,11 +10,11 @@ class ClaimsController < ApplicationController
 
   def create
     current_claim.attributes = claim_params
-    if current_claim.save(context: params[:slug].to_sym)
+    if current_claim.save(context: page_sequence.slugs.first.to_sym)
       session[:claim_id] = current_claim.to_param
       redirect_to claim_path(next_slug)
     else
-      render current_template
+      render first_template_in_sequence
     end
   end
 
