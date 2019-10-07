@@ -5,13 +5,10 @@ class ClaimsController < ApplicationController
   after_action :clear_claim_session, if: :submission_complete?
 
   def new
-    @current_claim = Claim.new(eligibility: StudentLoans::Eligibility.new)
     render claim_page_template
   end
 
   def create
-    @current_claim = Claim.new(eligibility: StudentLoans::Eligibility.new)
-
     if update_current_claim!
       session[:claim_id] = @current_claim.to_param
       redirect_to claim_path(next_slug)
