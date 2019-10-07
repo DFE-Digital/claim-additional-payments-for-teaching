@@ -5,7 +5,11 @@ class ClaimsController < ApplicationController
   after_action :clear_claim_session, if: :submission_complete?
 
   def new
-    render first_template_in_sequence
+    if current_claim.persisted?
+      redirect_to claim_path(page_sequence.slugs.first)
+    else
+      render first_template_in_sequence
+    end
   end
 
   def create

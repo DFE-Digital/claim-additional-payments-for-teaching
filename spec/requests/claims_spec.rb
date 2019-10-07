@@ -2,9 +2,16 @@ require "rails_helper"
 
 RSpec.describe "Claims", type: :request do
   describe "claims#new request" do
-    it "renders the correct template" do
+    it "renders the first page in the sequence" do
       get new_claim_path
       expect(response.body).to include(I18n.t("student_loans.questions.qts_award_year"))
+    end
+
+    it "redirects to the first page in the sequence if a claim has been started already" do
+      start_claim
+
+      get new_claim_path
+      expect(response).to redirect_to(claim_path(PageSequence::SLUGS.first))
     end
   end
 
