@@ -34,6 +34,9 @@ en:
     formats:
       default: "%-d %B %Y"
       day_month_year: "%d/%m/%Y"
+  time:
+    formats:
+      default: "%-d %B %Y %l:%M%P"
   number:
     currency:
       format:
