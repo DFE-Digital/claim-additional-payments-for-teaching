@@ -9,8 +9,9 @@ class ClaimsController < ApplicationController
   end
 
   def create
-    if update_current_claim!
-      session[:claim_id] = @current_claim.to_param
+    current_claim.attributes = claim_params
+    if current_claim.save(context: params[:slug].to_sym)
+      session[:claim_id] = current_claim.to_param
       redirect_to claim_path(next_slug)
     else
       render current_template

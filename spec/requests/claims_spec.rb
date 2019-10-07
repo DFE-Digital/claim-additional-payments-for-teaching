@@ -14,6 +14,11 @@ RSpec.describe "Claims", type: :request do
 
       expect(response).to redirect_to(claim_path("claim-school"))
     end
+
+    it "validates against the context for the first page in sequence" do
+      expect { post claims_path }.not_to change { Claim.count }
+      expect(response.body).to include("Select the academic year you were awarded qualified teacher status")
+    end
   end
 
   describe "claims#show request" do
