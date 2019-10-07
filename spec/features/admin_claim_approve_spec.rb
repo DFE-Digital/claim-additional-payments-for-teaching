@@ -1,9 +1,11 @@
 require "rails_helper"
 
 RSpec.feature "Admin approves a claim" do
+  let(:user_id) { "userid-345" }
+
   context "User is logged in as a service operator" do
     before do
-      stub_dfe_sign_in_with_role(AdminSession::SERVICE_OPERATOR_DFE_SIGN_IN_ROLE_CODE, "12345")
+      stub_dfe_sign_in_with_role(AdminSession::SERVICE_OPERATOR_DFE_SIGN_IN_ROLE_CODE, user_id)
       visit admin_path
       click_on "Sign in"
     end
@@ -13,15 +15,15 @@ RSpec.feature "Admin approves a claim" do
         submitted_claims = create_list(:claim, 5, :submitted)
         claim_to_approve = submitted_claims.first
 
-        click_on "Approve claims"
+        click_on "Check claims"
 
         expect(page).to have_content(claim_to_approve.reference)
-        expect(page).to have_content("5 claims awaiting approval")
+        expect(page).to have_content("5 claims awaiting checking")
 
         find("a[href='#{admin_claim_path(claim_to_approve)}']").click
         perform_enqueued_jobs { click_on "Approve" }
 
-        expect(claim_to_approve.check.checked_by).to eq("12345")
+        expect(claim_to_approve.check.checked_by).to eq(user_id)
 
         expect(page).to have_content("Claim has been approved successfully")
         expect(page).to_not have_content(claim_to_approve.reference)
@@ -30,12 +32,9 @@ RSpec.feature "Admin approves a claim" do
 
         mail = ActionMailer::Base.deliveries.first
 
-        expect(mail.subject).to eq(
-          "Your claim to get your student loan repayments back has been approved, reference number: #{claim_to_approve.reference}"
-        )
-        expect(mail.body.raw_source).to match(
-          "Your claim to get your student loan repayments back has been approved"
-        )
+        expect(mail.subject).to match("been approved")
+        expect(mail.to).to eq([claim_to_approve.email_address])
+        expect(mail.body.raw_source).to match("been approved")
       end
     end
   end
@@ -47,7 +46,7 @@ RSpec.feature "Admin approves a claim" do
       click_on "Sign in"
     end
 
-    scenario "User cannot view claims to approve" do
+    scenario "User cannot view claims to check" do
       expect(page).to_not have_link(nil, href: admin_claims_path)
 
       visit admin_claims_path

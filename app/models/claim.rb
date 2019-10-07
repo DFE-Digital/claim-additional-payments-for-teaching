@@ -105,7 +105,7 @@ class Claim < ApplicationRecord
   before_save :normalise_bank_sort_code, if: :bank_sort_code_changed?
 
   scope :submitted, -> { where.not(submitted_at: nil) }
-  scope :awaiting_approval, -> { submitted.left_outer_joins(:check).where(checks: {claim_id: nil}) }
+  scope :awaiting_checking, -> { submitted.left_outer_joins(:check).where(checks: {claim_id: nil}) }
   scope :approved, -> { joins(:check).where("checks.result" => :approved) }
 
   def submit!

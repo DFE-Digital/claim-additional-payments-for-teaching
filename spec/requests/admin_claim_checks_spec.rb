@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "Admin claim approvals", type: :request do
+RSpec.describe "Admin claim checks", type: :request do
   context "when signed in as a service operator" do
     before do
       stub_dfe_sign_in_with_role(AdminSession::SERVICE_OPERATOR_DFE_SIGN_IN_ROLE_CODE)
@@ -11,20 +11,29 @@ RSpec.describe "Admin claim approvals", type: :request do
     describe "claim_checks#create" do
       let(:claim) { create(:claim, :submitted) }
 
-      it "approves a claim" do
-        freeze_time do
-          post admin_claim_checks_path(claim_id: claim.id, result: "approved")
+      it "can approve a claim" do
+        post admin_claim_checks_path(claim_id: claim.id, result: "approved")
 
-          follow_redirect!
+        follow_redirect!
 
-          expect(response.body).to include("Claim has been approved successfully")
+        expect(response.body).to include("Claim has been approved successfully")
 
-          expect(claim.check.checked_by).to eq("123")
-          expect(claim.check.result).to eq("approved")
-        end
+        expect(claim.check.checked_by).to eq("123")
+        expect(claim.check.result).to eq("approved")
       end
 
-      context "when claim is already approved" do
+      it "can reject a claim" do
+        post admin_claim_checks_path(claim_id: claim.id, result: "rejected")
+
+        follow_redirect!
+
+        expect(response.body).to include("Claim has been rejected successfully")
+
+        expect(claim.check.checked_by).to eq("123")
+        expect(claim.check.result).to eq("rejected")
+      end
+
+      context "when claim is already checked" do
         let(:claim) { create(:claim, :approved) }
 
         it "shows an error" do

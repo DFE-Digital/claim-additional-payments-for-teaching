@@ -22,14 +22,30 @@ RSpec.describe ClaimMailer, type: :mailer do
     let(:mail) { ClaimMailer.approved(claim) }
 
     it "renders the headers" do
-      expect(mail.subject).to eq("Your claim to get your student loan repayments back has been approved, reference number: #{claim.reference}")
+      expect(mail.subject).to match("approved")
+      expect(mail.subject).to match("reference number: #{claim.reference}")
       expect(mail.to).to eq([claim.email_address])
     end
 
     it "renders the body" do
       expect(mail.body.encoded).to match("Dear John Kennedy,")
-      expect(mail.body.encoded).to match("Your claim to get your student loan repayments back has been approved.")
-      expect(mail.body.encoded).to match("Email studentloanteacherpayment@digital.education.gov.uk giving your reference number: #{claim.reference} if you have any questions.")
+      expect(mail.body.encoded).to match("been approved")
+    end
+  end
+
+  describe "#rejected" do
+    let(:claim) { create(:claim, :submitted, first_name: "John", middle_name: "Fitzgerald", surname: "Kennedy") }
+    let(:mail) { ClaimMailer.rejected(claim) }
+
+    it "renders the headers" do
+      expect(mail.subject).to match("rejected")
+      expect(mail.subject).to match("reference number: #{claim.reference}")
+      expect(mail.to).to eq([claim.email_address])
+    end
+
+    it "renders the body" do
+      expect(mail.body.encoded).to match("Dear John Kennedy,")
+      expect(mail.body.encoded).to match("been rejected")
     end
   end
 end
