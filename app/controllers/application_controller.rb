@@ -17,7 +17,7 @@ class ApplicationController < ActionController::Base
   private
 
   def send_unstarted_claiments_to_the_start
-    redirect_to root_url unless current_claim.present?
+    redirect_to root_url unless current_claim.persisted?
   end
 
   def admin_signed_in?
@@ -25,7 +25,11 @@ class ApplicationController < ActionController::Base
   end
 
   def current_claim
-    @current_claim ||= Claim.find(session[:claim_id]) if session.key?(:claim_id)
+    @current_claim ||= current_claim_from_session || Claim.new(eligibility: StudentLoans::Eligibility.new)
+  end
+
+  def current_claim_from_session
+    Claim.find(session[:claim_id]) if session.key?(:claim_id)
   end
 
   def claim_timeout_in_minutes

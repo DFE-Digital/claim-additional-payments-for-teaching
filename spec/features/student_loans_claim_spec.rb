@@ -2,11 +2,14 @@ require "rails_helper"
 
 RSpec.feature "Teacher Student Loan Repayments claims" do
   scenario "Teacher claims back student loan repayments" do
-    claim = start_claim
+    visit new_claim_path
     expect(page).to have_text(I18n.t("student_loans.questions.qts_award_year"))
 
     choose_qts_year
+    claim = Claim.order(:created_at).last
+
     expect(claim.eligibility.reload.qts_award_year).to eql("2014_2015")
+
     expect(page).to have_text(I18n.t("student_loans.questions.claim_school"))
 
     choose_school schools(:penistone_grammar_school)

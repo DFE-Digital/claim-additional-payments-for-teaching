@@ -23,6 +23,19 @@ RSpec.feature "Changing the answers on a submittable claim" do
     expect(page).to have_content("Check your answers before sending your application")
   end
 
+  scenario "Teacher changes their year" do
+    find("a[href='#{claim_path("qts-year")}']").click
+
+    expect(find("#claim_eligibility_attributes_qts_award_year_2014_2015").checked?).to eq(true)
+
+    choose I18n.t("student_loans.questions.qts_award_years.2013_2014")
+    click_on "Continue"
+
+    expect(eligibility.reload.qts_award_year).to eq("2013_2014")
+
+    expect(current_path).to eq(claim_path("check-your-answers"))
+  end
+
   context "when changing subjects taught" do
     before do
       find("a[href='#{claim_path("subjects-taught")}']").click

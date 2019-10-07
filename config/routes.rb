@@ -23,8 +23,11 @@ Rails.application.routes.draw do
 
   scope path: ":policy", defaults: {policy: "student-loans"}, constraints: {policy: %r{student-loans}} do
     constraints slug: %r{#{PageSequence::SLUGS.join("|")}} do
-      resources :claims, only: [:new, :create, :show, :update], param: :slug, path: "/"
+      resources :claims, only: [:show, :update], param: :slug, path: "/"
     end
+
+    get "new", as: :new_claim, to: "claims#new", params: {slug: PageSequence::SLUGS.first}
+    post "/", as: :claims, to: "claims#create", params: {slug: PageSequence::SLUGS.first}
 
     get "timeout", to: "claims#timeout", as: :timeout_claim
     get "refresh-session", to: "claims#refresh_session", as: :claim_refresh_session

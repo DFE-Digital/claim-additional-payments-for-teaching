@@ -3,7 +3,6 @@ require "rails_helper"
 RSpec.feature "Missing information from GOV.UK Verify" do
   scenario "Claimant is asked a payroll gender question when Verify doesn’t provide their gender" do
     claim = start_claim
-    choose_qts_year
     choose_school schools(:penistone_grammar_school)
     choose_still_teaching
     choose_subjects_taught
@@ -54,7 +53,6 @@ RSpec.feature "Missing information from GOV.UK Verify" do
 
   scenario "Claimant is asked an address question when Verify doesn’t provide their address" do
     claim = start_claim
-    choose_qts_year
     choose_school schools(:penistone_grammar_school)
     choose_still_teaching
     choose_subjects_taught

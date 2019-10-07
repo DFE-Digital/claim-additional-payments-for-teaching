@@ -6,6 +6,7 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+- Update the first page of the claim to initialise, rather than create a claim
 - Rework URL structure in preparation for Maths & Physics policy
 - Changes to accessibility statement as we think we now meet AA standard
 

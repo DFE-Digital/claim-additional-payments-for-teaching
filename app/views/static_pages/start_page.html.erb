@@ -31,7 +31,7 @@
         <li>sign in details for ‘Verify’ – the government’s secure way of proving who you are, if you do not have a Verify account, you’ll need your passport or photocard driving licence to sign up</li>
       </ul>
 
-      <%= button_to claims_path, method: :post, class: "govuk-button govuk-!-margin-top-2 govuk-!-margin-bottom-8 govuk-button--start", role: "button" do %>
+      <%= link_to new_claim_path, class: "govuk-button govuk-!-margin-top-2 govuk-!-margin-bottom-8 govuk-button--start", role: "button" do %>
         Start now
         <svg class="govuk-button__start-icon" xmlns="http://www.w3.org/2000/svg" width="17.5" height="19" viewBox="0 0 33 40" role="presentation" focusable="false">
           <path fill="currentColor" d="M0 0h13l20 20-20 20H0l20-20z" />

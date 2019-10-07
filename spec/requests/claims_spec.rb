@@ -1,17 +1,24 @@
 require "rails_helper"
 
 RSpec.describe "Claims", type: :request do
+  describe "claims#new request" do
+    it "renders the correct template" do
+      get new_claim_path
+      expect(response.body).to include(I18n.t("student_loans.questions.qts_award_year"))
+    end
+  end
+
   describe "claims#create request" do
     it "creates a new Claim and redirects to the QTS question" do
-      expect { post claims_path }.to change { Claim.count }.by(1)
+      expect { start_claim }.to change { Claim.count }.by(1)
 
-      expect(response).to redirect_to(claim_path("qts-year"))
+      expect(response).to redirect_to(claim_path("claim-school"))
     end
   end
 
   describe "claims#show request" do
     context "when a claim is already in progress" do
-      before { post claims_path }
+      before { start_claim }
 
       it "renders the requested page in the sequence" do
         get claim_path("qts-year")
@@ -55,7 +62,7 @@ RSpec.describe "Claims", type: :request do
 
     context "when the user reaches the confirmation page after submitting their claim" do
       before do
-        post claims_path
+        start_claim
 
         claim = Claim.order(:created_at).last
         claim.update_attributes(attributes_for(:claim, :submittable))
@@ -74,7 +81,7 @@ RSpec.describe "Claims", type: :request do
 
   describe "the claims ineligible page" do
     context "when a claim is already in progress" do
-      before { post claims_path }
+      before { start_claim }
 
       it "renders a static ineligibility page" do
         Claim.order(:created_at).last.eligibility.update(employment_status: "no_school")
@@ -119,7 +126,7 @@ RSpec.describe "Claims", type: :request do
     context "when a claim is already in progress" do
       let(:in_progress_claim) { Claim.order(:created_at).last }
 
-      before { post claims_path }
+      before { start_claim }
 
       it "updates the claim with the submitted form data" do
         put claim_path("qts-year"), params: {claim: {eligibility_attributes: {qts_award_year: "2014_2015"}}}
