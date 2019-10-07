@@ -1,5 +1,11 @@
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
+    <% if @claim.payroll_gender_missing? %>
+      <div class="govuk-body-l govuk-flash__notice">
+        This claim cannot be approved, the payroll gender is missing and the claim will need to be referred
+      </div>
+    <% end %>
+
     <h1 class="govuk-heading-xl">
       Claim <%= @claim.reference %>
     </h1>
@@ -11,6 +17,16 @@
     <%= render partial: "answer_section", locals: {heading: "Student loan details", answers: admin_student_loan_details(@claim)} %>
 
     <%= render partial: "answer_section", locals: {heading: "Submission details", answers: admin_submission_details(@claim)} %>
+
+    <% if @claim.payroll_gender_missing? %>
+      <div class="govuk-warning-text">
+        <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
+        <strong class="govuk-warning-text__text">
+          <span class="govuk-warning-text__assistive">Warning</span>
+          This claim cannot be approved, the payroll gender is missing and the claim will need to be referred
+        </strong>
+      </div>
+    <% end %>
 
     <%= button_to "Approve",
                   admin_claim_checks_path(@claim),

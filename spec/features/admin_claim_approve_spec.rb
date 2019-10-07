@@ -46,6 +46,7 @@ RSpec.feature "Admin approves a claim" do
         find("a[href='#{admin_claim_path(claim_missing_payroll_gender)}']").click
 
         expect(page).to have_button("Approve", disabled: true)
+        expect(page).to have_content("This claim cannot be approved, the payroll gender is missing")
       end
     end
   end
