@@ -5,21 +5,26 @@ class ClaimsController < ApplicationController
   after_action :clear_claim_session, if: :submission_complete?
 
   def new
-    render claim_page_template
+    if current_claim.persisted?
+      redirect_to claim_path(page_sequence.slugs.first)
+    else
+      render first_template_in_sequence
+    end
   end
 
   def create
-    if update_current_claim!
-      session[:claim_id] = @current_claim.to_param
+    current_claim.attributes = claim_params
+    if current_claim.save(context: page_sequence.slugs.first.to_sym)
+      session[:claim_id] = current_claim.to_param
       redirect_to claim_path(next_slug)
     else
-      render claim_page_template
+      render first_template_in_sequence
     end
   end
 
   def show
     search_schools if params[:school_search]
-    render claim_page_template
+    render current_template
   end
 
   def update
@@ -40,7 +45,7 @@ class ClaimsController < ApplicationController
   private
 
   def update_current_claim!
-    ClaimUpdate.new(current_claim, claim_params, params[:slug]).perform
+    ClaimUpdate.new(current_claim, claim_params, page_sequence.current_slug).perform
   end
 
   def next_slug
@@ -48,7 +53,7 @@ class ClaimsController < ApplicationController
   end
 
   def submission_complete?
-    params[:slug] == "confirmation" && current_claim.submitted?
+    page_sequence.current_slug == "confirmation" && current_claim.submitted?
   end
 
   def search_schools
@@ -64,8 +69,12 @@ class ClaimsController < ApplicationController
     params.fetch(:claim, {}).permit(StudentLoans::PermittedParameters.new(current_claim).keys)
   end
 
-  def claim_page_template
-    params[:slug].underscore
+  def current_template
+    page_sequence.current_slug.underscore
+  end
+
+  def first_template_in_sequence
+    page_sequence.slugs.first.underscore
   end
 
   def check_page_is_in_sequence

@@ -26,8 +26,8 @@ Rails.application.routes.draw do
       resources :claims, only: [:show, :update], param: :slug, path: "/"
     end
 
-    get "new", as: :new_claim, to: "claims#new", params: {slug: PageSequence::SLUGS.first}
-    post "/", as: :claims, to: "claims#create", params: {slug: PageSequence::SLUGS.first}
+    get "claim", as: :new_claim, to: "claims#new"
+    post "claim", as: :claims, to: "claims#create"
 
     get "timeout", to: "claims#timeout", as: :timeout_claim
     get "refresh-session", to: "claims#refresh_session", as: :claim_refresh_session

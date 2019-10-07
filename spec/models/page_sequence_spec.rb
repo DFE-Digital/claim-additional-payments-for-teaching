@@ -62,6 +62,10 @@ RSpec.describe PageSequence do
   end
 
   describe "#next_slug" do
+    it "assumes we're at the beginning of the sequence if no current_slug is specified" do
+      expect(PageSequence.new(claim, nil).next_slug).to eq "claim-school"
+    end
+
     it "returns the next slug in the sequence" do
       expect(PageSequence.new(claim, "qts-year").next_slug).to eq "claim-school"
       expect(PageSequence.new(claim, "claim-school").next_slug).to eq "still-teaching"
