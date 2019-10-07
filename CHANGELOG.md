@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+## [Release 015] - 2019-10-07
+
 - Update the first page of the claim to initialise, rather than create a claim
 - Rework URL structure in preparation for Maths & Physics policy
 - Changes to accessibility statement as we think we now meet AA standard
@@ -117,7 +119,9 @@ The format is based on [Keep a Changelog]
 - First release for student loan repayments private beta
 
 [unreleased]:
-  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-014...HEAD
+  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-015...HEAD
+[release 015]:
+  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-014...release-015
 [release 014]:
   https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-013...release-014
 [release 013]:
