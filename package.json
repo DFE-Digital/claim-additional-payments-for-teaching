@@ -3,7 +3,7 @@
   "private": true,
   "dependencies": {
     "a11y-dialog": "^5.2.0",
-    "accessible-autocomplete": "^2.0.0"
+    "accessible-autocomplete": "^2.0.1"
   },
   "devDependencies": {
     "prettier": "^1.18.2"
