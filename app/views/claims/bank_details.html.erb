@@ -17,6 +17,13 @@
             The account you want us to send your payment to.
           </span>
 
+          <%= form_group_tag current_claim, :banking_name do %>
+            <%= form.label :banking_name, "Name on the account", class: "govuk-label" %>
+            <%= form.text_field :banking_name,
+              class: css_classes_for_input(current_claim, :banking_name),
+              spellcheck: "false" %>
+          <% end %>
+
           <%= form_group_tag current_claim, :bank_sort_code do %>
             <%= form.label :bank_sort_code, "Sort code", class: "govuk-label" %>
             <span id="sort-code-hint" class="govuk-hint">For example: 44 00 26</span>
@@ -35,6 +42,16 @@
               class: css_classes_for_input(current_claim, :bank_account_number, "govuk-input--width-20"),
               autocomplete: "off",
               "aria-describedby" => "account-number-hint" %>
+          <% end %>
+
+          <%= form_group_tag current_claim, :building_society_roll_number do %>
+            <%= form.label :building_society_roll_number, "Building society roll number (if you have one)", class: "govuk-label" %>
+            <span id="roll-number-hint" class="govuk-hint">You can find it on your card, statement or passbook</span>
+            <%= form.text_field :building_society_roll_number,
+              class: css_classes_for_input(current_claim, :building_society_roll_number, "govuk-input--width-20"),
+              autocomplete: "off",
+              spellcheck: "false",
+              "aria-describedby" => "roll-number-hint" %>
           <% end %>
         </fieldset>
         <%= form.submit "Continue", class: "govuk-button" %>
