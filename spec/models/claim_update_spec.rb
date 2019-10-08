@@ -8,12 +8,21 @@ RSpec.describe ClaimUpdate do
   context "with parameters that are valid for the context" do
     let(:claim) { create(:claim) }
     let(:context) { "bank-details" }
-    let(:params) { {bank_sort_code: "123456", bank_account_number: "12345678"} }
+    let(:params) do
+      {
+        banking_name: "Jo Bloggs",
+        bank_sort_code: "123456",
+        bank_account_number: "12345678",
+        building_society_roll_number: "1234/12345678",
+      }
+    end
 
     it "updates the claim and returns a truthy value" do
       expect(claim_update.perform).to be_truthy
+      expect(claim.banking_name).to eq "Jo Bloggs"
       expect(claim.reload.bank_sort_code).to eq "123456"
       expect(claim.bank_account_number).to eq "12345678"
+      expect(claim.building_society_roll_number).to eq "1234/12345678"
     end
   end
 

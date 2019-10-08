@@ -23,6 +23,7 @@ module FeatureHelpers
     fill_in I18n.t("questions.email_address"), with: "name@example.tld"
     click_on "Continue"
 
+    fill_in "Name on the account", with: "Jo Bloggs"
     fill_in "Sort code", with: "123456"
     fill_in "Account number", with: "87654321"
     click_on "Continue"

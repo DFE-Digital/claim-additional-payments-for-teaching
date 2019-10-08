@@ -19,6 +19,7 @@
 
           <%= form_group_tag current_claim, :banking_name do %>
             <%= form.label :banking_name, "Name on the account", class: "govuk-label" %>
+            <%= errors_tag current_claim, :banking_name %>
             <%= form.text_field :banking_name,
               class: css_classes_for_input(current_claim, :banking_name),
               spellcheck: "false" %>

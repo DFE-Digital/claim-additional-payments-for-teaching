@@ -93,6 +93,7 @@ class Claim < ApplicationRecord
                             length: {maximum: 256, message: "Email address must be 256 characters or less"},
                             allow_blank: true
 
+  validates :banking_name, on: [:"bank-details", :submit], presence: {message: "Enter the name on your bank account"}
   validates :bank_sort_code, on: [:"bank-details", :submit], presence: {message: "Enter a sort code"}
   validates :bank_account_number, on: [:"bank-details", :submit], presence: {message: "Enter an account number"}
 

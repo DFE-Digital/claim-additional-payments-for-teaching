@@ -206,8 +206,10 @@ RSpec.describe Claim, type: :model do
 
   context "when saving in the “bank-details” validation context" do
     it "validates that the bank_account_number and bank_sort_code are present" do
-      expect(build(:claim)).not_to be_valid(:"bank-details")
-      expect(build(:claim, bank_sort_code: "123456", bank_account_number: "87654321")).to be_valid(:"bank-details")
+      invalid_claim = build(:claim)
+      valid_claim = build(:claim, bank_sort_code: "123456", bank_account_number: "87654321", banking_name: "Jo Bloggs")
+      expect(invalid_claim).not_to be_valid(:"bank-details")
+      expect(valid_claim).to be_valid(:"bank-details")
     end
   end
 
