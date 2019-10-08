@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+- A service operator can see if a claim is missing a payroll gender
+
 ## [Release 016] - 2019-10-08
 
 - A service operator can reject a claim and an email is sent to the claimant

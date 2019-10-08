@@ -13,4 +13,9 @@
     color: govuk-colour("blue");
     border-color: govuk-colour("blue");
   }
+  &__alert {
+    @extend %govuk-flash;
+    color: govuk-colour("red");
+    border-color: govuk-colour("red");
+  }
 }

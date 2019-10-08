@@ -44,6 +44,29 @@ RSpec.describe "Admin claim checks", type: :request do
           expect(response.body).to include("Claim already checked")
         end
       end
+
+      context "when the claim is missing a payroll gender" do
+        let(:claim) { create(:claim, :submitted, payroll_gender: :dont_know) }
+        before do
+          post admin_claim_checks_path(claim_id: claim.id, result: result)
+          follow_redirect!
+        end
+
+        context "and the user attempts to approve" do
+          let(:result) { "approved" }
+          it "shows an error" do
+            expect(response.body).to include("Claim cannot be approved")
+          end
+        end
+
+        context "and the user attempts to reject" do
+          let(:result) { "rejected" }
+          it "doesn’t show an error and rejects successfully" do
+            expect(response.body).not_to include("Claim cannot be approved")
+            expect(response.body).to include("Claim has been rejected successfully")
+          end
+        end
+      end
     end
   end
 
