@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+## [Release 016] - 2019-10-08
+
 - A service operator can reject a claim and an email is sent to the claimant
 - Make sure claimants cannot make a claim of £0
 
@@ -122,7 +124,9 @@ The format is based on [Keep a Changelog]
 - First release for student loan repayments private beta
 
 [unreleased]:
-  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-015...HEAD
+  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-016...HEAD
+[release 016]:
+  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-015...release-016
 [release 015]:
   https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-014...release-015
 [release 014]:
