@@ -136,10 +136,9 @@ describe ClaimsHelper do
   describe "#payment_answers" do
     it "returns an array of questions and answers for displaying to the user for review" do
       claim = create(:claim,
-                     bank_sort_code: "12 34 56",
-                     bank_account_number: "12 34 56 78",
-                     banking_name: "Jo Bloggs"
-                    )
+        bank_sort_code: "12 34 56",
+        bank_account_number: "12 34 56 78",
+        banking_name: "Jo Bloggs")
 
       expected_answers = [
         ["Name on bank account", "Jo Bloggs", "bank-details"],
