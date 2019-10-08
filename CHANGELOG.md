@@ -6,6 +6,7 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+- Remove the legacy payroll CSV download feature
 - A service operator can create a payroll run and download a CSV file for
   submission to Cantium
 - A service operator can see if a claim is missing a payroll gender

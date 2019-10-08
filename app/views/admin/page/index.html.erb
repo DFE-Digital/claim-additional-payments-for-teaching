@@ -9,7 +9,6 @@
     <% if service_operator_signed_in? %>
       <ul>
         <li><%= link_to 'Check claims', admin_claims_path, class: "govuk-link" %></li>
-        <li><%= link_to 'Download payroll data', payroll_admin_claims_path(format: :csv), class: "govuk-link" %></li>
         <li><%= link_to 'Payroll', admin_payroll_runs_path, class: "govuk-link" %></li>
       </ul>
     <% end %>
