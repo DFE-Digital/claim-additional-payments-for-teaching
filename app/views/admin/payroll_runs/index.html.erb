@@ -1,0 +1,39 @@
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-full">
+    <h1 class="govuk-heading-xl">
+      Payroll
+    </h1>
+  </div>
+  <div class="govuk-grid-column-two-thirds">
+    <p class="govuk-body">Make a payroll file containing all the relevant information for approved claims to be paid by a payroll provider.</p>
+
+    <div class="govuk-warning-text">
+      <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
+      <strong class="govuk-warning-text__text">
+        <span class="govuk-warning-text__assistive">Warning</span>
+        Only one payroll file should be generated and submitted per calendar month
+      </strong>
+    </div>
+
+    <%= link_to 'Prepare payroll', new_admin_payroll_run_path, class: "govuk-button", data: {module: "govuk-button"} %></li>
+  </div>
+  <div class="govuk-grid-column-full">
+    <table class="govuk-table">
+      <caption class="govuk-table__caption govuk-heading-l">Payroll history</caption>
+      <thead class="govuk-table__head">
+        <tr class="govuk-table__row">
+          <th scope="col" class="govuk-table__header">Date</th>
+          <th scope="col" class="govuk-table__header">Approved claims</th>
+        </tr>
+      </thead>
+      <tbody class="govuk-table__body">
+        <% @payroll_runs.each do |payroll_run| %>
+          <tr class="govuk-table__row">
+            <th scope="row" class="govuk-table__header"><%= l(payroll_run.created_at.to_date) %></th>
+            <td class="govuk-table__cell"><%= number_with_delimiter(payroll_run.claims.size) %></th>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+</div>

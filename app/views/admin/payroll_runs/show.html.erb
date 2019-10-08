@@ -1,0 +1,32 @@
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <h1 class="govuk-heading-xl">
+      Download payroll file
+    </h1>
+
+    <p class="govuk-body">The payroll file has been created and can be downloaded.</p>
+
+    <dl class="govuk-summary-list govuk-!-margin-bottom-9">
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+          Approved claims
+        </dt>
+
+        <dd class="govuk-summary-list__value">
+          <%= @payroll_run.claims.size %>
+        </dd>
+      </div>
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+          Total award amount
+        </dt>
+
+        <dd class="govuk-summary-list__value">
+          <%= number_to_currency(@payroll_run.total_award_amount) %>
+        </dd>
+      </div>
+    </dl>
+  </div>
+</div>
+
+<%= link_to 'Download file', { model: [:admin, @payroll_run], format: :csv }, class: "govuk-button", data: {module: "govuk-button"} %>

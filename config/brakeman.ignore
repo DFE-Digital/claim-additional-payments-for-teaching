@@ -3,24 +3,24 @@
     {
       "warning_type": "File Access",
       "warning_code": 16,
-      "fingerprint": "e8849ac5d4c15723fcde9994dd67c5bc9f5333b127889ea96a12d26d86d5e32f",
+      "fingerprint": "7b1c061f9ce9081188ad606d9371226ffaa79a96bd6326dbb186287eba3c62ed",
       "check_name": "SendFile",
       "message": "Model attribute used in file name",
-      "file": "app/controllers/admin/claims_controller.rb",
-      "line": 17,
+      "file": "app/controllers/admin/payroll_runs_controller.rb",
+      "line": 25,
       "link": "https://brakemanscanner.org/docs/warning_types/file_access/",
-      "code": "send_file(Payroll::ClaimsCsv.new(Claim.includes(:eligibility => ([:claim_school, :current_school])).approved.order(\"checks.created_at\")).file, :type => \"text/csv\", :filename => \"payroll_data.csv\")",
+      "code": "send_file(Payroll::ClaimsCsv.new(PayrollRun.find(params[:id]).claims).file, :type => \"text/csv\", :filename => (\"payroll_data_#{PayrollRun.find(params[:id]).id}.csv\"))",
       "render_path": null,
       "location": {
         "type": "method",
-        "class": "Admin::ClaimsController",
-        "method": "payroll"
+        "class": "Admin::PayrollRunsController",
+        "method": "show"
       },
-      "user_input": "Payroll::ClaimsCsv.new(Claim.includes(:eligibility => ([:claim_school, :current_school])).approved.order(\"checks.created_at\")).file",
+      "user_input": "Payroll::ClaimsCsv.new(PayrollRun.find(params[:id]).claims).file",
       "confidence": "Medium",
-      "note": ""
+      "note": "This is a false positive. The params[:id] is never directly inserted into a filename for reading from the server; it is only used to look up a PayrollRun record."
     }
   ],
-  "updated": "2019-09-30 14:22:47 +0100",
+  "updated": "2019-10-08 15:39:25 +0100",
   "brakeman_version": "4.6.1"
 }
