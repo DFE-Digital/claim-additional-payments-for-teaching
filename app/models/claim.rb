@@ -50,6 +50,8 @@ class Claim < ApplicationRecord
   belongs_to :eligibility, polymorphic: true
   accepts_nested_attributes_for :eligibility, update_only: true
 
+  belongs_to :payroll_run, optional: true
+
   enum payroll_gender: {
     dont_know: 0,
     female: 1,
