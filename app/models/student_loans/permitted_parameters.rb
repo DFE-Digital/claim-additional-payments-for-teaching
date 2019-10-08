@@ -28,6 +28,8 @@ module StudentLoans
       :email_address,
       :bank_sort_code,
       :bank_account_number,
+      :banking_name,
+      :building_society_roll_number,
       eligibility_attributes: ELIGIBILITY_PARAMETERS,
     ].freeze
 
