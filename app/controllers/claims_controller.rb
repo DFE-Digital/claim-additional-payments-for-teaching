@@ -35,9 +35,6 @@ class ClaimsController < ApplicationController
     end
   end
 
-  def ineligible
-  end
-
   def refresh_session
     head :ok
   end
