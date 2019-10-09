@@ -35,6 +35,9 @@ class ClaimsController < ApplicationController
     end
   end
 
+  def timeout
+  end
+
   def refresh_session
     head :ok
   end
