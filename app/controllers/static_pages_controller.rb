@@ -16,4 +16,8 @@ class StaticPagesController < ApplicationController
 
   def terms_conditions
   end
+
+  def maintenance
+    render status: :service_unavailable
+  end
 end
