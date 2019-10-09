@@ -1,5 +1,7 @@
 class ClaimsController < ApplicationController
-  before_action :send_unstarted_claiments_to_the_start, except: [:new, :create, :timeout, :refresh_session]
+  include PartOfClaimJourney
+
+  skip_before_action :send_unstarted_claiments_to_the_start, only: [:new, :create, :timeout, :refresh_session]
   before_action :check_page_is_in_sequence, only: [:show, :update]
 
   after_action :clear_claim_session, if: :submission_complete?
