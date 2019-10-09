@@ -170,3 +170,12 @@ The service architecture is currently defined [on confluence].
 [on confluence]:
   https://dfedigital.atlassian.net/wiki/spaces/TP/pages/1049559041/Service+Architecture
 [openjdk]: https://adoptopenjdk.net/
+
+## Putting the application into maintenance mode
+
+If we need to take the service offline for any reason (for example, we're
+investigating and issue, or we want to deploy a journey-breaking change), it's
+possible to put ther service into maintenance mode. To do this, we set the
+environment variable `MAINTENANCE_MODE` to a value of `1`. To restore the
+service, unset the environment variable, and the service will become operational
+again.
