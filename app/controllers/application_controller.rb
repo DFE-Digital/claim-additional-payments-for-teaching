@@ -9,27 +9,15 @@ class ApplicationController < ActionController::Base
     if: -> { ENV.key?("BASIC_AUTH_USERNAME") },
   )
 
-  helper_method :admin_signed_in?, :current_claim, :claim_timeout_in_minutes, :claim_timeout_warning_in_minutes
+  helper_method :admin_signed_in?, :claim_timeout_in_minutes, :claim_timeout_warning_in_minutes
   before_action :end_expired_admin_sessions
   before_action :end_expired_claim_sessions
   before_action :update_last_seen_at
 
   private
 
-  def send_unstarted_claiments_to_the_start
-    redirect_to root_url unless current_claim.persisted?
-  end
-
   def admin_signed_in?
     session.key?(:user_id)
-  end
-
-  def current_claim
-    @current_claim ||= current_claim_from_session || Claim.new(eligibility: StudentLoans::Eligibility.new)
-  end
-
-  def current_claim_from_session
-    Claim.find(session[:claim_id]) if session.key?(:claim_id)
   end
 
   def claim_timeout_in_minutes
