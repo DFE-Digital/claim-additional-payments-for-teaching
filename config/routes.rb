@@ -54,7 +54,7 @@ Rails.application.routes.draw do
   end
 
   namespace :admin do
-    get "/", to: "page#index"
+    get "/", to: "page#index", as: :root
 
     get "/auth/sign-in" => "auth#sign_in", :as => :sign_in
     delete "/auth/sign-out" => "auth#sign_out", :as => :sign_out

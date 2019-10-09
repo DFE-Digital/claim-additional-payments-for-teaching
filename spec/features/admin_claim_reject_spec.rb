@@ -6,7 +6,7 @@ RSpec.feature "Rejecting a claim" do
   context "when a user is logged in as a service operator" do
     before do
       stub_dfe_sign_in_with_role(AdminSession::SERVICE_OPERATOR_DFE_SIGN_IN_ROLE_CODE, user_id)
-      visit admin_path
+      visit admin_root_path
       click_on "Sign in"
     end
 

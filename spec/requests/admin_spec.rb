@@ -4,7 +4,7 @@ RSpec.describe "Admin", type: :request do
   describe "admin#index request" do
     context "when the user is not authenticated" do
       it "redirects to the sign in page and doesn’t set a session" do
-        get admin_path
+        get admin_root_path
 
         expect(response).to redirect_to(admin_sign_in_path)
         expect(session[:user_id]).to be_nil
@@ -25,7 +25,7 @@ RSpec.describe "Admin", type: :request do
         end
 
         it "renders the admin page and sets a session" do
-          get admin_path
+          get admin_root_path
 
           expect(response).to be_successful
           expect(response.body).to include("Admin")
@@ -53,7 +53,7 @@ RSpec.describe "Admin", type: :request do
         end
 
         it "renders the admin page and sets a session" do
-          get admin_path
+          get admin_root_path
 
           expect(response).to be_successful
           expect(response.body).to include("Admin")

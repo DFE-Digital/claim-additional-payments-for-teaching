@@ -10,6 +10,7 @@ The format is based on [Keep a Changelog]
 
 ## [Release 016] - 2019-10-08
 
+- Admin uses its own layout with with updated navigation
 - A service operator can reject a claim and an email is sent to the claimant
 - Make sure claimants cannot make a claim of £0
 
