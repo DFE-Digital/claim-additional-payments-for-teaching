@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+## [Release 017] - 2019-10-10
+
 - Remove the legacy payroll CSV download feature
 - A service operator can create a payroll run and download a CSV file for
   submission to Cantium
@@ -130,7 +132,9 @@ The format is based on [Keep a Changelog]
 - First release for student loan repayments private beta
 
 [unreleased]:
-  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-016...HEAD
+  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-017...HEAD
+[release 017]:
+  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-016...release-017
 [release 016]:
   https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-015...release-016
 [release 015]:
