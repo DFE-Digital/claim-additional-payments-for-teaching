@@ -99,6 +99,8 @@ class Claim < ApplicationRecord
 
   validate :bank_account_number_must_be_between_six_and_eight_digits
   validate :bank_sort_code_must_be_six_digits
+  validate :building_society_roll_number_must_be_between_one_and_eighteen_digits
+  validate :building_society_roll_number_must_be_in_a_valid_format
 
   validate :claim_must_not_be_ineligible, on: :submit
 
@@ -196,9 +198,20 @@ class Claim < ApplicationRecord
     bank_detail.gsub(/\s|-/, "")
   end
 
-  def bank_account_number_must_be_eight_digits
-    errors.add(:bank_account_number, "Bank account number must contain eight digits") \
-      if bank_account_number.present? && normalised_bank_detail(bank_account_number) !~ /\A\d{8}\z/
+  def building_society_roll_number_must_be_between_one_and_eighteen_digits
+    return unless building_society_roll_number.present?
+
+    errors.add(:building_society_roll_number, "Building society roll number must be between 1 and 18 characters") \
+      if building_society_roll_number.length > 18
+  end
+
+  def building_society_roll_number_must_be_in_a_valid_format
+    return unless building_society_roll_number.present?
+
+    errors.add(:building_society_roll_number, "Building society roll number must only include letters a to z, numbers, hyphens, spaces, forward slashes and full stops") \
+      unless /\A[a-z0-9\-\s\.\/]{1,18}\z/i.match?(building_society_roll_number)
+  end
+
   def bank_account_number_must_be_between_six_and_eight_digits
     errors.add(:bank_account_number, "Bank account number must be between 6 and 8 digits") \
       if bank_account_number.present? && normalised_bank_detail(bank_account_number) !~ /\A\d{6,8}\z/

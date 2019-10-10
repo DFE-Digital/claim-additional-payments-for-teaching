@@ -77,6 +77,15 @@ RSpec.describe Claim, type: :model do
       expect(build(:claim, bank_sort_code: "12 34 56")).to be_valid
     end
 
+    it "validates the format of the building society roll number" do
+      expect(build(:claim, building_society_roll_number: "CXJ-K6 897/98X")).to be_valid
+      expect(build(:claim, building_society_roll_number: "123456789/ABCD")).to be_valid
+      expect(build(:claim, building_society_roll_number: "123456789")).to be_valid
+
+      expect(build(:claim, building_society_roll_number: "123456789/ABC.CD-EFGH ")).not_to be_valid
+      expect(build(:claim, building_society_roll_number: "123456789/*****")).not_to be_valid
+    end
+
     context "on save" do
       it "strips out white space and the “-” character from bank_account_number and bank_sort_code" do
         claim = build(:claim, bank_sort_code: "12 34 56", bank_account_number: "12-34-56-78")
