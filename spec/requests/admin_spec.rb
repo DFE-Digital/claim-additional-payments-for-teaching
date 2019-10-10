@@ -26,7 +26,7 @@ RSpec.describe "Admin", type: :request do
           get admin_root_path
 
           expect(response).to be_successful
-          expect(response.body).to include("Admin")
+          expect(response.body).to include("Sign out")
           expect(session[:user_id]).to eq(user_id)
           expect(session[:organisation_id]).to eq(organisation_id)
           expect(session[:role_codes]).to eq([AdminSession::SERVICE_OPERATOR_DFE_SIGN_IN_ROLE_CODE])
@@ -52,7 +52,7 @@ RSpec.describe "Admin", type: :request do
           get admin_root_path
 
           expect(response).to be_successful
-          expect(response.body).to include("Admin")
+          expect(response.body).to include("Sign out")
           expect(session[:user_id]).to eq(user_id)
           expect(session[:organisation_id]).to eq(organisation_id)
           expect(session[:role_codes]).to eq([AdminSession::SUPPORT_AGENT_DFE_SIGN_IN_ROLE_CODE])

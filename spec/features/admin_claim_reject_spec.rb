@@ -12,7 +12,7 @@ RSpec.feature "Rejecting a claim" do
       submitted_claims = create_list(:claim, 5, :submitted)
       claim_to_reject = submitted_claims.first
 
-      click_on "Check claims"
+      click_on "View claims"
 
       expect(page).to have_content(claim_to_reject.reference)
       expect(page).to have_content("5 claims awaiting checking")
