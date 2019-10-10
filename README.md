@@ -170,3 +170,43 @@ The service architecture is currently defined [on confluence].
 [on confluence]:
   https://dfedigital.atlassian.net/wiki/spaces/TP/pages/1049559041/Service+Architecture
 [openjdk]: https://adoptopenjdk.net/
+
+## Putting the application into maintenance mode
+
+If we need to take the service offline for any reason (for example, we're
+investigating an issue, or we want to deploy a journey-breaking change), it's
+possible to put ther service into maintenance mode.
+
+To do this, we set the environment variable `MAINTENANCE_MODE` to a value of
+`1`. If you know when the service will be operational again, you can also set a
+`MAINTENANCE_MODE_AVAILABILITY_MESSAGE` environment variable with a
+human-readable value of when to expect the service to be operational again as a
+full sentence, for example `The service will be available from 2pm today.` or
+`Private beta has ended. You will be able to use the service again in November`.
+
+To do this, it's best to update the variables in the relevant Azure parameter
+file in `azure/resource_groups/app/parameters/{environment_name}.template.json`
+, and change the empty strings to real variables, i.e.:
+
+```json
+    "MAINTENANCE_MODE": {
+      "value": "1"
+    },
+    "MAINTENANCE_MODE_AVAILABILITY_MESSAGE": {
+      "value": "The service will be available from 2pm today."
+    },
+```
+
+Then commit the changes, open a pull request, and get it merged in.
+
+Alternatively you can run the following script to immediately put the
+application into maintenance mode:
+
+```bash
+bin/set-maintenance-mode ENVIRONMENT "OPTIONAL_AVAILABILITY_MESSAGE"
+```
+
+Bear in mind here, any subsequent deploys will unset the environment variables.
+
+To restore the service, unset the environment variables, and get the changes
+deployed. The service will become operational again on the next deploy.

@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+- Allow service to be put into maintenance mode
+
 ## [Release 017] - 2019-10-10
 
 - Improve bank account capture with separate account name and roll number for

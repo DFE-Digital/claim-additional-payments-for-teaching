@@ -1,0 +1,26 @@
+<%= page_title("Sorry, the service is unavailable") %>
+
+<h1 class="govuk-heading-xl">Sorry, the service is unavailable</h1>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <p class="govuk-body">
+      <% if @availability_message %>
+        <%= @availability_message %>
+      <% else %>
+        You will be able to use the service later today.
+      <% end %>
+    </p>
+
+    <p class="govuk-body">
+      We have not saved your answers. When the service is available, you will have to start again.
+    </p>
+
+    <p class="govuk-body">
+      Contact
+      <a href="mailto:additionalteachingpayment@digital.education.gov.uk" class="govuk-link">
+        additionalteachingpayment@digital.education.gov.uk
+      </a> if you need further information.
+    </p>
+  </div>
+</div>

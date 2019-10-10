@@ -16,4 +16,9 @@ class StaticPagesController < ApplicationController
 
   def terms_conditions
   end
+
+  def maintenance
+    @availability_message = Rails.configuration.maintenance_mode_availability_message
+    render status: :service_unavailable
+  end
 end
