@@ -1,7 +1,7 @@
 class CopyFullNamesToBankingNames < ActiveRecord::Migration[5.2]
   def up
     Claim.where(banking_name: nil).each do |c|
-      c.update!(banking_name: c.full_name)
+      c.update_attribute(:banking_name, c.full_name)
     end
   end
 
