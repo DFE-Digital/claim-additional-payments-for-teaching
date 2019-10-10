@@ -9,10 +9,15 @@ Rails.application.routes.draw do
     end
   end
 
-  root "static_pages#start_page"
-
   # setup a simple healthcheck endpoint for monitoring purposes
   get "/healthcheck", to: proc { [200, {}, ["OK"]] }
+
+  if Rails.application.config.maintenance_mode
+    root "static_pages#maintenance"
+    match "*path", to: redirect("/"), via: :all
+  else
+    root "static_pages#start_page"
+  end
 
   # setup static pages
   get "/privacy_notice", to: "static_pages#privacy_notice", as: :privacy_notice
