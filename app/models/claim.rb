@@ -97,7 +97,7 @@ class Claim < ApplicationRecord
   validates :bank_sort_code, on: [:"bank-details", :submit], presence: {message: "Enter a sort code"}
   validates :bank_account_number, on: [:"bank-details", :submit], presence: {message: "Enter an account number"}
 
-  validate :bank_account_number_must_be_eight_digits
+  validate :bank_account_number_must_be_between_six_and_eight_digits
   validate :bank_sort_code_must_be_six_digits
 
   validate :claim_must_not_be_ineligible, on: :submit
@@ -199,6 +199,9 @@ class Claim < ApplicationRecord
   def bank_account_number_must_be_eight_digits
     errors.add(:bank_account_number, "Bank account number must contain eight digits") \
       if bank_account_number.present? && normalised_bank_detail(bank_account_number) !~ /\A\d{8}\z/
+  def bank_account_number_must_be_between_six_and_eight_digits
+    errors.add(:bank_account_number, "Bank account number must be between 6 and 8 digits") \
+      if bank_account_number.present? && normalised_bank_detail(bank_account_number) !~ /\A\d{6,8}\z/
   end
 
   def bank_sort_code_must_be_six_digits
