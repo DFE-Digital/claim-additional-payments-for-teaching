@@ -199,5 +199,14 @@ file in `azure/resource_groups/app/parameters/{environment_name}.template.json`
 
 Then commit the changes, open a pull request, and get it merged in.
 
+Alternatively you can run the following script to immediately put the
+application into maintenance mode:
+
+```bash
+bin/set-maintenance-mode ENVIRONMENT "OPTIONAL_AVAILABILITY_MESSAGE"
+```
+
+Bear in mind here, any subsequent deploys will unset the environment variables.
+
 To restore the service, unset the environment variables, and get the changes
 deployed. The service will become operational again on the next deploy.
