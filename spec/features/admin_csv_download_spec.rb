@@ -4,7 +4,7 @@ RSpec.feature "Download CSV of claims" do
   context "User is logged in as a service operator" do
     before do
       stub_dfe_sign_in_with_role(AdminSession::SERVICE_OPERATOR_DFE_SIGN_IN_ROLE_CODE)
-      visit admin_path
+      visit admin_root_path
       click_on "Sign in"
     end
 
@@ -26,7 +26,7 @@ RSpec.feature "Download CSV of claims" do
   context "User is logged in as a support user" do
     before do
       stub_dfe_sign_in_with_role(AdminSession::SUPPORT_AGENT_DFE_SIGN_IN_ROLE_CODE)
-      visit admin_path
+      visit admin_root_path
       click_on "Sign in"
     end
 
