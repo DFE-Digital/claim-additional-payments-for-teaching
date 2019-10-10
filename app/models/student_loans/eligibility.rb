@@ -73,6 +73,10 @@ module StudentLoans
       ].find { |eligibility_check| send("#{eligibility_check}?") }
     end
 
+    def award_amount
+      student_loan_repayment_amount
+    end
+
     private
 
     def ineligible_qts_award_year?

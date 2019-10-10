@@ -5,9 +5,7 @@ RSpec.feature "Admin approves a claim" do
 
   context "User is logged in as a service operator" do
     before do
-      stub_dfe_sign_in_with_role(AdminSession::SERVICE_OPERATOR_DFE_SIGN_IN_ROLE_CODE, user_id)
-      visit admin_root_path
-      click_on "Sign in"
+      sign_in_to_admin_with_role(AdminSession::SERVICE_OPERATOR_DFE_SIGN_IN_ROLE_CODE, user_id)
     end
 
     scenario "User can approve a claim" do
@@ -53,9 +51,7 @@ RSpec.feature "Admin approves a claim" do
 
   context "User is logged in as a support user" do
     before do
-      stub_dfe_sign_in_with_role(AdminSession::SUPPORT_AGENT_DFE_SIGN_IN_ROLE_CODE)
-      visit admin_root_path
-      click_on "Sign in"
+      sign_in_to_admin_with_role(AdminSession::SUPPORT_AGENT_DFE_SIGN_IN_ROLE_CODE)
     end
 
     scenario "User cannot view claims to check" do

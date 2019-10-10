@@ -37,6 +37,7 @@ class Claim < ApplicationRecord
     verify_response: true,
     banking_name: true,
     building_society_roll_number: true,
+    payroll_run_id: false,
   }.freeze
 
   enum student_loan_country: StudentLoans::COUNTRIES
@@ -48,6 +49,8 @@ class Claim < ApplicationRecord
 
   belongs_to :eligibility, polymorphic: true
   accepts_nested_attributes_for :eligibility, update_only: true
+
+  belongs_to :payroll_run, optional: true
 
   enum payroll_gender: {
     dont_know: 0,
@@ -112,6 +115,8 @@ class Claim < ApplicationRecord
   scope :submitted, -> { where.not(submitted_at: nil) }
   scope :awaiting_checking, -> { submitted.left_outer_joins(:check).where(checks: {claim_id: nil}) }
   scope :approved, -> { joins(:check).where("checks.result" => :approved) }
+
+  delegate :award_amount, to: :eligibility
 
   def submit!
     if submittable?

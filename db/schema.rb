@@ -54,9 +54,11 @@ ActiveRecord::Schema.define(version: 2019_10_08_090245) do
     t.string "first_name", limit: 100
     t.string "middle_name", limit: 100
     t.string "surname", limit: 100
+    t.uuid "payroll_run_id"
     t.string "banking_name"
     t.string "building_society_roll_number"
     t.index ["eligibility_type", "eligibility_id"], name: "index_claims_on_eligibility_type_and_eligibility_id"
+    t.index ["payroll_run_id"], name: "index_claims_on_payroll_run_id"
     t.index ["reference"], name: "index_claims_on_reference", unique: true
     t.index ["submitted_at"], name: "index_claims_on_submitted_at"
   end
@@ -90,6 +92,12 @@ ActiveRecord::Schema.define(version: 2019_10_08_090245) do
     t.string "name"
     t.string "code"
     t.index ["code"], name: "index_local_authority_districts_on_code", unique: true
+  end
+
+  create_table "payroll_runs", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "created_by"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "schools", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -134,6 +142,7 @@ ActiveRecord::Schema.define(version: 2019_10_08_090245) do
     t.index ["current_school_id"], name: "index_student_loans_eligibilities_on_current_school_id"
   end
 
+  add_foreign_key "claims", "payroll_runs"
   add_foreign_key "schools", "local_authority_districts"
   add_foreign_key "student_loans_eligibilities", "schools", column: "claim_school_id"
   add_foreign_key "student_loans_eligibilities", "schools", column: "current_school_id"

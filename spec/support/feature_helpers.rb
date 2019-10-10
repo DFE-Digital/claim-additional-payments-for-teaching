@@ -102,6 +102,12 @@ module FeatureHelpers
     click_on "Continue"
   end
 
+  def sign_in_to_admin_with_role(*args)
+    stub_dfe_sign_in_with_role(*args)
+    visit admin_root_path
+    click_on "Sign in"
+  end
+
   def wait_until_visible(&block)
     page.document.synchronize do
       element = yield
