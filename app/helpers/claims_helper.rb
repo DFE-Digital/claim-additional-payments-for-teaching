@@ -57,10 +57,12 @@ module ClaimsHelper
   end
 
   def payment_answers(claim)
-    [
-      ["Bank sort code", claim.bank_sort_code, "bank-details"],
-      ["Bank account number", claim.bank_account_number, "bank-details"],
-    ]
+    [].tap do |a|
+      a << ["Name on bank account", claim.banking_name, "bank-details"]
+      a << ["Bank sort code", claim.bank_sort_code, "bank-details"]
+      a << ["Bank account number", claim.bank_account_number, "bank-details"]
+      a << ["Building society roll number", claim.building_society_roll_number, "bank-details"] if claim.building_society_roll_number.present?
+    end
   end
 
   def subject_list(subjects)

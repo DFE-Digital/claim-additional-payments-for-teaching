@@ -135,14 +135,26 @@ describe ClaimsHelper do
 
   describe "#payment_answers" do
     it "returns an array of questions and answers for displaying to the user for review" do
-      claim = create(:claim, bank_sort_code: "12 34 56", bank_account_number: "12 34 56 78")
+      claim = create(:claim,
+        bank_sort_code: "12 34 56",
+        bank_account_number: "12 34 56 78",
+        banking_name: "Jo Bloggs")
 
       expected_answers = [
+        ["Name on bank account", "Jo Bloggs", "bank-details"],
         ["Bank sort code", "123456", "bank-details"],
         ["Bank account number", "12345678", "bank-details"],
       ]
 
       expect(helper.payment_answers(claim)).to eq expected_answers
+    end
+
+    it "returns a roll number if one is provided" do
+      claim = create(:claim, building_society_roll_number: "1234/12345678")
+
+      expect(helper.payment_answers(claim)).to include(
+        ["Building society roll number", "1234/12345678", "bank-details"]
+      )
     end
   end
 

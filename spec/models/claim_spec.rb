@@ -71,9 +71,19 @@ RSpec.describe Claim, type: :model do
     it "validates the format of bank_account_number and bank_sort_code" do
       expect(build(:claim, bank_account_number: "ABC12 34 56 789")).not_to be_valid
       expect(build(:claim, bank_account_number: "12-34-56-78")).to be_valid
+      expect(build(:claim, bank_account_number: "12-34-56")).to be_valid
 
       expect(build(:claim, bank_sort_code: "ABC12 34 567")).not_to be_valid
       expect(build(:claim, bank_sort_code: "12 34 56")).to be_valid
+    end
+
+    it "validates the format of the building society roll number" do
+      expect(build(:claim, building_society_roll_number: "CXJ-K6 897/98X")).to be_valid
+      expect(build(:claim, building_society_roll_number: "123456789/ABCD")).to be_valid
+      expect(build(:claim, building_society_roll_number: "123456789")).to be_valid
+
+      expect(build(:claim, building_society_roll_number: "123456789/ABC.CD-EFGH ")).not_to be_valid
+      expect(build(:claim, building_society_roll_number: "123456789/*****")).not_to be_valid
     end
 
     context "on save" do
@@ -206,8 +216,10 @@ RSpec.describe Claim, type: :model do
 
   context "when saving in the “bank-details” validation context" do
     it "validates that the bank_account_number and bank_sort_code are present" do
-      expect(build(:claim)).not_to be_valid(:"bank-details")
-      expect(build(:claim, bank_sort_code: "123456", bank_account_number: "87654321")).to be_valid(:"bank-details")
+      invalid_claim = build(:claim)
+      valid_claim = build(:claim, bank_sort_code: "123456", bank_account_number: "87654321", banking_name: "Jo Bloggs")
+      expect(invalid_claim).not_to be_valid(:"bank-details")
+      expect(valid_claim).to be_valid(:"bank-details")
     end
   end
 
@@ -445,6 +457,8 @@ RSpec.describe Claim, type: :model do
         :middle_name,
         :surname,
         :verify_response,
+        :banking_name,
+        :building_society_roll_number,
       ])
     end
   end

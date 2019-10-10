@@ -16,6 +16,7 @@ FactoryBot.define do
       student_loan_start_date { StudentLoans::BEFORE_1_SEPT_2012 }
       student_loan_plan { StudentLoans::PLAN_1 }
       email_address { "test@email.com" }
+      banking_name { "Jo Bloggs" }
       bank_sort_code { 123456 }
       bank_account_number { 12345678 }
 

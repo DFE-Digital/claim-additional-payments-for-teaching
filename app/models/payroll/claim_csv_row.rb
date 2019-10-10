@@ -122,7 +122,7 @@ module Payroll
     end
 
     def banking_name
-      model.full_name
+      model.banking_name
     end
 
     def scheme_name
@@ -134,8 +134,7 @@ module Payroll
     end
 
     def roll_number
-      # This is intentionally left blank as we don't currently collect it, but this
-      # should be removed when we start collecting the data
+      model.building_society_roll_number
     end
 
     def model
