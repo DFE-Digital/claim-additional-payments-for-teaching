@@ -8,6 +8,8 @@ The format is based on [Keep a Changelog]
 
 ## [Release 017] - 2019-10-10
 
+- Improve bank account capture with separate account name and roll number for
+  building society accounts
 - Remove the legacy payroll CSV download feature
 - A service operator can create a payroll run and download a CSV file for
   submission to Cantium
