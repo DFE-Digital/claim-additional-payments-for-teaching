@@ -180,9 +180,24 @@ possible to put ther service into maintenance mode.
 To do this, we set the environment variable `MAINTENANCE_MODE` to a value of
 `1`. If you know when the service will be operational again, you can also set a
 `MAINTENANCE_MODE_AVAILABILITY_MESSAGE` environment variable with a
-human-readable value of when to expect the service to be operational again, for
-example `the service will be available from 2pm today` or
+human-readable value of when to expect the service to be operational again as a
+full sentence, for example `The service will be available from 2pm today.` or
 `Private beta has ended. You will be able to use the service again in November`.
 
-To restore the service, unset the environment variables, and the service will
-become operational again.
+To do this, it's best to update the variables in the relevant Azure parameter
+file in `azure/resource_groups/app/parameters/{environment_name}.template.json`
+, and change the empty strings to real variables, i.e.:
+
+```json
+    "MAINTENANCE_MODE": {
+      "value": "1"
+    },
+    "MAINTENANCE_MODE_AVAILABILITY_MESSAGE": {
+      "value": "The service will be available from 2pm today."
+    },
+```
+
+Then commit the changes, open a pull request, and get it merged in.
+
+To restore the service, unset the environment variables, and get the changes
+deployed. The service will become operational again on the next deploy.

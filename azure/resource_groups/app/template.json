@@ -135,6 +135,12 @@
     "ADMIN_ALLOWED_IPS": {
       "type": "string"
     },
+    "MAINTENANCE_MODE": {
+      "type": "string"
+    },
+    "MAINTENANCE_MODE_AVAILABILITY_MESSAGE": {
+      "type": "string"
+    },
     "GOOGLE_ANALYTICS_ID": {
       "type": "string"
     },
@@ -413,6 +419,14 @@
               {
                 "name": "DFE_SIGN_IN_API_ENDPOINT",
                 "value": "[parameters('DFE_SIGN_IN_API_ENDPOINT')]"
+              },
+              {
+                "name": "MAINTENANCE_MODE",
+                "value": "[parameters('MAINTENANCE_MODE')]"
+              },
+              {
+                "name": "MAINTENANCE_MODE_AVAILABILITY_MESSAGE",
+                "value": "[parameters('MAINTENANCE_MODE_AVAILABILITY_MESSAGE')]"
               },
               {
                 "name": "ADMIN_ALLOWED_IPS",
