@@ -174,8 +174,15 @@ The service architecture is currently defined [on confluence].
 ## Putting the application into maintenance mode
 
 If we need to take the service offline for any reason (for example, we're
-investigating and issue, or we want to deploy a journey-breaking change), it's
-possible to put ther service into maintenance mode. To do this, we set the
-environment variable `MAINTENANCE_MODE` to a value of `1`. To restore the
-service, unset the environment variable, and the service will become operational
-again.
+investigating an issue, or we want to deploy a journey-breaking change), it's
+possible to put ther service into maintenance mode.
+
+To do this, we set the environment variable `MAINTENANCE_MODE` to a value of
+`1`. If you know when the service will be operational again, you can also set a
+`MAINTENANCE_MODE_AVAILABILITY_MESSAGE` environment variable with a
+human-readable value of when to expect the service to be operational again, for
+example `the service will be available from 2pm today` or
+`Private beta has ended. You will be able to use the service again in November`.
+
+To restore the service, unset the environment variables, and the service will
+become operational again.

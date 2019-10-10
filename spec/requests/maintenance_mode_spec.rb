@@ -16,7 +16,26 @@ RSpec.describe "Maintenance Mode", type: :request do
     it "shows the maintenance page" do
       get "/"
       expect(response).to have_http_status(:service_unavailable)
-      expect(response).to have_attributes body: /service is unavailable/i
+      expect(response.body).to include("service is unavailable")
+      expect(response.body).to include("You will be able to use the service later today.")
+    end
+
+    context "when the availability message is set" do
+      let(:message) { "You will be able to use the service from 2pm today" }
+
+      before do
+        @original_maintenance_mode_availability_message = Rails.application.config.maintenance_mode_availability_message
+        Rails.application.config.maintenance_mode_availability_message = message
+      end
+
+      after do
+        Rails.application.config.maintenance_mode_availability_message = @original_maintenance_mode_availability_message
+      end
+
+      it "shows the time it will be available from" do
+        get "/"
+        expect(response.body).to include(message)
+      end
     end
 
     it "redirects a GET request to the maintenance page" do
