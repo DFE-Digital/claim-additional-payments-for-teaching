@@ -6,7 +6,7 @@ RSpec.feature "Admin sessions" do
   end
 
   scenario "Redirected to admin page after signing in" do
-    expect(page).to have_content("Admin")
+    expect(page).to have_link("Sign out")
   end
 
   scenario "Signing out" do
