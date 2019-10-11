@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+- Service operators can easily identify claims that are close to their deadline
+
 ## [Release 019] - 2019-10-17
 
 - Put the service into "permanent" maintenance mode until public beta
