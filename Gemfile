@@ -23,7 +23,7 @@ gem "jbuilder", "~> 2.9"
 
 # Use Gov UK Kit
 gem "dxw_govuk_frontend_rails"
-gem "sprockets", "~> 3"
+gem "sprockets", "~> 4"
 
 # Generate human-readable reference numbers
 gem "nanoid"
