@@ -94,7 +94,20 @@ describe Admin::ClaimsHelper do
       expect(helper.admin_submission_details(claim)).to eq([
         [I18n.t("admin.started_at"), l(claim.created_at)],
         [I18n.t("admin.submitted_at"), l(claim.submitted_at)],
+        [I18n.t("admin.check_deadline"), l(claim.check_deadline_date)],
       ])
+    end
+
+    context "when the claim is approaching its deadline" do
+      let(:claim) { create(:claim, :submitted, submitted_at: 5.weeks.ago) }
+
+      it "always includes the deadline date" do
+        expect(helper.admin_submission_details(claim)[2].last).to have_content(l(claim.check_deadline_date))
+      end
+
+      it "includes the deadline warning" do
+        expect(helper.admin_submission_details(claim)[2].last).to have_selector(".tag--warning")
+      end
     end
   end
 

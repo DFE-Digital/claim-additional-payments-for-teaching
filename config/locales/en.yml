@@ -65,6 +65,7 @@ en:
     email_address: "Email address"
     started_at: "Started at"
     submitted_at: "Submitted at"
+    check_deadline: "Check deadline"
   answers:
     student_loan_start_date:
       one_course:

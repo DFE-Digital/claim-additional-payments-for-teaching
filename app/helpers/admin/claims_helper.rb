@@ -35,6 +35,7 @@ module Admin
       [
         [t("admin.started_at"), l(claim.created_at)],
         [t("admin.submitted_at"), l(claim.submitted_at)],
+        [t("admin.check_deadline"), [l(claim.check_deadline_date), check_deadline_warning(claim)].compact.join.html_safe],
       ]
     end
 

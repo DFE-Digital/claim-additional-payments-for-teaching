@@ -16,3 +16,10 @@
   @extend %tag;
   background-color: govuk-colour("red");
 }
+
+.govuk-summary-list {
+  .tag--warning,
+  .tag--alert {
+    margin-left: 1em;
+  }
+}
