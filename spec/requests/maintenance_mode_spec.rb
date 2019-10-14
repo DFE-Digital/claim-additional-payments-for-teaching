@@ -20,6 +20,15 @@ RSpec.describe "Maintenance Mode", type: :request do
       expect(response.body).to include("You will be able to use the service later today.")
     end
 
+    it "still allows access to /admin for service operator access" do
+      get "/admin"
+      expect(response).to redirect_to(admin_sign_in_path)
+
+      get "/admin/auth/sign-in"
+      expect(response).to have_http_status(:success)
+      expect(response.body).to include("Sign in with DfE Sign In")
+    end
+
     context "when the availability message is set" do
       let(:message) { "You will be able to use the service from 2pm today" }
 

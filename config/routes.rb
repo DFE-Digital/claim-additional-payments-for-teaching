@@ -12,9 +12,11 @@ Rails.application.routes.draw do
   # setup a simple healthcheck endpoint for monitoring purposes
   get "/healthcheck", to: proc { [200, {}, ["OK"]] }
 
+  # Catch-all for when the service has been placed in maintenance mode.
+  # Excludes /admin so Service Operators can continue to check claims.
   if Rails.application.config.maintenance_mode
     root "static_pages#maintenance"
-    match "*path", to: redirect("/"), via: :all
+    match "*path", to: redirect("/"), via: :all, constraints: lambda { |req| !%r{^/admin($|/)}.match?(req.path) }
   else
     root "static_pages#start_page"
   end

@@ -6,6 +6,7 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+- Exclude /admin from maintenance mode
 - Allow service to be put into maintenance mode
 
 ## [Release 017] - 2019-10-10
