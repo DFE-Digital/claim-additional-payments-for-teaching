@@ -114,4 +114,30 @@ describe Admin::ClaimsHelper do
       )
     end
   end
+
+  describe "#check_deadline_warning" do
+    subject { helper.check_deadline_warning(claim) }
+    before { travel_to Time.zone.local(2019, 10, 11, 7, 0, 0) }
+    after { travel_back }
+
+    context "when a claim is approaching it's deadline" do
+      let(:claim) { build(:claim, :submitted, submitted_at: 5.weeks.ago) }
+
+      it { is_expected.to have_content("7 days") }
+      it { is_expected.to have_selector(".tag--warning") }
+    end
+
+    context "when a claim has passed it's deadline" do
+      let(:claim) { build(:claim, :submitted, submitted_at: 10.weeks.ago) }
+
+      it { is_expected.to have_content("-28 days") }
+      it { is_expected.to have_selector(".tag--alert") }
+    end
+
+    context "when a claim is not near it's deadline" do
+      let(:claim) { build(:claim, :submitted, submitted_at: 1.day.ago) }
+
+      it { is_expected.to be_nil }
+    end
+  end
 end

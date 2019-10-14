@@ -50,5 +50,19 @@ module Admin
       ].join(" ").html_safe
       sanitize(html, tags: %w[span a], attributes: %w[href class])
     end
+
+    def check_deadline_warning(claim)
+      days_until_check_deadline = days_between(Date.today, claim.check_deadline_date)
+      return if days_until_check_deadline.days > Claim::CHECK_DEADLINE_WARNING_POINT
+
+      check_deadline_warning_class = days_until_check_deadline < 0 ? "tag--alert" : "tag--warning"
+      content_tag(:strong, pluralize(days_until_check_deadline, "day"), class: "govuk-tag #{check_deadline_warning_class}")
+    end
+
+    private
+
+    def days_between(first_date, second_date)
+      (second_date - first_date).to_i
+    end
   end
 end

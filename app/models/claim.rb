@@ -144,6 +144,10 @@ class Claim < ApplicationRecord
     %w[male female].exclude?(payroll_gender)
   end
 
+  def check_deadline_date
+    (submitted_at + CHECK_DEADLINE).to_date
+  end
+
   def address(seperator = ", ")
     Claim::ADDRESS_ATTRIBUTES.map { |attr| send(attr) }.reject(&:blank?).join(seperator)
   end
