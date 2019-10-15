@@ -8,7 +8,6 @@ RSpec.describe Payroll::ClaimsCsv do
   subject { described_class.new(claims) }
   let(:claims) { Claim.all.order(:submitted_at) }
   let(:claim) { claims.first }
-  let(:start_of_month) { Date.today.at_beginning_of_month }
 
   describe "#file" do
     let(:file) { subject.file }
