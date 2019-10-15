@@ -3,24 +3,24 @@
     {
       "warning_type": "File Access",
       "warning_code": 16,
-      "fingerprint": "7b1c061f9ce9081188ad606d9371226ffaa79a96bd6326dbb186287eba3c62ed",
+      "fingerprint": "088b9c30d95759306b85565ec31d51856b7e8c37f8ea8ee74f85debc608f2ca8",
       "check_name": "SendFile",
       "message": "Model attribute used in file name",
       "file": "app/controllers/admin/payroll_runs_controller.rb",
       "line": 25,
       "link": "https://brakemanscanner.org/docs/warning_types/file_access/",
-      "code": "send_file(Payroll::ClaimsCsv.new(PayrollRun.find(params[:id]).claims).file, :type => \"text/csv\", :filename => (\"payroll_data_#{PayrollRun.find(params[:id]).id}.csv\"))",
+      "code": "send_file(Payroll::ClaimsCsv.new(PayrollRun.find(params[:id])).file, :type => \"text/csv\", :filename => Payroll::ClaimsCsv.new(PayrollRun.find(params[:id])).filename)",
       "render_path": null,
       "location": {
         "type": "method",
         "class": "Admin::PayrollRunsController",
         "method": "show"
       },
-      "user_input": "Payroll::ClaimsCsv.new(PayrollRun.find(params[:id]).claims).file",
+      "user_input": "Payroll::ClaimsCsv.new(PayrollRun.find(params[:id])).file",
       "confidence": "Medium",
-      "note": "This is a false positive. The params[:id] is never directly inserted into a filename for reading from the server; it is only used to look up a PayrollRun record."
+      "note": "We generate the filename based on non-user input so we can ignore this"
     }
   ],
-  "updated": "2019-10-08 15:39:25 +0100",
+  "updated": "2019-10-15 09:59:23 +0100",
   "brakeman_version": "4.6.1"
 }

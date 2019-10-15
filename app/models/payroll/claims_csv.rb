@@ -51,6 +51,10 @@ module Payroll
       end
     end
 
+    def filename
+      "payroll_data_#{payroll_run.created_at.to_date.iso8601}.csv"
+    end
+
     private
 
     def header_row
