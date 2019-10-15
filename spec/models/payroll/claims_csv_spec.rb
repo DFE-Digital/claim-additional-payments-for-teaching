@@ -1,16 +1,13 @@
 require "rails_helper"
 
 RSpec.describe Payroll::ClaimsCsv do
-  before do
-    create(:claim, :submitted, address_line_1: "1 Test Road", address_line_2: "Test Town", postcode: "AB1 2CD")
-  end
+  subject(:claims_csv) { described_class.new(claims) }
 
-  subject { described_class.new(claims) }
-  let(:claims) { Claim.all.order(:submitted_at) }
-  let(:claim) { claims.first }
+  let(:claims) { [claim] }
+  let(:claim) { create(:claim, :submitted, address_line_1: "1 Test Road", address_line_2: "Test Town", postcode: "AB1 2CD") }
 
   describe "#file" do
-    let(:file) { subject.file }
+    let(:file) { claims_csv.file }
     let(:file_lines) { file.read.split("\n") }
 
     it "returns a Tempfile" do
