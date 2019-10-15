@@ -6,6 +6,7 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+- Run schema and data migrations at the same time
 - Exclude /admin from maintenance mode
 - Allow service to be put into maintenance mode
 
