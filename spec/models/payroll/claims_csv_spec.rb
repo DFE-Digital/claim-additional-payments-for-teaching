@@ -12,7 +12,6 @@ RSpec.describe Payroll::ClaimsCsv do
   describe "#file" do
     let(:file) { subject.file }
     let(:csv) { CSV.read(file) }
-    let(:row) { Payroll::ClaimCsvRow.new(claim).to_s }
 
     it "returns a Tempfile" do
       expect(file).to be_a(Tempfile)
@@ -53,9 +52,10 @@ RSpec.describe Payroll::ClaimsCsv do
       ])
     end
 
-    it "returns the correct rows" do
-      expect(csv.count).to eq(2)
-      expect(csv[1]).to eq(CSV.parse_line(row))
+    it "contains data rows for passed in claims" do
+      expected_claim_data_row = CSV.parse_line(Payroll::ClaimCsvRow.new(claim).to_s)
+
+      expect(csv[1]).to eq(expected_claim_data_row)
     end
   end
 end
