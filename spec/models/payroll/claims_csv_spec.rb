@@ -10,12 +10,16 @@ RSpec.describe Payroll::ClaimsCsv do
   let(:claim) { claims.first }
   let(:start_of_month) { Date.today.at_beginning_of_month }
 
-  describe "file" do
+  describe "#file" do
     let(:file) { subject.file }
     let(:csv) { CSV.read(file) }
     let(:row) { Payroll::ClaimCsvRow.new(claim).to_s }
 
-    it "returns the correct headers" do
+    it "returns a Tempfile" do
+      expect(file).to be_a(Tempfile)
+    end
+
+    it "contains a headers row for the payroll file" do
       expect(csv[0]).to match_array([
         "TITLE",
         "FORENAME",
