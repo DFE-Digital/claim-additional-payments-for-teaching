@@ -173,43 +173,75 @@ The service architecture is currently defined [on confluence].
 
 ## Putting the application into maintenance mode
 
-If we need to take the service offline for any reason (for example, we're
-investigating an issue, or we want to deploy a journey-breaking change), it's
-possible to put ther service into maintenance mode.
+There are two potential reasons why we might want to turn maintenance mode on.
+Either prior to a deploy of a journey breaking change, or until further notice
+(the service is closed for some reason).
 
-To do this, we set the environment variable `MAINTENANCE_MODE` to a value of
-`1`. If you know when the service will be operational again, you can also set a
-`MAINTENANCE_MODE_AVAILABILITY_MESSAGE` environment variable with a
+### Turning maintenance mode on temporarily
+
+To do this, run the following command:
+
+```bash
+bin/set-maintenance-mode ENVIRONMENT "OPTIONAL_AVAILABILITY_MESSAGE"
+```
+
+Where `ENVIRONMENT` is the environment you're turning maintenance mode on for,
+and `OPTIONAL_AVAILABILITY_MESSAGE` is a human-readable value of when to expect
+the service to be operational again as a full sentence, for example
+`The service will be available from 2pm today.`
+
+This turns maintenance mode on, and restarts the app in maintenance mode.
+
+Maintenance mode will then be automatically disabled on the next deploy.
+
+### Turning maintenance mode on until further notice
+
+If you want to turn maintenance mode on, but still keep deploying to the
+service, you can set maintenance mode flags on in the Azure config.
+
+This involves us setting the environment variable `MAINTENANCE_MODE` to a value
+of `1`. If you know when the service will be operational again, you can also set
+a `MAINTENANCE_MODE_AVAILABILITY_MESSAGE` environment variable with a
 human-readable value of when to expect the service to be operational again as a
-full sentence, for example `The service will be available from 2pm today.` or
+full sentence, for example
 `Private beta has ended. You will be able to use the service again in November`.
 
-To do this, it's best to update the variables in the relevant Azure parameter
-file in `azure/resource_groups/app/parameters/{environment_name}.template.json`
-, and change the empty strings to real variables, i.e.:
+We do this as a manual step to ensure the settings are preserved over
+deployments.
+
+To do this, update the variables in the relevant Azure parameter file in
+`azure/resource_groups/app/parameters/{environment_name}.template.json` , and
+change the empty strings to real variables, i.e.:
 
 ```json
     "MAINTENANCE_MODE": {
       "value": "1"
     },
     "MAINTENANCE_MODE_AVAILABILITY_MESSAGE": {
-      "value": "The service will be available from 2pm today."
+      "value": "Private beta has ended. You will be able to use the service again in November"
     },
 ```
 
 Then commit the changes, open a pull request, and get it merged in.
 
-Alternatively you can run the following script to immediately put the
-application into maintenance mode:
-
-```bash
-bin/set-maintenance-mode ENVIRONMENT "OPTIONAL_AVAILABILITY_MESSAGE"
-```
-
-Bear in mind here, any subsequent deploys will unset the environment variables.
-
 To restore the service, unset the environment variables, and get the changes
 deployed. The service will become operational again on the next deploy.
+
+### Immediately disabling maintenance mode
+
+In both cases, you can immediately reenable the service by running the following
+command:
+
+```bash
+bin/unset-maintenance-mode ENVIRONMENT
+```
+
+Where `ENVIRONMENT` is the environment you're disabling maintenance mode for.
+
+This will immediately turn maintenance mode off, and restart the app.
+
+**Note: If the persistent maintenance mode was enabled via the template
+parameters, the next deployment will re-enable it.**
 
 ## Reusable components
 
