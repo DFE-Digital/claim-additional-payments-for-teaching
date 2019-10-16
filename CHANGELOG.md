@@ -6,6 +6,7 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+- Put the service into "permanent" maintenance mode until public beta
 - Updated maintenance page content to better fit the service
 - Payroll export start date is the second Monday of the month and the end date
   is the following Sunday
