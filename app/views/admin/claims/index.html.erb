@@ -6,6 +6,7 @@
     </h1>
 
     <% if @claims.any? %>
+      <% claims_with_warning = Claim.approaching_check_deadline.count + Claim.passed_check_deadline.count %>
 
       <h2 class="govuk-heading-m"><%= pluralize(@claims.count, "claim") %> awaiting checking</h2>
       <table class="govuk-table">
@@ -13,7 +14,9 @@
           <tr class="govuk-table__row">
             <th scope="col" class="govuk-table__header">Reference</th>
             <th scope="col" class="govuk-table__header">Applicant Name</th>
-            <th scope="col" class="govuk-table__header">Check warning</th>
+            <% if claims_with_warning.nonzero? %>
+              <th scope="col" class="govuk-table__header">Check warning</th>
+            <% end %>
             <th scope="col" class="govuk-table__header">Check deadline</th>
             <th scope="col" class="govuk-table__header"></th>
           </tr>
@@ -23,7 +26,9 @@
             <tr class="govuk-table__row">
               <th scope="row" class="govuk-table__header"><%= claim.reference %></th>
               <td class="govuk-table__cell"><%= claim.full_name %></td>
-              <td class="govuk-table__cell"><%= check_deadline_warning(claim) %></td>
+              <% if claims_with_warning.nonzero? %>
+                <td class="govuk-table__cell"><%= check_deadline_warning(claim) %></td>
+              <% end %>
               <td class="govuk-table__cell"><%= l(claim.check_deadline_date) %></td>
               <td class="govuk-table__cell"><%= link_to 'View claim', admin_claim_path(claim), class: "govuk-link" %></td>
             </tr>
