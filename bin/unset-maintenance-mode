@@ -1,7 +1,6 @@
 #!/bin/bash
 
 ENVIRONMENT_NAME=$1
-AVAILABILITY_MESSAGE=$2
 
 case $ENVIRONMENT_NAME in
   "development")
@@ -28,12 +27,12 @@ fi
 echo "Setting default subscription to $SUBSCRIPTION_ID..."
 az account set --subscription "$SUBSCRIPTION_ID"
 
-echo "Setting maintenance environment variables..."
+echo "Unsetting maintenance environment variables..."
 az webapp config appsettings set -g $RESOURCE_GROUP \
   -n $APP_SERVICE \
   --settings \
-  MAINTENANCE_MODE=1 \
-  MAINTENANCE_MODE_AVAILABILITY_MESSAGE="$AVAILABILITY_MESSAGE" \
+  MAINTENANCE_MODE="" \
+  MAINTENANCE_MODE_AVAILABILITY_MESSAGE="" \
   > /dev/null
 
 echo "Restarting the app..."
