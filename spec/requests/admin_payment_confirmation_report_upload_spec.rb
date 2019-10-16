@@ -21,7 +21,10 @@ RSpec.describe "Admin Payment Confirmation Report upload" do
       let(:file) { Rack::Test::UploadedFile.new(StringIO.new(csv), "text/csv", original_filename: "payments.csv") }
 
       context "the claims in the CSV match the claims of the payroll run" do
-        let(:claims) { create_list(:claim, 2, :approved, payroll_run: payroll_run) }
+        let(:claims) { create_list(:claim, 2, :approved) }
+        before do
+          claims.each { |c| create(:payment, claim: c, payroll_run: payroll_run) }
+        end
         let(:csv) do
           <<~CSV
             Payroll Reference,Gross Value,Claim ID,NI,Employers NI,Student Loans,Tax,Net Pay

@@ -1,7 +1,10 @@
 class AddPaymentsForPayrolledClaims < ActiveRecord::Migration[5.2]
   def up
-    Claim.where.not(payroll_run_id: nil).each do |claim|
-      claim.update!(payroll_run: PayrollRun.find(claim.payroll_run_id))
+    claims = Claim.left_outer_joins(:payment)
+      .where("payments.id IS NULL AND claims.payroll_run_id IS NOT NULL")
+
+    claims.each do |claim|
+      Payment.create!(payroll_run_id: claim.payroll_run_id, claim: claim, award_amount: claim.award_amount)
     end
   end
 

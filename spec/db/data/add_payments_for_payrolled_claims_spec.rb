@@ -12,14 +12,19 @@ RSpec.describe AddPaymentsForPayrolledClaims do
       it "creates a payment" do
         expect { described_class.new.up }.to change { Payment.count }.by(2)
 
-        expect(first_claim.payment).to_not be_nil
-        expect(first_claim.payroll_run).to eq(payroll_run)
+        expect(first_claim.payment.payroll_run).to eq(payroll_run)
       end
     end
 
     context "for a payrolled claim with a payment" do
-      let!(:first_claim) { create(:claim, :approved, payroll_run: payroll_run, payroll_run_id: payroll_run.id) }
-      let!(:second_claim) { create(:claim, :approved, payroll_run: payroll_run) }
+      let!(:first_claim) { create(:claim, :approved, payroll_run_id: payroll_run.id) }
+      let!(:second_claim) { create(:claim, :approved) }
+
+      before do
+        [first_claim, second_claim].each do |c|
+          create(:payment, claim: c, payroll_run: payroll_run)
+        end
+      end
 
       it "creates no payments" do
         expect { described_class.new.up }.not_to change { Payment.count }
@@ -28,7 +33,7 @@ RSpec.describe AddPaymentsForPayrolledClaims do
       it "preserves the claim's payroll run" do
         described_class.new.up
 
-        expect(first_claim.reload.payroll_run).to eq(payroll_run)
+        expect(first_claim.reload.payment.payroll_run).to eq(payroll_run)
       end
     end
 

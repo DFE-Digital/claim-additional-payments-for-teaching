@@ -53,7 +53,6 @@ class Claim < ApplicationRecord
   accepts_nested_attributes_for :eligibility, update_only: true
 
   has_one :payment
-  has_one :payroll_run, through: :payment
 
   enum payroll_gender: {
     dont_know: 0,

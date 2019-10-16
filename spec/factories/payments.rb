@@ -3,6 +3,6 @@ FactoryBot.define do
     association(:claim, factory: [:claim, :approved])
     association(:payroll_run, factory: :payroll_run)
 
-    award_amount { 1200 }
+    award_amount { claim.award_amount }
   end
 end

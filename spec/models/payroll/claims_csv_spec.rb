@@ -3,8 +3,12 @@ require "rails_helper"
 RSpec.describe Payroll::ClaimsCsv do
   subject(:claims_csv) { described_class.new(payroll_run) }
 
-  let(:payroll_run) { create(:payroll_run, claims: [claim], created_at: "2018-10-15") }
+  let(:payroll_run) { create(:payroll_run, created_at: "2018-10-15") }
   let(:claim) { create(:claim, :submitted, address_line_1: "1 Test Road", address_line_2: "Test Town", postcode: "AB1 2CD") }
+
+  before do
+    create(:payment, claim: claim, payroll_run: payroll_run)
+  end
 
   describe "#file" do
     let(:file) { claims_csv.file }

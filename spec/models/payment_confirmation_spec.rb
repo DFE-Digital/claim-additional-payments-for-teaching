@@ -1,8 +1,8 @@
 require "rails_helper"
 
 RSpec.describe PaymentConfirmation do
-  let(:payroll_run) { create(:payroll_run) }
-  let(:claims) { create_list(:claim, 2, :approved, payroll_run: payroll_run) }
+  let(:payroll_run) { build(:payroll_run) }
+  let(:claims) { build_list(:claim, 2, :approved) }
   let(:csv) do
     <<~CSV
       Payroll Reference,Gross Value,Claim ID,NI,Employers NI,Student Loans,Tax,Net Pay
@@ -18,6 +18,12 @@ RSpec.describe PaymentConfirmation do
   end
   let(:admin_user_id) { "uploader-id" }
   subject(:payment_confirmation) { described_class.new(payroll_run, file, admin_user_id) }
+
+  before do
+    claims.map do |c|
+      create(:payment, claim: c, payroll_run: payroll_run)
+    end
+  end
 
   context "the claims in the CSV match the claims of the payroll run" do
     it "records the values from the CSV against the claims' payments, and populates the payroll run's confirmation_report_uploaded_by" do
@@ -47,7 +53,7 @@ RSpec.describe PaymentConfirmation do
   end
 
   context "the value for Student Loans is blank" do
-    let(:claims) { create_list(:claim, 1, :approved, payroll_run: payroll_run) }
+    let(:claims) { create_list(:claim, 1, :approved) }
     let(:csv) do
       <<~CSV
         Payroll Reference,Gross Value,Claim ID,NI,Employers NI,Student Loans,Tax,Net Pay

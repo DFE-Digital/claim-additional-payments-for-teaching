@@ -36,7 +36,9 @@ RSpec.describe "Admin payroll runs" do
     describe "admin_payroll_runs#show" do
       it "returns a csv containing the claims from the given payroll run" do
         claims = create_list(:claim, 3, :approved)
-        payroll_run = create(:payroll_run, claims: claims)
+        payroll_run = create(:payroll_run)
+        claims.each { |c| create(:payment, claim: c, payroll_run: payroll_run) }
+
         create_list(:claim, 2, :approved)
 
         get admin_payroll_run_path(payroll_run, format: :csv)

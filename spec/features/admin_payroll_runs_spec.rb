@@ -64,7 +64,8 @@ RSpec.feature "Payroll" do
     sign_in_to_admin_with_role(AdminSession::SERVICE_OPERATOR_DFE_SIGN_IN_ROLE_CODE, "uploader-user-id")
 
     payroll_run = create(:payroll_run)
-    claims = create_list(:claim, 2, :approved, payroll_run: payroll_run)
+    claims = create_list(:claim, 2, :approved)
+    claims.each { |c| create(:payment, claim: c, payroll_run: payroll_run) }
 
     click_on "Payroll"
 
