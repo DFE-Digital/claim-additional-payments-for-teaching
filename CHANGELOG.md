@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+## [Release 018] - 2019-10-16
+
 - Run schema and data migrations at the same time
 - Exclude /admin from maintenance mode
 - Allow service to be put into maintenance mode
@@ -138,7 +140,9 @@ The format is based on [Keep a Changelog]
 - First release for student loan repayments private beta
 
 [unreleased]:
-  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-017...HEAD
+  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-018...HEAD
+[release 018]:
+  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-017...release-018
 [release 017]:
   https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-016...release-017
 [release 016]:
