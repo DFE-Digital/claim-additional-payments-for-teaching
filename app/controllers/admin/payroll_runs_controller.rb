@@ -21,8 +21,8 @@ module Admin
       respond_to do |format|
         format.html
         format.csv do
-          csv = Payroll::ClaimsCsv.new(@payroll_run.claims)
-          send_file csv.file, type: "text/csv", filename: "payroll_data_#{@payroll_run.created_at.to_date.iso8601}.csv"
+          csv = Payroll::ClaimsCsv.new(@payroll_run)
+          send_file csv.file, type: "text/csv", filename: csv.filename
         end
       end
     end

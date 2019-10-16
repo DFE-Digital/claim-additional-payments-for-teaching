@@ -2,7 +2,7 @@ require "csv"
 
 module Payroll
   class ClaimsCsv
-    attr_accessor :claims
+    attr_reader :payroll_run
 
     FIELDS_WITH_HEADERS = {
       title: "TITLE",
@@ -37,18 +37,22 @@ module Payroll
       reference: "CLAIM_ID",
     }.freeze
 
-    def initialize(claims)
-      self.claims = claims
+    def initialize(payroll_run)
+      @payroll_run = payroll_run
     end
 
     def file
       Tempfile.new.tap do |file|
         file.write(header_row)
-        claims.each do |claim|
+        payroll_run.claims.each do |claim|
           file.write(Payroll::ClaimCsvRow.new(claim).to_s)
         end
         file.rewind
       end
+    end
+
+    def filename
+      "payroll_data_#{payroll_run.created_at.to_date.iso8601}.csv"
     end
 
     private
