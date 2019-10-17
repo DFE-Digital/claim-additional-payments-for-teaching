@@ -8,10 +8,6 @@ class PayrollRun < ApplicationRecord
     claims.sum(&:award_amount)
   end
 
-  def self.payrollable_claims
-    Claim.approved.left_joins(:payment).where(payments: {id: nil})
-  end
-
   def self.create_with_claims!(claims, attrs = {})
     ActiveRecord::Base.transaction do
       PayrollRun.create!(attrs).tap do |payroll_run|

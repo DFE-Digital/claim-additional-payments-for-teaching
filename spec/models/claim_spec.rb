@@ -468,4 +468,24 @@ RSpec.describe Claim, type: :model do
       expect(Claim::FILTER_PARAMS.keys).to match_array(Claim.new.attribute_names.map(&:to_sym))
     end
   end
+
+  describe "payrollable" do
+    let(:payroll_run) { create(:payroll_run, claims_count: 1) }
+    let!(:submitted_claim) { create(:claim, :submitted) }
+    let!(:first_unpayrolled_claim) { create(:claim, :approved) }
+    let!(:second_unpayrolled_claim) { create(:claim, :approved) }
+
+    it "includes claims that do not belong to a payroll run" do
+      expect(described_class.payrollable).to include(first_unpayrolled_claim)
+      expect(described_class.payrollable).to include(second_unpayrolled_claim)
+    end
+
+    it "does not include claims that belong to a payroll run" do
+      expect(described_class.payrollable).not_to include(payroll_run.claims.first)
+    end
+
+    it "only includes approved claims" do
+      expect(described_class.payrollable).not_to include(submitted_claim)
+    end
+  end
 end

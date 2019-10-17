@@ -7,7 +7,7 @@ module Admin
     end
 
     def new
-      @payroll_run = PayrollRun.new(claims: PayrollRun.payrollable_claims)
+      @payroll_run = PayrollRun.new(claims: Claim.payrollable)
     end
 
     def create
