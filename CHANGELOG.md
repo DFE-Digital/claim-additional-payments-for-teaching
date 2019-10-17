@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+- Service operators can add notes when they approve or reject a claim
+
 ## [Release 020] - 2019-10-21
 
 - Service operators can easily identify claims that are close to their deadline

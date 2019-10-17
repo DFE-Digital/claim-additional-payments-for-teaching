@@ -19,9 +19,12 @@ RSpec.feature "Rejecting a claim" do
 
       find("a[href='#{admin_claim_path(claim_to_reject)}']").click
       choose "Reject"
+      fill_in "Decision notes", with: "TRN doesn't exist"
       perform_enqueued_jobs { click_on "Submit" }
 
       expect(claim_to_reject.check.checked_by).to eq(user_id)
+      expect(claim_to_reject.check.notes).to eq("TRN doesn't exist")
+
       expect(page).to have_content("Claim has been rejected successfully")
       expect(page).to_not have_content(claim_to_reject.reference)
 

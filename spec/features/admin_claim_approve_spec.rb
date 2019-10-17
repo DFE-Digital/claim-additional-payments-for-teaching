@@ -20,9 +20,11 @@ RSpec.feature "Admin approves a claim" do
 
         find("a[href='#{admin_claim_path(claim_to_approve)}']").click
         choose "Approve"
+        fill_in "Decision notes", with: "Everything matches"
         perform_enqueued_jobs { click_on "Submit" }
 
         expect(claim_to_approve.check.checked_by).to eq(user_id)
+        expect(claim_to_approve.check.notes).to eq("Everything matches")
 
         expect(page).to have_content("Claim has been approved successfully")
         expect(page).to_not have_content(claim_to_approve.reference)
