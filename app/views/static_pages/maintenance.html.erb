@@ -13,14 +13,17 @@
     </p>
 
     <p class="govuk-body">
-      We have not saved your answers. When the service is available, you will have to start again.
+      If you’ve already submitted a claim, we’ll contact you when we have reviewed it.
     </p>
 
     <p class="govuk-body">
-      Contact
-      <a href="mailto:additionalteachingpayment@digital.education.gov.uk" class="govuk-link">
-        additionalteachingpayment@digital.education.gov.uk
-      </a> if you need further information.
+      If you started a claim but did not send it, we have not saved your
+      answers. You’ll need to start again when the service is available.
+    </p>
+
+    <p class="govuk-body">
+      Contact <%= mail_to t("support_email_address"), t("support_email_address"), class: "govuk-link" %>
+      if you need further information.
     </p>
   </div>
 </div>
