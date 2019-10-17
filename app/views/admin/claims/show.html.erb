@@ -30,17 +30,26 @@
       </div>
     <% end %>
 
-    <%= button_to "Approve",
-                  admin_claim_checks_path(@claim),
-                  params: { result: "approved" },
-                  class: "govuk-button",
-                  data: { confirm: "Are you sure you want to approve this claim?" },
-                  disabled: @claim.payroll_gender_missing? %>
-
-    <%= button_to "Reject",
-                admin_claim_checks_path(@claim),
-                params: { result: "rejected" },
-                class: "govuk-button govuk-button--secondary",
-                data: { confirm: "Are you sure you want to reject this claim?" } %>
+    <%= form_for Check.new, url: admin_claim_checks_path(@claim) do |form| %>
+      <fieldset class="govuk-fieldset govuk-!-margin-bottom-6">
+        <legend class="govuk-fieldset__legend govuk-fieldset__legend--l govuk-!-margin-bottom-6">
+          <h2 class="govuk-fieldset__heading">
+            Claim decision
+          </h2>
+        </legend>
+        <div class="govuk-radios">
+          <%= form.hidden_field :result %>
+          <div class="govuk-radios__item">
+            <%= form.radio_button(:result, "approved", class: "govuk-radios__input", disabled: @claim.payroll_gender_missing?) %>
+            <%= form.label "result_approved", "Approve", class: "govuk-label govuk-radios__label" %>
+          </div>
+          <div class="govuk-radios__item">
+            <%= form.radio_button(:result, "rejected", class: "govuk-radios__input") %>
+            <%= form.label "result_rejected", "Reject", class: "govuk-label govuk-radios__label" %>
+          </div>
+        </div>
+      </fieldset>
+      <%= form.submit "Submit", class: "govuk-button" %>
+    <% end %>
   </div>
 </div>

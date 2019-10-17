@@ -18,8 +18,8 @@ RSpec.feature "Rejecting a claim" do
       expect(page).to have_content("5 claims awaiting checking")
 
       find("a[href='#{admin_claim_path(claim_to_reject)}']").click
-
-      perform_enqueued_jobs { click_on "Reject" }
+      choose "Reject"
+      perform_enqueued_jobs { click_on "Submit" }
 
       expect(claim_to_reject.check.checked_by).to eq(user_id)
       expect(page).to have_content("Claim has been rejected successfully")

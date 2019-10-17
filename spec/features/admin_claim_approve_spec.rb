@@ -19,7 +19,8 @@ RSpec.feature "Admin approves a claim" do
         expect(page).to have_content("5 claims awaiting checking")
 
         find("a[href='#{admin_claim_path(claim_to_approve)}']").click
-        perform_enqueued_jobs { click_on "Approve" }
+        choose "Approve"
+        perform_enqueued_jobs { click_on "Submit" }
 
         expect(claim_to_approve.check.checked_by).to eq(user_id)
 
@@ -43,7 +44,7 @@ RSpec.feature "Admin approves a claim" do
         click_on "View claims"
         find("a[href='#{admin_claim_path(claim_missing_payroll_gender)}']").click
 
-        expect(page).to have_button("Approve", disabled: true)
+        expect(page).to have_field("Approve", disabled: true)
         expect(page).to have_content("This claim cannot be approved, the payroll gender is missing")
       end
     end
