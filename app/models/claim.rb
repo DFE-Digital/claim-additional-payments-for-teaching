@@ -39,6 +39,8 @@ class Claim < ApplicationRecord
     building_society_roll_number: true,
     payroll_run_id: false,
   }.freeze
+  CHECK_DEADLINE = 6.weeks
+  CHECK_DEADLINE_WARNING_POINT = 2.weeks
 
   enum student_loan_country: StudentLoans::COUNTRIES
   enum student_loan_start_date: StudentLoans::COURSE_START_DATES
@@ -115,6 +117,8 @@ class Claim < ApplicationRecord
   scope :submitted, -> { where.not(submitted_at: nil) }
   scope :awaiting_checking, -> { submitted.left_outer_joins(:check).where(checks: {claim_id: nil}) }
   scope :approved, -> { joins(:check).where("checks.result" => :approved) }
+  scope :approaching_check_deadline, -> { awaiting_checking.where("submitted_at < ? AND submitted_at > ?", CHECK_DEADLINE.ago + CHECK_DEADLINE_WARNING_POINT, CHECK_DEADLINE.ago) }
+  scope :passed_check_deadline, -> { awaiting_checking.where("submitted_at < ?", CHECK_DEADLINE.ago) }
 
   delegate :award_amount, to: :eligibility
 
@@ -138,6 +142,10 @@ class Claim < ApplicationRecord
 
   def payroll_gender_missing?
     %w[male female].exclude?(payroll_gender)
+  end
+
+  def check_deadline_date
+    (submitted_at + CHECK_DEADLINE).to_date
   end
 
   def address(seperator = ", ")

@@ -94,7 +94,20 @@ describe Admin::ClaimsHelper do
       expect(helper.admin_submission_details(claim)).to eq([
         [I18n.t("admin.started_at"), l(claim.created_at)],
         [I18n.t("admin.submitted_at"), l(claim.submitted_at)],
+        [I18n.t("admin.check_deadline"), l(claim.check_deadline_date)],
       ])
+    end
+
+    context "when the claim is approaching its deadline" do
+      let(:claim) { create(:claim, :submitted, submitted_at: 5.weeks.ago) }
+
+      it "always includes the deadline date" do
+        expect(helper.admin_submission_details(claim)[2].last).to have_content(l(claim.check_deadline_date))
+      end
+
+      it "includes the deadline warning" do
+        expect(helper.admin_submission_details(claim)[2].last).to have_selector(".tag--warning")
+      end
     end
   end
 
@@ -112,6 +125,32 @@ describe Admin::ClaimsHelper do
       expect(helper.display_school(school)).to eq(
         "<a class=\"govuk-link\" href=\"#{gias_url}\">#{school.name}</a> <span class=\"govuk-body-s\">(#{school.dfe_number})</span>"
       )
+    end
+  end
+
+  describe "#check_deadline_warning" do
+    subject { helper.check_deadline_warning(claim) }
+    before { travel_to Time.zone.local(2019, 10, 11, 7, 0, 0) }
+    after { travel_back }
+
+    context "when a claim is approaching it's deadline" do
+      let(:claim) { build(:claim, :submitted, submitted_at: 5.weeks.ago) }
+
+      it { is_expected.to have_content("7 days") }
+      it { is_expected.to have_selector(".tag--warning") }
+    end
+
+    context "when a claim has passed it's deadline" do
+      let(:claim) { build(:claim, :submitted, submitted_at: 10.weeks.ago) }
+
+      it { is_expected.to have_content("-28 days") }
+      it { is_expected.to have_selector(".tag--alert") }
+    end
+
+    context "when a claim is not near it's deadline" do
+      let(:claim) { build(:claim, :submitted, submitted_at: 1.day.ago) }
+
+      it { is_expected.to be_nil }
     end
   end
 end

@@ -1,0 +1,25 @@
+@import "govuk-frontend-rails";
+
+%tag {
+  text-transform: none;
+  letter-spacing: 0;
+  min-width: 4em;
+  text-align: center;
+}
+
+.tag--warning {
+  @extend %tag;
+  background-color: govuk-colour("orange");
+}
+
+.tag--alert {
+  @extend %tag;
+  background-color: govuk-colour("red");
+}
+
+.govuk-summary-list {
+  .tag--warning,
+  .tag--alert {
+    margin-left: 1em;
+  }
+}
