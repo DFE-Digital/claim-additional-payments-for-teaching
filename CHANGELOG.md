@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+## [Release 019] - 2019-10-17
+
 - Put the service into "permanent" maintenance mode until public beta
 - Updated maintenance page content to better fit the service
 - Payroll export start date is the second Monday of the month and the end date
@@ -145,7 +147,9 @@ The format is based on [Keep a Changelog]
 - First release for student loan repayments private beta
 
 [unreleased]:
-  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-018...HEAD
+  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-019...HEAD
+[release 019]:
+  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-018...release-019
 [release 018]:
   https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-017...release-018
 [release 017]:
