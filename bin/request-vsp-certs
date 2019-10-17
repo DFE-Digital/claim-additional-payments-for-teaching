@@ -159,10 +159,14 @@ function request_cert {
     read -rp "  Hit return to continue with the pre-existing CSR, or CTRL+C to stop."
   fi
 
+  echo "Generate a strong challenge phrase. You must use alphanumeric characters."
+  echo "The following special characters are also allowed ' ( ) + , - . / , and space."
+  echo "Keep a note of the challenge phrase as you will need it during enrolment."
+
   CHALLENGE_PHRASE=
 
   while ! [ "$CHALLENGE_PHRASE" ]; do
-    read -rsp "  Enter the \"Challenge Phrase\" you will use in the enrollment request: " CHALLENGE_PHRASE
+    read -rsp "  Enter the \"Challenge Phrase\" you will use in the enrolment request: " CHALLENGE_PHRASE
     echo
   done
 
@@ -181,6 +185,9 @@ mkdir -p "${CERTS_DIR}"
 
 echo "Setting default Azure subscription to $AZURE_SUBSCRIPTION_ID..."
 az account set --subscription "$AZURE_SUBSCRIPTION_ID"
+
+echo "This script will generate both the signing and encryption keys."
+read -rp "  Hit return to continue, or CTRL+C to stop."
 
 SIGNING_FILE_PREFIX="TeacherPayments${ENVIRONMENT_SHORT_NAME}VspSamlSigning${VERSION_NUMBER}"
 SIGNING_CSR_COMMON_NAME="Teacher Payments Service $ENVIRONMENT_SHORT_NAME VSP SAML Signing $VERSION_NUMBER"
