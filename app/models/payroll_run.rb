@@ -1,5 +1,6 @@
 class PayrollRun < ApplicationRecord
-  has_many :claims
+  has_many :payments
+  has_many :claims, through: :payments
 
   validates :created_by, presence: true
 
@@ -8,6 +9,6 @@ class PayrollRun < ApplicationRecord
   end
 
   def self.payrollable_claims
-    Claim.approved.where(payroll_run: nil)
+    Claim.approved.left_joins(:payment).where(payments: {id: nil})
   end
 end

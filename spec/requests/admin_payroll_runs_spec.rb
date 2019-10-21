@@ -19,7 +19,7 @@ RSpec.describe "Admin payroll runs" do
     end
 
     describe "admin_payroll_runs#create" do
-      it "creates a payroll run and redirects to it" do
+      it "creates a payroll run with payments and redirects to it" do
         claims = create_list(:claim, 2, :approved)
 
         expect { post admin_payroll_runs_path(claim_ids: claims.map(&:id)) }.to change { PayrollRun.count }.by(1)
@@ -27,6 +27,7 @@ RSpec.describe "Admin payroll runs" do
         payroll_run = PayrollRun.order(:created_at).last
         expect(payroll_run.created_by).to eq(admin_session_id)
         expect(payroll_run.claims).to match_array(claims)
+        expect(payroll_run.payments.count).to eq(2)
 
         expect(response).to redirect_to(admin_payroll_run_path(payroll_run))
       end
