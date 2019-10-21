@@ -66,6 +66,16 @@ RSpec.feature "Admin checks a claim" do
       expect(mail.body.raw_source).to match("been rejected.")
     end
 
+    scenario "User can see existing check details" do
+      claim_with_check = create(:claim, :submitted, check: build(:check, result: :approved, notes: "Everything matches"))
+      visit admin_claim_path(claim_with_check)
+
+      expect(page).not_to have_button("Submit")
+      expect(page).to have_content("Claim decision")
+      expect(page).to have_content("Approved")
+      expect(page).to have_content(claim_with_check.check.notes)
+    end
+
     context "When the payroll gender is missing" do
       let!(:claim_missing_payroll_gender) { create(:claim, :submitted, payroll_gender: :dont_know) }
 

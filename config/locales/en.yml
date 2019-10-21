@@ -66,6 +66,10 @@ en:
     started_at: "Started at"
     submitted_at: "Submitted at"
     check_deadline: "Check deadline"
+    check:
+      checked_at: "Checked at"
+      result: "Result"
+      notes: "Notes"
   answers:
     student_loan_start_date:
       one_course:
