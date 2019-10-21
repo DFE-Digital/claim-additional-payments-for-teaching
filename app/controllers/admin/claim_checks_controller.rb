@@ -5,9 +5,13 @@ class Admin::ClaimChecksController < Admin::BaseAdminController
 
   def create
     return redirect_to admin_claim_path(@claim), alert: "Claim cannot be approved" if check_params[:result] == "approved" && @claim.payroll_gender_missing?
-    @claim.create_check!(check_params.merge(checked_by: admin_session.user_id))
-    send_claim_result_email
-    redirect_to admin_claims_path, notice: "Claim has been #{@claim.check.result} successfully"
+    @check = @claim.build_check(check_params.merge(checked_by: admin_session.user_id))
+    if @check.save
+      send_claim_result_email
+      redirect_to admin_claims_path, notice: "Claim has been #{@claim.check.result} successfully"
+    else
+      render "admin/claims/show"
+    end
   end
 
   private

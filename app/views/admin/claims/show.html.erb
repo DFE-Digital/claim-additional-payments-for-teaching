@@ -2,6 +2,8 @@
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
+    <%= render("shared/error_summary", instance: @check, errored_field_id_overrides: { "result": "check_result_approved" }) if @check.errors.any? %>
+
     <% if @claim.payroll_gender_missing? %>
       <div class="govuk-body-l govuk-flash__notice">
         This claim cannot be approved, the payroll gender is missing and the claim will need to be referred
@@ -12,13 +14,13 @@
       Claim <%= @claim.reference %>
     </h1>
 
-    <%= render partial: "answer_section", locals: {heading: "Personal details", answers: admin_personal_details(@claim)} %>
+    <%= render "admin/claims/answer_section", {heading: "Personal details", answers: admin_personal_details(@claim)} %>
 
-    <%= render partial: "answer_section", locals: {heading: "Eligibility details", answers: admin_eligibility_answers(@claim.eligibility)} %>
+    <%= render "admin/claims/answer_section", {heading: "Eligibility details", answers: admin_eligibility_answers(@claim.eligibility)} %>
 
-    <%= render partial: "answer_section", locals: {heading: "Student loan details", answers: admin_student_loan_details(@claim)} %>
+    <%= render "admin/claims/answer_section", {heading: "Student loan details", answers: admin_student_loan_details(@claim)} %>
 
-    <%= render partial: "answer_section", locals: {heading: "Submission details", answers: admin_submission_details(@claim)} %>
+    <%= render "admin/claims/answer_section", {heading: "Submission details", answers: admin_submission_details(@claim)} %>
 
     <% if @claim.payroll_gender_missing? %>
       <div class="govuk-warning-text">
@@ -30,31 +32,35 @@
       </div>
     <% end %>
 
-    <%= form_for Check.new, url: admin_claim_checks_path(@claim) do |form| %>
-      <fieldset class="govuk-fieldset govuk-!-margin-bottom-6">
-        <legend class="govuk-fieldset__legend govuk-fieldset__legend--l govuk-!-margin-bottom-6">
-          <h2 class="govuk-fieldset__heading">
-            Claim decision
-          </h2>
-        </legend>
-        <div class="govuk-radios">
-          <%= form.hidden_field :result %>
-          <div class="govuk-radios__item">
-            <%= form.radio_button(:result, "approved", class: "govuk-radios__input", disabled: @claim.payroll_gender_missing?) %>
-            <%= form.label "result_approved", "Approve", class: "govuk-label govuk-radios__label" %>
+    <%= form_for @check, url: admin_claim_checks_path(@claim) do |form| %>
+      <%= form_group_tag @check do %>
+        <fieldset class="govuk-fieldset govuk-!-margin-bottom-6">
+          <legend class="govuk-fieldset__legend govuk-fieldset__legend--l govuk-!-margin-bottom-6">
+            <h2 class="govuk-fieldset__heading">
+              Claim decision
+            </h2>
+          </legend>
+          <%= errors_tag @check, :result %>
+          <div class="govuk-radios">
+            <%= form.hidden_field :result %>
+            <div class="govuk-radios__item">
+              <%= form.radio_button(:result, "approved", class: "govuk-radios__input", disabled: @claim.payroll_gender_missing?) %>
+              <%= form.label "result_approved", "Approve", class: "govuk-label govuk-radios__label" %>
+            </div>
+            <div class="govuk-radios__item">
+              <%= form.radio_button(:result, "rejected", class: "govuk-radios__input") %>
+              <%= form.label "result_rejected", "Reject", class: "govuk-label govuk-radios__label" %>
+            </div>
           </div>
-          <div class="govuk-radios__item">
-            <%= form.radio_button(:result, "rejected", class: "govuk-radios__input") %>
-            <%= form.label "result_rejected", "Reject", class: "govuk-label govuk-radios__label" %>
-          </div>
-        </div>
-      </fieldset>
-      <%= form.label :notes, "Decision notes", class: "govuk-label govuk-label--m" %>
-      <span class="govuk-hint">
-        Please write a brief note explaining why this claim has been rejected or approved.
-      </span>
-      <%= form.text_area :notes, class: "govuk-textarea", rows: 5 %>
-      <%= form.submit "Submit", class: "govuk-button" %>
+        </fieldset>
+        <%= form.label :notes, "Decision notes", class: "govuk-label govuk-label--m" %>
+        <span class="govuk-hint">
+          Please write a brief note explaining why this claim has been rejected or approved.
+        </span>
+        <%= form.text_area :notes, class: "govuk-textarea", rows: 5 %>
+        <%= form.submit "Submit", class: "govuk-button" %>
+
+      <% end %>
     <% end %>
   </div>
 </div>

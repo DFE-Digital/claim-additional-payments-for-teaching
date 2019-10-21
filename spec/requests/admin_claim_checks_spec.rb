@@ -31,6 +31,15 @@ RSpec.describe "Admin claim checks", type: :request do
         expect(claim.check.result).to eq("rejected")
       end
 
+      context "when no result is selected" do
+        it "shows an error and doesn't save the check" do
+          post admin_claim_checks_path(claim_id: claim.id, check: {notes: "Something"})
+
+          expect(response.body).to include("Make a decision to approve or reject the claim")
+          expect(claim.reload.check).to be_nil
+        end
+      end
+
       context "when claim is already checked" do
         let(:claim) { create(:claim, :approved) }
 
