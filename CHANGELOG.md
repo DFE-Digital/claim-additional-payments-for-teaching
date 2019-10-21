@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+## [Release 020] - 2019-10-21
+
 - Service operators can easily identify claims that are close to their deadline
 
 ## [Release 019] - 2019-10-17
@@ -149,7 +151,9 @@ The format is based on [Keep a Changelog]
 - First release for student loan repayments private beta
 
 [unreleased]:
-  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-019...HEAD
+  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-020...HEAD
+[release 020]:
+  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-019...release-020
 [release 019]:
   https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-018...release-019
 [release 018]:
