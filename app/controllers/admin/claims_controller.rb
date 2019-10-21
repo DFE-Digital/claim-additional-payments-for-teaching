@@ -8,6 +8,7 @@ class Admin::ClaimsController < Admin::BaseAdminController
   def show
     @claim = Claim.find(params[:id])
     @check = @claim.check || Check.new
+    @claim_ids_with_matching_attributes = Claim::MatchingAttributeFinder.new(@claim).claim_ids_with_matching_attributes
   end
 
   def search

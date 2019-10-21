@@ -6,6 +6,9 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+- A clear warning is shown to service operators when a claim contains details
+  that have been used in other claims. The other claims are listed and linked
+
 ## [Release 022] - 2019-10-24
 
 - The Payment Confirmation Report for a payroll run can be uploaded and

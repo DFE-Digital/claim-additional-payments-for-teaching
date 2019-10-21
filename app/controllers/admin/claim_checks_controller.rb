@@ -18,6 +18,7 @@ class Admin::ClaimChecksController < Admin::BaseAdminController
 
   def load_claim
     @claim = Claim.find(params[:claim_id])
+    @claim_ids_with_matching_attributes = Claim::MatchingAttributeFinder.new(@claim).claim_ids_with_matching_attributes
   end
 
   def reject_checked_claims
