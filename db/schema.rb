@@ -101,6 +101,13 @@ ActiveRecord::Schema.define(version: 2019_10_17_125346) do
     t.decimal "award_amount", precision: 7, scale: 2
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "payroll_reference"
+    t.decimal "gross_value", precision: 7, scale: 2
+    t.decimal "national_insurance", precision: 7, scale: 2
+    t.decimal "employers_national_insurance", precision: 7, scale: 2
+    t.decimal "student_loan_repayment", precision: 7, scale: 2
+    t.decimal "tax", precision: 7, scale: 2
+    t.decimal "net_pay", precision: 7, scale: 2
     t.index ["claim_id"], name: "index_payments_on_claim_id", unique: true
     t.index ["payroll_run_id"], name: "index_payments_on_payroll_run_id"
   end
@@ -109,6 +116,7 @@ ActiveRecord::Schema.define(version: 2019_10_17_125346) do
     t.string "created_by"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "confirmation_report_uploaded_by"
   end
 
   create_table "schools", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|

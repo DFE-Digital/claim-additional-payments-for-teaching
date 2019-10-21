@@ -1,5 +1,5 @@
 require "rails_helper"
-require Rails.root.join("db", "data", "20191014151906_add_payments_for_payrolled_claims")
+require Rails.root.join("db", "data", "20191015103158_add_payments_for_payrolled_claims")
 
 RSpec.describe AddPaymentsForPayrolledClaims do
   describe "#up" do
