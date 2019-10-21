@@ -204,7 +204,7 @@ of `1`. If you know when the service will be operational again, you can also set
 a `MAINTENANCE_MODE_AVAILABILITY_MESSAGE` environment variable with a
 human-readable value of when to expect the service to be operational again as a
 full sentence, for example
-`Private beta has ended. You will be able to use the service again in November`.
+`Private beta has ended. You will be able to use the service again in November.`.
 
 We do this as a manual step to ensure the settings are preserved over
 deployments.
@@ -218,7 +218,7 @@ change the empty strings to real variables, i.e.:
       "value": "1"
     },
     "MAINTENANCE_MODE_AVAILABILITY_MESSAGE": {
-      "value": "Private beta has ended. You will be able to use the service again in November"
+      "value": "Private beta has ended. You will be able to use the service again in November."
     },
 ```
 
