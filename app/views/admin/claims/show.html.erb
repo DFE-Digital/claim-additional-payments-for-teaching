@@ -10,6 +10,12 @@
       </div>
     <% end %>
 
+    <% if @matching_claims.any? %>
+      <div class="govuk-body-l govuk-flash__warning">
+        <a href="#claims-with-matches">Details in this claim match those in other claims</a>
+      </div>
+    <% end %>
+
     <h1 class="govuk-heading-xl">
       Claim <%= @claim.reference %>
     </h1>
@@ -30,6 +36,32 @@
           This claim cannot be approved, the payroll gender is missing and the claim will need to be referred
         </strong>
       </div>
+    <% end %>
+
+    <% if @matching_claims.any? %>
+      <table id="claims-with-matches" class="govuk-table govuk-!-margin-bottom-9">
+        <caption class="govuk-table__caption govuk-heading-l">Claims with matching details</caption>
+        <thead class="govuk-table__head">
+          <tr class="govuk-table__row">
+            <th scope="col" class="govuk-table__header">Claim</th>
+            <th scope="col" class="govuk-table__header">Matching details</th>
+          </tr>
+        </thead>
+        <tbody class="govuk-table__body">
+          <% @matching_claims.each do |matching_claim| %>
+            <tr class="govuk-table__row">
+              <th scope="row" class="govuk-table__header"><%= link_to matching_claim.reference, [:admin, matching_claim], class: "govuk-link" %>
+              <td class="govuk-table__cell">
+                <ul class="govuk-list">
+                <% matching_attributes(@claim, matching_claim).each do |attribute| %>
+                  <li><%= attribute %></li>
+                <% end %>
+                </ul>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
     <% end %>
 
     <% if @check.persisted? %>
@@ -62,7 +94,6 @@
           </span>
           <%= form.text_area :notes, class: "govuk-textarea", rows: 5 %>
           <%= form.submit "Submit", class: "govuk-button" %>
-
         <% end %>
       <% end %>
     <% end %>

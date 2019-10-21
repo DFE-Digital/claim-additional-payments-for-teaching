@@ -6,6 +6,9 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+- A clear warning is shown to service operators when a claim contains details
+  that have been used in other claims. The other claims are listed and linked
+
 ## [Release 025] - 2019-10-31
 
 - Adjusted ineligibility screens for users who may have taught at more than one

@@ -68,6 +68,14 @@ module Admin
       content_tag(:strong, pluralize(days_until_check_deadline, "day"), class: "govuk-tag #{check_deadline_warning_class}")
     end
 
+    def matching_attributes(first_claim, second_claim)
+      first_attributes = first_claim.attributes.slice(*Claim::MatchingAttributeFinder::ATTRIBUTES_TO_MATCH).to_a
+      second_attributes = second_claim.attributes.slice(*Claim::MatchingAttributeFinder::ATTRIBUTES_TO_MATCH).to_a
+
+      matching_attributes = first_attributes & second_attributes
+      matching_attributes.to_h.compact.keys.map(&:humanize).sort
+    end
+
     private
 
     def days_between(first_date, second_date)
