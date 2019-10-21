@@ -21,15 +21,12 @@ RSpec.describe "Admin Payment Confirmation Report upload" do
       let(:file) { Rack::Test::UploadedFile.new(StringIO.new(csv), "text/csv", original_filename: "payments.csv") }
 
       context "the claims in the CSV match the claims of the payroll run" do
-        let(:claims) { create_list(:claim, 2, :approved) }
-        before do
-          claims.each { |c| create(:payment, claim: c, payroll_run: payroll_run) }
-        end
+        let(:payroll_run) { create(:payroll_run, claims_count: 2) }
         let(:csv) do
           <<~CSV
             Payroll Reference,Gross Value,Claim ID,NI,Employers NI,Student Loans,Tax,Net Pay
-            DFE00001,487.48,#{claims[0].reference},33.9,38.98,0,89.6,325
-            DFE00002,904.15,#{claims[1].reference},77.84,89.51,40,162.8,534
+            DFE00001,487.48,#{payroll_run.claims[0].reference},33.9,38.98,0,89.6,325
+            DFE00002,904.15,#{payroll_run.claims[1].reference},77.84,89.51,40,162.8,534
           CSV
         end
 
@@ -38,8 +35,8 @@ RSpec.describe "Admin Payment Confirmation Report upload" do
 
           expect(response).to redirect_to(admin_payroll_runs_path)
 
-          expect(claims[0].reload.payment.payroll_reference).to eq("DFE00001")
-          expect(claims[1].reload.payment.payroll_reference).to eq("DFE00002")
+          expect(payroll_run.claims[0].reload.payment.payroll_reference).to eq("DFE00001")
+          expect(payroll_run.claims[1].reload.payment.payroll_reference).to eq("DFE00002")
 
           expect(payroll_run.reload.confirmation_report_uploaded_by).to eq(admin_session_id)
         end

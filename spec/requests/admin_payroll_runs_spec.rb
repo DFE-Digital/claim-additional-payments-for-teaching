@@ -35,9 +35,7 @@ RSpec.describe "Admin payroll runs" do
 
     describe "admin_payroll_runs#show" do
       it "returns a csv containing the claims from the given payroll run" do
-        claims = create_list(:claim, 3, :approved)
-        payroll_run = create(:payroll_run)
-        claims.each { |c| create(:payment, claim: c, payroll_run: payroll_run) }
+        payroll_run = create(:payroll_run, claims_count: 3)
 
         create_list(:claim, 2, :approved)
 
@@ -45,7 +43,7 @@ RSpec.describe "Admin payroll runs" do
 
         csv = CSV.parse(body, headers: true)
 
-        expect(csv.map { |row| row["CLAIM_ID"] }).to match_array(claims.map(&:reference))
+        expect(csv.map { |row| row["CLAIM_ID"] }).to match_array(payroll_run.claims.map(&:reference))
       end
     end
   end

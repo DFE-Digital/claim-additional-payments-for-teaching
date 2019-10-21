@@ -63,9 +63,7 @@ RSpec.feature "Payroll" do
   scenario "Service operator can upload a Payment Confirmation Report against a payroll run" do
     sign_in_to_admin_with_role(AdminSession::SERVICE_OPERATOR_DFE_SIGN_IN_ROLE_CODE, "uploader-user-id")
 
-    payroll_run = create(:payroll_run)
-    claims = create_list(:claim, 2, :approved)
-    claims.each { |c| create(:payment, claim: c, payroll_run: payroll_run) }
+    payroll_run = create(:payroll_run, claims_count: 2)
 
     click_on "Payroll"
 
@@ -75,8 +73,8 @@ RSpec.feature "Payroll" do
 
     csv = <<~CSV
       Payroll Reference,Gross Value,Claim ID,NI,Employers NI,Student Loans,Tax,Net Pay
-      DFE00001,487.48,#{claims[0].reference},33.9,38.98,0,89.6,325
-      DFE00002,904.15,#{claims[1].reference},77.84,89.51,40,162.8,534
+      DFE00001,487.48,#{payroll_run.claims[0].reference},33.9,38.98,0,89.6,325
+      DFE00002,904.15,#{payroll_run.claims[1].reference},77.84,89.51,40,162.8,534
     CSV
 
     file = Tempfile.new
@@ -91,6 +89,6 @@ RSpec.feature "Payroll" do
     expect(page.find("table")).to have_content("Uploaded")
 
     expect(payroll_run.reload.confirmation_report_uploaded_by).to eq("uploader-user-id")
-    expect(claims[0].payment.reload.gross_value).to eq("487.48".to_d)
+    expect(payroll_run.claims[0].payment.reload.gross_value).to eq("487.48".to_d)
   end
 end

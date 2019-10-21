@@ -3,12 +3,7 @@ require "rails_helper"
 RSpec.describe Payroll::ClaimsCsv do
   subject(:claims_csv) { described_class.new(payroll_run) }
 
-  let(:payroll_run) { create(:payroll_run, created_at: "2018-10-15") }
-  let(:claim) { create(:claim, :submitted, address_line_1: "1 Test Road", address_line_2: "Test Town", postcode: "AB1 2CD") }
-
-  before do
-    create(:payment, claim: claim, payroll_run: payroll_run)
-  end
+  let(:payroll_run) { create(:payroll_run, claims_count: 1, created_at: "2018-10-15") }
 
   describe "#file" do
     let(:file) { claims_csv.file }
@@ -56,7 +51,7 @@ RSpec.describe Payroll::ClaimsCsv do
     end
 
     it "contains data rows for passed in claims" do
-      expected_claim_data_row = Payroll::ClaimCsvRow.new(claim).to_s.chomp
+      expected_claim_data_row = Payroll::ClaimCsvRow.new(payroll_run.claims[0]).to_s.chomp
 
       expect(file_lines[1]).to eq(expected_claim_data_row)
     end

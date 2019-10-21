@@ -1,13 +1,12 @@
 require "rails_helper"
 
 RSpec.describe PaymentConfirmation do
-  let(:payroll_run) { build(:payroll_run) }
-  let(:claims) { build_list(:claim, 2, :approved) }
+  let(:payroll_run) { create(:payroll_run, claims_count: 2) }
   let(:csv) do
     <<~CSV
       Payroll Reference,Gross Value,Claim ID,NI,Employers NI,Student Loans,Tax,Net Pay
-      DFE00001,487.48,#{claims[0].reference},33.9,38.98,0,89.6,325
-      DFE00002,904.15,#{claims[1].reference},77.84,89.51,40,162.8,534
+      DFE00001,487.48,#{payroll_run.claims[0].reference},33.9,38.98,0,89.6,325
+      DFE00002,904.15,#{payroll_run.claims[1].reference},77.84,89.51,40,162.8,534
     CSV
   end
   let(:file) do
@@ -19,18 +18,12 @@ RSpec.describe PaymentConfirmation do
   let(:admin_user_id) { "uploader-id" }
   subject(:payment_confirmation) { described_class.new(payroll_run, file, admin_user_id) }
 
-  before do
-    claims.map do |c|
-      create(:payment, claim: c, payroll_run: payroll_run)
-    end
-  end
-
   context "the claims in the CSV match the claims of the payroll run" do
     it "records the values from the CSV against the claims' payments, and populates the payroll run's confirmation_report_uploaded_by" do
       expect(payment_confirmation.ingest).to be_truthy
 
-      first_payment = claims[0].payment.reload
-      second_payment = claims[1].payment.reload
+      first_payment = payroll_run.claims[0].payment.reload
+      second_payment = payroll_run.claims[1].payment.reload
 
       expect(first_payment.payroll_reference).to eq("DFE00001")
       expect(first_payment.gross_value).to eq("487.48".to_d)
@@ -53,24 +46,24 @@ RSpec.describe PaymentConfirmation do
   end
 
   context "the value for Student Loans is blank" do
-    let(:claims) { create_list(:claim, 1, :approved) }
+    let(:payroll_run) { create(:payroll_run, claims_count: 1) }
     let(:csv) do
       <<~CSV
         Payroll Reference,Gross Value,Claim ID,NI,Employers NI,Student Loans,Tax,Net Pay
-        DFE00001,487.48,#{claims[0].reference},33.9,38.98,,6,325
+        DFE00001,487.48,#{payroll_run.claims[0].reference},33.9,38.98,,6,325
       CSV
     end
 
     it "stores a student_loan_repayment of nil" do
       expect(payment_confirmation.ingest).to be_truthy
 
-      payment = claims[0].payment.reload
+      payment = payroll_run.claims[0].payment.reload
       expect(payment.student_loan_repayment).to be_nil
     end
   end
 
   context "The payroll run has already had a Payment Confirmation Report uploaded" do
-    let(:payroll_run) { create(:payroll_run, confirmation_report_uploaded_by: "some-user-id") }
+    let(:payroll_run) { create(:payroll_run, claims_count: 2, confirmation_report_uploaded_by: "some-user-id") }
 
     it "fails and populates its errors" do
       expect(payment_confirmation.ingest).to be_falsey
@@ -83,8 +76,8 @@ RSpec.describe PaymentConfirmation do
     let(:csv) do
       <<~CSV
         Payroll Reference,Gross Value,Claim ID,NI,Employers NI,Student Loans,Tax,Net Pay
-        DFE00001,487.48,#{claims[0].reference},33.9,38.98,0,89.6,325
-        DFE00002,904.15,#{claims[1].reference},77.84,89.51,40,162.8,534
+        DFE00001,487.48,#{payroll_run.claims[0].reference},33.9,38.98,0,89.6,325
+        DFE00002,904.15,#{payroll_run.claims[1].reference},77.84,89.51,40,162.8,534
         DFE00003,904.15,#{extra_claim.reference},77.84,89.51,40,162.8,534
       CSV
     end
@@ -93,8 +86,8 @@ RSpec.describe PaymentConfirmation do
       expect(payment_confirmation.ingest).to be_falsey
       expect(payment_confirmation.errors).to eq(["The CSV file contains a claim that is not part of the payroll run at line 4"])
 
-      expect(claims[0].payment.reload.payroll_reference).to eq(nil)
-      expect(claims[1].payment.reload.payroll_reference).to eq(nil)
+      expect(payroll_run.claims[0].payment.reload.payroll_reference).to eq(nil)
+      expect(payroll_run.claims[1].payment.reload.payroll_reference).to eq(nil)
     end
   end
 
@@ -102,16 +95,16 @@ RSpec.describe PaymentConfirmation do
     let(:csv) do
       <<~CSV
         Payroll Reference,Gross Value,Claim ID,NI,Employers NI,Student Loans,Tax,Net Pay
-        DFE00001,487.48,#{claims[0].reference},33.9,38.98,0,89.6,325
+        DFE00001,487.48,#{payroll_run.claims[0].reference},33.9,38.98,0,89.6,325
       CSV
     end
 
     it "fails and populates its errors, and does not update the payments" do
       expect(payment_confirmation.ingest).to be_falsey
-      expect(payment_confirmation.errors).to eq(["The claim ID #{claims[1].reference} is missing from the CSV"])
+      expect(payment_confirmation.errors).to eq(["The claim ID #{payroll_run.claims[1].reference} is missing from the CSV"])
 
-      expect(claims[0].payment.reload.payroll_reference).to eq(nil)
-      expect(claims[1].payment.reload.payroll_reference).to eq(nil)
+      expect(payroll_run.claims[0].payment.reload.payroll_reference).to eq(nil)
+      expect(payroll_run.claims[1].payment.reload.payroll_reference).to eq(nil)
     end
   end
 
@@ -119,18 +112,18 @@ RSpec.describe PaymentConfirmation do
     let(:csv) do
       <<~CSV
         Payroll Reference,Gross Value,Claim ID,NI,Employers NI,Student Loans,Tax,Net Pay
-        DFE00001,487.48,#{claims[0].reference},33.9,38.98,0,89.6,325
-        DFE00002,904.15,#{claims[1].reference},77.84,89.51,40,162.8,534
-        DFE00002,904.15,#{claims[1].reference},77.84,89.51,40,162.8,534
+        DFE00001,487.48,#{payroll_run.claims[0].reference},33.9,38.98,0,89.6,325
+        DFE00002,904.15,#{payroll_run.claims[1].reference},77.84,89.51,40,162.8,534
+        DFE00002,904.15,#{payroll_run.claims[1].reference},77.84,89.51,40,162.8,534
       CSV
     end
 
     it "fails and populates its errors, and does not update the payments" do
       expect(payment_confirmation.ingest).to be_falsey
-      expect(payment_confirmation.errors).to eq(["The claim ID #{claims[1].reference} is repeated at line 4"])
+      expect(payment_confirmation.errors).to eq(["The claim ID #{payroll_run.claims[1].reference} is repeated at line 4"])
 
-      expect(claims[0].payment.reload.payroll_reference).to eq(nil)
-      expect(claims[1].payment.reload.payroll_reference).to eq(nil)
+      expect(payroll_run.claims[0].payment.reload.payroll_reference).to eq(nil)
+      expect(payroll_run.claims[1].payment.reload.payroll_reference).to eq(nil)
     end
   end
 
@@ -138,8 +131,8 @@ RSpec.describe PaymentConfirmation do
     let(:csv) do
       <<~CSV
         Payroll Reference,Gross Value,Claim ID,NI,Employers NI,Student Loans,Tax,Net Pay
-        DFE00001,,#{claims[0].reference},33.9,38.98,0,89.6,325
-        DFE00002,904.15,#{claims[1].reference},77.84,89.51,40,162.8,534
+        DFE00001,,#{payroll_run.claims[0].reference},33.9,38.98,0,89.6,325
+        DFE00002,904.15,#{payroll_run.claims[1].reference},77.84,89.51,40,162.8,534
       CSV
     end
 
@@ -147,8 +140,8 @@ RSpec.describe PaymentConfirmation do
       expect(payment_confirmation.ingest).to be_falsey
       expect(payment_confirmation.errors).to eq(["The claim at line 2 has invalid data"])
 
-      expect(claims[0].payment.reload.payroll_reference).to eq(nil)
-      expect(claims[1].payment.reload.payroll_reference).to eq(nil)
+      expect(payroll_run.claims[0].payment.reload.payroll_reference).to eq(nil)
+      expect(payroll_run.claims[1].payment.reload.payroll_reference).to eq(nil)
     end
   end
 end

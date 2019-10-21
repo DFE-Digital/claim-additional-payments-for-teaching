@@ -13,15 +13,10 @@ RSpec.describe PayrollRun, type: :model do
   end
 
   describe ".payrollable_claims" do
-    let(:payroll_run) { create(:payroll_run) }
-    let!(:payrolled_claim) { create(:claim, :approved) }
+    let(:payroll_run) { create(:payroll_run, claims_count: 1) }
     let!(:submitted_claim) { create(:claim, :submitted) }
     let!(:first_unpayrolled_claim) { create(:claim, :approved) }
     let!(:second_unpayrolled_claim) { create(:claim, :approved) }
-
-    before do
-      create(:payment, payroll_run: payroll_run, claim: payrolled_claim)
-    end
 
     it "includes claims that do not belong to a payroll run" do
       expect(PayrollRun.payrollable_claims).to include(first_unpayrolled_claim)
@@ -29,7 +24,7 @@ RSpec.describe PayrollRun, type: :model do
     end
 
     it "does not include claims that belong to a payroll run" do
-      expect(PayrollRun.payrollable_claims).not_to include(payrolled_claim)
+      expect(PayrollRun.payrollable_claims).not_to include(payroll_run.claims.first)
     end
 
     it "only includes approved claims" do
