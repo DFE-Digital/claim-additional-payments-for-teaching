@@ -41,5 +41,8 @@ module DfeTeachersPaymentService
 
     # Set a css_compressor so sassc-rails does not overwrite the compressor
     config.assets.css_compressor = nil
+
+    # Set the application time zone to UK. Times are still stored as UTC in the database
+    config.time_zone = "London"
   end
 end
