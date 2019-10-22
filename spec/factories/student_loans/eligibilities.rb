@@ -3,7 +3,7 @@
 FactoryBot.define do
   factory :student_loans_eligibility, class: "StudentLoans::Eligibility" do
     trait :eligible do
-      qts_award_year { "2013_2014" }
+      qts_award_year { "on_or_after_september_2013" }
       claim_school { School.find(ActiveRecord::FixtureSet.identify(:penistone_grammar_school, :uuid)) }
       employment_status { :claim_school }
       current_school { claim_school }

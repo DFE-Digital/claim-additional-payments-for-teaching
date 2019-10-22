@@ -13,14 +13,8 @@ module StudentLoans
     self.table_name = "student_loans_eligibilities"
 
     enum qts_award_year: {
-      "before_2013": 0,
-      "2013_2014": 1,
-      "2014_2015": 2,
-      "2015_2016": 3,
-      "2016_2017": 4,
-      "2017_2018": 5,
-      "2018_2019": 6,
-      "2019_2020": 7,
+      "before_september_2013": 0,
+      "on_or_after_september_2013": 1,
     }, _prefix: :awarded_qualified_status
 
     enum employment_status: {
@@ -80,7 +74,7 @@ module StudentLoans
     private
 
     def ineligible_qts_award_year?
-      awarded_qualified_status_before_2013?
+      awarded_qualified_status_before_september_2013?
     end
 
     def ineligible_claim_school?

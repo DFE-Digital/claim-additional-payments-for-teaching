@@ -3,7 +3,7 @@ module RequestHelpers
     post claims_path, params: {
       claim: {
         eligibility_attributes: {
-          qts_award_year: "2016_2017",
+          qts_award_year: "on_or_after_september_2013",
         },
       },
     }

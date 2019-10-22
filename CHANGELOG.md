@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+- No longer ask for specific year for QTS award year
+
 ## [Release 021] - 2019-10-22
 
 - Service operators can add notes when they approve or reject a claim

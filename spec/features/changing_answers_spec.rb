@@ -26,12 +26,12 @@ RSpec.feature "Changing the answers on a submittable claim" do
   scenario "Teacher changes their year" do
     find("a[href='#{claim_path("qts-year")}']").click
 
-    expect(find("#claim_eligibility_attributes_qts_award_year_2014_2015").checked?).to eq(true)
+    expect(find("#claim_eligibility_attributes_qts_award_year_on_or_after_september_2013").checked?).to eq(true)
 
-    choose I18n.t("student_loans.questions.qts_award_years.2013_2014")
+    choose I18n.t("student_loans.questions.qts_award_years.on_or_after_september_2013")
     click_on "Continue"
 
-    expect(eligibility.reload.qts_award_year).to eq("2013_2014")
+    expect(eligibility.reload.qts_award_year).to eq("on_or_after_september_2013")
 
     expect(current_path).to eq(claim_path("check-your-answers"))
   end

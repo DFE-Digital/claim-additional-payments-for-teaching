@@ -8,7 +8,7 @@ describe Admin::ClaimsHelper do
     let(:eligibility) do
       build(
         :student_loans_eligibility,
-        qts_award_year: "2013_2014",
+        qts_award_year: "on_or_after_september_2013",
         claim_school: claim_school,
         current_school: current_school,
         chemistry_taught: true,
@@ -21,7 +21,7 @@ describe Admin::ClaimsHelper do
 
     it "returns an array of questions and answers for displaying to approver" do
       expected_answers = [
-        [I18n.t("student_loans.admin.qts_award_year"), "1 September 2013 to 31 August 2014"],
+        [I18n.t("student_loans.admin.qts_award_year"), "On or after 1 September 2013"],
         [I18n.t("student_loans.admin.claim_school"), helper.display_school(claim_school)],
         [I18n.t("admin.current_school"), helper.display_school(current_school)],
         [I18n.t("student_loans.admin.subjects_taught"), "Chemistry and Physics"],
