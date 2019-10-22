@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+- Inform the user that their claim is ineligible, if the school that they are
+  currently employed at is not eligible
 - Claimants recieve payment notifications once a payroll run has been processed
 
 ## [Release 022] - 2019-10-24

@@ -67,6 +67,7 @@ module StudentLoans
         ineligible_claim_school? ||
         employed_at_no_school? ||
         current_school_closed? ||
+        ineligible_current_school? ||
         not_taught_eligible_subjects? ||
         not_taught_enough?
     end
@@ -77,6 +78,7 @@ module StudentLoans
         :ineligible_claim_school,
         :employed_at_no_school,
         :current_school_closed,
+        :ineligible_current_school,
         :not_taught_eligible_subjects,
         :not_taught_enough,
       ].find { |eligibility_check| send("#{eligibility_check}?") }
@@ -117,6 +119,10 @@ module StudentLoans
 
     def current_school_closed?
       current_school.present? && !current_school.open?
+    end
+
+    def ineligible_current_school?
+      current_school.present? && !current_school.eligible_for_student_loans_as_current_school?
     end
 
     def inferred_current_school

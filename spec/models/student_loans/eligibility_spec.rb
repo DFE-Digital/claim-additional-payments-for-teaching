@@ -102,6 +102,11 @@ RSpec.describe StudentLoans::Eligibility, type: :model do
       expect(StudentLoans::Eligibility.new(claim_school: schools(:penistone_grammar_school)).ineligible?).to eql false
     end
 
+    it "returns true when the current_school is not eligible" do
+      expect(StudentLoans::Eligibility.new(current_school: schools(:bradford_grammar_school)).ineligible?).to eql true
+      expect(StudentLoans::Eligibility.new(current_school: schools(:penistone_grammar_school)).ineligible?).to eql false
+    end
+
     it "returns true when no longer teaching" do
       expect(StudentLoans::Eligibility.new(employment_status: :no_school).ineligible?).to eql true
       expect(StudentLoans::Eligibility.new(employment_status: :claim_school).ineligible?).to eql false
