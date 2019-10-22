@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+## [Release 021] - 2019-10-22
+
 - Service operators can add notes when they approve or reject a claim
 
 ## [Release 020] - 2019-10-21
@@ -153,7 +155,9 @@ The format is based on [Keep a Changelog]
 - First release for student loan repayments private beta
 
 [unreleased]:
-  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-020...HEAD
+  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-021...HEAD
+[release 021]:
+  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-020...release-021
 [release 020]:
   https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-019...release-020
 [release 019]:
