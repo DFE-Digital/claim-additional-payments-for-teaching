@@ -73,13 +73,4 @@ module ClaimsHelper
       two_words_connector: connector
     )
   end
-
-  def academic_years(year_range)
-    return unless year_range.present?
-
-    start_year, end_year = year_range.split("_")
-    start_date = Date.new(start_year.to_i, 9, 1)
-    end_date = Date.new(end_year.to_i, 8, 31)
-    "#{l(start_date)} to #{l(end_date)}"
-  end
 end

@@ -238,14 +238,4 @@ describe ClaimsHelper do
       end
     end
   end
-
-  describe "#academic_years" do
-    it "returns a string showing the date range for the academic year based on the qts_award_year input" do
-      expect(helper.academic_years("2012_2013")).to eq "1 September 2012 to 31 August 2013"
-    end
-
-    it "doesn't fall over if the qts_award_year has not been set yet" do
-      expect(helper.academic_years(nil)).to be_nil
-    end
-  end
 end
