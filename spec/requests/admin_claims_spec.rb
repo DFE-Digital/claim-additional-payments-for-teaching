@@ -26,4 +26,22 @@ RSpec.describe "Admin claims", type: :request do
       expect(response.body).to include(claim.reference)
     end
   end
+
+  describe "claims#search" do
+    let(:claim) { create(:claim, :submitted) }
+
+    it "redirects to a claim when one exists" do
+      get search_admin_claims_path(reference: claim.reference)
+
+      expect(response).to redirect_to(admin_claim_path(claim))
+    end
+
+    it "shows an error if a claim can't be found" do
+      reference = "12345678"
+      get search_admin_claims_path(reference: reference)
+
+      expected_flash = CGI.escapeHTML("Cannot find a claim with reference \"#{reference}\"")
+      expect(response.body).to include(expected_flash)
+    end
+  end
 end

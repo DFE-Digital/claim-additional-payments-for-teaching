@@ -9,4 +9,16 @@ class Admin::ClaimsController < Admin::BaseAdminController
     @claim = Claim.find(params[:id])
     @check = @claim.check || Check.new
   end
+
+  def search
+    return unless params[:reference].present?
+
+    claim = Claim.find_by(reference: params[:reference])
+
+    if claim
+      redirect_to(admin_claim_url(claim))
+    else
+      flash.now[:notice] = "Cannot find a claim with reference \"#{params[:reference]}\""
+    end
+  end
 end

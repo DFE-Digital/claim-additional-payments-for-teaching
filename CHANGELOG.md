@@ -6,6 +6,7 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+- Allow service operators to search for a claim
 - No longer ask for specific year for QTS award year
 
 ## [Release 021] - 2019-10-22
