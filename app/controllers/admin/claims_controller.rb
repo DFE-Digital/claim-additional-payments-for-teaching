@@ -7,5 +7,6 @@ class Admin::ClaimsController < Admin::BaseAdminController
 
   def show
     @claim = Claim.find(params[:id])
+    @check = @claim.check || Check.new
   end
 end

@@ -10,7 +10,7 @@ RSpec.describe "Admin claim checks", type: :request do
       let(:claim) { create(:claim, :submitted) }
 
       it "can approve a claim" do
-        post admin_claim_checks_path(claim_id: claim.id, result: "approved")
+        post admin_claim_checks_path(claim_id: claim.id, check: {result: "approved"})
 
         follow_redirect!
 
@@ -21,7 +21,7 @@ RSpec.describe "Admin claim checks", type: :request do
       end
 
       it "can reject a claim" do
-        post admin_claim_checks_path(claim_id: claim.id, result: "rejected")
+        post admin_claim_checks_path(claim_id: claim.id, check: {result: "rejected"})
 
         follow_redirect!
 
@@ -31,11 +31,20 @@ RSpec.describe "Admin claim checks", type: :request do
         expect(claim.check.result).to eq("rejected")
       end
 
+      context "when no result is selected" do
+        it "shows an error and doesn't save the check" do
+          post admin_claim_checks_path(claim_id: claim.id, check: {notes: "Something"})
+
+          expect(response.body).to include("Make a decision to approve or reject the claim")
+          expect(claim.reload.check).to be_nil
+        end
+      end
+
       context "when claim is already checked" do
         let(:claim) { create(:claim, :approved) }
 
         it "shows an error" do
-          post admin_claim_checks_path(claim_id: claim.id, result: "approved")
+          post admin_claim_checks_path(claim_id: claim.id, check: {result: "approved"})
 
           follow_redirect!
 
@@ -46,7 +55,7 @@ RSpec.describe "Admin claim checks", type: :request do
       context "when the claim is missing a payroll gender" do
         let(:claim) { create(:claim, :submitted, payroll_gender: :dont_know) }
         before do
-          post admin_claim_checks_path(claim_id: claim.id, result: result)
+          post admin_claim_checks_path(claim_id: claim.id, check: {result: result})
           follow_redirect!
         end
 

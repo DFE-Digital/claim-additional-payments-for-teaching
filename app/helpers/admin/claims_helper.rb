@@ -39,6 +39,14 @@ module Admin
       ]
     end
 
+    def admin_check_details(check)
+      [].tap do |a|
+        a << [t("admin.check.checked_at"), l(check.created_at)]
+        a << [t("admin.check.result"), check.result.capitalize]
+        a << [t("admin.check.notes"), simple_format(check.notes, class: "govuk-body")] if check.notes.present?
+      end
+    end
+
     def link_to_school(school)
       url = "https://get-information-schools.service.gov.uk/Establishments/Establishment/Details/#{school.urn}"
       link_to(school.name, url, class: "govuk-link")

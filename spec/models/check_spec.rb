@@ -9,4 +9,9 @@ RSpec.describe Check, type: :model do
 
     expect(check.reload.checked_by).to eq("123")
   end
+
+  it "validates the check has a result" do
+    expect(build(:check, result: "approved")).to be_valid
+    expect(build(:check, result: nil)).not_to be_valid
+  end
 end
