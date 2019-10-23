@@ -1,0 +1,20 @@
+<%= link_to "Back", admin_root_path, class: "govuk-back-link" %>
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-full">
+    <h1 class="govuk-heading-xl">
+      Search for a claim
+    </h1>
+
+    <%= form_with url: search_admin_claims_path, method: :get, local: true do |form| %>
+      <div class="govuk-form-group">
+        <%= form.label :reference, "Enter a reference", class: "govuk-label" %>
+        <%= form.text_field :reference, class: "govuk-input" %>
+      </div>
+
+      <div class="govuk-form-group">
+        <%= form.submit "Search", class: "govuk-button" %>
+      </div>
+    <% end %>
+
+  </div>
+</div>
