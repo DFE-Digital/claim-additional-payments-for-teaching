@@ -475,17 +475,8 @@ RSpec.describe Claim, type: :model do
     let!(:first_unpayrolled_claim) { create(:claim, :approved) }
     let!(:second_unpayrolled_claim) { create(:claim, :approved) }
 
-    it "includes claims that do not belong to a payroll run" do
-      expect(described_class.payrollable).to include(first_unpayrolled_claim)
-      expect(described_class.payrollable).to include(second_unpayrolled_claim)
-    end
-
-    it "does not include claims that belong to a payroll run" do
-      expect(described_class.payrollable).not_to include(payroll_run.claims.first)
-    end
-
-    it "only includes approved claims" do
-      expect(described_class.payrollable).not_to include(submitted_claim)
+    it "returns approved claims that are not associated with a payroll run" do
+      expect(described_class.payrollable).to match_array([first_unpayrolled_claim, second_unpayrolled_claim])
     end
   end
 end
