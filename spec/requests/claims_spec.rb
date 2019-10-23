@@ -141,9 +141,9 @@ RSpec.describe "Claims", type: :request do
       before { start_claim }
 
       it "updates the claim with the submitted form data" do
-        put claim_path("qts-year"), params: {claim: {eligibility_attributes: {qts_award_year: "2014_2015"}}}
+        put claim_path("qts-year"), params: {claim: {eligibility_attributes: {qts_award_year: "on_or_after_september_2013"}}}
 
-        expect(in_progress_claim.eligibility.qts_award_year).to eq "2014_2015"
+        expect(in_progress_claim.eligibility.qts_award_year).to eq "on_or_after_september_2013"
       end
 
       it "makes sure validations appropriate to the context are run" do
@@ -243,7 +243,7 @@ RSpec.describe "Claims", type: :request do
 
     context "when a claim hasn’t been started yet" do
       it "redirects to the start page" do
-        put claim_path("qts-year"), params: {claim: {eligibility_attributes: {qts_award_year: "2014_2015"}}}
+        put claim_path("qts-year"), params: {claim: {eligibility_attributes: {qts_award_year: "on_or_after_september_2013"}}}
         expect(response).to redirect_to(root_path)
       end
     end
