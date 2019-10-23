@@ -38,32 +38,19 @@ $thick-border: 5px;
     }
 
     & > li {
-      box-sizing: border-box;
-      padding: $navigation-padding 0;
       float: left;
-      -moz-box-sizing: border-box;
-      -webkit-box-sizing: border-box;
-      border-bottom: 4px solid transparent;
 
       &:last-of-type {
         float: right;
       }
 
-      &:hover {
-        border-bottom: 4px solid $govuk-link-hover-colour;
-      }
-
-      &.active {
-        border-bottom: 4px solid govuk-colour("blue") !important;
-
-        a:hover {
-          color: $govuk-link-colour;
-        }
-      }
-
       a {
         display: block;
-        padding: 0 1em;
+        padding: $navigation-padding 1em;
+        box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        -webkit-box-sizing: border-box;
+        border-bottom: 4px solid transparent;
         color: $govuk-link-colour;
         text-decoration: none;
         @include govuk-media-query($until: tablet) {
@@ -77,11 +64,19 @@ $thick-border: 5px;
         &:hover {
           color: $govuk-link-hover-colour;
           text-decoration: underline;
+          border-bottom: 4px solid $govuk-link-hover-colour;
         }
         &:focus {
           color: $govuk-link-hover-colour;
           -webkit-box-shadow: 0 -2px #fd0, 0 4px #0b0c0c;
           box-shadow: 0 -2px #fd0, 0 4px #0b0c0c;
+        }
+        &.active {
+          border-bottom: 4px solid govuk-colour("blue") !important;
+
+          a:hover {
+            color: $govuk-link-colour;
+          }
         }
       }
     }
