@@ -12,24 +12,19 @@ RSpec.describe PayrollRun, type: :model do
     end
   end
 
-  describe ".payrollable_claims" do
-    let(:payroll_run) { create(:payroll_run) }
-    let!(:payrolled_claim) { create(:claim, payroll_run: payroll_run) }
-    let!(:submitted_claim) { create(:claim, :submitted) }
-    let!(:first_unpayrolled_claim) { create(:claim, :approved) }
-    let!(:second_unpayrolled_claim) { create(:claim, :approved) }
+  describe ".create_with_claims!" do
+    let(:claims) { create_list(:claim, 2, :approved) }
 
-    it "includes claims that do not belong to a payroll run" do
-      expect(PayrollRun.payrollable_claims).to include(first_unpayrolled_claim)
-      expect(PayrollRun.payrollable_claims).to include(second_unpayrolled_claim)
-    end
+    it "creates a payroll run with payments and populates the award_amount" do
+      claims[0].eligibility.update(student_loan_repayment_amount: 300)
+      claims[1].eligibility.update(student_loan_repayment_amount: 600)
 
-    it "does not include claims that belong to a payroll run" do
-      expect(PayrollRun.payrollable_claims).not_to include(payrolled_claim)
-    end
+      payroll_run = PayrollRun.create_with_claims!(claims, created_by: "creator-id")
 
-    it "only includes approved claims" do
-      expect(PayrollRun.payrollable_claims).not_to include(submitted_claim)
+      expect(payroll_run.reload.created_by).to eq("creator-id")
+      expect(payroll_run.claims).to match_array(claims)
+      expect(claims[0].payment.award_amount).to eq(300)
+      expect(claims[1].payment.award_amount).to eq(600)
     end
   end
 end

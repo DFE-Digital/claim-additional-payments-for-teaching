@@ -1,0 +1,24 @@
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <h1 class="govuk-heading-xl">
+      Upload Payment Confirmation Report
+    </h1>
+
+    <p class="govuk-body">You are uploading a Payment Confirmation Report for the payroll run dated <%= l(@payroll_run.created_at.to_date) %>.</p>
+
+    <%= form_with url: admin_payroll_run_payment_confirmation_report_uploads_path(@payroll_run), multipart: true, local: true do |f| %>
+      <div class="govuk-form-group<%= " govuk-form-group--error" if @payment_confirmation&.errors&.any? %>">
+        <%= f.label 'file', "Upload a Payment Confirmation Report CSV file", class: "govuk-label" %>
+
+        <% @payment_confirmation&.errors&.each do |error| %>
+          <span class="govuk-error-message">
+            <span class="govuk-visually-hidden">Error:</span> <%= error %>
+          </span>
+        <% end %>
+
+        <%= f.file_field 'file', class: "govuk-file-upload#{" govuk-file-upload--error" if @payment_confirmation&.errors&.any?}" %>
+      </div>
+      <%= f.submit "Upload file", class: "govuk-button", data: {module: "govuk-button"} %>
+    <% end %>
+  </div>
+</div>

@@ -13,6 +13,8 @@ The format is based on [Keep a Changelog]
 ## [Release 021] - 2019-10-22
 
 - Service operators can add notes when they approve or reject a claim
+- The Payment Confirmation Report for a payroll run can be uploaded and
+  processed
 
 ## [Release 020] - 2019-10-21
 

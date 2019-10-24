@@ -468,4 +468,15 @@ RSpec.describe Claim, type: :model do
       expect(Claim::FILTER_PARAMS.keys).to match_array(Claim.new.attribute_names.map(&:to_sym))
     end
   end
+
+  describe "payrollable" do
+    let(:payroll_run) { create(:payroll_run, claims_count: 1) }
+    let!(:submitted_claim) { create(:claim, :submitted) }
+    let!(:first_unpayrolled_claim) { create(:claim, :approved) }
+    let!(:second_unpayrolled_claim) { create(:claim, :approved) }
+
+    it "returns approved claims that are not associated with a payroll run" do
+      expect(described_class.payrollable).to match_array([first_unpayrolled_claim, second_unpayrolled_claim])
+    end
+  end
 end

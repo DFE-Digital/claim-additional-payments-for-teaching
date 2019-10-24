@@ -52,7 +52,7 @@ class Claim < ApplicationRecord
   belongs_to :eligibility, polymorphic: true
   accepts_nested_attributes_for :eligibility, update_only: true
 
-  belongs_to :payroll_run, optional: true
+  has_one :payment
 
   enum payroll_gender: {
     dont_know: 0,
@@ -119,6 +119,7 @@ class Claim < ApplicationRecord
   scope :approved, -> { joins(:check).where("checks.result" => :approved) }
   scope :approaching_check_deadline, -> { awaiting_checking.where("submitted_at < ? AND submitted_at > ?", CHECK_DEADLINE.ago + CHECK_DEADLINE_WARNING_POINT, CHECK_DEADLINE.ago) }
   scope :passed_check_deadline, -> { awaiting_checking.where("submitted_at < ?", CHECK_DEADLINE.ago) }
+  scope :payrollable, -> { approved.left_joins(:payment).where(payments: {id: nil}) }
 
   delegate :award_amount, to: :eligibility
 

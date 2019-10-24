@@ -95,10 +95,28 @@ ActiveRecord::Schema.define(version: 2019_10_17_125346) do
     t.index ["code"], name: "index_local_authority_districts_on_code", unique: true
   end
 
+  create_table "payments", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "claim_id"
+    t.uuid "payroll_run_id"
+    t.decimal "award_amount", precision: 7, scale: 2
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "payroll_reference"
+    t.decimal "gross_value", precision: 7, scale: 2
+    t.decimal "national_insurance", precision: 7, scale: 2
+    t.decimal "employers_national_insurance", precision: 7, scale: 2
+    t.decimal "student_loan_repayment", precision: 7, scale: 2
+    t.decimal "tax", precision: 7, scale: 2
+    t.decimal "net_pay", precision: 7, scale: 2
+    t.index ["claim_id"], name: "index_payments_on_claim_id", unique: true
+    t.index ["payroll_run_id"], name: "index_payments_on_payroll_run_id"
+  end
+
   create_table "payroll_runs", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "created_by"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "confirmation_report_uploaded_by"
   end
 
   create_table "schools", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -144,6 +162,8 @@ ActiveRecord::Schema.define(version: 2019_10_17_125346) do
   end
 
   add_foreign_key "claims", "payroll_runs"
+  add_foreign_key "payments", "claims"
+  add_foreign_key "payments", "payroll_runs"
   add_foreign_key "schools", "local_authority_districts"
   add_foreign_key "student_loans_eligibilities", "schools", column: "claim_school_id"
   add_foreign_key "student_loans_eligibilities", "schools", column: "current_school_id"

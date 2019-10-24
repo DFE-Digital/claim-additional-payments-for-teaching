@@ -76,6 +76,8 @@ Rails.application.routes.draw do
       get "search", on: :collection
     end
 
-    resources :payroll_runs, only: [:index, :new, :create, :show]
+    resources :payroll_runs, only: [:index, :new, :create, :show] do
+      resources :payment_confirmation_report_uploads, only: [:new, :create]
+    end
   end
 end
