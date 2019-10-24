@@ -34,7 +34,7 @@ module StudentLoans
       @school = school
     end
 
-    def check
+    def eligible_claim_school?
       !closed_before_policy_start? &&
         eligible_local_authority? &&
         @school.state_funded? &&
