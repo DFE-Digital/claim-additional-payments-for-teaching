@@ -11,7 +11,7 @@ RSpec.describe "Claims", type: :request do
       start_claim
 
       get new_claim_path
-      expect(response).to redirect_to(claim_path(PageSequence::SLUGS.first))
+      expect(response).to redirect_to(claim_path(StudentLoans::SlugSequence::SLUGS.first))
     end
   end
 

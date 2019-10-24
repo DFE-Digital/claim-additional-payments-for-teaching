@@ -8,33 +8,6 @@
 # `claim_school` will skip the `current-school` page as `current_school` is
 # inferred to be the same as `claim_school.
 class PageSequence
-  SLUGS = [
-    "qts-year",
-    "claim-school",
-    "still-teaching",
-    "current-school",
-    "subjects-taught",
-    "leadership-position",
-    "mostly-performed-leadership-duties",
-    "eligibility-confirmed",
-    "information-provided",
-    "verified",
-    "address",
-    "gender",
-    "teacher-reference-number",
-    "national-insurance-number",
-    "student-loan",
-    "student-loan-country",
-    "student-loan-how-many-courses",
-    "student-loan-start-date",
-    "student-loan-amount",
-    "email-address",
-    "bank-details",
-    "check-your-answers",
-    "confirmation",
-    "ineligible",
-  ].freeze
-
   attr_reader :claim, :current_slug
 
   def initialize(claim, current_slug)
@@ -43,15 +16,7 @@ class PageSequence
   end
 
   def slugs
-    SLUGS.dup.tap do |sequence|
-      sequence.delete("current-school") if claim.eligibility.employed_at_claim_school?
-      sequence.delete("mostly-performed-leadership-duties") unless claim.eligibility.had_leadership_position?
-      sequence.delete("student-loan-country") if claim.no_student_loan?
-      sequence.delete("student-loan-how-many-courses") if claim.no_student_loan? || claim.student_loan_country_with_one_plan?
-      sequence.delete("student-loan-start-date") if claim.no_student_loan? || claim.student_loan_country_with_one_plan?
-      sequence.delete("address") if claim.address_verified?
-      sequence.delete("gender") if claim.payroll_gender_verified?
-    end
+    StudentLoans::SlugSequence.new(claim).slugs
   end
 
   def next_slug
