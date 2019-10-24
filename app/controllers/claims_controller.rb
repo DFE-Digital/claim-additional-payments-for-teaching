@@ -85,6 +85,10 @@ class ClaimsController < ApplicationController
   end
 
   def page_sequence
-    @page_sequence ||= PageSequence.new(current_claim, params[:slug])
+    @page_sequence ||= PageSequence.new(current_claim, claim_slug_sequence, params[:slug])
+  end
+
+  def claim_slug_sequence
+    current_claim.eligibility.class.parent::SlugSequence.new(current_claim)
   end
 end

@@ -4,22 +4,23 @@ require "rails_helper"
 
 RSpec.describe PageSequence do
   let(:claim) { build(:claim) }
+  let(:slug_sequence) { OpenStruct.new(slugs: ["first-slug", "second-slug", "third-slug"]) }
 
   describe "#next_slug" do
     it "assumes we're at the beginning of the sequence if no current_slug is specified" do
-      expect(PageSequence.new(claim, nil).next_slug).to eq "claim-school"
+      expect(PageSequence.new(claim, slug_sequence, nil).next_slug).to eq "second-slug"
     end
 
     it "returns the next slug in the sequence" do
-      expect(PageSequence.new(claim, "qts-year").next_slug).to eq "claim-school"
-      expect(PageSequence.new(claim, "claim-school").next_slug).to eq "still-teaching"
+      expect(PageSequence.new(claim, slug_sequence, "first-slug").next_slug).to eq "second-slug"
+      expect(PageSequence.new(claim, slug_sequence, "second-slug").next_slug).to eq "third-slug"
     end
 
     context "with an ineligible claim" do
       let(:claim) { build(:claim, eligibility: build(:student_loans_eligibility, employment_status: :no_school)) }
 
       it "returns “ineligible” as the next slug" do
-        expect(PageSequence.new(claim, "still-teaching").next_slug).to eq "ineligible"
+        expect(PageSequence.new(claim, slug_sequence, ["second-slug"]).next_slug).to eq "ineligible"
       end
     end
 
@@ -27,28 +28,22 @@ RSpec.describe PageSequence do
       let(:claim) { build(:claim, :submittable) }
 
       it "returns “check-your-answers” as the next slug" do
-        expect(PageSequence.new(claim, "qts-year").next_slug).to eq "check-your-answers"
+        expect(PageSequence.new(claim, slug_sequence, ["third-slug"]).next_slug).to eq "check-your-answers"
       end
     end
   end
 
   describe "in_sequence?" do
-    let(:page_sequence) { PageSequence.new(claim, "gender") }
+    let(:page_sequence) { PageSequence.new(claim, slug_sequence, ["third-slug"]) }
 
-    context "when the page is not in the sequence" do
-      before do
-        claim.verified_fields = ["payroll_gender"]
-      end
-
-      it { expect(page_sequence.in_sequence?("gender")).to eq(false) }
+    it "returns true when the slug is part of the sequence" do
+      expect(page_sequence.in_sequence?("first-slug")).to eq(true)
+      expect(page_sequence.in_sequence?("second-slug")).to eq(true)
     end
 
-    context "when the page is in the sequence" do
-      before do
-        claim.verified_fields = []
-      end
-
-      it { expect(page_sequence.in_sequence?("gender")).to eq(true) }
+    it "returns false when the slug is not part of the sequence" do
+      expect(page_sequence.in_sequence?("random-slug")).to eq(false)
+      expect(page_sequence.in_sequence?("another-rando-slug")).to eq(false)
     end
   end
 end

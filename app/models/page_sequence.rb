@@ -1,22 +1,17 @@
 # frozen_string_literal: true
 
-# Represents the pages in the claim process.
-#
-# Depending on the state of `claim`,  the sequence of slugs will change,
-# filtering out pages that are not relevant. For example, the sequence for a
-# claim that states it is still employed at the same school as the
-# `claim_school` will skip the `current-school` page as `current_school` is
-# inferred to be the same as `claim_school.
+# Used to model the sequence of pages that make up the claim process.
 class PageSequence
   attr_reader :claim, :current_slug
 
-  def initialize(claim, current_slug)
+  def initialize(claim, slug_sequence, current_slug)
     @claim = claim
     @current_slug = current_slug
+    @slug_sequence = slug_sequence
   end
 
   def slugs
-    StudentLoans::SlugSequence.new(claim).slugs
+    @slug_sequence.slugs
   end
 
   def next_slug
