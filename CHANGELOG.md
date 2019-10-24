@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+## [Release 022] - 2019-10-24
+
+- The Payment Confirmation Report for a payroll run can be uploaded and
+  processed
 - Update student loan question to latest version
 - Allow service operators to search for a claim
 - No longer ask for specific year for QTS award year
@@ -13,8 +17,6 @@ The format is based on [Keep a Changelog]
 ## [Release 021] - 2019-10-22
 
 - Service operators can add notes when they approve or reject a claim
-- The Payment Confirmation Report for a payroll run can be uploaded and
-  processed
 
 ## [Release 020] - 2019-10-21
 
@@ -161,7 +163,9 @@ The format is based on [Keep a Changelog]
 - First release for student loan repayments private beta
 
 [unreleased]:
-  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-021...HEAD
+  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-022...HEAD
+[release 022]:
+  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-021...release-022
 [release 021]:
   https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-020...release-021
 [release 020]:
