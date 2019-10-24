@@ -5,6 +5,25 @@ class Claim < ApplicationRecord
   NO_STUDENT_LOAN = "not_applicable"
   STUDENT_LOAN_PLAN_OPTIONS = StudentLoans::PLANS.dup << NO_STUDENT_LOAN
   ADDRESS_ATTRIBUTES = %w[address_line_1 address_line_2 address_line_3 address_line_4 postcode].freeze
+  EDITABLE_ATTRIBUTES = [
+    :address_line_1,
+    :address_line_2,
+    :address_line_3,
+    :address_line_4,
+    :postcode,
+    :payroll_gender,
+    :teacher_reference_number,
+    :national_insurance_number,
+    :has_student_loan,
+    :student_loan_country,
+    :student_loan_courses,
+    :student_loan_start_date,
+    :email_address,
+    :bank_sort_code,
+    :bank_account_number,
+    :banking_name,
+    :building_society_roll_number,
+  ].freeze
   FILTER_PARAMS = {
     address_line_1: true,
     address_line_2: true,

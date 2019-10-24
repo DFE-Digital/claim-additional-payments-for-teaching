@@ -69,7 +69,7 @@ class ClaimsController < ApplicationController
   end
 
   def claim_params
-    params.fetch(:claim, {}).permit(StudentLoans::PermittedParameters.new(current_claim).keys)
+    params.fetch(:claim, {}).permit(Claim::PermittedParameters.new(current_claim).keys)
   end
 
   def current_template
