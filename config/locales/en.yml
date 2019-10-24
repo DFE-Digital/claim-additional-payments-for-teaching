@@ -118,8 +118,7 @@ en:
         languages_taught: "Languages"
         none_taught: "No, I didn't teach any of these subjects"
       student_loan_amount:
-        "Exactly how much student loan did you repay while you worked at %{claim_school_name} between 6 April 2018 and 5
-        April 2019?"
+        "Exactly how much student loan did you repay while employed as a teacher between 6 April 2018 and 5 April 2019?"
     admin:
       qts_award_year: "Award year"
       claim_school: "Claim school"
