@@ -9,6 +9,17 @@ module StudentLoans
       :computer_science_taught,
       :languages_taught,
     ].freeze
+    EDITABLE_ATTRIBUTES = [
+      :qts_award_year,
+      :claim_school_id,
+      :employment_status,
+      :current_school_id,
+      :had_leadership_position,
+      :taught_eligible_subjects,
+      :mostly_performed_leadership_duties,
+      :student_loan_repayment_amount,
+      SUBJECT_ATTRIBUTES,
+    ].flatten.freeze
 
     self.table_name = "student_loans_eligibilities"
 
