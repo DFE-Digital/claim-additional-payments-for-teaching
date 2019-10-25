@@ -40,7 +40,8 @@ class ClaimUpdate
     else
       claim.attributes = params
 
-      reset_dependent_answers
+      reset_dependent_claim_answers
+      reset_dependent_eligibility_answers
 
       infer_current_school
 
@@ -60,12 +61,15 @@ class ClaimUpdate
     ClaimMailer.submitted(claim).deliver_later
   end
 
-  def reset_dependent_answers
+  def reset_dependent_claim_answers
     DEPENDENT_CLAIM_ANSWERS.each do |attribute_name, dependent_attribute_name|
       if claim.changed.include?(attribute_name)
         claim.attributes = {dependent_attribute_name => nil}
       end
     end
+  end
+
+  def reset_dependent_eligibility_answers
     DEPENDENT_ELIGIBILITY_ANSWERS.each do |attribute_name, dependent_attribute_name|
       if claim.eligibility.changed.include?(attribute_name)
         claim.eligibility.attributes = {dependent_attribute_name => nil}
