@@ -39,13 +39,8 @@ class ClaimUpdate
       claim.submit! && send_confirmation_email
     else
       claim.attributes = params
-
       reset_dependent_claim_answers
       reset_dependent_eligibility_answers
-
-      infer_current_school
-
-      determine_student_loan_plan
 
       claim.save(context: context)
     end
@@ -67,6 +62,16 @@ class ClaimUpdate
         claim.attributes = {dependent_attribute_name => nil}
       end
     end
+
+    redetermine_student_loan_plan
+  end
+
+  def redetermine_student_loan_plan
+    claim.student_loan_plan = if claim.has_student_loan?
+      StudentLoans.determine_plan(claim.student_loan_country, claim.student_loan_start_date)
+    else
+      Claim::NO_STUDENT_LOAN
+    end
   end
 
   def reset_dependent_eligibility_answers
@@ -75,19 +80,13 @@ class ClaimUpdate
         claim.eligibility.attributes = {dependent_attribute_name => nil}
       end
     end
+
+    redetermine_current_school
   end
 
-  def infer_current_school
+  def redetermine_current_school
     if claim.eligibility.employment_status_changed?
       claim.eligibility.current_school = claim.eligibility.employed_at_claim_school? ? claim.eligibility.claim_school : nil
-    end
-  end
-
-  def determine_student_loan_plan
-    claim.student_loan_plan = if claim.has_student_loan?
-      StudentLoans.determine_plan(claim.student_loan_country, claim.student_loan_start_date)
-    else
-      Claim::NO_STUDENT_LOAN
     end
   end
 end
