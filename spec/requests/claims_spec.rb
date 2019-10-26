@@ -184,61 +184,6 @@ RSpec.describe "Claims", type: :request do
           )
         end
       end
-
-      context "when updating from check-your-answers" do
-        context "with a submittable claim" do
-          before :each do
-            # Make the claim submittable
-            in_progress_claim.update!(attributes_for(:claim, :submittable))
-            in_progress_claim.eligibility.update!(attributes_for(:student_loans_eligibility, :eligible))
-
-            perform_enqueued_jobs do
-              put claim_path("check-your-answers")
-            end
-
-            in_progress_claim.reload
-          end
-
-          it "submits the claim" do
-            expect(in_progress_claim.submitted_at).to be_present
-          end
-
-          it "sends an email" do
-            email = ActionMailer::Base.deliveries.first
-            expect(email.to).to eql([in_progress_claim.email_address])
-            expect(email.subject).to eql("Your claim was received")
-            expect(email.body).to include("Your unique reference is #{in_progress_claim.reference}.")
-          end
-
-          it "redirects to the confirmation page" do
-            expect(response).to redirect_to(claim_path("confirmation"))
-          end
-        end
-
-        context "with an unsubmittable claim" do
-          before :each do
-            # Make the claim _almost_ submittable
-            in_progress_claim.update!(attributes_for(:claim, :submittable, email_address: nil))
-
-            put claim_path("check-your-answers")
-
-            in_progress_claim.reload
-          end
-
-          it "doesn't submit the claim" do
-            expect(in_progress_claim.submitted_at).to be_nil
-          end
-
-          it "doesn't send an email" do
-            expect(ActionMailer::Base.deliveries).to be_empty
-          end
-
-          it "re-renders the check-your-answers page with errors" do
-            expect(response.body).to include("Check your answers before sending your application")
-            expect(response.body).to include("Enter an email address")
-          end
-        end
-      end
     end
 
     context "when a claim hasn’t been started yet" do

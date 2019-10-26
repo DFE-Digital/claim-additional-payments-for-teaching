@@ -1,19 +1,17 @@
 # frozen_string_literal: true
 
-# Performs an update on a claim in the context of a user performing an action
-# through the user interface. The `context` tells the object the page on which
-# the user is performing the action, enabling it to carry out actions and
-# validations on the claim that are appropriate to that context. For example,
-# Performing an update in the "check-your-answers" context will attempt to
-# submit the claim and send the confirmation email to the claimant.
+# Encapsulates a change being made by a user to their claim.
 #
-# The `DEPENDENT_CLAIM_ANSWERS` and `DEPENDENT_ELIGIBILITY_ANSWERS` hashes
-# define the attributes that depend on the value of another attribute
-# such that if the value of the other attribute changes the dependent
-# attribute should be reset because the value will no longer hold, or
-# may be an answer to a question that should no longer be asked. For
-# example the `student_loan_course` attribute should only be set if the
-# user `has_student_loan`.
+# Based on the changes being made, the answers to some related questions will be
+# reset. For example, if the user changes their answer to the question asking if
+# they have a student loan, then the answers to subsequent questions that depend
+# on that question will be reset, i.e. the student loan country, number of
+# courses and start date.
+#
+# Performs the update in the context the action is being performed in, thus
+# context-specific validations will fire.
+#
+# Returns true if the update is successful, false otherwise.
 class ClaimUpdate
   DEPENDENT_CLAIM_ANSWERS = {
     "has_student_loan" => "student_loan_country",
@@ -35,26 +33,13 @@ class ClaimUpdate
   end
 
   def perform
-    if submitting_claim?
-      claim.submit! && send_confirmation_email
-    else
-      claim.attributes = params
-      reset_dependent_claim_answers
-      reset_dependent_eligibility_answers
-
-      claim.save(context: context)
-    end
+    claim.attributes = params
+    reset_dependent_claim_answers
+    reset_dependent_eligibility_answers
+    claim.save(context: context)
   end
 
   private
-
-  def submitting_claim?
-    context == :"check-your-answers"
-  end
-
-  def send_confirmation_email
-    ClaimMailer.submitted(claim).deliver_later
-  end
 
   def reset_dependent_claim_answers
     DEPENDENT_CLAIM_ANSWERS.each do |attribute_name, dependent_attribute_name|

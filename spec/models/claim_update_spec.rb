@@ -61,33 +61,6 @@ RSpec.describe ClaimUpdate do
     end
   end
 
-  context "when updating claim that is submittable in the “check-your-answers” context" do
-    let(:claim) { create(:claim, :submittable) }
-    let(:context) { "check-your-answers" }
-    let(:params) { {} }
-
-    it "transitions the claim to a submitted state and returns a truthy" do
-      expect(claim_update.perform).to be_truthy
-      expect(claim.reload).to be_submitted
-    end
-
-    it "queues a confirmation email to be sent to the claimant" do
-      claim_update.perform
-      expect(ActionMailer::DeliveryJob).to have_been_enqueued.with("ClaimMailer", "submitted", "deliver_now", claim)
-    end
-  end
-
-  context "when updating an unsubmittable claim in the “check-your-answers” context" do
-    let(:claim) { create(:claim, :submittable, first_name: nil) }
-    let(:context) { "check-your-answers" }
-    let(:params) { {} }
-
-    it "returns false and does not queue a confirmation email" do
-      expect(claim_update.perform).to be_falsy
-      expect(ActionMailer::DeliveryJob).not_to have_been_enqueued
-    end
-  end
-
   describe "setting/resetting current_school based on the answer to employment_status" do
     context "when the update sets the employment_status to :claim_school" do
       let(:claim) { create(:claim, eligibility: build(:student_loans_eligibility, claim_school: schools(:penistone_grammar_school))) }
