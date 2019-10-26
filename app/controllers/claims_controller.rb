@@ -4,8 +4,6 @@ class ClaimsController < ApplicationController
   skip_before_action :send_unstarted_claiments_to_the_start, only: [:new, :create, :timeout, :refresh_session]
   before_action :check_page_is_in_sequence, only: [:show, :update]
 
-  after_action :clear_claim_session, if: :submission_complete?
-
   def new
     if current_claim.persisted?
       redirect_to claim_path(page_sequence.slugs.first)
@@ -53,10 +51,6 @@ class ClaimsController < ApplicationController
   helper_method :next_slug
   def next_slug
     page_sequence.next_slug
-  end
-
-  def submission_complete?
-    page_sequence.current_slug == "confirmation" && current_claim.submitted?
   end
 
   def search_schools

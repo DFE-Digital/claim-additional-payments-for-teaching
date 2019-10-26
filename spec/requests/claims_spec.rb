@@ -71,24 +71,6 @@ RSpec.describe "Claims", type: :request do
         expect(response).to redirect_to(root_path)
       end
     end
-
-    context "when the user reaches the confirmation page after submitting their claim" do
-      before do
-        start_claim
-
-        claim = Claim.order(:created_at).last
-        claim.update_attributes(attributes_for(:claim, :submittable))
-        claim.eligibility.update_attributes(attributes_for(:student_loans_eligibility, :eligible))
-
-        claim.submit!
-
-        get claim_path("confirmation")
-      end
-
-      it "clears the claim from the session" do
-        expect(session[:claim_id]).to be_nil
-      end
-    end
   end
 
   describe "the claims ineligible page" do

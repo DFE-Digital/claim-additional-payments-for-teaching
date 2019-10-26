@@ -15,7 +15,7 @@ RSpec.describe "Submissions", type: :request do
       end
 
       it "submits the claim, sends a confirmation email and redirects to the confirmation page" do
-        expect(response).to redirect_to(claim_path("confirmation"))
+        expect(response).to redirect_to(claim_confirmation_path)
 
         expect(in_progress_claim.reload.submitted_at).to be_present
 
@@ -46,6 +46,19 @@ RSpec.describe "Submissions", type: :request do
     it "redirects to the start page if a claim isn't in progress" do
       post claim_submission_path
       expect(response).to redirect_to(root_path)
+    end
+  end
+
+  describe "#show" do
+    before { start_claim }
+
+    context "with a submitted claim" do
+      it "renders the claim confirmation screen and clears the session" do
+        get claim_confirmation_path
+
+        expect(response.body).to include("Claim submitted")
+        expect(session[:claim_id]).to be_nil
+      end
     end
   end
 end
