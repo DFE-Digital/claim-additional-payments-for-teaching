@@ -140,6 +140,67 @@ RSpec.describe StudentLoans::Eligibility, type: :model do
     end
   end
 
+  describe "#reset_dependent_answers" do
+    let(:eligibility) do
+      create(
+        :student_loans_eligibility,
+        :eligible,
+        claim_school: schools(:penistone_grammar_school),
+        current_school: schools(:hampstead_school),
+        employment_status: :different_school,
+        had_leadership_position: true,
+      )
+    end
+
+    it "resets employment_status when the value of claim_school changes" do
+      eligibility.claim_school = schools(:penistone_grammar_school)
+      expect { eligibility.reset_dependent_answers }.not_to change { eligibility.attributes }
+
+      eligibility.claim_school = schools(:hampstead_school)
+      expect { eligibility.reset_dependent_answers }
+        .to change { eligibility.employment_status }
+        .from("different_school").to(nil)
+    end
+
+    it "resets mostly_performed_leadership_duties when the value of had_leadership_position changes" do
+      eligibility.had_leadership_position = true
+      expect { eligibility.reset_dependent_answers }.not_to change { eligibility.attributes }
+
+      eligibility.had_leadership_position = false
+      expect { eligibility.reset_dependent_answers }
+        .to change { eligibility.mostly_performed_leadership_duties }
+        .from(false).to(nil)
+    end
+
+    it "sets current_school to the claim_school when employment_status changes to :claim_school" do
+      eligibility.employment_status = :claim_school
+      expect { eligibility.reset_dependent_answers }
+        .to change { eligibility.current_school }
+        .from(schools(:hampstead_school)).to(schools(:penistone_grammar_school))
+    end
+
+    it "clears current_school when employment_status changes from :claim_school to :different_school" do
+      eligibility.update!(employment_status: :claim_school, current_school: schools(:penistone_grammar_school))
+
+      eligibility.employment_status = :different_school
+      expect { eligibility.reset_dependent_answers }
+        .to change { eligibility.current_school }
+        .from(schools(:penistone_grammar_school)).to(nil)
+    end
+
+    it "clears current_school when employment_status changes to :no_school" do
+      eligibility.employment_status = :no_school
+      expect { eligibility.reset_dependent_answers }
+        .to change { eligibility.current_school }
+        .from(schools(:hampstead_school)).to(nil)
+    end
+
+    it "doesn't change current_school if employment_status is unchanged" do
+      eligibility.employment_status = :different_school
+      expect { eligibility.reset_dependent_answers }.not_to change { eligibility.current_school }
+    end
+  end
+
   # Validation contexts
   context "when saving in the “qts-year” context" do
     it "is not valid without a value for qts_award_year" do

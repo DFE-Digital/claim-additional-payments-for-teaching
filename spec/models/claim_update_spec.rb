@@ -6,7 +6,7 @@ RSpec.describe ClaimUpdate do
   let(:claim_update) { ClaimUpdate.new(claim, params, context) }
 
   context "with parameters that are valid for the context" do
-    let(:claim) { create(:claim) }
+    let(:claim) { create(:claim, :submittable) }
     let(:context) { "bank-details" }
     let(:params) do
       {
@@ -14,6 +14,7 @@ RSpec.describe ClaimUpdate do
         bank_sort_code: "123456",
         bank_account_number: "12345678",
         building_society_roll_number: "1234/12345678",
+        eligibility_attributes: {had_leadership_position: false},
       }
     end
 
@@ -23,6 +24,11 @@ RSpec.describe ClaimUpdate do
       expect(claim.reload.bank_sort_code).to eq "123456"
       expect(claim.bank_account_number).to eq "12345678"
       expect(claim.building_society_roll_number).to eq "1234/12345678"
+    end
+
+    it "resets dependent attributes on the eligibility" do
+      claim_update.perform
+      expect(claim.eligibility.mostly_performed_leadership_duties).to be_nil
     end
   end
 
@@ -57,69 +63,6 @@ RSpec.describe ClaimUpdate do
       it "sets the student_loan_plan to indicate it is not applicable" do
         expect(claim_update.perform).to be_truthy
         expect(claim.student_loan_plan).to eq Claim::NO_STUDENT_LOAN
-      end
-    end
-  end
-
-  describe "setting/resetting current_school based on the answer to employment_status" do
-    context "when the update sets the employment_status to :claim_school" do
-      let(:claim) { create(:claim, eligibility: build(:student_loans_eligibility, claim_school: schools(:penistone_grammar_school))) }
-      let(:context) { "still-teaching" }
-      let(:params) { {eligibility_attributes: {employment_status: "claim_school"}} }
-
-      it "automatically sets current_school to match the claim_school" do
-        expect(claim_update.perform).to be_truthy
-        expect(claim.eligibility.reload.employment_status).to eq "claim_school"
-        expect(claim.eligibility.current_school).to eq schools(:penistone_grammar_school)
-      end
-    end
-
-    context "when the update changes employment_status to :different_school" do
-      let(:claim) { create(:claim, eligibility: build(:student_loans_eligibility, claim_school: schools(:penistone_grammar_school), employment_status: :claim_school, current_school: schools(:penistone_grammar_school))) }
-      let(:context) { "still-teaching" }
-      let(:params) { {eligibility_attributes: {employment_status: "different_school"}} }
-
-      it "resets the inferrred current_school to nil" do
-        expect(claim_update.perform).to be_truthy
-        expect(claim.eligibility.reload.employment_status).to eq "different_school"
-        expect(claim.eligibility.current_school).to be_nil
-      end
-    end
-
-    context "when the update does not actually change the employment_status" do
-      let(:claim) { create(:claim, eligibility: build(:student_loans_eligibility, claim_school: schools(:penistone_grammar_school), employment_status: :different_school, current_school: schools(:hampstead_school))) }
-      let(:context) { "still-teaching" }
-      let(:params) { {eligibility_attributes: {employment_status: claim.eligibility.employment_status}} }
-
-      it "does not reset the current_school" do
-        expect(claim_update.perform).to be_truthy
-        expect(claim.eligibility.reload.employment_status).to eq "different_school"
-        expect(claim.eligibility.current_school).to eq schools(:hampstead_school)
-      end
-    end
-  end
-
-  describe "setting/resetting employment_status when the claim_school changes" do
-    let(:claim) { create(:claim, eligibility: build(:student_loans_eligibility, claim_school: schools(:penistone_grammar_school), employment_status: :different_school, current_school: schools(:hampstead_school))) }
-    let(:context) { "claim-school" }
-
-    context "when the update changes the claim_school" do
-      let(:params) { {eligibility_attributes: {claim_school_id: schools(:hampstead_school).id}} }
-
-      it "resets the subsequent employment_status and current_school answers" do
-        expect(claim_update.perform).to be_truthy
-        expect(claim.eligibility.reload.employment_status).to be_nil
-        expect(claim.eligibility.current_school).to be_nil
-      end
-    end
-
-    context "when the update does not change the claim_school" do
-      let(:params) { {eligibility_attributes: {claim_school_id: claim.eligibility.claim_school_id}} }
-
-      it "does not reset the subsequent employment_status and current_school answers" do
-        expect(claim_update.perform).to be_truthy
-        expect(claim.eligibility.reload.employment_status).to eq "different_school"
-        expect(claim.eligibility.current_school).to eq schools(:hampstead_school)
       end
     end
   end

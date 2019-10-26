@@ -19,11 +19,6 @@ class ClaimUpdate
     "student_loan_courses" => "student_loan_start_date",
   }.freeze
 
-  DEPENDENT_ELIGIBILITY_ANSWERS = {
-    "claim_school_id" => "employment_status",
-    "had_leadership_position" => "mostly_performed_leadership_duties",
-  }.freeze
-
   attr_reader :claim, :context, :params
 
   def initialize(claim, params, context)
@@ -35,7 +30,7 @@ class ClaimUpdate
   def perform
     claim.attributes = params
     reset_dependent_claim_answers
-    reset_dependent_eligibility_answers
+    claim.eligibility.reset_dependent_answers
     claim.save(context: context)
   end
 
@@ -56,22 +51,6 @@ class ClaimUpdate
       StudentLoans.determine_plan(claim.student_loan_country, claim.student_loan_start_date)
     else
       Claim::NO_STUDENT_LOAN
-    end
-  end
-
-  def reset_dependent_eligibility_answers
-    DEPENDENT_ELIGIBILITY_ANSWERS.each do |attribute_name, dependent_attribute_name|
-      if claim.eligibility.changed.include?(attribute_name)
-        claim.eligibility.attributes = {dependent_attribute_name => nil}
-      end
-    end
-
-    redetermine_current_school
-  end
-
-  def redetermine_current_school
-    if claim.eligibility.employment_status_changed?
-      claim.eligibility.current_school = claim.eligibility.employed_at_claim_school? ? claim.eligibility.claim_school : nil
     end
   end
 end
