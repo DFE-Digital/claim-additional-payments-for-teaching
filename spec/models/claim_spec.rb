@@ -438,6 +438,63 @@ RSpec.describe Claim, type: :model do
     end
   end
 
+  describe "#reset_dependent_answers" do
+    let(:claim) { create(:claim, :submittable) }
+
+    it "redetermines the student_loan_plan and resets loan plan answers when has_student_loan changes" do
+      claim.has_student_loan = true
+      expect { claim.reset_dependent_answers }.not_to change { claim.attributes }
+
+      claim.has_student_loan = false
+      claim.reset_dependent_answers
+
+      expect(claim.has_student_loan).to eq false
+      expect(claim.student_loan_country).to be_nil
+      expect(claim.student_loan_courses).to be_nil
+      expect(claim.student_loan_start_date).to be_nil
+      expect(claim.student_loan_plan).to eq Claim::NO_STUDENT_LOAN
+    end
+
+    it "redetermines the student_loan_plan and resets subsequent loan plan answers when student_loan_country changes" do
+      claim.student_loan_country = :england
+      expect { claim.reset_dependent_answers }.not_to change { claim.attributes }
+
+      claim.student_loan_country = :scotland
+      claim.reset_dependent_answers
+      expect(claim.has_student_loan).to eq true
+      expect(claim.student_loan_country).to eq "scotland"
+      expect(claim.student_loan_courses).to be_nil
+      expect(claim.student_loan_start_date).to be_nil
+      expect(claim.student_loan_plan).to eq StudentLoans::PLAN_1
+    end
+
+    it "redetermines the student_loan_plan and resets subsequent loan plan answers when student_loan_courses changes" do
+      claim.student_loan_courses = :one_course
+      expect { claim.reset_dependent_answers }.not_to change { claim.attributes }
+
+      claim.student_loan_courses = :two_or_more_courses
+      claim.reset_dependent_answers
+      expect(claim.has_student_loan).to eq true
+      expect(claim.student_loan_country).to eq "england"
+      expect(claim.student_loan_courses).to eq "two_or_more_courses"
+      expect(claim.student_loan_start_date).to be_nil
+      expect(claim.student_loan_plan).to be_nil
+    end
+
+    it "redetermines the student_loan_plan when the value of student_loan_start_date changes" do
+      claim.student_loan_start_date = StudentLoans::BEFORE_1_SEPT_2012
+      expect { claim.reset_dependent_answers }.not_to change { claim.attributes }
+
+      claim.student_loan_start_date = StudentLoans::ON_OR_AFTER_1_SEPT_2012
+      claim.reset_dependent_answers
+      expect(claim.has_student_loan).to eq true
+      expect(claim.student_loan_country).to eq "england"
+      expect(claim.student_loan_courses).to eq "one_course"
+      expect(claim.student_loan_start_date).to eq StudentLoans::ON_OR_AFTER_1_SEPT_2012
+      expect(claim.student_loan_plan).to eq StudentLoans::PLAN_2
+    end
+  end
+
   describe ".filtered_params" do
     it "returns a list of sensitive params to be filtered" do
       expect(Claim.filtered_params).to match_array([
