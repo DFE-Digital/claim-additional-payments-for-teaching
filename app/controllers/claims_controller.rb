@@ -28,7 +28,11 @@ class ClaimsController < ApplicationController
   end
 
   def update
-    if update_current_claim!
+    current_claim.attributes = claim_params
+    current_claim.reset_dependent_answers
+    current_claim.eligibility.reset_dependent_answers
+
+    if current_claim.save(context: page_sequence.current_slug.to_sym)
       redirect_to claim_path(next_slug)
     else
       show
@@ -43,10 +47,6 @@ class ClaimsController < ApplicationController
   end
 
   private
-
-  def update_current_claim!
-    ClaimUpdate.new(current_claim, claim_params, page_sequence.current_slug).perform
-  end
 
   helper_method :next_slug
   def next_slug

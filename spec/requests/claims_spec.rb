@@ -134,6 +134,22 @@ RSpec.describe "Claims", type: :request do
         expect(response.body).to include("Select the academic year you were awarded qualified teacher status")
       end
 
+      it "resets dependent claim attributes when appropriate" do
+        in_progress_claim.update!(has_student_loan: false, student_loan_plan: Claim::NO_STUDENT_LOAN)
+        put claim_path("student-loan"), params: {claim: {has_student_loan: true}}
+
+        expect(response).to redirect_to(claim_path("student-loan-country"))
+        expect(in_progress_claim.reload.student_loan_plan).to be_nil
+      end
+
+      it "resets depenent eligibility attributes when appropriate" do
+        in_progress_claim.update!(eligibility_attributes: {had_leadership_position: true, mostly_performed_leadership_duties: false})
+        put claim_path("leadership-position"), params: {claim: {eligibility_attributes: {had_leadership_position: false}}}
+
+        expect(response).to redirect_to(claim_path("eligibility-confirmed"))
+        expect(in_progress_claim.eligibility.reload.mostly_performed_leadership_duties).to be_nil
+      end
+
       context "having searched for a school but not selected a school from the results on the claim-school page" do
         it "re-renders the school search results with an error message" do
           put claim_path("claim-school"), params: {school_search: "peniston", claim: {eligibility_attributes: {claim_school_id: ""}}}
