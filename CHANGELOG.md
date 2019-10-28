@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+- Claimants recieve payment notifications once a payroll run has been processed
+
 ## [Release 022] - 2019-10-24
 
 - The Payment Confirmation Report for a payroll run can be uploaded and

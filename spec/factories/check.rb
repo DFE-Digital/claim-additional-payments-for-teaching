@@ -5,5 +5,9 @@ FactoryBot.define do
     trait :approved do
       result { :approved }
     end
+
+    trait :rejected do
+      result { :rejected }
+    end
   end
 end

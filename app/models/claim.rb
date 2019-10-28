@@ -141,6 +141,7 @@ class Claim < ApplicationRecord
   scope :submitted, -> { where.not(submitted_at: nil) }
   scope :awaiting_checking, -> { submitted.left_outer_joins(:check).where(checks: {claim_id: nil}) }
   scope :approved, -> { joins(:check).where("checks.result" => :approved) }
+  scope :rejected, -> { joins(:check).where("checks.result" => :rejected) }
   scope :approaching_check_deadline, -> { awaiting_checking.where("submitted_at < ? AND submitted_at > ?", CHECK_DEADLINE.ago + CHECK_DEADLINE_WARNING_POINT, CHECK_DEADLINE.ago) }
   scope :passed_check_deadline, -> { awaiting_checking.where("submitted_at < ?", CHECK_DEADLINE.ago) }
   scope :payrollable, -> { approved.left_joins(:payment).where(payments: {id: nil}) }

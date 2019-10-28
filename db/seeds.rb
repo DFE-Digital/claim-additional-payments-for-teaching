@@ -19,5 +19,6 @@ if Rails.env.development?
 
     create_list(:claim, 23, :approved)
     create_list(:claim, 10, :submitted)
+    create_list(:claim, 5, :rejected)
   end
 end

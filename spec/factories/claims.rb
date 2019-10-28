@@ -35,6 +35,11 @@ FactoryBot.define do
       association(:check, factory: [:check, :approved], strategy: :build)
     end
 
+    trait :rejected do
+      submitted
+      association(:check, factory: [:check, :rejected], strategy: :build)
+    end
+
     trait :ineligible do
       submittable
       association(:eligibility, factory: [:student_loans_eligibility, :ineligible])

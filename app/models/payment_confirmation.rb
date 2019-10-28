@@ -23,11 +23,21 @@ class PaymentConfirmation
 
       payroll_run.update!(confirmation_report_uploaded_by: admin_user_id)
 
-      errors.empty? || (raise ActiveRecord::Rollback)
+      if errors.empty?
+        payroll_run.claims.each do |claim|
+          ClaimMailer.payment_confirmation(claim, payment_date_timestamp).deliver_later
+        end
+      else
+        raise ActiveRecord::Rollback
+      end
     end
   end
 
   private
+
+  def payment_date_timestamp
+    Date.today.next_occurring(:friday).to_time.to_i
+  end
 
   def validate
     if csv.errors.empty?

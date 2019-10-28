@@ -43,6 +43,27 @@ RSpec.describe PaymentConfirmation do
 
       expect(payroll_run.reload.confirmation_report_uploaded_by).to eq(admin_user_id)
     end
+
+    it "sends payment confirmation emails with a payment date of the following Friday" do
+      a_tuesday = Date.parse("2019-01-01")
+      the_following_friday = "4 January 2019"
+      travel_to a_tuesday do
+        perform_enqueued_jobs do
+          payment_confirmation.ingest
+        end
+
+        expect(ActionMailer::Base.deliveries.count).to eq(2)
+
+        first_email = ActionMailer::Base.deliveries.first
+        second_email = ActionMailer::Base.deliveries.last
+
+        expect(first_email.to).to eq([payroll_run.claims[0].email_address])
+        expect(second_email.to).to eq([payroll_run.claims[0].email_address])
+
+        expect(first_email.body.raw_source).to include(the_following_friday)
+        expect(second_email.body.raw_source).to include(the_following_friday)
+      end
+    end
   end
 
   context "the value for Student Loans is blank" do
@@ -125,6 +146,10 @@ RSpec.describe PaymentConfirmation do
       expect(payroll_run.claims[0].payment.reload.payroll_reference).to eq(nil)
       expect(payroll_run.claims[1].payment.reload.payroll_reference).to eq(nil)
     end
+
+    it "does not queue emails" do
+      expect { payment_confirmation.ingest }.to_not have_enqueued_job
+    end
   end
 
   context "The CSV has a blank value for a required field" do
@@ -142,6 +167,10 @@ RSpec.describe PaymentConfirmation do
 
       expect(payroll_run.claims[0].payment.reload.payroll_reference).to eq(nil)
       expect(payroll_run.claims[1].payment.reload.payroll_reference).to eq(nil)
+    end
+
+    it "does not queue emails" do
+      expect { payment_confirmation.ingest }.to_not have_enqueued_job
     end
   end
 end
