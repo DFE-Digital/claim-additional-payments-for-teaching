@@ -6,7 +6,7 @@
 
     <p class="govuk-body">You are uploading a Payment Confirmation Report for the payroll run dated <%= l(@payroll_run.created_at.to_date) %>.</p>
 
-    <%= form_with url: admin_payroll_run_payment_confirmation_report_uploads_path(@payroll_run), multipart: true, local: true do |f| %>
+    <%= form_with url: admin_payroll_run_payment_confirmation_report_uploads_path(@payroll_run), multipart: true do |f| %>
       <div class="govuk-form-group<%= " govuk-form-group--error" if @payment_confirmation&.errors&.any? %>">
         <%= f.label 'file', "Upload a Payment Confirmation Report CSV file", class: "govuk-label" %>
 

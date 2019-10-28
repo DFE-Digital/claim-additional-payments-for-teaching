@@ -5,7 +5,7 @@
       Search for a claim
     </h1>
 
-    <%= form_with url: search_admin_claims_path, method: :get, local: true do |form| %>
+    <%= form_with url: search_admin_claims_path, method: :get do |form| %>
       <div class="govuk-form-group">
         <%= form.label :reference, "Enter a reference", class: "govuk-label" %>
         <%= form.text_field :reference, class: "govuk-input" %>
