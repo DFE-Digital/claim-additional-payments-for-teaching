@@ -44,5 +44,7 @@ module DfeTeachersPaymentService
 
     # Set the application time zone to UK. Times are still stored as UTC in the database
     config.time_zone = "London"
+
+    config.action_mailer.preview_path = "#{Rails.root}/app/mailers/previews"
   end
 end
