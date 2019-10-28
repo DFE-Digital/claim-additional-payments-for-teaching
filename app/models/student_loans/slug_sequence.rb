@@ -32,7 +32,6 @@ module StudentLoans
       "email-address",
       "bank-details",
       "check-your-answers",
-      "confirmation",
       "ineligible",
     ].freeze
 

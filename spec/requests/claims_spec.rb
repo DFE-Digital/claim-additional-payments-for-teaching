@@ -71,24 +71,6 @@ RSpec.describe "Claims", type: :request do
         expect(response).to redirect_to(root_path)
       end
     end
-
-    context "when the user reaches the confirmation page after submitting their claim" do
-      before do
-        start_claim
-
-        claim = Claim.order(:created_at).last
-        claim.update_attributes(attributes_for(:claim, :submittable))
-        claim.eligibility.update_attributes(attributes_for(:student_loans_eligibility, :eligible))
-
-        claim.submit!
-
-        get claim_path("confirmation")
-      end
-
-      it "clears the claim from the session" do
-        expect(session[:claim_id]).to be_nil
-      end
-    end
   end
 
   describe "the claims ineligible page" do
@@ -152,6 +134,22 @@ RSpec.describe "Claims", type: :request do
         expect(response.body).to include("Select the academic year you were awarded qualified teacher status")
       end
 
+      it "resets dependent claim attributes when appropriate" do
+        in_progress_claim.update!(has_student_loan: false, student_loan_plan: Claim::NO_STUDENT_LOAN)
+        put claim_path("student-loan"), params: {claim: {has_student_loan: true}}
+
+        expect(response).to redirect_to(claim_path("student-loan-country"))
+        expect(in_progress_claim.reload.student_loan_plan).to be_nil
+      end
+
+      it "resets depenent eligibility attributes when appropriate" do
+        in_progress_claim.update!(eligibility_attributes: {had_leadership_position: true, mostly_performed_leadership_duties: false})
+        put claim_path("leadership-position"), params: {claim: {eligibility_attributes: {had_leadership_position: false}}}
+
+        expect(response).to redirect_to(claim_path("eligibility-confirmed"))
+        expect(in_progress_claim.eligibility.reload.mostly_performed_leadership_duties).to be_nil
+      end
+
       context "having searched for a school but not selected a school from the results on the claim-school page" do
         it "re-renders the school search results with an error message" do
           put claim_path("claim-school"), params: {school_search: "peniston", claim: {eligibility_attributes: {claim_school_id: ""}}}
@@ -182,61 +180,6 @@ RSpec.describe "Claims", type: :request do
           }.to raise_error(
             ActionController::UnpermittedParameters
           )
-        end
-      end
-
-      context "when updating from check-your-answers" do
-        context "with a submittable claim" do
-          before :each do
-            # Make the claim submittable
-            in_progress_claim.update!(attributes_for(:claim, :submittable))
-            in_progress_claim.eligibility.update!(attributes_for(:student_loans_eligibility, :eligible))
-
-            perform_enqueued_jobs do
-              put claim_path("check-your-answers")
-            end
-
-            in_progress_claim.reload
-          end
-
-          it "submits the claim" do
-            expect(in_progress_claim.submitted_at).to be_present
-          end
-
-          it "sends an email" do
-            email = ActionMailer::Base.deliveries.first
-            expect(email.to).to eql([in_progress_claim.email_address])
-            expect(email.subject).to eql("Your claim was received")
-            expect(email.body).to include("Your unique reference is #{in_progress_claim.reference}.")
-          end
-
-          it "redirects to the confirmation page" do
-            expect(response).to redirect_to(claim_path("confirmation"))
-          end
-        end
-
-        context "with an unsubmittable claim" do
-          before :each do
-            # Make the claim _almost_ submittable
-            in_progress_claim.update!(attributes_for(:claim, :submittable, email_address: nil))
-
-            put claim_path("check-your-answers")
-
-            in_progress_claim.reload
-          end
-
-          it "doesn't submit the claim" do
-            expect(in_progress_claim.submitted_at).to be_nil
-          end
-
-          it "doesn't send an email" do
-            expect(ActionMailer::Base.deliveries).to be_empty
-          end
-
-          it "re-renders the check-your-answers page with errors" do
-            expect(response.body).to include("Check your answers before sending your application")
-            expect(response.body).to include("Enter an email address")
-          end
         end
       end
     end

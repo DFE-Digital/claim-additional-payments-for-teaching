@@ -8,17 +8,17 @@
       Check your answers before sending your application
     </h1>
 
-    <%= render partial: "check_your_answers_section", locals: {heading: "Eligibility details", answers: eligibility_answers(current_claim.eligibility)} %>
+    <%= render partial: "claims/check_your_answers_section", locals: {heading: "Eligibility details", answers: eligibility_answers(current_claim.eligibility)} %>
 
-    <%= render partial: "check_your_answers_section", locals: {heading: "GOV.UK Verify details", answers: verify_answers(current_claim)} %>
+    <%= render partial: "claims/check_your_answers_section", locals: {heading: "GOV.UK Verify details", answers: verify_answers(current_claim)} %>
 
-    <%= render partial: "check_your_answers_section", locals: {heading: "Identity details", answers: identity_answers(current_claim)} %>
+    <%= render partial: "claims/check_your_answers_section", locals: {heading: "Identity details", answers: identity_answers(current_claim)} %>
 
-    <%= render partial: "check_your_answers_section", locals: {heading: "Student loan details", answers: student_loan_answers(current_claim)} %>
+    <%= render partial: "claims/check_your_answers_section", locals: {heading: "Student loan details", answers: student_loan_answers(current_claim)} %>
 
-    <%= render partial: "check_your_answers_section", locals: {heading: "Payment details", answers: payment_answers(current_claim)} %>
+    <%= render partial: "claims/check_your_answers_section", locals: {heading: "Payment details", answers: payment_answers(current_claim)} %>
 
-    <%= form_for current_claim, url: claim_path do |form| %>
+    <%= form_with url: claim_submission_path do |form| %>
       <h2 class="govuk-heading-m">Confirm and send your application</h2>
 
       <p class="govuk-body">By submitting this notification you are confirming that, to the best of your knowledge, the details you are providing are correct.</p>

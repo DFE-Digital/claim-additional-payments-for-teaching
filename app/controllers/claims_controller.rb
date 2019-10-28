@@ -4,8 +4,6 @@ class ClaimsController < ApplicationController
   skip_before_action :send_unstarted_claiments_to_the_start, only: [:new, :create, :timeout, :refresh_session]
   before_action :check_page_is_in_sequence, only: [:show, :update]
 
-  after_action :clear_claim_session, if: :submission_complete?
-
   def new
     if current_claim.persisted?
       redirect_to claim_path(page_sequence.slugs.first)
@@ -30,7 +28,11 @@ class ClaimsController < ApplicationController
   end
 
   def update
-    if update_current_claim!
+    current_claim.attributes = claim_params
+    current_claim.reset_dependent_answers
+    current_claim.eligibility.reset_dependent_answers
+
+    if current_claim.save(context: page_sequence.current_slug.to_sym)
       redirect_to claim_path(next_slug)
     else
       show
@@ -46,17 +48,9 @@ class ClaimsController < ApplicationController
 
   private
 
-  def update_current_claim!
-    ClaimUpdate.new(current_claim, claim_params, page_sequence.current_slug).perform
-  end
-
   helper_method :next_slug
   def next_slug
     page_sequence.next_slug
-  end
-
-  def submission_complete?
-    page_sequence.current_slug == "confirmation" && current_claim.submitted?
   end
 
   def search_schools

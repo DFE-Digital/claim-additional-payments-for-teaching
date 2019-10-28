@@ -20,6 +20,10 @@ module StudentLoans
       :student_loan_repayment_amount,
       SUBJECT_ATTRIBUTES,
     ].flatten.freeze
+    ATTRIBUTE_DEPENDENCIES = {
+      "claim_school_id" => "employment_status",
+      "had_leadership_position" => "mostly_performed_leadership_duties",
+    }.freeze
 
     self.table_name = "student_loans_eligibilities"
 
@@ -82,6 +86,13 @@ module StudentLoans
       student_loan_repayment_amount
     end
 
+    def reset_dependent_answers
+      ATTRIBUTE_DEPENDENCIES.each do |attribute_name, dependent_attribute_name|
+        write_attribute(dependent_attribute_name, nil) if changed.include?(attribute_name)
+      end
+      self.current_school = inferred_current_school if employment_status_changed?
+    end
+
     private
 
     def ineligible_qts_award_year?
@@ -106,6 +117,10 @@ module StudentLoans
 
     def current_school_closed?
       current_school.present? && !current_school.open?
+    end
+
+    def inferred_current_school
+      employed_at_claim_school? ? claim_school : nil
     end
   end
 end

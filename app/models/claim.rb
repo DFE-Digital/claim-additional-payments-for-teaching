@@ -60,6 +60,11 @@ class Claim < ApplicationRecord
   }.freeze
   CHECK_DEADLINE = 6.weeks
   CHECK_DEADLINE_WARNING_POINT = 2.weeks
+  ATTRIBUTE_DEPENDENCIES = {
+    "has_student_loan" => "student_loan_country",
+    "student_loan_country" => "student_loan_courses",
+    "student_loan_courses" => "student_loan_start_date",
+  }.freeze
 
   enum student_loan_country: StudentLoans::COUNTRIES
   enum student_loan_start_date: StudentLoans::COURSE_START_DATES
@@ -196,6 +201,13 @@ class Claim < ApplicationRecord
     FILTER_PARAMS.select { |_, v| v }.keys
   end
 
+  def reset_dependent_answers
+    ATTRIBUTE_DEPENDENCIES.each do |attribute_name, dependent_attribute_name|
+      write_attribute(dependent_attribute_name, nil) if changed.include?(attribute_name)
+    end
+    self.student_loan_plan = determine_student_loan_plan
+  end
+
   private
 
   def normalise_trn
@@ -268,5 +280,13 @@ class Claim < ApplicationRecord
 
   def claim_must_not_be_ineligible
     errors.add(:base, "You’re not eligible for this payment") if eligibility.ineligible?
+  end
+
+  def determine_student_loan_plan
+    if has_student_loan?
+      StudentLoans.determine_plan(student_loan_country, student_loan_start_date)
+    else
+      Claim::NO_STUDENT_LOAN
+    end
   end
 end

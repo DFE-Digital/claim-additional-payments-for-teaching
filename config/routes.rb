@@ -35,6 +35,8 @@ Rails.application.routes.draw do
 
     get "claim", as: :new_claim, to: "claims#new"
     post "claim", as: :claims, to: "claims#create"
+    post "claim/submit", as: :claim_submission, to: "submissions#create"
+    get "claims/confirmation", as: :claim_confirmation, to: "submissions#show"
 
     get "timeout", to: "claims#timeout", as: :timeout_claim
     get "refresh-session", to: "claims#refresh_session", as: :claim_refresh_session
