@@ -82,7 +82,7 @@ RSpec.feature "Payroll" do
     file.rewind
 
     attach_file("Upload a Payment Confirmation Report CSV file", file.path)
-    click_on "Upload file"
+    perform_enqueued_jobs { click_on "Upload file" }
 
     expect(page).to have_content("Payment Confirmation Report successfully uploaded")
 
@@ -90,5 +90,16 @@ RSpec.feature "Payroll" do
 
     expect(payroll_run.reload.confirmation_report_uploaded_by).to eq("uploader-user-id")
     expect(payroll_run.claims[0].payment.reload.gross_value).to eq("487.48".to_d)
+
+    expect(ActionMailer::Base.deliveries.count).to eq(2)
+
+    first_email = ActionMailer::Base.deliveries.first
+    second_email = ActionMailer::Base.deliveries.last
+
+    expect(first_email.to).to eq([payroll_run.claims[0].email_address])
+    expect(second_email.to).to eq([payroll_run.claims[1].email_address])
+
+    expect(first_email.subject).to eq("We’re paying your claim to get back your student loan repayments, reference number: #{payroll_run.claims[0].reference}")
+    expect(second_email.subject).to eq("We’re paying your claim to get back your student loan repayments, reference number: #{payroll_run.claims[1].reference}")
   end
 end
