@@ -41,6 +41,11 @@ module StudentLoans
         (eligible_phase? || eligible_special_school?)
     end
 
+    def eligible_current_school?
+      @school.state_funded? &&
+        (eligible_phase? || eligible_special_school?)
+    end
+
     private
 
     def eligible_local_authority?
