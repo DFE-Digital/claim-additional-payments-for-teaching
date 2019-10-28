@@ -29,7 +29,7 @@ Rails.application.routes.draw do
   get "/accessibility_statement", to: "static_pages#accessibility_statement", as: :accessibility_statement
 
   scope path: ":policy", defaults: {policy: "student-loans"}, constraints: {policy: %r{student-loans}} do
-    constraints slug: %r{#{PageSequence::SLUGS.join("|")}} do
+    constraints slug: %r{#{StudentLoans::SlugSequence::SLUGS.join("|")}} do
       resources :claims, only: [:show, :update], param: :slug, path: "/"
     end
 
