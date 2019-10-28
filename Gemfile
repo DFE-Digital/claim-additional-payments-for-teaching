@@ -21,10 +21,6 @@ gem "jbuilder", "~> 2.9"
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
 
-# Use Gov UK Kit
-gem "dxw_govuk_frontend_rails"
-gem "sprockets", "~> 3"
-
 # Generate human-readable reference numbers
 gem "nanoid"
 
