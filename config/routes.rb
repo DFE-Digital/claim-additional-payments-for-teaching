@@ -35,7 +35,7 @@ Rails.application.routes.draw do
     get "refresh-session", to: "claims#refresh_session", as: :claim_refresh_session
 
     %w[privacy_notice terms_conditions contact_us cookies accessibility_statement].each do |page_name|
-      get page_name, to: "static_pages##{page_name}", as: page_name
+      get page_name.dasherize, to: "static_pages##{page_name}", as: page_name
     end
   end
 
