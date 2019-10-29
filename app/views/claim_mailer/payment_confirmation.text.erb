@@ -12,12 +12,20 @@ This payment is treated as part of your salary and is subject to the deductions 
 
 We pay the Income Tax and National Insurance contribution (NIC) on your behalf, so these are not deducted from the amount you receive.
 
+<% if @payment.student_loan_repayment.present? %>
+<% if @payment.student_loan_repayment.zero? %>
+If you have made a student loan contribution, this is deducted from your payment amount and credited to SLC.
+<% else %>
 We do not pay your student loan contribution for you. Your student loan contribution is deducted from your payment amount and credited to SLC.
+<% end %>
+<% end %>
 
 * Total before deductions: <%= number_to_currency(@payment.gross_value) %>
 * Income Tax (paid by us): <%= number_to_currency(@payment.tax) %>
-* Employee National Insurance (paid by us): <%= number_to_currency(@payment.national_insurance) %>
-* Student loan (deducted): <%= number_to_currency(@payment.student_loan_repayment) || "Not applicable" %>
+* Employee NIC (paid by us): <%= number_to_currency(@payment.national_insurance) %>
+<% if @payment.student_loan_repayment.present? %>
+* Student loan<%= @payment.student_loan_repayment.positive? ? " (deducted)" : "" %>: <%= number_to_currency(@payment.student_loan_repayment) %>
+<% end %>
 
 ^ Payment you receive: <%= number_to_currency(@payment.net_pay) %>
 
