@@ -1,4 +1,4 @@
-@import "govuk-frontend-rails";
+@import "govuk-frontend/govuk/all";
 
 [data-a11y-dialog-native] > :first-child {
   display: none;

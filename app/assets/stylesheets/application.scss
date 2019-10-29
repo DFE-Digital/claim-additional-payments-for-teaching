@@ -1,4 +1,8 @@
-@import "govuk-frontend-rails";
+// Use the Rails helpers to load images and fonts
+$govuk-font-url-function: "image-url";
+$govuk-image-url-function: "font-url";
+
+@import "govuk-frontend/govuk/all";
 @import "accessible-autocomplete/src/autocomplete";
 
 @import "**/*";
