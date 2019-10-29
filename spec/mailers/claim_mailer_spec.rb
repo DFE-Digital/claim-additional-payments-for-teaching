@@ -50,7 +50,7 @@ RSpec.describe ClaimMailer, type: :mailer do
   end
 
   describe "#payment_confirmation" do
-    let(:payment) { create(:payment, :with_figures, net_pay: 500.00, claim: claim) }
+    let(:payment) { create(:payment, :with_figures, net_pay: 500.00, student_loan_repayment: 60, claim: claim) }
     let(:claim) { create(:claim, :submitted, first_name: "John", middle_name: "Fitzgerald", surname: "Kennedy") }
     let(:payment_date_timestamp) { Time.new(2019, 1, 1).to_i }
     let(:mail) { ClaimMailer.payment_confirmation(payment.claim, payment_date_timestamp) }
@@ -65,13 +65,24 @@ RSpec.describe ClaimMailer, type: :mailer do
       expect(mail.body.encoded).to include("Dear John Kennedy,")
       expect(mail.body.encoded).to include("We’re paying your claim")
       expect(mail.body.encoded).to include("You will receive £500.00 on or after 1 January 2019")
+      expect(mail.body.encoded).to include("Student loan (deducted): £60.00")
     end
 
-    context "when student loan repayment is nil" do
+    context "when user does not currently have a student loan" do
       let(:payment) { create(:payment, :with_figures, student_loan_repayment: nil, claim: claim) }
 
-      it "shows not applicable" do
-        expect(mail.body.encoded).to include("Student loan (deducted): Not applicable")
+      it "shows the right content" do
+        expect(mail.body.encoded).to_not include("student loan contribution")
+        expect(mail.body.encoded).to_not include("Student loan (deducted)")
+      end
+    end
+
+    context "when user has a student loan, but has not made a contribution" do
+      let(:payment) { create(:payment, :with_figures, student_loan_repayment: 0, claim: claim) }
+
+      it "shows the right content" do
+        expect(mail.body.encoded).to include("If you have made a student loan contribution, this is deducted from your payment amount and credited to SLC.")
+        expect(mail.body.encoded).to include("Student loan: £0.00")
       end
     end
   end
