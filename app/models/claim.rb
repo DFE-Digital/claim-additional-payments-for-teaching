@@ -56,7 +56,6 @@ class Claim < ApplicationRecord
     verify_response: true,
     banking_name: true,
     building_society_roll_number: true,
-    payroll_run_id: false,
   }.freeze
   CHECK_DEADLINE = 6.weeks
   CHECK_DEADLINE_WARNING_POINT = 2.weeks
