@@ -42,7 +42,8 @@ module StudentLoans
     end
 
     def eligible_current_school?
-      @school.state_funded? &&
+      @school.open? &&
+        @school.state_funded? &&
         (eligible_phase? || eligible_special_school?)
     end
 

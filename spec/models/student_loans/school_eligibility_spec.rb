@@ -208,5 +208,10 @@ RSpec.describe StudentLoans::SchoolEligibility do
       let(:school_attributes) { {phase: :not_applicable, school_type_group: :special_schools, school_type: :community_special_school} }
       it { is_expected.to be(true) }
     end
+
+    context "with a closed school that would otherwise be eligible" do
+      let(:school_attributes) { {phase: :secondary, school_type_group: :la_maintained, close_date: Date.yesterday} }
+      it { is_expected.to be(false) }
+    end
   end
 end
