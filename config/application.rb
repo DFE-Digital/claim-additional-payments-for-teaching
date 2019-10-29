@@ -46,5 +46,9 @@ module DfeTeachersPaymentService
     config.time_zone = "London"
 
     config.action_mailer.preview_path = "#{Rails.root}/app/mailers/previews"
+
+    # Make sure the `form_with` helper generates local forms, instead of defaulting
+    # to remote and unobtrusive XHR forms
+    config.action_view.form_with_generates_remote_forms = false
   end
 end
