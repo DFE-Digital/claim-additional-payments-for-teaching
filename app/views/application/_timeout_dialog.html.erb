@@ -1,4 +1,13 @@
-<div id="timeout_dialog" class="dialog" aria-hidden="true" data-timeout-in-minutes="<%= claim_timeout_in_minutes %>" data-warning-in-minutes="<%= claim_timeout_warning_in_minutes %>" data-claim-in-progress="<%= claim_in_progress? %>">
+<%= tag.div(
+    id: "timeout_dialog",
+    class: "dialog",
+    aria: {hidden: true},
+    data: {
+      "timeout-in-minutes" => claim_timeout_in_minutes,
+      "warning-in-minutes" => claim_timeout_warning_in_minutes,
+      "claim-in-progress" => claim_in_progress?,
+    },
+  ) do %>
   <div class="dialog-overlay" tabindex="-1" data-a11y-dialog-hide=""></div>
   <dialog class="dialog-content" aria-labelledby="timeout_dialog_title">
     <div class="timeout_dialog_titlebar">
@@ -20,4 +29,4 @@
       Continue session
     </button>
   </dialog>
-</div>
+<% end %>
