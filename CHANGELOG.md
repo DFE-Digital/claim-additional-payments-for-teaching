@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+## [Release 023] - 2019-10-29
+
 - Update copy to make it clear we may deduct a student loan repayment from
   amount the claimant receives
 - Inform the user that their claim is ineligible, if the school that they are
@@ -169,7 +171,9 @@ The format is based on [Keep a Changelog]
 - First release for student loan repayments private beta
 
 [unreleased]:
-  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-022...HEAD
+  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-023...HEAD
+[release 023]:
+  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-022...release-023
 [release 022]:
   https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-021...release-022
 [release 021]:
