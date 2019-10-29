@@ -30,7 +30,7 @@ the_samuel_lister_academy:
   county: West Yorkshire
   postcode: BD16 1TZ
 
-# Student loans and Maths and Physics Ineligible
+# Student loans ineligible as claim school, Maths and Physics Ineligible
 
 hampstead_school:
   name: Hampstead School
@@ -44,3 +44,17 @@ hampstead_school:
   locality: Hampstead
   town: London
   postcode: NW2 3RT
+
+# Student loans ineligible as current school
+
+bradford_grammar_school:
+  name: Bradford Grammar School
+  urn: 107455
+  phase: not_applicable
+  school_type_group: independent_schools
+  school_type: other_independent_school
+  local_authority: bradford
+  local_authority_district: bradford
+  street: Keighley Road
+  town: Bradford
+  postcode: BD9 4JP

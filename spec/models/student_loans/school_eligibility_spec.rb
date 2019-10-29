@@ -1,8 +1,8 @@
 require "rails_helper"
 
 RSpec.describe StudentLoans::SchoolEligibility do
-  describe "#check" do
-    subject { StudentLoans::SchoolEligibility.new(school).check }
+  describe "#eligible_claim_school?" do
+    subject { StudentLoans::SchoolEligibility.new(school).eligible_claim_school? }
     let(:school) { build(:school, school_attributes.merge({local_authority: local_authority})) }
 
     context "when it is in an eligible area" do
@@ -148,6 +148,70 @@ RSpec.describe StudentLoans::SchoolEligibility do
       let(:after_start_of_policy) { StudentLoans::SchoolEligibility::POLICY_START_DATE + 1.day }
       let(:school) { build(:school, :student_loan_eligible, close_date: after_start_of_policy) }
       it { is_expected.to be true }
+    end
+  end
+
+  describe "#eligible_current_school?" do
+    subject { StudentLoans::SchoolEligibility.new(school).eligible_current_school? }
+    let(:school) { build(:school, school_attributes) }
+
+    # e.g. Hampstead School, URN 4567
+    context "with a local authority maintained secondary school" do
+      let(:school_attributes) { {phase: :secondary, school_type_group: :la_maintained} }
+      it { is_expected.to be(true) }
+    end
+
+    # e.g. Hursthead Infant School, URN 106052
+    context "with a local authority maintained primary school" do
+      let(:school_attributes) { {phase: :primary, school_type_group: :la_maintained} }
+      it { is_expected.to be(false) }
+    end
+
+    # e.g. The Samuel Lister Academy, URN 137576
+    context "with a secondary academy" do
+      let(:school_attributes) { {phase: :secondary, school_type_group: :academies} }
+      it { is_expected.to be(true) }
+    end
+
+    # e.g. Willow Bank Primary School, URN 136932
+    context "with a primary academy" do
+      let(:school_attributes) { {phase: :primary, school_type_group: :academies} }
+      it { is_expected.to be(false) }
+    end
+
+    # e.g. West London Free School, URN 136750
+    context "with a secondary free school" do
+      let(:school_attributes) { {phase: :secondary, school_type_group: :free_schools} }
+      it { is_expected.to be(true) }
+    end
+
+    # e.g. Stockport College, URN 130512
+    context "with a sixteen-plus college" do
+      let(:school_attributes) { {phase: :sixteen_plus, school_type_group: :colleges} }
+      it { is_expected.to be(false) }
+    end
+
+    # e.g. Bradford Grammar School, URN 107455
+    context "with an independent school with not_applicable phase" do
+      let(:school_attributes) { {phase: :not_applicable, school_type_group: :independent_schools} }
+      it { is_expected.to be(false) }
+    end
+
+    # e.g. Coney Hill School, URN 101696
+    context "with a non-maintained special school with not_applicable phase" do
+      let(:school_attributes) { {phase: :not_applicable, school_type_group: :special_schools, school_type: :non_maintained_special_school} }
+      it { is_expected.to be(true) }
+    end
+
+    # e.g. Frank Barnes School for Deaf Children, URN 100091
+    context "with a community special school with not_applicable phase" do
+      let(:school_attributes) { {phase: :not_applicable, school_type_group: :special_schools, school_type: :community_special_school} }
+      it { is_expected.to be(true) }
+    end
+
+    context "with a closed school that would otherwise be eligible" do
+      let(:school_attributes) { {phase: :secondary, school_type_group: :la_maintained, close_date: Date.yesterday} }
+      it { is_expected.to be(false) }
     end
   end
 end

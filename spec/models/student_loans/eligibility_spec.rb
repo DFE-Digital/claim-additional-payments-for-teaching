@@ -102,6 +102,11 @@ RSpec.describe StudentLoans::Eligibility, type: :model do
       expect(StudentLoans::Eligibility.new(claim_school: schools(:penistone_grammar_school)).ineligible?).to eql false
     end
 
+    it "returns true when the current_school is not eligible" do
+      expect(StudentLoans::Eligibility.new(current_school: schools(:bradford_grammar_school)).ineligible?).to eql true
+      expect(StudentLoans::Eligibility.new(current_school: schools(:penistone_grammar_school)).ineligible?).to eql false
+    end
+
     it "returns true when no longer teaching" do
       expect(StudentLoans::Eligibility.new(employment_status: :no_school).ineligible?).to eql true
       expect(StudentLoans::Eligibility.new(employment_status: :claim_school).ineligible?).to eql false
@@ -127,7 +132,7 @@ RSpec.describe StudentLoans::Eligibility, type: :model do
       expect(StudentLoans::Eligibility.new(qts_award_year: "before_september_2013").ineligibility_reason).to eq :ineligible_qts_award_year
       expect(StudentLoans::Eligibility.new(claim_school: schools(:hampstead_school)).ineligibility_reason).to eq :ineligible_claim_school
       expect(StudentLoans::Eligibility.new(employment_status: :no_school).ineligibility_reason).to eq :employed_at_no_school
-      expect(StudentLoans::Eligibility.new(current_school: schools(:the_samuel_lister_academy)).ineligibility_reason).to eq :current_school_closed
+      expect(StudentLoans::Eligibility.new(current_school: schools(:the_samuel_lister_academy)).ineligibility_reason).to eq :ineligible_current_school
       expect(StudentLoans::Eligibility.new(taught_eligible_subjects: false).ineligibility_reason).to eq :not_taught_eligible_subjects
       expect(StudentLoans::Eligibility.new(mostly_performed_leadership_duties: true).ineligibility_reason).to eq :not_taught_enough
     end

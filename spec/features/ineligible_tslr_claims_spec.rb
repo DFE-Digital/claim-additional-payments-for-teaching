@@ -31,13 +31,29 @@ RSpec.feature "Ineligible Teacher Student Loan Repayments claims" do
     expect(page).to have_text(I18n.t("student_loans.questions.subjects_taught"))
   end
 
-  scenario "chooses an ineligible school" do
+  scenario "chooses an ineligible claim school" do
     claim = start_claim
     choose_school schools(:hampstead_school)
 
     expect(claim.eligibility.reload.claim_school).to eq schools(:hampstead_school)
     expect(page).to have_text("You’re not eligible")
     expect(page).to have_text("Hampstead School, where you were employed between 6 April 2018 and 5 April 2019, is not an eligible school.")
+  end
+
+  scenario "chooses an ineligible current school" do
+    start_claim
+
+    choose_school schools(:penistone_grammar_school)
+    choose_still_teaching "Yes, at another school"
+
+    fill_in :school_search, with: "Bradford"
+    click_on "Search"
+
+    choose "Bradford Grammar School"
+    click_on "Continue"
+
+    expect(page).to have_text("You’re not eligible")
+    expect(page).to have_text("Bradford Grammar School, where you are currently employed, is not a state-funded secondary school.")
   end
 
   scenario "no longer teaching" do
