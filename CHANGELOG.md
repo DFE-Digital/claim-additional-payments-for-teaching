@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+- Update copy to make it clear we may deduct a student loan repayment from
+  amount the claimant receives
 - Inform the user that their claim is ineligible, if the school that they are
   currently employed at is not eligible
 - Claimants recieve payment notifications once a payroll run has been processed
