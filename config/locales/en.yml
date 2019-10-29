@@ -96,6 +96,8 @@ en:
     payroll_gender: "gender"
     address: "address"
     full_name: "Full name"
+  maths_and_physics:
+    support_email_address: "mathsphysicsteacherpayment@digital.education.gov.uk"
   student_loans:
     journey_name: "Teachers: claim back your student loan repayments"
     support_email_address: "studentloanteacherpayment@digital.education.gov.uk"

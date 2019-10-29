@@ -19,4 +19,9 @@ module ApplicationHelper
 
     number_to_currency(value, delimiter: "", unit: "")
   end
+
+  def support_email_address(policy = nil)
+    translation_key = [policy&.underscore, "support_email_address"].compact.join(".")
+    t(translation_key)
+  end
 end
