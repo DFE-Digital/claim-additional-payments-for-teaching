@@ -1,12 +1,13 @@
 #!/bin/bash
 
-VSP_PATH=./bin/vsp/
-VSP_FILENAME=verify-service-provider-2.0.0
-VSP_DOWNLOAD_URL="https://github.com/alphagov/verify-service-provider/releases/download/2.0.0/${VSP_FILENAME}.zip"
+VSP_VERSION=2.1.0
+VSP_PATH=./bin/vsp/${VSP_VERSION}/
+VSP_FILENAME=verify-service-provider-${VSP_VERSION}
+VSP_DOWNLOAD_URL="https://github.com/alphagov/verify-service-provider/releases/download/${VSP_VERSION}/${VSP_FILENAME}.zip"
 IDENTITY_DATASET="spec/fixtures/verify/test-identity-dataset.json"
 
 if [ ! -d $VSP_PATH ]; then
-  echo "Can't find an installed version of the Verify Service Provider - downloading and installing..."
+  echo "Can't find an installed version of the Verify Service Provider (version ${VSP_VERSION}) - downloading and installing..."
   (cd tmp/ && curl -L -O -s $VSP_DOWNLOAD_URL)
   unzip -qq tmp/${VSP_FILENAME}.zip -d tmp/
   mv tmp/${VSP_FILENAME}/ $VSP_PATH

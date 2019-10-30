@@ -6,6 +6,7 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+- Update the Verify Service Provider to version 2.1.0
 - Make static pages such as "Cookies", and "Contact us" policy aware
 
 ## [Release 023] - 2019-10-29
