@@ -6,6 +6,7 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+- Updated feedback URL ready for public beta
 - Service updated to be linked to from external start page
 - Update the Verify Service Provider to version 2.1.0
 - Make static pages such as "Cookies", and "Contact us" policy aware
