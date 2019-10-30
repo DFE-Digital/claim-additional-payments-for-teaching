@@ -44,13 +44,13 @@ case $ENVIRONMENT_NAME in
     SUBSCRIPTION_ID="8655985a-2f87-44d7-a541-0be9a8c2779d"
     RESOURCE_GROUP_PREFIX="s118d01"
     DOCKER_IMAGE_TAG="development"
-    VSP_DOCKER_IMAGE_TAG="20190729.3"
+    VSP_DOCKER_IMAGE_TAG="20191030.1"
     ;;
   "production")
     SUBSCRIPTION_ID="88bd392f-df19-458b-a100-22b4429060ed"
     RESOURCE_GROUP_PREFIX="s118p01"
     DOCKER_IMAGE_TAG="production"
-    VSP_DOCKER_IMAGE_TAG="20190729.3"
+    VSP_DOCKER_IMAGE_TAG="20191030.1"
     ;;
   *)
     echo "Could not find a known environment with the name: $ENVIRONMENT_NAME"
