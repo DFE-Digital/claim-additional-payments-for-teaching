@@ -12,11 +12,11 @@
     </h2>
 
     <h3 class="govuk-heading-m">
-      Using the <%= t("service_name") %> service
+      Using the <%= policy_service_name(params[:policy]) %> service
     </h3>
 
     <p class="govuk-body">
-      Please read these Terms of Use (“General Terms”) carefully before using this <%= t("service_name") %> service (the “Service”).
+      Please read these Terms of Use (“General Terms”) carefully before using this <%= policy_service_name(params[:policy]) %> service (the “Service”).
     </p>
 
     <p class="govuk-body">
@@ -42,7 +42,8 @@
     </p>
 
     <p class="govuk-body">
-      You can contact us using the following email address: <%= mail_to t("support_email_address"), t("support_email_address"), class: "govuk-link" %>
+      You can contact us using the following email address:
+      <%= mail_to support_email_address(params[:policy]), support_email_address(params[:policy]), class: "govuk-link" %>
     </p>
 
     <h3 class="govuk-heading-m">

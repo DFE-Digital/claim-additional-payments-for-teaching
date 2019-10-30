@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+- Make static pages such as "Cookies", and "Contact us" policy aware
+
 ## [Release 023] - 2019-10-29
 
 - Update copy to make it clear we may deduct a student loan repayment from

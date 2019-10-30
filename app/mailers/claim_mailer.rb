@@ -1,4 +1,6 @@
 class ClaimMailer < Mail::Notify::Mailer
+  helper :application
+
   def submitted(claim)
     view_mail_with_claim_and_subject(claim, "Your claim was received")
   end

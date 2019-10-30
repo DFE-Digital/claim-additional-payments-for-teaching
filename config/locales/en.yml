@@ -96,9 +96,12 @@ en:
     payroll_gender: "gender"
     address: "address"
     full_name: "Full name"
+  maths_and_physics:
+    policy_name: "Claim a payment for teaching maths or physics"
+    support_email_address: "mathsphysicsteacherpayment@digital.education.gov.uk"
   student_loans:
-    journey_name: "Teachers: claim back your student loan repayments"
-    support_email: "studentloanteacherpayment@digital.education.gov.uk"
+    policy_name: "Teachers: claim back your student loan repayments"
+    support_email_address: "studentloanteacherpayment@digital.education.gov.uk"
     questions:
       qts_award_year: "When did you complete your initial teacher training?"
       qts_award_years:

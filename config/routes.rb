@@ -21,13 +21,6 @@ Rails.application.routes.draw do
     root "static_pages#start_page"
   end
 
-  # setup static pages
-  get "/privacy_notice", to: "static_pages#privacy_notice", as: :privacy_notice
-  get "/terms_conditions", to: "static_pages#terms_conditions", as: :terms_conditions
-  get "/contact_us", to: "static_pages#contact_us", as: :contact_us
-  get "/cookies", to: "static_pages#cookies", as: :cookies
-  get "/accessibility_statement", to: "static_pages#accessibility_statement", as: :accessibility_statement
-
   scope path: ":policy", defaults: {policy: "student-loans"}, constraints: {policy: %r{student-loans}} do
     constraints slug: %r{#{StudentLoans::SlugSequence::SLUGS.join("|")}} do
       resources :claims, only: [:show, :update], param: :slug, path: "/"
@@ -40,6 +33,10 @@ Rails.application.routes.draw do
 
     get "timeout", to: "claims#timeout", as: :timeout_claim
     get "refresh-session", to: "claims#refresh_session", as: :claim_refresh_session
+
+    %w[privacy_notice terms_conditions contact_us cookies accessibility_statement].each do |page_name|
+      get page_name.dasherize, to: "static_pages##{page_name}", as: page_name
+    end
   end
 
   constraints lambda { |req| req.format == :json } do

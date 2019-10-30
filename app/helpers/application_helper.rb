@@ -4,7 +4,7 @@ module ApplicationHelper
       [].tap do |a|
         a << "Error" if show_error
         a << title
-        a << t("student_loans.journey_name")
+        a << t("student_loans.policy_name")
         a << "GOV.UK"
       end.join(" - ")
     end
@@ -18,5 +18,14 @@ module ApplicationHelper
     return if value.nil?
 
     number_to_currency(value, delimiter: "", unit: "")
+  end
+
+  def support_email_address(policy = nil)
+    translation_key = [policy&.underscore, "support_email_address"].compact.join(".")
+    t(translation_key)
+  end
+
+  def policy_service_name(policy = nil)
+    policy ? t("#{policy.underscore}.policy_name") : t("service_name")
   end
 end
