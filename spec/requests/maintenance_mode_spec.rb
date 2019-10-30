@@ -27,10 +27,10 @@ RSpec.describe "Maintenance Mode", type: :request do
     end
 
     it "still allows access to /admin for service operator access" do
-      get "/admin"
+      get admin_root_path
       expect(response).to redirect_to(admin_sign_in_path)
 
-      get "/admin/auth/sign-in"
+      get admin_sign_in_path
       expect(response).to have_http_status(:success)
       expect(response.body).to include("Sign in with DfE Sign In")
     end
@@ -48,7 +48,7 @@ RSpec.describe "Maintenance Mode", type: :request do
       end
 
       it "shows the time it will be available from" do
-        get "/"
+        get new_claim_path
         expect(response.body).to include(availability_message)
       end
     end
