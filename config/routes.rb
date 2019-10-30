@@ -16,7 +16,7 @@ Rails.application.routes.draw do
   # Excludes /admin so Service Operators can continue to check claims.
   if Rails.application.config.maintenance_mode
     root "static_pages#maintenance"
-    match "*path", to: redirect("/"), via: :all, constraints: lambda { |req| !%r{^/admin($|/)}.match?(req.path) }
+    match "*path", to: "static_pages#maintenance", via: :all, constraints: lambda { |req| !%r{^/admin($|/)}.match?(req.path) }
   else
     root "static_pages#start_page"
   end
