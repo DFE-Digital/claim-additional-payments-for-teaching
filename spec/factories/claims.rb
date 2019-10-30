@@ -13,8 +13,8 @@ FactoryBot.define do
       has_student_loan { true }
       student_loan_country { :england }
       student_loan_courses { :one_course }
-      student_loan_start_date { StudentLoans::BEFORE_1_SEPT_2012 }
-      student_loan_plan { StudentLoans::PLAN_1 }
+      student_loan_start_date { StudentLoan::BEFORE_1_SEPT_2012 }
+      student_loan_plan { StudentLoan::PLAN_1 }
       email_address { "test@email.com" }
       banking_name { "Jo Bloggs" }
       bank_sort_code { 123456 }

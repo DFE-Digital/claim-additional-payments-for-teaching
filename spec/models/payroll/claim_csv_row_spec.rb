@@ -11,7 +11,7 @@ RSpec.describe Payroll::ClaimCsvRow do
       build(:claim, :submittable,
         payroll_gender: :female,
         date_of_birth: Date.new(1980, 12, 1),
-        student_loan_plan: StudentLoans::PLAN_2,
+        student_loan_plan: StudentLoan::PLAN_2,
         bank_sort_code: "001122",
         bank_account_number: "01234567",
         banking_name: "Jo Bloggs",

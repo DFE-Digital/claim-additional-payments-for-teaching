@@ -3,7 +3,7 @@
 class Claim < ApplicationRecord
   TRN_LENGTH = 7
   NO_STUDENT_LOAN = "not_applicable"
-  STUDENT_LOAN_PLAN_OPTIONS = StudentLoans::PLANS.dup << NO_STUDENT_LOAN
+  STUDENT_LOAN_PLAN_OPTIONS = StudentLoan::PLANS.dup << NO_STUDENT_LOAN
   ADDRESS_ATTRIBUTES = %w[address_line_1 address_line_2 address_line_3 address_line_4 postcode].freeze
   EDITABLE_ATTRIBUTES = [
     :address_line_1,
@@ -65,8 +65,8 @@ class Claim < ApplicationRecord
     "student_loan_courses" => "student_loan_start_date",
   }.freeze
 
-  enum student_loan_country: StudentLoans::COUNTRIES
-  enum student_loan_start_date: StudentLoans::COURSE_START_DATES
+  enum student_loan_country: StudentLoan::COUNTRIES
+  enum student_loan_start_date: StudentLoan::COURSE_START_DATES
   enum student_loan_courses: {one_course: 0, two_or_more_courses: 1}
   enum student_loan_plan: STUDENT_LOAN_PLAN_OPTIONS
 
@@ -182,7 +182,7 @@ class Claim < ApplicationRecord
   end
 
   def student_loan_country_with_one_plan?
-    StudentLoans::PLAN_1_COUNTRIES.include?(student_loan_country)
+    StudentLoan::PLAN_1_COUNTRIES.include?(student_loan_country)
   end
 
   def address_verified?
@@ -284,7 +284,7 @@ class Claim < ApplicationRecord
 
   def determine_student_loan_plan
     if has_student_loan?
-      StudentLoans.determine_plan(student_loan_country, student_loan_start_date)
+      StudentLoan.determine_plan(student_loan_country, student_loan_start_date)
     else
       Claim::NO_STUDENT_LOAN
     end

@@ -18,19 +18,19 @@
 
             <div class="govuk-radios">
               <div class="govuk-radios__item">
-                <%= form.radio_button(:student_loan_country, StudentLoans::ENGLAND, class: "govuk-radios__input")%>
+                <%= form.radio_button(:student_loan_country, StudentLoan::ENGLAND, class: "govuk-radios__input")%>
                 <%= form.label :student_loan_country_england, "England", class: "govuk-label govuk-radios__label" %>
               </div>
               <div class="govuk-radios__item">
-                <%= form.radio_button(:student_loan_country, StudentLoans::NORTHERN_IRELAND, class: "govuk-radios__input")%>
+                <%= form.radio_button(:student_loan_country, StudentLoan::NORTHERN_IRELAND, class: "govuk-radios__input")%>
                 <%= form.label :student_loan_country_northern_ireland, "Northern Ireland", class: "govuk-label govuk-radios__label" %>
               </div>
               <div class="govuk-radios__item">
-                <%= form.radio_button(:student_loan_country, StudentLoans::SCOTLAND, class: "govuk-radios__input")%>
+                <%= form.radio_button(:student_loan_country, StudentLoan::SCOTLAND, class: "govuk-radios__input")%>
                 <%= form.label :student_loan_country_scotland, "Scotland", class: "govuk-label govuk-radios__label" %>
               </div>
               <div class="govuk-radios__item">
-                <%= form.radio_button(:student_loan_country, StudentLoans::WALES, class: "govuk-radios__input")%>
+                <%= form.radio_button(:student_loan_country, StudentLoan::WALES, class: "govuk-radios__input")%>
                 <%= form.label :student_loan_country_wales, "Wales", class: "govuk-label govuk-radios__label" %>
               </div>
             </div>
