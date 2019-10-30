@@ -9,7 +9,7 @@ module PartOfClaimJourney
   private
 
   def send_unstarted_claiments_to_the_start
-    redirect_to root_url unless current_claim.persisted?
+    redirect_to StudentLoans.start_page_url unless current_claim.persisted?
   end
 
   def current_claim

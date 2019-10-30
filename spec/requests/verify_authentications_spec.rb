@@ -123,10 +123,10 @@ RSpec.describe "GOV.UK Verify::AuthenticationsController requests", type: :reque
 
     it "redirects to the start page" do
       get new_verify_authentications_path
-      expect(response).to redirect_to(root_path)
+      expect(response).to redirect_to(StudentLoans.start_page_url)
 
       post verify_authentications_path
-      expect(response).to redirect_to(root_path)
+      expect(response).to redirect_to(StudentLoans.start_page_url)
     end
   end
 end
