@@ -150,6 +150,9 @@
     "NOTIFY_TEMPLATE_ID": {
       "type": "string"
     },
+    "NOTES_TO_BACKFILL": {
+      "type": "string"
+    },
     "ROLLBAR_ACCESS_TOKEN": {
       "type": "securestring"
     },
@@ -443,6 +446,10 @@
               {
                 "name": "NOTIFY_TEMPLATE_ID",
                 "value": "[parameters('NOTIFY_TEMPLATE_ID')]"
+              },
+              {
+                "name": "NOTES_TO_BACKFILL",
+                "value": "[parameters('NOTES_TO_BACKFILL')]"
               },
               {
                 "name": "ROLLBAR_ACCESS_TOKEN",

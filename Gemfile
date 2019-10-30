@@ -89,6 +89,7 @@ end
 group :test do
   gem "selenium-webdriver"
   gem "launchy"
+  gem "climate_control"
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
