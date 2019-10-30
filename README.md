@@ -128,9 +128,9 @@ because these models map to real-world entities with unique identifiers, and
 these identifiers are used as constants in the eligibility code. For example,
 the local authority of Barnsley is eligible for student loans as it's local
 authority code is listed in
-`StudentLoans::StudentLoans::ELIGIBLE_LOCAL_AUTHORITY_CODES`. By using fixtures
-for a small number of these real-world entities we avoid potentially flaky
-fixtures for things like eligible schools or districts where these unique
+`StudentLoans::SchoolEligibility::ELIGIBLE_LOCAL_AUTHORITY_CODES`. By using
+fixtures for a small number of these real-world entities we avoid potentially
+flaky fixtures for things like eligible schools or districts where these unique
 identifiers may clash. See the School factory for how the eligible school traits
 make use of the local authority and district fixtures to create eligible
 schools.
