@@ -99,7 +99,7 @@ RSpec.describe Claim, type: :model do
 
   context "that has a student loan plan" do
     it "validates the plan" do
-      expect(build(:claim, student_loan_plan: StudentLoans::PLAN_1)).to be_valid
+      expect(build(:claim, student_loan_plan: StudentLoan::PLAN_1)).to be_valid
 
       expect { build(:claim, student_loan_plan: "plan_42") }.to raise_error(ArgumentError)
     end
@@ -193,7 +193,7 @@ RSpec.describe Claim, type: :model do
   context "when saving in the “student-loan-start-date” validation context" do
     it "validates the presence of the student_loan_start_date" do
       expect(build(:claim, student_loan_courses: :one_course)).not_to be_valid(:"student-loan-start-date")
-      expect(build(:claim, student_loan_start_date: StudentLoans::BEFORE_1_SEPT_2012)).to be_valid(:"student-loan-start-date")
+      expect(build(:claim, student_loan_start_date: StudentLoan::BEFORE_1_SEPT_2012)).to be_valid(:"student-loan-start-date")
     end
 
     it "the validation error message is pluralized or not based on student_loan_how_many_courses" do
@@ -298,7 +298,7 @@ RSpec.describe Claim, type: :model do
     it "returns true when the student_loan_country is one with only a single student loan plan" do
       expect(build(:claim).student_loan_country_with_one_plan?).to eq false
 
-      StudentLoans::PLAN_1_COUNTRIES.each do |country|
+      StudentLoan::PLAN_1_COUNTRIES.each do |country|
         expect(build(:claim, student_loan_country: country).student_loan_country_with_one_plan?).to eq true
       end
     end
@@ -465,7 +465,7 @@ RSpec.describe Claim, type: :model do
       expect(claim.student_loan_country).to eq "scotland"
       expect(claim.student_loan_courses).to be_nil
       expect(claim.student_loan_start_date).to be_nil
-      expect(claim.student_loan_plan).to eq StudentLoans::PLAN_1
+      expect(claim.student_loan_plan).to eq StudentLoan::PLAN_1
     end
 
     it "redetermines the student_loan_plan and resets subsequent loan plan answers when student_loan_courses changes" do
@@ -482,16 +482,16 @@ RSpec.describe Claim, type: :model do
     end
 
     it "redetermines the student_loan_plan when the value of student_loan_start_date changes" do
-      claim.student_loan_start_date = StudentLoans::BEFORE_1_SEPT_2012
+      claim.student_loan_start_date = StudentLoan::BEFORE_1_SEPT_2012
       expect { claim.reset_dependent_answers }.not_to change { claim.attributes }
 
-      claim.student_loan_start_date = StudentLoans::ON_OR_AFTER_1_SEPT_2012
+      claim.student_loan_start_date = StudentLoan::ON_OR_AFTER_1_SEPT_2012
       claim.reset_dependent_answers
       expect(claim.has_student_loan).to eq true
       expect(claim.student_loan_country).to eq "england"
       expect(claim.student_loan_courses).to eq "one_course"
-      expect(claim.student_loan_start_date).to eq StudentLoans::ON_OR_AFTER_1_SEPT_2012
-      expect(claim.student_loan_plan).to eq StudentLoans::PLAN_2
+      expect(claim.student_loan_start_date).to eq StudentLoan::ON_OR_AFTER_1_SEPT_2012
+      expect(claim.student_loan_plan).to eq StudentLoan::PLAN_2
     end
   end
 

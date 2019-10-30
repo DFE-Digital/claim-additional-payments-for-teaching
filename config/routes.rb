@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
+  root to: redirect(StudentLoans.start_page_url)
 
   # If the CANONICAL_HOSTNAME env var is present, and the request doesn't come from that
   # hostname, redirect us to the canonical hostname with the path and query string present
@@ -15,10 +16,7 @@ Rails.application.routes.draw do
   # Catch-all for when the service has been placed in maintenance mode.
   # Excludes /admin so Service Operators can continue to check claims.
   if Rails.application.config.maintenance_mode
-    root "static_pages#maintenance"
-    match "*path", to: redirect("/"), via: :all, constraints: lambda { |req| !%r{^/admin($|/)}.match?(req.path) }
-  else
-    root "static_pages#start_page"
+    match "*path", to: "static_pages#maintenance", via: :all, constraints: lambda { |req| !%r{^/admin($|/)}.match?(req.path) }
   end
 
   scope path: ":policy", defaults: {policy: "student-loans"}, constraints: {policy: %r{student-loans}} do

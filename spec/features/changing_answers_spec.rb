@@ -287,10 +287,10 @@ RSpec.feature "Changing the answers on a submittable claim" do
 
     expect(current_path).to eq(claim_path("check-your-answers"))
     expect(claim.reload.has_student_loan).to eq true
-    expect(claim.student_loan_country).to eq StudentLoans::WALES
+    expect(claim.student_loan_country).to eq StudentLoan::WALES
     expect(claim.student_loan_courses).to eq "one_course"
-    expect(claim.student_loan_start_date).to eq StudentLoans::BEFORE_1_SEPT_2012
-    expect(claim.student_loan_plan).to eq StudentLoans::PLAN_1
+    expect(claim.student_loan_start_date).to eq StudentLoan::BEFORE_1_SEPT_2012
+    expect(claim.student_loan_plan).to eq StudentLoan::PLAN_1
   end
 
   scenario "user cannot change the value of an identity field that was acquired from Verify" do

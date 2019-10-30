@@ -80,8 +80,8 @@ RSpec.feature "Teacher Student Loan Repayments claims" do
       expect(claim.reload).to have_student_loan
       expect(claim.student_loan_country).to eq("england")
       expect(claim.student_loan_courses).to eq("one_course")
-      expect(claim.student_loan_start_date).to eq(StudentLoans::BEFORE_1_SEPT_2012)
-      expect(claim.student_loan_plan).to eq(StudentLoans::PLAN_1)
+      expect(claim.student_loan_start_date).to eq(StudentLoan::BEFORE_1_SEPT_2012)
+      expect(claim.student_loan_plan).to eq(StudentLoan::PLAN_1)
 
       expect(page).to have_text(I18n.t("student_loans.questions.student_loan_amount", claim_school_name: claim.eligibility.claim_school_name))
       fill_in I18n.t("student_loans.questions.student_loan_amount", claim_school_name: claim.eligibility.claim_school_name), with: "1100"

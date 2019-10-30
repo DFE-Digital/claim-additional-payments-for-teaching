@@ -63,7 +63,7 @@
         </div>
         <div class="govuk-header__content">
 
-          <%= link_to policy_service_name(params[:policy]), root_path, class: "govuk-header__link govuk-header__link--service-name" %>
+          <%= link_to policy_service_name(params[:policy]), StudentLoans.start_page_url, class: "govuk-header__link govuk-header__link--service-name" %>
 
           <% if admin_signed_in? %>
           <button type="button" role="button" class="govuk-header__menu-button govuk-js-header-toggle" aria-controls="navigation" aria-label="Show or hide Top Level Navigation">Menu</button>

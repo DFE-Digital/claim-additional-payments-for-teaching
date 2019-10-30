@@ -13,7 +13,7 @@ require "sprockets/railtie"
 # require "rails/test_unit/railtie"
 
 require_relative "../lib/verify"
-require_relative "../lib/student_loans"
+require_relative "../lib/student_loan"
 require_relative "../lib/dfe_sign_in"
 
 # Require the gems listed in Gemfile, including any gems

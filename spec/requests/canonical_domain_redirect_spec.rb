@@ -12,7 +12,7 @@ RSpec.describe "Canonical domain redirect", type: :request do
   end
 
   it "redirects to the canonical domain" do
-    expect(get("http://example.org/")).to redirect_to("http://teacherpayments.com/")
+    expect(get("http://example.org/claim/new")).to redirect_to("http://teacherpayments.com/claim/new")
     expect(response.status).to eq(301)
   end
 

@@ -19,26 +19,26 @@
             <% if current_claim.student_loan_courses == "one_course" %>
               <div class="govuk-radios">
                 <div class="govuk-radios__item">
-                  <%= form.radio_button(:student_loan_start_date, StudentLoans::BEFORE_1_SEPT_2012, class: "govuk-radios__input")%>
+                  <%= form.radio_button(:student_loan_start_date, StudentLoan::BEFORE_1_SEPT_2012, class: "govuk-radios__input")%>
                   <%= form.label :student_loan_start_date_before_first_september_2012, t("answers.student_loan_start_date.one_course.before_first_september_2012"), class: "govuk-label govuk-radios__label" %>
                 </div>
                 <div class="govuk-radios__item">
-                  <%= form.radio_button(:student_loan_start_date, StudentLoans::ON_OR_AFTER_1_SEPT_2012, class: "govuk-radios__input")%>
+                  <%= form.radio_button(:student_loan_start_date, StudentLoan::ON_OR_AFTER_1_SEPT_2012, class: "govuk-radios__input")%>
                   <%= form.label :student_loan_start_date_on_or_after_first_september_2012, t("answers.student_loan_start_date.one_course.on_or_after_first_september_2012"), class: "govuk-label govuk-radios__label" %>
                 </div>
               </div>
             <% else %>
               <div class="govuk-radios">
                 <div class="govuk-radios__item">
-                  <%= form.radio_button(:student_loan_start_date, StudentLoans::BEFORE_1_SEPT_2012, class: "govuk-radios__input")%>
+                  <%= form.radio_button(:student_loan_start_date, StudentLoan::BEFORE_1_SEPT_2012, class: "govuk-radios__input")%>
                   <%= form.label :student_loan_start_date_before_first_september_2012, t("answers.student_loan_start_date.two_or_more_courses.before_first_september_2012"), class: "govuk-label govuk-radios__label" %>
                 </div>
                 <div class="govuk-radios__item">
-                  <%= form.radio_button(:student_loan_start_date, StudentLoans::BEFORE_AND_AFTER_1_SEPT_2012, class: "govuk-radios__input")%>
+                  <%= form.radio_button(:student_loan_start_date, StudentLoan::BEFORE_AND_AFTER_1_SEPT_2012, class: "govuk-radios__input")%>
                   <%= form.label :student_loan_start_date_some_before_some_after_first_september_2012, t("answers.student_loan_start_date.two_or_more_courses.some_before_some_after_first_september_2012"), class: "govuk-label govuk-radios__label" %>
                 </div>
                 <div class="govuk-radios__item">
-                  <%= form.radio_button(:student_loan_start_date, StudentLoans::ON_OR_AFTER_1_SEPT_2012, class: "govuk-radios__input")%>
+                  <%= form.radio_button(:student_loan_start_date, StudentLoan::ON_OR_AFTER_1_SEPT_2012, class: "govuk-radios__input")%>
                   <%= form.label :student_loan_start_date_on_or_after_first_september_2012, t("answers.student_loan_start_date.two_or_more_courses.on_or_after_first_september_2012"), class: "govuk-label govuk-radios__label" %>
                 </div>
               </div>

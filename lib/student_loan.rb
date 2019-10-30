@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module StudentLoans
+module StudentLoan
   COUNTRIES = [
     ENGLAND = "england",
     NORTHERN_IRELAND = "northern_ireland",

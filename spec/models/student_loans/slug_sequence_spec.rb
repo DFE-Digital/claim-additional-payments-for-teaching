@@ -27,7 +27,7 @@ RSpec.describe StudentLoans::SlugSequence do
     it "excludes the remaining student loan plan slugs if the claimant received their student loan in a Plan 1 country" do
       claim.has_student_loan = true
 
-      StudentLoans::PLAN_1_COUNTRIES.each do |plan_1_country|
+      StudentLoan::PLAN_1_COUNTRIES.each do |plan_1_country|
         claim.student_loan_country = plan_1_country
         expect(slug_sequence.slugs).to include("student-loan-country")
         expect(slug_sequence.slugs).not_to include("student-loan-how-many-courses")
