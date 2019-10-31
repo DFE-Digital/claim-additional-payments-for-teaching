@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+## [Release 024] - 2019-10-31
+
 - Updated feedback URL ready for public beta
 - Service updated to be linked to from external start page
 - Update the Verify Service Provider to version 2.1.0
@@ -176,7 +178,9 @@ The format is based on [Keep a Changelog]
 - First release for student loan repayments private beta
 
 [unreleased]:
-  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-023...HEAD
+  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-024...HEAD
+[release 024]:
+  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-023...release-024
 [release 023]:
   https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-022...release-023
 [release 022]:
