@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+## [Release 025] - 2019-10-31
+
+- Adjusted ineligibility screens for users who may have taught at more than one
+  school
 - Allow user to restart their claim by visiting start page
 
 ## [Release 024] - 2019-10-31
@@ -180,7 +184,9 @@ The format is based on [Keep a Changelog]
 - First release for student loan repayments private beta
 
 [unreleased]:
-  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-024...HEAD
+  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-025...HEAD
+[release 025]:
+  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-024...release-025
 [release 024]:
   https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-023...release-024
 [release 023]:
