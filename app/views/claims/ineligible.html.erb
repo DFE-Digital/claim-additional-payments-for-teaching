@@ -2,10 +2,6 @@
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-    <h1 class="govuk-heading-xl">
-      You’re not eligible for this payment
-    </h1>
-
     <%= render partial: "ineligibility_reason_#{current_claim.eligibility.ineligibility_reason}", locals: { claim_school_name: current_claim.eligibility.claim_school_name, current_school_name: current_claim.eligibility.current_school_name } %>
 
     <p class="govuk-body">
