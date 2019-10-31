@@ -1,4 +1,8 @@
 <p class="govuk-body">
+  You did not teach an eligible subject at <%= claim_school_name %>.
+</p>
+
+<p class="govuk-body">
   You can only get this payment if you taught one or more of the following
   subjects between 6 April 2018 and 5 April 2019:
 </p>
@@ -10,3 +14,12 @@
   <li>computer science</li>
   <li>languages (not including English)</li>
 </ul>
+
+<p class="govuk-body">
+  If you taught at more than one school between April 6 2018 and April 5 2019,
+  you can <%= link_to "start your claim again", new_claim_path %> with another
+  school. You only need to have taught an eligible subject at one eligible
+  school to claim.
+<p>
+
+
