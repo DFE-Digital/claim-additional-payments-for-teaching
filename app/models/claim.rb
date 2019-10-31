@@ -208,6 +208,10 @@ class Claim < ApplicationRecord
     self.student_loan_plan = determine_student_loan_plan
   end
 
+  def policy
+    eligibility.class.parent
+  end
+
   private
 
   def normalise_trn

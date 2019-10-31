@@ -304,6 +304,12 @@ RSpec.describe Claim, type: :model do
     end
   end
 
+  describe "#policy" do
+    it "returns the claim’s policy namespace" do
+      expect(Claim.new(eligibility: StudentLoans::Eligibility.new).policy).to eq StudentLoans
+    end
+  end
+
   describe "#submit!" do
     around do |example|
       freeze_time { example.run }

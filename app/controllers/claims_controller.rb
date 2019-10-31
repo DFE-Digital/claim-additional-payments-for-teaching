@@ -76,6 +76,6 @@ class ClaimsController < ApplicationController
   end
 
   def claim_slug_sequence
-    current_claim.eligibility.class.parent::SlugSequence.new(current_claim)
+    current_claim.policy::SlugSequence.new(current_claim)
   end
 end

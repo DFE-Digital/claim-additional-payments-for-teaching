@@ -128,7 +128,7 @@ module Payroll
     end
 
     def scheme_name
-      model.eligibility.class.name.deconstantize.titlecase
+      model.policy.name.titlecase
     end
 
     def scheme_amount
