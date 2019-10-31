@@ -31,9 +31,19 @@
           <strong>No results match that search term. Try again.</strong>
         </p>
       <% else %>
-        <span class="govuk-hint">
-          Enter the school name. Use at least four characters.
-        </span>
+        <p class="govuk-body">
+          <span class="govuk-hint">
+            Enter the school name. Use at least four characters.
+          </span>
+        </p>
+
+        <% if school_id_param == :claim_school_id %>
+          <p class="govuk-body">
+            <span class="govuk-hint">
+              If you worked at multiple schools during this period, enter the first school you think might be eligible.
+            </span>
+          </p>
+        <% end %>
       <% end %>
 
       <div id="school-search-container">

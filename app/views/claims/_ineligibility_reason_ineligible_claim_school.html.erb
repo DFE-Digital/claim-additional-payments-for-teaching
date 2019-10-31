@@ -1,5 +1,15 @@
+<h1 class="govuk-heading-xl">
+  This school is not eligible
+</h1>
+
 <p class="govuk-body">
-  <%= claim_school_name %>, where you were employed between 6 April 2018 and 5
-  April 2019, is not an eligible school. You can only get this payment if you
-  were employed at an eligible school.
+  <%= claim_school_name %> is not an eligible school. You can only get this
+  payment if you  were employed at an eligible school between 6 April 2018
+  and 5 April 2019.
+</p>
+
+<p class="govuk-body">
+  If you taught at more than one school during this period, you can
+  <%= link_to "start your claim again", new_claim_path, class: "govuk-link" %> with another school.
+  You only need to have worked at one eligible school to claim.
 </p>
