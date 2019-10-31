@@ -6,7 +6,7 @@ class ApplicationController < ActionController::Base
   http_basic_authenticate_with(
     name: ENV["BASIC_AUTH_USERNAME"],
     password: ENV["BASIC_AUTH_PASSWORD"],
-    if: -> { ENV.key?("BASIC_AUTH_USERNAME") },
+    if: -> { ENV["BASIC_AUTH_USERNAME"].present? },
   )
 
   helper_method :admin_signed_in?, :claim_timeout_in_minutes, :claim_timeout_warning_in_minutes
