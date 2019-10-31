@@ -5,11 +5,8 @@ class ClaimsController < ApplicationController
   before_action :check_page_is_in_sequence, only: [:show, :update]
 
   def new
-    if current_claim.persisted?
-      redirect_to claim_path(page_sequence.slugs.first)
-    else
-      render first_template_in_sequence
-    end
+    clear_claim_session
+    render first_template_in_sequence
   end
 
   def create
