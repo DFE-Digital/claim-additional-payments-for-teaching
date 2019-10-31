@@ -142,10 +142,10 @@
       }
     },
     "MAINTENANCE_MODE": {
-      "value": "1"
+      "value": ""
     },
     "MAINTENANCE_MODE_AVAILABILITY_MESSAGE": {
-      "value": "It's not possible to make a claim at the moment. The service will be back in November."
+      "value": ""
     },
     "NOTIFY_API_KEY": {
       "reference": {
