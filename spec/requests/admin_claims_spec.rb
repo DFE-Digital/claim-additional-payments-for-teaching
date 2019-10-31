@@ -20,10 +20,21 @@ RSpec.describe "Admin claims", type: :request do
   describe "claims#show" do
     let(:claim) { create(:claim, :submitted) }
 
-    it "returns a claim when one exists" do
+    it "returns the claim" do
       get admin_claim_path(claim)
 
       expect(response.body).to include(claim.reference)
+    end
+
+    context "when another claim has matching attributes" do
+      let!(:claim_with_matching_attributes) { create(:claim, :submitted) }
+
+      it "returns the claim and the duplicate" do
+        get admin_claim_path(claim)
+
+        expect(response.body).to include(claim.reference)
+        expect(response.body).to include(claim_with_matching_attributes.reference)
+      end
     end
   end
 

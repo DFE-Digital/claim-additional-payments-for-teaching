@@ -18,4 +18,12 @@
     color: govuk-colour("red");
     border-color: govuk-colour("red");
   }
+  &__warning {
+    @extend %govuk-flash;
+    color: govuk-colour("orange");
+    border-color: govuk-colour("orange");
+    a {
+      color: govuk-colour("orange");
+    }
+  }
 }
