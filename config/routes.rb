@@ -19,6 +19,8 @@ Rails.application.routes.draw do
     match "*path", to: "static_pages#maintenance", via: :all, constraints: lambda { |req| !%r{^/admin($|/)}.match?(req.path) }
   end
 
+  get "refresh-session", to: "sessions#refresh", as: :refresh_session
+
   scope path: ":policy", defaults: {policy: "student-loans"}, constraints: {policy: %r{student-loans}} do
     constraints slug: %r{#{StudentLoans::SlugSequence::SLUGS.join("|")}} do
       resources :claims, only: [:show, :update], param: :slug, path: "/"
@@ -30,7 +32,6 @@ Rails.application.routes.draw do
     get "claims/confirmation", as: :claim_confirmation, to: "submissions#show"
 
     get "timeout", to: "claims#timeout", as: :timeout_claim
-    get "refresh-session", to: "claims#refresh_session", as: :claim_refresh_session
 
     %w[privacy_notice terms_conditions contact_us cookies accessibility_statement].each do |page_name|
       get page_name.dasherize, to: "static_pages##{page_name}", as: page_name

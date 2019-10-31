@@ -17,7 +17,7 @@ RSpec.feature "Teacher Student Loan Repayments claims", js: true do
 
   scenario "Claimants can refresh their session" do
     expect(page).to have_content("Your session will expire in #{one_second_in_minutes} minutes")
-    expect_any_instance_of(ClaimsController).to receive(:update_last_seen_at)
+    expect_any_instance_of(SessionsController).to receive(:update_last_seen_at)
     click_on "Continue session"
   end
 

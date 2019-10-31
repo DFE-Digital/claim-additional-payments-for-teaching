@@ -1,7 +1,7 @@
 class ClaimsController < ApplicationController
   include PartOfClaimJourney
 
-  skip_before_action :send_unstarted_claiments_to_the_start, only: [:new, :create, :timeout, :refresh_session]
+  skip_before_action :send_unstarted_claiments_to_the_start, only: [:new, :create, :timeout]
   before_action :check_page_is_in_sequence, only: [:show, :update]
 
   def new
@@ -37,10 +37,6 @@ class ClaimsController < ApplicationController
   end
 
   def timeout
-  end
-
-  def refresh_session
-    head :ok
   end
 
   private

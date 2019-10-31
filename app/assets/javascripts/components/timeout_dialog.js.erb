@@ -20,7 +20,7 @@
 
   function refreshSession() {
     Rails.ajax({
-      url: "<%= claim_refresh_session_path %>",
+      url: "<%= refresh_session_path %>",
       type: "get",
       success: function() {
         clearInterval(window.sessionTimeoutTimer);
