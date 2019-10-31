@@ -7,7 +7,7 @@
     <p class="govuk-body">
       For more information about the eligibility criteria, or if you need help with
       your claim, contact
-      <%= mail_to "studentloanteacherpayment@digital.education.gov.uk", "studentloanteacherpayment@digital.education.gov.uk", class: "govuk-link" %>.
+      <%= mail_to support_email_address(params[:policy]), support_email_address(params[:policy]), class: "govuk-link" %>.
     </p>
   </div>
 </div>
