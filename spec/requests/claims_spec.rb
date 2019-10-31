@@ -2,16 +2,21 @@ require "rails_helper"
 
 RSpec.describe "Claims", type: :request do
   describe "claims#new request" do
-    it "renders the first page in the sequence" do
-      get new_claim_path
-      expect(response.body).to include(I18n.t("student_loans.questions.qts_award_year"))
+    context "the user has not already started a claim" do
+      it "renders the first page in the sequence" do
+        get new_claim_path
+        expect(response.body).to include(I18n.t("student_loans.questions.qts_award_year"))
+      end
     end
 
-    it "redirects to the first page in the sequence if a claim has been started already" do
-      start_claim
+    context "the user has already started a claim" do
+      before { start_claim }
 
-      get new_claim_path
-      expect(response).to redirect_to(claim_path(StudentLoans::SlugSequence::SLUGS.first))
+      it "clears the current claim from the session, and renders the first page in the sequence" do
+        expect { get new_claim_path }.to change { session[:claim_id] }.from(String).to(nil)
+
+        expect(response.body).to include(I18n.t("student_loans.questions.qts_award_year"))
+      end
     end
   end
 

@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+- Allow user to restart their claim by visiting start page
+
 ## [Release 024] - 2019-10-31
 
 - Updated feedback URL ready for public beta

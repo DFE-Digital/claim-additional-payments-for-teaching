@@ -98,4 +98,19 @@ RSpec.feature "Ineligible Teacher Student Loan Repayments claims" do
     expect(page).to have_text("You’re not eligible")
     expect(page).to have_text("You can only get this payment if you spent less than half your working hours performing leadership duties between 6 April 2018 and 5 April 2019.")
   end
+
+  scenario "claimant can start a fresh claim after being told they are ineligible, by visiting the start page" do
+    start_claim
+    choose_school schools(:hampstead_school)
+    expect(page).to have_text("You’re not eligible")
+
+    visit new_claim_path
+
+    expect(page).to have_content("When did you complete your initial teacher training?")
+    expect(page).not_to have_css("input[checked]")
+    choose_qts_year
+
+    choose_school schools(:penistone_grammar_school)
+    expect(page).to have_text("Are you still employed to teach at a school in England?")
+  end
 end
