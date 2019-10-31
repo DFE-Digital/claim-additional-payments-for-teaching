@@ -1,10 +1,10 @@
-<%= page_title("Privacy Notice: #{policy_service_name(params[:policy])}") %>
+<%= page_title("Privacy Notice: #{policy_service_name(current_policy_routing_name)}") %>
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
 
     <h1 class="govuk-heading-xl">
-      Privacy Notice: <%= policy_service_name(params[:policy]) %>
+      Privacy Notice: <%= policy_service_name(current_policy_routing_name) %>
     </h1>
 
     <h2 class="govuk-heading-l">
@@ -14,8 +14,8 @@
     <p class="govuk-body">
       This work is being carried out by the Department for Education (DfE) Digital, which is a part of DfE. DfE engages
       the private companies The Dextrous Web Ltd and Paper Design Studio Ltd to help improve and provide the service. For the purpose of data protection legislation, DfE
-      is the data controller for the personal data processed as part of <%= policy_service_name(params[:policy]) %>.
-      <%= policy_service_name(params[:policy]) %> is a free and optional service for eligible teachers to claim back student loan
+      is the data controller for the personal data processed as part of <%= policy_service_name(current_policy_routing_name) %>.
+      <%= policy_service_name(current_policy_routing_name) %> is a free and optional service for eligible teachers to claim back student loan
       repayments.
     </p>
 
@@ -66,7 +66,7 @@
 
     <p class="govuk-body">
       In order for our use of your personal data to be lawful, we need to meet one or more conditions in the data
-      protection legislation.  For the purpose of ‘<%= policy_service_name(params[:policy]) %>‘, the Department processes your
+      protection legislation.  For the purpose of ‘<%= policy_service_name(current_policy_routing_name) %>‘, the Department processes your
       data where it is necessary for the performance of a task carried out in the public interest or in the exercise of
       official authority (Article 6(1)(e) of the General Data Protection Regulation).
     </p>
@@ -95,7 +95,7 @@
         to enable users to use the service and receive updates
       </li>
       <li>
-        for security purposes: collecting the IP addresses of people visiting ‘<%= policy_service_name(params[:policy]) %>’
+        for security purposes: collecting the IP addresses of people visiting ‘<%= policy_service_name(current_policy_routing_name) %>’
         (for example, if we were receiving continuous direct denial of service attacks from an IP address then we could block it)
       </li>
     </ul>

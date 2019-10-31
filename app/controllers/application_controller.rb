@@ -9,12 +9,16 @@ class ApplicationController < ActionController::Base
     if: -> { ENV["BASIC_AUTH_USERNAME"].present? },
   )
 
-  helper_method :admin_signed_in?, :claim_timeout_in_minutes, :claim_timeout_warning_in_minutes
+  helper_method :current_policy_routing_name, :admin_signed_in?, :claim_timeout_in_minutes, :claim_timeout_warning_in_minutes
   before_action :end_expired_admin_sessions
   before_action :end_expired_claim_sessions
   before_action :update_last_seen_at
 
   private
+
+  def current_policy_routing_name
+    params[:policy]
+  end
 
   def admin_signed_in?
     session.key?(:user_id)

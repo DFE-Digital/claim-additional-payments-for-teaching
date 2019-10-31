@@ -22,7 +22,7 @@
       </summary>
       <div class="govuk-details__text">
         If you find that some of this information is incorrect please contact support at
-        <%= mail_to support_email_address(params[:policy]), support_email_address(params[:policy]), class: "govuk-link" %>
+        <%= mail_to support_email_address(current_policy_routing_name), support_email_address(current_policy_routing_name), class: "govuk-link" %>
         as this could affect your application.
       </div>
     </details>

@@ -2,7 +2,7 @@
 <html lang="en" class="govuk-template app-html-class">
   <head>
     <title>
-      <%= content_for(:page_title) || "#{policy_service_name(params[:policy])} – GOV.UK" %>
+      <%= content_for(:page_title) || "#{policy_service_name(current_policy_routing_name)} – GOV.UK" %>
     </title>
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
@@ -35,7 +35,7 @@
 
     <div id="global-cookie-message" class="govuk-cookie-banner" role="region" aria-label="cookie banner">
       <div class="govuk-width-container">
-        <p class="govuk-cookie-banner__message"><%= policy_service_name(params[:policy]) %> uses cookies to make the site simpler.</p>
+        <p class="govuk-cookie-banner__message"><%= policy_service_name(current_policy_routing_name) %> uses cookies to make the site simpler.</p>
         <div class="govuk-cookie-banner__buttons">
           <button id="accept-cookies" class="govuk-button govuk-button--secondary" type="submit" data-module="govuk-button">Accept cookies</button>
           <%= link_to('Cookie information', cookies_path, class: "govuk-button govuk-button--secondary ") %>
@@ -63,7 +63,7 @@
         </div>
         <div class="govuk-header__content">
 
-          <%= link_to policy_service_name(params[:policy]), StudentLoans.start_page_url, class: "govuk-header__link govuk-header__link--service-name" %>
+          <%= link_to policy_service_name(current_policy_routing_name), StudentLoans.start_page_url, class: "govuk-header__link govuk-header__link--service-name" %>
 
           <% if admin_signed_in? %>
           <button type="button" role="button" class="govuk-header__menu-button govuk-js-header-toggle" aria-controls="navigation" aria-label="Show or hide Top Level Navigation">Menu</button>

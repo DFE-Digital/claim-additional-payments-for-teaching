@@ -8,6 +8,10 @@ module PartOfClaimJourney
 
   private
 
+  def current_policy_routing_name
+    current_claim.eligibility.class.parent.routing_name
+  end
+
   def send_unstarted_claiments_to_the_start
     redirect_to StudentLoans.start_page_url unless current_claim.persisted?
   end

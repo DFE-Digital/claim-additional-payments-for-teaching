@@ -23,7 +23,7 @@
     </ul>
 
     <div class="panel panel-border-wide">
-      <p class="govuk-body"><%= policy_service_name(params[:policy]) %>  cookies aren’t used to identify you personally.</p>
+      <p class="govuk-body"><%= policy_service_name(current_policy_routing_name) %>  cookies aren’t used to identify you personally.</p>
     </div>
 
     <p class="govuk-body">
@@ -35,7 +35,7 @@
     </h2>
 
     <p class="govuk-body">
-      We use Google Analytics software to collect information about how you use <%= policy_service_name(params[:policy]) %>.
+      We use Google Analytics software to collect information about how you use <%= policy_service_name(current_policy_routing_name) %>.
       We do this to help make sure the site is meeting the needs of its users and to help us make improvements.
     </p>
 
@@ -44,7 +44,7 @@
     </p>
 
     <ul class="govuk-list govuk-list--bullet">
-      <li>the pages you visit on <%= policy_service_name(params[:policy]) %></li>
+      <li>the pages you visit on <%= policy_service_name(current_policy_routing_name) %></li>
       <li>how long you spend on each page</li>
       <li>how you got to the site</li>
       <li>what you click on while you’re visiting the site</li>
@@ -71,13 +71,13 @@
       <tbody>
         <tr class="govuk-table__row">
           <td class="govuk-table__cell">_ga</td>
-          <td class="govuk-table__cell">This helps us count how many people visit <%= policy_service_name(params[:policy]) %> by tracking if you’ve visited before</td>
+          <td class="govuk-table__cell">This helps us count how many people visit <%= policy_service_name(current_policy_routing_name) %> by tracking if you’ve visited before</td>
           <td class="govuk-table__cell">After 2 years</td>
         </tr>
         <tr>
           <tr class="govuk-table__row">
           <td class="govuk-table__cell">_gid</td>
-          <td class="govuk-table__cell">This helps us count how many people visit <%= policy_service_name(params[:policy]) %> by tracking if you’ve visited before</td>
+          <td class="govuk-table__cell">This helps us count how many people visit <%= policy_service_name(current_policy_routing_name) %> by tracking if you’ve visited before</td>
           <td class="govuk-table__cell">After 24 hours</td>
         </tr>
         <tr>
@@ -98,7 +98,7 @@
     </h2>
 
     <p class="govuk-body">
-      We use Google Forms software to collect information about what you thought of the <%= policy_service_name(params[:policy]) %> service.
+      We use Google Forms software to collect information about what you thought of the <%= policy_service_name(current_policy_routing_name) %> service.
       We do this to help make sure the site is meeting the needs of its users and to help us make improvements.
     </p>
 
@@ -136,7 +136,7 @@
     </h2>
 
     <p class="govuk-body">
-      You will see a pop-up cookie consent message when you visit <%= policy_service_name(params[:policy]) %>.
+      You will see a pop-up cookie consent message when you visit <%= policy_service_name(current_policy_routing_name) %>.
       If you give us consent to, we'll store a cookie so that your computer knows you’ve consented to non-essential cookies and don't ask you again.
     </p>
 

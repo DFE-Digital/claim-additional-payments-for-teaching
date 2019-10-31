@@ -1,10 +1,10 @@
-<%= page_title("Accessibility statement for #{policy_service_name(params[:policy])}") %>
+<%= page_title("Accessibility statement for #{policy_service_name(current_policy_routing_name)}") %>
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
 
     <h1 class="govuk-heading-xl">
-      Accessibility statement for <%= policy_service_name(params[:policy]) %>
+      Accessibility statement for <%= policy_service_name(current_policy_routing_name) %>
     </h1>
 
     <p class="govuk-body">
@@ -53,7 +53,7 @@
 
     <p class="govuk-body">
       If you need information on this website in a different format or cannot use the service,
-      contact us at <%= mail_to support_email_address(params[:policy]), support_email_address(params[:policy]), class: "govuk-link" %>.
+      contact us at <%= mail_to support_email_address(current_policy_routing_name), support_email_address(current_policy_routing_name), class: "govuk-link" %>.
     </p>
 
     <p class="govuk-body">
@@ -67,7 +67,7 @@
     <p class="govuk-body">
       We’re always looking to improve the accessibility of this website. If you find any problems that aren’t listed on
       this page or think we’re not meeting accessibility requirements, contact us at
-      <%= mail_to support_email_address(params[:policy]), support_email_address(params[:policy]), class: "govuk-link" %>.
+      <%= mail_to support_email_address(current_policy_routing_name), support_email_address(current_policy_routing_name), class: "govuk-link" %>.
     </p>
 
     <h2 class="govuk-heading-l">
@@ -105,7 +105,7 @@
 
     <ul class="govuk-list govuk-list--bullet">
       <li>
-        the ‘<%= policy_service_name(params[:policy]) %> service’
+        the ‘<%= policy_service_name(current_policy_routing_name) %> service’
       </li>
     </ul>
 
