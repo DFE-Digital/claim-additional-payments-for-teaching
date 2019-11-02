@@ -23,8 +23,8 @@ RSpec.feature "Admin user session timeout", js: true do
   end
 
   scenario "automatically signs out the admin session if no action taken" do
-    wait_until_visible { find("h1", text: "Your session has ended due to inactivity") }
-    expect(current_path).to eql(timeout_claim_path)
+    wait_until_visible { find("h1", text: "Sign in with DfE Sign In") }
+    expect(current_path).to eql(admin_sign_in_path)
 
     visit admin_root_path
     expect(page).to have_content("Sign in with DfE Sign In")
