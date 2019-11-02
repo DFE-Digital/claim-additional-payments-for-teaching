@@ -3,8 +3,8 @@
     class: "dialog",
     aria: {hidden: true},
     data: {
-      "timeout-in-minutes" => claim_timeout_in_minutes,
-      "warning-in-minutes" => claim_timeout_warning_in_minutes,
+      "timeout-in-minutes" => timeout_in_minutes,
+      "warning-in-minutes" => timeout_warning_in_minutes,
     },
   ) do %>
   <div class="dialog-overlay" tabindex="-1" data-a11y-dialog-hide=""></div>
@@ -18,7 +18,7 @@
       </button>
     </div>
     <h1 id="timeout_dialog_title" class="govuk-heading-l">
-      Your session will expire in <%= claim_timeout_warning_in_minutes %> minutes
+      Your session will expire in <%= timeout_warning_in_minutes %> minutes
     </h1>
     <p class="govuk-body">
       We won't be able to save what you have done and you will lose

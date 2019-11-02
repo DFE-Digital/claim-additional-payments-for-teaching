@@ -29,7 +29,7 @@
   <body class="govuk-template__body">
     <%= javascript_include_tag 'js_check' %>
 
-    <%= render("timeout_dialog") if claim_in_progress? %>
+    <%= render("timeout_dialog", timeout_in_minutes: claim_timeout_in_minutes) if claim_in_progress? %>
 
     <a href="#main-content" class="govuk-skip-link">Skip to main content</a>
 

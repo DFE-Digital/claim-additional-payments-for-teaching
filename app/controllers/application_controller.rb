@@ -9,7 +9,7 @@ class ApplicationController < ActionController::Base
     if: -> { ENV["BASIC_AUTH_USERNAME"].present? },
   )
 
-  helper_method :current_policy_routing_name, :admin_signed_in?, :claim_timeout_in_minutes, :claim_timeout_warning_in_minutes
+  helper_method :current_policy_routing_name, :admin_signed_in?, :admin_timeout_in_minutes, :claim_timeout_in_minutes, :timeout_warning_in_minutes
   before_action :end_expired_admin_sessions
   before_action :end_expired_claim_sessions
   before_action :update_last_seen_at
@@ -24,11 +24,15 @@ class ApplicationController < ActionController::Base
     session.key?(:user_id)
   end
 
+  def admin_timeout_in_minutes
+    ADMIN_TIMEOUT_LENGTH_IN_MINUTES
+  end
+
   def claim_timeout_in_minutes
     self.class::CLAIM_TIMEOUT_LENGTH_IN_MINUTES
   end
 
-  def claim_timeout_warning_in_minutes
+  def timeout_warning_in_minutes
     self.class::CLAIM_TIMEOUT_WARNING_LENGTH_IN_MINUTES
   end
 
@@ -49,7 +53,7 @@ class ApplicationController < ActionController::Base
   end
 
   def admin_session_timed_out?
-    admin_signed_in? && session[:last_seen_at] < ADMIN_TIMEOUT_LENGTH_IN_MINUTES.minutes.ago
+    admin_signed_in? && session[:last_seen_at] < admin_timeout_in_minutes.minutes.ago
   end
 
   def end_expired_admin_sessions
