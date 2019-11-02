@@ -2,10 +2,12 @@
 
 (function() {
   var dialogElement = document.getElementById("timeout_dialog");
+
+  if (!dialogElement) return;
+
   var continueButtonElement = document.getElementById("continue_session");
   var warningTimeInMinutes = dialogElement.getAttribute("data-warning-in-minutes");
   var timeoutInMinutes = dialogElement.getAttribute("data-timeout-in-minutes");
-  var claimInProgress = dialogElement.getAttribute("data-claim-in-progress");
   var timeoutInMilliseconds = (timeoutInMinutes - warningTimeInMinutes) * 60 * 1000;
   var dialog = new window.A11yDialog(dialogElement);
 
@@ -35,11 +37,9 @@
   }
 
   function showTimeoutDialog() {
-    if (claimInProgress === "true") {
-      dialogElement.setAttribute("aria-hidden", "false");
-      dialog.show();
-      setTimeout(sessionTimedOut, warningTimeInMinutes * 60 * 1000);
-    }
+    dialogElement.setAttribute("aria-hidden", "false");
+    dialog.show();
+    setTimeout(sessionTimedOut, warningTimeInMinutes * 60 * 1000);
   }
 
   window.sessionTimeoutTimer = setInterval(showTimeoutDialog, timeoutInMilliseconds);
