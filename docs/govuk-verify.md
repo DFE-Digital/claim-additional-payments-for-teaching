@@ -33,6 +33,23 @@ You can check that the VSP is running ok by hitting the healthcheck URL:
 curl localhost:50300/admin/healthcheck
 ```
 
+### How to complete the Verify user journey in local development
+
+After beginning the Verify flow, you will be redirected to a URL which looks
+something like
+`https://compliance-tool-reference.ida.digital.cabinet-office.gov.uk/SAML2/SSO`,
+and which will display a JSON object in your browser. To complete the Verify
+flow from here:
+
+1. Follow the `responseGeneratorLocation` URL from this JSON object.
+2. This will give you another JSON object, which provides `executeUri` URLs
+   which you can follow to simulate various Verify outcomes. For example, to
+   simulate a successful Verify outcome, use the test case whose title at the
+   time of writing is "Verified User On Service With Non Match Setting".
+
+These steps are explained in more detail in the
+[Verify documentation](https://www.docs.verify.service.gov.uk/get-started/set-up-successful-verification-journey/#run-the-identity-verified-response-scenario).
+
 ## Managing Certificates for the IDAP PKI
 
 Two certificates are used one for signing and one for encryption.
