@@ -1,4 +1,13 @@
-<div id="timeout_dialog" class="dialog" aria-hidden="true" data-timeout-in-minutes="<%= claim_timeout_in_minutes %>" data-warning-in-minutes="<%= claim_timeout_warning_in_minutes %>" data-claim-in-progress="<%= claim_in_progress? %>">
+<%= tag.div(
+    id: "timeout_dialog",
+    class: "dialog",
+    aria: {hidden: true},
+    data: {
+      "timeout-in-minutes" => timeout_in_minutes,
+      "warning-in-minutes" => timeout_warning_in_minutes,
+      "timeout-path" => path_on_timeout,
+    },
+  ) do %>
   <div class="dialog-overlay" tabindex="-1" data-a11y-dialog-hide=""></div>
   <dialog class="dialog-content" aria-labelledby="timeout_dialog_title">
     <div class="timeout_dialog_titlebar">
@@ -10,7 +19,7 @@
       </button>
     </div>
     <h1 id="timeout_dialog_title" class="govuk-heading-l">
-      Your session will expire in <%= claim_timeout_warning_in_minutes %> minutes
+      Your session will expire in <%= timeout_warning_in_minutes %> minutes
     </h1>
     <p class="govuk-body">
       We won't be able to save what you have done and you will lose
@@ -20,4 +29,4 @@
       Continue session
     </button>
   </dialog>
-</div>
+<% end %>

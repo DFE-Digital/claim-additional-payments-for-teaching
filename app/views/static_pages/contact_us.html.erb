@@ -9,7 +9,7 @@
 
     <p class="govuk-body">
       If you have any problems using this service contact us by emailing
-      <%= mail_to support_email_address(params[:policy]), support_email_address(params[:policy]), class: "govuk-footer__link" %>.
+      <%= mail_to support_email_address(current_policy_routing_name), support_email_address(current_policy_routing_name), class: "govuk-footer__link" %>.
     </p>
 
   </div>

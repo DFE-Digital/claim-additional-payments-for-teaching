@@ -2,11 +2,14 @@
 
 (function() {
   var dialogElement = document.getElementById("timeout_dialog");
+
+  if (!dialogElement) return;
+
   var continueButtonElement = document.getElementById("continue_session");
   var warningTimeInMinutes = dialogElement.getAttribute("data-warning-in-minutes");
   var timeoutInMinutes = dialogElement.getAttribute("data-timeout-in-minutes");
-  var claimInProgress = dialogElement.getAttribute("data-claim-in-progress");
   var timeoutInMilliseconds = (timeoutInMinutes - warningTimeInMinutes) * 60 * 1000;
+  var timeoutPath = dialogElement.getAttribute("data-timeout-path");
   var dialog = new window.A11yDialog(dialogElement);
 
   continueButtonElement.onclick = function() {
@@ -20,7 +23,7 @@
 
   function refreshSession() {
     Rails.ajax({
-      url: "<%= claim_refresh_session_path %>",
+      url: "<%= refresh_session_path %>",
       type: "get",
       success: function() {
         clearInterval(window.sessionTimeoutTimer);
@@ -31,15 +34,13 @@
 
   function sessionTimedOut() {
     clearInterval(window.sessionTimeoutTimer);
-    window.location = "<%= timeout_claim_path %>";
+    window.location = timeoutPath;
   }
 
   function showTimeoutDialog() {
-    if (claimInProgress === "true") {
-      dialogElement.setAttribute("aria-hidden", "false");
-      dialog.show();
-      setTimeout(sessionTimedOut, warningTimeInMinutes * 60 * 1000);
-    }
+    dialogElement.setAttribute("aria-hidden", "false");
+    dialog.show();
+    setTimeout(sessionTimedOut, warningTimeInMinutes * 60 * 1000);
   }
 
   window.sessionTimeoutTimer = setInterval(showTimeoutDialog, timeoutInMilliseconds);
