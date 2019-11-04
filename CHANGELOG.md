@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+## [Release 026] - 2019-11-04
+
 - A clear warning is shown to service operators when a claim contains details
   that have been used in other claims. The other claims are listed and linked
 
@@ -187,7 +189,9 @@ The format is based on [Keep a Changelog]
 - First release for student loan repayments private beta
 
 [unreleased]:
-  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-025...HEAD
+  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-026...HEAD
+[release 026]:
+  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-025...release-026
 [release 025]:
   https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-024...release-025
 [release 024]:
