@@ -18,4 +18,10 @@ class StaticPagesController < BasePublicController
     @availability_message = Rails.configuration.maintenance_mode_availability_message
     render status: :service_unavailable
   end
+
+  private
+
+  def current_policy_routing_name
+    super || "student-loans"
+  end
 end

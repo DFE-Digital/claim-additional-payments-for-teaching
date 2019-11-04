@@ -4,7 +4,7 @@
   <div class="govuk-grid-column-two-thirds">
     <%= render("shared/error_summary", instance: current_claim, errored_field_id_overrides: { has_student_loan: "claim_has_student_loan_true" }) if current_claim.errors.any? %>
 
-    <%= form_for current_claim, url: claim_path do |form| %>
+    <%= form_for current_claim, url: claim_path(current_policy_routing_name) do |form| %>
       <%= form.hidden_field :has_student_loan %>
         <%= form_group_tag current_claim do %>
           <fieldset class="govuk-fieldset">

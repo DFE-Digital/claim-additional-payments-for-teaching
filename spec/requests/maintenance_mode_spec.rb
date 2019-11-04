@@ -14,14 +14,14 @@ RSpec.describe "Maintenance Mode", type: :request do
     end
 
     it "shows the maintenance page for GET requests" do
-      get new_claim_path
+      get new_claim_path(StudentLoans.routing_name)
       expect(response).to have_http_status(:service_unavailable)
       expect(response.body).to include("service is unavailable")
       expect(response.body).to include("You will be able to use the service later today.")
     end
 
     it "shows the maintenance page for POST requests" do
-      post claims_path
+      post claims_path(StudentLoans.routing_name)
       expect(response).to have_http_status(:service_unavailable)
       expect(response.body).to include("service is unavailable")
     end
@@ -48,7 +48,7 @@ RSpec.describe "Maintenance Mode", type: :request do
       end
 
       it "shows the time it will be available from" do
-        get new_claim_path
+        get new_claim_path(StudentLoans.routing_name)
         expect(response.body).to include(availability_message)
       end
     end

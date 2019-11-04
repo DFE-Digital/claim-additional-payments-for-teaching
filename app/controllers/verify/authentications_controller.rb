@@ -25,7 +25,7 @@ module Verify
       if @response.verified?
         parser = Claim::VerifyResponseParametersParser.new(@response.parameters)
         current_claim.update!(parser.attributes)
-        redirect_to claim_url("verified")
+        redirect_to claim_url(current_policy_routing_name, "verified")
       else
         current_claim.update!(verify_response: @response.parameters)
         redirect_to verify_path_for_response_scenario(@response.scenario)

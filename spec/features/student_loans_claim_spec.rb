@@ -7,7 +7,7 @@ RSpec.feature "Teacher Student Loan Repayments claims" do
   ].each do |javascript_enabled|
     js_status = javascript_enabled ? "enabled" : "disabled"
     scenario "Teacher claims back student loan repayments with javascript #{js_status}", js: javascript_enabled do
-      visit new_claim_path
+      visit new_claim_path(StudentLoans.routing_name)
       expect(page).to have_text(I18n.t("student_loans.questions.qts_award_year"))
 
       choose_qts_year

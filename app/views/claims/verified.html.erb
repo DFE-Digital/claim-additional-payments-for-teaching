@@ -12,7 +12,7 @@
 
     <%= render partial: "check_your_answers_section", locals: {answers: verify_answers(current_claim), heading: nil} %>
 
-    <%= button_to "Continue", claim_path, method: :put, class: "govuk-button" %>
+    <%= button_to "Continue", claim_path(current_policy_routing_name), method: :put, class: "govuk-button" %>
 
     <details class="govuk-details" data-module="govuk-details">
       <summary class="govuk-details__summary">

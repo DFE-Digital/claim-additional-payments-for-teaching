@@ -39,7 +39,7 @@
         <p class="govuk-cookie-banner__message"><%= policy_service_name(current_policy_routing_name) %> uses cookies to make the site simpler.</p>
         <div class="govuk-cookie-banner__buttons">
           <button id="accept-cookies" class="govuk-button govuk-button--secondary" type="submit" data-module="govuk-button">Accept cookies</button>
-          <%= link_to('Cookie information', cookies_path, class: "govuk-button govuk-button--secondary ") %>
+          <%= link_to('Cookie information', cookies_path(current_policy_routing_name), class: "govuk-button govuk-button--secondary ") %>
         </div>
       </div>
     </div>
@@ -95,19 +95,19 @@
             <h2 class="govuk-visually-hidden">Support links</h2>
             <ul class="govuk-footer__inline-list">
               <li class="govuk-footer__inline-list-item">
-                <%= link_to "Contact us", contact_us_path, class: "govuk-footer__link" %>
+                <%= link_to "Contact us", contact_us_path(current_policy_routing_name), class: "govuk-footer__link" %>
               </li>
               <li class="govuk-footer__inline-list-item">
-                <%= link_to "Cookie", cookies_path, class: "govuk-footer__link" %>
+                <%= link_to "Cookie", cookies_path(current_policy_routing_name), class: "govuk-footer__link" %>
               </li>
               <li class="govuk-footer__inline-list-item">
-                <%= link_to "Terms and conditions", terms_conditions_path, class: "govuk-footer__link" %>
+                <%= link_to "Terms and conditions", terms_conditions_path(current_policy_routing_name), class: "govuk-footer__link" %>
               </li>
               <li class="govuk-footer__inline-list-item">
-                <%= link_to "Privacy notice", privacy_notice_path, class: "govuk-footer__link" %>
+                <%= link_to "Privacy notice", privacy_notice_path(current_policy_routing_name), class: "govuk-footer__link" %>
               </li>
               <li class="govuk-footer__inline-list-item">
-                <%= link_to "Accessibility statement", accessibility_statement_path, class: "govuk-footer__link" %>
+                <%= link_to "Accessibility statement", accessibility_statement_path(current_policy_routing_name), class: "govuk-footer__link" %>
               </li>
             </ul>
 

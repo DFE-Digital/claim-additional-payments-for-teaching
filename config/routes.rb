@@ -21,7 +21,7 @@ Rails.application.routes.draw do
 
   get "refresh-session", to: "sessions#refresh", as: :refresh_session
 
-  scope path: ":policy", defaults: {policy: "student-loans"}, constraints: {policy: %r{student-loans}} do
+  scope path: ":policy", constraints: {policy: %r{student-loans}} do
     constraints slug: %r{#{StudentLoans::SlugSequence::SLUGS.join("|")}} do
       resources :claims, only: [:show, :update], param: :slug, path: "/"
     end

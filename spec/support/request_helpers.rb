@@ -1,6 +1,6 @@
 module RequestHelpers
   def start_claim
-    post claims_path, params: {
+    post claims_path(StudentLoans.routing_name), params: {
       claim: {
         eligibility_attributes: {
           qts_award_year: "on_or_after_september_2013",

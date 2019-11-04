@@ -6,6 +6,6 @@
     <h1 class="govuk-heading-xl">You are eligible to claim back student loan repayments</h1>
     <p class="govuk-body">Based on your answers, you can claim back the student loan repayments you made between 6 April 2018 and 5 April 2019.</p>
 
-    <%= link_to "Continue", claim_path(next_slug), class: "govuk-button", role: "button" %>
+    <%= link_to "Continue", claim_path(current_policy_routing_name, next_slug), class: "govuk-button", role: "button" %>
   </div>
 </div>

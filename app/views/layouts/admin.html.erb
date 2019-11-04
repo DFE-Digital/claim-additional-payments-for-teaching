@@ -40,7 +40,7 @@
         <p class="govuk-cookie-banner__message"><%= t("service_name") %> uses cookies to make the site simpler.</p>
         <div class="govuk-cookie-banner__buttons">
           <button id="accept-cookies" class="govuk-button govuk-button--secondary" type="submit" data-module="govuk-button">Accept cookies</button>
-          <%= link_to('Cookie information', cookies_path, class: "govuk-button govuk-button--secondary ") %>
+          <%= link_to('Cookie information', cookies_path(StudentLoans.routing_name), class: "govuk-button govuk-button--secondary ") %>
         </div>
       </div>
     </div>
