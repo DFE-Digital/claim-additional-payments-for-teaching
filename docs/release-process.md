@@ -58,9 +58,11 @@ production as follows:
 - Log in to this project on
   [Azure DevOps](https://dev.azure.com/dfe-ssp/S118-Teacher-Payments-Service).
 - Navigate to Pipelines > Builds.
-- Find the build you want to release and note its build number (for example,
-  `20190717.2`). You can filter by branch using the filter / funnel icon in the
-  top right.
+- Find the build which corresponds to the merge commit created by merging the
+  release pull request into `master`. This is the build which you want to
+  release. You can filter by branch using the filter / funnel icon in the top
+  right.
+- Note the build number of this build (for example, `20190717.2`).
 - Navigate to Pipelines > Releases.
 - Click on the "Deploy" pipeline.
 - Click on the release matching the build number of the build you want to
