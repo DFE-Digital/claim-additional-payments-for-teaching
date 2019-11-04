@@ -184,14 +184,6 @@
         "secretName": "NotifyTemplateID"
       }
     },
-    "NOTES_TO_BACKFILL": {
-      "reference": {
-        "keyVault": {
-          "id": "${keyVaultId}"
-        },
-        "secretName": "NotesToBackfill"
-      }
-    },
     "ROLLBAR_ACCESS_TOKEN": {
       "reference": {
         "keyVault": {
