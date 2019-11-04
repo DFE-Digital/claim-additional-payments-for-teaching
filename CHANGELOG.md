@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+- Add noindex and nofollow directives to prevent search engines indexing pages
+
 ## [Release 026] - 2019-11-04
 
 - A clear warning is shown to service operators when a claim contains details

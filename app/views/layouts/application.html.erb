@@ -7,7 +7,8 @@
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-    <meta name="theme-color" content="#0b0c0c" />
+    <meta name="theme-color" content="#0b0c0c">
+    <meta name="robots" content="noindex,nofollow">
 
     <%= favicon_link_tag %>
     <%= favicon_link_tag 'govuk-mask-icon.svg', rel: 'mask-icon', type: 'image/svg+xml', color: '#0b0c0c' %>
@@ -16,7 +17,7 @@
     <%= favicon_link_tag 'govuk-apple-touch-icon-152x152.png', rel: 'apple-touch-icon', type: 'image/png', sizes: '152x152' %>
     <%= favicon_link_tag 'govuk-apple-touch-icon.png', rel: 'apple-touch-icon', type: 'image/png' %>
 
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
 
     <% if ENV["GOOGLE_ANALYTICS_ID"] %>
       <%= javascript_include_tag "google_analytics/analytics" %>
