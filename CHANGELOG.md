@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+## [Release 027] - 2019-11-05
+
 - Fixed bug in claim matcher code that would match blank building society roll
   numbers
 - Admin users are sent to the sign in page when their session times out
@@ -194,7 +196,9 @@ The format is based on [Keep a Changelog]
 - First release for student loan repayments private beta
 
 [unreleased]:
-  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-026...HEAD
+  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-027...HEAD
+[release 027]:
+  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-026...release-027
 [release 026]:
   https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-025...release-026
 [release 025]:
