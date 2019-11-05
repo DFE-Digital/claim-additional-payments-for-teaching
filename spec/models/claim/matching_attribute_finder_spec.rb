@@ -59,15 +59,18 @@ RSpec.describe Claim::MatchingAttributeFinder do
       expect(matching_claims).to eq([claim_with_matching_attribute])
     end
 
-    context "when the source claim building society roll number is nil" do
-      before do
-        source_claim.update!(building_society_roll_number: nil)
-      end
+    it "does not match claims with nil building society roll numbers" do
+      source_claim.update!(building_society_roll_number: nil)
+      create(:claim, :submitted, building_society_roll_number: nil)
 
-      it "does not include any claim with a roll number of nil" do
-        create(:claim, :submitted, building_society_roll_number: nil)
-        expect(matching_claims).to be_empty
-      end
+      expect(matching_claims).to be_empty
+    end
+
+    it "does not match claims with blank building society roll numbers" do
+      source_claim.update!(building_society_roll_number: "")
+      create(:claim, :submitted, building_society_roll_number: "")
+
+      expect(matching_claims).to be_empty
     end
   end
 end
