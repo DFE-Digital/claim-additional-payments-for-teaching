@@ -6,6 +6,9 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+- When checking whether a claim's details have been used in other claims, ignore
+  the case (i.e. capitalisation) of the claims' details
+
 ## [Release 027] - 2019-11-05
 
 - Fixed bug in claim matcher code that would match blank building society roll

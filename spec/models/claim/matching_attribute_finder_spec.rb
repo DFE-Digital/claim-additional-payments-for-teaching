@@ -35,8 +35,20 @@ RSpec.describe Claim::MatchingAttributeFinder do
       expect(matching_claims).to eq([claim_with_matching_attribute])
     end
 
+    it "includes a claim with a matching national insurance number with a different capitalisation" do
+      claim_with_matching_attribute = create(:claim, :submitted, national_insurance_number: source_claim.national_insurance_number.downcase)
+
+      expect(matching_claims).to eq([claim_with_matching_attribute])
+    end
+
     it "includes a claim with a matching email address" do
       claim_with_matching_attribute = create(:claim, :submitted, email_address: source_claim.email_address)
+
+      expect(matching_claims).to eq([claim_with_matching_attribute])
+    end
+
+    it "includes a claim with a matching email address with a different capitalisation" do
+      claim_with_matching_attribute = create(:claim, :submitted, email_address: source_claim.email_address.upcase)
 
       expect(matching_claims).to eq([claim_with_matching_attribute])
     end
