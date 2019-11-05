@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+- Fixed bug in claim matcher code that would match blank building society roll
+  numbers
 - Admin users are sent to the sign in page when their session times out
 - Add noindex and nofollow directives to prevent search engines indexing pages
 

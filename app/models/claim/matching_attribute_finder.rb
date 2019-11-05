@@ -19,7 +19,7 @@ class Claim
       values = []
       ATTRIBUTES_TO_MATCH.each do |attribute|
         value = @source_claim.read_attribute(attribute)
-        next unless value
+        next if value.blank?
 
         predicates << "#{attribute} = ?"
         values << value
