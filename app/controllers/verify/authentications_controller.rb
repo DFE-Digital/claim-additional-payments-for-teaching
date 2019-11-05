@@ -1,5 +1,5 @@
 module Verify
-  class AuthenticationsController < ApplicationController
+  class AuthenticationsController < BasePublicController
     CLAIM_TIMEOUT_LENGTH_IN_MINUTES = 90
 
     include PartOfClaimJourney

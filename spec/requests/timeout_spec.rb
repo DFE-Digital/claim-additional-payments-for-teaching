@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.describe "Claim session timing out", type: :request do
-  let(:timeout_length_in_minutes) { ApplicationController::CLAIM_TIMEOUT_LENGTH_IN_MINUTES }
+  let(:timeout_length_in_minutes) { BasePublicController::CLAIM_TIMEOUT_LENGTH_IN_MINUTES }
 
   context "no actions performed for more than the timeout period" do
     before do
