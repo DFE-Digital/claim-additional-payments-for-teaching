@@ -1,7 +1,6 @@
 class ApplicationController < ActionController::Base
   CLAIM_TIMEOUT_LENGTH_IN_MINUTES = 30
   CLAIM_TIMEOUT_WARNING_LENGTH_IN_MINUTES = 2
-  ADMIN_TIMEOUT_LENGTH_IN_MINUTES = 30
 
   http_basic_authenticate_with(
     name: ENV["BASIC_AUTH_USERNAME"],
@@ -9,23 +8,14 @@ class ApplicationController < ActionController::Base
     if: -> { ENV["BASIC_AUTH_USERNAME"].present? },
   )
 
-  helper_method :current_policy_routing_name, :admin_signed_in?, :admin_timeout_in_minutes, :claim_timeout_in_minutes, :timeout_warning_in_minutes
-  before_action :end_expired_admin_sessions
+  helper_method :current_policy_routing_name, :claim_timeout_in_minutes, :timeout_warning_in_minutes
   before_action :end_expired_claim_sessions
-  before_action :update_last_seen_at
+  after_action :update_last_seen_at
 
   private
 
   def current_policy_routing_name
     params[:policy]
-  end
-
-  def admin_signed_in?
-    session.key?(:user_id)
-  end
-
-  def admin_timeout_in_minutes
-    ADMIN_TIMEOUT_LENGTH_IN_MINUTES
   end
 
   def claim_timeout_in_minutes
@@ -50,19 +40,6 @@ class ApplicationController < ActionController::Base
   def clear_claim_session
     session.delete(:claim_id)
     session.delete(:verify_request_id)
-  end
-
-  def admin_session_timed_out?
-    admin_signed_in? && session[:last_seen_at] < admin_timeout_in_minutes.minutes.ago
-  end
-
-  def end_expired_admin_sessions
-    if admin_session_timed_out?
-      session.delete(:user_id)
-      session.delete(:organisation_id)
-      session.delete(:role_codes)
-      flash[:notice] = "Your session has timed out due to inactivity, please sign-in again"
-    end
   end
 
   def update_last_seen_at

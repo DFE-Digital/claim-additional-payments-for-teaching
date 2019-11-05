@@ -63,20 +63,7 @@
           </a>
         </div>
         <div class="govuk-header__content">
-
           <%= link_to policy_service_name(current_policy_routing_name), StudentLoans.start_page_url, class: "govuk-header__link govuk-header__link--service-name" %>
-
-          <% if admin_signed_in? %>
-          <button type="button" role="button" class="govuk-header__menu-button govuk-js-header-toggle" aria-controls="navigation" aria-label="Show or hide Top Level Navigation">Menu</button>
-          <nav>
-            <ul id="navigation" class="govuk-header__navigation " aria-label="Top Level Navigation">
-              <li class="govuk-header__navigation-item">
-                <%= link_to "Sign out", admin_sign_out_path, method: :delete, class: "govuk-header__link" %>
-              </li>
-            </ul>
-          </nav>
-          <% end %>
-
         </div>
       </div>
     </header>

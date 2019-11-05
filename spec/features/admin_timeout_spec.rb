@@ -5,8 +5,8 @@ RSpec.feature "Admin user session timeout", js: true do
   let(:two_seconds_in_minutes) { 2 / 60.to_f }
 
   before do
-    allow_any_instance_of(ApplicationController).to receive(:admin_timeout_in_minutes) { two_seconds_in_minutes }
-    allow_any_instance_of(ApplicationController).to receive(:timeout_warning_in_minutes) { one_second_in_minutes }
+    allow_any_instance_of(Admin::BaseAdminController).to receive(:admin_timeout_in_minutes) { two_seconds_in_minutes }
+    allow_any_instance_of(Admin::BaseAdminController).to receive(:timeout_warning_in_minutes) { one_second_in_minutes }
 
     sign_in_to_admin_with_role(AdminSession::SERVICE_OPERATOR_DFE_SIGN_IN_ROLE_CODE)
   end

@@ -6,6 +6,7 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+- Admin users are sent to the sign in page when their session times out
 - Add noindex and nofollow directives to prevent search engines indexing pages
 
 ## [Release 026] - 2019-11-04
