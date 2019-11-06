@@ -6,6 +6,7 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+- Always save claimant's National Insurance number in upper case
 - When checking whether a claim's details have been used in other claims, ignore
   the case (i.e. capitalisation) of the claims' details
 
