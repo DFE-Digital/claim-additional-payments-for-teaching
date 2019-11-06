@@ -21,8 +21,8 @@ module StudentLoans
       SUBJECT_ATTRIBUTES,
     ].flatten.freeze
     ATTRIBUTE_DEPENDENCIES = {
-      "claim_school_id" => "employment_status",
-      "had_leadership_position" => "mostly_performed_leadership_duties",
+      "claim_school_id" => ["taught_eligible_subjects", *SUBJECT_ATTRIBUTES, "employment_status"],
+      "had_leadership_position" => ["mostly_performed_leadership_duties"],
     }.freeze
 
     self.table_name = "student_loans_eligibilities"
@@ -87,8 +87,10 @@ module StudentLoans
     end
 
     def reset_dependent_answers
-      ATTRIBUTE_DEPENDENCIES.each do |attribute_name, dependent_attribute_name|
-        write_attribute(dependent_attribute_name, nil) if changed.include?(attribute_name)
+      ATTRIBUTE_DEPENDENCIES.each do |attribute_name, dependent_attribute_names|
+        dependent_attribute_names.each do |dependent_attribute_name|
+          write_attribute(dependent_attribute_name, nil) if changed.include?(attribute_name)
+        end
       end
       self.current_school = inferred_current_school if employment_status_changed?
     end

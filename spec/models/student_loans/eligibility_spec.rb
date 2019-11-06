@@ -152,6 +152,11 @@ RSpec.describe StudentLoans::Eligibility, type: :model do
         :eligible,
         claim_school: schools(:penistone_grammar_school),
         current_school: schools(:hampstead_school),
+        taught_eligible_subjects: true,
+        chemistry_taught: true,
+        physics_taught: true,
+        computer_science_taught: true,
+        languages_taught: true,
         employment_status: :different_school,
         had_leadership_position: true,
       )
@@ -165,6 +170,21 @@ RSpec.describe StudentLoans::Eligibility, type: :model do
       expect { eligibility.reset_dependent_answers }
         .to change { eligibility.employment_status }
         .from("different_school").to(nil)
+    end
+
+    it "resets the subject fields when the value of the claim_school changes" do
+      eligibility.claim_school = schools(:penistone_grammar_school)
+      expect { eligibility.reset_dependent_answers }.not_to change { eligibility.attributes }
+
+      eligibility.claim_school = schools(:hampstead_school)
+      eligibility.reset_dependent_answers
+
+      expect(eligibility.taught_eligible_subjects).to eq(nil)
+      expect(eligibility.physics_taught).to eq(nil)
+      expect(eligibility.chemistry_taught).to eq(nil)
+      expect(eligibility.physics_taught).to eq(nil)
+      expect(eligibility.computer_science_taught).to eq(nil)
+      expect(eligibility.languages_taught).to eq(nil)
     end
 
     it "resets mostly_performed_leadership_duties when the value of had_leadership_position changes" do
