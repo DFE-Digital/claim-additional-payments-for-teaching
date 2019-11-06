@@ -1,30 +1,33 @@
-<h1 class="govuk-heading-xl">
-  You did not select an eligible subject
-</h1>
+<% if params[:no_more_schools] %>
+  <%= render partial: "ineligibility_reason_no_more_schools" %>
+<% else %>
+  <h1 class="govuk-heading-xl">
+    You did not select an eligible subject
+  </h1>
 
-<p class="govuk-body">
-  You did not teach an eligible subject at <%= claim_school_name %>.
-</p>
+  <p class="govuk-body">
+    You did not teach an eligible subject at <%= claim_school_name %>.
+  </p>
 
-<p class="govuk-body">
-  You can only get this payment if you taught one or more of the following
-  subjects between 6 April 2018 and 5 April 2019:
-</p>
+  <p class="govuk-body">
+    You can only get this payment if you taught one or more of the following
+    subjects between 6 April 2018 and 5 April 2019:
+  </p>
 
-<ul class="govuk-list govuk-list--bullet">
-  <li>biology</li>
-  <li>chemistry</li>
-  <li>physics</li>
-  <li>computer science</li>
-  <li>languages (not including English)</li>
-</ul>
+  <ul class="govuk-list govuk-list--bullet">
+    <li>biology</li>
+    <li>chemistry</li>
+    <li>physics</li>
+    <li>computer science</li>
+    <li>languages (not including English)</li>
+  </ul>
 
-<p class="govuk-body">
-  If you taught at more than one school during this period, you can
-  search again with the next school.
-  You only need to have worked at one eligible school to claim.
-</p>
+  <p class="govuk-body">
+    If you taught at more than one school during this period, you can
+    search again with the next school.
+    You only need to have worked at one eligible school to claim.
+  </p>
 
-<%= link_to "Enter another school", claim_path(policy: current_policy_routing_name, slug: "claim-school", additional_school: true), class: "govuk-button" %>
-<%= link_to "I've tried all of my schools", claim_path(policy: current_policy_routing_name, slug: "ineligible", generic: true), class: "govuk-button govuk-button--secondary" %>
-
+  <%= link_to "Enter another school", claim_path(policy: current_policy_routing_name, slug: "claim-school", additional_school: true), class: "govuk-button" %>
+  <%= link_to "I've tried all of my schools", claim_path(policy: current_policy_routing_name, slug: "ineligible", no_more_schools: true), class: "govuk-button govuk-button--secondary" %>
+<% end %>
