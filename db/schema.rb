@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_10_24_151831) do
+ActiveRecord::Schema.define(version: 2019_11_06_160514) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -91,6 +91,12 @@ ActiveRecord::Schema.define(version: 2019_10_24_151831) do
     t.string "name"
     t.string "code"
     t.index ["code"], name: "index_local_authority_districts_on_code", unique: true
+  end
+
+  create_table "maths_and_physics_eligibilities", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.boolean "teaching_maths_or_physics"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "payments", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
