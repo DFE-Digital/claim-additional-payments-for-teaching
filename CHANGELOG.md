@@ -6,6 +6,7 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+- Change all of the existing claims' National Insurance numbers to upper case
 - Add a link to our service's satisfaction survey to the confirmation page
 
 ## [Release 028] - 2019-11-06
