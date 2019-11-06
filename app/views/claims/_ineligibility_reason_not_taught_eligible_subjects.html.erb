@@ -20,10 +20,11 @@
 </ul>
 
 <p class="govuk-body">
-  If you taught at more than one school between April 6 2018 and April 5 2019,
-  you can <%= link_to "start your claim again", new_claim_path, class: "govuk-link" %> with another
-  school. You only need to have taught an eligible subject at one eligible
-  school to claim.
-<p>
+  If you taught at more than one school during this period, you can
+  search again with the next school.
+  You only need to have worked at one eligible school to claim.
+</p>
 
+<%= link_to "Enter another school", claim_path(policy: current_policy_routing_name, slug: "claim-school", additional_school: true), class: "govuk-button" %>
+<%= link_to "I've tried all of my schools", claim_path(policy: current_policy_routing_name, slug: "ineligible", generic: true), class: "govuk-button govuk-button--secondary" %>
 
