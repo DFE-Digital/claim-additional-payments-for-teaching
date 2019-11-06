@@ -108,6 +108,7 @@ en:
         before_september_2013: "Before 1 September 2013"
         on_or_after_september_2013: "On or after 1 September 2013"
       claim_school: "Which school were you employed at between 6 April 2018 and 5 April 2019?"
+      additional_school: "Which additional school you were employed at between 6 April 2018 and 5 April 2019?"
       employment_status: "Are you still employed to teach at a school in England?"
       subjects_taught: "Did you teach any of these subjects between 6 April 2018 and 5 April 2019?"
       leadership_position: "Were you employed in a leadership position between 6 April 2018 and 5 April 2019?"

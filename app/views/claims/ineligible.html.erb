@@ -2,7 +2,11 @@
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-    <%= render partial: "ineligibility_reason_#{current_claim.eligibility.ineligibility_reason}", locals: { claim_school_name: current_claim.eligibility.claim_school_name, current_school_name: current_claim.eligibility.current_school_name } %>
+    <% if params[:generic] %>
+      <%= render partial: "ineligibility_reason_generic" %>
+    <% else %>
+      <%= render partial: "ineligibility_reason_#{current_claim.eligibility.ineligibility_reason}", locals: { claim_school_name: current_claim.eligibility.claim_school_name, current_school_name: current_claim.eligibility.current_school_name } %>
+    <% end %>
 
     <p class="govuk-body">
       For more information about the eligibility criteria, or if you need help with
