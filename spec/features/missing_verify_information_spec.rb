@@ -4,8 +4,9 @@ RSpec.feature "Missing information from GOV.UK Verify" do
   scenario "Claimant is asked a payroll gender question when Verify doesn’t provide their gender" do
     claim = start_claim
     choose_school schools(:penistone_grammar_school)
-    choose_still_teaching
     choose_subjects_taught
+    choose_still_teaching
+    choose_leadership
     click_on "Continue"
 
     perform_verify_step("identity-verified-other-gender")
@@ -55,8 +56,9 @@ RSpec.feature "Missing information from GOV.UK Verify" do
   scenario "Claimant is asked an address question when Verify doesn’t provide their address" do
     claim = start_claim
     choose_school schools(:penistone_grammar_school)
-    choose_still_teaching
     choose_subjects_taught
+    choose_still_teaching
+    choose_leadership
     click_on "Continue"
 
     perform_verify_step("identity-verified-no-address")

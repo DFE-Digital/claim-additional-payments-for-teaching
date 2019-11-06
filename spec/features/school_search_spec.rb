@@ -16,7 +16,7 @@ RSpec.feature "Searching for school during Teacher Student Loan Repayments claim
     click_on "Continue"
 
     expect(claim.eligibility.reload.claim_school).to eql schools(:penistone_grammar_school)
-    expect(page).to have_text("Are you still employed to teach at a school in England")
+    expect(page).to have_text(I18n.t("student_loans.questions.subjects_taught"))
   end
 
   scenario "searches again to find school" do
@@ -34,7 +34,7 @@ RSpec.feature "Searching for school during Teacher Student Loan Repayments claim
     click_on "Continue"
 
     expect(claim.eligibility.reload.claim_school).to eql schools(:penistone_grammar_school)
-    expect(page).to have_text("Are you still employed to teach at a school in England")
+    expect(page).to have_text(I18n.t("student_loans.questions.subjects_taught"))
   end
 
   scenario "Claim school search with autocomplete", js: true do
@@ -50,13 +50,15 @@ RSpec.feature "Searching for school during Teacher Student Loan Repayments claim
 
     click_button "Continue"
 
-    expect(page).to have_text(I18n.t("student_loans.questions.employment_status"))
+    expect(page).to have_text(I18n.t("student_loans.questions.subjects_taught"))
   end
 
   scenario "Current school search with autocomplete", js: true do
     start_claim
 
     choose_school schools(:penistone_grammar_school)
+    choose_subjects_taught
+
     choose_still_teaching "Yes, at another school"
 
     expect(page).to have_text(I18n.t("questions.current_school"))
@@ -69,7 +71,7 @@ RSpec.feature "Searching for school during Teacher Student Loan Repayments claim
 
     click_button "Continue"
 
-    expect(page).to have_text(I18n.t("student_loans.questions.subjects_taught"))
+    expect(page).to have_text(I18n.t("student_loans.questions.leadership_position"))
   end
 
   scenario "School search form still works like a normal form if submitted", js: true do
@@ -126,6 +128,7 @@ RSpec.feature "Searching for school during Teacher Student Loan Repayments claim
   scenario "Current school search excludes closed schools" do
     start_claim
     choose_school schools(:penistone_grammar_school)
+    choose_subjects_taught
     choose_still_teaching "Yes, at another school"
 
     expect(page).to have_text(I18n.t("questions.current_school"))
@@ -151,6 +154,7 @@ RSpec.feature "Searching for school during Teacher Student Loan Repayments claim
     start_claim
 
     choose_school schools(:penistone_grammar_school)
+    choose_subjects_taught
     choose_still_teaching "Yes, at another school"
 
     expect(page).to have_text(I18n.t("questions.current_school"))

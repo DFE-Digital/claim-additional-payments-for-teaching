@@ -15,6 +15,7 @@ RSpec.feature "Ineligible Teacher Student Loan Repayments claims" do
     claim = start_claim
 
     choose_school schools(:penistone_grammar_school)
+    choose_subjects_taught
 
     choose_still_teaching "Yes, at another school"
 
@@ -28,7 +29,7 @@ RSpec.feature "Ineligible Teacher Student Loan Repayments claims" do
 
     expect(claim.eligibility.reload.current_school).to eql schools(:hampstead_school)
 
-    expect(page).to have_text(I18n.t("student_loans.questions.subjects_taught"))
+    expect(page).to have_text(I18n.t("student_loans.questions.leadership_position"))
   end
 
   scenario "chooses an ineligible claim school" do
@@ -44,6 +45,8 @@ RSpec.feature "Ineligible Teacher Student Loan Repayments claims" do
     start_claim
 
     choose_school schools(:penistone_grammar_school)
+    choose_subjects_taught
+
     choose_still_teaching "Yes, at another school"
 
     fill_in :school_search, with: "Bradford"
@@ -59,6 +62,7 @@ RSpec.feature "Ineligible Teacher Student Loan Repayments claims" do
   scenario "no longer teaching" do
     claim = start_claim
     choose_school schools(:penistone_grammar_school)
+    choose_subjects_taught
 
     choose_still_teaching "No"
 
@@ -70,7 +74,6 @@ RSpec.feature "Ineligible Teacher Student Loan Repayments claims" do
   scenario "did not teach an eligible subject" do
     claim = start_claim
     choose_school schools(:penistone_grammar_school)
-    choose_still_teaching
 
     choose I18n.t("student_loans.questions.eligible_subjects.none_taught")
     click_on "Continue"
@@ -83,10 +86,10 @@ RSpec.feature "Ineligible Teacher Student Loan Repayments claims" do
   scenario "was in a leadership position and performed leadership duties for more than half of their time" do
     claim = start_claim
     choose_school schools(:penistone_grammar_school)
-    choose_still_teaching
-
     check "Biology"
     click_on "Continue"
+
+    choose_still_teaching
 
     choose "Yes"
     click_on "Continue"
@@ -111,6 +114,7 @@ RSpec.feature "Ineligible Teacher Student Loan Repayments claims" do
     choose_qts_year
 
     choose_school schools(:penistone_grammar_school)
-    expect(page).to have_text("Are you still employed to teach at a school in England?")
+
+    expect(page).to have_text(I18n.t("student_loans.questions.subjects_taught"))
   end
 end

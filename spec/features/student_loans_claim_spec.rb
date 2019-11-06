@@ -19,15 +19,15 @@ RSpec.feature "Teacher Student Loan Repayments claims" do
 
       choose_school schools(:penistone_grammar_school)
       expect(claim.eligibility.reload.claim_school).to eql schools(:penistone_grammar_school)
+      expect(page).to have_text(I18n.t("student_loans.questions.subjects_taught"))
+
+      check "Physics"
+      click_on "Continue"
       expect(page).to have_text(I18n.t("student_loans.questions.employment_status"))
 
       choose_still_teaching
       expect(claim.eligibility.reload.employment_status).to eql("claim_school")
       expect(claim.eligibility.current_school).to eql(schools(:penistone_grammar_school))
-
-      expect(page).to have_text(I18n.t("student_loans.questions.subjects_taught"))
-      check "Physics"
-      click_on "Continue"
 
       expect(claim.eligibility.reload.subjects_taught).to eq([:physics_taught])
 
