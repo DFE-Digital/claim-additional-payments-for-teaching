@@ -1,4 +1,4 @@
-class StaticPagesController < ApplicationController
+class StaticPagesController < BasePublicController
   def accessibility_statement
   end
 

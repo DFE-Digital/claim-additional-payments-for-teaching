@@ -1,4 +1,4 @@
-class ClaimsController < ApplicationController
+class ClaimsController < BasePublicController
   include PartOfClaimJourney
 
   skip_before_action :send_unstarted_claiments_to_the_start, only: [:new, :create, :timeout]

@@ -1,4 +1,4 @@
-class SubmissionsController < ApplicationController
+class SubmissionsController < BasePublicController
   include PartOfClaimJourney
 
   def create
