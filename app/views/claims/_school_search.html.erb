@@ -1,118 +1,54 @@
-<% if @schools.blank? %>
+<%= render("shared/error_summary", instance: current_claim, errored_field_id_overrides: { school_search: "school_search" }) if current_claim.errors.any? %>
 
-  <%= render("shared/error_summary", instance: current_claim, errored_field_id_overrides: { school_search: "school_search" }) if current_claim.errors.any? %>
+<%= form_for current_claim,
+             url: claim_path,
+             method: :get,
+             data: {
+               "school-id-param": "claim_eligibility_attributes_#{school_id_param}",
+               "exclude-closed": exclude_closed
+             },
+             html: { class: "school_search_form" } do |form|
+%>
+  <%= hidden_field_tag :_method, "get", id: nil %>
+  <%= hidden_field_tag :authenticity_token, form_authenticity_token %>
 
-  <%= form_for current_claim,
-               url: claim_path,
-               method: :get,
-               data: {
-                 "school-id-param": "claim_eligibility_attributes_#{school_id_param}",
-                 "exclude-closed": exclude_closed
-               },
-               html: { class: "school_search_form" } do |form|
-  %>
-    <%= hidden_field_tag :_method, "get", id: nil %>
-    <%= hidden_field_tag :authenticity_token, form_authenticity_token %>
-
-    <%= form.fields_for :eligibility, include_id: false do |fields| %>
-      <%= fields.hidden_field school_id_param %>
-    <% end %>
-
-    <%= form_group_tag current_claim, :school_search do %>
-
-      <%= hidden_field_tag :exclude_closed, exclude_closed, id: nil %>
-
-      <h1 class="govuk-label-wrapper">
-        <%= label_tag :school_search, question, class: "govuk-label govuk-label--xl" %>
-      </h1>
-
-      <% if params[:school_search].present? && current_claim.errors.empty? %>
-        <p class="govuk-body">
-          <strong>No results match that search term. Try again.</strong>
-        </p>
-      <% else %>
-        <p class="govuk-body">
-          <span class="govuk-hint">
-            Enter the school name. Use at least four characters.
-          </span>
-        </p>
-
-        <% if school_id_param == :claim_school_id %>
-          <p class="govuk-body">
-            <span class="govuk-hint">
-              If you worked at multiple schools during this period, enter the first school you think might be eligible.
-            </span>
-          </p>
-        <% end %>
-      <% end %>
-
-      <div id="school-search-container">
-
-        <%= errors_tag current_claim, :school_search %>
-        <%= text_field_tag :school_search, params[:school_search], id: :school_search, class: css_classes_for_input(current_claim, :school_search), value: school_search_value %>
-
-      </div>
-
-    <% end %>
-
-    <%= submit_tag "Search", class: "govuk-button" %>
-
+  <%= form.fields_for :eligibility, include_id: false do |fields| %>
+    <%= fields.hidden_field school_id_param %>
   <% end %>
 
-<% else %>
+  <%= form_group_tag current_claim, :school_search do %>
 
-  <%= render("shared/error_summary", instance: current_claim, errored_field_id_overrides: { "eligibility.#{school_param}": "claim_eligibility_attributes_#{school_id_param}_#{@schools.first.id}" }) if current_claim.errors.any?
-  %>
+    <%= hidden_field_tag :exclude_closed, exclude_closed, id: nil %>
 
-  <%= form_for current_claim, url: claim_path do |form| %>
-    <%= form_group_tag current_claim do %>
-      <fieldset class="govuk-fieldset" aria-describedby="school-search-result-hint">
+    <h1 class="govuk-label-wrapper">
+      <%= label_tag :school_search, question, class: "govuk-label govuk-label--xl" %>
+    </h1>
 
-        <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl">
-          <h1 class="govuk-fieldset__heading">
-            <%= question %>
-          </h1>
-        </legend>
+    <% if params[:school_search].present? && current_claim.errors.empty? %>
+      <p class="govuk-body">
+        <strong>No results match that search term. Try again.</strong>
+      </p>
+    <% else %>
+      <span class="govuk-hint">
+        Enter the school name. Use at least four characters.
+      </span>
 
-        <span id="school-search-result-hint" class="govuk-hint">
-          Select your school from the search results.
+      <% if school_id_param == :claim_school_id %>
+        <span class="govuk-hint">
+          If you worked at multiple schools during this period, enter the first school you think might be eligible.
         </span>
-
-        <%= hidden_field_tag :school_search, params[:school_search] %>
-
-        <%= errors_tag current_claim.eligibility, school_param %>
-
-        <div class="govuk-radios">
-          <%= form.fields_for :eligibility, include_id: false do |fields| %>
-            <%= fields.collection_radio_buttons school_id_param, @schools, :id, :name do |b| %>
-              <div class="govuk-radios__item">
-                <%= b.radio_button class: "govuk-radios__input" %>
-                <%= b.label class: "govuk-radios__label govuk-label--s govuk-radios__label govuk-!-padding-0" do %>
-                  <div class="school-search__suggestion">
-                    <div class="school-search__suggestion-main-section">
-                      <div class="govuk-label govuk-radios__label govuk-label--s">
-                        <%= b.text %>
-                      </div>
-                      <span class="govuk-hint govuk-radios__hint"><%= b.object.address %></span>
-                    </div>
-                    <% if b.object.close_date.present? %>
-                      <div class="school-search__closed-status">
-                        <span class="govuk-hint govuk-radios__hint govuk-!-margin-bottom-1">Closed on <%= l(b.object.close_date) %></span>
-                      </div>
-                    <% end %>
-                  </div>
-                <% end %>
-              </div>
-            <% end %>
-          <% end %>
-        </div>
-
-      </fieldset>
+      <% end %>
     <% end %>
 
-    <%= form.submit "Continue", class: "govuk-button" %>
-    <%= link_to "Search again", claim_path, class: "govuk-button govuk-button--secondary" %>
+    <div id="school-search-container">
+
+      <%= errors_tag current_claim, :school_search %>
+      <%= text_field_tag :school_search, params[:school_search], id: :school_search, class: css_classes_for_input(current_claim, :school_search), value: school_search_value %>
+
+    </div>
 
   <% end %>
+
+  <%= submit_tag "Search", class: "govuk-button" %>
 
 <% end %>
