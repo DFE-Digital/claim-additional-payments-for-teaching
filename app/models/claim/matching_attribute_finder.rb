@@ -21,7 +21,7 @@ class Claim
         value = @source_claim.read_attribute(attribute)
         next if value.blank?
 
-        predicates << "#{attribute} = ?"
+        predicates << "LOWER(#{attribute}) = LOWER(?)"
         values << value
       end
 
