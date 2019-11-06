@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+## [Release 028] - 2019-11-06
+
 - Always save claimant's National Insurance number in upper case
 - When checking whether a claim's details have been used in other claims, ignore
   the case (i.e. capitalisation) of the claims' details
@@ -200,7 +202,9 @@ The format is based on [Keep a Changelog]
 - First release for student loan repayments private beta
 
 [unreleased]:
-  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-027...HEAD
+  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-028...HEAD
+[release 028]:
+  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-027...release-028
 [release 027]:
   https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-026...release-027
 [release 026]:
