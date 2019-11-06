@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+- Add policy specific "Reply-to" address for claim emails
+
 ## [Release 029] - 2019-11-07
 
 - Make admin claim search case insensitive

@@ -30,7 +30,8 @@ class ClaimMailer < Mail::Notify::Mailer
     view_mail(
       ENV["NOTIFY_TEMPLATE_ID"],
       to: @claim.email_address,
-      subject: subject
+      subject: subject,
+      reply_to_id: claim.policy.notify_reply_to_id
     )
   end
 end
