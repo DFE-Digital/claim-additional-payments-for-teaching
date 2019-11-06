@@ -94,6 +94,13 @@ RSpec.describe Claim, type: :model do
         expect(claim.bank_sort_code).to eql("123456")
         expect(claim.bank_account_number).to eql("12345678")
       end
+
+      it "strips spaces from and upcases the National Insurance number" do
+        claim = build(:claim, national_insurance_number: "qq 34 56 78 c")
+        claim.save!
+
+        expect(claim.national_insurance_number).to eq("QQ345678C")
+      end
     end
   end
 

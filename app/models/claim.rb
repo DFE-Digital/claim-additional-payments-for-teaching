@@ -231,12 +231,12 @@ class Claim < ApplicationRecord
   end
 
   def normalised_ni_number
-    national_insurance_number.gsub(/\s/, "")
+    national_insurance_number.gsub(/\s/, "").upcase
   end
 
   def ni_number_is_correct_format
     errors.add(:national_insurance_number, "Enter a National Insurance number in the correct format") \
-      if national_insurance_number.present? && !normalised_ni_number.match(/\A[a-z]{2}[0-9]{6}[a-d]{1}\Z/i)
+      if national_insurance_number.present? && !normalised_ni_number.match(/\A[A-Z]{2}[0-9]{6}[A-D]{1}\Z/)
   end
 
   def normalise_bank_account_number
