@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+- Add a link to our service's satisfaction survey to the confirmation page
+
 ## [Release 028] - 2019-11-06
 
 - Always save claimant's National Insurance number in upper case
