@@ -115,6 +115,6 @@ RSpec.feature "Ineligible Teacher Student Loan Repayments claims" do
 
     choose_school schools(:penistone_grammar_school)
 
-    expect(page).to have_text(I18n.t("student_loans.questions.subjects_taught"))
+    expect(page).to have_text(I18n.t("student_loans.questions.subjects_taught", school: schools(:penistone_grammar_school).name))
   end
 end
