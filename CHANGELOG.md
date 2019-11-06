@@ -7,6 +7,8 @@ The format is based on [Keep a Changelog]
 ## [Unreleased]
 
 - Add a link to our service's satisfaction survey to the confirmation page
+- Improve journey for users that worked at more than one school during the claim
+  period
 
 ## [Release 028] - 2019-11-06
 
