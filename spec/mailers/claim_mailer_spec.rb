@@ -1,13 +1,20 @@
 require "rails_helper"
 
+RSpec.shared_examples "a claim mailer" do
+  it "sets the correct to address" do
+    expect(mail.to).to eq([claim.email_address])
+  end
+end
+
 RSpec.describe ClaimMailer, type: :mailer do
   describe "#submitted" do
     let(:claim) { create(:claim, :submittable, first_name: "Abraham", surname: "Lincoln") }
     let(:mail) { ClaimMailer.submitted(claim) }
 
-    it "renders the headers" do
+    it_behaves_like "a claim mailer"
+
+    it "renders the subject" do
       expect(mail.subject).to eq("Your claim was received")
-      expect(mail.to).to eq([claim.email_address])
     end
 
     it "renders the body" do
@@ -21,10 +28,11 @@ RSpec.describe ClaimMailer, type: :mailer do
     let(:claim) { create(:claim, :submitted, first_name: "John", middle_name: "Fitzgerald", surname: "Kennedy") }
     let(:mail) { ClaimMailer.approved(claim) }
 
-    it "renders the headers" do
+    it_behaves_like "a claim mailer"
+
+    it "renders the subject" do
       expect(mail.subject).to match("approved")
       expect(mail.subject).to match("reference number: #{claim.reference}")
-      expect(mail.to).to eq([claim.email_address])
     end
 
     it "renders the body" do
@@ -37,10 +45,11 @@ RSpec.describe ClaimMailer, type: :mailer do
     let(:claim) { create(:claim, :submitted, first_name: "John", middle_name: "Fitzgerald", surname: "Kennedy") }
     let(:mail) { ClaimMailer.rejected(claim) }
 
-    it "renders the headers" do
+    it_behaves_like "a claim mailer"
+
+    it "renders the subject" do
       expect(mail.subject).to match("rejected")
       expect(mail.subject).to match("reference number: #{claim.reference}")
-      expect(mail.to).to eq([claim.email_address])
     end
 
     it "renders the body" do
@@ -55,10 +64,11 @@ RSpec.describe ClaimMailer, type: :mailer do
     let(:payment_date_timestamp) { Time.new(2019, 1, 1).to_i }
     let(:mail) { ClaimMailer.payment_confirmation(payment.claim, payment_date_timestamp) }
 
-    it "renders the headers" do
+    it_behaves_like "a claim mailer"
+
+    it "renders the subject" do
       expect(mail.subject).to match("paying")
       expect(mail.subject).to match("reference number: #{claim.reference}")
-      expect(mail.to).to eq([claim.email_address])
     end
 
     it "renders the body" do
