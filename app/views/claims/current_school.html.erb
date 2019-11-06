@@ -2,6 +2,8 @@
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
+    <% if @schools.blank? %>
+
     <%= render "school_search",
                question: t("questions.current_school"),
                school_param: :current_school,
@@ -9,5 +11,13 @@
                school_search_value: current_claim.eligibility.current_school_name,
                exclude_closed: true
     %>
+
+    <% else %>
+      <%= render "school_search_results",
+                 question: t("questions.current_school"),
+                 school_param: :current_school,
+                 school_id_param: :current_school_id
+      %>
+    <% end %>
   </div>
 </div>

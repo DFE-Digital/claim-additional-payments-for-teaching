@@ -2,12 +2,22 @@
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-    <%= render "school_search",
-               question: t("student_loans.questions.claim_school"),
-               school_param: :claim_school,
-               school_id_param: :claim_school_id,
-               school_search_value: current_claim.eligibility.claim_school_name,
-               exclude_closed: false
-    %>
+    <% if @schools.blank? %>
+
+      <%= render "school_search",
+                 question: t("student_loans.questions.claim_school"),
+                 school_param: :claim_school,
+                 school_id_param: :claim_school_id,
+                 school_search_value: current_claim.eligibility.claim_school_name,
+                 exclude_closed: false
+      %>
+
+    <% else %>
+      <%= render "school_search_results",
+                 question: t("student_loans.questions.claim_school"),
+                 school_param: :claim_school,
+                 school_id_param: :claim_school_id
+      %>
+    <% end %>
   </div>
 </div>
