@@ -3,6 +3,7 @@ class ClaimsController < BasePublicController
 
   skip_before_action :send_unstarted_claiments_to_the_start, only: [:new, :create, :timeout]
   before_action :check_page_is_in_sequence, only: [:show, :update]
+  before_action :prepend_view_path_for_policy
 
   def new
     clear_claim_session
@@ -77,5 +78,9 @@ class ClaimsController < BasePublicController
 
   def claim_slug_sequence
     current_claim.policy::SlugSequence.new(current_claim)
+  end
+
+  def prepend_view_path_for_policy
+    prepend_view_path("app/views/#{current_policy_routing_name.underscore}")
   end
 end
