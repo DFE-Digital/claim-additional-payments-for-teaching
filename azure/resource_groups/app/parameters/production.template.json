@@ -149,12 +149,6 @@
         "secretName": "GoogleAnalyticsId"
       }
     },
-    "MAINTENANCE_MODE": {
-      "value": ""
-    },
-    "MAINTENANCE_MODE_AVAILABILITY_MESSAGE": {
-      "value": ""
-    },
     "NOTIFY_API_KEY": {
       "reference": {
         "keyVault": {

@@ -13,12 +13,6 @@ Rails.application.routes.draw do
   # setup a simple healthcheck endpoint for monitoring purposes
   get "/healthcheck", to: proc { [200, {}, ["OK"]] }
 
-  # Catch-all for when the service has been placed in maintenance mode.
-  # Excludes /admin so Service Operators can continue to check claims.
-  if Rails.application.config.maintenance_mode
-    match "*path", to: "static_pages#maintenance", via: :all, constraints: lambda { |req| !%r{^/admin($|/)}.match?(req.path) }
-  end
-
   get "refresh-session", to: "sessions#refresh", as: :refresh_session
 
   # Used to constrain claim journey routing so only slugs
