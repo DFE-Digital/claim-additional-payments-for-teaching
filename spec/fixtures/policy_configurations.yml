@@ -1,0 +1,5 @@
+student_loans:
+  policy_type: StudentLoans
+
+maths_and_physics:
+  policy_type: MathsAndPhysics

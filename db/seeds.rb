@@ -6,6 +6,9 @@
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
 
+PolicyConfiguration.create!(policy_type: StudentLoans)
+PolicyConfiguration.create!(policy_type: MathsAndPhysics)
+
 if Rails.env.development?
   ENV["FIXTURES_PATH"] = "spec/fixtures"
   Rake::Task["db:fixtures:load"].invoke
