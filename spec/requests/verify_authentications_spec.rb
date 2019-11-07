@@ -121,12 +121,12 @@ RSpec.describe "GOV.UK Verify::AuthenticationsController requests", type: :reque
   context "when a claim hasn’t been started yet" do
     before { stub_vsp_generate_request }
 
-    it "redirects to the start page" do
+    it "redirects to the root of the service, as we have no way to identify a specific policy to redirect them to" do
       get new_verify_authentications_path
-      expect(response).to redirect_to(StudentLoans.start_page_url)
+      expect(response).to redirect_to(root_url)
 
       post verify_authentications_path
-      expect(response).to redirect_to(StudentLoans.start_page_url)
+      expect(response).to redirect_to(root_url)
     end
   end
 end

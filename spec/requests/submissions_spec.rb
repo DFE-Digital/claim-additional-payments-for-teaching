@@ -43,7 +43,7 @@ RSpec.describe "Submissions", type: :request do
       end
     end
 
-    it "redirects to the start page if a claim isn't in progress" do
+    it "redirects to the start page if there is no claim actually in progress" do
       post claim_submission_path(StudentLoans.routing_name)
       expect(response).to redirect_to(StudentLoans.start_page_url)
     end
