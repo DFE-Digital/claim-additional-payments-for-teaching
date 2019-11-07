@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+## [Release 029] - 2019-11-07
+
 - Make admin claim search case insensitive
 - Change all of the existing claims' National Insurance numbers to upper case
 - Add a link to our service's satisfaction survey to the confirmation page
@@ -208,7 +210,9 @@ The format is based on [Keep a Changelog]
 - First release for student loan repayments private beta
 
 [unreleased]:
-  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-028...HEAD
+  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-029...HEAD
+[release 029]:
+  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-028...release-029
 [release 028]:
   https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-027...release-028
 [release 027]:
