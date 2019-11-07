@@ -16,7 +16,7 @@
       </dd>
 
       <dd class="govuk-summary-list__actions">
-        <%= link_to('Change', claim_path(slug), class: 'govuk-link') unless slug.nil? %>
+        <%= link_to('Change', claim_path(current_policy_routing_name, slug), class: 'govuk-link') unless slug.nil? %>
       </dd>
     </div>
   <% end %>

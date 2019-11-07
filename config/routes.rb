@@ -21,11 +21,30 @@ Rails.application.routes.draw do
 
   get "refresh-session", to: "sessions#refresh", as: :refresh_session
 
-  scope path: ":policy", defaults: {policy: "student-loans"}, constraints: {policy: %r{student-loans}} do
-    constraints slug: %r{#{StudentLoans::SlugSequence::SLUGS.join("|")}} do
-      resources :claims, only: [:show, :update], param: :slug, path: "/"
+  # Used to constrain claim journey routing so only slugs
+  # that are part of a policy’s slug sequence are routed.
+  class RestrictToSequenceSlugs
+    attr_reader :policy
+
+    def initialize(policy)
+      @policy = policy
     end
 
+    def matches?(request)
+      request["policy"] == policy.routing_name && policy::SlugSequence::SLUGS.include?(request["slug"])
+    end
+  end
+
+  # Define routes that are specific to each Policy's page sequence
+  Policies.all.each do |policy|
+    constraints(RestrictToSequenceSlugs.new(policy)) do
+      scope path: ":policy" do
+        resources :claims, only: [:show, :update], param: :slug, path: "/"
+      end
+    end
+  end
+  # Define the generic routes that aren't specific to any given policy
+  scope path: ":policy", constraints: {policy: %r{#{Policies.all.map(&:routing_name).join("|")}}} do
     get "claim", as: :new_claim, to: "claims#new"
     post "claim", as: :claims, to: "claims#create"
     post "claim/submit", as: :claim_submission, to: "submissions#create"

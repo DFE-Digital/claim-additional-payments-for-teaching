@@ -4,7 +4,7 @@
   <div class="govuk-grid-column-two-thirds">
     <%= render("shared/error_summary", instance: current_claim) if current_claim.errors.any? %>
 
-    <%= form_for current_claim, url: claim_path do |form| %>
+    <%= form_for current_claim, url: claim_path(current_policy_routing_name) do |form| %>
       <%= form_group_tag current_claim do %>
         <%= form.fields_for :eligibility, include_id: false do |fields| %>
 

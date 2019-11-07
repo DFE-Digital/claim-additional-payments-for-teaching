@@ -4,7 +4,7 @@
   <div class="govuk-grid-column-two-thirds">
     <%= render("shared/error_summary", instance: current_claim, errored_field_id_overrides: { student_loan_country: "claim_student_loan_country_england" }) if current_claim.errors.any? %>
 
-    <%= form_for current_claim, url: claim_path do |form| %>
+    <%= form_for current_claim, url: claim_path(current_policy_routing_name) do |form| %>
       <%= form.hidden_field :student_loan_country %>
         <%= form_group_tag current_claim do %>
           <fieldset class="govuk-fieldset">

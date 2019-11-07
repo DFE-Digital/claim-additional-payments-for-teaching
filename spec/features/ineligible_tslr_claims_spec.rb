@@ -2,7 +2,7 @@ require "rails_helper"
 
 RSpec.feature "Ineligible Teacher Student Loan Repayments claims" do
   scenario "qualified before the first eligible year" do
-    visit new_claim_path
+    visit new_claim_path(StudentLoans.routing_name)
     choose_qts_year("Before 1 September 2013")
     claim = Claim.order(:created_at).last
 
@@ -107,7 +107,7 @@ RSpec.feature "Ineligible Teacher Student Loan Repayments claims" do
     choose_school schools(:hampstead_school)
     expect(page).to have_text("This school is not eligible")
 
-    visit new_claim_path
+    visit new_claim_path(StudentLoans.routing_name)
 
     expect(page).to have_content("When did you complete your initial teacher training?")
     expect(page).not_to have_css("input[checked]")

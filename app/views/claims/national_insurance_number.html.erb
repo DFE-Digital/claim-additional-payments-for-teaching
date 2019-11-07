@@ -4,7 +4,7 @@
   <div class="govuk-grid-column-two-thirds">
     <%= render("shared/error_summary", instance: current_claim) if current_claim.errors.any? %>
 
-    <%= form_for current_claim, url: claim_path do |form| %>
+    <%= form_for current_claim, url: claim_path(current_policy_routing_name) do |form| %>
       <%= form_group_tag current_claim do %>
         <h1 class="govuk-label-wrapper">
           <%= form.label :national_insurance_number, t("questions.national_insurance_number"), {class: "govuk-label govuk-label--xl"}  %>

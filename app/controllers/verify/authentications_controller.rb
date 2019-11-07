@@ -25,7 +25,7 @@ module Verify
       if @response.verified?
         parser = Claim::VerifyResponseParametersParser.new(@response.parameters)
         current_claim.update!(parser.attributes)
-        redirect_to claim_url("verified")
+        redirect_to claim_url(current_policy_routing_name, "verified")
       else
         current_claim.update!(verify_response: @response.parameters)
         redirect_to verify_path_for_response_scenario(@response.scenario)
@@ -52,6 +52,14 @@ module Verify
     def report_redacted_response
       redacted_response = Verify::RedactedResponse.new(@response.parameters)
       Rollbar.debug("Verify::RedactedResponse", parameters: redacted_response.parameters)
+    end
+
+    # This controller is not namespaced to a policy so we can't redirect a user
+    # to a policy-specific start page if a claim isn't in progress. Instead
+    # redirect to the root URL and let the routing take care of sending the user
+    # to the right place.
+    def send_unstarted_claiments_to_the_start
+      redirect_to root_url unless current_claim.persisted?
     end
   end
 end

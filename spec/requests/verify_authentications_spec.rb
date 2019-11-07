@@ -40,7 +40,7 @@ RSpec.describe "GOV.UK Verify::AuthenticationsController requests", type: :reque
         end
 
         it "saves the translated identity attributes on the current claim and redirects to the verify confirmation" do
-          expect(response).to redirect_to(claim_path("verified"))
+          expect(response).to redirect_to(claim_path(StudentLoans.routing_name, "verified"))
 
           expect(current_claim.first_name).to eq("Isambard")
           expect(current_claim.middle_name).to eq("Kingdom")
@@ -121,12 +121,12 @@ RSpec.describe "GOV.UK Verify::AuthenticationsController requests", type: :reque
   context "when a claim hasn’t been started yet" do
     before { stub_vsp_generate_request }
 
-    it "redirects to the start page" do
+    it "redirects to the root of the service, as we have no way to identify a specific policy to redirect them to" do
       get new_verify_authentications_path
-      expect(response).to redirect_to(StudentLoans.start_page_url)
+      expect(response).to redirect_to(root_url)
 
       post verify_authentications_path
-      expect(response).to redirect_to(StudentLoans.start_page_url)
+      expect(response).to redirect_to(root_url)
     end
   end
 end

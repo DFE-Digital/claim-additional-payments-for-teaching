@@ -3,6 +3,7 @@ class ClaimsController < BasePublicController
 
   skip_before_action :send_unstarted_claiments_to_the_start, only: [:new, :create, :timeout]
   before_action :check_page_is_in_sequence, only: [:show, :update]
+  before_action :prepend_view_path_for_policy
 
   def new
     clear_claim_session
@@ -13,7 +14,7 @@ class ClaimsController < BasePublicController
     current_claim.attributes = claim_params
     if current_claim.save(context: page_sequence.slugs.first.to_sym)
       session[:claim_id] = current_claim.to_param
-      redirect_to claim_path(next_slug)
+      redirect_to claim_path(current_policy_routing_name, next_slug)
     else
       render first_template_in_sequence
     end
@@ -30,7 +31,7 @@ class ClaimsController < BasePublicController
     current_claim.eligibility.reset_dependent_answers
 
     if current_claim.save(context: page_sequence.current_slug.to_sym)
-      redirect_to claim_path(next_slug)
+      redirect_to claim_path(current_policy_routing_name, next_slug)
     else
       show
     end
@@ -77,5 +78,9 @@ class ClaimsController < BasePublicController
 
   def claim_slug_sequence
     current_claim.policy::SlugSequence.new(current_claim)
+  end
+
+  def prepend_view_path_for_policy
+    prepend_view_path("app/views/#{current_policy_routing_name.underscore}")
   end
 end
