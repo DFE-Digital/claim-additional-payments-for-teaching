@@ -168,59 +168,77 @@ RSpec.feature "Changing the answers on a submittable claim" do
         expect(eligibility.reload.claim_school).to eql new_claim_school
       end
 
-      scenario "Teacher is redirected to the are you still employed screen" do
-        expect(current_path).to eq(claim_path("still-teaching"))
+      scenario "Teacher is redirected to the subjects taught screen" do
+        expect(current_path).to eq(claim_path("subjects-taught"))
       end
 
-      context "When still teaching at the claim school" do
+      context "When still teaching eligible subjects" do
         before do
-          choose "Yes, at Claim School"
+          check I18n.t("student_loans.questions.eligible_subjects.biology_taught"), visible: false
+          check I18n.t("student_loans.questions.eligible_subjects.chemistry_taught"), visible: false
+
           click_on "Continue"
         end
 
-        scenario "current school is set correctly" do
-          expect(eligibility.reload.employment_status).to eql("claim_school")
-          expect(eligibility.current_school).to eql new_claim_school
+        scenario "Eligible subjects are set correctly" do
+          expect(eligibility.reload.biology_taught).to eq(true)
+          expect(eligibility.chemistry_taught).to eq(true)
         end
 
-        scenario "Teacher is redirected to the check your answers page" do
-          expect(current_path).to eq(claim_path("check-your-answers"))
-        end
-      end
-
-      context "When still teaching but at a different school" do
-        before do
-          choose_still_teaching "Yes, at another school"
-
-          fill_in :school_search, with: "Hampstead"
-          click_on "Search"
-
-          choose "Hampstead School"
-          click_on "Continue"
+        scenario "Teacher is redirected to the are you still employed screen" do
+          expect(current_path).to eq(claim_path("still-teaching"))
         end
 
-        scenario "School and employment status are set correctly" do
-          expect(eligibility.reload.employment_status).to eql("different_school")
-          expect(eligibility.reload.current_school).to eql schools(:hampstead_school)
+        context "When still teaching at the claim school" do
+          before do
+            choose "Yes, at Claim School"
+            click_on "Continue"
+          end
+
+          scenario "current school is set correctly" do
+            expect(eligibility.reload.employment_status).to eql("claim_school")
+            expect(eligibility.current_school).to eql new_claim_school
+          end
+
+          scenario "Teacher is redirected to the check your answers page" do
+            expect(current_path).to eq(claim_path("check-your-answers"))
+          end
         end
 
-        scenario "Teacher is redirected to the check your answers page" do
-          expect(current_path).to eq(claim_path("check-your-answers"))
-        end
-      end
+        context "When still teaching but at a different school" do
+          before do
+            choose_still_teaching "Yes, at another school"
 
-      context "When no longer teaching" do
-        before do
-          choose_still_teaching "No"
+            fill_in :school_search, with: "Hampstead"
+            click_on "Search"
+
+            choose "Hampstead School"
+            click_on "Continue"
+          end
+
+          scenario "School and employment status are set correctly" do
+            expect(eligibility.reload.employment_status).to eql("different_school")
+            expect(eligibility.reload.current_school).to eql schools(:hampstead_school)
+          end
+
+          scenario "Teacher is redirected to the check your answers page" do
+            expect(current_path).to eq(claim_path("check-your-answers"))
+          end
         end
 
-        scenario "Employment status is set correctly" do
-          expect(eligibility.reload.employment_status).to eq("no_school")
-        end
+        context "When no longer teaching" do
+          before do
+            choose_still_teaching "No"
+          end
 
-        scenario "Teacher is told they are not eligible" do
-          expect(page).to have_text("You’re not eligible")
-          expect(page).to have_text("You can only get this payment if you’re still employed at a school.")
+          scenario "Employment status is set correctly" do
+            expect(eligibility.reload.employment_status).to eq("no_school")
+          end
+
+          scenario "Teacher is told they are not eligible" do
+            expect(page).to have_text("You’re not eligible")
+            expect(page).to have_text("You can only get this payment if you’re still employed at a school.")
+          end
         end
       end
     end

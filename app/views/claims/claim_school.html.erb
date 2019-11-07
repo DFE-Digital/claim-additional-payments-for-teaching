@@ -1,14 +1,14 @@
-<%= page_title(t("student_loans.questions.claim_school"), show_error: current_claim.errors.any?) %>
+<%= page_title(school_search_question(params[:additional_school]), show_error: current_claim.errors.any?) %>
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
     <% if @schools.blank? %>
 
       <%= render "school_search",
-                 question: t("student_loans.questions.claim_school"),
+                 question: school_search_question(params[:additional_school]),
                  school_param: :claim_school,
                  school_id_param: :claim_school_id,
-                 school_search_value: current_claim.eligibility.claim_school_name,
+                 school_search_value: (current_claim.eligibility.claim_school_name unless params[:additional_school]),
                  exclude_closed: false
       %>
 

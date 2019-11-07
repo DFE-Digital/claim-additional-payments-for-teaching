@@ -2,9 +2,10 @@ module FeatureHelpers
   def answer_all_student_loans_claim_questions
     start_claim
     choose_school schools(:penistone_grammar_school)
+    choose_subjects_taught
     choose_still_teaching "Yes, at another school"
     choose_school schools(:hampstead_school)
-    choose_subjects_taught
+    choose_leadership
     click_on "Continue"
 
     perform_verify_step
@@ -56,7 +57,9 @@ module FeatureHelpers
   def choose_subjects_taught
     check "Physics"
     click_on "Continue"
+  end
 
+  def choose_leadership
     choose "Yes"
     click_on "Continue"
 

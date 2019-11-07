@@ -9,6 +9,8 @@ The format is based on [Keep a Changelog]
 - Make admin claim search case insensitive
 - Change all of the existing claims' National Insurance numbers to upper case
 - Add a link to our service's satisfaction survey to the confirmation page
+- Improve journey for users that worked at more than one school during the claim
+  period
 
 ## [Release 028] - 2019-11-06
 

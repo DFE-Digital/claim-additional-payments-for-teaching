@@ -6,6 +6,8 @@ RSpec.feature "Current school with closed claim school" do
   scenario "Still teaching only has two options" do
     start_claim
     choose_school claim_school
+    check "Physics"
+    click_on "Continue"
 
     expect(page).to have_text("Yes")
     expect(page).to have_text("No")
@@ -16,6 +18,8 @@ RSpec.feature "Current school with closed claim school" do
   scenario "Choosing yes to still teaching prompts to search for a school" do
     claim = start_claim
     choose_school claim_school
+    check "Physics"
+    click_on "Continue"
 
     choose_still_teaching "Yes"
 

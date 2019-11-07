@@ -12,9 +12,9 @@ module StudentLoans
     SLUGS = [
       "qts-year",
       "claim-school",
+      "subjects-taught",
       "still-teaching",
       "current-school",
-      "subjects-taught",
       "leadership-position",
       "mostly-performed-leadership-duties",
       "eligibility-confirmed",
