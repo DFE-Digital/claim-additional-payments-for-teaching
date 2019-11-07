@@ -1,35 +1,4 @@
 module FeatureHelpers
-  def answer_all_student_loans_claim_questions
-    start_claim
-    choose_school schools(:penistone_grammar_school)
-    choose_subjects_taught
-    choose_still_teaching "Yes, at another school"
-    choose_school schools(:hampstead_school)
-    choose_leadership
-    click_on "Continue"
-
-    perform_verify_step
-    click_on "Continue"
-
-    fill_in :claim_teacher_reference_number, with: "1234567"
-    click_on "Continue"
-
-    fill_in "National Insurance number", with: "QQ123456C"
-    click_on "Continue"
-
-    answer_student_loan_plan_questions
-    fill_in I18n.t("student_loans.questions.student_loan_amount", claim_school_name: claim.eligibility.claim_school_name), with: "1100"
-    click_on "Continue"
-
-    fill_in I18n.t("questions.email_address"), with: "name@example.tld"
-    click_on "Continue"
-
-    fill_in "Name on the account", with: "Jo Bloggs"
-    fill_in "Sort code", with: "123456"
-    fill_in "Account number", with: "87654321"
-    click_on "Continue"
-  end
-
   def start_claim
     visit new_claim_path
     choose_qts_year
