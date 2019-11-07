@@ -14,7 +14,7 @@ class Admin::ClaimsController < Admin::BaseAdminController
   def search
     return unless params[:reference].present?
 
-    claim = Claim.find_by(reference: params[:reference])
+    claim = Claim.find_by(reference: params[:reference].upcase)
 
     if claim
       redirect_to(admin_claim_url(claim))
