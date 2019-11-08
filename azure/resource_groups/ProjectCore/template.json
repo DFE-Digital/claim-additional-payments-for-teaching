@@ -43,10 +43,11 @@
                   "serviceEndpoints": [
                     {
                       "service": "Microsoft.Storage",
-                      "locations": [
-                        "westeurope",
-                        "northeurope"
-                      ]
+                      "locations": ["westeurope", "northeurope"]
+                    },
+                    {
+                      "service": "Microsoft.Sql",
+                      "locations": ["westeurope"]
                     }
                   ],
                   "delegations": [],

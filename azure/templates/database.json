@@ -130,6 +130,16 @@
         "value": "ON",
         "source": "user-override"
       }
+    },
+    {
+      "type": "Microsoft.DBforPostgreSQL/servers/virtualNetworkRules",
+      "apiVersion": "2017-12-01-preview",
+      "name": "[concat(parameters('databaseServerName'), '/vnet-rule')]",
+      "dependsOn": ["[resourceId('Microsoft.Resources/deployments', variables('databaseServerDeploymentName'))]"],
+      "properties": {
+        "virtualNetworkSubnetId": "[parameters('defaultSubnetId')]",
+        "ignoreMissingVnetServiceEndpoint": false
+      }
     }
   ],
   "outputs": {
