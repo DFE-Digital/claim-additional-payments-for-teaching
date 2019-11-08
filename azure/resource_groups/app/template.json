@@ -9,6 +9,9 @@
     "gitCommitHash": {
       "type": "string"
     },
+    "defaultSubnetId": {
+      "type": "string"
+    },
     "secretsResourceGroupName": {
       "type": "string"
     },
