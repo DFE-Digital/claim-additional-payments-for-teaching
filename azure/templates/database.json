@@ -5,6 +5,9 @@
     "storageAccountName": {
       "type": "string"
     },
+    "defaultSubnetId": {
+      "type": "string"
+    },
     "databaseServerName": {
       "type": "string"
     },
@@ -30,27 +33,48 @@
   },
   "resources": [
     {
-      "type": "Microsoft.Resources/deployments",
-      "apiVersion": "2017-05-10",
-      "name": "[variables('storageAccountDeploymentName')]",
+      "apiVersion": "2018-02-01",
+      "name": "[parameters('storageAccountName')]",
+      "type": "Microsoft.Storage/storageAccounts",
+      "location": "[resourceGroup().location]",
+      "sku": {
+        "name": "Standard_LRS"
+      },
+      "kind": "Storage",
+      "tags": {},
       "properties": {
-        "mode": "Incremental",
-        "templateLink": {
-          "uri": "[concat(variables('platformBuildingBlocksDeploymentUrlBase'), 'storage-account.json')]",
-          "contentVersion": "1.0.0.0"
+        "networkAcls": {
+          "bypass": "AzureServices",
+          "virtualNetworkRules": [
+            {
+              "id": "[parameters('defaultSubnetId')]",
+              "action": "Allow",
+              "state": "Succeeded"
+            }
+          ],
+          "ipRules": [],
+          "defaultAction": "Deny"
         },
-        "parameters": {
-          "storageAccountName": {
-            "value": "[parameters('storageAccountName')]"
-          }
-        }
+        "encryption": {
+          "services": {
+            "blob": {
+              "enabled": true
+            },
+            "file": {
+              "enabled": true
+            }
+          },
+          "keySource": "Microsoft.Storage"
+        },
+        "accessTier": "[json('null')]",
+        "supportsHttpsTrafficOnly": true
       }
     },
     {
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2017-05-10",
       "name": "[variables('databaseServerDeploymentName')]",
-      "dependsOn": ["[resourceId('Microsoft.Resources/deployments', variables('storageAccountDeploymentName'))]"],
+      "dependsOn": ["[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccountName'))]"],
       "properties": {
         "mode": "Incremental",
         "templateLink": {

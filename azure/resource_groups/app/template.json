@@ -9,6 +9,9 @@
     "gitCommitHash": {
       "type": "string"
     },
+    "defaultSubnetId": {
+      "type": "string"
+    },
     "secretsResourceGroupName": {
       "type": "string"
     },
@@ -250,6 +253,9 @@
         "parameters": {
           "storageAccountName": {
             "value": "[variables('storageAccountName')]"
+          },
+          "defaultSubnetId": {
+            "value": "[parameters('defaultSubnetId')]"
           },
           "databaseServerName": {
             "value": "[variables('databaseServerName')]"

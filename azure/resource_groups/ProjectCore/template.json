@@ -40,9 +40,18 @@
                 "name": "default",
                 "properties": {
                   "addressPrefix": "[variables('defaultSubnetAddressPrefix')]",
-                  "serviceEndpoints": [],
+                  "serviceEndpoints": [
+                    {
+                      "service": "Microsoft.Storage",
+                      "locations": [
+                        "westeurope",
+                        "northeurope"
+                      ]
+                    }
+                  ],
                   "delegations": [],
-                  "privateEndpointNetworkPolicies": "Enabled"
+                  "privateEndpointNetworkPolicies": "Enabled",
+                  "privateLinkServiceNetworkPolicies": "Enabled"
                 }
               }
             ]
@@ -55,6 +64,10 @@
     "resourceGroupId": {
       "type": "string",
       "value": "[resourceGroup().id]"
+    },
+    "defaultSubnetId": {
+      "type": "string",
+      "value": "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('vnetName'), 'default')]"
     }
   }
 }

@@ -244,6 +244,11 @@ APP_DEPLOYMENT_RESULT=$(
         "$SECRETS_DEPLOYMENT_RESULT" \
         "['keyVaultName']"
     )" \
+    --parameters "$(
+      filter-azure-outputs \
+        "$PROJECT_CORE_DEPLOYMENT_RESULT" \
+        "['defaultSubnetId']"
+    )" \
     "${EXTRA_APP_DEPLOYMENT_OPTIONS[@]}" \
     --mode Complete \
     --verbose \
