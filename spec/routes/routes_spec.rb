@@ -6,8 +6,14 @@ describe "Routes", type: :routing do
       expect(get: "student-loans/qts-year").to route_to "claims#show", slug: "qts-year", policy: "student-loans"
     end
 
-    it "routes /:policy/claim to the create action" do
+    it "routes GET /:policy/claim to the new action" do
+      expect(get: "student-loans/claim").to route_to "claims#new", policy: "student-loans"
+      expect(get: "maths-and-physics/claim").to route_to "claims#new", policy: "maths-and-physics"
+    end
+
+    it "routes POST /:policy/claim to the create action" do
       expect(post: "student-loans/claim").to route_to "claims#create", policy: "student-loans"
+      expect(post: "maths-and-physics/claim").to route_to "claims#create", policy: "maths-and-physics"
     end
 
     it "routes policy page sequence slugs to the update action" do
