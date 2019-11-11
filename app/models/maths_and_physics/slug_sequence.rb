@@ -9,7 +9,11 @@ module MathsAndPhysics
   # accounts for any changes that may have been made to the claim and always
   # reflects the sequence based on the claim's current state.
   class SlugSequence
-    SLUGS = [].freeze
+    SLUGS = [
+      "teaching-maths-or-physics",
+      "eligibility-confirmed",
+      "ineligible",
+    ].freeze
 
     attr_reader :claim
 

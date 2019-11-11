@@ -4,6 +4,7 @@ describe "Routes", type: :routing do
   describe "Claims routing" do
     it "routes GET requests to pages in the policies’ page sequences" do
       expect(get: "student-loans/qts-year").to route_to "claims#show", slug: "qts-year", policy: "student-loans"
+      expect(get: "maths-and-physics/teaching-maths-or-physics").to route_to "claims#show", slug: "teaching-maths-or-physics", policy: "maths-and-physics"
     end
 
     it "routes GET /:policy/claim to the new action" do
@@ -18,6 +19,7 @@ describe "Routes", type: :routing do
 
     it "routes policy page sequence slugs to the update action" do
       expect(put: "student-loans/claim-school").to route_to "claims#update", slug: "claim-school", policy: "student-loans"
+      expect(put: "maths-and-physics/teaching-maths-or-physics").to route_to "claims#update", slug: "teaching-maths-or-physics", policy: "maths-and-physics"
     end
 
     it "does not route for unrecognised policies" do
@@ -28,10 +30,12 @@ describe "Routes", type: :routing do
 
     it "does not route to pages not in a policy’s page sequences" do
       expect(get: "student-loans/teaching-maths-or-physics").not_to be_routable
+      expect(get: "maths-and-physics/qts-year").not_to be_routable
     end
 
     it "allows positionable routing parameters in the URL helpers" do
       expect(claim_path("student-loans", "claim-school")).to eq "/student-loans/claim-school"
+      expect(claim_path("maths-and-physics", "teaching-maths-or-physics")).to eq "/maths-and-physics/teaching-maths-or-physics"
     end
   end
 end

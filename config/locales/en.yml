@@ -99,6 +99,8 @@ en:
   maths_and_physics:
     policy_name: "Claim a payment for teaching maths or physics"
     support_email_address: "mathsphysicsteacherpayment@digital.education.gov.uk"
+    questions:
+      teaching_maths_or_physics: "Do you currently teach any maths or physics?"
   student_loans:
     policy_name: "Teachers: claim back your student loan repayments"
     support_email_address: "studentloanteacherpayment@digital.education.gov.uk"

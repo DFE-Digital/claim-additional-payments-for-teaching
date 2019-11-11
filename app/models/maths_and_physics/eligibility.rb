@@ -1,5 +1,8 @@
 module MathsAndPhysics
   class Eligibility < ApplicationRecord
+    EDITABLE_ATTRIBUTES = [
+      :teaching_maths_or_physics,
+    ].freeze
     self.table_name = "maths_and_physics_eligibilities"
 
     validates :teaching_maths_or_physics, on: [:"teaching-maths-or-physics", :submit], inclusion: {in: [true, false], message: "Select either Yes or No"}
