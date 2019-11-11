@@ -1,0 +1,32 @@
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-full">
+    <h1 class="govuk-heading-xl">
+      Open or close a service
+    </h1>
+  </div>
+
+  <div class="govuk-grid-column-two-thirds">
+    <p class="govuk-body">Here you can open or close a service. Closing a service will stop users applying and show them a holding page.</p>
+  </div>
+
+  <div class="govuk-grid-column-full">
+    <table class="govuk-table">
+      <thead class="govuk-table__head">
+        <tr class="govuk-table__row">
+          <th scope="col" class="govuk-table__header">Service</th>
+          <th scope="col" class="govuk-table__header">Status</th>
+          <th scope="col" class="govuk-table__header"><span class="govuk-visually-hidden">Actions</span></th>
+        </tr>
+      </thead>
+      <tbody class="govuk-table__body">
+        <% @policy_configurations.each do |policy_configuration| %>
+          <tr class="govuk-table__row" data-policy-configuration-id="<%= policy_configuration.id %>">
+            <th scope="row" class="govuk-table__header"><%= policy_service_name(policy_configuration.policy.routing_name) %></th>
+            <td class="govuk-table__cell"><%= policy_configuration.open_for_submissions? ? "Open" : "Closed" %></td>
+            <td class="govuk-table__cell"><%= link_to "Change", edit_admin_policy_configuration_path(policy_configuration), class: "govuk-link" %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+</div>

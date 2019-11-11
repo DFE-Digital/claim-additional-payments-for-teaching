@@ -1,0 +1,17 @@
+.govuk-panel--informational {
+  background-color: govuk-colour("blue");
+  color: govuk-colour("white");
+  text-align: left;
+  padding: govuk-spacing(3) - $govuk-border-width;
+  margin-bottom: govuk-spacing(5);
+
+  .govuk-panel__title {
+    @include govuk-font($size: 19, $weight: bold);
+    margin-bottom: 0;
+  }
+
+  .govuk-panel__body {
+    @include govuk-font($size: 19);
+    margin: 0;
+  }
+}
