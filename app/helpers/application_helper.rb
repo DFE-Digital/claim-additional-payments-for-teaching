@@ -1,13 +1,11 @@
 module ApplicationHelper
   def page_title(title, show_error: false)
-    content_for :page_title do
-      [].tap do |a|
-        a << "Error" if show_error
-        a << title
-        a << t("student_loans.policy_name")
-        a << "GOV.UK"
-      end.join(" - ")
-    end
+    [].tap do |a|
+      a << "Error" if show_error
+      a << title
+      a << t("student_loans.policy_name")
+      a << "GOV.UK"
+    end.join(" - ")
   end
 
   def claim_in_progress?
