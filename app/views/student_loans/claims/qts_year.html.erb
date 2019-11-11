@@ -1,4 +1,4 @@
-<% content_for(:page_title, page_title(t("student_loans.questions.qts_award_year"), show_error: current_claim.errors.any?)) %>
+<% content_for(:page_title, page_title(t("student_loans.questions.qts_award_year"), policy: current_policy_routing_name, show_error: current_claim.errors.any?)) %>
 <% path_for_form = current_claim.persisted? ? claim_path(current_policy_routing_name) : claims_path(current_policy_routing_name) %>
 
 <div class="govuk-grid-row">

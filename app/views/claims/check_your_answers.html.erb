@@ -1,4 +1,4 @@
-<% content_for(:page_title, page_title("Check your answers before sending your application", show_error: current_claim.errors.any?)) %>
+<% content_for(:page_title, page_title("Check your answers before sending your application", policy: current_policy_routing_name, show_error: current_claim.errors.any?)) %>
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
