@@ -112,7 +112,7 @@ GEM
     jaro_winkler (1.5.3)
     jbuilder (2.9.1)
       activesupport (>= 4.2.0)
-    json-jwt (1.10.1)
+    json-jwt (1.10.2)
       activesupport (>= 4.2)
       aes_key_wrap
       bindata
@@ -136,7 +136,7 @@ GEM
     mimemagic (0.3.3)
     mini_mime (1.0.2)
     mini_portile2 (2.4.0)
-    minitest (5.12.2)
+    minitest (5.13.0)
     msgpack (1.3.1)
     nanoid (2.0.0)
     nio4r (2.5.2)
@@ -150,11 +150,11 @@ GEM
     omniauth-rails_csrf_protection (0.1.2)
       actionpack (>= 4.2)
       omniauth (>= 1.3.1)
-    omniauth_openid_connect (0.3.1)
+    omniauth_openid_connect (0.3.3)
       addressable (~> 2.5)
-      omniauth (~> 1.3)
+      omniauth (~> 1.9)
       openid_connect (~> 1.1)
-    openid_connect (1.1.7)
+    openid_connect (1.1.8)
       activemodel
       attr_required (>= 1.0.0)
       json-jwt (>= 1.5.0)
