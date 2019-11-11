@@ -5,7 +5,7 @@ module ApplicationHelper
       a << title
       a << policy_service_name(policy)
       a << "GOV.UK"
-    end.join(" - ")
+    end.join(" — ")
   end
 
   def claim_in_progress?
