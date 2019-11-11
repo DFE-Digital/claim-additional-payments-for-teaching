@@ -18,18 +18,21 @@ describe ApplicationHelper do
   end
 
   describe "page_title" do
-    it "Returns a title without an error prefix" do
-      page_title("Some Title", show_error: false)
-      title = content_for(:page_title)
+    it "returns a title for the page that follows the guidance of the design system" do
+      expected_title = page_title("Title", policy: "student-loans")
+      expect(expected_title).to eq("Title — Teachers: claim back your student loan repayments — GOV.UK")
 
-      expect(title).to eq("Some Title - #{I18n.t("student_loans.policy_name")} - GOV.UK")
+      expected_title = page_title("Title", policy: "maths-and-physics")
+      expect(expected_title).to eq("Title — Claim a payment for teaching maths or physics — GOV.UK")
     end
 
-    it "Returns an error prefix" do
-      page_title("Some Title", show_error: true)
-      title = content_for(:page_title)
+    it "uses the generic service name if a specific policy isn't available" do
+      expect(page_title("Some Title", policy: nil)).to eq("Some Title — Claim additional payments for teaching — GOV.UK")
+    end
 
-      expect(title).to eq("Error - Some Title - #{I18n.t("student_loans.policy_name")} - GOV.UK")
+    it "includes an optional error prefix" do
+      expected_title = page_title("Some Title", show_error: true, policy: "student-loans")
+      expect(expected_title).to eq("Error — Some Title — Teachers: claim back your student loan repayments — GOV.UK")
     end
   end
 
