@@ -36,6 +36,7 @@ COPY Gemfile ${DEPS_HOME}/Gemfile
 COPY Gemfile.lock ${DEPS_HOME}/Gemfile.lock
 
 RUN gem install bundler
+ENV BUNDLE_BUILD__SASSC=--disable-march-tune-native
 
 RUN if [ ${RAILS_ENV} = "production" ]; then \
   bundle install --frozen --retry 3 --without development test; \
