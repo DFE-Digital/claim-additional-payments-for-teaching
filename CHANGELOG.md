@@ -6,7 +6,10 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+## [Release 030] - 2019-11-12
+
 - Add policy specific "Reply-to" address for claim emails
+- Upgrade to Rails 6.0.1
 
 ## [Release 029] - 2019-11-07
 
@@ -212,7 +215,9 @@ The format is based on [Keep a Changelog]
 - First release for student loan repayments private beta
 
 [unreleased]:
-  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-029...HEAD
+  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-030...HEAD
+[release 030]:
+  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-029...release-030
 [release 029]:
   https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-028...release-029
 [release 028]:
