@@ -127,4 +127,25 @@ RSpec.feature "Teacher Student Loan Repayments claims" do
       expect(page).to have_text(claim.email_address)
     end
   end
+
+  scenario "currently works at a different school to the claim school" do
+    claim = start_claim
+
+    choose_school schools(:penistone_grammar_school)
+    choose_subjects_taught
+
+    choose_still_teaching "Yes, at another school"
+
+    expect(claim.eligibility.reload.employment_status).to eql("different_school")
+
+    fill_in :school_search, with: "Hampstead"
+    click_on "Search"
+
+    choose "Hampstead School"
+    click_on "Continue"
+
+    expect(claim.eligibility.reload.current_school).to eql schools(:hampstead_school)
+
+    expect(page).to have_text(I18n.t("student_loans.questions.leadership_position"))
+  end
 end

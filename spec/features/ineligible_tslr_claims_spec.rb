@@ -11,27 +11,6 @@ RSpec.feature "Ineligible Teacher Student Loan Repayments claims" do
     expect(page).to have_text("You can only get this payment if you completed your initial teacher training on or after 1 September 2013.")
   end
 
-  scenario "now works for a different school" do
-    claim = start_claim
-
-    choose_school schools(:penistone_grammar_school)
-    choose_subjects_taught
-
-    choose_still_teaching "Yes, at another school"
-
-    expect(claim.eligibility.reload.employment_status).to eql("different_school")
-
-    fill_in :school_search, with: "Hampstead"
-    click_on "Search"
-
-    choose "Hampstead School"
-    click_on "Continue"
-
-    expect(claim.eligibility.reload.current_school).to eql schools(:hampstead_school)
-
-    expect(page).to have_text(I18n.t("student_loans.questions.leadership_position"))
-  end
-
   scenario "chooses an ineligible claim school" do
     claim = start_claim
     choose_school schools(:hampstead_school)
