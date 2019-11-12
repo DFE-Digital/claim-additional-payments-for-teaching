@@ -315,6 +315,10 @@ RSpec.describe Claim, type: :model do
     it "returns the claim’s policy namespace" do
       expect(Claim.new(eligibility: StudentLoans::Eligibility.new).policy).to eq StudentLoans
     end
+
+    it "returns nil if no eligibility is set" do
+      expect(Claim.new.policy).to be_nil
+    end
   end
 
   describe "#submit!" do

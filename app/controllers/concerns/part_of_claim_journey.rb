@@ -9,7 +9,7 @@ module PartOfClaimJourney
   private
 
   def current_policy_routing_name
-    current_claim.policy.routing_name
+    current_claim.policy&.routing_name
   end
 
   def send_unstarted_claiments_to_the_start
