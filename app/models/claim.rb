@@ -209,7 +209,7 @@ class Claim < ApplicationRecord
   end
 
   def policy
-    eligibility.class.module_parent
+    eligibility&.class&.module_parent
   end
 
   private

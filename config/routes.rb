@@ -62,6 +62,8 @@ Rails.application.routes.draw do
       resources :school_search, only: [:create]
     end
   end
+  # Temporary start page for Maths & Physics
+  get "maths-and-physics/start", to: "static_pages#maths_and_physics", defaults: {policy: "maths-and-physics"}
 
   namespace :verify do
     resource :authentications, only: [:new, :create] do
