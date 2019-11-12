@@ -10,6 +10,8 @@ The format is based on [Keep a Changelog]
   interface. Closing the service prevents users from making claims. As part of
   this, we remove the global maintenance mode, and the default maintenance mode
   availability message.
+- Only allow payroll runs to be created if none exist already for the current
+  month
 
 ## [Release 031] - 2019-11-18
 

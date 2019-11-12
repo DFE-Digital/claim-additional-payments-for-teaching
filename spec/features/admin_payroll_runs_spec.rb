@@ -27,6 +27,17 @@ RSpec.feature "Payroll" do
     expect(csv.count).to eq(3)
   end
 
+  context "when a payroll run already exists for the month" do
+    scenario "Service operator cannot create a new payroll run" do
+      create(:payroll_run, claims_count: 2, created_at: 5.minutes.ago)
+      sign_in_to_admin_with_role(AdminSession::SERVICE_OPERATOR_DFE_SIGN_IN_ROLE_CODE)
+
+      visit admin_payroll_runs_path
+
+      expect(page).not_to have_link("Prepare payroll")
+    end
+  end
+
   scenario "Any claims approved in the meantime are not included" do
     sign_in_to_admin_with_role(AdminSession::SERVICE_OPERATOR_DFE_SIGN_IN_ROLE_CODE)
 
@@ -49,7 +60,7 @@ RSpec.feature "Payroll" do
   scenario "Service operator can view a list of previous payroll runs" do
     sign_in_to_admin_with_role(AdminSession::SERVICE_OPERATOR_DFE_SIGN_IN_ROLE_CODE)
 
-    first_payroll_run = create(:payroll_run, created_at: Time.zone.now - 1.week)
+    first_payroll_run = create(:payroll_run, created_at: Time.zone.now - 1.month)
     last_payroll_run = create(:payroll_run, created_at: Time.zone.now)
 
     click_on "Payroll"

@@ -15,7 +15,7 @@
       </strong>
     </div>
 
-    <%= link_to 'Prepare payroll', new_admin_payroll_run_path, class: "govuk-button", data: {module: "govuk-button"} %></li>
+    <%= link_to 'Prepare payroll', new_admin_payroll_run_path, class: "govuk-button", data: {module: "govuk-button"} if PayrollRun.this_month.empty? %>
   </div>
   <div class="govuk-grid-column-full">
     <table class="govuk-table">

@@ -4,6 +4,10 @@ class PayrollRun < ApplicationRecord
 
   validates :created_by, presence: true
 
+  validate :ensure_no_payroll_run_this_month, on: :create
+
+  scope :this_month, -> { where(created_at: DateTime.now.all_month) }
+
   def total_award_amount
     claims.sum(&:award_amount)
   end
@@ -16,5 +20,11 @@ class PayrollRun < ApplicationRecord
         end
       end
     end
+  end
+
+  private
+
+  def ensure_no_payroll_run_this_month
+    errors.add(:base, "There has already been a payroll run for #{Date.today.strftime("%B")}") if PayrollRun.this_month.any?
   end
 end
