@@ -13,6 +13,8 @@ The format is based on [Keep a Changelog]
 
 - Add policy specific "Reply-to" address for claim emails
 - Upgrade to Rails 6.0.1
+- A service operator can create and download a Database of qualified teachers
+  (DQT) report request csv file
 
 ## [Release 029] - 2019-11-07
 

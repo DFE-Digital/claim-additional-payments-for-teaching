@@ -3,6 +3,13 @@ class Admin::ClaimsController < Admin::BaseAdminController
 
   def index
     @claims = Claim.includes(:check, eligibility: [:claim_school, :current_school]).awaiting_checking.order(:submitted_at)
+    respond_to do |format|
+      format.html
+      format.csv {
+        send_data Claim::DatabaseOfQualifiedTeachersReportRequest.new(@claims).to_csv,
+          filename: "dqt_report_request_#{Date.today.iso8601}.csv"
+      }
+    end
   end
 
   def show

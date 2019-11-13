@@ -9,6 +9,7 @@
       <% claims_with_warning = Claim.approaching_check_deadline.count + Claim.passed_check_deadline.count %>
 
       <h2 class="govuk-heading-m"><%= pluralize(@claims.count, "claim") %> awaiting checking</h2>
+      <%= link_to "Download DQT report request file", admin_claims_path(format: :csv), class: "govuk-button", data: { module: "govuk-button" }, role: :button %>
       <table class="govuk-table">
         <thead class="govuk-table__head">
           <tr class="govuk-table__row">
