@@ -156,6 +156,14 @@
         "secretName": "DfeSignInApiEndpoint"
       }
     },
+    "GECKOBOARD_API_KEY": {
+      "reference": {
+        "keyVault": {
+          "id": "${keyVaultId}"
+        },
+        "secretName": "GeckoboardAPIKey"
+      }
+    },
     "ADMIN_ALLOWED_IPS": {
       "value": "::/0,0.0.0.0/0"
     },

@@ -132,6 +132,9 @@
     "DFE_SIGN_IN_API_ENDPOINT": {
       "type": "string"
     },
+    "GECKOBOARD_API_KEY": {
+      "type": "string"
+    },
     "ADMIN_ALLOWED_IPS": {
       "type": "string"
     },
@@ -419,6 +422,10 @@
               {
                 "name": "DFE_SIGN_IN_API_ENDPOINT",
                 "value": "[parameters('DFE_SIGN_IN_API_ENDPOINT')]"
+              },
+              {
+                "name": "GECKOBOARD_API_KEY",
+                "value": "[parameters('GECKOBOARD_API_KEY')]"
               },
               {
                 "name": "MAINTENANCE_MODE",
