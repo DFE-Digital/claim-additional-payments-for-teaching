@@ -1,4 +1,12 @@
 module GeckoboardHelpers
+  # Use this to stub out the API calls that will be made to Geckoboard when a
+  # Claim is submitted. It will return the webmock POST request, which can be
+  # used to write expectations about the request being made.
+  def stub_geckoboard_submitted_event
+    stub_geckoboard_dataset_find_or_create("claims.submitted.")
+    stub_geckoboard_dataset_post("claims.submitted.")
+  end
+
   def stub_geckoboard_dataset_find_or_create(dataset_id)
     dataset_fields = {
       reference: {

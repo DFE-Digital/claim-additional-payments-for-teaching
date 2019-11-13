@@ -1,6 +1,8 @@
 require "rails_helper"
 
 RSpec.feature "Missing information from GOV.UK Verify" do
+  before { stub_geckoboard_submitted_event }
+
   scenario "Claimant is asked a payroll gender question when Verify doesn’t provide their gender" do
     claim = start_claim
     choose_school schools(:penistone_grammar_school)

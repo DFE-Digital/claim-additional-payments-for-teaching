@@ -6,6 +6,8 @@ RSpec.describe "Submissions", type: :request do
 
     context "with a submittable claim" do
       before do
+        @dataset_post_stub = stub_geckoboard_submitted_event
+
         start_claim
         # Make the claim submittable
         in_progress_claim.update!(attributes_for(:claim, :submittable))
@@ -23,6 +25,16 @@ RSpec.describe "Submissions", type: :request do
         expect(email.to).to eql([in_progress_claim.email_address])
         expect(email.subject).to eql("Your claim was received")
         expect(email.body).to include("Your unique reference is #{in_progress_claim.reference}.")
+      end
+
+      it "sends the claim's details to the “submitted” dataset on Geckoboard" do
+        claim_data = {
+          reference: in_progress_claim.reload.reference,
+          policy: in_progress_claim.policy.to_s,
+          submitted_at: in_progress_claim.submitted_at.strftime("%Y-%m-%dT%H:%M:%S%:z"),
+        }
+
+        expect(@dataset_post_stub.with(body: {data: [claim_data]})).to have_been_requested
       end
     end
 
