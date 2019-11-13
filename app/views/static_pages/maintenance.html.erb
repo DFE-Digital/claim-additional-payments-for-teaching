@@ -4,13 +4,11 @@
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-    <p class="govuk-body">
-      <% if @availability_message.present? %>
+    <% if @availability_message.present? %>
+      <p class="govuk-body">
         <%= @availability_message %>
-      <% else %>
-        You will be able to use the service later today.
-      <% end %>
-    </p>
+      </p>
+    <% end %>
 
     <p class="govuk-body">
       If you’ve already submitted a claim, we’ll contact you when we have reviewed it.

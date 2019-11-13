@@ -9,7 +9,6 @@ RSpec.describe "Maintenance Mode", type: :request do
       get new_claim_path(StudentLoans.routing_name)
       expect(response).to have_http_status(:service_unavailable)
       expect(response.body).to include("service is unavailable")
-      expect(response.body).to include("You will be able to use the service later today.")
     end
 
     it "shows the policy closed page for POST requests" do
