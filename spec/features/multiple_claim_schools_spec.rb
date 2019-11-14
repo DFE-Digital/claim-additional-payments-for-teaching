@@ -16,7 +16,7 @@ RSpec.feature "Applicant worked at multiple schools" do
 
     expect(page).to_not have_css("input[value=\"Hampstead School\"]")
     expect(page).to have_text(I18n.t("student_loans.questions.additional_school"))
-    expect(page).to_not have_text("If you worked at multiple schools")
+    expect(page).to_not have_text("If you taught at multiple schools")
 
     choose_school schools(:penistone_grammar_school)
     expect(claim.eligibility.reload.claim_school).to eq schools(:penistone_grammar_school)

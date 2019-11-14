@@ -35,7 +35,7 @@ RSpec.feature "Ineligible Teacher Student Loan Repayments claims" do
     click_on "Continue"
 
     expect(page).to have_text("You’re not eligible")
-    expect(page).to have_text("Bradford Grammar School, where you are currently employed, is not a state-funded secondary school.")
+    expect(page).to have_text("Bradford Grammar School, where you are currently employed to teach, is not a state-funded secondary school.")
   end
 
   scenario "no longer teaching" do
@@ -47,7 +47,7 @@ RSpec.feature "Ineligible Teacher Student Loan Repayments claims" do
 
     expect(claim.eligibility.reload.employment_status).to eq("no_school")
     expect(page).to have_text("You’re not eligible")
-    expect(page).to have_text("You can only get this payment if you’re still employed at a school.")
+    expect(page).to have_text("You can only get this payment if you’re still employed to teach at a school.")
   end
 
   scenario "did not teach an eligible subject" do

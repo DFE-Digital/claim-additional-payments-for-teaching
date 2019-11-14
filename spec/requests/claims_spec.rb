@@ -42,7 +42,7 @@ RSpec.describe "Claims", type: :request do
         expect(response.body).to include(I18n.t("student_loans.questions.qts_award_year"))
 
         get claim_path(StudentLoans.routing_name, "claim-school")
-        expect(response.body).to include("Which school were you employed at")
+        expect(response.body).to include("Which school were you employed to teach at")
       end
 
       context "when searching for a school on the claim-school page" do
@@ -88,7 +88,7 @@ RSpec.describe "Claims", type: :request do
         get claim_path(StudentLoans.routing_name, "ineligible")
 
         expect(response.body).to include("You’re not eligible")
-        expect(response.body).to include("You can only get this payment if you’re still employed at a school.")
+        expect(response.body).to include("You can only get this payment if you’re still employed to teach at a school.")
       end
     end
 
