@@ -2,6 +2,7 @@ module MathsAndPhysics
   class Eligibility < ApplicationRecord
     EDITABLE_ATTRIBUTES = [
       :teaching_maths_or_physics,
+      :current_school_id,
     ].freeze
     self.table_name = "maths_and_physics_eligibilities"
 

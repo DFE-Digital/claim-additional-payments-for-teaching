@@ -31,6 +31,13 @@ RSpec.describe MathsAndPhysics::Eligibility, type: :model do
     end
   end
 
+  context "when saving in the “current-school” context" do
+    it "validates the presence of the current_school" do
+      expect(MathsAndPhysics::Eligibility.new).not_to be_valid(:"current-school")
+      expect(MathsAndPhysics::Eligibility.new(current_school: schools(:penistone_grammar_school))).to be_valid(:"current-school")
+    end
+  end
+
   context "when saving in the “submit” context" do
     it "is valid when all attributes are present" do
       expect(build(:maths_and_physics_eligibility, :eligible)).to be_valid(:submit)
@@ -39,6 +46,11 @@ RSpec.describe MathsAndPhysics::Eligibility, type: :model do
     it "is not valid without a value for teaching_maths_or_physics" do
       expect(build(:maths_and_physics_eligibility, :eligible, teaching_maths_or_physics: nil)).not_to be_valid(:submit)
       expect(build(:maths_and_physics_eligibility, :eligible, teaching_maths_or_physics: true)).to be_valid(:submit)
+    end
+
+    it "is not valid without a value for current_school" do
+      expect(build(:maths_and_physics_eligibility, :eligible, current_school: nil)).not_to be_valid(:submit)
+      expect(build(:maths_and_physics_eligibility, :eligible, current_school: schools(:penistone_grammar_school))).to be_valid(:submit)
     end
   end
 end
