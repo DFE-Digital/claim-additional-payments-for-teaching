@@ -130,6 +130,14 @@
         "secretName": "DfeSignInApiEndpoint"
       }
     },
+    "GECKOBOARD_API_KEY": {
+      "reference": {
+        "keyVault": {
+          "id": "${keyVaultId}"
+        },
+        "secretName": "GeckoboardAPIKey"
+      }
+    },
     "ADMIN_ALLOWED_IPS": {
       "value": "194.72.231.130/31,194.72.231.132/31,213.123.63.150,217.38.175.48/28,217.38.175.64/28,217.38.165.192/28,217.38.165.176/28"
     },
@@ -171,7 +179,7 @@
         "secretName": "RollbarAccessToken"
       }
     },
-    "ROLLBAR_ENV": {
+    "ENVIRONMENT_NAME": {
       "value": "production"
     },
     "VSP.VERIFY_ENVIRONMENT": {

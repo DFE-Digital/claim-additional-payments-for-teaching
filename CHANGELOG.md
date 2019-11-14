@@ -8,6 +8,7 @@ The format is based on [Keep a Changelog]
 
 - Introduce the beginnings of the Maths & Physics journey, protected with basic
   auth
+- Send statistics on submitted claims to Geckoboard
 
 ## [Release 030] - 2019-11-12
 

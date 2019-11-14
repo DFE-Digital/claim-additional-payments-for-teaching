@@ -42,6 +42,9 @@ gem "delayed_cron_job"
 # Run data migrations along side schema migrations
 gem "data_migrate"
 
+# Geckoboard for stats
+gem "geckoboard-ruby"
+
 # Use ActiveStorage variant
 # gem 'mini_magick', '~> 4.8'
 
