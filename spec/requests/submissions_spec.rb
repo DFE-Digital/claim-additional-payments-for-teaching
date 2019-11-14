@@ -31,7 +31,7 @@ RSpec.describe "Submissions", type: :request do
         claim_data = {
           reference: in_progress_claim.reload.reference,
           policy: in_progress_claim.policy.to_s,
-          submitted_at: in_progress_claim.submitted_at.strftime("%Y-%m-%dT%H:%M:%S%:z"),
+          performed_at: in_progress_claim.submitted_at.strftime("%Y-%m-%dT%H:%M:%S%:z"),
         }
 
         expect(@dataset_post_stub.with(body: {data: [claim_data]})).to have_been_requested

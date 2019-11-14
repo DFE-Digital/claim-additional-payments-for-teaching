@@ -11,7 +11,7 @@ RSpec.describe RecordSubmittedClaimJob do
       claim_data = {
         reference: claim.reference,
         policy: claim.policy.to_s,
-        submitted_at: claim.submitted_at.strftime("%Y-%m-%dT%H:%M:%S%:z"),
+        performed_at: claim.submitted_at.strftime("%Y-%m-%dT%H:%M:%S%:z"),
       }
 
       stub_geckoboard_dataset_find_or_create("claims.submitted.environment_name")

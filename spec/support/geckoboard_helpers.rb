@@ -17,8 +17,8 @@ module GeckoboardHelpers
         name: "Policy",
         type: "string",
       },
-      submitted_at: {
-        name: "Date Submitted",
+      performed_at: {
+        name: "Performed at",
         type: "datetime",
       },
     }
