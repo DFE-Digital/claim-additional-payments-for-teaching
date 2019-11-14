@@ -7,7 +7,7 @@ RSpec.describe RecordSubmittedClaimJob do
   subject { described_class.new }
 
   it "sends the claim's reference, policy and submitted date to claims.submitted.ENV dataset" do
-    ClimateControl.modify ROLLBAR_ENV: "environment_name" do
+    ClimateControl.modify ENVIRONMENT_NAME: "environment_name" do
       claim_data = {
         reference: claim.reference,
         policy: claim.policy.to_s,

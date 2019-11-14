@@ -3,8 +3,8 @@ module GeckoboardHelpers
   # Claim is submitted. It will return the webmock POST request, which can be
   # used to write expectations about the request being made.
   def stub_geckoboard_submitted_event
-    stub_geckoboard_dataset_find_or_create("claims.submitted.")
-    stub_geckoboard_dataset_post("claims.submitted.")
+    stub_geckoboard_dataset_find_or_create("claims.submitted.test")
+    stub_geckoboard_dataset_post("claims.submitted.test")
   end
 
   def stub_geckoboard_dataset_find_or_create(dataset_id)

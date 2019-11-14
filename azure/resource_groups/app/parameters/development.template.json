@@ -192,7 +192,7 @@
         "secretName": "RollbarAccessToken"
       }
     },
-    "ROLLBAR_ENV": {
+    "ENVIRONMENT_NAME": {
       "value": "development"
     },
     "VSP.VERIFY_ENVIRONMENT": {
