@@ -10,6 +10,11 @@ RSpec.describe MathsAndPhysics::Eligibility, type: :model do
       expect(MathsAndPhysics::Eligibility.new(teaching_maths_or_physics: false).ineligible?).to eql true
       expect(MathsAndPhysics::Eligibility.new(teaching_maths_or_physics: true).ineligible?).to eql false
     end
+
+    it "returns true when teaching at an ineligble school" do
+      expect(MathsAndPhysics::Eligibility.new(current_school: schools(:hampstead_school)).ineligible?).to eql true
+      expect(MathsAndPhysics::Eligibility.new(current_school: schools(:penistone_grammar_school)).ineligible?).to eql false
+    end
   end
 
   describe "#ineligibility_reason" do
@@ -19,6 +24,18 @@ RSpec.describe MathsAndPhysics::Eligibility, type: :model do
 
     it "returns a symbol indicating the reason for ineligibility" do
       expect(MathsAndPhysics::Eligibility.new(teaching_maths_or_physics: false).ineligibility_reason).to eq :not_teaching_maths_or_physics
+      expect(MathsAndPhysics::Eligibility.new(current_school: schools(:hampstead_school)).ineligibility_reason).to eq :ineligible_current_school
+    end
+  end
+
+  describe "#current_school_name" do
+    it "returns the name of the claim school" do
+      eligibility = MathsAndPhysics::Eligibility.new(current_school: schools(:penistone_grammar_school))
+      expect(eligibility.current_school_name).to eq schools(:penistone_grammar_school).name
+    end
+
+    it "does not error if the claim school is not set" do
+      expect(MathsAndPhysics::Eligibility.new.current_school_name).to be_nil
     end
   end
 
