@@ -19,6 +19,7 @@ The format is based on [Keep a Changelog]
 - Only allow payroll runs to be created if none exist already for the current
   month
 - Added post-eligibility questions to the Maths & Physics journey
+- Add the current school question to the maths and physics claim journey
 
 ## [Release 031] - 2019-11-18
 
