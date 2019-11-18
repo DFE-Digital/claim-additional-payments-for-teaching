@@ -19,7 +19,7 @@ module PartOfClaimJourney
 
     unless policy_configuration.open_for_submissions?
       @availability_message = policy_configuration.availability_message
-      render "static_pages/maintenance", status: :service_unavailable
+      render "static_pages/closed_for_submissions", status: :service_unavailable
     end
   end
 
