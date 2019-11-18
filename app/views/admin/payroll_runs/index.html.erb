@@ -5,17 +5,13 @@
     </h1>
   </div>
   <div class="govuk-grid-column-two-thirds">
-    <p class="govuk-body">Make a payroll file containing all the relevant information for approved claims to be paid by a payroll provider.</p>
+    <p class="govuk-body">Make a payroll file containing all the relevant information for approved claims to be paid by Cantium.</p>
 
-    <div class="govuk-warning-text">
-      <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
-      <strong class="govuk-warning-text__text">
-        <span class="govuk-warning-text__assistive">Warning</span>
-        Only one payroll file should be generated and submitted per calendar month
-      </strong>
+    <div class="govuk-inset-text">
+      The next payroll file must be with Cantium on or before <%= l(next_payroll_file_to_cantium_due_date) %>
     </div>
 
-    <%= link_to 'Prepare payroll', new_admin_payroll_run_path, class: "govuk-button", data: {module: "govuk-button"} %></li>
+    <%= link_to 'Prepare payroll file', new_admin_payroll_run_path, class: "govuk-button", data: {module: "govuk-button"} if PayrollRun.this_month.empty? %>
   </div>
   <div class="govuk-grid-column-full">
     <table class="govuk-table">
