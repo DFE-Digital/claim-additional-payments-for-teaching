@@ -6,16 +6,18 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+## [Release 031] - 2019-11-18
+
 - Introduce the beginnings of the Maths & Physics journey, protected with basic
   auth
 - Send statistics on submitted claims to Geckoboard
+- A service operator can create and download a Database of qualified teachers
+  (DQT) report request csv file
 
 ## [Release 030] - 2019-11-12
 
 - Add policy specific "Reply-to" address for claim emails
 - Upgrade to Rails 6.0.1
-- A service operator can create and download a Database of qualified teachers
-  (DQT) report request csv file
 
 ## [Release 029] - 2019-11-07
 
@@ -221,7 +223,9 @@ The format is based on [Keep a Changelog]
 - First release for student loan repayments private beta
 
 [unreleased]:
-  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-030...HEAD
+  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-031...HEAD
+[release 031]:
+  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-030...release-031
 [release 030]:
   https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-029...release-030
 [release 029]:
