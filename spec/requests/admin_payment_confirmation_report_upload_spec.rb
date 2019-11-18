@@ -3,6 +3,8 @@ require "rails_helper"
 RSpec.describe "Admin Payment Confirmation Report upload" do
   let(:payroll_run) { create(:payroll_run) }
 
+  let!(:dataset_post_stub) { stub_geckoboard_dataset_update("claims.paid.test") }
+
   context "when signed in as a service operator" do
     let(:admin_session_id) { "some_user_id" }
     before do
@@ -30,7 +32,7 @@ RSpec.describe "Admin Payment Confirmation Report upload" do
           CSV
         end
 
-        it "records the values from the CSV against the claims' payments and sends emails" do
+        it "records the values from the CSV against the claims' payments, sends emails and logs data in Geckoboard" do
           perform_enqueued_jobs do
             post admin_payroll_run_payment_confirmation_report_uploads_path(payroll_run), params: {file: file}
           end
@@ -43,6 +45,8 @@ RSpec.describe "Admin Payment Confirmation Report upload" do
           expect(payroll_run.reload.confirmation_report_uploaded_by).to eq(admin_session_id)
 
           expect(ActionMailer::Base.deliveries.count).to eq(2)
+
+          expect(dataset_post_stub).to have_been_requested.twice
         end
       end
 

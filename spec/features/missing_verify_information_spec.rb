@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.feature "Missing information from GOV.UK Verify" do
-  before { stub_geckoboard_submitted_event }
+  before { stub_geckoboard_dataset_update }
 
   scenario "Claimant is asked a payroll gender question when Verify doesn’t provide their gender" do
     claim = start_claim

@@ -6,7 +6,7 @@ RSpec.describe "Submissions", type: :request do
 
     context "with a submittable claim" do
       before do
-        @dataset_post_stub = stub_geckoboard_submitted_event
+        @dataset_post_stub = stub_geckoboard_dataset_update
 
         start_claim
         # Make the claim submittable

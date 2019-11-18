@@ -1,6 +1,8 @@
 require "rails_helper"
 
 RSpec.feature "Payroll" do
+  let!(:dataset_post_stub) { stub_geckoboard_dataset_update("claims.paid.test") }
+
   scenario "Service operator creates a payroll run" do
     sign_in_to_admin_with_role(AdminSession::SERVICE_OPERATOR_DFE_SIGN_IN_ROLE_CODE)
 
@@ -112,5 +114,7 @@ RSpec.feature "Payroll" do
 
     expect(first_email.subject).to eq("We’re paying your claim to get back your student loan repayments, reference number: #{payroll_run.claims[0].reference}")
     expect(second_email.subject).to eq("We’re paying your claim to get back your student loan repayments, reference number: #{payroll_run.claims[1].reference}")
+
+    expect(dataset_post_stub).to have_been_requested.twice
   end
 end
