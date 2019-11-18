@@ -3,6 +3,7 @@ FactoryBot.define do
     trait :eligible do
       teaching_maths_or_physics { true }
       current_school { School.find(ActiveRecord::FixtureSet.identify(:penistone_grammar_school, :uuid)) }
+      initial_teacher_training_specialised_in_maths_or_physics { true }
     end
   end
 end
