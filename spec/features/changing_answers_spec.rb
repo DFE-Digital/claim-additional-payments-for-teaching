@@ -171,7 +171,7 @@ RSpec.feature "Changing the answers on a submittable claim" do
 
       expect(eligibility.reload.employment_status).to eq("no_school")
       expect(page).to have_text("You’re not eligible")
-      expect(page).to have_text("You can only get this payment if you’re still employed at a school.")
+      expect(page).to have_text("You can only get this payment if you’re still employed to teach at a school.")
     end
   end
 

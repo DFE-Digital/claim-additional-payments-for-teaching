@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+- Update employment-related copy to clarify that the policy cares about the
+  location that the teacher _taught_ at, not where their employer is based.
 - A service operator can open or close an individual service from the admin
   interface. Closing the service prevents users from making claims. As part of
   this, we remove the global maintenance mode, and the default maintenance mode
