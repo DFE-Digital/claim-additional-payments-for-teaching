@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.feature "Teacher Student Loan Repayments claims" do
-  before { stub_geckoboard_submitted_event }
+  before { stub_geckoboard_dataset_update }
 
   [
     true,

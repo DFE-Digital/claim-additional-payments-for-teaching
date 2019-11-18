@@ -9,8 +9,7 @@ RSpec.describe Claim::GeckoboardEvent, type: :model do
     ClimateControl.modify ENVIRONMENT_NAME: "test" do
       event = Claim::GeckoboardEvent.new(claim, event_name, datetime)
 
-      stub_geckoboard_dataset_find_or_create("claims.#{event_name}.test")
-      dataset_post_stub = stub_geckoboard_dataset_post("claims.#{event_name}.test")
+      dataset_post_stub = stub_geckoboard_dataset_update("claims.#{event_name}.test")
 
       event.record
 

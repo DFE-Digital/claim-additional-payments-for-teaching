@@ -14,9 +14,7 @@ RSpec.describe RecordSubmittedClaimJob do
         performed_at: claim.submitted_at.strftime("%Y-%m-%dT%H:%M:%S%:z"),
       }
 
-      stub_geckoboard_dataset_find_or_create("claims.submitted.environment_name")
-
-      dataset_post_stub = stub_geckoboard_dataset_post("claims.submitted.environment_name")
+      dataset_post_stub = stub_geckoboard_dataset_update("claims.submitted.environment_name")
 
       subject.perform(claim)
 
