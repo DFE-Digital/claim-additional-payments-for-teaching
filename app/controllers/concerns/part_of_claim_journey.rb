@@ -2,6 +2,7 @@ module PartOfClaimJourney
   extend ActiveSupport::Concern
 
   included do
+    before_action :check_whether_closed_for_submissions, if: :current_policy_routing_name
     before_action :send_unstarted_claiments_to_the_start
     helper_method :current_claim
   end
@@ -10,6 +11,16 @@ module PartOfClaimJourney
 
   def current_policy_routing_name
     current_claim.policy&.routing_name
+  end
+
+  def check_whether_closed_for_submissions
+    policy = Policies[current_policy_routing_name]
+    policy_configuration = PolicyConfiguration.find_by(policy_type: policy.name)
+
+    unless policy_configuration.open_for_submissions?
+      @availability_message = policy_configuration.availability_message
+      render "static_pages/closed_for_submissions", status: :service_unavailable
+    end
   end
 
   def send_unstarted_claiments_to_the_start

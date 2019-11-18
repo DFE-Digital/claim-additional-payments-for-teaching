@@ -1,0 +1,56 @@
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <h1 class="govuk-heading-xl">
+      <span class="govuk-caption-xl">Open or close a service</span>
+      <%= policy_service_name(@policy_configuration.policy.routing_name) %>
+    </h1>
+
+    <div class="govuk-panel govuk-panel--informational">
+      <% if @policy_configuration.open_for_submissions? %>
+        <h3 class="govuk-panel__title">Service open</h3>
+        <p class="govuk-panel__body">This service is currently open. Users can submit claims.</p>
+      <% else %>
+        <h3 class="govuk-panel__title">Service closed</h3>
+        <p class="govuk-panel__body">This service is currently closed. Users can not submit claims.</p>
+      <% end %>
+    </div>
+
+    <%= form_with model: [:admin, @policy_configuration] do |f| %>
+
+      <div class="govuk-form-group">
+        <fieldset class="govuk-fieldset">
+          <legend class="govuk-fieldset__legend">
+            Service status
+          </legend>
+          <div class="govuk-radios govuk-radios--conditional" data-module="govuk-radios">
+            <div class="govuk-radios__item">
+              <%= f.radio_button :open_for_submissions, true, class: "govuk-radios__input" %>
+              <%= f.label :open_for_submissions, "Open", value: true, class: "govuk-label govuk-radios__label" %>
+            </div>
+            <div class="govuk-radios__item">
+              <%= f.radio_button :open_for_submissions, false, class: "govuk-radios__input", data: { aria_controls: "conditional-availability-message-conditional" } %>
+              <%= f.label :open_for_submissions, "Closed", value: false, class: "govuk-label govuk-radios__label" %>
+            </div>
+            <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-availability-message-conditional">
+              <div class="govuk-form-group">
+                <%= f.label :availability_message, "Availability message", class: "govuk-label" %>
+                <span class="govuk-hint">
+                  <p>
+                  This is an optional message that should provide an explanation of why the service is closed and / or when we expect it to open again.
+                  </p>
+
+                  <p>
+                  For example, "The service is closed for maintenance and will be available from 2pm today."
+                  </p>
+                </span>
+                <%= f.text_area :availability_message, class: "govuk-textarea", rows: 5 %>
+              </div>
+            </div>
+          </div>
+        </fieldset>
+      </div>
+
+      <%= f.submit "Save", class: "govuk-button", data: { module: "govuk-button" } %>
+    <% end %>
+  </div>
+</div>

@@ -6,6 +6,11 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+- A service operator can open or close an individual service from the admin
+  interface. Closing the service prevents users from making claims. As part of
+  this, we remove the global maintenance mode, and the default maintenance mode
+  availability message.
+
 ## [Release 031] - 2019-11-18
 
 - Introduce the beginnings of the Maths & Physics journey, protected with basic

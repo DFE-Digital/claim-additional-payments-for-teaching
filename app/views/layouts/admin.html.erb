@@ -82,6 +82,9 @@
             <li class="app-navigation__list-item">
               <%= link_to 'Payroll', admin_payroll_runs_path, class: "govuk-link govuk-link--no-visited-state app-navigation__link" %>
             </li>
+            <li class="app-navigation__list-item">
+              <%= link_to 'Open or close a service', admin_policy_configurations_path, class: "govuk-link govuk-link--no-visited-state app-navigation__link" %>
+            </li>
           <% end %>
           <li class="app-navigation__list-item">
             <%= link_to "Sign out", admin_sign_out_path, method: :delete, class: "govuk-link govuk-link--no-visited-state app-navigation__link" %>

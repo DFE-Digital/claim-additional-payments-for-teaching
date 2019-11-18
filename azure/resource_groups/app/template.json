@@ -138,12 +138,6 @@
     "ADMIN_ALLOWED_IPS": {
       "type": "string"
     },
-    "MAINTENANCE_MODE": {
-      "type": "string"
-    },
-    "MAINTENANCE_MODE_AVAILABILITY_MESSAGE": {
-      "type": "string"
-    },
     "GOOGLE_ANALYTICS_ID": {
       "type": "string"
     },
@@ -426,14 +420,6 @@
               {
                 "name": "GECKOBOARD_API_KEY",
                 "value": "[parameters('GECKOBOARD_API_KEY')]"
-              },
-              {
-                "name": "MAINTENANCE_MODE",
-                "value": "[parameters('MAINTENANCE_MODE')]"
-              },
-              {
-                "name": "MAINTENANCE_MODE_AVAILABILITY_MESSAGE",
-                "value": "[parameters('MAINTENANCE_MODE_AVAILABILITY_MESSAGE')]"
               },
               {
                 "name": "ADMIN_ALLOWED_IPS",
