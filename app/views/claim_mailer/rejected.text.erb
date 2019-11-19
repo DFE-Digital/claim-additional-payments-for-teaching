@@ -4,10 +4,7 @@ We have not been able to approve your <%= @claim_description %>.
 
 Your claim has not been approved because our records show one of the following:
 
-* you completed your initial teacher training before September 2013
-* you did not teach at an eligible school during the financial year 2018 to 2019
-* you are not currently employed to teach at a state-funded secondary school
-* you did not teach an eligible subject for at least half of your contracted hours
+<%= @possible_rejection_reasons %>
 
 You can find more information about the eligibility criteria for this service at <%= @policy.eligibility_page_url %>
 
