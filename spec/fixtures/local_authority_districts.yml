@@ -2,6 +2,9 @@
 barnsley:
   code: E08000016
   name: Barnsley
+bradford:
+  code: E08000032
+  name: Bradford
 #Maths and Physics Ineligible
 camden:
   code: E09000007
