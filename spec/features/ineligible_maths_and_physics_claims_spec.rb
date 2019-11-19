@@ -13,12 +13,9 @@ RSpec.feature "Ineligible Maths and Physics claims" do
   end
 
   scenario "chooses an ineligible current school" do
-    visit new_claim_path(MathsAndPhysics.routing_name)
-    choose "Yes"
-    click_on "Continue"
+    claim = start_maths_and_physics_claim
 
     choose_school schools(:hampstead_school)
-    claim = Claim.order(:created_at).last
 
     expect(claim.eligibility.reload.current_school).to eq schools(:hampstead_school)
     expect(page).to have_text("This school is not eligible")

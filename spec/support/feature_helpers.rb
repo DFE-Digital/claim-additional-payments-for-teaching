@@ -1,4 +1,15 @@
 module FeatureHelpers
+  def start_maths_and_physics_claim
+    visit new_claim_path(MathsAndPhysics.routing_name)
+    choose_teaching_maths_or_physics
+    Claim.order(:created_at).last
+  end
+
+  def choose_teaching_maths_or_physics(response = "Yes")
+    choose response
+    click_on "Continue"
+  end
+
   def start_student_loans_claim
     visit new_claim_path(StudentLoans.routing_name)
     choose_qts_year
