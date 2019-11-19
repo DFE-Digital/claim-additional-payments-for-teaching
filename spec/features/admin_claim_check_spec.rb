@@ -63,7 +63,7 @@ RSpec.feature "Admin checks a claim" do
 
       expect(mail.subject).to match("been rejected")
       expect(mail.to).to eq([claim_to_reject.email_address])
-      expect(mail.body.raw_source).to match("been rejected.")
+      expect(mail.body.raw_source).to match("not been able to approve")
     end
 
     scenario "User can see existing check details" do

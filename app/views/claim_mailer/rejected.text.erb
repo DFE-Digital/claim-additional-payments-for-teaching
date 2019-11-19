@@ -1,14 +1,14 @@
 Dear <%= @display_name %>,
 
+We have not been able to approve your claim to get back your student loan repayments.
 
-Unfortunately your claim to get your student loan payments back has been rejected.
+Your claim has not been approved because our records show one of the following:
 
-# Appeals process and support
+* you completed your initial teacher training before September 2013
+* you did not teach at an eligible school during the financial year 2018 to 2019
+* you are not currently employed to teach at a state-funded secondary school
+* you did not teach an eligible subject for at least half of your contracted hours
 
-If you feel that we have made a mistake in the processing of your application or something is incorrect please email <%= support_email_address("student-loans") %>  giving your reference number: <%= @claim.reference %> if you have any questions about your claim.
+You can find more information about the eligibility criteria for this service at https://www.gov.uk/government/publications/additional-payments-for-teaching-eligibility-and-payment-details/teachers-claim-back-your-student-loan-repayments-eligibility-and-payment-details
 
-Regards,
-
-The claim additional payments for teaching team.
-
-
+If you have any questions about your claim, please contact <%= support_email_address("student-loans") %> giving your reference: <%= @claim.reference %>.

@@ -2,15 +2,15 @@ class ClaimMailer < Mail::Notify::Mailer
   helper :application
 
   def submitted(claim)
-    view_mail_with_claim_and_subject(claim, "Your claim was received")
+    view_mail_with_claim_and_subject(claim, "Your claim to get back your student loan repayments has been received")
   end
 
   def approved(claim)
-    view_mail_with_claim_and_subject(claim, "Your claim to get your student loan repayments back has been approved, reference number: #{claim.reference}")
+    view_mail_with_claim_and_subject(claim, "Your claim to get back your student loan repayments has been approved, reference number: #{claim.reference}")
   end
 
   def rejected(claim)
-    view_mail_with_claim_and_subject(claim, "Your claim to get your student loan repayments back has been rejected, reference number: #{claim.reference}")
+    view_mail_with_claim_and_subject(claim, "Your claim to get back your student loan repayments has been rejected, reference number: #{claim.reference}")
   end
 
   def payment_confirmation(claim, payment_date_timestamp)

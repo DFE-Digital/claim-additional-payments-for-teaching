@@ -23,7 +23,7 @@ RSpec.describe "Submissions", type: :request do
 
         email = ActionMailer::Base.deliveries.first
         expect(email.to).to eql([in_progress_claim.email_address])
-        expect(email.subject).to eql("Your claim was received")
+        expect(email.subject).to match("been received")
         expect(email.body).to include("Your unique reference is #{in_progress_claim.reference}.")
       end
 
