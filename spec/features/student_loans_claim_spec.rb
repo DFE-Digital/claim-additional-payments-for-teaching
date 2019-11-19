@@ -131,7 +131,7 @@ RSpec.feature "Teacher Student Loan Repayments claims" do
   end
 
   scenario "currently works at a different school to the claim school" do
-    claim = start_claim
+    claim = start_student_loans_claim
 
     choose_school schools(:penistone_grammar_school)
     choose_subjects_taught

@@ -1,5 +1,5 @@
 module FeatureHelpers
-  def start_claim
+  def start_student_loans_claim
     visit new_claim_path(StudentLoans.routing_name)
     choose_qts_year
     Claim.order(:created_at).last
