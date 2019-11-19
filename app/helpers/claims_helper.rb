@@ -1,8 +1,4 @@
 module ClaimsHelper
-  def tslr_guidance_url
-    "https://www.gov.uk/guidance/teachers-student-loan-reimbursement-guidance-for-teachers-and-schools"
-  end
-
   def verified_fields(claim)
     fields = []
     fields << I18n.t("verified_fields.first_name") if claim.verified_fields.include?("first_name")
