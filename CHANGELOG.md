@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+- Update transational emails with improved content
+
 ## [Release 032] - 2019-11-19
 
 - Update employment-related copy to clarify that the policy cares about the

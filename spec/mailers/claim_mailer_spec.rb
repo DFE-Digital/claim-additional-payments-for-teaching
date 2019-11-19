@@ -18,12 +18,12 @@ RSpec.describe ClaimMailer, type: :mailer do
     it_behaves_like "a claim mailer", StudentLoans
 
     it "renders the subject" do
-      expect(mail.subject).to eq("Your claim was received")
+      expect(mail.subject).to match("been received")
     end
 
     it "renders the body" do
       expect(mail.body.encoded).to match("Dear Abraham Lincoln,")
-      expect(mail.body.encoded).to match("We've received your application to claim back your student loan repayments for the time you spent at #{claim.eligibility.claim_school.name}.")
+      expect(mail.body.encoded).to match("We've received your claim to get back your student loan repayments.")
       expect(mail.body.encoded).to match("Your unique reference is #{claim.reference}. You will need this if you contact us about your claim.")
     end
   end
@@ -58,7 +58,7 @@ RSpec.describe ClaimMailer, type: :mailer do
 
     it "renders the body" do
       expect(mail.body.encoded).to match("Dear John Kennedy,")
-      expect(mail.body.encoded).to match("been rejected")
+      expect(mail.body.encoded).to match("not been able to approve")
     end
   end
 
