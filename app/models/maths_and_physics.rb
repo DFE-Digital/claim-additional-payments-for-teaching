@@ -10,4 +10,8 @@ module MathsAndPhysics
   def self.routing_name
     "maths-and-physics"
   end
+
+  def self.notify_reply_to_id
+    "29493350-ceec-4142-bd29-34ee363d5f62"
+  end
 end
