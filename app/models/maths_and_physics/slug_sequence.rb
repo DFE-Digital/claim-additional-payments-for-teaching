@@ -11,6 +11,7 @@ module MathsAndPhysics
   class SlugSequence
     SLUGS = [
       "teaching-maths-or-physics",
+      "current-school",
       "eligibility-confirmed",
       "information-provided",
       "verified",

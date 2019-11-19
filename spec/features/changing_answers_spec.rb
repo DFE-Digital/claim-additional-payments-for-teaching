@@ -5,7 +5,7 @@ RSpec.feature "Changing the answers on a submittable claim" do
   let(:eligibility) { claim.eligibility }
 
   before do
-    claim = start_claim
+    claim = start_student_loans_claim
     claim.update!(attributes_for(:claim, :submittable))
     claim.eligibility.update!(attributes_for(:student_loans_eligibility, :eligible))
     visit claim_path(StudentLoans.routing_name, "check-your-answers")

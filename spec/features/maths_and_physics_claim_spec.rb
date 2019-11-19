@@ -17,6 +17,11 @@ RSpec.feature "Maths & Physics claims" do
       eligibility = claim.eligibility
 
       expect(eligibility.teaching_maths_or_physics).to eql true
+
+      expect(page).to have_text(I18n.t("questions.current_school"))
+      choose_school schools(:penistone_grammar_school)
+      expect(claim.eligibility.reload.current_school).to eql schools(:penistone_grammar_school)
+
       expect(page).to have_text("You are eligible to claim a payment for teaching maths or physics")
 
       click_on "Continue"

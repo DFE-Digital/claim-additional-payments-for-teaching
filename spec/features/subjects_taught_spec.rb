@@ -2,7 +2,7 @@ require "rails_helper"
 
 RSpec.feature "Choosing subjects taught during Teacher Student Loan Repayments claims" do
   before do
-    start_claim
+    start_student_loans_claim
     choose_school schools(:penistone_grammar_school)
   end
 

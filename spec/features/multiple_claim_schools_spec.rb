@@ -3,7 +3,7 @@ require "rails_helper"
 RSpec.feature "Applicant worked at multiple schools" do
   let!(:eligible_school) { create(:school, :student_loan_eligible) }
 
-  let!(:claim) { start_claim }
+  let!(:claim) { start_student_loans_claim }
 
   scenario "first claim school is ineligible and subsequent school is eligible" do
     choose_school schools(:hampstead_school)

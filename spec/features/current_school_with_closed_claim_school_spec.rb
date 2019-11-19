@@ -4,7 +4,7 @@ RSpec.feature "Current school with closed claim school" do
   let(:claim_school) { schools(:the_samuel_lister_academy) }
 
   scenario "Still teaching only has two options" do
-    start_claim
+    start_student_loans_claim
     choose_school claim_school
     check "Physics"
     click_on "Continue"
@@ -16,7 +16,7 @@ RSpec.feature "Current school with closed claim school" do
   end
 
   scenario "Choosing yes to still teaching prompts to search for a school" do
-    claim = start_claim
+    claim = start_student_loans_claim
     choose_school claim_school
     check "Physics"
     click_on "Continue"

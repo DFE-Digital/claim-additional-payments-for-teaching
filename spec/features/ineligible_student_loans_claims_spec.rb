@@ -12,7 +12,7 @@ RSpec.feature "Ineligible Teacher Student Loan Repayments claims" do
   end
 
   scenario "chooses an ineligible claim school" do
-    claim = start_claim
+    claim = start_student_loans_claim
     choose_school schools(:hampstead_school)
 
     expect(claim.eligibility.reload.claim_school).to eq schools(:hampstead_school)
@@ -21,7 +21,7 @@ RSpec.feature "Ineligible Teacher Student Loan Repayments claims" do
   end
 
   scenario "chooses an ineligible current school" do
-    start_claim
+    start_student_loans_claim
 
     choose_school schools(:penistone_grammar_school)
     choose_subjects_taught
@@ -39,7 +39,7 @@ RSpec.feature "Ineligible Teacher Student Loan Repayments claims" do
   end
 
   scenario "no longer teaching" do
-    claim = start_claim
+    claim = start_student_loans_claim
     choose_school schools(:penistone_grammar_school)
     choose_subjects_taught
 
@@ -51,7 +51,7 @@ RSpec.feature "Ineligible Teacher Student Loan Repayments claims" do
   end
 
   scenario "did not teach an eligible subject" do
-    claim = start_claim
+    claim = start_student_loans_claim
     choose_school schools(:penistone_grammar_school)
 
     choose I18n.t("student_loans.questions.eligible_subjects.none_taught")
@@ -63,7 +63,7 @@ RSpec.feature "Ineligible Teacher Student Loan Repayments claims" do
   end
 
   scenario "was in a leadership position and performed leadership duties for more than half of their time" do
-    claim = start_claim
+    claim = start_student_loans_claim
     choose_school schools(:penistone_grammar_school)
     check "Biology"
     click_on "Continue"
@@ -82,7 +82,7 @@ RSpec.feature "Ineligible Teacher Student Loan Repayments claims" do
   end
 
   scenario "claimant can start a fresh claim after being told they are ineligible, by visiting the start page" do
-    start_claim
+    start_student_loans_claim
     choose_school schools(:hampstead_school)
     expect(page).to have_text("This school is not eligible")
 

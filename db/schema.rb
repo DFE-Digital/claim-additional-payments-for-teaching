@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_11_07_131220) do
+ActiveRecord::Schema.define(version: 2019_11_14_141607) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -97,6 +97,8 @@ ActiveRecord::Schema.define(version: 2019_11_07_131220) do
     t.boolean "teaching_maths_or_physics"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.uuid "current_school_id"
+    t.index ["current_school_id"], name: "index_maths_and_physics_eligibilities_on_current_school_id"
   end
 
   create_table "payments", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -174,6 +176,7 @@ ActiveRecord::Schema.define(version: 2019_11_07_131220) do
     t.index ["current_school_id"], name: "index_student_loans_eligibilities_on_current_school_id"
   end
 
+  add_foreign_key "maths_and_physics_eligibilities", "schools", column: "current_school_id"
   add_foreign_key "payments", "claims"
   add_foreign_key "payments", "payroll_runs"
   add_foreign_key "schools", "local_authority_districts"

@@ -4,7 +4,7 @@ RSpec.feature "Missing information from GOV.UK Verify" do
   before { stub_geckoboard_dataset_update }
 
   scenario "Claimant is asked a payroll gender question when Verify doesn’t provide their gender" do
-    claim = start_claim
+    claim = start_student_loans_claim
     choose_school schools(:penistone_grammar_school)
     choose_subjects_taught
     choose_still_teaching
@@ -56,7 +56,7 @@ RSpec.feature "Missing information from GOV.UK Verify" do
   end
 
   scenario "Claimant is asked an address question when Verify doesn’t provide their address" do
-    claim = start_claim
+    claim = start_student_loans_claim
     choose_school schools(:penistone_grammar_school)
     choose_subjects_taught
     choose_still_teaching

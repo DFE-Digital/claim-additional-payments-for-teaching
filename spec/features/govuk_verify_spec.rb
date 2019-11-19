@@ -4,7 +4,7 @@ RSpec.feature "Teacher verifies identity using GOV.UK Verify" do
   before do
     stub_vsp_generate_request
 
-    @claim = start_claim
+    @claim = start_student_loans_claim
     choose_school schools(:penistone_grammar_school)
     choose_subjects_taught
     choose_still_teaching
