@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+## [Release 032] - 2019-11-19
+
 - Update employment-related copy to clarify that the policy cares about the
   location that the teacher _taught_ at, not where their employer is based.
 - A service operator can open or close an individual service from the admin
@@ -234,7 +236,9 @@ The format is based on [Keep a Changelog]
 - First release for student loan repayments private beta
 
 [unreleased]:
-  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-031...HEAD
+  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-032...HEAD
+[release 032]:
+  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-031...release-032
 [release 031]:
   https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-030...release-031
 [release 030]:
