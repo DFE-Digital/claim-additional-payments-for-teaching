@@ -2,26 +2,34 @@ class ClaimMailer < Mail::Notify::Mailer
   helper :application
 
   def submitted(claim)
-    view_mail_with_claim_and_subject(claim, "Your claim to get back your student loan repayments has been received")
+    @claim_description = claim_description(claim)
+    view_mail_with_claim_and_subject(claim, "Your #{@claim_description} has been received")
   end
 
   def approved(claim)
-    view_mail_with_claim_and_subject(claim, "Your claim to get back your student loan repayments has been approved, reference number: #{claim.reference}")
+    @claim_description = claim_description(claim)
+    view_mail_with_claim_and_subject(claim, "Your #{@claim_description} has been approved, reference number: #{claim.reference}")
   end
 
   def rejected(claim)
-    view_mail_with_claim_and_subject(claim, "Your claim to get back your student loan repayments has been rejected, reference number: #{claim.reference}")
+    @claim_description = claim_description(claim)
+    view_mail_with_claim_and_subject(claim, "Your #{@claim_description} has been rejected, reference number: #{claim.reference}")
   end
 
   def payment_confirmation(claim, payment_date_timestamp)
+    @claim_description = claim_description(claim)
     @reference = claim.reference
     @payment = claim.payment
     @payment_date = Time.at(payment_date_timestamp).to_date
 
-    view_mail_with_claim_and_subject(claim, "We’re paying your claim to get back your student loan repayments, reference number: #{claim.reference}")
+    view_mail_with_claim_and_subject(claim, "We’re paying your #{@claim_description}, reference number: #{claim.reference}")
   end
 
   private
+
+  def claim_description(claim)
+    I18n.t("#{claim.policy.routing_name.underscore}.claim_description")
+  end
 
   def view_mail_with_claim_and_subject(claim, subject)
     @claim = claim

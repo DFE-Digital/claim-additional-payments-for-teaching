@@ -98,6 +98,7 @@ en:
     full_name: "Full name"
   maths_and_physics:
     policy_name: "Claim a payment for teaching maths or physics"
+    claim_description: "claim for a payment for teaching maths and physics"
     support_email_address: "mathsphysicsteacherpayment@digital.education.gov.uk"
     questions:
       teaching_maths_or_physics: "Do you currently teach any maths or physics?"
@@ -105,6 +106,7 @@ en:
       has_uk_maths_or_physics_degree: "Do you have a UK undergraduate or postgraduate degree in maths or physics?"
   student_loans:
     policy_name: "Teachers: claim back your student loan repayments"
+    claim_description: "claim to get back your student loan repayments"
     support_email_address: "studentloanteacherpayment@digital.education.gov.uk"
     questions:
       qts_award_year: "When did you complete your initial teacher training?"

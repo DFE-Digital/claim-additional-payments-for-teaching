@@ -8,6 +8,11 @@ RSpec.shared_examples "an email related to a claim" do |policy|
   it "sets the GOV.UK Notify reply_to_id according to the policy" do
     expect(mail["reply_to_id"].value).to eql(policy.notify_reply_to_id)
   end
+
+  it "mentions the type of claim in the subject" do
+    claim_description = I18n.t("#{policy.routing_name.underscore}.claim_description")
+    expect(mail.subject).to include(claim_description)
+  end
 end
 
 RSpec.describe ClaimMailer, type: :mailer do
