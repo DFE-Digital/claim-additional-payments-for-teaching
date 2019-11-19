@@ -1,11 +1,11 @@
 require "rails_helper"
 
-RSpec.shared_examples "a claim mailer" do |policy|
-  it "sets the correct to address" do
+RSpec.shared_examples "an email related to a claim" do |policy|
+  it "sets the to address to the claimant's email address" do
     expect(mail.to).to eq([claim.email_address])
   end
 
-  it "sets the correct GOV.UK Notify reply to id" do
+  it "sets the GOV.UK Notify reply_to_id according to the policy" do
     expect(mail["reply_to_id"].value).to eql(policy.notify_reply_to_id)
   end
 end
@@ -15,7 +15,7 @@ RSpec.describe ClaimMailer, type: :mailer do
     let(:claim) { create(:claim, :submittable, first_name: "Abraham", surname: "Lincoln") }
     let(:mail) { ClaimMailer.submitted(claim) }
 
-    it_behaves_like "a claim mailer", StudentLoans
+    it_behaves_like "an email related to a claim", StudentLoans
 
     it "renders the subject" do
       expect(mail.subject).to match("been received")
@@ -32,7 +32,7 @@ RSpec.describe ClaimMailer, type: :mailer do
     let(:claim) { create(:claim, :submitted, first_name: "John", middle_name: "Fitzgerald", surname: "Kennedy") }
     let(:mail) { ClaimMailer.approved(claim) }
 
-    it_behaves_like "a claim mailer", StudentLoans
+    it_behaves_like "an email related to a claim", StudentLoans
 
     it "renders the subject" do
       expect(mail.subject).to match("approved")
@@ -49,7 +49,7 @@ RSpec.describe ClaimMailer, type: :mailer do
     let(:claim) { create(:claim, :submitted, first_name: "John", middle_name: "Fitzgerald", surname: "Kennedy") }
     let(:mail) { ClaimMailer.rejected(claim) }
 
-    it_behaves_like "a claim mailer", StudentLoans
+    it_behaves_like "an email related to a claim", StudentLoans
 
     it "renders the subject" do
       expect(mail.subject).to match("rejected")
@@ -68,7 +68,7 @@ RSpec.describe ClaimMailer, type: :mailer do
     let(:payment_date_timestamp) { Time.new(2019, 1, 1).to_i }
     let(:mail) { ClaimMailer.payment_confirmation(payment.claim, payment_date_timestamp) }
 
-    it_behaves_like "a claim mailer", StudentLoans
+    it_behaves_like "an email related to a claim", StudentLoans
 
     it "renders the subject" do
       expect(mail.subject).to match("paying")
