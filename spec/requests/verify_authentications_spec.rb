@@ -3,7 +3,7 @@ require "verify/fake_sso"
 
 RSpec.describe "GOV.UK Verify::AuthenticationsController requests", type: :request do
   context "when a claim is in progress" do
-    before { start_claim }
+    before { start_student_loans_claim }
 
     describe "verify/authentications/new" do
       before do
@@ -23,7 +23,7 @@ RSpec.describe "GOV.UK Verify::AuthenticationsController requests", type: :reque
 
     describe "POST verify/authentications (i.e. the verify callback handler)" do
       before do
-        start_claim
+        start_student_loans_claim
 
         stub_vsp_generate_request
         get new_verify_authentications_path # sets the authentication request request_id in the session
@@ -97,7 +97,7 @@ RSpec.describe "GOV.UK Verify::AuthenticationsController requests", type: :reque
   end
 
   describe "GET verify/authentications/failed" do
-    before { start_claim }
+    before { start_student_loans_claim }
 
     it "renders the failure content" do
       get failed_verify_authentications_path
@@ -108,7 +108,7 @@ RSpec.describe "GOV.UK Verify::AuthenticationsController requests", type: :reque
   end
 
   describe "GET verify/authentications/no_auth" do
-    before { start_claim }
+    before { start_student_loans_claim }
 
     it "renders the no-auth content" do
       get no_auth_verify_authentications_path

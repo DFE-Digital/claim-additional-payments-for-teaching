@@ -8,7 +8,7 @@ RSpec.describe "Submissions", type: :request do
       before do
         @dataset_post_stub = stub_geckoboard_dataset_update
 
-        start_claim
+        start_student_loans_claim
         # Make the claim submittable
         in_progress_claim.update!(attributes_for(:claim, :submittable))
         in_progress_claim.eligibility.update!(attributes_for(:student_loans_eligibility, :eligible))
@@ -40,7 +40,7 @@ RSpec.describe "Submissions", type: :request do
 
     context "with an unsubmittable claim" do
       before :each do
-        start_claim
+        start_student_loans_claim
         # Make the claim _almost_ submittable
         in_progress_claim.update!(attributes_for(:claim, :submittable, email_address: nil))
 
@@ -62,7 +62,7 @@ RSpec.describe "Submissions", type: :request do
   end
 
   describe "#show" do
-    before { start_claim }
+    before { start_student_loans_claim }
 
     context "with a submitted claim" do
       it "renders the claim confirmation screen and clears the session" do

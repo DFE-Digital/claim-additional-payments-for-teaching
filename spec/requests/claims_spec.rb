@@ -10,7 +10,7 @@ RSpec.describe "Claims", type: :request do
     end
 
     context "the user has already started a claim" do
-      before { start_claim }
+      before { start_student_loans_claim }
 
       it "clears the current claim from the session, and renders the first page in the sequence" do
         expect { get new_claim_path(StudentLoans.routing_name) }.to change { session[:claim_id] }.from(String).to(nil)
@@ -22,7 +22,7 @@ RSpec.describe "Claims", type: :request do
 
   describe "claims#create request" do
     it "creates a new Claim and redirects to the QTS question" do
-      expect { start_claim }.to change { Claim.count }.by(1)
+      expect { start_student_loans_claim }.to change { Claim.count }.by(1)
 
       expect(response).to redirect_to(claim_path(StudentLoans.routing_name, "claim-school"))
     end
@@ -35,7 +35,7 @@ RSpec.describe "Claims", type: :request do
 
   describe "claims#show request" do
     context "when a claim is already in progress" do
-      before { start_claim }
+      before { start_student_loans_claim }
 
       it "renders the requested page in the sequence" do
         get claim_path(StudentLoans.routing_name, "qts-year")
@@ -80,7 +80,7 @@ RSpec.describe "Claims", type: :request do
 
   describe "the claims ineligible page" do
     context "when a claim is already in progress" do
-      before { start_claim }
+      before { start_student_loans_claim }
 
       it "renders a static ineligibility page" do
         Claim.order(:created_at).last.eligibility.update(employment_status: "no_school")
@@ -111,7 +111,7 @@ RSpec.describe "Claims", type: :request do
     context "when a claim is already in progress" do
       let(:in_progress_claim) { Claim.order(:created_at).last }
 
-      before { start_claim }
+      before { start_student_loans_claim }
 
       it "updates the claim with the submitted form data" do
         put claim_path(StudentLoans.routing_name, "qts-year"), params: {claim: {eligibility_attributes: {qts_award_year: "on_or_after_september_2013"}}}

@@ -1,5 +1,5 @@
 module RequestHelpers
-  def start_claim
+  def start_student_loans_claim
     post claims_path(StudentLoans.routing_name), params: {
       claim: {
         eligibility_attributes: {
