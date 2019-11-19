@@ -16,6 +16,7 @@ The format is based on [Keep a Changelog]
   to Cantium
 - Only allow payroll runs to be created if none exist already for the current
   month
+- Added post-eligibility questions to the Maths & Physics journey
 
 ## [Release 031] - 2019-11-18
 
