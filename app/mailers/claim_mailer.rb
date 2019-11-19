@@ -26,12 +26,13 @@ class ClaimMailer < Mail::Notify::Mailer
   def view_mail_with_claim_and_subject(claim, subject)
     @claim = claim
     @display_name = [claim.first_name, claim.surname].join(" ")
+    @policy = claim.policy
 
     view_mail(
       ENV["NOTIFY_TEMPLATE_ID"],
       to: @claim.email_address,
       subject: subject,
-      reply_to_id: claim.policy.notify_reply_to_id
+      reply_to_id: @policy.notify_reply_to_id
     )
   end
 end
