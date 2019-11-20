@@ -32,7 +32,7 @@ RSpec.describe ClaimMailer, type: :mailer do
 
     it_behaves_like "an email related to a claim", StudentLoans
 
-    it "renders the subject" do
+    it "mentions that claim has been received in the subject" do
       expect(mail.subject).to match("been received")
     end
 
@@ -48,7 +48,7 @@ RSpec.describe ClaimMailer, type: :mailer do
 
     it_behaves_like "an email related to a claim", StudentLoans
 
-    it "renders the subject" do
+    it "mentions that claim has been approved in the subject" do
       expect(mail.subject).to match("approved")
     end
 
@@ -63,7 +63,7 @@ RSpec.describe ClaimMailer, type: :mailer do
 
     it_behaves_like "an email related to a claim", StudentLoans
 
-    it "renders the subject" do
+    it "mentions that claim has been rejected in the subject" do
       expect(mail.subject).to match("rejected")
     end
 
@@ -80,7 +80,7 @@ RSpec.describe ClaimMailer, type: :mailer do
 
     it_behaves_like "an email related to a claim", StudentLoans
 
-    it "renders the subject" do
+    it "mentions that claim is being paid in the subject" do
       expect(mail.subject).to match("paying")
     end
 
