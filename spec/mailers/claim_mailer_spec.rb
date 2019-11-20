@@ -27,75 +27,79 @@ RSpec.shared_examples "an email related to a claim" do |policy|
 end
 
 RSpec.describe ClaimMailer, type: :mailer do
-  describe "#submitted" do
-    let(:claim) { build(:claim, :submitted) }
-    let(:mail) { ClaimMailer.submitted(claim) }
+  Policies.all.each do |policy|
+    context "with a #{policy} claim" do
+      describe "#submitted" do
+        let(:claim) { build(:claim, :submitted, policy: policy) }
+        let(:mail) { ClaimMailer.submitted(claim) }
 
-    it_behaves_like "an email related to a claim", StudentLoans
+        it_behaves_like "an email related to a claim", policy
 
-    it "mentions that claim has been received in the subject and body" do
-      expect(mail.subject).to include("been received")
-      expect(mail.body.encoded).to include("We've received your claim")
-    end
-  end
-
-  describe "#approved" do
-    let(:claim) { build(:claim, :submitted) }
-    let(:mail) { ClaimMailer.approved(claim) }
-
-    it_behaves_like "an email related to a claim", StudentLoans
-
-    it "mentions that claim has been approved in the subject and body" do
-      expect(mail.subject).to include("approved")
-      expect(mail.body.encoded).to include("been approved")
-    end
-  end
-
-  describe "#rejected" do
-    let(:claim) { build(:claim, :submitted) }
-    let(:mail) { ClaimMailer.rejected(claim) }
-
-    it_behaves_like "an email related to a claim", StudentLoans
-
-    it "mentions that claim has been rejected in the subject and body" do
-      expect(mail.subject).to include("rejected")
-      expect(mail.body.encoded).to include("not been able to approve")
-    end
-  end
-
-  describe "#payment_confirmation" do
-    let(:payment) { build(:payment, :with_figures, net_pay: 500.00, student_loan_repayment: 60, claim: claim) }
-    let(:claim) { build(:claim, :submitted) }
-    let(:payment_date_timestamp) { Time.new(2019, 1, 1).to_i }
-    let(:mail) { ClaimMailer.payment_confirmation(payment.claim, payment_date_timestamp) }
-
-    it_behaves_like "an email related to a claim", StudentLoans
-
-    it "mentions that claim is being paid in the subject and body" do
-      expect(mail.subject).to include("paying")
-      expect(mail.body.encoded).to include("We’re paying your claim")
-    end
-
-    it "includes the NET pay amount and the student loan deduction in the body" do
-      expect(mail.body.encoded).to include("You will receive £500.00 on or after 1 January 2019")
-      expect(mail.body.encoded).to include("Student loan (deducted): £60.00")
-    end
-
-    context "when user does not currently have a student loan" do
-      let(:payment) { build(:payment, :with_figures, student_loan_repayment: nil, claim: claim) }
-
-      it "does not mention the content relating to student loan dedictions" do
-        expect(mail.body.encoded).to_not include("student loan contribution")
-        expect(mail.body.encoded).to_not include("Student loan (deducted)")
+        it "mentions that claim has been received in the subject and body" do
+          expect(mail.subject).to include("been received")
+          expect(mail.body.encoded).to include("We've received your claim")
+        end
       end
-    end
 
-    context "when user has a student loan, but has not made a contribution" do
-      let(:payment) { build(:payment, :with_figures, student_loan_repayment: 0, claim: claim) }
+      describe "#approved" do
+        let(:claim) { build(:claim, :approved, policy: policy) }
+        let(:mail) { ClaimMailer.approved(claim) }
 
-      it "mentions the student loan deduction content and lists their contribution as zero" do
-        expect(mail.body.encoded).to include("If you have made a student loan contribution, this is deducted from your payment amount and credited to SLC.")
-        expect(mail.body.encoded).to include("Student loan: £0.00")
+        it_behaves_like "an email related to a claim", policy
+
+        it "mentions that claim has been approved in the subject and body" do
+          expect(mail.subject).to include("approved")
+          expect(mail.body.encoded).to include("been approved")
+        end
+      end
+
+      describe "#rejected" do
+        let(:claim) { build(:claim, :submitted, policy: policy) }
+        let(:mail) { ClaimMailer.rejected(claim) }
+
+        it_behaves_like "an email related to a claim", policy
+
+        it "mentions that claim has been rejected in the subject and body" do
+          expect(mail.subject).to include("rejected")
+          expect(mail.body.encoded).to include("not been able to approve")
+        end
+      end
+
+      describe "#payment_confirmation" do
+        let(:payment) { build(:payment, :with_figures, net_pay: 500.00, student_loan_repayment: 60, claim: claim) }
+        let(:claim) { build(:claim, :submitted, policy: policy) }
+        let(:payment_date_timestamp) { Time.new(2019, 1, 1).to_i }
+        let(:mail) { ClaimMailer.payment_confirmation(payment.claim, payment_date_timestamp) }
+
+        it_behaves_like "an email related to a claim", policy
+
+        it "mentions that claim is being paid in the subject and body" do
+          expect(mail.subject).to include("paying")
+          expect(mail.body.encoded).to include("We’re paying your claim")
+        end
+
+        it "includes the NET pay amount and the student loan deduction in the body" do
+          expect(mail.body.encoded).to include("You will receive £500.00 on or after 1 January 2019")
+          expect(mail.body.encoded).to include("Student loan (deducted): £60.00")
+        end
+
+        context "when user does not currently have a student loan" do
+          let(:payment) { build(:payment, :with_figures, student_loan_repayment: nil, claim: claim) }
+
+          it "does not mention the content relating to student loan deductions" do
+            expect(mail.body.encoded).to_not include("student loan contribution")
+            expect(mail.body.encoded).to_not include("Student loan (deducted)")
+          end
+        end
+
+        context "when user has a student loan, but has not made a contribution" do
+          let(:payment) { build(:payment, :with_figures, student_loan_repayment: 0, claim: claim) }
+
+          it "mentions the student loan deduction content and lists their contribution as zero" do
+            expect(mail.body.encoded).to include("If you have made a student loan contribution, this is deducted from your payment amount and credited to SLC.")
+            expect(mail.body.encoded).to include("Student loan: £0.00")
+          end
+        end
       end
     end
   end
