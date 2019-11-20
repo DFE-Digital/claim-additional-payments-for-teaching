@@ -19,11 +19,15 @@ RSpec.shared_examples "an email related to a claim" do |policy|
   it "includes the claim reference in the subject" do
     expect(mail.subject).to include("reference number: #{claim.reference}")
   end
+
+  it "greets the claimant in the body" do
+    expect(mail.body.encoded).to start_with("Dear #{claim.first_name} #{claim.surname},")
+  end
 end
 
 RSpec.describe ClaimMailer, type: :mailer do
   describe "#submitted" do
-    let(:claim) { build(:claim, :submittable, first_name: "Abraham", surname: "Lincoln") }
+    let(:claim) { build(:claim, :submittable) }
     let(:mail) { ClaimMailer.submitted(claim) }
 
     it_behaves_like "an email related to a claim", StudentLoans
@@ -33,14 +37,13 @@ RSpec.describe ClaimMailer, type: :mailer do
     end
 
     it "renders the body" do
-      expect(mail.body.encoded).to match("Dear Abraham Lincoln,")
       expect(mail.body.encoded).to match("We've received your claim to get back your student loan repayments.")
       expect(mail.body.encoded).to match("Your unique reference is #{claim.reference}. You will need this if you contact us about your claim.")
     end
   end
 
   describe "#approved" do
-    let(:claim) { build(:claim, :submitted, first_name: "John", middle_name: "Fitzgerald", surname: "Kennedy") }
+    let(:claim) { build(:claim, :submitted) }
     let(:mail) { ClaimMailer.approved(claim) }
 
     it_behaves_like "an email related to a claim", StudentLoans
@@ -50,13 +53,12 @@ RSpec.describe ClaimMailer, type: :mailer do
     end
 
     it "renders the body" do
-      expect(mail.body.encoded).to match("Dear John Kennedy,")
       expect(mail.body.encoded).to match("been approved")
     end
   end
 
   describe "#rejected" do
-    let(:claim) { build(:claim, :submitted, first_name: "John", middle_name: "Fitzgerald", surname: "Kennedy") }
+    let(:claim) { build(:claim, :submitted) }
     let(:mail) { ClaimMailer.rejected(claim) }
 
     it_behaves_like "an email related to a claim", StudentLoans
@@ -66,14 +68,13 @@ RSpec.describe ClaimMailer, type: :mailer do
     end
 
     it "renders the body" do
-      expect(mail.body.encoded).to match("Dear John Kennedy,")
       expect(mail.body.encoded).to match("not been able to approve")
     end
   end
 
   describe "#payment_confirmation" do
     let(:payment) { build(:payment, :with_figures, net_pay: 500.00, student_loan_repayment: 60, claim: claim) }
-    let(:claim) { build(:claim, :submitted, first_name: "John", middle_name: "Fitzgerald", surname: "Kennedy") }
+    let(:claim) { build(:claim, :submitted) }
     let(:payment_date_timestamp) { Time.new(2019, 1, 1).to_i }
     let(:mail) { ClaimMailer.payment_confirmation(payment.claim, payment_date_timestamp) }
 
@@ -84,7 +85,6 @@ RSpec.describe ClaimMailer, type: :mailer do
     end
 
     it "renders the body" do
-      expect(mail.body.encoded).to include("Dear John Kennedy,")
       expect(mail.body.encoded).to include("We’re paying your claim")
       expect(mail.body.encoded).to include("You will receive £500.00 on or after 1 January 2019")
       expect(mail.body.encoded).to include("Student loan (deducted): £60.00")
