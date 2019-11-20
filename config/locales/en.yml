@@ -120,7 +120,7 @@ en:
         biology_taught: "Biology"
         chemistry_taught: "Chemistry"
         physics_taught: "Physics"
-        computer_science_taught: "Computer Science"
+        computer_science_taught: "Computing"
         languages_taught: "Languages"
         none_taught: "No, I didn't teach any of these subjects"
       student_loan_amount:
