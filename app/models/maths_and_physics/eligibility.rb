@@ -5,6 +5,7 @@ module MathsAndPhysics
       :current_school_id,
       :initial_teacher_training_specialised_in_maths_or_physics,
       :has_uk_maths_or_physics_degree,
+      :qts_award_year,
     ].freeze
     ATTRIBUTE_DEPENDENCIES = {
       "initial_teacher_training_specialised_in_maths_or_physics" => ["has_uk_maths_or_physics_degree"],
@@ -17,17 +18,26 @@ module MathsAndPhysics
       has_non_uk: 2,
     }
 
+    enum qts_award_year: {
+      "before_september_2013": 0,
+      "on_or_after_september_2013": 1,
+    }, _prefix: :awarded_qualified_status
+
     belongs_to :current_school, optional: true, class_name: "School"
 
     validates :teaching_maths_or_physics, on: [:"teaching-maths-or-physics", :submit], inclusion: {in: [true, false], message: "Select either Yes or No"}
     validates :current_school, on: [:"current-school", :submit], presence: {message: "Select a school from the list"}
     validates :initial_teacher_training_specialised_in_maths_or_physics, on: [:"initial-teacher-training-specialised-in-maths-or-physics", :submit], inclusion: {in: [true, false], message: "Select either Yes or No"}
     validates :has_uk_maths_or_physics_degree, on: [:"has-uk-maths-or-physics-degree", :submit], presence: {message: "Select whether you have a UK maths or physics degree."}, unless: :initial_teacher_training_specialised_in_maths_or_physics?
+    validates :qts_award_year, on: [:"qts-year", :submit], presence: {message: "Select the academic year you were awarded qualified teacher status"}
 
     delegate :name, to: :current_school, prefix: true, allow_nil: true
 
     def ineligible?
-      not_teaching_maths_or_physics? || ineligible_current_school? || no_maths_or_physics_qualification?
+      not_teaching_maths_or_physics? ||
+        ineligible_current_school? ||
+        no_maths_or_physics_qualification? ||
+        ineligible_qts_award_year?
     end
 
     def ineligibility_reason
@@ -35,6 +45,7 @@ module MathsAndPhysics
         :not_teaching_maths_or_physics,
         :ineligible_current_school,
         :no_maths_or_physics_qualification,
+        :ineligible_qts_award_year,
       ].find { |eligibility_check| send("#{eligibility_check}?") }
     end
 
@@ -58,6 +69,10 @@ module MathsAndPhysics
 
     def no_maths_or_physics_qualification?
       initial_teacher_training_specialised_in_maths_or_physics == false && has_uk_maths_or_physics_degree == "no"
+    end
+
+    def ineligible_qts_award_year?
+      awarded_qualified_status_before_september_2013?
     end
   end
 end

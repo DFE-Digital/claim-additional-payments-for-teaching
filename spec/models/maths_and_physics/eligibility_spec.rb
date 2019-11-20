@@ -21,6 +21,11 @@ RSpec.describe MathsAndPhysics::Eligibility, type: :model do
       expect(MathsAndPhysics::Eligibility.new(initial_teacher_training_specialised_in_maths_or_physics: false, has_uk_maths_or_physics_degree: "yes").ineligible?).to eql false
       expect(MathsAndPhysics::Eligibility.new(initial_teacher_training_specialised_in_maths_or_physics: false, has_uk_maths_or_physics_degree: "has_non_uk").ineligible?).to eql false
     end
+
+    it "returns true when the qts_award_year is before 2013" do
+      expect(MathsAndPhysics::Eligibility.new(qts_award_year: "before_september_2013").ineligible?).to eql true
+      expect(MathsAndPhysics::Eligibility.new(qts_award_year: "on_or_after_september_2013").ineligible?).to eql false
+    end
   end
 
   describe "#ineligibility_reason" do
@@ -32,6 +37,7 @@ RSpec.describe MathsAndPhysics::Eligibility, type: :model do
       expect(MathsAndPhysics::Eligibility.new(teaching_maths_or_physics: false).ineligibility_reason).to eq :not_teaching_maths_or_physics
       expect(MathsAndPhysics::Eligibility.new(current_school: schools(:hampstead_school)).ineligibility_reason).to eq :ineligible_current_school
       expect(MathsAndPhysics::Eligibility.new(initial_teacher_training_specialised_in_maths_or_physics: false, has_uk_maths_or_physics_degree: "no").ineligibility_reason).to eq :no_maths_or_physics_qualification
+      expect(MathsAndPhysics::Eligibility.new(qts_award_year: "before_september_2013").ineligibility_reason).to eq :ineligible_qts_award_year
     end
   end
 
@@ -97,6 +103,13 @@ RSpec.describe MathsAndPhysics::Eligibility, type: :model do
     end
   end
 
+  context "when saving in the “qts-year” context" do
+    it "validates the presence of qts_award_year" do
+      expect(MathsAndPhysics::Eligibility.new).not_to be_valid(:"qts-year")
+      expect(MathsAndPhysics::Eligibility.new(qts_award_year: "before_september_2013")).to be_valid(:"qts-year")
+    end
+  end
+
   context "when saving in the “submit” context" do
     it "is valid when all attributes are present" do
       expect(build(:maths_and_physics_eligibility, :eligible)).to be_valid(:submit)
@@ -120,6 +133,11 @@ RSpec.describe MathsAndPhysics::Eligibility, type: :model do
     it "is not valid without a value for has_uk_maths_or_physics_degree, when initial_teacher_training_specialised_in_maths_or_physics is false" do
       expect(build(:maths_and_physics_eligibility, :eligible, initial_teacher_training_specialised_in_maths_or_physics: false, has_uk_maths_or_physics_degree: nil)).not_to be_valid(:submit)
       expect(build(:maths_and_physics_eligibility, :eligible, initial_teacher_training_specialised_in_maths_or_physics: false, has_uk_maths_or_physics_degree: "no")).to be_valid(:submit)
+    end
+
+    it "is not valid without a value for qts_award_year" do
+      expect(build(:maths_and_physics_eligibility, :eligible, qts_award_year: nil)).not_to be_valid(:submit)
+      expect(build(:maths_and_physics_eligibility, :eligible, qts_award_year: "before_september_2013")).to be_valid(:submit)
     end
   end
 end

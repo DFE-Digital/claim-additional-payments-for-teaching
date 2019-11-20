@@ -27,6 +27,10 @@ RSpec.feature "Maths & Physics claims" do
       click_on "Continue"
       expect(claim.eligibility.reload.initial_teacher_training_specialised_in_maths_or_physics).to eql true
 
+      expect(page).to have_text(I18n.t("questions.qts_award_year"))
+      choose_qts_year
+      expect(claim.eligibility.reload.qts_award_year).to eql("on_or_after_september_2013")
+
       expect(page).to have_text("You are eligible to claim a payment for teaching maths or physics")
 
       click_on "Continue"
@@ -93,8 +97,8 @@ RSpec.feature "Maths & Physics claims" do
 
   scenario "Teacher claims for Maths and Physics, without maths or physics ITT and with a UK degree in maths or physics" do
     # This test was initially written for the purpose of building out this
-    # alternative journey. It may evolve to not test the whole claims journey
-    # but only this part of it. Not sure of the best approach.
+    # alternative journey. It does not test the whole claims journey but only
+    # this part of it. Not sure of the best approach.
     visit "maths-and-physics/start"
     expect(page).to have_text "Claim a payment for teaching maths or physics"
 
@@ -123,13 +127,13 @@ RSpec.feature "Maths & Physics claims" do
     click_on "Continue"
     expect(claim.eligibility.reload.has_uk_maths_or_physics_degree).to eql "yes"
 
-    expect(page).to have_text("You are eligible to claim a payment for teaching maths or physics")
+    expect(page).to have_text(I18n.t("questions.qts_award_year"))
   end
 
   scenario "Teacher claims for Maths and Physics, without maths or physics ITT and with a non-UK degree in maths or physics" do
     # This test was initially written for the purpose of building out this
-    # alternative journey. It may evolve to not test the whole claims journey
-    # but only this part of it. Not sure of the best approach.
+    # alternative journey. It does not test the whole claims journey but only
+    # this part of it. Not sure of the best approach.
     visit "maths-and-physics/start"
     expect(page).to have_text "Claim a payment for teaching maths or physics"
 
@@ -158,7 +162,7 @@ RSpec.feature "Maths & Physics claims" do
     click_on "Continue"
     expect(claim.eligibility.reload.has_uk_maths_or_physics_degree).to eql "has_non_uk"
 
-    expect(page).to have_text("You are eligible to claim a payment for teaching maths or physics")
+    expect(page).to have_text(I18n.t("questions.qts_award_year"))
   end
 
   scenario "A teacher is ineligible for Maths & Physics" do
