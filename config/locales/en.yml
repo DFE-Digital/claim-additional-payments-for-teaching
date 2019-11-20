@@ -115,6 +115,7 @@ en:
         before_september_2014: "Before 1 September 2014"
         on_or_after_september_2014: "On or after 1 September 2014"
       employed_as_supply_teacher: "Are you currently employed as a supply teacher?"
+      has_entire_term_contract: "Do you have a contract to teach at the same school for an entire term or longer?"
   student_loans:
     policy_name: "Teachers: claim back your student loan repayments"
     claim_description: "claim to get back your student loan repayments"

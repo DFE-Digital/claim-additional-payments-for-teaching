@@ -170,6 +170,50 @@ RSpec.feature "Maths & Physics claims" do
     expect(page).to have_text(I18n.t("questions.qts_award_year"))
   end
 
+  scenario "Supply teacher claims for Maths and Physics, with a contract to teach for an entire term" do
+    # This test was initially written for the purpose of building out this
+    # alternative journey. It does not test the whole claims journey but only
+    # this part of it. Not sure of the best approach.
+    visit "maths-and-physics/start"
+    expect(page).to have_text "Claim a payment for teaching maths or physics"
+
+    click_on "Start"
+    expect(page).to have_text(I18n.t("maths_and_physics.questions.teaching_maths_or_physics"))
+
+    choose "Yes"
+    click_on "Continue"
+
+    claim = Claim.order(:created_at).last
+    eligibility = claim.eligibility
+
+    expect(eligibility.teaching_maths_or_physics).to eql true
+
+    expect(page).to have_text(I18n.t("questions.current_school"))
+    choose_school schools(:penistone_grammar_school)
+    expect(claim.eligibility.reload.current_school).to eql schools(:penistone_grammar_school)
+
+    expect(page).to have_text(I18n.t("maths_and_physics.questions.initial_teacher_training_specialised_in_maths_or_physics"))
+    choose "Yes"
+    click_on "Continue"
+    expect(claim.eligibility.reload.initial_teacher_training_specialised_in_maths_or_physics).to eql true
+
+    expect(page).to have_text(I18n.t("questions.qts_award_year"))
+    choose_qts_year "On or after 1 September 2014"
+    expect(claim.eligibility.reload.qts_award_year).to eql("on_or_after_september_2014")
+
+    expect(page).to have_text(I18n.t("maths_and_physics.questions.employed_as_supply_teacher"))
+    choose "Yes"
+    click_on "Continue"
+    expect(claim.eligibility.reload.employed_as_supply_teacher).to eql true
+
+    expect(page).to have_text(I18n.t("maths_and_physics.questions.has_entire_term_contract"))
+    choose "Yes"
+    click_on "Continue"
+    expect(claim.eligibility.reload.has_entire_term_contract).to eql true
+
+    expect(page).to have_text("You are eligible to claim a payment for teaching maths or physics")
+  end
+
   scenario "A teacher is ineligible for Maths & Physics" do
     visit new_claim_path(MathsAndPhysics.routing_name)
 

@@ -7,9 +7,11 @@ module MathsAndPhysics
       :has_uk_maths_or_physics_degree,
       :qts_award_year,
       :employed_as_supply_teacher,
+      :has_entire_term_contract,
     ].freeze
     ATTRIBUTE_DEPENDENCIES = {
       "initial_teacher_training_specialised_in_maths_or_physics" => ["has_uk_maths_or_physics_degree"],
+      "employed_as_supply_teacher" => ["has_entire_term_contract"],
     }.freeze
     self.table_name = "maths_and_physics_eligibilities"
 
@@ -32,6 +34,7 @@ module MathsAndPhysics
     validates :has_uk_maths_or_physics_degree, on: [:"has-uk-maths-or-physics-degree", :submit], presence: {message: "Select whether you have a UK maths or physics degree."}, unless: :initial_teacher_training_specialised_in_maths_or_physics?
     validates :qts_award_year, on: [:"qts-year", :submit], presence: {message: "Select the academic year you were awarded qualified teacher status"}
     validates :employed_as_supply_teacher, on: [:"supply-teacher", :submit], inclusion: {in: [true, false], message: "Select either Yes or No"}
+    validates :has_entire_term_contract, on: [:"entire-term-contract", :submit], inclusion: {in: [true, false], message: "Select either Yes or No"}, if: :employed_as_supply_teacher?
 
     delegate :name, to: :current_school, prefix: true, allow_nil: true
 
@@ -39,7 +42,8 @@ module MathsAndPhysics
       not_teaching_maths_or_physics? ||
         ineligible_current_school? ||
         no_maths_or_physics_qualification? ||
-        ineligible_qts_award_year?
+        ineligible_qts_award_year? ||
+        no_entire_term_contract?
     end
 
     def ineligibility_reason
@@ -48,6 +52,7 @@ module MathsAndPhysics
         :ineligible_current_school,
         :no_maths_or_physics_qualification,
         :ineligible_qts_award_year,
+        :no_entire_term_contract,
       ].find { |eligibility_check| send("#{eligibility_check}?") }
     end
 
@@ -75,6 +80,10 @@ module MathsAndPhysics
 
     def ineligible_qts_award_year?
       awarded_qualified_status_before_september_2014?
+    end
+
+    def no_entire_term_contract?
+      employed_as_supply_teacher? && has_entire_term_contract == false
     end
   end
 end
