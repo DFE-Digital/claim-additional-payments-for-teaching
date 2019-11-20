@@ -1,11 +1,17 @@
 require "rails_helper"
 
 RSpec.describe MathsAndPhysics::SlugSequence do
-  let(:claim) { build(:claim) }
+  let(:claim) { build(:claim, eligibility: build(:maths_and_physics_eligibility)) }
 
   subject(:slug_sequence) { MathsAndPhysics::SlugSequence.new(claim) }
 
   describe "The sequence as defined by #slugs" do
+    it "excludes “has-uk-maths-or-physics-degree” if the claimant's initial teacher training specialised in maths or physics" do
+      claim.eligibility.initial_teacher_training_specialised_in_maths_or_physics = true
+
+      expect(slug_sequence.slugs).not_to include("has-uk-maths-or-physics-degree")
+    end
+
     it "excludes the “address” slug if any address fields were acquired from GOV.UK Verify" do
       claim.verified_fields = []
       expect(slug_sequence.slugs).to include("address")

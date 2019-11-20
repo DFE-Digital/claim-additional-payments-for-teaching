@@ -102,6 +102,7 @@ en:
     questions:
       teaching_maths_or_physics: "Do you currently teach any maths or physics?"
       initial_teacher_training_specialised_in_maths_or_physics: "Did your initial teacher training specialise in maths or physics?"
+      has_uk_maths_or_physics_degree: "Do you have a UK undergraduate or postgraduate degree in maths or physics?"
   student_loans:
     policy_name: "Teachers: claim back your student loan repayments"
     support_email_address: "studentloanteacherpayment@digital.education.gov.uk"
