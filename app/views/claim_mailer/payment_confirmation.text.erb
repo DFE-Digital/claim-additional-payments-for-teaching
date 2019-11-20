@@ -2,7 +2,9 @@ Dear <%= @display_name %>,
 
 We’re paying your <%= @claim_description %>.
 
+<% if @policy == StudentLoans -%>
 This payment does not change the amount that was credited to your Student Loans Company (SLC) account in the last financial year.
+<% end -%>
 
 ^ You will receive <%=number_to_currency(@payment.net_pay) %> on or after <%= l(@payment_date) %>.
 
