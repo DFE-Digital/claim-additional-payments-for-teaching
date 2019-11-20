@@ -7,6 +7,7 @@ The format is based on [Keep a Changelog]
 ## [Unreleased]
 
 - Update transational emails with improved content
+- Clear claim session before view path gets calculated
 
 ## [Release 032] - 2019-11-19
 
