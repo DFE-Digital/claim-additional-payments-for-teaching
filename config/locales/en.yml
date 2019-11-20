@@ -45,6 +45,10 @@ en:
   support_email_address: "additionalteachingpayment@digital.education.gov.uk"
   questions:
     current_school: "Which school are you currently employed to teach at?"
+    qts_award_year: "When did you complete your initial teacher training?"
+    qts_award_years:
+      before_september_2013: "Before 1 September 2013"
+      on_or_after_september_2013: "On or after 1 September 2013"
     address: "What is your address?"
     teacher_reference_number: "What's your teacher reference number?"
     national_insurance_number: "What's your National Insurance number?"
@@ -107,10 +111,6 @@ en:
     policy_name: "Teachers: claim back your student loan repayments"
     support_email_address: "studentloanteacherpayment@digital.education.gov.uk"
     questions:
-      qts_award_year: "When did you complete your initial teacher training?"
-      qts_award_years:
-        before_september_2013: "Before 1 September 2013"
-        on_or_after_september_2013: "On or after 1 September 2013"
       claim_school: "Which school were you employed to teach at between 6 April 2018 and 5 April 2019?"
       additional_school: "Which additional school were you employed to teach at between 6 April 2018 and 5 April 2019?"
       employment_status: "Are you still employed to teach at a school in England?"

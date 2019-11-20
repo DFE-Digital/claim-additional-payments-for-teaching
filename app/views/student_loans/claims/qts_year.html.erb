@@ -1,4 +1,4 @@
-<% content_for(:page_title, page_title(t("student_loans.questions.qts_award_year"), policy: current_policy_routing_name, show_error: current_claim.errors.any?)) %>
+<% content_for(:page_title, page_title(t("questions.qts_award_year"), policy: current_policy_routing_name, show_error: current_claim.errors.any?)) %>
 <% path_for_form = current_claim.persisted? ? claim_path(current_policy_routing_name) : claims_path(current_policy_routing_name) %>
 
 <div class="govuk-grid-row">
@@ -9,7 +9,7 @@
         <fieldset class="govuk-fieldset">
           <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl">
             <h1 class="govuk-fieldset__heading">
-              <%= t("student_loans.questions.qts_award_year") %>
+              <%= t("questions.qts_award_year") %>
             </h1>
           </legend>
 
@@ -21,7 +21,7 @@
               <% StudentLoans::Eligibility.qts_award_years.each_key do |option| %>
                 <div class="govuk-radios__item">
                   <%= fields.radio_button(:qts_award_year, option, class: "govuk-radios__input") %>
-                  <%= fields.label "qts_award_year_#{option}", t("student_loans.questions.qts_award_years.#{option}"), class: "govuk-label govuk-radios__label" %>
+                  <%= fields.label "qts_award_year_#{option}", t("questions.qts_award_years.#{option}"), class: "govuk-label govuk-radios__label" %>
                 </div>
               <% end %>
             </div>
