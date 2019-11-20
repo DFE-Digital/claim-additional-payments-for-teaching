@@ -155,7 +155,7 @@ RSpec.describe StudentLoans::Eligibility, type: :model do
         taught_eligible_subjects: true,
         chemistry_taught: true,
         physics_taught: true,
-        computer_science_taught: true,
+        computing_taught: true,
         languages_taught: true,
         employment_status: :different_school,
         had_leadership_position: true,
@@ -183,7 +183,7 @@ RSpec.describe StudentLoans::Eligibility, type: :model do
       expect(eligibility.physics_taught).to eq(nil)
       expect(eligibility.chemistry_taught).to eq(nil)
       expect(eligibility.physics_taught).to eq(nil)
-      expect(eligibility.computer_science_taught).to eq(nil)
+      expect(eligibility.computing_taught).to eq(nil)
       expect(eligibility.languages_taught).to eq(nil)
     end
 
@@ -267,7 +267,7 @@ RSpec.describe StudentLoans::Eligibility, type: :model do
 
     it "is valid when one or more of the subjects-taught attributes are true" do
       expect(StudentLoans::Eligibility.new(biology_taught: true)).to be_valid(:"subjects-taught")
-      expect(StudentLoans::Eligibility.new(biology_taught: true, computer_science_taught: false)).to be_valid(:"subjects-taught")
+      expect(StudentLoans::Eligibility.new(biology_taught: true, computing_taught: false)).to be_valid(:"subjects-taught")
       expect(StudentLoans::Eligibility.new(chemistry_taught: true, languages_taught: true)).to be_valid(:"subjects-taught")
     end
 

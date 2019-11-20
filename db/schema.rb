@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_11_14_141607) do
+ActiveRecord::Schema.define(version: 2019_11_20_081451) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -165,7 +165,7 @@ ActiveRecord::Schema.define(version: 2019_11_14_141607) do
     t.integer "employment_status"
     t.boolean "biology_taught"
     t.boolean "chemistry_taught"
-    t.boolean "computer_science_taught"
+    t.boolean "computing_taught"
     t.boolean "languages_taught"
     t.boolean "physics_taught"
     t.boolean "taught_eligible_subjects"
