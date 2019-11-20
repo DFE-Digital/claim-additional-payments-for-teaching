@@ -33,7 +33,7 @@ RSpec.describe Claim::PermittedParameters do
         :biology_taught,
         :chemistry_taught,
         :physics_taught,
-        :computer_science_taught,
+        :computing_taught,
         :languages_taught,
       ],
     ]

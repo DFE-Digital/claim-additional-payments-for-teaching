@@ -6,7 +6,7 @@ module StudentLoans
       :biology_taught,
       :chemistry_taught,
       :physics_taught,
-      :computer_science_taught,
+      :computing_taught,
       :languages_taught,
     ].freeze
     EDITABLE_ATTRIBUTES = [
