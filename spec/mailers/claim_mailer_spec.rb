@@ -16,8 +16,9 @@ RSpec.shared_examples "an email related to a claim" do |policy|
     expect(mail.body.encoded).to include(claim_description)
   end
 
-  it "includes the claim reference in the subject" do
+  it "includes the claim reference in the subject and body" do
     expect(mail.subject).to include("reference number: #{claim.reference}")
+    expect(mail.body.encoded).to include(claim.reference)
   end
 
   it "greets the claimant in the body" do
@@ -38,7 +39,6 @@ RSpec.describe ClaimMailer, type: :mailer do
 
     it "renders the body" do
       expect(mail.body.encoded).to match("We've received your claim to get back your student loan repayments.")
-      expect(mail.body.encoded).to match("Your unique reference is #{claim.reference}. You will need this if you contact us about your claim.")
     end
   end
 
