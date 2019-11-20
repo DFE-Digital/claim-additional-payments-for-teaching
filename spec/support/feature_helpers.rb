@@ -10,6 +10,16 @@ module FeatureHelpers
     click_on "Continue"
   end
 
+  def choose_initial_teacher_training_specialised_in_maths_or_physics(response = "Yes")
+    choose response
+    click_on "Continue"
+  end
+
+  def choose_maths_and_physics_degree(response = "Yes")
+    choose response
+    click_on "Continue"
+  end
+
   def start_student_loans_claim
     visit new_claim_path(StudentLoans.routing_name)
     choose_qts_year

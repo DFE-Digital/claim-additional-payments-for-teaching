@@ -1,0 +1,61 @@
+<% content_for(:page_title, page_title(t("maths_and_physics.questions.has_uk_maths_or_physics_degree"), policy: current_policy_routing_name, show_error: current_claim.errors.any?)) %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= render("shared/error_summary", instance: current_claim, errored_field_id_overrides: { "eligibility.has_uk_maths_or_physics_degree": "claim_eligibility_attributes_has_uk_maths_or_physics_degree_yes" }) if current_claim.errors.any? %>
+
+    <%= form_for current_claim, url: claim_path(current_policy_routing_name) do |form| %>
+      <%= form_group_tag current_claim do %>
+        <%= form.fields_for :eligibility, include_id: false do |fields| %>
+
+          <%= fields.hidden_field :has_uk_maths_or_physics_degree %>
+
+          <fieldset class="govuk-fieldset">
+
+            <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl">
+              <h1 class="govuk-fieldset__heading">
+                <%= t("maths_and_physics.questions.has_uk_maths_or_physics_degree") %>
+              </h1>
+            </legend>
+
+            <span class="govuk-hint">
+              <p>You must have specialised in maths or physics to be able to
+              claim. If you studied maths or physics for less than 50% of your
+              degree, please select No.</p>
+
+              <p>For more information on which subjects are eligible, see the
+              <%= link_to "qualifications criteria", "https://www.gov.uk/guidance/apply-for-mathematics-and-physics-teacher-retention-payments#opportinity-area", class: "govuk-link" %> for this service.</p>
+            </span>
+
+            <%= errors_tag current_claim.eligibility, :has_uk_maths_or_physics_degree %>
+
+            <div class="govuk-radios">
+
+              <div class="govuk-radios__item">
+                <%= fields.radio_button(:has_uk_maths_or_physics_degree, :yes, class: "govuk-radios__input") %>
+                <%= fields.label :has_uk_maths_or_physics_degree_yes, "Yes", class: "govuk-label govuk-radios__label" %>
+              </div>
+
+              <div class="govuk-radios__item">
+                <%= fields.radio_button(:has_uk_maths_or_physics_degree, :no, class: "govuk-radios__input") %>
+                <%= fields.label :has_uk_maths_or_physics_degree_no, "No", class: "govuk-label govuk-radios__label" %>
+              </div>
+
+              <div class="govuk-radios__divider">or</div>
+
+              <div class="govuk-radios__item">
+                <%= fields.radio_button(:has_uk_maths_or_physics_degree, :has_non_uk, class: "govuk-radios__input") %>
+                <%= fields.label :has_uk_maths_or_physics_degree_has_non_uk, "I have a non-UK degree in Maths or Physics", class: "govuk-label govuk-radios__label" %>
+              </div>
+
+            </div>
+
+          </fieldset>
+
+        <% end %>
+      <% end %>
+
+      <%= form.submit "Continue", class: "govuk-button", data: {module: "govuk-button"} %>
+    <% end %>
+  </div>
+</div>

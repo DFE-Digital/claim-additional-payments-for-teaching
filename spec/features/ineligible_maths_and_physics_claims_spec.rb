@@ -21,4 +21,16 @@ RSpec.feature "Ineligible Maths and Physics claims" do
     expect(page).to have_text("This school is not eligible")
     expect(page).to have_text("You can only get this payment if you are employed to teach at an eligible state-funded secondary school.")
   end
+
+  scenario "chooses no degree in maths or physics" do
+    claim = start_maths_and_physics_claim
+
+    choose_school schools(:penistone_grammar_school)
+    choose_initial_teacher_training_specialised_in_maths_or_physics("No")
+    choose_maths_and_physics_degree("No")
+
+    expect(claim.eligibility.reload.has_uk_maths_or_physics_degree).to eq "no"
+    expect(page).to have_text("You’re not eligible")
+    expect(page).to have_text("You can only get this payment if you completed a degree specialising in maths or physics")
+  end
 end

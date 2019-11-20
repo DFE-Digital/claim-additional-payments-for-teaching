@@ -99,6 +99,7 @@ ActiveRecord::Schema.define(version: 2019_11_20_081451) do
     t.datetime "updated_at", null: false
     t.uuid "current_school_id"
     t.boolean "initial_teacher_training_specialised_in_maths_or_physics"
+    t.integer "has_uk_maths_or_physics_degree"
     t.index ["current_school_id"], name: "index_maths_and_physics_eligibilities_on_current_school_id"
   end
 

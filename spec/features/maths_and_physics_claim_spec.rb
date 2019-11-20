@@ -91,6 +91,76 @@ RSpec.feature "Maths & Physics claims" do
     end
   end
 
+  scenario "Teacher claims for Maths and Physics, without maths or physics ITT and with a UK degree in maths or physics" do
+    # This test was initially written for the purpose of building out this
+    # alternative journey. It may evolve to not test the whole claims journey
+    # but only this part of it. Not sure of the best approach.
+    visit "maths-and-physics/start"
+    expect(page).to have_text "Claim a payment for teaching maths or physics"
+
+    click_on "Start"
+    expect(page).to have_text(I18n.t("maths_and_physics.questions.teaching_maths_or_physics"))
+
+    choose "Yes"
+    click_on "Continue"
+
+    claim = Claim.order(:created_at).last
+    eligibility = claim.eligibility
+
+    expect(eligibility.teaching_maths_or_physics).to eql true
+
+    expect(page).to have_text(I18n.t("questions.current_school"))
+    choose_school schools(:penistone_grammar_school)
+    expect(claim.eligibility.reload.current_school).to eql schools(:penistone_grammar_school)
+
+    expect(page).to have_text(I18n.t("maths_and_physics.questions.initial_teacher_training_specialised_in_maths_or_physics"))
+    choose "No"
+    click_on "Continue"
+    expect(claim.eligibility.reload.initial_teacher_training_specialised_in_maths_or_physics).to eql false
+
+    expect(page).to have_text(I18n.t("maths_and_physics.questions.has_uk_maths_or_physics_degree"))
+    choose "Yes"
+    click_on "Continue"
+    expect(claim.eligibility.reload.has_uk_maths_or_physics_degree).to eql "yes"
+
+    expect(page).to have_text("You are eligible to claim a payment for teaching maths or physics")
+  end
+
+  scenario "Teacher claims for Maths and Physics, without maths or physics ITT and with a non-UK degree in maths or physics" do
+    # This test was initially written for the purpose of building out this
+    # alternative journey. It may evolve to not test the whole claims journey
+    # but only this part of it. Not sure of the best approach.
+    visit "maths-and-physics/start"
+    expect(page).to have_text "Claim a payment for teaching maths or physics"
+
+    click_on "Start"
+    expect(page).to have_text(I18n.t("maths_and_physics.questions.teaching_maths_or_physics"))
+
+    choose "Yes"
+    click_on "Continue"
+
+    claim = Claim.order(:created_at).last
+    eligibility = claim.eligibility
+
+    expect(eligibility.teaching_maths_or_physics).to eql true
+
+    expect(page).to have_text(I18n.t("questions.current_school"))
+    choose_school schools(:penistone_grammar_school)
+    expect(claim.eligibility.reload.current_school).to eql schools(:penistone_grammar_school)
+
+    expect(page).to have_text(I18n.t("maths_and_physics.questions.initial_teacher_training_specialised_in_maths_or_physics"))
+    choose "No"
+    click_on "Continue"
+    expect(claim.eligibility.reload.initial_teacher_training_specialised_in_maths_or_physics).to eql false
+
+    expect(page).to have_text(I18n.t("maths_and_physics.questions.has_uk_maths_or_physics_degree"))
+    choose "I have a non-UK degree in Maths or Physics"
+    click_on "Continue"
+    expect(claim.eligibility.reload.has_uk_maths_or_physics_degree).to eql "has_non_uk"
+
+    expect(page).to have_text("You are eligible to claim a payment for teaching maths or physics")
+  end
+
   scenario "A teacher is ineligible for Maths & Physics" do
     visit new_claim_path(MathsAndPhysics.routing_name)
 
