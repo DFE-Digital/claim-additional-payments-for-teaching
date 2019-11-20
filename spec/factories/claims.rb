@@ -1,6 +1,13 @@
 FactoryBot.define do
   factory :claim do
-    association(:eligibility, factory: :student_loans_eligibility)
+    transient do
+      policy { StudentLoans }
+      eligibility_factory { "#{policy.to_s.underscore}_eligibility".to_sym }
+    end
+
+    after(:build) do |claim, evaluator|
+      claim.eligibility = build(*evaluator.eligibility_factory) unless claim.eligibility
+    end
 
     trait :submittable do
       first_name { "Jo" }
@@ -19,9 +26,9 @@ FactoryBot.define do
       banking_name { "Jo Bloggs" }
       bank_sort_code { 123456 }
       bank_account_number { 12345678 }
-
-      association(:eligibility, factory: [:student_loans_eligibility, :eligible])
       payroll_gender { :female }
+
+      eligibility_factory { ["#{policy.to_s.underscore}_eligibility".to_sym, :eligible] }
     end
 
     trait :submitted do
@@ -42,7 +49,8 @@ FactoryBot.define do
 
     trait :ineligible do
       submittable
-      association(:eligibility, factory: [:student_loans_eligibility, :ineligible])
+
+      eligibility_factory { ["#{policy.to_s.underscore}_eligibility".to_sym, :ineligible] }
     end
   end
 end
