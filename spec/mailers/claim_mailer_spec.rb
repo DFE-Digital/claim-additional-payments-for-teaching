@@ -21,7 +21,7 @@ end
 
 RSpec.describe ClaimMailer, type: :mailer do
   describe "#submitted" do
-    let(:claim) { create(:claim, :submittable, first_name: "Abraham", surname: "Lincoln") }
+    let(:claim) { build(:claim, :submittable, first_name: "Abraham", surname: "Lincoln") }
     let(:mail) { ClaimMailer.submitted(claim) }
 
     it_behaves_like "an email related to a claim", StudentLoans
@@ -38,7 +38,7 @@ RSpec.describe ClaimMailer, type: :mailer do
   end
 
   describe "#approved" do
-    let(:claim) { create(:claim, :submitted, first_name: "John", middle_name: "Fitzgerald", surname: "Kennedy") }
+    let(:claim) { build(:claim, :submitted, first_name: "John", middle_name: "Fitzgerald", surname: "Kennedy") }
     let(:mail) { ClaimMailer.approved(claim) }
 
     it_behaves_like "an email related to a claim", StudentLoans
@@ -54,7 +54,7 @@ RSpec.describe ClaimMailer, type: :mailer do
   end
 
   describe "#rejected" do
-    let(:claim) { create(:claim, :submitted, first_name: "John", middle_name: "Fitzgerald", surname: "Kennedy") }
+    let(:claim) { build(:claim, :submitted, first_name: "John", middle_name: "Fitzgerald", surname: "Kennedy") }
     let(:mail) { ClaimMailer.rejected(claim) }
 
     it_behaves_like "an email related to a claim", StudentLoans
@@ -70,8 +70,8 @@ RSpec.describe ClaimMailer, type: :mailer do
   end
 
   describe "#payment_confirmation" do
-    let(:payment) { create(:payment, :with_figures, net_pay: 500.00, student_loan_repayment: 60, claim: claim) }
-    let(:claim) { create(:claim, :submitted, first_name: "John", middle_name: "Fitzgerald", surname: "Kennedy") }
+    let(:payment) { build(:payment, :with_figures, net_pay: 500.00, student_loan_repayment: 60, claim: claim) }
+    let(:claim) { build(:claim, :submitted, first_name: "John", middle_name: "Fitzgerald", surname: "Kennedy") }
     let(:payment_date_timestamp) { Time.new(2019, 1, 1).to_i }
     let(:mail) { ClaimMailer.payment_confirmation(payment.claim, payment_date_timestamp) }
 
@@ -89,7 +89,7 @@ RSpec.describe ClaimMailer, type: :mailer do
     end
 
     context "when user does not currently have a student loan" do
-      let(:payment) { create(:payment, :with_figures, student_loan_repayment: nil, claim: claim) }
+      let(:payment) { build(:payment, :with_figures, student_loan_repayment: nil, claim: claim) }
 
       it "shows the right content" do
         expect(mail.body.encoded).to_not include("student loan contribution")
@@ -98,7 +98,7 @@ RSpec.describe ClaimMailer, type: :mailer do
     end
 
     context "when user has a student loan, but has not made a contribution" do
-      let(:payment) { create(:payment, :with_figures, student_loan_repayment: 0, claim: claim) }
+      let(:payment) { build(:payment, :with_figures, student_loan_repayment: 0, claim: claim) }
 
       it "shows the right content" do
         expect(mail.body.encoded).to include("If you have made a student loan contribution, this is deducted from your payment amount and credited to SLC.")
