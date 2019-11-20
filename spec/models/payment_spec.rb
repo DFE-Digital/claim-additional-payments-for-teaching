@@ -17,7 +17,8 @@ RSpec.describe Payment do
           employers_national_insurance: 10,
           student_loan_repayment: 10,
           tax: 10,
-          net_pay: 10)
+          net_pay: 10,
+          gross_pay: 10)
       end
 
       it "is valid" do
@@ -34,7 +35,8 @@ RSpec.describe Payment do
           employers_national_insurance: 10,
           student_loan_repayment: nil,
           tax: 10,
-          net_pay: 10)
+          net_pay: 10,
+          gross_pay: 10)
       end
 
       it "is valid" do

@@ -33,6 +33,7 @@ RSpec.describe PaymentConfirmation do
       expect(first_payment.student_loan_repayment).to eq("0".to_d)
       expect(first_payment.tax).to eq("89.6".to_d)
       expect(first_payment.net_pay).to eq("325".to_d)
+      expect(first_payment.gross_pay).to eq("448.5".to_d)
 
       expect(second_payment.payroll_reference).to eq("DFE00002")
       expect(second_payment.gross_value).to eq("904.15".to_d)
@@ -41,6 +42,7 @@ RSpec.describe PaymentConfirmation do
       expect(second_payment.student_loan_repayment).to eq("40".to_d)
       expect(second_payment.tax).to eq("162.8".to_d)
       expect(second_payment.net_pay).to eq("534".to_d)
+      expect(second_payment.gross_pay).to eq("814.64".to_d)
 
       expect(payroll_run.reload.confirmation_report_uploaded_by).to eq(admin_user_id)
     end
