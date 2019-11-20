@@ -18,7 +18,7 @@
 
             <div class="govuk-radios">
               <%= fields.hidden_field :qts_award_year %>
-              <% StudentLoans::Eligibility.qts_award_years.each_key do |option| %>
+              <% current_claim.eligibility.class.qts_award_years.each_key do |option| %>
                 <div class="govuk-radios__item">
                   <%= fields.radio_button(:qts_award_year, option, class: "govuk-radios__input") %>
                   <%= fields.label "qts_award_year_#{option}", t("questions.qts_award_years.#{option}"), class: "govuk-label govuk-radios__label" %>
