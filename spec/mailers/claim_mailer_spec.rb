@@ -27,7 +27,7 @@ end
 
 RSpec.describe ClaimMailer, type: :mailer do
   describe "#submitted" do
-    let(:claim) { build(:claim, :submittable) }
+    let(:claim) { build(:claim, :submitted) }
     let(:mail) { ClaimMailer.submitted(claim) }
 
     it_behaves_like "an email related to a claim", StudentLoans
