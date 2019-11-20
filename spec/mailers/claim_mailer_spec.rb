@@ -33,12 +33,9 @@ RSpec.describe ClaimMailer, type: :mailer do
 
     it_behaves_like "an email related to a claim", StudentLoans
 
-    it "mentions that claim has been received in the subject" do
-      expect(mail.subject).to match("been received")
-    end
-
-    it "renders the body" do
-      expect(mail.body.encoded).to match("We've received your claim to get back your student loan repayments.")
+    it "mentions that claim has been received in the subject and body" do
+      expect(mail.subject).to include("been received")
+      expect(mail.body.encoded).to include("We've received your claim")
     end
   end
 
@@ -48,12 +45,9 @@ RSpec.describe ClaimMailer, type: :mailer do
 
     it_behaves_like "an email related to a claim", StudentLoans
 
-    it "mentions that claim has been approved in the subject" do
-      expect(mail.subject).to match("approved")
-    end
-
-    it "renders the body" do
-      expect(mail.body.encoded).to match("been approved")
+    it "mentions that claim has been approved in the subject and body" do
+      expect(mail.subject).to include("approved")
+      expect(mail.body.encoded).to include("been approved")
     end
   end
 
@@ -63,12 +57,9 @@ RSpec.describe ClaimMailer, type: :mailer do
 
     it_behaves_like "an email related to a claim", StudentLoans
 
-    it "mentions that claim has been rejected in the subject" do
-      expect(mail.subject).to match("rejected")
-    end
-
-    it "renders the body" do
-      expect(mail.body.encoded).to match("not been able to approve")
+    it "mentions that claim has been rejected in the subject and body" do
+      expect(mail.subject).to include("rejected")
+      expect(mail.body.encoded).to include("not been able to approve")
     end
   end
 
@@ -80,12 +71,12 @@ RSpec.describe ClaimMailer, type: :mailer do
 
     it_behaves_like "an email related to a claim", StudentLoans
 
-    it "mentions that claim is being paid in the subject" do
-      expect(mail.subject).to match("paying")
+    it "mentions that claim is being paid in the subject and body" do
+      expect(mail.subject).to include("paying")
+      expect(mail.body.encoded).to include("We’re paying your claim")
     end
 
-    it "renders the body" do
-      expect(mail.body.encoded).to include("We’re paying your claim")
+    it "includes the NET pay amount and the student loan deduction in the body" do
       expect(mail.body.encoded).to include("You will receive £500.00 on or after 1 January 2019")
       expect(mail.body.encoded).to include("Student loan (deducted): £60.00")
     end
@@ -93,7 +84,7 @@ RSpec.describe ClaimMailer, type: :mailer do
     context "when user does not currently have a student loan" do
       let(:payment) { build(:payment, :with_figures, student_loan_repayment: nil, claim: claim) }
 
-      it "shows the right content" do
+      it "does not mention the content relating to student loan dedictions" do
         expect(mail.body.encoded).to_not include("student loan contribution")
         expect(mail.body.encoded).to_not include("Student loan (deducted)")
       end
@@ -102,7 +93,7 @@ RSpec.describe ClaimMailer, type: :mailer do
     context "when user has a student loan, but has not made a contribution" do
       let(:payment) { build(:payment, :with_figures, student_loan_repayment: 0, claim: claim) }
 
-      it "shows the right content" do
+      it "mentions the student loan deduction content and lists their contribution as zero" do
         expect(mail.body.encoded).to include("If you have made a student loan contribution, this is deducted from your payment amount and credited to SLC.")
         expect(mail.body.encoded).to include("Student loan: £0.00")
       end
