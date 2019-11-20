@@ -3,10 +3,10 @@ class ClaimsController < BasePublicController
 
   skip_before_action :send_unstarted_claiments_to_the_start, only: [:new, :create, :timeout]
   before_action :check_page_is_in_sequence, only: [:show, :update]
+  before_action :clear_claim_session, only: [:new]
   before_action :prepend_view_path_for_policy
 
   def new
-    clear_claim_session
     render first_template_in_sequence
   end
 
