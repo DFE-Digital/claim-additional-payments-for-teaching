@@ -13,6 +13,10 @@ RSpec.shared_examples "an email related to a claim" do |policy|
     claim_description = I18n.t("#{policy.routing_name.underscore}.claim_description")
     expect(mail.subject).to include(claim_description)
   end
+
+  it "includes the claim reference in the subject" do
+    expect(mail.subject).to include("reference number: #{claim.reference}")
+  end
 end
 
 RSpec.describe ClaimMailer, type: :mailer do
@@ -41,7 +45,6 @@ RSpec.describe ClaimMailer, type: :mailer do
 
     it "renders the subject" do
       expect(mail.subject).to match("approved")
-      expect(mail.subject).to match("reference number: #{claim.reference}")
     end
 
     it "renders the body" do
@@ -58,7 +61,6 @@ RSpec.describe ClaimMailer, type: :mailer do
 
     it "renders the subject" do
       expect(mail.subject).to match("rejected")
-      expect(mail.subject).to match("reference number: #{claim.reference}")
     end
 
     it "renders the body" do
@@ -77,7 +79,6 @@ RSpec.describe ClaimMailer, type: :mailer do
 
     it "renders the subject" do
       expect(mail.subject).to match("paying")
-      expect(mail.subject).to match("reference number: #{claim.reference}")
     end
 
     it "renders the body" do

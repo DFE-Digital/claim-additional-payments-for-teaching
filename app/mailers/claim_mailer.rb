@@ -3,7 +3,7 @@ class ClaimMailer < Mail::Notify::Mailer
 
   def submitted(claim)
     @claim_description = claim_description(claim)
-    view_mail_with_claim_and_subject(claim, "Your #{@claim_description} has been received")
+    view_mail_with_claim_and_subject(claim, "Your #{@claim_description} has been received, reference number: #{claim.reference}")
   end
 
   def approved(claim)
