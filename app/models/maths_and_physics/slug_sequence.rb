@@ -12,6 +12,7 @@ module MathsAndPhysics
     SLUGS = [
       "teaching-maths-or-physics",
       "current-school",
+      "initial-teacher-training-specialised-in-maths-or-physics",
       "eligibility-confirmed",
       "information-provided",
       "verified",

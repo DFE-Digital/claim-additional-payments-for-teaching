@@ -3,6 +3,7 @@ module MathsAndPhysics
     EDITABLE_ATTRIBUTES = [
       :teaching_maths_or_physics,
       :current_school_id,
+      :initial_teacher_training_specialised_in_maths_or_physics,
     ].freeze
     self.table_name = "maths_and_physics_eligibilities"
 
@@ -10,6 +11,7 @@ module MathsAndPhysics
 
     validates :teaching_maths_or_physics, on: [:"teaching-maths-or-physics", :submit], inclusion: {in: [true, false], message: "Select either Yes or No"}
     validates :current_school, on: [:"current-school", :submit], presence: {message: "Select a school from the list"}
+    validates :initial_teacher_training_specialised_in_maths_or_physics, on: [:"initial-teacher-training-specialised-in-maths-or-physics", :submit], inclusion: {in: [true, false], message: "Select either Yes or No"}
 
     delegate :name, to: :current_school, prefix: true, allow_nil: true
 

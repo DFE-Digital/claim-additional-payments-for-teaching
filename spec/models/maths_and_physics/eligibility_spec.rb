@@ -55,6 +55,13 @@ RSpec.describe MathsAndPhysics::Eligibility, type: :model do
     end
   end
 
+  context "when saving in the “initial-teacher-training-specialised-in-maths-or-physics” context" do
+    it "validates the presence of initial_teacher_training_specialised_in_maths_or_physics" do
+      expect(MathsAndPhysics::Eligibility.new).not_to be_valid(:"initial-teacher-training-specialised-in-maths-or-physics")
+      expect(MathsAndPhysics::Eligibility.new(initial_teacher_training_specialised_in_maths_or_physics: true)).to be_valid(:"initial-teacher-training-specialised-in-maths-or-physics")
+    end
+  end
+
   context "when saving in the “submit” context" do
     it "is valid when all attributes are present" do
       expect(build(:maths_and_physics_eligibility, :eligible)).to be_valid(:submit)
@@ -68,6 +75,11 @@ RSpec.describe MathsAndPhysics::Eligibility, type: :model do
     it "is not valid without a value for current_school" do
       expect(build(:maths_and_physics_eligibility, :eligible, current_school: nil)).not_to be_valid(:submit)
       expect(build(:maths_and_physics_eligibility, :eligible, current_school: schools(:penistone_grammar_school))).to be_valid(:submit)
+    end
+
+    it "is not valid without a value for initial_teacher_training_specialised_in_maths_or_physics" do
+      expect(build(:maths_and_physics_eligibility, :eligible, initial_teacher_training_specialised_in_maths_or_physics: nil)).not_to be_valid(:submit)
+      expect(build(:maths_and_physics_eligibility, :eligible, initial_teacher_training_specialised_in_maths_or_physics: true)).to be_valid(:submit)
     end
   end
 end
