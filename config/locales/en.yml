@@ -111,6 +111,9 @@ en:
       teaching_maths_or_physics: "Do you currently teach any maths or physics?"
       initial_teacher_training_specialised_in_maths_or_physics: "Did your initial teacher training specialise in maths or physics?"
       has_uk_maths_or_physics_degree: "Do you have a UK undergraduate or postgraduate degree in maths or physics?"
+      qts_award_years:
+        before_september_2014: "Before 1 September 2014"
+        on_or_after_september_2014: "On or after 1 September 2014"
   student_loans:
     policy_name: "Teachers: claim back your student loan repayments"
     claim_description: "claim to get back your student loan repayments"

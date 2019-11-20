@@ -30,7 +30,7 @@ describe "Routes", type: :routing do
 
     it "does not route to pages not in a policy’s page sequences" do
       expect(get: "student-loans/teaching-maths-or-physics").not_to be_routable
-      expect(get: "maths-and-physics/qts-year").not_to be_routable
+      expect(get: "maths-and-physics/subjects-taught").not_to be_routable
     end
 
     it "allows positionable routing parameters in the URL helpers" do

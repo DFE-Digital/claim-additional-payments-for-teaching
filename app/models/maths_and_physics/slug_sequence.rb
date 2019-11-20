@@ -14,6 +14,7 @@ module MathsAndPhysics
       "current-school",
       "initial-teacher-training-specialised-in-maths-or-physics",
       "has-uk-maths-or-physics-degree",
+      "qts-year",
       "eligibility-confirmed",
       "information-provided",
       "verified",
