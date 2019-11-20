@@ -6,6 +6,7 @@ module MathsAndPhysics
       :initial_teacher_training_specialised_in_maths_or_physics,
       :has_uk_maths_or_physics_degree,
       :qts_award_year,
+      :employed_as_supply_teacher,
     ].freeze
     ATTRIBUTE_DEPENDENCIES = {
       "initial_teacher_training_specialised_in_maths_or_physics" => ["has_uk_maths_or_physics_degree"],
@@ -30,6 +31,7 @@ module MathsAndPhysics
     validates :initial_teacher_training_specialised_in_maths_or_physics, on: [:"initial-teacher-training-specialised-in-maths-or-physics", :submit], inclusion: {in: [true, false], message: "Select either Yes or No"}
     validates :has_uk_maths_or_physics_degree, on: [:"has-uk-maths-or-physics-degree", :submit], presence: {message: "Select whether you have a UK maths or physics degree."}, unless: :initial_teacher_training_specialised_in_maths_or_physics?
     validates :qts_award_year, on: [:"qts-year", :submit], presence: {message: "Select the academic year you were awarded qualified teacher status"}
+    validates :employed_as_supply_teacher, on: [:"supply-teacher", :submit], inclusion: {in: [true, false], message: "Select either Yes or No"}
 
     delegate :name, to: :current_school, prefix: true, allow_nil: true
 

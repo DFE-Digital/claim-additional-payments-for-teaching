@@ -110,6 +110,14 @@ RSpec.describe MathsAndPhysics::Eligibility, type: :model do
     end
   end
 
+  context "when saving in the “supply-teacher” context" do
+    it "is not valid without a value for employed_as_supply_teacher" do
+      expect(MathsAndPhysics::Eligibility.new).not_to be_valid(:"supply-teacher")
+      expect(MathsAndPhysics::Eligibility.new(employed_as_supply_teacher: true)).to be_valid(:"supply-teacher")
+      expect(MathsAndPhysics::Eligibility.new(employed_as_supply_teacher: false)).to be_valid(:"supply-teacher")
+    end
+  end
+
   context "when saving in the “submit” context" do
     it "is valid when all attributes are present" do
       expect(build(:maths_and_physics_eligibility, :eligible)).to be_valid(:submit)
@@ -138,6 +146,11 @@ RSpec.describe MathsAndPhysics::Eligibility, type: :model do
     it "is not valid without a value for qts_award_year" do
       expect(build(:maths_and_physics_eligibility, :eligible, qts_award_year: nil)).not_to be_valid(:submit)
       expect(build(:maths_and_physics_eligibility, :eligible, qts_award_year: "before_september_2014")).to be_valid(:submit)
+    end
+
+    it "is not valid without a value for employed_as_supply_teacher" do
+      expect(build(:maths_and_physics_eligibility, :eligible, employed_as_supply_teacher: nil)).not_to be_valid(:submit)
+      expect(build(:maths_and_physics_eligibility, :eligible, employed_as_supply_teacher: false)).to be_valid(:submit)
     end
   end
 end

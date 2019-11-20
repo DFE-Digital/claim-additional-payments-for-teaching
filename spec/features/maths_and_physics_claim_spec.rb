@@ -31,6 +31,11 @@ RSpec.feature "Maths & Physics claims" do
       choose_qts_year "On or after 1 September 2014"
       expect(claim.eligibility.reload.qts_award_year).to eql("on_or_after_september_2014")
 
+      expect(page).to have_text(I18n.t("maths_and_physics.questions.employed_as_supply_teacher"))
+      choose "No"
+      click_on "Continue"
+      expect(claim.eligibility.reload.employed_as_supply_teacher).to eql false
+
       expect(page).to have_text("You are eligible to claim a payment for teaching maths or physics")
 
       click_on "Continue"
