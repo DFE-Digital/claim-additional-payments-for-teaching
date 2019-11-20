@@ -9,6 +9,10 @@ module StudentLoans
     end
   end
 
+  def self.eligibility_page_url
+    "https://www.gov.uk/government/publications/additional-payments-for-teaching-eligibility-and-payment-details/teachers-claim-back-your-student-loan-repayments-eligibility-and-payment-details"
+  end
+
   def self.routing_name
     "student-loans"
   end

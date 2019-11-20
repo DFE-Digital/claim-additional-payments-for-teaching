@@ -1,6 +1,6 @@
 Dear <%= @display_name %>,
 
-Your claim to get back your student loan repayments has been approved.
+Your <%= @claim_description %> has been approved.
 
 We will send you another email when we have processed your payment, which may take up to 6 weeks.
 
@@ -9,4 +9,4 @@ When we contact you we will include a breakdown of your payment and confirm the 
 * Income Tax and Employee National Insurance (NIC), which we pay on your behalf
 * student loan contribution, which is deducted from your claim payment if applicable
 
-If you have any questions about your claim, please contact <%= support_email_address("student-loans") %> giving your reference: <%= @claim.reference %>.
+If you have any questions about your claim, please contact <%= support_email_address(@policy.routing_name) %> giving your reference: <%= @claim.reference %>.

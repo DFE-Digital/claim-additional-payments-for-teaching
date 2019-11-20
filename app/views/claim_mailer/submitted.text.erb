@@ -1,6 +1,6 @@
 Dear <%= @display_name %>,
 
-We've received your claim to get back your student loan repayments.
+We've received your <%= @claim_description %>.
 
 Your unique reference is <%= @claim.reference %>. You will need this if you contact us about your claim.
 
@@ -14,4 +14,4 @@ This service is in development. If we cannot make the payment within 18 weeks we
 
 # Contact us
 
-Reply to this email or send an email to <%= support_email_address("student-loans") %> with your unique reference and your query.
+Reply to this email or send an email to <%= support_email_address(@policy.routing_name) %> with your unique reference and your query.
