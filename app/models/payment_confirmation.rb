@@ -84,6 +84,7 @@ class PaymentConfirmation
     payment.student_loan_repayment = row["Student Loans"]
     payment.tax = row["Tax"]
     payment.net_pay = row["Net Pay"]
+    payment.gross_pay = row["Gross Value"].to_d - row["Employers NI"].to_d
 
     if payment.save(context: :upload)
       updated_claim_references.add(payment.claim.reference)

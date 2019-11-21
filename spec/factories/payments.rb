@@ -7,6 +7,7 @@ FactoryBot.define do
 
     trait :with_figures do
       gross_value { 487.48 }
+      gross_pay { 448.5 }
       national_insurance { 33.9 }
       employers_national_insurance { 38.98 }
       student_loan_repayment { 0 }
