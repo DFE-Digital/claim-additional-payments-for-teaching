@@ -8,10 +8,11 @@ module MathsAndPhysics
       :qts_award_year,
       :employed_as_supply_teacher,
       :has_entire_term_contract,
+      :employed_directly,
     ].freeze
     ATTRIBUTE_DEPENDENCIES = {
       "initial_teacher_training_specialised_in_maths_or_physics" => ["has_uk_maths_or_physics_degree"],
-      "employed_as_supply_teacher" => ["has_entire_term_contract"],
+      "employed_as_supply_teacher" => ["has_entire_term_contract", "employed_directly"],
     }.freeze
     self.table_name = "maths_and_physics_eligibilities"
 
@@ -35,6 +36,7 @@ module MathsAndPhysics
     validates :qts_award_year, on: [:"qts-year", :submit], presence: {message: "Select the academic year you were awarded qualified teacher status"}
     validates :employed_as_supply_teacher, on: [:"supply-teacher", :submit], inclusion: {in: [true, false], message: "Select either Yes or No"}
     validates :has_entire_term_contract, on: [:"entire-term-contract", :submit], inclusion: {in: [true, false], message: "Select either Yes or No"}, if: :employed_as_supply_teacher?
+    validates :employed_directly, on: [:"employed-directly", :submit], inclusion: {in: [true, false], message: "Select whether you are employed directly by your school."}, if: :employed_as_supply_teacher?
 
     delegate :name, to: :current_school, prefix: true, allow_nil: true
 
@@ -43,7 +45,8 @@ module MathsAndPhysics
         ineligible_current_school? ||
         no_maths_or_physics_qualification? ||
         ineligible_qts_award_year? ||
-        no_entire_term_contract?
+        no_entire_term_contract? ||
+        not_employed_directly?
     end
 
     def ineligibility_reason
@@ -53,6 +56,7 @@ module MathsAndPhysics
         :no_maths_or_physics_qualification,
         :ineligible_qts_award_year,
         :no_entire_term_contract,
+        :not_employed_directly,
       ].find { |eligibility_check| send("#{eligibility_check}?") }
     end
 
@@ -84,6 +88,10 @@ module MathsAndPhysics
 
     def no_entire_term_contract?
       employed_as_supply_teacher? && has_entire_term_contract == false
+    end
+
+    def not_employed_directly?
+      employed_as_supply_teacher? && employed_directly == false
     end
   end
 end

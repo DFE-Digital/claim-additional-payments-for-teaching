@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_11_20_171540) do
+ActiveRecord::Schema.define(version: 2019_11_21_081842) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -103,6 +103,7 @@ ActiveRecord::Schema.define(version: 2019_11_20_171540) do
     t.integer "qts_award_year"
     t.boolean "employed_as_supply_teacher"
     t.boolean "has_entire_term_contract"
+    t.boolean "employed_directly"
     t.index ["current_school_id"], name: "index_maths_and_physics_eligibilities_on_current_school_id"
   end
 

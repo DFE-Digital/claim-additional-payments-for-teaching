@@ -1,0 +1,44 @@
+<% content_for(:page_title, page_title(t("maths_and_physics.questions.employed_directly"), policy: current_policy_routing_name, show_error: current_claim.errors.any?)) %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= render("shared/error_summary", instance: current_claim, errored_field_id_overrides: { "eligibility.employed_directly": "claim_eligibility_attributes_employed_directly_true" }) if current_claim.errors.any? %>
+    <%= form_for current_claim, url: claim_path(current_policy_routing_name) do |form| %>
+      <%= form_group_tag current_claim do %>
+        <%= form.fields_for :eligibility, include_id: false do |fields| %>
+
+          <%= fields.hidden_field :employed_directly %>
+
+          <fieldset class="govuk-fieldset">
+
+            <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl">
+              <h1 class="govuk-fieldset__heading">
+                <%= t("maths_and_physics.questions.employed_directly") %>
+              </h1>
+            </legend>
+
+            <%= errors_tag current_claim.eligibility, :employed_directly %>
+
+            <div class="govuk-radios">
+
+              <div class="govuk-radios__item">
+                <%= fields.radio_button(:employed_directly, true, class: "govuk-radios__input") %>
+                <%= fields.label :employed_directly_true, "Yes, I’m employed by my school", class: "govuk-label govuk-radios__label" %>
+              </div>
+
+              <div class="govuk-radios__item">
+                <%= fields.radio_button(:employed_directly, false, class: "govuk-radios__input") %>
+                <%= fields.label :employed_directly_false, "No, I’m employed by a private agency", class: "govuk-label govuk-radios__label" %>
+              </div>
+
+            </div>
+
+          </fieldset>
+
+        <% end %>
+      <% end %>
+
+      <%= form.submit "Continue", class: "govuk-button", data: {module: "govuk-button"} %>
+    <% end %>
+  </div>
+</div>

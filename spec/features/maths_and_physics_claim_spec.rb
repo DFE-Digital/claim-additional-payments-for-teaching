@@ -170,7 +170,7 @@ RSpec.feature "Maths & Physics claims" do
     expect(page).to have_text(I18n.t("questions.qts_award_year"))
   end
 
-  scenario "Supply teacher claims for Maths and Physics, with a contract to teach for an entire term" do
+  scenario "Supply teacher claims for Maths and Physics, employed directly by school with a contract to teach for an entire term" do
     # This test was initially written for the purpose of building out this
     # alternative journey. It does not test the whole claims journey but only
     # this part of it. Not sure of the best approach.
@@ -210,6 +210,11 @@ RSpec.feature "Maths & Physics claims" do
     choose "Yes"
     click_on "Continue"
     expect(claim.eligibility.reload.has_entire_term_contract).to eql true
+
+    expect(page).to have_text(I18n.t("maths_and_physics.questions.employed_directly"))
+    choose "Yes, I’m employed by my school"
+    click_on "Continue"
+    expect(claim.eligibility.reload.employed_directly).to eql true
 
     expect(page).to have_text("You are eligible to claim a payment for teaching maths or physics")
   end
