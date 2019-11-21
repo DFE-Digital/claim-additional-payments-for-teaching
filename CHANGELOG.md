@@ -6,12 +6,15 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+## [Release 033] - 2019-11-21
+
 - Display the gross pay instead of the gross value in the payment confirmation
   email
 - Update transational emails with improved content
 - Clear claim session before view path gets calculated
 - Add some copy to make it clear why we ask about a user's student loan
 - Update transactional emails to support the two different policy types
+- Change "computer science" to "computing" on student loans questions
 
 ## [Release 032] - 2019-11-19
 
@@ -245,7 +248,9 @@ The format is based on [Keep a Changelog]
 - First release for student loan repayments private beta
 
 [unreleased]:
-  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-032...HEAD
+  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-033...HEAD
+[release 033]:
+  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-032...release-033
 [release 032]:
   https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-031...release-032
 [release 031]:
