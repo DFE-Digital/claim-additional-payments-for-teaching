@@ -20,7 +20,7 @@
 
         <div class="govuk-form-group">
           <%= errors_tag current_claim, :teacher_reference_number %>
-          <%= form.text_field :teacher_reference_number, spellcheck: "false", class: css_classes_for_input(current_claim, :teacher_reference_number, 'govuk-input--width-10') %>
+          <%= form.text_field :teacher_reference_number, spellcheck: "false", autocomplete: "off", class: css_classes_for_input(current_claim, :teacher_reference_number, 'govuk-input--width-10') %>
         </div>
       <% end %>
       <%= form.submit "Continue", class: "govuk-button" %>
