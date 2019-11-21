@@ -10,7 +10,7 @@ The format is based on [Keep a Changelog]
 
 - Display the gross pay instead of the gross value in the payment confirmation
   email
-- Update transational emails with improved content
+- Update transactional emails with improved content
 - Clear claim session before view path gets calculated
 - Add some copy to make it clear why we ask about a user's student loan
 - Update transactional emails to support the two different policy types
