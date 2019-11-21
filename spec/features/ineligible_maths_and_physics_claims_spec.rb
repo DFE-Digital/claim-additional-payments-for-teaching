@@ -81,4 +81,40 @@ RSpec.feature "Ineligible Maths and Physics claims" do
     expect(page).to have_text("You’re not eligible")
     expect(page).to have_text("You can only get this payment if you are employed directly by the school.")
   end
+
+  scenario "subject to disciplinary action" do
+    claim = start_maths_and_physics_claim
+
+    choose_school schools(:penistone_grammar_school)
+    choose_initial_teacher_training_specialised_in_maths_or_physics("Yes")
+    choose_qts_year("On or after 1 September 2014")
+
+    choose "No"
+    click_on "Continue"
+    choose "Yes"
+    click_on "Continue"
+
+    expect(claim.eligibility.reload.subject_to_disciplinary_action).to eql true
+    expect(page).to have_text("You’re not eligible")
+    expect(page).to have_text("You can only get this payment if you’re not currently subject to disciplinary action.")
+  end
+
+  scenario "subject to formal action for performance" do
+    claim = start_maths_and_physics_claim
+
+    choose_school schools(:penistone_grammar_school)
+    choose_initial_teacher_training_specialised_in_maths_or_physics("Yes")
+    choose_qts_year("On or after 1 September 2014")
+
+    choose "No"
+    click_on "Continue"
+    choose "No"
+    click_on "Continue"
+    choose "Yes"
+    click_on "Continue"
+
+    expect(claim.eligibility.reload.subject_to_formal_performance_action).to eql true
+    expect(page).to have_text("You’re not eligible")
+    expect(page).to have_text("You can only get this payment if you’re not currently subject to formal action for poor performance at work.")
+  end
 end

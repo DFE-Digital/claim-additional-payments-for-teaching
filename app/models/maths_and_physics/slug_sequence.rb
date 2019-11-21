@@ -18,6 +18,8 @@ module MathsAndPhysics
       "supply-teacher",
       "entire-term-contract",
       "employed-directly",
+      "disciplinary-action",
+      "formal-performance-action",
       "eligibility-confirmed",
       "information-provided",
       "verified",
