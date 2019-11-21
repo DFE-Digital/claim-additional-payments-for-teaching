@@ -42,6 +42,11 @@ RSpec.feature "Maths & Physics claims" do
       click_on "Continue"
       expect(claim.eligibility.reload.subject_to_disciplinary_action).to eql false
 
+      expect(page).to have_text(I18n.t("maths_and_physics.questions.formal_performance_action"))
+      choose "No"
+      click_on "Continue"
+      expect(claim.eligibility.reload.subject_to_formal_performance_action).to eql false
+
       expect(page).to have_text("You are eligible to claim a payment for teaching maths or physics")
 
       click_on "Continue"

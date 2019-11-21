@@ -41,6 +41,11 @@ RSpec.describe MathsAndPhysics::Eligibility, type: :model do
       expect(MathsAndPhysics::Eligibility.new(subject_to_disciplinary_action: true).ineligible?).to eql true
       expect(MathsAndPhysics::Eligibility.new(subject_to_disciplinary_action: false).ineligible?).to eql false
     end
+
+    it "returns true when subject to formal performance action" do
+      expect(MathsAndPhysics::Eligibility.new(subject_to_formal_performance_action: true).ineligible?).to eql true
+      expect(MathsAndPhysics::Eligibility.new(subject_to_formal_performance_action: false).ineligible?).to eql false
+    end
   end
 
   describe "#ineligibility_reason" do
@@ -55,6 +60,7 @@ RSpec.describe MathsAndPhysics::Eligibility, type: :model do
       expect(MathsAndPhysics::Eligibility.new(qts_award_year: "before_september_2014").ineligibility_reason).to eq :ineligible_qts_award_year
       expect(MathsAndPhysics::Eligibility.new(employed_as_supply_teacher: true, has_entire_term_contract: false).ineligibility_reason).to eql :no_entire_term_contract
       expect(MathsAndPhysics::Eligibility.new(subject_to_disciplinary_action: true).ineligibility_reason).to eql :subject_to_disciplinary_action
+      expect(MathsAndPhysics::Eligibility.new(subject_to_formal_performance_action: true).ineligibility_reason).to eql :subject_to_formal_performance_action
     end
   end
 
@@ -180,6 +186,14 @@ RSpec.describe MathsAndPhysics::Eligibility, type: :model do
     end
   end
 
+  context "when saving in the “formal-performance-action” context" do
+    it "is not valid without a value for subject_to_formal_performance_action" do
+      expect(MathsAndPhysics::Eligibility.new).not_to be_valid(:"formal-performance-action")
+      expect(MathsAndPhysics::Eligibility.new(subject_to_formal_performance_action: true)).to be_valid(:"formal-performance-action")
+      expect(MathsAndPhysics::Eligibility.new(subject_to_formal_performance_action: false)).to be_valid(:"formal-performance-action")
+    end
+  end
+
   context "when saving in the “submit” context" do
     it "is valid when all attributes are present" do
       expect(build(:maths_and_physics_eligibility, :eligible)).to be_valid(:submit)
@@ -224,6 +238,11 @@ RSpec.describe MathsAndPhysics::Eligibility, type: :model do
     it "is not valid without a value for subject_to_disciplinary_action" do
       expect(build(:maths_and_physics_eligibility, :eligible, subject_to_disciplinary_action: nil)).not_to be_valid(:submit)
       expect(build(:maths_and_physics_eligibility, :eligible, subject_to_disciplinary_action: false)).to be_valid(:submit)
+    end
+
+    it "is not valid without a value for subject_to_formal_performance_action" do
+      expect(build(:maths_and_physics_eligibility, :eligible, subject_to_formal_performance_action: nil)).not_to be_valid(:submit)
+      expect(build(:maths_and_physics_eligibility, :eligible, subject_to_formal_performance_action: false)).to be_valid(:submit)
     end
   end
 end

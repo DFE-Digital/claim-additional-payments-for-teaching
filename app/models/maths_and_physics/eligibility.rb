@@ -10,6 +10,7 @@ module MathsAndPhysics
       :has_entire_term_contract,
       :employed_directly,
       :subject_to_disciplinary_action,
+      :subject_to_formal_performance_action,
     ].freeze
     ATTRIBUTE_DEPENDENCIES = {
       "initial_teacher_training_specialised_in_maths_or_physics" => ["has_uk_maths_or_physics_degree"],
@@ -39,6 +40,7 @@ module MathsAndPhysics
     validates :has_entire_term_contract, on: [:"entire-term-contract", :submit], inclusion: {in: [true, false], message: "Select either Yes or No"}, if: :employed_as_supply_teacher?
     validates :employed_directly, on: [:"employed-directly", :submit], inclusion: {in: [true, false], message: "Select whether you are employed directly by your school."}, if: :employed_as_supply_teacher?
     validates :subject_to_disciplinary_action, on: [:"disciplinary-action", :submit], inclusion: {in: [true, false], message: "Select either Yes or No"}
+    validates :subject_to_formal_performance_action, on: [:"formal-performance-action", :submit], inclusion: {in: [true, false], message: "Select either Yes or No"}
 
     delegate :name, to: :current_school, prefix: true, allow_nil: true
 
@@ -49,7 +51,8 @@ module MathsAndPhysics
         ineligible_qts_award_year? ||
         no_entire_term_contract? ||
         not_employed_directly? ||
-        subject_to_disciplinary_action?
+        subject_to_disciplinary_action? ||
+        subject_to_formal_performance_action?
     end
 
     def ineligibility_reason
@@ -61,6 +64,7 @@ module MathsAndPhysics
         :no_entire_term_contract,
         :not_employed_directly,
         :subject_to_disciplinary_action,
+        :subject_to_formal_performance_action,
       ].find { |eligibility_check| send("#{eligibility_check}?") }
     end
 

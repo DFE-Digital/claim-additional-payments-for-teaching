@@ -7,6 +7,7 @@ FactoryBot.define do
       qts_award_year { "on_or_after_september_2014" }
       employed_as_supply_teacher { false }
       subject_to_disciplinary_action { false }
+      subject_to_formal_performance_action { false }
     end
   end
 end

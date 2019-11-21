@@ -6,6 +6,7 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+- Add the eligibility questions for the Maths and Physics journey
 - Show a different feedback URL depending on the policy being used
 
 ## [Release 033] - 2019-11-21

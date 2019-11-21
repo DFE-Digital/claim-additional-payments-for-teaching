@@ -118,6 +118,7 @@ en:
       has_entire_term_contract: "Do you have a contract to teach at the same school for an entire term or longer?"
       employed_directly: "Are you employed directly by your school?"
       disciplinary_action: "Are you currently subject to disciplinary action?"
+      formal_performance_action: "Are you currently subject to formal action for poor performance at work?"
   student_loans:
     policy_name: "Teachers: claim back your student loan repayments"
     claim_description: "claim to get back your student loan repayments"

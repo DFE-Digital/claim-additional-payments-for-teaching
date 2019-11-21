@@ -1,0 +1,51 @@
+<% content_for(:page_title, page_title(t("maths_and_physics.questions.formal_performance_action"), policy: current_policy_routing_name, show_error: current_claim.errors.any?)) %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= render("shared/error_summary", instance: current_claim, errored_field_id_overrides: { "eligibility.subject_to_formal_performance_action": "claim_eligibility_attributes_subject_to_formal_performance_action_true" }) if current_claim.errors.any? %>
+
+    <%= form_for current_claim, url: claim_path(current_policy_routing_name) do |form| %>
+      <%= form_group_tag current_claim do %>
+        <%= form.fields_for :eligibility, include_id: false do |fields| %>
+
+          <%= fields.hidden_field :subject_to_formal_performance_action %>
+
+          <fieldset class="govuk-fieldset">
+
+            <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl">
+              <h1 class="govuk-fieldset__heading">
+                <%= t("maths_and_physics.questions.formal_performance_action") %>
+              </h1>
+            </legend>
+
+            <span class="govuk-hint">
+              For example, under your school’s capability or performance
+              management policy. We only use this information to check your
+              eligibility.
+            </span>
+
+            <%= errors_tag current_claim.eligibility, :subject_to_formal_performance_action %>
+
+            <div class="govuk-radios govuk-radios--inline">
+
+              <div class="govuk-radios__item">
+                <%= fields.radio_button(:subject_to_formal_performance_action, true, class: "govuk-radios__input") %>
+                <%= fields.label :subject_to_formal_performance_action_true, "Yes", class: "govuk-label govuk-radios__label" %>
+              </div>
+
+              <div class="govuk-radios__item">
+                <%= fields.radio_button(:subject_to_formal_performance_action, false, class: "govuk-radios__input") %>
+                <%= fields.label :subject_to_formal_performance_action_false, "No", class: "govuk-label govuk-radios__label" %>
+              </div>
+
+            </div>
+
+          </fieldset>
+
+        <% end %>
+      <% end %>
+
+      <%= form.submit "Continue", class: "govuk-button", data: {module: "govuk-button"} %>
+    <% end %>
+  </div>
+</div>
