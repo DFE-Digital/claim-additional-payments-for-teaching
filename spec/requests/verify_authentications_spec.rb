@@ -19,6 +19,12 @@ RSpec.describe "GOV.UK Verify::AuthenticationsController requests", type: :reque
       it "stores the request_id in the user’s session" do
         expect(session[:verify_request_id]).to eql(stubbed_auth_request_response["requestId"])
       end
+
+      it "returns cache headers so the page gives a newly minted VSP request on every visit" do
+        expect(response.headers["Cache-Control"]).to eq("no-cache, no-store")
+        expect(response.headers["Pragma"]).to eq("no-cache")
+        expect(response.headers["Expires"]).to eq("Fri, 01 Jan 1990 00:00:00 GMT")
+      end
     end
 
     describe "POST verify/authentications (i.e. the verify callback handler)" do

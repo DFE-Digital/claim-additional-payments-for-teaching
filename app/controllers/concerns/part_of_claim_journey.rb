@@ -2,6 +2,7 @@ module PartOfClaimJourney
   extend ActiveSupport::Concern
 
   included do
+    before_action :set_cache_headers
     before_action :check_whether_closed_for_submissions, if: :current_policy_routing_name
     before_action :send_unstarted_claiments_to_the_start
     helper_method :current_claim
@@ -43,5 +44,11 @@ module PartOfClaimJourney
 
   def routing_eligibility
     routing_policy && routing_policy::Eligibility.new
+  end
+
+  def set_cache_headers
+    response.headers["Cache-Control"] = "no-cache, no-store"
+    response.headers["Pragma"] = "no-cache"
+    response.headers["Expires"] = "Fri, 01 Jan 1990 00:00:00 GMT"
   end
 end
