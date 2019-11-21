@@ -41,18 +41,15 @@ RSpec.describe PayrollRun, type: :model do
   end
 
   describe ".create_with_claims!" do
-    let(:claims) { create_list(:claim, 2, :approved) }
+    let(:claims) { Policies.all.map { |policy| create(:claim, :approved, policy: policy) } }
 
     it "creates a payroll run with payments and populates the award_amount" do
-      claims[0].eligibility.update(student_loan_repayment_amount: 300)
-      claims[1].eligibility.update(student_loan_repayment_amount: 600)
-
       payroll_run = PayrollRun.create_with_claims!(claims, created_by: "creator-id")
 
       expect(payroll_run.reload.created_by).to eq("creator-id")
       expect(payroll_run.claims).to match_array(claims)
-      expect(claims[0].payment.award_amount).to eq(300)
-      expect(claims[1].payment.award_amount).to eq(600)
+      expect(claims[0].payment.award_amount).to eq(claims[0].award_amount)
+      expect(claims[1].payment.award_amount).to eq(claims[1].award_amount)
     end
   end
 

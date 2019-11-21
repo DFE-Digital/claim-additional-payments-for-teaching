@@ -8,18 +8,19 @@ RSpec.feature "Payroll" do
 
     click_on "Payroll"
 
-    create_list(:claim, 3, :approved)
-    create_list(:claim, 1, :submitted)
+    create(:claim, :approved, policy: MathsAndPhysics)
+    create(:claim, :approved, policy: StudentLoans)
+    create(:claim, :approved, policy: StudentLoans)
 
     click_on "Prepare payroll"
 
     expect(page).to have_content("Approved claims 3")
-    expect(page).to have_content("Total award amount £3,000")
+    expect(page).to have_content("Total award amount £4,000")
 
     click_on "Create payroll file"
 
     expect(page).to have_content("Approved claims 3")
-    expect(page).to have_content("Total award amount £3,000")
+    expect(page).to have_content("Total award amount £4,000")
 
     click_on "Download file"
 
