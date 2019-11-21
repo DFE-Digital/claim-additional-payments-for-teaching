@@ -20,4 +20,8 @@ module MathsAndPhysics
   def feedback_url
     "https://docs.google.com/forms/d/e/1FAIpQLSeJcp50-eA5H_twIFKTUX8Z1ATDnj63wZaSlcnBCN-idJ7Ztg/viewform?usp=sf_link"
   end
+
+  def done_page_url
+    nil
+  end
 end
