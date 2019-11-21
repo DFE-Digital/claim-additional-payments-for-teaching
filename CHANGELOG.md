@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+- Show a different feedback URL depending on the policy being used
+
 ## [Release 033] - 2019-11-21
 
 - Display the gross pay instead of the gross value in the payment confirmation
