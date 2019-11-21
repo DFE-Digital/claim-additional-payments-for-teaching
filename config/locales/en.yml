@@ -45,6 +45,7 @@ en:
   support_email_address: "additionalteachingpayment@digital.education.gov.uk"
   questions:
     current_school: "Which school are you currently employed to teach at?"
+    qts_award_year: "When did you complete your initial teacher training?"
     address: "What is your address?"
     teacher_reference_number: "What's your teacher reference number?"
     national_insurance_number: "What's your National Insurance number?"
@@ -110,6 +111,9 @@ en:
       teaching_maths_or_physics: "Do you currently teach any maths or physics?"
       initial_teacher_training_specialised_in_maths_or_physics: "Did your initial teacher training specialise in maths or physics?"
       has_uk_maths_or_physics_degree: "Do you have a UK undergraduate or postgraduate degree in maths or physics?"
+      qts_award_years:
+        before_september_2014: "Before 1 September 2014"
+        on_or_after_september_2014: "On or after 1 September 2014"
   student_loans:
     policy_name: "Teachers: claim back your student loan repayments"
     claim_description: "claim to get back your student loan repayments"
@@ -120,7 +124,6 @@ en:
       * you did not teach an eligible subject for at least half of your contracted hours
     support_email_address: "studentloanteacherpayment@digital.education.gov.uk"
     questions:
-      qts_award_year: "When did you complete your initial teacher training?"
       qts_award_years:
         before_september_2013: "Before 1 September 2013"
         on_or_after_september_2013: "On or after 1 September 2013"

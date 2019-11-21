@@ -5,7 +5,7 @@ RSpec.describe "Claims", type: :request do
     context "the user has not already started a claim" do
       it "renders the first page in the sequence" do
         get new_claim_path(StudentLoans.routing_name)
-        expect(response.body).to include(I18n.t("student_loans.questions.qts_award_year"))
+        expect(response.body).to include(I18n.t("questions.qts_award_year"))
       end
     end
 
@@ -15,7 +15,7 @@ RSpec.describe "Claims", type: :request do
       it "clears the current claim from the session, and renders the first page in the sequence" do
         expect { get new_claim_path(StudentLoans.routing_name) }.to change { session[:claim_id] }.from(String).to(nil)
 
-        expect(response.body).to include(I18n.t("student_loans.questions.qts_award_year"))
+        expect(response.body).to include(I18n.t("questions.qts_award_year"))
       end
     end
   end
@@ -39,7 +39,7 @@ RSpec.describe "Claims", type: :request do
 
       it "renders the requested page in the sequence" do
         get claim_path(StudentLoans.routing_name, "qts-year")
-        expect(response.body).to include(I18n.t("student_loans.questions.qts_award_year"))
+        expect(response.body).to include(I18n.t("questions.qts_award_year"))
 
         get claim_path(StudentLoans.routing_name, "claim-school")
         expect(response.body).to include("Which school were you employed to teach at")

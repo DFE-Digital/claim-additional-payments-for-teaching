@@ -1,15 +1,15 @@
-<% content_for(:page_title, page_title(t("student_loans.questions.qts_award_year"), policy: current_policy_routing_name, show_error: current_claim.errors.any?)) %>
+<% content_for(:page_title, page_title(t("questions.qts_award_year"), policy: current_policy_routing_name, show_error: current_claim.errors.any?)) %>
 <% path_for_form = current_claim.persisted? ? claim_path(current_policy_routing_name) : claims_path(current_policy_routing_name) %>
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-    <%= render("shared/error_summary", instance: current_claim, errored_field_id_overrides: { "eligibility.qts_award_year": "claim_eligibility_attributes_qts_award_year_before_2013" }) if current_claim.errors.any? %>
+    <%= render("shared/error_summary", instance: current_claim, errored_field_id_overrides: { "eligibility.qts_award_year": "claim_eligibility_attributes_qts_award_year_#{current_claim.eligibility.class.qts_award_years.keys.first}" }) if current_claim.errors.any? %>
     <%= form_for current_claim, url: path_for_form  do |form| %>
       <%= form_group_tag current_claim do %>
         <fieldset class="govuk-fieldset">
           <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl">
             <h1 class="govuk-fieldset__heading">
-              <%= t("student_loans.questions.qts_award_year") %>
+              <%= t("questions.qts_award_year") %>
             </h1>
           </legend>
 
@@ -18,10 +18,10 @@
 
             <div class="govuk-radios">
               <%= fields.hidden_field :qts_award_year %>
-              <% StudentLoans::Eligibility.qts_award_years.each_key do |option| %>
+              <% current_claim.eligibility.class.qts_award_years.each_key do |option| %>
                 <div class="govuk-radios__item">
                   <%= fields.radio_button(:qts_award_year, option, class: "govuk-radios__input") %>
-                  <%= fields.label "qts_award_year_#{option}", t("student_loans.questions.qts_award_years.#{option}"), class: "govuk-label govuk-radios__label" %>
+                  <%= fields.label "qts_award_year_#{option}", t("#{current_claim.policy.name.underscore}.questions.qts_award_years.#{option}"), class: "govuk-label govuk-radios__label" %>
                 </div>
               <% end %>
             </div>

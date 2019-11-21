@@ -12,6 +12,6 @@ RSpec.feature "A user can switch policies" do
     start_maths_and_physics_claim
     visit new_claim_path(StudentLoans.routing_name)
 
-    expect(page).to have_text(I18n.t("student_loans.questions.qts_award_year"))
+    expect(page).to have_text(I18n.t("questions.qts_award_year"))
   end
 end
