@@ -6,6 +6,7 @@ RSpec.feature "Maths & Physics claims" do
     scenario "Teacher claims for Maths & Physics payment with JavaScript #{js_status}", js: javascript_enabled do
       visit "maths-and-physics/start"
       expect(page).to have_text "Claim a payment for teaching maths or physics"
+      expect(page).to have_link(href: MathsAndPhysics.feedback_url)
 
       click_on "Start"
       expect(page).to have_text(I18n.t("maths_and_physics.questions.teaching_maths_or_physics"))
