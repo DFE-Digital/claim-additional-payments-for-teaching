@@ -26,4 +26,8 @@ module StudentLoans
   def feedback_url
     "https://docs.google.com/forms/d/e/1FAIpQLSdAyOxHme39E8lMnD2qY029mmk4Lpn84soYg2vLrT5BV9IUSg/viewform?usp=sf_link"
   end
+
+  def done_page_url
+    "https://www.gov.uk/done/claim-additional-teaching-payment"
+  end
 end

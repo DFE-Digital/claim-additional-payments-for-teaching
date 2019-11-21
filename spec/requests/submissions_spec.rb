@@ -4,7 +4,7 @@ RSpec.describe "Submissions", type: :request do
   describe "#create" do
     let(:in_progress_claim) { Claim.order(:created_at).last }
 
-    context "with a submittable claim" do
+    context "with a submittable student loans claim" do
       before do
         @dataset_post_stub = stub_geckoboard_dataset_update
 
@@ -21,6 +21,11 @@ RSpec.describe "Submissions", type: :request do
 
         expect(in_progress_claim.reload.submitted_at).to be_present
 
+        follow_redirect!
+
+        expect(response.body).to include("What did you think of this service?")
+        expect(response.body).to include(in_progress_claim.policy.done_page_url)
+
         email = ActionMailer::Base.deliveries.first
         expect(email.to).to eql([in_progress_claim.email_address])
         expect(email.subject).to match("been received")
@@ -35,6 +40,27 @@ RSpec.describe "Submissions", type: :request do
         }
 
         expect(@dataset_post_stub.with(body: {data: [claim_data]})).to have_been_requested
+      end
+    end
+
+    context "with a submittable maths and physics claim" do
+      before do
+        start_maths_and_physics_claim
+        # Make the claim submittable
+        in_progress_claim.update!(attributes_for(:claim, :submittable))
+        in_progress_claim.eligibility.update!(attributes_for(:maths_and_physics_eligibility, :eligible))
+
+        post claim_submission_path(MathsAndPhysics.routing_name)
+      end
+
+      it "does not show a done page link" do
+        expect(response).to redirect_to(claim_confirmation_path(MathsAndPhysics.routing_name))
+
+        expect(in_progress_claim.reload.submitted_at).to be_present
+
+        follow_redirect!
+
+        expect(response.body).to_not include("What did you think of this service?")
       end
     end
 
