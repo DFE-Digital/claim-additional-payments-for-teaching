@@ -45,4 +45,40 @@ RSpec.feature "Ineligible Maths and Physics claims" do
     expect(page).to have_text("You’re not eligible")
     expect(page).to have_text("You can only get this payment if you completed your initial teacher training on or after 1 September 2014.")
   end
+
+  scenario "supply teacher doesn't have a contract for a whole term" do
+    claim = start_maths_and_physics_claim
+
+    choose_school schools(:penistone_grammar_school)
+    choose_initial_teacher_training_specialised_in_maths_or_physics("Yes")
+    choose_qts_year("On or after 1 September 2014")
+
+    choose "Yes"
+    click_on "Continue"
+    choose "No"
+    click_on "Continue"
+
+    expect(claim.eligibility.reload.has_entire_term_contract).to eql false
+    expect(page).to have_text("You’re not eligible")
+    expect(page).to have_text("You can only get this payment if you are employed directly by your school for at least one term")
+  end
+
+  scenario "supply teacher isn't employed directly by school" do
+    claim = start_maths_and_physics_claim
+
+    choose_school schools(:penistone_grammar_school)
+    choose_initial_teacher_training_specialised_in_maths_or_physics("Yes")
+    choose_qts_year("On or after 1 September 2014")
+
+    choose "Yes"
+    click_on "Continue"
+    choose "Yes"
+    click_on "Continue"
+    choose "No, I’m employed by a private agency"
+    click_on "Continue"
+
+    expect(claim.eligibility.reload.employed_directly).to eql false
+    expect(page).to have_text("You’re not eligible")
+    expect(page).to have_text("You can only get this payment if you are employed directly by the school.")
+  end
 end

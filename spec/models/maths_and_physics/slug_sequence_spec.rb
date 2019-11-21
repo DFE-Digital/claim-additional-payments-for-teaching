@@ -12,6 +12,13 @@ RSpec.describe MathsAndPhysics::SlugSequence do
       expect(slug_sequence.slugs).not_to include("has-uk-maths-or-physics-degree")
     end
 
+    it "excludes the remaining supply teacher slugs if the claimant is not employed as a supply teacher" do
+      claim.eligibility.employed_as_supply_teacher = false
+
+      expect(slug_sequence.slugs).not_to include("entire-term-contract")
+      expect(slug_sequence.slugs).not_to include("employed-directly")
+    end
+
     it "excludes the “address” slug if any address fields were acquired from GOV.UK Verify" do
       claim.verified_fields = []
       expect(slug_sequence.slugs).to include("address")

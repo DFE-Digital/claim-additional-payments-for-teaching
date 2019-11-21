@@ -26,6 +26,16 @@ RSpec.describe MathsAndPhysics::Eligibility, type: :model do
       expect(MathsAndPhysics::Eligibility.new(qts_award_year: "before_september_2014").ineligible?).to eql true
       expect(MathsAndPhysics::Eligibility.new(qts_award_year: "on_or_after_september_2014").ineligible?).to eql false
     end
+
+    it "returns true when claimant is a supply teacher without a contract of at least one term" do
+      expect(MathsAndPhysics::Eligibility.new(employed_as_supply_teacher: true, has_entire_term_contract: false).ineligible?).to eql true
+      expect(MathsAndPhysics::Eligibility.new(employed_as_supply_teacher: true, has_entire_term_contract: true).ineligible?).to eql false
+    end
+
+    it "returns true when claimant is a supply teacher who isn't employed directly by the school" do
+      expect(MathsAndPhysics::Eligibility.new(employed_as_supply_teacher: true, employed_directly: false).ineligible?).to eql true
+      expect(MathsAndPhysics::Eligibility.new(employed_as_supply_teacher: true, employed_directly: true).ineligible?).to eql false
+    end
   end
 
   describe "#ineligibility_reason" do
@@ -38,6 +48,7 @@ RSpec.describe MathsAndPhysics::Eligibility, type: :model do
       expect(MathsAndPhysics::Eligibility.new(current_school: schools(:hampstead_school)).ineligibility_reason).to eq :ineligible_current_school
       expect(MathsAndPhysics::Eligibility.new(initial_teacher_training_specialised_in_maths_or_physics: false, has_uk_maths_or_physics_degree: "no").ineligibility_reason).to eq :no_maths_or_physics_qualification
       expect(MathsAndPhysics::Eligibility.new(qts_award_year: "before_september_2014").ineligibility_reason).to eq :ineligible_qts_award_year
+      expect(MathsAndPhysics::Eligibility.new(employed_as_supply_teacher: true, has_entire_term_contract: false).ineligibility_reason).to eql :no_entire_term_contract
     end
   end
 
@@ -59,6 +70,9 @@ RSpec.describe MathsAndPhysics::Eligibility, type: :model do
         :eligible,
         initial_teacher_training_specialised_in_maths_or_physics: false,
         has_uk_maths_or_physics_degree: "no",
+        employed_as_supply_teacher: true,
+        has_entire_term_contract: false,
+        employed_directly: false,
       )
     end
 
@@ -70,6 +84,26 @@ RSpec.describe MathsAndPhysics::Eligibility, type: :model do
       expect { eligibility.reset_dependent_answers }
         .to change { eligibility.has_uk_maths_or_physics_degree }
         .from("no").to(nil)
+    end
+
+    it "resets has_entire_term_contract when the value of employed_as_supply_teacher changes" do
+      eligibility.employed_as_supply_teacher = true
+      expect { eligibility.reset_dependent_answers }.not_to change { eligibility.attributes }
+
+      eligibility.employed_as_supply_teacher = false
+      expect { eligibility.reset_dependent_answers }
+        .to change { eligibility.has_entire_term_contract }
+        .from(false).to(nil)
+    end
+
+    it "resets employed_directly when the value of employed_as_supply_teacher changes" do
+      eligibility.employed_as_supply_teacher = true
+      expect { eligibility.reset_dependent_answers }.not_to change { eligibility.attributes }
+
+      eligibility.employed_as_supply_teacher = false
+      expect { eligibility.reset_dependent_answers }
+        .to change { eligibility.employed_directly }
+        .from(false).to(nil)
     end
   end
 
@@ -110,6 +144,28 @@ RSpec.describe MathsAndPhysics::Eligibility, type: :model do
     end
   end
 
+  context "when saving in the “supply-teacher” context" do
+    it "is not valid without a value for employed_as_supply_teacher" do
+      expect(MathsAndPhysics::Eligibility.new).not_to be_valid(:"supply-teacher")
+      expect(MathsAndPhysics::Eligibility.new(employed_as_supply_teacher: true)).to be_valid(:"supply-teacher")
+      expect(MathsAndPhysics::Eligibility.new(employed_as_supply_teacher: false)).to be_valid(:"supply-teacher")
+    end
+  end
+
+  context "when saving in the “entire-term-contract” context, with employed_as_supply_teacher true" do
+    it "validates the presence of has_entire_term_contract" do
+      expect(MathsAndPhysics::Eligibility.new(employed_as_supply_teacher: true)).not_to be_valid(:"entire-term-contract")
+      expect(MathsAndPhysics::Eligibility.new(employed_as_supply_teacher: true, has_entire_term_contract: false)).to be_valid(:"entire-term-contract")
+    end
+  end
+
+  context "when saving in the “employed-directly” context, with employed_as_supply_teacher true" do
+    it "validates the presence of employed_directly" do
+      expect(MathsAndPhysics::Eligibility.new(employed_as_supply_teacher: true)).not_to be_valid(:"employed-directly")
+      expect(MathsAndPhysics::Eligibility.new(employed_as_supply_teacher: true, employed_directly: false)).to be_valid(:"employed-directly")
+    end
+  end
+
   context "when saving in the “submit” context" do
     it "is valid when all attributes are present" do
       expect(build(:maths_and_physics_eligibility, :eligible)).to be_valid(:submit)
@@ -138,6 +194,17 @@ RSpec.describe MathsAndPhysics::Eligibility, type: :model do
     it "is not valid without a value for qts_award_year" do
       expect(build(:maths_and_physics_eligibility, :eligible, qts_award_year: nil)).not_to be_valid(:submit)
       expect(build(:maths_and_physics_eligibility, :eligible, qts_award_year: "before_september_2014")).to be_valid(:submit)
+    end
+
+    it "is not valid without a value for employed_as_supply_teacher" do
+      expect(build(:maths_and_physics_eligibility, :eligible, employed_as_supply_teacher: nil)).not_to be_valid(:submit)
+      expect(build(:maths_and_physics_eligibility, :eligible, employed_as_supply_teacher: false)).to be_valid(:submit)
+    end
+
+    it "is not valid without a value for has_entire_term_contract and employed_directly, when employed_as_supply_teacher is true" do
+      expect(build(:maths_and_physics_eligibility, :eligible, employed_as_supply_teacher: true, has_entire_term_contract: nil, employed_directly: nil)).not_to be_valid(:submit)
+      expect(build(:maths_and_physics_eligibility, :eligible, employed_as_supply_teacher: true, has_entire_term_contract: true, employed_directly: nil)).not_to be_valid(:submit)
+      expect(build(:maths_and_physics_eligibility, :eligible, employed_as_supply_teacher: true, has_entire_term_contract: true, employed_directly: false)).to be_valid(:submit)
     end
   end
 end
