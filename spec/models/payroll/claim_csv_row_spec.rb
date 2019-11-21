@@ -17,8 +17,7 @@ RSpec.describe Payroll::ClaimCsvRow do
         banking_name: "Jo Bloggs",
         building_society_roll_number: "1234/12345678",
         address_line_1: "1 Test Road",
-        postcode: "AB1 2CD",
-        eligibility: build(:student_loans_eligibility, :eligible))
+        postcode: "AB1 2CD")
     end
 
     it "generates a csv row" do
