@@ -68,6 +68,10 @@ module MathsAndPhysics
       ].find { |eligibility_check| send("#{eligibility_check}?") }
     end
 
+    def award_amount
+      BigDecimal("2000.00")
+    end
+
     def reset_dependent_answers
       ATTRIBUTE_DEPENDENCIES.each do |attribute_name, dependent_attribute_names|
         dependent_attribute_names.each do |dependent_attribute_name|

@@ -64,6 +64,12 @@ RSpec.describe MathsAndPhysics::Eligibility, type: :model do
     end
   end
 
+  describe "#award_amount" do
+    it "returns the £2,000 amount that Maths & Physics claimants are eligible for" do
+      expect(MathsAndPhysics::Eligibility.new.award_amount).to eq(BigDecimal("2000"))
+    end
+  end
+
   describe "#current_school_name" do
     it "returns the name of the current school" do
       eligibility = MathsAndPhysics::Eligibility.new(current_school: schools(:penistone_grammar_school))
