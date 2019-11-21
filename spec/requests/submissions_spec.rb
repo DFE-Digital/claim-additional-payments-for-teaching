@@ -43,6 +43,27 @@ RSpec.describe "Submissions", type: :request do
       end
     end
 
+    context "with a submittable maths and physics claim" do
+      before do
+        start_maths_and_physics_claim
+        # Make the claim submittable
+        in_progress_claim.update!(attributes_for(:claim, :submittable))
+        in_progress_claim.eligibility.update!(attributes_for(:maths_and_physics_eligibility, :eligible))
+
+        post claim_submission_path(MathsAndPhysics.routing_name)
+      end
+
+      it "does not show a done page link" do
+        expect(response).to redirect_to(claim_confirmation_path(MathsAndPhysics.routing_name))
+
+        expect(in_progress_claim.reload.submitted_at).to be_present
+
+        follow_redirect!
+
+        expect(response.body).to_not include("What did you think of this service?")
+      end
+    end
+
     context "with an unsubmittable claim" do
       before :each do
         start_student_loans_claim
