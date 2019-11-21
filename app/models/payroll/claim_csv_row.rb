@@ -132,7 +132,7 @@ module Payroll
     end
 
     def scheme_amount
-      model.eligibility.student_loan_repayment_amount.to_s
+      model.payment.award_amount.to_s
     end
 
     def roll_number
