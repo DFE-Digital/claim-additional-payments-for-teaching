@@ -10,7 +10,7 @@ Capybara.register_driver :headless_chrome do |app|
     app,
     browser: :chrome,
     options: Selenium::WebDriver::Chrome::Options.new(
-      args: %w[headless disable-dev-shm-usage no-sandbox]
+      args: %w[headless disable-dev-shm-usage no-sandbox window-size=1280x1280]
     )
   )
 end
