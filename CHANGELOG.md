@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+- Make www.claim-additional-teaching-payment.service.gov.uk the canonical domain
+
 ## [Release 034] - 2019-11-25
 
 - Change wording of the student loan start date question for more than more

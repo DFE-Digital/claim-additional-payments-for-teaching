@@ -7,10 +7,10 @@
     },
     "appServiceHostNames": {
       "value": [
-        "additional-teaching-payment.education.gov.uk",
-        "www.additional-teaching-payment.education.gov.uk",
+        "www.claim-additional-teaching-payment.service.gov.uk",
         "claim-additional-teaching-payment.service.gov.uk",
-        "www.claim-additional-teaching-payment.service.gov.uk"
+        "additional-teaching-payment.education.gov.uk",
+        "www.additional-teaching-payment.education.gov.uk"
       ]
     },
     "appServiceCertificateSecretNames": {
