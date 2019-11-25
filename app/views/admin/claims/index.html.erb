@@ -15,6 +15,7 @@
           <tr class="govuk-table__row">
             <th scope="col" class="govuk-table__header">Reference</th>
             <th scope="col" class="govuk-table__header">Applicant Name</th>
+            <th scope="col" class="govuk-table__header">Service</th>
             <% if claims_with_warning.nonzero? %>
               <th scope="col" class="govuk-table__header">Check warning</th>
             <% end %>
@@ -27,6 +28,7 @@
             <tr class="govuk-table__row">
               <th scope="row" class="govuk-table__header"><%= claim.reference %></th>
               <td class="govuk-table__cell"><%= claim.full_name %></td>
+              <td class="govuk-table__cell"><%= claim.policy.short_name %></td>
               <% if claims_with_warning.nonzero? %>
                 <td class="govuk-table__cell"><%= check_deadline_warning(claim) %></td>
               <% end %>
