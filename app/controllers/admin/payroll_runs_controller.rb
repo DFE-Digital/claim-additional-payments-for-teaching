@@ -15,7 +15,7 @@ module Admin
 
       payroll_run = PayrollRun.create_with_claims!(claims, created_by: admin_session.user_id)
 
-      redirect_to [:admin, payroll_run]
+      redirect_to [:admin, payroll_run], notice: "Payroll run created"
     end
 
     def show

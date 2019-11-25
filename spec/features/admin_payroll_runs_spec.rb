@@ -22,6 +22,7 @@ RSpec.feature "Payroll" do
 
     expect(page).to have_content("Approved claims 3")
     expect(page).to have_content("Total award amount £4,000")
+    expect(page).to have_content("Payroll run created")
 
     click_on "Download payroll file"
 
