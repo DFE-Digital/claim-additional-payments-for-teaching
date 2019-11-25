@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+## [Release 034] - 2019-11-25
+
 - Change wording of the student loan start date question for more than more
   course
 - Add the eligibility questions for the Maths and Physics journey
@@ -255,7 +257,9 @@ The format is based on [Keep a Changelog]
 - First release for student loan repayments private beta
 
 [unreleased]:
-  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-033...HEAD
+  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-034...HEAD
+[release 034]:
+  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-033...release-034
 [release 033]:
   https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-032...release-033
 [release 032]:
