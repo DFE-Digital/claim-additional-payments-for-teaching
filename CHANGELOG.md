@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+## [Release 035] - 2019-11-25
+
 - Make www.claim-additional-teaching-payment.service.gov.uk the canonical domain
 - Admin users are redirected to their original request path after sign in
 
@@ -260,7 +262,9 @@ The format is based on [Keep a Changelog]
 - First release for student loan repayments private beta
 
 [unreleased]:
-  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-034...HEAD
+  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-035...HEAD
+[release 035]:
+  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-034...release-035
 [release 034]:
   https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-033...release-034
 [release 033]:
