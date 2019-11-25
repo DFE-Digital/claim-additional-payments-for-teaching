@@ -17,7 +17,7 @@
     "platformBuildingBlocksDeploymentUrlBase": "https://raw.githubusercontent.com/DFE-Digital/bat-platform-building-blocks/7a4748a0cf366193d31434bd7796d483bd281385/templates/",
 
     "vnetDeploymentName": "[concat(parameters('resourceNamePrefix'), '-virtual-network')]",
-    "workerNetworkProfileDeploymentName": "[concat(parameters('resourceNamePrefix'), '-worker-network-profile')]",
+    "workerNetworkProfileDeploymentName": "[concat(variables('vnetDeploymentName'), '-worker-network-profile')]",
 
     "vnetName": "[concat(parameters('resourceNamePrefix'), '-vn')]",
     "workerSubnetName": "worker",
