@@ -174,7 +174,7 @@ describe ClaimsHelper do
         [t("questions.student_loan_country"), "England", "student-loan-country"],
         [t("questions.student_loan_how_many_courses"), "One course", "student-loan-how-many-courses"],
         [t("questions.student_loan_start_date.one_course"), t("answers.student_loan_start_date.one_course.on_or_after_first_september_2012"), "student-loan-start-date"],
-        [t("student_loans.questions.student_loan_amount", claim_school_name: claim.eligibility.claim_school_name), "£1,987.65", "student-loan-amount"],
+        [t("student_loans.questions.student_loan_amount"), "£1,987.65", "student-loan-amount"],
       ]
 
       expect(helper.student_loan_answers(claim)).to eq expected_answers
@@ -195,7 +195,7 @@ describe ClaimsHelper do
         [t("questions.student_loan_country"), "England", "student-loan-country"],
         [t("questions.student_loan_how_many_courses"), "Two or more courses", "student-loan-how-many-courses"],
         [t("questions.student_loan_start_date.two_or_more_courses"), t("answers.student_loan_start_date.two_or_more_courses.before_first_september_2012"), "student-loan-start-date"],
-        [t("student_loans.questions.student_loan_amount", claim_school_name: claim.eligibility.claim_school_name), "£1,987.65", "student-loan-amount"],
+        [t("student_loans.questions.student_loan_amount"), "£1,987.65", "student-loan-amount"],
       ]
 
       expect(helper.student_loan_answers(claim)).to eq expected_answers
@@ -212,7 +212,7 @@ describe ClaimsHelper do
       expected_answers = [
         [t("questions.has_student_loan"), "Yes", "student-loan"],
         [t("questions.student_loan_country"), "Scotland", "student-loan-country"],
-        [t("student_loans.questions.student_loan_amount", claim_school_name: claim.eligibility.claim_school_name), "£1,987.65", "student-loan-amount"],
+        [t("student_loans.questions.student_loan_amount"), "£1,987.65", "student-loan-amount"],
       ]
 
       expect(helper.student_loan_answers(claim)).to eq expected_answers
