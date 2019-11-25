@@ -120,6 +120,12 @@ en:
       employed_directly: "Are you employed directly by your school?"
       disciplinary_action: "Are you currently subject to disciplinary action?"
       formal_performance_action: "Are you currently subject to formal action for poor performance at work?"
+    answers:
+      has_uk_maths_or_physics_degree:
+        has_non_uk: "I have a non-UK degree in Maths or Physics"
+      employed_directly:
+        "yes": "Yes, I’m employed by my school"
+        "no": "No, I’m employed by a private agency"
   student_loans:
     policy_name: "Teachers: claim back your student loan repayments"
     policy_short_name: "Student Loans"

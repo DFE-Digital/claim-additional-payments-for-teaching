@@ -23,12 +23,12 @@
 
               <div class="govuk-radios__item">
                 <%= fields.radio_button(:employed_directly, true, class: "govuk-radios__input") %>
-                <%= fields.label :employed_directly_true, "Yes, I’m employed by my school", class: "govuk-label govuk-radios__label" %>
+                <%= fields.label :employed_directly_true, t("maths_and_physics.answers.employed_directly.yes"), class: "govuk-label govuk-radios__label" %>
               </div>
 
               <div class="govuk-radios__item">
                 <%= fields.radio_button(:employed_directly, false, class: "govuk-radios__input") %>
-                <%= fields.label :employed_directly_false, "No, I’m employed by a private agency", class: "govuk-label govuk-radios__label" %>
+                <%= fields.label :employed_directly_false, t("maths_and_physics.answers.employed_directly.no"), class: "govuk-label govuk-radios__label" %>
               </div>
 
             </div>
