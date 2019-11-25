@@ -54,7 +54,7 @@ en:
     student_loan_how_many_courses: "How many higher education courses did you take a student loan out for?"
     student_loan_start_date:
       one_course: "When did the first year of your higher education course start?"
-      two_or_more_courses: "When did the first year of each higher education course start?"
+      two_or_more_courses: "When did your higher education courses start?"
     email_address: "Email address"
     bank_details: "Enter bank account details"
     payroll_gender: "What gender does your school's payroll system associate with you?"
