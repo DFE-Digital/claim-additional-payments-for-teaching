@@ -355,6 +355,9 @@
           "keyVaultName": {
             "value": "[parameters('keyVaultName')]"
           },
+          "workerImageName": {
+            "value": "[parameters('appServiceDockerImage')]"
+          },
           "workerContainerName": {
             "value": "[variables('workerContainerName')]"
           },
