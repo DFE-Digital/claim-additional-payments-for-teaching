@@ -12,17 +12,18 @@ RSpec.feature "Payroll" do
     create(:claim, :approved, policy: StudentLoans)
     create(:claim, :approved, policy: StudentLoans)
 
-    click_on "Prepare payroll"
+    month_name = Date.today.strftime("%B")
+    click_on "Run #{month_name} payroll"
 
     expect(page).to have_content("Approved claims 3")
     expect(page).to have_content("Total award amount £4,000")
 
-    click_on "Create payroll file"
+    click_on "Confirm and submit"
 
     expect(page).to have_content("Approved claims 3")
     expect(page).to have_content("Total award amount £4,000")
 
-    click_on "Download file"
+    click_on "Download payroll file"
 
     expect(page.response_headers["Content-Type"]).to eq("text/csv")
 
@@ -48,11 +49,12 @@ RSpec.feature "Payroll" do
 
     expected_claims = create_list(:claim, 3, :approved)
 
-    click_on "Prepare payroll"
+    month_name = Date.today.strftime("%B")
+    click_on "Run #{month_name} payroll"
 
     create_list(:claim, 3, :approved)
 
-    click_on "Create payroll file"
+    click_on "Confirm and submit"
 
     expect(page).to have_content("Approved claims 3")
 
