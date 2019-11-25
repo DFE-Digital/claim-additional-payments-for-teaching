@@ -15,4 +15,14 @@ RSpec.feature "Admin session management" do
     expect(page).to have_content("You've been signed out")
     expect(current_path).to eql(admin_sign_in_path)
   end
+
+  scenario "A user is redirected to their original url after sign in" do
+    visit admin_claims_path
+
+    expect(current_path).to eql(admin_sign_in_path)
+
+    sign_in_to_admin_with_role(AdminSession::SERVICE_OPERATOR_DFE_SIGN_IN_ROLE_CODE)
+
+    expect(current_path).to eql(admin_claims_path)
+  end
 end
