@@ -14,10 +14,10 @@ accessible-autocomplete@^2.0.1:
   dependencies:
     preact "^8.3.1"
 
-govuk-frontend@^3.0.0:
-  version "3.3.0"
-  resolved "https://registry.yarnpkg.com/govuk-frontend/-/govuk-frontend-3.3.0.tgz#90c55209b7baf5df2e400ee3aa111e1bc160f9b4"
-  integrity sha512-ncOGTAV6mzz1CPBlr/UGETiG3IO6P3b0CvSI0wxBz7Uo0A/6jttLoxkvuYXju2oNA2yqRh2NjD1zJUOP3Q32CQ==
+govuk-frontend@^3.4.0:
+  version "3.4.0"
+  resolved "https://registry.yarnpkg.com/govuk-frontend/-/govuk-frontend-3.4.0.tgz#f6694245fbec2dd476d8e161c36be2a4ea785ce3"
+  integrity sha512-rmYPtcCtWgz92QBejYwOnfSxbPGYfvSruLwB4CBk/yJtySHRY0whG1e2/iFRRSj0pMx1Bu+zh/IqCTo+84hbFw==
 
 preact@^8.3.1:
   version "8.4.2"
