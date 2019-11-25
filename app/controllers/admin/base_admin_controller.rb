@@ -31,7 +31,10 @@ module Admin
     end
 
     def ensure_authenticated_user
-      redirect_to admin_sign_in_path unless admin_signed_in?
+      unless admin_signed_in?
+        session[:requested_admin_path] = request.fullpath
+        redirect_to admin_sign_in_path
+      end
     end
 
     def admin_session

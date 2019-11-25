@@ -7,6 +7,7 @@ The format is based on [Keep a Changelog]
 ## [Unreleased]
 
 - Make www.claim-additional-teaching-payment.service.gov.uk the canonical domain
+- Admin users are redirected to their original request path after sign in
 
 ## [Release 034] - 2019-11-25
 
