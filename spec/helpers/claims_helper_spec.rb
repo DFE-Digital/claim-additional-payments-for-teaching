@@ -6,34 +6,17 @@ describe ClaimsHelper do
     let(:eligibility) do
       build(
         :student_loans_eligibility,
+        :eligible,
         qts_award_year: "on_or_after_september_2013",
-        claim_school: school,
-        current_school: school,
-        chemistry_taught: true,
-        physics_taught: true,
-        had_leadership_position: true,
-        mostly_performed_leadership_duties: false,
-        student_loan_repayment_amount: 1987.65,
       )
     end
-
-    it "returns an array of questions and answers for displaying to the user for review" do
-      expected_answers = [
-        [I18n.t("questions.qts_award_year"), "On or after 1 September 2013", "qts-year"],
-        [I18n.t("student_loans.questions.claim_school"), school.name, "claim-school"],
-        [I18n.t("questions.current_school"), school.name, "still-teaching"],
-        [I18n.t("student_loans.questions.subjects_taught", school: school.name), "Chemistry and Physics", "subjects-taught"],
-        [I18n.t("student_loans.questions.leadership_position"), "Yes", "leadership-position"],
-        [I18n.t("student_loans.questions.mostly_performed_leadership_duties"), "No", "mostly-performed-leadership-duties"],
-      ]
-
-      expect(helper.eligibility_answers(eligibility)).to eq expected_answers
+    let(:claim) do
+      build(:claim, eligibility: eligibility)
     end
 
-    it "excludes questions skipped from the flow" do
-      eligibility.had_leadership_position = false
-      expect(helper.eligibility_answers(eligibility)).to_not include([I18n.t("student_loans.questions.mostly_performed_leadership_duties"), "Yes", "mostly-performed-leadership-duties"])
-      expect(helper.eligibility_answers(eligibility)).to_not include([I18n.t("student_loans.questions.mostly_performed_leadership_duties"), "No", "mostly-performed-leadership-duties"])
+    it "returns the correct answers for the eligibility's policy" do
+      answers = helper.eligibility_answers(claim)
+      expect(answers.first).to eq [I18n.t("questions.qts_award_year"), "On or after 1 September 2013", "qts-year"]
     end
   end
 
@@ -216,26 +199,6 @@ describe ClaimsHelper do
       ]
 
       expect(helper.student_loan_answers(claim)).to eq expected_answers
-    end
-  end
-
-  describe "subject_list" do
-    let(:list) { subject_list(subjects) }
-
-    context "with two subjects" do
-      let(:subjects) { [:biology_taught, :chemistry_taught] }
-
-      it "seperates the subjects with 'and" do
-        expect(list).to eq("Biology and Chemistry")
-      end
-    end
-
-    context "with three subjects" do
-      let(:subjects) { [:biology_taught, :chemistry_taught, :physics_taught] }
-
-      it "returns a comma separated list with a final 'and'" do
-        expect(list).to eq("Biology, Chemistry and Physics")
-      end
     end
   end
 end
