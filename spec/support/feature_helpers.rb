@@ -97,7 +97,7 @@ module FeatureHelpers
 
   def sign_in_to_admin_with_role(*args)
     stub_dfe_sign_in_with_role(*args)
-    visit admin_root_path
+    visit admin_sign_in_path
     click_on "Sign in"
   end
 
