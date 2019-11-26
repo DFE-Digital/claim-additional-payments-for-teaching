@@ -32,6 +32,11 @@ RSpec.describe AdminSession, type: :model do
       expect(admin_session.has_admin_access?).to eq true
     end
 
+    it "returns true when user is a payroll operator" do
+      admin_session = AdminSession.new("user-id", "organisation-id", [AdminSession::PAYROLL_OPERATOR_DFE_SIGN_IN_ROLE_CODE])
+      expect(admin_session.has_admin_access?).to eq true
+    end
+
     it "returns true when user has both roles" do
       admin_session = AdminSession.new("user-id", "organisation-id", [
         AdminSession::SUPPORT_AGENT_DFE_SIGN_IN_ROLE_CODE,
