@@ -6,6 +6,7 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+- Hardcode VSP entity ID to fix our GOV.UK Verify journey
 - Temporarily whitelist new DfE Manchester office IP so that service operators
   can continue to access admin interface
 
