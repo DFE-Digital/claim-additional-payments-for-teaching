@@ -6,6 +6,7 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+- Stop running workers in the same instance as the web app
 - Show policy next to claims in admin view
 - Allow admins to filter list of claims by policy
 

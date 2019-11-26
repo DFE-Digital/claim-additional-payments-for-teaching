@@ -15,7 +15,7 @@
     "keyVaultName": {
       "type": "string"
     },
-    "appServiceDockerCompose": {
+    "appServiceDockerImage": {
       "type": "string"
     },
     "appServiceHostNames": {
@@ -81,6 +81,12 @@
     },
     "verifyHubPossibleOutboundIpAddresses": {
       "type": "array"
+    },
+    "workerSubnetId": {
+      "type": "string"
+    },
+    "workerNetworkProfileId": {
+      "type": "string"
     },
     "databaseName": {
       "type": "string"
@@ -226,7 +232,7 @@
 
     "appServicePlanName": "[concat(parameters('resourceNamePrefix'), '-asp')]",
     "appServiceName": "[concat(parameters('resourceNamePrefix'), '-as')]",
-    "appServiceRuntimeStack": "[concat('COMPOSE|', base64(parameters('appServiceDockerCompose')))]",
+    "appServiceRuntimeStack": "[concat('DOCKER|', parameters('appServiceDockerImage'))]",
 
     "appServiceWebTestName": "[concat(variables('appServiceName'), '-webtest')]",
 
@@ -234,7 +240,10 @@
     "vspAppServiceName": "[concat(parameters('resourceNamePrefix'), '-vsp-as')]",
     "vspAppServiceRuntimeStack": "[concat('DOCKER|', parameters('vspAppServiceDockerImage'))]",
 
-    "vspAppServiceWebTestName": "[concat(variables('vspAppServiceName'), '-webtest')]"
+    "vspAppServiceWebTestName": "[concat(variables('vspAppServiceName'), '-webtest')]",
+
+    "workerContainerName": "[concat(parameters('resourceNamePrefix'), '-worker-container')]",
+    "workerContainerInstanceName": "[concat(parameters('resourceNamePrefix'), '-worker-aci')]"
   },
   "resources": [
     {
@@ -345,6 +354,18 @@
           },
           "keyVaultName": {
             "value": "[parameters('keyVaultName')]"
+          },
+          "workerImageName": {
+            "value": "[parameters('appServiceDockerImage')]"
+          },
+          "workerContainerName": {
+            "value": "[variables('workerContainerName')]"
+          },
+          "workerContainerInstanceName": {
+            "value": "[variables('workerContainerInstanceName')]"
+          },
+          "workerNetworkProfileId": {
+            "value": "[parameters('workerNetworkProfileId')]"
           },
           "appServiceEnvironmentVariables": {
             "value": [
@@ -480,6 +501,9 @@
           },
           "serverName": {
             "value": "[variables('databaseServerName')]"
+          },
+          "subnetResourceIdList": {
+            "value": ["[parameters('workerSubnetId')]"]
           }
         }
       }

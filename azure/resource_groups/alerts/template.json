@@ -16,6 +16,9 @@
     "alertEmailAddress": {
       "type": "string"
     },
+    "projectCoreResourceGroupId": {
+      "type": "string"
+    },
     "appResourceGroupId": {
       "type": "string"
     },
@@ -89,6 +92,7 @@
           "resourceGroupIds": {
             "value": [
               "[resourceGroup().id]",
+              "[parameters('projectCoreResourceGroupId')]",
               "[parameters('appResourceGroupId')]",
               "[parameters('secretsResourceGroupId')]"
             ]

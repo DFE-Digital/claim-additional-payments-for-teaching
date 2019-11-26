@@ -4,6 +4,9 @@
   "parameters": {
     "vnetAddressSpaceCIDR": {
       "value": "11.0.1.0/24"
+    },
+    "workerSubnetAddressPrefix": {
+      "value": "11.0.1.0/28"
     }
   }
 }

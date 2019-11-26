@@ -1,0 +1,58 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "containerInstanceName": {
+      "type": "string"
+    },
+    "containerName": {
+      "type": "string"
+    },
+    "imageName": {
+      "type": "string"
+    },
+    "environmentVariables": {
+      "type": "array"
+    },
+    "command": {
+      "type": "array",
+      "defaultValue": ["rake", "jobs:work"]
+    },
+    "networkProfileId": {
+      "type": "string"
+    }
+  },
+  "variables": {},
+  "resources": [
+    {
+      "type": "Microsoft.ContainerInstance/containerGroups",
+      "apiVersion": "2018-10-01",
+      "name": "[parameters('containerInstanceName')]",
+      "location": "[resourceGroup().location]",
+      "properties": {
+        "containers": [
+          {
+            "name": "[parameters('containerName')]",
+            "properties": {
+              "image": "[parameters('imageName')]",
+              "resources": {
+                "requests": {
+                  "cpu": 1,
+                  "memoryInGB": 1.5
+                }
+              },
+              "environmentVariables": "[parameters('environmentVariables')]",
+              "command": "[parameters('command')]"
+            }
+          }
+        ],
+        "restartPolicy": "Always",
+        "osType": "Linux",
+        "networkProfile": {
+          "id": "[parameters('networkProfileId')]"
+        }
+      }
+    }
+  ],
+  "outputs": {}
+}
