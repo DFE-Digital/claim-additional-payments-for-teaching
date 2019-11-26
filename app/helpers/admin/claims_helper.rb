@@ -1,6 +1,6 @@
 module Admin
   module ClaimsHelper
-    include ::ClaimsHelper
+    include StudentLoans::PresenterMethods
 
     def admin_eligibility_answers(eligibility)
       [].tap do |a|

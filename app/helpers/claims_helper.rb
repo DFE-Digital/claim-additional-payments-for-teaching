@@ -10,15 +10,8 @@ module ClaimsHelper
     fields.to_sentence
   end
 
-  def eligibility_answers(eligibility)
-    [].tap do |a|
-      a << [t("questions.qts_award_year"), I18n.t("student_loans.questions.qts_award_years.#{eligibility.qts_award_year}"), "qts-year"]
-      a << [t("student_loans.questions.claim_school"), eligibility.claim_school_name, "claim-school"]
-      a << [t("questions.current_school"), eligibility.current_school_name, "still-teaching"]
-      a << [t("student_loans.questions.subjects_taught", school: eligibility.claim_school_name), subject_list(eligibility.subjects_taught), "subjects-taught"]
-      a << [t("student_loans.questions.leadership_position"), (eligibility.had_leadership_position? ? "Yes" : "No"), "leadership-position"]
-      a << [t("student_loans.questions.mostly_performed_leadership_duties"), (eligibility.mostly_performed_leadership_duties? ? "Yes" : "No"), "mostly-performed-leadership-duties"] if eligibility.had_leadership_position?
-    end
+  def eligibility_answers(claim)
+    claim.policy::EligibilityAnswersPresenter.new(claim.eligibility).answers
   end
 
   def verify_answers(claim)
@@ -59,15 +52,6 @@ module ClaimsHelper
       a << ["Bank account number", claim.bank_account_number, "bank-details"]
       a << ["Building society roll number", claim.building_society_roll_number, "bank-details"] if claim.building_society_roll_number.present?
     end
-  end
-
-  def subject_list(subjects)
-    connector = " and "
-    translated_subjects = subjects.map { |subject| I18n.t("student_loans.questions.eligible_subjects.#{subject}") }
-    translated_subjects.sort.to_sentence(
-      last_word_connector: connector,
-      two_words_connector: connector
-    )
   end
 
   def school_search_question(searching_for_additional_school)
