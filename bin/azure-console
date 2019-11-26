@@ -1,0 +1,63 @@
+#!/bin/bash
+set -e
+
+ENVIRONMENT_NAME=$1
+
+case $ENVIRONMENT_NAME in
+  "development")
+    SUBSCRIPTION_ID="8655985a-2f87-44d7-a541-0be9a8c2779d"
+    RESOURCE_GROUP_PREFIX="s118d01"
+    ;;
+  "production")
+    SUBSCRIPTION_ID="88bd392f-df19-458b-a100-22b4429060ed"
+    RESOURCE_GROUP_PREFIX="s118p01"
+    ;;
+  *)
+    echo "Could not find a known environment with the name: $ENVIRONMENT_NAME"
+    exit 1
+    ;;
+esac
+
+if [[ $ENVIRONMENT_NAME == "production" ]]; then
+  echo "**********************************************************************************************************************"
+  echo "You will need to make a PIM request to access the console"
+  echo "Visit https://portal.azure.com/#blade/Microsoft_Azure_PIMCommon/ActivationMenuBlade/azurerbac"
+  echo "and activate the 'Contributor' role for the 's118-teacherpaymentsservice-production' environment."
+  echo "Once this has been approved, press enter to continue"
+  echo "**********************************************************************************************************************"
+
+  read -p "" -r
+
+  echo "Logging out of Azure and back in to grab new tokens"
+  if az account show > /dev/null; then
+    az logout > /dev/null
+  fi
+fi
+
+if ! az account show > /dev/null; then
+  az login > /dev/null
+fi
+
+echo "**********************************************************************************************************************"
+echo "IMPORTANT: Accessing the $ENVIRONMENT_NAME console in this way is VERY risky and should only be done as a last resort"
+echo "This should only be done in pairs, and mutating any live data is STRONGLY discouraged."
+echo "**********************************************************************************************************************"
+
+echo
+
+read -p "Are you sure you want to continue? (y/n)" -n 1 -r
+echo
+
+if [[ $REPLY =~ ^[Yy]$ ]]; then
+  az account set --subscription "$SUBSCRIPTION_ID"
+
+  az container exec \
+    --name=$RESOURCE_GROUP_PREFIX-app-worker-aci \
+    --resource-group=$RESOURCE_GROUP_PREFIX-app \
+    --exec-command="/bin/bash"
+
+  exit 0
+else
+  echo "Quitting"
+  exit 0
+fi

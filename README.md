@@ -106,6 +106,46 @@ bundle exec rake
 
 To run the feature specs you will need Chrome installed.
 
+### Running a live console
+
+**Accessing a live console is very risky and should only be done as a last
+resort. This should only be done in pairs, and mutating any live data is
+STRONGLY discouraged.**
+
+The console will be ran inside a container instance and won't be on one of the
+web servers, however it will have access to the database.
+
+#### Through the Azure UI
+
+- Navigate to the
+  [container instance](https://portal.azure.com/#blade/HubsExtension/BrowseResourceBlade/resourceType/Microsoft.ContainerInstance%2FcontainerGroups)
+  resource (eg. `s118d01-app-worker-aci`)
+- Then go to 'Containers' under 'Settings'
+- With the container selected go to the 'Connect' tab
+- Choose the start up command (`/bin/bash` is recommended) and connect
+
+#### Through the Azure CLI
+
+We have a helpful script you can run that will connect you to the right resource
+(you will need the [Azure CLI](https://docs.microsoft.com/en-gb/cli) installed
+first):
+
+```bash
+bin/azure-console $ENVIRONMENT # (development/production)
+```
+
+#### Usage
+
+If you don't need to modify the data and only need to do queries it is
+recommended that you run rails console in sandbox mode
+`rails console --sandbox`.
+
+In exceptional circumstances you may want to modify the data, this should only
+be done with approval from the Service Owner and is to be carried out in pairs.
+
+Accessing a live console on production requires a
+[PIM (Privileged Identity Management) request](https://dfedigital.atlassian.net/wiki/spaces/TP/pages/1192624202/Privileged+Identity+Management+requests).
+
 ### Code linting rules
 
 Code linting is performed using:
