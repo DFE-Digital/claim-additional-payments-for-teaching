@@ -61,4 +61,33 @@ RSpec.describe PayrollRun, type: :model do
       expect(PayrollRun.this_month).to eq([created_this_month])
     end
   end
+
+  describe "#download_available?" do
+    it "returns true when the download was triggered within the time limit" do
+      payroll_run = create(:payroll_run, downloaded_at: Time.zone.now, downloaded_by: "admin_user_id")
+      expect(payroll_run.download_available?).to eql true
+
+      travel_to 31.seconds.from_now do
+        expect(payroll_run.download_available?).to eql false
+      end
+    end
+
+    it "returns false when the download has not been tirggered" do
+      payroll_run = create(:payroll_run)
+
+      expect(payroll_run.download_available?).to eql false
+    end
+  end
+
+  describe "#download_triggered?" do
+    it "returns true when downloaded_at and downloaded_by are present" do
+      payroll_run = create(:payroll_run)
+
+      expect(payroll_run.download_triggered?).to eql false
+
+      payroll_run.update!(downloaded_at: Time.zone.now, downloaded_by: "admin_user_id")
+
+      expect(payroll_run.download_triggered?).to eql true
+    end
+  end
 end

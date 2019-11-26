@@ -1,4 +1,6 @@
 class PayrollRun < ApplicationRecord
+  DOWNLOAD_FILE_TIMEOUT = 30
+
   has_many :payments
   has_many :claims, through: :payments
 
@@ -20,6 +22,14 @@ class PayrollRun < ApplicationRecord
         end
       end
     end
+  end
+
+  def download_triggered?
+    downloaded_at.present? && downloaded_by.present?
+  end
+
+  def download_available?
+    download_triggered? && Time.zone.now - downloaded_at < DOWNLOAD_FILE_TIMEOUT.seconds
   end
 
   private

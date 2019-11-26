@@ -137,6 +137,8 @@ ActiveRecord::Schema.define(version: 2019_12_03_103255) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "confirmation_report_uploaded_by"
+    t.datetime "downloaded_at"
+    t.string "downloaded_by"
     t.index ["created_at"], name: "index_payroll_runs_on_created_at"
   end
 
@@ -167,6 +169,7 @@ ActiveRecord::Schema.define(version: 2019_12_03_103255) do
     t.uuid "local_authority_district_id"
     t.date "close_date"
     t.integer "establishment_number"
+    t.integer "statutory_high_age"
     t.index ["created_at"], name: "index_schools_on_created_at"
     t.index ["local_authority_district_id"], name: "index_schools_on_local_authority_district_id"
     t.index ["local_authority_id"], name: "index_schools_on_local_authority_id"
