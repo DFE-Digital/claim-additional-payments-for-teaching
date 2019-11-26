@@ -221,6 +221,9 @@
     },
     "VSP.EUROPEAN_IDENTITY_ENABLED": {
       "value": "true"
+    },
+    "VSP.VERIFY_ENTITY_ID": {
+      "value": "development.additional-teaching-payment.education.gov.uk"
     }
   }
 }

@@ -167,6 +167,9 @@
     },
     "VSP.EUROPEAN_IDENTITY_ENABLED": {
       "type": "string"
+    },
+    "VSP.VERIFY_ENTITY_ID": {
+      "type": "string"
     }
   },
   "variables": {
@@ -564,7 +567,7 @@
               },
               {
                 "name": "SERVICE_ENTITY_IDS",
-                "value": "[string(createArray(concat('https://', reference(resourceId('Microsoft.Resources/deployments', variables('appDeploymentName'))).outputs.appServiceCanonicalHostName.value)))]"
+                "value": "[string(createArray(parameters('VSP.VERIFY_ENTITY_ID')))]"
               },
               {
                 "name": "SAML_SIGNING_KEY",
