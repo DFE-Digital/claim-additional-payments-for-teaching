@@ -6,6 +6,9 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+- Temporarily whitelist new DfE Manchester office IP so that service operators
+  can continue to access admin interface
+
 ## [Release 035] - 2019-11-25
 
 - Make www.claim-additional-teaching-payment.service.gov.uk the canonical domain
