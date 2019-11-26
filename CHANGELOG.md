@@ -6,6 +6,9 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+## [Release 036] - 2019-11-26
+
+- Hardcode VSP entity ID to fix our GOV.UK Verify journey
 - Temporarily whitelist new DfE Manchester office IP so that service operators
   can continue to access admin interface
 
@@ -265,7 +268,9 @@ The format is based on [Keep a Changelog]
 - First release for student loan repayments private beta
 
 [unreleased]:
-  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-035...HEAD
+  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-036...HEAD
+[release 036]:
+  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-035...release-036
 [release 035]:
   https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-034...release-035
 [release 034]:
