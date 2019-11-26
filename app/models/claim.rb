@@ -144,6 +144,7 @@ class Claim < ApplicationRecord
   scope :approaching_check_deadline, -> { awaiting_checking.where("submitted_at < ? AND submitted_at > ?", CHECK_DEADLINE.ago + CHECK_DEADLINE_WARNING_POINT, CHECK_DEADLINE.ago) }
   scope :passed_check_deadline, -> { awaiting_checking.where("submitted_at < ?", CHECK_DEADLINE.ago) }
   scope :payrollable, -> { approved.left_joins(:payment).where(payments: {id: nil}) }
+  scope :by_policy, ->(policy) { where(eligibility_type: policy::Eligibility.to_s) }
 
   delegate :award_amount, to: :eligibility
 

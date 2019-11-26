@@ -5,6 +5,16 @@
       Claims
     </h1>
 
+    <%= form_with url: admin_claims_path, method: :get do |form| %>
+      <div class="govuk-form-group">
+        <label class="govuk-label" for="policy">
+          Filter by service:
+        </label>
+        <%= form.select :policy, options_for_select(Policies.options_for_select, params[:policy]), {include_blank: "All"}, class: "govuk-select" %>
+        <%= form.submit "Go", class: "govuk-button govuk-button--secondary" %>
+      </div>
+    <% end %>
+
     <% if @claims.any? %>
       <% claims_with_warning = Claim.approaching_check_deadline.count + Claim.passed_check_deadline.count %>
 

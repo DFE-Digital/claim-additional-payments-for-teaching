@@ -9,6 +9,10 @@ module Policies
     POLICIES
   end
 
+  def self.options_for_select
+    all.collect { |c| [c.short_name, c.routing_name] }
+  end
+
   # Returns a policy that matches the provided routing name
   # For example:
   #

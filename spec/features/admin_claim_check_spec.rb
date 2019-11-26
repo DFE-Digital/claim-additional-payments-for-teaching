@@ -95,8 +95,22 @@ RSpec.feature "Admin checks a claim" do
       it "shows the policy types on the index page" do
         click_on "View claims"
 
-        expect(page).to have_content("Maths and Physics").exactly(3).times
-        expect(page).to have_content("Student Loans").exactly(2).times
+        expect(page.find("table")).to have_content("Maths and Physics").exactly(3).times
+        expect(page.find("table")).to have_content("Student Loans").exactly(2).times
+      end
+
+      it "can filter by claim type" do
+        click_on "View claims"
+        select "Maths and Physics", from: "policy"
+        click_on "Go"
+
+        maths_and_physics_claims.each do |c|
+          expect(page).to have_content(c.reference)
+        end
+
+        student_loan_claims.each do |c|
+          expect(page).to_not have_content(c.reference)
+        end
       end
     end
   end

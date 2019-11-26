@@ -3,6 +3,8 @@ class Admin::ClaimsController < Admin::BaseAdminController
 
   def index
     @claims = Claim.includes(:check, eligibility: [:claim_school, :current_school]).awaiting_checking.order(:submitted_at)
+    @claims = @claims.by_policy(filtered_policy) if filtered_policy
+
     respond_to do |format|
       format.html
       format.csv {
@@ -28,5 +30,11 @@ class Admin::ClaimsController < Admin::BaseAdminController
     else
       flash.now[:notice] = "Cannot find a claim with reference \"#{params[:reference]}\""
     end
+  end
+
+  private
+
+  def filtered_policy
+    Policies[params[:policy]]
   end
 end
