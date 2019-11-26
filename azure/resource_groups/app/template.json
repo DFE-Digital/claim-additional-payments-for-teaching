@@ -114,9 +114,6 @@
     "DFE_SIGN_IN_ISSUER": {
       "type": "string"
     },
-    "DFE_SIGN_IN_REDIRECT_BASE_URL": {
-      "type": "string"
-    },
     "DFE_SIGN_IN_IDENTIFIER": {
       "type": "securestring"
     },
@@ -229,6 +226,8 @@
     "appServiceRuntimeStack": "[concat('COMPOSE|', base64(parameters('appServiceDockerCompose')))]",
 
     "appServiceWebTestName": "[concat(variables('appServiceName'), '-webtest')]",
+
+    "canonicalHostname": "[if(parameters('useAppServiceHostNames'), first(parameters('appServiceHostNames')), concat(variables('appServiceName'), '.azurewebsites.net'))]",
 
     "vspAppServicePlanName": "[concat(parameters('resourceNamePrefix'), '-vsp-asp')]",
     "vspAppServiceName": "[concat(parameters('resourceNamePrefix'), '-vsp-as')]",
@@ -358,7 +357,7 @@
               },
               {
                 "name": "CANONICAL_HOSTNAME",
-                "value": "[if(parameters('useAppServiceHostNames'), first(parameters('appServiceHostNames')), concat(variables('appServiceName'), '.azurewebsites.net'))]"
+                "value": "[variables('canonicalHostname')]"
               },
               {
                 "name": "DFE_TEACHERS_PAYMENT_SERVICE_DATABASE_USERNAME",
@@ -398,7 +397,7 @@
               },
               {
                 "name": "DFE_SIGN_IN_REDIRECT_BASE_URL",
-                "value": "[parameters('DFE_SIGN_IN_REDIRECT_BASE_URL')]"
+                "value": "[concat('https://', variables('canonicalHostname'))]"
               },
               {
                 "name": "DFE_SIGN_IN_IDENTIFIER",
