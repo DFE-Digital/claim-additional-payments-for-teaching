@@ -108,14 +108,6 @@
         "secretName": "DfeSignInSecret"
       }
     },
-    "DFE_SIGN_IN_REDIRECT_BASE_URL": {
-      "reference": {
-        "keyVault": {
-          "id": "${keyVaultId}"
-        },
-        "secretName": "DfeSignInRedirectBaseUrl"
-      }
-    },
     "DFE_SIGN_IN_API_CLIENT_ID": {
       "reference": {
         "keyVault": {
