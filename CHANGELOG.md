@@ -6,6 +6,9 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+- Show policy next to claims in admin view
+- Allow admins to filter list of claims by policy
+
 ## [Release 036] - 2019-11-26
 
 - Hardcode VSP entity ID to fix our GOV.UK Verify journey
