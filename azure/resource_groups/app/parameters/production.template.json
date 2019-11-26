@@ -212,7 +212,7 @@
       "value": "true"
     },
     "VSP.VERIFY_ENTITY_ID": {
-      "value": "additional-teaching-payment.education.gov.uk"
+      "value": "https://additional-teaching-payment.education.gov.uk"
     }
   }
 }
