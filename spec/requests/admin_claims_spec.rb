@@ -17,6 +17,33 @@ RSpec.describe "Admin claims", type: :request do
       end
       expect(response.body).not_to include(checked_claim.reference)
     end
+
+    it "can filter by policy" do
+      maths_and_physics_claims = create_list(:claim, 3, :submitted, policy: MathsAndPhysics)
+      get admin_claims_path, params: {policy: "maths-and-physics"}
+
+      maths_and_physics_claims.each do |c|
+        expect(response.body).to include(c.reference)
+      end
+
+      claims.each do |c|
+        expect(response.body).to_not include(c.reference)
+      end
+    end
+
+    it "returns all claims if a policy does not exist" do
+      maths_and_physics_claims = create_list(:claim, 3, :submitted, policy: MathsAndPhysics)
+
+      get admin_claims_path, params: {policy: "non-existent-policy"}
+
+      maths_and_physics_claims.each do |c|
+        expect(response.body).to include(c.reference)
+      end
+
+      claims.each do |c|
+        expect(response.body).to include(c.reference)
+      end
+    end
   end
 
   describe "claims#show" do

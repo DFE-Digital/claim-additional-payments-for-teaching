@@ -22,7 +22,9 @@
 
     <%= render "admin/claims/answer_section", {heading: "Personal details", answers: admin_personal_details(@claim)} %>
 
-    <%= render "admin/claims/answer_section", {heading: "Eligibility details", answers: admin_eligibility_answers(@claim.eligibility)} %>
+    <% if @claim.policy == StudentLoans %>
+      <%= render "admin/claims/answer_section", {heading: "Eligibility details", answers: admin_eligibility_answers(@claim.eligibility)} %>
+    <% end %>
 
     <%= render "admin/claims/answer_section", {heading: "Student loan details", answers: admin_student_loan_details(@claim)} %>
 

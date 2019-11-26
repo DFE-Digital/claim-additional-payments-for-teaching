@@ -25,10 +25,10 @@ module Admin
     end
 
     def admin_student_loan_details(claim)
-      [
-        [t("student_loans.admin.student_loan_repayment_amount"), number_to_currency(claim.eligibility.student_loan_repayment_amount)],
-        [t("student_loans.admin.student_loan_repayment_plan"), claim.student_loan_plan&.humanize],
-      ]
+      [].tap do |a|
+        a << [t("student_loans.admin.student_loan_repayment_amount"), number_to_currency(claim.eligibility.student_loan_repayment_amount)] if claim.eligibility.respond_to?(:student_loan_repayment_amount)
+        a << [t("student_loans.admin.student_loan_repayment_plan"), claim.student_loan_plan&.humanize]
+      end
     end
 
     def admin_submission_details(claim)

@@ -24,4 +24,8 @@ module MathsAndPhysics
   def done_page_url
     nil
   end
+
+  def short_name
+    I18n.t("maths_and_physics.policy_short_name")
+  end
 end

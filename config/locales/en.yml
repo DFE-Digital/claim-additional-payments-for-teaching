@@ -99,6 +99,7 @@ en:
     full_name: "Full name"
   maths_and_physics:
     policy_name: "Claim a payment for teaching maths or physics"
+    policy_short_name: "Maths and Physics"
     claim_description: "claim for a payment for teaching maths and physics"
     support_email_address: "mathsphysicsteacherpayment@digital.education.gov.uk"
     possible_rejection_reasons: |
@@ -121,6 +122,7 @@ en:
       formal_performance_action: "Are you currently subject to formal action for poor performance at work?"
   student_loans:
     policy_name: "Teachers: claim back your student loan repayments"
+    policy_short_name: "Student Loans"
     claim_description: "claim to get back your student loan repayments"
     possible_rejection_reasons: |
       * you completed your initial teacher training before September 2013

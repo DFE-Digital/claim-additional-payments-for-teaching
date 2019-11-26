@@ -30,4 +30,8 @@ module StudentLoans
   def done_page_url
     "https://www.gov.uk/done/claim-additional-teaching-payment"
   end
+
+  def short_name
+    I18n.t("student_loans.policy_short_name")
+  end
 end
