@@ -8,32 +8,41 @@ This payment does not change the amount that was credited to your Student Loans 
 
 ^ You will receive <%=number_to_currency(@payment.net_pay) %> on or after <%= l(@payment_date) %>.
 
+<% if @payment.student_loan_repayment.present? %>
+
 # Breakdown of payment
 
-This payment is treated as part of your salary and is subject to the deductions listed below.
+This payment is treated as pay and is therefore subject to a student loan contribution, if applicable.
 
-We pay the Income Tax and National Insurance contribution (NIC) on your behalf, so these are not deducted from the amount you receive.
+* Amount you claimed for: <%= number_to_currency(@payment.award_amount) %>
+* Student loan contribution: <%= number_to_currency(@payment.student_loan_repayment) %>
+* Payment you receive: <%= number_to_currency(@payment.net_pay) %>
 
-<% if @payment.student_loan_repayment.present? %>
-<% if @payment.student_loan_repayment.zero? %>
-If you have made a student loan contribution, this is deducted from your payment amount and credited to SLC.
+# Contributions made to HMRC on your behalf
+
+Your payment is also subject to Income Tax and National Insurance (NI) contributions, which we pay to HMRC on your behalf. This does not affect the amount you receive.
+
+* Income Tax: <%= number_to_currency(@payment.tax) %>
+* Employee NI: <%= number_to_currency(@payment.national_insurance) %>
+* Gross amount paid by us: <%= number_to_currency(@payment.gross_pay) %>
+
+The Gross amount is comprised of the payment you receive, your student loan contribution, and the Income Tax and Employee NI set out above. You may see this figure on any tax statements or other correspondence relating to taxable pay.
+
 <% else %>
-We do not pay your student loan contribution for you. Your student loan contribution is deducted from your payment amount and credited to SLC.
+
+# Contributions made to HMRC on your behalf
+
+This payment is treated as pay and is therefore subject to Income Tax and National Insurance (NI) contributions, which we pay to HMRC on your behalf. This does not affect the amount you receive.
+
+* Income Tax: <%= number_to_currency(@payment.tax) %>
+* Employee NI: <%= number_to_currency(@payment.national_insurance) %>
+* Gross amount paid by us: <%= number_to_currency(@payment.gross_pay) %>
+
+The Gross amount is comprised of the payment you receive, and the Income Tax and Employee NI set out above. You may see this figure on any tax statements or other correspondence relating to taxable pay.
+
 <% end %>
-<% end %>
 
-* Total before deductions: <%= number_to_currency(@payment.gross_pay) %>
-* Income Tax (paid by us): <%= number_to_currency(@payment.tax) %>
-* Employee NIC (paid by us): <%= number_to_currency(@payment.national_insurance) %>
-<% if @payment.student_loan_repayment.present? %>
-* Student loan<%= @payment.student_loan_repayment.positive? ? " (deducted)" : "" %>: <%= number_to_currency(@payment.student_loan_repayment) %>
-<% end %>
-
-^ Payment you receive: <%= number_to_currency(@payment.net_pay) %>
-
-The total before deductions will be shown on any tax statements or other correspondence relating to taxable pay that you receive. You may see ‘Teaching payments DfE retention scheme’ listed as the secondary employer that made the payment.
-
-The ‘earnings period’ used to set the thresholds for student loan and National Insurance contributions is determined by HMRC as 1 week.
+You may also see ‘Teaching payments DfE retention scheme’ listed as the secondary employer that made this payment.
 
 # Contact us
 
