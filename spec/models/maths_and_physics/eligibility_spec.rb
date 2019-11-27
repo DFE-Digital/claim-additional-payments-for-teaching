@@ -11,7 +11,7 @@ RSpec.describe MathsAndPhysics::Eligibility, type: :model do
       expect(MathsAndPhysics::Eligibility.new(teaching_maths_or_physics: true).ineligible?).to eql false
     end
 
-    it "returns true when teaching at an ineligble school" do
+    it "returns true when teaching at an ineligible school" do
       expect(MathsAndPhysics::Eligibility.new(current_school: schools(:hampstead_school)).ineligible?).to eql true
       expect(MathsAndPhysics::Eligibility.new(current_school: schools(:penistone_grammar_school)).ineligible?).to eql false
     end
