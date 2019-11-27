@@ -1,18 +1,32 @@
 class ClaimMailerPreview < ActionMailer::Preview
   def submitted
-    ClaimMailer.submitted(Claim.submitted.last)
+    ClaimMailer.submitted(claim_for(Claim.submitted))
   end
 
   def approved
-    ClaimMailer.approved(Claim.approved.last)
+    ClaimMailer.approved(claim_for(Claim.approved))
   end
 
   def rejected
-    ClaimMailer.rejected(Claim.rejected.last)
+    ClaimMailer.rejected(claim_for(Claim.rejected))
   end
 
   def payment_confirmation
-    payment = Payment.where.not(gross_value: nil).last
-    ClaimMailer.payment_confirmation(payment.claim, DateTime.now.to_time.to_i)
+    claim = claim_for(Claim.joins(:payment).where("payments.gross_value IS NOT NULL"))
+    ClaimMailer.payment_confirmation(claim, DateTime.now.to_time.to_i)
+  end
+
+  private
+
+  def claim_for(scope)
+    scoped_by_policy(scope).order(:created_at).last
+  end
+
+  def scoped_by_policy(scope)
+    if (policy = Policies[params[:policy]])
+      scope.by_policy(policy)
+    else
+      scope
+    end
   end
 end
