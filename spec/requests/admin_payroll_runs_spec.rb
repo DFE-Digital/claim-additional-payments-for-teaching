@@ -35,7 +35,7 @@ RSpec.describe "Admin payroll runs" do
 
     describe "admin_payroll_runs#show" do
       it "returns a csv containing the claims from the given payroll run" do
-        payroll_run = create(:payroll_run, claims_count: 3)
+        payroll_run = create(:payroll_run, claims_counts: {StudentLoans => 3})
 
         create_list(:claim, 2, :approved)
 

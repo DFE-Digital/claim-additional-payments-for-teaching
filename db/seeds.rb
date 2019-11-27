@@ -16,12 +16,14 @@ if Rails.env.development?
   class Seeds
     extend FactoryBot::Syntax::Methods
 
-    create(:payroll_run, :confirmation_report_uploaded, claims_count: 32, created_at: 3.months.ago - 10.days)
-    create(:payroll_run, :confirmation_report_uploaded, claims_count: 19, created_at: 2.months.ago - 5.days)
-    create(:payroll_run, claims_count: 26, created_at: 1.months.ago - 3.days)
+    create(:payroll_run, :confirmation_report_uploaded, claims_counts: {StudentLoans => 22, MathsAndPhysics => 10}, created_at: 3.months.ago - 10.days)
+    create(:payroll_run, :confirmation_report_uploaded, claims_counts: {StudentLoans => 12, MathsAndPhysics => 7}, created_at: 2.months.ago - 5.days)
+    create(:payroll_run, claims_counts: {StudentLoans => 18, MathsAndPhysics => 8}, created_at: 1.months.ago - 3.days)
 
-    create_list(:claim, 23, :approved)
-    create_list(:claim, 10, :submitted)
-    create_list(:claim, 5, :rejected)
+    Policies.all.each do |policy|
+      create_list(:claim, 23, :approved, policy: policy)
+      create_list(:claim, 10, :submitted, policy: policy)
+      create_list(:claim, 5, :rejected, policy: policy)
+    end
   end
 end
