@@ -155,6 +155,13 @@ RSpec.describe MathsAndPhysics::Eligibility, type: :model do
     end
   end
 
+  context "when saving in the “initial-teacher-training-subject-specialism” context with an initial_teacher_training_subject of science" do
+    it "validates the presence of initial_teacher_training_subject_specialism" do
+      expect(MathsAndPhysics::Eligibility.new(initial_teacher_training_subject: :science)).not_to be_valid(:"initial-teacher-training-subject-specialism")
+      expect(MathsAndPhysics::Eligibility.new(initial_teacher_training_subject: :science, initial_teacher_training_subject_specialism: :chemistry)).to be_valid(:"initial-teacher-training-subject-specialism")
+    end
+  end
+
   context "when saving in the “has-uk-maths-or-physics-degree” context, with initial_teacher_training_specialised_in_maths_or_physics false" do
     it "validates the presence of has_uk_maths_or_physics_degree" do
       expect(MathsAndPhysics::Eligibility.new(initial_teacher_training_specialised_in_maths_or_physics: false)).not_to be_valid(:"has-uk-maths-or-physics-degree")
@@ -234,6 +241,14 @@ RSpec.describe MathsAndPhysics::Eligibility, type: :model do
     it "is not valid without a value for has_uk_maths_or_physics_degree, when initial_teacher_training_specialised_in_maths_or_physics is false" do
       expect(build(:maths_and_physics_eligibility, :eligible, initial_teacher_training_specialised_in_maths_or_physics: false, has_uk_maths_or_physics_degree: nil)).not_to be_valid(:submit)
       expect(build(:maths_and_physics_eligibility, :eligible, initial_teacher_training_specialised_in_maths_or_physics: false, has_uk_maths_or_physics_degree: "no")).to be_valid(:submit)
+    end
+
+    it "is not valid without a value for initial_teacher_training_subject_specialism when the initial_teacher_training_subject is science" do
+      eligibility = build(:maths_and_physics_eligibility, :eligible, initial_teacher_training_subject: :science, initial_teacher_training_subject_specialism: nil, has_uk_maths_or_physics_degree: "yes")
+      expect(eligibility).not_to be_valid(:submit)
+
+      eligibility.initial_teacher_training_subject_specialism = :physics
+      expect(eligibility).to be_valid(:submit)
     end
 
     it "is not valid without a value for qts_award_year" do

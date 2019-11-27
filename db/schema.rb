@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_11_27_085014) do
+ActiveRecord::Schema.define(version: 2019_11_27_094133) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -107,6 +107,7 @@ ActiveRecord::Schema.define(version: 2019_11_27_085014) do
     t.boolean "subject_to_disciplinary_action"
     t.boolean "subject_to_formal_performance_action"
     t.integer "initial_teacher_training_subject"
+    t.integer "initial_teacher_training_subject_specialism"
     t.index ["current_school_id"], name: "index_maths_and_physics_eligibilities_on_current_school_id"
   end
 
