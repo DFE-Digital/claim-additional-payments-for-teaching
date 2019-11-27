@@ -24,7 +24,7 @@
 
             <%= errors_tag current_claim.eligibility, :initial_teacher_training_subject_specialism %>
 
-            <div class="govuk-radios">
+            <div class="govuk-radios govuk-radios--conditional" data-module="govuk-radios">
               <div class="govuk-radios__item">
                 <%= fields.radio_button(:initial_teacher_training_subject_specialism, :physics, class: "govuk-radios__input") %>
                 <%= fields.label "initial_teacher_training_subject_specialism_physics", t("maths_and_physics.answers.initial_teacher_training_subject_specialism.physics"), class: "govuk-label govuk-radios__label" %>
@@ -41,9 +41,18 @@
               </div>
 
               <div class="govuk-radios__item">
-                <%= fields.radio_button(:initial_teacher_training_subject_specialism, :not_sure, class: "govuk-radios__input") %>
+                <%= fields.radio_button(:initial_teacher_training_subject_specialism, :not_sure, class: "govuk-radios__input", data: { aria_controls: "conditional-availability-message-conditional" }) %>
                 <%= fields.label "initial_teacher_training_subject_specialism_not_sure", t("maths_and_physics.answers.initial_teacher_training_subject_specialism.not_sure"), class: "govuk-label govuk-radios__label" %>
               </div>
+              <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-availability-message-conditional">
+                <div class="govuk-form-group">
+                  <span class="govuk-hint">
+                    <p>
+                      If you’re not sure, we’ll check this for you. Your claim may be rejected
+                      if your initial teacher training in science did not specialise in physics.
+                    </p>
+                  </span>
+                </div>
             </div>
 
           </fieldset>
