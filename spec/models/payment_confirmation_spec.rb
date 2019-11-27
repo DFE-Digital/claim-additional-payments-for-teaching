@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.describe PaymentConfirmation do
-  let(:payroll_run) { create(:payroll_run, claims_count: 2) }
+  let(:payroll_run) { create(:payroll_run, claims_counts: {StudentLoans => 2}) }
   let(:csv) do
     <<~CSV
       Payroll Reference,Gross Value,Claim ID,NI,Employers NI,Student Loans,Tax,Net Pay
@@ -85,7 +85,7 @@ RSpec.describe PaymentConfirmation do
   end
 
   context "the value for Student Loans is blank" do
-    let(:payroll_run) { create(:payroll_run, claims_count: 1) }
+    let(:payroll_run) { create(:payroll_run, claims_counts: {StudentLoans => 1}) }
     let(:csv) do
       <<~CSV
         Payroll Reference,Gross Value,Claim ID,NI,Employers NI,Student Loans,Tax,Net Pay
@@ -102,7 +102,7 @@ RSpec.describe PaymentConfirmation do
   end
 
   context "The payroll run has already had a Payment Confirmation Report uploaded" do
-    let(:payroll_run) { create(:payroll_run, claims_count: 2, confirmation_report_uploaded_by: "some-user-id") }
+    let(:payroll_run) { create(:payroll_run, claims_counts: {StudentLoans => 2}, confirmation_report_uploaded_by: "some-user-id") }
 
     it "fails and populates its errors" do
       expect(payment_confirmation.ingest).to be_falsey

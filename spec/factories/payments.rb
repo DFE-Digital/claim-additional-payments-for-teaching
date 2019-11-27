@@ -1,6 +1,10 @@
 FactoryBot.define do
   factory :payment do
-    association(:claim, factory: [:claim, :approved])
+    transient do
+      claim_policy { StudentLoans }
+    end
+
+    claim { association(:claim, :approved, policy: claim_policy) }
     association(:payroll_run, factory: :payroll_run)
 
     award_amount { 123.45 }

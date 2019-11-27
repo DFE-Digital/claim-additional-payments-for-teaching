@@ -3,12 +3,14 @@ FactoryBot.define do
     created_by { "123" }
 
     transient do
-      claims_count { 1 }
+      claims_counts { {StudentLoans => 1} }
       payment_traits { [] }
     end
 
     after(:create) do |payroll_run, evaluator|
-      create_list(:payment, evaluator.claims_count, *evaluator.payment_traits, payroll_run: payroll_run)
+      evaluator.claims_counts.each do |policy, count|
+        create_list(:payment, count, *evaluator.payment_traits, claim_policy: policy, payroll_run: payroll_run)
+      end
     end
 
     trait :confirmation_report_uploaded do

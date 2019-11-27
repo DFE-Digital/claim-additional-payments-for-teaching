@@ -32,7 +32,7 @@ RSpec.feature "Payroll" do
 
   context "when a payroll run already exists for the month" do
     scenario "Service operator cannot create a new payroll run" do
-      create(:payroll_run, claims_count: 2, created_at: 5.minutes.ago)
+      create(:payroll_run, claims_counts: {StudentLoans => 2}, created_at: 5.minutes.ago)
       sign_in_to_admin_with_role(AdminSession::SERVICE_OPERATOR_DFE_SIGN_IN_ROLE_CODE)
 
       visit admin_payroll_runs_path
@@ -77,7 +77,7 @@ RSpec.feature "Payroll" do
   scenario "Service operator can upload a Payment Confirmation Report against a payroll run" do
     sign_in_to_admin_with_role(AdminSession::SERVICE_OPERATOR_DFE_SIGN_IN_ROLE_CODE, "uploader-user-id")
 
-    payroll_run = create(:payroll_run, claims_count: 2)
+    payroll_run = create(:payroll_run, claims_counts: {StudentLoans => 2})
 
     click_on "Payroll"
 

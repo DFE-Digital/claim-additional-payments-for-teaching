@@ -544,7 +544,7 @@ RSpec.describe Claim, type: :model do
   end
 
   describe "payrollable" do
-    let(:payroll_run) { create(:payroll_run, claims_count: 1) }
+    let(:payroll_run) { create(:payroll_run, claims_counts: {StudentLoans => 1}) }
     let!(:submitted_claim) { create(:claim, :submitted) }
     let!(:first_unpayrolled_claim) { create(:claim, :approved) }
     let!(:second_unpayrolled_claim) { create(:claim, :approved) }
