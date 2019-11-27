@@ -148,6 +148,13 @@ RSpec.describe MathsAndPhysics::Eligibility, type: :model do
     end
   end
 
+  context "when saving in the “initial-teacher-training-subject” context" do
+    it "validates the presence of initial_teacher_training_subject" do
+      expect(MathsAndPhysics::Eligibility.new).not_to be_valid(:"initial-teacher-training-subject")
+      expect(MathsAndPhysics::Eligibility.new(initial_teacher_training_subject: :physics)).to be_valid(:"initial-teacher-training-subject")
+    end
+  end
+
   context "when saving in the “has-uk-maths-or-physics-degree” context, with initial_teacher_training_specialised_in_maths_or_physics false" do
     it "validates the presence of has_uk_maths_or_physics_degree" do
       expect(MathsAndPhysics::Eligibility.new(initial_teacher_training_specialised_in_maths_or_physics: false)).not_to be_valid(:"has-uk-maths-or-physics-degree")
@@ -218,6 +225,10 @@ RSpec.describe MathsAndPhysics::Eligibility, type: :model do
     it "is not valid without a value for initial_teacher_training_specialised_in_maths_or_physics" do
       expect(build(:maths_and_physics_eligibility, :eligible, initial_teacher_training_specialised_in_maths_or_physics: nil)).not_to be_valid(:submit)
       expect(build(:maths_and_physics_eligibility, :eligible, initial_teacher_training_specialised_in_maths_or_physics: true)).to be_valid(:submit)
+    end
+
+    it "is not valid without a value for initial_teacher_training_subject" do
+      expect(build(:maths_and_physics_eligibility, :eligible, initial_teacher_training_subject: nil)).not_to be_valid(:submit)
     end
 
     it "is not valid without a value for has_uk_maths_or_physics_degree, when initial_teacher_training_specialised_in_maths_or_physics is false" do

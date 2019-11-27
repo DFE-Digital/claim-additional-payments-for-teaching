@@ -27,6 +27,7 @@ RSpec.feature "Ineligible Maths and Physics claims" do
 
     choose_school schools(:penistone_grammar_school)
     choose_initial_teacher_training_specialised_in_maths_or_physics("No")
+    choose_initial_teacher_training_subject
     choose_maths_and_physics_degree("No")
 
     expect(claim.eligibility.reload.has_uk_maths_or_physics_degree).to eq "no"
@@ -39,6 +40,7 @@ RSpec.feature "Ineligible Maths and Physics claims" do
 
     choose_school schools(:penistone_grammar_school)
     choose_initial_teacher_training_specialised_in_maths_or_physics("Yes")
+    choose_initial_teacher_training_subject
     choose_qts_year("Before 1 September 2014")
 
     expect(claim.eligibility.reload.qts_award_year).to eql("before_september_2014")
@@ -51,6 +53,7 @@ RSpec.feature "Ineligible Maths and Physics claims" do
 
     choose_school schools(:penistone_grammar_school)
     choose_initial_teacher_training_specialised_in_maths_or_physics("Yes")
+    choose_initial_teacher_training_subject
     choose_qts_year("On or after 1 September 2014")
 
     choose "Yes"
@@ -68,6 +71,7 @@ RSpec.feature "Ineligible Maths and Physics claims" do
 
     choose_school schools(:penistone_grammar_school)
     choose_initial_teacher_training_specialised_in_maths_or_physics("Yes")
+    choose_initial_teacher_training_subject
     choose_qts_year("On or after 1 September 2014")
 
     choose "Yes"
@@ -87,6 +91,7 @@ RSpec.feature "Ineligible Maths and Physics claims" do
 
     choose_school schools(:penistone_grammar_school)
     choose_initial_teacher_training_specialised_in_maths_or_physics("Yes")
+    choose_initial_teacher_training_subject
     choose_qts_year("On or after 1 September 2014")
 
     choose "No"
@@ -104,6 +109,7 @@ RSpec.feature "Ineligible Maths and Physics claims" do
 
     choose_school schools(:penistone_grammar_school)
     choose_initial_teacher_training_specialised_in_maths_or_physics("Yes")
+    choose_initial_teacher_training_subject
     choose_qts_year("On or after 1 September 2014")
 
     choose "No"

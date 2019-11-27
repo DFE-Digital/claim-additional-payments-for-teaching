@@ -111,6 +111,7 @@ en:
     questions:
       teaching_maths_or_physics: "Do you currently teach any maths or physics?"
       initial_teacher_training_specialised_in_maths_or_physics: "Did your initial teacher training specialise in maths or physics?"
+      initial_teacher_training_subject: "Which subject did you complete your initial teacher training in?"
       has_uk_maths_or_physics_degree: "Do you have a UK undergraduate or postgraduate degree in maths or physics?"
       qts_award_years:
         before_september_2014: "Before 1 September 2014"
@@ -121,6 +122,11 @@ en:
       disciplinary_action: "Are you currently subject to disciplinary action?"
       formal_performance_action: "Are you currently subject to formal action for poor performance at work?"
     answers:
+      initial_teacher_training_subject:
+        maths: "Maths"
+        physics: "Physics"
+        science: "Science (physics, biology and chemistry)"
+        none_of_the_subjects: "None of these subjects"
       has_uk_maths_or_physics_degree:
         has_non_uk: "I have a non-UK degree in Maths or Physics"
       employed_directly:

@@ -13,6 +13,7 @@ module MathsAndPhysics
       "teaching-maths-or-physics",
       "current-school",
       "initial-teacher-training-specialised-in-maths-or-physics",
+      "initial-teacher-training-subject",
       "has-uk-maths-or-physics-degree",
       "qts-year",
       "supply-teacher",
