@@ -19,7 +19,7 @@ class ClaimMailerPreview < ActionMailer::Preview
   private
 
   def claim_for(scope)
-    scoped_by_policy(scope).last
+    scoped_by_policy(scope).order(:created_at).last
   end
 
   def scoped_by_policy(scope)
