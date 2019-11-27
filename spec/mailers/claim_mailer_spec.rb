@@ -102,26 +102,4 @@ RSpec.describe ClaimMailer, type: :mailer do
       end
     end
   end
-
-  # Policy-specific characteristics
-  describe "#payment_confirmation" do
-    let(:student_loan_account_credit_fragment) { "This payment does not change the amount that was credited to your Student Loans" }
-
-    it "includes a sentence about the amount credited to their student loans when given a StudentLoans claim" do
-      claim = build(:payment, :with_figures).claim
-      mail = ClaimMailer.payment_confirmation(claim, Time.new(2019, 1, 1).to_i)
-
-      expect(mail.body.encoded).to include(student_loan_account_credit_fragment)
-    end
-
-    it "does not include the student loans credit sentence" do
-      Policies.all.excluding(StudentLoans).each do |policy|
-        claim = create(:claim, :approved, policy: policy)
-        build(:payment, :with_figures, claim: claim)
-        mail = ClaimMailer.payment_confirmation(claim, Time.new(2019, 1, 1).to_i)
-
-        expect(mail.body.encoded).not_to include(student_loan_account_credit_fragment)
-      end
-    end
-  end
 end
