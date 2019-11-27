@@ -9,6 +9,7 @@ The format is based on [Keep a Changelog]
 - Stop running workers in the same instance as the web app
 - Show policy next to claims in admin view
 - Allow admins to filter list of claims by policy
+- Update Maths & Physics sequence with new ITT specialism questions
 
 ## [Release 036] - 2019-11-26
 
