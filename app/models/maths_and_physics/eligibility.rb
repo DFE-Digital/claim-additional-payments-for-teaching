@@ -111,8 +111,14 @@ module MathsAndPhysics
       current_school.present? && !current_school.eligible_for_maths_and_physics?
     end
 
+    # Returns true only if we can determine that they do not have a qualification
+    # in maths or physics. If they are not sure about their ITT specialism, they
+    # may still qualify, otherwise we require that they have an ITT in maths or
+    # physics or a degree in either maths or physics.
     def no_maths_or_physics_qualification?
-      !initial_teacher_training_specialised_in_maths_or_physics? && has_uk_maths_or_physics_degree == "no"
+      !itt_specialism_not_sure? &&
+        !initial_teacher_training_specialised_in_maths_or_physics? &&
+        (has_uk_maths_or_physics_degree == "no")
     end
 
     def ineligible_qts_award_year?

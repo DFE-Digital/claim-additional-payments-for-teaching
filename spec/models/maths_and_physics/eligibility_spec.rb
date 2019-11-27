@@ -18,8 +18,18 @@ RSpec.describe MathsAndPhysics::Eligibility, type: :model do
 
     it "returns true when initial teacher training was not in science and the claimant has no degree in maths or physics" do
       expect(MathsAndPhysics::Eligibility.new(initial_teacher_training_subject: :none_of_the_subjects, has_uk_maths_or_physics_degree: "no").ineligible?).to eql true
+    end
+
+    it "returns false if they have a degree in maths or physics" do
       expect(MathsAndPhysics::Eligibility.new(initial_teacher_training_subject: :none_of_the_subjects, has_uk_maths_or_physics_degree: "yes").ineligible?).to eql false
       expect(MathsAndPhysics::Eligibility.new(initial_teacher_training_subject: :none_of_the_subjects, has_uk_maths_or_physics_degree: "has_non_uk").ineligible?).to eql false
+
+      expect(MathsAndPhysics::Eligibility.new(initial_teacher_training_subject: :science, initial_teacher_training_subject_specialism: :chemistry, has_uk_maths_or_physics_degree: "yes").ineligible?).to eql false
+      expect(MathsAndPhysics::Eligibility.new(initial_teacher_training_subject: :science, initial_teacher_training_subject_specialism: :chemistry, has_uk_maths_or_physics_degree: "has_non_uk").ineligible?).to eql false
+    end
+
+    it "returns false if they are not sure about their ITT specialism, even if they don't have a degree" do
+      expect(MathsAndPhysics::Eligibility.new(initial_teacher_training_subject: :science, initial_teacher_training_subject_specialism: :not_sure, has_uk_maths_or_physics_degree: "no").ineligible?).to eql false
     end
 
     it "returns true when the qts_award_year is before 2014" do

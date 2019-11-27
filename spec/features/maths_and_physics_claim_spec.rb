@@ -186,6 +186,21 @@ RSpec.feature "Maths & Physics claims" do
     expect(page).to have_text(I18n.t("questions.qts_award_year"))
   end
 
+  scenario "Teacher is still eligible for Maths and Physics without a degree if they are not sure about their ITT specialism" do
+    start_maths_and_physics_claim
+    choose_school schools(:penistone_grammar_school)
+
+    choose_initial_teacher_training_subject "Science (physics, biology and chemistry)"
+    choose_initial_teacher_training_subject_specialism "I’m not sure"
+
+    expect(page).to have_text(I18n.t("maths_and_physics.questions.has_uk_maths_or_physics_degree"))
+
+    choose "No"
+    click_on "Continue"
+
+    expect(page).to have_text(I18n.t("questions.qts_award_year"))
+  end
+
   scenario "Supply teacher claims for Maths and Physics, employed directly by school with a contract to teach for an entire term" do
     # This test was initially written for the purpose of building out this
     # alternative journey. It does not test the whole claims journey but only
