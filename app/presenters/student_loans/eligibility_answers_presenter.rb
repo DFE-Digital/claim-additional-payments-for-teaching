@@ -1,6 +1,7 @@
 module StudentLoans
   class EligibilityAnswersPresenter
     include StudentLoans::PresenterMethods
+    include ActiveSupport::NumberHelper
 
     attr_reader :eligibility
 
@@ -25,6 +26,7 @@ module StudentLoans
         a << [I18n.t("student_loans.questions.subjects_taught", school: eligibility.claim_school_name), subject_list(eligibility.subjects_taught), "subjects-taught"]
         a << [I18n.t("student_loans.questions.leadership_position"), (eligibility.had_leadership_position? ? "Yes" : "No"), "leadership-position"]
         a << [I18n.t("student_loans.questions.mostly_performed_leadership_duties"), (eligibility.mostly_performed_leadership_duties? ? "Yes" : "No"), "mostly-performed-leadership-duties"] if eligibility.had_leadership_position?
+        a << [I18n.t("student_loans.questions.student_loan_amount"), number_to_currency(eligibility.student_loan_repayment_amount), "student-loan-amount"]
       end
     end
   end
