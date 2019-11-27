@@ -3,7 +3,6 @@ module MathsAndPhysics
     EDITABLE_ATTRIBUTES = [
       :teaching_maths_or_physics,
       :current_school_id,
-      :initial_teacher_training_specialised_in_maths_or_physics,
       :initial_teacher_training_subject,
       :initial_teacher_training_subject_specialism,
       :has_uk_maths_or_physics_degree,
@@ -15,7 +14,8 @@ module MathsAndPhysics
       :subject_to_formal_performance_action,
     ].freeze
     ATTRIBUTE_DEPENDENCIES = {
-      "initial_teacher_training_specialised_in_maths_or_physics" => ["has_uk_maths_or_physics_degree"],
+      "initial_teacher_training_subject" => ["initial_teacher_training_subject_specialism", "has_uk_maths_or_physics_degree"],
+      "initial_teacher_training_subject_specialism" => ["has_uk_maths_or_physics_degree"],
       "employed_as_supply_teacher" => ["has_entire_term_contract", "employed_directly"],
     }.freeze
     self.table_name = "maths_and_physics_eligibilities"
@@ -49,7 +49,6 @@ module MathsAndPhysics
 
     validates :teaching_maths_or_physics, on: [:"teaching-maths-or-physics", :submit], inclusion: {in: [true, false], message: "Select either Yes or No"}
     validates :current_school, on: [:"current-school", :submit], presence: {message: "Select a school from the list"}
-    validates :initial_teacher_training_specialised_in_maths_or_physics, on: [:"initial-teacher-training-specialised-in-maths-or-physics", :submit], inclusion: {in: [true, false], message: "Select either Yes or No"}
     validates :initial_teacher_training_subject, on: [:"initial-teacher-training-subject", :submit], presence: {message: "Choose a subject, or select None of these subjects"}
     validates :initial_teacher_training_subject_specialism, on: [:"initial-teacher-training-subject-specialism", :submit], presence: {message: "Choose a subject, or select I'm not sure"}, if: :itt_subject_science?
     validates :has_uk_maths_or_physics_degree, on: [:"has-uk-maths-or-physics-degree", :submit], presence: {message: "Select whether you have a UK maths or physics degree."}, unless: :initial_teacher_training_specialised_in_maths_or_physics?
@@ -98,6 +97,10 @@ module MathsAndPhysics
       end
     end
 
+    def initial_teacher_training_specialised_in_maths_or_physics?
+      itt_subject_maths? || itt_subject_physics? || itt_specialism_physics?
+    end
+
     private
 
     def not_teaching_maths_or_physics?
@@ -109,7 +112,7 @@ module MathsAndPhysics
     end
 
     def no_maths_or_physics_qualification?
-      initial_teacher_training_specialised_in_maths_or_physics == false && has_uk_maths_or_physics_degree == "no"
+      !initial_teacher_training_specialised_in_maths_or_physics? && has_uk_maths_or_physics_degree == "no"
     end
 
     def ineligible_qts_award_year?

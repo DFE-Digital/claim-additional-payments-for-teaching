@@ -7,9 +7,12 @@ RSpec.describe MathsAndPhysics::SlugSequence do
 
   describe "The sequence as defined by #slugs" do
     it "excludes “has-uk-maths-or-physics-degree” if the claimant's initial teacher training specialised in maths or physics" do
-      claim.eligibility.initial_teacher_training_specialised_in_maths_or_physics = true
+      claim.eligibility.initial_teacher_training_subject = :maths
 
       expect(slug_sequence.slugs).not_to include("has-uk-maths-or-physics-degree")
+
+      claim.eligibility.initial_teacher_training_subject = :science
+      expect(slug_sequence.slugs).to include("has-uk-maths-or-physics-degree")
     end
 
     it "excludes the remaining supply teacher slugs if the claimant is not employed as a supply teacher" do

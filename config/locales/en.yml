@@ -110,7 +110,6 @@ en:
       * you are currently subject to formal capability proceedings or disciplinary action
     questions:
       teaching_maths_or_physics: "Do you currently teach any maths or physics?"
-      initial_teacher_training_specialised_in_maths_or_physics: "Did your initial teacher training specialise in maths or physics?"
       initial_teacher_training_subject: "Which subject did you complete your initial teacher training in?"
       initial_teacher_training_subject_specialism: "Which science subject did your initial teacher training specialise in?"
       has_uk_maths_or_physics_degree: "Do you have a UK undergraduate or postgraduate degree in maths or physics?"

@@ -16,10 +16,10 @@ RSpec.describe MathsAndPhysics::Eligibility, type: :model do
       expect(MathsAndPhysics::Eligibility.new(current_school: schools(:penistone_grammar_school)).ineligible?).to eql false
     end
 
-    it "returns true when initial teacher training did not specialise in maths or physics and claimant has no degree in maths or physics" do
-      expect(MathsAndPhysics::Eligibility.new(initial_teacher_training_specialised_in_maths_or_physics: false, has_uk_maths_or_physics_degree: "no").ineligible?).to eql true
-      expect(MathsAndPhysics::Eligibility.new(initial_teacher_training_specialised_in_maths_or_physics: false, has_uk_maths_or_physics_degree: "yes").ineligible?).to eql false
-      expect(MathsAndPhysics::Eligibility.new(initial_teacher_training_specialised_in_maths_or_physics: false, has_uk_maths_or_physics_degree: "has_non_uk").ineligible?).to eql false
+    it "returns true when initial teacher training was not in science and the claimant has no degree in maths or physics" do
+      expect(MathsAndPhysics::Eligibility.new(initial_teacher_training_subject: :none_of_the_subjects, has_uk_maths_or_physics_degree: "no").ineligible?).to eql true
+      expect(MathsAndPhysics::Eligibility.new(initial_teacher_training_subject: :none_of_the_subjects, has_uk_maths_or_physics_degree: "yes").ineligible?).to eql false
+      expect(MathsAndPhysics::Eligibility.new(initial_teacher_training_subject: :none_of_the_subjects, has_uk_maths_or_physics_degree: "has_non_uk").ineligible?).to eql false
     end
 
     it "returns true when the qts_award_year is before 2014" do
@@ -56,7 +56,7 @@ RSpec.describe MathsAndPhysics::Eligibility, type: :model do
     it "returns a symbol indicating the reason for ineligibility" do
       expect(MathsAndPhysics::Eligibility.new(teaching_maths_or_physics: false).ineligibility_reason).to eq :not_teaching_maths_or_physics
       expect(MathsAndPhysics::Eligibility.new(current_school: schools(:hampstead_school)).ineligibility_reason).to eq :ineligible_current_school
-      expect(MathsAndPhysics::Eligibility.new(initial_teacher_training_specialised_in_maths_or_physics: false, has_uk_maths_or_physics_degree: "no").ineligibility_reason).to eq :no_maths_or_physics_qualification
+      expect(MathsAndPhysics::Eligibility.new(initial_teacher_training_subject: :none_of_the_subjects, has_uk_maths_or_physics_degree: "no").ineligibility_reason).to eq :no_maths_or_physics_qualification
       expect(MathsAndPhysics::Eligibility.new(qts_award_year: "before_september_2014").ineligibility_reason).to eq :ineligible_qts_award_year
       expect(MathsAndPhysics::Eligibility.new(employed_as_supply_teacher: true, has_entire_term_contract: false).ineligibility_reason).to eql :no_entire_term_contract
       expect(MathsAndPhysics::Eligibility.new(subject_to_disciplinary_action: true).ineligibility_reason).to eql :subject_to_disciplinary_action
@@ -81,12 +81,31 @@ RSpec.describe MathsAndPhysics::Eligibility, type: :model do
     end
   end
 
+  describe "#initial_teacher_training_specialised_in_maths_or_physics?" do
+    it "returns true when the ITT subject is maths or physics" do
+      expect(MathsAndPhysics::Eligibility.new(initial_teacher_training_subject: :maths).initial_teacher_training_specialised_in_maths_or_physics?).to be true
+      expect(MathsAndPhysics::Eligibility.new(initial_teacher_training_subject: :physics).initial_teacher_training_specialised_in_maths_or_physics?).to be true
+
+      expect(MathsAndPhysics::Eligibility.new(initial_teacher_training_subject: :science).initial_teacher_training_specialised_in_maths_or_physics?).to be false
+      expect(MathsAndPhysics::Eligibility.new(initial_teacher_training_subject: :none_of_the_subjects).initial_teacher_training_specialised_in_maths_or_physics?).to be false
+    end
+
+    it "returns true when the ITT specialism is physics" do
+      expect(MathsAndPhysics::Eligibility.new(initial_teacher_training_subject_specialism: :physics).initial_teacher_training_specialised_in_maths_or_physics?).to be true
+
+      expect(MathsAndPhysics::Eligibility.new(initial_teacher_training_subject_specialism: :biology).initial_teacher_training_specialised_in_maths_or_physics?).to be false
+      expect(MathsAndPhysics::Eligibility.new(initial_teacher_training_subject_specialism: :chemistry).initial_teacher_training_specialised_in_maths_or_physics?).to be false
+      expect(MathsAndPhysics::Eligibility.new(initial_teacher_training_subject_specialism: :not_sure).initial_teacher_training_specialised_in_maths_or_physics?).to be false
+    end
+  end
+
   describe "#reset_dependent_answers" do
     let(:eligibility) do
       create(
         :maths_and_physics_eligibility,
         :eligible,
-        initial_teacher_training_specialised_in_maths_or_physics: false,
+        initial_teacher_training_subject: :science,
+        initial_teacher_training_subject_specialism: :chemistry,
         has_uk_maths_or_physics_degree: "no",
         employed_as_supply_teacher: true,
         has_entire_term_contract: false,
@@ -94,11 +113,35 @@ RSpec.describe MathsAndPhysics::Eligibility, type: :model do
       )
     end
 
-    it "resets has_uk_maths_or_physics_degree when the value of initial_teacher_training_specialised_in_maths_or_physics changes" do
-      eligibility.initial_teacher_training_specialised_in_maths_or_physics = false
+    it "resets initial_teacher_training_subject_specialism and has_uk_maths_or_physics_degree when the value of initial_teacher_training_subject changes" do
+      eligibility.initial_teacher_training_subject = :science
       expect { eligibility.reset_dependent_answers }.not_to change { eligibility.attributes }
 
-      eligibility.initial_teacher_training_specialised_in_maths_or_physics = true
+      eligibility.initial_teacher_training_subject = :maths
+      expect { eligibility.reset_dependent_answers }
+        .to change { eligibility.has_uk_maths_or_physics_degree }
+        .from("no").to(nil)
+        .and change { eligibility.initial_teacher_training_subject_specialism }
+        .from("chemistry").to(nil)
+    end
+
+    it "resets has_uk_maths_or_physics_degree when initial_teacher_training_subject changes without the specialism changing" do
+      eligibility.update_columns(initial_teacher_training_subject: "none_of_the_subjects", initial_teacher_training_subject_specialism: nil)
+
+      eligibility.initial_teacher_training_subject = :none_of_the_subjects
+      expect { eligibility.reset_dependent_answers }.not_to change { eligibility.attributes }
+
+      eligibility.initial_teacher_training_subject = :maths
+      expect { eligibility.reset_dependent_answers }
+        .to change { eligibility.has_uk_maths_or_physics_degree }
+        .from("no").to(nil)
+    end
+
+    it "resets has_uk_maths_or_physics_degree when the value of initial_teacher_training_subject_specialism changes" do
+      eligibility.initial_teacher_training_subject_specialism = :chemistry
+      expect { eligibility.reset_dependent_answers }.not_to change { eligibility.attributes }
+
+      eligibility.initial_teacher_training_subject_specialism = :physics
       expect { eligibility.reset_dependent_answers }
         .to change { eligibility.has_uk_maths_or_physics_degree }
         .from("no").to(nil)
@@ -141,13 +184,6 @@ RSpec.describe MathsAndPhysics::Eligibility, type: :model do
     end
   end
 
-  context "when saving in the “initial-teacher-training-specialised-in-maths-or-physics” context" do
-    it "validates the presence of initial_teacher_training_specialised_in_maths_or_physics" do
-      expect(MathsAndPhysics::Eligibility.new).not_to be_valid(:"initial-teacher-training-specialised-in-maths-or-physics")
-      expect(MathsAndPhysics::Eligibility.new(initial_teacher_training_specialised_in_maths_or_physics: true)).to be_valid(:"initial-teacher-training-specialised-in-maths-or-physics")
-    end
-  end
-
   context "when saving in the “initial-teacher-training-subject” context" do
     it "validates the presence of initial_teacher_training_subject" do
       expect(MathsAndPhysics::Eligibility.new).not_to be_valid(:"initial-teacher-training-subject")
@@ -162,10 +198,10 @@ RSpec.describe MathsAndPhysics::Eligibility, type: :model do
     end
   end
 
-  context "when saving in the “has-uk-maths-or-physics-degree” context, with initial_teacher_training_specialised_in_maths_or_physics false" do
+  context "when saving in the “has-uk-maths-or-physics-degree” context and initial_teacher_training_specialised_in_maths_or_physics is false" do
     it "validates the presence of has_uk_maths_or_physics_degree" do
-      expect(MathsAndPhysics::Eligibility.new(initial_teacher_training_specialised_in_maths_or_physics: false)).not_to be_valid(:"has-uk-maths-or-physics-degree")
-      expect(MathsAndPhysics::Eligibility.new(initial_teacher_training_specialised_in_maths_or_physics: false, has_uk_maths_or_physics_degree: "no")).to be_valid(:"has-uk-maths-or-physics-degree")
+      expect(MathsAndPhysics::Eligibility.new(initial_teacher_training_subject: :none_of_the_subjects)).not_to be_valid(:"has-uk-maths-or-physics-degree")
+      expect(MathsAndPhysics::Eligibility.new(initial_teacher_training_subject: :none_of_the_subjects, has_uk_maths_or_physics_degree: "no")).to be_valid(:"has-uk-maths-or-physics-degree")
     end
   end
 
@@ -229,18 +265,13 @@ RSpec.describe MathsAndPhysics::Eligibility, type: :model do
       expect(build(:maths_and_physics_eligibility, :eligible, current_school: schools(:penistone_grammar_school))).to be_valid(:submit)
     end
 
-    it "is not valid without a value for initial_teacher_training_specialised_in_maths_or_physics" do
-      expect(build(:maths_and_physics_eligibility, :eligible, initial_teacher_training_specialised_in_maths_or_physics: nil)).not_to be_valid(:submit)
-      expect(build(:maths_and_physics_eligibility, :eligible, initial_teacher_training_specialised_in_maths_or_physics: true)).to be_valid(:submit)
-    end
-
     it "is not valid without a value for initial_teacher_training_subject" do
       expect(build(:maths_and_physics_eligibility, :eligible, initial_teacher_training_subject: nil)).not_to be_valid(:submit)
     end
 
     it "is not valid without a value for has_uk_maths_or_physics_degree, when initial_teacher_training_specialised_in_maths_or_physics is false" do
-      expect(build(:maths_and_physics_eligibility, :eligible, initial_teacher_training_specialised_in_maths_or_physics: false, has_uk_maths_or_physics_degree: nil)).not_to be_valid(:submit)
-      expect(build(:maths_and_physics_eligibility, :eligible, initial_teacher_training_specialised_in_maths_or_physics: false, has_uk_maths_or_physics_degree: "no")).to be_valid(:submit)
+      expect(build(:maths_and_physics_eligibility, :eligible, initial_teacher_training_subject: :none_of_the_subjects, has_uk_maths_or_physics_degree: nil)).not_to be_valid(:submit)
+      expect(build(:maths_and_physics_eligibility, :eligible, initial_teacher_training_subject: :none_of_the_subjects, has_uk_maths_or_physics_degree: "no")).to be_valid(:submit)
     end
 
     it "is not valid without a value for initial_teacher_training_subject_specialism when the initial_teacher_training_subject is science" do

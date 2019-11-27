@@ -12,7 +12,6 @@ module MathsAndPhysics
     SLUGS = [
       "teaching-maths-or-physics",
       "current-school",
-      "initial-teacher-training-specialised-in-maths-or-physics",
       "initial-teacher-training-subject",
       "initial-teacher-training-subject-specialism",
       "has-uk-maths-or-physics-degree",

@@ -19,7 +19,6 @@ module MathsAndPhysics
       [].tap do |a|
         a << [I18n.t("maths_and_physics.questions.teaching_maths_or_physics"), (eligibility.teaching_maths_or_physics? ? "Yes" : "No"), "teaching-maths-or-physics"]
         a << [I18n.t("questions.current_school"), eligibility.current_school_name, "current-school"]
-        a << [I18n.t("maths_and_physics.questions.initial_teacher_training_specialised_in_maths_or_physics"), (eligibility.initial_teacher_training_specialised_in_maths_or_physics? ? "Yes" : "No"), "initial-teacher-training-specialised-in-maths-or-physics"]
         a << [I18n.t("maths_and_physics.questions.initial_teacher_training_subject"), I18n.t("maths_and_physics.answers.initial_teacher_training_subject.#{eligibility.initial_teacher_training_subject}"), "initial-teacher-training-subject"]
         a << [I18n.t("maths_and_physics.questions.initial_teacher_training_subject_specialism"), I18n.t("maths_and_physics.answers.initial_teacher_training_subject_specialism.#{eligibility.initial_teacher_training_subject_specialism}"), "initial-teacher-training-subject-specialism"] if eligibility.initial_teacher_training_subject_specialism.present?
         a << [I18n.t("maths_and_physics.questions.has_uk_maths_or_physics_degree"), degree_answer, "has-uk-maths-or-physics-degree"] if eligibility.has_uk_maths_or_physics_degree.present?
