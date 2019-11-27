@@ -113,6 +113,22 @@ RSpec.feature "Maths & Physics claims" do
       expect(claim.building_society_roll_number).to eq("1234/123456789")
 
       expect(page).to have_text("Check your answers before sending your application")
+
+      stub_geckoboard_dataset_update
+
+      freeze_time do
+        perform_enqueued_jobs do
+          expect {
+            click_on "Confirm and send"
+          }.to change { ActionMailer::Base.deliveries.count }.by(1)
+        end
+
+        expect(claim.reload.submitted_at).to eq(Time.zone.now)
+      end
+
+      expect(page).to have_text("Claim submitted")
+      expect(page).to have_text(claim.reference)
+      expect(page).to have_text(claim.email_address)
     end
   end
 
