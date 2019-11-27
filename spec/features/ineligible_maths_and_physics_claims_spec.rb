@@ -40,7 +40,6 @@ RSpec.feature "Ineligible Maths and Physics claims" do
 
     choose_school schools(:penistone_grammar_school)
     choose_initial_teacher_training_subject
-    choose_initial_teacher_training_subject_specialism
     choose_qts_year("Before 1 September 2014")
 
     expect(claim.eligibility.reload.qts_award_year).to eql("before_september_2014")
@@ -53,7 +52,6 @@ RSpec.feature "Ineligible Maths and Physics claims" do
 
     choose_school schools(:penistone_grammar_school)
     choose_initial_teacher_training_subject
-    choose_initial_teacher_training_subject_specialism
     choose_qts_year("On or after 1 September 2014")
 
     choose "Yes"
@@ -71,7 +69,6 @@ RSpec.feature "Ineligible Maths and Physics claims" do
 
     choose_school schools(:penistone_grammar_school)
     choose_initial_teacher_training_subject
-    choose_initial_teacher_training_subject_specialism
     choose_qts_year("On or after 1 September 2014")
 
     choose "Yes"
@@ -91,7 +88,6 @@ RSpec.feature "Ineligible Maths and Physics claims" do
 
     choose_school schools(:penistone_grammar_school)
     choose_initial_teacher_training_subject
-    choose_initial_teacher_training_subject_specialism
     choose_qts_year("On or after 1 September 2014")
 
     choose "No"
@@ -109,7 +105,6 @@ RSpec.feature "Ineligible Maths and Physics claims" do
 
     choose_school schools(:penistone_grammar_school)
     choose_initial_teacher_training_subject
-    choose_initial_teacher_training_subject_specialism
     choose_qts_year("On or after 1 September 2014")
 
     choose "No"

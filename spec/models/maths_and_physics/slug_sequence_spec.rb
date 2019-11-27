@@ -6,13 +6,34 @@ RSpec.describe MathsAndPhysics::SlugSequence do
   subject(:slug_sequence) { MathsAndPhysics::SlugSequence.new(claim) }
 
   describe "The sequence as defined by #slugs" do
-    it "excludes “has-uk-maths-or-physics-degree” if the claimant's initial teacher training specialised in maths or physics" do
-      claim.eligibility.initial_teacher_training_subject = :maths
-
+    it "excludes the “initial-teacher-training-subject-specialism” and “has-uk-maths-or-physics-degree” slug if the claimant’s ITT subject was Maths or Physics" do
+      claim.eligibility.initial_teacher_training_subject = "maths"
+      expect(slug_sequence.slugs).not_to include("initial-teacher-training-subject-specialism")
       expect(slug_sequence.slugs).not_to include("has-uk-maths-or-physics-degree")
 
-      claim.eligibility.initial_teacher_training_subject = :science
+      claim.eligibility.initial_teacher_training_subject = "physics"
+      expect(slug_sequence.slugs).not_to include("initial-teacher-training-subject-specialism")
+      expect(slug_sequence.slugs).not_to include("has-uk-maths-or-physics-degree")
+
+      claim.eligibility.initial_teacher_training_subject = "science"
+      expect(slug_sequence.slugs).to include("initial-teacher-training-subject-specialism")
       expect(slug_sequence.slugs).to include("has-uk-maths-or-physics-degree")
+    end
+
+    it "excludes the “initial-teacher-training-subject-specialism” slug but not the “has-uk-maths-or-physics-degree” if the claimant doesn't have a science ITT" do
+      claim.eligibility.initial_teacher_training_subject = "none_of_the_subjects"
+      expect(slug_sequence.slugs).not_to include("initial-teacher-training-subject-specialism")
+      expect(slug_sequence.slugs).to include("has-uk-maths-or-physics-degree")
+    end
+
+    it "excludes “has-uk-maths-or-physics-degree” if the claimant’s ITT subject specialism is physics" do
+      claim.eligibility.initial_teacher_training_subject_specialism = "physics"
+      expect(slug_sequence.slugs).not_to include("has-uk-maths-or-physics-degree")
+
+      MathsAndPhysics::Eligibility.initial_teacher_training_subject_specialisms.keys.excluding("physics").each do |specialism|
+        claim.eligibility.initial_teacher_training_subject_specialism = specialism
+        expect(slug_sequence.slugs).to include("has-uk-maths-or-physics-degree")
+      end
     end
 
     it "excludes the remaining supply teacher slugs if the claimant is not employed as a supply teacher" do
