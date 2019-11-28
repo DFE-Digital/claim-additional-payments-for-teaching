@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+## [Release 037] - 2019-11-28
+
 - Redesign the layout of the payment confirmation email
 - Add script to get a console on a container instance
 - Stop running workers in the same instance as the web app
@@ -283,7 +285,9 @@ The format is based on [Keep a Changelog]
 - First release for student loan repayments private beta
 
 [unreleased]:
-  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-036...HEAD
+  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-037...HEAD
+[release 037]:
+  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-036...release-037
 [release 036]:
   https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-035...release-036
 [release 035]:
