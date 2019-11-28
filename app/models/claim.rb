@@ -57,7 +57,7 @@ class Claim < ApplicationRecord
     banking_name: true,
     building_society_roll_number: true,
   }.freeze
-  CHECK_DEADLINE = 6.weeks
+  CHECK_DEADLINE = 12.weeks
   CHECK_DEADLINE_WARNING_POINT = 2.weeks
   ATTRIBUTE_DEPENDENCIES = {
     "has_student_loan" => "student_loan_country",

@@ -5,8 +5,8 @@ RSpec.feature "Admin stats" do
     @submitted_claims = create_list(:claim, 6, :submitted)
     @approved_claims = create_list(:claim, 4, :approved, submitted_at: 10.weeks.ago)
     @unfinished_claims = create_list(:claim, 1, :submittable)
-    @claims_approaching_deadline = create_list(:claim, 2, :submitted, submitted_at: 5.weeks.ago)
-    @claims_passed_deadline = create_list(:claim, 1, :submitted, submitted_at: 10.weeks.ago)
+    @claims_approaching_deadline = create_list(:claim, 2, :submitted, submitted_at: (Claim::CHECK_DEADLINE - 1.week).ago)
+    @claims_passed_deadline = create_list(:claim, 1, :submitted, submitted_at: (Claim::CHECK_DEADLINE + 1.week).ago)
     sign_in_to_admin_with_role(AdminSession::SERVICE_OPERATOR_DFE_SIGN_IN_ROLE_CODE)
     visit admin_root_path
   end

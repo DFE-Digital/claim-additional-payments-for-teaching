@@ -16,6 +16,7 @@ The format is based on [Keep a Changelog]
 - Correct wording in Maths & Physics claim emails
 - Remove explicit mention of Student Loans policy on accessibility statement
 - Update re-apply date on performance/disciplinary ineligibility pages
+- Increase the claim checking deadline date to 12 weeks
 
 ## [Release 036] - 2019-11-26
 
