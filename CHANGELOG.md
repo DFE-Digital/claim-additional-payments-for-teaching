@@ -6,6 +6,7 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+- Redesign the layout of the payment confirmation email
 - Add script to get a console on a container instance
 - Stop running workers in the same instance as the web app
 - Show policy next to claims in admin view

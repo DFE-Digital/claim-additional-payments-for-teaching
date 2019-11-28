@@ -79,9 +79,8 @@ RSpec.describe ClaimMailer, type: :mailer do
           expect(mail.body.encoded).to include("We’re paying your claim")
         end
 
-        it "includes the NET pay amount and the student loan deduction in the body" do
+        it "includes the NET pay amount and payment date in the body" do
           expect(mail.body.encoded).to include("You will receive £500.00 on or after 1 January 2019")
-          expect(mail.body.encoded).to include("Student loan (deducted): £60.00")
         end
 
         context "when user does not currently have a student loan" do
@@ -89,40 +88,17 @@ RSpec.describe ClaimMailer, type: :mailer do
 
           it "does not mention the content relating to student loan deductions" do
             expect(mail.body.encoded).to_not include("student loan contribution")
-            expect(mail.body.encoded).to_not include("Student loan (deducted)")
           end
         end
 
-        context "when user has a student loan, but has not made a contribution" do
-          let(:payment) { build(:payment, :with_figures, student_loan_repayment: 0, claim: claim) }
+        context "when user has a student loan" do
+          let(:payment) { build(:payment, :with_figures, student_loan_repayment: 10, claim: claim) }
 
-          it "mentions the student loan deduction content and lists their contribution as zero" do
-            expect(mail.body.encoded).to include("If you have made a student loan contribution, this is deducted from your payment amount and credited to SLC.")
-            expect(mail.body.encoded).to include("Student loan: £0.00")
+          it "mentions the student loan deduction content and lists their contribution" do
+            expect(mail.body.encoded).to include("This payment is treated as pay and is therefore subject to a student loan contribution, if applicable.")
+            expect(mail.body.encoded).to include("Student loan contribution: £10.00")
           end
         end
-      end
-    end
-  end
-
-  # Policy-specific characteristics
-  describe "#payment_confirmation" do
-    let(:student_loan_account_credit_fragment) { "This payment does not change the amount that was credited to your Student Loans" }
-
-    it "includes a sentence about the amount credited to their student loans when given a StudentLoans claim" do
-      claim = build(:payment, :with_figures).claim
-      mail = ClaimMailer.payment_confirmation(claim, Time.new(2019, 1, 1).to_i)
-
-      expect(mail.body.encoded).to include(student_loan_account_credit_fragment)
-    end
-
-    it "does not include the student loans credit sentence" do
-      Policies.all.excluding(StudentLoans).each do |policy|
-        claim = create(:claim, :approved, policy: policy)
-        build(:payment, :with_figures, claim: claim)
-        mail = ClaimMailer.payment_confirmation(claim, Time.new(2019, 1, 1).to_i)
-
-        expect(mail.body.encoded).not_to include(student_loan_account_credit_fragment)
       end
     end
   end
