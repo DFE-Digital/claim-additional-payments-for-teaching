@@ -101,6 +101,7 @@ en:
     policy_name: "Claim a payment for teaching maths or physics"
     policy_short_name: "Maths and Physics"
     claim_description: "claim for a payment for teaching maths or physics"
+    claim_action: "claim £2,000 for teaching maths or physics"
     support_email_address: "mathsphysicsteacherpayment@digital.education.gov.uk"
     possible_rejection_reasons: |
       * you are not employed to teach maths or physics at an eligible state-funded secondary school
@@ -141,6 +142,7 @@ en:
     policy_name: "Teachers: claim back your student loan repayments"
     policy_short_name: "Student Loans"
     claim_description: "claim to get back your student loan repayments"
+    claim_action: "claim back student loan repayments"
     possible_rejection_reasons: |
       * you completed your initial teacher training before September 2013
       * you did not teach at an eligible school during the financial year 2018 to 2019

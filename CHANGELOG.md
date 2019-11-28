@@ -17,6 +17,7 @@ The format is based on [Keep a Changelog]
 - Remove explicit mention of Student Loans policy on accessibility statement
 - Update re-apply date on performance/disciplinary ineligibility pages
 - Increase the claim checking deadline date to 12 weeks
+- Privacy notice wording works for Maths & Physics
 
 ## [Release 036] - 2019-11-26
 
