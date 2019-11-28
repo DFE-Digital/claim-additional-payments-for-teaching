@@ -1,0 +1,40 @@
+<% content_for(:page_title, page_title(t("maths_and_physics.questions.initial_teacher_training_subject"), policy: current_policy_routing_name, show_error: current_claim.errors.any?)) %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= render("shared/error_summary", instance: current_claim, errored_field_id_overrides: { "eligibility.initial_teacher_training_subject": "claim_eligibility_attributes_initial_teacher_training_subject_maths" }) if current_claim.errors.any? %>
+
+    <%= form_for current_claim, url: claim_path(current_policy_routing_name) do |form| %>
+      <%= form_group_tag current_claim do %>
+        <%= form.fields_for :eligibility, include_id: false do |fields| %>
+
+          <%= fields.hidden_field :initial_teacher_training_subject %>
+
+          <fieldset class="govuk-fieldset">
+
+            <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl">
+              <h1 class="govuk-fieldset__heading">
+                <%= t("maths_and_physics.questions.initial_teacher_training_subject") %>
+              </h1>
+            </legend>
+
+            <%= errors_tag current_claim.eligibility, :initial_teacher_training_subject %>
+
+            <div class="govuk-radios">
+              <% MathsAndPhysics::Eligibility.initial_teacher_training_subjects.keys.each do |option| %>
+                <div class="govuk-radios__item">
+                  <%= fields.radio_button(:initial_teacher_training_subject, option, class: "govuk-radios__input") %>
+                  <%= fields.label "initial_teacher_training_subject_#{option}", t("maths_and_physics.answers.initial_teacher_training_subject.#{option}"), class: "govuk-label govuk-radios__label" %>
+                </div>
+              <% end %>
+            </div>
+
+          </fieldset>
+
+        <% end %>
+      <% end %>
+
+      <%= form.submit "Continue", class: "govuk-button", data: {module: "govuk-button"} %>
+    <% end %>
+  </div>
+</div>

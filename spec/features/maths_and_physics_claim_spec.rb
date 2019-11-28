@@ -23,10 +23,15 @@ RSpec.feature "Maths & Physics claims" do
       choose_school schools(:penistone_grammar_school)
       expect(claim.eligibility.reload.current_school).to eql schools(:penistone_grammar_school)
 
-      expect(page).to have_text(I18n.t("maths_and_physics.questions.initial_teacher_training_specialised_in_maths_or_physics"))
-      choose "Yes"
+      expect(page).to have_text(I18n.t("maths_and_physics.questions.initial_teacher_training_subject"))
+      choose "Science"
       click_on "Continue"
-      expect(claim.eligibility.reload.initial_teacher_training_specialised_in_maths_or_physics).to eql true
+      expect(claim.eligibility.reload.initial_teacher_training_subject).to eql "science"
+
+      expect(page).to have_text(I18n.t("maths_and_physics.questions.initial_teacher_training_subject_specialism"))
+      choose "Physics"
+      click_on "Continue"
+      expect(claim.eligibility.reload.initial_teacher_training_subject_specialism).to eql "physics"
 
       expect(page).to have_text(I18n.t("questions.qts_award_year"))
       choose_qts_year "On or after 1 September 2014"
@@ -133,10 +138,10 @@ RSpec.feature "Maths & Physics claims" do
     choose_school schools(:penistone_grammar_school)
     expect(claim.eligibility.reload.current_school).to eql schools(:penistone_grammar_school)
 
-    expect(page).to have_text(I18n.t("maths_and_physics.questions.initial_teacher_training_specialised_in_maths_or_physics"))
-    choose "No"
+    expect(page).to have_text(I18n.t("maths_and_physics.questions.initial_teacher_training_subject"))
+    choose "None of these subjects"
     click_on "Continue"
-    expect(claim.eligibility.reload.initial_teacher_training_specialised_in_maths_or_physics).to eql false
+    expect(claim.eligibility.reload.initial_teacher_training_subject).to eql "none_of_the_subjects"
 
     expect(page).to have_text(I18n.t("maths_and_physics.questions.has_uk_maths_or_physics_degree"))
     choose "Yes"
@@ -168,15 +173,30 @@ RSpec.feature "Maths & Physics claims" do
     choose_school schools(:penistone_grammar_school)
     expect(claim.eligibility.reload.current_school).to eql schools(:penistone_grammar_school)
 
-    expect(page).to have_text(I18n.t("maths_and_physics.questions.initial_teacher_training_specialised_in_maths_or_physics"))
-    choose "No"
+    expect(page).to have_text(I18n.t("maths_and_physics.questions.initial_teacher_training_subject"))
+    choose "None of these subjects"
     click_on "Continue"
-    expect(claim.eligibility.reload.initial_teacher_training_specialised_in_maths_or_physics).to eql false
+    expect(claim.eligibility.reload.initial_teacher_training_subject).to eql "none_of_the_subjects"
 
     expect(page).to have_text(I18n.t("maths_and_physics.questions.has_uk_maths_or_physics_degree"))
     choose "I have a non-UK degree in Maths or Physics"
     click_on "Continue"
     expect(claim.eligibility.reload.has_uk_maths_or_physics_degree).to eql "has_non_uk"
+
+    expect(page).to have_text(I18n.t("questions.qts_award_year"))
+  end
+
+  scenario "Teacher is still eligible for Maths and Physics without a degree if they are not sure about their ITT specialism" do
+    start_maths_and_physics_claim
+    choose_school schools(:penistone_grammar_school)
+
+    choose_initial_teacher_training_subject "Science (physics, biology and chemistry)"
+    choose_initial_teacher_training_subject_specialism "I’m not sure"
+
+    expect(page).to have_text(I18n.t("maths_and_physics.questions.has_uk_maths_or_physics_degree"))
+
+    choose "No"
+    click_on "Continue"
 
     expect(page).to have_text(I18n.t("questions.qts_award_year"))
   end
@@ -203,10 +223,10 @@ RSpec.feature "Maths & Physics claims" do
     choose_school schools(:penistone_grammar_school)
     expect(claim.eligibility.reload.current_school).to eql schools(:penistone_grammar_school)
 
-    expect(page).to have_text(I18n.t("maths_and_physics.questions.initial_teacher_training_specialised_in_maths_or_physics"))
-    choose "Yes"
+    expect(page).to have_text(I18n.t("maths_and_physics.questions.initial_teacher_training_subject"))
+    choose "Physics"
     click_on "Continue"
-    expect(claim.eligibility.reload.initial_teacher_training_specialised_in_maths_or_physics).to eql true
+    expect(claim.eligibility.reload.initial_teacher_training_subject).to eql "physics"
 
     expect(page).to have_text(I18n.t("questions.qts_award_year"))
     choose_qts_year "On or after 1 September 2014"

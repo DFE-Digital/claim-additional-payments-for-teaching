@@ -10,7 +10,12 @@ module FeatureHelpers
     click_on "Continue"
   end
 
-  def choose_initial_teacher_training_specialised_in_maths_or_physics(response = "Yes")
+  def choose_initial_teacher_training_subject(response = "Maths")
+    choose response
+    click_on "Continue"
+  end
+
+  def choose_initial_teacher_training_subject_specialism(response = "Physics")
     choose response
     click_on "Continue"
   end

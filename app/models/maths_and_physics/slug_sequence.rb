@@ -12,7 +12,8 @@ module MathsAndPhysics
     SLUGS = [
       "teaching-maths-or-physics",
       "current-school",
-      "initial-teacher-training-specialised-in-maths-or-physics",
+      "initial-teacher-training-subject",
+      "initial-teacher-training-subject-specialism",
       "has-uk-maths-or-physics-degree",
       "qts-year",
       "supply-teacher",
@@ -45,6 +46,7 @@ module MathsAndPhysics
 
     def slugs
       SLUGS.dup.tap do |sequence|
+        sequence.delete("initial-teacher-training-subject-specialism") unless claim.eligibility.itt_subject_science?
         sequence.delete("has-uk-maths-or-physics-degree") if claim.eligibility.initial_teacher_training_specialised_in_maths_or_physics?
         sequence.delete("entire-term-contract") unless claim.eligibility.employed_as_supply_teacher?
         sequence.delete("employed-directly") unless claim.eligibility.employed_as_supply_teacher?
