@@ -29,6 +29,7 @@ RSpec.describe StudentLoans::EligibilityAnswersPresenter, type: :model do
       [I18n.t("student_loans.questions.subjects_taught", school: school.name), "Chemistry and Physics", "subjects-taught"],
       [I18n.t("student_loans.questions.leadership_position"), "Yes", "leadership-position"],
       [I18n.t("student_loans.questions.mostly_performed_leadership_duties"), "No", "mostly-performed-leadership-duties"],
+      [I18n.t("student_loans.questions.student_loan_amount"), "£1,987.65", "student-loan-amount"],
     ]
 
     expect(presenter.answers).to eq expected_answers

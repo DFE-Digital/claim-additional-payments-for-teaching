@@ -18,6 +18,7 @@ The format is based on [Keep a Changelog]
 - Update re-apply date on performance/disciplinary ineligibility pages
 - Increase the claim checking deadline date to 12 weeks
 - Privacy notice wording works for Maths & Physics
+- A teacher can submit a Maths and Physics claim
 
 ## [Release 036] - 2019-11-26
 
