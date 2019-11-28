@@ -19,6 +19,7 @@ The format is based on [Keep a Changelog]
 - Increase the claim checking deadline date to 12 weeks
 - Privacy notice wording works for Maths & Physics
 - A teacher can submit a Maths and Physics claim
+- "How we use the information you provided" content works for both policies
 
 ## [Release 036] - 2019-11-26
 
