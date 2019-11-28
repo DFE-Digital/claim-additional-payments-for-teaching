@@ -7,9 +7,12 @@ The format is based on [Keep a Changelog]
 ## [Unreleased]
 
 - Service operators can see Maths and Physics claim eligibility
-- Fix a bug that would occassionally redirect users even after they'd continued
+- Fix a bug that would occasionally redirect users even after they'd continued
   their session
 - Redirect requests to the root URL to a GOV.UK page about teacher payments
+- Service operators can create and view a payroll run and provide a link to
+  payroll operators (Cantium users) to download a file
+- Payroll operators can download the payroll run file using a link
 
 ## [Release 037] - 2019-11-28
 
