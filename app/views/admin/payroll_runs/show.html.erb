@@ -23,6 +23,15 @@
           <%= number_to_currency(@payroll_run.total_award_amount) %>
         </dd>
       </div>
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+          Downloaded
+        </dt>
+
+        <dd class="govuk-summary-list__value">
+          <%= @payroll_run.download_triggered? ? l(@payroll_run.downloaded_at) : "No" %>
+        </dd>
+      </div>
     </dl>
   </div>
   <% unless @payroll_run.download_triggered? %>

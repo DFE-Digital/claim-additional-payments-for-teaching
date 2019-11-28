@@ -72,6 +72,22 @@ RSpec.feature "Payroll" do
 
     expect(page).to have_content(I18n.l(first_payroll_run.created_at.to_date))
     expect(page).to have_content(I18n.l(last_payroll_run.created_at.to_date))
+
+    expect(page).to have_link "View", href: admin_payroll_run_path(first_payroll_run)
+    expect(page).to have_link "View", href: admin_payroll_run_path(last_payroll_run)
+  end
+
+  scenario "Service operator can view a payroll run" do
+    sign_in_to_admin_with_role(AdminSession::SERVICE_OPERATOR_DFE_SIGN_IN_ROLE_CODE)
+
+    payroll_run = create(:payroll_run, created_at: Time.zone.now)
+
+    click_on "Payroll"
+    click_on "View #{payroll_run.created_at.strftime("%B")} payroll run"
+
+    expect(page).to have_content payroll_run.claims.count
+    expect(page).to have_content "Downloaded No"
+    expect(page).to have_field("payroll_run_download_link", with: new_admin_payroll_run_download_url(payroll_run))
   end
 
   scenario "Service operator can upload a Payment Confirmation Report against a payroll run" do
