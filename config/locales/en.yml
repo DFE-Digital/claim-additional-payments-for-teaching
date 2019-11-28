@@ -100,7 +100,7 @@ en:
   maths_and_physics:
     policy_name: "Claim a payment for teaching maths or physics"
     policy_short_name: "Maths and Physics"
-    claim_description: "claim for a payment for teaching maths and physics"
+    claim_description: "claim for a payment for teaching maths or physics"
     support_email_address: "mathsphysicsteacherpayment@digital.education.gov.uk"
     possible_rejection_reasons: |
       * you are not employed to teach maths or physics at an eligible state-funded secondary school

@@ -12,6 +12,7 @@ The format is based on [Keep a Changelog]
 - Allow admins to filter list of claims by policy
 - Update Maths & Physics sequence with new ITT specialism questions
 - Adjust Maths & Physics private beta start page content
+- Correct wording in Maths & Physics claim emails
 
 ## [Release 036] - 2019-11-26
 
