@@ -13,6 +13,7 @@ The format is based on [Keep a Changelog]
 - Update Maths & Physics sequence with new ITT specialism questions
 - Adjust Maths & Physics private beta start page content
 - Correct wording in Maths & Physics claim emails
+- Remove explicit mention of Student Loans policy on accessibility statement
 
 ## [Release 036] - 2019-11-26
 
