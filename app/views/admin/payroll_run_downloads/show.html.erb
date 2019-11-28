@@ -21,6 +21,6 @@
 
   </div>
   <div class="govuk-grid-column-full">
-    <%= link_to "Download #{@payroll_run.created_at.strftime("%B")} payroll file", admin_payroll_run_download_path(@payroll_run, format: :csv), class: ["govuk-body", "govuk-link"] if @payroll_run.download_available? %>
+    <%= link_to "Download #{@payroll_run.created_at.strftime("%B")} payroll file", admin_payroll_run_download_path(@payroll_run, format: :csv), class: ["govuk-body", "govuk-link"], data: { "auto-follow-link": "true" } if @payroll_run.download_available? %>
   </div>
 </div>
