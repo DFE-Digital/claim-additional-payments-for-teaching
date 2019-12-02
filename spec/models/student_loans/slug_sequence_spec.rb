@@ -6,6 +6,15 @@ RSpec.describe StudentLoans::SlugSequence do
   subject(:slug_sequence) { StudentLoans::SlugSequence.new(claim) }
 
   describe "The sequence as defined by #slugs" do
+    it "excludes the “ineligible” slug if the claim is not actually ineligible" do
+      expect(claim.eligibility).not_to be_ineligible
+      expect(slug_sequence.slugs).not_to include("ineligible")
+
+      claim.eligibility.qts_award_year = "before_september_2013"
+      expect(claim.eligibility).to be_ineligible
+      expect(slug_sequence.slugs).to include("ineligible")
+    end
+
     it "excludes “current-school” if the claimant still works at the school they are claiming against" do
       claim.eligibility.employment_status = :claim_school
 
