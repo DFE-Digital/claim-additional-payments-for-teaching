@@ -46,23 +46,31 @@ RSpec.describe "Admin claims", type: :request do
     end
   end
 
-  describe "claims#show" do
-    let(:claim) { create(:claim, :submitted) }
+  # Compatible with claims from each policy
+  Policies.all.each do |policy|
+    context "with a #{policy} claim" do
+      describe "claims#show" do
+        let(:claim) { create(:claim, :submitted, policy: policy) }
 
-    it "returns the claim" do
-      get admin_claim_path(claim)
+        it "displays the claim and eligibility details" do
+          get admin_claim_path(claim)
 
-      expect(response.body).to include(claim.reference)
-    end
+          expect(response.body).to include(claim.reference)
+          expect(response.body).to include(claim.teacher_reference_number)
+          expect(response.body).to include(claim.eligibility.current_school_name)
+          expect(response.body).to include(I18n.t("#{policy.to_s.underscore}.questions.qts_award_years.#{claim.eligibility.qts_award_year}"))
+        end
 
-    context "when another claim has matching attributes" do
-      let!(:claim_with_matching_attributes) { create(:claim, :submitted) }
+        context "when another claim has matching attributes" do
+          let!(:claim_with_matching_attributes) { create(:claim, :submitted, policy: policy) }
 
-      it "returns the claim and the duplicate" do
-        get admin_claim_path(claim)
+          it "returns the claim and the duplicate" do
+            get admin_claim_path(claim)
 
-        expect(response.body).to include(claim.reference)
-        expect(response.body).to include(claim_with_matching_attributes.reference)
+            expect(response.body).to include(claim.reference)
+            expect(response.body).to include(claim_with_matching_attributes.reference)
+          end
+        end
       end
     end
   end
