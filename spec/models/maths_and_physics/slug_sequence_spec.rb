@@ -6,6 +6,15 @@ RSpec.describe MathsAndPhysics::SlugSequence do
   subject(:slug_sequence) { MathsAndPhysics::SlugSequence.new(claim) }
 
   describe "The sequence as defined by #slugs" do
+    it "excludes the “ineligible” slug if the claim is not actually ineligible" do
+      expect(claim.eligibility).not_to be_ineligible
+      expect(slug_sequence.slugs).not_to include("ineligible")
+
+      claim.eligibility.teaching_maths_or_physics = false
+      expect(claim.eligibility).to be_ineligible
+      expect(slug_sequence.slugs).to include("ineligible")
+    end
+
     it "excludes the “initial-teacher-training-subject-specialism” and “has-uk-maths-or-physics-degree” slug if the claimant’s ITT subject was Maths or Physics" do
       claim.eligibility.initial_teacher_training_subject = "maths"
       expect(slug_sequence.slugs).not_to include("initial-teacher-training-subject-specialism")
