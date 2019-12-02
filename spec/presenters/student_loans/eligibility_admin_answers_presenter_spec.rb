@@ -20,7 +20,7 @@ RSpec.describe StudentLoans::EligibilityAdminAnswersPresenter, type: :model do
   describe "#answers" do
     it "returns an array of questions and answers for displaying to approver" do
       expected_answers = [
-        [I18n.t("student_loans.admin.qts_award_year"), "On or after 1 September 2013"],
+        [I18n.t("admin.qts_award_year"), "On or after 1 September 2013"],
         [I18n.t("student_loans.admin.claim_school"), presenter.display_school(school)],
         [I18n.t("admin.current_school"), presenter.display_school(school)],
         [I18n.t("student_loans.admin.subjects_taught"), "Chemistry and Physics"],

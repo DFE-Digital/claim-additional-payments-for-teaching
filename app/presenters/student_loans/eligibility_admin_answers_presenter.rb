@@ -19,7 +19,7 @@ module StudentLoans
     # [1]: answer text;
     def answers
       [].tap do |a|
-        a << [I18n.t("student_loans.admin.qts_award_year"), I18n.t("student_loans.questions.qts_award_years.#{eligibility.qts_award_year}")]
+        a << [I18n.t("admin.qts_award_year"), I18n.t("student_loans.questions.qts_award_years.#{eligibility.qts_award_year}")]
         a << [I18n.t("student_loans.admin.claim_school"), display_school(eligibility.claim_school)]
         a << [I18n.t("admin.current_school"), display_school(eligibility.current_school)]
         a << [I18n.t("student_loans.admin.subjects_taught"), subject_list(eligibility.subjects_taught)]

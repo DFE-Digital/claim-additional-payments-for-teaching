@@ -59,6 +59,7 @@ en:
     bank_details: "Enter bank account details"
     payroll_gender: "What gender does your school's payroll system associate with you?"
   admin:
+    qts_award_year: "Award year"
     current_school: "Current school"
     address: "Address"
     teacher_reference_number: "Teacher reference number"
@@ -172,7 +173,6 @@ en:
       student_loan_amount:
         "Exactly how much student loan did you repay while employed as a teacher between 6 April 2018 and 5 April 2019?"
     admin:
-      qts_award_year: "Award year"
       claim_school: "Claim school"
       subjects_taught: "Subjects taught"
       had_leadership_position: "Had leadership position?"
