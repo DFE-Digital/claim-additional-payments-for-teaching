@@ -6,6 +6,7 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+- Service operators can see Maths and Physics claim eligibility
 - Fix a bug that would occassionally redirect users even after they'd continued
   their session
 
