@@ -4,41 +4,6 @@ describe Admin::ClaimsHelper do
   let(:claim_school) { schools(:penistone_grammar_school) }
   let(:current_school) { create(:school, :student_loan_eligible) }
 
-  describe "#eligibility_answers" do
-    let(:eligibility) do
-      build(
-        :student_loans_eligibility,
-        qts_award_year: "on_or_after_september_2013",
-        claim_school: claim_school,
-        current_school: current_school,
-        chemistry_taught: true,
-        physics_taught: true,
-        had_leadership_position: true,
-        mostly_performed_leadership_duties: false,
-        student_loan_repayment_amount: 1987.65,
-      )
-    end
-
-    it "returns an array of questions and answers for displaying to approver" do
-      expected_answers = [
-        [I18n.t("student_loans.admin.qts_award_year"), "On or after 1 September 2013"],
-        [I18n.t("student_loans.admin.claim_school"), helper.display_school(claim_school)],
-        [I18n.t("admin.current_school"), helper.display_school(current_school)],
-        [I18n.t("student_loans.admin.subjects_taught"), "Chemistry and Physics"],
-        [I18n.t("student_loans.admin.had_leadership_position"), "Yes"],
-        [I18n.t("student_loans.admin.mostly_performed_leadership_duties"), "No"],
-      ]
-
-      expect(helper.admin_eligibility_answers(eligibility)).to eq expected_answers
-    end
-
-    it "excludes questions skipped from the flow" do
-      eligibility.had_leadership_position = false
-      expect(helper.admin_eligibility_answers(eligibility)).to include([I18n.t("student_loans.admin.had_leadership_position"), "No"])
-      expect(helper.admin_eligibility_answers(eligibility)).to_not include([I18n.t("student_loans.admin.mostly_performed_leadership_duties"), "No"])
-    end
-  end
-
   describe "#admin_personal_details" do
     let(:claim) do
       build(
@@ -128,23 +93,6 @@ describe Admin::ClaimsHelper do
       it "includes the notes" do
         expect(helper.admin_check_details(check)).to include([I18n.t("admin.check.notes"), simple_format(check.notes, class: "govuk-body")])
       end
-    end
-  end
-
-  describe "#display_school" do
-    let(:school) do
-      build(:school,
-        name: "Bash Street School",
-        urn: "1234",
-        establishment_number: 4567,
-        local_authority: build(:local_authority, code: 123))
-    end
-
-    it "shows a school with a link and the DfE number" do
-      gias_url = "https://get-information-schools.service.gov.uk/Establishments/Establishment/Details/#{school.urn}"
-      expect(helper.display_school(school)).to eq(
-        "<a class=\"govuk-link\" href=\"#{gias_url}\">#{school.name}</a> <span class=\"govuk-body-s\">(#{school.dfe_number})</span>"
-      )
     end
   end
 

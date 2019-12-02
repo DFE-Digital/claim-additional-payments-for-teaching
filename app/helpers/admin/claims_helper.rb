@@ -2,15 +2,8 @@ module Admin
   module ClaimsHelper
     include StudentLoans::PresenterMethods
 
-    def admin_eligibility_answers(eligibility)
-      [].tap do |a|
-        a << [t("student_loans.admin.qts_award_year"), I18n.t("student_loans.questions.qts_award_years.#{eligibility.qts_award_year}")]
-        a << [t("student_loans.admin.claim_school"), display_school(eligibility.claim_school)]
-        a << [t("admin.current_school"), display_school(eligibility.current_school)]
-        a << [t("student_loans.admin.subjects_taught"), subject_list(eligibility.subjects_taught)]
-        a << [t("student_loans.admin.had_leadership_position"), (eligibility.had_leadership_position? ? "Yes" : "No")]
-        a << [t("student_loans.admin.mostly_performed_leadership_duties"), (eligibility.mostly_performed_leadership_duties? ? "Yes" : "No")] if eligibility.had_leadership_position?
-      end
+    def admin_eligibility_answers(claim)
+      claim.policy::EligibilityAdminAnswersPresenter.new(claim.eligibility).answers
     end
 
     def admin_personal_details(claim)
@@ -45,19 +38,6 @@ module Admin
         a << [t("admin.check.result"), check.result.capitalize]
         a << [t("admin.check.notes"), simple_format(check.notes, class: "govuk-body")] if check.notes.present?
       end
-    end
-
-    def link_to_school(school)
-      url = "https://get-information-schools.service.gov.uk/Establishments/Establishment/Details/#{school.urn}"
-      link_to(school.name, url, class: "govuk-link")
-    end
-
-    def display_school(school)
-      html = [
-        link_to_school(school),
-        tag.span("(#{school.dfe_number})", class: "govuk-body-s"),
-      ].join(" ").html_safe
-      sanitize(html, tags: %w[span a], attributes: %w[href class])
     end
 
     def check_deadline_warning(claim)
