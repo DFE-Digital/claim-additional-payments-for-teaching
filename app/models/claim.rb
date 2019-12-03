@@ -56,6 +56,7 @@ class Claim < ApplicationRecord
     verify_response: true,
     banking_name: true,
     building_society_roll_number: true,
+    payment_id: false,
   }.freeze
   CHECK_DEADLINE = 12.weeks
   CHECK_DEADLINE_WARNING_POINT = 2.weeks
@@ -75,7 +76,7 @@ class Claim < ApplicationRecord
   belongs_to :eligibility, polymorphic: true
   accepts_nested_attributes_for :eligibility, update_only: true
 
-  has_one :payment
+  belongs_to :payment, optional: true
 
   enum payroll_gender: {
     dont_know: 0,
@@ -143,7 +144,7 @@ class Claim < ApplicationRecord
   scope :rejected, -> { joins(:check).where("checks.result" => :rejected) }
   scope :approaching_check_deadline, -> { awaiting_checking.where("submitted_at < ? AND submitted_at > ?", CHECK_DEADLINE.ago + CHECK_DEADLINE_WARNING_POINT, CHECK_DEADLINE.ago) }
   scope :passed_check_deadline, -> { awaiting_checking.where("submitted_at < ?", CHECK_DEADLINE.ago) }
-  scope :payrollable, -> { approved.left_joins(:payment).where(payments: {id: nil}) }
+  scope :payrollable, -> { approved.where(payment: nil) }
   scope :by_policy, ->(policy) { where(eligibility_type: policy::Eligibility.to_s) }
 
   delegate :award_amount, to: :eligibility

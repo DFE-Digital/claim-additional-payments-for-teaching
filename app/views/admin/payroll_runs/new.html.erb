@@ -16,7 +16,7 @@
         </dt>
 
         <dd class="govuk-summary-list__value">
-          <%= @payroll_run.claims.size %>
+          <%= @claims.size %>
         </dd>
       </div>
       <div class="govuk-summary-list__row">
@@ -25,15 +25,15 @@
         </dt>
 
         <dd class="govuk-summary-list__value">
-          <%= number_to_currency(@payroll_run.total_award_amount) %>
+          <%= number_to_currency(@total_award_amount) %>
         </dd>
       </div>
     </dl>
   </div>
 </div>
 
-<%= form_for [:admin, @payroll_run] do |form| %>
-  <% @payroll_run.claims.each do |claim| %>
+<%= form_with url: admin_payroll_runs_path do |form| %>
+  <% @claims.each do |claim| %>
     <%= hidden_field_tag "claim_ids[]", claim.id %>
   <% end %>
   <%= form.submit "Confirm and submit", class: "govuk-button", data: {module: "govuk-button"} %>

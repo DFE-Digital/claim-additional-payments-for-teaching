@@ -7,8 +7,9 @@ RSpec.describe Payroll::ClaimCsvRow do
   describe "to_s with an approved claim that has a payment" do
     let(:row) { CSV.parse(subject.to_s).first }
     let(:payment_award_amount) { BigDecimal("1234.56") }
+    let!(:payment) { build(:payment, award_amount: payment_award_amount, claim: claim) }
     let(:claim) do
-      build(:payment, award_amount: payment_award_amount, claim: build(:claim, :approved,
+      build(:claim, :approved,
         payroll_gender: :female,
         date_of_birth: Date.new(1980, 12, 1),
         student_loan_plan: StudentLoan::PLAN_2,
@@ -17,7 +18,7 @@ RSpec.describe Payroll::ClaimCsvRow do
         banking_name: "Jo Bloggs",
         building_society_roll_number: "1234/12345678",
         address_line_1: "1 Test Road",
-        postcode: "AB1 2CD")).claim
+        postcode: "AB1 2CD")
     end
 
     it "generates a csv row" do

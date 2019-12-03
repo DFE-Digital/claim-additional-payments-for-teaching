@@ -58,8 +58,10 @@ ActiveRecord::Schema.define(version: 2019_12_03_103255) do
     t.string "surname", limit: 100
     t.string "banking_name"
     t.string "building_society_roll_number"
+    t.uuid "payment_id"
     t.index ["created_at"], name: "index_claims_on_created_at"
     t.index ["eligibility_type", "eligibility_id"], name: "index_claims_on_eligibility_type_and_eligibility_id"
+    t.index ["payment_id"], name: "index_claims_on_payment_id"
     t.index ["reference"], name: "index_claims_on_reference", unique: true
     t.index ["submitted_at"], name: "index_claims_on_submitted_at"
   end
@@ -198,6 +200,7 @@ ActiveRecord::Schema.define(version: 2019_12_03_103255) do
     t.index ["current_school_id"], name: "index_student_loans_eligibilities_on_current_school_id"
   end
 
+  add_foreign_key "claims", "payments"
   add_foreign_key "maths_and_physics_eligibilities", "schools", column: "current_school_id"
   add_foreign_key "payments", "claims"
   add_foreign_key "payments", "payroll_runs"
