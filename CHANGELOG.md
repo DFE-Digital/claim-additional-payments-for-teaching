@@ -6,6 +6,9 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+- Fix a bug that would occassionally redirect users even after they'd continued
+  their session
+
 ## [Release 037] - 2019-11-28
 
 - Redesign the layout of the payment confirmation email

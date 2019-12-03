@@ -27,6 +27,7 @@
       type: "get",
       success: function() {
         clearInterval(window.sessionTimeoutTimer);
+        clearTimeout(window.sessionTimeout);
         window.sessionTimeoutTimer = setInterval(showTimeoutDialog, timeoutInMilliseconds);
       }
     });
@@ -40,7 +41,7 @@
   function showTimeoutDialog() {
     dialogElement.setAttribute("aria-hidden", "false");
     dialog.show();
-    setTimeout(sessionTimedOut, warningTimeInMinutes * 60 * 1000);
+    window.sessionTimeout = setTimeout(sessionTimedOut, warningTimeInMinutes * 60 * 1000);
   }
 
   window.sessionTimeoutTimer = setInterval(showTimeoutDialog, timeoutInMilliseconds);
