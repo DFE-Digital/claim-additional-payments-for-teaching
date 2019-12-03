@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_11_27_131226) do
+ActiveRecord::Schema.define(version: 2019_12_03_103255) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -24,6 +24,7 @@ ActiveRecord::Schema.define(version: 2019_11_27_131226) do
     t.datetime "updated_at", null: false
     t.text "notes"
     t.index ["claim_id"], name: "index_checks_on_claim_id"
+    t.index ["created_at"], name: "index_checks_on_created_at"
   end
 
   create_table "claims", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -57,6 +58,7 @@ ActiveRecord::Schema.define(version: 2019_11_27_131226) do
     t.string "surname", limit: 100
     t.string "banking_name"
     t.string "building_society_roll_number"
+    t.index ["created_at"], name: "index_claims_on_created_at"
     t.index ["eligibility_type", "eligibility_id"], name: "index_claims_on_eligibility_type_and_eligibility_id"
     t.index ["reference"], name: "index_claims_on_reference", unique: true
     t.index ["submitted_at"], name: "index_claims_on_submitted_at"
@@ -107,6 +109,7 @@ ActiveRecord::Schema.define(version: 2019_11_27_131226) do
     t.boolean "subject_to_formal_performance_action"
     t.integer "initial_teacher_training_subject"
     t.integer "initial_teacher_training_subject_specialism"
+    t.index ["created_at"], name: "index_maths_and_physics_eligibilities_on_created_at"
     t.index ["current_school_id"], name: "index_maths_and_physics_eligibilities_on_current_school_id"
   end
 
@@ -125,6 +128,7 @@ ActiveRecord::Schema.define(version: 2019_11_27_131226) do
     t.decimal "net_pay", precision: 7, scale: 2
     t.decimal "gross_pay", precision: 7, scale: 2
     t.index ["claim_id"], name: "index_payments_on_claim_id", unique: true
+    t.index ["created_at"], name: "index_payments_on_created_at"
     t.index ["payroll_run_id"], name: "index_payments_on_payroll_run_id"
   end
 
@@ -133,6 +137,7 @@ ActiveRecord::Schema.define(version: 2019_11_27_131226) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "confirmation_report_uploaded_by"
+    t.index ["created_at"], name: "index_payroll_runs_on_created_at"
   end
 
   create_table "policy_configurations", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -141,6 +146,7 @@ ActiveRecord::Schema.define(version: 2019_11_27_131226) do
     t.string "availability_message"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["created_at"], name: "index_policy_configurations_on_created_at"
     t.index ["policy_type"], name: "index_policy_configurations_on_policy_type", unique: true
   end
 
@@ -161,6 +167,7 @@ ActiveRecord::Schema.define(version: 2019_11_27_131226) do
     t.uuid "local_authority_district_id"
     t.date "close_date"
     t.integer "establishment_number"
+    t.index ["created_at"], name: "index_schools_on_created_at"
     t.index ["local_authority_district_id"], name: "index_schools_on_local_authority_district_id"
     t.index ["local_authority_id"], name: "index_schools_on_local_authority_id"
     t.index ["urn"], name: "index_schools_on_urn", unique: true
@@ -183,6 +190,7 @@ ActiveRecord::Schema.define(version: 2019_11_27_131226) do
     t.boolean "had_leadership_position"
     t.boolean "mostly_performed_leadership_duties"
     t.index ["claim_school_id"], name: "index_student_loans_eligibilities_on_claim_school_id"
+    t.index ["created_at"], name: "index_student_loans_eligibilities_on_created_at"
     t.index ["current_school_id"], name: "index_student_loans_eligibilities_on_current_school_id"
   end
 
