@@ -59,6 +59,7 @@ en:
     bank_details: "Enter bank account details"
     payroll_gender: "What gender does your school's payroll system associate with you?"
   admin:
+    qts_award_year: "Award year"
     current_school: "Current school"
     address: "Address"
     teacher_reference_number: "Teacher reference number"
@@ -139,6 +140,16 @@ en:
       employed_directly:
         "yes": "Yes, I’m employed by my school"
         "no": "No, I’m employed by a private agency"
+    admin:
+      teaching_maths_or_physics: "Teaches any maths or physics?"
+      initial_teacher_training_subject: "ITT subject"
+      initial_teacher_training_subject_specialism: "ITT subject specialism"
+      has_uk_maths_or_physics_degree: "UK degree in maths or physics?"
+      employed_as_supply_teacher: "Employed as a supply teacher?"
+      has_entire_term_contract: "Has entire term contract?"
+      employed_directly: "Employed directly by school?"
+      disciplinary_action: "Subject to disciplinary action?"
+      formal_performance_action: "Subject to formal performance action?"
   student_loans:
     policy_name: "Teachers: claim back your student loan repayments"
     policy_short_name: "Student Loans"
@@ -172,7 +183,6 @@ en:
       student_loan_amount:
         "Exactly how much student loan did you repay while employed as a teacher between 6 April 2018 and 5 April 2019?"
     admin:
-      qts_award_year: "Award year"
       claim_school: "Claim school"
       subjects_taught: "Subjects taught"
       had_leadership_position: "Had leadership position?"
