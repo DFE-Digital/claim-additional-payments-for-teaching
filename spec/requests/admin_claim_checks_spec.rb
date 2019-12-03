@@ -77,18 +77,17 @@ RSpec.describe "Admin claim checks", type: :request do
     end
   end
 
-  context "when signed in as a support user" do
-    before do
-      sign_in_to_admin_with_role(AdminSession::SUPPORT_AGENT_DFE_SIGN_IN_ROLE_CODE)
-    end
-
+  context "when signed in as a payroll operator or a support agent" do
     describe "claim_checks#create" do
       let(:claim) { create(:claim, :submitted) }
 
-      it "does not allow a claim to be approved" do
-        post admin_claim_checks_path(claim_id: claim.id, result: "approved")
+      [AdminSession::SUPPORT_AGENT_DFE_SIGN_IN_ROLE_CODE, AdminSession::PAYROLL_OPERATOR_DFE_SIGN_IN_ROLE_CODE].each do |role|
+        it "does not allow a claim to be approved" do
+          sign_in_to_admin_with_role(role)
+          post admin_claim_checks_path(claim_id: claim.id, result: "approved")
 
-        expect(response.code).to eq("401")
+          expect(response.code).to eq("401")
+        end
       end
     end
   end

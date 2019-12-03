@@ -54,34 +54,36 @@ RSpec.describe "Admin payroll runs" do
     end
   end
 
-  context "when signed in as a support user" do
-    before do
-      sign_in_to_admin_with_role(AdminSession::SUPPORT_AGENT_DFE_SIGN_IN_ROLE_CODE)
-    end
-
-    describe "admin_payroll_runs#new" do
-      it "returns a unauthorized response" do
-        get new_admin_payroll_run_path
-
-        expect(response).to have_http_status(:unauthorized)
+  context "when signed in as a payroll operator or a support agent" do
+    [AdminSession::SUPPORT_AGENT_DFE_SIGN_IN_ROLE_CODE, AdminSession::PAYROLL_OPERATOR_DFE_SIGN_IN_ROLE_CODE].each do |role|
+      before do
+        sign_in_to_admin_with_role(role)
       end
-    end
 
-    describe "admin_payroll_runs#create" do
-      it "does not create a payroll run and returns a unauthorized response" do
-        expect { post admin_payroll_runs_path }.to_not change { PayrollRun.count }
+      describe "admin_payroll_runs#new" do
+        it "returns a unauthorized response" do
+          get new_admin_payroll_run_path
 
-        expect(response).to have_http_status(:unauthorized)
+          expect(response).to have_http_status(:unauthorized)
+        end
       end
-    end
 
-    describe "admin_payroll_runs#show" do
-      it "does not view a payroll run and returns a unauthorized response" do
-        payroll_run = create(:payroll_run)
+      describe "admin_payroll_runs#create" do
+        it "does not create a payroll run and returns a unauthorized response" do
+          expect { post admin_payroll_runs_path }.to_not change { PayrollRun.count }
 
-        get admin_payroll_run_path(payroll_run)
+          expect(response).to have_http_status(:unauthorized)
+        end
+      end
 
-        expect(response).to have_http_status(:unauthorized)
+      describe "admin_payroll_runs#show" do
+        it "does not view a payroll run and returns a unauthorized response" do
+          payroll_run = create(:payroll_run)
+
+          get admin_payroll_run_path(payroll_run)
+
+          expect(response).to have_http_status(:unauthorized)
+        end
       end
     end
   end
