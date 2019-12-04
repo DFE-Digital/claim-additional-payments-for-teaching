@@ -37,6 +37,11 @@ Architecture decision records can be found in the
 2. Run `bundle install` and `yarn install` to install the dependencies
 3. Run `bundle exec rails db:setup` to set up the database development
 4. Run `bundle exec foreman start` to launch the app on https://localhost:3000/
+5. Visit one of the following urls in your browser to access the relevant
+   policy:
+
+- **Student Loans:** https://localhost:3000/student-loans/claim
+- **Maths and Physics:** https://localhost:3000/maths-and-physics/claim
 
 ### DfE Sign In credentials
 

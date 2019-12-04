@@ -9,6 +9,7 @@ The format is based on [Keep a Changelog]
 - Service operators can see Maths and Physics claim eligibility
 - Fix a bug that would occassionally redirect users even after they'd continued
   their session
+- Redirect requests to the root URL to a GOV.UK page about teacher payments
 
 ## [Release 037] - 2019-11-28
 
