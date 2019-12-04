@@ -11,5 +11,9 @@
     <p class="govuk-body govuk-!-font-weight-bold">
       NOTE: You will only be able to download this file once.
     </p>
+
+    <%= form_with url: admin_payroll_run_download_path(@payroll_run) do %>
+      <%= submit_tag "Download payroll file", class: "govuk-button" %>
+    <% end %>
   </div>
 </div>

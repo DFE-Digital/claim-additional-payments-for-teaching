@@ -9,5 +9,14 @@ RSpec.feature "Payroll run download" do
     visit new_admin_payroll_run_download_path(payroll_run)
 
     expect(page).to have_content "This month's payroll file is ready for processing."
+
+    click_on "Download payroll file"
+
+    click_on "Download #{payroll_run.created_at.strftime("%B")} payroll file"
+
+    expect(page.response_headers["Content-Type"]).to eq("text/csv")
+
+    csv = CSV.parse(body, headers: true)
+    expect(csv.count).to eq(3)
   end
 end
