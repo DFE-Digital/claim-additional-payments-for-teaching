@@ -510,39 +510,6 @@
     {
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2017-05-10",
-      "name": "[variables('appServiceWebTestDeploymentName')]",
-      "dependsOn": [
-        "[resourceId('Microsoft.Resources/deployments', variables('appDeploymentName'))]",
-        "[resourceId('Microsoft.Resources/deployments', variables('applicationInsightsDeploymentName'))]"
-      ],
-      "properties": {
-        "mode": "Incremental",
-        "templateLink": {
-          "uri": "[concat(variables('deploymentUrlBase'), 'web_test.json')]",
-          "contentVersion": "1.0.0.0"
-        },
-        "parameters": {
-          "webTestName": {
-            "value": "[variables('appServiceWebTestName')]"
-          },
-          "webTestLocations": {
-            "value": "[variables('azureAvailabilityTestLocations')]"
-          },
-          "appServiceHealthcheckUrl": {
-            "value": "[concat('https://', reference(resourceId('Microsoft.Resources/deployments', variables('appDeploymentName'))).outputs.appServiceCanonicalHostName.value, '/healthcheck')]"
-          },
-          "alertEmailAddress": {
-            "value": "[parameters('alertEmailAddress')]"
-          },
-          "applicationInsightsId": {
-            "value": "[resourceId('Microsoft.Insights/components', variables('applicationInsightsName'))]"
-          }
-        }
-      }
-    },
-    {
-      "type": "Microsoft.Resources/deployments",
-      "apiVersion": "2017-05-10",
       "name": "[variables('vspDeploymentName')]",
       "dependsOn": ["[resourceId('Microsoft.Resources/deployments', variables('appDeploymentName'))]"],
       "properties": {
@@ -609,39 +576,6 @@
                 "value": "[parameters('VSP.EUROPEAN_IDENTITY_ENABLED')]"
               }
             ]
-          }
-        }
-      }
-    },
-    {
-      "type": "Microsoft.Resources/deployments",
-      "apiVersion": "2017-05-10",
-      "name": "[variables('vspAppServiceWebTestDeploymentName')]",
-      "dependsOn": [
-        "[resourceId('Microsoft.Resources/deployments', variables('applicationInsightsDeploymentName'))]",
-        "[resourceId('Microsoft.Resources/deployments', variables('vspDeploymentName'))]"
-      ],
-      "properties": {
-        "mode": "Incremental",
-        "templateLink": {
-          "uri": "[concat(variables('deploymentUrlBase'), 'web_test.json')]",
-          "contentVersion": "1.0.0.0"
-        },
-        "parameters": {
-          "webTestName": {
-            "value": "[variables('vspAppServiceWebTestName')]"
-          },
-          "webTestLocations": {
-            "value": "[variables('azureAvailabilityTestLocations')]"
-          },
-          "appServiceHealthcheckUrl": {
-            "value": "[concat('https://', reference(resourceId('Microsoft.Resources/deployments', variables('vspDeploymentName'))).outputs.appServiceHostName.value, '/admin/healthcheck')]"
-          },
-          "alertEmailAddress": {
-            "value": "[parameters('alertEmailAddress')]"
-          },
-          "applicationInsightsId": {
-            "value": "[resourceId('Microsoft.Insights/components', variables('applicationInsightsName'))]"
           }
         }
       }
