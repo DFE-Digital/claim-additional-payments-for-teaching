@@ -13,6 +13,7 @@ RSpec.feature "Payroll" do
     create(:claim, :approved, policy: StudentLoans)
 
     month_name = Date.today.strftime("%B")
+
     click_on "Run #{month_name} payroll"
 
     expect(page).to have_content("Approved claims 3")
@@ -20,16 +21,12 @@ RSpec.feature "Payroll" do
 
     click_on "Confirm and submit"
 
+    payroll_run = PayrollRun.order(:created_at).last
+
     expect(page).to have_content("Approved claims 3")
     expect(page).to have_content("Total award amount £4,000")
     expect(page).to have_content("Payroll run created")
-
-    click_on "Download payroll file"
-
-    expect(page.response_headers["Content-Type"]).to eq("text/csv")
-
-    csv = CSV.parse(body, headers: true)
-    expect(csv.count).to eq(3)
+    expect(page).to have_field("payroll_run_download_link", with: new_admin_payroll_run_download_url(payroll_run))
   end
 
   context "when a payroll run already exists for the month" do

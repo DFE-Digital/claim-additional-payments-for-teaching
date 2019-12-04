@@ -45,8 +45,24 @@ module Admin
       admin_session.is_service_operator?
     end
 
+    def payroll_operator_signed_in?
+      admin_session.is_payroll_operator?
+    end
+
+    def support_agent_signed_in?
+      admin_session.is_support_agent?
+    end
+
+    def ensure_service_team
+      render "admin/auth/failure", status: :unauthorized unless service_operator_signed_in? || support_agent_signed_in?
+    end
+
     def ensure_service_operator
       render "admin/auth/failure", status: :unauthorized unless service_operator_signed_in?
+    end
+
+    def ensure_payroll_operator
+      render "admin/auth/failure", status: :unauthorized unless payroll_operator_signed_in?
     end
   end
 end

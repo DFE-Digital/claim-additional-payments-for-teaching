@@ -4,7 +4,7 @@ RSpec.describe "Admin payroll run downloads" do
   let(:admin_session_id) { "some_user_id" }
 
   before do
-    sign_in_to_admin_with_role(AdminSession::SERVICE_OPERATOR_DFE_SIGN_IN_ROLE_CODE, admin_session_id)
+    sign_in_to_admin_with_role(AdminSession::PAYROLL_OPERATOR_DFE_SIGN_IN_ROLE_CODE, admin_session_id)
   end
 
   describe "downloads#new" do

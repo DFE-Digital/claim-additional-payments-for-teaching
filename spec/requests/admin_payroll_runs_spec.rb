@@ -32,20 +32,6 @@ RSpec.describe "Admin payroll runs" do
         expect(response).to redirect_to(admin_payroll_run_path(payroll_run))
       end
     end
-
-    describe "admin_payroll_runs#show" do
-      it "returns a csv containing the claims from the given payroll run" do
-        payroll_run = create(:payroll_run, claims_counts: {StudentLoans => 3})
-
-        create_list(:claim, 2, :approved)
-
-        get admin_payroll_run_path(payroll_run, format: :csv)
-
-        csv = CSV.parse(body, headers: true)
-
-        expect(csv.map { |row| row["CLAIM_ID"] }).to match_array(payroll_run.claims.map(&:reference))
-      end
-    end
   end
 
   context "when signed in as a support user" do

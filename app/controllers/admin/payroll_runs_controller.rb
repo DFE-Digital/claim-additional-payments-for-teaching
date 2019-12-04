@@ -20,14 +20,6 @@ module Admin
 
     def show
       @payroll_run = PayrollRun.find(params[:id])
-
-      respond_to do |format|
-        format.html
-        format.csv do
-          csv = Payroll::ClaimsCsv.new(@payroll_run)
-          send_file csv.file, type: "text/csv", filename: csv.filename
-        end
-      end
     end
   end
 end
