@@ -133,11 +133,12 @@ ActiveRecord::Schema.define(version: 2019_12_03_103255) do
   end
 
   create_table "payroll_runs", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.string "created_by"
+    t.string "created_by", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "confirmation_report_uploaded_by"
     t.index ["created_at"], name: "index_payroll_runs_on_created_at"
+    t.index ["updated_at"], name: "index_payroll_runs_on_updated_at"
   end
 
   create_table "policy_configurations", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
