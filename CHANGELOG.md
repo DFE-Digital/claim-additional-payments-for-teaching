@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+## [Release 038] - 2019-12-04
+
 - Service operators can see Maths and Physics claim eligibility
 - Fix a bug that would occassionally redirect users even after they'd continued
   their session
@@ -290,7 +292,9 @@ The format is based on [Keep a Changelog]
 - First release for student loan repayments private beta
 
 [unreleased]:
-  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-037...HEAD
+  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-038...HEAD
+[release 038]:
+  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-037...release-038
 [release 037]:
   https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-036...release-037
 [release 036]:
