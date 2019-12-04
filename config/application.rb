@@ -48,5 +48,7 @@ module DfeTeachersPaymentService
     # Make sure the `form_with` helper generates local forms, instead of defaulting
     # to remote and unobtrusive XHR forms
     config.action_view.form_with_generates_remote_forms = false
+
+    config.guidance_url = "https://www.gov.uk/government/publications/additional-payments-for-teaching-eligibility-and-payment-details"
   end
 end
