@@ -11,7 +11,7 @@ class PayrollRun < ApplicationRecord
   scope :this_month, -> { where(created_at: DateTime.now.all_month) }
 
   def total_award_amount
-    claims.sum(&:award_amount)
+    payments.sum(:award_amount)
   end
 
   def self.create_with_claims!(claims, attrs = {})
