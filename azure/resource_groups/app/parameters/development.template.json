@@ -157,7 +157,12 @@
       }
     },
     "ADMIN_ALLOWED_IPS": {
-      "value": "::/0,0.0.0.0/0"
+      "reference": {
+        "keyVault": {
+          "id": "${keyVaultId}"
+        },
+        "secretName": "AdminAllowedIPs"
+      }
     },
     "GOOGLE_ANALYTICS_ID": {
       "value": ""
