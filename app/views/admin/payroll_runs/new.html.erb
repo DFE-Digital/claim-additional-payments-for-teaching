@@ -1,10 +1,13 @@
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
     <h1 class="govuk-heading-xl">
-      Create payroll file
+      Run <%= Date.today.strftime("%B") %> payroll
     </h1>
 
-    <p class="govuk-body">Below is a preview of the payroll file, you can see how many approved claims will be included and the total award amount.</p>
+    <p class="govuk-body">
+      Below is a preview of the payroll run for <%= Date.today.strftime("%B") %>.
+      You can see how many approved claims will be included and the total award amount.
+    </p>
 
     <dl class="govuk-summary-list govuk-!-margin-bottom-9">
       <div class="govuk-summary-list__row">
@@ -33,5 +36,5 @@
   <% @payroll_run.claims.each do |claim| %>
     <%= hidden_field_tag "claim_ids[]", claim.id %>
   <% end %>
-  <%= form.submit "Create payroll file", class: "govuk-button", data: {module: "govuk-button"} %>
+  <%= form.submit "Confirm and submit", class: "govuk-button", data: {module: "govuk-button"} %>
 <% end %>

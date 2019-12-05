@@ -12,22 +12,21 @@ RSpec.feature "Payroll" do
     create(:claim, :approved, policy: StudentLoans)
     create(:claim, :approved, policy: StudentLoans)
 
-    click_on "Prepare payroll"
+    month_name = Date.today.strftime("%B")
+
+    click_on "Run #{month_name} payroll"
 
     expect(page).to have_content("Approved claims 3")
     expect(page).to have_content("Total award amount £4,000")
 
-    click_on "Create payroll file"
+    click_on "Confirm and submit"
+
+    payroll_run = PayrollRun.order(:created_at).last
 
     expect(page).to have_content("Approved claims 3")
     expect(page).to have_content("Total award amount £4,000")
-
-    click_on "Download file"
-
-    expect(page.response_headers["Content-Type"]).to eq("text/csv")
-
-    csv = CSV.parse(body, headers: true)
-    expect(csv.count).to eq(3)
+    expect(page).to have_content("Payroll run created")
+    expect(page).to have_field("payroll_run_download_link", with: new_admin_payroll_run_download_url(payroll_run))
   end
 
   context "when a payroll run already exists for the month" do
@@ -48,11 +47,12 @@ RSpec.feature "Payroll" do
 
     expected_claims = create_list(:claim, 3, :approved)
 
-    click_on "Prepare payroll"
+    month_name = Date.today.strftime("%B")
+    click_on "Run #{month_name} payroll"
 
     create_list(:claim, 3, :approved)
 
-    click_on "Create payroll file"
+    click_on "Confirm and submit"
 
     expect(page).to have_content("Approved claims 3")
 
@@ -72,6 +72,22 @@ RSpec.feature "Payroll" do
 
     expect(page).to have_content(I18n.l(first_payroll_run.created_at.to_date))
     expect(page).to have_content(I18n.l(last_payroll_run.created_at.to_date))
+
+    expect(page).to have_link "View", href: admin_payroll_run_path(first_payroll_run)
+    expect(page).to have_link "View", href: admin_payroll_run_path(last_payroll_run)
+  end
+
+  scenario "Service operator can view a payroll run" do
+    sign_in_to_admin_with_role(AdminSession::SERVICE_OPERATOR_DFE_SIGN_IN_ROLE_CODE)
+
+    payroll_run = create(:payroll_run, created_at: Time.zone.now)
+
+    click_on "Payroll"
+    click_on "View #{payroll_run.created_at.strftime("%B")} payroll run"
+
+    expect(page).to have_content payroll_run.claims.count
+    expect(page).to have_content "Downloaded No"
+    expect(page).to have_field("payroll_run_download_link", with: new_admin_payroll_run_download_url(payroll_run))
   end
 
   scenario "Service operator can upload a Payment Confirmation Report against a payroll run" do

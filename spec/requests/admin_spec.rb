@@ -59,6 +59,23 @@ RSpec.describe "Admin", type: :request do
         end
       end
 
+      context "when the user is a payroll operator" do
+        before do
+          sign_in_to_admin_with_role(AdminSession::PAYROLL_OPERATOR_DFE_SIGN_IN_ROLE_CODE, user_id, organisation_id)
+        end
+
+        it "renders the page and sets a session" do
+          payroll_run = create(:payroll_run)
+
+          get new_admin_payroll_run_download_path(payroll_run)
+
+          expect(response).to be_successful
+          expect(session[:user_id]).to eq(user_id)
+          expect(session[:organisation_id]).to eq(organisation_id)
+          expect(session[:role_codes]).to eq([AdminSession::PAYROLL_OPERATOR_DFE_SIGN_IN_ROLE_CODE])
+        end
+      end
+
       context "when the user is not authorised to access the service" do
         before do
           sign_in_to_admin_with_role("not-the-role-code-we-expect")

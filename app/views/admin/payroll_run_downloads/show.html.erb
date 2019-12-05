@@ -1,0 +1,26 @@
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <h1 class="govuk-heading-xl">
+      <%= @payroll_run.created_at.strftime("%B") %> payroll file
+    </h1>
+
+    <% if @payroll_run.download_available? %>
+      <p class="govuk-body">
+        The payroll run file is available for 30 seconds. If the download does not start automatically, click on the link below
+      </p>
+    <% else %>
+      <p class="govuk-body">
+        This month's payroll file was downloaded on
+        <%= l(@payroll_run.downloaded_at) %> by
+        <%= @payroll_run.downloaded_by %>.
+      </p>
+      <p class="govuk-body">
+        For security and privacy, this payroll file can only be downloaded once.
+      </p>
+    <% end %>
+
+  </div>
+  <div class="govuk-grid-column-full">
+    <%= link_to "Download #{@payroll_run.created_at.strftime("%B")} payroll file", admin_payroll_run_download_path(@payroll_run, format: :csv), class: ["govuk-body", "govuk-link"], data: { "auto-follow-link": "true" } if @payroll_run.download_available? %>
+  </div>
+</div>

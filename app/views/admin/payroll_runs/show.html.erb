@@ -1,10 +1,8 @@
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
     <h1 class="govuk-heading-xl">
-      Download payroll file
+      <%= @payroll_run.created_at.strftime("%B") %> payroll run
     </h1>
-
-    <p class="govuk-body">The payroll file has been created and can be downloaded.</p>
 
     <dl class="govuk-summary-list govuk-!-margin-bottom-9">
       <div class="govuk-summary-list__row">
@@ -25,8 +23,25 @@
           <%= number_to_currency(@payroll_run.total_award_amount) %>
         </dd>
       </div>
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+          Downloaded
+        </dt>
+
+        <dd class="govuk-summary-list__value">
+          <%= @payroll_run.download_triggered? ? l(@payroll_run.downloaded_at) : "No" %>
+        </dd>
+      </div>
     </dl>
   </div>
+  <% unless @payroll_run.download_triggered? %>
+    <div class="govuk-grid-column-two-thirds">
+      <p class="govuk-body">
+        You can now send this link to Cantium for processing.
+      </p>
+    </div>
+    <div class="govuk-grid-column-full">
+      <%= text_field_tag "payroll_run_download_link", new_admin_payroll_run_download_url(@payroll_run), readonly: true, class: ["govuk-input"] %>
+    </div>
+  <% end %>
 </div>
-
-<%= link_to 'Download file', { model: [:admin, @payroll_run], format: :csv }, class: "govuk-button", data: {module: "govuk-button"} %>

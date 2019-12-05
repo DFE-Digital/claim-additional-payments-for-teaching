@@ -21,16 +21,16 @@ RSpec.describe "Service configuration" do
     end
   end
 
-  context "when signed in as a support user" do
-    before do
-      sign_in_to_admin_with_role(AdminSession::SUPPORT_AGENT_DFE_SIGN_IN_ROLE_CODE)
-    end
-
+  context "when signed in as a payroll operator or a support agent" do
     describe "admin_policy_configurations#update" do
-      it "returns a unauthorized response" do
-        patch admin_policy_configuration_path(policy_configuration, policy_configuration: {open_for_submissions: false, availability_message: "Test message"})
+      [AdminSession::SUPPORT_AGENT_DFE_SIGN_IN_ROLE_CODE, AdminSession::PAYROLL_OPERATOR_DFE_SIGN_IN_ROLE_CODE].each do |role|
+        it "returns a unauthorized response" do
+          sign_in_to_admin_with_role(role)
 
-        expect(response).to have_http_status(:unauthorized)
+          patch admin_policy_configuration_path(policy_configuration, policy_configuration: {open_for_submissions: false, availability_message: "Test message"})
+
+          expect(response).to have_http_status(:unauthorized)
+        end
       end
     end
   end
