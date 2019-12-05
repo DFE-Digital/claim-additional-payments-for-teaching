@@ -6,6 +6,9 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+- Security: Bump puma from 4.3.0 to 4.3.1 to resolve Keepalive thread
+  overload/DoS vulnerability
+
 ## [Release 038] - 2019-12-04
 
 - Service operators can see Maths and Physics claim eligibility
