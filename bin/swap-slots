@@ -3,6 +3,11 @@
 ENVIRONMENT_NAME=$1
 APP_SERVICE_TYPE=$2
 
+function swap-slots {
+  echo "Swapping $APP_SERVICE_TYPE app service $SOURCE_SLOT_NAME slot to production for $RESOURCE_GROUP..."
+  az webapp deployment slot swap --name "$APP_SERVICE_NAME" --slot "$SOURCE_SLOT_NAME" --resource-group "$RESOURCE_GROUP" --subscription="$SUBSCRIPTION_ID"
+}
+
 case $ENVIRONMENT_NAME in
   "development")
     SUBSCRIPTION_ID="8655985a-2f87-44d7-a541-0be9a8c2779d"
@@ -32,9 +37,12 @@ while [ "$3" ]; do
   shift
 done
 
+SOURCE_SLOT_NAME="staging"
+
 case $APP_SERVICE_TYPE in
   "main")
     APP_SERVICE_NAME="$RESOURCE_GROUP-as"
+    URL="https://$APP_SERVICE_NAME-$SOURCE_SLOT_NAME.azurewebsites.net/healthcheck"
     ;;
   "vsp")
     APP_SERVICE_NAME="$RESOURCE_GROUP-vsp-as"
@@ -45,10 +53,17 @@ case $APP_SERVICE_TYPE in
     ;;
 esac
 
-SOURCE_SLOT_NAME="staging"
-
 echo "Restarting $APP_SERVICE_TYPE app service $SOURCE_SLOT_NAME slot for $RESOURCE_GROUP..."
 az webapp restart --name "$APP_SERVICE_NAME" --resource-group "$RESOURCE_GROUP" --slot "$SOURCE_SLOT_NAME" --subscription="$SUBSCRIPTION_ID"
 
-echo "Swapping $APP_SERVICE_TYPE app service $SOURCE_SLOT_NAME slot to production for $RESOURCE_GROUP..."
-az webapp deployment slot swap --name "$APP_SERVICE_NAME" --slot "$SOURCE_SLOT_NAME" --resource-group "$RESOURCE_GROUP" --subscription="$SUBSCRIPTION_ID"
+if [ -z "$URL" ]; then
+  swap-slots
+else
+  echo "Checking health of $APP_SERVICE_TYPE app service $SOURCE_SLOT_NAME slot..."
+  if curl --output /dev/null --silent --head --fail "$URL"; then
+    swap-slots
+  else
+    echo "Slot swapping failed - check the logs of $APP_SERVICE_NAME for more information"
+    exit 1
+  fi
+fi
