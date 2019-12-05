@@ -37,14 +37,14 @@ module StudentLoans
     def eligible_claim_school?
       !closed_before_policy_start? &&
         eligible_local_authority? &&
-        @school.state_funded? &&
-        (eligible_phase? || secondary_equivalent_special_school?)
+        (@school.state_funded? || @school.secure_unit?) &&
+        (eligible_phase? || secondary_equivalent_special_school? || secondary_equivalent_alternative_provision_school?)
     end
 
     def eligible_current_school?
       @school.open? &&
-        @school.state_funded? &&
-        (eligible_phase? || secondary_equivalent_special_school?)
+        (@school.state_funded? || @school.secure_unit?) &&
+        (eligible_phase? || secondary_equivalent_special_school? || secondary_equivalent_alternative_provision_school?)
     end
 
     private
@@ -59,6 +59,10 @@ module StudentLoans
 
     def secondary_equivalent_special_school?
       @school.special? && @school.school_type != "special_post_16_institutions" && @school.has_statutory_high_age_over_eleven?
+    end
+
+    def secondary_equivalent_alternative_provision_school?
+      @school.alternative_provision? && @school.has_statutory_high_age_over_eleven?
     end
 
     def closed_before_policy_start?

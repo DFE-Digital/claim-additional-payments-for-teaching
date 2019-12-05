@@ -54,8 +54,8 @@ module MathsAndPhysics
     def eligible_current_school?
       @school.open? &&
         eligible_local_authority_district? &&
-        @school.state_funded? &&
-        (eligible_phase? || secondary_equivalent_special_school?)
+        (@school.state_funded? || @school.secure_unit?) &&
+        (eligible_phase? || secondary_equivalent_special_school? || secondary_equivalent_alternative_provision_school?)
     end
 
     private
@@ -70,6 +70,10 @@ module MathsAndPhysics
 
     def secondary_equivalent_special_school?
       @school.special? && @school.school_type != "special_post_16_institutions" && @school.has_statutory_high_age_over_eleven?
+    end
+
+    def secondary_equivalent_alternative_provision_school?
+      @school.alternative_provision? && @school.has_statutory_high_age_over_eleven?
     end
   end
 end

@@ -159,6 +159,23 @@ RSpec.describe StudentLoans::SchoolEligibility do
       let(:school) { build(:school, :student_loan_eligible, close_date: after_start_of_policy) }
       it { is_expected.to be true }
     end
+
+    context "with alternative provision school" do
+      it "returns true with a state funded secondary equivalent alternative provision school" do
+        alternative_provision_school = School.new(school_type_group: :la_maintained, school_type: :pupil_referral_unit, statutory_high_age: 19, local_authority_district: local_authority_districts(:barnsley))
+        expect(MathsAndPhysics::SchoolEligibility.new(alternative_provision_school).eligible_current_school?).to eq true
+      end
+
+      it "returns true with a secure unit" do
+        alternative_provision_school = School.new(school_type_group: :other, school_type: :secure_unit, statutory_high_age: 19, local_authority_district: local_authority_districts(:barnsley))
+        expect(MathsAndPhysics::SchoolEligibility.new(alternative_provision_school).eligible_current_school?).to eq true
+      end
+
+      it "returns false with a alternative provision school that is not secondary equivalent" do
+        alternative_provision_school = School.new(school_type_group: :la_maintained, school_type: :pupil_referral_unit, statutory_high_age: 11, local_authority_district: local_authority_districts(:barnsley))
+        expect(MathsAndPhysics::SchoolEligibility.new(alternative_provision_school).eligible_current_school?).to eq false
+      end
+    end
   end
 
   describe "#eligible_current_school?" do

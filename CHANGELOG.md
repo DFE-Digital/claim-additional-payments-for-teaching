@@ -8,6 +8,8 @@ The format is based on [Keep a Changelog]
 
 - Restore uptime alerting to alert when the App / VSP are down
 - Don't match bank account sort code when identifying potentially similar claims
+- Alternative provisions schools and special schools that teach students who are
+  over 11 are eligible
 
 ## [Release 040] - 2019-12-09
 

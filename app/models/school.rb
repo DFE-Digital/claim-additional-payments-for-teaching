@@ -93,6 +93,14 @@ class School < ApplicationRecord
     academy_special_converter
   ].freeze
 
+  ALTERNATIVE_PROVISION_TYPES = %w[
+    pupil_referral_unit
+    secure_unit
+    free_school_alternative_provider
+    academy_alternative_provision_converter
+    academy_alternative_provision_sponsor_led
+  ].freeze
+
   enum phase: PHASES
   enum school_type_group: SCHOOL_TYPE_GROUPS
   enum school_type: SCHOOL_TYPES
@@ -123,11 +131,15 @@ class School < ApplicationRecord
   end
 
   def state_funded?
-    STATE_FUNDED_SCHOOL_TYPE_GROUPS.include?(school_type_group) && school_type != "other_independent_special_school"
+    (STATE_FUNDED_SCHOOL_TYPE_GROUPS.include?(school_type_group) && school_type != "other_independent_special_school") || secure_unit?
   end
 
   def special?
     SPECIAL_SCHOOL_TYPES.include?(school_type)
+  end
+
+  def alternative_provision?
+    ALTERNATIVE_PROVISION_TYPES.include?(school_type)
   end
 
   def has_statutory_high_age_over_eleven?
@@ -143,5 +155,9 @@ class School < ApplicationRecord
       local_authority.code,
       establishment_number,
     ].join("/")
+  end
+
+  def secure_unit?
+    school_type == "secure_unit"
   end
 end

@@ -61,4 +61,20 @@ RSpec.describe School, type: :model do
       expect(school.dfe_number).to eq("123/4567")
     end
   end
+
+  describe "#state_funded?" do
+    it "returns true for state funded school type groups" do
+      School::STATE_FUNDED_SCHOOL_TYPE_GROUPS.each do |group|
+        expect(School.new(school_type_group: group).state_funded?).to eq true
+      end
+    end
+
+    it "returns false for school type groups that are not state funded" do
+      non_state_funded = School::SCHOOL_TYPE_GROUPS.keys.map(&:to_s) - School::STATE_FUNDED_SCHOOL_TYPE_GROUPS
+
+      non_state_funded.each do |phase|
+        expect(School.new(school_type_group: phase).state_funded?).to eq false
+      end
+    end
+  end
 end
