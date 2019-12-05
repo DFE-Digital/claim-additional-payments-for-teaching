@@ -38,13 +38,13 @@ module StudentLoans
       !closed_before_policy_start? &&
         eligible_local_authority? &&
         @school.state_funded? &&
-        (eligible_phase? || eligible_special_school?)
+        (eligible_phase? || secondary_equivalent_special_school?)
     end
 
     def eligible_current_school?
       @school.open? &&
         @school.state_funded? &&
-        (eligible_phase? || eligible_special_school?)
+        (eligible_phase? || secondary_equivalent_special_school?)
     end
 
     private
@@ -57,8 +57,8 @@ module StudentLoans
       ELIGIBLE_PHASES.include?(@school.phase)
     end
 
-    def eligible_special_school?
-      @school.phase == "not_applicable" && @school.special? && @school.school_type != "special_post_16_institutions"
+    def secondary_equivalent_special_school?
+      @school.special? && @school.school_type != "special_post_16_institutions" && @school.has_statutory_high_age_over_eleven?
     end
 
     def closed_before_policy_start?

@@ -130,6 +130,10 @@ class School < ApplicationRecord
     SPECIAL_SCHOOL_TYPES.include?(school_type)
   end
 
+  def has_statutory_high_age_over_eleven?
+    statutory_high_age.present? && statutory_high_age > 11
+  end
+
   def open?
     close_date.nil?
   end

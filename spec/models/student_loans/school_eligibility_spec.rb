@@ -79,7 +79,12 @@ RSpec.describe StudentLoans::SchoolEligibility do
 
         context "and it doesn't have an education phase" do
           let(:school_attributes) { special_school_attributes.merge({phase: :not_applicable}) }
-          it { is_expected.to be true }
+          it { is_expected.to be false }
+
+          context "and it has a statutory high age of 16" do
+            let(:school_attributes) { {statutory_high_age: 16} }
+            it { is_expected.to be(true) }
+          end
         end
       end
 
@@ -98,6 +103,11 @@ RSpec.describe StudentLoans::SchoolEligibility do
 
         context "and it doesn't have an education phase" do
           let(:school_attributes) { special_free_school_attributes.merge({phase: :not_applicable}) }
+          it { is_expected.to be false }
+        end
+
+        context "and it has a statutory high age of over 11" do
+          let(:school_attributes) { special_free_school_attributes.merge({statutory_high_age: 16}) }
           it { is_expected.to be true }
         end
       end
@@ -200,13 +210,23 @@ RSpec.describe StudentLoans::SchoolEligibility do
     # e.g. Coney Hill School, URN 101696
     context "with a non-maintained special school with not_applicable phase" do
       let(:school_attributes) { {phase: :not_applicable, school_type_group: :special_schools, school_type: :non_maintained_special_school} }
-      it { is_expected.to be(true) }
+      it { is_expected.to be(false) }
+
+      context "and it has a statutory high age of 16" do
+        let(:school_attributes) { {phase: :not_applicable, school_type_group: :special_schools, school_type: :non_maintained_special_school, statutory_high_age: 16} }
+        it { is_expected.to be(true) }
+      end
     end
 
     # e.g. Frank Barnes School for Deaf Children, URN 100091
     context "with a community special school with not_applicable phase" do
       let(:school_attributes) { {phase: :not_applicable, school_type_group: :special_schools, school_type: :community_special_school} }
-      it { is_expected.to be(true) }
+      it { is_expected.to be(false) }
+
+      context "and it has a statutory high age of 16" do
+        let(:school_attributes) { {phase: :not_applicable, school_type_group: :special_schools, school_type: :community_special_school, statutory_high_age: 16} }
+        it { is_expected.to be(true) }
+      end
     end
 
     context "with a closed school that would otherwise be eligible" do

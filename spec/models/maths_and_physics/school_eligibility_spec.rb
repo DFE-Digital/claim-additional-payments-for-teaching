@@ -79,7 +79,12 @@ RSpec.describe MathsAndPhysics::SchoolEligibility do
 
         context "and it doesn't have an education phase" do
           let(:school_attributes) { special_school_attributes.merge({phase: :not_applicable}) }
-          it { is_expected.to be true }
+          it { is_expected.to be false }
+
+          context "and it has a statutory high age of 16" do
+            let(:school_attributes) { {statutory_high_age: 16} }
+            it { is_expected.to be(true) }
+          end
         end
       end
 
@@ -98,7 +103,12 @@ RSpec.describe MathsAndPhysics::SchoolEligibility do
 
         context "and it doesn't have an education phase" do
           let(:school_attributes) { special_free_school_attributes.merge({phase: :not_applicable}) }
-          it { is_expected.to be true }
+          it { is_expected.to be false }
+
+          context "and it has a statutory high age of 16" do
+            let(:school_attributes) { {statutory_high_age: 16} }
+            it { is_expected.to be(true) }
+          end
         end
       end
 
