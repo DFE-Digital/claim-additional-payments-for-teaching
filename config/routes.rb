@@ -2,6 +2,9 @@ Rails.application.routes.draw do
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
   root to: redirect(Rails.application.config.guidance_url)
 
+  # setup a simple healthcheck endpoint for monitoring purposes
+  get "/healthcheck", to: proc { [200, {}, ["OK"]] }
+
   # If the CANONICAL_HOSTNAME env var is present, and the request doesn't come from that
   # hostname, redirect us to the canonical hostname with the path and query string present
   if ENV["CANONICAL_HOSTNAME"].present?
@@ -9,9 +12,6 @@ Rails.application.routes.draw do
       match "/(*path)" => redirect(host: ENV["CANONICAL_HOSTNAME"]), :via => [:all]
     end
   end
-
-  # setup a simple healthcheck endpoint for monitoring purposes
-  get "/healthcheck", to: proc { [200, {}, ["OK"]] }
 
   get "refresh-session", to: "sessions#refresh", as: :refresh_session
 
