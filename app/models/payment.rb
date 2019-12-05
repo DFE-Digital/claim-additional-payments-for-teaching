@@ -1,5 +1,5 @@
 class Payment < ApplicationRecord
-  belongs_to :claim
+  has_one :claim
   belongs_to :payroll_run
 
   validates :award_amount, presence: true

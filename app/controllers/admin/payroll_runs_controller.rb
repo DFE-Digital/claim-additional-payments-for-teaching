@@ -7,7 +7,8 @@ module Admin
     end
 
     def new
-      @payroll_run = PayrollRun.new(claims: Claim.payrollable)
+      @claims = Claim.payrollable
+      @total_award_amount = @claims.sum(&:award_amount)
     end
 
     def create

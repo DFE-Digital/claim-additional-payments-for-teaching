@@ -7,7 +7,7 @@ FactoryBot.define do
     claim { association(:claim, :approved, policy: claim_policy) }
     association(:payroll_run, factory: :payroll_run)
 
-    award_amount { 123.45 }
+    award_amount { claim.award_amount }
 
     trait :with_figures do
       gross_value { 487.48 }
