@@ -41,7 +41,7 @@
       </p>
     </div>
     <div class="govuk-grid-column-full">
-      <%= text_field_tag "payroll_run_download_link", new_admin_payroll_run_download_url(@payroll_run), readonly: true, class: ["govuk-input"] %>
+      <%= text_field_tag "payroll_run_download_link", new_admin_payroll_run_download_url(@payroll_run), data: {"copy-to-clipboard": :true}, readonly: true, class: ["govuk-input"] %>
     </div>
   <% end %>
 </div>
