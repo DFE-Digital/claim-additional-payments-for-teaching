@@ -6,6 +6,11 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+## [Release 039] - 2019-12-06
+
+- Service operators can create and view a payroll run and provide a link to
+  payroll operators (Cantium users) to download a file
+- Payroll operators can download the payroll run file using a link
 - Security: Bump puma from 4.3.0 to 4.3.1 to resolve Keepalive thread
   overload/DoS vulnerability
 
@@ -15,9 +20,6 @@ The format is based on [Keep a Changelog]
 - Fix a bug that would occasionally redirect users even after they'd continued
   their session
 - Redirect requests to the root URL to a GOV.UK page about teacher payments
-- Service operators can create and view a payroll run and provide a link to
-  payroll operators (Cantium users) to download a file
-- Payroll operators can download the payroll run file using a link
 
 ## [Release 037] - 2019-11-28
 
@@ -298,7 +300,9 @@ The format is based on [Keep a Changelog]
 - First release for student loan repayments private beta
 
 [unreleased]:
-  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-038...HEAD
+  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-039...HEAD
+[release 039]:
+  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-038...release-039
 [release 038]:
   https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-037...release-038
 [release 037]:
