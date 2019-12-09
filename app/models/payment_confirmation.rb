@@ -1,12 +1,12 @@
 class PaymentConfirmation
-  attr_reader :payroll_run, :csv, :updated_claim_references, :errors, :admin_user_id
+  attr_reader :payroll_run, :csv, :updated_payment_ids, :errors, :admin_user_id
 
   def initialize(payroll_run, csv_file, admin_user_id)
     @payroll_run = payroll_run
     @errors = []
     @csv = PaymentConfirmationCsv.new(csv_file)
     @line_number = 1
-    @updated_claim_references = Set.new
+    @updated_payment_ids = Set.new
     @admin_user_id = admin_user_id
     validate
   end
@@ -24,9 +24,9 @@ class PaymentConfirmation
       payroll_run.update!(confirmation_report_uploaded_by: admin_user_id)
 
       if errors.empty?
-        payroll_run.claims.each do |claim|
-          PaymentMailer.confirmation(claim.payment, payment_date_timestamp).deliver_later
-          RecordPaymentJob.perform_later(claim.payment)
+        payroll_run.payments.each do |payment|
+          PaymentMailer.confirmation(payment, payment_date_timestamp).deliver_later
+          RecordPaymentJob.perform_later(payment)
         end
       else
         raise ActiveRecord::Rollback
@@ -72,8 +72,8 @@ class PaymentConfirmation
   end
 
   def update_payment_fields(payment, row)
-    if updated_claim_references.include?(payment.claim.reference)
-      errors.append("The claim ID #{payment.claim.reference} is repeated at line #{@line_number}")
+    if updated_payment_ids.include?(payment.id)
+      errors.append("The payment for claim ID #{payment.claim.reference} is repeated at line #{@line_number}")
       return
     end
 
@@ -87,7 +87,7 @@ class PaymentConfirmation
     payment.gross_pay = row["Gross Value"].to_d - row["Employers NI"].to_d
 
     if payment.save(context: :upload)
-      updated_claim_references.add(payment.claim.reference)
+      updated_payment_ids.add(payment.id)
     else
       errors.append("The claim at line #{@line_number} has invalid data")
     end

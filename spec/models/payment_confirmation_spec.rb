@@ -159,7 +159,7 @@ RSpec.describe PaymentConfirmation do
 
     it "fails and populates its errors, and does not update the payments" do
       expect(payment_confirmation.ingest).to be_falsey
-      expect(payment_confirmation.errors).to eq(["The claim ID #{payroll_run.claims[1].reference} is repeated at line 4"])
+      expect(payment_confirmation.errors).to eq(["The payment for claim ID #{payroll_run.claims[1].reference} is repeated at line 4"])
 
       expect(payroll_run.claims[0].payment.reload.payroll_reference).to eq(nil)
       expect(payroll_run.claims[1].payment.reload.payroll_reference).to eq(nil)
