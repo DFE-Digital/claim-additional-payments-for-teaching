@@ -5,7 +5,7 @@ require "csv"
 require "excel_utils"
 
 module Payroll
-  class ClaimCsvRow < SimpleDelegator
+  class PaymentCsvRow < SimpleDelegator
     DATE_FORMAT = "%Y%m%d"
     UNITED_KINGDOM = "United Kingdom"
     BASIC_RATE_TAX_CODE = "BR"
@@ -23,7 +23,7 @@ module Payroll
     private
 
     def data
-      Payroll::ClaimsCsv::FIELDS_WITH_HEADERS.keys.map do |f|
+      Payroll::PaymentsCsv::FIELDS_WITH_HEADERS.keys.map do |f|
         field = send(f)
         ExcelUtils.escape_formulas(field)
       end
@@ -128,15 +128,19 @@ module Payroll
     end
 
     def scheme_name
-      model.policy.name.titlecase
+      model.claim.policy.name.titlecase
     end
 
     def scheme_amount
-      model.payment.award_amount.to_s
+      model.award_amount.to_s
     end
 
     def roll_number
       model.building_society_roll_number
+    end
+
+    def reference
+      model.claim.reference
     end
 
     def model

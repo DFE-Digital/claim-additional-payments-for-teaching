@@ -1,7 +1,7 @@
 require "csv"
 
 module Payroll
-  class ClaimsCsv
+  class PaymentsCsv
     attr_reader :payroll_run
 
     FIELDS_WITH_HEADERS = {
@@ -44,8 +44,8 @@ module Payroll
     def file
       Tempfile.new.tap do |file|
         file.write(header_row)
-        payroll_run.claims.includes(:payment).each do |claim|
-          file.write(Payroll::ClaimCsvRow.new(claim).to_s)
+        payroll_run.payments.includes(:claim).each do |payment|
+          file.write(Payroll::PaymentCsvRow.new(payment).to_s)
         end
         file.rewind
       end

@@ -1,13 +1,13 @@
 require "rails_helper"
 
-RSpec.describe Payroll::ClaimCsvRow do
-  subject { described_class.new(claim) }
+RSpec.describe Payroll::PaymentCsvRow do
+  subject { described_class.new(payment) }
   let(:claim) { build(:claim) }
 
   describe "to_s with an approved claim that has a payment" do
     let(:row) { CSV.parse(subject.to_s).first }
     let(:payment_award_amount) { BigDecimal("1234.56") }
-    let!(:payment) { build(:payment, award_amount: payment_award_amount, claim: claim) }
+    let(:payment) { build(:payment, award_amount: payment_award_amount, claim: claim) }
     let(:claim) do
       build(:claim, :approved,
         payroll_gender: :female,
@@ -93,7 +93,7 @@ RSpec.describe Payroll::ClaimCsvRow do
     it "escapes fields with strings that could be dangerous in Microsoft Excel and friends" do
       claim.address_line_1 = "=ActiveCell.Row-1,14"
 
-      expect(row[Payroll::ClaimsCsv::FIELDS_WITH_HEADERS.find_index { |k, _| k == :address_line_1 }]).to eq("\\#{claim.address_line_1}")
+      expect(row[Payroll::PaymentsCsv::FIELDS_WITH_HEADERS.find_index { |k, _| k == :address_line_1 }]).to eq("\\#{claim.address_line_1}")
     end
   end
 end
