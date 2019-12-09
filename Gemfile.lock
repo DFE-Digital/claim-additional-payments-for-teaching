@@ -92,7 +92,7 @@ GEM
     crack (0.4.3)
       safe_yaml (~> 1.0.0)
     crass (1.0.5)
-    data_migrate (6.1.0)
+    data_migrate (6.2.0)
       rails (>= 5.0)
     delayed_cron_job (0.7.2)
       delayed_job (>= 4.1)
@@ -136,7 +136,7 @@ GEM
     listen (3.2.1)
       rb-fsevent (~> 0.10, >= 0.10.3)
       rb-inotify (~> 0.9, >= 0.9.10)
-    loofah (2.3.1)
+    loofah (2.4.0)
       crass (~> 1.0.2)
       nokogiri (>= 1.5.9)
     mail (2.7.1)
@@ -154,7 +154,7 @@ GEM
     msgpack (1.3.1)
     nanoid (2.0.0)
     nio4r (2.5.2)
-    nokogiri (1.10.5)
+    nokogiri (1.10.7)
       mini_portile2 (~> 2.4.0)
     notifications-ruby-client (4.0.0)
       jwt (>= 1.5, < 3)
@@ -325,7 +325,7 @@ GEM
     websocket-extensions (0.1.4)
     xpath (3.2.0)
       nokogiri (~> 1.8)
-    zeitwerk (2.2.1)
+    zeitwerk (2.2.2)
 
 PLATFORMS
   ruby
