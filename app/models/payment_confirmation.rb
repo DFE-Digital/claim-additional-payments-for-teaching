@@ -26,7 +26,7 @@ class PaymentConfirmation
       if errors.empty?
         payroll_run.claims.each do |claim|
           PaymentMailer.confirmation(claim.payment, payment_date_timestamp).deliver_later
-          RecordPaymentJob.perform_later(claim)
+          RecordPaymentJob.perform_later(claim.payment)
         end
       else
         raise ActiveRecord::Rollback

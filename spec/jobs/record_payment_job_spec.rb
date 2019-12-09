@@ -7,7 +7,7 @@ RSpec.describe RecordPaymentJob do
 
   subject { described_class.new }
 
-  it "sends the claim reference, policy and payment date to claims.submitted.ENV dataset" do
+  it "sends the claim reference, policy and payment date to claims.paid.ENV dataset" do
     ClimateControl.modify ENVIRONMENT_NAME: "environment_name" do
       claim_data = {
         reference: claim.reference,
@@ -17,7 +17,7 @@ RSpec.describe RecordPaymentJob do
 
       dataset_post_stub = stub_geckoboard_dataset_update("claims.paid.environment_name")
 
-      subject.perform(claim)
+      subject.perform(payment)
 
       expect(dataset_post_stub.with(body: {data: [claim_data]})).to have_been_requested
     end
