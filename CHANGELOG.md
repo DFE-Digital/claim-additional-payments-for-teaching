@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+## [Release 040] - 2019-12-09
+
 - Load the admin IP whitelist from the Key vault
 
 ## [Release 039] - 2019-12-06
@@ -302,7 +304,9 @@ The format is based on [Keep a Changelog]
 - First release for student loan repayments private beta
 
 [unreleased]:
-  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-039...HEAD
+  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-040...HEAD
+[release 040]:
+  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-039...release-040
 [release 039]:
   https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-038...release-039
 [release 038]:
