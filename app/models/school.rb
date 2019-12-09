@@ -22,6 +22,8 @@ class School < ApplicationRecord
     all_through: 7,
   }.freeze
 
+  SECONDARY_PHASES = %w[secondary middle_deemed_secondary all_through].freeze
+
   SCHOOL_TYPE_GROUPS = {
     colleges: 1,
     universities: 2,
@@ -144,6 +146,10 @@ class School < ApplicationRecord
 
   def has_statutory_high_age_over_eleven?
     statutory_high_age.present? && statutory_high_age > 11
+  end
+
+  def secondary_phase?
+    SECONDARY_PHASES.include?(phase)
   end
 
   def open?

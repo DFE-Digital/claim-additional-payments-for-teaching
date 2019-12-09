@@ -1,6 +1,5 @@
 module MathsAndPhysics
   class SchoolEligibility
-    ELIGIBLE_PHASES = %w[secondary middle_deemed_secondary all_through].freeze
     ELIGIBLE_LOCAL_AUTHORITY_DISTRICT_CODES = [
       "E08000016", # Barnsley
       "E06000009", # Blackpool
@@ -55,17 +54,13 @@ module MathsAndPhysics
       @school.open? &&
         eligible_local_authority_district? &&
         (@school.state_funded? || @school.secure_unit?) &&
-        (eligible_phase? || secondary_equivalent_special_school? || secondary_equivalent_alternative_provision_school?)
+        (@school.secondary_phase? || secondary_equivalent_special_school? || secondary_equivalent_alternative_provision_school?)
     end
 
     private
 
     def eligible_local_authority_district?
       ELIGIBLE_LOCAL_AUTHORITY_DISTRICT_CODES.include?(@school.local_authority_district.code)
-    end
-
-    def eligible_phase?
-      ELIGIBLE_PHASES.include?(@school.phase)
     end
 
     def secondary_equivalent_special_school?

@@ -77,4 +77,20 @@ RSpec.describe School, type: :model do
       end
     end
   end
+
+  describe "#secondary_phase?" do
+    it "returns true for all secondary phases" do
+      School::SECONDARY_PHASES.each do |phase|
+        expect(School.new(phase: phase).secondary_phase?).to eq true
+      end
+    end
+
+    it "returns false for all other phases" do
+      non_secondary_phases = School::PHASES.keys.map(&:to_s) - School::SECONDARY_PHASES
+
+      non_secondary_phases.each do |phase|
+        expect(School.new(phase: phase).secondary_phase?).to eq false
+      end
+    end
+  end
 end
