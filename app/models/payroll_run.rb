@@ -19,7 +19,7 @@ class PayrollRun < ApplicationRecord
     ActiveRecord::Base.transaction do
       PayrollRun.create!(attrs).tap do |payroll_run|
         claims.each do |claim|
-          Payment.create!(payroll_run: payroll_run, claim: claim, award_amount: claim.award_amount)
+          Payment.create!(payroll_run: payroll_run, claims: [claim], award_amount: claim.award_amount)
         end
       end
     end

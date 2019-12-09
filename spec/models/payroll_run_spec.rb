@@ -33,8 +33,8 @@ RSpec.describe PayrollRun, type: :model do
 
   describe "#total_award_amount" do
     it "returns the sum of the award amounts of its claims" do
-      payment_1 = build(:payment, claim: build(:claim, :approved, eligibility: build(:student_loans_eligibility, :eligible, student_loan_repayment_amount: 1500)))
-      payment_2 = build(:payment, claim: build(:claim, :approved, eligibility: build(:student_loans_eligibility, :eligible, student_loan_repayment_amount: 2000)))
+      payment_1 = build(:payment, claims: [build(:claim, :approved, eligibility: build(:student_loans_eligibility, :eligible, student_loan_repayment_amount: 1500))])
+      payment_2 = build(:payment, claims: [build(:claim, :approved, eligibility: build(:student_loans_eligibility, :eligible, student_loan_repayment_amount: 2000))])
 
       payroll_run = PayrollRun.create!(created_by: user, payments: [payment_1, payment_2])
 

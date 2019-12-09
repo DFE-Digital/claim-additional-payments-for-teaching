@@ -3,7 +3,7 @@ require "geckoboard"
 
 RSpec.describe RecordPaymentJob do
   let(:claim) { build(:claim) }
-  let(:payment) { build(:payment, :with_figures, updated_at: DateTime.now, claim: claim) }
+  let(:payment) { build(:payment, :with_figures, updated_at: DateTime.now, claims: [claim]) }
 
   subject { described_class.new }
 

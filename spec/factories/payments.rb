@@ -4,7 +4,7 @@ FactoryBot.define do
       claim_policy { StudentLoans }
     end
 
-    claim { association(:claim, :approved, policy: claim_policy) }
+    claims { [association(:claim, :approved, policy: claim_policy)] }
     association(:payroll_run, factory: :payroll_run)
 
     award_amount { claim.award_amount }

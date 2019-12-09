@@ -44,7 +44,7 @@ module Payroll
     def file
       Tempfile.new.tap do |file|
         file.write(header_row)
-        payroll_run.payments.includes(:claim).each do |payment|
+        payroll_run.payments.includes(:claims).each do |payment|
           file.write(Payroll::PaymentCsvRow.new(payment).to_s)
         end
         file.rewind
