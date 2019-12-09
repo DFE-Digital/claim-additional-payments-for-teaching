@@ -48,7 +48,7 @@ RSpec.describe School, type: :model do
     end
   end
 
-  describe "dfe_number" do
+  describe "#dfe_number" do
     let(:school) do
       build(:school,
         name: "Bash Street School",
