@@ -54,7 +54,7 @@ module MathsAndPhysics
       @school.open? &&
         eligible_local_authority_district? &&
         (@school.state_funded? || @school.secure_unit?) &&
-        (@school.secondary_phase? || @school.secondary_equivalent_special? || @school.secondary_equivalent_alternative_provision?)
+        @school.secondary_or_equivalent?
     end
 
     private

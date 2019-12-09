@@ -136,18 +136,6 @@ class School < ApplicationRecord
     (STATE_FUNDED_SCHOOL_TYPE_GROUPS.include?(school_type_group) && school_type != "other_independent_special_school") || secure_unit?
   end
 
-  def secondary_phase?
-    SECONDARY_PHASES.include?(phase)
-  end
-
-  def secondary_equivalent_special?
-    special? && school_type != "special_post_16_institutions" && has_statutory_high_age_over_eleven?
-  end
-
-  def secondary_equivalent_alternative_provision?
-    alternative_provision? && has_statutory_high_age_over_eleven?
-  end
-
   def open?
     close_date.nil?
   end
@@ -163,12 +151,30 @@ class School < ApplicationRecord
     school_type == "secure_unit"
   end
 
+  def secondary_or_equivalent?
+    secondary_phase? || secondary_equivalent_special? || secondary_equivalent_alternative_provision?
+  end
+
+  private
+
   def alternative_provision?
     ALTERNATIVE_PROVISION_TYPES.include?(school_type)
   end
 
   def has_statutory_high_age_over_eleven?
     statutory_high_age.present? && statutory_high_age > 11
+  end
+
+  def secondary_phase?
+    SECONDARY_PHASES.include?(phase)
+  end
+
+  def secondary_equivalent_special?
+    special? && school_type != "special_post_16_institutions" && has_statutory_high_age_over_eleven?
+  end
+
+  def secondary_equivalent_alternative_provision?
+    alternative_provision? && has_statutory_high_age_over_eleven?
   end
 
   def special?

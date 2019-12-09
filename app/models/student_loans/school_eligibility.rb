@@ -37,13 +37,13 @@ module StudentLoans
       !closed_before_policy_start? &&
         eligible_local_authority? &&
         (@school.state_funded? || @school.secure_unit?) &&
-        (@school.secondary_phase? || @school.secondary_equivalent_special? || @school.secondary_equivalent_alternative_provision?)
+        @school.secondary_or_equivalent?
     end
 
     def eligible_current_school?
       @school.open? &&
         (@school.state_funded? || @school.secure_unit?) &&
-        (@school.secondary_phase? || @school.secondary_equivalent_special? || @school.secondary_equivalent_alternative_provision?)
+        @school.secondary_or_equivalent?
     end
 
     private

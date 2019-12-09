@@ -78,58 +78,54 @@ RSpec.describe School, type: :model do
     end
   end
 
-  describe "#secondary_phase?" do
-    it "returns true for all secondary phases" do
+  describe "#secondary_or_equivalent?" do
+    it "returns true for a secondary school" do
       School::SECONDARY_PHASES.each do |phase|
-        expect(School.new(phase: phase).secondary_phase?).to eq true
+        expect(School.new(phase: phase).secondary_or_equivalent?).to eq true
       end
     end
 
-    it "returns false for all other phases" do
+    it "returns false for schools that are not secondary" do
       non_secondary_phases = School::PHASES.keys.map(&:to_s) - School::SECONDARY_PHASES
 
       non_secondary_phases.each do |phase|
-        expect(School.new(phase: phase).secondary_phase?).to eq false
+        expect(School.new(phase: phase).secondary_or_equivalent?).to eq false
       end
     end
-  end
 
-  describe "#secondary_equivalent_special?" do
     it "returns true for a special school that teaches students over eleven" do
       school = School.new(school_type: :community_special_school, statutory_high_age: 16)
-      expect(school.secondary_equivalent_special?).to eq true
+      expect(school.secondary_or_equivalent?).to eq true
     end
 
     it "returns false for a special school that teaches students eleven or under" do
       school = School.new(school_type: :community_special_school, statutory_high_age: 11)
-      expect(school.secondary_equivalent_special?).to eq false
+      expect(school.secondary_or_equivalent?).to eq false
     end
 
     it "returns false for a non special school that teaches students over eleven" do
       school = School.new(school_type: :community_school, statutory_high_age: 16)
-      expect(school.secondary_equivalent_special?).to eq false
+      expect(school.secondary_or_equivalent?).to eq false
     end
 
     it "returns false for a special school that is a post 16 institution" do
       school = School.new(school_type: :special_post_16_institutions, statutory_high_age: 18)
-      expect(school.secondary_equivalent_special?).to eq false
+      expect(school.secondary_or_equivalent?).to eq false
     end
-  end
 
-  describe "#secondary_equivalent_alternative_provision?" do
     it "returns true for a alternative provision school that teaches students over eleven" do
       school = School.new(school_type: :pupil_referral_unit, statutory_high_age: 16)
-      expect(school.secondary_equivalent_alternative_provision?).to eq true
+      expect(school.secondary_or_equivalent?).to eq true
     end
 
     it "returns false for a alternative provision school that teaches students under eleven" do
       school = School.new(school_type: :pupil_referral_unit, statutory_high_age: 11)
-      expect(school.secondary_equivalent_alternative_provision?).to eq false
+      expect(school.secondary_or_equivalent?).to eq false
     end
 
     it "returns false for a non alternative provision school that teaches students over 11" do
       school = School.new(school_type: :community_school, statutory_high_age: 16)
-      expect(school.secondary_equivalent_alternative_provision?).to eq false
+      expect(school.secondary_or_equivalent?).to eq false
     end
   end
 end
