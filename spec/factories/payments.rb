@@ -11,7 +11,7 @@ FactoryBot.define do
     end
     association(:payroll_run, factory: :payroll_run)
 
-    award_amount { claim.award_amount }
+    award_amount { claims.sum(&:award_amount) }
 
     trait :with_figures do
       # This is a rough approximation of the "grossing up" done by Cantium. It
