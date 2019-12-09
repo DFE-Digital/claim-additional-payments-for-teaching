@@ -11,11 +11,6 @@ class ClaimMailerPreview < ActionMailer::Preview
     ClaimMailer.rejected(claim_for(Claim.rejected))
   end
 
-  def payment_confirmation
-    claim = claim_for(Claim.joins(:payment).where("payments.gross_value IS NOT NULL"))
-    ClaimMailer.payment_confirmation(claim, DateTime.now.to_time.to_i)
-  end
-
   private
 
   def claim_for(scope)

@@ -17,15 +17,6 @@ class ClaimMailer < Mail::Notify::Mailer
     view_mail_with_claim_and_subject(claim, "Your #{@claim_description} has been rejected, reference number: #{claim.reference}")
   end
 
-  def payment_confirmation(claim, payment_date_timestamp)
-    @claim_description = claim_description(claim)
-    @reference = claim.reference
-    @payment = claim.payment
-    @payment_date = Time.at(payment_date_timestamp).to_date
-
-    view_mail_with_claim_and_subject(claim, "We’re paying your #{@claim_description}, reference number: #{claim.reference}")
-  end
-
   private
 
   def claim_description(claim)
