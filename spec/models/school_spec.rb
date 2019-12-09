@@ -93,4 +93,26 @@ RSpec.describe School, type: :model do
       end
     end
   end
+
+  describe "#secondary_equivalent_special?" do
+    it "returns true for a special school that teaches students over eleven" do
+      school = School.new(school_type: :community_special_school, statutory_high_age: 16)
+      expect(school.secondary_equivalent_special?).to eq true
+    end
+
+    it "returns false for a special school that teaches students eleven or under" do
+      school = School.new(school_type: :community_special_school, statutory_high_age: 11)
+      expect(school.secondary_equivalent_special?).to eq false
+    end
+
+    it "returns false for a non special school that teaches students over eleven" do
+      school = School.new(school_type: :community_school, statutory_high_age: 16)
+      expect(school.secondary_equivalent_special?).to eq false
+    end
+
+    it "returns false for a special school that is a post 16 institution" do
+      school = School.new(school_type: :special_post_16_institutions, statutory_high_age: 18)
+      expect(school.secondary_equivalent_special?).to eq false
+    end
+  end
 end

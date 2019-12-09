@@ -152,6 +152,10 @@ class School < ApplicationRecord
     SECONDARY_PHASES.include?(phase)
   end
 
+  def secondary_equivalent_special?
+    special? && school_type != "special_post_16_institutions" && has_statutory_high_age_over_eleven?
+  end
+
   def open?
     close_date.nil?
   end
