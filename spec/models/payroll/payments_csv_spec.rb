@@ -42,9 +42,8 @@ RSpec.describe Payroll::PaymentsCsv do
         SORT_CODE
         ACCOUNT_NUMBER
         ROLL_NUMBER
-        SCHEME_NAME
         SCHEME_AMOUNT
-        CLAIM_ID
+        PAYMENT_ID
       ].join(",")
 
       expect(file_lines[0]).to eq(expected_header_row)

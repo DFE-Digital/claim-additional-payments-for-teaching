@@ -127,10 +127,6 @@ module Payroll
       model.banking_name
     end
 
-    def scheme_name
-      model.claim.policy.name.titlecase
-    end
-
     def scheme_amount
       model.award_amount.to_s
     end
@@ -139,8 +135,8 @@ module Payroll
       model.building_society_roll_number
     end
 
-    def reference
-      model.claim.reference
+    def payment_id
+      model.id
     end
 
     def model
