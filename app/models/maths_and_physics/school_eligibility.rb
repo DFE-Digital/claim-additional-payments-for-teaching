@@ -54,17 +54,13 @@ module MathsAndPhysics
       @school.open? &&
         eligible_local_authority_district? &&
         (@school.state_funded? || @school.secure_unit?) &&
-        (@school.secondary_phase? || @school.secondary_equivalent_special? || secondary_equivalent_alternative_provision_school?)
+        (@school.secondary_phase? || @school.secondary_equivalent_special? || @school.secondary_equivalent_alternative_provision?)
     end
 
     private
 
     def eligible_local_authority_district?
       ELIGIBLE_LOCAL_AUTHORITY_DISTRICT_CODES.include?(@school.local_authority_district.code)
-    end
-
-    def secondary_equivalent_alternative_provision_school?
-      @school.alternative_provision? && @school.has_statutory_high_age_over_eleven?
     end
   end
 end
