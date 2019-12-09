@@ -36,8 +36,10 @@ Architecture decision records can be found in the
      section.
 2. Run `bundle install` and `yarn install` to install the dependencies
 3. Run `bundle exec rails db:setup` to set up the database development
-4. Run `bundle exec foreman start` to launch the app on https://localhost:3000/
-5. Visit one of the following urls in your browser to access the relevant
+4. Run `bundle exec rails data:schema:load` to seed the data migrations
+   information
+5. Run `bundle exec foreman start` to launch the app on https://localhost:3000/
+6. Visit one of the following urls in your browser to access the relevant
    policy:
 
 - **Student Loans:** https://localhost:3000/student-loans/claim
