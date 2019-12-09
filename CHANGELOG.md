@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+- Load the admin IP whitelist from the Key vault
+
 ## [Release 039] - 2019-12-06
 
 - Service operators can create and view a payroll run and provide a link to
