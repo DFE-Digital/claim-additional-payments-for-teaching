@@ -188,9 +188,8 @@ schools.
 
 In development we do not automatically seed the database with the full list of
 schools (as supplied by the Get Information About Schools service). To import
-the full list, run `rake schools_data:import`. This enqueues the import as an
-Active Job, so you will need to be running the worker for this to have any
-effect.
+the full data set for schools run `rails schools_data:import`. This can take a
+few minutes to complete.
 
 ## Creating data migrations
 
