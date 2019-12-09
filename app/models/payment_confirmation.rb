@@ -17,7 +17,7 @@ class PaymentConfirmation
     ActiveRecord::Base.transaction do
       csv.rows.each do |row|
         @line_number += 1
-        payment = fetch_payment_by_reference(row["Claim ID"])
+        payment = fetch_payment_by_id(row["Payment ID"])
         update_payment_fields(payment, row) if payment
       end
 
@@ -43,7 +43,7 @@ class PaymentConfirmation
   def validate
     if csv.errors.empty?
       check_payroll_run
-      check_for_missing_claims
+      check_for_missing_payments
     else
       @errors = csv.errors
     end
@@ -53,27 +53,27 @@ class PaymentConfirmation
     errors.append("A Payment Confirmation Report has already been uploaded for this payroll run") if payroll_run.confirmation_report_uploaded_by
   end
 
-  def check_for_missing_claims
-    missing_claims_references = payroll_run.claims.map(&:reference) - csv.rows.map { |c| c["Claim ID"] }
-    missing_claims_references.each do |claim|
-      errors.append("The claim ID #{claim} is missing from the CSV")
+  def check_for_missing_payments
+    missing_payment_ids = payroll_run.payments.map { |payment| payment.id } - csv.rows.map { |c| c["Payment ID"] }
+    missing_payment_ids.each do |id|
+      errors.append("The payment ID #{id} is missing from the CSV")
     end
   end
 
-  def fetch_payment_by_reference(reference)
-    claim = payroll_run.claims.detect { |claim| claim.reference == reference }
+  def fetch_payment_by_id(id)
+    payment = payroll_run.payments.detect { |payment| payment.id == id }
 
-    if claim
-      claim.payment
+    if payment
+      payment
     else
-      errors.append("The CSV file contains a claim that is not part of the payroll run at line #{@line_number}")
+      errors.append("The CSV file contains a payment that is not part of the payroll run at line #{@line_number}")
       nil
     end
   end
 
   def update_payment_fields(payment, row)
     if updated_payment_ids.include?(payment.id)
-      errors.append("The payment for claim ID #{payment.claim.reference} is repeated at line #{@line_number}")
+      errors.append("The payment with ID #{payment.id} is repeated at line #{@line_number}")
       return
     end
 
