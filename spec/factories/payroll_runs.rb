@@ -15,7 +15,7 @@ FactoryBot.define do
       # - 10 payments each of which has a single StudentLoans claim;
       # - 15 payments each of which has a single MathsAndPhysics claim;
       # - 5 payments each of which has two claims: one for StudentLoans and one for MathsAndPhysics.
-      claims_counts { {StudentLoans => 1} }
+      claims_counts { {StudentLoans => 0} }
       payment_traits { [] }
     end
 
