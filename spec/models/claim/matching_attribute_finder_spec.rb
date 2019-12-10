@@ -53,22 +53,40 @@ RSpec.describe Claim::MatchingAttributeFinder do
       expect(matching_claims).to eq([claim_with_matching_attribute])
     end
 
-    it "includes a claim with a matching bank account number" do
-      claim_with_matching_attribute = create(:claim, :submitted, bank_account_number: source_claim.bank_account_number)
+    it "does not include a claim with a matching bank account number" do
+      create(:claim, :submitted, bank_account_number: source_claim.bank_account_number)
 
-      expect(matching_claims).to eq([claim_with_matching_attribute])
+      expect(matching_claims).to eq([])
     end
 
-    it "includes a claim with a matching bank sort code" do
-      claim_with_matching_attribute = create(:claim, :submitted, bank_sort_code: source_claim.bank_sort_code)
+    it "does not include a claim with a matching bank sort code" do
+      create(:claim, :submitted, bank_sort_code: source_claim.bank_sort_code)
 
-      expect(matching_claims).to eq([claim_with_matching_attribute])
+      expect(matching_claims).to eq([])
     end
 
-    it "includes a claim with a matching building society roll number" do
-      claim_with_matching_attribute = create(:claim, :submitted, building_society_roll_number: source_claim.building_society_roll_number)
+    it "does not include a claim with a matching building society roll number" do
+      create(:claim, :submitted, building_society_roll_number: source_claim.building_society_roll_number)
 
-      expect(matching_claims).to eq([claim_with_matching_attribute])
+      expect(matching_claims).to eq([])
+    end
+
+    it "includes a claim with a matching bank account number and sort code" do
+      source_claim.update!(building_society_roll_number: nil)
+      claim_with_matching_attributes = create(:claim, :submitted,
+        bank_account_number: source_claim.bank_account_number,
+        bank_sort_code: source_claim.bank_sort_code)
+
+      expect(matching_claims).to eq([claim_with_matching_attributes])
+    end
+
+    it "includes a claim with a matching bank account number, sort code and roll number" do
+      claim_with_matching_attributes = create(:claim, :submitted,
+        bank_account_number: source_claim.bank_account_number,
+        bank_sort_code: source_claim.bank_sort_code,
+        building_society_roll_number: source_claim.building_society_roll_number)
+
+      expect(matching_claims).to eq([claim_with_matching_attributes])
     end
 
     it "does not match claims with nil building society roll numbers" do

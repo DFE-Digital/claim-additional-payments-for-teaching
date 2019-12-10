@@ -7,6 +7,7 @@ The format is based on [Keep a Changelog]
 ## [Unreleased]
 
 - Restore uptime alerting to alert when the App / VSP are down
+- Don't match bank account sort code when identifying potentially similar claims
 
 ## [Release 040] - 2019-12-09
 

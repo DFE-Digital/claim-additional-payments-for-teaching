@@ -49,8 +49,8 @@ module Admin
     end
 
     def matching_attributes(first_claim, second_claim)
-      first_attributes = first_claim.attributes.slice(*Claim::MatchingAttributeFinder::ATTRIBUTES_TO_MATCH).to_a
-      second_attributes = second_claim.attributes.slice(*Claim::MatchingAttributeFinder::ATTRIBUTES_TO_MATCH).to_a
+      first_attributes = first_claim.attributes.slice(*Claim::MatchingAttributeFinder::ATTRIBUTE_GROUPS_TO_MATCH.flatten).to_a
+      second_attributes = second_claim.attributes.slice(*Claim::MatchingAttributeFinder::ATTRIBUTE_GROUPS_TO_MATCH.flatten).to_a
 
       matching_attributes = first_attributes & second_attributes
       matching_attributes.to_h.compact.keys.map(&:humanize).sort
