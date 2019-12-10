@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+- Restore uptime alerting to alert when the App / VSP are down
+
 ## [Release 040] - 2019-12-09
 
 - Load the admin IP whitelist from the Key vault
