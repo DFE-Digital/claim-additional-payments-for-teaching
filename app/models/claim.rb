@@ -187,6 +187,12 @@ class Claim < ApplicationRecord
     StudentLoan::PLAN_1_COUNTRIES.include?(student_loan_country)
   end
 
+  # Returns true if the claim has a confirmed identity. For now this can only
+  # be done through GOV.UK Verify, but will change in the future.
+  def identity_confirmed?
+    verified_fields.any?
+  end
+
   def address_verified?
     (ADDRESS_ATTRIBUTES & verified_fields).any?
   end
