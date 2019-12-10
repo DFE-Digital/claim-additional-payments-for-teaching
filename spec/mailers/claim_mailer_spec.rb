@@ -65,41 +65,6 @@ RSpec.describe ClaimMailer, type: :mailer do
           expect(mail.body.encoded).to include("not been able to approve")
         end
       end
-
-      describe "#payment_confirmation" do
-        let(:payment) { build(:payment, :with_figures, net_pay: 500.00, student_loan_repayment: 60, claim: claim) }
-        let(:claim) { build(:claim, :submitted, policy: policy) }
-        let(:payment_date_timestamp) { Time.new(2019, 1, 1).to_i }
-        let(:mail) { ClaimMailer.payment_confirmation(payment.claim, payment_date_timestamp) }
-
-        it_behaves_like "an email related to a claim", policy
-
-        it "mentions that claim is being paid in the subject and body" do
-          expect(mail.subject).to include("paying")
-          expect(mail.body.encoded).to include("We’re paying your claim")
-        end
-
-        it "includes the NET pay amount and payment date in the body" do
-          expect(mail.body.encoded).to include("You will receive £500.00 on or after 1 January 2019")
-        end
-
-        context "when user does not currently have a student loan" do
-          let(:payment) { build(:payment, :with_figures, student_loan_repayment: nil, claim: claim) }
-
-          it "does not mention the content relating to student loan deductions" do
-            expect(mail.body.encoded).to_not include("student loan contribution")
-          end
-        end
-
-        context "when user has a student loan" do
-          let(:payment) { build(:payment, :with_figures, student_loan_repayment: 10, claim: claim) }
-
-          it "mentions the student loan deduction content and lists their contribution" do
-            expect(mail.body.encoded).to include("This payment is treated as pay and is therefore subject to a student loan contribution, if applicable.")
-            expect(mail.body.encoded).to include("Student loan contribution: £10.00")
-          end
-        end
-      end
     end
   end
 end
