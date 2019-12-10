@@ -35,6 +35,7 @@ localhost.key
 
 # Ignore Verify Service Provider
 bin/vsp/*
+!bin/vsp/.gitkeep
 
 # Ignore RSpec example status persistence file
 spec/examples.txt
