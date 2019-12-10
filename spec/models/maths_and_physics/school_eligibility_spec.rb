@@ -1,8 +1,8 @@
 require "rails_helper"
 
 RSpec.describe MathsAndPhysics::SchoolEligibility do
-  describe "#check" do
-    subject { MathsAndPhysics::SchoolEligibility.new(school).check }
+  describe "#eligible_current_school?" do
+    subject { MathsAndPhysics::SchoolEligibility.new(school).eligible_current_school? }
     let(:school) { build(:school, school_attributes.merge({local_authority_district: local_authority_district})) }
 
     context "when it is in an eligible local authority district" do

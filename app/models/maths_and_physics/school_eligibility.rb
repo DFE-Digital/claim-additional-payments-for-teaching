@@ -51,7 +51,7 @@ module MathsAndPhysics
       @school = school
     end
 
-    def check
+    def eligible_current_school?
       @school.open? &&
         eligible_local_authority_district? &&
         @school.state_funded? &&

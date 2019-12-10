@@ -119,7 +119,7 @@ class School < ApplicationRecord
   end
 
   def eligible_for_maths_and_physics?
-    MathsAndPhysics::SchoolEligibility.new(self).check
+    MathsAndPhysics::SchoolEligibility.new(self).eligible_current_school?
   end
 
   def state_funded?
