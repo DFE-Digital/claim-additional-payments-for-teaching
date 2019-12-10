@@ -41,4 +41,31 @@ module VerifyHelpers
   def parsed_vsp_translated_response(type)
     JSON.parse(stubbed_vsp_translated_response(type))
   end
+
+  # A sample parsed response from a successful GOV.UK Verify authentication
+  # request.
+  def sample_parsed_verify_response(overrides = {})
+    attributes = {
+      "firstNames" => [
+        {"value" => "Isambard", "verified" => true},
+      ],
+      "middleNames" => [],
+      "surnames" => [
+        {"value" => "Brunel", "verified" => true},
+      ],
+      "datesOfBirth" => [
+        {"value" => "1806-04-09", "verified" => true},
+      ],
+      "addresses" => [
+        {"value" => {"lines" => ["Verified Street", "Verified Town"], "postCode" => "M12 345"}, "verified" => true},
+      ],
+    }.merge(overrides.deep_stringify_keys)
+
+    {
+      "scenario" => "IDENTITY_VERIFIED",
+      "pid" => "5989a87f344bb79ee8d0f0532c0f716deb4f8d71e906b87b346b649c4ceb20c5",
+      "levelOfAssurance" => "LEVEL_2",
+      "attributes" => attributes,
+    }
+  end
 end
