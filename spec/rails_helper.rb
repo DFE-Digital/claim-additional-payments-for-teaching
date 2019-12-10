@@ -67,6 +67,7 @@ RSpec.configure do |config|
   config.include ActiveJob::TestHelper
   config.include DfeSignInHelpers
   config.include GeckoboardHelpers
+  config.include VerifyHelpers
 
   config.before :each do
     clear_enqueued_jobs
