@@ -28,6 +28,9 @@ FactoryBot.define do
       bank_account_number { 12345678 }
       payroll_gender { :female }
 
+      verified_fields { %w[first_name surname address_line_1 postcode date_of_birth payroll_gender] }
+      verify_response { {"scenario" => "IDENTITY_VERIFIED", "pid" => "123", "levelOfAssurance" => "LEVEL_2", "attributes" => {}} }
+
       eligibility_factory { ["#{policy.to_s.underscore}_eligibility".to_sym, :eligible] }
     end
 
