@@ -3,12 +3,19 @@
 </h1>
 
 <p class="govuk-body">
-  You can only get this payment if you completed a degree specialising
-  in maths or physics or you specialised in maths and physics for your
-  initial teacher training.
+  You can only get this payment if you completed a degree specialising in maths
+  or physics or you specialised in maths or physics for your initial teacher
+  training.
 </p>
 
 <p class="govuk-body">
   If you trained to teach physics as part of science but specialised in a
   subject other than physics, you are not eligible to claim.
+</p>
+
+<p class="govuk-body">
+  For more information, including which qualifications are eligible
+  for this payment, visit the
+  <%= link_to "’Claim a payment for teaching maths or physics’", "#{MathsAndPhysics.eligibility_page_url}#eligible-teachers", class: "govuk-link" %>
+  guidance.
 </p>
