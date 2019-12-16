@@ -35,7 +35,7 @@ WORKDIR ${DEPS_HOME}
 COPY Gemfile ${DEPS_HOME}/Gemfile
 COPY Gemfile.lock ${DEPS_HOME}/Gemfile.lock
 
-RUN gem install bundler -v 2.0.2
+RUN gem install bundler
 ENV BUNDLE_BUILD__SASSC=--disable-march-tune-native
 
 RUN if [ ${RAILS_ENV} = "production" ]; then \
@@ -104,7 +104,7 @@ RUN if [ ${RAILS_ENV} = "production" ]; then \
 EXPOSE 3000
 
 ENTRYPOINT [ "bin/docker-entrypoint" ]
-CMD [ "rails", "server" ]
+CMD [ "bundle", "exec", "rails", "server" ]
 
 # ------------------------------------------------------------------------------
 # shellcheck
@@ -141,4 +141,4 @@ COPY *.md ${APP_HOME}/
 COPY azure ${APP_HOME}/azure
 # End
 
-CMD [ "rake" ]
+CMD [ "bundle", "exec", "rake" ]
