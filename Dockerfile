@@ -35,17 +35,21 @@ WORKDIR ${DEPS_HOME}
 COPY Gemfile ${DEPS_HOME}/Gemfile
 COPY Gemfile.lock ${DEPS_HOME}/Gemfile.lock
 
-RUN gem install bundler -v 2.0.2
+RUN gem install bundler
 ENV BUNDLE_BUILD__SASSC=--disable-march-tune-native
 
+RUN bundle config set frozen 'true'
 RUN if [ ${RAILS_ENV} = "production" ]; then \
-  bundle install --frozen --retry 3 --without development test; \
+  bundle config set without 'development test'; \
   elif [ ${RAILS_ENV} = "test" ]; then \
-  bundle install --frozen --retry 3 --without development; \
+  bundle config set without 'development'; \
   else \
-  bundle install --frozen --retry 3 --without test; \
+  bundle config set without 'test'; \
   fi
 # End
+RUN bundle config
+
+RUN bundle install --retry 3
 
 # Install JavaScript dependencies
 COPY package.json ${DEPS_HOME}/package.json
@@ -104,7 +108,7 @@ RUN if [ ${RAILS_ENV} = "production" ]; then \
 EXPOSE 3000
 
 ENTRYPOINT [ "bin/docker-entrypoint" ]
-CMD [ "rails", "server" ]
+CMD [ "bundle", "exec", "rails", "server" ]
 
 # ------------------------------------------------------------------------------
 # shellcheck
@@ -141,4 +145,4 @@ COPY *.md ${APP_HOME}/
 COPY azure ${APP_HOME}/azure
 # End
 
-CMD [ "rake" ]
+CMD [ "bundle", "exec", "rake" ]
