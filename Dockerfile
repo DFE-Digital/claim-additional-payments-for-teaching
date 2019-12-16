@@ -35,7 +35,7 @@ WORKDIR ${DEPS_HOME}
 COPY Gemfile ${DEPS_HOME}/Gemfile
 COPY Gemfile.lock ${DEPS_HOME}/Gemfile.lock
 
-RUN gem install bundler
+RUN gem install bundler -v 2.0.2
 ENV BUNDLE_BUILD__SASSC=--disable-march-tune-native
 
 RUN if [ ${RAILS_ENV} = "production" ]; then \
