@@ -2,6 +2,12 @@ require "net/http"
 require "csv"
 
 class SchoolDataImporter
+  # Returns the URL for today's schools data CSV file
+  def self.gias_schools_csv_url
+    date_string = Time.zone.now.strftime("%Y%m%d")
+    "http://ea-edubase-api-prod.azurewebsites.net/edubase/edubasealldata#{date_string}.csv"
+  end
+
   def run
     CSV.foreach(schools_data_file.path, headers: true, encoding: "ISO-8859-1:UTF-8") do |row|
       school = row_to_school(row)
@@ -11,7 +17,7 @@ class SchoolDataImporter
 
   def schools_data_file
     @schools_data_file ||= begin
-      response = Net::HTTP.get_response(URI(schools_csv_url))
+      response = Net::HTTP.get_response(URI(SchoolDataImporter.gias_schools_csv_url))
       body = response.body.force_encoding("ISO-8859-1")
       file = Tempfile.new(["school_data_", ".csv"], encoding: "ISO-8859-1")
       file.write(body)
@@ -47,13 +53,5 @@ class SchoolDataImporter
     school.establishment_number = row.fetch("EstablishmentNumber")
     school.statutory_high_age = row.fetch("StatutoryHighAge")
     school
-  end
-
-  def schools_csv_url
-    "http://ea-edubase-api-prod.azurewebsites.net/edubase/edubasealldata#{date_string}.csv"
-  end
-
-  def date_string
-    Time.zone.now.strftime("%Y%m%d")
   end
 end
