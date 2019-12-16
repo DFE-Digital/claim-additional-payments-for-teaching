@@ -22,6 +22,8 @@ class School < ApplicationRecord
     all_through: 7,
   }.freeze
 
+  SECONDARY_PHASES = %w[secondary middle_deemed_secondary all_through].freeze
+
   SCHOOL_TYPE_GROUPS = {
     colleges: 1,
     universities: 2,
@@ -93,6 +95,14 @@ class School < ApplicationRecord
     academy_special_converter
   ].freeze
 
+  ALTERNATIVE_PROVISION_TYPES = %w[
+    pupil_referral_unit
+    secure_unit
+    free_school_alternative_provider
+    academy_alternative_provision_converter
+    academy_alternative_provision_sponsor_led
+  ].freeze
+
   enum phase: PHASES
   enum school_type_group: SCHOOL_TYPE_GROUPS
   enum school_type: SCHOOL_TYPES
@@ -119,15 +129,11 @@ class School < ApplicationRecord
   end
 
   def eligible_for_maths_and_physics?
-    MathsAndPhysics::SchoolEligibility.new(self).check
+    MathsAndPhysics::SchoolEligibility.new(self).eligible_current_school?
   end
 
   def state_funded?
-    STATE_FUNDED_SCHOOL_TYPE_GROUPS.include?(school_type_group) && school_type != "other_independent_special_school"
-  end
-
-  def special?
-    SPECIAL_SCHOOL_TYPES.include?(school_type)
+    (STATE_FUNDED_SCHOOL_TYPE_GROUPS.include?(school_type_group) && school_type != "other_independent_special_school") || secure_unit?
   end
 
   def open?
@@ -139,5 +145,39 @@ class School < ApplicationRecord
       local_authority.code,
       establishment_number,
     ].join("/")
+  end
+
+  def secure_unit?
+    school_type == "secure_unit"
+  end
+
+  def secondary_or_equivalent?
+    secondary_phase? || secondary_equivalent_special? || secondary_equivalent_alternative_provision?
+  end
+
+  private
+
+  def alternative_provision?
+    ALTERNATIVE_PROVISION_TYPES.include?(school_type)
+  end
+
+  def has_statutory_high_age_over_eleven?
+    statutory_high_age.present? && statutory_high_age > 11
+  end
+
+  def secondary_phase?
+    SECONDARY_PHASES.include?(phase)
+  end
+
+  def secondary_equivalent_special?
+    special? && school_type != "special_post_16_institutions" && has_statutory_high_age_over_eleven?
+  end
+
+  def secondary_equivalent_alternative_provision?
+    alternative_provision? && has_statutory_high_age_over_eleven?
+  end
+
+  def special?
+    SPECIAL_SCHOOL_TYPES.include?(school_type)
   end
 end
