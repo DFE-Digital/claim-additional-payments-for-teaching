@@ -3,9 +3,9 @@ require "csv"
 
 RSpec.describe SchoolDataImporter do
   let(:school_data_importer) { SchoolDataImporter.new }
+  let(:example_csv_file) { File.open("spec/fixtures/example_schools_data.csv") }
 
   describe "#run" do
-    let(:example_csv_file) { File.open("spec/fixtures/example_schools_data.csv") }
     let!(:request) { stub_request(:get, SchoolDataImporter.gias_schools_csv_url).to_return(body: example_csv_file) }
 
     it "downloads the Get Information About Schools CSV file" do
@@ -96,10 +96,9 @@ RSpec.describe SchoolDataImporter do
   end
 
   describe "#schools_data_file" do
-    let(:example_csv_file) { File.open("spec/fixtures/example_schools_data.csv") }
-    let!(:request) { stub_request(:get, SchoolDataImporter.gias_schools_csv_url).to_return(body: example_csv_file) }
-
     it "returns the GIAS data as a Tempfile (and not StringIO) so CSV.foreach can be used to stream-read the data" do
+      stub_request(:get, SchoolDataImporter.gias_schools_csv_url).to_return(body: example_csv_file)
+
       file = school_data_importer.schools_data_file
 
       expect(file).to be_a(Tempfile)
