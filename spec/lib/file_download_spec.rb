@@ -58,4 +58,12 @@ RSpec.describe FileDownload do
       FileDownload.new("http://url.com/file-0.csv").fetch
     }.to raise_error(FileDownload::TooManyRedirects)
   end
+
+  it "raises an exception on any other response" do
+    stub_request(:get, file_url).to_return(status: [500, "Internal Server Error"])
+
+    expect {
+      FileDownload.new(file_url).fetch
+    }.to raise_error(FileDownload::DownloadError, "500 response for #{file_url}")
+  end
 end
