@@ -49,7 +49,7 @@ en:
     address: "What is your address?"
     teacher_reference_number: "What's your teacher reference number?"
     national_insurance_number: "What's your National Insurance number?"
-    has_student_loan: "Are you still paying off your student loan?"
+    has_student_loan: "Are you currently paying off your student loan?"
     student_loan_country: "When you applied for your student loan where was your home address?"
     student_loan_how_many_courses: "How many higher education courses did you take a student loan out for?"
     student_loan_start_date:

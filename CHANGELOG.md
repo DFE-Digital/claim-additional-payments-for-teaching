@@ -11,6 +11,7 @@ The format is based on [Keep a Changelog]
 - Alternative provisions schools and special schools that teach students who are
   over 11 are eligible
 - Update content for both maths and physics and student loans ineligible screens
+- Update student loan question wording to make the intention clearer
 
 ## [Release 040] - 2019-12-09
 
