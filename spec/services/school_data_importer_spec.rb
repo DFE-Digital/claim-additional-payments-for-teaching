@@ -3,7 +3,7 @@ require "csv"
 
 RSpec.describe SchoolDataImporter do
   let(:school_data_importer) { SchoolDataImporter.new }
-  let(:example_csv_file) { File.open("spec/fixtures/example_schools_data.csv") }
+  let(:example_csv_file) { File.open("spec/fixtures/files/example_schools_data.csv") }
 
   describe "#run" do
     context "with a successful CSV download" do
@@ -44,7 +44,7 @@ RSpec.describe SchoolDataImporter do
       end
 
       context "when the school data is invalid" do
-        let(:example_csv_file) { File.open("spec/fixtures/example_bad_schools_data.csv") }
+        let(:example_csv_file) { File.open("spec/fixtures/files/example_bad_schools_data.csv") }
 
         it "raises an ActiveRecord::RecordInvalid exception" do
           expect { school_data_importer.run }.to raise_error(ActiveRecord::RecordInvalid)
