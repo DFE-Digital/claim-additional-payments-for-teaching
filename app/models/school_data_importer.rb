@@ -16,17 +16,20 @@ class SchoolDataImporter
   end
 
   def schools_data_file
-    @schools_data_file ||= begin
-      response = Net::HTTP.get_response(URI(SchoolDataImporter.gias_schools_csv_url))
-      body = response.body.force_encoding("ISO-8859-1")
-      file = Tempfile.new(["school_data_", ".csv"], encoding: "ISO-8859-1")
-      file.write(body)
-      file.close
-      file
-    end
+    @schools_data_file ||= download_file(SchoolDataImporter.gias_schools_csv_url)
   end
 
   private
+
+  def download_file(url)
+    response = Net::HTTP.get_response(URI(url))
+
+    body = response.body.force_encoding("ISO-8859-1")
+    file = Tempfile.new(["school_data_", ".csv"], encoding: "ISO-8859-1")
+    file.write(body)
+    file.close
+    file
+  end
 
   def row_to_school(row)
     local_authority = LocalAuthority.find_or_initialize_by(code: row.fetch("LA (code)"))
