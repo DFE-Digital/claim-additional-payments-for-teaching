@@ -2,12 +2,6 @@ require "file_download"
 require "csv"
 
 class SchoolDataImporter
-  # Returns the URL for today's schools data CSV file
-  def self.gias_schools_csv_url
-    date_string = Time.zone.now.strftime("%Y%m%d")
-    "https://ea-edubase-api-prod.azurewebsites.net/edubase/downloads/public/edubasealldata#{date_string}.csv"
-  end
-
   def run
     CSV.foreach(schools_data_file.path, headers: true, encoding: "ISO-8859-1:UTF-8") do |row|
       school = row_to_school(row)
@@ -17,8 +11,13 @@ class SchoolDataImporter
 
   private
 
+  def gias_schools_csv_url
+    date_string = Time.zone.now.strftime("%Y%m%d")
+    "https://ea-edubase-api-prod.azurewebsites.net/edubase/downloads/public/edubasealldata#{date_string}.csv"
+  end
+
   def schools_data_file
-    FileDownload.new(SchoolDataImporter.gias_schools_csv_url).fetch
+    FileDownload.new(gias_schools_csv_url).fetch
   end
 
   def row_to_school(row)

@@ -6,8 +6,24 @@ RSpec.describe SchoolDataImporter do
   let(:example_csv_file) { File.open("spec/fixtures/files/example_schools_data.csv") }
 
   describe "#run" do
+    it "downloads the file from a location based on the current date" do
+      travel_to Date.new(2020, 12, 3) do
+        expected_location = "https://ea-edubase-api-prod.azurewebsites.net/edubase/downloads/public/edubasealldata20201203.csv"
+        expected_request = stub_request(:get, expected_location).to_return(body: example_csv_file)
+
+        school_data_importer.run
+
+        expect(expected_request).to have_been_requested
+      end
+    end
+
     context "with a successful CSV download" do
-      let!(:request) { stub_request(:get, SchoolDataImporter.gias_schools_csv_url).to_return(body: example_csv_file) }
+      around do |example|
+        travel_to(Date.new(2019, 1, 23)) { example.run }
+      end
+
+      let(:todays_file_url) { "https://ea-edubase-api-prod.azurewebsites.net/edubase/downloads/public/edubasealldata20190123.csv" }
+      let!(:request) { stub_request(:get, todays_file_url).to_return(body: example_csv_file) }
 
       it "imports each row as a school with associated Local Authority" do
         expect { school_data_importer.run }.to change { School.count }.by 3
