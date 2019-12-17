@@ -5,3 +5,9 @@
 <p class="govuk-body">
   You can only get this payment if you teach maths or physics.
 </p>
+
+<p class="govuk-body">
+  For more information, including eligibility criteria for this payment, visit the
+  <%= link_to "‘Claim a payment for teaching maths or physics’", "#{MathsAndPhysics.eligibility_page_url}#eligible-subjects", class: "govuk-link" %>
+  guidance.
+</p>

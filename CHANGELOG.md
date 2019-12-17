@@ -10,6 +10,7 @@ The format is based on [Keep a Changelog]
 - Don't match bank account sort code when identifying potentially similar claims
 - Alternative provisions schools and special schools that teach students who are
   over 11 are eligible
+- Update content for both maths and physics and student loans ineligible screens
 
 ## [Release 040] - 2019-12-09
 

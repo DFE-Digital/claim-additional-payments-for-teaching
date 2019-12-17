@@ -88,7 +88,7 @@ RSpec.describe "Claims", type: :request do
         get claim_path(StudentLoans.routing_name, "ineligible")
 
         expect(response.body).to include("You’re not eligible")
-        expect(response.body).to include("You can only get this payment if you’re still employed to teach at a school.")
+        expect(response.body).to include("You can only get this payment if you’re still employed to teach at a state-funded secondary school.")
       end
     end
 

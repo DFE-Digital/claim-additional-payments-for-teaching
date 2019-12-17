@@ -6,17 +6,17 @@
   </h1>
 
   <p class="govuk-body">
-    <%= current_claim.eligibility.claim_school_name %> is not an eligible school. You can only get this
-    payment if you were employed to teach at an eligible school between 6 April 2018
-    and 5 April 2019.
+    <%= current_claim.eligibility.claim_school_name %> is not an eligible
+    school. You can only get this payment if you were employed to teach at an
+    eligible school between 6 April 2018 and 5 April 2019.
   </p>
 
   <p class="govuk-body">
-    If you taught at more than one school during this period, you can
-    search again with the next school.
-    You only need to have taught at one eligible school to claim.
+    If you taught at more than one school during this period, you can search
+    again with the next school. You only need to have taught at one eligible school
+    to claim.
   </p>
 
-  <%= link_to "Enter another school", claim_path(current_policy_routing_name, "claim-school", additional_school: true), class: "govuk-button" %>
-  <%= link_to "I've tried all of my schools", claim_path(current_policy_routing_name, "ineligible", no_more_schools: true), class: "govuk-button govuk-button--secondary" %>
+  <%= link_to "Enter another school", claim_path(current_policy_routing_name, "claim-school", additional_school: true), class: "govuk-button", data: {module: "govuk-button"}%>
+  <%= link_to "I've tried all of my schools", claim_path(current_policy_routing_name, "ineligible", no_more_schools: true), class: "govuk-button govuk-button--secondary", data: {module: "govuk-button"}  %>
 <% end %>
