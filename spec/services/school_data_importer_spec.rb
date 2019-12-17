@@ -6,17 +6,12 @@ RSpec.describe SchoolDataImporter do
   let(:example_csv_file) { File.open("spec/fixtures/example_schools_data.csv") }
 
   describe "#run" do
-    let!(:request) { stub_request(:get, SchoolDataImporter.gias_schools_csv_url).to_return(body: example_csv_file) }
+    context "with a successful CSV download" do
+      let!(:request) { stub_request(:get, SchoolDataImporter.gias_schools_csv_url).to_return(body: example_csv_file) }
 
-    it "downloads the Get Information About Schools CSV file" do
-      school_data_importer.run
-
-      expect(request).to have_been_requested
-    end
-
-    context "when the download is successful" do
       it "imports each row as a school with associated Local Authority" do
         expect { school_data_importer.run }.to change { School.count }.by 3
+        expect(request).to have_been_requested
 
         imported_school = School.find_by(urn: 106653)
         expect(imported_school.name).to eql("Penistone Grammar School")
