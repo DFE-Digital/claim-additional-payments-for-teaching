@@ -1,6 +1,26 @@
 {
   "ignored_warnings": [
     {
+      "warning_type": "SQL Injection",
+      "warning_code": 0,
+      "fingerprint": "aac74520956533997d73d1c601c2bcde5d3cd501f14401fb9cb8e2bfdc7862fa",
+      "check_name": "SQL",
+      "message": "Possible SQL injection",
+      "file": "app/models/claim/matching_attribute_finder.rb",
+      "line": 26,
+      "link": "https://brakemanscanner.org/docs/warning_types/sql_injection/",
+      "code": "Claim.where(\"LOWER(#{\"CONCAT(#{attributes.join(\",\")})\"}) = LOWER(?)\", values_for_attributes(attributes).join)",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "MatchingAttributeFinder",
+        "method": "matching_claims"
+      },
+      "user_input": "attributes.join(\",\")",
+      "confidence": "Medium",
+      "note": "The concetenated attributes in the CONCAT operation are not user-generated, so this can be safely ignored"
+    },
+    {
       "warning_type": "File Access",
       "warning_code": 16,
       "fingerprint": "dc2ed132897187b2950a4358e22d70cf3f57a65db3730cc0f81e807de5977758",
@@ -21,6 +41,6 @@
       "note": "We generate the filename based on non-user input so we can ignore this"
     }
   ],
-  "updated": "2019-12-06 10:43:15 +0000",
+  "updated": "2019-12-17 11:26:22 +0000",
   "brakeman_version": "4.7.2"
 }
