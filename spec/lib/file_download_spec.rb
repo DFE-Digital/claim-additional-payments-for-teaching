@@ -4,6 +4,7 @@ require "file_download"
 RSpec.describe FileDownload do
   let(:file_url) { "https://somewhere.com/file.csv" }
   let(:example_file) { File.open("spec/fixtures/files/file.csv") }
+  let(:example_iso_encoded_file) { File.open("spec/fixtures/files/iso_encoded_file.csv") }
 
   it "returns a Tempfile for the given URL" do
     request = stub_request(:get, file_url).to_return(body: example_file)
@@ -14,6 +15,17 @@ RSpec.describe FileDownload do
 
     expect(file).to be_a(Tempfile)
     expect(FileUtils.identical?(file.path, example_file.path)).to be_truthy
+  end
+
+  it "allows the file encoding to be overridden" do
+    request = stub_request(:get, file_url).to_return(body: example_iso_encoded_file)
+
+    file = FileDownload.new(file_url, encoding: "ISO-8859-1").fetch
+
+    expect(request).to have_been_requested
+
+    expect(file).to be_a(Tempfile)
+    expect(FileUtils.identical?(file.path, example_iso_encoded_file.path)).to be_truthy
   end
 
   it "handles Redirect (302) responses" do

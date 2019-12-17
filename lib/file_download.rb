@@ -7,10 +7,11 @@ class FileDownload
 
   class TooManyRedirects < StandardError; end
 
-  attr_reader :url
+  attr_reader :url, :encoding
 
-  def initialize(url)
+  def initialize(url, encoding: "UTF-8")
     @url = url
+    @encoding = encoding
   end
 
   def fetch
@@ -33,8 +34,8 @@ class FileDownload
   end
 
   def temp_file_from_response(response)
-    body = response.body
-    file = Tempfile.new
+    body = response.body.force_encoding(encoding)
+    file = Tempfile.new(encoding: encoding)
     file.write(body)
     file.close
     file
