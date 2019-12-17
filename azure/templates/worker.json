@@ -16,7 +16,7 @@
     },
     "command": {
       "type": "array",
-      "defaultValue": ["rake", "jobs:work"]
+      "defaultValue": ["bundle", "exec", "rake", "jobs:work"]
     },
     "networkProfileId": {
       "type": "string"
