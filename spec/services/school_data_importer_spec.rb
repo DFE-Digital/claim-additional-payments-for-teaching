@@ -88,24 +88,5 @@ RSpec.describe SchoolDataImporter do
         end
       end
     end
-
-    it "handles a Redirect response for the CSV and still imports the schools" do
-      redirected_url = "https://somewhere.else/download.csv"
-      stub_request(:get, SchoolDataImporter.gias_schools_csv_url).to_return(status: 301, headers: {"Location" => redirected_url})
-      stub_request(:get, redirected_url).to_return(body: example_csv_file)
-
-      expect { school_data_importer.run }.to change { School.count }.by 3
-    end
-  end
-
-  describe "#schools_data_file" do
-    it "returns the GIAS data as a Tempfile (and not StringIO) so CSV.foreach can be used to stream-read the data" do
-      stub_request(:get, SchoolDataImporter.gias_schools_csv_url).to_return(body: example_csv_file)
-
-      file = school_data_importer.schools_data_file
-
-      expect(file).to be_a(Tempfile)
-      expect(FileUtils.identical?(file.path, example_csv_file.path)).to be_truthy
-    end
   end
 end

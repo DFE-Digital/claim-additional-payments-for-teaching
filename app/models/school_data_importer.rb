@@ -1,4 +1,4 @@
-require "net/http"
+require "file_download"
 require "csv"
 
 class SchoolDataImporter
@@ -15,29 +15,10 @@ class SchoolDataImporter
     end
   end
 
-  def schools_data_file
-    @schools_data_file ||= download_file(SchoolDataImporter.gias_schools_csv_url)
-  end
-
   private
 
-  def download_file(url)
-    response = Net::HTTP.get_response(URI(url))
-
-    case response
-      when Net::HTTPSuccess
-        response_to_file(response)
-      when Net::HTTPMovedPermanently, Net::HTTPRedirection
-        download_file(response["location"])
-    end
-  end
-
-  def response_to_file(response)
-    body = response.body.force_encoding("ISO-8859-1")
-    file = Tempfile.new(["school_data_", ".csv"], encoding: "ISO-8859-1")
-    file.write(body)
-    file.close
-    file
+  def schools_data_file
+    FileDownload.new(SchoolDataImporter.gias_schools_csv_url).fetch
   end
 
   def row_to_school(row)
