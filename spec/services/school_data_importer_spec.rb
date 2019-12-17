@@ -3,22 +3,31 @@ require "csv"
 
 RSpec.describe SchoolDataImporter do
   let(:school_data_importer) { SchoolDataImporter.new }
+  let(:example_csv_file) { File.open("spec/fixtures/files/example_schools_data.csv") }
 
   describe "#run" do
-    let(:date_string) { Time.zone.now.strftime("%Y%m%d") }
-    let(:gias_csv_url) { "http://ea-edubase-api-prod.azurewebsites.net/edubase/edubasealldata#{date_string}.csv" }
-    let(:example_csv_file) { File.open("spec/fixtures/example_schools_data.csv") }
-    let!(:request) { stub_request(:get, gias_csv_url).to_return(body: example_csv_file) }
+    it "downloads the file from a location based on the current date" do
+      travel_to Date.new(2020, 12, 3) do
+        expected_location = "https://ea-edubase-api-prod.azurewebsites.net/edubase/downloads/public/edubasealldata20201203.csv"
+        expected_request = stub_request(:get, expected_location).to_return(body: example_csv_file)
 
-    it "downloads the Get Information About Schools CSV file" do
-      school_data_importer.run
+        school_data_importer.run
 
-      expect(request).to have_been_requested
+        expect(expected_request).to have_been_requested
+      end
     end
 
-    context "when the download is successful" do
+    context "with a successful CSV download" do
+      around do |example|
+        travel_to(Date.new(2019, 1, 23)) { example.run }
+      end
+
+      let(:todays_file_url) { "https://ea-edubase-api-prod.azurewebsites.net/edubase/downloads/public/edubasealldata20190123.csv" }
+      let!(:request) { stub_request(:get, todays_file_url).to_return(body: example_csv_file) }
+
       it "imports each row as a school with associated Local Authority" do
         expect { school_data_importer.run }.to change { School.count }.by 3
+        expect(request).to have_been_requested
 
         imported_school = School.find_by(urn: 106653)
         expect(imported_school.name).to eql("Penistone Grammar School")
@@ -51,7 +60,7 @@ RSpec.describe SchoolDataImporter do
       end
 
       context "when the school data is invalid" do
-        let(:example_csv_file) { File.open("spec/fixtures/example_bad_schools_data.csv") }
+        let(:example_csv_file) { File.open("spec/fixtures/files/example_bad_schools_data.csv") }
 
         it "raises an ActiveRecord::RecordInvalid exception" do
           expect { school_data_importer.run }.to raise_error(ActiveRecord::RecordInvalid)
@@ -94,20 +103,6 @@ RSpec.describe SchoolDataImporter do
           expect(local_authority_districts(:barnsley).name).to eql("Barnsley")
         end
       end
-    end
-  end
-
-  describe "#schools_data_file" do
-    let(:date_string) { Time.zone.now.strftime("%Y%m%d") }
-    let(:gias_csv_url) { "http://ea-edubase-api-prod.azurewebsites.net/edubase/edubasealldata#{date_string}.csv" }
-    let(:example_csv_file) { File.open("spec/fixtures/example_schools_data.csv") }
-    let!(:request) { stub_request(:get, gias_csv_url).to_return(body: example_csv_file) }
-
-    it "returns the GIAS data as a Tempfile (and not StringIO) so CSV.foreach can be used to stream-read the data" do
-      file = school_data_importer.schools_data_file
-
-      expect(file).to be_a(Tempfile)
-      expect(FileUtils.identical?(file.path, example_csv_file.path)).to be_truthy
     end
   end
 end

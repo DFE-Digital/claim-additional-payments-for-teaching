@@ -1,4 +1,4 @@
-require "net/http"
+require "file_download"
 require "csv"
 
 class SchoolDataImporter
@@ -9,18 +9,16 @@ class SchoolDataImporter
     end
   end
 
-  def schools_data_file
-    @schools_data_file ||= begin
-      response = Net::HTTP.get_response(URI(schools_csv_url))
-      body = response.body.force_encoding("ISO-8859-1")
-      file = Tempfile.new(["school_data_", ".csv"], encoding: "ISO-8859-1")
-      file.write(body)
-      file.close
-      file
-    end
+  private
+
+  def gias_schools_csv_url
+    date_string = Time.zone.now.strftime("%Y%m%d")
+    "https://ea-edubase-api-prod.azurewebsites.net/edubase/downloads/public/edubasealldata#{date_string}.csv"
   end
 
-  private
+  def schools_data_file
+    FileDownload.new(gias_schools_csv_url).fetch
+  end
 
   def row_to_school(row)
     local_authority = LocalAuthority.find_or_initialize_by(code: row.fetch("LA (code)"))
@@ -47,13 +45,5 @@ class SchoolDataImporter
     school.establishment_number = row.fetch("EstablishmentNumber")
     school.statutory_high_age = row.fetch("StatutoryHighAge")
     school
-  end
-
-  def schools_csv_url
-    "http://ea-edubase-api-prod.azurewebsites.net/edubase/edubasealldata#{date_string}.csv"
-  end
-
-  def date_string
-    Time.zone.now.strftime("%Y%m%d")
   end
 end
