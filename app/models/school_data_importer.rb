@@ -5,7 +5,7 @@ class SchoolDataImporter
   # Returns the URL for today's schools data CSV file
   def self.gias_schools_csv_url
     date_string = Time.zone.now.strftime("%Y%m%d")
-    "http://ea-edubase-api-prod.azurewebsites.net/edubase/edubasealldata#{date_string}.csv"
+    "https://ea-edubase-api-prod.azurewebsites.net/edubase/downloads/public/edubasealldata#{date_string}.csv"
   end
 
   def run
