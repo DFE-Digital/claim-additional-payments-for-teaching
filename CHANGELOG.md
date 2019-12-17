@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+## [Release 041] - 2019-12-17
+
 - Restore uptime alerting to alert when the App / VSP are down
 - Don't match bank account sort code when identifying potentially similar claims
 - Alternative provisions schools and special schools that teach students who are
@@ -311,7 +313,9 @@ The format is based on [Keep a Changelog]
 - First release for student loan repayments private beta
 
 [unreleased]:
-  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-040...HEAD
+  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-041...HEAD
+[release 041]:
+  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-040...release-041
 [release 040]:
   https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-039...release-040
 [release 039]:
