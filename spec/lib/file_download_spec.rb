@@ -35,4 +35,15 @@ RSpec.describe FileDownload do
 
     expect(FileUtils.identical?(file.path, example_file.path)).to be_truthy
   end
+
+  it "gives up after 5 redirects" do
+    5.times do |i|
+      stub_request(:get, "http://url.com/file-#{i}.csv")
+        .to_return(status: 301, headers: {"Location" => "http://url.com/file-#{i + 1}.csv"})
+    end
+
+    expect {
+      FileDownload.new("http://url.com/file-0.csv").fetch
+    }.to raise_error(FileDownload::TooManyRedirects)
+  end
 end

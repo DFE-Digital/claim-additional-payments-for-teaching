@@ -1,8 +1,12 @@
 require "net/http"
 
-# Used to download a remote file. Handles redirects.
+# Used to download a remote file. Handles redirects up to a maximum of 5.
 # Returns the file as a `Tempfile`
 class FileDownload
+  MAX_REDIRECTS = 5
+
+  class TooManyRedirects < StandardError; end
+
   attr_reader :url
 
   def initialize(url)
@@ -15,14 +19,16 @@ class FileDownload
 
   private
 
-  def download_file(url)
+  def download_file(url, redirect_limit = MAX_REDIRECTS)
+    raise TooManyRedirects if redirect_limit == 0
+
     response = Net::HTTP.get_response(URI(url))
 
     case response
     when Net::HTTPSuccess
       temp_file_from_response(response)
     when Net::HTTPMovedPermanently, Net::HTTPRedirection
-      download_file(response["location"])
+      download_file(response["location"], (redirect_limit - 1))
     end
   end
 
