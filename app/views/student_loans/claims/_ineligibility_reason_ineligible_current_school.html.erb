@@ -4,6 +4,13 @@
 
 <p class="govuk-body">
   You must be employed to teach at a state-funded secondary school to be eligible for
-  this payment. <%= current_claim.eligibility.current_school_name %>, where you are currently employed to teach,
-  is not a state-funded secondary school.
+  this payment. <%= current_claim.eligibility.current_school_name %>, where you
+  are currently employed to teach, is not a state-funded secondary school.
+</p>
+
+<p class="govuk-body">
+  For more information, including employment eligibility criteria for this
+  payment, visit the
+  <%= link_to "‘Claim back your student loan repayments’", "#{StudentLoans.eligibility_page_url}#eligible-teachers", class: "govuk-link" %>
+  guidance.
 </p>
