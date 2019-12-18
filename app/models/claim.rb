@@ -6,6 +6,9 @@ class Claim < ApplicationRecord
   STUDENT_LOAN_PLAN_OPTIONS = StudentLoan::PLANS.dup << NO_STUDENT_LOAN
   ADDRESS_ATTRIBUTES = %w[address_line_1 address_line_2 address_line_3 address_line_4 postcode].freeze
   EDITABLE_ATTRIBUTES = [
+    :first_name,
+    :middle_name,
+    :surname,
     :address_line_1,
     :address_line_2,
     :address_line_3,
@@ -86,12 +89,12 @@ class Claim < ApplicationRecord
 
   validates :payroll_gender, on: [:gender, :submit], presence: {message: "Choose the option for the gender your school’s payroll system associates with you"}
 
-  validates :first_name, on: :submit, presence: {message: "Enter your first name"}
+  validates :first_name, on: [:name, :submit], presence: {message: "Enter your first name"}
   validates :first_name, length: {maximum: 100, message: "First name must be 100 characters or less"}
 
   validates :middle_name, length: {maximum: 100, message: "Middle name must be 100 characters or less"}
 
-  validates :surname, on: :submit, presence: {message: "Enter your last name"}
+  validates :surname, on: [:name, :submit], presence: {message: "Enter your last name"}
   validates :surname, length: {maximum: 100, message: "Last name must be 100 characters or less"}
 
   validates :address_line_1, on: [:address, :submit], presence: {message: "Enter your building and street address"}
@@ -199,6 +202,10 @@ class Claim < ApplicationRecord
   # be done through GOV.UK Verify, but will change in the future.
   def identity_confirmed?
     verified_fields.any?
+  end
+
+  def name_verified?
+    verified_fields.include?("first_name")
   end
 
   def address_verified?

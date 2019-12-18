@@ -59,6 +59,14 @@ RSpec.describe StudentLoans::SlugSequence do
       expect(slug_sequence.slugs).to_not include("gender")
     end
 
+    it "excludes the “name” slug if the name has been acquired from GOV.UK Verify" do
+      claim.verified_fields = []
+      expect(slug_sequence.slugs).to include("name")
+
+      claim.verified_fields = ["first_name"]
+      expect(slug_sequence.slugs).to_not include("name")
+    end
+
     it "excludes the “address” slug if any address fields were acquired from GOV.UK Verify" do
       claim.verified_fields = []
       expect(slug_sequence.slugs).to include("address")

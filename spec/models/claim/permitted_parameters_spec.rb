@@ -4,6 +4,9 @@ RSpec.describe Claim::PermittedParameters do
   let(:student_loan_claim) { Claim.new(eligibility: StudentLoans::Eligibility.new) }
   let(:editable_attributes_for_student_loans_claim) do
     [
+      :first_name,
+      :middle_name,
+      :surname,
       :address_line_1,
       :address_line_2,
       :address_line_3,

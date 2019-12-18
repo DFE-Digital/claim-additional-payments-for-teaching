@@ -46,6 +46,7 @@ en:
   questions:
     current_school: "Which school are you currently employed to teach at?"
     qts_award_year: "When did you complete your initial teacher training?"
+    name: "What is your full name?"
     address: "What is your address?"
     teacher_reference_number: "What's your teacher reference number?"
     national_insurance_number: "What's your National Insurance number?"

@@ -145,6 +145,16 @@ RSpec.describe Claim, type: :model do
     end
   end
 
+  context "when saving in the name validation context" do
+    it "validates the presence of the first_name and surname attributes" do
+      expect(build(:claim)).not_to be_valid(:name)
+      expect(build(:claim, first_name: "Cheryl")).not_to be_valid(:name)
+      expect(build(:claim, surname: "Lynn")).not_to be_valid(:name)
+
+      expect(build(:claim, first_name: "Cheryl", surname: "Lynn")).to be_valid(:name)
+    end
+  end
+
   context "when saving in the “address” validation context" do
     it "validates the presence of address_line_1 and postcode" do
       expect(build(:claim)).not_to be_valid(:address)
@@ -459,6 +469,13 @@ RSpec.describe Claim, type: :model do
     it "returns false if the claim doesn't have any GOV.UK Verified fields" do
       expect(Claim.new.identity_confirmed?).to eq false
       expect(Claim.new(verified_fields: []).identity_confirmed?).to eq false
+    end
+  end
+
+  describe "#name_verified?" do
+    it "returns true if the name is present in the list of verified fields" do
+      expect(Claim.new.name_verified?).to eq false
+      expect(Claim.new(verified_fields: ["first_name"]).name_verified?).to eq true
     end
   end
 
