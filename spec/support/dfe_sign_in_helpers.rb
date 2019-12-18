@@ -62,8 +62,7 @@ module DfeSignInHelpers
   end
 
   def stub_dfe_sign_in_user_info_request(user_id, organisation_id, role_code)
-    api_client_id = DfeSignIn.configuration.client_id
-    api_base_url = DfeSignIn.configuration.base_url
+    url = dfe_sign_in_user_info_url(user_id, organisation_id)
     api_response = {
       "userId" => user_id,
       "serviceId" => "XXXXXXX",
@@ -87,7 +86,69 @@ module DfeSignInHelpers
       ],
     }.to_json
 
-    stub_request(:get, "#{api_base_url}/services/#{api_client_id}/organisations/#{organisation_id}/users/#{user_id}")
+    stub_request(:get, url)
       .to_return(status: 200, body: api_response)
+  end
+
+  def stub_failed_dfe_sign_in_user_info_request(user_id, organisation_id)
+    url = dfe_sign_in_user_info_url(user_id, organisation_id)
+    api_response = {
+      "error": "An error occurred",
+    }.to_json
+
+    stub_request(:get, url)
+      .to_return(status: 500, body: api_response)
+  end
+
+  def stub_dfe_sign_in_user_list_request(number_of_pages: 1, page_number: nil)
+    url = "#{DfeSignIn.configuration.base_url}/users"
+    url = "#{url}?page=#{page_number}" if page_number
+
+    response = {
+      "users" => [
+        {
+          "organisation" => {
+            "id" => "5b0e38fc-1db7-11ea-978f-2e728ce88125",
+            "name" => "ACME Inc",
+          },
+          "userId" => "5b0e3686-1db7-11ea-978f-2e728ce88125",
+          "email" => "alice@example.com",
+          "familyName" => "Example",
+          "givenName" => "Alice",
+        },
+        {
+          "organisation" => {
+            "id" => "5b0e3bcc-1db7-11ea-978f-2e728ce88125",
+            "name" => "ACME Inc",
+          },
+          "userId" => "5409565d-5be6-4285-ba09-76fd431db0b5",
+          "email" => "bob@example.com",
+          "familyName" => "Example",
+          "givenName" => "Bob",
+        },
+        {
+          "organisation" => {
+            "id" => "5b0e3bcc-1db7-11ea-978f-2e728ce88125",
+            "name" => "ACME Inc",
+          },
+          "userId" => "25f0f85c-bfb7-4a21-aedc-1253370d04b0",
+          "email" => "eve@example.com",
+          "familyName" => "Example",
+          "givenName" => "Eve",
+        },
+      ],
+      "numberOfRecords" => 3,
+      "page" => 1,
+      "numberOfPages" => number_of_pages,
+    }.to_json
+
+    stub_request(:get, url)
+      .to_return(body: response, status: 200)
+  end
+
+  def dfe_sign_in_user_info_url(user_id, organisation_id)
+    api_client_id = DfeSignIn.configuration.client_id
+    api_base_url = DfeSignIn.configuration.base_url
+    "#{api_base_url}/services/#{api_client_id}/organisations/#{organisation_id}/users/#{user_id}"
   end
 end

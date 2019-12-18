@@ -2,13 +2,55 @@ module DfeSignIn
   module Api
     class User
       include DfeSignIn::Utils
+      extend DfeSignIn::Utils
 
       attr_accessor :organisation_id,
-        :user_id
+        :user_id,
+        :organisation_name,
+        :given_name,
+        :family_name,
+        :email
 
-      def initialize(organisation_id:, user_id:)
-        self.organisation_id = organisation_id
-        self.user_id = user_id
+      class << self
+        def all
+          get_users.map do |u|
+            new(
+              organisation_id: u["organisation"]["id"],
+              organisation_name: u["organisation"]["name"],
+              user_id: u["userId"],
+              given_name: u["givenName"],
+              family_name: u["familyName"],
+              email: u["email"]
+            )
+          end
+        end
+
+        def all_users_endpoint
+          URI.join(DfeSignIn.configuration.base_url, "/users")
+        end
+
+        def get_users
+          uri = all_users_endpoint
+          body = get(uri)
+          page_number = 2
+          users = body["users"]
+          while page_number <= body["numberOfPages"]
+            uri.query = "page=#{page_number}"
+            page = get(uri)
+            users.concat(page["users"])
+            page_number += 1
+          end
+          users
+        end
+      end
+
+      def initialize(attrs)
+        self.organisation_id = attrs[:organisation_id]
+        self.organisation_name = attrs[:organisation_name]
+        self.user_id = attrs[:user_id]
+        self.given_name = attrs[:given_name]
+        self.family_name = attrs[:family_name]
+        self.email = attrs[:email]
       end
 
       def has_role?(role_code)
@@ -22,19 +64,7 @@ module DfeSignIn
       private
 
       def body
-        @body ||= begin
-          request = Net::HTTP::Get.new(uri)
-          request["Authorization"] = "bearer #{generate_jwt_token}"
-          request["Content-Type"] = "application/json"
-
-          response = Net::HTTP.start(uri.hostname, uri.port, use_ssl: true) { |http|
-            http.request(request)
-          }
-
-          raise ExternalServerError, "#{response.code}: #{response.body}" unless response.code.eql?("200")
-
-          JSON.parse(response.body)
-        end
+        @body ||= get(uri)
       end
 
       def uri
