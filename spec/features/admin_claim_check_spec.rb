@@ -74,6 +74,8 @@ RSpec.feature "Admin checks a claim" do
       expect(page).to have_content("Claim decision")
       expect(page).to have_content("Approved")
       expect(page).to have_content(claim_with_check.check.notes)
+      expect(page).to have_content("Checked by")
+      expect(page).to have_content(user.full_name)
     end
 
     context "When the payroll gender is missing" do
