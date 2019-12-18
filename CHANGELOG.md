@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+- Import users from DfE Signin to the local database
+
 ## [Release 041] - 2019-12-17
 
 - Restore uptime alerting to alert when the App / VSP are down
