@@ -16,18 +16,20 @@ module ClaimsHelper
 
   def verify_answers(claim)
     [].tap do |a|
-      a << [I18n.t("verified_fields.first_name").capitalize, claim.first_name]
-      a << [I18n.t("verified_fields.middle_name").capitalize, claim.middle_name] if claim.middle_name.present?
-      a << [I18n.t("verified_fields.surname").capitalize, claim.surname]
+      a << [I18n.t("verified_fields.first_name").capitalize, claim.first_name] if claim.name_verified?
+      a << [I18n.t("verified_fields.middle_name").capitalize, claim.middle_name] if claim.name_verified? && claim.middle_name.present?
+      a << [I18n.t("verified_fields.surname").capitalize, claim.surname] if claim.name_verified?
       a << [I18n.t("verified_fields.address").capitalize, sanitize(claim.address("<br>").html_safe, tags: %w[br])] if claim.address_verified?
-      a << [I18n.t("verified_fields.date_of_birth").capitalize, l(claim.date_of_birth)]
+      a << [I18n.t("verified_fields.date_of_birth").capitalize, l(claim.date_of_birth)] if claim.date_of_birth_verified?
       a << [I18n.t("verified_fields.payroll_gender").capitalize, t("answers.payroll_gender.#{claim.payroll_gender}")] if claim.payroll_gender_verified?
     end
   end
 
   def identity_answers(claim)
     [].tap do |a|
+      a << [t("questions.name"), claim.full_name, "name"] unless claim.name_verified?
       a << [t("questions.address"), claim.address, "address"] unless claim.address_verified?
+      a << [t("questions.date_of_birth"), l(claim.date_of_birth), "date-of-birth"] unless claim.date_of_birth_verified?
       a << [t("questions.payroll_gender"), t("answers.payroll_gender.#{claim.payroll_gender}"), "gender"] unless claim.payroll_gender_verified?
       a << [t("questions.teacher_reference_number"), claim.teacher_reference_number, "teacher-reference-number"]
       a << [t("questions.national_insurance_number"), claim.national_insurance_number, "national-insurance-number"]
