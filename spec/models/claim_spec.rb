@@ -481,8 +481,8 @@ RSpec.describe Claim, type: :model do
 
   describe "#address_verified?" do
     it "returns true if any address attributes are in the list of verified fields" do
-      expect(Claim.new.payroll_gender_verified?).to eq false
-      expect(Claim.new(verified_fields: ["gender"]).payroll_gender_verified?).to eq false
+      expect(Claim.new.address_verified?).to eq false
+      expect(Claim.new(verified_fields: ["gender"]).address_verified?).to eq false
 
       expect(Claim.new(verified_fields: ["address_line_1"]).address_verified?).to eq true
       expect(Claim.new(verified_fields: ["address_line_1", "postcode"]).address_verified?).to eq true
