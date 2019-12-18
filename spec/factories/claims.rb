@@ -40,6 +40,13 @@ FactoryBot.define do
       reference { Reference.new.to_s }
     end
 
+    trait :unverified do
+      submitted
+
+      verified_fields { [] }
+      verify_response { nil }
+    end
+
     trait :approved do
       submitted
       association(:check, factory: [:check, :approved], strategy: :build)
