@@ -14,6 +14,7 @@ class Claim < ApplicationRecord
     :address_line_3,
     :address_line_4,
     :postcode,
+    :date_of_birth,
     :payroll_gender,
     :teacher_reference_number,
     :national_insurance_number,
@@ -210,6 +211,10 @@ class Claim < ApplicationRecord
 
   def address_verified?
     (ADDRESS_ATTRIBUTES & verified_fields).any?
+  end
+
+  def date_of_birth_verified?
+    verified_fields.include?("date_of_birth")
   end
 
   def payroll_gender_verified?

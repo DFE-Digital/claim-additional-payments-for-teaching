@@ -74,5 +74,13 @@ RSpec.describe StudentLoans::SlugSequence do
       claim.verified_fields = ["postcode"]
       expect(slug_sequence.slugs).to_not include("address")
     end
+
+    it "excludes the “date-of-birth” slug if the date_of_birth has been acquired from GOV.UK Verify" do
+      claim.verified_fields = []
+      expect(slug_sequence.slugs).to include("date-of-birth")
+
+      claim.verified_fields = ["date_of_birth"]
+      expect(slug_sequence.slugs).to_not include("date-of-birth")
+    end
   end
 end

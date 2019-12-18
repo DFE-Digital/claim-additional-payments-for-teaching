@@ -489,6 +489,13 @@ RSpec.describe Claim, type: :model do
     end
   end
 
+  describe "#date_of_birth_verified?" do
+    it "returns true if date_of_birth is in the list of verified fields" do
+      expect(Claim.new(verified_fields: ["date_of_birth"]).date_of_birth_verified?).to eq true
+      expect(Claim.new(verified_fields: ["address_line_1"]).date_of_birth_verified?).to eq false
+    end
+  end
+
   describe "#payroll_gender_verified?" do
     it "returns true if payroll_gender is in the list of verified fields" do
       expect(Claim.new(verified_fields: ["payroll_gender"]).payroll_gender_verified?).to eq true
