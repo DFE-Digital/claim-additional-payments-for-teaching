@@ -14,4 +14,12 @@ RSpec.describe Check, type: :model do
     expect(build(:check, result: "approved")).to be_valid
     expect(build(:check, result: nil)).not_to be_valid
   end
+
+  it "prevents an unapprovable claim from being approved" do
+    claim = create(:claim, :unverified)
+    check = build(:check, claim: claim, result: "approved")
+
+    expect(check).not_to be_valid
+    expect(check.errors.messages[:base]).to eq(["This claim cannot be approved"])
+  end
 end
