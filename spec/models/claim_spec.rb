@@ -462,8 +462,8 @@ RSpec.describe Claim, type: :model do
   end
 
   describe "#identity_confirmed?" do
-    it "returns true if the claim has GOV.UK Verified fields" do
-      expect(Claim.new(verified_fields: ["gender"]).identity_confirmed?).to eq true
+    it "returns true if the claim has any GOV.UK Verified fields" do
+      expect(Claim.new(verified_fields: ["payroll_gender"]).identity_confirmed?).to eq true
     end
 
     it "returns false if the claim doesn't have any GOV.UK Verified fields" do
@@ -482,7 +482,7 @@ RSpec.describe Claim, type: :model do
   describe "#address_verified?" do
     it "returns true if any address attributes are in the list of verified fields" do
       expect(Claim.new.address_verified?).to eq false
-      expect(Claim.new(verified_fields: ["gender"]).address_verified?).to eq false
+      expect(Claim.new(verified_fields: ["payroll_gender"]).address_verified?).to eq false
 
       expect(Claim.new(verified_fields: ["address_line_1"]).address_verified?).to eq true
       expect(Claim.new(verified_fields: ["address_line_1", "postcode"]).address_verified?).to eq true
