@@ -91,8 +91,8 @@ class Claim < ApplicationRecord
 
   validates :middle_name, length: {maximum: 100, message: "Middle name must be 100 characters or less"}
 
-  validates :surname, on: :submit, presence: {message: "Enter your surname"}
-  validates :surname, length: {maximum: 100, message: "Surname must be 100 characters or less"}
+  validates :surname, on: :submit, presence: {message: "Enter your last name"}
+  validates :surname, length: {maximum: 100, message: "Last name must be 100 characters or less"}
 
   validates :address_line_1, on: [:address, :submit], presence: {message: "Enter your building and street address"}
   validates :address_line_1, length: {maximum: 100, message: "Address lines must be 100 characters or less"}
