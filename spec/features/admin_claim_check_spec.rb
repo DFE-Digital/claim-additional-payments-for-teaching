@@ -96,6 +96,7 @@ RSpec.feature "Admin checks a claim" do
         find("a[href='#{admin_claim_path(claim_without_identity_confirmation)}']").click
 
         expect(page).to have_content("Identity has not been confirmed")
+        expect(page).to have_field("Approve", disabled: true)
       end
     end
 
