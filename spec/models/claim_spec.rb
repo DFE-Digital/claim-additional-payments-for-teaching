@@ -412,6 +412,27 @@ RSpec.describe Claim, type: :model do
     end
   end
 
+  describe "#approvable?" do
+    it "returns true for a submitted claim with all required data present" do
+      expect(build(:claim, :submitted).approvable?).to eq true
+    end
+
+    it "returns false for an unsubmitted claim" do
+      expect(build(:claim, :submittable).approvable?).to eq false
+    end
+
+    it "returns false for a submitted claim that is missing a binary value for payroll_gender" do
+      expect(build(:claim, :submitted, payroll_gender: :dont_know).approvable?).to eq false
+    end
+
+    it "returns false for a claim that already has a persisted check" do
+      expect(build(:claim, :approved).approvable?).to eq true
+
+      expect(create(:claim, :approved).approvable?).to eq false
+      expect(create(:claim, :rejected).approvable?).to eq false
+    end
+  end
+
   describe "#payroll_gender_missing?" do
     it "returns true when the claimant doesn't know their payroll gender" do
       claim = build(:claim, payroll_gender: :dont_know)

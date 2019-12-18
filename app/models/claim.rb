@@ -167,6 +167,14 @@ class Claim < ApplicationRecord
     valid?(:submit) && !submitted?
   end
 
+  def approvable?
+    submitted? && !payroll_gender_missing? && !checked?
+  end
+
+  def checked?
+    check&.persisted?
+  end
+
   def payroll_gender_missing?
     %w[male female].exclude?(payroll_gender)
   end
