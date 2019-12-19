@@ -50,6 +50,17 @@ flow from here:
 These steps are explained in more detail in the
 [Verify documentation](https://www.docs.verify.service.gov.uk/get-started/set-up-successful-verification-journey/#run-the-identity-verified-response-scenario).
 
+### How to simulate skipping the Verify user journey in local development
+
+Users that are unable to complete the GOV.UK Verify process are still able to
+submit a claim. To do so they are linked back to the service on the GOV.UK
+Verify failure screen so they can provide their identity information and
+complete their claim. Such claims are then manually check to confirm the
+claimants identity. To simulate such a claim, visit the following URL after you
+reach the screen just before the GOV.UK Verify stage:
+
+https://localhost:3000/verify/authentications/skip
+
 ## Managing Certificates for the IDAP PKI
 
 Two certificates are used one for signing and one for encryption.
