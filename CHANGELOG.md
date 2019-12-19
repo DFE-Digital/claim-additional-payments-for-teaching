@@ -6,7 +6,10 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+## [Release 042] - 2019-12-19
+
 - Import users from DfE Signin to the local database
+- Bump Rack library dependency with security update
 
 ## [Release 041] - 2019-12-17
 
@@ -315,7 +318,9 @@ The format is based on [Keep a Changelog]
 - First release for student loan repayments private beta
 
 [unreleased]:
-  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-041...HEAD
+  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-042...HEAD
+[release 042]:
+  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-041...release-042
 [release 041]:
   https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-040...release-041
 [release 040]:
