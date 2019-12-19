@@ -8,5 +8,9 @@
   },
   "devDependencies": {
     "prettier": "^1.19.1"
+  },
+  "engines": {
+    "node": "12.12.0",
+    "yarn": "1.19.1"
   }
 }
