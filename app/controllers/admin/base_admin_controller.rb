@@ -37,8 +37,12 @@ module Admin
       end
     end
 
+    def admin_user
+      @admin_user ||= DfeSignIn::User.find(session[:user_id])
+    end
+
     def admin_session
-      @admin_session ||= AdminSession.new(session[:user_id], session[:organisation_id], session[:role_codes])
+      @admin_session ||= AdminSession.new(admin_user.dfe_sign_in_id, session[:organisation_id], session[:role_codes])
     end
 
     def service_operator_signed_in?

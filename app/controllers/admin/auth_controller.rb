@@ -14,7 +14,9 @@ module Admin
       admin_session = AdminSession.from_auth_hash(request.env.fetch("omniauth.auth"))
 
       if admin_session.has_admin_access?
-        session[:user_id] = admin_session.user_id
+        dfe_sign_in_user = DfeSignIn::User.find_or_create_by(dfe_sign_in_id: admin_session.user_id)
+
+        session[:user_id] = dfe_sign_in_user.id
         session[:organisation_id] = admin_session.organisation_id
         session[:role_codes] = admin_session.role_codes
 
