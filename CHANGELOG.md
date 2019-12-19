@@ -7,6 +7,7 @@ The format is based on [Keep a Changelog]
 ## [Unreleased]
 
 - Users can complete and submit a claim without completing GOV.UK Verify
+- Update autocomplete attributes for the address capture page
 
 ## [Release 042] - 2019-12-19
 
