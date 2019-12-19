@@ -1,6 +1,6 @@
 FactoryBot.define do
   factory :check do
-    checked_by { "123" }
+    association :checked_by, factory: :dfe_signin_user
     claim { build(:claim, :submitted) }
     trait :approved do
       result { :approved }

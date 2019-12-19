@@ -3,11 +3,12 @@ require "rails_helper"
 RSpec.describe Check, type: :model do
   it "should not permit changes after creation" do
     claim = create(:claim, :submitted)
-    check = Check.create!(claim: claim, checked_by: "123", result: :approved)
+    user = create(:dfe_signin_user)
+    check = Check.create!(claim: claim, checked_by: user, result: :approved)
 
-    expect { check.update(checked_by: "456") }.to raise_error(ActiveRecord::ReadOnlyRecord)
+    expect { check.update(checked_by: build(:dfe_signin_user)) }.to raise_error(ActiveRecord::ReadOnlyRecord)
 
-    expect(check.reload.checked_by).to eq("123")
+    expect(check.reload.checked_by).to eq(user)
   end
 
   it "validates the check has a result" do
