@@ -39,6 +39,15 @@ RSpec.describe ClaimMailer, type: :mailer do
         it "mentions that claim has been received in the subject and body" do
           expect(mail.subject).to include("been received")
           expect(mail.body.encoded).to include("We've received your claim")
+          expect(mail.body.encoded).not_to include("confirm your identity")
+        end
+
+        it "adjusts the content for claims that need manual identity confirmation" do
+          claim.update!(verified_fields: [])
+
+          expect(mail.subject).to include("been received")
+          expect(mail.body.encoded).to include("We've received your claim")
+          expect(mail.body.encoded).to include("confirm your identity")
         end
       end
 

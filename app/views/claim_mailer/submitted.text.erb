@@ -6,7 +6,11 @@ Your unique reference is <%= @claim.reference %>. You will need this if you cont
 
 # What happens next
 
+<%- if @claim.identity_confirmed? -%>
 We'll check the details you provided in your application and we'll tell you if your claim was successful within <%= claim_checking_deadline_in_weeks %>.
+<%- else -%>
+We'll try to contact you at your school to confirm your identity before progressing your claim. If we're able to verify your identity, we'll check the details you provided in your application and tell you if your claim was successful within <%= claim_checking_deadline_in_weeks %>.
+<%- end -%>
 
 It can take up to 18 weeks to process your application and make a payment into your account.
 
