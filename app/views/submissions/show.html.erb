@@ -21,15 +21,28 @@
       We have sent your application to the Department for Education.
     </p>
 
-    <p class="govuk-body">
-      They will check the details you provided in your application and tell
-      you if your claim was successful within the next <%= claim_checking_deadline_in_weeks %>.
-    </p>
+    <% if current_claim.identity_confirmed? %>
+      <p class="govuk-body">
+        They will check the details you provided in your application and tell
+        you if your claim was successful within the next <%= claim_checking_deadline_in_weeks %>.
+      </p>
 
-    <p class="govuk-body">
-      This service is currently in development, so while we expect to be
-      able to send you the outcome in that time frame, it may change.
-    </p>
+      <p class="govuk-body">
+        This service is currently in development, so while we expect to be
+        able to send you the outcome in that time frame, it may change.
+      </p>
+    <% else %>
+      <p class="govuk-body">
+        They will try to contact you at your school to confirm your identity
+        before progressing your claim.
+      </p>
+
+      <p class="govuk-body">
+        If they're able to confirm your identity, they will check the details
+        you provided in your application and tell you if your claim was
+        successful within <%= claim_checking_deadline_in_weeks %>.
+      </p>
+    <% end %>
 
     <p class="govuk-body">
       You will receive email updates as your application progresses.

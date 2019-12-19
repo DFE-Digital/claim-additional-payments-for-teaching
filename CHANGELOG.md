@@ -8,6 +8,8 @@ The format is based on [Keep a Changelog]
 
 - Users can complete and submit a claim without completing GOV.UK Verify
 - Update autocomplete attributes for the address capture page
+- Application complete page updated to include content for claimants that do not
+  complete GOV.UK Verify
 
 ## [Release 042] - 2019-12-19
 

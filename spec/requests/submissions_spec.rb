@@ -1,9 +1,9 @@
 require "rails_helper"
 
 RSpec.describe "Submissions", type: :request do
-  describe "#create" do
-    let(:in_progress_claim) { Claim.order(:created_at).last }
+  let(:in_progress_claim) { Claim.last }
 
+  describe "#create" do
     context "with a submittable student loans claim" do
       before do
         @dataset_post_stub = stub_geckoboard_dataset_update
@@ -88,13 +88,29 @@ RSpec.describe "Submissions", type: :request do
   end
 
   describe "#show" do
-    before { start_student_loans_claim }
+    before do
+      start_student_loans_claim
+      in_progress_claim.update!(attributes_for(:claim, :submittable))
+    end
 
-    context "with a submitted claim" do
+    context "with a submitted claim that completed GOV.UK Verify" do
       it "renders the claim confirmation screen and clears the session" do
         get claim_confirmation_path(StudentLoans.routing_name)
 
         expect(response.body).to include("Claim submitted")
+        expect(response.body).to include("check the details you provided in your application")
+        expect(session[:claim_id]).to be_nil
+      end
+    end
+
+    context "with a submitted claim that did not complete GOV.UK Verify" do
+      it "renders the claim confirmation screen, including identity checking content, and clears the session" do
+        in_progress_claim.update!(verified_fields: [])
+
+        get claim_confirmation_path(StudentLoans.routing_name)
+
+        expect(response.body).to include("Claim submitted")
+        expect(response.body).to include("contact you at your school to confirm your identity")
         expect(session[:claim_id]).to be_nil
       end
     end
