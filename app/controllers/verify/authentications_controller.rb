@@ -38,6 +38,12 @@ module Verify
     def no_auth
     end
 
+    # Users unable to complete the GOV.UK Verify identity assurance will be able
+    # to visit this endpoint to continue their claim.
+    def skip
+      redirect_to claim_url(current_policy_routing_name, "name")
+    end
+
     private
 
     def verify_path_for_response_scenario(scenario)

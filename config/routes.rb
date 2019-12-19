@@ -64,6 +64,7 @@ Rails.application.routes.draw do
       member do
         get "failed"
         get "no_auth"
+        get "skip"
       end
     end
 
