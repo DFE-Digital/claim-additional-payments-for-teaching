@@ -145,6 +145,16 @@ RSpec.describe Claim, type: :model do
     end
   end
 
+  context "when saving in the name validation context" do
+    it "validates the presence of the first_name and surname attributes" do
+      expect(build(:claim)).not_to be_valid(:name)
+      expect(build(:claim, first_name: "Cheryl")).not_to be_valid(:name)
+      expect(build(:claim, surname: "Lynn")).not_to be_valid(:name)
+
+      expect(build(:claim, first_name: "Cheryl", surname: "Lynn")).to be_valid(:name)
+    end
+  end
+
   context "when saving in the “address” validation context" do
     it "validates the presence of address_line_1 and postcode" do
       expect(build(:claim)).not_to be_valid(:address)
@@ -412,6 +422,31 @@ RSpec.describe Claim, type: :model do
     end
   end
 
+  describe "#approvable?" do
+    it "returns true for a submitted claim with all required data present" do
+      expect(build(:claim, :submitted).approvable?).to eq true
+    end
+
+    it "returns false for an unsubmitted claim" do
+      expect(build(:claim, :submittable).approvable?).to eq false
+    end
+
+    it "returns false for a submitted claim that is missing a binary value for payroll_gender" do
+      expect(build(:claim, :submitted, payroll_gender: :dont_know).approvable?).to eq false
+    end
+
+    it "returns false for a claim that already has a persisted check" do
+      expect(build(:claim, :approved).approvable?).to eq true
+
+      expect(create(:claim, :approved).approvable?).to eq false
+      expect(create(:claim, :rejected).approvable?).to eq false
+    end
+
+    it "returns false for a claim that doesn't have a confirmed identity" do
+      expect(build(:claim, :unverified).approvable?).to eq false
+    end
+  end
+
   describe "#payroll_gender_missing?" do
     it "returns true when the claimant doesn't know their payroll gender" do
       claim = build(:claim, payroll_gender: :dont_know)
@@ -426,13 +461,38 @@ RSpec.describe Claim, type: :model do
     end
   end
 
+  describe "#identity_confirmed?" do
+    it "returns true if the claim has any GOV.UK Verified fields" do
+      expect(Claim.new(verified_fields: ["payroll_gender"]).identity_confirmed?).to eq true
+    end
+
+    it "returns false if the claim doesn't have any GOV.UK Verified fields" do
+      expect(Claim.new.identity_confirmed?).to eq false
+      expect(Claim.new(verified_fields: []).identity_confirmed?).to eq false
+    end
+  end
+
+  describe "#name_verified?" do
+    it "returns true if the name is present in the list of verified fields" do
+      expect(Claim.new.name_verified?).to eq false
+      expect(Claim.new(verified_fields: ["first_name"]).name_verified?).to eq true
+    end
+  end
+
   describe "#address_verified?" do
     it "returns true if any address attributes are in the list of verified fields" do
-      expect(Claim.new.payroll_gender_verified?).to eq false
-      expect(Claim.new(verified_fields: ["gender"]).payroll_gender_verified?).to eq false
+      expect(Claim.new.address_verified?).to eq false
+      expect(Claim.new(verified_fields: ["payroll_gender"]).address_verified?).to eq false
 
       expect(Claim.new(verified_fields: ["address_line_1"]).address_verified?).to eq true
       expect(Claim.new(verified_fields: ["address_line_1", "postcode"]).address_verified?).to eq true
+    end
+  end
+
+  describe "#date_of_birth_verified?" do
+    it "returns true if date_of_birth is in the list of verified fields" do
+      expect(Claim.new(verified_fields: ["date_of_birth"]).date_of_birth_verified?).to eq true
+      expect(Claim.new(verified_fields: ["address_line_1"]).date_of_birth_verified?).to eq false
     end
   end
 

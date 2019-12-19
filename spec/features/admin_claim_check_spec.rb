@@ -88,6 +88,18 @@ RSpec.feature "Admin checks a claim" do
       end
     end
 
+    context "When the claimant has not completed GOV.UK Verify" do
+      let!(:claim_without_identity_confirmation) { create(:claim, :unverified) }
+
+      scenario "the service operator should be told the identity hasn't been confirmed" do
+        click_on "View claims"
+        find("a[href='#{admin_claim_path(claim_without_identity_confirmation)}']").click
+
+        expect(page).to have_content("Identity has not been confirmed")
+        expect(page).to have_field("Approve", disabled: true)
+      end
+    end
+
     context "with a mixture of policy types" do
       let!(:maths_and_physics_claims) { create_list(:claim, 3, :submitted, policy: MathsAndPhysics) }
       let!(:student_loan_claims) { create_list(:claim, 2, :submitted, policy: StudentLoans) }

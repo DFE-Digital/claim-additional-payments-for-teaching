@@ -3,46 +3,46 @@ require "rails_helper"
 RSpec.describe Claim::VerifyResponseParametersParser do
   describe "#gender" do
     it "returns :male when Verify reports 'gender' as 'MALE'" do
-      parser = Claim::VerifyResponseParametersParser.new(sample_response_parameters(gender: {value: "MALE", verified: true}))
+      parser = Claim::VerifyResponseParametersParser.new(sample_parsed_verify_response(gender: {value: "MALE", verified: true}))
       expect(parser.gender).to eq :male
     end
 
     it "returns :female when Verify reports 'gender' as 'FEMALE'" do
-      parser = Claim::VerifyResponseParametersParser.new(sample_response_parameters(gender: {value: "FEMALE", verified: true}))
+      parser = Claim::VerifyResponseParametersParser.new(sample_parsed_verify_response(gender: {value: "FEMALE", verified: true}))
       expect(parser.gender).to eq :female
     end
 
     it "returns nil when Verify reports 'gender' as neither 'MALE' nor 'FEMALE" do
-      parser = Claim::VerifyResponseParametersParser.new(sample_response_parameters(gender: {value: "OTHER", verified: true}))
+      parser = Claim::VerifyResponseParametersParser.new(sample_parsed_verify_response(gender: {value: "OTHER", verified: true}))
       expect(parser.gender).to be_nil
     end
 
     it "returns a gender, even when the value is not 'verified'" do
-      parser = Claim::VerifyResponseParametersParser.new(sample_response_parameters(gender: {value: "MALE", verified: false}))
+      parser = Claim::VerifyResponseParametersParser.new(sample_parsed_verify_response(gender: {value: "MALE", verified: false}))
       expect(parser.gender).to eq :male
     end
 
     it "returns nil if the 'gender' is not reported at all" do
-      parser = Claim::VerifyResponseParametersParser.new(sample_response_parameters.except("gender"))
+      parser = Claim::VerifyResponseParametersParser.new(sample_parsed_verify_response.except("gender"))
       expect(parser.gender).to be_nil
     end
   end
 
   describe "#date_of_birth" do
     it "returns the raw String value for the 'datesOfBirth' reported by Verify" do
-      parser = Claim::VerifyResponseParametersParser.new(sample_response_parameters(datesOfBirth: [{value: "1994-08-09"}]))
+      parser = Claim::VerifyResponseParametersParser.new(sample_parsed_verify_response(datesOfBirth: [{value: "1994-08-09"}]))
       expect(parser.date_of_birth).to eq "1994-08-09"
     end
   end
 
   describe "#first_name" do
     it "returns a 'verified' value for 'firstNames'" do
-      parser = Claim::VerifyResponseParametersParser.new(sample_response_parameters(firstNames: [{value: "Bob", verified: true}]))
+      parser = Claim::VerifyResponseParametersParser.new(sample_parsed_verify_response(firstNames: [{value: "Bob", verified: true}]))
       expect(parser.first_name).to eq "Bob"
     end
 
     it "returns the most recent 'verified' value for 'firstNames'" do
-      changed_name_parameters = sample_response_parameters({
+      changed_name_parameters = sample_parsed_verify_response({
         firstNames: [
           {value: "Barbara", verified: true, from: "1991-12-12", to: "2018-08-08"},
           {value: "Bob", verified: true, from: "2018-08-09"},
@@ -54,7 +54,7 @@ RSpec.describe Claim::VerifyResponseParametersParser do
     end
 
     it "returns the 'verified' value without a from/to date (this will be the most recent)" do
-      changed_name_parameters = sample_response_parameters({
+      changed_name_parameters = sample_parsed_verify_response({
         firstNames: [
           {value: "Bob", verified: true},
           {value: "Barbara", verified: true, from: "1991-12-12", to: "2018-08-08"},
@@ -66,7 +66,7 @@ RSpec.describe Claim::VerifyResponseParametersParser do
     end
 
     it "raises a MissingResponseAttribute error if there is no 'verified' value for 'firstNames'" do
-      unverified_name_paramters = sample_response_parameters({
+      unverified_name_paramters = sample_parsed_verify_response({
         firstNames: [value: "Fred", verified: false],
       })
 
@@ -78,12 +78,12 @@ RSpec.describe Claim::VerifyResponseParametersParser do
 
   describe "#surname" do
     it "returns a 'verified' value for 'surnames'" do
-      parser = Claim::VerifyResponseParametersParser.new(sample_response_parameters(surnames: [{value: "Booker", verified: true}]))
+      parser = Claim::VerifyResponseParametersParser.new(sample_parsed_verify_response(surnames: [{value: "Booker", verified: true}]))
       expect(parser.surname).to eq "Booker"
     end
 
     it "returns the most recent 'verified' value for 'surnames'" do
-      changed_name_parameters = sample_response_parameters({
+      changed_name_parameters = sample_parsed_verify_response({
         surnames: [
           {value: "Franklin", verified: true, from: "1991-12-12", to: "2018-08-08"},
           {value: "Booker", verified: true, from: "2018-08-09"},
@@ -95,7 +95,7 @@ RSpec.describe Claim::VerifyResponseParametersParser do
     end
 
     it "returns the 'verified' value without a from/to date (assuming this will be the most recent)" do
-      changed_name_parameters = sample_response_parameters({
+      changed_name_parameters = sample_parsed_verify_response({
         surnames: [
           {value: "Brooker", verified: false},
           {value: "Booker", verified: true},
@@ -108,7 +108,7 @@ RSpec.describe Claim::VerifyResponseParametersParser do
     end
 
     it "raises a MissingResponseAttribute error if there is no 'verified' value for 'surnames'" do
-      unverified_name_paramters = sample_response_parameters({
+      unverified_name_paramters = sample_parsed_verify_response({
         surnames: [value: "Fred", verified: false],
       })
 
@@ -120,7 +120,7 @@ RSpec.describe Claim::VerifyResponseParametersParser do
 
   describe "#middle_name" do
     it "returns the most recent 'verified' value for 'middleNames'" do
-      changed_name_parameters = sample_response_parameters({
+      changed_name_parameters = sample_parsed_verify_response({
         "middleNames": [
           {value: "Horacio", verified: true, from: "1991-12-12", to: "2018-08-08"},
           {value: "Buster", verified: true, from: "2018-08-09"},
@@ -132,19 +132,19 @@ RSpec.describe Claim::VerifyResponseParametersParser do
     end
 
     it "returns nil if there are no 'middleNames'" do
-      parser = Claim::VerifyResponseParametersParser.new(sample_response_parameters(middleNames: []))
+      parser = Claim::VerifyResponseParametersParser.new(sample_parsed_verify_response(middleNames: []))
       expect(parser.middle_name).to be_nil
     end
 
     it "returns nil if there is no 'verified' value for 'middleNames'" do
-      parser = Claim::VerifyResponseParametersParser.new(sample_response_parameters(middleNames: [{value: "Horacio", verified: false}]))
+      parser = Claim::VerifyResponseParametersParser.new(sample_parsed_verify_response(middleNames: [{value: "Horacio", verified: false}]))
       expect(parser.middle_name).to be_nil
     end
   end
 
   describe "#postcode" do
     it "returns the 'postCode' from the most recent 'verified' address" do
-      multi_address_parameters = sample_response_parameters({
+      multi_address_parameters = sample_parsed_verify_response({
         addresses: [
           {
             value: {lines: ["Old Street", "Old Town"], postCode: "M21 1GP"},
@@ -165,7 +165,7 @@ RSpec.describe Claim::VerifyResponseParametersParser do
     end
 
     it "returns nil if there is no address" do
-      parser = Claim::VerifyResponseParametersParser.new(sample_response_parameters(addresses: []))
+      parser = Claim::VerifyResponseParametersParser.new(sample_parsed_verify_response(addresses: []))
 
       expect(parser.postcode).to be_nil
     end
@@ -173,14 +173,14 @@ RSpec.describe Claim::VerifyResponseParametersParser do
 
   describe "the address_line_X methods" do
     it "returns address lines that are present from the most recent 'verified' address" do
-      short_address_parameters = sample_response_parameters({addresses: [{value: {lines: ["Old Street", "Old Town"], postCode: "M21 1GP"}, verified: true}]})
+      short_address_parameters = sample_parsed_verify_response({addresses: [{value: {lines: ["Old Street", "Old Town"], postCode: "M21 1GP"}, verified: true}]})
       parser = Claim::VerifyResponseParametersParser.new(short_address_parameters)
       expect(parser.address_line_1).to eq "Old Street"
       expect(parser.address_line_2).to eq "Old Town"
       expect(parser.address_line_3).to be_nil
       expect(parser.address_line_4).to be_nil
 
-      full_address_parameters = sample_response_parameters({
+      full_address_parameters = sample_parsed_verify_response({
         addresses: [
           {
             value: {lines: ["Some house", "Verified Street", "Verified Town", "Verified County"], postCode: "M1 7GL"},
@@ -197,7 +197,7 @@ RSpec.describe Claim::VerifyResponseParametersParser do
     end
 
     it "returns nil if there are no 'addresses'" do
-      parser = Claim::VerifyResponseParametersParser.new(sample_response_parameters(addresses: []))
+      parser = Claim::VerifyResponseParametersParser.new(sample_parsed_verify_response(addresses: []))
 
       expect(parser.address_line_1).to be_nil
       expect(parser.address_line_2).to be_nil
@@ -208,7 +208,7 @@ RSpec.describe Claim::VerifyResponseParametersParser do
 
   describe "#attributes" do
     it "returns a compact attributes hash ready to be mass-assigned to a Claim record, including the keys of the verified fields and verify response" do
-      parser = Claim::VerifyResponseParametersParser.new(sample_response_parameters)
+      parser = Claim::VerifyResponseParametersParser.new(sample_parsed_verify_response)
       expected_attributes = {
         first_name: "Isambard",
         surname: "Brunel",
@@ -217,37 +217,10 @@ RSpec.describe Claim::VerifyResponseParametersParser do
         address_line_2: "Verified Town",
         postcode: "M12 345",
         verified_fields: %i[first_name surname date_of_birth address_line_1 address_line_2 postcode],
-        verify_response: sample_response_parameters,
+        verify_response: sample_parsed_verify_response,
       }
 
       expect(parser.attributes).to eq expected_attributes
     end
-  end
-
-  private
-
-  def sample_response_parameters(overrides = {})
-    attributes = {
-      "firstNames" => [
-        {"value" => "Isambard", "verified" => true},
-      ],
-      "middleNames" => [],
-      "surnames" => [
-        {"value" => "Brunel", "verified" => true},
-      ],
-      "datesOfBirth" => [
-        {"value" => "1806-04-09", "verified" => true},
-      ],
-      "addresses" => [
-        {"value" => {"lines" => ["Verified Street", "Verified Town"], "postCode" => "M12 345"}, "verified" => true},
-      ],
-    }.merge(overrides.deep_stringify_keys)
-
-    {
-      "scenario" => "IDENTITY_VERIFIED",
-      "pid" => "5989a87f344bb79ee8d0f0532c0f716deb4f8d71e906b87b346b649c4ceb20c5",
-      "levelOfAssurance" => "LEVEL_2",
-      "attributes" => attributes,
-    }
   end
 end

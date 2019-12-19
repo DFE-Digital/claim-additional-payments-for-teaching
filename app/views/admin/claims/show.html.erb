@@ -4,6 +4,16 @@
   <div class="govuk-grid-column-two-thirds">
     <%= render("shared/error_summary", instance: @check, errored_field_id_overrides: { "result": "check_result_approved" }) if @check.errors.any? %>
 
+
+    <% unless @claim.identity_confirmed? %>
+      <div class="govuk-error-summary" aria-labelledby="identity-error-title" role="alert" data-module="govuk-error-summary">
+        <h2 class="govuk-error-summary__title" id="identity-error-title">
+          Identity has not been confirmed
+        </h2>
+        <p class="govuk-body">Claims without a confirmed identity cannot be approved at present.</p>
+      </div>
+    <% end %>
+
     <% if @claim.payroll_gender_missing? %>
       <div class="govuk-body-l govuk-flash__notice">
         This claim cannot be approved, the payroll gender is missing and the claim will need to be referred
@@ -79,7 +89,7 @@
             <div class="govuk-radios">
               <%= form.hidden_field :result %>
               <div class="govuk-radios__item">
-                <%= form.radio_button(:result, "approved", class: "govuk-radios__input", disabled: @claim.payroll_gender_missing?) %>
+                <%= form.radio_button(:result, "approved", class: "govuk-radios__input", disabled: !@claim.approvable?) %>
                 <%= form.label "result_approved", "Approve", class: "govuk-label govuk-radios__label" %>
               </div>
               <div class="govuk-radios__item">

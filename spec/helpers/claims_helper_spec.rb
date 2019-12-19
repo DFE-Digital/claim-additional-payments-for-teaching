@@ -60,8 +60,11 @@ describe ClaimsHelper do
       expect(helper.verify_answers(claim)).to eq expected_answers
     end
 
-    it "excludes questions not answered by verify" do
+    it "excludes questions/answers not acquired from GOV.UK Verify" do
       claim.verified_fields = []
+      expect(helper.verify_answers(claim)).to eq []
+
+      claim.verified_fields = ["first_name", "surname", "date_of_birth"]
 
       expected_answers = [
         ["First name", "Jo"],
@@ -83,7 +86,7 @@ describe ClaimsHelper do
         address_line_2: "1 Test Road",
         address_line_3: "Test Town",
         postcode: "AB1 2CD",
-        date_of_birth: 20.years.ago.to_date,
+        date_of_birth: Date.new(1980, 1, 10),
         teacher_reference_number: "1234567",
         national_insurance_number: "QQ123456C",
         email_address: "test@email.com",
@@ -91,9 +94,11 @@ describe ClaimsHelper do
       )
     end
 
-    it "returns an array of questions and answers for displaying to the user for review" do
+    it "returns an array of identity-related questions and answers for displaying to the user for review" do
       expected_answers = [
+        [I18n.t("questions.name"), "Jo Bloggs", "name"],
         [I18n.t("questions.address"), "Flat 1, 1 Test Road, Test Town, AB1 2CD", "address"],
+        [I18n.t("questions.date_of_birth"), "10 January 1980", "date-of-birth"],
         [I18n.t("questions.payroll_gender"), "Don’t know", "gender"],
         [I18n.t("questions.teacher_reference_number"), "1234567", "teacher-reference-number"],
         [I18n.t("questions.national_insurance_number"), "QQ123456C", "national-insurance-number"],
@@ -103,8 +108,8 @@ describe ClaimsHelper do
       expect(helper.identity_answers(claim)).to eq expected_answers
     end
 
-    it "excludes questions answered by verify" do
-      claim.verified_fields = ["payroll_gender", "postcode"]
+    it "excludes questions/answers that were acquired from GOV.UK Verify" do
+      claim.verified_fields = ["first_name", "surname", "date_of_birth", "payroll_gender", "postcode"]
 
       expected_answers = [
         [I18n.t("questions.teacher_reference_number"), "1234567", "teacher-reference-number"],
