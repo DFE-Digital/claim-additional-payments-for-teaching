@@ -5,7 +5,7 @@ class Admin::ClaimChecksController < Admin::BaseAdminController
   before_action :reject_missing_payroll_gender
 
   def create
-    @check = @claim.build_check(check_params.merge(checked_by: admin_session.user_id))
+    @check = @claim.build_check(check_params.merge(checked_by: admin_user))
     if @check.save
       send_claim_result_email
       redirect_to admin_claims_path, notice: "Claim has been #{@claim.check.result} successfully"

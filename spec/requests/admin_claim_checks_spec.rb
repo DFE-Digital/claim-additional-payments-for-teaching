@@ -2,8 +2,10 @@ require "rails_helper"
 
 RSpec.describe "Admin claim checks", type: :request do
   context "when signed in as a service operator" do
+    let(:user) { create(:dfe_signin_user) }
+
     before do
-      sign_in_to_admin_with_role(AdminSession::SERVICE_OPERATOR_DFE_SIGN_IN_ROLE_CODE)
+      sign_in_to_admin_with_role(AdminSession::SERVICE_OPERATOR_DFE_SIGN_IN_ROLE_CODE, user.dfe_sign_in_id)
     end
 
     describe "claim_checks#create" do
@@ -16,7 +18,7 @@ RSpec.describe "Admin claim checks", type: :request do
 
         expect(response.body).to include("Claim has been approved successfully")
 
-        expect(claim.check.checked_by).to eq("123")
+        expect(claim.check.checked_by).to eq(user)
         expect(claim.check.result).to eq("approved")
       end
 
@@ -27,7 +29,7 @@ RSpec.describe "Admin claim checks", type: :request do
 
         expect(response.body).to include("Claim has been rejected successfully")
 
-        expect(claim.check.checked_by).to eq("123")
+        expect(claim.check.checked_by).to eq(user)
         expect(claim.check.result).to eq("rejected")
       end
 

@@ -78,7 +78,8 @@ describe Admin::ClaimsHelper do
 
   describe "#admin_check_details" do
     let(:claim) { create(:claim, :submitted) }
-    let(:check) { Check.create!(claim: claim, checked_by: "user-123", result: :approved) }
+    let(:user) { create(:dfe_signin_user) }
+    let(:check) { Check.create!(claim: claim, checked_by: user, result: :approved) }
 
     it "includes an array of details about the check" do
       expect(helper.admin_check_details(check)).to eq([
@@ -88,7 +89,7 @@ describe Admin::ClaimsHelper do
     end
 
     context "when notes are saved with the check" do
-      let(:check) { Check.create!(claim: claim, checked_by: "user-123", result: :approved, notes: "abc\nxyz") }
+      let(:check) { Check.create!(claim: claim, checked_by: user, result: :approved, notes: "abc\nxyz") }
 
       it "includes the notes" do
         expect(helper.admin_check_details(check)).to include([I18n.t("admin.check.notes"), simple_format(check.notes, class: "govuk-body")])

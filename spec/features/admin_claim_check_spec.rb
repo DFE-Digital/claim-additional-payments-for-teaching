@@ -1,11 +1,11 @@
 require "rails_helper"
 
 RSpec.feature "Admin checks a claim" do
-  let(:user_id) { "userid-345" }
+  let(:user) { create(:dfe_signin_user) }
 
   context "User is logged in as a service operator" do
     before do
-      sign_in_to_admin_with_role(AdminSession::SERVICE_OPERATOR_DFE_SIGN_IN_ROLE_CODE, user_id)
+      sign_in_to_admin_with_role(AdminSession::SERVICE_OPERATOR_DFE_SIGN_IN_ROLE_CODE, user.dfe_sign_in_id)
     end
 
     scenario "User can approve a claim" do
@@ -23,7 +23,7 @@ RSpec.feature "Admin checks a claim" do
         fill_in "Decision notes", with: "Everything matches"
         perform_enqueued_jobs { click_on "Submit" }
 
-        expect(claim_to_approve.check.checked_by).to eq(user_id)
+        expect(claim_to_approve.check.checked_by).to eq(user)
         expect(claim_to_approve.check.notes).to eq("Everything matches")
 
         expect(page).to have_content("Claim has been approved successfully")
@@ -53,7 +53,7 @@ RSpec.feature "Admin checks a claim" do
       fill_in "Decision notes", with: "TRN doesn't exist"
       perform_enqueued_jobs { click_on "Submit" }
 
-      expect(claim_to_reject.check.checked_by).to eq(user_id)
+      expect(claim_to_reject.check.checked_by).to eq(user)
       expect(claim_to_reject.check.notes).to eq("TRN doesn't exist")
 
       expect(page).to have_content("Claim has been rejected successfully")
