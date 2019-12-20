@@ -226,6 +226,7 @@ APP_DEPLOYMENT_RESULT=$(
     --template-file "$APP_TEMPLATE_FILE_PATH" \
     --parameters "@$APP_PARAMETERS_FILE_PATH" \
     --parameters "gitCommitHash=$GIT_COMMIT_HASH" \
+    --parameters "azureBuildNumber=$AZURE_BUILD_NUMBER" \
     --parameters "secretsResourceGroupName=$SECRETS_RESOURCE_GROUP_NAME" \
     --parameters "$(
       filter-azure-outputs \
