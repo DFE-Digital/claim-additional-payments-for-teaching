@@ -20,7 +20,6 @@ module Admin
 
         session[:user_id] = dfe_sign_in_user.id
         session[:organisation_id] = admin_session.organisation_id
-        session[:role_codes] = admin_session.role_codes
 
         redirect_to session.delete(:requested_admin_path) || admin_root_path
       else
