@@ -5,7 +5,7 @@ RSpec.describe "Service configuration" do
 
   context "when signed in as a service operator" do
     before do
-      sign_in_to_admin_with_role(AdminSession::SERVICE_OPERATOR_DFE_SIGN_IN_ROLE_CODE)
+      sign_in_to_admin_with_role(DfeSignIn::User::SERVICE_OPERATOR_DFE_SIGN_IN_ROLE_CODE)
     end
 
     describe "admin_policy_configurations#update" do
@@ -23,7 +23,7 @@ RSpec.describe "Service configuration" do
 
   context "when signed in as a payroll operator or a support agent" do
     describe "admin_policy_configurations#update" do
-      [AdminSession::SUPPORT_AGENT_DFE_SIGN_IN_ROLE_CODE, AdminSession::PAYROLL_OPERATOR_DFE_SIGN_IN_ROLE_CODE].each do |role|
+      [DfeSignIn::User::SUPPORT_AGENT_DFE_SIGN_IN_ROLE_CODE, DfeSignIn::User::PAYROLL_OPERATOR_DFE_SIGN_IN_ROLE_CODE].each do |role|
         it "returns a unauthorized response" do
           sign_in_to_admin_with_role(role)
 

@@ -2,7 +2,7 @@ require "rails_helper"
 
 RSpec.feature "DQT Report request" do
   scenario "Service operator can download CSV for the Database of Qualified Teachers report request" do
-    sign_in_to_admin_with_role(AdminSession::SERVICE_OPERATOR_DFE_SIGN_IN_ROLE_CODE)
+    sign_in_to_admin_with_role(DfeSignIn::User::SERVICE_OPERATOR_DFE_SIGN_IN_ROLE_CODE)
 
     claims = create_list(:claim, 3, :submitted)
 

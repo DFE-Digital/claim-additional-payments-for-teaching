@@ -5,7 +5,7 @@ RSpec.describe "Admin claim checks", type: :request do
     let(:user) { create(:dfe_signin_user) }
 
     before do
-      sign_in_to_admin_with_role(AdminSession::SERVICE_OPERATOR_DFE_SIGN_IN_ROLE_CODE, user.dfe_sign_in_id)
+      sign_in_to_admin_with_role(DfeSignIn::User::SERVICE_OPERATOR_DFE_SIGN_IN_ROLE_CODE, user.dfe_sign_in_id)
     end
 
     describe "claim_checks#create" do
@@ -83,7 +83,7 @@ RSpec.describe "Admin claim checks", type: :request do
     describe "claim_checks#create" do
       let(:claim) { create(:claim, :submitted) }
 
-      [AdminSession::SUPPORT_AGENT_DFE_SIGN_IN_ROLE_CODE, AdminSession::PAYROLL_OPERATOR_DFE_SIGN_IN_ROLE_CODE].each do |role|
+      [DfeSignIn::User::SUPPORT_AGENT_DFE_SIGN_IN_ROLE_CODE, DfeSignIn::User::PAYROLL_OPERATOR_DFE_SIGN_IN_ROLE_CODE].each do |role|
         it "does not allow a claim to be approved" do
           sign_in_to_admin_with_role(role)
           post admin_claim_checks_path(claim_id: claim.id, result: "approved")

@@ -5,7 +5,7 @@ RSpec.feature "Admin checks a claim" do
 
   context "User is logged in as a service operator" do
     before do
-      sign_in_to_admin_with_role(AdminSession::SERVICE_OPERATOR_DFE_SIGN_IN_ROLE_CODE, user.dfe_sign_in_id)
+      sign_in_to_admin_with_role(DfeSignIn::User::SERVICE_OPERATOR_DFE_SIGN_IN_ROLE_CODE, user.dfe_sign_in_id)
     end
 
     scenario "User can approve a claim" do
@@ -130,7 +130,7 @@ RSpec.feature "Admin checks a claim" do
   end
 
   context "User is logged in as a payroll operator or a support user" do
-    [AdminSession::SUPPORT_AGENT_DFE_SIGN_IN_ROLE_CODE, AdminSession::PAYROLL_OPERATOR_DFE_SIGN_IN_ROLE_CODE].each do |role|
+    [DfeSignIn::User::SUPPORT_AGENT_DFE_SIGN_IN_ROLE_CODE, DfeSignIn::User::PAYROLL_OPERATOR_DFE_SIGN_IN_ROLE_CODE].each do |role|
       scenario "User cannot view claims to check" do
         sign_in_to_admin_with_role(role)
 

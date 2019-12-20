@@ -2,7 +2,7 @@ require "rails_helper"
 
 RSpec.describe "Admin claims", type: :request do
   before do
-    sign_in_to_admin_with_role(AdminSession::SERVICE_OPERATOR_DFE_SIGN_IN_ROLE_CODE)
+    sign_in_to_admin_with_role(DfeSignIn::User::SERVICE_OPERATOR_DFE_SIGN_IN_ROLE_CODE)
   end
 
   describe "claims#index" do

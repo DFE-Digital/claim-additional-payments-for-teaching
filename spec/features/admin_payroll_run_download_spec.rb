@@ -2,7 +2,7 @@ require "rails_helper"
 
 RSpec.feature "Payroll run download" do
   scenario "User can download a payroll run file" do
-    sign_in_to_admin_with_role(AdminSession::PAYROLL_OPERATOR_DFE_SIGN_IN_ROLE_CODE)
+    sign_in_to_admin_with_role(DfeSignIn::User::PAYROLL_OPERATOR_DFE_SIGN_IN_ROLE_CODE)
 
     payroll_run = create(:payroll_run, claims_counts: {StudentLoans: 2, MathsAndPhysics: 1})
 

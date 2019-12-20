@@ -20,7 +20,7 @@ RSpec.describe "Admin", type: :request do
 
       context "when the user is a service operator" do
         before do
-          sign_in_to_admin_with_role(AdminSession::SERVICE_OPERATOR_DFE_SIGN_IN_ROLE_CODE, dfe_sign_in_id, organisation_id)
+          sign_in_to_admin_with_role(DfeSignIn::User::SERVICE_OPERATOR_DFE_SIGN_IN_ROLE_CODE, dfe_sign_in_id, organisation_id)
         end
 
         it "renders the admin page, sets a session and applies the appropriate role to the user" do
@@ -29,7 +29,7 @@ RSpec.describe "Admin", type: :request do
           expect(response).to be_successful
           expect(response.body).to include("Sign out")
 
-          expect(user.reload.role_codes).to eq([AdminSession::SERVICE_OPERATOR_DFE_SIGN_IN_ROLE_CODE])
+          expect(user.reload.role_codes).to eq([DfeSignIn::User::SERVICE_OPERATOR_DFE_SIGN_IN_ROLE_CODE])
 
           expect(session[:user_id]).to eq(user.id)
           expect(session[:organisation_id]).to eq(organisation_id)
@@ -47,7 +47,7 @@ RSpec.describe "Admin", type: :request do
 
       context "when the user is a support user" do
         before do
-          sign_in_to_admin_with_role(AdminSession::SUPPORT_AGENT_DFE_SIGN_IN_ROLE_CODE, dfe_sign_in_id, organisation_id)
+          sign_in_to_admin_with_role(DfeSignIn::User::SUPPORT_AGENT_DFE_SIGN_IN_ROLE_CODE, dfe_sign_in_id, organisation_id)
         end
 
         it "renders the admin page, sets a session and applies the appropriate role to the user" do
@@ -56,7 +56,7 @@ RSpec.describe "Admin", type: :request do
           expect(response).to be_successful
           expect(response.body).to include("Sign out")
 
-          expect(user.reload.role_codes).to eq([AdminSession::SUPPORT_AGENT_DFE_SIGN_IN_ROLE_CODE])
+          expect(user.reload.role_codes).to eq([DfeSignIn::User::SUPPORT_AGENT_DFE_SIGN_IN_ROLE_CODE])
 
           expect(session[:user_id]).to eq(user.id)
           expect(session[:organisation_id]).to eq(organisation_id)
@@ -65,7 +65,7 @@ RSpec.describe "Admin", type: :request do
 
       context "when the user is a payroll operator" do
         before do
-          sign_in_to_admin_with_role(AdminSession::PAYROLL_OPERATOR_DFE_SIGN_IN_ROLE_CODE, dfe_sign_in_id, organisation_id)
+          sign_in_to_admin_with_role(DfeSignIn::User::PAYROLL_OPERATOR_DFE_SIGN_IN_ROLE_CODE, dfe_sign_in_id, organisation_id)
         end
 
         it "renders the page, sets a session and applies the appropriate role to the user" do
@@ -75,7 +75,7 @@ RSpec.describe "Admin", type: :request do
 
           expect(response).to be_successful
 
-          expect(user.reload.role_codes).to eq([AdminSession::PAYROLL_OPERATOR_DFE_SIGN_IN_ROLE_CODE])
+          expect(user.reload.role_codes).to eq([DfeSignIn::User::PAYROLL_OPERATOR_DFE_SIGN_IN_ROLE_CODE])
 
           expect(session[:user_id]).to eq(user.id)
           expect(session[:organisation_id]).to eq(organisation_id)
@@ -121,14 +121,14 @@ RSpec.describe "Admin", type: :request do
 
       it "creates a DfeSignIn::User record and sets the record ID in the session" do
         expect {
-          sign_in_to_admin_with_role(AdminSession::SERVICE_OPERATOR_DFE_SIGN_IN_ROLE_CODE, dfe_sign_in_id, organisation_id)
+          sign_in_to_admin_with_role(DfeSignIn::User::SERVICE_OPERATOR_DFE_SIGN_IN_ROLE_CODE, dfe_sign_in_id, organisation_id)
         }.to change {
           DfeSignIn::User.count
         }.by(1)
 
         user = DfeSignIn::User.last
         expect(user.dfe_sign_in_id).to eq(dfe_sign_in_id)
-        expect(user.role_codes).to eq([AdminSession::SERVICE_OPERATOR_DFE_SIGN_IN_ROLE_CODE])
+        expect(user.role_codes).to eq([DfeSignIn::User::SERVICE_OPERATOR_DFE_SIGN_IN_ROLE_CODE])
 
         expect(session[:user_id]).to eq(user.id)
         expect(session[:organisation_id]).to eq(organisation_id)

@@ -4,7 +4,7 @@ RSpec.feature "Payroll" do
   let!(:dataset_post_stub) { stub_geckoboard_dataset_update("claims.paid.test") }
 
   scenario "Service operator creates a payroll run" do
-    sign_in_to_admin_with_role(AdminSession::SERVICE_OPERATOR_DFE_SIGN_IN_ROLE_CODE)
+    sign_in_to_admin_with_role(DfeSignIn::User::SERVICE_OPERATOR_DFE_SIGN_IN_ROLE_CODE)
 
     click_on "Payroll"
 
@@ -32,7 +32,7 @@ RSpec.feature "Payroll" do
   context "when a payroll run already exists for the month" do
     scenario "Service operator cannot create a new payroll run" do
       create(:payroll_run, claims_counts: {StudentLoans => 2}, created_at: 5.minutes.ago)
-      sign_in_to_admin_with_role(AdminSession::SERVICE_OPERATOR_DFE_SIGN_IN_ROLE_CODE)
+      sign_in_to_admin_with_role(DfeSignIn::User::SERVICE_OPERATOR_DFE_SIGN_IN_ROLE_CODE)
 
       visit admin_payroll_runs_path
 
@@ -41,7 +41,7 @@ RSpec.feature "Payroll" do
   end
 
   scenario "Any claims approved in the meantime are not included" do
-    sign_in_to_admin_with_role(AdminSession::SERVICE_OPERATOR_DFE_SIGN_IN_ROLE_CODE)
+    sign_in_to_admin_with_role(DfeSignIn::User::SERVICE_OPERATOR_DFE_SIGN_IN_ROLE_CODE)
 
     click_on "Payroll"
 
@@ -61,7 +61,7 @@ RSpec.feature "Payroll" do
   end
 
   scenario "Service operator can view a list of previous payroll runs" do
-    sign_in_to_admin_with_role(AdminSession::SERVICE_OPERATOR_DFE_SIGN_IN_ROLE_CODE)
+    sign_in_to_admin_with_role(DfeSignIn::User::SERVICE_OPERATOR_DFE_SIGN_IN_ROLE_CODE)
 
     first_payroll_run = create(:payroll_run, created_at: Time.zone.now - 1.month)
     last_payroll_run = create(:payroll_run, created_at: Time.zone.now)
@@ -78,7 +78,7 @@ RSpec.feature "Payroll" do
   end
 
   scenario "Service operator can view a payroll run" do
-    sign_in_to_admin_with_role(AdminSession::SERVICE_OPERATOR_DFE_SIGN_IN_ROLE_CODE)
+    sign_in_to_admin_with_role(DfeSignIn::User::SERVICE_OPERATOR_DFE_SIGN_IN_ROLE_CODE)
 
     payroll_run = create(:payroll_run, created_at: Time.zone.now)
 
@@ -91,7 +91,7 @@ RSpec.feature "Payroll" do
   end
 
   scenario "Service operator can upload a Payment Confirmation Report against a payroll run" do
-    sign_in_to_admin_with_role(AdminSession::SERVICE_OPERATOR_DFE_SIGN_IN_ROLE_CODE, "uploader-user-id")
+    sign_in_to_admin_with_role(DfeSignIn::User::SERVICE_OPERATOR_DFE_SIGN_IN_ROLE_CODE, "uploader-user-id")
 
     payroll_run = create(:payroll_run, claims_counts: {StudentLoans => 2})
 
