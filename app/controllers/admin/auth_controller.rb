@@ -18,7 +18,6 @@ module Admin
         dfe_sign_in_user.save
 
         session[:user_id] = dfe_sign_in_user.id
-        session[:organisation_id] = admin_session.organisation_id
 
         redirect_to session.delete(:requested_admin_path) || admin_root_path
       else
