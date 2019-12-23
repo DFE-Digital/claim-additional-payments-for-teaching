@@ -29,7 +29,7 @@ RSpec.describe "Claims", type: :request do
 
     it "validates against the context for the first page in sequence" do
       expect { post claims_path(StudentLoans.routing_name) }.not_to change { Claim.count }
-      expect(response.body).to include("Select the academic year you were awarded qualified teacher status")
+      expect(response.body).to include("Select whether you completed your initial teacher training before or after September 2013")
     end
   end
 
@@ -58,7 +58,7 @@ RSpec.describe "Claims", type: :request do
           get claim_path(StudentLoans.routing_name, "claim-school"), params: {school_search: "Pen"}
 
           expect(response.body).to include("There is a problem")
-          expect(response.body).to include("Enter the school you currently teach at")
+          expect(response.body).to include("Enter the name of the school")
           expect(response.body).not_to include(schools(:penistone_grammar_school).name)
         end
 
@@ -122,7 +122,7 @@ RSpec.describe "Claims", type: :request do
       it "makes sure validations appropriate to the context are run" do
         put claim_path(StudentLoans.routing_name, "qts-year"), params: {claim: {eligibility_attributes: {qts_award_year: nil}}}
 
-        expect(response.body).to include("Select the academic year you were awarded qualified teacher status")
+        expect(response.body).to include("Select whether you completed your initial teacher training before or after September 2013")
       end
 
       it "resets dependent claim attributes when appropriate" do

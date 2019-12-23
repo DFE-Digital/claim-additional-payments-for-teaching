@@ -41,13 +41,13 @@ module StudentLoans
     belongs_to :claim_school, optional: true, class_name: "School"
     belongs_to :current_school, optional: true, class_name: "School"
 
-    validates :qts_award_year, on: [:"qts-year", :submit], presence: {message: "Select the academic year you were awarded qualified teacher status"}
-    validates :claim_school, on: [:"claim-school", :submit], presence: {message: "Select a school from the list"}
+    validates :qts_award_year, on: [:"qts-year", :submit], presence: {message: "Select whether you completed your initial teacher training before or after September 2013"}
+    validates :claim_school, on: [:"claim-school", :submit], presence: {message: "Select a school from the list or search again for a different school"}
     validates :employment_status, on: [:"still-teaching", :submit], presence: {message: "Choose the option that describes your current employment status"}
     validates :current_school, on: [:"current-school", :submit], presence: {message: "Select a school from the list"}
     validate :one_subject_must_be_selected, on: [:"subjects-taught", :submit], unless: :not_taught_eligible_subjects?
-    validates :had_leadership_position, on: [:"leadership-position", :submit], inclusion: {in: [true, false], message: "Select either Yes or No"}
-    validates :mostly_performed_leadership_duties, on: [:"mostly-performed-leadership-duties", :submit], inclusion: {in: [true, false], message: "Select either Yes or No"}, if: :had_leadership_position?
+    validates :had_leadership_position, on: [:"leadership-position", :submit], inclusion: {in: [true, false], message: "Select yes if you were employed in a leadership position"}
+    validates :mostly_performed_leadership_duties, on: [:"mostly-performed-leadership-duties", :submit], inclusion: {in: [true, false], message: "Select yes if you spent more than half your working hours on leadership duties"}, if: :had_leadership_position?
     validates :student_loan_repayment_amount, on: [:"student-loan-amount", :submit], presence: {message: "Enter your student loan repayment amount"}
     validates_numericality_of :student_loan_repayment_amount, message: "Enter a valid monetary amount", allow_nil: true, greater_than: 0, less_than_or_equal_to: 99999
 
@@ -114,7 +114,7 @@ module StudentLoans
     end
 
     def one_subject_must_be_selected
-      errors.add(:subjects_taught, "Choose a subject, or select No") if subjects_taught.empty?
+      errors.add(:subjects_taught, "Select if you taught Biology, Chemistry, Physics, Computing, Languages or you didn’t teach any of these subjects") if subjects_taught.empty?
     end
 
     def ineligible_current_school?

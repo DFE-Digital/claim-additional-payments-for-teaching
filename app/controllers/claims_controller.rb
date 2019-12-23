@@ -53,7 +53,7 @@ class ClaimsController < BasePublicController
   rescue ArgumentError => e
     raise unless e.message == School::SEARCH_NOT_ENOUGH_CHARACTERS_ERROR
 
-    current_claim.errors.add(:school_search, "Enter the school you currently teach at")
+    current_claim.errors.add(:school_search, "Enter the name of the school")
   end
 
   def claim_params
