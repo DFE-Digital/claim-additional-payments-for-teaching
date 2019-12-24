@@ -124,6 +124,16 @@ RSpec.describe "GOV.UK Verify::AuthenticationsController requests", type: :reque
     end
   end
 
+  describe "verify/authentications/skip" do
+    before { start_student_loans_claim }
+
+    it "redirects the user to the “name” page for their claim" do
+      get skip_verify_authentications_path
+
+      expect(response).to redirect_to(claim_path(StudentLoans.routing_name, "name"))
+    end
+  end
+
   context "when a claim hasn’t been started yet" do
     before { stub_vsp_generate_request }
 
