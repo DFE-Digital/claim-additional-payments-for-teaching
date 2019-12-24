@@ -43,7 +43,7 @@ module StudentLoans
 
     validates :qts_award_year, on: [:"qts-year", :submit], presence: {message: "Select whether you completed your initial teacher training before or after September 2013"}
     validates :claim_school, on: [:"claim-school", :submit], presence: {message: "Select a school from the list or search again for a different school"}
-    validates :employment_status, on: [:"still-teaching", :submit], presence: {message: "Choose the option that describes your current employment status"}
+    validates :employment_status, on: [:"still-teaching", :submit], presence: {message: ->(object, _data) { "Select if you still work at #{object.claim_school_name}, another school or no longer teach in England" }}
     validates :current_school, on: [:"current-school", :submit], presence: {message: "Select a school from the list"}
     validate :one_subject_must_be_selected, on: [:"subjects-taught", :submit], unless: :not_taught_eligible_subjects?
     validates :had_leadership_position, on: [:"leadership-position", :submit], inclusion: {in: [true, false], message: "Select yes if you were employed in a leadership position"}
