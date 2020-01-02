@@ -10,7 +10,7 @@
 
           <%= fields.hidden_field :teaching_maths_or_physics %>
 
-          <fieldset class="govuk-fieldset">
+          <fieldset class="govuk-fieldset" aria-describedby="teaching_maths_or_physics-hint" role="group">
 
             <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl">
               <h1 class="govuk-fieldset__heading">
@@ -18,7 +18,7 @@
               </h1>
             </legend>
 
-            <span class="govuk-hint">
+            <span class="govuk-hint" id="teaching_maths_or_physics-hint">
               You are still eligible to claim if you usually teach another
               subject but sometimes teach maths or physics.
             </span>

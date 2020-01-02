@@ -10,7 +10,7 @@
 
           <%= fields.hidden_field :has_uk_maths_or_physics_degree %>
 
-          <fieldset class="govuk-fieldset">
+          <fieldset class="govuk-fieldset" aria-describedby="has_uk_maths_or_physics_degree-hint" role="group">
 
             <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl">
               <h1 class="govuk-fieldset__heading">
@@ -18,7 +18,7 @@
               </h1>
             </legend>
 
-            <span class="govuk-hint">
+            <span class="govuk-hint" id="has_uk_maths_or_physics_degree-hint">
               <p>You must have specialised in maths or physics to be able to
               claim. If you studied maths or physics for less than 50% of your
               degree, please select No.</p>

@@ -7,14 +7,14 @@
     <%= form_for current_claim, url: claim_path(current_policy_routing_name) do |form| %>
       <%= form.hidden_field :has_student_loan %>
         <%= form_group_tag current_claim do %>
-          <fieldset class="govuk-fieldset">
+          <fieldset class="govuk-fieldset" aria-describedby="student_loans-hint" role="group">
             <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl">
               <h1 class="govuk-fieldset__heading">
                 <%= t("questions.has_student_loan") %>
               </h1>
             </legend>
 
-            <span class="govuk-hint">
+            <span class="govuk-hint" id="student_loans-hint">
               We use this information to determine if we need to apply a student loan deduction to your payment.
             </span>
 

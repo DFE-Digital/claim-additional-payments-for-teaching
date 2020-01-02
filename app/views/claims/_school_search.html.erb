@@ -29,21 +29,24 @@
         <strong>No results match that search term. Try again.</strong>
       </p>
     <% else %>
-      <span class="govuk-hint">
+      <span class="govuk-hint" id: "school_search-hint">
         Enter the school name. Use at least four characters.
-      </span>
-
-      <% if school_id_param == :claim_school_id && !params.has_key?(:additional_school) %>
-        <span class="govuk-hint">
+        <% if school_id_param == :claim_school_id && !params.has_key?(:additional_school) %>
+          <br><br>
           If you taught at multiple schools during this period, enter the first school you think might be eligible.
-        </span>
-      <% end %>
+        <% end %>
+      </span>
     <% end %>
 
     <div id="school-search-container">
 
       <%= errors_tag current_claim, :school_search %>
-      <%= text_field_tag :school_search, params[:school_search], id: :school_search, class: css_classes_for_input(current_claim, :school_search), value: school_search_value %>
+      <%= text_field_tag :school_search,
+                         params[:school_search],
+                         id: :school_search,
+                         class: css_classes_for_input(current_claim, :school_search),
+                         value: school_search_value,
+                         "aria-describedby" => "school_search-hint" %>
 
     </div>
 

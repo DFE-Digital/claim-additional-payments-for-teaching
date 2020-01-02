@@ -10,7 +10,7 @@
           <%= form.label :national_insurance_number, t("questions.national_insurance_number"), {class: "govuk-label govuk-label--xl"}  %>
         </h1>
 
-        <span class="govuk-hint">
+        <span class="govuk-hint" id="national_insurance_number-hint">
           It’s on your National Insurance card, benefit letter, payslip or P60. For example, ‘QQ 12 34 56 C’.
         </span>
 
@@ -20,8 +20,8 @@
               spellcheck: "false",
               autocomplete: "off",
               minlength: 9,
-              class: css_classes_for_input(current_claim, :national_insurance_number, 'govuk-input--width-10')
-        %>
+              class: css_classes_for_input(current_claim, :national_insurance_number, 'govuk-input--width-10'),
+              "aria-describedby" => "national_insurance_number-hint" %>
       <% end %>
       <%= form.submit "Continue", class: "govuk-button" %>
     <% end %>

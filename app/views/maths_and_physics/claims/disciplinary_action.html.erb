@@ -10,7 +10,7 @@
 
           <%= fields.hidden_field :subject_to_disciplinary_action %>
 
-          <fieldset class="govuk-fieldset">
+          <fieldset class="govuk-fieldset" aria-describedby="subject_to_disciplinary_action-hint" role="group">
 
             <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl">
               <h1 class="govuk-fieldset__heading">
@@ -18,7 +18,7 @@
               </h1>
             </legend>
 
-            <span class="govuk-hint">
+            <span class="govuk-hint" id="subject_to_disciplinary_action-hint">
               For example, if you are under an investigation or have been given
               a warning that has not expired yet. We only use this information
               to check your eligibility.
