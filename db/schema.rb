@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_12_11_160017) do
+ActiveRecord::Schema.define(version: 2019_12_16_135816) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -23,6 +23,8 @@ ActiveRecord::Schema.define(version: 2019_12_11_160017) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.text "notes"
+    t.uuid "checked_by_id"
+    t.index ["checked_by_id"], name: "index_checks_on_checked_by_id"
     t.index ["claim_id"], name: "index_checks_on_claim_id"
     t.index ["created_at"], name: "index_checks_on_created_at"
   end
@@ -211,6 +213,7 @@ ActiveRecord::Schema.define(version: 2019_12_11_160017) do
     t.index ["current_school_id"], name: "index_student_loans_eligibilities_on_current_school_id"
   end
 
+  add_foreign_key "checks", "dfe_sign_in_users", column: "checked_by_id"
   add_foreign_key "claims", "payments"
   add_foreign_key "maths_and_physics_eligibilities", "schools", column: "current_school_id"
   add_foreign_key "payments", "claims"
