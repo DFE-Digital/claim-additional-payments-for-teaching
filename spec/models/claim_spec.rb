@@ -135,7 +135,7 @@ RSpec.describe Claim, type: :model do
     claim = build(:claim)
 
     expect(claim).not_to be_valid(:"qts-year")
-    expect(claim.errors.values).to include(["Select the academic year you were awarded qualified teacher status"])
+    expect(claim.errors.values).to include(["Select whether you completed your initial teacher training before or after September 2013"])
   end
 
   context "when saving in the “gender” validation context" do

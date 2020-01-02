@@ -249,6 +249,13 @@ RSpec.describe StudentLoans::Eligibility, type: :model do
       expect(StudentLoans::Eligibility.new).not_to be_valid(:"still-teaching")
       expect(StudentLoans::Eligibility.new(employment_status: :claim_school)).to be_valid(:"still-teaching")
     end
+
+    it "includes the claim school name in the error message" do
+      eligibility = build(:student_loans_eligibility, claim_school: schools(:penistone_grammar_school), employment_status: nil)
+
+      expect(eligibility).not_to be_valid(:"still-teaching")
+      expect(eligibility.errors[:employment_status]).to eq(["Select if you still work at Penistone Grammar School, another school or no longer teach in England"])
+    end
   end
 
   context "when saving in the “current-school” context" do

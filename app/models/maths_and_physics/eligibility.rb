@@ -47,17 +47,17 @@ module MathsAndPhysics
 
     belongs_to :current_school, optional: true, class_name: "School"
 
-    validates :teaching_maths_or_physics, on: [:"teaching-maths-or-physics", :submit], inclusion: {in: [true, false], message: "Select either Yes or No"}
-    validates :current_school, on: [:"current-school", :submit], presence: {message: "Select a school from the list"}
-    validates :initial_teacher_training_subject, on: [:"initial-teacher-training-subject", :submit], presence: {message: "Choose a subject, or select None of these subjects"}
-    validates :initial_teacher_training_subject_specialism, on: [:"initial-teacher-training-subject-specialism", :submit], presence: {message: "Choose a subject, or select I'm not sure"}, if: :itt_subject_science?
-    validates :has_uk_maths_or_physics_degree, on: [:"has-uk-maths-or-physics-degree", :submit], presence: {message: "Select whether you have a UK maths or physics degree."}, unless: :initial_teacher_training_specialised_in_maths_or_physics?
-    validates :qts_award_year, on: [:"qts-year", :submit], presence: {message: "Select the academic year you were awarded qualified teacher status"}
-    validates :employed_as_supply_teacher, on: [:"supply-teacher", :submit], inclusion: {in: [true, false], message: "Select either Yes or No"}
-    validates :has_entire_term_contract, on: [:"entire-term-contract", :submit], inclusion: {in: [true, false], message: "Select either Yes or No"}, if: :employed_as_supply_teacher?
-    validates :employed_directly, on: [:"employed-directly", :submit], inclusion: {in: [true, false], message: "Select whether you are employed directly by your school."}, if: :employed_as_supply_teacher?
-    validates :subject_to_disciplinary_action, on: [:"disciplinary-action", :submit], inclusion: {in: [true, false], message: "Select either Yes or No"}
-    validates :subject_to_formal_performance_action, on: [:"formal-performance-action", :submit], inclusion: {in: [true, false], message: "Select either Yes or No"}
+    validates :teaching_maths_or_physics, on: [:"teaching-maths-or-physics", :submit], inclusion: {in: [true, false], message: "Select yes if you teach any maths or physics"}
+    validates :current_school, on: [:"current-school", :submit], presence: {message: "Select a school from the list or search again for a different school"}
+    validates :initial_teacher_training_subject, on: [:"initial-teacher-training-subject", :submit], presence: {message: "Select if you completed your initial teacher training in Maths, Physics, Science, or None of these subjects"}
+    validates :initial_teacher_training_subject_specialism, on: [:"initial-teacher-training-subject-specialism", :submit], presence: {message: "Select the subject your initial teacher training specialised in or select I'm not sure"}, if: :itt_subject_science?
+    validates :has_uk_maths_or_physics_degree, on: [:"has-uk-maths-or-physics-degree", :submit], presence: {message: "Select yes if you have a UK degree specialising in maths or physics"}, unless: :initial_teacher_training_specialised_in_maths_or_physics?
+    validates :qts_award_year, on: [:"qts-year", :submit], presence: {message: "Select whether you completed your initial teacher training before or after September 2014"}
+    validates :employed_as_supply_teacher, on: [:"supply-teacher", :submit], inclusion: {in: [true, false], message: "Select yes if you are currently employed as a supply teacher"}
+    validates :has_entire_term_contract, on: [:"entire-term-contract", :submit], inclusion: {in: [true, false], message: "Select yes if you have a contract to teach at the same school for one term or longer"}, if: :employed_as_supply_teacher?
+    validates :employed_directly, on: [:"employed-directly", :submit], inclusion: {in: [true, false], message: "Select yes if you are employed directly by your school"}, if: :employed_as_supply_teacher?
+    validates :subject_to_disciplinary_action, on: [:"disciplinary-action", :submit], inclusion: {in: [true, false], message: "Select yes if you are subject to disciplinary action"}
+    validates :subject_to_formal_performance_action, on: [:"formal-performance-action", :submit], inclusion: {in: [true, false], message: "Select yes if you are subject to formal action for poor performance at work"}
 
     delegate :name, to: :current_school, prefix: true, allow_nil: true
 
