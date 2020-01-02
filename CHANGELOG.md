@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+- Update to privacy policy to explain how data can be amended and add bullet
+  point about collecting bank details
 - Users can complete and submit a claim without completing GOV.UK Verify
 - Update autocomplete attributes for the address capture page
 - Application complete page and claim submitted email updated to include content
