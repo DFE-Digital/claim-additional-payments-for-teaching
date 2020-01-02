@@ -11,11 +11,10 @@ module Admin
     end
 
     def callback
-      admin_session = AdminSession.from_auth_hash(request.env.fetch("omniauth.auth"))
+      admin_session = DfeSignIn::AuthenticatedSession.from_auth_hash(request.env.fetch("omniauth.auth"))
+      dfe_sign_in_user = DfeSignIn::User.from_session(admin_session)
 
-      if admin_session.has_admin_access?
-        dfe_sign_in_user = DfeSignIn::User.where(dfe_sign_in_id: admin_session.user_id).first_or_initialize
-        dfe_sign_in_user.role_codes = admin_session.role_codes
+      if dfe_sign_in_user.has_admin_access?
         dfe_sign_in_user.save
 
         session[:user_id] = dfe_sign_in_user.id

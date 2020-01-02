@@ -8,6 +8,12 @@ module DfeSignIn
       "dfe_sign_in_users"
     end
 
+    def self.from_session(session)
+      user = where(dfe_sign_in_id: session.user_id).first_or_initialize
+      user.role_codes = session.role_codes
+      user
+    end
+
     def full_name
       [given_name, family_name].join(" ")
     end
