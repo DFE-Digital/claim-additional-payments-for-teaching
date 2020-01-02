@@ -37,12 +37,8 @@ module Admin
         a << [t("admin.check.checked_at"), l(check.created_at)]
         a << [t("admin.check.result"), check.result.capitalize]
         a << [t("admin.check.notes"), simple_format(check.notes, class: "govuk-body")] if check.notes.present?
-        a << [t("admin.check.checked_by"), checked_by(check)]
+        a << [t("admin.check.checked_by"), user_details(check.checked_by)]
       end
-    end
-
-    def checked_by(check)
-      check.checked_by.full_name.presence || unknown_user(check.checked_by)
     end
 
     def check_deadline_warning(claim)
@@ -65,21 +61,6 @@ module Admin
 
     def days_between(first_date, second_date)
       (second_date - first_date).to_i
-    end
-
-    def unknown_user(user)
-      [
-        "Unknown user",
-        unknown_user_details(user),
-      ].join("<br/>").html_safe
-    end
-
-    def unknown_user_details(user)
-      content_tag(
-        :span,
-        "(DfE Sign-in ID - #{user.dfe_sign_in_id})",
-        class: "govuk-!-font-size-16"
-      )
     end
   end
 end

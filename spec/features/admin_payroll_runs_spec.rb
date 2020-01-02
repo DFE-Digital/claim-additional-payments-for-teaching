@@ -1,10 +1,11 @@
 require "rails_helper"
 
 RSpec.feature "Payroll" do
+  let(:user) { create(:dfe_signin_user) }
   let!(:dataset_post_stub) { stub_geckoboard_dataset_update("claims.paid.test") }
 
   scenario "Service operator creates a payroll run" do
-    sign_in_to_admin_with_role(DfeSignIn::User::SERVICE_OPERATOR_DFE_SIGN_IN_ROLE_CODE)
+    sign_in_to_admin_with_role(DfeSignIn::User::SERVICE_OPERATOR_DFE_SIGN_IN_ROLE_CODE, user.dfe_sign_in_id)
 
     click_on "Payroll"
 
@@ -24,6 +25,7 @@ RSpec.feature "Payroll" do
     payroll_run = PayrollRun.order(:created_at).last
 
     expect(page).to have_content("Approved claims 3")
+    expect(page).to have_content("Created by #{user.full_name}")
     expect(page).to have_content("Total award amount £4,000")
     expect(page).to have_content("Payroll run created")
     expect(page).to have_field("payroll_run_download_link", with: new_admin_payroll_run_download_url(payroll_run))
@@ -85,6 +87,7 @@ RSpec.feature "Payroll" do
     click_on "Payroll"
     click_on "View #{payroll_run.created_at.strftime("%B")} payroll run"
 
+    expect(page).to have_content("Created by #{payroll_run.created_by.full_name}")
     expect(page).to have_content payroll_run.claims.count
     expect(page).to have_content "Downloaded No"
     expect(page).to have_field("payroll_run_download_link", with: new_admin_payroll_run_download_url(payroll_run))
