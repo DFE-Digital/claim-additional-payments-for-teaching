@@ -151,9 +151,6 @@
     "NOTIFY_API_KEY": {
       "type": "securestring"
     },
-    "NOTIFY_TEMPLATE_ID": {
-      "type": "string"
-    },
     "ROLLBAR_ACCESS_TOKEN": {
       "type": "securestring"
     },
@@ -506,10 +503,6 @@
               {
                 "name": "NOTIFY_API_KEY",
                 "value": "[parameters('NOTIFY_API_KEY')]"
-              },
-              {
-                "name": "NOTIFY_TEMPLATE_ID",
-                "value": "[parameters('NOTIFY_TEMPLATE_ID')]"
               },
               {
                 "name": "ROLLBAR_ACCESS_TOKEN",

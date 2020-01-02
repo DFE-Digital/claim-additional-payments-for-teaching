@@ -1,4 +1,4 @@
-class PaymentMailer < Mail::Notify::Mailer
+class PaymentMailer < ApplicationMailer
   helper :application
 
   def confirmation(payment, payment_date_timestamp)
@@ -10,7 +10,7 @@ class PaymentMailer < Mail::Notify::Mailer
     @policy = payment.claim.policy
 
     view_mail(
-      ENV["NOTIFY_TEMPLATE_ID"],
+      NOTIFY_TEMPLATE_ID,
       to: payment.email_address,
       subject: "We’re paying your #{@claim_description}, reference number: #{@reference}",
       reply_to_id: @policy.notify_reply_to_id

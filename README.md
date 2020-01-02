@@ -65,13 +65,11 @@ In's pre-production environment.
 ### GOV.UK Notify
 
 We use Notify to send emails however it is turned off by default in development.
-If you want to test Notify in development you will need an API key and template
-ID and add them to your `.env` file. Make sure you use a 'test' or 'team' API
-key only.
+If you want to test Notify in development you will need an API key and add it to
+your `.env` file. Make sure you use a 'test' or 'team' API key only.
 
 ```
 NOTIFY_API_KEY=<paste api key>
-NOTIFY_TEMPLATE_ID=d72e2ff9-b228-4f16-9099-fd9d411c0334
 ```
 
 ### GOV.UK Verify

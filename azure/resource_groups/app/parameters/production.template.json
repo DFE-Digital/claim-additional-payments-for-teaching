@@ -164,14 +164,6 @@
         "secretName": "NotifyApiKey"
       }
     },
-    "NOTIFY_TEMPLATE_ID": {
-      "reference": {
-        "keyVault": {
-          "id": "${keyVaultId}"
-        },
-        "secretName": "NotifyTemplateID"
-      }
-    },
     "ROLLBAR_ACCESS_TOKEN": {
       "reference": {
         "keyVault": {
