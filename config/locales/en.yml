@@ -74,6 +74,7 @@ en:
       checked_at: "Checked at"
       result: "Result"
       notes: "Notes"
+      checked_by: "Checked by"
   answers:
     student_loan_start_date:
       one_course:

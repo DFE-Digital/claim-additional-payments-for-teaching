@@ -10,6 +10,7 @@ The format is based on [Keep a Changelog]
 - Update autocomplete attributes for the address capture page
 - Application complete page and claim submitted email updated to include content
   for claimants that do not complete GOV.UK Verify
+- Service operators can see who approved a claim
 
 ## [Release 042] - 2019-12-19
 

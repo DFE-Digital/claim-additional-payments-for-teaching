@@ -4,7 +4,7 @@ RSpec.describe "Admin payroll runs" do
   context "when signed in as a service operator" do
     let(:admin_session_id) { "some_user_id" }
     before do
-      sign_in_to_admin_with_role(AdminSession::SERVICE_OPERATOR_DFE_SIGN_IN_ROLE_CODE, admin_session_id)
+      sign_in_to_admin_with_role(DfeSignIn::User::SERVICE_OPERATOR_DFE_SIGN_IN_ROLE_CODE, admin_session_id)
     end
 
     describe "admin_payroll_runs#new" do
@@ -55,7 +55,7 @@ RSpec.describe "Admin payroll runs" do
   end
 
   context "when signed in as a payroll operator or a support agent" do
-    [AdminSession::SUPPORT_AGENT_DFE_SIGN_IN_ROLE_CODE, AdminSession::PAYROLL_OPERATOR_DFE_SIGN_IN_ROLE_CODE].each do |role|
+    [DfeSignIn::User::SUPPORT_AGENT_DFE_SIGN_IN_ROLE_CODE, DfeSignIn::User::PAYROLL_OPERATOR_DFE_SIGN_IN_ROLE_CODE].each do |role|
       before do
         sign_in_to_admin_with_role(role)
       end

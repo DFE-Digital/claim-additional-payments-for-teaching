@@ -8,7 +8,7 @@ RSpec.describe "Admin Payment Confirmation Report upload" do
   context "when signed in as a service operator" do
     let(:admin_session_id) { "some_user_id" }
     before do
-      sign_in_to_admin_with_role(AdminSession::SERVICE_OPERATOR_DFE_SIGN_IN_ROLE_CODE, admin_session_id)
+      sign_in_to_admin_with_role(DfeSignIn::User::SERVICE_OPERATOR_DFE_SIGN_IN_ROLE_CODE, admin_session_id)
     end
 
     describe "payment_confirmation_report_uploads#new" do
@@ -84,7 +84,7 @@ RSpec.describe "Admin Payment Confirmation Report upload" do
 
   context "when signed in as a payroll operator or a support agent" do
     describe "payment_confirmation_report_uploads#new" do
-      [AdminSession::SUPPORT_AGENT_DFE_SIGN_IN_ROLE_CODE, AdminSession::PAYROLL_OPERATOR_DFE_SIGN_IN_ROLE_CODE].each do |role|
+      [DfeSignIn::User::SUPPORT_AGENT_DFE_SIGN_IN_ROLE_CODE, DfeSignIn::User::PAYROLL_OPERATOR_DFE_SIGN_IN_ROLE_CODE].each do |role|
         it "returns an unauthorized response" do
           sign_in_to_admin_with_role(role)
 

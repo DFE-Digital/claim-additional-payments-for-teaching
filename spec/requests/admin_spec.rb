@@ -8,28 +8,29 @@ RSpec.describe "Admin", type: :request do
 
         expect(response).to redirect_to(admin_sign_in_path)
         expect(session[:user_id]).to be_nil
-        expect(session[:organisation_id]).to be_nil
-        expect(session[:role_codes]).to be_nil
       end
     end
 
     context "when the user is authenticated" do
-      let(:user_id) { "userid-345" }
+      let(:dfe_sign_in_id) { "userid-345" }
       let(:organisation_id) { "organisationid-6789" }
+
+      let!(:user) { create(:dfe_signin_user, dfe_sign_in_id: dfe_sign_in_id) }
 
       context "when the user is a service operator" do
         before do
-          sign_in_to_admin_with_role(AdminSession::SERVICE_OPERATOR_DFE_SIGN_IN_ROLE_CODE, user_id, organisation_id)
+          sign_in_to_admin_with_role(DfeSignIn::User::SERVICE_OPERATOR_DFE_SIGN_IN_ROLE_CODE, dfe_sign_in_id, organisation_id)
         end
 
-        it "renders the admin page and sets a session" do
+        it "renders the admin page, sets a session and applies the appropriate role to the user" do
           get admin_root_path
 
           expect(response).to be_successful
           expect(response.body).to include("Sign out")
-          expect(session[:user_id]).to eq(user_id)
-          expect(session[:organisation_id]).to eq(organisation_id)
-          expect(session[:role_codes]).to eq([AdminSession::SERVICE_OPERATOR_DFE_SIGN_IN_ROLE_CODE])
+
+          expect(user.reload.role_codes).to eq([DfeSignIn::User::SERVICE_OPERATOR_DFE_SIGN_IN_ROLE_CODE])
+
+          expect(session[:user_id]).to eq(user.id)
         end
 
         context "and they sign out" do
@@ -37,42 +38,42 @@ RSpec.describe "Admin", type: :request do
             delete admin_sign_out_path
 
             expect(session[:user_id]).to be_nil
-            expect(session[:organisation_id]).to be_nil
-            expect(session[:role_codes]).to be_nil
           end
         end
       end
 
       context "when the user is a support user" do
         before do
-          sign_in_to_admin_with_role(AdminSession::SUPPORT_AGENT_DFE_SIGN_IN_ROLE_CODE, user_id, organisation_id)
+          sign_in_to_admin_with_role(DfeSignIn::User::SUPPORT_AGENT_DFE_SIGN_IN_ROLE_CODE, dfe_sign_in_id, organisation_id)
         end
 
-        it "renders the admin page and sets a session" do
+        it "renders the admin page, sets a session and applies the appropriate role to the user" do
           get admin_root_path
 
           expect(response).to be_successful
           expect(response.body).to include("Sign out")
-          expect(session[:user_id]).to eq(user_id)
-          expect(session[:organisation_id]).to eq(organisation_id)
-          expect(session[:role_codes]).to eq([AdminSession::SUPPORT_AGENT_DFE_SIGN_IN_ROLE_CODE])
+
+          expect(user.reload.role_codes).to eq([DfeSignIn::User::SUPPORT_AGENT_DFE_SIGN_IN_ROLE_CODE])
+
+          expect(session[:user_id]).to eq(user.id)
         end
       end
 
       context "when the user is a payroll operator" do
         before do
-          sign_in_to_admin_with_role(AdminSession::PAYROLL_OPERATOR_DFE_SIGN_IN_ROLE_CODE, user_id, organisation_id)
+          sign_in_to_admin_with_role(DfeSignIn::User::PAYROLL_OPERATOR_DFE_SIGN_IN_ROLE_CODE, dfe_sign_in_id, organisation_id)
         end
 
-        it "renders the page and sets a session" do
+        it "renders the page, sets a session and applies the appropriate role to the user" do
           payroll_run = create(:payroll_run)
 
           get new_admin_payroll_run_download_path(payroll_run)
 
           expect(response).to be_successful
-          expect(session[:user_id]).to eq(user_id)
-          expect(session[:organisation_id]).to eq(organisation_id)
-          expect(session[:role_codes]).to eq([AdminSession::PAYROLL_OPERATOR_DFE_SIGN_IN_ROLE_CODE])
+
+          expect(user.reload.role_codes).to eq([DfeSignIn::User::PAYROLL_OPERATOR_DFE_SIGN_IN_ROLE_CODE])
+
+          expect(session[:user_id]).to eq(user.id)
         end
       end
 
@@ -83,8 +84,6 @@ RSpec.describe "Admin", type: :request do
 
         it "shows a not authorised page and doesn’t set a session" do
           expect(session[:user_id]).to be_nil
-          expect(session[:organisation_id]).to be_nil
-          expect(session[:role_codes]).to be_nil
 
           expect(response.code).to eq("401")
           expect(response.body).to include("Not authorised")
@@ -102,12 +101,29 @@ RSpec.describe "Admin", type: :request do
         follow_redirect!
 
         expect(session[:user_id]).to be_nil
-        expect(session[:organisation_id]).to be_nil
-        expect(session[:role_codes]).to be_nil
 
         expect(response.body).to redirect_to(
           admin_auth_failure_path(message: :invalid_credentials, strategy: :dfe)
         )
+      end
+    end
+
+    context "when a local DfeSignIn::User record matching the DfE Sign-in ID does not exist" do
+      let(:dfe_sign_in_id) { "userid-345" }
+      let(:organisation_id) { "organisationid-6789" }
+
+      it "creates a DfeSignIn::User record and sets the record ID in the session" do
+        expect {
+          sign_in_to_admin_with_role(DfeSignIn::User::SERVICE_OPERATOR_DFE_SIGN_IN_ROLE_CODE, dfe_sign_in_id, organisation_id)
+        }.to change {
+          DfeSignIn::User.count
+        }.by(1)
+
+        user = DfeSignIn::User.last
+        expect(user.dfe_sign_in_id).to eq(dfe_sign_in_id)
+        expect(user.role_codes).to eq([DfeSignIn::User::SERVICE_OPERATOR_DFE_SIGN_IN_ROLE_CODE])
+
+        expect(session[:user_id]).to eq(user.id)
       end
     end
   end

@@ -37,20 +37,20 @@ module Admin
       end
     end
 
-    def admin_session
-      @admin_session ||= AdminSession.new(session[:user_id], session[:organisation_id], session[:role_codes])
+    def admin_user
+      @admin_user ||= DfeSignIn::User.find(session[:user_id])
     end
 
     def service_operator_signed_in?
-      admin_session.is_service_operator?
+      admin_user.is_service_operator?
     end
 
     def payroll_operator_signed_in?
-      admin_session.is_payroll_operator?
+      admin_user.is_payroll_operator?
     end
 
     def support_agent_signed_in?
-      admin_session.is_support_agent?
+      admin_user.is_support_agent?
     end
 
     def ensure_service_team

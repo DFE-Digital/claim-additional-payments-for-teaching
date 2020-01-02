@@ -1,5 +1,6 @@
 class Check < ApplicationRecord
   belongs_to :claim
+  belongs_to :checked_by, class_name: "DfeSignIn::User"
 
   validates :result, :checked_by, presence: {message: "Make a decision to approve or reject the claim"}
   validate :claim_must_be_approvable, if: :approved?, on: :create

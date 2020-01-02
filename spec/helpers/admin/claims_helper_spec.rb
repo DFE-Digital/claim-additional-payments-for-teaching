@@ -78,20 +78,33 @@ describe Admin::ClaimsHelper do
 
   describe "#admin_check_details" do
     let(:claim) { create(:claim, :submitted) }
-    let(:check) { Check.create!(claim: claim, checked_by: "user-123", result: :approved) }
+    let(:user) { create(:dfe_signin_user) }
+    let(:check) { Check.create!(claim: claim, checked_by: user, result: :approved) }
 
     it "includes an array of details about the check" do
       expect(helper.admin_check_details(check)).to eq([
         [I18n.t("admin.check.checked_at"), l(check.created_at)],
         [I18n.t("admin.check.result"), check.result.capitalize],
+        [I18n.t("admin.check.checked_by"), user.full_name],
       ])
     end
 
     context "when notes are saved with the check" do
-      let(:check) { Check.create!(claim: claim, checked_by: "user-123", result: :approved, notes: "abc\nxyz") }
+      let(:check) { Check.create!(claim: claim, checked_by: user, result: :approved, notes: "abc\nxyz") }
 
       it "includes the notes" do
         expect(helper.admin_check_details(check)).to include([I18n.t("admin.check.notes"), simple_format(check.notes, class: "govuk-body")])
+      end
+    end
+
+    context "when user does not have a name stored" do
+      let(:user) { create(:dfe_signin_user, given_name: nil, family_name: nil) }
+
+      it "displays the user ID" do
+        user_id_details = helper.admin_check_details(check).last
+        expect(user_id_details[0]).to eq(I18n.t("admin.check.checked_by"))
+        expect(user_id_details[1]).to match("Unknown user")
+        expect(user_id_details[1]).to match("DfE Sign-in ID - #{user.dfe_sign_in_id}")
       end
     end
   end

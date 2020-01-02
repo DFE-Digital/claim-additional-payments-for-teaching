@@ -11,12 +11,13 @@ module Admin
     end
 
     def callback
-      admin_session = AdminSession.from_auth_hash(request.env.fetch("omniauth.auth"))
+      admin_session = DfeSignIn::AuthenticatedSession.from_auth_hash(request.env.fetch("omniauth.auth"))
+      dfe_sign_in_user = DfeSignIn::User.from_session(admin_session)
 
-      if admin_session.has_admin_access?
-        session[:user_id] = admin_session.user_id
-        session[:organisation_id] = admin_session.organisation_id
-        session[:role_codes] = admin_session.role_codes
+      if dfe_sign_in_user.has_admin_access?
+        dfe_sign_in_user.save
+
+        session[:user_id] = dfe_sign_in_user.id
 
         redirect_to session.delete(:requested_admin_path) || admin_root_path
       else
