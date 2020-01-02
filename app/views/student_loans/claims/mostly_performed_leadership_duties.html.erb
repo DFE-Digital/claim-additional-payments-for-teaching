@@ -8,7 +8,7 @@
       <%= form_group_tag current_claim do %>
         <%= form.fields_for :eligibility, include_id: false do |fields| %>
           <%= fields.hidden_field :mostly_performed_leadership_duties %>
-          <fieldset class="govuk-fieldset">
+          <fieldset class="govuk-fieldset" aria-describedby="mostly_performed_leadership_duties-hint" role="group">
 
             <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl">
               <h1 class="govuk-fieldset__heading">
@@ -16,7 +16,7 @@
               </h1>
             </legend>
 
-            <span class="govuk-hint">
+            <span class="govuk-hint" id="mostly_performed_leadership_duties-hint">
               If you were off on long-term leave or sick, include the time you would have spent.
             </span>
 

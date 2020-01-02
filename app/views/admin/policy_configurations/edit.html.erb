@@ -34,7 +34,7 @@
             <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-availability-message-conditional">
               <div class="govuk-form-group">
                 <%= f.label :availability_message, "Availability message", class: "govuk-label" %>
-                <span class="govuk-hint">
+                <span class="govuk-hint" id="availability_message-hint">
                   <p>
                   This is an optional message that should provide an explanation of why the service is closed and / or when we expect it to open again.
                   </p>
@@ -43,7 +43,7 @@
                   For example, "The service is closed for maintenance and will be available from 2pm today."
                   </p>
                 </span>
-                <%= f.text_area :availability_message, class: "govuk-textarea", rows: 5 %>
+                <%= f.text_area :availability_message, class: "govuk-textarea", "aria-describedby" => "availability_message-hint", rows: 5 %>
               </div>
             </div>
           </div>

@@ -10,7 +10,7 @@
           <%= form.label :teacher_reference_number, t("questions.teacher_reference_number"), class: "govuk-label govuk-label--xl" %>
         </h1>
 
-        <span class="govuk-hint">
+        <span class="govuk-hint" id="teacher_reference_number-hint">
           You can get this from your school, the certificate you got when you
           qualified as a teacher or from the
           <a href="https://www.gov.uk/guidance/individual-teacher-records-information-for-teachers#contact"  class="govuk-link">
@@ -20,7 +20,11 @@
 
         <div class="govuk-form-group">
           <%= errors_tag current_claim, :teacher_reference_number %>
-          <%= form.text_field :teacher_reference_number, spellcheck: "false", autocomplete: "off", class: css_classes_for_input(current_claim, :teacher_reference_number, 'govuk-input--width-10') %>
+          <%= form.text_field :teacher_reference_number,
+                              spellcheck: "false",
+                              autocomplete: "off",
+                              class: css_classes_for_input(current_claim, :teacher_reference_number, 'govuk-input--width-10'),
+                              "aria-describedby" => "teacher_reference_number-hint" %>
         </div>
       <% end %>
       <%= form.submit "Continue", class: "govuk-button" %>

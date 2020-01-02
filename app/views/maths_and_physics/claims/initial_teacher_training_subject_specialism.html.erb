@@ -10,7 +10,7 @@
 
           <%= fields.hidden_field :initial_teacher_training_subject_specialism %>
 
-          <fieldset class="govuk-fieldset">
+          <fieldset class="govuk-fieldset" aria-describedby="initial_teacher_training_subject_specialism-hint" role="group">
 
             <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl">
               <h1 class="govuk-fieldset__heading">
@@ -18,7 +18,7 @@
               </h1>
             </legend>
 
-            <span class="govuk-hint">
+            <span class="govuk-hint" id="initial_teacher_training_subject_specialism-hint">
               Your specialism is normally the science you spent the most time training to teach.
             </span>
 
@@ -41,12 +41,16 @@
               </div>
 
               <div class="govuk-radios__item">
-                <%= fields.radio_button(:initial_teacher_training_subject_specialism, :not_sure, class: "govuk-radios__input", data: { aria_controls: "conditional-availability-message-conditional" }) %>
+                <%= fields.radio_button(:initial_teacher_training_subject_specialism,
+                                        :not_sure,
+                                        class: "govuk-radios__input",
+                                        data: { aria_controls: "conditional-availability-message-conditional" },
+                                        "aria-describedby" => "initial_teacher_training_subject_specialism_not_sure-hint") %>
                 <%= fields.label "initial_teacher_training_subject_specialism_not_sure", t("maths_and_physics.answers.initial_teacher_training_subject_specialism.not_sure"), class: "govuk-label govuk-radios__label" %>
               </div>
               <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-availability-message-conditional">
                 <div class="govuk-form-group">
-                  <span class="govuk-hint">
+                  <span class="govuk-hint" id="initial_teacher_training_subject_specialism_not_sure-hint">
                     <p>
                       If you’re not sure, we’ll check this for you. Your claim may be rejected
                       if your initial teacher training in science did not specialise in physics.

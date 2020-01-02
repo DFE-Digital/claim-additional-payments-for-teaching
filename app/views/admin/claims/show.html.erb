@@ -99,10 +99,10 @@
             </div>
           </fieldset>
           <%= form.label :notes, "Decision notes", class: "govuk-label govuk-label--m" %>
-          <span class="govuk-hint">
+          <span class="govuk-hint" id="notes-hint">
             Please write a brief note explaining why this claim has been rejected or approved.
           </span>
-          <%= form.text_area :notes, class: "govuk-textarea", rows: 5 %>
+          <%= form.text_area :notes, class: "govuk-textarea", "aria-describedby" => "notes-hint", rows: 5 %>
           <%= form.submit "Submit", class: "govuk-button" %>
         <% end %>
       <% end %>

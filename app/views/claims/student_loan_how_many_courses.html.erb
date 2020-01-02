@@ -7,14 +7,14 @@
     <%= form_for current_claim, url: claim_path(current_policy_routing_name) do |form| %>
       <%= form.hidden_field :student_loan_courses %>
         <%= form_group_tag current_claim do %>
-          <fieldset class="govuk-fieldset">
+          <fieldset class="govuk-fieldset" role="group", aria-describedby="student_loan_courses-hint">
             <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl">
               <h1 class="govuk-fieldset__heading">
                 <%= t("questions.student_loan_how_many_courses") %>
               </h1>
             </legend>
 
-            <span class="govuk-hint">
+            <span class="govuk-hint" id="student_loan_courses-hint">
               This includes university degrees, PGCE and Initial Teacher Training courses.
             </span>
 

@@ -12,11 +12,9 @@
             <%= fields.label :student_loan_repayment_amount, t("student_loans.questions.student_loan_amount"), class: "govuk-label govuk-label--xl" %>
           </h1>
 
-          <p class="govuk-hint">
+          <p class="govuk-hint" id="student_loan_repayment_amount-hint">
             Check your annual student loan statement, or your P60 if you had only one employer.
-          </p>
-
-          <p class="govuk-hint">
+            <br><br>
             You can also add up the student loan contributions from your payslips from this period, but bear in mind the
             amounts on each payslip might be different.
           </p>
@@ -32,6 +30,7 @@
                   min: 1,
                   max: 99999,
                   value: currency_value_for_number_field(fields.object.student_loan_repayment_amount),
+                  "aria-describedby" => "student_loan_repayment_amount-hint"
                 )
             %>
           </div>

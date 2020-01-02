@@ -10,7 +10,7 @@
 
           <%= fields.hidden_field :had_leadership_position %>
 
-          <fieldset class="govuk-fieldset">
+          <fieldset class="govuk-fieldset" aria-describedby="had_leadership_position-hint" role="group">
 
             <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl">
               <h1 class="govuk-fieldset__heading">
@@ -18,7 +18,7 @@
               </h1>
             </legend>
 
-            <span class="govuk-hint">
+            <span class="govuk-hint" id="had_leadership_position-hint">
               This includes head of subject, head of year, head of department,
               deputy head, head teacher or other middle leader role.
             </span>

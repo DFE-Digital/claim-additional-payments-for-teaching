@@ -10,7 +10,7 @@
 
           <%= fields.hidden_field :subject_to_formal_performance_action %>
 
-          <fieldset class="govuk-fieldset">
+          <fieldset class="govuk-fieldset" aria-describedby="formal_performance_action-hint" role="group">
 
             <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl">
               <h1 class="govuk-fieldset__heading">
@@ -18,7 +18,7 @@
               </h1>
             </legend>
 
-            <span class="govuk-hint">
+            <span class="govuk-hint" id="formal_performance_action-hint">
               For example, under your school’s capability or performance
               management policy. We only use this information to check your
               eligibility.

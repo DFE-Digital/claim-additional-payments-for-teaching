@@ -6,14 +6,14 @@
       <%= render("shared/error_summary", instance: current_claim) if current_claim.errors.any? %>
 
       <%= form_for current_claim, url: claim_path(current_policy_routing_name) do |form| %>
-        <fieldset class="govuk-fieldset">
+        <fieldset class="govuk-fieldset" aria-describedby="bank_details-hint" role="group">
           <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl">
             <h1 class="govuk-fieldset__heading">
               <%= t("questions.bank_details") %>
             </h1>
           </legend>
 
-          <span class="govuk-hint">
+          <span class="govuk-hint" id="bank_details-hint">
             The account you want us to send your payment to.
           </span>
 
