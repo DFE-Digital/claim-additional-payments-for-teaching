@@ -45,7 +45,7 @@ RSpec.describe "Admin payroll runs" do
       end
 
       it "does not show the link to the payroll run download once the download has been triggered" do
-        payroll_run = create(:payroll_run, downloaded_at: Time.zone.now, downloaded_by: "admin_user_id")
+        payroll_run = create(:payroll_run, downloaded_at: Time.zone.now, downloaded_by: user)
 
         get admin_payroll_run_path(payroll_run)
 

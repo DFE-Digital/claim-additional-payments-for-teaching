@@ -1,10 +1,10 @@
 require "rails_helper"
 
 RSpec.describe "Admin payroll run downloads" do
-  let(:admin_session_id) { "some_user_id" }
+  let(:admin) { create(:dfe_signin_user) }
 
   before do
-    sign_in_to_admin_with_role(DfeSignIn::User::PAYROLL_OPERATOR_DFE_SIGN_IN_ROLE_CODE, admin_session_id)
+    sign_in_to_admin_with_role(DfeSignIn::User::PAYROLL_OPERATOR_DFE_SIGN_IN_ROLE_CODE, admin.dfe_sign_in_id)
   end
 
   describe "downloads#new" do
@@ -18,7 +18,7 @@ RSpec.describe "Admin payroll run downloads" do
     end
 
     it "redirects to the show action if the download has already been triggered for the payroll run" do
-      payroll_run = create(:payroll_run, downloaded_at: Time.zone.now, downloaded_by: admin_session_id)
+      payroll_run = create(:payroll_run, downloaded_at: Time.zone.now, downloaded_by: admin)
 
       expect(get(new_admin_payroll_run_download_path(payroll_run))).to redirect_to admin_payroll_run_download_path(payroll_run)
     end
@@ -36,7 +36,7 @@ RSpec.describe "Admin payroll run downloads" do
     context "when requesting html" do
       context "and it is within the timeout" do
         it "shows a link to download the payroll run file" do
-          payroll_run = create(:payroll_run, downloaded_at: Time.zone.now, downloaded_by: admin_session_id)
+          payroll_run = create(:payroll_run, downloaded_at: Time.zone.now, downloaded_by: admin)
 
           get admin_payroll_run_download_path(payroll_run)
 
@@ -52,11 +52,11 @@ RSpec.describe "Admin payroll run downloads" do
 
       context "and the timeout has been reached" do
         it "shows who triggered the download and when" do
-          payroll_run = create(:payroll_run, downloaded_at: 31.seconds.ago, downloaded_by: "admin_user_id")
+          payroll_run = create(:payroll_run, downloaded_at: 31.seconds.ago, downloaded_by: admin)
 
           get admin_payroll_run_download_path(payroll_run)
 
-          expect(response.body).to include payroll_run.downloaded_by
+          expect(response.body).to include payroll_run.downloaded_by.full_name
           expect(response.body).to include I18n.l(payroll_run.downloaded_at)
         end
       end
@@ -65,7 +65,7 @@ RSpec.describe "Admin payroll run downloads" do
     context "when requesting csv" do
       context "and it is within the timeout" do
         it "allows the payroll run file to be downloaded within the time limit" do
-          payroll_run = create(:payroll_run, downloaded_at: Time.zone.now, downloaded_by: "admin_user_id")
+          payroll_run = create(:payroll_run, downloaded_at: Time.zone.now, downloaded_by: admin)
           get admin_payroll_run_download_path(payroll_run, format: :csv)
 
           expect(response.headers["Content-Type"]).to eq("text/csv")
@@ -74,7 +74,7 @@ RSpec.describe "Admin payroll run downloads" do
 
       context "and the timeout has been reached" do
         it "redirects a request for the file once the timeout has been reached" do
-          payroll_run = create(:payroll_run, downloaded_at: 31.seconds.ago, downloaded_by: "admin_user_id")
+          payroll_run = create(:payroll_run, downloaded_at: 31.seconds.ago, downloaded_by: admin)
 
           expect(get(admin_payroll_run_download_path(payroll_run, format: :csv))).to redirect_to admin_payroll_run_download_path(payroll_run, format: :html)
         end
@@ -92,7 +92,7 @@ RSpec.describe "Admin payroll run downloads" do
         travel_to downloaded_at do
           post admin_payroll_run_download_path(payroll_run)
 
-          expect(payroll_run.reload.downloaded_by).to eql admin_session_id
+          expect(payroll_run.reload.downloaded_by.id).to eql admin.id
           expect(payroll_run.downloaded_at.to_s).to eql downloaded_at.to_s
         end
       end
