@@ -1,16 +1,18 @@
 module DfeSignIn
   module UserHelper
-    def user_details(user)
-      user.full_name.presence || unknown_user(user)
+    def user_details(user, include_line_break: true)
+      user.full_name.presence || unknown_user(user, include_line_break)
     end
 
     private
 
-    def unknown_user(user)
+    def unknown_user(user, include_line_break)
+      join_chr = include_line_break == true ? "<br/>" : " "
+
       [
         "Unknown user",
         unknown_user_details(user),
-      ].join("<br/>").html_safe
+      ].join(join_chr).html_safe
     end
 
     def unknown_user_details(user)

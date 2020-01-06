@@ -11,12 +11,16 @@ RSpec.describe DfeSignIn::UserHelper, type: :helper do
     end
 
     context "when user has no name assigned" do
-      let(:user) { build(:dfe_signin_user, given_name: nil, family_name: nil) }
+      let(:user) { build(:dfe_signin_user, :without_data) }
 
       it "returns an unknown user message with the user's DfE Sign-In ID" do
         user_details = helper.user_details(user)
-        expect(user_details).to match("Unknown user")
-        expect(user_details).to match("DfE Sign-in ID - #{user.dfe_sign_in_id}")
+        expect(user_details).to eq("Unknown user<br/><span class=\"govuk-!-font-size-16\">(DfE Sign-in ID - #{user.dfe_sign_in_id})</span>")
+      end
+
+      it "does not have a line break when include_line_break is set to false" do
+        user_details = helper.user_details(user, include_line_break: false)
+        expect(user_details).to eq("Unknown user <span class=\"govuk-!-font-size-16\">(DfE Sign-in ID - #{user.dfe_sign_in_id})</span>")
       end
     end
   end

@@ -59,6 +59,15 @@ RSpec.describe "Admin payroll run downloads" do
           expect(response.body).to include payroll_run.downloaded_by.full_name
           expect(response.body).to include I18n.l(payroll_run.downloaded_at)
         end
+
+        it "shows the user ID of the user if the user has not name assigned" do
+          user = create(:dfe_signin_user, :without_data)
+          payroll_run = create(:payroll_run, downloaded_at: 31.seconds.ago, downloaded_by: user)
+
+          get admin_payroll_run_download_path(payroll_run)
+
+          expect(response.body).to include payroll_run.downloaded_by.dfe_sign_in_id
+        end
       end
     end
 
