@@ -4,7 +4,7 @@ class PayrollRun < ApplicationRecord
   has_many :payments
   has_many :claims, through: :payments
 
-  validates :created_by, presence: true
+  belongs_to :created_by, class_name: "DfeSignIn::User"
 
   validate :ensure_no_payroll_run_this_month, on: :create
 

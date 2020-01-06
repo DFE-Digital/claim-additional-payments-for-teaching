@@ -1,6 +1,8 @@
 require "rails_helper"
 
 RSpec.describe PayrollRun, type: :model do
+  let(:user) { create(:dfe_signin_user) }
+
   it "cannot be created when another PayrollRun has occurred in same month" do
     create(:payroll_run)
     another_payroll_run = build(:payroll_run)
@@ -34,7 +36,7 @@ RSpec.describe PayrollRun, type: :model do
       payment_1 = build(:payment, claim: build(:claim, :approved, eligibility: build(:student_loans_eligibility, :eligible, student_loan_repayment_amount: 1500)))
       payment_2 = build(:payment, claim: build(:claim, :approved, eligibility: build(:student_loans_eligibility, :eligible, student_loan_repayment_amount: 2000)))
 
-      payroll_run = PayrollRun.create!(created_by: "foo", payments: [payment_1, payment_2])
+      payroll_run = PayrollRun.create!(created_by: user, payments: [payment_1, payment_2])
 
       expect(payroll_run.total_award_amount).to eq(3500)
     end
@@ -44,9 +46,9 @@ RSpec.describe PayrollRun, type: :model do
     let(:claims) { Policies.all.map { |policy| create(:claim, :approved, policy: policy) } }
 
     it "creates a payroll run with payments and populates the award_amount" do
-      payroll_run = PayrollRun.create_with_claims!(claims, created_by: "creator-id")
+      payroll_run = PayrollRun.create_with_claims!(claims, created_by: user)
 
-      expect(payroll_run.reload.created_by).to eq("creator-id")
+      expect(payroll_run.reload.created_by.id).to eq(user.id)
       expect(payroll_run.claims).to match_array(claims)
       expect(claims[0].payment.award_amount).to eq(claims[0].award_amount)
       expect(claims[1].payment.award_amount).to eq(claims[1].award_amount)

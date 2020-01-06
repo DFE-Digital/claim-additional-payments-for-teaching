@@ -14,7 +14,7 @@ module Admin
     def create
       claims = Claim.find(params[:claim_ids])
 
-      payroll_run = PayrollRun.create_with_claims!(claims, created_by: admin_user.dfe_sign_in_id)
+      payroll_run = PayrollRun.create_with_claims!(claims, created_by: admin_user)
 
       redirect_to [:admin, payroll_run], notice: "Payroll run created"
     end

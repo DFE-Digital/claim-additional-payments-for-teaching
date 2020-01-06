@@ -2,9 +2,10 @@ require "rails_helper"
 
 RSpec.describe "Admin payroll runs" do
   context "when signed in as a service operator" do
-    let(:admin_session_id) { "some_user_id" }
+    let(:user) { create(:dfe_signin_user) }
+
     before do
-      sign_in_to_admin_with_role(DfeSignIn::User::SERVICE_OPERATOR_DFE_SIGN_IN_ROLE_CODE, admin_session_id)
+      sign_in_to_admin_with_role(DfeSignIn::User::SERVICE_OPERATOR_DFE_SIGN_IN_ROLE_CODE, user.dfe_sign_in_id)
     end
 
     describe "admin_payroll_runs#new" do
@@ -25,7 +26,7 @@ RSpec.describe "Admin payroll runs" do
         expect { post admin_payroll_runs_path(claim_ids: claims.map(&:id)) }.to change { PayrollRun.count }.by(1)
 
         payroll_run = PayrollRun.order(:created_at).last
-        expect(payroll_run.created_by).to eq(admin_session_id)
+        expect(payroll_run.created_by.id).to eq(user.id)
         expect(payroll_run.claims).to match_array(claims)
         expect(payroll_run.payments.count).to eq(2)
 

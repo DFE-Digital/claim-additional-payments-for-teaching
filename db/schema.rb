@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_12_19_160435) do
+ActiveRecord::Schema.define(version: 2020_01_02_144145) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -149,13 +149,15 @@ ActiveRecord::Schema.define(version: 2019_12_19_160435) do
   end
 
   create_table "payroll_runs", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.string "created_by", null: false
+    t.string "created_by"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "confirmation_report_uploaded_by"
     t.datetime "downloaded_at"
     t.string "downloaded_by"
+    t.uuid "created_by_id"
     t.index ["created_at"], name: "index_payroll_runs_on_created_at"
+    t.index ["created_by_id"], name: "index_payroll_runs_on_created_by_id"
     t.index ["updated_at"], name: "index_payroll_runs_on_updated_at"
   end
 
@@ -219,6 +221,7 @@ ActiveRecord::Schema.define(version: 2019_12_19_160435) do
   add_foreign_key "maths_and_physics_eligibilities", "schools", column: "current_school_id"
   add_foreign_key "payments", "claims"
   add_foreign_key "payments", "payroll_runs"
+  add_foreign_key "payroll_runs", "dfe_sign_in_users", column: "created_by_id"
   add_foreign_key "schools", "local_authority_districts"
   add_foreign_key "student_loans_eligibilities", "schools", column: "claim_school_id"
   add_foreign_key "student_loans_eligibilities", "schools", column: "current_school_id"
