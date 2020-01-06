@@ -52,6 +52,16 @@ RSpec.describe "Admin payroll runs" do
         expect(response).to have_http_status(:ok)
         expect(response.body).not_to include new_admin_payroll_run_download_url(payroll_run)
       end
+
+      it "shows who downloaded the payroll run once the download has been triggered" do
+        payroll_run = create(:payroll_run, downloaded_at: Time.zone.now, downloaded_by: user)
+
+        get admin_payroll_run_path(payroll_run)
+
+        expect(response).to have_http_status(:ok)
+        expect(response.body).to include(I18n.l(payroll_run.downloaded_at))
+        expect(response.body).to include(user.full_name)
+      end
     end
   end
 
