@@ -14,6 +14,8 @@ The format is based on [Keep a Changelog]
   for claimants that do not complete GOV.UK Verify
 - Service operators can see who approved a claim
 - Service operators can see who created a payroll run
+- Fix a bug where users who spent more than 90 minutes in Verify would trigger a
+  routing exception and not receive the session timeout message.
 
 ## [Release 042] - 2019-12-19
 
