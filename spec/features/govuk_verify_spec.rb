@@ -107,4 +107,14 @@ RSpec.feature "Teacher verifies identity using GOV.UK Verify" do
       expect(page).to have_text("This is your first name, middle name, surname, address, date of birth, and gender from your digital identity")
     end
   end
+
+  scenario "Users who take longer than 90 minutes to complete Verify are told that their session has timed out", js: true do
+    stub_vsp_translate_response_request
+    click_on "Continue"
+
+    travel 95.minutes do
+      click_on "Perform identity check"
+      expect(page).to have_text("Your session has ended due to inactivity")
+    end
+  end
 end

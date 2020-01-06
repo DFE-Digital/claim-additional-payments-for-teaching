@@ -17,8 +17,9 @@ class BasePublicController < ApplicationController
 
   def end_expired_claim_sessions
     if claim_session_timed_out?
+      policy_routing_name_for_redirect = current_policy_routing_name
       clear_claim_session
-      redirect_to timeout_claim_path(current_policy_routing_name)
+      redirect_to timeout_claim_path(policy_routing_name_for_redirect)
     end
   end
 
