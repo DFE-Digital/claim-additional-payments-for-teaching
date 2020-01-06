@@ -13,6 +13,7 @@ The format is based on [Keep a Changelog]
 - Application complete page and claim submitted email updated to include content
   for claimants that do not complete GOV.UK Verify
 - Service operators can see who approved a claim
+- Service operators can see who created a payroll run
 
 ## [Release 042] - 2019-12-19
 

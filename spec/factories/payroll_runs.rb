@@ -1,6 +1,6 @@
 FactoryBot.define do
   factory :payroll_run do
-    created_by { "123" }
+    association :created_by, factory: :dfe_signin_user
 
     transient do
       claims_counts { {StudentLoans => 1} }
