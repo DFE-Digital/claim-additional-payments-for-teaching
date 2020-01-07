@@ -12,6 +12,7 @@ The format is based on [Keep a Changelog]
 - Claims that have skipped GOV.UK Verify are identified in admin
 - Bank account numbers must be exactly 8 digits long (6- and 7-digit numbers are
   no longer accepted)
+- Multiple approved claims from the same person are grouped in to one payment
 
 ## [Release 043] - 2020-01-08
 
