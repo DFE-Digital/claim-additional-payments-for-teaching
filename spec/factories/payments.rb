@@ -14,13 +14,15 @@ FactoryBot.define do
     award_amount { claim.award_amount }
 
     trait :with_figures do
-      gross_value { 487.48 }
-      gross_pay { 448.5 }
-      national_insurance { 33.9 }
-      employers_national_insurance { 38.98 }
+      # This is a rough approximation of the "grossing up" done by Cantium. It
+      # gives realistic-ish numbers.
+      gross_value { gross_pay + employers_national_insurance }
+      gross_pay { award_amount + tax + national_insurance }
+      national_insurance { award_amount * 0.12 }
+      employers_national_insurance { award_amount * 0.12 }
       student_loan_repayment { 0 }
-      tax { 89.6 }
-      net_pay { 325 }
+      tax { award_amount * 0.2 }
+      net_pay { award_amount }
     end
   end
 end
