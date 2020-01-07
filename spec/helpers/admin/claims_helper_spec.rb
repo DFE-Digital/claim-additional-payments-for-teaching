@@ -98,7 +98,7 @@ describe Admin::ClaimsHelper do
     end
 
     context "when user does not have a name stored" do
-      let(:user) { create(:dfe_signin_user, given_name: nil, family_name: nil) }
+      let(:user) { create(:dfe_signin_user, :without_data) }
 
       it "displays the user ID" do
         user_id_details = helper.admin_check_details(check).last

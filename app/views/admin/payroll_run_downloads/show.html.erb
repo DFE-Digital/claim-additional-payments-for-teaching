@@ -13,7 +13,7 @@
       <p class="govuk-body">
         This month's payroll file was downloaded on
         <%= l(@payroll_run.downloaded_at) %> by
-        <%= @payroll_run.downloaded_by %>.
+        <%= user_details(@payroll_run.downloaded_by, include_line_break: false) %>.
       </p>
       <p class="govuk-body">
         For security and privacy, this payroll file can only be downloaded once.

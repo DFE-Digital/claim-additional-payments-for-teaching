@@ -5,6 +5,7 @@ class PayrollRun < ApplicationRecord
   has_many :claims, through: :payments
 
   belongs_to :created_by, class_name: "DfeSignIn::User"
+  belongs_to :downloaded_by, class_name: "DfeSignIn::User", optional: true
 
   validate :ensure_no_payroll_run_this_month, on: :create
 

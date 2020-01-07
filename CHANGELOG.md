@@ -16,6 +16,7 @@ The format is based on [Keep a Changelog]
 - Service operators can see who created a payroll run
 - Fix a bug where users who spent more than 90 minutes in Verify would trigger a
   routing exception and not receive the session timeout message.
+- Service operators can see who downloaded a payroll run
 
 ## [Release 042] - 2019-12-19
 

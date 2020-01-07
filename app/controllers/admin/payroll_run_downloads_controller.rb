@@ -9,7 +9,7 @@ class Admin::PayrollRunDownloadsController < Admin::BaseAdminController
   end
 
   def create
-    @payroll_run.update!(downloaded_at: Time.zone.now, downloaded_by: admin_user.dfe_sign_in_id)
+    @payroll_run.update!(downloaded_at: Time.zone.now, downloaded_by: admin_user)
 
     redirect_to admin_payroll_run_download_path(@payroll_run)
   end

@@ -41,6 +41,17 @@
           <%= @payroll_run.download_triggered? ? l(@payroll_run.downloaded_at) : "No" %>
         </dd>
       </div>
+      <% if @payroll_run.download_triggered? %>
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">
+            Downloaded by
+          </dt>
+
+          <dd class="govuk-summary-list__value">
+            <%= user_details(@payroll_run.downloaded_by) %>
+          </dd>
+        </div>
+      <% end %>
     </dl>
   </div>
   <% unless @payroll_run.download_triggered? %>
