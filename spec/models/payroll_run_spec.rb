@@ -53,12 +53,22 @@ RSpec.describe PayrollRun, type: :model do
       expect(claims[1].payment.award_amount).to eq(claims[1].award_amount)
     end
 
-    context "with multiple claims with the same National Insurance number" do
+    context "with multiple claims from the same National Insurance number" do
+      let(:personal_details) do
+        {
+          national_insurance_number: generate(:national_insurance_number),
+          teacher_reference_number: generate(:teacher_reference_number),
+          email_address: generate(:email_address),
+          bank_sort_code: "112233",
+          bank_account_number: "95928482",
+          address_line_1: "64 West Lane",
+          student_loan_plan: StudentLoan::PLAN_1,
+        }
+      end
       let(:matching_claims) do
-        national_insurance_number = generate(:national_insurance_number)
         [
-          create(:claim, :approved, policy: StudentLoans, national_insurance_number: national_insurance_number),
-          create(:claim, :approved, policy: MathsAndPhysics, national_insurance_number: national_insurance_number),
+          create(:claim, :approved, personal_details.merge(policy: StudentLoans)),
+          create(:claim, :approved, personal_details.merge(policy: MathsAndPhysics)),
         ]
       end
       let(:other_claim) { create(:claim, :approved) }

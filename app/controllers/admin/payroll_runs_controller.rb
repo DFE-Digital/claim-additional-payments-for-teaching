@@ -17,6 +17,8 @@ module Admin
       payroll_run = PayrollRun.create_with_claims!(claims, created_by: admin_user)
 
       redirect_to [:admin, payroll_run], notice: "Payroll run created"
+    rescue ActiveRecord::RecordInvalid => e
+      redirect_to new_admin_payroll_run_path, alert: e.message
     end
 
     def show

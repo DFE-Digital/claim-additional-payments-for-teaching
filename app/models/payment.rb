@@ -7,9 +7,26 @@ class Payment < ApplicationRecord
   validates :payroll_reference, :gross_value, :national_insurance, :employers_national_insurance, :tax, :net_pay, :gross_pay, presence: true, on: :upload
   validates :gross_value, :national_insurance, :employers_national_insurance, :student_loan_repayment, :tax, :net_pay, :gross_pay, numericality: true, allow_nil: true
 
-  delegate :first_name, :middle_name, :surname, :national_insurance_number, :payroll_gender, :date_of_birth, :email_address, :address_line_1, :address_line_2, :address_line_3, :address_line_4, :postcode, :has_student_loan, :student_loan_plan, :banking_name, :bank_sort_code, :bank_account_number, :building_society_roll_number, to: :claim_for_personal_details
+  validate :personal_details_must_be_consistent
+
+  PERSONAL_DETAILS_ATTRIBUTES_PERMITTING_DISCREPANCIES = %i[first_name middle_name surname national_insurance_number payroll_gender email_address address_line_1 address_line_2 address_line_3 address_line_4 postcode has_student_loan banking_name]
+  PERSONAL_DETAILS_ATTRIBUTES_FORBIDDING_DISCREPANCIES = %i[national_insurance_number date_of_birth student_loan_plan bank_sort_code bank_account_number building_society_roll_number]
+
+  delegate(*(PERSONAL_DETAILS_ATTRIBUTES_PERMITTING_DISCREPANCIES + PERSONAL_DETAILS_ATTRIBUTES_FORBIDDING_DISCREPANCIES), to: :claim_for_personal_details)
 
   private
+
+  def personal_details_must_be_consistent
+    mismatching_attributes = PERSONAL_DETAILS_ATTRIBUTES_FORBIDDING_DISCREPANCIES.select { |attribute|
+      claims.map(&attribute).uniq.count > 1
+    }
+
+    if mismatching_attributes.any?
+      claims_sentence = claims.map(&:reference).to_sentence
+      attributes_sentence = mismatching_attributes.map { |attribute| Claim.human_attribute_name(attribute).downcase }.to_sentence
+      errors.add(:claims, "#{claims_sentence} have different values for #{attributes_sentence}")
+    end
+  end
 
   def claim_for_personal_details
     @claim_for_personal_details ||= claims.first
