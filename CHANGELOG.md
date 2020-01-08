@@ -6,6 +6,9 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+- Schools in the West Somerset opportunity area are now regarded as eligible
+  again, after the West Somerset local authority district ceased to exist.
+
 ## [Release 043] - 2020-01-08
 
 - Update to privacy policy to explain how data can be amended and add bullet
