@@ -441,10 +441,6 @@ RSpec.describe Claim, type: :model do
       expect(create(:claim, :approved).approvable?).to eq false
       expect(create(:claim, :rejected).approvable?).to eq false
     end
-
-    it "returns false for a claim that doesn't have a confirmed identity" do
-      expect(build(:claim, :unverified).approvable?).to eq false
-    end
   end
 
   describe "#payroll_gender_missing?" do

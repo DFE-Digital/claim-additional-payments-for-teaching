@@ -17,7 +17,7 @@ RSpec.describe Check, type: :model do
   end
 
   it "prevents an unapprovable claim from being approved" do
-    claim = create(:claim, :unverified)
+    claim = create(:claim, :ineligible)
     check = build(:check, claim: claim, result: "approved")
 
     expect(check).not_to be_valid

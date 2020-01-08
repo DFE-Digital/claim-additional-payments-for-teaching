@@ -172,7 +172,7 @@ class Claim < ApplicationRecord
   end
 
   def approvable?
-    submitted? && !payroll_gender_missing? && identity_confirmed? && !checked?
+    submitted? && !payroll_gender_missing? && !checked?
   end
 
   def checked?
