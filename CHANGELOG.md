@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+## [Release 043] - 2020-01-08
+
 - Update to privacy policy to explain how data can be amended and add bullet
   point about collecting bank details
 - Users can complete and submit a claim without completing GOV.UK Verify
@@ -330,7 +332,9 @@ The format is based on [Keep a Changelog]
 - First release for student loan repayments private beta
 
 [unreleased]:
-  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-042...HEAD
+  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-043...HEAD
+[release 043]:
+  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-042...release-043
 [release 042]:
   https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-041...release-042
 [release 041]:
