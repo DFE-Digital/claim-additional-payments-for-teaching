@@ -189,6 +189,7 @@ ActiveRecord::Schema.define(version: 2020_01_09_115709) do
     t.date "close_date"
     t.integer "establishment_number"
     t.integer "statutory_high_age"
+    t.string "phone_number", limit: 20
     t.index ["created_at"], name: "index_schools_on_created_at"
     t.index ["local_authority_district_id"], name: "index_schools_on_local_authority_district_id"
     t.index ["local_authority_id"], name: "index_schools_on_local_authority_id"
