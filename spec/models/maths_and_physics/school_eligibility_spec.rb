@@ -32,6 +32,32 @@ RSpec.describe MathsAndPhysics::SchoolEligibility do
       end
     end
 
+    context "with an explicitly eligible school in an ineligible local authority district" do
+      let(:explicitly_eligible_school) {
+        School.new(
+          school_type_group: :la_maintained,
+          phase: :secondary,
+          close_date: nil,
+          urn: 136791,
+          local_authority_district: local_authority_districts(:camden)
+        )
+      }
+
+      it "returns true if the school is otherwise eligible" do
+        expect(MathsAndPhysics::SchoolEligibility.new(explicitly_eligible_school).eligible_current_school?).to eql true
+      end
+
+      it "returns false when closed" do
+        explicitly_eligible_school.assign_attributes(close_date: Date.new)
+        expect(MathsAndPhysics::SchoolEligibility.new(explicitly_eligible_school).eligible_current_school?).to eql false
+      end
+
+      it "returns false when not state funded" do
+        explicitly_eligible_school.assign_attributes(school_type_group: :independent_schools)
+        expect(MathsAndPhysics::SchoolEligibility.new(explicitly_eligible_school).eligible_current_school?).to eql false
+      end
+    end
+
     context "with a special school" do
       let(:special_school) {
         School.new(

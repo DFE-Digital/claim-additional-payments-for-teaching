@@ -45,13 +45,19 @@ module MathsAndPhysics
       "E06000014", # York
     ].freeze
 
+    SCHOOL_URNS_CONSIDERED_AS_ELIGIBLE_LOCAL_AUTHORITY_DISTRICT = [
+      136774, # Minehead Middle School
+      136791, # West Somerset College
+      140631, # Danesfield Church of England Voluntary Controlled Community Middle School
+    ].freeze
+
     def initialize(school)
       @school = school
     end
 
     def eligible_current_school?
       @school.open? &&
-        eligible_local_authority_district? &&
+        (eligible_local_authority_district? || considered_as_eligible_local_authority_district?) &&
         (@school.state_funded? || @school.secure_unit?) &&
         @school.secondary_or_equivalent?
     end
@@ -60,6 +66,10 @@ module MathsAndPhysics
 
     def eligible_local_authority_district?
       ELIGIBLE_LOCAL_AUTHORITY_DISTRICT_CODES.include?(@school.local_authority_district.code)
+    end
+
+    def considered_as_eligible_local_authority_district?
+      SCHOOL_URNS_CONSIDERED_AS_ELIGIBLE_LOCAL_AUTHORITY_DISTRICT.include?(@school.urn)
     end
   end
 end
