@@ -42,7 +42,6 @@ module MathsAndPhysics
       "E06000021", # Stoke-on-Trent
       "E08000024", # Sunderland
       "E08000036", # Wakefield
-      "E07000191", # West Somerset
       "E06000014", # York
     ].freeze
 
