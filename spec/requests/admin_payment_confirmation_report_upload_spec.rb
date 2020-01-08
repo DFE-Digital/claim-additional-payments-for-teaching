@@ -39,8 +39,8 @@ RSpec.describe "Admin Payment Confirmation Report upload" do
 
           expect(response).to redirect_to(admin_payroll_runs_path)
 
-          expect(payroll_run.claims[0].reload.payment.payroll_reference).to eq("DFE00001")
-          expect(payroll_run.claims[1].reload.payment.payroll_reference).to eq("DFE00002")
+          expect(payroll_run.payments[0].reload.payroll_reference).to eq("DFE00001")
+          expect(payroll_run.payments[1].reload.payroll_reference).to eq("DFE00002")
 
           expect(payroll_run.reload.confirmation_report_uploaded_by).to eq(admin_session_id)
 
