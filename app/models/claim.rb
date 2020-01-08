@@ -240,6 +240,10 @@ class Claim < ApplicationRecord
     eligibility&.class&.module_parent
   end
 
+  def school
+    eligibility&.current_school
+  end
+
   private
 
   def normalise_trn
