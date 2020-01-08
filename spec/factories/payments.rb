@@ -1,22 +1,28 @@
 FactoryBot.define do
   factory :payment do
     transient do
-      claim_policy { StudentLoans }
+      claim_policies { [StudentLoans] }
     end
 
-    claim { association(:claim, :approved, policy: claim_policy) }
+    claims do
+      claim_policies.map do |policy|
+        association(:claim, :approved, policy: policy)
+      end
+    end
     association(:payroll_run, factory: :payroll_run)
 
-    award_amount { claim.award_amount }
+    award_amount { claims.sum(&:award_amount) }
 
     trait :with_figures do
-      gross_value { 487.48 }
-      gross_pay { 448.5 }
-      national_insurance { 33.9 }
-      employers_national_insurance { 38.98 }
+      # This is a rough approximation of the "grossing up" done by Cantium. It
+      # gives realistic-ish numbers.
+      gross_value { gross_pay + employers_national_insurance }
+      gross_pay { award_amount + tax + national_insurance }
+      national_insurance { award_amount * 0.12 }
+      employers_national_insurance { award_amount * 0.12 }
       student_loan_repayment { 0 }
-      tax { 89.6 }
-      net_pay { 325 }
+      tax { award_amount * 0.2 }
+      net_pay { award_amount }
     end
   end
 end

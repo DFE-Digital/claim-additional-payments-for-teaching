@@ -32,9 +32,8 @@ module Payroll
       bank_sort_code: "SORT_CODE",
       bank_account_number: "ACCOUNT_NUMBER",
       roll_number: "ROLL_NUMBER",
-      scheme_name: "SCHEME_NAME",
       scheme_amount: "SCHEME_AMOUNT",
-      reference: "CLAIM_ID",
+      payment_id: "PAYMENT_ID",
     }.freeze
 
     def initialize(payroll_run)
@@ -44,7 +43,7 @@ module Payroll
     def file
       Tempfile.new.tap do |file|
         file.write(header_row)
-        payroll_run.payments.includes(:claim).each do |payment|
+        payroll_run.payments.includes(:claims).each do |payment|
           file.write(Payroll::PaymentCsvRow.new(payment).to_s)
         end
         file.rewind

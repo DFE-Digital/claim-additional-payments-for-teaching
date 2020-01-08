@@ -6,7 +6,7 @@ class PaymentConfirmationCsv
   EXPECTED_HEADERS = [
     "Payroll Reference",
     "Gross Value",
-    "Claim ID",
+    "Payment ID",
     "NI",
     "Employers NI",
     "Student Loans",

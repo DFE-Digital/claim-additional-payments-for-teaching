@@ -1,5 +1,7 @@
 class RecordPaymentJob < ApplicationJob
   def perform(payment)
-    Claim::GeckoboardEvent.new(payment.claim, :paid, payment.updated_at).record
+    payment.claims.each do |claim|
+      Claim::GeckoboardEvent.new(claim, :paid, payment.updated_at).record
+    end
   end
 end

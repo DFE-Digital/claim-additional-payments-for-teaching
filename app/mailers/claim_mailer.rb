@@ -1,4 +1,4 @@
-class ClaimMailer < Mail::Notify::Mailer
+class ClaimMailer < ApplicationMailer
   helper :application
 
   def submitted(claim)
@@ -29,7 +29,7 @@ class ClaimMailer < Mail::Notify::Mailer
     @policy = claim.policy
 
     view_mail(
-      ENV["NOTIFY_TEMPLATE_ID"],
+      NOTIFY_TEMPLATE_ID,
       to: @claim.email_address,
       subject: subject,
       reply_to_id: @policy.notify_reply_to_id

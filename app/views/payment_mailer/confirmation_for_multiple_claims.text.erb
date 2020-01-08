@@ -1,0 +1,63 @@
+Dear <%= @display_name %>,
+
+We’re paying:
+<% @payment.claims.each do |claim| %>
+* your <%= I18n.t("#{claim.policy.routing_name.underscore}.claim_description") %>, reference: <%= claim.reference %>
+<% end %>
+
+^ You will receive <%=number_to_currency(@payment.net_pay) %> on or after <%= l(@payment_date) %>.
+
+<% if @payment.student_loan_repayment.present? %>
+
+# Breakdown of payment
+
+This payment is treated as pay and is therefore subject to a student loan contribution, if applicable.
+
+<% @payment.claims.each do |claim| %>
+* <%= I18n.t("#{claim.policy.routing_name.underscore}.claim_amount_description") %>: <%= number_to_currency(claim.award_amount) %>
+<% end %>
+* Student loan contribution: <%= number_to_currency(@payment.student_loan_repayment) %>
+* Payment you receive: <%= number_to_currency(@payment.net_pay) %>
+
+# Contributions made to HMRC on your behalf
+
+Your payment is also subject to Income Tax and National Insurance (NI) contributions, which we pay to HMRC on your behalf. This does not affect the amount you receive.
+
+* Income Tax: <%= number_to_currency(@payment.tax) %>
+* Employee NI: <%= number_to_currency(@payment.national_insurance) %>
+* Gross amount paid by us: <%= number_to_currency(@payment.gross_pay) %>
+
+The Gross amount is comprised of the payment you receive, your student loan contribution, and the Income Tax and Employee NI set out above. You may see this figure on any tax statements or other correspondence relating to taxable pay.
+
+<% else %>
+
+# Breakdown of payment
+
+<% @payment.claims.each do |claim| %>
+* <%= I18n.t("#{claim.policy.routing_name.underscore}.claim_amount_description") %>: <%= number_to_currency(claim.award_amount) %>
+<% end %>
+* Payment you receive: <%= number_to_currency(@payment.net_pay) %>
+
+# Contributions made to HMRC on your behalf
+
+Your payment is also subject to Income Tax and National Insurance (NI) contributions, which we pay to HMRC on your behalf. This does not affect the amount you receive.
+
+* Income Tax: <%= number_to_currency(@payment.tax) %>
+* Employee NI: <%= number_to_currency(@payment.national_insurance) %>
+* Gross amount paid by us: <%= number_to_currency(@payment.gross_pay) %>
+
+The Gross amount is comprised of the payment you receive, and the Income Tax and Employee NI set out above. You may see this figure on any tax statements or other correspondence relating to taxable pay.
+
+<% end %>
+
+You may also see ‘Teaching payments DfE retention scheme’ listed as the secondary employer that made this payment.
+
+# Contact us
+
+<% @payment.claims.each do |claim| %>
+If you have any questions about your <%= I18n.t("#{claim.policy.routing_name.underscore}.claim_description") %>, email <%= support_email_address(claim.policy.routing_name) %> giving your reference: <%= claim.reference %>.
+<% end %>
+
+----
+
+We’d appreciate any feedback you can give us on this email. You can complete our short survey here: https://forms.gle/T7sZ9ponQMw9h8V59
