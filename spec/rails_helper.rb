@@ -70,6 +70,7 @@ RSpec.configure do |config|
   config.include VerifyHelpers
 
   config.before :each do
+    FactoryBot.rewind_sequences
     clear_enqueued_jobs
     ActionMailer::Base.deliveries.clear
     OmniAuth.config.mock_auth[:dfe] = nil

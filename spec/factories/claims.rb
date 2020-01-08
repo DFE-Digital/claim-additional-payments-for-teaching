@@ -1,4 +1,8 @@
 FactoryBot.define do
+  sequence(:email_address) { |n| "person#{n}@example.com" }
+  sequence(:teacher_reference_number, 1000000) { |n| n }
+  sequence(:national_insurance_number, 100000) { |n| "QQ#{n}C" }
+
   factory :claim do
     transient do
       policy { StudentLoans }
@@ -15,17 +19,17 @@ FactoryBot.define do
       address_line_1 { "1 Test Road" }
       postcode { "AB1 2CD" }
       date_of_birth { 20.years.ago.to_date }
-      teacher_reference_number { "1234567" }
-      national_insurance_number { "QQ123456C" }
+      teacher_reference_number { generate(:teacher_reference_number) }
+      national_insurance_number { generate(:national_insurance_number) }
       has_student_loan { true }
       student_loan_country { :england }
       student_loan_courses { :one_course }
       student_loan_start_date { StudentLoan::BEFORE_1_SEPT_2012 }
       student_loan_plan { StudentLoan::PLAN_1 }
-      email_address { "test@email.com" }
+      email_address { generate(:email_address) }
       banking_name { "Jo Bloggs" }
-      bank_sort_code { 123456 }
-      bank_account_number { 12345678 }
+      bank_sort_code { rand(100000..999999) }
+      bank_account_number { rand(10000000..99999999) }
       payroll_gender { :female }
 
       verified_fields { %w[first_name surname address_line_1 postcode date_of_birth payroll_gender] }
