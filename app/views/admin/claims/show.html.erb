@@ -79,6 +79,18 @@
               </h2>
             </legend>
 
+            <% unless @claim.identity_confirmed? %>
+              <div class="govuk-warning-text">
+                <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
+                <strong class="govuk-warning-text__text">
+                  <span class="govuk-warning-text__assistive">Warning</span>
+                  This claimant did not complete GOV.UK Verify. Approve the
+                  claim only if the claimant's identity has been confirmed by
+                  an alternative method.
+                </strong>
+              </div>
+            <% end %>
+
             <%= errors_tag @check, :result %>
             <div class="govuk-radios">
               <%= form.hidden_field :result %>
