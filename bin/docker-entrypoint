@@ -9,7 +9,7 @@ else
 
   if [ "$DB_STATUS" == "Schema migrations table does not exist yet."  ]; then
     echo "No tables exist - setting up the database"
-    bundle exec rails db:setup
+    bundle exec rake db:schema:load:with_data db:seed
   else
     echo "Running the schema and data migrations"
     bundle exec rails db:migrate:with_data
