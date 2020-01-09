@@ -14,6 +14,8 @@ FactoryBot.define do
     end
 
     trait :submittable do
+      verified
+
       first_name { "Jo" }
       surname { "Bloggs" }
       address_line_1 { "1 Test Road" }
@@ -32,9 +34,6 @@ FactoryBot.define do
       bank_account_number { rand(10000000..99999999) }
       payroll_gender { :female }
 
-      verified_fields { %w[first_name surname address_line_1 postcode date_of_birth payroll_gender] }
-      verify_response { {"scenario" => "IDENTITY_VERIFIED", "pid" => "123", "levelOfAssurance" => "LEVEL_2", "attributes" => {}} }
-
       eligibility_factory { ["#{policy.to_s.underscore}_eligibility".to_sym, :eligible] }
     end
 
@@ -42,6 +41,11 @@ FactoryBot.define do
       submittable
       submitted_at { Time.zone.now }
       reference { Reference.new.to_s }
+    end
+
+    trait :verified do
+      verified_fields { %w[first_name surname address_line_1 postcode date_of_birth payroll_gender] }
+      verify_response { {"scenario" => "IDENTITY_VERIFIED", "pid" => "123", "levelOfAssurance" => "LEVEL_2", "attributes" => {}} }
     end
 
     trait :unverified do
