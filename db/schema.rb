@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_01_06_120123) do
+ActiveRecord::Schema.define(version: 2020_01_09_115709) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -130,7 +130,6 @@ ActiveRecord::Schema.define(version: 2020_01_06_120123) do
   end
 
   create_table "payments", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.uuid "claim_id"
     t.uuid "payroll_run_id"
     t.decimal "award_amount", precision: 7, scale: 2
     t.datetime "created_at", null: false
@@ -143,7 +142,6 @@ ActiveRecord::Schema.define(version: 2020_01_06_120123) do
     t.decimal "tax", precision: 7, scale: 2
     t.decimal "net_pay", precision: 7, scale: 2
     t.decimal "gross_pay", precision: 7, scale: 2
-    t.index ["claim_id"], name: "index_payments_on_claim_id", unique: true
     t.index ["created_at"], name: "index_payments_on_created_at"
     t.index ["payroll_run_id"], name: "index_payments_on_payroll_run_id"
   end
@@ -221,7 +219,6 @@ ActiveRecord::Schema.define(version: 2020_01_06_120123) do
   add_foreign_key "checks", "dfe_sign_in_users", column: "checked_by_id"
   add_foreign_key "claims", "payments"
   add_foreign_key "maths_and_physics_eligibilities", "schools", column: "current_school_id"
-  add_foreign_key "payments", "claims"
   add_foreign_key "payments", "payroll_runs"
   add_foreign_key "payroll_runs", "dfe_sign_in_users", column: "created_by_id"
   add_foreign_key "payroll_runs", "dfe_sign_in_users", column: "downloaded_by_id"
