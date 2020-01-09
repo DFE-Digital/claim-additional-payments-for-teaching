@@ -2,6 +2,10 @@ module Admin
   module ClaimsHelper
     include StudentLoans::PresenterMethods
 
+    def confirming_identity_playbook_url
+      "https://docs.google.com/document/d/1wZh68_RV_FTJLxXIDPr3XFtJHW3vRgiXGaBDUo1Q1ZU"
+    end
+
     def admin_eligibility_answers(claim)
       claim.policy::EligibilityAdminAnswersPresenter.new(claim.eligibility).answers
     end

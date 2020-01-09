@@ -1,0 +1,32 @@
+.banner-temporary-message-without-action {
+  background: govuk-colour("blue");
+  color: govuk-colour("white");
+  padding: govuk-spacing(4);
+  margin-bottom: govuk-spacing(4);
+
+  *[class*="govuk-body"] {
+    color: govuk-colour("white");
+  }
+
+  .govuk-body-l {
+    font-weight: 700;
+  }
+
+  a,
+  a.govuk-link,
+  a:visited {
+    color: govuk-colour("white");
+  }
+
+  a.govuk-link:focus {
+    color: $govuk-focus-text-colour;
+  }
+
+  h2 {
+    margin-bottom: govuk-spacing(3);
+  }
+
+  p:last-of-type {
+    margin-bottom: 0;
+  }
+}

@@ -4,9 +4,6 @@
   <div class="govuk-grid-column-two-thirds">
     <%= render("shared/error_summary", instance: @check, errored_field_id_overrides: { "result": "check_result_approved" }) if @check.errors.any? %>
 
-
-    <%= render "info_panel_identity_unconfirmed" unless @claim.identity_confirmed? %>
-
     <% if @claim.payroll_gender_missing? %>
       <div class="govuk-body-l govuk-flash__notice">
         This claim cannot be approved, the payroll gender is missing and the claim will need to be referred
@@ -22,6 +19,8 @@
     <h1 class="govuk-heading-xl">
       Claim <%= @claim.reference %>
     </h1>
+
+    <%= render("info_panel_identity_unconfirmed", school: @claim.school) unless @claim.identity_confirmed? %>
 
     <%= render "admin/claims/answer_section", {heading: "Personal details", answers: admin_personal_details(@claim)} %>
 
@@ -70,7 +69,7 @@
     <% if @check.persisted? %>
       <%= render "admin/claims/answer_section", {heading: "Claim decision details", answers: admin_check_details(@check)} %>
     <% else %>
-      <%= form_for @check, url: admin_claim_checks_path(@claim) do |form| %>
+      <%= form_for @check, url: admin_claim_checks_path(@claim), html: { id: "claim_check_form" } do |form| %>
         <%= form_group_tag @check do %>
           <fieldset class="govuk-fieldset govuk-!-margin-bottom-6">
             <legend class="govuk-fieldset__legend govuk-fieldset__legend--l govuk-!-margin-bottom-6">
