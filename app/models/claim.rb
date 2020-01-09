@@ -172,7 +172,7 @@ class Claim < ApplicationRecord
   end
 
   def approvable?
-    submitted? && !payroll_gender_missing? && identity_confirmed? && !checked?
+    submitted? && !payroll_gender_missing? && !checked?
   end
 
   def checked?
@@ -238,6 +238,10 @@ class Claim < ApplicationRecord
 
   def policy
     eligibility&.class&.module_parent
+  end
+
+  def school
+    eligibility&.current_school
   end
 
   private

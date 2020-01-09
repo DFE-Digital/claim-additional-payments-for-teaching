@@ -5,6 +5,8 @@ FactoryBot.define do
     school_type { :community_school }
     school_type_group { :la_maintained }
     phase { :secondary }
+    sequence(:phone_number) { |n| "01612733#{n}" }
+
     local_authority
     local_authority_district
 

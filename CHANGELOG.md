@@ -8,6 +8,8 @@ The format is based on [Keep a Changelog]
 
 - Schools in the West Somerset opportunity area are now regarded as eligible
   again, after the West Somerset local authority district ceased to exist.
+- Service operators can approve claims that did not complete GOV.UK Verify
+- Claims that have skipped GOV.UK Verify are identified in admin
 
 ## [Release 043] - 2020-01-08
 

@@ -2,6 +2,10 @@ module Admin
   module ClaimsHelper
     include StudentLoans::PresenterMethods
 
+    def confirming_identity_playbook_url
+      "https://docs.google.com/document/d/1wZh68_RV_FTJLxXIDPr3XFtJHW3vRgiXGaBDUo1Q1ZU"
+    end
+
     def admin_eligibility_answers(claim)
       claim.policy::EligibilityAdminAnswersPresenter.new(claim.eligibility).answers
     end
@@ -47,6 +51,10 @@ module Admin
 
       check_deadline_warning_class = days_until_check_deadline < 0 ? "tag--alert" : "tag--warning"
       content_tag(:strong, pluralize(days_until_check_deadline, "day"), class: "govuk-tag #{check_deadline_warning_class}")
+    end
+
+    def id_verification_status(claim)
+      claim.identity_confirmed? ? "GOV.UK Verify" : content_tag(:strong, "Unverified", class: "govuk-tag tag--warning")
     end
 
     def matching_attributes(first_claim, second_claim)

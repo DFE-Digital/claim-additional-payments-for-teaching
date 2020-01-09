@@ -1,0 +1,15 @@
+<div class="banner-temporary-message-without-action">
+  <h2 class="govuk-body-l">
+    The claimant did not complete GOV.UK Verify
+  </h2>
+
+  <p class="govuk-body">
+    Refer to the <%= link_to "Confirming a claimant's identity playbook", confirming_identity_playbook_url, class: "govuk-link" %>
+    and contact <%= school.name %> on <strong><%= school.phone_number %></strong>.
+  </p>
+
+  <p class="govuk-body">
+    Once you have completed all the steps outlined in the playbook, you can
+    <%= link_to "approve or reject this claim", "#claim_check_form", class: "govuk-link" %>.
+  </p>
+</div>

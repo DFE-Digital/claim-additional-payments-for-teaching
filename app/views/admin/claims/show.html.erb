@@ -4,16 +4,6 @@
   <div class="govuk-grid-column-two-thirds">
     <%= render("shared/error_summary", instance: @check, errored_field_id_overrides: { "result": "check_result_approved" }) if @check.errors.any? %>
 
-
-    <% unless @claim.identity_confirmed? %>
-      <div class="govuk-error-summary" aria-labelledby="identity-error-title" role="alert" data-module="govuk-error-summary">
-        <h2 class="govuk-error-summary__title" id="identity-error-title">
-          Identity has not been confirmed
-        </h2>
-        <p class="govuk-body">Claims without a confirmed identity cannot be approved at present.</p>
-      </div>
-    <% end %>
-
     <% if @claim.payroll_gender_missing? %>
       <div class="govuk-body-l govuk-flash__notice">
         This claim cannot be approved, the payroll gender is missing and the claim will need to be referred
@@ -29,6 +19,8 @@
     <h1 class="govuk-heading-xl">
       Claim <%= @claim.reference %>
     </h1>
+
+    <%= render("info_panel_identity_unconfirmed", school: @claim.school) unless @claim.identity_confirmed? %>
 
     <%= render "admin/claims/answer_section", {heading: "Personal details", answers: admin_personal_details(@claim)} %>
 
@@ -77,7 +69,7 @@
     <% if @check.persisted? %>
       <%= render "admin/claims/answer_section", {heading: "Claim decision details", answers: admin_check_details(@check)} %>
     <% else %>
-      <%= form_for @check, url: admin_claim_checks_path(@claim) do |form| %>
+      <%= form_for @check, url: admin_claim_checks_path(@claim), html: { id: "claim_check_form" } do |form| %>
         <%= form_group_tag @check do %>
           <fieldset class="govuk-fieldset govuk-!-margin-bottom-6">
             <legend class="govuk-fieldset__legend govuk-fieldset__legend--l govuk-!-margin-bottom-6">
@@ -85,6 +77,19 @@
                 Claim decision
               </h2>
             </legend>
+
+            <% unless @claim.identity_confirmed? %>
+              <div class="govuk-warning-text">
+                <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
+                <strong class="govuk-warning-text__text">
+                  <span class="govuk-warning-text__assistive">Warning</span>
+                  This claimant did not complete GOV.UK Verify. Approve the
+                  claim only if the claimant's identity has been confirmed by
+                  an alternative method.
+                </strong>
+              </div>
+            <% end %>
+
             <%= errors_tag @check, :result %>
             <div class="govuk-radios">
               <%= form.hidden_field :result %>

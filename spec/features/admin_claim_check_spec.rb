@@ -93,12 +93,19 @@ RSpec.feature "Admin checks a claim" do
     context "When the claimant has not completed GOV.UK Verify" do
       let!(:claim_without_identity_confirmation) { create(:claim, :unverified) }
 
-      scenario "the service operator should be told the identity hasn't been confirmed" do
+      scenario "the service operator is told the identity hasn't been confirmed and can approve the claim" do
         click_on "View claims"
         find("a[href='#{admin_claim_path(claim_without_identity_confirmation)}']").click
 
-        expect(page).to have_content("Identity has not been confirmed")
-        expect(page).to have_field("Approve", disabled: true)
+        expect(page).to have_content("The claimant did not complete GOV.UK Verify")
+        expect(page).to have_content(claim_without_identity_confirmation.school.phone_number)
+
+        choose "Approve"
+        fill_in "Decision notes", with: "Identity confirmed via phone call"
+        click_on "Submit"
+
+        expect(claim_without_identity_confirmation.check.checked_by).to eq(user)
+        expect(claim_without_identity_confirmation.check.notes).to eq("Identity confirmed via phone call")
       end
     end
 
