@@ -53,6 +53,10 @@ module Admin
       content_tag(:strong, pluralize(days_until_check_deadline, "day"), class: "govuk-tag #{check_deadline_warning_class}")
     end
 
+    def id_verification_status(claim)
+      claim.identity_confirmed? ? "GOV.UK Verify" : content_tag(:strong, "Unverified", class: "govuk-tag tag--warning")
+    end
+
     def matching_attributes(first_claim, second_claim)
       first_attributes = first_claim.attributes.slice(*Claim::MatchingAttributeFinder::ATTRIBUTE_GROUPS_TO_MATCH.flatten).to_a
       second_attributes = second_claim.attributes.slice(*Claim::MatchingAttributeFinder::ATTRIBUTE_GROUPS_TO_MATCH.flatten).to_a
