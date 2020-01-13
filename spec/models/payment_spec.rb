@@ -139,4 +139,27 @@ RSpec.describe Payment do
       expect(subject).to be_valid
     end
   end
+
+  describe "personal details" do
+    subject(:payment) { create(:payment, claims: claims) }
+    let(:claims) do
+      personal_details = {
+        national_insurance_number: "JM603818B",
+        teacher_reference_number: "1234567",
+        bank_sort_code: "112233",
+        bank_account_number: "95928482",
+        building_society_roll_number: nil,
+      }
+      [
+        build(:claim, :approved, personal_details.merge(first_name: "Margaret", address_line_1: "17 Green Road", payroll_gender: :female, submitted_at: 5.days.ago)),
+        build(:claim, :approved, personal_details.merge(first_name: "John", address_line_1: "64 West Lane", payroll_gender: :male, submitted_at: 10.days.ago)),
+      ]
+    end
+
+    it "is taken from the payment’s most recently submitted claim" do
+      expect(payment.first_name).to eq("Margaret")
+      expect(payment.address_line_1).to eq("17 Green Road")
+      expect(payment.payroll_gender).to eq("female")
+    end
+  end
 end

@@ -5,7 +5,7 @@ RSpec.describe PaymentMailer, type: :mailer do
   Policies.all.each do |policy|
     context "with a payment with a single #{policy} claim" do
       describe "#confirmation" do
-        let(:payment) { build(:payment, :with_figures, net_pay: 500.00, student_loan_repayment: 60, claims: [claim]) }
+        let(:payment) { create(:payment, :with_figures, net_pay: 500.00, student_loan_repayment: 60, claims: [claim]) }
         let(:claim) { build(:claim, :submitted, policy: policy) }
         let(:payment_date_timestamp) { Time.new(2019, 1, 1).to_i }
         let(:mail) { PaymentMailer.confirmation(payment, payment_date_timestamp) }
@@ -43,7 +43,7 @@ RSpec.describe PaymentMailer, type: :mailer do
         end
 
         context "when user does not currently have a student loan" do
-          let(:payment) { build(:payment, :with_figures, student_loan_repayment: nil, claims: [claim]) }
+          let(:payment) { create(:payment, :with_figures, student_loan_repayment: nil, claims: [claim]) }
 
           it "does not mention the content relating to student loan deductions" do
             expect(mail.body.encoded).to_not include("student loan contribution")
@@ -51,7 +51,7 @@ RSpec.describe PaymentMailer, type: :mailer do
         end
 
         context "when user has a student loan" do
-          let(:payment) { build(:payment, :with_figures, student_loan_repayment: 10, claims: [claim]) }
+          let(:payment) { create(:payment, :with_figures, student_loan_repayment: 10, claims: [claim]) }
 
           it "mentions the student loan deduction content and lists their contribution" do
             expect(mail.body.encoded).to include("This payment is treated as pay and is therefore subject to a student loan contribution, if applicable.")
@@ -64,12 +64,19 @@ RSpec.describe PaymentMailer, type: :mailer do
 
   context "with a payment with multiple claims" do
     describe "#confirmation" do
-      let(:payment) { build(:payment, :with_figures, net_pay: 2500.00, student_loan_repayment: 60, claims: claims) }
+      let(:payment) { create(:payment, :with_figures, net_pay: 2500.00, student_loan_repayment: 60, claims: claims) }
       let(:student_loans_eligibility) { build(:student_loans_eligibility, :eligible, student_loan_repayment_amount: 500) }
       let(:claims) do
+        personal_details = {
+          national_insurance_number: "JM603818B",
+          teacher_reference_number: "1234567",
+          bank_sort_code: "112233",
+          bank_account_number: "95928482",
+          building_society_roll_number: nil,
+        }
         [
-          build(:claim, :approved, eligibility: student_loans_eligibility),
-          build(:claim, :approved, policy: MathsAndPhysics),
+          build(:claim, :approved, personal_details.merge(eligibility: student_loans_eligibility)),
+          build(:claim, :approved, personal_details.merge(policy: MathsAndPhysics)),
         ]
       end
       let(:payment_date_timestamp) { Time.new(2019, 1, 1).to_i }
@@ -116,7 +123,7 @@ RSpec.describe PaymentMailer, type: :mailer do
       end
 
       context "when user does not currently have a student loan" do
-        let(:payment) { build(:payment, :with_figures, student_loan_repayment: nil, claims: claims) }
+        let(:payment) { create(:payment, :with_figures, student_loan_repayment: nil, claims: claims) }
 
         it "does not mention the content relating to student loan deductions" do
           expect(mail.body.encoded).to_not include("student loan contribution")
@@ -124,7 +131,7 @@ RSpec.describe PaymentMailer, type: :mailer do
       end
 
       context "when user has a student loan" do
-        let(:payment) { build(:payment, :with_figures, student_loan_repayment: 10, claims: claims) }
+        let(:payment) { create(:payment, :with_figures, student_loan_repayment: 10, claims: claims) }
 
         it "mentions the student loan deduction content and lists their contribution" do
           expect(mail.body.encoded).to include("This payment is treated as pay and is therefore subject to a student loan contribution, if applicable.")

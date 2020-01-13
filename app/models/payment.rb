@@ -29,6 +29,6 @@ class Payment < ApplicationRecord
   end
 
   def claim_for_personal_details
-    @claim_for_personal_details ||= claims.first
+    @claim_for_personal_details ||= claims.order(:submitted_at).last
   end
 end
