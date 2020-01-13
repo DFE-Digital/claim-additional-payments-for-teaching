@@ -70,8 +70,9 @@ RSpec.describe Claim, type: :model do
   context "that has bank details" do
     it "validates the format of bank_account_number and bank_sort_code" do
       expect(build(:claim, bank_account_number: "ABC12 34 56 789")).not_to be_valid
+      expect(build(:claim, bank_account_number: "12-34-56-78-90")).not_to be_valid
       expect(build(:claim, bank_account_number: "12-34-56-78")).to be_valid
-      expect(build(:claim, bank_account_number: "12-34-56")).to be_valid
+      expect(build(:claim, bank_account_number: "12-34-56")).not_to be_valid
 
       expect(build(:claim, bank_sort_code: "ABC12 34 567")).not_to be_valid
       expect(build(:claim, bank_sort_code: "12 34 56")).to be_valid
