@@ -7,7 +7,7 @@ The format is based on [Keep a Changelog]
 ## [Unreleased]
 
 - Schools in the West Somerset opportunity area are now regarded as eligible
-  again, after the West Somerset local authority district ceased to exist.
+  again, after the West Somerset local authority district ceased to exist
 - Service operators can approve claims that did not complete GOV.UK Verify
 - Claims that have skipped GOV.UK Verify are identified in admin
 - Bank account numbers must be exactly 8 digits long (6- and 7-digit numbers are
@@ -28,7 +28,7 @@ The format is based on [Keep a Changelog]
 - Service operators can see who approved a claim
 - Service operators can see who created a payroll run
 - Fix a bug where users who spent more than 90 minutes in Verify would trigger a
-  routing exception and not receive the session timeout message.
+  routing exception and not receive the session timeout message
 - Service operators can see who downloaded a payroll run
 
 ## [Release 042] - 2019-12-19
@@ -114,7 +114,7 @@ The format is based on [Keep a Changelog]
 ## [Release 032] - 2019-11-19
 
 - Update employment-related copy to clarify that the policy cares about the
-  location that the teacher _taught_ at, not where their employer is based.
+  location that the teacher _taught_ at, not where their employer is based
 - A service operator can open or close an individual service from the admin
   interface. Closing the service prevents users from making claims. As part of
   this, we remove the global maintenance mode, and the default maintenance mode
@@ -163,7 +163,7 @@ The format is based on [Keep a Changelog]
 ## [Release 026] - 2019-11-04
 
 - A clear warning is shown to service operators when a claim contains details
-  that have been used in other claims. The other claims are listed and linked
+  that have been used in other claims. The other claims are listed and linked.
 
 ## [Release 025] - 2019-10-31
 
