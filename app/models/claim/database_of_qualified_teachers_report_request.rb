@@ -2,21 +2,22 @@ require "csv"
 
 class Claim
   class DatabaseOfQualifiedTeachersReportRequest
-    ATTRIBUTES = {
-      reference: "Claim reference",
-      teacher_reference_number: "Teacher reference number",
-    }.freeze
+    HEADERS = [
+      "Claim reference",
+      "Teacher reference number",
+    ].freeze
 
     def initialize(claims)
       @claims = claims
     end
 
     def to_csv
-      CSV.generate do |csv|
-        csv << ATTRIBUTES.values
-
+      CSV.generate(write_headers: true, headers: HEADERS) do |csv|
         @claims.each do |claim|
-          csv << ATTRIBUTES.keys.map { |attribute| claim.read_attribute(attribute) }
+          csv << [
+            claim.reference,
+            claim.teacher_reference_number,
+          ]
         end
       end
     end

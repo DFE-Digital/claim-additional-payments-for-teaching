@@ -9,7 +9,7 @@ RSpec.describe Claim::DatabaseOfQualifiedTeachersReportRequest do
     subject(:report_request_csv) { CSV.parse(report_request.to_csv, headers: true) }
 
     it "contains the correct headers" do
-      expect(report_request_csv.headers).to eql(Claim::DatabaseOfQualifiedTeachersReportRequest::ATTRIBUTES.values)
+      expect(report_request_csv.headers).to eql(Claim::DatabaseOfQualifiedTeachersReportRequest::HEADERS)
     end
 
     it "includes the claims reference number and teacher reference number" do
