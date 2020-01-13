@@ -10,6 +10,8 @@ The format is based on [Keep a Changelog]
   again, after the West Somerset local authority district ceased to exist.
 - Service operators can approve claims that did not complete GOV.UK Verify
 - Claims that have skipped GOV.UK Verify are identified in admin
+- Bank account numbers must be exactly 8 digits long (6- and 7-digit numbers are
+  no longer accepted)
 
 ## [Release 043] - 2020-01-08
 
