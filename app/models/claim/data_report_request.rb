@@ -1,7 +1,10 @@
 require "csv"
 
 class Claim
-  class DatabaseOfQualifiedTeachersReportRequest
+  # Used to genearte a CSV of claims that includes: Claim reference, teacher
+  # reference number, and full name. These are sent to various other parts of
+  # DfE when requesting data for teachers that have made a claim.
+  class DataReportRequest
     HEADERS = [
       "Claim reference",
       "Teacher reference number",

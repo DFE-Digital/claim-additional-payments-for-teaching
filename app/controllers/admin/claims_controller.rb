@@ -8,7 +8,7 @@ class Admin::ClaimsController < Admin::BaseAdminController
     respond_to do |format|
       format.html
       format.csv {
-        send_data Claim::DatabaseOfQualifiedTeachersReportRequest.new(@claims).to_csv,
+        send_data Claim::DataReportRequest.new(@claims).to_csv,
           filename: "dqt_report_request_#{Date.today.iso8601}.csv"
       }
     end
