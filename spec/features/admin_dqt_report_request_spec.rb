@@ -16,5 +16,6 @@ RSpec.feature "DQT Report request" do
 
     expect(csv.count).to eq(3)
     expect(csv[2].fields("Claim reference")).to include(claims.last.reference)
+    expect(csv[2].fields("Full name")).to include(claims.last.full_name)
   end
 end

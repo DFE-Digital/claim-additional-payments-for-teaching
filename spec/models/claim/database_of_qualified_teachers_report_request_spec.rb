@@ -15,6 +15,7 @@ RSpec.describe Claim::DatabaseOfQualifiedTeachersReportRequest do
     it "includes the claims reference number and teacher reference number" do
       expect(report_request_csv[2].fields("Claim reference")).to include(claims.last.reference)
       expect(report_request_csv[2].fields("Teacher reference number")).to include(claims.last.teacher_reference_number)
+      expect(report_request_csv[2].fields("Full name")).to include(claims.last.full_name)
     end
   end
 end

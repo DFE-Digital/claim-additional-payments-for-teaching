@@ -5,6 +5,7 @@ class Claim
     HEADERS = [
       "Claim reference",
       "Teacher reference number",
+      "Full name",
     ].freeze
 
     def initialize(claims)
@@ -17,6 +18,7 @@ class Claim
           csv << [
             claim.reference,
             claim.teacher_reference_number,
+            claim.full_name,
           ]
         end
       end

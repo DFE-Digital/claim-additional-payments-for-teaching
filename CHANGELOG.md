@@ -15,6 +15,7 @@ The format is based on [Keep a Changelog]
 - Multiple approved claims from the same person are grouped in to one payment
 - Fix "Sorry, something went wrong" message displayed by GOV.UK Verify when
   claimant clicks "Continue" button on /verify/authentications/new page
+- Include full name in claims report so it can be used to make TPS data requests
 
 ## [Release 043] - 2020-01-08
 
