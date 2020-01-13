@@ -8,7 +8,7 @@ RSpec.feature "Data report request" do
 
     click_on "View claims"
 
-    click_on "Download DQT report request file"
+    click_on "Download report request file"
 
     expect(page.response_headers["Content-Type"]).to eq("text/csv")
 
