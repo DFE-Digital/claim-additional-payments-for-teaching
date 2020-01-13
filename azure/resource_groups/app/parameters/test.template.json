@@ -1,0 +1,216 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "appServiceDockerImage": {
+      "value": "dfedigital/teacher-payments-service:${appServiceDockerImageTag}"
+    },
+    "useAppServiceHostNames": {
+      "value": false
+    },
+    "appServiceHostNames": {
+      "value": ["PLACEHOLDER"]
+    },
+    "appServiceCertificateSecretNames": {
+      "value": ["PLACEHOLDER"]
+    },
+    "appServiceHostNameToCertificateSecretNameIndexMap": {
+      "value": {
+        "PLACEHOLDER": 0
+      }
+    },
+    "appServiceAlwaysOn": {
+      "value": false
+    },
+    "appServicePlanSkuTier": {
+      "value": "PremiumV2"
+    },
+    "appServicePlanSkuSize": {
+      "value": "P1v2"
+    },
+    "appServicePlanSkuFamily": {
+      "value": "Pv2"
+    },
+    "appServicePlanSkuCapacity": {
+      "value": 1
+    },
+    "vspAppServiceDockerImage": {
+      "value": "dfedigital/teacher-payments-service-verify:${vspDockerImageTag}"
+    },
+    "vspAppServicePlanSkuTier": {
+      "value": "PremiumV2"
+    },
+    "vspAppServicePlanSkuSize": {
+      "value": "P1v2"
+    },
+    "vspAppServicePlanSkuFamily": {
+      "value": "Pv2"
+    },
+    "vspAppServicePlanSkuCapacity": {
+      "value": 1
+    },
+    "verifyHubPossibleOutboundIpAddresses": {
+      "value": ["35.176.130.173", "18.130.112.6", "3.8.225.78"]
+    },
+    "databaseName": {
+      "value": "test"
+    },
+    "databaseUsername": {
+      "reference": {
+        "keyVault": {
+          "id": "${keyVaultId}"
+        },
+        "secretName": "DatabaseUsername"
+      }
+    },
+    "databasePassword": {
+      "reference": {
+        "keyVault": {
+          "id": "${keyVaultId}"
+        },
+        "secretName": "DatabasePassword"
+      }
+    },
+    "alertEmailAddress": {
+      "reference": {
+        "keyVault": {
+          "id": "${keyVaultId}"
+        },
+        "secretName": "AlertEmailAddress"
+      }
+    },
+    "SECRET_KEY_BASE": {
+      "reference": {
+        "keyVault": {
+          "id": "${keyVaultId}"
+        },
+        "secretName": "SecretKeyBase"
+      }
+    },
+    "BASIC_AUTH_USERNAME": {
+      "reference": {
+        "keyVault": {
+          "id": "${keyVaultId}"
+        },
+        "secretName": "BasicAuthUsername"
+      }
+    },
+    "BASIC_AUTH_PASSWORD": {
+      "reference": {
+        "keyVault": {
+          "id": "${keyVaultId}"
+        },
+        "secretName": "BasicAuthPassword"
+      }
+    },
+    "DFE_SIGN_IN_ISSUER": {
+      "reference": {
+        "keyVault": {
+          "id": "${keyVaultId}"
+        },
+        "secretName": "DfeSignInIssuer"
+      }
+    },
+    "DFE_SIGN_IN_IDENTIFIER": {
+      "reference": {
+        "keyVault": {
+          "id": "${keyVaultId}"
+        },
+        "secretName": "DfeSignInIdentifier"
+      }
+    },
+    "DFE_SIGN_IN_SECRET": {
+      "reference": {
+        "keyVault": {
+          "id": "${keyVaultId}"
+        },
+        "secretName": "DfeSignInSecret"
+      }
+    },
+    "DFE_SIGN_IN_API_CLIENT_ID": {
+      "reference": {
+        "keyVault": {
+          "id": "${keyVaultId}"
+        },
+        "secretName": "DfeSignInApiClientId"
+      }
+    },
+    "DFE_SIGN_IN_API_SECRET": {
+      "reference": {
+        "keyVault": {
+          "id": "${keyVaultId}"
+        },
+        "secretName": "DfeSignInApiSecret"
+      }
+    },
+    "DFE_SIGN_IN_API_ENDPOINT": {
+      "reference": {
+        "keyVault": {
+          "id": "${keyVaultId}"
+        },
+        "secretName": "DfeSignInApiEndpoint"
+      }
+    },
+    "GECKOBOARD_API_KEY": {
+      "reference": {
+        "keyVault": {
+          "id": "${keyVaultId}"
+        },
+        "secretName": "GeckoboardAPIKey"
+      }
+    },
+    "ADMIN_ALLOWED_IPS": {
+      "reference": {
+        "keyVault": {
+          "id": "${keyVaultId}"
+        },
+        "secretName": "AdminAllowedIPs"
+      }
+    },
+    "GOOGLE_ANALYTICS_ID": {
+      "value": ""
+    },
+    "NOTIFY_API_KEY": {
+      "reference": {
+        "keyVault": {
+          "id": "${keyVaultId}"
+        },
+        "secretName": "NotifyApiKey"
+      }
+    },
+    "ROLLBAR_ACCESS_TOKEN": {
+      "value": ""
+    },
+    "ENVIRONMENT_NAME": {
+      "value": "test"
+    },
+    "VSP.VERIFY_ENVIRONMENT": {
+      "value": "INTEGRATION"
+    },
+    "VSP.SAML_SIGNING_KEY": {
+      "reference": {
+        "keyVault": {
+          "id": "${keyVaultId}"
+        },
+        "secretName": "TeacherPaymentsDevVspSamlSigning6KeyBase64"
+      }
+    },
+    "VSP.SAML_PRIMARY_ENCRYPTION_KEY": {
+      "reference": {
+        "keyVault": {
+          "id": "${keyVaultId}"
+        },
+        "secretName": "TeacherPaymentsDevVspSamlEncryption6KeyBase64"
+      }
+    },
+    "VSP.SAML_SECONDARY_ENCRYPTION_KEY": {
+      "value": ""
+    },
+    "VSP.EUROPEAN_IDENTITY_ENABLED": {
+      "value": "true"
+    },
+    "VSP.VERIFY_ENTITY_ID": {
+      "value": "https://development.additional-teaching-payment.education.gov.uk"
+    }
+  }
+}
