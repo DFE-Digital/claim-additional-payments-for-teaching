@@ -41,15 +41,15 @@ class Claim
     end
 
     def first_name
-      most_recent_verified("firstNames")
+      most_recent_value("firstNames")
     end
 
     def surname
-      most_recent_verified("surnames")
+      most_recent_value("surnames")
     end
 
     def middle_name
-      most_recent_verified("middleNames", required: false)
+      most_recent_value("middleNames", required: false)
     end
 
     def postcode
@@ -78,12 +78,15 @@ class Claim
       @response_parameters.fetch("attributes")
     end
 
-    def most_recent_verified(attribute_name, required: true)
-      raise MissingResponseAttribute, "No verified value found for #{attribute_name}" if required && no_verified_values?(attribute_name)
+    def most_recent_value(attribute_name, required: true, verified: true)
+      raise MissingResponseAttribute, "No verified value found for #{attribute_name}" if required && verified && no_verified_values?(attribute_name)
 
-      verify_attributes.fetch(attribute_name)
-        .select { |value| value["verified"] }
-        .max_by { |value| Date.parse(value.fetch("from", Date.today.to_s)) }&.fetch("value")
+      sorted_by_date = verify_attributes.fetch(attribute_name)
+        .sort_by { |value| Date.parse(value.fetch("from", Date.today.to_s)) }
+
+      sorted_by_date.select! { |value| value["verified"] } if verified
+
+      sorted_by_date.last&.fetch("value")
     end
 
     def no_verified_values?(attribute_name)
@@ -91,7 +94,7 @@ class Claim
     end
 
     def most_recent_address
-      @most_recent_address ||= most_recent_verified("addresses", required: false)
+      @most_recent_address ||= most_recent_value("addresses", required: false)
     end
 
     def address_lines
