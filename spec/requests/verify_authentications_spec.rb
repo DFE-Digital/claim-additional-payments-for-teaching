@@ -51,11 +51,10 @@ RSpec.describe "GOV.UK Verify::AuthenticationsController requests", type: :reque
           expect(current_claim.first_name).to eq("Isambard")
           expect(current_claim.middle_name).to eq("Kingdom")
           expect(current_claim.surname).to eq("Brunel")
-          expect(current_claim.address_line_1).to eq("Verified Building")
-          expect(current_claim.address_line_2).to eq("Verified Street")
-          expect(current_claim.address_line_3).to eq("Verified Town")
-          expect(current_claim.address_line_4).to eq("Verified County")
-          expect(current_claim.postcode).to eq("M12 345")
+          expect(current_claim.address_line_1).to eq("Unverified Street")
+          expect(current_claim.address_line_2).to eq("Unverified Town")
+          expect(current_claim.address_line_3).to eq("Unverified County")
+          expect(current_claim.postcode).to eq("L12 345")
           expect(current_claim.date_of_birth).to eq(Date.new(1806, 4, 9))
           expect(current_claim.payroll_gender).to eq("male")
 
@@ -66,7 +65,6 @@ RSpec.describe "GOV.UK Verify::AuthenticationsController requests", type: :reque
             "address_line_1",
             "address_line_2",
             "address_line_3",
-            "address_line_4",
             "postcode",
             "date_of_birth",
             "payroll_gender",
