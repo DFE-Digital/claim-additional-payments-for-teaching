@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+- Allow unverified addresses from GOV.UK Verify responses
+
 ## [Release 044] - 2020-01-14
 
 - Schools in the West Somerset opportunity area are now regarded as eligible

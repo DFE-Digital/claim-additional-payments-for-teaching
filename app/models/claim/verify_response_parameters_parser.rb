@@ -94,7 +94,7 @@ class Claim
     end
 
     def most_recent_address
-      @most_recent_address ||= most_recent_value("addresses", required: false)
+      @most_recent_address ||= most_recent_value("addresses", required: false, verified: false)
     end
 
     def address_lines
