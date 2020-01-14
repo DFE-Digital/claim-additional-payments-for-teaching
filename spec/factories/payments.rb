@@ -5,8 +5,15 @@ FactoryBot.define do
     end
 
     claims do
+      personal_details = {
+        national_insurance_number: generate(:national_insurance_number),
+        teacher_reference_number: generate(:teacher_reference_number),
+        email_address: "email@example.com",
+        bank_sort_code: "220011",
+        bank_account_number: "12345678",
+      }
       claim_policies.map do |policy|
-        association(:claim, :approved, policy: policy)
+        association(:claim, :approved, personal_details.merge(policy: policy))
       end
     end
     association(:payroll_run, factory: :payroll_run)

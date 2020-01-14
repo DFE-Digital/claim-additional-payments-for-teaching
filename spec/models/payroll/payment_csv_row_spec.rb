@@ -7,21 +7,26 @@ RSpec.describe Payroll::PaymentCsvRow do
     let(:row) { CSV.parse(subject.to_s).first }
     let(:payment_award_amount) { BigDecimal("1234.56") }
     let(:payment) { create(:payment, award_amount: payment_award_amount, claims: claims) }
+    let(:personal_details) do
+      {
+        national_insurance_number: generate(:national_insurance_number),
+        teacher_reference_number: generate(:teacher_reference_number),
+        payroll_gender: :female,
+        date_of_birth: Date.new(1980, 12, 1),
+        student_loan_plan: StudentLoan::PLAN_2,
+        bank_sort_code: "001122",
+        bank_account_number: "01234567",
+        banking_name: "Jo Bloggs",
+        building_society_roll_number: "1234/12345678",
+        address_line_1: "1 Test Road",
+        postcode: "AB1 2CD",
+        email_address: "email@example.com",
+      }
+    end
     let(:claims) do
       [
-        create(:claim, :approved,
-          policy: StudentLoans,
-          payroll_gender: :female,
-          date_of_birth: Date.new(1980, 12, 1),
-          student_loan_plan: StudentLoan::PLAN_2,
-          bank_sort_code: "001122",
-          bank_account_number: "01234567",
-          banking_name: "Jo Bloggs",
-          building_society_roll_number: "1234/12345678",
-          address_line_1: "1 Test Road",
-          postcode: "AB1 2CD"),
-        create(:claim, :approved,
-          policy: MathsAndPhysics),
+        create(:claim, :approved, personal_details.merge(policy: StudentLoans)),
+        create(:claim, :approved, personal_details.merge(policy: MathsAndPhysics)),
       ]
     end
 
@@ -101,10 +106,11 @@ RSpec.describe Payroll::PaymentCsvRow do
     end
 
     it "escapes fields with strings that could be dangerous in Microsoft Excel and friends" do
-      claim = claims.first
-      claim.address_line_1 = "=ActiveCell.Row-1,14"
+      claims.each do |claim|
+        claim.address_line_1 = "=ActiveCell.Row-1,14"
+      end
 
-      expect(row[Payroll::PaymentsCsv::FIELDS_WITH_HEADERS.find_index { |k, _| k == :address_line_1 }]).to eq("\\#{claim.address_line_1}")
+      expect(row[Payroll::PaymentsCsv::FIELDS_WITH_HEADERS.find_index { |k, _| k == :address_line_1 }]).to eq("\\#{claims.first.address_line_1}")
     end
   end
 end
