@@ -88,6 +88,8 @@ RSpec.feature "Ineligible Teacher Student Loan Repayments claims" do
 
     visit new_claim_path(StudentLoans.routing_name)
 
+    expect(page).to_not have_content("You have a claim in progress")
+
     expect(page).to have_content("When did you complete your initial teacher training?")
     expect(page).not_to have_css("input[checked]")
     choose_qts_year

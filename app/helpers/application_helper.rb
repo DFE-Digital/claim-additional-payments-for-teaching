@@ -27,6 +27,10 @@ module ApplicationHelper
     policy ? t("#{policy.underscore}.policy_name") : t("service_name")
   end
 
+  def policy_description(policy)
+    I18n.t("#{policy.underscore}.claim_description")
+  end
+
   def feedback_url
     current_policy.feedback_url
   end

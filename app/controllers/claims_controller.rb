@@ -3,6 +3,7 @@ class ClaimsController < BasePublicController
 
   skip_before_action :send_unstarted_claiments_to_the_start, only: [:new, :create, :timeout]
   before_action :check_page_is_in_sequence, only: [:show, :update]
+  before_action :check_claim_not_in_progress, only: [:new]
   before_action :clear_claim_session, only: [:new]
   before_action :prepend_view_path_for_policy
 
@@ -40,6 +41,9 @@ class ClaimsController < BasePublicController
   def timeout
   end
 
+  def existing_session
+  end
+
   private
 
   helper_method :next_slug
@@ -70,6 +74,14 @@ class ClaimsController < BasePublicController
 
   def check_page_is_in_sequence
     raise ActionController::RoutingError.new("Not Found") unless page_sequence.in_sequence?(params[:slug])
+  end
+
+  def check_claim_not_in_progress
+    redirect_to(existing_session_path(policy: params[:policy])) if claim_in_progress?
+  end
+
+  def claim_in_progress?
+    session[:claim_id].present? && !current_claim.eligibility.ineligible?
   end
 
   def page_sequence

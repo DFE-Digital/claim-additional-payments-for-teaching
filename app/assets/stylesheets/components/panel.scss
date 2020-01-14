@@ -15,3 +15,43 @@
     margin: 0;
   }
 }
+
+.govuk-panel--interruption {
+  background-color: govuk-colour("blue");
+  text-align: left;
+
+  * {
+    color: govuk-colour("white");
+  }
+
+  a,
+  a:link,
+  a:visited {
+    color: govuk-colour("white");
+  }
+  a:hover {
+    color: govuk-colour("light-grey");
+  }
+
+  .govuk-list--definition {
+    dt,
+    dd {
+      color: govuk-colour("blue");
+    }
+  }
+
+  .govuk-button:not(.govuk-button--link) {
+    background-color: govuk-colour("white");
+    box-shadow: 0 2px 0 govuk-colour("black");
+
+    &:link,
+    &:visited {
+      color: govuk-colour("blue");
+    }
+
+    &:hover,
+    &:focus {
+      background-color: govuk-colour("light-grey");
+    }
+  }
+}
