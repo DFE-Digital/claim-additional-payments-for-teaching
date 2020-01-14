@@ -13,6 +13,8 @@ The format is based on [Keep a Changelog]
 - Bank account numbers must be exactly 8 digits long (6- and 7-digit numbers are
   no longer accepted)
 - Multiple approved claims from the same person are grouped in to one payment
+- Fix "Sorry, something went wrong" message displayed by GOV.UK Verify when
+  claimant clicks "Continue" button on /verify/authentications/new page
 
 ## [Release 043] - 2020-01-08
 
