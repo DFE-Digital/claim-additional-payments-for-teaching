@@ -32,6 +32,8 @@ The format is based on [Keep a Changelog]
 - Fix a bug where users who spent more than 90 minutes in Verify would trigger a
   routing exception and not receive the session timeout message
 - Service operators can see who downloaded a payroll run
+- Show a warning message when a user tries to switch policies or start a new
+  claim
 
 ## [Release 042] - 2019-12-19
 

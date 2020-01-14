@@ -9,14 +9,18 @@ RSpec.describe "Claims", type: :request do
       end
     end
 
-    context "the user has already started a claim" do
-      before { start_student_loans_claim }
+    it "redirects to the existing claim interruption page if a claim for another policy is already in progress" do
+      start_student_loans_claim
+      get new_claim_path(MathsAndPhysics.routing_name)
 
-      it "clears the current claim from the session, and renders the first page in the sequence" do
-        expect { get new_claim_path(StudentLoans.routing_name) }.to change { session[:claim_id] }.from(String).to(nil)
+      expect(response).to redirect_to(existing_session_path(MathsAndPhysics.routing_name))
+    end
 
-        expect(response.body).to include(I18n.t("questions.qts_award_year"))
-      end
+    it "redirects to the existing claim interruption page if another claim for the same policy is already in progress" do
+      start_student_loans_claim
+      get new_claim_path(StudentLoans.routing_name)
+
+      expect(response).to redirect_to(existing_session_path(StudentLoans.routing_name))
     end
   end
 

@@ -1,17 +1,23 @@
 require "rails_helper"
 
-RSpec.feature "A user can switch policies" do
-  it "a user can switch to maths and physics after starting a student loan claim" do
+RSpec.feature "Switching policies" do
+  before do
     start_student_loans_claim
     visit new_claim_path(MathsAndPhysics.routing_name)
+  end
+
+  scenario "a user can switch to a different policy after starting a claim on another" do
+    expect(page.title).to have_text(I18n.t("maths_and_physics.policy_name"))
+    expect(page.find("header")).to have_text(I18n.t("maths_and_physics.policy_name"))
+
+    click_on "Start claim for a payment for teaching maths or physics"
 
     expect(page).to have_text(I18n.t("maths_and_physics.questions.teaching_maths_or_physics"))
   end
 
-  it "a user can switch to student loans after starting a maths and physics claim" do
-    start_maths_and_physics_claim
-    visit new_claim_path(StudentLoans.routing_name)
+  scenario "a user can choose to continue their claim" do
+    click_on "Finish claim in progress"
 
-    expect(page).to have_text(I18n.t("questions.qts_award_year"))
+    expect(page).to have_text(I18n.t("student_loans.questions.claim_school"))
   end
 end

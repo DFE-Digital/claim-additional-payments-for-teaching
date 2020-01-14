@@ -16,10 +16,4 @@ class StaticPagesController < BasePublicController
 
   def terms_conditions
   end
-
-  private
-
-  def current_policy_routing_name
-    super || "student-loans"
-  end
 end

@@ -14,6 +14,7 @@ Rails.application.routes.draw do
   end
 
   get "refresh-session", to: "sessions#refresh", as: :refresh_session
+  delete "session", to: "sessions#destroy", as: :session
 
   # Used to constrain claim journey routing so only slugs
   # that are part of a policy’s slug sequence are routed.
@@ -45,6 +46,7 @@ Rails.application.routes.draw do
     get "claims/confirmation", as: :claim_confirmation, to: "submissions#show"
 
     get "timeout", to: "claims#timeout", as: :timeout_claim
+    get "existing-session", as: :existing_session, to: "claims#existing_session"
 
     %w[privacy_notice terms_conditions contact_us cookies accessibility_statement].each do |page_name|
       get page_name.dasherize, to: "static_pages##{page_name}", as: page_name

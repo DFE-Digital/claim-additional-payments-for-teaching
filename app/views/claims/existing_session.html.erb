@@ -1,0 +1,19 @@
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-full">
+    <div class="govuk-panel govuk-panel--interruption">
+      <h1 class="govuk-heading-xl">
+        You have a claim in progress <%= policy_description(current_claim.policy.routing_name) %>.
+      </h1>
+
+      <h2 class="govuk-heading-m">
+        You will lose your progress on this claim if you start a different claim before you send it.
+      </h2>
+    </div>
+
+    <p class="govuk-body govuk-!-margin-top-7 govuk-!-margin-bottom-0">
+      <%= link_to "Finish claim in progress", claim_path(current_claim.policy.routing_name, slug: session[:current_slug]), class: "govuk-button" %>
+    </p>
+
+    <%= button_to "Start claim #{policy_description(params[:policy])}", session_path(policy: params[:policy]), method: :delete, class: "govuk-button govuk-button--secondary" %>
+  </div>
+</div>
