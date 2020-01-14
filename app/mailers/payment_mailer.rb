@@ -24,7 +24,7 @@ class PaymentMailer < ApplicationMailer
     view_mail(
       NOTIFY_TEMPLATE_ID,
       to: @payment.email_address,
-      subject: "We’re paying your #{@claim_description}, reference number: #{@reference}",
+      subject: "We’re paying your claim #{@claim_description}, reference number: #{@reference}",
       reply_to_id: @policy.notify_reply_to_id,
       template_name: :confirmation_for_single_claim
     )

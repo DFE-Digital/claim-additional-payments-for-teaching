@@ -104,7 +104,7 @@ en:
   maths_and_physics:
     policy_name: "Claim a payment for teaching maths or physics"
     policy_short_name: "Maths and Physics"
-    claim_description: "claim for a payment for teaching maths or physics"
+    claim_description: "for a payment for teaching maths or physics"
     claim_amount_description: "Payment for teaching maths or physics"
     claim_action: "claim £2,000 for teaching maths or physics"
     award_description: "£2,000 payment"
@@ -157,7 +157,7 @@ en:
   student_loans:
     policy_name: "Teachers: claim back your student loan repayments"
     policy_short_name: "Student Loans"
-    claim_description: "claim to get back your student loan repayments"
+    claim_description: "to get back your student loan repayments"
     claim_amount_description: "Student loan repayments you’ve claimed back"
     claim_action: "claim back student loan repayments"
     award_description: "claim payment"

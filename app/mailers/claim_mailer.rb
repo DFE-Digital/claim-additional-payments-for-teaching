@@ -3,18 +3,18 @@ class ClaimMailer < ApplicationMailer
 
   def submitted(claim)
     @claim_description = claim_description(claim)
-    view_mail_with_claim_and_subject(claim, "Your #{@claim_description} has been received, reference number: #{claim.reference}")
+    view_mail_with_claim_and_subject(claim, "Your claim #{@claim_description} has been received, reference number: #{claim.reference}")
   end
 
   def approved(claim)
     @claim_description = claim_description(claim)
-    view_mail_with_claim_and_subject(claim, "Your #{@claim_description} has been approved, reference number: #{claim.reference}")
+    view_mail_with_claim_and_subject(claim, "Your claim #{@claim_description} has been approved, reference number: #{claim.reference}")
   end
 
   def rejected(claim)
     @claim_description = claim_description(claim)
     @possible_rejection_reasons = I18n.t("#{claim.policy.routing_name.underscore}.possible_rejection_reasons")
-    view_mail_with_claim_and_subject(claim, "Your #{@claim_description} has been rejected, reference number: #{claim.reference}")
+    view_mail_with_claim_and_subject(claim, "Your claim #{@claim_description} has been rejected, reference number: #{claim.reference}")
   end
 
   private
