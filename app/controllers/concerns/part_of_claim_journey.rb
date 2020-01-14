@@ -11,7 +11,7 @@ module PartOfClaimJourney
   private
 
   def current_policy_routing_name
-    current_claim.policy&.routing_name
+    super || current_claim.policy&.routing_name
   end
 
   def check_whether_closed_for_submissions
