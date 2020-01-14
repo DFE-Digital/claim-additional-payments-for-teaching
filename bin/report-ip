@@ -1,0 +1,2 @@
+#!/bin/bash
+/usr/bin/curl canhazip.com

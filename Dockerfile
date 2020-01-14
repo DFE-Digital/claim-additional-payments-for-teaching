@@ -8,6 +8,7 @@ RUN apk add bash
 RUN apk add postgresql-dev
 RUN apk add tzdata
 RUN apk add nodejs
+RUN apk add curl
 
 ENV APP_HOME /app
 ENV DEPS_HOME /deps
