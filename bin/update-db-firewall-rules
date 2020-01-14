@@ -28,7 +28,7 @@ esac
 
 az account set --subscription "$SUBSCRIPTION_ID"
 
-CONTAINER_OUTPUT=$(az container exec --resource-group $RESOURCE_GROUP_PREFIX-app --name $RESOURCE_GROUP_PREFIX-app-worker-aci --exec-command "/bin/report-ip")
+CONTAINER_OUTPUT=$(az container exec --resource-group $RESOURCE_GROUP_PREFIX-app --name $RESOURCE_GROUP_PREFIX-app-worker-aci --exec-command "./bin/report-ip")
 CONTAINER_IP=$(echo "$CONTAINER_OUTPUT" | tr -d '\r')
 
 az postgres server firewall-rule create \
