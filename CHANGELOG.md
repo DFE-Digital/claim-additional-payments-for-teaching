@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+## [Release 044] - 2020-01-14
+
 - Schools in the West Somerset opportunity area are now regarded as eligible
   again, after the West Somerset local authority district ceased to exist
 - Service operators can approve claims that did not complete GOV.UK Verify
@@ -343,7 +345,9 @@ The format is based on [Keep a Changelog]
 - First release for student loan repayments private beta
 
 [unreleased]:
-  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-043...HEAD
+  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-044...HEAD
+[release 044]:
+  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-043...release-044
 [release 043]:
   https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-042...release-043
 [release 042]:
