@@ -10,6 +10,10 @@
       </h2>
     </div>
 
+    <p class="govuk-body govuk-!-margin-top-7 govuk-!-margin-bottom-0">
+      <%= link_to "Finish claim in progress", claim_path(current_claim.policy.routing_name, slug: session[:current_slug]), class: "govuk-button" %>
+    </p>
+
     <%= button_to "Start claim #{policy_description(params[:policy])}", session_path(policy: params[:policy]), method: :delete, class: "govuk-button govuk-button--secondary" %>
   </div>
 </div>
