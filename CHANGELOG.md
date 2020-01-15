@@ -6,6 +6,9 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+- Removed unnecessary tags on main and footer elements that were causing
+  warnings on validators
+
 ## [Release 044] - 2020-01-14
 
 - Schools in the West Somerset opportunity area are now regarded as eligible
