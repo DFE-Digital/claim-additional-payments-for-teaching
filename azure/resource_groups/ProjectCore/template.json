@@ -19,7 +19,7 @@
     "vnetDeploymentName": "[concat(parameters('resourceNamePrefix'), '-virtual-network')]",
     "workerNetworkProfileDeploymentName": "[concat(variables('vnetDeploymentName'), '-worker-network-profile')]",
 
-    "vnetName": "[concat(parameters('resourceNamePrefix'), '-vn')]",
+    "vnetName": "[concat(parameters('resourceNamePrefix'), '-wkrvn')]",
     "workerSubnetName": "worker",
 
     "workerNetworkProfileName": "[concat(parameters('resourceNamePrefix'), '-worker-np')]"
