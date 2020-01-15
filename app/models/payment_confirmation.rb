@@ -21,11 +21,14 @@ class PaymentConfirmation
         update_payment_fields(payment, row) if payment
       end
 
-      payroll_run.update!(confirmation_report_uploaded_by: admin_user_id)
+      payroll_run.update!(
+        confirmation_report_uploaded_by: admin_user_id,
+        scheduled_payment_date: scheduled_payment_date
+      )
 
       if errors.empty?
         payroll_run.payments.each do |payment|
-          PaymentMailer.confirmation(payment, payment_date_timestamp).deliver_later
+          PaymentMailer.confirmation(payment, scheduled_payment_date.to_time.to_i).deliver_later
           RecordPaymentJob.perform_later(payment)
         end
       else
@@ -36,8 +39,8 @@ class PaymentConfirmation
 
   private
 
-  def payment_date_timestamp
-    Date.today.next_occurring(:friday).to_time.to_i
+  def scheduled_payment_date
+    Date.today.next_occurring(:friday)
   end
 
   def validate

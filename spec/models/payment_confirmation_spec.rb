@@ -20,7 +20,7 @@ RSpec.describe PaymentConfirmation do
   subject(:payment_confirmation) { described_class.new(payroll_run, file, admin_user_id) }
 
   context "the claims in the CSV match the claims of the payroll run" do
-    it "records the values from the CSV against the claims' payments, and populates the payroll run's confirmation_report_uploaded_by" do
+    it "records the values from the CSV against the claims' payments" do
       expect(payment_confirmation.ingest).to be_truthy
 
       first_payment = payroll_run.payments[0].reload
@@ -43,8 +43,19 @@ RSpec.describe PaymentConfirmation do
       expect(second_payment.tax).to eq("162.8".to_d)
       expect(second_payment.net_pay).to eq("534".to_d)
       expect(second_payment.gross_pay).to eq("814.64".to_d)
+    end
 
-      expect(payroll_run.reload.confirmation_report_uploaded_by).to eq(admin_user_id)
+    it "populates the payroll run's confirmation_report_uploaded_by and sets a payment date of the upcoming Friday" do
+      a_tuesday = Date.parse("2019-01-01")
+      the_following_friday = Date.parse("2019-01-04")
+
+      travel_to a_tuesday do
+        payment_confirmation.ingest
+        payroll_run.reload
+
+        expect(payroll_run.confirmation_report_uploaded_by).to eq(admin_user_id)
+        expect(payroll_run.scheduled_payment_date).to eq(the_following_friday)
+      end
     end
 
     it "sends payment confirmation emails with a payment date of the following Friday" do
