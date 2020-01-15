@@ -122,7 +122,7 @@ RSpec.feature "Payroll" do
     expect(page.find("table")).to have_content("Uploaded")
 
     expect(payroll_run.reload.confirmation_report_uploaded_by).to eq("uploader-user-id")
-    expect(payroll_run.claims[0].payment.reload.gross_value).to eq("487.48".to_d)
+    expect(payroll_run.payments[0].reload.gross_value).to eq("487.48".to_d)
 
     expect(ActionMailer::Base.deliveries.count).to eq(2)
 
