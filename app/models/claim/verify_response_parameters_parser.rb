@@ -10,7 +10,7 @@ class Claim
   # As well as keys for the personal information of the user (name, address,
   # etc) the returned Hash includes two additional keys:
   #
-  #   verified_fields – these are the keys for the attributes that have come
+  #   govuk_verify_fields – these are the keys for the attributes that have come
   #                     back in the Verify response. Recording these allows us
   #                     to determine which attributes came from Verify and
   #                     therefore should not be editable by the user.
@@ -29,7 +29,7 @@ class Claim
     end
 
     def attributes
-      identity_attributes.merge(verified_fields: verified_fields, verify_response: @response_parameters)
+      identity_attributes.merge(govuk_verify_fields: govuk_verify_fields, verify_response: @response_parameters)
     end
 
     def gender
@@ -116,7 +116,7 @@ class Claim
       }.compact
     end
 
-    def verified_fields
+    def govuk_verify_fields
       identity_attributes.keys
     end
   end

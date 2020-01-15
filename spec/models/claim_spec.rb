@@ -470,44 +470,44 @@ RSpec.describe Claim, type: :model do
   end
 
   describe "#identity_confirmed?" do
-    it "returns true if the claim has any GOV.UK Verified fields" do
-      expect(Claim.new(verified_fields: ["payroll_gender"]).identity_confirmed?).to eq true
+    it "returns true if the claim has any GOV.UK Verify fields" do
+      expect(Claim.new(govuk_verify_fields: ["payroll_gender"]).identity_confirmed?).to eq true
     end
 
-    it "returns false if the claim doesn't have any GOV.UK Verified fields" do
+    it "returns false if the claim doesn't have any GOV.UK Verify fields" do
       expect(Claim.new.identity_confirmed?).to eq false
-      expect(Claim.new(verified_fields: []).identity_confirmed?).to eq false
+      expect(Claim.new(govuk_verify_fields: []).identity_confirmed?).to eq false
     end
   end
 
   describe "#name_verified?" do
-    it "returns true if the name is present in the list of verified fields" do
+    it "returns true if the name is present in the list of GOV.UK Verify fields" do
       expect(Claim.new.name_verified?).to eq false
-      expect(Claim.new(verified_fields: ["first_name"]).name_verified?).to eq true
+      expect(Claim.new(govuk_verify_fields: ["first_name"]).name_verified?).to eq true
     end
   end
 
   describe "#address_verified?" do
-    it "returns true if any address attributes are in the list of verified fields" do
+    it "returns true if any address attributes are in the list of GOV.UK Verify fields" do
       expect(Claim.new.address_verified?).to eq false
-      expect(Claim.new(verified_fields: ["payroll_gender"]).address_verified?).to eq false
+      expect(Claim.new(govuk_verify_fields: ["payroll_gender"]).address_verified?).to eq false
 
-      expect(Claim.new(verified_fields: ["address_line_1"]).address_verified?).to eq true
-      expect(Claim.new(verified_fields: ["address_line_1", "postcode"]).address_verified?).to eq true
+      expect(Claim.new(govuk_verify_fields: ["address_line_1"]).address_verified?).to eq true
+      expect(Claim.new(govuk_verify_fields: ["address_line_1", "postcode"]).address_verified?).to eq true
     end
   end
 
   describe "#date_of_birth_verified?" do
-    it "returns true if date_of_birth is in the list of verified fields" do
-      expect(Claim.new(verified_fields: ["date_of_birth"]).date_of_birth_verified?).to eq true
-      expect(Claim.new(verified_fields: ["address_line_1"]).date_of_birth_verified?).to eq false
+    it "returns true if date_of_birth is in the list of GOV.UK Verify fields" do
+      expect(Claim.new(govuk_verify_fields: ["date_of_birth"]).date_of_birth_verified?).to eq true
+      expect(Claim.new(govuk_verify_fields: ["address_line_1"]).date_of_birth_verified?).to eq false
     end
   end
 
   describe "#payroll_gender_verified?" do
-    it "returns true if payroll_gender is in the list of verified fields" do
-      expect(Claim.new(verified_fields: ["payroll_gender"]).payroll_gender_verified?).to eq true
-      expect(Claim.new(verified_fields: ["address_line_1"]).payroll_gender_verified?).to eq false
+    it "returns true if payroll_gender is in the list of GOV.UK Verify fields" do
+      expect(Claim.new(govuk_verify_fields: ["payroll_gender"]).payroll_gender_verified?).to eq true
+      expect(Claim.new(govuk_verify_fields: ["address_line_1"]).payroll_gender_verified?).to eq false
     end
   end
 

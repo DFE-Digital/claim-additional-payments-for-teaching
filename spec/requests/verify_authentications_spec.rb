@@ -58,7 +58,7 @@ RSpec.describe "GOV.UK Verify::AuthenticationsController requests", type: :reque
           expect(current_claim.date_of_birth).to eq(Date.new(1806, 4, 9))
           expect(current_claim.payroll_gender).to eq("male")
 
-          expect(current_claim.verified_fields).to match_array([
+          expect(current_claim.govuk_verify_fields).to match_array([
             "first_name",
             "middle_name",
             "surname",

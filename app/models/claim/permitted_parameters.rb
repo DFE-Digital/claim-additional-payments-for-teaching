@@ -25,7 +25,7 @@ class Claim
     end
 
     def verified_claim_attributes
-      claim.verified_fields.map(&:to_sym)
+      claim.govuk_verify_fields.map(&:to_sym)
     end
   end
 end

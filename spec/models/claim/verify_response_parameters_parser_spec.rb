@@ -215,7 +215,7 @@ RSpec.describe Claim::VerifyResponseParametersParser do
         address_line_1: "Verified Street",
         address_line_2: "Verified Town",
         postcode: "M12 345",
-        verified_fields: %i[first_name surname date_of_birth address_line_1 address_line_2 postcode],
+        govuk_verify_fields: %i[first_name surname date_of_birth address_line_1 address_line_2 postcode],
         verify_response: sample_parsed_verify_response,
       }
 

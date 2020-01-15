@@ -24,10 +24,10 @@ describe Admin::ClaimsHelper do
     it "includes an array of questions and answers" do
       expected_answers = [
         [I18n.t("admin.teacher_reference_number"), "1234567"],
-        [I18n.t("verified_fields.full_name").capitalize, "Bruce Wayne"],
-        [I18n.t("verified_fields.date_of_birth").capitalize, "01/01/1901"],
+        [I18n.t("govuk_verify_fields.full_name").capitalize, "Bruce Wayne"],
+        [I18n.t("govuk_verify_fields.date_of_birth").capitalize, "01/01/1901"],
         [I18n.t("admin.national_insurance_number"), "QQ123456C"],
-        [I18n.t("verified_fields.address").capitalize, "Flat 1<br>1 Test Road<br>Test Town<br>AB1 2CD"],
+        [I18n.t("govuk_verify_fields.address").capitalize, "Flat 1<br>1 Test Road<br>Test Town<br>AB1 2CD"],
         [I18n.t("admin.email_address"), "test@email.com"],
       ]
 

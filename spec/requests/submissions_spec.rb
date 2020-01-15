@@ -101,7 +101,7 @@ RSpec.describe "Submissions", type: :request do
 
     context "with a submitted claim that did not complete GOV.UK Verify" do
       it "renders the claim confirmation screen, including identity checking content, and clears the session" do
-        in_progress_claim.update!(verified_fields: [])
+        in_progress_claim.update!(govuk_verify_fields: [])
 
         get claim_confirmation_path(StudentLoans.routing_name)
 

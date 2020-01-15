@@ -56,7 +56,7 @@ class Claim < ApplicationRecord
     student_loan_plan: false,
     submitted_at: false,
     updated_at: false,
-    verified_fields: false,
+    govuk_verify_fields: false,
     verify_response: true,
     banking_name: true,
     building_society_roll_number: true,
@@ -203,23 +203,23 @@ class Claim < ApplicationRecord
   # Returns true if the claim has a confirmed identity. For now this can only
   # be done through GOV.UK Verify, but will change in the future.
   def identity_confirmed?
-    verified_fields.any?
+    govuk_verify_fields.any?
   end
 
   def name_verified?
-    verified_fields.include?("first_name")
+    govuk_verify_fields.include?("first_name")
   end
 
   def address_verified?
-    (ADDRESS_ATTRIBUTES & verified_fields).any?
+    (ADDRESS_ATTRIBUTES & govuk_verify_fields).any?
   end
 
   def date_of_birth_verified?
-    verified_fields.include?("date_of_birth")
+    govuk_verify_fields.include?("date_of_birth")
   end
 
   def payroll_gender_verified?
-    verified_fields.include?("payroll_gender")
+    govuk_verify_fields.include?("payroll_gender")
   end
 
   def full_name

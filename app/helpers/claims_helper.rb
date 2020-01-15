@@ -1,12 +1,12 @@
 module ClaimsHelper
-  def verified_fields(claim)
+  def fields_from_govuk_verify(claim)
     fields = []
-    fields << I18n.t("verified_fields.first_name") if claim.verified_fields.include?("first_name")
-    fields << I18n.t("verified_fields.middle_name") if claim.verified_fields.include?("middle_name")
-    fields << I18n.t("verified_fields.surname") if claim.verified_fields.include?("surname")
-    fields << I18n.t("verified_fields.address") if claim.address_verified?
-    fields << I18n.t("verified_fields.date_of_birth") if claim.verified_fields.include?("date_of_birth")
-    fields << I18n.t("verified_fields.payroll_gender") if claim.payroll_gender_verified?
+    fields << I18n.t("govuk_verify_fields.first_name") if claim.govuk_verify_fields.include?("first_name")
+    fields << I18n.t("govuk_verify_fields.middle_name") if claim.govuk_verify_fields.include?("middle_name")
+    fields << I18n.t("govuk_verify_fields.surname") if claim.govuk_verify_fields.include?("surname")
+    fields << I18n.t("govuk_verify_fields.address") if claim.address_verified?
+    fields << I18n.t("govuk_verify_fields.date_of_birth") if claim.govuk_verify_fields.include?("date_of_birth")
+    fields << I18n.t("govuk_verify_fields.payroll_gender") if claim.payroll_gender_verified?
     fields.to_sentence
   end
 
@@ -16,12 +16,12 @@ module ClaimsHelper
 
   def verify_answers(claim)
     [].tap do |a|
-      a << [I18n.t("verified_fields.first_name").capitalize, claim.first_name] if claim.name_verified?
-      a << [I18n.t("verified_fields.middle_name").capitalize, claim.middle_name] if claim.name_verified? && claim.middle_name.present?
-      a << [I18n.t("verified_fields.surname").capitalize, claim.surname] if claim.name_verified?
-      a << [I18n.t("verified_fields.address").capitalize, sanitize(claim.address("<br>").html_safe, tags: %w[br])] if claim.address_verified?
-      a << [I18n.t("verified_fields.date_of_birth").capitalize, l(claim.date_of_birth)] if claim.date_of_birth_verified?
-      a << [I18n.t("verified_fields.payroll_gender").capitalize, t("answers.payroll_gender.#{claim.payroll_gender}")] if claim.payroll_gender_verified?
+      a << [I18n.t("govuk_verify_fields.first_name").capitalize, claim.first_name] if claim.name_verified?
+      a << [I18n.t("govuk_verify_fields.middle_name").capitalize, claim.middle_name] if claim.name_verified? && claim.middle_name.present?
+      a << [I18n.t("govuk_verify_fields.surname").capitalize, claim.surname] if claim.name_verified?
+      a << [I18n.t("govuk_verify_fields.address").capitalize, sanitize(claim.address("<br>").html_safe, tags: %w[br])] if claim.address_verified?
+      a << [I18n.t("govuk_verify_fields.date_of_birth").capitalize, l(claim.date_of_birth)] if claim.date_of_birth_verified?
+      a << [I18n.t("govuk_verify_fields.payroll_gender").capitalize, t("answers.payroll_gender.#{claim.payroll_gender}")] if claim.payroll_gender_verified?
     end
   end
 
