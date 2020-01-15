@@ -621,4 +621,23 @@ RSpec.describe Claim, type: :model do
       expect(described_class.payrollable).to match_array([first_unpayrolled_claim, second_unpayrolled_claim])
     end
   end
+
+  describe "#scheduled_payment_date" do
+    let(:scheduled_payment_date) { Date.parse("2019-01-01") }
+    let(:claim) { create(:claim, :submitted) }
+
+    context "when a claim has a payroll run associated with it" do
+      let!(:payment) { create(:payment, :with_figures, claims: [claim], scheduled_payment_date: scheduled_payment_date) }
+
+      it "returns the payment date" do
+        expect(claim.scheduled_payment_date).to eq(scheduled_payment_date)
+      end
+    end
+
+    context "when a claim does not have a payroll run associated with it" do
+      it "returns nil" do
+        expect(claim.scheduled_payment_date).to be_nil
+      end
+    end
+  end
 end

@@ -152,6 +152,7 @@ class Claim < ApplicationRecord
   scope :by_policy, ->(policy) { where(eligibility_type: policy::Eligibility.to_s) }
 
   delegate :award_amount, to: :eligibility
+  delegate :scheduled_payment_date, to: :payment, allow_nil: true
 
   def submit!
     if submittable?

@@ -8,6 +8,7 @@ The format is based on [Keep a Changelog]
 
 - Removed unnecessary tags on main and footer elements that were causing
   warnings on validators
+- A Payment date is set when a payroll run is ingested
 
 ## [Release 044] - 2020-01-14
 

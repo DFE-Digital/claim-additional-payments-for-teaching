@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_01_09_115709) do
+ActiveRecord::Schema.define(version: 2020_01_14_151353) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -155,6 +155,7 @@ ActiveRecord::Schema.define(version: 2020_01_09_115709) do
     t.string "downloaded_by"
     t.uuid "created_by_id"
     t.uuid "downloaded_by_id"
+    t.date "scheduled_payment_date"
     t.index ["created_at"], name: "index_payroll_runs_on_created_at"
     t.index ["created_by_id"], name: "index_payroll_runs_on_created_by_id"
     t.index ["downloaded_by_id"], name: "index_payroll_runs_on_downloaded_by_id"
