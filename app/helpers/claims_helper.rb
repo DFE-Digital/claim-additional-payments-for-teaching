@@ -4,7 +4,7 @@ module ClaimsHelper
     fields << I18n.t("govuk_verify_fields.first_name") if claim.govuk_verify_fields.include?("first_name")
     fields << I18n.t("govuk_verify_fields.middle_name") if claim.govuk_verify_fields.include?("middle_name")
     fields << I18n.t("govuk_verify_fields.surname") if claim.govuk_verify_fields.include?("surname")
-    fields << I18n.t("govuk_verify_fields.address") if claim.address_verified?
+    fields << I18n.t("govuk_verify_fields.address") if claim.address_from_govuk_verify?
     fields << I18n.t("govuk_verify_fields.date_of_birth") if claim.govuk_verify_fields.include?("date_of_birth")
     fields << I18n.t("govuk_verify_fields.payroll_gender") if claim.payroll_gender_verified?
     fields.to_sentence
@@ -19,7 +19,7 @@ module ClaimsHelper
       a << [I18n.t("govuk_verify_fields.first_name").capitalize, claim.first_name] if claim.name_verified?
       a << [I18n.t("govuk_verify_fields.middle_name").capitalize, claim.middle_name] if claim.name_verified? && claim.middle_name.present?
       a << [I18n.t("govuk_verify_fields.surname").capitalize, claim.surname] if claim.name_verified?
-      a << [I18n.t("govuk_verify_fields.address").capitalize, sanitize(claim.address("<br>").html_safe, tags: %w[br])] if claim.address_verified?
+      a << [I18n.t("govuk_verify_fields.address").capitalize, sanitize(claim.address("<br>").html_safe, tags: %w[br])] if claim.address_from_govuk_verify?
       a << [I18n.t("govuk_verify_fields.date_of_birth").capitalize, l(claim.date_of_birth)] if claim.date_of_birth_verified?
       a << [I18n.t("govuk_verify_fields.payroll_gender").capitalize, t("answers.payroll_gender.#{claim.payroll_gender}")] if claim.payroll_gender_verified?
     end
@@ -28,7 +28,7 @@ module ClaimsHelper
   def identity_answers(claim)
     [].tap do |a|
       a << [t("questions.name"), claim.full_name, "name"] unless claim.name_verified?
-      a << [t("questions.address"), claim.address, "address"] unless claim.address_verified?
+      a << [t("questions.address"), claim.address, "address"] unless claim.address_from_govuk_verify?
       a << [t("questions.date_of_birth"), l(claim.date_of_birth), "date-of-birth"] unless claim.date_of_birth_verified?
       a << [t("questions.payroll_gender"), t("answers.payroll_gender.#{claim.payroll_gender}"), "gender"] unless claim.payroll_gender_verified?
       a << [t("questions.teacher_reference_number"), claim.teacher_reference_number, "teacher-reference-number"]

@@ -487,13 +487,13 @@ RSpec.describe Claim, type: :model do
     end
   end
 
-  describe "#address_verified?" do
+  describe "#address_from_govuk_verify?" do
     it "returns true if any address attributes are in the list of GOV.UK Verify fields" do
-      expect(Claim.new.address_verified?).to eq false
-      expect(Claim.new(govuk_verify_fields: ["payroll_gender"]).address_verified?).to eq false
+      expect(Claim.new.address_from_govuk_verify?).to eq false
+      expect(Claim.new(govuk_verify_fields: ["payroll_gender"]).address_from_govuk_verify?).to eq false
 
-      expect(Claim.new(govuk_verify_fields: ["address_line_1"]).address_verified?).to eq true
-      expect(Claim.new(govuk_verify_fields: ["address_line_1", "postcode"]).address_verified?).to eq true
+      expect(Claim.new(govuk_verify_fields: ["address_line_1"]).address_from_govuk_verify?).to eq true
+      expect(Claim.new(govuk_verify_fields: ["address_line_1", "postcode"]).address_from_govuk_verify?).to eq true
     end
   end
 
