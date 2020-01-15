@@ -47,7 +47,10 @@
           }
         ],
         "restartPolicy": "Always",
-        "osType": "Linux"
+        "osType": "Linux",
+        "networkProfile": {
+          "id": "[parameters('networkProfileId')]"
+        }
       }
     }
   ],
