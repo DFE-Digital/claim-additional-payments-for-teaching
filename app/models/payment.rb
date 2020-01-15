@@ -13,6 +13,7 @@ class Payment < ApplicationRecord
   PERSONAL_DETAILS_ATTRIBUTES_FORBIDDING_DISCREPANCIES = %i[national_insurance_number date_of_birth student_loan_plan bank_sort_code bank_account_number building_society_roll_number]
 
   delegate(*(PERSONAL_DETAILS_ATTRIBUTES_PERMITTING_DISCREPANCIES + PERSONAL_DETAILS_ATTRIBUTES_FORBIDDING_DISCREPANCIES), to: :claim_for_personal_details)
+  delegate :scheduled_payment_date, to: :payroll_run
 
   private
 

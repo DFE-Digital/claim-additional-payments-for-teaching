@@ -1,9 +1,9 @@
 class PaymentMailer < ApplicationMailer
   helper :application
 
-  def confirmation(payment, payment_date_timestamp)
+  def confirmation(payment)
     @payment = payment
-    @payment_date = Time.at(payment_date_timestamp).to_date
+    @payment_date = payment.scheduled_payment_date
     @display_name = [payment.first_name, payment.surname].join(" ")
 
     if payment.claims.size == 1

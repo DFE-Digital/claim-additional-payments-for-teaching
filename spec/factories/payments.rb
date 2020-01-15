@@ -2,6 +2,7 @@ FactoryBot.define do
   factory :payment do
     transient do
       claim_policies { [StudentLoans] }
+      scheduled_payment_date { Date.today }
     end
 
     claims do
@@ -30,6 +31,10 @@ FactoryBot.define do
       student_loan_repayment { 0 }
       tax { award_amount * 0.2 }
       net_pay { award_amount }
+
+      payroll_run do
+        create(:payroll_run, :confirmation_report_uploaded, scheduled_payment_date: scheduled_payment_date)
+      end
     end
   end
 end

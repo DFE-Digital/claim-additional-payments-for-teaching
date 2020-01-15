@@ -28,7 +28,7 @@ class PaymentConfirmation
 
       if errors.empty?
         payroll_run.payments.each do |payment|
-          PaymentMailer.confirmation(payment, scheduled_payment_date.to_time.to_i).deliver_later
+          PaymentMailer.confirmation(payment).deliver_later
           RecordPaymentJob.perform_later(payment)
         end
       else

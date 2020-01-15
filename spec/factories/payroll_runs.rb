@@ -28,6 +28,7 @@ FactoryBot.define do
 
     trait :confirmation_report_uploaded do
       confirmation_report_uploaded_by { "some-user-id" }
+      scheduled_payment_date { Date.today }
       payment_traits { %i[with_figures] }
     end
   end

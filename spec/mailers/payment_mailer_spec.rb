@@ -5,10 +5,9 @@ RSpec.describe PaymentMailer, type: :mailer do
   Policies.all.each do |policy|
     context "with a payment with a single #{policy} claim" do
       describe "#confirmation" do
-        let(:payment) { create(:payment, :with_figures, net_pay: 500.00, student_loan_repayment: 60, claims: [claim]) }
+        let(:payment) { create(:payment, :with_figures, net_pay: 500.00, student_loan_repayment: 60, claims: [claim], scheduled_payment_date: Date.parse("2019-01-01")) }
         let(:claim) { build(:claim, :submitted, policy: policy) }
-        let(:payment_date_timestamp) { Time.new(2019, 1, 1).to_i }
-        let(:mail) { PaymentMailer.confirmation(payment, payment_date_timestamp) }
+        let(:mail) { PaymentMailer.confirmation(payment) }
 
         it "sets the to address to the claimant's email address" do
           expect(mail.to).to eq([payment.email_address])
@@ -64,7 +63,7 @@ RSpec.describe PaymentMailer, type: :mailer do
 
   context "with a payment with multiple claims" do
     describe "#confirmation" do
-      let(:payment) { create(:payment, :with_figures, net_pay: 2500.00, student_loan_repayment: 60, claims: claims) }
+      let(:payment) { create(:payment, :with_figures, net_pay: 2500.00, student_loan_repayment: 60, claims: claims, scheduled_payment_date: Date.parse("2019-01-01")) }
       let(:student_loans_eligibility) { build(:student_loans_eligibility, :eligible, student_loan_repayment_amount: 500) }
       let(:claims) do
         personal_details = {
@@ -79,8 +78,7 @@ RSpec.describe PaymentMailer, type: :mailer do
           build(:claim, :approved, personal_details.merge(policy: MathsAndPhysics)),
         ]
       end
-      let(:payment_date_timestamp) { Time.new(2019, 1, 1).to_i }
-      let(:mail) { PaymentMailer.confirmation(payment, payment_date_timestamp) }
+      let(:mail) { PaymentMailer.confirmation(payment) }
 
       it "sets the to address to the claimant's email address" do
         expect(mail.to).to eq([payment.email_address])
