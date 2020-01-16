@@ -2,7 +2,7 @@ require "geckoboard"
 
 class Claim
   class GeckoboardEvent
-    attr_reader :claim, :event_type, :performed_at
+    attr_reader :claims, :event_type, :performed_at_method
 
     DATASET_FIELDS = [
       Geckoboard::StringField.new(:reference, name: "Reference"),
@@ -10,24 +10,26 @@ class Claim
       Geckoboard::DateTimeField.new(:performed_at, name: "Performed at"),
     ]
 
-    def initialize(claim, event_type, performed_at)
-      @claim = claim
+    def initialize(claim_or_claims, event_type, performed_at_method)
+      @claims = Array(claim_or_claims)
       @event_type = event_type
-      @performed_at = performed_at
+      @performed_at_method = performed_at_method
     end
 
     def record
-      dataset.post([data])
+      dataset.post(data)
     end
 
     private
 
     def data
-      {
-        reference: claim.reference,
-        policy: claim.policy.to_s,
-        performed_at: performed_at,
-      }
+      claims.map do |claim|
+        {
+          reference: claim.reference,
+          policy: claim.policy.to_s,
+          performed_at: claim.public_send(performed_at_method),
+        }
+      end
     end
 
     def client
