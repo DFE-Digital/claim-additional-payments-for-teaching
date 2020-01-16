@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+- Semantic Logger has been added to make log entries more concise and useful
+- Application logs can now be sent to Logstash for aggregation, analysis and
+  monitoring
+
 ## [Release 045] - 2020-01-16
 
 - Changed buttons on information-provided and eligibility confirmed pages to be

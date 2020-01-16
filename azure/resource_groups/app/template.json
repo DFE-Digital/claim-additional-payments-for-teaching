@@ -142,6 +142,12 @@
     "GECKOBOARD_API_KEY": {
       "type": "string"
     },
+    "LOGSTASH_HOST": {
+      "type": "string"
+    },
+    "LOGSTASH_PORT": {
+      "type": "int"
+    },
     "ADMIN_ALLOWED_IPS": {
       "type": "string"
     },
@@ -491,6 +497,14 @@
               {
                 "name": "GECKOBOARD_API_KEY",
                 "value": "[parameters('GECKOBOARD_API_KEY')]"
+              },
+              {
+                "name": "LOGSTASH_HOST",
+                "value": "[parameters('LOGSTASH_HOST')]"
+              },
+              {
+                "name": "LOGSTASH_PORT",
+                "value": "[parameters('LOGSTASH_PORT')]"
               },
               {
                 "name": "ADMIN_ALLOWED_IPS",

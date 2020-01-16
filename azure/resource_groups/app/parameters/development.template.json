@@ -156,6 +156,17 @@
         "secretName": "GeckoboardAPIKey"
       }
     },
+    "LOGSTASH_HOST": {
+      "reference": {
+        "keyVault": {
+          "id": "${keyVaultId}"
+        },
+        "secretName": "LogstashHost"
+      }
+    },
+    "LOGSTASH_PORT": {
+      "value": 23890
+    },
     "ADMIN_ALLOWED_IPS": {
       "reference": {
         "keyVault": {
