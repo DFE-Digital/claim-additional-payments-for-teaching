@@ -77,7 +77,7 @@ class Claim < ApplicationRecord
 
   has_one :check
 
-  belongs_to :eligibility, polymorphic: true
+  belongs_to :eligibility, polymorphic: true, dependent: :destroy
   accepts_nested_attributes_for :eligibility, update_only: true
 
   belongs_to :payment, optional: true
