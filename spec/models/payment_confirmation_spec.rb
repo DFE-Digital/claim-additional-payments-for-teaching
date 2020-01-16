@@ -79,19 +79,14 @@ RSpec.describe PaymentConfirmation do
       end
     end
 
-    it "sends each claim's reference, policy and payment date to Geckoboard" do
+    it "sends each claim's reference, policy and scheduled payment date to Geckoboard" do
       perform_enqueued_jobs do
         payment_confirmation.ingest
       end
 
-      payroll_run.claims.each do |paid_claim|
-        claim_data = {
-          reference: paid_claim.reference,
-          policy: paid_claim.policy.to_s,
-          performed_at: paid_claim.payment.updated_at.strftime("%Y-%m-%dT%H:%M:%S%:z"),
-        }
-        expect(dataset_post_stub.with(body: {data: [claim_data]})).to have_been_requested
-      end
+      expect(dataset_post_stub.with { |request|
+        request_body_matches_geckoboard_data_for_claims?(request, payroll_run.claims, :scheduled_payment_date)
+      }).to have_been_requested
     end
   end
 

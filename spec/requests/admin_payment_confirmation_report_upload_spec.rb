@@ -46,7 +46,7 @@ RSpec.describe "Admin Payment Confirmation Report upload" do
 
           expect(ActionMailer::Base.deliveries.count).to eq(2)
 
-          expect(dataset_post_stub).to have_been_requested.twice
+          expect(dataset_post_stub).to have_been_requested.once
         end
       end
 

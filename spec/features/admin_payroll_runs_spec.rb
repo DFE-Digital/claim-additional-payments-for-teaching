@@ -139,6 +139,6 @@ RSpec.feature "Payroll" do
       "We’re paying your claim to get back your student loan repayments, reference number: #{payroll_run.claims[1].reference}",
     ])
 
-    expect(dataset_post_stub).to have_been_requested.twice
+    expect(dataset_post_stub).to have_been_requested.once
   end
 end
