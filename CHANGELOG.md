@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+- Changed buttons on information-provided and eligibility confirmed pages to be
+  actual buttons
 - Check your answers page now has ARIA labels on the change buttons so screen
   readers will now tell users what they will change by visiting the link
 - Removed unnecessary tags on main and footer elements that were causing
