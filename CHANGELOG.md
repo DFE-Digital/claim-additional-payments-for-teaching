@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+- Check your answers page now has ARIA labels on the change buttons so screen
+  readers will now tell users what they will change by visiting the link
 - Removed unnecessary tags on main and footer elements that were causing
   warnings on validators
 - A Payment date is set when a payroll run is ingested
