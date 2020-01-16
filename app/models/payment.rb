@@ -9,7 +9,7 @@ class Payment < ApplicationRecord
 
   validate :personal_details_must_be_consistent
 
-  PERSONAL_DETAILS_ATTRIBUTES_PERMITTING_DISCREPANCIES = %i[first_name middle_name surname national_insurance_number payroll_gender email_address address_line_1 address_line_2 address_line_3 address_line_4 postcode has_student_loan banking_name]
+  PERSONAL_DETAILS_ATTRIBUTES_PERMITTING_DISCREPANCIES = %i[first_name middle_name surname payroll_gender email_address address_line_1 address_line_2 address_line_3 address_line_4 postcode has_student_loan banking_name]
   PERSONAL_DETAILS_ATTRIBUTES_FORBIDDING_DISCREPANCIES = %i[national_insurance_number date_of_birth student_loan_plan bank_sort_code bank_account_number building_society_roll_number]
 
   delegate(*(PERSONAL_DETAILS_ATTRIBUTES_PERMITTING_DISCREPANCIES + PERSONAL_DETAILS_ATTRIBUTES_FORBIDDING_DISCREPANCIES), to: :claim_for_personal_details)
