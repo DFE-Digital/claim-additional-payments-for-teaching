@@ -84,15 +84,9 @@ RSpec.describe PaymentConfirmation do
         payment_confirmation.ingest
       end
 
-      claim_data = payroll_run.claims.map { |paid_claim|
-        {
-          reference: paid_claim.reference,
-          policy: paid_claim.policy.to_s,
-          performed_at: paid_claim.scheduled_payment_date.strftime("%Y-%m-%dT%H:%M:%S%:z"),
-        }
-      }
-
-      expect(dataset_post_stub.with(body: {data: claim_data})).to have_been_requested
+      expect(dataset_post_stub.with { |request|
+        request_body_matches_geckoboard_data_for_claims?(request, payroll_run.claims, :scheduled_payment_date)
+      }).to have_been_requested
     end
   end
 

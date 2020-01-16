@@ -12,12 +12,9 @@ RSpec.describe Claim::GeckoboardEvent, type: :model do
 
       event.record
 
-      expected_data_payload = {
-        reference: claim.reference,
-        policy: claim.policy.to_s,
-        performed_at: claim.created_at.strftime("%Y-%m-%dT%H:%M:%S%:z"),
-      }
-      expect(dataset_post_stub.with(body: {data: [expected_data_payload]})).to have_been_requested
+      expect(dataset_post_stub.with { |request|
+        request_body_matches_geckoboard_data_for_claims?(request, [claim], :created_at)
+      }).to have_been_requested
     end
   end
 end

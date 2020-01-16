@@ -39,4 +39,17 @@ module GeckoboardHelpers
   def stub_geckoboard_dataset_post(dataset_id)
     stub_request(:post, "https://api.geckoboard.com/datasets/#{dataset_id}/data")
   end
+
+  def request_body_matches_geckoboard_data_for_claims?(request, claims, performed_at_method)
+    expected_claims_data = claims.map { |claim|
+      {
+        "reference" => claim.reference,
+        "policy" => claim.policy.to_s,
+        "performed_at" => claim.public_send(performed_at_method).strftime("%Y-%m-%dT%H:%M:%S%:z"),
+      }
+    }.sort_by { |d| d["reference"] }
+
+    data = JSON.parse(request.body)["data"].sort_by { |d| d["reference"] }
+    expected_claims_data == data
+  end
 end

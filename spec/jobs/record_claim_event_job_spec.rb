@@ -11,19 +11,13 @@ RSpec.describe RecordClaimEventJob do
     dataset = "claims.#{event_type}.#{environment_name}"
 
     ClimateControl.modify ENVIRONMENT_NAME: environment_name do
-      claim_data = claims.map { |claim|
-        {
-          reference: claim.reference,
-          policy: claim.policy.to_s,
-          performed_at: claim.submitted_at.strftime("%Y-%m-%dT%H:%M:%S%:z"),
-        }
-      }
-
       dataset_post_stub = stub_geckoboard_dataset_update(dataset)
 
       subject.perform(claims.pluck(:id), event_type, :submitted_at)
 
-      expect(dataset_post_stub.with(body: {data: claim_data})).to have_been_requested
+      expect(dataset_post_stub.with { |request|
+        request_body_matches_geckoboard_data_for_claims?(request, claims, :submitted_at)
+      }).to have_been_requested
     end
   end
 end
