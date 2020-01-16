@@ -5,6 +5,7 @@
     <h1 class="govuk-heading-xl">You are eligible to claim a payment for teaching maths or physics</h1>
     <p class="govuk-body">Based on your answers you can claim £2,000 for teaching maths or physics.</p>
 
-    <%= link_to "Continue", claim_path(current_policy_routing_name, next_slug), class: "govuk-button", role: "button", data: { module: "govuk-button" } %>
+    <%= button_to "Continue", claim_path(current_policy_routing_name, next_slug), method: :get, class: "govuk-button" %>
+
   </div>
 </div>
