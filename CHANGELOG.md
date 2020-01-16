@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+## [Release 045] - 2020-01-16
+
 - Changed buttons on information-provided and eligibility confirmed pages to be
   actual buttons
 - Check your answers page now has ARIA labels on the change buttons so screen
@@ -13,6 +15,7 @@ The format is based on [Keep a Changelog]
 - Removed unnecessary tags on main and footer elements that were causing
   warnings on validators
 - A Payment date is set when a payroll run is ingested
+- Backfill data about historic claims in Geckoboard
 
 ## [Release 044] - 2020-01-14
 
@@ -356,6 +359,8 @@ The format is based on [Keep a Changelog]
 
 [unreleased]:
   https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-044...HEAD
+[release 045]:
+  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-044...release-045
 [release 044]:
   https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-043...release-044
 [release 043]:
