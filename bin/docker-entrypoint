@@ -3,7 +3,7 @@ set -e
 
 if [ "$RAILS_ENV" != "production" ]; then
   echo "In a non-production environment: initializing database"
-  bundle exec rake db:create db:schema:load
+  bundle exec rake db:create db:schema:load:with_data
 else
   DB_STATUS=$(bundle exec rake db:migrate:status 2>&1 | tail -n 1)
 
