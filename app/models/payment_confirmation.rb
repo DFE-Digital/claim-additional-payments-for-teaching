@@ -31,7 +31,11 @@ class PaymentConfirmation
           PaymentMailer.confirmation(payment).deliver_later
         end
 
-        RecordPaymentJob.perform_later(payroll_run.claims.pluck(:id))
+        RecordClaimEventJob.perform_later(
+          payroll_run.claims.pluck(:id),
+          :paid,
+          :scheduled_payment_date
+        )
       else
         raise ActiveRecord::Rollback
       end
