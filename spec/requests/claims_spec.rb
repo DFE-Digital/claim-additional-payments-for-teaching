@@ -166,7 +166,7 @@ RSpec.describe "Claims", type: :request do
 
       context "when a field has come from Verify" do
         before do
-          in_progress_claim.update!(verified_fields: ["payroll_gender"])
+          in_progress_claim.update!(govuk_verify_fields: ["payroll_gender"])
         end
 
         it "raises an error when trying to update via the controller" do

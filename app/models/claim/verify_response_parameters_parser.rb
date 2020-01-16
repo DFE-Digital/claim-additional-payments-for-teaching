@@ -10,7 +10,7 @@ class Claim
   # As well as keys for the personal information of the user (name, address,
   # etc) the returned Hash includes two additional keys:
   #
-  #   verified_fields – these are the keys for the attributes that have come
+  #   govuk_verify_fields – these are the keys for the attributes that have come
   #                     back in the Verify response. Recording these allows us
   #                     to determine which attributes came from Verify and
   #                     therefore should not be editable by the user.
@@ -29,7 +29,7 @@ class Claim
     end
 
     def attributes
-      identity_attributes.merge(verified_fields: verified_fields, verify_response: @response_parameters)
+      identity_attributes.merge(govuk_verify_fields: govuk_verify_fields, verify_response: @response_parameters)
     end
 
     def gender
@@ -41,15 +41,15 @@ class Claim
     end
 
     def first_name
-      most_recent_verified("firstNames")
+      most_recent_value("firstNames")
     end
 
     def surname
-      most_recent_verified("surnames")
+      most_recent_value("surnames")
     end
 
     def middle_name
-      most_recent_verified("middleNames", required: false)
+      most_recent_value("middleNames", required: false)
     end
 
     def postcode
@@ -78,12 +78,15 @@ class Claim
       @response_parameters.fetch("attributes")
     end
 
-    def most_recent_verified(attribute_name, required: true)
-      raise MissingResponseAttribute, "No verified value found for #{attribute_name}" if required && no_verified_values?(attribute_name)
+    def most_recent_value(attribute_name, required: true, verified: true)
+      raise MissingResponseAttribute, "No verified value found for #{attribute_name}" if required && verified && no_verified_values?(attribute_name)
 
-      verify_attributes.fetch(attribute_name)
-        .select { |value| value["verified"] }
-        .max_by { |value| Date.parse(value.fetch("from", Date.today.to_s)) }&.fetch("value")
+      sorted_by_date = verify_attributes.fetch(attribute_name)
+        .sort_by { |value| Date.parse(value.fetch("from", Date.today.to_s)) }
+
+      sorted_by_date.select! { |value| value["verified"] } if verified
+
+      sorted_by_date.last&.fetch("value")
     end
 
     def no_verified_values?(attribute_name)
@@ -91,7 +94,7 @@ class Claim
     end
 
     def most_recent_address
-      @most_recent_address ||= most_recent_verified("addresses", required: false)
+      @most_recent_address ||= most_recent_value("addresses", required: false, verified: false)
     end
 
     def address_lines
@@ -113,7 +116,7 @@ class Claim
       }.compact
     end
 
-    def verified_fields
+    def govuk_verify_fields
       identity_attributes.keys
     end
   end

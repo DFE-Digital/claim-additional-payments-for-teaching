@@ -43,7 +43,7 @@ RSpec.describe ClaimMailer, type: :mailer do
         end
 
         it "adjusts the content for claims that need manual identity confirmation" do
-          claim.update!(verified_fields: [])
+          claim.update!(govuk_verify_fields: [])
 
           expect(mail.subject).to include("been received")
           expect(mail.body.encoded).to include("We've received your claim")

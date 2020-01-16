@@ -35,7 +35,7 @@ describe ClaimsHelper do
         national_insurance_number: "QQ123456C",
         email_address: "test@email.com",
         payroll_gender: :female,
-        verified_fields: [
+        govuk_verify_fields: [
           "first_name",
           "surname",
           "address_line_1",
@@ -61,10 +61,10 @@ describe ClaimsHelper do
     end
 
     it "excludes questions/answers not acquired from GOV.UK Verify" do
-      claim.verified_fields = []
+      claim.govuk_verify_fields = []
       expect(helper.verify_answers(claim)).to eq []
 
-      claim.verified_fields = ["first_name", "surname", "date_of_birth"]
+      claim.govuk_verify_fields = ["first_name", "surname", "date_of_birth"]
 
       expected_answers = [
         ["First name", "Jo"],
@@ -109,7 +109,7 @@ describe ClaimsHelper do
     end
 
     it "excludes questions/answers that were acquired from GOV.UK Verify" do
-      claim.verified_fields = ["first_name", "surname", "date_of_birth", "payroll_gender", "postcode"]
+      claim.govuk_verify_fields = ["first_name", "surname", "date_of_birth", "payroll_gender", "postcode"]
 
       expected_answers = [
         [I18n.t("questions.teacher_reference_number"), "1234567", "teacher-reference-number"],

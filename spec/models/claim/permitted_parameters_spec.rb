@@ -51,7 +51,7 @@ RSpec.describe Claim::PermittedParameters do
     end
 
     it "will exclude any attributes that have been set based on a GOV.UK Verify response" do
-      student_loan_claim.verified_fields = ["payroll_gender", "address_line_1"]
+      student_loan_claim.govuk_verify_fields = ["payroll_gender", "address_line_1"]
 
       expected_attributes = editable_attributes_for_student_loans_claim - [:address_line_1, :payroll_gender]
 

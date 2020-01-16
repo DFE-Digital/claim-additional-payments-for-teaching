@@ -172,8 +172,8 @@ RSpec.describe Claim::VerifyResponseParametersParser do
   end
 
   describe "the address_line_X methods" do
-    it "returns address lines that are present from the most recent 'verified' address" do
-      short_address_parameters = sample_parsed_verify_response({addresses: [{value: {lines: ["Old Street", "Old Town"], postCode: "M21 1GP"}, verified: true}]})
+    it "returns address lines that are present from the most recent address" do
+      short_address_parameters = sample_parsed_verify_response({addresses: [{value: {lines: ["Old Street", "Old Town"], postCode: "M21 1GP"}}]})
       parser = Claim::VerifyResponseParametersParser.new(short_address_parameters)
       expect(parser.address_line_1).to eq "Old Street"
       expect(parser.address_line_2).to eq "Old Town"
@@ -183,17 +183,16 @@ RSpec.describe Claim::VerifyResponseParametersParser do
       full_address_parameters = sample_parsed_verify_response({
         addresses: [
           {
-            value: {lines: ["Some house", "Verified Street", "Verified Town", "Verified County"], postCode: "M1 7GL"},
-            verified: true,
+            value: {lines: ["Some house", "Unverified Street", "Unverified Town", "Unverified County"], postCode: "M1 7GL"},
             from: "2018-08-08",
           },
         ],
       })
       parser = Claim::VerifyResponseParametersParser.new(full_address_parameters)
       expect(parser.address_line_1).to eq "Some house"
-      expect(parser.address_line_2).to eq "Verified Street"
-      expect(parser.address_line_3).to eq "Verified Town"
-      expect(parser.address_line_4).to eq "Verified County"
+      expect(parser.address_line_2).to eq "Unverified Street"
+      expect(parser.address_line_3).to eq "Unverified Town"
+      expect(parser.address_line_4).to eq "Unverified County"
     end
 
     it "returns nil if there are no 'addresses'" do
@@ -216,7 +215,7 @@ RSpec.describe Claim::VerifyResponseParametersParser do
         address_line_1: "Verified Street",
         address_line_2: "Verified Town",
         postcode: "M12 345",
-        verified_fields: %i[first_name surname date_of_birth address_line_1 address_line_2 postcode],
+        govuk_verify_fields: %i[first_name surname date_of_birth address_line_1 address_line_2 postcode],
         verify_response: sample_parsed_verify_response,
       }
 

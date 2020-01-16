@@ -93,7 +93,7 @@ en:
     student_loan_start_date:
       one_course: "Select when the first year of your higher education course started"
       two_or_more_courses: "Select when the first year of each of your higher education courses started"
-  verified_fields:
+  govuk_verify_fields:
     first_name: "first name"
     middle_name: "middle name"
     surname: "surname"

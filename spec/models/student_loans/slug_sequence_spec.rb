@@ -52,34 +52,34 @@ RSpec.describe StudentLoans::SlugSequence do
     end
 
     it "excludes the “gender” slug if the claim's payroll_gender were acquired supplied by GOV.UK Verify" do
-      claim.verified_fields = []
+      claim.govuk_verify_fields = []
       expect(slug_sequence.slugs).to include("gender")
 
-      claim.verified_fields = ["payroll_gender"]
+      claim.govuk_verify_fields = ["payroll_gender"]
       expect(slug_sequence.slugs).to_not include("gender")
     end
 
     it "excludes the “name” slug if the name has been acquired from GOV.UK Verify" do
-      claim.verified_fields = []
+      claim.govuk_verify_fields = []
       expect(slug_sequence.slugs).to include("name")
 
-      claim.verified_fields = ["first_name"]
+      claim.govuk_verify_fields = ["first_name"]
       expect(slug_sequence.slugs).to_not include("name")
     end
 
     it "excludes the “address” slug if any address fields were acquired from GOV.UK Verify" do
-      claim.verified_fields = []
+      claim.govuk_verify_fields = []
       expect(slug_sequence.slugs).to include("address")
 
-      claim.verified_fields = ["postcode"]
+      claim.govuk_verify_fields = ["postcode"]
       expect(slug_sequence.slugs).to_not include("address")
     end
 
     it "excludes the “date-of-birth” slug if the date_of_birth has been acquired from GOV.UK Verify" do
-      claim.verified_fields = []
+      claim.govuk_verify_fields = []
       expect(slug_sequence.slugs).to include("date-of-birth")
 
-      claim.verified_fields = ["date_of_birth"]
+      claim.govuk_verify_fields = ["date_of_birth"]
       expect(slug_sequence.slugs).to_not include("date-of-birth")
     end
   end

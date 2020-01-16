@@ -198,7 +198,7 @@ RSpec.feature "Changing the answers on a submittable claim" do
     end
 
     scenario "user cannot change the value of an identity field that was acquired from Verify" do
-      claim.update!(verified_fields: ["payroll_gender"])
+      claim.update!(govuk_verify_fields: ["payroll_gender"])
       visit claim_path(StudentLoans.routing_name, "check-your-answers")
 
       expect(page).to_not have_content(I18n.t("questions.payroll_gender"))
@@ -210,7 +210,7 @@ RSpec.feature "Changing the answers on a submittable claim" do
     end
 
     scenario "user can change the answer to identity questions that were not acquired from GOV.UK Verify" do
-      claim.update!(verified_fields: ["first_name", "surname", "address_line_1", "postcode", "date_of_birth"])
+      claim.update!(govuk_verify_fields: ["first_name", "surname", "address_line_1", "postcode", "date_of_birth"])
       visit claim_path(StudentLoans.routing_name, "check-your-answers")
 
       expect(page).to have_content("GOV.UK Verify details")
@@ -225,7 +225,7 @@ RSpec.feature "Changing the answers on a submittable claim" do
     end
 
     scenario "user can change identity details when GOV.UK Verify was skipped" do
-      claim.update!(verified_fields: [])
+      claim.update!(govuk_verify_fields: [])
       visit claim_path(StudentLoans.routing_name, "check-your-answers")
 
       expect(page).not_to have_content("GOV.UK Verify details")

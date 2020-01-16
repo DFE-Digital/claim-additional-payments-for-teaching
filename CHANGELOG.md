@@ -9,6 +9,7 @@ The format is based on [Keep a Changelog]
 - Semantic Logger has been added to make log entries more concise and useful
 - Application logs can now be sent to Logstash for aggregation, analysis and
   monitoring
+- Allow unverified addresses from GOV.UK Verify responses
 
 ## [Release 045] - 2020-01-16
 

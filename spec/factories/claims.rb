@@ -44,14 +44,14 @@ FactoryBot.define do
     end
 
     trait :verified do
-      verified_fields { %w[first_name surname address_line_1 postcode date_of_birth payroll_gender] }
+      govuk_verify_fields { %w[first_name surname address_line_1 postcode date_of_birth payroll_gender] }
       verify_response { {"scenario" => "IDENTITY_VERIFIED", "pid" => "123", "levelOfAssurance" => "LEVEL_2", "attributes" => {}} }
     end
 
     trait :unverified do
       submitted
 
-      verified_fields { [] }
+      govuk_verify_fields { [] }
       verify_response { nil }
     end
 
