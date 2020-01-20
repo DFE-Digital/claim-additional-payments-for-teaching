@@ -10,6 +10,7 @@ The format is based on [Keep a Changelog]
 - Application logs can now be sent to Logstash for aggregation, analysis and
   monitoring
 - Allow unverified addresses from GOV.UK Verify responses
+- Unsubmitted claims are purged every 24 hours
 
 ## [Release 045] - 2020-01-16
 

@@ -77,7 +77,7 @@ class Claim < ApplicationRecord
 
   has_one :check
 
-  belongs_to :eligibility, polymorphic: true
+  belongs_to :eligibility, polymorphic: true, dependent: :destroy
   accepts_nested_attributes_for :eligibility, update_only: true
 
   belongs_to :payment, optional: true
@@ -142,6 +142,7 @@ class Claim < ApplicationRecord
   before_save :normalise_bank_account_number, if: :bank_account_number_changed?
   before_save :normalise_bank_sort_code, if: :bank_sort_code_changed?
 
+  scope :unsubmitted, -> { where(submitted_at: nil) }
   scope :submitted, -> { where.not(submitted_at: nil) }
   scope :awaiting_checking, -> { submitted.left_outer_joins(:check).where(checks: {claim_id: nil}) }
   scope :approved, -> { joins(:check).where("checks.result" => :approved) }
