@@ -8,6 +8,9 @@ class Claim
       Geckoboard::StringField.new(:reference, name: "Reference"),
       Geckoboard::StringField.new(:policy, name: "Policy"),
       Geckoboard::DateTimeField.new(:submitted_at, name: "Submitted at"),
+      Geckoboard::StringField.new(:checked, name: "Checked"),
+      Geckoboard::DateTimeField.new(:checked_at, name: "Checked at"),
+      Geckoboard::StringField.new(:check_result, name: "Check result"),
       Geckoboard::StringField.new(:paid, name: "Paid"),
       Geckoboard::DateTimeField.new(:paid_at, name: "Paid at"),
     ]
@@ -31,6 +34,9 @@ class Claim
           reference: claim.reference,
           policy: claim.policy.to_s,
           submitted_at: claim.submitted_at,
+          checked: claim.check.present?.to_s,
+          checked_at: claim.check.present? ? claim.check.created_at : placeholder_date_for_nil_value,
+          check_result: claim.check.present? ? claim.check.result : "",
           paid: claim.scheduled_payment_date.present?.to_s,
           paid_at: claim.scheduled_payment_date.presence || placeholder_date_for_nil_value,
         }

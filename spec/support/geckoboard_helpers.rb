@@ -21,6 +21,18 @@ module GeckoboardHelpers
         name: "Submitted at",
         type: "datetime",
       },
+      checked: {
+        name: "Checked",
+        type: "string",
+      },
+      checked_at: {
+        name: "Checked at",
+        type: "datetime",
+      },
+      check_result: {
+        name: "Check result",
+        type: "string",
+      },
       paid: {
         name: "Paid",
         type: "string",
@@ -55,6 +67,9 @@ module GeckoboardHelpers
         "reference" => claim.reference,
         "policy" => claim.policy.to_s,
         "submitted_at" => claim.submitted_at&.strftime("%Y-%m-%dT%H:%M:%S%:z"),
+        "checked" => claim.check.present?.to_s,
+        "checked_at" => (claim.check.present? ? claim.check.created_at : DateTime.parse("1970-01-01")).strftime("%Y-%m-%dT%H:%M:%S%:z"),
+        "check_result" => claim.check.present? ? claim.check.result : "",
         "paid" => claim.payment.present?.to_s,
         "paid_at" => (claim.payment.present? ? claim.scheduled_payment_date : DateTime.parse("1970-01-01")).strftime("%Y-%m-%dT%H:%M:%S%:z"),
       }
