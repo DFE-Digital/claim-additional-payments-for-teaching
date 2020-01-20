@@ -27,12 +27,13 @@ module GeckoboardHelpers
       .with(
         body: {
           fields: dataset_fields,
+          unique_by: ["reference"],
         }.to_json
       )
       .to_return(status: 200, body: {
         id: dataset_id,
         fields: dataset_fields,
-        unique_by: ["timestamp"],
+        unique_by: ["reference"],
       }.to_json)
   end
 

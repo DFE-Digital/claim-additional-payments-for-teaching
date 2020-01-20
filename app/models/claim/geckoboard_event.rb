@@ -40,7 +40,9 @@ class Claim
     end
 
     def dataset
-      @dataset ||= client.datasets.find_or_create(dataset_name, fields: DATASET_FIELDS)
+      @dataset ||= client.datasets.find_or_create(dataset_name,
+        fields: DATASET_FIELDS,
+        unique_by: [:reference])
     end
 
     def dataset_name
