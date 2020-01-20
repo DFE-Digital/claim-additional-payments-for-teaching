@@ -1,19 +1,39 @@
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-full">
     <div class="govuk-panel govuk-panel--interruption">
-      <h1 class="govuk-heading-xl">
-        You have a claim in progress <%= policy_description(current_claim.policy.routing_name) %>.
-      </h1>
+      <%= form_with url: start_new_path(policy: params[:policy]), method: :post do |form| %>
+        <fieldset class="govuk-fieldset" aria-describedby="start_new_claim">
 
-      <h2 class="govuk-heading-m">
-        You will lose your progress on this claim if you start a different claim before you send it.
-      </h2>
+            <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl">
+              <h1 class="govuk-heading-xl" id="start_new_claim">
+                Are you sure you want to start a claim <%= policy_description(params[:policy]) %>?
+              </h1>
+            </legend>
+
+          <h2 class="govuk-heading-m">
+            You have a claim in progress <%= policy_description(current_claim.policy.routing_name) %>.
+          </h2>
+
+          <h2 class="govuk-heading-m">
+            You will lose your progress on this claim if you start a different claim before you send it.
+          </h2>
+
+          <div class="govuk-radios govuk-!-margin-bottom-9">
+            <div class="govuk-radios__item">
+              <%= form.radio_button(:start_new_claim, false, class: "govuk-radios__input") %>
+              <%= form.label :start_new_claim_false, "No, finish the claim I have in progress", class: "govuk-label govuk-radios__label" %>
+            </div>
+            <div class="govuk-radios__item">
+              <%= form.radio_button(:start_new_claim, true, class: "govuk-radios__input") %>
+              <%= form.label :start_new_claim_true, "Yes, start claim #{policy_description(params[:policy])} and lose my progress on my first claim", class: "govuk-label govuk-radios__label" %>
+            </div>
+          </div>
+
+        </fieldset>
+
+        <%= form.submit "Submit", class: "govuk-button" %>
+
+      <% end %>
     </div>
-
-    <p class="govuk-body govuk-!-margin-top-7 govuk-!-margin-bottom-0">
-      <%= link_to "Finish claim in progress", claim_path(current_claim.policy.routing_name, slug: session[:current_slug]), class: "govuk-button" %>
-    </p>
-
-    <%= button_to "Start claim #{policy_description(params[:policy])}", session_path(policy: params[:policy]), method: :delete, class: "govuk-button govuk-button--secondary" %>
   </div>
 </div>

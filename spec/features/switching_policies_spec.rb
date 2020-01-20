@@ -10,13 +10,15 @@ RSpec.feature "Switching policies" do
     expect(page.title).to have_text(I18n.t("maths_and_physics.policy_name"))
     expect(page.find("header")).to have_text(I18n.t("maths_and_physics.policy_name"))
 
-    click_on "Start claim for a payment for teaching maths or physics"
+    choose "Yes, start claim for a payment for teaching maths or physics and lose my progress on my first claim"
+    click_on "Submit"
 
     expect(page).to have_text(I18n.t("maths_and_physics.questions.teaching_maths_or_physics"))
   end
 
   scenario "a user can choose to continue their claim" do
-    click_on "Finish claim in progress"
+    choose "No, finish the claim I have in progress"
+    click_on "Submit"
 
     expect(page).to have_text(I18n.t("student_loans.questions.claim_school"))
   end
