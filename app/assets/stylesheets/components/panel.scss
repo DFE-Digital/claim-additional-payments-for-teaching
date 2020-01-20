@@ -24,15 +24,6 @@
     color: govuk-colour("white");
   }
 
-  a,
-  a:link,
-  a:visited {
-    color: govuk-colour("white");
-  }
-  a:hover {
-    color: govuk-colour("light-grey");
-  }
-
   .govuk-list--definition {
     dt,
     dd {
@@ -40,18 +31,9 @@
     }
   }
 
-  .govuk-button:not(.govuk-button--link) {
+  .govuk-button {
+    color: govuk-colour("black");
     background-color: govuk-colour("white");
-    box-shadow: 0 2px 0 govuk-colour("black");
-
-    &:link,
-    &:visited {
-      color: govuk-colour("blue");
-    }
-
-    &:hover,
-    &:focus {
-      background-color: govuk-colour("light-grey");
-    }
+    box-shadow: 0 2px 0 govuk-colour("dark-blue");
   }
 }

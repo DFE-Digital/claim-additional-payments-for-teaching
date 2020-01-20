@@ -45,6 +45,15 @@ class ClaimsController < BasePublicController
   def existing_session
   end
 
+  def start_new
+    if ActiveModel::Type::Boolean.new.cast(params[:start_new_claim]) == true
+      clear_claim_session
+      redirect_to(new_claim_path(params[:policy]))
+    else
+      redirect_to(claim_path(current_claim.policy.routing_name, slug: session[:current_slug]))
+    end
+  end
+
   private
 
   helper_method :next_slug
