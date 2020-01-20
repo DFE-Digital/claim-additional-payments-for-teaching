@@ -39,6 +39,10 @@
     },
     "databaseServerId": {
       "type": "string"
+    },
+    "enableAlerts": {
+      "type": "bool",
+      "defaultValue": true
     }
   },
   "variables": {
@@ -123,6 +127,9 @@
           },
           "appServicePlanId": {
             "value": "[parameters('appServicePlanId')]"
+          },
+          "enableAlerts": {
+            "value": "[parameters('enableAlerts')]"
           }
         }
       }
@@ -147,6 +154,9 @@
           },
           "databaseServerId": {
             "value": "[parameters('databaseServerId')]"
+          },
+          "enableAlerts": {
+            "value": "[parameters('enableAlerts')]"
           }
         }
       }
@@ -174,6 +184,9 @@
           },
           "appServicePlanId": {
             "value": "[parameters('vspAppServicePlanId')]"
+          },
+          "enableAlerts": {
+            "value": "[parameters('enableAlerts')]"
           }
         }
       }
