@@ -11,6 +11,7 @@ The format is based on [Keep a Changelog]
   monitoring
 - Allow unverified addresses from GOV.UK Verify responses
 - Unsubmitted claims are purged every 24 hours
+- Batch Geckoboard data when submitting to the API
 
 ## [Release 045] - 2020-01-16
 

@@ -9,6 +9,7 @@ class Claim
       Geckoboard::StringField.new(:policy, name: "Policy"),
       Geckoboard::DateTimeField.new(:performed_at, name: "Performed at"),
     ]
+    BATCH_SIZE = 500
 
     def initialize(claim_or_claims, event_type, performed_at_method)
       @claims = Array(claim_or_claims)
@@ -17,12 +18,14 @@ class Claim
     end
 
     def record
-      dataset.post(data)
+      batched_claims.each do |batch|
+        dataset.post(data_for_claims(batch))
+      end
     end
 
     private
 
-    def data
+    def data_for_claims(claims)
       claims.map do |claim|
         {
           reference: claim.reference,
@@ -37,7 +40,7 @@ class Claim
     end
 
     def dataset
-      client.datasets.find_or_create(dataset_name, fields: DATASET_FIELDS)
+      @dataset ||= client.datasets.find_or_create(dataset_name, fields: DATASET_FIELDS)
     end
 
     def dataset_name
@@ -46,6 +49,10 @@ class Claim
         event_type,
         ENV.fetch("ENVIRONMENT_NAME"),
       ].join(".")
+    end
+
+    def batched_claims
+      claims.each_slice(BATCH_SIZE).to_a
     end
   end
 end
