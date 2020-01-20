@@ -9,6 +9,9 @@
     "vnetAddressSpaceCIDR": {
       "type": "string"
     },
+    "defaultSubnetAddressPrefix": {
+      "type": "string"
+    },
     "workerSubnetAddressPrefix": {
       "type": "string"
     }
@@ -44,6 +47,25 @@
           },
           "subnetConfiguration": {
             "value": [
+              {
+                "name": "default",
+                "properties": {
+                  "addressPrefix": "[parameters('defaultSubnetAddressPrefix')]",
+                  "serviceEndpoints": [
+                    {
+                      "service": "Microsoft.Storage",
+                      "locations": ["westeurope", "northeurope"]
+                    },
+                    {
+                      "service": "Microsoft.KeyVault",
+                      "locations": ["westeurope"]
+                    }
+                  ],
+                  "delegations": [],
+                  "privateEndpointNetworkPolicies": "Enabled",
+                  "privateLinkServiceNetworkPolicies": "Enabled"
+                }
+              },
               {
                 "name": "[variables('workerSubnetName')]",
                 "properties": {
@@ -106,6 +128,10 @@
     "workerNetworkProfileId": {
       "type": "string",
       "value": "[resourceId('Microsoft.Network/networkProfiles', variables('workerNetworkProfileName'))]"
+    },
+    "defaultSubnetId": {
+      "type": "string",
+      "value": "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('vnetName'), 'default')]"
     }
   }
 }

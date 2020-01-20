@@ -5,6 +5,9 @@
     "vnetAddressSpaceCIDR": {
       "value": "11.0.3.0/24"
     },
+    "defaultSubnetAddressPrefix": {
+      "value": "11.0.3.16/28"
+    },
     "workerSubnetAddressPrefix": {
       "value": "11.0.3.0/28"
     }

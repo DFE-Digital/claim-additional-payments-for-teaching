@@ -2,9 +2,6 @@
   "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
   "contentVersion": "1.0.0.0",
   "parameters": {
-    "storageAccountName": {
-      "type": "string"
-    },
     "databaseServerName": {
       "type": "string"
     },
@@ -19,68 +16,66 @@
     },
     "alertEmailAddress": {
       "type": "string"
+    },
+    "postgresSku": {
+      "type": "object",
+      "defaultValue": {
+        "name": "GP_Gen5_2",
+        "tier": "GeneralPurpose",
+        "size": 5120,
+        "family": "Gen5",
+        "capacity": 2
+      }
     }
   },
   "variables": {
     "platformBuildingBlocksDeploymentUrlBase": "https://raw.githubusercontent.com/DFE-Digital/bat-platform-building-blocks/master/templates/",
 
-    "databaseServerDeploymentName": "[concat(deployment().name, '-database-server')]",
     "databaseDeploymentName": "[concat(deployment().name, '-database')]",
-    "storageAccountDeploymentName": "[concat(deployment().name, '-storage-account')]"
+
+    "securityAlertPolicyName": "[concat(parameters('databaseServerName'), '-DefaultSecurityAlert')]"
   },
   "resources": [
     {
-      "type": "Microsoft.Resources/deployments",
-      "apiVersion": "2017-05-10",
-      "name": "[variables('storageAccountDeploymentName')]",
+      "name": "[parameters('databaseServerName')]",
+      "type": "Microsoft.DBforPostgreSQL/servers",
+      "apiVersion": "2017-12-01",
+      "location": "[resourceGroup().location]",
+      "tags": {},
+      "sku": "[parameters('postgresSku')]",
       "properties": {
-        "mode": "Incremental",
-        "templateLink": {
-          "uri": "[concat(variables('platformBuildingBlocksDeploymentUrlBase'), 'storage-account.json')]",
-          "contentVersion": "1.0.0.0"
+        "storageProfile": {
+          "storageMB": "[parameters('postgresSku').size]",
+          "backupRetentionDays": 35,
+          "geoRedundantBackup": "disabled",
+          "storageAutoGrow": "disabled"
         },
-        "parameters": {
-          "storageAccountName": {
-            "value": "[parameters('storageAccountName')]"
-          }
+        "version": "9.6",
+        "sslEnforcement": "Enabled",
+        "administratorLogin": "[parameters('databaseUsername')]",
+        "administratorLoginPassword": "[parameters('databasePassword')]"
+      },
+      "resources": [
+        {
+          "name": "[variables('securityAlertPolicyName')]",
+          "type": "securityAlertPolicies",
+          "apiVersion": "2017-12-01",
+          "properties": {
+            "state": "Enabled",
+            "disabledAlerts": [],
+            "emailAddresses": ["[parameters('alertEmailAddress')]"],
+            "emailAccountAdmins": false,
+            "retentionDays": 90
+          },
+          "dependsOn": ["[parameters('databaseServerName')]"]
         }
-      }
-    },
-    {
-      "type": "Microsoft.Resources/deployments",
-      "apiVersion": "2017-05-10",
-      "name": "[variables('databaseServerDeploymentName')]",
-      "dependsOn": ["[resourceId('Microsoft.Resources/deployments', variables('storageAccountDeploymentName'))]"],
-      "properties": {
-        "mode": "Incremental",
-        "templateLink": {
-          "uri": "[concat(variables('platformBuildingBlocksDeploymentUrlBase'), 'postgresql-server.json')]",
-          "contentVersion": "1.0.0.0"
-        },
-        "parameters": {
-          "postgresServerName": {
-            "value": "[parameters('databaseServerName')]"
-          },
-          "postgresAdminLogin": {
-            "value": "[parameters('databaseUsername')]"
-          },
-          "postgresAdminPassword": {
-            "value": "[parameters('databasePassword')]"
-          },
-          "securityAlertEmailAddress": {
-            "value": "[parameters('alertEmailAddress')]"
-          },
-          "storageAccountName": {
-            "value": "[parameters('storageAccountName')]"
-          }
-        }
-      }
+      ]
     },
     {
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2017-05-10",
       "name": "[variables('databaseDeploymentName')]",
-      "dependsOn": ["[resourceId('Microsoft.Resources/deployments', variables('databaseServerDeploymentName'))]"],
+      "dependsOn": ["[resourceId('Microsoft.DBforPostgreSQL/servers', parameters('databaseServerName'))]"],
       "properties": {
         "mode": "Incremental",
         "templateLink": {
@@ -101,7 +96,7 @@
       "type": "Microsoft.DBforPostgreSQL/servers/configurations",
       "apiVersion": "2017-12-01",
       "name": "[concat(parameters('databaseServerName'), '/log_disconnections')]",
-      "dependsOn": ["[resourceId('Microsoft.Resources/deployments', variables('databaseServerDeploymentName'))]"],
+      "dependsOn": ["[resourceId('Microsoft.DBforPostgreSQL/servers', parameters('databaseServerName'))]"],
       "properties": {
         "value": "ON",
         "source": "user-override"
@@ -115,7 +110,7 @@
     },
     "databaseServerFullyQualifiedDomainName": {
       "type": "string",
-      "value": "[reference(resourceId('Microsoft.Resources/deployments', variables('databaseServerDeploymentName'))).outputs.fullyQualifiedDomainName.value]"
+      "value": "[reference(resourceId('Microsoft.DBforPostgreSQL/servers', parameters('databaseServerName'))).fullyQualifiedDomainName]"
     }
   }
 }

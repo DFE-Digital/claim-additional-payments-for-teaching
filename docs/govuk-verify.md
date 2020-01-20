@@ -114,6 +114,10 @@ where:
 
 Run the request script with the next version number in the sequence:
 
+Note: Before running this script you will need to
+[add your IP to the allow list](https://dfedigital.atlassian.net/wiki/spaces/TP/pages/1264418844/Secrets)
+of the KeyVault firewall belonging to the environment you are requesting for.
+
 ```bash
 bin/request-vsp-certs <environment> <version>
 ```
@@ -152,6 +156,10 @@ generated within 5 days and we be sent to the group email address.
 
 When you receive the certificates run the import script for both signing and
 encryption certificates:
+
+Note: Before running this script you will need to
+[add your IP to the allow list](https://dfedigital.atlassian.net/wiki/spaces/TP/pages/1264418844/Secrets)
+of the KeyVault firewall belonging to the environment you are importing for.
 
 ```bash
 bin/import-vsp-certs <environment> <version>

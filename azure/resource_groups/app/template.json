@@ -9,6 +9,9 @@
     "gitCommitHash": {
       "type": "string"
     },
+    "defaultSubnetId": {
+      "type": "string"
+    },
     "secretsResourceGroupName": {
       "type": "string"
     },
@@ -230,7 +233,6 @@
     "vspDeploymentName": "[concat(parameters('resourceNamePrefix'), '-vsp')]",
     "vspAppServiceWebTestDeploymentName": "[concat(parameters('resourceNamePrefix'), '-vsp-app-service-web-test')]",
 
-    "storageAccountName": "[replace(concat(parameters('resourceNamePrefix'), 'storage'), '-', '')]",
     "databaseServerName": "[concat(parameters('resourceNamePrefix'), '-db')]",
 
     "applicationInsightsName": "[concat(parameters('resourceNamePrefix'), '-ai')]",
@@ -264,9 +266,6 @@
           "contentVersion": "1.0.0.0"
         },
         "parameters": {
-          "storageAccountName": {
-            "value": "[variables('storageAccountName')]"
-          },
           "databaseServerName": {
             "value": "[variables('databaseServerName')]"
           },

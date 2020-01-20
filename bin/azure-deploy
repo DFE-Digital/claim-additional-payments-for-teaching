@@ -187,6 +187,11 @@ SECRETS_DEPLOYMENT_RESULT=$(
     --resource-group "$SECRETS_RESOURCE_GROUP_NAME" \
     --template-file "$SECRETS_TEMPLATE_FILE_PATH" \
     --parameters "@$SECRETS_PARAMETERS_FILE_PATH" \
+    --parameters "$(
+      filter-azure-outputs \
+        "$PROJECT_CORE_DEPLOYMENT_RESULT" \
+        "['defaultSubnetId']"
+      )" \
     --mode Complete \
     --verbose \
     <&- || true
@@ -242,7 +247,7 @@ APP_DEPLOYMENT_RESULT=$(
     --parameters "$(
       filter-azure-outputs \
         "$PROJECT_CORE_DEPLOYMENT_RESULT" \
-        "['workerSubnetId', 'workerNetworkProfileId']"
+        "['workerSubnetId', 'workerNetworkProfileId', 'defaultSubnetId']"
     )" \
     "${EXTRA_APP_DEPLOYMENT_OPTIONS[@]}" \
     --mode Complete \
