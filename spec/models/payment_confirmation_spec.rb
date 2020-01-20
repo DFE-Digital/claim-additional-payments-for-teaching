@@ -16,7 +16,7 @@ RSpec.describe PaymentConfirmation do
     tempfile
   end
   let(:admin_user_id) { "uploader-id" }
-  let!(:dataset_post_stub) { stub_geckoboard_dataset_update("claims.paid.test") }
+  let!(:dataset_post_stub) { stub_geckoboard_dataset_update("claims.test") }
   subject(:payment_confirmation) { described_class.new(payroll_run, file, admin_user_id) }
 
   context "the claims in the CSV match the claims of the payroll run" do
@@ -85,7 +85,7 @@ RSpec.describe PaymentConfirmation do
       end
 
       expect(dataset_post_stub.with { |request|
-        request_body_matches_geckoboard_data_for_claims?(request, payroll_run.claims, :scheduled_payment_date)
+        request_body_matches_geckoboard_data_for_claims?(request, payroll_run.claims)
       }).to have_been_requested
     end
   end

@@ -1,23 +1,23 @@
 require "geckoboard"
 
 class Claim
-  class GeckoboardEvent
-    attr_reader :claims, :event_type, :performed_at_method
+  class GeckoboardDataset
+    attr_reader :claims
 
     DATASET_FIELDS = [
       Geckoboard::StringField.new(:reference, name: "Reference"),
       Geckoboard::StringField.new(:policy, name: "Policy"),
-      Geckoboard::DateTimeField.new(:performed_at, name: "Performed at"),
+      Geckoboard::DateTimeField.new(:submitted_at, name: "Submitted at"),
+      Geckoboard::StringField.new(:paid, name: "Paid"),
+      Geckoboard::DateTimeField.new(:paid_at, name: "Paid at"),
     ]
     BATCH_SIZE = 500
 
-    def initialize(claim_or_claims, event_type, performed_at_method)
+    def initialize(claim_or_claims)
       @claims = Array(claim_or_claims)
-      @event_type = event_type
-      @performed_at_method = performed_at_method
     end
 
-    def record
+    def save
       batched_claims.each do |batch|
         dataset.post(data_for_claims(batch))
       end
@@ -30,7 +30,9 @@ class Claim
         {
           reference: claim.reference,
           policy: claim.policy.to_s,
-          performed_at: claim.public_send(performed_at_method),
+          submitted_at: claim.submitted_at,
+          paid: claim.scheduled_payment_date.present?.to_s,
+          paid_at: claim.scheduled_payment_date.presence || placeholder_date_for_nil_value,
         }
       end
     end
@@ -48,13 +50,16 @@ class Claim
     def dataset_name
       [
         "claims",
-        event_type,
         ENV.fetch("ENVIRONMENT_NAME"),
       ].join(".")
     end
 
     def batched_claims
       claims.each_slice(BATCH_SIZE).to_a
+    end
+
+    def placeholder_date_for_nil_value
+      DateTime.parse("1970-01-01")
     end
   end
 end

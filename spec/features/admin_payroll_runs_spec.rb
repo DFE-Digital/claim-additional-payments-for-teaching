@@ -2,7 +2,7 @@ require "rails_helper"
 
 RSpec.feature "Payroll" do
   let(:user) { create(:dfe_signin_user) }
-  let!(:dataset_post_stub) { stub_geckoboard_dataset_update("claims.paid.test") }
+  let!(:dataset_post_stub) { stub_geckoboard_dataset_update("claims.test") }
 
   scenario "Service operator creates a payroll run" do
     sign_in_to_admin_with_role(DfeSignIn::User::SERVICE_OPERATOR_DFE_SIGN_IN_ROLE_CODE, user.dfe_sign_in_id)
