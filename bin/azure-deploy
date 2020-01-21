@@ -79,6 +79,7 @@ ALERTS_DEPLOYMENT_NAME=$ALERTS_RESOURCE_GROUP_NAME
 LOGIN_TO_AZURE=1
 CONFIRM_BEFORE_DEPLOY=1
 DEPLOY_ALERTS=1
+RECOVER_KEY_VAULT=
 EXTRA_APP_DEPLOYMENT_OPTIONS=()
 
 while [ "$2" ]; do
@@ -103,6 +104,9 @@ while [ "$2" ]; do
     "--tmp-alerts")
       ALERTS_RESOURCE_GROUP_NAME="$ALERTS_RESOURCE_GROUP_NAME-tmp"
       ALERTS_DEPLOYMENT_NAME="$ALERTS_DEPLOYMENT_NAME-tmp"
+      ;;
+    "--recover-keyvault")
+      RECOVER_KEY_VAULT=1
       ;;
     *)
       echo "Unexpected argument: $2"
@@ -179,7 +183,13 @@ if [ $CONFIRM_BEFORE_DEPLOY ]; then
   read -r
 fi
 
-echo "Starting secrets deployment..."
+if [ $RECOVER_KEY_VAULT ]; then
+  KEYVAULT_CREATE_MODE="recover"
+else
+  KEYVAULT_CREATE_MODE="default"
+fi
+
+echo "Starting secrets deployment with KeyVault createMode: $KEYVAULT_CREATE_MODE..."
 
 SECRETS_DEPLOYMENT_RESULT=$(
   az group deployment create \
@@ -192,6 +202,7 @@ SECRETS_DEPLOYMENT_RESULT=$(
         "$PROJECT_CORE_DEPLOYMENT_RESULT" \
         "['defaultSubnetId']"
       )" \
+    --parameters "keyVaultCreateMode=$KEYVAULT_CREATE_MODE" \
     --mode Complete \
     --verbose \
     <&- || true
