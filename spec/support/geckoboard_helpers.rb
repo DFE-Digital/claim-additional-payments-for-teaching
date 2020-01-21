@@ -2,7 +2,7 @@ module GeckoboardHelpers
   # Use this to stub out the API calls that will be made to Geckoboard.
   # It will return the webmock POST request, which can be used to write
   # expectations about the request being made.
-  def stub_geckoboard_dataset_update(dataset_id = "claims.submitted.test")
+  def stub_geckoboard_dataset_update(dataset_id = "claims.test")
     stub_geckoboard_dataset_find_or_create(dataset_id)
     stub_geckoboard_dataset_post(dataset_id)
   end
@@ -17,8 +17,28 @@ module GeckoboardHelpers
         name: "Policy",
         type: "string",
       },
-      performed_at: {
-        name: "Performed at",
+      submitted_at: {
+        name: "Submitted at",
+        type: "datetime",
+      },
+      checked: {
+        name: "Checked",
+        type: "string",
+      },
+      checked_at: {
+        name: "Checked at",
+        type: "datetime",
+      },
+      check_result: {
+        name: "Check result",
+        type: "string",
+      },
+      paid: {
+        name: "Paid",
+        type: "string",
+      },
+      paid_at: {
+        name: "Paid at",
         type: "datetime",
       },
     }
@@ -27,12 +47,13 @@ module GeckoboardHelpers
       .with(
         body: {
           fields: dataset_fields,
+          unique_by: ["reference"],
         }.to_json
       )
       .to_return(status: 200, body: {
         id: dataset_id,
         fields: dataset_fields,
-        unique_by: ["timestamp"],
+        unique_by: ["reference"],
       }.to_json)
   end
 
@@ -40,12 +61,17 @@ module GeckoboardHelpers
     stub_request(:post, "https://api.geckoboard.com/datasets/#{dataset_id}/data")
   end
 
-  def request_body_matches_geckoboard_data_for_claims?(request, claims, performed_at_method)
+  def request_body_matches_geckoboard_data_for_claims?(request, claims)
     expected_claims_data = claims.map { |claim|
       {
         "reference" => claim.reference,
         "policy" => claim.policy.to_s,
-        "performed_at" => claim.public_send(performed_at_method).strftime("%Y-%m-%dT%H:%M:%S%:z"),
+        "submitted_at" => claim.submitted_at&.strftime("%Y-%m-%dT%H:%M:%S%:z"),
+        "checked" => claim.check.present?.to_s,
+        "checked_at" => (claim.check.present? ? claim.check.created_at : DateTime.parse("1970-01-01")).strftime("%Y-%m-%dT%H:%M:%S%:z"),
+        "check_result" => claim.check.present? ? claim.check.result : "",
+        "paid" => claim.payment.present?.to_s,
+        "paid_at" => (claim.payment.present? ? claim.scheduled_payment_date : DateTime.parse("1970-01-01")).strftime("%Y-%m-%dT%H:%M:%S%:z"),
       }
     }.sort_by { |d| d["reference"] }
 

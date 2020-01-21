@@ -34,7 +34,7 @@ RSpec.describe "Submissions", type: :request do
 
       it "sends the claim's details to the “submitted” dataset on Geckoboard" do
         expect(@dataset_post_stub.with { |request|
-          request_body_matches_geckoboard_data_for_claims?(request, [in_progress_claim.reload], :submitted_at)
+          request_body_matches_geckoboard_data_for_claims?(request, [in_progress_claim.reload])
         }).to have_been_requested
       end
     end

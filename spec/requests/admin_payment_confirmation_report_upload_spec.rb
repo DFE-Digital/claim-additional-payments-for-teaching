@@ -3,7 +3,7 @@ require "rails_helper"
 RSpec.describe "Admin Payment Confirmation Report upload" do
   let(:payroll_run) { create(:payroll_run) }
 
-  let!(:dataset_post_stub) { stub_geckoboard_dataset_update("claims.paid.test") }
+  let!(:dataset_post_stub) { stub_geckoboard_dataset_update("claims.test") }
 
   context "when signed in as a service operator" do
     let(:admin_session_id) { "some_user_id" }
