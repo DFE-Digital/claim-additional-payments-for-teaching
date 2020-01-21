@@ -13,6 +13,9 @@
     },
     "appServicePlanId": {
       "type": "string"
+    },
+    "enableAlerts": {
+      "type": "bool"
     }
   },
   "variables": {
@@ -34,7 +37,7 @@
       "location": "global",
       "properties": {
         "scopes": ["[parameters('appServiceId')]"],
-        "enabled": true,
+        "enabled": "[parameters('enableAlerts')]",
         "description": "[concat('Alert when average response times for ', variables('appServiceName'), ' are greater than 2 seconds.')]",
         "severity": 1,
         "evaluationFrequency": "PT1M",
@@ -69,7 +72,7 @@
       "location": "global",
       "properties": {
         "scopes": ["[parameters('appServiceId')]"],
-        "enabled": true,
+        "enabled": "[parameters('enableAlerts')]",
         "description": "[concat('Alert when any HTTP server errors occur for ', variables('appServiceName'), '.')]",
         "severity": 1,
         "evaluationFrequency": "PT1M",
@@ -104,7 +107,7 @@
       "location": "global",
       "properties": {
         "scopes": ["[parameters('appServicePlanId')]"],
-        "enabled": true,
+        "enabled": "[parameters('enableAlerts')]",
         "description": "[concat('Alert when average CPU utilization for ', variables('appServicePlanName'), ' is greater than 80%.')]",
         "severity": 1,
         "evaluationFrequency": "PT1M",
@@ -139,7 +142,7 @@
       "location": "global",
       "properties": {
         "scopes": ["[parameters('appServicePlanId')]"],
-        "enabled": true,
+        "enabled": "[parameters('enableAlerts')]",
         "description": "[concat('Alert when average memory utilization for ', variables('appServicePlanName'), ' is greater than 80%.')]",
         "severity": 1,
         "evaluationFrequency": "PT1M",

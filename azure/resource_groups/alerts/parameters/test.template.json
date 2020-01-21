@@ -15,6 +15,9 @@
     },
     "secretsResourceGroupId": {
       "value": "${secretsResourceGroupId}"
+    },
+    "enableAlerts": {
+      "value": false
     }
   }
 }

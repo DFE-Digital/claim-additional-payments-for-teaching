@@ -79,6 +79,9 @@
         "secretName": "AlertEmailAddress"
       }
     },
+    "enableWebTestAlerts": {
+      "value": false
+    },
     "SECRET_KEY_BASE": {
       "reference": {
         "keyVault": {

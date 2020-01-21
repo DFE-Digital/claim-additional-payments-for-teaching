@@ -10,6 +10,9 @@
     },
     "databaseServerId": {
       "type": "string"
+    },
+    "enableAlerts": {
+      "type": "bool"
     }
   },
   "variables": {
@@ -27,7 +30,7 @@
       "location": "global",
       "properties": {
         "scopes": ["[parameters('databaseServerId')]"],
-        "enabled": true,
+        "enabled": "[parameters('enableAlerts')]",
         "description": "[concat('Alert when average CPU utilization for ', variables('databaseServerName'), ' is greater than 80%.')]",
         "severity": 0,
         "evaluationFrequency": "PT1M",
@@ -62,7 +65,7 @@
       "location": "global",
       "properties": {
         "scopes": ["[parameters('databaseServerId')]"],
-        "enabled": true,
+        "enabled": "[parameters('enableAlerts')]",
         "description": "[concat('Alert when average memory utilization for ', variables('databaseServerName'), ' is greater than 80%.')]",
         "severity": 0,
         "evaluationFrequency": "PT1M",
@@ -97,7 +100,7 @@
       "location": "global",
       "properties": {
         "scopes": ["[parameters('databaseServerId')]"],
-        "enabled": true,
+        "enabled": "[parameters('enableAlerts')]",
         "description": "[concat('Alert when average storage utilization for ', variables('databaseServerName'), ' is greater than 80%.')]",
         "severity": 0,
         "evaluationFrequency": "PT1M",

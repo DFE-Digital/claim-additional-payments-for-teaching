@@ -26,6 +26,9 @@
       "metadata": {
         "description": "The locations to conduct webtests from"
       }
+    },
+    "enableWebTestAlerts": {
+      "type": "bool"
     }
   },
   "variables": {
@@ -40,7 +43,7 @@
       "tags": {},
       "properties": {
         "groupShortName": "[concat(split(parameters('appInsightsName'), '-')[0], '-ops')]",
-        "enabled": true,
+        "enabled": "[parameters('enableWebTestAlerts')]",
         "useCommonAlertSchema": true,
         "emailReceivers": [
           {
@@ -51,9 +54,9 @@
       }
     },
     {
+      "type": "Microsoft.Insights/webtests",
       "apiVersion": "2015-05-01",
       "name": "[if(greater(length(parameters('availabilityTests')), 0), concat(parameters('appInsightsName'), '-at-', parameters('availabilityTests')[copyIndex('webTestsCopy')].nameSuffix), 'UNUSED_WEBTEST')]",
-      "type": "Microsoft.Insights/webtests",
       "condition": "[greater(length(parameters('availabilityTests')), 0)]",
       "location": "[resourceGroup().location]",
       "copy": {
@@ -66,7 +69,7 @@
       "properties": {
         "SyntheticMonitorId": "[concat(parameters('appInsightsName'), '-at-', parameters('availabilityTests')[copyIndex('webTestsCopy')].nameSuffix)]",
         "Name": "[concat(parameters('appInsightsName'), '-at-', parameters('availabilityTests')[copyIndex('webTestsCopy')].nameSuffix)]",
-        "Enabled": true,
+        "Enabled": "[parameters('enableWebTestAlerts')]",
         "Frequency": 300,
         "Timeout": 120,
         "RetryEnabled": true,
@@ -99,7 +102,7 @@
         "name": "[concat(parameters('appInsightsName'), '-at-', parameters('availabilityTests')[copyIndex('metricAlertsCopy')].nameSuffix, '-alert')]",
         "description": "[concat('Returns when availability of ', parameters('availabilityTests')[copyIndex('metricAlertsCopy')].nameSuffix ,' is less than 100%')]",
         "severity": 1,
-        "enabled": true,
+        "enabled": "[parameters('enableWebTestAlerts')]",
         "scopes": [
           "[resourceId('Microsoft.Insights/webtests', concat(parameters('appInsightsName'), '-at-', parameters('availabilityTests')[copyIndex('metricAlertsCopy')].nameSuffix))]",
           "[resourceId('microsoft.insights/components', parameters('appInsightsName'))]"

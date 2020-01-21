@@ -103,6 +103,10 @@
     "alertEmailAddress": {
       "type": "string"
     },
+    "enableWebTestAlerts": {
+      "type": "bool",
+      "defaultValue": true
+    },
     "azureBuildNumber": {
       "type": "string",
       "defaultValue": ""
@@ -342,6 +346,9 @@
           },
           "webTestLocations": {
             "value": "[variables('azureAvailabilityTestLocations')]"
+          },
+          "enableWebTestAlerts": {
+            "value": "[parameters('enableWebTestAlerts')]"
           }
         }
       }
