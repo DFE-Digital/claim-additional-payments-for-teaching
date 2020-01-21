@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+## [Relase 046] - 2020-01-21
+
 - Feedback link tells users it will open in a new tab
 - Changed existing session page to use radios and tidy up the iterruption card
 - Semantic Logger has been added to make log entries more concise and useful
@@ -368,6 +370,8 @@ The format is based on [Keep a Changelog]
 
 [unreleased]:
   https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-044...HEAD
+[release 046]:
+  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-045...release-046
 [release 045]:
   https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-044...release-045
 [release 044]:
