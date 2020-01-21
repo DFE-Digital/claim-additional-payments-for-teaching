@@ -6,6 +6,7 @@ RSpec.describe "Admin claim checks", type: :request do
 
     before do
       sign_in_to_admin_with_role(DfeSignIn::User::SERVICE_OPERATOR_DFE_SIGN_IN_ROLE_CODE, user.dfe_sign_in_id)
+      @dataset_post_stub = stub_geckoboard_dataset_update
     end
 
     describe "claim_checks#create" do
@@ -31,6 +32,14 @@ RSpec.describe "Admin claim checks", type: :request do
 
         expect(claim.check.checked_by).to eq(user)
         expect(claim.check.result).to eq("rejected")
+      end
+
+      it "updates the claim dataset on Geckoboard" do
+        perform_enqueued_jobs { post admin_claim_checks_path(claim_id: claim.id, check: {result: "approved"}) }
+
+        expect(@dataset_post_stub.with { |request|
+          request_body_matches_geckoboard_data_for_claims?(request, [claim.reload])
+        }).to have_been_requested
       end
 
       context "when no result is selected" do

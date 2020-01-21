@@ -10,6 +10,7 @@ RSpec.feature "Admin checks a claim" do
 
     scenario "User can approve a claim" do
       freeze_time do
+        stub_geckoboard_dataset_update
         submitted_claims = create_list(:claim, 5, :submitted)
         claim_to_approve = submitted_claims.first
 
@@ -40,6 +41,7 @@ RSpec.feature "Admin checks a claim" do
     end
 
     scenario "they can reject a claim" do
+      stub_geckoboard_dataset_update
       submitted_claims = create_list(:claim, 5, :submitted)
       claim_to_reject = submitted_claims.first
 
