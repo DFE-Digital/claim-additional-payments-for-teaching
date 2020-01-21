@@ -21,6 +21,10 @@ module GeckoboardHelpers
         name: "Submitted at",
         type: "datetime",
       },
+      passed_checking_deadline: {
+        name: "Passed checking deadline",
+        type: "string",
+      },
       checked: {
         name: "Checked",
         type: "string",
@@ -67,6 +71,7 @@ module GeckoboardHelpers
         "reference" => claim.reference,
         "policy" => claim.policy.to_s,
         "submitted_at" => claim.submitted_at&.strftime("%Y-%m-%dT%H:%M:%S%:z"),
+        "passed_checking_deadline" => claim.check_deadline_date.past?.to_s,
         "checked" => claim.check.present?.to_s,
         "checked_at" => (claim.check.present? ? claim.check.created_at : DateTime.parse("1970-01-01")).strftime("%Y-%m-%dT%H:%M:%S%:z"),
         "check_result" => claim.check.present? ? claim.check.result : "",
