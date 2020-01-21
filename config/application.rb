@@ -50,14 +50,5 @@ module DfeTeachersPaymentService
     config.action_view.form_with_generates_remote_forms = false
 
     config.guidance_url = "https://www.gov.uk/government/publications/additional-payments-for-teaching-eligibility-and-payment-details"
-
-    if ENV["LOGSTASH_HOST"].present?
-      tcp_logger = LogStashLogger.new(type: :tcp,
-                                      host: ENV.fetch("LOGSTASH_HOST"),
-                                      port: ENV.fetch("LOGSTASH_PORT"),
-                                      ssl_enable: true)
-
-      SemanticLogger.add_appender(logger: tcp_logger, level: :info, formatter: :json)
-    end
   end
 end
