@@ -6,6 +6,7 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+- Feedback link tells users it will open in a new tab
 - Changed existing session page to use radios and tidy up the iterruption card
 - Semantic Logger has been added to make log entries more concise and useful
 - Application logs can now be sent to Logstash for aggregation, analysis and
