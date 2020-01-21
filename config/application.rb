@@ -50,5 +50,11 @@ module DfeTeachersPaymentService
     config.action_view.form_with_generates_remote_forms = false
 
     config.guidance_url = "https://www.gov.uk/government/publications/additional-payments-for-teaching-eligibility-and-payment-details"
+
+    # Additional information which is passed in the logs for each request
+    # See https://rocketjob.github.io/semantic_logger/rails.html#named-tags
+    config.log_tags = {
+      environment: ENV.fetch("ENVIRONMENT_NAME", "unspecified"),
+    }
   end
 end
