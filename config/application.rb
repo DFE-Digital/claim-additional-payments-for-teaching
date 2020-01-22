@@ -51,13 +51,10 @@ module DfeTeachersPaymentService
 
     config.guidance_url = "https://www.gov.uk/government/publications/additional-payments-for-teaching-eligibility-and-payment-details"
 
-    if ENV["LOGSTASH_HOST"].present?
-      tcp_logger = LogStashLogger.new(type: :tcp,
-                                      host: ENV.fetch("LOGSTASH_HOST"),
-                                      port: ENV.fetch("LOGSTASH_PORT"),
-                                      ssl_enable: true)
-
-      SemanticLogger.add_appender(logger: tcp_logger, level: :info, formatter: :json)
-    end
+    # Additional information which is passed in the logs for each request
+    # See https://rocketjob.github.io/semantic_logger/rails.html#named-tags
+    config.log_tags = {
+      environment: ENV.fetch("ENVIRONMENT_NAME", "unspecified"),
+    }
   end
 end

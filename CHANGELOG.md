@@ -7,6 +7,7 @@ The format is based on [Keep a Changelog]
 ## [Unreleased]
 
 - Update Geckoboard with how many claims are passed their check deadline
+- Log entries are now tagged with their deployed environment
 
 ## [Relase 046] - 2020-01-21
 
