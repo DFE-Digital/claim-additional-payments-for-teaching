@@ -40,11 +40,11 @@ RSpec.feature "Ineligible Maths and Physics claims" do
 
     choose_school schools(:penistone_grammar_school)
     choose_initial_teacher_training_subject
-    choose_qts_year("Before 1 September 2014")
+    choose_qts_year("In or before the academic year 2013 to 2014")
 
     expect(claim.eligibility.reload.qts_award_year).to eql("before_september_2014")
     expect(page).to have_text("You’re not eligible")
-    expect(page).to have_text("You can only get this payment if you completed your initial teacher training on or after 1 September 2014.")
+    expect(page).to have_text("You can only get this payment if you completed your initial teacher training in or after the academic year 2014 to 2015.")
   end
 
   scenario "supply teacher doesn't have a contract for a whole term" do
@@ -52,7 +52,7 @@ RSpec.feature "Ineligible Maths and Physics claims" do
 
     choose_school schools(:penistone_grammar_school)
     choose_initial_teacher_training_subject
-    choose_qts_year("On or after 1 September 2014")
+    choose_qts_year("In or after the academic year 2014 to 2015")
 
     choose "Yes"
     click_on "Continue"
@@ -69,7 +69,7 @@ RSpec.feature "Ineligible Maths and Physics claims" do
 
     choose_school schools(:penistone_grammar_school)
     choose_initial_teacher_training_subject
-    choose_qts_year("On or after 1 September 2014")
+    choose_qts_year("In or after the academic year 2014 to 2015")
 
     choose "Yes"
     click_on "Continue"
@@ -88,7 +88,7 @@ RSpec.feature "Ineligible Maths and Physics claims" do
 
     choose_school schools(:penistone_grammar_school)
     choose_initial_teacher_training_subject
-    choose_qts_year("On or after 1 September 2014")
+    choose_qts_year("In or after the academic year 2014 to 2015")
 
     choose "No"
     click_on "Continue"
@@ -105,7 +105,7 @@ RSpec.feature "Ineligible Maths and Physics claims" do
 
     choose_school schools(:penistone_grammar_school)
     choose_initial_teacher_training_subject
-    choose_qts_year("On or after 1 September 2014")
+    choose_qts_year("In or after the academic year 2014 to 2015")
 
     choose "No"
     click_on "Continue"
