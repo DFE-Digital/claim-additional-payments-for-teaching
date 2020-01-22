@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+- Fix existing session page so if no option is selected a user doesn't continue
+  their claim
 - Update Geckoboard with how many claims are passed their check deadline
 - Log entries are now tagged with their deployed environment
 

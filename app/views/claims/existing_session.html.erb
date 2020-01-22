@@ -20,12 +20,12 @@
 
           <div class="govuk-radios govuk-!-margin-bottom-9">
             <div class="govuk-radios__item">
-              <%= form.radio_button(:start_new_claim, false, class: "govuk-radios__input") %>
-              <%= form.label :start_new_claim_false, "No, finish the claim I have in progress", class: "govuk-label govuk-radios__label" %>
-            </div>
-            <div class="govuk-radios__item">
               <%= form.radio_button(:start_new_claim, true, class: "govuk-radios__input") %>
               <%= form.label :start_new_claim_true, "Yes, start claim #{policy_description(params[:policy])} and lose my progress on my first claim", class: "govuk-label govuk-radios__label" %>
+            </div>
+            <div class="govuk-radios__item">
+              <%= form.radio_button(:start_new_claim, false, class: "govuk-radios__input") %>
+              <%= form.label :start_new_claim_false, "No, finish the claim I have in progress", class: "govuk-label govuk-radios__label" %>
             </div>
           </div>
 
