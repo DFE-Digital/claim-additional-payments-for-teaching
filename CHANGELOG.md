@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+- Update Geckoboard with how many claims are passed their check deadline
+
 ## [Relase 046] - 2020-01-21
 
 - Feedback link tells users it will open in a new tab

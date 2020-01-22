@@ -8,6 +8,7 @@ class Admin::ClaimChecksController < Admin::BaseAdminController
     @check = @claim.build_check(check_params.merge(checked_by: admin_user))
     if @check.save
       send_claim_result_email
+      RecordOrUpdateGeckoboardDatasetJob.perform_later([@claim.id])
       redirect_to admin_claims_path, notice: "Claim has been #{@claim.check.result} successfully"
     else
       render "admin/claims/show"
