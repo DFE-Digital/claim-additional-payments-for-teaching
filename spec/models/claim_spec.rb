@@ -453,6 +453,13 @@ RSpec.describe Claim, type: :model do
       expect(create(:claim, :approved).approvable?).to eq false
       expect(create(:claim, :rejected).approvable?).to eq false
     end
+
+    it "returns false when there exists another payrollable claim with the same National Insurance number but with inconsistent attributes that would prevent us from running payroll" do
+      national_insurance_number = generate(:national_insurance_number)
+      create(:claim, :approved, national_insurance_number: national_insurance_number, date_of_birth: 20.years.ago)
+
+      expect(create(:claim, :submitted, national_insurance_number: national_insurance_number, date_of_birth: 30.years.ago).approvable?).to eq false
+    end
   end
 
   describe "#payroll_gender_missing?" do
@@ -638,6 +645,94 @@ RSpec.describe Claim, type: :model do
       it "returns nil" do
         expect(claim.scheduled_payment_date).to be_nil
       end
+    end
+  end
+
+  describe "#inconsistent_claims" do
+    let(:personal_details) do
+      {
+        national_insurance_number: generate(:national_insurance_number),
+        bank_account_number: "32828838",
+        bank_sort_code: "183828",
+        first_name: "Boris",
+      }
+    end
+    let(:claim) { create(:claim, :submitted, personal_details) }
+    subject(:inconsistent_claims) { claim.inconsistent_claims }
+
+    context "when there is another claim with the same National Insurance number, with inconsistent personal details that would prevent us from running payroll" do
+      let(:inconsistent_personal_details) do
+        personal_details.merge(
+          national_insurance_number: national_insurance_number,
+          bank_account_number: "87282828",
+          bank_sort_code: "388183",
+        )
+      end
+
+      context "when the other claim is not yet approved" do
+        let!(:other_claim) { create(:claim, :submitted, inconsistent_personal_details) }
+
+        it "does not include the other claim" do
+          expect(inconsistent_claims).to be_empty
+        end
+      end
+
+      context "when the other claim is approved but not yet payrolled" do
+        let!(:other_claim) { create(:claim, :approved, inconsistent_personal_details) }
+
+        it "includes the other claim" do
+          expect(inconsistent_claims).to eq([other_claim])
+        end
+      end
+
+      context "when the other claim is already payrolled" do
+        let!(:other_claim) { create(:claim, :approved, inconsistent_personal_details) }
+        let!(:payment) { create(:payment, claims: [other_claim]) }
+
+        it "does not include the other claim" do
+          expect(inconsistent_claims).to be_empty
+        end
+      end
+    end
+
+    context "when there is another claim with the same National Insurance number, with inconsistent details that would not prevent us from running payroll" do
+      let(:inconsistent_personal_details) do
+        personal_details.merge(
+          national_insurance_number: national_insurance_number,
+          first_name: "Jarvis",
+        )
+      end
+      let!(:other_claim) { create(:claim, :approved, inconsistent_personal_details) }
+
+      it "does not include the other claim even if that claim is approved and not yet payrolled" do
+        expect(inconsistent_claims).to be_empty
+      end
+    end
+  end
+
+  describe "#inconsistent_attributes" do
+    let(:national_insurance_number) { generate(:national_insurance_number) }
+    let(:personal_details) do
+      {
+        national_insurance_number: national_insurance_number,
+        bank_account_number: "32828838",
+        bank_sort_code: "183828",
+        date_of_birth: 30.years.ago.to_date,
+        student_loan_plan: :plan_1,
+        first_name: "Boris",
+      }
+    end
+    let(:claim) { create(:claim, :submitted, personal_details) }
+    let(:inconsistent_claims) do
+      [
+        create(:claim, :approved, personal_details.merge(bank_account_number: "87282828", bank_sort_code: "388183")),
+        create(:claim, :approved, personal_details.merge(date_of_birth: 25.years.ago.to_date)),
+      ]
+    end
+    subject(:inconsistent_attributes) { claim.inconsistent_attributes(inconsistent_claims) }
+
+    it "returns a list of inconsistent attributes which would prevent us from running payroll, which does not contain any other inconsistent attributes" do
+      expect(inconsistent_attributes).to match_array([:bank_account_number, :bank_sort_code, :date_of_birth])
     end
   end
 end

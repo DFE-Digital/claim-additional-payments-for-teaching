@@ -8,6 +8,9 @@ The format is based on [Keep a Changelog]
 
 - Update Geckoboard with how many claims are passed their check deadline
 - Log entries are now tagged with their deployed environment
+- Prevent service operator from approving a claim when it is inconsistent with
+  another claim awaiting payment to the same claimant, if this would prevent us
+  from running payroll
 
 ## [Relase 046] - 2020-01-21
 

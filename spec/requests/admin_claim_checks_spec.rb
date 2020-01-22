@@ -85,6 +85,42 @@ RSpec.describe "Admin claim checks", type: :request do
           end
         end
       end
+
+      context "when the claimant has another approved claim in the same payroll window, with inconsistent personal details" do
+        let(:personal_details) do
+          {
+            national_insurance_number: generate(:national_insurance_number),
+            teacher_reference_number: generate(:teacher_reference_number),
+            date_of_birth: 30.years.ago.to_date,
+            student_loan_plan: StudentLoan::PLAN_1,
+            email_address: "email@example.com",
+            bank_sort_code: "112233",
+            bank_account_number: "95928482",
+            building_society_roll_number: nil,
+          }
+        end
+        let(:claim) { create(:claim, :submitted, personal_details.merge(bank_sort_code: "582939", bank_account_number: "74727752")) }
+        let!(:approved_claim) { create(:claim, :approved, personal_details.merge(bank_sort_code: "112233", bank_account_number: "29482823")) }
+        before do
+          post admin_claim_checks_path(claim_id: claim.id, check: {result: result})
+          follow_redirect!
+        end
+
+        context "and the user attempts to approve" do
+          let(:result) { "approved" }
+          it "shows an error" do
+            expect(response.body).to include("Claim cannot be approved because there are inconsistent claims")
+          end
+        end
+
+        context "and the user attempts to reject" do
+          let(:result) { "rejected" }
+          it "doesn’t show an error and rejects successfully" do
+            expect(response.body).not_to include("Claim cannot be approved")
+            expect(response.body).to include("Claim has been rejected successfully")
+          end
+        end
+      end
     end
   end
 

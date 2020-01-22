@@ -66,6 +66,18 @@
       </table>
     <% end %>
 
+    <% if @inconsistent_claims.any? %>
+      <div class="govuk-warning-text">
+        <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
+        <strong class="govuk-warning-text__text">
+          <span class="govuk-warning-text__assistive">Warning</span>
+          This claim cannot be approved because <%= @inconsistent_claims.count == 1 ? 'claim' : 'claims' %> <%= @inconsistent_claims.map(&:reference).to_sentence %>
+          from the same claimant <%= @inconsistent_claims.count == 1 ? "has" : "have" %> different
+          values for <%= @inconsistent_attributes.map { |attribute| Claim.human_attribute_name(attribute).downcase }.to_sentence %>
+        </strong>
+      </div>
+    <% end %>
+
     <% if @check.persisted? %>
       <%= render "admin/claims/answer_section", {heading: "Claim decision details", answers: admin_check_details(@check)} %>
     <% else %>

@@ -3,6 +3,26 @@
     {
       "warning_type": "SQL Injection",
       "warning_code": 0,
+      "fingerprint": "858823e2fccbbf0b77c3d2f575633b2c787067ce615a8203ea5f39a30edc785c",
+      "check_name": "SQL",
+      "message": "Possible SQL injection",
+      "file": "app/models/claim.rb",
+      "line": 258,
+      "link": "https://brakemanscanner.org/docs/warning_types/sql_injection/",
+      "code": "Claim.payrollable.joins(\"INNER JOIN claims AS this_claim ON claims.id != this_claim.id              AND claims.national_insurance_number = this_claim.national_insurance_number              AND (#{Payment::PERSONAL_DETAILS_ATTRIBUTES_FORBIDDING_DISCREPANCIES.map do\n \"claims.#{attribute} IS DISTINCT FROM this_claim.#{attribute}\"\n end.join(\" OR \")})\")",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "Claim",
+        "method": "inconsistent_claims"
+      },
+      "user_input": "Payment::PERSONAL_DETAILS_ATTRIBUTES_FORBIDDING_DISCREPANCIES.map",
+      "confidence": "High",
+      "note": "The `attribute` values inserted into the SQL come from a constant array; they are not user-generated."
+    },
+    {
+      "warning_type": "SQL Injection",
+      "warning_code": 0,
       "fingerprint": "aac74520956533997d73d1c601c2bcde5d3cd501f14401fb9cb8e2bfdc7862fa",
       "check_name": "SQL",
       "message": "Possible SQL injection",
@@ -41,6 +61,6 @@
       "note": "We generate the filename based on non-user input so we can ignore this"
     }
   ],
-  "updated": "2019-12-17 11:26:22 +0000",
+  "updated": "2020-01-21 16:27:32 +0000",
   "brakeman_version": "4.7.2"
 }

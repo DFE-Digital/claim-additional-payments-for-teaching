@@ -174,7 +174,7 @@ class Claim < ApplicationRecord
   end
 
   def approvable?
-    submitted? && !payroll_gender_missing? && !checked?
+    submitted? && !payroll_gender_missing? && !checked? && inconsistent_claims.empty?
   end
 
   def checked?
@@ -244,6 +244,27 @@ class Claim < ApplicationRecord
 
   def school
     eligibility&.current_school
+  end
+
+  def inconsistent_claims
+    attributes = Payment::PERSONAL_DETAILS_ATTRIBUTES_FORBIDDING_DISCREPANCIES.dup
+    attributes.delete(:national_insurance_number)
+
+    distinct_attributes_predicate = attributes.map { |attribute|
+      "claims.#{attribute} IS DISTINCT FROM this_claim.#{attribute}"
+    }.join(" OR ")
+
+    Claim.payrollable
+      .joins("INNER JOIN claims AS this_claim ON claims.id != this_claim.id \
+             AND claims.national_insurance_number = this_claim.national_insurance_number \
+             AND (#{distinct_attributes_predicate})")
+      .where("this_claim.id = ?", id)
+  end
+
+  def inconsistent_attributes(other_claims)
+    Payment::PERSONAL_DETAILS_ATTRIBUTES_FORBIDDING_DISCREPANCIES.select do |attribute|
+      other_claims.any? { |claim| claim.read_attribute(attribute) != read_attribute(attribute) }
+    end
   end
 
   private

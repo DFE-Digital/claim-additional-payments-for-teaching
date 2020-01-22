@@ -18,6 +18,8 @@ class Admin::ClaimsController < Admin::BaseAdminController
     @claim = Claim.find(params[:id])
     @check = @claim.check || Check.new
     @matching_claims = Claim::MatchingAttributeFinder.new(@claim).matching_claims
+    @inconsistent_claims = @claim.inconsistent_claims
+    @inconsistent_attributes = @claim.inconsistent_attributes(@inconsistent_claims)
   end
 
   def search

@@ -3,6 +3,7 @@ class Admin::ClaimChecksController < Admin::BaseAdminController
   before_action :load_claim
   before_action :reject_checked_claims
   before_action :reject_missing_payroll_gender
+  before_action :reject_inconsistent_claims
 
   def create
     @check = @claim.build_check(check_params.merge(checked_by: admin_user))
@@ -11,6 +12,8 @@ class Admin::ClaimChecksController < Admin::BaseAdminController
       RecordOrUpdateGeckoboardDatasetJob.perform_later([@claim.id])
       redirect_to admin_claims_path, notice: "Claim has been #{@claim.check.result} successfully"
     else
+      @inconsistent_claims = @claim.inconsistent_claims
+      @inconsistent_attributes = @claim.inconsistent_attributes(@inconsistent_claims)
       render "admin/claims/show"
     end
   end
@@ -31,6 +34,12 @@ class Admin::ClaimChecksController < Admin::BaseAdminController
   def reject_missing_payroll_gender
     if check_params[:result] == "approved" && @claim.payroll_gender_missing?
       redirect_to admin_claim_path(@claim), alert: "Claim cannot be approved"
+    end
+  end
+
+  def reject_inconsistent_claims
+    if check_params[:result] == "approved" && @claim.inconsistent_claims.any?
+      redirect_to admin_claim_path(@claim), alert: "Claim cannot be approved because there are inconsistent claims"
     end
   end
 
