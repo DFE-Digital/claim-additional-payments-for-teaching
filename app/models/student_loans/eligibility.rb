@@ -41,7 +41,7 @@ module StudentLoans
     belongs_to :claim_school, optional: true, class_name: "School"
     belongs_to :current_school, optional: true, class_name: "School"
 
-    validates :qts_award_year, on: [:"qts-year", :submit], presence: {message: "Select whether you completed your initial teacher training before or after September 2013"}
+    validates :qts_award_year, on: [:"qts-year", :submit], presence: {message: "Select whether you completed your initial teacher training before or after the start of the academic year 2013 to 2014"}
     validates :claim_school, on: [:"claim-school", :submit], presence: {message: "Select a school from the list or search again for a different school"}
     validates :employment_status, on: [:"still-teaching", :submit], presence: {message: ->(object, _data) { "Select if you still work at #{object.claim_school_name}, another school or no longer teach in England" }}
     validates :current_school, on: [:"current-school", :submit], presence: {message: "Select a school from the list"}
