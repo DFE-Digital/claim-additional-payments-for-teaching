@@ -7,6 +7,8 @@ The format is based on [Keep a Changelog]
 ## [Unreleased]
 
 - QLS questions now refer to academic year, instead of "1 September"
+- Styling tweaks to make the service AAA accessible. Accessiblity updated to
+  reflect AAA status
 
 ## [Relase 047] - 2020-01-23
 
