@@ -3,3 +3,15 @@ $govuk-link-colour: #175b96;
 .govuk-hint {
   color: #52575b;
 }
+
+.govuk-phase-banner__content a {
+  color: $govuk-link-colour;
+}
+
+.govuk-tag {
+  background-color: $govuk-link-colour;
+}
+
+.govuk-header__container {
+  border-bottom-color: $govuk-link-colour;
+}
