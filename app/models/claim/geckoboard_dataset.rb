@@ -4,6 +4,10 @@ class Claim
   class GeckoboardDataset
     attr_reader :claims
 
+    # If any change is made to the `DATASET_FIELDS` constant below, it's important
+    # to run the `rake geckoboard:reset` task.
+    # See https://github.com/DFE-Digital/dfe-teachers-payment-service#geckoboard for more
+    # detail
     DATASET_FIELDS = [
       Geckoboard::StringField.new(:reference, name: "Reference"),
       Geckoboard::StringField.new(:policy, name: "Policy"),
