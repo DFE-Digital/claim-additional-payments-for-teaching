@@ -122,12 +122,6 @@
     "SECRET_KEY_BASE": {
       "type": "securestring"
     },
-    "BASIC_AUTH_USERNAME": {
-      "type": "securestring"
-    },
-    "BASIC_AUTH_PASSWORD": {
-      "type": "securestring"
-    },
     "DFE_SIGN_IN_ISSUER": {
       "type": "string"
     },
@@ -463,14 +457,6 @@
               {
                 "name": "SECRET_KEY_BASE",
                 "value": "[parameters('SECRET_KEY_BASE')]"
-              },
-              {
-                "name": "BASIC_AUTH_USERNAME",
-                "value": "[parameters('BASIC_AUTH_USERNAME')]"
-              },
-              {
-                "name": "BASIC_AUTH_PASSWORD",
-                "value": "[parameters('BASIC_AUTH_PASSWORD')]"
               },
               {
                 "name": "DFE_SIGN_IN_ISSUER",

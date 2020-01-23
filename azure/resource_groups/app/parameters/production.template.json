@@ -68,22 +68,6 @@
         "secretName": "SecretKeyBase"
       }
     },
-    "BASIC_AUTH_USERNAME": {
-      "reference": {
-        "keyVault": {
-          "id": "${keyVaultId}"
-        },
-        "secretName": "BasicAuthUsername"
-      }
-    },
-    "BASIC_AUTH_PASSWORD": {
-      "reference": {
-        "keyVault": {
-          "id": "${keyVaultId}"
-        },
-        "secretName": "BasicAuthPassword"
-      }
-    },
     "DFE_SIGN_IN_ISSUER": {
       "reference": {
         "keyVault": {
