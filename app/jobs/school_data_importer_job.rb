@@ -1,5 +1,5 @@
 class SchoolDataImporterJob < CronJob
-  self.cron_expression = "0 4 * * *"
+  self.cron_expression = "0 6 * * *"
 
   queue_as :school_data
 
