@@ -1,5 +1,13 @@
 $govuk-link-colour: #175b96;
 
+:not(.govuk-panel--interruption)input.govuk-button:not(.govuk-button.govuk-button--secondary) {
+  background-color: #006636;
+
+  &:hover {
+    background-color: #00562e;
+  }
+}
+
 .govuk-hint {
   color: #52575b;
 }

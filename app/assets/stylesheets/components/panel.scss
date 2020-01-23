@@ -39,4 +39,8 @@ $interrupt-background-colour: #005a9e;
     background-color: govuk-colour("white");
     box-shadow: 0 2px 0 govuk-colour("dark-blue");
   }
+
+  .govuk-button:hover {
+    background-color: govuk-colour("light-grey");
+  }
 }
