@@ -18,14 +18,18 @@ class Claim
     ]
     BATCH_SIZE = 500
 
-    def initialize(claim_or_claims)
-      @claims = Array(claim_or_claims)
+    def initialize(claims: [])
+      @claims = claims
     end
 
     def save
       batched_claims.each do |batch|
         dataset.post(data_for_claims(batch))
       end
+    end
+
+    def delete
+      client.datasets.delete(dataset_name)
     end
 
     private

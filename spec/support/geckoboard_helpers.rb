@@ -70,6 +70,10 @@ module GeckoboardHelpers
     stub_request(:post, "https://api.geckoboard.com/datasets/#{dataset_id}/data")
   end
 
+  def stub_geckoboard_dataset_delete(dataset_id)
+    stub_request(:delete, "https://api.geckoboard.com/datasets/#{dataset_id}")
+  end
+
   def request_body_matches_geckoboard_data_for_claims?(request, claims)
     expected_claims_data = claims.map { |claim|
       {
