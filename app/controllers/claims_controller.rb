@@ -46,6 +46,10 @@ class ClaimsController < BasePublicController
   end
 
   def start_new
+    new_policy_description = I18n.t("#{params[:policy].underscore}.claim_description")
+
+    return redirect_to existing_session_path, alert: "Select yes if you want to start a claim #{new_policy_description}" unless params[:start_new_claim].present?
+
     if ActiveModel::Type::Boolean.new.cast(params[:start_new_claim]) == true
       clear_claim_session
       redirect_to(new_claim_path(params[:policy]))

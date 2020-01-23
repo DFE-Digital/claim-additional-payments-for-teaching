@@ -22,4 +22,10 @@ RSpec.feature "Switching policies" do
 
     expect(page).to have_text(I18n.t("student_loans.questions.claim_school"))
   end
+
+  scenario "a user does not select an option" do
+    click_on "Submit"
+
+    expect(page).to have_text("Select yes if you want to start a claim for a payment for teaching maths or physics")
+  end
 end
