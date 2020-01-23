@@ -1,3 +1,8 @@
+.autocomplete__option--focused,
+.autocomplete__option:hover {
+  background-color: $govuk-link-colour;
+}
+
 .school-search__suggestion {
   display: flex;
   justify-content: space-between;
