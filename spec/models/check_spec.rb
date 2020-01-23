@@ -23,4 +23,11 @@ RSpec.describe Check, type: :model do
     expect(check).not_to be_valid
     expect(check.errors.messages[:base]).to eq(["This claim cannot be approved"])
   end
+
+  it "returns the number of days between the claim being submitted and the claim being checked" do
+    claim = create(:claim, :submitted, submitted_at: 12.days.ago)
+    check = build(:check, claim: claim, created_at: DateTime.now)
+
+    expect(check.number_of_days_since_claim_submitted).to eq(12)
+  end
 end

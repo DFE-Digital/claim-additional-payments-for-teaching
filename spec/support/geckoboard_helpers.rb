@@ -37,6 +37,11 @@ module GeckoboardHelpers
         name: "Check result",
         type: "string",
       },
+      number_of_days_to_check: {
+        name: "Number of days to check",
+        optional: true,
+        type: "number",
+      },
       paid: {
         name: "Paid",
         type: "string",
@@ -65,6 +70,10 @@ module GeckoboardHelpers
     stub_request(:post, "https://api.geckoboard.com/datasets/#{dataset_id}/data")
   end
 
+  def stub_geckoboard_dataset_delete(dataset_id)
+    stub_request(:delete, "https://api.geckoboard.com/datasets/#{dataset_id}")
+  end
+
   def request_body_matches_geckoboard_data_for_claims?(request, claims)
     expected_claims_data = claims.map { |claim|
       {
@@ -75,6 +84,7 @@ module GeckoboardHelpers
         "checked" => claim.check.present?.to_s,
         "checked_at" => (claim.check.present? ? claim.check.created_at : DateTime.parse("1970-01-01")).strftime("%Y-%m-%dT%H:%M:%S%:z"),
         "check_result" => claim.check.present? ? claim.check.result : "",
+        "number_of_days_to_check" => claim.check&.number_of_days_since_claim_submitted,
         "paid" => claim.payment.present?.to_s,
         "paid_at" => (claim.payment.present? ? claim.scheduled_payment_date : DateTime.parse("1970-01-01")).strftime("%Y-%m-%dT%H:%M:%S%:z"),
       }

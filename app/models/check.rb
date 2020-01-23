@@ -14,6 +14,10 @@ class Check < ApplicationRecord
     persisted?
   end
 
+  def number_of_days_since_claim_submitted
+    (claim.check.created_at.to_date - claim.submitted_at.to_date).to_i
+  end
+
   private
 
   def claim_must_be_approvable

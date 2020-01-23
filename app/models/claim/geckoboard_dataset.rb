@@ -4,6 +4,10 @@ class Claim
   class GeckoboardDataset
     attr_reader :claims
 
+    # If any change is made to the `DATASET_FIELDS` constant below, it's important
+    # to run the `rake geckoboard:reset` task.
+    # See https://github.com/DFE-Digital/dfe-teachers-payment-service#geckoboard for more
+    # detail
     DATASET_FIELDS = [
       Geckoboard::StringField.new(:reference, name: "Reference"),
       Geckoboard::StringField.new(:policy, name: "Policy"),
@@ -12,19 +16,24 @@ class Claim
       Geckoboard::StringField.new(:checked, name: "Checked"),
       Geckoboard::DateTimeField.new(:checked_at, name: "Checked at"),
       Geckoboard::StringField.new(:check_result, name: "Check result"),
+      Geckoboard::NumberField.new(:number_of_days_to_check, name: "Number of days to check", optional: true),
       Geckoboard::StringField.new(:paid, name: "Paid"),
       Geckoboard::DateTimeField.new(:paid_at, name: "Paid at"),
     ]
     BATCH_SIZE = 500
 
-    def initialize(claim_or_claims)
-      @claims = Array(claim_or_claims)
+    def initialize(claims: [])
+      @claims = claims
     end
 
     def save
       batched_claims.each do |batch|
         dataset.post(data_for_claims(batch))
       end
+    end
+
+    def delete
+      client.datasets.delete(dataset_name)
     end
 
     private
@@ -39,6 +48,7 @@ class Claim
           checked: claim.check.present?.to_s,
           checked_at: claim.check.present? ? claim.check.created_at : placeholder_date_for_nil_value,
           check_result: claim.check.present? ? claim.check.result : "",
+          number_of_days_to_check: claim.check&.number_of_days_since_claim_submitted,
           paid: claim.scheduled_payment_date.present?.to_s,
           paid_at: claim.scheduled_payment_date.presence || placeholder_date_for_nil_value,
         }
