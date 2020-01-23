@@ -12,6 +12,7 @@ class Claim
       Geckoboard::StringField.new(:checked, name: "Checked"),
       Geckoboard::DateTimeField.new(:checked_at, name: "Checked at"),
       Geckoboard::StringField.new(:check_result, name: "Check result"),
+      Geckoboard::NumberField.new(:number_of_days_to_check, name: "Number of days to check", optional: true),
       Geckoboard::StringField.new(:paid, name: "Paid"),
       Geckoboard::DateTimeField.new(:paid_at, name: "Paid at"),
     ]
@@ -39,6 +40,7 @@ class Claim
           checked: claim.check.present?.to_s,
           checked_at: claim.check.present? ? claim.check.created_at : placeholder_date_for_nil_value,
           check_result: claim.check.present? ? claim.check.result : "",
+          number_of_days_to_check: claim.check&.number_of_days_since_claim_submitted,
           paid: claim.scheduled_payment_date.present?.to_s,
           paid_at: claim.scheduled_payment_date.presence || placeholder_date_for_nil_value,
         }
