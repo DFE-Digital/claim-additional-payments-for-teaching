@@ -31,7 +31,7 @@ module FeatureHelpers
     Claim.order(:created_at).last
   end
 
-  def choose_qts_year(year = "On or after 1 September 2013")
+  def choose_qts_year(year = "In or after the academic year 2013 to 2014")
     choose year
     click_on "Continue"
   end

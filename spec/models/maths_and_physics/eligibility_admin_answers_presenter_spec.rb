@@ -26,7 +26,7 @@ RSpec.describe MathsAndPhysics::EligibilityAdminAnswersPresenter, type: :model d
         [I18n.t("maths_and_physics.admin.initial_teacher_training_subject"), "Maths"],
         [I18n.t("maths_and_physics.admin.initial_teacher_training_subject_specialism"), "I’m not sure"],
         [I18n.t("maths_and_physics.admin.has_uk_maths_or_physics_degree"), "I have a non-UK degree in Maths or Physics"],
-        [I18n.t("admin.qts_award_year"), "On or after 1 September 2014"],
+        [I18n.t("admin.qts_award_year"), "In or after the academic year 2014 to 2015"],
         [I18n.t("maths_and_physics.admin.employed_as_supply_teacher"), "Yes"],
         [I18n.t("maths_and_physics.admin.has_entire_term_contract"), "Yes"],
         [I18n.t("maths_and_physics.admin.employed_directly"), "Yes, I’m employed by my school"],

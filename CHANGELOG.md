@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+- QLS questions now refer to academic year, instead of "1 September"
+
 ## [Relase 047] - 2020-01-23
 
 - Fix existing session page so if no option is selected a user doesn't continue

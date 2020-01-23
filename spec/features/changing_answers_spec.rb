@@ -35,7 +35,7 @@ RSpec.feature "Changing the answers on a submittable claim" do
     expect(claim.eligibility.reload.qts_award_year).to eq("before_september_2013")
 
     expect(page).to have_text("You’re not eligible")
-    expect(page).to have_text("You can only get this payment if you completed your initial teacher training on or after 1 September 2013.")
+    expect(page).to have_text("You can only get this payment if you completed your initial teacher training in or after the academic year 2013 to 2014.")
   end
 
   scenario "Teacher changes an answer which is a dependency of some of the subsequent answers they’ve given, remaining eligible" do
