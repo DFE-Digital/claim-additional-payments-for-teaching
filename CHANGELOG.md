@@ -18,6 +18,7 @@ The format is based on [Keep a Changelog]
 - Log entries are now tagged with their deployed environment
 - Record the the time in days between submitting and approving a claim
 - Add a Rake task to update a Geckoboard dataset when a new field has been added
+- Put Maths and Physics into public beta
 
 ## [Relase 046] - 2020-01-21
 
