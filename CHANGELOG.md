@@ -6,10 +6,14 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+## [Relase 047] - 2020-01-23
+
 - Fix existing session page so if no option is selected a user doesn't continue
   their claim
 - Update Geckoboard with how many claims are passed their check deadline
 - Log entries are now tagged with their deployed environment
+- Record the the time in days between submitting and approving a claim
+- Add a Rake task to update a Geckoboard dataset when a new field has been added
 
 ## [Relase 046] - 2020-01-21
 
@@ -374,7 +378,9 @@ The format is based on [Keep a Changelog]
 - First release for student loan repayments private beta
 
 [unreleased]:
-  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-044...HEAD
+  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-047...HEAD
+[release 047]:
+  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-046...release-047
 [release 046]:
   https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-045...release-046
 [release 045]:
