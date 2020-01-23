@@ -1,7 +1,5 @@
-$interrupt-background-colour: #005a9e;
-
 .govuk-panel--informational {
-  background-color: $interrupt-background-colour;
+  background-color: $govuk-link-colour;
   color: govuk-colour("white");
   text-align: left;
   padding: govuk-spacing(3) - $govuk-border-width;
@@ -19,7 +17,7 @@ $interrupt-background-colour: #005a9e;
 }
 
 .govuk-panel--interruption {
-  background-color: govuk-colour("blue");
+  background-color: $govuk-link-colour;
   text-align: left;
 
   * {
