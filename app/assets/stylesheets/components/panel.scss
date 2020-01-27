@@ -24,6 +24,13 @@
     color: govuk-colour("white");
   }
 
+  .govuk-radios__label::before,
+  & ::after {
+    color: govuk-colour("black");
+    border-color: govuk-colour("black");
+    background-color: govuk-colour("white");
+  }
+
   .govuk-list--definition {
     dt,
     dd {
