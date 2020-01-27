@@ -2,7 +2,11 @@ module MathsAndPhysics
   extend self
 
   def start_page_url
-    "/maths-and-physics/start" # Temporary start page during private beta
+    if Rails.env.production?
+      "https://www.gov.uk/guidance/claim-a-payment-for-teaching-maths-or-physics"
+    else
+      "/#{routing_name}/claim"
+    end
   end
 
   def eligibility_page_url
