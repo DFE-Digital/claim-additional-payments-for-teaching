@@ -1,7 +1,5 @@
-$interrupt-background-colour: #005a9e;
-
 .govuk-panel--informational {
-  background-color: $interrupt-background-colour;
+  background-color: $govuk-link-colour;
   color: govuk-colour("white");
   text-align: left;
   padding: govuk-spacing(3) - $govuk-border-width;
@@ -19,11 +17,18 @@ $interrupt-background-colour: #005a9e;
 }
 
 .govuk-panel--interruption {
-  background-color: govuk-colour("blue");
+  background-color: $govuk-link-colour;
   text-align: left;
 
   * {
     color: govuk-colour("white");
+  }
+
+  .govuk-radios__label::before,
+  & ::after {
+    color: govuk-colour("black");
+    border-color: govuk-colour("black");
+    background-color: govuk-colour("white");
   }
 
   .govuk-list--definition {
@@ -38,5 +43,9 @@ $interrupt-background-colour: #005a9e;
     color: govuk-colour("black");
     background-color: govuk-colour("white");
     box-shadow: 0 2px 0 govuk-colour("dark-blue");
+  }
+
+  .govuk-button:hover {
+    background-color: govuk-colour("light-grey");
   }
 }
