@@ -54,6 +54,7 @@ module DfeTeachersPaymentService
     # Additional information which is passed in the logs for each request
     # See https://rocketjob.github.io/semantic_logger/rails.html#named-tags
     config.log_tags = {
+      request_id: :request_id,
       environment: ENV.fetch("ENVIRONMENT_NAME", "unspecified"),
     }
   end
