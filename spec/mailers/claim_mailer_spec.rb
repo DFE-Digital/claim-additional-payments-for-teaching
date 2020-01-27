@@ -74,6 +74,18 @@ RSpec.describe ClaimMailer, type: :mailer do
           expect(mail.body.encoded).to include("not been able to approve")
         end
       end
+
+      describe "#update_after_three_weeks" do
+        let(:claim) { build(:claim, :submitted, policy: policy) }
+        let(:mail) { ClaimMailer.update_after_three_weeks(claim) }
+
+        it_behaves_like "an email related to a claim", policy
+
+        it "mentions that the claim is still being reviewed in the subject and body" do
+          expect(mail.subject).to include("still reviewing your claim")
+          expect(mail.body.encoded).to include("still reviewing your claim")
+        end
+      end
     end
   end
 end

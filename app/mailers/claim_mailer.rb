@@ -17,6 +17,11 @@ class ClaimMailer < ApplicationMailer
     view_mail_with_claim_and_subject(claim, "Your claim #{@claim_description} has been rejected, reference number: #{claim.reference}")
   end
 
+  def update_after_three_weeks(claim)
+    @claim_description = claim_description(claim)
+    view_mail_with_claim_and_subject(claim, "We are still reviewing your claim #{@claim_description}, reference number: #{claim.reference}")
+  end
+
   private
 
   def claim_description(claim)

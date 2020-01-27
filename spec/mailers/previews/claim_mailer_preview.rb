@@ -11,6 +11,10 @@ class ClaimMailerPreview < ActionMailer::Preview
     ClaimMailer.rejected(claim_for(Claim.rejected))
   end
 
+  def update_after_three_weeks
+    ClaimMailer.update_after_three_weeks(claim_for(Claim.update_after_three_weeks))
+  end
+
   private
 
   def claim_for(scope)
