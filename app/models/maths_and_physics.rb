@@ -18,7 +18,7 @@ module MathsAndPhysics
   end
 
   def feedback_url
-    "https://docs.google.com/forms/d/e/1FAIpQLSeJcp50-eA5H_twIFKTUX8Z1ATDnj63wZaSlcnBCN-idJ7Ztg/viewform?usp=sf_link"
+    "https://docs.google.com/forms/d/e/1FAIpQLSfwPUxmNHqSnQ6RJ-0nedu5F2FRibBF5UIJ_EciTPcWQg581A/viewform"
   end
 
   def short_name
