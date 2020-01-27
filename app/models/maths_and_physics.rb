@@ -21,10 +21,6 @@ module MathsAndPhysics
     "https://docs.google.com/forms/d/e/1FAIpQLSeJcp50-eA5H_twIFKTUX8Z1ATDnj63wZaSlcnBCN-idJ7Ztg/viewform?usp=sf_link"
   end
 
-  def done_page_url
-    nil
-  end
-
   def short_name
     I18n.t("maths_and_physics.policy_short_name")
   end

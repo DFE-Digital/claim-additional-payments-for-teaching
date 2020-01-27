@@ -46,4 +46,8 @@ module ApplicationHelper
   def claim_checking_deadline_in_weeks
     "#{Claim::CHECK_DEADLINE.to_i / ActiveSupport::Duration::SECONDS_PER_WEEK} weeks"
   end
+
+  def done_page_url
+    "https://www.gov.uk/done/claim-additional-teaching-payment"
+  end
 end
