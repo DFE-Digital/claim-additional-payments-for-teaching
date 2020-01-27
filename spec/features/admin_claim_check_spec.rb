@@ -92,6 +92,31 @@ RSpec.feature "Admin checks a claim" do
       end
     end
 
+    context "When the claimant has another approved claim in the same payroll window, with inconsistent personal details" do
+      let(:personal_details) do
+        {
+          national_insurance_number: generate(:national_insurance_number),
+          teacher_reference_number: generate(:teacher_reference_number),
+          date_of_birth: 30.years.ago.to_date,
+          student_loan_plan: StudentLoan::PLAN_1,
+          email_address: "email@example.com",
+          bank_sort_code: "112233",
+          bank_account_number: "95928482",
+          building_society_roll_number: nil,
+        }
+      end
+      let!(:claim) { create(:claim, :submitted, personal_details.merge(bank_sort_code: "582939", bank_account_number: "74727752")) }
+      let!(:approved_claim) { create(:claim, :approved, personal_details.merge(bank_sort_code: "112233", bank_account_number: "29482823")) }
+
+      scenario "User is informed that the claim cannot be approved" do
+        click_on "View claims"
+        find("a[href='#{admin_claim_path(claim)}']").click
+
+        expect(page).to have_field("Approve", disabled: true)
+        expect(page).to have_content("This claim cannot currently be approved because we’re already paying another claim (#{approved_claim.reference}) to this claimant in this payroll month using different payment details. Please speak to a Grade 7.")
+      end
+    end
+
     context "When the claimant has not completed GOV.UK Verify" do
       let!(:claim_without_identity_confirmation) { create(:claim, :unverified) }
 

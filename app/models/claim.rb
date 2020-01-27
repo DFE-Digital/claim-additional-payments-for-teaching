@@ -174,7 +174,7 @@ class Claim < ApplicationRecord
   end
 
   def approvable?
-    submitted? && !payroll_gender_missing? && !checked?
+    submitted? && !payroll_gender_missing? && !checked? && !payment_prevented_by_other_claims?
   end
 
   def checked?
@@ -183,6 +183,10 @@ class Claim < ApplicationRecord
 
   def payroll_gender_missing?
     %w[male female].exclude?(payroll_gender)
+  end
+
+  def payment_prevented_by_other_claims?
+    ClaimsPreventingPaymentFinder.new(self).claims_preventing_payment.any?
   end
 
   def check_deadline_date
