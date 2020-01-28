@@ -25,17 +25,13 @@ module GeckoboardHelpers
         name: "Passed checking deadline",
         type: "string",
       },
-      checked: {
-        name: "Checked",
+      check: {
+        name: "Check",
         type: "string",
       },
       checked_at: {
         name: "Checked at",
         type: "datetime",
-      },
-      check_result: {
-        name: "Check result",
-        type: "string",
       },
       number_of_days_to_check: {
         name: "Number of days to check",
@@ -81,9 +77,8 @@ module GeckoboardHelpers
         "policy" => claim.policy.to_s,
         "submitted_at" => claim.submitted_at&.strftime("%Y-%m-%dT%H:%M:%S%:z"),
         "passed_checking_deadline" => claim.check_deadline_date.past?.to_s,
-        "checked" => claim.check.present?.to_s,
+        "check" => claim.check.present? ? claim.check.result : "unchecked",
         "checked_at" => (claim.check.present? ? claim.check.created_at : DateTime.parse("1970-01-01")).strftime("%Y-%m-%dT%H:%M:%S%:z"),
-        "check_result" => claim.check.present? ? claim.check.result : "",
         "number_of_days_to_check" => claim.check&.number_of_days_since_claim_submitted,
         "paid" => claim.payment.present?.to_s,
         "paid_at" => (claim.payment.present? ? claim.scheduled_payment_date : DateTime.parse("1970-01-01")).strftime("%Y-%m-%dT%H:%M:%S%:z"),
