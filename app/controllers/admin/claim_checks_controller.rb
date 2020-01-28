@@ -3,6 +3,7 @@ class Admin::ClaimChecksController < Admin::BaseAdminController
   before_action :load_claim
   before_action :reject_checked_claims
   before_action :reject_missing_payroll_gender
+  before_action :reject_if_claims_preventing_payment
 
   def create
     @check = @claim.build_check(check_params.merge(checked_by: admin_user))
@@ -11,6 +12,7 @@ class Admin::ClaimChecksController < Admin::BaseAdminController
       RecordOrUpdateGeckoboardDatasetJob.perform_later([@claim.id])
       redirect_to admin_claims_path, notice: "Claim has been #{@claim.check.result} successfully"
     else
+      @claims_preventing_payment = claims_preventing_payment_finder.claims_preventing_payment
       render "admin/claims/show"
     end
   end
@@ -22,6 +24,10 @@ class Admin::ClaimChecksController < Admin::BaseAdminController
     @matching_claims = Claim::MatchingAttributeFinder.new(@claim).matching_claims
   end
 
+  def claims_preventing_payment_finder
+    @claims_preventing_payment_finder ||= Claim::ClaimsPreventingPaymentFinder.new(@claim)
+  end
+
   def reject_checked_claims
     if @claim.check.present?
       redirect_to admin_claim_path(@claim), notice: "Claim already checked"
@@ -31,6 +37,12 @@ class Admin::ClaimChecksController < Admin::BaseAdminController
   def reject_missing_payroll_gender
     if check_params[:result] == "approved" && @claim.payroll_gender_missing?
       redirect_to admin_claim_path(@claim), alert: "Claim cannot be approved"
+    end
+  end
+
+  def reject_if_claims_preventing_payment
+    if check_params[:result] == "approved" && claims_preventing_payment_finder.claims_preventing_payment.any?
+      redirect_to admin_claim_path(@claim), alert: "Claim cannot be approved because there are inconsistent claims"
     end
   end
 
