@@ -6,6 +6,9 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+- Emails are sent for unchecked claims three weeks after they are submitted,
+  advising users that their claim is still in progress
+
 ## [Release 048] - 2020-01-28
 
 - QLS questions now refer to academic year, instead of "1 September"
