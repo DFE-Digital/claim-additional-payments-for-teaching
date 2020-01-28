@@ -37,6 +37,16 @@ RSpec.feature "Searching for school during Teacher Student Loan Repayments claim
     expect(page).to have_text(I18n.t("student_loans.questions.subjects_taught", school: schools(:penistone_grammar_school).name))
   end
 
+  scenario "redirects a timed-out session", js: true do
+    start_student_loans_claim
+
+    allow_any_instance_of(BasePublicController).to receive(:claim_session_timed_out?) { true }
+
+    fill_in :school_search, with: "Peni"
+
+    expect(page).to have_current_path(timeout_claim_path(StudentLoans.routing_name))
+  end
+
   scenario "Claim school search with autocomplete", js: true do
     start_student_loans_claim
 

@@ -1,4 +1,6 @@
 class SchoolSearchController < BasePublicController
+  include PartOfClaimJourney
+
   def create
     search_schools
     render status: errors.blank? ? :ok : :bad_request
