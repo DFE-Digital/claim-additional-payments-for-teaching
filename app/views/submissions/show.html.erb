@@ -53,11 +53,9 @@
       make the payment into your account.
     </div>
 
-    <% if current_claim.policy.done_page_url %>
-      <p class="govuk-body">
-        <%= link_to "What did you think of this service?", current_claim.policy.done_page_url, class: "govuk-link" %>
-        (takes 30 seconds)
-      </p>
-    <% end %>
+    <p class="govuk-body">
+      <%= link_to "What did you think of this service?", done_page_url, class: "govuk-link" %>
+      (takes 30 seconds)
+    </p>
   </div>
 </div>

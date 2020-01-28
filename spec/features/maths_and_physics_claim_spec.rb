@@ -4,11 +4,9 @@ RSpec.feature "Maths & Physics claims" do
   [true, false].each do |javascript_enabled|
     js_status = javascript_enabled ? "enabled" : "disabled"
     scenario "Teacher claims for Maths & Physics payment with JavaScript #{js_status}", js: javascript_enabled do
-      visit "maths-and-physics/start"
-      expect(page).to have_text "Claim a payment for teaching maths or physics"
+      visit new_claim_path(MathsAndPhysics.routing_name)
       expect(page).to have_link(href: MathsAndPhysics.feedback_url)
 
-      click_on "Start"
       expect(page).to have_text(I18n.t("maths_and_physics.questions.teaching_maths_or_physics"))
 
       choose "Yes"
@@ -135,10 +133,8 @@ RSpec.feature "Maths & Physics claims" do
     # This test was initially written for the purpose of building out this
     # alternative journey. It does not test the whole claims journey but only
     # this part of it. Not sure of the best approach.
-    visit "maths-and-physics/start"
-    expect(page).to have_text "Claim a payment for teaching maths or physics"
+    visit new_claim_path(MathsAndPhysics.routing_name)
 
-    click_on "Start"
     expect(page).to have_text(I18n.t("maths_and_physics.questions.teaching_maths_or_physics"))
 
     choose "Yes"
@@ -170,10 +166,8 @@ RSpec.feature "Maths & Physics claims" do
     # This test was initially written for the purpose of building out this
     # alternative journey. It does not test the whole claims journey but only
     # this part of it. Not sure of the best approach.
-    visit "maths-and-physics/start"
-    expect(page).to have_text "Claim a payment for teaching maths or physics"
+    visit new_claim_path(MathsAndPhysics.routing_name)
 
-    click_on "Start"
     expect(page).to have_text(I18n.t("maths_and_physics.questions.teaching_maths_or_physics"))
 
     choose "Yes"
@@ -220,10 +214,8 @@ RSpec.feature "Maths & Physics claims" do
     # This test was initially written for the purpose of building out this
     # alternative journey. It does not test the whole claims journey but only
     # this part of it. Not sure of the best approach.
-    visit "maths-and-physics/start"
-    expect(page).to have_text "Claim a payment for teaching maths or physics"
+    visit new_claim_path(MathsAndPhysics.routing_name)
 
-    click_on "Start"
     expect(page).to have_text(I18n.t("maths_and_physics.questions.teaching_maths_or_physics"))
 
     choose "Yes"
