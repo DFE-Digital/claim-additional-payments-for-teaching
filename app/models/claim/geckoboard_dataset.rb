@@ -18,6 +18,7 @@ class Claim
       Geckoboard::NumberField.new(:number_of_days_to_check, name: "Number of days to check", optional: true),
       Geckoboard::StringField.new(:paid, name: "Paid"),
       Geckoboard::DateTimeField.new(:paid_at, name: "Paid at"),
+      Geckoboard::MoneyField.new(:award_amount, name: "Award amount", optional: true, currency_code: "GBP"),
     ]
     BATCH_SIZE = 500
 
@@ -35,8 +36,6 @@ class Claim
       client.datasets.delete(dataset_name)
     end
 
-    private
-
     def data_for_claims(claims)
       claims.map do |claim|
         {
@@ -49,9 +48,12 @@ class Claim
           number_of_days_to_check: claim.check&.number_of_days_since_claim_submitted,
           paid: claim.scheduled_payment_date.present?.to_s,
           paid_at: claim.scheduled_payment_date.presence || placeholder_date_for_nil_value,
+          award_amount: claim.eligibility.present? ? (claim.award_amount * 100).to_i : nil, # Geckoboard expects currency as an integer of pence - see https://api-docs.geckoboard.com/#money-format
         }
       end
     end
+
+    private
 
     def client
       @client ||= Geckoboard.client(ENV.fetch("GECKOBOARD_API_KEY"))
