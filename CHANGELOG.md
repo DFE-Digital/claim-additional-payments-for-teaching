@@ -6,11 +6,20 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+## [Release 048] - 2020-01-28
+
 - QLS questions now refer to academic year, instead of "1 September"
 - Styling tweaks to make the service AAA accessible. Accessiblity updated to
   reflect AAA status
+- Remove basic authentication on the Maths and Physics journey
+- Update the "Claim submitted" page so all journeys link to the done page on
+  GOV.UK
+- Remove the temporary Maths and Physics start page and redirect to the one on
+  GOV.UK
+- New Maths and Physics feedback form link
+- Put Maths and Physics into public beta
 
-## [Relase 047] - 2020-01-23
+## [Release 047] - 2020-01-23
 
 - Fix existing session page so if no option is selected a user doesn't continue
   their claim
@@ -18,9 +27,8 @@ The format is based on [Keep a Changelog]
 - Log entries are now tagged with their deployed environment
 - Record the the time in days between submitting and approving a claim
 - Add a Rake task to update a Geckoboard dataset when a new field has been added
-- Put Maths and Physics into public beta
 
-## [Relase 046] - 2020-01-21
+## [Release 046] - 2020-01-21
 
 - Feedback link tells users it will open in a new tab
 - Changed existing session page to use radios and tidy up the iterruption card
@@ -383,7 +391,9 @@ The format is based on [Keep a Changelog]
 - First release for student loan repayments private beta
 
 [unreleased]:
-  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-047...HEAD
+  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-048...HEAD
+[release 048]:
+  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-047...release-048
 [release 047]:
   https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-046...release-047
 [release 046]:
