@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.describe "Admin session timing out", type: :request do
-  let(:timeout_length_in_minutes) { Admin::BaseAdminController::ADMIN_TIMEOUT_LENGTH_IN_MINUTES }
+  let(:timeout_length_in_minutes) { AdminSessionTimeout::ADMIN_TIMEOUT_LENGTH_IN_MINUTES }
   let(:dfe_sign_in_id) { "userid-345" }
   let(:organisation_id) { "organisationid-6789" }
 
