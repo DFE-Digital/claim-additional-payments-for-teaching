@@ -6,7 +6,7 @@ RSpec.describe Claim::ClaimsPreventingPaymentFinder do
   describe "#claims_preventing_payment" do
     let(:personal_details) do
       {
-        national_insurance_number: generate(:national_insurance_number),
+        teacher_reference_number: generate(:teacher_reference_number),
         bank_account_number: "32828838",
         bank_sort_code: "183828",
         first_name: "Boris",
@@ -15,7 +15,7 @@ RSpec.describe Claim::ClaimsPreventingPaymentFinder do
     let(:claim) { create(:claim, :submitted, personal_details) }
     subject(:claims_preventing_payment) { finder.claims_preventing_payment }
 
-    context "when there is another claim with the same National Insurance number, with inconsistent personal details that would prevent us from running payroll" do
+    context "when there is another claim with the same teacher reference number, with inconsistent personal details that would prevent us from running payroll" do
       let(:inconsistent_personal_details) do
         personal_details.merge(
           bank_account_number: "87282828",
@@ -40,7 +40,7 @@ RSpec.describe Claim::ClaimsPreventingPaymentFinder do
       end
     end
 
-    context "when there is another claim with the same National Insurance number, with inconsistent details that would not prevent us from running payroll" do
+    context "when there is another claim with the same teacher reference number, with inconsistent details that would not prevent us from running payroll" do
       let(:inconsistent_personal_details) do
         personal_details.merge(
           first_name: "Jarvis",

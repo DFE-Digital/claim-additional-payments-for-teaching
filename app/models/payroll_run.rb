@@ -18,9 +18,9 @@ class PayrollRun < ApplicationRecord
   def self.create_with_claims!(claims, attrs = {})
     ActiveRecord::Base.transaction do
       PayrollRun.create!(attrs).tap do |payroll_run|
-        claims.group_by(&:national_insurance_number).each_value do |claims|
-          award_amount = claims.sum(&:award_amount)
-          Payment.create!(payroll_run: payroll_run, claims: claims, award_amount: award_amount)
+        claims.group_by(&:teacher_reference_number).each_value do |grouped_claims|
+          award_amount = grouped_claims.sum(&:award_amount)
+          Payment.create!(payroll_run: payroll_run, claims: grouped_claims, award_amount: award_amount)
         end
       end
     end

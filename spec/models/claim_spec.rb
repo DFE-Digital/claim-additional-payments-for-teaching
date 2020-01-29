@@ -454,11 +454,11 @@ RSpec.describe Claim, type: :model do
       expect(create(:claim, :rejected).approvable?).to eq false
     end
 
-    it "returns false when there exists another payrollable claim with the same National Insurance number but with inconsistent attributes that would prevent us from running payroll" do
-      national_insurance_number = generate(:national_insurance_number)
-      create(:claim, :approved, national_insurance_number: national_insurance_number, date_of_birth: 20.years.ago)
+    it "returns false when there exists another payrollable claim with the same teacher reference number but with inconsistent attributes that would prevent us from running payroll" do
+      teacher_reference_number = generate(:teacher_reference_number)
+      create(:claim, :approved, teacher_reference_number: teacher_reference_number, date_of_birth: 20.years.ago)
 
-      expect(create(:claim, :submitted, national_insurance_number: national_insurance_number, date_of_birth: 30.years.ago).approvable?).to eq false
+      expect(create(:claim, :submitted, teacher_reference_number: teacher_reference_number, date_of_birth: 30.years.ago).approvable?).to eq false
     end
   end
 
