@@ -3,6 +3,24 @@ require "rails_helper"
 RSpec.describe Claim::GeckoboardDataset, type: :model do
   let(:claim) { build(:claim, :submitted, created_at: DateTime.now) }
 
+  it "returns an award_amount of nil for a claim with no eligibility" do
+    ClimateControl.modify ENVIRONMENT_NAME: "test" do
+      expect(Claim::GeckoboardDataset.new(claims: [claim]).data_for_claims([claim]).first["award_amount"]).to be_nil
+    end
+  end
+
+  it "correctly converts award amounts to an integer of pennies" do
+    ClimateControl.modify ENVIRONMENT_NAME: "test" do
+      eligible_claim = build(
+        :claim,
+        :submitted,
+        student_loan_plan: :plan_1,
+        eligibility: build(:student_loans_eligibility, student_loan_repayment_amount: 2345.67),
+      )
+      expect(Claim::GeckoboardDataset.new(claims: [eligible_claim]).data_for_claims([eligible_claim]).first[:award_amount]).to eq(234567)
+    end
+  end
+
   it "sends a claim's details to the Geckoboard dataset" do
     ClimateControl.modify ENVIRONMENT_NAME: "test" do
       event = Claim::GeckoboardDataset.new(claims: [claim])

@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+- Claim award amount is now sent to the Geckoboard dataset
+
 ## [Release 049] - 2020-01-29
 
 - Prevent service operator from approving a claim if we would not be able to pay
