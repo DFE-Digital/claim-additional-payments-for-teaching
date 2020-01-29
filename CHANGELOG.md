@@ -6,8 +6,14 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+## [Release 049] - 2020-01-29
+
+- Prevent service operator from approving a claim if we would not be able to pay
+  it in the current payroll month because we are already paying the same
+  claimant for another claim with different payment details
 - Emails are sent for unchecked claims three weeks after they are submitted,
   advising users that their claim is still in progress
+- Developers can export data needed for school check mail merge
 
 ## [Release 048] - 2020-01-28
 
@@ -30,9 +36,6 @@ The format is based on [Keep a Changelog]
 - Log entries are now tagged with their deployed environment
 - Record the the time in days between submitting and approving a claim
 - Add a Rake task to update a Geckoboard dataset when a new field has been added
-- Prevent service operator from approving a claim if we would not be able to pay
-  it in the current payroll month because we are already paying the same
-  claimant for another claim with different payment details
 
 ## [Release 046] - 2020-01-21
 
@@ -397,7 +400,9 @@ The format is based on [Keep a Changelog]
 - First release for student loan repayments private beta
 
 [unreleased]:
-  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-048...HEAD
+  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-049...HEAD
+[release 049]:
+  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-048...release-049
 [release 048]:
   https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-047...release-048
 [release 047]:
