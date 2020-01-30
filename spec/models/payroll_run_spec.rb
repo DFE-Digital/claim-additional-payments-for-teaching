@@ -53,7 +53,7 @@ RSpec.describe PayrollRun, type: :model do
       expect(claims[1].payment.award_amount).to eq(claims[1].award_amount)
     end
 
-    context "with multiple claims from the same National Insurance number" do
+    context "with multiple claims from the same teacher reference number" do
       let(:personal_details) do
         {
           national_insurance_number: generate(:national_insurance_number),

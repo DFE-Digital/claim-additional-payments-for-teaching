@@ -10,7 +10,7 @@ class Claim
     # payroll run for the current month.
     #
     # These claims are payrollable, and submitted by the same claimant as
-    # `claim`, as identified by National Insurance number.
+    # `claim`, as identified by teacher reference number (TRN).
     #
     # The returned claims have different payment or tax details to those
     # provided by `claim`, and hence `claim` cannot be paid in the same payment
@@ -22,7 +22,7 @@ class Claim
     private
 
     def find_claims_preventing_payment
-      payrollable_claims_from_same_claimant = Claim.payrollable.where(national_insurance_number: claim.national_insurance_number)
+      payrollable_claims_from_same_claimant = Claim.payrollable.where(teacher_reference_number: claim.teacher_reference_number)
 
       payrollable_claims_from_same_claimant.select do |other_claim|
         Payment::PERSONAL_DETAILS_ATTRIBUTES_FORBIDDING_DISCREPANCIES.any? do |attribute|

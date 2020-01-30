@@ -7,6 +7,7 @@ The format is based on [Keep a Changelog]
 ## [Unreleased]
 
 - Claim award amount is now sent to the Geckoboard dataset
+- Identify claimants by teacher reference number instead of NI number
 
 ## [Release 049] - 2020-01-29
 

@@ -36,7 +36,7 @@ RSpec.describe "Admin payroll runs" do
       context "when a payroll run contains claims from the same person with different bank details" do
         it "doesn’t create a payroll run and shows an error" do
           personal_details = {
-            national_insurance_number: generate(:national_insurance_number),
+            teacher_reference_number: generate(:teacher_reference_number),
             bank_sort_code: "112233",
           }
           claims = [

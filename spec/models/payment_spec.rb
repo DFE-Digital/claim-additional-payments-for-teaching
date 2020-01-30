@@ -68,11 +68,11 @@ RSpec.describe Payment do
       expect(subject).to be_valid
     end
 
-    it "is invalid when claims’ National Insurance numbers do not match" do
-      claims[0].national_insurance_number = "JM102019D"
+    it "is invalid when claims’ teacher reference numbers do not match" do
+      claims[0].teacher_reference_number = "9988776"
 
       expect(subject).not_to be_valid
-      expect(subject.errors[:claims]).to eq(["#{claims[0].reference} and #{claims[1].reference} have different values for national insurance number"])
+      expect(subject.errors[:claims]).to eq(["#{claims[0].reference} and #{claims[1].reference} have different values for teacher reference number"])
     end
 
     it "is invalid when claims’ dates of birth do not match" do
@@ -135,6 +135,12 @@ RSpec.describe Payment do
 
     it "remains valid when claims’ addresses do not match" do
       claims[0].address_line_1 = "129 Brookland Drive"
+
+      expect(subject).to be_valid
+    end
+
+    it "is valid when claims’ National Insurance numbers do not match" do
+      claims[0].national_insurance_number = "JM102019D"
 
       expect(subject).to be_valid
     end
