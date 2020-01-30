@@ -4,12 +4,20 @@ RSpec.describe "School search", type: :request do
   describe "school_search#create request" do
     before { start_student_loans_claim }
 
-    it "searches for schools using the query parameter" do
+    it "searches for schools by name using the query parameter" do
       post school_search_index_path, params: {query: "Penistone"}
 
       expect(response.status).to eq(200)
       expect(response.body).to include(schools(:penistone_grammar_school).name)
       expect(response.body).to include(schools(:penistone_grammar_school).address)
+      expect(response.body).not_to include(schools(:hampstead_school).name)
+    end
+
+    it "searches for schools by postcode using the query parameter" do
+      post school_search_index_path, params: {query: "s367"}
+
+      expect(response.status).to eq(200)
+      expect(response.body).to include(schools(:penistone_grammar_school).name)
       expect(response.body).not_to include(schools(:hampstead_school).name)
     end
 

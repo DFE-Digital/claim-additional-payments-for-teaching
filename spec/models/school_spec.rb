@@ -10,8 +10,12 @@ RSpec.describe School, type: :model do
   it { should validate_presence_of(:phase) }
 
   describe ".search" do
-    it "returns schools matching the search term" do
+    it "returns schools with a name matching the search term" do
       expect(School.search("Penistone")).to match_array([schools(:penistone_grammar_school)])
+    end
+
+    it "returns schools with a postcode matching the search term" do
+      expect(School.search("NW2 3RT")).to match_array([schools(:hampstead_school)])
     end
 
     it "raises an ArgumentError when the search term has fewer than 4 characters" do
