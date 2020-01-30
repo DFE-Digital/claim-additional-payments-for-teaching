@@ -1,6 +1,7 @@
 class School < ApplicationRecord
   SEARCH_RESULTS_LIMIT = 50
-  SEARCH_NOT_ENOUGH_CHARACTERS_ERROR = "search_term must have a minimum of 4 characters".freeze
+  SEARCH_MINIMUM_LENGTH = 3
+  SEARCH_NOT_ENOUGH_CHARACTERS_ERROR = "search term must have a minimum of #{SEARCH_MINIMUM_LENGTH} characters".freeze
 
   belongs_to :local_authority
   belongs_to :local_authority_district
@@ -111,7 +112,7 @@ class School < ApplicationRecord
   scope :closed, -> { where.not(close_date: nil) }
 
   def self.search(search_term)
-    raise ArgumentError, SEARCH_NOT_ENOUGH_CHARACTERS_ERROR if search_term.length < 4
+    raise ArgumentError, SEARCH_NOT_ENOUGH_CHARACTERS_ERROR if search_term.length < SEARCH_MINIMUM_LENGTH
 
     where("name ILIKE ?", "%#{sanitize_sql_like(search_term)}%")
       .or(where("REPLACE(postcode, ' ', '') ILIKE ?", "%#{sanitize_sql_like(search_term.tr(" ", ""))}%"))

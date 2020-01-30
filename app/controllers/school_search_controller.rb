@@ -21,7 +21,7 @@ class SchoolSearchController < BasePublicController
     rescue ArgumentError => e
       raise unless e.message == School::SEARCH_NOT_ENOUGH_CHARACTERS_ERROR
 
-      errors.push("'query' parameter must have a minimum of four characters")
+      errors.push(School::SEARCH_NOT_ENOUGH_CHARACTERS_ERROR)
     end
   end
 

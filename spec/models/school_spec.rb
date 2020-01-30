@@ -18,8 +18,8 @@ RSpec.describe School, type: :model do
       expect(School.search("NW2 3RT")).to match_array([schools(:hampstead_school)])
     end
 
-    it "raises an ArgumentError when the search term has fewer than 4 characters" do
-      expect(lambda { School.search("Pen") }).to raise_error(ArgumentError, School::SEARCH_NOT_ENOUGH_CHARACTERS_ERROR)
+    it "raises an ArgumentError when the search term has fewer than 3 characters" do
+      expect(lambda { School.search("Pe") }).to raise_error(ArgumentError, School::SEARCH_NOT_ENOUGH_CHARACTERS_ERROR)
     end
 
     it "limits the results" do

@@ -77,7 +77,7 @@ document.addEventListener("DOMContentLoaded", function() {
         error: handleResponse
       });
     },
-    minLength: 4,
+    minLength: parseInt("<%= School::SEARCH_MINIMUM_LENGTH %>"),
     showNoOptionsFound: false,
     confirmOnBlur: false,
     templates: {

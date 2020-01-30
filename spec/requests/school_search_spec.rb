@@ -21,11 +21,11 @@ RSpec.describe "School search", type: :request do
       expect(response.body).not_to include(schools(:hampstead_school).name)
     end
 
-    it "returns an error if the query parameter is less than four characters" do
-      post school_search_index_path, params: {query: "Pen"}
+    it "returns an error if the query parameter is less than three characters" do
+      post school_search_index_path, params: {query: "Pe"}
 
       expect(response.status).to eq(400)
-      expect(response.body).to include({errors: ["'query' parameter must have a minimum of four characters"]}.to_json)
+      expect(response.body).to include({errors: [School::SEARCH_NOT_ENOUGH_CHARACTERS_ERROR]}.to_json)
       expect(response.body).not_to include(schools(:penistone_grammar_school).name)
     end
 
