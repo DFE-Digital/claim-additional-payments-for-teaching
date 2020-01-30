@@ -102,8 +102,6 @@ rake jobs:schedule
 ```
 
 Look for jobs that inherit from `CronJob` for a complete list of scheduled jobs.
-Currently there is a single scheduled job for importing the schools data once a
-day at 4am: `SchoolDataImporterJob`.
 
 ## Storing non-essential cookies
 
