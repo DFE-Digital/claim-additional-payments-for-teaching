@@ -82,7 +82,7 @@ RSpec.feature "Payroll" do
   scenario "Service operator can view a payroll run" do
     sign_in_to_admin_with_role(DfeSignIn::User::SERVICE_OPERATOR_DFE_SIGN_IN_ROLE_CODE)
 
-    payroll_run = create(:payroll_run, created_at: Time.zone.now)
+    payroll_run = create(:payroll_run, claims_counts: {MathsAndPhysics => 1, StudentLoans => 1})
 
     click_on "Payroll"
     click_on "View #{payroll_run.created_at.strftime("%B")} payroll run"
@@ -91,6 +91,41 @@ RSpec.feature "Payroll" do
     expect(page).to have_content payroll_run.claims.count
     expect(page).to have_content "Downloaded No"
     expect(page).to have_field("payroll_run_download_link", with: new_admin_payroll_run_download_url(payroll_run))
+
+    expect(page).to have_content payroll_run.payments[0].id
+    expect(page).to have_content payroll_run.payments[1].id
+
+    expect(page).to have_css("form[action=\"#{admin_payroll_run_payment_path(payroll_run_id: payroll_run.id, id: payroll_run.payments[0].id)}\"]")
+    expect(page).to have_css("form[action=\"#{admin_payroll_run_payment_path(payroll_run_id: payroll_run.id, id: payroll_run.payments[1].id)}\"]")
+  end
+
+  scenario "Service operator cannot see removal buttons when confirmation report has been uploaded" do
+    sign_in_to_admin_with_role(DfeSignIn::User::SERVICE_OPERATOR_DFE_SIGN_IN_ROLE_CODE)
+
+    payroll_run = create(:payroll_run, :confirmation_report_uploaded, claims_counts: {MathsAndPhysics => 1, StudentLoans => 1})
+
+    click_on "Payroll"
+    click_on "View #{payroll_run.created_at.strftime("%B")} payroll run"
+
+    expect(page).to have_content payroll_run.payments[0].id
+    expect(page).to have_content payroll_run.payments[1].id
+
+    expect(page).to_not have_css("form[action=\"#{admin_payroll_run_payment_path(payroll_run_id: payroll_run.id, id: payroll_run.payments[0].id)}\"]")
+    expect(page).to_not have_css("form[action=\"#{admin_payroll_run_payment_path(payroll_run_id: payroll_run.id, id: payroll_run.payments[1].id)}\"]")
+  end
+
+  scenario "Service operator can remove a payment from a payroll run" do
+    sign_in_to_admin_with_role(DfeSignIn::User::SERVICE_OPERATOR_DFE_SIGN_IN_ROLE_CODE)
+    payroll_run = create(:payroll_run, claims_counts: {MathsAndPhysics => 1, StudentLoans => 1})
+
+    click_on "Payroll"
+    click_on "View #{payroll_run.created_at.strftime("%B")} payroll run"
+
+    expect {
+      click_on "Remove", match: :first
+    }.to change(payroll_run.reload.payments, :count).by(-1)
+
+    expect(page).to have_content("Payment has been removed from payroll run")
   end
 
   scenario "Service operator can upload a Payment Confirmation Report against a payroll run" do

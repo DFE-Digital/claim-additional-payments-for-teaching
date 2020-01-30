@@ -64,4 +64,44 @@
       <%= text_field_tag "payroll_run_download_link", new_admin_payroll_run_download_url(@payroll_run), data: {"copy-to-clipboard": :true}, readonly: true, class: ["govuk-input"] %>
     </div>
   <% end %>
+
+  <div class="govuk-grid-column-full">
+
+    <h2 class="govuk-heading-l">Payments</h2>
+
+    <table class="govuk-table">
+    <thead class="govuk-table__head">
+      <tr class="govuk-table__row">
+        <th scope="col" class="govuk-table__header">Payment ID</th>
+        <th scope="col" class="govuk-table__header">Claim Reference(s)</th>
+        <th scope="col" class="govuk-table__header">Applicant Name</th>
+        <% unless @payroll_run.confirmation_report_uploaded_by %>
+          <th scope="col" class="govuk-table__header"></th>
+        <% end %>
+      </tr>
+    </thead>
+    <tbody class="govuk-table__body">
+      <% @payroll_run.payments.each do |payment| %>
+        <tr class="govuk-table__row">
+          <th scope="row" class="govuk-table__header"><%= payment.id %></th>
+          <td class="govuk-table__cell"><%= list_references(payment) %></td>
+          <td class="govuk-table__cell"><%= payment.banking_name %></td>
+          <% unless @payroll_run.confirmation_report_uploaded_by %>
+            <td class="govuk-table__cell">
+              <%= button_to 'Remove',
+                            admin_payroll_run_payment_path(id: payment.id, payroll_run_id: payment.payroll_run.id),
+                            method: :delete,
+                            class: "govuk-button govuk-button--warning",
+                            data: {
+                              confirm: "Are you sure you want to remove this payment from the payroll run?"
+                            }
+              %>
+            </td>
+          <% end %>
+        </tr>
+      <% end %>
+    </tbody>
+    </table>
+  </div>
+
 </div>
