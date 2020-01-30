@@ -16,6 +16,7 @@ The format is based on [Keep a Changelog]
 - Emails are sent for unchecked claims three weeks after they are submitted,
   advising users that their claim is still in progress
 - Developers can export data needed for school check mail merge
+- A Service Operator can remove problematic payments from a payroll run
 
 ## [Release 048] - 2020-01-28
 
