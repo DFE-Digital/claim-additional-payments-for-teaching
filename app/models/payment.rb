@@ -1,5 +1,5 @@
 class Payment < ApplicationRecord
-  has_many :claims
+  has_many :claims, dependent: :nullify
   belongs_to :payroll_run
 
   validates :award_amount, presence: true
