@@ -12,7 +12,7 @@ class ClaimMailerPreview < ActionMailer::Preview
   end
 
   def update_after_three_weeks
-    ClaimMailer.update_after_three_weeks(claim_for(Claim.update_after_three_weeks))
+    ClaimMailer.update_after_three_weeks(claim_for(Claim.approved))
   end
 
   private
