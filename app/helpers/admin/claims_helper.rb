@@ -58,14 +58,21 @@ module Admin
     end
 
     def matching_attributes(first_claim, second_claim)
-      first_attributes = first_claim.attributes.slice(*Claim::MatchingAttributeFinder::ATTRIBUTE_GROUPS_TO_MATCH.flatten).to_a
-      second_attributes = second_claim.attributes.slice(*Claim::MatchingAttributeFinder::ATTRIBUTE_GROUPS_TO_MATCH.flatten).to_a
+      first_attributes = matching_attributes_for(first_claim)
+      second_attributes = matching_attributes_for(second_claim)
 
       matching_attributes = first_attributes & second_attributes
       matching_attributes.to_h.compact.keys.map(&:humanize).sort
     end
 
     private
+
+    def matching_attributes_for(claim)
+      claim.attributes
+        .slice(*Claim::MatchingAttributeFinder::ATTRIBUTE_GROUPS_TO_MATCH.flatten)
+        .reject { |_, v| v.blank? }
+        .to_a
+    end
 
     def days_between(first_date, second_date)
       (second_date - first_date).to_i
