@@ -60,7 +60,7 @@ class PaymentConfirmation
   def check_for_missing_payments
     missing_payment_ids = payroll_run.payments.map { |payment| payment.id } - csv.rows.map { |c| c["Payment ID"] }
     missing_payment_ids.each do |id|
-      errors.append("The payment ID #{id} is missing from the CSV")
+      errors.append("Payment ID #{id} is missing from the file. Please check with Cantium to see if there is a problem with this payment. You may need to remove some payments from the Payroll Run then try uploading it again")
     end
   end
 

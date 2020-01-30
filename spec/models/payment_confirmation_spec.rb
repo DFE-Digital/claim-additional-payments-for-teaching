@@ -146,7 +146,9 @@ RSpec.describe PaymentConfirmation do
 
     it "fails and populates its errors, and does not update the payments" do
       expect(payment_confirmation.ingest).to be_falsey
-      expect(payment_confirmation.errors).to eq(["The payment ID #{payroll_run.payments[1].id} is missing from the CSV"])
+      expect(payment_confirmation.errors).to eq([
+        "Payment ID #{payroll_run.payments[1].id} is missing from the file. Please check with Cantium to see if there is a problem with this payment. You may need to remove some payments from the Payroll Run then try uploading it again",
+      ])
 
       expect(payroll_run.payments[0].reload.payroll_reference).to eq(nil)
       expect(payroll_run.payments[1].reload.payroll_reference).to eq(nil)
