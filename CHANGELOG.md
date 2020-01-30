@@ -6,9 +6,13 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+## [Release 050] - 2020-01-30
+
 - Claim award amount is now sent to the Geckoboard dataset
 - Identify claimants by teacher reference number instead of NI number
 - Fix date sent to user in three week reminder email
+- Better handling of issues related to browser caching and session expiration/
+  timeouts
 
 ## [Release 049] - 2020-01-29
 
@@ -404,7 +408,9 @@ The format is based on [Keep a Changelog]
 - First release for student loan repayments private beta
 
 [unreleased]:
-  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-049...HEAD
+  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-050...HEAD
+[release 050]:
+  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-049...release-050
 [release 049]:
   https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-048...release-049
 [release 048]:
