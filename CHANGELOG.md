@@ -9,6 +9,9 @@ The format is based on [Keep a Changelog]
 - Allow claimants to search by school postcode
 - Replace "passed SLA deadline" true/false with ok/warning/passed status in
   Geckoboard dataset
+- Schools check email export no longer includes claims which have been checked
+- Schools check email export now includes the claim school for claims made under
+  the Student Loans policy
 
 ## [Release 050] - 2020-01-30
 
