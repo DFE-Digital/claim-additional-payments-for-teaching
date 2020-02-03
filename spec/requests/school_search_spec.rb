@@ -4,7 +4,7 @@ RSpec.describe "School search", type: :request do
   describe "school_search#create request" do
     before { start_student_loans_claim }
 
-    it "searches for schools using the query parameter" do
+    it "searches for schools by name using the query parameter" do
       post school_search_index_path, params: {query: "Penistone"}
 
       expect(response.status).to eq(200)
@@ -13,11 +13,19 @@ RSpec.describe "School search", type: :request do
       expect(response.body).not_to include(schools(:hampstead_school).name)
     end
 
-    it "returns an error if the query parameter is less than four characters" do
-      post school_search_index_path, params: {query: "Pen"}
+    it "searches for schools by postcode using the query parameter" do
+      post school_search_index_path, params: {query: "s367"}
+
+      expect(response.status).to eq(200)
+      expect(response.body).to include(schools(:penistone_grammar_school).name)
+      expect(response.body).not_to include(schools(:hampstead_school).name)
+    end
+
+    it "returns an error if the query parameter is less than three characters" do
+      post school_search_index_path, params: {query: "Pe"}
 
       expect(response.status).to eq(400)
-      expect(response.body).to include({errors: ["'query' parameter must have a minimum of four characters"]}.to_json)
+      expect(response.body).to include({errors: [School::SEARCH_NOT_ENOUGH_CHARACTERS_ERROR]}.to_json)
       expect(response.body).not_to include(schools(:penistone_grammar_school).name)
     end
 

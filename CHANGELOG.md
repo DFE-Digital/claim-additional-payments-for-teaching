@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+- Allow claimants to search by school postcode
+
 ## [Release 050] - 2020-01-30
 
 - Claim award amount is now sent to the Geckoboard dataset
