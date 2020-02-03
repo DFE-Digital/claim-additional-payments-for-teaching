@@ -60,13 +60,9 @@ document.addEventListener("DOMContentLoaded", function() {
     name: "school_search",
     source: function(query, populateResults) {
       function handleResponse(response) {
-        if (response.redirect) {
-          window.location.replace(response.redirect);
-        } else {
-          schools = response.data || [];
+        schools = response.data || [];
 
-          populateResults(getSchoolIds());
-        }
+        populateResults(getSchoolIds());
       }
 
       Rails.ajax({

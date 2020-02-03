@@ -2,8 +2,6 @@ require "rails_helper"
 
 RSpec.describe "School search", type: :request do
   describe "school_search#create request" do
-    before { start_student_loans_claim }
-
     it "searches for schools by name using the query parameter" do
       post school_search_index_path, params: {query: "Penistone"}
 
@@ -35,15 +33,6 @@ RSpec.describe "School search", type: :request do
       expect(response.status).to eq(400)
       expect(response.body).to include({errors: ["Expected required parameter 'query' to be set"]}.to_json)
       expect(response.body).not_to include(schools(:penistone_grammar_school).name)
-    end
-
-    it "returns a response with a redirect URL to the timeout for the policy if the session has expired" do
-      travel(2.hours) do
-        post school_search_index_path, params: {query: "Penistone", policy: StudentLoans.routing_name}
-
-        expect(response.status).to eq(200)
-        expect(response.body).to eq({redirect: timeout_claim_path(StudentLoans.routing_name)}.to_json)
-      end
     end
 
     it "includes closed schools by default" do
