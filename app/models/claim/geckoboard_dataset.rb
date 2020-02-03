@@ -12,7 +12,7 @@ class Claim
       Geckoboard::StringField.new(:reference, name: "Reference"),
       Geckoboard::StringField.new(:policy, name: "Policy"),
       Geckoboard::DateTimeField.new(:submitted_at, name: "Submitted at"),
-      Geckoboard::StringField.new(:passed_checking_deadline, name: "Passed checking deadline"),
+      Geckoboard::StringField.new(:sla_status, name: "SLA status"),
       Geckoboard::StringField.new(:check, name: "Check"),
       Geckoboard::DateTimeField.new(:checked_at, name: "Checked at"),
       Geckoboard::NumberField.new(:number_of_days_to_check, name: "Number of days to check", optional: true),
@@ -42,7 +42,7 @@ class Claim
           reference: claim.reference,
           policy: claim.policy.to_s,
           submitted_at: claim.submitted_at,
-          passed_checking_deadline: claim.check_deadline_date.past?.to_s,
+          sla_status: sla_status_string(claim),
           check: claim.check.present? ? claim.check.result : "unchecked",
           checked_at: claim.check.present? ? claim.check.created_at : placeholder_date_for_nil_value,
           number_of_days_to_check: claim.check&.number_of_days_since_claim_submitted,
@@ -78,6 +78,16 @@ class Claim
 
     def placeholder_date_for_nil_value
       DateTime.parse("1970-01-01")
+    end
+
+    def sla_status_string(claim)
+      if claim.check_deadline_date.past?
+        "passed"
+      elsif claim.deadline_warning_date.past?
+        "warning"
+      else
+        "ok"
+      end
     end
   end
 end

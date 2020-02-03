@@ -24,6 +24,30 @@ RSpec.describe Claim::GeckoboardDataset, type: :model do
     end
   end
 
+  it "correctly reports a claim's SLA status when the claim is not approaching the check deadline" do
+    ClimateControl.modify ENVIRONMENT_NAME: "test" do
+      claim_sla_ok = build(:claim, :submitted, submitted_at: (Claim::CHECK_DEADLINE - Claim::CHECK_DEADLINE_WARNING_POINT - 1.week).ago)
+      data = dataset.data_for_claims([claim_sla_ok])
+      expect(data.first[:sla_status]).to eq("ok")
+    end
+  end
+
+  it "correctly reports a claim's SLA status when the check deadline is approaching" do
+    ClimateControl.modify ENVIRONMENT_NAME: "test" do
+      claim_sla_warning = build(:claim, :submitted, submitted_at: (Claim::CHECK_DEADLINE - Claim::CHECK_DEADLINE_WARNING_POINT + 1.week).ago)
+      data = dataset.data_for_claims([claim_sla_warning])
+      expect(data.first[:sla_status]).to eq("warning")
+    end
+  end
+
+  it "correctly reports a claim's SLA status when the check deadline has passed" do
+    ClimateControl.modify ENVIRONMENT_NAME: "test" do
+      claim_sla_passed = build(:claim, :submitted, submitted_at: (Claim::CHECK_DEADLINE + 1.week).ago)
+      data = dataset.data_for_claims([claim_sla_passed])
+      expect(data.first[:sla_status]).to eq("passed")
+    end
+  end
+
   it "sends a claim's details to the Geckoboard dataset" do
     ClimateControl.modify ENVIRONMENT_NAME: "test" do
       event = Claim::GeckoboardDataset.new(claims: [claim])

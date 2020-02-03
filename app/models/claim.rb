@@ -193,6 +193,10 @@ class Claim < ApplicationRecord
     (submitted_at + CHECK_DEADLINE).to_date
   end
 
+  def deadline_warning_date
+    (submitted_at + CHECK_DEADLINE - CHECK_DEADLINE_WARNING_POINT).to_date
+  end
+
   def address(seperator = ", ")
     Claim::ADDRESS_ATTRIBUTES.map { |attr| send(attr) }.reject(&:blank?).join(seperator)
   end
