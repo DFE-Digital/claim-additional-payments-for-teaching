@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+## [Release 051] - 2020-02-03
+
 - Allow claimants to search by school postcode
 - Replace "passed SLA deadline" true/false with ok/warning/passed status in
   Geckoboard dataset
@@ -415,7 +417,9 @@ The format is based on [Keep a Changelog]
 - First release for student loan repayments private beta
 
 [unreleased]:
-  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-050...HEAD
+  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-051...HEAD
+[release 051]:
+  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-050...release-051
 [release 050]:
   https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-049...release-050
 [release 049]:
