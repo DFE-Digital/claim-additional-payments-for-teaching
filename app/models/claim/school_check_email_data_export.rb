@@ -18,10 +18,18 @@ class Claim
 
     def csv_string
       CSV.generate { |csv|
-        csv << ["Claim reference", "Policy", "Current school URN", "Current school name", "Claimant name", "Subject"]
+        csv << ["Claim reference", "Policy", "Current school URN", "Current school name", "Claim school URN", "Claim school name", "Claimant name", "Subject"]
 
         claims.each do |claim|
-          csv << [claim.reference, claim.policy.name, claim.school.urn, claim.school.name, claimant_name(claim), subject(claim)]
+          csv << [claim.reference,
+                  claim.policy.name,
+                  claim.eligibility.current_school.urn,
+                  claim.eligibility.current_school.name,
+                  (claim.eligibility.claim_school.urn if claim.policy.is_a? StudentLoans),
+                  (claim.eligibility.claim_school.name if claim.policy.is_a? StudentLoans),
+                  claimant_name(claim),
+                  subject(claim),
+                 ]
         end
       }
     end
