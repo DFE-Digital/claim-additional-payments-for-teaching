@@ -7,6 +7,8 @@ The format is based on [Keep a Changelog]
 ## [Unreleased]
 
 - Allow claimants to search by school postcode
+- Replace "passed SLA deadline" true/false with ok/warning/passed status in
+  Geckoboard dataset
 
 ## [Release 050] - 2020-01-30
 
