@@ -29,7 +29,7 @@ module ClaimsHelper
     [].tap do |a|
       a << [t("questions.name"), claim.full_name, "name"] unless claim.name_verified?
       a << [t("questions.address"), claim.address, "address"] unless claim.address_from_govuk_verify?
-      a << [t("questions.date_of_birth"), l(claim.date_of_birth), "date-of-birth"] unless claim.date_of_birth_verified?
+      a << [t("questions.date_of_birth"), date_of_birth_string(claim), "date-of-birth"] unless claim.date_of_birth_verified?
       a << [t("questions.payroll_gender"), t("answers.payroll_gender.#{claim.payroll_gender}"), "gender"] unless claim.payroll_gender_verified?
       a << [t("questions.teacher_reference_number"), claim.teacher_reference_number, "teacher-reference-number"]
       a << [t("questions.national_insurance_number"), claim.national_insurance_number, "national-insurance-number"]
@@ -57,5 +57,9 @@ module ClaimsHelper
 
   def school_search_question(searching_for_additional_school)
     searching_for_additional_school ? t("student_loans.questions.additional_school") : t("student_loans.questions.claim_school")
+  end
+
+  def date_of_birth_string(claim)
+    claim.date_of_birth && l(claim.date_of_birth)
   end
 end

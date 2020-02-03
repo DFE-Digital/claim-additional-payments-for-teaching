@@ -119,6 +119,22 @@ describe ClaimsHelper do
 
       expect(helper.identity_answers(claim)).to eq expected_answers
     end
+
+    it "copes with a blank date of birth" do
+      claim.date_of_birth = nil
+
+      expected_answers = [
+        [I18n.t("questions.name"), "Jo Bloggs", "name"],
+        [I18n.t("questions.address"), "Flat 1, 1 Test Road, Test Town, AB1 2CD", "address"],
+        [I18n.t("questions.date_of_birth"), nil, "date-of-birth"],
+        [I18n.t("questions.payroll_gender"), "Don’t know", "gender"],
+        [I18n.t("questions.teacher_reference_number"), "1234567", "teacher-reference-number"],
+        [I18n.t("questions.national_insurance_number"), "QQ123456C", "national-insurance-number"],
+        [I18n.t("questions.email_address"), "test@email.com", "email-address"],
+      ]
+
+      expect(helper.identity_answers(claim)).to eq expected_answers
+    end
   end
 
   describe "#payment_answers" do
