@@ -10,6 +10,8 @@ RSpec.describe Claim::SchoolCheckEmailDataExport do
   let!(:submitted_claims) { [submitted_student_loans_claim, submitted_maths_and_physics_claim] }
   let!(:submittable_claims) { create_list(:claim, 4, :submittable) }
   let!(:excluded_claims) { create_list(:claim, 3, :submitted) }
+  let!(:approved_claims) { create_list(:claim, 2, :approved) }
+  let!(:rejected_claims) { create_list(:claim, 2, :rejected) }
 
   subject { described_class.new(excluded_claims.map(&:reference).join(",")) }
 

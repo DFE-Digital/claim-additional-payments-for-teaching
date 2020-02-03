@@ -29,7 +29,7 @@ class Claim
     private
 
     def claims
-      Claim.submitted
+      Claim.awaiting_checking
         .where.not(reference: claim_references_to_exclude)
         .includes(eligibility: [:current_school])
     end
