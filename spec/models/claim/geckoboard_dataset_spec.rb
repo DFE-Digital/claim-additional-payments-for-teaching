@@ -2,10 +2,12 @@ require "rails_helper"
 
 RSpec.describe Claim::GeckoboardDataset, type: :model do
   let(:claim) { build(:claim, :submitted, created_at: DateTime.now) }
+  let(:dataset) { Claim::GeckoboardDataset.new }
 
   it "returns an award_amount of nil for a claim with no eligibility" do
     ClimateControl.modify ENVIRONMENT_NAME: "test" do
-      expect(Claim::GeckoboardDataset.new(claims: [claim]).data_for_claims([claim]).first["award_amount"]).to be_nil
+      data = dataset.data_for_claims([claim])
+      expect(data.first["award_amount"]).to be_nil
     end
   end
 
@@ -17,7 +19,32 @@ RSpec.describe Claim::GeckoboardDataset, type: :model do
         student_loan_plan: :plan_1,
         eligibility: build(:student_loans_eligibility, student_loan_repayment_amount: 2345.67),
       )
-      expect(Claim::GeckoboardDataset.new(claims: [eligible_claim]).data_for_claims([eligible_claim]).first[:award_amount]).to eq(234567)
+      data = dataset.data_for_claims([eligible_claim])
+      expect(data.first[:award_amount]).to eq(234567)
+    end
+  end
+
+  it "correctly reports a claim's SLA status when the claim is not approaching the check deadline" do
+    ClimateControl.modify ENVIRONMENT_NAME: "test" do
+      claim_sla_ok = build(:claim, :submitted, submitted_at: (Claim::CHECK_DEADLINE - Claim::CHECK_DEADLINE_WARNING_POINT - 1.week).ago)
+      data = dataset.data_for_claims([claim_sla_ok])
+      expect(data.first[:sla_status]).to eq("ok")
+    end
+  end
+
+  it "correctly reports a claim's SLA status when the check deadline is approaching" do
+    ClimateControl.modify ENVIRONMENT_NAME: "test" do
+      claim_sla_warning = build(:claim, :submitted, submitted_at: (Claim::CHECK_DEADLINE - Claim::CHECK_DEADLINE_WARNING_POINT + 1.week).ago)
+      data = dataset.data_for_claims([claim_sla_warning])
+      expect(data.first[:sla_status]).to eq("warning")
+    end
+  end
+
+  it "correctly reports a claim's SLA status when the check deadline has passed" do
+    ClimateControl.modify ENVIRONMENT_NAME: "test" do
+      claim_sla_passed = build(:claim, :submitted, submitted_at: (Claim::CHECK_DEADLINE + 1.week).ago)
+      data = dataset.data_for_claims([claim_sla_passed])
+      expect(data.first[:sla_status]).to eq("passed")
     end
   end
 
