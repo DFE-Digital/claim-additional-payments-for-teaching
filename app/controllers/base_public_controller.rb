@@ -14,12 +14,7 @@ class BasePublicController < ApplicationController
     if claim_session_timed_out?
       policy_routing_name_for_redirect = current_policy_routing_name
       clear_claim_session
-      respond_to do |format|
-        format.html { redirect_to timeout_claim_path(policy_routing_name_for_redirect) }
-        format.json do
-          render json: {redirect: timeout_claim_path(policy_routing_name_for_redirect)}
-        end
-      end
+      redirect_to timeout_claim_path(policy_routing_name_for_redirect)
     end
   end
 end
