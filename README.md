@@ -113,6 +113,24 @@ Look for jobs that inherit from `CronJob` for a complete list of scheduled jobs.
 Currently there is a single scheduled job for importing the schools data once a
 day at 4am: `SchoolDataImporterJob`.
 
+## Geckoboard
+
+The application has a Geckoboard dashboard that is updated every time a Claim is
+submitted or approved, or a payment is recorded. The class that does most of the
+work can be found in app/models/claim/geckoboard_dataset.rb.
+
+If any changes are made to the `DATASET_FIELDS` constant, then it's important
+that the underlying Geckoboard dataset is reset, as the Geckoboard API doesn't
+support adding new fields to an already existing dataset. The easiest way to do
+this is to run the following Rake command:
+
+```bash
+bundle exec rake geckoboard:reset
+```
+
+This deletes the existing dataset, and then recreates the dataset with the
+exisiting claim data.
+
 ## Running specs, brakeman, and code linting
 
 ```
@@ -259,24 +277,6 @@ the user IP address as part of the payload data sent to Application Insights in
 [`lib/application_insights`](lib/application_insights). See
 [`config/initializers/application_insights.rb`](config/initializers/application_insights.rb)
 for how to mixin this code to your Rails application.
-
-### Geckoboard
-
-The application has a Geckoboard dashboard that is updated every time a Claim is
-submitted or approved, or a payment is recorded. The class that does most of the
-work can be found in app/models/claim/geckoboard_dataset.rb.
-
-If any changes are made to the `DATASET_FIELDS` constant, then it's important
-that the underlying Geckoboard dataset is reset, as the Geckoboard API doesn't
-support adding new fields to an already existing dataset. The easiest way to do
-this is to run the following Rake command:
-
-```bash
-bundle exec rake geckoboard:reset
-```
-
-This deletes the existing dataset, and then recreates the dataset with the
-exisiting claim data.
 
 ### Azure ARM templates
 
