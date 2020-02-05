@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+- Update admin menu with new layout
+
 ## [Release 051] - 2020-02-03
 
 - Allow claimants to search by school postcode

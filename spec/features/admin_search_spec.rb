@@ -11,7 +11,7 @@ RSpec.feature "Admin search" do
     visit search_admin_claims_path
 
     fill_in :reference, with: claim.reference
-    click_on "Search"
+    click_button "Search"
 
     expect(page).to have_content(claim.reference)
   end
