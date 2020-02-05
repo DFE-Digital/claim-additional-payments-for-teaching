@@ -1,0 +1,3 @@
+# Run me with `rails runner db/data/<%= @file_name %>`
+
+# Put your Ruby code here

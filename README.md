@@ -36,10 +36,8 @@ Architecture decision records can be found in the
      section.
 2. Run `bundle install` and `yarn install` to install the dependencies
 3. Run `bundle exec rails db:setup` to set up the database development
-4. Run `bundle exec rails data:schema:load` to seed the data migrations
-   information
-5. Run `bundle exec foreman start` to launch the app on https://localhost:3000/
-6. Visit one of the following urls in your browser to access the relevant
+4. Run `bundle exec foreman start` to launch the app on https://localhost:3000/
+5. Visit one of the following urls in your browser to access the relevant
    policy:
 
 - **Student Loans:** https://localhost:3000/student-loans/claim
@@ -194,18 +192,17 @@ few minutes to complete.
 ## Creating data migrations
 
 When running a live service sometimes you're required to change existing data in
-some way. Using the gem [data_migrate](https://github.com/ilyakatz/data-migrate)
-we can write data migrations in a similar way we do with schema migrations.
+some way. We do this in a similar way to database migrations, using Data
+Migrations
 
 The migrations are stored in the `db/data` folder.
 
 - To generate a migration: `rails g data_migration add_this_to_that`
-- To run the data migration: `rails data:migrate` run this separately from the
-  schema migration
+- To run the data migration:
+  `rails runner db/data/$FILENAME_OF_THE_GENERATED_MIGRATION`
 
-When the service deploys it will run these data migrations after the schema
-ones. Any schema clean-up as a result of the data migration will need to be done
-as a separate change.
+When the new code deploys, you'll need to run your migration on the live service
+by [running a live console](#running-a-live-console).
 
 ## Deployment
 

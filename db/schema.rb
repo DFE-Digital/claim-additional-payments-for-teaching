@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_01_15_092652) do
+ActiveRecord::Schema.define(version: 2020_02_03_161814) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -66,9 +66,6 @@ ActiveRecord::Schema.define(version: 2020_01_15_092652) do
     t.index ["payment_id"], name: "index_claims_on_payment_id"
     t.index ["reference"], name: "index_claims_on_reference", unique: true
     t.index ["submitted_at"], name: "index_claims_on_submitted_at"
-  end
-
-  create_table "data_migrations", primary_key: "version", id: :string, force: :cascade do |t|
   end
 
   create_table "delayed_jobs", force: :cascade do |t|
