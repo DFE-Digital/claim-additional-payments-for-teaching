@@ -47,6 +47,7 @@ ActiveRecord::Schema.define(version: 2020_02_12_154529) do
     t.string "banking_name"
     t.string "building_society_roll_number"
     t.uuid "payment_id"
+    t.datetime "pii_removed_at"
     t.string "academic_year", limit: 9
     t.index ["academic_year"], name: "index_claims_on_academic_year"
     t.index ["created_at"], name: "index_claims_on_created_at"
