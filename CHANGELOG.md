@@ -7,6 +7,7 @@ The format is based on [Keep a Changelog]
 ## [Unreleased]
 
 - Update admin menu with new layout
+- Update "Some of this information is wrong" content on the verified page
 
 ## [Release 051] - 2020-02-03
 
