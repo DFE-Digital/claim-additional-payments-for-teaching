@@ -126,7 +126,7 @@ Code linting is performed using:
 [Bullet](https://github.com/flyerhzm/bullet) runs around each spec. If it
 detects an N+1 query it will raise an exception and the tests will fail.
 
-## The use of Rails fixtures in the test suite
+### The use of Rails fixtures in the test suite
 
 The application test suite makes use of a small number of
 [Rails fixtures](https://api.rubyonrails.org/v5.2.1/classes/ActiveRecord/FixtureSet.html)
