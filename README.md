@@ -93,14 +93,6 @@ To enable Google Analytics set the following environment variable:
 GOOGLE_ANALYTICS_ID=<UA PROPERTY>
 ```
 
-### Storing non-essential cookies
-
-Non-essential cookies should not be stored without the user's consent. If the
-user has given consent, we record it in a cookie called `accept_cookies`.
-
-In JavaScript before setting a cookie, you can check the user's consent by using
-the function: `TeacherPayments.cookies.checkNonEssentialCookiesAccepted()`
-
 ### Running `CronJob`s
 
 To schedule recurring jobs, run the following:
@@ -112,6 +104,14 @@ rake jobs:schedule
 Look for jobs that inherit from `CronJob` for a complete list of scheduled jobs.
 Currently there is a single scheduled job for importing the schools data once a
 day at 4am: `SchoolDataImporterJob`.
+
+## Storing non-essential cookies
+
+Non-essential cookies should not be stored without the user's consent. If the
+user has given consent, we record it in a cookie called `accept_cookies`.
+
+In JavaScript before setting a cookie, you can check the user's consent by using
+the function: `TeacherPayments.cookies.checkNonEssentialCookiesAccepted()`
 
 ## Geckoboard
 
