@@ -230,17 +230,21 @@ first):
 bin/azure-console $ENVIRONMENT # (development/production)
 ```
 
-### Usage
-
-If you don't need to modify the data and only need to do queries it is
-recommended that you run rails console in sandbox mode
-`rails console --sandbox`.
-
-In exceptional circumstances you may want to modify the data, this should only
-be done with approval from the Service Owner and is to be carried out in pairs.
-
 Accessing a live console on production requires a
 [PIM (Privileged Identity Management) request](https://dfedigital.atlassian.net/wiki/spaces/TP/pages/1192624202/Privileged+Identity+Management+requests).
+
+### Usage
+
+When accessing the Rails console on a live system, do so in sandbox mode to
+avoid making unintented changes to the database state:
+
+`bin/rails console --sandbox`.
+
+In exceptional circumstances you may want to modify the data. If this is the
+case, you should probably write a [data migration](#creating-data-migrations) so
+that the code to do it can be reviewed and put into source control. If there is
+a need to make an immediate change live using the console, make sure it is done
+with approval from the Service Owner and is to done as a pair.
 
 ## Putting the application into maintenance mode
 
