@@ -65,10 +65,11 @@
         </div>
         <div class="govuk-header__content">
           <%= link_to t("service_name"), admin_root_path, class: "govuk-header__link govuk-header__link--service-name" %>
+
+          <%= render "admin_menu" if admin_signed_in? %>
         </div>
       </div>
     </header>
-    <%= render "admin_menu" if admin_signed_in? %>
 
     <div class="govuk-width-container">
       <main class="govuk-main-wrapper app-main-class" id="main-content">

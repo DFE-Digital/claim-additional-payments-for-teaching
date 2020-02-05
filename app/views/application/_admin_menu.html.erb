@@ -1,23 +1,22 @@
-<div class="govuk-width-container">
-  <nav class="app-navigation govuk-clearfix">
-    <ul class="app-navigation__list govuk-width-container">
-      <% if service_operator_signed_in? %>
-        <li class="app-navigation__list-item">
-          <%= link_to "View claims", admin_claims_path, class: "govuk-link govuk-link--no-visited-state app-navigation__link" %>
-        </li>
-        <li>
-          <%= link_to "Search for a claim", search_admin_claims_path, class: "govuk-link govuk-link--no-visited-state app-navigation__link" %>
-        </li>
-        <li class="app-navigation__list-item">
-          <%= link_to 'Payroll', admin_payroll_runs_path, class: "govuk-link govuk-link--no-visited-state app-navigation__link" %>
-        </li>
-        <li class="app-navigation__list-item">
-          <%= link_to 'Open or close a service', admin_policy_configurations_path, class: "govuk-link govuk-link--no-visited-state app-navigation__link" %>
-        </li>
-      <% end %>
-      <li class="app-navigation__list-item">
-        <%= link_to "Sign out", admin_sign_out_path, method: :delete, class: "govuk-link govuk-link--no-visited-state app-navigation__link" %>
+<button type="button" class="govuk-header__menu-button govuk-js-header-toggle" aria-controls="navigation" aria-label="Show or hide Top Level Navigation">Menu</button>
+<nav>
+  <ul id="navigation" class="govuk-header__navigation " aria-label="Top Level Navigation">
+    <% if service_operator_signed_in? %>
+      <li class="govuk-header__navigation-item">
+        <%= link_to "View claims", admin_claims_path, class: "govuk-header__link" %>
       </li>
-    </ul>
-  </nav>
-</div>
+      <li class="govuk-header__navigation-item">
+        <%= link_to "Search", search_admin_claims_path, class: "govuk-header__link" %>
+      </li>
+      <li class="govuk-header__navigation-item">
+        <%= link_to "Payroll", admin_payroll_runs_path, class: "govuk-header__link" %>
+      </li>
+      <li class="govuk-header__navigation-item">
+        <%= link_to "Open/close a service", admin_policy_configurations_path, class: "govuk-header__link" %>
+      </li>
+    <% end %>
+    <li class="govuk-header__navigation-item">
+      <%= link_to "Sign out", admin_sign_out_path, method: :delete, class: "govuk-header__link" %>
+    </li>
+  </ul>
+</nav>
