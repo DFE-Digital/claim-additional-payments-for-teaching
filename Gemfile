@@ -39,9 +39,6 @@ gem "mail-notify"
 gem "delayed_job_active_record"
 gem "delayed_cron_job"
 
-# Run data migrations along side schema migrations
-gem "data_migrate"
-
 # Geckoboard for stats
 gem "geckoboard-ruby"
 
