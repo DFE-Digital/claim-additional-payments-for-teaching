@@ -9,6 +9,14 @@ Most documentation for the service can be found on the
 Some app-specific technical documentation can be found in the [docs](docs)
 directory.
 
+### Service architecture
+
+The service architecture is currently defined [on confluence].
+
+[on confluence]:
+  https://dfedigital.atlassian.net/wiki/spaces/TP/pages/1049559041/Service+Architecture
+[openjdk]: https://adoptopenjdk.net/
+
 ### ADRs
 
 Architecture decision records can be found in the
@@ -215,15 +223,6 @@ be done with approval from the Service Owner and is to be carried out in pairs.
 
 Accessing a live console on production requires a
 [PIM (Privileged Identity Management) request](https://dfedigital.atlassian.net/wiki/spaces/TP/pages/1192624202/Privileged+Identity+Management+requests).
-
-
-## Service architecture
-
-The service architecture is currently defined [on confluence].
-
-[on confluence]:
-  https://dfedigital.atlassian.net/wiki/spaces/TP/pages/1049559041/Service+Architecture
-[openjdk]: https://adoptopenjdk.net/
 
 ## Putting the application into maintenance mode
 
