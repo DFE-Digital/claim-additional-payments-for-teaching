@@ -192,18 +192,17 @@ few minutes to complete.
 ## Creating data migrations
 
 When running a live service sometimes you're required to change existing data in
-some way. Using the gem [data_migrate](https://github.com/ilyakatz/data-migrate)
-we can write data migrations in a similar way we do with schema migrations.
+some way. We do this in a similar way to database migrations, using Data
+Migrations
 
 The migrations are stored in the `db/data` folder.
 
 - To generate a migration: `rails g data_migration add_this_to_that`
-- To run the data migration: `rails data:migrate` run this separately from the
-  schema migration
+- To run the data migration:
+  `rails runner db/data/$FILENAME_OF_THE_GENERATED_MIGRATION`
 
-When the service deploys it will run these data migrations after the schema
-ones. Any schema clean-up as a result of the data migration will need to be done
-as a separate change.
+When the new code deploys, you'll need to run your migration on the live service
+by [running a live console](#running-a-live-console).
 
 ## Deployment
 

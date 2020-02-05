@@ -1,0 +1,8 @@
+Description:
+    Generate a data migration
+
+Example:
+    rails generate data_migration name_of_migration
+
+    This will create:
+        db/data/$TIMESTAMP_name_of_migration.rb
