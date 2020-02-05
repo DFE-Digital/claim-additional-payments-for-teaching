@@ -9,6 +9,14 @@ Most documentation for the service can be found on the
 Some app-specific technical documentation can be found in the [docs](docs)
 directory.
 
+### Service architecture
+
+The service architecture is currently defined [on confluence].
+
+[on confluence]:
+  https://dfedigital.atlassian.net/wiki/spaces/TP/pages/1049559041/Service+Architecture
+[openjdk]: https://adoptopenjdk.net/
+
 ### ADRs
 
 Architecture decision records can be found in the
@@ -85,14 +93,6 @@ To enable Google Analytics set the following environment variable:
 GOOGLE_ANALYTICS_ID=<UA PROPERTY>
 ```
 
-### Storing non-essential cookies
-
-Non-essential cookies should not be stored without the user's consent. If the
-user has given consent, we record it in a cookie called `accept_cookies`.
-
-In JavaScript before setting a cookie, you can check the user's consent by using
-the function: `TeacherPayments.cookies.checkNonEssentialCookiesAccepted()`
-
 ### Running `CronJob`s
 
 To schedule recurring jobs, run the following:
@@ -105,6 +105,32 @@ Look for jobs that inherit from `CronJob` for a complete list of scheduled jobs.
 Currently there is a single scheduled job for importing the schools data once a
 day at 4am: `SchoolDataImporterJob`.
 
+## Storing non-essential cookies
+
+Non-essential cookies should not be stored without the user's consent. If the
+user has given consent, we record it in a cookie called `accept_cookies`.
+
+In JavaScript before setting a cookie, you can check the user's consent by using
+the function: `TeacherPayments.cookies.checkNonEssentialCookiesAccepted()`
+
+## Geckoboard
+
+The application has a Geckoboard dashboard that is updated every time a Claim is
+submitted or approved, or a payment is recorded. The class that does most of the
+work can be found in app/models/claim/geckoboard_dataset.rb.
+
+If any changes are made to the `DATASET_FIELDS` constant, then it's important
+that the underlying Geckoboard dataset is reset, as the Geckoboard API doesn't
+support adding new fields to an already existing dataset. The easiest way to do
+this is to run the following Rake command:
+
+```bash
+bundle exec rake geckoboard:reset
+```
+
+This deletes the existing dataset, and then recreates the dataset with the
+exisiting claim data.
+
 ## Running specs, brakeman, and code linting
 
 ```
@@ -112,46 +138,6 @@ bundle exec rake
 ```
 
 To run the feature specs you will need Chrome installed.
-
-### Running a live console
-
-**Accessing a live console is very risky and should only be done as a last
-resort. This should only be done in pairs, and mutating any live data is
-STRONGLY discouraged.**
-
-The console will be ran inside a container instance and won't be on one of the
-web servers, however it will have access to the database.
-
-#### Through the Azure UI
-
-- Navigate to the
-  [container instance](https://portal.azure.com/#blade/HubsExtension/BrowseResourceBlade/resourceType/Microsoft.ContainerInstance%2FcontainerGroups)
-  resource (eg. `s118d01-app-worker-aci`)
-- Then go to 'Containers' under 'Settings'
-- With the container selected go to the 'Connect' tab
-- Choose the start up command (`/bin/bash` is recommended) and connect
-
-#### Through the Azure CLI
-
-We have a helpful script you can run that will connect you to the right resource
-(you will need the [Azure CLI](https://docs.microsoft.com/en-gb/cli) installed
-first):
-
-```bash
-bin/azure-console $ENVIRONMENT # (development/production)
-```
-
-#### Usage
-
-If you don't need to modify the data and only need to do queries it is
-recommended that you run rails console in sandbox mode
-`rails console --sandbox`.
-
-In exceptional circumstances you may want to modify the data, this should only
-be done with approval from the Service Owner and is to be carried out in pairs.
-
-Accessing a live console on production requires a
-[PIM (Privileged Identity Management) request](https://dfedigital.atlassian.net/wiki/spaces/TP/pages/1192624202/Privileged+Identity+Management+requests).
 
 ### Code linting rules
 
@@ -166,7 +152,7 @@ Code linting is performed using:
 [Bullet](https://github.com/flyerhzm/bullet) runs around each spec. If it
 detects an N+1 query it will raise an exception and the tests will fail.
 
-## The use of Rails fixtures in the test suite
+### The use of Rails fixtures in the test suite
 
 The application test suite makes use of a small number of
 [Rails fixtures](https://api.rubyonrails.org/v5.2.1/classes/ActiveRecord/FixtureSet.html)
@@ -216,13 +202,49 @@ Development is automatically built and deployed when commits are pushed to
 The release process for Production is documented in
 [`docs/release-process.md`](docs/release-process.md)
 
-## Service architecture
+## Accessing production data with a live Rails console
 
-The service architecture is currently defined [on confluence].
+**Accessing a live console is very risky and should only be done as a last
+resort. This should only be done in pairs, and mutating any live data is
+STRONGLY discouraged.**
 
-[on confluence]:
-  https://dfedigital.atlassian.net/wiki/spaces/TP/pages/1049559041/Service+Architecture
-[openjdk]: https://adoptopenjdk.net/
+The console will be ran inside a container instance and won't be on one of the
+web servers, however it will have access to the database.
+
+### Through the Azure UI
+
+- Navigate to the
+  [container instance](https://portal.azure.com/#blade/HubsExtension/BrowseResourceBlade/resourceType/Microsoft.ContainerInstance%2FcontainerGroups)
+  resource (eg. `s118d01-app-worker-aci`)
+- Then go to 'Containers' under 'Settings'
+- With the container selected go to the 'Connect' tab
+- Choose the start up command (`/bin/bash` is recommended) and connect
+
+### Through the Azure CLI
+
+We have a helpful script you can run that will connect you to the right resource
+(you will need the [Azure CLI](https://docs.microsoft.com/en-gb/cli) installed
+first):
+
+```bash
+bin/azure-console $ENVIRONMENT # (development/production)
+```
+
+Accessing a live console on production requires a
+[PIM (Privileged Identity Management) request](https://dfedigital.atlassian.net/wiki/spaces/TP/pages/1192624202/Privileged+Identity+Management+requests).
+
+### Usage
+
+When accessing the Rails console on a live system, do so in sandbox mode to
+avoid making unintented changes to the database state:
+
+`bin/rails console --sandbox`.
+
+In exceptional circumstances you may want to modify the data. If this is the
+case, you should probably write a [data migration](#creating-data-migrations) so
+that the code to do it can be reviewed and put into source control. If there is
+a need to make an immediate change live using the console, make sure it is done
+with approval from the Service Owner and is to done as a pair.
 
 ## Putting the application into maintenance mode
 
@@ -259,24 +281,6 @@ the user IP address as part of the payload data sent to Application Insights in
 [`lib/application_insights`](lib/application_insights). See
 [`config/initializers/application_insights.rb`](config/initializers/application_insights.rb)
 for how to mixin this code to your Rails application.
-
-### Geckoboard
-
-The application has a Geckoboard dashboard that is updated every time a Claim is
-submitted or approved, or a payment is recorded. The class that does most of the
-work can be found in app/models/claim/geckoboard_dataset.rb.
-
-If any changes are made to the `DATASET_FIELDS` constant, then it's important
-that the underlying Geckoboard dataset is reset, as the Geckoboard API doesn't
-support adding new fields to an already existing dataset. The easiest way to do
-this is to run the following Rake command:
-
-```bash
-bundle exec rake geckoboard:reset
-```
-
-This deletes the existing dataset, and then recreates the dataset with the
-exisiting claim data.
 
 ### Azure ARM templates
 
