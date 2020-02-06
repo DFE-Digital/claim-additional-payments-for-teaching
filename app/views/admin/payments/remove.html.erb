@@ -1,0 +1,22 @@
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-full">
+    <h1 class="govuk-heading-l">
+      Are you sure you want to remove payment <%= @payment.id %> from the payroll run?
+    </h1>
+
+    <p class="govuk-body-l">
+      <%= t("admin.payment_deletion_claim_warning",
+            count: @payment.claims.count,
+            references: @payment.claims.pluck(:reference).to_sentence) %>
+    </p>
+
+    <%= form_with url: admin_payroll_run_payment_path(id: @payment.id, payroll_run_id: @payment.payroll_run.id), method: :delete do |f| %>
+      <%= f.submit "Remove payment",
+                   class: "govuk-button govuk-button--warning",
+                   data: {
+                     confirm: "Are you sure you want to remove this payment from the payroll run?"
+                    } %>
+      <%= link_to "Cancel", admin_payroll_run_path(@payroll_run), class: "govuk-button govuk-button--secondary govuk-!-margin-left-1" %>
+    <% end %>
+  </div>
+</div>

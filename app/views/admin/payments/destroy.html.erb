@@ -1,0 +1,28 @@
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-full">
+    <h1 class="govuk-heading-l">
+      <%= t("admin.payment_deleted_title",
+            count: @claim_references.count) %>
+    </h1>
+
+    <p class="govuk-body-l">
+      <%= t("admin.payment_deleted_outcome_message",
+            count: @claim_references.count,
+            references: @claim_references.to_sentence) %>
+    </p>
+
+    <div class="govuk-warning-text">
+      <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
+      <strong class="govuk-warning-text__text">
+        <span class="govuk-warning-text__assistive">Warning</span>
+          <%= t("admin.payment_deleted_claim_next_steps_message",
+                count: @claim_references.count) %>
+        </span>
+      </strong>
+    </div>
+
+    <p class="govuk-body">
+      <%= link_to "Back to payroll run", admin_payroll_run_path(@payroll_run), class: "govuk-link" %>
+    </p>
+  </div>
+</div>
