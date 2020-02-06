@@ -32,7 +32,7 @@
             <th scope="row" class="govuk-table__header"><%= l(payroll_run.created_at.to_date) %></th>
             <td class="govuk-table__cell"><%= number_with_delimiter(payroll_run.claims.size) %></td>
             <td class="govuk-table__cell">
-              <% if payroll_run.confirmation_report_uploaded_by %>
+              <% if payroll_run.confirmation_report_uploaded? %>
                 Uploaded
               <% else %>
                 <%= link_to("Upload", new_admin_payroll_run_payment_confirmation_report_upload_path(payroll_run), class: "govuk-link") %>

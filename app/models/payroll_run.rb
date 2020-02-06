@@ -34,6 +34,10 @@ class PayrollRun < ApplicationRecord
     download_triggered? && Time.zone.now - downloaded_at < DOWNLOAD_FILE_TIMEOUT.seconds
   end
 
+  def confirmation_report_uploaded?
+    confirmation_report_uploaded_by.present?
+  end
+
   private
 
   def ensure_no_payroll_run_this_month

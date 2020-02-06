@@ -82,7 +82,7 @@ RSpec.feature "Payroll" do
   scenario "Service operator can view a payroll run" do
     sign_in_to_admin_with_role(DfeSignIn::User::SERVICE_OPERATOR_DFE_SIGN_IN_ROLE_CODE)
 
-    payroll_run = create(:payroll_run, created_at: Time.zone.now)
+    payroll_run = create(:payroll_run, claims_counts: {MathsAndPhysics => 1, StudentLoans => 1})
 
     click_on "Payroll"
     click_on "View #{payroll_run.created_at.strftime("%B")} payroll run"
@@ -91,6 +91,35 @@ RSpec.feature "Payroll" do
     expect(page).to have_content payroll_run.claims.count
     expect(page).to have_content "Downloaded No"
     expect(page).to have_field("payroll_run_download_link", with: new_admin_payroll_run_download_url(payroll_run))
+
+    expect(page).to have_content payroll_run.payments[0].id
+    expect(page).to have_content payroll_run.payments[1].id
+
+    expect(page).to have_link(href: remove_admin_payroll_run_payment_path(id: payroll_run.payments[0].id, payroll_run_id: payroll_run.id))
+    expect(page).to have_link(href: remove_admin_payroll_run_payment_path(id: payroll_run.payments[1].id, payroll_run_id: payroll_run.id))
+  end
+
+  scenario "Service operator can remove a payment from a payroll run" do
+    sign_in_to_admin_with_role(DfeSignIn::User::SERVICE_OPERATOR_DFE_SIGN_IN_ROLE_CODE)
+    payroll_run = create(:payroll_run, claims_counts: {MathsAndPhysics => 1, StudentLoans => 1})
+    payment_to_delete = payroll_run.payments.first
+    claim_reference = payment_to_delete.claims.first.reference
+
+    click_on "Payroll"
+    click_on "View #{payroll_run.created_at.strftime("%B")} payroll run"
+
+    find("a[href='#{remove_admin_payroll_run_payment_path(id: payment_to_delete.id, payroll_run_id: payroll_run.id)}']").click
+
+    expect(page).to have_content("Are you sure you want to remove payment #{payment_to_delete.id} from the payroll run?")
+
+    expect {
+      click_on "Remove payment"
+    }.to change(payroll_run.reload.payments, :count).by(-1)
+
+    expect(payroll_run.reload.payments).to_not include(payment_to_delete)
+
+    expect(page).to have_content("You have removed a claim from the payroll run")
+    expect(page).to have_content(claim_reference)
   end
 
   scenario "Service operator can upload a Payment Confirmation Report against a payroll run" do

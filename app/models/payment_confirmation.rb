@@ -54,7 +54,7 @@ class PaymentConfirmation
   end
 
   def check_payroll_run
-    errors.append("A Payment Confirmation Report has already been uploaded for this payroll run") if payroll_run.confirmation_report_uploaded_by
+    errors.append("A Payment Confirmation Report has already been uploaded for this payroll run") if payroll_run.confirmation_report_uploaded?
   end
 
   def check_for_missing_payments
