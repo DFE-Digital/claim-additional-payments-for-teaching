@@ -8,6 +8,7 @@ The format is based on [Keep a Changelog]
 
 - Update admin menu with new layout
 - Update "Some of this information is wrong" content on the verified page
+- A Service Operator can remove problematic payments from a payroll run
 
 ## [Release 051] - 2020-02-03
 
