@@ -88,7 +88,7 @@
     "workerSubnetId": {
       "type": "string"
     },
-    "workerNetworkProfileId": {
+    "containerNetworkProfileId": {
       "type": "string"
     },
     "databaseName": {
@@ -250,7 +250,10 @@
     "vspAppServiceWebTestName": "[concat(variables('vspAppServiceName'), '-webtest')]",
 
     "workerContainerName": "[concat(parameters('resourceNamePrefix'), '-worker-container')]",
-    "workerContainerInstanceName": "[concat(parameters('resourceNamePrefix'), '-worker-aci')]"
+    "workerContainerInstanceName": "[concat(parameters('resourceNamePrefix'), '-worker-aci')]",
+
+    "migrationRunnerContainerName": "[concat(parameters('resourceNamePrefix'), '-migration-runner-container')]",
+    "migrationRunnerContainerInstanceName": "[concat(parameters('resourceNamePrefix'), '-migration-runner-aci')]"
   },
   "resources": [
     {
@@ -404,17 +407,23 @@
           "keyVaultName": {
             "value": "[parameters('keyVaultName')]"
           },
-          "workerImageName": {
+          "containerImageName": {
             "value": "[parameters('appServiceDockerImage')]"
           },
           "workerContainerName": {
             "value": "[variables('workerContainerName')]"
           },
+          "migrationRunnerContainerName": {
+            "value": "[variables('migrationRunnerContainerName')]"
+          },
           "workerContainerInstanceName": {
             "value": "[variables('workerContainerInstanceName')]"
           },
-          "workerNetworkProfileId": {
-            "value": "[parameters('workerNetworkProfileId')]"
+          "migrationRunnerContainerInstanceName": {
+            "value": "[variables('migrationRunnerContainerInstanceName')]"
+          },
+          "containerNetworkProfileId": {
+            "value": "[parameters('containerNetworkProfileId')]"
           },
           "appServiceEnvironmentVariables": {
             "value": [

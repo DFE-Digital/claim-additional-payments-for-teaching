@@ -69,13 +69,19 @@
     "workerContainerName": {
       "type": "string"
     },
-    "workerImageName": {
+    "migrationRunnerContainerName": {
+      "type": "string"
+    },
+    "containerImageName": {
+      "type": "string"
+    },
+    "migrationRunnerContainerInstanceName": {
       "type": "string"
     },
     "workerContainerInstanceName": {
       "type": "string"
     },
-    "workerNetworkProfileId": {
+    "containerNetworkProfileId": {
       "type": "string"
     }
   },
@@ -88,6 +94,7 @@
     "appServiceLogsDeploymentName": "[concat(deployment().name, '-app-service-logs')]",
     "appServicePlanDeploymentName": "[concat(deployment().name, '-app-service-plan')]",
     "workerDeploymentName": "[concat(deployment().name, '-worker')]",
+    "migrationRunnerDeploymentName": "[concat(deployment().name, '-migration-runner')]",
 
     "appServiceCertificateDeploymentCopyLoopName": "[concat(parameters('appServiceName'),'-certificate-deployment-copy')]",
     "appServiceHostNameBindingsCopyLoopName": "[concat(parameters('appServiceName'),'-host-name-bindings-copy')]",
@@ -167,7 +174,10 @@
       "name": "[parameters('appServiceName')]",
       "kind": "app,linux,container",
       "location": "[resourceGroup().location]",
-      "dependsOn": ["[resourceId('Microsoft.Resources/deployments', variables('appServicePlanDeploymentName'))]"],
+      "dependsOn": [
+        "[resourceId('Microsoft.Resources/deployments', variables('appServicePlanDeploymentName'))]",
+        "[resourceId('Microsoft.Resources/deployments', variables('migrationRunnerDeploymentName'))]"
+      ],
       "properties": {
         "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', parameters('appServicePlanName'))]",
         "httpsOnly": true,
@@ -245,11 +255,47 @@
     {
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2017-05-10",
-      "name": "[variables('workerDeploymentName')]",
+      "name": "[variables('migrationRunnerDeploymentName')]",
       "properties": {
         "mode": "Incremental",
         "templateLink": {
-          "uri": "[concat(variables('deploymentUrlBase'), 'worker.json')]",
+          "uri": "[concat(variables('deploymentUrlBase'), 'container.json')]",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "containerInstanceName": {
+            "value": "[parameters('migrationRunnerContainerInstanceName')]"
+          },
+          "containerName": {
+            "value": "[parameters('migrationRunnerContainerName')]"
+          },
+          "imageName": {
+            "value": "[parameters('containerImageName')]"
+          },
+          "environmentVariables": {
+            "value": "[parameters('appServiceEnvironmentVariables')]"
+          },
+          "networkProfileId": {
+            "value": "[parameters('containerNetworkProfileId')]"
+          },
+          "command": {
+            "value": ["bin/prepare-database"]
+          },
+          "restartPolicy": {
+            "value": "OnFailure"
+          }
+        }
+      }
+    },
+    {
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2017-05-10",
+      "name": "[variables('workerDeploymentName')]",
+      "dependsOn": ["[resourceId('Microsoft.Resources/deployments', variables('migrationRunnerDeploymentName'))]"],
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[concat(variables('deploymentUrlBase'), 'container.json')]",
           "contentVersion": "1.0.0.0"
         },
         "parameters": {
@@ -260,13 +306,16 @@
             "value": "[parameters('workerContainerName')]"
           },
           "imageName": {
-            "value": "[parameters('workerImageName')]"
+            "value": "[parameters('containerImageName')]"
           },
           "environmentVariables": {
             "value": "[parameters('appServiceEnvironmentVariables')]"
           },
           "networkProfileId": {
-            "value": "[parameters('workerNetworkProfileId')]"
+            "value": "[parameters('containerNetworkProfileId')]"
+          },
+          "command": {
+            "value": ["bundle", "exec", "rake", "jobs:work"]
           }
         }
       }

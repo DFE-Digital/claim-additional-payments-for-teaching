@@ -20,6 +20,7 @@ services:
       args:
         RAILS_ENV: test
     image: local/dfe-teachers-payment-service:test
+    entrypoint: bin/docker-entrypoint bundle exec rake
     depends_on:
       - dependencies
       - db
