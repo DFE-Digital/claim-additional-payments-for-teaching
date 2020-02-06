@@ -89,6 +89,7 @@ Rails.application.routes.draw do
 
     resources :claims, only: [:index, :show] do
       resources :checks, only: [:create], controller: "claim_checks"
+      get "overview", on: :member
       get "search", on: :collection
     end
 

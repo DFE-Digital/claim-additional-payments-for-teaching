@@ -14,6 +14,10 @@ class Admin::ClaimsController < Admin::BaseAdminController
     end
   end
 
+  def overview
+    @claim = Claim.find(params[:id])
+  end
+
   def show
     @claim = Claim.find(params[:id])
     @check = @claim.check || Check.new

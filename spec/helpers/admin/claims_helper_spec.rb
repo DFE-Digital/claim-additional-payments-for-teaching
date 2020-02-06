@@ -35,6 +35,48 @@ describe Admin::ClaimsHelper do
     end
   end
 
+  describe "#admin_claim_overview" do
+    let(:claim) do
+      build(
+        :claim,
+        first_name: "Bruce",
+        surname: "Wayne",
+        teacher_reference_number: "1234567",
+        date_of_birth: Date.new(1901, 1, 1),
+      )
+    end
+
+    it "includes an array of questions and answers" do
+      expected_answers = [
+        ["TRN", "1234567"],
+        [I18n.t("govuk_verify_fields.full_name").capitalize, "Bruce Wayne"],
+        [I18n.t("govuk_verify_fields.date_of_birth").capitalize, "01/01/1901"],
+      ]
+
+      expect(helper.admin_claim_overview(claim)).to eq expected_answers
+    end
+  end
+
+  describe "#admin_submission_overview" do
+    let(:claim) do
+      build(
+        :claim,
+        :submitted,
+        email_address: "test@email.com",
+      )
+    end
+
+    it "includes an array of questions and answers" do
+      expected_answers = [
+        ["SLA", l(claim.check_deadline_date)],
+        [I18n.t("admin.submitted_at"), l(claim.submitted_at)],
+        [I18n.t("admin.email_address"), "test@email.com"],
+      ]
+
+      expect(helper.admin_submission_overview(claim)).to eq expected_answers
+    end
+  end
+
   describe "#admin_student_loan_details" do
     let(:claim) do
       build(

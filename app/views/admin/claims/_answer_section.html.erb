@@ -1,6 +1,8 @@
-<h2 class="govuk-heading-m">
-  <%= heading %>
-</h2>
+<% if heading.present? %>
+  <h2 class="govuk-heading-m">
+    <%= heading %>
+  </h2>
+<% end %>
 
 <dl class="govuk-summary-list govuk-!-margin-bottom-9">
   <%- answers.each do |(label, answer)| %>

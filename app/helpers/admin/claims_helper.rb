@@ -21,6 +21,22 @@ module Admin
       ]
     end
 
+    def admin_claim_overview(claim)
+      [
+        ["TRN", claim.teacher_reference_number],
+        [t("govuk_verify_fields.full_name").capitalize, claim.full_name],
+        [t("govuk_verify_fields.date_of_birth").capitalize, l(claim.date_of_birth, format: :day_month_year)],
+      ]
+    end
+
+    def admin_submission_overview(claim)
+      [
+        ["SLA", [l(claim.check_deadline_date), check_deadline_warning(claim)].compact.join.html_safe],
+        [t("admin.submitted_at"), l(claim.submitted_at)],
+        [t("admin.email_address"), claim.email_address],
+      ]
+    end
+
     def admin_student_loan_details(claim)
       [].tap do |a|
         a << [t("student_loans.admin.student_loan_repayment_amount"), number_to_currency(claim.eligibility.student_loan_repayment_amount)] if claim.eligibility.respond_to?(:student_loan_repayment_amount)

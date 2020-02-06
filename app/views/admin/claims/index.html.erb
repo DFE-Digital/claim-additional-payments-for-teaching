@@ -45,7 +45,7 @@
                 <td class="govuk-table__cell"><%= check_deadline_warning(claim) %></td>
               <% end %>
               <td class="govuk-table__cell"><%= l(claim.check_deadline_date) %></td>
-              <td class="govuk-table__cell"><%= link_to 'View claim', admin_claim_path(claim), class: "govuk-link" %></td>
+              <td class="govuk-table__cell"><%= link_to 'View claim', overview_admin_claim_path(claim), class: "govuk-link" %></td>
             </tr>
           <% end %>
         </tbody>
