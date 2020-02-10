@@ -125,7 +125,7 @@
       "type": "string",
       "value": "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('vnetName'), variables('workerSubnetName'))]"
     },
-    "workerNetworkProfileId": {
+    "containerNetworkProfileId": {
       "type": "string",
       "value": "[resourceId('Microsoft.Network/networkProfiles', variables('workerNetworkProfileName'))]"
     },

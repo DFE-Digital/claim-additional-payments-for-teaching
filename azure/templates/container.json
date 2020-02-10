@@ -15,11 +15,14 @@
       "type": "array"
     },
     "command": {
-      "type": "array",
-      "defaultValue": ["bundle", "exec", "rake", "jobs:work"]
+      "type": "array"
     },
     "networkProfileId": {
       "type": "string"
+    },
+    "restartPolicy": {
+      "type": "string",
+      "defaultValue": "Always"
     }
   },
   "variables": {},
@@ -46,7 +49,7 @@
             }
           }
         ],
-        "restartPolicy": "Always",
+        "restartPolicy": "[parameters('restartPolicy')]",
         "osType": "Linux",
         "networkProfile": {
           "id": "[parameters('networkProfileId')]"
