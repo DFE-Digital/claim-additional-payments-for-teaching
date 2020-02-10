@@ -1,5 +1,5 @@
 module Geckoboard
-  class UpdateUncheckedClaimsJob < CronJob
+  class UpdateUndecidedClaimsJob < CronJob
     self.cron_expression = "0 3 * * *"
 
     def perform
