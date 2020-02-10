@@ -79,7 +79,7 @@
     <% if @check.persisted? %>
       <%= render "admin/claims/answer_section", {heading: "Claim decision details", answers: admin_check_details(@check)} %>
     <% else %>
-      <%= form_for @check, url: admin_claim_checks_path(@claim), html: { id: "claim_check_form" } do |form| %>
+      <%= form_for @check, url: admin_claim_decisions_path(@claim), html: { id: "claim_check_form" } do |form| %>
         <%= form_group_tag @check do %>
           <fieldset class="govuk-fieldset govuk-!-margin-bottom-6">
             <legend class="govuk-fieldset__legend govuk-fieldset__legend--l govuk-!-margin-bottom-6">

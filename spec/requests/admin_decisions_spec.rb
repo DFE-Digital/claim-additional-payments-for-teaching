@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "Admin claim checks", type: :request do
+RSpec.describe "Admin decisions", type: :request do
   context "when signed in as a service operator" do
     let(:user) { create(:dfe_signin_user) }
 
@@ -9,11 +9,11 @@ RSpec.describe "Admin claim checks", type: :request do
       @dataset_post_stub = stub_geckoboard_dataset_update
     end
 
-    describe "claim_checks#create" do
+    describe "decisions#create" do
       let(:claim) { create(:claim, :submitted) }
 
       it "can approve a claim" do
-        post admin_claim_checks_path(claim_id: claim.id, check: {result: "approved"})
+        post admin_claim_decisions_path(claim_id: claim.id, check: {result: "approved"})
 
         follow_redirect!
 
@@ -24,7 +24,7 @@ RSpec.describe "Admin claim checks", type: :request do
       end
 
       it "can reject a claim" do
-        post admin_claim_checks_path(claim_id: claim.id, check: {result: "rejected"})
+        post admin_claim_decisions_path(claim_id: claim.id, check: {result: "rejected"})
 
         follow_redirect!
 
@@ -35,7 +35,7 @@ RSpec.describe "Admin claim checks", type: :request do
       end
 
       it "updates the claim dataset on Geckoboard" do
-        perform_enqueued_jobs { post admin_claim_checks_path(claim_id: claim.id, check: {result: "approved"}) }
+        perform_enqueued_jobs { post admin_claim_decisions_path(claim_id: claim.id, check: {result: "approved"}) }
 
         expect(@dataset_post_stub.with { |request|
           request_body_matches_geckoboard_data_for_claims?(request, [claim.reload])
@@ -44,18 +44,18 @@ RSpec.describe "Admin claim checks", type: :request do
 
       context "when no result is selected" do
         it "shows an error and doesn't save the check" do
-          post admin_claim_checks_path(claim_id: claim.id, check: {notes: "Something"})
+          post admin_claim_decisions_path(claim_id: claim.id, check: {notes: "Something"})
 
           expect(response.body).to include("Make a decision to approve or reject the claim")
           expect(claim.reload.check).to be_nil
         end
       end
 
-      context "when claim is already checked" do
+      context "when a decision has already been made" do
         let(:claim) { create(:claim, :approved) }
 
         it "shows an error" do
-          post admin_claim_checks_path(claim_id: claim.id, check: {result: "approved"})
+          post admin_claim_decisions_path(claim_id: claim.id, check: {result: "approved"})
 
           follow_redirect!
 
@@ -66,7 +66,7 @@ RSpec.describe "Admin claim checks", type: :request do
       context "when the claim is missing a payroll gender" do
         let(:claim) { create(:claim, :submitted, payroll_gender: :dont_know) }
         before do
-          post admin_claim_checks_path(claim_id: claim.id, check: {result: result})
+          post admin_claim_decisions_path(claim_id: claim.id, check: {result: result})
           follow_redirect!
         end
 
@@ -102,7 +102,7 @@ RSpec.describe "Admin claim checks", type: :request do
         let(:claim) { create(:claim, :submitted, personal_details.merge(bank_sort_code: "582939", bank_account_number: "74727752")) }
         let!(:approved_claim) { create(:claim, :approved, personal_details.merge(bank_sort_code: "112233", bank_account_number: "29482823")) }
         before do
-          post admin_claim_checks_path(claim_id: claim.id, check: {result: result})
+          post admin_claim_decisions_path(claim_id: claim.id, check: {result: result})
           follow_redirect!
         end
 
@@ -125,13 +125,13 @@ RSpec.describe "Admin claim checks", type: :request do
   end
 
   context "when signed in as a payroll operator or a support agent" do
-    describe "claim_checks#create" do
+    describe "decisions#create" do
       let(:claim) { create(:claim, :submitted) }
 
       [DfeSignIn::User::SUPPORT_AGENT_DFE_SIGN_IN_ROLE_CODE, DfeSignIn::User::PAYROLL_OPERATOR_DFE_SIGN_IN_ROLE_CODE].each do |role|
         it "does not allow a claim to be approved" do
           sign_in_to_admin_with_role(role)
-          post admin_claim_checks_path(claim_id: claim.id, result: "approved")
+          post admin_claim_decisions_path(claim_id: claim.id, result: "approved")
 
           expect(response.code).to eq("401")
         end

@@ -1,4 +1,4 @@
-class Admin::ClaimChecksController < Admin::BaseAdminController
+class Admin::DecisionsController < Admin::BaseAdminController
   before_action :ensure_service_operator
   before_action :load_claim
   before_action :reject_checked_claims
@@ -6,7 +6,7 @@ class Admin::ClaimChecksController < Admin::BaseAdminController
   before_action :reject_if_claims_preventing_payment
 
   def create
-    @check = @claim.build_check(check_params.merge(checked_by: admin_user))
+    @check = @claim.build_check(decision_params.merge(checked_by: admin_user))
     if @check.save
       send_claim_result_email
       RecordOrUpdateGeckoboardDatasetJob.perform_later([@claim.id])
@@ -35,13 +35,13 @@ class Admin::ClaimChecksController < Admin::BaseAdminController
   end
 
   def reject_missing_payroll_gender
-    if check_params[:result] == "approved" && @claim.payroll_gender_missing?
+    if decision_params[:result] == "approved" && @claim.payroll_gender_missing?
       redirect_to admin_claim_path(@claim), alert: "Claim cannot be approved"
     end
   end
 
   def reject_if_claims_preventing_payment
-    if check_params[:result] == "approved" && claims_preventing_payment_finder.claims_preventing_payment.any?
+    if decision_params[:result] == "approved" && claims_preventing_payment_finder.claims_preventing_payment.any?
       redirect_to admin_claim_path(@claim), alert: "Claim cannot be approved because there are inconsistent claims"
     end
   end
@@ -51,7 +51,7 @@ class Admin::ClaimChecksController < Admin::BaseAdminController
     ClaimMailer.rejected(@claim).deliver_later if @claim.check.result == "rejected"
   end
 
-  def check_params
+  def decision_params
     params.require(:check).permit(:result, :notes)
   end
 end
