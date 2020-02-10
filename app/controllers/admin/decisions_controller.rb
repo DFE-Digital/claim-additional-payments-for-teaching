@@ -1,7 +1,7 @@
 class Admin::DecisionsController < Admin::BaseAdminController
   before_action :ensure_service_operator
   before_action :load_claim
-  before_action :reject_checked_claims
+  before_action :reject_decided_claims
   before_action :reject_missing_payroll_gender
   before_action :reject_if_claims_preventing_payment
 
@@ -28,9 +28,9 @@ class Admin::DecisionsController < Admin::BaseAdminController
     @claims_preventing_payment_finder ||= Claim::ClaimsPreventingPaymentFinder.new(@claim)
   end
 
-  def reject_checked_claims
+  def reject_decided_claims
     if @claim.decision.present?
-      redirect_to admin_claim_path(@claim), notice: "Claim already checked"
+      redirect_to admin_claim_path(@claim), notice: "Claim outcome already decided"
     end
   end
 

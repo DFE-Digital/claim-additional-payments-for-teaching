@@ -59,7 +59,7 @@ RSpec.describe "Admin decisions", type: :request do
 
           follow_redirect!
 
-          expect(response.body).to include("Claim already checked")
+          expect(response.body).to include("Claim outcome already decided")
         end
       end
 

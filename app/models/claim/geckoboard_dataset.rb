@@ -81,7 +81,7 @@ class Claim
     end
 
     def sla_status_string(claim)
-      if claim.check_deadline_date.past?
+      if claim.decision_deadline_date.past?
         "passed"
       elsif claim.deadline_warning_date.past?
         "warning"

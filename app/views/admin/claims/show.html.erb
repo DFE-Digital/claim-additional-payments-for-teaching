@@ -77,9 +77,9 @@
     <% end %>
 
     <% if @decision.persisted? %>
-      <%= render "admin/claims/answer_section", {heading: "Claim decision details", answers: admin_check_details(@decision)} %>
+      <%= render "admin/claims/answer_section", {heading: "Claim decision details", answers: admin_decision_details(@decision)} %>
     <% else %>
-      <%= form_for @decision, url: admin_claim_decisions_path(@claim), html: { id: "claim_check_form" } do |form| %>
+      <%= form_for @decision, url: admin_claim_decisions_path(@claim), html: { id: "claim_decision_form" } do |form| %>
         <%= form_group_tag @decision do %>
           <fieldset class="govuk-fieldset govuk-!-margin-bottom-6">
             <legend class="govuk-fieldset__legend govuk-fieldset__legend--l govuk-!-margin-bottom-6">

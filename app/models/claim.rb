@@ -62,8 +62,8 @@ class Claim < ApplicationRecord
     building_society_roll_number: true,
     payment_id: false,
   }.freeze
-  CHECK_DEADLINE = 12.weeks
-  CHECK_DEADLINE_WARNING_POINT = 2.weeks
+  DECISION_DEADLINE = 12.weeks
+  DECISION_DEADLINE_WARNING_POINT = 2.weeks
   ATTRIBUTE_DEPENDENCIES = {
     "has_student_loan" => "student_loan_country",
     "student_loan_country" => "student_loan_courses",
@@ -144,11 +144,11 @@ class Claim < ApplicationRecord
 
   scope :unsubmitted, -> { where(submitted_at: nil) }
   scope :submitted, -> { where.not(submitted_at: nil) }
-  scope :awaiting_checking, -> { submitted.left_outer_joins(:decision).where(decisions: {claim_id: nil}) }
+  scope :awaiting_decision, -> { submitted.left_outer_joins(:decision).where(decisions: {claim_id: nil}) }
   scope :approved, -> { joins(:decision).where("decisions.result" => :approved) }
   scope :rejected, -> { joins(:decision).where("decisions.result" => :rejected) }
-  scope :approaching_check_deadline, -> { awaiting_checking.where("submitted_at < ? AND submitted_at > ?", CHECK_DEADLINE.ago + CHECK_DEADLINE_WARNING_POINT, CHECK_DEADLINE.ago) }
-  scope :passed_check_deadline, -> { awaiting_checking.where("submitted_at < ?", CHECK_DEADLINE.ago) }
+  scope :approaching_decision_deadline, -> { awaiting_decision.where("submitted_at < ? AND submitted_at > ?", DECISION_DEADLINE.ago + DECISION_DEADLINE_WARNING_POINT, DECISION_DEADLINE.ago) }
+  scope :passed_decision_deadline, -> { awaiting_decision.where("submitted_at < ?", DECISION_DEADLINE.ago) }
   scope :payrollable, -> { approved.where(payment: nil) }
   scope :by_policy, ->(policy) { where(eligibility_type: policy::Eligibility.to_s) }
 
@@ -174,10 +174,10 @@ class Claim < ApplicationRecord
   end
 
   def approvable?
-    submitted? && !payroll_gender_missing? && !checked? && !payment_prevented_by_other_claims?
+    submitted? && !payroll_gender_missing? && !decision_made? && !payment_prevented_by_other_claims?
   end
 
-  def checked?
+  def decision_made?
     decision&.persisted?
   end
 
@@ -189,12 +189,12 @@ class Claim < ApplicationRecord
     ClaimsPreventingPaymentFinder.new(self).claims_preventing_payment.any?
   end
 
-  def check_deadline_date
-    (submitted_at + CHECK_DEADLINE).to_date
+  def decision_deadline_date
+    (submitted_at + DECISION_DEADLINE).to_date
   end
 
   def deadline_warning_date
-    (submitted_at + CHECK_DEADLINE - CHECK_DEADLINE_WARNING_POINT).to_date
+    (submitted_at + DECISION_DEADLINE - DECISION_DEADLINE_WARNING_POINT).to_date
   end
 
   def address(seperator = ", ")

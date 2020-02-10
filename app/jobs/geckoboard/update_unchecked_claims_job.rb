@@ -3,7 +3,7 @@ module Geckoboard
     self.cron_expression = "0 3 * * *"
 
     def perform
-      Claim::GeckoboardDataset.new(claims: Claim.awaiting_checking).save
+      Claim::GeckoboardDataset.new(claims: Claim.awaiting_decision).save
     end
   end
 end

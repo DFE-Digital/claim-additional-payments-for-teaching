@@ -59,15 +59,15 @@ describe Admin::ClaimsHelper do
       expect(helper.admin_submission_details(claim)).to eq([
         [I18n.t("admin.started_at"), l(claim.created_at)],
         [I18n.t("admin.submitted_at"), l(claim.submitted_at)],
-        [I18n.t("admin.check_deadline"), l(claim.check_deadline_date)],
+        [I18n.t("admin.decision_deadline"), l(claim.decision_deadline_date)],
       ])
     end
 
     context "when the claim is approaching its deadline" do
-      let(:claim) { create(:claim, :submitted, submitted_at: (Claim::CHECK_DEADLINE - 1.week).ago) }
+      let(:claim) { create(:claim, :submitted, submitted_at: (Claim::DECISION_DEADLINE - 1.week).ago) }
 
       it "always includes the deadline date" do
-        expect(helper.admin_submission_details(claim)[2].last).to have_content(l(claim.check_deadline_date))
+        expect(helper.admin_submission_details(claim)[2].last).to have_content(l(claim.decision_deadline_date))
       end
 
       it "includes the deadline warning" do
@@ -76,16 +76,16 @@ describe Admin::ClaimsHelper do
     end
   end
 
-  describe "#admin_check_details" do
+  describe "#admin_decision_details" do
     let(:claim) { create(:claim, :submitted) }
     let(:user) { create(:dfe_signin_user) }
     let(:decision) { Decision.create!(claim: claim, created_by: user, result: :approved) }
 
-    it "includes an array of details about the check" do
-      expect(helper.admin_check_details(decision)).to eq([
-        [I18n.t("admin.check.checked_at"), l(decision.created_at)],
-        [I18n.t("admin.check.result"), decision.result.capitalize],
-        [I18n.t("admin.check.checked_by"), user.full_name],
+    it "includes an array of details about the decision" do
+      expect(helper.admin_decision_details(decision)).to eq([
+        [I18n.t("admin.decision.created_at"), l(decision.created_at)],
+        [I18n.t("admin.decision.result"), decision.result.capitalize],
+        [I18n.t("admin.decision.created_by"), user.full_name],
       ])
     end
 
@@ -93,7 +93,7 @@ describe Admin::ClaimsHelper do
       let(:decision) { Decision.create!(claim: claim, created_by: user, result: :approved, notes: "abc\nxyz") }
 
       it "includes the notes" do
-        expect(helper.admin_check_details(decision)).to include([I18n.t("admin.check.notes"), simple_format(decision.notes, class: "govuk-body")])
+        expect(helper.admin_decision_details(decision)).to include([I18n.t("admin.decision.notes"), simple_format(decision.notes, class: "govuk-body")])
       end
     end
 
@@ -101,28 +101,28 @@ describe Admin::ClaimsHelper do
       let(:user) { create(:dfe_signin_user, :without_data) }
 
       it "displays the user ID" do
-        user_id_details = helper.admin_check_details(decision).last
-        expect(user_id_details[0]).to eq(I18n.t("admin.check.checked_by"))
+        user_id_details = helper.admin_decision_details(decision).last
+        expect(user_id_details[0]).to eq(I18n.t("admin.decision.created_by"))
         expect(user_id_details[1]).to match("Unknown user")
         expect(user_id_details[1]).to match("DfE Sign-in ID - #{user.dfe_sign_in_id}")
       end
     end
   end
 
-  describe "#check_deadline_warning" do
-    subject { helper.check_deadline_warning(claim) }
+  describe "#decision_deadline_warning" do
+    subject { helper.decision_deadline_warning(claim) }
     before { travel_to Time.zone.local(2019, 10, 11, 7, 0, 0) }
     after { travel_back }
 
     context "when a claim is approaching it's deadline" do
-      let(:claim) { build(:claim, :submitted, submitted_at: (Claim::CHECK_DEADLINE - 1.week).ago) }
+      let(:claim) { build(:claim, :submitted, submitted_at: (Claim::DECISION_DEADLINE - 1.week).ago) }
 
       it { is_expected.to have_content("7 days") }
       it { is_expected.to have_selector(".tag--warning") }
     end
 
     context "when a claim has passed it's deadline" do
-      let(:claim) { build(:claim, :submitted, submitted_at: (Claim::CHECK_DEADLINE + 4.weeks).ago) }
+      let(:claim) { build(:claim, :submitted, submitted_at: (Claim::DECISION_DEADLINE + 4.weeks).ago) }
 
       it { is_expected.to have_content("-28 days") }
       it { is_expected.to have_selector(".tag--alert") }

@@ -1,8 +1,8 @@
 <div class="govuk-grid-row">
 
   <div class="govuk-grid-column-one-half">
-    <h2 class="govuk-heading-m">Claims awaiting checking</h2>
-    <p class="govuk-body govuk-!-font-size-36"><%= Claim.awaiting_checking.count %></p>
+    <h2 class="govuk-heading-m">Claims awaiting a decision</h2>
+    <p class="govuk-body govuk-!-font-size-36"><%= Claim.awaiting_decision.count %></p>
     <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
 
     <h2 class="govuk-heading-m">Total claims received</h2>
@@ -12,13 +12,13 @@
 
   <div class="govuk-grid-column-one-half">
     <h2 class="govuk-heading-m">Claims approaching deadline</h2>
-    <p class="govuk-body govuk-!-font-size-36"><%= Claim.approaching_check_deadline.count %></p>
+    <p class="govuk-body govuk-!-font-size-36"><%= Claim.approaching_decision_deadline.count %></p>
     <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
   </div>
 
   <div class="govuk-grid-column-one-half">
     <h2 class="govuk-heading-m">Claims passed deadline</h2>
-    <p class="govuk-body govuk-!-font-size-36"><%= Claim.passed_check_deadline.count %></p>
+    <p class="govuk-body govuk-!-font-size-36"><%= Claim.passed_decision_deadline.count %></p>
     <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
   </div>
 </div>

@@ -17,7 +17,7 @@ RSpec.feature "Admin checks a claim" do
         click_on "View claims"
 
         expect(page).to have_content(claim_to_approve.reference)
-        expect(page).to have_content("5 claims awaiting checking")
+        expect(page).to have_content("5 claims awaiting a decision")
 
         find("a[href='#{admin_claim_path(claim_to_approve)}']").click
         choose "Approve"
@@ -48,7 +48,7 @@ RSpec.feature "Admin checks a claim" do
       click_on "View claims"
 
       expect(page).to have_content(claim_to_reject.reference)
-      expect(page).to have_content("5 claims awaiting checking")
+      expect(page).to have_content("5 claims awaiting a decision")
 
       find("a[href='#{admin_claim_path(claim_to_reject)}']").click
       choose "Reject"
@@ -76,7 +76,7 @@ RSpec.feature "Admin checks a claim" do
       expect(page).to have_content("Claim decision")
       expect(page).to have_content("Approved")
       expect(page).to have_content(claim_with_decision.decision.notes)
-      expect(page).to have_content("Checked by")
+      expect(page).to have_content("Created by")
       expect(page).to have_content(user.full_name)
     end
 
@@ -165,7 +165,7 @@ RSpec.feature "Admin checks a claim" do
 
   context "User is logged in as a payroll operator or a support user" do
     [DfeSignIn::User::SUPPORT_AGENT_DFE_SIGN_IN_ROLE_CODE, DfeSignIn::User::PAYROLL_OPERATOR_DFE_SIGN_IN_ROLE_CODE].each do |role|
-      scenario "User cannot view claims to check" do
+      scenario "User cannot view claims" do
         sign_in_to_admin_with_role(role)
 
         expect(page).to_not have_link(nil, href: admin_claims_path)

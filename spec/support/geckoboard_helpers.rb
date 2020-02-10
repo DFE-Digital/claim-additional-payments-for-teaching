@@ -82,7 +82,7 @@ module GeckoboardHelpers
         "reference" => claim.reference,
         "policy" => claim.policy.to_s,
         "submitted_at" => claim.submitted_at&.strftime("%Y-%m-%dT%H:%M:%S%:z"),
-        "sla_status" => if claim.check_deadline_date.past?
+        "sla_status" => if claim.decision_deadline_date.past?
                           "passed"
                         elsif claim.deadline_warning_date.past?
                           "warning"
