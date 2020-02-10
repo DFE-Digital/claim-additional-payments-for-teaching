@@ -10,24 +10,11 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_02_03_161814) do
+ActiveRecord::Schema.define(version: 2020_02_10_121152) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
-
-  create_table "checks", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.integer "result"
-    t.string "checked_by"
-    t.uuid "claim_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.text "notes"
-    t.uuid "checked_by_id"
-    t.index ["checked_by_id"], name: "index_checks_on_checked_by_id"
-    t.index ["claim_id"], name: "index_checks_on_claim_id"
-    t.index ["created_at"], name: "index_checks_on_created_at"
-  end
 
   create_table "claims", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.datetime "created_at", null: false
@@ -66,6 +53,19 @@ ActiveRecord::Schema.define(version: 2020_02_03_161814) do
     t.index ["payment_id"], name: "index_claims_on_payment_id"
     t.index ["reference"], name: "index_claims_on_reference", unique: true
     t.index ["submitted_at"], name: "index_claims_on_submitted_at"
+  end
+
+  create_table "decisions", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.integer "result"
+    t.string "checked_by"
+    t.uuid "claim_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.text "notes"
+    t.uuid "created_by_id"
+    t.index ["claim_id"], name: "index_decisions_on_claim_id"
+    t.index ["created_at"], name: "index_decisions_on_created_at"
+    t.index ["created_by_id"], name: "index_decisions_on_created_by_id"
   end
 
   create_table "delayed_jobs", force: :cascade do |t|
@@ -215,8 +215,8 @@ ActiveRecord::Schema.define(version: 2020_02_03_161814) do
     t.index ["current_school_id"], name: "index_student_loans_eligibilities_on_current_school_id"
   end
 
-  add_foreign_key "checks", "dfe_sign_in_users", column: "checked_by_id"
   add_foreign_key "claims", "payments"
+  add_foreign_key "decisions", "dfe_sign_in_users", column: "created_by_id"
   add_foreign_key "maths_and_physics_eligibilities", "schools", column: "current_school_id"
   add_foreign_key "payments", "payroll_runs"
   add_foreign_key "payroll_runs", "dfe_sign_in_users", column: "created_by_id"

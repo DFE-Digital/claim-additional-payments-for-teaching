@@ -75,7 +75,7 @@ class Claim < ApplicationRecord
   enum student_loan_courses: {one_course: 0, two_or_more_courses: 1}
   enum student_loan_plan: STUDENT_LOAN_PLAN_OPTIONS
 
-  has_one :check
+  has_one :decision
 
   belongs_to :eligibility, polymorphic: true, dependent: :destroy
   accepts_nested_attributes_for :eligibility, update_only: true
@@ -144,9 +144,9 @@ class Claim < ApplicationRecord
 
   scope :unsubmitted, -> { where(submitted_at: nil) }
   scope :submitted, -> { where.not(submitted_at: nil) }
-  scope :awaiting_checking, -> { submitted.left_outer_joins(:check).where(checks: {claim_id: nil}) }
-  scope :approved, -> { joins(:check).where("checks.result" => :approved) }
-  scope :rejected, -> { joins(:check).where("checks.result" => :rejected) }
+  scope :awaiting_checking, -> { submitted.left_outer_joins(:decision).where(decisions: {claim_id: nil}) }
+  scope :approved, -> { joins(:decision).where("decisions.result" => :approved) }
+  scope :rejected, -> { joins(:decision).where("decisions.result" => :rejected) }
   scope :approaching_check_deadline, -> { awaiting_checking.where("submitted_at < ? AND submitted_at > ?", CHECK_DEADLINE.ago + CHECK_DEADLINE_WARNING_POINT, CHECK_DEADLINE.ago) }
   scope :passed_check_deadline, -> { awaiting_checking.where("submitted_at < ?", CHECK_DEADLINE.ago) }
   scope :payrollable, -> { approved.where(payment: nil) }
@@ -178,7 +178,7 @@ class Claim < ApplicationRecord
   end
 
   def checked?
-    check&.persisted?
+    decision&.persisted?
   end
 
   def payroll_gender_missing?

@@ -6,11 +6,11 @@ class Admin::DecisionsController < Admin::BaseAdminController
   before_action :reject_if_claims_preventing_payment
 
   def create
-    @check = @claim.build_check(decision_params.merge(checked_by: admin_user))
-    if @check.save
+    @decision = @claim.build_decision(decision_params.merge(created_by: admin_user))
+    if @decision.save
       send_claim_result_email
       RecordOrUpdateGeckoboardDatasetJob.perform_later([@claim.id])
-      redirect_to admin_claims_path, notice: "Claim has been #{@claim.check.result} successfully"
+      redirect_to admin_claims_path, notice: "Claim has been #{@claim.decision.result} successfully"
     else
       @claims_preventing_payment = claims_preventing_payment_finder.claims_preventing_payment
       render "admin/claims/show"
@@ -29,7 +29,7 @@ class Admin::DecisionsController < Admin::BaseAdminController
   end
 
   def reject_checked_claims
-    if @claim.check.present?
+    if @claim.decision.present?
       redirect_to admin_claim_path(@claim), notice: "Claim already checked"
     end
   end
@@ -47,11 +47,11 @@ class Admin::DecisionsController < Admin::BaseAdminController
   end
 
   def send_claim_result_email
-    ClaimMailer.approved(@claim).deliver_later if @claim.check.result == "approved"
-    ClaimMailer.rejected(@claim).deliver_later if @claim.check.result == "rejected"
+    ClaimMailer.approved(@claim).deliver_later if @claim.decision.result == "approved"
+    ClaimMailer.rejected(@claim).deliver_later if @claim.decision.result == "rejected"
   end
 
   def decision_params
-    params.require(:check).permit(:result, :notes)
+    params.require(:decision).permit(:result, :notes)
   end
 end

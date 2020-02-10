@@ -2,7 +2,7 @@ class Admin::ClaimsController < Admin::BaseAdminController
   before_action :ensure_service_operator
 
   def index
-    @claims = Claim.includes(:check, eligibility: [:claim_school, :current_school]).awaiting_checking.order(:submitted_at)
+    @claims = Claim.includes(:decision, eligibility: [:claim_school, :current_school]).awaiting_checking.order(:submitted_at)
     @claims = @claims.by_policy(filtered_policy) if filtered_policy
 
     respond_to do |format|
@@ -16,7 +16,7 @@ class Admin::ClaimsController < Admin::BaseAdminController
 
   def show
     @claim = Claim.find(params[:id])
-    @check = @claim.check || Check.new
+    @decision = @claim.decision || Decision.new
     @matching_claims = Claim::MatchingAttributeFinder.new(@claim).matching_claims
     @claims_preventing_payment = Claim::ClaimsPreventingPaymentFinder.new(@claim).claims_preventing_payment
   end

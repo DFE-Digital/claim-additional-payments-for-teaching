@@ -41,7 +41,7 @@ module Admin
         a << [t("admin.check.checked_at"), l(check.created_at)]
         a << [t("admin.check.result"), check.result.capitalize]
         a << [t("admin.check.notes"), simple_format(check.notes, class: "govuk-body")] if check.notes.present?
-        a << [t("admin.check.checked_by"), user_details(check.checked_by)]
+        a << [t("admin.check.checked_by"), user_details(check.made_by)]
       end
     end
 
