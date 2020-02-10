@@ -12,6 +12,9 @@ The format is based on [Keep a Changelog]
 - Service operators can change the academic year a policy is accepting claims
   for
 - Service operators can view qualification and employment checks
+- PII is automatically deleted from claims which are either rejected and have
+  had no update in the last two months, or which have been paid more than two
+  months ago
 
 ## [Release 053] - 2020-02-12
 
