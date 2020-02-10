@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+## [Release 052] - 2020-02-10
+
 - Update admin menu with new layout
 - Update "Some of this information is wrong" content on the verified page
 - A Service Operator can remove problematic payments from a payroll run
@@ -421,7 +423,9 @@ The format is based on [Keep a Changelog]
 - First release for student loan repayments private beta
 
 [unreleased]:
-  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-051...HEAD
+  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-052...HEAD
+[release 052]:
+  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-051...release-052
 [release 051]:
   https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-050...release-051
 [release 050]:
