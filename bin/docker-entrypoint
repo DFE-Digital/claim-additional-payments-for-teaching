@@ -1,20 +1,8 @@
 #!/bin/bash
 set -e
 
-if [ "$RAILS_ENV" != "production" ]; then
-  echo "In a non-production environment: initializing database"
-  bundle exec rake db:create db:schema:load
-else
-  DB_STATUS=$(bundle exec rake db:migrate:status 2>&1 | tail -n 1)
-
-  if [ "$DB_STATUS" == "Schema migrations table does not exist yet."  ]; then
-    echo "No tables exist - setting up the database"
-    bundle exec rake db:setup
-  else
-    echo "Running the schema and data migrations"
-    bundle exec rails db:migrate
-  fi
-fi
+echo "Running migrations..."
+bundle exec rails db:setup_or_migrate
 
 if [ "$RAILS_ENV" != "test" ]; then
   echo "Scheduling Cron Jobs"
