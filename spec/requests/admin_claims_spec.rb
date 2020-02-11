@@ -7,15 +7,15 @@ RSpec.describe "Admin claims", type: :request do
 
   describe "claims#index" do
     let!(:claims) { create_list(:claim, 3, :submitted) }
-    let!(:checked_claim) { create :claim, :approved }
+    let!(:approved_claim) { create :claim, :approved }
 
-    it "lists all claims awaiting checking" do
+    it "lists all claims awaiting a decision" do
       get admin_claims_path
 
       claims.each do |c|
         expect(response.body).to include(c.reference)
       end
-      expect(response.body).not_to include(checked_claim.reference)
+      expect(response.body).not_to include(approved_claim.reference)
     end
 
     it "can filter by policy" do

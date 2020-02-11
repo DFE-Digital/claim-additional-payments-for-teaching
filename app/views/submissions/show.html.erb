@@ -24,7 +24,7 @@
     <% if current_claim.identity_confirmed? %>
       <p class="govuk-body">
         They will check the details you provided in your application and tell
-        you if your claim was successful within the next <%= claim_checking_deadline_in_weeks %>.
+        you if your claim was successful within the next <%= claim_decision_deadline_in_weeks %>.
       </p>
 
       <p class="govuk-body">
@@ -40,7 +40,7 @@
       <p class="govuk-body">
         If they're able to confirm your identity, they will check the details
         you provided in your application and tell you if your claim was
-        successful within <%= claim_checking_deadline_in_weeks %>.
+        successful within <%= claim_decision_deadline_in_weeks %>.
       </p>
     <% end %>
 

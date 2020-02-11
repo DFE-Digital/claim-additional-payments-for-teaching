@@ -82,16 +82,16 @@ module GeckoboardHelpers
         "reference" => claim.reference,
         "policy" => claim.policy.to_s,
         "submitted_at" => claim.submitted_at&.strftime("%Y-%m-%dT%H:%M:%S%:z"),
-        "sla_status" => if claim.check_deadline_date.past?
+        "sla_status" => if claim.decision_deadline_date.past?
                           "passed"
                         elsif claim.deadline_warning_date.past?
                           "warning"
                         else
                           "ok"
                         end,
-        "check" => claim.check.present? ? claim.check.result : "unchecked",
-        "checked_at" => (claim.check.present? ? claim.check.created_at : DateTime.parse("1970-01-01")).strftime("%Y-%m-%dT%H:%M:%S%:z"),
-        "number_of_days_to_check" => claim.check&.number_of_days_since_claim_submitted,
+        "check" => claim.decision.present? ? claim.decision.result : "unchecked",
+        "checked_at" => (claim.decision.present? ? claim.decision.created_at : DateTime.parse("1970-01-01")).strftime("%Y-%m-%dT%H:%M:%S%:z"),
+        "number_of_days_to_check" => claim.decision&.number_of_days_since_claim_submitted,
         "paid" => claim.payment.present?.to_s,
         "paid_at" => (claim.payment.present? ? claim.scheduled_payment_date : DateTime.parse("1970-01-01")).strftime("%Y-%m-%dT%H:%M:%S%:z"),
         "award_amount" => claim.eligibility.present? ? (claim.award_amount * 100).to_i : nil,

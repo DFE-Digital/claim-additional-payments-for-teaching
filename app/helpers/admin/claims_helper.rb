@@ -32,25 +32,25 @@ module Admin
       [
         [t("admin.started_at"), l(claim.created_at)],
         [t("admin.submitted_at"), l(claim.submitted_at)],
-        [t("admin.check_deadline"), [l(claim.check_deadline_date), check_deadline_warning(claim)].compact.join.html_safe],
+        [t("admin.decision_deadline"), [l(claim.decision_deadline_date), decision_deadline_warning(claim)].compact.join.html_safe],
       ]
     end
 
-    def admin_check_details(check)
+    def admin_decision_details(decision)
       [].tap do |a|
-        a << [t("admin.check.checked_at"), l(check.created_at)]
-        a << [t("admin.check.result"), check.result.capitalize]
-        a << [t("admin.check.notes"), simple_format(check.notes, class: "govuk-body")] if check.notes.present?
-        a << [t("admin.check.checked_by"), user_details(check.checked_by)]
+        a << [t("admin.decision.created_at"), l(decision.created_at)]
+        a << [t("admin.decision.result"), decision.result.capitalize]
+        a << [t("admin.decision.notes"), simple_format(decision.notes, class: "govuk-body")] if decision.notes.present?
+        a << [t("admin.decision.created_by"), user_details(decision.created_by)]
       end
     end
 
-    def check_deadline_warning(claim)
-      days_until_check_deadline = days_between(Date.today, claim.check_deadline_date)
-      return if days_until_check_deadline.days > Claim::CHECK_DEADLINE_WARNING_POINT
+    def decision_deadline_warning(claim)
+      days_until_decision_deadline = days_between(Date.today, claim.decision_deadline_date)
+      return if days_until_decision_deadline.days > Claim::DECISION_DEADLINE_WARNING_POINT
 
-      check_deadline_warning_class = days_until_check_deadline < 0 ? "tag--alert" : "tag--warning"
-      content_tag(:strong, pluralize(days_until_check_deadline, "day"), class: "govuk-tag #{check_deadline_warning_class}")
+      decision_deadline_warning_class = days_until_decision_deadline < 0 ? "tag--alert" : "tag--warning"
+      content_tag(:strong, pluralize(days_until_decision_deadline, "day"), class: "govuk-tag #{decision_deadline_warning_class}")
     end
 
     def id_verification_status(claim)

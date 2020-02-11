@@ -2,7 +2,7 @@
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-    <%= render("shared/error_summary", instance: @check, errored_field_id_overrides: { "result": "check_result_approved" }) if @check.errors.any? %>
+    <%= render("shared/error_summary", instance: @decision, errored_field_id_overrides: { "result": "decision_result_approved" }) if @decision.errors.any? %>
 
     <% if @claim.payroll_gender_missing? %>
       <div class="govuk-body-l govuk-flash__notice">
@@ -76,11 +76,11 @@
       </div>
     <% end %>
 
-    <% if @check.persisted? %>
-      <%= render "admin/claims/answer_section", {heading: "Claim decision details", answers: admin_check_details(@check)} %>
+    <% if @decision.persisted? %>
+      <%= render "admin/claims/answer_section", {heading: "Claim decision details", answers: admin_decision_details(@decision)} %>
     <% else %>
-      <%= form_for @check, url: admin_claim_checks_path(@claim), html: { id: "claim_check_form" } do |form| %>
-        <%= form_group_tag @check do %>
+      <%= form_for @decision, url: admin_claim_decisions_path(@claim), html: { id: "claim_decision_form" } do |form| %>
+        <%= form_group_tag @decision do %>
           <fieldset class="govuk-fieldset govuk-!-margin-bottom-6">
             <legend class="govuk-fieldset__legend govuk-fieldset__legend--l govuk-!-margin-bottom-6">
               <h2 class="govuk-fieldset__heading">
@@ -100,7 +100,7 @@
               </div>
             <% end %>
 
-            <%= errors_tag @check, :result %>
+            <%= errors_tag @decision, :result %>
             <div class="govuk-radios">
               <%= form.hidden_field :result %>
               <div class="govuk-radios__item">
