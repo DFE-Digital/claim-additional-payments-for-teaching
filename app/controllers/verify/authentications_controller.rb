@@ -27,7 +27,6 @@ module Verify
         current_claim.update!(parser.attributes)
         redirect_to claim_url(current_policy_routing_name, "verified")
       else
-        current_claim.update!(verify_response: @response.parameters)
         redirect_to verify_path_for_response_scenario(@response.scenario)
       end
     end

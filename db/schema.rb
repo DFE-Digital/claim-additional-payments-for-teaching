@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_02_10_163354) do
+ActiveRecord::Schema.define(version: 2020_02_11_105406) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -41,7 +41,6 @@ ActiveRecord::Schema.define(version: 2020_02_10_163354) do
     t.text "govuk_verify_fields", default: [], array: true
     t.string "eligibility_type"
     t.uuid "eligibility_id"
-    t.json "verify_response"
     t.string "first_name", limit: 100
     t.string "middle_name", limit: 100
     t.string "surname", limit: 100

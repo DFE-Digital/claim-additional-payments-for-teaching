@@ -8,18 +8,10 @@ class Claim
   #   => { first_name: "Margaret", last_name: "Hamilton", date_of_birth: "1936-08-17", ...}
   #
   # As well as keys for the personal information of the user (name, address,
-  # etc) the returned Hash includes two additional keys:
-  #
-  #   govuk_verify_fields – these are the keys for the attributes that have come
-  #                     back in the Verify response. Recording these allows us
-  #                     to determine which attributes came from Verify and
-  #                     therefore should not be editable by the user.
-  #
-  #   verify_response – this is the entire Verify response payload. We record
-  #                     this so that we can examine the original payload to
-  #                     debug issues in the way we parse responses, but also so
-  #                     we can retrospectively re-parse responses in future if
-  #                     necessary.
+  # etc) the returned Hash includes an additional `govuk_verify_fields` key,
+  # which are the keys for the attributes that have come back in the Verify
+  # response. Recording these allows us to determine which attributes came
+  # from Verify and therefore should not be editable by the user.
   #
   class VerifyResponseParametersParser
     class MissingResponseAttribute < StandardError; end
@@ -29,7 +21,7 @@ class Claim
     end
 
     def attributes
-      identity_attributes.merge(govuk_verify_fields: govuk_verify_fields, verify_response: @response_parameters)
+      identity_attributes.merge(govuk_verify_fields: govuk_verify_fields)
     end
 
     def gender

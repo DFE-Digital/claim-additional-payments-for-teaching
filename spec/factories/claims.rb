@@ -45,14 +45,12 @@ FactoryBot.define do
 
     trait :verified do
       govuk_verify_fields { %w[first_name surname address_line_1 postcode date_of_birth payroll_gender] }
-      verify_response { {"scenario" => "IDENTITY_VERIFIED", "pid" => "123", "levelOfAssurance" => "LEVEL_2", "attributes" => {}} }
     end
 
     trait :unverified do
       submitted
 
       govuk_verify_fields { [] }
-      verify_response { nil }
     end
 
     trait :approved do
