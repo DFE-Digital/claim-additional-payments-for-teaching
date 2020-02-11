@@ -5,6 +5,7 @@ module Admin
     layout "admin"
 
     before_action :end_expired_admin_sessions, :ensure_authenticated_user
+    after_action :update_last_seen_at
     helper_method :admin_signed_in?, :admin_timeout_in_minutes, :service_operator_signed_in?
 
     private
@@ -42,6 +43,10 @@ module Admin
 
     def ensure_payroll_operator
       render "admin/auth/failure", status: :unauthorized unless payroll_operator_signed_in?
+    end
+
+    def update_last_seen_at
+      session[:admin_last_seen_at] = Time.zone.now
     end
   end
 end

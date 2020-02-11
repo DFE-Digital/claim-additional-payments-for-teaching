@@ -101,5 +101,6 @@ Rails.application.routes.draw do
     end
 
     resources :policy_configurations, only: [:index, :edit, :update]
+    get "refresh-session", to: "sessions#refresh", as: :refresh_session
   end
 end

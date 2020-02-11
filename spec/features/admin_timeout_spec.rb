@@ -18,7 +18,7 @@ RSpec.feature "Admin user session timeout", js: true do
 
   scenario "can refresh their session" do
     expect(page).to have_content("Your session will expire in #{one_second_in_minutes} minutes")
-    expect_any_instance_of(SessionsController).to receive(:update_last_seen_at)
+    expect_any_instance_of(Admin::SessionsController).to receive(:update_last_seen_at)
     click_on "Continue session"
   end
 

@@ -15,7 +15,7 @@ module AdminSessionTimeout
   end
 
   def admin_session_timed_out?
-    admin_signed_in? && session[:last_seen_at] < admin_timeout_in_minutes.minutes.ago
+    admin_signed_in? && session[:admin_last_seen_at] < admin_timeout_in_minutes.minutes.ago
   end
 
   def admin_timeout_in_minutes
