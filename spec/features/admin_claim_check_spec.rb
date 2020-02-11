@@ -105,6 +105,19 @@ RSpec.feature "Admin checks a claim" do
       expect(page).to have_content(user.full_name)
     end
 
+    context "When the claim has had PII removed" do
+      let!(:claim_with_pii_removed) { create(:claim, :rejected, :pii_removed) }
+
+      scenario "User can see where a claim has had PII removed" do
+        visit admin_claim_path(claim_with_pii_removed)
+        expect(page).to have_content("personally identifiable information removed")
+        expect(page).to have_content("Full name Removed")
+        expect(page).to have_content("Date of birth Removed")
+        expect(page).to have_content("National Insurance number Removed")
+        expect(page).to have_content("Address Removed")
+      end
+    end
+
     context "When the payroll gender is missing" do
       let!(:claim_missing_payroll_gender) { create(:claim, :submitted, payroll_gender: :dont_know) }
 

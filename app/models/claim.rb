@@ -234,6 +234,10 @@ class Claim < ApplicationRecord
     (ADDRESS_ATTRIBUTES & govuk_verify_fields).any?
   end
 
+  def pii_removed?
+    pii_removed_at.present?
+  end
+
   def full_name
     [first_name, middle_name, surname].compact.join(" ")
   end
