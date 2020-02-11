@@ -57,7 +57,6 @@ class Claim < ApplicationRecord
     submitted_at: false,
     updated_at: false,
     govuk_verify_fields: false,
-    verify_response: true,
     banking_name: true,
     building_society_roll_number: true,
     payment_id: false,

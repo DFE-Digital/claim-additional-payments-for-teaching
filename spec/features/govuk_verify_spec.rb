@@ -49,7 +49,6 @@ RSpec.feature "Teacher verifies identity using GOV.UK Verify" do
       expect(@claim.postcode).to eq("L12 345")
       expect(@claim.date_of_birth).to eq(Date.new(1806, 4, 9))
       expect(@claim.payroll_gender).to eq("male")
-      expect(@claim.verify_response).to eq(parsed_vsp_translated_response("identity-verified"))
     end
 
     scenario "successful verification with JavaScript disabled" do
@@ -80,7 +79,6 @@ RSpec.feature "Teacher verifies identity using GOV.UK Verify" do
     expect(page).to have_text("you did not complete the process")
 
     @claim.reload
-    expect(@claim.verify_response).to eq(parsed_vsp_translated_response("no-authentication"))
   end
 
   scenario "Failing the Verify process shows a failure message to the user", js: true do
@@ -92,7 +90,6 @@ RSpec.feature "Teacher verifies identity using GOV.UK Verify" do
     expect(page).to have_text("the company you chose does not have enough information about you")
 
     @claim.reload
-    expect(@claim.verify_response).to eq(parsed_vsp_translated_response("authentication-failed"))
   end
 
   scenario "Users can take longer than 60 minutes to complete Verify", js: true do
