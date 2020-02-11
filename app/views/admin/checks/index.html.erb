@@ -1,0 +1,23 @@
+<%= link_to "Back", admin_claim_path(@claim), class: "govuk-back-link" %>
+
+<div class="govuk-grid-row">
+
+  <%= render "claim_summary", claim: @claim %>
+
+  <div class="govuk-grid-column-two-thirds">
+
+    <ol class="app-task-list">
+      <li>
+        <h2 class="app-task-list__section">
+          <span class="app-task-list__section-number">1. </span> Qualifications
+        </h2>
+      </li>
+      <li>
+        <h2 class="app-task-list__section">
+          <span class="app-task-list__section-number">2. </span> Employment
+        </h2>
+      </li>
+    </ol>
+
+  </div>
+</div>

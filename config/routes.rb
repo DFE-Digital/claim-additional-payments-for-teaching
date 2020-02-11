@@ -88,6 +88,7 @@ Rails.application.routes.draw do
     get "/auth/failure", to: "auth#failure"
 
     resources :claims, only: [:index, :show] do
+      resources :checks, only: [:index]
       resources :decisions, only: [:create]
       get "search", on: :collection
     end
