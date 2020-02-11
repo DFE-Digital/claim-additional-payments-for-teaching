@@ -19,6 +19,23 @@ RSpec.describe "Admin checks", type: :request do
         expect(response.body).to include("Employment")
       end
     end
+
+    # Compatible with claims from each policy
+    Policies.all.each do |policy|
+      context "with a #{policy} claim" do
+        describe "checks#show" do
+          it "renders the requested page" do
+            get admin_claim_check_path(claim, "qualifications")
+            expect(response.body).to include(I18n.t("admin.qts_award_year"))
+            expect(response.body).to include(I18n.t("#{claim.policy.to_s.underscore}.questions.qts_award_years.#{claim.eligibility.qts_award_year}"))
+
+            get admin_claim_check_path(claim, "employment")
+            expect(response.body).to include(I18n.t("admin.current_school"))
+            expect(response.body).to include(claim.eligibility.current_school.name)
+          end
+        end
+      end
+    end
   end
 
   context "when signed in as a payroll operator or a support agent" do

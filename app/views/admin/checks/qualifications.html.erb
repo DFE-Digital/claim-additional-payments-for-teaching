@@ -1,0 +1,25 @@
+<%= link_to "Back", admin_claim_checks_path(claim_id: @claim.id), class: "govuk-back-link" %>
+
+<div class="govuk-grid-row">
+
+  <%= render "claim_summary", claim: @claim %>
+
+  <div class="govuk-grid-column-two-thirds">
+    <h2 class="govuk-heading-l">
+      Qualifications
+    </h2>
+    <p class="govuk-body-l">Check the claimant's initial teacher training (ITT) qualification year matches the below information from their claim.</p>
+
+    <dl class="govuk-summary-list govuk-!-margin-bottom-9">
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+          <%= I18n.t("admin.qts_award_year") %>
+        </dt>
+
+        <dd class="govuk-summary-list__value">
+          <%= I18n.t("#{@claim.policy.to_s.underscore}.questions.qts_award_years.#{@claim.eligibility.qts_award_year}") %>
+        </dd>
+      </div>
+    </dl>
+  </div>
+</div>

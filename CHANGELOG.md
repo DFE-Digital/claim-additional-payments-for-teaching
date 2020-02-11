@@ -11,6 +11,7 @@ The format is based on [Keep a Changelog]
 - Iterate content on the Verify without Verify journey
 - Service operators can change the academic year a policy is accepting claims
   for
+- Service operators can view qualification and employment checks
 
 ## [Release 053] - 2020-02-12
 

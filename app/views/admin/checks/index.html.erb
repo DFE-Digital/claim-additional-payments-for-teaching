@@ -11,11 +11,25 @@
         <h2 class="app-task-list__section">
           <span class="app-task-list__section-number">1. </span> Qualifications
         </h2>
+        <ul class="app-task-list__items">
+          <li class="app-task-list__item">
+            <span class="app-task-list__task-name">
+              <%= link_to "Check qualification information", admin_claim_check_path(claim_id: @claim.id, check: :qualifications), class: "govuk-link" %>
+            </span>
+          </li>
+        </ul>
       </li>
       <li>
         <h2 class="app-task-list__section">
           <span class="app-task-list__section-number">2. </span> Employment
         </h2>
+        <ul class="app-task-list__items">
+          <li class="app-task-list__item">
+            <span class="app-task-list__task-name">
+              <%= link_to "Check employment information", admin_claim_check_path(claim_id: @claim.id, check: :employment), class: "govuk-link" %>
+            </span>
+          </li>
+        </ul>
       </li>
     </ol>
 

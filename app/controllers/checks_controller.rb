@@ -5,9 +5,17 @@ class Admin::ChecksController < Admin::BaseAdminController
   def index
   end
 
+  def show
+    render current_check_template
+  end
+
   private
 
   def load_claim
     @claim = Claim.find(params[:claim_id])
+  end
+
+  def current_check_template
+    params[:check].parameterize.underscore
   end
 end
