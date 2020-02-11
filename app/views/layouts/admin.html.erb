@@ -31,7 +31,7 @@
   <body class="govuk-template__body">
     <%= javascript_include_tag 'js_check' %>
 
-    <%= render("timeout_dialog", timeout_in_minutes: admin_timeout_in_minutes, path_on_timeout: admin_sign_in_path) if admin_signed_in? %>
+    <%= render("timeout_dialog", timeout_in_minutes: admin_timeout_in_minutes, path_on_timeout: admin_sign_in_path, refresh_session_path: admin_refresh_session_path) if admin_signed_in? %>
 
     <a href="#main-content" class="govuk-skip-link">Skip to main content</a>
 
