@@ -36,6 +36,12 @@ module PartOfClaimJourney
     Claim.find(session[:claim_id]) if session.key?(:claim_id)
   end
 
+  # Returns the policy module that matches the current routing. Note this is
+  # subtly different to `current_policy`, which is more robust and will fall-
+  # back to the policy of the `current_claim` when the routing is not scoped to
+  # a `:policy`, for example with the GOV.UK Verify-related routes.
+  #
+  # You will almost certainly want to use `current_policy` most of the time.
   def routing_policy
     Policies[params[:policy]]
   end
