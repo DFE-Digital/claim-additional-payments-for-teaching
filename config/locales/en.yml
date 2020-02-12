@@ -85,8 +85,8 @@ en:
       one: You have removed a claim from the payroll run
       other: You have removed %{count} claims from the payroll run
     payment_deleted_outcome_message:
-      one: Claim %{references} is no longer included in this pay run.
-      other: Claims %{references} are no longer included in this pay run.
+      one: Claim %{references} is no longer included in this pay run. This claim will be automatically added to the next pay run.
+      other: Claims %{references} are no longer included in this pay run. These claims will be automatically added to the next pay run.
     payment_deleted_claim_next_steps_message:
       one: Please make a note of this claim and contact the claimant to resolve the problems with their payment before the next pay run.
       other: Please make a note of these claims and contact the claimant to resolve the problems with their payment before the next pay run.
