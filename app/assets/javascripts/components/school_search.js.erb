@@ -29,11 +29,16 @@ document.addEventListener("DOMContentLoaded", function() {
   var defaultMethodInputValue = methodInput.method || "";
   var defaultFormSubmitValue = formSubmit.value || "";
 
-  function resetForm() {
+  function setSubmitValue(value) {
+    formSubmit.value = value;
+    formSubmit.setAttribute("data-disable-with", value);
+  }
+
+  function resetForm(e) {
     schoolIdInput.value = defaultSchoolIdInputValue;
     form.method = defaultFormMethod;
     methodInput.value = defaultMethodInputValue;
-    formSubmit.value = defaultFormSubmitValue;
+    setSubmitValue(defaultFormSubmitValue);
   }
 
   var schools = [];
@@ -120,7 +125,7 @@ document.addEventListener("DOMContentLoaded", function() {
       schoolIdInput.value = school.id;
       form.method = "post";
       methodInput.value = "patch";
-      formSubmit.value = "Continue";
+      setSubmitValue("Continue");
     }
   });
 
