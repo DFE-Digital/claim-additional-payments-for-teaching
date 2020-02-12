@@ -26,11 +26,14 @@ RSpec.describe "Claims", type: :request do
 
   describe "claims#create request" do
     Policies.all.each do |policy|
-      it "creates a new Claim for the policy and redirects to the next question in the sequence" do
+      it "creates a new #{policy.name} claim for the current academic year and redirects to the next question in the sequence" do
         expect { start_claim(policy) }.to change { Claim.count }.by(1)
 
         claim = Claim.last
+        current_academic_year = policy_configurations(policy.routing_name.underscore).current_academic_year
+
         expect(claim.eligibility).to be_kind_of(policy::Eligibility)
+        expect(claim.academic_year).to eq(current_academic_year)
 
         expect(response).to redirect_to(claim_path(policy.routing_name, policy::SlugSequence::SLUGS[1]))
       end
