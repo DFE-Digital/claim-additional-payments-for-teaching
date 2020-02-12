@@ -15,8 +15,7 @@ module PartOfClaimJourney
   end
 
   def check_whether_closed_for_submissions
-    policy = Policies[current_policy_routing_name]
-    policy_configuration = PolicyConfiguration.find_by(policy_type: policy.name)
+    policy_configuration = PolicyConfiguration.find_by(policy_type: current_policy.name)
 
     unless policy_configuration.open_for_submissions?
       @availability_message = policy_configuration.availability_message
