@@ -14,6 +14,11 @@ module RequestHelpers
           qts_award_year: "on_or_after_september_2013",
         },
       },
+      MathsAndPhysics => {
+        eligibility_attributes: {
+          teaching_maths_or_physics: "true",
+        },
+      },
     }.fetch(policy)
   end
 
