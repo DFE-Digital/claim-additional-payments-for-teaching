@@ -15,8 +15,6 @@ module PartOfClaimJourney
   end
 
   def check_whether_closed_for_submissions
-    policy_configuration = PolicyConfiguration.find_by(policy_type: current_policy.name)
-
     unless policy_configuration.open_for_submissions?
       @availability_message = policy_configuration.availability_message
       render "static_pages/closed_for_submissions", status: :service_unavailable
@@ -33,6 +31,10 @@ module PartOfClaimJourney
 
   def claim_from_session
     Claim.find(session[:claim_id]) if session.key?(:claim_id)
+  end
+
+  def policy_configuration
+    @policy_configuration ||= PolicyConfiguration.find_by(policy_type: current_policy.name)
   end
 
   # Returns the policy module that matches the current routing. Note this is
