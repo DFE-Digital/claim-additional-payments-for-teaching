@@ -6,7 +6,7 @@
 
     <% if @claim.payroll_gender_missing? %>
       <div class="govuk-body-l govuk-flash__notice">
-        This claim cannot be approved, the payroll gender is missing and the claim will need to be referred
+        <%= t("admin.unknown_payroll_gender_preventing_approval_message") %>
       </div>
     <% end %>
 
@@ -35,7 +35,7 @@
         <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
         <strong class="govuk-warning-text__text">
           <span class="govuk-warning-text__assistive">Warning</span>
-          This claim cannot be approved, the payroll gender is missing and the claim will need to be referred
+          <%= t("admin.unknown_payroll_gender_preventing_approval_message") %>
         </strong>
       </div>
     <% end %>
