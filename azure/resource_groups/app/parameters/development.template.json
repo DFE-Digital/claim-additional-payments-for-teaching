@@ -17,7 +17,7 @@
       }
     },
     "appServiceAlwaysOn": {
-      "value": false
+      "value": true
     },
     "appServicePlanSkuTier": {
       "value": "PremiumV2"
