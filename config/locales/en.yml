@@ -90,6 +90,7 @@ en:
     payment_deleted_claim_next_steps_message:
       one: Please make a note of this claim and contact the claimant to resolve the problems with their payment before the next pay run.
       other: Please make a note of these claims and contact the claimant to resolve the problems with their payment before the next pay run.
+    unknown_payroll_gender_preventing_approval_message: This claim cannot be approved, the payroll gender is missing and the claim will need to be referred
   answers:
     student_loan_start_date:
       one_course:
