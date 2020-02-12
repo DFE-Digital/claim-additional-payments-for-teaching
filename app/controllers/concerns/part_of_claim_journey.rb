@@ -36,8 +36,6 @@ module PartOfClaimJourney
     Claim.find(session[:claim_id]) if session.key?(:claim_id)
   end
 
-  private
-
   def routing_policy
     Policies[params[:policy]]
   end
