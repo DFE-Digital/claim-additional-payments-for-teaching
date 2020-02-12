@@ -26,11 +26,15 @@ module PartOfClaimJourney
   end
 
   def current_claim
-    @current_claim ||= claim_from_session || Claim.new(eligibility: current_policy::Eligibility.new)
+    @current_claim ||= claim_from_session || build_new_claim
   end
 
   def claim_from_session
     Claim.find(session[:claim_id]) if session.key?(:claim_id)
+  end
+
+  def build_new_claim
+    Claim.new(eligibility: current_policy::Eligibility.new)
   end
 
   def policy_configuration
