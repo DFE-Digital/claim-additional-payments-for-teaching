@@ -7,17 +7,13 @@
     <%= form_for current_claim, url: claim_path(current_policy_routing_name) do |form| %>
       <%= form.hidden_field :has_student_loan %>
         <%= form_group_tag current_claim do %>
-          <fieldset class="govuk-fieldset" aria-describedby="student_loans-hint" role="group">
+          <fieldset class="govuk-fieldset" role="group">
             <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl">
               <span class="govuk-caption-xl">About your student loans</span>
               <h1 class="govuk-fieldset__heading">
                 <%= t("questions.has_student_loan") %>
               </h1>
             </legend>
-
-            <span class="govuk-hint" id="student_loans-hint">
-              We use this information to determine if we need to apply a student loan deduction to your payment.
-            </span>
 
             <%= errors_tag current_claim, :has_student_loan %>
 
@@ -31,10 +27,22 @@
                 <%= form.label :has_student_loan_false, "No", class: "govuk-label govuk-radios__label" %>
               </div>
             </div>
-
           </fieldset>
         <% end %>
         <%= form.submit "Continue", class: "govuk-button" %>
       <% end %>
+
+      <details class="govuk-details" data-module="govuk-details">
+        <summary class="govuk-details__summary">
+          <span class="govuk-details__summary-text">
+            Why do you need to know about my student loans?
+          </span>
+        </summary>
+        <div class="govuk-details__text">
+          <p class="govuk-body">
+            We work out your student loan plan type using these questions so we make the correct student loan contributions to HMRC.
+          </p>
+        </div>
+      </details>
   </div>
 </div>
