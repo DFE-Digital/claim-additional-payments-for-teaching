@@ -22,11 +22,11 @@ module PartOfClaimJourney
   end
 
   def send_unstarted_claiments_to_the_start
-    redirect_to routing_policy.start_page_url unless current_claim.persisted?
+    redirect_to current_policy.start_page_url unless current_claim.persisted?
   end
 
   def current_claim
-    @current_claim ||= claim_from_session || Claim.new(eligibility: routing_eligibility)
+    @current_claim ||= claim_from_session || Claim.new(eligibility: current_policy::Eligibility.new)
   end
 
   def claim_from_session
@@ -35,20 +35,6 @@ module PartOfClaimJourney
 
   def policy_configuration
     @policy_configuration ||= PolicyConfiguration.find_by(policy_type: current_policy.name)
-  end
-
-  # Returns the policy module that matches the current routing. Note this is
-  # subtly different to `current_policy`, which is more robust and will fall-
-  # back to the policy of the `current_claim` when the routing is not scoped to
-  # a `:policy`, for example with the GOV.UK Verify-related routes.
-  #
-  # You will almost certainly want to use `current_policy` most of the time.
-  def routing_policy
-    Policies[params[:policy]]
-  end
-
-  def routing_eligibility
-    routing_policy && routing_policy::Eligibility.new
   end
 
   def set_cache_headers
