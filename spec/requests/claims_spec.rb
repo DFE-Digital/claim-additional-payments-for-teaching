@@ -25,8 +25,11 @@ RSpec.describe "Claims", type: :request do
   end
 
   describe "claims#create request" do
-    it "creates a new Claim and redirects to the QTS question" do
+    it "creates a new Claim for the policy and redirects to the QTS question" do
       expect { start_student_loans_claim }.to change { Claim.count }.by(1)
+
+      claim = Claim.last
+      expect(claim.eligibility).to be_kind_of(StudentLoans::Eligibility)
 
       expect(response).to redirect_to(claim_path(StudentLoans.routing_name, "claim-school"))
     end
