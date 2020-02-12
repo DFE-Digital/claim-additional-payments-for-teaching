@@ -21,5 +21,6 @@
         </dd>
       </div>
     </dl>
+    <%= button_to "Complete qualifications check and continue", admin_claim_check_path(claim_id: @claim.id, check: :employment), class: "govuk-button", method: :get %>
   </div>
 </div>

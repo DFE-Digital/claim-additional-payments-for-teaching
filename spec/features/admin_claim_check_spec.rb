@@ -82,12 +82,15 @@ RSpec.feature "Admin checks a claim" do
       expect(page).to have_content("Award year")
       expect(page).to have_content(I18n.t("#{claim.policy.to_s.underscore}.questions.qts_award_years.#{claim.eligibility.qts_award_year}"))
 
-      click_on "Back"
+      click_on "Complete qualifications check and continue"
 
-      click_on "Check employment information"
       expect(page).to have_content("Employment")
       expect(page).to have_content("Current school")
       expect(page).to have_link(claim.eligibility.current_school.name)
+
+      click_on "Complete employment check and continue"
+
+      expect(page).to have_content("Claim decision")
     end
 
     scenario "User can see existing decision details" do
