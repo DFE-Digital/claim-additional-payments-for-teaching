@@ -6,6 +6,14 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+## [Release 053] - 2020-02-12
+
+- Don't share the last seen at session variables
+- Fix bug causing school search button text to change when user clicks on it
+- Add subheader to student loans questions
+- Add a component saying why ask about student loans
+- New copy when claim has been removed from payrun
+
 ## [Release 052] - 2020-02-10
 
 - Update admin menu with new layout
@@ -423,7 +431,9 @@ The format is based on [Keep a Changelog]
 - First release for student loan repayments private beta
 
 [unreleased]:
-  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-052...HEAD
+  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-053...HEAD
+[release 053]:
+  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-052...release-053
 [release 052]:
   https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-051...release-052
 [release 051]:
