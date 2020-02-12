@@ -88,7 +88,7 @@
               "metricNamespace": "Microsoft.Web/sites",
               "metricName": "Http5xx",
               "operator": "GreaterThan",
-              "threshold": 1,
+              "threshold": 2,
               "timeAggregation": "Total"
             }
           ]
@@ -110,8 +110,8 @@
         "enabled": "[parameters('enableAlerts')]",
         "description": "[concat('Alert when average CPU utilization for ', variables('appServicePlanName'), ' is greater than 80%.')]",
         "severity": 1,
-        "evaluationFrequency": "PT1M",
-        "windowSize": "PT5M",
+        "evaluationFrequency": "PT5M",
+        "windowSize": "PT15M",
         "targetResourceType": "Microsoft.Web/serverfarms",
         "targetResourceRegion": "[resourceGroup().location]",
         "criteria": {
@@ -145,8 +145,8 @@
         "enabled": "[parameters('enableAlerts')]",
         "description": "[concat('Alert when average memory utilization for ', variables('appServicePlanName'), ' is greater than 80%.')]",
         "severity": 1,
-        "evaluationFrequency": "PT1M",
-        "windowSize": "PT5M",
+        "evaluationFrequency": "PT5M",
+        "windowSize": "PT15M",
         "targetResourceType": "Microsoft.Web/serverfarms",
         "targetResourceRegion": "[resourceGroup().location]",
         "criteria": {
