@@ -90,6 +90,16 @@ RSpec.feature "Admin checks a claim" do
         expect(page).to have_field("Approve", disabled: true)
         expect(page).to have_content(I18n.t("admin.unknown_payroll_gender_preventing_approval_message"))
       end
+
+      context "When a decision has been made" do
+        let!(:claim_missing_payroll_gender_with_decision) { create(:claim, :rejected, payroll_gender: :dont_know) }
+
+        scenario "User is not informed that the claim cannot be approved" do
+          visit admin_claim_path(claim_missing_payroll_gender_with_decision)
+
+          expect(page).to_not have_content(I18n.t("admin.unknown_payroll_gender_preventing_approval_message"))
+        end
+      end
     end
 
     context "When the claimant has another approved claim in the same payroll window, with inconsistent personal details" do

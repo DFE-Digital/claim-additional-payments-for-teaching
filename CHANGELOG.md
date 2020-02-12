@@ -6,6 +6,9 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+- The admin page for a claim no longer warns about a missing payroll gender once
+  a decision has been made
+
 ## [Release 053] - 2020-02-12
 
 - Don't share the last seen at session variables
