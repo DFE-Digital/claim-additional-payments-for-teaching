@@ -12,6 +12,10 @@
 class PolicyConfiguration < ApplicationRecord
   validates :policy_type, inclusion: {in: Policies.all.map(&:name)}
 
+  def self.for(policy)
+    find_by policy_type: policy.name
+  end
+
   def policy
     policy_type.constantize
   end
