@@ -24,7 +24,7 @@
 
       <div class="govuk-form-group">
         <%= f.label :current_academic_year, "Accepting claims for academic year", class: "govuk-label" %>
-        <%= f.select :current_academic_year, ["2019/2020", "2020/2021"], {}, class: "govuk-select" %>
+        <%= f.select :current_academic_year, options_for_academic_year, {}, class: "govuk-select" %>
       </div>
 
       <div class="govuk-form-group">
