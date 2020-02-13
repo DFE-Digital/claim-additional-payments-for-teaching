@@ -17,6 +17,7 @@ The format is based on [Keep a Changelog]
 - Add subheader to student loans questions
 - Add a component saying why ask about student loans
 - New copy when claim has been removed from payrun
+- Claims now track the academic year they were made in
 
 ## [Release 052] - 2020-02-10
 
