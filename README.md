@@ -200,6 +200,16 @@ Development is automatically built and deployed when commits are pushed to
 The release process for Production is documented in
 [`docs/release-process.md`](docs/release-process.md)
 
+### Heroku Review Apps
+
+Pull requests in the
+[GitHub Repository](https://github.com/DFE-Digital/dfe-teachers-payment-service)
+will automatically have a
+[review app](https://devcenter.heroku.com/articles/github-integration-review-apps)
+created in Heroku once CI has passed.
+
+For more information, see the [app's Heroku docs](docs/heroku.md)
+
 ## Accessing production data with a live Rails console
 
 **Accessing a live console is very risky and should only be done as a last
