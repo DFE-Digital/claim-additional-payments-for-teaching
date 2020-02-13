@@ -3,6 +3,9 @@
     { "url": "heroku/nodejs" },
     { "url": "heroku/ruby" }
   ],
+  "scripts": {
+    "postdeploy": "bundle exec rake db:schema:load db:seed"
+  },
   "environments": {
     "test": {
       "addons": ["heroku-postgresql:in-dyno"],
