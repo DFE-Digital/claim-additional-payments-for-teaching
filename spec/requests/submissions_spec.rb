@@ -80,7 +80,7 @@ RSpec.describe "Submissions", type: :request do
         get claim_confirmation_path(StudentLoans.routing_name)
 
         expect(response.body).to include("Claim submitted")
-        expect(response.body).to include("contact you at your school to confirm your identity")
+        expect(response.body).to include("We’ll check the details you provided in your claim")
         expect(session[:claim_id]).to be_nil
       end
     end
