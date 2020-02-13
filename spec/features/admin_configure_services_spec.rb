@@ -10,7 +10,7 @@ RSpec.feature "Service configuration" do
     scenario "Service operator closes a service for submissions, with JavaScript #{js_status}", js: javascript_enabled do
       sign_in_to_admin_with_role(DfeSignIn::User::SERVICE_OPERATOR_DFE_SIGN_IN_ROLE_CODE)
 
-      click_on "Open/close a service"
+      click_on "Manage services"
 
       expect(page).to have_content("Teachers: claim back your student loan repayments")
       within(find("tr[data-policy-configuration-id=\"#{policy_configuration.id}\"]")) do
@@ -42,7 +42,7 @@ RSpec.feature "Service configuration" do
 
     sign_in_to_admin_with_role(DfeSignIn::User::SERVICE_OPERATOR_DFE_SIGN_IN_ROLE_CODE)
 
-    click_on "Open/close a service"
+    click_on "Manage services"
 
     expect(page).to have_content("Teachers: claim back your student loan repayments")
     within(find("tr[data-policy-configuration-id=\"#{policy_configuration.id}\"]")) do
