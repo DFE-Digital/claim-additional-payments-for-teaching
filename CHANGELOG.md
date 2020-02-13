@@ -9,6 +9,8 @@ The format is based on [Keep a Changelog]
 - The admin page for a claim no longer warns about a missing payroll gender once
   a decision has been made
 - Iterate content on the Verify without Verify journey
+- Service operators can change the academic year a policy is accepting claims
+  for
 
 ## [Release 053] - 2020-02-12
 

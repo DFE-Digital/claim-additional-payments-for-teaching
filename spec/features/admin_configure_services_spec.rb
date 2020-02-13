@@ -64,4 +64,23 @@ RSpec.feature "Service configuration" do
 
     expect(policy_configuration.reload.open_for_submissions).to be true
   end
+
+  scenario "Service operator changes the academic year a service is accepting payments for" do
+    sign_in_to_admin_with_role(DfeSignIn::User::SERVICE_OPERATOR_DFE_SIGN_IN_ROLE_CODE)
+
+    click_on "Manage services"
+
+    within(find("tr[data-policy-configuration-id=\"#{policy_configuration.id}\"]")) do
+      click_on "Change"
+    end
+
+    select "2020/2021", from: "Accepting claims for academic year"
+    click_on "Save"
+
+    within(find("tr[data-policy-configuration-id=\"#{policy_configuration.id}\"]")) do
+      expect(page).to have_content("2020/2021")
+    end
+
+    expect(policy_configuration.reload.current_academic_year).to eq "2020/2021"
+  end
 end

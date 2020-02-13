@@ -6,7 +6,10 @@
   </div>
 
   <div class="govuk-grid-column-two-thirds">
-    <p class="govuk-body">Here you can open or close a service. Closing a service will stop users applying and show them a holding page.</p>
+    <p class="govuk-body">
+      Here you can open or close a service for applications and change the
+      academic year that claims are being accepted for.
+    </p>
   </div>
 
   <div class="govuk-grid-column-full">
@@ -14,6 +17,7 @@
       <thead class="govuk-table__head">
         <tr class="govuk-table__row">
           <th scope="col" class="govuk-table__header">Service</th>
+          <th scope="col" class="govuk-table__header">Accepting claims for</th>
           <th scope="col" class="govuk-table__header">Status</th>
           <th scope="col" class="govuk-table__header"><span class="govuk-visually-hidden">Actions</span></th>
         </tr>
@@ -22,6 +26,7 @@
         <% @policy_configurations.each do |policy_configuration| %>
           <tr class="govuk-table__row" data-policy-configuration-id="<%= policy_configuration.id %>">
             <th scope="row" class="govuk-table__header"><%= policy_service_name(policy_configuration.policy.routing_name) %></th>
+            <td class="govuk-table__cell"><%= policy_configuration.current_academic_year %></td>
             <td class="govuk-table__cell"><%= policy_configuration.open_for_submissions? ? "Open" : "Closed" %></td>
             <td class="govuk-table__cell"><%= link_to "Change", edit_admin_policy_configuration_path(policy_configuration), class: "govuk-link" %></td>
           </tr>
