@@ -6,6 +6,7 @@ class Admin::ChecksController < Admin::BaseAdminController
   end
 
   def show
+    @eligibility_checks = @claim.policy::AdminChecksPresenter.new(@claim.eligibility)
     render current_check_template
   end
 

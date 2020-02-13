@@ -1,6 +1,12 @@
-<h2 class="govuk-heading-m">
+<h2 class="govuk-heading-l">
   <%= heading %>
 </h2>
+
+<% if local_assigns.has_key?(:description) %>
+  <p class="govuk-body-l">
+    <%= description %>
+  </p>
+<% end %>
 
 <dl class="govuk-summary-list govuk-!-margin-bottom-9">
   <%- answers.each do |(label, answer)| %>
