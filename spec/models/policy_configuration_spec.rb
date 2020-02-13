@@ -15,4 +15,10 @@ RSpec.describe PolicyConfiguration do
       expect(PolicyConfiguration.new(policy_type: StudentLoans).policy).to eq(StudentLoans)
     end
   end
+
+  it "validates academic years are formated like '2020/2021'" do
+    expect(PolicyConfiguration.new(policy_type: StudentLoans)).not_to be_valid
+    expect(PolicyConfiguration.new(policy_type: StudentLoans, current_academic_year: "2020-2021")).not_to be_valid
+    expect(PolicyConfiguration.new(policy_type: StudentLoans, current_academic_year: "2020/2021")).to be_valid
+  end
 end

@@ -11,6 +11,7 @@ FactoryBot.define do
 
     after(:build) do |claim, evaluator|
       claim.eligibility = build(*evaluator.eligibility_factory) unless claim.eligibility
+      claim.academic_year = "2019/2020" unless claim.academic_year
     end
 
     trait :submittable do
