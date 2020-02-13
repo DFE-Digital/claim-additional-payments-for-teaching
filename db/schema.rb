@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_02_11_105406) do
+ActiveRecord::Schema.define(version: 2020_02_12_154529) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -47,6 +47,8 @@ ActiveRecord::Schema.define(version: 2020_02_11_105406) do
     t.string "banking_name"
     t.string "building_society_roll_number"
     t.uuid "payment_id"
+    t.string "academic_year", limit: 9
+    t.index ["academic_year"], name: "index_claims_on_academic_year"
     t.index ["created_at"], name: "index_claims_on_created_at"
     t.index ["eligibility_type", "eligibility_id"], name: "index_claims_on_eligibility_type_and_eligibility_id"
     t.index ["payment_id"], name: "index_claims_on_payment_id"
@@ -161,6 +163,7 @@ ActiveRecord::Schema.define(version: 2020_02_11_105406) do
     t.string "availability_message"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "current_academic_year", limit: 9
     t.index ["created_at"], name: "index_policy_configurations_on_created_at"
     t.index ["policy_type"], name: "index_policy_configurations_on_policy_type", unique: true
   end

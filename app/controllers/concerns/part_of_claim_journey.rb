@@ -15,9 +15,6 @@ module PartOfClaimJourney
   end
 
   def check_whether_closed_for_submissions
-    policy = Policies[current_policy_routing_name]
-    policy_configuration = PolicyConfiguration.find_by(policy_type: policy.name)
-
     unless policy_configuration.open_for_submissions?
       @availability_message = policy_configuration.availability_message
       render "static_pages/closed_for_submissions", status: :service_unavailable
@@ -25,25 +22,26 @@ module PartOfClaimJourney
   end
 
   def send_unstarted_claiments_to_the_start
-    redirect_to routing_policy.start_page_url unless current_claim.persisted?
+    redirect_to current_policy.start_page_url unless current_claim.persisted?
   end
 
   def current_claim
-    @current_claim ||= claim_from_session || Claim.new(eligibility: routing_eligibility)
+    @current_claim ||= claim_from_session || build_new_claim
   end
 
   def claim_from_session
     Claim.find(session[:claim_id]) if session.key?(:claim_id)
   end
 
-  private
-
-  def routing_policy
-    Policies[params[:policy]]
+  def build_new_claim
+    Claim.new(
+      eligibility: current_policy::Eligibility.new,
+      academic_year: policy_configuration.current_academic_year,
+    )
   end
 
-  def routing_eligibility
-    routing_policy && routing_policy::Eligibility.new
+  def policy_configuration
+    @policy_configuration ||= PolicyConfiguration.find_by(policy_type: current_policy.name)
   end
 
   def set_cache_headers

@@ -1,11 +1,15 @@
 class BasePublicController < ApplicationController
   include ClaimSessionTimeout
 
-  helper_method :current_policy_routing_name, :claim_timeout_in_minutes
+  helper_method :current_policy, :current_policy_routing_name, :claim_timeout_in_minutes
   before_action :end_expired_claim_sessions
   after_action :update_last_seen_at
 
   private
+
+  def current_policy
+    Policies[current_policy_routing_name]
+  end
 
   def current_policy_routing_name
     params[:policy]

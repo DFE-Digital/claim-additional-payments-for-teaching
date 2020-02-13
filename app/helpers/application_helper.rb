@@ -39,10 +39,6 @@ module ApplicationHelper
     current_policy.start_page_url
   end
 
-  def current_policy
-    Policies[current_policy_routing_name]
-  end
-
   def claim_decision_deadline_in_weeks
     "#{Claim::DECISION_DEADLINE.to_i / ActiveSupport::Duration::SECONDS_PER_WEEK} weeks"
   end

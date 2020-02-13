@@ -25,15 +25,23 @@ RSpec.describe "Claims", type: :request do
   end
 
   describe "claims#create request" do
-    it "creates a new Claim and redirects to the QTS question" do
-      expect { start_student_loans_claim }.to change { Claim.count }.by(1)
+    Policies.all.each do |policy|
+      it "creates a new #{policy.name} claim for the current academic year and redirects to the next question in the sequence" do
+        expect { start_claim(policy) }.to change { Claim.count }.by(1)
 
-      expect(response).to redirect_to(claim_path(StudentLoans.routing_name, "claim-school"))
-    end
+        claim = Claim.last
+        current_academic_year = policy_configurations(policy.routing_name.underscore).current_academic_year
 
-    it "validates against the context for the first page in sequence" do
-      expect { post claims_path(StudentLoans.routing_name) }.not_to change { Claim.count }
-      expect(response.body).to include("Select whether you completed your initial teacher training before or after the start of the academic year 2013 to 2014")
+        expect(claim.eligibility).to be_kind_of(policy::Eligibility)
+        expect(claim.academic_year).to eq(current_academic_year)
+
+        expect(response).to redirect_to(claim_path(policy.routing_name, policy::SlugSequence::SLUGS[1]))
+      end
+
+      it "does not create a #{policy.name} claim if validations fail" do
+        expect { post claims_path(policy.routing_name) }.not_to change { Claim.count }
+        expect(response.body).to include("There is a problem")
+      end
     end
   end
 

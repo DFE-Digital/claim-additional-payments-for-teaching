@@ -1,12 +1,25 @@
 module RequestHelpers
   def start_student_loans_claim
-    post claims_path(StudentLoans.routing_name), params: {
-      claim: {
+    start_claim(StudentLoans)
+  end
+
+  def start_claim(policy)
+    post claims_path(policy.routing_name), params: {claim: claim_create_params_for(policy)}
+  end
+
+  def claim_create_params_for(policy)
+    {
+      StudentLoans => {
         eligibility_attributes: {
           qts_award_year: "on_or_after_september_2013",
         },
       },
-    }
+      MathsAndPhysics => {
+        eligibility_attributes: {
+          teaching_maths_or_physics: "true",
+        },
+      },
+    }.fetch(policy)
   end
 
   def sign_in_to_admin_with_role(*args)

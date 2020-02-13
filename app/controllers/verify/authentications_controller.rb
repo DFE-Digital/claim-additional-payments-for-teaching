@@ -59,12 +59,16 @@ module Verify
       Rollbar.debug("Verify::RedactedResponse", parameters: redacted_response.parameters)
     end
 
+    def current_policy_routing_name
+      claim_from_session&.policy&.routing_name
+    end
+
     # This controller is not namespaced to a policy so we can't redirect a user
     # to a policy-specific start page if a claim isn't in progress. Instead
     # redirect to the root URL and let the routing take care of sending the user
     # to the right place.
     def send_unstarted_claiments_to_the_start
-      redirect_to root_url unless current_claim.persisted?
+      redirect_to root_url unless current_policy_routing_name
     end
   end
 end
