@@ -10,7 +10,7 @@ RSpec.feature "Service configuration" do
     scenario "Service operator closes a service for submissions, with JavaScript #{js_status}", js: javascript_enabled do
       sign_in_to_admin_with_role(DfeSignIn::User::SERVICE_OPERATOR_DFE_SIGN_IN_ROLE_CODE)
 
-      click_on "Open/close a service"
+      click_on "Manage services"
 
       expect(page).to have_content("Teachers: claim back your student loan repayments")
       within(find("tr[data-policy-configuration-id=\"#{policy_configuration.id}\"]")) do
@@ -42,7 +42,7 @@ RSpec.feature "Service configuration" do
 
     sign_in_to_admin_with_role(DfeSignIn::User::SERVICE_OPERATOR_DFE_SIGN_IN_ROLE_CODE)
 
-    click_on "Open/close a service"
+    click_on "Manage services"
 
     expect(page).to have_content("Teachers: claim back your student loan repayments")
     within(find("tr[data-policy-configuration-id=\"#{policy_configuration.id}\"]")) do
@@ -63,5 +63,26 @@ RSpec.feature "Service configuration" do
     end
 
     expect(policy_configuration.reload.open_for_submissions).to be true
+  end
+
+  scenario "Service operator changes the academic year a service is accepting payments for" do
+    travel_to Date.new(2023) do
+      sign_in_to_admin_with_role(DfeSignIn::User::SERVICE_OPERATOR_DFE_SIGN_IN_ROLE_CODE)
+
+      click_on "Manage services"
+
+      within(find("tr[data-policy-configuration-id=\"#{policy_configuration.id}\"]")) do
+        click_on "Change"
+      end
+
+      select "2023/2024", from: "Accepting claims for academic year"
+      click_on "Save"
+
+      within(find("tr[data-policy-configuration-id=\"#{policy_configuration.id}\"]")) do
+        expect(page).to have_content("2023/2024")
+      end
+
+      expect(policy_configuration.reload.current_academic_year).to eq "2023/2024"
+    end
   end
 end

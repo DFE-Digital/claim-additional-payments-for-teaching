@@ -20,7 +20,7 @@ module Admin
     private
 
     def policy_configuration_params
-      params.require(:policy_configuration).permit(:availability_message, :open_for_submissions)
+      params.require(:policy_configuration).permit(:availability_message, :open_for_submissions, :current_academic_year)
     end
   end
 end

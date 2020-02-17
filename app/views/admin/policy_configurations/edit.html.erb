@@ -1,21 +1,31 @@
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
     <h1 class="govuk-heading-xl">
-      <span class="govuk-caption-xl">Open or close a service</span>
+      <span class="govuk-caption-xl">Manage services</span>
       <%= policy_service_name(@policy_configuration.policy.routing_name) %>
     </h1>
 
     <div class="govuk-panel govuk-panel--informational">
       <% if @policy_configuration.open_for_submissions? %>
         <h3 class="govuk-panel__title">Service open</h3>
-        <p class="govuk-panel__body">This service is currently open. Users can submit claims.</p>
+        <p class="govuk-panel__body">
+          This service is currently open and accepting claims for the
+          <%= @policy_configuration.current_academic_year%> academic year.
+        </p>
       <% else %>
         <h3 class="govuk-panel__title">Service closed</h3>
-        <p class="govuk-panel__body">This service is currently closed. Users can not submit claims.</p>
+        <p class="govuk-panel__body">
+          This service is currently closed. Users can not submit claims.
+        </p>
       <% end %>
     </div>
 
     <%= form_with model: [:admin, @policy_configuration] do |f| %>
+
+      <div class="govuk-form-group">
+        <%= f.label :current_academic_year, "Accepting claims for academic year", class: "govuk-label" %>
+        <%= f.select :current_academic_year, options_for_academic_year, {}, class: "govuk-select" %>
+      </div>
 
       <div class="govuk-form-group">
         <fieldset class="govuk-fieldset">

@@ -1,6 +1,11 @@
 require "rails_helper"
 
 RSpec.describe Claim, type: :model do
+  it "validates academic years are formated like '2020/2021'" do
+    expect(build(:claim, academic_year: "2022/2023")).to be_valid
+    expect(build(:claim, academic_year: "2020-2021")).not_to be_valid
+  end
+
   context "that has a teacher_reference_number" do
     it "validates the length of the teacher reference number" do
       expect(build(:claim, teacher_reference_number: "1/2/3/4/5/6/7")).to be_valid

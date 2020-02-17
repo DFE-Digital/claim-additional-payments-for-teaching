@@ -41,7 +41,7 @@ module PartOfClaimJourney
   end
 
   def policy_configuration
-    @policy_configuration ||= PolicyConfiguration.find_by(policy_type: current_policy.name)
+    @policy_configuration ||= PolicyConfiguration.for(current_policy)
   end
 
   def set_cache_headers
