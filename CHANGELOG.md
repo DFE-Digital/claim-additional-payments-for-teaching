@@ -15,6 +15,7 @@ The format is based on [Keep a Changelog]
 - PII is automatically deleted from claims which are either rejected and have
   had no update in the last two months, or which have been paid more than two
   months ago
+- Update "What information is sent" to include Cantium
 
 ## [Release 053] - 2020-02-12
 
