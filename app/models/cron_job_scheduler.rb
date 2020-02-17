@@ -1,6 +1,6 @@
 class CronJobScheduler
   def initialize
-    Dir.glob(glob).each { |f| require f }
+    Dir.glob(glob).sort.each { |f| require f }
   end
 
   def schedule
