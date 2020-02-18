@@ -38,4 +38,17 @@ describe "Routes", type: :routing do
       expect(claim_path("maths-and-physics", "teaching-maths-or-physics")).to eq "/maths-and-physics/teaching-maths-or-physics"
     end
   end
+
+  describe "Admin claim checks routing" do
+    it "routes GET requests to valid checks on a claim" do
+      claim = create(:claim, :submitted)
+      expect(get: "admin/claims/#{claim.id}/checks/qualifications").to route_to "admin/checks#show", claim_id: claim.id, check: "qualifications"
+      expect(get: "admin/claims/#{claim.id}/checks/employment").to route_to "admin/checks#show", claim_id: claim.id, check: "employment"
+    end
+
+    it "does not route for unrecognised checks" do
+      claim = create(:claim, :submitted)
+      expect(get: "admin/claims/#{claim.id}/checks/foo").not_to be_routable
+    end
+  end
 end

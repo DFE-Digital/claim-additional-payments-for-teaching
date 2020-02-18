@@ -68,6 +68,31 @@ RSpec.feature "Admin checks a claim" do
       expect(mail.body.raw_source).to match("not been able to approve")
     end
 
+    scenario "User can see checks for a claim" do
+      claim = create(:claim, :submitted)
+      visit admin_claim_path(claim)
+
+      click_on "View checks"
+
+      expect(page).to have_content("1. Qualifications")
+      expect(page).to have_content("2. Employment")
+
+      click_on "Check qualification information"
+      expect(page).to have_content("Qualifications")
+      expect(page).to have_content("Award year")
+      expect(page).to have_content(I18n.t("#{claim.policy.to_s.underscore}.questions.qts_award_years.#{claim.eligibility.qts_award_year}"))
+
+      click_on "Complete qualifications check and continue"
+
+      expect(page).to have_content("Employment")
+      expect(page).to have_content("Current school")
+      expect(page).to have_link(claim.eligibility.current_school.name)
+
+      click_on "Complete employment check and continue"
+
+      expect(page).to have_content("Claim decision")
+    end
+
     scenario "User can see existing decision details" do
       claim_with_decision = create(:claim, :submitted, decision: build(:decision, result: :approved, notes: "Everything matches"))
       visit admin_claim_path(claim_with_decision)

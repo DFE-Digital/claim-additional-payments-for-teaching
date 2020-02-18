@@ -1,0 +1,15 @@
+<%= link_to "Back", admin_claim_checks_path(claim_id: @claim.id), class: "govuk-back-link" %>
+
+<div class="govuk-grid-row">
+
+  <%= render "claim_summary", claim: @claim %>
+
+  <div class="govuk-grid-column-two-thirds">
+    <%= render "admin/claims/answer_section",
+          heading: "Qualifications",
+          description: I18n.t("#{@claim.policy.to_s.underscore}.admin.qualification_check_description"),
+          answers: @eligibility_checks.qualifications %>
+
+    <%= button_to "Complete qualifications check and continue", admin_claim_check_path(claim_id: @claim.id, check: :employment), class: "govuk-button", method: :get %>
+  </div>
+</div>

@@ -170,6 +170,8 @@ en:
       employed_directly: "Employed directly by school?"
       disciplinary_action: "Subject to disciplinary action?"
       formal_performance_action: "Subject to formal performance action?"
+      qualification_check_description: "Check the claimant's initial teacher training (ITT) qualification year and specialist subject matches the below information from their claim."
+      employment_check_description: "Check the claimant's current school matches the below information from their claim."
   student_loans:
     policy_name: "Teachers: claim back your student loan repayments"
     policy_short_name: "Student Loans"
@@ -210,3 +212,5 @@ en:
       mostly_performed_leadership_duties: "Mostly performed leadership duties?"
       student_loan_repayment_amount: "Student loan repayment amount"
       student_loan_repayment_plan: "Student loan repayment plan"
+      qualification_check_description: "Check the claimant's initial teacher training (ITT) qualification year matches the below information from their claim."
+      employment_check_description: "Check the claimant's previous and current schools match the below information from their claim."
