@@ -16,6 +16,8 @@ The format is based on [Keep a Changelog]
   had no update in the last two months, or which have been paid more than two
   months ago
 - Update "What information is sent" to include Cantium
+- Swap Net/HTTP for HTTPClient when downloading the school data file to resolve
+  a memory issue
 
 ## [Release 053] - 2020-02-12
 

@@ -352,6 +352,7 @@ DEPENDENCIES
   factory_bot_rails
   foreman
   geckoboard-ruby
+  httpclient
   jbuilder (~> 2.10)
   jwt
   launchy
