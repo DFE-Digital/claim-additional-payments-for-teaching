@@ -134,7 +134,7 @@ RSpec.describe "Claims", type: :request do
       it "makes sure validations appropriate to the context are run" do
         put claim_path(StudentLoans.routing_name, "qts-year"), params: {claim: {eligibility_attributes: {qts_award_year: nil}}}
 
-        expect(response.body).to include("Select whether you completed your initial teacher training before or after the start of the academic year 2013 to 2014")
+        expect(response.body).to include("Select when you completed your initial teacher training")
       end
 
       it "resets dependent claim attributes when appropriate" do
