@@ -1,0 +1,4 @@
+#!/bin/bash
+
+echo "Starting workers..."
+RAILS_ENV=production bundle exec bin/delayed_job start -n 2
