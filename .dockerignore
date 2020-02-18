@@ -2,3 +2,14 @@
 /log/
 /node_modules/
 /tmp/
+/.git/
+
+localhost.crt
+localhost.key
+
+.env
+.env.local
+
+.rakeTasks
+.byebug_history
+.generators

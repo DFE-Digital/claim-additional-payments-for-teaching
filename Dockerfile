@@ -131,19 +131,11 @@ COPY --from=shellcheck / /opt/shellcheck/
 ENV PATH /opt/shellcheck/bin:${PATH}
 # End
 
-# Copy test code (sorted by vague frequency of change for caching)
-COPY .prettierignore ${APP_HOME}/.prettierignore
-COPY .prettierrc ${APP_HOME}/.prettierrc
-COPY .rspec ${APP_HOME}/.rspec
-COPY .standard.yml ${APP_HOME}/.standard.yml
-
-COPY spec ${APP_HOME}/spec
-# End
-
-# Copy files for linting (sorted by vague frequency of change for caching)
-COPY docs ${APP_HOME}/docs
-COPY *.md ${APP_HOME}/
-COPY azure ${APP_HOME}/azure
+# Copy all files
+# This is only for the test target and ensures that all the files that could be linted locally are also linted on CI.
+# We need to be mindful of files that get added to the project, if they are secrets or superfluous we should add them
+# to the .dockerignore file.
+COPY . ${APP_HOME}/
 # End
 
 CMD [ "bundle", "exec", "rake" ]
