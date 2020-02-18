@@ -93,18 +93,6 @@ while [ "$2" ]; do
     "--skip-alerts")
       DEPLOY_ALERTS=
       ;;
-    "--tmp-secrets")
-      SECRETS_RESOURCE_GROUP_NAME="$SECRETS_RESOURCE_GROUP_NAME-tmp"
-      SECRETS_DEPLOYMENT_NAME="$SECRETS_DEPLOYMENT_NAME-tmp"
-      ;;
-    "--tmp-app")
-      APP_RESOURCE_GROUP_NAME="$APP_RESOURCE_GROUP_NAME-tmp"
-      APP_DEPLOYMENT_NAME="$APP_DEPLOYMENT_NAME-tmp"
-      ;;
-    "--tmp-alerts")
-      ALERTS_RESOURCE_GROUP_NAME="$ALERTS_RESOURCE_GROUP_NAME-tmp"
-      ALERTS_DEPLOYMENT_NAME="$ALERTS_DEPLOYMENT_NAME-tmp"
-      ;;
     "--recover-keyvault")
       RECOVER_KEY_VAULT=1
       ;;

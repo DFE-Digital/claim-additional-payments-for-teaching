@@ -69,8 +69,16 @@ has finished running the changes will be applied to your environment!
 ## Testing deployment
 
 If you want to test changes to infrastructure with minimal impact to existing
-environments, `bin/azure-deploy` has `--tmp-*` arguments for each resource group
-(e.g. `--tmp-app`), which deploys a new resource group with a `-tmp` suffix.
+environments, you can deploy to the test environment:
+
+```bash
+bin/azure-deploy test
+```
+
+You will need to carry out a Privileged Identity Management request to deploy to
+the test environment. See
+[Privileged Identity Management requests](https://dfedigital.atlassian.net/wiki/spaces/TP/pages/1192624202/Privileged+Identity+Management+requests)
+for more.
 
 Deployments rely on having web access to the current version of the Git
 repository (they attempt to fetch the current commit hash from GitHub). To test
