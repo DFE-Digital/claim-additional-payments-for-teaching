@@ -1,5 +1,10 @@
-# frozen_string_literal: true
-
+# Module namespace specific to the policy for claiming back your student loan
+# payments.
+#
+# This payment is available to teachers that qualified after 2013 teaching
+# specific subjects in state-funded secondary schools in eligible local
+# authorities. Full details of the eligibility criteria can be found at the URL
+# defined by `StudentLoans.eligibility_page_url`.
 module StudentLoans
   extend self
 

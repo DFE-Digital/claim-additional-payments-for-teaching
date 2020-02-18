@@ -1,3 +1,10 @@
+# Module namespace specific to the policy for claiming a payment for teaching
+# maths or physics.
+#
+# This payment is available to Maths or Physics teachers in the first five their
+# career employed in state-funded secondary schools in eligible local
+# authorities. Full details of the eligibility criteria can be found at the URL
+# defined by `MathsAndPhysics.eligibility_page_url`.
 module MathsAndPhysics
   extend self
 
