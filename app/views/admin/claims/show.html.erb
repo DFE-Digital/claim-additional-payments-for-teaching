@@ -10,6 +10,12 @@
       </div>
     <% end %>
 
+    <% if @claim.pii_removed? %>
+      <div class="govuk-body-l govuk-flash__notice">
+        This claim had personally identifiable information removed on <%= l(@claim.pii_removed_at.to_date) %>.
+      </div>
+    <% end %>
+
     <% if @matching_claims.any? %>
       <div class="govuk-body-l govuk-flash__warning">
         <a href="#claims-with-matches">Details in this claim match those in other claims</a>

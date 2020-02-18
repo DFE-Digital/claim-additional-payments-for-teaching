@@ -10,13 +10,17 @@ module Admin
       claim.policy::EligibilityAdminAnswersPresenter.new(claim.eligibility).answers
     end
 
+    def pii_removed_text
+      content_tag(:span, "Removed", class: "capt-text-quiet")
+    end
+
     def admin_personal_details(claim)
       [
         [t("admin.teacher_reference_number"), claim.teacher_reference_number],
-        [t("govuk_verify_fields.full_name").capitalize, claim.full_name],
-        [t("govuk_verify_fields.date_of_birth").capitalize, l(claim.date_of_birth, format: :day_month_year)],
-        [t("admin.national_insurance_number"), claim.national_insurance_number],
-        [t("govuk_verify_fields.address").capitalize, sanitize(claim.address("<br>").html_safe, tags: %w[br])],
+        [t("govuk_verify_fields.full_name").capitalize, claim.pii_removed? ? pii_removed_text : claim.full_name],
+        [t("govuk_verify_fields.date_of_birth").capitalize, claim.pii_removed? ? pii_removed_text : l(claim.date_of_birth, format: :day_month_year)],
+        [t("admin.national_insurance_number"), claim.pii_removed? ? pii_removed_text : claim.national_insurance_number],
+        [t("govuk_verify_fields.address").capitalize, claim.pii_removed? ? pii_removed_text : sanitize(claim.address("<br>").html_safe, tags: %w[br])],
         [t("admin.email_address"), claim.email_address],
       ]
     end

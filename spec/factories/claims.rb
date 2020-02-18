@@ -69,5 +69,24 @@ FactoryBot.define do
 
       eligibility_factory { ["#{policy.to_s.underscore}_eligibility".to_sym, :ineligible] }
     end
+
+    trait :pii_removed do
+      submitted
+      first_name { nil }
+      middle_name { nil }
+      surname { nil }
+      date_of_birth { nil }
+      address_line_1 { nil }
+      address_line_2 { nil }
+      address_line_3 { nil }
+      address_line_4 { nil }
+      postcode { nil }
+      payroll_gender { nil }
+      national_insurance_number { nil }
+      bank_sort_code { nil }
+      bank_account_number { nil }
+      building_society_roll_number { nil }
+      pii_removed_at { Time.zone.now }
+    end
   end
 end
