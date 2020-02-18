@@ -7,13 +7,13 @@
 
     <div class="govuk-panel govuk-panel--informational">
       <% if @policy_configuration.open_for_submissions? %>
-        <h3 class="govuk-panel__title">Service open</h3>
+        <h2 class="govuk-panel__title">Service open</h2>
         <p class="govuk-panel__body">
           This service is currently open and accepting claims for the
           <%= @policy_configuration.current_academic_year%> academic year.
         </p>
       <% else %>
-        <h3 class="govuk-panel__title">Service closed</h3>
+        <h2 class="govuk-panel__title">Service closed</h2>
         <p class="govuk-panel__body">
           This service is currently closed. Users can not submit claims.
         </p>
