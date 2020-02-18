@@ -12,6 +12,10 @@ case $ENVIRONMENT_NAME in
     SUBSCRIPTION_ID="88bd392f-df19-458b-a100-22b4429060ed"
     RESOURCE_GROUP_PREFIX="s118p01"
     ;;
+  "test")
+    SUBSCRIPTION_ID="e9299169-9666-4f15-9da9-5332680145af"
+    RESOURCE_GROUP_PREFIX="s118t01"
+    ;;
   *)
     echo "Could not find a known environment with the name: $ENVIRONMENT_NAME"
     exit 1
