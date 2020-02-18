@@ -315,7 +315,7 @@
             "value": "[parameters('containerNetworkProfileId')]"
           },
           "command": {
-            "value": ["bundle", "exec", "rake", "jobs:work"]
+            "value": ["bin/start-worker", "production"]
           }
         }
       }
