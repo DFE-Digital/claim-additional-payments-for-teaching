@@ -56,7 +56,7 @@ RSpec.describe FileDownload do
 
     expect {
       FileDownload.new("http://url.com/file-0.csv").fetch
-    }.to raise_error(FileDownload::TooManyRedirects)
+    }.to raise_error(HTTPClient::BadResponseError)
   end
 
   it "raises an exception on any other response" do
