@@ -10,7 +10,7 @@ RSpec.describe StudentLoans::SlugSequence do
       expect(claim.eligibility).not_to be_ineligible
       expect(slug_sequence.slugs).not_to include("ineligible")
 
-      claim.eligibility.qts_award_year = "before_september_2013"
+      claim.eligibility.qts_award_year = "before_cut_off_date"
       expect(claim.eligibility).to be_ineligible
       expect(slug_sequence.slugs).to include("ineligible")
     end

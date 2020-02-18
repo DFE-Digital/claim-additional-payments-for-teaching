@@ -27,12 +27,12 @@ RSpec.feature "Changing the answers on a submittable claim" do
 
     find("a[href='#{claim_path(StudentLoans.routing_name, "qts-year")}']").click
 
-    expect(find("#claim_eligibility_attributes_qts_award_year_on_or_after_september_2013").checked?).to eq(true)
+    expect(find("#claim_eligibility_attributes_qts_award_year_on_or_after_cut_off_date").checked?).to eq(true)
 
-    choose I18n.t("student_loans.questions.qts_award_years.before_september_2013")
+    choose I18n.t("student_loans.questions.qts_award_years.before_cut_off_date")
     click_on "Continue"
 
-    expect(claim.eligibility.reload.qts_award_year).to eq("before_september_2013")
+    expect(claim.eligibility.reload.qts_award_year).to eq("before_cut_off_date")
 
     expect(page).to have_text("You’re not eligible")
     expect(page).to have_text("You can only get this payment if you completed your initial teacher training in or after the academic year 2013 to 2014.")

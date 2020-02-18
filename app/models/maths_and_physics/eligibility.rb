@@ -41,8 +41,8 @@ module MathsAndPhysics
     }
 
     enum qts_award_year: {
-      "before_september_2014": 0,
-      "on_or_after_september_2014": 1,
+      before_cut_off_date: 0,
+      on_or_after_cut_off_date: 1,
     }, _prefix: :awarded_qualified_status
 
     belongs_to :current_school, optional: true, class_name: "School"
@@ -122,7 +122,7 @@ module MathsAndPhysics
     end
 
     def ineligible_qts_award_year?
-      awarded_qualified_status_before_september_2014?
+      awarded_qualified_status_before_cut_off_date?
     end
 
     def no_entire_term_contract?

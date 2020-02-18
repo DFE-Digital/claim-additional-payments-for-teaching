@@ -137,8 +137,8 @@ en:
       initial_teacher_training_subject_specialism: "Which science subject did your initial teacher training specialise in?"
       has_uk_maths_or_physics_degree: "Do you have a UK undergraduate or postgraduate degree in maths or physics?"
       qts_award_years:
-        before_september_2014: "In or before the academic year 2013 to 2014"
-        on_or_after_september_2014: "In or after the academic year 2014 to 2015"
+        before_cut_off_date: "In or before the academic year 2013 to 2014"
+        on_or_after_cut_off_date: "In or after the academic year 2014 to 2015"
       employed_as_supply_teacher: "Are you currently employed as a supply teacher?"
       has_entire_term_contract: "Do you have a contract to teach at the same school for an entire term or longer?"
       employed_directly: "Are you employed directly by your school?"
@@ -187,8 +187,8 @@ en:
     support_email_address: "studentloanteacherpayment@digital.education.gov.uk"
     questions:
       qts_award_years:
-        before_september_2013: "In or before the academic year 2012 to 2013"
-        on_or_after_september_2013: "In or after the academic year 2013 to 2014"
+        before_cut_off_date: "In or before the academic year 2012 to 2013"
+        on_or_after_cut_off_date: "In or after the academic year 2013 to 2014"
       claim_school: "Which school were you employed to teach at between 6 April 2018 and 5 April 2019?"
       additional_school: "Which additional school were you employed to teach at between 6 April 2018 and 5 April 2019?"
       employment_status: "Are you still employed to teach at a school in England?"

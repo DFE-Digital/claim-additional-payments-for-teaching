@@ -6,7 +6,7 @@ RSpec.describe MathsAndPhysics::EligibilityAnswersPresenter do
       teaching_maths_or_physics: true,
       current_school: schools(:penistone_grammar_school),
       initial_teacher_training_subject: :maths,
-      qts_award_year: "on_or_after_september_2014",
+      qts_award_year: "on_or_after_cut_off_date",
       employed_as_supply_teacher: false,
       subject_to_disciplinary_action: false,
       subject_to_formal_performance_action: false)
@@ -34,7 +34,7 @@ RSpec.describe MathsAndPhysics::EligibilityAnswersPresenter do
         current_school: schools(:penistone_grammar_school),
         initial_teacher_training_subject: :none_of_the_subjects,
         has_uk_maths_or_physics_degree: "has_non_uk",
-        qts_award_year: "on_or_after_september_2014",
+        qts_award_year: "on_or_after_cut_off_date",
         employed_as_supply_teacher: false,
         subject_to_disciplinary_action: false,
         subject_to_formal_performance_action: false)
@@ -64,7 +64,7 @@ RSpec.describe MathsAndPhysics::EligibilityAnswersPresenter do
         initial_teacher_training_subject: :science,
         initial_teacher_training_subject_specialism: :not_sure,
         has_uk_maths_or_physics_degree: "has_non_uk",
-        qts_award_year: "on_or_after_september_2014",
+        qts_award_year: "on_or_after_cut_off_date",
         employed_as_supply_teacher: false,
         subject_to_disciplinary_action: false,
         subject_to_formal_performance_action: false)
@@ -94,7 +94,7 @@ RSpec.describe MathsAndPhysics::EligibilityAnswersPresenter do
         current_school: schools(:penistone_grammar_school),
         initial_teacher_training_subject: :physics,
         initial_teacher_training_subject_specialism: :physics,
-        qts_award_year: "on_or_after_september_2014",
+        qts_award_year: "on_or_after_cut_off_date",
         employed_as_supply_teacher: true,
         has_entire_term_contract: true,
         employed_directly: true,

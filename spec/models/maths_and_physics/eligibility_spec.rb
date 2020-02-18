@@ -32,9 +32,9 @@ RSpec.describe MathsAndPhysics::Eligibility, type: :model do
       expect(MathsAndPhysics::Eligibility.new(initial_teacher_training_subject: :science, initial_teacher_training_subject_specialism: :not_sure, has_uk_maths_or_physics_degree: "no").ineligible?).to eql false
     end
 
-    it "returns true when the qts_award_year is before 2014" do
-      expect(MathsAndPhysics::Eligibility.new(qts_award_year: "before_september_2014").ineligible?).to eql true
-      expect(MathsAndPhysics::Eligibility.new(qts_award_year: "on_or_after_september_2014").ineligible?).to eql false
+    it "returns true when the qts_award_year is before the qualifiying cut-off" do
+      expect(MathsAndPhysics::Eligibility.new(qts_award_year: "before_cut_off_date").ineligible?).to eql true
+      expect(MathsAndPhysics::Eligibility.new(qts_award_year: "on_or_after_cut_off_date").ineligible?).to eql false
     end
 
     it "returns true when claimant is a supply teacher without a contract of at least one term" do
@@ -67,7 +67,7 @@ RSpec.describe MathsAndPhysics::Eligibility, type: :model do
       expect(MathsAndPhysics::Eligibility.new(teaching_maths_or_physics: false).ineligibility_reason).to eq :not_teaching_maths_or_physics
       expect(MathsAndPhysics::Eligibility.new(current_school: schools(:hampstead_school)).ineligibility_reason).to eq :ineligible_current_school
       expect(MathsAndPhysics::Eligibility.new(initial_teacher_training_subject: :none_of_the_subjects, has_uk_maths_or_physics_degree: "no").ineligibility_reason).to eq :no_maths_or_physics_qualification
-      expect(MathsAndPhysics::Eligibility.new(qts_award_year: "before_september_2014").ineligibility_reason).to eq :ineligible_qts_award_year
+      expect(MathsAndPhysics::Eligibility.new(qts_award_year: "before_cut_off_date").ineligibility_reason).to eq :ineligible_qts_award_year
       expect(MathsAndPhysics::Eligibility.new(employed_as_supply_teacher: true, has_entire_term_contract: false).ineligibility_reason).to eql :no_entire_term_contract
       expect(MathsAndPhysics::Eligibility.new(subject_to_disciplinary_action: true).ineligibility_reason).to eql :subject_to_disciplinary_action
       expect(MathsAndPhysics::Eligibility.new(subject_to_formal_performance_action: true).ineligibility_reason).to eql :subject_to_formal_performance_action
@@ -218,7 +218,7 @@ RSpec.describe MathsAndPhysics::Eligibility, type: :model do
   context "when saving in the “qts-year” context" do
     it "validates the presence of qts_award_year" do
       expect(MathsAndPhysics::Eligibility.new).not_to be_valid(:"qts-year")
-      expect(MathsAndPhysics::Eligibility.new(qts_award_year: "before_september_2014")).to be_valid(:"qts-year")
+      expect(MathsAndPhysics::Eligibility.new(qts_award_year: "before_cut_off_date")).to be_valid(:"qts-year")
     end
   end
 
@@ -294,7 +294,7 @@ RSpec.describe MathsAndPhysics::Eligibility, type: :model do
 
     it "is not valid without a value for qts_award_year" do
       expect(build(:maths_and_physics_eligibility, :eligible, qts_award_year: nil)).not_to be_valid(:submit)
-      expect(build(:maths_and_physics_eligibility, :eligible, qts_award_year: "before_september_2014")).to be_valid(:submit)
+      expect(build(:maths_and_physics_eligibility, :eligible, qts_award_year: "before_cut_off_date")).to be_valid(:submit)
     end
 
     it "is not valid without a value for employed_as_supply_teacher" do

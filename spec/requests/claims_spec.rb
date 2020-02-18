@@ -126,9 +126,9 @@ RSpec.describe "Claims", type: :request do
       before { start_student_loans_claim }
 
       it "updates the claim with the submitted form data" do
-        put claim_path(StudentLoans.routing_name, "qts-year"), params: {claim: {eligibility_attributes: {qts_award_year: "on_or_after_september_2013"}}}
+        put claim_path(StudentLoans.routing_name, "qts-year"), params: {claim: {eligibility_attributes: {qts_award_year: "on_or_after_cut_off_date"}}}
 
-        expect(in_progress_claim.eligibility.qts_award_year).to eq "on_or_after_september_2013"
+        expect(in_progress_claim.eligibility.qts_award_year).to eq "on_or_after_cut_off_date"
       end
 
       it "makes sure validations appropriate to the context are run" do
@@ -189,7 +189,7 @@ RSpec.describe "Claims", type: :request do
 
     context "when a claim hasn’t been started yet" do
       it "redirects to the start page indicated by the routing" do
-        put claim_path(StudentLoans.routing_name, "qts-year"), params: {claim: {eligibility_attributes: {qts_award_year: "on_or_after_september_2013"}}}
+        put claim_path(StudentLoans.routing_name, "qts-year"), params: {claim: {eligibility_attributes: {qts_award_year: "on_or_after_cut_off_date"}}}
         expect(response).to redirect_to(StudentLoans.start_page_url)
       end
     end

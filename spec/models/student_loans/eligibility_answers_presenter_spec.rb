@@ -4,7 +4,7 @@ RSpec.describe StudentLoans::EligibilityAnswersPresenter, type: :model do
   let(:school) { schools(:penistone_grammar_school) }
   let(:eligibility_attributes) do
     {
-      qts_award_year: "on_or_after_september_2013",
+      qts_award_year: "on_or_after_cut_off_date",
       claim_school: school,
       current_school: school,
       had_leadership_position: true,

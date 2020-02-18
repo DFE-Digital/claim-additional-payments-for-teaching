@@ -11,7 +11,7 @@ module RequestHelpers
     {
       StudentLoans => {
         eligibility_attributes: {
-          qts_award_year: "on_or_after_september_2013",
+          qts_award_year: "on_or_after_cut_off_date",
         },
       },
       MathsAndPhysics => {

@@ -6,7 +6,7 @@ RSpec.feature "Ineligible Teacher Student Loan Repayments claims" do
     choose_qts_year("In or before the academic year 2012 to 2013")
     claim = Claim.order(:created_at).last
 
-    expect(claim.eligibility.reload.qts_award_year).to eql("before_september_2013")
+    expect(claim.eligibility.reload.qts_award_year).to eql("before_cut_off_date")
     expect(page).to have_text("You’re not eligible")
     expect(page).to have_text("You can only get this payment if you completed your initial teacher training in or after the academic year 2013 to 2014.")
   end
