@@ -23,6 +23,8 @@ RSpec.describe "Admin checks", type: :request do
     # Compatible with claims from each policy
     Policies.all.each do |policy|
       context "with a #{policy} claim" do
+        let(:claim) { create(:claim, :submitted, policy: policy) }
+
         describe "checks#show" do
           it "renders the requested page" do
             get admin_claim_check_path(claim, "qualifications")
