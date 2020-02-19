@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+## [Release 054] - 2020-02-19
+
 - The admin page for a claim no longer warns about a missing payroll gender once
   a decision has been made
 - Iterate content on the Verify without Verify journey
@@ -445,7 +447,9 @@ The format is based on [Keep a Changelog]
 - First release for student loan repayments private beta
 
 [unreleased]:
-  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-053...HEAD
+  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-054...HEAD
+[release 054]:
+  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-053...release-054
 [release 053]:
   https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-052...release-053
 [release 052]:
