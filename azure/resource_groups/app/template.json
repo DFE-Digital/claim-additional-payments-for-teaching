@@ -164,6 +164,9 @@
     "ENVIRONMENT_NAME": {
       "type": "string"
     },
+    "WORKER_COUNT": {
+      "type": "int"
+    },
     "VSP.VERIFY_ENVIRONMENT": {
       "type": "string"
     },
@@ -526,6 +529,10 @@
               {
                 "name": "ENVIRONMENT_NAME",
                 "value": "[parameters('ENVIRONMENT_NAME')]"
+              },
+              {
+                "name": "WORKER_COUNT",
+                "value": "[parameters('WORKER_COUNT')]"
               },
               {
                 "name": "GOVUK_VERIFY_VSP_HOST",

@@ -6,6 +6,9 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+- Run multiple worker instances so long-running queued jobs don't entirely block
+  the queue.
+
 ## [Release 054] - 2020-02-19
 
 - The admin page for a claim no longer warns about a missing payroll gender once

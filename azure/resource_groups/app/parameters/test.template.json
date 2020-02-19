@@ -182,6 +182,9 @@
     "ENVIRONMENT_NAME": {
       "value": "test"
     },
+    "WORKER_COUNT": {
+      "value": 1
+    },
     "VSP.VERIFY_ENVIRONMENT": {
       "value": "INTEGRATION"
     },
