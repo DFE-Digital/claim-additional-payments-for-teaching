@@ -23,7 +23,7 @@ class Claim
       :building_society_roll_number,
     ]
 
-    MINIMUM_DATE_OF_LAST_ACTION = 2.months.ago
+    TIME_BEFORE_CLAIM_CONSIDERED_OLD = 2.months
 
     def scrub_completed_claims
       old_claims_rejected_or_paid.update_all(attribute_values_to_set)
@@ -43,7 +43,7 @@ class Claim
         .where(pii_removed_at: nil)
         .where(
           "(decisions.result = :rejected AND decisions.created_at < :minimum_time) OR scheduled_payment_date < :minimum_time",
-          minimum_time: MINIMUM_DATE_OF_LAST_ACTION,
+          minimum_time: TIME_BEFORE_CLAIM_CONSIDERED_OLD.ago,
           rejected: Decision.results.fetch(:rejected)
         )
     end
