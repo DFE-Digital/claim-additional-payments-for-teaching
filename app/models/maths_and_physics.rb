@@ -10,6 +10,8 @@
 module MathsAndPhysics
   extend self
 
+  ELIGIBLE_CAREER_LENGTH = 5
+
   def start_page_url
     if Rails.env.production?
       "https://www.gov.uk/guidance/claim-a-payment-for-teaching-maths-or-physics"
@@ -46,7 +48,7 @@ module MathsAndPhysics
   # Maths & Physics teachers are eligible to claim if they are in the first five
   # years of their career.
   def first_eligible_qts_award_year
-    configuration.current_academic_year - 5
+    configuration.current_academic_year - ELIGIBLE_CAREER_LENGTH
   end
 
   def configuration

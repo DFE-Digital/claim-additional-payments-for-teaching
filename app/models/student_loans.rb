@@ -10,6 +10,9 @@
 module StudentLoans
   extend self
 
+  POLICY_START_YEAR = AcademicYear.new(2013).freeze
+  ACADEMIC_YEARS_QUALIFIED_TEACHERS_CAN_CLAIM_FOR = 11
+
   def start_page_url
     if Rails.env.production?
       "https://www.gov.uk/guidance/teachers-claim-back-your-student-loan-repayments"
@@ -56,8 +59,8 @@ module StudentLoans
   # claims up to 2025/2026 and so on.
   def first_eligible_qts_award_year
     [
-      AcademicYear.new(2013),
-      (configuration.current_academic_year - 11),
+      POLICY_START_YEAR,
+      (configuration.current_academic_year - ACADEMIC_YEARS_QUALIFIED_TEACHERS_CAN_CLAIM_FOR),
     ].max
   end
 
