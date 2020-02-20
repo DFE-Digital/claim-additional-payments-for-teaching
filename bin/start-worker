@@ -1,7 +1,5 @@
 #!/bin/bash
 
-ENVIRONMENT_NAME=$1
-
 echo "Starting workers..."
-RAILS_ENV="$ENVIRONMENT_NAME" bundle exec bin/delayed_job start -n "$WORKER_COUNT" \
-  & tail -f "log/$ENVIRONMENT_NAME.log"
+bundle exec bin/delayed_job start -n "$WORKER_COUNT" \
+  & tail -f "log/$RAILS_ENV.log"
