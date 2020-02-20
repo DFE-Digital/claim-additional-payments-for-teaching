@@ -47,8 +47,9 @@ module MathsAndPhysics
   #
   # Maths & Physics teachers are eligible to claim if they are in the first five
   # years of their career.
-  def first_eligible_qts_award_year
-    configuration.current_academic_year - ELIGIBLE_CAREER_LENGTH
+  def first_eligible_qts_award_year(claim_year = nil)
+    claim_year ||= configuration.current_academic_year
+    claim_year - ELIGIBLE_CAREER_LENGTH
   end
 
   def configuration

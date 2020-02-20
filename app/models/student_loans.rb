@@ -57,10 +57,11 @@ module StudentLoans
   # So to give concrete examples, teachers qualifying in 2013/2014 can make
   # claims up to 2024/2025, and a teacher qualifying in 2014/2015 can make
   # claims up to 2025/2026 and so on.
-  def first_eligible_qts_award_year
+  def first_eligible_qts_award_year(claim_year = nil)
+    claim_year ||= configuration.current_academic_year
     [
       POLICY_START_YEAR,
-      (configuration.current_academic_year - ACADEMIC_YEARS_QUALIFIED_TEACHERS_CAN_CLAIM_FOR),
+      (claim_year - ACADEMIC_YEARS_QUALIFIED_TEACHERS_CAN_CLAIM_FOR),
     ].max
   end
 
