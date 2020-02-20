@@ -15,6 +15,19 @@ class AcademicYear
 
   attr_reader :start_year, :end_year
 
+  # Defines a custom ActiveRecord::Type for AcademicYear that means we can
+  # define attributes on our models that save and return AcademicYear objects.
+  # See the Claim#academic_year attribute.
+  class Type < ActiveRecord::Type::Value
+    def serialize(value)
+      value.to_s
+    end
+
+    def cast(value)
+      AcademicYear.new(value)
+    end
+  end
+
   class << self
     # Returns the current academic year, based on September 1st being the start
     # of the year.
@@ -44,6 +57,15 @@ class AcademicYear
 
   def <=>(other)
     start_year <=> other.start_year
+  end
+
+  # Generates an Integer hash value for the object.
+  #
+  # Used primarily by the `Hash` class to determine if two objects reference the
+  # same hash key, but also used by the RSpec change matcher when doing
+  # comparison of nested objects.
+  def hash
+    [self.class, start_year].hash
   end
 
   def -(other)

@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "academic_year"
-
 # Module namespace specific to the policy for claiming a payment for teaching
 # maths or physics.
 #
@@ -48,7 +46,7 @@ module MathsAndPhysics
   # Maths & Physics teachers are eligible to claim if they are in the first five
   # years of their career.
   def first_eligible_qts_award_year
-    AcademicYear.new(configuration.current_academic_year) - 5
+    configuration.current_academic_year - 5
   end
 
   def configuration

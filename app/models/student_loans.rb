@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "academic_year"
-
 # Module namespace specific to the policy for claiming back your student loan
 # payments.
 #
@@ -57,8 +55,10 @@ module StudentLoans
   # claims up to 2024/2025, and a teacher qualifying in 2014/2015 can make
   # claims up to 2025/2026 and so on.
   def first_eligible_qts_award_year
-    eleven_years_prior = AcademicYear.new(configuration.current_academic_year) - 11
-    [AcademicYear.new(2013), eleven_years_prior].max
+    [
+      AcademicYear.new(2013),
+      (configuration.current_academic_year - 11),
+    ].max
   end
 
   def configuration

@@ -1,5 +1,4 @@
 require "rails_helper"
-require "academic_year"
 
 RSpec.describe AcademicYear do
   describe ".current" do
@@ -12,6 +11,20 @@ RSpec.describe AcademicYear do
       end
       travel_to Date.new(2020, 9, 1) do
         expect(AcademicYear.current).to eq AcademicYear.new(2020)
+      end
+    end
+  end
+
+  describe AcademicYear::Type do
+    describe "#serialize" do
+      it "returns the String representation of an AcademicYear" do
+        expect(AcademicYear::Type.new.serialize(AcademicYear.new(2020))).to eq "2020/2021"
+      end
+    end
+
+    describe "#cast" do
+      it "returns an Academic year based on the provided serialised string version" do
+        expect(AcademicYear::Type.new.cast("2024/2025")).to eq AcademicYear.new(2024)
       end
     end
   end
@@ -54,6 +67,18 @@ RSpec.describe AcademicYear do
       expect(AcademicYear.new(2014).to_s(:long)).to eq "2014 to 2015"
       expect(AcademicYear.new("2020").to_s(:long)).to eq "2020 to 2021"
       expect(AcademicYear.new("2020/2021").to_s(:long)).to eq "2020 to 2021"
+    end
+  end
+
+  describe "#hash" do
+    it "returns the same Integer value for matching AcademicYears" do
+      expect(AcademicYear.new(2014).hash).to be_a(Integer)
+
+      expect(AcademicYear.new(2014).hash).to eql AcademicYear.new(2014).hash
+      expect(AcademicYear.new("2020").hash).to eql AcademicYear.new(2020).hash
+
+      expect(AcademicYear.new(2014).hash).not_to eql AcademicYear.new(2020).hash
+      expect(AcademicYear.new(2014).hash).not_to eql 2014.hash
     end
   end
 end
