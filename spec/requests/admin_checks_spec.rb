@@ -36,6 +36,32 @@ RSpec.describe "Admin checks", type: :request do
             expect(response.body).to include(claim.eligibility.current_school.name)
           end
         end
+
+        describe "checks#create" do
+          it "creates a new check and redirects to the next check" do
+            expect {
+              post admin_claim_checks_path(claim, check: "qualifications")
+            }.to change { Check.count }.by(1)
+
+            expect(claim.checks.last.name).to eql("qualifications")
+            expect(claim.checks.last.created_by).to eql(user)
+            expect(response).to redirect_to(admin_claim_check_path(claim, check: "employment"))
+          end
+
+          context "when the last check is marked as completed" do
+            let(:last_check) { Admin::ChecksController::CHECKS_SEQUENCE.last }
+
+            it "creates the check and redirects to the claims#show page" do
+              expect {
+                post admin_claim_checks_path(claim, check: last_check)
+              }.to change { Check.count }.by(1)
+
+              expect(claim.checks.last.name).to eql(last_check)
+              expect(claim.checks.last.created_by).to eql(user)
+              expect(response).to redirect_to(admin_claim_path(claim))
+            end
+          end
+        end
       end
     end
   end

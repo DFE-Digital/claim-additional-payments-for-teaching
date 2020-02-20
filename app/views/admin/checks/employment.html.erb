@@ -11,6 +11,6 @@
           description: I18n.t("#{@claim.policy.to_s.underscore}.admin.employment_check_description"),
           answers: @eligibility_checks.employment %>
 
-    <%= button_to "Complete employment check and continue", admin_claim_path(@claim), class: "govuk-button", method: :get %>
+    <%= button_to "Complete employment check and continue", admin_claim_checks_path(@claim, check: :employment), class: "govuk-button" %>
   </div>
 </div>

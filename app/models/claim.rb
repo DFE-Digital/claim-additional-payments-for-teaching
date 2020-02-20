@@ -77,6 +77,7 @@ class Claim < ApplicationRecord
   enum student_loan_plan: STUDENT_LOAN_PLAN_OPTIONS
 
   has_one :decision
+  has_many :checks
 
   belongs_to :eligibility, polymorphic: true, dependent: :destroy
   accepts_nested_attributes_for :eligibility, update_only: true
