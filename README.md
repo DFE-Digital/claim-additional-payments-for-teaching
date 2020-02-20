@@ -22,6 +22,11 @@ The service architecture is currently defined [on confluence].
 Architecture decision records can be found in the
 [architecture-decisions](docs/architecture-decisions) directory.
 
+### Documentation for common developer tasks
+
+- Release process for production:
+  [`docs/release-process.md`](docs/release-process.md)
+
 ## Prerequisites
 
 - Java 11 or 8 (LTS) - we recommend [OpenJDK][openjdk]
