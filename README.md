@@ -26,6 +26,8 @@ Architecture decision records can be found in the
 
 - Release process for production:
   [`docs/release-process.md`](docs/release-process.md)
+- Generating school check data:
+  [`docs/school-check-data.md`](docs/school-check-data.md)
 
 ## Prerequisites
 
