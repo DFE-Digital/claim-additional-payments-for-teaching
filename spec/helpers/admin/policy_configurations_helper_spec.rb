@@ -4,13 +4,13 @@ RSpec.describe Admin::PolicyConfigurationsHelper, type: :helper do
   describe "#options_for_academic_year" do
     it "returns the current and next academic year (based on September 1st being the start of the year)" do
       travel_to Date.new(2018, 8, 31) do
-        expect(helper.options_for_academic_year).to eq ["2017/2018", "2018/2019"]
+        expect(helper.options_for_academic_year).to eq [AcademicYear.new(2017), AcademicYear.new(2018)]
       end
       travel_to Date.new(2018, 9, 1) do
-        expect(helper.options_for_academic_year).to eq ["2018/2019", "2019/2020"]
+        expect(helper.options_for_academic_year).to eq [AcademicYear.new(2018), AcademicYear.new(2019)]
       end
       travel_to Date.new(2020, 9, 1) do
-        expect(helper.options_for_academic_year).to eq ["2020/2021", "2021/2022"]
+        expect(helper.options_for_academic_year).to eq [AcademicYear.new(2020), AcademicYear.new(2021)]
       end
     end
   end

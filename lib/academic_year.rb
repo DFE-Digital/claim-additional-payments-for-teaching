@@ -15,6 +15,20 @@ class AcademicYear
 
   attr_reader :start_year, :end_year
 
+  class << self
+    # Returns the current academic year, based on September 1st being the start
+    # of the year.
+    def current
+      start_of_autumn_term = Date.new(Date.today.year, 9, 1)
+
+      if Date.today < start_of_autumn_term
+        new(Date.today.year - 1)
+      else
+        new(Date.today.year)
+      end
+    end
+  end
+
   def initialize(start_year)
     @start_year = start_year.to_s.split("/").first.to_i
     @end_year = @start_year + 1
