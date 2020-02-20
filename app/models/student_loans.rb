@@ -1,3 +1,7 @@
+# frozen_string_literal: true
+
+require "academic_year"
+
 # Module namespace specific to the policy for claiming back your student loan
 # payments.
 #
@@ -34,5 +38,30 @@ module StudentLoans
 
   def short_name
     I18n.t("student_loans.policy_short_name")
+  end
+
+  # Returns the AcademicYear during or after which teachers must have completed
+  # their Initial Teacher Training and been awarded QTS to be eligible to make
+  # a claim. Anyone qualifying before this academic year should not be able to
+  # make a claim.
+  #
+  # Teachers that qualified after 2013 are eligible to claim back student loans
+  # repayments for 10 years. Their first claim will be made in the subsequent
+  # year because they are retrospectively claiming *back* repayments made during
+  # the *financial year*. So for example if you qualify in 2021/2022, you are
+  # eligible to claim back student loan repayments you make in the 2021/2022
+  # "financial year", which ends April 2022, and the claim for that period can
+  # be made from the start of the 2022/2023 "academic year".
+  #
+  # So to give concrete examples, teachers qualifying in 2013/2014 can make
+  # claims up to 2024/2025, and a teacher qualifying in 2014/2015 can make
+  # claims up to 2025/2026 and so on.
+  def first_eligible_qts_award_year
+    eleven_years_prior = AcademicYear.new(configuration.current_academic_year) - 11
+    [AcademicYear.new(2013), eleven_years_prior].max
+  end
+
+  def configuration
+    PolicyConfiguration.for(self)
   end
 end
