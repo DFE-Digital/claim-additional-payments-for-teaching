@@ -21,14 +21,14 @@
               <div class="govuk-radios__item">
                 <%= fields.radio_button(:qts_award_year, :before_cut_off_date, class: "govuk-radios__input") %>
                 <%= fields.label "qts_award_year_before_cut_off_date",
-                      t("#{current_claim.policy.name.underscore}.questions.qts_award_years.before_cut_off_date"),
+                      t("answers.qts_award_years.before_cut_off_date", year: (current_policy.first_eligible_qts_award_year - 1).to_s(:long)),
                       class: "govuk-label govuk-radios__label" %>
               </div>
 
               <div class="govuk-radios__item">
                 <%= fields.radio_button(:qts_award_year, :on_or_after_cut_off_date, class: "govuk-radios__input") %>
                 <%= fields.label "qts_award_year_on_or_after_cut_off_date",
-                      t("#{current_claim.policy.name.underscore}.questions.qts_award_years.on_or_after_cut_off_date"),
+                      t("answers.qts_award_years.on_or_after_cut_off_date", year: current_policy.first_eligible_qts_award_year.to_s(:long)),
                       class: "govuk-label govuk-radios__label" %>
               </div>
             </div>

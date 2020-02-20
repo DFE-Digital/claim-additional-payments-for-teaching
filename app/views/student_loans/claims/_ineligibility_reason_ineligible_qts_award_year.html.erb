@@ -4,12 +4,11 @@
 
 <p class="govuk-body">
   You can only get this payment if you completed your initial teacher training
-  <%= t("#{current_claim.policy.name.underscore}.questions.qts_award_years.on_or_after_cut_off_date").downcase %>.
+  <%= t("answers.qts_award_years.on_or_after_cut_off_date", year: StudentLoans.first_eligible_qts_award_year.to_s(:long)).downcase %>.
 </p>
 
 <p class="govuk-body">
-  For more information, including eligibility criteria for this payment, visit
-  the
+  For more information, including eligibility criteria for this payment, visit the
   <%= link_to "‘Claim back your student loan repayments’", "#{StudentLoans.eligibility_page_url}#eligible-teachers", class: "govuk-link" %>
   guidance.
 </p>
