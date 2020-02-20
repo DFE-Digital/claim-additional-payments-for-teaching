@@ -14,7 +14,7 @@ RSpec.describe StudentLoans::AdminChecksPresenter, type: :model do
 
   describe "#qualifications" do
     it "returns an array of label and values for displaying information for qualification checks" do
-      expect(presenter.qualifications).to eq [[I18n.t("admin.qts_award_year"), "In or after the academic year 2013 to 2014"]]
+      expect(presenter.qualifications).to eq [["Award year", "In or after the academic year 2013 to 2014"]]
     end
   end
 

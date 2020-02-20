@@ -15,7 +15,7 @@ RSpec.describe MathsAndPhysics::AdminChecksPresenter, type: :model do
   describe "#qualifications" do
     it "returns an array of label and values for displaying information for qualification checks" do
       expected_array = [
-        [I18n.t("admin.qts_award_year"), "In or after the academic year 2014 to 2015"],
+        ["Award year", "In or after the academic year 2014 to 2015"],
         ["ITT subject", "Maths"],
       ]
       expect(presenter.qualifications).to eq expected_array
@@ -26,7 +26,7 @@ RSpec.describe MathsAndPhysics::AdminChecksPresenter, type: :model do
       eligibility.initial_teacher_training_subject_specialism = :physics
 
       expected_array = [
-        [I18n.t("admin.qts_award_year"), "In or after the academic year 2014 to 2015"],
+        ["Award year", "In or after the academic year 2014 to 2015"],
         ["ITT subject", "Physics"],
       ]
       expect(presenter.qualifications).to eq expected_array
