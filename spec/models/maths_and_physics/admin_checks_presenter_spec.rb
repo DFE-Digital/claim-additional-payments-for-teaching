@@ -24,6 +24,13 @@ RSpec.describe MathsAndPhysics::AdminChecksPresenter, type: :model do
       expect(presenter.qualifications).to eq expected_array
     end
 
+    it "sets the “Award year” value based on the academic year the claim was made in" do
+      claim.academic_year = "2021/2022"
+
+      expected_qts_answer = presenter.qualifications[0][1]
+      expect(expected_qts_answer).to eq "In or after the academic year 2016 to 2017"
+    end
+
     it "includes the subject specialism if they chose science" do
       eligibility.initial_teacher_training_subject = :science
       eligibility.initial_teacher_training_subject_specialism = :physics
