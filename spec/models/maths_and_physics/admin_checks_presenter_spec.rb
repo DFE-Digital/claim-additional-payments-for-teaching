@@ -2,15 +2,18 @@ require "rails_helper"
 
 RSpec.describe MathsAndPhysics::AdminChecksPresenter, type: :model do
   let(:school) { schools(:penistone_grammar_school) }
-  let(:eligibility) do
-    build(:maths_and_physics_eligibility,
-      teaching_maths_or_physics: true,
-      current_school: school,
-      initial_teacher_training_subject: :maths,
-      initial_teacher_training_subject_specialism: nil,
-      qts_award_year: "on_or_after_cut_off_date")
+  let(:eligibility) { claim.eligibility }
+  let(:claim) do
+    build(:claim,
+      academic_year: "2019/2020",
+      eligibility: build(:maths_and_physics_eligibility,
+        teaching_maths_or_physics: true,
+        current_school: school,
+        initial_teacher_training_subject: :maths,
+        initial_teacher_training_subject_specialism: nil,
+        qts_award_year: "on_or_after_cut_off_date"))
   end
-  subject(:presenter) { described_class.new(eligibility) }
+  subject(:presenter) { described_class.new(claim) }
 
   describe "#qualifications" do
     it "returns an array of label and values for displaying information for qualification checks" do

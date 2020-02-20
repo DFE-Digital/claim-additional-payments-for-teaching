@@ -9,7 +9,7 @@
     <%= render "admin/claims/answer_section",
           heading: "Employment",
           description: I18n.t("#{@claim.policy.to_s.underscore}.admin.employment_check_description"),
-          answers: @eligibility_checks.employment %>
+          answers: @claim_checks.employment %>
   </div>
 
   <div class="govuk-grid-column-full">

@@ -2,10 +2,10 @@ module MathsAndPhysics
   class AdminChecksPresenter
     include Admin::PresenterMethods
 
-    attr_reader :eligibility
+    attr_reader :claim
 
-    def initialize(eligibility)
-      @eligibility = eligibility
+    def initialize(claim)
+      @claim = claim
     end
 
     def qualifications
@@ -23,6 +23,10 @@ module MathsAndPhysics
     end
 
     private
+
+    def eligibility
+      claim.eligibility
+    end
 
     def maths_or_physics_degree
       if eligibility.has_uk_maths_or_physics_degree == "yes"
