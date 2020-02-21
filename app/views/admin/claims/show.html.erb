@@ -1,4 +1,4 @@
-<% content_for(:page_title) { "View claim #{@claim.reference} for #{policy_service_name(@claim.policy.routing_name)} - #{t("service_name")} – GOV.UK"} %>
+<% content_for(:page_title) { page_title("View claim #{@claim.reference} for #{policy_service_name(@claim.policy.routing_name)}") } %>
 
 <%= link_to "Back", admin_claims_path, class: "govuk-back-link" %>
 
