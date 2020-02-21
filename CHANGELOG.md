@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+- Fix skipped heading level on manage services screen
+- Add label to Payroll Cantium link
+- Fix empty th on view claims screen
+- Add page titles to admin area
 - Run multiple worker instances so long-running queued jobs don't entirely block
   the queue.
 

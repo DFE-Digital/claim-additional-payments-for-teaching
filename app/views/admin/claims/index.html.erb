@@ -1,3 +1,5 @@
+<% content_for(:page_title) { page_title("View claims") } %>
+
 <%= link_to "Back", admin_root_path, class: "govuk-back-link" %>
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-full">
@@ -31,7 +33,7 @@
               <th scope="col" class="govuk-table__header">Decision warning</th>
             <% end %>
             <th scope="col" class="govuk-table__header">Decision deadline</th>
-            <th scope="col" class="govuk-table__header"></th>
+            <th scope="col" class="govuk-table__header"><span class="govuk-visually-hidden">Actions</span></th>
           </tr>
         </thead>
         <tbody class="govuk-table__body">

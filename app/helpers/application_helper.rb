@@ -1,5 +1,5 @@
 module ApplicationHelper
-  def page_title(title, policy:, show_error: false)
+  def page_title(title, policy: nil, show_error: false)
     [].tap do |a|
       a << "Error" if show_error
       a << title
