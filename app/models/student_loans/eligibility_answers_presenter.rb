@@ -20,14 +20,72 @@ module StudentLoans
     # [2]: slug for changing the answer.
     def answers
       [].tap do |a|
-        a << [I18n.t("questions.qts_award_year"), I18n.t("student_loans.questions.qts_award_years.#{eligibility.qts_award_year}"), "qts-year"]
-        a << [I18n.t("student_loans.questions.claim_school"), eligibility.claim_school_name, "claim-school"]
-        a << [I18n.t("questions.current_school"), eligibility.current_school_name, "still-teaching"]
-        a << [I18n.t("student_loans.questions.subjects_taught", school: eligibility.claim_school_name), subject_list(eligibility.subjects_taught), "subjects-taught"]
-        a << [I18n.t("student_loans.questions.leadership_position"), (eligibility.had_leadership_position? ? "Yes" : "No"), "leadership-position"]
-        a << [I18n.t("student_loans.questions.mostly_performed_leadership_duties"), (eligibility.mostly_performed_leadership_duties? ? "Yes" : "No"), "mostly-performed-leadership-duties"] if eligibility.had_leadership_position?
-        a << [I18n.t("student_loans.questions.student_loan_amount"), number_to_currency(eligibility.student_loan_repayment_amount), "student-loan-amount"]
+        a << qts_award_year
+        a << claim_school
+        a << current_school
+        a << subjects_taught
+        a << leadership_position
+        a << mostly_performed_leadership_duties if eligibility.had_leadership_position?
+        a << student_loan_amount
       end
+    end
+
+    private
+
+    def qts_award_year
+      [
+        I18n.t("questions.qts_award_year"),
+        I18n.t("student_loans.questions.qts_award_years.#{eligibility.qts_award_year}"),
+        "qts-year",
+      ]
+    end
+
+    def claim_school
+      [
+        I18n.t("student_loans.questions.claim_school"),
+        eligibility.claim_school_name,
+        "claim-school",
+      ]
+    end
+
+    def current_school
+      [
+        I18n.t("questions.current_school"),
+        eligibility.current_school_name,
+        "still-teaching",
+      ]
+    end
+
+    def subjects_taught
+      [
+        I18n.t("student_loans.questions.subjects_taught", school: eligibility.claim_school_name),
+        subject_list(eligibility.subjects_taught),
+        "subjects-taught",
+      ]
+    end
+
+    def leadership_position
+      [
+        I18n.t("student_loans.questions.leadership_position"),
+        (eligibility.had_leadership_position? ? "Yes" : "No"),
+        "leadership-position",
+      ]
+    end
+
+    def mostly_performed_leadership_duties
+      [
+        I18n.t("student_loans.questions.mostly_performed_leadership_duties"),
+        (eligibility.mostly_performed_leadership_duties? ? "Yes" : "No"),
+        "mostly-performed-leadership-duties",
+      ]
+    end
+
+    def student_loan_amount
+      [
+        I18n.t("student_loans.questions.student_loan_amount"),
+        number_to_currency(eligibility.student_loan_repayment_amount),
+        "student-loan-amount",
+      ]
     end
   end
 end
