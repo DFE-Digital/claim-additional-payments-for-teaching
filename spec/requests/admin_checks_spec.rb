@@ -61,6 +61,19 @@ RSpec.describe "Admin checks", type: :request do
               expect(response).to redirect_to(admin_claim_path(claim))
             end
           end
+
+          context "when a check has already been marked as completed" do
+            it "doesn't create a check and redirects with an error" do
+              create(:check, name: "qualifications", claim: claim)
+
+              expect {
+                post admin_claim_checks_path(claim, check: "qualifications")
+              }.not_to change { Check.count }
+
+              expect(response).to redirect_to(admin_claim_check_path(claim, check: "qualifications"))
+              expect(flash[:alert]).to eql("This check has already been completed")
+            end
+          end
         end
       end
     end

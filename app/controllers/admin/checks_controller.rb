@@ -16,6 +16,8 @@ class Admin::ChecksController < Admin::BaseAdminController
   def create
     Check.create!(name: current_check, claim: @claim, created_by: admin_user)
     redirect_to next_check_path
+  rescue ActiveRecord::RecordInvalid
+    redirect_to admin_claim_check_path(@claim, check: current_check), alert: "This check has already been completed"
   end
 
   private
