@@ -12,6 +12,7 @@ The format is based on [Keep a Changelog]
 - Add page titles to admin area
 - Run multiple worker instances so long-running queued jobs don't entirely block
   the queue.
+- Don't use "1" or "I" characters in claim references to avoid confusion
 
 ## [Release 054] - 2020-02-19
 

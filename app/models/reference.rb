@@ -6,6 +6,6 @@ class Reference
   private
 
   def characters_to_use
-    "123456789ABCDEFGHIJKLMNPQRSTUVWXYZ"
+    "23456789ABCDEFGHJKLMNPQRSTUVWXYZ"
   end
 end
