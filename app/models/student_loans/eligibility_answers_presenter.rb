@@ -35,7 +35,7 @@ module StudentLoans
     def qts_award_year
       [
         I18n.t("questions.qts_award_year"),
-        I18n.t("student_loans.questions.qts_award_years.#{eligibility.qts_award_year}"),
+        I18n.t("answers.qts_award_years.#{eligibility.qts_award_year}", year: qts_answer_academic_year.to_s(:long)),
         "qts-year",
       ]
     end
@@ -86,6 +86,14 @@ module StudentLoans
         number_to_currency(eligibility.student_loan_repayment_amount),
         "student-loan-amount",
       ]
+    end
+
+    def qts_answer_academic_year
+      if eligibility.awarded_qualified_status_on_or_after_cut_off_date?
+        StudentLoans.first_eligible_qts_award_year
+      else
+        StudentLoans.first_eligible_qts_award_year - 1
+      end
     end
   end
 end

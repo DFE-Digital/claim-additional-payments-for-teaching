@@ -27,6 +27,16 @@ RSpec.describe MathsAndPhysics::EligibilityAnswersPresenter do
     expect(presenter.answers).to eq(expected_answers)
   end
 
+  it "changes the answer for the QTS question based on the answer and the configured academic year" do
+    policy_configurations(:maths_and_physics).update!(current_academic_year: "2021/2022")
+    qts_answer = presenter.answers[3][1]
+    expect(qts_answer).to eq("In or after the academic year 2016 to 2017")
+
+    presenter.eligibility.qts_award_year = :before_cut_off_date
+    qts_answer = presenter.answers[3][1]
+    expect(qts_answer).to eq("In or before the academic year 2015 to 2016")
+  end
+
   context "initial teacher training subject not in a science" do
     let(:eligibility) do
       build(:maths_and_physics_eligibility,

@@ -35,6 +35,17 @@ RSpec.describe StudentLoans::EligibilityAnswersPresenter, type: :model do
     expect(presenter.answers).to eq expected_answers
   end
 
+  it "changes the answer for the QTS question, based on the configured academic year" do
+    policy_configurations(:student_loans).update!(current_academic_year: "2027/2028")
+
+    qts_answer = presenter.answers[0][1]
+    expect(qts_answer).to eq("In or after the academic year 2016 to 2017")
+
+    presenter.eligibility.qts_award_year = :before_cut_off_date
+    qts_answer = presenter.answers[0][1]
+    expect(qts_answer).to eq("In or before the academic year 2015 to 2016")
+  end
+
   it "excludes questions skipped from the flow" do
     eligibility.had_leadership_position = false
     expect(presenter.answers).to_not include([I18n.t("student_loans.questions.mostly_performed_leadership_duties"), "Yes", "mostly-performed-leadership-duties"])
