@@ -11,7 +11,13 @@
           heading: "Qualifications",
           description: I18n.t("#{@claim.policy.to_s.underscore}.admin.qualification_check_description"),
           answers: @eligibility_checks.qualifications %>
+  </div>
 
-    <%= button_to "Complete qualifications check and continue", admin_claim_checks_path(claim_id: @claim.id, check: :qualifications), class: "govuk-button" %>
+  <div class="govuk-grid-column-full">
+    <% if @check.present? %>
+      <%= render "check_outcome", check: @check %>
+    <% else %>
+      <%= button_to "Complete qualifications check and continue", admin_claim_checks_path(claim_id: @claim.id, check: :qualifications), class: "govuk-button" %>
+    <% end %>
   </div>
 </div>

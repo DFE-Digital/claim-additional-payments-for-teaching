@@ -93,6 +93,22 @@ RSpec.feature "Admin checks a claim" do
       expect(page).to have_content("Claim decision")
     end
 
+    scenario "User can see completed checks" do
+      ten_minutes_ago = 10.minutes.ago
+      checking_user = create(:dfe_signin_user, given_name: "Fred", family_name: "Smith")
+      qualification_check = build(:check, name: "qualifications", created_by: checking_user, created_at: ten_minutes_ago)
+      claim_with_checks = create(:claim, :submitted, checks: [qualification_check, build(:check, name: "employment")])
+      visit admin_claim_checks_path(claim_with_checks)
+
+      expect(page).to have_content("Check qualification information Completed")
+      expect(page).to have_content("Check employment information Completed")
+
+      click_on "Check qualification information"
+      expect(page).to have_content("Checked by #{checking_user.full_name}")
+      expect(page).to have_content(I18n.l(ten_minutes_ago))
+      expect(page).not_to have_button("Complete qualifications check and continue")
+    end
+
     scenario "User can see existing decision details" do
       claim_with_decision = create(:claim, :submitted, decision: build(:decision, result: :approved, notes: "Everything matches"))
       visit admin_claim_path(claim_with_decision)
