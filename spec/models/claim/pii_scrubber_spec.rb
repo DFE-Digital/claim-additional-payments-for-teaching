@@ -79,4 +79,18 @@ RSpec.describe Claim::PiiScrubber, type: :model do
       expect(cleaned_claim.pii_removed_at).to eq(Time.zone.now)
     end
   end
+
+  it "calculates the date past which claims are considered old at runtime" do
+    # Initialise the scrubber, and create a claim
+    scrubber = Claim::PiiScrubber.new
+    claim = create(:claim, :submitted)
+    create(:decision, :rejected, claim: claim)
+
+    # Travel three months forwards. At this point the claim should be considered
+    # old enough to scrub information from.
+    travel_to(3.months.from_now)
+    scrubber.scrub_completed_claims
+    cleaned_claim = Claim.find(claim.id)
+    expect(cleaned_claim.pii_removed_at).to eq(Time.zone.now)
+  end
 end
