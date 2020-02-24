@@ -6,12 +6,14 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+## [Release 055] - 2020-02-24
+
 - Fix skipped heading level on manage services screen
 - Add label to Payroll Cantium link
 - Fix empty th on view claims screen
 - Add page titles to admin area
 - Run multiple worker instances so long-running queued jobs don't entirely block
-  the queue.
+  the queue
 - Don't use "1" or "I" characters in claim references to avoid confusion
 - Adjust option for not teaching eligible subjects for student loans
 
@@ -456,7 +458,9 @@ The format is based on [Keep a Changelog]
 - First release for student loan repayments private beta
 
 [unreleased]:
-  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-054...HEAD
+  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-055...HEAD
+[release 055]:
+  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-054...release-055
 [release 054]:
   https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-053...release-054
 [release 053]:
