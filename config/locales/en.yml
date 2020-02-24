@@ -202,7 +202,7 @@ en:
         physics_taught: "Physics"
         computing_taught: "Computing"
         languages_taught: "Languages"
-        none_taught: "No, I didn't teach any of these subjects"
+        none_taught: "I did not teach any of these subjects"
       student_loan_amount:
         "Exactly how much student loan did you repay while employed as a teacher between 6 April 2018 and 5 April 2019?"
     admin:
