@@ -9,10 +9,12 @@
 PolicyConfiguration.create!(policy_type: StudentLoans, current_academic_year: "2018/2019")
 PolicyConfiguration.create!(policy_type: MathsAndPhysics, current_academic_year: "2018/2019")
 
-if Rails.env.development?
+if Rails.env.development? || ENV["ENVIRONMENT_NAME"] == "review"
   ENV["FIXTURES_PATH"] = "spec/fixtures"
   Rake::Task["db:fixtures:load"].invoke
+end
 
+if Rails.env.development?
   class Seeds
     extend FactoryBot::Syntax::Methods
 
