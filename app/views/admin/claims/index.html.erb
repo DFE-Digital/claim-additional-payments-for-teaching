@@ -47,7 +47,13 @@
                 <td class="govuk-table__cell"><%= decision_deadline_warning(claim) %></td>
               <% end %>
               <td class="govuk-table__cell"><%= l(claim.decision_deadline_date) %></td>
-              <td class="govuk-table__cell"><%= link_to 'View claim', admin_claim_path(claim), class: "govuk-link" %></td>
+              <td class="govuk-table__cell">
+                <% if claim.policy == MathsAndPhysics %>
+                  <%= link_to 'View tasks', admin_claim_checks_path(claim), class: "govuk-link" %>
+                <% else %>
+                  <%= link_to 'View claim', admin_claim_path(claim), class: "govuk-link" %>
+                <% end %>
+              </td>
             </tr>
           <% end %>
         </tbody>

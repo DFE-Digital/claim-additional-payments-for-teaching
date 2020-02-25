@@ -8,6 +8,8 @@ The format is based on [Keep a Changelog]
 
 - Allow service operators to mark a check as completed
 - Update school eligibility to include City Technology Colleges
+- Service operators are taken straight to the tasks list when checking a Maths
+  and Physics claim
 
 ## [Release 055] - 2020-02-24
 
