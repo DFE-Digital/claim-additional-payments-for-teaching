@@ -33,7 +33,7 @@ module StudentLoans
     def qts_award_year
       [
         I18n.t("admin.qts_award_year"),
-        I18n.t("student_loans.questions.qts_award_years.#{eligibility.qts_award_year}"),
+        qts_award_year_answer,
       ]
     end
 
@@ -70,6 +70,11 @@ module StudentLoans
         I18n.t("student_loans.admin.mostly_performed_leadership_duties"),
         (eligibility.mostly_performed_leadership_duties? ? "Yes" : "No"),
       ]
+    end
+
+    def qts_award_year_answer
+      qts_cut_off_for_claim = StudentLoans.first_eligible_qts_award_year(eligibility.claim.academic_year)
+      I18n.t("answers.qts_award_years.on_or_after_cut_off_date", year: qts_cut_off_for_claim.to_s(:long))
     end
   end
 end

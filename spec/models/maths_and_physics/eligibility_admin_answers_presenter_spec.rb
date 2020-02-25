@@ -5,6 +5,7 @@ RSpec.describe MathsAndPhysics::EligibilityAdminAnswersPresenter, type: :model d
   let(:eligibility) { claim.eligibility }
   let(:claim) do
     build(:claim,
+      academic_year: "2019/2020",
       eligibility: build(:maths_and_physics_eligibility,
         teaching_maths_or_physics: true,
         current_school: school,
@@ -37,6 +38,13 @@ RSpec.describe MathsAndPhysics::EligibilityAdminAnswersPresenter, type: :model d
       ]
 
       expect(presenter.answers).to eq expected_answers
+    end
+
+    it "changes the answer for the QTS question based on the answer academic year the claim was made" do
+      claim.academic_year = "2021/2022"
+
+      expected_qts_answer = presenter.answers[5][1]
+      expect(expected_qts_answer).to eq("In or after the academic year 2016 to 2017")
     end
 
     it "excludes questions skipped from the flow" do

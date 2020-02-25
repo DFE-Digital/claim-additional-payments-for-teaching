@@ -5,6 +5,7 @@ RSpec.describe StudentLoans::EligibilityAdminAnswersPresenter, type: :model do
   let(:eligibility) { claim.eligibility }
   let(:claim) do
     build(:claim,
+      academic_year: "2019/2020",
       eligibility: build(:student_loans_eligibility,
         qts_award_year: "on_or_after_cut_off_date",
         claim_school: school,
@@ -29,6 +30,13 @@ RSpec.describe StudentLoans::EligibilityAdminAnswersPresenter, type: :model do
       ]
 
       expect(presenter.answers).to eq expected_answers
+    end
+
+    it "changes the answer for the QTS question based on the answer academic year the claim was made" do
+      claim.academic_year = "2029/2030"
+
+      expected_qts_answer = presenter.answers[0][1]
+      expect(expected_qts_answer).to eq("In or after the academic year 2018 to 2019")
     end
 
     it "excludes questions skipped from the flow" do
