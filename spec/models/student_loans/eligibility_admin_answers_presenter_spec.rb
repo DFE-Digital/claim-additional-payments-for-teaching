@@ -2,18 +2,18 @@ require "rails_helper"
 
 RSpec.describe StudentLoans::EligibilityAdminAnswersPresenter, type: :model do
   let(:school) { schools(:penistone_grammar_school) }
-  let(:eligibility) do
-    build(
-      :student_loans_eligibility,
-      qts_award_year: "on_or_after_cut_off_date",
-      claim_school: school,
-      current_school: school,
-      chemistry_taught: true,
-      physics_taught: true,
-      had_leadership_position: true,
-      mostly_performed_leadership_duties: false,
-      student_loan_repayment_amount: 1987.65,
-    )
+  let(:eligibility) { claim.eligibility }
+  let(:claim) do
+    build(:claim,
+      eligibility: build(:student_loans_eligibility,
+        qts_award_year: "on_or_after_cut_off_date",
+        claim_school: school,
+        current_school: school,
+        chemistry_taught: true,
+        physics_taught: true,
+        had_leadership_position: true,
+        mostly_performed_leadership_duties: false,
+        student_loan_repayment_amount: 1987.65))
   end
   subject(:presenter) { described_class.new(eligibility) }
 
