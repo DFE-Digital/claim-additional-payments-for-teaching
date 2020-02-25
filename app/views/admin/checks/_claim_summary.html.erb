@@ -1,9 +1,10 @@
 <div class="govuk-grid-column-full">
   <span class="govuk-caption-xl"><%= @claim.policy.short_name %></span>
-  <h1 class="govuk-heading-xl">
+  <h1 class="govuk-heading-xl govuk-heading--navigation">
     <%= @claim.reference %>
     <span class="govuk-body-m">
       <%= link_to "View full claim", admin_claim_path(@claim), class: "govuk-link" %>
+      <%= link_to "Amend claim", new_admin_claim_amendment_url(@claim), class: "govuk-link" if @claim.amendable? %>
     </span>
   </h1>
 </div>

@@ -90,6 +90,7 @@ Rails.application.routes.draw do
     resources :claims, only: [:index, :show] do
       resources :checks, only: [:index, :show, :create], param: :check, constraints: {check: %r{#{Admin::ChecksController::CHECKS_SEQUENCE.join("|")}}}
       resources :decisions, only: [:create, :new]
+      resources :amendments, only: [:new, :create]
       get "search", on: :collection
     end
 

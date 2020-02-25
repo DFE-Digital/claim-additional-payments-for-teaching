@@ -28,6 +28,15 @@ class Claim < ApplicationRecord
     :banking_name,
     :building_society_roll_number
   ].freeze
+  AMENDABLE_ATTRIBUTES = %i[
+    teacher_reference_number
+    payroll_gender
+    date_of_birth
+    student_loan_plan
+    bank_sort_code
+    bank_account_number
+    building_society_roll_number
+  ].freeze
   FILTER_PARAMS = {
     address_line_1: true,
     address_line_2: true,

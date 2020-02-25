@@ -25,12 +25,14 @@
     <% end %>
 
     <span class="govuk-caption-xl"><%= @claim.policy.short_name %></span>
-    <h1 class="govuk-heading-xl">
+    <h1 class="govuk-heading-xl govuk-heading--navigation">
       <%= @claim.reference %>
       <span class="govuk-body-m">
         <%= link_to "View checks", admin_claim_checks_path(claim_id: @claim.id), class: "govuk-link" %>
+        <%= link_to "Amend claim", new_admin_claim_amendment_url(@claim), class: "govuk-link" %>
       </span>
     </h1>
+
 
     <%= render("info_panel_identity_unconfirmed", school: @claim.school) unless @claim.identity_confirmed? %>
 

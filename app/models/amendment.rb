@@ -14,4 +14,38 @@ class Amendment < ApplicationRecord
 
   validates :claim_changes, presence: {message: "To amend the claim you must change at least one value"}
   validates :notes, presence: {message: "Enter a message to explain why you are making this amendment"}
+
+  # Updates the claim using the attributes given in claim_attributes, and uses
+  # these changes to create an associated Amendment record with additional
+  # attributes given by amendment_attributes.
+  #
+  # If the operation fails, then the claim’s changes will not be persisted, and
+  # the Amendment record will not be saved.
+  #
+  # Returns an Amendment record.
+  # - If the operation was successful, this will return true for persisted?
+  # - If the operation failed, this will return false for persisted?, and the
+  # amendment’s errors will have been populated with the errors from the claim.
+  def self.amend_claim(claim, claim_attributes, amendment_attributes)
+    amendment = Amendment.new(claim: claim, **amendment_attributes)
+
+    Claim.transaction do
+      claim.assign_attributes(claim_attributes)
+
+      unless claim.save(context: :submit)
+        amendment.valid?
+        amendment.errors.merge!(claim.errors)
+        amendment.errors.delete(:claim_changes)
+        raise ActiveRecord::Rollback
+      end
+
+      amendment.claim_changes = claim.previous_changes
+        .slice(*Claim::AMENDABLE_ATTRIBUTES)
+        .reject { |_, values| values.all?(&:blank?) }
+        .to_h
+      raise ActiveRecord::Rollback unless amendment.save
+    end
+
+    amendment
+  end
 end
