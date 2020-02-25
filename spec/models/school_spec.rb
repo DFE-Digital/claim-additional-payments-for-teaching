@@ -135,5 +135,15 @@ RSpec.describe School, type: :model do
       school = School.new(school_type: :community_school, statutory_high_age: 16)
       expect(school.secondary_or_equivalent?).to eq false
     end
+
+    it "returns true for a City Technology College that teaches students over eleven" do
+      school = School.new(school_type: :city_technology_college, statutory_high_age: 16)
+      expect(school.secondary_or_equivalent?).to eq true
+    end
+
+    it "returns false for a City Technology College that only teaches students under eleven" do
+      school = School.new(school_type: :city_technology_college, statutory_high_age: 10)
+      expect(school.secondary_or_equivalent?).to eq false
+    end
   end
 end

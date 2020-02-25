@@ -157,7 +157,10 @@ class School < ApplicationRecord
   end
 
   def secondary_or_equivalent?
-    secondary_phase? || secondary_equivalent_special? || secondary_equivalent_alternative_provision?
+    secondary_phase? ||
+      secondary_equivalent_special? ||
+      secondary_equivalent_alternative_provision? ||
+      secondary_equivalent_city_technology_college?
   end
 
   private
@@ -180,6 +183,10 @@ class School < ApplicationRecord
 
   def secondary_equivalent_alternative_provision?
     alternative_provision? && has_statutory_high_age_over_eleven?
+  end
+
+  def secondary_equivalent_city_technology_college?
+    city_technology_college? && has_statutory_high_age_over_eleven?
   end
 
   def special?
