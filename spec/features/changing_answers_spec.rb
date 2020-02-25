@@ -29,8 +29,7 @@ RSpec.feature "Changing the answers on a submittable claim" do
 
     expect(find("#claim_eligibility_attributes_qts_award_year_on_or_after_cut_off_date").checked?).to eq(true)
 
-    before_cut_off_question = I18n.t("answers.qts_award_years.before_cut_off_date", year: (StudentLoans.first_eligible_qts_award_year - 1).to_s(:long))
-    choose before_cut_off_question
+    choose_qts_year :before_cut_off_date
     click_on "Continue"
 
     expect(claim.eligibility.reload.qts_award_year).to eq("before_cut_off_date")

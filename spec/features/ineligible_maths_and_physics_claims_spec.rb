@@ -41,7 +41,7 @@ RSpec.feature "Ineligible Maths and Physics claims" do
 
     choose_school schools(:penistone_grammar_school)
     choose_initial_teacher_training_subject
-    choose_qts_year("In or before the academic year 2014 to 2015")
+    choose_qts_year(:before_cut_off_date)
 
     expect(claim.eligibility.reload.qts_award_year).to eql("before_cut_off_date")
     expect(page).to have_text("You’re not eligible")
@@ -53,7 +53,7 @@ RSpec.feature "Ineligible Maths and Physics claims" do
 
     choose_school schools(:penistone_grammar_school)
     choose_initial_teacher_training_subject
-    choose_qts_year("In or after the academic year 2014 to 2015")
+    choose_qts_year(:on_or_after_cut_off_date)
 
     choose "Yes"
     click_on "Continue"
@@ -70,7 +70,7 @@ RSpec.feature "Ineligible Maths and Physics claims" do
 
     choose_school schools(:penistone_grammar_school)
     choose_initial_teacher_training_subject
-    choose_qts_year("In or after the academic year 2014 to 2015")
+    choose_qts_year(:on_or_after_cut_off_date)
 
     choose "Yes"
     click_on "Continue"
@@ -89,7 +89,7 @@ RSpec.feature "Ineligible Maths and Physics claims" do
 
     choose_school schools(:penistone_grammar_school)
     choose_initial_teacher_training_subject
-    choose_qts_year("In or after the academic year 2014 to 2015")
+    choose_qts_year(:on_or_after_cut_off_date)
 
     choose "No"
     click_on "Continue"
@@ -106,7 +106,7 @@ RSpec.feature "Ineligible Maths and Physics claims" do
 
     choose_school schools(:penistone_grammar_school)
     choose_initial_teacher_training_subject
-    choose_qts_year("In or after the academic year 2014 to 2015")
+    choose_qts_year(:on_or_after_cut_off_date)
 
     choose "No"
     click_on "Continue"
