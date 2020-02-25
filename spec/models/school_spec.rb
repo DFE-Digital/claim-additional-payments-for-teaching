@@ -80,6 +80,10 @@ RSpec.describe School, type: :model do
         expect(School.new(school_type_group: phase).state_funded?).to eq false
       end
     end
+
+    it "returns true for City Technology Colleges" do
+      expect(School.new(school_type: :city_technology_college, school_type_group: :independent_schools).state_funded?).to eq true
+    end
   end
 
   describe "#secondary_or_equivalent?" do

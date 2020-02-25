@@ -136,7 +136,9 @@ class School < ApplicationRecord
   end
 
   def state_funded?
-    (STATE_FUNDED_SCHOOL_TYPE_GROUPS.include?(school_type_group) && school_type != "other_independent_special_school") || secure_unit?
+    (STATE_FUNDED_SCHOOL_TYPE_GROUPS.include?(school_type_group) && school_type != "other_independent_special_school") ||
+      secure_unit? ||
+      city_technology_college?
   end
 
   def open?
