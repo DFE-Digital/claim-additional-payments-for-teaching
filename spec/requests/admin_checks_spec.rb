@@ -29,7 +29,7 @@ RSpec.describe "Admin checks", type: :request do
           it "renders the requested page" do
             get admin_claim_check_path(claim, "qualifications")
             expect(response.body).to include(I18n.t("admin.qts_award_year"))
-            expect(response.body).to include(I18n.t("#{claim.policy.to_s.underscore}.questions.qts_award_years.#{claim.eligibility.qts_award_year}"))
+            expect(response.body).to include(claim.eligibility.qts_award_year_answer)
 
             get admin_claim_check_path(claim, "employment")
             expect(response.body).to include(I18n.t("admin.current_school"))

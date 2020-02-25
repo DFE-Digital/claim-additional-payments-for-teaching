@@ -58,7 +58,7 @@ RSpec.describe "Admin claims", type: :request do
           expect(response.body).to include(claim.reference)
           expect(response.body).to include(claim.teacher_reference_number)
           expect(response.body).to include(claim.eligibility.current_school_name)
-          expect(response.body).to include(I18n.t("#{policy.to_s.underscore}.questions.qts_award_years.#{claim.eligibility.qts_award_year}"))
+          expect(response.body).to include(claim.eligibility.qts_award_year_answer)
         end
 
         context "when another claim has matching attributes" do

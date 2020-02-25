@@ -13,12 +13,9 @@ RSpec.describe StudentLoans::EligibilityAnswersPresenter, type: :model do
     }.merge(subject_attributes)
   end
   let(:subject_attributes) { {chemistry_taught: true, physics_taught: true} }
-  let(:eligibility) do
-    build(
-      :student_loans_eligibility,
-      eligibility_attributes
-    )
-  end
+  let(:eligibility) { claim.eligibility }
+  let(:claim) { build(:claim, eligibility: build(:student_loans_eligibility, eligibility_attributes)) }
+
   subject(:presenter) { described_class.new(eligibility) }
 
   it "returns an array of questions, answers, and slugs for displaying to the user for review" do
@@ -35,13 +32,13 @@ RSpec.describe StudentLoans::EligibilityAnswersPresenter, type: :model do
     expect(presenter.answers).to eq expected_answers
   end
 
-  it "changes the answer for the QTS question, based on the configured academic year" do
-    policy_configurations(:student_loans).update!(current_academic_year: "2027/2028")
+  it "changes the answer for the QTS question based on the answer and the claim's academic year" do
+    claim.academic_year = "2027/2028"
 
     qts_answer = presenter.answers[0][1]
     expect(qts_answer).to eq("In or after the academic year 2016 to 2017")
 
-    presenter.eligibility.qts_award_year = :before_cut_off_date
+    eligibility.qts_award_year = :before_cut_off_date
     qts_answer = presenter.answers[0][1]
     expect(qts_answer).to eq("In or before the academic year 2015 to 2016")
   end

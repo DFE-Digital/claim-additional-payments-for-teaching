@@ -72,7 +72,7 @@ module MathsAndPhysics
     def qts_award_year
       [
         I18n.t("admin.qts_award_year"),
-        qts_award_year_answer,
+        eligibility.qts_award_year_answer,
       ]
     end
 
@@ -117,11 +117,6 @@ module MathsAndPhysics
       when "no" then "No"
       else I18n.t("maths_and_physics.answers.has_uk_maths_or_physics_degree.#{eligibility.has_uk_maths_or_physics_degree}")
       end
-    end
-
-    def qts_award_year_answer
-      qts_cut_off_for_claim = MathsAndPhysics.first_eligible_qts_award_year(eligibility.claim.academic_year)
-      I18n.t("answers.qts_award_years.on_or_after_cut_off_date", year: qts_cut_off_for_claim.to_s(:long))
     end
   end
 end

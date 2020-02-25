@@ -1,11 +1,6 @@
 module StudentLoans
   # Used to display the information a claim checker needs to check to either
-  # approve or reject a claim
-  #
-  # Note this presenter is only intented for use with eligible claims and
-  # therefor makes certain assumptions about the claim and eligibility.
-  # Specifically it assumes the QTS question was answered with
-  # :on_or_after_cut_off_date.
+  # approve or reject a claim.
   class AdminChecksPresenter
     include Admin::PresenterMethods
 
@@ -17,7 +12,7 @@ module StudentLoans
 
     def qualifications
       [
-        ["Award year", qts_award_year_answer],
+        ["Award year", eligibility.qts_award_year_answer],
       ]
     end
 
@@ -32,11 +27,6 @@ module StudentLoans
 
     def eligibility
       claim.eligibility
-    end
-
-    def qts_award_year_answer
-      qts_cut_off_for_claim = StudentLoans.first_eligible_qts_award_year(claim.academic_year)
-      I18n.t("answers.qts_award_years.on_or_after_cut_off_date", year: qts_cut_off_for_claim.to_s(:long))
     end
   end
 end

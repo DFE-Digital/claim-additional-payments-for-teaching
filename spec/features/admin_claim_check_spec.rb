@@ -80,7 +80,7 @@ RSpec.feature "Admin checks a claim" do
       click_on "Check qualification information"
       expect(page).to have_content("Qualifications")
       expect(page).to have_content("Award year")
-      expect(page).to have_content(I18n.t("#{claim.policy.to_s.underscore}.questions.qts_award_years.#{claim.eligibility.qts_award_year}"))
+      expect(page).to have_content(claim.eligibility.qts_award_year_answer)
 
       click_on "Complete qualifications check and continue"
 
