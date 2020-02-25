@@ -129,6 +129,37 @@ RSpec.describe MathsAndPhysics::SchoolEligibility do
         expect(MathsAndPhysics::SchoolEligibility.new(alternative_provision_school).eligible_current_school?).to eq true
       end
     end
+
+    context "with a City Technology College (CTC)" do
+      let(:city_technology_college) {
+        School.new(
+          close_date: nil,
+          school_type: :city_technology_college,
+          school_type_group: :independent_schools,
+          statutory_high_age: 16,
+          local_authority_district: local_authority_districts(:barnsley)
+        )
+      }
+
+      it "returns true with an open, state funded secondary equivalent CTC in an eligible local authority district" do
+        expect(MathsAndPhysics::SchoolEligibility.new(city_technology_college).eligible_current_school?).to eql true
+      end
+
+      it "returns false when closed" do
+        city_technology_college.assign_attributes(close_date: Date.new)
+        expect(MathsAndPhysics::SchoolEligibility.new(city_technology_college).eligible_current_school?).to eql false
+      end
+
+      it "returns false when not in an eligible local authority district" do
+        city_technology_college.assign_attributes(local_authority_district: local_authority_districts(:camden))
+        expect(MathsAndPhysics::SchoolEligibility.new(city_technology_college).eligible_current_school?).to eql false
+      end
+
+      it "returns false when not secondary equivalent" do
+        city_technology_college.assign_attributes(statutory_high_age: 11)
+        expect(MathsAndPhysics::SchoolEligibility.new(city_technology_college).eligible_current_school?).to eq false
+      end
+    end
   end
 
   context "when it is not a secondary school" do
