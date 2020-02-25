@@ -38,6 +38,7 @@ module StudentLoans
       no_school: 2,
     }, _prefix: :employed_at
 
+    has_one :claim, as: :eligibility, inverse_of: :eligibility
     belongs_to :claim_school, optional: true, class_name: "School"
     belongs_to :current_school, optional: true, class_name: "School"
 

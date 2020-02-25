@@ -45,6 +45,7 @@ module MathsAndPhysics
       on_or_after_cut_off_date: 1,
     }, _prefix: :awarded_qualified_status
 
+    has_one :claim, as: :eligibility, inverse_of: :eligibility
     belongs_to :current_school, optional: true, class_name: "School"
 
     validates :teaching_maths_or_physics, on: [:"teaching-maths-or-physics", :submit], inclusion: {in: [true, false], message: "Select yes if you teach any maths or physics"}
