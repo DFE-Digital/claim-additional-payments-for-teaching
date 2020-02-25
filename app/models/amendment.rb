@@ -14,6 +14,7 @@ class Amendment < ApplicationRecord
 
   validates :claim_changes, presence: {message: "To amend the claim you must change at least one value"}
   validates :notes, presence: {message: "Enter a message to explain why you are making this amendment"}
+  validate :claim_must_be_amendable, on: :create
 
   # Updates the claim using the attributes given in claim_attributes, and uses
   # these changes to create an associated Amendment record with additional
@@ -47,5 +48,11 @@ class Amendment < ApplicationRecord
     end
 
     amendment
+  end
+
+  private
+
+  def claim_must_be_amendable
+    errors.add(:claim, "must be amendable") unless claim.amendable?
   end
 end

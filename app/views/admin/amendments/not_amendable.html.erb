@@ -1,0 +1,14 @@
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <span class="govuk-caption-xl"><%= @claim.policy.short_name %></span>
+    <h1 class="govuk-heading-xl">
+      Amend claim <%= @claim.reference %>
+    </h1>
+
+    <div class="govuk-body-l govuk-flash__alert">
+      This claim cannot be amended.
+    </div>
+
+    <p><%= link_to "Return to claim page", admin_claim_path(@claim), class: "govuk-link" %></p>
+  </div>
+</div>

@@ -651,4 +651,38 @@ RSpec.describe Claim, type: :model do
       end
     end
   end
+
+  describe "#amendable?" do
+    it "returns false for a claim that hasn’t been submitted" do
+      claim = build(:claim, :submittable)
+      expect(claim.amendable?).to eq(false)
+    end
+
+    it "returns true for a submitted claim" do
+      claim = build(:claim, :submitted)
+      expect(claim.amendable?).to eq(true)
+    end
+
+    it "returns true for an approved claim that isn’t payrolled" do
+      claim = build(:claim, :approved)
+      expect(claim.amendable?).to eq(true)
+    end
+
+    it "returns false for a payrolled claim" do
+      claim = build(:claim, :approved)
+      create(:payment, claims: [claim])
+
+      expect(claim.amendable?).to eq(false)
+    end
+
+    it "returns false for a rejected claim" do
+      claim = build(:claim, :rejected)
+      expect(claim.amendable?).to eq(false)
+    end
+
+    it "returns false for a claim that’s had its personal data removed" do
+      claim = build(:claim, :pii_removed)
+      expect(claim.amendable?).to eq(false)
+    end
+  end
 end

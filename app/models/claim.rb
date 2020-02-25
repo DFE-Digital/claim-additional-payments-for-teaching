@@ -275,6 +275,10 @@ class Claim < ApplicationRecord
     eligibility&.current_school
   end
 
+  def amendable?
+    submitted? && !decision&.rejected? && !payment && !pii_removed?
+  end
+
   private
 
   def normalise_trn

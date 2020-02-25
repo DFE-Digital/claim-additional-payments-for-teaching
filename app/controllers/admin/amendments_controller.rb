@@ -1,13 +1,13 @@
 class Admin::AmendmentsController < Admin::BaseAdminController
+  before_action :load_claim
   before_action :ensure_service_operator
+  before_action :ensure_claim_is_amendable
 
   def new
-    @claim = Claim.find(params[:claim_id])
     @amendment = @claim.amendments.build
   end
 
   def create
-    @claim = Claim.find(params[:claim_id])
     @amendment = Amendment.amend_claim(@claim, claim_params, amendment_params)
 
     if @amendment.persisted?
@@ -18,6 +18,16 @@ class Admin::AmendmentsController < Admin::BaseAdminController
   end
 
   private
+
+  def load_claim
+    @claim = Claim.find(params[:claim_id])
+  end
+
+  def ensure_claim_is_amendable
+    unless @claim.amendable?
+      render "not_amendable"
+    end
+  end
 
   def claim_params
     params.require(:amendment).require(:claim).permit(*Claim::AMENDABLE_ATTRIBUTES)

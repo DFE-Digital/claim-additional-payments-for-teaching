@@ -17,6 +17,14 @@ RSpec.describe Amendment, type: :model do
     expect(amendment).to be_valid
   end
 
+  it "is invalid if its claim is not amendable" do
+    amendment = build(:amendment, claim: build(:claim, :rejected))
+    expect(amendment).not_to be_valid
+
+    amendment.claim = build(:claim, :approved)
+    expect(amendment).to be_valid
+  end
+
   describe ".amend_claim" do
     let(:claim) { create(:claim, :submitted, teacher_reference_number: "1234567", payroll_gender: :male, bank_sort_code: "111213", building_society_roll_number: nil) }
     let(:dfe_signin_user) { create(:dfe_signin_user) }

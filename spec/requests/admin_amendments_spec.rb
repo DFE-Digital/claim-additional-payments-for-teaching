@@ -90,6 +90,16 @@ RSpec.describe "Admin claim amendments" do
 
         expect([claim.national_insurance_number, claim.amendments.size]).to eq(original_counts)
       end
+
+      context "when the claim is not amendable" do
+        let(:claim) { create(:claim, :rejected) }
+
+        it "shows an error" do
+          post admin_claim_amendments_url(claim, amendment: {claim: {teacher_reference_number: claim.teacher_reference_number},
+                                                             notes: "Claimant made a typo"})
+          expect(response.body).to include("This claim cannot be amended.")
+        end
+      end
     end
   end
 

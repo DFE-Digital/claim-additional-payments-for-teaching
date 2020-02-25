@@ -71,6 +71,26 @@ RSpec.describe "Admin claims", type: :request do
             expect(response.body).to include(claim_with_matching_attributes.reference)
           end
         end
+
+        context "when the claim is amendable" do
+          let(:claim) { create(:claim, :submitted) }
+
+          it "displays a link to amend the claim" do
+            get admin_claim_path(claim)
+
+            expect(response.body).to include("Amend claim")
+          end
+        end
+
+        context "when the claim is not amendable" do
+          let(:claim) { create(:claim, :rejected) }
+
+          it "does not display a link to amend the claim" do
+            get admin_claim_path(claim)
+
+            expect(response.body).not_to include("Amend claim")
+          end
+        end
       end
     end
   end
