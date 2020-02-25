@@ -81,6 +81,7 @@ class Claim < ApplicationRecord
 
   has_one :decision
   has_many :checks
+  has_many :amendments
 
   belongs_to :eligibility, polymorphic: true, inverse_of: :claim, dependent: :destroy
   accepts_nested_attributes_for :eligibility, update_only: true
