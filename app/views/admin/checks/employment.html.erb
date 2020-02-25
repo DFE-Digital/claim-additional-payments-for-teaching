@@ -10,7 +10,13 @@
           heading: "Employment",
           description: I18n.t("#{@claim.policy.to_s.underscore}.admin.employment_check_description"),
           answers: @eligibility_checks.employment %>
+  </div>
 
-    <%= button_to "Complete employment check and continue", admin_claim_path(@claim), class: "govuk-button", method: :get %>
+  <div class="govuk-grid-column-full">
+    <% if @check.present? %>
+      <%= render "check_outcome", check: @check %>
+    <% else %>
+      <%= button_to "Complete employment check and continue", admin_claim_checks_path(@claim, check: :employment), class: "govuk-button" %>
+    <% end %>
   </div>
 </div>

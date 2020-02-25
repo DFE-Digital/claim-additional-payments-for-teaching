@@ -23,6 +23,8 @@ RSpec.describe "Admin checks", type: :request do
     # Compatible with claims from each policy
     Policies.all.each do |policy|
       context "with a #{policy} claim" do
+        let(:claim) { create(:claim, :submitted, policy: policy) }
+
         describe "checks#show" do
           it "renders the requested page" do
             get admin_claim_check_path(claim, "qualifications")
@@ -32,6 +34,45 @@ RSpec.describe "Admin checks", type: :request do
             get admin_claim_check_path(claim, "employment")
             expect(response.body).to include(I18n.t("admin.current_school"))
             expect(response.body).to include(claim.eligibility.current_school.name)
+          end
+        end
+
+        describe "checks#create" do
+          it "creates a new check and redirects to the next check" do
+            expect {
+              post admin_claim_checks_path(claim, check: "qualifications")
+            }.to change { Check.count }.by(1)
+
+            expect(claim.checks.last.name).to eql("qualifications")
+            expect(claim.checks.last.created_by).to eql(user)
+            expect(response).to redirect_to(admin_claim_check_path(claim, check: "employment"))
+          end
+
+          context "when the last check is marked as completed" do
+            let(:last_check) { Admin::ChecksController::CHECKS_SEQUENCE.last }
+
+            it "creates the check and redirects to the claims#show page" do
+              expect {
+                post admin_claim_checks_path(claim, check: last_check)
+              }.to change { Check.count }.by(1)
+
+              expect(claim.checks.last.name).to eql(last_check)
+              expect(claim.checks.last.created_by).to eql(user)
+              expect(response).to redirect_to(admin_claim_path(claim))
+            end
+          end
+
+          context "when a check has already been marked as completed" do
+            it "doesn't create a check and redirects with an error" do
+              create(:check, name: "qualifications", claim: claim)
+
+              expect {
+                post admin_claim_checks_path(claim, check: "qualifications")
+              }.not_to change { Check.count }
+
+              expect(response).to redirect_to(admin_claim_check_path(claim, check: "qualifications"))
+              expect(flash[:alert]).to eql("This check has already been completed")
+            end
           end
         end
       end

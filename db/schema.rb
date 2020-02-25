@@ -10,11 +10,22 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_02_12_154529) do
+ActiveRecord::Schema.define(version: 2020_02_19_154337) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
+
+  create_table "checks", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "name"
+    t.uuid "claim_id"
+    t.uuid "created_by_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["claim_id"], name: "index_checks_on_claim_id"
+    t.index ["created_by_id"], name: "index_checks_on_created_by_id"
+    t.index ["name", "claim_id"], name: "index_checks_on_name_and_claim_id", unique: true
+  end
 
   create_table "claims", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.datetime "created_at", null: false
@@ -215,6 +226,8 @@ ActiveRecord::Schema.define(version: 2020_02_12_154529) do
     t.index ["current_school_id"], name: "index_student_loans_eligibilities_on_current_school_id"
   end
 
+  add_foreign_key "checks", "claims"
+  add_foreign_key "checks", "dfe_sign_in_users", column: "created_by_id"
   add_foreign_key "claims", "payments"
   add_foreign_key "decisions", "dfe_sign_in_users", column: "created_by_id"
   add_foreign_key "maths_and_physics_eligibilities", "schools", column: "current_school_id"

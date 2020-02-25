@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+- Allow service operators to mark a check as completed
+
 ## [Release 055] - 2020-02-24
 
 - Fix skipped heading level on manage services screen
