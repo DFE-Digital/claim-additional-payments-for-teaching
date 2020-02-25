@@ -10,6 +10,7 @@ The format is based on [Keep a Changelog]
 - Update school eligibility to include City Technology Colleges
 - Service operators are taken straight to the tasks list when checking a Maths
   and Physics claim
+- Handle byte order mark when reading payment confirmation CSV
 
 ## [Release 055] - 2020-02-24
 
