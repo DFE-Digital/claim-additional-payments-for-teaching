@@ -26,7 +26,13 @@ class Claim
     TIME_BEFORE_CLAIM_CONSIDERED_OLD = 2.months
 
     def scrub_completed_claims
-      old_claims_rejected_or_paid.update_all(attribute_values_to_set)
+      Claim.transaction do
+        old_claims_rejected_or_paid.includes(:amendments).each do |claim|
+          scrub_amendments_personal_data(claim)
+        end
+
+        old_claims_rejected_or_paid.update_all(attribute_values_to_set)
+      end
     end
 
     private
@@ -46,6 +52,22 @@ class Claim
           minimum_time: TIME_BEFORE_CLAIM_CONSIDERED_OLD.ago,
           rejected: Decision.results.fetch(:rejected)
         )
+    end
+
+    def scrub_amendments_personal_data(claim)
+      claim.amendments.each do |amendment|
+        scrub_amendment_personal_data(amendment)
+      end
+    end
+
+    def scrub_amendment_personal_data(amendment)
+      attributes_to_scrub = PII_ATTRIBUTES_TO_DELETE.map(&:to_s) & amendment.claim_changes.keys
+      personal_data_mask = attributes_to_scrub.to_h { |attribute| [attribute, nil] }
+      amendment.claim_changes.merge!(personal_data_mask)
+
+      amendment.personal_data_removed_at = Time.zone.now
+
+      amendment.save!
     end
   end
 end
