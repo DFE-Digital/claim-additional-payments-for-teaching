@@ -36,6 +36,10 @@
 
     <%= render("info_panel_identity_unconfirmed", school: @claim.school) unless @claim.identity_confirmed? %>
 
+  </div>
+</div>
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
     <%= render "admin/claims/answer_section", {heading: "Personal details", answers: admin_personal_details(@claim)} %>
 
     <%= render "admin/claims/answer_section", {heading: "Eligibility details", answers: admin_eligibility_answers(@claim)} %>
@@ -52,4 +56,10 @@
       <%= render "admin/decisions/decision_form", claim: @claim, decision: @decision, claims_preventing_payment: @claims_preventing_payment %>
   <% end %>
   </div>
+
+  <% if @claim.amendments.any? %>
+    <div class="govuk-grid-column-one-third">
+      <%= render "amendments_timeline", amendments: @claim.amendments.reverse %>
+    </div>
+  <% end %>
 </div>

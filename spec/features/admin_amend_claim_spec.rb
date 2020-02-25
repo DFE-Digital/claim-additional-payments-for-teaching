@@ -59,6 +59,17 @@ RSpec.feature "Admin amends a claim" do
     expect(claim.building_society_roll_number).to eq("JF 838281")
 
     expect(current_url).to eq(admin_claim_url(claim))
+
+    expect(page).to have_content("Teacher reference number\nchanged from 1234567 to 7654321")
+    expect(page).to have_content("Payroll gender\nchanged from don’t know to male")
+    expect(page).to have_content("Date of birth\nchanged from #{I18n.l(date_of_birth, format: :day_month_year)} to #{I18n.l(new_date_of_birth, format: :day_month_year)}")
+    expect(page).to have_content("Student loan repayment plan\nchanged from Plan 1 to Plan 2")
+    expect(page).to have_content("Bank sort code\nchanged from 010203 to 111213")
+    expect(page).to have_content("Bank account number\nchanged from 47274828 to 18929492")
+    expect(page).to have_content("Building society roll number\nchanged from RN 123456 to JF 838281")
+
+    expect(page).to have_content("This claimant got some of their details wrong and then contacted us")
+    expect(page).to have_content("by Jo Bloggs on #{I18n.l(Time.current)}")
   end
 
   scenario "Service operator cancels amending a claim" do
