@@ -55,6 +55,10 @@ module StudentLoans
     delegate :name, to: :claim_school, prefix: true, allow_nil: true
     delegate :name, to: :current_school, prefix: true, allow_nil: true
 
+    def policy
+      StudentLoans
+    end
+
     def subjects_taught
       SUBJECT_ATTRIBUTES.select { |attribute_name| public_send("#{attribute_name}?") }
     end

@@ -62,6 +62,10 @@ module MathsAndPhysics
 
     delegate :name, to: :current_school, prefix: true, allow_nil: true
 
+    def policy
+      MathsAndPhysics
+    end
+
     def ineligible?
       not_teaching_maths_or_physics? ||
         ineligible_current_school? ||

@@ -258,7 +258,7 @@ class Claim < ApplicationRecord
   end
 
   def policy
-    eligibility&.class&.module_parent
+    eligibility&.policy
   end
 
   def school
