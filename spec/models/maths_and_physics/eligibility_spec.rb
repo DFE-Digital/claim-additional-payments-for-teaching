@@ -178,6 +178,22 @@ RSpec.describe MathsAndPhysics::Eligibility, type: :model do
     end
   end
 
+  describe "#qts_award_year_answer" do
+    it "returns a String representing the answer of the QTS question based on qts_award_year and the academic year the claim was made in" do
+      claim = Claim.new(academic_year: 2019)
+      eligibility = MathsAndPhysics::Eligibility.new(claim: claim)
+
+      eligibility.qts_award_year = :before_cut_off_date
+      expect(eligibility.qts_award_year_answer).to eq "In or before the academic year 2013 to 2014"
+
+      eligibility.qts_award_year = :on_or_after_cut_off_date
+      expect(eligibility.qts_award_year_answer).to eq "In or after the academic year 2014 to 2015"
+
+      claim.academic_year = "2020/2021"
+      expect(eligibility.qts_award_year_answer).to eq "In or after the academic year 2015 to 2016"
+    end
+  end
+
   # Validation contexts
   context "when saving in the “teaching-maths-or-physics” context" do
     it "is not valid without a value for teaching_maths_or_physics" do
