@@ -58,7 +58,7 @@ RSpec.describe "Admin checks", type: :request do
 
               expect(claim.checks.last.name).to eql(last_check)
               expect(claim.checks.last.created_by).to eql(user)
-              expect(response).to redirect_to(admin_claim_path(claim))
+              expect(response).to redirect_to(admin_claim_path(claim, anchor: "claim_decision_form"))
             end
           end
 
