@@ -7,7 +7,7 @@ describe ClaimsHelper do
       build(
         :student_loans_eligibility,
         :eligible,
-        qts_award_year: "on_or_after_september_2013",
+        qts_award_year: "on_or_after_cut_off_date",
       )
     end
     let(:claim) do

@@ -8,7 +8,7 @@ RSpec.describe MathsAndPhysics::EligibilityAdminAnswersPresenter, type: :model d
       current_school: school,
       initial_teacher_training_subject: :maths,
       initial_teacher_training_subject_specialism: :not_sure,
-      qts_award_year: "on_or_after_september_2014",
+      qts_award_year: "on_or_after_cut_off_date",
       has_uk_maths_or_physics_degree: "has_non_uk",
       employed_as_supply_teacher: true,
       has_entire_term_contract: true,

@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+- QTS question will vary based on the year the service is accepting claims for
+
 ## [Release 056] - 2020-02-25
 
 - Allow service operators to mark a check as completed

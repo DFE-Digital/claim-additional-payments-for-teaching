@@ -1,3 +1,14 @@
+# frozen_string_literal: true
+
+require "academic_year"
+
+# Module namespace specific to the policy for claiming a payment for teaching
+# maths or physics.
+#
+# This payment is available to Maths or Physics teachers in the first five their
+# career employed in state-funded secondary schools in eligible local
+# authorities. Full details of the eligibility criteria can be found at the URL
+# defined by `MathsAndPhysics.eligibility_page_url`.
 module MathsAndPhysics
   extend self
 
@@ -27,5 +38,20 @@ module MathsAndPhysics
 
   def short_name
     I18n.t("maths_and_physics.policy_short_name")
+  end
+
+  # Returns the AcademicYear during or after which teachers must have completed
+  # their Initial Teacher Training and been awarded QTS to be eligible to make
+  # a claim. Anyone qualifying before this academic year should not be able to
+  # make a claim.
+  #
+  # Maths & Physics teachers are eligible to claim if they are in the first five
+  # years of their career.
+  def first_eligible_qts_award_year
+    AcademicYear.new(configuration.current_academic_year) - 5
+  end
+
+  def configuration
+    PolicyConfiguration.for(self)
   end
 end

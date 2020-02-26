@@ -33,7 +33,7 @@ RSpec.feature "Maths & Physics claims" do
 
       expect(page).to have_text(I18n.t("questions.qts_award_year"))
       choose_qts_year "In or after the academic year 2014 to 2015"
-      expect(claim.eligibility.reload.qts_award_year).to eql("on_or_after_september_2014")
+      expect(claim.eligibility.reload.qts_award_year).to eql("on_or_after_cut_off_date")
 
       expect(page).to have_text(I18n.t("maths_and_physics.questions.employed_as_supply_teacher"))
       choose "No"
@@ -237,7 +237,7 @@ RSpec.feature "Maths & Physics claims" do
 
     expect(page).to have_text(I18n.t("questions.qts_award_year"))
     choose_qts_year "In or after the academic year 2014 to 2015"
-    expect(claim.eligibility.reload.qts_award_year).to eql("on_or_after_september_2014")
+    expect(claim.eligibility.reload.qts_award_year).to eql("on_or_after_cut_off_date")
 
     expect(page).to have_text(I18n.t("maths_and_physics.questions.employed_as_supply_teacher"))
     choose "Yes"

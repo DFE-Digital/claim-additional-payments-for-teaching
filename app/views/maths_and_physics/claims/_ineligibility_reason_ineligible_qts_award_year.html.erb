@@ -4,7 +4,7 @@
 
 <p class="govuk-body">
   You can only get this payment if you completed your initial teacher training
-  in or after the academic year 2014 to 2015.
+  <%= t("answers.qts_award_years.on_or_after_cut_off_date", year: MathsAndPhysics.first_eligible_qts_award_year.to_s(:long)).downcase %>.
 </p>
 
 <p class="govuk-body">

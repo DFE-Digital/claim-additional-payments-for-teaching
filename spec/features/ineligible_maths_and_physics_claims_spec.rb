@@ -35,16 +35,17 @@ RSpec.feature "Ineligible Maths and Physics claims" do
     expect(page).to have_text("You can only get this payment if you completed a degree specialising in maths or physics")
   end
 
-  scenario "qualified before the first eligible year" do
+  scenario "qualified before the first eligible QTS year" do
+    policy_configurations(:maths_and_physics).update!(current_academic_year: "2020/2021")
     claim = start_maths_and_physics_claim
 
     choose_school schools(:penistone_grammar_school)
     choose_initial_teacher_training_subject
-    choose_qts_year("In or before the academic year 2013 to 2014")
+    choose_qts_year("In or before the academic year 2014 to 2015")
 
-    expect(claim.eligibility.reload.qts_award_year).to eql("before_september_2014")
+    expect(claim.eligibility.reload.qts_award_year).to eql("before_cut_off_date")
     expect(page).to have_text("You’re not eligible")
-    expect(page).to have_text("You can only get this payment if you completed your initial teacher training in or after the academic year 2014 to 2015.")
+    expect(page).to have_text("You can only get this payment if you completed your initial teacher training in or after the academic year 2015 to 2016.")
   end
 
   scenario "supply teacher doesn't have a contract for a whole term" do

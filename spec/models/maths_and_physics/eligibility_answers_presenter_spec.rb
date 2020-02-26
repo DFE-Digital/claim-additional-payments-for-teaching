@@ -6,7 +6,7 @@ RSpec.describe MathsAndPhysics::EligibilityAnswersPresenter do
       teaching_maths_or_physics: true,
       current_school: schools(:penistone_grammar_school),
       initial_teacher_training_subject: :maths,
-      qts_award_year: "on_or_after_september_2014",
+      qts_award_year: "on_or_after_cut_off_date",
       employed_as_supply_teacher: false,
       subject_to_disciplinary_action: false,
       subject_to_formal_performance_action: false)
@@ -27,6 +27,16 @@ RSpec.describe MathsAndPhysics::EligibilityAnswersPresenter do
     expect(presenter.answers).to eq(expected_answers)
   end
 
+  it "changes the answer for the QTS question based on the answer and the configured academic year" do
+    policy_configurations(:maths_and_physics).update!(current_academic_year: "2021/2022")
+    qts_answer = presenter.answers[3][1]
+    expect(qts_answer).to eq("In or after the academic year 2016 to 2017")
+
+    presenter.eligibility.qts_award_year = :before_cut_off_date
+    qts_answer = presenter.answers[3][1]
+    expect(qts_answer).to eq("In or before the academic year 2015 to 2016")
+  end
+
   context "initial teacher training subject not in a science" do
     let(:eligibility) do
       build(:maths_and_physics_eligibility,
@@ -34,7 +44,7 @@ RSpec.describe MathsAndPhysics::EligibilityAnswersPresenter do
         current_school: schools(:penistone_grammar_school),
         initial_teacher_training_subject: :none_of_the_subjects,
         has_uk_maths_or_physics_degree: "has_non_uk",
-        qts_award_year: "on_or_after_september_2014",
+        qts_award_year: "on_or_after_cut_off_date",
         employed_as_supply_teacher: false,
         subject_to_disciplinary_action: false,
         subject_to_formal_performance_action: false)
@@ -64,7 +74,7 @@ RSpec.describe MathsAndPhysics::EligibilityAnswersPresenter do
         initial_teacher_training_subject: :science,
         initial_teacher_training_subject_specialism: :not_sure,
         has_uk_maths_or_physics_degree: "has_non_uk",
-        qts_award_year: "on_or_after_september_2014",
+        qts_award_year: "on_or_after_cut_off_date",
         employed_as_supply_teacher: false,
         subject_to_disciplinary_action: false,
         subject_to_formal_performance_action: false)
@@ -94,7 +104,7 @@ RSpec.describe MathsAndPhysics::EligibilityAnswersPresenter do
         current_school: schools(:penistone_grammar_school),
         initial_teacher_training_subject: :physics,
         initial_teacher_training_subject_specialism: :physics,
-        qts_award_year: "on_or_after_september_2014",
+        qts_award_year: "on_or_after_cut_off_date",
         employed_as_supply_teacher: true,
         has_entire_term_contract: true,
         employed_directly: true,

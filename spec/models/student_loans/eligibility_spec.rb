@@ -9,10 +9,10 @@ RSpec.describe StudentLoans::Eligibility, type: :model do
     end
 
     it "has handily named boolean methods for the possible values" do
-      eligibility = StudentLoans::Eligibility.new(qts_award_year: "on_or_after_september_2013")
+      eligibility = StudentLoans::Eligibility.new(qts_award_year: "on_or_after_cut_off_date")
 
-      expect(eligibility.awarded_qualified_status_on_or_after_september_2013?).to eq true
-      expect(eligibility.awarded_qualified_status_before_september_2013?).to eq false
+      expect(eligibility.awarded_qualified_status_on_or_after_cut_off_date?).to eq true
+      expect(eligibility.awarded_qualified_status_before_cut_off_date?).to eq false
     end
   end
 
@@ -92,9 +92,9 @@ RSpec.describe StudentLoans::Eligibility, type: :model do
       expect(StudentLoans::Eligibility.new.ineligible?).to eql false
     end
 
-    it "returns true when the qts_award_year is before 2013" do
-      expect(StudentLoans::Eligibility.new(qts_award_year: "before_september_2013").ineligible?).to eql true
-      expect(StudentLoans::Eligibility.new(qts_award_year: "on_or_after_september_2013").ineligible?).to eql false
+    it "returns true when the qts_award_year is before the qualifying cut-off" do
+      expect(StudentLoans::Eligibility.new(qts_award_year: "before_cut_off_date").ineligible?).to eql true
+      expect(StudentLoans::Eligibility.new(qts_award_year: "on_or_after_cut_off_date").ineligible?).to eql false
     end
 
     it "returns true when the claim_school is not eligible" do
@@ -129,7 +129,7 @@ RSpec.describe StudentLoans::Eligibility, type: :model do
     end
 
     it "returns a symbol indicating the reason for ineligibility" do
-      expect(StudentLoans::Eligibility.new(qts_award_year: "before_september_2013").ineligibility_reason).to eq :ineligible_qts_award_year
+      expect(StudentLoans::Eligibility.new(qts_award_year: "before_cut_off_date").ineligibility_reason).to eq :ineligible_qts_award_year
       expect(StudentLoans::Eligibility.new(claim_school: schools(:hampstead_school)).ineligibility_reason).to eq :ineligible_claim_school
       expect(StudentLoans::Eligibility.new(employment_status: :no_school).ineligibility_reason).to eq :employed_at_no_school
       expect(StudentLoans::Eligibility.new(current_school: schools(:the_samuel_lister_academy)).ineligibility_reason).to eq :ineligible_current_school

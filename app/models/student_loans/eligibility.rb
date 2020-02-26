@@ -28,8 +28,8 @@ module StudentLoans
     self.table_name = "student_loans_eligibilities"
 
     enum qts_award_year: {
-      "before_september_2013": 0,
-      "on_or_after_september_2013": 1,
+      before_cut_off_date: 0,
+      on_or_after_cut_off_date: 1,
     }, _prefix: :awarded_qualified_status
 
     enum employment_status: {
@@ -41,7 +41,7 @@ module StudentLoans
     belongs_to :claim_school, optional: true, class_name: "School"
     belongs_to :current_school, optional: true, class_name: "School"
 
-    validates :qts_award_year, on: [:"qts-year", :submit], presence: {message: "Select whether you completed your initial teacher training before or after the start of the academic year 2013 to 2014"}
+    validates :qts_award_year, on: [:"qts-year", :submit], presence: {message: "Select when you completed your initial teacher training"}
     validates :claim_school, on: [:"claim-school", :submit], presence: {message: "Select a school from the list or search again for a different school"}
     validates :employment_status, on: [:"still-teaching", :submit], presence: {message: ->(object, _data) { "Select if you still work at #{object.claim_school_name}, another school or no longer teach in England" }}
     validates :current_school, on: [:"current-school", :submit], presence: {message: "Select a school from the list"}
@@ -98,7 +98,7 @@ module StudentLoans
     private
 
     def ineligible_qts_award_year?
-      awarded_qualified_status_before_september_2013?
+      awarded_qualified_status_before_cut_off_date?
     end
 
     def ineligible_claim_school?

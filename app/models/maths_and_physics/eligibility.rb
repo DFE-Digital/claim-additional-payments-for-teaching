@@ -41,8 +41,8 @@ module MathsAndPhysics
     }
 
     enum qts_award_year: {
-      "before_september_2014": 0,
-      "on_or_after_september_2014": 1,
+      before_cut_off_date: 0,
+      on_or_after_cut_off_date: 1,
     }, _prefix: :awarded_qualified_status
 
     belongs_to :current_school, optional: true, class_name: "School"
@@ -52,7 +52,7 @@ module MathsAndPhysics
     validates :initial_teacher_training_subject, on: [:"initial-teacher-training-subject", :submit], presence: {message: "Select if you completed your initial teacher training in Maths, Physics, Science, or None of these subjects"}
     validates :initial_teacher_training_subject_specialism, on: [:"initial-teacher-training-subject-specialism", :submit], presence: {message: "Select the subject your initial teacher training specialised in or select I'm not sure"}, if: :itt_subject_science?
     validates :has_uk_maths_or_physics_degree, on: [:"has-uk-maths-or-physics-degree", :submit], presence: {message: "Select yes if you have a UK degree specialising in maths or physics"}, unless: :initial_teacher_training_specialised_in_maths_or_physics?
-    validates :qts_award_year, on: [:"qts-year", :submit], presence: {message: "Select whether you completed your initial teacher training before or after the start of the academic year 2014 to 2015"}
+    validates :qts_award_year, on: [:"qts-year", :submit], presence: {message: "Select when you completed your initial teacher training"}
     validates :employed_as_supply_teacher, on: [:"supply-teacher", :submit], inclusion: {in: [true, false], message: "Select yes if you are currently employed as a supply teacher"}
     validates :has_entire_term_contract, on: [:"entire-term-contract", :submit], inclusion: {in: [true, false], message: "Select yes if you have a contract to teach at the same school for one term or longer"}, if: :employed_as_supply_teacher?
     validates :employed_directly, on: [:"employed-directly", :submit], inclusion: {in: [true, false], message: "Select yes if you are employed directly by your school"}, if: :employed_as_supply_teacher?
@@ -122,7 +122,7 @@ module MathsAndPhysics
     end
 
     def ineligible_qts_award_year?
-      awarded_qualified_status_before_september_2014?
+      awarded_qualified_status_before_cut_off_date?
     end
 
     def no_entire_term_contract?

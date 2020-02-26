@@ -16,7 +16,7 @@ RSpec.feature "Teacher Student Loan Repayments claims" do
       choose_qts_year
       claim = Claim.order(:created_at).last
 
-      expect(claim.eligibility.reload.qts_award_year).to eql("on_or_after_september_2013")
+      expect(claim.eligibility.reload.qts_award_year).to eql("on_or_after_cut_off_date")
 
       expect(page).to have_text(I18n.t("student_loans.questions.claim_school"))
 

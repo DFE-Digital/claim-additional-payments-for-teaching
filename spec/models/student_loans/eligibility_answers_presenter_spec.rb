@@ -4,7 +4,7 @@ RSpec.describe StudentLoans::EligibilityAnswersPresenter, type: :model do
   let(:school) { schools(:penistone_grammar_school) }
   let(:eligibility_attributes) do
     {
-      qts_award_year: "on_or_after_september_2013",
+      qts_award_year: "on_or_after_cut_off_date",
       claim_school: school,
       current_school: school,
       had_leadership_position: true,
@@ -33,6 +33,17 @@ RSpec.describe StudentLoans::EligibilityAnswersPresenter, type: :model do
     ]
 
     expect(presenter.answers).to eq expected_answers
+  end
+
+  it "changes the answer for the QTS question, based on the configured academic year" do
+    policy_configurations(:student_loans).update!(current_academic_year: "2027/2028")
+
+    qts_answer = presenter.answers[0][1]
+    expect(qts_answer).to eq("In or after the academic year 2016 to 2017")
+
+    presenter.eligibility.qts_award_year = :before_cut_off_date
+    qts_answer = presenter.answers[0][1]
+    expect(qts_answer).to eq("In or before the academic year 2015 to 2016")
   end
 
   it "excludes questions skipped from the flow" do
