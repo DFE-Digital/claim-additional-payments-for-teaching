@@ -7,6 +7,7 @@ The format is based on [Keep a Changelog]
 ## [Unreleased]
 
 - Allow service operators to mark a check as completed
+- Update school eligibility to include City Technology Colleges
 
 ## [Release 055] - 2020-02-24
 

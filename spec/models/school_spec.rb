@@ -80,6 +80,10 @@ RSpec.describe School, type: :model do
         expect(School.new(school_type_group: phase).state_funded?).to eq false
       end
     end
+
+    it "returns true for City Technology Colleges" do
+      expect(School.new(school_type: :city_technology_college, school_type_group: :independent_schools).state_funded?).to eq true
+    end
   end
 
   describe "#secondary_or_equivalent?" do
@@ -129,6 +133,16 @@ RSpec.describe School, type: :model do
 
     it "returns false for a non alternative provision school that teaches students over 11" do
       school = School.new(school_type: :community_school, statutory_high_age: 16)
+      expect(school.secondary_or_equivalent?).to eq false
+    end
+
+    it "returns true for a City Technology College that teaches students over eleven" do
+      school = School.new(school_type: :city_technology_college, statutory_high_age: 16)
+      expect(school.secondary_or_equivalent?).to eq true
+    end
+
+    it "returns false for a City Technology College that only teaches students under eleven" do
+      school = School.new(school_type: :city_technology_college, statutory_high_age: 10)
       expect(school.secondary_or_equivalent?).to eq false
     end
   end

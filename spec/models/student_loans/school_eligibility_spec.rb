@@ -117,6 +117,37 @@ RSpec.describe StudentLoans::SchoolEligibility do
       end
     end
 
+    context "with a City Technology College (CTC)" do
+      let(:city_technology_college) {
+        School.new(
+          close_date: nil,
+          school_type: :city_technology_college,
+          school_type_group: :independent_schools,
+          statutory_high_age: 16,
+          local_authority: local_authorities(:barnsley)
+        )
+      }
+
+      it "returns true with an open, state funded secondary equivalent CTC in an eligible local authority district" do
+        expect(StudentLoans::SchoolEligibility.new(city_technology_college).eligible_claim_school?).to eql true
+      end
+
+      it "returns false when closed" do
+        city_technology_college.assign_attributes(close_date: Date.new)
+        expect(StudentLoans::SchoolEligibility.new(city_technology_college).eligible_claim_school?).to eql false
+      end
+
+      it "returns false when not in an eligible local authority" do
+        city_technology_college.assign_attributes(local_authority: local_authorities(:camden))
+        expect(StudentLoans::SchoolEligibility.new(city_technology_college).eligible_claim_school?).to eql false
+      end
+
+      it "returns false when not secondary equivalent" do
+        city_technology_college.assign_attributes(statutory_high_age: 11)
+        expect(StudentLoans::SchoolEligibility.new(city_technology_college).eligible_claim_school?).to eq false
+      end
+    end
+
     context "when it is not a secondary school" do
       it "returns false" do
         primary_school = School.new(phase: :primary, school_type_group: :la_maintained, local_authority: local_authorities(:barnsley))
@@ -207,6 +238,32 @@ RSpec.describe StudentLoans::SchoolEligibility do
       it "returns true with a secure unit" do
         alternative_provision_school.assign_attributes(school_type_group: :other, school_type: :secure_unit)
         expect(StudentLoans::SchoolEligibility.new(alternative_provision_school).eligible_current_school?).to eq true
+      end
+    end
+
+    context "with a City Technology College (CTC)" do
+      let(:city_technology_college) {
+        School.new(
+          close_date: nil,
+          school_type: :city_technology_college,
+          school_type_group: :independent_schools,
+          statutory_high_age: 16,
+          local_authority: local_authorities(:camden)
+        )
+      }
+
+      it "returns true with an open, state funded secondary equivalent CTC" do
+        expect(StudentLoans::SchoolEligibility.new(city_technology_college).eligible_current_school?).to eql true
+      end
+
+      it "returns false when closed" do
+        city_technology_college.assign_attributes(close_date: Date.new)
+        expect(StudentLoans::SchoolEligibility.new(city_technology_college).eligible_current_school?).to eql false
+      end
+
+      it "returns false when not secondary equivalent" do
+        city_technology_college.assign_attributes(statutory_high_age: 11)
+        expect(StudentLoans::SchoolEligibility.new(city_technology_college).eligible_current_school?).to eq false
       end
     end
 
