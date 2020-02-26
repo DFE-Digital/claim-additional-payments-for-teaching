@@ -34,7 +34,7 @@ class PaymentConfirmationCsv
       errors.append("You must provide a file")
       nil
     else
-      CSV.read(file.to_io, headers: true)
+      CSV.read(file.to_io, headers: true, encoding: "BOM|UTF-8")
     end
   rescue CSV::MalformedCSVError
     errors.append("The selected file must be a CSV")

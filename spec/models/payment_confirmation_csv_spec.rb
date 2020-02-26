@@ -58,4 +58,27 @@ RSpec.describe PaymentConfirmationCsv do
       expect(subject.errors).to eq(["You must provide a file"])
     end
   end
+
+  context "The CSV contains a byte order mark (BOM)" do
+    let(:file) do
+      tempfile = Tempfile.new
+      tempfile.write(byte_order_mark + csv)
+      tempfile.rewind
+      tempfile
+    end
+    let(:byte_order_mark) { "\xEF\xBB\xBF" }
+    let(:csv) do
+      <<~CSV
+        Payroll Reference,Gross Value,Payment ID,NI,Employers NI,Student Loans,Tax,Net Pay
+        DFE00001,487.48,88b5dba7-ccf1-4ffd-a3ce-20bd3ce1e500,33.9,38.98,0,89.6,325
+      CSV
+    end
+
+    it "has no errors and parses the CSV" do
+      expect(subject.errors).to be_empty
+
+      expect(subject.rows.count).to eq(1)
+      expect(subject.rows.first["Payroll Reference"]).to eq("DFE00001")
+    end
+  end
 end
