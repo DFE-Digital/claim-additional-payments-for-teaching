@@ -51,14 +51,14 @@ RSpec.describe "Admin checks", type: :request do
           context "when the last check is marked as completed" do
             let(:last_check) { Admin::ChecksController::CHECKS_SEQUENCE.last }
 
-            it "creates the check and redirects to the claims#show page" do
+            it "creates the check and redirects to the decision page" do
               expect {
                 post admin_claim_checks_path(claim, check: last_check)
               }.to change { Check.count }.by(1)
 
               expect(claim.checks.last.name).to eql(last_check)
               expect(claim.checks.last.created_by).to eql(user)
-              expect(response).to redirect_to(admin_claim_path(claim, anchor: "claim_decision_form"))
+              expect(response).to redirect_to(new_admin_claim_decision_path(claim))
             end
           end
 

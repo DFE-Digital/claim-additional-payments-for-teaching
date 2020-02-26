@@ -1,0 +1,39 @@
+<div class="govuk-grid-row">
+  <%= render("shared/error_summary", instance: @decision, errored_field_id_overrides: { "result": "decision_result_approved" }) if @decision.errors.any? %>
+
+  <%= render "admin/checks/claim_summary", claim: @claim %>
+
+  <div class="govuk-grid-column-two-thirds">
+
+  <%= form_for @decision, url: admin_claim_decisions_path(@claim), html: { id: "claim_decision_form" } do |form| %>
+    <%= form_group_tag @decision do %>
+      <fieldset class="govuk-fieldset govuk-!-margin-bottom-6">
+        <legend class="govuk-fieldset__legend govuk-fieldset__legend--l govuk-!-margin-bottom-6">
+          <h2 class="govuk-fieldset__heading">
+            Claim decision
+          </h2>
+        </legend>
+
+        <%= errors_tag @decision, :result %>
+        <div class="govuk-radios govuk-radios--inline">
+          <%= form.hidden_field :result %>
+          <div class="govuk-radios__item">
+            <%= form.radio_button(:result, "approved", class: "govuk-radios__input", disabled: !@claim.approvable?) %>
+            <%= form.label "result_approved", "Approve", class: "govuk-label govuk-radios__label" %>
+          </div>
+          <div class="govuk-radios__item">
+            <%= form.radio_button(:result, "rejected", class: "govuk-radios__input") %>
+            <%= form.label "result_rejected", "Reject", class: "govuk-label govuk-radios__label" %>
+          </div>
+        </div>
+      </fieldset>
+      <%= form.label :notes, "Decision notes", class: "govuk-label govuk-label--m" %>
+      <span class="govuk-hint" id="notes-hint">
+        Please write a brief note explaining why this claim has been rejected or approved.
+      </span>
+      <%= form.text_area :notes, class: "govuk-textarea", "aria-describedby" => "notes-hint", rows: 5 %>
+      <%= form.submit "Confirm decision", class: "govuk-button" %>
+    <% end %>
+  <% end %>
+  </div>
+</div>

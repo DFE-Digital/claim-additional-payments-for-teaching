@@ -68,7 +68,7 @@ RSpec.feature "Admin checks a claim" do
       expect(mail.body.raw_source).to match("not been able to approve")
     end
 
-    scenario "User can see checks for a claim" do
+    scenario "User can complete the claim checks and approve a claim" do
       claim = create(:claim, :submitted, policy: MathsAndPhysics)
 
       visit admin_claims_path
@@ -91,6 +91,14 @@ RSpec.feature "Admin checks a claim" do
       click_on "Complete employment check and continue"
 
       expect(page).to have_content("Claim decision")
+
+      choose "Approve"
+      fill_in "Decision notes", with: "All checks passed!"
+      click_on "Confirm decision"
+
+      expect(page).to have_content("Claim has been approved successfully")
+      expect(claim.decision).to be_approved
+      expect(claim.decision.created_by).to eq(user)
     end
 
     scenario "User can see completed checks" do
