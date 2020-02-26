@@ -11,7 +11,7 @@ RSpec.feature "Admin checks a claim" do
     scenario "User can approve a claim" do
       freeze_time do
         stub_geckoboard_dataset_update
-        submitted_claims = create_list(:claim, 5, :submitted)
+        submitted_claims = create_list(:claim, 5, :submitted, policy: StudentLoans)
         claim_to_approve = submitted_claims.first
 
         click_on "View claims"
@@ -69,10 +69,10 @@ RSpec.feature "Admin checks a claim" do
     end
 
     scenario "User can see checks for a claim" do
-      claim = create(:claim, :submitted)
-      visit admin_claim_path(claim)
+      claim = create(:claim, :submitted, policy: MathsAndPhysics)
 
-      click_on "View checks"
+      visit admin_claims_path
+      find("a[href='#{admin_claim_checks_path(claim)}']").click
 
       expect(page).to have_content("1. Qualifications")
       expect(page).to have_content("2. Employment")
