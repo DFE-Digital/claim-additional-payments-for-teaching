@@ -72,6 +72,10 @@ RSpec.describe ClaimMailer, type: :mailer do
         it "mentions that claim has been rejected in the subject and body" do
           expect(mail.subject).to include("rejected")
           expect(mail.body.encoded).to include("not been able to approve")
+
+          ineligible_year = (policy.first_eligible_qts_award_year - 1).to_s(:long)
+          expect(mail.body.encoded)
+            .to include("completed your initial teacher training in or before the academic year #{ineligible_year}")
         end
       end
 
