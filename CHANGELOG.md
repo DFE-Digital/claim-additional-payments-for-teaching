@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+## [Release 056] - 2020-02-25
+
 - Allow service operators to mark a check as completed
 - Update school eligibility to include City Technology Colleges
 - Service operators are taken straight to the tasks list when checking a Maths
@@ -464,7 +466,9 @@ The format is based on [Keep a Changelog]
 - First release for student loan repayments private beta
 
 [unreleased]:
-  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-055...HEAD
+  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-056...HEAD
+[release 056]:
+  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-055...release-056
 [release 055]:
   https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-054...release-055
 [release 054]:
