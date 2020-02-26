@@ -11,6 +11,7 @@ PolicyConfiguration.create!(policy_type: MathsAndPhysics, current_academic_year:
 
 if Rails.env.development? || ENV["ENVIRONMENT_NAME"] == "review"
   ENV["FIXTURES_PATH"] = "spec/fixtures"
+  ENV["FIXTURES"] = "local_authorities,local_authority_districts,schools"
   Rake::Task["db:fixtures:load"].invoke
 end
 
