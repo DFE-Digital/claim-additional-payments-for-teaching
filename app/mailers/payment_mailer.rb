@@ -17,7 +17,7 @@ class PaymentMailer < ApplicationMailer
 
   def confirmation_for_single_claim
     claim = @payment.claims.first
-    @claim_description = I18n.t("#{claim.policy.routing_name.underscore}.claim_description")
+    @claim_description = I18n.t("#{claim.policy.locale_key}.claim_description")
     @reference = claim.reference
     @policy = claim.policy
 

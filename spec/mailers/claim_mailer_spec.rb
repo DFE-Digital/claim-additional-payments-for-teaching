@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.shared_examples "an email related to a claim" do |policy|
-  let(:claim_description) { I18n.t("#{policy.routing_name.underscore}.claim_description") }
+  let(:claim_description) { I18n.t("#{policy.locale_key}.claim_description") }
 
   it "sets the to address to the claimant's email address" do
     expect(mail.to).to eq([claim.email_address])

@@ -30,7 +30,7 @@ RSpec.describe "Claims", type: :request do
         expect { start_claim(policy) }.to change { Claim.count }.by(1)
 
         claim = Claim.last
-        current_academic_year = policy_configurations(policy.routing_name.underscore).current_academic_year
+        current_academic_year = policy_configurations(policy.locale_key).current_academic_year
 
         expect(claim.eligibility).to be_kind_of(policy::Eligibility)
         expect(claim.academic_year).to eq(current_academic_year)
