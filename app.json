@@ -4,10 +4,10 @@
       "addons": ["heroku-postgresql:in-dyno"],
       "buildpacks": [{ "url": "heroku/nodejs" }, { "url": "heroku/ruby" }],
       "scripts": {
-        "postdeploy": "bundle exec rake db:schema:load db:fixtures:load"
+        "postdeploy": "bundle exec rake db:schema:load db:seed"
       },
       "env": {
-        "FIXTURES_PATH": "spec/fixtures"
+        "ENVIRONMENT_NAME": "review"
       }
     },
     "test": {
