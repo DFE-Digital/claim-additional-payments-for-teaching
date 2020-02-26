@@ -6,8 +6,8 @@
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
 
-PolicyConfiguration.create!(policy_type: StudentLoans, current_academic_year: "2018/2019")
-PolicyConfiguration.create!(policy_type: MathsAndPhysics, current_academic_year: "2018/2019")
+PolicyConfiguration.create!(policy_type: StudentLoans, current_academic_year: AcademicYear.current)
+PolicyConfiguration.create!(policy_type: MathsAndPhysics, current_academic_year: AcademicYear.current)
 
 if Rails.env.development? || ENV["ENVIRONMENT_NAME"] == "review"
   ENV["FIXTURES_PATH"] = "spec/fixtures"
