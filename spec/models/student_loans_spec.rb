@@ -17,5 +17,9 @@ RSpec.describe StudentLoans, type: :model do
       policy_configuration.update!(current_academic_year: "2023/2024")
       expect(StudentLoans.first_eligible_qts_award_year).to eq AcademicYear.new(2013)
     end
+
+    it "can return the AcademicYear based on a passed-in academic year" do
+      expect(StudentLoans.first_eligible_qts_award_year(AcademicYear.new(2030))).to eq AcademicYear.new(2019)
+    end
   end
 end

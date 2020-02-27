@@ -45,6 +45,7 @@ module MathsAndPhysics
       on_or_after_cut_off_date: 1,
     }, _prefix: :awarded_qualified_status
 
+    has_one :claim, as: :eligibility, inverse_of: :eligibility
     belongs_to :current_school, optional: true, class_name: "School"
 
     validates :teaching_maths_or_physics, on: [:"teaching-maths-or-physics", :submit], inclusion: {in: [true, false], message: "Select yes if you teach any maths or physics"}
@@ -60,6 +61,11 @@ module MathsAndPhysics
     validates :subject_to_formal_performance_action, on: [:"formal-performance-action", :submit], inclusion: {in: [true, false], message: "Select yes if you are subject to formal action for poor performance at work"}
 
     delegate :name, to: :current_school, prefix: true, allow_nil: true
+    delegate :academic_year, to: :claim, prefix: true
+
+    def policy
+      MathsAndPhysics
+    end
 
     def ineligible?
       not_teaching_maths_or_physics? ||
@@ -99,6 +105,15 @@ module MathsAndPhysics
 
     def initial_teacher_training_specialised_in_maths_or_physics?
       itt_subject_maths? || itt_subject_physics? || itt_specialism_physics?
+    end
+
+    # Returns a String that is the human-readable answer given for the QTS
+    # question when the claim was made.
+    def qts_award_year_answer
+      year_for_answer = MathsAndPhysics.first_eligible_qts_award_year(claim_academic_year)
+      year_for_answer -= 1 if awarded_qualified_status_before_cut_off_date?
+
+      I18n.t("answers.qts_award_years.#{qts_award_year}", year: year_for_answer.to_s(:long))
     end
 
     private

@@ -38,6 +38,7 @@ module StudentLoans
       no_school: 2,
     }, _prefix: :employed_at
 
+    has_one :claim, as: :eligibility, inverse_of: :eligibility
     belongs_to :claim_school, optional: true, class_name: "School"
     belongs_to :current_school, optional: true, class_name: "School"
 
@@ -53,6 +54,11 @@ module StudentLoans
 
     delegate :name, to: :claim_school, prefix: true, allow_nil: true
     delegate :name, to: :current_school, prefix: true, allow_nil: true
+    delegate :academic_year, to: :claim, prefix: true
+
+    def policy
+      StudentLoans
+    end
 
     def subjects_taught
       SUBJECT_ATTRIBUTES.select { |attribute_name| public_send("#{attribute_name}?") }
@@ -93,6 +99,15 @@ module StudentLoans
         end
       end
       self.current_school = inferred_current_school if employment_status_changed?
+    end
+
+    # Returns a String that is the human-readable answer given for the QTS
+    # question when the claim was made.
+    def qts_award_year_answer
+      year_for_answer = StudentLoans.first_eligible_qts_award_year(claim_academic_year)
+      year_for_answer -= 1 if awarded_qualified_status_before_cut_off_date?
+
+      I18n.t("answers.qts_award_years.#{qts_award_year}", year: year_for_answer.to_s(:long))
     end
 
     private

@@ -2,19 +2,29 @@ require "rails_helper"
 
 RSpec.describe StudentLoans::AdminChecksPresenter, type: :model do
   let(:school) { schools(:penistone_grammar_school) }
-  let(:eligibility) do
-    build(
-      :student_loans_eligibility,
-      qts_award_year: "on_or_after_cut_off_date",
-      claim_school: school,
-      current_school: school,
-    )
+  let(:eligibility) { claim.eligibility }
+  let(:claim) do
+    build(:claim,
+      academic_year: "2019/2020",
+      eligibility: build(
+        :student_loans_eligibility,
+        qts_award_year: "on_or_after_cut_off_date",
+        claim_school: school,
+        current_school: school,
+      ))
   end
-  subject(:presenter) { described_class.new(eligibility) }
+  subject(:presenter) { described_class.new(claim) }
 
   describe "#qualifications" do
     it "returns an array of label and values for displaying information for qualification checks" do
-      expect(presenter.qualifications).to eq [[I18n.t("admin.qts_award_year"), "In or after the academic year 2013 to 2014"]]
+      expect(presenter.qualifications).to eq [["Award year", "In or after the academic year 2013 to 2014"]]
+    end
+
+    it "sets the “Award year” value based on the academic year the claim was made in" do
+      claim.academic_year = "2030/2031"
+
+      expected_qts_answer = presenter.qualifications[0][1]
+      expect(expected_qts_answer).to eq "In or after the academic year 2019 to 2020"
     end
   end
 

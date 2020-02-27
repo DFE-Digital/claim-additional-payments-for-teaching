@@ -76,7 +76,7 @@ module MathsAndPhysics
     def qts_award_year
       [
         I18n.t("questions.qts_award_year"),
-        I18n.t("answers.qts_award_years.#{eligibility.qts_award_year}", year: qts_answer_academic_year.to_s(:long)),
+        eligibility.qts_award_year_answer,
         "qts-year",
       ]
     end
@@ -126,14 +126,6 @@ module MathsAndPhysics
       when "yes" then "Yes"
       when "no" then "No"
       else I18n.t("maths_and_physics.answers.has_uk_maths_or_physics_degree.#{eligibility.has_uk_maths_or_physics_degree}")
-      end
-    end
-
-    def qts_answer_academic_year
-      if eligibility.awarded_qualified_status_on_or_after_cut_off_date?
-        MathsAndPhysics.first_eligible_qts_award_year
-      else
-        MathsAndPhysics.first_eligible_qts_award_year - 1
       end
     end
   end

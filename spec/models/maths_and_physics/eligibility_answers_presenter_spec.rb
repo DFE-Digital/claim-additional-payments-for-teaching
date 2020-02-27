@@ -1,16 +1,20 @@
 require "rails_helper"
 
 RSpec.describe MathsAndPhysics::EligibilityAnswersPresenter do
-  let(:eligibility) do
-    build(:maths_and_physics_eligibility,
+  let(:eligibility_attributes) do
+    {
       teaching_maths_or_physics: true,
       current_school: schools(:penistone_grammar_school),
       initial_teacher_training_subject: :maths,
       qts_award_year: "on_or_after_cut_off_date",
       employed_as_supply_teacher: false,
       subject_to_disciplinary_action: false,
-      subject_to_formal_performance_action: false)
+      subject_to_formal_performance_action: false,
+    }
   end
+  let(:eligibility) { claim.eligibility }
+  let(:claim) { build(:claim, eligibility: build(:maths_and_physics_eligibility, eligibility_attributes)) }
+
   subject(:presenter) { described_class.new(eligibility) }
 
   it "returns an array of questions and answers to be presented to the user for checking" do
@@ -27,19 +31,19 @@ RSpec.describe MathsAndPhysics::EligibilityAnswersPresenter do
     expect(presenter.answers).to eq(expected_answers)
   end
 
-  it "changes the answer for the QTS question based on the answer and the configured academic year" do
-    policy_configurations(:maths_and_physics).update!(current_academic_year: "2021/2022")
+  it "changes the answer for the QTS question based on the answer and the claim's academic year" do
+    claim.academic_year = "2021/2022"
     qts_answer = presenter.answers[3][1]
     expect(qts_answer).to eq("In or after the academic year 2016 to 2017")
 
-    presenter.eligibility.qts_award_year = :before_cut_off_date
+    eligibility.qts_award_year = :before_cut_off_date
     qts_answer = presenter.answers[3][1]
     expect(qts_answer).to eq("In or before the academic year 2015 to 2016")
   end
 
   context "initial teacher training subject not in a science" do
-    let(:eligibility) do
-      build(:maths_and_physics_eligibility,
+    let(:eligibility_attributes) do
+      {
         teaching_maths_or_physics: true,
         current_school: schools(:penistone_grammar_school),
         initial_teacher_training_subject: :none_of_the_subjects,
@@ -47,7 +51,8 @@ RSpec.describe MathsAndPhysics::EligibilityAnswersPresenter do
         qts_award_year: "on_or_after_cut_off_date",
         employed_as_supply_teacher: false,
         subject_to_disciplinary_action: false,
-        subject_to_formal_performance_action: false)
+        subject_to_formal_performance_action: false,
+      }
     end
 
     it "includes the specialism and degree in the questions and answers" do
@@ -67,8 +72,8 @@ RSpec.describe MathsAndPhysics::EligibilityAnswersPresenter do
   end
 
   context "initial teacher training subject specialism and degree questions answered" do
-    let(:eligibility) do
-      build(:maths_and_physics_eligibility,
+    let(:eligibility_attributes) do
+      {
         teaching_maths_or_physics: true,
         current_school: schools(:penistone_grammar_school),
         initial_teacher_training_subject: :science,
@@ -77,7 +82,8 @@ RSpec.describe MathsAndPhysics::EligibilityAnswersPresenter do
         qts_award_year: "on_or_after_cut_off_date",
         employed_as_supply_teacher: false,
         subject_to_disciplinary_action: false,
-        subject_to_formal_performance_action: false)
+        subject_to_formal_performance_action: false,
+      }
     end
 
     it "includes the specialism and degree in the questions and answers" do
@@ -98,8 +104,8 @@ RSpec.describe MathsAndPhysics::EligibilityAnswersPresenter do
   end
 
   context "employed as supply teacher" do
-    let(:eligibility) do
-      build(:maths_and_physics_eligibility,
+    let(:eligibility_attributes) do
+      {
         teaching_maths_or_physics: true,
         current_school: schools(:penistone_grammar_school),
         initial_teacher_training_subject: :physics,
@@ -109,7 +115,8 @@ RSpec.describe MathsAndPhysics::EligibilityAnswersPresenter do
         has_entire_term_contract: true,
         employed_directly: true,
         subject_to_disciplinary_action: false,
-        subject_to_formal_performance_action: false)
+        subject_to_formal_performance_action: false,
+      }
     end
 
     it "includes supply teacher questions" do

@@ -1,16 +1,18 @@
 module StudentLoans
+  # Used to display the information a claim checker needs to check to either
+  # approve or reject a claim.
   class AdminChecksPresenter
     include Admin::PresenterMethods
 
-    attr_reader :eligibility
+    attr_reader :claim
 
-    def initialize(eligibility)
-      @eligibility = eligibility
+    def initialize(claim)
+      @claim = claim
     end
 
     def qualifications
       [
-        ["Award year", I18n.t("student_loans.questions.qts_award_years.#{eligibility.qts_award_year}")],
+        ["Award year", eligibility.qts_award_year_answer],
       ]
     end
 
@@ -19,6 +21,12 @@ module StudentLoans
         ["6 April 2018 to 5 April 2019", display_school(eligibility.claim_school)],
         [I18n.t("admin.current_school"), display_school(eligibility.current_school)],
       ]
+    end
+
+    private
+
+    def eligibility
+      claim.eligibility
     end
   end
 end

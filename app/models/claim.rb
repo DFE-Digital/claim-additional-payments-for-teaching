@@ -71,6 +71,9 @@ class Claim < ApplicationRecord
     "student_loan_courses" => "student_loan_start_date",
   }.freeze
 
+  # Use AcademicYear as custom ActiveRecord attribute type
+  attribute :academic_year, AcademicYear::Type.new
+
   enum student_loan_country: StudentLoan::COUNTRIES
   enum student_loan_start_date: StudentLoan::COURSE_START_DATES
   enum student_loan_courses: {one_course: 0, two_or_more_courses: 1}
@@ -79,7 +82,7 @@ class Claim < ApplicationRecord
   has_one :decision
   has_many :checks
 
-  belongs_to :eligibility, polymorphic: true, dependent: :destroy
+  belongs_to :eligibility, polymorphic: true, inverse_of: :claim, dependent: :destroy
   accepts_nested_attributes_for :eligibility, update_only: true
 
   belongs_to :payment, optional: true
@@ -90,7 +93,7 @@ class Claim < ApplicationRecord
     male: 2,
   }
 
-  validates :academic_year, format: {with: PolicyConfiguration::ACADEMIC_YEAR_REGEXP}
+  validates :academic_year_before_type_cast, format: {with: PolicyConfiguration::ACADEMIC_YEAR_REGEXP}
 
   validates :payroll_gender, on: [:gender, :submit], presence: {message: "Choose the option for the gender your school’s payroll system associates with you"}
 
@@ -255,7 +258,7 @@ class Claim < ApplicationRecord
   end
 
   def policy
-    eligibility&.class&.module_parent
+    eligibility&.policy
   end
 
   def school

@@ -2,19 +2,22 @@ require "rails_helper"
 
 RSpec.describe MathsAndPhysics::EligibilityAdminAnswersPresenter, type: :model do
   let(:school) { schools(:penistone_grammar_school) }
-  let(:eligibility) do
-    build(:maths_and_physics_eligibility,
-      teaching_maths_or_physics: true,
-      current_school: school,
-      initial_teacher_training_subject: :maths,
-      initial_teacher_training_subject_specialism: :not_sure,
-      qts_award_year: "on_or_after_cut_off_date",
-      has_uk_maths_or_physics_degree: "has_non_uk",
-      employed_as_supply_teacher: true,
-      has_entire_term_contract: true,
-      employed_directly: true,
-      subject_to_disciplinary_action: true,
-      subject_to_formal_performance_action: true)
+  let(:eligibility) { claim.eligibility }
+  let(:claim) do
+    build(:claim,
+      academic_year: "2019/2020",
+      eligibility: build(:maths_and_physics_eligibility,
+        teaching_maths_or_physics: true,
+        current_school: school,
+        initial_teacher_training_subject: :maths,
+        initial_teacher_training_subject_specialism: :not_sure,
+        qts_award_year: "on_or_after_cut_off_date",
+        has_uk_maths_or_physics_degree: "has_non_uk",
+        employed_as_supply_teacher: true,
+        has_entire_term_contract: true,
+        employed_directly: true,
+        subject_to_disciplinary_action: true,
+        subject_to_formal_performance_action: true))
   end
   subject(:presenter) { described_class.new(eligibility) }
 
@@ -35,6 +38,13 @@ RSpec.describe MathsAndPhysics::EligibilityAdminAnswersPresenter, type: :model d
       ]
 
       expect(presenter.answers).to eq expected_answers
+    end
+
+    it "changes the answer for the QTS question based on the answer academic year the claim was made" do
+      claim.academic_year = "2021/2022"
+
+      expected_qts_answer = presenter.answers[5][1]
+      expect(expected_qts_answer).to eq("In or after the academic year 2016 to 2017")
     end
 
     it "excludes questions skipped from the flow" do

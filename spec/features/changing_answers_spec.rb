@@ -29,13 +29,13 @@ RSpec.feature "Changing the answers on a submittable claim" do
 
     expect(find("#claim_eligibility_attributes_qts_award_year_on_or_after_cut_off_date").checked?).to eq(true)
 
-    choose I18n.t("student_loans.questions.qts_award_years.before_cut_off_date")
+    choose_qts_year :before_cut_off_date
     click_on "Continue"
 
     expect(claim.eligibility.reload.qts_award_year).to eq("before_cut_off_date")
 
     expect(page).to have_text("You’re not eligible")
-    expect(page).to have_text("You can only get this payment if you completed your initial teacher training in or after the academic year 2013 to 2014.")
+    expect(page).to have_text("You can only get this payment if you completed your initial teacher training in or after the academic year #{StudentLoans.first_eligible_qts_award_year.to_s(:long)}.")
   end
 
   scenario "Teacher changes an answer which is a dependency of some of the subsequent answers they’ve given, remaining eligible" do

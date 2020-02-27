@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "academic_year"
-
 # Module namespace specific to the policy for claiming a payment for teaching
 # maths or physics.
 #
@@ -11,6 +9,8 @@ require "academic_year"
 # defined by `MathsAndPhysics.eligibility_page_url`.
 module MathsAndPhysics
   extend self
+
+  ELIGIBLE_CAREER_LENGTH = 5
 
   def start_page_url
     if Rails.env.production?
@@ -51,8 +51,9 @@ module MathsAndPhysics
   #
   # Maths & Physics teachers are eligible to claim if they are in the first five
   # years of their career.
-  def first_eligible_qts_award_year
-    AcademicYear.new(configuration.current_academic_year) - 5
+  def first_eligible_qts_award_year(claim_year = nil)
+    claim_year ||= configuration.current_academic_year
+    claim_year - ELIGIBLE_CAREER_LENGTH
   end
 
   def configuration

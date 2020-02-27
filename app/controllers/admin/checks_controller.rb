@@ -8,7 +8,7 @@ class Admin::ChecksController < Admin::BaseAdminController
   end
 
   def show
-    @eligibility_checks = @claim.policy::AdminChecksPresenter.new(@claim.eligibility)
+    @claim_checks = @claim.policy::AdminChecksPresenter.new(@claim)
     @check = @claim.checks.find_by(name: current_check)
     render current_check
   end

@@ -11,5 +11,9 @@ RSpec.describe MathsAndPhysics, type: :model do
       policy_configuration.update!(current_academic_year: "2025/2026")
       expect(MathsAndPhysics.first_eligible_qts_award_year).to eq AcademicYear.new(2020)
     end
+
+    it "can return the AcademicYear based on a passed-in academic year" do
+      expect(MathsAndPhysics.first_eligible_qts_award_year(AcademicYear.new(2021))).to eq AcademicYear.new(2016)
+    end
   end
 end

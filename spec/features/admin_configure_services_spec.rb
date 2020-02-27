@@ -82,7 +82,7 @@ RSpec.feature "Service configuration" do
         expect(page).to have_content("2023/2024")
       end
 
-      expect(policy_configuration.reload.current_academic_year).to eq "2023/2024"
+      expect(policy_configuration.reload.current_academic_year).to eq AcademicYear.new(2023)
     end
   end
 end

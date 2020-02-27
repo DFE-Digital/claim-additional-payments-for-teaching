@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "academic_year"
-
 # Module namespace specific to the policy for claiming back your student loan
 # payments.
 #
@@ -11,6 +9,9 @@ require "academic_year"
 # defined by `StudentLoans.eligibility_page_url`.
 module StudentLoans
   extend self
+
+  POLICY_START_YEAR = AcademicYear.new(2013).freeze
+  ACADEMIC_YEARS_QUALIFIED_TEACHERS_CAN_CLAIM_FOR = 11
 
   def start_page_url
     if Rails.env.production?
@@ -60,9 +61,12 @@ module StudentLoans
   # So to give concrete examples, teachers qualifying in 2013/2014 can make
   # claims up to 2024/2025, and a teacher qualifying in 2014/2015 can make
   # claims up to 2025/2026 and so on.
-  def first_eligible_qts_award_year
-    eleven_years_prior = AcademicYear.new(configuration.current_academic_year) - 11
-    [AcademicYear.new(2013), eleven_years_prior].max
+  def first_eligible_qts_award_year(claim_year = nil)
+    claim_year ||= configuration.current_academic_year
+    [
+      POLICY_START_YEAR,
+      (claim_year - ACADEMIC_YEARS_QUALIFIED_TEACHERS_CAN_CLAIM_FOR),
+    ].max
   end
 
   def configuration

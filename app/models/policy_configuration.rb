@@ -12,8 +12,11 @@
 class PolicyConfiguration < ApplicationRecord
   ACADEMIC_YEAR_REGEXP = /\A20\d{2}\/20\d{2}\z/.freeze
 
+  # Use AcademicYear as custom ActiveRecord attribute type
+  attribute :current_academic_year, AcademicYear::Type.new
+
   validates :policy_type, inclusion: {in: Policies.all.map(&:name)}
-  validates :current_academic_year, format: {with: ACADEMIC_YEAR_REGEXP}
+  validates :current_academic_year_before_type_cast, format: {with: ACADEMIC_YEAR_REGEXP}
 
   def self.for(policy)
     find_by policy_type: policy.name
