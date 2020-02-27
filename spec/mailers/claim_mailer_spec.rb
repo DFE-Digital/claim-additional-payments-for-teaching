@@ -100,4 +100,15 @@ RSpec.describe ClaimMailer, type: :mailer do
       end
     end
   end
+
+  context "with a StudentLoans claim" do
+    describe "#rejected" do
+      let(:claim) { build(:claim, :submitted, policy: StudentLoans) }
+      let(:mail) { ClaimMailer.rejected(claim) }
+
+      it "mentions “the eligible-school during the financial year” reason" do
+        expect(mail.body.encoded).to include("you did not teach at an eligible school between 6 April 2018 and 5 April 2019")
+      end
+    end
+  end
 end

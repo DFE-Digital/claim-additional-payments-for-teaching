@@ -181,7 +181,7 @@ en:
     award_description: "claim payment"
     possible_rejection_reasons: |
       * you completed your initial teacher training in or before the academic year %{qts_year}
-      * you did not teach at an eligible school during the financial year 2018 to 2019
+      * you did not teach at an eligible school between 6 April 2018 and 5 April 2019
       * you are not currently employed to teach at a state-funded secondary school
       * you did not teach an eligible subject for at least half of your contracted hours
     support_email_address: "studentloanteacherpayment@digital.education.gov.uk"
