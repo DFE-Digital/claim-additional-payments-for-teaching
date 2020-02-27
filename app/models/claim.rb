@@ -292,6 +292,10 @@ class Claim < ApplicationRecord
     submitted? && !decision&.rejected? && !payrolled? && !personal_data_removed?
   end
 
+  def decision_undoable?
+    decision_made? && !payrolled? && !personal_data_removed?
+  end
+
   private
 
   def normalise_trn

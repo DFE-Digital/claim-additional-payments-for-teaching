@@ -789,4 +789,38 @@ RSpec.describe Claim, type: :model do
       expect(claim.decision_made?).to eq(true)
     end
   end
+
+  describe "#decision_undoable?" do
+    it "returns false for a claim that hasn’t been submitted" do
+      claim = create(:claim, :submittable)
+      expect(claim.decision_undoable?).to eq(false)
+    end
+
+    it "returns false for a submitted but undecided claim" do
+      claim = create(:claim, :submitted)
+      expect(claim.decision_undoable?).to eq(false)
+    end
+
+    it "returns true for a rejected claim" do
+      claim = create(:claim, :rejected)
+      expect(claim.decision_undoable?).to eq(true)
+    end
+
+    it "returns true for an approved claim that isn’t payrolled" do
+      claim = create(:claim, :approved)
+      expect(claim.decision_undoable?).to eq(true)
+    end
+
+    it "returns false for a payrolled claim" do
+      claim = create(:claim, :approved)
+      create(:payment, claims: [claim])
+
+      expect(claim.decision_undoable?).to eq(false)
+    end
+
+    it "returns false for a claim that’s had its personal data removed" do
+      claim = create(:claim, :personal_data_removed)
+      expect(claim.decision_undoable?).to eq(false)
+    end
+  end
 end
