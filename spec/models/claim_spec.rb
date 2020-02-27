@@ -555,6 +555,18 @@ RSpec.describe Claim, type: :model do
     end
   end
 
+  describe "#personal_data_removed?" do
+    it "returns false if a claim has not had its personal data removed" do
+      claim = create(:claim, :approved)
+      expect(claim.personal_data_removed?).to eq false
+    end
+
+    it "returns true if a claim has the time personal data was removed recorded" do
+      claim = create(:claim, :approved, personal_data_removed_at: Time.zone.now)
+      expect(claim.personal_data_removed?).to eq true
+    end
+  end
+
   describe "#full_name" do
     it "joins the first name and surname together" do
       expect(Claim.new(first_name: "Isambard", surname: "Brunel").full_name).to eq "Isambard Brunel"
