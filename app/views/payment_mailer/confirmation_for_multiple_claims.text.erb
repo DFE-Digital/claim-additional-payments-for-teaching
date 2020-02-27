@@ -2,7 +2,7 @@ Dear <%= @display_name %>,
 
 We’re paying:
 <% @payment.claims.each do |claim| %>
-* your claim <%= I18n.t("#{claim.policy.routing_name.underscore}.claim_description") %>, reference: <%= claim.reference %>
+* your claim <%= I18n.t("#{claim.policy.locale_key}.claim_description") %>, reference: <%= claim.reference %>
 <% end %>
 
 ^ You will receive <%=number_to_currency(@payment.net_pay) %> on or after <%= l(@payment_date) %>.
@@ -14,7 +14,7 @@ We’re paying:
 This payment is treated as pay and is therefore subject to a student loan contribution, if applicable.
 
 <% @payment.claims.each do |claim| %>
-* <%= I18n.t("#{claim.policy.routing_name.underscore}.claim_amount_description") %>: <%= number_to_currency(claim.award_amount) %>
+* <%= I18n.t("#{claim.policy.locale_key}.claim_amount_description") %>: <%= number_to_currency(claim.award_amount) %>
 <% end %>
 * Student loan contribution: <%= number_to_currency(@payment.student_loan_repayment) %>
 * Payment you receive: <%= number_to_currency(@payment.net_pay) %>
@@ -34,7 +34,7 @@ The Gross amount is comprised of the payment you receive, your student loan cont
 # Breakdown of payment
 
 <% @payment.claims.each do |claim| %>
-* <%= I18n.t("#{claim.policy.routing_name.underscore}.claim_amount_description") %>: <%= number_to_currency(claim.award_amount) %>
+* <%= I18n.t("#{claim.policy.locale_key}.claim_amount_description") %>: <%= number_to_currency(claim.award_amount) %>
 <% end %>
 * Payment you receive: <%= number_to_currency(@payment.net_pay) %>
 
@@ -55,7 +55,7 @@ You may also see ‘Teaching payments DfE retention scheme’ listed as the seco
 # Contact us
 
 <% @payment.claims.each do |claim| %>
-If you have any questions about your <%= I18n.t("#{claim.policy.routing_name.underscore}.claim_description") %>, email <%= support_email_address(claim.policy.routing_name) %> giving your reference: <%= claim.reference %>.
+If you have any questions about your <%= I18n.t("#{claim.policy.locale_key}.claim_description") %>, email <%= support_email_address(claim.policy.routing_name) %> giving your reference: <%= claim.reference %>.
 <% end %>
 
 ----

@@ -18,7 +18,7 @@ RSpec.describe PaymentMailer, type: :mailer do
         end
 
         it "mentions the type of claim in the subject and body" do
-          claim_description = I18n.t("#{policy.routing_name.underscore}.claim_description")
+          claim_description = I18n.t("#{policy.locale_key}.claim_description")
           expect(mail.subject).to include(claim_description)
           expect(mail.body.encoded).to include(claim_description)
         end
@@ -101,8 +101,8 @@ RSpec.describe PaymentMailer, type: :mailer do
       end
 
       it "mentions the type of claim in the body" do
-        expect(mail.body.encoded).to include(I18n.t("#{claims[0].policy.routing_name.underscore}.claim_description"))
-        expect(mail.body.encoded).to include(I18n.t("#{claims[1].policy.routing_name.underscore}.claim_description"))
+        expect(mail.body.encoded).to include(I18n.t("#{claims[0].policy.locale_key}.claim_description"))
+        expect(mail.body.encoded).to include(I18n.t("#{claims[1].policy.locale_key}.claim_description"))
       end
 
       it "includes the claims' references in the body" do

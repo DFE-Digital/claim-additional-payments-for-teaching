@@ -13,7 +13,7 @@ class ClaimMailer < ApplicationMailer
 
   def rejected(claim)
     @claim_description = claim_description(claim)
-    @possible_rejection_reasons = I18n.t("#{claim.policy.routing_name.underscore}.possible_rejection_reasons", qts_year: ineligible_qts_year(claim))
+    @possible_rejection_reasons = I18n.t("#{claim.policy.locale_key}.possible_rejection_reasons", qts_year: ineligible_qts_year(claim))
     view_mail_with_claim_and_subject(claim, "Your claim #{@claim_description} has been rejected, reference number: #{claim.reference}")
   end
 
@@ -25,7 +25,7 @@ class ClaimMailer < ApplicationMailer
   private
 
   def claim_description(claim)
-    I18n.t("#{claim.policy.routing_name.underscore}.claim_description")
+    I18n.t("#{claim.policy.locale_key}.claim_description")
   end
 
   def ineligible_qts_year(claim)

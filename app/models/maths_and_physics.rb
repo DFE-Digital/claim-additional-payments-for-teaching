@@ -28,6 +28,10 @@ module MathsAndPhysics
     "maths-and-physics"
   end
 
+  def locale_key
+    routing_name.underscore
+  end
+
   def notify_reply_to_id
     "29493350-ceec-4142-bd29-34ee363d5f62"
   end

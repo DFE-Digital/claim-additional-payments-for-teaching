@@ -28,6 +28,10 @@ module StudentLoans
     "student-loans"
   end
 
+  def locale_key
+    routing_name.underscore
+  end
+
   def notify_reply_to_id
     "962b3044-cdd4-4dbe-b6ea-c461530b3dc6"
   end
