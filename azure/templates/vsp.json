@@ -94,7 +94,6 @@
         "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', parameters('appServicePlanName'))]",
         "siteConfig": {
           "alwaysOn": "[parameters('appServiceAlwaysOn')]",
-          "linuxFxVersion": "[parameters('appServiceRuntimeStack')]",
           "appSettings": "[parameters('appServiceEnvironmentVariables')]",
           "copy": [
             {
