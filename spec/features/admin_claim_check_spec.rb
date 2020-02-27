@@ -22,7 +22,7 @@ RSpec.feature "Admin checks a claim" do
         find("a[href='#{admin_claim_path(claim_to_approve)}']").click
         choose "Approve"
         fill_in "Decision notes", with: "Everything matches"
-        perform_enqueued_jobs { click_on "Submit" }
+        perform_enqueued_jobs { click_on "Confirm decision" }
 
         expect(claim_to_approve.decision.created_by).to eq(user)
         expect(claim_to_approve.decision.notes).to eq("Everything matches")
@@ -53,7 +53,7 @@ RSpec.feature "Admin checks a claim" do
       find("a[href='#{admin_claim_path(claim_to_reject)}']").click
       choose "Reject"
       fill_in "Decision notes", with: "TRN doesn't exist"
-      perform_enqueued_jobs { click_on "Submit" }
+      perform_enqueued_jobs { click_on "Confirm decision" }
 
       expect(claim_to_reject.decision.created_by).to eq(user)
       expect(claim_to_reject.decision.notes).to eq("TRN doesn't exist")
@@ -121,7 +121,7 @@ RSpec.feature "Admin checks a claim" do
       claim_with_decision = create(:claim, :submitted, decision: build(:decision, result: :approved, notes: "Everything matches"))
       visit admin_claim_path(claim_with_decision)
 
-      expect(page).not_to have_button("Submit")
+      expect(page).not_to have_button("Confirm decision")
       expect(page).to have_content("Claim decision")
       expect(page).to have_content("Approved")
       expect(page).to have_content(claim_with_decision.decision.notes)
@@ -201,7 +201,7 @@ RSpec.feature "Admin checks a claim" do
 
         choose "Approve"
         fill_in "Decision notes", with: "Identity confirmed via phone call"
-        click_on "Submit"
+        click_on "Confirm decision"
 
         expect(claim_without_identity_confirmation.decision.created_by).to eq(user)
         expect(claim_without_identity_confirmation.decision.notes).to eq("Identity confirmed via phone call")
