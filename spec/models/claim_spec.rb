@@ -567,6 +567,44 @@ RSpec.describe Claim, type: :model do
     end
   end
 
+  describe "#payrolled?" do
+    it "returns false if a claim has not been added to payroll" do
+      claim = create(:claim, :approved)
+      expect(claim.payrolled?).to eq false
+    end
+
+    it "returns true if a claim has been added to payroll but is not yet paid" do
+      claim = create(:claim, :approved)
+      create(:payment, claims: [claim])
+      expect(claim.payrolled?).to eq true
+    end
+
+    it "returns true if a claim has been scheduled for payment" do
+      claim = create(:claim, :approved)
+      create(:payment, :with_figures, claims: [claim])
+      expect(claim.payrolled?).to eq true
+    end
+  end
+
+  describe "#scheduled_for_payment?" do
+    it "returns false if a claim has not been added to payroll" do
+      claim = create(:claim, :approved)
+      expect(claim.scheduled_for_payment?).to eq false
+    end
+
+    it "returns false if a claim has been added to payroll but is not yet paid" do
+      claim = create(:claim, :approved)
+      create(:payment, claims: [claim])
+      expect(claim.scheduled_for_payment?).to eq false
+    end
+
+    it "returns true if a claim has been scheduled for payment" do
+      claim = create(:claim, :approved)
+      create(:payment, :with_figures, claims: [claim])
+      expect(claim.scheduled_for_payment?).to eq true
+    end
+  end
+
   describe "#full_name" do
     it "joins the first name and surname together" do
       expect(Claim.new(first_name: "Isambard", surname: "Brunel").full_name).to eq "Isambard Brunel"

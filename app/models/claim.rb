@@ -257,6 +257,14 @@ class Claim < ApplicationRecord
     personal_data_removed_at.present?
   end
 
+  def payrolled?
+    payment.present?
+  end
+
+  def scheduled_for_payment?
+    scheduled_payment_date.present?
+  end
+
   def full_name
     [first_name, middle_name, surname].compact.join(" ")
   end
@@ -281,7 +289,7 @@ class Claim < ApplicationRecord
   end
 
   def amendable?
-    submitted? && !decision&.rejected? && !payment && !personal_data_removed?
+    submitted? && !decision&.rejected? && !payrolled? && !personal_data_removed?
   end
 
   private

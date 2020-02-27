@@ -46,7 +46,7 @@ class Claim
           check: claim.decision.present? ? claim.decision.result : "unchecked",
           checked_at: claim.decision.present? ? claim.decision.created_at : placeholder_date_for_nil_value,
           number_of_days_to_check: claim.decision&.number_of_days_since_claim_submitted,
-          paid: claim.scheduled_payment_date.present?.to_s,
+          paid: claim.scheduled_for_payment?.to_s,
           paid_at: claim.scheduled_payment_date.presence || placeholder_date_for_nil_value,
           award_amount: claim.eligibility.present? ? (claim.award_amount * 100).to_i : nil # Geckoboard expects currency as an integer of pence - see https://api-docs.geckoboard.com/#money-format
         }

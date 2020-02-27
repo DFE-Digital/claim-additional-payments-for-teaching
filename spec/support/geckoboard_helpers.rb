@@ -92,9 +92,9 @@ module GeckoboardHelpers
         "check" => claim.decision.present? ? claim.decision.result : "unchecked",
         "checked_at" => (claim.decision.present? ? claim.decision.created_at : DateTime.parse("1970-01-01")).strftime("%Y-%m-%dT%H:%M:%S%:z"),
         "number_of_days_to_check" => claim.decision&.number_of_days_since_claim_submitted,
-        "paid" => claim.payment.present?.to_s,
-        "paid_at" => (claim.payment.present? ? claim.scheduled_payment_date : DateTime.parse("1970-01-01")).strftime("%Y-%m-%dT%H:%M:%S%:z"),
-        "award_amount" => claim.eligibility.present? ? (claim.award_amount * 100).to_i : nil
+        "award_amount" => claim.eligibility.present? ? (claim.award_amount * 100).to_i : nil,
+        "paid" => claim.scheduled_for_payment?.to_s,
+        "paid_at" => (claim.scheduled_for_payment? ? claim.scheduled_payment_date : DateTime.parse("1970-01-01")).strftime("%Y-%m-%dT%H:%M:%S%:z")
       }
     }.sort_by { |d| d["reference"] }
 
