@@ -6,9 +6,9 @@ RSpec.describe "Admin Payment Confirmation Report upload" do
   let!(:dataset_post_stub) { stub_geckoboard_dataset_update("claims.test") }
 
   context "when signed in as a service operator" do
-    let(:admin_session_id) { "some_user_id" }
+    let(:admin) { create(:dfe_signin_user) }
     before do
-      sign_in_to_admin_with_role(DfeSignIn::User::SERVICE_OPERATOR_DFE_SIGN_IN_ROLE_CODE, admin_session_id)
+      sign_in_to_admin_with_role(DfeSignIn::User::SERVICE_OPERATOR_DFE_SIGN_IN_ROLE_CODE, admin.dfe_sign_in_id)
     end
 
     describe "payment_confirmation_report_uploads#new" do
@@ -42,7 +42,7 @@ RSpec.describe "Admin Payment Confirmation Report upload" do
           expect(payroll_run.payments[0].reload.payroll_reference).to eq("DFE00001")
           expect(payroll_run.payments[1].reload.payroll_reference).to eq("DFE00002")
 
-          expect(payroll_run.reload.confirmation_report_uploaded_by).to eq(admin_session_id)
+          expect(payroll_run.reload.confirmation_report_uploaded_by).to eq(admin)
 
           expect(ActionMailer::Base.deliveries.count).to eq(2)
 

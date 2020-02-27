@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_02_19_154337) do
+ActiveRecord::Schema.define(version: 2020_02_27_160303) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -163,6 +163,8 @@ ActiveRecord::Schema.define(version: 2020_02_19_154337) do
     t.uuid "created_by_id"
     t.uuid "downloaded_by_id"
     t.date "scheduled_payment_date"
+    t.uuid "confirmation_report_uploaded_by_id"
+    t.index ["confirmation_report_uploaded_by_id"], name: "index_payroll_runs_on_confirmation_report_uploaded_by_id"
     t.index ["created_at"], name: "index_payroll_runs_on_created_at"
     t.index ["created_by_id"], name: "index_payroll_runs_on_created_by_id"
     t.index ["downloaded_by_id"], name: "index_payroll_runs_on_downloaded_by_id"
@@ -232,6 +234,7 @@ ActiveRecord::Schema.define(version: 2020_02_19_154337) do
   add_foreign_key "decisions", "dfe_sign_in_users", column: "created_by_id"
   add_foreign_key "maths_and_physics_eligibilities", "schools", column: "current_school_id"
   add_foreign_key "payments", "payroll_runs"
+  add_foreign_key "payroll_runs", "dfe_sign_in_users", column: "confirmation_report_uploaded_by_id"
   add_foreign_key "payroll_runs", "dfe_sign_in_users", column: "created_by_id"
   add_foreign_key "payroll_runs", "dfe_sign_in_users", column: "downloaded_by_id"
   add_foreign_key "schools", "local_authority_districts"

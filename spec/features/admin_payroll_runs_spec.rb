@@ -123,7 +123,7 @@ RSpec.feature "Payroll" do
   end
 
   scenario "Service operator can upload a Payment Confirmation Report against a payroll run" do
-    sign_in_to_admin_with_role(DfeSignIn::User::SERVICE_OPERATOR_DFE_SIGN_IN_ROLE_CODE, "uploader-user-id")
+    sign_in_to_admin_with_role(DfeSignIn::User::SERVICE_OPERATOR_DFE_SIGN_IN_ROLE_CODE, user.dfe_sign_in_id)
 
     payroll_run = create(:payroll_run, claims_counts: {StudentLoans => 2})
 
@@ -150,7 +150,7 @@ RSpec.feature "Payroll" do
 
     expect(page.find("table")).to have_content("Uploaded")
 
-    expect(payroll_run.reload.confirmation_report_uploaded_by).to eq("uploader-user-id")
+    expect(payroll_run.reload.confirmation_report_uploaded_by).to eq(user)
     expect(payroll_run.payments[0].reload.gross_value).to eq("487.48".to_d)
 
     expect(ActionMailer::Base.deliveries.count).to eq(2)
