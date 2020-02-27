@@ -200,7 +200,7 @@ class Claim < ApplicationRecord
   end
 
   def decision_made?
-    decision&.persisted?
+    decision.present? && decision.persisted?
   end
 
   def payroll_gender_missing?

@@ -767,4 +767,26 @@ RSpec.describe Claim, type: :model do
       expect(claim.amendable?).to eq(false)
     end
   end
+
+  describe "#decision_made?" do
+    it "returns false for a claim that hasn’t been submitted" do
+      claim = create(:claim, :submittable)
+      expect(claim.decision_made?).to eq(false)
+    end
+
+    it "returns false for a claim that has been submitted but not decided" do
+      claim = create(:claim, :submitted)
+      expect(claim.decision_made?).to eq(false)
+    end
+
+    it "returns true for a claim that has been approved" do
+      claim = create(:claim, :approved)
+      expect(claim.decision_made?).to eq(true)
+    end
+
+    it "returns true for a claim that has been rejected" do
+      claim = create(:claim, :rejected)
+      expect(claim.decision_made?).to eq(true)
+    end
+  end
 end
