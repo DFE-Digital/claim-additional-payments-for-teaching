@@ -233,6 +233,66 @@ RSpec.feature "Admin checks a claim" do
         end
       end
     end
+
+    context "when the service operator completes the last check" do
+      context "and the payroll gender is missing" do
+        let!(:claim) { create(:claim, :submitted, payroll_gender: :dont_know) }
+
+        scenario "User is informed that the claim cannot be approved" do
+          perform_last_check
+
+          expect(page).to have_field("Approve", disabled: true)
+          expect(page).to have_content(I18n.t("admin.unknown_payroll_gender_preventing_approval_message"))
+        end
+      end
+
+      context "and the claimant has another approved claim in the same payroll window, with inconsistent personal details" do
+        let(:personal_details) do
+          {
+            national_insurance_number: generate(:national_insurance_number),
+            teacher_reference_number: generate(:teacher_reference_number),
+            date_of_birth: 30.years.ago.to_date,
+            student_loan_plan: StudentLoan::PLAN_1,
+            email_address: "email@example.com",
+            bank_sort_code: "112233",
+            bank_account_number: "95928482",
+            building_society_roll_number: nil
+          }
+        end
+        let!(:approved_claim) { create(:claim, :approved, personal_details.merge(bank_sort_code: "112233", bank_account_number: "29482823")) }
+        let!(:claim) { create(:claim, :submitted, personal_details.merge(bank_sort_code: "582939", bank_account_number: "74727752")) }
+
+        scenario "User is informed that the claim cannot be approved" do
+          perform_last_check
+
+          expect(page).to have_field("Approve", disabled: true)
+          expect(page).to have_content("This claim cannot currently be approved because we’re already paying another claim (#{approved_claim.reference}) to this claimant in this payroll month using different payment details. Please speak to a Grade 7.")
+        end
+      end
+
+      context "and the claimant has not completed GOV.UK Verify" do
+        let!(:claim) { create(:claim, :unverified) }
+
+        scenario "the service operator is told the identity hasn't been confirmed and can approve the claim" do
+          perform_last_check
+
+          expect(page).to have_content("The claimant did not complete GOV.UK Verify")
+          expect(page).to have_content(claim.school.phone_number)
+
+          choose "Approve"
+          fill_in "Decision notes", with: "Identity confirmed via phone call"
+          click_on "Confirm decision"
+
+          expect(claim.decision.created_by).to eq(user)
+          expect(claim.decision.notes).to eq("Identity confirmed via phone call")
+        end
+      end
+
+      def perform_last_check
+        visit admin_claim_check_path(claim, check: Admin::ChecksController::CHECKS_SEQUENCE.last)
+        find("input[type='submit']").click
+      end
+    end
   end
 
   context "User is logged in as a payroll operator or a support user" do

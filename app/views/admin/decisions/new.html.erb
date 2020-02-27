@@ -1,9 +1,32 @@
 <div class="govuk-grid-row">
   <%= render("shared/error_summary", instance: @decision, errored_field_id_overrides: { "result": "decision_result_approved" }) if @decision.errors.any? %>
 
+  <%= render("admin/claims/info_panel_identity_unconfirmed", school: @claim.school) unless @claim.identity_confirmed? %>
+
   <%= render "admin/checks/claim_summary", claim: @claim %>
 
   <div class="govuk-grid-column-two-thirds">
+
+
+  <% if @claim.payroll_gender_missing? && !@claim.decision_made? %>
+    <div class="govuk-warning-text">
+      <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
+      <strong class="govuk-warning-text__text">
+        <span class="govuk-warning-text__assistive">Warning</span>
+        <%= t("admin.unknown_payroll_gender_preventing_approval_message") %>
+      </strong>
+    </div>
+  <% end %>
+
+  <% if @claims_preventing_payment.any? %>
+    <div class="govuk-warning-text">
+      <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
+      <strong class="govuk-warning-text__text">
+        <span class="govuk-warning-text__assistive">Warning</span>
+        <%= t('admin.claims_preventing_payment_message', count: @claims_preventing_payment.count, claim_references: @claims_preventing_payment.map(&:reference).to_sentence) %>
+      </strong>
+    </div>
+  <% end %>
 
   <%= form_for @decision, url: admin_claim_decisions_path(@claim), html: { id: "claim_decision_form" } do |form| %>
     <%= form_group_tag @decision do %>

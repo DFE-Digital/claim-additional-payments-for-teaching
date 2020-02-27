@@ -7,6 +7,7 @@ class Admin::DecisionsController < Admin::BaseAdminController
 
   def new
     @decision = Decision.new
+    @claims_preventing_payment = claims_preventing_payment_finder.claims_preventing_payment
   end
 
   def create
