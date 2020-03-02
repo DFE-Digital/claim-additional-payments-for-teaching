@@ -71,6 +71,37 @@ RSpec.describe "Admin claims", type: :request do
             expect(response.body).to include(claim_with_matching_attributes.reference)
           end
         end
+
+        context "when the claim is amendable" do
+          let(:claim) { create(:claim, :submitted) }
+
+          it "displays a link to amend the claim" do
+            get admin_claim_path(claim)
+
+            expect(response.body).to include("Amend claim")
+          end
+        end
+
+        context "when the claim is not amendable" do
+          let(:claim) { create(:claim, :rejected) }
+
+          it "does not display a link to amend the claim" do
+            get admin_claim_path(claim)
+
+            expect(response.body).not_to include("Amend claim")
+          end
+        end
+
+        context "when the claim has been amended" do
+          let(:claim) { create(:claim, :submitted, teacher_reference_number: "1234567") }
+          let!(:amendment) { create(:amendment, claim: claim, claim_changes: {"teacher_reference_number" => ["7654321", "1234567"]}) }
+
+          it "renders a timeline of changes" do
+            get admin_claim_path(claim)
+
+            expect(response.body).to include("changed from 7654321 to 1234567")
+          end
+        end
       end
     end
   end

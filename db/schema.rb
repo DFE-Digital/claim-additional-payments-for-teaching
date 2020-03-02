@@ -16,6 +16,20 @@ ActiveRecord::Schema.define(version: 2020_02_27_160303) do
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
 
+  create_table "amendments", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "claim_id"
+    t.text "notes"
+    t.string "claim_changes"
+    t.uuid "dfe_sign_in_users_id"
+    t.uuid "created_by_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "personal_data_removed_at"
+    t.index ["claim_id"], name: "index_amendments_on_claim_id"
+    t.index ["created_by_id"], name: "index_amendments_on_created_by_id"
+    t.index ["dfe_sign_in_users_id"], name: "index_amendments_on_dfe_sign_in_users_id"
+  end
+
   create_table "checks", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "name"
     t.uuid "claim_id"
@@ -228,6 +242,9 @@ ActiveRecord::Schema.define(version: 2020_02_27_160303) do
     t.index ["current_school_id"], name: "index_student_loans_eligibilities_on_current_school_id"
   end
 
+  add_foreign_key "amendments", "claims"
+  add_foreign_key "amendments", "dfe_sign_in_users", column: "created_by_id"
+  add_foreign_key "amendments", "dfe_sign_in_users", column: "dfe_sign_in_users_id"
   add_foreign_key "checks", "claims"
   add_foreign_key "checks", "dfe_sign_in_users", column: "created_by_id"
   add_foreign_key "claims", "payments"

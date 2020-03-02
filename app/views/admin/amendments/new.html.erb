@@ -1,0 +1,168 @@
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <span class="govuk-caption-xl"><%= @claim.policy.short_name %></span>
+    <h1 class="govuk-heading-xl">
+      Amend claim <%= @claim.reference %>
+    </h1>
+
+    <%=
+      if @amendment.errors.any?
+        render(
+          "shared/error_summary",
+          instance: @amendment,
+          errored_field_id_overrides: amendment_errored_field_id_overrides(@amendment)
+        )
+      end
+    %>
+  </div>
+</div>
+
+<%= form_with model: @amendment, url: admin_claim_amendments_path(@claim), html: { autocomplete: "off" } do |f| %>
+  <%= f.fields_for :claim, @amendment.claim do |claim_form| %>
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-one-third">
+        <%= form_group_tag(@amendment, :teacher_reference_number) do %>
+          <%= claim_form.label :teacher_reference_number, class: "govuk-label" %>
+          <%= errors_tag @amendment, :teacher_reference_number %>
+        <% end %>
+      </div>
+      <div class="govuk-grid-column-two-thirds">
+        <div class="govuk-form-group">
+          <%= claim_form.text_field :teacher_reference_number, class: "govuk-input govuk-input--width-10" %>
+        </div>
+      </div>
+    </div>
+
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-one-third">
+        <%= form_group_tag(@amendment, :payroll_gender) do %>
+          <%= claim_form.label :payroll_gender, class: "govuk-label" %>
+          <%= errors_tag @amendment, :payroll_gender %>
+        <% end %>
+      </div>
+      <div class="govuk-grid-column-two-thirds">
+        <div class="govuk-form-group">
+          <%= claim_form.select :payroll_gender, [["Female", :female], ["Male", :male], ["Don’t know", :dont_know]], {}, { class: "govuk-select" } %>
+        </div>
+      </div>
+    </div>
+
+    <div class="govuk-grid-row">
+      <fieldset class="govuk-fieldset">
+        <div class="govuk-grid-column-one-third">
+          <%= form_group_tag(@amendment, :date_of_birth) do %>
+            <legend class="govuk-fieldset__legend">
+              Date of birth
+            </legend>
+          <% end %>
+        </div>
+        <div class="govuk-grid-column-two-thirds">
+          <div class="govuk-form-group">
+            <div class="govuk-date-input">
+              <div class="govuk-date-input__item">
+                <div class="govuk-form-group">
+                  <%= label_tag :"amendment_claim_date_of_birth_3i", "Day", class: "govuk-label govuk-date-input__label" %>
+                  <%= text_field_tag :"amendment[claim][date_of_birth(3i)]", claim_form.object.date_of_birth.day, id: "amendment_claim_date_of_birth_3i", class: "govuk-input govuk-date-input__input govuk-input--width-2", type: "number", pattern: "[0-9]*" %>
+                </div>
+              </div>
+              <div class="govuk-date-input__item">
+                <div class="govuk-form-group">
+                  <%= label_tag :"amendment_claim_date_of_birth_2i", "Month", class: "govuk-label govuk-date-input__label" %>
+                  <%= text_field_tag :"amendment[claim][date_of_birth(2i)]", claim_form.object.date_of_birth.month, id: "amendment_claim_date_of_birth_2i", class: "govuk-input govuk-date-input__input govuk-input--width-2", type: "number", pattern: "[0-9]*" %>
+                </div>
+              </div>
+              <div class="govuk-date-input__item">
+                <div class="govuk-form-group">
+                  <%= label_tag :"amendment_claim_date_of_birth_1i", "Year", class: "govuk-label govuk-date-input__label" %>
+                  <%= text_field_tag :"amendment[claim][date_of_birth(1i)]", claim_form.object.date_of_birth.year, id: "amendment_claim_date_of_birth_1i", class: "govuk-input govuk-date-input__input govuk-input--width-4", type: "number", pattern: "[0-9]*" %>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </fieldset>
+    </div>
+
+    <div class="govuk-grid-row">
+      <div class="govuk-form-group">
+        <div class="govuk-grid-column-one-third">
+          <%= form_group_tag(@amendment, :student_loan_plan) do %>
+            <%= claim_form.label :student_loan_plan, "Student loan repayment plan", class: "govuk-label" %>
+            <%= errors_tag @amendment, :student_loan_plan %>
+          <% end %>
+        </div>
+        <div class="govuk-grid-column-two-thirds">
+          <div class="govuk-form-group">
+            <%= claim_form.select :student_loan_plan, Claim::STUDENT_LOAN_PLAN_OPTIONS.map { |option| [option.humanize, option] }, {}, { class: "govuk-select" } %>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-one-third">
+        <%= form_group_tag(@amendment, :bank_sort_code) do %>
+          <%= claim_form.label :bank_sort_code, class: "govuk-label" %>
+          <%= errors_tag @amendment, :bank_sort_code %>
+        <% end %>
+      </div>
+      <div class="govuk-grid-column-two-thirds">
+        <div class="govuk-form-group">
+          <%= claim_form.text_field :bank_sort_code, class: "govuk-input govuk-input--width-5" %>
+        </div>
+      </div>
+    </div>
+
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-one-third">
+        <%= form_group_tag(@amendment, :bank_account_number) do %>
+          <%= claim_form.label :bank_account_number, class: "govuk-label" %>
+          <%= errors_tag @amendment, :bank_account_number %>
+        <% end %>
+      </div>
+      <div class="govuk-grid-column-two-thirds">
+        <div class="govuk-form-group">
+          <%= claim_form.text_field :bank_account_number, class: "govuk-input govuk-input--width-10" %>
+        </div>
+      </div>
+    </div>
+
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-one-third">
+        <%= form_group_tag(@amendment, :building_society_roll_number) do %>
+          <%= claim_form.label :building_society_roll_number, class: "govuk-label" %>
+          <%= errors_tag @amendment, :building_society_roll_number %>
+        <% end %>
+      </div>
+      <div class="govuk-grid-column-two-thirds">
+        <div class="govuk-form-group">
+          <%= claim_form.text_field :building_society_roll_number, class: "govuk-input govuk-input--width-10" %>
+        </div>
+      </div>
+    </div>
+  <% end %>
+
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-one-third">
+      <%= form_group_tag(@amendment, :notes) do %>
+        <%= f.label :notes, "Change notes", class: "govuk-label" %>
+        <%= errors_tag @amendment, :notes %>
+      <% end %>
+    </div>
+    <div class="govuk-grid-column-two-thirds">
+      <div class="govuk-form-group">
+        <span class="govuk-hint">
+          Please explain why you are making this amendment. Do not include personal data about the claimant.
+        </span>
+        <%= f.text_area :notes, class: "govuk-textarea" %>
+      </div>
+    </div>
+  </div>
+
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-full">
+      <%= f.submit "Amend claim", class: "govuk-button", data: {module: "govuk-button"} %>
+      <%= link_to "Cancel", admin_claim_url(@claim), class: "govuk-button govuk-button--secondary", data: {module: "govuk-button"} %>
+    </div>
+  </div>
+<% end %>

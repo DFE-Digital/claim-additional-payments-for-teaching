@@ -25,15 +25,21 @@
     <% end %>
 
     <span class="govuk-caption-xl"><%= @claim.policy.short_name %></span>
-    <h1 class="govuk-heading-xl">
+    <h1 class="govuk-heading-xl govuk-heading--navigation">
       <%= @claim.reference %>
       <span class="govuk-body-m">
         <%= link_to "View checks", admin_claim_checks_path(claim_id: @claim.id), class: "govuk-link" %>
+        <%= link_to "Amend claim", new_admin_claim_amendment_url(@claim), class: "govuk-link" if @claim.amendable? %>
       </span>
     </h1>
 
+
     <%= render("info_panel_identity_unconfirmed", school: @claim.school) unless @claim.identity_confirmed? %>
 
+  </div>
+</div>
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
     <%= render "admin/claims/answer_section", {heading: "Personal details", answers: admin_personal_details(@claim)} %>
 
     <%= render "admin/claims/answer_section", {heading: "Eligibility details", answers: admin_eligibility_answers(@claim)} %>
@@ -50,4 +56,10 @@
       <%= render "admin/decisions/decision_form", claim: @claim, decision: @decision, claims_preventing_payment: @claims_preventing_payment %>
   <% end %>
   </div>
+
+  <% if @claim.amendments.any? %>
+    <div class="govuk-grid-column-one-third">
+      <%= render "amendments_timeline", amendments: @claim.amendments.reverse %>
+    </div>
+  <% end %>
 </div>

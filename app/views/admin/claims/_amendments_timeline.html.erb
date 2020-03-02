@@ -1,0 +1,25 @@
+<h2 class="govuk-heading-m">Claim amendments</h2>
+<div class="hmcts-timeline">
+  <% amendments.each do |amendment| %>
+    <div class="hmcts-timeline__item">
+      <section>
+        <% admin_amendment_details(amendment).each do |details| %>
+          <h3 class="hmcts-timeline__title"><%= details[0] %></h3>
+          <% if details.count > 1 %>
+            <p class="hmcts-timeline__by">changed from <%= details[1] %> to <%= details[2] %></p>
+          <% else %>
+            <p class="hmcts-timeline__by">changed</p>
+          <% end %>
+          <br>
+        <% end %>
+
+        <% if amendment.notes.present? %>
+          <h3 class="hmcts-timeline__title">Change notes</h3>
+          <p class="hmcts-timeline__by"><%= amendment.notes %></p>
+        <% end %>
+      </section>
+
+      <p class="hmcts-timeline__description"> by <%= user_details(amendment.created_by, include_line_break: false) %> on <%= l(amendment.created_at) %></p>
+    </div>
+  <% end %>
+</div>
