@@ -11,60 +11,60 @@ module GeckoboardHelpers
     dataset_fields = {
       reference: {
         name: "Reference",
-        type: "string",
+        type: "string"
       },
       policy: {
         name: "Policy",
-        type: "string",
+        type: "string"
       },
       submitted_at: {
         name: "Submitted at",
-        type: "datetime",
+        type: "datetime"
       },
       sla_status: {
         name: "SLA status",
-        type: "string",
+        type: "string"
       },
       check: {
         name: "Check",
-        type: "string",
+        type: "string"
       },
       checked_at: {
         name: "Checked at",
-        type: "datetime",
+        type: "datetime"
       },
       number_of_days_to_check: {
         name: "Number of days to check",
         optional: true,
-        type: "number",
+        type: "number"
       },
       paid: {
         name: "Paid",
-        type: "string",
+        type: "string"
       },
       paid_at: {
         name: "Paid at",
-        type: "datetime",
+        type: "datetime"
       },
       award_amount: {
         name: "Award amount",
         optional: true,
         type: "money",
-        currency_code: "GBP",
-      },
+        currency_code: "GBP"
+      }
     }
 
     stub_request(:put, "https://api.geckoboard.com/datasets/#{dataset_id}")
       .with(
         body: {
           fields: dataset_fields,
-          unique_by: ["reference"],
+          unique_by: ["reference"]
         }.to_json
       )
       .to_return(status: 200, body: {
         id: dataset_id,
         fields: dataset_fields,
-        unique_by: ["reference"],
+        unique_by: ["reference"]
       }.to_json)
   end
 
@@ -94,7 +94,7 @@ module GeckoboardHelpers
         "number_of_days_to_check" => claim.decision&.number_of_days_since_claim_submitted,
         "paid" => claim.payment.present?.to_s,
         "paid_at" => (claim.payment.present? ? claim.scheduled_payment_date : DateTime.parse("1970-01-01")).strftime("%Y-%m-%dT%H:%M:%S%:z"),
-        "award_amount" => claim.eligibility.present? ? (claim.award_amount * 100).to_i : nil,
+        "award_amount" => claim.eligibility.present? ? (claim.award_amount * 100).to_i : nil
       }
     }.sort_by { |d| d["reference"] }
 

@@ -45,8 +45,8 @@ RSpec.describe Claim::VerifyResponseParametersParser do
       changed_name_parameters = sample_parsed_verify_response({
         firstNames: [
           {value: "Barbara", verified: true, from: "1991-12-12", to: "2018-08-08"},
-          {value: "Bob", verified: true, from: "2018-08-09"},
-        ],
+          {value: "Bob", verified: true, from: "2018-08-09"}
+        ]
       })
       parser = Claim::VerifyResponseParametersParser.new(changed_name_parameters)
 
@@ -57,8 +57,8 @@ RSpec.describe Claim::VerifyResponseParametersParser do
       changed_name_parameters = sample_parsed_verify_response({
         firstNames: [
           {value: "Bob", verified: true},
-          {value: "Barbara", verified: true, from: "1991-12-12", to: "2018-08-08"},
-        ],
+          {value: "Barbara", verified: true, from: "1991-12-12", to: "2018-08-08"}
+        ]
       })
       parser = Claim::VerifyResponseParametersParser.new(changed_name_parameters)
 
@@ -67,7 +67,7 @@ RSpec.describe Claim::VerifyResponseParametersParser do
 
     it "raises a MissingResponseAttribute error if there is no 'verified' value for 'firstNames'" do
       unverified_name_paramters = sample_parsed_verify_response({
-        firstNames: [value: "Fred", verified: false],
+        firstNames: [value: "Fred", verified: false]
       })
 
       expect { Claim::VerifyResponseParametersParser.new(unverified_name_paramters).first_name }.to raise_exception(
@@ -86,8 +86,8 @@ RSpec.describe Claim::VerifyResponseParametersParser do
       changed_name_parameters = sample_parsed_verify_response({
         surnames: [
           {value: "Franklin", verified: true, from: "1991-12-12", to: "2018-08-08"},
-          {value: "Booker", verified: true, from: "2018-08-09"},
-        ],
+          {value: "Booker", verified: true, from: "2018-08-09"}
+        ]
       })
       parser = Claim::VerifyResponseParametersParser.new(changed_name_parameters)
 
@@ -99,8 +99,8 @@ RSpec.describe Claim::VerifyResponseParametersParser do
         surnames: [
           {value: "Brooker", verified: false},
           {value: "Booker", verified: true},
-          {value: "Franklin", verified: true, from: "1991-12-12", to: "2018-08-08"},
-        ],
+          {value: "Franklin", verified: true, from: "1991-12-12", to: "2018-08-08"}
+        ]
       })
       parser = Claim::VerifyResponseParametersParser.new(changed_name_parameters)
 
@@ -109,7 +109,7 @@ RSpec.describe Claim::VerifyResponseParametersParser do
 
     it "raises a MissingResponseAttribute error if there is no 'verified' value for 'surnames'" do
       unverified_name_paramters = sample_parsed_verify_response({
-        surnames: [value: "Fred", verified: false],
+        surnames: [value: "Fred", verified: false]
       })
 
       expect { Claim::VerifyResponseParametersParser.new(unverified_name_paramters).surname }.to raise_exception(
@@ -123,8 +123,8 @@ RSpec.describe Claim::VerifyResponseParametersParser do
       changed_name_parameters = sample_parsed_verify_response({
         "middleNames": [
           {value: "Horacio", verified: true, from: "1991-12-12", to: "2018-08-08"},
-          {value: "Buster", verified: true, from: "2018-08-09"},
-        ],
+          {value: "Buster", verified: true, from: "2018-08-09"}
+        ]
       })
       parser = Claim::VerifyResponseParametersParser.new(changed_name_parameters)
 
@@ -150,14 +150,14 @@ RSpec.describe Claim::VerifyResponseParametersParser do
             value: {lines: ["Old Street", "Old Town"], postCode: "M21 1GP"},
             verified: true,
             from: "1991-12-12",
-            to: "2018-08-08",
+            to: "2018-08-08"
           },
           {
             value: {lines: ["Verified Street", "Verified Town"], postCode: "M1 7GL"},
             verified: true,
-            from: "2018-08-08",
-          },
-        ],
+            from: "2018-08-08"
+          }
+        ]
       })
       parser = Claim::VerifyResponseParametersParser.new(multi_address_parameters)
 
@@ -184,9 +184,9 @@ RSpec.describe Claim::VerifyResponseParametersParser do
         addresses: [
           {
             value: {lines: ["Some house", "Unverified Street", "Unverified Town", "Unverified County"], postCode: "M1 7GL"},
-            from: "2018-08-08",
-          },
-        ],
+            from: "2018-08-08"
+          }
+        ]
       })
       parser = Claim::VerifyResponseParametersParser.new(full_address_parameters)
       expect(parser.address_line_1).to eq "Some house"
@@ -215,7 +215,7 @@ RSpec.describe Claim::VerifyResponseParametersParser do
         address_line_1: "Verified Street",
         address_line_2: "Verified Town",
         postcode: "M12 345",
-        govuk_verify_fields: %i[first_name surname date_of_birth address_line_1 address_line_2 postcode],
+        govuk_verify_fields: %i[first_name surname date_of_birth address_line_1 address_line_2 postcode]
       }
 
       expect(parser.attributes).to eq expected_attributes

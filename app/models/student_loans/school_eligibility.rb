@@ -26,7 +26,7 @@ module StudentLoans
       343, # Sefton
       342, # St Helens
       861, # Stoke-on-Trent
-      935, # Suffolk
+      935 # Suffolk
     ].freeze
 
     def initialize(school)

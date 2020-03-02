@@ -9,14 +9,14 @@ module VerifyHelpers
     {
       "samlRequest" => "PD94bWwg",
       "requestId" => "REQUEST_ID",
-      "ssoLocation" => "/verify/fake_sso",
+      "ssoLocation" => "/verify/fake_sso"
     }
   end
 
   def stubbed_auth_request_error_response
     {
       "code" => 422,
-      "message" => "Some error message",
+      "message" => "Some error message"
     }
   end
 
@@ -30,7 +30,7 @@ module VerifyHelpers
     {
       "samlResponse" => Verify::FakeSso::IDENTITY_VERIFIED_SAML_RESPONSE,
       "requestId" => "REQUEST_ID",
-      "levelOfAssurance" => "LEVEL_2",
+      "levelOfAssurance" => "LEVEL_2"
     }
   end
 
@@ -47,25 +47,25 @@ module VerifyHelpers
   def sample_parsed_verify_response(overrides = {})
     attributes = {
       "firstNames" => [
-        {"value" => "Isambard", "verified" => true},
+        {"value" => "Isambard", "verified" => true}
       ],
       "middleNames" => [],
       "surnames" => [
-        {"value" => "Brunel", "verified" => true},
+        {"value" => "Brunel", "verified" => true}
       ],
       "datesOfBirth" => [
-        {"value" => "1806-04-09", "verified" => true},
+        {"value" => "1806-04-09", "verified" => true}
       ],
       "addresses" => [
-        {"value" => {"lines" => ["Verified Street", "Verified Town"], "postCode" => "M12 345"}, "verified" => true},
-      ],
+        {"value" => {"lines" => ["Verified Street", "Verified Town"], "postCode" => "M12 345"}, "verified" => true}
+      ]
     }.merge(overrides.deep_stringify_keys)
 
     {
       "scenario" => "IDENTITY_VERIFIED",
       "pid" => "5989a87f344bb79ee8d0f0532c0f716deb4f8d71e906b87b346b649c4ceb20c5",
       "levelOfAssurance" => "LEVEL_2",
-      "attributes" => attributes,
+      "attributes" => attributes
     }
   end
 end

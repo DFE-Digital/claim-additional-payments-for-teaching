@@ -23,14 +23,14 @@ module DfeSignInHelpers
         "gender" => nil,
         "image" => nil,
         "phone" => nil,
-        "urls" => {"website" => nil},
+        "urls" => {"website" => nil}
       },
       "credentials" => {
         "id_token" => "REDACTED",
         "token" => "REDACTED",
         "refresh_token" => nil,
         "expires_in" => 3600,
-        "scope" => "openid email organisation",
+        "scope" => "openid email organisation"
       },
       "extra" => {
         "raw_info" => {
@@ -46,7 +46,7 @@ module DfeSignInHelpers
             "establishmentNumber" => "001",
             "status" => {
               "id" => 1,
-              "name" => "Open",
+              "name" => "Open"
             },
             "closedOn" => nil,
             "address" => nil,
@@ -54,10 +54,10 @@ module DfeSignInHelpers
             "statutoryLowAge" => nil,
             "statutoryHighAge" => nil,
             "legacyId" => "1031237",
-            "companyRegistrationNumber" => nil,
-          },
-        },
-      },
+            "companyRegistrationNumber" => nil
+          }
+        }
+      }
     }
   end
 
@@ -74,16 +74,16 @@ module DfeSignInHelpers
           "code" => role_code,
           "numericId" => "162",
           "status" => {
-            "id" => 1,
-          },
-        },
+            "id" => 1
+          }
+        }
       ],
       "identifiers" => [
         {
           "key" => "groups",
-          "value" => "teacher_payments_access",
-        },
-      ],
+          "value" => "teacher_payments_access"
+        }
+      ]
     }.to_json
 
     stub_request(:get, url)
@@ -93,7 +93,7 @@ module DfeSignInHelpers
   def stub_failed_dfe_sign_in_user_info_request(user_id, organisation_id)
     url = dfe_sign_in_user_info_url(user_id, organisation_id)
     api_response = {
-      "error": "An error occurred",
+      "error": "An error occurred"
     }.to_json
 
     stub_request(:get, url)
@@ -109,37 +109,37 @@ module DfeSignInHelpers
         {
           "organisation" => {
             "id" => "5b0e38fc-1db7-11ea-978f-2e728ce88125",
-            "name" => "ACME Inc",
+            "name" => "ACME Inc"
           },
           "userId" => "5b0e3686-1db7-11ea-978f-2e728ce88125",
           "email" => "alice@example.com",
           "familyName" => "Example",
-          "givenName" => "Alice",
+          "givenName" => "Alice"
         },
         {
           "organisation" => {
             "id" => "5b0e3bcc-1db7-11ea-978f-2e728ce88125",
-            "name" => "ACME Inc",
+            "name" => "ACME Inc"
           },
           "userId" => "5409565d-5be6-4285-ba09-76fd431db0b5",
           "email" => "bob@example.com",
           "familyName" => "Example",
-          "givenName" => "Bob",
+          "givenName" => "Bob"
         },
         {
           "organisation" => {
             "id" => "5b0e3bcc-1db7-11ea-978f-2e728ce88125",
-            "name" => "ACME Inc",
+            "name" => "ACME Inc"
           },
           "userId" => "25f0f85c-bfb7-4a21-aedc-1253370d04b0",
           "email" => "eve@example.com",
           "familyName" => "Example",
-          "givenName" => "Eve",
-        },
+          "givenName" => "Eve"
+        }
       ],
       "numberOfRecords" => 3,
       "page" => 1,
-      "numberOfPages" => number_of_pages,
+      "numberOfPages" => number_of_pages
     }.to_json
 
     stub_request(:get, url)

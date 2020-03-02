@@ -37,7 +37,7 @@ module MathsAndPhysics
       "email-address",
       "bank-details",
       "check-your-answers",
-      "ineligible",
+      "ineligible"
     ].freeze
 
     attr_reader :claim

@@ -64,7 +64,7 @@ module Payroll
         model.address_line_2,
         model.address_line_3,
         model.address_line_4,
-        model.postcode,
+        model.postcode
       ].compact
     end
 

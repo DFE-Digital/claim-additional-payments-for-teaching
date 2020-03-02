@@ -104,7 +104,7 @@ class Claim
         address_line_2: address_line_2,
         address_line_3: address_line_3,
         address_line_4: address_line_4,
-        postcode: postcode,
+        postcode: postcode
       }.compact
     end
 

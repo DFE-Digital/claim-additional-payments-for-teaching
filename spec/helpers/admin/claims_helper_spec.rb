@@ -28,7 +28,7 @@ describe Admin::ClaimsHelper do
         [I18n.t("govuk_verify_fields.date_of_birth").capitalize, "01/01/1901"],
         [I18n.t("admin.national_insurance_number"), "QQ123456C"],
         [I18n.t("govuk_verify_fields.address").capitalize, "Flat 1<br>1 Test Road<br>Test Town<br>AB1 2CD"],
-        [I18n.t("admin.email_address"), "test@email.com"],
+        [I18n.t("admin.email_address"), "test@email.com"]
       ]
 
       expect(helper.admin_personal_details(claim)).to eq expected_answers
@@ -44,7 +44,7 @@ describe Admin::ClaimsHelper do
           [I18n.t("govuk_verify_fields.date_of_birth").capitalize, helper.pii_removed_text],
           [I18n.t("admin.national_insurance_number"), helper.pii_removed_text],
           [I18n.t("govuk_verify_fields.address").capitalize, helper.pii_removed_text],
-          [I18n.t("admin.email_address"), "test@email.com"],
+          [I18n.t("admin.email_address"), "test@email.com"]
         ]
 
         expect(helper.admin_personal_details(claim)).to eq expected_answers
@@ -64,7 +64,7 @@ describe Admin::ClaimsHelper do
     it "includes an array of questions and answers" do
       expect(helper.admin_student_loan_details(claim)).to eq([
         [I18n.t("student_loans.admin.student_loan_repayment_amount"), "£1,234.00"],
-        [I18n.t("student_loans.admin.student_loan_repayment_plan"), "Plan 1"],
+        [I18n.t("student_loans.admin.student_loan_repayment_plan"), "Plan 1"]
       ])
     end
   end
@@ -76,7 +76,7 @@ describe Admin::ClaimsHelper do
       expect(helper.admin_submission_details(claim)).to eq([
         [I18n.t("admin.started_at"), l(claim.created_at)],
         [I18n.t("admin.submitted_at"), l(claim.submitted_at)],
-        [I18n.t("admin.decision_deadline"), l(claim.decision_deadline_date)],
+        [I18n.t("admin.decision_deadline"), l(claim.decision_deadline_date)]
       ])
     end
 
@@ -102,7 +102,7 @@ describe Admin::ClaimsHelper do
       expect(helper.admin_decision_details(decision)).to eq([
         [I18n.t("admin.decision.created_at"), l(decision.created_at)],
         [I18n.t("admin.decision.result"), decision.result.capitalize],
-        [I18n.t("admin.decision.created_by"), user.full_name],
+        [I18n.t("admin.decision.created_by"), user.full_name]
       ])
     end
 

@@ -29,7 +29,7 @@ class Claim
             (claim.eligibility.claim_school.urn if claim.policy.is_a? StudentLoans),
             (claim.eligibility.claim_school.name if claim.policy.is_a? StudentLoans),
             claimant_name(claim),
-            subject(claim),
+            subject(claim)
           ]
         end
       }

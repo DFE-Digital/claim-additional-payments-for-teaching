@@ -11,7 +11,7 @@ module DfeSignIn
 
       [
         "Unknown user",
-        unknown_user_details(user),
+        unknown_user_details(user)
       ].join(join_chr).html_safe
     end
 

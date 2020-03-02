@@ -2,7 +2,7 @@ desc "Lint with ShellCheck"
 task shellcheck: :environment do
   ignored_directories = ["bin/vsp/"].freeze
   excluded_rules = [
-    "SC1071", # ShellCheck only supports sh/bash/dash/ksh scripts. Sorry!
+    "SC1071" # ShellCheck only supports sh/bash/dash/ksh scripts. Sorry!
   ].freeze
 
   files = Dir.glob("bin/**/*").reject { |path|

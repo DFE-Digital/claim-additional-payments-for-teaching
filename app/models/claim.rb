@@ -26,7 +26,7 @@ class Claim < ApplicationRecord
     :bank_sort_code,
     :bank_account_number,
     :banking_name,
-    :building_society_roll_number,
+    :building_society_roll_number
   ].freeze
   FILTER_PARAMS = {
     address_line_1: true,
@@ -61,14 +61,14 @@ class Claim < ApplicationRecord
     building_society_roll_number: true,
     payment_id: false,
     academic_year: false,
-    pii_removed_at: false,
+    pii_removed_at: false
   }.freeze
   DECISION_DEADLINE = 12.weeks
   DECISION_DEADLINE_WARNING_POINT = 2.weeks
   ATTRIBUTE_DEPENDENCIES = {
     "has_student_loan" => "student_loan_country",
     "student_loan_country" => "student_loan_courses",
-    "student_loan_courses" => "student_loan_start_date",
+    "student_loan_courses" => "student_loan_start_date"
   }.freeze
 
   # Use AcademicYear as custom ActiveRecord attribute type
@@ -90,7 +90,7 @@ class Claim < ApplicationRecord
   enum payroll_gender: {
     dont_know: 0,
     female: 1,
-    male: 2,
+    male: 2
   }
 
   validates :academic_year_before_type_cast, format: {with: PolicyConfiguration::ACADEMIC_YEAR_REGEXP}

@@ -71,11 +71,11 @@ RSpec.describe PaymentMailer, type: :mailer do
           teacher_reference_number: "1234567",
           bank_sort_code: "112233",
           bank_account_number: "95928482",
-          building_society_roll_number: nil,
+          building_society_roll_number: nil
         }
         [
           build(:claim, :approved, personal_details.merge(eligibility: student_loans_eligibility)),
-          build(:claim, :approved, personal_details.merge(policy: MathsAndPhysics)),
+          build(:claim, :approved, personal_details.merge(policy: MathsAndPhysics))
         ]
       end
       let(:mail) { PaymentMailer.confirmation(payment) }

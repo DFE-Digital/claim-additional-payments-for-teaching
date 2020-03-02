@@ -7,7 +7,7 @@ module StudentLoans
       :chemistry_taught,
       :physics_taught,
       :computing_taught,
-      :languages_taught,
+      :languages_taught
     ].freeze
     EDITABLE_ATTRIBUTES = [
       :qts_award_year,
@@ -18,24 +18,24 @@ module StudentLoans
       :taught_eligible_subjects,
       :mostly_performed_leadership_duties,
       :student_loan_repayment_amount,
-      SUBJECT_ATTRIBUTES,
+      SUBJECT_ATTRIBUTES
     ].flatten.freeze
     ATTRIBUTE_DEPENDENCIES = {
       "claim_school_id" => ["taught_eligible_subjects", *SUBJECT_ATTRIBUTES, "employment_status"],
-      "had_leadership_position" => ["mostly_performed_leadership_duties"],
+      "had_leadership_position" => ["mostly_performed_leadership_duties"]
     }.freeze
 
     self.table_name = "student_loans_eligibilities"
 
     enum qts_award_year: {
       before_cut_off_date: 0,
-      on_or_after_cut_off_date: 1,
+      on_or_after_cut_off_date: 1
     }, _prefix: :awarded_qualified_status
 
     enum employment_status: {
       claim_school: 0,
       different_school: 1,
-      no_school: 2,
+      no_school: 2
     }, _prefix: :employed_at
 
     has_one :claim, as: :eligibility, inverse_of: :eligibility
@@ -84,7 +84,7 @@ module StudentLoans
         :employed_at_no_school,
         :ineligible_current_school,
         :not_taught_eligible_subjects,
-        :not_taught_enough,
+        :not_taught_enough
       ].find { |eligibility_check| send("#{eligibility_check}?") }
     end
 

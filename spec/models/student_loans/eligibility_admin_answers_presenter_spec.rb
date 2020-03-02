@@ -26,7 +26,7 @@ RSpec.describe StudentLoans::EligibilityAdminAnswersPresenter, type: :model do
         [I18n.t("admin.current_school"), presenter.display_school(school)],
         [I18n.t("student_loans.admin.subjects_taught"), "Chemistry and Physics"],
         [I18n.t("student_loans.admin.had_leadership_position"), "Yes"],
-        [I18n.t("student_loans.admin.mostly_performed_leadership_duties"), "No"],
+        [I18n.t("student_loans.admin.mostly_performed_leadership_duties"), "No"]
       ]
 
       expect(presenter.answers).to eq expected_answers

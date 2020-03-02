@@ -154,11 +154,11 @@ RSpec.describe Payment do
         teacher_reference_number: "1234567",
         bank_sort_code: "112233",
         bank_account_number: "95928482",
-        building_society_roll_number: nil,
+        building_society_roll_number: nil
       }
       [
         build(:claim, :approved, personal_details.merge(first_name: "Margaret", address_line_1: "17 Green Road", payroll_gender: :female, submitted_at: 5.days.ago)),
-        build(:claim, :approved, personal_details.merge(first_name: "John", address_line_1: "64 West Lane", payroll_gender: :male, submitted_at: 10.days.ago)),
+        build(:claim, :approved, personal_details.merge(first_name: "John", address_line_1: "64 West Lane", payroll_gender: :male, submitted_at: 10.days.ago))
       ]
     end
 

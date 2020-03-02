@@ -11,14 +11,14 @@ module RequestHelpers
     {
       StudentLoans => {
         eligibility_attributes: {
-          qts_award_year: "on_or_after_cut_off_date",
-        },
+          qts_award_year: "on_or_after_cut_off_date"
+        }
       },
       MathsAndPhysics => {
         eligibility_attributes: {
-          teaching_maths_or_physics: "true",
-        },
-      },
+          teaching_maths_or_physics: "true"
+        }
+      }
     }.fetch(policy)
   end
 

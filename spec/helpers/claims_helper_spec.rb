@@ -43,7 +43,7 @@ describe ClaimsHelper do
           "address_line_3",
           "postcode",
           "date_of_birth",
-          "payroll_gender",
+          "payroll_gender"
         ]
       )
     end
@@ -54,7 +54,7 @@ describe ClaimsHelper do
         ["Surname", "Bloggs"],
         ["Address", "Flat 1<br>1 Test Road<br>Test Town<br>AB1 2CD"],
         ["Date of birth", "1 January 1901"],
-        ["Gender", "Female"],
+        ["Gender", "Female"]
       ]
 
       expect(helper.verify_answers(claim)).to eq expected_answers
@@ -69,7 +69,7 @@ describe ClaimsHelper do
       expected_answers = [
         ["First name", "Jo"],
         ["Surname", "Bloggs"],
-        ["Date of birth", "1 January 1901"],
+        ["Date of birth", "1 January 1901"]
       ]
 
       expect(helper.verify_answers(claim)).to eq expected_answers
@@ -102,7 +102,7 @@ describe ClaimsHelper do
         [I18n.t("questions.payroll_gender"), "Don’t know", "gender"],
         [I18n.t("questions.teacher_reference_number"), "1234567", "teacher-reference-number"],
         [I18n.t("questions.national_insurance_number"), "QQ123456C", "national-insurance-number"],
-        [I18n.t("questions.email_address"), "test@email.com", "email-address"],
+        [I18n.t("questions.email_address"), "test@email.com", "email-address"]
       ]
 
       expect(helper.identity_answers(claim)).to eq expected_answers
@@ -114,7 +114,7 @@ describe ClaimsHelper do
       expected_answers = [
         [I18n.t("questions.teacher_reference_number"), "1234567", "teacher-reference-number"],
         [I18n.t("questions.national_insurance_number"), "QQ123456C", "national-insurance-number"],
-        [I18n.t("questions.email_address"), "test@email.com", "email-address"],
+        [I18n.t("questions.email_address"), "test@email.com", "email-address"]
       ]
 
       expect(helper.identity_answers(claim)).to eq expected_answers
@@ -130,7 +130,7 @@ describe ClaimsHelper do
         [I18n.t("questions.payroll_gender"), "Don’t know", "gender"],
         [I18n.t("questions.teacher_reference_number"), "1234567", "teacher-reference-number"],
         [I18n.t("questions.national_insurance_number"), "QQ123456C", "national-insurance-number"],
-        [I18n.t("questions.email_address"), "test@email.com", "email-address"],
+        [I18n.t("questions.email_address"), "test@email.com", "email-address"]
       ]
 
       expect(helper.identity_answers(claim)).to eq expected_answers
@@ -147,7 +147,7 @@ describe ClaimsHelper do
       expected_answers = [
         ["Name on bank account", "Jo Bloggs", "bank-details"],
         ["Bank sort code", "123456", "bank-details"],
-        ["Bank account number", "12345678", "bank-details"],
+        ["Bank account number", "12345678", "bank-details"]
       ]
 
       expect(helper.payment_answers(claim)).to eq expected_answers
@@ -177,7 +177,7 @@ describe ClaimsHelper do
         [t("questions.has_student_loan"), "Yes", "student-loan"],
         [t("questions.student_loan_country"), "England", "student-loan-country"],
         [t("questions.student_loan_how_many_courses"), "One course", "student-loan-how-many-courses"],
-        [t("questions.student_loan_start_date.one_course"), t("answers.student_loan_start_date.one_course.on_or_after_first_september_2012"), "student-loan-start-date"],
+        [t("questions.student_loan_start_date.one_course"), t("answers.student_loan_start_date.one_course.on_or_after_first_september_2012"), "student-loan-start-date"]
       ]
 
       expect(helper.student_loan_answers(claim)).to eq expected_answers
@@ -197,7 +197,7 @@ describe ClaimsHelper do
         [t("questions.has_student_loan"), "Yes", "student-loan"],
         [t("questions.student_loan_country"), "England", "student-loan-country"],
         [t("questions.student_loan_how_many_courses"), "Two or more courses", "student-loan-how-many-courses"],
-        [t("questions.student_loan_start_date.two_or_more_courses"), t("answers.student_loan_start_date.two_or_more_courses.before_first_september_2012"), "student-loan-start-date"],
+        [t("questions.student_loan_start_date.two_or_more_courses"), t("answers.student_loan_start_date.two_or_more_courses.before_first_september_2012"), "student-loan-start-date"]
       ]
 
       expect(helper.student_loan_answers(claim)).to eq expected_answers
@@ -213,7 +213,7 @@ describe ClaimsHelper do
 
       expected_answers = [
         [t("questions.has_student_loan"), "Yes", "student-loan"],
-        [t("questions.student_loan_country"), "Scotland", "student-loan-country"],
+        [t("questions.student_loan_country"), "Scotland", "student-loan-country"]
       ]
 
       expect(helper.student_loan_answers(claim)).to eq expected_answers

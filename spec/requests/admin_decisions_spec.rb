@@ -96,7 +96,7 @@ RSpec.describe "Admin decisions", type: :request do
             email_address: "email@example.com",
             bank_sort_code: "112233",
             bank_account_number: "95928482",
-            building_society_roll_number: nil,
+            building_society_roll_number: nil
           }
         end
         let(:claim) { create(:claim, :submitted, personal_details.merge(bank_sort_code: "582939", bank_account_number: "74727752")) }

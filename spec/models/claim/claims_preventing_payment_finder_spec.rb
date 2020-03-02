@@ -9,7 +9,7 @@ RSpec.describe Claim::ClaimsPreventingPaymentFinder do
         teacher_reference_number: generate(:teacher_reference_number),
         bank_account_number: "32828838",
         bank_sort_code: "183828",
-        first_name: "Boris",
+        first_name: "Boris"
       }
     end
     let(:claim) { create(:claim, :submitted, personal_details) }

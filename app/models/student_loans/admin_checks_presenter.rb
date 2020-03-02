@@ -12,14 +12,14 @@ module StudentLoans
 
     def qualifications
       [
-        ["Award year", eligibility.qts_award_year_answer],
+        ["Award year", eligibility.qts_award_year_answer]
       ]
     end
 
     def employment
       [
         ["6 April 2018 to 5 April 2019", display_school(eligibility.claim_school)],
-        [I18n.t("admin.current_school"), display_school(eligibility.current_school)],
+        [I18n.t("admin.current_school"), display_school(eligibility.current_school)]
       ]
     end
 

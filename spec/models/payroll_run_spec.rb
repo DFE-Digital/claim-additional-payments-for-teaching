@@ -62,13 +62,13 @@ RSpec.describe PayrollRun, type: :model do
           bank_sort_code: "112233",
           bank_account_number: "95928482",
           address_line_1: "64 West Lane",
-          student_loan_plan: StudentLoan::PLAN_1,
+          student_loan_plan: StudentLoan::PLAN_1
         }
       end
       let(:matching_claims) do
         [
           create(:claim, :approved, personal_details.merge(policy: StudentLoans)),
-          create(:claim, :approved, personal_details.merge(policy: MathsAndPhysics)),
+          create(:claim, :approved, personal_details.merge(policy: MathsAndPhysics))
         ]
       end
       let(:other_claim) { create(:claim, :approved) }

@@ -23,8 +23,8 @@ options = {
     host: dfe_sign_in_issuer_uri&.host,
     identifier: dfe_sign_in_identifier,
     secret: dfe_sign_in_secret,
-    redirect_uri: dfe_sign_in_redirect_uri&.to_s,
-  },
+    redirect_uri: dfe_sign_in_redirect_uri&.to_s
+  }
 }
 
 Rails.application.config.middleware.use OmniAuth::Strategies::OpenIDConnect, options
