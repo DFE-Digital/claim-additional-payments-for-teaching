@@ -10,6 +10,7 @@ The format is based on [Keep a Changelog]
 - QTS answer will vary in admin based on the year the claim was made
 - Claim decision page is shown at the end of the checks process
 - A service operator can amend a claim
+- Update static error pages (404, 422, 500) to make them policy-agnostic
 
 ## [Release 056] - 2020-02-25
 
