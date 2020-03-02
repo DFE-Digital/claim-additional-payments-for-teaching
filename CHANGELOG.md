@@ -8,6 +8,7 @@ The format is based on [Keep a Changelog]
 
 - QTS question will vary based on the year the service is accepting claims for
 - QTS answer will vary in admin based on the year the claim was made
+- Update static error pages (404, 422, 500) to make them policy-agnostic
 
 ## [Release 056] - 2020-02-25
 
