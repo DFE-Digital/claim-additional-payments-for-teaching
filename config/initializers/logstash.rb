@@ -1,6 +1,7 @@
 if ENV["LOGSTASH_HOST"].present?
   LogStashLogger.configure do |logstash_config|
     logstash_config.customize_event do |event|
+      event["named_tags"] ||= {}
       event["named_tags"]["environment"] = ENV.fetch("ENVIRONMENT_NAME")
     end
   end
