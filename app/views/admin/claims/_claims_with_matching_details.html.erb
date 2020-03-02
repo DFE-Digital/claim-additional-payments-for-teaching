@@ -1,0 +1,23 @@
+<table id="claims-with-matches" class="govuk-table govuk-!-margin-bottom-9">
+  <caption class="govuk-table__caption govuk-heading-l">Claims with matching details</caption>
+  <thead class="govuk-table__head">
+    <tr class="govuk-table__row">
+      <th scope="col" class="govuk-table__header">Claim</th>
+      <th scope="col" class="govuk-table__header">Matching details</th>
+    </tr>
+  </thead>
+  <tbody class="govuk-table__body">
+    <% matching_claims.each do |matching_claim| %>
+      <tr class="govuk-table__row">
+        <th scope="row" class="govuk-table__header"><%= link_to matching_claim.reference, [:admin, matching_claim], class: "govuk-link" %>
+        <td class="govuk-table__cell">
+          <ul class="govuk-list">
+            <% matching_attributes(claim, matching_claim).each do |attribute| %>
+              <li><%= attribute %></li>
+            <% end %>
+          </ul>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

@@ -38,7 +38,7 @@ class Admin::ChecksController < Admin::BaseAdminController
     if next_check.present?
       admin_claim_check_path(@claim, check: next_check)
     else
-      admin_claim_path(@claim, anchor: "claim_decision_form")
+      new_admin_claim_decision_path(@claim)
     end
   end
 end

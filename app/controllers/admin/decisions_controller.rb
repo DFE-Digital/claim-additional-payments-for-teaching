@@ -2,8 +2,13 @@ class Admin::DecisionsController < Admin::BaseAdminController
   before_action :ensure_service_operator
   before_action :load_claim
   before_action :reject_decided_claims
-  before_action :reject_missing_payroll_gender
-  before_action :reject_if_claims_preventing_payment
+  before_action :reject_missing_payroll_gender, only: [:create]
+  before_action :reject_if_claims_preventing_payment, only: [:create]
+
+  def new
+    @decision = Decision.new
+    @claims_preventing_payment = claims_preventing_payment_finder.claims_preventing_payment
+  end
 
   def create
     @decision = @claim.build_decision(decision_params.merge(created_by: admin_user))
@@ -13,7 +18,7 @@ class Admin::DecisionsController < Admin::BaseAdminController
       redirect_to admin_claims_path, notice: "Claim has been #{@claim.decision.result} successfully"
     else
       @claims_preventing_payment = claims_preventing_payment_finder.claims_preventing_payment
-      render "admin/claims/show"
+      render "new"
     end
   end
 

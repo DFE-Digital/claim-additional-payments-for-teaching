@@ -8,6 +8,7 @@ The format is based on [Keep a Changelog]
 
 - QTS question will vary based on the year the service is accepting claims for
 - QTS answer will vary in admin based on the year the claim was made
+- Claim decision page is shown at the end of the checks process
 
 ## [Release 056] - 2020-02-25
 

@@ -3,15 +3,34 @@ require "rails_helper"
 RSpec.describe "Admin decisions", type: :request do
   context "when signed in as a service operator" do
     let(:user) { create(:dfe_signin_user) }
+    let(:claim) { create(:claim, :submitted) }
 
     before do
       sign_in_to_admin_with_role(DfeSignIn::User::SERVICE_OPERATOR_DFE_SIGN_IN_ROLE_CODE, user.dfe_sign_in_id)
       @dataset_post_stub = stub_geckoboard_dataset_update
     end
 
-    describe "decisions#create" do
-      let(:claim) { create(:claim, :submitted) }
+    describe "decisions#new" do
+      it "renders the claim decision form" do
+        get new_admin_claim_decision_path(claim)
 
+        expect(response).to have_http_status(:ok)
+        expect(response.body).to include("Claim decision")
+      end
+
+      context "when a decision has already been made" do
+        let(:claim) { create(:claim, :approved) }
+
+        it "redirects and shows an error" do
+          get new_admin_claim_decision_path(claim)
+
+          expect(response).to redirect_to(admin_claim_path(claim))
+          expect(flash[:notice]).to eql("Claim outcome already decided")
+        end
+      end
+    end
+
+    describe "decisions#create" do
       it "can approve a claim" do
         post admin_claim_decisions_path(claim_id: claim.id, decision: {result: "approved"})
 
