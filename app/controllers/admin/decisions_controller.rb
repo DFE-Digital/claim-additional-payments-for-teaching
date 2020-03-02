@@ -11,7 +11,7 @@ class Admin::DecisionsController < Admin::BaseAdminController
   end
 
   def create
-    @decision = @claim.build_decision(decision_params.merge(created_by: admin_user))
+    @decision = @claim.decisions.build(decision_params.merge(created_by: admin_user))
     if @decision.save
       send_claim_result_email
       RecordOrUpdateGeckoboardDatasetJob.perform_later([@claim.id])

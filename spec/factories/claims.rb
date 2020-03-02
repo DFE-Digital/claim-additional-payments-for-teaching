@@ -56,12 +56,16 @@ FactoryBot.define do
 
     trait :approved do
       submitted
-      association(:decision, factory: [:decision, :approved], strategy: :build)
+      after(:build) do |claim|
+        claim.decisions.append(build(:decision, :approved))
+      end
     end
 
     trait :rejected do
       submitted
-      association(:decision, factory: [:decision, :rejected], strategy: :build)
+      after(:build) do |claim|
+        claim.decisions.append(build(:decision, :rejected))
+      end
     end
 
     trait :ineligible do

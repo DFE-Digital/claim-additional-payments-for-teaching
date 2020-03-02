@@ -32,23 +32,6 @@ RSpec.describe "Admin payroll runs" do
 
         expect(response).to redirect_to(admin_payroll_run_path(payroll_run))
       end
-
-      context "when a payroll run contains claims from the same person with different bank details" do
-        it "doesn’t create a payroll run and shows an error" do
-          personal_details = {
-            teacher_reference_number: generate(:teacher_reference_number),
-            bank_sort_code: "112233"
-          }
-          claims = [
-            create(:claim, :approved, personal_details.merge(bank_account_number: "12345678")),
-            create(:claim, :approved, personal_details.merge(bank_account_number: "99999999"))
-          ]
-
-          expect { post admin_payroll_runs_path(claim_ids: claims.map(&:id)) }.to change { PayrollRun.count }.by(0)
-          follow_redirect!
-          expect(response.body).to include("Claims #{claims[0].reference} and #{claims[1].reference} have different values for bank account number")
-        end
-      end
     end
 
     describe "admin_payroll_runs#show" do

@@ -88,7 +88,7 @@ class Claim < ApplicationRecord
   enum student_loan_courses: {one_course: 0, two_or_more_courses: 1}
   enum student_loan_plan: STUDENT_LOAN_PLAN_OPTIONS
 
-  has_one :decision
+  has_many :decisions
   has_many :checks
   has_many :amendments
 
@@ -161,9 +161,9 @@ class Claim < ApplicationRecord
 
   scope :unsubmitted, -> { where(submitted_at: nil) }
   scope :submitted, -> { where.not(submitted_at: nil) }
-  scope :awaiting_decision, -> { submitted.left_outer_joins(:decision).where(decisions: {claim_id: nil}) }
-  scope :approved, -> { joins(:decision).where("decisions.result" => :approved) }
-  scope :rejected, -> { joins(:decision).where("decisions.result" => :rejected) }
+  scope :awaiting_decision, -> { submitted.left_outer_joins(:decisions).where(decisions: {claim_id: nil}) }
+  scope :approved, -> { joins(:decisions).where("decisions.result" => :approved) }
+  scope :rejected, -> { joins(:decisions).where("decisions.result" => :rejected) }
   scope :approaching_decision_deadline, -> { awaiting_decision.where("submitted_at < ? AND submitted_at > ?", DECISION_DEADLINE.ago + DECISION_DEADLINE_WARNING_POINT, DECISION_DEADLINE.ago) }
   scope :passed_decision_deadline, -> { awaiting_decision.where("submitted_at < ?", DECISION_DEADLINE.ago) }
   scope :payrollable, -> { approved.where(payment: nil) }
@@ -192,6 +192,10 @@ class Claim < ApplicationRecord
 
   def approvable?
     submitted? && !payroll_gender_missing? && !decision_made? && !payment_prevented_by_other_claims?
+  end
+
+  def decision
+    decisions.last
   end
 
   def decision_made?
