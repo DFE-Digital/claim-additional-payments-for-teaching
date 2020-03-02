@@ -19,7 +19,7 @@ RSpec.describe MathsAndPhysics::AdminChecksPresenter, type: :model do
     it "returns an array of label and values for displaying information for qualification checks" do
       expected_array = [
         ["Award year", "In or after the academic year 2014 to 2015"],
-        ["ITT subject", "Maths"],
+        ["ITT subject", "Maths"]
       ]
       expect(presenter.qualifications).to eq expected_array
     end
@@ -37,7 +37,7 @@ RSpec.describe MathsAndPhysics::AdminChecksPresenter, type: :model do
 
       expected_array = [
         ["Award year", "In or after the academic year 2014 to 2015"],
-        ["ITT subject", "Physics"],
+        ["ITT subject", "Physics"]
       ]
       expect(presenter.qualifications).to eq expected_array
     end
@@ -50,7 +50,7 @@ RSpec.describe MathsAndPhysics::AdminChecksPresenter, type: :model do
       expected_array = [
         [I18n.t("admin.qts_award_year"), "In or after the academic year 2014 to 2015"],
         ["ITT subject", "Biology"],
-        ["Maths or Physics degree", "UK Maths or Physics degree"],
+        ["Maths or Physics degree", "UK Maths or Physics degree"]
       ]
       expect(presenter.qualifications).to eq expected_array
     end
@@ -59,7 +59,7 @@ RSpec.describe MathsAndPhysics::AdminChecksPresenter, type: :model do
   describe "#employment" do
     it "returns an array of label and values for displaying information for employment checks" do
       expect(presenter.employment).to eq [
-        [I18n.t("admin.current_school"), presenter.display_school(eligibility.current_school)],
+        [I18n.t("admin.current_school"), presenter.display_school(eligibility.current_school)]
       ]
     end
   end

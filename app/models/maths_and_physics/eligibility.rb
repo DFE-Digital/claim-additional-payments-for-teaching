@@ -11,12 +11,12 @@ module MathsAndPhysics
       :has_entire_term_contract,
       :employed_directly,
       :subject_to_disciplinary_action,
-      :subject_to_formal_performance_action,
+      :subject_to_formal_performance_action
     ].freeze
     ATTRIBUTE_DEPENDENCIES = {
       "initial_teacher_training_subject" => ["initial_teacher_training_subject_specialism", "has_uk_maths_or_physics_degree"],
       "initial_teacher_training_subject_specialism" => ["has_uk_maths_or_physics_degree"],
-      "employed_as_supply_teacher" => ["has_entire_term_contract", "employed_directly"],
+      "employed_as_supply_teacher" => ["has_entire_term_contract", "employed_directly"]
     }.freeze
     self.table_name = "maths_and_physics_eligibilities"
 
@@ -24,25 +24,25 @@ module MathsAndPhysics
       maths: 0,
       physics: 1,
       science: 2,
-      none_of_the_subjects: 3,
+      none_of_the_subjects: 3
     }, _prefix: :itt_subject
 
     enum initial_teacher_training_subject_specialism: {
       physics: 0,
       biology: 1,
       chemistry: 2,
-      not_sure: 3,
+      not_sure: 3
     }, _prefix: :itt_specialism
 
     enum has_uk_maths_or_physics_degree: {
       yes: 0,
       no: 1,
-      has_non_uk: 2,
+      has_non_uk: 2
     }
 
     enum qts_award_year: {
       before_cut_off_date: 0,
-      on_or_after_cut_off_date: 1,
+      on_or_after_cut_off_date: 1
     }, _prefix: :awarded_qualified_status
 
     has_one :claim, as: :eligibility, inverse_of: :eligibility
@@ -87,7 +87,7 @@ module MathsAndPhysics
         :no_entire_term_contract,
         :not_employed_directly,
         :subject_to_disciplinary_action,
-        :subject_to_formal_performance_action,
+        :subject_to_formal_performance_action
       ].find { |eligibility_check| send("#{eligibility_check}?") }
     end
 

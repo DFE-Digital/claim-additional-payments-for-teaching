@@ -611,7 +611,7 @@ RSpec.describe Claim, type: :model do
         :middle_name,
         :surname,
         :banking_name,
-        :building_society_roll_number,
+        :building_society_roll_number
       ])
     end
   end

@@ -9,7 +9,7 @@ RSpec.describe MathsAndPhysics::EligibilityAnswersPresenter do
       qts_award_year: "on_or_after_cut_off_date",
       employed_as_supply_teacher: false,
       subject_to_disciplinary_action: false,
-      subject_to_formal_performance_action: false,
+      subject_to_formal_performance_action: false
     }
   end
   let(:eligibility) { claim.eligibility }
@@ -25,7 +25,7 @@ RSpec.describe MathsAndPhysics::EligibilityAnswersPresenter do
       [I18n.t("questions.qts_award_year"), "In or after the academic year 2014 to 2015", "qts-year"],
       [I18n.t("maths_and_physics.questions.employed_as_supply_teacher"), "No", "supply-teacher"],
       [I18n.t("maths_and_physics.questions.disciplinary_action"), "No", "disciplinary-action"],
-      [I18n.t("maths_and_physics.questions.formal_performance_action"), "No", "formal-performance-action"],
+      [I18n.t("maths_and_physics.questions.formal_performance_action"), "No", "formal-performance-action"]
     ]
 
     expect(presenter.answers).to eq(expected_answers)
@@ -51,7 +51,7 @@ RSpec.describe MathsAndPhysics::EligibilityAnswersPresenter do
         qts_award_year: "on_or_after_cut_off_date",
         employed_as_supply_teacher: false,
         subject_to_disciplinary_action: false,
-        subject_to_formal_performance_action: false,
+        subject_to_formal_performance_action: false
       }
     end
 
@@ -64,7 +64,7 @@ RSpec.describe MathsAndPhysics::EligibilityAnswersPresenter do
         [I18n.t("questions.qts_award_year"), "In or after the academic year 2014 to 2015", "qts-year"],
         [I18n.t("maths_and_physics.questions.employed_as_supply_teacher"), "No", "supply-teacher"],
         [I18n.t("maths_and_physics.questions.disciplinary_action"), "No", "disciplinary-action"],
-        [I18n.t("maths_and_physics.questions.formal_performance_action"), "No", "formal-performance-action"],
+        [I18n.t("maths_and_physics.questions.formal_performance_action"), "No", "formal-performance-action"]
       ]
 
       expect(presenter.answers).to eq(expected_answers)
@@ -82,7 +82,7 @@ RSpec.describe MathsAndPhysics::EligibilityAnswersPresenter do
         qts_award_year: "on_or_after_cut_off_date",
         employed_as_supply_teacher: false,
         subject_to_disciplinary_action: false,
-        subject_to_formal_performance_action: false,
+        subject_to_formal_performance_action: false
       }
     end
 
@@ -96,7 +96,7 @@ RSpec.describe MathsAndPhysics::EligibilityAnswersPresenter do
         [I18n.t("questions.qts_award_year"), "In or after the academic year 2014 to 2015", "qts-year"],
         [I18n.t("maths_and_physics.questions.employed_as_supply_teacher"), "No", "supply-teacher"],
         [I18n.t("maths_and_physics.questions.disciplinary_action"), "No", "disciplinary-action"],
-        [I18n.t("maths_and_physics.questions.formal_performance_action"), "No", "formal-performance-action"],
+        [I18n.t("maths_and_physics.questions.formal_performance_action"), "No", "formal-performance-action"]
       ]
 
       expect(presenter.answers).to eq(expected_answers)
@@ -115,7 +115,7 @@ RSpec.describe MathsAndPhysics::EligibilityAnswersPresenter do
         has_entire_term_contract: true,
         employed_directly: true,
         subject_to_disciplinary_action: false,
-        subject_to_formal_performance_action: false,
+        subject_to_formal_performance_action: false
       }
     end
 
@@ -130,7 +130,7 @@ RSpec.describe MathsAndPhysics::EligibilityAnswersPresenter do
         [I18n.t("maths_and_physics.questions.has_entire_term_contract"), "Yes", "entire-term-contract"],
         [I18n.t("maths_and_physics.questions.employed_directly"), "Yes, I’m employed by my school", "employed-directly"],
         [I18n.t("maths_and_physics.questions.disciplinary_action"), "No", "disciplinary-action"],
-        [I18n.t("maths_and_physics.questions.formal_performance_action"), "No", "formal-performance-action"],
+        [I18n.t("maths_and_physics.questions.formal_performance_action"), "No", "formal-performance-action"]
       ]
 
       expect(presenter.answers).to eq(expected_answers)

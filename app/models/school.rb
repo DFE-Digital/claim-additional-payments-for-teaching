@@ -20,7 +20,7 @@ class School < ApplicationRecord
     secondary: 4,
     middle_deemed_secondary: 5,
     sixteen_plus: 6,
-    all_through: 7,
+    all_through: 7
   }.freeze
 
   SECONDARY_PHASES = %w[secondary middle_deemed_secondary all_through].freeze
@@ -34,7 +34,7 @@ class School < ApplicationRecord
     welsh_schools: 6,
     other: 9,
     academies: 10,
-    free_schools: 11,
+    free_schools: 11
   }.freeze
 
   STATE_FUNDED_SCHOOL_TYPE_GROUPS = %w[
@@ -82,7 +82,7 @@ class School < ApplicationRecord
     academy_special_converter: 44,
     academy_16_to_19_converter: 45,
     academy_16_to_19_sponsor_led: 46,
-    institution_funded_by_other_government_department: 56,
+    institution_funded_by_other_government_department: 56
   }.freeze
 
   SPECIAL_SCHOOL_TYPES = %w[
@@ -148,7 +148,7 @@ class School < ApplicationRecord
   def dfe_number
     [
       local_authority.code,
-      establishment_number,
+      establishment_number
     ].join("/")
   end
 

@@ -4,7 +4,7 @@ class Claim
       ["teacher_reference_number"],
       ["email_address"],
       ["national_insurance_number"],
-      ["bank_account_number", "bank_sort_code", "building_society_roll_number"],
+      ["bank_account_number", "bank_sort_code", "building_society_roll_number"]
     ].freeze
 
     def initialize(source_claim, claims_to_compare = Claim.submitted)

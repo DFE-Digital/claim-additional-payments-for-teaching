@@ -7,7 +7,7 @@ class Decision < ApplicationRecord
 
   enum result: {
     approved: 0,
-    rejected: 1,
+    rejected: 1
   }
 
   def readonly?

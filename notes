@@ -1,0 +1,5 @@
+- Do we want to check the SHA of the Azure stuff and only deploy if there's a difference?
+- SemVer on Docker tags?
+- Push tags (releases) after deploy? (Built-in Github Releases)
+- Autoheal might be a thing?
+- Setting up some uptime pings?

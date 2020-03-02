@@ -67,7 +67,7 @@ RSpec.describe "GOV.UK Verify::AuthenticationsController requests", type: :reque
             "address_line_3",
             "postcode",
             "date_of_birth",
-            "payroll_gender",
+            "payroll_gender"
           ])
         end
       end

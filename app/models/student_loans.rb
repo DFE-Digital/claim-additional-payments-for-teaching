@@ -65,7 +65,7 @@ module StudentLoans
     claim_year ||= configuration.current_academic_year
     [
       POLICY_START_YEAR,
-      (claim_year - ACADEMIC_YEARS_QUALIFIED_TEACHERS_CAN_CLAIM_FOR),
+      (claim_year - ACADEMIC_YEARS_QUALIFIED_TEACHERS_CAN_CLAIM_FOR)
     ].max
   end
 

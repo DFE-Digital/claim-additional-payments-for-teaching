@@ -21,7 +21,7 @@ module Admin
         [t("govuk_verify_fields.date_of_birth").capitalize, claim.pii_removed? ? pii_removed_text : l(claim.date_of_birth, format: :day_month_year)],
         [t("admin.national_insurance_number"), claim.pii_removed? ? pii_removed_text : claim.national_insurance_number],
         [t("govuk_verify_fields.address").capitalize, claim.pii_removed? ? pii_removed_text : sanitize(claim.address("<br>").html_safe, tags: %w[br])],
-        [t("admin.email_address"), claim.email_address],
+        [t("admin.email_address"), claim.email_address]
       ]
     end
 
@@ -36,7 +36,7 @@ module Admin
       [
         [t("admin.started_at"), l(claim.created_at)],
         [t("admin.submitted_at"), l(claim.submitted_at)],
-        [t("admin.decision_deadline"), [l(claim.decision_deadline_date), decision_deadline_warning(claim)].compact.join.html_safe],
+        [t("admin.decision_deadline"), [l(claim.decision_deadline_date), decision_deadline_warning(claim)].compact.join.html_safe]
       ]
     end
 

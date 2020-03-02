@@ -4,7 +4,7 @@ module DfeSignIn
       payload = {
         iss: DfeSignIn.configuration.client_id,
         exp: (Time.now.getlocal + 60).to_i,
-        aud: "signin.education.gov.uk",
+        aud: "signin.education.gov.uk"
       }
       JWT.encode(payload, DfeSignIn.configuration.secret, "HS256")
     end

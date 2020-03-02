@@ -2,7 +2,7 @@
 module Policies
   POLICIES = [
     StudentLoans,
-    MathsAndPhysics,
+    MathsAndPhysics
   ].freeze
 
   def self.all

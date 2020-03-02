@@ -69,7 +69,7 @@ RSpec.describe DfeSignIn::User, type: :model do
     it "returns true when user has multiple roles" do
       user.role_codes = [
         DfeSignIn::User::SUPPORT_AGENT_DFE_SIGN_IN_ROLE_CODE,
-        DfeSignIn::User::SERVICE_OPERATOR_DFE_SIGN_IN_ROLE_CODE,
+        DfeSignIn::User::SERVICE_OPERATOR_DFE_SIGN_IN_ROLE_CODE
       ]
 
       expect(user.has_admin_access?).to eq true

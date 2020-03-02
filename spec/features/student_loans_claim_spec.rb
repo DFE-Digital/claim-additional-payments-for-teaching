@@ -5,7 +5,7 @@ RSpec.feature "Teacher Student Loan Repayments claims" do
 
   [
     true,
-    false,
+    false
   ].each do |javascript_enabled|
     js_status = javascript_enabled ? "enabled" : "disabled"
     scenario "Teacher claims back student loan repayments with javascript #{js_status}", js: javascript_enabled do

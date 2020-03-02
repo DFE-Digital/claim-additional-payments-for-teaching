@@ -20,13 +20,13 @@ RSpec.describe Payroll::PaymentCsvRow do
         building_society_roll_number: "1234/12345678",
         address_line_1: "1 Test Road",
         postcode: "AB1 2CD",
-        email_address: "email@example.com",
+        email_address: "email@example.com"
       }
     end
     let(:claims) do
       [
         create(:claim, :approved, personal_details.merge(policy: StudentLoans)),
-        create(:claim, :approved, personal_details.merge(policy: MathsAndPhysics)),
+        create(:claim, :approved, personal_details.merge(policy: MathsAndPhysics))
       ]
     end
 
@@ -62,7 +62,7 @@ RSpec.describe Payroll::PaymentCsvRow do
           claim.bank_account_number,
           claim.building_society_roll_number,
           payment_award_amount.to_s,
-          payment.id,
+          payment.id
         ])
       end
     end

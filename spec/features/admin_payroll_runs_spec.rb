@@ -160,12 +160,12 @@ RSpec.feature "Payroll" do
 
     expect(addressees).to match_array([
       [payroll_run.claims[0].email_address],
-      [payroll_run.claims[1].email_address],
+      [payroll_run.claims[1].email_address]
     ])
 
     expect(subjects).to match_array([
       "We’re paying your claim to get back your student loan repayments, reference number: #{payroll_run.claims[0].reference}",
-      "We’re paying your claim to get back your student loan repayments, reference number: #{payroll_run.claims[1].reference}",
+      "We’re paying your claim to get back your student loan repayments, reference number: #{payroll_run.claims[1].reference}"
     ])
 
     expect(dataset_post_stub).to have_been_requested.once

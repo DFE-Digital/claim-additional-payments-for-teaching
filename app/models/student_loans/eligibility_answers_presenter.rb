@@ -36,7 +36,7 @@ module StudentLoans
       [
         I18n.t("questions.qts_award_year"),
         eligibility.qts_award_year_answer,
-        "qts-year",
+        "qts-year"
       ]
     end
 
@@ -44,7 +44,7 @@ module StudentLoans
       [
         I18n.t("student_loans.questions.claim_school"),
         eligibility.claim_school_name,
-        "claim-school",
+        "claim-school"
       ]
     end
 
@@ -52,7 +52,7 @@ module StudentLoans
       [
         I18n.t("questions.current_school"),
         eligibility.current_school_name,
-        "still-teaching",
+        "still-teaching"
       ]
     end
 
@@ -60,7 +60,7 @@ module StudentLoans
       [
         I18n.t("student_loans.questions.subjects_taught", school: eligibility.claim_school_name),
         subject_list(eligibility.subjects_taught),
-        "subjects-taught",
+        "subjects-taught"
       ]
     end
 
@@ -68,7 +68,7 @@ module StudentLoans
       [
         I18n.t("student_loans.questions.leadership_position"),
         (eligibility.had_leadership_position? ? "Yes" : "No"),
-        "leadership-position",
+        "leadership-position"
       ]
     end
 
@@ -76,7 +76,7 @@ module StudentLoans
       [
         I18n.t("student_loans.questions.mostly_performed_leadership_duties"),
         (eligibility.mostly_performed_leadership_duties? ? "Yes" : "No"),
-        "mostly-performed-leadership-duties",
+        "mostly-performed-leadership-duties"
       ]
     end
 
@@ -84,7 +84,7 @@ module StudentLoans
       [
         I18n.t("student_loans.questions.student_loan_amount"),
         number_to_currency(eligibility.student_loan_repayment_amount),
-        "student-loan-amount",
+        "student-loan-amount"
       ]
     end
   end

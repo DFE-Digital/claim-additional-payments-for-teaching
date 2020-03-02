@@ -33,7 +33,7 @@ Rails.application.config.assets.precompile += [
   "govuk-crest.png",
   "govuk-logotype-crown.png",
   "govuk-mask-icon.svg",
-  "govuk-opengraph-image.png",
+  "govuk-opengraph-image.png"
 ]
 
 # Include the url_helpers in the asset pipeline

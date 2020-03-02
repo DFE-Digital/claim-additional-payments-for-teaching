@@ -32,16 +32,16 @@ RSpec.describe Verify::RedactedResponse do
         "firstNames" => [
           {"value" => "XXXXXXXX", "verified" => true, "from" => "XXXXXXXXXX", "to" => "2019-06-30"},
           {"value" => "XXXXXX", "verified" => true, "from" => "XXXXXXXXXX", "to" => "2019-06-25"},
-          {"value" => "XXX", "verified" => false, "from" => "XXXXXXXXXX"},
+          {"value" => "XXX", "verified" => false, "from" => "XXXXXXXXXX"}
         ],
         "middleNames" => [
           {"value" => "XXXXXXX", "verified" => true, "from" => "XXXXXXXXXX", "to" => "2019-06-25"},
-          {"value" => "XX", "verified" => false, "from" => "XXXXXXXXXX"},
+          {"value" => "XX", "verified" => false, "from" => "XXXXXXXXXX"}
         ],
         "surnames" => [
           {"value" => "XXXXXXX", "verified" => true, "from" => "XXXXXXXXXX", "to" => "2019-06-24"},
           {"value" => "XXXXXX", "verified" => true, "from" => "XXXXXXXXXX", "to" => "2019-06-25"},
-          {"value" => "", "verified" => false, "from" => "XXXXXXXXXX"},
+          {"value" => "", "verified" => false, "from" => "XXXXXXXXXX"}
         ],
         "datesOfBirth" => [{"value" => "XXXXXXXXXX", "verified" => true, "from" => "XXXXXXXXXX"}],
         "gender" => {"value" => "XXXX", "verified" => true},
@@ -49,22 +49,22 @@ RSpec.describe Verify::RedactedResponse do
           {
             "value" => {
               "lines" => ["XXXXXXXXXXXXXXXXX", "XXXXXXXXXXXXXXX", "XXXXXXXXXXXXX", "XXXXXXXXXXXXXXX"],
-              "postCode" => "XXXXXXX",
+              "postCode" => "XXXXXXX"
             },
             "verified" => true,
             "from" => "XXXXXXXXXX",
-            "to" => "2019-06-25",
+            "to" => "2019-06-25"
           },
           {
             "value" => {
               "lines" => ["XXXXXXXXXXXXXXXXX", "XXXXXXXXXXXXXXX", "XXXXXXXXXXXXXXXXX"],
-              "postCode" => "XXXXXXX",
+              "postCode" => "XXXXXXX"
             },
             "verified" => false,
-            "from" => "XXXXXXXXXX",
-          },
-        ],
-      },
+            "from" => "XXXXXXXXXX"
+          }
+        ]
+      }
     }
 
     expect(Verify::RedactedResponse.new(input).parameters).to eq expected_output

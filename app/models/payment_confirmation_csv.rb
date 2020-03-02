@@ -11,7 +11,7 @@ class PaymentConfirmationCsv
     "Employers NI",
     "Student Loans",
     "Tax",
-    "Net Pay",
+    "Net Pay"
   ].freeze
 
   def initialize(file)

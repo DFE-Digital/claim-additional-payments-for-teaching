@@ -19,10 +19,10 @@ RSpec.describe DfeSignIn::Utils do
       expect(payload.first).to eq({
         "iss" => DfeSignIn.configuration.client_id,
         "exp" => (Time.now.getlocal + 60).to_i,
-        "aud" => "signin.education.gov.uk",
+        "aud" => "signin.education.gov.uk"
       })
       expect(payload.last).to eq({
-        "alg" => "HS256",
+        "alg" => "HS256"
       })
     end
   end

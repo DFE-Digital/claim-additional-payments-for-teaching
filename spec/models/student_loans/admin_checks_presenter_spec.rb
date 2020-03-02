@@ -32,7 +32,7 @@ RSpec.describe StudentLoans::AdminChecksPresenter, type: :model do
     it "returns an array of label and values for displaying information for employment checks" do
       expect(presenter.employment).to eq [
         ["6 April 2018 to 5 April 2019", presenter.display_school(eligibility.claim_school)],
-        [I18n.t("admin.current_school"), presenter.display_school(eligibility.current_school)],
+        [I18n.t("admin.current_school"), presenter.display_school(eligibility.current_school)]
       ]
     end
   end

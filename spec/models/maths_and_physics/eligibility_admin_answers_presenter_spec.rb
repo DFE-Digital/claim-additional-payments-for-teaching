@@ -34,7 +34,7 @@ RSpec.describe MathsAndPhysics::EligibilityAdminAnswersPresenter, type: :model d
         [I18n.t("maths_and_physics.admin.has_entire_term_contract"), "Yes"],
         [I18n.t("maths_and_physics.admin.employed_directly"), "Yes, I’m employed by my school"],
         [I18n.t("maths_and_physics.admin.disciplinary_action"), "Yes"],
-        [I18n.t("maths_and_physics.admin.formal_performance_action"), "Yes"],
+        [I18n.t("maths_and_physics.admin.formal_performance_action"), "Yes"]
       ]
 
       expect(presenter.answers).to eq expected_answers

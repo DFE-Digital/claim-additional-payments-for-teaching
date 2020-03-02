@@ -42,13 +42,13 @@ module MathsAndPhysics
       "E06000021", # Stoke-on-Trent
       "E08000024", # Sunderland
       "E08000036", # Wakefield
-      "E06000014", # York
+      "E06000014" # York
     ].freeze
 
     SCHOOL_URNS_CONSIDERED_AS_ELIGIBLE_LOCAL_AUTHORITY_DISTRICT = [
       136774, # Minehead Middle School
       136791, # West Somerset College
-      140631, # Danesfield Church of England Voluntary Controlled Community Middle School
+      140631 # Danesfield Church of England Voluntary Controlled Community Middle School
     ].freeze
 
     def initialize(school)
