@@ -40,7 +40,7 @@ RSpec.describe "Admin payroll run payments" do
     end
 
     it "cannot delete a payment from an already confirmed payroll run" do
-      payroll_run.confirmation_report_uploaded_by = admin.id
+      payroll_run.confirmation_report_uploaded_by = admin
       payroll_run.save!
 
       expect {

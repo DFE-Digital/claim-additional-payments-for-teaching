@@ -1,13 +1,13 @@
 class PaymentConfirmation
-  attr_reader :payroll_run, :csv, :updated_payment_ids, :errors, :admin_user_id
+  attr_reader :payroll_run, :csv, :updated_payment_ids, :errors, :admin_user
 
-  def initialize(payroll_run, csv_file, admin_user_id)
+  def initialize(payroll_run, csv_file, admin_user)
     @payroll_run = payroll_run
     @errors = []
     @csv = PaymentConfirmationCsv.new(csv_file)
     @line_number = 1
     @updated_payment_ids = Set.new
-    @admin_user_id = admin_user_id
+    @admin_user = admin_user
     validate
   end
 
@@ -22,7 +22,7 @@ class PaymentConfirmation
       end
 
       payroll_run.update!(
-        confirmation_report_uploaded_by: admin_user_id,
+        confirmation_report_uploaded_by: admin_user,
         scheduled_payment_date: scheduled_payment_date
       )
 

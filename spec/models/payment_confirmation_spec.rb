@@ -15,9 +15,9 @@ RSpec.describe PaymentConfirmation do
     tempfile.rewind
     tempfile
   end
-  let(:admin_user_id) { "uploader-id" }
+  let(:admin_user) { build(:dfe_signin_user) }
   let!(:dataset_post_stub) { stub_geckoboard_dataset_update("claims.test") }
-  subject(:payment_confirmation) { described_class.new(payroll_run, file, admin_user_id) }
+  subject(:payment_confirmation) { described_class.new(payroll_run, file, admin_user) }
 
   context "the claims in the CSV match the claims of the payroll run" do
     it "records the values from the CSV against the claims' payments" do
@@ -53,7 +53,7 @@ RSpec.describe PaymentConfirmation do
         payment_confirmation.ingest
         payroll_run.reload
 
-        expect(payroll_run.confirmation_report_uploaded_by).to eq(admin_user_id)
+        expect(payroll_run.confirmation_report_uploaded_by).to eq(admin_user)
         expect(payroll_run.scheduled_payment_date).to eq(the_following_friday)
       end
     end
@@ -108,7 +108,7 @@ RSpec.describe PaymentConfirmation do
   end
 
   context "The payroll run has already had a Payment Confirmation Report uploaded" do
-    let(:payroll_run) { create(:payroll_run, claims_counts: {StudentLoans => 2}, confirmation_report_uploaded_by: "some-user-id") }
+    let(:payroll_run) { create(:payroll_run, claims_counts: {StudentLoans => 2}, confirmation_report_uploaded_by: build(:dfe_signin_user)) }
 
     it "fails and populates its errors" do
       expect(payment_confirmation.ingest).to be_falsey

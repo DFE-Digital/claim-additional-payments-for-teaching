@@ -21,13 +21,13 @@ RSpec.describe PayrollRun, type: :model do
   it "can be updated in the same month as it was created" do
     payroll_run = create(:payroll_run)
     confirmation_report_uploaded_time = Time.zone.now.end_of_month
-    service_operator_id = "service_operator_id"
+    service_operator = build(:dfe_signin_user)
 
     travel_to confirmation_report_uploaded_time do
-      payroll_run.confirmation_report_uploaded_by = service_operator_id
+      payroll_run.confirmation_report_uploaded_by = service_operator
 
       expect(payroll_run.save!).to be true
-      expect(payroll_run.confirmation_report_uploaded_by).eql? service_operator_id
+      expect(payroll_run.confirmation_report_uploaded_by).eql? service_operator
     end
   end
 
