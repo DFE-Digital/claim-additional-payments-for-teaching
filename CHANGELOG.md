@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+- Adjust content on the service closed page
+
 ## [Release 057] - 2020-03-03
 
 - QTS question will vary based on the year the service is accepting claims for
