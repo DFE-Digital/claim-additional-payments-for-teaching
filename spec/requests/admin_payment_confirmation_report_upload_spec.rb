@@ -76,7 +76,7 @@ RSpec.describe "Admin Payment Confirmation Report upload" do
           post admin_payroll_run_payment_confirmation_report_uploads_path(payroll_run)
 
           expect(response).to have_http_status(:ok)
-          expect(response.body).to include("You must provide a file")
+          expect(response.body).to include("Select a file")
         end
       end
     end
