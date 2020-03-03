@@ -426,6 +426,28 @@ RSpec.describe Claim, type: :model do
     end
   end
 
+  describe "approved" do
+    let!(:submitted_claims) { create_list(:claim, 5, :submitted) }
+    let!(:unsubmitted_claims) { create_list(:claim, 2, :submittable) }
+    let!(:approved_claims) { create_list(:claim, 5, :approved) }
+    let!(:rejected_claims) { create_list(:claim, 5, :rejected) }
+
+    it "returns approved claims" do
+      expect(subject.class.approved).to match_array(approved_claims)
+    end
+  end
+
+  describe "rejected" do
+    let!(:submitted_claims) { create_list(:claim, 5, :submitted) }
+    let!(:unsubmitted_claims) { create_list(:claim, 2, :submittable) }
+    let!(:approved_claims) { create_list(:claim, 5, :approved) }
+    let!(:rejected_claims) { create_list(:claim, 5, :rejected) }
+
+    it "returns rejected claims" do
+      expect(subject.class.rejected).to match_array(rejected_claims)
+    end
+  end
+
   describe "#submittable?" do
     it "returns true when the claim is valid and has not been submitted" do
       claim = build(:claim, :submittable)
