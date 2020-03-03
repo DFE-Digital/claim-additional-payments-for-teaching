@@ -7,5 +7,7 @@
 
   <%= render("admin/claims/claims_with_matching_details", {matching_claims: @matching_claims, claim: @claim}) if @matching_claims.any? %>
 
-  <%= render "decision_form", claim: @claim, decision: @decision, claims_preventing_payment: @claims_preventing_payment %>
+  <div class="govuk-grid-column-two-thirds">
+    <%= render "decision_form", claim: @claim, decision: @decision, claims_preventing_payment: @claims_preventing_payment %>
+  </div>
 </div>
