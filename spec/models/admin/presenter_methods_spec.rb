@@ -19,7 +19,7 @@ RSpec.describe Admin::PresenterMethods do
     it "shows a school with a link and the DfE number" do
       gias_url = "https://get-information-schools.service.gov.uk/Establishments/Establishment/Details/#{school.urn}"
       expect(admin_presenter.new.display_school(school)).to eq(
-        "<a class=\"govuk-link\" href=\"#{gias_url}\">#{school.name}</a> <span class=\"govuk-body-s\">(#{school.dfe_number})</span>"
+        "<a class=\"govuk-link\" href=\"#{gias_url}\"><span class=\"govuk-visually-hidden\">View</span> #{school.name} <span class=\"govuk-visually-hidden\">on Get Information About Schools</span></a> <span class=\"govuk-body-s\">(#{school.dfe_number})</span>"
       )
     end
   end
