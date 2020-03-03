@@ -30,7 +30,11 @@
             <th scope="row" class="govuk-table__header"><%= policy_service_name(policy_configuration.policy.routing_name) %></th>
             <td class="govuk-table__cell"><%= policy_configuration.current_academic_year %></td>
             <td class="govuk-table__cell"><%= policy_configuration.open_for_submissions? ? "Open" : "Closed" %></td>
-            <td class="govuk-table__cell"><%= link_to "Change", edit_admin_policy_configuration_path(policy_configuration), class: "govuk-link" %></td>
+            <td class="govuk-table__cell">
+              <%= link_to edit_admin_policy_configuration_path(policy_configuration), class: "govuk-link" do %>
+                Change <span class="govuk-visually-hidden"><%= policy_service_name(policy_configuration.policy.routing_name) %></span>
+              <% end %>
+            </td>
           </tr>
         <% end %>
       </tbody>
