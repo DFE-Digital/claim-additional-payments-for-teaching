@@ -97,7 +97,7 @@ RSpec.describe Claim::PersonalDataScrubber, type: :model do
   it "also deletes expected details from the scrubbed claims’ amendments, setting a personal_data_removed_at timestamp on the amendments" do
     claim, amendment = nil
     travel_to over_two_months_ago - 1.week do
-      claim = create(:claim, :approved)
+      claim = create(:claim, :submitted)
       amendment = create(:amendment, claim: claim, claim_changes: {
         "teacher_reference_number" => [generate(:teacher_reference_number).to_s, claim.teacher_reference_number],
         "payroll_gender" => ["male", claim.payroll_gender],
@@ -107,6 +107,7 @@ RSpec.describe Claim::PersonalDataScrubber, type: :model do
         "bank_account_number" => ["84818482", claim.bank_account_number],
         "building_society_roll_number" => ["123456789/ABCD", claim.building_society_roll_number]
       })
+      create(:decision, :approved, claim: claim, created_at: over_two_months_ago)
       create(:payment, :with_figures, claims: [claim], scheduled_payment_date: over_two_months_ago)
     end
 
