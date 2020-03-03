@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+## [Release 057] - 2020-03-03
+
 - QTS question will vary based on the year the service is accepting claims for
 - QTS answer will vary in admin based on the year the claim was made
 - Claim decision page is shown at the end of the checks process
@@ -472,7 +474,9 @@ The format is based on [Keep a Changelog]
 - First release for student loan repayments private beta
 
 [unreleased]:
-  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-056...HEAD
+  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-057...HEAD
+[release 057]:
+  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-056...release-057
 [release 056]:
   https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-055...release-056
 [release 055]:
