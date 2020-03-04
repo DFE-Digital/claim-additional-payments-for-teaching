@@ -43,19 +43,16 @@ case $ENVIRONMENT_NAME in
   "development")
     SUBSCRIPTION_ID="8655985a-2f87-44d7-a541-0be9a8c2779d"
     RESOURCE_GROUP_PREFIX="s118d01"
-    DOCKER_IMAGE_TAG="development"
     VSP_DOCKER_IMAGE_TAG="20191030.1"
     ;;
   "test")
     SUBSCRIPTION_ID="e9299169-9666-4f15-9da9-5332680145af"
     RESOURCE_GROUP_PREFIX="s118t01"
-    DOCKER_IMAGE_TAG="development"
     VSP_DOCKER_IMAGE_TAG="20191030.1"
     ;;
   "production")
     SUBSCRIPTION_ID="88bd392f-df19-458b-a100-22b4429060ed"
     RESOURCE_GROUP_PREFIX="s118p01"
-    DOCKER_IMAGE_TAG="production"
     VSP_DOCKER_IMAGE_TAG="20191030.1"
     ;;
   *)
@@ -96,6 +93,9 @@ while [ "$2" ]; do
     "--recover-keyvault")
       RECOVER_KEY_VAULT=1
       ;;
+    --docker-tag=*)
+      DOCKER_TAG="${2#*=}"
+      ;;
     *)
       echo "Unexpected argument: $2"
       exit 1
@@ -104,6 +104,10 @@ while [ "$2" ]; do
 
   shift
 done
+
+if [ -z "$DOCKER_TAG" ]; then
+  DOCKER_TAG="latest"
+fi
 
 GIT_COMMIT_HASH=${GIT_COMMIT_HASH:-$(git rev-parse --verify HEAD)}
 SCRIPT_PATH=$(cd "$(dirname "$0")" ; pwd -P)
@@ -216,7 +220,7 @@ echo "Rewriting app parameters file for $ENVIRONMENT_NAME..."
 sed \
     -e "s|\${keyVaultId}|$KEY_VAULT_ID|g" \
     -e "s|\${vspDockerImageTag}|$VSP_DOCKER_IMAGE_TAG|g" \
-    -e "s|\${appServiceDockerImageTag}|$DOCKER_IMAGE_TAG|g" \
+    -e "s|\${appServiceDockerImageTag}|$DOCKER_TAG|g" \
     "$APP_PARAMETERS_TEMPLATE_FILE_PATH" > "$APP_PARAMETERS_FILE_PATH"
 
 if [ $CONFIRM_BEFORE_DEPLOY ]; then
