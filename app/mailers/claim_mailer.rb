@@ -16,7 +16,7 @@ class ClaimMailer < ApplicationMailer
   def rejected(claim)
     @claim = claim
     @claim_description = claim_description
-    @possible_rejection_reasons = I18n.t("#{@claim.policy.locale_key}.possible_rejection_reasons", qts_year: ineligible_qts_year)
+    @ineligible_qts_year = @claim.policy.first_eligible_qts_award_year - 1
     view_mail_with_claim_and_subject("Your claim #{@claim_description} has been rejected, reference number: #{claim.reference}")
   end
 
@@ -30,10 +30,6 @@ class ClaimMailer < ApplicationMailer
 
   def claim_description
     I18n.t("#{@claim.policy.locale_key}.claim_description")
-  end
-
-  def ineligible_qts_year
-    (@claim.policy.first_eligible_qts_award_year - 1).to_s(:long)
   end
 
   def view_mail_with_claim_and_subject(subject)
