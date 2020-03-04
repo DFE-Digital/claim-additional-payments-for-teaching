@@ -19,7 +19,7 @@ RSpec.describe Claim::ClaimsPreventingPaymentFinder do
       let(:inconsistent_personal_details) do
         personal_details.merge(
           bank_account_number: "87282828",
-          bank_sort_code: "388183",
+          bank_sort_code: "388183"
         )
       end
 
@@ -43,7 +43,7 @@ RSpec.describe Claim::ClaimsPreventingPaymentFinder do
     context "when there is another claim with the same teacher reference number, with inconsistent details that would not prevent us from running payroll" do
       let(:inconsistent_personal_details) do
         personal_details.merge(
-          first_name: "Jarvis",
+          first_name: "Jarvis"
         )
       end
 

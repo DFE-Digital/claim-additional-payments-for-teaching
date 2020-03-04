@@ -9,7 +9,7 @@ RSpec.feature "Admin amends a claim" do
       student_loan_plan: :plan_1,
       bank_sort_code: "010203",
       bank_account_number: "47274828",
-      building_society_roll_number: "RN 123456",)
+      building_society_roll_number: "RN 123456")
   end
   let(:date_of_birth) { 25.years.ago.to_date }
   let(:service_operator) { create(:dfe_signin_user, given_name: "Jo", family_name: "Bloggs") }

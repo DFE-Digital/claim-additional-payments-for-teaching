@@ -119,7 +119,7 @@ RSpec.describe MathsAndPhysics::Eligibility, type: :model do
         has_uk_maths_or_physics_degree: "no",
         employed_as_supply_teacher: true,
         has_entire_term_contract: false,
-        employed_directly: false,
+        employed_directly: false
       )
     end
 

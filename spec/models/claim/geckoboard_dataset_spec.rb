@@ -17,7 +17,7 @@ RSpec.describe Claim::GeckoboardDataset, type: :model do
         :claim,
         :submitted,
         student_loan_plan: :plan_1,
-        eligibility: build(:student_loans_eligibility, student_loan_repayment_amount: 2345.67),
+        eligibility: build(:student_loans_eligibility, student_loan_repayment_amount: 2345.67)
       )
       data = dataset.data_for_claims([eligible_claim])
       expect(data.first[:award_amount]).to eq(234567)
