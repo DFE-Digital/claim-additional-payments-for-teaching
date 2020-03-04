@@ -109,6 +109,9 @@ RUN if [ ${RAILS_ENV} = "production" ]; then \
 
 EXPOSE 3000
 
+ARG GIT_COMMIT_HASH
+ENV GIT_COMMIT_HASH ${GIT_COMMIT_HASH}
+
 CMD [ "bundle", "exec", "rails", "server" ]
 
 # ------------------------------------------------------------------------------

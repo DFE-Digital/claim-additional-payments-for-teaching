@@ -71,4 +71,6 @@ Rollbar.configure do |config|
   # setup for Heroku. See:
   # https://devcenter.heroku.com/articles/deploying-to-a-custom-rails-environment
   config.environment = ENV["ENVIRONMENT_NAME"].presence || Rails.env
+
+  config.code_version = ENV["GIT_COMMIT_HASH"]
 end

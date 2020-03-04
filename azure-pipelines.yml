@@ -65,6 +65,7 @@ steps:
         --cache-from=$(dockerRegistry)/$(dockerImageName):latest \
         --tag=local/dfe-teachers-payment-service:web \
         --target=web \
+        --build-arg GIT_COMMIT_HASH=$(Build.SourceVersion) \
         .
     displayName: Build web Docker image using 'latest' as cache
     condition: ne(variables['Build.SourceBranch'], 'refs/heads/master')
@@ -74,6 +75,7 @@ steps:
         --cache-from=local/dfe-teachers-payment-service:web-dependencies \
         --tag=local/dfe-teachers-payment-service:web \
         --target=web \
+        --build-arg GIT_COMMIT_HASH=$(Build.SourceVersion) \
         .
     displayName: Build web Docker image without cache
     condition: eq(variables['Build.SourceBranch'], 'refs/heads/master')
