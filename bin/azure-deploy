@@ -299,7 +299,7 @@ if [ $DEPLOY_ALERTS ]; then
       --parameters "$(
         filter-azure-outputs \
           "$APP_DEPLOYMENT_RESULT" \
-          "['appServiceId', 'appServicePlanId', 'databaseServerId', 'vspAppServiceId', 'vspAppServicePlanId']" \
+          "['appServiceId', 'appServicePlanId', 'workerContainerInstanceId', 'databaseServerId', 'vspAppServiceId', 'vspAppServicePlanId']" \
           "{'resourceGroupId' => 'appResourceGroupId'}"
       )" \
       --mode Complete \

@@ -31,6 +31,9 @@
     "appServicePlanId": {
       "type": "string"
     },
+    "workerContainerInstanceId": {
+      "type": "string"
+    },
     "vspAppServiceId": {
       "type": "string"
     },
@@ -127,6 +130,9 @@
           },
           "appServicePlanId": {
             "value": "[parameters('appServicePlanId')]"
+          },
+          "workerContainerInstanceId": {
+            "value": "[parameters('workerContainerInstanceId')]"
           },
           "enableAlerts": {
             "value": "[parameters('enableAlerts')]"

@@ -329,6 +329,10 @@
       "type": "string",
       "value": "[resourceId('Microsoft.Web/sites', parameters('appServiceName'))]"
     },
+    "workerContainerInstanceId": {
+      "type": "string",
+      "value": "[resourceId('Microsoft.ContainerInstance/containerGroups', parameters('workerContainerInstanceName'))]"
+    },
     "appServicePossibleOutboundIpAddresses": {
       "type": "array",
       "value": "[split(reference(resourceId('Microsoft.Web/sites', parameters('appServiceName'))).possibleOutboundIpAddresses, ',')]"

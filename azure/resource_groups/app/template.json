@@ -664,6 +664,10 @@
       "type": "string",
       "value": "[reference(resourceId('Microsoft.Resources/deployments', variables('appDeploymentName'))).outputs.appServiceId.value]"
     },
+    "workerContainerInstanceId": {
+      "type": "string",
+      "value": "[reference(resourceId('Microsoft.Resources/deployments', variables('appDeploymentName'))).outputs.workerContainerInstanceId.value]"
+    },
     "vspAppServicePlanId": {
       "type": "string",
       "value": "[reference(resourceId('Microsoft.Resources/deployments', variables('vspDeploymentName'))).outputs.appServicePlanId.value]"
