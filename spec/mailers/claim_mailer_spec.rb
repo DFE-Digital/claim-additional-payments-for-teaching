@@ -107,7 +107,15 @@ RSpec.describe ClaimMailer, type: :mailer do
       let(:mail) { ClaimMailer.rejected(claim) }
 
       it "mentions “the eligible-school during the financial year” reason" do
-        expect(mail.body.encoded).to include("you did not teach at an eligible school between 6 April 2018 and 5 April 2019")
+        # Based on the current academic year set by the policy_configurations.yml fixtures
+        expect(mail.body.encoded).to include("you did not teach at an eligible school between 6 April 2024 and 5 April 2025")
+      end
+
+      it "changes the financial year based on the policy's configured current_academic_year" do
+        policy_configurations(:student_loans).update!(current_academic_year: "2019/2020")
+
+        expect(mail.body.encoded)
+          .to include("you did not teach at an eligible school between 6 April 2018 and 5 April 2019")
       end
     end
   end
