@@ -422,7 +422,29 @@ RSpec.describe Claim, type: :model do
     let!(:approved_claims) { create_list(:claim, 5, :approved) }
 
     it "returns submitted claims awaiting a decision" do
-      expect(subject.class.awaiting_decision).to match_array(submitted_claims)
+      expect(Claim.awaiting_decision).to match_array(submitted_claims)
+    end
+  end
+
+  describe "approved" do
+    let!(:submitted_claims) { create_list(:claim, 5, :submitted) }
+    let!(:unsubmitted_claims) { create_list(:claim, 2, :submittable) }
+    let!(:approved_claims) { create_list(:claim, 5, :approved) }
+    let!(:rejected_claims) { create_list(:claim, 5, :rejected) }
+
+    it "returns approved claims" do
+      expect(Claim.approved).to match_array(approved_claims)
+    end
+  end
+
+  describe "rejected" do
+    let!(:submitted_claims) { create_list(:claim, 5, :submitted) }
+    let!(:unsubmitted_claims) { create_list(:claim, 2, :submittable) }
+    let!(:approved_claims) { create_list(:claim, 5, :approved) }
+    let!(:rejected_claims) { create_list(:claim, 5, :rejected) }
+
+    it "returns rejected claims" do
+      expect(Claim.rejected).to match_array(rejected_claims)
     end
   end
 
@@ -464,6 +486,16 @@ RSpec.describe Claim, type: :model do
       create(:claim, :approved, teacher_reference_number: teacher_reference_number, date_of_birth: 20.years.ago)
 
       expect(create(:claim, :submitted, teacher_reference_number: teacher_reference_number, date_of_birth: 30.years.ago).approvable?).to eq false
+    end
+  end
+
+  describe "#decision" do
+    it "returns the latest decision on a claim" do
+      claim = build(:claim, :submitted)
+      claim.decisions.append(build(:decision, result: "approved", created_at: 7.days.ago))
+      claim.decisions.append(build(:decision, result: "rejected", created_at: DateTime.now))
+
+      expect(claim.decision.result).to eq "rejected"
     end
   end
 
@@ -629,7 +661,7 @@ RSpec.describe Claim, type: :model do
     let!(:second_unpayrolled_claim) { create(:claim, :approved) }
 
     it "returns approved claims that are not associated with a payroll run" do
-      expect(described_class.payrollable).to match_array([first_unpayrolled_claim, second_unpayrolled_claim])
+      expect(Claim.payrollable).to match_array([first_unpayrolled_claim, second_unpayrolled_claim])
     end
   end
 

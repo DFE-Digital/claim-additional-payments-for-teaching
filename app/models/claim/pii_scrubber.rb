@@ -45,7 +45,7 @@ class Claim
 
     def old_claims_rejected_or_paid
       Claim.left_outer_joins(payment: [:payroll_run])
-        .joins(:decision)
+        .joins(:decisions)
         .where(pii_removed_at: nil)
         .where(
           "(decisions.result = :rejected AND decisions.created_at < :minimum_time) OR scheduled_payment_date < :minimum_time",

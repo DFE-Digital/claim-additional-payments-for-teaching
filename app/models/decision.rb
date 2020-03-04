@@ -15,7 +15,7 @@ class Decision < ApplicationRecord
   end
 
   def number_of_days_since_claim_submitted
-    (claim.decision.created_at.to_date - claim.submitted_at.to_date).to_i
+    (created_at.to_date - claim.submitted_at.to_date).to_i
   end
 
   private

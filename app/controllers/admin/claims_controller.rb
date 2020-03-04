@@ -2,7 +2,7 @@ class Admin::ClaimsController < Admin::BaseAdminController
   before_action :ensure_service_operator
 
   def index
-    @claims = Claim.includes(:decision, eligibility: [:claim_school, :current_school]).awaiting_decision.order(:submitted_at)
+    @claims = Claim.includes(:decisions, eligibility: [:claim_school, :current_school]).awaiting_decision.order(:submitted_at)
     @claims = @claims.by_policy(filtered_policy) if filtered_policy
 
     respond_to do |format|
