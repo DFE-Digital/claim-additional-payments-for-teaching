@@ -10,7 +10,7 @@ RSpec.describe Claim::MatchingAttributeFinder do
         email_address: "genghis.khan@mongol-empire.com",
         bank_account_number: "34682151",
         bank_sort_code: "972654",
-        building_society_roll_number: "123456789/ABCD",
+        building_society_roll_number: "123456789/ABCD"
       )
     }
 

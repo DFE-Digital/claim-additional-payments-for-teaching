@@ -36,7 +36,7 @@ module PartOfClaimJourney
   def build_new_claim
     Claim.new(
       eligibility: current_policy::Eligibility.new,
-      academic_year: policy_configuration.current_academic_year,
+      academic_year: policy_configuration.current_academic_year
     )
   end
 

@@ -181,7 +181,7 @@ GEM
       validate_url
       webfinger (>= 1.0.1)
     parallel (1.19.1)
-    parser (2.7.0.3)
+    parser (2.7.0.4)
       ast (~> 2.4.0)
     pg (1.2.2)
     public_suffix (4.0.3)
@@ -290,7 +290,7 @@ GEM
       actionpack (>= 4.0)
       activesupport (>= 4.0)
       sprockets (>= 3.0.0)
-    standard (0.2.0)
+    standard (0.2.1)
       rubocop (~> 0.79.0)
       rubocop-performance (~> 1.5.1)
     swd (1.1.2)

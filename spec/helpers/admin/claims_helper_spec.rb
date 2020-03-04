@@ -17,7 +17,7 @@ describe Admin::ClaimsHelper do
         address_line_2: "1 Test Road",
         address_line_3: "Test Town",
         postcode: "AB1 2CD",
-        date_of_birth: Date.new(1901, 1, 1),
+        date_of_birth: Date.new(1901, 1, 1)
       )
     end
 
@@ -57,7 +57,7 @@ describe Admin::ClaimsHelper do
       build(
         :claim,
         student_loan_plan: :plan_1,
-        eligibility: build(:student_loans_eligibility, student_loan_repayment_amount: 1234),
+        eligibility: build(:student_loans_eligibility, student_loan_repayment_amount: 1234)
       )
     end
 
@@ -176,7 +176,7 @@ describe Admin::ClaimsHelper do
         email_address: "genghis.khan@mongol-empire.com",
         bank_account_number: "34682151",
         bank_sort_code: "972654",
-        building_society_roll_number: "123456789/ABCD",
+        building_society_roll_number: "123456789/ABCD"
       )
     }
     let(:second_claim) {

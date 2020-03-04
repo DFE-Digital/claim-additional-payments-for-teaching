@@ -7,7 +7,7 @@ describe ClaimsHelper do
       build(
         :student_loans_eligibility,
         :eligible,
-        qts_award_year: "on_or_after_cut_off_date",
+        qts_award_year: "on_or_after_cut_off_date"
       )
     end
     let(:claim) do
@@ -170,7 +170,7 @@ describe ClaimsHelper do
         student_loan_country: StudentLoan::ENGLAND,
         student_loan_courses: :one_course,
         student_loan_start_date: StudentLoan::ON_OR_AFTER_1_SEPT_2012,
-        eligibility: build(:student_loans_eligibility, student_loan_repayment_amount: 1987.65),
+        eligibility: build(:student_loans_eligibility, student_loan_repayment_amount: 1987.65)
       )
 
       expected_answers = [
@@ -190,7 +190,7 @@ describe ClaimsHelper do
         student_loan_country: StudentLoan::ENGLAND,
         student_loan_courses: :two_or_more_courses,
         student_loan_start_date: StudentLoan::BEFORE_1_SEPT_2012,
-        eligibility: build(:student_loans_eligibility, student_loan_repayment_amount: 1987.65),
+        eligibility: build(:student_loans_eligibility, student_loan_repayment_amount: 1987.65)
       )
 
       expected_answers = [
@@ -208,7 +208,7 @@ describe ClaimsHelper do
         :claim,
         has_student_loan: true,
         student_loan_country: StudentLoan::SCOTLAND,
-        eligibility: build(:student_loans_eligibility, student_loan_repayment_amount: 1987.65),
+        eligibility: build(:student_loans_eligibility, student_loan_repayment_amount: 1987.65)
       )
 
       expected_answers = [

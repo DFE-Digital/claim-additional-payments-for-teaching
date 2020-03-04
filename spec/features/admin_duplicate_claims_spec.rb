@@ -14,7 +14,7 @@ RSpec.feature "Service operator can see potential duplicate claims" do
       email_address: "genghis.khan@mongol-empire.com",
       bank_account_number: "34682151",
       bank_sort_code: "972654",
-      building_society_roll_number: "123456789/ABCD",
+      building_society_roll_number: "123456789/ABCD"
     )
 
     claim_with_matching_teacher_reference_number = create(:claim, :submitted, teacher_reference_number: claim_to_approve.teacher_reference_number)

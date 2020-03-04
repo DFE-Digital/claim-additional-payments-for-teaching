@@ -10,7 +10,7 @@ RSpec.describe StudentLoans::AdminChecksPresenter, type: :model do
         :student_loans_eligibility,
         qts_award_year: "on_or_after_cut_off_date",
         claim_school: school,
-        current_school: school,
+        current_school: school
       ))
   end
   subject(:presenter) { described_class.new(claim) }

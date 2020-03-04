@@ -158,7 +158,7 @@ RSpec.describe StudentLoans::Eligibility, type: :model do
         computing_taught: true,
         languages_taught: true,
         employment_status: :different_school,
-        had_leadership_position: true,
+        had_leadership_position: true
       )
     end
 
