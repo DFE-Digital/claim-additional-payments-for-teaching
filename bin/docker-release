@@ -1,9 +1,0 @@
-#!/bin/bash
-set -e
-
-DOCKER_SOURCE=$1
-DOCKER_TARGET=$2
-
-docker pull "$DOCKER_SOURCE"
-docker tag "$DOCKER_SOURCE" "$DOCKER_TARGET"
-docker push "$DOCKER_TARGET"

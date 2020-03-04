@@ -107,10 +107,6 @@
       "type": "bool",
       "defaultValue": true
     },
-    "azureBuildNumber": {
-      "type": "string",
-      "defaultValue": ""
-    },
     "RAILS_ENV": {
       "type": "string",
       "defaultValue": "production"
@@ -437,10 +433,6 @@
               {
                 "name": "RAILS_SERVE_STATIC_FILES",
                 "value": "[parameters('RAILS_SERVE_STATIC_FILES')]"
-              },
-              {
-                "name": "BUILD_NUMBER",
-                "value": "[parameters('azureBuildNumber')]"
               },
               {
                 "name": "CANONICAL_HOSTNAME",
