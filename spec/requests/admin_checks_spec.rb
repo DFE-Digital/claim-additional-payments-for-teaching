@@ -18,6 +18,16 @@ RSpec.describe "Admin checks", type: :request do
         expect(response.body).to include("Qualifications")
         expect(response.body).to include("Employment")
       end
+
+      context "when the claim has a decision" do
+        let(:claim) { create(:claim, :approved) }
+
+        it "shows the outcome of the decision" do
+          get admin_claim_checks_path(claim_id: claim.id)
+
+          expect(response.body).to include("Approved")
+        end
+      end
     end
 
     # Compatible with claims from each policy
