@@ -88,7 +88,7 @@ describe Admin::ClaimsHelper do
       end
 
       it "includes the deadline warning" do
-        expect(helper.admin_submission_details(claim)[2].last).to have_selector(".tag--warning")
+        expect(helper.admin_submission_details(claim)[2].last).to have_selector(".tag--information")
       end
     end
   end
@@ -135,7 +135,7 @@ describe Admin::ClaimsHelper do
       let(:claim) { build(:claim, :submitted, submitted_at: (Claim::DECISION_DEADLINE - 1.week).ago) }
 
       it { is_expected.to have_content("7 days") }
-      it { is_expected.to have_selector(".tag--warning") }
+      it { is_expected.to have_selector(".tag--information") }
     end
 
     context "when a claim has passed it's deadline" do
@@ -163,7 +163,7 @@ describe Admin::ClaimsHelper do
       verified_claim = build(:claim, :unverified)
 
       expect(id_verification_status(verified_claim)).to have_content "Unverified"
-      expect(id_verification_status(verified_claim)).to have_selector(".tag--warning")
+      expect(id_verification_status(verified_claim)).to have_selector(".tag--information")
     end
   end
 
