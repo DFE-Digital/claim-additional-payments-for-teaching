@@ -58,7 +58,7 @@ module Admin
     end
 
     def id_verification_status(claim)
-      claim.identity_confirmed? ? "GOV.UK Verify" : content_tag(:strong, "Unverified", class: "govuk-tag tag--warning")
+      claim.identity_confirmed? ? "GOV.UK Verify" : content_tag(:strong, "Unverified", class: "govuk-tag tag--information")
     end
 
     def matching_attributes(first_claim, second_claim)

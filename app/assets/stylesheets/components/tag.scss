@@ -17,9 +17,15 @@
   background-color: govuk-colour("red");
 }
 
+.tag--information {
+  @extend %tag;
+  background-color: govuk-colour("blue");
+}
+
 .govuk-summary-list {
   .tag--warning,
-  .tag--alert {
+  .tag--alert,
+  .tag--information {
     margin-left: 1em;
   }
 }
