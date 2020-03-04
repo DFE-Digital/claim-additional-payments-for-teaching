@@ -69,6 +69,18 @@ module StudentLoans
     ].max
   end
 
+  # Returns human-friendly String for the financial year that Student Loans
+  # claims are being made against based on the currently-configured academic
+  # year for the StudentLoans policy. For example:
+  #
+  #   "6 April 2018 and 5 April 2019"
+  def current_financial_year
+    end_year = configuration.current_academic_year.start_year
+    start_year = end_year - 1
+
+    "6 April #{start_year} and 5 April #{end_year}"
+  end
+
   def configuration
     PolicyConfiguration.for(self)
   end
