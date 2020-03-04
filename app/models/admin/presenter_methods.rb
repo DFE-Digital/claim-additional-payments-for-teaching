@@ -14,7 +14,14 @@ module Admin
 
     def link_to_school(school)
       url = "https://get-information-schools.service.gov.uk/Establishments/Establishment/Details/#{school.urn}"
-      link_to(school.name, url, class: "govuk-link")
+
+      link_text = [
+        content_tag(:span, "View", class: "govuk-visually-hidden"),
+        school.name,
+        content_tag(:span, "on Get Information About Schools", class: "govuk-visually-hidden")
+      ].join(" ").html_safe
+
+      link_to(link_text, url, class: "govuk-link")
     end
   end
 end

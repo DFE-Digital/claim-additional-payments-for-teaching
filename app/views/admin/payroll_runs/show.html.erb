@@ -78,7 +78,7 @@
         <th scope="col" class="govuk-table__header">Claim Reference(s)</th>
         <th scope="col" class="govuk-table__header">Payee Name</th>
         <% unless @payroll_run.confirmation_report_uploaded? %>
-          <th scope="col" class="govuk-table__header"></th>
+          <th scope="col" class="govuk-table__header"><span class="govuk-visually-hidden">Actions</span></th>
         <% end %>
       </tr>
     </thead>
@@ -90,10 +90,9 @@
           <td class="govuk-table__cell"><%= payment.banking_name %></td>
           <% unless @payroll_run.confirmation_report_uploaded? %>
             <td class="govuk-table__cell">
-              <%= link_to 'Remove',
-                          remove_admin_payroll_run_payment_path(id: payment.id, payroll_run_id: payment.payroll_run.id),
-                          class: "govuk-link"
-              %>
+              <%= link_to remove_admin_payroll_run_payment_path(id: payment.id, payroll_run_id: payment.payroll_run.id), class: "govuk-link" do %>
+                Remove <span class="govuk-visually-hidden">payment row</span>
+              <% end %>
             </td>
           <% end %>
         </tr>

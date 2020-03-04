@@ -6,6 +6,13 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+- Manage services page validates in html checker
+- Improve guidance on admin file upload when no file is selected
+- Add visually hidden text to manage services
+- Screen reader improvements when viewing payrun
+- Add visually hidden text to payroll history table
+- Add visually hidden text to GIAS school link
+
 ## [Release 058] - 2020-03-03
 
 - Adjust content on the service closed page

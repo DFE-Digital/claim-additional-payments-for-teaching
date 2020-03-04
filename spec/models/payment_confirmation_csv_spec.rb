@@ -55,7 +55,7 @@ RSpec.describe PaymentConfirmationCsv do
     let(:file) { nil }
 
     it "fails and populates its errors" do
-      expect(subject.errors).to eq(["You must provide a file"])
+      expect(subject.errors).to eq(["Select a file"])
     end
   end
 

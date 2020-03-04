@@ -31,7 +31,7 @@ class PaymentConfirmationCsv
 
   def parse_csv(file)
     if file.nil?
-      errors.append("You must provide a file")
+      errors.append("Select a file")
       nil
     else
       CSV.read(file.to_io, headers: true, encoding: "BOM|UTF-8")
