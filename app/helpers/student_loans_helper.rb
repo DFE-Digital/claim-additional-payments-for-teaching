@@ -1,5 +1,10 @@
 module StudentLoansHelper
-  def claim_school_question(searching_for_additional_school)
-    searching_for_additional_school ? t("student_loans.questions.additional_school") : t("student_loans.questions.claim_school")
+  # Returns the question for the claim-school page in the Student Loans journey.
+  #
+  # Accepts an optional named parameter `additional_school` that, if set to
+  # `true`, will rephrase the question so it applies to a user searching for an
+  # additional school.
+  def claim_school_question(additional_school: false)
+    additional_school ? t("student_loans.questions.additional_school") : t("student_loans.questions.claim_school")
   end
 end
