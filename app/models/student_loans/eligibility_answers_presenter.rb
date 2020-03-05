@@ -75,7 +75,7 @@ module StudentLoans
 
     def mostly_performed_leadership_duties
       [
-        I18n.t("student_loans.questions.mostly_performed_leadership_duties"),
+        mostly_performed_leadership_duties_question,
         (eligibility.mostly_performed_leadership_duties? ? "Yes" : "No"),
         "mostly-performed-leadership-duties"
       ]

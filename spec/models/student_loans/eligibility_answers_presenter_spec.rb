@@ -27,7 +27,7 @@ RSpec.describe StudentLoans::EligibilityAnswersPresenter, type: :model do
       [I18n.t("questions.current_school"), school.name, "still-teaching"],
       [subjects_taught_question(school_name: school.name), "Chemistry and Physics", "subjects-taught"],
       [leadership_position_question, "Yes", "leadership-position"],
-      [I18n.t("student_loans.questions.mostly_performed_leadership_duties"), "No", "mostly-performed-leadership-duties"],
+      [mostly_performed_leadership_duties_question, "No", "mostly-performed-leadership-duties"],
       [I18n.t("student_loans.questions.student_loan_amount"), "£1,987.65", "student-loan-amount"]
     ]
 
@@ -47,8 +47,8 @@ RSpec.describe StudentLoans::EligibilityAnswersPresenter, type: :model do
 
   it "excludes questions skipped from the flow" do
     eligibility.had_leadership_position = false
-    expect(presenter.answers).to_not include([I18n.t("student_loans.questions.mostly_performed_leadership_duties"), "Yes", "mostly-performed-leadership-duties"])
-    expect(presenter.answers).to_not include([I18n.t("student_loans.questions.mostly_performed_leadership_duties"), "No", "mostly-performed-leadership-duties"])
+    expect(presenter.answers).to_not include([mostly_performed_leadership_duties_question, "Yes", "mostly-performed-leadership-duties"])
+    expect(presenter.answers).to_not include([mostly_performed_leadership_duties_question, "No", "mostly-performed-leadership-duties"])
   end
 
   context "with three subjects taught" do

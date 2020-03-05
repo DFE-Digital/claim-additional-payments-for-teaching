@@ -42,7 +42,7 @@ RSpec.feature "Teacher Student Loan Repayments claims" do
 
       expect(claim.eligibility.reload.had_leadership_position?).to eq(true)
 
-      expect(page).to have_text(I18n.t("student_loans.questions.mostly_performed_leadership_duties"))
+      expect(page).to have_text(mostly_performed_leadership_duties_question)
       choose "No"
       click_on "Continue"
 

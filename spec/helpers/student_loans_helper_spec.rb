@@ -28,4 +28,10 @@ describe StudentLoansHelper do
       expect(helper.leadership_position_question).to eq "Were you employed in a leadership position between 6 April 2024 and 5 April 2025?"
     end
   end
+
+  describe "#mostly_performed_leadership_duties_question" do
+    it "returns the question for the mostly performed leadership duties question in the Student Loans journey" do
+      expect(helper.mostly_performed_leadership_duties_question).to eq "Were more than half your working hours spent on leadership duties between 6 April 2018 and 5 April 2019?"
+    end
+  end
 end

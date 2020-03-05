@@ -26,4 +26,10 @@ module StudentLoansHelper
   def leadership_position_question
     I18n.t("student_loans.questions.leadership_position", financial_year: StudentLoans.current_financial_year)
   end
+
+  # Returns the question for the mostly-performed-leadership-duties question in
+  # the Student  Loans journey.
+  def mostly_performed_leadership_duties_question
+    I18n.t("student_loans.questions.mostly_performed_leadership_duties")
+  end
 end
