@@ -48,6 +48,5 @@
   <% end %>
 
   <%= form.submit "Continue", class: "govuk-button" %>
-  <%= link_to "Search again", claim_path, class: "govuk-button govuk-button--secondary" %>
-
+  <%= link_to "Search again", claim_path, class: "govuk-button govuk-button--secondary", role: "button", data: {module: "govuk-button"} %>
 <% end %>
