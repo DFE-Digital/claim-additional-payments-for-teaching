@@ -46,7 +46,7 @@ jobs:
           azureSubscription: ${{parameters.azureSubscription}}
           scriptLocation: inlineScript
           inlineScript: 'az container delete --name ${{parameters.resourceGroupPrefix}}-app-migration-runner-aci --resource-group s118t01-app -y'
-  - job: send_slack_notification
+  - job: send_slack_success_message
     dependsOn: clean_up
     displayName: Send Slack notification
     steps:
@@ -56,10 +56,13 @@ jobs:
           targetType: filePath
           filePath: './$(System.DefaultWorkingDirectory)/Build/repository/bin/slack-alert'
           arguments: '${{parameters.environmentName}} $(Build.BuildNumber) $(Release.ReleaseId) ${{parameters.slackWebhookUrl}} SUCCESS'
+  - job: send_slack_failure_message
+    displayName: Send Slack failure notification
+    condition: failed()
+    steps:
       - task: Bash@3
         displayName: 'Send Slack Failure Notification'
         inputs:
           targetType: filePath
           filePath: './$(System.DefaultWorkingDirectory)/Build/repository/bin/slack-alert'
           arguments: '${{parameters.environmentName}} $(Build.BuildNumber) $(Release.ReleaseId) ${{parameters.slackWebhookUrl}} FAILURE'
-        condition: failed()
