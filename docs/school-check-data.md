@@ -52,10 +52,15 @@ which need this email sending is a developer task, documented below.
    `school-check-batch_ddmmyyyy.csv`
 
 8. Securely transfer the file to the relevant service operator to follow the
-   rest of the school check process
+   rest of the school check process. The best way we’ve found to do this is to
+   create a [new Google Sheets document](https://sheets.new/), private to
+   yourself and shared only with the service operator.
 
 9. From the CSV file, copy the claim references (and no other details) and
    append them to the first worksheet in the
    [School Check Email - Sent Claims spreadsheet](https://docs.google.com/spreadsheets/d/1mxMND-SqOjK7yyYp0EaEJOOCUYFkqLJ1ZIwPLuSVKfM/edit#gid=1926551388)
    so that they will be excluded the next time the process is run. Trim any
    remaining empty cells from the bottom of the column
+
+10. After the service operator has sent the school check emails, delete the
+    personal data from your machine and Google Sheets.
