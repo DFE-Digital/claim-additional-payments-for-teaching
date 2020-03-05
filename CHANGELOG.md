@@ -15,6 +15,8 @@ The format is based on [Keep a Changelog]
 - Add visually hidden text to payroll history table
 - Add visually hidden text to GIAS school link
 - Allow service operators to navigate to decision page
+- Financial year for student loans claims varies based on the current academic
+  year
 
 ## [Release 058] - 2020-03-03
 
