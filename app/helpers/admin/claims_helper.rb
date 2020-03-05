@@ -53,12 +53,12 @@ module Admin
       days_until_decision_deadline = days_between(Date.today, claim.decision_deadline_date)
       return if days_until_decision_deadline.days > Claim::DECISION_DEADLINE_WARNING_POINT
 
-      decision_deadline_warning_class = days_until_decision_deadline < 0 ? "tag--alert" : "tag--warning"
+      decision_deadline_warning_class = days_until_decision_deadline < 0 ? "tag--alert" : "tag--information"
       content_tag(:strong, pluralize(days_until_decision_deadline, "day"), class: "govuk-tag #{decision_deadline_warning_class}")
     end
 
     def id_verification_status(claim)
-      claim.identity_confirmed? ? "GOV.UK Verify" : content_tag(:strong, "Unverified", class: "govuk-tag tag--warning")
+      claim.identity_confirmed? ? "GOV.UK Verify" : content_tag(:strong, "Unverified", class: "govuk-tag tag--information")
     end
 
     def matching_attributes(first_claim, second_claim)
