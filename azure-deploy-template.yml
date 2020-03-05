@@ -15,7 +15,7 @@ jobs:
         inputs:
           azureSubscription: ${{parameters.azureSubscription}}
           scriptPath: './bin/azure-deploy'
-          arguments: 'test --skip-login --skip-confirmation --docker-tag=$(Build.BuildNumber)'
+          arguments: '${{parameters.environmentName}} --skip-login --skip-confirmation --docker-tag=$(Build.BuildNumber)'
         env:
           GIT_COMMIT_HASH: $(Release.Artifacts.Build.SourceVersion)
   - job: swap_app_service_slots
@@ -55,11 +55,11 @@ jobs:
         inputs:
           targetType: filePath
           filePath: './$(System.DefaultWorkingDirectory)/Build/repository/bin/slack-alert'
-          arguments: 'test $(Build.BuildNumber) $(Release.ReleaseId) ${{parameters.slackWebhookUrl}} SUCCESS'
+          arguments: '${{parameters.environmentName}} $(Build.BuildNumber) $(Release.ReleaseId) ${{parameters.slackWebhookUrl}} SUCCESS'
       - task: Bash@3
         displayName: 'Send Slack Failure Notification'
         inputs:
           targetType: filePath
           filePath: './$(System.DefaultWorkingDirectory)/Build/repository/bin/slack-alert'
-          arguments: 'test $(Build.BuildNumber) $(Release.ReleaseId) ${{parameters.slackWebhookUrl}} FAILURE'
+          arguments: '${{parameters.environmentName}} $(Build.BuildNumber) $(Release.ReleaseId) ${{parameters.slackWebhookUrl}} FAILURE'
         condition: failed()
