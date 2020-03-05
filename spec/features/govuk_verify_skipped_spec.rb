@@ -1,6 +1,8 @@
 require "rails_helper"
 
 RSpec.feature "Bypassing GOV.UK Verify" do
+  include StudentLoansHelper
+
   before { stub_geckoboard_dataset_update }
 
   scenario "Teacher can submit a claim without going through GOV.UK Verify" do
@@ -62,7 +64,7 @@ RSpec.feature "Bypassing GOV.UK Verify" do
 
     answer_student_loan_plan_questions
 
-    fill_in I18n.t("student_loans.questions.student_loan_amount"), with: "1100"
+    fill_in student_loan_amount_question, with: "1100"
     click_on "Continue"
 
     fill_in I18n.t("questions.email_address"), with: "name@example.tld"

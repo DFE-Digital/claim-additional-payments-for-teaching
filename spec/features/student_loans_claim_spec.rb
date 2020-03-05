@@ -87,8 +87,8 @@ RSpec.feature "Teacher Student Loan Repayments claims" do
       expect(claim.student_loan_start_date).to eq(StudentLoan::BEFORE_1_SEPT_2012)
       expect(claim.student_loan_plan).to eq(StudentLoan::PLAN_1)
 
-      expect(page).to have_text(I18n.t("student_loans.questions.student_loan_amount"))
-      fill_in I18n.t("student_loans.questions.student_loan_amount"), with: "1100"
+      expect(page).to have_text(student_loan_amount_question)
+      fill_in student_loan_amount_question, with: "1100"
       click_on "Continue"
 
       expect(claim.eligibility.reload.student_loan_repayment_amount).to eql(1100.00)

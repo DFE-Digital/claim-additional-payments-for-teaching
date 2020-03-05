@@ -32,4 +32,10 @@ module StudentLoansHelper
   def mostly_performed_leadership_duties_question
     I18n.t("student_loans.questions.mostly_performed_leadership_duties", financial_year: StudentLoans.current_financial_year)
   end
+
+  # Returns the question for the student-loan-amount question in the Student
+  # Loans journey.
+  def student_loan_amount_question
+    I18n.t("student_loans.questions.student_loan_amount")
+  end
 end

@@ -83,7 +83,7 @@ module StudentLoans
 
     def student_loan_amount
       [
-        I18n.t("student_loans.questions.student_loan_amount"),
+        student_loan_amount_question,
         number_to_currency(eligibility.student_loan_repayment_amount),
         "student-loan-amount"
       ]

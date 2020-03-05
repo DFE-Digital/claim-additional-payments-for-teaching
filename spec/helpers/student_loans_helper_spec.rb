@@ -35,4 +35,10 @@ describe StudentLoansHelper do
       expect(helper.leadership_position_question).to eq "Were you employed in a leadership position between 6 April 2024 and 5 April 2025?"
     end
   end
+
+  describe "#student_loan_amount_question" do
+    it "returns the question for the student laon amount question in the Student Loans journey" do
+      expect(helper.student_loan_amount_question).to eq "Exactly how much student loan did you repay while employed as a teacher between 6 April 2018 and 5 April 2019?"
+    end
+  end
 end
