@@ -16,8 +16,9 @@ describe StudentLoansHelper do
   end
 
   describe "#subjects_taught_question" do
-    it "returns the question for the subjects taught question in the Student Loans journey mentioning the school" do
-      expect(helper.subjects_taught_question(school_name: "Edward Tilghman Middle")).to eq "Which of the following subjects did you teach at Edward Tilghman Middle between 6 April 2018 and 5 April 2019?"
+    it "returns the question for the subjects taught question in the Student Loans journey mentioning the school, based on the configured current academic year" do
+      expect(policy_configurations(:student_loans).current_academic_year).to eq AcademicYear.new("2025/2026")
+      expect(helper.subjects_taught_question(school_name: "Edward Tilghman Middle")).to eq "Which of the following subjects did you teach at Edward Tilghman Middle between 6 April 2024 and 5 April 2025?"
     end
   end
 end

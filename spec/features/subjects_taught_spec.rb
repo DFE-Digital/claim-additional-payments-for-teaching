@@ -1,6 +1,7 @@
 require "rails_helper"
 
 RSpec.feature "Choosing subjects taught during Teacher Student Loan Repayments claims" do
+  include StudentLoansHelper
   before do
     start_student_loans_claim
     choose_school schools(:penistone_grammar_school)
@@ -24,7 +25,7 @@ RSpec.feature "Choosing subjects taught during Teacher Student Loan Repayments c
       click_on "Continue"
 
       expect(page).to have_text("You did not select an eligible subject")
-      expect(page).to have_text("You can only get this payment if you taught one or more of the following subjects between 6 April 2018 and 5 April 2019:")
+      expect(page).to have_text("You can only get this payment if you taught one or more of the following subjects between #{StudentLoans.current_financial_year}:")
     end
 
     scenario "checks not applicable and then chooses a subject" do
@@ -55,7 +56,7 @@ RSpec.feature "Choosing subjects taught during Teacher Student Loan Repayments c
       click_on "Continue"
 
       expect(page).to have_text("You did not select an eligible subject")
-      expect(page).to have_text("You can only get this payment if you taught one or more of the following subjects between 6 April 2018 and 5 April 2019:")
+      expect(page).to have_text("You can only get this payment if you taught one or more of the following subjects between #{StudentLoans.current_financial_year}:")
     end
 
     scenario "checks not applicable and then chooses a subject" do
@@ -65,7 +66,7 @@ RSpec.feature "Choosing subjects taught during Teacher Student Loan Repayments c
       click_on "Continue"
 
       expect(page).to have_text("You did not select an eligible subject")
-      expect(page).to have_text("You can only get this payment if you taught one or more of the following subjects between 6 April 2018 and 5 April 2019:")
+      expect(page).to have_text("You can only get this payment if you taught one or more of the following subjects between #{StudentLoans.current_financial_year}:")
     end
   end
 end

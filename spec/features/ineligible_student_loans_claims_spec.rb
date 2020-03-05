@@ -63,7 +63,7 @@ RSpec.feature "Ineligible Teacher Student Loan Repayments claims" do
 
     expect(claim.eligibility.reload.taught_eligible_subjects?).to eq(false)
     expect(page).to have_text("You did not select an eligible subject")
-    expect(page).to have_text("You can only get this payment if you taught one or more of the following subjects between 6 April 2018 and 5 April 2019:")
+    expect(page).to have_text("You can only get this payment if you taught one or more of the following subjects between #{StudentLoans.current_financial_year}:")
   end
 
   scenario "was in a leadership position and performed leadership duties for more than half of their time" do
