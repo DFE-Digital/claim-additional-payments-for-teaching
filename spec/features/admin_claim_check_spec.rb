@@ -110,6 +110,7 @@ RSpec.feature "Admin checks a claim" do
 
       expect(page).to have_content("Check qualification information Completed")
       expect(page).to have_content("Check employment information Completed")
+      expect(page).to have_link("Approve or reject this claim", href: new_admin_claim_decision_path(claim_with_checks))
 
       click_on "Check qualification information"
       expect(page).to have_content("Checked by #{checking_user.full_name}")

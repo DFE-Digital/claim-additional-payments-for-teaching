@@ -39,6 +39,23 @@
           </li>
         </ul>
       </li>
+      <li>
+        <h2 class="app-task-list__section">
+          <span class="app-task-list__section-number">3. </span> Decision
+        </h2>
+        <ul class="app-task-list__items">
+          <li class="app-task-list__item">
+            <span class="app-task-list__task-name">
+              <%= link_to "Approve or reject this claim", new_admin_claim_decision_path(@claim), class: "govuk-link" %>
+            </span>
+            <% if @claim.decision&.approved? %>
+              <strong class="govuk-tag app-task-list__task-completed">Approved</strong>
+            <% elsif @claim.decision&.rejected? %>
+              <strong class="govuk-tag app-task-list__task-completed govuk-tag--alert">Rejected</strong>
+            <% end %>
+          </li>
+        </ul>
+      </li>
     </ol>
 
   </div>

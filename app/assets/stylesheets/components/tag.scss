@@ -7,14 +7,24 @@
   text-align: center;
 }
 
+.govuk-tag {
+  &--warning {
+    background-color: govuk-colour("orange");
+  }
+
+  &--alert {
+    background-color: govuk-colour("red");
+  }
+}
+
 .tag--warning {
   @extend %tag;
-  background-color: govuk-colour("orange");
+  @extend .govuk-tag--warning;
 }
 
 .tag--alert {
   @extend %tag;
-  background-color: govuk-colour("red");
+  @extend .govuk-tag--alert;
 }
 
 .govuk-summary-list {

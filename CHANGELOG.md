@@ -12,6 +12,7 @@ The format is based on [Keep a Changelog]
 - Screen reader improvements when viewing payrun
 - Add visually hidden text to payroll history table
 - Add visually hidden text to GIAS school link
+- Allow service operators to navigate to decision page
 
 ## [Release 058] - 2020-03-03
 
