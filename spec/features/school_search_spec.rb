@@ -73,7 +73,7 @@ RSpec.feature "Searching for school during Teacher Student Loan Repayments claim
 
     click_button "Continue"
 
-    expect(page).to have_text(I18n.t("student_loans.questions.leadership_position"))
+    expect(page).to have_text(leadership_position_question)
   end
 
   scenario "School search form still works like a normal form if submitted", js: true do

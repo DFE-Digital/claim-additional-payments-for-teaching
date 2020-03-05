@@ -36,7 +36,7 @@ RSpec.feature "Teacher Student Loan Repayments claims" do
 
       expect(claim.eligibility.reload.subjects_taught).to eq([:physics_taught])
 
-      expect(page).to have_text(I18n.t("student_loans.questions.leadership_position"))
+      expect(page).to have_text(leadership_position_question)
       choose "Yes"
       click_on "Continue"
 
@@ -150,6 +150,6 @@ RSpec.feature "Teacher Student Loan Repayments claims" do
 
     expect(claim.eligibility.reload.current_school).to eql schools(:hampstead_school)
 
-    expect(page).to have_text(I18n.t("student_loans.questions.leadership_position"))
+    expect(page).to have_text(leadership_position_question)
   end
 end

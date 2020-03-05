@@ -67,7 +67,7 @@ module StudentLoans
 
     def leadership_position
       [
-        I18n.t("student_loans.questions.leadership_position"),
+        leadership_position_question,
         (eligibility.had_leadership_position? ? "Yes" : "No"),
         "leadership-position"
       ]

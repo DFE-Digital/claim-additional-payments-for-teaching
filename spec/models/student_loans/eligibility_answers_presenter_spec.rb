@@ -26,7 +26,7 @@ RSpec.describe StudentLoans::EligibilityAnswersPresenter, type: :model do
       [claim_school_question, school.name, "claim-school"],
       [I18n.t("questions.current_school"), school.name, "still-teaching"],
       [subjects_taught_question(school_name: school.name), "Chemistry and Physics", "subjects-taught"],
-      [I18n.t("student_loans.questions.leadership_position"), "Yes", "leadership-position"],
+      [leadership_position_question, "Yes", "leadership-position"],
       [I18n.t("student_loans.questions.mostly_performed_leadership_duties"), "No", "mostly-performed-leadership-duties"],
       [I18n.t("student_loans.questions.student_loan_amount"), "£1,987.65", "student-loan-amount"]
     ]

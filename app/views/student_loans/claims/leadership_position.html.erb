@@ -1,4 +1,4 @@
-<% content_for(:page_title, page_title(t("student_loans.questions.leadership_position"), policy: current_policy_routing_name, show_error: current_claim.errors.any?)) %>
+<% content_for(:page_title, page_title(leadership_position_question, policy: current_policy_routing_name, show_error: current_claim.errors.any?)) %>
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
@@ -14,7 +14,7 @@
 
             <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl">
               <h1 class="govuk-fieldset__heading">
-                <%= t("student_loans.questions.leadership_position") %>
+                <%= leadership_position_question %>
               </h1>
             </legend>
 

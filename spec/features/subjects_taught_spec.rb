@@ -43,7 +43,7 @@ RSpec.feature "Choosing subjects taught during Teacher Student Loan Repayments c
       choose "Yes, at Penistone Grammar School"
       click_on "Continue"
 
-      expect(page).to have_text(I18n.t("student_loans.questions.leadership_position"))
+      expect(page).to have_text(leadership_position_question)
     end
   end
 

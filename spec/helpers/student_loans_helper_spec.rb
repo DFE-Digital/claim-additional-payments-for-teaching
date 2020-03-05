@@ -21,4 +21,10 @@ describe StudentLoansHelper do
       expect(helper.subjects_taught_question(school_name: "Edward Tilghman Middle")).to eq "Which of the following subjects did you teach at Edward Tilghman Middle between 6 April 2024 and 5 April 2025?"
     end
   end
+
+  describe "#leadership_position_question" do
+    it "returns the question for the leadership position question in the Student Loans journey" do
+      expect(helper.leadership_position_question).to eq "Were you employed in a leadership position between 6 April 2018 and 5 April 2019?"
+    end
+  end
 end

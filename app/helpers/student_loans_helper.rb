@@ -20,4 +20,10 @@ module StudentLoansHelper
   def subjects_taught_question(school_name:)
     I18n.t("student_loans.questions.subjects_taught", school: school_name, financial_year: StudentLoans.current_financial_year)
   end
+
+  # Returns the question for the leadership-position question in the Student
+  # Loans journey.
+  def leadership_position_question
+    I18n.t("student_loans.questions.leadership_position")
+  end
 end
