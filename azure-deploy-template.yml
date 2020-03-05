@@ -14,9 +14,8 @@ jobs:
         displayName: 'Deploy Azure'
         inputs:
           azureSubscription: ${{parameters.azureSubscription}}
-          scriptPath: '$(System.DefaultWorkingDirectory)/Build/repository/bin/azure-deploy'
+          scriptPath: './bin/azure-deploy'
           arguments: 'test --skip-login --skip-confirmation --docker-tag=$(Build.BuildNumber)'
-          workingDirectory: '$(System.DefaultWorkingDirectory)/Build/repository'
         env:
           GIT_COMMIT_HASH: $(Release.Artifacts.Build.SourceVersion)
   - job: swap_app_service_slots
