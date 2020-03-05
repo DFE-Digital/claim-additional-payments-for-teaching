@@ -14,6 +14,7 @@
           "Run #{Date.today.strftime("%B")} payroll",
           new_admin_payroll_run_path,
           class: "govuk-button",
+          role: "button",
           data: {module: "govuk-button"}
         ) if PayrollRun.this_month.empty? %>
   </div>
