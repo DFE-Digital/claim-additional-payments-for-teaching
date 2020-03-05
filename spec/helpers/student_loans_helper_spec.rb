@@ -23,8 +23,9 @@ describe StudentLoansHelper do
   end
 
   describe "#leadership_position_question" do
-    it "returns the question for the leadership position question in the Student Loans journey" do
-      expect(helper.leadership_position_question).to eq "Were you employed in a leadership position between 6 April 2018 and 5 April 2019?"
+    it "returns the question for the leadership position question in the Student Loans journey, based on the configured current academic year" do
+      expect(policy_configurations(:student_loans).current_academic_year).to eq AcademicYear.new("2025/2026")
+      expect(helper.leadership_position_question).to eq "Were you employed in a leadership position between 6 April 2024 and 5 April 2025?"
     end
   end
 end

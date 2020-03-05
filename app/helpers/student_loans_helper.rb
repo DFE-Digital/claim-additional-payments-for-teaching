@@ -24,6 +24,6 @@ module StudentLoansHelper
   # Returns the question for the leadership-position question in the Student
   # Loans journey.
   def leadership_position_question
-    I18n.t("student_loans.questions.leadership_position")
+    I18n.t("student_loans.questions.leadership_position", financial_year: StudentLoans.current_financial_year)
   end
 end
