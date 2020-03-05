@@ -8,7 +8,7 @@
   <p class="govuk-body">
     <%= current_claim.eligibility.claim_school_name %> is not an eligible
     school. You can only get this payment if you were employed to teach at an
-    eligible school between 6 April 2018 and 5 April 2019.
+    eligible school between <%= StudentLoans.current_financial_year %>
   </p>
 
   <p class="govuk-body">

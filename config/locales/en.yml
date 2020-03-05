@@ -175,8 +175,8 @@ en:
     award_description: "claim payment"
     support_email_address: "studentloanteacherpayment@digital.education.gov.uk"
     questions:
-      claim_school: "Which school were you employed to teach at between 6 April 2018 and 5 April 2019?"
-      additional_school: "Which additional school were you employed to teach at between 6 April 2018 and 5 April 2019?"
+      claim_school: "Which school were you employed to teach at between %{financial_year}?"
+      additional_school: "Which additional school were you employed to teach at between %{financial_year}?"
       employment_status: "Are you still employed to teach at a school in England?"
       subjects_taught: "Which of the following subjects did you teach at %{school} between 6 April 2018 and 5 April 2019?"
       leadership_position: "Were you employed in a leadership position between 6 April 2018 and 5 April 2019?"

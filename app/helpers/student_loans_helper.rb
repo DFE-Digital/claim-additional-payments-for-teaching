@@ -5,6 +5,10 @@ module StudentLoansHelper
   # `true`, will rephrase the question so it applies to a user searching for an
   # additional school.
   def claim_school_question(additional_school: false)
-    additional_school ? I18n.t("student_loans.questions.additional_school") : I18n.t("student_loans.questions.claim_school")
+    if additional_school
+      I18n.t("student_loans.questions.additional_school", financial_year: StudentLoans.current_financial_year)
+    else
+      I18n.t("student_loans.questions.claim_school", financial_year: StudentLoans.current_financial_year)
+    end
   end
 end
