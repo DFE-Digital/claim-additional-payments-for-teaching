@@ -1,5 +1,6 @@
 module StudentLoans
   class EligibilityAnswersPresenter
+    include StudentLoansHelper
     include StudentLoans::PresenterMethods
     include ActiveSupport::NumberHelper
 
@@ -42,7 +43,7 @@ module StudentLoans
 
     def claim_school
       [
-        I18n.t("student_loans.questions.claim_school"),
+        claim_school_question,
         eligibility.claim_school_name,
         "claim-school"
       ]

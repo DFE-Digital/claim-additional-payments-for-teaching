@@ -1,6 +1,8 @@
 require "rails_helper"
 
 RSpec.describe StudentLoans::EligibilityAnswersPresenter, type: :model do
+  include StudentLoansHelper
+
   let(:school) { schools(:penistone_grammar_school) }
   let(:eligibility_attributes) do
     {
@@ -21,7 +23,7 @@ RSpec.describe StudentLoans::EligibilityAnswersPresenter, type: :model do
   it "returns an array of questions, answers, and slugs for displaying to the user for review" do
     expected_answers = [
       [I18n.t("questions.qts_award_year"), "In or after the academic year 2013 to 2014", "qts-year"],
-      [I18n.t("student_loans.questions.claim_school"), school.name, "claim-school"],
+      [claim_school_question, school.name, "claim-school"],
       [I18n.t("questions.current_school"), school.name, "still-teaching"],
       [I18n.t("student_loans.questions.subjects_taught", school: school.name), "Chemistry and Physics", "subjects-taught"],
       [I18n.t("student_loans.questions.leadership_position"), "Yes", "leadership-position"],

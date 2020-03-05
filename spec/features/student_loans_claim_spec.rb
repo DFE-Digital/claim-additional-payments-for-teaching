@@ -1,6 +1,8 @@
 require "rails_helper"
 
 RSpec.feature "Teacher Student Loan Repayments claims" do
+  include StudentLoansHelper
+
   before { stub_geckoboard_dataset_update }
 
   [
@@ -18,7 +20,7 @@ RSpec.feature "Teacher Student Loan Repayments claims" do
 
       expect(claim.eligibility.reload.qts_award_year).to eql("on_or_after_cut_off_date")
 
-      expect(page).to have_text(I18n.t("student_loans.questions.claim_school"))
+      expect(page).to have_text(claim_school_question)
 
       choose_school schools(:penistone_grammar_school)
       expect(claim.eligibility.reload.claim_school).to eql schools(:penistone_grammar_school)
