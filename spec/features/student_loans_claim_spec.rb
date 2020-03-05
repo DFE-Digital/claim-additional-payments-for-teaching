@@ -48,7 +48,7 @@ RSpec.feature "Teacher Student Loan Repayments claims" do
 
       expect(claim.eligibility.reload.mostly_performed_leadership_duties?).to eq(false)
 
-      expect(page).to have_text("You are eligible to claim back student loan repayments")
+      expect(page).to have_text("you can claim back the student loan repayments you made between #{StudentLoans.current_financial_year}.")
       click_on "Continue"
 
       expect(page).to have_text("How we will use the information you provide")
