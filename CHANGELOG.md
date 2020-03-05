@@ -6,7 +6,8 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
-- Links that look like buttons now work if users have JS
+- Links that look like buttons now work if users have JS on the claim journey
+- Links styled as buttons now work as expected for keyboard users
 - Manage services page validates in html checker
 - Improve guidance on admin file upload when no file is selected
 - Add visually hidden text to manage services

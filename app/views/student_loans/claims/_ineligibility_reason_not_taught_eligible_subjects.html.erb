@@ -29,6 +29,6 @@
     You only need to have worked at one eligible school to claim.
   </p>
 
-  <%= link_to "Enter another school", claim_path(current_policy_routing_name, "claim-school", additional_school: true), class: "govuk-button", data: {module: "govuk-button"} %>
-  <%= link_to "I've tried all of my schools", claim_path(current_policy_routing_name, "ineligible", no_more_schools: true), class: "govuk-button govuk-button--secondary", data: {module: "govuk-button"} %>
+  <%= link_to "Enter another school", claim_path(current_policy_routing_name, "claim-school", additional_school: true), class: "govuk-button", role: "button", data: {module: "govuk-button"} %>
+  <%= link_to "I've tried all of my schools", claim_path(current_policy_routing_name, "ineligible", no_more_schools: true), class: "govuk-button govuk-button--secondary", role: "button", data: {module: "govuk-button"} %>
 <% end %>
