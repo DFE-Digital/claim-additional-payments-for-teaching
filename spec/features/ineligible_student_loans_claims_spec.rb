@@ -82,7 +82,7 @@ RSpec.feature "Ineligible Teacher Student Loan Repayments claims" do
 
     expect(claim.eligibility.reload.mostly_performed_leadership_duties?).to eq(true)
     expect(page).to have_text("You’re not eligible")
-    expect(page).to have_text("You can only get this payment if you spent less than half your working hours performing leadership duties between 6 April 2018 and 5 April 2019.")
+    expect(page).to have_text("You can only get this payment if you spent less than half your working hours performing leadership duties between #{StudentLoans.current_financial_year}.")
   end
 
   scenario "claimant can start a fresh claim after being told they are ineligible, by visiting the start page" do

@@ -96,7 +96,7 @@ RSpec.feature "Changing the answers on a submittable claim" do
     expect(claim.eligibility.reload.mostly_performed_leadership_duties).to eq(true)
 
     expect(page).to have_text("You’re not eligible")
-    expect(page).to have_text("You can only get this payment if you spent less than half your working hours performing leadership duties between 6 April 2018 and 5 April 2019.")
+    expect(page).to have_text("You can only get this payment if you spent less than half your working hours performing leadership duties between #{StudentLoans.current_financial_year}.")
   end
 
   scenario "Teacher edits but does not change an answer which is a dependency of some of the subsequent answers they’ve given" do
