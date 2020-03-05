@@ -23,7 +23,7 @@ RSpec.feature "Applicant worked at multiple schools" do
     choose_school schools(:penistone_grammar_school)
     expect(claim.eligibility.reload.claim_school).to eq schools(:penistone_grammar_school)
 
-    expect(page).to have_text(I18n.t("student_loans.questions.subjects_taught", school: schools(:penistone_grammar_school).name))
+    expect(page).to have_text(subjects_taught_question(school_name: schools(:penistone_grammar_school).name))
   end
 
   scenario "first claim school is ineligible and subsequent school is ineligible too" do

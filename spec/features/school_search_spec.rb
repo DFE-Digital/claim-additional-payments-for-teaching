@@ -18,7 +18,7 @@ RSpec.feature "Searching for school during Teacher Student Loan Repayments claim
     click_on "Continue"
 
     expect(claim.eligibility.reload.claim_school).to eql schools(:penistone_grammar_school)
-    expect(page).to have_text(I18n.t("student_loans.questions.subjects_taught", school: schools(:penistone_grammar_school).name))
+    expect(page).to have_text(subjects_taught_question(school_name: schools(:penistone_grammar_school).name))
   end
 
   scenario "searches again to find school" do
@@ -36,7 +36,7 @@ RSpec.feature "Searching for school during Teacher Student Loan Repayments claim
     click_on "Continue"
 
     expect(claim.eligibility.reload.claim_school).to eql schools(:penistone_grammar_school)
-    expect(page).to have_text(I18n.t("student_loans.questions.subjects_taught", school: schools(:penistone_grammar_school).name))
+    expect(page).to have_text(subjects_taught_question(school_name: schools(:penistone_grammar_school).name))
   end
 
   scenario "Claim school search with autocomplete", js: true do
@@ -52,7 +52,7 @@ RSpec.feature "Searching for school during Teacher Student Loan Repayments claim
 
     click_button "Continue"
 
-    expect(page).to have_text(I18n.t("student_loans.questions.subjects_taught", school: schools(:penistone_grammar_school).name))
+    expect(page).to have_text(subjects_taught_question(school_name: schools(:penistone_grammar_school).name))
   end
 
   scenario "Current school search with autocomplete", js: true do

@@ -59,7 +59,7 @@ module StudentLoans
 
     def subjects_taught
       [
-        I18n.t("student_loans.questions.subjects_taught", school: eligibility.claim_school_name),
+        subjects_taught_question(school_name: eligibility.claim_school_name),
         subject_list(eligibility.subjects_taught),
         "subjects-taught"
       ]

@@ -1,6 +1,8 @@
 require "rails_helper"
 
 RSpec.feature "Ineligible Teacher Student Loan Repayments claims" do
+  include StudentLoansHelper
+
   scenario "qualified before the first eligible QTS year" do
     policy_configurations(:student_loans).update!(current_academic_year: "2025/2026")
 
@@ -98,6 +100,6 @@ RSpec.feature "Ineligible Teacher Student Loan Repayments claims" do
 
     choose_school schools(:penistone_grammar_school)
 
-    expect(page).to have_text(I18n.t("student_loans.questions.subjects_taught", school: schools(:penistone_grammar_school).name))
+    expect(page).to have_text(subjects_taught_question(school_name: schools(:penistone_grammar_school).name))
   end
 end

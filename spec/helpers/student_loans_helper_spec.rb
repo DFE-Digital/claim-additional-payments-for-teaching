@@ -14,4 +14,10 @@ describe StudentLoansHelper do
       expect(helper.claim_school_question(additional_school: true)).to eq "Which additional school were you employed to teach at between 6 April 2024 and 5 April 2025?"
     end
   end
+
+  describe "#subjects_taught_question" do
+    it "returns the question for the subjects taught question in the Student Loans journey mentioning the school" do
+      expect(helper.subjects_taught_question(school_name: "Edward Tilghman Middle")).to eq "Which of the following subjects did you teach at Edward Tilghman Middle between 6 April 2018 and 5 April 2019?"
+    end
+  end
 end
