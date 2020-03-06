@@ -238,6 +238,7 @@ ActiveRecord::Schema.define(version: 2020_03_16_100421) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.boolean "passed"
+    t.boolean "manual"
     t.index ["claim_id"], name: "index_tasks_on_claim_id"
     t.index ["created_by_id"], name: "index_tasks_on_created_by_id"
     t.index ["name", "claim_id"], name: "index_tasks_on_name_and_claim_id", unique: true

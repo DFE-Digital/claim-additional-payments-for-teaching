@@ -58,7 +58,8 @@ class Admin::TasksController < Admin::BaseAdminController
     params.require(:task)
       .permit(:passed)
       .merge(name: current_task_name,
-             created_by: admin_user)
+             created_by: admin_user,
+             manual: true)
   end
 
   def load_matching_claims
