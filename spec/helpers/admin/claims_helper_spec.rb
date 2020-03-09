@@ -34,16 +34,16 @@ describe Admin::ClaimsHelper do
       expect(helper.admin_personal_details(claim)).to eq expected_answers
     end
 
-    context "when a claim has had PII deleted" do
+    context "when a claim has had personal data deleted" do
       let(:claim) { build(:claim, :rejected, :personal_data_removed, teacher_reference_number: "1234567", email_address: "test@email.com") }
 
       it "returns the expected strings" do
         expected_answers = [
           [I18n.t("admin.teacher_reference_number"), "1234567"],
-          [I18n.t("govuk_verify_fields.full_name").capitalize, helper.pii_removed_text],
-          [I18n.t("govuk_verify_fields.date_of_birth").capitalize, helper.pii_removed_text],
-          [I18n.t("admin.national_insurance_number"), helper.pii_removed_text],
-          [I18n.t("govuk_verify_fields.address").capitalize, helper.pii_removed_text],
+          [I18n.t("govuk_verify_fields.full_name").capitalize, helper.personal_data_removed_text],
+          [I18n.t("govuk_verify_fields.date_of_birth").capitalize, helper.personal_data_removed_text],
+          [I18n.t("admin.national_insurance_number"), helper.personal_data_removed_text],
+          [I18n.t("govuk_verify_fields.address").capitalize, helper.personal_data_removed_text],
           [I18n.t("admin.email_address"), "test@email.com"]
         ]
 
