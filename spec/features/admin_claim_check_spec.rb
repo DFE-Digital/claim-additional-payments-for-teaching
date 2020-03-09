@@ -130,19 +130,6 @@ RSpec.feature "Admin checks a claim" do
       expect(page).to have_content(user.full_name)
     end
 
-    context "When the claim has had PII removed" do
-      let!(:claim_with_pii_removed) { create(:claim, :rejected, :pii_removed) }
-
-      scenario "User can see where a claim has had PII removed" do
-        visit admin_claim_path(claim_with_pii_removed)
-        expect(page).to have_content("personally identifiable information removed")
-        expect(page).to have_content("Full name Removed")
-        expect(page).to have_content("Date of birth Removed")
-        expect(page).to have_content("National Insurance number Removed")
-        expect(page).to have_content("Address Removed")
-      end
-    end
-
     context "with a mixture of policy types" do
       let!(:maths_and_physics_claims) { create_list(:claim, 3, :submitted, policy: MathsAndPhysics) }
       let!(:student_loan_claims) { create_list(:claim, 2, :submitted, policy: StudentLoans) }
