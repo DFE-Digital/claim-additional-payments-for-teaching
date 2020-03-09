@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+## [Release 059] - 2020-03-09
+
 - Links that look like buttons now work if users have JS on the claim journey
 - Links styled as buttons now work as expected for keyboard users
 - Manage services page validates in html checker
@@ -491,7 +493,9 @@ The format is based on [Keep a Changelog]
 - First release for student loan repayments private beta
 
 [unreleased]:
-  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-058...HEAD
+  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-059...HEAD
+[release 059]:
+  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-058...release-059
 [release 058]:
   https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-057...release-058
 [release 057]:
