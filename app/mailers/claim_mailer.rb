@@ -18,7 +18,7 @@ class ClaimMailer < ApplicationMailer
   def rejected(claim)
     set_common_instance_variables(claim)
     @subject = "Your claim #{@claim_description} has been rejected, reference number: #{claim.reference}"
-    @ineligible_qts_year = @claim.policy.first_eligible_qts_award_year - 1
+    @ineligible_qts_year = @claim.policy.last_ineligible_qts_award_year
 
     send_mail
   end

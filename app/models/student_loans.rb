@@ -69,6 +69,10 @@ module StudentLoans
     ].max
   end
 
+  def last_ineligible_qts_award_year
+    first_eligible_qts_award_year - 1
+  end
+
   # Returns human-friendly String for the financial year that Student Loans
   # claims are being made against based on the currently-configured academic
   # year for the StudentLoans policy. For example:

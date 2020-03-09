@@ -56,6 +56,10 @@ module MathsAndPhysics
     claim_year - ELIGIBLE_CAREER_LENGTH
   end
 
+  def last_ineligible_qts_award_year
+    first_eligible_qts_award_year - 1
+  end
+
   def configuration
     PolicyConfiguration.for(self)
   end
