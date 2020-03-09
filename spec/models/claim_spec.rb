@@ -713,7 +713,7 @@ RSpec.describe Claim, type: :model do
     end
 
     it "returns false for a claim that’s had its personal data removed" do
-      claim = build(:claim, :pii_removed)
+      claim = build(:claim, :personal_data_removed)
       expect(claim.amendable?).to eq(false)
     end
   end

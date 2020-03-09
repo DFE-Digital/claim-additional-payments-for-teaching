@@ -35,7 +35,7 @@ describe Admin::ClaimsHelper do
     end
 
     context "when a claim has had PII deleted" do
-      let(:claim) { build(:claim, :rejected, :pii_removed, teacher_reference_number: "1234567", email_address: "test@email.com") }
+      let(:claim) { build(:claim, :rejected, :personal_data_removed, teacher_reference_number: "1234567", email_address: "test@email.com") }
 
       it "returns the expected strings" do
         expected_answers = [

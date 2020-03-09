@@ -74,7 +74,7 @@ FactoryBot.define do
       eligibility_factory { ["#{policy.to_s.underscore}_eligibility".to_sym, :ineligible] }
     end
 
-    trait :pii_removed do
+    trait :personal_data_removed do
       submitted
       first_name { nil }
       middle_name { nil }
