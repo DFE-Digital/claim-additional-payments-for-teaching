@@ -1,0 +1,62 @@
+#!/bin/bash
+
+BRANCH=$1
+GIT_COMMIT_HASH=$2
+DOCKER_REPOSITORY=$3
+BUILD_NUMBER=$4
+
+if [ "$BRANCH" == "ref/heads/master" ]; then
+  echo "Building web dependencies Docker image without cache..."
+  docker build \
+    --file=Dockerfile \
+    --tag=local/dfe-teachers-payment-service:web-dependencies \
+    --target=dependencies \
+    .
+
+  echo "Building web Docker image without cache"
+  docker build \
+    --file=Dockerfile \
+    --cache-from=local/dfe-teachers-payment-service:web-dependencies \
+    --tag=local/dfe-teachers-payment-service:web \
+    --target=web \
+    --build-arg GIT_COMMIT_HASH="$GIT_COMMIT_HASH" \
+    .
+
+  echo "Pushing test dependencies Docker image for caching"
+  docker tag local/dfe-teachers-payment-service:test-dependencies "$DOCKER_REPOSITORY:cache-test-dependencies"
+  docker push "$DOCKER_REPOSITORY:cache-test-dependencies"
+
+  echo "Pushing test Docker image for caching"
+  docker tag local/dfe-teachers-payment-service:test "$DOCKER_REPOSITORY:cache-test"
+  docker push "$DOCKER_REPOSITORY:cache-test"
+
+  echo "Pushing web dependencies Docker image for caching"
+  docker tag local/dfe-teachers-payment-service:web-dependencies "$DOCKER_REPOSITORY:cache-web-dependencies"
+  docker push "$DOCKER_REPOSITORY:cache-web-dependencies"
+
+  echo "Pushing web Docker image"
+  docker tag local/dfe-teachers-payment-service:web "$DOCKER_REPOSITORY:$BUILD_NUMBER"
+  docker tag local/dfe-teachers-payment-service:web "$DOCKER_REPOSITORY:latest"
+  docker push "$DOCKER_REPOSITORY:$BUILD_NUMBER"
+  docker push "$DOCKER_REPOSITORY:latest"
+else
+  echo "Building web dependencies Docker image using 'cache-web-dependencies' as cache"
+  docker pull "$DOCKER_REPOSITORY:cache-web-dependencies" || true
+  docker build \
+    --file=Dockerfile \
+    --cache-from="$DOCKER_REPOSITORY:cache-web-dependencies" \
+    --tag=local/dfe-teachers-payment-service:web-dependencies \
+    --target=dependencies \
+    .
+
+  echo "Building web Docker image using 'latest' as cache"
+  docker pull "$DOCKER_REPOSITORY:latest" || true
+  docker build \
+    --file=Dockerfile \
+    --cache-from=local/dfe-teachers-payment-service:web-dependencies \
+    --cache-from="$DOCKER_REPOSITORY:latest" \
+    --tag=local/dfe-teachers-payment-service:web \
+    --target=web \
+    --build-arg GIT_COMMIT_HASH="$GIT_COMMIT_HASH" \
+    .
+fi

@@ -1,0 +1,76 @@
+parameters:
+  azureSubscription:
+  resourceGroupPrefix:
+  environmentName:
+  slackWebhookUrl:
+
+jobs:
+  - job: run_deploy_script
+    displayName: Run deploy script
+    steps:
+      - task: UseRubyVersion@0
+        displayName: 'Use Ruby >= 2.4'
+      - task: AzureCLI@1
+        displayName: 'Deploy Azure'
+        inputs:
+          azureSubscription: ${{parameters.azureSubscription}}
+          scriptPath: './bin/azure-deploy'
+          arguments: '${{parameters.environmentName}} --skip-login --skip-confirmation --docker-tag=$(Build.BuildNumber)'
+  - job: swap_app_service_slots
+    dependsOn: run_deploy_script
+    displayName: Swap app service slots
+    steps:
+      - task: AzureAppServiceManage@0
+        displayName: 'Swap Slots: ${{parameters.resourceGroupPrefix}}-app-as'
+        inputs:
+          azureSubscription: ${{parameters.azureSubscription}}
+          WebAppName: '${{parameters.resourceGroupPrefix}}-app-as'
+          ResourceGroupName: '${{parameters.resourceGroupPrefix}}-app'
+          SourceSlot: staging
+      - task: AzureAppServiceManage@0
+        displayName: 'Swap Slots: ${{parameters.resourceGroupPrefix}}-app-vsp-as'
+        inputs:
+          azureSubscription: ${{parameters.azureSubscription}}
+          WebAppName: '${{parameters.resourceGroupPrefix}}-app-vsp-as'
+          ResourceGroupName: '${{parameters.resourceGroupPrefix}}-app'
+          SourceSlot: staging
+  - job: clean_up
+    dependsOn:
+      - run_deploy_script
+      - swap_app_service_slots
+    displayName: Clean up
+    steps:
+      - task: AzureCLI@1
+        displayName: 'Delete migration runner container'
+        inputs:
+          azureSubscription: ${{parameters.azureSubscription}}
+          scriptLocation: inlineScript
+          inlineScript: 'az container delete --name ${{parameters.resourceGroupPrefix}}-app-migration-runner-aci --resource-group ${{parameters.resourceGroupPrefix}}-app -y'
+  - job: send_slack_success_message
+    dependsOn:
+      - run_deploy_script
+      - swap_app_service_slots
+      - clean_up
+    condition: succeeded()
+    displayName: Send Slack notification
+    steps:
+      - task: Bash@3
+        displayName: 'Send Slack Notification'
+        inputs:
+          targetType: filePath
+          filePath: './bin/slack-alert'
+          arguments: '${{parameters.environmentName}} $(Build.BuildNumber) $(Build.BuildId) ${{parameters.slackWebhookUrl}} SUCCESS'
+  - job: send_slack_failure_message
+    displayName: Send Slack failure notification
+    dependsOn:
+      - run_deploy_script
+      - swap_app_service_slots
+      - clean_up
+    condition: failed()
+    steps:
+      - task: Bash@3
+        displayName: 'Send Slack Failure Notification'
+        inputs:
+          targetType: filePath
+          filePath: './bin/slack-alert'
+          arguments: '${{parameters.environmentName}} $(Build.BuildNumber) $(Build.BuildId) ${{parameters.slackWebhookUrl}} FAILURE'

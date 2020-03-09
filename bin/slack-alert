@@ -2,11 +2,11 @@
 
 ENVIRONMENT_NAME=$1
 BUILD_NUMBER=$2
-RELEASE_ID=$3
+BUILD_ID=$3
 WEBHOOK_URL=$4
 RESULT=$5
 
-RELEASE_URL="https://dev.azure.com/dfe-ssp/S118-Teacher-Payments-Service/_releaseProgress?_a=release-pipeline-progress&releaseId=$RELEASE_ID"
+RELEASE_URL="https://dfe-ssp.visualstudio.com/S118-Teacher-Payments-Service/_build/results?buildId=$BUILD_ID&view=results"
 
 if [ "$RESULT" == "SUCCESS" ]; then
   MESSAGE=":ship: Build $BUILD_NUMBER is deployed to $ENVIRONMENT_NAME! $RELEASE_URL :rocket:"
