@@ -128,12 +128,6 @@ en:
     claim_action: "claim £2,000 for teaching maths or physics"
     award_description: "£2,000 payment"
     support_email_address: "mathsphysicsteacherpayment@digital.education.gov.uk"
-    possible_rejection_reasons: |
-      * you are not employed to teach maths or physics at an eligible state-funded secondary school
-      * you did not complete your initial teacher training in maths or physics and you do not have a degree in maths or physics
-      * you completed your initial teacher training in or before the academic year %{qts_year}
-      * you’re a supply teacher contracted by a private agency or for less than a full term
-      * you are currently subject to formal capability proceedings or disciplinary action
     questions:
       teaching_maths_or_physics: "Do you currently teach any maths or physics?"
       initial_teacher_training_subject: "Which subject did you complete your initial teacher training in?"
@@ -179,20 +173,14 @@ en:
     claim_amount_description: "Student loan repayments you’ve claimed back"
     claim_action: "claim back student loan repayments"
     award_description: "claim payment"
-    possible_rejection_reasons: |
-      * you completed your initial teacher training in or before the academic year %{qts_year}
-      * you did not teach at an eligible school during the financial year 2018 to 2019
-      * you are not currently employed to teach at a state-funded secondary school
-      * you did not teach an eligible subject for at least half of your contracted hours
     support_email_address: "studentloanteacherpayment@digital.education.gov.uk"
     questions:
-      claim_school: "Which school were you employed to teach at between 6 April 2018 and 5 April 2019?"
-      additional_school: "Which additional school were you employed to teach at between 6 April 2018 and 5 April 2019?"
+      claim_school: "Which school were you employed to teach at between %{financial_year}?"
+      additional_school: "Which additional school were you employed to teach at between %{financial_year}?"
       employment_status: "Are you still employed to teach at a school in England?"
-      subjects_taught: "Which of the following subjects did you teach at %{school} between 6 April 2018 and 5 April 2019?"
-      leadership_position: "Were you employed in a leadership position between 6 April 2018 and 5 April 2019?"
-      mostly_performed_leadership_duties:
-        "Were more than half your working hours spent on leadership duties between 6 April 2018 and 5 April 2019?"
+      subjects_taught: "Which of the following subjects did you teach at %{school} between %{financial_year}?"
+      leadership_position: "Were you employed in a leadership position between %{financial_year}?"
+      mostly_performed_leadership_duties: "Were more than half your working hours spent on leadership duties between %{financial_year}?"
       eligible_subjects:
         biology_taught: "Biology"
         chemistry_taught: "Chemistry"
@@ -200,8 +188,7 @@ en:
         computing_taught: "Computing"
         languages_taught: "Languages"
         none_taught: "I did not teach any of these subjects"
-      student_loan_amount:
-        "Exactly how much student loan did you repay while employed as a teacher between 6 April 2018 and 5 April 2019?"
+      student_loan_amount: "Exactly how much student loan did you repay while employed as a teacher between %{financial_year}?"
     admin:
       claim_school: "Claim school"
       subjects_taught: "Subjects taught"

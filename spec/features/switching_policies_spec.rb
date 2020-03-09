@@ -1,6 +1,8 @@
 require "rails_helper"
 
 RSpec.feature "Switching policies" do
+  include StudentLoansHelper
+
   before do
     start_student_loans_claim
     visit new_claim_path(MathsAndPhysics.routing_name)
@@ -20,7 +22,7 @@ RSpec.feature "Switching policies" do
     choose "No, finish the claim I have in progress"
     click_on "Submit"
 
-    expect(page).to have_text(I18n.t("student_loans.questions.claim_school"))
+    expect(page).to have_text(claim_school_question)
   end
 
   scenario "a user does not select an option" do

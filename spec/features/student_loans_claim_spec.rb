@@ -1,6 +1,8 @@
 require "rails_helper"
 
 RSpec.feature "Teacher Student Loan Repayments claims" do
+  include StudentLoansHelper
+
   before { stub_geckoboard_dataset_update }
 
   [
@@ -18,11 +20,11 @@ RSpec.feature "Teacher Student Loan Repayments claims" do
 
       expect(claim.eligibility.reload.qts_award_year).to eql("on_or_after_cut_off_date")
 
-      expect(page).to have_text(I18n.t("student_loans.questions.claim_school"))
+      expect(page).to have_text(claim_school_question)
 
       choose_school schools(:penistone_grammar_school)
       expect(claim.eligibility.reload.claim_school).to eql schools(:penistone_grammar_school)
-      expect(page).to have_text(I18n.t("student_loans.questions.subjects_taught", school: schools(:penistone_grammar_school).name))
+      expect(page).to have_text(subjects_taught_question(school_name: schools(:penistone_grammar_school).name))
 
       check "Physics"
       click_on "Continue"
@@ -34,19 +36,19 @@ RSpec.feature "Teacher Student Loan Repayments claims" do
 
       expect(claim.eligibility.reload.subjects_taught).to eq([:physics_taught])
 
-      expect(page).to have_text(I18n.t("student_loans.questions.leadership_position"))
+      expect(page).to have_text(leadership_position_question)
       choose "Yes"
       click_on "Continue"
 
       expect(claim.eligibility.reload.had_leadership_position?).to eq(true)
 
-      expect(page).to have_text(I18n.t("student_loans.questions.mostly_performed_leadership_duties"))
+      expect(page).to have_text(mostly_performed_leadership_duties_question)
       choose "No"
       click_on "Continue"
 
       expect(claim.eligibility.reload.mostly_performed_leadership_duties?).to eq(false)
 
-      expect(page).to have_text("You are eligible to claim back student loan repayments")
+      expect(page).to have_text("you can claim back the student loan repayments you made between #{StudentLoans.current_financial_year}.")
       click_on "Continue"
 
       expect(page).to have_text("How we will use the information you provide")
@@ -85,8 +87,8 @@ RSpec.feature "Teacher Student Loan Repayments claims" do
       expect(claim.student_loan_start_date).to eq(StudentLoan::BEFORE_1_SEPT_2012)
       expect(claim.student_loan_plan).to eq(StudentLoan::PLAN_1)
 
-      expect(page).to have_text(I18n.t("student_loans.questions.student_loan_amount"))
-      fill_in I18n.t("student_loans.questions.student_loan_amount"), with: "1100"
+      expect(page).to have_text(student_loan_amount_question)
+      fill_in student_loan_amount_question, with: "1100"
       click_on "Continue"
 
       expect(claim.eligibility.reload.student_loan_repayment_amount).to eql(1100.00)
@@ -148,6 +150,6 @@ RSpec.feature "Teacher Student Loan Repayments claims" do
 
     expect(claim.eligibility.reload.current_school).to eql schools(:hampstead_school)
 
-    expect(page).to have_text(I18n.t("student_loans.questions.leadership_position"))
+    expect(page).to have_text(leadership_position_question)
   end
 end

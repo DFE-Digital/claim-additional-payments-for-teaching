@@ -4,7 +4,7 @@ We have not been able to approve your claim <%= @claim_description %>.
 
 Your claim has not been approved because our records show one of the following:
 
-<%= @possible_rejection_reasons %>
+<%= render "claim_mailer/rejection_reasons/#{@policy.locale_key}" %>
 
 You can find more information about the eligibility criteria for this service at <%= @policy.eligibility_page_url %>
 

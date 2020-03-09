@@ -1,6 +1,8 @@
 require "rails_helper"
 
 RSpec.feature "Ineligible Teacher Student Loan Repayments claims" do
+  include StudentLoansHelper
+
   scenario "qualified before the first eligible QTS year" do
     policy_configurations(:student_loans).update!(current_academic_year: "2025/2026")
 
@@ -61,7 +63,7 @@ RSpec.feature "Ineligible Teacher Student Loan Repayments claims" do
 
     expect(claim.eligibility.reload.taught_eligible_subjects?).to eq(false)
     expect(page).to have_text("You did not select an eligible subject")
-    expect(page).to have_text("You can only get this payment if you taught one or more of the following subjects between 6 April 2018 and 5 April 2019:")
+    expect(page).to have_text("You can only get this payment if you taught one or more of the following subjects between #{StudentLoans.current_financial_year}:")
   end
 
   scenario "was in a leadership position and performed leadership duties for more than half of their time" do
@@ -80,7 +82,7 @@ RSpec.feature "Ineligible Teacher Student Loan Repayments claims" do
 
     expect(claim.eligibility.reload.mostly_performed_leadership_duties?).to eq(true)
     expect(page).to have_text("You’re not eligible")
-    expect(page).to have_text("You can only get this payment if you spent less than half your working hours performing leadership duties between 6 April 2018 and 5 April 2019.")
+    expect(page).to have_text("You can only get this payment if you spent less than half your working hours performing leadership duties between #{StudentLoans.current_financial_year}.")
   end
 
   scenario "claimant can start a fresh claim after being told they are ineligible, by visiting the start page" do
@@ -98,6 +100,6 @@ RSpec.feature "Ineligible Teacher Student Loan Repayments claims" do
 
     choose_school schools(:penistone_grammar_school)
 
-    expect(page).to have_text(I18n.t("student_loans.questions.subjects_taught", school: schools(:penistone_grammar_school).name))
+    expect(page).to have_text(subjects_taught_question(school_name: schools(:penistone_grammar_school).name))
   end
 end

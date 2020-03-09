@@ -1,6 +1,8 @@
 require "rails_helper"
 
 RSpec.feature "Changing the answers on a submittable claim" do
+  include StudentLoansHelper
+
   scenario "Teacher changes an answer which is not a dependency of any of the other answers they’ve given, remaining eligible" do
     claim = start_maths_and_physics_claim
     claim.update!(attributes_for(:claim, :submittable))
@@ -96,7 +98,7 @@ RSpec.feature "Changing the answers on a submittable claim" do
     expect(claim.eligibility.reload.mostly_performed_leadership_duties).to eq(true)
 
     expect(page).to have_text("You’re not eligible")
-    expect(page).to have_text("You can only get this payment if you spent less than half your working hours performing leadership duties between 6 April 2018 and 5 April 2019.")
+    expect(page).to have_text("You can only get this payment if you spent less than half your working hours performing leadership duties between #{StudentLoans.current_financial_year}.")
   end
 
   scenario "Teacher edits but does not change an answer which is a dependency of some of the subsequent answers they’ve given" do
@@ -128,7 +130,7 @@ RSpec.feature "Changing the answers on a submittable claim" do
     find("a[href='#{claim_path(StudentLoans.routing_name, "student-loan-amount")}']").click
 
     expect(find("#claim_eligibility_attributes_student_loan_repayment_amount").value).to eq("100.10")
-    fill_in I18n.t("student_loans.questions.student_loan_amount"), with: "150.20"
+    fill_in student_loan_amount_question, with: "150.20"
     click_on "Continue"
 
     expect(page).to have_content("£150.20")

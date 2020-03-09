@@ -21,7 +21,7 @@
               <div class="govuk-radios__item">
                 <%= fields.radio_button(:qts_award_year, :before_cut_off_date, class: "govuk-radios__input") %>
                 <%= fields.label "qts_award_year_before_cut_off_date",
-                      t("answers.qts_award_years.before_cut_off_date", year: (current_policy.first_eligible_qts_award_year - 1).to_s(:long)),
+                      t("answers.qts_award_years.before_cut_off_date", year: current_policy.last_ineligible_qts_award_year.to_s(:long)),
                       class: "govuk-label govuk-radios__label" %>
               </div>
 

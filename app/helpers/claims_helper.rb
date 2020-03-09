@@ -55,10 +55,6 @@ module ClaimsHelper
     end
   end
 
-  def school_search_question(searching_for_additional_school)
-    searching_for_additional_school ? t("student_loans.questions.additional_school") : t("student_loans.questions.claim_school")
-  end
-
   def date_of_birth_string(claim)
     claim.date_of_birth && l(claim.date_of_birth)
   end

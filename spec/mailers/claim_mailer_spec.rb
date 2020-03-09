@@ -73,7 +73,7 @@ RSpec.describe ClaimMailer, type: :mailer do
           expect(mail.subject).to include("rejected")
           expect(mail.body.encoded).to include("not been able to approve")
 
-          ineligible_year = (policy.first_eligible_qts_award_year - 1).to_s(:long)
+          ineligible_year = policy.last_ineligible_qts_award_year.to_s(:long)
           expect(mail.body.encoded)
             .to include("completed your initial teacher training in or before the academic year #{ineligible_year}")
         end
@@ -81,7 +81,7 @@ RSpec.describe ClaimMailer, type: :mailer do
         it "changes the ITT reason based on the policy's configured current_academic_year" do
           PolicyConfiguration.for(policy).update!(current_academic_year: "2025/2026")
 
-          ineligible_year = (policy.first_eligible_qts_award_year - 1).to_s(:long)
+          ineligible_year = policy.last_ineligible_qts_award_year.to_s(:long)
           expect(mail.body.encoded)
             .to include("completed your initial teacher training in or before the academic year #{ineligible_year}")
         end
@@ -97,6 +97,25 @@ RSpec.describe ClaimMailer, type: :mailer do
           expect(mail.subject).to include("still reviewing your claim")
           expect(mail.body.encoded).to include("still reviewing your claim")
         end
+      end
+    end
+  end
+
+  context "with a StudentLoans claim" do
+    describe "#rejected" do
+      let(:claim) { build(:claim, :submitted, policy: StudentLoans) }
+      let(:mail) { ClaimMailer.rejected(claim) }
+
+      it "mentions “the eligible-school during the financial year” reason" do
+        # Based on the current academic year set by the policy_configurations.yml fixtures
+        expect(mail.body.encoded).to include("you did not teach at an eligible school between 6 April 2024 and 5 April 2025")
+      end
+
+      it "changes the financial year based on the policy's configured current_academic_year" do
+        policy_configurations(:student_loans).update!(current_academic_year: "2019/2020")
+
+        expect(mail.body.encoded)
+          .to include("you did not teach at an eligible school between 6 April 2018 and 5 April 2019")
       end
     end
   end

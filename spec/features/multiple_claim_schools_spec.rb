@@ -1,6 +1,8 @@
 require "rails_helper"
 
 RSpec.feature "Applicant worked at multiple schools" do
+  include StudentLoansHelper
+
   let!(:eligible_school) { create(:school, :student_loan_eligible) }
 
   let!(:claim) { start_student_loans_claim }
@@ -15,13 +17,13 @@ RSpec.feature "Applicant worked at multiple schools" do
     click_on "Enter another school"
 
     expect(page).to_not have_css("input[value=\"Hampstead School\"]")
-    expect(page).to have_text(I18n.t("student_loans.questions.additional_school"))
+    expect(page).to have_text(claim_school_question(additional_school: true))
     expect(page).to_not have_text("If you taught at multiple schools")
 
     choose_school schools(:penistone_grammar_school)
     expect(claim.eligibility.reload.claim_school).to eq schools(:penistone_grammar_school)
 
-    expect(page).to have_text(I18n.t("student_loans.questions.subjects_taught", school: schools(:penistone_grammar_school).name))
+    expect(page).to have_text(subjects_taught_question(school_name: schools(:penistone_grammar_school).name))
   end
 
   scenario "first claim school is ineligible and subsequent school is ineligible too" do
@@ -49,7 +51,7 @@ RSpec.feature "Applicant worked at multiple schools" do
     click_on "Enter another school"
 
     expect(page).to_not have_css("input[value=\"Penistone Grammar School\"]")
-    expect(page).to have_text(I18n.t("student_loans.questions.additional_school"))
+    expect(page).to have_text(claim_school_question(additional_school: true))
 
     choose_school eligible_school
 

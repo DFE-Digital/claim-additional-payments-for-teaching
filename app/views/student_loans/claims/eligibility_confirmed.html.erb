@@ -4,7 +4,7 @@
   <div class="govuk-grid-column-two-thirds">
 
     <h1 class="govuk-heading-xl">You are eligible to claim back student loan repayments</h1>
-    <p class="govuk-body">Based on your answers, you can claim back the student loan repayments you made between 6 April 2018 and 5 April 2019.</p>
+    <p class="govuk-body">Based on your answers, you can claim back the student loan repayments you made between <%= StudentLoans.current_financial_year %>.</p>
 
     <%= button_to "Continue", claim_path(current_policy_routing_name, next_slug), method: :get, class: "govuk-button" %>
   </div>

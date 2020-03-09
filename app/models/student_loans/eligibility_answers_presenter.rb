@@ -1,5 +1,6 @@
 module StudentLoans
   class EligibilityAnswersPresenter
+    include StudentLoansHelper
     include StudentLoans::PresenterMethods
     include ActiveSupport::NumberHelper
 
@@ -42,7 +43,7 @@ module StudentLoans
 
     def claim_school
       [
-        I18n.t("student_loans.questions.claim_school"),
+        claim_school_question,
         eligibility.claim_school_name,
         "claim-school"
       ]
@@ -58,7 +59,7 @@ module StudentLoans
 
     def subjects_taught
       [
-        I18n.t("student_loans.questions.subjects_taught", school: eligibility.claim_school_name),
+        subjects_taught_question(school_name: eligibility.claim_school_name),
         subject_list(eligibility.subjects_taught),
         "subjects-taught"
       ]
@@ -66,7 +67,7 @@ module StudentLoans
 
     def leadership_position
       [
-        I18n.t("student_loans.questions.leadership_position"),
+        leadership_position_question,
         (eligibility.had_leadership_position? ? "Yes" : "No"),
         "leadership-position"
       ]
@@ -74,7 +75,7 @@ module StudentLoans
 
     def mostly_performed_leadership_duties
       [
-        I18n.t("student_loans.questions.mostly_performed_leadership_duties"),
+        mostly_performed_leadership_duties_question,
         (eligibility.mostly_performed_leadership_duties? ? "Yes" : "No"),
         "mostly-performed-leadership-duties"
       ]
@@ -82,7 +83,7 @@ module StudentLoans
 
     def student_loan_amount
       [
-        I18n.t("student_loans.questions.student_loan_amount"),
+        student_loan_amount_question,
         number_to_currency(eligibility.student_loan_repayment_amount),
         "student-loan-amount"
       ]
