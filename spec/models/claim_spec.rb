@@ -717,4 +717,18 @@ RSpec.describe Claim, type: :model do
       expect(claim.amendable?).to eq(false)
     end
   end
+
+  describe "#incomplete_check_names" do
+    Policies.all.each do |policy|
+      it "returns an array of the checks that haven’t been completed on the claim" do
+        claim = build(:claim, :submitted, checks: [
+          build(:check, name: "qualifications")
+        ])
+        expect(claim.incomplete_check_names).to eq(["employment"])
+
+        claim.checks << build(:check, name: "employment")
+        expect(claim.incomplete_check_names).to eq([])
+      end
+    end
+  end
 end

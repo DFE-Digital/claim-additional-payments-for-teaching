@@ -283,6 +283,10 @@ class Claim < ApplicationRecord
     submitted? && !decision&.rejected? && !payment && !pii_removed?
   end
 
+  def incomplete_check_names
+    Admin::ChecksController::CHECKS_SEQUENCE - checks.map(&:name)
+  end
+
   private
 
   def normalise_trn
