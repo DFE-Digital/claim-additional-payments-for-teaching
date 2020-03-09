@@ -76,5 +76,5 @@ released should be moved to the top of the "Done" column.
 
 ## 6. Announce the release in #twd_claim_payments
 
-Post an update in the team's main Slack chnanel #twd_claim_payments to let
+Post an update in the team's main Slack channel #twd_claim_payments to let
 people know about the new release and the changes that have just gone out.
