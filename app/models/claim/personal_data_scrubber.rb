@@ -1,12 +1,12 @@
-# Removes personally identifiable information from a claim where the claim is
+# Removes personal data from a claim where the claim is
 # either rejected and hasn't been updated in over two months, or where the claim
 # was scheduled to be paid more than two months ago.
 #
 # Attributes are set to nil, and personal_data_removed_at is set to the current timestamp.
 
 class Claim
-  class PiiScrubber
-    PII_ATTRIBUTES_TO_DELETE = [
+  class PersonalDataScrubber
+    PERSONAL_DATA_ATTRIBUTES_TO_DELETE = [
       :first_name,
       :middle_name,
       :surname,
@@ -38,7 +38,7 @@ class Claim
     private
 
     def attribute_values_to_set
-      PII_ATTRIBUTES_TO_DELETE.map { |attr| [attr, nil] }.to_h.merge(
+      PERSONAL_DATA_ATTRIBUTES_TO_DELETE.map { |attr| [attr, nil] }.to_h.merge(
         personal_data_removed_at: Time.zone.now
       )
     end
@@ -61,7 +61,7 @@ class Claim
     end
 
     def scrub_amendment_personal_data(amendment)
-      attributes_to_scrub = PII_ATTRIBUTES_TO_DELETE.map(&:to_s) & amendment.claim_changes.keys
+      attributes_to_scrub = PERSONAL_DATA_ATTRIBUTES_TO_DELETE.map(&:to_s) & amendment.claim_changes.keys
       personal_data_mask = attributes_to_scrub.to_h { |attribute| [attribute, nil] }
       amendment.claim_changes.merge!(personal_data_mask)
 

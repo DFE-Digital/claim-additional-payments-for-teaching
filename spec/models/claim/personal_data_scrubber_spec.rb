@@ -1,31 +1,31 @@
 require "rails_helper"
 
-RSpec.describe Claim::PiiScrubber, type: :model do
+RSpec.describe Claim::PersonalDataScrubber, type: :model do
   let(:over_two_months_ago) { 2.months.ago - 1.day }
 
   it "does not delete details from a submitted claim" do
     claim = create(:claim, :submitted, updated_at: over_two_months_ago)
 
-    expect { Claim::PiiScrubber.new.scrub_completed_claims }.not_to change { claim.reload.attributes }
+    expect { Claim::PersonalDataScrubber.new.scrub_completed_claims }.not_to change { claim.reload.attributes }
   end
 
   it "does not delete details from an approved but unpaid claim" do
     claim = create(:claim, :approved, updated_at: over_two_months_ago)
 
-    expect { Claim::PiiScrubber.new.scrub_completed_claims }.not_to change { claim.reload.attributes }
+    expect { Claim::PersonalDataScrubber.new.scrub_completed_claims }.not_to change { claim.reload.attributes }
   end
 
   it "does not delete details from a newly rejected claim" do
     claim = create(:claim, :rejected)
 
-    expect { Claim::PiiScrubber.new.scrub_completed_claims }.not_to change { claim.reload.attributes }
+    expect { Claim::PersonalDataScrubber.new.scrub_completed_claims }.not_to change { claim.reload.attributes }
   end
 
   it "does not delete details from a newly paid claim" do
     claim = create(:claim, :approved)
     create(:payment, :with_figures, claims: [claim])
 
-    expect { Claim::PiiScrubber.new.scrub_completed_claims }.not_to change { claim.reload.attributes }
+    expect { Claim::PersonalDataScrubber.new.scrub_completed_claims }.not_to change { claim.reload.attributes }
   end
 
   it "deletes expected details from an old rejected claim, setting a personal_data_removed_at timestamp" do
@@ -33,7 +33,7 @@ RSpec.describe Claim::PiiScrubber, type: :model do
       claim = create(:claim, :submitted)
       create(:decision, :rejected, claim: claim, created_at: over_two_months_ago)
 
-      Claim::PiiScrubber.new.scrub_completed_claims
+      Claim::PersonalDataScrubber.new.scrub_completed_claims
       cleaned_claim = Claim.find(claim.id)
 
       expect(cleaned_claim.first_name).to be_nil
@@ -59,7 +59,7 @@ RSpec.describe Claim::PiiScrubber, type: :model do
       claim = create(:claim, :approved)
       create(:payment, :with_figures, claims: [claim], scheduled_payment_date: over_two_months_ago)
 
-      Claim::PiiScrubber.new.scrub_completed_claims
+      Claim::PersonalDataScrubber.new.scrub_completed_claims
       cleaned_claim = Claim.find(claim.id)
 
       expect(cleaned_claim.first_name).to be_nil
@@ -82,7 +82,7 @@ RSpec.describe Claim::PiiScrubber, type: :model do
 
   it "calculates the date past which claims are considered old at runtime" do
     # Initialise the scrubber, and create a claim
-    scrubber = Claim::PiiScrubber.new
+    scrubber = Claim::PersonalDataScrubber.new
     claim = create(:claim, :submitted)
     create(:decision, :rejected, claim: claim)
 
@@ -113,7 +113,7 @@ RSpec.describe Claim::PiiScrubber, type: :model do
     freeze_time do
       original_trn_change = amendment.claim_changes["teacher_reference_number"]
 
-      Claim::PiiScrubber.new.scrub_completed_claims
+      Claim::PersonalDataScrubber.new.scrub_completed_claims
 
       cleaned_amendment = Amendment.find(amendment.id)
 
