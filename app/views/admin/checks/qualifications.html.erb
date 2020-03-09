@@ -9,7 +9,7 @@
   <div class="govuk-grid-column-two-thirds">
     <%= render "admin/claims/answer_section",
           heading: "Qualifications",
-          description: I18n.t("#{@claim.policy.to_s.underscore}.admin.qualification_check_description"),
+          description: I18n.t("#{@claim.policy.to_s.underscore}.admin.checks.qualifications.description"),
           answers: @claim_checks.qualifications %>
   </div>
 

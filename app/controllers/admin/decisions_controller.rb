@@ -25,7 +25,7 @@ class Admin::DecisionsController < Admin::BaseAdminController
   private
 
   def load_claim
-    @claim = Claim.find(params[:claim_id])
+    @claim = Claim.includes(:checks).find(params[:claim_id])
     @matching_claims = Claim::MatchingAttributeFinder.new(@claim).matching_claims
   end
 
