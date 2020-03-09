@@ -3,23 +3,37 @@ require "rails_helper"
 RSpec.describe Claim::MatchingAttributeFinder do
   describe "#matching_claims" do
     let(:source_claim) {
-      create(
-        :claim,
+      create(:claim,
         teacher_reference_number: "0902344",
         national_insurance_number: "QQ891011C",
         email_address: "genghis.khan@mongol-empire.com",
         bank_account_number: "34682151",
         bank_sort_code: "972654",
-        building_society_roll_number: "123456789/ABCD"
-      )
+        building_society_roll_number: "123456789/ABCD",
+        policy: StudentLoans)
     }
-
-    let!(:claim_with_no_matching_attributes) { create(:claim, :submitted) }
-    let!(:unsubmitted_claim_with_matching_teacher_reference_number) { create(:claim, :submittable, teacher_reference_number: source_claim.teacher_reference_number) }
 
     subject(:matching_claims) { Claim::MatchingAttributeFinder.new(source_claim).matching_claims }
 
-    it "does not include the source claim, or claims that do not match, or claims that are not submitted" do
+    it "does not include the source claim" do
+      expect(matching_claims).to be_empty
+    end
+
+    it "does not include claims that do not match" do
+      create(:claim, :submitted)
+
+      expect(matching_claims).to be_empty
+    end
+
+    it "does not include unsubmitted claims with matching attributes" do
+      create(:claim, :submittable, teacher_reference_number: source_claim.teacher_reference_number)
+
+      expect(matching_claims).to be_empty
+    end
+
+    it "does not include claims that match, but have a different policy" do
+      create(:claim, :submitted, teacher_reference_number: source_claim.teacher_reference_number, policy: MathsAndPhysics)
+
       expect(matching_claims).to be_empty
     end
 

@@ -7,13 +7,19 @@ class Claim
       ["bank_account_number", "bank_sort_code", "building_society_roll_number"]
     ].freeze
 
-    def initialize(source_claim, claims_to_compare = Claim.submitted)
+    def initialize(source_claim)
       @source_claim = source_claim
-      @claims_to_compare = claims_to_compare
     end
 
+    # Returns a list of claims that could potentially be from the same applicant
+    # because they either share a same single attribute with the source claim,
+    # (for example, the same TRN, or email), or they share a group of attributes
+    # with the source claim (for example bank sort code, account number and roll
+    # number).
+    #
+    # This may not necessarily mean the claim cannot be approved, but means it
+    # warrants a degree of caution and further investigation.
     def matching_claims
-      claims = @claims_to_compare.where.not(id: @source_claim.id)
       match_queries = nil
 
       ATTRIBUTE_GROUPS_TO_MATCH.each do |attributes|
@@ -27,10 +33,16 @@ class Claim
         match_queries = match_queries.nil? ? query : match_queries.or(query)
       end
 
-      claims.merge(match_queries)
+      claims_to_compare.merge(match_queries)
     end
 
     private
+
+    def claims_to_compare
+      Claim.submitted
+        .by_policy(@source_claim.policy)
+        .where.not(id: @source_claim.id)
+    end
 
     def values_for_attributes(attributes)
       attributes.map { |attribute|
