@@ -7,6 +7,7 @@ The format is based on [Keep a Changelog]
 ## [Unreleased]
 
 - Fix question bug on school search results page
+- Show a list of incomplete checks on the claim decision page
 
 ## [Release 059] - 2020-03-09
 

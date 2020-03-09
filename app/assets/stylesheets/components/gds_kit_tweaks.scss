@@ -27,3 +27,16 @@ $govuk-link-colour: #175b96;
 .govuk-heading--navigation .govuk-link:not(:last-of-type) {
   margin-right: govuk-spacing(2);
 }
+
+.claim-error-summary--warning {
+  border-color: govuk-colour("blue");
+}
+
+.claim-error-summary__list--warning a {
+  &:link,
+  &:visited,
+  &:hover,
+  &:active {
+    color: govuk-colour("blue");
+  }
+}
