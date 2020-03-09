@@ -143,28 +143,6 @@ RSpec.feature "Admin checks a claim" do
       end
     end
 
-    context "When the payroll gender is missing" do
-      let!(:claim_missing_payroll_gender) { create(:claim, :submitted, payroll_gender: :dont_know) }
-
-      scenario "User is informed that the claim cannot be approved" do
-        click_on "View claims"
-        find("a[href='#{admin_claim_path(claim_missing_payroll_gender)}']").click
-
-        expect(page).to have_field("Approve", disabled: true)
-        expect(page).to have_content(I18n.t("admin.unknown_payroll_gender_preventing_approval_message"))
-      end
-
-      context "When a decision has been made" do
-        let!(:claim_missing_payroll_gender_with_decision) { create(:claim, :rejected, payroll_gender: :dont_know) }
-
-        scenario "User is not informed that the claim cannot be approved" do
-          visit admin_claim_path(claim_missing_payroll_gender_with_decision)
-
-          expect(page).to_not have_content(I18n.t("admin.unknown_payroll_gender_preventing_approval_message"))
-        end
-      end
-    end
-
     context "with a mixture of policy types" do
       let!(:maths_and_physics_claims) { create_list(:claim, 3, :submitted, policy: MathsAndPhysics) }
       let!(:student_loan_claims) { create_list(:claim, 2, :submitted, policy: StudentLoans) }
