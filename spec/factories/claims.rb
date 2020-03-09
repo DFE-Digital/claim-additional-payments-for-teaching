@@ -90,7 +90,7 @@ FactoryBot.define do
       bank_sort_code { nil }
       bank_account_number { nil }
       building_society_roll_number { nil }
-      pii_removed_at { Time.zone.now }
+      personal_data_removed_at { Time.zone.now }
     end
   end
 end

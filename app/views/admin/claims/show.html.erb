@@ -14,7 +14,7 @@
 
     <% if @claim.pii_removed? %>
       <div class="govuk-body-l govuk-flash__notice">
-        This claim had personally identifiable information removed on <%= l(@claim.pii_removed_at.to_date) %>.
+        This claim had personally identifiable information removed on <%= l(@claim.personal_data_removed_at.to_date) %>.
       </div>
     <% end %>
 

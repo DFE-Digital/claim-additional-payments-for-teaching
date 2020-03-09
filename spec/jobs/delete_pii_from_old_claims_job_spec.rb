@@ -13,9 +13,9 @@ RSpec.describe DeletePiiFromOldClaimsJob do
 
       DeletePiiFromOldClaimsJob.new.perform
 
-      expect(Claim.find(submitted_claim.id).pii_removed_at).to be_nil
-      expect(Claim.find(rejected_claim.id).pii_removed_at).to_not be_nil
-      expect(Claim.find(paid_claim.id).pii_removed_at).to_not be_nil
+      expect(Claim.find(submitted_claim.id).personal_data_removed_at).to be_nil
+      expect(Claim.find(rejected_claim.id).personal_data_removed_at).to_not be_nil
+      expect(Claim.find(paid_claim.id).personal_data_removed_at).to_not be_nil
     end
   end
 end

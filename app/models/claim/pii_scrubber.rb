@@ -2,7 +2,7 @@
 # either rejected and hasn't been updated in over two months, or where the claim
 # was scheduled to be paid more than two months ago.
 #
-# Attributes are set to nil, and pii_removed_at is set to the current timestamp.
+# Attributes are set to nil, and personal_data_removed_at is set to the current timestamp.
 
 class Claim
   class PiiScrubber
@@ -39,14 +39,14 @@ class Claim
 
     def attribute_values_to_set
       PII_ATTRIBUTES_TO_DELETE.map { |attr| [attr, nil] }.to_h.merge(
-        pii_removed_at: Time.zone.now
+        personal_data_removed_at: Time.zone.now
       )
     end
 
     def old_claims_rejected_or_paid
       Claim.left_outer_joins(payment: [:payroll_run])
         .joins(:decisions)
-        .where(pii_removed_at: nil)
+        .where(personal_data_removed_at: nil)
         .where(
           "(decisions.result = :rejected AND decisions.created_at < :minimum_time) OR scheduled_payment_date < :minimum_time",
           minimum_time: TIME_BEFORE_CLAIM_CONSIDERED_OLD.ago,

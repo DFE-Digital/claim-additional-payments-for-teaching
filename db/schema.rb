@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_03_10_094621) do
+ActiveRecord::Schema.define(version: 2020_03_10_094710) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -61,7 +61,7 @@ ActiveRecord::Schema.define(version: 2020_03_10_094621) do
     t.string "banking_name"
     t.string "building_society_roll_number"
     t.uuid "payment_id"
-    t.datetime "pii_removed_at"
+    t.datetime "personal_data_removed_at"
     t.string "academic_year", limit: 9
     t.index ["academic_year"], name: "index_claims_on_academic_year"
     t.index ["created_at"], name: "index_claims_on_created_at"
