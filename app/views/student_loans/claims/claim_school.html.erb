@@ -14,7 +14,7 @@
 
     <% else %>
       <%= render "school_search_results",
-                 question: t("student_loans.questions.claim_school"),
+                 question: claim_school_question(additional_school: params[:additional_school]),
                  school_param: :claim_school,
                  school_id_param: :claim_school_id
       %>

@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+- Fix question bug on school search results page
+
 ## [Release 059] - 2020-03-09
 
 - Links that look like buttons now work if users have JS on the claim journey
