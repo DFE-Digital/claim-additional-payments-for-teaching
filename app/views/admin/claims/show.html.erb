@@ -20,7 +20,9 @@
 
     <% if @matching_claims.any? %>
       <div class="govuk-body-l govuk-flash__warning">
-        <a href="#claims-with-matches">Details in this claim match those in other claims</a>
+        <a href="#claims-with-matches">
+          <%= t("admin.duplicate_attributes_message", count: @matching_claims.count, policy: @claim.policy.short_name) %>
+        </a>
       </div>
     <% end %>
 

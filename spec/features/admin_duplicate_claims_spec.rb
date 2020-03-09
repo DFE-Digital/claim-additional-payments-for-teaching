@@ -23,8 +23,8 @@ RSpec.feature "Service operator can see potential duplicate claims" do
 
     find("a[href='#{admin_claim_path(claim_to_approve)}']").click
 
-    expect(page).to have_content("Details in this claim match those in other claims")
-    expect(page).to have_content("Claims with matching details")
+    expect(page).to have_content("Details in this claim match another Student Loans claim")
+    expect(page).to have_content("Student Loans claim with matching details")
 
     expect(page).to have_content("#{claim_with_matching_teacher_reference_number.reference}\nTeacher reference number")
   end

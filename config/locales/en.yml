@@ -81,6 +81,9 @@ en:
     payment_deletion_claim_warning:
       one: This means claim %{references} will no longer be included in this pay run.
       other: This means claims %{references} will no longer be included in this pay run.
+    duplicate_attributes_message:
+      one: Details in this claim match another %{policy} claim
+      other: Details in this claim match other %{policy} claims
     payment_deleted_title:
       one: You have removed a claim from the payroll run
       other: You have removed %{count} claims from the payroll run
