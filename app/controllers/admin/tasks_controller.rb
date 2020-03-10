@@ -8,7 +8,7 @@ class Admin::TasksController < Admin::BaseAdminController
   end
 
   def show
-    @claim_checks = @claim.policy::AdminChecksPresenter.new(@claim)
+    @tasks_presenter = @claim.policy::AdminTasksPresenter.new(@claim)
     @task = @claim.tasks.find_by(name: current_task)
     render current_task
   end

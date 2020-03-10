@@ -10,7 +10,7 @@
     <%= render "admin/claims/answer_section",
           heading: "Qualifications",
           description: I18n.t("#{@claim.policy.to_s.underscore}.admin.checks.qualifications.description"),
-          answers: @claim_checks.qualifications %>
+          answers: @tasks_presenter.qualifications %>
   </div>
 
   <div class="govuk-grid-column-full">

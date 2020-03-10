@@ -1,7 +1,7 @@
 module MathsAndPhysics
   # Used to display the information a claim checker needs to check to either
   # approve or reject a claim.
-  class AdminChecksPresenter
+  class AdminTasksPresenter
     include Admin::PresenterMethods
 
     attr_reader :claim
