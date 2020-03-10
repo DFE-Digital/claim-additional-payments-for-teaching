@@ -3,7 +3,7 @@
 # This models the tasks that need to be performed on a claim as part of the
 # claim checking process.
 class ClaimCheckingTasks
-  TASK_NAMES = %w[qualifications employment].freeze
+  TASK_NAMES = %w[qualifications employment student_loan_amount].freeze
 
   attr_reader :claim
 
@@ -11,10 +11,10 @@ class ClaimCheckingTasks
     @claim = claim
   end
 
-  # Returns an Array task names that need to be performed on the claim during
-  # claim checking before it should be approved.
   def applicable_task_names
-    TASK_NAMES
+    @applicable_task_names ||= TASK_NAMES.dup.tap do |task_names|
+      task_names.delete("student_loan_amount") unless claim.policy == StudentLoans
+    end
   end
 
   # Returns an Array of tasks names that have not been completed on the claim.

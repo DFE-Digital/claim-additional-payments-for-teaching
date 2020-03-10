@@ -3,6 +3,7 @@ module StudentLoans
   # approve or reject a claim.
   class AdminTasksPresenter
     include Admin::PresenterMethods
+    include ActionView::Helpers::NumberHelper
 
     attr_reader :claim
 
@@ -20,6 +21,13 @@ module StudentLoans
       [
         ["6 April 2018 to 5 April 2019", display_school(eligibility.claim_school)],
         [I18n.t("admin.current_school"), display_school(eligibility.current_school)]
+      ]
+    end
+
+    def student_loan_amount
+      [
+        ["Student loan repayment amount", number_to_currency(eligibility.student_loan_repayment_amount)],
+        ["Student loan plan", claim.student_loan_plan.humanize]
       ]
     end
 

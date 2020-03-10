@@ -10,6 +10,13 @@ RSpec.describe ClaimCheckingTasks do
     it "returns the tasks that apply to the claim" do
       expect(checking_tasks.applicable_task_names).to eq %w[qualifications employment]
     end
+
+    it "includes the a task for student loan amount for a StudentLoans claim" do
+      student_loan_claim = build(:claim, policy: StudentLoans)
+      student_loan_tasks = ClaimCheckingTasks.new(student_loan_claim)
+
+      expect(student_loan_tasks.applicable_task_names).to eq %w[qualifications employment student_loan_amount]
+    end
   end
 
   describe "#incomplete_task_names" do

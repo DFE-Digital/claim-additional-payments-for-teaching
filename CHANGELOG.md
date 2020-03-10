@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+- Add a task for confirming the student loan amount on Student Loans claims
+
 ## [Release 060] - 2020-03-10
 
 - Fix question bug on school search results page

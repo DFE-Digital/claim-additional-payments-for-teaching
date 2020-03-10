@@ -6,11 +6,13 @@ RSpec.describe StudentLoans::AdminTasksPresenter, type: :model do
   let(:claim) do
     build(:claim,
       academic_year: "2019/2020",
+      student_loan_plan: StudentLoan::PLAN_1,
       eligibility: build(
         :student_loans_eligibility,
         qts_award_year: "on_or_after_cut_off_date",
         claim_school: school,
-        current_school: school
+        current_school: school,
+        student_loan_repayment_amount: "670.99"
       ))
   end
   subject(:presenter) { described_class.new(claim) }
@@ -33,6 +35,15 @@ RSpec.describe StudentLoans::AdminTasksPresenter, type: :model do
       expect(presenter.employment).to eq [
         ["6 April 2018 to 5 April 2019", presenter.display_school(eligibility.claim_school)],
         [I18n.t("admin.current_school"), presenter.display_school(eligibility.current_school)]
+      ]
+    end
+  end
+
+  describe "#student_loan_amount" do
+    it "returns an array of label and values for displaying information for the student loan amount check" do
+      expect(presenter.student_loan_amount).to eq [
+        ["Student loan repayment amount", "£670.99"],
+        ["Student loan plan", "Plan 1"]
       ]
     end
   end

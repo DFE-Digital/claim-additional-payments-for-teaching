@@ -3,7 +3,7 @@ require "rails_helper"
 RSpec.describe "Admin decisions", type: :request do
   context "when signed in as a service operator" do
     let(:user) { create(:dfe_signin_user) }
-    let(:claim) { create(:claim, :submitted) }
+    let(:claim) { create(:claim, :submitted, policy: MathsAndPhysics) }
 
     before do
       sign_in_to_admin_with_role(DfeSignIn::User::SERVICE_OPERATOR_DFE_SIGN_IN_ROLE_CODE, user.dfe_sign_in_id)
@@ -19,12 +19,10 @@ RSpec.describe "Admin decisions", type: :request do
       end
 
       context "when all tasks have been completed" do
-        let(:claim) {
-          create(:claim, :submitted, tasks: [
-            build(:task, name: "qualifications"),
-            build(:task, name: "employment")
-          ])
-        }
+        before do
+          create(:task, name: "qualifications", claim: claim)
+          create(:task, name: "employment", claim: claim)
+        end
 
         it "does not warn the service operator about incomplete tasks" do
           get new_admin_claim_decision_path(claim)
