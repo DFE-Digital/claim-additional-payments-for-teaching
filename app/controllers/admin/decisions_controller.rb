@@ -7,11 +7,13 @@ class Admin::DecisionsController < Admin::BaseAdminController
 
   def new
     @decision = Decision.new
+    @claim_checking_tasks = ClaimCheckingTasks.new(@claim)
     @claims_preventing_payment = claims_preventing_payment_finder.claims_preventing_payment
   end
 
   def create
     @decision = @claim.decisions.build(decision_params.merge(created_by: admin_user))
+    @claim_checking_tasks = ClaimCheckingTasks.new(@claim)
     if @decision.save
       send_claim_result_email
       RecordOrUpdateGeckoboardDatasetJob.perform_later([@claim.id])

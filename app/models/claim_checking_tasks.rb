@@ -16,4 +16,9 @@ class ClaimCheckingTasks
   def applicable_task_names
     TASK_NAMES
   end
+
+  # Returns an Array of tasks names that have not been completed on the claim.
+  def incomplete_task_names
+    applicable_task_names - claim.tasks.map(&:name)
+  end
 end

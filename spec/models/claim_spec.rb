@@ -717,18 +717,4 @@ RSpec.describe Claim, type: :model do
       expect(claim.amendable?).to eq(false)
     end
   end
-
-  describe "#incomplete_task_names" do
-    Policies.all.each do |policy|
-      it "returns an array of the tasks that haven’t been completed on the claim" do
-        claim = build(:claim, :submitted, tasks: [
-          build(:task, name: "qualifications")
-        ])
-        expect(claim.incomplete_task_names).to eq(["employment"])
-
-        claim.tasks << build(:task, name: "employment")
-        expect(claim.incomplete_task_names).to eq([])
-      end
-    end
-  end
 end
