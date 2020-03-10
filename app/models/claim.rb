@@ -89,7 +89,7 @@ class Claim < ApplicationRecord
   enum student_loan_plan: STUDENT_LOAN_PLAN_OPTIONS
 
   has_many :decisions
-  has_many :checks
+  has_many :tasks
   has_many :amendments
 
   belongs_to :eligibility, polymorphic: true, inverse_of: :claim, dependent: :destroy
@@ -284,7 +284,7 @@ class Claim < ApplicationRecord
   end
 
   def incomplete_check_names
-    Admin::ChecksController::CHECKS_SEQUENCE - checks.map(&:name)
+    Admin::ChecksController::CHECKS_SEQUENCE - tasks.map(&:name)
   end
 
   private

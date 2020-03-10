@@ -13,8 +13,8 @@
   </div>
 
   <div class="govuk-grid-column-full">
-    <% if @check.present? %>
-      <%= render "check_outcome", check: @check %>
+    <% if @task.present? %>
+      <%= render "check_outcome", check: @task %>
     <% else %>
       <%= button_to "Complete employment check and continue", admin_claim_checks_path(@claim, check: :employment), class: "govuk-button" %>
     <% end %>

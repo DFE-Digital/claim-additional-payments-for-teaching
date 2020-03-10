@@ -721,12 +721,12 @@ RSpec.describe Claim, type: :model do
   describe "#incomplete_check_names" do
     Policies.all.each do |policy|
       it "returns an array of the checks that haven’t been completed on the claim" do
-        claim = build(:claim, :submitted, checks: [
-          build(:check, name: "qualifications")
+        claim = build(:claim, :submitted, tasks: [
+          build(:task, name: "qualifications")
         ])
         expect(claim.incomplete_check_names).to eq(["employment"])
 
-        claim.checks << build(:check, name: "employment")
+        claim.tasks << build(:task, name: "employment")
         expect(claim.incomplete_check_names).to eq([])
       end
     end

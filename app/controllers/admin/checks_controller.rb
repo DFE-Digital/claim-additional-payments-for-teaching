@@ -9,12 +9,12 @@ class Admin::ChecksController < Admin::BaseAdminController
 
   def show
     @claim_checks = @claim.policy::AdminChecksPresenter.new(@claim)
-    @check = @claim.checks.find_by(name: current_check)
+    @task = @claim.tasks.find_by(name: current_check)
     render current_check
   end
 
   def create
-    @claim.checks.create!(name: current_check, created_by: admin_user)
+    @claim.tasks.create!(name: current_check, created_by: admin_user)
     redirect_to next_check_path
   rescue ActiveRecord::RecordInvalid
     redirect_to admin_claim_check_path(@claim, check: current_check), alert: "This check has already been completed"
@@ -23,7 +23,7 @@ class Admin::ChecksController < Admin::BaseAdminController
   private
 
   def load_claim
-    @claim = Claim.includes(:checks).find(params[:claim_id])
+    @claim = Claim.includes(:tasks).find(params[:claim_id])
   end
 
   def current_check

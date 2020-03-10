@@ -51,10 +51,10 @@ RSpec.describe "Admin checks", type: :request do
           it "creates a new check and redirects to the next check" do
             expect {
               post admin_claim_checks_path(claim, check: "qualifications")
-            }.to change { Check.count }.by(1)
+            }.to change { Task.count }.by(1)
 
-            expect(claim.checks.last.name).to eql("qualifications")
-            expect(claim.checks.last.created_by).to eql(user)
+            expect(claim.tasks.last.name).to eql("qualifications")
+            expect(claim.tasks.last.created_by).to eql(user)
             expect(response).to redirect_to(admin_claim_check_path(claim, check: "employment"))
           end
 
@@ -64,21 +64,21 @@ RSpec.describe "Admin checks", type: :request do
             it "creates the check and redirects to the decision page" do
               expect {
                 post admin_claim_checks_path(claim, check: last_check)
-              }.to change { Check.count }.by(1)
+              }.to change { Task.count }.by(1)
 
-              expect(claim.checks.last.name).to eql(last_check)
-              expect(claim.checks.last.created_by).to eql(user)
+              expect(claim.tasks.last.name).to eql(last_check)
+              expect(claim.tasks.last.created_by).to eql(user)
               expect(response).to redirect_to(new_admin_claim_decision_path(claim))
             end
           end
 
           context "when a check has already been marked as completed" do
             it "doesn't create a check and redirects with an error" do
-              create(:check, name: "qualifications", claim: claim)
+              create(:task, name: "qualifications", claim: claim)
 
               expect {
                 post admin_claim_checks_path(claim, check: "qualifications")
-              }.not_to change { Check.count }
+              }.not_to change { Task.count }
 
               expect(response).to redirect_to(admin_claim_check_path(claim, check: "qualifications"))
               expect(flash[:alert]).to eql("This check has already been completed")

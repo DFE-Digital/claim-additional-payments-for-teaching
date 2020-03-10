@@ -20,9 +20,9 @@ RSpec.describe "Admin decisions", type: :request do
 
       context "when all checks have been completed" do
         let(:claim) {
-          create(:claim, :submitted, checks: [
-            build(:check, name: "qualifications"),
-            build(:check, name: "employment")
+          create(:claim, :submitted, tasks: [
+            build(:task, name: "qualifications"),
+            build(:task, name: "employment")
           ])
         }
 
@@ -36,8 +36,8 @@ RSpec.describe "Admin decisions", type: :request do
 
       context "when some checks have not been completed" do
         let(:claim) {
-          create(:claim, :submitted, checks: [
-            build(:check, name: "qualifications")
+          create(:claim, :submitted, tasks: [
+            build(:task, name: "qualifications")
           ])
         }
 
