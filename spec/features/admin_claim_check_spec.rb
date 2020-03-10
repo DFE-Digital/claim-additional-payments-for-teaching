@@ -19,7 +19,9 @@ RSpec.feature "Admin checks a claim" do
         expect(page).to have_content(claim_to_approve.reference)
         expect(page).to have_content("5 claims awaiting a decision")
 
-        find("a[href='#{admin_claim_path(claim_to_approve)}']").click
+        find("a[href='#{admin_claim_tasks_path(claim_to_approve)}']").click
+        click_on "Approve or reject this claim"
+
         choose "Approve"
         fill_in "Decision notes", with: "Everything matches"
         perform_enqueued_jobs { click_on "Confirm decision" }
@@ -50,7 +52,9 @@ RSpec.feature "Admin checks a claim" do
       expect(page).to have_content(claim_to_reject.reference)
       expect(page).to have_content("5 claims awaiting a decision")
 
-      find("a[href='#{admin_claim_path(claim_to_reject)}']").click
+      find("a[href='#{admin_claim_tasks_path(claim_to_reject)}']").click
+      click_on "Approve or reject this claim"
+
       choose "Reject"
       fill_in "Decision notes", with: "TRN doesn't exist"
       perform_enqueued_jobs { click_on "Confirm decision" }

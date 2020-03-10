@@ -7,6 +7,7 @@ The format is based on [Keep a Changelog]
 ## [Unreleased]
 
 - Add a task for confirming the student loan amount on Student Loans claims
+- Student Loans claims default to new task-based claim checking interface
 
 ## [Release 060] - 2020-03-10
 

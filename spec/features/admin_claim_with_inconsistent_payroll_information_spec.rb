@@ -24,7 +24,8 @@ RSpec.feature "Admin checking a claim with inconsistent payroll information" do
     second_inconsistent_claim = create(:claim, :submitted, personal_details.merge(bank_sort_code: "582939", bank_account_number: "74727752"))
 
     click_on "View claims"
-    find("a[href='#{admin_claim_path(second_inconsistent_claim)}']").click
+    find("a[href='#{admin_claim_tasks_path(second_inconsistent_claim)}']").click
+    click_on "View full claim"
 
     expect(page).to have_field("Approve", disabled: true)
     expect(page).to have_content("This claim cannot currently be approved because we’re already paying another claim (#{approved_claim.reference}) to this claimant in this payroll month using different payment details. Please speak to a Grade 7.")

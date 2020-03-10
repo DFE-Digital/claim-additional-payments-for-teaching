@@ -11,7 +11,8 @@ RSpec.feature "Admin checking a claim missing a payroll gender" do
     claim_missing_payroll_gender = create(:claim, :submitted, payroll_gender: :dont_know)
 
     click_on "View claims"
-    find("a[href='#{admin_claim_path(claim_missing_payroll_gender)}']").click
+    find("a[href='#{admin_claim_tasks_path(claim_missing_payroll_gender)}']").click
+    click_on "View full claim"
 
     expect(page).to have_field("Approve", disabled: true)
     expect(page).to have_content(I18n.t("admin.unknown_payroll_gender_preventing_approval_message"))
