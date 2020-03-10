@@ -68,7 +68,7 @@ RSpec.feature "Admin checks a claim" do
       expect(mail.body.raw_source).to match("not been able to approve")
     end
 
-    scenario "User can see completed checks" do
+    scenario "User can see completed tasks" do
       ten_minutes_ago = 10.minutes.ago
       checking_user = create(:dfe_signin_user, given_name: "Fred", family_name: "Smith")
       qualification_task = build(:task, name: "qualifications", created_by: checking_user, created_at: ten_minutes_ago)
@@ -80,7 +80,7 @@ RSpec.feature "Admin checks a claim" do
       expect(page).to have_link("Approve or reject this claim", href: new_admin_claim_decision_path(claim_with_tasks))
 
       click_on "Check qualification information"
-      expect(page).to have_content("Checked by #{checking_user.full_name}")
+      expect(page).to have_content("Performed by #{checking_user.full_name}")
       expect(page).to have_content(I18n.l(ten_minutes_ago))
       expect(page).not_to have_button("Complete qualifications check and continue")
     end
@@ -97,7 +97,7 @@ RSpec.feature "Admin checks a claim" do
       expect(page).to have_content(user.full_name)
     end
 
-    context "when the service operator completes the last check" do
+    context "when the service operator completes the last checking task" do
       context "and the payroll gender is missing" do
         let!(:claim) { create(:claim, :submitted, payroll_gender: :dont_know) }
 

@@ -12,7 +12,7 @@ RSpec.feature "Admin checking a Student Loans claim" do
 
     visit admin_claims_path
     find("a[href='#{admin_claim_path(claim)}']").click
-    click_on "View checks"
+    click_on "View tasks"
 
     expect(page).to have_content("1. Qualifications")
     expect(page).to have_content("2. Employment")

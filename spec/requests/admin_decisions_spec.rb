@@ -18,7 +18,7 @@ RSpec.describe "Admin decisions", type: :request do
         expect(response.body).to include("Claim decision")
       end
 
-      context "when all checks have been completed" do
+      context "when all tasks have been completed" do
         let(:claim) {
           create(:claim, :submitted, tasks: [
             build(:task, name: "qualifications"),
@@ -26,26 +26,26 @@ RSpec.describe "Admin decisions", type: :request do
           ])
         }
 
-        it "does not warn the service operator about incomplete checks" do
+        it "does not warn the service operator about incomplete tasks" do
           get new_admin_claim_decision_path(claim)
 
           expect(response).to have_http_status(:ok)
-          expect(response.body).not_to include("Some checks have not yet been completed")
+          expect(response.body).not_to include("Some tasks have not yet been completed")
         end
       end
 
-      context "when some checks have not been completed" do
+      context "when some tasks have not been completed" do
         let(:claim) {
           create(:claim, :submitted, tasks: [
             build(:task, name: "qualifications")
           ])
         }
 
-        it "warns the service operator about those checks" do
+        it "warns the service operator about those tasks" do
           get new_admin_claim_decision_path(claim)
 
           expect(response).to have_http_status(:ok)
-          expect(response.body).to include("Some checks have not yet been completed")
+          expect(response.body).to include("Some tasks have not yet been completed")
           expect(response.body).to include("Check employment information")
           expect(response.body).to include(admin_claim_task_url(claim, name: "employment"))
         end

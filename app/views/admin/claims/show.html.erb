@@ -30,7 +30,7 @@
     <h1 class="govuk-heading-xl govuk-heading--navigation">
       <%= @claim.reference %>
       <span class="govuk-body-m">
-        <%= link_to "View checks", admin_claim_tasks_path(claim_id: @claim.id), class: "govuk-link" %>
+        <%= link_to "View tasks", admin_claim_tasks_path(claim_id: @claim.id), class: "govuk-link" %>
         <%= link_to "Amend claim", new_admin_claim_amendment_url(@claim), class: "govuk-link" if @claim.amendable? %>
       </span>
     </h1>

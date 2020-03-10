@@ -15,7 +15,7 @@
 
   <div class="govuk-grid-column-full">
     <% if @task.present? %>
-      <%= render "check_outcome", task: @task %>
+      <%= render "task_outcome", task: @task %>
     <% else %>
       <%= button_to "Complete qualifications check and continue", admin_claim_tasks_path(claim_id: @claim.id, name: :qualifications), class: "govuk-button" %>
     <% end %>
