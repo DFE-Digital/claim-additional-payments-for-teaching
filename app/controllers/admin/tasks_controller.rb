@@ -30,13 +30,13 @@ class Admin::TasksController < Admin::BaseAdminController
     params[:name]
   end
 
-  def next_check
+  def next_task_name
     TASKS_SEQUENCE[TASKS_SEQUENCE.index(current_task) + 1]
   end
 
   def next_task_path
-    if next_check.present?
-      admin_claim_task_path(@claim, name: next_check)
+    if next_task_name.present?
+      admin_claim_task_path(@claim, name: next_task_name)
     else
       new_admin_claim_decision_path(@claim)
     end
