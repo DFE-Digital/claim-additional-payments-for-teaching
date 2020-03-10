@@ -3,6 +3,7 @@ class Admin::TasksController < Admin::BaseAdminController
   before_action :load_claim
 
   def index
+    @claim_checking_tasks = ClaimCheckingTasks.new(@claim)
   end
 
   def show

@@ -16,6 +16,7 @@ RSpec.feature "Admin checking a Student Loans claim" do
 
     expect(page).to have_content("1. Qualifications")
     expect(page).to have_content("2. Employment")
+    expect(page).to have_content("3. Decision")
 
     click_on "Check qualification information"
     expect(page).to have_content("Qualifications")
