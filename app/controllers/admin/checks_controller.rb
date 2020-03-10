@@ -27,7 +27,7 @@ class Admin::ChecksController < Admin::BaseAdminController
   end
 
   def current_check
-    params[:check].parameterize.underscore
+    params[:check]
   end
 
   def next_check
