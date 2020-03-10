@@ -284,7 +284,7 @@ class Claim < ApplicationRecord
   end
 
   def incomplete_check_names
-    Admin::ChecksController::CHECKS_SEQUENCE - tasks.map(&:name)
+    Admin::TasksController::TASKS_SEQUENCE - tasks.map(&:name)
   end
 
   private

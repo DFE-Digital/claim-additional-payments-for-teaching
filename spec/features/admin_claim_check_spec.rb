@@ -73,7 +73,7 @@ RSpec.feature "Admin checks a claim" do
       checking_user = create(:dfe_signin_user, given_name: "Fred", family_name: "Smith")
       qualification_task = build(:task, name: "qualifications", created_by: checking_user, created_at: ten_minutes_ago)
       claim_with_tasks = create(:claim, :submitted, tasks: [qualification_task, build(:task, name: "employment")])
-      visit admin_claim_checks_path(claim_with_tasks)
+      visit admin_claim_tasks_path(claim_with_tasks)
 
       expect(page).to have_content("Check qualification information Completed")
       expect(page).to have_content("Check employment information Completed")
@@ -152,7 +152,7 @@ RSpec.feature "Admin checks a claim" do
       end
 
       def perform_last_task
-        visit admin_claim_check_path(claim, check: Admin::ChecksController::CHECKS_SEQUENCE.last)
+        visit admin_claim_task_path(claim, name: Admin::TasksController::TASKS_SEQUENCE.last)
         find("input[type='submit']").click
       end
     end

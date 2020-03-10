@@ -39,16 +39,16 @@ describe "Routes", type: :routing do
     end
   end
 
-  describe "Admin claim checks routing" do
-    it "routes GET requests to valid checks on a claim" do
+  describe "Admin claim tasks routing" do
+    it "routes GET requests to valid tasks on a claim" do
       claim = create(:claim, :submitted)
-      expect(get: "admin/claims/#{claim.id}/checks/qualifications").to route_to "admin/checks#show", claim_id: claim.id, check: "qualifications"
-      expect(get: "admin/claims/#{claim.id}/checks/employment").to route_to "admin/checks#show", claim_id: claim.id, check: "employment"
+      expect(get: "admin/claims/#{claim.id}/tasks/qualifications").to route_to "admin/tasks#show", claim_id: claim.id, name: "qualifications"
+      expect(get: "admin/claims/#{claim.id}/tasks/employment").to route_to "admin/tasks#show", claim_id: claim.id, name: "employment"
     end
 
-    it "does not route for unrecognised checks" do
+    it "does not route for unrecognised tasks" do
       claim = create(:claim, :submitted)
-      expect(get: "admin/claims/#{claim.id}/checks/foo").not_to be_routable
+      expect(get: "admin/claims/#{claim.id}/tasks/foo").not_to be_routable
     end
   end
 end

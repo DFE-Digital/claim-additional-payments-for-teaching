@@ -11,7 +11,7 @@ RSpec.feature "Admin checking a Maths & Physics claim" do
     claim = create(:claim, :submitted, policy: MathsAndPhysics)
 
     visit admin_claims_path
-    find("a[href='#{admin_claim_checks_path(claim)}']").click
+    find("a[href='#{admin_claim_tasks_path(claim)}']").click
 
     expect(page).to have_content("1. Qualifications")
     expect(page).to have_content("2. Employment")

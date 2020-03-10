@@ -3,7 +3,7 @@
 
   <%= render("admin/claims/info_panel_identity_unconfirmed", school: @claim.school) unless @claim.identity_confirmed? %>
 
-  <%= render "admin/checks/claim_summary", claim: @claim %>
+  <%= render "admin/tasks/claim_summary", claim: @claim %>
 
   <%= render("admin/claims/claims_with_matching_details", {matching_claims: @matching_claims, claim: @claim}) if @matching_claims.any? %>
 

@@ -47,7 +47,7 @@ RSpec.describe "Admin decisions", type: :request do
           expect(response).to have_http_status(:ok)
           expect(response.body).to include("Some checks have not yet been completed")
           expect(response.body).to include("Check employment information")
-          expect(response.body).to include(admin_claim_check_url(check: "employment"))
+          expect(response.body).to include(admin_claim_task_url(claim, name: "employment"))
         end
       end
 

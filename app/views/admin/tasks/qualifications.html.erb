@@ -1,6 +1,6 @@
 <% content_for(:page_title) { page_title("Claim #{@claim.reference} qualification check for #{policy_service_name(@claim.policy.routing_name)}") } %>
 
-<%= link_to "Back", admin_claim_checks_path(claim_id: @claim.id), class: "govuk-back-link" %>
+<%= link_to "Back", admin_claim_tasks_path(claim_id: @claim.id), class: "govuk-back-link" %>
 
 <div class="govuk-grid-row">
 
@@ -15,9 +15,9 @@
 
   <div class="govuk-grid-column-full">
     <% if @task.present? %>
-      <%= render "check_outcome", check: @task %>
+      <%= render "check_outcome", task: @task %>
     <% else %>
-      <%= button_to "Complete qualifications check and continue", admin_claim_checks_path(claim_id: @claim.id, check: :qualifications), class: "govuk-button" %>
+      <%= button_to "Complete qualifications check and continue", admin_claim_tasks_path(claim_id: @claim.id, name: :qualifications), class: "govuk-button" %>
     <% end %>
   </div>
 </div>
