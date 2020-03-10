@@ -1,6 +1,6 @@
 module Verify
-  # Used to report a response from Verify without revealing any Personally
-  # Identifiable Information by replacing any string "values" with the "X"
+  # Used to report a response from Verify without revealing any personal
+  # data by replacing any string "values" with the "X"
   # character. For example:
   #
   #   Verify::RedactedResponse.new({"value" => "Secret"}).parameters
