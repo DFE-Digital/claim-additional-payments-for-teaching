@@ -284,7 +284,7 @@ class Claim < ApplicationRecord
   end
 
   def incomplete_task_names
-    Admin::TasksController::TASKS_SEQUENCE - tasks.map(&:name)
+    ClaimCheckingTasks.new(self).applicable_task_names - tasks.map(&:name)
   end
 
   private

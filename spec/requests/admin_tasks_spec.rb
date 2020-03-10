@@ -59,7 +59,7 @@ RSpec.describe "Admin tasks", type: :request do
           end
 
           context "when the last check is marked as completed" do
-            let(:last_check) { Admin::TasksController::TASKS_SEQUENCE.last }
+            let(:last_check) { ClaimCheckingTasks.new(claim).applicable_task_names.last }
 
             it "creates the check and redirects to the decision page" do
               expect {
