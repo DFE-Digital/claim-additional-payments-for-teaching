@@ -6,8 +6,11 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+## [Release 060] - 2020-03-10
+
 - Fix question bug on school search results page
 - Show a list of incomplete checks on the claim decision page
+- Exclude claims for the other policy from claims with matching details
 
 ## [Release 059] - 2020-03-09
 
@@ -496,7 +499,9 @@ The format is based on [Keep a Changelog]
 - First release for student loan repayments private beta
 
 [unreleased]:
-  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-059...HEAD
+  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-060...HEAD
+[release 060]:
+  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-059...release-060
 [release 059]:
   https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-058...release-059
 [release 058]:
