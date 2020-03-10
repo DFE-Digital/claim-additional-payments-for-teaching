@@ -68,19 +68,19 @@ RSpec.feature "Admin checks a claim" do
       expect(mail.body.raw_source).to match("not been able to approve")
     end
 
-    scenario "User can see completed checks" do
+    scenario "User can see completed tasks" do
       ten_minutes_ago = 10.minutes.ago
       checking_user = create(:dfe_signin_user, given_name: "Fred", family_name: "Smith")
-      qualification_check = build(:check, name: "qualifications", created_by: checking_user, created_at: ten_minutes_ago)
-      claim_with_checks = create(:claim, :submitted, checks: [qualification_check, build(:check, name: "employment")])
-      visit admin_claim_checks_path(claim_with_checks)
+      qualification_task = build(:task, name: "qualifications", created_by: checking_user, created_at: ten_minutes_ago)
+      claim_with_tasks = create(:claim, :submitted, tasks: [qualification_task, build(:task, name: "employment")])
+      visit admin_claim_tasks_path(claim_with_tasks)
 
       expect(page).to have_content("Check qualification information Completed")
       expect(page).to have_content("Check employment information Completed")
-      expect(page).to have_link("Approve or reject this claim", href: new_admin_claim_decision_path(claim_with_checks))
+      expect(page).to have_link("Approve or reject this claim", href: new_admin_claim_decision_path(claim_with_tasks))
 
       click_on "Check qualification information"
-      expect(page).to have_content("Checked by #{checking_user.full_name}")
+      expect(page).to have_content("Performed by #{checking_user.full_name}")
       expect(page).to have_content(I18n.l(ten_minutes_ago))
       expect(page).not_to have_button("Complete qualifications check and continue")
     end
@@ -97,12 +97,12 @@ RSpec.feature "Admin checks a claim" do
       expect(page).to have_content(user.full_name)
     end
 
-    context "when the service operator completes the last check" do
+    context "when the service operator completes the last checking task" do
       context "and the payroll gender is missing" do
         let!(:claim) { create(:claim, :submitted, payroll_gender: :dont_know) }
 
         scenario "User is informed that the claim cannot be approved" do
-          perform_last_check
+          perform_last_task
 
           expect(page).to have_field("Approve", disabled: true)
           expect(page).to have_content(I18n.t("admin.unknown_payroll_gender_preventing_approval_message"))
@@ -126,7 +126,7 @@ RSpec.feature "Admin checks a claim" do
         let!(:claim) { create(:claim, :submitted, personal_details.merge(bank_sort_code: "582939", bank_account_number: "74727752")) }
 
         scenario "User is informed that the claim cannot be approved" do
-          perform_last_check
+          perform_last_task
 
           expect(page).to have_field("Approve", disabled: true)
           expect(page).to have_content("This claim cannot currently be approved because we’re already paying another claim (#{approved_claim.reference}) to this claimant in this payroll month using different payment details. Please speak to a Grade 7.")
@@ -137,7 +137,7 @@ RSpec.feature "Admin checks a claim" do
         let!(:claim) { create(:claim, :unverified) }
 
         scenario "the service operator is told the identity hasn't been confirmed and can approve the claim" do
-          perform_last_check
+          perform_last_task
 
           expect(page).to have_content("The claimant did not complete GOV.UK Verify")
           expect(page).to have_content(claim.school.phone_number)
@@ -151,8 +151,8 @@ RSpec.feature "Admin checks a claim" do
         end
       end
 
-      def perform_last_check
-        visit admin_claim_check_path(claim, check: Admin::ChecksController::CHECKS_SEQUENCE.last)
+      def perform_last_task
+        visit admin_claim_task_path(claim, name: Admin::TasksController::TASKS_SEQUENCE.last)
         find("input[type='submit']").click
       end
     end

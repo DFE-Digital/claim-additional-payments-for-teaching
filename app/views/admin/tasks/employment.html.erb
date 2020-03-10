@@ -1,5 +1,5 @@
 <% content_for(:page_title) { page_title("Claim #{@claim.reference} employment check for #{policy_service_name(@claim.policy.routing_name)}") } %>
-<%= link_to "Back", admin_claim_checks_path(claim_id: @claim.id), class: "govuk-back-link" %>
+<%= link_to "Back", admin_claim_tasks_path(claim_id: @claim.id), class: "govuk-back-link" %>
 
 <div class="govuk-grid-row">
 
@@ -9,14 +9,14 @@
     <%= render "admin/claims/answer_section",
           heading: "Employment",
           description: I18n.t("#{@claim.policy.to_s.underscore}.admin.checks.employment.description"),
-          answers: @claim_checks.employment %>
+          answers: @tasks_presenter.employment %>
   </div>
 
   <div class="govuk-grid-column-full">
-    <% if @check.present? %>
-      <%= render "check_outcome", check: @check %>
+    <% if @task.present? %>
+      <%= render "task_outcome", task: @task %>
     <% else %>
-      <%= button_to "Complete employment check and continue", admin_claim_checks_path(@claim, check: :employment), class: "govuk-button" %>
+      <%= button_to "Complete employment check and continue", admin_claim_tasks_path(@claim, name: :employment), class: "govuk-button" %>
     <% end %>
   </div>
 </div>

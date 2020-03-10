@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_03_04_101213) do
+ActiveRecord::Schema.define(version: 2020_03_10_094621) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -28,17 +28,6 @@ ActiveRecord::Schema.define(version: 2020_03_04_101213) do
     t.index ["claim_id"], name: "index_amendments_on_claim_id"
     t.index ["created_by_id"], name: "index_amendments_on_created_by_id"
     t.index ["dfe_sign_in_users_id"], name: "index_amendments_on_dfe_sign_in_users_id"
-  end
-
-  create_table "checks", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.string "name"
-    t.uuid "claim_id"
-    t.uuid "created_by_id"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.index ["claim_id"], name: "index_checks_on_claim_id"
-    t.index ["created_by_id"], name: "index_checks_on_created_by_id"
-    t.index ["name", "claim_id"], name: "index_checks_on_name_and_claim_id", unique: true
   end
 
   create_table "claims", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -241,11 +230,20 @@ ActiveRecord::Schema.define(version: 2020_03_04_101213) do
     t.index ["current_school_id"], name: "index_student_loans_eligibilities_on_current_school_id"
   end
 
+  create_table "tasks", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "name"
+    t.uuid "claim_id"
+    t.uuid "created_by_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["claim_id"], name: "index_tasks_on_claim_id"
+    t.index ["created_by_id"], name: "index_tasks_on_created_by_id"
+    t.index ["name", "claim_id"], name: "index_tasks_on_name_and_claim_id", unique: true
+  end
+
   add_foreign_key "amendments", "claims"
   add_foreign_key "amendments", "dfe_sign_in_users", column: "created_by_id"
   add_foreign_key "amendments", "dfe_sign_in_users", column: "dfe_sign_in_users_id"
-  add_foreign_key "checks", "claims"
-  add_foreign_key "checks", "dfe_sign_in_users", column: "created_by_id"
   add_foreign_key "claims", "payments"
   add_foreign_key "decisions", "dfe_sign_in_users", column: "created_by_id"
   add_foreign_key "maths_and_physics_eligibilities", "schools", column: "current_school_id"
@@ -256,4 +254,6 @@ ActiveRecord::Schema.define(version: 2020_03_04_101213) do
   add_foreign_key "schools", "local_authority_districts"
   add_foreign_key "student_loans_eligibilities", "schools", column: "claim_school_id"
   add_foreign_key "student_loans_eligibilities", "schools", column: "current_school_id"
+  add_foreign_key "tasks", "claims"
+  add_foreign_key "tasks", "dfe_sign_in_users", column: "created_by_id"
 end

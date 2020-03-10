@@ -1,12 +1,12 @@
 <div class="govuk-error-summary claim-error-summary--warning" aria-labelledby="error-summary-title" role="alert" tabindex="-1" data-module="govuk-error-summary">
   <h2 class="govuk-error-summary__title" id="error-summary-title">
-    Some checks have not yet been completed
+    Some tasks have not yet been completed
   </h2>
 
   <div class="govuk-error-summary__body">
     <ul class="govuk-list govuk-error-summary__list claim-error-summary__list--warning">
-      <% @claim.incomplete_check_names.each do |name| %>
-        <li><%= link_to(t("#{@claim.policy.locale_key}.admin.checks.#{name}.summary"), admin_claim_check_url(check: name)) %></li>
+      <% @claim.incomplete_task_names.each do |name| %>
+        <li><%= link_to(t("#{@claim.policy.locale_key}.admin.checks.#{name}.summary"), admin_claim_task_url(@claim, name: name)) %></li>
       <% end %>
     </ul>
   </div>

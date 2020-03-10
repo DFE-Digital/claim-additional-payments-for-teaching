@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe MathsAndPhysics::AdminChecksPresenter, type: :model do
+RSpec.describe MathsAndPhysics::AdminTasksPresenter, type: :model do
   let(:school) { schools(:penistone_grammar_school) }
   let(:eligibility) { claim.eligibility }
   let(:claim) do

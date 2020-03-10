@@ -16,9 +16,9 @@
         <ul class="app-task-list__items">
           <li class="app-task-list__item">
             <span class="app-task-list__task-name">
-              <%= link_to I18n.t("#{@claim.policy.locale_key}.admin.checks.qualifications.summary"), admin_claim_check_path(claim_id: @claim.id, check: :qualifications), class: "govuk-link" %>
+              <%= link_to I18n.t("#{@claim.policy.locale_key}.admin.checks.qualifications.summary"), admin_claim_task_path(claim_id: @claim.id, name: :qualifications), class: "govuk-link" %>
             </span>
-            <% if @claim.checks.exists?(name: "qualifications") %>
+            <% if @claim.tasks.exists?(name: "qualifications") %>
               <strong class="govuk-tag app-task-list__task-completed">Completed</strong>
             <% end %>
           </li>
@@ -31,9 +31,9 @@
         <ul class="app-task-list__items">
           <li class="app-task-list__item">
             <span class="app-task-list__task-name">
-              <%= link_to I18n.t("#{@claim.policy.locale_key}.admin.checks.employment.summary"), admin_claim_check_path(claim_id: @claim.id, check: :employment), class: "govuk-link" %>
+              <%= link_to I18n.t("#{@claim.policy.locale_key}.admin.checks.employment.summary"), admin_claim_task_path(claim_id: @claim.id, name: :employment), class: "govuk-link" %>
             </span>
-            <% if @claim.checks.exists?(name: "employment") %>
+            <% if @claim.tasks.exists?(name: "employment") %>
               <strong class="govuk-tag app-task-list__task-completed">Completed</strong>
             <% end %>
           </li>

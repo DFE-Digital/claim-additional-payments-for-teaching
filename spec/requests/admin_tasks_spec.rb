@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "Admin checks", type: :request do
+RSpec.describe "Admin tasks", type: :request do
   let(:claim) { create(:claim, :submitted) }
 
   context "when signed in as a service operator" do
@@ -10,9 +10,9 @@ RSpec.describe "Admin checks", type: :request do
       sign_in_to_admin_with_role(DfeSignIn::User::SERVICE_OPERATOR_DFE_SIGN_IN_ROLE_CODE, user.dfe_sign_in_id)
     end
 
-    describe "checks#index" do
-      it "shows a list of checks for a claim" do
-        get admin_claim_checks_path(claim_id: claim.id)
+    describe "tasks#index" do
+      it "shows a list of tasks for a claim" do
+        get admin_claim_tasks_path(claim_id: claim.id)
 
         expect(response.body).to include(claim.reference)
         expect(response.body).to include("Qualifications")
@@ -23,7 +23,7 @@ RSpec.describe "Admin checks", type: :request do
         let(:claim) { create(:claim, :approved) }
 
         it "shows the outcome of the decision" do
-          get admin_claim_checks_path(claim_id: claim.id)
+          get admin_claim_tasks_path(claim_id: claim.id)
 
           expect(response.body).to include("Approved")
         end
@@ -35,52 +35,52 @@ RSpec.describe "Admin checks", type: :request do
       context "with a #{policy} claim" do
         let(:claim) { create(:claim, :submitted, policy: policy) }
 
-        describe "checks#show" do
+        describe "tasks#show" do
           it "renders the requested page" do
-            get admin_claim_check_path(claim, "qualifications")
+            get admin_claim_task_path(claim, "qualifications")
             expect(response.body).to include(I18n.t("admin.qts_award_year"))
             expect(response.body).to include(claim.eligibility.qts_award_year_answer)
 
-            get admin_claim_check_path(claim, "employment")
+            get admin_claim_task_path(claim, "employment")
             expect(response.body).to include(I18n.t("admin.current_school"))
             expect(response.body).to include(claim.eligibility.current_school.name)
           end
         end
 
-        describe "checks#create" do
+        describe "tasks#create" do
           it "creates a new check and redirects to the next check" do
             expect {
-              post admin_claim_checks_path(claim, check: "qualifications")
-            }.to change { Check.count }.by(1)
+              post admin_claim_tasks_path(claim, name: "qualifications")
+            }.to change { Task.count }.by(1)
 
-            expect(claim.checks.last.name).to eql("qualifications")
-            expect(claim.checks.last.created_by).to eql(user)
-            expect(response).to redirect_to(admin_claim_check_path(claim, check: "employment"))
+            expect(claim.tasks.last.name).to eql("qualifications")
+            expect(claim.tasks.last.created_by).to eql(user)
+            expect(response).to redirect_to(admin_claim_task_path(claim, name: "employment"))
           end
 
           context "when the last check is marked as completed" do
-            let(:last_check) { Admin::ChecksController::CHECKS_SEQUENCE.last }
+            let(:last_check) { Admin::TasksController::TASKS_SEQUENCE.last }
 
             it "creates the check and redirects to the decision page" do
               expect {
-                post admin_claim_checks_path(claim, check: last_check)
-              }.to change { Check.count }.by(1)
+                post admin_claim_tasks_path(claim, name: last_check)
+              }.to change { Task.count }.by(1)
 
-              expect(claim.checks.last.name).to eql(last_check)
-              expect(claim.checks.last.created_by).to eql(user)
+              expect(claim.tasks.last.name).to eql(last_check)
+              expect(claim.tasks.last.created_by).to eql(user)
               expect(response).to redirect_to(new_admin_claim_decision_path(claim))
             end
           end
 
           context "when a check has already been marked as completed" do
             it "doesn't create a check and redirects with an error" do
-              create(:check, name: "qualifications", claim: claim)
+              create(:task, name: "qualifications", claim: claim)
 
               expect {
-                post admin_claim_checks_path(claim, check: "qualifications")
-              }.not_to change { Check.count }
+                post admin_claim_tasks_path(claim, name: "qualifications")
+              }.not_to change { Task.count }
 
-              expect(response).to redirect_to(admin_claim_check_path(claim, check: "qualifications"))
+              expect(response).to redirect_to(admin_claim_task_path(claim, name: "qualifications"))
               expect(flash[:alert]).to eql("This check has already been completed")
             end
           end
@@ -90,11 +90,11 @@ RSpec.describe "Admin checks", type: :request do
   end
 
   context "when signed in as a payroll operator or a support agent" do
-    describe "checks#index" do
+    describe "tasks#index" do
       [DfeSignIn::User::SUPPORT_AGENT_DFE_SIGN_IN_ROLE_CODE, DfeSignIn::User::PAYROLL_OPERATOR_DFE_SIGN_IN_ROLE_CODE].each do |role|
-        it "does not allow the claim checks to be viewed" do
+        it "does not allow the claim tasks to be viewed" do
           sign_in_to_admin_with_role(role)
-          get admin_claim_checks_path(claim_id: claim.id)
+          get admin_claim_tasks_path(claim_id: claim.id)
 
           expect(response.code).to eq("401")
         end
