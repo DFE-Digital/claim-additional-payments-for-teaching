@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+## [Release 061] - 2020-03-11
+
 - Add a task for confirming the student loan amount on Student Loans claims
 - Student Loans claims default to new task-based claim checking interface
 - Claim checking tasks have unique headings
@@ -504,7 +506,9 @@ The format is based on [Keep a Changelog]
 - First release for student loan repayments private beta
 
 [unreleased]:
-  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-060...HEAD
+  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-061...HEAD
+[release 061]:
+  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-060...release-061
 [release 060]:
   https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-059...release-060
 [release 059]:
