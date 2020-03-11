@@ -9,7 +9,7 @@
   <div class="govuk-grid-column-two-thirds">
     <%= render "admin/claims/answer_section",
           heading: "Student loan amount",
-          description: I18n.t("#{@claim.policy.to_s.underscore}.admin.checks.student_loan_amount.description"),
+          description: I18n.t("#{@claim.policy.to_s.underscore}.admin.tasks.student_loan_amount.question"),
           answers: @tasks_presenter.student_loan_amount %>
   </div>
 
