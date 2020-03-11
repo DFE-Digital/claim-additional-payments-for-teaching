@@ -7,17 +7,14 @@
   <%= render "claim_summary", claim: @claim, heading: "Qualifications" %>
 
   <div class="govuk-grid-column-two-thirds">
-    <%= render "admin/claims/answer_section",
-          heading: "Qualifications",
-          description: I18n.t("#{@claim.policy.to_s.underscore}.admin.checks.qualifications.question"),
-          answers: @tasks_presenter.qualifications %>
+    <%= render "admin/claims/answers", answers: @tasks_presenter.qualifications %>
   </div>
 
-  <div class="govuk-grid-column-full">
+  <div class="govuk-grid-column-two-thirds">
     <% if @task.present? %>
       <%= render "task_outcome", task: @task %>
     <% else %>
-      <%= button_to "Complete qualifications check and continue", admin_claim_tasks_path(claim_id: @claim.id, name: :qualifications), class: "govuk-button" %>
+      <%= render "form", task_name: "qualifications", claim: @claim %>
     <% end %>
   </div>
 </div>

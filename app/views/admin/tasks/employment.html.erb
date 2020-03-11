@@ -6,17 +6,14 @@
   <%= render "claim_summary", claim: @claim, heading: "Employment" %>
 
   <div class="govuk-grid-column-two-thirds">
-    <%= render "admin/claims/answer_section",
-          heading: "Employment",
-          description: I18n.t("#{@claim.policy.to_s.underscore}.admin.tasks.employment.question"),
-          answers: @tasks_presenter.employment %>
+    <%= render "admin/claims/answers", answers: @tasks_presenter.employment %>
   </div>
 
-  <div class="govuk-grid-column-full">
+  <div class="govuk-grid-column-two-thirds">
     <% if @task.present? %>
       <%= render "task_outcome", task: @task %>
     <% else %>
-      <%= button_to "Complete employment check and continue", admin_claim_tasks_path(@claim, name: :employment), class: "govuk-button" %>
+      <%= render "form", task_name: "employment", claim: @claim %>
     <% end %>
   </div>
 </div>

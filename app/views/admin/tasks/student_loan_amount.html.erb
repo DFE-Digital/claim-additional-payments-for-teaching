@@ -7,17 +7,14 @@
   <%= render "claim_summary", claim: @claim, heading: "Student loan amount" %>
 
   <div class="govuk-grid-column-two-thirds">
-    <%= render "admin/claims/answer_section",
-          heading: "Student loan amount",
-          description: I18n.t("#{@claim.policy.to_s.underscore}.admin.tasks.student_loan_amount.question"),
-          answers: @tasks_presenter.student_loan_amount %>
+    <%= render "admin/claims/answers", answers: @tasks_presenter.student_loan_amount %>
   </div>
 
-  <div class="govuk-grid-column-full">
+  <div class="govuk-grid-column-two-thirds">
     <% if @task.present? %>
       <%= render "task_outcome", task: @task %>
     <% else %>
-      <%= button_to "Complete student loan amount check and continue", admin_claim_tasks_path(claim_id: @claim.id, name: :student_loan_amount), class: "govuk-button" %>
+      <%= render "form", task_name: "student_loan_amount", claim: @claim %>
     <% end %>
   </div>
 </div>
