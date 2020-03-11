@@ -19,7 +19,9 @@ RSpec.feature "Admin checks a claim" do
         expect(page).to have_content(claim_to_approve.reference)
         expect(page).to have_content("5 claims awaiting a decision")
 
-        find("a[href='#{admin_claim_path(claim_to_approve)}']").click
+        find("a[href='#{admin_claim_tasks_path(claim_to_approve)}']").click
+        click_on "Approve or reject this claim"
+
         choose "Approve"
         fill_in "Decision notes", with: "Everything matches"
         perform_enqueued_jobs { click_on "Confirm decision" }
@@ -50,7 +52,9 @@ RSpec.feature "Admin checks a claim" do
       expect(page).to have_content(claim_to_reject.reference)
       expect(page).to have_content("5 claims awaiting a decision")
 
-      find("a[href='#{admin_claim_path(claim_to_reject)}']").click
+      find("a[href='#{admin_claim_tasks_path(claim_to_reject)}']").click
+      click_on "Approve or reject this claim"
+
       choose "Reject"
       fill_in "Decision notes", with: "TRN doesn't exist"
       perform_enqueued_jobs { click_on "Confirm decision" }
@@ -102,7 +106,7 @@ RSpec.feature "Admin checks a claim" do
         let!(:claim) { create(:claim, :submitted, payroll_gender: :dont_know) }
 
         scenario "User is informed that the claim cannot be approved" do
-          perform_last_task
+          perform_last_task(claim)
 
           expect(page).to have_field("Approve", disabled: true)
           expect(page).to have_content(I18n.t("admin.unknown_payroll_gender_preventing_approval_message"))
@@ -126,7 +130,7 @@ RSpec.feature "Admin checks a claim" do
         let!(:claim) { create(:claim, :submitted, personal_details.merge(bank_sort_code: "582939", bank_account_number: "74727752")) }
 
         scenario "User is informed that the claim cannot be approved" do
-          perform_last_task
+          perform_last_task(claim)
 
           expect(page).to have_field("Approve", disabled: true)
           expect(page).to have_content("This claim cannot currently be approved because we’re already paying another claim (#{approved_claim.reference}) to this claimant in this payroll month using different payment details. Please speak to a Grade 7.")
@@ -137,7 +141,7 @@ RSpec.feature "Admin checks a claim" do
         let!(:claim) { create(:claim, :unverified) }
 
         scenario "the service operator is told the identity hasn't been confirmed and can approve the claim" do
-          perform_last_task
+          perform_last_task(claim)
 
           expect(page).to have_content("The claimant did not complete GOV.UK Verify")
           expect(page).to have_content(claim.school.phone_number)
@@ -151,8 +155,9 @@ RSpec.feature "Admin checks a claim" do
         end
       end
 
-      def perform_last_task
-        visit admin_claim_task_path(claim, name: Admin::TasksController::TASKS_SEQUENCE.last)
+      def perform_last_task(claim)
+        applicable_task_names = ClaimCheckingTasks.new(claim).applicable_task_names
+        visit admin_claim_task_path(claim, name: applicable_task_names.last)
         find("input[type='submit']").click
       end
     end

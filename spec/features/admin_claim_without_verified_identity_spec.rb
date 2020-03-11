@@ -11,7 +11,8 @@ RSpec.feature "Admin checking a claim without a verified identity" do
     claim_without_identity_confirmation = create(:claim, :unverified)
 
     click_on "View claims"
-    find("a[href='#{admin_claim_path(claim_without_identity_confirmation)}']").click
+    find("a[href='#{admin_claim_tasks_path(claim_without_identity_confirmation)}']").click
+    click_on "View full claim"
 
     expect(page).to have_content("The claimant did not complete GOV.UK Verify")
     expect(page).to have_content(claim_without_identity_confirmation.school.phone_number)

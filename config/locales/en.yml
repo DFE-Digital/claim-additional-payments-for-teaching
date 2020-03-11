@@ -211,3 +211,6 @@ en:
         employment:
           summary: "Check employment information"
           description: "Check the claimant's previous and current schools match the below information from their claim."
+        student_loan_amount:
+          summary: "Check student loan amount"
+          description: "Check the claimant’s student loan amount and plan type match the information we hold about their loan."

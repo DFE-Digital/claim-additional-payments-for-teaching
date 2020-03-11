@@ -2,9 +2,8 @@ class Admin::TasksController < Admin::BaseAdminController
   before_action :ensure_service_operator
   before_action :load_claim
 
-  TASKS_SEQUENCE = %w[qualifications employment]
-
   def index
+    @claim_checking_tasks = ClaimCheckingTasks.new(@claim)
   end
 
   def show
@@ -14,6 +13,7 @@ class Admin::TasksController < Admin::BaseAdminController
   end
 
   def create
+    @claim_checking_tasks = ClaimCheckingTasks.new(@claim)
     @claim.tasks.create!(name: current_task, created_by: admin_user)
     redirect_to next_task_path
   rescue ActiveRecord::RecordInvalid
@@ -30,13 +30,14 @@ class Admin::TasksController < Admin::BaseAdminController
     params[:name]
   end
 
-  def next_check
-    TASKS_SEQUENCE[TASKS_SEQUENCE.index(current_task) + 1]
+  def next_task_name
+    current_task_index = @claim_checking_tasks.applicable_task_names.index(current_task)
+    @claim_checking_tasks.applicable_task_names[current_task_index + 1]
   end
 
   def next_task_path
-    if next_check.present?
-      admin_claim_task_path(@claim, name: next_check)
+    if next_task_name.present?
+      admin_claim_task_path(@claim, name: next_task_name)
     else
       new_admin_claim_decision_path(@claim)
     end

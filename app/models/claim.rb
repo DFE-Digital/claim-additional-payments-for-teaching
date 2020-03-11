@@ -283,10 +283,6 @@ class Claim < ApplicationRecord
     submitted? && !decision&.rejected? && !payment && !pii_removed?
   end
 
-  def incomplete_task_names
-    Admin::TasksController::TASKS_SEQUENCE - tasks.map(&:name)
-  end
-
   private
 
   def normalise_trn
