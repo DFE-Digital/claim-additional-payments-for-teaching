@@ -8,7 +8,7 @@ class Admin::TasksController < Admin::BaseAdminController
 
   def show
     @tasks_presenter = @claim.policy::AdminTasksPresenter.new(@claim)
-    @task = @claim.tasks.find_by(name: current_task_name)
+    @task = @claim.tasks.find_or_initialize_by(name: current_task_name)
     render current_task_name
   end
 

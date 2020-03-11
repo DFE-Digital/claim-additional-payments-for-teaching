@@ -10,7 +10,7 @@
   </div>
 
   <div class="govuk-grid-column-two-thirds">
-    <% if @task.present? %>
+    <% if @task.persisted? %>
       <%= render "task_outcome", task: @task %>
     <% else %>
       <%= render "form", task_name: "employment", claim: @claim %>
