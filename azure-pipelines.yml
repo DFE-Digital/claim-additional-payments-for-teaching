@@ -13,6 +13,11 @@ stages:
       - job: run_tests
         displayName: Run tests
         steps:
+            # Login to DockerHub
+          - script: docker login -u $(dockerId) -p $pass
+            env:
+              pass: $(dockerPassword)
+            displayName: Login to DockerHub
           # Build and run tests
           - script: |
               docker pull $(dockerRegistry)/$(dockerImageName):cache-test-dependencies || true
