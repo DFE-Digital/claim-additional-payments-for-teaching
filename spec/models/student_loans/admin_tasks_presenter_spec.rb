@@ -47,4 +47,13 @@ RSpec.describe StudentLoans::AdminTasksPresenter, type: :model do
       ]
     end
   end
+
+  describe "#identity_confirmation" do
+    it "returns an array of label and values for displaying information for the identity confirmation check" do
+      expect(presenter.identity_confirmation).to eq [
+        ["Current school", school.name],
+        ["Contact number", school.phone_number]
+      ]
+    end
+  end
 end

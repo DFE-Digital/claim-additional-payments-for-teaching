@@ -165,6 +165,9 @@ en:
         matching_details:
           summary: "Review matching details from other claims"
           question: "Is this claim still valid despite having matching details with other claims?"
+        identity_confirmation:
+          summary: "Confirm the claimant made the claim"
+          question: "Did %{name} submit the claim?"
   student_loans:
     policy_name: "Teachers: claim back your student loan repayments"
     policy_short_name: "Student Loans"
@@ -208,3 +211,6 @@ en:
         matching_details:
           summary: "Review matching details from other claims"
           question: "Is this claim still valid despite having matching details with other claims?"
+        identity_confirmation:
+          summary: "Confirm the claimant made the claim"
+          question: "Did %{name} submit the claim?"
