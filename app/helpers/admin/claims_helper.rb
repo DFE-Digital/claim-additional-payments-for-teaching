@@ -69,6 +69,20 @@ module Admin
       matching_attributes.to_h.compact.keys.map(&:humanize).sort
     end
 
+    def task_status_tag(claim, task_name)
+      task = claim.tasks.detect { |t| t.name == task_name }
+
+      if task.present?
+        status = task_status(task)
+        tag_classes = "govuk-tag app-task-list__task-completed"
+      else
+        status = "Incomplete"
+        tag_classes = "govuk-tag app-task-list__task-completed govuk-tag--inactive"
+      end
+
+      content_tag("strong", status, class: tag_classes)
+    end
+
     private
 
     def matching_attributes_for(claim)
@@ -80,6 +94,10 @@ module Admin
 
     def days_between(first_date, second_date)
       (second_date - first_date).to_i
+    end
+
+    def task_status(task)
+      task.passed? ? "Passed" : "Failed"
     end
   end
 end
