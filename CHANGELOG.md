@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+- Add Yes/No option to claim checking tasks
+
 ## [Release 061] - 2020-03-11
 
 - Add a task for confirming the student loan amount on Student Loans claims
