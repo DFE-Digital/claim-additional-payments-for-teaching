@@ -28,23 +28,30 @@ stages:
               git reset --hard
               git clean -xdf
             displayName: Clean repository
-      - job: build_and_push_web_dependencies
+      - job: docker_tasks
         dependsOn: run_tests
-        displayName: Build and push web dependencies
+        displayName: Docker tasks
         steps:
           - script: docker login -u $(dockerId) -p $pass
             env:
               pass: $(dockerPassword)
             displayName: Login to DockerHub
           - script: |
-              ./bin/build-docker-images "ref/heads/master" \
-                $(Build.SourceVersion) \
+              ./bin/build-docker-images $(Build.SourceVersion) \
                 $(dockerRegistry)/$(dockerImageName) \
                 $(Build.BuildNumber)
             displayName: Prepare and push Docker images
+            condition: eq(variables['Build.SourceBranch'], 'refs/heads/master')
+          - script: |
+              ./bin/cache-docker-images $(Build.SourceVersion) \
+                $(dockerRegistry)/$(dockerImageName) \
+                $(Build.BuildNumber)
+            displayName: Prepare Docker images for caching
+            condition: ne(variables['Build.SourceBranch'], 'refs/heads/master')
       - job: publish_repository
-        dependsOn: build_and_push_web_dependencies
+        dependsOn: docker_tasks
         displayName: Publish repository
+        condition: eq(variables['Build.SourceBranch'], 'refs/heads/master')
         steps:
           - publish: $(System.DefaultWorkingDirectory)
             artifact: repository

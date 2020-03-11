@@ -1,0 +1,24 @@
+#!/bin/bash
+
+GIT_COMMIT_HASH=$1
+DOCKER_REPOSITORY=$2
+
+echo "Building web dependencies Docker image using 'cache-web-dependencies' as cache"
+docker pull "$DOCKER_REPOSITORY:cache-web-dependencies" || true
+docker build \
+  --file=Dockerfile \
+  --cache-from="$DOCKER_REPOSITORY:cache-web-dependencies" \
+  --tag=local/dfe-teachers-payment-service:web-dependencies \
+  --target=dependencies \
+  .
+
+echo "Building web Docker image using 'latest' as cache"
+docker pull "$DOCKER_REPOSITORY:latest" || true
+docker build \
+  --file=Dockerfile \
+  --cache-from=local/dfe-teachers-payment-service:web-dependencies \
+  --cache-from="$DOCKER_REPOSITORY:latest" \
+  --tag=local/dfe-teachers-payment-service:web \
+  --target=web \
+  --build-arg GIT_COMMIT_HASH="$GIT_COMMIT_HASH" \
+  .
