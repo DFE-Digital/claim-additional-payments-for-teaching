@@ -38,18 +38,26 @@
         <%= l(claim.date_of_birth, format: :day_month_year) %>
       </dd>
     </div>
+    <div class="govuk-summary-list__row">
+      <dt class="govuk-summary-list__key">
+        Submitted
+      </dt>
+
+      <dd class="govuk-summary-list__value">
+        <%= l(claim.submitted_at) %>
+      </dd>
+    </div>
   </dl>
 </div>
 <div class="govuk-grid-column-one-half">
   <dl class="govuk-summary-list govuk-!-margin-bottom-9">
     <div class="govuk-summary-list__row">
       <dt class="govuk-summary-list__key">
-        SLA
+        NI number
       </dt>
 
       <dd class="govuk-summary-list__value">
-        <%= l(claim.decision_deadline_date) %>
-        <%= decision_deadline_warning(claim) %>
+        <%= claim.national_insurance_number %>
       </dd>
     </div>
     <div class="govuk-summary-list__row">
@@ -68,6 +76,16 @@
 
       <dd class="govuk-summary-list__value">
         <%= claim.email_address %>
+      </dd>
+    </div>
+    <div class="govuk-summary-list__row">
+      <dt class="govuk-summary-list__key">
+        SLA
+      </dt>
+
+      <dd class="govuk-summary-list__value">
+        <%= l(claim.decision_deadline_date) %>
+        <%= decision_deadline_warning(claim) %>
       </dd>
     </div>
   </dl>

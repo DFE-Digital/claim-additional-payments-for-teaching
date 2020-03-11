@@ -9,6 +9,7 @@ The format is based on [Keep a Changelog]
 - Add a task for confirming the student loan amount on Student Loans claims
 - Student Loans claims default to new task-based claim checking interface
 - Claim checking tasks have unique headings
+- Show NI number in the claim summary
 
 ## [Release 060] - 2020-03-10
 
