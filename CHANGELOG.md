@@ -6,7 +6,10 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+## [Release 062] - 2020-03-12
+
 - Add Yes/No option to claim checking tasks
+- Update payment removal content
 
 ## [Release 061] - 2020-03-11
 
@@ -508,7 +511,9 @@ The format is based on [Keep a Changelog]
 - First release for student loan repayments private beta
 
 [unreleased]:
-  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-061...HEAD
+  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-062...HEAD
+[release 062]:
+  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-061...release-062
 [release 061]:
   https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-060...release-061
 [release 060]:
