@@ -15,6 +15,13 @@ RSpec.describe AcademicYear do
     end
   end
 
+  describe ".for" do
+    it "returns the academic year for a given date (based on September 1st being the start of the year)" do
+      expect(AcademicYear.for(Date.new(2018, 1, 1))).to eq AcademicYear.new(2017)
+      expect(AcademicYear.for(Date.new(2018, 10, 1))).to eq AcademicYear.new(2018)
+    end
+  end
+
   describe AcademicYear::Type do
     describe "#serialize" do
       it "returns the String representation of an AcademicYear" do
