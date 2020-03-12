@@ -1,22 +1,20 @@
 <% content_for(:page_title) { page_title("Claim #{@claim.reference} employment check for #{policy_service_name(@claim.policy.routing_name)}") } %>
 <%= link_to "Back", admin_claim_tasks_path(claim_id: @claim.id), class: "govuk-back-link" %>
+<%= render "shared/error_summary", instance: @task, errored_field_id_overrides: { "passed": "task_passed_true" } if @task.errors.any? %>
 
 <div class="govuk-grid-row">
 
   <%= render "claim_summary", claim: @claim, heading: "Employment" %>
 
   <div class="govuk-grid-column-two-thirds">
-    <%= render "admin/claims/answer_section",
-          heading: "Employment",
-          description: I18n.t("#{@claim.policy.to_s.underscore}.admin.checks.employment.description"),
-          answers: @tasks_presenter.employment %>
+    <%= render "admin/claims/answers", answers: @tasks_presenter.employment %>
   </div>
 
-  <div class="govuk-grid-column-full">
-    <% if @task.present? %>
+  <div class="govuk-grid-column-two-thirds">
+    <% if @task.persisted? %>
       <%= render "task_outcome", task: @task %>
     <% else %>
-      <%= button_to "Complete employment check and continue", admin_claim_tasks_path(@claim, name: :employment), class: "govuk-button" %>
+      <%= render "form", task_name: "employment", claim: @claim %>
     <% end %>
   </div>
 </div>

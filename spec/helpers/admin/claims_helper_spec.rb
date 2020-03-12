@@ -201,4 +201,32 @@ describe Admin::ClaimsHelper do
       expect(subject).to eq(["Bank account number", "Bank sort code", "National insurance number", "Teacher reference number"])
     end
   end
+
+  describe "#task_status_tag" do
+    let(:claim) { build(:claim) }
+    let(:task_status_tag) { helper.task_status_tag(claim, "employment") }
+
+    it "returns a passed tag if the task has been marked as passed" do
+      claim.tasks << build(:task, name: "employment", passed: true, claim: claim)
+
+      expect(task_status_tag).to match("Passed")
+      expect(task_status_tag).to match("govuk-tag app-task-list__task-completed")
+      expect(task_status_tag).to_not match("govuk-tag--inactive")
+    end
+
+    it "returns a failed tag if the task has been marked as failed" do
+      claim.tasks << build(:task, name: "employment", passed: false, claim: claim)
+
+      expect(task_status_tag).to match("Failed")
+      expect(task_status_tag).to match("govuk-tag app-task-list__task-completed")
+      expect(task_status_tag).to_not match("govuk-tag--inactive")
+    end
+
+    it "returns an incomplete tag if the task has not been done" do
+      claim.tasks = []
+
+      expect(task_status_tag).to match("Incomplete")
+      expect(task_status_tag).to match("govuk-tag app-task-list__task-completed govuk-tag--inactive")
+    end
+  end
 end

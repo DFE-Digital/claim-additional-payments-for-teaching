@@ -48,40 +48,59 @@ RSpec.describe "Admin tasks", type: :request do
         end
 
         describe "tasks#create" do
-          it "creates a new check and redirects to the next check" do
+          it "creates a new passed task and redirects to the next task" do
             expect {
-              post admin_claim_tasks_path(claim, name: "qualifications")
+              post admin_claim_tasks_path(claim, name: "qualifications", params: {task: {passed: "true"}})
             }.to change { Task.count }.by(1)
 
             expect(claim.tasks.last.name).to eql("qualifications")
+            expect(claim.tasks.last.passed?).to eql(true)
             expect(claim.tasks.last.created_by).to eql(user)
             expect(response).to redirect_to(admin_claim_task_path(claim, name: "employment"))
           end
 
-          context "when the last check is marked as completed" do
-            let(:last_check) { ClaimCheckingTasks.new(claim).applicable_task_names.last }
+          it "creates a new failed task" do
+            post admin_claim_tasks_path(claim, name: "qualifications", params: {task: {passed: "false"}})
 
-            it "creates the check and redirects to the decision page" do
+            expect(claim.tasks.last.name).to eql("qualifications")
+            expect(claim.tasks.last.passed?).to eql(false)
+          end
+
+          context "when the last task is marked as completed" do
+            let(:last_task) { ClaimCheckingTasks.new(claim).applicable_task_names.last }
+
+            it "creates the task and redirects to the decision page" do
               expect {
-                post admin_claim_tasks_path(claim, name: last_check)
+                post admin_claim_tasks_path(claim, name: last_task, params: {task: {passed: "true"}})
               }.to change { Task.count }.by(1)
 
-              expect(claim.tasks.last.name).to eql(last_check)
+              expect(claim.tasks.last.name).to eql(last_task)
+              expect(claim.tasks.last.passed?).to eql(true)
               expect(claim.tasks.last.created_by).to eql(user)
               expect(response).to redirect_to(new_admin_claim_decision_path(claim))
             end
           end
 
-          context "when a check has already been marked as completed" do
-            it "doesn't create a check and redirects with an error" do
+          context "when a task's passed flag is not set" do
+            it "doesn't create a task and shows an error" do
+              expect {
+                post admin_claim_tasks_path(claim, name: "qualifications", params: {task: {passed: ""}})
+              }.not_to change { claim.tasks.count }
+
+              expect(response.body).to match("You must select ‘Yes’ or ‘No’")
+            end
+          end
+
+          context "when a task has already been marked as completed" do
+            it "doesn't create a task and redirects with an error" do
               create(:task, name: "qualifications", claim: claim)
 
               expect {
-                post admin_claim_tasks_path(claim, name: "qualifications")
+                post admin_claim_tasks_path(claim, name: "qualifications", params: {task: {passed: "true"}})
               }.not_to change { Task.count }
 
               expect(response).to redirect_to(admin_claim_task_path(claim, name: "qualifications"))
-              expect(flash[:alert]).to eql("This check has already been completed")
+              expect(flash[:alert]).to eql("This task has already been completed")
             end
           end
         end

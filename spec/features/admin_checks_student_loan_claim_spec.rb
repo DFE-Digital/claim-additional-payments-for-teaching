@@ -25,22 +25,33 @@ RSpec.feature "Admin checking a Student Loans claim" do
     expect(page).to have_content("4. Decision")
 
     click_on "Check qualification information"
-    expect(page).to have_content("Qualifications")
+
+    expect(page).to have_content(I18n.t("student_loans.admin.tasks.qualifications.question"))
     expect(page).to have_content("Award year")
     expect(page).to have_content(claim.eligibility.qts_award_year_answer)
 
-    click_on "Complete qualifications check and continue"
+    choose "Yes"
+    click_on "Save and continue"
 
-    expect(page).to have_content("Employment")
+    expect(claim.tasks.find_by!(name: "qualifications").passed?).to eq(true)
+
+    expect(page).to have_content(I18n.t("student_loans.admin.tasks.employment.question"))
     expect(page).to have_content("Current school")
     expect(page).to have_link(claim.eligibility.current_school.name)
 
-    click_on "Complete employment check and continue"
+    choose "Yes"
+    click_on "Save and continue"
 
-    expect(page).to have_content("Student loan amount")
+    expect(claim.tasks.find_by!(name: "employment").passed?).to eq(true)
+
+    expect(page).to have_content(I18n.t("student_loans.admin.tasks.student_loan_amount.question"))
     expect(page).to have_content("£1,987.65")
     expect(page).to have_content("Plan 2")
-    click_on "Complete student loan amount check and continue"
+
+    choose "Yes"
+    click_on "Save and continue"
+
+    expect(claim.tasks.find_by!(name: "student_loan_amount").passed?).to eq(true)
 
     expect(page).to have_content("Claim decision")
 

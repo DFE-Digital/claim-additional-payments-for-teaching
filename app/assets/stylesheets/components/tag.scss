@@ -15,6 +15,10 @@
   &--alert {
     background-color: govuk-colour("red");
   }
+
+  &--inactive {
+    background-color: govuk-colour("dark-grey");
+  }
 }
 
 .tag--warning {
