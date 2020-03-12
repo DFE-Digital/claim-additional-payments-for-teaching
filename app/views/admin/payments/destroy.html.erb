@@ -1,25 +1,50 @@
 <div class="govuk-grid-row">
-  <div class="govuk-grid-column-full">
+  <div class="govuk-grid-column-two-thirds">
     <h1 class="govuk-heading-l">
-      <%= t("admin.payment_deleted_title",
-            count: @claim_references.count) %>
+      You have removed a payment from the payroll run
     </h1>
 
-    <p class="govuk-body-l">
-      <%= t("admin.payment_deleted_outcome_message",
-            count: @claim_references.count,
-            references: @claim_references.to_sentence) %>
+    <p class="govuk-body-m">
+      Payment <strong><%= @payment.id %></strong> belonging to
+      <%= "claim".pluralize(@claims.size) %>
+      <%= claim_links(@claims) %>
+      <%= "is".pluralize(@claims.size) %> no longer included in this
+      payroll run.
     </p>
 
-    <div class="govuk-warning-text">
-      <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
-      <strong class="govuk-warning-text__text">
-        <span class="govuk-warning-text__assistive">Warning</span>
-          <%= t("admin.payment_deleted_claim_next_steps_message",
-                count: @claim_references.count) %>
-        </span>
-      </strong>
-    </div>
+    <h2 class="govuk-heading-m">
+      If Cantium had a problem paying this claimant
+    </h2>
+
+    <p class="govuk-body-m">
+      The <%= "claim".pluralize(@claims.size) %> will be
+      automatically added to the next payroll run.
+    </p>
+
+    <p class="govuk-body-m">
+      Contact the claimant for
+      <%= "claim".pluralize(@claims.size) %>
+      <%= claim_links(@claims) %> to get their correct bank details
+      before the next payroll run, otherwise their payment will fail again.
+    </p>
+
+    <h2 class="govuk-heading-m">
+      If we no longer want Cantium to pay this claim
+    </h2>
+
+    <p class="govuk-body-m">
+      If you’ve already sent the payroll file to Cantium, contact Cantium and
+      ask them to remove payment <strong><%= @payment.id %></strong> from the
+      payroll run.
+    </p>
+
+    <p class="govuk-body-m">
+      You’ll need to reverse the approved decision on
+      <%= "claim".pluralize(@claims.size) %>
+      <%= claim_links(@claims) %> to prevent
+      <%= "it".pluralize(@claims.size) %>
+      being automatically added to the next payroll run.
+    </p>
 
     <p class="govuk-body">
       <%= link_to "Back to payroll run", admin_payroll_run_path(@payroll_run), class: "govuk-link" %>

@@ -23,8 +23,8 @@ RSpec.describe "Admin payroll run payments" do
   end
 
   describe "destroy" do
-    it "deletes a payroll run and shows a message" do
-      reference = payment.claims.first.reference
+    it "deletes the payment, playing back the payment ID and claim reference" do
+      claim = payment.claims.first
 
       expect {
         delete admin_payroll_run_payment_path(
@@ -35,8 +35,9 @@ RSpec.describe "Admin payroll run payments" do
 
       expect(payroll_run.payments).to_not include(payment)
 
-      expect(response.body).to include("You have removed a claim from the payroll run")
-      expect(response.body).to include(reference)
+      expect(response.body).to include("You have removed a payment from the payroll run")
+      expect(response.body).to include(payment.id)
+      expect(response.body).to include(claim.reference)
     end
 
     it "cannot delete a payment from an already confirmed payroll run" do
