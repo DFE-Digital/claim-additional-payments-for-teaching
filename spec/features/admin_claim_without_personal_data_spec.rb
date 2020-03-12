@@ -8,10 +8,10 @@ RSpec.feature "Admin checking a claim with personal data removed" do
   end
 
   scenario "the service operator sees that the personal data has been removed" do
-    claim_with_pii_removed = create(:claim, :rejected, :pii_removed)
+    claim_with_personal_data_removed = create(:claim, :rejected, :personal_data_removed)
 
-    visit admin_claim_path(claim_with_pii_removed)
-    expect(page).to have_content("personally identifiable information removed")
+    visit admin_claim_path(claim_with_personal_data_removed)
+    expect(page).to have_content("personal data removed")
     expect(page).to have_content("Full name Removed")
     expect(page).to have_content("Date of birth Removed")
     expect(page).to have_content("National Insurance number Removed")

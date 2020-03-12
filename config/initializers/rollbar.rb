@@ -7,7 +7,7 @@ Rollbar.configure do |config|
   # Disable Rollbar in "test" and "development" environments
   config.enabled = false if Rails.env.test? || Rails.env.development?
 
-  # removing personally identifiable information
+  # removing personal data
   config.collect_user_ip = false
   config.scrub_headers |= ["X-Client-Ip", "Client-Ip"]
   config.scrub_fields |= Rails.application.config.filter_parameters

@@ -70,7 +70,7 @@ class Claim < ApplicationRecord
     building_society_roll_number: true,
     payment_id: false,
     academic_year: false,
-    pii_removed_at: false
+    personal_data_removed_at: false
   }.freeze
   DECISION_DEADLINE = 12.weeks
   DECISION_DEADLINE_WARNING_POINT = 2.weeks
@@ -252,8 +252,8 @@ class Claim < ApplicationRecord
     (ADDRESS_ATTRIBUTES & govuk_verify_fields).any?
   end
 
-  def pii_removed?
-    pii_removed_at.present?
+  def personal_data_removed?
+    personal_data_removed_at.present?
   end
 
   def full_name
@@ -280,7 +280,7 @@ class Claim < ApplicationRecord
   end
 
   def amendable?
-    submitted? && !decision&.rejected? && !payment && !pii_removed?
+    submitted? && !decision&.rejected? && !payment && !personal_data_removed?
   end
 
   private
