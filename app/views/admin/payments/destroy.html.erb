@@ -6,9 +6,9 @@
 
     <p class="govuk-body-m">
       Payment <strong><%= @payment.id %></strong> belonging to
-      <%= "claim".pluralize(@claim_references.size) %>
-      <%= @claim_references.to_sentence %>
-      <%= "is".pluralize(@claim_references.size) %> no longer included in this
+      <%= "claim".pluralize(@claims.size) %>
+      <%= @claims.map(&:reference).to_sentence %>
+      <%= "is".pluralize(@claims.size) %> no longer included in this
       payroll run.
     </p>
 
@@ -17,14 +17,14 @@
     </h2>
 
     <p class="govuk-body-m">
-      The <%= "claim".pluralize(@claim_references.size) %> will be
+      The <%= "claim".pluralize(@claims.size) %> will be
       automatically added to the next payroll run.
     </p>
 
     <p class="govuk-body-m">
       Contact the claimant for
-      <%= "claim".pluralize(@claim_references.size) %>
-      <%= @claim_references.to_sentence %> to get their correct bank details
+      <%= "claim".pluralize(@claims.size) %>
+      <%= @claims.map(&:reference).to_sentence %> to get their correct bank details
       before the next payroll run, otherwise their payment will fail again.
     </p>
 
@@ -40,9 +40,9 @@
 
     <p class="govuk-body-m">
       You’ll need to reverse the approved decision on
-      <%= "claim".pluralize(@claim_references.size) %>
-      <%= @claim_references.to_sentence %> to prevent
-      <%= "it".pluralize(@claim_references.size) %>
+      <%= "claim".pluralize(@claims.size) %>
+      <%= @claims.map(&:reference).to_sentence %> to prevent
+      <%= "it".pluralize(@claims.size) %>
       being automatically added to the next payroll run.
     </p>
 
