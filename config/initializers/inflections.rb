@@ -14,3 +14,9 @@
 # ActiveSupport::Inflector.inflections(:en) do |inflect|
 #   inflect.acronym 'RESTful'
 # end
+# inflections.rb
+ActiveSupport::Inflector.inflections(:en) do |inflect|
+  inflect.irregular "it", "them"
+  inflect.irregular "is", "are"
+  inflect.irregular "this", "these"
+end

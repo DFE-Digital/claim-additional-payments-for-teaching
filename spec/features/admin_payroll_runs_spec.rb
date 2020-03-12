@@ -118,7 +118,7 @@ RSpec.feature "Payroll" do
 
     expect(payroll_run.reload.payments).to_not include(payment_to_delete)
 
-    expect(page).to have_content("You have removed a claim from the payroll run")
+    expect(page).to have_content("You have removed a payment from the payroll run")
     expect(page).to have_content(claim_reference)
   end
 
