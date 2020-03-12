@@ -47,4 +47,18 @@ RSpec.feature "Admin checking a Maths & Physics claim" do
     expect(claim.decision).to be_approved
     expect(claim.decision.created_by).to eq(user)
   end
+
+  scenario "service operator sees an error if they don't choose a Yes/No option on a check" do
+    claim = create(:claim, :submitted, policy: MathsAndPhysics)
+
+    visit admin_claims_path
+    find("a[href='#{admin_claim_tasks_path(claim)}']").click
+
+    click_on "Check qualification information"
+
+    click_on "Save and continue"
+
+    expect(page).to have_content("You must select ‘Yes’ or ‘No’")
+    expect(claim.tasks.find_by(name: "qualifications")).to be_nil
+  end
 end

@@ -81,6 +81,16 @@ RSpec.describe "Admin tasks", type: :request do
             end
           end
 
+          context "when a task's passed flag is not set" do
+            it "doesn't create a task and shows an error" do
+              expect {
+                post admin_claim_tasks_path(claim, name: "qualifications", params: {task: {passed: ""}})
+              }.not_to change { claim.tasks.count }
+
+              expect(response.body).to match("You must select ‘Yes’ or ‘No’")
+            end
+          end
+
           context "when a task has already been marked as completed" do
             it "doesn't create a task and redirects with an error" do
               create(:task, name: "qualifications", claim: claim)

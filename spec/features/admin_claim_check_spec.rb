@@ -158,7 +158,9 @@ RSpec.feature "Admin checks a claim" do
       def perform_last_task(claim)
         applicable_task_names = ClaimCheckingTasks.new(claim).applicable_task_names
         visit admin_claim_task_path(claim, name: applicable_task_names.last)
-        find("input[type='submit']").click
+
+        choose "Yes"
+        click_on "Save and continue"
       end
     end
   end
