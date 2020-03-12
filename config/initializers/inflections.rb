@@ -19,4 +19,5 @@ ActiveSupport::Inflector.inflections(:en) do |inflect|
   inflect.irregular "it", "them"
   inflect.irregular "is", "are"
   inflect.irregular "this", "these"
+  inflect.acronym "DQT"
 end
