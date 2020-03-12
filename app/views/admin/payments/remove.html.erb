@@ -5,9 +5,9 @@
     </h1>
 
     <p class="govuk-body-l">
-      <%= t("admin.payment_deletion_claim_warning",
-            count: @payment.claims.count,
-            references: @payment.claims.pluck(:reference).to_sentence) %>
+      This means <%= "claim".pluralize(@payment.claims.size) %>
+      <%= @payment.claims.pluck(:reference).to_sentence %> will no longer be included in this
+      payroll run.
     </p>
 
     <%= form_with url: admin_payroll_run_payment_path(id: @payment.id, payroll_run_id: @payment.payroll_run.id), method: :delete do |f| %>

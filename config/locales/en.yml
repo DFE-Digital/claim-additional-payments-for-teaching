@@ -78,9 +78,6 @@ en:
     claims_preventing_payment_message:
       one: This claim cannot currently be approved because we’re already paying another claim (%{claim_references}) to this claimant in this payroll month using different payment details. Please speak to a Grade 7.
       other: This claim cannot currently be approved because we’re already paying other claims (%{claim_references}) to this claimant in this payroll month using different payment details. Please speak to a Grade 7.
-    payment_deletion_claim_warning:
-      one: This means claim %{references} will no longer be included in this payroll run.
-      other: This means claims %{references} will no longer be included in this payroll run.
     duplicate_attributes_message:
       one: Details in this claim match another %{policy} claim
       other: Details in this claim match other %{policy} claims
