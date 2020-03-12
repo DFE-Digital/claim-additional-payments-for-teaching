@@ -2,6 +2,10 @@ module Admin
   module ClaimsHelper
     include StudentLoans::PresenterMethods
 
+    def claim_links(claims)
+      claims.map { |claim| link_to(claim.reference, admin_claim_path(claim), class: "govuk-link") }.to_sentence.html_safe
+    end
+
     def confirming_identity_playbook_url
       "https://docs.google.com/document/d/1wZh68_RV_FTJLxXIDPr3XFtJHW3vRgiXGaBDUo1Q1ZU"
     end

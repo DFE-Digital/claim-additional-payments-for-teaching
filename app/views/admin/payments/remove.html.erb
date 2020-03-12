@@ -6,7 +6,7 @@
 
     <p class="govuk-body-l">
       This means <%= "claim".pluralize(@claims.size) %>
-      <%= @claims.map(&:reference).to_sentence %> will no longer be included in this
+      <%= claim_links(@claims) %> will no longer be included in this
       payroll run.
     </p>
 
