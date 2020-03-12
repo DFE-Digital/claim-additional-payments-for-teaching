@@ -22,6 +22,7 @@
 
       <h2 class="govuk-heading-m"><%= pluralize(@claims.count, "claim") %> awaiting a decision</h2>
       <%= link_to "Download report request file", admin_claims_path(format: :csv), class: "govuk-button govuk-button--secondary", data: { module: "govuk-button" }, role: :button %>
+      <%= link_to "Upload DQT report", new_admin_qualification_report_upload_path, class: "govuk-button govuk-button--secondary", data: { module: "govuk-button" }, role: :button %>
       <table class="govuk-table">
         <thead class="govuk-table__head">
           <tr class="govuk-table__row">

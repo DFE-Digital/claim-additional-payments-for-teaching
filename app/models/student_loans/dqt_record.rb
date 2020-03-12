@@ -1,0 +1,34 @@
+module StudentLoans
+  # Used to model a record in DQT for the Student Loans
+  # reimbursement policy.
+  #
+  # Should be initialised with data from a row in the report
+  # requested from the Database of Qualified Teachers.
+  #
+  # Determines the eligibility of a teacher's qualifications for
+  # the Student Loans reimbursement.
+  #
+  #   qts_award_date: The date the teacher achieved qualified
+  #                   teacher status.
+  class DQTRecord
+    attr_reader :qts_award_date
+
+    # The row from a DQTReportCsv as a hash. Expected to contain the keys:
+    # data["dfeta qtsdate"] - A string representation of the date the teacher
+    #                         achieved qualified teacher status.
+    #                         Format: %-d/%-m/%Y
+    def initialize(data)
+      @qts_award_date = Date.parse(data.fetch("dfeta qtsdate"))
+    end
+
+    def eligible?
+      eligible_qts_date?
+    end
+
+    private
+
+    def eligible_qts_date?
+      AcademicYear.for(qts_award_date) >= StudentLoans.first_eligible_qts_award_year
+    end
+  end
+end
