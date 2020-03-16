@@ -6,6 +6,9 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+- Add "Back" link and page title to claim decision screen
+- Link claim tasks view back to the list of claims
+
 ## [Release 063] - 2020-03-16
 
 - Add a task to check claims with matching attributes

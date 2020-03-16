@@ -1,6 +1,6 @@
 <% content_for(:page_title) { page_title("Claim #{@claim.reference} checks for #{policy_service_name(@claim.policy.routing_name)}") } %>
 
-<%= link_to "Back", admin_claim_path(@claim), class: "govuk-back-link" %>
+<%= link_to "Back", admin_claims_path, class: "govuk-back-link" %>
 
 <div class="govuk-grid-row">
 
