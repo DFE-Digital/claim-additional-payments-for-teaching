@@ -1,8 +1,6 @@
 <div class="govuk-grid-row">
   <%= render("shared/error_summary", instance: @decision, errored_field_id_overrides: { "result": "decision_result_approved" }) if @decision.errors.any? %>
 
-  <%= render("admin/claims/info_panel_identity_unconfirmed", school: @claim.school) unless @claim.identity_confirmed? %>
-
   <%= render "admin/tasks/claim_summary", claim: @claim, heading: "Claim decision" %>
 
   <div class="govuk-grid-column-two-thirds">

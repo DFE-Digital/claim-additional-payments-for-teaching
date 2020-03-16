@@ -8,6 +8,7 @@ class ClaimCheckingTasks
     employment
     student_loan_amount
     matching_details
+    identity_confirmation
   ].freeze
 
   attr_reader :claim
@@ -20,6 +21,7 @@ class ClaimCheckingTasks
     @applicable_task_names ||= TASK_NAMES.dup.tap do |task_names|
       task_names.delete("student_loan_amount") unless claim.policy == StudentLoans
       task_names.delete("matching_details") unless matching_claims.exists?
+      task_names.delete("identity_confirmation") if claim.identity_confirmed?
     end
   end
 

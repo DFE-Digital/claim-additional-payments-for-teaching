@@ -92,4 +92,36 @@ RSpec.feature "Admin checking a Student Loans claim" do
 
     expect(page).to have_content("Claim decision")
   end
+
+  scenario "service operator checks and approves a Student Loans claim where the claimant did not complete GOV.UK Verify" do
+    claim = create(
+      :claim,
+      :unverified,
+      policy: StudentLoans,
+      student_loan_plan: StudentLoan::PLAN_2,
+      eligibility: build(:student_loans_eligibility, :eligible, student_loan_repayment_amount: "1987.65")
+    )
+
+    visit admin_claims_path
+    find("a[href='#{admin_claim_tasks_path(claim)}']").click
+
+    expect(page).to have_content("1. Qualifications")
+    expect(page).to have_content("2. Employment")
+    expect(page).to have_content("3. Student loan amount")
+    expect(page).to have_content("4. Identity confirmation")
+    expect(page).to have_content("5. Decision")
+
+    click_on I18n.t("student_loans.admin.tasks.identity_confirmation.summary")
+
+    expect(page).to have_content(I18n.t("student_loans.admin.tasks.identity_confirmation.question", name: claim.full_name))
+    expect(page).to have_content(claim.eligibility.current_school.name)
+    expect(page).to have_content(claim.eligibility.current_school.phone_number)
+
+    choose "Yes"
+    click_on "Save and continue"
+
+    expect(claim.tasks.find_by!(name: "identity_confirmation").passed?).to eq(true)
+
+    expect(page).to have_content("Claim decision")
+  end
 end

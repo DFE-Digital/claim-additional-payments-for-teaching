@@ -137,24 +137,6 @@ RSpec.feature "Admin checks a claim" do
         end
       end
 
-      context "and the claimant has not completed GOV.UK Verify" do
-        let!(:claim) { create(:claim, :unverified) }
-
-        scenario "the service operator is told the identity hasn't been confirmed and can approve the claim" do
-          perform_last_task(claim)
-
-          expect(page).to have_content("The claimant did not complete GOV.UK Verify")
-          expect(page).to have_content(claim.school.phone_number)
-
-          choose "Approve"
-          fill_in "Decision notes", with: "Identity confirmed via phone call"
-          click_on "Confirm decision"
-
-          expect(claim.decision.created_by).to eq(user)
-          expect(claim.decision.notes).to eq("Identity confirmed via phone call")
-        end
-      end
-
       def perform_last_task(claim)
         applicable_task_names = ClaimCheckingTasks.new(claim).applicable_task_names
         visit admin_claim_task_path(claim, name: applicable_task_names.last)

@@ -7,6 +7,8 @@ The format is based on [Keep a Changelog]
 ## [Unreleased]
 
 - Add a task to check claims with matching attributes
+- Add a claim checking task to verify identity of claimants who didn’t use
+  GOV.UK Verify
 
 ## [Release 062] - 2020-03-12
 

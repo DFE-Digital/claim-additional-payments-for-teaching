@@ -3,7 +3,7 @@
 require "rails_helper"
 
 RSpec.describe ClaimCheckingTasks do
-  let(:claim) { build(:claim, :submitted, policy: MathsAndPhysics) }
+  let(:claim) { build(:claim, :submitted, :verified, policy: MathsAndPhysics) }
   let(:checking_tasks) { ClaimCheckingTasks.new(claim) }
 
   describe "#applicable_task_names" do
@@ -12,7 +12,7 @@ RSpec.describe ClaimCheckingTasks do
     end
 
     it "includes the a task for student loan amount for a StudentLoans claim" do
-      student_loan_claim = build(:claim, :submitted, policy: StudentLoans)
+      student_loan_claim = build(:claim, :submitted, :verified, policy: StudentLoans)
       student_loan_tasks = ClaimCheckingTasks.new(student_loan_claim)
 
       expect(student_loan_tasks.applicable_task_names).to eq %w[qualifications employment student_loan_amount]
@@ -24,6 +24,20 @@ RSpec.describe ClaimCheckingTasks do
         teacher_reference_number: claim.teacher_reference_number)
 
       expect(checking_tasks.applicable_task_names).to eq %w[qualifications employment matching_details]
+    end
+
+    it "includes a task for identity confirmation for a StudentLoans claim where the claimant didn’t complete GOV.UK Verify" do
+      unverified_claim = build(:claim, :unverified, policy: StudentLoans)
+      unverified_tasks = ClaimCheckingTasks.new(unverified_claim)
+
+      expect(unverified_tasks.applicable_task_names).to eq %w[qualifications employment student_loan_amount identity_confirmation]
+    end
+
+    it "includes a task for identity confirmation for a MathsAndPhysics claim where the claimant didn’t complete GOV.UK Verify" do
+      unverified_claim = build(:claim, :unverified, policy: MathsAndPhysics)
+      unverified_tasks = ClaimCheckingTasks.new(unverified_claim)
+
+      expect(unverified_tasks.applicable_task_names).to eq %w[qualifications employment identity_confirmation]
     end
   end
 
