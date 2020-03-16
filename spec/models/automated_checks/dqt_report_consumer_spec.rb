@@ -78,5 +78,12 @@ RSpec.describe AutomatedChecks::DQTReportConsumer do
         expect { dqt_report_consumer.ingest }.to change { claim.tasks.count }.by(0)
       end
     end
+
+    context "when there is already a qualification check for the claim" do
+      it "does nothing" do
+        create(:task, name: "qualifications", claim: claim)
+        expect { dqt_report_consumer.ingest }.to change { claim.tasks.count }.by(0)
+      end
+    end
   end
 end

@@ -20,6 +20,8 @@ module AutomatedChecks
           task = claim.tasks.build(task_attributes)
           task.save!
         end
+      rescue ActiveRecord::RecordInvalid
+        next
       end
     end
 
