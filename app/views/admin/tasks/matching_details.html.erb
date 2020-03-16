@@ -1,0 +1,20 @@
+<% content_for(:page_title) { page_title("Claim #{@claim.reference} matching details check for #{policy_service_name(@claim.policy.routing_name)}") } %>
+<%= link_to "Back", admin_claim_tasks_path(claim_id: @claim.id), class: "govuk-back-link" %>
+<%= render "shared/error_summary", instance: @task, errored_field_id_overrides: { "passed": "task_passed_true" } if @task.errors.any? %>
+
+<div class="govuk-grid-row">
+
+  <%= render "claim_summary", claim: @claim, heading: "Claims with matching details" %>
+
+  <div class="govuk-grid-column-two-thirds">
+    <%= render("admin/claims/claims_with_matching_details", {matching_claims: @matching_claims, claim: @claim, show_caption: false}) %>
+  </div>
+
+  <div class="govuk-grid-column-two-thirds">
+    <% if @task.persisted? %>
+      <%= render "task_outcome", task: @task %>
+    <% else %>
+      <%= render "form", task_name: "matching_details", claim: @claim %>
+    <% end %>
+  </div>
+</div>

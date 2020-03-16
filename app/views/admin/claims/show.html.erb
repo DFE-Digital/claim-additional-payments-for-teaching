@@ -50,7 +50,7 @@
 
     <%= render "admin/claims/answer_section", {heading: "Submission details", answers: admin_submission_details(@claim)} %>
 
-    <%= render("claims_with_matching_details", {matching_claims: @matching_claims, claim: @claim}) if @matching_claims.any? %>
+    <%= render("claims_with_matching_details", {matching_claims: @matching_claims, claim: @claim, show_caption: true}) if @matching_claims.any? %>
 
     <% if @decision.persisted? %>
       <%= render "admin/claims/answer_section", {heading: "Claim decision details", answers: admin_decision_details(@decision)} %>

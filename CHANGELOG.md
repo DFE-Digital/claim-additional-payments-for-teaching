@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+- Add a task to check claims with matching attributes
+
 ## [Release 062] - 2020-03-12
 
 - Add Yes/No option to claim checking tasks

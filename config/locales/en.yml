@@ -162,6 +162,9 @@ en:
         employment:
           summary: "Check employment information"
           question: "Does the claimant’s current school match the above information from their claim?"
+        matching_details:
+          summary: "Review matching details from other claims"
+          question: "Is this claim still valid despite having matching details with other claims?"
   student_loans:
     policy_name: "Teachers: claim back your student loan repayments"
     policy_short_name: "Student Loans"
@@ -202,3 +205,6 @@ en:
         student_loan_amount:
           summary: "Check student loan amount"
           question: "Does the claimant’s student loan amount and plan type match the information we hold about their loan?"
+        matching_details:
+          summary: "Review matching details from other claims"
+          question: "Is this claim still valid despite having matching details with other claims?"
