@@ -25,7 +25,6 @@ class Payment < ApplicationRecord
     national_insurance_number
   ]
   PERSONAL_DETAILS_ATTRIBUTES_FORBIDDING_DISCREPANCIES = %i[
-    teacher_reference_number
     date_of_birth
     student_loan_plan
     bank_sort_code

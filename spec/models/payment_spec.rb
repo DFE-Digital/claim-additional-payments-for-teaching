@@ -68,13 +68,6 @@ RSpec.describe Payment do
       expect(subject).to be_valid
     end
 
-    it "is invalid when claims’ teacher reference numbers do not match" do
-      claims[0].teacher_reference_number = "9988776"
-
-      expect(subject).not_to be_valid
-      expect(subject.errors[:claims]).to eq(["#{claims[0].reference} and #{claims[1].reference} have different values for teacher reference number"])
-    end
-
     it "is invalid when claims’ dates of birth do not match" do
       claims[0].date_of_birth = 20.years.ago.to_date
 
