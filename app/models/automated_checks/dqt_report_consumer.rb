@@ -16,7 +16,7 @@ module AutomatedChecks
       @csv.rows.each do |row|
         claim = Claim.awaiting_decision.find_by(reference: row["dfeta text2"])
         next if row["dfeta qtsdate"].blank? || claim.nil?
-        if claim.policy::DQTRecord.new(row.to_h).eligible?
+        if claim.policy::DQTRecord.new(row.to_h).eligible? && row_matches_claim?(row, claim)
           task = claim.tasks.build(task_attributes)
           task.save!
         end
@@ -34,6 +34,10 @@ module AutomatedChecks
         manual: false,
         created_by: @admin_user
       }
+    end
+
+    def row_matches_claim?(row, claim)
+      Date.parse(row["birthdate"]) == claim.date_of_birth
     end
   end
 end

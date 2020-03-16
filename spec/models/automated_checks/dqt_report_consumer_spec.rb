@@ -15,11 +15,14 @@ RSpec.describe AutomatedChecks::DQTReportConsumer do
     tempfile
   end
   let(:admin_user) { build(:dfe_signin_user) }
-  let(:claim) { create(:claim, :submitted, academic_year: "2019/2020", policy: policy) }
+  let(:claim) do
+    create(:claim, :submitted, academic_year: "2019/2020", policy: policy, date_of_birth: date_of_birth)
+  end
   let(:policy) { StudentLoans }
   let(:itt_subject_code) { "" }
   let(:postgraduate_degree_code) { "" }
   let(:qts_date) { "20/10/2015" }
+  let(:date_of_birth) { Date.new(1990, 8, 23) }
 
   describe "#ingest" do
     context "when the QTS date is after the cut-off date" do
@@ -58,6 +61,14 @@ RSpec.describe AutomatedChecks::DQTReportConsumer do
 
     context "when the QTS date is before the cut-off date" do
       let(:qts_date) { "20/4/1990" }
+
+      it "does nothing" do
+        expect { dqt_report_consumer.ingest }.to change { claim.tasks.count }.by(0)
+      end
+    end
+
+    context "when the DQT record doesn’t match the data we have in the claim" do
+      let(:date_of_birth) { Date.new(1895, 10, 1) }
 
       it "does nothing" do
         expect { dqt_report_consumer.ingest }.to change { claim.tasks.count }.by(0)

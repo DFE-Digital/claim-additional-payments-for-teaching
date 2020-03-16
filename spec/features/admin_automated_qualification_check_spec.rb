@@ -8,11 +8,12 @@ RSpec.feature "Admins automated qualification check" do
   end
 
   scenario "Service operators can upload and run automated DQT checks" do
-    maths_and_physics_claim = create(:claim, :submitted, policy: MathsAndPhysics)
-    student_loans_claim = create(:claim, :submitted, policy: StudentLoans)
-    claim_with_ineligible_record = create(:claim, :submitted, policy: StudentLoans)
+    maths_and_physics_claim = create(:claim, :submitted, policy: MathsAndPhysics, date_of_birth: Date.new(1990, 8, 23))
+    student_loans_claim = create(:claim, :submitted, policy: StudentLoans, date_of_birth: Date.new(1990, 8, 23))
+    claim_with_ineligible_record = create(:claim, :submitted, policy: StudentLoans, date_of_birth: Date.new(1990, 8, 23))
+    claim_with_decision = create(:claim, :approved, date_of_birth: Date.new(1990, 8, 23))
     existing_qualification_task = create(:task, name: "qualifications", passed: false, created_at: 10.minutes.ago)
-    claim_with_qualification_task = create(:claim, :submitted, tasks: [existing_qualification_task])
+    claim_with_qualification_task = create(:claim, :submitted, tasks: [existing_qualification_task], date_of_birth: Date.new(1990, 8, 23))
 
     click_on "View claims"
     click_on "Upload DQT report"
