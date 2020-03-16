@@ -5,7 +5,7 @@
 
   <%= render "admin/tasks/claim_summary", claim: @claim, heading: "Claim decision" %>
 
-  <%= render("admin/claims/claims_with_matching_details", {matching_claims: @matching_claims, claim: @claim}) if @matching_claims.any? %>
+  <%= render("admin/claims/claims_with_matching_details", {matching_claims: @matching_claims, claim: @claim, show_caption: true}) if @matching_claims.any? %>
 
   <div class="govuk-grid-column-two-thirds">
     <%= render("incomplete_tasks", claim: @claim, incomplete_task_names: @claim_checking_tasks.incomplete_task_names) if @claim_checking_tasks.incomplete_task_names.any? %>

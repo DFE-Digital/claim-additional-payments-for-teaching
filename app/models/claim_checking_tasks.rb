@@ -3,7 +3,12 @@
 # This models the tasks that need to be performed on a claim as part of the
 # claim checking process.
 class ClaimCheckingTasks
-  TASK_NAMES = %w[qualifications employment student_loan_amount].freeze
+  TASK_NAMES = %w[
+    qualifications
+    employment
+    student_loan_amount
+    matching_details
+  ].freeze
 
   attr_reader :claim
 
@@ -14,11 +19,18 @@ class ClaimCheckingTasks
   def applicable_task_names
     @applicable_task_names ||= TASK_NAMES.dup.tap do |task_names|
       task_names.delete("student_loan_amount") unless claim.policy == StudentLoans
+      task_names.delete("matching_details") unless matching_claims.exists?
     end
   end
 
   # Returns an Array of tasks names that have not been completed on the claim.
   def incomplete_task_names
     applicable_task_names - claim.tasks.map(&:name)
+  end
+
+  private
+
+  def matching_claims
+    @matching_claims ||= Claim::MatchingAttributeFinder.new(claim).matching_claims
   end
 end

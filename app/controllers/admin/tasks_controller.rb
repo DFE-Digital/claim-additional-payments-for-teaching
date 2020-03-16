@@ -2,6 +2,7 @@ class Admin::TasksController < Admin::BaseAdminController
   before_action :ensure_service_operator
   before_action :load_claim
   before_action :ensure_task_has_not_already_been_completed, only: [:create]
+  before_action :load_matching_claims, only: [:show], if: -> { current_task_name == "matching_details" }
 
   def index
     @claim_checking_tasks = ClaimCheckingTasks.new(@claim)
@@ -58,5 +59,9 @@ class Admin::TasksController < Admin::BaseAdminController
       .permit(:passed)
       .merge(name: current_task_name,
              created_by: admin_user)
+  end
+
+  def load_matching_claims
+    @matching_claims = Claim::MatchingAttributeFinder.new(@claim).matching_claims
   end
 end

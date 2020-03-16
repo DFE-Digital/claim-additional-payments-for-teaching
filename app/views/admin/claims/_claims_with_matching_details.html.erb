@@ -1,7 +1,10 @@
 <table id="claims-with-matches" class="govuk-table govuk-!-margin-bottom-9">
-  <caption class="govuk-table__caption govuk-heading-l">
-    <%= @claim.policy.short_name %> <%= "claim".pluralize(@matching_claims.count) %> with matching details
-  </caption>
+  <% if show_caption %>
+    <caption class="govuk-table__caption govuk-heading-l">
+      <%= @claim.policy.short_name %> <%= "claim".pluralize(@matching_claims.count) %> with matching details
+    </caption>
+  <% end %>
+
   <thead class="govuk-table__head">
     <tr class="govuk-table__row">
       <th scope="col" class="govuk-table__header">Claim</th>
