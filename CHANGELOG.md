@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+## [Release 063] - 2020-03-16
+
 - Add a task to check claims with matching attributes
 - Add a claim checking task to verify identity of claimants who didn’t use
   GOV.UK Verify
@@ -515,7 +517,9 @@ The format is based on [Keep a Changelog]
 - First release for student loan repayments private beta
 
 [unreleased]:
-  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-062...HEAD
+  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-063...HEAD
+[release 063]:
+  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-062...release-063
 [release 062]:
   https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-061...release-062
 [release 061]:
