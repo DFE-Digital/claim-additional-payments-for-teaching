@@ -416,35 +416,28 @@ RSpec.describe Claim, type: :model do
     end
   end
 
-  describe "awaiting_decision" do
-    let!(:submitted_claims) { create_list(:claim, 5, :submitted) }
-    let!(:unsubmitted_claims) { create_list(:claim, 2, :submittable) }
-    let!(:approved_claims) { create_list(:claim, 5, :approved) }
-
-    it "returns submitted claims awaiting a decision" do
-      expect(Claim.awaiting_decision).to match_array(submitted_claims)
-    end
-  end
-
-  describe "approved" do
+  describe "scopes" do
     let!(:submitted_claims) { create_list(:claim, 5, :submitted) }
     let!(:unsubmitted_claims) { create_list(:claim, 2, :submittable) }
     let!(:approved_claims) { create_list(:claim, 5, :approved) }
     let!(:rejected_claims) { create_list(:claim, 5, :rejected) }
 
-    it "returns approved claims" do
-      expect(Claim.approved).to match_array(approved_claims)
+    describe "awaiting_decision" do
+      it "returns submitted claims awaiting a decision" do
+        expect(Claim.awaiting_decision).to match_array(submitted_claims)
+      end
     end
-  end
 
-  describe "rejected" do
-    let!(:submitted_claims) { create_list(:claim, 5, :submitted) }
-    let!(:unsubmitted_claims) { create_list(:claim, 2, :submittable) }
-    let!(:approved_claims) { create_list(:claim, 5, :approved) }
-    let!(:rejected_claims) { create_list(:claim, 5, :rejected) }
+    describe "approved" do
+      it "returns approved claims" do
+        expect(Claim.approved).to match_array(approved_claims)
+      end
+    end
 
-    it "returns rejected claims" do
-      expect(Claim.rejected).to match_array(rejected_claims)
+    describe "rejected" do
+      it "returns rejected claims" do
+        expect(Claim.rejected).to match_array(rejected_claims)
+      end
     end
   end
 
