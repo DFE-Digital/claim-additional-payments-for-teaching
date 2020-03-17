@@ -30,7 +30,6 @@ class Claim < ApplicationRecord
   ].freeze
   AMENDABLE_ATTRIBUTES = %i[
     teacher_reference_number
-    payroll_gender
     date_of_birth
     student_loan_plan
     bank_sort_code

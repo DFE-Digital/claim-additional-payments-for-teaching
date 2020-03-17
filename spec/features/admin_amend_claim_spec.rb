@@ -24,7 +24,6 @@ RSpec.feature "Admin amends a claim" do
     new_date_of_birth = 30.years.ago.to_date
 
     fill_in "Teacher reference number", with: "7654321"
-    select "Male", from: "Payroll gender"
     fill_in "Day", with: new_date_of_birth.day
     fill_in "Month", with: new_date_of_birth.month
     fill_in "Year", with: new_date_of_birth.year
@@ -40,7 +39,6 @@ RSpec.feature "Admin amends a claim" do
     amendment = claim.amendments.last
     expect(amendment.claim_changes).to eq({
       "teacher_reference_number" => ["1234567", "7654321"],
-      "payroll_gender" => ["dont_know", "male"],
       "date_of_birth" => [date_of_birth, new_date_of_birth],
       "student_loan_plan" => ["plan_1", "plan_2"],
       "bank_sort_code" => ["010203", "111213"],
@@ -51,7 +49,6 @@ RSpec.feature "Admin amends a claim" do
     expect(amendment.created_by).to eq(service_operator)
 
     expect(claim.reload.teacher_reference_number).to eq("7654321")
-    expect(claim.payroll_gender).to eq("male")
     expect(claim.date_of_birth).to eq(new_date_of_birth)
     expect(claim.student_loan_plan).to eq("plan_2")
     expect(claim.bank_sort_code).to eq("111213")
@@ -61,7 +58,6 @@ RSpec.feature "Admin amends a claim" do
     expect(current_url).to eq(admin_claim_url(claim))
 
     expect(page).to have_content("Teacher reference number\nchanged from 1234567 to 7654321")
-    expect(page).to have_content("Payroll gender\nchanged from don’t know to male")
     expect(page).to have_content("Date of birth\nchanged from #{I18n.l(date_of_birth, format: :day_month_year)} to #{I18n.l(new_date_of_birth, format: :day_month_year)}")
     expect(page).to have_content("Student loan repayment plan\nchanged from Plan 1 to Plan 2")
     expect(page).to have_content("Bank sort code\nchanged from 010203 to 111213")

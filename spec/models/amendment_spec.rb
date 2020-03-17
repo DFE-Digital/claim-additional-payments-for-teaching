@@ -26,14 +26,14 @@ RSpec.describe Amendment, type: :model do
   end
 
   describe ".amend_claim" do
-    let(:claim) { create(:claim, :submitted, teacher_reference_number: "1234567", payroll_gender: :male, bank_sort_code: "111213", building_society_roll_number: nil) }
+    let(:claim) { create(:claim, :submitted, teacher_reference_number: "1234567", bank_sort_code: "111213", bank_account_number: "12345678", building_society_roll_number: nil) }
     let(:dfe_signin_user) { create(:dfe_signin_user) }
 
     context "given valid claim attributes and valid amendment attributes" do
       let(:claim_attributes) do
         {
           teacher_reference_number: "7654321",
-          payroll_gender: :female
+          bank_account_number: "87654321"
         }
       end
       let(:amendment_attributes) do
@@ -48,13 +48,13 @@ RSpec.describe Amendment, type: :model do
 
         expect(amendment).to be_persisted
         expect(amendment.claim_changes).to be_an_instance_of(Hash)
-        expect(amendment.claim_changes).to eq("teacher_reference_number" => ["1234567", "7654321"], "payroll_gender" => ["male", "female"])
+        expect(amendment.claim_changes).to eq("teacher_reference_number" => ["1234567", "7654321"], "bank_account_number" => ["12345678", "87654321"])
         expect(amendment.notes).to eq("This is a change")
         expect(amendment.created_by).to eq(dfe_signin_user)
 
         expect(claim.reload.amendments).to eq([amendment])
         expect(claim.teacher_reference_number).to eq("7654321")
-        expect(claim.payroll_gender).to eq("female")
+        expect(claim.bank_account_number).to eq("87654321")
       end
     end
 
@@ -62,7 +62,7 @@ RSpec.describe Amendment, type: :model do
       let(:claim_attributes) do
         {
           teacher_reference_number: "7654321",
-          payroll_gender: :female
+          bank_account_number: "87654321"
         }
       end
       let(:amendment_attributes) do
@@ -76,15 +76,15 @@ RSpec.describe Amendment, type: :model do
 
         expect(amendment).to_not be_persisted
         expect(amendment.claim_changes).to be_an_instance_of(Hash)
-        expect(amendment.claim_changes).to eq("teacher_reference_number" => ["1234567", "7654321"], "payroll_gender" => ["male", "female"])
+        expect(amendment.claim_changes).to eq("teacher_reference_number" => ["1234567", "7654321"], "bank_account_number" => ["12345678", "87654321"])
         expect(amendment.created_by).to eq(dfe_signin_user)
 
         expect(claim.teacher_reference_number).to eq("7654321")
-        expect(claim.payroll_gender).to eq("female")
+        expect(claim.bank_account_number).to eq("87654321")
 
         expect(claim.reload.amendments).to be_empty
         expect(claim.teacher_reference_number).to eq("1234567")
-        expect(claim.payroll_gender).to eq("male")
+        expect(claim.bank_account_number).to eq("12345678")
 
         expect(amendment.errors.keys).to eq([:notes])
       end
@@ -94,7 +94,7 @@ RSpec.describe Amendment, type: :model do
       let(:claim_attributes) do
         {
           teacher_reference_number: "765432",
-          payroll_gender: :female
+          bank_account_number: "87654321"
         }
       end
       let(:amendment_attributes) do
@@ -111,11 +111,11 @@ RSpec.describe Amendment, type: :model do
         expect(amendment.created_by).to eq(dfe_signin_user)
 
         expect(claim.teacher_reference_number).to eq("765432")
-        expect(claim.payroll_gender).to eq("female")
+        expect(claim.bank_account_number).to eq("87654321")
 
         expect(claim.reload.amendments).to be_empty
         expect(claim.teacher_reference_number).to eq("1234567")
-        expect(claim.payroll_gender).to eq("male")
+        expect(claim.bank_account_number).to eq("12345678")
 
         expect(amendment.errors.keys).to match_array([:teacher_reference_number])
       end
@@ -125,7 +125,7 @@ RSpec.describe Amendment, type: :model do
       let(:claim_attributes) do
         {
           teacher_reference_number: "765432",
-          payroll_gender: :female
+          bank_account_number: "87654321"
         }
       end
       let(:amendment_attributes) do
@@ -141,11 +141,11 @@ RSpec.describe Amendment, type: :model do
         expect(amendment.created_by).to eq(dfe_signin_user)
 
         expect(claim.teacher_reference_number).to eq("765432")
-        expect(claim.payroll_gender).to eq("female")
+        expect(claim.bank_account_number).to eq("87654321")
 
         expect(claim.reload.amendments).to be_empty
         expect(claim.teacher_reference_number).to eq("1234567")
-        expect(claim.payroll_gender).to eq("male")
+        expect(claim.bank_account_number).to eq("12345678")
 
         expect(amendment.errors.keys).to match_array([:notes, :teacher_reference_number])
       end
