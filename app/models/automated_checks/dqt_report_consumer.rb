@@ -7,13 +7,17 @@ module AutomatedChecks
   # The records will be used to determine if a claimant's qualifications
   # make them eligible for a specific policy.
   class DQTReportConsumer
+    attr_reader :csv
+
     def initialize(file, admin_user)
       @csv = DQTReportCsv.new(file)
       @admin_user = admin_user
     end
 
     def ingest
-      @csv.rows.each do |row|
+      return if errors.any?
+
+      csv.rows.each do |row|
         claim = Claim.awaiting_decision.find_by(reference: row["dfeta text2"])
         next if row["dfeta qtsdate"].blank? || claim.nil?
         if claim.policy::DQTRecord.new(row.to_h).eligible? && row_matches_claim?(row, claim)
@@ -23,6 +27,10 @@ module AutomatedChecks
       rescue ActiveRecord::RecordInvalid
         next
       end
+    end
+
+    def errors
+      csv.errors
     end
 
     private

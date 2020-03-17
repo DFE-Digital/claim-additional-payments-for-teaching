@@ -45,6 +45,23 @@ RSpec.describe "Admin qualification report upload" do
       end
     end
 
+    context "when an invalid CSV is uploaded" do
+      let(:csv) { "Malformed CSV File\"," }
+      it "displays an error" do
+        post admin_qualification_report_uploads_path, params: {file: file}
+
+        expect(response.body).to include("The selected file must be a CSV")
+      end
+    end
+
+    context "when no CSV file is uploaded" do
+      it "displays an error" do
+        post admin_qualification_report_uploads_path
+
+        expect(response.body).to include("Select a file")
+      end
+    end
+
     [DfeSignIn::User::SUPPORT_AGENT_DFE_SIGN_IN_ROLE_CODE, DfeSignIn::User::PAYROLL_OPERATOR_DFE_SIGN_IN_ROLE_CODE].each do |role|
       it "returns a unauthorized response for #{role} users" do
         sign_in_to_admin_with_role(role)

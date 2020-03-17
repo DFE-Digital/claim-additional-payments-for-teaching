@@ -6,8 +6,15 @@
 
     <%= form_with url: admin_qualification_report_uploads_path, multipart: true do |f| %>
       <div class="govuk-form-group">
-        <%= f.label 'file', "Upload a CSV file", class: "govuk-label" %>
-        <%= f.file_field 'file', class: "govuk-file-upload" %>
+        <%= f.label "file", "Upload a CSV file", class: "govuk-label" %>
+
+        <% @dqt_report_consumer && @dqt_report_consumer.errors.each do |error| %>
+          <span class="govuk-error-message">
+            <span class="govuk-visually-hidden">Error:</span> <%= error %>
+          </span>
+        <% end %>
+
+        <%= f.file_field "file", class: "govuk-file-upload" %>
       </div>
       <%= f.submit "Upload", class: "govuk-button", data: {module: "govuk-button"} %>
     <% end %>
