@@ -84,7 +84,8 @@ RSpec.feature "Admin checks a claim" do
       expect(page).to have_link("Approve or reject this claim", href: new_admin_claim_decision_path(claim_with_tasks))
 
       click_on "Check qualification information"
-      expect(page).to have_content("Performed by #{checking_user.full_name}")
+      expect(page).to have_content("Passed")
+      expect(page).to have_content("This task was performed by #{checking_user.full_name}")
       expect(page).to have_content(I18n.l(ten_minutes_ago))
       expect(page).not_to have_button("Save and continue")
     end
