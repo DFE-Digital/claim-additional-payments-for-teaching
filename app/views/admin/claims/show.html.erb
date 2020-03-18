@@ -26,7 +26,7 @@
       </div>
     <% end %>
 
-    <span class="govuk-caption-xl"><%= @claim.policy.short_name %></span>
+    <span class="govuk-caption-xl"><%= @claim.policy.short_name %>  (<%= @claim.academic_year %>)</span>
     <h1 class="govuk-heading-xl govuk-heading--navigation">
       <%= @claim.reference %>
       <span class="govuk-body-m">
