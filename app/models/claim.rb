@@ -170,6 +170,7 @@ class Claim < ApplicationRecord
   scope :passed_decision_deadline, -> { awaiting_decision.where("submitted_at < ?", DECISION_DEADLINE.ago) }
   scope :payrollable, -> { approved.where(payment: nil) }
   scope :by_policy, ->(policy) { where(eligibility_type: policy::Eligibility.to_s) }
+  scope :by_academic_year, ->(academic_year) { where(academic_year: academic_year) }
 
   delegate :award_amount, to: :eligibility
   delegate :scheduled_payment_date, to: :payment, allow_nil: true
