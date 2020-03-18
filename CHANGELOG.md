@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+- Show the academic year when viewing a claim
+
 ## [Release 064] - 2020-03-18
 
 - Add "Back" link and page title to claim decision screen
