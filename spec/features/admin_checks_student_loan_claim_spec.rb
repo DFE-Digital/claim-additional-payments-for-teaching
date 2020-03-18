@@ -28,7 +28,7 @@ RSpec.feature "Admin checking a Student Loans claim" do
 
     click_on "Check qualification information"
 
-    expect(page).to have_content(I18n.t("student_loans.admin.tasks.qualifications.question"))
+    expect(page).to have_content(I18n.t("student_loans.admin.task_questions.qualifications"))
     expect(page).to have_content("Award year")
     expect(page).to have_content(claim.eligibility.qts_award_year_answer)
 
@@ -37,7 +37,7 @@ RSpec.feature "Admin checking a Student Loans claim" do
 
     expect(claim.tasks.find_by!(name: "qualifications").passed?).to eq(true)
 
-    expect(page).to have_content(I18n.t("student_loans.admin.tasks.employment.question"))
+    expect(page).to have_content(I18n.t("student_loans.admin.task_questions.employment"))
     expect(page).to have_content("Current school")
     expect(page).to have_link(claim.eligibility.current_school.name)
 
@@ -46,7 +46,7 @@ RSpec.feature "Admin checking a Student Loans claim" do
 
     expect(claim.tasks.find_by!(name: "employment").passed?).to eq(true)
 
-    expect(page).to have_content(I18n.t("student_loans.admin.tasks.student_loan_amount.question"))
+    expect(page).to have_content(I18n.t("student_loans.admin.task_questions.student_loan_amount"))
     expect(page).to have_content("£1,987.65")
     expect(page).to have_content("Plan 2")
 
@@ -81,7 +81,7 @@ RSpec.feature "Admin checking a Student Loans claim" do
 
     click_on I18n.t("admin.tasks.matching_details")
 
-    expect(page).to have_content(I18n.t("student_loans.admin.tasks.matching_details.question"))
+    expect(page).to have_content(I18n.t("student_loans.admin.task_questions.matching_details"))
     expect(page).to have_content(claim_with_matching_details.reference)
     expect(page).to have_content("Teacher reference number")
 
@@ -113,7 +113,7 @@ RSpec.feature "Admin checking a Student Loans claim" do
 
     click_on I18n.t("admin.tasks.identity_confirmation")
 
-    expect(page).to have_content(I18n.t("student_loans.admin.tasks.identity_confirmation.question", name: claim.full_name))
+    expect(page).to have_content(I18n.t("student_loans.admin.task_questions.identity_confirmation", name: claim.full_name))
     expect(page).to have_content(claim.eligibility.current_school.name)
     expect(page).to have_content(claim.eligibility.current_school.phone_number)
 
