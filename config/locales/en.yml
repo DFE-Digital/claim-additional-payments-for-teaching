@@ -168,6 +168,8 @@ en:
         identity_confirmation:
           summary: "Confirm the claimant made the claim"
           question: "Did %{name} submit the claim?"
+        payroll_gender:
+          summary: "Add a payroll gender for HMRC"
   student_loans:
     policy_name: "Teachers: claim back your student loan repayments"
     policy_short_name: "Student Loans"
@@ -214,3 +216,5 @@ en:
         identity_confirmation:
           summary: "Confirm the claimant made the claim"
           question: "Did %{name} submit the claim?"
+        payroll_gender:
+          summary: "Add a payroll gender for HMRC"

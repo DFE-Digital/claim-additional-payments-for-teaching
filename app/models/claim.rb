@@ -30,7 +30,6 @@ class Claim < ApplicationRecord
   ].freeze
   AMENDABLE_ATTRIBUTES = %i[
     teacher_reference_number
-    payroll_gender
     date_of_birth
     student_loan_plan
     bank_sort_code
@@ -146,6 +145,8 @@ class Claim < ApplicationRecord
   validates :banking_name, on: [:"bank-details", :submit], presence: {message: "Enter the name on your bank account"}
   validates :bank_sort_code, on: [:"bank-details", :submit], presence: {message: "Enter a sort code"}
   validates :bank_account_number, on: [:"bank-details", :submit], presence: {message: "Enter an account number"}
+
+  validates :payroll_gender, on: [:"payroll-gender-task", :submit], presence: {message: "You must select a gender that will be passed to HMRC"}
 
   validate :bank_account_number_must_be_eight_digits
   validate :bank_sort_code_must_be_six_digits

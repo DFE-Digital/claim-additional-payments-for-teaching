@@ -8,6 +8,8 @@ The format is based on [Keep a Changelog]
 
 - Add "Back" link and page title to claim decision screen
 - Link claim tasks view back to the list of claims
+- Add a Missing Payroll Gender task to allow service operators to update a
+  claim's Payroll Gender if it's not specified
 
 ## [Release 063] - 2020-03-16
 

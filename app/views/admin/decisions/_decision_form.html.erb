@@ -1,13 +1,3 @@
-<% if claim.payroll_gender_missing? && !claim.decision_made? %>
-  <div class="govuk-warning-text">
-    <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
-    <strong class="govuk-warning-text__text">
-      <span class="govuk-warning-text__assistive">Warning</span>
-      <%= t("admin.unknown_payroll_gender_preventing_approval_message") %>
-    </strong>
-  </div>
-<% end %>
-
 <% if claims_preventing_payment.any? %>
   <div class="govuk-warning-text">
     <span class="govuk-warning-text__icon" aria-hidden="true">!</span>

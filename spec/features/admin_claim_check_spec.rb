@@ -102,17 +102,6 @@ RSpec.feature "Admin checks a claim" do
     end
 
     context "when the service operator completes the last checking task" do
-      context "and the payroll gender is missing" do
-        let!(:claim) { create(:claim, :submitted, payroll_gender: :dont_know) }
-
-        scenario "User is informed that the claim cannot be approved" do
-          perform_last_task(claim)
-
-          expect(page).to have_field("Approve", disabled: true)
-          expect(page).to have_content(I18n.t("admin.unknown_payroll_gender_preventing_approval_message"))
-        end
-      end
-
       context "and the claimant has another approved claim in the same payroll window, with inconsistent personal details" do
         let(:personal_details) do
           {

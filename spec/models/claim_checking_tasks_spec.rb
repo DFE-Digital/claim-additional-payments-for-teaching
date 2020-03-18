@@ -39,6 +39,18 @@ RSpec.describe ClaimCheckingTasks do
 
       expect(unverified_tasks.applicable_task_names).to eq %w[qualifications employment identity_confirmation]
     end
+
+    it "includes a task for payroll gender when the claim does not have a binary value for it" do
+      claim.payroll_gender = :dont_know
+
+      expect(checking_tasks.applicable_task_names).to eq %w[qualifications employment payroll_gender]
+    end
+
+    it "includes a task for payroll gender when a payroll gender task has previously been completed" do
+      claim.tasks << build(:task, name: "payroll_gender")
+
+      expect(checking_tasks.applicable_task_names).to eq %w[qualifications employment payroll_gender]
+    end
   end
 
   describe "#incomplete_task_names" do
