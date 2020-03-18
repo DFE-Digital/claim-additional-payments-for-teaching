@@ -615,7 +615,7 @@
               },
               {
                 "name": "SERVICE_ENTITY_IDS",
-                "value": "[string(createArray(parameters('VSP.VERIFY_ENTITY_ID')))]"
+                "value": "[concat('[', '''', parameters('VSP.VERIFY_ENTITY_ID'), '''', ']')]"
               },
               {
                 "name": "SAML_SIGNING_KEY",
