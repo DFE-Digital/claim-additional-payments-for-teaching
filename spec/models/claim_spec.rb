@@ -422,21 +422,39 @@ RSpec.describe Claim, type: :model do
     let!(:approved_claims) { create_list(:claim, 5, :approved) }
     let!(:rejected_claims) { create_list(:claim, 5, :rejected) }
 
+    let!(:approved_then_rejected_claim) { create(:claim, :submitted) }
+    let!(:rejected_then_approved_claim) { create(:claim, :submitted) }
+    let!(:approved_then_decision_undone_claim) { create(:claim, :submitted) }
+    let!(:rejected_then_decision_undone_claim) { create(:claim, :submitted) }
+
+    # TODO: This doesn't feel great, but works - is this the best way?
+    before do
+      create(:decision, :approved, :undone, claim: approved_then_rejected_claim)
+      create(:decision, :rejected, claim: approved_then_rejected_claim)
+
+      create(:decision, :rejected, :undone, claim: rejected_then_approved_claim)
+      create(:decision, :approved, claim: rejected_then_approved_claim)
+
+      create(:decision, :approved, :undone, claim: approved_then_decision_undone_claim)
+
+      create(:decision, :rejected, :undone, claim: rejected_then_decision_undone_claim)
+    end
+
     describe "awaiting_decision" do
       it "returns submitted claims awaiting a decision" do
-        expect(Claim.awaiting_decision).to match_array(submitted_claims)
+        expect(Claim.awaiting_decision).to match_array(submitted_claims + [approved_then_decision_undone_claim] + [rejected_then_decision_undone_claim])
       end
     end
 
     describe "approved" do
       it "returns approved claims" do
-        expect(Claim.approved).to match_array(approved_claims)
+        expect(Claim.approved).to match_array(approved_claims + [rejected_then_approved_claim])
       end
     end
 
     describe "rejected" do
       it "returns rejected claims" do
-        expect(Claim.rejected).to match_array(rejected_claims)
+        expect(Claim.rejected).to match_array(rejected_claims + [approved_then_rejected_claim])
       end
     end
   end
@@ -484,11 +502,18 @@ RSpec.describe Claim, type: :model do
 
   describe "#decision" do
     it "returns the latest decision on a claim" do
-      claim = build(:claim, :submitted)
-      claim.decisions.append(build(:decision, result: "approved", created_at: 7.days.ago))
-      claim.decisions.append(build(:decision, result: "rejected", created_at: DateTime.now))
+      claim = create(:claim, :submitted)
+      create(:decision, result: "approved", claim: claim, created_at: 7.days.ago)
+      create(:decision, result: "rejected", claim: claim, created_at: DateTime.now)
 
       expect(claim.decision.result).to eq "rejected"
+    end
+
+    it "returns only decisions which haven't been undone" do
+      claim = create(:claim, :submitted)
+      create(:decision, :undone, result: "rejected", claim: claim)
+
+      expect(claim.decision).to be_nil
     end
   end
 
@@ -781,6 +806,26 @@ RSpec.describe Claim, type: :model do
       claim = create(:claim, :rejected)
       expect(claim.decision_made?).to eq(true)
     end
+
+    it "returns true for a claim that had a decison made, undone, then been approved" do
+      claim = create(:claim, :submitted)
+      create(:decision, :undone, result: "rejected", claim: claim)
+      create(:decision, result: "approved", claim: claim)
+      expect(claim.decision_made?).to eq(true)
+    end
+
+    it "returns true for a claim that had a decison made, undone, then been rejected" do
+      claim = create(:claim, :submitted)
+      create(:decision, :undone, result: "approved", claim: claim)
+      create(:decision, result: "rejected", claim: claim)
+      expect(claim.decision_made?).to eq(true)
+    end
+
+    it "returns false for a claim that had a decison made, then undone" do
+      claim = create(:claim, :submitted)
+      create(:decision, :undone, result: "approved", claim: claim)
+      expect(claim.decision_made?).to eq(false)
+    end
   end
 
   describe "#decision_undoable?" do
@@ -797,6 +842,12 @@ RSpec.describe Claim, type: :model do
     it "returns true for a rejected claim" do
       claim = create(:claim, :rejected)
       expect(claim.decision_undoable?).to eq(true)
+    end
+
+    it "returns false for a claim that had a decison made, then undone" do
+      claim = create(:claim, :submitted)
+      create(:decision, :undone, result: "approved", claim: claim)
+      expect(claim.decision_made?).to eq(false)
     end
 
     it "returns true for an approved claim that isn’t payrolled" do

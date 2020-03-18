@@ -24,6 +24,17 @@ RSpec.describe Decision, type: :model do
     expect(decision.errors.messages[:base]).to eq(["This claim cannot be approved"])
   end
 
+  it "prevents a decision being marked as undone when a claim cannot have its decision undone" do
+    claim = create(:claim, :submitted)
+    decision = create(:decision, claim: claim, result: "approved")
+    create(:payment, claims: [claim])
+    decision.undone = true
+    decision.save
+
+    expect(decision).not_to be_valid
+    expect(decision.errors.messages[:base]).to eq(["This claim cannot have its decision undone"])
+  end
+
   it "prevents a claim with matching bank details from being approved" do
     personal_details = {
       teacher_reference_number: generate(:teacher_reference_number),

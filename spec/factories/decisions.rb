@@ -9,5 +9,9 @@ FactoryBot.define do
     trait :rejected do
       result { :rejected }
     end
+
+    trait :undone do
+      undone { true }
+    end
   end
 end

@@ -162,9 +162,9 @@ class Claim < ApplicationRecord
 
   scope :unsubmitted, -> { where(submitted_at: nil) }
   scope :submitted, -> { where.not(submitted_at: nil) }
-  scope :awaiting_decision, -> { submitted.left_outer_joins(:decisions).where(decisions: {claim_id: nil}) }
-  scope :approved, -> { joins(:decisions).where("decisions.result" => :approved) }
-  scope :rejected, -> { joins(:decisions).where("decisions.result" => :rejected) }
+  scope :awaiting_decision, -> { submitted.joins("LEFT OUTER JOIN decisions ON decisions.claim_id = claims.id AND decisions.undone = false").where(decisions: {claim_id: nil}) }
+  scope :approved, -> { joins(:decisions).merge(Decision.active.approved) }
+  scope :rejected, -> { joins(:decisions).merge(Decision.active.rejected) }
   scope :approaching_decision_deadline, -> { awaiting_decision.where("submitted_at < ? AND submitted_at > ?", DECISION_DEADLINE.ago + DECISION_DEADLINE_WARNING_POINT, DECISION_DEADLINE.ago) }
   scope :passed_decision_deadline, -> { awaiting_decision.where("submitted_at < ?", DECISION_DEADLINE.ago) }
   scope :payrollable, -> { approved.where(payment: nil) }
@@ -196,7 +196,7 @@ class Claim < ApplicationRecord
   end
 
   def decision
-    decisions.last
+    decisions.where(undone: false).last
   end
 
   def decision_made?
