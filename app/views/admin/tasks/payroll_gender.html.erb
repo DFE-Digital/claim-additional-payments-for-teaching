@@ -1,0 +1,46 @@
+<% content_for(:page_title) { page_title("Claim #{@claim.reference} payroll gender check for #{policy_service_name(@claim.policy.routing_name)}") } %>
+
+<%= link_to "Back", admin_claim_tasks_path(claim_id: @claim.id), class: "govuk-back-link" %>
+<%= render "shared/error_summary", instance: @claim, errored_field_id_overrides: { "payroll_gender": "claim_payroll_gender_female" } if @claim.errors.any? %>
+
+<div class="govuk-grid-row">
+
+  <%= render "claim_summary", claim: @claim, heading: "Payroll gender" %>
+
+  <div class="govuk-grid-column-two-thirds">
+    <% if @task.persisted? %>
+      <%= render "task_outcome", task: @task %>
+    <% else %>
+      <div class="govuk-form-group">
+        <%= form_with url: admin_claim_payroll_gender_tasks_path(@claim), scope: :claim do |f| %>
+          <fieldset class="govuk-fieldset govuk-!-margin-bottom-6">
+            <legend class="govuk-fieldset__legend govuk-fieldset__legend--l ">
+              <h3 class="govuk-heading-l">
+                What gender should be passed to payroll and HMRC?
+              </h3>
+            </legend>
+
+            <p class="govuk-body">
+              The claimant answered ‘Don't know’ to the question ‘What gender does your school's payroll system associate with you?’
+            </p>
+
+            <%= hidden_field_tag "task[passed]", "true" %>
+            <%= f.hidden_field :payroll_gender, value: "" %>
+
+            <div class="govuk-radios govuk-radios--inline">
+              <div class="govuk-radios__item">
+                <%= f.radio_button(:payroll_gender, :female, class: "govuk-radios__input") %>
+                <%= f.label :payroll_gender_female, "Female", class: "govuk-label govuk-radios__label" %>
+              </div>
+              <div class="govuk-radios__item">
+                <%= f.radio_button(:payroll_gender, :male, class: "govuk-radios__input") %>
+                <%= f.label :payroll_gender_male, "Male", class: "govuk-label govuk-radios__label" %>
+              </div>
+            </div>
+          </fieldset>
+          <%= f.submit "Save and continue", class: "govuk-button", data: {module: "govuk-button"} %>
+        <% end %>
+      </div>
+    <% end %>
+  </div>
+</div>

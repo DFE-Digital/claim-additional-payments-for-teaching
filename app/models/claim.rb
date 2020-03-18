@@ -147,6 +147,8 @@ class Claim < ApplicationRecord
   validates :bank_sort_code, on: [:"bank-details", :submit], presence: {message: "Enter a sort code"}
   validates :bank_account_number, on: [:"bank-details", :submit], presence: {message: "Enter an account number"}
 
+  validates :payroll_gender, on: [:"payroll-gender-task", :submit], presence: {message: "You must select a gender that will be passed to HMRC"}
+
   validate :bank_account_number_must_be_eight_digits
   validate :bank_sort_code_must_be_six_digits
   validate :building_society_roll_number_must_be_between_one_and_eighteen_digits

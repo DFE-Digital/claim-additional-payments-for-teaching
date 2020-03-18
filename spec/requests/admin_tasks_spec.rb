@@ -74,7 +74,7 @@ RSpec.describe "Admin tasks", type: :request do
                 post admin_claim_tasks_path(claim, name: last_task, params: {task: {passed: "true"}})
               }.to change { Task.count }.by(1)
 
-              expect(claim.tasks.last.name).to eql(last_task)
+              expect(claim.tasks.reload.last.name).to eql(last_task)
               expect(claim.tasks.last.passed?).to eql(true)
               expect(claim.tasks.last.created_by).to eql(user)
               expect(response).to redirect_to(new_admin_claim_decision_path(claim))
