@@ -51,6 +51,7 @@ module StudentLoans
     validates :mostly_performed_leadership_duties, on: [:"mostly-performed-leadership-duties", :submit], inclusion: {in: [true, false], message: "Select yes if you spent more than half your working hours on leadership duties"}, if: :had_leadership_position?
     validates :student_loan_repayment_amount, on: [:"student-loan-amount", :submit], presence: {message: "Enter your student loan repayment amount"}
     validates_numericality_of :student_loan_repayment_amount, message: "Enter a valid monetary amount", allow_nil: true, greater_than: 0, less_than_or_equal_to: 99999
+    validates :student_loan_repayment_amount, on: :amendment, numericality: {less_than: 5000, message: "Enter an amount below £5,000"}
 
     delegate :name, to: :claim_school, prefix: true, allow_nil: true
     delegate :name, to: :current_school, prefix: true, allow_nil: true

@@ -33,7 +33,7 @@ class Amendment < ApplicationRecord
     Claim.transaction do
       claim.assign_attributes(claim_attributes)
 
-      unless claim.save(context: :submit)
+      unless claim.save(context: [:submit, :amendment])
         amendment.valid?
         amendment.errors.merge!(claim.errors)
         amendment.errors.delete(:claim_changes)
