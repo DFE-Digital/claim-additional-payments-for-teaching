@@ -144,7 +144,7 @@ fi
 echo "Starting ProjectCore deployment..."
 
 PROJECT_CORE_DEPLOYMENT_RESULT=$(
-  az group deployment create \
+  az deployment group create \
     --name "$PROJECT_CORE_DEPLOYMENT_NAME" \
     --resource-group "$PROJECT_CORE_RESOURCE_GROUP_NAME" \
     --template-file "$PROJECT_CORE_TEMPLATE_FILE_PATH" \
@@ -184,7 +184,7 @@ fi
 echo "Starting secrets deployment with KeyVault createMode: $KEYVAULT_CREATE_MODE..."
 
 SECRETS_DEPLOYMENT_RESULT=$(
-  az group deployment create \
+  az deployment group create \
     --name "$SECRETS_DEPLOYMENT_NAME" \
     --resource-group "$SECRETS_RESOURCE_GROUP_NAME" \
     --template-file "$SECRETS_TEMPLATE_FILE_PATH" \
@@ -234,7 +234,7 @@ fi
 echo "Starting app deployment..."
 
 APP_DEPLOYMENT_RESULT=$(
-  az group deployment create \
+  az deployment group create \
     --name "$APP_DEPLOYMENT_NAME" \
     --resource-group "$APP_RESOURCE_GROUP_NAME" \
     --template-file "$APP_TEMPLATE_FILE_PATH" \
@@ -281,7 +281,7 @@ if [ $DEPLOY_ALERTS ]; then
   echo "Starting alerts deployment..."
 
   ALERTS_DEPLOYMENT_RESULT=$(
-    az group deployment create \
+    az deployment group create \
       --name "$ALERTS_DEPLOYMENT_NAME" \
       --resource-group "$ALERTS_RESOURCE_GROUP_NAME" \
       --template-file "$ALERTS_TEMPLATE_FILE_PATH" \
