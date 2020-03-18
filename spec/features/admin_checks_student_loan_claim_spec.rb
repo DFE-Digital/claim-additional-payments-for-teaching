@@ -79,7 +79,7 @@ RSpec.feature "Admin checking a Student Loans claim" do
     expect(page).to have_content("4. Matching details")
     expect(page).to have_content("5. Decision")
 
-    click_on I18n.t("student_loans.admin.tasks.matching_details.summary")
+    click_on I18n.t("admin.tasks.matching_details")
 
     expect(page).to have_content(I18n.t("student_loans.admin.tasks.matching_details.question"))
     expect(page).to have_content(claim_with_matching_details.reference)
@@ -111,7 +111,7 @@ RSpec.feature "Admin checking a Student Loans claim" do
     expect(page).to have_content("4. Identity confirmation")
     expect(page).to have_content("5. Decision")
 
-    click_on I18n.t("student_loans.admin.tasks.identity_confirmation.summary")
+    click_on I18n.t("admin.tasks.identity_confirmation")
 
     expect(page).to have_content(I18n.t("student_loans.admin.tasks.identity_confirmation.question", name: claim.full_name))
     expect(page).to have_content(claim.eligibility.current_school.name)

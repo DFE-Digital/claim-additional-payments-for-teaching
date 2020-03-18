@@ -61,7 +61,7 @@ RSpec.feature "Admin checking a Maths & Physics claim" do
     expect(page).to have_content("3. Matching details")
     expect(page).to have_content("4. Decision")
 
-    click_on I18n.t("maths_and_physics.admin.tasks.matching_details.summary")
+    click_on I18n.t("admin.tasks.matching_details")
 
     expect(page).to have_content(I18n.t("maths_and_physics.admin.tasks.matching_details.question"))
     expect(page).to have_content(claim_with_matching_details.reference)
@@ -100,7 +100,7 @@ RSpec.feature "Admin checking a Maths & Physics claim" do
     expect(page).to have_content("3. Identity confirmation")
     expect(page).to have_content("4. Decision")
 
-    click_on I18n.t("maths_and_physics.admin.tasks.identity_confirmation.summary")
+    click_on I18n.t("admin.tasks.identity_confirmation")
 
     expect(page).to have_content(I18n.t("maths_and_physics.admin.tasks.identity_confirmation.question", name: claim.full_name))
     expect(page).to have_content(claim.eligibility.current_school.name)

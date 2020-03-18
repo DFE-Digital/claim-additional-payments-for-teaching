@@ -19,7 +19,7 @@ RSpec.feature "Admin checking a claim missing a payroll gender" do
     expect(page).to have_content("4. Payroll gender")
     expect(page).to have_content("5. Decision")
 
-    click_on I18n.t("student_loans.admin.tasks.payroll_gender.summary")
+    click_on I18n.t("admin.tasks.payroll_gender")
 
     expect(page).to have_content("What gender should be passed to payroll and HMRC?")
 

@@ -6,7 +6,7 @@
   <div class="govuk-error-summary__body">
     <ul class="govuk-list govuk-error-summary__list claim-error-summary__list--warning">
       <% incomplete_task_names.each do |name| %>
-        <li><%= link_to(t("#{claim.policy.locale_key}.admin.tasks.#{name}.summary"), admin_claim_task_url(claim, name: name)) %></li>
+        <li><%= link_to(t("admin.tasks.#{name}"), admin_claim_task_url(claim, name: name)) %></li>
       <% end %>
     </ul>
   </div>
