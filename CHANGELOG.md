@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+## [Release 064] - 2020-03-18
+
 - Add "Back" link and page title to claim decision screen
 - Link claim tasks view back to the list of claims
 - Add a Missing Payroll Gender task to allow service operators to update a
@@ -522,7 +524,9 @@ The format is based on [Keep a Changelog]
 - First release for student loan repayments private beta
 
 [unreleased]:
-  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-063...HEAD
+  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-064...HEAD
+[release 064]:
+  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-063...release-064
 [release 063]:
   https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-062...release-063
 [release 062]:
