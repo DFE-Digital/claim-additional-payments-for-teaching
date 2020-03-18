@@ -7,6 +7,7 @@ The format is based on [Keep a Changelog]
 ## [Unreleased]
 
 - Show the academic year when viewing a claim
+- Allow service operators to amend student loan amount
 
 ## [Release 064] - 2020-03-18
 

@@ -40,10 +40,13 @@ class Amendment < ApplicationRecord
         raise ActiveRecord::Rollback
       end
 
-      amendment.claim_changes = claim.previous_changes
-        .slice(*Claim::AMENDABLE_ATTRIBUTES)
+      changes_hash = claim.previous_changes.merge(claim.eligibility.previous_changes)
+        .slice(*Claim::AMENDABLE_ATTRIBUTES + Claim::AMENDABLE_ELIGIBILITY_ATTRIBUTES)
         .reject { |_, values| values.all?(&:blank?) }
         .to_h
+
+      amendment.claim_changes = changes_hash
+
       raise ActiveRecord::Rollback unless amendment.save
     end
 

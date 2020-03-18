@@ -4,12 +4,12 @@
   position: relative;
   &__unit {
     position: absolute;
-    bottom: 8px;
-    left: 10px;
+    bottom: 7px;
+    left: 7px;
     @include govuk-font(19, bold);
   }
 
   &__input.govuk-input {
-    padding-left: 25px;
+    padding-left: 20px;
   }
 }

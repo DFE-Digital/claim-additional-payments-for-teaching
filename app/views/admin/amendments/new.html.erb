@@ -126,6 +126,30 @@
         </div>
       </div>
     </div>
+
+    <% if @amendment.claim.policy == StudentLoans %>
+      <%= claim_form.fields_for :eligibility, @amendment.claim.eligibility, include_id: false do |eligibility_form| %>
+        <div class="govuk-grid-row">
+          <div class="govuk-grid-column-one-third">
+            <%= form_group_tag(@amendment.claim.eligibility, :student_loan_repayment_amount) do %>
+              <%= eligibility_form.label :student_loan_repayment_amount, class: "govuk-label" %>
+              <%= errors_tag @amendment.claim.eligibility, :student_loan_repayment_amount %>
+            <% end %>
+          </div>
+          <div class="govuk-grid-column-two-thirds">
+            <div class="govuk-form-group">
+              <div class="govuk-currency-input">
+                <span class="govuk-currency-input__unit">&pound;</span>
+                <%= eligibility_form.text_field(
+                      :student_loan_repayment_amount,
+                      value: currency_value_for_number_field(eligibility_form.object.student_loan_repayment_amount),
+                      class: "govuk-input govuk-currency-input__input govuk-input--width-5") %>
+              </div>
+            </div>
+          </div>
+        </div>
+      <% end %>
+    <% end %>
   <% end %>
 
   <div class="govuk-grid-row">

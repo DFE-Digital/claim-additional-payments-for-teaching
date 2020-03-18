@@ -36,6 +36,7 @@ class Claim < ApplicationRecord
     bank_account_number
     building_society_roll_number
   ].freeze
+  AMENDABLE_ELIGIBILITY_ATTRIBUTES = %i[student_loan_repayment_amount].freeze
   FILTER_PARAMS = {
     address_line_1: true,
     address_line_2: true,
