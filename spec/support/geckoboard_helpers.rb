@@ -89,12 +89,12 @@ module GeckoboardHelpers
                         else
                           "ok"
                         end,
-        "check" => claim.decision.present? ? claim.decision.result : "unchecked",
-        "checked_at" => (claim.decision.present? ? claim.decision.created_at : DateTime.parse("1970-01-01")).strftime("%Y-%m-%dT%H:%M:%S%:z"),
-        "number_of_days_to_check" => claim.decision&.number_of_days_since_claim_submitted,
-        "award_amount" => claim.eligibility.present? ? (claim.award_amount * 100).to_i : nil,
+        "check" => claim.latest_decision.present? ? claim.latest_decision.result : "unchecked",
+        "checked_at" => (claim.latest_decision.present? ? claim.latest_decision.created_at : DateTime.parse("1970-01-01")).strftime("%Y-%m-%dT%H:%M:%S%:z"),
+        "number_of_days_to_check" => claim.latest_decision&.number_of_days_since_claim_submitted,
         "paid" => claim.scheduled_for_payment?.to_s,
-        "paid_at" => (claim.scheduled_for_payment? ? claim.scheduled_payment_date : DateTime.parse("1970-01-01")).strftime("%Y-%m-%dT%H:%M:%S%:z")
+        "paid_at" => (claim.scheduled_for_payment? ? claim.scheduled_payment_date : DateTime.parse("1970-01-01")).strftime("%Y-%m-%dT%H:%M:%S%:z"),
+        "award_amount" => claim.eligibility.present? ? (claim.award_amount * 100).to_i : nil
       }
     }.sort_by { |d| d["reference"] }
 

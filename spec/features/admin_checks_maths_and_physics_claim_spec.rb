@@ -44,8 +44,8 @@ RSpec.feature "Admin checking a Maths & Physics claim" do
     click_on "Confirm decision"
 
     expect(page).to have_content("Claim has been approved successfully")
-    expect(claim.decision).to be_approved
-    expect(claim.decision.created_by).to eq(user)
+    expect(claim.latest_decision).to be_approved
+    expect(claim.latest_decision.created_by).to eq(user)
   end
 
   scenario "service operator can check a claim with matching details" do
@@ -118,7 +118,7 @@ RSpec.feature "Admin checking a Maths & Physics claim" do
     click_on "Confirm decision"
 
     expect(page).to have_content("Claim has been approved successfully")
-    expect(claim.decision).to be_approved
-    expect(claim.decision.created_by).to eq(user)
+    expect(claim.latest_decision).to be_approved
+    expect(claim.latest_decision.created_by).to eq(user)
   end
 end

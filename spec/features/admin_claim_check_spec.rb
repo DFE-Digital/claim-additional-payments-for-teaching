@@ -26,8 +26,8 @@ RSpec.feature "Admin checks a claim" do
         fill_in "Decision notes", with: "Everything matches"
         perform_enqueued_jobs { click_on "Confirm decision" }
 
-        expect(claim_to_approve.decision.created_by).to eq(user)
-        expect(claim_to_approve.decision.notes).to eq("Everything matches")
+        expect(claim_to_approve.latest_decision.created_by).to eq(user)
+        expect(claim_to_approve.latest_decision.notes).to eq("Everything matches")
 
         expect(page).to have_content("Claim has been approved successfully")
         expect(page).to_not have_content(claim_to_approve.reference)
@@ -59,8 +59,8 @@ RSpec.feature "Admin checks a claim" do
       fill_in "Decision notes", with: "TRN doesn't exist"
       perform_enqueued_jobs { click_on "Confirm decision" }
 
-      expect(claim_to_reject.decision.created_by).to eq(user)
-      expect(claim_to_reject.decision.notes).to eq("TRN doesn't exist")
+      expect(claim_to_reject.latest_decision.created_by).to eq(user)
+      expect(claim_to_reject.latest_decision.notes).to eq("TRN doesn't exist")
 
       expect(page).to have_content("Claim has been rejected successfully")
       expect(page).to_not have_content(claim_to_reject.reference)
@@ -96,7 +96,7 @@ RSpec.feature "Admin checks a claim" do
       expect(page).not_to have_button("Confirm decision")
       expect(page).to have_content("Claim decision")
       expect(page).to have_content("Approved")
-      expect(page).to have_content(claim_with_decision.decision.notes)
+      expect(page).to have_content(claim_with_decision.latest_decision.notes)
       expect(page).to have_content("Created by")
       expect(page).to have_content(user.full_name)
     end

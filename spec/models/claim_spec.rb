@@ -506,14 +506,14 @@ RSpec.describe Claim, type: :model do
       create(:decision, result: "approved", claim: claim, created_at: 7.days.ago)
       create(:decision, result: "rejected", claim: claim, created_at: DateTime.now)
 
-      expect(claim.decision.result).to eq "rejected"
+      expect(claim.latest_decision.result).to eq "rejected"
     end
 
     it "returns only decisions which haven't been undone" do
       claim = create(:claim, :submitted)
       create(:decision, :undone, result: "rejected", claim: claim)
 
-      expect(claim.decision).to be_nil
+      expect(claim.latest_decision).to be_nil
     end
   end
 

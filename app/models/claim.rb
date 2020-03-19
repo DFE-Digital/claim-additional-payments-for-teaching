@@ -195,12 +195,12 @@ class Claim < ApplicationRecord
     submitted? && !payroll_gender_missing? && !decision_made? && !payment_prevented_by_other_claims?
   end
 
-  def decision
-    decisions.where(undone: false).last
+  def latest_decision
+    decisions.active.last
   end
 
   def decision_made?
-    decision.present? && decision.persisted?
+    latest_decision.present? && latest_decision.persisted?
   end
 
   def payroll_gender_missing?

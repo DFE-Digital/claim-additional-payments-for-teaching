@@ -21,7 +21,7 @@ RSpec.feature "Admin checking a claim without a verified identity" do
     fill_in "Decision notes", with: "Identity confirmed via phone call"
     click_on "Confirm decision"
 
-    expect(claim_without_identity_confirmation.decision.created_by).to eq(user)
-    expect(claim_without_identity_confirmation.decision.notes).to eq("Identity confirmed via phone call")
+    expect(claim_without_identity_confirmation.latest_decision.created_by).to eq(user)
+    expect(claim_without_identity_confirmation.latest_decision.notes).to eq("Identity confirmed via phone call")
   end
 end
