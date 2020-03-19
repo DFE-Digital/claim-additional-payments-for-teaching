@@ -459,6 +459,18 @@ RSpec.describe Claim, type: :model do
     end
   end
 
+  describe ".awaiting_task" do
+    let!(:claim_with_employment_task) { create(:claim, :submitted, tasks: [build(:task, name: "employment")]) }
+    let!(:claim_with_qualification_task) { create(:claim, :submitted, tasks: [build(:task, name: "qualifications")]) }
+    let!(:claim_with_no_tasks) { create(:claim, :submitted, tasks: []) }
+    let!(:claim_with_decision) { create(:claim, :approved, tasks: [build(:task, name: "employment")]) }
+
+    it "returns claims without a decision and without a given task" do
+      expect(Claim.awaiting_task("qualifications")).to match_array([claim_with_employment_task, claim_with_no_tasks])
+      expect(Claim.awaiting_task("employment")).to match_array([claim_with_qualification_task, claim_with_no_tasks])
+    end
+  end
+
   describe "#submittable?" do
     it "returns true when the claim is valid and has not been submitted" do
       claim = build(:claim, :submittable)

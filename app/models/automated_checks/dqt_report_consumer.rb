@@ -17,15 +17,15 @@ module AutomatedChecks
     def ingest
       return if errors.any?
 
+      claims = Claim.awaiting_task("qualifications")
       csv.rows.each do |row|
-        claim = Claim.awaiting_decision.find_by(reference: row["dfeta text2"])
-        next if row["dfeta qtsdate"].blank? || claim.nil?
+        reference = row.fetch("dfeta text2")
+        qts_date = row.fetch("dfeta qtsdate")
+        claim = claims.detect { |c| c.reference == reference }
+        next if qts_date.blank? || claim.nil?
         if claim.policy::DQTRecord.new(row.to_h).eligible? && row_matches_claim?(row, claim)
-          task = claim.tasks.build(task_attributes)
-          task.save!
+          claim.tasks.create!(task_attributes)
         end
-      rescue ActiveRecord::RecordInvalid
-        next
       end
     end
 
