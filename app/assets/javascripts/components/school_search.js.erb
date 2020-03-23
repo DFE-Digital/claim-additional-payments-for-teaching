@@ -1,6 +1,6 @@
 "use strict";
 
-document.addEventListener("DOMContentLoaded", function() {
+document.addEventListener("DOMContentLoaded", function () {
   var form = document.querySelector("form.school_search_form");
 
   if (!form) {
@@ -44,7 +44,7 @@ document.addEventListener("DOMContentLoaded", function() {
   var schools = [];
 
   function getSchoolIds() {
-    return schools.map(function(school) {
+    return schools.map(function (school) {
       return school.id;
     });
   }
@@ -63,7 +63,7 @@ document.addEventListener("DOMContentLoaded", function() {
     element: searchInputContainer,
     id: "school_search",
     name: "school_search",
-    source: function(query, populateResults) {
+    source: function (query, populateResults) {
       function handleResponse(response) {
         schools = response.data || [];
 
@@ -82,11 +82,11 @@ document.addEventListener("DOMContentLoaded", function() {
     showNoOptionsFound: false,
     confirmOnBlur: false,
     templates: {
-      inputValue: function(id) {
+      inputValue: function (id) {
         var school = findSchool(id);
         if (school) return school.name;
       },
-      suggestion: function(id) {
+      suggestion: function (id) {
         var school = findSchool(id);
 
         var suggestion =
@@ -114,7 +114,7 @@ document.addEventListener("DOMContentLoaded", function() {
         return suggestion;
       }
     },
-    onConfirm: function(id) {
+    onConfirm: function (id) {
       var school = findSchool(id);
 
       if (!school) {
@@ -137,7 +137,7 @@ document.addEventListener("DOMContentLoaded", function() {
   var newSearchInput = form.querySelector('input[name="school_search"]');
 
   newSearchInput.value = searchValue;
-  newSearchInput.addEventListener("input", function() {
+  newSearchInput.addEventListener("input", function () {
     resetForm();
   });
 

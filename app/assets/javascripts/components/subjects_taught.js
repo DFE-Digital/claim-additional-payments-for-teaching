@@ -1,6 +1,6 @@
 "use strict";
 
-document.addEventListener("DOMContentLoaded", function() {
+document.addEventListener("DOMContentLoaded", function () {
   var fieldset = document.querySelector("#claim_subjects_taught");
 
   if (!fieldset) {
@@ -25,7 +25,7 @@ document.addEventListener("DOMContentLoaded", function() {
       radioButton.checked = false;
     } else if (el.name == notTeachingSubjectsName) {
       var checkboxes = document.querySelectorAll("input." + eligibleSubjectsClass);
-      checkboxes.forEach(function(item, _index) {
+      checkboxes.forEach(function (item, _index) {
         item.checked = false;
       });
     }

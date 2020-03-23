@@ -1,6 +1,6 @@
 "use strict";
 
-(function() {
+(function () {
   var dialogElement = document.getElementById("timeout_dialog");
 
   if (!dialogElement) return;
@@ -13,11 +13,11 @@
   var timeoutPath = dialogElement.getAttribute("data-timeout-path");
   var dialog = new window.A11yDialog(dialogElement);
 
-  continueButtonElement.onclick = function() {
+  continueButtonElement.onclick = function () {
     dialog.hide();
   };
 
-  dialog.on("hide", function() {
+  dialog.on("hide", function () {
     dialogElement.setAttribute("aria-hidden", "true");
     refreshSession();
   });
@@ -26,7 +26,7 @@
     Rails.ajax({
       url: refreshSessionPath,
       type: "get",
-      success: function() {
+      success: function () {
         clearInterval(window.sessionTimeoutTimer);
         clearTimeout(window.sessionTimeout);
         window.sessionTimeoutTimer = setInterval(showTimeoutDialog, timeoutInMilliseconds);
