@@ -1,6 +1,6 @@
 "use strict";
 
-(function() {
+(function () {
   window.TeacherPayments = window.TeacherPayments || {};
   window.TeacherPayments.cookies = window.TeacherPayments.cookies || {};
   window.TeacherPayments.cookies.postNonEssentialCookieAcceptanceFunctions =
@@ -13,7 +13,7 @@
     ga("send", "pageview", { anonymizeIp: true });
   }
 
-  document.addEventListener("DOMContentLoaded", function() {
+  document.addEventListener("DOMContentLoaded", function () {
     if (window.TeacherPayments.cookies.checkNonEssentialCookiesAccepted()) {
       trackPageView();
     } else {

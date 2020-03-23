@@ -1,6 +1,6 @@
 "use strict";
 
-(function() {
+(function () {
   window.TeacherPayments = window.TeacherPayments || {};
   window.TeacherPayments.cookies = window.TeacherPayments.cookies || {};
   window.TeacherPayments.cookies.postNonEssentialCookieAcceptanceFunctions =

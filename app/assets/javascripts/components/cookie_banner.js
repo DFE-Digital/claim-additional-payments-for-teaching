@@ -1,6 +1,6 @@
 "use strict";
 
-document.addEventListener("DOMContentLoaded", function() {
+document.addEventListener("DOMContentLoaded", function () {
   var cookieBanner = document.querySelector("#global-cookie-message");
   var acceptButton = document.querySelector("#accept-cookies");
 
@@ -8,7 +8,7 @@ document.addEventListener("DOMContentLoaded", function() {
     cookieBanner.classList.add("govuk-cookie-banner--visible");
   }
 
-  acceptButton.onclick = function() {
+  acceptButton.onclick = function () {
     window.TeacherPayments.cookies.acceptNonEssentialCookies();
     cookieBanner.classList.remove("govuk-cookie-banner--visible");
   };
