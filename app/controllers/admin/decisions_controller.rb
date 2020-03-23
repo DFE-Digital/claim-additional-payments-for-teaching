@@ -17,7 +17,7 @@ class Admin::DecisionsController < Admin::BaseAdminController
     if @decision.save
       send_claim_result_email
       RecordOrUpdateGeckoboardDatasetJob.perform_later([@claim.id])
-      redirect_to admin_claims_path, notice: "Claim has been #{@claim.decision.result} successfully"
+      redirect_to admin_claims_path, notice: "Claim has been #{@claim.latest_decision.result} successfully"
     else
       @claims_preventing_payment = claims_preventing_payment_finder.claims_preventing_payment
       render "new"
@@ -36,7 +36,7 @@ class Admin::DecisionsController < Admin::BaseAdminController
   end
 
   def reject_decided_claims
-    if @claim.decision.present?
+    if @claim.latest_decision.present?
       redirect_to admin_claim_path(@claim), notice: "Claim outcome already decided"
     end
   end
@@ -54,8 +54,8 @@ class Admin::DecisionsController < Admin::BaseAdminController
   end
 
   def send_claim_result_email
-    ClaimMailer.approved(@claim).deliver_later if @claim.decision.result == "approved"
-    ClaimMailer.rejected(@claim).deliver_later if @claim.decision.result == "rejected"
+    ClaimMailer.approved(@claim).deliver_later if @claim.latest_decision.result == "approved"
+    ClaimMailer.rejected(@claim).deliver_later if @claim.latest_decision.result == "rejected"
   end
 
   def decision_params

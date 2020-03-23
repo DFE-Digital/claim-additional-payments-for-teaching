@@ -162,9 +162,9 @@ class Claim < ApplicationRecord
 
   scope :unsubmitted, -> { where(submitted_at: nil) }
   scope :submitted, -> { where.not(submitted_at: nil) }
-  scope :awaiting_decision, -> { submitted.left_outer_joins(:decisions).where(decisions: {claim_id: nil}) }
-  scope :approved, -> { joins(:decisions).where("decisions.result" => :approved) }
-  scope :rejected, -> { joins(:decisions).where("decisions.result" => :rejected) }
+  scope :awaiting_decision, -> { submitted.joins("LEFT OUTER JOIN decisions ON decisions.claim_id = claims.id AND decisions.undone = false").where(decisions: {claim_id: nil}) }
+  scope :approved, -> { joins(:decisions).merge(Decision.active.approved) }
+  scope :rejected, -> { joins(:decisions).merge(Decision.active.rejected) }
   scope :approaching_decision_deadline, -> { awaiting_decision.where("submitted_at < ? AND submitted_at > ?", DECISION_DEADLINE.ago + DECISION_DEADLINE_WARNING_POINT, DECISION_DEADLINE.ago) }
   scope :passed_decision_deadline, -> { awaiting_decision.where("submitted_at < ?", DECISION_DEADLINE.ago) }
   scope :payrollable, -> { approved.where(payment: nil) }
@@ -195,12 +195,12 @@ class Claim < ApplicationRecord
     submitted? && !payroll_gender_missing? && !decision_made? && !payment_prevented_by_other_claims?
   end
 
-  def decision
-    decisions.last
+  def latest_decision
+    decisions.active.last
   end
 
   def decision_made?
-    decision&.persisted?
+    latest_decision.present? && latest_decision.persisted?
   end
 
   def payroll_gender_missing?
@@ -257,6 +257,14 @@ class Claim < ApplicationRecord
     personal_data_removed_at.present?
   end
 
+  def payrolled?
+    payment.present?
+  end
+
+  def scheduled_for_payment?
+    scheduled_payment_date.present?
+  end
+
   def full_name
     [first_name, middle_name, surname].compact.join(" ")
   end
@@ -281,7 +289,11 @@ class Claim < ApplicationRecord
   end
 
   def amendable?
-    submitted? && !decision&.rejected? && !payment && !personal_data_removed?
+    submitted? && !decision_made? && !payrolled? && !personal_data_removed?
+  end
+
+  def decision_undoable?
+    decision_made? && !payrolled? && !personal_data_removed?
   end
 
   private

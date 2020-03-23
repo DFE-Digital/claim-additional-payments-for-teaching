@@ -69,8 +69,8 @@ RSpec.describe "Admin decisions", type: :request do
 
         expect(response.body).to include("Claim has been approved successfully")
 
-        expect(claim.decision.created_by).to eq(user)
-        expect(claim.decision.result).to eq("approved")
+        expect(claim.latest_decision.created_by).to eq(user)
+        expect(claim.latest_decision.result).to eq("approved")
       end
 
       it "can reject a claim" do
@@ -80,8 +80,8 @@ RSpec.describe "Admin decisions", type: :request do
 
         expect(response.body).to include("Claim has been rejected successfully")
 
-        expect(claim.decision.created_by).to eq(user)
-        expect(claim.decision.result).to eq("rejected")
+        expect(claim.latest_decision.created_by).to eq(user)
+        expect(claim.latest_decision.result).to eq("rejected")
       end
 
       it "updates the claim dataset on Geckoboard" do
@@ -97,7 +97,7 @@ RSpec.describe "Admin decisions", type: :request do
           post admin_claim_decisions_path(claim_id: claim.id, decision: {notes: "Something"})
 
           expect(response.body).to include("Make a decision to approve or reject the claim")
-          expect(claim.reload.decision).to be_nil
+          expect(claim.reload.latest_decision).to be_nil
         end
       end
 

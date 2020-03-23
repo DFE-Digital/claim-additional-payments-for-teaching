@@ -35,9 +35,9 @@
             <span class="app-task-list__task-name">
               <%= link_to "Approve or reject this claim", new_admin_claim_decision_path(@claim), class: "govuk-link" %>
             </span>
-            <% if @claim.decision&.approved? %>
+            <% if @claim.latest_decision&.approved? %>
               <strong class="govuk-tag app-task-list__task-completed">Approved</strong>
-            <% elsif @claim.decision&.rejected? %>
+            <% elsif @claim.latest_decision&.rejected? %>
               <strong class="govuk-tag app-task-list__task-completed govuk-tag--alert">Rejected</strong>
             <% end %>
           </li>

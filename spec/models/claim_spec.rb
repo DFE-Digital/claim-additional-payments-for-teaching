@@ -416,35 +416,46 @@ RSpec.describe Claim, type: :model do
     end
   end
 
-  describe "awaiting_decision" do
-    let!(:submitted_claims) { create_list(:claim, 5, :submitted) }
-    let!(:unsubmitted_claims) { create_list(:claim, 2, :submittable) }
-    let!(:approved_claims) { create_list(:claim, 5, :approved) }
-
-    it "returns submitted claims awaiting a decision" do
-      expect(Claim.awaiting_decision).to match_array(submitted_claims)
-    end
-  end
-
-  describe "approved" do
+  describe "scopes" do
     let!(:submitted_claims) { create_list(:claim, 5, :submitted) }
     let!(:unsubmitted_claims) { create_list(:claim, 2, :submittable) }
     let!(:approved_claims) { create_list(:claim, 5, :approved) }
     let!(:rejected_claims) { create_list(:claim, 5, :rejected) }
 
-    it "returns approved claims" do
-      expect(Claim.approved).to match_array(approved_claims)
+    let!(:approved_then_rejected_claim) { create(:claim, :submitted) }
+    let!(:rejected_then_approved_claim) { create(:claim, :submitted) }
+    let!(:approved_then_decision_undone_claim) { create(:claim, :submitted) }
+    let!(:rejected_then_decision_undone_claim) { create(:claim, :submitted) }
+
+    # TODO: This doesn't feel great, but works - is this the best way?
+    before do
+      create(:decision, :approved, :undone, claim: approved_then_rejected_claim)
+      create(:decision, :rejected, claim: approved_then_rejected_claim)
+
+      create(:decision, :rejected, :undone, claim: rejected_then_approved_claim)
+      create(:decision, :approved, claim: rejected_then_approved_claim)
+
+      create(:decision, :approved, :undone, claim: approved_then_decision_undone_claim)
+
+      create(:decision, :rejected, :undone, claim: rejected_then_decision_undone_claim)
     end
-  end
 
-  describe "rejected" do
-    let!(:submitted_claims) { create_list(:claim, 5, :submitted) }
-    let!(:unsubmitted_claims) { create_list(:claim, 2, :submittable) }
-    let!(:approved_claims) { create_list(:claim, 5, :approved) }
-    let!(:rejected_claims) { create_list(:claim, 5, :rejected) }
+    describe "awaiting_decision" do
+      it "returns submitted claims awaiting a decision" do
+        expect(Claim.awaiting_decision).to match_array(submitted_claims + [approved_then_decision_undone_claim] + [rejected_then_decision_undone_claim])
+      end
+    end
 
-    it "returns rejected claims" do
-      expect(Claim.rejected).to match_array(rejected_claims)
+    describe "approved" do
+      it "returns approved claims" do
+        expect(Claim.approved).to match_array(approved_claims + [rejected_then_approved_claim])
+      end
+    end
+
+    describe "rejected" do
+      it "returns rejected claims" do
+        expect(Claim.rejected).to match_array(rejected_claims + [approved_then_rejected_claim])
+      end
     end
   end
 
@@ -491,11 +502,18 @@ RSpec.describe Claim, type: :model do
 
   describe "#decision" do
     it "returns the latest decision on a claim" do
-      claim = build(:claim, :submitted)
-      claim.decisions.append(build(:decision, result: "approved", created_at: 7.days.ago))
-      claim.decisions.append(build(:decision, result: "rejected", created_at: DateTime.now))
+      claim = create(:claim, :submitted)
+      create(:decision, result: "approved", claim: claim, created_at: 7.days.ago)
+      create(:decision, result: "rejected", claim: claim, created_at: DateTime.now)
 
-      expect(claim.decision.result).to eq "rejected"
+      expect(claim.latest_decision.result).to eq "rejected"
+    end
+
+    it "returns only decisions which haven't been undone" do
+      claim = create(:claim, :submitted)
+      create(:decision, :undone, result: "rejected", claim: claim)
+
+      expect(claim.latest_decision).to be_nil
     end
   end
 
@@ -552,6 +570,56 @@ RSpec.describe Claim, type: :model do
     it "returns true if payroll_gender is in the list of GOV.UK Verify fields" do
       expect(Claim.new(govuk_verify_fields: ["payroll_gender"]).payroll_gender_verified?).to eq true
       expect(Claim.new(govuk_verify_fields: ["address_line_1"]).payroll_gender_verified?).to eq false
+    end
+  end
+
+  describe "#personal_data_removed?" do
+    it "returns false if a claim has not had its personal data removed" do
+      claim = create(:claim, :approved)
+      expect(claim.personal_data_removed?).to eq false
+    end
+
+    it "returns true if a claim has the time personal data was removed recorded" do
+      claim = create(:claim, :approved, personal_data_removed_at: Time.zone.now)
+      expect(claim.personal_data_removed?).to eq true
+    end
+  end
+
+  describe "#payrolled?" do
+    it "returns false if a claim has not been added to payroll" do
+      claim = create(:claim, :approved)
+      expect(claim.payrolled?).to eq false
+    end
+
+    it "returns true if a claim has been added to payroll but is not yet paid" do
+      claim = create(:claim, :approved)
+      create(:payment, claims: [claim])
+      expect(claim.payrolled?).to eq true
+    end
+
+    it "returns true if a claim has been scheduled for payment" do
+      claim = create(:claim, :approved)
+      create(:payment, :with_figures, claims: [claim])
+      expect(claim.payrolled?).to eq true
+    end
+  end
+
+  describe "#scheduled_for_payment?" do
+    it "returns false if a claim has not been added to payroll" do
+      claim = create(:claim, :approved)
+      expect(claim.scheduled_for_payment?).to eq false
+    end
+
+    it "returns false if a claim has been added to payroll but is not yet paid" do
+      claim = create(:claim, :approved)
+      create(:payment, claims: [claim])
+      expect(claim.scheduled_for_payment?).to eq false
+    end
+
+    it "returns true if a claim has been scheduled for payment" do
+      claim = create(:claim, :approved)
+      create(:payment, :with_figures, claims: [claim])
+      expect(claim.scheduled_for_payment?).to eq true
     end
   end
 
@@ -695,9 +763,9 @@ RSpec.describe Claim, type: :model do
       expect(claim.amendable?).to eq(true)
     end
 
-    it "returns true for an approved claim that isn’t payrolled" do
-      claim = build(:claim, :approved)
-      expect(claim.amendable?).to eq(true)
+    it "returns false for an approved claim" do
+      claim = create(:claim, :approved)
+      expect(claim.amendable?).to eq(false)
     end
 
     it "returns false for a payrolled claim" do
@@ -708,13 +776,95 @@ RSpec.describe Claim, type: :model do
     end
 
     it "returns false for a rejected claim" do
-      claim = build(:claim, :rejected)
+      claim = create(:claim, :rejected)
       expect(claim.amendable?).to eq(false)
     end
 
     it "returns false for a claim that’s had its personal data removed" do
       claim = build(:claim, :personal_data_removed)
       expect(claim.amendable?).to eq(false)
+    end
+  end
+
+  describe "#decision_made?" do
+    it "returns false for a claim that hasn’t been submitted" do
+      claim = create(:claim, :submittable)
+      expect(claim.decision_made?).to eq(false)
+    end
+
+    it "returns false for a claim that has been submitted but not decided" do
+      claim = create(:claim, :submitted)
+      expect(claim.decision_made?).to eq(false)
+    end
+
+    it "returns true for a claim that has been approved" do
+      claim = create(:claim, :approved)
+      expect(claim.decision_made?).to eq(true)
+    end
+
+    it "returns true for a claim that has been rejected" do
+      claim = create(:claim, :rejected)
+      expect(claim.decision_made?).to eq(true)
+    end
+
+    it "returns true for a claim that had a decison made, undone, then been approved" do
+      claim = create(:claim, :submitted)
+      create(:decision, :undone, result: "rejected", claim: claim)
+      create(:decision, result: "approved", claim: claim)
+      expect(claim.decision_made?).to eq(true)
+    end
+
+    it "returns true for a claim that had a decison made, undone, then been rejected" do
+      claim = create(:claim, :submitted)
+      create(:decision, :undone, result: "approved", claim: claim)
+      create(:decision, result: "rejected", claim: claim)
+      expect(claim.decision_made?).to eq(true)
+    end
+
+    it "returns false for a claim that had a decison made, then undone" do
+      claim = create(:claim, :submitted)
+      create(:decision, :undone, result: "approved", claim: claim)
+      expect(claim.decision_made?).to eq(false)
+    end
+  end
+
+  describe "#decision_undoable?" do
+    it "returns false for a claim that hasn’t been submitted" do
+      claim = create(:claim, :submittable)
+      expect(claim.decision_undoable?).to eq(false)
+    end
+
+    it "returns false for a submitted but undecided claim" do
+      claim = create(:claim, :submitted)
+      expect(claim.decision_undoable?).to eq(false)
+    end
+
+    it "returns true for a rejected claim" do
+      claim = create(:claim, :rejected)
+      expect(claim.decision_undoable?).to eq(true)
+    end
+
+    it "returns false for a claim that had a decison made, then undone" do
+      claim = create(:claim, :submitted)
+      create(:decision, :undone, result: "approved", claim: claim)
+      expect(claim.decision_made?).to eq(false)
+    end
+
+    it "returns true for an approved claim that isn’t payrolled" do
+      claim = create(:claim, :approved)
+      expect(claim.decision_undoable?).to eq(true)
+    end
+
+    it "returns false for a payrolled claim" do
+      claim = create(:claim, :approved)
+      create(:payment, claims: [claim])
+
+      expect(claim.decision_undoable?).to eq(false)
+    end
+
+    it "returns false for a claim that’s had its personal data removed" do
+      claim = create(:claim, :personal_data_removed)
+      expect(claim.decision_undoable?).to eq(false)
     end
   end
 end
