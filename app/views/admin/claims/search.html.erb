@@ -10,7 +10,7 @@
     <%= form_with url: search_admin_claims_path, method: :get do |form| %>
       <div class="govuk-form-group">
         <%= form.label :query, "Enter a reference, email address, Teacher Reference Number, or surname", class: "govuk-label" %>
-        <%= form.text_field :query, class: "govuk-input" %>
+        <%= form.text_field :query, class: "govuk-input govuk-input--width-20" %>
       </div>
 
       <div class="govuk-form-group">
