@@ -183,7 +183,8 @@
         "httpsOnly": true,
         "siteConfig": {
           "alwaysOn": "[parameters('appServiceAlwaysOn')]",
-          "appSettings": "[parameters('appServiceEnvironmentVariables')]"
+          "appSettings": "[parameters('appServiceEnvironmentVariables')]",
+          "healthCheckPath": "/healthcheck"
         }
       }
     },
