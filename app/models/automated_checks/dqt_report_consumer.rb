@@ -7,11 +7,12 @@ module AutomatedChecks
   # The records will be used to determine if a claimant's qualifications
   # make them eligible for a specific policy.
   class DQTReportConsumer
-    attr_reader :csv
+    attr_reader :csv, :completed_tasks, :total_records
 
     def initialize(file, admin_user)
       @csv = DQTReportCsv.new(file)
       @admin_user = admin_user
+      @completed_tasks = 0
     end
 
     def ingest
@@ -25,8 +26,10 @@ module AutomatedChecks
         next if qts_date.blank? || claim.nil?
         if claim.policy::DQTRecord.new(row.to_h).eligible? && row_matches_claim?(row, claim)
           claim.tasks.create!(task_attributes)
+          @completed_tasks += 1
         end
       end
+      @total_records = csv.rows.count
     end
 
     def errors

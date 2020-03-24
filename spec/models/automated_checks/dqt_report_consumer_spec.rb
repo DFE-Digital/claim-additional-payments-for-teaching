@@ -17,6 +17,8 @@ RSpec.describe AutomatedChecks::DQTReportConsumer do
       dqt_report_consumer.ingest
 
       new_qualication_task = eligible_claim_with_matching_data.tasks.find_by!(name: "qualifications")
+      expect(dqt_report_consumer.completed_tasks).to eq(1)
+      expect(dqt_report_consumer.total_records).to eq(6)
       expect(new_qualication_task.passed).to eq(true)
       expect(new_qualication_task.manual).to eq(false)
       expect(new_qualication_task.created_by).to eq(admin_user)
