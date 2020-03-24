@@ -1,6 +1,7 @@
 module Admin
   module PresenterMethods
     include ActionView::Helpers::UrlHelper
+    include ActionView::Helpers::TranslationHelper
 
     def display_school(school)
       html = [

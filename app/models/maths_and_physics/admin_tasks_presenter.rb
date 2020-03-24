@@ -20,7 +20,7 @@ module MathsAndPhysics
 
     def employment
       [
-        [I18n.t("admin.current_school"), display_school(eligibility.current_school)]
+        [translate("admin.current_school"), display_school(eligibility.current_school)]
       ]
     end
 

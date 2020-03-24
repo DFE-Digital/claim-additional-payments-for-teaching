@@ -20,36 +20,36 @@ module Admin
 
     def admin_personal_details(claim)
       [
-        [t("admin.teacher_reference_number"), claim.teacher_reference_number],
-        [t("govuk_verify_fields.full_name").capitalize, claim.personal_data_removed? ? personal_data_removed_text : claim.full_name],
-        [t("govuk_verify_fields.date_of_birth").capitalize, claim.personal_data_removed? ? personal_data_removed_text : l(claim.date_of_birth, format: :day_month_year)],
-        [t("admin.national_insurance_number"), claim.personal_data_removed? ? personal_data_removed_text : claim.national_insurance_number],
-        [t("govuk_verify_fields.address").capitalize, claim.personal_data_removed? ? personal_data_removed_text : sanitize(claim.address("<br>").html_safe, tags: %w[br])],
-        [t("admin.email_address"), claim.email_address]
+        [translate("admin.teacher_reference_number"), claim.teacher_reference_number],
+        [translate("govuk_verify_fields.full_name").capitalize, claim.personal_data_removed? ? personal_data_removed_text : claim.full_name],
+        [translate("govuk_verify_fields.date_of_birth").capitalize, claim.personal_data_removed? ? personal_data_removed_text : l(claim.date_of_birth, format: :day_month_year)],
+        [translate("admin.national_insurance_number"), claim.personal_data_removed? ? personal_data_removed_text : claim.national_insurance_number],
+        [translate("govuk_verify_fields.address").capitalize, claim.personal_data_removed? ? personal_data_removed_text : sanitize(claim.address("<br>").html_safe, tags: %w[br])],
+        [translate("admin.email_address"), claim.email_address]
       ]
     end
 
     def admin_student_loan_details(claim)
       [].tap do |a|
-        a << [t("student_loans.admin.student_loan_repayment_amount"), number_to_currency(claim.eligibility.student_loan_repayment_amount)] if claim.eligibility.respond_to?(:student_loan_repayment_amount)
-        a << [t("student_loans.admin.student_loan_repayment_plan"), claim.student_loan_plan&.humanize]
+        a << [translate("student_loans.admin.student_loan_repayment_amount"), number_to_currency(claim.eligibility.student_loan_repayment_amount)] if claim.eligibility.respond_to?(:student_loan_repayment_amount)
+        a << [translate("student_loans.admin.student_loan_repayment_plan"), claim.student_loan_plan&.humanize]
       end
     end
 
     def admin_submission_details(claim)
       [
-        [t("admin.started_at"), l(claim.created_at)],
-        [t("admin.submitted_at"), l(claim.submitted_at)],
-        [t("admin.decision_deadline"), [l(claim.decision_deadline_date), decision_deadline_warning(claim)].compact.join.html_safe]
+        [translate("admin.started_at"), l(claim.created_at)],
+        [translate("admin.submitted_at"), l(claim.submitted_at)],
+        [translate("admin.decision_deadline"), [l(claim.decision_deadline_date), decision_deadline_warning(claim)].compact.join.html_safe]
       ]
     end
 
     def admin_decision_details(decision)
       [].tap do |a|
-        a << [t("admin.decision.created_at"), l(decision.created_at)]
-        a << [t("admin.decision.result"), decision.result.capitalize]
-        a << [t("admin.decision.notes"), simple_format(decision.notes, class: "govuk-body")] if decision.notes.present?
-        a << [t("admin.decision.created_by"), user_details(decision.created_by)]
+        a << [translate("admin.decision.created_at"), l(decision.created_at)]
+        a << [translate("admin.decision.result"), decision.result.capitalize]
+        a << [translate("admin.decision.notes"), simple_format(decision.notes, class: "govuk-body")] if decision.notes.present?
+        a << [translate("admin.decision.created_by"), user_details(decision.created_by)]
       end
     end
 

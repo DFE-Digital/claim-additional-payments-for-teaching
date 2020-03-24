@@ -20,7 +20,7 @@ module StudentLoans
     def employment
       [
         ["6 April 2018 to 5 April 2019", display_school(eligibility.claim_school)],
-        [I18n.t("admin.current_school"), display_school(eligibility.current_school)]
+        [translate("admin.current_school"), display_school(eligibility.current_school)]
       ]
     end
 
