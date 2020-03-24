@@ -9,7 +9,7 @@ RSpec.describe "Admin qualification report upload" do
   describe "qualification_report_upload#new" do
     it "shows the upload form" do
       get new_admin_qualification_report_upload_path
-      expect(response.body).to include("Upload DQT report")
+      expect(response.body).to include("Choose and upload DQT report")
     end
   end
 
