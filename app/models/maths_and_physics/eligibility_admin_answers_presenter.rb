@@ -36,77 +36,77 @@ module MathsAndPhysics
 
     def teaching_maths_or_physics
       [
-        I18n.t("maths_and_physics.admin.teaching_maths_or_physics"),
+        translate("maths_and_physics.admin.teaching_maths_or_physics"),
         (eligibility.teaching_maths_or_physics? ? "Yes" : "No")
       ]
     end
 
     def current_school
       [
-        I18n.t("admin.current_school"),
+        translate("admin.current_school"),
         display_school(eligibility.current_school)
       ]
     end
 
     def initial_teacher_training_subject
       [
-        I18n.t("maths_and_physics.admin.initial_teacher_training_subject"),
-        I18n.t("maths_and_physics.answers.initial_teacher_training_subject.#{eligibility.initial_teacher_training_subject}")
+        translate("maths_and_physics.admin.initial_teacher_training_subject"),
+        translate("maths_and_physics.answers.initial_teacher_training_subject.#{eligibility.initial_teacher_training_subject}")
       ]
     end
 
     def initial_teacher_training_subject_specialism
       [
-        I18n.t("maths_and_physics.admin.initial_teacher_training_subject_specialism"),
-        I18n.t("maths_and_physics.answers.initial_teacher_training_subject_specialism.#{eligibility.initial_teacher_training_subject_specialism}")
+        translate("maths_and_physics.admin.initial_teacher_training_subject_specialism"),
+        translate("maths_and_physics.answers.initial_teacher_training_subject_specialism.#{eligibility.initial_teacher_training_subject_specialism}")
       ]
     end
 
     def has_uk_maths_or_physics_degree
       [
-        I18n.t("maths_and_physics.admin.has_uk_maths_or_physics_degree"),
+        translate("maths_and_physics.admin.has_uk_maths_or_physics_degree"),
         degree_answer
       ]
     end
 
     def qts_award_year
       [
-        I18n.t("admin.qts_award_year"),
+        translate("admin.qts_award_year"),
         eligibility.qts_award_year_answer
       ]
     end
 
     def employed_as_supply_teacher
       [
-        I18n.t("maths_and_physics.admin.employed_as_supply_teacher"),
+        translate("maths_and_physics.admin.employed_as_supply_teacher"),
         (eligibility.employed_as_supply_teacher? ? "Yes" : "No")
       ]
     end
 
     def has_entire_term_contract
       [
-        I18n.t("maths_and_physics.admin.has_entire_term_contract"),
+        translate("maths_and_physics.admin.has_entire_term_contract"),
         (eligibility.has_entire_term_contract? ? "Yes" : "No")
       ]
     end
 
     def employed_directly
       [
-        I18n.t("maths_and_physics.admin.employed_directly"),
-        I18n.t("maths_and_physics.answers.employed_directly.#{eligibility.employed_directly? ? "yes" : "no"}")
+        translate("maths_and_physics.admin.employed_directly"),
+        translate("maths_and_physics.answers.employed_directly.#{eligibility.employed_directly? ? "yes" : "no"}")
       ]
     end
 
     def disciplinary_action
       [
-        I18n.t("maths_and_physics.admin.disciplinary_action"),
+        translate("maths_and_physics.admin.disciplinary_action"),
         (eligibility.subject_to_disciplinary_action? ? "Yes" : "No")
       ]
     end
 
     def formal_performance_action
       [
-        I18n.t("maths_and_physics.admin.formal_performance_action"),
+        translate("maths_and_physics.admin.formal_performance_action"),
         (eligibility.subject_to_formal_performance_action? ? "Yes" : "No")
       ]
     end
@@ -115,7 +115,7 @@ module MathsAndPhysics
       case eligibility.has_uk_maths_or_physics_degree
       when "yes" then "Yes"
       when "no" then "No"
-      else I18n.t("maths_and_physics.answers.has_uk_maths_or_physics_degree.#{eligibility.has_uk_maths_or_physics_degree}")
+      else translate("maths_and_physics.answers.has_uk_maths_or_physics_degree.#{eligibility.has_uk_maths_or_physics_degree}")
       end
     end
   end

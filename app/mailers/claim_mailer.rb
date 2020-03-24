@@ -34,7 +34,7 @@ class ClaimMailer < ApplicationMailer
 
   def set_common_instance_variables(claim)
     @claim = claim
-    @claim_description = I18n.t("#{@claim.policy.locale_key}.claim_description")
+    @claim_description = translate("#{@claim.policy.locale_key}.claim_description")
     @display_name = [@claim.first_name, @claim.surname].join(" ")
     @policy = @claim.policy
   end

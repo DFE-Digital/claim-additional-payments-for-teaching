@@ -28,7 +28,7 @@ module ApplicationHelper
   end
 
   def policy_description(policy)
-    I18n.t("#{policy.underscore}.claim_description")
+    translate("#{policy.underscore}.claim_description")
   end
 
   def feedback_url

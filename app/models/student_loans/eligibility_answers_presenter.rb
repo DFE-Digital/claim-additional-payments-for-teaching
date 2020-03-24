@@ -35,7 +35,7 @@ module StudentLoans
 
     def qts_award_year
       [
-        I18n.t("questions.qts_award_year"),
+        translate("questions.qts_award_year"),
         eligibility.qts_award_year_answer,
         "qts-year"
       ]
@@ -51,7 +51,7 @@ module StudentLoans
 
     def current_school
       [
-        I18n.t("questions.current_school"),
+        translate("questions.current_school"),
         eligibility.current_school_name,
         "still-teaching"
       ]
