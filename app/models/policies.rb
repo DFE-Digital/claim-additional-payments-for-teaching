@@ -5,6 +5,8 @@ module Policies
     MathsAndPhysics
   ].freeze
 
+  AMENDABLE_ELIGIBILITY_ATTRIBUTES = POLICIES.map { |policy| policy::Eligibility::AMENDABLE_ATTRIBUTES }.flatten.freeze
+
   def self.all
     POLICIES
   end

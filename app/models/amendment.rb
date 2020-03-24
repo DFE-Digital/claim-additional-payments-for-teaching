@@ -41,7 +41,7 @@ class Amendment < ApplicationRecord
       end
 
       changes_hash = claim.previous_changes.merge(claim.eligibility.previous_changes)
-        .slice(*Claim::AMENDABLE_ATTRIBUTES + Claim::AMENDABLE_ELIGIBILITY_ATTRIBUTES)
+        .slice(*Claim::AMENDABLE_ATTRIBUTES + Policies::AMENDABLE_ELIGIBILITY_ATTRIBUTES)
         .reject { |_, values| values.all?(&:blank?) }
         .to_h
 

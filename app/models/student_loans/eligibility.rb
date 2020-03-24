@@ -20,6 +20,7 @@ module StudentLoans
       :student_loan_repayment_amount,
       SUBJECT_ATTRIBUTES
     ].flatten.freeze
+    AMENDABLE_ATTRIBUTES = %i[student_loan_repayment_amount].freeze
     ATTRIBUTE_DEPENDENCIES = {
       "claim_school_id" => ["taught_eligible_subjects", *SUBJECT_ATTRIBUTES, "employment_status"],
       "had_leadership_position" => ["mostly_performed_leadership_duties"]
