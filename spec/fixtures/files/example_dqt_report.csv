@@ -1,0 +1,7 @@
+dfeta text1,dfeta text2,dfeta trn,fullname,birthdate,dfeta ninumber,dfeta qtsdate,dfeta he hesubject1idname,dfeta he hesubject2idname,dfeta he hesubject3idname,HESubject1Value,HESubject2Value,HESubject3Value,dfeta subject1idname,dfeta subject2idname,dfeta subject3idname,ITTSub1Value,ITTSub2Value,ITTSub3Value
+1234567,AB123456,1234567,Fred Eligible,23/8/1990,QQ123456C,23/8/2017,Politics,,,L200,,,Politics,,,L200,,
+8901231,RR123456,8901231,Jo Eligible,11/2/1970,QQ123456C,20/6/2017,Psychology,,,C800,,,Psychology,,,C800,,
+3456789,XX123456,3456789,,,,,,,,,,,,,,,,
+6758493,CD123456,6758493,Terry Ineligible,21/4/1979,QQ123456C,12/3/2000,Politics,,,L200,,,Mathematics,,,G100,,
+5554433,EF123456,5554433,Already decided,15/5/1985,QQ123456C,9/1/2019,Chemistry,,,F100,,,Chemistry,,,F100,,
+6060606,GH123456,6060606,Already automated,4/10/1980,QQ123456C,10/5/2018,Spanish Studies,,,R400,,,Other Modern Language,,,R900,,

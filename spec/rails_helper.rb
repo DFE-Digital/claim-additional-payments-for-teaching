@@ -68,6 +68,7 @@ RSpec.configure do |config|
   config.include DfeSignInHelpers
   config.include GeckoboardHelpers
   config.include VerifyHelpers
+  config.include FixtureHelpers
 
   config.before :each do
     FactoryBot.rewind_sequences

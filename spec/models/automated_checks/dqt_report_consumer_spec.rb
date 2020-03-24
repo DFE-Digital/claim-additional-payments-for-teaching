@@ -2,98 +2,71 @@ require "rails_helper"
 
 RSpec.describe AutomatedChecks::DQTReportConsumer do
   let(:dqt_report_consumer) { described_class.new(file, admin_user) }
-  let(:csv) do
-    <<~CSV
-      dfeta text1,dfeta text2,dfeta trn,fullname,birthdate,dfeta ninumber,dfeta qtsdate,dfeta he hesubject1idname,dfeta he hesubject2idname,dfeta he hesubject3idname,HESubject1Value,HESubject2Value,HESubject3Value,dfeta subject1idname,dfeta subject2idname,dfeta subject3idname,ITTSub1Value,ITTSub2Value,ITTSub3Value
-      1234567,#{claim.reference},1234567,Fred Smith,23/8/1990,QQ123456C,#{qts_date},Mathematics,,,#{postgraduate_degree_code},,,Mathematics,,,#{itt_subject_code},,
-    CSV
-  end
-  let(:file) do
-    tempfile = Tempfile.new
-    tempfile.write(csv)
-    tempfile.rewind
-    tempfile
-  end
+  let(:file) { example_dqt_report_csv }
   let(:admin_user) { build(:dfe_signin_user) }
-  let(:claim) do
-    create(:claim, :submitted, academic_year: "2019/2020", policy: policy, date_of_birth: date_of_birth)
-  end
-  let(:policy) { StudentLoans }
-  let(:itt_subject_code) { "" }
-  let(:postgraduate_degree_code) { "" }
-  let(:qts_date) { "20/10/2015" }
-  let(:date_of_birth) { Date.new(1990, 8, 23) }
+  let!(:eligible_claim_with_matching_data) { claim_from_example_dqt_report(:eligible_claim_with_matching_data) }
+  let!(:eligible_claim_with_non_matching_data) { claim_from_example_dqt_report(:eligible_claim_with_non_matching_data) }
+  let!(:claim_without_dqt_record) { claim_from_example_dqt_report(:claim_without_dqt_record) }
+  let!(:claim_with_ineligible_dqt_record) { claim_from_example_dqt_report(:claim_with_ineligible_dqt_record) }
+  let!(:claim_with_decision) { claim_from_example_dqt_report(:claim_with_decision) }
+  let!(:claim_with_qualification_task) { claim_from_example_dqt_report(:claim_with_qualification_task) }
+  let!(:existing_qualification_task) { claim_with_qualification_task.tasks.find_by!(name: "qualifications") }
 
   describe "#ingest" do
-    context "when the QTS date is after the cut-off date" do
-      let(:qts_date) { "20/10/2015" }
+    it "creates a qualification task for matching claims that are eligible" do
+      dqt_report_consumer.ingest
 
-      context "and the claim is a Student Loans claim" do
-        let(:policy) { StudentLoans }
+      new_qualication_task = eligible_claim_with_matching_data.tasks.find_by!(name: "qualifications")
+      expect(new_qualication_task.passed).to eq(true)
+      expect(new_qualication_task.manual).to eq(false)
+      expect(new_qualication_task.created_by).to eq(admin_user)
+    end
 
-        it "completes the qualification task for the associated claim" do
-          expect { dqt_report_consumer.ingest }.to change { claim.tasks.count }.by(1)
-        end
+    it "doesn’t create a qualification task where the data doesn't match" do
+      dqt_report_consumer.ingest
+
+      expect(eligible_claim_with_non_matching_data.tasks.find_by(name: "qualifications")).to be_nil
+      expect(claim_without_dqt_record.tasks.find_by(name: "qualifications")).to be_nil
+      expect(claim_with_ineligible_dqt_record.tasks.find_by(name: "qualifications")).to be_nil
+    end
+
+    it "doesn’t create a qualification task when the claim already has a decision" do
+      dqt_report_consumer.ingest
+
+      expect(claim_with_decision.tasks.find_by(name: "qualifications")).to be_nil
+    end
+
+    it "doesn’t create a qualification task when the claim already has one" do
+      dqt_report_consumer.ingest
+
+      expect(claim_with_qualification_task.tasks.find_by(name: "qualifications")).to eql(existing_qualification_task)
+    end
+
+    context "when a malformed CSV is uploaded" do
+      let(:file) do
+        tempfile = Tempfile.new
+        tempfile.write("Malformed CSV\"")
+        tempfile.rewind
+        tempfile
       end
 
-      context "and the claim is a Maths and Physics claim" do
-        let(:policy) { MathsAndPhysics }
-
-        context "and the ITT subject or post-graduate degree is Maths or Physics" do
-          let(:itt_subject_code) { "G100" }
-          let(:postgraduate_degree_code) { "G100" }
-
-          it "completes the qualification task for the associated claim" do
-            expect { dqt_report_consumer.ingest }.to change { claim.tasks.count }.by(1)
-          end
-        end
-
-        context "and the ITT subject or post-graduate degree is neither Maths or Physics" do
-          let(:itt_subject_code) { "J100" }
-          let(:postgraduate_degree_code) { "X100" }
-
-          it "does nothing" do
-            expect { dqt_report_consumer.ingest }.to change { claim.tasks.count }.by(0)
-          end
-        end
+      it "doesn’t do anything and sets an error" do
+        expect(dqt_report_consumer.ingest).to be_falsey
+        expect(dqt_report_consumer.errors).to eql(["The selected file must be a CSV"])
       end
     end
 
-    context "when the QTS date is before the cut-off date" do
-      let(:qts_date) { "20/4/1990" }
-
-      it "does nothing" do
-        expect { dqt_report_consumer.ingest }.to change { claim.tasks.count }.by(0)
+    context "when the CSV doesn’t have all the expected headers" do
+      let(:file) do
+        tempfile = Tempfile.new
+        tempfile.write("dfeta text1,dfeta text2,dfeta trn,dfeta qtsdate,fullname,birthdate\n")
+        tempfile.rewind
+        tempfile
       end
-    end
 
-    context "when the DQT record doesn’t match the data we have in the claim" do
-      let(:date_of_birth) { Date.new(1895, 10, 1) }
-
-      it "does nothing" do
-        expect { dqt_report_consumer.ingest }.to change { claim.tasks.count }.by(0)
-      end
-    end
-
-    context "when there is no DQT record" do
-      let(:qts_date) { "" }
-
-      it "does nothing" do
-        expect { dqt_report_consumer.ingest }.to change { claim.tasks.count }.by(0)
-      end
-    end
-
-    context "when the claim already has a decision" do
-      it "does nothing" do
-        create(:decision, :approved, claim: claim)
-        expect { dqt_report_consumer.ingest }.to change { claim.tasks.count }.by(0)
-      end
-    end
-
-    context "when there is already a qualification check for the claim" do
-      it "does nothing" do
-        create(:task, name: "qualifications", claim: claim)
-        expect { dqt_report_consumer.ingest }.to change { claim.tasks.count }.by(0)
+      it "doesn’t do anything and sets an error" do
+        expect(dqt_report_consumer.ingest).to be_falsey
+        expect(dqt_report_consumer.errors).to eql(["The selected file is missing some expected columns: dfeta ninumber, HESubject1Value, HESubject2Value, HESubject3Value, ITTSub1Value, ITTSub2Value, ITTSub3Value"])
       end
     end
   end
