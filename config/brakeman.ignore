@@ -3,11 +3,31 @@
     {
       "warning_type": "SQL Injection",
       "warning_code": 0,
+      "fingerprint": "46bfd0a9d4a19eb048a883184b501b060aa4d6006accc3c76bbfc00722b44dbf",
+      "check_name": "SQL",
+      "message": "Possible SQL injection",
+      "file": "app/models/claim/search.rb",
+      "line": 28,
+      "link": "https://brakemanscanner.org/docs/warning_types/sql_injection/",
+      "code": "Claim.where(\"LOWER(#{attribute}) = LOWER(?)\", search_term)",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "Search",
+        "method": "search_by"
+      },
+      "user_input": "attribute",
+      "confidence": "Medium",
+      "note": ""
+    },
+    {
+      "warning_type": "SQL Injection",
+      "warning_code": 0,
       "fingerprint": "aac74520956533997d73d1c601c2bcde5d3cd501f14401fb9cb8e2bfdc7862fa",
       "check_name": "SQL",
       "message": "Possible SQL injection",
       "file": "app/models/claim/matching_attribute_finder.rb",
-      "line": 26,
+      "line": 31,
       "link": "https://brakemanscanner.org/docs/warning_types/sql_injection/",
       "code": "Claim.where(\"LOWER(#{\"CONCAT(#{attributes.join(\",\")})\"}) = LOWER(?)\", values_for_attributes(attributes).join)",
       "render_path": null,
@@ -41,6 +61,6 @@
       "note": "We generate the filename based on non-user input so we can ignore this"
     }
   ],
-  "updated": "2019-12-17 11:26:22 +0000",
-  "brakeman_version": "4.7.2"
+  "updated": "2020-03-24 11:25:44 +0000",
+  "brakeman_version": "4.8.0"
 }
