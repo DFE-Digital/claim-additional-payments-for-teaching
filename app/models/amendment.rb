@@ -33,17 +33,20 @@ class Amendment < ApplicationRecord
     Claim.transaction do
       claim.assign_attributes(claim_attributes)
 
-      unless claim.save(context: :submit)
+      unless claim.save(context: [:submit, :amendment])
         amendment.valid?
         amendment.errors.merge!(claim.errors)
         amendment.errors.delete(:claim_changes)
         raise ActiveRecord::Rollback
       end
 
-      amendment.claim_changes = claim.previous_changes
-        .slice(*Claim::AMENDABLE_ATTRIBUTES)
+      changes_hash = claim.previous_changes.merge(claim.eligibility.previous_changes)
+        .slice(*Claim::AMENDABLE_ATTRIBUTES + Policies::AMENDABLE_ELIGIBILITY_ATTRIBUTES)
         .reject { |_, values| values.all?(&:blank?) }
         .to_h
+
+      amendment.claim_changes = changes_hash
+
       raise ActiveRecord::Rollback unless amendment.save
     end
 

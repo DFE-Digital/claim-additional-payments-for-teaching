@@ -26,7 +26,7 @@ RSpec.describe Amendment, type: :model do
   end
 
   describe ".amend_claim" do
-    let(:claim) { create(:claim, :submitted, teacher_reference_number: "1234567", bank_sort_code: "111213", bank_account_number: "12345678", building_society_roll_number: nil) }
+    let(:claim) { create(:claim, :submitted, teacher_reference_number: "1234567", bank_sort_code: "111213", bank_account_number: "12345678", building_society_roll_number: nil, policy: MathsAndPhysics) }
     let(:dfe_signin_user) { create(:dfe_signin_user) }
 
     context "given valid claim attributes and valid amendment attributes" do
@@ -191,6 +191,32 @@ RSpec.describe Amendment, type: :model do
         amendment = described_class.amend_claim(claim, claim_attributes, amendment_attributes)
 
         expect(amendment.claim_changes).to eq("bank_sort_code" => ["111213", "010203"])
+      end
+    end
+
+    context "when amending the claim’s eligibility attributes" do
+      let(:claim) do
+        create(:claim, :submitted, eligibility: build(:student_loans_eligibility, :eligible, student_loan_repayment_amount: 1000))
+      end
+
+      let(:claim_attributes) do
+        {
+          eligibility_attributes: {
+            student_loan_repayment_amount: 555
+          }
+        }
+      end
+      let(:amendment_attributes) do
+        {
+          notes: "This is a change",
+          created_by: dfe_signin_user
+        }
+      end
+
+      it "stores the value in the amendment’s claim_changes" do
+        amendment = described_class.amend_claim(claim, claim_attributes, amendment_attributes)
+
+        expect(amendment.claim_changes).to eq("student_loan_repayment_amount" => [1000, 555])
       end
     end
 

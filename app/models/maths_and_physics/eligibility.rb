@@ -13,6 +13,7 @@ module MathsAndPhysics
       :subject_to_disciplinary_action,
       :subject_to_formal_performance_action
     ].freeze
+    AMENDABLE_ATTRIBUTES = [].freeze
     ATTRIBUTE_DEPENDENCIES = {
       "initial_teacher_training_subject" => ["initial_teacher_training_subject_specialism", "has_uk_maths_or_physics_degree"],
       "initial_teacher_training_subject_specialism" => ["has_uk_maths_or_physics_degree"],

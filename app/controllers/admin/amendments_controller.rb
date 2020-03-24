@@ -30,7 +30,11 @@ class Admin::AmendmentsController < Admin::BaseAdminController
   end
 
   def claim_params
-    params.require(:amendment).require(:claim).permit(*Claim::AMENDABLE_ATTRIBUTES)
+    params.require(:amendment).require(:claim).permit(*amendable_attributes)
+  end
+
+  def amendable_attributes
+    Claim::AMENDABLE_ATTRIBUTES.dup.concat([eligibility_attributes: Policies::AMENDABLE_ELIGIBILITY_ATTRIBUTES])
   end
 
   def amendment_params

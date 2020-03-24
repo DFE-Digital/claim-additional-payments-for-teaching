@@ -98,4 +98,36 @@ RSpec.feature "Admin amends a claim" do
     expect(page).to have_content("Bank account number\nchanged")
     expect(page).not_to have_content("Bank account number\nchanged from")
   end
+
+  context "with a Student Loans claim" do
+    let(:claim) do
+      create(:claim, :submitted, eligibility: build(:student_loans_eligibility, :eligible, student_loan_repayment_amount: 550))
+    end
+
+    scenario "Service operator amends the student loan repayment amount" do
+      sign_in_to_admin_with_role(DfeSignIn::User::SERVICE_OPERATOR_DFE_SIGN_IN_ROLE_CODE, service_operator.dfe_sign_in_id)
+
+      visit admin_claim_url(claim)
+
+      click_on "Amend claim"
+
+      fill_in "Student loan repayment amount", with: "300"
+      fill_in "Change notes", with: "The claimant calculated the incorrect student loan repayment amount"
+      expect { click_on "Amend claim" }.to change { claim.reload.amendments.size }.by(1)
+
+      amendment = claim.amendments.last
+      expect(amendment.claim_changes).to eq({
+        "student_loan_repayment_amount" => [550, 300]
+      })
+      expect(amendment.notes).to eq("The claimant calculated the incorrect student loan repayment amount")
+      expect(amendment.created_by).to eq(service_operator)
+
+      expect(claim.eligibility.student_loan_repayment_amount).to eq(300)
+
+      expect(page).to have_content("Student loan repayment amount\nchanged from £550.00 to £300.00")
+
+      expect(page).to have_content("The claimant calculated the incorrect student loan repayment amount")
+      expect(page).to have_content("by Jo Bloggs on #{I18n.l(Time.current)}")
+    end
+  end
 end

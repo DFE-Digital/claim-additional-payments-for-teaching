@@ -48,6 +48,11 @@ RSpec.describe StudentLoans::Eligibility, type: :model do
     it "validates that the loan repayment is not zero" do
       expect(StudentLoans::Eligibility.new(student_loan_repayment_amount: "0")).not_to be_valid
     end
+
+    it "validates that the loan repayment less than £5000 when amending a claim" do
+      expect(StudentLoans::Eligibility.new(student_loan_repayment_amount: "5001")).not_to be_valid(:amendment)
+      expect(StudentLoans::Eligibility.new(student_loan_repayment_amount: "1200")).to be_valid(:amendment)
+    end
   end
 
   describe "#claim_school_name" do
