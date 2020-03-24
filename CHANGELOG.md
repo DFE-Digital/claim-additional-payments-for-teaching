@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+- Support searching for claims with more than just the reference
+
 ## [Release 065] - 2020-03-24
 
 - Show the academic year when viewing a claim
