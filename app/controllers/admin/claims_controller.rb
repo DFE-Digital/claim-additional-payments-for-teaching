@@ -22,14 +22,14 @@ class Admin::ClaimsController < Admin::BaseAdminController
   end
 
   def search
-    return unless params[:reference].present?
+    return unless params[:query].present?
 
-    claim = Claim.find_by(reference: params[:reference].upcase)
+    @claims = Claim::Search.new(params[:query]).claims.includes(:eligibility)
 
-    if claim
-      redirect_to(admin_claim_url(claim))
-    else
-      flash.now[:notice] = "Cannot find a claim with reference \"#{params[:reference]}\""
+    if @claims.none?
+      flash.now[:notice] = "Cannot find a claim for query \"#{params[:query]}\""
+    elsif @claims.one?
+      redirect_to(admin_claim_url(@claims.first))
     end
   end
 
