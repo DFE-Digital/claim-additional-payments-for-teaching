@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+## [Release 065] - 2020-03-24
+
 - Show the academic year when viewing a claim
 - Allow service operators to amend student loan amount
 
@@ -527,7 +529,9 @@ The format is based on [Keep a Changelog]
 - First release for student loan repayments private beta
 
 [unreleased]:
-  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-064...HEAD
+  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-065...HEAD
+[release 065]:
+  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-064...release-065
 [release 064]:
   https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-063...release-064
 [release 063]:
