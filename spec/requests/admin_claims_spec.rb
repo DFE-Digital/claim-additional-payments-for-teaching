@@ -113,7 +113,7 @@ RSpec.describe "Admin claims", type: :request do
     it "redirects to a claim when one exists" do
       get search_admin_claims_path(query: claim1.reference)
 
-      expect(response).to redirect_to(admin_claim_path(claim1))
+      expect(response).to redirect_to(admin_claim_tasks_path(claim1))
     end
 
     it "shows a list of matching claims if there are more than one" do
