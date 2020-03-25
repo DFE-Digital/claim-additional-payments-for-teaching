@@ -41,6 +41,7 @@ class Claim
     def claims_to_compare
       Claim.submitted
         .by_policy(@source_claim.policy)
+        .by_academic_year(@source_claim.academic_year)
         .where.not(id: @source_claim.id)
     end
 

@@ -9,6 +9,7 @@ RSpec.describe Claim::MatchingAttributeFinder do
         email_address: "genghis.khan@mongol-empire.com",
         bank_account_number: "34682151",
         bank_sort_code: "972654",
+        academic_year: AcademicYear.new("2019"),
         building_society_roll_number: "123456789/ABCD",
         policy: StudentLoans)
     }
@@ -33,6 +34,15 @@ RSpec.describe Claim::MatchingAttributeFinder do
 
     it "does not include claims that match, but have a different policy" do
       create(:claim, :submitted, teacher_reference_number: source_claim.teacher_reference_number, policy: MathsAndPhysics)
+
+      expect(matching_claims).to be_empty
+    end
+
+    it "does not include claims that match, but have a different academic year" do
+      create(:claim, :submitted,
+        teacher_reference_number: source_claim.teacher_reference_number,
+        academic_year: AcademicYear.new("2020"),
+        policy: source_claim.policy)
 
       expect(matching_claims).to be_empty
     end
