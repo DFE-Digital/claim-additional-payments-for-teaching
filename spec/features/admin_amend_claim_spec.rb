@@ -55,7 +55,11 @@ RSpec.feature "Admin amends a claim" do
     expect(claim.bank_account_number).to eq("18929492")
     expect(claim.building_society_roll_number).to eq("JF 838281")
 
-    expect(current_url).to eq(admin_claim_url(claim))
+    expect(current_url).to eq(admin_claim_tasks_url(claim))
+
+    expect(page).to have_content("Claim has been amended successfully")
+
+    click_on "View full claim"
 
     expect(page).to have_content("Teacher reference number\nchanged from 1234567 to 7654321")
     expect(page).to have_content("Date of birth\nchanged from #{I18n.l(date_of_birth, format: :day_month_year)} to #{I18n.l(new_date_of_birth, format: :day_month_year)}")
@@ -123,6 +127,8 @@ RSpec.feature "Admin amends a claim" do
       expect(amendment.created_by).to eq(service_operator)
 
       expect(claim.eligibility.student_loan_repayment_amount).to eq(300)
+
+      click_on "View full claim"
 
       expect(page).to have_content("Student loan repayment amount\nchanged from £550.00 to £300.00")
 

@@ -39,7 +39,6 @@ RSpec.feature "Admin checking a claim with inconsistent payroll information" do
 
     expect(second_inconsistent_claim.reload).to be_approvable
 
-    click_on "View tasks"
     click_on "Approve or reject this claim"
 
     choose "Approve"
