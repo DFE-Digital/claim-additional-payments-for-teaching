@@ -12,4 +12,5 @@ class Task < ApplicationRecord
 
   validates :name, uniqueness: {scope: :claim_id}
   validates_inclusion_of :passed, in: [true, false], message: "You must select ‘Yes’ or ‘No’"
+  validates_inclusion_of :manual, in: [true, false]
 end

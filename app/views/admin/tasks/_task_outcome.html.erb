@@ -1,3 +1,12 @@
-<p class="govuk-body">
-  Performed by <strong><%= user_details(task.created_by, include_line_break: false) %></strong> on <strong><%= l(task.created_at) %></strong>
-</p>
+<div class="govuk-inset-text">
+  <p class="govuk-body">
+    <%= task_status_tag(task.claim, task.name) %>
+  </p>
+  <p class="govuk-body">
+    <% if task.manual %>
+      This task was performed by <%= user_details(task.created_by, include_line_break: false) %> on <%= l(task.created_at) %>
+    <% else %>
+      This task was performed by an automated check uploaded by <%= user_details(task.created_by, include_line_break: false) %> on <%= l(task.created_at) %>
+    <% end %>
+  </p>
+</div>

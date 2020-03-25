@@ -75,8 +75,10 @@ RSpec.feature "Admin checks a claim" do
     scenario "User can see completed tasks" do
       ten_minutes_ago = 10.minutes.ago
       checking_user = create(:dfe_signin_user, given_name: "Fred", family_name: "Smith")
-      qualification_task = build(:task, name: "qualifications", created_by: checking_user, created_at: ten_minutes_ago)
-      claim_with_tasks = create(:claim, :submitted, tasks: [qualification_task, build(:task, name: "employment", passed: false)])
+      uploading_user = create(:dfe_signin_user, given_name: "Trevor", family_name: "Nelson")
+      qualification_task = build(:task, name: "qualifications", created_by: uploading_user, created_at: ten_minutes_ago, manual: false)
+      employment_task = build(:task, name: "employment", created_by: checking_user, created_at: ten_minutes_ago, passed: false, manual: true)
+      claim_with_tasks = create(:claim, :submitted, tasks: [qualification_task, employment_task])
       visit admin_claim_tasks_path(claim_with_tasks)
 
       expect(page).to have_content("Check qualification information Passed")
@@ -84,9 +86,16 @@ RSpec.feature "Admin checks a claim" do
       expect(page).to have_link("Approve or reject this claim", href: new_admin_claim_decision_path(claim_with_tasks))
 
       click_on "Check qualification information"
-      expect(page).to have_content("Performed by #{checking_user.full_name}")
+      expect(page).to have_content("Passed")
+      expect(page).to have_content("This task was performed by an automated check uploaded by #{uploading_user.full_name}")
       expect(page).to have_content(I18n.l(ten_minutes_ago))
       expect(page).not_to have_button("Save and continue")
+
+      click_on "Back"
+      click_on "Check employment information"
+      expect(page).to have_content("Failed")
+      expect(page).to have_content("This task was performed by #{checking_user.full_name}")
+      expect(page).to have_content(I18n.l(ten_minutes_ago))
     end
 
     scenario "User can see existing decision details" do

@@ -32,12 +32,17 @@ class AcademicYear
     # Returns the current academic year, based on September 1st being the start
     # of the year.
     def current
-      start_of_autumn_term = Date.new(Date.today.year, 9, 1)
+      self.for(Date.today)
+    end
 
-      if Date.today < start_of_autumn_term
-        new(Date.today.year - 1)
+    # Returns the academic year for a given date, based on September 1st being
+    # the start of the year.
+    def for(date)
+      start_of_autumn_term = Date.new(date.year, 9, 1)
+      if date < start_of_autumn_term
+        new(date.year - 1)
       else
-        new(Date.today.year)
+        new(date.year)
       end
     end
   end

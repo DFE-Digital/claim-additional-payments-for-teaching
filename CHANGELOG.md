@@ -7,6 +7,8 @@ The format is based on [Keep a Changelog]
 ## [Unreleased]
 
 - Support searching for claims with more than just the reference
+- Service operators can upload the report from DQT and perform automated
+  qualification checks
 
 ## [Release 065] - 2020-03-24
 

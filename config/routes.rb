@@ -95,6 +95,8 @@ Rails.application.routes.draw do
       get "search", on: :collection
     end
 
+    resources :qualification_report_uploads, only: [:new, :create]
+
     resources :payroll_runs, only: [:index, :new, :create, :show] do
       resources :payment_confirmation_report_uploads, only: [:new, :create]
       resource :download, only: [:new, :create, :show], controller: "payroll_run_downloads"
