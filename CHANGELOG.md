@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+## [Release 066] - 2020-03-25
+
 - Support searching for claims with more than just the reference
 - Service operators can upload the report from DQT and perform automated
   qualification checks
@@ -533,7 +535,9 @@ The format is based on [Keep a Changelog]
 - First release for student loan repayments private beta
 
 [unreleased]:
-  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-065...HEAD
+  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-066...HEAD
+[release 066]:
+  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-065...release-066
 [release 065]:
   https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-064...release-065
 [release 064]:
