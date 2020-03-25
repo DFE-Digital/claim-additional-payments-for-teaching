@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+- Exclude claims from previous academic years on matching claims screen
+
 ## [Release 066] - 2020-03-25
 
 - Support searching for claims with more than just the reference

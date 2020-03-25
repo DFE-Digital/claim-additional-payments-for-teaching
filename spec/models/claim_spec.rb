@@ -471,6 +471,19 @@ RSpec.describe Claim, type: :model do
     end
   end
 
+  describe "by_academic_year" do
+    let(:academic_year_2019) { AcademicYear.new("2019") }
+    let(:academic_year_2020) { AcademicYear.new("2020") }
+
+    let!(:academic_year_2019_claims) { create_list(:claim, 5, academic_year: academic_year_2019) }
+    let!(:academic_year_2020_claims) { create_list(:claim, 5, academic_year: academic_year_2020) }
+
+    it "returns claims for a specific academic year" do
+      expect(Claim.by_academic_year(academic_year_2019.dup)).to match_array(academic_year_2019_claims)
+      expect(Claim.by_academic_year(academic_year_2020.dup)).to match_array(academic_year_2020_claims)
+    end
+  end
+
   describe "#submittable?" do
     it "returns true when the claim is valid and has not been submitted" do
       claim = build(:claim, :submittable)
