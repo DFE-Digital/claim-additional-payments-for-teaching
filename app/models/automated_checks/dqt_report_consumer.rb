@@ -19,17 +19,16 @@ module AutomatedChecks
       return if errors.any?
 
       claims = Claim.awaiting_task("qualifications")
-      csv.rows.each do |row|
-        reference = row.fetch("dfeta text2")
-        qts_date = row.fetch("dfeta qtsdate")
-        claim = claims.detect { |c| c.reference == reference }
-        next if qts_date.blank? || claim.nil?
-        if claim.policy::DQTRecord.new(row.to_h).eligible? && row_matches_claim?(row, claim)
+      records = DQTReportCsvToRecords.new(csv.rows).transform
+      records.each do |record|
+        claim = claims.detect { |c| c.reference == record.fetch(:claim_reference) }
+        next if record.fetch(:qts_date).blank? || claim.nil?
+        if claim.policy::DQTRecord.new(record).eligible? && record_matches_claim?(record, claim)
           claim.tasks.create!(task_attributes)
           @completed_tasks += 1
         end
       end
-      @total_records = csv.rows.count
+      @total_records = records.count
     end
 
     def errors
@@ -47,8 +46,8 @@ module AutomatedChecks
       }
     end
 
-    def row_matches_claim?(row, claim)
-      Date.parse(row["birthdate"]) == claim.date_of_birth
+    def record_matches_claim?(record, claim)
+      record.fetch(:date_of_birth) == claim.date_of_birth
     end
   end
 end

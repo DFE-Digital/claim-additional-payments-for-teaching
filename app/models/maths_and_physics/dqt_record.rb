@@ -30,18 +30,16 @@ module MathsAndPhysics
       "F3" # Physics
     ].freeze
 
-    # The row from a DQTReportCsv as a hash. Expected to contain the keys:
-    # "dfeta qtsdate" -     A string representation of the date the teacher
-    #                       achieved qualified teacher status.
-    #                       Format: %-d/%-m/%Y
-    # "ITTSub(n)Value" -    A string value containing the teacher's ITT subject
-    #                       specialism JAC code.
-    # "HESubject(n)Value" - A string value containing the teacher's
-    #                       undergraduate or postgraduate degree JAC code
-    def initialize(data)
-      @qts_award_date = Date.parse(data.fetch("dfeta qtsdate"))
-      @itt_subject_codes = data.slice("ITTSub1Value", "ITTSub2Value", "ITTSub3Value").compact.values
-      @degree_codes = data.slice("HESubject1Value", "HESubject2Value", "HESubject3Value").compact.values
+    # The record transformed from a DQTReportCsv. Expected to contain the keys:
+    # :qts_date              - The date the teacher achieved qualified teacher
+    #                          status.
+    #                          Format: %d/%m/%Y
+    # :itt_subject_jac_codes - An array of the claimants ITT subject JAC codes.
+    # :degree_jac_codes      - An array of the claimants degree JAC codes.
+    def initialize(record)
+      @qts_award_date = record.fetch(:qts_date)
+      @itt_subject_codes = record.fetch(:itt_subject_jac_codes)
+      @degree_codes = record.fetch(:degree_jac_codes)
     end
 
     def eligible?
