@@ -53,6 +53,35 @@ class Amendment < ApplicationRecord
     amendment
   end
 
+  # Undoes a decision and makes a new Amendment record with notes and details
+  # on what the decison was previously.
+  #
+  # If the operation fails, then the claim’s changes will not be persisted, and
+  # the Amendment record will not be saved.
+  #
+  # Returns an Amendment record.
+  # - If the operation was successful, this will return true for persisted?
+  # - If the operation failed, this will return false for persisted?, and the
+  # amendment’s errors will have been populated with the errors from the
+  # decision (this will usually only happen if the decision cannot be reversed).
+  def self.undo_decision(decision, amendment_params)
+    amendment = Amendment.new(claim: decision.claim, **amendment_params)
+
+    ActiveRecord::Base.transaction do
+      amendment.claim_changes = {
+        decision: [decision.result, "undecided"]
+      }
+
+      decision.update!(undone: true)
+      amendment.save!
+    end
+
+    amendment
+  rescue ActiveRecord::RecordInvalid
+    amendment.errors.merge!(decision.errors)
+    amendment
+  end
+
   private
 
   def claim_must_be_amendable
