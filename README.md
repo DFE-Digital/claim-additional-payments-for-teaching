@@ -236,6 +236,8 @@ web servers, however it will have access to the database.
 - Then go to 'Containers' under 'Settings'
 - With the container selected go to the 'Connect' tab
 - Choose the start up command (`/bin/bash` is recommended) and connect
+- From there, you can run a Rails console with `bin/rails console`. Pass the
+  `--sandbox` flag if you don’t need to modify data.
 
 ### Through the Azure CLI
 
@@ -246,6 +248,9 @@ first):
 ```bash
 bin/azure-console $ENVIRONMENT # (development/production)
 ```
+
+From there, you can run a Rails console with `bin/rails console`. Pass the
+`--sandbox` flag if you don’t need to modify data.
 
 Accessing a live console on production requires a
 [PIM (Privileged Identity Management) request](docs/privileged-identity-management-requests.md)
