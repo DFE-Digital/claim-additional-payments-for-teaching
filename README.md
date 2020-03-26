@@ -246,7 +246,7 @@ bin/azure-console $ENVIRONMENT # (development/production)
 ```
 
 Accessing a live console on production requires a
-[PIM (Privileged Identity Management) request](https://dfedigital.atlassian.net/wiki/spaces/TP/pages/1192624202/Privileged+Identity+Management+requests).
+[PIM (Privileged Identity Management) request](docs/privileged-identity-management-requests.md)
 
 ### Usage
 
