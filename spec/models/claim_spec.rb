@@ -788,20 +788,20 @@ RSpec.describe Claim, type: :model do
       expect(claim.amendable?).to eq(true)
     end
 
-    it "returns false for an approved claim" do
+    it "returns true for an approved claim" do
       claim = create(:claim, :approved)
-      expect(claim.amendable?).to eq(false)
+      expect(claim.amendable?).to eq(true)
+    end
+
+    it "returns true for a rejected claim" do
+      claim = create(:claim, :rejected)
+      expect(claim.amendable?).to eq(true)
     end
 
     it "returns false for a payrolled claim" do
       claim = build(:claim, :approved)
       create(:payment, claims: [claim])
 
-      expect(claim.amendable?).to eq(false)
-    end
-
-    it "returns false for a rejected claim" do
-      claim = create(:claim, :rejected)
       expect(claim.amendable?).to eq(false)
     end
 

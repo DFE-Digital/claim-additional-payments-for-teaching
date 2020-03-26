@@ -18,7 +18,10 @@ RSpec.describe Amendment, type: :model do
   end
 
   it "is invalid if its claim is not amendable" do
-    amendment = build(:amendment, claim: create(:claim, :rejected))
+    claim = create(:claim, :approved)
+    create(:payment, claims: [claim])
+
+    amendment = build(:amendment, claim: claim)
     expect(amendment).not_to be_valid
 
     amendment.claim = build(:claim, :approved)
