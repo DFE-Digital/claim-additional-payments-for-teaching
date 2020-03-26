@@ -9,6 +9,12 @@ Most documentation for the service can be found on the
 Some app-specific technical documentation can be found in the [docs](docs)
 directory.
 
+### First-line support developers
+
+If you’re a developer on first-line support who is new to this project, see the
+[support runbook (`docs/first-line-support-developer-runbook.md`)](docs/first-line-support-developer-runbook.md)
+for help with common support tasks.
+
 ### Service architecture
 
 The service architecture is currently defined [on confluence].
