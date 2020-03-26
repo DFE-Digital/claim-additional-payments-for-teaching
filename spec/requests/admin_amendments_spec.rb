@@ -92,7 +92,8 @@ RSpec.describe "Admin claim amendments" do
       end
 
       context "when the claim is not amendable" do
-        let(:claim) { create(:claim, :rejected) }
+        let(:payment) { create(:payment, :with_figures) }
+        let(:claim) { create(:claim, :approved, payment: payment) }
 
         it "shows an error" do
           post admin_claim_amendments_url(claim, amendment: {claim: {teacher_reference_number: claim.teacher_reference_number},

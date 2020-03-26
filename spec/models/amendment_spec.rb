@@ -18,7 +18,10 @@ RSpec.describe Amendment, type: :model do
   end
 
   it "is invalid if its claim is not amendable" do
-    amendment = build(:amendment, claim: create(:claim, :rejected))
+    claim = create(:claim, :approved)
+    create(:payment, claims: [claim])
+
+    amendment = build(:amendment, claim: claim)
     expect(amendment).not_to be_valid
 
     amendment.claim = build(:claim, :approved)
@@ -238,6 +241,56 @@ RSpec.describe Amendment, type: :model do
         amendment = described_class.amend_claim(claim, claim_attributes, amendment_attributes)
 
         expect(amendment.claim_changes).to eq("teacher_reference_number" => ["1234567", "7654321"])
+      end
+    end
+  end
+
+  describe ".undo_decision" do
+    let(:dfe_signin_user) { create(:dfe_signin_user) }
+    let(:claim) { create(:claim, :approved) }
+    let(:decision) { claim.latest_decision }
+
+    let(:amendment) { Amendment.undo_decision(decision, notes: "Here are some notes", created_by: dfe_signin_user) }
+
+    context "when the decision can be undone" do
+      it "undoes the decision and creates an Amendment record" do
+        expect(amendment).to be_persisted
+        expect(amendment.claim).to eq(claim)
+        expect(amendment.claim_changes).to eq({
+          decision: [
+            "approved",
+            "undecided"
+          ]
+        })
+
+        expect(decision.reload.undone).to eq(true)
+      end
+    end
+
+    context "when the claim has already been paid" do
+      before do
+        create(:payment, claims: [claim])
+      end
+
+      it "returns an unpersisted Amendment record with errors and does not update the decision" do
+        expect(amendment).to_not be_persisted
+        expect(amendment.errors).to_not be_empty
+        expect(amendment.errors.messages[:base]).to include("This claim cannot have its decision undone")
+
+        expect(decision.reload.undone).to eq(false)
+      end
+    end
+
+    context "when a note has not been included" do
+      let(:amendment) { Amendment.undo_decision(decision, notes: "", created_by: dfe_signin_user) }
+
+      it "returns an unpersisted Amendment record with errors and does not update the decision" do
+        expect(amendment).to_not be_persisted
+        expect(amendment.errors).to_not be_empty
+        expect(amendment.errors.messages[:notes]).to include("Enter a message to explain why you are making this amendment")
+
+        expect(decision.reload.result).to eq("approved")
+        expect(decision.undone).to eq(false)
       end
     end
   end

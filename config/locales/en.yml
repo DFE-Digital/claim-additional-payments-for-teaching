@@ -89,6 +89,9 @@ en:
       identity_confirmation: "Confirm the claimant made the claim"
       payroll_gender: "Add a payroll gender for HMRC"
       student_loan_amount: "Check student loan amount"
+    undo_decision:
+      approved: "Undo approval"
+      rejected: "Undo rejection"
   answers:
     qts_award_years:
       before_cut_off_date: "In or before the academic year %{year}"

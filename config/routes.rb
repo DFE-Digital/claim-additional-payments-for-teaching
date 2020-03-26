@@ -90,7 +90,9 @@ Rails.application.routes.draw do
     resources :claims, only: [:index, :show] do
       resources :tasks, only: [:index, :show, :create], param: :name, constraints: {name: %r{#{ClaimCheckingTasks::TASK_NAMES.join("|")}}}
       resources :payroll_gender_tasks, only: [:create], param: :name, name: "payroll_gender"
-      resources :decisions, only: [:create, :new]
+      resources :decisions, only: [:create, :new] do
+        resources :undos, only: [:create, :new], controller: "decisions_undo"
+      end
       resources :amendments, only: [:new, :create]
       get "search", on: :collection
     end
