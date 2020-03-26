@@ -9,6 +9,7 @@ The format is based on [Keep a Changelog]
 - Exclude claims from previous academic years on matching claims screen
 - Fix a bug with automated DQT checks where the report has multiple rows for the
   same claim
+- Allow a claim's decision to be amended by a service operator
 
 ## [Release 066] - 2020-03-25
 
