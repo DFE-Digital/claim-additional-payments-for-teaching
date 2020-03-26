@@ -13,12 +13,11 @@ module StudentLoans
   class DQTRecord
     attr_reader :qts_award_date
 
-    # The row from a DQTReportCsv as a hash. Expected to contain the keys:
-    # data["dfeta qtsdate"] - A string representation of the date the teacher
-    #                         achieved qualified teacher status.
-    #                         Format: %-d/%-m/%Y
-    def initialize(data)
-      @qts_award_date = Date.parse(data.fetch("dfeta qtsdate"))
+    # The record transformed from a DQTReportCsv. Expected to contain the keys:
+    # :qts_date - The date the teacher achieved qualified teacher status.
+    #             Format: %d/%m/%Y
+    def initialize(record)
+      @qts_award_date = record.fetch(:qts_date)
     end
 
     def eligible?
