@@ -1,0 +1,40 @@
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-full">
+    <h1 class="govuk-heading-l">
+      Undo claim decision for claim <%= @claim.reference %>
+    </h1>
+  </div>
+</div>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+
+    <%= render("shared/error_summary", instance: @amendment) if @amendment.errors.any? %>
+
+    <p class="govuk-body">
+      Claim <%= @claim.reference %> is currently <%= @claim.latest_decision.result %>. If you undo this
+      decision, the claim will be marked as undecided. You'll need to approve or reject this claim later.
+    </p>
+  </div>
+</div>
+
+<%= form_with url: admin_claim_decision_undos_path(@claim, @decision), scope: :amendment, model: @amendment do |f| %>
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <div class="govuk-form-group">
+        <%= f.label :notes, "Change notes", class: "govuk-label" %>
+        <span class="govuk-hint">
+          Please write a brief note to explain why you're undoing this decision.
+        </span>
+        <%= f.text_area :notes, class: "govuk-textarea", rows: 5 %>
+      </div>
+    </div>
+  </div>
+
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-full">
+      <%= f.submit t("admin.undo_decision.#{@claim.latest_decision.result}"), class: "govuk-button", data: {module: "govuk-button"} %>
+      <%= link_to "Cancel", admin_claim_url(@claim), class: "govuk-button govuk-button--secondary", role: "button", data: {module: "govuk-button"} %>
+    </div>
+  </div>
+<% end %>
