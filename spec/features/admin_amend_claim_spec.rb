@@ -83,7 +83,7 @@ RSpec.feature "Admin amends a claim" do
 
     expect { click_on "Cancel" }.not_to change { [claim.reload.amendments.size, claim.teacher_reference_number] }
 
-    expect(current_url).to eq(admin_claim_url(claim))
+    expect(current_url).to eq(admin_claim_tasks_url(claim))
   end
 
   # I would have written this as a request spec but there wasn’t an easy way
