@@ -3,6 +3,9 @@ class Admin::AmendmentsController < Admin::BaseAdminController
   before_action :ensure_service_operator
   before_action :ensure_claim_is_amendable
 
+  def index
+  end
+
   def new
     @amendment = @claim.amendments.build
   end

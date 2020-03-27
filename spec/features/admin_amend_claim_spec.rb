@@ -59,7 +59,7 @@ RSpec.feature "Admin amends a claim" do
 
     expect(page).to have_content("Claim has been amended successfully")
 
-    click_on "View full claim"
+    click_on "Claim amendments"
 
     expect(page).to have_content("Teacher reference number\nchanged from 1234567 to 7654321")
     expect(page).to have_content("Date of birth\nchanged from #{I18n.l(date_of_birth, format: :day_month_year)} to #{I18n.l(new_date_of_birth, format: :day_month_year)}")
@@ -96,7 +96,7 @@ RSpec.feature "Admin amends a claim" do
 
     sign_in_to_admin_with_role(DfeSignIn::User::SERVICE_OPERATOR_DFE_SIGN_IN_ROLE_CODE, service_operator.dfe_sign_in_id)
 
-    visit admin_claim_url(claim)
+    visit admin_claim_amendments_url(claim)
 
     expect(page).to have_content("Teacher reference number\nchanged from 7654321 to 1234567")
     expect(page).to have_content("Bank account number\nchanged")
@@ -128,7 +128,7 @@ RSpec.feature "Admin amends a claim" do
 
       expect(claim.eligibility.student_loan_repayment_amount).to eq(300)
 
-      click_on "View full claim"
+      click_on "Claim amendments"
 
       expect(page).to have_content("Student loan repayment amount\nchanged from £550.00 to £300.00")
 
