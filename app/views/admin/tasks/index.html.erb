@@ -3,47 +3,56 @@
 <%= link_to "Back", admin_claims_path, class: "govuk-back-link" %>
 
 <div class="govuk-grid-row">
-
   <%= render "claim_summary", claim: @claim, heading: @claim.reference %>
+</div>
 
-  <div class="govuk-grid-column-two-thirds">
+<div class="govuk-grid-row">
+  <div class="govuk-tabs" data-module="govuk-tabs">
+    <h2 class="govuk-tabs__title">Contents</h2>
 
-    <ol class="app-task-list">
+    <ul class="govuk-tabs__list" role="tablist">
+      <li class="govuk-tabs__list-item govuk-tabs__list-item--selected" role="presentation">
+        <%= link_to "Tasks", '#tasks', class: "govuk-tabs__tab", role: "tabs", aria: { controls: "task", selected: "true" } %>
+      </li>
+    </ul>
 
-      <% @claim_checking_tasks.applicable_task_names.each_with_index do |task_name, index| %>
+    <section class="govuk-tabs__panel" id="tasks" role="tabpanel" aria-labelledby="tab_tasks">
+      <ol class="app-task-list">
+
+        <% @claim_checking_tasks.applicable_task_names.each_with_index do |task_name, index| %>
+          <li>
+            <h2 class="app-task-list__section">
+              <span class="app-task-list__section-number"><%= index + 1 %>. </span> <%= task_name.humanize %>
+            </h2>
+            <ul class="app-task-list__items">
+              <li class="app-task-list__item">
+                <span class="app-task-list__task-name">
+                  <%= link_to I18n.t("admin.tasks.#{task_name}"), admin_claim_task_path(claim_id: @claim.id, name: task_name), class: "govuk-link" %>
+                </span>
+                <%= task_status_tag(@claim, task_name) %>
+              </li>
+            </ul>
+          </li>
+        <% end %>
+
         <li>
           <h2 class="app-task-list__section">
-            <span class="app-task-list__section-number"><%= index + 1 %>. </span> <%= task_name.humanize %>
+            <span class="app-task-list__section-number"><%= @claim_checking_tasks.applicable_task_names.size + 1 %>. </span> Decision
           </h2>
           <ul class="app-task-list__items">
             <li class="app-task-list__item">
               <span class="app-task-list__task-name">
-                <%= link_to I18n.t("admin.tasks.#{task_name}"), admin_claim_task_path(claim_id: @claim.id, name: task_name), class: "govuk-link" %>
+                <%= link_to "Approve or reject this claim", new_admin_claim_decision_path(@claim), class: "govuk-link" %>
               </span>
-              <%= task_status_tag(@claim, task_name) %>
+              <% if @claim.latest_decision&.approved? %>
+                <strong class="govuk-tag app-task-list__task-completed">Approved</strong>
+              <% elsif @claim.latest_decision&.rejected? %>
+                <strong class="govuk-tag app-task-list__task-completed govuk-tag--alert">Rejected</strong>
+              <% end %>
             </li>
           </ul>
         </li>
-      <% end %>
-
-      <li>
-        <h2 class="app-task-list__section">
-          <span class="app-task-list__section-number"><%= @claim_checking_tasks.applicable_task_names.size + 1 %>. </span> Decision
-        </h2>
-        <ul class="app-task-list__items">
-          <li class="app-task-list__item">
-            <span class="app-task-list__task-name">
-              <%= link_to "Approve or reject this claim", new_admin_claim_decision_path(@claim), class: "govuk-link" %>
-            </span>
-            <% if @claim.latest_decision&.approved? %>
-              <strong class="govuk-tag app-task-list__task-completed">Approved</strong>
-            <% elsif @claim.latest_decision&.rejected? %>
-              <strong class="govuk-tag app-task-list__task-completed govuk-tag--alert">Rejected</strong>
-            <% end %>
-          </li>
-        </ul>
-      </li>
-    </ol>
-
+      </ol>
+    </section>
   </div>
 </div>
