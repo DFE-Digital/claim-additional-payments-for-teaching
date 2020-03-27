@@ -1,7 +1,10 @@
 # GOV.UK Verify Integration
 
-A good place to start is to read the
-[GOV.UK Verify technical documentation](https://www.docs.verify.service.gov.uk/#gov-uk-verify-technical-documentation).
+For an overview of how the service uses GOV.UK Verify for identity assurance see
+the
+[service’s Confluence space](https://dfedigital.atlassian.net/wiki/spaces/TP/pages/1106444353/GOV.UK+Verify).
+There is more general information about GOV.UK Verify on the
+[GOV.UK Verify documentation site](https://www.docs.verify.service.gov.uk).
 
 ## Getting support
 
