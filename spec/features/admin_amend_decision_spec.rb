@@ -24,6 +24,8 @@ RSpec.feature "Undoing a claim's decision" do
     expect(amendment.notes).to eq("Here are some notes")
     expect(amendment.claim_changes).to eq({decision: ["rejected", "undecided"]})
 
+    click_on "View full claim"
+
     expect(page).to have_content("Decision\nchanged from rejected to undecided")
     expect(page).to have_content("Change notes\nHere are some notes")
   end

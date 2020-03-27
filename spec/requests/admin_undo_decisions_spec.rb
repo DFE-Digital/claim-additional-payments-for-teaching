@@ -19,7 +19,7 @@ RSpec.describe "Undoing decisions", type: :request do
           }
         }
 
-        expect(response).to redirect_to(admin_claim_path(claim))
+        expect(response).to redirect_to(admin_claim_tasks_path(claim))
 
         expect(decision.reload.undone?).to eq(true)
         expect(claim.amendments.count).to eq(1)
