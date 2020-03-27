@@ -8,9 +8,9 @@ There is more general information about GOV.UK Verify on the
 
 ## Getting support
 
-The email address for Verify support is idasupport@digital.cabinet-office.gov.uk
-(which goes through to Zendesk). There is also a #govuk-verify slack channel on
-the ukgovernmentdigital.slack.com slack workspace.
+Visit [GOV.UK Verify Support](https://www.verify.service.gov.uk/support/) for
+the most up-to-date way to get support. There is also a #govuk-verify slack
+channel on the ukgovernmentdigital.slack.com slack workspace.
 
 ## Environment variables
 
