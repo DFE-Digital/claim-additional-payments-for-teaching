@@ -29,7 +29,7 @@ class Admin::ClaimsController < Admin::BaseAdminController
     if @claims.none?
       flash.now[:notice] = "Cannot find a claim for query \"#{params[:query]}\""
     elsif @claims.one?
-      redirect_to(admin_claim_url(@claims.first))
+      redirect_to(admin_claim_tasks_url(@claims.first))
     end
   end
 

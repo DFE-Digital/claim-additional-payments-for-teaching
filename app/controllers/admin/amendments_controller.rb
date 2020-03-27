@@ -11,7 +11,7 @@ class Admin::AmendmentsController < Admin::BaseAdminController
     @amendment = Amendment.amend_claim(@claim, claim_params, amendment_params)
 
     if @amendment.persisted?
-      redirect_to admin_claim_url(@claim)
+      redirect_to admin_claim_tasks_url(@claim), notice: "Claim has been amended successfully"
     else
       render "new"
     end

@@ -18,7 +18,7 @@ RSpec.describe "Admin claim amendments" do
                                                              notes: "Claimant made a typo"})
         }.to change { claim.reload.amendments.size }.by(1)
 
-        expect(response).to redirect_to(admin_claim_url(claim))
+        expect(response).to redirect_to(admin_claim_tasks_url(claim))
 
         amendment = claim.amendments.last
         expect(amendment.claim_changes).to eq({
@@ -38,7 +38,7 @@ RSpec.describe "Admin claim amendments" do
       it "saves the normalised value in the amendment when updating bank sort code" do
         post admin_claim_amendments_url(claim, amendment: {claim: {bank_sort_code: "11 12 13"}, notes: "Claimant made a typo"})
 
-        expect(response).to redirect_to(admin_claim_url(claim))
+        expect(response).to redirect_to(admin_claim_tasks_url(claim))
 
         expect(claim.reload.amendments.last.claim_changes).to eq({"bank_sort_code" => ["010203", "111213"]})
         expect(claim.bank_sort_code).to eq("111213")
@@ -50,7 +50,7 @@ RSpec.describe "Admin claim amendments" do
         post admin_claim_amendments_url(claim, amendment: {claim: {bank_sort_code: "111213", building_society_roll_number: ""},
                                                            notes: "Claimant made a typo"})
 
-        expect(response).to redirect_to(admin_claim_url(claim))
+        expect(response).to redirect_to(admin_claim_tasks_url(claim))
 
         expect(claim.reload.amendments.last.claim_changes).to eq({"bank_sort_code" => ["010203", "111213"]})
       end

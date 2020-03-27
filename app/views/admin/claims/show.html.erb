@@ -54,9 +54,7 @@
 
     <% if @decision.persisted? %>
       <%= render "admin/claims/answer_section", {heading: "Claim decision details", answers: admin_decision_details(@decision)} %>
-    <% else %>
-      <%= render "admin/decisions/decision_form", claim: @claim, decision: @decision, claims_preventing_payment: @claims_preventing_payment %>
-  <% end %>
+    <% end %>
   </div>
 
   <% if @claim.amendments.any? %>
