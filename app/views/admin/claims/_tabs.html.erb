@@ -1,0 +1,6 @@
+<ul class="govuk-tabs__list" role="tablist">
+  <li class="govuk-tabs__list-item govuk-tabs__list-item--selected" role="presentation">
+    <%= link_to_unless_current "Tasks", admin_claim_tasks_path(claim), class: "govuk-tabs__tab", role: "tabs", aria: { controls: "task", selected: "true" } %>
+  </li>
+</ul>
+
