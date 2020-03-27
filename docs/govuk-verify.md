@@ -14,7 +14,7 @@ channel on the ukgovernmentdigital.slack.com slack workspace.
 
 ## Environment variables
 
-Verify integration requires certain environment variables be set:
+GOV.UK Verify integration requires certain environment variables be set:
 
 ```bash
 GOVUK_VERIFY_VSP_HOST=http://URL.FOR.VSP:12345
@@ -36,13 +36,13 @@ You can check that the VSP is running ok by hitting the healthcheck URL:
 curl localhost:50300/admin/healthcheck
 ```
 
-### How to complete the Verify user journey in local development
+### How to complete the GOV.UK Verify user journey in local development
 
-After beginning the Verify flow, you will be redirected to a URL which looks
-something like
+After beginning the GOV.UK Verify flow, you will be redirected to a URL which
+looks something like
 `https://compliance-tool-reference.ida.digital.cabinet-office.gov.uk/SAML2/SSO`,
-and which will display a JSON object in your browser. To complete the Verify
-flow from here:
+and which will display a JSON object in your browser. To complete the GOV.UK
+Verify flow from here:
 
 1. Follow the `responseGeneratorLocation` URL from this JSON object.
 2. This will give you another JSON object, which provides `executeUri` URLs
@@ -51,9 +51,9 @@ flow from here:
    time of writing is "Verified User On Service With Non Match Setting".
 
 These steps are explained in more detail in the
-[Verify documentation](https://www.docs.verify.service.gov.uk/get-started/set-up-successful-verification-journey/#run-the-identity-verified-response-scenario).
+[GOV.UK Verify documentation](https://www.docs.verify.service.gov.uk/get-started/set-up-successful-verification-journey/#run-the-identity-verified-response-scenario).
 
-### How to simulate skipping the Verify user journey in local development
+### How to simulate skipping the GOV.UK Verify user journey in local development
 
 Users that are unable to complete the GOV.UK Verify process are still able to
 submit a claim. To do so they are linked back to the service on the GOV.UK
