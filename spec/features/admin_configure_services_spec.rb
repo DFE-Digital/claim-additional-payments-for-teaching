@@ -8,7 +8,7 @@ RSpec.feature "Service configuration" do
     js_status = javascript_enabled ? "enabled" : "disabled"
 
     scenario "Service operator closes a service for submissions, with JavaScript #{js_status}", js: javascript_enabled do
-      sign_in_to_admin_with_role(DfeSignIn::User::SERVICE_OPERATOR_DFE_SIGN_IN_ROLE_CODE)
+      sign_in_as_service_operator
 
       click_on "Manage services"
 
@@ -40,7 +40,7 @@ RSpec.feature "Service configuration" do
   scenario "Service operator opens a service for submissions" do
     policy_configuration.update(open_for_submissions: false)
 
-    sign_in_to_admin_with_role(DfeSignIn::User::SERVICE_OPERATOR_DFE_SIGN_IN_ROLE_CODE)
+    sign_in_as_service_operator
 
     click_on "Manage services"
 
@@ -67,7 +67,7 @@ RSpec.feature "Service configuration" do
 
   scenario "Service operator changes the academic year a service is accepting payments for" do
     travel_to Date.new(2023) do
-      sign_in_to_admin_with_role(DfeSignIn::User::SERVICE_OPERATOR_DFE_SIGN_IN_ROLE_CODE)
+      sign_in_as_service_operator
 
       click_on "Manage services"
 

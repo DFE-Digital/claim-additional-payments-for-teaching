@@ -2,7 +2,7 @@ require "rails_helper"
 
 RSpec.feature "Service operator can see potential duplicate claims" do
   before do
-    sign_in_to_admin_with_role(DfeSignIn::User::SERVICE_OPERATOR_DFE_SIGN_IN_ROLE_CODE)
+    sign_in_as_service_operator
   end
 
   scenario "they are shown other claims with matching details" do

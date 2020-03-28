@@ -1,9 +1,7 @@
 require "rails_helper"
 
 RSpec.feature "Admin search" do
-  before do
-    sign_in_to_admin_with_role(DfeSignIn::User::SERVICE_OPERATOR_DFE_SIGN_IN_ROLE_CODE)
-  end
+  before { sign_in_as_service_operator }
 
   let!(:claim1) { create(:claim, :submitted, surname: "Wayne") }
   let!(:claim2) { create(:claim, :submitted, surname: "Wayne") }
