@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "Admin", type: :request do
+RSpec.describe "Admin authentication", type: :request do
   describe "admin#index request" do
     context "when the user is not authenticated" do
       it "redirects to the sign in page and doesn’t set a session" do
