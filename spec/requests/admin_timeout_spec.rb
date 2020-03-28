@@ -3,7 +3,6 @@ require "rails_helper"
 RSpec.describe "Admin session timing out", type: :request do
   let(:timeout_length_in_minutes) { AdminSessionTimeout::ADMIN_TIMEOUT_LENGTH_IN_MINUTES }
   let(:dfe_sign_in_id) { "userid-345" }
-  let(:organisation_id) { "organisationid-6789" }
 
   let!(:user) { create(:dfe_signin_user, dfe_sign_in_id: dfe_sign_in_id) }
 
@@ -11,7 +10,7 @@ RSpec.describe "Admin session timing out", type: :request do
   let(:after_expiry) { timeout_length_in_minutes.minutes + 1.second }
 
   before do
-    sign_in_to_admin_with_role(DfeSignIn::User::SERVICE_OPERATOR_DFE_SIGN_IN_ROLE_CODE, dfe_sign_in_id, organisation_id)
+    sign_in_to_admin_with_role(DfeSignIn::User::SERVICE_OPERATOR_DFE_SIGN_IN_ROLE_CODE, dfe_sign_in_id)
   end
 
   it "clears the session and redirects to the login page when no actions have been performed during the timeout period" do
