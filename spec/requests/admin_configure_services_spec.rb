@@ -4,9 +4,7 @@ RSpec.describe "Service configuration" do
   let(:policy_configuration) { policy_configurations(:student_loans) }
 
   context "when signed in as a service operator" do
-    before do
-      sign_in_to_admin_with_role(DfeSignIn::User::SERVICE_OPERATOR_DFE_SIGN_IN_ROLE_CODE)
-    end
+    before { sign_in_as_service_operator }
 
     describe "admin_policy_configurations#update" do
       it "sets the configuration's availability message and status" do

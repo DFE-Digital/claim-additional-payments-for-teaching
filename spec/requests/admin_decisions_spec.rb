@@ -2,11 +2,10 @@ require "rails_helper"
 
 RSpec.describe "Admin decisions", type: :request do
   context "when signed in as a service operator" do
-    let(:user) { create(:dfe_signin_user) }
     let(:claim) { create(:claim, :submitted, policy: MathsAndPhysics) }
 
     before do
-      sign_in_to_admin_with_role(DfeSignIn::User::SERVICE_OPERATOR_DFE_SIGN_IN_ROLE_CODE, user.dfe_sign_in_id)
+      @signed_in_user = sign_in_as_service_operator
       @dataset_post_stub = stub_geckoboard_dataset_update
     end
 
@@ -69,7 +68,7 @@ RSpec.describe "Admin decisions", type: :request do
 
         expect(response.body).to include("Claim has been approved successfully")
 
-        expect(claim.latest_decision.created_by).to eq(user)
+        expect(claim.latest_decision.created_by).to eq(@signed_in_user)
         expect(claim.latest_decision.result).to eq("approved")
       end
 
@@ -80,7 +79,7 @@ RSpec.describe "Admin decisions", type: :request do
 
         expect(response.body).to include("Claim has been rejected successfully")
 
-        expect(claim.latest_decision.created_by).to eq(user)
+        expect(claim.latest_decision.created_by).to eq(@signed_in_user)
         expect(claim.latest_decision.result).to eq("rejected")
       end
 

@@ -4,10 +4,7 @@ RSpec.describe "Admin claim amendments" do
   let(:claim) { create(:claim, :submitted, teacher_reference_number: "1234567", bank_sort_code: "010203", date_of_birth: 25.years.ago.to_date) }
 
   context "when signed in as a service operator" do
-    let(:service_operator) { create(:dfe_signin_user) }
-    before do
-      sign_in_to_admin_with_role(DfeSignIn::User::SERVICE_OPERATOR_DFE_SIGN_IN_ROLE_CODE, service_operator.dfe_sign_in_id)
-    end
+    before { @signed_in_user = sign_in_as_service_operator }
 
     describe "admin/amendments#index" do
       let(:claim) { create(:claim, :submitted, teacher_reference_number: "1234567") }
@@ -40,7 +37,7 @@ RSpec.describe "Admin claim amendments" do
         })
         expect(amendment.claim_changes).to be_a(Hash)
         expect(amendment.notes).to eq("Claimant made a typo")
-        expect(amendment.created_by).to eq(service_operator)
+        expect(amendment.created_by).to eq(@signed_in_user)
 
         expect(claim.teacher_reference_number).to eq("7654321")
         expect(claim.bank_sort_code).to eq("111213")

@@ -22,6 +22,13 @@ module RequestHelpers
     }.fetch(policy)
   end
 
+  # Signs in as a user with the service operator role. Returns the signed-in User record.
+  def sign_in_as_service_operator
+    user = create(:dfe_signin_user)
+    sign_in_to_admin_with_role(DfeSignIn::User::SERVICE_OPERATOR_DFE_SIGN_IN_ROLE_CODE, user.dfe_sign_in_id)
+    user
+  end
+
   def sign_in_to_admin_with_role(*args)
     stub_dfe_sign_in_with_role(*args)
     post admin_dfe_sign_in_path

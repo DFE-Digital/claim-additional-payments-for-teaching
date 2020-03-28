@@ -2,11 +2,7 @@ require "rails_helper"
 
 RSpec.describe "Admin payroll runs" do
   context "when signed in as a service operator" do
-    let(:user) { create(:dfe_signin_user) }
-
-    before do
-      sign_in_to_admin_with_role(DfeSignIn::User::SERVICE_OPERATOR_DFE_SIGN_IN_ROLE_CODE, user.dfe_sign_in_id)
-    end
+    before { @signed_in_user = sign_in_as_service_operator }
 
     describe "admin_payroll_runs#new" do
       it "displays a preview of the payrollable claims" do
@@ -26,7 +22,7 @@ RSpec.describe "Admin payroll runs" do
         expect { post admin_payroll_runs_path(claim_ids: claims.map(&:id)) }.to change { PayrollRun.count }.by(1)
 
         payroll_run = PayrollRun.order(:created_at).last
-        expect(payroll_run.created_by.id).to eq(user.id)
+        expect(payroll_run.created_by.id).to eq(@signed_in_user.id)
         expect(payroll_run.claims).to match_array(claims)
         expect(payroll_run.payments.count).to eq(2)
 
@@ -45,7 +41,7 @@ RSpec.describe "Admin payroll runs" do
       end
 
       it "does not show the link to the payroll run download once the download has been triggered" do
-        payroll_run = create(:payroll_run, downloaded_at: Time.zone.now, downloaded_by: user)
+        payroll_run = create(:payroll_run, downloaded_at: Time.zone.now)
 
         get admin_payroll_run_path(payroll_run)
 
@@ -54,13 +50,13 @@ RSpec.describe "Admin payroll runs" do
       end
 
       it "shows who downloaded the payroll run once the download has been triggered" do
-        payroll_run = create(:payroll_run, downloaded_at: Time.zone.now, downloaded_by: user)
+        payroll_run = create(:payroll_run, downloaded_at: Time.zone.now)
 
         get admin_payroll_run_path(payroll_run)
 
         expect(response).to have_http_status(:ok)
         expect(response.body).to include(I18n.l(payroll_run.downloaded_at))
-        expect(response.body).to include(user.full_name)
+        expect(response.body).to include(payroll_run.downloaded_by.full_name)
       end
     end
   end

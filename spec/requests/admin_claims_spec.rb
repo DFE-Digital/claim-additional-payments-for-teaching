@@ -1,9 +1,7 @@
 require "rails_helper"
 
 RSpec.describe "Admin claims", type: :request do
-  before do
-    sign_in_to_admin_with_role(DfeSignIn::User::SERVICE_OPERATOR_DFE_SIGN_IN_ROLE_CODE)
-  end
+  before { sign_in_as_service_operator }
 
   describe "claims#index" do
     let!(:claims) { create_list(:claim, 3, :submitted) }

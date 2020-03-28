@@ -2,9 +2,9 @@ require "rails_helper"
 
 RSpec.describe "Admin Sessions", type: :request do
   describe "#refresh" do
-    it "updates the last_seen_at session timestamp and responds with OK" do
-      sign_in_to_admin_with_role(DfeSignIn::User::SERVICE_OPERATOR_DFE_SIGN_IN_ROLE_CODE, "_user_id", "_org_id")
+    before { sign_in_as_service_operator }
 
+    it "updates the last_seen_at session timestamp and responds with OK" do
       travel(1.minute) do
         get admin_refresh_session_path
 
@@ -14,8 +14,6 @@ RSpec.describe "Admin Sessions", type: :request do
     end
 
     it "does not extend an expired admin session" do
-      sign_in_to_admin_with_role(DfeSignIn::User::SERVICE_OPERATOR_DFE_SIGN_IN_ROLE_CODE, "_user_id", "_org_id")
-
       travel(2.hours) do
         get admin_refresh_session_path
 
