@@ -7,7 +7,7 @@ module Admin
 
     def sign_out
       session.destroy
-      redirect_to admin_root_path, notice: "You've been signed out"
+      redirect_to admin_sign_in_path, notice: "You've been signed out"
     end
 
     def callback
