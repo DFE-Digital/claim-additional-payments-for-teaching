@@ -13,13 +13,12 @@ RSpec.describe "Admin", type: :request do
 
     context "when the user is authenticated" do
       let(:dfe_sign_in_id) { "userid-345" }
-      let(:organisation_id) { "organisationid-6789" }
 
       let!(:user) { create(:dfe_signin_user, dfe_sign_in_id: dfe_sign_in_id) }
 
       context "when the user is a service operator" do
         before do
-          sign_in_to_admin_with_role(DfeSignIn::User::SERVICE_OPERATOR_DFE_SIGN_IN_ROLE_CODE, dfe_sign_in_id, organisation_id)
+          sign_in_to_admin_with_role(DfeSignIn::User::SERVICE_OPERATOR_DFE_SIGN_IN_ROLE_CODE, dfe_sign_in_id)
         end
 
         it "renders the admin page, sets a session and applies the appropriate role to the user" do
@@ -44,7 +43,7 @@ RSpec.describe "Admin", type: :request do
 
       context "when the user is a support user" do
         before do
-          sign_in_to_admin_with_role(DfeSignIn::User::SUPPORT_AGENT_DFE_SIGN_IN_ROLE_CODE, dfe_sign_in_id, organisation_id)
+          sign_in_to_admin_with_role(DfeSignIn::User::SUPPORT_AGENT_DFE_SIGN_IN_ROLE_CODE, dfe_sign_in_id)
         end
 
         it "renders the admin page, sets a session and applies the appropriate role to the user" do
@@ -61,7 +60,7 @@ RSpec.describe "Admin", type: :request do
 
       context "when the user is a payroll operator" do
         before do
-          sign_in_to_admin_with_role(DfeSignIn::User::PAYROLL_OPERATOR_DFE_SIGN_IN_ROLE_CODE, dfe_sign_in_id, organisation_id)
+          sign_in_to_admin_with_role(DfeSignIn::User::PAYROLL_OPERATOR_DFE_SIGN_IN_ROLE_CODE, dfe_sign_in_id)
         end
 
         it "renders the page, sets a session and applies the appropriate role to the user" do
@@ -110,11 +109,10 @@ RSpec.describe "Admin", type: :request do
 
     context "when a local DfeSignIn::User record matching the DfE Sign-in ID does not exist" do
       let(:dfe_sign_in_id) { "userid-345" }
-      let(:organisation_id) { "organisationid-6789" }
 
       it "creates a DfeSignIn::User record and sets the record ID in the session" do
         expect {
-          sign_in_to_admin_with_role(DfeSignIn::User::SERVICE_OPERATOR_DFE_SIGN_IN_ROLE_CODE, dfe_sign_in_id, organisation_id)
+          sign_in_to_admin_with_role(DfeSignIn::User::SERVICE_OPERATOR_DFE_SIGN_IN_ROLE_CODE, dfe_sign_in_id)
         }.to change {
           DfeSignIn::User.count
         }.by(1)
