@@ -1,12 +1,8 @@
 require "rails_helper"
 
 RSpec.feature "Admin checks a claim" do
-  let(:user) { create(:dfe_signin_user) }
-
   context "User is logged in as a service operator" do
-    before do
-      sign_in_to_admin_with_role(DfeSignIn::User::SERVICE_OPERATOR_DFE_SIGN_IN_ROLE_CODE, user.dfe_sign_in_id)
-    end
+    before { @signed_in_user = sign_in_as_service_operator }
 
     scenario "User can approve a claim" do
       freeze_time do
@@ -26,7 +22,7 @@ RSpec.feature "Admin checks a claim" do
         fill_in "Decision notes", with: "Everything matches"
         perform_enqueued_jobs { click_on "Confirm decision" }
 
-        expect(claim_to_approve.latest_decision.created_by).to eq(user)
+        expect(claim_to_approve.latest_decision.created_by).to eq(@signed_in_user)
         expect(claim_to_approve.latest_decision.notes).to eq("Everything matches")
 
         expect(page).to have_content("Claim has been approved successfully")
@@ -59,7 +55,7 @@ RSpec.feature "Admin checks a claim" do
       fill_in "Decision notes", with: "TRN doesn't exist"
       perform_enqueued_jobs { click_on "Confirm decision" }
 
-      expect(claim_to_reject.latest_decision.created_by).to eq(user)
+      expect(claim_to_reject.latest_decision.created_by).to eq(@signed_in_user)
       expect(claim_to_reject.latest_decision.notes).to eq("TRN doesn't exist")
 
       expect(page).to have_content("Claim has been rejected successfully")
@@ -107,7 +103,7 @@ RSpec.feature "Admin checks a claim" do
       expect(page).to have_content("Approved")
       expect(page).to have_content(claim_with_decision.latest_decision.notes)
       expect(page).to have_content("Created by")
-      expect(page).to have_content(user.full_name)
+      expect(page).to have_content(@signed_in_user.full_name)
     end
   end
 

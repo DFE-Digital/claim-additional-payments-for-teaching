@@ -1,11 +1,7 @@
 require "rails_helper"
 
 RSpec.feature "Admin checking a claim without a verified identity" do
-  let(:user) { create(:dfe_signin_user) }
-
-  before do
-    sign_in_to_admin_with_role(DfeSignIn::User::SERVICE_OPERATOR_DFE_SIGN_IN_ROLE_CODE, user.dfe_sign_in_id)
-  end
+  before { @signed_in_user = sign_in_as_service_operator }
 
   scenario "the service operator can do a manual identity check and approve the claim" do
     unverified_claim = create(:claim, :unverified)
@@ -30,7 +26,7 @@ RSpec.feature "Admin checking a claim without a verified identity" do
     fill_in "Decision notes", with: "Identity confirmed via phone call"
     click_on "Confirm decision"
 
-    expect(unverified_claim.latest_decision.created_by).to eq(user)
+    expect(unverified_claim.latest_decision.created_by).to eq(@signed_in_user)
     expect(unverified_claim.latest_decision.notes).to eq("Identity confirmed via phone call")
   end
 end

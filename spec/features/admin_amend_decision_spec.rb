@@ -2,10 +2,9 @@ require "rails_helper"
 
 RSpec.feature "Undoing a claim's decision" do
   let(:claim) { create(:claim, :rejected) }
-  let(:service_operator) { create(:dfe_signin_user, given_name: "Jo", family_name: "Bloggs") }
 
   scenario "Service operator can undo a claim's decision" do
-    sign_in_to_admin_with_role(DfeSignIn::User::SERVICE_OPERATOR_DFE_SIGN_IN_ROLE_CODE, service_operator.dfe_sign_in_id)
+    signed_in_user = sign_in_as_service_operator
 
     visit admin_claim_url(claim)
 
@@ -28,5 +27,6 @@ RSpec.feature "Undoing a claim's decision" do
 
     expect(page).to have_content("Decision\nchanged from rejected to undecided")
     expect(page).to have_content("Change notes\nHere are some notes")
+    expect(page).to have_content("by #{signed_in_user.full_name}")
   end
 end

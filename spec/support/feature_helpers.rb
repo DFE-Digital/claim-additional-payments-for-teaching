@@ -100,11 +100,11 @@ module FeatureHelpers
     click_on "Continue"
   end
 
-  # Signs in as a user with the service operator role.
+  # Signs in as a user with the service operator role. Returns the signed-in User record.
   def sign_in_as_service_operator
-    create(:dfe_signin_user).tap do |user|
-      sign_in_to_admin_with_role(DfeSignIn::User::SERVICE_OPERATOR_DFE_SIGN_IN_ROLE_CODE, user.id)
-    end
+    user = create(:dfe_signin_user)
+    sign_in_to_admin_with_role(DfeSignIn::User::SERVICE_OPERATOR_DFE_SIGN_IN_ROLE_CODE, user.dfe_sign_in_id)
+    user
   end
 
   def sign_in_to_admin_with_role(role_code, user_id = "123")
