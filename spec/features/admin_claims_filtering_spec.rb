@@ -1,11 +1,7 @@
 require "rails_helper"
 
 RSpec.feature "Admin claim filtering" do
-  let(:user) { create(:dfe_signin_user) }
-
-  before do
-    sign_in_to_admin_with_role(DfeSignIn::User::SERVICE_OPERATOR_DFE_SIGN_IN_ROLE_CODE, user.dfe_sign_in_id)
-  end
+  before { sign_in_as_service_operator }
 
   scenario "the service operator can filter claims by policy" do
     maths_and_physics_claims = create_list(:claim, 3, :submitted, policy: MathsAndPhysics)

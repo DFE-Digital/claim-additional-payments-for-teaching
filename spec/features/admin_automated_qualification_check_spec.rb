@@ -1,11 +1,7 @@
 require "rails_helper"
 
 RSpec.feature "Admins automated qualification check" do
-  let(:user) { create(:dfe_signin_user) }
-
-  before do
-    sign_in_to_admin_with_role(DfeSignIn::User::SERVICE_OPERATOR_DFE_SIGN_IN_ROLE_CODE, user.dfe_sign_in_id)
-  end
+  before { sign_in_as_service_operator }
 
   scenario "Service operators can upload and run automated DQT checks" do
     eligible_claim_with_matching_data = claim_from_example_dqt_report(:eligible_claim_with_matching_data)
