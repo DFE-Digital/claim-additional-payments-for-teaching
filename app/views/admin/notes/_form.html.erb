@@ -1,0 +1,11 @@
+<%= form_with model: note, url: admin_claim_notes_path(claim) do |form| %>
+  <%= form_group_tag note, :body do %>
+    <%= form.label :body, "Add note", class: "govuk-label govuk-label--m" %>
+    <span class="govuk-hint" id="notes-hint">
+      Write a brief update. Do not include any personal data about the claimant.
+    </span>
+    <%= form.text_area :body, class: "govuk-textarea", "aria-describedby" => "notes-hint", rows: 5 %>
+  <% end %>
+
+  <%= form.submit "Add note", class: "govuk-button" %>
+<% end %>
