@@ -7,6 +7,7 @@ RSpec.describe AutomatedChecks::DQTReportCsvToRecords do
       {
         "dfeta text2" => "AB123456",
         "dfeta qtsdate" => "24/10/2017",
+        "fullname" => "Jonathan Bishop",
         "birthdate" => "10/09/1980",
         "HESubject1Value" => "G100",
         "HESubject2Value" => "F100",
@@ -18,6 +19,7 @@ RSpec.describe AutomatedChecks::DQTReportCsvToRecords do
       {
         "dfeta text2" => "AB123456",
         "dfeta qtsdate" => "24/10/2017",
+        "fullname" => "Jonathan Bishop",
         "birthdate" => "10/09/1980",
         "HESubject1Value" => "R100",
         "HESubject2Value" => nil,
@@ -29,6 +31,7 @@ RSpec.describe AutomatedChecks::DQTReportCsvToRecords do
       {
         "dfeta text2" => "XX999999",
         "dfeta qtsdate" => "17/06/2016",
+        "fullname" => "Phillip David Collins",
         "birthdate" => "05/03/1993",
         "HESubject1Value" => "X100",
         "HESubject2Value" => nil,
@@ -46,6 +49,7 @@ RSpec.describe AutomatedChecks::DQTReportCsvToRecords do
         {
           claim_reference: "AB123456",
           qts_date: Date.new(2017, 10, 24),
+          surname: "Bishop",
           date_of_birth: Date.new(1980, 9, 10),
           degree_jac_codes: ["G100", "F100", "R100"],
           itt_subject_jac_codes: ["E100"]
@@ -53,6 +57,7 @@ RSpec.describe AutomatedChecks::DQTReportCsvToRecords do
         {
           claim_reference: "XX999999",
           qts_date: Date.new(2016, 6, 17),
+          surname: "Collins",
           date_of_birth: Date.new(1993, 3, 5),
           degree_jac_codes: ["X100"],
           itt_subject_jac_codes: ["X100"]
@@ -68,6 +73,7 @@ RSpec.describe AutomatedChecks::DQTReportCsvToRecords do
         {
           "dfeta text2" => "RE123456",
           "dfeta qtsdate" => nil,
+          "fullname" => nil,
           "birthdate" => "24/03/1988",
           "HESubject1Value" => nil,
           "HESubject2Value" => nil,
@@ -84,6 +90,7 @@ RSpec.describe AutomatedChecks::DQTReportCsvToRecords do
         {
           claim_reference: "RE123456",
           qts_date: nil,
+          surname: nil,
           date_of_birth: Date.new(1988, 3, 24),
           degree_jac_codes: [],
           itt_subject_jac_codes: []
