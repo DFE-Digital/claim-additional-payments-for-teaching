@@ -22,9 +22,7 @@
             <% @claim.notes.order(created_at: :desc).each do |note| %>
               <div class="hmcts-timeline__item">
                 <section>
-                  <p class="govuk-body">
-                    <%= note.body %>
-                  </p>
+                  <%= simple_format note.body, class: "govuk-body" %>
                 </section>
 
                 <p class="hmcts-timeline__description">
