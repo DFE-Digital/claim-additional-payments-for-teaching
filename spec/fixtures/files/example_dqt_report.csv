@@ -2,6 +2,7 @@ dfeta text1,dfeta text2,dfeta trn,fullname,birthdate,dfeta ninumber,dfeta qtsdat
 1234567,AB123456,1234567,Fred Eligible,23/8/1990,QQ123456C,23/8/2017,Politics,,,L200,,,Politics,,,L200,,
 1234567,AB123456,1234567,Fred Eligible,23/8/1990,QQ123456C,23/8/2017,Law By Area,,,M100,,,Politics,,,L200,,
 8901231,RR123456,8901231,Jo Eligible,11/2/1970,QQ123456C,20/6/2017,Psychology,,,C800,,,Psychology,,,C800,,
+8981212,DD123456,8981212,Sarah Different,10/4/1980,QQ123456C,20/6/2017,Business Studies,,,N100,,,Mathematics,,,G100,,
 3456789,XX123456,3456789,,,,,,,,,,,,,,,,
 6758493,CD123456,6758493,Terry Ineligible,21/4/1979,QQ123456C,12/3/2000,Politics,,,L200,,,Mathematics,,,G100,,
 5554433,EF123456,5554433,Already decided,15/5/1985,QQ123456C,9/1/2019,Chemistry,,,F100,,,Chemistry,,,F100,,

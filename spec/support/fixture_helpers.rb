@@ -11,6 +11,7 @@ module FixtureHelpers
     when :eligible_claim_with_matching_data
       # Eligible claim with matching data in DQT
       create(:claim, :submitted,
+        surname: "Eligible",
         teacher_reference_number: "1234567",
         reference: "AB123456",
         date_of_birth: Date.new(1990, 8, 23))
@@ -18,9 +19,18 @@ module FixtureHelpers
     when :eligible_claim_with_non_matching_birthdate
       # Eligible claim and eligible DQT data but different date of birth
       create(:claim, :submitted,
+        surname: "Eligible",
         teacher_reference_number: "8901231",
         reference: "RR123456",
         date_of_birth: Date.new(1899, 1, 1))
+
+    when :eligible_claim_with_non_matching_surname
+      # Eligible claim and eligible DQT data but different surname
+      create(:claim, :submitted,
+        surname: "Eligible",
+        teacher_reference_number: "8981212",
+        reference: "DD123456",
+        date_of_birth: Date.new(1980, 4, 10))
 
     when :claim_without_dqt_record
       # Submitted claim that has no DQT associated with it

@@ -11,6 +11,8 @@ The format is based on [Keep a Changelog]
   same claim
 - Allow a claim's decision to be amended by a service operator
 - Move claim amendments to a seperate tab
+- Automated DQT checks verify that the surname in DQT matches the one in the
+  claim
 
 ## [Release 066] - 2020-03-25
 
