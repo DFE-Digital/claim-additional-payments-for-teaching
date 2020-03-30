@@ -30,10 +30,10 @@ case $ENVIRONMENT_NAME in
     ;;
 esac
 
-function fetch_or_generate_key_and_csr {
+function fetch_or_generate_key_and_certificate {
   local FILE_PREFIX=$1
-  local CSR_COMMON_NAME=$2
-  local CSR_SUBJECT="/emailAddress=$EMAIL_ADDRESS/C=GB/ST=Greater Manchester/L=Manchester/O=DfE/OU=Teaching Workforce Directorate/CN=$CSR_COMMON_NAME"
+  local COMMON_NAME=$2
+  local SUBJECT="/emailAddress=$EMAIL_ADDRESS/C=GB/ST=Greater Manchester/L=Manchester/O=DfE/OU=Teaching Workforce Directorate/CN=$COMMON_NAME"
 
   if [ -f "${CERTS_DIR}${FILE_PREFIX}.key" ]; then
     rm "${CERTS_DIR}${FILE_PREFIX}.key"
@@ -48,9 +48,10 @@ function fetch_or_generate_key_and_csr {
   then
     KEY_EXISTED=
 
-    echo "Generating key..."
+    echo "Generating key and certificate..."
+    openssl req -x509 -newkey rsa:2048 -days 365 -nodes -sha256 -subj "$SUBJECT" -keyout "${CERTS_DIR}${FILE_PREFIX}-tmp.key" -out "${CERTS_DIR}${FILE_PREFIX}.crt"
 
-    openssl genrsa -out "${CERTS_DIR}${FILE_PREFIX}-tmp.key" 2048
+    echo "Converting key to PKCS#8 format..."
     openssl pkcs8 -topk8 -inform PEM -outform PEM -nocrypt -in "${CERTS_DIR}${FILE_PREFIX}-tmp.key" -out "${CERTS_DIR}${FILE_PREFIX}.key"
 
     rm "${CERTS_DIR}${FILE_PREFIX}-tmp.key"
@@ -86,39 +87,21 @@ function fetch_or_generate_key_and_csr {
 
     BASE64_KEY_EXISTED=1
   fi
-
-  if [ -f "${CERTS_DIR}${FILE_PREFIX}.csr" ]; then
-    rm "${CERTS_DIR}${FILE_PREFIX}.csr"
-  fi
-
-  echo "Attempting to fetch CSR..."
-
-  if ! az keyvault secret download \
-    --vault-name $KEY_VAULT_NAME \
-    --name "${FILE_PREFIX}Csr" \
-    --file "${CERTS_DIR}${FILE_PREFIX}.csr"
-  then
-    CSR_EXISTED=
-
-    echo "Generating CSR..."
-
-    openssl req -new -batch -key "${CERTS_DIR}${FILE_PREFIX}.key" -subj "$CSR_SUBJECT" -out "${CERTS_DIR}${FILE_PREFIX}.csr"
-  else
-    echo "CSR found."
-
-    CSR_EXISTED=1
-  fi
 }
 
-function store_key_and_csr_and_challenge_phrase {
+function store_key_and_certificate {
   local FILE_PREFIX=$1
-  local CHALLENGE_PHRASE=$2
 
   if ! [ "$KEY_EXISTED" ]; then
     az keyvault secret set \
       --vault-name $KEY_VAULT_NAME \
       --name "${FILE_PREFIX}Key" \
       --file "${CERTS_DIR}${FILE_PREFIX}.key"
+
+    az keyvault secret set \
+      --vault-name $KEY_VAULT_NAME \
+      --name "${FILE_PREFIX}Certificate" \
+      --file "${CERTS_DIR}${FILE_PREFIX}.crt"
   fi
 
   if ! [ "$KEY_EXISTED" ] || ! [ "$BASE64_KEY_EXISTED" ]; then
@@ -127,53 +110,25 @@ function store_key_and_csr_and_challenge_phrase {
       --name "${FILE_PREFIX}KeyBase64" \
       --file "${CERTS_DIR}${FILE_PREFIX}.key.base64"
   fi
-
-  if ! [ "$CSR_EXISTED" ]; then
-    az keyvault secret set \
-      --vault-name $KEY_VAULT_NAME \
-      --name "${FILE_PREFIX}Csr" \
-      --file "${CERTS_DIR}${FILE_PREFIX}.csr"
-  fi
-
-  az keyvault secret set \
-    --vault-name $KEY_VAULT_NAME \
-    --name "${FILE_PREFIX}ChallengePhrase" \
-    --value "$CHALLENGE_PHRASE"
 }
 
-function request_cert {
+function generate_key_and_certificate {
   local TYPE=$1
   local FILE_PREFIX=$2
-  local CSR_COMMON_NAME=$3
+  local COMMON_NAME=$3
 
-  echo "Fetching or generating $TYPE key and CSR..."
-  fetch_or_generate_key_and_csr "$FILE_PREFIX" "$CSR_COMMON_NAME"
+  echo "Fetching or generating $TYPE key and certificate..."
+  fetch_or_generate_key_and_certificate "$FILE_PREFIX" "$COMMON_NAME"
 
   if [ "$KEY_EXISTED" ]; then
     echo "A $TYPE key already existed for $ENVIRONMENT_NAME version $VERSION_NUMBER."
     read -rp "  Hit return to continue with the pre-existing key, or CTRL+C to stop."
   fi
 
-  if [ "$CSR_EXISTED" ]; then
-    echo "A $TYPE CSR already existed for $ENVIRONMENT_NAME version $VERSION_NUMBER."
-    read -rp "  Hit return to continue with the pre-existing CSR, or CTRL+C to stop."
-  fi
+  echo "Storing $TYPE key and certificate in $KEY_VAULT_NAME..."
+  store_key_and_certificate "$FILE_PREFIX"
 
-  echo "Generate a strong challenge phrase. You must use alphanumeric characters."
-  echo "The following special characters are also allowed ' ( ) + , - . / , and space."
-  echo "Keep a note of the challenge phrase as you will need it during enrolment."
-
-  CHALLENGE_PHRASE=
-
-  while ! [ "$CHALLENGE_PHRASE" ]; do
-    read -rsp "  Enter the \"Challenge Phrase\" you will use in the enrolment request: " CHALLENGE_PHRASE
-    echo
-  done
-
-  echo "Storing $TYPE key, CSR, and challenge phrase in $KEY_VAULT_NAME..."
-  store_key_and_csr_and_challenge_phrase "$FILE_PREFIX" "$CHALLENGE_PHRASE"
-
-  echo "Now enrol the generated $TYPE CSR to Verify."
+  echo "$TYPE certificate ready for uploading to GOV.UK Verify."
 }
 
 if ! az account show > /dev/null; then
@@ -190,16 +145,16 @@ echo "This script will generate both the signing and encryption keys."
 read -rp "  Hit return to continue, or CTRL+C to stop."
 
 SIGNING_FILE_PREFIX="TeacherPayments${ENVIRONMENT_SHORT_NAME}VspSamlSigning${VERSION_NUMBER}"
-SIGNING_CSR_COMMON_NAME="Teacher Payments Service $ENVIRONMENT_SHORT_NAME VSP SAML Signing $VERSION_NUMBER"
+SIGNING_COMMON_NAME="Teacher Payments Service $ENVIRONMENT_SHORT_NAME VSP SAML Signing $VERSION_NUMBER"
 
 ENCRYPTION_FILE_PREFIX="TeacherPayments${ENVIRONMENT_SHORT_NAME}VspSamlEncryption${VERSION_NUMBER}"
-ENCRYPTION_CSR_COMMON_NAME="Teacher Payments Service $ENVIRONMENT_SHORT_NAME VSP SAML Encryption $VERSION_NUMBER"
+ENCRYPTION_COMMON_NAME="Teacher Payments Service $ENVIRONMENT_SHORT_NAME VSP SAML Encryption $VERSION_NUMBER"
 
 echo
-request_cert signing "$SIGNING_FILE_PREFIX" "$SIGNING_CSR_COMMON_NAME"
+generate_key_and_certificate signing "$SIGNING_FILE_PREFIX" "$SIGNING_COMMON_NAME"
 
 echo
-request_cert encryption "$ENCRYPTION_FILE_PREFIX" "$ENCRYPTION_CSR_COMMON_NAME"
+generate_key_and_certificate encryption "$ENCRYPTION_FILE_PREFIX" "$ENCRYPTION_COMMON_NAME"
 
 echo
 echo "Done! Files are in tmp/certs. Do not forget to remove them when you are done!"
