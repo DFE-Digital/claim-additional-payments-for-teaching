@@ -1,12 +1,8 @@
 require "rails_helper"
 
 RSpec.feature "Admin checks a claim" do
-  let(:user) { create(:dfe_signin_user) }
-
   context "User is logged in as a service operator" do
-    before do
-      sign_in_to_admin_with_role(DfeSignIn::User::SERVICE_OPERATOR_DFE_SIGN_IN_ROLE_CODE, user.dfe_sign_in_id)
-    end
+    before { @signed_in_user = sign_in_as_service_operator }
 
     scenario "User can approve a claim" do
       freeze_time do
@@ -26,7 +22,7 @@ RSpec.feature "Admin checks a claim" do
         fill_in "Decision notes", with: "Everything matches"
         perform_enqueued_jobs { click_on "Confirm decision" }
 
-        expect(claim_to_approve.latest_decision.created_by).to eq(user)
+        expect(claim_to_approve.latest_decision.created_by).to eq(@signed_in_user)
         expect(claim_to_approve.latest_decision.notes).to eq("Everything matches")
 
         expect(page).to have_content("Claim has been approved successfully")
@@ -59,7 +55,7 @@ RSpec.feature "Admin checks a claim" do
       fill_in "Decision notes", with: "TRN doesn't exist"
       perform_enqueued_jobs { click_on "Confirm decision" }
 
-      expect(claim_to_reject.latest_decision.created_by).to eq(user)
+      expect(claim_to_reject.latest_decision.created_by).to eq(@signed_in_user)
       expect(claim_to_reject.latest_decision.notes).to eq("TRN doesn't exist")
 
       expect(page).to have_content("Claim has been rejected successfully")
@@ -107,41 +103,7 @@ RSpec.feature "Admin checks a claim" do
       expect(page).to have_content("Approved")
       expect(page).to have_content(claim_with_decision.latest_decision.notes)
       expect(page).to have_content("Created by")
-      expect(page).to have_content(user.full_name)
-    end
-
-    context "when the service operator completes the last checking task" do
-      context "and the claimant has another approved claim in the same payroll window, with inconsistent personal details" do
-        let(:personal_details) do
-          {
-            national_insurance_number: generate(:national_insurance_number),
-            teacher_reference_number: generate(:teacher_reference_number),
-            date_of_birth: 30.years.ago.to_date,
-            student_loan_plan: StudentLoan::PLAN_1,
-            email_address: "email@example.com",
-            bank_sort_code: "112233",
-            bank_account_number: "95928482",
-            building_society_roll_number: nil
-          }
-        end
-        let!(:approved_claim) { create(:claim, :approved, personal_details.merge(bank_sort_code: "112233", bank_account_number: "29482823")) }
-        let!(:claim) { create(:claim, :submitted, personal_details.merge(bank_sort_code: "582939", bank_account_number: "74727752")) }
-
-        scenario "User is informed that the claim cannot be approved" do
-          perform_last_task(claim)
-
-          expect(page).to have_field("Approve", disabled: true)
-          expect(page).to have_content("This claim cannot currently be approved because we’re already paying another claim (#{approved_claim.reference}) to this claimant in this payroll month using different payment details. Please speak to a Grade 7.")
-        end
-      end
-
-      def perform_last_task(claim)
-        applicable_task_names = ClaimCheckingTasks.new(claim).applicable_task_names
-        visit admin_claim_task_path(claim, name: applicable_task_names.last)
-
-        choose "Yes"
-        click_on "Save and continue"
-      end
+      expect(page).to have_content(@signed_in_user.full_name)
     end
   end
 

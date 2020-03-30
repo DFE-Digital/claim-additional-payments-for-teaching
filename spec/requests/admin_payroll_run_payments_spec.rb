@@ -1,14 +1,10 @@
 require "rails_helper"
 
 RSpec.describe "Admin payroll run payments" do
-  let(:admin) { create(:dfe_signin_user) }
-
-  before do
-    sign_in_to_admin_with_role(DfeSignIn::User::SERVICE_OPERATOR_DFE_SIGN_IN_ROLE_CODE, admin.dfe_sign_in_id)
-  end
-
   let(:payroll_run) { create(:payroll_run, claims_counts: {MathsAndPhysics => 1, StudentLoans => 1}) }
   let(:payment) { payroll_run.payments.first }
+
+  before { @signed_in_user = sign_in_as_service_operator }
 
   describe "remove" do
     it "shows a confirmation screen" do
@@ -41,7 +37,7 @@ RSpec.describe "Admin payroll run payments" do
     end
 
     it "cannot delete a payment from an already confirmed payroll run" do
-      payroll_run.confirmation_report_uploaded_by = admin
+      payroll_run.confirmation_report_uploaded_by = @signed_in_user
       payroll_run.save!
 
       expect {

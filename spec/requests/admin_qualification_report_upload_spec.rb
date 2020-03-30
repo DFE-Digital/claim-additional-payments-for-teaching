@@ -1,10 +1,7 @@
 require "rails_helper"
 
 RSpec.describe "Admin qualification report upload" do
-  let(:admin) { create(:dfe_signin_user) }
-  before do
-    sign_in_to_admin_with_role(DfeSignIn::User::SERVICE_OPERATOR_DFE_SIGN_IN_ROLE_CODE, admin.dfe_sign_in_id)
-  end
+  before { @signed_in_user = sign_in_as_service_operator }
 
   describe "qualification_report_upload#new" do
     it "shows the upload form" do
@@ -37,7 +34,7 @@ RSpec.describe "Admin qualification report upload" do
         }.to change { claim.tasks.count }.by(1)
 
         qualification_task = claim.tasks.find_by(name: "qualifications")
-        expect(qualification_task.created_by).to eql(admin)
+        expect(qualification_task.created_by).to eql(@signed_in_user)
 
         expect(flash[:notice]).to eql("DQT report uploaded successfully. Automatically created checks for 1 claim out of 1 record.")
         expect(response).to redirect_to(admin_claims_path)

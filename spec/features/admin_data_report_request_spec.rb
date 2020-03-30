@@ -2,7 +2,7 @@ require "rails_helper"
 
 RSpec.feature "Data report request" do
   scenario "Service operator can download an external data report request file" do
-    sign_in_to_admin_with_role(DfeSignIn::User::SERVICE_OPERATOR_DFE_SIGN_IN_ROLE_CODE)
+    sign_in_as_service_operator
 
     claims = create_list(:claim, 3, :submitted)
 

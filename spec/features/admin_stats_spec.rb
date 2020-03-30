@@ -7,7 +7,7 @@ RSpec.feature "Admin stats" do
     @unfinished_claims = create_list(:claim, 1, :submittable)
     @claims_approaching_deadline = create_list(:claim, 2, :submitted, submitted_at: (Claim::DECISION_DEADLINE - 1.week).ago)
     @claims_passed_deadline = create_list(:claim, 1, :submitted, submitted_at: (Claim::DECISION_DEADLINE + 1.week).ago)
-    sign_in_to_admin_with_role(DfeSignIn::User::SERVICE_OPERATOR_DFE_SIGN_IN_ROLE_CODE)
+    sign_in_as_service_operator
     visit admin_root_path
   end
 

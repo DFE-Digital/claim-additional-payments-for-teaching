@@ -12,11 +12,10 @@ RSpec.feature "Admin amends a claim" do
       building_society_roll_number: "RN 123456")
   end
   let(:date_of_birth) { 25.years.ago.to_date }
-  let(:service_operator) { create(:dfe_signin_user, given_name: "Jo", family_name: "Bloggs") }
+
+  before { @signed_in_user = sign_in_as_service_operator }
 
   scenario "Service operator amends a claim" do
-    sign_in_to_admin_with_role(DfeSignIn::User::SERVICE_OPERATOR_DFE_SIGN_IN_ROLE_CODE, service_operator.dfe_sign_in_id)
-
     visit admin_claim_url(claim)
 
     click_on "Amend claim"
@@ -46,7 +45,7 @@ RSpec.feature "Admin amends a claim" do
       "building_society_roll_number" => ["RN 123456", "JF 838281"]
     })
     expect(amendment.notes).to eq("This claimant got some of their details wrong and then contacted us")
-    expect(amendment.created_by).to eq(service_operator)
+    expect(amendment.created_by).to eq(@signed_in_user)
 
     expect(claim.reload.teacher_reference_number).to eq("7654321")
     expect(claim.date_of_birth).to eq(new_date_of_birth)
@@ -69,12 +68,10 @@ RSpec.feature "Admin amends a claim" do
     expect(page).to have_content("Building society roll number\nchanged from RN 123456 to JF 838281")
 
     expect(page).to have_content("This claimant got some of their details wrong and then contacted us")
-    expect(page).to have_content("by Jo Bloggs on #{I18n.l(Time.current)}")
+    expect(page).to have_content("by #{@signed_in_user.full_name} on #{I18n.l(Time.current)}")
   end
 
   scenario "Service operator cancels amending a claim" do
-    sign_in_to_admin_with_role(DfeSignIn::User::SERVICE_OPERATOR_DFE_SIGN_IN_ROLE_CODE, service_operator.dfe_sign_in_id)
-
     visit admin_claim_url(claim)
 
     click_on "Amend claim"
@@ -94,8 +91,6 @@ RSpec.feature "Admin amends a claim" do
       "bank_account_number" => nil
     })
 
-    sign_in_to_admin_with_role(DfeSignIn::User::SERVICE_OPERATOR_DFE_SIGN_IN_ROLE_CODE, service_operator.dfe_sign_in_id)
-
     visit admin_claim_amendments_url(claim)
 
     expect(page).to have_content("Teacher reference number\nchanged from 7654321 to 1234567")
@@ -109,8 +104,6 @@ RSpec.feature "Admin amends a claim" do
     end
 
     scenario "Service operator amends the student loan repayment amount" do
-      sign_in_to_admin_with_role(DfeSignIn::User::SERVICE_OPERATOR_DFE_SIGN_IN_ROLE_CODE, service_operator.dfe_sign_in_id)
-
       visit admin_claim_url(claim)
 
       click_on "Amend claim"
@@ -124,7 +117,7 @@ RSpec.feature "Admin amends a claim" do
         "student_loan_repayment_amount" => [550, 300]
       })
       expect(amendment.notes).to eq("The claimant calculated the incorrect student loan repayment amount")
-      expect(amendment.created_by).to eq(service_operator)
+      expect(amendment.created_by).to eq(@signed_in_user)
 
       expect(claim.eligibility.student_loan_repayment_amount).to eq(300)
 
@@ -133,7 +126,7 @@ RSpec.feature "Admin amends a claim" do
       expect(page).to have_content("Student loan repayment amount\nchanged from £550.00 to £300.00")
 
       expect(page).to have_content("The claimant calculated the incorrect student loan repayment amount")
-      expect(page).to have_content("by Jo Bloggs on #{I18n.l(Time.current)}")
+      expect(page).to have_content("by #{@signed_in_user.full_name} on #{I18n.l(Time.current)}")
     end
   end
 end

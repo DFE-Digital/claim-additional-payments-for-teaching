@@ -1,7 +1,6 @@
 require "rails_helper"
 
 RSpec.feature "Admin checking a claim with inconsistent payroll information" do
-  let(:user) { create(:dfe_signin_user) }
   let(:personal_details) do
     {
       national_insurance_number: generate(:national_insurance_number),
@@ -15,9 +14,7 @@ RSpec.feature "Admin checking a claim with inconsistent payroll information" do
     }
   end
 
-  before do
-    sign_in_to_admin_with_role(DfeSignIn::User::SERVICE_OPERATOR_DFE_SIGN_IN_ROLE_CODE, user.dfe_sign_in_id)
-  end
+  before { sign_in_as_service_operator }
 
   scenario "cannot approve a second claim from an individual whilst the payroll information on the claims is inconsistent" do
     approved_claim = create(:claim, :approved, personal_details.merge(bank_sort_code: "112233", bank_account_number: "29482823"))

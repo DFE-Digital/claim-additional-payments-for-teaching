@@ -1,12 +1,11 @@
 require "rails_helper"
 
 RSpec.feature "Payroll" do
-  let(:user) { create(:dfe_signin_user) }
   let!(:dataset_post_stub) { stub_geckoboard_dataset_update("claims.test") }
 
-  scenario "Service operator creates a payroll run" do
-    sign_in_to_admin_with_role(DfeSignIn::User::SERVICE_OPERATOR_DFE_SIGN_IN_ROLE_CODE, user.dfe_sign_in_id)
+  before { @signed_in_user = sign_in_as_service_operator }
 
+  scenario "Service operator creates a payroll run" do
     click_on "Payroll"
 
     create(:claim, :approved, policy: MathsAndPhysics)
@@ -25,7 +24,7 @@ RSpec.feature "Payroll" do
     payroll_run = PayrollRun.order(:created_at).last
 
     expect(page).to have_content("Approved claims 3")
-    expect(page).to have_content("Created by #{user.full_name}")
+    expect(page).to have_content("Created by #{@signed_in_user.full_name}")
     expect(page).to have_content("Total award amount £4,000")
     expect(page).to have_content("Payroll run created")
     expect(page).to have_field("payroll_run_download_link", with: new_admin_payroll_run_download_url(payroll_run))
@@ -34,7 +33,6 @@ RSpec.feature "Payroll" do
   context "when a payroll run already exists for the month" do
     scenario "Service operator cannot create a new payroll run" do
       create(:payroll_run, claims_counts: {StudentLoans => 2}, created_at: 5.minutes.ago)
-      sign_in_to_admin_with_role(DfeSignIn::User::SERVICE_OPERATOR_DFE_SIGN_IN_ROLE_CODE)
 
       visit admin_payroll_runs_path
 
@@ -43,8 +41,6 @@ RSpec.feature "Payroll" do
   end
 
   scenario "Any claims approved in the meantime are not included" do
-    sign_in_to_admin_with_role(DfeSignIn::User::SERVICE_OPERATOR_DFE_SIGN_IN_ROLE_CODE)
-
     click_on "Payroll"
 
     expected_claims = create_list(:claim, 3, :approved)
@@ -63,8 +59,6 @@ RSpec.feature "Payroll" do
   end
 
   scenario "Service operator can view a list of previous payroll runs" do
-    sign_in_to_admin_with_role(DfeSignIn::User::SERVICE_OPERATOR_DFE_SIGN_IN_ROLE_CODE)
-
     first_payroll_run = create(:payroll_run, created_at: Time.zone.now - 1.month)
     last_payroll_run = create(:payroll_run, created_at: Time.zone.now)
 
@@ -80,8 +74,6 @@ RSpec.feature "Payroll" do
   end
 
   scenario "Service operator can view a payroll run" do
-    sign_in_to_admin_with_role(DfeSignIn::User::SERVICE_OPERATOR_DFE_SIGN_IN_ROLE_CODE)
-
     payroll_run = create(:payroll_run, claims_counts: {MathsAndPhysics => 1, StudentLoans => 1})
 
     click_on "Payroll"
@@ -100,7 +92,6 @@ RSpec.feature "Payroll" do
   end
 
   scenario "Service operator can remove a payment from a payroll run" do
-    sign_in_to_admin_with_role(DfeSignIn::User::SERVICE_OPERATOR_DFE_SIGN_IN_ROLE_CODE)
     payroll_run = create(:payroll_run, claims_counts: {MathsAndPhysics => 1, StudentLoans => 1})
     payment_to_delete = payroll_run.payments.first
     claim_reference = payment_to_delete.claims.first.reference
@@ -123,8 +114,6 @@ RSpec.feature "Payroll" do
   end
 
   scenario "Service operator can upload a Payment Confirmation Report against a payroll run" do
-    sign_in_to_admin_with_role(DfeSignIn::User::SERVICE_OPERATOR_DFE_SIGN_IN_ROLE_CODE, user.dfe_sign_in_id)
-
     payroll_run = create(:payroll_run, claims_counts: {StudentLoans => 2})
 
     click_on "Payroll"
@@ -150,7 +139,7 @@ RSpec.feature "Payroll" do
 
     expect(page.find("table")).to have_content("Uploaded")
 
-    expect(payroll_run.reload.confirmation_report_uploaded_by).to eq(user)
+    expect(payroll_run.reload.confirmation_report_uploaded_by).to eq(@signed_in_user)
     expect(payroll_run.payments[0].reload.gross_value).to eq("487.48".to_d)
 
     expect(ActionMailer::Base.deliveries.count).to eq(2)

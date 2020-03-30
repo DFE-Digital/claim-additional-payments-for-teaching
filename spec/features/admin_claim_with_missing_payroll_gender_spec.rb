@@ -1,11 +1,7 @@
 require "rails_helper"
 
 RSpec.feature "Admin checking a claim missing a payroll gender" do
-  let(:user) { create(:dfe_signin_user) }
-
-  before do
-    sign_in_to_admin_with_role(DfeSignIn::User::SERVICE_OPERATOR_DFE_SIGN_IN_ROLE_CODE, user.dfe_sign_in_id)
-  end
+  before { @signed_in_user = sign_in_as_service_operator }
 
   scenario "service operator can add a payroll gender as part of the checking process" do
     claim = create(:claim, :submitted, policy: StudentLoans, payroll_gender: :dont_know)
@@ -41,6 +37,6 @@ RSpec.feature "Admin checking a claim missing a payroll gender" do
 
     expect(page).to have_content("Claim has been approved successfully")
     expect(claim.latest_decision).to be_approved
-    expect(claim.latest_decision.created_by).to eq(user)
+    expect(claim.latest_decision.created_by).to eq(@signed_in_user)
   end
 end

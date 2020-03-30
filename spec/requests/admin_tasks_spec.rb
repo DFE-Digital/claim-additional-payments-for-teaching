@@ -4,11 +4,7 @@ RSpec.describe "Admin tasks", type: :request do
   let(:claim) { create(:claim, :submitted) }
 
   context "when signed in as a service operator" do
-    let(:user) { create(:dfe_signin_user) }
-
-    before do
-      sign_in_to_admin_with_role(DfeSignIn::User::SERVICE_OPERATOR_DFE_SIGN_IN_ROLE_CODE, user.dfe_sign_in_id)
-    end
+    before { @signed_in_user = sign_in_as_service_operator }
 
     describe "tasks#index" do
       it "shows a list of tasks for a claim" do
@@ -55,7 +51,7 @@ RSpec.describe "Admin tasks", type: :request do
 
             expect(claim.tasks.last.name).to eql("qualifications")
             expect(claim.tasks.last.passed?).to eql(true)
-            expect(claim.tasks.last.created_by).to eql(user)
+            expect(claim.tasks.last.created_by).to eql(@signed_in_user)
             expect(response).to redirect_to(admin_claim_task_path(claim, name: "employment"))
           end
 
@@ -76,7 +72,7 @@ RSpec.describe "Admin tasks", type: :request do
 
               expect(claim.tasks.reload.last.name).to eql(last_task)
               expect(claim.tasks.last.passed?).to eql(true)
-              expect(claim.tasks.last.created_by).to eql(user)
+              expect(claim.tasks.last.created_by).to eql(@signed_in_user)
               expect(response).to redirect_to(new_admin_claim_decision_path(claim))
             end
           end

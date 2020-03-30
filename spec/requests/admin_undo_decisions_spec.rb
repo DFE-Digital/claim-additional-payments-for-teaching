@@ -2,11 +2,7 @@ require "rails_helper"
 
 RSpec.describe "Undoing decisions", type: :request do
   context "when signed in as a service operator" do
-    let(:service_operator) { create(:dfe_signin_user) }
-
-    before do
-      sign_in_to_admin_with_role(DfeSignIn::User::SERVICE_OPERATOR_DFE_SIGN_IN_ROLE_CODE, service_operator.dfe_sign_in_id)
-    end
+    before { @signed_in_user = sign_in_as_service_operator }
 
     describe "#create" do
       let(:claim) { create(:claim, :approved) }
@@ -29,6 +25,7 @@ RSpec.describe "Undoing decisions", type: :request do
         expect(amendment.claim).to eq(claim)
         expect(amendment.notes).to eq("Here are some notes")
         expect(amendment.claim_changes).to eq({decision: ["approved", "undecided"]})
+        expect(amendment.created_by).to eq(@signed_in_user)
       end
 
       it "does not save the decision or admendment if the claim has been subsequently paid" do
