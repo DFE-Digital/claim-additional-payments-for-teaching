@@ -4,9 +4,8 @@ RSpec.describe "admin/notes controller" do
   let(:claim) { create(:claim, :submitted) }
 
   describe "admin/notes#index" do
-    before { @signed_in_user = sign_in_as_service_operator }
-
-    it "list the notes on a claim" do
+    it "list the notes on a claim when the user is a service operator" do
+      sign_in_as_service_operator
       note = create(:note, claim: claim, body: "Need to verify the student loan amount")
       user = note.created_by
 
@@ -16,12 +15,23 @@ RSpec.describe "admin/notes controller" do
       expect(response.body).to include("Need to verify the student loan amount")
       expect(response.body).to include("by #{user.full_name}")
     end
+
+    it "refuses requests from users without the service operator role" do
+      non_service_operator_roles.each do |role|
+        sign_in_to_admin_with_role(role)
+
+        get admin_claim_notes_path(claim)
+
+        expect(response).to have_http_status(:unauthorized)
+        expect(response.body).to include("Not authorised")
+      end
+    end
   end
 
   describe "admin/notes#create" do
     before { @signed_in_user = sign_in_as_service_operator }
 
-    it "creates a note against the claim by the signed-in user" do
+    it "creates a note against the claim when the user is a service operator" do
       post admin_claim_notes_path(claim), params: {note: {body: "Some note"}}
 
       expect(response).to redirect_to(admin_claim_notes_path(claim))
@@ -31,6 +41,17 @@ RSpec.describe "admin/notes controller" do
       note = claim.notes.last
       expect(note.body).to eq("Some note")
       expect(note.created_by).to eq(@signed_in_user)
+    end
+
+    it "refuses requests from users without the service operator role" do
+      non_service_operator_roles.each do |role|
+        sign_in_to_admin_with_role(role)
+
+        post admin_claim_notes_path(claim), params: {note: {body: "Some note"}}
+
+        expect(response).to have_http_status(:unauthorized)
+        expect(response.body).to include("Not authorised")
+      end
     end
   end
 end

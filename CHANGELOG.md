@@ -6,7 +6,7 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
-- Admin users can add notes to claims
+- Service operators can add notes to claims
 
 ## [Release 067] - 2020-03-30
 
