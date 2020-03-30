@@ -200,16 +200,11 @@
         "keyVault": {
           "id": "${keyVaultId}"
         },
-        "secretName": "TeacherPaymentsDevVspSamlEncryption7KeyBase64"
+        "secretName": "TeacherPaymentsDevVspSamlEncryption8KeyBase64"
       }
     },
     "VSP.SAML_SECONDARY_ENCRYPTION_KEY": {
-      "reference": {
-        "keyVault": {
-          "id": "${keyVaultId}"
-        },
-        "secretName": "TeacherPaymentsDevVspSamlEncryption8KeyBase64"
-      }
+      "value": ""
     },
     "VSP.EUROPEAN_IDENTITY_ENABLED": {
       "value": "true"
