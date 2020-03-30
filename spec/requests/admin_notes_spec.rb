@@ -43,6 +43,14 @@ RSpec.describe "admin/notes controller" do
       expect(note.created_by).to eq(@signed_in_user)
     end
 
+    it "shows an error message when the note is missing" do
+      post admin_claim_notes_path(claim), params: {note: {body: ""}}
+
+      expect(claim.notes.count).to eq(0)
+
+      expect(response.body).to include("Enter a note")
+    end
+
     it "refuses requests from users without the service operator role" do
       non_service_operator_roles.each do |role|
         sign_in_to_admin_with_role(role)

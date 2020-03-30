@@ -9,8 +9,11 @@ module Admin
 
     def create
       @note = Note.new(note_params)
-      @note.save!
-      redirect_to admin_claim_notes_url(@claim)
+      if @note.save
+        redirect_to admin_claim_notes_url(@claim)
+      else
+        render :index
+      end
     end
 
     private
