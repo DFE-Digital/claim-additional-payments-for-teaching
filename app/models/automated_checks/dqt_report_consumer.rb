@@ -18,17 +18,19 @@ module AutomatedChecks
     def ingest
       return if errors.any?
 
-      claims = Claim.awaiting_task("qualifications")
-      records = DQTReportCsvToRecords.new(csv.rows).transform
-      records.each do |record|
-        claim = claims.detect { |c| c.reference == record.fetch(:claim_reference) }
-        next if record.fetch(:qts_date).blank? || claim.nil?
-        if claim.policy::DQTRecord.new(record).eligible? && record_matches_claim?(record, claim)
-          claim.tasks.create!(task_attributes)
-          @completed_tasks += 1
+      ActiveRecord::Base.transaction do
+        claims = Claim.awaiting_task("qualifications")
+        records = DQTReportCsvToRecords.new(csv.rows).transform
+        records.each do |record|
+          claim = claims.detect { |c| c.reference == record.fetch(:claim_reference) }
+          next if record.fetch(:qts_date).blank? || claim.nil?
+          if claim.policy::DQTRecord.new(record).eligible? && record_matches_claim?(record, claim)
+            claim.tasks.create!(task_attributes)
+            @completed_tasks += 1
+          end
         end
+        @total_records = records.count
       end
-      @total_records = records.count
     end
 
     def errors

@@ -15,6 +15,12 @@ RSpec.describe "Admin qualification report upload" do
 
   describe "qualification_report_upload#create" do
     let(:file) { Rack::Test::UploadedFile.new(StringIO.new(csv), "text/csv", original_filename: "dqt_data.csv") }
+    let(:csv) do
+      <<~CSV
+        dfeta text1,dfeta text2,dfeta trn,fullname,birthdate,dfeta ninumber,dfeta qtsdate,dfeta he hesubject1idname,dfeta he hesubject2idname,dfeta he hesubject3idname,HESubject1Value,HESubject2Value,HESubject3Value,dfeta subject1idname,dfeta subject2idname,dfeta subject3idname,ITTSub1Value,ITTSub2Value,ITTSub3Value
+        1234567,#{claim.reference},1234567,Fred Smith,23/8/1990,QQ123456C,23/8/2017,Politics,,,L200,,,Mathematics,,,G100,,
+      CSV
+    end
     let(:claim) do
       create(:claim, :submitted,
         teacher_reference_number: "1234567",
@@ -25,13 +31,6 @@ RSpec.describe "Admin qualification report upload" do
     end
 
     context "when the data in CSV matches the data in the claim" do
-      let(:csv) do
-        <<~CSV
-          dfeta text1,dfeta text2,dfeta trn,fullname,birthdate,dfeta ninumber,dfeta qtsdate,dfeta he hesubject1idname,dfeta he hesubject2idname,dfeta he hesubject3idname,HESubject1Value,HESubject2Value,HESubject3Value,dfeta subject1idname,dfeta subject2idname,dfeta subject3idname,ITTSub1Value,ITTSub2Value,ITTSub3Value
-          1234567,#{claim.reference},1234567,Fred Smith,23/8/1990,QQ123456C,23/8/2017,Politics,,,L200,,,Mathematics,,,G100,,
-        CSV
-      end
-
       it "creates qualification task for the claim" do
         expect {
           post admin_qualification_report_uploads_path, params: {file: file}
@@ -59,6 +58,19 @@ RSpec.describe "Admin qualification report upload" do
         post admin_qualification_report_uploads_path
 
         expect(response.body).to include("Select a file")
+      end
+    end
+
+    context "when there's an error creating the tasks" do
+      it "displays an error and prompts the user to try again" do
+        allow_any_instance_of(Claim).to receive_message_chain("tasks.create!").and_raise(ActiveRecord::RecordInvalid)
+
+        expect {
+          post admin_qualification_report_uploads_path, params: {file: file}
+        }.not_to change { Task.count }
+
+        expect(response).to redirect_to(new_admin_qualification_report_upload_path)
+        expect(flash[:alert]).to eql("There was a problem, please try again")
       end
     end
 

@@ -15,6 +15,8 @@ module Admin
       else
         render :new
       end
+    rescue ActiveRecord::RecordInvalid
+      redirect_to new_admin_qualification_report_upload_path, alert: "There was a problem, please try again"
     end
   end
 end
