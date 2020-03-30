@@ -50,7 +50,7 @@ module AutomatedChecks
 
     def record_matches_claim?(record, claim)
       record.fetch(:date_of_birth) == claim.date_of_birth &&
-        record.fetch(:surname) == claim.surname
+        record.fetch(:surname)&.casecmp?(claim.surname)
     end
   end
 end

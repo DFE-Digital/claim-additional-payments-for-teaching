@@ -11,7 +11,7 @@ module FixtureHelpers
     when :eligible_claim_with_matching_data
       # Eligible claim with matching data in DQT
       create(:claim, :submitted,
-        surname: "Eligible",
+        surname: "ELIGIBLE",
         teacher_reference_number: "1234567",
         reference: "AB123456",
         date_of_birth: Date.new(1990, 8, 23))
