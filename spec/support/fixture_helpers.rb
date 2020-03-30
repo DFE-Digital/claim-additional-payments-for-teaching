@@ -15,7 +15,7 @@ module FixtureHelpers
         reference: "AB123456",
         date_of_birth: Date.new(1990, 8, 23))
 
-    when :eligible_claim_with_non_matching_data
+    when :eligible_claim_with_non_matching_birthdate
       # Eligible claim and eligible DQT data but different date of birth
       create(:claim, :submitted,
         teacher_reference_number: "8901231",
