@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+## [Release 067] - 2020-03-30
+
 - Exclude claims from previous academic years on matching claims screen
 - Fix a bug with automated DQT checks where the report has multiple rows for the
   same claim
@@ -543,7 +545,9 @@ The format is based on [Keep a Changelog]
 - First release for student loan repayments private beta
 
 [unreleased]:
-  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-066...HEAD
+  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-067...HEAD
+[release 067]:
+  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-066...release-067
 [release 066]:
   https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-065...release-066
 [release 065]:
