@@ -12,7 +12,7 @@ class Admin::DecisionsUndoController < Admin::BaseAdminController
     @amendment = Amendment.undo_decision(@decision, amendment_params)
 
     if @amendment.persisted?
-      redirect_to admin_claim_path(@claim)
+      redirect_to admin_claim_tasks_path(@claim)
     else
       render :new
     end

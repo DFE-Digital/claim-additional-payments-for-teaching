@@ -9,6 +9,18 @@ RSpec.describe "Admin claim amendments" do
       sign_in_to_admin_with_role(DfeSignIn::User::SERVICE_OPERATOR_DFE_SIGN_IN_ROLE_CODE, service_operator.dfe_sign_in_id)
     end
 
+    describe "admin/amendments#index" do
+      let(:claim) { create(:claim, :submitted, teacher_reference_number: "1234567") }
+      let!(:amendment) { create(:amendment, claim: claim, notes: "Made a change", claim_changes: {"teacher_reference_number" => ["7654321", "1234567"]}) }
+
+      it "list the amendments on a claim" do
+        get admin_claim_amendments_path(claim)
+
+        expect(response.body).to include("changed from 7654321 to 1234567")
+        expect(response.body).to include("Made a change")
+      end
+    end
+
     describe "admin_amendments#create" do
       it "creates an amendment and updates the claim" do
         old_date_of_birth = claim.date_of_birth

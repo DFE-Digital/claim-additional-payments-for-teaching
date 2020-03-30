@@ -1,0 +1,10 @@
+<ul class="govuk-tabs__list" role="tablist">
+  <li class="govuk-tabs__list-item govuk-tabs__list-item--<%= "selected" if current_page?(controller: "tasks") %>" role="presentation">
+    <%= link_to_unless_current "Tasks", admin_claim_tasks_path(claim), class: "govuk-tabs__tab", role: "tabs", aria: { controls: "task", selected: current_page?(controller: "tasks") } %>
+  </li>
+  <li class="govuk-tabs__list-item govuk-tabs__list-item--<%= "selected" if current_page?(controller: "amendments") %>" role="presentation">
+    <%= link_to_unless_current "Claim amendments", admin_claim_amendments_path(@claim), class: "govuk-tabs__tab", role: "tabs", aria: { controls: "task", selected: current_page?(controller: "amendments") } %>
+    <%= "(#{claim.amendments.count})" if claim.amendments.any? %>
+  </li>
+</ul>
+

@@ -10,6 +10,7 @@ The format is based on [Keep a Changelog]
 - Fix a bug with automated DQT checks where the report has multiple rows for the
   same claim
 - Allow a claim's decision to be amended by a service operator
+- Move claim amendments to a seperate tab
 
 ## [Release 066] - 2020-03-25
 

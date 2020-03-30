@@ -56,10 +56,4 @@
       <%= render "admin/claims/answer_section", {heading: "Claim decision details", answers: admin_decision_details(@decision)} %>
     <% end %>
   </div>
-
-  <% if @claim.amendments.any? %>
-    <div class="govuk-grid-column-one-third">
-      <%= render "amendments_timeline", amendments: @claim.amendments.reverse %>
-    </div>
-  <% end %>
 </div>
