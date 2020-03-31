@@ -9,6 +9,12 @@ Most documentation for the service can be found on the
 Some app-specific technical documentation can be found in the [docs](docs)
 directory.
 
+### First-line support developers
+
+If you’re a developer on first-line support who is new to this project, see the
+[support runbook (`docs/first-line-support-developer-runbook.md`)](docs/first-line-support-developer-runbook.md)
+for help with common support tasks.
+
 ### Service architecture
 
 The service architecture is currently defined [on confluence].
@@ -37,7 +43,7 @@ Architecture decision records can be found in the
 - [ShellCheck](https://www.shellcheck.net/)
 - [Yarn](https://yarnpkg.com/en/docs/install)
 
-## Setting up the app in development
+## Setting up the app locally
 
 1. In order to integrate with DfE Sign-in's Open ID Connect service we are
    required to communicate over https in development. Create a self-signed
@@ -58,22 +64,24 @@ Architecture decision records can be found in the
 - **Student Loans:** https://localhost:3000/student-loans/claim
 - **Maths and Physics:** https://localhost:3000/maths-and-physics/claim
 
-### DfE Sign In credentials
+### How to set up DfE Sign-In locally
 
-The service uses DfE Sign In to handle admin users. To run in development, you
-need the credentials for DfE Sign In's pre-production environment.
+The service uses DfE Sign In to handle admin users.
 
-Create a `.env` file with the following variables:
+To use the `/admin` site locally, you need the secret configuration variables
+for DfE Sign In's pre-production environment. You can find these in the
+development key vault on Azure.
+
+Create a `.env` file at the root of the repository, with the following
+variables:
 
 ```
 DFE_SIGN_IN_SECRET=<paste secret>
 DFE_SIGN_IN_API_SECRET=<paste secret>
 ```
 
-The secrets are stored in the development Key Vault on Azure.
-
-To access the admin routes, you will also need to request an account on DfE Sign
-In's pre-production environment.
+To access the admin routes, you will also need to
+[request an account on DfE Sign In's pre-production environment](docs/dfe-sign-in.md#adding-a-new-user-to-the-pre-production-environment).
 
 ### GOV.UK Notify
 
@@ -234,6 +242,8 @@ web servers, however it will have access to the database.
 - Then go to 'Containers' under 'Settings'
 - With the container selected go to the 'Connect' tab
 - Choose the start up command (`/bin/bash` is recommended) and connect
+- From there, you can run a Rails console with `bin/rails console`. Pass the
+  `--sandbox` flag if you don’t need to modify data.
 
 ### Through the Azure CLI
 
@@ -245,8 +255,11 @@ first):
 bin/azure-console $ENVIRONMENT # (development/production)
 ```
 
+From there, you can run a Rails console with `bin/rails console`. Pass the
+`--sandbox` flag if you don’t need to modify data.
+
 Accessing a live console on production requires a
-[PIM (Privileged Identity Management) request](https://dfedigital.atlassian.net/wiki/spaces/TP/pages/1192624202/Privileged+Identity+Management+requests).
+[PIM (Privileged Identity Management) request](docs/privileged-identity-management-requests.md)
 
 ### Usage
 
