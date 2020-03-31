@@ -57,8 +57,8 @@ production as follows:
 
 - Log in to this project on
   [Azure DevOps](https://dev.azure.com/dfe-ssp/S118-Teacher-Payments-Service).
-- Navigate to Pipelines > Builds.
-- Find the build which corresponds to the merge commit created by merging the
+- Navigate to Pipelines > Pipelines.
+- Find the "Run" which corresponds to the merge commit created by merging the
   release pull request into `master`. This is the build which you want to
   release. You can filter by branch using the filter / funnel icon in the top
   right.
