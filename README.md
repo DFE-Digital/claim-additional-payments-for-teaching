@@ -5,7 +5,7 @@
 ## Documentation
 
 Most documentation for the service can be found on the
-[project's confluence wiki](https://dfedigital.atlassian.net/wiki/spaces/TP).
+[project's Confluence wiki](https://dfedigital.atlassian.net/wiki/spaces/TP).
 Some app-specific technical documentation can be found in the [docs](docs)
 directory.
 
@@ -17,11 +17,8 @@ for help with common support tasks.
 
 ### Service architecture
 
-The service architecture is currently defined [on confluence].
-
-[on confluence]:
-  https://dfedigital.atlassian.net/wiki/spaces/TP/pages/1049559041/Service+Architecture
-[openjdk]: https://adoptopenjdk.net/
+The service architecture is currently defined
+[on Confluence](https://dfedigital.atlassian.net/wiki/spaces/TP/pages/1049559041/Service+Architecture).
 
 ### ADRs
 
@@ -37,7 +34,7 @@ Architecture decision records can be found in the
 
 ## Prerequisites
 
-- Java 11 or 8 (LTS) - we recommend [OpenJDK][openjdk]
+- Java 11 or 8 (LTS) - we recommend [OpenJDK](https://adoptopenjdk.net/)
 - Ruby 2.6.2
 - PostgreSQL
 - [ShellCheck](https://www.shellcheck.net/)
