@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+- Service operators can add notes to claims
+
 ## [Release 067] - 2020-03-30
 
 - Exclude claims from previous academic years on matching claims screen

@@ -94,6 +94,7 @@ Rails.application.routes.draw do
         resources :undos, only: [:create, :new], controller: "decisions_undo"
       end
       resources :amendments, only: [:index, :new, :create]
+      resources :notes, only: [:index, :create]
       get "search", on: :collection
     end
 
