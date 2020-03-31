@@ -7,6 +7,8 @@ We’re paying:
 
 ^ You will receive <%=number_to_currency(@payment.net_pay) %> on or after <%= l(@payment_date) %>.
 
+You may see the name of our payments processor ‘Cantium Business Solutions’ on your bank statement as the sender of this payment.
+
 <% if @payment.student_loan_repayment.present? %>
 
 # Breakdown of payment
