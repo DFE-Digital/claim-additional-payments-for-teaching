@@ -274,14 +274,21 @@ that the code to do it can be reviewed and put into source control. If there is
 a need to make an immediate change live using the console, make sure it is done
 with approval from the Service Owner and is to done as a pair.
 
-## Putting the application into maintenance mode
+## Opening/closing services for applications
 
-There are two potential reasons why we might want to turn maintenance mode on.
-Either prior to a deploy of a journey breaking change, or until further notice
-(the service is closed for some reason).
+It is possible to close each service for applications in the admin interface
+under "Manage services" by changing the service status from "Open" to "Closed".
+When closed, the public-facing interface for making claims is disabled and a
+message explaining that the service is down is displayed. The admin interface
+remains open.
 
-Maintenance mode is enabled on a per-policy basis via "Open or close a service"
-in the admin web interface.
+There are a few reasons each service might need to be closed:
+
+- At the end of the April when the service closes for applications until the
+  next academic year
+- When there is release planned that requires the site be temporarily be
+  disabled because of the changes being made
+- When there is unplanned maintenance because of an issue or incident.
 
 ## Reusable components
 
