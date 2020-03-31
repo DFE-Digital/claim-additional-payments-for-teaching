@@ -26,7 +26,7 @@
       </dt>
 
       <dd class="govuk-summary-list__value">
-        <%= claim.full_name %>
+        <%= claim.personal_data_removed? ? personal_data_removed_text : claim.full_name %>
       </dd>
     </div>
     <div class="govuk-summary-list__row">
@@ -35,7 +35,7 @@
       </dt>
 
       <dd class="govuk-summary-list__value">
-        <%= l(claim.date_of_birth, format: :day_month_year) %>
+        <%= claim.personal_data_removed? ? personal_data_removed_text : l(claim.date_of_birth, format: :day_month_year) %>
       </dd>
     </div>
     <div class="govuk-summary-list__row">
@@ -57,7 +57,7 @@
       </dt>
 
       <dd class="govuk-summary-list__value">
-        <%= claim.national_insurance_number %>
+        <%= claim.personal_data_removed? ? personal_data_removed_text : claim.national_insurance_number %>
       </dd>
     </div>
     <div class="govuk-summary-list__row">
