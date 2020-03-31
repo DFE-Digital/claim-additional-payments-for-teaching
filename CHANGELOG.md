@@ -556,7 +556,7 @@ The format is based on [Keep a Changelog]
 [unreleased]:
   https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-068...HEAD
 [release 068]:
-  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-067...release-068  
+  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-067...release-068
 [release 067]:
   https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-066...release-067
 [release 066]:
