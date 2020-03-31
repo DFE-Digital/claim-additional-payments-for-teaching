@@ -18,6 +18,9 @@
 
           <h2 class="govuk-heading-l">
             Claim amendments
+            <span class="govuk-body-m">
+              <%= link_to('Amend claim', new_admin_claim_amendment_path(@claim), class: "govuk-link") if @claim.amendable? %>
+            </span>
           </h2>
 
           <div class="hmcts-timeline">
