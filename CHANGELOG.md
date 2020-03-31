@@ -6,7 +6,14 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+## [Release 068] - 2020-03-31
+
 - Service operators can add notes to claims
+- Display "Removed" when personal data from the tasks view is removed
+- Remove warning banners for matching claims and missing payroll gender
+- Remove decision form from the full claim view
+- Redirect user to the tasks view instead of full claim view when searching or
+  amending a claim
 
 ## [Release 067] - 2020-03-30
 
@@ -547,7 +554,9 @@ The format is based on [Keep a Changelog]
 - First release for student loan repayments private beta
 
 [unreleased]:
-  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-067...HEAD
+  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-068...HEAD
+[release 068]:
+  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-067...release-068  
 [release 067]:
   https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-066...release-067
 [release 066]:
