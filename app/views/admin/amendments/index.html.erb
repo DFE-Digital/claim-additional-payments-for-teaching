@@ -13,31 +13,38 @@
     <%= render "admin/claims/tabs", claim: @claim %>
 
     <section class="govuk-tabs__panel" role="tabpanel" aria-labelledby="tab_tasks">
-      <h2 class="govuk-heading-l">Claim amendments</h2>
+      <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
 
-      <div class="hmcts-timeline">
-        <% @claim.amendments.each do |amendment| %>
-          <div class="hmcts-timeline__item">
-            <section>
-              <% admin_amendment_details(amendment).each do |details| %>
-                <h3 class="hmcts-timeline__title"><%= details[0] %></h3>
-                <% if details.count > 1 %>
-                  <p class="hmcts-timeline__by">changed from <%= details[1] %> to <%= details[2] %></p>
-                <% else %>
-                  <p class="hmcts-timeline__by">changed</p>
-                <% end %>
-                <br>
-              <% end %>
+          <h2 class="govuk-heading-l">
+            Claim amendments
+          </h2>
 
-              <% if amendment.notes.present? %>
-                <h3 class="hmcts-timeline__title">Change notes</h3>
-                <p class="hmcts-timeline__by"><%= amendment.notes %></p>
-              <% end %>
-            </section>
+          <div class="hmcts-timeline">
+            <% @claim.amendments.each do |amendment| %>
+              <div class="hmcts-timeline__item">
+                <section>
+                  <% admin_amendment_details(amendment).each do |details| %>
+                    <h3 class="hmcts-timeline__title"><%= details[0] %></h3>
+                    <% if details.count > 1 %>
+                      <p class="hmcts-timeline__by">changed from <%= details[1] %> to <%= details[2] %></p>
+                    <% else %>
+                      <p class="hmcts-timeline__by">changed</p>
+                    <% end %>
+                    <br>
+                  <% end %>
 
-            <p class="hmcts-timeline__description"> by <%= user_details(amendment.created_by, include_line_break: false) %> on <%= l(amendment.created_at) %></p>
+                  <% if amendment.notes.present? %>
+                    <h3 class="hmcts-timeline__title">Change notes</h3>
+                    <p class="hmcts-timeline__by"><%= amendment.notes %></p>
+                  <% end %>
+                </section>
+
+                <p class="hmcts-timeline__description"> by <%= user_details(amendment.created_by, include_line_break: false) %> on <%= l(amendment.created_at) %></p>
+              </div>
+            <% end %>
           </div>
-        <% end %>
+        </div>
       </div>
     </section>
   </div>
