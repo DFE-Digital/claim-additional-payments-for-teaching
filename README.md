@@ -207,6 +207,12 @@ by [running a live console](#running-a-live-console).
 Development is automatically built and deployed when commits are pushed to
 `master`.
 
+You can check the progress of the build and release in
+[Azure DevOps](https://dev.azure.com/dfe-ssp/S118-Teacher-Payments-Service).
+
+The development website is at
+https://development.additional-teaching-payment.education.gov.uk.
+
 ### Production
 
 The release process for Production is documented in

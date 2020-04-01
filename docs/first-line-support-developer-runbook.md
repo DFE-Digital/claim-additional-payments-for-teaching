@@ -38,9 +38,6 @@ tasks that you might get asked to do.
 
 - credentials for DfE Sign-in pre-production, if you’re investigating a bug in
   the `/admin` site — see [`dfe-sign-in.md`](dfe-sign-in.md)
-- basic auth credentials to log in to the website for the development
-  environment — you can find these on
-  [this Confluence page](https://dfedigital.atlassian.net/wiki/spaces/TP/overview)
 
 #### Steps
 
@@ -54,7 +51,8 @@ tasks that you might get asked to do.
 3. Describe the fix in [`CHANGELOG.md`](../CHANGELOG.md).
 4. Open a pull request into `master`, and get it reviewed.
 5. Merge the pull request.
-6. If possible, verify that the fix works on the development environment.
+6. If possible, verify that the fix works on the
+   [development environment](../README.md#development).
 7. Do a release. See [`release-process.md`](release-process.md).
 
 ### I want to pull some data from the production database
