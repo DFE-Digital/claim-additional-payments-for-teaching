@@ -4,10 +4,14 @@
     <strong class="govuk-warning-text__text">
       <span class="govuk-warning-text__assistive">Warning</span>
       <p class="govuk-!-margin-top-0">
-        <%= t('admin.claims_preventing_payment_message', count: claims_preventing_payment.count, claim_references: claims_preventing_payment.map(&:reference).to_sentence) %>
+        This claim cannot currently be approved because we’re already paying
+        <%= claims_preventing_payment.one? ? "another claim" : "other claims" %>
+        (<%= claims_preventing_payment.map(&:reference).to_sentence %>)
+        to this claimant in this payroll month using different payment details.
       </p>
       <p>
-        <%= t('admin.claims_preventing_payment_message.action')%>
+        Please check the guidance in the operations playbook and speak to a
+        Grade 7 before making a decision on this claim.
       </p>
     </strong>
   </div>
