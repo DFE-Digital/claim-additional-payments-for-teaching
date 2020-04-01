@@ -26,7 +26,8 @@ RSpec.feature "Admin checking a claim with inconsistent payroll information" do
     click_on "Approve or reject this claim"
 
     expect(page).to have_field("Approve", disabled: true)
-    expect(page).to have_content("This claim cannot currently be approved because we’re already paying another claim (#{approved_claim.reference}) to this claimant in this payroll month using different payment details. Please speak to a Grade 7.")
+    expect(page).to have_content("This claim cannot currently be approved because we’re already paying another claim (#{approved_claim.reference}) to this claimant in this payroll month using different payment details.")
+    expect(page).to have_content("Please check the guidance in the operations playbook and speak to a Grade 7 before making a decision on this claim.")
 
     click_on "Amend claim"
     fill_in "Bank sort code", with: approved_claim.bank_sort_code

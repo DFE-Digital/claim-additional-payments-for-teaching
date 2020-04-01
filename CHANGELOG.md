@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+- Improve message shown when inconsistent payroll information is found
+
 ## [Release 068] - 2020-03-31
 
 - Service operators can add notes to claims
