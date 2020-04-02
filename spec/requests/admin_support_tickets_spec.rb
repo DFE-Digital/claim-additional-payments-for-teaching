@@ -22,5 +22,16 @@ RSpec.describe "admin/support_tickets controller" do
       expect(claim.support_ticket).not_to be_present
       expect(response.body).to include("Enter a valid support ticket URL")
     end
+
+    it "refuses requests from users without the service operator role" do
+      non_service_operator_roles.each do |role|
+        sign_in_to_admin_with_role(role)
+
+        post admin_claim_support_tickets_path(claim), params: {support_ticket: {url: "https://some/ticket/url"}}
+
+        expect(response).to have_http_status(:unauthorized)
+        expect(response.body).to include("Not authorised")
+      end
+    end
   end
 end

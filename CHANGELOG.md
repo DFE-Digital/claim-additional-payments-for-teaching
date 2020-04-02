@@ -7,7 +7,7 @@ The format is based on [Keep a Changelog]
 ## [Unreleased]
 
 - Improve message shown when inconsistent payroll information is found
-- Admin users can add a support ticket to claims
+- Service operators can add a support ticket to claims
 
 ## [Release 068] - 2020-03-31
 

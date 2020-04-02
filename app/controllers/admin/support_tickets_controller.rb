@@ -1,5 +1,6 @@
 module Admin
   class SupportTicketsController < BaseAdminController
+    before_action :ensure_service_operator
     before_action :load_claim
 
     def create
