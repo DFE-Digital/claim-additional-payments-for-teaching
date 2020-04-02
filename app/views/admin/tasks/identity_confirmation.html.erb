@@ -6,9 +6,11 @@
 
   <%= render "claim_summary", claim: @claim, heading: "Identity confirmation" %>
 
-  <div class="govuk-grid-column-two-thirds">
-    <%= render "admin/claims/answers", answers: @tasks_presenter.identity_confirmation %>
-  </div>
+  <% unless @claim.identity_verified? %>
+    <div class="govuk-grid-column-two-thirds">
+      <%= render "admin/claims/answers", answers: @tasks_presenter.identity_confirmation %>
+    </div>
+  <% end %>
 
   <div class="govuk-grid-column-two-thirds">
     <% if @task.persisted? %>
@@ -20,14 +22,16 @@
           <fieldset class="govuk-fieldset govuk-!-margin-bottom-6">
             <legend class="govuk-fieldset__legend govuk-fieldset__legend--l ">
               <h3 class="govuk-heading-l">
-                Did <%= @claim.full_name %> submit the claim?
+                <%= identity_confirmation_question(@claim) %>
               </h3>
             </legend>
 
-            <p class="govuk-body">
-              The claimant did not complete GOV.UK Verify. Refer to the
-              <%= link_to "Confirming a claimant’s identity playbook", confirming_identity_playbook_url, class: "govuk-link" %>.
-            </p>
+            <% unless @claim.identity_verified? %>
+              <p class="govuk-body">
+                The claimant did not complete GOV.UK Verify. Refer to the
+                <%= link_to "Confirming a claimant’s identity playbook", confirming_identity_playbook_url, class: "govuk-link" %>.
+              </p>
+            <% end %>
 
             <%= f.hidden_field :passed %>
 

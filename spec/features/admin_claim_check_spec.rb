@@ -77,6 +77,7 @@ RSpec.feature "Admin checks a claim" do
       claim_with_tasks = create(:claim, :submitted, tasks: [qualification_task, employment_task])
       visit admin_claim_tasks_path(claim_with_tasks)
 
+      expect(page).to have_content("Confirm the claimant made the claim Incomplete")
       expect(page).to have_content("Check qualification information Passed")
       expect(page).to have_content("Check employment information Failed")
       expect(page).to have_link("Approve or reject this claim", href: new_admin_claim_decision_path(claim_with_tasks))

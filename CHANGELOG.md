@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+- The identity confirmation task is now present on all submitted claims
+
 ## [Release 070] - 2020-04-03
 
 - Add secondary SAML encryption key in preparation for rotating production VSP

@@ -10,11 +10,12 @@ RSpec.feature "Admin checking a claim with matching details" do
     click_on "View claims"
     find("a[href='#{admin_claim_tasks_path(claim)}']").click
 
-    expect(page).to have_content("1. Qualifications")
-    expect(page).to have_content("2. Employment")
-    expect(page).to have_content("3. Student loan amount")
-    expect(page).to have_content("4. Matching details")
-    expect(page).to have_content("5. Decision")
+    expect(page).to have_content("1. Identity confirmation")
+    expect(page).to have_content("2. Qualifications")
+    expect(page).to have_content("3. Employment")
+    expect(page).to have_content("4. Student loan amount")
+    expect(page).to have_content("5. Matching details")
+    expect(page).to have_content("6. Decision")
 
     click_on I18n.t("admin.tasks.matching_details")
 

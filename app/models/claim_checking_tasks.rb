@@ -22,7 +22,6 @@ class ClaimCheckingTasks
     @applicable_task_names ||= TASK_NAMES.dup.tap do |task_names|
       task_names.delete("student_loan_amount") unless claim.policy == StudentLoans
       task_names.delete("matching_details") unless matching_claims.exists?
-      task_names.delete("identity_confirmation") if claim.identity_verified?
       task_names.delete("payroll_gender") unless claim.payroll_gender_missing? || task_names_for_claim.include?("payroll_gender")
     end
   end

@@ -9,11 +9,19 @@ RSpec.feature "Admin checking a Maths & Physics claim" do
     visit admin_claims_path
     find("a[href='#{admin_claim_tasks_path(claim)}']").click
 
-    expect(page).to have_content("1. Qualifications")
-    expect(page).to have_content("2. Employment")
-    expect(page).to have_content("3. Decision")
+    expect(page).to have_content("1. Identity confirmation")
+    expect(page).to have_content("2. Qualifications")
+    expect(page).to have_content("3. Employment")
+    expect(page).to have_content("4. Decision")
 
-    click_on "Check qualification information"
+    click_on I18n.t("admin.tasks.identity_confirmation")
+
+    expect(page).to have_content("Do our records for this teacher match the above name and date of birth from this claim?")
+
+    choose "Yes"
+    click_on "Save and continue"
+
+    expect(claim.tasks.find_by!(name: "identity_confirmation").passed?).to eq(true)
 
     expect(page).to have_content(I18n.t("maths_and_physics.admin.task_questions.qualifications"))
     expect(page).to have_content("Award year")

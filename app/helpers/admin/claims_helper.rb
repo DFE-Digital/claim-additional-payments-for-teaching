@@ -65,6 +65,14 @@ module Admin
       claim.identity_verified? ? "GOV.UK Verify" : content_tag(:strong, "Unverified", class: "govuk-tag tag--information")
     end
 
+    def identity_confirmation_question(claim)
+      if claim.identity_verified?
+        "Do our records for this teacher match the above name and date of birth from this claim?"
+      else
+        "Did #{claim.full_name} submit the claim?"
+      end
+    end
+
     def matching_attributes(first_claim, second_claim)
       first_attributes = matching_attributes_for(first_claim)
       second_attributes = matching_attributes_for(second_claim)

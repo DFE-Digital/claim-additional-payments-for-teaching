@@ -19,6 +19,7 @@ RSpec.describe "Admin decisions", type: :request do
 
       context "when all tasks have been completed" do
         before do
+          create(:task, name: "identity_confirmation", claim: claim)
           create(:task, name: "qualifications", claim: claim)
           create(:task, name: "employment", claim: claim)
         end
