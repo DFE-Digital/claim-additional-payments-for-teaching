@@ -34,7 +34,7 @@
             <% end %>
           </div>
 
-          <%= render "form", claim: @claim, note: @note %>
+          <%= render "admin/notes/form", claim: @claim, note: @note || Note.new %>
         </div>
       </div>
     </section>

@@ -4,8 +4,11 @@ module Admin
 
     def create
       @support_ticket = @claim.build_support_ticket(support_ticket_params)
-      @support_ticket.save!
-      redirect_to admin_claim_notes_url(@claim)
+      if @support_ticket.save
+        redirect_to admin_claim_notes_url(@claim)
+      else
+        render "admin/notes/index"
+      end
     end
 
     private
