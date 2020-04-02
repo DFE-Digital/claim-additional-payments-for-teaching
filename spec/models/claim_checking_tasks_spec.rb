@@ -30,14 +30,14 @@ RSpec.describe ClaimCheckingTasks do
       unverified_claim = build(:claim, :unverified, policy: StudentLoans)
       unverified_tasks = ClaimCheckingTasks.new(unverified_claim)
 
-      expect(unverified_tasks.applicable_task_names).to eq %w[qualifications employment student_loan_amount identity_confirmation]
+      expect(unverified_tasks.applicable_task_names).to eq %w[identity_confirmation qualifications employment student_loan_amount]
     end
 
     it "includes a task for identity confirmation for a MathsAndPhysics claim where the claimant didn’t complete GOV.UK Verify" do
       unverified_claim = build(:claim, :unverified, policy: MathsAndPhysics)
       unverified_tasks = ClaimCheckingTasks.new(unverified_claim)
 
-      expect(unverified_tasks.applicable_task_names).to eq %w[qualifications employment identity_confirmation]
+      expect(unverified_tasks.applicable_task_names).to eq %w[identity_confirmation qualifications employment]
     end
 
     it "includes a task for payroll gender when the claim does not have a binary value for it" do

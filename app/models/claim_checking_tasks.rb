@@ -4,11 +4,11 @@
 # claim checking process.
 class ClaimCheckingTasks
   TASK_NAMES = %w[
+    identity_confirmation
     qualifications
     employment
     student_loan_amount
     matching_details
-    identity_confirmation
     payroll_gender
   ].freeze
 
