@@ -1,7 +1,7 @@
 module Admin
   class NotesController < BaseAdminController
-    before_action :load_claim
     before_action :ensure_service_operator
+    before_action :load_claim
 
     def index
       @note = Note.new
