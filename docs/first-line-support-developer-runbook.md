@@ -13,6 +13,9 @@ tasks that you might get asked to do.
 
 ## Support tasks
 
+If you want to do one of these tasks and you don’t have what you need, see the
+[first-line support onboarding list](developer-onboarding.md#first-line-support-onboarding).
+
 ### I want to make a bug fix and deploy it
 
 #### You will need
