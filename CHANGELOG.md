@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+- Move shipping logs to logstash to Filebeat
+
 ## [Release 072] - 2020-04-03
 
 - DQT report upload now performs automated identity confirmation checks

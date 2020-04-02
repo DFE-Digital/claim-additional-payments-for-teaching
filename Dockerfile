@@ -9,6 +9,7 @@ RUN apk add postgresql-dev
 RUN apk add tzdata
 RUN apk add nodejs
 RUN apk add curl
+RUN apk add libc6-compat
 
 ENV APP_HOME /app
 ENV DEPS_HOME /deps
@@ -74,6 +75,17 @@ RUN mkdir -p ${APP_HOME}
 WORKDIR ${APP_HOME}
 # End
 
+# Download and install filebeat for sending logs to logstash
+ENV FILEBEAT_VERSION=7.6.2
+RUN curl https://artifacts.elastic.co/downloads/beats/filebeat/filebeat-${FILEBEAT_VERSION}-linux-x86_64.tar.gz -o filebeat.tar.gz && \
+    tar xzvf filebeat.tar.gz && \
+    rm filebeat.tar.gz && \
+    mv filebeat-${FILEBEAT_VERSION}-linux-x86_64 /filebeat && \
+    rm -f /filebeat/filebeat.yml
+
+# Copy our local filebeat config to the installation
+COPY filebeat.yml /filebeat/filebeat.yml
+
 # Copy dependencies (relying on dependencies using the same base image as this)
 COPY --from=dependencies ${DEPS_HOME}/Gemfile ${APP_HOME}/Gemfile
 COPY --from=dependencies ${DEPS_HOME}/Gemfile.lock ${APP_HOME}/Gemfile.lock
@@ -112,7 +124,7 @@ EXPOSE 3000
 ARG GIT_COMMIT_HASH
 ENV GIT_COMMIT_HASH ${GIT_COMMIT_HASH}
 
-CMD [ "bundle", "exec", "rails", "server" ]
+CMD /filebeat/filebeat -c /filebeat/filebeat.yml & bundle exec rails server
 
 # ------------------------------------------------------------------------------
 # shellcheck
