@@ -3,15 +3,9 @@
     <fieldset class="govuk-fieldset govuk-!-margin-bottom-6">
       <legend class="govuk-fieldset__legend govuk-fieldset__legend--l ">
         <h3 class="govuk-heading-l">
-          <%= I18n.t("#{claim.policy.to_s.underscore}.admin.task_questions.#{task_name}", local_assigns[:question_variables]) %>
+          <%= I18n.t("#{claim.policy.to_s.underscore}.admin.task_questions.#{task_name}") %>
         </h3>
       </legend>
-
-      <% if local_assigns.has_key?(:explanation) %>
-        <p class="govuk-body">
-          <%= explanation %>
-        </p>
-      <% end %>
 
       <%= f.hidden_field :passed %>
 

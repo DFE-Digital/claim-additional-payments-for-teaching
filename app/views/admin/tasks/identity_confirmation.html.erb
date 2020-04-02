@@ -15,13 +15,37 @@
       <%= render "task_outcome", task: @task do %>
       <% end %>
     <% else %>
-      <%=
-        render "form",
-          task_name: "identity_confirmation",
-          question_variables: { name: @claim.full_name },
-          claim: @claim,
-          explanation: "The claimant did not complete GOV.UK Verify. Refer to the #{link_to("Confirming a claimant’s identity playbook", confirming_identity_playbook_url, class: "govuk-link")}.".html_safe
-      %>
+      <%= form_with url: admin_claim_tasks_path(@claim, name: "identity_confirmation"), scope: :task do |f| %>
+        <div class="govuk-form-group">
+          <fieldset class="govuk-fieldset govuk-!-margin-bottom-6">
+            <legend class="govuk-fieldset__legend govuk-fieldset__legend--l ">
+              <h3 class="govuk-heading-l">
+                <%= I18n.t("#{@claim.policy.to_s.underscore}.admin.task_questions.identity_confirmation", name: @claim.full_name) %>
+              </h3>
+            </legend>
+
+            <p class="govuk-body">
+              The claimant did not complete GOV.UK Verify. Refer to the
+              <%= link_to "Confirming a claimant’s identity playbook", confirming_identity_playbook_url, class: "govuk-link" %>.
+            </p>
+
+            <%= f.hidden_field :passed %>
+
+            <div class="govuk-radios govuk-radios--inline">
+              <div class="govuk-radios__item">
+                <%= f.radio_button(:passed, true, class: "govuk-radios__input") %>
+                <%= f.label "passed_true", "Yes", class: "govuk-label govuk-radios__label" %>
+              </div>
+
+              <div class="govuk-radios__item">
+                <%= f.radio_button(:passed, false, class: "govuk-radios__input") %>
+                <%= f.label "passed_false", "No", class: "govuk-label govuk-radios__label" %>
+              </div>
+            </div>
+          </fieldset>
+          <%= f.submit "Save and continue", class: "govuk-button", data: {module: "govuk-button"} %>
+        </div>
+      <% end %>
     <% end %>
   </div>
 </div>
