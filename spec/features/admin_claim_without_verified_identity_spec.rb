@@ -13,7 +13,7 @@ RSpec.feature "Admin checking a claim without a verified identity" do
 
     click_on I18n.t("admin.tasks.identity_confirmation")
 
-    expect(page).to have_content(I18n.t("student_loans.admin.task_questions.identity_confirmation", name: unverified_claim.full_name))
+    expect(page).to have_content("Did #{unverified_claim.full_name} submit the claim?")
     expect(page).to have_content(unverified_claim.eligibility.current_school.name)
     expect(page).to have_content(unverified_claim.eligibility.current_school.phone_number)
 

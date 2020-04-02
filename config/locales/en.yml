@@ -167,7 +167,6 @@ en:
         qualifications: "Does the claimant’s initial teacher training (ITT) qualification year and specialist subject match the above information from their claim?"
         employment: "Does the claimant’s current school match the above information from their claim?"
         matching_details: "Is this claim still valid despite having matching details with other claims?"
-        identity_confirmation: "Did %{name} submit the claim?"
   student_loans:
     policy_name: "Teachers: claim back your student loan repayments"
     policy_short_name: "Student Loans"
@@ -203,4 +202,3 @@ en:
         employment: "Does the claimant’s previous and current schools match the above information from their claim?"
         student_loan_amount: "Does the claimant’s student loan amount and plan type match the information we hold about their loan?"
         matching_details: "Is this claim still valid despite having matching details with other claims?"
-        identity_confirmation: "Did %{name} submit the claim?"
