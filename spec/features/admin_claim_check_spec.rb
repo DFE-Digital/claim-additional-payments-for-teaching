@@ -105,6 +105,17 @@ RSpec.feature "Admin checks a claim" do
       expect(page).to have_content("Created by")
       expect(page).to have_content(@signed_in_user.full_name)
     end
+
+    scenario "they see an error if they don't choose a Yes/No option on a check" do
+      claim = create(:claim, :submitted)
+      visit admin_claim_tasks_path(claim)
+
+      click_on "Check qualification information"
+      click_on "Save and continue"
+
+      expect(page).to have_content("You must select ‘Yes’ or ‘No’")
+      expect(claim.tasks.find_by(name: "qualifications")).to be_nil
+    end
   end
 
   context "User is logged in as a payroll operator or a support user" do
