@@ -95,6 +95,7 @@ Rails.application.routes.draw do
       end
       resources :amendments, only: [:index, :new, :create]
       resources :notes, only: [:index, :create]
+      resources :support_tickets, only: [:create]
       get "search", on: :collection
     end
 

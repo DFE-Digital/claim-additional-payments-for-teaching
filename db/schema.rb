@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_03_30_135833) do
+ActiveRecord::Schema.define(version: 2020_04_02_093512) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -242,6 +242,16 @@ ActiveRecord::Schema.define(version: 2020_03_30_135833) do
     t.index ["current_school_id"], name: "index_student_loans_eligibilities_on_current_school_id"
   end
 
+  create_table "support_tickets", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "url", null: false
+    t.uuid "claim_id"
+    t.uuid "created_by_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["claim_id"], name: "index_support_tickets_on_claim_id"
+    t.index ["created_by_id"], name: "index_support_tickets_on_created_by_id"
+  end
+
   create_table "tasks", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "name"
     t.uuid "claim_id"
@@ -270,6 +280,8 @@ ActiveRecord::Schema.define(version: 2020_03_30_135833) do
   add_foreign_key "schools", "local_authority_districts"
   add_foreign_key "student_loans_eligibilities", "schools", column: "claim_school_id"
   add_foreign_key "student_loans_eligibilities", "schools", column: "current_school_id"
+  add_foreign_key "support_tickets", "claims"
+  add_foreign_key "support_tickets", "dfe_sign_in_users", column: "created_by_id"
   add_foreign_key "tasks", "claims"
   add_foreign_key "tasks", "dfe_sign_in_users", column: "created_by_id"
 end

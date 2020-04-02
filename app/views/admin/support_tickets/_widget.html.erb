@@ -1,0 +1,23 @@
+<% if support_ticket.persisted? %>
+
+  <h2 class="govuk-heading-m">Support ticket</h2>
+  <p class="govuk-body-m">
+    <%= link_to claim.support_ticket.url, claim.support_ticket.url, class: "govuk-link" %>
+  </p>
+
+<% else %>
+
+  <%= form_with model: [:admin, claim, support_ticket] do |form| %>
+    <%= form_group_tag support_ticket, :url do %>
+      <%= errors_tag support_ticket, :url %>
+      <%= form.label :url, "Support ticket", class: "govuk-label govuk-label--m" %>
+      <span class="govuk-hint" id="ticket-hint">
+        Create a ticket on Zendesk and enter the URL here.
+      </span>
+      <%= form.text_field :url, class: "govuk-input govuk-input", autocomplete: "off", "aria-describedby" => "ticket-hint" %>
+    <% end %>
+
+    <%= form.submit "Save support ticket", class: "govuk-button" %>
+  <% end %>
+
+<% end %>

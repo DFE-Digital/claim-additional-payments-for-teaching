@@ -10,7 +10,7 @@ RSpec.feature "Admin claim notes" do
     visit admin_claims_path
     find("a[href='#{admin_claim_tasks_path(claim)}']").click
 
-    click_on "Notes"
+    click_on "Notes and support"
 
     expect(page).to have_content(existing_note.body)
     expect(page).to have_content(existing_note.created_by.full_name)
