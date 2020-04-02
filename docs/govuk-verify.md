@@ -64,6 +64,37 @@ reach the screen just before the GOV.UK Verify stage:
 
 https://localhost:3000/verify/authentications/skip
 
+### How to complete the GOV.UK Verify journey in our `development` environment (their integration environment)
+
+We already have some test users set up which give these responses from GOV.UK
+Verify:
+
+- UK identity provider, response with gender
+- UK identity provider, response without gender
+
+The credentials for these users are given on
+[this Confluence page](https://dfedigital.atlassian.net/wiki/spaces/TP/pages/1106444353/GOV.UK+Verify).
+
+You can also create new integration users by:
+
+- using the registration form on the stub identity providers – this will only
+  let you create an identity without middle name and without gender
+- using the user administration API:
+  - it’s described in the
+    [GOV.UK Verify documentation](https://www.docs.verify.service.gov.uk/test-in-integration/testing/set-up-tests/#set-up-end-to-end-tests)
+    with example `curl` requests
+  - you’ll need a username and password to use this API – you can find them in
+    the [development key vault](secrets.md), with names
+    `VerifyBasicAuthUsername` and `VerifyBasicAuthPassword`
+
+#### Testing EU identities
+
+1. Choose the “Select your European digital identity” option on the Verify Hub.
+2. Select the Stub Country (Select Stub IDP Demo).
+3. Change to the Register tab and fill out the form – the password is stored in
+   plain-text so just use `password` or similar.
+4. Select “I agree” to return to the service.
+
 ## Rotating keys and certificates
 
 The VSP uses keys and certificates to encrypt requests and decrypt responses
