@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+## [Release 069] - 2020-04-02
+
 - Improve message shown when inconsistent payroll information is found
 - Service operators can add a support ticket to claims
 
@@ -557,7 +559,9 @@ The format is based on [Keep a Changelog]
 - First release for student loan repayments private beta
 
 [unreleased]:
-  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-068...HEAD
+  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-069...HEAD
+[release 069]:
+  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-068...release-069
 [release 068]:
   https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-067...release-068
 [release 067]:
