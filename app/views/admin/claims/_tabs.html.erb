@@ -4,7 +4,7 @@
   </li>
 
   <li class="govuk-tabs__list-item govuk-tabs__list-item--<%= "selected" if current_page?(controller: "notes") %>" role="presentation">
-    <%= link_to_unless_current "Notes", admin_claim_notes_path(@claim), class: "govuk-tabs__tab", role: "tabs", aria: { controls: "task", selected: current_page?(controller: "notes") } %>
+    <%= link_to_unless_current "Notes and support", admin_claim_notes_path(@claim), class: "govuk-tabs__tab", role: "tabs", aria: { controls: "task", selected: current_page?(controller: "notes") } %>
     <%= "(#{claim.notes.count})" if claim.notes.any? %>
   </li>
 

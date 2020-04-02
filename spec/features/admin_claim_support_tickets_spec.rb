@@ -9,7 +9,7 @@ RSpec.feature "Admin claim support tickets" do
     visit admin_claims_path
     find("a[href='#{admin_claim_tasks_path(claim)}']").click
 
-    click_on "Notes"
+    click_on "Notes and support"
 
     fill_in "Support ticket", with: "https://account-sub-domain.zendesk.com/agent/tickets/1638"
     click_on "Save support ticket"
