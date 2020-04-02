@@ -17,7 +17,7 @@
 
     <h2 class="govuk-heading-m">What happens next</h2>
 
-    <% if current_claim.identity_confirmed? %>
+    <% if current_claim.identity_verified? %>
       <p class="govuk-body">
         We will check the details you provided in your application and tell
         you if your claim was successful within the next <%= claim_decision_deadline_in_weeks %>.
