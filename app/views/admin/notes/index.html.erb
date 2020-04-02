@@ -15,6 +15,7 @@
     <section class="govuk-tabs__panel" role="tabpanel" aria-labelledby="tab_tasks">
       <div class="govuk-grid-row">
        <div class="govuk-grid-column-two-thirds">
+          <%= render "admin/support_tickets/widget", claim: @claim, support_ticket: (@claim.support_ticket || SupportTicket.new) %>
 
           <h2 class="govuk-heading-m">Claim notes</h2>
 
