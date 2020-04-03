@@ -20,8 +20,8 @@ module AutomatedChecks
 
       ActiveRecord::Base.transaction do
         claims = Claim.awaiting_task("qualifications")
-        records = DQTReportCsvToRecords.new(csv.rows).transform
-        records.each do |record|
+
+        dqt_records.each do |record|
           claim = claims.detect { |c| c.reference == record.fetch(:claim_reference) }
           next if record.fetch(:qts_date).blank? || claim.nil?
           if claim.policy::DQTRecord.new(record).eligible?
@@ -29,7 +29,7 @@ module AutomatedChecks
             @completed_tasks += 1
           end
         end
-        @total_records = records.count
+        @total_records = dqt_records.count
       end
     end
 
@@ -38,6 +38,10 @@ module AutomatedChecks
     end
 
     private
+
+    def dqt_records
+      @dqt_records ||= DQTReportCsvToRecords.new(@csv.rows).transform
+    end
 
     def task_attributes
       {
