@@ -24,6 +24,9 @@ To perform this task, you will need:
 - The
   [Azure CLI installed](https://docs.microsoft.com/en-us/cli/azure/install-azure-cli?view=azure-cli-latest)
 - The codebase cloned locally
+- If you're performing the rotation on production you will need either an
+  existing account with a GOV.UK Verify identity provider or the required
+  documents necessary for signing up to one
 
 Speak to the product manager if you need access to the GOV.UK Manage
 certificates service or the Azure portal.
@@ -202,7 +205,7 @@ Make sure to securely delete the copies of the keys and certificates stored in
 
 ## Step 10. Clean up – remove your local IP address from the Azure key vault firewall
 
-The key vault firewall should aumatically get reset on a redeploy, but double
+The key vault firewall should automatically get reset on a redeploy, but double
 check to be sure:
 
 - Navigate to the key vault in the Azure Portal
