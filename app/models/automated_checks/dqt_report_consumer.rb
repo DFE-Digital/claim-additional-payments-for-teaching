@@ -53,7 +53,7 @@ module AutomatedChecks
     end
 
     def perform_identity_confirmation(claim, record)
-      if awaiting_task?(claim, "identity_confirmation") && identity_matches?(claim, record)
+      if claim.identity_verified? && awaiting_task?(claim, "identity_confirmation") && identity_matches?(claim, record)
         claim.tasks.create!(task_attributes("identity_confirmation"))
         @completed_tasks += 1
       end

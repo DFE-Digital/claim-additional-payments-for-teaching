@@ -12,13 +12,14 @@ RSpec.describe AutomatedChecks::DQTReportConsumer do
   let!(:claim_with_decision) { claim_from_example_dqt_report(:claim_with_decision) }
   let!(:claim_with_qualification_task) { claim_from_example_dqt_report(:claim_with_qualification_task) }
   let!(:existing_qualification_task) { claim_with_qualification_task.tasks.find_by!(name: "qualifications") }
+  let!(:unverified_claim_with_matching_identity_data) { claim_from_example_dqt_report(:unverified_claim_with_matching_identity_data) }
 
   describe "#ingest" do
     before { dqt_report_consumer.ingest }
 
     it "sets attributes that report the number of tasks automatically completed and the number of claims checked" do
-      expect(dqt_report_consumer.completed_tasks).to eq(4)
-      expect(dqt_report_consumer.total_claims_checked).to eq(6)
+      expect(dqt_report_consumer.completed_tasks).to eq(5)
+      expect(dqt_report_consumer.total_claims_checked).to eq(7)
     end
 
     it "creates a qualification task for claims that are eligible" do
@@ -43,6 +44,13 @@ RSpec.describe AutomatedChecks::DQTReportConsumer do
       expect(new_id_confirmation_task.passed).to eq(true)
       expect(new_id_confirmation_task.manual).to eq(false)
       expect(new_id_confirmation_task.created_by).to eq(admin_user)
+    end
+
+    it "doesn‘t create an identity_confirmation task for claims that are unverified" do
+      qualification_task = unverified_claim_with_matching_identity_data.tasks.find_by!(name: "qualifications")
+      expect(qualification_task.passed).to eq(true)
+
+      expect(unverified_claim_with_matching_identity_data.tasks.find_by(name: "identity_confirmation")).to be_nil
     end
 
     it "doesn't create an identity_confirmation task if either the surname or DOB does not match" do
