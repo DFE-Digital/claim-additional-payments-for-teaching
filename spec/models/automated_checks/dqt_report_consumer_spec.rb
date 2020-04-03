@@ -4,9 +4,7 @@ RSpec.describe AutomatedChecks::DQTReportConsumer do
   let(:dqt_report_consumer) { described_class.new(file, admin_user) }
   let(:file) { example_dqt_report_csv }
   let(:admin_user) { build(:dfe_signin_user) }
-  let!(:eligible_claim_with_matching_data) { claim_from_example_dqt_report(:eligible_claim_with_matching_data) }
-  let!(:eligible_claim_with_non_matching_birthdate) { claim_from_example_dqt_report(:eligible_claim_with_non_matching_birthdate) }
-  let!(:eligible_claim_with_non_matching_surname) { claim_from_example_dqt_report(:eligible_claim_with_non_matching_surname) }
+  let!(:claim_with_eligible_dqt_record) { claim_from_example_dqt_report(:eligible_claim_with_matching_data) }
   let!(:claim_without_dqt_record) { claim_from_example_dqt_report(:claim_without_dqt_record) }
   let!(:claim_with_ineligible_dqt_record) { claim_from_example_dqt_report(:claim_with_ineligible_dqt_record) }
   let!(:claim_with_decision) { claim_from_example_dqt_report(:claim_with_decision) }
@@ -14,24 +12,15 @@ RSpec.describe AutomatedChecks::DQTReportConsumer do
   let!(:existing_qualification_task) { claim_with_qualification_task.tasks.find_by!(name: "qualifications") }
 
   describe "#ingest" do
-    it "creates a qualification task for matching claims that are eligible" do
+    it "creates a qualification task for claims that are eligible" do
       dqt_report_consumer.ingest
 
-      new_qualication_task = eligible_claim_with_matching_data.tasks.find_by!(name: "qualifications")
+      new_qualication_task = claim_with_eligible_dqt_record.tasks.find_by!(name: "qualifications")
       expect(dqt_report_consumer.completed_tasks).to eq(1)
       expect(dqt_report_consumer.total_records).to eq(7)
       expect(new_qualication_task.passed).to eq(true)
       expect(new_qualication_task.manual).to eq(false)
       expect(new_qualication_task.created_by).to eq(admin_user)
-    end
-
-    it "doesn’t create a qualification task where the data doesn't match" do
-      dqt_report_consumer.ingest
-
-      expect(eligible_claim_with_non_matching_birthdate.tasks.find_by(name: "qualifications")).to be_nil
-      expect(eligible_claim_with_non_matching_surname.tasks.find_by(name: "qualifications")).to be_nil
-      expect(claim_without_dqt_record.tasks.find_by(name: "qualifications")).to be_nil
-      expect(claim_with_ineligible_dqt_record.tasks.find_by(name: "qualifications")).to be_nil
     end
 
     it "doesn’t create a qualification task when the claim already has a decision" do

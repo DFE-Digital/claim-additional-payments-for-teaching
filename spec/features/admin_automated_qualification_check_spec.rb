@@ -4,9 +4,7 @@ RSpec.feature "Admins automated qualification check" do
   before { sign_in_as_service_operator }
 
   scenario "Service operators can upload and run automated DQT checks" do
-    eligible_claim_with_matching_data = claim_from_example_dqt_report(:eligible_claim_with_matching_data)
-    eligible_claim_with_non_matching_birthdate = claim_from_example_dqt_report(:eligible_claim_with_non_matching_birthdate)
-    eligible_claim_with_non_matching_surname = claim_from_example_dqt_report(:eligible_claim_with_non_matching_surname)
+    claim_with_eligible_dqt_record = claim_from_example_dqt_report(:eligible_claim_with_matching_data)
     claim_without_dqt_record = claim_from_example_dqt_report(:claim_without_dqt_record)
     claim_with_ineligible_dqt_record = claim_from_example_dqt_report(:claim_with_ineligible_dqt_record)
     claim_with_decision = claim_from_example_dqt_report(:claim_with_decision)
@@ -21,9 +19,7 @@ RSpec.feature "Admins automated qualification check" do
     click_on "Upload"
 
     expect(page).to have_content "DQT report uploaded successfully. Automatically created checks for 1 claim out of 7 records."
-    expect(eligible_claim_with_matching_data.tasks.find_by!(name: "qualifications").passed?).to eq(true)
-    expect(eligible_claim_with_non_matching_birthdate.tasks.find_by(name: "qualifications")).to be_nil
-    expect(eligible_claim_with_non_matching_surname.tasks.find_by(name: "qualifications")).to be_nil
+    expect(claim_with_eligible_dqt_record.tasks.find_by!(name: "qualifications").passed?).to eq(true)
     expect(claim_without_dqt_record.tasks.find_by(name: "qualifications")).to be_nil
     expect(claim_with_ineligible_dqt_record.tasks.find_by(name: "qualifications")).to be_nil
     expect(claim_with_decision.tasks.find_by(name: "qualifications")).to be_nil
