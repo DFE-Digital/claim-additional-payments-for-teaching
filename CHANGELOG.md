@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+- DQT report upload now performs automated identity confirmation checks
+
 ## [Release 071] - 2020-04-03
 
 - The identity confirmation task is now present on all submitted claims

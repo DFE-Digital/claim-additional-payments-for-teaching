@@ -1,11 +1,18 @@
 module AutomatedChecks
-  # Used to ingest a report from DQT (Database of Qualified Teachers)
-  # containing qualification data such as QTS (Qualified Teacher Status)
-  # award date, ITT (Initial Teacher Training) subjects and
-  # post graduate degree subject.
+  # Used to ingest a report from DQT (Database of Qualified Teachers) that
+  # contain qualification and identity information for claimants and
+  # automatically perform tasks based on the data in the report.
   #
-  # The records will be used to determine if a claimant's qualifications
-  # make them eligible for a specific policy.
+  # Any undecided claims that match records in the report are checked against
+  # the report data and both an identity confirmation check and a qualification
+  # check is performed:
+  #
+  #   - if the identity information in the claim matches the data in the report,
+  #     the claim is marked as having its identity confirmed
+  #   - if the qualifications in the report make the claimant eligible for the
+  #     policy they are claiming against, the claim is marked as having had its
+  #     qualifications checked
+  #
   class DQTReportConsumer
     attr_reader :csv, :completed_tasks
 
@@ -21,7 +28,12 @@ module AutomatedChecks
           claim = claim_for_record(record)
 
           if claim && awaiting_task?(claim, "qualifications") && claim.policy::DQTRecord.new(record).eligible?
-            claim.tasks.create!(task_attributes)
+            claim.tasks.create!(task_attributes("qualifications"))
+            @completed_tasks += 1
+          end
+
+          if claim && awaiting_task?(claim, "identity_confirmation") && identity_matches?(claim, record)
+            claim.tasks.create!(task_attributes("identity_confirmation"))
             @completed_tasks += 1
           end
         end
@@ -50,13 +62,17 @@ module AutomatedChecks
       claim.tasks.none? { |task| task.name == task_name }
     end
 
+    def identity_matches?(claim, record)
+      record.fetch(:date_of_birth) == claim.date_of_birth && record.fetch(:surname)&.casecmp?(claim.surname)
+    end
+
     def dqt_records
       @dqt_records ||= DQTReportCsvToRecords.new(@csv.rows).transform
     end
 
-    def task_attributes
+    def task_attributes(task_name)
       {
-        name: "qualifications",
+        name: task_name,
         passed: true,
         manual: false,
         created_by: @admin_user

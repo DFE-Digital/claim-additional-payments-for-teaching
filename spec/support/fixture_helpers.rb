@@ -9,7 +9,7 @@ module FixtureHelpers
   def claim_from_example_dqt_report(trait)
     case trait
     when :eligible_claim_with_matching_data
-      # Eligible claim with matching data in DQT
+      # Eligible claim with matching name and DOB in DQT
       create(:claim, :submitted,
         surname: "ELIGIBLE",
         teacher_reference_number: "1234567",

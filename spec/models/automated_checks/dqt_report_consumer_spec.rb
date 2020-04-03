@@ -15,7 +15,7 @@ RSpec.describe AutomatedChecks::DQTReportConsumer do
     before { dqt_report_consumer.ingest }
 
     it "sets attributes that report the number of tasks automatically completed and the number of claims checked" do
-      expect(dqt_report_consumer.completed_tasks).to eq(1)
+      expect(dqt_report_consumer.completed_tasks).to eq(2)
       expect(dqt_report_consumer.total_claims_checked).to eq(4)
     end
 
@@ -24,6 +24,13 @@ RSpec.describe AutomatedChecks::DQTReportConsumer do
       expect(new_qualication_task.passed).to eq(true)
       expect(new_qualication_task.manual).to eq(false)
       expect(new_qualication_task.created_by).to eq(admin_user)
+    end
+
+    it "creates an identity_confirmation task for claims where the surname and DOB in the record matches the claim" do
+      new_id_confirmation_task = claim_with_eligible_dqt_record.tasks.find_by!(name: "identity_confirmation")
+      expect(new_id_confirmation_task.passed).to eq(true)
+      expect(new_id_confirmation_task.manual).to eq(false)
+      expect(new_id_confirmation_task.created_by).to eq(admin_user)
     end
 
     it "doesn’t create a qualification task when the claim already has a decision" do
