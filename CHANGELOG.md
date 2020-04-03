@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+## [Release 071] - 2020-04-03
+
 - The identity confirmation task is now present on all submitted claims
 
 ## [Release 070] - 2020-04-03
@@ -566,7 +568,9 @@ The format is based on [Keep a Changelog]
 - First release for student loan repayments private beta
 
 [unreleased]:
-  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-070...HEAD
+  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-071...HEAD
+[release 071]:
+  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-070...release-071
 [release 070]:
   https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-069...release-070
 [release 069]:
