@@ -20,7 +20,7 @@ class Claim
     # This may not necessarily mean the claim cannot be approved, but means it
     # warrants a degree of caution and further investigation.
     def matching_claims
-      match_queries = nil
+      match_queries = Claim.none
 
       ATTRIBUTE_GROUPS_TO_MATCH.each do |attributes|
         vals = values_for_attributes(attributes)
@@ -30,7 +30,7 @@ class Claim
         concatenated_columns = "CONCAT(#{attributes.join(",")})"
         query = Claim.where("LOWER(#{concatenated_columns}) = LOWER(?)", vals.join)
 
-        match_queries = match_queries.nil? ? query : match_queries.or(query)
+        match_queries = match_queries.or(query)
       end
 
       claims_to_compare.merge(match_queries)
