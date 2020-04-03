@@ -12,9 +12,9 @@ RSpec.describe AutomatedChecks::DQTReportConsumer do
   let!(:existing_qualification_task) { claim_with_qualification_task.tasks.find_by!(name: "qualifications") }
 
   describe "#ingest" do
-    it "creates a qualification task for claims that are eligible" do
-      dqt_report_consumer.ingest
+    before { dqt_report_consumer.ingest }
 
+    it "creates a qualification task for claims that are eligible" do
       new_qualication_task = claim_with_eligible_dqt_record.tasks.find_by!(name: "qualifications")
       expect(dqt_report_consumer.completed_tasks).to eq(1)
       expect(dqt_report_consumer.total_records).to eq(7)
@@ -24,14 +24,10 @@ RSpec.describe AutomatedChecks::DQTReportConsumer do
     end
 
     it "doesn’t create a qualification task when the claim already has a decision" do
-      dqt_report_consumer.ingest
-
       expect(claim_with_decision.tasks.find_by(name: "qualifications")).to be_nil
     end
 
     it "doesn’t create a qualification task when the claim already has one" do
-      dqt_report_consumer.ingest
-
       expect(claim_with_qualification_task.tasks.find_by(name: "qualifications")).to eql(existing_qualification_task)
     end
   end
