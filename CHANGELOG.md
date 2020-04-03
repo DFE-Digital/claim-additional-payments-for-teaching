@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+## [Release 072] - 2020-04-03
+
 - DQT report upload now performs automated identity confirmation checks
 
 ## [Release 071] - 2020-04-03
@@ -570,7 +572,9 @@ The format is based on [Keep a Changelog]
 - First release for student loan repayments private beta
 
 [unreleased]:
-  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-071...HEAD
+  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-072...HEAD
+[release 072]:
+  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-071...release-072
 [release 071]:
   https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-070...release-071
 [release 070]:
