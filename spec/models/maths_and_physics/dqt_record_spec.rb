@@ -39,6 +39,10 @@ RSpec.describe MathsAndPhysics::DQTRecord do
           expect(MathsAndPhysics::DQTRecord.new(attributes.merge({qts_date: Date.parse("8/3/2000")})).eligible?). to eql false
         end
       end
+
+      it "returns false when given a record with a blank qts_date" do
+        expect(MathsAndPhysics::DQTRecord.new({qts_date: "", itt_subject_jac_codes: [jac_code], degree_jac_codes: []}).eligible?). to eql false
+      end
     end
 
     EXAMPLE_NON_ELIGIBLE_JAC_CODES.each do |jac_code|

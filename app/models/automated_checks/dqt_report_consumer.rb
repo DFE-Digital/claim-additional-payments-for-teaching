@@ -19,8 +19,8 @@ module AutomatedChecks
       ActiveRecord::Base.transaction do
         dqt_records.each do |record|
           claim = claim_for_record(record)
-          next if record.fetch(:qts_date).blank? || claim.nil?
-          if claim.policy::DQTRecord.new(record).eligible?
+
+          if claim && claim.policy::DQTRecord.new(record).eligible?
             claim.tasks.create!(task_attributes)
             @completed_tasks += 1
           end
