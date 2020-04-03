@@ -16,8 +16,6 @@ module AutomatedChecks
     end
 
     def ingest
-      return if errors.any?
-
       ActiveRecord::Base.transaction do
         dqt_records.each do |record|
           claim = claim_for_record(record)

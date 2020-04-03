@@ -34,33 +34,31 @@ RSpec.describe AutomatedChecks::DQTReportConsumer do
 
       expect(claim_with_qualification_task.tasks.find_by(name: "qualifications")).to eql(existing_qualification_task)
     end
+  end
 
-    context "when a malformed CSV is uploaded" do
-      let(:file) do
-        tempfile = Tempfile.new
-        tempfile.write("Malformed CSV\"")
-        tempfile.rewind
-        tempfile
-      end
-
-      it "doesn’t do anything and sets an error" do
-        expect(dqt_report_consumer.ingest).to be_falsey
-        expect(dqt_report_consumer.errors).to eql(["The selected file must be a CSV"])
-      end
+  context "when given a malformed CSV file" do
+    let(:file) do
+      tempfile = Tempfile.new
+      tempfile.write("Malformed CSV\"")
+      tempfile.rewind
+      tempfile
     end
 
-    context "when the CSV doesn’t have all the expected headers" do
-      let(:file) do
-        tempfile = Tempfile.new
-        tempfile.write("dfeta text1,dfeta text2,dfeta trn,dfeta qtsdate,fullname,birthdate\n")
-        tempfile.rewind
-        tempfile
-      end
+    it "reports an appropriate error mesage" do
+      expect(dqt_report_consumer.errors).to eql(["The selected file must be a CSV"])
+    end
+  end
 
-      it "doesn’t do anything and sets an error" do
-        expect(dqt_report_consumer.ingest).to be_falsey
-        expect(dqt_report_consumer.errors).to eql(["The selected file is missing some expected columns: dfeta ninumber, HESubject1Value, HESubject2Value, HESubject3Value, ITTSub1Value, ITTSub2Value, ITTSub3Value"])
-      end
+  context "when given a CSV without the expected headers" do
+    let(:file) do
+      tempfile = Tempfile.new
+      tempfile.write("dfeta text1,dfeta text2,dfeta trn,dfeta qtsdate,fullname,birthdate\n")
+      tempfile.rewind
+      tempfile
+    end
+
+    it "reports the misssing columns in the error message" do
+      expect(dqt_report_consumer.errors).to eql(["The selected file is missing some expected columns: dfeta ninumber, HESubject1Value, HESubject2Value, HESubject3Value, ITTSub1Value, ITTSub2Value, ITTSub3Value"])
     end
   end
 end
