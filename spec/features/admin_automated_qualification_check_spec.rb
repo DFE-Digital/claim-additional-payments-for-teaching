@@ -18,7 +18,7 @@ RSpec.feature "Admins automated qualification check" do
 
     click_on "Upload"
 
-    expect(page).to have_content "DQT report uploaded successfully. Automatically created checks for 1 claim out of 7 records."
+    expect(page).to have_content "DQT report uploaded successfully. Automatically completed 1 task from 7 DQT records."
     expect(claim_with_eligible_dqt_record.tasks.find_by!(name: "qualifications").passed?).to eq(true)
     expect(claim_without_dqt_record.tasks.find_by(name: "qualifications")).to be_nil
     expect(claim_with_ineligible_dqt_record.tasks.find_by(name: "qualifications")).to be_nil
