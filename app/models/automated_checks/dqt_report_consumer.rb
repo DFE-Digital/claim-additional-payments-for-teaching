@@ -19,10 +19,8 @@ module AutomatedChecks
       return if errors.any?
 
       ActiveRecord::Base.transaction do
-        claims = Claim.awaiting_task("qualifications")
-
         dqt_records.each do |record|
-          claim = claims.detect { |c| c.reference == record.fetch(:claim_reference) }
+          claim = claim_for_record(record)
           next if record.fetch(:qts_date).blank? || claim.nil?
           if claim.policy::DQTRecord.new(record).eligible?
             claim.tasks.create!(task_attributes)
@@ -38,6 +36,14 @@ module AutomatedChecks
     end
 
     private
+
+    def claims
+      @claims ||= Claim.awaiting_task("qualifications")
+    end
+
+    def claim_for_record(record)
+      claims.detect { |c| c.reference == record.fetch(:claim_reference) }
+    end
 
     def dqt_records
       @dqt_records ||= DQTReportCsvToRecords.new(@csv.rows).transform
