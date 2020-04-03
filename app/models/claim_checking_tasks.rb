@@ -3,15 +3,6 @@
 # This models the tasks that need to be performed on a claim as part of the
 # claim checking process.
 class ClaimCheckingTasks
-  TASK_NAMES = %w[
-    qualifications
-    employment
-    student_loan_amount
-    matching_details
-    identity_confirmation
-    payroll_gender
-  ].freeze
-
   attr_reader :claim
 
   def initialize(claim)
@@ -19,10 +10,9 @@ class ClaimCheckingTasks
   end
 
   def applicable_task_names
-    @applicable_task_names ||= TASK_NAMES.dup.tap do |task_names|
+    @applicable_task_names ||= Task::NAMES.dup.tap do |task_names|
       task_names.delete("student_loan_amount") unless claim.policy == StudentLoans
       task_names.delete("matching_details") unless matching_claims.exists?
-      task_names.delete("identity_confirmation") if claim.identity_confirmed?
       task_names.delete("payroll_gender") unless claim.payroll_gender_missing? || task_names_for_claim.include?("payroll_gender")
     end
   end

@@ -24,7 +24,7 @@ module AutomatedChecks
         records.each do |record|
           claim = claims.detect { |c| c.reference == record.fetch(:claim_reference) }
           next if record.fetch(:qts_date).blank? || claim.nil?
-          if claim.policy::DQTRecord.new(record).eligible? && record_matches_claim?(record, claim)
+          if claim.policy::DQTRecord.new(record).eligible?
             claim.tasks.create!(task_attributes)
             @completed_tasks += 1
           end
@@ -46,11 +46,6 @@ module AutomatedChecks
         manual: false,
         created_by: @admin_user
       }
-    end
-
-    def record_matches_claim?(record, claim)
-      record.fetch(:date_of_birth) == claim.date_of_birth &&
-        record.fetch(:surname)&.casecmp?(claim.surname)
     end
   end
 end

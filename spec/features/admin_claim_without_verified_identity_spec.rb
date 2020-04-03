@@ -9,11 +9,11 @@ RSpec.feature "Admin checking a claim without a verified identity" do
     click_on "View claims"
     find("a[href='#{admin_claim_tasks_path(unverified_claim)}']").click
 
-    expect(page).to have_content("4. Identity confirmation")
+    expect(page).to have_content("1. Identity confirmation")
 
     click_on I18n.t("admin.tasks.identity_confirmation")
 
-    expect(page).to have_content(I18n.t("student_loans.admin.task_questions.identity_confirmation", name: unverified_claim.full_name))
+    expect(page).to have_content("Did #{unverified_claim.full_name} submit the claim?")
     expect(page).to have_content(unverified_claim.eligibility.current_school.name)
     expect(page).to have_content(unverified_claim.eligibility.current_school.phone_number)
 
@@ -21,6 +21,9 @@ RSpec.feature "Admin checking a claim without a verified identity" do
     click_on "Save and continue"
 
     expect(unverified_claim.tasks.find_by!(name: "identity_confirmation").passed?).to eq(true)
+
+    click_on "Back"
+    click_on "Approve or reject this claim"
 
     choose "Approve"
     fill_in "Decision notes", with: "Identity confirmed via phone call"

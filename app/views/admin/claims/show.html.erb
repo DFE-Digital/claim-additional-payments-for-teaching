@@ -22,7 +22,7 @@
     </h1>
 
 
-    <%= render("info_panel_identity_unconfirmed", school: @claim.school) unless @claim.identity_confirmed? %>
+    <%= render("info_panel_identity_unconfirmed", school: @claim.school) unless @claim.identity_verified? %>
 
   </div>
 </div>

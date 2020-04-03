@@ -77,6 +77,7 @@ RSpec.feature "Admin checks a claim" do
       claim_with_tasks = create(:claim, :submitted, tasks: [qualification_task, employment_task])
       visit admin_claim_tasks_path(claim_with_tasks)
 
+      expect(page).to have_content("Confirm the claimant made the claim Incomplete")
       expect(page).to have_content("Check qualification information Passed")
       expect(page).to have_content("Check employment information Failed")
       expect(page).to have_link("Approve or reject this claim", href: new_admin_claim_decision_path(claim_with_tasks))
@@ -104,6 +105,17 @@ RSpec.feature "Admin checks a claim" do
       expect(page).to have_content(claim_with_decision.latest_decision.notes)
       expect(page).to have_content("Created by")
       expect(page).to have_content(@signed_in_user.full_name)
+    end
+
+    scenario "they see an error if they don't choose a Yes/No option on a check" do
+      claim = create(:claim, :submitted)
+      visit admin_claim_tasks_path(claim)
+
+      click_on "Check qualification information"
+      click_on "Save and continue"
+
+      expect(page).to have_content("You must select ‘Yes’ or ‘No’")
+      expect(claim.tasks.find_by(name: "qualifications")).to be_nil
     end
   end
 

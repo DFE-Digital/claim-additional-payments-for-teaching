@@ -9,11 +9,12 @@ RSpec.feature "Admin checking a claim missing a payroll gender" do
     visit admin_claims_path
     find("a[href='#{admin_claim_tasks_path(claim)}']").click
 
-    expect(page).to have_content("1. Qualifications")
-    expect(page).to have_content("2. Employment")
-    expect(page).to have_content("3. Student loan amount")
-    expect(page).to have_content("4. Payroll gender")
-    expect(page).to have_content("5. Decision")
+    expect(page).to have_content("1. Identity confirmation")
+    expect(page).to have_content("2. Qualifications")
+    expect(page).to have_content("3. Employment")
+    expect(page).to have_content("4. Student loan amount")
+    expect(page).to have_content("5. Payroll gender")
+    expect(page).to have_content("6. Decision")
 
     click_on I18n.t("admin.tasks.payroll_gender")
 
