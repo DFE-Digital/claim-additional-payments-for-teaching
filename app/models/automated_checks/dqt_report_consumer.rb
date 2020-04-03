@@ -20,7 +20,7 @@ module AutomatedChecks
         dqt_records.each do |record|
           claim = claim_for_record(record)
 
-          if claim && claim.policy::DQTRecord.new(record).eligible?
+          if claim && awaiting_task?(claim, "qualifications") && claim.policy::DQTRecord.new(record).eligible?
             claim.tasks.create!(task_attributes)
             @completed_tasks += 1
           end
@@ -36,11 +36,15 @@ module AutomatedChecks
     private
 
     def claims
-      @claims ||= Claim.awaiting_task("qualifications")
+      @claims ||= Claim.awaiting_decision.includes(:tasks)
     end
 
     def claim_for_record(record)
       claims.detect { |c| c.reference == record.fetch(:claim_reference) }
+    end
+
+    def awaiting_task?(claim, task_name)
+      claim.tasks.none? { |task| task.name == task_name }
     end
 
     def dqt_records
