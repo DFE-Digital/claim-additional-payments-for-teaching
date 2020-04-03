@@ -205,7 +205,7 @@ Make sure to securely delete the copies of the keys and certificates stored in
 
 ## Step 10. Clean up – remove your local IP address from the Azure key vault firewall
 
-The key vault firewall should aumatically get reset on a redeploy, but double
+The key vault firewall should automatically get reset on a redeploy, but double
 check to be sure:
 
 - Navigate to the key vault in the Azure Portal
