@@ -4,6 +4,6 @@ FactoryBot.define do
     passed { true }
     manual { true }
     association :created_by, factory: :dfe_signin_user
-    association :claim
+    association :claim, :submitted
   end
 end
