@@ -7,6 +7,15 @@
 # It records who completed the task and the date/time the action was carried
 # out.
 class Task < ApplicationRecord
+  NAMES = %w[
+    identity_confirmation
+    qualifications
+    employment
+    student_loan_amount
+    matching_details
+    payroll_gender
+  ].freeze
+
   belongs_to :claim
   belongs_to :created_by, class_name: "DfeSignIn::User"
 

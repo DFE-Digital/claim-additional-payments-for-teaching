@@ -88,7 +88,7 @@ Rails.application.routes.draw do
     get "/auth/failure", to: "auth#failure"
 
     resources :claims, only: [:index, :show] do
-      resources :tasks, only: [:index, :show, :create], param: :name, constraints: {name: %r{#{ClaimCheckingTasks::TASK_NAMES.join("|")}}}
+      resources :tasks, only: [:index, :show, :create], param: :name, constraints: {name: %r{#{Task::NAMES.join("|")}}}
       resources :payroll_gender_tasks, only: [:create], param: :name, name: "payroll_gender"
       resources :decisions, only: [:create, :new] do
         resources :undos, only: [:create, :new], controller: "decisions_undo"
