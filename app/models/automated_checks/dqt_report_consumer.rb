@@ -27,14 +27,9 @@ module AutomatedChecks
         dqt_records.each do |record|
           claim = claim_for_record(record)
 
-          if claim && awaiting_task?(claim, "qualifications") && claim.policy::DQTRecord.new(record).eligible?
-            claim.tasks.create!(task_attributes("qualifications"))
-            @completed_tasks += 1
-          end
-
-          if claim && awaiting_task?(claim, "identity_confirmation") && identity_matches?(claim, record)
-            claim.tasks.create!(task_attributes("identity_confirmation"))
-            @completed_tasks += 1
+          if claim
+            perform_qualification_check(claim, record)
+            perform_identity_confirmation(claim, record)
           end
         end
       end
@@ -49,6 +44,20 @@ module AutomatedChecks
     end
 
     private
+
+    def perform_qualification_check(claim, record)
+      if awaiting_task?(claim, "qualifications") && claim.policy::DQTRecord.new(record).eligible?
+        claim.tasks.create!(task_attributes("qualifications"))
+        @completed_tasks += 1
+      end
+    end
+
+    def perform_identity_confirmation(claim, record)
+      if awaiting_task?(claim, "identity_confirmation") && identity_matches?(claim, record)
+        claim.tasks.create!(task_attributes("identity_confirmation"))
+        @completed_tasks += 1
+      end
+    end
 
     def claims
       @claims ||= Claim.awaiting_decision.includes(:tasks)
