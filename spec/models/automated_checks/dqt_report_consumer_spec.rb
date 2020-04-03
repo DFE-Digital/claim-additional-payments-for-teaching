@@ -14,10 +14,13 @@ RSpec.describe AutomatedChecks::DQTReportConsumer do
   describe "#ingest" do
     before { dqt_report_consumer.ingest }
 
-    it "creates a qualification task for claims that are eligible" do
-      new_qualication_task = claim_with_eligible_dqt_record.tasks.find_by!(name: "qualifications")
+    it "sets attributes that report the number of tasks automatically completed and the number of DQT records checked" do
       expect(dqt_report_consumer.completed_tasks).to eq(1)
       expect(dqt_report_consumer.total_records).to eq(7)
+    end
+
+    it "creates a qualification task for claims that are eligible" do
+      new_qualication_task = claim_with_eligible_dqt_record.tasks.find_by!(name: "qualifications")
       expect(new_qualication_task.passed).to eq(true)
       expect(new_qualication_task.manual).to eq(false)
       expect(new_qualication_task.created_by).to eq(admin_user)
