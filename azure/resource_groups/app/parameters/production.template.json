@@ -193,7 +193,12 @@
       }
     },
     "VSP.SAML_SECONDARY_ENCRYPTION_KEY": {
-      "value": ""
+      "reference": {
+        "keyVault": {
+          "id": "${keyVaultId}"
+        },
+        "secretName": "TeacherPaymentsProdVspSamlEncryption2KeyBase64"
+      }
     },
     "VSP.EUROPEAN_IDENTITY_ENABLED": {
       "value": "true"
