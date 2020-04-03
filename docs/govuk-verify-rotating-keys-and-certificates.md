@@ -24,6 +24,9 @@ To perform this task, you will need:
 - The
   [Azure CLI installed](https://docs.microsoft.com/en-us/cli/azure/install-azure-cli?view=azure-cli-latest)
 - The codebase cloned locally
+- If you're performing the rotation on production you will need either an
+  existing account with a GOV.UK Verify identity provider or the required
+  documents necessary for signing up to one
 
 Speak to the product manager if you need access to the GOV.UK Manage
 certificates service or the Azure portal.
