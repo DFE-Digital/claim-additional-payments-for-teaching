@@ -9,4 +9,17 @@ RSpec.describe Task, type: :model do
     expect(first_employment_task).to be_valid
     expect(second_employment_task).not_to be_valid
   end
+
+  it "validates name is from the defined list of tasks" do
+    task = build(:task)
+
+    Task::NAMES.each do |name|
+      task.name = name
+      expect(task).to be_valid
+    end
+
+    task.name = "bogus_task"
+    expect(task).not_to be_valid
+    expect(task.errors.messages[:name]).to include("name not recognised")
+  end
 end
