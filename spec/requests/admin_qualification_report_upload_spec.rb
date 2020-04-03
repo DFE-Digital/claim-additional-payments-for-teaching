@@ -36,7 +36,7 @@ RSpec.describe "Admin qualification report upload" do
         qualification_task = claim.tasks.find_by(name: "qualifications")
         expect(qualification_task.created_by).to eql(@signed_in_user)
 
-        expect(flash[:notice]).to eql("DQT report uploaded successfully. Automatically completed 1 task from 1 DQT record.")
+        expect(flash[:notice]).to eql("DQT report uploaded successfully. Automatically completed 1 task for 1 checked claim.")
         expect(response).to redirect_to(admin_claims_path)
       end
     end

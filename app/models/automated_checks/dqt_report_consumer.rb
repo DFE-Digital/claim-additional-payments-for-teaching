@@ -7,7 +7,7 @@ module AutomatedChecks
   # The records will be used to determine if a claimant's qualifications
   # make them eligible for a specific policy.
   class DQTReportConsumer
-    attr_reader :csv, :completed_tasks, :total_records
+    attr_reader :csv, :completed_tasks
 
     def initialize(file, admin_user)
       @csv = DQTReportCsv.new(file)
@@ -25,12 +25,15 @@ module AutomatedChecks
             @completed_tasks += 1
           end
         end
-        @total_records = dqt_records.count
       end
     end
 
     def errors
       csv.errors
+    end
+
+    def total_claims_checked
+      claims.size
     end
 
     private
