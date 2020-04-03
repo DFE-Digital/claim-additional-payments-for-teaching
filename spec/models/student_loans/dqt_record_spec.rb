@@ -10,8 +10,12 @@ RSpec.describe StudentLoans::DQTRecord do
       expect(StudentLoans::DQTRecord.new({qts_date: Date.parse("1/10/2014")}).eligible?). to eql true
     end
 
-    it "returns false if the given date is not an eligible year" do
+    it "returns false if the given QTS award date is not an eligible year" do
       expect(StudentLoans::DQTRecord.new({qts_date: Date.parse("8/3/2000")}).eligible?). to eql false
+    end
+
+    it "returns false if the given QTS award date is blank" do
+      expect(StudentLoans::DQTRecord.new({qts_date: ""}).eligible?). to eql false
     end
   end
 end

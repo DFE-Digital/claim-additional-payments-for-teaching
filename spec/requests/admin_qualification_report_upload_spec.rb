@@ -28,15 +28,18 @@ RSpec.describe "Admin qualification report upload" do
     end
 
     context "when the data in CSV matches the data in the claim" do
-      it "creates qualification task for the claim" do
+      it "creates qualification and identity_confirmation tasks for the claim" do
         expect {
           post admin_qualification_report_uploads_path, params: {file: file}
-        }.to change { claim.tasks.count }.by(1)
+        }.to change { claim.tasks.count }.by(2)
 
         qualification_task = claim.tasks.find_by(name: "qualifications")
         expect(qualification_task.created_by).to eql(@signed_in_user)
 
-        expect(flash[:notice]).to eql("DQT report uploaded successfully. Automatically created checks for 1 claim out of 1 record.")
+        id_confirmation_task = claim.tasks.find_by(name: "identity_confirmation")
+        expect(id_confirmation_task.created_by).to eql(@signed_in_user)
+
+        expect(flash[:notice]).to eql("DQT report uploaded successfully. Automatically completed 2 tasks for 1 checked claim.")
         expect(response).to redirect_to(admin_claims_path)
       end
     end
@@ -58,9 +61,9 @@ RSpec.describe "Admin qualification report upload" do
       end
     end
 
-    context "when there's an error creating the tasks" do
+    context "when there's an ActiveRecord::RecordInvalid error raised during the file ingest" do
       it "displays an error and prompts the user to try again" do
-        allow_any_instance_of(Claim).to receive_message_chain("tasks.create!").and_raise(ActiveRecord::RecordInvalid)
+        expect_any_instance_of(AutomatedChecks::DQTReportConsumer).to receive("ingest").and_raise(ActiveRecord::RecordInvalid)
 
         expect {
           post admin_qualification_report_uploads_path, params: {file: file}

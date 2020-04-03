@@ -9,7 +9,7 @@ module FixtureHelpers
   def claim_from_example_dqt_report(trait)
     case trait
     when :eligible_claim_with_matching_data
-      # Eligible claim with matching data in DQT
+      # Eligible claim with matching name and DOB in DQT
       create(:claim, :submitted,
         surname: "ELIGIBLE",
         teacher_reference_number: "1234567",
@@ -57,6 +57,12 @@ module FixtureHelpers
         reference: "GH123456",
         date_of_birth: Date.new(1980, 10, 4),
         tasks: [build(:task, name: "qualifications")])
+    when :unverified_claim_with_matching_identity_data
+      create(:claim, :unverified,
+        teacher_reference_number: "9996060",
+        reference: "DP5NEGWP",
+        surname: "Bob",
+        date_of_birth: Date.new(1979, 5, 2))
     end
   end
 

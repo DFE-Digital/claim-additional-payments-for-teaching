@@ -5,6 +5,8 @@ RSpec.feature "Admins automated qualification check" do
 
   scenario "Service operators can upload and run automated DQT checks" do
     claim_with_eligible_dqt_record = claim_from_example_dqt_report(:eligible_claim_with_matching_data)
+    eligible_claim_with_non_matching_birthdate = claim_from_example_dqt_report(:eligible_claim_with_non_matching_birthdate)
+    eligible_claim_with_non_matching_surname = claim_from_example_dqt_report(:eligible_claim_with_non_matching_surname)
     claim_without_dqt_record = claim_from_example_dqt_report(:claim_without_dqt_record)
     claim_with_ineligible_dqt_record = claim_from_example_dqt_report(:claim_with_ineligible_dqt_record)
     claim_with_decision = claim_from_example_dqt_report(:claim_with_decision)
@@ -18,11 +20,21 @@ RSpec.feature "Admins automated qualification check" do
 
     click_on "Upload"
 
-    expect(page).to have_content "DQT report uploaded successfully. Automatically created checks for 1 claim out of 7 records."
+    expect(page).to have_content "DQT report uploaded successfully. Automatically completed 4 tasks for 6 checked claims."
+
     expect(claim_with_eligible_dqt_record.tasks.find_by!(name: "qualifications").passed?).to eq(true)
+    expect(claim_with_eligible_dqt_record.tasks.find_by!(name: "identity_confirmation").passed?).to eq(true)
+
+    expect(eligible_claim_with_non_matching_birthdate.tasks.find_by(name: "qualifications").passed?).to eq(true)
+    expect(eligible_claim_with_non_matching_birthdate.tasks.find_by(name: "identity_confirmation")).to be_nil
+
+    expect(eligible_claim_with_non_matching_surname.tasks.find_by(name: "qualifications").passed?).to eq(true)
+    expect(eligible_claim_with_non_matching_surname.tasks.find_by(name: "identity_confirmation")).to be_nil
+
     expect(claim_without_dqt_record.tasks.find_by(name: "qualifications")).to be_nil
     expect(claim_with_ineligible_dqt_record.tasks.find_by(name: "qualifications")).to be_nil
     expect(claim_with_decision.tasks.find_by(name: "qualifications")).to be_nil
+
     expect(claim_with_qualification_task.tasks.find_by(name: "qualifications")).to eq(existing_qualification_task)
   end
 end
