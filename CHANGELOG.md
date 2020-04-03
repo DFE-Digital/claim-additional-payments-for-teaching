@@ -6,6 +6,11 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+## [Release 070] - 2020-04-03
+
+- Add secondary SAML encryption key in preparation for rotating production VSP
+  keys and certificates
+
 ## [Release 069] - 2020-04-02
 
 - Improve message shown when inconsistent payroll information is found
@@ -559,7 +564,9 @@ The format is based on [Keep a Changelog]
 - First release for student loan repayments private beta
 
 [unreleased]:
-  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-069...HEAD
+  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-070...HEAD
+[release 070]:
+  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-069...release-070
 [release 069]:
   https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-068...release-069
 [release 068]:
