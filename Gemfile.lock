@@ -135,9 +135,6 @@ GEM
     listen (3.2.1)
       rb-fsevent (~> 0.10, >= 0.10.3)
       rb-inotify (~> 0.9, >= 0.9.10)
-    logstash-event (1.2.02)
-    logstash-logger (0.26.1)
-      logstash-event (~> 1.2)
     loofah (2.5.0)
       crass (~> 1.0.2)
       nokogiri (>= 1.5.9)
@@ -361,7 +358,6 @@ DEPENDENCIES
   jwt
   launchy
   listen (>= 3.0.5, < 3.3)
-  logstash-logger (~> 0.26)
   mail-notify
   nanoid
   omniauth
