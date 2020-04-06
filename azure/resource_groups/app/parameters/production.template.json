@@ -133,7 +133,7 @@
       }
     },
     "LOGSTASH_PORT": {
-      "value": 23890
+      "value": 23888
     },
     "ADMIN_ALLOWED_IPS": {
       "reference": {

@@ -149,7 +149,7 @@
       }
     },
     "LOGSTASH_PORT": {
-      "value": 17002
+      "value": 17000
     },
     "ADMIN_ALLOWED_IPS": {
       "reference": {
