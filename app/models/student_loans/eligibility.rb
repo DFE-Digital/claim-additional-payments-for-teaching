@@ -131,7 +131,7 @@ module StudentLoans
     end
 
     def one_subject_must_be_selected
-      errors.add(:subjects_taught, "Select if you taught Biology, Chemistry, Physics, Computing, Languages or you didn’t teach any of these subjects") if subjects_taught.empty?
+      errors.add(:subjects_taught, "Select if you taught Biology, Chemistry, Physics, Computing, Languages or you did not teach any of these subjects") if subjects_taught.empty?
     end
 
     def ineligible_current_school?

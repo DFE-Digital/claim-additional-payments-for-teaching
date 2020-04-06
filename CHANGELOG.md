@@ -7,6 +7,7 @@ The format is based on [Keep a Changelog]
 ## [Unreleased]
 
 - Move shipping logs to logstash to Filebeat
+- Remove a negative contraction in some text, to follow GOV.UK style guide
 
 ## [Release 072] - 2020-04-03
 
