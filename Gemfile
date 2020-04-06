@@ -60,9 +60,6 @@ gem "application_insights", git: "https://github.com/microsoft/ApplicationInsigh
 # Semantic Logger provides more useful application log entries
 gem "rails_semantic_logger"
 
-# Use logstash-logger to send to Logit.io
-gem "logstash-logger", "~> 0.26"
-
 # Improved memory usage in downloading large files vs Net/HTTP
 gem "httpclient"
 
