@@ -95,6 +95,14 @@ module Admin
       content_tag("strong", status, class: tag_classes)
     end
 
+    def claim_summary_heading(claim)
+      if claim.decision_made?
+        claim.reference + " – " + claim.latest_decision.result.capitalize
+      else
+        claim.reference
+      end
+    end
+
     private
 
     def matching_attributes_for(claim)

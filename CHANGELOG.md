@@ -23,6 +23,7 @@ The format is based on [Keep a Changelog]
 
 - Improve message shown when inconsistent payroll information is found
 - Service operators can add a support ticket to claims
+- Display the claim's decision within the heading on the task view page
 
 ## [Release 068] - 2020-03-31
 

@@ -229,4 +229,22 @@ describe Admin::ClaimsHelper do
       expect(task_status_tag).to match("govuk-tag app-task-list__task-completed govuk-tag--inactive")
     end
   end
+
+  describe "#claim_summary_heading" do
+    context "when the claim has a decision" do
+      it "returns the reference field and the decision result" do
+        claim = create(:claim, :approved, reference: "1")
+        result = helper.claim_summary_heading(claim)
+        expect(result).to eql("1 – Approved")
+      end
+    end
+
+    context "when the claim does not have a decision" do
+      it "returns the reference field" do
+        claim = create(:claim, reference: "1")
+        result = helper.claim_summary_heading(claim)
+        expect(result).to eql("1")
+      end
+    end
+  end
 end
