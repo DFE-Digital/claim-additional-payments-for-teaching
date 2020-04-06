@@ -128,7 +128,7 @@ ALERTS_TEMPLATE_FILE_PATH="$SCRIPT_PATH/../azure/resource_groups/alerts/template
 ALERTS_PARAMETERS_TEMPLATE_FILE_PATH="$SCRIPT_PATH/../azure/resource_groups/alerts/parameters/$ENVIRONMENT_NAME.template.json"
 ALERTS_PARAMETERS_FILE_PATH="$SCRIPT_PATH/../azure/resource_groups/alerts/parameters/$ENVIRONMENT_NAME.json"
 
-if [ $LOGIN_TO_AZURE ] && ! az account show > /dev/null; then
+if [ "$LOGIN_TO_AZURE" ] && ! az account show > /dev/null; then
   echo "Logging in..."
   az login
 fi
@@ -168,14 +168,14 @@ echo
 
 ensure-resource-group-exists $SECRETS_RESOURCE_GROUP_NAME
 
-if [ $CONFIRM_BEFORE_DEPLOY ]; then
+if [ "$CONFIRM_BEFORE_DEPLOY" ]; then
   echo
   echo "Are you ready to deploy $SECRETS_RESOURCE_GROUP_NAME?"
   echo "  Hit return to continue, or CTRL+C to stop."
   read -r
 fi
 
-if [ $RECOVER_KEY_VAULT ]; then
+if [ "$RECOVER_KEY_VAULT" ]; then
   KEYVAULT_CREATE_MODE="recover"
 else
   KEYVAULT_CREATE_MODE="default"
@@ -223,7 +223,7 @@ sed \
     -e "s|\${appServiceDockerImageTag}|$DOCKER_TAG|g" \
     "$APP_PARAMETERS_TEMPLATE_FILE_PATH" > "$APP_PARAMETERS_FILE_PATH"
 
-if [ $CONFIRM_BEFORE_DEPLOY ]; then
+if [ "$CONFIRM_BEFORE_DEPLOY" ]; then
   echo
   echo "Are all the secrets up to date?"
   echo "Are you ready to deploy $APP_RESOURCE_GROUP_NAME?"
@@ -269,7 +269,7 @@ echo
 echo "$APP_RESOURCE_GROUP_NAME deployed!"
 echo
 
-if [ $DEPLOY_ALERTS ]; then
+if [ "$DEPLOY_ALERTS" ]; then
   ensure-resource-group-exists $ALERTS_RESOURCE_GROUP_NAME
 
   echo "Rewriting alerts parameters file for $ENVIRONMENT_NAME..."
