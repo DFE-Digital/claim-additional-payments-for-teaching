@@ -77,9 +77,12 @@ WORKDIR ${APP_HOME}
 
 # Download and install filebeat for sending logs to logstash
 ENV FILEBEAT_VERSION=7.6.2
-RUN curl https://artifacts.elastic.co/downloads/beats/filebeat/filebeat-${FILEBEAT_VERSION}-linux-x86_64.tar.gz -o filebeat.tar.gz && \
-    tar xzvf filebeat.tar.gz && \
-    rm filebeat.tar.gz && \
+ENV FILEBEAT_DOWNLOAD_PATH=/tmp/filebeat.tar.gz
+ENV FILEBEAT_CHECKSUM=482304509aed80db78ef63a0fed88e4453ebe7b11f6b4ab3168036a78f6a413e2f6a5c039f405e13984653b1a094c23f7637ac7daf3da75a032692d1c34a9b65
+RUN curl https://artifacts.elastic.co/downloads/beats/filebeat/filebeat-${FILEBEAT_VERSION}-linux-x86_64.tar.gz -o ${FILEBEAT_DOWNLOAD_PATH} && \
+    [ "$(sha512sum ${FILEBEAT_DOWNLOAD_PATH})" = "${FILEBEAT_CHECKSUM}  ${FILEBEAT_DOWNLOAD_PATH}" ] && \
+    tar xzvf ${FILEBEAT_DOWNLOAD_PATH} && \
+    rm ${FILEBEAT_DOWNLOAD_PATH} && \
     mv filebeat-${FILEBEAT_VERSION}-linux-x86_64 /filebeat && \
     rm -f /filebeat/filebeat.yml
 
