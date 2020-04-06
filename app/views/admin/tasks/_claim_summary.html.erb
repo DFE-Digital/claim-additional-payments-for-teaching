@@ -49,6 +49,17 @@
         <%= l(claim.submitted_at) %>
       </dd>
     </div>
+
+    <div class="govuk-summary-list__row">
+      <dt class="govuk-summary-list__key">
+        Payroll status
+      </dt>
+
+      <dd class="govuk-summary-list__value">
+        <%= payroll_run_status(claim) %>
+      </dd>
+    </div>
+
   </dl>
 </div>
 <div class="govuk-grid-column-one-half">

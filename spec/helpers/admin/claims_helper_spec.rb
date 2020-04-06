@@ -247,4 +247,20 @@ describe Admin::ClaimsHelper do
       end
     end
   end
+
+  describe "#payroll_run_status" do
+    it "returns a payroll status where a claim hasn't gone through payroll" do
+      claim = create(:claim, :approved)
+
+      expect(payroll_run_status(claim)).to eq "Awaiting payroll"
+    end
+
+    it "returns a payroll status where a claim has gone through payroll" do
+      claim = create(:claim, :approved)
+      create(:payment, claims: [claim])
+      freeze_time do
+        expect(payroll_run_status(claim)).to eq(Time.zone.now.strftime("%B %Y"))
+      end
+    end
+  end
 end
