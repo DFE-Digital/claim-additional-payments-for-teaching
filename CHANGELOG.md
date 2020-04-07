@@ -6,6 +6,9 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+- Display payroll status of claim within task view
+- Display claim amount within task view
+
 ## [Release 073] - 2020-04-07
 
 - Move shipping logs to logstash to Filebeat
