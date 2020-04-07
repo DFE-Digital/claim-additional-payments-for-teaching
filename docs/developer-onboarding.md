@@ -37,12 +37,13 @@ Then, follow these steps to complete your onboarding:
    [owners](https://portal.azure.com/?Microsoft_Azure_PIMCommon=true#blade/Microsoft_AAD_IAM/GroupDetailsMenuBlade/Owners/groupId/6642920a-1aab-49bb-9a20-365131195349)
    of the “s118-teacherpaymentservice-Delivery Team USR” Active Directory group
    to follow
-   [these instructions](#how-to-add-a-member-to-the-delivery-team-in-azure) to
-   add you as a member.
-8. Sign up for [DfE Digital’s Confluence wiki](https://dfedigital.atlassian.net)
+   [these instructions](#how-to-add-a-member-to-the-delivery-team-group-in-azure)
+   to add you as a member.
+8. Sign up for
+   [DfE Digital’s Confluence wiki](https://dfedigital.atlassian.net/wiki/spaces/TP)
    using your DfE email address.
 9. Follow these steps from the
-   [onboarding page in Confluence](https://dfedigital.atlassian.net/wiki/spaces/TP):
+   [onboarding page in Confluence](https://dfedigital.atlassian.net/wiki/spaces/TP/pages/1085538326/Onboarding+Offboarding+Guidance):
    - Slack
    - GitHub
    - logit.io – the Viewers team is sufficient for support needs
