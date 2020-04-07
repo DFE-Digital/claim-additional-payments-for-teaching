@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+## [Release 073] - 2020-04-07
+
 - Move shipping logs to logstash to Filebeat
 - Remove a negative contraction in some text, to follow GOV.UK style guide
 
@@ -576,7 +578,9 @@ The format is based on [Keep a Changelog]
 - First release for student loan repayments private beta
 
 [unreleased]:
-  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-072...HEAD
+  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-073...HEAD
+[release 073]:
+  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-072...release-073
 [release 072]:
   https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-071...release-072
 [release 071]:
