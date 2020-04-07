@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+## [Release 074] - 2020-04-07
+
 - Display payroll status of claim within task view
 - Display claim amount within task view
 
@@ -581,7 +583,9 @@ The format is based on [Keep a Changelog]
 - First release for student loan repayments private beta
 
 [unreleased]:
-  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-073...HEAD
+  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-074...HEAD
+[release 074]:
+  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-073...release-074
 [release 073]:
   https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-072...release-073
 [release 072]:
