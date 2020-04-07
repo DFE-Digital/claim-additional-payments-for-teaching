@@ -105,7 +105,7 @@ module Admin
 
     def payroll_run_status(claim)
       if claim.payrolled?
-        claim.payment.payroll_run.created_at.strftime("%B %Y")
+        link_to(claim.payment.payroll_run.created_at.strftime("%B %Y"), admin_payroll_run_path(claim.payment.payroll_run))
       else
         "Awaiting payroll"
       end
