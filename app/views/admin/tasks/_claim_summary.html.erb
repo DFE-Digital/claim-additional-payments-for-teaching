@@ -101,5 +101,14 @@
         <%= decision_deadline_warning(claim) %>
       </dd>
     </div>
+    <div class="govuk-summary-list__row">
+      <dt class="govuk-summary-list__key">
+        Claim amount
+      </dt>
+
+      <dd class="govuk-summary-list__value">
+        <%= number_to_currency(claim.award_amount) %>
+      </dd>
+    </div>
   </dl>
 </div>
