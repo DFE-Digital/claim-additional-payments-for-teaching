@@ -136,3 +136,27 @@ Someone from DfE will probably ask us to do this at least once every 6 months.
 
 Follow the steps in
 [`govuk-verify-rotating-keys-and-certificates.md`](govuk-verify-rotating-keys-and-certificates.md).
+
+### I want to remove the 'downloaded' state from a payroll run so it can be downloaded again
+
+#### You will need
+
+- credentials for the project’s Azure infrastructure
+
+#### Steps
+
+1. Make a Privileged Identity Management (PIM) request, to gain the elevated
+   permissions required to access production resources. See
+   [`privileged-identity-management-requests.md`](privileged-identity-management-requests.md).
+2. Ask another developer to approve the PIM request.
+3. Start a Rails console. See
+   [`README.md#accessing-production-data-with-a-live-rails-console`](../README.md#accessing-production-data-with-a-live-rails-console).
+4. Identify the latest `PayrollRun` object (double check that the dates are as
+   expected), set `downloaded_at` and `downloaded_by_id` to `nil` and save the
+   object:
+   ```ruby
+   payroll = PayrollRun.last
+   payroll.downloaded_at = nil
+   payroll.downloaded_by_id = nil
+   payroll.save
+   ```
