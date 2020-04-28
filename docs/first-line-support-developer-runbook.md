@@ -160,3 +160,21 @@ Follow the steps in
    payroll.downloaded_by_id = nil
    payroll.save
    ```
+
+### I want to restart the worker container instance
+
+#### You will need
+
+- credentials for the project’s Azure infrastructure
+
+#### Steps
+
+1. Make a Privileged Identity Management (PIM) request, to gain the elevated
+   permissions required to access production resources. See
+   [`privileged-identity-management-requests.md`](privileged-identity-management-requests.md).
+2. Ask another developer to approve the PIM request.
+3. Search for `s118p01-app-worker-aci` within the Azure portal.
+4. Click "Restart"
+
+Alternatively, instead of doing it via the web interface, you can run
+`az container restart --name s118p01-app-worker-aci --resource-group s118p01-app`.
