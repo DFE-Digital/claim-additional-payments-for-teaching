@@ -53,9 +53,12 @@ Architecture decision records can be found in the
      “When using this certificate:” dropdown to `Always Trust` in the Trust
      section.
 2. Run `bundle install` and `yarn install` to install the dependencies
-3. Run `bundle exec rails db:setup` to set up the database development
-4. Run `bundle exec foreman start` to launch the app on https://localhost:3000/
-5. Visit one of the following urls in your browser to access the relevant
+3. Fetch the `DFE_SIGN_IN_API_SECRET` development secret from the
+   [Azure key vault](docs/secrets.md) and store it in `.env` at the root of the
+   repository.
+4. Run `bundle exec rails db:setup` to set up the database development
+5. Run `bundle exec foreman start` to launch the app on https://localhost:3000/
+6. Visit one of the following urls in your browser to access the relevant
    policy:
 
 - **Student Loans:** https://localhost:3000/student-loans/claim

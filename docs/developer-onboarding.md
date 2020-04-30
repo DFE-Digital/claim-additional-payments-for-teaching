@@ -24,7 +24,8 @@ Then, follow these steps to complete your onboarding:
 1. Log in to your DfE email.
 2. If Google asks you to set up two-factor authentication, see
    [this advice](#how-to-set-up-two-factor-auth-for-your-digitaleducationgovuk-google-account).
-3. Follow the link in the Azure invitation email and create an account.
+3. Follow the link in the Azure invitation email and create an account. Your
+   password should be no longer than 16 characters.
 4. Click on
    [this link](https://portal.azure.com/?Microsoft_Azure_PIMCommon=true#blade/Microsoft_AAD_IAM/GroupDetailsMenuBlade/Owners/groupId/6642920a-1aab-49bb-9a20-365131195349)
    – we’ll use this to confirm you’re using the correct directory in Azure.
