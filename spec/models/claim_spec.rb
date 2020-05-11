@@ -118,6 +118,17 @@ RSpec.describe Claim, type: :model do
     end
   end
 
+  context "when amending a claim with no student loan" do
+    it "cannot have its student loan plan type amended to anything other than NO_STUDENT_LOAN" do
+      claim = build(:claim, :submittable, has_student_loan: false, student_loan_plan: Claim::NO_STUDENT_LOAN)
+
+      expect(claim).to be_valid(:amendment)
+
+      claim.student_loan_plan = StudentLoan::PLAN_1
+      expect(claim).not_to be_valid(:amendment)
+    end
+  end
+
   it "is not submittable without a value for the student_loan_plan present" do
     expect(build(:claim, :submittable, student_loan_plan: nil)).not_to be_valid(:submit)
     expect(build(:claim, :submittable, student_loan_plan: Claim::NO_STUDENT_LOAN)).to be_valid(:submit)

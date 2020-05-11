@@ -76,6 +76,19 @@ RSpec.describe "Admin claim amendments" do
         expect(response.body).to include("Enter an account number")
       end
 
+      it "displays a validation error and does not update the claim or create an amendment when trying to change the student loan plan when the claimant is no longer paying off their student loan" do
+        claim.update!(has_student_loan: false, student_loan_plan: Claim::NO_STUDENT_LOAN)
+
+        expect {
+          post admin_claim_amendments_url(claim, amendment: {claim: {student_loan_plan: "plan_2"},
+                                                             notes: "Contacted claimant to find out plan type"})
+        }.not_to change { [claim.reload.student_loan_plan, claim.amendments.size] }
+
+        expect(response).to have_http_status(:ok)
+
+        expect(response.body).to include("You can’t amend the student loan plan type")
+      end
+
       it "displays an error message and does not create an amendment when none of the claim’s values are changed" do
         expect {
           post admin_claim_amendments_url(claim, amendment: {claim: {teacher_reference_number: claim.teacher_reference_number},
