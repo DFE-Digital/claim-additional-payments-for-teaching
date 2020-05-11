@@ -6,6 +6,9 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+- A service operator isn’t allowed to amend student loan plan when the claimant
+  has already paid off their student loan
+
 ## [Release 074] - 2020-04-07
 
 - Display payroll status of claim within task view
