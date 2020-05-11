@@ -1,14 +1,14 @@
 # Deployment process
 
 All of our infrastructure is hosted on DfE's Cloud Infrastructure Platform in
-[Microsoft Azure](azure).
+[Microsoft Azure][azure].
 
-The setup is specified as [Infrastructure as Code](iac) using
-[Azure Resource Mananger (ARM) Templates](arm), stored in the `azure` folder in
-the root of the project.
+The setup is specified as [Infrastructure as Code][iac] using [Azure Resource
+Mananger (ARM) Templates][arm], stored in the `azure` folder in the root of the
+project.
 
 Many of the ARM templates build on top of building blocks already developed by
-the [Becoming A Teacher team](building_blocks).
+the [Becoming A Teacher team][building_blocks].
 
 ## Automated deployment
 
@@ -42,7 +42,7 @@ do when preparing for a deploy.
 
 #### Requesting permissions
 
-- In the [Azure Portal](azure_portal), navigate to Azure AD Privileged Identity
+- In the [Azure Portal][azure_portal], navigate to Azure AD Privileged Identity
   Management.
 - Click 'My Roles', then 'Azure Resource Roles'.
 - Then click 'Eligible Roles' in the table, choose the role you want access to
