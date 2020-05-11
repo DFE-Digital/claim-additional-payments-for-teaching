@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+## [Release 075] - 2020-05-11
+
 - A service operator isn’t allowed to amend student loan plan when the claimant
   has already paid off their student loan
 
@@ -586,7 +588,9 @@ The format is based on [Keep a Changelog]
 - First release for student loan repayments private beta
 
 [unreleased]:
-  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-074...HEAD
+  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-075...HEAD
+[release 075]:
+  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-074...release-075
 [release 074]:
   https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-073...release-074
 [release 073]:
