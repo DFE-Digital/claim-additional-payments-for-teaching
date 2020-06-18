@@ -28,6 +28,13 @@ RSpec.describe Claim::PersonalDataScrubber, type: :model do
     expect { Claim::PersonalDataScrubber.new.scrub_completed_claims }.not_to change { claim.reload.attributes }
   end
 
+  it "does not delete details from a claim with a rejection which is old but undone" do
+    claim = create(:claim, :submitted)
+    create(:decision, :rejected, :undone, claim: claim, created_at: over_two_months_ago)
+
+    expect { Claim::PersonalDataScrubber.new.scrub_completed_claims }.not_to change { claim.reload.attributes }
+  end
+
   it "deletes expected details from an old rejected claim, setting a personal_data_removed_at timestamp" do
     freeze_time do
       claim = create(:claim, :submitted)

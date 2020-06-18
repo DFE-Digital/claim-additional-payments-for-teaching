@@ -6,6 +6,9 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+- When removing personal data from claims, don’t treat a claim as rejected if
+  the rejection has been undone
+
 ## [Release 076] - 2020-06-16
 
 - Security updates

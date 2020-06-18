@@ -48,7 +48,7 @@ class Claim
         .joins(:decisions)
         .where(personal_data_removed_at: nil)
         .where(
-          "(decisions.result = :rejected AND decisions.created_at < :minimum_time) OR scheduled_payment_date < :minimum_time",
+          "(decisions.undone = false AND decisions.result = :rejected AND decisions.created_at < :minimum_time) OR scheduled_payment_date < :minimum_time",
           minimum_time: TIME_BEFORE_CLAIM_CONSIDERED_OLD.ago,
           rejected: Decision.results.fetch(:rejected)
         )
