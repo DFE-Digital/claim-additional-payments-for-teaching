@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+## [Release 077] - 2020-06-18
+
 - When removing personal data from claims, don’t treat a claim as rejected if
   the rejection has been undone
 
@@ -595,7 +597,9 @@ The format is based on [Keep a Changelog]
 - First release for student loan repayments private beta
 
 [unreleased]:
-  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-076...HEAD
+  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-077...HEAD
+[release 077]:
+  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-076...release-077
 [release 076]:
   https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-075...release-076
 [release 075]:
