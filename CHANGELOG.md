@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+- Remove banking_name when scrubbing personal data from a claim
+
 ## [Release 077] - 2020-06-18
 
 - When removing personal data from claims, don’t treat a claim as rejected if
