@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+## [Release 078] - 2020-06-22
+
 - Remove banking_name when scrubbing personal data from a claim
 
 ## [Release 077] - 2020-06-18
@@ -599,7 +601,9 @@ The format is based on [Keep a Changelog]
 - First release for student loan repayments private beta
 
 [unreleased]:
-  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-077...HEAD
+  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-078...HEAD
+[release 078]:
+  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-077...release-078
 [release 077]:
   https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-076...release-077
 [release 076]:
