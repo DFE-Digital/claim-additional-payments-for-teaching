@@ -20,7 +20,8 @@ class Claim
       :national_insurance_number,
       :bank_sort_code,
       :bank_account_number,
-      :building_society_roll_number
+      :building_society_roll_number,
+      :banking_name
     ]
 
     TIME_BEFORE_CLAIM_CONSIDERED_OLD = 2.months
