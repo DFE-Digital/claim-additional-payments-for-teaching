@@ -6,6 +6,9 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+- Add contextual information when incorrect data is in a confirmation report
+- Remove thousand seperators from numeric columns in confirmation reports
+
 ## [Release 078] - 2020-06-22
 
 - Remove banking_name when scrubbing personal data from a claim
