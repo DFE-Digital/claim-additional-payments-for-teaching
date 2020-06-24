@@ -182,14 +182,14 @@ RSpec.describe PaymentConfirmation do
     let(:csv) do
       <<~CSV
         Payroll Reference,Gross Value,Payment ID,NI,Employers NI,Student Loans,Tax,Net Pay
-        DFE00001,,#{payroll_run.payments[0].id},33.9,38.98,0,89.6,325
+        DFE00001,,#{payroll_run.payments[0].id},,38.98,0,89.6,325
         DFE00002,904.15,#{payroll_run.payments[1].id},77.84,89.51,40,162.8,534
       CSV
     end
 
     it "fails and populates its errors, and does not update the payments" do
       expect(payment_confirmation.ingest).to be_falsey
-      expect(payment_confirmation.errors).to eq(["The claim at line 2 has invalid data"])
+      expect(payment_confirmation.errors).to eq(["The claim at line 2 has invalid data - Gross value can't be blank and National insurance can't be blank"])
 
       expect(payroll_run.payments[0].reload.payroll_reference).to eq(nil)
       expect(payroll_run.payments[1].reload.payroll_reference).to eq(nil)

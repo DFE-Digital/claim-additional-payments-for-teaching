@@ -93,7 +93,7 @@ class PaymentConfirmation
     if payment.save(context: :upload)
       updated_payment_ids.add(payment.id)
     else
-      errors.append("The claim at line #{@line_number} has invalid data")
+      errors.append("The claim at line #{@line_number} has invalid data - #{payment.errors.full_messages.to_sentence}")
     end
   end
 end
