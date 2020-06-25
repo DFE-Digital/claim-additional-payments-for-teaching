@@ -82,18 +82,22 @@ class PaymentConfirmation
     end
 
     payment.payroll_reference = row["Payroll Reference"]
-    payment.gross_value = row["Gross Value"]
-    payment.national_insurance = row["NI"]
-    payment.employers_national_insurance = row["Employers NI"]
-    payment.student_loan_repayment = row["Student Loans"]
-    payment.tax = row["Tax"]
-    payment.net_pay = row["Net Pay"]
-    payment.gross_pay = row["Gross Value"].to_d - row["Employers NI"].to_d
+    payment.gross_value = cast_as_numeric(row["Gross Value"])
+    payment.national_insurance = cast_as_numeric(row["NI"])
+    payment.employers_national_insurance = cast_as_numeric(row["Employers NI"])
+    payment.student_loan_repayment = cast_as_numeric(row["Student Loans"])
+    payment.tax = cast_as_numeric(row["Tax"])
+    payment.net_pay = cast_as_numeric(row["Net Pay"])
+    payment.gross_pay = cast_as_numeric(row["Gross Value"]).to_d - cast_as_numeric(row["Employers NI"]).to_d
 
     if payment.save(context: :upload)
       updated_payment_ids.add(payment.id)
     else
-      errors.append("The claim at line #{@line_number} has invalid data")
+      errors.append("The claim at line #{@line_number} has invalid data - #{payment.errors.full_messages.to_sentence}")
     end
+  end
+
+  def cast_as_numeric(number)
+    number&.gsub(",", "")
   end
 end
