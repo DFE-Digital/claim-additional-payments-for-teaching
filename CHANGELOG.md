@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+## [Release 079] - 2020-06-25
+
 - Add contextual information when incorrect data is in a confirmation report
 - Remove thousand seperators from numeric columns in confirmation reports
 
@@ -604,7 +606,9 @@ The format is based on [Keep a Changelog]
 - First release for student loan repayments private beta
 
 [unreleased]:
-  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-078...HEAD
+  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-079...HEAD
+[release 079]:
+  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-078...release-079
 [release 078]:
   https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-077...release-078
 [release 077]:
