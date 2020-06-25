@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+## [Release 080] - 2020-06-25
+
+- Bump rails from 6.0.3.1 to 6.0.3.2
+
 ## [Release 079] - 2020-06-25
 
 - Add contextual information when incorrect data is in a confirmation report
@@ -606,7 +610,9 @@ The format is based on [Keep a Changelog]
 - First release for student loan repayments private beta
 
 [unreleased]:
-  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-079...HEAD
+  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-080...HEAD
+[release 080]:
+  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-079...release-080
 [release 079]:
   https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-078...release-079
 [release 078]:
