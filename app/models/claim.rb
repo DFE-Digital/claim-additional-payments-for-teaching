@@ -350,7 +350,7 @@ class Claim < ApplicationRecord
     return unless building_society_roll_number.present?
 
     errors.add(:building_society_roll_number, "Building society roll number must only include letters a to z, numbers, hyphens, spaces, forward slashes and full stops") \
-      unless /\A[a-z0-9\-\s\.\/]{1,18}\z/i.match?(building_society_roll_number)
+      unless /\A[a-z0-9\-\s.\/]{1,18}\z/i.match?(building_society_roll_number)
   end
 
   def bank_account_number_must_be_eight_digits
