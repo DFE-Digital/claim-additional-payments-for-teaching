@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+- Content changes for new academic year.
+
 ## [Release 080] - 2020-06-25
 
 - Bump rails from 6.0.3.1 to 6.0.3.2
