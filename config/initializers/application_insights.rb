@@ -1,5 +1,5 @@
-require_relative "../../lib/application_insights/enhance_request_data_with_client_ip.rb"
-require_relative "../../lib/application_insights/enhance_track_request_with_client_ip.rb"
+require_relative "../../lib/application_insights/enhance_request_data_with_client_ip"
+require_relative "../../lib/application_insights/enhance_track_request_with_client_ip"
 
 instrumentation_key = ENV["APPINSIGHTS_INSTRUMENTATIONKEY"]
 
