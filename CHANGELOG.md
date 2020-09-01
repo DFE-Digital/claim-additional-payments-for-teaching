@@ -7,6 +7,7 @@ The format is based on [Keep a Changelog]
 ## [Unreleased]
 
 - Changes made to content pages ready for academic year 2020-21
+- Increase Verify timeout from 90 minutes to 120 minutes
 
 ## [Release 080] - 2020-06-25
 
