@@ -103,11 +103,11 @@ RSpec.feature "Teacher verifies identity using GOV.UK Verify" do
     end
   end
 
-  scenario "Users who take longer than 90 minutes to complete Verify are told that their session has timed out", js: true do
+  scenario "Users who take longer than 120 minutes to complete Verify are told that their session has timed out", js: true do
     stub_vsp_translate_response_request
     click_on "Continue"
 
-    travel 95.minutes do
+    travel 125.minutes do
       click_on "Perform identity check"
       expect(page).to have_text("Your session has ended due to inactivity")
     end
