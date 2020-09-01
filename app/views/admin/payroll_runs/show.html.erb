@@ -56,6 +56,27 @@
       <% end %>
     </dl>
   </div>
+  <div class="govuk-grid-column-full">
+    <h2 class="govuk-heading-m">Summary of claim amounts by service</h2>
+    <table class="govuk-table">
+      <thead class="govuk-table__head">
+        <tr class="govuk-table__row">
+          <th scope="col" class="govuk-table__header">Service</th>
+          <th scope="col" class="govuk-table__header">Number of claims</th>
+          <th scope="col" class="govuk-table__header">Total claimed amount</th>
+        </tr>
+        <% Policies.all.each do |policy| %>
+          <tr class="govuk-table__row">
+            <th scope="row" class="govuk-table__header"><%= policy.short_name %></th>
+            <td class="govuk-table__cell"><%= @payroll_run.number_of_claims_for_policy(policy) %></td>
+            <td class="govuk-table__cell"><%= number_to_currency(@payroll_run.total_claim_amount_for_policy(policy)) %></td>
+          </tr>
+        <% end %>
+      </thead>
+      <tbody class="govuk-table__body">
+      </tbody>
+    </table>
+  </div>
   <% unless @payroll_run.download_triggered? %>
     <div class="govuk-grid-column-full">
       <div class="govuk-form-group">

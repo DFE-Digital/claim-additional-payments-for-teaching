@@ -16,6 +16,14 @@ class PayrollRun < ApplicationRecord
     payments.sum(:award_amount)
   end
 
+  def number_of_claims_for_policy(policy)
+    claims.by_policy(policy).count
+  end
+
+  def total_claim_amount_for_policy(policy)
+    claims.by_policy(policy).sum(:award_amount)
+  end
+
   def self.create_with_claims!(claims, attrs = {})
     ActiveRecord::Base.transaction do
       PayrollRun.create!(attrs).tap do |payroll_run|
