@@ -42,6 +42,47 @@ RSpec.describe PayrollRun, type: :model do
     end
   end
 
+  describe "#number_of_claims_for_policy" do
+    it "returns the correct number of claims under each policy" do
+      payment_1 = build(:payment, claims: [
+        build(:claim, :approved, eligibility: build(:student_loans_eligibility, :eligible, student_loan_repayment_amount: 1500))
+      ])
+      payment_2 = build(:payment, claims: [
+        build(:claim, :approved, eligibility: build(:maths_and_physics_eligibility, :eligible))
+      ])
+      payment_3 = build(:payment, claims: [
+        build(:claim, :approved, eligibility: build(:maths_and_physics_eligibility, :eligible))
+      ])
+
+      payroll_run = PayrollRun.create!(created_by: user, payments: [payment_1, payment_2, payment_3])
+
+      expect(payroll_run.number_of_claims_for_policy(StudentLoans)).to eq(1)
+      expect(payroll_run.number_of_claims_for_policy(MathsAndPhysics)).to eq(2)
+    end
+  end
+
+  describe "#total_claim_amount_for_policy" do
+    it "returns the correct total amount claimed under each policy" do
+      payment_1 = build(:payment, claims: [
+        build(:claim, :approved, eligibility: build(:student_loans_eligibility, :eligible, student_loan_repayment_amount: 1500))
+      ])
+      payment_2 = build(:payment, claims: [
+        build(:claim, :approved, eligibility: build(:maths_and_physics_eligibility, :eligible))
+      ])
+      payment_3 = build(:payment, claims: [
+        build(:claim, :approved, eligibility: build(:maths_and_physics_eligibility, :eligible))
+      ])
+      payment_4 = build(:payment, claims: [
+        build(:claim, :approved, eligibility: build(:student_loans_eligibility, :eligible, student_loan_repayment_amount: 1000))
+      ])
+
+      payroll_run = PayrollRun.create!(created_by: user, payments: [payment_1, payment_2, payment_3, payment_4])
+
+      expect(payroll_run.total_claim_amount_for_policy(StudentLoans)).to eq(2500)
+      expect(payroll_run.total_claim_amount_for_policy(MathsAndPhysics)).to eq(4000)
+    end
+  end
+
   describe ".create_with_claims!" do
     let(:claims) { Policies.all.map { |policy| create(:claim, :approved, policy: policy) } }
     subject!(:payroll_run) { PayrollRun.create_with_claims!(claims, created_by: user) }

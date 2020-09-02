@@ -56,6 +56,27 @@
       <% end %>
     </dl>
   </div>
+  <div class="govuk-grid-column-full">
+    <h2 class="govuk-heading-m">Summary of claim amounts by service</h2>
+    <table class="govuk-table">
+      <thead class="govuk-table__head">
+        <tr class="govuk-table__row">
+          <th scope="col" class="govuk-table__header">Service</th>
+          <th scope="col" class="govuk-table__header">Number of claims</th>
+          <th scope="col" class="govuk-table__header">Total claimed amount</th>
+        </tr>
+        <% Policies.all.each do |policy| %>
+          <tr class="govuk-table__row">
+            <th scope="row" class="govuk-table__header"><%= policy.short_name %></th>
+            <td class="govuk-table__cell"><%= @payroll_run.number_of_claims_for_policy(policy) %></td>
+            <td class="govuk-table__cell"><%= number_to_currency(@payroll_run.total_claim_amount_for_policy(policy)) %></td>
+          </tr>
+        <% end %>
+      </thead>
+      <tbody class="govuk-table__body">
+      </tbody>
+    </table>
+  </div>
   <% unless @payroll_run.download_triggered? %>
     <div class="govuk-grid-column-full">
       <div class="govuk-form-group">
@@ -75,8 +96,11 @@
     <thead class="govuk-table__head">
       <tr class="govuk-table__row">
         <th scope="col" class="govuk-table__header">Payment ID</th>
-        <th scope="col" class="govuk-table__header">Claim Reference(s)</th>
         <th scope="col" class="govuk-table__header">Payee Name</th>
+        <th scope="col" class="govuk-table__header">Claim Reference</th>
+        <th scope="col" class="govuk-table__header">Service</th>
+        <th scope="col" class="govuk-table__header">Claim Amount</th>
+        <th scope="col" class="govuk-table__header">Payment Amount</th>
         <% unless @payroll_run.confirmation_report_uploaded? %>
           <th scope="col" class="govuk-table__header"><span class="govuk-visually-hidden">Actions</span></th>
         <% end %>
@@ -84,18 +108,30 @@
     </thead>
     <tbody class="govuk-table__body">
       <% @payroll_run.payments.each do |payment| %>
+        <% first_claim = payment.claims.first %>
+        <% number_of_claims = payment.claims.count %>
         <tr class="govuk-table__row">
-          <th scope="row" class="govuk-table__header"><%= payment.id %></th>
-          <td class="govuk-table__cell"><%= claim_references(payment) %></td>
-          <td class="govuk-table__cell"><%= payment.banking_name %></td>
+          <th scope="row" rowspan="<%= number_of_claims %>" class="govuk-table__header"><%= payment.id %></th>
+          <td class="govuk-table__cell" rowspan="<%= number_of_claims %>"><%= payment.banking_name %></td>
+          <td class="govuk-table__cell"><%= first_claim.reference %></td>
+          <td class="govuk-table__cell"><%= first_claim.policy.short_name %></td>
+          <td class="govuk-table__cell"><%= number_to_currency(first_claim.award_amount) %></td>
+          <td class="govuk-table__cell" rowspan="<%= number_of_claims %>"><%= number_to_currency(payment.award_amount) %></td>
           <% unless @payroll_run.confirmation_report_uploaded? %>
-            <td class="govuk-table__cell">
+            <td class="govuk-table__cell" rowspan="<%= number_of_claims %>">
               <%= link_to remove_admin_payroll_run_payment_path(id: payment.id, payroll_run_id: payment.payroll_run.id), class: "govuk-link" do %>
                 Remove <span class="govuk-visually-hidden">payment row</span>
               <% end %>
             </td>
           <% end %>
         </tr>
+        <% payment.claims.drop(1).each do |claim| %>
+          <tr class="govuk-table__row">
+            <td class="govuk-table__cell"><%= claim.reference %></td>
+            <td class="govuk-table__cell"><%= claim.policy.short_name %></td>
+            <td class="govuk-table__cell"><%= number_to_currency(claim.award_amount) %></td>
+          </tr>
+        <% end %>
       <% end %>
     </tbody>
     </table>
