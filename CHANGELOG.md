@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+## [Release 082] - 2020-09-02
+
 - Break down number of claims and claim amount in payroll runs by policy
 - Display the correct financial year for employment as part of the employment
   task.
@@ -620,7 +622,9 @@ The format is based on [Keep a Changelog]
 - First release for student loan repayments private beta
 
 [unreleased]:
-  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-081...HEAD
+  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-082...HEAD
+[release 082]:
+  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-081...release-082
 [release 081]:
   https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-080...release-081
 [release 080]:
