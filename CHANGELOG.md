@@ -7,6 +7,8 @@ The format is based on [Keep a Changelog]
 ## [Unreleased]
 
 - Break down number of claims and claim amount in payroll runs by policy
+- Display the correct financial year for employment as part of the employment
+  task.
 
 ## [Release 081] - 2020-09-01
 
