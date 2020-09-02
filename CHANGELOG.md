@@ -6,8 +6,11 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+## [Release 081] - 2020-09-01
+
 - Changes made to content pages ready for academic year 2020-21
 - Increase Verify timeout from 90 minutes to 120 minutes
+- Update code formatting to match latest Standard version
 
 ## [Release 080] - 2020-06-25
 
@@ -613,7 +616,9 @@ The format is based on [Keep a Changelog]
 - First release for student loan repayments private beta
 
 [unreleased]:
-  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-080...HEAD
+  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-081...HEAD
+[release 081]:
+  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-080...release-081
 [release 080]:
   https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-079...release-080
 [release 079]:
