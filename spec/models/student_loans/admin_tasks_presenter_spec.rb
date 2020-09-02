@@ -37,6 +37,19 @@ RSpec.describe StudentLoans::AdminTasksPresenter, type: :model do
         [I18n.t("admin.current_school"), presenter.display_school(eligibility.current_school)]
       ]
     end
+    it "correctly returns the expected string for financial year" do
+      claim_2025 = build(:claim,
+        academic_year: "2025/2026",
+        student_loan_plan: StudentLoan::PLAN_1,
+        eligibility: build(
+          :student_loans_eligibility,
+          qts_award_year: "on_or_after_cut_off_date",
+          claim_school: school,
+          current_school: school
+        ))
+      presenter_2025 = described_class.new(claim_2025)
+      expect(presenter_2025.employment[0][0]).to eq "6 April 2024 to 5 April 2025"
+    end
   end
 
   describe "#student_loan_amount" do

@@ -19,7 +19,7 @@ module StudentLoans
 
     def employment
       [
-        ["6 April 2018 to 5 April 2019", display_school(eligibility.claim_school)],
+        [financial_year_for_academic_year(claim.academic_year), display_school(eligibility.claim_school)],
         [translate("admin.current_school"), display_school(eligibility.current_school)]
       ]
     end
@@ -42,6 +42,13 @@ module StudentLoans
 
     def eligibility
       claim.eligibility
+    end
+
+    def financial_year_for_academic_year(academic_year)
+      end_year = academic_year.start_year
+      start_year = end_year - 1
+
+      "6 April #{start_year} to 5 April #{end_year}"
     end
   end
 end
