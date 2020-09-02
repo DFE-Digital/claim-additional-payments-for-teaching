@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+- Break down number of claims and claim amount in payroll runs by policy
+
 ## [Release 081] - 2020-09-01
 
 - Changes made to content pages ready for academic year 2020-21
