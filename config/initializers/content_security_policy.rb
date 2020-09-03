@@ -9,7 +9,7 @@ Rails.application.config.content_security_policy do |policy|
   policy.font_src :self, :https, :data
   policy.img_src :self, :https, :data
   policy.object_src :none
-  policy.script_src :self
+  policy.script_src :self, "https://static.zdassets.com"
   policy.connect_src :self, "https://www.google-analytics.com"
   policy.style_src :self
 
