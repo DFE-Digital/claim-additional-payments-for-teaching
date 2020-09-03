@@ -10,7 +10,7 @@ Rails.application.config.content_security_policy do |policy|
   policy.img_src :self, :https, :data
   policy.object_src :none
   policy.script_src :self, "https://static.zdassets.com"
-  policy.connect_src :self, "https://www.google-analytics.com"
+  policy.connect_src :self, "https://www.google-analytics.com", "https://ekr.zdassets.com"
   policy.style_src :self
 
   # Specify URI for violation reports
