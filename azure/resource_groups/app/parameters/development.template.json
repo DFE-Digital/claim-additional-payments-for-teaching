@@ -9,7 +9,7 @@
       "value": ["development.additional-teaching-payment.education.gov.uk"]
     },
     "appServiceCertificateSecretNames": {
-      "value": ["sslCertificate-wildcard-additional-teaching-payment-education-gov-uk"]
+      "value": ["development-additional-teaching-payment-education-gov-uk"]
     },
     "appServiceHostNameToCertificateSecretNameIndexMap": {
       "value": {
