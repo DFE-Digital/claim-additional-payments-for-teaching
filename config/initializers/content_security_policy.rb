@@ -7,7 +7,7 @@
 Rails.application.config.content_security_policy do |policy|
   policy.default_src :self
   policy.font_src :self, :https, :data
-  policy.img_src :self, "https://v2assets.zopim.io", "https://static.zdassets.com" :https, :data
+  policy.img_src :self, "https://v2assets.zopim.io", "https://static.zdassets.com", :https, :data
   policy.object_src :none
   policy.script_src :self, "https://static.zdassets.com"
   policy.connect_src :self, "https://www.google-analytics.com", "https://ekr.zdassets.com", "https://static.zdassets.com", "https://additional-teaching-payment.zendesk.com", "wss://additional-teaching-payment.zendesk.com", "wss://*.zopim.com"
