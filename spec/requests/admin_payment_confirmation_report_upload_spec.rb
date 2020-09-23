@@ -23,9 +23,9 @@ RSpec.describe "Admin Payment Confirmation Report upload" do
         let(:payroll_run) { create(:payroll_run, claims_counts: {StudentLoans => 2}) }
         let(:csv) do
           <<~CSV
-            Payroll Reference,Gross Value,Payment ID,NI,Employers NI,Student Loans,Tax,Net Pay
-            DFE00001,487.48,#{payroll_run.payments[0].id},33.9,38.98,0,89.6,325
-            DFE00002,904.15,#{payroll_run.payments[1].id},77.84,89.51,40,162.8,534
+            Payroll Reference,Gross Value,Payment ID,NI,Employers NI,Student Loans,Tax,Net Pay,Claim Policies
+            DFE00001,487.48,#{payroll_run.payments[0].id},33.9,38.98,0,89.6,325,StudentLoans
+            DFE00002,904.15,#{payroll_run.payments[1].id},77.84,89.51,40,162.8,534,StudentLoans
           CSV
         end
 
@@ -51,8 +51,8 @@ RSpec.describe "Admin Payment Confirmation Report upload" do
         let(:payroll_run) { create(:payroll_run, claims_counts: {StudentLoans => 2}) }
         let(:csv) do
           <<~CSV
-            Payroll Reference,Gross Value,Payment ID,NI,Employers NI,Student Loans,Tax,Net Pay
-            DFE00001,487.48,#{payroll_run.payments[0].id},33.9,38.98,0,89.6,325
+            Payroll Reference,Gross Value,Payment ID,NI,Employers NI,Student Loans,Tax,Net Pay,Claim Policies
+            DFE00001,487.48,#{payroll_run.payments[0].id},33.9,38.98,0,89.6,325,StudentLoans
             DFE00002,904.15,#{payroll_run.payments[1].id},77.84,89.51,40,162.8,
           CSV
         end

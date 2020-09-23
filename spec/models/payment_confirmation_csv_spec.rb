@@ -13,8 +13,8 @@ RSpec.describe PaymentConfirmationCsv do
   context "The CSV is valid and has all the correct data" do
     let(:csv) do
       <<~CSV
-        Payroll Reference,Gross Value,Payment ID,NI,Employers NI,Student Loans,Tax,Net Pay
-        DFE00001,487.48,88b5dba7-ccf1-4ffd-a3ce-20bd3ce1e500,33.9,38.98,0,89.6,325
+        Payroll Reference,Gross Value,Payment ID,NI,Employers NI,Student Loans,Tax,Net Pay,Claim Policies
+        DFE00001,487.48,88b5dba7-ccf1-4ffd-a3ce-20bd3ce1e500,33.9,38.98,0,89.6,325,"MathsAndPhysics,StudentLoans"
       CSV
     end
 
@@ -41,8 +41,8 @@ RSpec.describe PaymentConfirmationCsv do
   context "The CSV does not have the expected headers" do
     let(:csv) do
       <<~CSV
-        Payroll Ref,Gross Val,Payment ID,NI,Employers NI,Student Loans,Tax,Net Pay
-        DFE00001,487.48,88b5dba7-ccf1-4ffd-a3ce-20bd3ce1e500,33.9,38.98,0,89.6,325
+        Payroll Ref,Gross Val,Payment ID,NI,Employers NI,Student Loans,Tax,Net Pay,Claim Policies
+        DFE00001,487.48,88b5dba7-ccf1-4ffd-a3ce-20bd3ce1e500,33.9,38.98,0,89.6,325,StudentLoans
       CSV
     end
 
@@ -69,8 +69,8 @@ RSpec.describe PaymentConfirmationCsv do
     let(:byte_order_mark) { "\xEF\xBB\xBF" }
     let(:csv) do
       <<~CSV
-        Payroll Reference,Gross Value,Payment ID,NI,Employers NI,Student Loans,Tax,Net Pay
-        DFE00001,487.48,88b5dba7-ccf1-4ffd-a3ce-20bd3ce1e500,33.9,38.98,0,89.6,325
+        Payroll Reference,Gross Value,Payment ID,NI,Employers NI,Student Loans,Tax,Net Pay,Claim Policies
+        DFE00001,487.48,88b5dba7-ccf1-4ffd-a3ce-20bd3ce1e500,33.9,38.98,0,89.6,325,StudentLoans
       CSV
     end
 

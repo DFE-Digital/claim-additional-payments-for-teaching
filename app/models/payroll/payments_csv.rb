@@ -33,7 +33,8 @@ module Payroll
       bank_account_number: "ACCOUNT_NUMBER",
       roll_number: "ROLL_NUMBER",
       scheme_amount: "SCHEME_AMOUNT",
-      payment_id: "PAYMENT_ID"
+      payment_id: "PAYMENT_ID",
+      policies_in_payment: "CLAIM_POLICIES"
     }.freeze
 
     def initialize(payroll_run)
