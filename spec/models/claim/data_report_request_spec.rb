@@ -17,5 +17,9 @@ RSpec.describe Claim::DataReportRequest do
       expect(report_request_csv[2].fields("Teacher reference number")).to include(claims.last.teacher_reference_number)
       expect(report_request_csv[2].fields("Full name")).to include(claims.last.full_name)
     end
+    it "includes the claims email address and date of birth" do 
+      expect(report_request_csv[2].fields("Email")).to include(claims.last.email_address)
+      expect(report_request_csv[2].fields("Date of birth")).to include(claims.last.date_of_birth.to_s)
+    end
   end
 end
