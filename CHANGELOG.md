@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+- Update data report request to retrieve email address and date of birth
+
 ## [Release 082] - 2020-09-02
 
 - Break down number of claims and claim amount in payroll runs by policy

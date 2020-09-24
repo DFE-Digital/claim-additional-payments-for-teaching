@@ -17,5 +17,7 @@ RSpec.feature "Data report request" do
     expect(csv.count).to eq(3)
     expect(csv[2].fields("Claim reference")).to include(claims.last.reference)
     expect(csv[2].fields("Full name")).to include(claims.last.full_name)
+    expect(csv[2].fields("Email")).to include(claims.last.email_address)
+    expect(csv[2].fields("Date of birth")).to include(claims.last.date_of_birth.to_s)
   end
 end
