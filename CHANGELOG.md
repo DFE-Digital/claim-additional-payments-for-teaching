@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+## [Release 083] - 2020-09-25
+
+- Geckoboard now only includes claims from the current academic year
+
 ## [Release 082] - 2020-09-02
 
 - Break down number of claims and claim amount in payroll runs by policy
@@ -622,7 +626,9 @@ The format is based on [Keep a Changelog]
 - First release for student loan repayments private beta
 
 [unreleased]:
-  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-082...HEAD
+  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-083...HEAD
+[release 083]:
+  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-082...release-083
 [release 082]:
   https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-081...release-082
 [release 081]:
