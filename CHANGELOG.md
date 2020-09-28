@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+- Update data report request to retrieve email address and date of birth
+
 ## [Release 083] - 2020-09-25
 
 - Geckoboard now only includes claims from the current academic year
