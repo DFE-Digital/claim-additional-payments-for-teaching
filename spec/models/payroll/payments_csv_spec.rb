@@ -44,6 +44,7 @@ RSpec.describe Payroll::PaymentsCsv do
         ROLL_NUMBER
         SCHEME_AMOUNT
         PAYMENT_ID
+        CLAIM_POLICIES
       ].join(",")
 
       expect(file_lines[0]).to eq(expected_header_row)

@@ -168,4 +168,44 @@ RSpec.describe Payment do
       expect(payment.payroll_gender).to eq("female")
     end
   end
+
+  describe "policies in payment" do
+    let(:personal_details) do
+      {
+        national_insurance_number: generate(:national_insurance_number),
+        teacher_reference_number: generate(:teacher_reference_number),
+        email_address: generate(:email_address),
+        bank_sort_code: "112233",
+        bank_account_number: "95928482",
+        address_line_1: "64 West Lane",
+        student_loan_plan: StudentLoan::PLAN_1
+      }
+    end
+
+    it "returns the correct string for a payment with one claim" do
+      payment = create(:payment, claims: [
+        create(:claim, :approved, personal_details.merge(policy: StudentLoans))
+      ])
+
+      expect(payment.policies_in_payment).to eq("StudentLoans")
+    end
+
+    it "returns the correct string for a payment with multiple claims under one policy" do
+      payment = create(:payment, claims: [
+        create(:claim, :approved, personal_details.merge(policy: StudentLoans)),
+        create(:claim, :approved, personal_details.merge(policy: StudentLoans))
+      ])
+
+      expect(payment.policies_in_payment).to eq("StudentLoans")
+    end
+
+    it "returns the correct string for a payment with multiple claims under different policies" do
+      payment = create(:payment, claims: [
+        create(:claim, :approved, personal_details.merge(policy: StudentLoans)),
+        create(:claim, :approved, personal_details.merge(policy: MathsAndPhysics))
+      ])
+
+      expect(payment.policies_in_payment).to eq("MathsAndPhysics,StudentLoans")
+    end
+  end
 end

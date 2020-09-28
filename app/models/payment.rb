@@ -36,6 +36,10 @@ class Payment < ApplicationRecord
   delegate(*(PERSONAL_DETAILS_ATTRIBUTES_PERMITTING_DISCREPANCIES + PERSONAL_DETAILS_ATTRIBUTES_FORBIDDING_DISCREPANCIES), to: :claim_for_personal_details)
   delegate :scheduled_payment_date, to: :payroll_run
 
+  def policies_in_payment
+    claims.map { |claim| claim.policy.to_s }.uniq.sort.join(",")
+  end
+
   private
 
   def personal_details_must_be_consistent

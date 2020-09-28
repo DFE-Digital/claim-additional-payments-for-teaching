@@ -62,7 +62,8 @@ RSpec.describe Payroll::PaymentCsvRow do
           claim.bank_account_number,
           claim.building_society_roll_number,
           payment_award_amount.to_s,
-          payment.id
+          payment.id,
+          payment.policies_in_payment
         ])
       end
     end
