@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+## [Release 084] - 2020-09-30
+
 - Update data report request to retrieve email address and date of birth
 
 ## [Release 083] - 2020-09-25
@@ -628,7 +630,9 @@ The format is based on [Keep a Changelog]
 - First release for student loan repayments private beta
 
 [unreleased]:
-  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-083...HEAD
+  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-084...HEAD
+[release 084]:
+  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-083...release-084
 [release 083]:
   https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-082...release-083
 [release 082]:
