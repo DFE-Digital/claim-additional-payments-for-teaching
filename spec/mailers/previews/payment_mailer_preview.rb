@@ -1,10 +1,10 @@
 class PaymentMailerPreview < ActionMailer::Preview
   def confirmation_for_single_claim
-    PaymentMailer.confirmation(payment(claims_count: "= 1"), DateTime.now.to_time.to_i)
+    PaymentMailer.confirmation(payment(claims_count: "= 1"))
   end
 
   def confirmation_for_multiple_claims
-    PaymentMailer.confirmation(payment(claims_count: "> 1"), DateTime.now.to_time.to_i)
+    PaymentMailer.confirmation(payment(claims_count: "> 1"))
   end
 
   private
