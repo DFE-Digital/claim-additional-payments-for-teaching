@@ -37,7 +37,7 @@ class Payment < ApplicationRecord
   delegate :scheduled_payment_date, to: :payroll_run
 
   def policies_in_payment
-    claims.map { |claim| claim.policy.to_s }.uniq.sort.join(",")
+    claims.map { |claim| claim.policy.to_s }.uniq.sort.join(" ")
   end
 
   private
