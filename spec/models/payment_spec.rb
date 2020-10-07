@@ -205,7 +205,7 @@ RSpec.describe Payment do
         create(:claim, :approved, personal_details.merge(policy: MathsAndPhysics))
       ])
 
-      expect(payment.policies_in_payment).to eq("MathsAndPhysics,StudentLoans")
+      expect(payment.policies_in_payment).to eq("MathsAndPhysics StudentLoans")
     end
   end
 end

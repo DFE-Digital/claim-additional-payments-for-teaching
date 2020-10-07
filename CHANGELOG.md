@@ -7,6 +7,7 @@ The format is based on [Keep a Changelog]
 ## [Unreleased]
 
 - Update payment email copy
+- Seperate policies in payment with a space
 
 ## [Release 084] - 2020-09-30
 
