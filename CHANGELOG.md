@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+## [Release 085] - 2020-10-07
+
 - Update payment email copy
 - Seperate policies in payment with a space
 
@@ -633,7 +635,9 @@ The format is based on [Keep a Changelog]
 - First release for student loan repayments private beta
 
 [unreleased]:
-  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-084...HEAD
+  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-085...HEAD
+[release 085]:
+  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-084...release-085
 [release 084]:
   https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-083...release-084
 [release 083]:
