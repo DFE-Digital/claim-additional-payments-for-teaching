@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+- Update payment email copy
+
 ## [Release 084] - 2020-09-30
 
 - Update data report request to retrieve email address and date of birth
