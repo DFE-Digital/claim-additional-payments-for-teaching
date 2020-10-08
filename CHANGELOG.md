@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+- Fix incorrect summing for claims by policy
+
 ## [Release 085] - 2020-10-07
 
 - Update payment email copy

@@ -21,7 +21,7 @@ class PayrollRun < ApplicationRecord
   end
 
   def total_claim_amount_for_policy(policy)
-    claims.by_policy(policy).sum(:award_amount)
+    claims.by_policy(policy).sum(&:award_amount)
   end
 
   def self.create_with_claims!(claims, attrs = {})
