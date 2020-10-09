@@ -2,10 +2,10 @@
 # yarn lockfile v1
 
 
-a11y-dialog@^5.3.2:
-  version "5.3.2"
-  resolved "https://registry.yarnpkg.com/a11y-dialog/-/a11y-dialog-5.3.2.tgz#68b41edf344c8f2ab63b74c5b4bbdda08509c264"
-  integrity sha512-edUDgtKhEReLdYzZjhOi/VLHygdPVyHWKmD36qXjK9lnMYIVm4MK0KpvNcYAZXKK+mW//UcaEhkyvK1jL8uzCQ==
+a11y-dialog@^5.4.0:
+  version "5.4.0"
+  resolved "https://registry.yarnpkg.com/a11y-dialog/-/a11y-dialog-5.4.0.tgz#c160081a1f488bd6bb8bd835577f6dee4f1161e6"
+  integrity sha512-C6+5tXNbHNZrJ3U8Wbxhq0xtAoFFH7aK8c1LAyI1ezuxtNP02b6bIMlBrkhDaXoe+hrg+7o8Gt+SwYylRgftpQ==
 
 accessible-autocomplete@^2.0.1:
   version "2.0.1"
