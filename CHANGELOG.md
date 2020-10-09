@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+## [Release 086] - 2020-10-08
+
 - Fix incorrect summing for claims by policy
 
 ## [Release 085] - 2020-10-07
@@ -637,7 +639,9 @@ The format is based on [Keep a Changelog]
 - First release for student loan repayments private beta
 
 [unreleased]:
-  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-085...HEAD
+  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-086...HEAD
+[release 086]:
+  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-085...release-086
 [release 085]:
   https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-084...release-085
 [release 084]:
