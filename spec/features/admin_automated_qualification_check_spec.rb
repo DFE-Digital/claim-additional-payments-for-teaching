@@ -5,6 +5,7 @@ RSpec.feature "Admins automated qualification check" do
 
   scenario "Service operators can upload and run automated DQT checks" do
     claim_with_eligible_dqt_record = claim_from_example_dqt_report(:eligible_claim_with_matching_data)
+    claim_with_eligible_dqt_record_inc_hecos_code = claim_from_example_dqt_report(:eligible_claim_with_matching_data_and_hecos_code)
     eligible_claim_with_non_matching_birthdate = claim_from_example_dqt_report(:eligible_claim_with_non_matching_birthdate)
     eligible_claim_with_non_matching_surname = claim_from_example_dqt_report(:eligible_claim_with_non_matching_surname)
     claim_without_dqt_record = claim_from_example_dqt_report(:claim_without_dqt_record)
@@ -19,11 +20,13 @@ RSpec.feature "Admins automated qualification check" do
     attach_file("Upload a CSV file", example_dqt_report_csv.path)
 
     click_on "Upload"
-
-    expect(page).to have_content "DQT report uploaded successfully. Automatically completed 4 tasks for 6 checked claims."
+    expect(page).to have_content "DQT report uploaded successfully. Automatically completed 6 tasks for 7 checked claims."
 
     expect(claim_with_eligible_dqt_record.tasks.find_by!(name: "qualifications").passed?).to eq(true)
     expect(claim_with_eligible_dqt_record.tasks.find_by!(name: "identity_confirmation").passed?).to eq(true)
+
+    expect(claim_with_eligible_dqt_record_inc_hecos_code.tasks.find_by!(name: "qualifications").passed?).to eq(true)
+    expect(claim_with_eligible_dqt_record_inc_hecos_code.tasks.find_by!(name: "identity_confirmation").passed?).to eq(true)
 
     expect(eligible_claim_with_non_matching_birthdate.tasks.find_by(name: "qualifications").passed?).to eq(true)
     expect(eligible_claim_with_non_matching_birthdate.tasks.find_by(name: "identity_confirmation")).to be_nil

@@ -16,6 +16,14 @@ module FixtureHelpers
         reference: "AB123456",
         date_of_birth: Date.new(1990, 8, 23))
 
+    when :eligible_claim_with_matching_data_and_hecos_code
+      # Eligible claim with matching, name, DOB and HECOS code in DQT
+      create(:claim, :submitted,
+        surname: "Hecos",
+        teacher_reference_number: "9876543",
+        reference: "ZY987654",
+        date_of_birth: Date.new(1991, 1, 8))
+
     when :eligible_claim_with_non_matching_birthdate
       # Eligible claim and eligible DQT data but different date of birth
       create(:claim, :submitted,
