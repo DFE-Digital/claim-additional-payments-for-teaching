@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+## [Release 087] - 2020-10-23
+
 - Update the DQT automation to include HECOS codes as well as JACS codes
 - Update email copy for claim submitted and claim approved
 
@@ -642,7 +644,9 @@ The format is based on [Keep a Changelog]
 - First release for student loan repayments private beta
 
 [unreleased]:
-  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-086...HEAD
+  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-087...HEAD
+[release 086]:
+  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-086...release-087
 [release 086]:
   https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-085...release-086
 [release 085]:
