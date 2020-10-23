@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+- Update the DQT automation to include HECOS codes as well as JACS codes
+
 ## [Release 086] - 2020-10-08
 
 - Fix incorrect summing for claims by policy

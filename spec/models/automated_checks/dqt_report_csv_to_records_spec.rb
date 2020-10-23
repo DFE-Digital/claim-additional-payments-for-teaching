@@ -51,16 +51,16 @@ RSpec.describe AutomatedChecks::DQTReportCsvToRecords do
           qts_date: Date.new(2017, 10, 24),
           surname: "Bishop",
           date_of_birth: Date.new(1980, 9, 10),
-          degree_jac_codes: ["G100", "F100", "R100"],
-          itt_subject_jac_codes: ["E100"]
+          degree_codes: ["G100", "F100", "R100"],
+          itt_subject_codes: ["E100"]
         },
         {
           claim_reference: "XX999999",
           qts_date: Date.new(2016, 6, 17),
           surname: "Collins",
           date_of_birth: Date.new(1993, 3, 5),
-          degree_jac_codes: ["X100"],
-          itt_subject_jac_codes: ["X100"]
+          degree_codes: ["X100"],
+          itt_subject_codes: ["X100"]
         }
       ]
       expect(dqt_report_csv_to_records.transform).to eql(expected_records)
@@ -92,8 +92,8 @@ RSpec.describe AutomatedChecks::DQTReportCsvToRecords do
           qts_date: nil,
           surname: nil,
           date_of_birth: Date.new(1988, 3, 24),
-          degree_jac_codes: [],
-          itt_subject_jac_codes: []
+          degree_codes: [],
+          itt_subject_codes: []
         }
       ]
       expect(dqt_report_csv_to_records.transform).to eql(expected_records)
