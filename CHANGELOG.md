@@ -7,6 +7,7 @@ The format is based on [Keep a Changelog]
 ## [Unreleased]
 
 - Update the DQT automation to include HECOS codes as well as JACS codes
+- Update email copy for claim submitted and claim approved
 
 ## [Release 086] - 2020-10-08
 
