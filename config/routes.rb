@@ -17,7 +17,7 @@ Rails.application.routes.draw do
 
   # Used to constrain claim journey routing so only slugs
   # that are part of a policy’s slug sequence are routed.
-  class RestrictToSequenceSlugs
+  restrict_to_sequence_slugs = Class.new {
     attr_reader :policy
 
     def initialize(policy)
@@ -27,11 +27,11 @@ Rails.application.routes.draw do
     def matches?(request)
       request["policy"] == policy.routing_name && policy::SlugSequence::SLUGS.include?(request["slug"])
     end
-  end
+  }
 
   # Define routes that are specific to each Policy's page sequence
   Policies.all.each do |policy|
-    constraints(RestrictToSequenceSlugs.new(policy)) do
+    constraints(restrict_to_sequence_slugs.new(policy)) do
       scope path: ":policy" do
         resources :claims, only: [:show, :update], param: :slug, path: "/"
       end
