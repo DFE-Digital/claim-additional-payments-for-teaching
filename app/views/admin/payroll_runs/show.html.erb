@@ -108,28 +108,27 @@
     </thead>
     <tbody class="govuk-table__body">
       <% @payroll_run.payments.each do |payment| %>
-        <% first_claim = payment.claims.first %>
-        <% number_of_claims = payment.claims.count %>
-        <tr class="govuk-table__row">
-          <th scope="row" rowspan="<%= number_of_claims %>" class="govuk-table__header"><%= payment.id %></th>
-          <td class="govuk-table__cell" rowspan="<%= number_of_claims %>"><%= payment.banking_name %></td>
-          <td class="govuk-table__cell"><%= first_claim.reference %></td>
-          <td class="govuk-table__cell"><%= first_claim.policy.short_name %></td>
-          <td class="govuk-table__cell"><%= number_to_currency(first_claim.award_amount) %></td>
-          <td class="govuk-table__cell" rowspan="<%= number_of_claims %>"><%= number_to_currency(payment.award_amount) %></td>
-          <% unless @payroll_run.confirmation_report_uploaded? %>
-            <td class="govuk-table__cell" rowspan="<%= number_of_claims %>">
-              <%= link_to remove_admin_payroll_run_payment_path(id: payment.id, payroll_run_id: payment.payroll_run.id), class: "govuk-link" do %>
-                Remove <span class="govuk-visually-hidden">payment row</span>
-              <% end %>
-            </td>
-          <% end %>
-        </tr>
-        <% payment.claims.drop(1).each do |claim| %>
+        <% payment.claims.each_with_index do |claim, index| %>
+          <% number_of_claims = payment.claims.length %>
+
           <tr class="govuk-table__row">
+            <% if index == 0 %>
+              <th scope="row" rowspan="<%= number_of_claims %>" class="govuk-table__header"><%= payment.id %></th>
+              <td class="govuk-table__cell" rowspan="<%= number_of_claims %>"><%= payment.banking_name %></td>
+            <% end %>
             <td class="govuk-table__cell"><%= claim.reference %></td>
             <td class="govuk-table__cell"><%= claim.policy.short_name %></td>
             <td class="govuk-table__cell"><%= number_to_currency(claim.award_amount) %></td>
+            <% if index == 0 %>
+              <td class="govuk-table__cell" rowspan="<%= number_of_claims %>"><%= number_to_currency(payment.award_amount) %></td>
+              <% unless @payroll_run.confirmation_report_uploaded? %>
+                <td class="govuk-table__cell" rowspan="<%= number_of_claims %>">
+                  <%= link_to remove_admin_payroll_run_payment_path(id: payment.id, payroll_run_id: payment.payroll_run.id), class: "govuk-link" do %>
+                    Remove <span class="govuk-visually-hidden">payment row</span>
+                  <% end %>
+                </td>
+              <% end %>
+            <% end %>
           </tr>
         <% end %>
       <% end %>
