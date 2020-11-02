@@ -2,7 +2,7 @@ require "rails_helper"
 
 RSpec.describe Admin::PresenterMethods do
   subject(:admin_presenter) do
-    class DummyClass
+    Class.new do
       include Admin::PresenterMethods
     end
   end

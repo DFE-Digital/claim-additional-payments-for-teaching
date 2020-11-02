@@ -1,18 +1,18 @@
 require "rails_helper"
 
 RSpec.describe MathsAndPhysics::DQTRecord do
-  MATHS_JAC_CODES = %w[G100 G290 G310 G320 G900]
-  PHYSICS_JAC_CODES = %w[F300 F310 F320 F321 F331]
-  EXAMPLE_ELIGIBLE_JAC_CODES = MATHS_JAC_CODES + PHYSICS_JAC_CODES
-  EXAMPLE_NON_ELIGIBLE_JAC_CODES = %w[X100 L800 F100 C700 R100]
+  maths_jac_codes = %w[G100 G290 G310 G320 G900]
+  physics_jac_codes = %w[F300 F310 F320 F321 F331]
+  example_eligible_jac_codes = maths_jac_codes + physics_jac_codes
+  example_non_eligible_jac_codes = %w[X100 L800 F100 C700 R100]
 
-  ELIGIBLE_MATHS_HECOS_CODES = %w[100400 100401 100402 100403 100404 100405 100406 101027 101028 101029 101030 101031 101032 101033 101034].freeze
-  ELIGIBLE_PHYSICS_HECOS_CODES = %w[100416 100419 100425 100426 101060 101061 101068 101071 101074 101075 101076 101077 101223 101300 101390 101391].freeze
-  EXAMPLE_ELIGIBLE_HECOS_CODES = ELIGIBLE_MATHS_HECOS_CODES + ELIGIBLE_PHYSICS_HECOS_CODES
-  EXAMPLE_NON_ELIGIBLE_HECOS_CODES = %w[100430 101066 101078 100300 100396 100427].freeze
+  eligible_maths_hecos_codes = %w[100400 100401 100402 100403 100404 100405 100406 101027 101028 101029 101030 101031 101032 101033 101034].freeze
+  eligible_physics_hecos_codes = %w[100416 100419 100425 100426 101060 101061 101068 101071 101074 101075 101076 101077 101223 101300 101390 101391].freeze
+  example_eligible_hecos_codes = eligible_maths_hecos_codes + eligible_physics_hecos_codes
+  example_non_eligible_hecos_codes = %w[100430 101066 101078 100300 100396 100427].freeze
 
   describe "#eligible?" do
-    EXAMPLE_ELIGIBLE_JAC_CODES.each do |jac_code|
+    example_eligible_jac_codes.each do |jac_code|
       context "when the given ITT subject (#{jac_code}) is eligible" do
         let(:attributes) { {itt_subject_codes: [jac_code], degree_codes: []} }
 
@@ -50,7 +50,7 @@ RSpec.describe MathsAndPhysics::DQTRecord do
       end
     end
 
-    EXAMPLE_ELIGIBLE_HECOS_CODES.each do |hecos_code|
+    example_eligible_hecos_codes.each do |hecos_code|
       context "when the given ITT subject HECoS code (#{hecos_code}) is eligible" do
         let(:attributes) { {itt_subject_codes: [hecos_code], degree_codes: []} }
 
@@ -88,7 +88,7 @@ RSpec.describe MathsAndPhysics::DQTRecord do
       end
     end
 
-    EXAMPLE_NON_ELIGIBLE_JAC_CODES.each do |jac_code|
+    example_non_eligible_jac_codes.each do |jac_code|
       context "when the given ITT subject or degree (#{jac_code}) isn't eligible" do
         let(:attributes) { {itt_subject_codes: [jac_code], degree_codes: [jac_code]} }
 
@@ -98,7 +98,7 @@ RSpec.describe MathsAndPhysics::DQTRecord do
       end
     end
 
-    EXAMPLE_NON_ELIGIBLE_HECOS_CODES.each do |hecos_code|
+    example_non_eligible_hecos_codes.each do |hecos_code|
       context "when given ITT subject or degree (#{hecos_code}) - HECOS code isn't eligible" do
         let(:attributes) { {itt_subject_codes: [hecos_code], degree_codes: [hecos_code]} }
         it "always returns false" do
