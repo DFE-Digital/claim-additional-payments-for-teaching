@@ -6,15 +6,7 @@ Your unique reference is <%= @claim.reference %>. You will need this if you cont
 
 # What happens next
 
-<%- if @claim.identity_verified? -%>
 We'll check the details you provided in your application and we'll tell you within <%= claim_decision_deadline_in_weeks %> if your claim was successful.
-<%- else -%>
-We’ll check the details you provided in your claim and then contact you to confirm your identity over the phone.
-
-We’ll send you an email from <%= support_email_address(@policy.routing_name) %> to arrange a convenient time for us to call you on your school's landline. Please add <%= support_email_address(@policy.routing_name) %> to your address book to make sure you receive this email.
-
-You'll find out if your claim was successful within <%= claim_decision_deadline_in_weeks %> and you'll receive email updates as your application progresses.
-<%- end -%>
 
 From the point your claim is approved it can take a further 6 weeks to make a payment into your account.
 
