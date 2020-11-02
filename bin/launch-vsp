@@ -1,6 +1,6 @@
 #!/bin/bash
 
-VSP_VERSION=2.1.0
+VSP_VERSION=2.2.0
 VSP_PATH=./bin/vsp/${VSP_VERSION}/
 VSP_FILENAME=verify-service-provider-${VSP_VERSION}
 VSP_DOWNLOAD_URL="https://github.com/alphagov/verify-service-provider/releases/download/${VSP_VERSION}/${VSP_FILENAME}.zip"

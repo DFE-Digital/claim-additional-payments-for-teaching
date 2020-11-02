@@ -9,6 +9,7 @@ The format is based on [Keep a Changelog]
 - Update the DQT automation to include HECOS codes as well as JACS codes
 - Update email copy for claim submitted and claim approved
 - Fix incorrect display of claims in payroll run
+- Update Verify Service Provider to version 2.2.0
 
 ## [Release 086] - 2020-10-08
 
