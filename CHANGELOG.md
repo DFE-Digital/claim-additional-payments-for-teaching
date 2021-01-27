@@ -6,6 +6,9 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+- Add an additional rejection reason to the claim rejection email (Zendesk
+  #13584)
+
 ## [Release 087] - 2020-11-02
 
 - Update the DQT automation to include HECOS codes as well as JACS codes
