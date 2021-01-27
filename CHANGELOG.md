@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+## [Release 088] - 2021-01-27
+
 - Add an additional rejection reason to the claim rejection email (Zendesk
   #13584)
 
@@ -649,7 +651,9 @@ The format is based on [Keep a Changelog]
 - First release for student loan repayments private beta
 
 [unreleased]:
-  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-087...HEAD
+  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-088...HEAD
+[release 088]:
+  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-087...release-088
 [release 087]:
   https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-086...release-087
 [release 086]:
