@@ -49,8 +49,8 @@
         "enabled": "[parameters('enableAlerts')]",
         "description": "[concat('Alert when average response times for ', variables('appServiceName'), ' are greater than 2 seconds.')]",
         "severity": 1,
-        "evaluationFrequency": "PT1M",
-        "windowSize": "PT5M",
+        "evaluationFrequency": "PT5M",
+        "windowSize": "PT15M",
         "targetResourceType": "Microsoft.Web/sites",
         "targetResourceRegion": "[resourceGroup().location]",
         "criteria": {
