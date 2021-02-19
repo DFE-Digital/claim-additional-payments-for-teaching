@@ -20,9 +20,15 @@ Follow these steps to get access to the pre-production environment:
    button.
 2. Click the “create a DfE Sign-in account” link and create an account (probably
    best to use your DfE email address).
-3. In `ukgovernmentdfe.slack.com`’s `#dfe_sign-in`, write something like
-   > I have started as a developer on the "Claim additional payments for
-   > teaching" service. On pre-prod, please can you add me to the Department for
-   > Education organisation, and give me access to this service, with the
-   > Service Operator role?
-4. Now wait until this is granted.
+3. Security approval is required
+   This is obtained via the self-service portal
+   [Raise a ticket in Service Portal](https://dfe.service-now.com/serviceportal)
+   _**N.B.**_ If you are not on a `DfE device` a request for external access can be raised by
+   a manager or colleague with a `DfE device` via
+   Requests > Accounts and Access > Service Portal - External BOYD Access to the
+   Self-Service portal ONLY (You will need to provide a DfE email address)
+   >The wording for the request is "please can you invite first_name.last_name@digital.education.gov.uk
+   >to the Group Access Policy that restricts access to the Claim additional payments for teaching service,
+   >and add them to this service with the Service Operator role."
+4. DSI change team approval is required.
+5. Now wait until this is granted.
