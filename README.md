@@ -203,6 +203,10 @@ The migrations are stored in the `db/data` folder.
 When the new code deploys, you'll need to run your migration on the live service
 by [running a live console](#running-a-live-console).
 
+## Generating Code Coverage report
+
+Simplecov gem has been installed and the report is generated from a successful run by running the following command `bundle exec rspec`. For a more detailed report click on the generated link.
+
 ## Deployment
 
 ### Development
