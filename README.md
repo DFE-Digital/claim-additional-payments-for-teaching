@@ -205,7 +205,9 @@ by [running a live console](#running-a-live-console).
 
 ## Generating Code Coverage report
 
-Simplecov gem has been installed and the report is generated from a successful run by running the following command `bundle exec rspec`. For a more detailed report click on the generated link.
+Simplecov gem has been installed and the report is generated from a successful
+run by running the following command `bundle exec rspec`. For a more detailed
+report click on the generated link
 
 ## Deployment
 
