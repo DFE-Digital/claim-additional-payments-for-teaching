@@ -3,48 +3,27 @@
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-    <%= render("shared/error_summary", instance: current_claim, errored_field_id_overrides: { "eligibility.teaching_maths_or_physics": "claim_eligibility_attributes_teaching_maths_or_physics_true" }) if current_claim.errors.any? %>
-    <%= form_for current_claim, url: path_for_form  do |form| %>
-      <%= form_group_tag current_claim do %>
-        <%= form.fields_for :eligibility, include_id: false do |fields| %>
-
-          <%= fields.hidden_field :teaching_maths_or_physics %>
-
-          <fieldset class="govuk-fieldset" aria-describedby="teaching_maths_or_physics-hint" role="group">
-
-            <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl">
-              <h1 class="govuk-fieldset__heading">
-                <%= t("maths_and_physics.questions.teaching_maths_or_physics") %>
-              </h1>
-            </legend>
-
-            <span class="govuk-hint" id="teaching_maths_or_physics-hint">
-              You are still eligible to claim if you usually teach another
-              subject but sometimes teach maths or physics.
-            </span>
-
-            <%= errors_tag current_claim.eligibility, :teaching_maths_or_physics %>
-
-            <div class="govuk-radios govuk-radios--inline">
-
-              <div class="govuk-radios__item">
-                <%= fields.radio_button(:teaching_maths_or_physics, true, class: "govuk-radios__input") %>
-                <%= fields.label :teaching_maths_or_physics_true, "Yes", class: "govuk-label govuk-radios__label" %>
-              </div>
-
-              <div class="govuk-radios__item">
-                <%= fields.radio_button(:teaching_maths_or_physics, false, class: "govuk-radios__input") %>
-                <%= fields.label :teaching_maths_or_physics_false, "No", class: "govuk-label govuk-radios__label" %>
-              </div>
-
-            </div>
-
-          </fieldset>
-
-        <% end %>
+    <%= form_for current_claim, url: path_for_form, builder: GOVUKDesignSystemFormBuilder::FormBuilder do |form| %>
+      <%= form.govuk_error_summary %>
+      <%= form.fields_for :eligibility, include_id: false do |fields| %>
+        <%= fields.govuk_collection_radio_buttons(
+          :teaching_maths_or_physics,
+          [
+            OpenStruct.new(id: true, name: 'Yes'),
+            OpenStruct.new(id: false, name: 'No')
+          ],
+          :id,
+          :name,
+          inline: true,
+          legend: {
+            size: 'xl',
+            tag: 'h1',
+            text: 'Do you currently teach any maths or physics?'
+          },
+          hint: { text: 'You are still eligible to claim if you usually teach another subject but sometimes teach maths or physics.' }
+        ) %>
       <% end %>
-
-      <%= form.submit "Continue", class: "govuk-button", data: {module: "govuk-button"} %>
+      <%= form.govuk_submit "Continue" %>
     <% end %>
   </div>
 </div>
