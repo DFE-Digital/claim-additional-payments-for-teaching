@@ -199,38 +199,9 @@ RSpec.feature "Changing the answers on a submittable claim" do
       expect(claim.student_loan_plan).to eq StudentLoan::PLAN_1
     end
 
-    scenario "user cannot change the value of an identity field that was acquired from Verify" do
-      claim.update!(govuk_verify_fields: ["payroll_gender"])
-      visit claim_path(StudentLoans.routing_name, "check-your-answers")
-
-      expect(page).to_not have_content(I18n.t("questions.payroll_gender"))
-      expect(page).to_not have_selector(:css, "a[href='#{claim_path(StudentLoans.routing_name, "gender")}']")
-
-      expect {
-        visit claim_path(StudentLoans.routing_name, "gender")
-      }.to raise_error(ActionController::RoutingError)
-    end
-
-    scenario "user can change the answer to identity questions that were not acquired from GOV.UK Verify" do
-      claim.update!(govuk_verify_fields: ["first_name", "surname", "address_line_1", "postcode", "date_of_birth"])
-      visit claim_path(StudentLoans.routing_name, "check-your-answers")
-
-      expect(page).to have_content("GOV.UK Verify details")
-      expect(page).to have_content(I18n.t("questions.payroll_gender"))
-      expect(page).to have_selector(:css, "a[href='#{claim_path(StudentLoans.routing_name, "gender")}']")
-
-      find("a[href='#{claim_path(StudentLoans.routing_name, "gender")}']").click
-      choose "I don't know"
-      click_on "Continue"
-
-      expect(claim.reload.payroll_gender).to eq("dont_know")
-    end
-
-    scenario "user can change identity details when GOV.UK Verify was skipped" do
+    scenario "user can change the answer to identity details" do
       claim.update!(govuk_verify_fields: [])
       visit claim_path(StudentLoans.routing_name, "check-your-answers")
-
-      expect(page).not_to have_content("GOV.UK Verify details")
 
       expect(page).to have_content(I18n.t("questions.name"))
       expect(page).to have_content(I18n.t("questions.address"))

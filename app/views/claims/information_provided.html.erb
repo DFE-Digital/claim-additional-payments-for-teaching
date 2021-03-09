@@ -33,7 +33,7 @@
       <li>we can pay Income Tax and National Insurance (NI) on your behalf</li>
     </ul>
 
-    <%= button_to "Continue", new_verify_authentications_path, method: :get, class: "govuk-button"%>
+    <%= button_to "Continue", claim_path(current_policy_routing_name, next_slug), method: :get, class: "govuk-button" %>
 
     <details class="govuk-details" data-module="govuk-details">
       <summary class="govuk-details__summary">

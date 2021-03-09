@@ -93,13 +93,6 @@ your `.env` file. Make sure you use a 'test' or 'team' API key only.
 NOTIFY_API_KEY=<paste api key>
 ```
 
-### GOV.UK Verify
-
-The service uses GOV.UK Verify to verify the identity of teachers that are
-claiming.
-
-See [docs/govuk-verify](/docs/govuk-verify.md) for more details on this.
-
 ### Google Analytics
 
 To enable Google Analytics set the following environment variable:
@@ -307,13 +300,6 @@ There are a few reasons each service might need to be closed:
 A number of classes and components within this application have been written
 such that they are decoupled from the specifics of this service and could easily
 be reused in other projects.
-
-### GOV.UK Verify
-
-There are a number of documented classes in the [`lib`](lib) folder under the
-`Verify` namespace that relate to integrating with GOV.UK Verify. You may find
-these classes useful if your Rails-based service needs to integrate with GOV.UK
-Verify.
 
 ### DfE Sign-in
 

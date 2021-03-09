@@ -120,23 +120,6 @@ Follow the steps in [`school-check-data.md`](school-check-data.md). The
 “relevant service operator” which that document refers to is probably the person
 who raised the support ticket.
 
-### I want to rotate the Verify Service Provider (VSP) certificates
-
-Someone from DfE will probably ask us to do this at least once every 6 months.
-
-#### You will need
-
-- the same things needed to
-  [make a bug fix and deploy it](#i-want-to-make-a-bug-fix-and-deploy-it):
-  - permissions to open a pull request in the repository
-  - credentials for DfE’s Cloud Infrastructure platform and membership of an
-    Active Directory group that allows you to perform a release
-
-#### How to do it
-
-Follow the steps in
-[`govuk-verify-rotating-keys-and-certificates.md`](govuk-verify-rotating-keys-and-certificates.md).
-
 ### I want to remove the 'downloaded' state from a payroll run so it can be downloaded again
 
 #### You will need

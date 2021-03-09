@@ -63,26 +63,14 @@ RSpec.describe "Submissions", type: :request do
       in_progress_claim.update!(attributes_for(:claim, :submittable))
     end
 
-    context "with a submitted claim that completed GOV.UK Verify" do
-      it "renders the claim confirmation screen and clears the session" do
-        get claim_confirmation_path(StudentLoans.routing_name)
+    it "renders the claim confirmation screen, including identity checking content, and clears the session" do
+      in_progress_claim.update!(govuk_verify_fields: [])
 
-        expect(response.body).to include("Claim submitted")
-        expect(response.body).to include("check the details you provided in your application")
-        expect(session[:claim_id]).to be_nil
-      end
-    end
+      get claim_confirmation_path(StudentLoans.routing_name)
 
-    context "with a submitted claim that did not complete GOV.UK Verify" do
-      it "renders the claim confirmation screen, including identity checking content, and clears the session" do
-        in_progress_claim.update!(govuk_verify_fields: [])
-
-        get claim_confirmation_path(StudentLoans.routing_name)
-
-        expect(response.body).to include("Claim submitted")
-        expect(response.body).to include("We’ll check the details you provided in your claim")
-        expect(session[:claim_id]).to be_nil
-      end
+      expect(response.body).to include("Claim submitted")
+      expect(response.body).to include("We’ll check the details you provided in your claim")
+      expect(session[:claim_id]).to be_nil
     end
   end
 end

@@ -17,15 +17,11 @@ class Claim
     private
 
     def claim_attributes
-      Claim::EDITABLE_ATTRIBUTES.dup - claim_attributes_from_govuk_verify
+      Claim::EDITABLE_ATTRIBUTES.dup
     end
 
     def eligibility_attributes
       {eligibility_attributes: claim.eligibility.class::EDITABLE_ATTRIBUTES.dup}
-    end
-
-    def claim_attributes_from_govuk_verify
-      claim.govuk_verify_fields.map(&:to_sym)
     end
   end
 end

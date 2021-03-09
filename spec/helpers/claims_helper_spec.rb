@@ -20,62 +20,6 @@ describe ClaimsHelper do
     end
   end
 
-  describe "#verify_answers" do
-    let(:claim) do
-      build(
-        :claim,
-        first_name: "Jo",
-        surname: "Bloggs",
-        address_line_1: "Flat 1",
-        address_line_2: "1 Test Road",
-        address_line_3: "Test Town",
-        postcode: "AB1 2CD",
-        date_of_birth: Date.new(1901, 1, 1),
-        teacher_reference_number: "1234567",
-        national_insurance_number: "QQ123456C",
-        email_address: "test@email.com",
-        payroll_gender: :female,
-        govuk_verify_fields: [
-          "first_name",
-          "surname",
-          "address_line_1",
-          "address_line_2",
-          "address_line_3",
-          "postcode",
-          "date_of_birth",
-          "payroll_gender"
-        ]
-      )
-    end
-
-    it "returns an array of questions and answers for displaying to the user for review" do
-      expected_answers = [
-        ["First name", "Jo"],
-        ["Surname", "Bloggs"],
-        ["Address", "Flat 1<br>1 Test Road<br>Test Town<br>AB1 2CD"],
-        ["Date of birth", "1 January 1901"],
-        ["Gender", "Female"]
-      ]
-
-      expect(helper.verify_answers(claim)).to eq expected_answers
-    end
-
-    it "excludes questions/answers not acquired from GOV.UK Verify" do
-      claim.govuk_verify_fields = []
-      expect(helper.verify_answers(claim)).to eq []
-
-      claim.govuk_verify_fields = ["first_name", "surname", "date_of_birth"]
-
-      expected_answers = [
-        ["First name", "Jo"],
-        ["Surname", "Bloggs"],
-        ["Date of birth", "1 January 1901"]
-      ]
-
-      expect(helper.verify_answers(claim)).to eq expected_answers
-    end
-  end
-
   describe "#identity_answers" do
     let(:claim) do
       build(

@@ -10,8 +10,6 @@
 
     <%= render partial: "claims/check_your_answers_section", locals: {heading: "Eligibility details", answers: eligibility_answers(current_claim)} %>
 
-    <%= render(partial: "claims/check_your_answers_section", locals: {heading: "GOV.UK Verify details", answers: verify_answers(current_claim)}) if current_claim.govuk_verify_fields.any? %>
-
     <%= render partial: "claims/check_your_answers_section", locals: {heading: "Identity details", answers: identity_answers(current_claim)} %>
 
     <%= render partial: "claims/check_your_answers_section", locals: {heading: "Student loan details", answers: student_loan_answers(current_claim)} %>

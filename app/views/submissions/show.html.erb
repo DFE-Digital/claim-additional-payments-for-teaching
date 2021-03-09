@@ -17,42 +17,26 @@
 
     <h2 class="govuk-heading-m">What happens next</h2>
 
-    <% if current_claim.identity_verified? %>
-      <p class="govuk-body">
-        We will check the details you provided in your application and tell
-        you if your claim was successful within the next <%= claim_decision_deadline_in_weeks %>.
-      </p>
+    <p class="govuk-body">
+      We’ll check the details you provided in your claim and then contact
+      you to confirm your identity over the phone.
+    </p>
 
-      <p class="govuk-body">
-        This service is currently in development, so while we expect to be
-        able to send you the outcome in that time frame, it may change.
-      </p>
+    <p class="govuk-body">
+      We'll send you an email from <strong><%= support_email_address(current_claim.policy.routing_name) %></strong>
+      to arrange a convenient time for us to call you on your school's
+      landline.
+    </p>
 
-      <p class="govuk-body">
-        You will receive email updates as your application progresses.
-      </p>
-    <% else %>
-      <p class="govuk-body">
-        We’ll check the details you provided in your claim and then contact
-        you to confirm your identity over the phone.
-      </p>
+    <p class="govuk-body">
+      Please add <strong><%= support_email_address(current_claim.policy.routing_name) %></strong>
+      to your address book to make sure you receive this email.
+    </p>
 
-      <p class="govuk-body">
-        We'll send you an email from <strong><%= support_email_address(current_claim.policy.routing_name) %></strong>
-        to arrange a convenient time for us to call you on your school's
-        landline.
-      </p>
-
-      <p class="govuk-body">
-        Please add <strong><%= support_email_address(current_claim.policy.routing_name) %></strong>
-        to your address book to make sure you receive this email.
-      </p>
-
-      <p class="govuk-body">
-        You'll find out if your claim was successful within  <%= claim_decision_deadline_in_weeks %>
-        weeks and you'll receive email updates as your application progresses.
-      </p>
-    <% end %>
+    <p class="govuk-body">
+      You'll find out if your claim was successful within  <%= claim_decision_deadline_in_weeks %>
+      weeks and you'll receive email updates as your application progresses.
+    </p>
 
     <div class="govuk-inset-text">
       It can take up to 18 weeks to process your application and

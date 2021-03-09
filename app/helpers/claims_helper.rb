@@ -1,28 +1,6 @@
 module ClaimsHelper
-  def fields_from_govuk_verify(claim)
-    fields = []
-    fields << translate("govuk_verify_fields.first_name") if claim.govuk_verify_fields.include?("first_name")
-    fields << translate("govuk_verify_fields.middle_name") if claim.govuk_verify_fields.include?("middle_name")
-    fields << translate("govuk_verify_fields.surname") if claim.govuk_verify_fields.include?("surname")
-    fields << translate("govuk_verify_fields.address") if claim.address_from_govuk_verify?
-    fields << translate("govuk_verify_fields.date_of_birth") if claim.govuk_verify_fields.include?("date_of_birth")
-    fields << translate("govuk_verify_fields.payroll_gender") if claim.payroll_gender_verified?
-    fields.to_sentence
-  end
-
   def eligibility_answers(claim)
     claim.policy::EligibilityAnswersPresenter.new(claim.eligibility).answers
-  end
-
-  def verify_answers(claim)
-    [].tap do |a|
-      a << [translate("govuk_verify_fields.first_name").capitalize, claim.first_name] if claim.name_verified?
-      a << [translate("govuk_verify_fields.middle_name").capitalize, claim.middle_name] if claim.name_verified? && claim.middle_name.present?
-      a << [translate("govuk_verify_fields.surname").capitalize, claim.surname] if claim.name_verified?
-      a << [translate("govuk_verify_fields.address").capitalize, sanitize(claim.address("<br>").html_safe, tags: %w[br])] if claim.address_from_govuk_verify?
-      a << [translate("govuk_verify_fields.date_of_birth").capitalize, l(claim.date_of_birth)] if claim.date_of_birth_verified?
-      a << [translate("govuk_verify_fields.payroll_gender").capitalize, t("answers.payroll_gender.#{claim.payroll_gender}")] if claim.payroll_gender_verified?
-    end
   end
 
   def identity_answers(claim)

@@ -3,7 +3,6 @@ module ClaimSessionTimeout
 
   def clear_claim_session
     session.delete(:claim_id)
-    session.delete(:verify_request_id)
     @current_claim = nil
   end
 
