@@ -8,7 +8,7 @@ module Admin
     end
 
     def create
-      @dqt_report_consumer = AutomatedChecks::DQTReportConsumer.new(params[:file], admin_user)
+      @dqt_report_consumer = AutomatedChecks::DqtReportConsumer.new(params[:file], admin_user)
 
       if @dqt_report_consumer.errors.any?
         render :new
