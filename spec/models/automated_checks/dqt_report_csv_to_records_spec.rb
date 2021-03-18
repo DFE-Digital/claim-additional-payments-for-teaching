@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe AutomatedChecks::DQTReportCsvToRecords do
+RSpec.describe AutomatedChecks::DqtReportCsvToRecords do
   subject(:dqt_report_csv_to_records) { described_class.new(rows) }
   let(:rows) do
     [

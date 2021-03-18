@@ -63,7 +63,7 @@ RSpec.describe "Admin qualification report upload" do
 
     context "when there's an ActiveRecord::RecordInvalid error raised during the file ingest" do
       it "displays an error and prompts the user to try again" do
-        expect_any_instance_of(AutomatedChecks::DQTReportConsumer).to receive("ingest").and_raise(ActiveRecord::RecordInvalid)
+        expect_any_instance_of(AutomatedChecks::DqtReportConsumer).to receive("ingest").and_raise(ActiveRecord::RecordInvalid)
 
         expect {
           post admin_qualification_report_uploads_path, params: {file: file}

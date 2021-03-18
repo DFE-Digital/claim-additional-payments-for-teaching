@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe AutomatedChecks::DQTReportCsv do
+RSpec.describe AutomatedChecks::DqtReportCsv do
   let(:file) do
     tempfile = Tempfile.new
     tempfile.write(csv)

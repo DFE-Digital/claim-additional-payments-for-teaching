@@ -10,7 +10,7 @@ module StudentLoans
   #
   #   qts_award_date: The date the teacher achieved qualified
   #                   teacher status.
-  class DQTRecord
+  class DqtRecord
     attr_reader :qts_award_date
 
     # The record transformed from a DQTReportCsv. Expected to contain the keys:

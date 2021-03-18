@@ -13,11 +13,11 @@ module AutomatedChecks
   #     policy they are claiming against, the claim is marked as having had its
   #     qualifications checked
   #
-  class DQTReportConsumer
+  class DqtReportConsumer
     attr_reader :csv, :completed_tasks
 
     def initialize(file, admin_user)
-      @csv = DQTReportCsv.new(file)
+      @csv = DqtReportCsv.new(file)
       @admin_user = admin_user
       @completed_tasks = 0
     end
@@ -46,7 +46,7 @@ module AutomatedChecks
     private
 
     def perform_qualification_check(claim, record)
-      if awaiting_task?(claim, "qualifications") && claim.policy::DQTRecord.new(record).eligible?
+      if awaiting_task?(claim, "qualifications") && claim.policy::DqtRecord.new(record).eligible?
         claim.tasks.create!(task_attributes("qualifications"))
         @completed_tasks += 1
       end
@@ -76,7 +76,7 @@ module AutomatedChecks
     end
 
     def dqt_records
-      @dqt_records ||= DQTReportCsvToRecords.new(@csv.rows).transform
+      @dqt_records ||= DqtReportCsvToRecords.new(@csv.rows).transform
     end
 
     def task_attributes(task_name)
