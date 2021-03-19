@@ -34,12 +34,6 @@
     "workerContainerInstanceId": {
       "type": "string"
     },
-    "vspAppServiceId": {
-      "type": "string"
-    },
-    "vspAppServicePlanId": {
-      "type": "string"
-    },
     "databaseServerId": {
       "type": "string"
     },
@@ -54,7 +48,6 @@
     "appAlertsDeploymentName": "[concat(parameters('resourceNamePrefix'), '-app')]",
     "healthAlertsDeploymentName": "[concat(parameters('resourceNamePrefix'), '-health')]",
     "databaseAlertsDeploymentName": "[concat(parameters('resourceNamePrefix'), '-database')]",
-    "vspAlertsDeploymentName": "[concat(parameters('resourceNamePrefix'), '-vsp')]",
 
     "alertActionGroupName": "[concat(parameters('resourceNamePrefix'), '-ag')]",
 
@@ -160,36 +153,6 @@
           },
           "databaseServerId": {
             "value": "[parameters('databaseServerId')]"
-          },
-          "enableAlerts": {
-            "value": "[parameters('enableAlerts')]"
-          }
-        }
-      }
-    },
-    {
-      "type": "Microsoft.Resources/deployments",
-      "apiVersion": "2017-05-10",
-      "name": "[variables('vspAlertsDeploymentName')]",
-      "dependsOn": ["[resourceId('Microsoft.Insights/actionGroups', variables('alertActionGroupName'))]"],
-      "properties": {
-        "mode": "Incremental",
-        "templateLink": {
-          "uri": "[concat(variables('deploymentUrlBase'), 'app_alerts.json')]",
-          "contentVersion": "1.0.0.0"
-        },
-        "parameters": {
-          "alertNamePrefix": {
-            "value": "[variables('alertNamePrefix')]"
-          },
-          "actionGroupId": {
-            "value": "[resourceId('Microsoft.Insights/actionGroups', variables('alertActionGroupName'))]"
-          },
-          "appServiceId": {
-            "value": "[parameters('vspAppServiceId')]"
-          },
-          "appServicePlanId": {
-            "value": "[parameters('vspAppServicePlanId')]"
           },
           "enableAlerts": {
             "value": "[parameters('enableAlerts')]"
