@@ -52,18 +52,40 @@ RSpec.feature "Teacher Student Loan Repayments claims" do
       click_on "Continue"
 
       expect(page).to have_text("How we will use the information you provide")
-      perform_verify_step
       click_on "Continue"
 
-      expect(claim.reload.first_name).to eql("Isambard")
-      expect(claim.reload.middle_name).to eql("Kingdom")
-      expect(claim.reload.surname).to eql("Brunel")
-      expect(claim.address_line_1).to eq("Unverified Street")
-      expect(claim.address_line_2).to eq("Unverified Town")
-      expect(claim.address_line_3).to eq("Unverified County")
-      expect(claim.postcode).to eql("L12 345")
-      expect(claim.date_of_birth).to eq(Date.new(1806, 4, 9))
-      expect(claim.payroll_gender).to eq("male")
+      expect(page).to have_text(I18n.t("questions.name"))
+      fill_in "First name", with: "Edmund"
+      fill_in "Middle names", with: "Percival"
+      fill_in "Last name", with: "Hillary"
+      click_on "Continue"
+
+      expect(claim.reload.first_name).to eql("Edmund")
+      expect(claim.middle_name).to eql("Percival")
+      expect(claim.surname).to eql("Hillary")
+
+      expect(page).to have_text(I18n.t("questions.address"))
+      fill_in_address
+
+      expect(claim.reload.address_line_1).to eql("123 Main Street")
+      expect(claim.address_line_2).to eql("Downtown")
+      expect(claim.address_line_3).to eql("Twin Peaks")
+      expect(claim.address_line_4).to eql("Washington")
+      expect(claim.postcode).to eql("M1 7HL")
+
+      expect(page).to have_text(I18n.t("questions.date_of_birth"))
+      fill_in "Day", with: "20"
+      fill_in "Month", with: "7"
+      fill_in "Year", with: "1919"
+      click_on "Continue"
+
+      expect(claim.reload.date_of_birth).to eq(Date.new(1919, 7, 20))
+
+      expect(page).to have_text(I18n.t("questions.payroll_gender"))
+      choose "Male"
+      click_on "Continue"
+
+      expect(claim.reload.payroll_gender).to eq("male")
 
       expect(page).to have_text(I18n.t("questions.teacher_reference_number"))
       fill_in :claim_teacher_reference_number, with: "1234567"

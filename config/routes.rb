@@ -61,21 +61,6 @@ Rails.application.routes.draw do
   # Redirect for Maths and Physics temporary start page
   get "maths-and-physics/start", to: redirect(MathsAndPhysics.start_page_url)
 
-  namespace :verify do
-    resource :authentications, only: [:new, :create] do
-      member do
-        get "failed"
-        get "no_auth"
-        get "skip"
-      end
-    end
-
-    if Rails.env.test?
-      require "verify/fake_sso"
-      mount Verify::FakeSso.new("/verify/authentications"), at: "/fake_sso"
-    end
-  end
-
   namespace :admin do
     get "/", to: "page#index", as: :root
 

@@ -19,7 +19,6 @@ module StudentLoans
       "mostly-performed-leadership-duties",
       "eligibility-confirmed",
       "information-provided",
-      "verified",
       "name",
       "address",
       "date-of-birth",
@@ -50,10 +49,6 @@ module StudentLoans
         sequence.delete("student-loan-country") if claim.no_student_loan?
         sequence.delete("student-loan-how-many-courses") if claim.no_student_loan? || claim.student_loan_country_with_one_plan?
         sequence.delete("student-loan-start-date") if claim.no_student_loan? || claim.student_loan_country_with_one_plan?
-        sequence.delete("name") if claim.name_verified?
-        sequence.delete("address") if claim.address_from_govuk_verify?
-        sequence.delete("date-of-birth") if claim.date_of_birth_verified?
-        sequence.delete("gender") if claim.payroll_gender_verified?
         sequence.delete("ineligible") unless claim.eligibility.ineligible?
       end
     end

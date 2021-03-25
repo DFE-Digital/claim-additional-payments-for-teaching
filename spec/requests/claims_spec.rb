@@ -171,20 +171,6 @@ RSpec.describe "Claims", type: :request do
           expect(response).to redirect_to(claim_path(StudentLoans.routing_name, "ineligible"))
         end
       end
-
-      context "when a field has come from Verify" do
-        before do
-          in_progress_claim.update!(govuk_verify_fields: ["payroll_gender"])
-        end
-
-        it "raises an error when trying to update via the controller" do
-          expect {
-            put claim_path(StudentLoans.routing_name, "claim-school"), params: {claim: {payroll_gender: "female"}}
-          }.to raise_error(
-            ActionController::UnpermittedParameters
-          )
-        end
-      end
     end
 
     context "when a claim hasn’t been started yet" do

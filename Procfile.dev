@@ -1,3 +1,2 @@
 web: bundle exec rails s -b 'ssl://localhost:3000?key=localhost.key&cert=localhost.crt'
 worker: bundle exec rake jobs:work
-vsp: bin/launch-vsp
