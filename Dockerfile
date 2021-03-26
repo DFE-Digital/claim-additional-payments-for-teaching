@@ -10,6 +10,7 @@ RUN apk add tzdata
 RUN apk add nodejs
 RUN apk add curl
 RUN apk add libc6-compat
+RUN apk add shared-mime-info
 
 ENV APP_HOME /app
 ENV DEPS_HOME /deps
