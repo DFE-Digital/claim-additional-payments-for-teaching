@@ -63,28 +63,6 @@
       "type": "int",
       "defaultValue": 2
     },
-    "vspAppServiceDockerImage": {
-      "type": "string"
-    },
-    "vspAppServicePlanSkuTier": {
-      "type": "string",
-      "defaultValue": "PremiumV2"
-    },
-    "vspAppServicePlanSkuSize": {
-      "type": "string",
-      "defaultValue": "P2v2"
-    },
-    "vspAppServicePlanSkuFamily": {
-      "type": "string",
-      "defaultValue": "Pv2"
-    },
-    "vspAppServicePlanSkuCapacity": {
-      "type": "int",
-      "defaultValue": 2
-    },
-    "verifyHubPossibleOutboundIpAddresses": {
-      "type": "array"
-    },
     "workerSubnetId": {
       "type": "string"
     },
@@ -162,24 +140,6 @@
     },
     "WORKER_COUNT": {
       "type": "int"
-    },
-    "VSP.VERIFY_ENVIRONMENT": {
-      "type": "string"
-    },
-    "VSP.SAML_SIGNING_KEY": {
-      "type": "securestring"
-    },
-    "VSP.SAML_PRIMARY_ENCRYPTION_KEY": {
-      "type": "securestring"
-    },
-    "VSP.SAML_SECONDARY_ENCRYPTION_KEY": {
-      "type": "securestring"
-    },
-    "VSP.EUROPEAN_IDENTITY_ENABLED": {
-      "type": "string"
-    },
-    "VSP.VERIFY_ENTITY_ID": {
-      "type": "string"
     }
   },
   "variables": {
@@ -227,8 +187,6 @@
     "appServiceWebTestDeploymentName": "[concat(parameters('resourceNamePrefix'), '-app-service-web-test')]",
     "databaseServerFirewallRulesDeploymentName": "[concat(parameters('resourceNamePrefix'), '-database-server-firewall-rules')]",
     "databaseDeploymentName": "[concat(parameters('resourceNamePrefix'), '-database')]",
-    "vspDeploymentName": "[concat(parameters('resourceNamePrefix'), '-vsp')]",
-    "vspAppServiceWebTestDeploymentName": "[concat(parameters('resourceNamePrefix'), '-vsp-app-service-web-test')]",
 
     "databaseServerName": "[concat(parameters('resourceNamePrefix'), '-db')]",
 
@@ -241,12 +199,6 @@
     "appServiceWebTestName": "[concat(variables('appServiceName'), '-webtest')]",
 
     "canonicalHostname": "[if(parameters('useAppServiceHostNames'), first(parameters('appServiceHostNames')), concat(variables('appServiceName'), '.azurewebsites.net'))]",
-
-    "vspAppServicePlanName": "[concat(parameters('resourceNamePrefix'), '-vsp-asp')]",
-    "vspAppServiceName": "[concat(parameters('resourceNamePrefix'), '-vsp-as')]",
-    "vspAppServiceRuntimeStack": "[concat('DOCKER|', parameters('vspAppServiceDockerImage'))]",
-
-    "vspAppServiceWebTestName": "[concat(variables('vspAppServiceName'), '-webtest')]",
 
     "workerContainerName": "[concat(parameters('resourceNamePrefix'), '-worker-container')]",
     "workerContainerInstanceName": "[concat(parameters('resourceNamePrefix'), '-worker-aci')]",
@@ -310,8 +262,7 @@
       "name": "[variables('availabilityTestsDeploymentName')]",
       "dependsOn": [
         "[resourceId('Microsoft.Resources/deployments', variables('applicationInsightsDeploymentName'))]",
-        "[resourceId('Microsoft.Resources/deployments', variables('appDeploymentName'))]",
-        "[resourceId('Microsoft.Resources/deployments', variables('vspDeploymentName'))]"
+        "[resourceId('Microsoft.Resources/deployments', variables('appDeploymentName'))]"
       ],
       "properties": {
         "mode": "Incremental",
@@ -329,11 +280,6 @@
                 "nameSuffix": "[variables('appServiceWebTestName')]",
                 "url": "[concat('https://', reference(resourceId('Microsoft.Resources/deployments', variables('appDeploymentName'))).outputs.appServiceCanonicalHostName.value, '/healthcheck')]",
                 "guid": "[guid(variables('appServiceWebTestName'))]"
-              },
-              {
-                "nameSuffix": "[variables('vspAppServiceWebTestName')]",
-                "url": "[concat('https://', reference(resourceId('Microsoft.Resources/deployments', variables('vspDeploymentName'))).outputs.appServiceHostName.value, '/admin/healthcheck')]",
-                "guid": "[guid(variables('vspAppServiceName'))]"
               }
             ]
           },
@@ -525,10 +471,6 @@
               {
                 "name": "WORKER_COUNT",
                 "value": "[parameters('WORKER_COUNT')]"
-              },
-              {
-                "name": "GOVUK_VERIFY_VSP_HOST",
-                "value": "[concat('https://', variables('vspAppServiceName'), '.azurewebsites.net')]"
               }
             ]
           }
@@ -564,79 +506,6 @@
           }
         }
       }
-    },
-    {
-      "type": "Microsoft.Resources/deployments",
-      "apiVersion": "2017-05-10",
-      "name": "[variables('vspDeploymentName')]",
-      "dependsOn": ["[resourceId('Microsoft.Resources/deployments', variables('appDeploymentName'))]"],
-      "properties": {
-        "mode": "Incremental",
-        "templateLink": {
-          "uri": "[concat(variables('deploymentUrlBase'), 'vsp.json')]",
-          "contentVersion": "1.0.0.0"
-        },
-        "parameters": {
-          "gitCommitHash": {
-            "value": "[parameters('gitCommitHash')]"
-          },
-          "appServicePlanName": {
-            "value": "[variables('vspAppServicePlanName')]"
-          },
-          "appServicePlanSkuTier": {
-            "value": "[parameters('vspAppServicePlanSkuTier')]"
-          },
-          "appServicePlanSkuSize": {
-            "value": "[parameters('vspAppServicePlanSkuSize')]"
-          },
-          "appServicePlanSkuFamily": {
-            "value": "[parameters('vspAppServicePlanSkuFamily')]"
-          },
-          "appServicePlanSkuCapacity": {
-            "value": "[parameters('vspAppServicePlanSkuCapacity')]"
-          },
-          "appServiceName": {
-            "value": "[variables('vspAppServiceName')]"
-          },
-          "appServiceRuntimeStack": {
-            "value": "[variables('vspAppServiceRuntimeStack')]"
-          },
-          "appServiceAlwaysOn": {
-            "value": "[parameters('appServiceAlwaysOn')]"
-          },
-          "appServiceAllowedIpAddresses": {
-            "value": "[union(reference(resourceId('Microsoft.Resources/deployments', variables('appDeploymentName'))).outputs.appServicePossibleOutboundIpAddresses.value, parameters('verifyHubPossibleOutboundIpAddresses'), variables('azureAvailabilityTestIpAddresses'))]"
-          },
-          "appServiceEnvironmentVariables": {
-            "value": [
-              {
-                "name": "VERIFY_ENVIRONMENT",
-                "value": "[parameters('VSP.VERIFY_ENVIRONMENT')]"
-              },
-              {
-                "name": "SERVICE_ENTITY_IDS",
-                "value": "[concat('[', '''', parameters('VSP.VERIFY_ENTITY_ID'), '''', ']')]"
-              },
-              {
-                "name": "SAML_SIGNING_KEY",
-                "value": "[parameters('VSP.SAML_SIGNING_KEY')]"
-              },
-              {
-                "name": "SAML_PRIMARY_ENCRYPTION_KEY",
-                "value": "[parameters('VSP.SAML_PRIMARY_ENCRYPTION_KEY')]"
-              },
-              {
-                "name": "SAML_SECONDARY_ENCRYPTION_KEY",
-                "value": "[parameters('VSP.SAML_SECONDARY_ENCRYPTION_KEY')]"
-              },
-              {
-                "name": "EUROPEAN_IDENTITY_ENABLED",
-                "value": "[parameters('VSP.EUROPEAN_IDENTITY_ENABLED')]"
-              }
-            ]
-          }
-        }
-      }
     }
   ],
   "outputs": {
@@ -659,14 +528,6 @@
     "workerContainerInstanceId": {
       "type": "string",
       "value": "[reference(resourceId('Microsoft.Resources/deployments', variables('appDeploymentName'))).outputs.workerContainerInstanceId.value]"
-    },
-    "vspAppServicePlanId": {
-      "type": "string",
-      "value": "[reference(resourceId('Microsoft.Resources/deployments', variables('vspDeploymentName'))).outputs.appServicePlanId.value]"
-    },
-    "vspAppServiceId": {
-      "type": "string",
-      "value": "[reference(resourceId('Microsoft.Resources/deployments', variables('vspDeploymentName'))).outputs.appServiceId.value]"
     }
   }
 }

@@ -34,24 +34,6 @@
     "appServicePlanSkuCapacity": {
       "value": 1
     },
-    "vspAppServiceDockerImage": {
-      "value": "dfedigital/teacher-payments-service-verify:${vspDockerImageTag}"
-    },
-    "vspAppServicePlanSkuTier": {
-      "value": "PremiumV2"
-    },
-    "vspAppServicePlanSkuSize": {
-      "value": "P1v2"
-    },
-    "vspAppServicePlanSkuFamily": {
-      "value": "Pv2"
-    },
-    "vspAppServicePlanSkuCapacity": {
-      "value": 1
-    },
-    "verifyHubPossibleOutboundIpAddresses": {
-      "value": ["35.176.130.173", "18.130.112.6", "3.8.225.78"]
-    },
     "databaseName": {
       "value": "test"
     },
@@ -184,34 +166,6 @@
     },
     "WORKER_COUNT": {
       "value": 1
-    },
-    "VSP.VERIFY_ENVIRONMENT": {
-      "value": "INTEGRATION"
-    },
-    "VSP.SAML_SIGNING_KEY": {
-      "reference": {
-        "keyVault": {
-          "id": "${keyVaultId}"
-        },
-        "secretName": "TeacherPaymentsDevVspSamlSigning6KeyBase64"
-      }
-    },
-    "VSP.SAML_PRIMARY_ENCRYPTION_KEY": {
-      "reference": {
-        "keyVault": {
-          "id": "${keyVaultId}"
-        },
-        "secretName": "TeacherPaymentsDevVspSamlEncryption6KeyBase64"
-      }
-    },
-    "VSP.SAML_SECONDARY_ENCRYPTION_KEY": {
-      "value": ""
-    },
-    "VSP.EUROPEAN_IDENTITY_ENABLED": {
-      "value": "true"
-    },
-    "VSP.VERIFY_ENTITY_ID": {
-      "value": "https://development.additional-teaching-payment.education.gov.uk"
     }
   }
 }

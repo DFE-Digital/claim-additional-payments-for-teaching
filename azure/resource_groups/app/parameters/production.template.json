@@ -27,12 +27,6 @@
         "www.claim-additional-teaching-payment.service.gov.uk": 1
       }
     },
-    "vspAppServiceDockerImage": {
-      "value": "dfedigital/teacher-payments-service-verify:${vspDockerImageTag}"
-    },
-    "verifyHubPossibleOutboundIpAddresses": {
-      "value": ["18.130.47.107", "18.130.64.77", "35.176.149.113"]
-    },
     "databaseName": {
       "value": "production"
     },
@@ -172,34 +166,6 @@
     },
     "WORKER_COUNT": {
       "value": 2
-    },
-    "VSP.VERIFY_ENVIRONMENT": {
-      "value": "PRODUCTION"
-    },
-    "VSP.SAML_SIGNING_KEY": {
-      "reference": {
-        "keyVault": {
-          "id": "${keyVaultId}"
-        },
-        "secretName": "TeacherPaymentsProdVspSamlSigning2KeyBase64"
-      }
-    },
-    "VSP.SAML_PRIMARY_ENCRYPTION_KEY": {
-      "reference": {
-        "keyVault": {
-          "id": "${keyVaultId}"
-        },
-        "secretName": "TeacherPaymentsProdVspSamlEncryption2KeyBase64"
-      }
-    },
-    "VSP.SAML_SECONDARY_ENCRYPTION_KEY": {
-      "value": ""
-    },
-    "VSP.EUROPEAN_IDENTITY_ENABLED": {
-      "value": "true"
-    },
-    "VSP.VERIFY_ENTITY_ID": {
-      "value": "https://additional-teaching-payment.education.gov.uk"
     }
   }
 }
