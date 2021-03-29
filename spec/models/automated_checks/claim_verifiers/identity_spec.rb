@@ -110,6 +110,12 @@ module AutomatedChecks
             end
           end
 
+          describe "note" do
+            subject(:note) { claim.notes.last }
+
+            it { is_expected.to eq(nil) }
+          end
+
           context "except national insurance number" do
             let(:data) do
               {
@@ -145,6 +151,24 @@ module AutomatedChecks
                 it { is_expected.to eq false }
               end
             end
+
+            describe "note" do
+              subject(:note) { claim.notes.last }
+
+              before { perform }
+
+              describe "#body" do
+                subject(:body) { note.body }
+
+                it { is_expected.to eq("National Insurance number not matched") }
+              end
+
+              describe "#created_by" do
+                subject(:created_by) { note.created_by }
+
+                it { is_expected.to eq(nil) }
+              end
+            end
           end
 
           context "except matching teacher reference number" do
@@ -157,7 +181,7 @@ module AutomatedChecks
               }
             end
 
-            it { is_expected.to be(nil) }
+            it { is_expected.to be_an_instance_of(Note) }
 
             describe "identity confirmation task" do
               subject(:identity_confirmation_task) { claim.tasks.find_by(name: "identity_confirmation") }
@@ -165,6 +189,24 @@ module AutomatedChecks
               before { perform }
 
               it { is_expected.to eq(nil) }
+            end
+
+            describe "note" do
+              subject(:note) { claim.notes.last }
+
+              before { perform }
+
+              describe "#body" do
+                subject(:body) { note.body }
+
+                it { is_expected.to eq("Teacher reference number not matched") }
+              end
+
+              describe "#created_by" do
+                subject(:created_by) { note.created_by }
+
+                it { is_expected.to eq(nil) }
+              end
             end
           end
 
@@ -201,6 +243,24 @@ module AutomatedChecks
                 subject(:manual) { identity_confirmation_task.manual }
 
                 it { is_expected.to eq false }
+              end
+            end
+
+            describe "note" do
+              subject(:note) { claim.notes.last }
+
+              before { perform }
+
+              describe "#body" do
+                subject(:body) { note.body }
+
+                it { is_expected.to eq("First name or surname not matched") }
+              end
+
+              describe "#created_by" do
+                subject(:created_by) { note.created_by }
+
+                it { is_expected.to eq(nil) }
               end
             end
           end
@@ -240,6 +300,24 @@ module AutomatedChecks
                 it { is_expected.to eq false }
               end
             end
+
+            describe "note" do
+              subject(:note) { claim.notes.last }
+
+              before { perform }
+
+              describe "#body" do
+                subject(:body) { note.body }
+
+                it { is_expected.to eq("First name or surname not matched") }
+              end
+
+              describe "#created_by" do
+                subject(:created_by) { note.created_by }
+
+                it { is_expected.to eq(nil) }
+              end
+            end
           end
 
           context "with middle names" do
@@ -277,6 +355,12 @@ module AutomatedChecks
                 it { is_expected.to eq false }
               end
             end
+
+            describe "note" do
+              subject(:note) { claim.notes.last }
+
+              it { is_expected.to eq(nil) }
+            end
           end
 
           context "except matching date of birth" do
@@ -312,6 +396,24 @@ module AutomatedChecks
                 subject(:manual) { identity_confirmation_task.manual }
 
                 it { is_expected.to eq false }
+              end
+            end
+
+            describe "note" do
+              subject(:note) { claim.notes.last }
+
+              before { perform }
+
+              describe "#body" do
+                subject(:body) { note.body }
+
+                it { is_expected.to eq("Date of birth not matched") }
+              end
+
+              describe "#created_by" do
+                subject(:created_by) { note.created_by }
+
+                it { is_expected.to eq(nil) }
               end
             end
           end
@@ -356,6 +458,14 @@ module AutomatedChecks
                 it { is_expected.to eq true }
               end
             end
+
+            describe "note" do
+              subject(:note) { claim.notes.last }
+
+              before { perform }
+
+              it { is_expected.to eq(nil) }
+            end
           end
         end
 
@@ -369,7 +479,7 @@ module AutomatedChecks
             }
           end
 
-          it { is_expected.to eq(nil) }
+          it { is_expected.to be_an_instance_of(Note) }
 
           describe "identity confirmation task" do
             subject(:identity_confirmation_task) { claim.tasks.find_by(name: "identity_confirmation") }
@@ -377,6 +487,24 @@ module AutomatedChecks
             before { perform }
 
             it { is_expected.to eq(nil) }
+          end
+
+          describe "note" do
+            subject(:note) { claim.notes.last }
+
+            before { perform }
+
+            describe "#body" do
+              subject(:body) { note.body }
+
+              it { is_expected.to eq("Not matched") }
+            end
+
+            describe "#created_by" do
+              subject(:created_by) { note.created_by }
+
+              it { is_expected.to eq(nil) }
+            end
           end
         end
       end

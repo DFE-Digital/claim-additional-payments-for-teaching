@@ -14,7 +14,9 @@ module AutomatedChecks
       def perform
         return unless awaiting_task?("qualifications")
 
-        complete_match
+        complete_match ||
+          partial_match ||
+          no_match
       end
 
       private
@@ -31,6 +33,15 @@ module AutomatedChecks
         create_passed_task
       end
 
+      def create_note(field_body = nil)
+        claim.notes.create!(
+          {
+            body: "#{field_body ? field_body + " n" : "N"}ot eligible",
+            created_by: admin_user
+          }
+        )
+      end
+
       def create_passed_task
         claim.tasks.create!(
           {
@@ -40,6 +51,22 @@ module AutomatedChecks
             created_by: admin_user
           }
         )
+      end
+
+      def no_match
+        return unless !claim.policy::DqtRecord.new(dqt_teacher_status).eligible?
+
+        create_note
+      end
+
+      def partial_match
+        if claim.policy::DqtRecord.new(dqt_teacher_status).eligible_qts_date?
+          return create_note("ITT subject codes")
+        end
+
+        if claim.policy::DqtRecord.new(dqt_teacher_status).eligible_qualification_subject?
+          create_note("QTS award date")
+        end
       end
 
       def tasks=(tasks)

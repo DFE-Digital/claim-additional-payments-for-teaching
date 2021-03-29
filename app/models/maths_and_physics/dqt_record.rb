@@ -88,8 +88,6 @@ module MathsAndPhysics
       eligible_qts_date? && eligible_qualification_subject?
     end
 
-    private
-
     def eligible_qts_date?
       qts_award_date.present? && AcademicYear.for(qts_award_date) >= MathsAndPhysics.first_eligible_qts_award_year
     end
@@ -97,6 +95,8 @@ module MathsAndPhysics
     def eligible_qualification_subject?
       itt_subject_maths_or_physics? || maths_or_physics_degree?
     end
+
+    private
 
     def itt_subject_maths_or_physics?
       itt_subject_codes.any? { |subject_code|

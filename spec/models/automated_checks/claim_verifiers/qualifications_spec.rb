@@ -112,6 +112,12 @@ module AutomatedChecks
             end
           end
 
+          describe "note" do
+            subject(:note) { claim.notes.last }
+
+            it { is_expected.to eq(nil) }
+          end
+
           context "except QTS award date" do
             let(:data) do
               {
@@ -124,7 +130,7 @@ module AutomatedChecks
               }
             end
 
-            it { is_expected.to eq(nil) }
+            it { is_expected.to be_an_instance_of(Note) }
 
             describe "qualifications task" do
               subject(:qualifications_task) { claim.tasks.find_by(name: "qualifications") }
@@ -132,6 +138,24 @@ module AutomatedChecks
               before { perform }
 
               it { is_expected.to eq(nil) }
+            end
+
+            describe "note" do
+              subject(:note) { claim.notes.last }
+
+              before { perform }
+
+              describe "#body" do
+                subject(:body) { note.body }
+
+                it { is_expected.to eq("QTS award date not eligible") }
+              end
+
+              describe "#created_by" do
+                subject(:created_by) { note.created_by }
+
+                it { is_expected.to eq(nil) }
+              end
             end
           end
 
@@ -147,7 +171,7 @@ module AutomatedChecks
               }
             end
 
-            it { is_expected.to eq(nil) }
+            it { is_expected.to be_an_instance_of(Note) }
 
             describe "qualifications task" do
               subject(:qualifications_task) { claim.tasks.find_by(name: "qualifications") }
@@ -155,6 +179,24 @@ module AutomatedChecks
               before { perform }
 
               it { is_expected.to eq(nil) }
+            end
+
+            describe "note" do
+              subject(:note) { claim.notes.last }
+
+              before { perform }
+
+              describe "#body" do
+                subject(:body) { note.body }
+
+                it { is_expected.to eq("ITT subject codes not eligible") }
+              end
+
+              describe "#created_by" do
+                subject(:created_by) { note.created_by }
+
+                it { is_expected.to eq(nil) }
+              end
             end
           end
 
@@ -198,6 +240,14 @@ module AutomatedChecks
                 it { is_expected.to eq true }
               end
             end
+
+            describe "note" do
+              subject(:note) { claim.notes.last }
+
+              before { perform }
+
+              it { is_expected.to eq(nil) }
+            end
           end
         end
 
@@ -213,7 +263,7 @@ module AutomatedChecks
             }
           end
 
-          it { is_expected.to eq(nil) }
+          it { is_expected.to be_an_instance_of(Note) }
 
           describe "qualifications task" do
             subject(:qualifications_task) { claim.tasks.find_by(name: "qualifications") }
@@ -221,6 +271,24 @@ module AutomatedChecks
             before { perform }
 
             it { is_expected.to eq(nil) }
+          end
+
+          describe "note" do
+            subject(:note) { claim.notes.last }
+
+            before { perform }
+
+            describe "#body" do
+              subject(:body) { note.body }
+
+              it { is_expected.to eq("Not eligible") }
+            end
+
+            describe "#created_by" do
+              subject(:created_by) { note.created_by }
+
+              it { is_expected.to eq(nil) }
+            end
           end
         end
       end
