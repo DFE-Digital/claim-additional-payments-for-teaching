@@ -1,10 +1,10 @@
 # 8. Use GOVUK Verify for claimant identity assurance
 
-Date: 2019-06-13
+Date: 2021-03-19
 
 ## Status
 
-Accepted
+Deprecated (Replaced by ADR #0012)
 
 ## Context
 
