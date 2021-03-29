@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+- Remove GOVUK Verify IAS components and from claimant journeys
+- Documentation updates - DFE Signin process
 - Reduce sensitivity of high response time alert
 
 ## [Release 089] - 2021-03-05
