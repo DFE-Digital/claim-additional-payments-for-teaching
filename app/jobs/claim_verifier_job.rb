@@ -1,6 +1,6 @@
-class UpdateAdminClaimTasksWithDqtApiJob < ApplicationJob
+class ClaimVerifierJob < ApplicationJob
   def perform(claim)
-    AutomatedChecks::UpdateAdminClaimTasksWithDqt.new(
+    AutomatedChecks::ClaimVerifier.new(
       claim: claim,
       dqt_teacher_status: Dqt::Client.new.api.qualified_teaching_status.show(
         params: {

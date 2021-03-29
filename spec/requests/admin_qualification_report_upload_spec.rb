@@ -24,6 +24,7 @@ RSpec.describe "Admin qualification report upload" do
         first_name: "Fred",
         surname: "Smith",
         date_of_birth: Date.new(1990, 8, 23),
+        national_insurance_number: "QQ123456C",
         eligibility: build(:maths_and_physics_eligibility, :eligible))
     end
 

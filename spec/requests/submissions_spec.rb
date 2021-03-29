@@ -46,9 +46,9 @@ RSpec.describe "Submissions", type: :request do
       #
       # This spec at least tests the right thing even if it's still in the
       # wrong place.
-      it "enqueues UpdateAdminClaimTasksWithDqtApiJob" do
+      it "enqueues ClaimVerifierJob" do
         expect { post claim_submission_path(StudentLoans.routing_name) }.to(
-          have_enqueued_job(UpdateAdminClaimTasksWithDqtApiJob)
+          have_enqueued_job(ClaimVerifierJob)
         )
       end
     end

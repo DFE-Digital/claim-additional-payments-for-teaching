@@ -17,7 +17,7 @@ RSpec.describe AutomatedChecks::DqtReportConsumer do
     before { dqt_report_consumer.ingest }
 
     it "sets attributes that report the number of tasks automatically completed and the number of claims checked" do
-      expect(dqt_report_consumer.completed_tasks).to eq(4)
+      expect(dqt_report_consumer.completed_tasks).to eq(6)
       expect(dqt_report_consumer.total_claims_checked).to eq(6)
     end
 
@@ -38,7 +38,7 @@ RSpec.describe AutomatedChecks::DqtReportConsumer do
       expect(new_qualication_task.created_by).to eq(admin_user)
     end
 
-    it "creates an identity_confirmation task for claims where the surname and DOB in the record matches the claim" do
+    it "creates an identity_confirmation task for claims where the first name, surname, DOB, NI, and TRN in the record matches the claim" do
       new_id_confirmation_task = claim_with_eligible_dqt_record.tasks.find_by!(name: "identity_confirmation")
       expect(new_id_confirmation_task.passed).to eq(true)
       expect(new_id_confirmation_task.manual).to eq(false)
@@ -46,8 +46,8 @@ RSpec.describe AutomatedChecks::DqtReportConsumer do
     end
 
     it "doesn't create an identity_confirmation task if either the surname or DOB does not match" do
-      expect(eligible_claim_with_non_matching_birthdate.tasks.find_by(name: "identity_confirmation")).to be_nil
-      expect(eligible_claim_with_non_matching_surname.tasks.find_by(name: "identity_confirmation")).to be_nil
+      expect(eligible_claim_with_non_matching_birthdate.tasks.find_by(name: "identity_confirmation")).to be_an_instance_of(Task)
+      expect(eligible_claim_with_non_matching_surname.tasks.find_by(name: "identity_confirmation")).to be_an_instance_of(Task)
     end
 
     it "doesn’t create a qualification task when the claim already has a decision" do
