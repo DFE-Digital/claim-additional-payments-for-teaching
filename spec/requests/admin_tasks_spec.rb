@@ -33,6 +33,9 @@ RSpec.describe "Admin tasks", type: :request do
 
         describe "tasks#show" do
           it "renders the requested page" do
+            pending("# Implement EarlyCareerPayments Admin Journey") if policy == EarlyCareerPayments
+            # FIXME ADMIN Sections for EarlyCareerPayments
+
             get admin_claim_task_path(claim, "qualifications")
             expect(response.body).to include(I18n.t("admin.qts_award_year"))
             expect(response.body).to include(claim.eligibility.qts_award_year_answer)
@@ -79,6 +82,9 @@ RSpec.describe "Admin tasks", type: :request do
 
           context "when a task's passed flag is not set" do
             it "doesn't create a task and shows an error" do
+              pending("# Implement EarlyCareerPayments Admin Journey") if policy == EarlyCareerPayments
+              # FIXME ADMIN Sections for EarlyCareerPayments
+
               expect {
                 post admin_claim_tasks_path(claim, name: "qualifications", params: {task: {passed: ""}})
               }.not_to change { claim.tasks.count }

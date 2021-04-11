@@ -2,7 +2,8 @@
 module Policies
   POLICIES = [
     StudentLoans,
-    MathsAndPhysics
+    MathsAndPhysics,
+    EarlyCareerPayments
   ].freeze
 
   AMENDABLE_ELIGIBILITY_ATTRIBUTES = POLICIES.map { |policy| policy::Eligibility::AMENDABLE_ATTRIBUTES }.flatten.freeze

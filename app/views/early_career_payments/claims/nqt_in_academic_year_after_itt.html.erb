@@ -1,0 +1,51 @@
+<% content_for(:page_title, page_title(t("early_career_payments.questions.nqt_in_academic_year_after_itt"), policy: current_policy_routing_name, show_error: current_claim.errors.any?)) %>
+<% path_for_form = current_claim.persisted? ? claim_path(current_policy_routing_name) : claims_path(current_policy_routing_name) %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= render("shared/error_summary", instance: current_claim, errored_field_id_overrides: { "eligibility.nqt_in_academic_year_after_itt": "claim_eligibility_attributes_nqt_in_academic_year_after_itt_true" }) if current_claim.errors.any? %>
+    <%= form_for current_claim, url: path_for_form  do |form| %>
+      <%= form_group_tag current_claim do %>
+        <%= form.fields_for :eligibility, include_id: false do |fields| %>
+
+          <%= fields.hidden_field :nqt_in_academic_year_after_itt %>
+
+          <fieldset class="govuk-fieldset" aria-describedby="nqt_in_academic_year_after_itt-hint" role="group">
+
+            <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl">
+              <h1 class="govuk-fieldset__heading">
+                <%= t("early_career_payments.questions.nqt_in_academic_year_after_itt") %>
+              </h1>
+            </legend>
+
+            <span class="govuk-hint" id="nqt_in_academic_year_after_itt-hint">
+              You are still eligible to claim if you usually teach another
+              subject but sometimes teach maths or physics.
+            </span>
+
+            <%= errors_tag current_claim.eligibility, :nqt_in_academic_year_after_itt %>
+
+            <div class="govuk-radios govuk-radios--inline">
+
+              <div class="govuk-radios__item">
+                <%= fields.radio_button(:nqt_in_academic_year_after_itt, true, class: "govuk-radios__input") %>
+                <%= fields.label :nqt_in_academic_year_after_itt_true, "Yes", class: "govuk-label govuk-radios__label" %>
+              </div>
+
+              <div class="govuk-radios__item">
+                <%= fields.radio_button(:nqt_in_academic_year_after_itt, false, class: "govuk-radios__input") %>
+                <%= fields.label :nqt_in_academic_year_after_itt_false, "No", class: "govuk-label govuk-radios__label" %>
+              </div>
+
+            </div>
+
+          </fieldset>
+
+        <% end %>
+      <% end %>
+
+      <%= form.submit "Continue", class: "govuk-button", data: {module: "govuk-button"} %>
+    <% end %>
+
+  </div>
+</div>

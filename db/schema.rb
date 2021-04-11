@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_04_02_093512) do
+ActiveRecord::Schema.define(version: 2021_04_08_151248) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -110,6 +110,12 @@ ActiveRecord::Schema.define(version: 2020_04_02_093512) do
     t.datetime "updated_at", precision: 6, null: false
     t.string "role_codes", default: [], array: true
     t.index ["dfe_sign_in_id"], name: "index_dfe_sign_in_users_on_dfe_sign_in_id", unique: true
+  end
+
+  create_table "early_career_payments_eligibilities", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.boolean "nqt_in_academic_year_after_itt"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
   end
 
   create_table "local_authorities", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
