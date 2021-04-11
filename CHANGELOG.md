@@ -9,6 +9,8 @@ The format is based on [Keep a Changelog]
 - Remove GOVUK Verify IAS components and from claimant journeys
 - Documentation updates - DFE Signin process
 - Reduce sensitivity of high response time alert
+- Build new Early Career Payments Policy
+- Build new Early Career Payments Journey
 
 ## [Release 089] - 2021-03-05
 

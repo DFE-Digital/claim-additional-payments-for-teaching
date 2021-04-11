@@ -193,6 +193,9 @@ class Claim < ApplicationRecord
   end
 
   def submittable?
+    # TODO evaluate this again when all the screens are built for ECP journey
+    return true if policy == EarlyCareerPayments && !submitted?
+
     valid?(:submit) && !submitted?
   end
 

@@ -35,6 +35,9 @@ RSpec.describe "Admin tasks", type: :request do
 
           context "when a payroll gender is not set" do
             it "doesn't create a task and shows an error" do
+              pending("# Implement EarlyCareerPayments Admin Journey") if policy == EarlyCareerPayments
+              # FIXME ADMIN Sections for EarlyCareerPayments
+
               params[:claim][:payroll_gender] = ""
 
               expect {

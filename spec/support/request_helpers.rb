@@ -18,6 +18,11 @@ module RequestHelpers
         eligibility_attributes: {
           teaching_maths_or_physics: "true"
         }
+      },
+      EarlyCareerPayments => {
+        eligibility_attributes: {
+          nqt_in_academic_year_after_itt: "true"
+        }
       }
     }.fetch(policy)
   end
