@@ -15,6 +15,7 @@ require "sprockets/railtie"
 require_relative "../lib/verify"
 require_relative "../lib/student_loan"
 require_relative "../lib/dfe_sign_in"
+require_relative "../lib/dqt"
 
 # Require the gems listed in Gemfile, including any gems
 # you've limited to :test, :development, or :production.

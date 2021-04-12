@@ -107,6 +107,8 @@ GEM
       dotenv (= 2.7.6)
       railties (>= 3.2)
     erubi (1.10.0)
+    ethon (0.12.0)
+      ffi (>= 1.3.0)
     execjs (2.7.0)
     factory_bot (6.1.0)
       activesupport (>= 5.0.0)
@@ -316,6 +318,8 @@ GEM
     thor (1.1.0)
     thread_safe (0.3.6)
     tilt (2.0.10)
+    typhoeus (1.4.0)
+      ethon (>= 0.9.0)
     tzinfo (1.2.9)
       thread_safe (~> 0.1)
     uglifier (4.2.0)
@@ -393,6 +397,7 @@ DEPENDENCIES
   spring
   spring-watcher-listen (~> 2.0.0)
   standard
+  typhoeus
   tzinfo-data
   uglifier (>= 1.3.0)
   web-console (>= 3.3.0)
@@ -403,4 +408,4 @@ RUBY VERSION
    ruby 2.6.2p47
 
 BUNDLED WITH
-   2.1.4
+   2.2.11
