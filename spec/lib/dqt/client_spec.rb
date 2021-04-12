@@ -83,6 +83,12 @@ module Dqt
       end
     end
 
+    after do
+      Dqt.configure do |config|
+        config.client.host = ENV["DQT_API_HOST"]
+      end
+    end
+
     describe "#api" do
       it "returns API" do
         expect(client.api).to be_an_instance_of(Api)

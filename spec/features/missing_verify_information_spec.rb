@@ -44,6 +44,8 @@ RSpec.feature "Missing information from GOV.UK Verify" do
     fill_in "Account number", with: "87654321"
     click_on "Continue"
 
+    stub_qualified_teaching_status_show(claim: claim.reload)
+
     freeze_time do
       perform_enqueued_jobs do
         expect {
@@ -98,6 +100,8 @@ RSpec.feature "Missing information from GOV.UK Verify" do
     fill_in "Sort code", with: "123456"
     fill_in "Account number", with: "87654321"
     click_on "Continue"
+
+    stub_qualified_teaching_status_show(claim: claim.reload)
 
     freeze_time do
       perform_enqueued_jobs do

@@ -10,7 +10,7 @@ RSpec.describe Dqt do
   let(:config_args) do
     {
       client: {
-        host: "http://test"
+        host: ENV["DQT_API_HOST"]
       }
     }
   end

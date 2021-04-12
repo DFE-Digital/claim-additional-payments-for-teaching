@@ -1,6 +1,6 @@
 module DqtHelpers
   def stub_qualified_teaching_status_show(claim:)
-    stub_request(:get, "http://dqt.com/api/qualified-teachers/qualified-teaching-status").with(
+    stub_request(:get, "#{ENV["DQT_API_HOST"]}/api/qualified-teachers/qualified-teaching-status").with(
       query: WebMock::API.hash_including(
         {
           trn: claim.teacher_reference_number,
