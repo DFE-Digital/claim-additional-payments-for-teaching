@@ -148,11 +148,24 @@ RSpec.describe Claim, type: :model do
     expect(claim).to be_valid(:submit)
   end
 
-  it "triggers validations on the eligibility appropriate to the context" do
-    claim = build(:claim)
+  context "with student loans policy eligibility" do
+    let(:claim) { build(:claim, policy: StudentLoans) }
 
-    expect(claim).not_to be_valid(:"qts-year")
-    expect(claim.errors.values).to include(["Select when you completed your initial teacher training"])
+    # Tests a single attribute, possibly should test multiple attributes
+    it "validates eligibility" do
+      expect(claim).not_to be_valid(:"qts-year")
+      expect(claim.errors.values).to include(["Select when you completed your initial teacher training"])
+    end
+  end
+
+  context "with early career payments policy eligibility" do
+    let(:claim) { build(:claim, policy: EarlyCareerPayments) }
+
+    # Tests a single attribute, possibly should test multiple attributes
+    it "validates eligibility" do
+      expect(claim).not_to be_valid(:"nqt-in-academic-year-after-itt")
+      expect(claim.errors.values).to include(["Select yes if you did your NQT in the academic year after your ITT"])
+    end
   end
 
   context "when saving in the “gender” validation context" do
@@ -496,15 +509,45 @@ RSpec.describe Claim, type: :model do
   end
 
   describe "#submittable?" do
-    it "returns true when the claim is valid and has not been submitted" do
-      claim = build(:claim, :submittable)
+    let(:claim) { build(:claim, trait, policy: policy) }
 
-      expect(claim.submittable?).to eq true
+    context "with student loans policy eligibility" do
+      let(:policy) { StudentLoans }
+
+      context "when submittable" do
+        let(:trait) { :submittable }
+
+        it "returns true" do
+          expect(claim.submittable?).to eq true
+        end
+      end
+
+      context "when submitted" do
+        let(:trait) { :submitted }
+        it "returns false" do
+          expect(claim.submittable?).to eq false
+        end
+      end
     end
-    it "returns false when it has already been submitted" do
-      claim = build(:claim, :submitted)
 
-      expect(claim.submittable?).to eq false
+    context "with early career payments policy eligibility" do
+      let(:policy) { EarlyCareerPayments }
+
+      context "when submittable" do
+        let(:trait) { :submittable }
+
+        it "returns true" do
+          expect(claim.submittable?).to eq true
+        end
+      end
+
+      context "when submitted" do
+        let(:trait) { :submitted }
+
+        it "returns false" do
+          expect(claim.submittable?).to eq false
+        end
+      end
     end
   end
 
@@ -904,27 +947,31 @@ RSpec.describe Claim, type: :model do
     end
   end
 
-  describe "Early Career Payments claim" do
-    let(:eligibility) { build(:early_career_payments_eligibility) }
+  describe "#has_ecp_policy?" do
+    let(:claim) { create(:claim, policy: policy) }
 
-    describe "#submittable?" do
-      it "returns true when the claim is valid and has not been submitted" do
-        claim = build(:claim, :submittable, govuk_verify_fields: [], eligibility: eligibility)
+    context "with student loans policy" do
+      let(:policy) { StudentLoans }
 
-        expect(claim.submittable?).to eq true
-      end
-      it "returns false when it has already been submitted" do
-        claim = build(:claim, :unverified, eligibility: eligibility)
-
-        expect(claim.submittable?).to eq false
+      it "returns false" do
+        expect(claim.has_ecp_policy?).to eq(false)
       end
     end
 
-    it "triggers validations on the eligibility appropriate to the context" do
-      claim = build(:claim, eligibility: eligibility)
+    context "with maths and physics policy" do
+      let(:policy) { MathsAndPhysics }
 
-      expect(claim).not_to be_valid(:"nqt-in-academic-year-after-itt")
-      expect(claim.errors.values).to include(["Select yes if you did your NQT in the academic year after your ITT"])
+      it "returns false" do
+        expect(claim.has_ecp_policy?).to eq(false)
+      end
+    end
+
+    context "with early career payments policy" do
+      let(:policy) { EarlyCareerPayments }
+
+      it "returns true" do
+        expect(claim.has_ecp_policy?).to eq(true)
+      end
     end
   end
 end

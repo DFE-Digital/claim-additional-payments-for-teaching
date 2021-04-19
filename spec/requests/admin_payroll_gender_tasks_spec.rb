@@ -6,7 +6,7 @@ RSpec.describe "Admin tasks", type: :request do
   context "when signed in as a service operator" do
     before { @signed_in_user = sign_in_as_service_operator }
 
-    Policies.all.each do |policy|
+    [MathsAndPhysics, StudentLoans].each do |policy|
       context "with a #{policy} claim" do
         describe "payroll_gender_tasks#create" do
           let(:claim) { create(:claim, :submitted, policy: policy, payroll_gender: :dont_know) }
@@ -35,9 +35,6 @@ RSpec.describe "Admin tasks", type: :request do
 
           context "when a payroll gender is not set" do
             it "doesn't create a task and shows an error" do
-              pending("# Implement EarlyCareerPayments Admin Journey") if policy == EarlyCareerPayments
-              # FIXME ADMIN Sections for EarlyCareerPayments
-
               params[:claim][:payroll_gender] = ""
 
               expect {

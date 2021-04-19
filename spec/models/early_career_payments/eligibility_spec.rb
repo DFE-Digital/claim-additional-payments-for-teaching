@@ -35,5 +35,11 @@ RSpec.describe EarlyCareerPayments::Eligibility, type: :model do
         expect(EarlyCareerPayments::Eligibility.new).not_to be_valid(:"nqt-in-academic-year-after-itt")
       end
     end
+
+    context "when saving in the 'employed_as_supply_teacher' context" do
+      it "is not valid without a value for 'employed_as_supply_teacher'" do
+        expect(EarlyCareerPayments::Eligibility.new).not_to be_valid(:"supply-teacher")
+      end
+    end
   end
 end

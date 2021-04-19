@@ -106,50 +106,50 @@ class Claim < ApplicationRecord
 
   validates :academic_year_before_type_cast, format: {with: PolicyConfiguration::ACADEMIC_YEAR_REGEXP}
 
-  validates :payroll_gender, on: [:gender, :submit], presence: {message: "Choose the option for the gender your school’s payroll system associates with you"}
+  validates :payroll_gender, on: [:gender, :submit], presence: {message: "Choose the option for the gender your school’s payroll system associates with you"}, unless: :has_ecp_policy?
 
-  validates :first_name, on: [:name, :submit], presence: {message: "Enter your first name"}
+  validates :first_name, on: [:name, :submit], presence: {message: "Enter your first name"}, unless: :has_ecp_policy?
   validates :first_name, length: {maximum: 100, message: "First name must be 100 characters or less"}
 
   validates :middle_name, length: {maximum: 100, message: "Middle name must be 100 characters or less"}
 
-  validates :surname, on: [:name, :submit], presence: {message: "Enter your last name"}
+  validates :surname, on: [:name, :submit], presence: {message: "Enter your last name"}, unless: :has_ecp_policy?
   validates :surname, length: {maximum: 100, message: "Last name must be 100 characters or less"}
 
-  validates :address_line_1, on: [:address, :submit], presence: {message: "Enter your building and street address"}
+  validates :address_line_1, on: [:address, :submit], presence: {message: "Enter your building and street address"}, unless: :has_ecp_policy?
   validates :address_line_1, length: {maximum: 100, message: "Address lines must be 100 characters or less"}
   validates :address_line_2, length: {maximum: 100, message: "Address lines must be 100 characters or less"}
   validates :address_line_3, length: {maximum: 100, message: "Address lines must be 100 characters or less"}
   validates :address_line_4, length: {maximum: 100, message: "Address lines must be 100 characters or less"}
 
-  validates :postcode, on: [:address, :submit], presence: {message: "Enter your postcode"}
+  validates :postcode, on: [:address, :submit], presence: {message: "Enter your postcode"}, unless: :has_ecp_policy?
   validates :postcode, length: {maximum: 11, message: "Postcode must be 11 characters or less"}
 
-  validates :date_of_birth, on: [:"date-of-birth", :submit], presence: {message: "Enter your date of birth"}
+  validates :date_of_birth, on: [:"date-of-birth", :submit], presence: {message: "Enter your date of birth"}, unless: :has_ecp_policy?
 
-  validates :teacher_reference_number, on: [:"teacher-reference-number", :submit], presence: {message: "Enter your teacher reference number"}
+  validates :teacher_reference_number, on: [:"teacher-reference-number", :submit], presence: {message: "Enter your teacher reference number"}, unless: :has_ecp_policy?
   validate :trn_must_be_seven_digits
 
-  validates :national_insurance_number, on: [:"national-insurance-number", :submit], presence: {message: "Enter your National Insurance number"}
+  validates :national_insurance_number, on: [:"national-insurance-number", :submit], presence: {message: "Enter your National Insurance number"}, unless: :has_ecp_policy?
   validate :ni_number_is_correct_format
 
-  validates :has_student_loan, on: [:"student-loan", :submit], inclusion: {in: [true, false], message: "Select yes if you have a student loan"}
+  validates :has_student_loan, on: [:"student-loan", :submit], inclusion: {in: [true, false], message: "Select yes if you have a student loan"}, unless: :has_ecp_policy?
   validates :student_loan_country, on: [:"student-loan-country"], presence: {message: "Select the country you lived in when you applied for your student loan"}
   validates :student_loan_courses, on: [:"student-loan-how-many-courses"], presence: {message: "Select the number of student loans you have taken out"}
   validates :student_loan_start_date, on: [:"student-loan-start-date"], presence: {message: ->(object, data) { I18n.t("validation_errors.student_loan_start_date.#{object.student_loan_courses}") }}
   validates :student_loan_plan, on: [:submit], presence: {message: "We have not been able determined your student loan repayment plan. Answer all questions about your student loan."}
   validates :student_loan_plan, on: [:amendment], inclusion: {in: [Claim::NO_STUDENT_LOAN], message: "You can’t amend the student loan plan type because the claimant said they are no longer paying off their student loan"}, if: :no_student_loan?
 
-  validates :email_address, on: [:"email-address", :submit], presence: {message: "Enter an email address"}
+  validates :email_address, on: [:"email-address", :submit], presence: {message: "Enter an email address"}, unless: :has_ecp_policy?
   validates :email_address, format: {with: URI::MailTo::EMAIL_REGEXP, message: "Enter an email in the format name@example.com"},
                             length: {maximum: 256, message: "Email address must be 256 characters or less"},
                             allow_blank: true
 
-  validates :banking_name, on: [:"bank-details", :submit], presence: {message: "Enter the name on your bank account"}
-  validates :bank_sort_code, on: [:"bank-details", :submit], presence: {message: "Enter a sort code"}
-  validates :bank_account_number, on: [:"bank-details", :submit], presence: {message: "Enter an account number"}
+  validates :banking_name, on: [:"bank-details", :submit], presence: {message: "Enter the name on your bank account"}, unless: :has_ecp_policy?
+  validates :bank_sort_code, on: [:"bank-details", :submit], presence: {message: "Enter a sort code"}, unless: :has_ecp_policy?
+  validates :bank_account_number, on: [:"bank-details", :submit], presence: {message: "Enter an account number"}, unless: :has_ecp_policy?
 
-  validates :payroll_gender, on: [:"payroll-gender-task", :submit], presence: {message: "You must select a gender that will be passed to HMRC"}
+  validates :payroll_gender, on: [:"payroll-gender-task", :submit], presence: {message: "You must select a gender that will be passed to HMRC"}, unless: :has_ecp_policy?
 
   validate :bank_account_number_must_be_eight_digits
   validate :bank_sort_code_must_be_six_digits
@@ -193,8 +193,6 @@ class Claim < ApplicationRecord
   end
 
   def submittable?
-    return true if policy == EarlyCareerPayments && !submitted?
-
     valid?(:submit) && !submitted?
   end
 
@@ -300,6 +298,10 @@ class Claim < ApplicationRecord
 
   def decision_undoable?
     decision_made? && !payrolled? && !personal_data_removed?
+  end
+
+  def has_ecp_policy?
+    policy == EarlyCareerPayments
   end
 
   private
