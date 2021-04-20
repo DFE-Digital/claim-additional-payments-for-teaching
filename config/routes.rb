@@ -50,6 +50,10 @@ Rails.application.routes.draw do
     %w[privacy_notice terms_conditions contact_us cookies accessibility_statement].each do |page_name|
       get page_name.dasherize, to: "static_pages##{page_name}", as: page_name
     end
+
+    scope path: "/", constraints: {policy: Policies.all.detect { |policy| policy.routing_name == "early-career-payments" }.routing_name} do
+      get "landing-page", to: "static_pages#landing_page", as: :landing_page
+    end
   end
 
   constraints lambda { |req| req.format == :json } do

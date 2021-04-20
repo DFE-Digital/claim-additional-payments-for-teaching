@@ -207,5 +207,6 @@ en:
     policy_short_name: "Early Career Payments"
     claim_description: "for an early career payment"
     support_email_address: "earlycareerteacherpayments@digital.education.gov.uk"
+    landing_page: "Apply for an early-career payment"
     questions:
       nqt_in_academic_year_after_itt: "Did you do your NQT the academic year after your ITT?"

@@ -2,10 +2,12 @@ require "rails_helper"
 
 RSpec.feature "Teacher Early Career Payments claims" do
   scenario "Teacher makes claim for 'Early Career Payments' claim" do
-    visit new_claim_path(EarlyCareerPayments.routing_name)
+    visit landing_page_path(EarlyCareerPayments.routing_name)
     expect(page).to have_link(href: EarlyCareerPayments.feedback_url)
 
     # TODO [PAGE 00] - Landing (start)
+    expect(page).to have_text(I18n.t("early_career_payments.landing_page"))
+    click_on "Start Now"
 
     # TODO - Investigate usage of new FormBuilder pattern & convert
     # [PAGE 01] - NQT in Academic Year after ITT
@@ -66,7 +68,6 @@ RSpec.feature "Teacher Early Career Payments claims" do
     # TODO [PAGE 38] - Application complete (make sure its Word for Word and styling matches)
     expect(page).to have_text("Claim submitted")
     expect(page).to have_text(claim.reference)
-    expect(page).to have_text(claim.email_address)
   end
 
   # Sad paths

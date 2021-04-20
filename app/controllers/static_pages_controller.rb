@@ -13,4 +13,7 @@ class StaticPagesController < BasePublicController
 
   def terms_conditions
   end
+
+  def landing_page
+  end
 end

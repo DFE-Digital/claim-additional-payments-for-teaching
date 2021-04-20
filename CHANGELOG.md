@@ -12,6 +12,7 @@ The format is based on [Keep a Changelog]
 - Reduce sensitivity of high response time alert
 - Build new Early Career Payments Policy
 - Build new Early Career Payments Journey with following page additions
+  - Add Landing Page - 'Apply for an early-career payment'
   - Eligibility Journey
     - Add 'Did you do your NQT the academic year after your ITT?'
 
