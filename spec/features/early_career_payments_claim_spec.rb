@@ -31,7 +31,14 @@ RSpec.feature "Teacher Early Career Payments claims" do
     expect(claim.eligibility.reload.employed_as_supply_teacher).to eql false
 
     # TODO [PAGE 07] - Are you currently subject to action for poor performance
-    # TODO [PAGE 08] - Are you currently subject to dsiciplinary action
+    # [PAGE 08] - Are you currently subject to dsiciplinary action
+    expect(page).to have_text(I18n.t("early_career_payments.questions.disciplinary_action"))
+
+    choose "No"
+    click_on "Continue"
+
+    expect(claim.eligibility.reload.subject_to_disciplinary_action).to eql false
+
     # TODO [PAGE 09] - Did you do a postgraduate ITT course or undergraduate ITT course
     # TODO [PAGE 10] - Which subject did you do your undergraduate ITT in
     # TODO [PAGE 11] - Which subject did you do your postgraduate ITT in
@@ -118,6 +125,14 @@ RSpec.feature "Teacher Early Career Payments claims" do
     click_on "Continue"
 
     expect(claim.eligibility.reload.employed_directly).to eql true
+
+    # [PAGE 08] - Are you currently subject to dsiciplinary action
+    expect(page).to have_text(I18n.t("early_career_payments.questions.disciplinary_action"))
+
+    choose "No"
+    click_on "Continue"
+
+    expect(claim.eligibility.reload.subject_to_disciplinary_action).to eql false
 
     # TODO [PAGE 37] - Check your answers before sending your application
     expect(page).to have_text("Check your answers before sending your application")

@@ -3,6 +3,7 @@ FactoryBot.define do
     trait :eligible do
       nqt_in_academic_year_after_itt { true }
       employed_as_supply_teacher { false }
+      subject_to_disciplinary_action { false }
     end
   end
 end

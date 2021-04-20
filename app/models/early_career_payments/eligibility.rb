@@ -4,7 +4,8 @@ module EarlyCareerPayments
       :nqt_in_academic_year_after_itt,
       :employed_as_supply_teacher,
       :has_entire_term_contract,
-      :employed_directly
+      :employed_directly,
+      :subject_to_disciplinary_action
     ].freeze
     AMENDABLE_ATTRIBUTES = [].freeze
     ATTRIBUTE_DEPENDENCIES = {
@@ -19,6 +20,7 @@ module EarlyCareerPayments
     validates :employed_as_supply_teacher, on: [:"supply-teacher", :submit], inclusion: {in: [true, false], message: "Select yes if you are currently employed as a supply teacher"}
     validates :has_entire_term_contract, on: [:"entire-term-contract", :submit], inclusion: {in: [true, false], message: "Select yes if you have a contract to teach at the same school for one term or longer"}, if: :employed_as_supply_teacher?
     validates :employed_directly, on: [:"employed-directly", :submit], inclusion: {in: [true, false], message: "Select yes if you are employed directly by your school"}, if: :employed_as_supply_teacher?
+    validates :subject_to_disciplinary_action, on: [:"disciplinary-action", :submit], inclusion: {in: [true, false], message: "Select yes if you are subject to disciplinary action"}
 
     def policy
       EarlyCareerPayments
@@ -27,7 +29,8 @@ module EarlyCareerPayments
     def ineligible?
       ineligible_nqt_in_academic_year_after_itt? ||
         no_entire_term_contract? ||
-        not_employed_directly?
+        not_employed_directly? ||
+        subject_to_disciplinary_action?
     end
 
     def award_amount
