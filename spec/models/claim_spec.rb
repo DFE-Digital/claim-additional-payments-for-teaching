@@ -903,4 +903,28 @@ RSpec.describe Claim, type: :model do
       expect(claim.decision_undoable?).to eq(false)
     end
   end
+
+  describe "Early Career Payments claim" do
+    let(:eligibility) { build(:early_career_payments_eligibility) }
+
+    describe "#submittable?" do
+      it "returns true when the claim is valid and has not been submitted" do
+        claim = build(:claim, :submittable, govuk_verify_fields: [], eligibility: eligibility)
+
+        expect(claim.submittable?).to eq true
+      end
+      it "returns false when it has already been submitted" do
+        claim = build(:claim, :unverified, eligibility: eligibility)
+
+        expect(claim.submittable?).to eq false
+      end
+    end
+
+    it "triggers validations on the eligibility appropriate to the context" do
+      claim = build(:claim, eligibility: eligibility)
+
+      expect(claim).not_to be_valid(:"nqt-in-academic-year-after-itt")
+      expect(claim.errors.values).to include(["Select yes if you did your NQT in the academic year after your ITT"])
+    end
+  end
 end

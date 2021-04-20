@@ -6,9 +6,14 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
-- Remove GOVUK Verify IAS components and from claimant journeys
+- Remove GOVUK Verify IAS components
+- Remove GOVUK Verify from claimant journeys
 - Documentation updates - DFE Signin process
 - Reduce sensitivity of high response time alert
+- Build new Early Career Payments Policy
+- Build new Early Career Payments Journey with following page additions
+  - Eligibility Journey
+    - Add 'Did you do your NQT the academic year after your ITT?'
 
 ## [Release 089] - 2021-03-05
 

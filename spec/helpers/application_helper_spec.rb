@@ -44,6 +44,7 @@ describe ApplicationHelper do
     it "returns a policy-specific email address" do
       expect(support_email_address("student-loans")).to eq t("student_loans.support_email_address")
       expect(support_email_address("maths-and-physics")).to eq t("maths_and_physics.support_email_address")
+      expect(support_email_address("early-career-payments")).to eq t("early_career_payments.support_email_address")
     end
   end
 
@@ -55,6 +56,7 @@ describe ApplicationHelper do
     it "returns a policy-specific service name" do
       expect(policy_service_name("student-loans")).to eq t("student_loans.policy_name")
       expect(policy_service_name("maths-and-physics")).to eq t("maths_and_physics.policy_name")
+      expect(policy_service_name("early-career-payments")).to eq t("early_career_payments.policy_name")
     end
   end
 end

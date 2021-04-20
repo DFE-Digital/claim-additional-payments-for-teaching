@@ -193,6 +193,8 @@ class Claim < ApplicationRecord
   end
 
   def submittable?
+    return true if policy == EarlyCareerPayments && !submitted?
+
     valid?(:submit) && !submitted?
   end
 

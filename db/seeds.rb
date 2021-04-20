@@ -8,6 +8,7 @@
 
 PolicyConfiguration.create!(policy_type: StudentLoans, current_academic_year: AcademicYear.current)
 PolicyConfiguration.create!(policy_type: MathsAndPhysics, current_academic_year: AcademicYear.current)
+PolicyConfiguration.create!(policy_type: EarlyCareerPayments, current_academic_year: AcademicYear.current)
 
 if Rails.env.development? || ENV["ENVIRONMENT_NAME"] == "review"
   ENV["FIXTURES_PATH"] = "spec/fixtures"

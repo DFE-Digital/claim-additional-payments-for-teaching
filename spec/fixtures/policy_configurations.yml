@@ -5,3 +5,7 @@ student_loans:
 maths_and_physics:
   policy_type: MathsAndPhysics
   current_academic_year: "2020/2021"
+
+early_career_payments:
+  policy_type: EarlyCareerPayments
+  current_academic_year: "2020/2021"

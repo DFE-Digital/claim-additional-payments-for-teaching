@@ -7,6 +7,7 @@ RSpec.describe PolicyConfiguration do
     it "returns the configuration for a given policy" do
       expect(PolicyConfiguration.for(StudentLoans)).to eq policy_configurations(:student_loans)
       expect(PolicyConfiguration.for(MathsAndPhysics)).to eq policy_configurations(:maths_and_physics)
+      expect(PolicyConfiguration.for(EarlyCareerPayments)).to eq policy_configurations(:early_career_payments)
     end
   end
 

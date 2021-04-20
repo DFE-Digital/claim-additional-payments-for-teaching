@@ -202,3 +202,10 @@ en:
         employment: "Does the claimant’s previous and current schools match the above information from their claim?"
         student_loan_amount: "Does the claimant’s student loan amount and plan type match the information we hold about their loan?"
         matching_details: "Is this claim still valid despite having matching details with other claims?"
+  early_career_payments:
+    policy_name: "Claim a early career payment"
+    policy_short_name: "Early Career Payments"
+    claim_description: "for an early career payment"
+    support_email_address: "earlycareerteacherpayments@digital.education.gov.uk"
+    questions:
+      nqt_in_academic_year_after_itt: "Did you do your NQT the academic year after your ITT?"
