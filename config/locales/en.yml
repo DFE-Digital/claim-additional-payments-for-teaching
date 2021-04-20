@@ -211,6 +211,7 @@ en:
     ineligible: "You are not eligible"
     questions:
       employed_as_supply_teacher: "Are you currently employed as a supply teacher?"
+      has_entire_term_contract: "Do you have a contract to teach at the same school for an entire term or longer?"
       nqt_in_academic_year_after_itt: "Did you do your NQT the academic year after your ITT?"
     admin:
       employed_as_supply_teacher: "Employed as a supply teacher?"

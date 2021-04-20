@@ -21,10 +21,19 @@ module EarlyCareerPayments
       [].tap do |a|
         a << nqt_in_academic_year_after_itt
         a << employed_as_supply_teacher
+        a << has_entire_term_contract if eligibility.employed_as_supply_teacher?
       end
     end
 
     private
+
+    def has_entire_term_contract
+      [
+        translate("early_career_payments.questions.has_entire_term_contract"),
+        (eligibility.has_entire_term_contract? ? "Yes" : "No"),
+        "entire-term-contract"
+      ]
+    end
 
     def nqt_in_academic_year_after_itt
       [

@@ -108,4 +108,16 @@ module FeatureHelpers
       raise Capybara::ElementNotFound unless element.visible?
     end
   end
+
+  # Early Career Payment Policy specific helpers
+  def start_early_career_payments_claim
+    visit new_claim_path(EarlyCareerPayments.routing_name)
+    choose_nqt_in_academic_year_after_itt
+    Claim.order(:created_at).last
+  end
+
+  def choose_nqt_in_academic_year_after_itt
+    choose "Yes"
+    click_on "Continue"
+  end
 end

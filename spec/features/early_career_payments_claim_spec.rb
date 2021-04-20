@@ -30,7 +30,6 @@ RSpec.feature "Teacher Early Career Payments claims" do
 
     expect(claim.eligibility.reload.employed_as_supply_teacher).to eql false
 
-    # TODO [PAGE 05] - Do you have a contract to teach at the same school
     # TODO [PAGE 06] - Are you employed directly by your school
     # TODO [PAGE 07] - Are you currently subject to action for poor performance
     # TODO [PAGE 08] - Are you currently subject to dsiciplinary action
@@ -74,5 +73,46 @@ RSpec.feature "Teacher Early Career Payments claims" do
     # TODO [PAGE 38] - Application complete (make sure its Word for Word and styling matches)
     expect(page).to have_text("Claim submitted")
     expect(page).to have_text(claim.reference)
+  end
+
+  scenario "Supply Teacher makes claim for 'Early Career Payments' with a contract to teach for entire term" do
+    visit landing_page_path(EarlyCareerPayments.routing_name)
+    expect(page).to have_link(href: EarlyCareerPayments.feedback_url)
+
+    # [PAGE 00] - Landing (start)
+    expect(page).to have_text(I18n.t("early_career_payments.landing_page"))
+    click_on "Start Now"
+
+    # [PAGE 01] - NQT in Academic Year after ITT
+    expect(page).to have_text(I18n.t("early_career_payments.questions.nqt_in_academic_year_after_itt"))
+
+    choose "Yes"
+    click_on "Continue"
+
+    claim = Claim.order(:created_at).last
+    eligibility = claim.eligibility
+
+    expect(eligibility.nqt_in_academic_year_after_itt).to eql true
+
+    # TODO [PAGE 02] - Which school do you teach at
+    # TODO [PAGE 03] - Select the school you teach at
+    # [PAGE 04] - Are you currently employed as a supply teacher
+    expect(page).to have_text(I18n.t("early_career_payments.questions.employed_as_supply_teacher"))
+
+    choose "Yes"
+    click_on "Continue"
+
+    expect(claim.eligibility.reload.employed_as_supply_teacher).to eql true
+
+    # [PAGE 05] - Do you have a contract to teach at the same school for an entire term or longer
+    expect(page).to have_text(I18n.t("early_career_payments.questions.has_entire_term_contract"))
+
+    choose "Yes"
+    click_on "Continue"
+
+    expect(claim.eligibility.reload.has_entire_term_contract).to eql true
+
+    # TODO [PAGE 37] - Check your answers before sending your application
+    expect(page).to have_text("Check your answers before sending your application")
   end
 end
