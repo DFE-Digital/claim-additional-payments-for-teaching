@@ -69,9 +69,4 @@ RSpec.feature "Teacher Early Career Payments claims" do
     expect(page).to have_text("Claim submitted")
     expect(page).to have_text(claim.reference)
   end
-
-  # Sad paths
-  # TODO [PAGE 17] - This school is not eligible (sad path)
-  # TODO [PAGE 18] - You are not eligible for an early career payment
-  # TODO [PAGE 19] - You will be eligible for an early career payment in 2022
 end
