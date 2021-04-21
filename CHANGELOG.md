@@ -20,6 +20,7 @@ The format is based on [Keep a Changelog]
     - Add 'Do you have a contract to teach at the same school for an entire term
       or longer?'
     - Add 'Are you currently subject to disciplinary action?'
+    - Add 'Did you do a postgraduate ITT course or an undergraduate ITT course?'
     - Add 'You are not eligible for an early careers payment'
 - Automatically update admin claim tasks with DQT API
 

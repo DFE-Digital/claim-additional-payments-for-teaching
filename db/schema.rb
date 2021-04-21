@@ -117,6 +117,7 @@ ActiveRecord::Schema.define(version: 2021_04_22_225248) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.boolean "employed_as_supply_teacher"
+    t.integer "pgitt_or_ugitt_course"
     t.boolean "has_entire_term_contract"
     t.boolean "employed_directly"
     t.boolean "subject_to_disciplinary_action"

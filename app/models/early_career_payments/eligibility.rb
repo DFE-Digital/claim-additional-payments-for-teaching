@@ -5,7 +5,8 @@ module EarlyCareerPayments
       :employed_as_supply_teacher,
       :has_entire_term_contract,
       :employed_directly,
-      :subject_to_disciplinary_action
+      :subject_to_disciplinary_action,
+      :pgitt_or_ugitt_course
     ].freeze
     AMENDABLE_ATTRIBUTES = [].freeze
     ATTRIBUTE_DEPENDENCIES = {
@@ -14,6 +15,11 @@ module EarlyCareerPayments
 
     self.table_name = "early_career_payments_eligibilities"
 
+    enum pgitt_or_ugitt_course: {
+      postgraduate: 0,
+      undergraduate: 1
+    }, _suffix: :itt_course
+
     has_one :claim, as: :eligibility, inverse_of: :eligibility
 
     validates :nqt_in_academic_year_after_itt, on: [:"nqt-in-academic-year-after-itt", :submit], inclusion: {in: [true, false], message: "Select yes if you did your NQT in the academic year after your ITT"}
@@ -21,6 +27,7 @@ module EarlyCareerPayments
     validates :has_entire_term_contract, on: [:"entire-term-contract", :submit], inclusion: {in: [true, false], message: "Select yes if you have a contract to teach at the same school for one term or longer"}, if: :employed_as_supply_teacher?
     validates :employed_directly, on: [:"employed-directly", :submit], inclusion: {in: [true, false], message: "Select yes if you are employed directly by your school"}, if: :employed_as_supply_teacher?
     validates :subject_to_disciplinary_action, on: [:"disciplinary-action", :submit], inclusion: {in: [true, false], message: "Select yes if you are subject to disciplinary action"}
+    validates :pgitt_or_ugitt_course, on: [:"postgraduate-itt-or-undergraduate-itt-course", :submit], presence: {message: "Select postgraduate if you did a Postgraduate ITT course"}
 
     def policy
       EarlyCareerPayments
