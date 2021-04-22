@@ -15,6 +15,7 @@ The format is based on [Keep a Changelog]
   - Add Landing Page - 'Apply for an early-career payment'
   - Eligibility Journey
     - Add 'Did you do your NQT the academic year after your ITT?'
+    - Add 'You are not eligible for an early careers payment'
 
 ## [Release 089] - 2021-03-05
 
