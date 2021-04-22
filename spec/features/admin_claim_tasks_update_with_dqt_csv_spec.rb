@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.feature "Admins automated qualification check" do
+RSpec.feature "Admin claim tasks update with DQT CSV" do
   before { sign_in_as_service_operator }
 
   scenario "Service operators can upload and run automated DQT checks" do

@@ -111,7 +111,8 @@ module Dqt
 
     let(:client_args) do
       {
-        host: "test"
+        host: "test",
+        port: nil
       }
     end
 

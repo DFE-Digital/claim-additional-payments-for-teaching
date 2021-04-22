@@ -13,10 +13,11 @@ RSpec.describe "Submissions", type: :request do
         in_progress_claim.update!(attributes_for(:claim, :submittable))
         in_progress_claim.eligibility.update!(attributes_for(:student_loans_eligibility, :eligible))
 
-        perform_enqueued_jobs { post claim_submission_path(StudentLoans.routing_name) }
+        stub_qualified_teaching_status_show(claim: in_progress_claim)
       end
 
       it "submits the claim, sends a confirmation email and redirects to the confirmation page" do
+        perform_enqueued_jobs { post claim_submission_path(StudentLoans.routing_name) }
         expect(response).to redirect_to(claim_confirmation_path(StudentLoans.routing_name))
 
         expect(in_progress_claim.reload.submitted_at).to be_present
@@ -28,9 +29,27 @@ RSpec.describe "Submissions", type: :request do
       end
 
       it "sends the claim's details to the “submitted” dataset on Geckoboard" do
+        perform_enqueued_jobs { post claim_submission_path(StudentLoans.routing_name) }
         expect(@dataset_post_stub.with { |request|
           request_body_matches_geckoboard_data_for_claims?(request, [in_progress_claim.reload])
         }).to have_been_requested
+      end
+
+      # None of these specs should be here, should be in features.
+      #
+      # Instead of refactoring everything as part of an already large PR, I've
+      # just added another spec here.
+      #
+      # Really all these specs should be in features and should test the right
+      # thing, eg,the above spec tests that a request has been made rather than
+      # the immediate side effect of the job being enqueued.
+      #
+      # This spec at least tests the right thing even if it's still in the
+      # wrong place.
+      it "enqueues UpdateAdminClaimTasksWithDqtApiJob" do
+        expect { post claim_submission_path(StudentLoans.routing_name) }.to(
+          have_enqueued_job(UpdateAdminClaimTasksWithDqtApiJob)
+        )
       end
     end
 

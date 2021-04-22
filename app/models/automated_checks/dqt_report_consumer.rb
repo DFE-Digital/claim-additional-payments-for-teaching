@@ -28,8 +28,11 @@ module AutomatedChecks
           claim = claim_for_record(record)
 
           if claim
-            perform_qualification_check(claim, record)
-            perform_identity_confirmation(claim, record)
+            @completed_tasks += UpdateAdminClaimTasksWithDqt.new(
+              claim: claim,
+              admin_user: @admin_user,
+              dqt_teacher_status: record
+            ).perform
           end
         end
       end
@@ -45,20 +48,6 @@ module AutomatedChecks
 
     private
 
-    def perform_qualification_check(claim, record)
-      if awaiting_task?(claim, "qualifications") && claim.policy::DqtRecord.new(record).eligible?
-        claim.tasks.create!(task_attributes("qualifications"))
-        @completed_tasks += 1
-      end
-    end
-
-    def perform_identity_confirmation(claim, record)
-      if claim.identity_verified? && awaiting_task?(claim, "identity_confirmation") && identity_matches?(claim, record)
-        claim.tasks.create!(task_attributes("identity_confirmation"))
-        @completed_tasks += 1
-      end
-    end
-
     def claims
       @claims ||= Claim.awaiting_decision.includes(:tasks)
     end
@@ -67,25 +56,8 @@ module AutomatedChecks
       claims.detect { |c| c.reference == record.fetch(:claim_reference) }
     end
 
-    def awaiting_task?(claim, task_name)
-      claim.tasks.none? { |task| task.name == task_name }
-    end
-
-    def identity_matches?(claim, record)
-      record.fetch(:date_of_birth) == claim.date_of_birth && record.fetch(:surname)&.casecmp?(claim.surname)
-    end
-
     def dqt_records
       @dqt_records ||= DqtReportCsvToRecords.new(@csv.rows).transform
-    end
-
-    def task_attributes(task_name)
-      {
-        name: task_name,
-        passed: true,
-        manual: false,
-        created_by: @admin_user
-      }
     end
   end
 end
