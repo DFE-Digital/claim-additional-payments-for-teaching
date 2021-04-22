@@ -49,4 +49,8 @@ module EarlyCareerPayments
   def last_ineligible_qts_award_year
     first_eligible_qts_award_year - 1
   end
+
+  def student_loan_balance_url
+    "https://www.gov.uk/sign-in-to-manage-your-student-loan-balance"
+  end
 end
