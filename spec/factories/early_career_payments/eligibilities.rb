@@ -5,6 +5,7 @@ FactoryBot.define do
       employed_as_supply_teacher { false }
       subject_to_disciplinary_action { false }
       pgitt_or_ugitt_course { :postgraduate }
+      eligible_itt_subject { 2 }
     end
   end
 end
