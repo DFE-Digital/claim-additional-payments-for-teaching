@@ -1,11 +1,13 @@
 <%= render("shared/error_summary", instance: current_claim, errored_field_id_overrides: { school_search: "school_search" }) if current_claim.errors.any? %>
+<% shared_view_css_size = current_claim.policy == EarlyCareerPayments ? "l" : "xl" %>
 
 <%= form_for current_claim,
              url: claim_path(current_policy_routing_name),
              method: :get,
              data: {
                "school-id-param": "claim_eligibility_attributes_#{school_id_param}",
-               "exclude-closed": exclude_closed
+               "exclude-closed": exclude_closed,
+               "current-policy": current_policy_routing_name
              },
              html: { class: "school_search_form" } do |form|
 %>
@@ -19,10 +21,16 @@
   <%= form_group_tag current_claim, :school_search do %>
 
     <%= hidden_field_tag :exclude_closed, exclude_closed, id: nil %>
-
-    <h1 class="govuk-label-wrapper">
-      <%= label_tag :school_search, question, class: "govuk-label govuk-label--xl" %>
-    </h1>
+   
+   <% if current_claim.has_ecp_policy? %>
+     <h1 class="govuk-label-wrapper">
+      <%= label_tag :school_search, ecp_question, class: "govuk-label govuk-label--#{shared_view_css_size}" %>
+     </h1>
+   <% else %>
+     <h1 class="govuk-label-wrapper">
+       <%= label_tag :school_search, question, class: "govuk-label govuk-label--#{shared_view_css_size}" %>
+     </h1>
+   <% end %>  
 
     <% if params[:school_search].present? && current_claim.errors.empty? %>
       <p class="govuk-body">

@@ -20,8 +20,12 @@ RSpec.feature "Teacher Early Career Payments claims" do
 
     expect(eligibility.nqt_in_academic_year_after_itt).to eql true
 
-    # TODO [PAGE 02] - Which school do you teach at
-    # TODO [PAGE 03] - Select the school you teach at
+    # [PAGE 02/03] - Which school do you teach at
+    expect(page).to have_text(I18n.t("early_career_payments.questions.current_school_search"))
+
+    choose_school schools(:penistone_grammar_school)
+    expect(claim.eligibility.reload.current_school).to eql schools(:penistone_grammar_school)
+
     # [PAGE 04] - Are you currently employed as a supply teacher
     expect(page).to have_text(I18n.t("early_career_payments.questions.employed_as_supply_teacher"))
 
@@ -288,8 +292,12 @@ RSpec.feature "Teacher Early Career Payments claims" do
 
     expect(eligibility.nqt_in_academic_year_after_itt).to eql true
 
-    # TODO [PAGE 02] - Which school do you teach at
-    # TODO [PAGE 03] - Select the school you teach at
+    # [PAGE 02/03] - Which school do you teach at
+    expect(page).to have_text(I18n.t("early_career_payments.questions.current_school_search"))
+
+    choose_school schools(:penistone_grammar_school)
+    expect(claim.eligibility.reload.current_school).to eql schools(:penistone_grammar_school)
+
     # [PAGE 04] - Are you currently employed as a supply teacher
     expect(page).to have_text(I18n.t("early_career_payments.questions.employed_as_supply_teacher"))
 

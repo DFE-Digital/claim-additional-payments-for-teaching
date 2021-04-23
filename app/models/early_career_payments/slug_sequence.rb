@@ -13,6 +13,7 @@ module EarlyCareerPayments
     SLUGS = [
       # eligibility phase of claim journey
       "nqt-in-academic-year-after-itt",
+      "current-school",
       "supply-teacher",
       "entire-term-contract",
       "employed-directly",

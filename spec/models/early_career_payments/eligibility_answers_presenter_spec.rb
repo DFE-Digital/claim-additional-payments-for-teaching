@@ -4,6 +4,7 @@ RSpec.describe EarlyCareerPayments::EligibilityAnswersPresenter, type: :model do
   let(:eligibility_attributes) do
     {
       nqt_in_academic_year_after_itt: true,
+      current_school: schools(:penistone_grammar_school),
       employed_as_supply_teacher: false,
       subject_to_formal_performance_action: false,
       subject_to_disciplinary_action: false,
@@ -21,6 +22,7 @@ RSpec.describe EarlyCareerPayments::EligibilityAnswersPresenter, type: :model do
   it "returns an array of questions and answers to be presented to the user for checking" do
     expected_answers = [
       [I18n.t("early_career_payments.questions.nqt_in_academic_year_after_itt"), "Yes", "nqt-in-academic-year-after-itt"],
+      [I18n.t("questions.current_school"), "Penistone Grammar School", "current-school"],
       [I18n.t("early_career_payments.questions.employed_as_supply_teacher"), "No", "supply-teacher"],
       [I18n.t("early_career_payments.questions.formal_performance_action"), "No", "formal-performance-action"],
       [I18n.t("early_career_payments.questions.disciplinary_action"), "No", "disciplinary-action"],
@@ -53,6 +55,7 @@ RSpec.describe EarlyCareerPayments::EligibilityAnswersPresenter, type: :model do
     let(:eligibility_attributes) do
       {
         nqt_in_academic_year_after_itt: true,
+        current_school: schools(:penistone_grammar_school),
         employed_as_supply_teacher: true,
         has_entire_term_contract: true,
         employed_directly: true,
@@ -68,6 +71,7 @@ RSpec.describe EarlyCareerPayments::EligibilityAnswersPresenter, type: :model do
     it "includes supply teacher questions" do
       expected_answers = [
         [I18n.t("early_career_payments.questions.nqt_in_academic_year_after_itt"), "Yes", "nqt-in-academic-year-after-itt"],
+        [I18n.t("questions.current_school"), "Penistone Grammar School", "current-school"],
         [I18n.t("early_career_payments.questions.employed_as_supply_teacher"), "Yes", "supply-teacher"],
         [I18n.t("early_career_payments.questions.has_entire_term_contract"), "Yes", "entire-term-contract"],
         [I18n.t("early_career_payments.questions.employed_directly"), "Yes", "employed-directly"],

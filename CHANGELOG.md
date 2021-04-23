@@ -16,6 +16,7 @@ The format is based on [Keep a Changelog]
   - Eligibility Journey
     - Add 'Are you employed directly by your school?'
     - Add 'Did you do your NQT the academic year after your ITT?'
+    - Add 'Which school do you teach at?'
     - Add 'Are you currently employed as a Supply Teacher?'
     - Add 'Do you have a contract to teach at the same school for an entire term
       or longer?'
