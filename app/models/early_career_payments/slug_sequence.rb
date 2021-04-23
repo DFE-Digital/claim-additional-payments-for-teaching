@@ -17,6 +17,7 @@ module EarlyCareerPayments
       "disciplinary-action",
       "postgraduate-itt-or-undergraduate-itt-course",
       "eligible-itt-subject",
+      "teaching-subject-now",
       "check-your-answers",
       "ineligible"
     ].freeze

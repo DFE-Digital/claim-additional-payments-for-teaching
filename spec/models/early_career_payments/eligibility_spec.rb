@@ -11,7 +11,7 @@ RSpec.describe EarlyCareerPayments::Eligibility, type: :model do
     end
   end
 
-  describe "pgitt_or_ugitt attribute" do
+  describe "pgitt_or_ugitt_course attribute" do
     it "rejects invalid values" do
       expect { EarlyCareerPayments::Eligibility.new(pgitt_or_ugitt_course: "non-existance") }.to raise_error(ArgumentError)
     end
@@ -64,6 +64,11 @@ RSpec.describe EarlyCareerPayments::Eligibility, type: :model do
       expect(EarlyCareerPayments::Eligibility.new(eligible_itt_subject: :none_of_the_above).ineligible?).to eql true
       expect(EarlyCareerPayments::Eligibility.new(eligible_itt_subject: :mathematics).ineligible?).to eql false
     end
+
+    it "returns true when teaching now the course indentified as being eligible ITT subject" do
+      expect(EarlyCareerPayments::Eligibility.new(teaching_subject_now: false).ineligible?).to eql true
+      expect(EarlyCareerPayments::Eligibility.new(teaching_subject_now: true).ineligible?).to eql false
+    end
   end
 
   describe "#award_amount" do
@@ -79,8 +84,41 @@ RSpec.describe EarlyCareerPayments::Eligibility, type: :model do
         :eligible,
         employed_as_supply_teacher: true,
         has_entire_term_contract: false,
-        employed_directly: false
+        employed_directly: false,
+        pgitt_or_ugitt_course: :undergraduate,
+        eligible_itt_subject: :none_of_the_above,
+        teaching_subject_now: false
       )
+    end
+
+    it "resets 'eligible_itt_subject' when value of 'pgitt_or_ugitt_course' changes" do
+      eligibility.pgitt_or_ugitt_course = :undergraduate
+      expect { eligibility.reset_dependent_answers }.not_to change { eligibility.attributes }
+
+      eligibility.pgitt_or_ugitt_course = :postgraduate
+      expect { eligibility.reset_dependent_answers }
+        .to change { eligibility.eligible_itt_subject }
+        .from("none_of_the_above").to(nil)
+    end
+
+    it "resets 'teaching_subject_now' when value of 'pgitt_or_ugitt_course' changes" do
+      eligibility.pgitt_or_ugitt_course = :undergraduate
+      expect { eligibility.reset_dependent_answers }.not_to change { eligibility.attributes }
+
+      eligibility.pgitt_or_ugitt_course = :postgraduate
+      expect { eligibility.reset_dependent_answers }
+        .to change { eligibility.teaching_subject_now }
+        .from(false).to(nil)
+    end
+
+    it "resets 'teaching_subject_now' when value of 'eligible_itt_subject' changes" do
+      eligibility.eligible_itt_subject = :none_of_the_above
+      expect { eligibility.reset_dependent_answers }.not_to change { eligibility.attributes }
+
+      eligibility.eligible_itt_subject = :modern_foreign_languages
+      expect { eligibility.reset_dependent_answers }
+        .to change { eligibility.teaching_subject_now }
+        .from(false).to(nil)
     end
 
     it "resets 'has_entire_term_contract' when the value of 'employed_as_supply_teacher' changes" do
@@ -160,6 +198,14 @@ RSpec.describe EarlyCareerPayments::Eligibility, type: :model do
         expect(EarlyCareerPayments::Eligibility.new(eligible_itt_subject: :chemistry)).to be_valid(:"eligible-itt-subject")
         expect(EarlyCareerPayments::Eligibility.new(eligible_itt_subject: :physics)).to be_valid(:"eligible-itt-subject")
         expect(EarlyCareerPayments::Eligibility.new(eligible_itt_subject: :modern_foreign_languages)).to be_valid(:"eligible-itt-subject")
+      end
+    end
+
+    context "when saving in the 'teaching_subject_now' context" do
+      it "is not valid without a value for 'teaching_subject_now'" do
+        expect(EarlyCareerPayments::Eligibility.new).not_to be_valid(:"teaching-subject-now")
+        expect(EarlyCareerPayments::Eligibility.new(teaching_subject_now: true)).to be_valid(:"teaching-subject-now")
+        expect(EarlyCareerPayments::Eligibility.new(teaching_subject_now: false)).to be_valid(:"teaching-subject-now")
       end
     end
   end

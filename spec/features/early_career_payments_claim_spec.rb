@@ -57,6 +57,13 @@ RSpec.feature "Teacher Early Career Payments claims" do
 
     # TODO [PAGE 11] - Which subject did you do your postgraduate ITT in
     # TODO [PAGE 12] - Do you teach maths now
+    expect(page).to have_text(I18n.t("early_career_payments.questions.teaching_subject_now", eligible_itt_subject: claim.eligibility.eligible_itt_subject))
+
+    choose "Yes"
+    click_on "Continue"
+
+    expect(claim.eligibility.reload.teaching_subject_now).to eql true
+
     # TODO [PAGE 13] - In what academic year did you start your undergraduate ITT
     # TODO [PAGE 14] - In what academic year did you start your postgraduate ITT
     # TODO [PAGE 15] - Check your answers for eligibility

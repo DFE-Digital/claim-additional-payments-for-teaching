@@ -7,7 +7,8 @@ RSpec.describe EarlyCareerPayments::EligibilityAnswersPresenter do
       employed_as_supply_teacher: false,
       subject_to_disciplinary_action: false,
       pgitt_or_ugitt_course: :postgraduate,
-      eligible_itt_subject: :chemistry
+      eligible_itt_subject: :chemistry,
+      teaching_subject_now: true
     }
   end
   let(:eligibility) { claim.eligibility }
@@ -25,6 +26,11 @@ RSpec.describe EarlyCareerPayments::EligibilityAnswersPresenter do
         I18n.t("early_career_payments.questions.eligible_itt_subject", ug_or_pg: eligibility.pgitt_or_ugitt_course),
         "Chemistry",
         "eligible-itt-subject"
+      ],
+      [
+        I18n.t("early_career_payments.questions.teaching_subject_now", eligible_itt_subject: eligibility.eligible_itt_subject),
+        "Yes",
+        "teaching-subject-now"
       ]
     ]
 
@@ -40,7 +46,8 @@ RSpec.describe EarlyCareerPayments::EligibilityAnswersPresenter do
         employed_directly: true,
         subject_to_disciplinary_action: false,
         pgitt_or_ugitt_course: :postgraduate,
-        eligible_itt_subject: :modern_foreign_languages
+        eligible_itt_subject: :modern_foreign_languages,
+        teaching_subject_now: true
       }
     end
 
@@ -60,6 +67,11 @@ RSpec.describe EarlyCareerPayments::EligibilityAnswersPresenter do
           I18n.t("early_career_payments.questions.eligible_itt_subject", ug_or_pg: eligibility.pgitt_or_ugitt_course),
           "Modern foreign languages",
           "eligible-itt-subject"
+        ],
+        [
+          I18n.t("early_career_payments.questions.teaching_subject_now", eligible_itt_subject: eligibility.eligible_itt_subject),
+          "Yes",
+          "teaching-subject-now"
         ]
       ]
 

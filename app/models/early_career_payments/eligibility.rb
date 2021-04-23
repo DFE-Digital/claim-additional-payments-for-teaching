@@ -7,11 +7,14 @@ module EarlyCareerPayments
       :employed_directly,
       :subject_to_disciplinary_action,
       :pgitt_or_ugitt_course,
-      :eligible_itt_subject
+      :eligible_itt_subject,
+      :teaching_subject_now
     ].freeze
     AMENDABLE_ATTRIBUTES = [].freeze
     ATTRIBUTE_DEPENDENCIES = {
-      "employed_as_supply_teacher" => ["has_entire_term_contract", "employed_directly"]
+      "employed_as_supply_teacher" => ["has_entire_term_contract", "employed_directly"],
+      "pgitt_or_ugitt_course" => ["eligible_itt_subject", "teaching_subject_now"],
+      "eligible_itt_subject" => ["teaching_subject_now"]
     }.freeze
 
     self.table_name = "early_career_payments_eligibilities"
@@ -38,6 +41,7 @@ module EarlyCareerPayments
     validates :subject_to_disciplinary_action, on: [:"disciplinary-action", :submit], inclusion: {in: [true, false], message: "Select yes if you are subject to disciplinary action"}
     validates :pgitt_or_ugitt_course, on: [:"postgraduate-itt-or-undergraduate-itt-course", :submit], presence: {message: "Select postgraduate if you did a Postgraduate ITT course"}
     validates :eligible_itt_subject, on: [:"eligible-itt-subject", :submit], presence: {message: "Select if you completed your initial teacher training in Chemistry, Mathematics, Modern Foreign Languages, Physics or None of these subjects"}
+    validates :teaching_subject_now, on: [:"teaching-subject-now", :submit], inclusion: {in: [true, false], message: "Select yes if you are currently teaching in your ITT subject now"}
 
     def policy
       EarlyCareerPayments
@@ -48,7 +52,8 @@ module EarlyCareerPayments
         no_entire_term_contract? ||
         not_employed_directly? ||
         subject_to_disciplinary_action? ||
-        not_supported_itt_subject?
+        not_supported_itt_subject? ||
+        not_teaching_now_in_eligible_itt_subject?
     end
 
     def award_amount
@@ -79,6 +84,10 @@ module EarlyCareerPayments
 
     def not_supported_itt_subject?
       itt_subject_none_of_the_above?
+    end
+
+    def not_teaching_now_in_eligible_itt_subject?
+      teaching_subject_now == false
     end
   end
 end
