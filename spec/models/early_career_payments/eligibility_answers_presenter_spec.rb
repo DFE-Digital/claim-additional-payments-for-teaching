@@ -20,4 +20,24 @@ RSpec.describe EarlyCareerPayments::EligibilityAnswersPresenter do
 
     expect(presenter.answers).to eq(expected_answers)
   end
+
+  context "when employed as a supply teacher" do
+    let(:eligibility_attributes) do
+      {
+        nqt_in_academic_year_after_itt: true,
+        employed_as_supply_teacher: true,
+        has_entire_term_contract: true
+      }
+    end
+
+    it "includes supply teacher questions" do
+      expected_answers = [
+        [I18n.t("early_career_payments.questions.nqt_in_academic_year_after_itt"), "Yes", "nqt-in-academic-year-after-itt"],
+        [I18n.t("early_career_payments.questions.employed_as_supply_teacher"), "Yes", "supply-teacher"],
+        [I18n.t("early_career_payments.questions.has_entire_term_contract"), "Yes", "entire-term-contract"]
+      ]
+
+      expect(presenter.answers).to eq(expected_answers)
+    end
+  end
 end

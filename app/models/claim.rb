@@ -306,6 +306,10 @@ class Claim < ApplicationRecord
 
   private
 
+  def is_ecp_policy?
+    policy == EarlyCareerPayments
+  end
+
   def normalise_trn
     self.teacher_reference_number = normalised_trn
   end

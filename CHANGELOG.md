@@ -16,6 +16,8 @@ The format is based on [Keep a Changelog]
   - Eligibility Journey
     - Add 'Did you do your NQT the academic year after your ITT?'
     - Add 'Are you currently employed as a Supply Teacher?'
+    - Add 'Do you have a contract to teach at the same school for an entire term
+      or longer?'
     - Add 'You are not eligible for an early careers payment'
 - Automatically update admin claim tasks with DQT API
 

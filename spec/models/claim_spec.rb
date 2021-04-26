@@ -524,6 +524,7 @@ RSpec.describe Claim, type: :model do
 
       context "when submitted" do
         let(:trait) { :submitted }
+
         it "returns false" do
           expect(claim.submittable?).to eq false
         end
