@@ -27,6 +27,7 @@ module EarlyCareerPayments
         a << pgitt_or_ugitt_course
         a << eligible_itt_subject
         a << teaching_subject_now
+        a << itt_academic_year
       end
     end
 
@@ -93,6 +94,20 @@ module EarlyCareerPayments
         translate("early_career_payments.questions.teaching_subject_now", eligible_itt_subject: eligibility.eligible_itt_subject),
         (eligibility.teaching_subject_now? ? "Yes" : "No"),
         "teaching-subject-now"
+      ]
+    end
+
+    def itt_academic_year
+      puts eligibility.inspect
+      puts eligibility.itt_academic_year
+      [
+        translate(
+          "early_career_payments.questions.itt_academic_year",
+          start_or_complete: (eligibility.pgitt_or_ugitt_course == "postgraduate" ? "start" : "complete"),
+          ug_or_pg: eligibility.pgitt_or_ugitt_course
+        ),
+        eligibility.itt_academic_year.dasherize.gsub("-", " - "),
+        "itt-year"
       ]
     end
   end

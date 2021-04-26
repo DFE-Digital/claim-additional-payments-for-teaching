@@ -23,6 +23,7 @@ The format is based on [Keep a Changelog]
     - Add 'Did you do a postgraduate ITT course or an undergraduate ITT course?'
     - Add 'Which subject did you do your undergraduate ITT in?'
     - Add 'Do you teach ITT subject now?'
+    - Add 'In what academic year did you complete your undergraduate ITT?'
     - Add 'You are not eligible for an early careers payment'
 - Automatically update admin claim tasks with DQT API
 

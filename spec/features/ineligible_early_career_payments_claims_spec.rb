@@ -20,7 +20,7 @@ RSpec.feature "Ineligible Teacher Early Career Payments claims" do
     expect(page).to have_text("Based on the answers you have provided you are not eligible #{I18n.t("early_career_payments.claim_description")}")
   end
 
-  scenario "When suject to disciplinary action" do
+  scenario "When subject to disciplinary action" do
     start_early_career_payments_claim
 
     # [PAGE 04] - Are you currently employed as a supply teacher
@@ -81,6 +81,106 @@ RSpec.feature "Ineligible Teacher Early Career Payments claims" do
 
     choose "No"
     click_on "Continue"
+
+    expect(page).to have_text(I18n.t("early_career_payments.ineligible"))
+    expect(page).to have_link(href: EarlyCareerPayments.eligibility_page_url)
+    expect(page).to have_text("Based on the answers you have provided you are not eligible #{I18n.t("early_career_payments.claim_description")}")
+  end
+
+  scenario "when no longer teaching an eligible ITT subject" do
+    start_early_career_payments_claim
+    claim = Claim.order(:created_at).last
+
+    # [PAGE 04] - Are you currently employed as a supply teacher
+    expect(page).to have_text(I18n.t("early_career_payments.questions.employed_as_supply_teacher"))
+
+    choose "No"
+    click_on "Continue"
+
+    # TODO [PAGE 07] - Are you currently subject to action for poor performance
+    # [PAGE 08] - Are you currently subject to dsiciplinary action
+    expect(page).to have_text(I18n.t("early_career_payments.questions.disciplinary_action"))
+
+    choose "No"
+    click_on "Continue"
+
+    # [PAGE 09] - Did you do a postgraduate ITT course or undergraduate ITT course
+    expect(page).to have_text(I18n.t("early_career_payments.questions.postgraduate_itt_or_undergraduate_itt_course"))
+
+    choose "Undergraduate"
+    click_on "Continue"
+
+    expect(claim.eligibility.reload.pgitt_or_ugitt_course).to eq "undergraduate"
+
+    # [PAGE 10] - Which subject did you do your undergraduate ITT in
+    expect(page).to have_text(I18n.t("early_career_payments.questions.eligible_itt_subject", ug_or_pg: claim.eligibility.pgitt_or_ugitt_course))
+
+    choose "Modern foreign languages"
+    click_on "Continue"
+
+    expect(claim.eligibility.reload.eligible_itt_subject).to eql "modern_foreign_languages"
+
+    # [PAGE 12] - Do you teach the eligible ITT subject now
+    expect(page).to have_text(I18n.t("early_career_payments.questions.teaching_subject_now", eligible_itt_subject: claim.eligibility.eligible_itt_subject.humanize.downcase))
+
+    choose "No"
+    click_on "Continue"
+
+    expect(claim.eligibility.reload.teaching_subject_now).to eql false
+
+    expect(page).to have_text(I18n.t("early_career_payments.ineligible"))
+    expect(page).to have_link(href: EarlyCareerPayments.eligibility_page_url)
+    expect(page).to have_text("Based on the answers you have provided you are not eligible #{I18n.t("early_career_payments.claim_description")}")
+  end
+
+  scenario "when academic year completed undergraduate ITT or started postgraduate ITT is 'none of the above'" do
+    start_early_career_payments_claim
+    claim = Claim.order(:created_at).last
+
+    # [PAGE 04] - Are you currently employed as a supply teacher
+    expect(page).to have_text(I18n.t("early_career_payments.questions.employed_as_supply_teacher"))
+
+    choose "No"
+    click_on "Continue"
+
+    # TODO [PAGE 07] - Are you currently subject to action for poor performance
+    # [PAGE 08] - Are you currently subject to dsiciplinary action
+    expect(page).to have_text(I18n.t("early_career_payments.questions.disciplinary_action"))
+
+    choose "No"
+    click_on "Continue"
+
+    # [PAGE 09] - Did you do a postgraduate ITT course or undergraduate ITT course
+    expect(page).to have_text(I18n.t("early_career_payments.questions.postgraduate_itt_or_undergraduate_itt_course"))
+
+    choose "Undergraduate"
+    click_on "Continue"
+
+    expect(claim.eligibility.reload.pgitt_or_ugitt_course).to eq "undergraduate"
+
+    # [PAGE 10] - Which subject did you do your undergraduate ITT in
+    expect(page).to have_text(I18n.t("early_career_payments.questions.eligible_itt_subject", ug_or_pg: claim.eligibility.pgitt_or_ugitt_course))
+
+    choose "Modern foreign languages"
+    click_on "Continue"
+
+    expect(claim.eligibility.reload.eligible_itt_subject).to eql "modern_foreign_languages"
+
+    # [PAGE 12] - Do you teach the eligible ITT subject now
+    expect(page).to have_text(I18n.t("early_career_payments.questions.teaching_subject_now", eligible_itt_subject: claim.eligibility.eligible_itt_subject.humanize.downcase))
+
+    choose "Yes"
+    click_on "Continue"
+
+    expect(claim.eligibility.reload.teaching_subject_now).to eql true
+
+    # [PAGE 13] - In what academic year did you start your undergraduate ITT
+    expect(page).to have_text(I18n.t("early_career_payments.questions.itt_academic_year", start_or_complete: "complete", ug_or_pg: claim.eligibility.pgitt_or_ugitt_course))
+
+    choose "None of the above"
+    click_on "Continue"
+
+    expect(claim.eligibility.reload.itt_academic_year).to eql "none_of_the_above"
 
     expect(page).to have_text(I18n.t("early_career_payments.ineligible"))
     expect(page).to have_link(href: EarlyCareerPayments.eligibility_page_url)

@@ -40,6 +40,20 @@ RSpec.describe EarlyCareerPayments::Eligibility, type: :model do
     end
   end
 
+  describe "itt_academic_year" do
+    it "rejects invalid values" do
+      expect { EarlyCareerPayments::Eligibility.new(itt_academic_year: "2025_2026") }.to raise_error(ArgumentError)
+    end
+
+    it "has handily named boolean methods for the possible values" do
+      eligibility = EarlyCareerPayments::Eligibility.new(itt_academic_year: "2018_2019")
+
+      expect(eligibility.itt_academic_year_2018_2019?).to eq true
+      expect(eligibility.itt_academic_year_2019_2020?).to eq false
+      expect(eligibility.itt_academic_year_2020_2021?).to eq false
+    end
+  end
+
   describe "#ineligible?" do
     it "returns false when the eligibility cannot be determined" do
       expect(EarlyCareerPayments::Eligibility.new.ineligible?).to eql false
@@ -68,6 +82,13 @@ RSpec.describe EarlyCareerPayments::Eligibility, type: :model do
     it "returns true when teaching now the course indentified as being eligible ITT subject" do
       expect(EarlyCareerPayments::Eligibility.new(teaching_subject_now: false).ineligible?).to eql true
       expect(EarlyCareerPayments::Eligibility.new(teaching_subject_now: true).ineligible?).to eql false
+    end
+
+    it "returns true when the ITT postgraduate start date OR ITT undergraduate complete date not in 2018 - 2019, 2019 - 2020, 2020 - 2021" do
+      expect(EarlyCareerPayments::Eligibility.new(itt_academic_year: :none_of_the_above).ineligible?).to eql true
+      expect(EarlyCareerPayments::Eligibility.new(itt_academic_year: "2018_2019").ineligible?).to eql false
+      expect(EarlyCareerPayments::Eligibility.new(itt_academic_year: "2019_2020").ineligible?).to eql false
+      expect(EarlyCareerPayments::Eligibility.new(itt_academic_year: "2020_2021").ineligible?).to eql false
     end
   end
 
@@ -206,6 +227,13 @@ RSpec.describe EarlyCareerPayments::Eligibility, type: :model do
         expect(EarlyCareerPayments::Eligibility.new).not_to be_valid(:"teaching-subject-now")
         expect(EarlyCareerPayments::Eligibility.new(teaching_subject_now: true)).to be_valid(:"teaching-subject-now")
         expect(EarlyCareerPayments::Eligibility.new(teaching_subject_now: false)).to be_valid(:"teaching-subject-now")
+      end
+    end
+
+    context "when saving in the 'itt_academic_year' context" do
+      it "is not valid without a value for 'itt_academic_year'" do
+        expect(EarlyCareerPayments::Eligibility.new).not_to be_valid(:"itt-year")
+        expect(EarlyCareerPayments::Eligibility.new(itt_academic_year: "2020_2021")).to be_valid(:"itt-year")
       end
     end
   end
