@@ -138,6 +138,8 @@ RSpec.feature "Teacher Student Loan Repayments claims" do
 
       expect(page).to have_text("Check your answers before sending your application")
 
+      stub_qualified_teaching_status_show(claim: claim)
+
       freeze_time do
         perform_enqueued_jobs do
           expect {
