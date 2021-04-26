@@ -14,7 +14,7 @@ module MathsAndPhysics
   #                       initial teacher training in.
   #   degree_codes:       The corresponding JAC codes or HECOS to the subject(s)
   #                       the teacher completed their degree in.
-  class DQTRecord
+  class DqtRecord
     attr_reader :qts_award_date, :itt_subject_codes, :degree_codes
 
     # Full list of JAC principal subject codes can be found:

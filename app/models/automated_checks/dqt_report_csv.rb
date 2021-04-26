@@ -7,7 +7,7 @@ module AutomatedChecks
   #
   # file - Must be a type of File class that responds to `#to_io`, typically
   #        will be an UploadedFile
-  class DQTReportCsv
+  class DqtReportCsv
     attr_reader :rows, :errors
 
     EXPECTED_HEADERS = [

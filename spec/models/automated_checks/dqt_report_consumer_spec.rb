@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe AutomatedChecks::DQTReportConsumer do
+RSpec.describe AutomatedChecks::DqtReportConsumer do
   let(:dqt_report_consumer) { described_class.new(file, admin_user) }
   let(:file) { example_dqt_report_csv }
   let(:admin_user) { build(:dfe_signin_user) }

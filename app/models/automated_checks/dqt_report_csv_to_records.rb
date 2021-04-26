@@ -1,5 +1,5 @@
 module AutomatedChecks
-  class DQTReportCsvToRecords
+  class DqtReportCsvToRecords
     CLAIM_REFERENCE_COLUMN = "dfeta text2".freeze
 
     def initialize(csv_rows)

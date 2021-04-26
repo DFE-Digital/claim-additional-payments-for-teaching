@@ -69,6 +69,10 @@ gem "daemons"
 # Gov form builder to structure claims
 gem "govuk_design_system_formbuilder"
 
+# See https://github.com/typhoeus/ethon/issues/185
+gem "ethon", "~> 0.12.0"
+gem "typhoeus", "~> 1.4.0"
+
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem "byebug", platforms: [:mri, :mingw, :x64_mingw]

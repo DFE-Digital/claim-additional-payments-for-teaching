@@ -17,7 +17,7 @@ class Task < ApplicationRecord
   ].freeze
 
   belongs_to :claim
-  belongs_to :created_by, class_name: "DfeSignIn::User"
+  belongs_to :created_by, class_name: "DfeSignIn::User", optional: true
 
   validates :name, uniqueness: {scope: :claim_id}, inclusion: {in: NAMES, message: "name not recognised"}
   validates_inclusion_of :passed, in: [true, false], message: "You must select ‘Yes’ or ‘No’"

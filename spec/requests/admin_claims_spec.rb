@@ -45,15 +45,12 @@ RSpec.describe "Admin claims", type: :request do
   end
 
   # Compatible with claims from each policy
-  Policies.all.each do |policy|
+  [MathsAndPhysics, StudentLoans].each do |policy|
     context "with a #{policy} claim" do
       describe "claims#show" do
         let(:claim) { create(:claim, :submitted, policy: policy) }
 
         it "displays the claim and eligibility details" do
-          pending("# Implement EarlyCareerPayments Admin Journey") if policy == EarlyCareerPayments
-          # FIXME ADMIN Sections for EarlyCareerPayments
-
           get admin_claim_path(claim)
 
           expect(response.body).to include(claim.reference)
@@ -66,9 +63,6 @@ RSpec.describe "Admin claims", type: :request do
           let!(:claim_with_matching_attributes) { create(:claim, :submitted, teacher_reference_number: claim.teacher_reference_number, policy: policy) }
 
           it "returns the claim and the duplicate" do
-            pending("# Implement EarlyCareerPayments Admin Journey") if policy == EarlyCareerPayments
-            # FIXME ADMIN Sections for EarlyCareerPayments
-
             get admin_claim_path(claim)
 
             expect(response.body).to include(claim.reference)

@@ -5,8 +5,10 @@
   <p class="govuk-body">
     <% if task.manual %>
       This task was performed by <%= user_details(task.created_by, include_line_break: false) %> on <%= l(task.created_at) %>
-    <% else %>
+    <% elsif task.created_by %>
       This task was performed by an automated check uploaded by <%= user_details(task.created_by, include_line_break: false) %> on <%= l(task.created_at) %>
+    <% else  %>
+      This task was performed by an automated check on <%= l(task.created_at) %>
     <% end %>
   </p>
 </div>
