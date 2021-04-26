@@ -39,7 +39,8 @@ RSpec.describe EarlyCareerPayments::Eligibility, type: :model do
         :early_career_payments_eligibility,
         :eligible,
         employed_as_supply_teacher: true,
-        has_entire_term_contract: false
+        has_entire_term_contract: false,
+        employed_directly: false
       )
     end
 
@@ -50,6 +51,16 @@ RSpec.describe EarlyCareerPayments::Eligibility, type: :model do
       eligibility.employed_as_supply_teacher = false
       expect { eligibility.reset_dependent_answers }
         .to change { eligibility.has_entire_term_contract }
+        .from(false).to(nil)
+    end
+
+    it "resets 'employed_directly' when the value of 'employed_as_supply_teacher' changes" do
+      eligibility.employed_as_supply_teacher = true
+      expect { eligibility.reset_dependent_answers }.not_to change { eligibility.attributes }
+
+      eligibility.employed_as_supply_teacher = false
+      expect { eligibility.reset_dependent_answers }
+        .to change { eligibility.employed_directly }
         .from(false).to(nil)
     end
   end
@@ -75,6 +86,13 @@ RSpec.describe EarlyCareerPayments::Eligibility, type: :model do
       it "is not valid without a value for 'has_entire_term_contract'" do
         expect(EarlyCareerPayments::Eligibility.new(employed_as_supply_teacher: true)).not_to be_valid(:"entire-term-contract")
         expect(EarlyCareerPayments::Eligibility.new(employed_as_supply_teacher: true, has_entire_term_contract: false)).to be_valid(:"entire-term-contract")
+      end
+    end
+
+    context "when saving in the 'employed_directly' context" do
+      it "is not valid without a value for 'employed_directly" do
+        expect(EarlyCareerPayments::Eligibility.new(employed_as_supply_teacher: true)).not_to be_valid(:"employed-directly")
+        expect(EarlyCareerPayments::Eligibility.new(employed_as_supply_teacher: true, employed_directly: false)).to be_valid(:"employed-directly")
       end
     end
   end

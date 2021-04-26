@@ -22,6 +22,7 @@ module EarlyCareerPayments
         a << nqt_in_academic_year_after_itt
         a << employed_as_supply_teacher
         a << has_entire_term_contract if eligibility.employed_as_supply_teacher?
+        a << employed_directly if eligibility.employed_as_supply_teacher?
       end
     end
 
@@ -48,6 +49,14 @@ module EarlyCareerPayments
         translate("early_career_payments.questions.employed_as_supply_teacher"),
         (eligibility.employed_as_supply_teacher? ? "Yes" : "No"),
         "supply-teacher"
+      ]
+    end
+
+    def employed_directly
+      [
+        translate("early_career_payments.questions.employed_directly"),
+        (eligibility.employed_directly? ? "Yes" : "No"),
+        "employed-directly"
       ]
     end
   end

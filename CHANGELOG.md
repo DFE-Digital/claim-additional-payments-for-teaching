@@ -14,6 +14,7 @@ The format is based on [Keep a Changelog]
 - Build new Early Career Payments Journey with following page additions
   - Add Landing Page - 'Apply for an early-career payment'
   - Eligibility Journey
+    - Add 'Are you employed directly by your school?'
     - Add 'Did you do your NQT the academic year after your ITT?'
     - Add 'Are you currently employed as a Supply Teacher?'
     - Add 'Do you have a contract to teach at the same school for an entire term

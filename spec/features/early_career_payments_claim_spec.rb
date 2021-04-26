@@ -30,7 +30,6 @@ RSpec.feature "Teacher Early Career Payments claims" do
 
     expect(claim.eligibility.reload.employed_as_supply_teacher).to eql false
 
-    # TODO [PAGE 06] - Are you employed directly by your school
     # TODO [PAGE 07] - Are you currently subject to action for poor performance
     # TODO [PAGE 08] - Are you currently subject to dsiciplinary action
     # TODO [PAGE 09] - Did you do a postgraduate ITT course or undergraduate ITT course
@@ -75,7 +74,7 @@ RSpec.feature "Teacher Early Career Payments claims" do
     expect(page).to have_text(claim.reference)
   end
 
-  scenario "Supply Teacher makes claim for 'Early Career Payments' with a contract to teach for entire term" do
+  scenario "Supply Teacher makes claim for 'Early Career Payments' with a contract to teach for entire term & employed directly by school" do
     visit landing_page_path(EarlyCareerPayments.routing_name)
     expect(page).to have_link(href: EarlyCareerPayments.feedback_url)
 
@@ -111,6 +110,14 @@ RSpec.feature "Teacher Early Career Payments claims" do
     click_on "Continue"
 
     expect(claim.eligibility.reload.has_entire_term_contract).to eql true
+
+    # [PAGE 06] - Are you employed directly by your school
+    expect(page).to have_text(I18n.t("early_career_payments.questions.employed_directly"))
+
+    choose "Yes, I'm employed by my school"
+    click_on "Continue"
+
+    expect(claim.eligibility.reload.employed_directly).to eql true
 
     # TODO [PAGE 37] - Check your answers before sending your application
     expect(page).to have_text("Check your answers before sending your application")
