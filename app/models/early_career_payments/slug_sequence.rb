@@ -15,6 +15,7 @@ module EarlyCareerPayments
       "entire-term-contract",
       "employed-directly",
       "disciplinary-action",
+      "postgraduate-itt-or-undergraduate-itt-course",
       "check-your-answers",
       "ineligible"
     ].freeze
