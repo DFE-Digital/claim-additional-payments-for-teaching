@@ -25,6 +25,11 @@ RSpec.describe EarlyCareerPayments::Eligibility, type: :model do
       expect(EarlyCareerPayments::Eligibility.new(nqt_in_academic_year_after_itt: false).ineligible?).to eql true
       expect(EarlyCareerPayments::Eligibility.new(nqt_in_academic_year_after_itt: true).ineligible?).to eql false
     end
+
+    it "returns true when subject to disciplinary action" do
+      expect(EarlyCareerPayments::Eligibility.new(subject_to_disciplinary_action: true).ineligible?).to eql true
+      expect(EarlyCareerPayments::Eligibility.new(subject_to_disciplinary_action: false).ineligible?).to eql false
+    end
   end
 
   describe "#award_amount" do
@@ -66,6 +71,12 @@ RSpec.describe EarlyCareerPayments::Eligibility, type: :model do
   end
 
   describe "validation contexts" do
+    context "when saving in the 'subject_to_disciplinary_action' context" do
+      it "is not valid without a value for 'subject_to_disciplinary_action" do
+        expect(EarlyCareerPayments::Eligibility.new).not_to be_valid(:"disciplinary-action")
+      end
+    end
+
     context "when saving in the 'nqt_in_academic_year_after_itt' context" do
       it "is not valid without a value for 'nqt_in_academic_year_after_itt'" do
         expect(EarlyCareerPayments::Eligibility.new).not_to be_valid(:"nqt-in-academic-year-after-itt")

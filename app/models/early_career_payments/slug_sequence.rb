@@ -14,6 +14,7 @@ module EarlyCareerPayments
       "supply-teacher",
       "entire-term-contract",
       "employed-directly",
+      "disciplinary-action",
       "check-your-answers",
       "ineligible"
     ].freeze

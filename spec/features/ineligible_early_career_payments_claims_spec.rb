@@ -15,10 +15,25 @@ RSpec.feature "Ineligible Teacher Early Career Payments claims" do
     choose "No"
     click_on "Continue"
 
-    claim = Claim.order(:created_at).last
-    eligibility = claim.eligibility
+    expect(page).to have_text(I18n.t("early_career_payments.ineligible"))
+    expect(page).to have_link(href: EarlyCareerPayments.eligibility_page_url)
+    expect(page).to have_text("Based on the answers you have provided you are not eligible #{I18n.t("early_career_payments.claim_description")}")
+  end
 
-    expect(eligibility.nqt_in_academic_year_after_itt).to eql false
+  scenario "When suject to disciplinary action" do
+    start_early_career_payments_claim
+
+    # [PAGE 04] - Are you currently employed as a supply teacher
+    expect(page).to have_text(I18n.t("early_career_payments.questions.employed_as_supply_teacher"))
+
+    choose "No"
+    click_on "Continue"
+
+    # [PAGE 08] - Are you currently subject to dsiciplinary action
+    expect(page).to have_text(I18n.t("early_career_payments.questions.disciplinary_action"))
+
+    choose "Yes"
+    click_on "Continue"
 
     expect(page).to have_text(I18n.t("early_career_payments.ineligible"))
     expect(page).to have_link(href: EarlyCareerPayments.eligibility_page_url)

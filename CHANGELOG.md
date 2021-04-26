@@ -19,6 +19,7 @@ The format is based on [Keep a Changelog]
     - Add 'Are you currently employed as a Supply Teacher?'
     - Add 'Do you have a contract to teach at the same school for an entire term
       or longer?'
+    - Add 'Are you currently subject to disciplinary action?'
     - Add 'You are not eligible for an early careers payment'
 - Automatically update admin claim tasks with DQT API
 

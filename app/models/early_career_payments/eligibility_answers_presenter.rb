@@ -23,6 +23,7 @@ module EarlyCareerPayments
         a << employed_as_supply_teacher
         a << has_entire_term_contract if eligibility.employed_as_supply_teacher?
         a << employed_directly if eligibility.employed_as_supply_teacher?
+        a << subject_to_disciplinary_action
       end
     end
 
@@ -57,6 +58,14 @@ module EarlyCareerPayments
         translate("early_career_payments.questions.employed_directly"),
         (eligibility.employed_directly? ? "Yes" : "No"),
         "employed-directly"
+      ]
+    end
+
+    def subject_to_disciplinary_action
+      [
+        translate("early_career_payments.questions.disciplinary_action"),
+        (eligibility.subject_to_disciplinary_action? ? "Yes" : "No"),
+        "disciplinary-action"
       ]
     end
   end
