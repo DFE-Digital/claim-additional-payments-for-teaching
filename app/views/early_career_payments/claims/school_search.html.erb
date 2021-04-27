@@ -1,4 +1,6 @@
-<%= render("shared/error_summary", instance: current_claim, errored_field_id_overrides: { school_search: "school_search" }) if current_claim.errors.any? %>
+<% content_for(:page_title, page_title(t("early_career_payments.questions.school_search"), policy: current_policy_routing_name, show_error: current_claim.errors.any?)) %>
+<% path_for_form = current_claim.persisted? ? claim_path(current_policy_routing_name) : claims_path(current_policy_routing_name) %>
+<% shared_view_css_size = current_claim.policy == EarlyCareerPayments ? "l" : "xl" %>
 
 <%= form_for current_claim,
              url: claim_path(current_policy_routing_name),
@@ -21,7 +23,7 @@
     <%= hidden_field_tag :exclude_closed, exclude_closed, id: nil %>
 
     <h1 class="govuk-label-wrapper">
-      <%= label_tag :school_search, question, class: "govuk-label govuk-label--l" %>
+      <%= label_tag :school_search, early_career_payments.questions.school_search, class: "govuk-label govuk-label--l" %>
     </h1>
 
     <% if params[:school_search].present? && current_claim.errors.empty? %>
