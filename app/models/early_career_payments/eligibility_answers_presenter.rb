@@ -26,6 +26,7 @@ module EarlyCareerPayments
         a << subject_to_disciplinary_action
         a << pgitt_or_ugitt_course
         a << eligible_itt_subject
+        a << teaching_subject_now
       end
     end
 
@@ -84,6 +85,14 @@ module EarlyCareerPayments
         translate("early_career_payments.questions.eligible_itt_subject", ug_or_pg: eligibility.pgitt_or_ugitt_course),
         translate("early_career_payments.answers.eligible_itt_subject.#{eligibility.eligible_itt_subject}"),
         "eligible-itt-subject"
+      ]
+    end
+
+    def teaching_subject_now
+      [
+        translate("early_career_payments.questions.teaching_subject_now", eligible_itt_subject: eligibility.eligible_itt_subject),
+        (eligibility.teaching_subject_now? ? "Yes" : "No"),
+        "teaching-subject-now"
       ]
     end
   end
