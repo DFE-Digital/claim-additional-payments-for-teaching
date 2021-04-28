@@ -21,4 +21,10 @@ RSpec.describe EarlyCareerPayments::SlugSequence do
       expect(slug_sequence.slugs).not_to include("entire-term-contract")
     end
   end
+
+  it "excludes the 'employed-directly' slug if the claimant is not a supply teacher" do
+    claim.eligibility.employed_as_supply_teacher = false
+
+    expect(slug_sequence.slugs).not_to include("employed-directly")
+  end
 end

@@ -13,6 +13,9 @@ module EarlyCareerPayments
       "nqt-in-academic-year-after-itt",
       "supply-teacher",
       "entire-term-contract",
+      "employed-directly",
+      "disciplinary-action",
+      "postgraduate-itt-or-undergraduate-itt-course",
       "check-your-answers",
       "ineligible"
     ].freeze
@@ -26,6 +29,7 @@ module EarlyCareerPayments
     def slugs
       SLUGS.dup.tap do |sequence|
         sequence.delete("entire-term-contract") unless claim.eligibility.employed_as_supply_teacher?
+        sequence.delete("employed-directly") unless claim.eligibility.employed_as_supply_teacher?
         sequence.delete("ineligible") unless claim.eligibility.ineligible?
       end
     end

@@ -550,6 +550,22 @@ RSpec.describe Claim, type: :model do
         end
       end
     end
+
+    context "Early Career Payments claim" do
+      let(:eligibility) { build(:early_career_payments_eligibility, :eligible) }
+
+      it "returns true when the claim is valid and has not been submitted" do
+        claim = build(:claim, :submittable, govuk_verify_fields: [], eligibility: eligibility)
+
+        expect(claim.submittable?).to eq true
+      end
+
+      it "returns false when it has already been submitted" do
+        claim = build(:claim, :unverified, eligibility: eligibility)
+
+        expect(claim.submittable?).to eq false
+      end
+    end
   end
 
   describe "#approvable?" do

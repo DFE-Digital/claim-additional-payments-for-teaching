@@ -11,6 +11,19 @@ RSpec.describe EarlyCareerPayments::Eligibility, type: :model do
     end
   end
 
+  describe "pgitt_or_ugitt attribute" do
+    it "rejects invalid values" do
+      expect { EarlyCareerPayments::Eligibility.new(pgitt_or_ugitt_course: "non-existance") }.to raise_error(ArgumentError)
+    end
+
+    it "has handily named boolean methods for the possible values" do
+      eligiblity = EarlyCareerPayments::Eligibility.new(pgitt_or_ugitt_course: "postgraduate")
+
+      expect(eligiblity.postgraduate_itt_course?).to eq true
+      expect(eligiblity.undergraduate_itt_course?).to eq false
+    end
+  end
+
   describe "#ineligible?" do
     it "returns false when the eligiblity cannot be determined" do
       expect(EarlyCareerPayments::Eligibility.new.ineligible?).to eql false
@@ -24,6 +37,11 @@ RSpec.describe EarlyCareerPayments::Eligibility, type: :model do
     it "returns true when the NQT acdemic year was not the year after the ITT" do
       expect(EarlyCareerPayments::Eligibility.new(nqt_in_academic_year_after_itt: false).ineligible?).to eql true
       expect(EarlyCareerPayments::Eligibility.new(nqt_in_academic_year_after_itt: true).ineligible?).to eql false
+    end
+
+    it "returns true when subject to disciplinary action" do
+      expect(EarlyCareerPayments::Eligibility.new(subject_to_disciplinary_action: true).ineligible?).to eql true
+      expect(EarlyCareerPayments::Eligibility.new(subject_to_disciplinary_action: false).ineligible?).to eql false
     end
   end
 
@@ -39,7 +57,8 @@ RSpec.describe EarlyCareerPayments::Eligibility, type: :model do
         :early_career_payments_eligibility,
         :eligible,
         employed_as_supply_teacher: true,
-        has_entire_term_contract: false
+        has_entire_term_contract: false,
+        employed_directly: false
       )
     end
 
@@ -52,9 +71,25 @@ RSpec.describe EarlyCareerPayments::Eligibility, type: :model do
         .to change { eligibility.has_entire_term_contract }
         .from(false).to(nil)
     end
+
+    it "resets 'employed_directly' when the value of 'employed_as_supply_teacher' changes" do
+      eligibility.employed_as_supply_teacher = true
+      expect { eligibility.reset_dependent_answers }.not_to change { eligibility.attributes }
+
+      eligibility.employed_as_supply_teacher = false
+      expect { eligibility.reset_dependent_answers }
+        .to change { eligibility.employed_directly }
+        .from(false).to(nil)
+    end
   end
 
   describe "validation contexts" do
+    context "when saving in the 'subject_to_disciplinary_action' context" do
+      it "is not valid without a value for 'subject_to_disciplinary_action" do
+        expect(EarlyCareerPayments::Eligibility.new).not_to be_valid(:"disciplinary-action")
+      end
+    end
+
     context "when saving in the 'nqt_in_academic_year_after_itt' context" do
       it "is not valid without a value for 'nqt_in_academic_year_after_itt'" do
         expect(EarlyCareerPayments::Eligibility.new).not_to be_valid(:"nqt-in-academic-year-after-itt")
@@ -75,6 +110,19 @@ RSpec.describe EarlyCareerPayments::Eligibility, type: :model do
       it "is not valid without a value for 'has_entire_term_contract'" do
         expect(EarlyCareerPayments::Eligibility.new(employed_as_supply_teacher: true)).not_to be_valid(:"entire-term-contract")
         expect(EarlyCareerPayments::Eligibility.new(employed_as_supply_teacher: true, has_entire_term_contract: false)).to be_valid(:"entire-term-contract")
+      end
+    end
+
+    context "when saving in the 'employed_directly' context" do
+      it "is not valid without a value for 'employed_directly" do
+        expect(EarlyCareerPayments::Eligibility.new(employed_as_supply_teacher: true)).not_to be_valid(:"employed-directly")
+        expect(EarlyCareerPayments::Eligibility.new(employed_as_supply_teacher: true, employed_directly: false)).to be_valid(:"employed-directly")
+      end
+    end
+
+    context "when saving in the 'pgitt_or_ugitt_course' context" do
+      it "is not valid without a value for 'pgitt_or_ugitt_course'" do
+        expect(EarlyCareerPayments::Eligibility.new).not_to be_valid(:"postgraduate-itt-or-undergraduate-itt-course")
       end
     end
   end
