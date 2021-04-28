@@ -25,6 +25,7 @@ module EarlyCareerPayments
         a << employed_directly if eligibility.employed_as_supply_teacher?
         a << subject_to_disciplinary_action
         a << pgitt_or_ugitt_course
+        a << eligible_itt_subject
       end
     end
 
@@ -75,6 +76,14 @@ module EarlyCareerPayments
         translate("early_career_payments.questions.postgraduate_itt_or_undergraduate_itt_course"),
         translate("early_career_payments.answers.pgitt_or_ugitt_course.#{eligibility.pgitt_or_ugitt_course}"),
         "postgraduate-itt-or-undergraduate-itt-course"
+      ]
+    end
+
+    def eligible_itt_subject
+      [
+        translate("early_career_payments.questions.eligible_itt_subject", ug_or_pg: eligibility.pgitt_or_ugitt_course),
+        translate("early_career_payments.answers.eligible_itt_subject.#{eligibility.eligible_itt_subject}"),
+        "eligible-itt-subject"
       ]
     end
   end

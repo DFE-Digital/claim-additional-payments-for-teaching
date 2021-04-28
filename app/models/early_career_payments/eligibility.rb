@@ -6,7 +6,8 @@ module EarlyCareerPayments
       :has_entire_term_contract,
       :employed_directly,
       :subject_to_disciplinary_action,
-      :pgitt_or_ugitt_course
+      :pgitt_or_ugitt_course,
+      :eligible_itt_subject
     ].freeze
     AMENDABLE_ATTRIBUTES = [].freeze
     ATTRIBUTE_DEPENDENCIES = {
@@ -20,6 +21,14 @@ module EarlyCareerPayments
       undergraduate: 1
     }, _suffix: :itt_course
 
+    enum eligible_itt_subject: {
+      chemistry: 0,
+      mathematics: 1,
+      modern_foreign_languages: 2,
+      physics: 3,
+      none_of_the_above: 4
+    }, _prefix: :itt_subject
+
     has_one :claim, as: :eligibility, inverse_of: :eligibility
 
     validates :nqt_in_academic_year_after_itt, on: [:"nqt-in-academic-year-after-itt", :submit], inclusion: {in: [true, false], message: "Select yes if you did your NQT in the academic year after your ITT"}
@@ -28,6 +37,7 @@ module EarlyCareerPayments
     validates :employed_directly, on: [:"employed-directly", :submit], inclusion: {in: [true, false], message: "Select yes if you are employed directly by your school"}, if: :employed_as_supply_teacher?
     validates :subject_to_disciplinary_action, on: [:"disciplinary-action", :submit], inclusion: {in: [true, false], message: "Select yes if you are subject to disciplinary action"}
     validates :pgitt_or_ugitt_course, on: [:"postgraduate-itt-or-undergraduate-itt-course", :submit], presence: {message: "Select postgraduate if you did a Postgraduate ITT course"}
+    validates :eligible_itt_subject, on: [:"eligible-itt-subject", :submit], presence: {message: "Select if you completed your initial teacher training in Chemistry, Mathematics, Modern Foreign Languages, Physics or None of these subjects"}
 
     def policy
       EarlyCareerPayments
@@ -37,7 +47,8 @@ module EarlyCareerPayments
       ineligible_nqt_in_academic_year_after_itt? ||
         no_entire_term_contract? ||
         not_employed_directly? ||
-        subject_to_disciplinary_action?
+        subject_to_disciplinary_action? ||
+        not_supported_itt_subject?
     end
 
     def award_amount
@@ -64,6 +75,10 @@ module EarlyCareerPayments
 
     def not_employed_directly?
       employed_as_supply_teacher? && employed_directly == false
+    end
+
+    def not_supported_itt_subject?
+      itt_subject_none_of_the_above?
     end
   end
 end

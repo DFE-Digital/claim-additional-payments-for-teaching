@@ -17,15 +17,31 @@ RSpec.describe EarlyCareerPayments::Eligibility, type: :model do
     end
 
     it "has handily named boolean methods for the possible values" do
-      eligiblity = EarlyCareerPayments::Eligibility.new(pgitt_or_ugitt_course: "postgraduate")
+      eligibility = EarlyCareerPayments::Eligibility.new(pgitt_or_ugitt_course: "postgraduate")
 
-      expect(eligiblity.postgraduate_itt_course?).to eq true
-      expect(eligiblity.undergraduate_itt_course?).to eq false
+      expect(eligibility.postgraduate_itt_course?).to eq true
+      expect(eligibility.undergraduate_itt_course?).to eq false
+    end
+  end
+
+  describe "eligible_itt_subject" do
+    it "rejects invalid values" do
+      expect { EarlyCareerPayments::Eligibility.new(eligible_itt_subject: "not-in-list-of-options") }.to raise_error(ArgumentError)
+    end
+
+    it "has handily named boolean methods for the possible values" do
+      eligibility = EarlyCareerPayments::Eligibility.new(eligible_itt_subject: "modern_foreign_languages")
+
+      expect(eligibility.itt_subject_modern_foreign_languages?).to eq true
+      expect(eligibility.itt_subject_chemistry?).to eq false
+      expect(eligibility.itt_subject_mathematics?).to eq false
+      expect(eligibility.itt_subject_physics?).to eq false
+      expect(eligibility.itt_subject_none_of_the_above?).to eq false
     end
   end
 
   describe "#ineligible?" do
-    it "returns false when the eligiblity cannot be determined" do
+    it "returns false when the eligibility cannot be determined" do
       expect(EarlyCareerPayments::Eligibility.new.ineligible?).to eql false
     end
 
@@ -42,6 +58,11 @@ RSpec.describe EarlyCareerPayments::Eligibility, type: :model do
     it "returns true when subject to disciplinary action" do
       expect(EarlyCareerPayments::Eligibility.new(subject_to_disciplinary_action: true).ineligible?).to eql true
       expect(EarlyCareerPayments::Eligibility.new(subject_to_disciplinary_action: false).ineligible?).to eql false
+    end
+
+    it "returns true when none of the eligible ITT courses were taken" do
+      expect(EarlyCareerPayments::Eligibility.new(eligible_itt_subject: :none_of_the_above).ineligible?).to eql true
+      expect(EarlyCareerPayments::Eligibility.new(eligible_itt_subject: :mathematics).ineligible?).to eql false
     end
   end
 
@@ -114,7 +135,7 @@ RSpec.describe EarlyCareerPayments::Eligibility, type: :model do
     end
 
     context "when saving in the 'employed_directly' context" do
-      it "is not valid without a value for 'employed_directly" do
+      it "is not valid without a value for 'employed_directly'" do
         expect(EarlyCareerPayments::Eligibility.new(employed_as_supply_teacher: true)).not_to be_valid(:"employed-directly")
         expect(EarlyCareerPayments::Eligibility.new(employed_as_supply_teacher: true, employed_directly: false)).to be_valid(:"employed-directly")
       end
@@ -123,6 +144,22 @@ RSpec.describe EarlyCareerPayments::Eligibility, type: :model do
     context "when saving in the 'pgitt_or_ugitt_course' context" do
       it "is not valid without a value for 'pgitt_or_ugitt_course'" do
         expect(EarlyCareerPayments::Eligibility.new).not_to be_valid(:"postgraduate-itt-or-undergraduate-itt-course")
+      end
+    end
+
+    context "when saving in the 'eligible_itt_subject' context" do
+      it "is not valid without a value for 'eligible_itt_subject'" do
+        expect(EarlyCareerPayments::Eligibility.new).not_to be_valid(:"eligible-itt-subject")
+      end
+
+      it "is not valid when the value for 'eligible_itt_subject' is 'none of the above'" do
+        expect(EarlyCareerPayments::Eligibility.new(eligible_itt_subject: :none_of_the_above)).to be_valid(:"eligible-itt-subject")
+      end
+
+      it "is valid when the value for 'eligible_itt_subject' is one of 'chemistry, mathematics, modern foreigh languages or physics'" do
+        expect(EarlyCareerPayments::Eligibility.new(eligible_itt_subject: :chemistry)).to be_valid(:"eligible-itt-subject")
+        expect(EarlyCareerPayments::Eligibility.new(eligible_itt_subject: :physics)).to be_valid(:"eligible-itt-subject")
+        expect(EarlyCareerPayments::Eligibility.new(eligible_itt_subject: :modern_foreign_languages)).to be_valid(:"eligible-itt-subject")
       end
     end
   end
