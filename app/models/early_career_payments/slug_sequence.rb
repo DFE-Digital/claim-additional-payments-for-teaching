@@ -11,6 +11,7 @@ module EarlyCareerPayments
   class SlugSequence
     SLUGS = [
       "nqt-in-academic-year-after-itt",
+      #"school-search",
       "supply-teacher",
       "entire-term-contract",
       "employed-directly",

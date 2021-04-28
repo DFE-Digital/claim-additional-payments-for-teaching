@@ -2,6 +2,7 @@ module EarlyCareerPayments
   class Eligibility < ApplicationRecord
     EDITABLE_ATTRIBUTES = [
       :nqt_in_academic_year_after_itt,
+      #:school_search,
       :employed_as_supply_teacher,
       :has_entire_term_contract,
       :employed_directly,
@@ -23,6 +24,7 @@ module EarlyCareerPayments
     has_one :claim, as: :eligibility, inverse_of: :eligibility
 
     validates :nqt_in_academic_year_after_itt, on: [:"nqt-in-academic-year-after-itt", :submit], inclusion: {in: [true, false], message: "Select yes if you did your NQT in the academic year after your ITT"}
+    #validates :school_search, on: [:"school_search", :submit], presence: {message: "Select a school from the list or search again for a different school"}
     validates :employed_as_supply_teacher, on: [:"supply-teacher", :submit], inclusion: {in: [true, false], message: "Select yes if you are currently employed as a supply teacher"}
     validates :has_entire_term_contract, on: [:"entire-term-contract", :submit], inclusion: {in: [true, false], message: "Select yes if you have a contract to teach at the same school for one term or longer"}, if: :employed_as_supply_teacher?
     validates :employed_directly, on: [:"employed-directly", :submit], inclusion: {in: [true, false], message: "Select yes if you are employed directly by your school"}, if: :employed_as_supply_teacher?
