@@ -15,8 +15,6 @@ FactoryBot.define do
     end
 
     trait :submittable do
-      verified
-
       first_name { "Jo" }
       surname { "Bloggs" }
       address_line_1 { "1 Test Road" }

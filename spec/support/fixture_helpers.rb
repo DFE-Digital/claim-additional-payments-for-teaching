@@ -65,12 +65,6 @@ module FixtureHelpers
         reference: "GH123456",
         date_of_birth: Date.new(1980, 10, 4),
         tasks: [build(:task, name: "qualifications")])
-    when :unverified_claim_with_matching_identity_data
-      create(:claim, :unverified,
-        teacher_reference_number: "9996060",
-        reference: "DP5NEGWP",
-        surname: "Bob",
-        date_of_birth: Date.new(1979, 5, 2))
     end
   end
 
