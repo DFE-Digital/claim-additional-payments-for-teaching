@@ -18,6 +18,7 @@ module EarlyCareerPayments
       "postgraduate-itt-or-undergraduate-itt-course",
       "eligible-itt-subject",
       "check-your-answers",
+      "higher-education-courses-start",
       "ineligible"
     ].freeze
 
