@@ -19,6 +19,7 @@ The format is based on [Keep a Changelog]
     - Add 'Are you currently employed as a Supply Teacher?'
     - Add 'Do you have a contract to teach at the same school for an entire term
       or longer?'
+    - Add 'Are you currently subject to action for poor performance?'
     - Add 'Are you currently subject to disciplinary action?'
     - Add 'Did you do a postgraduate ITT course or an undergraduate ITT course?'
     - Add 'Which subject did you do your undergraduate ITT in?'

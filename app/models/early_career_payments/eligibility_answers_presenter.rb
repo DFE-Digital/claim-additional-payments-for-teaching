@@ -23,6 +23,7 @@ module EarlyCareerPayments
         a << employed_as_supply_teacher
         a << has_entire_term_contract if eligibility.employed_as_supply_teacher?
         a << employed_directly if eligibility.employed_as_supply_teacher?
+        a << subject_to_formal_performance_action
         a << subject_to_disciplinary_action
         a << pgitt_or_ugitt_course
         a << eligible_itt_subject
@@ -62,6 +63,14 @@ module EarlyCareerPayments
         translate("early_career_payments.questions.employed_directly"),
         (eligibility.employed_directly? ? "Yes" : "No"),
         "employed-directly"
+      ]
+    end
+
+    def subject_to_formal_performance_action
+      [
+        translate("early_career_payments.questions.formal_performance_action"),
+        (eligibility.subject_to_formal_performance_action? ? "Yes" : "No"),
+        "formal-performance-action"
       ]
     end
 

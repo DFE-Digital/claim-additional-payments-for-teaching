@@ -30,7 +30,14 @@ RSpec.feature "Teacher Early Career Payments claims" do
 
     expect(claim.eligibility.reload.employed_as_supply_teacher).to eql false
 
-    # TODO [PAGE 07] - Are you currently subject to action for poor performance
+    # [PAGE 07] - Are you currently subject to action for poor performance
+    expect(page).to have_text(I18n.t("early_career_payments.questions.formal_performance_action"))
+
+    choose "No"
+    click_on "Continue"
+
+    expect(claim.eligibility.reload.subject_to_formal_performance_action).to eql false
+
     # [PAGE 08] - Are you currently subject to dsiciplinary action
     expect(page).to have_text(I18n.t("early_career_payments.questions.disciplinary_action"))
 
@@ -154,7 +161,10 @@ RSpec.feature "Teacher Early Career Payments claims" do
 
     expect(claim.eligibility.reload.employed_directly).to eql true
 
-    # [PAGE 08] - Are you currently subject to dsiciplinary action
-    expect(page).to have_text(I18n.t("early_career_payments.questions.disciplinary_action"))
+    # [PAGE 07] - Are you currently subject to action for poor performance
+    expect(page).to have_text(I18n.t("early_career_payments.questions.formal_performance_action"))
+
+    choose "No"
+    click_on "Continue"
   end
 end

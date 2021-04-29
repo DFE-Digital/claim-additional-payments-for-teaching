@@ -14,6 +14,7 @@ module EarlyCareerPayments
       "supply-teacher",
       "entire-term-contract",
       "employed-directly",
+      "formal-performance-action",
       "disciplinary-action",
       "postgraduate-itt-or-undergraduate-itt-course",
       "eligible-itt-subject",
