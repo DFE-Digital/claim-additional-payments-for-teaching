@@ -108,12 +108,12 @@ class Claim < ApplicationRecord
 
   validates :payroll_gender, on: [:gender, :submit], presence: {message: "Choose the option for the gender your school’s payroll system associates with you"}, unless: :has_ecp_policy?
 
-  validates :first_name, on: [:name, :submit], presence: {message: "Enter your first name"}, unless: :has_ecp_policy?
+  validates :first_name, on: [:name, :submit], presence: {message: "Enter your first name"}
   validates :first_name, length: {maximum: 100, message: "First name must be 100 characters or less"}
 
   validates :middle_name, length: {maximum: 100, message: "Middle name must be 100 characters or less"}
 
-  validates :surname, on: [:name, :submit], presence: {message: "Enter your last name"}, unless: :has_ecp_policy?
+  validates :surname, on: [:name, :submit], presence: {message: "Enter your last name"}
   validates :surname, length: {maximum: 100, message: "Last name must be 100 characters or less"}
 
   validates :address_line_1, on: [:address, :submit], presence: {message: "Enter your building and street address"}, unless: :has_ecp_policy?
@@ -125,12 +125,12 @@ class Claim < ApplicationRecord
   validates :postcode, on: [:address, :submit], presence: {message: "Enter your postcode"}, unless: :has_ecp_policy?
   validates :postcode, length: {maximum: 11, message: "Postcode must be 11 characters or less"}
 
-  validates :date_of_birth, on: [:"date-of-birth", :submit], presence: {message: "Enter your date of birth"}, unless: :has_ecp_policy?
+  validates :date_of_birth, on: [:"date-of-birth", :submit], presence: {message: "Enter your date of birth"}
 
   validates :teacher_reference_number, on: [:"teacher-reference-number", :submit], presence: {message: "Enter your teacher reference number"}, unless: :has_ecp_policy?
   validate :trn_must_be_seven_digits
 
-  validates :national_insurance_number, on: [:"national-insurance-number", :submit], presence: {message: "Enter your National Insurance number"}, unless: :has_ecp_policy?
+  validates :national_insurance_number, on: [:"national-insurance-number", :submit], presence: {message: "Enter your National Insurance number"}
   validate :ni_number_is_correct_format
 
   validates :has_student_loan, on: [:"student-loan", :submit], inclusion: {in: [true, false], message: "Select yes if you have a student loan"}, unless: :has_ecp_policy?
