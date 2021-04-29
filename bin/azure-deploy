@@ -214,6 +214,11 @@ echo
 
 KEY_VAULT_ID=$(fetch-azure-output-value "$SECRETS_DEPLOYMENT_RESULT" keyVaultId)
 
+KEY_VAULT_NAME=$((get-azkeyvault -vaultname 's118d01-secrets-kv').vaultname)
+echo 
+echo "$KEY_VAULT_NAME has been deployed - Logging"
+echo
+
 ensure-resource-group-exists $APP_RESOURCE_GROUP_NAME
 
 echo "Rewriting app parameters file for $ENVIRONMENT_NAME..."
