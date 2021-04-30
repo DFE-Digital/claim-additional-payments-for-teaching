@@ -48,7 +48,7 @@ RSpec.feature "Teacher Early Career Payments claims" do
     expect(claim.eligibility.reload.pgitt_or_ugitt_course).to eq "postgraduate"
 
     # [PAGE 10] - Which subject did you do your undergraduate ITT in
-    expect(page).to have_text(I18n.t("early_career_payments.questions.eligible_itt_subject", ug_or_pg: claim.eligibility.pgitt_or_ugitt_course))
+    expect(page).to have_text(I18n.t("early_career_payments.questions.eligible_itt_subject", ug_or_pg: claim.eligibility.reload.pgitt_or_ugitt_course))
 
     choose "Mathematics"
     click_on "Continue"
@@ -56,7 +56,7 @@ RSpec.feature "Teacher Early Career Payments claims" do
     expect(claim.eligibility.reload.eligible_itt_subject).to eql "mathematics"
 
     # TODO [PAGE 11] - Which subject did you do your postgraduate ITT in
-    # TODO [PAGE 12] - Do you teach maths now
+    # [PAGE 12] - Do you teach maths now
     expect(page).to have_text(I18n.t("early_career_payments.questions.teaching_subject_now", eligible_itt_subject: claim.eligibility.eligible_itt_subject))
 
     choose "Yes"
@@ -64,7 +64,14 @@ RSpec.feature "Teacher Early Career Payments claims" do
 
     expect(claim.eligibility.reload.teaching_subject_now).to eql true
 
-    # TODO [PAGE 13] - In what academic year did you start your undergraduate ITT
+    # [PAGE 13] - In what academic year did you start your undergraduate ITT
+    expect(page).to have_text(I18n.t("early_career_payments.questions.itt_academic_year", start_or_complete: "start", ug_or_pg: claim.eligibility.pgitt_or_ugitt_course))
+
+    choose "2018 - 2019"
+    click_on "Continue"
+
+    expect(claim.eligibility.reload.itt_academic_year).to eql "2018_2019"
+
     # TODO [PAGE 14] - In what academic year did you start your postgraduate ITT
     # TODO [PAGE 15] - Check your answers for eligibility
     # TODO [PAGE 16] - You are eligible for an early career payment

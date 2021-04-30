@@ -8,7 +8,8 @@ module EarlyCareerPayments
       :subject_to_disciplinary_action,
       :pgitt_or_ugitt_course,
       :eligible_itt_subject,
-      :teaching_subject_now
+      :teaching_subject_now,
+      :itt_academic_year
     ].freeze
     AMENDABLE_ATTRIBUTES = [].freeze
     ATTRIBUTE_DEPENDENCIES = {
@@ -32,6 +33,13 @@ module EarlyCareerPayments
       none_of_the_above: 4
     }, _prefix: :itt_subject
 
+    enum itt_academic_year: {
+      "2018_2019": 0,
+      "2019_2020": 1,
+      "2020_2021": 2,
+      none_of_the_above: 3
+    }, _prefix: :itt_academic_year
+
     has_one :claim, as: :eligibility, inverse_of: :eligibility
 
     validates :nqt_in_academic_year_after_itt, on: [:"nqt-in-academic-year-after-itt", :submit], inclusion: {in: [true, false], message: "Select yes if you did your NQT in the academic year after your ITT"}
@@ -42,6 +50,7 @@ module EarlyCareerPayments
     validates :pgitt_or_ugitt_course, on: [:"postgraduate-itt-or-undergraduate-itt-course", :submit], presence: {message: "Select postgraduate if you did a Postgraduate ITT course"}
     validates :eligible_itt_subject, on: [:"eligible-itt-subject", :submit], presence: {message: "Select if you completed your initial teacher training in Chemistry, Mathematics, Modern Foreign Languages, Physics or None of these subjects"}
     validates :teaching_subject_now, on: [:"teaching-subject-now", :submit], inclusion: {in: [true, false], message: "Select yes if you are currently teaching in your ITT subject now"}
+    validates :itt_academic_year, on: [:"itt-year", :submit], presence: {message: "Select if you started your initial teacher training in 2018 - 2019, 2019 - 2020, 2020 - 2021 or None of these academic years"}
 
     def policy
       EarlyCareerPayments
@@ -53,7 +62,8 @@ module EarlyCareerPayments
         not_employed_directly? ||
         subject_to_disciplinary_action? ||
         not_supported_itt_subject? ||
-        not_teaching_now_in_eligible_itt_subject?
+        not_teaching_now_in_eligible_itt_subject? ||
+        ineligible_itt_academic_year?
     end
 
     def award_amount
@@ -72,6 +82,10 @@ module EarlyCareerPayments
 
     def ineligible_nqt_in_academic_year_after_itt?
       nqt_in_academic_year_after_itt == false
+    end
+
+    def ineligible_itt_academic_year?
+      itt_academic_year == "none_of_the_above"
     end
 
     def no_entire_term_contract?

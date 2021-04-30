@@ -7,6 +7,7 @@ FactoryBot.define do
       pgitt_or_ugitt_course { :postgraduate }
       eligible_itt_subject { 2 }
       teaching_subject_now { true }
+      itt_academic_year { "2020_2021" }
     end
   end
 end

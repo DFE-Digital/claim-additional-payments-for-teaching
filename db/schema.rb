@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_04_28_070526) do
+ActiveRecord::Schema.define(version: 2021_04_28_223553) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -123,6 +123,7 @@ ActiveRecord::Schema.define(version: 2021_04_28_070526) do
     t.boolean "subject_to_disciplinary_action"
     t.integer "eligible_itt_subject"
     t.boolean "teaching_subject_now"
+    t.integer "itt_academic_year"
   end
 
   create_table "local_authorities", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
