@@ -25,6 +25,8 @@ The format is based on [Keep a Changelog]
     - Add 'Which subject did you do your undergraduate ITT in?'
     - Add 'Do you teach ITT subject now?'
     - Add 'In what academic year did you complete your undergraduate ITT?'
+    - Add 'Did you take out a Postgraduate Master's Loan on or after 1 August
+      2016?'
     - Add 'You are not eligible for an early careers payment'
 - Automatically update admin claim tasks with DQT API
 

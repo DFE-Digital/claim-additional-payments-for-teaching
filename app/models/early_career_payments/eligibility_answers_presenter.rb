@@ -29,6 +29,7 @@ module EarlyCareerPayments
         a << eligible_itt_subject
         a << teaching_subject_now
         a << itt_academic_year
+        a << postgraduate_masters_loan
       end
     end
 
@@ -107,8 +108,6 @@ module EarlyCareerPayments
     end
 
     def itt_academic_year
-      puts eligibility.inspect
-      puts eligibility.itt_academic_year
       [
         translate(
           "early_career_payments.questions.itt_academic_year",
@@ -117,6 +116,14 @@ module EarlyCareerPayments
         ),
         eligibility.itt_academic_year.dasherize.gsub("-", " - "),
         "itt-year"
+      ]
+    end
+
+    def postgraduate_masters_loan
+      [
+        translate("early_career_payments.questions.postgraduate_masters_loan"),
+        (eligibility.postgraduate_masters_loan? ? "Yes" : "No"),
+        "masters-loan"
       ]
     end
   end

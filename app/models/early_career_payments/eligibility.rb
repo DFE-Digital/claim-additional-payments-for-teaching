@@ -10,7 +10,8 @@ module EarlyCareerPayments
       :pgitt_or_ugitt_course,
       :eligible_itt_subject,
       :teaching_subject_now,
-      :itt_academic_year
+      :itt_academic_year,
+      :postgraduate_masters_loan
     ].freeze
     AMENDABLE_ATTRIBUTES = [].freeze
     ATTRIBUTE_DEPENDENCIES = {
@@ -53,6 +54,7 @@ module EarlyCareerPayments
     validates :eligible_itt_subject, on: [:"eligible-itt-subject", :submit], presence: {message: "Select if you completed your initial teacher training in Chemistry, Mathematics, Modern Foreign Languages, Physics or None of these subjects"}
     validates :teaching_subject_now, on: [:"teaching-subject-now", :submit], inclusion: {in: [true, false], message: "Select yes if you are currently teaching in your ITT subject now"}
     validates :itt_academic_year, on: [:"itt-year", :submit], presence: {message: "Select if you started your initial teacher training in 2018 - 2019, 2019 - 2020, 2020 - 2021 or None of these academic years"}
+    validates :postgraduate_masters_loan, on: [:"masters-loan", :submit], inclusion: {in: [true, false], message: "Select yes if you have a Postgraduate Master Loan taken out on or after 1st August 1016"}
 
     def policy
       EarlyCareerPayments
