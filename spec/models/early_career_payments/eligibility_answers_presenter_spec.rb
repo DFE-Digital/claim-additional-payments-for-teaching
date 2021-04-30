@@ -5,6 +5,7 @@ RSpec.describe EarlyCareerPayments::EligibilityAnswersPresenter do
     {
       nqt_in_academic_year_after_itt: true,
       employed_as_supply_teacher: false,
+      subject_to_formal_performance_action: false,
       subject_to_disciplinary_action: false,
       pgitt_or_ugitt_course: :postgraduate,
       eligible_itt_subject: :chemistry,
@@ -21,6 +22,7 @@ RSpec.describe EarlyCareerPayments::EligibilityAnswersPresenter do
     expected_answers = [
       [I18n.t("early_career_payments.questions.nqt_in_academic_year_after_itt"), "Yes", "nqt-in-academic-year-after-itt"],
       [I18n.t("early_career_payments.questions.employed_as_supply_teacher"), "No", "supply-teacher"],
+      [I18n.t("early_career_payments.questions.formal_performance_action"), "No", "formal-performance-action"],
       [I18n.t("early_career_payments.questions.disciplinary_action"), "No", "disciplinary-action"],
       [
         I18n.t("early_career_payments.questions.postgraduate_itt_or_undergraduate_itt_course"),
@@ -54,6 +56,7 @@ RSpec.describe EarlyCareerPayments::EligibilityAnswersPresenter do
         employed_as_supply_teacher: true,
         has_entire_term_contract: true,
         employed_directly: true,
+        subject_to_formal_performance_action: false,
         subject_to_disciplinary_action: false,
         pgitt_or_ugitt_course: :undergraduate,
         eligible_itt_subject: :modern_foreign_languages,
@@ -68,6 +71,7 @@ RSpec.describe EarlyCareerPayments::EligibilityAnswersPresenter do
         [I18n.t("early_career_payments.questions.employed_as_supply_teacher"), "Yes", "supply-teacher"],
         [I18n.t("early_career_payments.questions.has_entire_term_contract"), "Yes", "entire-term-contract"],
         [I18n.t("early_career_payments.questions.employed_directly"), "Yes", "employed-directly"],
+        [I18n.t("early_career_payments.questions.formal_performance_action"), "No", "formal-performance-action"],
         [I18n.t("early_career_payments.questions.disciplinary_action"), "No", "disciplinary-action"],
         [
           I18n.t("early_career_payments.questions.postgraduate_itt_or_undergraduate_itt_course"),

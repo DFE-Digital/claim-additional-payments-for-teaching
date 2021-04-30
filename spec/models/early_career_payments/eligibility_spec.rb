@@ -69,6 +69,11 @@ RSpec.describe EarlyCareerPayments::Eligibility, type: :model do
       expect(EarlyCareerPayments::Eligibility.new(nqt_in_academic_year_after_itt: true).ineligible?).to eql false
     end
 
+    it "returns true when subject to formal performance action" do
+      expect(EarlyCareerPayments::Eligibility.new(subject_to_formal_performance_action: true).ineligible?).to eql true
+      expect(EarlyCareerPayments::Eligibility.new(subject_to_formal_performance_action: false).ineligible?).to eql false
+    end
+
     it "returns true when subject to disciplinary action" do
       expect(EarlyCareerPayments::Eligibility.new(subject_to_disciplinary_action: true).ineligible?).to eql true
       expect(EarlyCareerPayments::Eligibility.new(subject_to_disciplinary_action: false).ineligible?).to eql false
@@ -197,6 +202,14 @@ RSpec.describe EarlyCareerPayments::Eligibility, type: :model do
       it "is not valid without a value for 'employed_directly'" do
         expect(EarlyCareerPayments::Eligibility.new(employed_as_supply_teacher: true)).not_to be_valid(:"employed-directly")
         expect(EarlyCareerPayments::Eligibility.new(employed_as_supply_teacher: true, employed_directly: false)).to be_valid(:"employed-directly")
+      end
+    end
+
+    context "when saving in the 'subject_to_formal_performance_action' context" do
+      it "is not valid without a value for 'subject_to_formal_performance_action'" do
+        expect(EarlyCareerPayments::Eligibility.new).not_to be_valid(:"formal-performance-action")
+        expect(EarlyCareerPayments::Eligibility.new(subject_to_formal_performance_action: true)).to be_valid(:"formal-performance-action")
+        expect(EarlyCareerPayments::Eligibility.new(subject_to_formal_performance_action: false)).to be_valid(:"formal-performance-action")
       end
     end
 

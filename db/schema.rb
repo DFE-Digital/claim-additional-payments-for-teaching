@@ -121,6 +121,7 @@ ActiveRecord::Schema.define(version: 2021_04_28_223553) do
     t.boolean "has_entire_term_contract"
     t.boolean "employed_directly"
     t.boolean "subject_to_disciplinary_action"
+    t.boolean "subject_to_formal_performance_action"
     t.integer "eligible_itt_subject"
     t.boolean "teaching_subject_now"
     t.integer "itt_academic_year"

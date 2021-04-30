@@ -215,6 +215,7 @@ en:
       employed_directly: "Are you employed directly by your school?"
       disciplinary_action: "Are you currently subject to disciplinary action?"
       nqt_in_academic_year_after_itt: "Did you do your NQT the academic year after your ITT?"
+      formal_performance_action: "Are you currently subject to action for poor performance?"
       postgraduate_itt_or_undergraduate_itt_course: "Did you do a postgraduate ITT course or an undergraduate ITT course?"
       eligible_itt_subject: "Which subject did you do your %{ug_or_pg} ITT in?"
       itt_postgraduate_hint: "Postgraduate ITT includes: university-led and school-led courses like the Postgraduate Certificate of Education (PGCE), School Direct ITT and School Centred ITT (SCITT)."
