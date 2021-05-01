@@ -85,7 +85,11 @@ RSpec.feature "Teacher Early Career Payments claims" do
     # TODO [PAGE 20] - Personal Details
     # TODO [PAGE 21] - One Time Password
     # TODO [PAGE 22] - We have sent you reminders
-    # TODO [PAGE 23] - How will we use the information you provide
+    # [PAGE 23] - How will we use the information you provide
+    expect(page).to have_text("How we will use the information you provide")
+
+    click_on "Continue"
+
     # [PAGE 24] - Personal details
     expect(page).to have_text(I18n.t("early_career_payments.personal_details"))
     expect(page).to have_text(I18n.t("questions.name"))
