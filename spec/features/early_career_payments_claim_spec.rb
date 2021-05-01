@@ -97,7 +97,14 @@ RSpec.feature "Teacher Early Career Payments claims" do
     # TODO [PAGE 32] - How many higher education courses did you take a student loan out for
     # TODO [PAGE 33] - When did the first year of your higher education course start
     # TODO [PAGE 34] - When did your higher education courses start
-    # TODO [PAGE 35] - Did you take out a postgraduate masters loan on or after 1 August 2016
+    # [PAGE 35] - Did you take out a postgraduate masters loan on or after 1 August 2016
+    expect(page).to have_text(I18n.t("early_career_payments.questions.postgraduate_masters_loan"))
+
+    choose "Yes"
+    click_on "Continue"
+
+    expect(claim.eligibility.reload.postgraduate_masters_loan).to eql true
+
     # TODO [PAGE 36] - Did you take out a postgraduate doctoral loan on or after 1 August 2016
 
     # TODO [PAGE 37] - Check your answers before sending your application

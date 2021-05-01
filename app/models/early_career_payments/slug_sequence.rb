@@ -8,8 +8,10 @@ module EarlyCareerPayments
   # Note that the sequence is recalculated on each call to `slugs` so that it
   # accounts for any changes that may have been made to the claim and always
   # reflects the sequence based on the claim's current state.
+  # There are 4 distinct phases of the claimant journey
   class SlugSequence
     SLUGS = [
+      # eligibility phase of claim journey
       "nqt-in-academic-year-after-itt",
       "supply-teacher",
       "entire-term-contract",
@@ -20,6 +22,10 @@ module EarlyCareerPayments
       "eligible-itt-subject",
       "teaching-subject-now",
       "itt_year",
+      # eligible later phase of claim journey
+      # personal details phase of claim journey
+      # student loans phase of claim journey
+      "masters-loan",
       "check-your-answers",
       "ineligible"
     ].freeze

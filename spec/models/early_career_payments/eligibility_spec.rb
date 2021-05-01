@@ -249,5 +249,13 @@ RSpec.describe EarlyCareerPayments::Eligibility, type: :model do
         expect(EarlyCareerPayments::Eligibility.new(itt_academic_year: "2020_2021")).to be_valid(:"itt-year")
       end
     end
+
+    context "when saving in the 'postgraduate_masters_loan' context" do
+      it "is not valid without a value for 'postgraduate_masters_loan'" do
+        expect(EarlyCareerPayments::Eligibility.new).not_to be_valid(:"masters-loan")
+        expect(EarlyCareerPayments::Eligibility.new(postgraduate_masters_loan: true)).to be_valid(:"masters-loan")
+        expect(EarlyCareerPayments::Eligibility.new(postgraduate_masters_loan: false)).to be_valid(:"masters-loan")
+      end
+    end
   end
 end
