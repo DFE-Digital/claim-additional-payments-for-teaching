@@ -24,6 +24,7 @@ module EarlyCareerPayments
       "itt_year",
       # eligible later phase of claim journey
       # personal details phase of claim journey
+      "personal-details",
       # student loans phase of claim journey
       "masters-loan",
       "check-your-answers",

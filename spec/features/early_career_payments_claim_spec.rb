@@ -86,7 +86,30 @@ RSpec.feature "Teacher Early Career Payments claims" do
     # TODO [PAGE 21] - One Time Password
     # TODO [PAGE 22] - We have sent you reminders
     # TODO [PAGE 23] - How will we use the information you provide
-    # TODO [PAGE 24] - Personal details
+    # [PAGE 24] - Personal details
+    expect(page).to have_text(I18n.t("early_career_payments.personal_details"))
+    expect(page).to have_text(I18n.t("questions.name"))
+
+    fill_in "claim_first_name", with: "Russell"
+    fill_in "claim_surname", with: "Wong"
+
+    expect(page).to have_text(I18n.t("questions.date_of_birth"))
+
+    fill_in "Day", with: "28"
+    fill_in "Month", with: "2"
+    fill_in "Year", with: "1988"
+
+    expect(page).to have_text(I18n.t("early_career_payments.questions.national_insurance_number"))
+
+    fill_in "National Insurance number", with: "PX321499A"
+
+    click_on "Continue"
+
+    expect(claim.reload.first_name).to eql("Russell")
+    expect(claim.reload.surname).to eql("Wong")
+    expect(claim.reload.date_of_birth).to eq(Date.new(1988, 2, 28))
+    expect(claim.reload.national_insurance_number).to eq("PX321499A")
+
     # TODO [PAGE 25] - What is your address
     # TODO [PAGE 26] - Email address
     # TODO [PAGE 27] - Enter bank account details
