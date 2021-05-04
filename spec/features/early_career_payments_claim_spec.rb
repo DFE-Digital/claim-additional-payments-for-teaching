@@ -117,7 +117,14 @@ RSpec.feature "Teacher Early Career Payments claims" do
     # TODO [PAGE 25] - What is your address
     # TODO [PAGE 26] - Email address
     # TODO [PAGE 27] - Enter bank account details
-    # TODO [PAGE 28] - What gender does your school's payroll system associate with you
+    # [PAGE 28] - What gender does your school's payroll system associate with you
+    expect(page).to have_text(I18n.t("questions.payroll_gender"))
+
+    choose "Female"
+    click_on "Continue"
+
+    expect(claim.reload.payroll_gender).to eq("female")
+
     # TODO [PAGE 29] - What is your teacher reference number
     # TODO [PAGE 30] - Are you currently paying off your student loan
     # TODO [PAGE 31] - When you applied for your student loan where was your address

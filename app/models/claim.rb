@@ -106,7 +106,7 @@ class Claim < ApplicationRecord
 
   validates :academic_year_before_type_cast, format: {with: PolicyConfiguration::ACADEMIC_YEAR_REGEXP}
 
-  validates :payroll_gender, on: [:gender, :submit], presence: {message: "Choose the option for the gender your school’s payroll system associates with you"}, unless: :has_ecp_policy?
+  validates :payroll_gender, on: [:gender, :submit], presence: {message: "Choose the option for the gender your school’s payroll system associates with you"}
 
   validates :first_name, on: [:name, :submit], presence: {message: "Enter your first name"}
   validates :first_name, length: {maximum: 100, message: "First name must be 100 characters or less"}

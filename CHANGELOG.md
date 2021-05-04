@@ -31,6 +31,8 @@ The format is based on [Keep a Changelog]
     - Add 'Did you take out a Postgraduate Doctoral Loan on or after 1 August
       2018?'
     - Add 'You are not eligible for an early careers payment'
+  - Personal Details Journey
+    - Add 'What gender does your school's payroll system associate with you?'
 - Automatically update admin claim tasks with DQT API
 
 ## [Release 089] - 2021-03-05
