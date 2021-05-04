@@ -257,5 +257,13 @@ RSpec.describe EarlyCareerPayments::Eligibility, type: :model do
         expect(EarlyCareerPayments::Eligibility.new(postgraduate_masters_loan: false)).to be_valid(:"masters-loan")
       end
     end
+
+    context "when saving in the 'postgraduate_doctoral_loan' context" do
+      it "is not valid without a value for 'postgraduate_doctoral_loan'" do
+        expect(EarlyCareerPayments::Eligibility.new).not_to be_valid(:"doctoral-loan")
+        expect(EarlyCareerPayments::Eligibility.new(postgraduate_doctoral_loan: true)).to be_valid(:"doctoral-loan")
+        expect(EarlyCareerPayments::Eligibility.new(postgraduate_doctoral_loan: false)).to be_valid(:"doctoral-loan")
+      end
+    end
   end
 end

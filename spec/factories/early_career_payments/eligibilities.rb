@@ -10,6 +10,7 @@ FactoryBot.define do
       teaching_subject_now { true }
       itt_academic_year { "2020_2021" }
       postgraduate_masters_loan { true }
+      postgraduate_doctoral_loan { true }
     end
   end
 end

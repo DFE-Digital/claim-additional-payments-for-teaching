@@ -11,7 +11,8 @@ RSpec.describe EarlyCareerPayments::EligibilityAnswersPresenter do
       eligible_itt_subject: :chemistry,
       teaching_subject_now: true,
       itt_academic_year: "2019_2020",
-      postgraduate_masters_loan: true
+      postgraduate_masters_loan: true,
+      postgraduate_doctoral_loan: true
     }
   end
   let(:eligibility) { claim.eligibility }
@@ -45,7 +46,8 @@ RSpec.describe EarlyCareerPayments::EligibilityAnswersPresenter do
         "2019 - 2020",
         "itt-year"
       ],
-      [I18n.t("early_career_payments.questions.postgraduate_masters_loan"), "Yes", "masters-loan"]
+      [I18n.t("early_career_payments.questions.postgraduate_masters_loan"), "Yes", "masters-loan"],
+      [I18n.t("early_career_payments.questions.postgraduate_doctoral_loan"), "Yes", "doctoral-loan"]
     ]
 
     expect(presenter.answers).to eq(expected_answers)
@@ -64,7 +66,8 @@ RSpec.describe EarlyCareerPayments::EligibilityAnswersPresenter do
         eligible_itt_subject: :modern_foreign_languages,
         teaching_subject_now: true,
         itt_academic_year: "2018_2019",
-        postgraduate_masters_loan: false
+        postgraduate_masters_loan: false,
+        postgraduate_doctoral_loan: true
       }
     end
 
@@ -100,7 +103,8 @@ RSpec.describe EarlyCareerPayments::EligibilityAnswersPresenter do
           "2018 - 2019",
           "itt-year"
         ],
-        [I18n.t("early_career_payments.questions.postgraduate_masters_loan"), "No", "masters-loan"]
+        [I18n.t("early_career_payments.questions.postgraduate_masters_loan"), "No", "masters-loan"],
+        [I18n.t("early_career_payments.questions.postgraduate_doctoral_loan"), "Yes", "doctoral-loan"]
       ]
 
       expect(presenter.answers).to eq(expected_answers)
