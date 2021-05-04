@@ -28,6 +28,7 @@ module EarlyCareerPayments
       "personal-details",
       # student loans phase of claim journey
       "masters-loan",
+      "doctoral-loan",
       "check-your-answers",
       "ineligible"
     ].freeze

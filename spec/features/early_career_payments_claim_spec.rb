@@ -132,7 +132,13 @@ RSpec.feature "Teacher Early Career Payments claims" do
 
     expect(claim.eligibility.reload.postgraduate_masters_loan).to eql true
 
-    # TODO [PAGE 36] - Did you take out a postgraduate doctoral loan on or after 1 August 2016
+    # [PAGE 36] - Did you take out a postgraduate doctoral loan on or after 1 August 2016
+    expect(page).to have_text(I18n.t("early_career_payments.questions.postgraduate_doctoral_loan"))
+
+    choose "Yes"
+    click_on "Continue"
+
+    expect(claim.eligibility.reload.postgraduate_doctoral_loan).to eql true
 
     # TODO [PAGE 37] - Check your answers before sending your application
     expect(page).to have_text("Check your answers before sending your application")
