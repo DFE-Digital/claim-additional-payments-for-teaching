@@ -205,6 +205,11 @@ en:
   early_career_payments:
     policy_name: "Claim a early career payment"
     policy_short_name: "Early Career Payments"
+    check_answers:
+      part_one:
+        primary_heading: Check your answers for your eligibility?
+        secondary_heading: Eligibility details
+        confirmation_notice: By selecting continue you are confirming that, to the best of your knowledge, the details you are providing are correct.
     claim_description: "for an early-career payment"
     support_email_address: "earlycareerteacherpayments@digital.education.gov.uk"
     landing_page: "Apply for an early-career payment"

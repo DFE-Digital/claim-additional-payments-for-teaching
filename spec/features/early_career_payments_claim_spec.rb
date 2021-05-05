@@ -80,7 +80,13 @@ RSpec.feature "Teacher Early Career Payments claims" do
     expect(claim.eligibility.reload.itt_academic_year).to eql "2018_2019"
 
     # TODO [PAGE 14] - In what academic year did you start your postgraduate ITT
-    # TODO [PAGE 15] - Check your answers for eligibility
+    # [PAGE 15] - Check your answers for eligibility
+    expect(page).to have_text(I18n.t("early_career_payments.check_answers.part_one.primary_heading"))
+    expect(page).to have_text(I18n.t("early_career_payments.check_answers.part_one.secondary_heading"))
+    expect(page).to have_text(I18n.t("early_career_payments.check_answers.part_one.confirmation_notice"))
+
+    click_on("Continue")
+
     # TODO [PAGE 16] - You are eligible for an early career payment
     # TODO [PAGE 20] - Personal Details
     # TODO [PAGE 21] - One Time Password
@@ -116,6 +122,7 @@ RSpec.feature "Teacher Early Career Payments claims" do
 
     # [PAGE 25] - What is your address
     expect(page).to have_text(I18n.t("questions.address"))
+
     fill_in_address
 
     expect(claim.reload.address_line_1).to eql("123 Main Street")

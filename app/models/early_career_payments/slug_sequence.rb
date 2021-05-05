@@ -22,6 +22,7 @@ module EarlyCareerPayments
       "eligible-itt-subject",
       "teaching-subject-now",
       "itt_year",
+      "check-your-answers-part-one",
       # eligible later phase of claim journey
       # personal details phase of claim journey
       "how_we_will_use_information_provided",
