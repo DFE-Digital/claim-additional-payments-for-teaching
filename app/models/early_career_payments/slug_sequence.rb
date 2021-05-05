@@ -27,6 +27,7 @@ module EarlyCareerPayments
       "how_we_will_use_information_provided",
       "personal-details",
       "address",
+      "bank-details",
       "gender",
       # student loans phase of claim journey
       "masters-loan",
