@@ -114,7 +114,16 @@ RSpec.feature "Teacher Early Career Payments claims" do
     expect(claim.reload.date_of_birth).to eq(Date.new(1988, 2, 28))
     expect(claim.reload.national_insurance_number).to eq("PX321499A")
 
-    # TODO [PAGE 25] - What is your address
+    # [PAGE 25] - What is your address
+    expect(page).to have_text(I18n.t("questions.address"))
+    fill_in_address
+
+    expect(claim.reload.address_line_1).to eql("123 Main Street")
+    expect(claim.address_line_2).to eql("Downtown")
+    expect(claim.address_line_3).to eql("Twin Peaks")
+    expect(claim.address_line_4).to eql("Washington")
+    expect(claim.postcode).to eql("M1 7HL")
+
     # TODO [PAGE 26] - Email address
     # TODO [PAGE 27] - Enter bank account details
     # [PAGE 28] - What gender does your school's payroll system associate with you

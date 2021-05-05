@@ -32,6 +32,7 @@ The format is based on [Keep a Changelog]
       2018?'
     - Add 'You are not eligible for an early careers payment'
   - Personal Details Journey
+    - Add 'What is your address?'
     - Add 'What gender does your school's payroll system associate with you?'
 - Automatically update admin claim tasks with DQT API
 
