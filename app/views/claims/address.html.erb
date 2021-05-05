@@ -1,4 +1,5 @@
 <% content_for(:page_title, page_title(t("questions.address"), policy: current_policy_routing_name, show_error: current_claim.errors.any?)) %>
+<% shared_view_css_size = current_claim.policy == EarlyCareerPayments ? "l" : "xl" %>
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
@@ -6,7 +7,7 @@
 
     <%= form_for current_claim, url: claim_path(current_policy_routing_name) do |form| %>
       <fieldset class="govuk-fieldset">
-        <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl">
+        <legend class="govuk-fieldset__legend govuk-fieldset__legend--<%= shared_view_css_size %>">
           <h1 class="govuk-fieldset__heading">
             <%= t("questions.address") %>
           </h1>

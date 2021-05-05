@@ -116,7 +116,7 @@ class Claim < ApplicationRecord
   validates :surname, on: [:name, :submit], presence: {message: "Enter your last name"}
   validates :surname, length: {maximum: 100, message: "Last name must be 100 characters or less"}
 
-  validates :address_line_1, on: [:address, :submit], presence: {message: "Enter your building and street address"}, unless: :has_ecp_policy?
+  validates :address_line_1, on: [:address, :submit], presence: {message: "Enter your building and street address"}
   validates :address_line_1, length: {maximum: 100, message: "Address lines must be 100 characters or less"}
   validates :address_line_2, length: {maximum: 100, message: "Address lines must be 100 characters or less"}
   validates :address_line_3, length: {maximum: 100, message: "Address lines must be 100 characters or less"}
