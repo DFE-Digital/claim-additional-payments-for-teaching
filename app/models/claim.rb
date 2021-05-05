@@ -122,7 +122,7 @@ class Claim < ApplicationRecord
   validates :address_line_3, length: {maximum: 100, message: "Address lines must be 100 characters or less"}
   validates :address_line_4, length: {maximum: 100, message: "Address lines must be 100 characters or less"}
 
-  validates :postcode, on: [:address, :submit], presence: {message: "Enter your postcode"}, unless: :has_ecp_policy?
+  validates :postcode, on: [:address, :submit], presence: {message: "Enter your postcode"}
   validates :postcode, length: {maximum: 11, message: "Postcode must be 11 characters or less"}
 
   validates :date_of_birth, on: [:"date-of-birth", :submit], presence: {message: "Enter your date of birth"}
@@ -145,9 +145,9 @@ class Claim < ApplicationRecord
                             length: {maximum: 256, message: "Email address must be 256 characters or less"},
                             allow_blank: true
 
-  validates :banking_name, on: [:"bank-details", :submit], presence: {message: "Enter the name on your bank account"}, unless: :has_ecp_policy?
-  validates :bank_sort_code, on: [:"bank-details", :submit], presence: {message: "Enter a sort code"}, unless: :has_ecp_policy?
-  validates :bank_account_number, on: [:"bank-details", :submit], presence: {message: "Enter an account number"}, unless: :has_ecp_policy?
+  validates :banking_name, on: [:"bank-details", :submit], presence: {message: "Enter the name on your bank account"}
+  validates :bank_sort_code, on: [:"bank-details", :submit], presence: {message: "Enter a sort code"}
+  validates :bank_account_number, on: [:"bank-details", :submit], presence: {message: "Enter an account number"}
 
   validates :payroll_gender, on: [:"payroll-gender-task", :submit], presence: {message: "You must select a gender that will be passed to HMRC"}, unless: :has_ecp_policy?
 
