@@ -5,14 +5,13 @@
     <%= render("shared/error_summary", instance: current_claim) if current_claim.errors.any? %>
 
     <%= form_for current_claim, url: claim_path(current_policy_routing_name) do |form| %>
+      <%= personal_details_caption(current_claim) %>
       <%= form_group_tag current_claim do %>
         <h1 class="govuk-label-wrapper">
           <%= form.label :email_address, t("questions.email_address"), class: "govuk-label govuk-label--xl"  %>
         </h1>
 
-        <span class="govuk-hint" id="email_address-hint">
-          We will only use your email address to update you about your claim, and to inform you about future opportunities to claim. We recommend you use a personal email address.
-        </span>
+        <%= email_govuk_hint(current_claim) %>
 
         <%= errors_tag current_claim, :email_address %>
 

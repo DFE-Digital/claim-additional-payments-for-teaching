@@ -131,7 +131,15 @@ RSpec.feature "Teacher Early Career Payments claims" do
     expect(claim.address_line_4).to eql("Washington")
     expect(claim.postcode).to eql("M1 7HL")
 
-    # TODO [PAGE 26] - Email address
+    # [PAGE 26] - Email address
+    expect(page).to have_text(I18n.t("questions.email_address"))
+
+    fill_in "Email address", with: "david.tau1988@hotmail.co.uk"
+
+    click_on "Continue"
+
+    expect(claim.reload.email_address).to eql("david.tau1988@hotmail.co.uk")
+
     # [PAGE 27] - Enter bank account details
     expect(page).to have_text(I18n.t("questions.bank_details"))
 

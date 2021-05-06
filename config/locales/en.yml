@@ -58,6 +58,7 @@ en:
       one_course: "When did the first year of your higher education course start?"
       two_or_more_courses: "When did your higher education courses start?"
     email_address: "Email address"
+    email_address_hint: "We will only use your email address to update you about your claim, and to inform you about future opportunities to claim. We recommend you use a personal email address."
     bank_details: "Enter bank account details"
     payroll_gender: "What gender does your school's payroll system associate with you?"
   admin:
@@ -215,6 +216,8 @@ en:
     landing_page: "Apply for an early-career payment"
     ineligible: "You are not eligible"
     personal_details: "Personal details"
+    email_address_hint1: "We will use your email address to update you about your application. We recommend you use a personal email address."
+    email_address_hint2: "We will send you an email with a 6 character password, this will be used on the next screen."
     questions:
       employed_as_supply_teacher: "Are you currently employed as a supply teacher?"
       has_entire_term_contract: "Do you have a contract to teach at the same school for an entire term or longer?"

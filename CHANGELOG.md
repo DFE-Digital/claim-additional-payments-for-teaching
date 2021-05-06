@@ -36,6 +36,7 @@ The format is based on [Keep a Changelog]
     - Add 'What is your address?'
     - Add 'What gender does your school's payroll system associate with you?'
     - Add 'Enter bank account details'
+    - Add 'Email address'
 - Automatically update admin claim tasks with DQT API
 
 ## [Release 089] - 2021-03-05
