@@ -140,7 +140,7 @@ class Claim < ApplicationRecord
   validates :student_loan_plan, on: [:submit], presence: {message: "We have not been able determined your student loan repayment plan. Answer all questions about your student loan."}, unless: :has_ecp_policy?
   validates :student_loan_plan, on: [:amendment], inclusion: {in: [Claim::NO_STUDENT_LOAN], message: "You can’t amend the student loan plan type because the claimant said they are no longer paying off their student loan"}, if: :no_student_loan?
 
-  validates :email_address, on: [:"email-address", :submit], presence: {message: "Enter an email address"}, unless: :has_ecp_policy?
+  validates :email_address, on: [:"email-address", :submit], presence: {message: "Enter an email address"}
   validates :email_address, format: {with: URI::MailTo::EMAIL_REGEXP, message: "Enter an email in the format name@example.com"},
                             length: {maximum: 256, message: "Email address must be 256 characters or less"},
                             allow_blank: true
