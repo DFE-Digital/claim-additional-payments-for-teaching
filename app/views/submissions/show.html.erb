@@ -4,7 +4,7 @@
   <div class="govuk-grid-column-two-thirds">
 
     <div class="govuk-panel govuk-panel--confirmation">
-      <h1 class="govuk-panel__title">Claim submitted</h1>
+      <%= claim_submitted_title(current_claim) %>
       <div class="govuk-panel__body">
         Your reference number<br>
         <strong><%= current_claim.reference %></strong>
@@ -17,31 +17,11 @@
 
     <h2 class="govuk-heading-m">What happens next</h2>
 
-    <p class="govuk-body">
-      We’ll check the details you provided in your claim and then contact
-      you to confirm your identity over the phone.
-    </p>
-
-    <p class="govuk-body">
-      We'll send you an email from <strong><%= support_email_address(current_claim.policy.routing_name) %></strong>
-      to arrange a convenient time for us to call you on your school's
-      landline.
-    </p>
-
-    <p class="govuk-body">
-      Please add <strong><%= support_email_address(current_claim.policy.routing_name) %></strong>
-      to your address book to make sure you receive this email.
-    </p>
-
-    <p class="govuk-body">
-      You'll find out if your claim was successful within  <%= claim_decision_deadline_in_weeks %>
-      weeks and you'll receive email updates as your application progresses.
-    </p>
-
-    <div class="govuk-inset-text">
-      It can take up to 18 weeks to process your application and
-      make the payment into your account.
-    </div>
+    <% if current_claim.has_ecp_policy? %>
+      <%= render partial: "completion" %>
+    <% else %>
+      <%= render partial: "confirmation", locals: { current_policy_routing_name: current_policy_routing_name } %>
+    <% end %>
 
     <p class="govuk-body">
       <%= link_to "What did you think of this service?", done_page_url, class: "govuk-link" %>
