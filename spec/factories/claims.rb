@@ -15,6 +15,8 @@ FactoryBot.define do
     end
 
     trait :submittable do
+      with_student_loan
+
       first_name { "Jo" }
       surname { "Bloggs" }
       address_line_1 { "1 Test Road" }
@@ -22,11 +24,6 @@ FactoryBot.define do
       date_of_birth { 20.years.ago.to_date }
       teacher_reference_number { generate(:teacher_reference_number) }
       national_insurance_number { generate(:national_insurance_number) }
-      has_student_loan { true }
-      student_loan_country { :england }
-      student_loan_courses { :one_course }
-      student_loan_start_date { StudentLoan::BEFORE_1_SEPT_2012 }
-      student_loan_plan { StudentLoan::PLAN_1 }
       email_address { generate(:email_address) }
       banking_name { "Jo Bloggs" }
       bank_sort_code { rand(100000..999999) }
@@ -89,6 +86,28 @@ FactoryBot.define do
       bank_account_number { nil }
       building_society_roll_number { nil }
       personal_data_removed_at { Time.zone.now }
+    end
+
+    trait :with_student_loan do
+      has_student_loan { true }
+      student_loan_country { StudentLoan::ENGLAND }
+      student_loan_courses { :one_course }
+      student_loan_start_date { StudentLoan::BEFORE_1_SEPT_2012 }
+      # student_loan_start_date { StudentLoan::ON_OR_AFTER_1_SEPT_2012 }
+      student_loan_plan { StudentLoan::PLAN_1 }
+    end
+
+    trait :with_student_loan_for_two_courses do
+      with_student_loan
+
+      student_loan_courses { :two_or_more_courses }
+      # student_loan_start_date { StudentLoan::BEFORE_1_SEPT_2012 }
+      student_loan_start_date { StudentLoan::ON_OR_AFTER_1_SEPT_2012 }
+    end
+
+    trait :with_unanswered_student_loan_questions do
+      has_student_loan { true }
+      student_loan_country { StudentLoan::SCOTLAND }
     end
   end
 end

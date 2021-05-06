@@ -107,60 +107,111 @@ describe ClaimsHelper do
   end
 
   describe "#student_loan_answers" do
-    it "returns an array of question and answers for the student loan questions" do
-      claim = build(
-        :claim,
-        has_student_loan: true,
-        student_loan_country: StudentLoan::ENGLAND,
-        student_loan_courses: :one_course,
-        student_loan_start_date: StudentLoan::ON_OR_AFTER_1_SEPT_2012,
-        eligibility: build(:student_loans_eligibility, student_loan_repayment_amount: 1987.65)
-      )
+    let(:claim) { build(:claim, trait, eligibility: eligibility) }
+    let(:trait) { :with_student_loan }
 
-      expected_answers = [
-        [t("questions.has_student_loan"), "Yes", "student-loan"],
-        [t("questions.student_loan_country"), "England", "student-loan-country"],
-        [t("questions.student_loan_how_many_courses"), "One course", "student-loan-how-many-courses"],
-        [t("questions.student_loan_start_date.one_course"), t("answers.student_loan_start_date.one_course.on_or_after_first_september_2012"), "student-loan-start-date"]
-      ]
+    context "TSLR (Student Loans) policy" do
+      let(:eligibility) { build(:student_loans_eligibility, student_loan_repayment_amount: 1987.65) }
 
-      expect(helper.student_loan_answers(claim)).to eq expected_answers
+      it "returns an array of question and answers for the student loan questions" do
+        expected_answers = [
+          [t("questions.has_student_loan"), "Yes", "student-loan"],
+          [t("questions.student_loan_country"), "England", "student-loan-country"],
+          [t("questions.student_loan_how_many_courses"), "One course", "student-loan-how-many-courses"],
+          [
+            t("questions.student_loan_start_date.one_course"),
+            t("answers.student_loan_start_date.one_course.before_first_september_2012"),
+            "student-loan-start-date"
+          ]
+        ]
+
+        expect(helper.student_loan_answers(claim)).to eq expected_answers
+      end
+
+      context "with the loan start date and answer" do
+        let(:trait) { :with_student_loan_for_two_courses }
+
+        it "adjusts according to the number of courses answer" do
+          expected_answers = [
+            [t("questions.has_student_loan"), "Yes", "student-loan"],
+            [t("questions.student_loan_country"), "England", "student-loan-country"],
+            [t("questions.student_loan_how_many_courses"), "Two or more courses", "student-loan-how-many-courses"],
+            [
+              t("questions.student_loan_start_date.two_or_more_courses"),
+              t("answers.student_loan_start_date.two_or_more_courses.on_or_after_first_september_2012"),
+              "student-loan-start-date"
+            ]
+          ]
+
+          expect(helper.student_loan_answers(claim)).to eq expected_answers
+        end
+      end
+
+      context "when it has unanswered questions" do
+        let(:trait) { :with_unanswered_student_loan_questions }
+
+        it "these are excluded" do
+          expected_answers = [
+            [t("questions.has_student_loan"), "Yes", "student-loan"],
+            [t("questions.student_loan_country"), "Scotland", "student-loan-country"]
+          ]
+
+          expect(helper.student_loan_answers(claim)).to eq expected_answers
+        end
+      end
     end
 
-    it "adjusts the loan start date question and answer according to the number of courses answer" do
-      claim = build(
-        :claim,
-        has_student_loan: true,
-        student_loan_country: StudentLoan::ENGLAND,
-        student_loan_courses: :two_or_more_courses,
-        student_loan_start_date: StudentLoan::BEFORE_1_SEPT_2012,
-        eligibility: build(:student_loans_eligibility, student_loan_repayment_amount: 1987.65)
-      )
+    context "Early Career Payment policy" do
+      let(:eligibility) { build(:early_career_payments_eligibility, postgraduate_masters_loan: true, postgraduate_doctoral_loan: false) }
 
-      expected_answers = [
-        [t("questions.has_student_loan"), "Yes", "student-loan"],
-        [t("questions.student_loan_country"), "England", "student-loan-country"],
-        [t("questions.student_loan_how_many_courses"), "Two or more courses", "student-loan-how-many-courses"],
-        [t("questions.student_loan_start_date.two_or_more_courses"), t("answers.student_loan_start_date.two_or_more_courses.before_first_september_2012"), "student-loan-start-date"]
-      ]
+      it "returns an array of question and answers for the student loan questions" do
+        expected_answers = [
+          [t("questions.has_student_loan"), "Yes", "student-loan"],
+          [t("questions.student_loan_country"), "England", "student-loan-country"],
+          [t("questions.student_loan_how_many_courses"), "One course", "student-loan-how-many-courses"],
+          [
+            t("questions.student_loan_start_date.one_course"),
+            t("answers.student_loan_start_date.one_course.before_first_september_2012"),
+            "student-loan-start-date"
+          ],
+          [t("early_career_payments.questions.postgraduate_masters_loan"), "Yes", "masters-loan"],
+          [t("early_career_payments.questions.postgraduate_doctoral_loan"), "No", "doctoral-loan"]
+        ]
 
-      expect(helper.student_loan_answers(claim)).to eq expected_answers
-    end
+        expect(helper.student_loan_answers(claim)).to eq expected_answers
+      end
 
-    it "excludes unanswered questions" do
-      claim = build(
-        :claim,
-        has_student_loan: true,
-        student_loan_country: StudentLoan::SCOTLAND,
-        eligibility: build(:student_loans_eligibility, student_loan_repayment_amount: 1987.65)
-      )
+      context "with the loan start date and answer" do
+        let(:trait) { :with_student_loan_for_two_courses }
 
-      expected_answers = [
-        [t("questions.has_student_loan"), "Yes", "student-loan"],
-        [t("questions.student_loan_country"), "Scotland", "student-loan-country"]
-      ]
+        it "adjusts according to the number of courses answer" do
+          expected_answers = [
+            [t("questions.has_student_loan"), "Yes", "student-loan"],
+            [t("questions.student_loan_country"), "England", "student-loan-country"],
+            [t("questions.student_loan_how_many_courses"), "Two or more courses", "student-loan-how-many-courses"],
+            [t("questions.student_loan_start_date.two_or_more_courses"), t("answers.student_loan_start_date.two_or_more_courses.on_or_after_first_september_2012"), "student-loan-start-date"],
+            [t("early_career_payments.questions.postgraduate_masters_loan"), "Yes", "masters-loan"],
+            [t("early_career_payments.questions.postgraduate_doctoral_loan"), "No", "doctoral-loan"]
+          ]
 
-      expect(helper.student_loan_answers(claim)).to eq expected_answers
+          expect(helper.student_loan_answers(claim)).to eq expected_answers
+        end
+      end
+
+      context "when it has unanswered questions" do
+        let(:trait) { :with_unanswered_student_loan_questions }
+
+        it "these are excluded" do
+          expected_answers = [
+            [t("questions.has_student_loan"), "Yes", "student-loan"],
+            [t("questions.student_loan_country"), "Scotland", "student-loan-country"],
+            [t("early_career_payments.questions.postgraduate_masters_loan"), "Yes", "masters-loan"],
+            [t("early_career_payments.questions.postgraduate_doctoral_loan"), "No", "doctoral-loan"]
+          ]
+
+          expect(helper.student_loan_answers(claim)).to eq expected_answers
+        end
+      end
     end
   end
 end
