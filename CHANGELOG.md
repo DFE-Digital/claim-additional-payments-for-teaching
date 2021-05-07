@@ -32,6 +32,7 @@ The format is based on [Keep a Changelog]
     - Add 'Did you take out a Postgraduate Doctoral Loan on or after 1 August
       2018?'
     - Add 'You are not eligible for an early careers payment'
+    - Add 'Are you currently paying off your student loan?'
   - Personal Details Journey
     - Add 'What is your address?'
     - Add 'What gender does your school's payroll system associate with you?'
