@@ -178,7 +178,13 @@ RSpec.feature "Teacher Early Career Payments claims" do
 
     expect(claim.reload.has_student_loan).to eql true
 
-    # TODO [PAGE 31] - When you applied for your student loan where was your address
+    # [PAGE 31] - When you applied for your student loan where was your address
+    expect(page).to have_text(I18n.t("questions.student_loan_country"))
+
+    choose "England"
+    click_on "Continue"
+
+    expect(claim.reload.student_loan_country).to eql("england")
     # TODO [PAGE 32] - How many higher education courses did you take a student loan out for
     # TODO [PAGE 33] - When did the first year of your higher education course start
     # TODO [PAGE 34] - When did your higher education courses start

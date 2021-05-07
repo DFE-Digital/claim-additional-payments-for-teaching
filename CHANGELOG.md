@@ -34,6 +34,7 @@ The format is based on [Keep a Changelog]
       2018?'
     - Add 'You are not eligible for an early careers payment'
     - Add 'Are you currently paying off your student loan?'
+    - Add 'When you applied for your student loan where was your home address?'
   - Personal Details Journey
     - Add 'What is your address?'
     - Add 'What gender does your school's payroll system associate with you?'
