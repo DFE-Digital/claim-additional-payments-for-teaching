@@ -162,7 +162,14 @@ RSpec.feature "Teacher Early Career Payments claims" do
 
     expect(claim.reload.payroll_gender).to eq("female")
 
-    # TODO [PAGE 29] - What is your teacher reference number
+    # [PAGE 29] - What is your teacher reference number
+    expect(page).to have_text(I18n.t("questions.teacher_reference_number"))
+
+    fill_in :claim_teacher_reference_number, with: "1234567"
+    click_on "Continue"
+
+    expect(claim.reload.teacher_reference_number).to eql("1234567")
+
     # [PAGE 30] - Are you currently paying off your student loan
     expect(page).to have_text(I18n.t("questions.has_student_loan"))
 
