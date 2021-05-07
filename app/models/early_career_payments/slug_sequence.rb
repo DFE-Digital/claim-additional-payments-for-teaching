@@ -32,6 +32,7 @@ module EarlyCareerPayments
       "bank-details",
       "gender",
       # student loans phase of claim journey
+      "student-loan",
       "masters-loan",
       "doctoral-loan",
       "check-your-answers",

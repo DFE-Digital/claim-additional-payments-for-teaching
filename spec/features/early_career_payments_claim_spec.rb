@@ -163,7 +163,14 @@ RSpec.feature "Teacher Early Career Payments claims" do
     expect(claim.reload.payroll_gender).to eq("female")
 
     # TODO [PAGE 29] - What is your teacher reference number
-    # TODO [PAGE 30] - Are you currently paying off your student loan
+    # [PAGE 30] - Are you currently paying off your student loan
+    expect(page).to have_text(I18n.t("questions.has_student_loan"))
+
+    choose "Yes"
+    click_on "Continue"
+
+    expect(claim.reload.has_student_loan).to eql true
+
     # TODO [PAGE 31] - When you applied for your student loan where was your address
     # TODO [PAGE 32] - How many higher education courses did you take a student loan out for
     # TODO [PAGE 33] - When did the first year of your higher education course start
