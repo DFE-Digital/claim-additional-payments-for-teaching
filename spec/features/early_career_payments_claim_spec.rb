@@ -195,8 +195,8 @@ RSpec.feature "Teacher Early Career Payments claims" do
       expect(claim.reload.submitted_at).to eq(Time.zone.now)
     end
 
-    # TODO [PAGE 38] - Application complete (make sure its Word for Word and styling matches)
-    expect(page).to have_text("Claim submitted")
+    # [PAGE 38] - Application complete (make sure its Word for Word and styling matches)
+    expect(page).to have_text("Application complete")
     expect(page).to have_text(claim.reference)
   end
 

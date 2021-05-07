@@ -7,7 +7,7 @@ class SubmissionsController < BasePublicController
       RecordOrUpdateGeckoboardDatasetJob.perform_later([current_claim.id])
       UpdateAdminClaimTasksWithDqtApiJob.perform_later(current_claim)
 
-      redirect_to claim_confirmation_path
+      redirect_to current_claim.has_ecp_policy? ? claim_completion_path : claim_confirmation_path
     else
       render "claims/check_your_answers"
     end
