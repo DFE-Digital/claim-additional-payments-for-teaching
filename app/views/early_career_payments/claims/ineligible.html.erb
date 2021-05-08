@@ -3,16 +3,13 @@
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
     <h1 class="govuk-heading-xl">
-      <%= I18n.t("early_career_payments.ineligible") %>
+      <%= I18n.t("early_career_payments.ineligible.heading") %> <%= current_claim.eligibility.ineligibility_reason == :subject_to_formal_performance_action ? "for an early-careers payment" : nil %>
     </h1>
 
-    <p class="govuk-body">
-      Based on the answers you have provided you are not eligible
-      <%= I18n.t("early_career_payments.claim_description") %>.
-    </p>
+    <%= render "ineligibility_reason_#{current_claim.eligibility.ineligibility_reason}" %>
 
     <p class="govuk-body">
-      If you need to know more about who can make a claim, check our
+      If you want to know more about who can apply, check our
       <%= link_to "eligibility page", EarlyCareerPayments.eligibility_page_url, class: "govuk-link" %>.
     </p>
   </div>

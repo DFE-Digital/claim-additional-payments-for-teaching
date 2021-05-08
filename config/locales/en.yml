@@ -214,7 +214,11 @@ en:
     claim_description: "for an early-career payment"
     support_email_address: "earlycareerteacherpayments@digital.education.gov.uk"
     landing_page: "Apply for an early-career payment"
-    ineligible: "You are not eligible"
+    ineligible:
+      heading: "You are not eligible"
+      reason:
+        itt_subject: "Early-career payments are only available for teachers who did their ITT in:"
+        not_teaching_subject: "You can only get this payment if you are still teaching maths/chemistry/physics/modern languages."
     personal_details: "Personal details"
     email_address_hint1: "We will use your email address to update you about your application. We recommend you use a personal email address."
     email_address_hint2: "We will send you an email with a 6 character password, this will be used on the next screen."

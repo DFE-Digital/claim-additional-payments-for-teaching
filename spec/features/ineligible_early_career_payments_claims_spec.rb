@@ -15,7 +15,7 @@ RSpec.feature "Ineligible Teacher Early Career Payments claims" do
     choose "No"
     click_on "Continue"
 
-    expect(page).to have_text(I18n.t("early_career_payments.ineligible"))
+    expect(page).to have_text(I18n.t("early_career_payments.ineligible.heading"))
     expect(page).to have_link(href: EarlyCareerPayments.eligibility_page_url)
     expect(page).to have_text("Based on the answers you have provided you are not eligible #{I18n.t("early_career_payments.claim_description")}")
   end
@@ -35,9 +35,9 @@ RSpec.feature "Ineligible Teacher Early Career Payments claims" do
     choose "Yes"
     click_on "Continue"
 
-    expect(page).to have_text(I18n.t("early_career_payments.ineligible"))
     expect(page).to have_link(href: EarlyCareerPayments.eligibility_page_url)
-    expect(page).to have_text("Based on the answers you have provided you are not eligible #{I18n.t("early_career_payments.claim_description")}")
+    expect(page).to have_text("You are not eligible for an early-careers payment")
+    expect(page).to have_text("You are not eligible for the early-career payment but you may be able to claim a student loan repayment.")
   end
 
   scenario "When subject to disciplinary action" do
@@ -55,18 +55,19 @@ RSpec.feature "Ineligible Teacher Early Career Payments claims" do
     choose "No"
     click_on "Continue"
 
-    # [PAGE 08] - Are you currently subject to dsiciplinary action
+    # [PAGE 08] - Are you currently subject to disciplinary action
     expect(page).to have_text(I18n.t("early_career_payments.questions.disciplinary_action"))
 
     choose "Yes"
     click_on "Continue"
 
-    expect(page).to have_text(I18n.t("early_career_payments.ineligible"))
+    expect(page).to have_text(I18n.t("early_career_payments.ineligible.heading"))
     expect(page).to have_link(href: EarlyCareerPayments.eligibility_page_url)
     expect(page).to have_text("Based on the answers you have provided you are not eligible #{I18n.t("early_career_payments.claim_description")}")
   end
 
-  scenario "supply teacher doesn't have a contract for a whole term" do
+  # Employed as Supply Teacher with contract less than an entire term
+  scenario "supply teacher doesn't have a contract for a whole term at same school" do
     start_early_career_payments_claim
 
     # [PAGE 04] - Are you currently employed as a supply teacher
@@ -81,7 +82,7 @@ RSpec.feature "Ineligible Teacher Early Career Payments claims" do
     choose "No"
     click_on "Continue"
 
-    expect(page).to have_text(I18n.t("early_career_payments.ineligible"))
+    expect(page).to have_text(I18n.t("early_career_payments.ineligible.heading"))
     expect(page).to have_link(href: EarlyCareerPayments.eligibility_page_url)
     expect(page).to have_text("Based on the answers you have provided you are not eligible #{I18n.t("early_career_payments.claim_description")}")
   end
@@ -108,9 +109,52 @@ RSpec.feature "Ineligible Teacher Early Career Payments claims" do
     choose "No"
     click_on "Continue"
 
-    expect(page).to have_text(I18n.t("early_career_payments.ineligible"))
+    expect(page).to have_text(I18n.t("early_career_payments.ineligible.heading"))
     expect(page).to have_link(href: EarlyCareerPayments.eligibility_page_url)
     expect(page).to have_text("Based on the answers you have provided you are not eligible #{I18n.t("early_career_payments.claim_description")}")
+  end
+
+  scenario "when subject for undergraduate ITT or postgraduate ITT is 'none of the above'" do
+    start_early_career_payments_claim
+    claim = Claim.order(:created_at).last
+
+    # [PAGE 04] - Are you currently employed as a supply teacher
+    expect(page).to have_text(I18n.t("early_career_payments.questions.employed_as_supply_teacher"))
+
+    choose "No"
+    click_on "Continue"
+
+    # [PAGE 07] - Are you currently subject to action for poor performance
+    expect(page).to have_text(I18n.t("early_career_payments.questions.formal_performance_action"))
+
+    choose "No"
+    click_on "Continue"
+
+    # [PAGE 08] - Are you currently subject to disciplinary action
+    expect(page).to have_text(I18n.t("early_career_payments.questions.disciplinary_action"))
+
+    choose "No"
+    click_on "Continue"
+
+    # [PAGE 09] - Did you do a postgraduate ITT course or undergraduate ITT course
+    expect(page).to have_text(I18n.t("early_career_payments.questions.postgraduate_itt_or_undergraduate_itt_course"))
+
+    choose "Undergraduate"
+    click_on "Continue"
+
+    expect(claim.eligibility.reload.pgitt_or_ugitt_course).to eq "undergraduate"
+
+    # [PAGE 10] - Which subject did you do your undergraduate ITT in
+    expect(page).to have_text(I18n.t("early_career_payments.questions.eligible_itt_subject", ug_or_pg: claim.eligibility.pgitt_or_ugitt_course))
+
+    choose "None of the above"
+    click_on "Continue"
+
+    expect(claim.eligibility.reload.eligible_itt_subject).to eql "none_of_the_above"
+
+    expect(page).to have_text(I18n.t("early_career_payments.ineligible.heading"))
+    expect(page).to have_link(href: EarlyCareerPayments.eligibility_page_url)
+    expect(page).to have_text(I18n.t("early_career_payments.ineligible.reason.itt_subject"))
   end
 
   scenario "when no longer teaching an eligible ITT subject" do
@@ -129,7 +173,7 @@ RSpec.feature "Ineligible Teacher Early Career Payments claims" do
     choose "No"
     click_on "Continue"
 
-    # [PAGE 08] - Are you currently subject to dsiciplinary action
+    # [PAGE 08] - Are you currently subject to disciplinary action
     expect(page).to have_text(I18n.t("early_career_payments.questions.disciplinary_action"))
 
     choose "No"
@@ -159,9 +203,9 @@ RSpec.feature "Ineligible Teacher Early Career Payments claims" do
 
     expect(claim.eligibility.reload.teaching_subject_now).to eql false
 
-    expect(page).to have_text(I18n.t("early_career_payments.ineligible"))
+    expect(page).to have_text(I18n.t("early_career_payments.ineligible.heading"))
     expect(page).to have_link(href: EarlyCareerPayments.eligibility_page_url)
-    expect(page).to have_text("Based on the answers you have provided you are not eligible #{I18n.t("early_career_payments.claim_description")}")
+    expect(page).to have_text(I18n.t("early_career_payments.ineligible.reason.not_teaching_subject"))
   end
 
   scenario "when academic year completed undergraduate ITT or started postgraduate ITT is 'none of the above'" do
@@ -180,7 +224,7 @@ RSpec.feature "Ineligible Teacher Early Career Payments claims" do
     choose "No"
     click_on "Continue"
 
-    # [PAGE 08] - Are you currently subject to dsiciplinary action
+    # [PAGE 08] - Are you currently subject to disciplinary action
     expect(page).to have_text(I18n.t("early_career_payments.questions.disciplinary_action"))
 
     choose "No"
@@ -218,7 +262,7 @@ RSpec.feature "Ineligible Teacher Early Career Payments claims" do
 
     expect(claim.eligibility.reload.itt_academic_year).to eql "none_of_the_above"
 
-    expect(page).to have_text(I18n.t("early_career_payments.ineligible"))
+    expect(page).to have_text(I18n.t("early_career_payments.ineligible.heading"))
     expect(page).to have_link(href: EarlyCareerPayments.eligibility_page_url)
     expect(page).to have_text("Based on the answers you have provided you are not eligible #{I18n.t("early_career_payments.claim_description")}")
   end

@@ -68,9 +68,18 @@ module EarlyCareerPayments
         not_employed_directly? ||
         subject_to_formal_performance_action? ||
         subject_to_disciplinary_action? ||
-        not_supported_itt_subject? ||
+        itt_subject_none_of_the_above? ||
         not_teaching_now_in_eligible_itt_subject? ||
         ineligible_itt_academic_year?
+    end
+
+    def ineligibility_reason
+      [
+        :generic_ineligibility,
+        :subject_to_formal_performance_action,
+        :itt_subject_none_of_the_above,
+        :not_teaching_now_in_eligible_itt_subject
+      ].find { |eligibility_check| send("#{eligibility_check}?") }
     end
 
     def award_amount
@@ -103,12 +112,16 @@ module EarlyCareerPayments
       employed_as_supply_teacher? && employed_directly == false
     end
 
-    def not_supported_itt_subject?
-      itt_subject_none_of_the_above?
-    end
-
     def not_teaching_now_in_eligible_itt_subject?
       teaching_subject_now == false
+    end
+
+    def generic_ineligibility?
+      ineligible_nqt_in_academic_year_after_itt? ||
+        no_entire_term_contract? ||
+        not_employed_directly? ||
+        subject_to_disciplinary_action? ||
+        ineligible_itt_academic_year?
     end
   end
 end
