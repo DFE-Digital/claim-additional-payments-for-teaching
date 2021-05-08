@@ -59,14 +59,19 @@ RSpec.describe EarlyCareerPayments::Eligibility, type: :model do
       expect(EarlyCareerPayments::Eligibility.new.ineligible?).to eql false
     end
 
+    it "returns true when the NQT acdemic year was not the year after the ITT" do
+      expect(EarlyCareerPayments::Eligibility.new(nqt_in_academic_year_after_itt: false).ineligible?).to eql true
+      expect(EarlyCareerPayments::Eligibility.new(nqt_in_academic_year_after_itt: true).ineligible?).to eql false
+    end
+
     it "returns true when claimant is a supply teacher without a contract of at least one term" do
       expect(EarlyCareerPayments::Eligibility.new(employed_as_supply_teacher: true, has_entire_term_contract: false).ineligible?).to eql true
       expect(EarlyCareerPayments::Eligibility.new(employed_as_supply_teacher: true, has_entire_term_contract: true).ineligible?).to eql false
     end
 
-    it "returns true when the NQT acdemic year was not the year after the ITT" do
-      expect(EarlyCareerPayments::Eligibility.new(nqt_in_academic_year_after_itt: false).ineligible?).to eql true
-      expect(EarlyCareerPayments::Eligibility.new(nqt_in_academic_year_after_itt: true).ineligible?).to eql false
+    it "returns true when claimant is a supply teacher employed by a private agency" do
+      expect(EarlyCareerPayments::Eligibility.new(employed_as_supply_teacher: true, employed_directly: false).ineligible?).to eql true
+      expect(EarlyCareerPayments::Eligibility.new(employed_as_supply_teacher: true, employed_directly: true).ineligible?).to eql false
     end
 
     it "returns true when subject to formal performance action" do
@@ -84,7 +89,7 @@ RSpec.describe EarlyCareerPayments::Eligibility, type: :model do
       expect(EarlyCareerPayments::Eligibility.new(eligible_itt_subject: :mathematics).ineligible?).to eql false
     end
 
-    it "returns true when teaching now the course indentified as being eligible ITT subject" do
+    it "returns true when still teaching now the course indentified as being eligible ITT subject" do
       expect(EarlyCareerPayments::Eligibility.new(teaching_subject_now: false).ineligible?).to eql true
       expect(EarlyCareerPayments::Eligibility.new(teaching_subject_now: true).ineligible?).to eql false
     end
@@ -94,6 +99,23 @@ RSpec.describe EarlyCareerPayments::Eligibility, type: :model do
       expect(EarlyCareerPayments::Eligibility.new(itt_academic_year: "2018_2019").ineligible?).to eql false
       expect(EarlyCareerPayments::Eligibility.new(itt_academic_year: "2019_2020").ineligible?).to eql false
       expect(EarlyCareerPayments::Eligibility.new(itt_academic_year: "2020_2021").ineligible?).to eql false
+    end
+  end
+
+  describe "#ineligibility_reason" do
+    it "returns nil when the reason for ineligibility cannot be determined" do
+      expect(EarlyCareerPayments::Eligibility.new.ineligibility_reason).to be_nil
+    end
+
+    it "returns a symbol indicating the reason for ineligibility" do
+      expect(EarlyCareerPayments::Eligibility.new(nqt_in_academic_year_after_itt: false).ineligibility_reason).to eq :generic_ineligibility
+      expect(EarlyCareerPayments::Eligibility.new(employed_as_supply_teacher: true, has_entire_term_contract: false).ineligibility_reason).to eql :generic_ineligibility
+      expect(EarlyCareerPayments::Eligibility.new(employed_as_supply_teacher: true, employed_directly: false).ineligibility_reason).to eql :generic_ineligibility
+      expect(EarlyCareerPayments::Eligibility.new(subject_to_formal_performance_action: true).ineligibility_reason).to eq :subject_to_formal_performance_action
+      expect(EarlyCareerPayments::Eligibility.new(subject_to_disciplinary_action: true).ineligibility_reason).to eql :generic_ineligibility
+      expect(EarlyCareerPayments::Eligibility.new(eligible_itt_subject: :none_of_the_above).ineligibility_reason).to eq :itt_subject_none_of_the_above
+      expect(EarlyCareerPayments::Eligibility.new(teaching_subject_now: false).ineligibility_reason).to eql :not_teaching_now_in_eligible_itt_subject
+      expect(EarlyCareerPayments::Eligibility.new(itt_academic_year: :none_of_the_above).ineligibility_reason).to eql :generic_ineligibility
     end
   end
 

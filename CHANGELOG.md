@@ -24,6 +24,7 @@ The format is based on [Keep a Changelog]
     - Add 'Did you do a postgraduate ITT course or an undergraduate ITT course?'
     - Add 'Which subject did you do your undergraduate ITT in?'
     - Add 'Do you teach ITT subject now?'
+    - Add 'You are not eligible' (Subject)
     - Add 'In what academic year did you complete your undergraduate ITT?'
     - Add 'Check your answers for eligibility?'
     - Add 'How we will use the information you provide'
