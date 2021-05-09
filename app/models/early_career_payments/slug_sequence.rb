@@ -31,6 +31,7 @@ module EarlyCareerPayments
       "email-address",
       "bank-details",
       "gender",
+      "teacher-reference-number",
       # student loans phase of claim journey
       "student-loan",
       "masters-loan",

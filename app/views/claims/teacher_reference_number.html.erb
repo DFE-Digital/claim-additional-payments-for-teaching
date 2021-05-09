@@ -1,4 +1,5 @@
 <% content_for(:page_title, page_title(t("questions.teacher_reference_number"), policy: current_policy_routing_name, show_error: current_claim.errors.any?)) %>
+<% shared_view_css_size = current_claim.policy == EarlyCareerPayments ? "l" : "xl" %>
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
@@ -7,17 +8,28 @@
     <%= form_for current_claim, url: claim_path(current_policy_routing_name) do |form| %>
       <%= form_group_tag current_claim do %>
         <h1 class="govuk-label-wrapper">
-          <%= form.label :teacher_reference_number, t("questions.teacher_reference_number"), class: "govuk-label govuk-label--xl" %>
+          <%= form.label :teacher_reference_number, t("questions.teacher_reference_number"), class: "govuk-label govuk-label--#{shared_view_css_size}" %>
         </h1>
 
-        <span class="govuk-hint" id="teacher_reference_number-hint">
-          You can get this from your school, the certificate you got when you
-          qualified as a teacher or from the
-          <a href="https://www.gov.uk/guidance/individual-teacher-records-information-for-teachers#contact"  class="govuk-link">
-            teacher qualifications helpdesk
-          </a>.
-          You can also call the teacher qualifications helpdesk on 020 7593 5394 between 9am and 5pm Monday to Friday.
-        </span>
+        <% if current_claim.has_ecp_policy? %>
+            
+          <span class="govuk-hint" id="ecp_trn_hint">
+            You can get this from your school or on the certificate you got when you qualified as a teacher. 
+            You can also call the teacher qualifications helpdesk on 020 7593 5394 between 9am and 5pm Monday to Friday.
+          </span>
+      
+        <% else %>
+
+          <span class="govuk-hint" id="teacher_reference_number-hint">
+            You can get this from your school, the certificate you got when you
+            qualified as a teacher or from the
+            <a href="https://www.gov.uk/guidance/individual-teacher-records-information-for-teachers#contact"  class="govuk-link">
+              teacher qualifications helpdesk
+            </a>.
+            You can also call the teacher qualifications helpdesk on 020 7593 5394 between 9am and 5pm Monday to Friday.
+          </span>
+      
+        <% end %>
 
         <div class="govuk-form-group">
           <%= errors_tag current_claim, :teacher_reference_number %>

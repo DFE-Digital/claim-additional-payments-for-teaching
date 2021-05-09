@@ -127,7 +127,7 @@ class Claim < ApplicationRecord
 
   validates :date_of_birth, on: [:"date-of-birth", :submit], presence: {message: "Enter your date of birth"}
 
-  validates :teacher_reference_number, on: [:"teacher-reference-number", :submit], presence: {message: "Enter your teacher reference number"}, unless: :has_ecp_policy?
+  validates :teacher_reference_number, on: [:"teacher-reference-number", :submit], presence: {message: "Enter your teacher reference number"}
   validate :trn_must_be_seven_digits
 
   validates :national_insurance_number, on: [:"national-insurance-number", :submit], presence: {message: "Enter your National Insurance number"}

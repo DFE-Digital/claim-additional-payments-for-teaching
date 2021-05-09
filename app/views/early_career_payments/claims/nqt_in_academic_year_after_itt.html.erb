@@ -1,5 +1,6 @@
 <% content_for(:page_title, page_title(t("early_career_payments.questions.nqt_in_academic_year_after_itt"), policy: current_policy_routing_name, show_error: current_claim.errors.any?)) %>
 <% path_for_form = current_claim.persisted? ? claim_path(current_policy_routing_name) : claims_path(current_policy_routing_name) %>
+<% shared_view_css_size = current_claim.policy == EarlyCareerPayments ? "l" : "xl" %>
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
@@ -12,7 +13,7 @@
 
           <fieldset class="govuk-fieldset" aria-describedby="nqt_in_academic_year_after_itt-hint" role="group">
 
-            <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl">
+            <legend class="govuk-fieldset__legend govuk-fieldset__legend--<%= shared_view_css_size %>">
               <h1 class="govuk-fieldset__heading">
                 <%= t("early_career_payments.questions.nqt_in_academic_year_after_itt") %>
               </h1>
