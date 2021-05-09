@@ -81,9 +81,18 @@ RSpec.feature "Teacher Early Career Payments claims" do
 
     # TODO [PAGE 14] - In what academic year did you start your postgraduate ITT
     # [PAGE 15] - Check your answers for eligibility
-    expect(page).to have_text(I18n.t("early_career_payments.check_answers.part_one.primary_heading"))
-    expect(page).to have_text(I18n.t("early_career_payments.check_answers.part_one.secondary_heading"))
-    expect(page).to have_text(I18n.t("early_career_payments.check_answers.part_one.confirmation_notice"))
+    expect(page).to have_text(I18n.t("early_career_payments.check_your_answers.part_one.primary_heading"))
+    expect(page).to have_text(I18n.t("early_career_payments.check_your_answers.part_one.secondary_heading"))
+    expect(page).to have_text(I18n.t("early_career_payments.check_your_answers.part_one.confirmation_notice"))
+
+    %w[Identity\ details Payment\ details Student\ loan\ details].each do |section_heading|
+      expect(page).not_to have_text section_heading
+    end
+
+    within(".govuk-summary-list") do
+      expect(page).not_to have_text(I18n.t("early_career_payments.questions.postgraduate_masters_loan"))
+      expect(page).not_to have_text(I18n.t("early_career_payments.questions.postgraduate_doctoral_loan"))
+    end
 
     click_on("Continue")
 
@@ -200,11 +209,20 @@ RSpec.feature "Teacher Early Career Payments claims" do
 
     # TODO [PAGE 37] - Check your answers before sending your application
     expect(page).to have_text("Check your answers before sending your application")
+    expect(page).not_to have_text("Eligibility details")
+    %w[Identity\ details Payment\ details Student\ loan\ details].each do |section_heading|
+      expect(page).to have_text section_heading
+    end
+
+    within(".govuk-summary-list:nth-of-type(3)") do
+      expect(page).to have_text(I18n.t("early_career_payments.questions.postgraduate_masters_loan"))
+      expect(page).to have_text(I18n.t("early_career_payments.questions.postgraduate_doctoral_loan"))
+    end
 
     stub_geckoboard_dataset_update
 
     freeze_time do
-      click_on "Confirm and send"
+      click_on "Accept and send"
 
       expect(claim.reload.submitted_at).to eq(Time.zone.now)
     end

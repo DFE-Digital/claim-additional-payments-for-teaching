@@ -43,6 +43,10 @@ en:
         unit: "£"
   service_name: "Claim additional payments for teaching"
   support_email_address: "additionalteachingpayment@digital.education.gov.uk"
+  check_your_answers:
+    heading_send_application: Confirm and send your application
+    statement: By submitting this notification you are confirming that, to the best of your knowledge, the details you are providing are correct.
+    btn_text: Confirm and send
   questions:
     current_school: "Which school are you currently employed to teach at?"
     qts_award_year: "When did you complete your initial teacher training?"
@@ -204,13 +208,16 @@ en:
         student_loan_amount: "Does the claimant’s student loan amount and plan type match the information we hold about their loan?"
         matching_details: "Is this claim still valid despite having matching details with other claims?"
   early_career_payments:
-    policy_name: "Claim a early career payment"
-    policy_short_name: "Early Career Payments"
-    check_answers:
+    check_your_answers:
       part_one:
         primary_heading: Check your answers for your eligibility?
         secondary_heading: Eligibility details
         confirmation_notice: By selecting continue you are confirming that, to the best of your knowledge, the details you are providing are correct.
+      heading_send_application: Now send your application
+      statement: By submitting this you are confirming that, to the best of your knowledge, the details you are providing are correct.
+      btn_text: Accept and send
+    policy_name: "Claim a early career payment"
+    policy_short_name: "Early Career Payments"
     claim_description: "for an early-career payment"
     support_email_address: "earlycareerteacherpayments@digital.education.gov.uk"
     landing_page: "Apply for an early-career payment"
