@@ -35,6 +35,7 @@ module EarlyCareerPayments
       # student loans phase of claim journey
       "student-loan",
       "student-loan-country",
+      "student-loan-how-many-courses",
       "masters-loan",
       "doctoral-loan",
       "check-your-answers",
