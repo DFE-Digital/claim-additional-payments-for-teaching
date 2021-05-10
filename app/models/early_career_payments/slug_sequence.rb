@@ -34,6 +34,7 @@ module EarlyCareerPayments
       "teacher-reference-number",
       # student loans phase of claim journey
       "student-loan",
+      "student-loan-country",
       "masters-loan",
       "doctoral-loan",
       "check-your-answers",
