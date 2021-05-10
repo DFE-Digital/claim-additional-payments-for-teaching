@@ -61,8 +61,8 @@ case $ENVIRONMENT_NAME in
     ;;
 esac
 
-# PROJECT_CORE_RESOURCE_GROUP_NAME="$RESOURCE_GROUP_PREFIX-ProjectCore"
-# PROJECT_CORE_DEPLOYMENT_NAME=$PROJECT_CORE_RESOURCE_GROUP_NAME
+PROJECT_CORE_RESOURCE_GROUP_NAME="$RESOURCE_GROUP_PREFIX-ProjectCore"
+PROJECT_CORE_DEPLOYMENT_NAME=$PROJECT_CORE_RESOURCE_GROUP_NAME
 
 SECRETS_RESOURCE_GROUP_NAME="$RESOURCE_GROUP_PREFIX-secrets"
 SECRETS_DEPLOYMENT_NAME=$SECRETS_RESOURCE_GROUP_NAME
@@ -114,8 +114,8 @@ SCRIPT_PATH=$(cd "$(dirname "$0")" ; pwd -P)
 
 RESOURCE_LOCATION="West Europe"
 
-# PROJECT_CORE_TEMPLATE_FILE_PATH="$SCRIPT_PATH/../azure/resource_groups/ProjectCore/template.json"
-# PROJECT_CORE_PARAMETERS_FILE_PATH="$SCRIPT_PATH/../azure/resource_groups/ProjectCore/parameters/$ENVIRONMENT_NAME.json"
+PROJECT_CORE_TEMPLATE_FILE_PATH="$SCRIPT_PATH/../azure/resource_groups/ProjectCore/template.json"
+PROJECT_CORE_PARAMETERS_FILE_PATH="$SCRIPT_PATH/../azure/resource_groups/ProjectCore/parameters/$ENVIRONMENT_NAME.json"
 
 SECRETS_TEMPLATE_FILE_PATH="$SCRIPT_PATH/../azure/resource_groups/secrets/template.json"
 SECRETS_PARAMETERS_FILE_PATH="$SCRIPT_PATH/../azure/resource_groups/secrets/parameters/$ENVIRONMENT_NAME.json"
@@ -136,35 +136,35 @@ fi
 echo "Setting default subscription to $SUBSCRIPTION_ID..."
 az account set --subscription "$SUBSCRIPTION_ID"
 
-# if ! az group show --name "$PROJECT_CORE_RESOURCE_GROUP_NAME" > /dev/null; then
-#   echo "$PROJECT_CORE_RESOURCE_GROUP_NAME does not exist"
-#   exit 1
-# fi
+if ! az group show --name "$PROJECT_CORE_RESOURCE_GROUP_NAME" > /dev/null; then
+  echo "$PROJECT_CORE_RESOURCE_GROUP_NAME does not exist"
+  exit 1
+fi
 
-# echo "Starting ProjectCore deployment..."
+echo "Starting ProjectCore deployment..."
 
-# PROJECT_CORE_DEPLOYMENT_RESULT=$(
-#   az deployment group create \
-#     --name "$PROJECT_CORE_DEPLOYMENT_NAME" \
-#     --resource-group "$PROJECT_CORE_RESOURCE_GROUP_NAME" \
-#     --template-file "$PROJECT_CORE_TEMPLATE_FILE_PATH" \
-#     --parameters "@$PROJECT_CORE_PARAMETERS_FILE_PATH" \
-#     --mode Complete \
-#     --verbose \
-#     <&- || true
-# )
+PROJECT_CORE_DEPLOYMENT_RESULT=$(
+  az deployment group create \
+    --name "$PROJECT_CORE_DEPLOYMENT_NAME" \
+    --resource-group "$PROJECT_CORE_RESOURCE_GROUP_NAME" \
+    --template-file "$PROJECT_CORE_TEMPLATE_FILE_PATH" \
+    --parameters "@$PROJECT_CORE_PARAMETERS_FILE_PATH" \
+    --mode Complete \
+    --verbose \
+    <&- || true
+)
 
-# if ! [ "$PROJECT_CORE_DEPLOYMENT_RESULT" ]; then
-#   echo "Deployment failed!"
-#   echo "There may be some parameters missing from $PROJECT_CORE_PARAMETERS_FILE_PATH or something else might have gone wrong."
-#   exit 1
-# fi
+if ! [ "$PROJECT_CORE_DEPLOYMENT_RESULT" ]; then
+  echo "Deployment failed!"
+  echo "There may be some parameters missing from $PROJECT_CORE_PARAMETERS_FILE_PATH or something else might have gone wrong."
+  exit 1
+fi
 
-# echo "$PROJECT_CORE_DEPLOYMENT_RESULT"
+echo "$PROJECT_CORE_DEPLOYMENT_RESULT"
 
-# echo
-# echo "$PROJECT_CORE_RESOURCE_GROUP_NAME deployed!"
-# echo
+echo
+echo "$PROJECT_CORE_RESOURCE_GROUP_NAME deployed!"
+echo
 
 ensure-resource-group-exists $SECRETS_RESOURCE_GROUP_NAME
 
