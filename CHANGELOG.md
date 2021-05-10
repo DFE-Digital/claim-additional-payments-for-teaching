@@ -40,6 +40,7 @@ The format is based on [Keep a Changelog]
     - Add 'Enter bank account details'
     - Add 'Email address'
     - Add 'What is your teacher reference number'
+  - Add 'Check your answers before sending your application'
   - Add 'Application complete'
 - Automatically update admin claim tasks with DQT API
 

@@ -8,21 +8,27 @@
       Check your answers before sending your application
     </h1>
 
-    <%= render partial: "claims/check_your_answers_section", locals: {heading: "Eligibility details", answers: eligibility_answers(current_claim)} %>
+    <%= render partial: "claims/check_your_answers_section", locals: {heading: "Eligibility details", answers: eligibility_answers(current_claim)} unless current_claim.has_ecp_policy? %> 
 
     <%= render partial: "claims/check_your_answers_section", locals: {heading: "Identity details", answers: identity_answers(current_claim)} %>
 
-    <%= render partial: "claims/check_your_answers_section", locals: {heading: "Student loan details", answers: student_loan_answers(current_claim)} %>
+    <% if current_claim.has_ecp_policy? %>
+      <%= render partial: "claims/check_your_answers_section", locals: {heading: "Payment details", answers: payment_answers(current_claim)} %>
 
-    <%= render partial: "claims/check_your_answers_section", locals: {heading: "Payment details", answers: payment_answers(current_claim)} %>
+      <%= render partial: "claims/check_your_answers_section", locals: {heading: "Student loan details", answers: student_loan_answers(current_claim)} %>
+    <% else %>
+      <%= render partial: "claims/check_your_answers_section", locals: {heading: "Student loan details", answers: student_loan_answers(current_claim)} %>
+
+      <%= render partial: "claims/check_your_answers_section", locals: {heading: "Payment details", answers: payment_answers(current_claim)} %>
+    <% end %>
 
     <%= form_with url: claim_submission_path do |form| %>
-      <h2 class="govuk-heading-m">Confirm and send your application</h2>
+      <%= send_your_application(current_claim) %>
 
-      <p class="govuk-body">By submitting this notification you are confirming that, to the best of your knowledge, the details you are providing are correct.</p>
+      <%= statement(current_claim) %>
 
       <div class="govuk-form-group">
-        <%= form.submit "Confirm and send", class: "govuk-button" %>
+        <%= form.submit submit_text(current_claim), class: "govuk-button" %>
       </div>
     <% end %>
   </div>
