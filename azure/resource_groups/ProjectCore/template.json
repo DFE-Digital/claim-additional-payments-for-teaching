@@ -31,71 +31,8 @@
     {
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2017-05-10",
-      "name": "[variables('vnetDeploymentName')]",
-      "properties": {
-        "mode": "Incremental",
-        "templateLink": {
-          "uri": "[concat(variables('platformBuildingBlocksDeploymentUrlBase'), 'virtual-network.json')]",
-          "contentVersion": "1.0.0.0"
-        },
-        "parameters": {
-          "vnetName": {
-            "value": "[variables('vnetName')]"
-          },
-          "vnetAddressSpaceCIDR": {
-            "value": "[parameters('vnetAddressSpaceCIDR')]"
-          },
-          "subnetConfiguration": {
-            "value": [
-              {
-                "name": "default",
-                "properties": {
-                  "addressPrefix": "[parameters('defaultSubnetAddressPrefix')]",
-                  "serviceEndpoints": [
-                    {
-                      "service": "Microsoft.Storage",
-                      "locations": ["westeurope", "northeurope"]
-                    },
-                    {
-                      "service": "Microsoft.KeyVault",
-                      "locations": ["westeurope"]
-                    }
-                  ],
-                  "delegations": [],
-                  "privateEndpointNetworkPolicies": "Enabled",
-                  "privateLinkServiceNetworkPolicies": "Enabled"
-                }
-              },
-              {
-                "name": "[variables('workerSubnetName')]",
-                "properties": {
-                  "addressPrefix": "[parameters('workerSubnetAddressPrefix')]",
-                  "delegations": [
-                    {
-                      "name": "DelegationService",
-                      "properties": {
-                        "serviceName": "Microsoft.ContainerInstance/containerGroups"
-                      }
-                    }
-                  ],
-                  "serviceEndpoints": [
-                    {
-                      "service": "Microsoft.Sql"
-                    }
-                  ],
-                  "privateEndpointNetworkPolicies": "Enabled"
-                }
-              }
-            ]
-          }
-        }
-      }
-    },
-    {
-      "type": "Microsoft.Resources/deployments",
-      "apiVersion": "2017-05-10",
       "name": "[variables('workerNetworkProfileDeploymentName')]",
-      "dependsOn": ["[resourceId('Microsoft.Resources/deployments', variables('vnetDeploymentName'))]"],
+      "dependsOn": [],
       "properties": {
         "mode": "Incremental",
         "templateLink": {
