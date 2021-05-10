@@ -126,7 +126,7 @@ RSpec.feature "Maths & Physics claims" do
       click_on "Continue"
 
       expect(claim.reload.banking_name).to eq("Jo Bloggs")
-      expect(claim.reload.bank_sort_code).to eq("123456")
+      expect(claim.bank_sort_code).to eq("123456")
       expect(claim.bank_account_number).to eq("87654321")
       expect(claim.building_society_roll_number).to eq("1234/123456789")
 
