@@ -61,7 +61,7 @@
                       "locations": ["westeurope"]
                     }
                   ],
-                  "delegations": ["Microsoft.Web/serverFarms"],
+                  "delegations": "Microsoft.Web/serverFarms",
                   "privateEndpointNetworkPolicies": "Enabled",
                   "privateLinkServiceNetworkPolicies": "Enabled"
                 }
