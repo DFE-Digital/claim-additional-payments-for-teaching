@@ -36,6 +36,7 @@ module EarlyCareerPayments
       "student-loan",
       "student-loan-country",
       "student-loan-how-many-courses",
+      "student-loan-start-date",
       "masters-loan",
       "doctoral-loan",
       "check-your-answers",

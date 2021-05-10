@@ -159,7 +159,7 @@ RSpec.feature "Teacher Early Career Payments claims" do
     click_on "Continue"
 
     expect(claim.reload.banking_name).to eq("Jo Bloggs")
-    expect(claim.reload.bank_sort_code).to eq("123456")
+    expect(claim.bank_sort_code).to eq("123456")
     expect(claim.bank_account_number).to eq("87654321")
     expect(claim.building_society_roll_number).to eq("1234/123456789")
 
@@ -201,8 +201,15 @@ RSpec.feature "Teacher Early Career Payments claims" do
     click_on "Continue"
 
     expect(claim.reload.student_loan_courses).to eql("one_course")
-    # TODO [PAGE 33] - When did the first year of your higher education course start
-    # TODO [PAGE 34] - When did your higher education courses start
+    # [PAGE 33] - When did the first year of your higher education course start
+    expect(page).to have_text(I18n.t("questions.student_loan_start_date.one_course"))
+
+    choose "Before 1 September 2012"
+    click_on "Continue"
+
+    expect(claim.reload.student_loan_start_date).to eq(StudentLoan::BEFORE_1_SEPT_2012)
+    expect(claim.student_loan_plan).to eq(StudentLoan::PLAN_1)
+
     # [PAGE 35] - Did you take out a postgraduate masters loan on or after 1 August 2016
     expect(page).to have_text(I18n.t("early_career_payments.questions.postgraduate_masters_loan"))
 

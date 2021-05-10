@@ -43,6 +43,14 @@ The format is based on [Keep a Changelog]
     - Add 'Enter bank account details'
     - Add 'Email address'
     - Add 'What is your teacher reference number'
+  - Student Loan Information Journey
+    - Add 'Are you currently paying off your student loan'
+    - Add 'When you applied for your student loan where was your address'
+    - Add 'How many higher education courses did you take a student loan for'
+    - Add 'When did the first year of your higher education course start'
+    - Add 'When did your higher education courses start'
+    - Add 'Did you take out a masters loan on or after 1 August 2016'
+    - Add 'Did you take out a doctoral loan on or after 1 August 2016'
   - Add 'Check your answers before sending your application'
   - Add 'Application complete'
 - Automatically update admin claim tasks with DQT API
