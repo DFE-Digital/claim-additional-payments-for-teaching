@@ -1,4 +1,6 @@
 <% content_for(:page_title, page_title(t("questions.student_loan_how_many_courses"), policy: current_policy_routing_name, show_error: current_claim.errors.any?)) %>
+<% shared_view_css_size = current_claim.policy == EarlyCareerPayments ? "l" : "xl" %>
+<% shared_view_radios = current_claim.policy == EarlyCareerPayments ? "radios--inline" : "radios" %>
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
@@ -8,7 +10,7 @@
       <%= form.hidden_field :student_loan_courses %>
         <%= form_group_tag current_claim do %>
           <fieldset class="govuk-fieldset" role="group", aria-describedby="student_loan_courses-hint">
-            <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl">
+            <legend class="govuk-fieldset__legend govuk-fieldset__legend--<%= shared_view_css_size %>">
               <span class="govuk-caption-xl">About your student loans</span>
               <h1 class="govuk-fieldset__heading">
                 <%= t("questions.student_loan_how_many_courses") %>
@@ -21,7 +23,7 @@
 
             <%= errors_tag current_claim, :student_loan_courses %>
 
-            <div class="govuk-radios">
+            <div class="govuk-<%= shared_view_radios %>">
               <div class="govuk-radios__item">
                 <%= form.radio_button(:student_loan_courses, :one_course, class: "govuk-radios__input")%>
                 <%= form.label :student_loan_courses_one_course, "1", class: "govuk-label govuk-radios__label" %>
