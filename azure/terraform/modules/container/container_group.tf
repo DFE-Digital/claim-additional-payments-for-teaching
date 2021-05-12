@@ -6,7 +6,7 @@ resource "azurerm_container_group" "cont_reg_01" {
   # ip_address_type = "Public"
   # dns_name_label = "s118d01-aci-label-01"
   os_type            = "Linux"
-  #network_profile_id = var.projcore_network_prof
+  network_profile_id = var.projcore_network_prof
 
   container {
     name   = format("%s-%s", var.app_rg_name, "worker-container")
@@ -43,10 +43,10 @@ resource "azurerm_container_group" "cont_reg_01" {
       #"GOVUK_VERIFY_VSP_HOST"                          = format("%s%s.%s", "https://", data.azurerm_app_service.app_vsp_as.name, "azurewebsites.net")      
     }
 
-    # ports {
-    #   port     = 443
-    #   protocol = "TCP"
-    # }
+    ports {
+      port     = 443
+      protocol = "TCP"
+    }
   }
 
   tags = merge({
@@ -61,7 +61,7 @@ resource "azurerm_container_group" "cont_reg_02" {
   resource_group_name = var.app_rg_name
   # dns_name_label      = "s118d01-aci-label-01"
   os_type            = "Linux"
-  #network_profile_id = var.projcore_network_prof
+  # network_profile_id = var.projcore_network_prof
   restart_policy     = "OnFailure"
   #ip_address_type    = "Private"
 
@@ -104,10 +104,10 @@ resource "azurerm_container_group" "cont_reg_02" {
     cpu    = "1"
     memory = "1.5"
 
-    # ports {
-    #   port     = 443
-    #   protocol = "TCP"
-    # }
+    ports {
+      port     = 443
+      protocol = "TCP"
+    }
 
   }
 
