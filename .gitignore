@@ -36,3 +36,11 @@ localhost.key
 # Ignore RSpec example status persistence file
 spec/examples.txt
 coverage/
+
+# Local .terraform directories
+**/.terraform/*
+
+# .tfstate files
+*.tfstate
+*.tfstate.*
+*terraform.lock*
