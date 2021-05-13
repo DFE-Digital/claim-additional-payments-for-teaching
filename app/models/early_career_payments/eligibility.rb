@@ -18,7 +18,8 @@ module EarlyCareerPayments
     ATTRIBUTE_DEPENDENCIES = {
       "employed_as_supply_teacher" => ["has_entire_term_contract", "employed_directly"],
       "pgitt_or_ugitt_course" => ["eligible_itt_subject", "teaching_subject_now"],
-      "eligible_itt_subject" => ["teaching_subject_now"]
+      "eligible_itt_subject" => ["teaching_subject_now"],
+      "has_student_loan" => ["postgraduate_masters_loan", "postgraduate_doctoral_loan"]
     }.freeze
 
     self.table_name = "early_career_payments_eligibilities"
@@ -95,7 +96,7 @@ module EarlyCareerPayments
     def reset_dependent_answers
       ATTRIBUTE_DEPENDENCIES.each do |attribute_name, dependent_attribute_names|
         dependent_attribute_names.each do |dependent_attribute_name|
-          write_attribute(dependent_attribute_name, nil) if changed.include?(attribute_name)
+          write_attribute(dependent_attribute_name, nil) if changed.include?(attribute_name) || claim.changed.include?(attribute_name)
         end
       end
     end

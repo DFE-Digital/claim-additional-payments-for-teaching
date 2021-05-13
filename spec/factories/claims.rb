@@ -109,5 +109,13 @@ FactoryBot.define do
       has_student_loan { true }
       student_loan_country { StudentLoan::SCOTLAND }
     end
+
+    trait :with_no_student_loan do
+      has_student_loan { false }
+      student_loan_country { nil }
+      student_loan_courses { nil }
+      student_loan_start_date { nil }
+      student_loan_plan { nil }
+    end
   end
 end

@@ -137,7 +137,7 @@ class Claim < ApplicationRecord
   validates :student_loan_country, on: [:"student-loan-country"], presence: {message: "Select the country you lived in when you applied for your student loan"}
   validates :student_loan_courses, on: [:"student-loan-how-many-courses"], presence: {message: "Select the number of student loans you have taken out"}
   validates :student_loan_start_date, on: [:"student-loan-start-date"], presence: {message: ->(object, data) { I18n.t("validation_errors.student_loan_start_date.#{object.student_loan_courses}") }}
-  validates :student_loan_plan, on: [:submit], presence: {message: "We have not been able determined your student loan repayment plan. Answer all questions about your student loan."}, unless: :has_ecp_policy?
+  validates :student_loan_plan, on: [:submit], presence: {message: "We have not been able determined your student loan repayment plan. Answer all questions about your student loan."}
   validates :student_loan_plan, on: [:amendment], inclusion: {in: [Claim::NO_STUDENT_LOAN], message: "You can’t amend the student loan plan type because the claimant said they are no longer paying off their student loan"}, if: :no_student_loan?
 
   validates :email_address, on: [:"email-address", :submit], presence: {message: "Enter an email address"}
@@ -149,7 +149,7 @@ class Claim < ApplicationRecord
   validates :bank_sort_code, on: [:"bank-details", :submit], presence: {message: "Enter a sort code"}
   validates :bank_account_number, on: [:"bank-details", :submit], presence: {message: "Enter an account number"}
 
-  validates :payroll_gender, on: [:"payroll-gender-task", :submit], presence: {message: "You must select a gender that will be passed to HMRC"}, unless: :has_ecp_policy?
+  validates :payroll_gender, on: [:"payroll-gender-task", :submit], presence: {message: "You must select a gender that will be passed to HMRC"}
 
   validate :bank_account_number_must_be_eight_digits
   validate :bank_sort_code_must_be_six_digits

@@ -144,8 +144,9 @@ RSpec.describe EarlyCareerPayments::Eligibility, type: :model do
   end
 
   describe "#reset_dependent_answers" do
+    let!(:claim) { build_stubbed(:claim, :with_student_loan, eligibility: eligibility) }
     let(:eligibility) do
-      create(
+      build_stubbed(
         :early_career_payments_eligibility,
         :eligible,
         employed_as_supply_teacher: true,
@@ -205,6 +206,24 @@ RSpec.describe EarlyCareerPayments::Eligibility, type: :model do
       expect { eligibility.reset_dependent_answers }
         .to change { eligibility.employed_directly }
         .from(false).to(nil)
+    end
+
+    it "resets 'postgraduate_masters_loan' when the value of 'claim.has_student_loan' changes from true to false" do
+      expect { eligibility.reset_dependent_answers }.not_to change { eligibility.attributes }
+
+      claim.has_student_loan = false
+      expect { eligibility.reset_dependent_answers }
+        .to change { eligibility.postgraduate_masters_loan }
+        .from(true).to(nil)
+    end
+
+    it "resets 'postgraduate_doctoral_loan' when the value of 'claim.has_student_loan' changes from true to false" do
+      expect { eligibility.reset_dependent_answers }.not_to change { eligibility.attributes }
+
+      claim.has_student_loan = false
+      expect { eligibility.reset_dependent_answers }
+        .to change { eligibility.postgraduate_doctoral_loan }
+        .from(true).to(nil)
     end
   end
 

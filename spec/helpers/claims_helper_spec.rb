@@ -212,6 +212,19 @@ describe ClaimsHelper do
           expect(helper.student_loan_answers(claim)).to eq expected_answers
         end
       end
+
+      context "when claimant answered 'No' to 'Paying off Student Loan'" do
+        let(:eligibility) { build(:early_career_payments_eligibility, postgraduate_masters_loan: nil, postgraduate_doctoral_loan: nil) }
+        let(:trait) { :with_no_student_loan }
+
+        it "returns an arry with a single question and answer" do
+          expected_answers = [
+            [t("questions.has_student_loan"), "No", "student-loan"]
+          ]
+
+          expect(helper.student_loan_answers(claim)).to eq expected_answers
+        end
+      end
     end
   end
 end
