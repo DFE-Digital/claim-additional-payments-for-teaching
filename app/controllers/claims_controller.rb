@@ -23,6 +23,8 @@ class ClaimsController < BasePublicController
   end
 
   def show
+    logger.debug("ClaimsController#show: #{}")
+    logger.debug("  - OTP section: #{}") if params[:slug] == "email-verification"
     search_schools if params[:school_search]
     render current_template
   end
@@ -59,6 +61,26 @@ class ClaimsController < BasePublicController
   end
 
   private
+
+  def generate_and_send_one_time_password
+    logger.debug("ClaimsController#generate_and_send_one_time_password:")
+    logger.debug("  - OTP section: #{}")
+    logger.debug("Email address params: #{params["claim"]["email_address"]}")
+    ROTP::Base32.random
+    totp = ROTP::TOTP.new("base32secret3232", issuer: "Early Career Payments", interval: OTP_PASSWORD_INTERVAL)
+    challenge_otp = totp.now
+    session[:challenge_otp] = challenge_otp
+
+    ClaimMailer.ecp_email_verification(current_claim, challenge_otp).deliver_now
+  end
+
+  def verify_one_time_password
+    logger.debug("ClaimsController#verify_one_time_password:")
+    submitted_one_time_password = params["one_time_password"]
+    logger.debug("submitted_one_time_password: #{submitted_one_time_password}")
+    totp = ROTP::TOTP.new("base32secret3232", issuer: "Early Career Payments", interval: OTP_PASSWORD_INTERVAL)
+    totp.verify(submitted_one_time_password)
+  end
 
   helper_method :next_slug
   def next_slug

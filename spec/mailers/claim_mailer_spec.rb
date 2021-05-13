@@ -129,4 +129,18 @@ RSpec.describe ClaimMailer, type: :mailer do
       end
     end
   end
+
+  context "with an EarlyCareerPayments claim" do
+    describe "#ecp_email_verification" do
+      let(:claim) { build(:claim, policy: EarlyCareerPayments) }
+      let(:mail) { ClaimMailer.ecp_email_verification(claim, one_time_password) }
+      let(:one_time_password) { 123124 }
+
+      it "mentions the one time password and its duration of validity" do
+        expect(mail.body.encoded).to include("This is your 6-character one time password:")
+        expect(mail.body.encoded).to include("#{one_time_password}")
+        expect(mail.body.encoded).to include("It is valid for 15 minutes.")
+      end
+    end
+  end
 end

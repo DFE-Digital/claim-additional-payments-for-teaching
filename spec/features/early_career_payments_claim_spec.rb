@@ -166,6 +166,16 @@ RSpec.feature "Teacher Early-Career Payments claims" do
 
     expect(claim.reload.email_address).to eql("david.tau1988@hotmail.co.uk")
 
+    # - One time password
+    expect(page).to have_text("One time password")
+
+    mail = ActionMailer::Base.deliveries.last
+    otp_in_mail_sent = mail.body.decoded.scan(/\b[0-9]{6}\b/).first
+
+    fill_in "one_time_password", with: otp_in_mail_sent
+
+    click_on "Confirm"
+
     # [PAGE 27] - Enter bank account details
     expect(page).to have_text(I18n.t("questions.bank_details"))
 
