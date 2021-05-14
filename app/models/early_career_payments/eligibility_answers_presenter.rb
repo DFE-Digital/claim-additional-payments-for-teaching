@@ -20,6 +20,7 @@ module EarlyCareerPayments
     def answers
       [].tap do |a|
         a << nqt_in_academic_year_after_itt
+        a << current_school
         a << employed_as_supply_teacher
         a << has_entire_term_contract if eligibility.employed_as_supply_teacher?
         a << employed_directly if eligibility.employed_as_supply_teacher?
@@ -47,6 +48,14 @@ module EarlyCareerPayments
         translate("early_career_payments.questions.nqt_in_academic_year_after_itt"),
         (eligibility.nqt_in_academic_year_after_itt? ? "Yes" : "No"),
         "nqt-in-academic-year-after-itt"
+      ]
+    end
+
+    def current_school
+      [
+        translate("questions.current_school"),
+        eligibility.current_school_name,
+        "current-school"
       ]
     end
 

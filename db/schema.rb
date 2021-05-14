@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_05_04_085525) do
+ActiveRecord::Schema.define(version: 2021_05_11_105439) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -127,6 +127,8 @@ ActiveRecord::Schema.define(version: 2021_05_04_085525) do
     t.integer "itt_academic_year"
     t.boolean "postgraduate_masters_loan"
     t.boolean "postgraduate_doctoral_loan"
+    t.uuid "current_school_id"
+    t.index ["current_school_id"], name: "index_early_career_payments_eligibilities_on_current_school_id"
   end
 
   create_table "local_authorities", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -287,6 +289,7 @@ ActiveRecord::Schema.define(version: 2021_05_04_085525) do
   add_foreign_key "amendments", "dfe_sign_in_users", column: "dfe_sign_in_users_id"
   add_foreign_key "claims", "payments"
   add_foreign_key "decisions", "dfe_sign_in_users", column: "created_by_id"
+  add_foreign_key "early_career_payments_eligibilities", "schools", column: "current_school_id"
   add_foreign_key "maths_and_physics_eligibilities", "schools", column: "current_school_id"
   add_foreign_key "notes", "claims"
   add_foreign_key "notes", "dfe_sign_in_users", column: "created_by_id"

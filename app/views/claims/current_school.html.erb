@@ -6,6 +6,7 @@
 
     <%= render "school_search",
                question: t("questions.current_school"),
+               ecp_question: t("early_career_payments.questions.current_school_search"),
                school_param: :current_school,
                school_id_param: :current_school_id,
                school_search_value: current_claim.eligibility.current_school_name,
@@ -15,6 +16,7 @@
     <% else %>
       <%= render "school_search_results",
                  question: t("questions.current_school"),
+                 ecp_question: t("early_career_payments.questions.current_school_results"),
                  school_param: :current_school,
                  school_id_param: :current_school_id
       %>

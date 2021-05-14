@@ -23,6 +23,11 @@ RSpec.feature "Ineligible Teacher Early Career Payments claims" do
   scenario "When subject to formal performance action" do
     start_early_career_payments_claim
 
+    # [PAGE 02/03] - Which school do you teach at
+    expect(page).to have_text(I18n.t("early_career_payments.questions.current_school_search"))
+
+    choose_school schools(:penistone_grammar_school)
+
     # [PAGE 04] - Are you currently employed as a supply teacher
     expect(page).to have_text(I18n.t("early_career_payments.questions.employed_as_supply_teacher"))
 
@@ -42,6 +47,11 @@ RSpec.feature "Ineligible Teacher Early Career Payments claims" do
 
   scenario "When subject to disciplinary action" do
     start_early_career_payments_claim
+
+    # [PAGE 02/03] - Which school do you teach at
+    expect(page).to have_text(I18n.t("early_career_payments.questions.current_school_search"))
+
+    choose_school schools(:penistone_grammar_school)
 
     # [PAGE 04] - Are you currently employed as a supply teacher
     expect(page).to have_text(I18n.t("early_career_payments.questions.employed_as_supply_teacher"))
@@ -70,6 +80,11 @@ RSpec.feature "Ineligible Teacher Early Career Payments claims" do
   scenario "supply teacher doesn't have a contract for a whole term at same school" do
     start_early_career_payments_claim
 
+    # [PAGE 02/03] - Which school do you teach at
+    expect(page).to have_text(I18n.t("early_career_payments.questions.current_school_search"))
+
+    choose_school schools(:penistone_grammar_school)
+
     # [PAGE 04] - Are you currently employed as a supply teacher
     expect(page).to have_text(I18n.t("early_career_payments.questions.employed_as_supply_teacher"))
 
@@ -90,6 +105,11 @@ RSpec.feature "Ineligible Teacher Early Career Payments claims" do
   # Employed as Supply Teacher by Private Agency
   scenario "Supply Teacher employed directly by Private Agency" do
     start_early_career_payments_claim
+
+    # [PAGE 02/03] - Which school do you teach at
+    expect(page).to have_text(I18n.t("early_career_payments.questions.current_school_search"))
+
+    choose_school schools(:penistone_grammar_school)
 
     # [PAGE 04] - Are you currently employed as a supply teacher
     expect(page).to have_text(I18n.t("early_career_payments.questions.employed_as_supply_teacher"))
@@ -117,6 +137,11 @@ RSpec.feature "Ineligible Teacher Early Career Payments claims" do
   scenario "when subject for undergraduate ITT or postgraduate ITT is 'none of the above'" do
     start_early_career_payments_claim
     claim = Claim.order(:created_at).last
+
+    # TODO [PAGE 02/03] - Which school do you teach at
+    expect(page).to have_text(I18n.t("early_career_payments.questions.current_school_search"))
+
+    choose_school schools(:penistone_grammar_school)
 
     # [PAGE 04] - Are you currently employed as a supply teacher
     expect(page).to have_text(I18n.t("early_career_payments.questions.employed_as_supply_teacher"))
@@ -160,6 +185,11 @@ RSpec.feature "Ineligible Teacher Early Career Payments claims" do
   scenario "when no longer teaching an eligible ITT subject" do
     start_early_career_payments_claim
     claim = Claim.order(:created_at).last
+
+    # [PAGE 02/03] - Which school do you teach at
+    expect(page).to have_text(I18n.t("early_career_payments.questions.current_school_search"))
+
+    choose_school schools(:penistone_grammar_school)
 
     # [PAGE 04] - Are you currently employed as a supply teacher
     expect(page).to have_text(I18n.t("early_career_payments.questions.employed_as_supply_teacher"))
@@ -211,6 +241,11 @@ RSpec.feature "Ineligible Teacher Early Career Payments claims" do
   scenario "when academic year completed undergraduate ITT or started postgraduate ITT is 'none of the above'" do
     start_early_career_payments_claim
     claim = Claim.order(:created_at).last
+
+    # [PAGE 02/03] - Which school do you teach at
+    expect(page).to have_text(I18n.t("early_career_payments.questions.current_school_search"))
+
+    choose_school schools(:penistone_grammar_school)
 
     # [PAGE 04] - Are you currently employed as a supply teacher
     expect(page).to have_text(I18n.t("early_career_payments.questions.employed_as_supply_teacher"))

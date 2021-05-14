@@ -230,6 +230,8 @@ en:
     email_address_hint1: "We will use your email address to update you about your application. We recommend you use a personal email address."
     email_address_hint2: "We will send you an email with a 6 character password, this will be used on the next screen."
     questions:
+      current_school_search: "Which school do you teach at?"
+      current_school_results: "Select the school you teach at"
       employed_as_supply_teacher: "Are you currently employed as a supply teacher?"
       has_entire_term_contract: "Do you have a contract to teach at the same school for an entire term or longer?"
       employed_directly: "Are you employed directly by your school?"

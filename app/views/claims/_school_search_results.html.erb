@@ -1,16 +1,25 @@
 <%= render("shared/error_summary", instance: current_claim, errored_field_id_overrides: { "eligibility.#{school_param}": "claim_eligibility_attributes_#{school_id_param}_#{@schools.first.id}" }) if current_claim.errors.any?
 %>
+<% shared_view_css_size = current_claim.policy == EarlyCareerPayments ? "l" : "xl" %>
 
 <%= form_for current_claim, url: claim_path(current_policy_routing_name) do |form| %>
   <%= form_group_tag current_claim do %>
     <fieldset class="govuk-fieldset" aria-describedby="school-search-result-hint">
 
-      <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl">
-        <h1 class="govuk-fieldset__heading">
-          <%= question %>
-        </h1>
-      </legend>
-
+      <% if current_claim.has_ecp_policy? %>
+        <legend class="govuk-fieldset__legend govuk-fieldset__legend--<%= shared_view_css_class_size(current_claim) %>">
+          <h1 class="govuk-fieldset__heading">
+            <%= ecp_question %>
+          </h1>
+        </legend>
+      <% else %>
+        <legend class="govuk-fieldset__legend govuk-fieldset__legend--<%= shared_view_css_class_size(current_claim) %>">
+          <h1 class="govuk-fieldset__heading">
+            <%= question %>
+          </h1>
+        </legend>
+      <% end %>  
+    
       <span id="school-search-result-hint" class="govuk-hint">
           Select your school from the search results.
         </span>
@@ -48,5 +57,7 @@
   <% end %>
 
   <%= form.submit "Continue", class: "govuk-button" %>
-  <%= link_to "Search again", claim_path, class: "govuk-button govuk-button--secondary", role: "button", data: {module: "govuk-button"} %>
+  <% if ! current_claim.has_ecp_policy? %>
+    <%= link_to "Search again", claim_path, class: "govuk-button govuk-button--secondary", role: "button", data: {module: "govuk-button"} %>
+  <% end %>
 <% end %>
