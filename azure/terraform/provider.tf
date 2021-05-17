@@ -18,7 +18,10 @@ provider "random" {
 
 terraform {
   backend "azurerm" {
-    key = "terraform.tfstate"
+    key                  = "terraform.tfstate"
+    resource_group_name  = "s118t01-tfbackend"
+    storage_account_name = "s118t01tfbackendsa"
+    container_name       = "s118t01conttfstate"
   }
 
   required_providers {

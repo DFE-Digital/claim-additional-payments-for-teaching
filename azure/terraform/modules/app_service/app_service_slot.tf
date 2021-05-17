@@ -49,6 +49,7 @@ resource "azurerm_app_service_slot" "app_as_slot" {
     "ROLLBAR_ACCESS_TOKEN"                           = data.azurerm_key_vault_secret.RollbarInfraToken.value
     "SECRET_KEY_BASE"                                = data.azurerm_key_vault_secret.SecretKeyBase.value
     "WORKER_COUNT"                                   = "2"
+    "DOCKER_REGISTRY_SERVER_URL"                     = "https://index.docker.io"
     #    "GOVUK_VERIFY_VSP_HOST"                          = format("%s%s.%s", "https://", azurerm_app_service.app_vsp_as.name, "azurewebsites.net")    
   }
 
