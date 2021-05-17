@@ -57,6 +57,36 @@ module EarlyCareerPayments
         sequence.delete("employed-directly") unless claim.eligibility.employed_as_supply_teacher?
         sequence.delete("eligibility_confirmed") unless claim.eligibility.eligible?
         sequence.delete("ineligible") unless claim.eligibility.ineligible?
+        remove_student_loan_slugs(sequence) if claim.has_student_loan == false
+        remove_student_loan_country_slugs(sequence)
+      end
+    end
+
+    private
+
+    def remove_student_loan_slugs(sequence, slugs = nil)
+      slugs ||= %w[
+        student-loan-country
+        student-loan-how-many-courses
+        student-loan-start-date
+        masters-loan
+        doctoral-loan
+      ]
+
+      slugs.each { |slug| sequence.delete(slug) }
+    end
+
+    def remove_student_loan_country_slugs(sequence)
+      slugs = %w[
+        student-loan-how-many-courses
+        student-loan-start-date
+      ]
+
+      if [
+        StudentLoan::NORTHERN_IRELAND,
+        StudentLoan::SCOTLAND
+      ].include?(claim.student_loan_country)
+        remove_student_loan_slugs(sequence, slugs)
       end
     end
   end
