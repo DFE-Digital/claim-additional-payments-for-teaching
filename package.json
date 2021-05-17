@@ -4,7 +4,7 @@
   "dependencies": {
     "a11y-dialog": "^5.4.2",
     "accessible-autocomplete": "^2.0.1",
-    "govuk-frontend": "^3.11.0"
+    "govuk-frontend": "^3.12.0"
   },
   "devDependencies": {
     "prettier": "^2.3.0"
