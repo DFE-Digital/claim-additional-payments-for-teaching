@@ -48,6 +48,7 @@ RSpec.describe EarlyCareerPayments::SlugSequence do
 
         expected_slugs = %w[
           nqt-in-academic-year-after-itt
+          current-school
           supply-teacher
           formal-performance-action
           disciplinary-action
@@ -75,6 +76,7 @@ RSpec.describe EarlyCareerPayments::SlugSequence do
       let(:expected_slugs) do
         %w[
           nqt-in-academic-year-after-itt
+          current-school
           supply-teacher
           formal-performance-action
           disciplinary-action
