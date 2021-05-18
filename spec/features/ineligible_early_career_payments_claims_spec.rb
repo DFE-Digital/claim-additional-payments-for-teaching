@@ -20,6 +20,16 @@ RSpec.feature "Ineligible Teacher Early Career Payments claims" do
     expect(page).to have_text("Based on the answers you have provided you are not eligible #{I18n.t("early_career_payments.claim_description")}")
   end
 
+  scenario "When the school selected is ineligible" do
+    start_early_career_payments_claim
+
+    # [PAGE 02/03] - Which school do you teach at
+    expect(page).to have_text(I18n.t("early_career_payments.questions.current_school_search"))
+    choose_school schools(:bradford_grammar_school)
+
+    expect(page).to have_text("This school is not eligible")
+  end
+
   scenario "When subject to formal performance action" do
     start_early_career_payments_claim
 
@@ -303,6 +313,5 @@ RSpec.feature "Ineligible Teacher Early Career Payments claims" do
   end
 
   # Additional sad paths
-  # TODO [PAGE 17] - This school is not eligible (sad path)
   # TODO [PAGE 19] - You will be eligible for an early career payment in 2022
 end

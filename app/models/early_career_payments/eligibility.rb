@@ -70,6 +70,7 @@ module EarlyCareerPayments
 
     def ineligible?
       ineligible_nqt_in_academic_year_after_itt? ||
+        ineligible_current_school? ||
         no_entire_term_contract? ||
         not_employed_directly? ||
         subject_to_formal_performance_action? ||
@@ -82,6 +83,7 @@ module EarlyCareerPayments
     def ineligibility_reason
       [
         :generic_ineligibility,
+        :ineligible_current_school,
         :subject_to_formal_performance_action,
         :itt_subject_none_of_the_above,
         :not_teaching_now_in_eligible_itt_subject
@@ -110,6 +112,10 @@ module EarlyCareerPayments
 
     def ineligible_nqt_in_academic_year_after_itt?
       nqt_in_academic_year_after_itt == false
+    end
+
+    def ineligible_current_school?
+      current_school.present? && !current_school.eligible_for_early_career_payments?
     end
 
     def ineligible_itt_academic_year?
