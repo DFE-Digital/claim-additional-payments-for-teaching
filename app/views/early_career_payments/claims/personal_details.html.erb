@@ -6,7 +6,7 @@
 
     <%= form_for current_claim, url: claim_path(current_policy_routing_name) do |form| %>
       <fieldset class="govuk-fieldset">
-        <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl">
+        <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl govuk-!-padding-bottom-6">
           <h1 class="govuk-fieldset__heading">
               <%= t("early_career_payments.personal_details") %>
           </h1>
@@ -14,7 +14,7 @@
 
         <div class="govuk-!-padding-bottom-6">
           <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
-            <h1 class="govuk-fieldset__heading">
+            <h1 class="govuk-fieldset__heading govuk-!-padding-bottom-3">
               <%= t("questions.name") %>
             </h1>
           </legend>

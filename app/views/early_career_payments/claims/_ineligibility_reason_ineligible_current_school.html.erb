@@ -1,0 +1,54 @@
+<p class="govuk-body">
+  This is because either:
+</p>
+
+<ul class="govuk-list govuk-list--bullet">
+  <li>
+    <p class="govuk-body">
+      It is not a state-funded secondary school in England and is therefore not eligible. 
+      For more information, check the 
+      <%= link_to "eligibility page", EarlyCareerPayments.eligibility_page_url, class: "govuk-link" %>.
+    </p>
+  </li>
+  <li>
+    <p class="govuk-body">
+      We could not find a school matching those details in the system.
+    </p>
+  </li>
+    <li>
+    <p class="govuk-body">
+      The school you selected is listed as closed.
+    </p>
+  </li>
+</ul>
+
+<h3 class="govuk-heading-m">
+  What can you do next
+</h3>
+
+<ul class="govuk-list govuk-list--bullet">
+  <li>
+    <p class="govuk-body">
+      Check the spelling, including any apostrophes or full stops used in the school’s name.
+    </p>
+  </li>
+  <li>
+    <p class="govuk-body">
+      Check to make sure the school you selected is not listed as closed.
+    </p>
+  </li>
+  <li>
+    <p class="govuk-body">
+      Check to make sure you selected the correct school. 
+      If your school shares a name with others in the country, 
+      make sure you select the one with the correct postcode.
+    </p>
+  </li>
+</ul>
+
+<%= link_to "Try again", claim_path(current_policy_routing_name, "current-school"), class: "govuk-button", role: "button", data: {module: "govuk-button"} %>
+
+<p class="govuk-body">
+  If you need help with your claim, contact
+  <a class="govuk-link" href="mailto:#">earlycareerpayments@education.gov.uk</a>
+</p>

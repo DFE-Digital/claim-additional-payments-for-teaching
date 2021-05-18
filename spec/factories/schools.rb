@@ -21,5 +21,11 @@ FactoryBot.define do
       school_type_group { School::STATE_FUNDED_SCHOOL_TYPE_GROUPS.sample }
       phase { School::SECONDARY_PHASES.sample }
     end
+
+    trait :early_career_payments_eligible do
+      local_authority_district { LocalAuthorityDistrict.find(ActiveRecord::FixtureSet.identify(:barnsley, :uuid)) }
+      school_type_group { School::STATE_FUNDED_SCHOOL_TYPE_GROUPS.sample }
+      phase { School::SECONDARY_PHASES.sample }
+    end
   end
 end
