@@ -48,19 +48,19 @@ module EarlyCareerPayments
     has_one :claim, as: :eligibility, inverse_of: :eligibility
     belongs_to :current_school, optional: true, class_name: "School"
 
-    validates :nqt_in_academic_year_after_itt, on: [:"nqt-in-academic-year-after-itt", :submit], inclusion: {in: [true, false], message: "Select yes if you did your NQT in the academic year after your ITT"}
-    validates :current_school, on: [:"current-school", :submit], presence: {message: "Select a school from the list or search again for a different school"}
+    validates :nqt_in_academic_year_after_itt, on: [:"nqt-in-academic-year-after-itt", :submit], inclusion: {in: [true, false], message: "Select yes if you did your NQT in the academic year after you completed your ITT"}
+    validates :current_school, on: [:"current-school", :submit], presence: {message: "Enter a school’s name or a school’s postcode"}
     validates :employed_as_supply_teacher, on: [:"supply-teacher", :submit], inclusion: {in: [true, false], message: "Select yes if you are currently employed as a supply teacher"}
-    validates :has_entire_term_contract, on: [:"entire-term-contract", :submit], inclusion: {in: [true, false], message: "Select yes if you have a contract to teach at the same school for one term or longer"}, if: :employed_as_supply_teacher?
+    validates :has_entire_term_contract, on: [:"entire-term-contract", :submit], inclusion: {in: [true, false], message: "Select yes if you have a contract to teach at the same school for a term or more"}, if: :employed_as_supply_teacher?
     validates :employed_directly, on: [:"employed-directly", :submit], inclusion: {in: [true, false], message: "Select yes if you are employed directly by your school"}, if: :employed_as_supply_teacher?
-    validates :subject_to_formal_performance_action, on: [:"formal-performance-action", :submit], inclusion: {in: [true, false], message: "Select yes if you are subject to formal action for poor performance at work"}
-    validates :subject_to_disciplinary_action, on: [:"disciplinary-action", :submit], inclusion: {in: [true, false], message: "Select yes if you are subject to disciplinary action"}
-    validates :pgitt_or_ugitt_course, on: [:"postgraduate-itt-or-undergraduate-itt-course", :submit], presence: {message: "Select postgraduate if you did a Postgraduate ITT course"}
-    validates :eligible_itt_subject, on: [:"eligible-itt-subject", :submit], presence: {message: "Select if you completed your initial teacher training in Chemistry, Mathematics, Modern Foreign Languages, Physics or None of these subjects"}
-    validates :teaching_subject_now, on: [:"teaching-subject-now", :submit], inclusion: {in: [true, false], message: "Select yes if you are currently teaching in your ITT subject now"}
-    validates :itt_academic_year, on: [:"itt-year", :submit], presence: {message: "Select if you started your initial teacher training in 2018 - 2019, 2019 - 2020, 2020 - 2021 or None of these academic years"}
-    validates :postgraduate_masters_loan, on: [:"masters-loan", :submit], inclusion: {in: [true, false], message: "Select yes if you have a Postgraduate Master Loan taken out on or after 1st August 2016"}
-    validates :postgraduate_doctoral_loan, on: [:"doctoral-loan", :submit], inclusion: {in: [true, false], message: "Select yes if you have a Postgraduate Doctoral Loan taken out on or after 1st August 2018"}
+    validates :subject_to_formal_performance_action, on: [:"formal-performance-action", :submit], inclusion: {in: [true, false], message: "Select no if you are not currently subject to action for poor performance"}
+    validates :subject_to_disciplinary_action, on: [:"disciplinary-action", :submit], inclusion: {in: [true, false], message: "Select no if you are not currently subject to disciplinary action"}
+    validates :pgitt_or_ugitt_course, on: [:"postgraduate-itt-or-undergraduate-itt-course", :submit], presence: {message: "Select if you did a postgraduate course or an undergraduate course"}
+    validates :eligible_itt_subject, on: [:"eligible-itt-subject", :submit], presence: {message: "Select if you did chemistry, mathematics, modern foreign languages, physics or none of the above"}
+    validates :teaching_subject_now, on: [:"teaching-subject-now", :submit], inclusion: {in: [true, false], message: ->(object, _data) { "Select yes if you currently teach #{I18n.t("early_career_payments.answers.eligible_itt_subject.#{object.eligible_itt_subject}")}" }}
+    validates :itt_academic_year, on: [:"itt-year", :submit], presence: {message: ->(object, _data) { "Select which year you started your #{object.pgitt_or_ugitt_course} ITT in" }}
+    validates :postgraduate_masters_loan, on: [:"masters-loan", :submit], inclusion: {in: [true, false], message: "Select yes if you took out a Postgraduate Master’s Loan on or before 1 August 2016"}
+    validates :postgraduate_doctoral_loan, on: [:"doctoral-loan", :submit], inclusion: {in: [true, false], message: "Select yes if you took out a Postgraduate Doctoral Loan on or before 1 August 2018"}
 
     delegate :name, to: :current_school, prefix: true, allow_nil: true
 

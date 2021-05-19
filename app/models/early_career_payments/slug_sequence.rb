@@ -22,7 +22,7 @@ module EarlyCareerPayments
       "postgraduate-itt-or-undergraduate-itt-course",
       "eligible-itt-subject",
       "teaching-subject-now",
-      "itt_year",
+      "itt-year",
       "check-your-answers-part-one",
       "eligibility_confirmed",
       # eligible later phase of claim journey

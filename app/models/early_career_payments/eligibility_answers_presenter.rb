@@ -122,7 +122,7 @@ module EarlyCareerPayments
           start_or_complete: (eligibility.pgitt_or_ugitt_course == "postgraduate" ? "start" : "complete"),
           ug_or_pg: eligibility.pgitt_or_ugitt_course
         ),
-        eligibility.itt_academic_year.dasherize.gsub("-", " - "),
+        eligibility.itt_academic_year&.dasherize&.gsub("-", " - "),
         "itt-year"
       ]
     end

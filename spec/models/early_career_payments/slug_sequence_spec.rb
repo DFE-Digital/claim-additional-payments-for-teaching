@@ -55,7 +55,7 @@ RSpec.describe EarlyCareerPayments::SlugSequence do
           postgraduate-itt-or-undergraduate-itt-course
           eligible-itt-subject
           teaching-subject-now
-          itt_year
+          itt-year
           check-your-answers-part-one
           how_we_will_use_information_provided
           personal-details
@@ -83,7 +83,7 @@ RSpec.describe EarlyCareerPayments::SlugSequence do
           postgraduate-itt-or-undergraduate-itt-course
           eligible-itt-subject
           teaching-subject-now
-          itt_year
+          itt-year
           check-your-answers-part-one
           how_we_will_use_information_provided
           personal-details

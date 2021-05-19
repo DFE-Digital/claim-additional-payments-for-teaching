@@ -22,7 +22,7 @@ RSpec.feature "Admin checking a claim missing a payroll gender" do
 
     click_on "Save and continue"
 
-    expect(page).to have_content("You must select a gender that will be passed to HMRC")
+    expect(page).to have_content("Select male, female, or I don’t know")
 
     choose "Female"
     click_on "Save and continue"

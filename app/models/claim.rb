@@ -109,12 +109,12 @@ class Claim < ApplicationRecord
   validates :payroll_gender, on: [:gender, :submit], presence: {message: "Choose the option for the gender your school’s payroll system associates with you"}
 
   validates :first_name, on: [:name, :submit], presence: {message: "Enter your first name"}
-  validates :first_name, length: {maximum: 100, message: "First name must be 100 characters or less"}
+  validates :first_name, length: {maximum: 100, message: "First name must be between 3 and 30 characters"}
 
   validates :middle_name, length: {maximum: 100, message: "Middle name must be 100 characters or less"}
 
   validates :surname, on: [:name, :submit], presence: {message: "Enter your last name"}
-  validates :surname, length: {maximum: 100, message: "Last name must be 100 characters or less"}
+  validates :surname, length: {maximum: 100, message: "Last name must be between 3 and 30 characters"}
 
   validates :address_line_1, on: [:address, :submit], presence: {message: "Enter your building and street address"}
   validates :address_line_1, length: {maximum: 100, message: "Address lines must be 100 characters or less"}
@@ -125,7 +125,7 @@ class Claim < ApplicationRecord
   validates :postcode, on: [:address, :submit], presence: {message: "Enter your postcode"}
   validates :postcode, length: {maximum: 11, message: "Postcode must be 11 characters or less"}
 
-  validates :date_of_birth, on: [:"date-of-birth", :submit], presence: {message: "Enter your date of birth"}
+  validates :date_of_birth, on: [:"date-of-birth", :submit], presence: {message: "Enter a date of birth in the correct format"}
 
   validates :teacher_reference_number, on: [:"teacher-reference-number", :submit], presence: {message: "Enter your teacher reference number"}
   validate :trn_must_be_seven_digits
@@ -133,9 +133,9 @@ class Claim < ApplicationRecord
   validates :national_insurance_number, on: [:"national-insurance-number", :submit], presence: {message: "Enter your National Insurance number"}
   validate :ni_number_is_correct_format
 
-  validates :has_student_loan, on: [:"student-loan", :submit], inclusion: {in: [true, false], message: "Select yes if you have a student loan"}
-  validates :student_loan_country, on: [:"student-loan-country"], presence: {message: "Select the country you lived in when you applied for your student loan"}
-  validates :student_loan_courses, on: [:"student-loan-how-many-courses"], presence: {message: "Select the number of student loans you have taken out"}
+  validates :has_student_loan, on: [:"student-loan", :submit], inclusion: {in: [true, false], message: "Select yes if you are currently paying off your student loan"}
+  validates :student_loan_country, on: [:"student-loan-country"], presence: {message: "Select either England, Northern Ireland, Scotland, or Wales"}
+  validates :student_loan_courses, on: [:"student-loan-how-many-courses"], presence: {message: "Select 1 or 2 or more courses you took a student loan out for"}
   validates :student_loan_start_date, on: [:"student-loan-start-date"], presence: {message: ->(object, data) { I18n.t("validation_errors.student_loan_start_date.#{object.student_loan_courses}") }}
   validates :student_loan_plan, on: [:submit], presence: {message: "We have not been able determined your student loan repayment plan. Answer all questions about your student loan."}
   validates :student_loan_plan, on: [:amendment], inclusion: {in: [Claim::NO_STUDENT_LOAN], message: "You can’t amend the student loan plan type because the claimant said they are no longer paying off their student loan"}, if: :no_student_loan?
@@ -145,11 +145,11 @@ class Claim < ApplicationRecord
                             length: {maximum: 256, message: "Email address must be 256 characters or less"},
                             allow_blank: true
 
-  validates :banking_name, on: [:"bank-details", :submit], presence: {message: "Enter the name on your bank account"}
+  validates :banking_name, on: [:"bank-details", :submit], presence: {message: "Enter a name on the account"}
   validates :bank_sort_code, on: [:"bank-details", :submit], presence: {message: "Enter a sort code"}
   validates :bank_account_number, on: [:"bank-details", :submit], presence: {message: "Enter an account number"}
 
-  validates :payroll_gender, on: [:"payroll-gender-task", :submit], presence: {message: "You must select a gender that will be passed to HMRC"}
+  validates :payroll_gender, on: [:"payroll-gender-task", :submit], presence: {message: "Select male, female, or I don’t know"}
 
   validate :bank_account_number_must_be_eight_digits
   validate :bank_sort_code_must_be_six_digits
