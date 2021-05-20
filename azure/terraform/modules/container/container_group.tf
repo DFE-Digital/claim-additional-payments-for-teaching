@@ -9,8 +9,9 @@ resource "azurerm_container_group" "cont_reg_01" {
   network_profile_id = var.projcore_network_prof
 
   container {
-    name   = format("%s-%s", var.app_rg_name, "worker-container")
-    image  = format("%s%s", "dfedigital/teacher-payments-service:", var.container_version)
+    name = format("%s-%s", var.app_rg_name, "worker-container")
+    # image  = format("%s%s", "dfedigital/teacher-payments-service:", var.container_version)
+    image  = format("%s%s", "s118d01contreg.azurecr.io/teacher-payments-service:", var.container_version)
     cpu    = "1"
     memory = "1.5"
 
@@ -60,9 +61,9 @@ resource "azurerm_container_group" "cont_reg_02" {
   location            = var.rg_location
   resource_group_name = var.app_rg_name
   # dns_name_label      = "s118d01-aci-label-01"
-  os_type            = "Linux"
+  os_type = "Linux"
   # network_profile_id = var.projcore_network_prof
-  restart_policy     = "OnFailure"
+  restart_policy = "OnFailure"
   #ip_address_type    = "Private"
 
   container {
@@ -99,8 +100,9 @@ resource "azurerm_container_group" "cont_reg_02" {
 
     }
 
-    name   = format("%s-%s", var.app_rg_name, "migration-runner-container")
-    image  = format("%s%s", "dfedigital/teacher-payments-service:", var.container_version)
+    name = format("%s-%s", var.app_rg_name, "migration-runner-container")
+    # image  = format("%s%s", "dfedigital/teacher-payments-service:", var.container_version)
+    image  = format("%s%s", "s118d01contreg.azurecr.io/teacher-payments-service:", var.container_version)
     cpu    = "1"
     memory = "1.5"
 
