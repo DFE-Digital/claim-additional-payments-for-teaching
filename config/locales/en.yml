@@ -114,8 +114,8 @@ en:
       dont_know: "Don’t know"
   validation_errors:
     student_loan_start_date:
-      one_course: "Select when the first year of your higher education course started"
-      two_or_more_courses: "Select when the first year of each of your higher education courses started"
+      one_course: "Select before 1 September or after 1 September"
+      two_or_more_courses: "Select when your higher education courses began"
   govuk_verify_fields:
     first_name: "first name"
     middle_name: "middle name"

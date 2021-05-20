@@ -41,7 +41,7 @@ RSpec.describe "Admin tasks", type: :request do
                 post admin_claim_payroll_gender_tasks_path(claim, params: params)
               }.not_to change { claim.tasks.count }
 
-              expect(response.body).to match("Select male, female, or I don’t know")
+              expect(response.body).to match("Select male, female, or I don’t know for the gender recorded on your school’s payroll system")
             end
           end
 

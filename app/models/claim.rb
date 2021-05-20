@@ -106,7 +106,7 @@ class Claim < ApplicationRecord
 
   validates :academic_year_before_type_cast, format: {with: PolicyConfiguration::ACADEMIC_YEAR_REGEXP}
 
-  validates :payroll_gender, on: [:gender, :submit], presence: {message: "Choose the option for the gender your school’s payroll system associates with you"}
+  validates :payroll_gender, on: [:gender, :submit], presence: {message: "Select male, female, or I don’t know for the gender recorded on your school’s payroll system"}
 
   validates :first_name, on: [:name, :submit], presence: {message: "Enter your first name"}
   validates :first_name, length: {maximum: 100, message: "First name must be between 3 and 30 characters"}
@@ -141,7 +141,7 @@ class Claim < ApplicationRecord
   validates :student_loan_plan, on: [:amendment], inclusion: {in: [Claim::NO_STUDENT_LOAN], message: "You can’t amend the student loan plan type because the claimant said they are no longer paying off their student loan"}, if: :no_student_loan?
 
   validates :email_address, on: [:"email-address", :submit], presence: {message: "Enter an email address"}
-  validates :email_address, format: {with: URI::MailTo::EMAIL_REGEXP, message: "Enter an email in the format name@example.com"},
+  validates :email_address, format: {with: URI::MailTo::EMAIL_REGEXP, message: "Enter an email address in the correct format, like name@example.com"},
                             length: {maximum: 256, message: "Email address must be 256 characters or less"},
                             allow_blank: true
 
@@ -149,7 +149,7 @@ class Claim < ApplicationRecord
   validates :bank_sort_code, on: [:"bank-details", :submit], presence: {message: "Enter a sort code"}
   validates :bank_account_number, on: [:"bank-details", :submit], presence: {message: "Enter an account number"}
 
-  validates :payroll_gender, on: [:"payroll-gender-task", :submit], presence: {message: "Select male, female, or I don’t know"}
+  validates :payroll_gender, on: [:"payroll-gender-task", :submit], presence: {message: "Select male, female, or I don’t know for the gender recorded on your school’s payroll system"}
 
   validate :bank_account_number_must_be_eight_digits
   validate :bank_sort_code_must_be_six_digits
