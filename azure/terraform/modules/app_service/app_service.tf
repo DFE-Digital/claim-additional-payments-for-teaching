@@ -24,7 +24,8 @@ resource "azurerm_app_service" "app_as" {
     health_check_path         = "/healthcheck"
     scm_type                  = "None"
     use_32_bit_worker_process = true
-    linux_fx_version          = format("%s%s", "DOCKER|dfedigital/teacher-payments-service:", var.input_container_version)
+    # linux_fx_version          = format("%s%s", "DOCKER|dfedigital/teacher-payments-service:", var.input_container_version)
+    linux_fx_version = format("%s%s", "DOCKER|s118d01contreg.azurecr.io/teacher-payments-service:", var.input_container_version)
   }
 
 
