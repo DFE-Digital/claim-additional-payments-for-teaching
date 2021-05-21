@@ -86,6 +86,8 @@ steps:
   - script: |
       docker pull $(acrRegistry)/$(dockerImageName):latest || true
     displayName: Pull latest from ACR
+    condition: ne(variables['Build.SourceBranch'], 'refs/heads/master')
+    
 
   - task: Docker@2
     displayName: Build web Docker image using 'latest' as cache      
