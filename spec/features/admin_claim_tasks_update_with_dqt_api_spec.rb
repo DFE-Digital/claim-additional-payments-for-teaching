@@ -38,6 +38,10 @@ RSpec.feature "Admin claim tasks update with DQT API" do
     Capybara.session_name = current_session
   end
 
+  def notes
+    page.all("div", class: ["hmcts-timeline__item"])
+  end
+
   def task(name)
     page.find("h2", text: name).sibling("*").find("strong", class: ["app-task-list__task-completed"])
   end
@@ -121,6 +125,18 @@ RSpec.feature "Admin claim tasks update with DQT API" do
         end
       end
 
+      context "admin claim notes view" do
+        before { visit admin_claim_notes_path(claim) }
+
+        scenario "doesn't show not matched by an automated check" do
+          expect(notes).not_to include(
+            have_text(%r{[Nn]ot matched}).and(
+              have_text("by an automated check")
+            )
+          )
+        end
+      end
+
       context "except national insurance number" do
         let(:data) do
           {
@@ -144,6 +160,22 @@ RSpec.feature "Admin claim tasks update with DQT API" do
 
           scenario "shows task outcome performed by automated check" do
             expect(task_outcome).to have_text("This task was performed by an automated check on #{I18n.l(claim.tasks.where(name: :identity_confirmation).first.created_at)}")
+          end
+        end
+
+        context "admin claim notes view" do
+          before { visit admin_claim_notes_path(claim) }
+
+          scenario "shows National Insurance number not matched by an automated check" do
+            expect(notes).to include(
+              have_text(
+                "National Insurance number not matched"
+              ).and(
+                have_text(
+                  "by an automated check on #{I18n.l(claim.notes.last.created_at)}"
+                )
+              )
+            )
           end
         end
       end
@@ -173,6 +205,18 @@ RSpec.feature "Admin claim tasks update with DQT API" do
             expect { task_outcome }.to raise_error(Capybara::ElementNotFound)
           end
         end
+
+        context "admin claim notes view" do
+          before { visit admin_claim_notes_path(claim) }
+
+          scenario "shows teacher reference number not matched by an automated check" do
+            expect(notes).to include(
+              have_text("Teacher reference number not matched").and(
+                have_text("by an automated check")
+              )
+            )
+          end
+        end
       end
 
       context "except matching first name" do
@@ -198,6 +242,22 @@ RSpec.feature "Admin claim tasks update with DQT API" do
 
           scenario "shows task outcome performed by automated check" do
             expect(task_outcome).to have_text("This task was performed by an automated check on #{I18n.l(claim.tasks.where(name: :identity_confirmation).first.created_at)}")
+          end
+        end
+
+        context "admin claim notes view" do
+          before { visit admin_claim_notes_path(claim) }
+
+          scenario "shows first name or surname not matched by an automated check" do
+            expect(notes).to include(
+              have_text(
+                "First name or surname not matched"
+              ).and(
+                have_text(
+                  "by an automated check on #{I18n.l(claim.notes.last.created_at)}"
+                )
+              )
+            )
           end
         end
       end
@@ -227,6 +287,26 @@ RSpec.feature "Admin claim tasks update with DQT API" do
             expect(task_outcome).to have_text("This task was performed by an automated check on #{I18n.l(claim.tasks.where(name: :identity_confirmation).first.created_at)}")
           end
         end
+
+        context "admin claim notes view" do
+          before { visit admin_claim_notes_path(claim) }
+
+          context "admin claim notes view" do
+            before { visit admin_claim_notes_path(claim) }
+
+            scenario "shows first name or surname not matched by an automated check" do
+              expect(notes).to include(
+                have_text(
+                  "First name or surname not matched"
+                ).and(
+                  have_text(
+                    "by an automated check on #{I18n.l(claim.notes.last.created_at)}"
+                  )
+                )
+              )
+            end
+          end
+        end
       end
 
       context "with middle names" do
@@ -252,6 +332,18 @@ RSpec.feature "Admin claim tasks update with DQT API" do
 
           scenario "shows task outcome performed by automated check" do
             expect(task_outcome).to have_text("This task was performed by an automated check on #{I18n.l(claim.tasks.where(name: :identity_confirmation).first.created_at)}")
+          end
+        end
+
+        context "admin claim notes view" do
+          before { visit admin_claim_notes_path(claim) }
+
+          scenario "doesn't show not matched by an automated check" do
+            expect(notes).not_to include(
+              have_text(%r{[Nn]ot matched}).and(
+                have_text("by an automated check")
+              )
+            )
           end
         end
       end
@@ -281,6 +373,22 @@ RSpec.feature "Admin claim tasks update with DQT API" do
             expect(task_outcome).to have_text("This task was performed by an automated check on #{I18n.l(claim.tasks.where(name: :identity_confirmation).first.created_at)}")
           end
         end
+
+        context "admin claim notes view" do
+          before { visit admin_claim_notes_path(claim) }
+
+          scenario "shows date of birth not matched by an automated check" do
+            expect(notes).to include(
+              have_text(
+                "Date of birth not matched"
+              ).and(
+                have_text(
+                  "by an automated check on #{I18n.l(claim.notes.last.created_at)}"
+                )
+              )
+            )
+          end
+        end
       end
 
       context "with admin claims tasks identity confirmation passed" do
@@ -303,6 +411,18 @@ RSpec.feature "Admin claim tasks update with DQT API" do
 
           scenario "shows task outcome previously performed by user" do
             expect(task_outcome).to have_text("This task was performed by #{claim.tasks.where(name: :identity_confirmation).first.created_by.full_name} on #{I18n.l(claim.tasks.where(name: :identity_confirmation).first.created_at)}")
+          end
+        end
+
+        context "admin claim notes view" do
+          before { visit admin_claim_notes_path(claim) }
+
+          scenario "doesn't show not matched by automated check" do
+            expect(notes).not_to include(
+              have_text(%r{[Nn]ot matched}).and(
+                have_text("by an automated check")
+              )
+            )
           end
         end
       end
@@ -331,6 +451,18 @@ RSpec.feature "Admin claim tasks update with DQT API" do
 
         scenario "doesn't show task outcome" do
           expect { task_outcome }.to raise_error(Capybara::ElementNotFound)
+        end
+      end
+
+      context "admin claim notes view" do
+        before { visit admin_claim_notes_path(claim) }
+
+        scenario "shows note not matched by automated check" do
+          expect(notes).to include(
+            have_text("Not matched").and(
+              have_text("by an automated check")
+            )
+          )
         end
       end
     end
@@ -363,6 +495,18 @@ RSpec.feature "Admin claim tasks update with DQT API" do
         end
       end
 
+      context "admin claim notes view" do
+        before { visit admin_claim_notes_path(claim) }
+
+        scenario "doesn't show not eligible by an automated check" do
+          expect(notes).not_to include(
+            have_text(%r{[Nn]ot eligible}).and(
+              have_text("by an automated check")
+            )
+          )
+        end
+      end
+
       context "except QTS award date" do
         let(:data) do
           {
@@ -388,6 +532,20 @@ RSpec.feature "Admin claim tasks update with DQT API" do
 
           scenario "doesn't show task outcome" do
             expect { task_outcome }.to raise_error(Capybara::ElementNotFound)
+          end
+        end
+
+        context "admin claim notes view" do
+          before { visit admin_claim_notes_path(claim) }
+
+          scenario "shows QTS award date not eligible by an automated check" do
+            expect(notes).to include(
+              have_content(
+                "QTS award date not eligible"
+              ).and(
+                have_content("by an automated check")
+              )
+            )
           end
         end
       end
@@ -419,6 +577,20 @@ RSpec.feature "Admin claim tasks update with DQT API" do
             expect { task_outcome }.to raise_error(Capybara::ElementNotFound)
           end
         end
+
+        context "admin claim notes view" do
+          before { visit admin_claim_notes_path(claim) }
+
+          scenario "shows ITT subject codes not eligible by an automated check" do
+            expect(notes).to include(
+              have_content(
+                "ITT subject codes not eligible"
+              ).and(
+                have_content("by an automated check")
+              )
+            )
+          end
+        end
       end
 
       context "with admin claims tasks qualifications passed" do
@@ -441,6 +613,18 @@ RSpec.feature "Admin claim tasks update with DQT API" do
 
           scenario "shows task outcome previously performed by user" do
             expect(task_outcome).to have_text("This task was performed by #{claim.tasks.where(name: :qualifications).first.created_by.full_name} on #{I18n.l(claim.tasks.where(name: :qualifications).first.created_at)}")
+          end
+        end
+
+        context "admin claim notes view" do
+          before { visit admin_claim_notes_path(claim) }
+
+          scenario "doesn't show not eligible by automated check" do
+            expect(notes).not_to include(
+              have_text(%r{[Nn]ot eligible}).and(
+                have_text("by an automated check")
+              )
+            )
           end
         end
       end
@@ -471,6 +655,18 @@ RSpec.feature "Admin claim tasks update with DQT API" do
 
         scenario "doesn't show task outcome" do
           expect { task_outcome }.to raise_error(Capybara::ElementNotFound)
+        end
+      end
+
+      context "admin claim notes view" do
+        before { visit admin_claim_notes_path(claim) }
+
+        scenario "shows not eligible by an automated check" do
+          expect(notes).to include(
+            have_text("Not eligible").and(
+              have_text("by an automated check")
+            )
+          )
         end
       end
     end

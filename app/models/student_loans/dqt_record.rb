@@ -24,10 +24,12 @@ module StudentLoans
       eligible_qts_date?
     end
 
-    private
-
     def eligible_qts_date?
       qts_award_date.present? && AcademicYear.for(qts_award_date) >= StudentLoans.first_eligible_qts_award_year
+    end
+
+    def eligible_qualification_subject?
+      true
     end
   end
 end

@@ -27,7 +27,11 @@
                 </section>
 
                 <p class="hmcts-timeline__description">
-                  by <%= user_details(note.created_by, include_line_break: false) %>
+                  <% if note.created_by %>
+                    by <%= user_details(note.created_by, include_line_break: false) %>
+                  <% else %>
+                    by an automated check
+                  <% end %>
                   on <%= l(note.created_at) %>
                 </p>
               </div>

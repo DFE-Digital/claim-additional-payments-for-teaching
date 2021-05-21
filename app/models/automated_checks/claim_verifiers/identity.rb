@@ -15,7 +15,8 @@ module AutomatedChecks
         return unless awaiting_task?("identity_confirmation")
 
         complete_match ||
-          partial_match
+          partial_match ||
+          no_match
       end
 
       private
@@ -33,6 +34,15 @@ module AutomatedChecks
           dob_matched?
 
         create_passed_task
+      end
+
+      def create_note(field_body = nil)
+        claim.notes.create!(
+          {
+            body: "#{field_body ? field_body + " n" : "N"}ot matched",
+            created_by: admin_user
+          }
+        )
       end
 
       def create_passed_task
@@ -59,17 +69,33 @@ module AutomatedChecks
         claim.national_insurance_number == dqt_teacher_status.fetch(:national_insurance_number)
       end
 
+      def no_match
+        return unless !trn_matched? && !national_insurance_number_matched?
+
+        create_note
+      end
+
       def partial_match
         if trn_matched? && name_matched? && dob_matched?
+          create_note("National Insurance number")
+
           return create_passed_task
         end
 
         if trn_matched? && national_insurance_number_matched? && dob_matched?
+          create_note("First name or surname")
+
           return create_passed_task
         end
 
         if trn_matched? && national_insurance_number_matched? && name_matched?
-          create_passed_task
+          create_note("Date of birth")
+
+          return create_passed_task
+        end
+
+        if national_insurance_number_matched? && name_matched? & dob_matched?
+          create_note("Teacher reference number")
         end
       end
 
