@@ -72,6 +72,8 @@ module AutomatedChecks
       def no_match
         return unless !trn_matched? && !national_insurance_number_matched?
 
+        ClaimMailer.identity_confirmation(claim).deliver_later
+
         create_note
       end
 

@@ -1,32 +1,32 @@
 require "rails_helper"
 
-RSpec.shared_examples "an email related to a claim" do |policy|
-  let(:claim_description) { I18n.t("#{policy.locale_key}.claim_description") }
-
-  it "sets the to address to the claimant's email address" do
-    expect(mail.to).to eq([claim.email_address])
-  end
-
-  it "sets the GOV.UK Notify reply_to_id according to the policy" do
-    expect(mail["reply_to_id"].value).to eql(policy.notify_reply_to_id)
-  end
-
-  it "mentions the type of claim in the subject and body" do
-    expect(mail.subject).to include(claim_description)
-    expect(mail.body.encoded).to include(claim_description)
-  end
-
-  it "includes the claim reference in the subject and body" do
-    expect(mail.subject).to include("reference number: #{claim.reference}")
-    expect(mail.body.encoded).to include(claim.reference)
-  end
-
-  it "greets the claimant in the body" do
-    expect(mail.body.encoded).to start_with("Dear #{claim.first_name} #{claim.surname},")
-  end
-end
-
 RSpec.describe ClaimMailer, type: :mailer do
+  shared_examples "an email related to a claim" do |policy|
+    let(:claim_description) { I18n.t("#{policy.locale_key}.claim_description") }
+
+    it "sets the to address to the claimant's email address" do
+      expect(mail.to).to eq([claim.email_address])
+    end
+
+    it "sets the GOV.UK Notify reply_to_id according to the policy" do
+      expect(mail["reply_to_id"].value).to eql(policy.notify_reply_to_id)
+    end
+
+    it "mentions the type of claim in the subject and body" do
+      expect(mail.subject).to include(claim_description)
+      expect(mail.body.encoded).to include(claim_description)
+    end
+
+    it "includes the claim reference in the subject and body" do
+      expect(mail.subject).to include("reference number: #{claim.reference}")
+      expect(mail.body.encoded).to include(claim.reference)
+    end
+
+    it "greets the claimant in the body" do
+      expect(mail.body.encoded).to start_with("Dear #{claim.first_name} #{claim.surname},")
+    end
+  end
+
   # Characteristics common to all policies
   Policies.all.each do |policy|
     context "with a #{policy} claim" do
@@ -87,6 +87,25 @@ RSpec.describe ClaimMailer, type: :mailer do
         it "mentions that the claim is still being reviewed in the subject and body" do
           expect(mail.subject).to include("still reviewing your claim")
           expect(mail.body.encoded).to include("still reviewing your claim")
+        end
+      end
+
+      describe "#identity_confirmation" do
+        let(:claim) { build(:claim, :submitted, policy: policy) }
+        let(:mail) { ClaimMailer.identity_confirmation(claim) }
+
+        it_behaves_like "an email related to a claim", policy
+
+        it "mentions the claimant's identity needs to be confirmed" do
+          expect(mail.subject).to include("verify your identity")
+
+          expect(mail.body.encoded).to(
+            include(claim.national_insurance_number).and(
+              include(claim.teacher_reference_number).and(
+                include("we need to be able to identify your teacher record")
+              )
+            )
+          )
         end
       end
     end
