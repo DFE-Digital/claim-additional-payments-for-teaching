@@ -69,6 +69,7 @@ RSpec.configure do |config|
   config.include GeckoboardHelpers
   config.include DqtHelpers
   config.include FixtureHelpers
+  config.include IsExpectedWithBlock
 
   config.before :each do
     FactoryBot.rewind_sequences
