@@ -108,13 +108,13 @@ class Claim < ApplicationRecord
 
   validates :payroll_gender, on: [:gender, :submit], presence: {message: "Select male, female, or I don’t know for the gender recorded on your school’s payroll system"}
 
-  validates :first_name, on: [:name, :submit], presence: {message: "Enter your first name"}
-  validates :first_name, length: {maximum: 100, message: "First name must be between 3 and 30 characters"}
+  validates :first_name, on: [:name, :"personal-details", :submit], presence: {message: "Enter your first name"}
+  validates :first_name, length: {in: 3..30, message: "First name must be between 3 and 30 characters"}
 
   validates :middle_name, length: {maximum: 100, message: "Middle name must be 100 characters or less"}
 
-  validates :surname, on: [:name, :submit], presence: {message: "Enter your last name"}
-  validates :surname, length: {maximum: 100, message: "Last name must be between 3 and 30 characters"}
+  validates :surname, on: [:name, :"personal-details", :submit], presence: {message: "Enter your last name"}
+  validates :surname, length: {in: 3..30, message: "Last name must be between 3 and 30 characters"}
 
   validates :address_line_1, on: [:address, :submit], presence: {message: "Enter your building and street address"}
   validates :address_line_1, length: {maximum: 100, message: "Address lines must be 100 characters or less"}
@@ -125,12 +125,12 @@ class Claim < ApplicationRecord
   validates :postcode, on: [:address, :submit], presence: {message: "Enter your postcode"}
   validates :postcode, length: {maximum: 11, message: "Postcode must be 11 characters or less"}
 
-  validates :date_of_birth, on: [:"date-of-birth", :submit], presence: {message: "Enter a date of birth in the correct format"}
+  validates :date_of_birth, on: [:"date-of-birth", :"personal-details", :submit], presence: {message: "Enter a date of birth in the correct format"}
 
   validates :teacher_reference_number, on: [:"teacher-reference-number", :submit], presence: {message: "Enter your teacher reference number"}
   validate :trn_must_be_seven_digits
 
-  validates :national_insurance_number, on: [:"national-insurance-number", :submit], presence: {message: "Enter your National Insurance number"}
+  validates :national_insurance_number, on: [:"national-insurance-number", :"personal-details", :submit], presence: {message: "Enter your National Insurance number"}
   validate :ni_number_is_correct_format
 
   validates :has_student_loan, on: [:"student-loan", :submit], inclusion: {in: [true, false], message: "Select yes if you are currently paying off your student loan"}
