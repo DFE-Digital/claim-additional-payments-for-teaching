@@ -96,7 +96,7 @@ steps:
       repository: 'teacher-payments-service'
       command: 'build'
       Dockerfile: '**/Dockerfile'
-      tags: 'local/dfe-teachers-payment-service:web'
+      tags: 'web'
       arguments: '--cache-from=local/dfe-teachers-payment-service:web-dependencies --cache-from=$(acrRegistry)/$(dockerImageName):latest --target=web --build-arg GIT_COMMIT_HASH=$(Build.SourceVersion)'
     condition: ne(variables['Build.SourceBranch'], 'refs/heads/master')
 
@@ -107,7 +107,7 @@ steps:
       repository: 'teacher-payments-service'
       command: 'build'
       Dockerfile: '**/Dockerfile'
-      tags: 'local/dfe-teachers-payment-service:web'
+      tags: 'web'
       arguments: '--cache-from=local/dfe-teachers-payment-service:web-dependencies --target=web --build-arg GIT_COMMIT_HASH=$(Build.SourceVersion)'
     condition: eq(variables['Build.SourceBranch'], 'refs/heads/master')
 
@@ -145,7 +145,7 @@ steps:
 
   # # Push web images
   - script: |
-      docker tag $(acrRegistry)/local/dfe-teachers-payment-service:web-dependencies $(acrRegistry)/$(dockerImageName):cache-web-dependencies
+      docker tag $(acrRegistry)/local/teachers-payment-service:web-dependencies $(acrRegistry)/$(dockerImageName):cache-web-dependencies
     displayName: Tag local web dependencies Docker image for caching
     condition: eq(variables['Build.SourceBranch'], 'refs/heads/master')
 
@@ -159,7 +159,7 @@ steps:
     condition: eq(variables['Build.SourceBranch'], 'refs/heads/master')
 
   - script: 
-      docker tag $(acrRegistry)/local/dfe-teachers-payment-service:web $(acrRegistry)/$(dockerImageName):$(Build.BuildNumber)
+      docker tag $(acrRegistry)/local/teachers-payment-service:web $(acrRegistry)/$(dockerImageName):$(Build.BuildNumber)
     displayName: Tag local build number Docker image for caching
     condition: eq(variables['Build.SourceBranch'], 'refs/heads/master')
 
@@ -173,7 +173,7 @@ steps:
     condition: eq(variables['Build.SourceBranch'], 'refs/heads/master')
 
   - script:
-      docker tag $(acrRegistry)/local/dfe-teachers-payment-service:web $(acrRegistry)/$(dockerImageName):latest
+      docker tag $(acrRegistry)/local/teachers-payment-service:web $(acrRegistry)/$(dockerImageName):latest
     displayName: Tag local latest Docker image for caching
     condition: eq(variables['Build.SourceBranch'], 'refs/heads/master')
 
