@@ -20,7 +20,7 @@ RSpec.feature "Admin claim tasks update with DQT CSV" do
     attach_file("Upload a CSV file", example_dqt_report_csv.path)
 
     click_on "Upload"
-    expect(page).to have_content "DQT report uploaded successfully. Automatically completed 6 tasks for 7 checked claims."
+    expect(page).to have_content "DQT report uploaded successfully. Automatically completed 8 tasks for 7 checked claims."
 
     expect(claim_with_eligible_dqt_record.tasks.find_by!(name: "qualifications").passed?).to eq(true)
     expect(claim_with_eligible_dqt_record.tasks.find_by!(name: "identity_confirmation").passed?).to eq(true)
@@ -29,10 +29,10 @@ RSpec.feature "Admin claim tasks update with DQT CSV" do
     expect(claim_with_eligible_dqt_record_inc_hecos_code.tasks.find_by!(name: "identity_confirmation").passed?).to eq(true)
 
     expect(eligible_claim_with_non_matching_birthdate.tasks.find_by(name: "qualifications").passed?).to eq(true)
-    expect(eligible_claim_with_non_matching_birthdate.tasks.find_by(name: "identity_confirmation")).to be_nil
+    expect(eligible_claim_with_non_matching_birthdate.tasks.find_by(name: "identity_confirmation")).to be_an_instance_of(Task)
 
     expect(eligible_claim_with_non_matching_surname.tasks.find_by(name: "qualifications").passed?).to eq(true)
-    expect(eligible_claim_with_non_matching_surname.tasks.find_by(name: "identity_confirmation")).to be_nil
+    expect(eligible_claim_with_non_matching_surname.tasks.find_by(name: "identity_confirmation")).to be_an_instance_of(Task)
 
     expect(claim_without_dqt_record.tasks.find_by(name: "qualifications")).to be_nil
     expect(claim_with_ineligible_dqt_record.tasks.find_by(name: "qualifications")).to be_nil

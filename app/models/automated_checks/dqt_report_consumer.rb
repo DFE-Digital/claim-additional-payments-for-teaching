@@ -28,7 +28,7 @@ module AutomatedChecks
           claim = claim_for_record(record)
 
           if claim
-            @completed_tasks += UpdateAdminClaimTasksWithDqt.new(
+            @completed_tasks += ClaimVerifier.new(
               claim: claim,
               admin_user: @admin_user,
               dqt_teacher_status: record

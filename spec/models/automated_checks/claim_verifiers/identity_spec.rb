@@ -1,0 +1,385 @@
+require "rails_helper"
+
+module AutomatedChecks
+  module ClaimVerifiers
+    RSpec.describe Identity do
+      before do
+        stub_request(:get, "#{ENV["DQT_CLIENT_HOST"]}:#{ENV["DQT_CLIENT_PORT"]}/api/qualified-teachers/qualified-teaching-status").with(
+          query: WebMock::API.hash_including(
+            {
+              trn: claim.teacher_reference_number,
+              niNumber: claim.national_insurance_number
+            }
+          )
+        ).to_return(
+          body: <<~JSON
+            {
+              "data": [
+                {
+                  "trn": "#{data[:teacher_reference_number]}",
+                  "name": "#{data[:name]}",
+                  "doB": "#{data[:date_of_birth] || Date.today}",
+                  "niNumber": "#{data[:national_insurance_number]}",
+                  "qtsAwardDate": "#{data[:qts_award_date] || Date.today}",
+                  "ittSubject1Code": "#{data.dig(:itt_subject_codes, 0)}",
+                  "ittSubject2Code": "#{data.dig(:itt_subject_codes, 1)}",
+                  "ittSubject3Code": "#{data.dig(:itt_subject_codes, 2)}",
+                  "activeAlert": true
+                }
+              ],
+              "message": null
+            }
+          JSON
+        )
+      end
+
+      subject(:identity) { described_class.new(**identity_args) }
+
+      let(:claim) do
+        claim = create(
+          :claim,
+          :submitted,
+          date_of_birth: Date.new(1990, 8, 23),
+          first_name: "Fred",
+          national_insurance_number: "QQ100000C",
+          reference: "AB123456",
+          surname: "ELIGIBLE",
+          teacher_reference_number: "1234567",
+          policy: MathsAndPhysics
+        )
+
+        claim.eligibility.update!(
+          attributes_for(
+            :maths_and_physics_eligibility,
+            :eligible,
+            initial_teacher_training_subject: :maths
+          )
+        )
+
+        claim
+      end
+
+      let(:identity_args) do
+        {
+          claim: claim,
+          dqt_teacher_status: Dqt::Client.new.api.qualified_teaching_status.show(
+            params: {
+              teacher_reference_number: claim.teacher_reference_number,
+              national_insurance_number: claim.national_insurance_number
+            }
+          )
+        }
+      end
+
+      describe "#perform" do
+        subject(:perform) { identity.perform }
+
+        context "with matching DQT identity" do
+          let(:data) do
+            {
+              date_of_birth: claim.date_of_birth,
+              name: "#{claim.first_name} #{claim.surname}",
+              national_insurance_number: claim.national_insurance_number,
+              teacher_reference_number: claim.teacher_reference_number
+            }
+          end
+
+          it { is_expected.to be_an_instance_of(Task) }
+
+          describe "identity confirmation task" do
+            subject(:identity_confirmation_task) { claim.tasks.find_by(name: "identity_confirmation") }
+
+            before { perform }
+
+            describe "#created_by" do
+              subject(:created_by) { identity_confirmation_task.created_by }
+
+              it { is_expected.to eq nil }
+            end
+
+            describe "#passed" do
+              subject(:passed) { identity_confirmation_task.passed }
+
+              it { is_expected.to eq true }
+            end
+
+            describe "#manual" do
+              subject(:manual) { identity_confirmation_task.manual }
+
+              it { is_expected.to eq false }
+            end
+          end
+
+          context "except national insurance number" do
+            let(:data) do
+              {
+                date_of_birth: claim.date_of_birth,
+                name: "#{claim.first_name} #{claim.surname}",
+                national_insurance_number: "QQ100000B",
+                teacher_reference_number: claim.teacher_reference_number
+              }
+            end
+
+            it { is_expected.to be_an_instance_of(Task) }
+
+            describe "identity confirmation task" do
+              subject(:identity_confirmation_task) { claim.tasks.find_by(name: "identity_confirmation") }
+
+              before { perform }
+
+              describe "#created_by" do
+                subject(:created_by) { identity_confirmation_task.created_by }
+
+                it { is_expected.to eq nil }
+              end
+
+              describe "#passed" do
+                subject(:passed) { identity_confirmation_task.passed }
+
+                it { is_expected.to eq true }
+              end
+
+              describe "#manual" do
+                subject(:manual) { identity_confirmation_task.manual }
+
+                it { is_expected.to eq false }
+              end
+            end
+          end
+
+          context "except matching teacher reference number" do
+            let(:data) do
+              {
+                date_of_birth: claim.date_of_birth,
+                name: "#{claim.first_name} #{claim.surname}",
+                national_insurance_number: claim.national_insurance_number,
+                teacher_reference_number: "7654321"
+              }
+            end
+
+            it { is_expected.to be(nil) }
+
+            describe "identity confirmation task" do
+              subject(:identity_confirmation_task) { claim.tasks.find_by(name: "identity_confirmation") }
+
+              before { perform }
+
+              it { is_expected.to eq(nil) }
+            end
+          end
+
+          context "except matching first name" do
+            let(:data) do
+              {
+                date_of_birth: claim.date_of_birth,
+                name: "Except #{claim.surname}",
+                national_insurance_number: claim.national_insurance_number,
+                teacher_reference_number: claim.teacher_reference_number
+              }
+            end
+
+            it { is_expected.to be_an_instance_of(Task) }
+
+            describe "identity confirmation task" do
+              subject(:identity_confirmation_task) { claim.tasks.find_by(name: "identity_confirmation") }
+
+              before { perform }
+
+              describe "#created_by" do
+                subject(:created_by) { identity_confirmation_task.created_by }
+
+                it { is_expected.to eq nil }
+              end
+
+              describe "#passed" do
+                subject(:passed) { identity_confirmation_task.passed }
+
+                it { is_expected.to eq true }
+              end
+
+              describe "#manual" do
+                subject(:manual) { identity_confirmation_task.manual }
+
+                it { is_expected.to eq false }
+              end
+            end
+          end
+
+          context "except matching surname" do
+            let(:data) do
+              {
+                date_of_birth: claim.date_of_birth,
+                name: "#{claim.first_name} Except",
+                national_insurance_number: claim.national_insurance_number,
+                teacher_reference_number: claim.teacher_reference_number
+              }
+            end
+
+            it { is_expected.to be_an_instance_of(Task) }
+
+            describe "identity confirmation task" do
+              subject(:identity_confirmation_task) { claim.tasks.find_by(name: "identity_confirmation") }
+
+              before { perform }
+
+              describe "#created_by" do
+                subject(:created_by) { identity_confirmation_task.created_by }
+
+                it { is_expected.to eq nil }
+              end
+
+              describe "#passed" do
+                subject(:passed) { identity_confirmation_task.passed }
+
+                it { is_expected.to eq true }
+              end
+
+              describe "#manual" do
+                subject(:manual) { identity_confirmation_task.manual }
+
+                it { is_expected.to eq false }
+              end
+            end
+          end
+
+          context "with middle names" do
+            let(:data) do
+              {
+                date_of_birth: claim.date_of_birth,
+                name: "#{claim.first_name} Middle Names #{claim.surname}",
+                national_insurance_number: claim.national_insurance_number,
+                teacher_reference_number: claim.teacher_reference_number
+              }
+            end
+
+            it { is_expected.to be_an_instance_of(Task) }
+
+            describe "identity confirmation task" do
+              subject(:identity_confirmation_task) { claim.tasks.find_by(name: "identity_confirmation") }
+
+              before { perform }
+
+              describe "#created_by" do
+                subject(:created_by) { identity_confirmation_task.created_by }
+
+                it { is_expected.to eq nil }
+              end
+
+              describe "#passed" do
+                subject(:passed) { identity_confirmation_task.passed }
+
+                it { is_expected.to eq true }
+              end
+
+              describe "#manual" do
+                subject(:manual) { identity_confirmation_task.manual }
+
+                it { is_expected.to eq false }
+              end
+            end
+          end
+
+          context "except matching date of birth" do
+            let(:data) do
+              {
+                date_of_birth: claim.date_of_birth + 1.day,
+                name: "#{claim.first_name} #{claim.surname}",
+                national_insurance_number: claim.national_insurance_number,
+                teacher_reference_number: claim.teacher_reference_number
+              }
+            end
+
+            it { is_expected.to be_an_instance_of(Task) }
+
+            describe "identity confirmation task" do
+              subject(:identity_confirmation_task) { claim.tasks.find_by(name: "identity_confirmation") }
+
+              before { perform }
+
+              describe "#created_by" do
+                subject(:created_by) { identity_confirmation_task.created_by }
+
+                it { is_expected.to eq nil }
+              end
+
+              describe "#passed" do
+                subject(:passed) { identity_confirmation_task.passed }
+
+                it { is_expected.to eq true }
+              end
+
+              describe "#manual" do
+                subject(:manual) { identity_confirmation_task.manual }
+
+                it { is_expected.to eq false }
+              end
+            end
+          end
+
+          context "with admin claims tasks identity confirmation passed" do
+            let(:claim) do
+              create(
+                :claim,
+                :submitted,
+                date_of_birth: Date.new(1990, 8, 23),
+                first_name: "Fred",
+                national_insurance_number: "QQ100000C",
+                reference: "AB123456",
+                surname: "ELIGIBLE",
+                tasks: [build(:task, name: :identity_confirmation)],
+                teacher_reference_number: "1234567"
+              )
+            end
+
+            it { is_expected.to eq(nil) }
+
+            describe "identity confirmation task" do
+              subject(:identity_confirmation_task) { claim.tasks.find_by(name: "identity_confirmation") }
+
+              before { perform }
+
+              describe "#created_by" do
+                subject(:created_by) { identity_confirmation_task.created_by }
+
+                it { is_expected.to be_an_instance_of(DfeSignIn::User) }
+              end
+
+              describe "#passed" do
+                subject(:passed) { identity_confirmation_task.passed }
+
+                it { is_expected.to eq true }
+              end
+
+              describe "#manual" do
+                subject(:manual) { identity_confirmation_task.manual }
+
+                it { is_expected.to eq true }
+              end
+            end
+          end
+        end
+
+        context "without matching DQT identity" do
+          let(:data) do
+            {
+              date_of_birth: claim.date_of_birth,
+              name: "#{claim.first_name} #{claim.surname}",
+              national_insurance_number: "QQ100000B",
+              teacher_reference_number: "7654321"
+            }
+          end
+
+          it { is_expected.to eq(nil) }
+
+          describe "identity confirmation task" do
+            subject(:identity_confirmation_task) { claim.tasks.find_by(name: "identity_confirmation") }
+
+            before { perform }
+
+            it { is_expected.to eq(nil) }
+          end
+        end
+      end
+    end
+  end
+end

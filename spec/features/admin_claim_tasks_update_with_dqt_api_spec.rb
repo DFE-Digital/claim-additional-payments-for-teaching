@@ -1,28 +1,12 @@
 require "rails_helper"
 
-# These contexts are derived from similar CSV upload specs but they don't
-# readily give a clear picture of what's actually being tested.
-#
-# Multiple top level contexts called "with eligible claim" illustrates part of
-# the issue.
-#
-# At least restructuring them this way gives a clearer path to understanding
-# and refactoring accordingly.
-#
-# Also, this should be refactored to work with DqtHelpers#stub_qualified_teaching_status_show.
 RSpec.feature "Admin claim tasks update with DQT API" do
-  def in_browser(name)
-    current_session = Capybara.session_name
-    Capybara.session_name = name
-    yield
-    Capybara.session_name = current_session
-  end
-
   def claimant_submits_claim(claim_attributes:)
     claim = nil
 
     in_browser(:claimant) do
-      claim = start_student_loans_claim
+      claim = start_maths_and_physics_claim
+      claim_attributes[:policy] = MathsAndPhysics
 
       claim.update!(
         attributes_for(
@@ -32,7 +16,13 @@ RSpec.feature "Admin claim tasks update with DQT API" do
         )
       )
 
-      claim.eligibility.update!(attributes_for(:student_loans_eligibility, :eligible))
+      claim.eligibility.update!(
+        attributes_for(
+          :maths_and_physics_eligibility,
+          :eligible,
+          initial_teacher_training_subject: :maths
+        )
+      )
 
       visit claim_path(claim.policy.routing_name, "check-your-answers")
       click_on "Confirm and send"
@@ -41,16 +31,62 @@ RSpec.feature "Admin claim tasks update with DQT API" do
     claim
   end
 
+  def in_browser(name)
+    current_session = Capybara.session_name
+    Capybara.session_name = name
+    yield
+    Capybara.session_name = current_session
+  end
+
+  def task(name)
+    page.find("h2", text: name).sibling("*").find("strong", class: ["app-task-list__task-completed"])
+  end
+
+  def task_outcome
+    page.find("div", class: ["govuk-inset-text"])
+  end
+
   before do
     stub_geckoboard_dataset_update
     sign_in_as_service_operator
+
+    stub_request(:get, "#{ENV["DQT_CLIENT_HOST"]}:#{ENV["DQT_CLIENT_PORT"]}/api/qualified-teachers/qualified-teaching-status").with(
+      query: WebMock::API.hash_including(
+        {
+          trn: claim.teacher_reference_number,
+          niNumber: claim.national_insurance_number
+        }
+      )
+    ).to_return(
+      body: <<~JSON
+        {
+          "data": [
+            {
+              "trn": "#{data[:teacher_reference_number]}",
+              "name": "#{data[:name]}",
+              "doB": "#{data[:date_of_birth] || Date.today}",
+              "niNumber": "#{data[:national_insurance_number]}",
+              "qtsAwardDate": "#{data[:qts_award_date] || Date.today}",
+              "ittSubject1Code": "#{data.dig(:itt_subject_codes, 0)}",
+              "ittSubject2Code": "#{data.dig(:itt_subject_codes, 1)}",
+              "ittSubject3Code": "#{data.dig(:itt_subject_codes, 2)}",
+              "activeAlert": true
+            }
+          ],
+          "message": null
+        }
+      JSON
+    )
+
+    perform_enqueued_jobs
   end
 
-  context "with eligible claim" do
-    let!(:claim) do
+  context "with submitted claim" do
+    let(:claim) do
       claimant_submits_claim(
         claim_attributes: {
           date_of_birth: Date.new(1990, 8, 23),
+          first_name: "Fred",
           national_insurance_number: "QQ100000C",
           reference: "AB123456",
           surname: "ELIGIBLE",
@@ -59,437 +95,382 @@ RSpec.feature "Admin claim tasks update with DQT API" do
       )
     end
 
-    context "with matching data" do
-      before do
-        stub_request(:get, "#{ENV["DQT_CLIENT_HOST"]}:#{ENV["DQT_CLIENT_PORT"]}/api/qualified-teachers/qualified-teaching-status").with(
-          query: WebMock::API.hash_including(
-            {
-              trn: "1234567",
-              niNumber: "QQ100000C"
-            }
-          )
-        ).to_return(
-          body: <<~JSON
-            {
-              "data": [
-                {
-                  "trn": "1234567",
-                  "name": "Fred Eligible",
-                  "doB": "#{claim.date_of_birth}",
-                  "niNumber": "QQ100000C",
-                  "qtsAwardDate": "2017-08-23T10:54:57.199Z",
-                  "ittSubject1Code": "L200",
-                  "ittSubject2Code": "",
-                  "ittSubject3Code": "",
-                  "activeAlert": true
-                }
-              ],
-              "message": null
-            }
-          JSON
-        )
-      end
-
-      context "with jobs performed" do
-        before { perform_enqueued_jobs }
-
-        context "admin claim tasks view" do
-          before { visit admin_claim_tasks_path(claim) }
-
-          scenario "Changes identity confirmation and qualifications claim tasks to passed" do
-            expect(page).to have_xpath('//h2[normalize-space(.)="1. Identity confirmation"]/..//strong[text()="Passed"]')
-            expect(page).to have_xpath('//h2[normalize-space(.)="2. Qualifications"]/..//strong[text()="Passed"]')
-          end
-        end
-
-        context "admin claim tasks identity confirmation view" do
-          before { visit admin_claim_task_path(claim, :identity_confirmation) }
-
-          scenario "Shows task outcome" do
-            expect(page).to have_content("This task was performed by an automated check on #{I18n.l(claim.tasks.where(name: :identity_confirmation).first.created_at)}")
-          end
-        end
-
-        context "admin claim tasks qualifications view" do
-          before { visit admin_claim_task_path(claim, :qualifications) }
-
-          scenario "Shows task outcome" do
-            expect(page).to have_content("This task was performed by an automated check on #{I18n.l(claim.tasks.where(name: :qualifications).first.created_at)}")
-          end
-        end
-      end
-    end
-  end
-
-  context "with eligible claim" do
-    let!(:claim) do
-      claimant_submits_claim(
-        claim_attributes: {
-          date_of_birth: Date.new(1991, 1, 8),
-          national_insurance_number: "QQ100000C",
-          reference: "ZY987654",
-          surname: "Hecos",
-          teacher_reference_number: "9876543"
+    context "with matching DQT identity" do
+      let(:data) do
+        {
+          date_of_birth: claim.date_of_birth,
+          name: "#{claim.first_name} #{claim.surname}",
+          national_insurance_number: claim.national_insurance_number,
+          teacher_reference_number: claim.teacher_reference_number
         }
-      )
-    end
-
-    context "with matching data and hecos code" do
-      before do
-        stub_request(:get, "#{ENV["DQT_CLIENT_HOST"]}:#{ENV["DQT_CLIENT_PORT"]}/api/qualified-teachers/qualified-teaching-status").with(
-          query: WebMock::API.hash_including(
-            {
-              trn: "9876543",
-              niNumber: "QQ100000C"
-            }
-          )
-        ).to_return(
-          body: <<~JSON
-            {
-              "data": [
-                {
-                  "trn": "9876543",
-                  "name": "Dwayne Hecos",
-                  "doB": "#{claim.date_of_birth}",
-                  "niNumber": "QQ100000C",
-                  "qtsAwardDate": "2017-05-20T10:54:57.199Z",
-                  "ittSubject1Code": "100405",
-                  "ittSubject2Code": "",
-                  "ittSubject3Code": "",
-                  "activeAlert": true
-                }
-              ],
-              "message": null
-            }
-          JSON
-        )
       end
 
-      context "with jobs performed" do
-        before { perform_enqueued_jobs }
+      context "admin claim tasks view" do
+        before { visit admin_claim_tasks_path(claim) }
+
+        scenario "shows identity confirmation passed" do
+          expect(task("Identity confirmation")).to have_text("Passed")
+        end
+      end
+
+      context "admin claim tasks identity confirmation view" do
+        before { visit admin_claim_task_path(claim, :identity_confirmation) }
+
+        scenario "shows task outcome performed by automated check" do
+          expect(task_outcome).to have_text("This task was performed by an automated check on #{I18n.l(claim.tasks.where(name: :identity_confirmation).first.created_at)}")
+        end
+      end
+
+      context "except national insurance number" do
+        let(:data) do
+          {
+            date_of_birth: claim.date_of_birth,
+            name: "#{claim.first_name} #{claim.surname}",
+            national_insurance_number: "QQ100000B",
+            teacher_reference_number: claim.teacher_reference_number
+          }
+        end
 
         context "admin claim tasks view" do
           before { visit admin_claim_tasks_path(claim) }
 
-          scenario "Changes identity confirmation and qualifications claim tasks to passed" do
-            expect(page).to have_xpath('//h2[normalize-space(.)="1. Identity confirmation"]/..//strong[text()="Passed"]')
-            expect(page).to have_xpath('//h2[normalize-space(.)="2. Qualifications"]/..//strong[text()="Passed"]')
+          scenario "shows identity confirmation passed" do
+            expect(task("Identity confirmation")).to have_text("Passed")
           end
         end
 
         context "admin claim tasks identity confirmation view" do
           before { visit admin_claim_task_path(claim, :identity_confirmation) }
 
-          scenario "Shows task outcome" do
-            expect(page).to have_content("This task was performed by an automated check on #{I18n.l(claim.tasks.where(name: :identity_confirmation).first.created_at)}")
+          scenario "shows task outcome performed by automated check" do
+            expect(task_outcome).to have_text("This task was performed by an automated check on #{I18n.l(claim.tasks.where(name: :identity_confirmation).first.created_at)}")
+          end
+        end
+      end
+
+      context "except matching teacher reference number" do
+        let(:data) do
+          {
+            date_of_birth: claim.date_of_birth,
+            name: "#{claim.first_name} #{claim.surname}",
+            national_insurance_number: claim.national_insurance_number,
+            teacher_reference_number: "7654321"
+          }
+        end
+
+        context "admin claim tasks view" do
+          before { visit admin_claim_tasks_path(claim) }
+
+          scenario "shows identity confirmation incomplete" do
+            expect(task("Identity confirmation")).to have_text("Incomplete")
           end
         end
 
-        context "admin claim tasks qualifications view" do
-          before { visit admin_claim_task_path(claim, :qualifications) }
+        context "admin claim tasks identity confirmation view" do
+          before { visit admin_claim_task_path(claim, :identity_confirmation) }
 
-          scenario "Shows task outcome" do
-            expect(page).to have_content("This task was performed by an automated check on #{I18n.l(claim.tasks.where(name: :qualifications).first.created_at)}")
+          scenario "doesn't show task outcome" do
+            expect { task_outcome }.to raise_error(Capybara::ElementNotFound)
+          end
+        end
+      end
+
+      context "except matching first name" do
+        let(:data) do
+          {
+            date_of_birth: claim.date_of_birth,
+            name: "Except #{claim.surname}",
+            national_insurance_number: claim.national_insurance_number,
+            teacher_reference_number: claim.teacher_reference_number
+          }
+        end
+
+        context "admin claim tasks view" do
+          before { visit admin_claim_tasks_path(claim) }
+
+          scenario "shows identity confirmation passed" do
+            expect(task("Identity confirmation")).to have_text("Passed")
+          end
+        end
+
+        context "admin claim tasks identity confirmation view" do
+          before { visit admin_claim_task_path(claim, :identity_confirmation) }
+
+          scenario "shows task outcome performed by automated check" do
+            expect(task_outcome).to have_text("This task was performed by an automated check on #{I18n.l(claim.tasks.where(name: :identity_confirmation).first.created_at)}")
+          end
+        end
+      end
+
+      context "except matching surname" do
+        let(:data) do
+          {
+            date_of_birth: claim.date_of_birth,
+            name: "#{claim.first_name} Except",
+            national_insurance_number: claim.national_insurance_number,
+            teacher_reference_number: claim.teacher_reference_number
+          }
+        end
+
+        context "admin claim tasks view" do
+          before { visit admin_claim_tasks_path(claim) }
+
+          scenario "shows identity confirmation passed" do
+            expect(task("Identity confirmation")).to have_text("Passed")
+          end
+        end
+
+        context "admin claim tasks identity confirmation view" do
+          before { visit admin_claim_task_path(claim, :identity_confirmation) }
+
+          scenario "shows task outcome performed by automated check" do
+            expect(task_outcome).to have_text("This task was performed by an automated check on #{I18n.l(claim.tasks.where(name: :identity_confirmation).first.created_at)}")
+          end
+        end
+      end
+
+      context "with middle names" do
+        let(:data) do
+          {
+            date_of_birth: claim.date_of_birth,
+            name: "#{claim.first_name} Middle Names #{claim.surname}",
+            national_insurance_number: claim.national_insurance_number,
+            teacher_reference_number: claim.teacher_reference_number
+          }
+        end
+
+        context "admin claim tasks view" do
+          before { visit admin_claim_tasks_path(claim) }
+
+          scenario "shows identity confirmation passed" do
+            expect(task("Identity confirmation")).to have_text("Passed")
+          end
+        end
+
+        context "admin claim tasks identity confirmation view" do
+          before { visit admin_claim_task_path(claim, :identity_confirmation) }
+
+          scenario "shows task outcome performed by automated check" do
+            expect(task_outcome).to have_text("This task was performed by an automated check on #{I18n.l(claim.tasks.where(name: :identity_confirmation).first.created_at)}")
+          end
+        end
+      end
+
+      context "except matching date of birth" do
+        let(:data) do
+          {
+            date_of_birth: claim.date_of_birth + 1.day,
+            name: "#{claim.first_name} #{claim.surname}",
+            national_insurance_number: claim.national_insurance_number,
+            teacher_reference_number: claim.teacher_reference_number
+          }
+        end
+
+        context "admin claim tasks view" do
+          before { visit admin_claim_tasks_path(claim) }
+
+          scenario "shows identity confirmation passed" do
+            expect(task("Identity confirmation")).to have_text("Passed")
+          end
+        end
+
+        context "admin claim tasks identity confirmation view" do
+          before { visit admin_claim_task_path(claim, :identity_confirmation) }
+
+          scenario "shows task outcome performed by automated check" do
+            expect(task_outcome).to have_text("This task was performed by an automated check on #{I18n.l(claim.tasks.where(name: :identity_confirmation).first.created_at)}")
+          end
+        end
+      end
+
+      context "with admin claims tasks identity confirmation passed" do
+        let(:claim) do
+          claimant_submits_claim(
+            claim_attributes: {
+              date_of_birth: Date.new(1990, 8, 23),
+              first_name: "Fred",
+              national_insurance_number: "QQ100000C",
+              reference: "AB123456",
+              surname: "ELIGIBLE",
+              tasks: [build(:task, name: :identity_confirmation)],
+              teacher_reference_number: "1234567"
+            }
+          )
+        end
+
+        context "admin claim tasks identity confirmation view" do
+          before { visit admin_claim_task_path(claim, :identity_confirmation) }
+
+          scenario "shows task outcome previously performed by user" do
+            expect(task_outcome).to have_text("This task was performed by #{claim.tasks.where(name: :identity_confirmation).first.created_by.full_name} on #{I18n.l(claim.tasks.where(name: :identity_confirmation).first.created_at)}")
           end
         end
       end
     end
-  end
 
-  context "with eligible claim" do
-    let!(:claim) do
-      claimant_submits_claim(
-        claim_attributes: {
-          date_of_birth: Date.new(1899, 1, 1),
-          national_insurance_number: "QQ100000C",
-          reference: "RR123456",
-          surname: "Eligible",
-          teacher_reference_number: "8901231"
+    context "without matching DQT identity" do
+      let(:data) do
+        {
+          date_of_birth: claim.date_of_birth,
+          name: "#{claim.first_name} #{claim.surname}",
+          national_insurance_number: "QQ100000B",
+          teacher_reference_number: "7654321"
         }
-      )
-    end
-
-    context "with non matching date of birth" do
-      before do
-        stub_request(:get, "#{ENV["DQT_CLIENT_HOST"]}:#{ENV["DQT_CLIENT_PORT"]}/api/qualified-teachers/qualified-teaching-status").with(
-          query: WebMock::API.hash_including(
-            {
-              trn: "8901231",
-              niNumber: "QQ100000C"
-            }
-          )
-        ).to_return(
-          body: <<~JSON
-            {
-              "data": [
-                {
-                  "trn": "8901231",
-                  "name": "Jo Eligible",
-                  "doB": "1970-02-11T10:54:57.199Z",
-                  "niNumber": "QQ100000C",
-                  "qtsAwardDate": "2017-06-20T10:54:57.199Z",
-                  "ittSubject1Code": "C800",
-                  "ittSubject2Code": "",
-                  "ittSubject3Code": "",
-                  "activeAlert": true
-                }
-              ],
-              "message": null
-            }
-          JSON
-        )
       end
 
-      context "with jobs performed" do
-        before { perform_enqueued_jobs }
+      context "admin claim tasks view" do
+        before { visit admin_claim_tasks_path(claim) }
 
-        context "admin claim tasks view" do
-          before { visit admin_claim_tasks_path(claim) }
-
-          scenario "Changes identity confirmation and qualifications claim tasks" do
-            expect(page).to have_xpath('//h2[normalize-space(.)="1. Identity confirmation"]/..//strong[text()="Incomplete"]')
-            expect(page).to have_xpath('//h2[normalize-space(.)="2. Qualifications"]/..//strong[text()="Passed"]')
-          end
+        scenario "shows identity confirmation incomplete" do
+          expect(task("Identity confirmation")).to have_text("Incomplete")
         end
+      end
 
-        context "admin claim tasks identity confirmation view" do
-          before { visit admin_claim_task_path(claim, :identity_confirmation) }
+      context "admin claim tasks identity confirmation view" do
+        before { visit admin_claim_task_path(claim, :identity_confirmation) }
 
-          scenario "Doesn't show task outcome" do
-            expect(page).not_to have_content("This task was performed by an automated check on")
-          end
-        end
-
-        context "admin claim tasks qualifications view" do
-          before { visit admin_claim_task_path(claim, :qualifications) }
-
-          scenario "Shows task outcome" do
-            expect(page).to have_content("This task was performed by an automated check on #{I18n.l(claim.tasks.where(name: :qualifications).first.created_at)}")
-          end
+        scenario "doesn't show task outcome" do
+          expect { task_outcome }.to raise_error(Capybara::ElementNotFound)
         end
       end
     end
-  end
 
-  context "with eligible claim" do
-    let!(:claim) do
-      claimant_submits_claim(
-        claim_attributes: {
-          date_of_birth: Date.new(1980, 4, 10),
-          national_insurance_number: "QQ100000C",
-          reference: "DD123456",
-          surname: "Eligible",
-          teacher_reference_number: "8981212"
+    context "with eligible qualifications" do
+      let(:data) do
+        {
+          qts_award_date: Date.new( # 1st September is start of academic year
+            MathsAndPhysics.first_eligible_qts_award_year(claim.academic_year).start_year,
+            9,
+            1
+          ),
+          itt_subject_codes: [MathsAndPhysics::DqtRecord::ELIGIBLE_MATHS_HECOS_CODES.first]
         }
-      )
-    end
-
-    context "with non matching surname" do
-      before do
-        stub_request(:get, "#{ENV["DQT_CLIENT_HOST"]}:#{ENV["DQT_CLIENT_PORT"]}/api/qualified-teachers/qualified-teaching-status").with(
-          query: WebMock::API.hash_including(
-            {
-              trn: "8981212",
-              niNumber: "QQ100000C"
-            }
-          )
-        ).to_return(
-          body: <<~JSON
-            {
-              "data": [
-                {
-                  "trn": "8981212",
-                  "name": "Sarah Different",
-                  "doB": "1980-04-10T10:54:57.199Z",
-                  "niNumber": "QQ100000C",
-                  "qtsAwardDate": "2017-06-20T10:54:57.199Z",
-                  "ittSubject1Code": "N100",
-                  "ittSubject2Code": "",
-                  "ittSubject3Code": "",
-                  "activeAlert": true
-                }
-              ],
-              "message": null
-            }
-          JSON
-        )
       end
 
-      context "with jobs performed" do
-        before { perform_enqueued_jobs }
+      context "admin claim tasks view" do
+        before { visit admin_claim_tasks_path(claim) }
+
+        scenario "shows qualifications passed" do
+          expect(task("Qualifications")).to have_text("Passed")
+        end
+      end
+
+      context "admin claim tasks qualifications view" do
+        before { visit admin_claim_task_path(claim, :qualifications) }
+
+        scenario "shows task outcome performed by automated check" do
+          expect(task_outcome).to have_text("This task was performed by an automated check on #{I18n.l(claim.tasks.where(name: :qualifications).first.created_at)}")
+        end
+      end
+
+      context "except QTS award date" do
+        let(:data) do
+          {
+            qts_award_date: Date.new(
+              MathsAndPhysics.first_eligible_qts_award_year(claim.academic_year).start_year - 1.year,
+              9,
+              1
+            ),
+            itt_subject_codes: [MathsAndPhysics::DqtRecord::ELIGIBLE_MATHS_HECOS_CODES.first]
+          }
+        end
 
         context "admin claim tasks view" do
           before { visit admin_claim_tasks_path(claim) }
 
-          scenario "Changes identity confirmation and qualifications claim tasks to passed" do
-            expect(page).to have_xpath('//h2[normalize-space(.)="1. Identity confirmation"]/..//strong[text()="Incomplete"]')
-            expect(page).to have_xpath('//h2[normalize-space(.)="2. Qualifications"]/..//strong[text()="Passed"]')
-          end
-        end
-
-        context "admin claim tasks identity confirmation view" do
-          before { visit admin_claim_task_path(claim, :identity_confirmation) }
-
-          scenario "Doesn't show task outcome" do
-            expect(page).not_to have_content("This task was performed by an automated check on")
+          scenario "shows qualifications incomplete" do
+            expect(task("Qualifications")).to have_text("Incomplete")
           end
         end
 
         context "admin claim tasks qualifications view" do
           before { visit admin_claim_task_path(claim, :qualifications) }
 
-          scenario "Shows task outcome" do
-            expect(page).to have_content("This task was performed by an automated check on #{I18n.l(claim.tasks.where(name: :qualifications).first.created_at)}")
+          scenario "doesn't show task outcome" do
+            expect { task_outcome }.to raise_error(Capybara::ElementNotFound)
+          end
+        end
+      end
+
+      context "except ITT subjects codes" do
+        let(:data) do
+          {
+            qts_award_date: Date.new( # 1st September is start of academic year
+              MathsAndPhysics.first_eligible_qts_award_year(claim.academic_year).start_year,
+              9,
+              1
+            ),
+            itt_subject_codes: ["NoCode"]
+          }
+        end
+
+        context "admin claim tasks view" do
+          before { visit admin_claim_tasks_path(claim) }
+
+          scenario "shows qualifications incomplete" do
+            expect(task("Qualifications")).to have_text("Incomplete")
+          end
+        end
+
+        context "admin claim tasks qualifications view" do
+          before { visit admin_claim_task_path(claim, :qualifications) }
+
+          scenario "doesn't show task outcome" do
+            expect { task_outcome }.to raise_error(Capybara::ElementNotFound)
+          end
+        end
+      end
+
+      context "with admin claims tasks qualifications passed" do
+        let(:claim) do
+          claimant_submits_claim(
+            claim_attributes: {
+              date_of_birth: Date.new(1990, 8, 23),
+              first_name: "Fred",
+              national_insurance_number: "QQ100000C",
+              reference: "AB123456",
+              surname: "ELIGIBLE",
+              tasks: [build(:task, name: "qualifications")],
+              teacher_reference_number: "1234567"
+            }
+          )
+        end
+
+        context "admin claim tasks qualifications view" do
+          before { visit admin_claim_task_path(claim, :qualifications) }
+
+          scenario "shows task outcome previously performed by user" do
+            expect(task_outcome).to have_text("This task was performed by #{claim.tasks.where(name: :qualifications).first.created_by.full_name} on #{I18n.l(claim.tasks.where(name: :qualifications).first.created_at)}")
           end
         end
       end
     end
-  end
 
-  context "with eligible claim" do
-    let!(:claim) do
-      claimant_submits_claim(
-        claim_attributes: {
-          date_of_birth: Date.new(1979, 4, 21),
-          national_insurance_number: "QQ100000C",
-          reference: "CD123456",
-          teacher_reference_number: "6758493"
+    context "without eligible qualifications" do
+      let(:data) do
+        {
+          qts_award_date: Date.new(
+            MathsAndPhysics.first_eligible_qts_award_year(claim.academic_year).start_year - 1.year,
+            9,
+            1
+          ),
+          itt_subject_codes: ["NoCode"]
         }
-      )
-    end
-
-    context "with ineligible DQT record" do
-      before do
-        stub_request(:get, "#{ENV["DQT_CLIENT_HOST"]}:#{ENV["DQT_CLIENT_PORT"]}/api/qualified-teachers/qualified-teaching-status").with(
-          query: WebMock::API.hash_including(
-            {
-              trn: "6758493",
-              niNumber: "QQ100000C"
-            }
-          )
-        ).to_return(
-          body: <<~JSON
-            {
-              "data": [
-                {
-                  "trn": "6758493",
-                  "name": "Terry Ineligible",
-                  "doB": "1979-04-21T10:54:57.199Z",
-                  "niNumber": "QQ100000C",
-                  "qtsAwardDate": "2000-03-12T10:54:57.199Z",
-                  "ittSubject1Code": "L200",
-                  "ittSubject2Code": "",
-                  "ittSubject3Code": "",
-                  "activeAlert": true
-                }
-              ],
-              "message": null
-            }
-          JSON
-        )
       end
 
-      context "with jobs performed" do
-        before { perform_enqueued_jobs }
+      context "admin claim tasks view" do
+        before { visit admin_claim_tasks_path(claim) }
 
-        context "admin claim tasks view" do
-          before { visit admin_claim_tasks_path(claim) }
-
-          scenario "Changes identity confirmation and qualifications claim tasks to passed" do
-            expect(page).to have_xpath('//h2[normalize-space(.)="1. Identity confirmation"]/..//strong[text()="Incomplete"]')
-            expect(page).to have_xpath('//h2[normalize-space(.)="2. Qualifications"]/..//strong[text()="Incomplete"]')
-          end
-        end
-
-        context "admin claim tasks identity confirmation view" do
-          before { visit admin_claim_task_path(claim, :identity_confirmation) }
-
-          scenario "Doesn't show task outcome" do
-            expect(page).not_to have_content("This task was performed by an automated check on")
-          end
-        end
-
-        context "admin claim tasks qualifications view" do
-          before { visit admin_claim_task_path(claim, :qualifications) }
-
-          scenario "Doesn't show task outcome" do
-            expect(page).not_to have_content("This task was performed by an automated check on")
-          end
+        scenario "shows qualifications incomplete" do
+          expect(task("Qualifications")).to have_text("Incomplete")
         end
       end
-    end
-  end
 
-  context "with eligible claim" do
-    let!(:claim) do
-      claimant_submits_claim(
-        claim_attributes: {
-          date_of_birth: Date.new(1980, 10, 4),
-          national_insurance_number: "QQ100000C",
-          reference: "GH123456",
-          tasks: [build(:task, name: "qualifications")],
-          teacher_reference_number: "6060606"
-        }
-      )
-    end
+      context "admin claim tasks qualifications view" do
+        before { visit admin_claim_task_path(claim, :qualifications) }
 
-    context "with qualification task" do
-      before do
-        stub_request(:get, "#{ENV["DQT_CLIENT_HOST"]}:#{ENV["DQT_CLIENT_PORT"]}/api/qualified-teachers/qualified-teaching-status").with(
-          query: WebMock::API.hash_including(
-            {
-              trn: "6060606",
-              niNumber: "QQ100000C"
-            }
-          )
-        ).to_return(
-          body: <<~JSON
-            {
-              "data": [
-                {
-                  "trn": "6060606",
-                  "name": "Already automated",
-                  "doB": "1980-10-04T10:54:57.199Z",
-                  "niNumber": "QQ100000C",
-                  "qtsAwardDate": "2018-05-10T10:54:57.199Z",
-                  "ittSubject1Code": "R400",
-                  "ittSubject2Code": "",
-                  "ittSubject3Code": "",
-                  "activeAlert": true
-                }
-              ],
-              "message": null
-            }
-          JSON
-        )
-      end
-
-      context "with jobs performed" do
-        before { perform_enqueued_jobs }
-
-        context "admin claim tasks view" do
-          before { visit admin_claim_tasks_path(claim) }
-
-          scenario "Changes identity confirmation and qualifications claim tasks to passed" do
-            expect(page).to have_xpath('//h2[normalize-space(.)="1. Identity confirmation"]/..//strong[text()="Incomplete"]')
-            expect(page).to have_xpath('//h2[normalize-space(.)="2. Qualifications"]/..//strong[text()="Passed"]')
-          end
-        end
-
-        context "admin claim tasks identity confirmation view" do
-          before { visit admin_claim_task_path(claim, :identity_confirmation) }
-
-          scenario "Doesn't show task outcome" do
-            expect(page).not_to have_content("This task was performed by an automated check on")
-          end
-        end
-
-        context "admin claim tasks qualifications view" do
-          before { visit admin_claim_task_path(claim, :qualifications) }
-
-          scenario "Shows task outcome" do
-            expect(page).to have_content("This task was performed by #{claim.tasks.where(name: :qualifications).first.created_by.full_name} on #{I18n.l(claim.tasks.where(name: :qualifications).first.created_at)}")
-          end
+        scenario "doesn't show task outcome" do
+          expect { task_outcome }.to raise_error(Capybara::ElementNotFound)
         end
       end
     end
