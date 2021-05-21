@@ -113,7 +113,7 @@ steps:
 
   # Push test images
   - script: |
-      docker tag ***/local/dfe-teachers-payment-service:test-dependencies $(acrRegistry)/$(dockerImageName):cache-test-dependencies
+      docker tag $(acrRegistry)/local/dfe-teachers-payment-service:test-dependencies $(acrRegistry)/$(dockerImageName):cache-test-dependencies
     displayName: Tag local test dependencies Docker image for caching
     condition: eq(variables['Build.SourceBranch'], 'refs/heads/master')
 
