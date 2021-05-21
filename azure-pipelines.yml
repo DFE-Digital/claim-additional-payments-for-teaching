@@ -120,7 +120,7 @@ steps:
     condition: eq(variables['Build.SourceBranch'], 'refs/heads/master')
 
   - task: Docker@2
-    displayName: Push test Docker image for caching
+    displayName: Push test dependencies Docker image for caching
     inputs:
       containerRegistry: 's118d01contreg'
       repository: 'teacher-payments-service'
@@ -159,7 +159,7 @@ steps:
     condition: eq(variables['Build.SourceBranch'], 'refs/heads/master')
 
   - script: 
-      docker tag $(acrRegistry)//local/dfe-teachers-payment-service:web $(acrRegistry)/$(dockerImageName):$(Build.BuildNumber)
+      docker tag $(acrRegistry)/local/dfe-teachers-payment-service:web $(acrRegistry)/$(dockerImageName):$(Build.BuildNumber)
     displayName: Tag local build number Docker image for caching
     condition: eq(variables['Build.SourceBranch'], 'refs/heads/master')
 
