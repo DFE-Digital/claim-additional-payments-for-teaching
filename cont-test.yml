@@ -107,7 +107,7 @@ steps:
 
   # # Push web images
   - script: |
-      docker tag $(acrRegistry)/local/dfe-teachers-payment-service:web-dependencies $(acrRegistry)/$(dockerImageName):cache-web-dependencies
+      docker tag $(acrRegistry)/teacher-payments-service:web-dependencies $(acrRegistry)/$(dockerImageName):cache-web-dependencies
     displayName: FAIL Tag local web dependencies Docker image for caching
     # condition: eq(variables['Build.SourceBranch'], 'refs/heads/master')
 
