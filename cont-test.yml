@@ -56,9 +56,10 @@ steps:
     displayName: Build web dependencies Docker image without cache      
     inputs:
       containerRegistry: 's118d01contreg'
+      repository: 'teacher-payments-service'
       command: 'build'
       Dockerfile: '**/Dockerfile'
-      tags: local/dfe-teachers-payment-service:web-dependencies
+      tags: 'local/dfe-teachers-payment-service:web-dependencies'
       arguments: '--target=dependencies'
     # condition: eq(variables['Build.SourceBranch'], 'refs/heads/master')
 
