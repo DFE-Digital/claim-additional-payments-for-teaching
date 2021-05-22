@@ -1,0 +1,127 @@
+pr: none
+
+trigger:
+  branches:
+    include:
+    - '*'
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+variables:
+  - group: docker-settings
+
+steps:
+  # Login to DockerHub
+  - script: docker login -u $(dockerId) -p $pass
+    env:
+      pass: $(dockerPassword)
+    displayName: Login to DockerHub
+
+  - task: Docker@2
+    displayName: login into ACR
+    inputs:
+      containerRegistry: 's118d01contreg'
+      command: 'login'
+
+  # Build and run tests
+  - script: |
+      docker pull $(acrRegistry)/$(dockerImageName):cache-test-dependencies || true
+      docker pull $(acrRegistry)/$(dockerImageName):cache-test || true
+    displayName: Pull test and test dependencies images 
+  # # Build web dependencies
+  - task: Docker@2
+    displayName: Build web dependencies Docker image using 'cache-web-dependencies' as cache      
+    inputs:
+      containerRegistry: 's118d01contreg'
+      command: 'build'
+      Dockerfile: '**/Dockerfile'
+      tags: local/dfe-teachers-payment-service:web-dependencies
+      arguments: '--cache-from=$(acrRegistry)/$(dockerImageName):cache-web-dependencies --target=dependencies'
+
+  - task: Docker@2
+    displayName: Build web dependencies Docker image without cache      
+    inputs:
+      containerRegistry: 's118d01contreg'
+      command: 'build'
+      Dockerfile: '**/Dockerfile'
+      tags: local/dfe-teachers-payment-service:web-dependencies
+      arguments: '--target=dependencies'
+
+  # # Build web
+  - script: |
+      docker pull $(acrRegistry)/$(dockerImageName):latest || true
+    displayName: Pull latest from ACR
+    
+  - task: Docker@2
+    displayName: Build web Docker image without cache      
+    inputs:
+      containerRegistry: 's118d01contreg'
+      repository: 'teacher-payments-service'
+      command: 'build'
+      Dockerfile: '**/Dockerfile'
+      tags: 'web'
+      arguments: '--cache-from=local/dfe-teachers-payment-service:web-dependencies --target=web --build-arg GIT_COMMIT_HASH=$(Build.SourceVersion)'
+
+
+  # Push test images
+  - script: |
+      docker tag $(acrRegistry)/local/dfe-teachers-payment-service:test-dependencies $(acrRegistry)/$(dockerImageName):cache-test-dependencies
+    displayName: Tag local test dependencies Docker image for caching
+
+  - task: Docker@2
+    displayName: Push test dependencies Docker image for caching
+    inputs:
+      containerRegistry: 's118d01contreg'
+      repository: 'teacher-payments-service'
+      command: 'push'
+      tags: 'cache-test-dependencies'  
+
+  - script: |
+      docker tag $(acrRegistry)/local/dfe-teachers-payment-service:test $(acrRegistry)/$(dockerImageName):cache-test
+    displayName: Tag local Docker image for caching
+
+  - task: Docker@2
+    displayName: Push test Docker image for caching
+    inputs:
+      containerRegistry: 's118d01contreg'
+      repository: 'teacher-payments-service'
+      command: 'push'
+      tags: 'cache-test'  
+
+  # # Push web images
+  - script: |
+      docker tag $(acrRegistry)/local/teachers-payment-service:web-dependencies $(acrRegistry)/$(dockerImageName):cache-web-dependencies
+    displayName: Tag local web dependencies Docker image for caching
+
+  - task: Docker@2
+    displayName: Push web dependencies Docker image for caching
+    inputs:
+      containerRegistry: 's118d01contreg'
+      repository: 'teacher-payments-service'
+      command: 'push'
+      tags: 'cache-web-dependencies'  
+
+  - script: 
+      docker tag $(acrRegistry)/local/teachers-payment-service:web $(acrRegistry)/$(dockerImageName):$(Build.BuildNumber)
+    displayName: Tag local build number Docker image for caching
+
+  - task: Docker@2
+    displayName: Push build number Docker image
+    inputs:
+      containerRegistry: 's118d01contreg'
+      repository: 'teacher-payments-service'
+      command: 'push'
+      tags: $(Build.BuildNumber)  
+
+  - script:
+      docker tag $(acrRegistry)/local/teachers-payment-service:web $(acrRegistry)/$(dockerImageName):latest
+    displayName: Tag local latest Docker image for caching
+
+  - task: Docker@2
+    displayName: Push latest Docker image
+    inputs:
+      containerRegistry: 's118d01contreg'
+      repository: 'teacher-payments-service'
+      command: 'push'
+      tags: latest  
