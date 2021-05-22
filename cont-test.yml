@@ -122,7 +122,7 @@ steps:
 
   - script: 
       docker tag $(acrRegistry)/teacher-payments-service:web $(acrRegistry)/$(dockerImageName):$(Build.BuildNumber)
-    displayName: FAIL Tag local build number Docker image for caching
+    displayName: Tag local build number Docker image for caching
     # condition: eq(variables['Build.SourceBranch'], 'refs/heads/master')
 
   - task: Docker@2
