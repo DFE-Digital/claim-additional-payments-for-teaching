@@ -112,7 +112,6 @@ steps:
     condition: eq(variables['Build.SourceBranch'], 'refs/heads/master')
 
 
-
   # Push test images
   - script: |
       docker tag $(acrRegistry)/local/dfe-teachers-payment-service:test-dependencies $(acrRegistry)/$(dockerImageName):cache-test-dependencies
@@ -145,7 +144,7 @@ steps:
 
   # # Push web images
   - script: |
-      docker tag $(acrRegistry)/local/teachers-payment-service:web-dependencies $(acrRegistry)/$(dockerImageName):cache-web-dependencies
+      docker tag $(acrRegistry)/teacher-payments-service:web-dependencies $(acrRegistry)/$(dockerImageName):cache-web-dependencies
     displayName: Tag local web dependencies Docker image for caching
     condition: eq(variables['Build.SourceBranch'], 'refs/heads/master')
 
@@ -159,7 +158,7 @@ steps:
     condition: eq(variables['Build.SourceBranch'], 'refs/heads/master')
 
   - script: 
-      docker tag $(acrRegistry)/local/teachers-payment-service:web $(acrRegistry)/$(dockerImageName):$(Build.BuildNumber)
+      docker tag $(acrRegistry)/teacher-payments-service:web $(acrRegistry)/$(dockerImageName):$(Build.BuildNumber)
     displayName: Tag local build number Docker image for caching
     condition: eq(variables['Build.SourceBranch'], 'refs/heads/master')
 
@@ -173,7 +172,7 @@ steps:
     condition: eq(variables['Build.SourceBranch'], 'refs/heads/master')
 
   - script:
-      docker tag $(acrRegistry)/local/teachers-payment-service:web $(acrRegistry)/$(dockerImageName):latest
+      docker tag $(acrRegistry)/teacher-payments-service:web $(acrRegistry)/$(dockerImageName):latest
     displayName: Tag local latest Docker image for caching
     condition: eq(variables['Build.SourceBranch'], 'refs/heads/master')
 
