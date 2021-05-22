@@ -108,14 +108,8 @@ steps:
   # # Push web images
   - script: |
       docker tag $(acrRegistry)/teacher-payments-service:web-dependencies $(acrRegistry)/$(dockerImageName):cache-web-dependencies
-    displayName: FAIL Tag local web dependencies Docker image for caching
+    displayName: Tag local web dependencies Docker image for caching
     # condition: eq(variables['Build.SourceBranch'], 'refs/heads/master')
-
-#        docker tag dfedigital/teacher-payments-service:latest s118d01contreg.azurecr.io/teacher-payments-service:latest
-#        docker tag dfedigital/teacher-payments-service:cache-web-dependencies s118d01contreg.azurecr.io/teacher-payments-service:cache-web-dependencies
-
-# docker tag ***/local/teachers-payment-service:web-dependencies ***/teacher-payments-service:cache-web-dependencies
-# Error response from daemon: No such image: ***/local/teachers-payment-service:web-dependencies
 
   - task: Docker@2
     displayName: Push web dependencies Docker image for caching
@@ -127,8 +121,8 @@ steps:
     # condition: eq(variables['Build.SourceBranch'], 'refs/heads/master')
 
   - script: 
-      docker tag $(acrRegistry)/local/teachers-payment-service:web $(acrRegistry)/$(dockerImageName):$(Build.BuildNumber)
-    displayName: Tag local build number Docker image for caching
+      docker tag $(acrRegistry)/local/teacher-payment-service:web $(acrRegistry)/$(dockerImageName):$(Build.BuildNumber)
+    displayName: FAIL Tag local build number Docker image for caching
     # condition: eq(variables['Build.SourceBranch'], 'refs/heads/master')
 
   - task: Docker@2
@@ -141,7 +135,7 @@ steps:
     # condition: eq(variables['Build.SourceBranch'], 'refs/heads/master')
 
   - script:
-      docker tag $(acrRegistry)/local/teachers-payment-service:web $(acrRegistry)/$(dockerImageName):latest
+      docker tag $(acrRegistry)/local/teacher-payment-service:web $(acrRegistry)/$(dockerImageName):latest
     displayName: Tag local latest Docker image for caching
     # condition: eq(variables['Build.SourceBranch'], 'refs/heads/master')
 
