@@ -135,7 +135,7 @@ steps:
     # condition: eq(variables['Build.SourceBranch'], 'refs/heads/master')
 
   - script:
-      docker tag $(acrRegistry)/local/teacher-payment-service:web $(acrRegistry)/$(dockerImageName):latest
+      docker tag $(acrRegistry)/teacher-payments-service:web $(acrRegistry)/$(dockerImageName):latest
     displayName: Tag local latest Docker image for caching
     # condition: eq(variables['Build.SourceBranch'], 'refs/heads/master')
 
