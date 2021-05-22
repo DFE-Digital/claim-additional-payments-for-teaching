@@ -40,16 +40,6 @@ steps:
       action: 'Run a Docker Compose command'
       dockerComposeCommand: 'build'
 
-  - task: DockerCompose@0
-    displayName: Run test on Docker
-    inputs:
-      containerregistrytype: 'Azure Container Registry'
-      azureSubscription: 'azdo.pipelines.cip.S118D.armfe1ef140-8bef-4043-b5ee-c449e6f951ef'
-      azureContainerRegistry: '{"loginServer":"s118d01contreg.azurecr.io", "id" : "/subscriptions/8655985a-2f87-44d7-a541-0be9a8c2779d/resourceGroups/s118d01-contreg/providers/Microsoft.ContainerRegistry/registries/s118d01contreg"}'
-      dockerComposeFile: 'docker-compose.test.yml'
-      action: 'Run a Docker Compose command'
-      dockerComposeCommand: 'run --rm test'
-
   # # Clean up
   - script: |
       git reset --hard
@@ -116,8 +106,8 @@ steps:
 
   # # Push web images
   - script: |
-      docker tag $(acrRegistry)/local/teachers-payment-service:web-dependencies $(acrRegistry)/$(dockerImageName):cache-web-dependencies
-    displayName: Tag local web dependencies Docker image for caching
+      docker tag $(acrRegistry)/teachers-payment-service:web-dependencies $(acrRegistry)/$(dockerImageName):cache-web-dependencies
+    displayName: FAIL Tag local web dependencies Docker image for caching
     # condition: eq(variables['Build.SourceBranch'], 'refs/heads/master')
 
 #        docker tag dfedigital/teacher-payments-service:latest s118d01contreg.azurecr.io/teacher-payments-service:latest
