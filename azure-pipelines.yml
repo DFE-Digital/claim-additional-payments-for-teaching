@@ -76,6 +76,7 @@ steps:
     displayName: Build web dependencies Docker image without cache      
     inputs:
       containerRegistry: 's118d01contreg'
+      repository: 'teacher-payments-service'
       command: 'build'
       Dockerfile: '**/Dockerfile'
       tags: web-dependencies
