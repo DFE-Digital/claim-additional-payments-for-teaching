@@ -78,7 +78,7 @@ steps:
       containerRegistry: 's118d01contreg'
       command: 'build'
       Dockerfile: '**/Dockerfile'
-      tags: local/dfe-teachers-payment-service:web-dependencies
+      tags: web-dependencies
       arguments: '--target=dependencies'
     condition: eq(variables['Build.SourceBranch'], 'refs/heads/master')
 
