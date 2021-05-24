@@ -33,7 +33,7 @@ RSpec.describe EarlyCareerPayments, type: :model do
 
   describe ".short_name" do
     it "returns the 'policy_short_name' translation" do
-      expect(subject.short_name).to eql "Early Career Payments"
+      expect(subject.short_name).to eql "Early-Career Payments"
     end
   end
 

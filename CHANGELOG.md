@@ -10,8 +10,8 @@ The format is based on [Keep a Changelog]
 - Remove GOVUK Verify from claimant journeys
 - Documentation updates - DFE Signin process
 - Reduce sensitivity of high response time alert
-- Build new Early Career Payments Policy
-- Build new Early Career Payments Journey with following page additions
+- Build new Early-Career Payments Policy
+- Build new Early-Career Payments Journey with following page additions
   - Add Landing Page - 'Apply for an early-career payment'
   - Eligibility Journey
     - Add 'Are you employed directly by your school?'
@@ -28,13 +28,13 @@ The format is based on [Keep a Changelog]
     - Add 'You are not eligible' (Subject)
     - Add 'In what academic year did you complete your undergraduate ITT?'
     - Add 'Check your answers for eligibility?'
-    - Add 'You are eligible for an early careers payment'
+    - Add 'You are eligible for an early-careers payment'
     - Add 'How we will use the information you provide'
     - Add 'Did you take out a Postgraduate Master's Loan on or after 1 August
       2016?'
     - Add 'Did you take out a Postgraduate Doctoral Loan on or after 1 August
       2018?'
-    - Add 'You are not eligible for an early careers payment'
+    - Add 'You are not eligible for an early-careers payment'
     - Add 'Are you currently paying off your student loan?'
     - Add 'When you applied for your student loan where was your home address?'
     - Add 'How many higher education courses did you take a student loan out

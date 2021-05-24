@@ -138,7 +138,7 @@ RSpec.describe EarlyCareerPayments::Eligibility, type: :model do
   end
 
   describe "#award_amount" do
-    it "returns the £2,000 amount that Early Career Payments claimants are eligible for" do
+    it "returns the £2,000 amount that Early-Career Payments claimants are eligible for" do
       expect(EarlyCareerPayments::Eligibility.new.award_amount).to eq(BigDecimal("2000"))
     end
   end

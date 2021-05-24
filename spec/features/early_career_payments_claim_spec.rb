@@ -1,7 +1,7 @@
 require "rails_helper"
 
-RSpec.feature "Teacher Early Career Payments claims" do
-  scenario "Teacher makes claim for 'Early Career Payments' claim" do
+RSpec.feature "Teacher Early-Career Payments claims" do
+  scenario "Teacher makes claim for 'Early-Career Payments' claim" do
     visit landing_page_path(EarlyCareerPayments.routing_name)
     expect(page).to have_link(href: EarlyCareerPayments.feedback_url)
 
@@ -106,7 +106,7 @@ RSpec.feature "Teacher Early Career Payments claims" do
 
     click_on("Continue")
 
-    # [PAGE 16] - You are eligible for an early career payment
+    # [PAGE 16] - You are eligible for an early-career payment
     expect(page).to have_text("You are eligible " + I18n.t("early_career_payments.claim_description"))
     within(".govuk-list--bullet") do
       expect(page).to have_text("your National Insurance number")
@@ -273,7 +273,7 @@ RSpec.feature "Teacher Early Career Payments claims" do
   # TODO [PAGE 21] - One Time Password
   # TODO [PAGE 22] - We have sent you reminders
 
-  scenario "Supply Teacher makes claim for 'Early Career Payments' with a contract to teach for entire term & employed directly by school" do
+  scenario "Supply Teacher makes claim for 'Early-Career Payments' with a contract to teach for entire term & employed directly by school" do
     visit landing_page_path(EarlyCareerPayments.routing_name)
     expect(page).to have_link(href: EarlyCareerPayments.feedback_url)
 
