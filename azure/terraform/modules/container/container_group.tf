@@ -3,21 +3,19 @@ resource "azurerm_container_group" "cont_grp_01" {
   location            = var.rg_location
   resource_group_name = var.app_rg_name
   ip_address_type     = "Private"
-  # ip_address_type = "Public"
-  # dns_name_label = "s118d01-aci-label-01"
-  os_type            = "Linux"
-  network_profile_id = var.projcore_network_prof
+  os_type             = "Linux"
+  network_profile_id  = var.projcore_network_prof
 
-  image_registry_credential {
-    username = data.azurerm_container_registry.test.admin_username
-    password = data.azurerm_container_registry.test.admin_password
-    server   = data.azurerm_container_registry.test.login_server
-  }
+  # image_registry_credential {
+  #   username = data.azurerm_container_registry.test.admin_username
+  #   password = data.azurerm_container_registry.test.admin_password
+  #   server   = data.azurerm_container_registry.test.login_server
+  # }
 
   container {
-    name  = format("%s-%s", var.app_rg_name, "worker-container")
-    image = format("%s%s", "s118d01contreg.azurecr.io/teacher-payments-service:", var.container_version)
-    # image = "s118d01contreg.azurecr.io/teacher-payments-service:20210523.5"
+    name = format("%s-%s", var.app_rg_name, "worker-container")
+    # image = format("%s%s", "s118d01contreg.azurecr.io/teacher-payments-service:", var.container_version)
+    image = format("%s%s", "dfedigital/teacher-payments-service:", var.container_version)
 
     cpu    = "1"
     memory = "1.5"
@@ -48,7 +46,6 @@ resource "azurerm_container_group" "cont_grp_01" {
       "ROLLBAR_ACCESS_TOKEN"                           = data.azurerm_key_vault_secret.RollbarInfraToken.value
       "SECRET_KEY_BASE"                                = data.azurerm_key_vault_secret.SecretKeyBase.value
       "WORKER_COUNT"                                   = "2"
-      #"GOVUK_VERIFY_VSP_HOST"                          = format("%s%s.%s", "https://", data.azurerm_app_service.app_vsp_as.name, "azurewebsites.net")      
     }
 
     ports {
@@ -67,17 +64,14 @@ resource "azurerm_container_group" "cont_grp_02" {
   name                = format("%s-%s", var.app_rg_name, "migration-runner-aci")
   location            = var.rg_location
   resource_group_name = var.app_rg_name
-  # dns_name_label      = "s118d01-aci-label-01"
-  os_type = "Linux"
-  # network_profile_id = var.projcore_network_prof
-  restart_policy = "OnFailure"
-  #ip_address_type    = "Private"
+  os_type             = "Linux"
+  restart_policy      = "OnFailure"
 
-  image_registry_credential {
-    username = data.azurerm_container_registry.test.admin_username
-    password = data.azurerm_container_registry.test.admin_password
-    server   = data.azurerm_container_registry.test.login_server
-  }
+  # image_registry_credential {
+  #   username = data.azurerm_container_registry.test.admin_username
+  #   password = data.azurerm_container_registry.test.admin_password
+  #   server   = data.azurerm_container_registry.test.login_server
+  # }
 
   container {
     commands = [
@@ -101,21 +95,20 @@ resource "azurerm_container_group" "cont_grp_02" {
       "ENVIRONMENT_NAME"                               = "development"
       "GECKOBOARD_API_KEY"                             = data.azurerm_key_vault_secret.GeckoboardAPIKey.value
       "GOOGLE_ANALYTICS_ID"                            = ""
-      #"GOVUK_VERIFY_VSP_HOST"                          = format("%s%s.%s", "https://", data.azurerm_app_service.app_vsp_as.name, "azurewebsites.net")
-      "LOGSTASH_HOST"            = data.azurerm_key_vault_secret.LogstashHost.value
-      "LOGSTASH_PORT"            = "17000"
-      "NOTIFY_API_KEY"           = data.azurerm_key_vault_secret.NotifyApiKey.value
-      "RAILS_ENV"                = "production"
-      "RAILS_SERVE_STATIC_FILES" = "true"
-      "ROLLBAR_ACCESS_TOKEN"     = data.azurerm_key_vault_secret.RollbarInfraToken.value
-      "SECRET_KEY_BASE"          = data.azurerm_key_vault_secret.SecretKeyBase.value
-      "WORKER_COUNT"             = "2"
+      "LOGSTASH_HOST"                                  = data.azurerm_key_vault_secret.LogstashHost.value
+      "LOGSTASH_PORT"                                  = "17000"
+      "NOTIFY_API_KEY"                                 = data.azurerm_key_vault_secret.NotifyApiKey.value
+      "RAILS_ENV"                                      = "production"
+      "RAILS_SERVE_STATIC_FILES"                       = "true"
+      "ROLLBAR_ACCESS_TOKEN"                           = data.azurerm_key_vault_secret.RollbarInfraToken.value
+      "SECRET_KEY_BASE"                                = data.azurerm_key_vault_secret.SecretKeyBase.value
+      "WORKER_COUNT"                                   = "2"
 
     }
 
-    name = format("%s-%s", var.app_rg_name, "migration-runner-container")
-    # image = format("%s%s", "dfedigital/teacher-payments-service:", var.container_version)
-    image  = format("%s%s", "s118d01contreg.azurecr.io/teacher-payments-service:", var.container_version)
+    name  = format("%s-%s", var.app_rg_name, "migration-runner-container")
+    image = format("%s%s", "dfedigital/teacher-payments-service:", var.container_version)
+    # image  = format("%s%s", "s118d01contreg.azurecr.io/teacher-payments-service:", var.container_version)
     cpu    = "1"
     memory = "1.5"
 

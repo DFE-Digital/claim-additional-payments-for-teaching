@@ -6,7 +6,6 @@ resource "azurerm_app_service" "app_as" {
 
   client_affinity_enabled = true
   https_only              = true
-  # this needs to be defined
 
   site_config {
     always_on = true
@@ -24,8 +23,8 @@ resource "azurerm_app_service" "app_as" {
     health_check_path         = "/healthcheck"
     scm_type                  = "None"
     use_32_bit_worker_process = true
-    # linux_fx_version          = format("%s%s", "DOCKER|dfedigital/teacher-payments-service:", "20210520.1")
-    linux_fx_version = format("%s%s", "DOCKER|s118d01contreg.azurecr.io/teacher-payments-service:", var.input_container_version)
+    linux_fx_version          = format("%s%s", "DOCKER|dfedigital/teacher-payments-service:", var.input_container_version)
+    # linux_fx_version = format("%s%s", "DOCKER|s118d01contreg.azurecr.io/teacher-payments-service:", var.input_container_version)
   }
 
 
@@ -56,7 +55,6 @@ resource "azurerm_app_service" "app_as" {
     "ROLLBAR_ACCESS_TOKEN"                           = data.azurerm_key_vault_secret.RollbarInfraToken.value
     "SECRET_KEY_BASE"                                = data.azurerm_key_vault_secret.SecretKeyBase.value
     "WORKER_COUNT"                                   = "2"
-    #    "GOVUK_VERIFY_VSP_HOST"                          = format("%s%s.%s", "https://", azurerm_app_service.app_vsp_as.name, "azurewebsites.net")    
   }
 
   tags = merge({
