@@ -480,6 +480,7 @@ module AutomatedChecks
           end
 
           it { is_expected.to be_an_instance_of(Note) }
+          it { is_expected_with_block.to have_enqueued_mail(ClaimMailer, :identity_confirmation) }
 
           describe "identity confirmation task" do
             subject(:identity_confirmation_task) { claim.tasks.find_by(name: "identity_confirmation") }
