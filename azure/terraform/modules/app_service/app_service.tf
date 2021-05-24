@@ -44,6 +44,9 @@ resource "azurerm_app_service" "app_as" {
     "DFE_TEACHERS_PAYMENT_SERVICE_DATABASE_NAME"     = local.environment
     "DFE_TEACHERS_PAYMENT_SERVICE_DATABASE_PASSWORD" = data.azurerm_key_vault_secret.DatabasePassword.value
     "DFE_TEACHERS_PAYMENT_SERVICE_DATABASE_USERNAME" = format("%s@%s", data.azurerm_key_vault_secret.DatabaseUsername.value, format("%s-%s", var.app_rg_name, "db")) # "tps_development@s118d01-app-db"
+    "DQT_CLIENT_HEADERS"                             = data.azurerm_key_vault_secret.DqtClientHeaders.value
+    "DQT_CLIENT_HOST"                                = data.azurerm_key_vault_secret.DqtClientHost.value
+    "DQT_CLIENT_PARAMS"                              = data.azurerm_key_vault_secret.DqtClientParams.value
     "DOCKER_REGISTRY_SERVER_URL"                     = "https://index.docker.io"
     "ENVIRONMENT_NAME"                               = local.environment
     "GECKOBOARD_API_KEY"                             = data.azurerm_key_vault_secret.GeckoboardAPIKey.value
