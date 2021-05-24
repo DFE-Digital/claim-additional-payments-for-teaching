@@ -6,7 +6,7 @@ trigger:
     - '*'
 
 pool:
-  vmImage: 'ubuntu-latest'
+  vmImage: ubuntu-latest
 
 variables:
   - group: docker-settings
@@ -18,39 +18,17 @@ steps:
       pass: $(dockerPassword)
     displayName: Login to DockerHub
 
-  - task: Docker@2
-    displayName: login into ACR
-    inputs:
-      containerRegistry: 's118d01contreg'
-      command: 'login'
-
   # Build and run tests
   - script: |
-      docker pull $(acrRegistry)/$(dockerImageName):cache-test-dependencies || true
-      docker pull $(acrRegistry)/$(dockerImageName):cache-test || true
-    displayName: Pull test and test dependencies images 
+      docker pull $(dockerRegistry)/$(dockerImageName):cache-test-dependencies || true
+      docker pull $(dockerRegistry)/$(dockerImageName):cache-test || true
 
-  - task: DockerCompose@0
-    displayName: Build test Docker image  
-    inputs:
-      containerregistrytype: 'Azure Container Registry'
-      azureSubscription: 'azdo.pipelines.cip.S118D.armfe1ef140-8bef-4043-b5ee-c449e6f951ef'
-      azureContainerRegistry: '{"loginServer":"s118d01contreg.azurecr.io", "id" : "/subscriptions/8655985a-2f87-44d7-a541-0be9a8c2779d/resourceGroups/s118d01-contreg/providers/Microsoft.ContainerRegistry/registries/s118d01contreg"}'
-      dockerComposeFile: 'docker-compose.test.yml'
-      action: 'Run a Docker Compose command'
-      dockerComposeCommand: 'build'
+      docker-compose --file=docker-compose.test.yml build
+    displayName: Build test Docker image
+  - script: docker-compose --file=docker-compose.test.yml run --rm test
+    displayName: Run tests on Docker
 
-  - task: DockerCompose@0
-    displayName: Run test on Docker
-    inputs:
-      containerregistrytype: 'Azure Container Registry'
-      azureSubscription: 'azdo.pipelines.cip.S118D.armfe1ef140-8bef-4043-b5ee-c449e6f951ef'
-      azureContainerRegistry: '{"loginServer":"s118d01contreg.azurecr.io", "id" : "/subscriptions/8655985a-2f87-44d7-a541-0be9a8c2779d/resourceGroups/s118d01-contreg/providers/Microsoft.ContainerRegistry/registries/s118d01contreg"}'
-      dockerComposeFile: 'docker-compose.test.yml'
-      action: 'Run a Docker Compose command'
-      dockerComposeCommand: 'run --rm test'
-
-  # # Clean up
+  # Clean up
   - script: |
       git reset --hard
       git clean -xdf
@@ -61,127 +39,78 @@ steps:
     artifact: repository
     displayName: Publish repository as artifact
 
-  # # Build web dependencies
-  - task: Docker@2
-    displayName: Build web dependencies Docker image using 'cache-web-dependencies' as cache      
-    inputs:
-      containerRegistry: 's118d01contreg'
-      command: 'build'
-      Dockerfile: '**/Dockerfile'
-      tags: local/dfe-teachers-payment-service:web-dependencies
-      arguments: '--cache-from=$(acrRegistry)/$(dockerImageName):cache-web-dependencies --target=dependencies'
-    condition: ne(variables['Build.SourceBranch'], 'refs/heads/master')      
-
-  - task: Docker@2
-    displayName: Build web dependencies Docker image without cache      
-    inputs:
-      containerRegistry: 's118d01contreg'
-      repository: 'teacher-payments-service'
-      command: 'build'
-      Dockerfile: '**/Dockerfile'
-      tags: web-dependencies
-      arguments: '--target=dependencies'
-    condition: eq(variables['Build.SourceBranch'], 'refs/heads/master')
-
-  # # Build web
+  # Build web dependencies
   - script: |
-      docker pull $(acrRegistry)/$(dockerImageName):latest || true
-    displayName: Pull latest from ACR
-    condition: ne(variables['Build.SourceBranch'], 'refs/heads/master')
-    
+      docker pull $(dockerRegistry)/$(dockerImageName):cache-web-dependencies || true
 
-  - task: Docker@2
-    displayName: Build web Docker image using 'latest' as cache      
-    inputs:
-      containerRegistry: 's118d01contreg'
-      repository: 'teacher-payments-service'
-      command: 'build'
-      Dockerfile: '**/Dockerfile'
-      tags: 'web'
-      arguments: '--cache-from=local/dfe-teachers-payment-service:web-dependencies --cache-from=$(acrRegistry)/$(dockerImageName):latest --target=web --build-arg GIT_COMMIT_HASH=$(Build.SourceVersion)'
+      docker build \
+        --file=Dockerfile \
+        --cache-from=$(dockerRegistry)/$(dockerImageName):cache-web-dependencies \
+        --tag=local/dfe-teachers-payment-service:web-dependencies \
+        --target=dependencies \
+        .
+    displayName: Build web dependencies Docker image using 'cache-web-dependencies' as cache
     condition: ne(variables['Build.SourceBranch'], 'refs/heads/master')
-
-  - task: Docker@2
-    displayName: Build web Docker image without cache      
-    inputs:
-      containerRegistry: 's118d01contreg'
-      repository: 'teacher-payments-service'
-      command: 'build'
-      Dockerfile: '**/Dockerfile'
-      tags: 'web'
-      arguments: '--cache-from=local/dfe-teachers-payment-service:web-dependencies --target=web --build-arg GIT_COMMIT_HASH=$(Build.SourceVersion)'
+  - script: |
+      docker build \
+        --file=Dockerfile \
+        --tag=local/dfe-teachers-payment-service:web-dependencies \
+        --target=dependencies \
+        .
+    displayName: Build web dependencies Docker image without cache
     condition: eq(variables['Build.SourceBranch'], 'refs/heads/master')
 
+  # Build web
+  - script: |
+      docker pull $(dockerRegistry)/$(dockerImageName):latest || true
+
+      docker build \
+        --file=Dockerfile \
+        --cache-from=local/dfe-teachers-payment-service:web-dependencies \
+        --cache-from=$(dockerRegistry)/$(dockerImageName):latest \
+        --tag=local/dfe-teachers-payment-service:web \
+        --target=web \
+        --build-arg GIT_COMMIT_HASH=$(Build.SourceVersion) \
+        .
+    displayName: Build web Docker image using 'latest' as cache
+    condition: ne(variables['Build.SourceBranch'], 'refs/heads/master')
+  - script: |
+      docker build \
+        --file=Dockerfile \
+        --cache-from=local/dfe-teachers-payment-service:web-dependencies \
+        --tag=local/dfe-teachers-payment-service:web \
+        --target=web \
+        --build-arg GIT_COMMIT_HASH=$(Build.SourceVersion) \
+        .
+    displayName: Build web Docker image without cache
+    condition: eq(variables['Build.SourceBranch'], 'refs/heads/master')
 
   # Push test images
   - script: |
-      docker tag $(acrRegistry)/local/dfe-teachers-payment-service:test-dependencies $(acrRegistry)/$(dockerImageName):cache-test-dependencies
-    displayName: Tag local test dependencies Docker image for caching
-    condition: eq(variables['Build.SourceBranch'], 'refs/heads/master')
+      docker tag local/dfe-teachers-payment-service:test-dependencies $(dockerRegistry)/$(dockerImageName):cache-test-dependencies
 
-  - task: Docker@2
+      docker push $(dockerRegistry)/$(dockerImageName):cache-test-dependencies
     displayName: Push test dependencies Docker image for caching
-    inputs:
-      containerRegistry: 's118d01contreg'
-      repository: 'teacher-payments-service'
-      command: 'push'
-      tags: 'cache-test-dependencies'  
     condition: eq(variables['Build.SourceBranch'], 'refs/heads/master')
-
-
   - script: |
-      docker tag $(acrRegistry)/local/dfe-teachers-payment-service:test $(acrRegistry)/$(dockerImageName):cache-test
-    displayName: Tag local Docker image for caching
-    condition: eq(variables['Build.SourceBranch'], 'refs/heads/master')
+      docker tag local/dfe-teachers-payment-service:test $(dockerRegistry)/$(dockerImageName):cache-test
 
-  - task: Docker@2
+      docker push $(dockerRegistry)/$(dockerImageName):cache-test
     displayName: Push test Docker image for caching
-    inputs:
-      containerRegistry: 's118d01contreg'
-      repository: 'teacher-payments-service'
-      command: 'push'
-      tags: 'cache-test'  
     condition: eq(variables['Build.SourceBranch'], 'refs/heads/master')
 
-  # # Push web images
+  # Push web images
   - script: |
-      docker tag $(acrRegistry)/teacher-payments-service:web-dependencies $(acrRegistry)/$(dockerImageName):cache-web-dependencies
-    displayName: Tag local web dependencies Docker image for caching
-    condition: eq(variables['Build.SourceBranch'], 'refs/heads/master')
+      docker tag local/dfe-teachers-payment-service:web-dependencies $(dockerRegistry)/$(dockerImageName):cache-web-dependencies
 
-  - task: Docker@2
+      docker push $(dockerRegistry)/$(dockerImageName):cache-web-dependencies
     displayName: Push web dependencies Docker image for caching
-    inputs:
-      containerRegistry: 's118d01contreg'
-      repository: 'teacher-payments-service'
-      command: 'push'
-      tags: 'cache-web-dependencies'  
     condition: eq(variables['Build.SourceBranch'], 'refs/heads/master')
+  - script: |
+      docker tag local/dfe-teachers-payment-service:web $(dockerRegistry)/$(dockerImageName):$(Build.BuildNumber)
+      docker tag local/dfe-teachers-payment-service:web $(dockerRegistry)/$(dockerImageName):latest
 
-  - script: 
-      docker tag $(acrRegistry)/teacher-payments-service:web $(acrRegistry)/$(dockerImageName):$(Build.BuildNumber)
-    displayName: Tag local build number Docker image for caching
+      docker push $(dockerRegistry)/$(dockerImageName):$(Build.BuildNumber)
+      docker push $(dockerRegistry)/$(dockerImageName):latest
+    displayName: Push web Docker image
     condition: eq(variables['Build.SourceBranch'], 'refs/heads/master')
-
-  - task: Docker@2
-    displayName: Push build number Docker image
-    inputs:
-      containerRegistry: 's118d01contreg'
-      repository: 'teacher-payments-service'
-      command: 'push'
-      tags: $(Build.BuildNumber)  
-    condition: eq(variables['Build.SourceBranch'], 'refs/heads/master')
-
-  - script:
-      docker tag $(acrRegistry)/teacher-payments-service:web $(acrRegistry)/$(dockerImageName):latest
-    displayName: Tag local latest Docker image for caching
-    condition: eq(variables['Build.SourceBranch'], 'refs/heads/master')
-
-  - task: Docker@2
-    displayName: Push latest Docker image
-    inputs:
-      containerRegistry: 's118d01contreg'
-      repository: 'teacher-payments-service'
-      command: 'push'
-      tags: latest  
-    condition: eq(variables['Build.SourceBranch'], 'refs/heads/master') 
