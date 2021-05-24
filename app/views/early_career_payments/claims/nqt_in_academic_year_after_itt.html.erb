@@ -20,13 +20,13 @@
             </legend>
 
             <span class="govuk-hint" id="nqt_in_academic_year_after_itt-hint">
-              You are still eligible to claim if you usually teach another
-              subject but sometimes teach maths or physics.
+              This is sometimes referred to as your induction year and is the first year after
+              you have gained your qualified teacher status (QTS).
             </span>
 
             <%= errors_tag current_claim.eligibility, :nqt_in_academic_year_after_itt %>
 
-            <div class="govuk-radios govuk-radios--inline">
+            <div class="govuk-radios govuk-radios">
 
               <div class="govuk-radios__item">
                 <%= fields.radio_button(:nqt_in_academic_year_after_itt, true, class: "govuk-radios__input") %>
@@ -35,7 +35,7 @@
 
               <div class="govuk-radios__item">
                 <%= fields.radio_button(:nqt_in_academic_year_after_itt, false, class: "govuk-radios__input") %>
-                <%= fields.label :nqt_in_academic_year_after_itt_false, "No", class: "govuk-label govuk-radios__label" %>
+                <%= fields.label :nqt_in_academic_year_after_itt_false, "No, I’m a trainee teacher", class: "govuk-label govuk-radios__label" %>
               </div>
 
             </div>

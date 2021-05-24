@@ -238,7 +238,7 @@ en:
       has_entire_term_contract: "Do you have a contract to teach at the same school for an entire term or longer?"
       employed_directly: "Are you employed directly by your school?"
       disciplinary_action: "Are you currently subject to disciplinary action?"
-      nqt_in_academic_year_after_itt: "Did you do your NQT the academic year after your ITT?"
+      nqt_in_academic_year_after_itt: "Have you started your first year as a newly qualified teacher?"
       formal_performance_action: "Are you currently subject to action for poor performance?"
       postgraduate_itt_or_undergraduate_itt_course: "Did you do a postgraduate ITT course or an undergraduate ITT course?"
       eligible_itt_subject: "Which subject did you do your %{ug_or_pg} ITT in?"
