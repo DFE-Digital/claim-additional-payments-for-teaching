@@ -1,4 +1,4 @@
-resource "azurerm_container_group" "cont_reg_01" {
+resource "azurerm_container_group" "cont_grp_01" {
   name                = format("%s-%s", var.app_rg_name, "worker-aci")
   location            = var.rg_location
   resource_group_name = var.app_rg_name
@@ -8,10 +8,17 @@ resource "azurerm_container_group" "cont_reg_01" {
   os_type            = "Linux"
   network_profile_id = var.projcore_network_prof
 
+  image_registry_credential {
+    username = data.azurerm_container_registry.test.admin_username
+    password = data.azurerm_container_registry.test.admin_password
+    server   = data.azurerm_container_registry.test.login_server
+  }
+
   container {
-    name = format("%s-%s", var.app_rg_name, "worker-container")
-    # image  = format("%s%s", "dfedigital/teacher-payments-service:", var.container_version)
-    image  = format("%s%s", "s118d01contreg.azurecr.io/teacher-payments-service:", var.container_version)
+    name  = format("%s-%s", var.app_rg_name, "worker-container")
+    image = format("%s%s", "s118d01contreg.azurecr.io/teacher-payments-service:", var.container_version)
+    # image = "s118d01contreg.azurecr.io/teacher-payments-service:20210523.5"
+
     cpu    = "1"
     memory = "1.5"
 
@@ -56,7 +63,7 @@ resource "azurerm_container_group" "cont_reg_01" {
   )
 }
 
-resource "azurerm_container_group" "cont_reg_02" {
+resource "azurerm_container_group" "cont_grp_02" {
   name                = format("%s-%s", var.app_rg_name, "migration-runner-aci")
   location            = var.rg_location
   resource_group_name = var.app_rg_name
@@ -65,6 +72,12 @@ resource "azurerm_container_group" "cont_reg_02" {
   # network_profile_id = var.projcore_network_prof
   restart_policy = "OnFailure"
   #ip_address_type    = "Private"
+
+  image_registry_credential {
+    username = data.azurerm_container_registry.test.admin_username
+    password = data.azurerm_container_registry.test.admin_password
+    server   = data.azurerm_container_registry.test.login_server
+  }
 
   container {
     commands = [
@@ -101,7 +114,7 @@ resource "azurerm_container_group" "cont_reg_02" {
     }
 
     name = format("%s-%s", var.app_rg_name, "migration-runner-container")
-    # image  = format("%s%s", "dfedigital/teacher-payments-service:", var.container_version)
+    # image = format("%s%s", "dfedigital/teacher-payments-service:", var.container_version)
     image  = format("%s%s", "s118d01contreg.azurecr.io/teacher-payments-service:", var.container_version)
     cpu    = "1"
     memory = "1.5"

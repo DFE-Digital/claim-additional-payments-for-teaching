@@ -20,8 +20,8 @@ resource "azurerm_app_service_slot" "app_as_slot" {
     ]
     health_check_path         = "/healthcheck"
     use_32_bit_worker_process = true
-    # linux_fx_version          = format("%s%s", "DOCKER|dfedigital/teacher-payments-service:", var.input_container_version)
-    linux_fx_version = format("%s%s", "DOCKER|s118d01contreg.azurecr.io/teacher-payments-service:", var.input_container_version)
+    linux_fx_version          = format("%s%s", "DOCKER|dfedigital/teacher-payments-service:", "20210520.1")
+    # linux_fx_version = format("%s%s", "DOCKER|s118d01contreg.azurecr.io/teacher-payments-service:", var.input_container_version)
   }
 
   app_settings = {

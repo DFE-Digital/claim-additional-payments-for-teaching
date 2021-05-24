@@ -3,6 +3,11 @@ data "azurerm_application_insights" "app_ai" {
   resource_group_name = var.app_rg_name
 }
 
+data "azurerm_container_registry" "test" {
+  name                = "s118d01contreg"
+  resource_group_name = "s118d01-contreg"
+}
+
 data "azurerm_key_vault" "secrets_kv" {
   name                = format("%s-%s", var.rg_prefix, "secrets-kv")
   resource_group_name = format("%s-%s", var.rg_prefix, "secrets")
