@@ -1,5 +1,6 @@
 class ClaimsController < BasePublicController
   include PartOfClaimJourney
+  include OneTimePassword
 
   skip_before_action :send_unstarted_claiments_to_the_start, only: [:new, :create, :timeout]
   before_action :check_page_is_in_sequence, only: [:show, :update]
@@ -23,8 +24,6 @@ class ClaimsController < BasePublicController
   end
 
   def show
-    logger.debug("ClaimsController#show: #{}")
-    logger.debug("  - OTP section: #{}") if params[:slug] == "email-verification"
     search_schools if params[:school_search]
     render current_template
   end
@@ -33,6 +32,9 @@ class ClaimsController < BasePublicController
     current_claim.attributes = claim_params
     current_claim.reset_dependent_answers
     current_claim.eligibility.reset_dependent_answers
+
+    generate_one_time_password
+    store_in_session_one_time_password
 
     if current_claim.save(context: page_sequence.current_slug.to_sym)
       redirect_to claim_path(current_policy_routing_name, next_slug)
@@ -61,26 +63,6 @@ class ClaimsController < BasePublicController
   end
 
   private
-
-  def generate_and_send_one_time_password
-    logger.debug("ClaimsController#generate_and_send_one_time_password:")
-    logger.debug("  - OTP section: #{}")
-    logger.debug("Email address params: #{params["claim"]["email_address"]}")
-    ROTP::Base32.random
-    totp = ROTP::TOTP.new("base32secret3232", issuer: "Early Career Payments", interval: OTP_PASSWORD_INTERVAL)
-    challenge_otp = totp.now
-    session[:challenge_otp] = challenge_otp
-
-    ClaimMailer.ecp_email_verification(current_claim, challenge_otp).deliver_now
-  end
-
-  def verify_one_time_password
-    logger.debug("ClaimsController#verify_one_time_password:")
-    submitted_one_time_password = params["one_time_password"]
-    logger.debug("submitted_one_time_password: #{submitted_one_time_password}")
-    totp = ROTP::TOTP.new("base32secret3232", issuer: "Early Career Payments", interval: OTP_PASSWORD_INTERVAL)
-    totp.verify(submitted_one_time_password)
-  end
 
   helper_method :next_slug
   def next_slug
@@ -134,5 +116,19 @@ class ClaimsController < BasePublicController
 
   def prepend_view_path_for_policy
     prepend_view_path("app/views/#{current_policy_routing_name.underscore}")
+  end
+
+  def generate_one_time_password
+    if params[:slug] == "email-address" && current_claim.has_ecp_policy?
+      one_time_password = generate_otp
+      ClaimMailer.ecp_email_verification(current_claim, one_time_password).deliver_now
+      session[:sent_one_time_password_at] = Time.now
+    end
+  end
+
+  def store_in_session_one_time_password
+    if params[:slug] == "email-verification" && current_claim.has_ecp_policy?
+      current_claim.update_attributes(sent_one_time_password_at: session[:sent_one_time_password_at])
+    end
   end
 end
