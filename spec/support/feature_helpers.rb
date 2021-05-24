@@ -109,7 +109,7 @@ module FeatureHelpers
     end
   end
 
-  # Early Career Payment Policy specific helpers
+  # Early-Career Payment Policy specific helpers
   def start_early_career_payments_claim
     visit new_claim_path(EarlyCareerPayments.routing_name)
     choose_nqt_in_academic_year_after_itt

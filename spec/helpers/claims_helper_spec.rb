@@ -161,7 +161,7 @@ describe ClaimsHelper do
       end
     end
 
-    context "Early Career Payment policy" do
+    context "Early-Career Payment policy" do
       let(:eligibility) { build(:early_career_payments_eligibility, postgraduate_masters_loan: true, postgraduate_doctoral_loan: false) }
 
       it "returns an array of question and answers for the student loan questions" do

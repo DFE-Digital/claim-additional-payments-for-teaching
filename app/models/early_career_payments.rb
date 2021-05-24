@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# Module namespace specific to the policy for claiming early career payments.
+# Module namespace specific to the policy for claiming early-career payments.
 #
 # Early-career payments are available to teachers starting their initial teacher training (ITT)
 # in the 2018 to 2019, 2019 to 2020 or 2020 to 2021 academic year.

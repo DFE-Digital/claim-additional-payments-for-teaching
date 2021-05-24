@@ -1,5 +1,5 @@
 module EarlyCareerPayments
-  # Determines the slugs that make up the claim process for a Early Career Payments
+  # Determines the slugs that make up the claim process for a Early-Career Payments
   # claim. Based on the existing answers on the claim, the sequence of slugs
   # will change. For example, if the claimant has said they are
   # FIXME change when exclusions are known

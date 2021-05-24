@@ -158,7 +158,7 @@ RSpec.describe Claim, type: :model do
     end
   end
 
-  context "with early career payments policy eligibility" do
+  context "with early-career payments policy eligibility" do
     let(:claim) { build(:claim, policy: EarlyCareerPayments) }
 
     # Tests a single attribute, possibly should test multiple attributes
@@ -531,7 +531,7 @@ RSpec.describe Claim, type: :model do
       end
     end
 
-    context "with early career payments policy eligibility" do
+    context "with early-career payments policy eligibility" do
       let(:policy) { EarlyCareerPayments }
 
       context "when submittable" do
@@ -551,7 +551,7 @@ RSpec.describe Claim, type: :model do
       end
     end
 
-    context "Early Career Payments claim" do
+    context "Early-Career Payments claim" do
       let(:eligibility) { build(:early_career_payments_eligibility, :eligible) }
 
       it "returns true when the claim is valid and has not been submitted" do
@@ -983,7 +983,7 @@ RSpec.describe Claim, type: :model do
       end
     end
 
-    context "with early career payments policy" do
+    context "with early-career payments policy" do
       let(:policy) { EarlyCareerPayments }
 
       it "returns true" do

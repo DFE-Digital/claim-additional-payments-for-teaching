@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.feature "Ineligible Teacher Early Career Payments claims" do
+RSpec.feature "Ineligible Teacher Early-Career Payments claims" do
   scenario "NQT not in Academic Year after ITT" do
     visit landing_page_path(EarlyCareerPayments.routing_name)
     expect(page).to have_link(href: EarlyCareerPayments.feedback_url)
@@ -313,5 +313,5 @@ RSpec.feature "Ineligible Teacher Early Career Payments claims" do
   end
 
   # Additional sad paths
-  # TODO [PAGE 19] - You will be eligible for an early career payment in 2022
+  # TODO [PAGE 19] - You will be eligible for an early-career payment in 2022
 end
