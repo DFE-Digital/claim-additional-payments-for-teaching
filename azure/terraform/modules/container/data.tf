@@ -4,8 +4,8 @@ data "azurerm_application_insights" "app_ai" {
 }
 
 data "azurerm_container_registry" "test" {
-  name                = "s118d01contreg"
-  resource_group_name = "s118d01-contreg"
+  name                = format("%s%s", var.rg_prefix, "contreg")
+  resource_group_name = format("%s-%s", var.rg_prefix, "contreg")
 }
 
 data "azurerm_key_vault" "secrets_kv" {

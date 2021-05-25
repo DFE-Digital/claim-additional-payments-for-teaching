@@ -20,8 +20,8 @@ resource "azurerm_app_service_slot" "app_as_slot" {
     ]
     health_check_path         = "/healthcheck"
     use_32_bit_worker_process = true
-    # linux_fx_version          = format("%s%s", "DOCKER|dfedigital/teacher-payments-service:", "20210520.1")
-    linux_fx_version = format("%s%s", "DOCKER|s118d01contreg.azurecr.io/teacher-payments-service:", var.input_container_version)
+    linux_fx_version          = format("%s%s", "DOCKER|dfedigital/teacher-payments-service:", var.input_container_version)
+    # linux_fx_version = format("%s%s", "DOCKER|s118d01contreg.azurecr.io/teacher-payments-service:", var.input_container_version)
   }
 
   app_settings = {
@@ -51,7 +51,6 @@ resource "azurerm_app_service_slot" "app_as_slot" {
     "SECRET_KEY_BASE"                                = data.azurerm_key_vault_secret.SecretKeyBase.value
     "WORKER_COUNT"                                   = "2"
     "DOCKER_REGISTRY_SERVER_URL"                     = "https://index.docker.io"
-    #    "GOVUK_VERIFY_VSP_HOST"                          = format("%s%s.%s", "https://", azurerm_app_service.app_vsp_as.name, "azurewebsites.net")    
   }
 
   tags = merge({
