@@ -30,9 +30,9 @@ RSpec.describe EarlyCareerPayments::Eligibility, type: :model do
     end
 
     it "has handily named boolean methods for the possible values" do
-      eligibility = EarlyCareerPayments::Eligibility.new(eligible_itt_subject: "modern_foreign_languages")
+      eligibility = EarlyCareerPayments::Eligibility.new(eligible_itt_subject: "foreign_languages")
 
-      expect(eligibility.itt_subject_modern_foreign_languages?).to eq true
+      expect(eligibility.itt_subject_foreign_languages?).to eq true
       expect(eligibility.itt_subject_chemistry?).to eq false
       expect(eligibility.itt_subject_mathematics?).to eq false
       expect(eligibility.itt_subject_physics?).to eq false
@@ -120,7 +120,7 @@ RSpec.describe EarlyCareerPayments::Eligibility, type: :model do
   end
 
   describe "#eligible?" do
-    context "when 'itt_eligible_subject' is modern foreign languages AND 'itt_academic_year' is 2020/2021" do
+    context "when 'itt_eligible_subject' is foreign languages AND 'itt_academic_year' is 2020/2021" do
       let(:eligibility) { build(:early_career_payments_eligibility, :eligible) }
 
       it "returns false" do
@@ -182,7 +182,7 @@ RSpec.describe EarlyCareerPayments::Eligibility, type: :model do
       eligibility.eligible_itt_subject = :none_of_the_above
       expect { eligibility.reset_dependent_answers }.not_to change { eligibility.attributes }
 
-      eligibility.eligible_itt_subject = :modern_foreign_languages
+      eligibility.eligible_itt_subject = :foreign_languages
       expect { eligibility.reset_dependent_answers }
         .to change { eligibility.teaching_subject_now }
         .from(false).to(nil)
@@ -287,10 +287,10 @@ RSpec.describe EarlyCareerPayments::Eligibility, type: :model do
         expect(EarlyCareerPayments::Eligibility.new(eligible_itt_subject: :none_of_the_above)).to be_valid(:"eligible-itt-subject")
       end
 
-      it "is valid when the value for 'eligible_itt_subject' is one of 'chemistry, mathematics, modern foreigh languages or physics'" do
+      it "is valid when the value for 'eligible_itt_subject' is one of 'chemistry, foreign languages, mathematics or physics'" do
         expect(EarlyCareerPayments::Eligibility.new(eligible_itt_subject: :chemistry)).to be_valid(:"eligible-itt-subject")
         expect(EarlyCareerPayments::Eligibility.new(eligible_itt_subject: :physics)).to be_valid(:"eligible-itt-subject")
-        expect(EarlyCareerPayments::Eligibility.new(eligible_itt_subject: :modern_foreign_languages)).to be_valid(:"eligible-itt-subject")
+        expect(EarlyCareerPayments::Eligibility.new(eligible_itt_subject: :foreign_languages)).to be_valid(:"eligible-itt-subject")
       end
     end
 

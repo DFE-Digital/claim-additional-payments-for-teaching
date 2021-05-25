@@ -32,7 +32,7 @@ RSpec.describe EarlyCareerPayments::SlugSequence do
       let(:eligibility) { build(:early_career_payments_eligibility, :mathematics_and_itt_year_2018) }
 
       it "excludes the 'eligibility_confirmed' slug when the claim is ineligible" do
-        claim.eligibility.eligible_itt_subject = :modern_foreign_languages
+        claim.eligibility.eligible_itt_subject = :foreign_languages
 
         expect(slug_sequence.slugs).not_to include("eligibility_confirmed")
       end

@@ -230,10 +230,10 @@ RSpec.feature "Ineligible Teacher Early Career Payments claims" do
     # [PAGE 10] - Which subject did you do your undergraduate ITT in
     expect(page).to have_text(I18n.t("early_career_payments.questions.eligible_itt_subject", ug_or_pg: claim.eligibility.pgitt_or_ugitt_course))
 
-    choose "Modern foreign languages"
+    choose "Foreign languages"
     click_on "Continue"
 
-    expect(claim.eligibility.reload.eligible_itt_subject).to eql "modern_foreign_languages"
+    expect(claim.eligibility.reload.eligible_itt_subject).to eql "foreign_languages"
 
     # [PAGE 12] - Do you teach the eligible ITT subject now
     expect(page).to have_text(I18n.t("early_career_payments.questions.teaching_subject_now", eligible_itt_subject: claim.eligibility.eligible_itt_subject.humanize.downcase))
@@ -286,10 +286,10 @@ RSpec.feature "Ineligible Teacher Early Career Payments claims" do
     # [PAGE 10] - Which subject did you do your undergraduate ITT in
     expect(page).to have_text(I18n.t("early_career_payments.questions.eligible_itt_subject", ug_or_pg: claim.eligibility.pgitt_or_ugitt_course))
 
-    choose "Modern foreign languages"
+    choose "Foreign languages"
     click_on "Continue"
 
-    expect(claim.eligibility.reload.eligible_itt_subject).to eql "modern_foreign_languages"
+    expect(claim.eligibility.reload.eligible_itt_subject).to eql "foreign_languages"
 
     # [PAGE 12] - Do you teach the eligible ITT subject now
     expect(page).to have_text(I18n.t("early_career_payments.questions.teaching_subject_now", eligible_itt_subject: claim.eligibility.eligible_itt_subject.humanize.downcase))
