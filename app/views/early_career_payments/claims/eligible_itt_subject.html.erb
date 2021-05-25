@@ -42,9 +42,24 @@
               </div>
             </div>
 
+            <br/>
+            <br/>
           </fieldset>
-
         <% end %>
+        <details class="govuk-details" data-module="govuk-details">
+          <summary class="govuk-details__summary">
+            <span class="govuk-details__summary-text">
+              If you qualified with science
+            </span>
+          </summary>
+          <div class="govuk-details__text">
+            <p class="govuk-body">You will need to have specialised in either chemistry or physics to be
+              eligible. If you specialised in biology then you will not be eligible. If you’re
+              unsure, you can get this from the certificate you received when you
+              qualified as a teacher.
+            </p>
+          </div>
+        </details>
       <% end %>
 
       <%= form.submit "Continue", class: "govuk-button", data: {module: "govuk-button"} %>

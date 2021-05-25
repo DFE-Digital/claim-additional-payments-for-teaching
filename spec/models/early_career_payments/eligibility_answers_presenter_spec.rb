@@ -62,7 +62,7 @@ RSpec.describe EarlyCareerPayments::EligibilityAnswersPresenter, type: :model do
         subject_to_formal_performance_action: false,
         subject_to_disciplinary_action: false,
         pgitt_or_ugitt_course: :undergraduate,
-        eligible_itt_subject: :modern_foreign_languages,
+        eligible_itt_subject: :foreign_languages,
         teaching_subject_now: true,
         itt_academic_year: "2018_2019"
       }
@@ -84,7 +84,7 @@ RSpec.describe EarlyCareerPayments::EligibilityAnswersPresenter, type: :model do
         ],
         [
           I18n.t("early_career_payments.questions.eligible_itt_subject", ug_or_pg: eligibility.pgitt_or_ugitt_course),
-          "Modern foreign languages",
+          "Foreign languages",
           "eligible-itt-subject"
         ],
         [
