@@ -34,11 +34,11 @@ RSpec.describe EarlyCareerPayments::SlugSequence do
       it "excludes the 'eligibility_confirmed' slug when the claim is ineligible" do
         claim.eligibility.eligible_itt_subject = :foreign_languages
 
-        expect(slug_sequence.slugs).not_to include("eligibility_confirmed")
+        expect(slug_sequence.slugs).not_to include("eligibility-confirmed")
       end
 
       it "includes the 'eligibility_confirmed' slug when claim is eligible" do
-        expect(slug_sequence.slugs).to include("eligibility_confirmed")
+        expect(slug_sequence.slugs).to include("eligibility-confirmed")
       end
     end
 
@@ -55,9 +55,9 @@ RSpec.describe EarlyCareerPayments::SlugSequence do
           postgraduate-itt-or-undergraduate-itt-course
           eligible-itt-subject
           teaching-subject-now
-          itt_year
+          itt-year
           check-your-answers-part-one
-          how_we_will_use_information_provided
+          how-we-will-use-information-provided
           personal-details
           address
           email-address
@@ -84,9 +84,9 @@ RSpec.describe EarlyCareerPayments::SlugSequence do
           postgraduate-itt-or-undergraduate-itt-course
           eligible-itt-subject
           teaching-subject-now
-          itt_year
+          itt-year
           check-your-answers-part-one
-          how_we_will_use_information_provided
+          how-we-will-use-information-provided
           personal-details
           address
           email-address
