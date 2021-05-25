@@ -3,7 +3,7 @@ data "azurerm_application_insights" "app_ai" {
   resource_group_name = var.app_rg_name
 }
 
-data "azurerm_container_registry" "test" {
+data "azurerm_container_registry" "acr" {
   name                = format("%s%s", var.rg_prefix, "contreg")
   resource_group_name = format("%s-%s", var.rg_prefix, "contreg")
 }
