@@ -47,18 +47,23 @@ data "azurerm_key_vault_secret" "DfeSignInSecret" {
   name         = "DfeSignInSecret"
   key_vault_id = data.azurerm_key_vault.secrets_kv.id
 }
-data "azurerm_key_vault_secret" "DqtClientHeaders" {
+data "azurerm_key_vault_secret" "DQTClientHeaders" {
   name         = "DqtClientHeaders"
   key_vault_id = data.azurerm_key_vault.secrets_kv.id
 }
-data "azurerm_key_vault_secret" "DqtClientHost" {
+data "azurerm_key_vault_secret" "DQTClientHost" {
   name         = "DqtClientHost"
   key_vault_id = data.azurerm_key_vault.secrets_kv.id
 }
-data "azurerm_key_vault_secret" "DqtClientParams" {
+data "azurerm_key_vault_secret" "DQTClientParams" {
   name         = "DqtClientParams"
   key_vault_id = data.azurerm_key_vault.secrets_kv.id
 }
+data "azurerm_key_vault_secret" "DQTClientPort" {
+  name         = "DQTClientPort"
+  key_vault_id = data.azurerm_key_vault.secrets_kv.id
+}
+
 data "azurerm_key_vault_secret" "DatabasePassword" {
   name         = "DatabasePassword"
   key_vault_id = data.azurerm_key_vault.secrets_kv.id
