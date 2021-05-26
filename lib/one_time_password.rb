@@ -4,7 +4,7 @@ module OneTimePassword
   extend ActiveSupport::Concern
 
   OTP_SECRET = ROTP::Base32.random.freeze
-  OTP_PASSWORD_INTERVAL = 60
+  OTP_PASSWORD_INTERVAL = 900
   ONE_TIME_PASSWORD_LENGTH = 6
 
   private
