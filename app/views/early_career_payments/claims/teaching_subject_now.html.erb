@@ -23,8 +23,8 @@
             </legend>
 
             <span class="govuk-hint" id="teaching_subject_now-hint">
-              You are still eligible to claim if you teach another
-              subject but sometimes teach <%= translated_eligible_itt_subject %>.
+              You can still claim even if you teach another subject but the majority of your
+              timetable must be teaching <%= translated_eligible_itt_subject %>.
             </span>
 
             <%= errors_tag current_claim.eligibility, :teaching_subject_now %>
@@ -45,6 +45,23 @@
 
           </fieldset>
 
+        <% end %>
+
+        <% if translated_eligible_itt_subject == "physics" || translated_eligible_itt_subject == "chemistry" %>
+          <br/>
+          <details class="govuk-details" data-module="govuk-details">
+            <summary class="govuk-details__summary">
+              <span class="govuk-details__summary-text">
+                If you teach all sciences
+              </span>
+            </summary>
+            <div class="govuk-details__text">
+              <p class="govuk-body">You will need to spend the majority of your time teaching chemistry and
+              or physics to be eligible. If you teach biology most of the time you will not
+              be eligible.
+              </p>
+            </div>
+          </details>
         <% end %>
       <% end %>
 
