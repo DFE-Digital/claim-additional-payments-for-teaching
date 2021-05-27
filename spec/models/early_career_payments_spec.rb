@@ -55,7 +55,7 @@ RSpec.describe EarlyCareerPayments, type: :model do
 
   describe ".eligibility_page_url" do
     it "returns a link to the guidance page for eligibility url" do
-      expect(subject.eligibility_page_url).to include("https://www.gov.uk/publications/TO-BE-REPLACED-by-response-to-ECP-518")
+      expect(subject.eligibility_page_url).to include("https://www.gov.uk/guidance/early-career-payments-guidance-for-teachers-and-schools")
     end
   end
 
