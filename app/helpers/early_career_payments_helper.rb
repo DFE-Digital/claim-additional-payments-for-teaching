@@ -8,4 +8,8 @@ module EarlyCareerPaymentsHelper
       content_tag(:h1, I18n.t("early_career_payments.ineligible.heading"), class: "govuk-heading-xl")
     end
   end
+
+  def one_time_password_validity_duration
+    pluralize(OneTimePassword::OTP_PASSWORD_INTERVAL / 60, "minute")
+  end
 end

@@ -1,5 +1,6 @@
 class ClaimMailer < ApplicationMailer
   helper :application
+  helper :early_career_payments
 
   def submitted(claim)
     set_common_instance_variables(claim)
