@@ -56,6 +56,9 @@ resource "azurerm_container_group" "cont_grp_01" {
       port     = 443
       protocol = "TCP"
     }
+
+    commands = ["bin/start-worker"]
+
   }
 
   tags = merge({
