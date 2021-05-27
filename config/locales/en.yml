@@ -242,7 +242,7 @@ en:
       formal_performance_action: "Are you currently subject to action for poor performance?"
       postgraduate_itt_or_undergraduate_itt_course: "Did you do a postgraduate ITT course or an undergraduate ITT course?"
       eligible_itt_subject: "Which subject did you do your %{ug_or_pg} ITT in?"
-      itt_postgraduate_hint: "Postgraduate ITT includes: university-led and school-led courses like the Postgraduate Certificate of Education (PGCE), School Direct ITT and School Centred ITT (SCITT)."
+      itt_postgraduate_hint: "Postgraduate ITT includes: university-led and school-led courses like the Postgraduate Certificate of Education (PGCE), Teach First, School Direct ITT and School Centred ITT (SCITT)."
       itt_undergraduate_hint: "Undergraduate ITT includes: Bachelor of Arts (BA) or Bachelor of Science (BSc) degrees."
       teaching_subject_now: "Do you teach %{eligible_itt_subject} now?"
       itt_academic_year: "In what academic year did you %{start_or_complete} your %{ug_or_pg} ITT?"
