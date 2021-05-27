@@ -25,6 +25,12 @@
             <%= form.text_field :first_name, class: css_classes_for_input(current_claim, :first_name), autocomplete: "given-name" %>
           <% end %>
 
+          <%= form_group_tag current_claim, :middle_name do %>
+            <%= form.label :middle_name, "Middle names", class: "govuk-label" %>
+            <%= errors_tag current_claim, :middle_name %>
+            <%= form.text_field :middle_name, class: css_classes_for_input(current_claim, :middle_name), autocomplete: "given-name" %>
+          <% end %>
+
           <%= form_group_tag current_claim, :surname do %>
             <%= form.label :surname, "Last name", class: "govuk-label" %>
             <%= errors_tag current_claim, :surname %>
@@ -74,7 +80,8 @@
         </h1>
 
         <div class="govuk-hint" id="national_insurance_number-hint">
-          It’s on your National Insurance card, benefit letter, payslip or P60. For example, ‘QQ 12 34 56 C’.
+          It's on your National Insurance card, benefit letter, payslip or P60. For
+          example 'QQ123456C'.
         </div>
 
         <%= errors_tag current_claim, :national_insurance_number %>
