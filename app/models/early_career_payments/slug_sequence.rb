@@ -31,6 +31,7 @@ module EarlyCareerPayments
       "personal-details",
       "address",
       "email-address",
+      "email-verification",
       "bank-details",
       "gender",
       "teacher-reference-number",

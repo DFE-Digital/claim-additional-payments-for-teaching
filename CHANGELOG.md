@@ -44,6 +44,8 @@ The format is based on [Keep a Changelog]
     - Add 'What gender does your school's payroll system associate with you?'
     - Add 'Enter bank account details'
     - Add 'Email address'
+    - Add 'Email validation - ask user to validate their email with a One Time
+      Password"
     - Add 'What is your teacher reference number'
   - Student Loan Information Journey
     - Add 'Are you currently paying off your student loan'

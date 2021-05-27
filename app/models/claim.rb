@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class Claim < ApplicationRecord
+  include OneTimePassword
+
   TRN_LENGTH = 7
   NO_STUDENT_LOAN = "not_applicable"
   STUDENT_LOAN_PLAN_OPTIONS = StudentLoan::PLANS.dup << NO_STUDENT_LOAN
@@ -26,7 +28,8 @@ class Claim < ApplicationRecord
     :bank_sort_code,
     :bank_account_number,
     :banking_name,
-    :building_society_roll_number
+    :building_society_roll_number,
+    :one_time_password
   ].freeze
   AMENDABLE_ATTRIBUTES = %i[
     teacher_reference_number
@@ -69,7 +72,9 @@ class Claim < ApplicationRecord
     building_society_roll_number: true,
     payment_id: false,
     academic_year: false,
-    personal_data_removed_at: false
+    personal_data_removed_at: false,
+    one_time_password: true,
+    sent_one_time_password_at: false
   }.freeze
   DECISION_DEADLINE = 12.weeks
   DECISION_DEADLINE_WARNING_POINT = 2.weeks
@@ -81,6 +86,10 @@ class Claim < ApplicationRecord
 
   # Use AcademicYear as custom ActiveRecord attribute type
   attribute :academic_year, AcademicYear::Type.new
+
+  # Use virtual attributes for OTP validation
+  attribute :one_time_password, :string, limit: 6
+  attribute :sent_one_time_password_at, :datetime
 
   enum student_loan_country: StudentLoan::COUNTRIES
   enum student_loan_start_date: StudentLoan::COURSE_START_DATES
@@ -157,6 +166,13 @@ class Claim < ApplicationRecord
   validate :building_society_roll_number_must_be_in_a_valid_format
 
   validate :claim_must_not_be_ineligible, on: :submit
+
+  validates :one_time_password, on: [:"email-verification"], presence: {message: "Enter your one time password that we emailed to you"}, if: :has_ecp_policy?
+  validate :otp_must_be_six_digits, on: [:"email-verification"], if: :has_ecp_policy?
+  validate :otp_must_be_valid_challenge_code, on: [:"email-verification"], if: :has_ecp_policy_and_not_new_claim?
+
+  before_save :set_sent_one_time_password_at, if: :has_ecp_policy_and_not_new_claim?
+  before_save :normalise_one_time_password, if: :one_time_password_changed?
 
   before_save :normalise_trn, if: :teacher_reference_number_changed?
   before_save :normalise_ni_number, if: :national_insurance_number_changed?
@@ -384,5 +400,37 @@ class Claim < ApplicationRecord
     else
       Claim::NO_STUDENT_LOAN
     end
+  end
+
+  def set_sent_one_time_password_at
+    self.sent_one_time_password_at = sent_one_time_password_at
+  end
+
+  def normalise_one_time_password
+    self.one_time_password = normalised_one_time_password
+  end
+
+  def normalised_one_time_password
+    one_time_password.gsub(/\D/, "")
+  end
+
+  def otp_must_be_six_digits
+    errors.add(:one_time_password, "Enter the correct one time password that we emailed to you") if one_time_password.present? && normalised_one_time_password.length != ONE_TIME_PASSWORD_LENGTH
+  end
+
+  def otp_must_be_valid_challenge_code
+    return false unless one_time_password.present? && normalised_one_time_password.length == ONE_TIME_PASSWORD_LENGTH
+
+    if verify_otp(one_time_password).nil?
+      if sent_one_time_password_at < OTP_PASSWORD_INTERVAL.seconds.ago
+        errors.add(:one_time_password, "Your one time password has expired, request a new one")
+      else
+        errors.add(:one_time_password, "Enter the correct one time password that we emailed to you")
+      end
+    end
+  end
+
+  def has_ecp_policy_and_not_new_claim?
+    has_ecp_policy? && persisted?
   end
 end

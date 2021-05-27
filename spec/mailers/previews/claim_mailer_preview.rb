@@ -15,6 +15,10 @@ class ClaimMailerPreview < ActionMailer::Preview
     ClaimMailer.update_after_three_weeks(claim_for(Claim.approved))
   end
 
+  def ecp_email_verification
+    ClaimMailer.ecp_email_verification(claim_for(Claim.unsubmitted), "@one_time_password")
+  end
+
   private
 
   def claim_for(scope)

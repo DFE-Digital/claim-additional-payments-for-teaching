@@ -25,6 +25,7 @@ RSpec.describe Claim::PermittedParameters do
       :bank_account_number,
       :banking_name,
       :building_society_roll_number,
+      :one_time_password,
       eligibility_attributes: [
         :qts_award_year,
         :claim_school_id,

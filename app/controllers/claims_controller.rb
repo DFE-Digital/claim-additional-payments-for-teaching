@@ -1,5 +1,6 @@
 class ClaimsController < BasePublicController
   include PartOfClaimJourney
+  include OneTimePassword
 
   skip_before_action :send_unstarted_claiments_to_the_start, only: [:new, :create, :timeout]
   before_action :check_page_is_in_sequence, only: [:show, :update]
@@ -31,6 +32,9 @@ class ClaimsController < BasePublicController
     current_claim.attributes = claim_params
     current_claim.reset_dependent_answers
     current_claim.eligibility.reset_dependent_answers
+
+    generate_one_time_password
+    store_in_session_one_time_password
 
     if current_claim.save(context: page_sequence.current_slug.to_sym)
       redirect_to claim_path(current_policy_routing_name, next_slug)
@@ -112,5 +116,19 @@ class ClaimsController < BasePublicController
 
   def prepend_view_path_for_policy
     prepend_view_path("app/views/#{current_policy_routing_name.underscore}")
+  end
+
+  def generate_one_time_password
+    if params[:slug] == "email-address" && current_claim.has_ecp_policy?
+      one_time_password = generate_otp
+      ClaimMailer.ecp_email_verification(current_claim, one_time_password).deliver_now
+      session[:sent_one_time_password_at] = Time.now
+    end
+  end
+
+  def store_in_session_one_time_password
+    if params[:slug] == "email-verification" && current_claim.has_ecp_policy?
+      current_claim.update_attributes(sent_one_time_password_at: session[:sent_one_time_password_at])
+    end
   end
 end
