@@ -26,12 +26,7 @@
       <a class="govuk-link" href="/">eligibility page.</a>
     </p>
 
-    <%= link_to new_claim_url(EarlyCareerPayments.routing_name), role: :button, draggable: false, class: "govuk-button govuk-button--start", data: { module: "govuk-button"} do %>
-      Start Now
-      <%= render partial: "shared/svg_for_govuk_button_start_icon" %>
-    <% end %>
-
-    <h2 class="govuk-heading-l">Future claims</h2>
+    <h2 class="govuk-heading-l">Who can apply in the future?</h2>
 
     <p class="govuk-body">
       If you are one of the below teachers, you can still 
@@ -70,12 +65,17 @@
 
     <p class="govuk-body">If you do not fall into any of these groups then you will not be eligible for a payment.</p>
 
+    <%= link_to new_claim_url(EarlyCareerPayments.routing_name), role: :button, draggable: false, class: "govuk-button govuk-button--start", data: { module: "govuk-button"} do %>
+      Start Now
+      <%= render partial: "shared/svg_for_govuk_button_start_icon" %>
+    <% end %>
+
     <h2 class="govuk-heading-l">More information</h2>
 
     <p class="govuk-body">
       Email <a class="govuk-link" href="/">earlycareerpayments@education.gov.uk</a> for more information.
     </p>
-    <p>
+    <p class="govuk-body">
       Published 28 January 2020 Last updated 28th October 2020
     </p>
   </div>
