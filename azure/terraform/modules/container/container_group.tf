@@ -38,7 +38,6 @@ resource "azurerm_container_group" "cont_grp_01" {
       "DQT_CLIENT_HEADERS"                             = data.azurerm_key_vault_secret.DQTClientHeaders.value
       "DQT_CLIENT_HOST"                                = data.azurerm_key_vault_secret.DQTClientHost.value
       "DQT_CLIENT_PARAMS"                              = data.azurerm_key_vault_secret.DQTClientParams.value
-      "DQT_CLIENT_PORT"                                = data.azurerm_key_vault_secret.DQTClientPort.value
       "ENVIRONMENT_NAME"                               = local.environment
       "GECKOBOARD_API_KEY"                             = data.azurerm_key_vault_secret.GeckoboardAPIKey.value
       "GOOGLE_ANALYTICS_ID"                            = ""
@@ -102,7 +101,6 @@ resource "azurerm_container_group" "cont_grp_02" {
       "DQT_CLIENT_HEADERS"                             = data.azurerm_key_vault_secret.DQTClientHeaders.value
       "DQT_CLIENT_HOST"                                = data.azurerm_key_vault_secret.DQTClientHost.value
       "DQT_CLIENT_PARAMS"                              = data.azurerm_key_vault_secret.DQTClientParams.value
-      "DQT_CLIENT_PORT"                                = data.azurerm_key_vault_secret.DQTClientPort.value
       "ENVIRONMENT_NAME"                               = "development"
       "GECKOBOARD_API_KEY"                             = data.azurerm_key_vault_secret.GeckoboardAPIKey.value
       "GOOGLE_ANALYTICS_ID"                            = ""

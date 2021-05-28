@@ -59,11 +59,6 @@ data "azurerm_key_vault_secret" "DQTClientParams" {
   name         = "DqtClientParams"
   key_vault_id = data.azurerm_key_vault.secrets_kv.id
 }
-data "azurerm_key_vault_secret" "DQTClientPort" {
-  name         = "DQTClientPort"
-  key_vault_id = data.azurerm_key_vault.secrets_kv.id
-}
-
 data "azurerm_key_vault_secret" "DatabasePassword" {
   name         = "DatabasePassword"
   key_vault_id = data.azurerm_key_vault.secrets_kv.id
