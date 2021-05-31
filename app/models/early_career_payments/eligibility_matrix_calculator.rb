@@ -1,12 +1,5 @@
 module EarlyCareerPayments
   class EligibilityMatrixCalculator
-    MATRIX = {
-      mathematics: ["2018_2019", "2019_2020", "2020_2021"],
-      physics: ["2020_2021"],
-      chemistry: ["2020_2021"],
-      foreign_languages: ["2020_2021"]
-    }.freeze
-
     attr_reader :eligibility
 
     def initialize(eligibility)
@@ -16,7 +9,7 @@ module EarlyCareerPayments
     def eligible_later?
       return false if subject == :mathematics && itt_academic_year == "2018_2019"
 
-      MATRIX.dig(subject)&.include?(itt_academic_year) ? true : false
+      MATRIX.dig(subject.to_s, itt_academic_year).nil? ? false : true
     end
 
     private
