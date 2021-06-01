@@ -53,7 +53,7 @@ en:
     name: "What is your full name?"
     address: "What is your address?"
     date_of_birth: "What is your date of birth?"
-    teacher_reference_number: "What's your teacher reference number?"
+    teacher_reference_number: "What is your teacher reference number (TRN)?"
     national_insurance_number: "What's your National Insurance number?"
     has_student_loan: "Are you currently paying off your student loan?"
     student_loan_country: "When you applied for your student loan where was your home address?"
