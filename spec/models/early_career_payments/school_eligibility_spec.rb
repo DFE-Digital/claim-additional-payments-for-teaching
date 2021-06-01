@@ -152,4 +152,42 @@ RSpec.describe EarlyCareerPayments::SchoolEligibility do
       expect(EarlyCareerPayments::SchoolEligibility.new(primary_school).eligible_current_school?).to eql false
     end
   end
+
+  describe "#in_uplift_area?" do
+    it "returns false when not an 'eligible_current_school?'" do
+      ineligible_school = School.new(
+        close_date: Date.parse("2012-08-31"),
+        school_type: :city_technology_college,
+        school_type_group: :independent_schools,
+        statutory_high_age: 16,
+        local_authority_district: local_authority_districts(:camden)
+      )
+
+      expect(EarlyCareerPayments::SchoolEligibility.new(ineligible_school).in_uplift_area?).to eql false
+    end
+
+    it "returns false when the school is not in an uplifted local authority" do
+      eligible_school_not_in_uplift_area = School.new(
+        close_date: nil,
+        school_type: :city_technology_college,
+        school_type_group: :independent_schools,
+        statutory_high_age: 16,
+        local_authority_district: local_authority_districts(:camden)
+      )
+
+      expect(EarlyCareerPayments::SchoolEligibility.new(eligible_school_not_in_uplift_area).in_uplift_area?).to eql false
+    end
+
+    it "returns true when the school is in an uplifted local authority" do
+      uplift_school = School.new(
+        close_date: nil,
+        school_type: :city_technology_college,
+        school_type_group: :independent_schools,
+        statutory_high_age: 16,
+        local_authority_district: local_authority_districts(:barnsley)
+      )
+
+      expect(EarlyCareerPayments::SchoolEligibility.new(uplift_school).in_uplift_area?).to be true
+    end
+  end
 end

@@ -58,6 +58,7 @@ The format is based on [Keep a Changelog]
   - Add 'Check your answers before sending your application'
   - Add 'Application complete'
 - Automatically update admin claim tasks with DQT API
+- Add list of schools eligible for uplift ECP payments
 
 ## [Release 089] - 2021-03-05
 
