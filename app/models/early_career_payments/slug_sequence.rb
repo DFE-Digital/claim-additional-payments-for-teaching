@@ -22,12 +22,13 @@ module EarlyCareerPayments
       "postgraduate-itt-or-undergraduate-itt-course",
       "eligible-itt-subject",
       "teaching-subject-now",
-      "itt_year",
+      "itt-year",
       "check-your-answers-part-one",
-      "eligibility_confirmed",
+      "eligibility-confirmed",
       # eligible later phase of claim journey
+      "eligible-later",
       # personal details phase of claim journey
-      "how_we_will_use_information_provided",
+      "how-we-will-use-information-provided",
       "personal-details",
       "address",
       "email-address",
@@ -56,7 +57,8 @@ module EarlyCareerPayments
       SLUGS.dup.tap do |sequence|
         sequence.delete("entire-term-contract") unless claim.eligibility.employed_as_supply_teacher?
         sequence.delete("employed-directly") unless claim.eligibility.employed_as_supply_teacher?
-        sequence.delete("eligibility_confirmed") unless claim.eligibility.eligible?
+        sequence.delete("eligibility-confirmed") unless claim.eligibility.eligible?
+        sequence.delete("eligible-later") unless claim.eligibility.eligible_later?
         sequence.delete("ineligible") unless claim.eligibility.ineligible?
         remove_student_loan_slugs(sequence) if claim.has_student_loan == false
         remove_student_loan_country_slugs(sequence)

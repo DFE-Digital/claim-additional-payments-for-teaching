@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.describe EarlyCareerPayments::SlugSequence do
-  let(:eligibility) { build(:early_career_payments_eligibility) }
+  let(:eligibility) { build(:early_career_payments_eligibility, :eligible) }
   let(:claim) { build(:claim, eligibility: eligibility) }
 
   subject(:slug_sequence) { EarlyCareerPayments::SlugSequence.new(claim) }
@@ -28,17 +28,32 @@ RSpec.describe EarlyCareerPayments::SlugSequence do
       expect(slug_sequence.slugs).not_to include("employed-directly")
     end
 
-    context "when assessing if to include 'eligibility_confirmed' slug" do
+    context "when assessing if to include 'eligibility-confirmed' slug" do
       let(:eligibility) { build(:early_career_payments_eligibility, :mathematics_and_itt_year_2018) }
 
-      it "excludes the 'eligibility_confirmed' slug when the claim is ineligible" do
+      it "excludes the 'eligibility-confirmed' slug when the claim is ineligible" do
         claim.eligibility.eligible_itt_subject = :foreign_languages
 
-        expect(slug_sequence.slugs).not_to include("eligibility_confirmed")
+        expect(slug_sequence.slugs).not_to include("eligibility-confirmed")
       end
 
-      it "includes the 'eligibility_confirmed' slug when claim is eligible" do
-        expect(slug_sequence.slugs).to include("eligibility_confirmed")
+      it "includes the 'eligibility-confirmed' slug when claim is eligible" do
+        expect(slug_sequence.slugs).to include("eligibility-confirmed")
+      end
+    end
+
+    context "when assessing if to include 'eligible-later' slug" do
+      let(:eligibility) { build(:early_career_payments_eligibility, :chemistry_and_itt_year_2020) }
+
+      it "excludes the 'eligible-later' slug when the claim is eligible" do
+        claim.eligibility.eligible_itt_subject = :mathematics
+        claim.eligibility.itt_academic_year = "2018_2019"
+
+        expect(slug_sequence.slugs).not_to include("eligible-later")
+      end
+
+      it "includes the 'eligible-later' slug when claim is not eligible in the first claim year" do
+        expect(slug_sequence.slugs).to include("eligible-later")
       end
     end
 
@@ -55,9 +70,10 @@ RSpec.describe EarlyCareerPayments::SlugSequence do
           postgraduate-itt-or-undergraduate-itt-course
           eligible-itt-subject
           teaching-subject-now
-          itt_year
+          itt-year
           check-your-answers-part-one
-          how_we_will_use_information_provided
+          eligible-later
+          how-we-will-use-information-provided
           personal-details
           address
           email-address
@@ -84,9 +100,10 @@ RSpec.describe EarlyCareerPayments::SlugSequence do
           postgraduate-itt-or-undergraduate-itt-course
           eligible-itt-subject
           teaching-subject-now
-          itt_year
+          itt-year
           check-your-answers-part-one
-          how_we_will_use_information_provided
+          eligible-later
+          how-we-will-use-information-provided
           personal-details
           address
           email-address
