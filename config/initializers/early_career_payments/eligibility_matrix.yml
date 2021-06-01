@@ -1,0 +1,45 @@
+# determines if a teachers claim:
+# - is eligible in which year
+# - OR - if it is ineligible
+# - OR - eligible later
+
+# file format for ECP eligibility matrix
+# subject
+#   itt_academic_year
+#     the next level down reprsents the base award amount for
+#     each of the specific years
+
+mathematics:
+  "2018_2019":
+    2021: 5000
+    2022: 0
+    2023: 5000
+    2024: 0
+  "2019_2020":
+    2021: 0
+    2022: 5000
+    2023: 0
+    2024: 5000
+  "2020_2021":
+    2021: 0
+    2022: 2000
+    2023: 2000
+    2024: 2000
+physics:
+  "2020_2021":
+    2021: 0
+    2022: 2000
+    2023: 2000
+    2024: 2000
+chemistry:
+  "2020_2021":
+    2021: 0
+    2022: 2000
+    2023: 2000
+    2024: 2000
+foreign_languages:
+  "2020_2021":
+    2021: 0
+    2022: 2000
+    2023: 2000
+    2024: 2000
