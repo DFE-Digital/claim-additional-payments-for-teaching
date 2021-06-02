@@ -1,48 +1,62 @@
+<h3 class="govuk-heading-m">
+  School selected
+</h3>
+
 <p class="govuk-body">
-  This is because either:
+  <%= current_claim.school.name %>
 </p>
 
-<ul class="govuk-list govuk-list--bullet">
-  <li>
-    <p class="govuk-body">
-      It is not a state-funded secondary school in England and is therefore not eligible. 
-      For more information, check the 
-      <%= link_to "eligibility page", EarlyCareerPayments.eligibility_page_url, class: "govuk-link" %>.
-    </p>
-  </li>
-  <li>
-    <p class="govuk-body">
-      We could not find a school matching those details in the system.
-    </p>
-  </li>
-    <li>
-    <p class="govuk-body">
-      The school you selected is listed as closed.
-    </p>
-  </li>
-</ul>
+<div class="govuk-!-padding-bottom-6">
+  <%= link_to "Change school", claim_path(current_policy_routing_name, "current-school"), class: "govuk-button govuk-button--secondary", role: "button", draggable: false, data: {module: "govuk-button"} %>
+</div>
 
 <h3 class="govuk-heading-m">
-  What can you do next
+  This is because either:
 </h3>
 
 <ul class="govuk-list govuk-list--bullet">
   <li>
-    <p class="govuk-body">
+    <span class="govuk-body">
+      It is not a state-funded secondary school in England and is therefore not eligible. 
+      For more information, check the 
+      <%= link_to "early career payments eligibility criteria", EarlyCareerPayments.eligibility_page_url, class: "govuk-link" %>.
+    </span>
+  </li>
+  <li>
+    <span class="govuk-body">
+      The school you selected is listed as closed. This could be the case if it has
+      changed status to become an academy or has rebranded.
+    </span>
+  </li>
+    <li>
+    <span class="govuk-body">
+      The spelling of the school does not match our records.
+    </span>
+  </li>
+</ul>
+
+<h3 class="govuk-heading-m">
+  What you can do next
+</h3>
+
+<ul class="govuk-list govuk-list--bullet">
+  <li>
+    <span class="govuk-body">
       Check the spelling, including any apostrophes or full stops used in the school’s name.
-    </p>
+    </span>
   </li>
   <li>
-    <p class="govuk-body">
-      Check to make sure the school you selected is not listed as closed.
-    </p>
+    <span class="govuk-body">
+      Check to make sure the school you selected is not listed as closed, if it has
+      changed status to become an academy.
+    </span>
   </li>
   <li>
-    <p class="govuk-body">
+    <span class="govuk-body">
       Check to make sure you selected the correct school. 
       If your school shares a name with others in the country, 
       make sure you select the one with the correct postcode.
-    </p>
+    </span>
   </li>
 </ul>
 
@@ -50,5 +64,5 @@
 
 <p class="govuk-body">
   If you need help with your claim, contact
-  <a class="govuk-link" href="mailto:#">earlycareerpayments@education.gov.uk</a>
+  <a class="govuk-link" href="mailto:#">earlycareerteacherpayments@digital.education.gov.uk</a>
 </p>
