@@ -86,7 +86,8 @@ module EarlyCareerPayments
         :ineligible_current_school,
         :subject_to_formal_performance_action,
         :itt_subject_none_of_the_above,
-        :not_teaching_now_in_eligible_itt_subject
+        :not_teaching_now_in_eligible_itt_subject,
+        :ineligible_nqt_in_academic_year_after_itt
       ].find { |eligibility_check| send("#{eligibility_check}?") }
     end
 
@@ -140,8 +141,7 @@ module EarlyCareerPayments
     end
 
     def generic_ineligibility?
-      ineligible_nqt_in_academic_year_after_itt? ||
-        no_entire_term_contract? ||
+      no_entire_term_contract? ||
         not_employed_directly? ||
         subject_to_disciplinary_action? ||
         ineligible_itt_academic_year?
