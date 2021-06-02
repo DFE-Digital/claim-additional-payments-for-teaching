@@ -46,7 +46,7 @@ resource "azurerm_app_service_slot" "app_as_slot" {
     "GECKOBOARD_API_KEY"                             = data.azurerm_key_vault_secret.GeckoboardAPIKey.value
     "GOOGLE_ANALYTICS_ID"                            = ""
     "LOGSTASH_HOST"                                  = data.azurerm_key_vault_secret.LogstashHost.value
-    "LOGSTASH_PORT"                                  = "17000"
+    "LOGSTASH_PORT"                                  = local.stash_port
     "NOTIFY_API_KEY"                                 = data.azurerm_key_vault_secret.NotifyApiKey.value
     "RAILS_ENV"                                      = "production" #local.environment
     "RAILS_SERVE_STATIC_FILES"                       = "true"
