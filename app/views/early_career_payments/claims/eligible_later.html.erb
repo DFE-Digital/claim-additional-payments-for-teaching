@@ -1,12 +1,11 @@
 <% content_for(:page_title, page_title("You will be eligible for an early-career payment in 2022", policy: current_policy_routing_name)) %>
-<% year = 2022 %>
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
     <h1 class="govuk-heading-xl">You will be eligible <%= I18n.t("early_career_payments.claim_description") %> in 2022</h1>
     <p class="govuk-body">
       So long as your circumstances remain the same, you’ll be able to claim
-      <%= number_to_currency(base_and_uplift_award_amounts(current_claim, year)[:base], precision: 0) %> in autumn 2022. This could increase to <%= number_to_currency(base_and_uplift_award_amounts(current_claim, year)[:uplifted], precision: 0) %> if the school you
+      £2,000 in autumn 2022. This could increase to £3,000 if the school you
       teach at is considered to be in an uplift area.
     </p>
 
