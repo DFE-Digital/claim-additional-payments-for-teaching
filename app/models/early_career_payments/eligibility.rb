@@ -97,11 +97,6 @@ module EarlyCareerPayments
         itt_subject_mathematics?
     end
 
-    def eligible_later?
-      !ineligible? &&
-        EligibilityMatrixCalculator.new(self).eligible_later?
-    end
-
     def award_amount
       BigDecimal("2000.00")
     end

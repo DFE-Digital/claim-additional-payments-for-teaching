@@ -137,24 +137,6 @@ RSpec.describe EarlyCareerPayments::Eligibility, type: :model do
     end
   end
 
-  describe "#eligible_later?" do
-    context "when 'eligible_itt_subject' is mathematics AND 'itt_academic_year' is 2018/2019" do
-      let(:eligibility) { build(:early_career_payments_eligibility, :mathematics_and_itt_year_2018) }
-
-      it "returns false" do
-        expect(eligibility.eligible_later?).to be false
-      end
-    end
-
-    context "when 'itt_eligible_subject' is chemistry AND 'itt_academic_year' is 2020/2021" do
-      let(:eligibility) { build(:early_career_payments_eligibility, :chemistry_and_itt_year_2020) }
-
-      it "returns true" do
-        expect(eligibility.eligible_later?).to be true
-      end
-    end
-  end
-
   describe "#award_amount" do
     it "returns the £2,000 amount that Early-Career Payments claimants are eligible for" do
       expect(EarlyCareerPayments::Eligibility.new.award_amount).to eq(BigDecimal("2000"))

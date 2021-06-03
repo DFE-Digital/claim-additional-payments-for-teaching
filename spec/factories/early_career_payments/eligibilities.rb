@@ -29,14 +29,5 @@ FactoryBot.define do
       teaching_subject_now { true }
       itt_academic_year { "2018_2019" }
     end
-
-    trait :chemistry_and_itt_year_2020 do
-      regular_teacher_no_negative_actions
-
-      pgitt_or_ugitt_course { :undergraduate }
-      eligible_itt_subject { 0 }
-      teaching_subject_now { true }
-      itt_academic_year { "2020_2021" }
-    end
   end
 end
