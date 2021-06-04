@@ -10,28 +10,21 @@
       teach at is considered to be in an uplift area.
     </p>
 
-    <p>
-      <%= link_to "Uplift areas",
-        "#{EarlyCareerPayments.eligibility_page_url}#local-authorities-with-uplift-payments",
-        class: "govuk-link",
-        title: "Opens in a new tab",
-        target: "_blank"
-      %>
-    </p>
+    <%= render "uplift_payment_area" %>
 
     <h2 class="govuk-heading-l">What you can do next</h2>
 
     <p class="govuk-body">
-      You can set up a reminder. We will send this to your preferred email address
-      when your application window is open.
+      Set up a reminder with us and we will email you when your application window
+      opens. We will send this to your preferred email address.
     </p>
-
-    <%= button_to "Continue", claim_path(current_policy_routing_name, next_slug), method: :get, class: "govuk-button" %>
 
     <p class="govuk-body">
       It is your responsibility to apply for the payment. The Department for
       Education cannot issue payments unless you apply for one.
     </p>
+
+    <%= button_to "Continue", "#", method: :get, class: "govuk-button" %>
 
   </div>
 </div>
