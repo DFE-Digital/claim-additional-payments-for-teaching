@@ -91,12 +91,6 @@ module EarlyCareerPayments
       ].find { |eligibility_check| send("#{eligibility_check}?") }
     end
 
-    def eligible?
-      !ineligible? &&
-        itt_academic_year_2018_2019? &&
-        itt_subject_mathematics?
-    end
-
     def award_amount
       BigDecimal("2000.00")
     end

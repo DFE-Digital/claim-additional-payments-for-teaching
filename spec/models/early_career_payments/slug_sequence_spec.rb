@@ -1,8 +1,7 @@
 require "rails_helper"
 
 RSpec.describe EarlyCareerPayments::SlugSequence do
-  let(:eligibility) { build(:early_career_payments_eligibility) }
-  let(:claim) { build(:claim, eligibility: eligibility) }
+  let(:claim) { build(:claim, eligibility: build(:early_career_payments_eligibility)) }
 
   subject(:slug_sequence) { EarlyCareerPayments::SlugSequence.new(claim) }
 
@@ -26,20 +25,6 @@ RSpec.describe EarlyCareerPayments::SlugSequence do
       claim.eligibility.employed_as_supply_teacher = false
 
       expect(slug_sequence.slugs).not_to include("employed-directly")
-    end
-
-    context "when assessing if to include 'eligibility_confirmed' slug" do
-      let(:eligibility) { build(:early_career_payments_eligibility, :mathematics_and_itt_year_2018) }
-
-      it "excludes the 'eligibility_confirmed' slug when the claim is ineligible" do
-        claim.eligibility.eligible_itt_subject = :foreign_languages
-
-        expect(slug_sequence.slugs).not_to include("eligibility-confirmed")
-      end
-
-      it "includes the 'eligibility_confirmed' slug when claim is eligible" do
-        expect(slug_sequence.slugs).to include("eligibility-confirmed")
-      end
     end
 
     context "when the answer to 'paying off student loan' is 'No'" do
