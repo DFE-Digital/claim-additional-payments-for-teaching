@@ -32,18 +32,35 @@ module Dqt
 
       body = {request: body}.to_json unless body.blank?
       params = params.merge(send(:params))
+      url = url(path)
 
       response = Response.new(
         response: Typhoeus.public_send(
           method,
-          url(path),
+          url,
           headers: headers,
           params: params,
           body: body
         )
       )
 
-      raise ResponseError.new(response) if [*0..199, *300..599].include? response.code
+      if [*0..199, *300..599].include? response.code
+        raise ResponseError.new(
+          {
+            request: {
+              method: method,
+              url: url,
+              headers: headers,
+              params: params,
+              body: body
+            },
+            response: {
+              body: response.body,
+              code: response.code
+            }
+          }
+        )
+      end
 
       response.body
     end

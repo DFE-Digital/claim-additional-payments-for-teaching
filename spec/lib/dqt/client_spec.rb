@@ -88,7 +88,7 @@ module Dqt
         let(:response_status) { [*0..199, *300..599].sample }
 
         it "raises an error" do
-          expect { client.public_send(method) }.to raise_error(Client::ResponseError)
+          expect { client.public_send(method) }.to raise_error(Client::ResponseError, include("toest"))
         end
       end
 
