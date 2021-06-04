@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+## [Release 090] - 2021-06-02
+
 - Remove GOVUK Verify IAS components
 - Remove GOVUK Verify from claimant journeys
 - Documentation updates - DFE Signin process
@@ -709,7 +711,9 @@ The format is based on [Keep a Changelog]
 - First release for student loan repayments private beta
 
 [unreleased]:
-  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-089...HEAD
+  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-090...HEAD
+[release 090]:
+  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-089...release-090
 [release 089]:
   https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-088...release-089
 [release 088]:
