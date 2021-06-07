@@ -224,7 +224,7 @@ en:
     ineligible:
       poor_performance_heading: "You are not eligible for an early-careers payment"
       heading: "You are not eligible"
-      school_heading: "This school is not eligible"
+      school_heading: "We could not find a school matching those details"
       reason:
         itt_subject: "Early-career payments are only available for teachers who did their ITT in:"
         not_teaching_subject: "You can only get this payment if you are still teaching maths/chemistry/physics/foreign languages."
