@@ -191,7 +191,7 @@ The migrations are stored in the `db/data` folder.
 
 - To generate a migration: `rails g data_migration add_this_to_that`
 - To run the data migration:
-  `rails runner db/data/$FILENAME_OF_THE_GENERATED_MIGRATION`
+  `bin/rails runner db/data/$FILENAME_OF_THE_GENERATED_MIGRATION`
 
 When the new code deploys, you'll need to run your migration on the live service
 by [running a live console](#running-a-live-console).
