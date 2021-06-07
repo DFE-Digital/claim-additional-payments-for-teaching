@@ -4,6 +4,8 @@ module EarlyCareerPaymentsHelper
       content_tag(:h1, I18n.t("early_career_payments.ineligible.poor_performance_heading"), class: "govuk-heading-xl")
     elsif claim.eligibility.ineligibility_reason == :ineligible_current_school
       content_tag(:h1, I18n.t("early_career_payments.ineligible.school_heading"), class: "govuk-heading-xl")
+    elsif claim.eligibility.ineligibility_reason == :ineligible_nqt_in_academic_year_after_itt
+      content_tag(:h1, I18n.t("early_career_payments.ineligible.reason.nqt_after_itt"), class: "govuk-heading-l")
     else
       content_tag(:h1, I18n.t("early_career_payments.ineligible.heading"), class: "govuk-heading-xl")
     end
