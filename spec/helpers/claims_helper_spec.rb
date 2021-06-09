@@ -24,6 +24,7 @@ describe ClaimsHelper do
     let(:claim) do
       build(
         :claim,
+        policy: policy,
         first_name: "Jo",
         surname: "Bloggs",
         address_line_1: "Flat 1",
@@ -38,46 +39,84 @@ describe ClaimsHelper do
       )
     end
 
-    it "returns an array of identity-related questions and answers for displaying to the user for review" do
-      expected_answers = [
-        [I18n.t("questions.name"), "Jo Bloggs", "name"],
-        [I18n.t("questions.address"), "Flat 1, 1 Test Road, Test Town, AB1 2CD", "address"],
-        [I18n.t("questions.date_of_birth"), "10 January 1980", "date-of-birth"],
-        [I18n.t("questions.payroll_gender"), "Don’t know", "gender"],
-        [I18n.t("questions.teacher_reference_number"), "1234567", "teacher-reference-number"],
-        [I18n.t("questions.national_insurance_number"), "QQ123456C", "national-insurance-number"],
-        [I18n.t("questions.email_address"), "test@email.com", "email-address"]
-      ]
+    context "for a claim with a policy of StudentLoans" do
+      let(:policy) { StudentLoans }
 
-      expect(helper.identity_answers(claim)).to eq expected_answers
+      it "returns an array of identity-related questions and answers for displaying to the user for review" do
+        expected_answers = [
+          [I18n.t("questions.name"), "Jo Bloggs", "name"],
+          [I18n.t("questions.address"), "Flat 1, 1 Test Road, Test Town, AB1 2CD", "address"],
+          [I18n.t("questions.date_of_birth"), "10 January 1980", "date-of-birth"],
+          [I18n.t("questions.payroll_gender"), "Don’t know", "gender"],
+          [I18n.t("questions.teacher_reference_number"), "1234567", "teacher-reference-number"],
+          [I18n.t("questions.national_insurance_number"), "QQ123456C", "national-insurance-number"],
+          [I18n.t("questions.email_address"), "test@email.com", "email-address"]
+        ]
+
+        expect(helper.identity_answers(claim)).to eq expected_answers
+      end
+
+      it "excludes questions/answers that were acquired from GOV.UK Verify" do
+        claim.govuk_verify_fields = ["first_name", "surname", "date_of_birth", "payroll_gender", "postcode"]
+
+        expected_answers = [
+          [I18n.t("questions.teacher_reference_number"), "1234567", "teacher-reference-number"],
+          [I18n.t("questions.national_insurance_number"), "QQ123456C", "national-insurance-number"],
+          [I18n.t("questions.email_address"), "test@email.com", "email-address"]
+        ]
+
+        expect(helper.identity_answers(claim)).to eq expected_answers
+      end
+
+      it "copes with a blank date of birth" do
+        claim.date_of_birth = nil
+
+        expected_answers = [
+          [I18n.t("questions.name"), "Jo Bloggs", "name"],
+          [I18n.t("questions.address"), "Flat 1, 1 Test Road, Test Town, AB1 2CD", "address"],
+          [I18n.t("questions.date_of_birth"), nil, "date-of-birth"],
+          [I18n.t("questions.payroll_gender"), "Don’t know", "gender"],
+          [I18n.t("questions.teacher_reference_number"), "1234567", "teacher-reference-number"],
+          [I18n.t("questions.national_insurance_number"), "QQ123456C", "national-insurance-number"],
+          [I18n.t("questions.email_address"), "test@email.com", "email-address"]
+        ]
+
+        expect(helper.identity_answers(claim)).to eq expected_answers
+      end
     end
 
-    it "excludes questions/answers that were acquired from GOV.UK Verify" do
-      claim.govuk_verify_fields = ["first_name", "surname", "date_of_birth", "payroll_gender", "postcode"]
+    context "for a claim with a policy of EarlyCareerPayments" do
+      let(:policy) { EarlyCareerPayments }
 
-      expected_answers = [
-        [I18n.t("questions.teacher_reference_number"), "1234567", "teacher-reference-number"],
-        [I18n.t("questions.national_insurance_number"), "QQ123456C", "national-insurance-number"],
-        [I18n.t("questions.email_address"), "test@email.com", "email-address"]
-      ]
+      it "returns an array of identity-related questions and answers for displaying to the user for review" do
+        expected_answers = [
+          [I18n.t("questions.name"), "Jo Bloggs", "personal-details"],
+          [I18n.t("questions.address"), "Flat 1, 1 Test Road, Test Town, AB1 2CD", "address"],
+          [I18n.t("questions.date_of_birth"), "10 January 1980", "personal-details"],
+          [I18n.t("questions.payroll_gender"), "Don’t know", "gender"],
+          [I18n.t("questions.teacher_reference_number"), "1234567", "teacher-reference-number"],
+          [I18n.t("questions.national_insurance_number"), "QQ123456C", "personal-details"],
+          [I18n.t("questions.email_address"), "test@email.com", "email-address"]
+        ]
 
-      expect(helper.identity_answers(claim)).to eq expected_answers
-    end
+        expect(helper.identity_answers(claim)).to eq expected_answers
+      end
 
-    it "copes with a blank date of birth" do
-      claim.date_of_birth = nil
+      it "copes with a blank date of birth" do
+        claim.date_of_birth = nil
 
-      expected_answers = [
-        [I18n.t("questions.name"), "Jo Bloggs", "name"],
-        [I18n.t("questions.address"), "Flat 1, 1 Test Road, Test Town, AB1 2CD", "address"],
-        [I18n.t("questions.date_of_birth"), nil, "date-of-birth"],
-        [I18n.t("questions.payroll_gender"), "Don’t know", "gender"],
-        [I18n.t("questions.teacher_reference_number"), "1234567", "teacher-reference-number"],
-        [I18n.t("questions.national_insurance_number"), "QQ123456C", "national-insurance-number"],
-        [I18n.t("questions.email_address"), "test@email.com", "email-address"]
-      ]
+        expected_answers = [
+          [I18n.t("questions.name"), "Jo Bloggs", "personal-details"],
+          [I18n.t("questions.address"), "Flat 1, 1 Test Road, Test Town, AB1 2CD", "address"],
+          [I18n.t("questions.date_of_birth"), nil, "personal-details"],
+          [I18n.t("questions.payroll_gender"), "Don’t know", "gender"],
+          [I18n.t("questions.teacher_reference_number"), "1234567", "teacher-reference-number"],
+          [I18n.t("questions.national_insurance_number"), "QQ123456C", "personal-details"],
+          [I18n.t("questions.email_address"), "test@email.com", "email-address"]
+        ]
 
-      expect(helper.identity_answers(claim)).to eq expected_answers
+        expect(helper.identity_answers(claim)).to eq expected_answers
+      end
     end
   end
 
