@@ -10,6 +10,8 @@ The format is based on [Keep a Changelog]
 - TSLR / M+P / ECP User Journeys
   - Additions
     - Add 'What account do you want the money paid into?'
+- Update content for 'How many higher education courses did you take a student
+  loan out for?'
 
 ## [Release 090] - 2021-06-02
 
