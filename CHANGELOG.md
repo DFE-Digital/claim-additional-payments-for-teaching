@@ -13,6 +13,7 @@ The format is based on [Keep a Changelog]
 - Update content for 'How many higher education courses did you take a student
   loan out for?'
 - Update content for 'Did you take out a Postgraduate Masters Loan?'
+- Update content for 'Did you take out a Postgraduate Doctoral Loan?'
 
 ## [Release 090] - 2021-06-02
 
