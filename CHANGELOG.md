@@ -14,6 +14,7 @@ The format is based on [Keep a Changelog]
   loan out for?'
 - Update content for 'Did you take out a Postgraduate Masters Loan?'
 - Update content for 'Did you take out a Postgraduate Doctoral Loan?'
+- Update content for 'When did all of your higher education courses start?'
 
 ## [Release 090] - 2021-06-02
 
