@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+- Add subject cohort ineligibility to ECP eligibility
+
 ## [Release 090] - 2021-06-02
 
 - Remove GOVUK Verify IAS components
