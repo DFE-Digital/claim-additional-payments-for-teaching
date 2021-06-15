@@ -8,7 +8,7 @@
       Check your answers before sending your application
     </h1>
 
-    <%= render partial: "claims/check_your_answers_section", locals: {heading: "Eligibility details", answers: eligibility_answers(current_claim)} unless current_claim.has_ecp_policy? %> 
+    <%= render partial: "claims/check_your_answers_section", locals: {heading: "Eligibility details", answers: eligibility_answers(current_claim)} unless current_claim.has_ecp_policy? %>
 
     <%= render partial: "claims/check_your_answers_section", locals: {heading: "Identity details", answers: identity_answers(current_claim)} %>
 

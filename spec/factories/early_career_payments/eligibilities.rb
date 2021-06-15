@@ -7,9 +7,9 @@ FactoryBot.define do
       subject_to_formal_performance_action { false }
       subject_to_disciplinary_action { false }
       pgitt_or_ugitt_course { :postgraduate }
-      eligible_itt_subject { 1 }
+      eligible_itt_subject { :mathematics }
       teaching_subject_now { true }
-      itt_academic_year { "2020_2021" }
+      itt_academic_year { "2018_2019" }
       postgraduate_masters_loan { true }
       postgraduate_doctoral_loan { true }
     end

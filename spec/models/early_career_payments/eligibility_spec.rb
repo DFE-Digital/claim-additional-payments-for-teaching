@@ -100,6 +100,10 @@ RSpec.describe EarlyCareerPayments::Eligibility, type: :model do
       expect(EarlyCareerPayments::Eligibility.new(itt_academic_year: "2019_2020").ineligible?).to eql false
       expect(EarlyCareerPayments::Eligibility.new(itt_academic_year: "2020_2021").ineligible?).to eql false
     end
+
+    it "returns true when subject cohort ineligible" do
+      expect(EarlyCareerPayments::Eligibility.new(eligible_itt_subject: "mathematics", itt_academic_year: "2019_2020").ineligible?).to eql true
+    end
   end
 
   describe "#ineligibility_reason" do
