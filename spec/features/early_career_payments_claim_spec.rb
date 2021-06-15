@@ -275,6 +275,9 @@ RSpec.feature "Teacher Early-Career Payments claims" do
 
     # [PAGE 38] - Application complete (make sure its Word for Word and styling matches)
     expect(page).to have_text("Application complete")
+    expect(page).to have_text("What happens next")
+    expect(page).to have_text("Set a reminder for when your application window opens")
+    expect(page).to have_text("What did you think of this service?")
     expect(page).to have_text(claim.reference)
   end
 
