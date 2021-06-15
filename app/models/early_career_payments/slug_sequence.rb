@@ -33,6 +33,7 @@ module EarlyCareerPayments
       "address",
       "email-address",
       "email-verification",
+      "bank-or-building-society",
       "bank-details",
       "gender",
       "teacher-reference-number",

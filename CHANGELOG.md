@@ -7,6 +7,9 @@ The format is based on [Keep a Changelog]
 ## [Unreleased]
 
 - Add subject cohort ineligibility to ECP eligibility
+- TSLR / M+P / ECP User Journeys
+  - Additions
+    - Add 'What account do you want the money paid into?'
 
 ## [Release 090] - 2021-06-02
 

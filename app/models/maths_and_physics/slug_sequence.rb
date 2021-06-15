@@ -34,6 +34,7 @@ module MathsAndPhysics
       "student-loan-how-many-courses",
       "student-loan-start-date",
       "email-address",
+      "bank-or-building-society",
       "bank-details",
       "check-your-answers",
       "ineligible"

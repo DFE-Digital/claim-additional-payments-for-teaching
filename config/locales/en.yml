@@ -65,6 +65,7 @@ en:
     email_address_hint: "We will only use your email address to update you about your claim, and to inform you about future opportunities to claim. We recommend you use a personal email address."
     bank_details: "Enter bank account details"
     payroll_gender: "What gender does your school's payroll system associate with you?"
+    bank_or_building_society: What account do you want the money paid into?
   admin:
     qts_award_year: "Award year"
     current_school: "Current school"

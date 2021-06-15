@@ -174,6 +174,14 @@ RSpec.feature "Teacher Early-Career Payments claims" do
 
     click_on "Confirm"
 
+    # Payment to Bank or Building Society
+    expect(page).to have_text(I18n.t("questions.bank_or_building_society"))
+
+    choose "Personal bank account"
+    click_on "Continue"
+
+    expect(claim.reload.bank_or_building_society).to eq "personal_bank_account"
+
     # [PAGE 27] - Enter bank account details
     expect(page).to have_text(I18n.t("questions.bank_details"))
 

@@ -117,6 +117,13 @@ RSpec.feature "Maths & Physics claims" do
 
       expect(claim.reload.email_address).to eq("name@example.com")
 
+      expect(page).to have_text(I18n.t("questions.bank_or_building_society"))
+
+      choose "Personal bank account"
+      click_on "Continue"
+
+      expect(claim.reload.bank_or_building_society).to eq "personal_bank_account"
+
       expect(page).to have_text(I18n.t("questions.bank_details"))
 
       fill_in "Name on the account", with: "Jo Bloggs"
