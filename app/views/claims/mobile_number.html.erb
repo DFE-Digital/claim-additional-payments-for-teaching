@@ -1,0 +1,30 @@
+<% content_for(:page_title, page_title(t("questions.mobile_number"), policy: current_policy_routing_name, show_error: current_claim.errors.any?)) %>
+<% shared_view_css_size = current_claim.policy == EarlyCareerPayments ? "l" : "xl" %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= render("shared/error_summary", instance: current_claim) if current_claim.errors.any? %>
+
+    <%= form_for current_claim, url: claim_path(current_policy_routing_name) do |form| %>
+      <span class="govuk-caption-xl"><%= t("early_career_payments.personal_details") %></span>
+      <%= form_group_tag current_claim do %>
+        <h1 class="govuk-label-wrapper">
+          <%= form.label :mobile_number, t("questions.mobile_number"), class: "govuk-label govuk-label--#{shared_view_css_size}" %>
+        </h1>
+
+        <div id="mobile-number-hint" class="govuk-hint">
+          We will send you a text message with a 6-digit password, this will be
+          used on the next screen.
+        </div>
+
+        <%= errors_tag current_claim, :mobile_number %>
+
+        <%= form.text_field :mobile_number,
+                             spellcheck: "false",
+                             class: css_classes_for_input(current_claim, :mobile_number),
+                             "aria-describedby" => "mobile-number-hint" %>
+      <% end %>
+      <%= form.submit "Continue", class: "govuk-button" %>
+    <% end %>
+  </div>
+</div>

@@ -31,6 +31,7 @@ module ClaimsHelper
       a << [translate("questions.email_address"), claim.email_address, "email-address"]
 
       a << [translate("questions.provide_mobile_number"), (claim.provide_mobile_number ? "Yes" : "No"), "provide-mobile-number"] if claim.has_ecp_policy?
+      a << [translate("questions.mobile_number"), claim.mobile_number, "mobile-number"] if claim.has_ecp_policy?
     end
   end
 

@@ -24,6 +24,7 @@ The format is based on [Keep a Changelog]
   - Update content for 'What is your address?' screen
   - Add 'Set up a Reminder - Enter Personal Details' screen to ECP eligible
     later journey
+  - Add 'Mobile number' screen
 
 ## [Release 091] - 2021-06-24
 

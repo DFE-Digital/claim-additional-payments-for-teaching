@@ -34,7 +34,10 @@ FactoryBot.define do
       eligibility_factory { ["#{policy.to_s.underscore}_eligibility".to_sym, :eligible] }
 
       after(:build) do |claim|
-        claim.provide_mobile_number = true if claim.has_ecp_policy?
+        if claim.has_ecp_policy?
+          claim.provide_mobile_number = true
+          claim.mobile_number = "07474000123"
+        end
       end
     end
 

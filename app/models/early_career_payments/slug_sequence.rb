@@ -34,6 +34,7 @@ module EarlyCareerPayments
       "email-address",
       "email-verification",
       "provide-mobile-number",
+      "mobile-number",
       "bank-or-building-society",
       "personal-bank-account",
       "building-society-account",
@@ -65,6 +66,7 @@ module EarlyCareerPayments
         sequence.delete("ineligible") unless claim.eligibility.ineligible?
         sequence.delete("personal-bank-account") if claim.bank_or_building_society == "building_society"
         sequence.delete("building-society-account") if claim.bank_or_building_society == "personal_bank_account"
+        sequence.delete("mobile-number") if claim.provide_mobile_number == false
         remove_student_loan_slugs(sequence) if claim.has_student_loan == false
         remove_student_loan_country_slugs(sequence)
       end

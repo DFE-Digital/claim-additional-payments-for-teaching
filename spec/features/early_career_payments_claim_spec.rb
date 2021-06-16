@@ -186,6 +186,14 @@ RSpec.feature "Teacher Early-Career Payments claims" do
 
     expect(claim.reload.provide_mobile_number).to eql true
 
+    # - Mobile number
+    expect(page).to have_text(I18n.t("questions.mobile_number"))
+
+    fill_in "claim_mobile_number", with: "07123456789"
+    click_on "Continue"
+
+    expect(claim.reload.mobile_number).to eql("07123456789")
+
     # Payment to Bank or Building Society
     expect(page).to have_text(I18n.t("questions.bank_or_building_society"))
 
@@ -622,6 +630,14 @@ RSpec.feature "Teacher Early-Career Payments claims" do
     click_on "Continue"
 
     expect(claim.reload.provide_mobile_number).to eql true
+
+    # - Mobile number
+    expect(page).to have_text(I18n.t("questions.mobile_number"))
+
+    fill_in "Mobile number", with: "01234567899"
+    click_on "Continue"
+
+    expect(claim.reload.mobile_number).to eql "01234567899"
 
     # Payment to Bank or Building Society
     expect(page).to have_text(I18n.t("questions.bank_or_building_society"))

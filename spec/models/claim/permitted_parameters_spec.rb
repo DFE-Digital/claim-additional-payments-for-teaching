@@ -22,6 +22,7 @@ RSpec.describe Claim::PermittedParameters do
       :student_loan_start_date,
       :email_address,
       :provide_mobile_number,
+      :mobile_number,
       :bank_or_building_society,
       :bank_sort_code,
       :bank_account_number,
