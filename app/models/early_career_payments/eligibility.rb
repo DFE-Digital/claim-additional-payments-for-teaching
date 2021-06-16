@@ -68,6 +68,7 @@ module EarlyCareerPayments
       EarlyCareerPayments
     end
 
+    # This doesn't mean it's eligible either, ie, eligibility could be undetermined
     def ineligible?
       ineligible_nqt_in_academic_year_after_itt? ||
         ineligible_current_school? ||

@@ -1,9 +1,10 @@
 require "rails_helper"
 
 RSpec.describe EarlyCareerPayments::SlugSequence do
-  let(:claim) { build(:claim, eligibility: build(:early_career_payments_eligibility)) }
-
   subject(:slug_sequence) { EarlyCareerPayments::SlugSequence.new(claim) }
+
+  let(:eligibility) { build(:early_career_payments_eligibility) }
+  let(:claim) { build(:claim, eligibility: eligibility) }
 
   describe "The sequence as defined by #slugs" do
     it "excludes the “ineligible” slug if the claim is not actually ineligible" do
@@ -27,6 +28,28 @@ RSpec.describe EarlyCareerPayments::SlugSequence do
       expect(slug_sequence.slugs).not_to include("employed-directly")
     end
 
+    context "when claim is eligible" do
+      let(:eligibility) { build(:early_career_payments_eligibility, :eligible) }
+
+      it "includes the 'eligibility_confirmed' slug" do
+        expect(slug_sequence.slugs).to include("eligibility-confirmed")
+      end
+    end
+
+    context "when claim is ineligible" do
+      let(:eligibility) do
+        build(
+          :early_career_payments_eligibility,
+          :eligible,
+          eligible_itt_subject: :foreign_languages
+        )
+      end
+
+      it "excludes the 'eligibility_confirmed' slug" do
+        expect(slug_sequence.slugs).not_to include("eligibility-confirmed")
+      end
+    end
+
     context "when the answer to 'paying off student loan' is 'No'" do
       it "excludes 'student-loan-country', 'student-loan-how-many-courses', 'student-loan-start-date', 'masters-loan' and 'doctoral-loan'" do
         claim.has_student_loan = false
@@ -42,6 +65,7 @@ RSpec.describe EarlyCareerPayments::SlugSequence do
           teaching-subject-now
           itt-year
           check-your-answers-part-one
+          eligibility-confirmed
           how-we-will-use-information-provided
           personal-details
           address
@@ -71,6 +95,7 @@ RSpec.describe EarlyCareerPayments::SlugSequence do
           teaching-subject-now
           itt-year
           check-your-answers-part-one
+          eligibility-confirmed
           how-we-will-use-information-provided
           personal-details
           address

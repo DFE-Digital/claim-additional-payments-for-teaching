@@ -146,7 +146,7 @@ RSpec.feature "Ineligible Teacher Early-Career Payments claims" do
     start_early_career_payments_claim
     claim = Claim.order(:created_at).last
 
-    # TODO [PAGE 02/03] - Which school do you teach at
+    # [PAGE 02/03] - Which school do you teach at
     expect(page).to have_text(I18n.t("early_career_payments.questions.current_school_search"))
 
     choose_school schools(:penistone_grammar_school)
@@ -311,7 +311,7 @@ RSpec.feature "Ineligible Teacher Early-Career Payments claims" do
   end
 
   # Additional sad paths
-  # TODO [PAGE 19] - You will be eligible for an early-career payment in 2022
+  # [PAGE 19] - You will be eligible for an early-career payment in 2022
 
   [
     {subject: "Mathematics", cohort: "2019 - 2020"},

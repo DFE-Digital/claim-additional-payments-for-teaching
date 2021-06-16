@@ -24,6 +24,7 @@ module EarlyCareerPayments
       "teaching-subject-now",
       "itt-year",
       "check-your-answers-part-one",
+      "eligibility-confirmed",
       # eligible later phase of claim journey
       # personal details phase of claim journey
       "how-we-will-use-information-provided",
@@ -55,6 +56,7 @@ module EarlyCareerPayments
       SLUGS.dup.tap do |sequence|
         sequence.delete("entire-term-contract") unless claim.eligibility.employed_as_supply_teacher?
         sequence.delete("employed-directly") unless claim.eligibility.employed_as_supply_teacher?
+        sequence.delete("eligibility-confirmed") if claim.eligibility.ineligible?
         sequence.delete("ineligible") unless claim.eligibility.ineligible?
         remove_student_loan_slugs(sequence) if claim.has_student_loan == false
         remove_student_loan_country_slugs(sequence)
