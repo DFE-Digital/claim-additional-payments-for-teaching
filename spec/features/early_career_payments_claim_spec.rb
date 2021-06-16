@@ -58,7 +58,7 @@ RSpec.feature "Teacher Early-Career Payments claims" do
 
     expect(claim.eligibility.reload.pgitt_or_ugitt_course).to eq "postgraduate"
 
-    # [PAGE 10] - Which subject did you do your undergraduate ITT in
+    # [PAGE 10] - Which subject did you do your postgraduate ITT in
     expect(page).to have_text(I18n.t("early_career_payments.questions.eligible_itt_subject", ug_or_pg: claim.eligibility.reload.pgitt_or_ugitt_course))
 
     choose "Mathematics"
@@ -100,6 +100,21 @@ RSpec.feature "Teacher Early-Career Payments claims" do
 
     click_on("Continue")
 
+    # [PAGE 16] - You are eligible for an early career payment
+    expect(page).to have_text("You are eligible " + I18n.t("early_career_payments.claim_description"))
+
+    within(".govuk-list--bullet") do
+      expect(page).to have_text("your National Insurance number")
+      ["bank account details", "teacher reference number", "QTS certificate", "student loan"].each do |bullet_point|
+        expect(page).to have_text bullet_point
+      end
+    end
+
+    click_on "Continue"
+
+    # [PAGE 20] - Personal Details
+    # [PAGE 21] - One Time Password
+    # [PAGE 22] - We have sent you reminders
     # [PAGE 23] - How will we use the information you provide
     expect(page).to have_text("How we will use the information you provide")
 

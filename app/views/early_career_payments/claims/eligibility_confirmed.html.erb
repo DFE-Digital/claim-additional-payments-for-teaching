@@ -1,0 +1,88 @@
+<% content_for(:page_title, page_title("You are eligible to claim for early-career payment", policy: current_policy_routing_name)) %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <h1 class="govuk-heading-xl">You are eligible <%= I18n.t("early_career_payments.claim_description") %></h1>
+    <p class="govuk-body">
+      Based on the answers you have provided you will be able to claim £5,000.
+      This could increase to £7,500 if the school you teach at is considered
+      to be in an uplift area.
+    </p>
+
+    <p>
+      <%= link_to "Uplift areas",
+        "#{EarlyCareerPayments.eligibility_page_url}#local-authorities-with-uplift-payments",
+        class: "govuk-link",
+        title: "Opens in a new tab",
+        target: "_blank"
+      %>
+    </p>
+
+    <h2 class="govuk-heading-l">What happens next?</h2>
+
+    <p class="govuk-body govuk-!-font-weight-bold">
+      We now need to gather some personal details. In order to continue you’ll need:
+    </p>
+
+    <ul class="govuk-list govuk-list--bullet">
+      <li>
+        <p class="govuk-body">
+          your National Insurance number
+        </p>
+      </li>
+      <li>
+        <p class="govuk-body">
+          your bank account details
+        </p>
+      </li>
+      <li>
+        <p class="govuk-body">
+          your 7-digit teacher reference number - you can get this from
+          your school, the certificate you got when you qualified, or
+          by contacting the teacher qualifications helpdesk on
+          <%= link_to "0207 593 5394",
+            "#",
+            class: "govuk-link",
+            title: "Opens in a new tab",
+            target: "_blank"
+          %> or
+          <%= link_to "qts.enquiries@education.gov.uk",
+            "#",
+            class: "govuk-link",
+            title: "Opens in a new tab",
+            target: "_blank"
+          %>
+        </p>
+      </li>
+      <li>
+        <p class="govuk-body">
+          the academic year in which you completed your ITT - you
+          can find this on your QTS certificate or through the
+          <%= link_to "teacher self-service",
+            "#",
+            class: "govuk-link",
+            title: "Opens in a new tab",
+            target: "_blank"
+          %> website
+        </p>
+      </li>
+      <li>
+        <p class="govuk-body">
+          when you took out your student loan (if you have one) - if
+          you don't know when this was, you can find out by logging into your
+          <%= link_to "student loan account",
+            EarlyCareerPayments.student_loan_balance_url,
+            class: "govuk-link",
+            title: "Opens in a new tab",
+            target: "_blank"
+          %>
+            class: "govuk-link",
+            title: "Opens in a new tab",
+        </p>
+      </li>
+    </ul>
+
+    <%= button_to "Continue", claim_path(current_policy_routing_name, next_slug), method: :get, class: "govuk-button" %>
+
+  </div>
+</div>

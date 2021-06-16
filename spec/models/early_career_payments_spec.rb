@@ -66,4 +66,10 @@ RSpec.describe EarlyCareerPayments, type: :model do
       expect(EarlyCareerPayments.first_eligible_qts_award_year(AcademicYear.new(2024))).to eq AcademicYear.new(2021)
     end
   end
+
+  describe ".student_loan_balance_url" do
+    it "returns a link to the guidance page for student loan balance url" do
+      expect(subject.student_loan_balance_url).to include("https://www.gov.uk/sign-in-to-manage-your-student-loan-balance")
+    end
+  end
 end
