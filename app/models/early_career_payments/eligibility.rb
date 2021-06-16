@@ -79,7 +79,7 @@ module EarlyCareerPayments
         itt_subject_none_of_the_above? ||
         not_teaching_now_in_eligible_itt_subject? ||
         ineligible_itt_academic_year? ||
-        ineligible_subject_cohort?
+        ineligible_cohort?
     end
 
     def ineligibility_reason
@@ -107,18 +107,18 @@ module EarlyCareerPayments
 
     private
 
-    def ineligible_subject_cohort?
+    def ineligible_cohort?
       return false if [eligible_itt_subject, itt_academic_year].any?(nil)
 
-      eligible_subject_cohort = {
+      eligible_cohort = {
         mathematics: [
           "2018_2019"
         ]
-      }.find do |eligible_subject, eligible_subject_cohorts|
-        eligible_subject.to_s == eligible_itt_subject && eligible_subject_cohorts.any?(itt_academic_year)
+      }.find do |eligible_cohort_itt_subject, eligible_cohort_itt_academic_years|
+        eligible_cohort_itt_subject.to_s == eligible_itt_subject && eligible_cohort_itt_academic_years.any?(itt_academic_year)
       end
 
-      eligible_subject_cohort.nil? ? true : false
+      eligible_cohort.nil? ? true : false
     end
 
     def ineligible_nqt_in_academic_year_after_itt?
@@ -150,7 +150,7 @@ module EarlyCareerPayments
         not_employed_directly? ||
         subject_to_disciplinary_action? ||
         ineligible_itt_academic_year? ||
-        ineligible_subject_cohort?
+        ineligible_cohort?
     end
 
     def no_student_loan?
