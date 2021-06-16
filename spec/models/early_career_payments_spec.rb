@@ -26,7 +26,7 @@ RSpec.describe EarlyCareerPayments, type: :model do
 
   describe ".feedback_url" do
     it "returns a 'docs.google.com/forms/<slug>/viewform' url" do
-      # TODO get proper feedback URL - ECP-509
+      # get proper feedback URL - ECP-509
       expect(subject.feedback_url).to include("https://docs.google.com/forms/TO-BE-REPLACED-by-response-to-ECP-509/viewform")
     end
   end
@@ -48,7 +48,7 @@ RSpec.describe EarlyCareerPayments, type: :model do
       "3f85a1f7-9400-4b48-9a31-eaa643d6b977"
     end
     it "returns the notify_reply_to_id" do
-      # TODO replace with valid ID - ECP-515
+      # replace with valid ID - ECP-515
       expect(subject.notify_reply_to_id).to eql ecp_notify_reply_to_id
     end
   end
@@ -64,6 +64,12 @@ RSpec.describe EarlyCareerPayments, type: :model do
 
     it "can return the AcademicYear based on a passed-in academic year" do
       expect(EarlyCareerPayments.first_eligible_qts_award_year(AcademicYear.new(2024))).to eq AcademicYear.new(2021)
+    end
+  end
+
+  describe ".student_loan_balance_url" do
+    it "returns a link to the guidance page for student loan balance url" do
+      expect(subject.student_loan_balance_url).to include("https://www.gov.uk/sign-in-to-manage-your-student-loan-balance")
     end
   end
 end

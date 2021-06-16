@@ -451,7 +451,7 @@ RSpec.describe Claim, type: :model do
     let!(:approved_then_decision_undone_claim) { create(:claim, :submitted) }
     let!(:rejected_then_decision_undone_claim) { create(:claim, :submitted) }
 
-    # TODO: This doesn't feel great, but works - is this the best way?
+    # This doesn't feel great, but works - is this the best way?
     before do
       create(:decision, :approved, :undone, claim: approved_then_rejected_claim)
       create(:decision, :rejected, claim: approved_then_rejected_claim)
