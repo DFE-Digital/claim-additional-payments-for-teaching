@@ -40,6 +40,50 @@ RSpec.describe EarlyCareerPayments::Eligibility, type: :model do
     end
   end
 
+  describe "#eligible_later?" do
+    context "when claim is eligible later" do
+      let(:eligibility_args) do
+        {
+          eligible_itt_subject: itt_subject,
+          itt_academic_year: itt_academic_year
+        }
+      end
+
+      [
+        {itt_subject: "Mathematics", itt_academic_year: "2019 - 2020"},
+        {itt_subject: "Mathematics", itt_academic_year: "2020 - 2021"},
+        {itt_subject: "Physics", itt_academic_year: "2020 - 2021"},
+        {itt_subject: "Chemistry", itt_academic_year: "2020 - 2021"},
+        {itt_subject: "Foreign languages", itt_academic_year: "2020 - 2021"}
+      ].each do |context|
+        context "with ITT subject #{context[:itt_subject]}" do
+          let(:itt_subject) { context[:itt_subject].gsub(/\s/, "_").downcase }
+
+          context "with ITT academic year #{context[:itt_academic_year]}" do
+            let(:itt_academic_year) { context[:itt_academic_year].gsub(/\s-\s/, "_") }
+
+            it "returns true" do
+              expect(EarlyCareerPayments::Eligibility.new(eligibility_args).eligible_later?).to eql true
+            end
+          end
+        end
+      end
+    end
+
+    context "when claim is not eligible later" do
+      let(:eligibility_args) do
+        {
+          eligible_itt_subject: :mathematics,
+          itt_academic_year: "2018_2019"
+        }
+      end
+
+      it "returns false" do
+        expect(EarlyCareerPayments::Eligibility.new(eligibility_args).eligible_later?).to eql false
+      end
+    end
+  end
+
   describe "itt_academic_year" do
     it "rejects invalid values" do
       expect { EarlyCareerPayments::Eligibility.new(itt_academic_year: "2025_2026") }.to raise_error(ArgumentError)
@@ -101,8 +145,34 @@ RSpec.describe EarlyCareerPayments::Eligibility, type: :model do
       expect(EarlyCareerPayments::Eligibility.new(itt_academic_year: "2020_2021").ineligible?).to eql false
     end
 
-    it "returns true when subject cohort ineligible" do
-      expect(EarlyCareerPayments::Eligibility.new(eligible_itt_subject: "mathematics", itt_academic_year: "2019_2020").ineligible?).to eql true
+    context "when cohort is eligible" do
+      let(:eligibility_args) do
+        {
+          eligible_itt_subject: itt_subject,
+          itt_academic_year: itt_academic_year
+        }
+      end
+
+      [
+        {itt_subject: "Mathematics", itt_academic_year: "2018 - 2019"},
+        {itt_subject: "Mathematics", itt_academic_year: "2019 - 2020"},
+        {itt_subject: "Mathematics", itt_academic_year: "2020 - 2021"},
+        {itt_subject: "Physics", itt_academic_year: "2020 - 2021"},
+        {itt_subject: "Chemistry", itt_academic_year: "2020 - 2021"},
+        {itt_subject: "Foreign languages", itt_academic_year: "2020 - 2021"}
+      ].each do |context|
+        context "with ITT subject #{context[:itt_subject]}" do
+          let(:itt_subject) { context[:itt_subject].gsub(/\s/, "_").downcase }
+
+          context "with ITT academic year #{context[:itt_academic_year]}" do
+            let(:itt_academic_year) { context[:itt_academic_year].gsub(/\s-\s/, "_") }
+
+            it "returns false" do
+              expect(EarlyCareerPayments::Eligibility.new(eligibility_args).ineligible?).to eql false
+            end
+          end
+        end
+      end
     end
   end
 
@@ -124,8 +194,179 @@ RSpec.describe EarlyCareerPayments::Eligibility, type: :model do
   end
 
   describe "#award_amount" do
-    it "returns the £2,000 amount that Early-Career Payments claimants are eligible for" do
-      expect(EarlyCareerPayments::Eligibility.new.award_amount).to eq(BigDecimal("2000"))
+    context "when cohort is eligible" do
+      let(:eligibility_args) do
+        {
+          eligible_itt_subject: itt_subject,
+          itt_academic_year: itt_academic_year
+        }
+      end
+
+      [
+        {
+          context: {
+            itt_subject: "Mathematics",
+            itt_academic_year: "2018 - 2019"
+          },
+          expect: {
+            base_amount: 5_000,
+            uplift_amount: 7_500
+          }
+        },
+        {
+          context: {
+            itt_subject: "Mathematics",
+            itt_academic_year: "2019 - 2020"
+          },
+          expect: {
+            base_amount: 5_000,
+            uplift_amount: 7_500
+          }
+        },
+        {
+          context: {
+            itt_subject: "Mathematics",
+            itt_academic_year: "2020 - 2021"
+          },
+          expect: {
+            base_amount: 2_000,
+            uplift_amount: 3_000
+          }
+        },
+        {
+          context: {
+            itt_subject: "Physics",
+            itt_academic_year: "2020 - 2021"
+          },
+          expect: {
+            base_amount: 2_000,
+            uplift_amount: 3_000
+          }
+        },
+        {
+          context: {
+            itt_subject: "Chemistry",
+            itt_academic_year: "2020 - 2021"
+          },
+          expect: {
+            base_amount: 2_000,
+            uplift_amount: 3_000
+          }
+        },
+        {
+          context: {
+            itt_subject: "Foreign languages",
+            itt_academic_year: "2020 - 2021"
+          },
+          expect: {
+            base_amount: 2_000,
+            uplift_amount: 3_000
+          }
+        }
+      ].each do |spec|
+        context "with ITT subject #{spec[:context][:itt_subject]}" do
+          let(:itt_subject) { spec[:context][:itt_subject].gsub(/\s/, "_").downcase }
+
+          context "with ITT academic year #{spec[:context][:itt_academic_year]}" do
+            let(:itt_academic_year) { spec[:context][:itt_academic_year].gsub(/\s-\s/, "_") }
+
+            it "returns hash with correct values" do
+              expect(EarlyCareerPayments::Eligibility.new(eligibility_args).award_amount).to eq(spec[:expect][:base_amount])
+            end
+          end
+        end
+      end
+    end
+  end
+
+  describe "#award_amounts" do
+    context "when cohort is eligible" do
+      let(:eligibility_args) do
+        {
+          eligible_itt_subject: itt_subject,
+          itt_academic_year: itt_academic_year
+        }
+      end
+
+      [
+        {
+          context: {
+            itt_subject: "Mathematics",
+            itt_academic_year: "2018 - 2019"
+          },
+          expect: {
+            base_amount: 5_000,
+            uplift_amount: 7_500
+          }
+        },
+        {
+          context: {
+            itt_subject: "Mathematics",
+            itt_academic_year: "2019 - 2020"
+          },
+          expect: {
+            base_amount: 5_000,
+            uplift_amount: 7_500
+          }
+        },
+        {
+          context: {
+            itt_subject: "Mathematics",
+            itt_academic_year: "2020 - 2021"
+          },
+          expect: {
+            base_amount: 2_000,
+            uplift_amount: 3_000
+          }
+        },
+        {
+          context: {
+            itt_subject: "Physics",
+            itt_academic_year: "2020 - 2021"
+          },
+          expect: {
+            base_amount: 2_000,
+            uplift_amount: 3_000
+          }
+        },
+        {
+          context: {
+            itt_subject: "Chemistry",
+            itt_academic_year: "2020 - 2021"
+          },
+          expect: {
+            base_amount: 2_000,
+            uplift_amount: 3_000
+          }
+        },
+        {
+          context: {
+            itt_subject: "Foreign languages",
+            itt_academic_year: "2020 - 2021"
+          },
+          expect: {
+            base_amount: 2_000,
+            uplift_amount: 3_000
+          }
+        }
+      ].each do |spec|
+        context "with ITT subject #{spec[:context][:itt_subject]}" do
+          let(:itt_subject) { spec[:context][:itt_subject].gsub(/\s/, "_").downcase }
+
+          context "with ITT academic year #{spec[:context][:itt_academic_year]}" do
+            let(:itt_academic_year) { spec[:context][:itt_academic_year].gsub(/\s-\s/, "_") }
+
+            it "returns hash with correct values" do
+              expect(EarlyCareerPayments::Eligibility.new(eligibility_args).award_amounts).to eq(
+                {
+                  base: spec[:expect][:base_amount],
+                  uplift: spec[:expect][:uplift_amount]
+                }
+              )
+            end
+          end
+        end
+      end
     end
   end
 

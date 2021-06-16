@@ -314,17 +314,12 @@ RSpec.feature "Ineligible Teacher Early-Career Payments claims" do
   # [PAGE 19] - You will be eligible for an early-career payment in 2022
 
   [
-    {itt_subject: "Mathematics", itt_academic_year: "2019 - 2020"},
-    {itt_subject: "Mathematics", itt_academic_year: "2020 - 2021"},
     {itt_subject: "Physics", itt_academic_year: "2018 - 2019"},
     {itt_subject: "Physics", itt_academic_year: "2019 - 2020"},
-    {itt_subject: "Physics", itt_academic_year: "2020 - 2021"},
     {itt_subject: "Chemistry", itt_academic_year: "2018 - 2019"},
     {itt_subject: "Chemistry", itt_academic_year: "2019 - 2020"},
-    {itt_subject: "Chemistry", itt_academic_year: "2020 - 2021"},
     {itt_subject: "Foreign languages", itt_academic_year: "2018 - 2019"},
-    {itt_subject: "Foreign languages", itt_academic_year: "2019 - 2020"},
-    {itt_subject: "Foreign languages", itt_academic_year: "2020 - 2021"}
+    {itt_subject: "Foreign languages", itt_academic_year: "2019 - 2020"}
   ].each do |scenario|
     scenario "with ITT subject #{scenario[:itt_subject]} in ITT academic year #{scenario[:itt_academic_year]}" do
       start_early_career_payments_claim

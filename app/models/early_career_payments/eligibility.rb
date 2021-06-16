@@ -68,6 +68,28 @@ module EarlyCareerPayments
       EarlyCareerPayments
     end
 
+    def eligible_later?
+      eligible_later_cohort = find_cohort(
+        cohorts: {
+          mathematics: [
+            "2019_2020",
+            "2020_2021"
+          ],
+          chemistry: [
+            "2020_2021"
+          ],
+          physics: [
+            "2020_2021"
+          ],
+          foreign_languages: [
+            "2020_2021"
+          ]
+        }
+      )
+
+      eligible_later_cohort.nil? ? false : true
+    end
+
     # This doesn't mean it's eligible either, ie, eligibility could be undetermined
     def ineligible?
       ineligible_nqt_in_academic_year_after_itt? ||
@@ -78,7 +100,6 @@ module EarlyCareerPayments
         subject_to_disciplinary_action? ||
         itt_subject_none_of_the_above? ||
         not_teaching_now_in_eligible_itt_subject? ||
-        ineligible_itt_academic_year? ||
         ineligible_cohort?
     end
 
@@ -94,7 +115,53 @@ module EarlyCareerPayments
     end
 
     def award_amount
-      BigDecimal("2000.00")
+      award_amounts[:base]
+    end
+
+    def award_amounts
+      award_amounts = {
+        mathematics: {
+          "2018_2019": {
+            base: BigDecimal("5000.00"),
+            uplift: BigDecimal("7500.00")
+          },
+          "2019_2020": {
+            base: BigDecimal("5000.00"),
+            uplift: BigDecimal("7500.00")
+          },
+          "2020_2021": {
+            base: BigDecimal("2000.00"),
+            uplift: BigDecimal("3000.00")
+          }
+        },
+        chemistry: {
+          "2020_2021": {
+            base: BigDecimal("2000.00"),
+            uplift: BigDecimal("3000.00")
+          }
+        },
+        physics: {
+          "2020_2021": {
+            base: BigDecimal("2000.00"),
+            uplift: BigDecimal("3000.00")
+          }
+        },
+        foreign_languages: {
+          "2020_2021": {
+            base: BigDecimal("2000.00"),
+            uplift: BigDecimal("3000.00")
+          }
+        }
+      }.dig(eligible_itt_subject.to_sym, itt_academic_year.to_sym)
+
+      if award_amounts.nil?
+        return {
+          base: BigDecimal("0.00"),
+          uplift: BigDecimal("0.00")
+        }
+      end
+
+      award_amounts
     end
 
     def reset_dependent_answers
@@ -107,16 +174,34 @@ module EarlyCareerPayments
 
     private
 
+    def find_cohort(cohorts:)
+      cohorts.find do |cohort_itt_subject, cohort_itt_academic_years|
+        cohort_itt_subject.to_s == eligible_itt_subject && cohort_itt_academic_years.any?(itt_academic_year)
+      end
+    end
+
     def ineligible_cohort?
+      return true if itt_academic_year == "none_of_the_above"
       return false if [eligible_itt_subject, itt_academic_year].any?(nil)
 
-      eligible_cohort = {
-        mathematics: [
-          "2018_2019"
-        ]
-      }.find do |eligible_cohort_itt_subject, eligible_cohort_itt_academic_years|
-        eligible_cohort_itt_subject.to_s == eligible_itt_subject && eligible_cohort_itt_academic_years.any?(itt_academic_year)
-      end
+      eligible_cohort = find_cohort(
+        cohorts: {
+          mathematics: [
+            "2018_2019",
+            "2019_2020",
+            "2020_2021"
+          ],
+          chemistry: [
+            "2020_2021"
+          ],
+          physics: [
+            "2020_2021"
+          ],
+          foreign_languages: [
+            "2020_2021"
+          ]
+        }
+      )
 
       eligible_cohort.nil? ? true : false
     end
@@ -127,10 +212,6 @@ module EarlyCareerPayments
 
     def ineligible_current_school?
       current_school.present? && !current_school.eligible_for_early_career_payments?
-    end
-
-    def ineligible_itt_academic_year?
-      itt_academic_year == "none_of_the_above"
     end
 
     def no_entire_term_contract?
@@ -149,7 +230,6 @@ module EarlyCareerPayments
       no_entire_term_contract? ||
         not_employed_directly? ||
         subject_to_disciplinary_action? ||
-        ineligible_itt_academic_year? ||
         ineligible_cohort?
     end
 
