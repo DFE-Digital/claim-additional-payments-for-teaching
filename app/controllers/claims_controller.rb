@@ -33,10 +33,9 @@ class ClaimsController < BasePublicController
     current_claim.reset_dependent_answers
     current_claim.eligibility.reset_dependent_answers
 
-    generate_one_time_password
-    store_in_session_one_time_password
-
     if current_claim.save(context: page_sequence.current_slug.to_sym)
+      generate_one_time_password
+      store_in_session_one_time_password
       redirect_to claim_path(current_policy_routing_name, next_slug)
     else
       show
