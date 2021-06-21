@@ -22,6 +22,8 @@ The format is based on [Keep a Changelog]
   - Update question for ITT Year to 'Which academic year did you earn your
     qualified teacher status (QTS)?' for AO and OR routes into teaching
   - Update content for 'What is your address?' screen
+  - Add 'Set up a Reminder - Enter Personal Details' screen to ECP eligible
+    later journey
 
 ## [Release 091] - 2021-06-24
 

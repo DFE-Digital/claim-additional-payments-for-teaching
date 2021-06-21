@@ -52,6 +52,11 @@ Rails.application.routes.draw do
       get page_name.dasherize, to: "static_pages##{page_name}", as: page_name
     end
 
+    scope constraints: {policy: Policies.all.detect { |policy| policy.routing_name == "early-career-payments" }.routing_name} do
+      get "reminders/personal-details", as: :new_reminder, to: "reminders#new"
+      post "reminders/personal-details", to: "reminders#create"
+    end
+
     scope path: "/", constraints: {policy: Policies.all.detect { |policy| policy.routing_name == "early-career-payments" }.routing_name} do
       get "landing-page", to: "static_pages#landing_page", as: :landing_page
     end
