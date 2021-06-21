@@ -121,27 +121,44 @@ describe ClaimsHelper do
   end
 
   describe "#payment_answers" do
-    it "returns an array of questions and answers for displaying to the user for review" do
-      claim = create(:claim,
-        bank_sort_code: "12 34 56",
-        bank_account_number: "12 34 56 78",
-        banking_name: "Jo Bloggs")
+    context "when a personal bank account is selected" do
+      it "returns an array of questions and answers for displaying to the user for review" do
+        claim = create(:claim,
+          bank_or_building_society: :personal_bank_account,
+          bank_sort_code: "12 34 56",
+          bank_account_number: "12 34 56 78",
+          banking_name: "Jo Bloggs")
 
-      expected_answers = [
-        ["Name on bank account", "Jo Bloggs", "bank-details"],
-        ["Bank sort code", "123456", "bank-details"],
-        ["Bank account number", "12345678", "bank-details"]
-      ]
+        expected_answers = [
+          [t("questions.bank_or_building_society"), "Personal bank account", "bank-or-building-society"],
+          ["Name on bank account", "Jo Bloggs", "bank-details"],
+          ["Bank sort code", "123456", "bank-details"],
+          ["Bank account number", "12345678", "bank-details"]
+        ]
 
-      expect(helper.payment_answers(claim)).to eq expected_answers
+        expect(helper.payment_answers(claim)).to eq expected_answers
+      end
     end
 
-    it "returns a roll number if one is provided" do
-      claim = create(:claim, building_society_roll_number: "1234/12345678")
+    context "when a building society is selected" do
+      it "returns an array of questions and answers for displaying to the user for review" do
+        claim = create(:claim,
+          bank_or_building_society: :building_society,
+          bank_sort_code: "65 90 07",
+          bank_account_number: "90 77 02 24",
+          banking_name: "David Badger-Hillary",
+          building_society_roll_number: "5890/87654321")
 
-      expect(helper.payment_answers(claim)).to include(
-        ["Building society roll number", "1234/12345678", "bank-details"]
-      )
+        expected_answers = [
+          [t("questions.bank_or_building_society"), "Building society", "bank-or-building-society"],
+          ["Name on bank account", "David Badger-Hillary", "bank-details"],
+          ["Bank sort code", "659007", "bank-details"],
+          ["Bank account number", "90770224", "bank-details"],
+          ["Building society roll number", "5890/87654321", "bank-details"]
+        ]
+
+        expect(helper.payment_answers(claim)).to eq expected_answers
+      end
     end
   end
 

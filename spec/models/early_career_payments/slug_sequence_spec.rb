@@ -120,6 +120,7 @@ RSpec.describe EarlyCareerPayments::SlugSequence do
           address
           email-address
           email-verification
+          bank-or-building-society
           bank-details
           gender
           teacher-reference-number
@@ -150,6 +151,7 @@ RSpec.describe EarlyCareerPayments::SlugSequence do
           address
           email-address
           email-verification
+          bank-or-building-society
           bank-details
           gender
           teacher-reference-number

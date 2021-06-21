@@ -122,6 +122,13 @@ RSpec.feature "Teacher Student Loan Repayments claims" do
 
       expect(claim.reload.email_address).to eq("name@example.tld")
 
+      expect(page).to have_text(I18n.t("questions.bank_or_building_society"))
+
+      choose "Personal bank account"
+      click_on "Continue"
+
+      expect(claim.reload.bank_or_building_society).to eq "personal_bank_account"
+
       expect(page).to have_text(I18n.t("questions.bank_details"))
       expect(page).to have_text("The account you want us to send your payment to.")
 

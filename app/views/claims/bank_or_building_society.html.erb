@@ -1,0 +1,41 @@
+<% content_for(:page_title, page_title(t("questions.bank_or_building_society"), policy: current_policy_routing_name, show_error: current_claim.errors.any?)) %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= render("shared/error_summary", instance: current_claim, errored_field_id_overrides: { bank_or_building_society: "bank_or_building_society_personal_bank_account" }) if current_claim.errors.any? %>
+    <%= form_for current_claim, url: claim_path(current_policy_routing_name) do |form| %>
+      <%= form.hidden_field :bank_or_building_society %>
+      <%= form_group_tag current_claim do %>
+        <fieldset class="govuk-fieldset" role="group">
+
+          <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
+            <h1 class="govuk-fieldset__heading">
+              <%= t("questions.bank_or_building_society") %>
+            </h1>
+          </legend>
+
+          <span class="govuk-hint" id="bank_details-hint">
+            Some places are both a bank and a building society. If your account requires a roll number your account with them is through the building society.
+          </span>
+
+          <%= errors_tag current_claim.eligibility, :bank_or_building_society %>
+
+          <div class="govuk-radios">
+            <div class="govuk-radios__item">
+              <%= form.radio_button(:bank_or_building_society, :personal_bank_account, class: "govuk-radios__input") %>
+              <%= form.label :bank_or_building_society_personal_bank_account, "Personal bank account", class: "govuk-label govuk-radios__label" %>
+            </div>
+
+            <div class="govuk-radios__item">
+              <%= form.radio_button(:bank_or_building_society, :building_society, class: "govuk-radios__input") %>
+              <%= form.label :bank_or_building_society_building_society, "Building society", class: "govuk-label govuk-radios__label" %>
+            </div>
+          </div>
+
+        </fieldset>
+      <% end %>
+
+      <%= form.submit "Continue", class: "govuk-button", data: {module: "govuk-button"} %>
+    <% end %>
+  </div>
+</div>
