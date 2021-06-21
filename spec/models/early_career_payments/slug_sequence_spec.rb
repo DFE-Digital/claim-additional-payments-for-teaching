@@ -7,13 +7,8 @@ RSpec.describe EarlyCareerPayments::SlugSequence do
   let(:claim) { build(:claim, eligibility: eligibility) }
 
   describe "The sequence as defined by #slugs" do
-    it "excludes the “ineligible” slug if the claim is not actually ineligible" do
-      expect(claim.eligibility).not_to be_ineligible
+    it "excludes the 'ineligible' slug if the claim's eligibility is undetermined" do
       expect(slug_sequence.slugs).not_to include("ineligible")
-
-      claim.eligibility.nqt_in_academic_year_after_itt = false
-      expect(claim.eligibility).to be_ineligible
-      expect(slug_sequence.slugs).to include("ineligible")
     end
 
     it "excludes the 'entire-term-contract' slug if the claimant is not a supply teacher" do
@@ -45,8 +40,62 @@ RSpec.describe EarlyCareerPayments::SlugSequence do
         )
       end
 
-      it "excludes the 'eligibility_confirmed' slug" do
+      it "includes the 'ineligible' slug" do
+        expect(slug_sequence.slugs).to include("ineligible")
+      end
+
+      it "excludes the 'eligibility-confirmed' slug" do
         expect(slug_sequence.slugs).not_to include("eligibility-confirmed")
+      end
+    end
+
+    context "when claim is eligible later" do
+      let(:eligibility) do
+        build(
+          :early_career_payments_eligibility,
+          :eligible,
+          eligible_itt_subject: itt_subject,
+          itt_academic_year: itt_academic_year
+        )
+      end
+
+      [
+        {itt_subject: "Mathematics", itt_academic_year: "2019 - 2020"},
+        {itt_subject: "Mathematics", itt_academic_year: "2020 - 2021"},
+        {itt_subject: "Physics", itt_academic_year: "2020 - 2021"},
+        {itt_subject: "Chemistry", itt_academic_year: "2020 - 2021"},
+        {itt_subject: "Foreign languages", itt_academic_year: "2020 - 2021"}
+      ].each do |context|
+        context "with ITT subject #{context[:itt_subject]}" do
+          let(:itt_subject) { context[:itt_subject].gsub(/\s/, "_").downcase }
+
+          context "with ITT academic year #{context[:itt_academic_year]}" do
+            let(:itt_academic_year) { context[:itt_academic_year].gsub(/\s-\s/, "_") }
+
+            it "excludes the 'eligibility-confirmed' slug" do
+              expect(slug_sequence.slugs).not_to include("eligibility-confirmed")
+            end
+
+            it "includes the 'eligible-later' slug" do
+              expect(slug_sequence.slugs).to include("eligible-later")
+            end
+          end
+        end
+      end
+    end
+
+    context "when claim is not eligible later" do
+      let(:eligibility) do
+        build(
+          :early_career_payments_eligibility,
+          :eligible,
+          eligible_itt_subject: :mathematics,
+          itt_academic_year: "2018_2019"
+        )
+      end
+
+      it "excludes the 'eligibile-later' slug" do
+        expect(slug_sequence.slugs).not_to include("eligibile-later")
       end
     end
 
