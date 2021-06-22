@@ -83,9 +83,10 @@ class Claim < ApplicationRecord
   DECISION_DEADLINE = 12.weeks
   DECISION_DEADLINE_WARNING_POINT = 2.weeks
   ATTRIBUTE_DEPENDENCIES = {
-    "has_student_loan" => "student_loan_country",
-    "student_loan_country" => "student_loan_courses",
-    "student_loan_courses" => "student_loan_start_date"
+    "has_student_loan" => ["student_loan_country"],
+    "student_loan_country" => ["student_loan_courses"],
+    "student_loan_courses" => ["student_loan_start_date"],
+    "bank_or_building_society" => ["banking_name", "bank_account_number", "bank_sort_code", "building_society_roll_number"]
   }.freeze
 
   # Use AcademicYear as custom ActiveRecord attribute type
@@ -302,8 +303,10 @@ class Claim < ApplicationRecord
   end
 
   def reset_dependent_answers
-    ATTRIBUTE_DEPENDENCIES.each do |attribute_name, dependent_attribute_name|
-      write_attribute(dependent_attribute_name, nil) if changed.include?(attribute_name)
+    ATTRIBUTE_DEPENDENCIES.each do |attribute_name, dependent_attribute_names|
+      dependent_attribute_names.each do |dependent_attribute_name|
+        write_attribute(dependent_attribute_name, nil) if changed.include?(attribute_name)
+      end
     end
     self.student_loan_plan = determine_student_loan_plan
   end
@@ -356,10 +359,14 @@ class Claim < ApplicationRecord
   end
 
   def normalise_bank_account_number
+    return if bank_account_number.nil?
+
     self.bank_account_number = normalised_bank_detail(bank_account_number)
   end
 
   def normalise_bank_sort_code
+    return if bank_sort_code.nil?
+
     self.bank_sort_code = normalised_bank_detail(bank_sort_code)
   end
 

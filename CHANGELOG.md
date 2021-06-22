@@ -18,6 +18,8 @@ The format is based on [Keep a Changelog]
 - Update content for 'Application complete' screen
 - Build new Early-Career Payments Journey with following page additions
   - Add 'Would you like to provide your phone number?'
+  - Update payment account details 'Enter your bank/building society account
+    details'
 
 ## [Release 090] - 2021-06-02
 
