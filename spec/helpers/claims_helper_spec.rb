@@ -89,8 +89,6 @@ describe ClaimsHelper do
       let(:policy) { EarlyCareerPayments }
 
       it "returns an array of identity-related questions and answers for displaying to the user for review" do
-        claim.provide_mobile_number = "Yes"
-
         expected_answers = [
           [I18n.t("questions.name"), "Jo Bloggs", "personal-details"],
           [I18n.t("questions.address"), "Flat 1, 1 Test Road, Test Town, AB1 2CD", "address"],
@@ -98,8 +96,7 @@ describe ClaimsHelper do
           [I18n.t("questions.payroll_gender"), "Don’t know", "gender"],
           [I18n.t("questions.teacher_reference_number"), "1234567", "teacher-reference-number"],
           [I18n.t("questions.national_insurance_number"), "QQ123456C", "personal-details"],
-          [I18n.t("questions.email_address"), "test@email.com", "email-address"],
-          [I18n.t("questions.provide_mobile_number"), "Yes", "provide-mobile-number"]
+          [I18n.t("questions.email_address"), "test@email.com", "email-address"]
         ]
 
         expect(helper.identity_answers(claim)).to eq expected_answers
@@ -115,8 +112,7 @@ describe ClaimsHelper do
           [I18n.t("questions.payroll_gender"), "Don’t know", "gender"],
           [I18n.t("questions.teacher_reference_number"), "1234567", "teacher-reference-number"],
           [I18n.t("questions.national_insurance_number"), "QQ123456C", "personal-details"],
-          [I18n.t("questions.email_address"), "test@email.com", "email-address"],
-          [I18n.t("questions.provide_mobile_number"), "No", "provide-mobile-number"]
+          [I18n.t("questions.email_address"), "test@email.com", "email-address"]
         ]
 
         expect(helper.identity_answers(claim)).to eq expected_answers
