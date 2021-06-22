@@ -31,6 +31,7 @@ module StudentLoans
       "student-loan-start-date",
       "student-loan-amount",
       "email-address",
+      "bank-or-building-society",
       "bank-details",
       "check-your-answers",
       "ineligible"

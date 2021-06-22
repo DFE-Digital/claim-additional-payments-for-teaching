@@ -73,6 +73,22 @@ RSpec.describe Claim, type: :model do
   end
 
   context "that has bank details" do
+    let(:claim) { build(:claim, policy: EarlyCareerPayments) }
+
+    it "validates which type of payment account was specified" do
+      expect(claim).not_to be_valid(:"bank-or-building-society")
+
+      expect { claim.bank_or_building_society = "paypal" }.to raise_error(ArgumentError)
+
+      claim.bank_or_building_society = :building_society
+
+      expect(claim).to be_valid(:"bank-or-building-society")
+    end
+
+    it "does not validate which type of payment account was specified" do
+      expect { claim.bank_or_building_society = "visa" }.to raise_error(ArgumentError)
+    end
+
     it "validates the format of bank_account_number and bank_sort_code" do
       expect(build(:claim, bank_account_number: "ABC12 34 56 789")).not_to be_valid
       expect(build(:claim, bank_account_number: "12-34-56-78-90")).not_to be_valid
@@ -451,7 +467,7 @@ RSpec.describe Claim, type: :model do
     let!(:approved_then_decision_undone_claim) { create(:claim, :submitted) }
     let!(:rejected_then_decision_undone_claim) { create(:claim, :submitted) }
 
-    # TODO: This doesn't feel great, but works - is this the best way?
+    # This doesn't feel great, but works - is this the best way?
     before do
       create(:decision, :approved, :undone, claim: approved_then_rejected_claim)
       create(:decision, :rejected, claim: approved_then_rejected_claim)

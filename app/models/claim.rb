@@ -25,6 +25,7 @@ class Claim < ApplicationRecord
     :student_loan_courses,
     :student_loan_start_date,
     :email_address,
+    :bank_or_building_society,
     :bank_sort_code,
     :bank_account_number,
     :banking_name,
@@ -68,6 +69,7 @@ class Claim < ApplicationRecord
     submitted_at: false,
     updated_at: false,
     govuk_verify_fields: false,
+    bank_or_building_society: false,
     banking_name: true,
     building_society_roll_number: true,
     payment_id: false,
@@ -95,6 +97,7 @@ class Claim < ApplicationRecord
   enum student_loan_start_date: StudentLoan::COURSE_START_DATES
   enum student_loan_courses: {one_course: 0, two_or_more_courses: 1}
   enum student_loan_plan: STUDENT_LOAN_PLAN_OPTIONS
+  enum bank_or_building_society: {personal_bank_account: 0, building_society: 1}
 
   has_many :decisions
   has_many :tasks
@@ -154,6 +157,7 @@ class Claim < ApplicationRecord
                             length: {maximum: 256, message: "Email address must be 256 characters or less"},
                             allow_blank: true
 
+  validates :bank_or_building_society, on: [:"bank-or-building-society", :submit], presence: {message: "Choose the option for payment"}
   validates :banking_name, on: [:"bank-details", :submit], presence: {message: "Enter the name on your bank account"}
   validates :bank_sort_code, on: [:"bank-details", :submit], presence: {message: "Enter a sort code"}
   validates :bank_account_number, on: [:"bank-details", :submit], presence: {message: "Enter an account number"}

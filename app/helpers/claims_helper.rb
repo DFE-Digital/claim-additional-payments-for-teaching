@@ -45,6 +45,7 @@ module ClaimsHelper
 
   def payment_answers(claim)
     [].tap do |a|
+      a << [translate("questions.bank_or_building_society"), claim.bank_or_building_society.to_s.humanize, "bank-or-building-society"]
       a << ["Name on bank account", claim.banking_name, "bank-details"]
       a << ["Bank sort code", claim.bank_sort_code, "bank-details"]
       a << ["Bank account number", claim.bank_account_number, "bank-details"]

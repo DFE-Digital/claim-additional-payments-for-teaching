@@ -14,6 +14,11 @@ The format is based on [Keep a Changelog]
   - Update 'When did all of your higher education courses start?'
   - Update 'Application complete' screen
   - Fix No Validation on Personal Detail: Email address page
+- Build new Early-Career Payments Journey with following page additions
+  - Add subject cohort ineligibility to ECP eligibility
+  - TSLR / M+P / ECP User Journeys
+    - Additions
+      - Add 'What account do you want the money paid into?'
 
 ## [Release 090] - 2021-06-02
 
@@ -39,7 +44,6 @@ The format is based on [Keep a Changelog]
     - Add 'You are not eligible' (Subject)
     - Add 'In what academic year did you complete your undergraduate ITT?'
     - Add 'Check your answers for eligibility?'
-    - Add 'You are eligible for an early-careers payment'
     - Add 'How we will use the information you provide'
     - Add 'Did you take out a Postgraduate Master's Loan on or after 1 August
       2016?'

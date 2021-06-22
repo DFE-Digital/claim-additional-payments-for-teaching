@@ -146,7 +146,7 @@ RSpec.feature "Ineligible Teacher Early-Career Payments claims" do
     start_early_career_payments_claim
     claim = Claim.order(:created_at).last
 
-    # TODO [PAGE 02/03] - Which school do you teach at
+    # [PAGE 02/03] - Which school do you teach at
     expect(page).to have_text(I18n.t("early_career_payments.questions.current_school_search"))
 
     choose_school schools(:penistone_grammar_school)
@@ -311,5 +311,78 @@ RSpec.feature "Ineligible Teacher Early-Career Payments claims" do
   end
 
   # Additional sad paths
-  # TODO [PAGE 19] - You will be eligible for an early-career payment in 2022
+  # [PAGE 19] - You will be eligible for an early-career payment in 2022
+
+  [
+    {itt_subject: "Physics", itt_academic_year: "2018 - 2019"},
+    {itt_subject: "Physics", itt_academic_year: "2019 - 2020"},
+    {itt_subject: "Chemistry", itt_academic_year: "2018 - 2019"},
+    {itt_subject: "Chemistry", itt_academic_year: "2019 - 2020"},
+    {itt_subject: "Foreign languages", itt_academic_year: "2018 - 2019"},
+    {itt_subject: "Foreign languages", itt_academic_year: "2019 - 2020"}
+  ].each do |scenario|
+    scenario "with ITT subject #{scenario[:itt_subject]} in ITT academic year #{scenario[:itt_academic_year]}" do
+      start_early_career_payments_claim
+      claim = Claim.order(:created_at).last
+
+      # [PAGE 02/03] - Which school do you teach at
+      expect(page).to have_text(I18n.t("early_career_payments.questions.current_school_search"))
+
+      choose_school schools(:penistone_grammar_school)
+
+      # [PAGE 04] - Are you currently employed as a supply teacher
+      expect(page).to have_text(I18n.t("early_career_payments.questions.employed_as_supply_teacher"))
+
+      choose "No"
+      click_on "Continue"
+
+      # [PAGE 07] - Are you currently subject to action for poor performance
+      expect(page).to have_text(I18n.t("early_career_payments.questions.formal_performance_action"))
+
+      choose "No"
+      click_on "Continue"
+
+      # [PAGE 08] - Are you currently subject to disciplinary action
+      expect(page).to have_text(I18n.t("early_career_payments.questions.disciplinary_action"))
+
+      choose "No"
+      click_on "Continue"
+
+      # [PAGE 09] - Did you do a postgraduate ITT course or undergraduate ITT course
+      expect(page).to have_text(I18n.t("early_career_payments.questions.postgraduate_itt_or_undergraduate_itt_course"))
+
+      choose "Undergraduate"
+      click_on "Continue"
+
+      expect(claim.eligibility.reload.pgitt_or_ugitt_course).to eq "undergraduate"
+
+      # [PAGE 10] - Which subject did you do your undergraduate ITT in
+      expect(page).to have_text(I18n.t("early_career_payments.questions.eligible_itt_subject", ug_or_pg: claim.eligibility.pgitt_or_ugitt_course))
+
+      choose scenario[:itt_subject]
+      click_on "Continue"
+
+      expect(claim.eligibility.reload.eligible_itt_subject).to eq scenario[:itt_subject].gsub(/\s/, "_").downcase
+
+      # [PAGE 12] - Do you teach the eligible ITT subject now
+      expect(page).to have_text(I18n.t("early_career_payments.questions.teaching_subject_now", eligible_itt_subject: claim.eligibility.eligible_itt_subject.humanize.downcase))
+
+      choose "Yes"
+      click_on "Continue"
+
+      expect(claim.eligibility.reload.teaching_subject_now).to eql true
+
+      # [PAGE 13] - In what academic year did you start your undergraduate ITT
+      expect(page).to have_text(I18n.t("early_career_payments.questions.itt_academic_year", start_or_complete: "complete", ug_or_pg: claim.eligibility.pgitt_or_ugitt_course))
+
+      choose scenario[:itt_academic_year]
+      click_on "Continue"
+
+      expect(claim.eligibility.reload.itt_academic_year).to eql scenario[:itt_academic_year].gsub(/\s-\s/, "_")
+
+      expect(page).to have_text(I18n.t("early_career_payments.ineligible.heading"))
+      expect(page).to have_link(href: EarlyCareerPayments.eligibility_page_url)
+      expect(page).to have_text("Based on the answers you have provided you are not eligible #{I18n.t("early_career_payments.claim_description")}")
+    end
+  end
 end
