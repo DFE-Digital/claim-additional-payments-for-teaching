@@ -6,6 +6,15 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+- Updates for Early-Career Payments journey (v10 content changes)
+  - Update 'Did you take out a Postgraduate Masters Loan?'
+  - Update 'Did you take out a Postgraduate Doctoral Loan?'
+  - Update 'How many higher education courses did you take a student loan out
+    for?'
+  - Update 'When did all of your higher education courses start?'
+  - Update 'Application complete' screen
+  - Fix No Validation on Personal Detail: Email address page
+
 ## [Release 090] - 2021-06-02
 
 - Remove GOVUK Verify IAS components
