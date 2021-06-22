@@ -120,6 +120,7 @@ RSpec.describe EarlyCareerPayments::SlugSequence do
           address
           email-address
           email-verification
+          provide-mobile-number
           bank-or-building-society
           bank-details
           gender
@@ -151,6 +152,7 @@ RSpec.describe EarlyCareerPayments::SlugSequence do
           address
           email-address
           email-verification
+          provide-mobile-number
           bank-or-building-society
           bank-details
           gender

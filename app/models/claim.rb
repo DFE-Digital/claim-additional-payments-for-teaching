@@ -25,6 +25,7 @@ class Claim < ApplicationRecord
     :student_loan_courses,
     :student_loan_start_date,
     :email_address,
+    :provide_mobile_number,
     :bank_or_building_society,
     :bank_sort_code,
     :bank_account_number,
@@ -54,6 +55,7 @@ class Claim < ApplicationRecord
     student_loan_courses: false,
     student_loan_start_date: false,
     email_address: true,
+    provide_mobile_number: false,
     bank_sort_code: true,
     bank_account_number: true,
     created_at: false,
@@ -156,6 +158,8 @@ class Claim < ApplicationRecord
   validates :email_address, format: {with: URI::MailTo::EMAIL_REGEXP, message: "Enter an email in the format name@example.com"},
                             length: {maximum: 256, message: "Email address must be 256 characters or less"},
                             allow_blank: true
+
+  validates :provide_mobile_number, on: [:"provide-mobile-number", :submit], inclusion: {in: [true, false], message: "Choose yes if you want to provide a mobile number"}, if: :has_ecp_policy?
 
   validates :bank_or_building_society, on: [:"bank-or-building-society", :submit], presence: {message: "Choose the option for payment"}
   validates :banking_name, on: [:"bank-details", :submit], presence: {message: "Enter the name on your bank account"}

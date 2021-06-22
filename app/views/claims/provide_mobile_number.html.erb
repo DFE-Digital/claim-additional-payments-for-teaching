@@ -1,0 +1,49 @@
+<% content_for(:page_title, page_title(t("questions.provide_mobile_number"), policy: current_policy_routing_name, show_error: current_claim.errors.any?)) %>
+<% path_for_form = current_claim.persisted? ? claim_path(current_policy_routing_name) : claims_path(current_policy_routing_name) %>
+<% shared_view_css_size = current_claim.policy == EarlyCareerPayments ? "l" : "xl" %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= render("shared/error_summary", instance: current_claim, errored_field_id_overrides: { "provide_mobile_number": "claim_attributes_provide_mobile_number_true" }) if current_claim.errors.any? %>
+    <%= form_for current_claim, url: path_for_form do |form| %>
+      <span class="govuk-caption-xl"><%= t("questions.personal_details") %></span>
+      <%= form.hidden_field :provide_mobile_number %>
+      <%= form_group_tag current_claim do %>
+
+        <fieldset class="govuk-fieldset">
+
+          <legend class="govuk-fieldset__legend govuk-fieldset__legend--<%= shared_view_css_size %>">
+            <h1 class="govuk-fieldset__heading">
+              <%= t("questions.provide_mobile_number") %>
+            </h1>
+          </legend>
+
+          <div class="govuk-hint" id="provide-mobile-number-hint">
+              We will only use this number if we are unable to contact you via email. It may slow
+              down your application if we are unable to reach you.
+          </div>
+
+          <%= errors_tag current_claim, :provide_mobile_number %>
+
+          <div class="govuk-radios">
+
+            <div class="govuk-radios__item">
+              <%= form.radio_button(:provide_mobile_number, true, class: "govuk-radios__input") %>
+              <%= form.label :provide_mobile_number_true, "Yes", class: "govuk-label govuk-radios__label" %>
+            </div>
+
+            <div class="govuk-radios__item">
+              <%= form.radio_button(:provide_mobile_number, false, class: "govuk-radios__input") %>
+              <%= form.label :provide_mobile_number_false, "No", class: "govuk-label govuk-radios__label" %>
+            </div>
+
+          </div>
+
+        </fieldset>
+
+      <% end %>
+
+      <%= form.submit "Continue", class: "govuk-button", data: {module: "govuk-button"} %>
+    <% end %>
+  </div>
+</div>
