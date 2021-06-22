@@ -174,15 +174,6 @@ RSpec.feature "Teacher Early-Career Payments claims" do
 
     click_on "Confirm"
 
-    # - Provide mobile number
-
-    expect(page).to have_text(I18n.t("questions.provide_mobile_number"))
-
-    choose "Yes"
-    click_on "Continue"
-
-    expect(claim.reload.provide_mobile_number).to eql true
-
     # Payment to Bank or Building Society
     expect(page).to have_text(I18n.t("questions.bank_or_building_society"))
 

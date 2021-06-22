@@ -66,8 +66,6 @@ en:
     bank_details: "Enter bank account details"
     payroll_gender: "What gender does your school's payroll system associate with you?"
     bank_or_building_society: What account do you want the money paid into?
-    provide_mobile_number: "Would you like to provide your mobile number?"
-    personal_details: "Personal details"
   admin:
     qts_award_year: "Award year"
     current_school: "Current school"

@@ -16,8 +16,6 @@ The format is based on [Keep a Changelog]
 - Update content for 'Did you take out a Postgraduate Doctoral Loan?'
 - Update content for 'When did all of your higher education courses start?'
 - Update content for 'Application complete' screen
-- Build new Early-Career Payments Journey with following page additions
-  - Add 'Would you like to provide your phone number?'
 
 ## [Release 090] - 2021-06-02
 
