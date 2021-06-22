@@ -12,6 +12,7 @@ The format is based on [Keep a Changelog]
     - Add 'What account do you want the money paid into?'
 - Update content for 'How many higher education courses did you take a student
   loan out for?'
+- Update content for 'Did you take out a Postgraduate Masters Loan?'
 
 ## [Release 090] - 2021-06-02
 

@@ -249,7 +249,7 @@ en:
       itt_undergraduate_hint: "Undergraduate ITT includes: Bachelor of Arts (BA) or Bachelor of Science (BSc) degrees."
       teaching_subject_now: "Do you teach %{eligible_itt_subject} now?"
       itt_academic_year: "In what academic year did you %{start_or_complete} your %{ug_or_pg} ITT?"
-      postgraduate_masters_loan: "Did you take out a Postgraduate Master's Loan on or after 1 August 2016?"
+      postgraduate_masters_loan: "Did you take out a Postgraduate Master's Loan?"
       postgraduate_doctoral_loan: "Did you take out a Postgraduate Doctoral Loan on or after 1 August 2018?"
       national_insurance_number: "What is your National Insurance number?"
     admin:
