@@ -33,6 +33,7 @@ module EarlyCareerPayments
       "address",
       "email-address",
       "email-verification",
+      "provide-mobile-number",
       "bank-or-building-society",
       "bank-details",
       "gender",

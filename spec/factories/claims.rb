@@ -32,6 +32,10 @@ FactoryBot.define do
       payroll_gender { :female }
 
       eligibility_factory { ["#{policy.to_s.underscore}_eligibility".to_sym, :eligible] }
+
+      after(:build) do |claim|
+        claim.provide_mobile_number = true if claim.has_ecp_policy?
+      end
     end
 
     trait :submitted do
