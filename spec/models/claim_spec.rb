@@ -759,7 +759,7 @@ RSpec.describe Claim, type: :model do
   end
 
   describe "#reset_dependent_answers" do
-    let(:claim) { create(:claim, :submittable) }
+    let(:claim) { create(:claim, :submittable, bank_or_building_society: "building_society") }
 
     it "redetermines the student_loan_plan and resets loan plan answers when has_student_loan changes" do
       claim.has_student_loan = true
@@ -812,6 +812,20 @@ RSpec.describe Claim, type: :model do
       expect(claim.student_loan_courses).to eq "one_course"
       expect(claim.student_loan_start_date).to eq StudentLoan::ON_OR_AFTER_1_SEPT_2012
       expect(claim.student_loan_plan).to eq StudentLoan::PLAN_2
+    end
+
+    it "redetermines the bank_details when the value of bank_or_building_society changes" do
+      expect { claim.reset_dependent_answers }.not_to change { claim.attributes }
+
+      claim.bank_or_building_society = "personal_bank_account"
+      claim.banking_name = "Mr David McCorkindale-Travers"
+      claim.bank_sort_code = "984530"
+      claim.bank_account_number = "66320109"
+
+      expect(claim.banking_name).to eq "Mr David McCorkindale-Travers"
+      expect(claim.bank_account_number).to eq "66320109"
+      expect(claim.bank_sort_code).to eq "984530"
+      expect(claim.building_society_roll_number).to be_nil
     end
   end
 

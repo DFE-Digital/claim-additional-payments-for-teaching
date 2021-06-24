@@ -119,17 +119,18 @@ RSpec.feature "Maths & Physics claims" do
 
       expect(page).to have_text(I18n.t("questions.bank_or_building_society"))
 
-      choose "Personal bank account"
+      choose "Building society"
       click_on "Continue"
 
-      expect(claim.reload.bank_or_building_society).to eq "personal_bank_account"
+      expect(claim.reload.bank_or_building_society).to eq "building_society"
 
-      expect(page).to have_text(I18n.t("questions.bank_details"))
+      expect(page).to have_text(I18n.t("questions.account_details", bank_or_building_society: claim.bank_or_building_society.humanize.downcase))
+      expect(page).to have_text("Building society roll number")
 
-      fill_in "Name on the account", with: "Jo Bloggs"
+      fill_in "Name on your account", with: "Jo Bloggs"
       fill_in "Sort code", with: "123456"
       fill_in "Account number", with: "87654321"
-      fill_in "Building society roll number (if you have one)", with: "1234/123456789"
+      fill_in "Building society roll number", with: "1234/123456789"
       click_on "Continue"
 
       expect(claim.reload.banking_name).to eq("Jo Bloggs")

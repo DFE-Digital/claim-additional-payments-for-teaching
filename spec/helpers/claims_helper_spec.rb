@@ -135,9 +135,9 @@ describe ClaimsHelper do
 
         expected_answers = [
           [t("questions.bank_or_building_society"), "Personal bank account", "bank-or-building-society"],
-          ["Name on bank account", "Jo Bloggs", "bank-details"],
-          ["Bank sort code", "123456", "bank-details"],
-          ["Bank account number", "12345678", "bank-details"]
+          ["Name on bank account", "Jo Bloggs", "personal-bank-account"],
+          ["Bank sort code", "123456", "personal-bank-account"],
+          ["Bank account number", "12345678", "personal-bank-account"]
         ]
 
         expect(helper.payment_answers(claim)).to eq expected_answers
@@ -155,10 +155,10 @@ describe ClaimsHelper do
 
         expected_answers = [
           [t("questions.bank_or_building_society"), "Building society", "bank-or-building-society"],
-          ["Name on bank account", "David Badger-Hillary", "bank-details"],
-          ["Bank sort code", "659007", "bank-details"],
-          ["Bank account number", "90770224", "bank-details"],
-          ["Building society roll number", "5890/87654321", "bank-details"]
+          ["Name on bank account", "David Badger-Hillary", "building-society-account"],
+          ["Bank sort code", "659007", "building-society-account"],
+          ["Bank account number", "90770224", "building-society-account"],
+          ["Building society roll number", "5890/87654321", "building-society-account"]
         ]
 
         expect(helper.payment_answers(claim)).to eq expected_answers

@@ -35,7 +35,8 @@ module MathsAndPhysics
       "student-loan-start-date",
       "email-address",
       "bank-or-building-society",
-      "bank-details",
+      "personal-bank-account",
+      "building-society-account",
       "check-your-answers",
       "ineligible"
     ].freeze
@@ -55,6 +56,8 @@ module MathsAndPhysics
         sequence.delete("student-loan-country") if claim.no_student_loan?
         sequence.delete("student-loan-how-many-courses") if claim.no_student_loan? || claim.student_loan_country_with_one_plan?
         sequence.delete("student-loan-start-date") if claim.no_student_loan? || claim.student_loan_country_with_one_plan?
+        sequence.delete("personal-bank-account") if claim.bank_or_building_society == "building_society"
+        sequence.delete("building-society-account") if claim.bank_or_building_society == "personal_bank_account"
         sequence.delete("ineligible") unless claim.eligibility.ineligible?
       end
     end

@@ -35,7 +35,8 @@ module EarlyCareerPayments
       "email-verification",
       "provide-mobile-number",
       "bank-or-building-society",
-      "bank-details",
+      "personal-bank-account",
+      "building-society-account",
       "gender",
       "teacher-reference-number",
       # student loans phase of claim journey
@@ -62,6 +63,8 @@ module EarlyCareerPayments
         sequence.delete("eligibility-confirmed") if claim.eligibility.ineligible? || claim.eligibility.eligible_later?
         sequence.delete("eligible-later") unless claim.eligibility.eligible_later?
         sequence.delete("ineligible") unless claim.eligibility.ineligible?
+        sequence.delete("personal-bank-account") if claim.bank_or_building_society == "building_society"
+        sequence.delete("building-society-account") if claim.bank_or_building_society == "personal_bank_account"
         remove_student_loan_slugs(sequence) if claim.has_student_loan == false
         remove_student_loan_country_slugs(sequence)
       end

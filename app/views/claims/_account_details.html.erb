@@ -1,0 +1,59 @@
+<% account_hint = bank_or_building_society == "personal bank account" ? "bank" : bank_or_building_society %>
+<% account_card = account_hint == "bank" ? account_hint : "" %>
+
+<%= form_for current_claim, url: claim_path(current_policy_routing_name) do |form| %>
+  <fieldset class="govuk-fieldset" aria-describedby="bank_details-hint" role="group">
+    <legend class="govuk-fieldset__legend govuk-fieldset__legend--<%= shared_view_css_class_size(current_claim) %>">
+      <h1 class="govuk-fieldset__heading">
+        <%= t("questions.account_details", bank_or_building_society: bank_or_building_society) %>
+      </h1>
+    </legend>
+
+    <%= form_group_tag current_claim, :banking_name do %>
+      <%= form.label :banking_name, "Name on your account", class: "govuk-label" %>
+      <span class="govuk-hint" id="name-on-the-account-hint">
+        <%= t("questions.account_hint", bank_or_building_society: account_hint, card: account_card) %>
+      </span>
+      <%= errors_tag current_claim, :banking_name %>
+      <%= form.text_field :banking_name,
+        class: css_classes_for_input(current_claim, :banking_name),
+        spellcheck: "false" %>
+    <% end %>
+
+    <%= form_group_tag current_claim, :bank_sort_code do %>
+      <%= form.label :bank_sort_code, "Sort code", class: "govuk-label" %>
+      <span id="sort-code-hint" class="govuk-hint">For example: 44 00 26</span>
+      <%= errors_tag current_claim, :bank_sort_code %>
+      <%= form.text_field :bank_sort_code,
+        class: css_classes_for_input(current_claim, :bank_sort_code, "govuk-!-width-one-quarter"),
+        autocomplete: "off",
+        "aria-describedby" => "sort-code-hint" %>
+    <% end %>
+
+    <%= form_group_tag current_claim, :bank_account_number do %>
+      <%= form.label :bank_account_number, "Account number", class: "govuk-label" %>
+      <span id="account-number-hint" class="govuk-hint">For example: 70872490</span>
+      <%= errors_tag current_claim, :bank_account_number %>
+      <%= form.text_field :bank_account_number,
+        class: css_classes_for_input(current_claim, :bank_account_number, "govuk-input--width-20"),
+        autocomplete: "off",
+        "aria-describedby" => "account-number-hint" %>
+    <% end %>
+
+    <% if bank_or_building_society == "building society" %>
+      <%= form_group_tag current_claim, :building_society_roll_number do %>
+        <%= form.label :building_society_roll_number, "Building society roll number", class: "govuk-label" %>
+        <span id="roll-number-hint" class="govuk-hint">You can find it on your card, statement or passbook</span>
+        <%= errors_tag current_claim, :building_society_roll_number %>
+        <%= form.text_field :building_society_roll_number,
+          class: css_classes_for_input(current_claim, :building_society_roll_number, "govuk-input--width-20"),
+          autocomplete: "off",
+          spellcheck: "false",
+          "aria-describedby" => "roll-number-hint" %>
+      <% end %>
+    <% end %>
+
+  </fieldset>
+  <p class='govuk-body'><%= t("questions.check_your_account_details", bank_or_building_society: current_claim.bank_or_building_society == "personal_bank_account"? "bank" : "building society") %></p>
+  <%= form.submit "Continue", class: "govuk-button" %>
+<% end %>

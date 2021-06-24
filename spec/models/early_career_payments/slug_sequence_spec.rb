@@ -99,6 +99,22 @@ RSpec.describe EarlyCareerPayments::SlugSequence do
       end
     end
 
+    context "when claim payment details are 'personal bank account'" do
+      it "excludes the 'building-society-account' slug" do
+        claim.bank_or_building_society = :personal_bank_account
+
+        expect(slug_sequence.slugs).not_to include("building-society-account")
+      end
+    end
+
+    context "when claim payment details are 'building society'" do
+      it "excludes the 'personal-bank-account' slug" do
+        claim.bank_or_building_society = :building_society
+
+        expect(slug_sequence.slugs).not_to include("personal-bank-account")
+      end
+    end
+
     context "when the answer to 'paying off student loan' is 'No'" do
       it "excludes 'student-loan-country', 'student-loan-how-many-courses', 'student-loan-start-date', 'masters-loan' and 'doctoral-loan'" do
         claim.has_student_loan = false
@@ -122,7 +138,8 @@ RSpec.describe EarlyCareerPayments::SlugSequence do
           email-verification
           provide-mobile-number
           bank-or-building-society
-          bank-details
+          personal-bank-account
+          building-society-account
           gender
           teacher-reference-number
           student-loan
@@ -154,7 +171,8 @@ RSpec.describe EarlyCareerPayments::SlugSequence do
           email-verification
           provide-mobile-number
           bank-or-building-society
-          bank-details
+          personal-bank-account
+          building-society-account
           gender
           teacher-reference-number
           student-loan

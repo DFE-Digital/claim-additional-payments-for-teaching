@@ -192,18 +192,17 @@ RSpec.feature "Teacher Early-Career Payments claims" do
     expect(claim.reload.bank_or_building_society).to eq "personal_bank_account"
 
     # [PAGE 27] - Enter bank account details
-    expect(page).to have_text(I18n.t("questions.bank_details"))
+    expect(page).to have_text(I18n.t("questions.account_details", bank_or_building_society: claim.bank_or_building_society.humanize.downcase))
+    expect(page).not_to have_text("Building society roll number")
 
-    fill_in "Name on the account", with: "Jo Bloggs"
+    fill_in "Name on your account", with: "Jo Bloggs"
     fill_in "Sort code", with: "123456"
     fill_in "Account number", with: "87654321"
-    fill_in "Building society roll number (if you have one)", with: "1234/123456789"
     click_on "Continue"
 
     expect(claim.reload.banking_name).to eq("Jo Bloggs")
     expect(claim.bank_sort_code).to eq("123456")
     expect(claim.bank_account_number).to eq("87654321")
-    expect(claim.building_society_roll_number).to eq("1234/123456789")
 
     # [PAGE 28] - What gender does your school's payroll system associate with you
     expect(page).to have_text(I18n.t("questions.payroll_gender"))
