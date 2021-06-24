@@ -9,14 +9,7 @@
       to be in an uplift area.
     </p>
 
-    <p>
-      <%= link_to "Uplift areas",
-        "#{EarlyCareerPayments.eligibility_page_url}#local-authorities-with-uplift-payments",
-        class: "govuk-link",
-        title: "Opens in a new tab",
-        target: "_blank"
-      %>
-    </p>
+    <%= render "uplift_payment_area" %>
 
     <h2 class="govuk-heading-l">What happens next?</h2>
 
@@ -26,17 +19,12 @@
 
     <ul class="govuk-list govuk-list--bullet">
       <li>
-        <p class="govuk-body">
           your National Insurance number
-        </p>
       </li>
       <li>
-        <p class="govuk-body">
           your bank account details
-        </p>
       </li>
       <li>
-        <p class="govuk-body">
           your 7-digit teacher reference number - you can get this from
           your school, the certificate you got when you qualified, or
           by contacting the teacher qualifications helpdesk on
@@ -52,22 +40,8 @@
             title: "Opens in a new tab",
             target: "_blank"
           %>
-        </p>
       </li>
       <li>
-        <p class="govuk-body">
-          the academic year in which you completed your ITT - you
-          can find this on your QTS certificate or through the
-          <%= link_to "teacher self-service",
-            "#",
-            class: "govuk-link",
-            title: "Opens in a new tab",
-            target: "_blank"
-          %> website
-        </p>
-      </li>
-      <li>
-        <p class="govuk-body">
           when you took out your student loan (if you have one) - if
           you don't know when this was, you can find out by logging into your
           <%= link_to "student loan account",
@@ -76,7 +50,6 @@
             title: "Opens in a new tab",
             target: "_blank"
           %>
-        </p>
       </li>
     </ul>
 
