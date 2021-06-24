@@ -350,4 +350,36 @@ RSpec.feature "Teacher Early-Career Payments claims" do
     choose "No"
     click_on "Continue"
   end
+
+  context "Route into teaching" do
+    let(:claim) do
+      claim = start_early_career_payments_claim
+      claim.eligibility.update!(attributes_for(:early_career_payments_eligibility, :eligible))
+      claim
+    end
+
+    scenario "when Assessment only" do
+      visit claim_path(claim.policy.routing_name, "qualification")
+
+      # What route into teaching did you take?
+      expect(page).to have_text(I18n.t("early_career_payments.questions.qualification"))
+
+      choose "Assessment only"
+      click_on "Continue"
+
+      expect(claim.eligibility.reload.qualification).to eq "assessment_only"
+    end
+
+    scenario "when Overseas recognition" do
+      visit claim_path(claim.policy.routing_name, "qualification")
+
+      # What route into teaching did you take?
+      expect(page).to have_text(I18n.t("early_career_payments.questions.qualification"))
+
+      choose "Overseas recognition"
+      click_on "Continue"
+
+      expect(claim.eligibility.reload.qualification).to eq "overseas_recognition"
+    end
+  end
 end

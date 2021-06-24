@@ -8,6 +8,9 @@ The format is based on [Keep a Changelog]
 
 - ECP Policy
   - Update content for ECP Start Page
+  - Update qualification question 'Did you do a postgraduate ITT course or an
+    undergraduate ITT course?', add new answer options for 'Assessment only' and
+    'Overseas recognition'
   - Update content for 'You are eligible for an early-career payment' screen
 
 ## [Release 091] - 2021-06-24

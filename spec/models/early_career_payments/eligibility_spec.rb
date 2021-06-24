@@ -21,6 +21,8 @@ RSpec.describe EarlyCareerPayments::Eligibility, type: :model do
 
       expect(eligibility.postgraduate_itt_course?).to eq true
       expect(eligibility.undergraduate_itt_course?).to eq false
+      expect(eligibility.assessment_only_itt_course?).to eq false
+      expect(eligibility.overseas_recognition_itt_course?).to eq false
     end
   end
 
@@ -501,7 +503,7 @@ RSpec.describe EarlyCareerPayments::Eligibility, type: :model do
 
     context "when saving in the 'qualification' context" do
       it "is not valid without a value for 'qualification'" do
-        expect(EarlyCareerPayments::Eligibility.new).not_to be_valid(:"qualification")
+        expect(EarlyCareerPayments::Eligibility.new).not_to be_valid(:qualification)
       end
     end
 

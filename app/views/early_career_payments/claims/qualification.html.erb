@@ -32,6 +32,16 @@
                 <%= fields.label :qualification_undergraduate, t("early_career_payments.answers.qualification.undergraduate"), class: "govuk-label govuk-radios__label" %>
               </div>
 
+              <div class="govuk-radios__item">
+                <%= fields.radio_button(:qualification, :assessment_only, class: "govuk-radios__input") %>
+                <%= fields.label :qualification_assessment_only, t("early_career_payments.answers.qualification.assessment_only"), class: "govuk-label govuk-radios__label" %>
+              </div>
+
+              <div class="govuk-radios__item">
+                <%= fields.radio_button(:qualification, :overseas_recognition, class: "govuk-radios__input") %>
+                <%= fields.label :qualification_overseas_recognition, t("early_career_payments.answers.qualification.overseas_recognition"), class: "govuk-label govuk-radios__label" %>
+              </div>
+
             </div>
 
           </fieldset>
