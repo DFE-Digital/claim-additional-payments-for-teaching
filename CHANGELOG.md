@@ -6,20 +6,22 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
-- Add subject cohort ineligibility to ECP eligibility
-- TSLR / M+P / ECP User Journeys
-  - Additions
-    - Add 'What account do you want the money paid into?'
-- Update content for 'How many higher education courses did you take a student
-  loan out for?'
-- Update content for 'Did you take out a Postgraduate Masters Loan?'
-- Update content for 'Did you take out a Postgraduate Doctoral Loan?'
-- Update content for 'When did all of your higher education courses start?'
-- Update content for 'Application complete' screen
-- Build new Early-Career Payments Journey with following page additions
-  - Add 'Would you like to provide your phone number?'
-  - Update payment account details 'Enter your bank/building society account
-    details'
+## [Release 091] - 2021-06-24
+
+- All policies
+  - Add 'What account do you want the money paid into?' screen
+- ECP policy
+  - Add subject cohort ineligibility to eligibility
+  - Update content for'How many higher education courses did you take a student
+    loan out for?' screen
+  - Update content for 'Did you take out a Postgraduate Masters Loan?' screen
+  - Update content for 'Did you take out a Postgraduate Doctoral Loan?' screen
+  - Update content for 'When did all of your higher education courses start?'
+    screen
+  - Update content for 'Application complete' screen
+  - Add 'Would you like to provide your phone number?' screen
+  - Update payment account details for 'Enter your bank/building society account
+    details' screen
 
 ## [Release 090] - 2021-06-02
 
@@ -725,7 +727,9 @@ The format is based on [Keep a Changelog]
 - First release for student loan repayments private beta
 
 [unreleased]:
-  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-090...HEAD
+  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-091...HEAD
+[release 091]:
+  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-090...release-091
 [release 090]:
   https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-089...release-090
 [release 089]:
