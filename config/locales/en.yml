@@ -248,12 +248,13 @@ en:
       disciplinary_action: "Are you currently subject to disciplinary action?"
       nqt_in_academic_year_after_itt: "Have you started your first year as a newly qualified teacher?"
       formal_performance_action: "Are you currently subject to action for poor performance?"
-      postgraduate_itt_or_undergraduate_itt_course: "Did you do a postgraduate ITT course or an undergraduate ITT course?"
-      eligible_itt_subject: "Which subject did you do your %{ug_or_pg} ITT in?"
+      qualification: "Did you do a postgraduate ITT course or an undergraduate ITT course?"
+      eligible_itt_subject: "Which subject did you do your %{qualification} ITT in?"
       itt_postgraduate_hint: "Postgraduate ITT includes: university-led and school-led courses like the Postgraduate Certificate of Education (PGCE), Teach First, School Direct ITT and School Centred ITT (SCITT)."
       itt_undergraduate_hint: "Undergraduate ITT includes: Bachelor of Arts (BA) or Bachelor of Science (BSc) degrees."
+      itt_assessment_only_hint: ""
       teaching_subject_now: "Do you teach %{eligible_itt_subject} now?"
-      itt_academic_year: "In what academic year did you %{start_or_complete} your %{ug_or_pg} ITT?"
+      itt_academic_year: "In what academic year did you %{start_or_complete} your %{qualification} ITT?"
       postgraduate_masters_loan: "Did you take out a Postgraduate Master's Loan?"
       postgraduate_doctoral_loan: "Did you take out a Postgraduate Doctoral Loan?"
       national_insurance_number: "What is your National Insurance number?"
@@ -261,7 +262,7 @@ en:
       employed_as_supply_teacher: "Employed as a supply teacher?"
       nqt_in_academic_year_after_itt: "NQT the academic year after ITT"
     answers:
-      pgitt_or_ugitt_course:
+      qualification:
         postgraduate: "Postgraduate"
         undergraduate: "Undergraduate"
       eligible_itt_subject:

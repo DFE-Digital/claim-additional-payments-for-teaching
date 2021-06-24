@@ -19,7 +19,7 @@ module EarlyCareerPayments
       "employed-directly",
       "formal-performance-action",
       "disciplinary-action",
-      "postgraduate-itt-or-undergraduate-itt-course",
+      "qualification",
       "eligible-itt-subject",
       "teaching-subject-now",
       "itt-year",

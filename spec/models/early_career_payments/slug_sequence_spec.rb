@@ -125,7 +125,7 @@ RSpec.describe EarlyCareerPayments::SlugSequence do
           supply-teacher
           formal-performance-action
           disciplinary-action
-          postgraduate-itt-or-undergraduate-itt-course
+          qualification
           eligible-itt-subject
           teaching-subject-now
           itt-year
@@ -158,7 +158,7 @@ RSpec.describe EarlyCareerPayments::SlugSequence do
           supply-teacher
           formal-performance-action
           disciplinary-action
-          postgraduate-itt-or-undergraduate-itt-course
+          qualification
           eligible-itt-subject
           teaching-subject-now
           itt-year

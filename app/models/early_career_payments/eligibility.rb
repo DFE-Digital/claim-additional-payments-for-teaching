@@ -8,7 +8,7 @@ module EarlyCareerPayments
       :employed_directly,
       :subject_to_formal_performance_action,
       :subject_to_disciplinary_action,
-      :pgitt_or_ugitt_course,
+      :qualification,
       :eligible_itt_subject,
       :teaching_subject_now,
       :itt_academic_year,
@@ -18,14 +18,14 @@ module EarlyCareerPayments
     AMENDABLE_ATTRIBUTES = [].freeze
     ATTRIBUTE_DEPENDENCIES = {
       "employed_as_supply_teacher" => ["has_entire_term_contract", "employed_directly"],
-      "pgitt_or_ugitt_course" => ["eligible_itt_subject", "teaching_subject_now"],
+      "qualification" => ["eligible_itt_subject", "teaching_subject_now"],
       "eligible_itt_subject" => ["teaching_subject_now"],
       "has_student_loan" => ["postgraduate_masters_loan", "postgraduate_doctoral_loan"]
     }.freeze
 
     self.table_name = "early_career_payments_eligibilities"
 
-    enum pgitt_or_ugitt_course: {
+    enum qualification: {
       postgraduate: 0,
       undergraduate: 1
     }, _suffix: :itt_course
@@ -55,7 +55,7 @@ module EarlyCareerPayments
     validates :employed_directly, on: [:"employed-directly", :submit], inclusion: {in: [true, false], message: "Select yes if you are employed directly by your school"}, if: :employed_as_supply_teacher?
     validates :subject_to_formal_performance_action, on: [:"formal-performance-action", :submit], inclusion: {in: [true, false], message: "Select yes if you are subject to formal action for poor performance at work"}
     validates :subject_to_disciplinary_action, on: [:"disciplinary-action", :submit], inclusion: {in: [true, false], message: "Select yes if you are subject to disciplinary action"}
-    validates :pgitt_or_ugitt_course, on: [:"postgraduate-itt-or-undergraduate-itt-course", :submit], presence: {message: "Select postgraduate if you did a Postgraduate ITT course"}
+    validates :qualification, on: [:"qualification", :submit], presence: {message: "Select postgraduate if you did a Postgraduate ITT course"}
     validates :eligible_itt_subject, on: [:"eligible-itt-subject", :submit], presence: {message: "Select if you completed your initial teacher training in Chemistry, Foreign Languages, Mathematics, Physics or None of these subjects"}
     validates :teaching_subject_now, on: [:"teaching-subject-now", :submit], inclusion: {in: [true, false], message: "Select yes if you are currently teaching in your ITT subject now"}
     validates :itt_academic_year, on: [:"itt-year", :submit], presence: {message: "Select if you started your initial teacher training in 2018 - 2019, 2019 - 2020, 2020 - 2021 or None of these academic years"}

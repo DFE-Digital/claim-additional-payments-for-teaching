@@ -6,7 +6,7 @@ FactoryBot.define do
       employed_as_supply_teacher { false }
       subject_to_formal_performance_action { false }
       subject_to_disciplinary_action { false }
-      pgitt_or_ugitt_course { :postgraduate }
+      qualification { :postgraduate }
       eligible_itt_subject { :mathematics }
       teaching_subject_now { true }
       itt_academic_year { "2018_2019" }
