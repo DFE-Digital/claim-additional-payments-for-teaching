@@ -105,7 +105,7 @@ RSpec.feature "Teacher Early-Career Payments claims" do
 
     within(".govuk-list--bullet") do
       expect(page).to have_text("your National Insurance number")
-      ["bank account details", "teacher reference number", "QTS certificate", "student loan"].each do |bullet_point|
+      ["bank account details", "teacher reference number", "student loan"].each do |bullet_point|
         expect(page).to have_text bullet_point
       end
     end
