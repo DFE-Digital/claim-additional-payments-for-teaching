@@ -376,4 +376,10 @@ RSpec.describe StudentLoans::Eligibility, type: :model do
       expect(build(:student_loans_eligibility, student_loan_repayment_amount: nil)).not_to be_valid(:submit)
     end
   end
+
+  describe "#eligible_itt_subject" do
+    it "returns nil" do
+      expect(StudentLoans::Eligibility.new.eligible_itt_subject).to be(nil)
+    end
+  end
 end

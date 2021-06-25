@@ -104,6 +104,9 @@ module MathsAndPhysics
       end
     end
 
+    def eligible_itt_subject
+    end
+
     def initial_teacher_training_specialised_in_maths_or_physics?
       itt_subject_maths? || itt_subject_physics? || itt_specialism_physics?
     end

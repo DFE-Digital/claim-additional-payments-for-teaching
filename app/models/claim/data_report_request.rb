@@ -10,7 +10,9 @@ class Claim
       "Teacher reference number",
       "Full name",
       "Email",
-      "Date of birth"
+      "Date of birth",
+      "ITT subject",
+      "Policy name"
     ].freeze
 
     def initialize(claims)
@@ -25,7 +27,9 @@ class Claim
             claim.teacher_reference_number,
             claim.full_name,
             claim.email_address,
-            claim.date_of_birth
+            claim.date_of_birth,
+            claim.eligibility.eligible_itt_subject,
+            claim.policy
           ]
         end
       end

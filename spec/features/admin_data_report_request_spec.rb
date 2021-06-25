@@ -4,7 +4,11 @@ RSpec.feature "Data report request" do
   scenario "Service operator can download an external data report request file" do
     sign_in_as_service_operator
 
-    claims = create_list(:claim, 3, :submitted)
+    claims = [
+      create(:claim, :submitted, policy: StudentLoans),
+      create(:claim, :submitted, policy: MathsAndPhysics),
+      create(:claim, :submitted, policy: EarlyCareerPayments)
+    ]
 
     click_on "View claims"
 
@@ -15,9 +19,15 @@ RSpec.feature "Data report request" do
     csv = CSV.parse(body, headers: true)
 
     expect(csv.count).to eq(3)
-    expect(csv[2].fields("Claim reference")).to include(claims.last.reference)
-    expect(csv[2].fields("Full name")).to include(claims.last.full_name)
-    expect(csv[2].fields("Email")).to include(claims.last.email_address)
-    expect(csv[2].fields("Date of birth")).to include(claims.last.date_of_birth.to_s)
+
+    claims.each_with_index do |claim, index|
+      expect(csv[index].fields("Claim reference")).to include(claim.reference)
+      expect(csv[index].fields("Teacher reference number")).to include(claim.teacher_reference_number)
+      expect(csv[index].fields("Full name")).to include(claim.full_name)
+      expect(csv[index].fields("Email")).to include(claim.email_address)
+      expect(csv[index].fields("Date of birth")).to include(claim.date_of_birth.to_s)
+      expect(csv[index].fields("ITT subject")).to include(claim.eligibility.eligible_itt_subject)
+      expect(csv[index].fields("Policy name")).to include(claim.policy.to_s)
+    end
   end
 end
