@@ -26,7 +26,7 @@ module EarlyCareerPayments
         a << employed_directly if eligibility.employed_as_supply_teacher?
         a << subject_to_formal_performance_action
         a << subject_to_disciplinary_action
-        a << pgitt_or_ugitt_course
+        a << qualification
         a << eligible_itt_subject
         a << teaching_subject_now
         a << itt_academic_year
@@ -91,17 +91,17 @@ module EarlyCareerPayments
       ]
     end
 
-    def pgitt_or_ugitt_course
+    def qualification
       [
-        translate("early_career_payments.questions.postgraduate_itt_or_undergraduate_itt_course"),
-        translate("early_career_payments.answers.pgitt_or_ugitt_course.#{eligibility.pgitt_or_ugitt_course}"),
-        "postgraduate-itt-or-undergraduate-itt-course"
+        translate("early_career_payments.questions.qualification"),
+        translate("early_career_payments.answers.qualification.#{eligibility.qualification}"),
+        "qualification"
       ]
     end
 
     def eligible_itt_subject
       [
-        translate("early_career_payments.questions.eligible_itt_subject", ug_or_pg: eligibility.pgitt_or_ugitt_course),
+        translate("early_career_payments.questions.eligible_itt_subject", qualification: eligibility.qualification),
         translate("early_career_payments.answers.eligible_itt_subject.#{eligibility.eligible_itt_subject}"),
         "eligible-itt-subject"
       ]
@@ -119,8 +119,8 @@ module EarlyCareerPayments
       [
         translate(
           "early_career_payments.questions.itt_academic_year",
-          start_or_complete: (eligibility.pgitt_or_ugitt_course == "postgraduate" ? "start" : "complete"),
-          ug_or_pg: eligibility.pgitt_or_ugitt_course
+          start_or_complete: (eligibility.qualification == "postgraduate" ? "start" : "complete"),
+          qualification: eligibility.qualification
         ),
         eligibility.itt_academic_year.dasherize.gsub("-", " - "),
         "itt-year"

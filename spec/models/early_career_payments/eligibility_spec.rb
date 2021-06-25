@@ -11,16 +11,18 @@ RSpec.describe EarlyCareerPayments::Eligibility, type: :model do
     end
   end
 
-  describe "pgitt_or_ugitt_course attribute" do
+  describe "qualification attribute" do
     it "rejects invalid values" do
-      expect { EarlyCareerPayments::Eligibility.new(pgitt_or_ugitt_course: "non-existance") }.to raise_error(ArgumentError)
+      expect { EarlyCareerPayments::Eligibility.new(qualification: "non-existance") }.to raise_error(ArgumentError)
     end
 
     it "has handily named boolean methods for the possible values" do
-      eligibility = EarlyCareerPayments::Eligibility.new(pgitt_or_ugitt_course: "postgraduate")
+      eligibility = EarlyCareerPayments::Eligibility.new(qualification: "postgraduate")
 
       expect(eligibility.postgraduate_itt_course?).to eq true
       expect(eligibility.undergraduate_itt_course?).to eq false
+      expect(eligibility.assessment_only_itt_course?).to eq false
+      expect(eligibility.overseas_recognition_itt_course?).to eq false
     end
   end
 
@@ -379,27 +381,27 @@ RSpec.describe EarlyCareerPayments::Eligibility, type: :model do
         employed_as_supply_teacher: true,
         has_entire_term_contract: false,
         employed_directly: false,
-        pgitt_or_ugitt_course: :undergraduate,
+        qualification: :undergraduate,
         eligible_itt_subject: :none_of_the_above,
         teaching_subject_now: false
       )
     end
 
-    it "resets 'eligible_itt_subject' when value of 'pgitt_or_ugitt_course' changes" do
-      eligibility.pgitt_or_ugitt_course = :undergraduate
+    it "resets 'eligible_itt_subject' when value of 'qualification' changes" do
+      eligibility.qualification = :undergraduate
       expect { eligibility.reset_dependent_answers }.not_to change { eligibility.attributes }
 
-      eligibility.pgitt_or_ugitt_course = :postgraduate
+      eligibility.qualification = :postgraduate
       expect { eligibility.reset_dependent_answers }
         .to change { eligibility.eligible_itt_subject }
         .from("none_of_the_above").to(nil)
     end
 
-    it "resets 'teaching_subject_now' when value of 'pgitt_or_ugitt_course' changes" do
-      eligibility.pgitt_or_ugitt_course = :undergraduate
+    it "resets 'teaching_subject_now' when value of 'qualification' changes" do
+      eligibility.qualification = :undergraduate
       expect { eligibility.reset_dependent_answers }.not_to change { eligibility.attributes }
 
-      eligibility.pgitt_or_ugitt_course = :postgraduate
+      eligibility.qualification = :postgraduate
       expect { eligibility.reset_dependent_answers }
         .to change { eligibility.teaching_subject_now }
         .from(false).to(nil)
@@ -499,9 +501,9 @@ RSpec.describe EarlyCareerPayments::Eligibility, type: :model do
       end
     end
 
-    context "when saving in the 'pgitt_or_ugitt_course' context" do
-      it "is not valid without a value for 'pgitt_or_ugitt_course'" do
-        expect(EarlyCareerPayments::Eligibility.new).not_to be_valid(:"postgraduate-itt-or-undergraduate-itt-course")
+    context "when saving in the 'qualification' context" do
+      it "is not valid without a value for 'qualification'" do
+        expect(EarlyCareerPayments::Eligibility.new).not_to be_valid(:qualification)
       end
     end
 
@@ -545,7 +547,7 @@ RSpec.describe EarlyCareerPayments::Eligibility, type: :model do
           employed_as_supply_teacher: true,
           has_entire_term_contract: false,
           employed_directly: false,
-          pgitt_or_ugitt_course: :undergraduate,
+          qualification: :undergraduate,
           eligible_itt_subject: :none_of_the_above,
           teaching_subject_now: false,
           postgraduate_masters_loan: nil
@@ -581,7 +583,7 @@ RSpec.describe EarlyCareerPayments::Eligibility, type: :model do
           employed_as_supply_teacher: true,
           has_entire_term_contract: false,
           employed_directly: false,
-          pgitt_or_ugitt_course: :undergraduate,
+          qualification: :undergraduate,
           eligible_itt_subject: :none_of_the_above,
           teaching_subject_now: false,
           postgraduate_doctoral_loan: nil

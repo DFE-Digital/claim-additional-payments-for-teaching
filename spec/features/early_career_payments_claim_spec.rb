@@ -51,15 +51,15 @@ RSpec.feature "Teacher Early-Career Payments claims" do
     expect(claim.eligibility.reload.subject_to_disciplinary_action).to eql false
 
     # [PAGE 09] - Did you do a postgraduate ITT course or undergraduate ITT course
-    expect(page).to have_text(I18n.t("early_career_payments.questions.postgraduate_itt_or_undergraduate_itt_course"))
+    expect(page).to have_text(I18n.t("early_career_payments.questions.qualification"))
 
     choose "Postgraduate"
     click_on "Continue"
 
-    expect(claim.eligibility.reload.pgitt_or_ugitt_course).to eq "postgraduate"
+    expect(claim.eligibility.reload.qualification).to eq "postgraduate"
 
     # [PAGE 10] - Which subject did you do your postgraduate ITT in
-    expect(page).to have_text(I18n.t("early_career_payments.questions.eligible_itt_subject", ug_or_pg: claim.eligibility.reload.pgitt_or_ugitt_course))
+    expect(page).to have_text(I18n.t("early_career_payments.questions.eligible_itt_subject", qualification: claim.eligibility.reload.qualification))
 
     choose "Mathematics"
     click_on "Continue"
@@ -76,7 +76,7 @@ RSpec.feature "Teacher Early-Career Payments claims" do
     expect(claim.eligibility.reload.teaching_subject_now).to eql true
 
     # [PAGE 13] - In what academic year did you start your undergraduate ITT
-    expect(page).to have_text(I18n.t("early_career_payments.questions.itt_academic_year", start_or_complete: "start", ug_or_pg: claim.eligibility.pgitt_or_ugitt_course))
+    expect(page).to have_text(I18n.t("early_career_payments.questions.itt_academic_year", start_or_complete: "start", qualification: claim.eligibility.qualification))
 
     choose "2018 - 2019"
     click_on "Continue"
@@ -349,5 +349,37 @@ RSpec.feature "Teacher Early-Career Payments claims" do
 
     choose "No"
     click_on "Continue"
+  end
+
+  context "Route into teaching" do
+    let(:claim) do
+      claim = start_early_career_payments_claim
+      claim.eligibility.update!(attributes_for(:early_career_payments_eligibility, :eligible))
+      claim
+    end
+
+    scenario "when Assessment only" do
+      visit claim_path(claim.policy.routing_name, "qualification")
+
+      # What route into teaching did you take?
+      expect(page).to have_text(I18n.t("early_career_payments.questions.qualification"))
+
+      choose "Assessment only"
+      click_on "Continue"
+
+      expect(claim.eligibility.reload.qualification).to eq "assessment_only"
+    end
+
+    scenario "when Overseas recognition" do
+      visit claim_path(claim.policy.routing_name, "qualification")
+
+      # What route into teaching did you take?
+      expect(page).to have_text(I18n.t("early_career_payments.questions.qualification"))
+
+      choose "Overseas recognition"
+      click_on "Continue"
+
+      expect(claim.eligibility.reload.qualification).to eq "overseas_recognition"
+    end
   end
 end

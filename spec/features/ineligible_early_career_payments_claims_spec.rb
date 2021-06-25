@@ -170,15 +170,15 @@ RSpec.feature "Ineligible Teacher Early-Career Payments claims" do
     click_on "Continue"
 
     # [PAGE 09] - Did you do a postgraduate ITT course or undergraduate ITT course
-    expect(page).to have_text(I18n.t("early_career_payments.questions.postgraduate_itt_or_undergraduate_itt_course"))
+    expect(page).to have_text(I18n.t("early_career_payments.questions.qualification"))
 
     choose "Undergraduate"
     click_on "Continue"
 
-    expect(claim.eligibility.reload.pgitt_or_ugitt_course).to eq "undergraduate"
+    expect(claim.eligibility.reload.qualification).to eq "undergraduate"
 
     # [PAGE 10] - Which subject did you do your undergraduate ITT in
-    expect(page).to have_text(I18n.t("early_career_payments.questions.eligible_itt_subject", ug_or_pg: claim.eligibility.pgitt_or_ugitt_course))
+    expect(page).to have_text(I18n.t("early_career_payments.questions.eligible_itt_subject", qualification: claim.eligibility.qualification))
 
     choose "None of the above"
     click_on "Continue"
@@ -218,15 +218,15 @@ RSpec.feature "Ineligible Teacher Early-Career Payments claims" do
     click_on "Continue"
 
     # [PAGE 09] - Did you do a postgraduate ITT course or undergraduate ITT course
-    expect(page).to have_text(I18n.t("early_career_payments.questions.postgraduate_itt_or_undergraduate_itt_course"))
+    expect(page).to have_text(I18n.t("early_career_payments.questions.qualification"))
 
     choose "Undergraduate"
     click_on "Continue"
 
-    expect(claim.eligibility.reload.pgitt_or_ugitt_course).to eq "undergraduate"
+    expect(claim.eligibility.reload.qualification).to eq "undergraduate"
 
     # [PAGE 10] - Which subject did you do your undergraduate ITT in
-    expect(page).to have_text(I18n.t("early_career_payments.questions.eligible_itt_subject", ug_or_pg: claim.eligibility.pgitt_or_ugitt_course))
+    expect(page).to have_text(I18n.t("early_career_payments.questions.eligible_itt_subject", qualification: claim.eligibility.qualification))
 
     choose "Foreign languages"
     click_on "Continue"
@@ -274,15 +274,15 @@ RSpec.feature "Ineligible Teacher Early-Career Payments claims" do
     click_on "Continue"
 
     # [PAGE 09] - Did you do a postgraduate ITT course or undergraduate ITT course
-    expect(page).to have_text(I18n.t("early_career_payments.questions.postgraduate_itt_or_undergraduate_itt_course"))
+    expect(page).to have_text(I18n.t("early_career_payments.questions.qualification"))
 
     choose "Undergraduate"
     click_on "Continue"
 
-    expect(claim.eligibility.reload.pgitt_or_ugitt_course).to eq "undergraduate"
+    expect(claim.eligibility.reload.qualification).to eq "undergraduate"
 
     # [PAGE 10] - Which subject did you do your undergraduate ITT in
-    expect(page).to have_text(I18n.t("early_career_payments.questions.eligible_itt_subject", ug_or_pg: claim.eligibility.pgitt_or_ugitt_course))
+    expect(page).to have_text(I18n.t("early_career_payments.questions.eligible_itt_subject", qualification: claim.eligibility.qualification))
 
     choose "Foreign languages"
     click_on "Continue"
@@ -298,7 +298,7 @@ RSpec.feature "Ineligible Teacher Early-Career Payments claims" do
     expect(claim.eligibility.reload.teaching_subject_now).to eql true
 
     # [PAGE 13] - In what academic year did you start your undergraduate ITT
-    expect(page).to have_text(I18n.t("early_career_payments.questions.itt_academic_year", start_or_complete: "complete", ug_or_pg: claim.eligibility.pgitt_or_ugitt_course))
+    expect(page).to have_text(I18n.t("early_career_payments.questions.itt_academic_year", start_or_complete: "complete", qualification: claim.eligibility.qualification))
 
     choose "None of the above"
     click_on "Continue"
@@ -349,15 +349,15 @@ RSpec.feature "Ineligible Teacher Early-Career Payments claims" do
       click_on "Continue"
 
       # [PAGE 09] - Did you do a postgraduate ITT course or undergraduate ITT course
-      expect(page).to have_text(I18n.t("early_career_payments.questions.postgraduate_itt_or_undergraduate_itt_course"))
+      expect(page).to have_text(I18n.t("early_career_payments.questions.qualification"))
 
       choose "Undergraduate"
       click_on "Continue"
 
-      expect(claim.eligibility.reload.pgitt_or_ugitt_course).to eq "undergraduate"
+      expect(claim.eligibility.reload.qualification).to eq "undergraduate"
 
       # [PAGE 10] - Which subject did you do your undergraduate ITT in
-      expect(page).to have_text(I18n.t("early_career_payments.questions.eligible_itt_subject", ug_or_pg: claim.eligibility.pgitt_or_ugitt_course))
+      expect(page).to have_text(I18n.t("early_career_payments.questions.eligible_itt_subject", qualification: claim.eligibility.qualification))
 
       choose scenario[:itt_subject]
       click_on "Continue"
@@ -373,7 +373,7 @@ RSpec.feature "Ineligible Teacher Early-Career Payments claims" do
       expect(claim.eligibility.reload.teaching_subject_now).to eql true
 
       # [PAGE 13] - In what academic year did you start your undergraduate ITT
-      expect(page).to have_text(I18n.t("early_career_payments.questions.itt_academic_year", start_or_complete: "complete", ug_or_pg: claim.eligibility.pgitt_or_ugitt_course))
+      expect(page).to have_text(I18n.t("early_career_payments.questions.itt_academic_year", start_or_complete: "complete", qualification: claim.eligibility.qualification))
 
       choose scenario[:itt_academic_year]
       click_on "Continue"

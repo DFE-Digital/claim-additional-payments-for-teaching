@@ -8,7 +8,7 @@ RSpec.describe EarlyCareerPayments::EligibilityAnswersPresenter, type: :model do
       employed_as_supply_teacher: false,
       subject_to_formal_performance_action: false,
       subject_to_disciplinary_action: false,
-      pgitt_or_ugitt_course: :postgraduate,
+      qualification: :postgraduate,
       eligible_itt_subject: :chemistry,
       teaching_subject_now: true,
       itt_academic_year: "2019_2020"
@@ -27,12 +27,12 @@ RSpec.describe EarlyCareerPayments::EligibilityAnswersPresenter, type: :model do
       [I18n.t("early_career_payments.questions.formal_performance_action"), "No", "formal-performance-action"],
       [I18n.t("early_career_payments.questions.disciplinary_action"), "No", "disciplinary-action"],
       [
-        I18n.t("early_career_payments.questions.postgraduate_itt_or_undergraduate_itt_course"),
+        I18n.t("early_career_payments.questions.qualification"),
         "Postgraduate",
-        "postgraduate-itt-or-undergraduate-itt-course"
+        "qualification"
       ],
       [
-        I18n.t("early_career_payments.questions.eligible_itt_subject", ug_or_pg: eligibility.pgitt_or_ugitt_course),
+        I18n.t("early_career_payments.questions.eligible_itt_subject", qualification: eligibility.qualification),
         "Chemistry",
         "eligible-itt-subject"
       ],
@@ -42,7 +42,7 @@ RSpec.describe EarlyCareerPayments::EligibilityAnswersPresenter, type: :model do
         "teaching-subject-now"
       ],
       [
-        I18n.t("early_career_payments.questions.itt_academic_year", start_or_complete: :start, ug_or_pg: eligibility.pgitt_or_ugitt_course),
+        I18n.t("early_career_payments.questions.itt_academic_year", start_or_complete: :start, qualification: eligibility.qualification),
         "2019 - 2020",
         "itt-year"
       ]
@@ -61,7 +61,7 @@ RSpec.describe EarlyCareerPayments::EligibilityAnswersPresenter, type: :model do
         employed_directly: true,
         subject_to_formal_performance_action: false,
         subject_to_disciplinary_action: false,
-        pgitt_or_ugitt_course: :undergraduate,
+        qualification: :undergraduate,
         eligible_itt_subject: :foreign_languages,
         teaching_subject_now: true,
         itt_academic_year: "2018_2019"
@@ -78,12 +78,12 @@ RSpec.describe EarlyCareerPayments::EligibilityAnswersPresenter, type: :model do
         [I18n.t("early_career_payments.questions.formal_performance_action"), "No", "formal-performance-action"],
         [I18n.t("early_career_payments.questions.disciplinary_action"), "No", "disciplinary-action"],
         [
-          I18n.t("early_career_payments.questions.postgraduate_itt_or_undergraduate_itt_course"),
+          I18n.t("early_career_payments.questions.qualification"),
           "Undergraduate",
-          "postgraduate-itt-or-undergraduate-itt-course"
+          "qualification"
         ],
         [
-          I18n.t("early_career_payments.questions.eligible_itt_subject", ug_or_pg: eligibility.pgitt_or_ugitt_course),
+          I18n.t("early_career_payments.questions.eligible_itt_subject", qualification: eligibility.qualification),
           "Foreign languages",
           "eligible-itt-subject"
         ],
@@ -96,7 +96,7 @@ RSpec.describe EarlyCareerPayments::EligibilityAnswersPresenter, type: :model do
           I18n.t(
             "early_career_payments.questions.itt_academic_year",
             start_or_complete: :complete,
-            ug_or_pg: eligibility.pgitt_or_ugitt_course
+            qualification: eligibility.qualification
           ),
           "2018 - 2019",
           "itt-year"
