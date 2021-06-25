@@ -6,7 +6,7 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
-- ECP Policy
+- ECP policy
   - Update content for ECP Start Page
   - Update qualification question 'Did you do a postgraduate ITT course or an
     undergraduate ITT course?', add new answer options for 'Assessment only' and
@@ -17,6 +17,8 @@ The format is based on [Keep a Changelog]
     Recognition
   - Include ECP data as part of the 'DQT download' feature and add additional
     columns on the Claim Admin site
+  - Add claim calculation to 'You are eligible for an early-career payment'
+    screen
 
 ## [Release 091] - 2021-06-24
 

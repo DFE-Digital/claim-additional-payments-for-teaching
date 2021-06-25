@@ -3,7 +3,7 @@ require "rails_helper"
 RSpec.feature "Eligible later Teacher Early-Career Payments claims" do
   include ActionView::Helpers::NumberHelper
 
-  context "with eligible claim" do
+  context "with eligible later claim" do
     let(:claim) do
       claim = start_early_career_payments_claim
       claim.eligibility.update!(attributes_for(:early_career_payments_eligibility, :eligible))
