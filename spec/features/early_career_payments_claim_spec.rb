@@ -60,6 +60,7 @@ RSpec.feature "Teacher Early-Career Payments claims" do
 
     # [PAGE 10] - Which subject did you do your postgraduate ITT in
     expect(page).to have_text(I18n.t("early_career_payments.questions.eligible_itt_subject", qualification: claim.eligibility.qualification_name))
+    expect(page).to have_text(I18n.t("early_career_payments.questions.qualification.hint.#{claim.eligibility.qualification}"))
 
     choose "Mathematics"
     click_on "Continue"

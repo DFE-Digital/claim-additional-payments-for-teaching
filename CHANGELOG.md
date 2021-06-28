@@ -12,6 +12,8 @@ The format is based on [Keep a Changelog]
     undergraduate ITT course?', add new answer options for 'Assessment only' and
     'Overseas recognition'
   - Update content for 'You are eligible for an early-career payment' screen
+  - Update `Which subject did you do your qualification in?` screen for
+    Assessment Only
 
 ## [Release 091] - 2021-06-24
 
