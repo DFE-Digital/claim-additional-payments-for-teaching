@@ -146,4 +146,17 @@ RSpec.describe School, type: :model do
       expect(school.secondary_or_equivalent?).to eq false
     end
   end
+
+  describe "#eligible_for_early_career_payments_as_uplift?" do
+    it "delegates to SchoolEligibility#eligible_uplift?" do
+      class_double = class_double(EarlyCareerPayments::SchoolEligibility).as_stubbed_const
+      instance_double = instance_double(EarlyCareerPayments::SchoolEligibility)
+      allow(class_double).to receive(:new).and_return(instance_double)
+      allow(instance_double).to receive(:eligible_uplift?)
+
+      School.new.eligible_for_early_career_payments_as_uplift?
+
+      expect(instance_double).to have_received(:eligible_uplift?)
+    end
+  end
 end

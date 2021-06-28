@@ -125,10 +125,19 @@ module EarlyCareerPayments
     end
 
     def award_amount
-      award_amounts[:base]
+      return BigDecimal("0.00") if current_school.nil?
+
+      current_school.eligible_for_early_career_payments_as_uplift? ? award_amounts[:uplift] : award_amounts[:base]
     end
 
     def award_amounts
+      if without_cohort?
+        return {
+          base: BigDecimal("0.00"),
+          uplift: BigDecimal("0.00")
+        }
+      end
+
       award_amounts = {
         mathematics: {
           "2018_2019": {
@@ -190,9 +199,13 @@ module EarlyCareerPayments
       end
     end
 
+    def without_cohort?
+      [eligible_itt_subject, itt_academic_year].any?(nil)
+    end
+
     def ineligible_cohort?
       return true if itt_academic_year == "none_of_the_above"
-      return false if [eligible_itt_subject, itt_academic_year].any?(nil)
+      return false if without_cohort?
 
       eligible_cohort = find_cohort(
         cohorts: {

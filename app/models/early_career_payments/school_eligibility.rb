@@ -374,7 +374,7 @@ module EarlyCareerPayments
         @school.secondary_or_equivalent?
     end
 
-    def in_uplift_area?
+    def eligible_uplift?
       eligible_current_school? &&
         uplift_local_authority_district?
     end

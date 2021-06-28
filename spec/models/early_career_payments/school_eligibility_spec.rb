@@ -153,7 +153,7 @@ RSpec.describe EarlyCareerPayments::SchoolEligibility do
     end
   end
 
-  describe "#in_uplift_area?" do
+  describe "#eligible_uplift?" do
     it "returns false when not an 'eligible_current_school?'" do
       ineligible_school = School.new(
         close_date: Date.parse("2012-08-31"),
@@ -163,7 +163,7 @@ RSpec.describe EarlyCareerPayments::SchoolEligibility do
         local_authority_district: local_authority_districts(:camden)
       )
 
-      expect(EarlyCareerPayments::SchoolEligibility.new(ineligible_school).in_uplift_area?).to eql false
+      expect(EarlyCareerPayments::SchoolEligibility.new(ineligible_school).eligible_uplift?).to eql false
     end
 
     it "returns false when the school is not in an uplifted local authority" do
@@ -175,7 +175,7 @@ RSpec.describe EarlyCareerPayments::SchoolEligibility do
         local_authority_district: local_authority_districts(:camden)
       )
 
-      expect(EarlyCareerPayments::SchoolEligibility.new(eligible_school_not_in_uplift_area).in_uplift_area?).to eql false
+      expect(EarlyCareerPayments::SchoolEligibility.new(eligible_school_not_in_uplift_area).eligible_uplift?).to eql false
     end
 
     it "returns true when the school is in an uplifted local authority" do
@@ -187,7 +187,7 @@ RSpec.describe EarlyCareerPayments::SchoolEligibility do
         local_authority_district: local_authority_districts(:barnsley)
       )
 
-      expect(EarlyCareerPayments::SchoolEligibility.new(uplift_school).in_uplift_area?).to be true
+      expect(EarlyCareerPayments::SchoolEligibility.new(uplift_school).eligible_uplift?).to be true
     end
   end
 end
