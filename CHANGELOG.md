@@ -15,6 +15,8 @@ The format is based on [Keep a Changelog]
   - Update `Which subject did you do your qualification in?` screen for
   - Update `Which subject did you do your qualification in?` screen for Overseas
     Recognition
+  - Include ECP data as part of the 'DQT download' feature and add additional
+    columns on the Claim Admin site
 
 ## [Release 091] - 2021-06-24
 

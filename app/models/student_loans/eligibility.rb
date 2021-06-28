@@ -94,6 +94,9 @@ module StudentLoans
       student_loan_repayment_amount
     end
 
+    def eligible_itt_subject
+    end
+
     def reset_dependent_answers
       ATTRIBUTE_DEPENDENCIES.each do |attribute_name, dependent_attribute_names|
         dependent_attribute_names.each do |dependent_attribute_name|

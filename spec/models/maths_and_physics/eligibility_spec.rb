@@ -334,4 +334,10 @@ RSpec.describe MathsAndPhysics::Eligibility, type: :model do
       expect(build(:maths_and_physics_eligibility, :eligible, subject_to_formal_performance_action: false)).to be_valid(:submit)
     end
   end
+
+  describe "#eligible_itt_subject" do
+    it "returns nil" do
+      expect(StudentLoans::Eligibility.new.eligible_itt_subject).to be(nil)
+    end
+  end
 end
