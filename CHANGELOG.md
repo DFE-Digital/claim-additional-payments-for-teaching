@@ -13,7 +13,8 @@ The format is based on [Keep a Changelog]
     'Overseas recognition'
   - Update content for 'You are eligible for an early-career payment' screen
   - Update `Which subject did you do your qualification in?` screen for
-    Assessment Only
+  - Update `Which subject did you do your qualification in?` screen for Overseas
+    Recognition
 
 ## [Release 091] - 2021-06-24
 
