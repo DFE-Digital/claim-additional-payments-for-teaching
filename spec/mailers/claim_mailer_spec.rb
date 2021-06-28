@@ -133,7 +133,7 @@ RSpec.describe ClaimMailer, type: :mailer do
   context "with an EarlyCareerPayments claim" do
     describe "#ecp_email_verification" do
       let(:claim) { build(:claim, policy: EarlyCareerPayments) }
-      let(:mail) { ClaimMailer.ecp_email_verification(claim, one_time_password) }
+      let(:mail) { ClaimMailer.email_verification(claim, one_time_password) }
       let(:one_time_password) { 123124 }
 
       it "mentions the one time password and its duration of validity" do

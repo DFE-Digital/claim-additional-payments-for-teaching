@@ -118,15 +118,15 @@ class ClaimsController < BasePublicController
   end
 
   def generate_one_time_password
-    if params[:slug] == "email-address" && current_claim.has_ecp_policy?
+    if params[:slug] == "email-address"
       one_time_password = generate_otp
-      ClaimMailer.ecp_email_verification(current_claim, one_time_password).deliver_now
+      ClaimMailer.email_verification(current_claim, one_time_password).deliver_now
       session[:sent_one_time_password_at] = Time.now
     end
   end
 
   def store_in_session_one_time_password
-    if params[:slug] == "email-verification" && current_claim.has_ecp_policy?
+    if params[:slug] == "email-verification"
       current_claim.update_attributes(sent_one_time_password_at: session[:sent_one_time_password_at])
     end
   end
