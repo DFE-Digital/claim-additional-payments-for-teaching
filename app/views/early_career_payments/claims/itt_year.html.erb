@@ -1,6 +1,4 @@
-<% qualification = current_claim.eligibility.qualification %>
-<% start_or_complete = current_claim.eligibility.qualification == "undergraduate_itt" ? "complete" : "start" %>
-<% content_for(:page_title, page_title(t("early_career_payments.questions.itt_academic_year", start_or_complete: start_or_complete, qualification: qualification), policy: current_policy_routing_name, show_error: current_claim.errors.any?)) %>
+<% content_for(:page_title, page_title(t("early_career_payments.questions.itt_academic_year.qualification.#{current_claim.eligibility.qualification}"), policy: current_policy_routing_name, show_error: current_claim.errors.any?)) %>
 <% path_for_form = current_claim.persisted? ? claim_path(current_policy_routing_name) : claims_path(current_policy_routing_name) %>
 <% shared_view_css_size = current_claim.policy == EarlyCareerPayments ? "l" : "xl" %>
 
@@ -17,7 +15,7 @@
 
             <legend class="govuk-fieldset__legend govuk-fieldset__legend--<%= shared_view_css_size %>">
               <h1 class="govuk-fieldset__heading">
-                <%= t("early_career_payments.questions.itt_academic_year", start_or_complete: start_or_complete, qualification: qualification ) %>
+                <%= t("early_career_payments.questions.itt_academic_year.qualification.#{current_claim.eligibility.qualification}") %>
               </h1>
             </legend>
 
@@ -52,24 +50,25 @@
         <% end %>
         <br/>
         <br/>
-        <details class="govuk-details" data-module="govuk-details">
-          <summary class="govuk-details__summary">
-            <span class="govuk-details__summary-text">
-              If you did a part time ITT
-            </span>
-          </summary>
-          <div class="govuk-details__text">
-            <p class="govuk-body">
-              You might still be eligible to claim if your ITT coincided with one of the
-              academic years stated, even if it didn’t start or complete in one of those
-              years.
-            </p>
-          </div>
-        </details>
+        <% if %w[undergraduate_itt postgraduate_itt].include? current_claim.eligibility.qualification %>
+          <details class="govuk-details" data-module="govuk-details">
+            <summary class="govuk-details__summary">
+              <span class="govuk-details__summary-text">
+                If you did a part time ITT
+              </span>
+            </summary>
+            <div class="govuk-details__text">
+              <p class="govuk-body">
+                You might still be eligible to claim if your ITT coincided with one of the
+                academic years stated, even if it didn’t start or complete in one of those
+                years.
+              </p>
+            </div>
+          </details>
+        <% end %>
       <% end %>
 
       <%= form.submit "Continue", class: "govuk-button", data: {module: "govuk-button"} %>
     <% end %>
-
   </div>
 </div>
