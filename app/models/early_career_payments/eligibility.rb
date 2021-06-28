@@ -26,11 +26,11 @@ module EarlyCareerPayments
     self.table_name = "early_career_payments_eligibilities"
 
     enum qualification: {
-      postgraduate: 0,
-      undergraduate: 1,
+      postgraduate_itt: 0,
+      undergraduate_itt: 1,
       assessment_only: 2,
       overseas_recognition: 3
-    }, _suffix: :itt_course
+    }
 
     enum eligible_itt_subject: {
       chemistry: 0,
@@ -57,7 +57,7 @@ module EarlyCareerPayments
     validates :employed_directly, on: [:"employed-directly", :submit], inclusion: {in: [true, false], message: "Select yes if you are employed directly by your school"}, if: :employed_as_supply_teacher?
     validates :subject_to_formal_performance_action, on: [:"formal-performance-action", :submit], inclusion: {in: [true, false], message: "Select yes if you are subject to formal action for poor performance at work"}
     validates :subject_to_disciplinary_action, on: [:"disciplinary-action", :submit], inclusion: {in: [true, false], message: "Select yes if you are subject to disciplinary action"}
-    validates :qualification, on: [:qualification, :submit], presence: {message: "Select postgraduate if you did a Postgraduate ITT course"}
+    validates :qualification, on: [:qualification, :submit], presence: {message: "Select postgraduate ITT if you did a Postgraduate ITT course"}
     validates :eligible_itt_subject, on: [:"eligible-itt-subject", :submit], presence: {message: "Select if you completed your initial teacher training in Chemistry, Foreign Languages, Mathematics, Physics or None of these subjects"}
     validates :teaching_subject_now, on: [:"teaching-subject-now", :submit], inclusion: {in: [true, false], message: "Select yes if you are currently teaching in your ITT subject now"}
     validates :itt_academic_year, on: [:"itt-year", :submit], presence: {message: "Select if you started your initial teacher training in 2018 - 2019, 2019 - 2020, 2020 - 2021 or None of these academic years"}
@@ -68,6 +68,12 @@ module EarlyCareerPayments
 
     def policy
       EarlyCareerPayments
+    end
+
+    def qualification_name
+      return qualification.gsub("_itt", " ITT") if qualification.split("_").last == "itt"
+
+      qualification.humanize.downcase
     end
 
     def eligible_later?

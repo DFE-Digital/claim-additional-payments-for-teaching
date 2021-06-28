@@ -51,15 +51,15 @@ RSpec.feature "Teacher Early-Career Payments claims" do
     expect(claim.eligibility.reload.subject_to_disciplinary_action).to eql false
 
     # [PAGE 09] - Did you do a postgraduate ITT course or undergraduate ITT course
-    expect(page).to have_text(I18n.t("early_career_payments.questions.qualification"))
+    expect(page).to have_text(I18n.t("early_career_payments.questions.qualification.heading"))
 
-    choose "Postgraduate"
+    choose "Postgraduate ITT"
     click_on "Continue"
 
-    expect(claim.eligibility.reload.qualification).to eq "postgraduate"
+    expect(claim.eligibility.reload.qualification).to eq "postgraduate_itt"
 
     # [PAGE 10] - Which subject did you do your postgraduate ITT in
-    expect(page).to have_text(I18n.t("early_career_payments.questions.eligible_itt_subject", qualification: claim.eligibility.reload.qualification))
+    expect(page).to have_text(I18n.t("early_career_payments.questions.eligible_itt_subject", qualification: claim.eligibility.qualification_name))
 
     choose "Mathematics"
     click_on "Continue"
@@ -362,7 +362,7 @@ RSpec.feature "Teacher Early-Career Payments claims" do
       visit claim_path(claim.policy.routing_name, "qualification")
 
       # What route into teaching did you take?
-      expect(page).to have_text(I18n.t("early_career_payments.questions.qualification"))
+      expect(page).to have_text(I18n.t("early_career_payments.questions.qualification.heading"))
 
       choose "Assessment only"
       click_on "Continue"
@@ -374,7 +374,7 @@ RSpec.feature "Teacher Early-Career Payments claims" do
       visit claim_path(claim.policy.routing_name, "qualification")
 
       # What route into teaching did you take?
-      expect(page).to have_text(I18n.t("early_career_payments.questions.qualification"))
+      expect(page).to have_text(I18n.t("early_career_payments.questions.qualification.heading"))
 
       choose "Overseas recognition"
       click_on "Continue"
