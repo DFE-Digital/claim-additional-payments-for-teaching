@@ -17,16 +17,34 @@ RSpec.describe EarlyCareerPayments::Eligibility, type: :model do
     end
 
     it "has handily named boolean methods for the possible values" do
-      eligibility = EarlyCareerPayments::Eligibility.new(qualification: "postgraduate")
+      eligibility = EarlyCareerPayments::Eligibility.new(qualification: "postgraduate_itt")
 
-      expect(eligibility.postgraduate_itt_course?).to eq true
-      expect(eligibility.undergraduate_itt_course?).to eq false
-      expect(eligibility.assessment_only_itt_course?).to eq false
-      expect(eligibility.overseas_recognition_itt_course?).to eq false
+      expect(eligibility.postgraduate_itt?).to eq true
+      expect(eligibility.undergraduate_itt?).to eq false
+      expect(eligibility.assessment_only?).to eq false
+      expect(eligibility.overseas_recognition?).to eq false
     end
   end
 
-  describe "eligible_itt_subject" do
+  describe "#qualification_name" do
+    context "when qualificaton is 'postgraduate_itt' or 'undergraduate_itt'" do
+      eligibility = EarlyCareerPayments::Eligibility.new(qualification: "postgraduate_itt")
+
+      it "returns the qualification in the format '<qualification> ITT'" do
+        expect(eligibility.qualification_name).to eq "postgraduate ITT"
+      end
+    end
+
+    context "when qualification is 'assessment_only' or 'overseas_recognition'" do
+      eligibility = EarlyCareerPayments::Eligibility.new(qualification: "assessment_only")
+
+      it "returns the qualification in a humanized for that is lowercase" do
+        expect(eligibility.qualification_name).to eq "assessment only"
+      end
+    end
+  end
+
+  describe "eligible_itt_subject attribute" do
     it "rejects invalid values" do
       expect { EarlyCareerPayments::Eligibility.new(eligible_itt_subject: "not-in-list-of-options") }.to raise_error(ArgumentError)
     end
@@ -381,27 +399,27 @@ RSpec.describe EarlyCareerPayments::Eligibility, type: :model do
         employed_as_supply_teacher: true,
         has_entire_term_contract: false,
         employed_directly: false,
-        qualification: :undergraduate,
+        qualification: :undergraduate_itt,
         eligible_itt_subject: :none_of_the_above,
         teaching_subject_now: false
       )
     end
 
     it "resets 'eligible_itt_subject' when value of 'qualification' changes" do
-      eligibility.qualification = :undergraduate
+      eligibility.qualification = :undergraduate_itt
       expect { eligibility.reset_dependent_answers }.not_to change { eligibility.attributes }
 
-      eligibility.qualification = :postgraduate
+      eligibility.qualification = :postgraduate_itt
       expect { eligibility.reset_dependent_answers }
         .to change { eligibility.eligible_itt_subject }
         .from("none_of_the_above").to(nil)
     end
 
     it "resets 'teaching_subject_now' when value of 'qualification' changes" do
-      eligibility.qualification = :undergraduate
+      eligibility.qualification = :undergraduate_itt
       expect { eligibility.reset_dependent_answers }.not_to change { eligibility.attributes }
 
-      eligibility.qualification = :postgraduate
+      eligibility.qualification = :postgraduate_itt
       expect { eligibility.reset_dependent_answers }
         .to change { eligibility.teaching_subject_now }
         .from(false).to(nil)
@@ -547,7 +565,7 @@ RSpec.describe EarlyCareerPayments::Eligibility, type: :model do
           employed_as_supply_teacher: true,
           has_entire_term_contract: false,
           employed_directly: false,
-          qualification: :undergraduate,
+          qualification: :undergraduate_itt,
           eligible_itt_subject: :none_of_the_above,
           teaching_subject_now: false,
           postgraduate_masters_loan: nil
@@ -583,7 +601,7 @@ RSpec.describe EarlyCareerPayments::Eligibility, type: :model do
           employed_as_supply_teacher: true,
           has_entire_term_contract: false,
           employed_directly: false,
-          qualification: :undergraduate,
+          qualification: :undergraduate_itt,
           eligible_itt_subject: :none_of_the_above,
           teaching_subject_now: false,
           postgraduate_doctoral_loan: nil
