@@ -73,7 +73,9 @@ module EarlyCareerPayments
     def qualification_name
       return qualification.gsub("_itt", " ITT") if qualification.split("_").last == "itt"
 
-      qualification.humanize.downcase
+      qualification_attained = qualification.humanize.downcase
+
+      qualification_attained == "assessment only" ? qualification_attained : qualification_attained + " qualification"
     end
 
     def eligible_later?

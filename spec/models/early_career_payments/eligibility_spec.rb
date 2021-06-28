@@ -35,11 +35,19 @@ RSpec.describe EarlyCareerPayments::Eligibility, type: :model do
       end
     end
 
-    context "when qualification is 'assessment_only' or 'overseas_recognition'" do
+    context "when qualification is 'assessment_only'" do
       eligibility = EarlyCareerPayments::Eligibility.new(qualification: "assessment_only")
 
       it "returns the qualification in a humanized for that is lowercase" do
         expect(eligibility.qualification_name).to eq "assessment only"
+      end
+    end
+
+    context "when qualification is 'overseas recognition'" do
+      eligibility = EarlyCareerPayments::Eligibility.new(qualification: "overseas_recognition")
+
+      it "returns the qualification in a humanized for that is lowercase" do
+        expect(eligibility.qualification_name).to eq "overseas recognition qualification"
       end
     end
   end
