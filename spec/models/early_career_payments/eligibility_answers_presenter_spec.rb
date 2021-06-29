@@ -42,7 +42,7 @@ RSpec.describe EarlyCareerPayments::EligibilityAnswersPresenter, type: :model do
         "teaching-subject-now"
       ],
       [
-        I18n.t("early_career_payments.questions.itt_academic_year", start_or_complete: :start, qualification: eligibility.qualification_name),
+        I18n.t("early_career_payments.questions.itt_academic_year.qualification.#{eligibility.qualification}"),
         "2019 - 2020",
         "itt-year"
       ]
@@ -93,11 +93,7 @@ RSpec.describe EarlyCareerPayments::EligibilityAnswersPresenter, type: :model do
           "teaching-subject-now"
         ],
         [
-          I18n.t(
-            "early_career_payments.questions.itt_academic_year",
-            start_or_complete: :complete,
-            qualification: eligibility.qualification_name
-          ),
+          I18n.t("early_career_payments.questions.itt_academic_year.qualification.#{eligibility.qualification}"),
           "2018 - 2019",
           "itt-year"
         ]

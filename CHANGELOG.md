@@ -19,6 +19,8 @@ The format is based on [Keep a Changelog]
     columns on the Claim Admin site
   - Add claim calculation to 'You are eligible for an early-career payment'
     screen
+  - Update question for ITT Year to 'Which academic year did you earn your
+    qualified teacher status (QTS)?' for AO and OR routes into teaching
 
 ## [Release 091] - 2021-06-24
 

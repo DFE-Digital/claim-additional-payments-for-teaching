@@ -117,11 +117,7 @@ module EarlyCareerPayments
 
     def itt_academic_year
       [
-        translate(
-          "early_career_payments.questions.itt_academic_year",
-          start_or_complete: (eligibility.qualification == "postgraduate_itt" ? "start" : "complete"),
-          qualification: eligibility.qualification_name
-        ),
+        I18n.t("early_career_payments.questions.itt_academic_year.qualification.#{eligibility.qualification}"),
         eligibility.itt_academic_year.dasherize.gsub("-", " - "),
         "itt-year"
       ]
