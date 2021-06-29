@@ -47,6 +47,7 @@ en:
     heading_send_application: Confirm and send your application
     statement: By submitting this notification you are confirming that, to the best of your knowledge, the details you are providing are correct.
     btn_text: Confirm and send
+  one_time_password: "One time password"
   questions:
     current_school: "Which school are you currently employed to teach at?"
     qts_award_year: "When did you complete your initial teacher training?"
@@ -238,7 +239,6 @@ en:
     personal_details: "Personal details"
     email_address_hint1: "We will use your email address to update you about your application. We recommend you use a personal email address."
     email_address_hint2: "We will send you an email with a 6 character password, this will be used on the next screen."
-    one_time_password: "One time password"
     questions:
       current_school_search: "Which school do you teach at?"
       current_school_results: "Select the school you teach at"

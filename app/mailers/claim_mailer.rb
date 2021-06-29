@@ -38,9 +38,9 @@ class ClaimMailer < ApplicationMailer
     send_mail
   end
 
-  def ecp_email_verification(claim, one_time_password)
+  def email_verification(claim, one_time_password)
     set_common_instance_variables(claim)
-    @subject = "Early-career payment email verification"
+    @subject = "#{@claim_description} email verification"
     @one_time_password = one_time_password
 
     send_mail

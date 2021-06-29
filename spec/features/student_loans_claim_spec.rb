@@ -122,6 +122,16 @@ RSpec.feature "Teacher Student Loan Repayments claims" do
 
       expect(claim.reload.email_address).to eq("name@example.tld")
 
+      # - One time password
+      expect(page).to have_text("One time password")
+
+      mail = ActionMailer::Base.deliveries.last
+      otp_in_mail_sent = mail.body.decoded.scan(/\b[0-9]{6}\b/).first
+
+      fill_in "claim_one_time_password", with: otp_in_mail_sent
+
+      click_on "Confirm"
+
       expect(page).to have_text(I18n.t("questions.bank_or_building_society"))
 
       choose "Building society"

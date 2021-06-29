@@ -31,6 +31,7 @@ module StudentLoans
       "student-loan-start-date",
       "student-loan-amount",
       "email-address",
+      "email-verification",
       "bank-or-building-society",
       "personal-bank-account",
       "building-society-account",

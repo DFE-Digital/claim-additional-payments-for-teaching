@@ -176,11 +176,11 @@ class Claim < ApplicationRecord
 
   validate :claim_must_not_be_ineligible, on: :submit
 
-  validates :one_time_password, on: [:"email-verification"], presence: {message: "Enter your one time password that we emailed to you"}, if: :has_ecp_policy?
-  validate :otp_must_be_six_digits, on: [:"email-verification"], if: :has_ecp_policy?
-  validate :otp_must_be_valid_challenge_code, on: [:"email-verification"], if: :has_ecp_policy_and_not_new_claim?
+  validates :one_time_password, on: [:"email-verification"], presence: {message: "Enter your one time password that we emailed to you"}
+  validate :otp_must_be_six_digits, on: [:"email-verification"]
+  validate :otp_must_be_valid_challenge_code, on: [:"email-verification"], if: :persisted?
 
-  before_save :set_sent_one_time_password_at, if: :has_ecp_policy_and_not_new_claim?
+  before_save :set_sent_one_time_password_at, if: :persisted?
   before_save :normalise_one_time_password, if: :one_time_password_changed?
 
   before_save :normalise_trn, if: :teacher_reference_number_changed?
@@ -443,9 +443,5 @@ class Claim < ApplicationRecord
         errors.add(:one_time_password, "Enter the correct one time password that we emailed to you")
       end
     end
-  end
-
-  def has_ecp_policy_and_not_new_claim?
-    has_ecp_policy? && persisted?
   end
 end
