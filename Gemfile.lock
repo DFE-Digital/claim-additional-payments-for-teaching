@@ -108,15 +108,15 @@ GEM
       dotenv (= 2.7.6)
       railties (>= 3.2)
     erubi (1.10.0)
-    ethon (0.12.0)
-      ffi (>= 1.3.0)
+    ethon (0.14.0)
+      ffi (>= 1.15.0)
     execjs (2.7.0)
     factory_bot (6.2.0)
       activesupport (>= 5.0.0)
     factory_bot_rails (6.2.0)
       factory_bot (~> 6.2.0)
       railties (>= 5.0.0)
-    ffi (1.15.0)
+    ffi (1.15.3)
     foreman (0.87.2)
     geckoboard-ruby (0.4.0)
     globalid (0.4.2)
@@ -376,7 +376,7 @@ DEPENDENCIES
   delayed_cron_job
   delayed_job_active_record
   dotenv-rails
-  ethon (~> 0.12.0)
+  ethon (~> 0.14.0)
   factory_bot_rails
   foreman
   geckoboard-ruby
