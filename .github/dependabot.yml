@@ -1,0 +1,50 @@
+version: 2
+updates:
+- package-ecosystem: bundler
+  directory: "/"
+  schedule:
+    interval: daily
+  open-pull-requests-limit: 10
+  ignore:
+  - dependency-name: rspec-rails
+    versions:
+    - 5.0.0
+  - dependency-name: puma
+    versions:
+    - 5.2.0
+    - 5.2.1
+  - dependency-name: bootsnap
+    versions:
+    - 1.6.0
+    - 1.7.0
+    - 1.7.1
+  - dependency-name: capybara
+    versions:
+    - 3.35.1
+  - dependency-name: webdrivers
+    versions:
+    - 4.5.0
+  - dependency-name: bullet
+    versions:
+    - 6.1.3
+- package-ecosystem: npm
+  directory: "/"
+  schedule:
+    interval: daily
+  open-pull-requests-limit: 10
+  ignore:
+  - dependency-name: a11y-dialog
+    versions:
+    - ">= 7.0.a, < 7.1"
+  - dependency-name: accessible-autocomplete
+    versions:
+    - "> 2.0.1, < 2.1"
+  - dependency-name: a11y-dialog
+    versions:
+    - 5.4.3
+    - 5.5.1
+    - 5.5.2
+    - 6.0.0
+    - 6.0.1
+    - 6.1.0
+    - 6.1.1
