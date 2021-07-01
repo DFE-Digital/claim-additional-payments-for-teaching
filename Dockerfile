@@ -2,7 +2,7 @@
 # base
 # ------------------------------------------------------------------------------
 
-FROM ruby:2.6.2-alpine AS base
+FROM ruby:2.6.7-alpine AS base
 
 RUN apk add bash
 RUN apk add postgresql-dev
