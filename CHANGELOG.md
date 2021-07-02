@@ -21,6 +21,7 @@ The format is based on [Keep a Changelog]
     screen
   - Update question for ITT Year to 'Which academic year did you earn your
     qualified teacher status (QTS)?' for AO and OR routes into teaching
+  - Update content for 'What is your address?' screen
 
 ## [Release 091] - 2021-06-24
 
