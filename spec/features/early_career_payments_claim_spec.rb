@@ -145,13 +145,19 @@ RSpec.feature "Teacher Early-Career Payments claims" do
     # - What is your address
     expect(page).to have_text(I18n.t("questions.address"))
 
-    fill_in_address
+    fill_in :claim_address_line_1, with: "57"
+    fill_in :claim_address_line_2, with: "Walthamstow Drive"
+    fill_in "Town or city", with: "Derby"
+    fill_in "County", with: "City of Derby"
+    fill_in "Postcode", with: "DE22 4BS"
 
-    expect(claim.reload.address_line_1).to eql("123 Main Street")
-    expect(claim.address_line_2).to eql("Downtown")
-    expect(claim.address_line_3).to eql("Twin Peaks")
-    expect(claim.address_line_4).to eql("Washington")
-    expect(claim.postcode).to eql("M1 7HL")
+    click_on "Continue"
+
+    expect(claim.reload.address_line_1).to eql("57")
+    expect(claim.address_line_2).to eql("Walthamstow Drive")
+    expect(claim.address_line_3).to eql("Derby")
+    expect(claim.address_line_4).to eql("City of Derby")
+    expect(claim.postcode).to eql("DE22 4BS")
 
     # - Email address
     expect(page).to have_text(I18n.t("questions.email_address"))
@@ -577,12 +583,17 @@ RSpec.feature "Teacher Early-Career Payments claims" do
     # - What is your address
     expect(page).to have_text(I18n.t("questions.address"))
 
-    fill_in_address
+    fill_in :claim_address_line_1, with: "88"
+    fill_in :claim_address_line_2, with: "Deanborough Street"
+    fill_in "Town or city", with: "Nottingham"
+    fill_in "County", with: "Nottinghamshire"
+    fill_in "Postcode", with: "M1 7HL"
+    click_on "Continue"
 
-    expect(claim.reload.address_line_1).to eql("123 Main Street")
-    expect(claim.address_line_2).to eql("Downtown")
-    expect(claim.address_line_3).to eql("Twin Peaks")
-    expect(claim.address_line_4).to eql("Washington")
+    expect(claim.reload.address_line_1).to eql("88")
+    expect(claim.address_line_2).to eql("Deanborough Street")
+    expect(claim.address_line_3).to eql("Nottingham")
+    expect(claim.address_line_4).to eql("Nottinghamshire")
     expect(claim.postcode).to eql("M1 7HL")
 
     # - Email address

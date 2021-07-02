@@ -2,32 +2,59 @@
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
+
     <%= render("shared/error_summary", instance: current_claim) if current_claim.errors.any? %>
 
     <%= form_for current_claim, url: claim_path(current_policy_routing_name) do |form| %>
-      <fieldset class="govuk-fieldset">
-        <legend class="govuk-fieldset__legend govuk-fieldset__legend--<%= shared_view_css_class_size(current_claim) %>">
-          <h1 class="govuk-fieldset__heading">
-            <%= t("questions.address") %>
-          </h1>
+    <fieldset class="govuk-fieldset">
+    <% if current_claim.has_ecp_policy? %>
+       <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
+          <span class="govuk-caption-xl">Personal details</span>
+            <h1 class="govuk-heading-xl">
+              What is your address?
+            </h1>
         </legend>
 
-        <%= form_group_tag current_claim, :address_line_1 do %>
-          <%= form.label :address_line_1, class: "govuk-label" do %>
-            Building and street <span class="govuk-visually-hidden">line 1 of 2</span>
+          <%= form_group_tag current_claim, :address_line_1 do %>
+            <%= form.label :address_line_1, class: "govuk-label" do %>
+              House number or name <span class="govuk-visually-hidden">House number or name line 1 of 2</span>
+            <% end %>
+            <%= errors_tag current_claim, :address_line_1 %>
+            <%= form.text_field :address_line_1, autocomplete: "address-line1",
+              class: css_classes_for_input(current_claim, :address_line_1) %>
           <% end %>
-          <%= errors_tag current_claim, :address_line_1 %>
-          <%= form.text_field :address_line_1, autocomplete: "street-address",
-            class: css_classes_for_input(current_claim, :address_line_1) %>
-        <% end %>
 
-        <%= form_group_tag current_claim, :address_line_2 do %>
-          <%= form.label :address_line_2, class: "govuk-label" do %>
-            <span class="govuk-visually-hidden">Building and street line 2 of 2</span>
+          <%= form_group_tag current_claim, :address_line_2 do %>
+            <%= form.label :address_line_2, class: "govuk-label" do %>
+              Building and street <span class="govuk-visually-hidden">Building and street line 2 of 2</span>
+            <% end %>
+            <%= errors_tag current_claim, :address_line_2 %>
+            <%= form.text_field :address_line_2, autocomplete: "address-line2",
+              class: "govuk-input" %>
           <% end %>
-          <%= errors_tag current_claim, :address_line_2 %>
-          <%= form.text_field :address_line_2, autocomplete: "street-address",
-            class: "govuk-input" %>
+          <% else %>
+            <legend class="govuk-fieldset__legend govuk-fieldset__legend--<%= shared_view_css_class_size(current_claim) %>">
+              <h1 class="govuk-fieldset__heading">
+                <%= t("questions.address") %>
+              </h1>
+            </legend>
+
+            <%= form_group_tag current_claim, :address_line_1 do %>
+            <%= form.label :address_line_1, class: "govuk-label" do %>
+              Building and street <span class="govuk-visually-hidden">line 1 of 2</span>
+            <% end %>
+            <%= errors_tag current_claim, :address_line_1 %>
+            <%= form.text_field :address_line_1, autocomplete: "street-address",
+              class: css_classes_for_input(current_claim, :address_line_1) %>
+          <% end %>
+          <%= form_group_tag current_claim, :address_line_2 do %>
+            <%= form.label :address_line_2, class: "govuk-label" do %>
+              <span class="govuk-visually-hidden">Building and street line 2 of 2</span>
+            <% end %>
+            <%= errors_tag current_claim, :address_line_2 %>
+            <%= form.text_field :address_line_2, autocomplete: "street-address",
+              class: "govuk-input" %>
+          <% end %>
         <% end %>
 
         <%= form_group_tag current_claim, :address_line_3 do %>
