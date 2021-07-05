@@ -281,3 +281,5 @@ en:
         foreign_languages: "Foreign languages"
         physics: "Physics"
         none_of_the_above: "None of the above"
+    reminders:
+      full_name: Full name
