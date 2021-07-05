@@ -237,6 +237,7 @@ en:
         itt_subject: "Early-career payments are only available for teachers who did their ITT in:"
         not_teaching_subject: "You can only get this payment if you are still teaching maths/chemistry/physics/foreign languages."
         nqt_after_itt: "You might be eligible to claim in the future when you’ve completed your ITT"
+        poor_performance: "You are not eligible for the early-career payment but you may be able to claim a student loan repayment."
     personal_details: "Personal details"
     email_address_hint1: "We will use your email address to update you about your application. We recommend you use a personal email address."
     email_address_hint2: "We will send you an email with a 6 character password, this will be used on the next screen."
@@ -246,9 +247,12 @@ en:
       employed_as_supply_teacher: "Are you currently employed as a supply teacher?"
       has_entire_term_contract: "Do you have a contract to teach at the same school for an entire term or longer?"
       employed_directly: "Are you employed directly by your school?"
-      disciplinary_action: "Are you currently subject to disciplinary action?"
       nqt_in_academic_year_after_itt: "Have you started your first year as a newly qualified teacher?"
-      formal_performance_action: "Are you currently subject to action for poor performance?"
+      poor_performance: Performance issues
+      disciplinary_action: "Are you currently subject to disciplinary action?"
+      disciplinary_action_hint: This could be because of gross misconduct. It is something we may check with your school as it will affect your eligibility.
+      formal_performance_action: "Have any performance measures been started against you?"
+      formal_performance_action_hint: This will be as a result of your serious underperformance as a teacher over a period of time. It will put your employment at the school at risk.
       qualification:
         heading: "Which route into teaching did you take?"
         hint:

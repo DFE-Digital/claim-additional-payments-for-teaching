@@ -55,8 +55,8 @@ module EarlyCareerPayments
     validates :employed_as_supply_teacher, on: [:"supply-teacher", :submit], inclusion: {in: [true, false], message: "Select yes if you are currently employed as a supply teacher"}
     validates :has_entire_term_contract, on: [:"entire-term-contract", :submit], inclusion: {in: [true, false], message: "Select yes if you have a contract to teach at the same school for one term or longer"}, if: :employed_as_supply_teacher?
     validates :employed_directly, on: [:"employed-directly", :submit], inclusion: {in: [true, false], message: "Select yes if you are employed directly by your school"}, if: :employed_as_supply_teacher?
-    validates :subject_to_formal_performance_action, on: [:"formal-performance-action", :submit], inclusion: {in: [true, false], message: "Select yes if you are subject to formal action for poor performance at work"}
-    validates :subject_to_disciplinary_action, on: [:"disciplinary-action", :submit], inclusion: {in: [true, false], message: "Select yes if you are subject to disciplinary action"}
+    validates :subject_to_formal_performance_action, on: [:"poor-performance", :submit], inclusion: {in: [true, false], message: "Select yes if you are subject to formal action for poor performance at work"}
+    validates :subject_to_disciplinary_action, on: [:"poor-performance", :submit], inclusion: {in: [true, false], message: "Select yes if you are subject to disciplinary action"}
     validates :qualification, on: [:qualification, :submit], presence: {message: "Select postgraduate ITT if you did a Postgraduate ITT course"}
     validates :eligible_itt_subject, on: [:"eligible-itt-subject", :submit], presence: {message: "Select if you completed your initial teacher training in Chemistry, Foreign Languages, Mathematics, Physics or None of these subjects"}
     validates :teaching_subject_now, on: [:"teaching-subject-now", :submit], inclusion: {in: [true, false], message: "Select yes if you are currently teaching in your ITT subject now"}
@@ -106,8 +106,7 @@ module EarlyCareerPayments
         ineligible_current_school? ||
         no_entire_term_contract? ||
         not_employed_directly? ||
-        subject_to_formal_performance_action? ||
-        subject_to_disciplinary_action? ||
+        poor_performance? ||
         itt_subject_none_of_the_above? ||
         not_teaching_now_in_eligible_itt_subject? ||
         ineligible_cohort?
@@ -117,7 +116,7 @@ module EarlyCareerPayments
       [
         :generic_ineligibility,
         :ineligible_current_school,
-        :subject_to_formal_performance_action,
+        :poor_performance,
         :itt_subject_none_of_the_above,
         :not_teaching_now_in_eligible_itt_subject,
         :ineligible_nqt_in_academic_year_after_itt
@@ -249,10 +248,14 @@ module EarlyCareerPayments
       teaching_subject_now == false
     end
 
+    def poor_performance?
+      subject_to_formal_performance_action? ||
+        subject_to_disciplinary_action?
+    end
+
     def generic_ineligibility?
       no_entire_term_contract? ||
         not_employed_directly? ||
-        subject_to_disciplinary_action? ||
         ineligible_cohort?
     end
 
