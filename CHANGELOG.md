@@ -25,6 +25,7 @@ The format is based on [Keep a Changelog]
   - Add 'Set up a Reminder - Enter Personal Details' screen to ECP eligible
     later journey
   - Add 'Mobile number' screen
+  - Update DQT client qualified teacher status to handle null data response
 
 ## [Release 091] - 2021-06-24
 

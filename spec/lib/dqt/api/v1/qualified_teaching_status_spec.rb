@@ -47,6 +47,24 @@ module Dqt
               }
             )
           end
+
+          context "with no matches" do
+            let!(:show_endpoint) do
+              stub_qualified_teaching_status_show(
+                claim: claim,
+                overrides: {
+                  body: {
+                    data: nil,
+                    message: "No records found"
+                  }
+                }
+              )
+            end
+
+            it "returns empty array" do
+              expect(show).to eq []
+            end
+          end
         end
       end
     end
