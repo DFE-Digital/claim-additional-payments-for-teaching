@@ -65,6 +65,7 @@ ActiveRecord::Schema.define(version: 2021_06_28_223812) do
     t.string "academic_year", limit: 9
     t.integer "bank_or_building_society"
     t.boolean "provide_mobile_number"
+    t.string "mobile_number"
     t.index ["academic_year"], name: "index_claims_on_academic_year"
     t.index ["created_at"], name: "index_claims_on_created_at"
     t.index ["eligibility_type", "eligibility_id"], name: "index_claims_on_eligibility_type_and_eligibility_id"

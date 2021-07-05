@@ -841,6 +841,7 @@ RSpec.describe Claim, type: :model do
         :teacher_reference_number,
         :national_insurance_number,
         :email_address,
+        :mobile_number,
         :bank_sort_code,
         :bank_account_number,
         :date_of_birth,

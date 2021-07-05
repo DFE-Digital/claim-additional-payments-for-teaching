@@ -137,6 +137,7 @@ RSpec.describe EarlyCareerPayments::SlugSequence do
           email-address
           email-verification
           provide-mobile-number
+          mobile-number
           bank-or-building-society
           personal-bank-account
           building-society-account
@@ -170,6 +171,7 @@ RSpec.describe EarlyCareerPayments::SlugSequence do
           email-address
           email-verification
           provide-mobile-number
+          mobile-number
           bank-or-building-society
           personal-bank-account
           building-society-account

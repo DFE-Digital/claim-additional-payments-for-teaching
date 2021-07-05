@@ -26,6 +26,7 @@ class Claim < ApplicationRecord
     :student_loan_start_date,
     :email_address,
     :provide_mobile_number,
+    :mobile_number,
     :bank_or_building_society,
     :bank_sort_code,
     :bank_account_number,
@@ -56,6 +57,7 @@ class Claim < ApplicationRecord
     student_loan_start_date: false,
     email_address: true,
     provide_mobile_number: false,
+    mobile_number: true,
     bank_sort_code: true,
     bank_account_number: true,
     created_at: false,
@@ -161,6 +163,8 @@ class Claim < ApplicationRecord
                             allow_blank: true
 
   validates :provide_mobile_number, on: [:"provide-mobile-number", :submit], inclusion: {in: [true, false], message: "Choose yes if you want to provide a mobile number"}, if: :has_ecp_policy?
+  validates :mobile_number, on: [:"mobile-number", :submit], presence: {message: "Enter a mobile number in the correct format, for example 07123456789"}, if: :has_ecp_policy?
+  validates :mobile_number, on: [:"mobile-number", :submit], format: {with: /\A\+?(?:\d\s?){11}\z/, message: "A mobile number must be 11 digits"}, if: :has_ecp_policy?
 
   validates :bank_or_building_society, on: [:"bank-or-building-society", :submit], presence: {message: "Choose the option for payment"}
   validates :banking_name, on: [:"bank-details", :submit], presence: {message: "Enter the name on your bank account"}
