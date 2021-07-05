@@ -48,5 +48,7 @@ RSpec.describe "Set Reminders when Eligible Later for an Early Career Payment" d
     reminder = Reminder.order(:created_at).last
     expect(reminder.full_name).to eq "Miss Sandia Patel"
     expect(reminder.email_address).to eq "s.patel2000gb@gmail.com"
+
+    expect(page).to have_text("We have set your reminders")
   end
 end

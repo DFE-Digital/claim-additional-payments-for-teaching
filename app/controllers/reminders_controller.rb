@@ -8,10 +8,14 @@ class RemindersController < BasePublicController
     @reminder = Reminder.new(reminder_params)
 
     if @reminder.save(context: :"personal-details")
-      redirect_to landing_page_path
+      redirect_to reminder_path
     else
       render "personal-details".underscore
     end
+  end
+
+  def show
+    render "eligible-later-completion".underscore
   end
 
   private
