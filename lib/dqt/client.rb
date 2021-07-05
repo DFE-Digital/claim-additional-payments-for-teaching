@@ -43,7 +43,9 @@ module Dqt
         )
       )
 
-      raise ResponseError.new(response) if [*0..199, *300..599].include? response.code
+      return nil if response.code == 404
+
+      raise ResponseError.new(response) if [*0..199, *300..403, *405..599].include? response.code
 
       response.body
     end

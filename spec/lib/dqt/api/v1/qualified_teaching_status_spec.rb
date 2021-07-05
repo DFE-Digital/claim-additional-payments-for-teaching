@@ -49,20 +49,21 @@ module Dqt
           end
 
           context "with no matches" do
-            let!(:show_endpoint) do
+            before do
               stub_qualified_teaching_status_show(
                 claim: claim,
                 overrides: {
                   body: {
-                    data: "null",
-                    message: "No records found"
-                  }
+                    data: nil,
+                    message: "No records found."
+                  },
+                  status: 404
                 }
               )
             end
 
-            it "returns empty array" do
-              expect(show).to eq []
+            it "returns nil" do
+              expect(show).to eq nil
             end
           end
         end
