@@ -34,7 +34,7 @@ module AutomatedChecks
           name_matched? &&
           dob_matched?
 
-        create_passed_task
+        create_task(match: :all, passed: true)
       end
 
       def create_note(field_body = nil)
@@ -46,15 +46,20 @@ module AutomatedChecks
         )
       end
 
-      def create_passed_task
-        claim.tasks.create!(
+      def create_task(match:, passed: nil)
+        task = claim.tasks.build(
           {
             name: "identity_confirmation",
-            passed: true,
+            claim_verifier_match: match,
+            passed: passed,
             manual: false,
             created_by: admin_user
           }
         )
+
+        task.save!(context: :claim_verifier)
+
+        task
       end
 
       def dob_matched?
@@ -76,29 +81,32 @@ module AutomatedChecks
         ClaimMailer.identity_confirmation(claim).deliver_later
 
         create_note
+        create_task(match: :none)
       end
 
       def partial_match
         if trn_matched? && name_matched? && dob_matched?
           create_note("National Insurance number")
 
-          return create_passed_task
+          return create_task(match: :any, passed: true)
         end
 
         if trn_matched? && national_insurance_number_matched? && dob_matched?
           create_note("First name or surname")
 
-          return create_passed_task
+          return create_task(match: :any, passed: true)
         end
 
         if trn_matched? && national_insurance_number_matched? && name_matched?
           create_note("Date of birth")
 
-          return create_passed_task
+          return create_task(match: :any, passed: true)
         end
 
         if national_insurance_number_matched? && name_matched? & dob_matched?
           create_note("Teacher reference number")
+
+          create_task(match: :any)
         end
       end
 

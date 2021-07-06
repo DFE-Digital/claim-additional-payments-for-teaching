@@ -126,7 +126,7 @@ RSpec.feature "Admin claim tasks update with DQT API" do
         before { visit admin_claim_tasks_path(claim) }
 
         scenario "shows identity confirmation passed" do
-          expect(task("Identity confirmation")).to have_text("Passed")
+          expect(task("Identity confirmation")).to have_text("Full match")
         end
       end
 
@@ -164,7 +164,7 @@ RSpec.feature "Admin claim tasks update with DQT API" do
           before { visit admin_claim_tasks_path(claim) }
 
           scenario "shows identity confirmation passed" do
-            expect(task("Identity confirmation")).to have_text("Passed")
+            expect(task("Identity confirmation")).to have_text("Partial match")
           end
         end
 
@@ -207,15 +207,15 @@ RSpec.feature "Admin claim tasks update with DQT API" do
           before { visit admin_claim_tasks_path(claim) }
 
           scenario "shows identity confirmation incomplete" do
-            expect(task("Identity confirmation")).to have_text("Incomplete")
+            expect(task("Identity confirmation")).to have_text("Partial match")
           end
         end
 
         context "admin claim tasks identity confirmation view" do
           before { visit admin_claim_task_path(claim, :identity_confirmation) }
 
-          scenario "doesn't show task outcome" do
-            expect { task_outcome }.to raise_error(Capybara::ElementNotFound)
+          scenario "shows task outcome performed by automated check" do
+            expect(task_outcome).to have_text("This task was performed by an automated check on #{I18n.l(claim.tasks.where(name: :identity_confirmation).first.created_at)}")
           end
         end
 
@@ -246,7 +246,7 @@ RSpec.feature "Admin claim tasks update with DQT API" do
           before { visit admin_claim_tasks_path(claim) }
 
           scenario "shows identity confirmation passed" do
-            expect(task("Identity confirmation")).to have_text("Passed")
+            expect(task("Identity confirmation")).to have_text("Partial match")
           end
         end
 
@@ -289,7 +289,7 @@ RSpec.feature "Admin claim tasks update with DQT API" do
           before { visit admin_claim_tasks_path(claim) }
 
           scenario "shows identity confirmation passed" do
-            expect(task("Identity confirmation")).to have_text("Passed")
+            expect(task("Identity confirmation")).to have_text("Partial match")
           end
         end
 
@@ -336,7 +336,7 @@ RSpec.feature "Admin claim tasks update with DQT API" do
           before { visit admin_claim_tasks_path(claim) }
 
           scenario "shows identity confirmation passed" do
-            expect(task("Identity confirmation")).to have_text("Passed")
+            expect(task("Identity confirmation")).to have_text("Full match")
           end
         end
 
@@ -375,7 +375,7 @@ RSpec.feature "Admin claim tasks update with DQT API" do
           before { visit admin_claim_tasks_path(claim) }
 
           scenario "shows identity confirmation passed" do
-            expect(task("Identity confirmation")).to have_text("Passed")
+            expect(task("Identity confirmation")).to have_text("Partial match")
           end
         end
 
@@ -447,16 +447,16 @@ RSpec.feature "Admin claim tasks update with DQT API" do
       context "admin claim tasks view" do
         before { visit admin_claim_tasks_path(claim) }
 
-        scenario "shows identity confirmation incomplete" do
-          expect(task("Identity confirmation")).to have_text("Incomplete")
+        scenario "shows identity confirmation no match" do
+          expect(task("Identity confirmation")).to have_text("No match")
         end
       end
 
       context "admin claim tasks identity confirmation view" do
         before { visit admin_claim_task_path(claim, :identity_confirmation) }
 
-        scenario "doesn't show task outcome" do
-          expect { task_outcome }.to raise_error(Capybara::ElementNotFound)
+        scenario "shows task outcome performed by automated check" do
+          expect(task_outcome).to have_text("This task was performed by an automated check on #{I18n.l(claim.tasks.where(name: :identity_confirmation).first.created_at)}")
         end
       end
 
@@ -489,7 +489,7 @@ RSpec.feature "Admin claim tasks update with DQT API" do
         before { visit admin_claim_tasks_path(claim) }
 
         scenario "shows qualifications passed" do
-          expect(task("Qualifications")).to have_text("Passed")
+          expect(task("Qualifications")).to have_text("Full match")
         end
       end
 
@@ -529,15 +529,15 @@ RSpec.feature "Admin claim tasks update with DQT API" do
           before { visit admin_claim_tasks_path(claim) }
 
           scenario "shows qualifications incomplete" do
-            expect(task("Qualifications")).to have_text("Incomplete")
+            expect(task("Qualifications")).to have_text("Partial match")
           end
         end
 
         context "admin claim tasks qualifications view" do
           before { visit admin_claim_task_path(claim, :qualifications) }
 
-          scenario "doesn't show task outcome" do
-            expect { task_outcome }.to raise_error(Capybara::ElementNotFound)
+          scenario "shows task outcome performed by automated check" do
+            expect(task_outcome).to have_text("This task was performed by an automated check on #{I18n.l(claim.tasks.where(name: :qualifications).first.created_at)}")
           end
         end
 
@@ -572,15 +572,15 @@ RSpec.feature "Admin claim tasks update with DQT API" do
           before { visit admin_claim_tasks_path(claim) }
 
           scenario "shows qualifications incomplete" do
-            expect(task("Qualifications")).to have_text("Incomplete")
+            expect(task("Qualifications")).to have_text("Partial match")
           end
         end
 
         context "admin claim tasks qualifications view" do
           before { visit admin_claim_task_path(claim, :qualifications) }
 
-          scenario "doesn't show task outcome" do
-            expect { task_outcome }.to raise_error(Capybara::ElementNotFound)
+          scenario "shows task outcome performed by automated check" do
+            expect(task_outcome).to have_text("This task was performed by an automated check on #{I18n.l(claim.tasks.where(name: :qualifications).first.created_at)}")
           end
         end
 
@@ -652,15 +652,15 @@ RSpec.feature "Admin claim tasks update with DQT API" do
         before { visit admin_claim_tasks_path(claim) }
 
         scenario "shows qualifications incomplete" do
-          expect(task("Qualifications")).to have_text("Incomplete")
+          expect(task("Qualifications")).to have_text("No match")
         end
       end
 
       context "admin claim tasks qualifications view" do
         before { visit admin_claim_task_path(claim, :qualifications) }
 
-        scenario "doesn't show task outcome" do
-          expect { task_outcome }.to raise_error(Capybara::ElementNotFound)
+        scenario "shows task outcome performed by automated check" do
+          expect(task_outcome).to have_text("This task was performed by an automated check on #{I18n.l(claim.tasks.where(name: :qualifications).first.created_at)}")
         end
       end
 

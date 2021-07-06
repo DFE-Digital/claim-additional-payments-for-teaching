@@ -106,6 +106,12 @@ module AutomatedChecks
 
             before { perform }
 
+            describe "#claim_verifier_match" do
+              subject(:claim_verifier_match) { qualifications_task.claim_verifier_match }
+
+              it { is_expected.to eq "all" }
+            end
+
             describe "#created_by" do
               subject(:created_by) { qualifications_task.created_by }
 
@@ -143,14 +149,36 @@ module AutomatedChecks
               }
             end
 
-            it { is_expected.to be_an_instance_of(Note) }
+            it { is_expected.to be_an_instance_of(Task) }
 
             describe "qualifications task" do
               subject(:qualifications_task) { claim.tasks.find_by(name: "qualifications") }
 
               before { perform }
 
-              it { is_expected.to eq(nil) }
+              describe "#claim_verifier_match" do
+                subject(:claim_verifier_match) { qualifications_task.claim_verifier_match }
+
+                it { is_expected.to eq "any" }
+              end
+
+              describe "#created_by" do
+                subject(:created_by) { qualifications_task.created_by }
+
+                it { is_expected.to eq nil }
+              end
+
+              describe "#passed" do
+                subject(:passed) { qualifications_task.passed }
+
+                it { is_expected.to eq nil }
+              end
+
+              describe "#manual" do
+                subject(:manual) { qualifications_task.manual }
+
+                it { is_expected.to eq false }
+              end
             end
 
             describe "note" do
@@ -184,14 +212,36 @@ module AutomatedChecks
               }
             end
 
-            it { is_expected.to be_an_instance_of(Note) }
+            it { is_expected.to be_an_instance_of(Task) }
 
             describe "qualifications task" do
               subject(:qualifications_task) { claim.tasks.find_by(name: "qualifications") }
 
               before { perform }
 
-              it { is_expected.to eq(nil) }
+              describe "#claim_verifier_match" do
+                subject(:claim_verifier_match) { qualifications_task.claim_verifier_match }
+
+                it { is_expected.to eq "any" }
+              end
+
+              describe "#created_by" do
+                subject(:created_by) { qualifications_task.created_by }
+
+                it { is_expected.to eq nil }
+              end
+
+              describe "#passed" do
+                subject(:passed) { qualifications_task.passed }
+
+                it { is_expected.to eq nil }
+              end
+
+              describe "#manual" do
+                subject(:manual) { qualifications_task.manual }
+
+                it { is_expected.to eq false }
+              end
             end
 
             describe "note" do
@@ -235,6 +285,12 @@ module AutomatedChecks
 
               before { perform }
 
+              describe "#claim_verifier_match" do
+                subject(:claim_verifier_match) { qualifications_task.claim_verifier_match }
+
+                it { is_expected.to eq nil }
+              end
+
               describe "#created_by" do
                 subject(:created_by) { qualifications_task.created_by }
 
@@ -276,14 +332,36 @@ module AutomatedChecks
             }
           end
 
-          it { is_expected.to be_an_instance_of(Note) }
+          it { is_expected.to be_an_instance_of(Task) }
 
           describe "qualifications task" do
             subject(:qualifications_task) { claim.tasks.find_by(name: "qualifications") }
 
             before { perform }
 
-            it { is_expected.to eq(nil) }
+            describe "#claim_verifier_match" do
+              subject(:claim_verifier_match) { qualifications_task.claim_verifier_match }
+
+              it { is_expected.to eq "none" }
+            end
+
+            describe "#created_by" do
+              subject(:created_by) { qualifications_task.created_by }
+
+              it { is_expected.to eq nil }
+            end
+
+            describe "#passed" do
+              subject(:passed) { qualifications_task.passed }
+
+              it { is_expected.to eq nil }
+            end
+
+            describe "#manual" do
+              subject(:manual) { qualifications_task.manual }
+
+              it { is_expected.to eq false }
+            end
           end
 
           describe "note" do
@@ -308,14 +386,36 @@ module AutomatedChecks
         context "without matching DQT record" do
           let(:data) { nil }
 
-          it { is_expected.to be_an_instance_of(Note) }
+          it { is_expected.to be_an_instance_of(Task) }
 
           describe "qualifications task" do
             subject(:qualifications_task) { claim.tasks.find_by(name: "qualifications") }
 
             before { perform }
 
-            it { is_expected.to eq(nil) }
+            describe "#claim_verifier_match" do
+              subject(:claim_verifier_match) { qualifications_task.claim_verifier_match }
+
+              it { is_expected.to eq "none" }
+            end
+
+            describe "#created_by" do
+              subject(:created_by) { qualifications_task.created_by }
+
+              it { is_expected.to eq nil }
+            end
+
+            describe "#passed" do
+              subject(:passed) { qualifications_task.passed }
+
+              it { is_expected.to eq nil }
+            end
+
+            describe "#manual" do
+              subject(:manual) { qualifications_task.manual }
+
+              it { is_expected.to eq false }
+            end
           end
 
           describe "note" do

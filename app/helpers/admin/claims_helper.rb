@@ -84,13 +84,29 @@ module Admin
     def task_status_tag(claim, task_name)
       task = claim.tasks.detect { |t| t.name == task_name }
 
-      if task.present?
-        status = task_status(task)
-        tag_classes = "govuk-tag app-task-list__task-completed"
-      else
+      if task.nil?
         status = "Incomplete"
-        tag_classes = "govuk-tag app-task-list__task-completed govuk-tag--inactive"
+        status_colour = "grey"
+      elsif !task.claim_verifier_match.nil?
+        if task.claim_verifier_match_all?
+          status = "Full match"
+          status_colour = "green"
+        elsif task.claim_verifier_match_any?
+          status = "Partial match"
+          status_colour = "yellow"
+        elsif task.claim_verifier_match_none?
+          status = "No match"
+          status_colour = "red"
+        end
+      elsif task.passed?
+        status = "Passed"
+        status_colour = "green"
+      elsif task.passed == false
+        status = "Failed"
+        status_colour = "red"
       end
+
+      tag_classes = "govuk-tag app-task-list__task-completed govuk-tag--#{task.nil? || !task.claim_verifier_match.nil? ? "" : "strong-"}#{status_colour}"
 
       content_tag("strong", status, class: tag_classes)
     end
@@ -122,10 +138,6 @@ module Admin
 
     def days_between(first_date, second_date)
       (second_date - first_date).to_i
-    end
-
-    def task_status(task)
-      task.passed? ? "Passed" : "Failed"
     end
   end
 end

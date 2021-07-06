@@ -41,5 +41,11 @@ RSpec.describe StudentLoans::DqtRecord do
     it "returns true" do
       expect(StudentLoans::DqtRecord.new({qts_date: Date.parse("19/3/2017")}).eligible_qualification_subject?).to eql true
     end
+
+    context "without subject codes" do
+      it "returns false" do
+        expect(StudentLoans::DqtRecord.new({qts_date: Date.parse("19/3/2017"), degree_codes: [], itt_subject_codes: []}).eligible_qualification_subject?).to eql false
+      end
+    end
   end
 end

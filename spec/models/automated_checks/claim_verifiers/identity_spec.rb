@@ -104,6 +104,12 @@ module AutomatedChecks
 
             before { perform }
 
+            describe "#claim_verifier_match" do
+              subject(:claim_verifier_match) { identity_confirmation_task.claim_verifier_match }
+
+              it { is_expected.to eq "all" }
+            end
+
             describe "#created_by" do
               subject(:created_by) { identity_confirmation_task.created_by }
 
@@ -145,6 +151,12 @@ module AutomatedChecks
               subject(:identity_confirmation_task) { claim.tasks.find_by(name: "identity_confirmation") }
 
               before { perform }
+
+              describe "#claim_verifier_match" do
+                subject(:claim_verifier_match) { identity_confirmation_task.claim_verifier_match }
+
+                it { is_expected.to eq "any" }
+              end
 
               describe "#created_by" do
                 subject(:created_by) { identity_confirmation_task.created_by }
@@ -194,14 +206,36 @@ module AutomatedChecks
               }
             end
 
-            it { is_expected.to be_an_instance_of(Note) }
+            it { is_expected.to be_an_instance_of(Task) }
 
             describe "identity confirmation task" do
               subject(:identity_confirmation_task) { claim.tasks.find_by(name: "identity_confirmation") }
 
               before { perform }
 
-              it { is_expected.to eq(nil) }
+              describe "#claim_verifier_match" do
+                subject(:claim_verifier_match) { identity_confirmation_task.claim_verifier_match }
+
+                it { is_expected.to eq "any" }
+              end
+
+              describe "#created_by" do
+                subject(:created_by) { identity_confirmation_task.created_by }
+
+                it { is_expected.to eq nil }
+              end
+
+              describe "#passed" do
+                subject(:passed) { identity_confirmation_task.passed }
+
+                it { is_expected.to eq nil }
+              end
+
+              describe "#manual" do
+                subject(:manual) { identity_confirmation_task.manual }
+
+                it { is_expected.to eq false }
+              end
             end
 
             describe "note" do
@@ -239,6 +273,12 @@ module AutomatedChecks
               subject(:identity_confirmation_task) { claim.tasks.find_by(name: "identity_confirmation") }
 
               before { perform }
+
+              describe "#claim_verifier_match" do
+                subject(:claim_verifier_match) { identity_confirmation_task.claim_verifier_match }
+
+                it { is_expected.to eq "any" }
+              end
 
               describe "#created_by" do
                 subject(:created_by) { identity_confirmation_task.created_by }
@@ -295,6 +335,12 @@ module AutomatedChecks
 
               before { perform }
 
+              describe "#claim_verifier_match" do
+                subject(:claim_verifier_match) { identity_confirmation_task.claim_verifier_match }
+
+                it { is_expected.to eq "any" }
+              end
+
               describe "#created_by" do
                 subject(:created_by) { identity_confirmation_task.created_by }
 
@@ -350,6 +396,12 @@ module AutomatedChecks
 
               before { perform }
 
+              describe "#claim_verifier_match" do
+                subject(:claim_verifier_match) { identity_confirmation_task.claim_verifier_match }
+
+                it { is_expected.to eq "all" }
+              end
+
               describe "#created_by" do
                 subject(:created_by) { identity_confirmation_task.created_by }
 
@@ -392,6 +444,12 @@ module AutomatedChecks
               subject(:identity_confirmation_task) { claim.tasks.find_by(name: "identity_confirmation") }
 
               before { perform }
+
+              describe "#claim_verifier_match" do
+                subject(:claim_verifier_match) { identity_confirmation_task.claim_verifier_match }
+
+                it { is_expected.to eq "any" }
+              end
 
               describe "#created_by" do
                 subject(:created_by) { identity_confirmation_task.created_by }
@@ -453,6 +511,12 @@ module AutomatedChecks
 
               before { perform }
 
+              describe "#claim_verifier_match" do
+                subject(:claim_verifier_match) { identity_confirmation_task.claim_verifier_match }
+
+                it { is_expected.to eq nil }
+              end
+
               describe "#created_by" do
                 subject(:created_by) { identity_confirmation_task.created_by }
 
@@ -485,7 +549,7 @@ module AutomatedChecks
         context "without matching DQT identity" do
           let(:data) { nil }
 
-          it { is_expected.to be_an_instance_of(Note) }
+          it { is_expected.to be_an_instance_of(Task) }
           it { is_expected_with_block.to have_enqueued_mail(ClaimMailer, :identity_confirmation) }
 
           describe "identity confirmation task" do
@@ -493,7 +557,29 @@ module AutomatedChecks
 
             before { perform }
 
-            it { is_expected.to eq nil }
+            describe "#claim_verifier_match" do
+              subject(:claim_verifier_match) { identity_confirmation_task.claim_verifier_match }
+
+              it { is_expected.to eq "none" }
+            end
+
+            describe "#created_by" do
+              subject(:created_by) { identity_confirmation_task.created_by }
+
+              it { is_expected.to eq nil }
+            end
+
+            describe "#passed" do
+              subject(:passed) { identity_confirmation_task.passed }
+
+              it { is_expected.to eq nil }
+            end
+
+            describe "#manual" do
+              subject(:manual) { identity_confirmation_task.manual }
+
+              it { is_expected.to eq false }
+            end
           end
 
           describe "note" do
