@@ -100,7 +100,6 @@ RSpec.feature "Teacher Early-Career Payments claims" do
       expect(page).not_to have_text(I18n.t("early_career_payments.questions.postgraduate_masters_loan"))
       expect(page).not_to have_text(I18n.t("early_career_payments.questions.postgraduate_doctoral_loan"))
     end
-
     click_on("Continue")
 
     # - You are eligible for an early career payment
@@ -113,12 +112,10 @@ RSpec.feature "Teacher Early-Career Payments claims" do
         expect(page).to have_text bullet_point
       end
     end
-
     click_on "Continue"
 
     # - How will we use the information you provide
     expect(page).to have_text("How we will use the information you provide")
-
     click_on "Continue"
 
     # - Personal details
@@ -137,7 +134,6 @@ RSpec.feature "Teacher Early-Career Payments claims" do
     expect(page).to have_text(I18n.t("early_career_payments.questions.national_insurance_number"))
 
     fill_in "National Insurance number", with: "PX321499A"
-
     click_on "Continue"
 
     expect(claim.reload.first_name).to eql("Russell")
@@ -153,7 +149,6 @@ RSpec.feature "Teacher Early-Career Payments claims" do
     fill_in "Town or city", with: "Derby"
     fill_in "County", with: "City of Derby"
     fill_in "Postcode", with: "DE22 4BS"
-
     click_on "Continue"
 
     expect(claim.reload.address_line_1).to eql("57")
@@ -166,19 +161,19 @@ RSpec.feature "Teacher Early-Career Payments claims" do
     expect(page).to have_text(I18n.t("questions.email_address"))
 
     fill_in "Email address", with: "david.tau1988@hotmail.co.uk"
-
     click_on "Continue"
 
     expect(claim.reload.email_address).to eql("david.tau1988@hotmail.co.uk")
 
     # - One time password
+    expect(page).to have_text("Email verification")
     expect(page).to have_text("One time password")
+    expect(page).to have_text("We recommend you copy and paste the password from the email.")
 
     mail = ActionMailer::Base.deliveries.last
     otp_in_mail_sent = mail.body.decoded.scan(/\b[0-9]{6}\b/).first
 
     fill_in "claim_one_time_password", with: otp_in_mail_sent
-
     click_on "Confirm"
 
     # - Provide mobile number
@@ -196,6 +191,14 @@ RSpec.feature "Teacher Early-Career Payments claims" do
     click_on "Continue"
 
     expect(claim.reload.mobile_number).to eql("07123456789")
+
+    # - Mobile number one-time password
+    expect(page).to have_text("Password verification")
+    expect(page).to have_text("One time password")
+    expect(page).not_to have_text("We recommend you copy and paste the password from the email.")
+
+    # fill_in "claim_one_time_password", with: otp_sent_to_mobile
+    click_on "Confirm"
 
     # Payment to Bank or Building Society
     expect(page).to have_text(I18n.t("questions.bank_or_building_society"))
@@ -492,7 +495,6 @@ RSpec.feature "Teacher Early-Career Payments claims" do
 
     # "No"
     choose "claim_eligibility_attributes_subject_to_disciplinary_action_false"
-
     click_on "Continue"
 
     expect(claim.eligibility.reload.subject_to_formal_performance_action).to eql false
@@ -556,15 +558,10 @@ RSpec.feature "Teacher Early-Career Payments claims" do
         expect(page).to have_text bullet_point
       end
     end
-
     click_on "Continue"
 
-    # [PAGE 20] - Personal Details
-    # [PAGE 21] - One Time Password
-    # [PAGE 22] - We have sent you reminders
-    # [PAGE 23] - How will we use the information you provide
+    # - How will we use the information you provide
     expect(page).to have_text("How we will use the information you provide")
-
     click_on "Continue"
 
     # - Personal details
@@ -583,7 +580,6 @@ RSpec.feature "Teacher Early-Career Payments claims" do
     expect(page).to have_text(I18n.t("early_career_payments.questions.national_insurance_number"))
 
     fill_in "National Insurance number", with: "PX321499A"
-
     click_on "Continue"
 
     expect(claim.reload.first_name).to eql("Russell")
@@ -611,19 +607,19 @@ RSpec.feature "Teacher Early-Career Payments claims" do
     expect(page).to have_text(I18n.t("questions.email_address"))
 
     fill_in "Email address", with: "david.tau1988@hotmail.co.uk"
-
     click_on "Continue"
 
     expect(claim.reload.email_address).to eql("david.tau1988@hotmail.co.uk")
 
     # - One time password
+    expect(page).to have_text("Email verification")
     expect(page).to have_text("One time password")
+    expect(page).to have_text("We recommend you copy and paste the password from the email.")
 
     mail = ActionMailer::Base.deliveries.last
     otp_in_mail_sent = mail.body.decoded.scan(/\b[0-9]{6}\b/).first
 
     fill_in "claim_one_time_password", with: otp_in_mail_sent
-
     click_on "Confirm"
 
     # - Provide mobile number
@@ -641,6 +637,14 @@ RSpec.feature "Teacher Early-Career Payments claims" do
     click_on "Continue"
 
     expect(claim.reload.mobile_number).to eql "01234567899"
+
+    # - Mobile number one-time password
+    expect(page).to have_text("Password verification")
+    expect(page).to have_text("One time password")
+    expect(page).not_to have_text("We recommend you copy and paste the password from the email.")
+
+    # fill_in "claim_one_time_password", with: otp_sent_to_mobile
+    click_on "Confirm"
 
     # Payment to Bank or Building Society
     expect(page).to have_text(I18n.t("questions.bank_or_building_society"))

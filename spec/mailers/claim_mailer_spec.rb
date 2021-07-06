@@ -137,7 +137,7 @@ RSpec.describe ClaimMailer, type: :mailer do
       let(:one_time_password) { 123124 }
 
       it "mentions the one time password and its duration of validity" do
-        expect(mail.body.encoded).to include("This is your 6-character one time password:")
+        expect(mail.body.encoded).to include("This is your 6-digit one time password:")
         expect(mail.body.encoded).to include(one_time_password.to_s)
         expect(mail.body.encoded).to include("It is valid for 15 minutes.")
       end

@@ -88,7 +88,8 @@ class Claim < ApplicationRecord
     "has_student_loan" => ["student_loan_country"],
     "student_loan_country" => ["student_loan_courses"],
     "student_loan_courses" => ["student_loan_start_date"],
-    "bank_or_building_society" => ["banking_name", "bank_account_number", "bank_sort_code", "building_society_roll_number"]
+    "bank_or_building_society" => ["banking_name", "bank_account_number", "bank_sort_code", "building_society_roll_number"],
+    "provide_mobile_number" => ["mobile_number"]
   }.freeze
 
   # Use AcademicYear as custom ActiveRecord attribute type
@@ -434,7 +435,7 @@ class Claim < ApplicationRecord
   end
 
   def otp_must_be_six_digits
-    errors.add(:one_time_password, "Enter the correct one time password that we emailed to you") if one_time_password.present? && normalised_one_time_password.length != ONE_TIME_PASSWORD_LENGTH
+    errors.add(:one_time_password, "Your one time password must be 6-digits") if one_time_password.present? && normalised_one_time_password.length != ONE_TIME_PASSWORD_LENGTH
   end
 
   def otp_must_be_valid_challenge_code
