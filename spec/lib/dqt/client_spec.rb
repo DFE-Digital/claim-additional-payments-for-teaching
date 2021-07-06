@@ -83,9 +83,17 @@ module Dqt
         end
       end
 
+      context "with not found status" do
+        before { stub_request(method, %r{test}).to_return(status: 404) }
+
+        it "returns nil" do
+          expect(client.public_send(method)).to eq(nil)
+        end
+      end
+
       context "with invalid response status" do
         before { stub_request(method, %r{test}).to_return(status: response_status) }
-        let(:response_status) { [*0..199, *300..599].sample }
+        let(:response_status) { [*0..199, *300..403, *405..599].sample }
 
         it "raises an error" do
           expect { client.public_send(method) }.to raise_error(Client::ResponseError)

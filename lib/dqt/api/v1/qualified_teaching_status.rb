@@ -14,7 +14,7 @@ module Dqt
 
           response = client.get(path: "/api/qualified-teachers/qualified-teaching-status", params: mapped_params)
 
-          return [] if response[:data] == "null"
+          return nil unless response
 
           # API returns multiple items but we only ever use the first one. Decided to create a consistent interface here for automated checks rather than spend time creating an abstract interface.
           first_item = response[:data].first

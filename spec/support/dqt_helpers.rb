@@ -21,15 +21,19 @@ module DqtHelpers
             activeAlert: true
           }
         ],
-        "message": "null"
-      }
+        "message": nil
+      },
+      status: 200
     }
 
     args = overrides ? merge_recursively(defaults, overrides) : defaults
 
     stub_request(:get, "#{ENV["DQT_CLIENT_HOST"]}:#{ENV["DQT_CLIENT_PORT"]}/api/qualified-teachers/qualified-teaching-status")
       .with(query: args[:query])
-      .to_return(body: args[:body].to_json)
+      .to_return(
+        body: args[:body].to_json,
+        status: args[:status]
+      )
   end
 
   private
