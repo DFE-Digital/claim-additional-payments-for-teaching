@@ -85,6 +85,10 @@ data "azurerm_key_vault_secret" "RollbarInfraToken" {
   name         = "RollbarAccessToken"
   key_vault_id = data.azurerm_key_vault.secrets_kv.id
 }
+data "azurerm_key_vault_secret" "DqtProxyApiKey" {
+  name         = "DqtProxyApiKey"
+  key_vault_id = data.azurerm_key_vault.secrets_kv.id
+}
 
 # data "azurerm_key_vault_secret" "SamlEncryptionKey" {
 #   name         = "TeacherPaymentsDevVspSamlEncryption8KeyBase64"
