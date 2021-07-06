@@ -8,6 +8,8 @@ The format is based on [Keep a Changelog]
 
 - ECP policy
   - Update content for ECP Start Page
+  - Update performance questions 'poor performance' and 'disciplinary action'
+    combining them on a single screen
   - Update qualification question 'Did you do a postgraduate ITT course or an
     undergraduate ITT course?', add new answer options for 'Assessment only' and
     'Overseas recognition'

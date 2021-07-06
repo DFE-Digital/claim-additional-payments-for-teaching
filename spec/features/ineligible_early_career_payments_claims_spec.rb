@@ -28,7 +28,7 @@ RSpec.feature "Ineligible Teacher Early-Career Payments claims" do
     expect(page).to have_text("We could not find a school matching those details")
   end
 
-  scenario "When subject to formal performance action" do
+  scenario "when poor performance - subject to formal performance action" do
     start_early_career_payments_claim
 
     # - Which school do you teach at
@@ -42,46 +42,71 @@ RSpec.feature "Ineligible Teacher Early-Career Payments claims" do
     choose "No"
     click_on "Continue"
 
-    # - Are you currently subject to action for poor performance
+    # - Poor performance
     expect(page).to have_text(I18n.t("early_career_payments.questions.formal_performance_action"))
-
-    choose "Yes"
-    click_on "Continue"
-
-    expect(page).to have_link(href: EarlyCareerPayments.eligibility_page_url)
-    expect(page).to have_text("You are not eligible for an early-careers payment")
-    expect(page).to have_text("You are not eligible for the early-career payment but you may be able to claim a student loan repayment.")
-  end
-
-  scenario "When subject to disciplinary action" do
-    start_early_career_payments_claim
-
-    # - Which school do you teach at
-    expect(page).to have_text(I18n.t("early_career_payments.questions.current_school_search"))
-
-    choose_school schools(:penistone_grammar_school)
-
-    # - Are you currently employed as a supply teacher
-    expect(page).to have_text(I18n.t("early_career_payments.questions.employed_as_supply_teacher"))
-
-    choose "No"
-    click_on "Continue"
-
-    # - Are you currently subject to action for poor performance
-    expect(page).to have_text(I18n.t("early_career_payments.questions.formal_performance_action"))
-
-    choose "No"
-    click_on "Continue"
-
-    # - Are you currently subject to disciplinary action
     expect(page).to have_text(I18n.t("early_career_payments.questions.disciplinary_action"))
 
-    choose "Yes"
+    choose "claim_eligibility_attributes_subject_to_formal_performance_action_true"
+    choose "claim_eligibility_attributes_subject_to_disciplinary_action_false"
     click_on "Continue"
 
     expect(page).to have_text(I18n.t("early_career_payments.ineligible.heading"))
     expect(page).to have_link(href: EarlyCareerPayments.eligibility_page_url)
-    expect(page).to have_text("Based on the answers you have provided you are not eligible #{I18n.t("early_career_payments.claim_description")}")
+    expect(page).to have_text(I18n.t("early_career_payments.ineligible.reason.poor_performance"))
+  end
+
+  scenario "when poor performance - subject to disciplinary action" do
+    start_early_career_payments_claim
+
+    # - Which school do you teach at
+    expect(page).to have_text(I18n.t("early_career_payments.questions.current_school_search"))
+
+    choose_school schools(:penistone_grammar_school)
+
+    # - Are you currently employed as a supply teacher
+    expect(page).to have_text(I18n.t("early_career_payments.questions.employed_as_supply_teacher"))
+
+    choose "No"
+    click_on "Continue"
+
+    # - Poor performance
+    expect(page).to have_text(I18n.t("early_career_payments.questions.formal_performance_action"))
+    expect(page).to have_text(I18n.t("early_career_payments.questions.disciplinary_action"))
+
+    choose "claim_eligibility_attributes_subject_to_formal_performance_action_false"
+    choose "claim_eligibility_attributes_subject_to_disciplinary_action_true"
+    click_on "Continue"
+
+    expect(page).to have_text(I18n.t("early_career_payments.ineligible.heading"))
+    expect(page).to have_link(href: EarlyCareerPayments.eligibility_page_url)
+    expect(page).to have_text(I18n.t("early_career_payments.ineligible.reason.poor_performance"))
+  end
+
+  scenario "when poor performance - subject to disciplinary & formal performance action" do
+    start_early_career_payments_claim
+
+    # - Which school do you teach at
+    expect(page).to have_text(I18n.t("early_career_payments.questions.current_school_search"))
+
+    choose_school schools(:penistone_grammar_school)
+
+    # - Are you currently employed as a supply teacher
+    expect(page).to have_text(I18n.t("early_career_payments.questions.employed_as_supply_teacher"))
+
+    choose "No"
+    click_on "Continue"
+
+    # - Poor performance
+    expect(page).to have_text(I18n.t("early_career_payments.questions.formal_performance_action"))
+    expect(page).to have_text(I18n.t("early_career_payments.questions.disciplinary_action"))
+
+    choose "claim_eligibility_attributes_subject_to_formal_performance_action_true"
+    choose "claim_eligibility_attributes_subject_to_disciplinary_action_true"
+    click_on "Continue"
+
+    expect(page).to have_text(I18n.t("early_career_payments.ineligible.heading"))
+    expect(page).to have_link(href: EarlyCareerPayments.eligibility_page_url)
+    expect(page).to have_text(I18n.t("early_career_payments.ineligible.reason.poor_performance"))
   end
 
   # Employed as Supply Teacher with contract less than an entire term
@@ -157,16 +182,12 @@ RSpec.feature "Ineligible Teacher Early-Career Payments claims" do
     choose "No"
     click_on "Continue"
 
-    # - Are you currently subject to action for poor performance
+    # - Poor performance
     expect(page).to have_text(I18n.t("early_career_payments.questions.formal_performance_action"))
-
-    choose "No"
-    click_on "Continue"
-
-    # - Are you currently subject to disciplinary action
     expect(page).to have_text(I18n.t("early_career_payments.questions.disciplinary_action"))
 
-    choose "No"
+    choose "claim_eligibility_attributes_subject_to_formal_performance_action_false"
+    choose "claim_eligibility_attributes_subject_to_disciplinary_action_false"
     click_on "Continue"
 
     # - What route into teaching did you take?
@@ -205,16 +226,12 @@ RSpec.feature "Ineligible Teacher Early-Career Payments claims" do
     choose "No"
     click_on "Continue"
 
-    # - Are you currently subject to action for poor performance
+    # - Poor performance
     expect(page).to have_text(I18n.t("early_career_payments.questions.formal_performance_action"))
-
-    choose "No"
-    click_on "Continue"
-
-    # - Are you currently subject to disciplinary action
     expect(page).to have_text(I18n.t("early_career_payments.questions.disciplinary_action"))
 
-    choose "No"
+    choose "claim_eligibility_attributes_subject_to_formal_performance_action_false"
+    choose "claim_eligibility_attributes_subject_to_disciplinary_action_false"
     click_on "Continue"
 
     # - What route into teaching did you take?
@@ -261,16 +278,12 @@ RSpec.feature "Ineligible Teacher Early-Career Payments claims" do
     choose "No"
     click_on "Continue"
 
-    # - Are you currently subject to action for poor performance
+    # - Poor performance
     expect(page).to have_text(I18n.t("early_career_payments.questions.formal_performance_action"))
-
-    choose "No"
-    click_on "Continue"
-
-    # - Are you currently subject to disciplinary action
     expect(page).to have_text(I18n.t("early_career_payments.questions.disciplinary_action"))
 
-    choose "No"
+    choose "claim_eligibility_attributes_subject_to_formal_performance_action_false"
+    choose "claim_eligibility_attributes_subject_to_disciplinary_action_false"
     click_on "Continue"
 
     # - What route into teaching did you take?
@@ -337,16 +350,12 @@ RSpec.feature "Ineligible Teacher Early-Career Payments claims" do
       choose "No"
       click_on "Continue"
 
-      # - Are you currently subject to action for poor performance
+      # - Poor performance
       expect(page).to have_text(I18n.t("early_career_payments.questions.formal_performance_action"))
-
-      choose "No"
-      click_on "Continue"
-
-      # - Are you currently subject to disciplinary action
       expect(page).to have_text(I18n.t("early_career_payments.questions.disciplinary_action"))
 
-      choose "No"
+      choose "claim_eligibility_attributes_subject_to_formal_performance_action_false"
+      choose "claim_eligibility_attributes_subject_to_disciplinary_action_false"
       click_on "Continue"
 
       # - What route into teaching did you take?

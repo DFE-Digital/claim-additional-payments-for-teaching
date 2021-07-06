@@ -123,8 +123,7 @@ RSpec.describe EarlyCareerPayments::SlugSequence do
           nqt-in-academic-year-after-itt
           current-school
           supply-teacher
-          formal-performance-action
-          disciplinary-action
+          poor-performance
           qualification
           eligible-itt-subject
           teaching-subject-now
@@ -157,8 +156,7 @@ RSpec.describe EarlyCareerPayments::SlugSequence do
           nqt-in-academic-year-after-itt
           current-school
           supply-teacher
-          formal-performance-action
-          disciplinary-action
+          poor-performance
           qualification
           eligible-itt-subject
           teaching-subject-now

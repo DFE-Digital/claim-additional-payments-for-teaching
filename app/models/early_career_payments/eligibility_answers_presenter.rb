@@ -79,7 +79,7 @@ module EarlyCareerPayments
       [
         translate("early_career_payments.questions.formal_performance_action"),
         (eligibility.subject_to_formal_performance_action? ? "Yes" : "No"),
-        "formal-performance-action"
+        "poor-performance"
       ]
     end
 
@@ -87,7 +87,7 @@ module EarlyCareerPayments
       [
         translate("early_career_payments.questions.disciplinary_action"),
         (eligibility.subject_to_disciplinary_action? ? "Yes" : "No"),
-        "disciplinary-action"
+        "poor-performance"
       ]
     end
 

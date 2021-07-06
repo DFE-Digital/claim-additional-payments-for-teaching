@@ -34,20 +34,23 @@ RSpec.feature "Teacher Early-Career Payments claims" do
 
     expect(claim.eligibility.reload.employed_as_supply_teacher).to eql false
 
-    # - Are you currently subject to action for poor performance
+    # - Performance Issues
+    expect(page).to have_text(I18n.t("early_career_payments.questions.poor_performance"))
     expect(page).to have_text(I18n.t("early_career_payments.questions.formal_performance_action"))
+    expect(page).to have_text(I18n.t("early_career_payments.questions.formal_performance_action_hint"))
 
-    choose "No"
+    # No
+    choose "claim_eligibility_attributes_subject_to_formal_performance_action_false"
+
+    expect(page).to have_text(I18n.t("early_career_payments.questions.disciplinary_action"))
+    expect(page).to have_text(I18n.t("early_career_payments.questions.disciplinary_action_hint"))
+
+    # "No"
+    choose "claim_eligibility_attributes_subject_to_disciplinary_action_false"
+
     click_on "Continue"
 
     expect(claim.eligibility.reload.subject_to_formal_performance_action).to eql false
-
-    # - Are you currently subject to dsiciplinary action
-    expect(page).to have_text(I18n.t("early_career_payments.questions.disciplinary_action"))
-
-    choose "No"
-    click_on "Continue"
-
     expect(claim.eligibility.reload.subject_to_disciplinary_action).to eql false
 
     # - What route into teaching did you take?
@@ -359,9 +362,6 @@ RSpec.feature "Teacher Early-Career Payments claims" do
 
     # - Are you currently subject to action for poor performance
     expect(page).to have_text(I18n.t("early_career_payments.questions.formal_performance_action"))
-
-    choose "No"
-    click_on "Continue"
   end
 
   context "Route into teaching" do
@@ -479,20 +479,23 @@ RSpec.feature "Teacher Early-Career Payments claims" do
 
     expect(claim.eligibility.reload.employed_as_supply_teacher).to eql false
 
-    # - Are you currently subject to action for poor performance
+    # - Performance Issues
+    expect(page).to have_text(I18n.t("early_career_payments.questions.poor_performance"))
     expect(page).to have_text(I18n.t("early_career_payments.questions.formal_performance_action"))
+    expect(page).to have_text(I18n.t("early_career_payments.questions.formal_performance_action_hint"))
 
-    choose "No"
+    # No
+    choose "claim_eligibility_attributes_subject_to_formal_performance_action_false"
+
+    expect(page).to have_text(I18n.t("early_career_payments.questions.disciplinary_action"))
+    expect(page).to have_text(I18n.t("early_career_payments.questions.disciplinary_action_hint"))
+
+    # "No"
+    choose "claim_eligibility_attributes_subject_to_disciplinary_action_false"
+
     click_on "Continue"
 
     expect(claim.eligibility.reload.subject_to_formal_performance_action).to eql false
-
-    # - Are you currently subject to dsiciplinary action
-    expect(page).to have_text(I18n.t("early_career_payments.questions.disciplinary_action"))
-
-    choose "No"
-    click_on "Continue"
-
     expect(claim.eligibility.reload.subject_to_disciplinary_action).to eql false
 
     # - What route into teaching did you take?
