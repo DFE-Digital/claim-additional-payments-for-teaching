@@ -14,9 +14,10 @@ module AutomatedChecks
       def perform
         return unless awaiting_task?("identity_confirmation")
 
-        complete_match ||
-          partial_match ||
-          no_match
+        # Order matters so that subsequent conditions in methods fall through to execute the right thing
+        no_match ||
+          complete_match ||
+          partial_match
       end
 
       private
@@ -70,7 +71,7 @@ module AutomatedChecks
       end
 
       def no_match
-        return unless !trn_matched? && !national_insurance_number_matched?
+        return unless dqt_teacher_status.nil?
 
         ClaimMailer.identity_confirmation(claim).deliver_later
 

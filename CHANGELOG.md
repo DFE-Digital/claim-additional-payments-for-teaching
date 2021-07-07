@@ -28,6 +28,7 @@ The format is based on [Keep a Changelog]
     later journey
   - Add 'Mobile number' screen
   - Update DQT client qualified teacher status to handle 404 response
+  - Fix admin claim tasks update with DQT API without matching DQT identity
 
 ## [Release 091] - 2021-06-24
 

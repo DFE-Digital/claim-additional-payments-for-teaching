@@ -4,15 +4,17 @@ module AutomatedChecks
   module ClaimVerifiers
     RSpec.describe Identity do
       before do
-        stub_request(:get, "#{ENV["DQT_CLIENT_HOST"]}:#{ENV["DQT_CLIENT_PORT"]}/api/qualified-teachers/qualified-teaching-status").with(
-          query: WebMock::API.hash_including(
+        if data.nil?
+          body = <<~JSON
             {
-              trn: claim.teacher_reference_number,
-              niNumber: claim.national_insurance_number
+              "data": null,
+              "message": "No records found."
             }
-          )
-        ).to_return(
-          body: <<~JSON
+          JSON
+
+          status = 404
+        else
+          body = <<~JSON
             {
               "data": [
                 {
@@ -30,7 +32,18 @@ module AutomatedChecks
               "message": null
             }
           JSON
-        )
+
+          status = 200
+        end
+
+        stub_request(:get, "#{ENV["DQT_CLIENT_HOST"]}:#{ENV["DQT_CLIENT_PORT"]}/api/qualified-teachers/qualified-teaching-status").with(
+          query: WebMock::API.hash_including(
+            {
+              trn: claim.teacher_reference_number,
+              niNumber: claim.national_insurance_number
+            }
+          )
+        ).to_return(body: body, status: status)
       end
 
       subject(:identity) { described_class.new(**identity_args) }
@@ -470,14 +483,7 @@ module AutomatedChecks
         end
 
         context "without matching DQT identity" do
-          let(:data) do
-            {
-              date_of_birth: claim.date_of_birth,
-              name: "#{claim.first_name} #{claim.surname}",
-              national_insurance_number: "QQ100000B",
-              teacher_reference_number: "7654321"
-            }
-          end
+          let(:data) { nil }
 
           it { is_expected.to be_an_instance_of(Note) }
           it { is_expected_with_block.to have_enqueued_mail(ClaimMailer, :identity_confirmation) }
@@ -487,7 +493,7 @@ module AutomatedChecks
 
             before { perform }
 
-            it { is_expected.to eq(nil) }
+            it { is_expected.to eq nil }
           end
 
           describe "note" do

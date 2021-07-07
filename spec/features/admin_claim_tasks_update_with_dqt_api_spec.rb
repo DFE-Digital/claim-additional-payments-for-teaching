@@ -54,15 +54,17 @@ RSpec.feature "Admin claim tasks update with DQT API" do
     stub_geckoboard_dataset_update
     sign_in_as_service_operator
 
-    stub_request(:get, "#{ENV["DQT_CLIENT_HOST"]}:#{ENV["DQT_CLIENT_PORT"]}/api/qualified-teachers/qualified-teaching-status").with(
-      query: WebMock::API.hash_including(
+    if data.nil?
+      body = <<~JSON
         {
-          trn: claim.teacher_reference_number,
-          niNumber: claim.national_insurance_number
+          "data": null,
+          "message": "No records found."
         }
-      )
-    ).to_return(
-      body: <<~JSON
+      JSON
+
+      status = 404
+    else
+      body = <<~JSON
         {
           "data": [
             {
@@ -80,7 +82,18 @@ RSpec.feature "Admin claim tasks update with DQT API" do
           "message": null
         }
       JSON
-    )
+
+      status = 200
+    end
+
+    stub_request(:get, "#{ENV["DQT_CLIENT_HOST"]}:#{ENV["DQT_CLIENT_PORT"]}/api/qualified-teachers/qualified-teaching-status").with(
+      query: WebMock::API.hash_including(
+        {
+          trn: claim.teacher_reference_number,
+          niNumber: claim.national_insurance_number
+        }
+      )
+    ).to_return(body: body, status: status)
 
     perform_enqueued_jobs
   end
@@ -429,14 +442,7 @@ RSpec.feature "Admin claim tasks update with DQT API" do
     end
 
     context "without matching DQT identity" do
-      let(:data) do
-        {
-          date_of_birth: claim.date_of_birth,
-          name: "#{claim.first_name} #{claim.surname}",
-          national_insurance_number: "QQ100000B",
-          teacher_reference_number: "7654321"
-        }
-      end
+      let(:data) { nil }
 
       context "admin claim tasks view" do
         before { visit admin_claim_tasks_path(claim) }

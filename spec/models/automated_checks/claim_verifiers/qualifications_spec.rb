@@ -4,15 +4,17 @@ module AutomatedChecks
   module ClaimVerifiers
     RSpec.describe Qualifications do
       before do
-        stub_request(:get, "#{ENV["DQT_CLIENT_HOST"]}:#{ENV["DQT_CLIENT_PORT"]}/api/qualified-teachers/qualified-teaching-status").with(
-          query: WebMock::API.hash_including(
+        if data.nil?
+          body = <<~JSON
             {
-              trn: claim.teacher_reference_number,
-              niNumber: claim.national_insurance_number
+              "data": null,
+              "message": "No records found."
             }
-          )
-        ).to_return(
-          body: <<~JSON
+          JSON
+
+          status = 404
+        else
+          body = <<~JSON
             {
               "data": [
                 {
@@ -30,7 +32,18 @@ module AutomatedChecks
               "message": null
             }
           JSON
-        )
+
+          status = 200
+        end
+
+        stub_request(:get, "#{ENV["DQT_CLIENT_HOST"]}:#{ENV["DQT_CLIENT_PORT"]}/api/qualified-teachers/qualified-teaching-status").with(
+          query: WebMock::API.hash_including(
+            {
+              trn: claim.teacher_reference_number,
+              niNumber: claim.national_insurance_number
+            }
+          )
+        ).to_return(body: body, status: status)
       end
 
       subject(:qualifications) { described_class.new(**qualifications_args) }
@@ -262,6 +275,38 @@ module AutomatedChecks
               itt_subject_codes: ["NoCode"]
             }
           end
+
+          it { is_expected.to be_an_instance_of(Note) }
+
+          describe "qualifications task" do
+            subject(:qualifications_task) { claim.tasks.find_by(name: "qualifications") }
+
+            before { perform }
+
+            it { is_expected.to eq(nil) }
+          end
+
+          describe "note" do
+            subject(:note) { claim.notes.last }
+
+            before { perform }
+
+            describe "#body" do
+              subject(:body) { note.body }
+
+              it { is_expected.to eq("Not eligible") }
+            end
+
+            describe "#created_by" do
+              subject(:created_by) { note.created_by }
+
+              it { is_expected.to eq(nil) }
+            end
+          end
+        end
+
+        context "without matching DQT record" do
+          let(:data) { nil }
 
           it { is_expected.to be_an_instance_of(Note) }
 

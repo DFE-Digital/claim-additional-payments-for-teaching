@@ -14,9 +14,10 @@ module AutomatedChecks
       def perform
         return unless awaiting_task?("qualifications")
 
-        complete_match ||
-          partial_match ||
-          no_match
+        # Order matters so that subsequent conditions in methods fall through to execute the right thing
+        no_match ||
+          complete_match ||
+          partial_match
       end
 
       private
@@ -54,7 +55,11 @@ module AutomatedChecks
       end
 
       def no_match
-        return unless !claim.policy::DqtRecord.new(dqt_teacher_status).eligible?
+        return unless dqt_teacher_status.nil? ||
+          (
+            !claim.policy::DqtRecord.new(dqt_teacher_status).eligible_qts_date? &&
+            !claim.policy::DqtRecord.new(dqt_teacher_status).eligible_qualification_subject?
+          )
 
         create_note
       end
