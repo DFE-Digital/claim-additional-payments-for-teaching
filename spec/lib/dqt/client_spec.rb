@@ -13,14 +13,14 @@ module Dqt
       context "with client headers" do
         before do
           client_args[:headers] = {
-            Authorization: "}N~4#V6VY->dX2p4R#~Rz%t,&5!fr}]Y[*>Rs[C{kX#GBmS.}5"
+            Authorization: "fake_DQT_CLIENT_HEADERS"
           }
         end
 
         it "adds security headers" do
           stub = stub_request(method, %r{test}).with(
             headers: {
-              Authorization: "}N~4#V6VY->dX2p4R#~Rz%t,&5!fr}]Y[*>Rs[C{kX#GBmS.}5"
+              Authorization: "fake_DQT_CLIENT_HEADERS"
             }
           )
 
