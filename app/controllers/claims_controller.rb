@@ -122,6 +122,9 @@ class ClaimsController < BasePublicController
       one_time_password = generate_otp
       ClaimMailer.email_verification(current_claim, one_time_password).deliver_now
       session[:sent_one_time_password_at] = Time.now
+    elsif params[:slug] == "mobile-number"
+      one_time_password = generate_otp
+      Rails.logger.debug "\n\n  ** =================== **\nSMS one_time_password: \n#{one_time_password}\n  ** =================== **\n"
     end
   end
 

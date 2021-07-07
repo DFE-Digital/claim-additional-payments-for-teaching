@@ -827,6 +827,16 @@ RSpec.describe Claim, type: :model do
       expect(claim.bank_sort_code).to eq "984530"
       expect(claim.building_society_roll_number).to be_nil
     end
+
+    it "resets mobile_number when the value of provide_mobile_number changes" do
+      expect { claim.reset_dependent_answers }.not_to change { claim.attributes }
+
+      claim.provide_mobile_number = false
+      claim.reset_dependent_answers
+
+      expect(claim.provide_mobile_number).to eq false
+      expect(claim.mobile_number).to be_nil
+    end
   end
 
   describe ".filtered_params" do
