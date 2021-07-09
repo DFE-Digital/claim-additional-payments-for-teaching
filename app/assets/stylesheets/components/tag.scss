@@ -1,5 +1,7 @@
 @import "govuk-frontend/govuk/all";
 
+// Don't know why we're redefining tag styles here but unfortunately we have to because of the tag rule in gds_kit_tweaks.scss.
+
 %tag {
   text-transform: none;
   letter-spacing: 0;
@@ -18,6 +20,34 @@
 
   &--inactive {
     background-color: govuk-colour("dark-grey");
+  }
+
+  &--green {
+    color: govuk-shade(govuk-colour("green"), 20);
+    background: govuk-tint(govuk-colour("green"), 80);
+  }
+
+  &--grey {
+    color: govuk-shade(govuk-colour("dark-grey", $legacy: "grey-1"), 30);
+    background: govuk-tint(govuk-colour("dark-grey", $legacy: "grey-1"), 90);
+  }
+
+  &--red {
+    color: govuk-shade(govuk-colour("red"), 30);
+    background: govuk-tint(govuk-colour("red"), 80);
+  }
+
+  &--yellow {
+    color: govuk-shade(govuk-colour("yellow"), 65);
+    background: govuk-tint(govuk-colour("yellow"), 75);
+  }
+
+  &--strong-green {
+    background-color: govuk-colour("green");
+  }
+
+  &--strong-red {
+    background-color: govuk-colour("red");
   }
 }
 

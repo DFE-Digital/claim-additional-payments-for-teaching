@@ -203,30 +203,111 @@ describe Admin::ClaimsHelper do
   end
 
   describe "#task_status_tag" do
-    let(:claim) { build(:claim) }
+    let(:claim) { build(:claim, tasks: tasks_arg) }
     let(:task_status_tag) { helper.task_status_tag(claim, "employment") }
 
-    it "returns a passed tag if the task has been marked as passed" do
-      claim.tasks << build(:task, name: "employment", passed: true, claim: claim)
+    context "without task" do
+      let(:tasks_arg) { [] }
 
-      expect(task_status_tag).to match("Passed")
-      expect(task_status_tag).to match("govuk-tag app-task-list__task-completed")
-      expect(task_status_tag).to_not match("govuk-tag--inactive")
+      it "returns incomplete task status tag" do
+        expect(task_status_tag).to match("Incomplete")
+        expect(task_status_tag).to match("govuk-tag app-task-list__task-completed govuk-tag--grey")
+      end
     end
 
-    it "returns a failed tag if the task has been marked as failed" do
-      claim.tasks << build(:task, name: "employment", passed: false, claim: claim)
+    context "with full match task" do
+      let(:tasks_arg) do
+        [
+          build(
+            :task,
+            claim_verifier_match: :all,
+            name: "employment",
+            passed: nil
+          )
+        ]
+      end
 
-      expect(task_status_tag).to match("Failed")
-      expect(task_status_tag).to match("govuk-tag app-task-list__task-completed")
-      expect(task_status_tag).to_not match("govuk-tag--inactive")
+      it "returns full match task status tag" do
+        expect(task_status_tag).to match("Full match")
+        expect(task_status_tag).to match("govuk-tag app-task-list__task-completed")
+        expect(task_status_tag).to match("govuk-tag--green")
+      end
     end
 
-    it "returns an incomplete tag if the task has not been done" do
-      claim.tasks = []
+    context "with partial match task" do
+      let(:tasks_arg) do
+        [
+          build(
+            :task,
+            claim_verifier_match: :any,
+            name: "employment",
+            passed: nil
+          )
+        ]
+      end
 
-      expect(task_status_tag).to match("Incomplete")
-      expect(task_status_tag).to match("govuk-tag app-task-list__task-completed govuk-tag--inactive")
+      it "returns partial match task status tag" do
+        expect(task_status_tag).to match("Partial match")
+        expect(task_status_tag).to match("govuk-tag app-task-list__task-completed")
+        expect(task_status_tag).to match("govuk-tag--yellow")
+      end
+    end
+
+    context "with no match task" do
+      let(:tasks_arg) do
+        [
+          build(
+            :task,
+            claim_verifier_match: :none,
+            name: "employment",
+            passed: nil
+          )
+        ]
+      end
+
+      it "returns no match task status tag" do
+        expect(task_status_tag).to match("No match")
+        expect(task_status_tag).to match("govuk-tag app-task-list__task-completed")
+        expect(task_status_tag).to match("govuk-tag--red")
+      end
+    end
+
+    context "with passed task" do
+      let(:tasks_arg) do
+        [
+          build(
+            :task,
+            claim_verifier_match: nil,
+            name: "employment",
+            passed: true
+          )
+        ]
+      end
+
+      it "returns passed task status tag" do
+        expect(task_status_tag).to match("Passed")
+        expect(task_status_tag).to match("govuk-tag app-task-list__task-completed")
+        expect(task_status_tag).to match("govuk-tag--strong-green")
+      end
+    end
+
+    context "with failed task" do
+      let(:tasks_arg) do
+        [
+          build(
+            :task,
+            claim_verifier_match: nil,
+            name: "employment",
+            passed: false
+          )
+        ]
+      end
+
+      it "returns failed task status tag" do
+        expect(task_status_tag).to match("Failed")
+        expect(task_status_tag).to match("govuk-tag app-task-list__task-completed")
+        expect(task_status_tag).to match("govuk-tag--strong-red")
+      end
     end
   end
 

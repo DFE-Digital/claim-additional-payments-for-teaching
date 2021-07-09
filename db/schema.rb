@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_06_28_223812) do
+ActiveRecord::Schema.define(version: 2021_07_01_152930) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -289,6 +289,7 @@ ActiveRecord::Schema.define(version: 2021_06_28_223812) do
     t.datetime "updated_at", precision: 6, null: false
     t.boolean "passed"
     t.boolean "manual"
+    t.integer "claim_verifier_match"
     t.index ["claim_id"], name: "index_tasks_on_claim_id"
     t.index ["created_by_id"], name: "index_tasks_on_created_by_id"
     t.index ["name", "claim_id"], name: "index_tasks_on_name_and_claim_id", unique: true

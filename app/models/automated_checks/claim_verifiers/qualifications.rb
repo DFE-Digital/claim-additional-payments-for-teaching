@@ -31,7 +31,7 @@ module AutomatedChecks
       def complete_match
         return unless claim.policy::DqtRecord.new(dqt_teacher_status).eligible?
 
-        create_passed_task
+        create_task(match: :all, passed: true)
       end
 
       def create_note(field_body = nil)
@@ -43,15 +43,20 @@ module AutomatedChecks
         )
       end
 
-      def create_passed_task
-        claim.tasks.create!(
+      def create_task(match:, passed: nil)
+        task = claim.tasks.build(
           {
             name: "qualifications",
-            passed: true,
+            claim_verifier_match: match,
+            passed: passed,
             manual: false,
             created_by: admin_user
           }
         )
+
+        task.save!(context: :claim_verifier)
+
+        task
       end
 
       def no_match
@@ -62,15 +67,19 @@ module AutomatedChecks
           )
 
         create_note
+        create_task(match: :none)
       end
 
       def partial_match
         if claim.policy::DqtRecord.new(dqt_teacher_status).eligible_qts_date?
-          return create_note("ITT subject codes")
+          create_note("ITT subject codes")
+
+          return create_task(match: :any)
         end
 
         if claim.policy::DqtRecord.new(dqt_teacher_status).eligible_qualification_subject?
           create_note("QTS award date")
+          create_task(match: :any)
         end
       end
 
