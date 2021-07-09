@@ -273,10 +273,10 @@ en:
       teaching_subject_now: "Do you teach %{eligible_itt_subject} now?"
       itt_academic_year:
         qualification:
-          undergraduate_itt: Which academic year did you complete your undergraduate ITT?
-          postgraduate_itt: Which academic year did you start your postgraduate ITT?
-          assessment_only: Which academic year did you earn your qualified teacher status (QTS)?
-          overseas_recognition: Which academic year did you earn your qualified teacher status (QTS)?
+          undergraduate_itt: In what academic year did you complete your undergraduate ITT?
+          postgraduate_itt: In what academic year did you start your postgraduate ITT?
+          assessment_only: What academic year did you earn your qualified teacher status (QTS)?
+          overseas_recognition: What academic year did you earn your qualified teacher status (QTS)?
       postgraduate_masters_loan: "Did you take out a Postgraduate Master's Loan?"
       postgraduate_doctoral_loan: "Did you take out a Postgraduate Doctoral Loan?"
       national_insurance_number: "What is your National Insurance number?"
@@ -297,3 +297,15 @@ en:
         none_of_the_above: "None of the above"
     reminders:
       full_name: Full name
+  activerecord:
+    errors:
+      models:
+        early_career_payments_eligibilities:
+          attributes:
+            itt_academic_year:
+              blank:
+                qualification:
+                  undergraduate_itt: "Select which year you completed your undergraduate ITT in"
+                  postgraduate_itt: "Select which year you completed your postgraduate ITT in"
+                  assessment_only: "Select which academic year you earned your qualified teacher status in"
+                  overseas_recognition: "Select which academic year you earned your qualified teacher status in"
