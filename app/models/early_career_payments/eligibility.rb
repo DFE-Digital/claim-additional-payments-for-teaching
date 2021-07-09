@@ -57,7 +57,7 @@ module EarlyCareerPayments
     validates :employed_directly, on: [:"employed-directly", :submit], inclusion: {in: [true, false], message: "Select yes if you are employed directly by your school"}, if: :employed_as_supply_teacher?
     validates :subject_to_formal_performance_action, on: [:"poor-performance", :submit], inclusion: {in: [true, false], message: "Select yes if you are subject to formal action for poor performance at work"}
     validates :subject_to_disciplinary_action, on: [:"poor-performance", :submit], inclusion: {in: [true, false], message: "Select yes if you are subject to disciplinary action"}
-    validates :qualification, on: [:qualification, :submit], presence: {message: "Select postgraduate ITT if you did a Postgraduate ITT course"}
+    validates :qualification, on: [:qualification, :submit], presence: {message: "Select which route into teaching you took"}
     validates :eligible_itt_subject, on: [:"eligible-itt-subject", :submit], presence: {message: "Select if you completed your initial teacher training in Chemistry, Foreign Languages, Mathematics, Physics or None of these subjects"}
     validates :teaching_subject_now, on: [:"teaching-subject-now", :submit], inclusion: {in: [true, false], message: "Select yes if you are currently teaching in your ITT subject now"}
     validates :itt_academic_year, on: [:"itt-year", :submit], presence: {message: "Select if you started your initial teacher training in 2018 - 2019, 2019 - 2020, 2020 - 2021 or None of these academic years"}
