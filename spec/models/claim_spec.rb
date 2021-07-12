@@ -205,7 +205,7 @@ RSpec.describe Claim, type: :model do
     it "validates the presence of address_line_1 and postcode" do
       expect(build(:claim)).not_to be_valid(:address)
 
-      valid_address_attributes = {address_line_1: "123 Main Street", postcode: "12345"}
+      valid_address_attributes = {address_line_1: "123 Main Street", address_line_3: "City", address_line_4: "County", postcode: "PE11 3EW"}
       expect(build(:claim, valid_address_attributes)).to be_valid(:address)
     end
   end

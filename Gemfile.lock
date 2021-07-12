@@ -329,6 +329,7 @@ GEM
       thread_safe (~> 0.1)
     uglifier (4.2.0)
       execjs (>= 0.3.0, < 3)
+    uk_postcode (2.1.6)
     unicode-display_width (2.0.0)
     uniform_notifier (1.14.1)
     validate_email (0.1.6)
@@ -408,6 +409,7 @@ DEPENDENCIES
   typhoeus (~> 1.4.0)
   tzinfo-data
   uglifier (>= 1.3.0)
+  uk_postcode
   web-console (>= 3.3.0)
   webdrivers
   webmock

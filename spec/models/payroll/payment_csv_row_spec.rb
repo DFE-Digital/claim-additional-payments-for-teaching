@@ -19,7 +19,7 @@ RSpec.describe Payroll::PaymentCsvRow do
         banking_name: "Jo Bloggs",
         building_society_roll_number: "1234/12345678",
         address_line_1: "1 Test Road",
-        postcode: "AB1 2CD",
+        postcode: "WIA OAA",
         email_address: "email@example.com"
       }
     end
