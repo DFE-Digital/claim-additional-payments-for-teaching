@@ -152,21 +152,6 @@ describe Admin::ClaimsHelper do
     end
   end
 
-  describe "#id_verification_status" do
-    it "reports a claim that as having been GOV.UK Verified" do
-      verified_claim = build(:claim, :verified)
-
-      expect(id_verification_status(verified_claim)).to eq "GOV.UK Verify"
-    end
-
-    it "returns a warning tag for an unverified claim" do
-      verified_claim = build(:claim, :unverified)
-
-      expect(id_verification_status(verified_claim)).to have_content "Unverified"
-      expect(id_verification_status(verified_claim)).to have_selector(".tag--information")
-    end
-  end
-
   describe "#matching_attributes" do
     let(:first_claim) {
       build(
