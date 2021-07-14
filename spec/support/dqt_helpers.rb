@@ -21,7 +21,7 @@ module DqtHelpers
             activeAlert: true
           }
         ],
-        "message": nil
+        message: nil
       },
       status: 200
     }
