@@ -33,7 +33,7 @@ RSpec.describe "Set Reminders when Eligible Later for an Early Career Payment" d
 
     expect(page).to have_text("You will be eligible for an early-career payment in 2022")
 
-    expect(page).to have_content("You can set up a reminder. We will send this to your preferred email address when your application window is open.")
+    expect(page).to have_content("Set up a reminder with us and we will email you when your application window opens.")
 
     click_on "Continue"
 
