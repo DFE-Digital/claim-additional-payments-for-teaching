@@ -23,7 +23,7 @@ RSpec.describe "Admin claim amendments" do
         old_date_of_birth = claim.date_of_birth
         new_date_of_birth = 30.years.ago.to_date
         expect {
-          post admin_claim_amendments_url(claim, amendment: {claim: {teacher_reference_number: "7654321", "bank_sort_code": "111213", "date_of_birth(3i)": new_date_of_birth.day, "date_of_birth(2i)": new_date_of_birth.month, "date_of_birth(1i)": new_date_of_birth.year},
+          post admin_claim_amendments_url(claim, amendment: {claim: {teacher_reference_number: "7654321", bank_sort_code: "111213", "date_of_birth(3i)": new_date_of_birth.day, "date_of_birth(2i)": new_date_of_birth.month, "date_of_birth(1i)": new_date_of_birth.year},
                                                              notes: "Claimant made a typo"})
         }.to change { claim.reload.amendments.size }.by(1)
 

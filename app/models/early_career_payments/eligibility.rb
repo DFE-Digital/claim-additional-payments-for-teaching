@@ -79,7 +79,7 @@ module EarlyCareerPayments
     end
 
     def eligible_later?
-      eligible_later_cohort = find_cohort(
+      find_cohort(
         cohorts: {
           mathematics: [
             "2019_2020",
@@ -95,9 +95,7 @@ module EarlyCareerPayments
             "2020_2021"
           ]
         }
-      )
-
-      eligible_later_cohort.nil? ? false : true
+      ).present?
     end
 
     # This doesn't mean it's eligible either, ie, eligibility could be undetermined
@@ -206,7 +204,7 @@ module EarlyCareerPayments
       return true if itt_academic_year == "none_of_the_above"
       return false if without_cohort?
 
-      eligible_cohort = find_cohort(
+      find_cohort(
         cohorts: {
           mathematics: [
             "2018_2019",
@@ -223,9 +221,7 @@ module EarlyCareerPayments
             "2020_2021"
           ]
         }
-      )
-
-      eligible_cohort.nil? ? true : false
+      ).blank?
     end
 
     def ineligible_nqt_in_academic_year_after_itt?
