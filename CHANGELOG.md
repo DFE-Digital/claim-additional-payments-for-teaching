@@ -31,6 +31,8 @@ The format is based on [Keep a Changelog]
   - Fix admin claim tasks update with DQT API without matching DQT identity
   - Add multiple statuses to admin task statuses
   - Update admin claims index ID verification column with new statuses
+  - Add claim calculation to 'You will be eligible for an early-career payment
+    in [YEAR]' screen
 
 ## [Release 091] - 2021-06-24
 
