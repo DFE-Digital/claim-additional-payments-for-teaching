@@ -50,6 +50,8 @@ The format is based on [Keep a Changelog]
   - Add 'Would you like to provide your phone number?' screen
   - Update payment account details for 'Enter your bank/building society account
     details' screen
+  - Change admin manage services accepting claims for academic year select to
+    display four years instead of two
 
 ## [Release 090] - 2021-06-02
 
