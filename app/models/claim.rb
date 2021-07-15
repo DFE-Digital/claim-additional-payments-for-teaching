@@ -134,14 +134,19 @@ class Claim < ApplicationRecord
   validates :surname, on: [:name, :submit], presence: {message: "Enter your last name"}
   validates :surname, length: {maximum: 100, message: "Last name must be 100 characters or less"}
 
-  validates :address_line_1, on: [:address, :submit], presence: {message: "Enter your building and street address"}
+  validates :address_line_1, on: [:address], presence: {message: "Enter a house number or name"}, if: :has_ecp_policy?
+  validates :address_line_1, on: [:address, :submit], presence: {message: "Enter a building and street address"}, unless: :has_ecp_policy?
   validates :address_line_1, length: {maximum: 100, message: "Address lines must be 100 characters or less"}
   validates :address_line_2, length: {maximum: 100, message: "Address lines must be 100 characters or less"}
+  validates :address_line_2, on: [:address], presence: {message: "Enter a building and street address"}, if: :has_ecp_policy?
   validates :address_line_3, length: {maximum: 100, message: "Address lines must be 100 characters or less"}
+  validates :address_line_3, on: [:address], presence: {message: "Enter a town or city"}
   validates :address_line_4, length: {maximum: 100, message: "Address lines must be 100 characters or less"}
+  validates :address_line_4, on: [:address], presence: {message: "Enter a county"}
 
-  validates :postcode, on: [:address, :submit], presence: {message: "Enter your postcode"}
+  validates :postcode, on: [:address, :submit], presence: {message: "Enter a real postcode"}
   validates :postcode, length: {maximum: 11, message: "Postcode must be 11 characters or less"}
+  validate :postcode_is_valid, if: -> { postcode.present? }
 
   validates :date_of_birth, on: [:"date-of-birth", :submit], presence: {message: "Enter your date of birth"}
 
@@ -448,5 +453,15 @@ class Claim < ApplicationRecord
         errors.add(:one_time_password, "Enter the correct one time password that we emailed to you")
       end
     end
+  end
+
+  def postcode_is_valid
+    unless postcode_is_valid?
+      errors.add(:postcode, "Enter a postcode in the correct format")
+    end
+  end
+
+  def postcode_is_valid?
+    UKPostcode.parse(postcode).full_valid?
   end
 end

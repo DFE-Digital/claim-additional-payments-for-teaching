@@ -30,7 +30,7 @@
             <% end %>
             <%= errors_tag current_claim, :address_line_2 %>
             <%= form.text_field :address_line_2, autocomplete: "address-line2",
-              class: "govuk-input" %>
+              class: css_classes_for_input(current_claim, :address_line_2) %>
           <% end %>
           <% else %>
             <legend class="govuk-fieldset__legend govuk-fieldset__legend--<%= shared_view_css_class_size(current_claim) %>">
@@ -53,7 +53,7 @@
             <% end %>
             <%= errors_tag current_claim, :address_line_2 %>
             <%= form.text_field :address_line_2, autocomplete: "street-address",
-              class: "govuk-input" %>
+              class: css_classes_for_input(current_claim, :address_line_2) %>
           <% end %>
         <% end %>
 
@@ -72,7 +72,7 @@
           <% end %>
           <%= errors_tag current_claim, :address_line_4 %>
           <%= form.text_field :address_line_4, autocomplete: "region",
-            class: "govuk-input govuk-!-width-two-thirds" %>
+            class: css_classes_for_input(current_claim, :address_line_4, "govuk-input govuk-!-width-two-thirds") %>
         <% end %>
 
         <%= form_group_tag current_claim, :postcode do %>

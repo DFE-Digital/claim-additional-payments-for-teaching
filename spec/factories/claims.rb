@@ -20,7 +20,7 @@ FactoryBot.define do
       first_name { "Jo" }
       surname { "Bloggs" }
       address_line_1 { "1 Test Road" }
-      postcode { "AB1 2CD" }
+      postcode { "WIA OAA" }
       date_of_birth { 20.years.ago.to_date }
       teacher_reference_number { generate(:teacher_reference_number) }
       national_insurance_number { generate(:national_insurance_number) }

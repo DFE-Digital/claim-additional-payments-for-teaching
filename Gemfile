@@ -76,6 +76,8 @@ gem "typhoeus", "~> 1.4.0"
 # ROTP requried for Early Career Payments one-time password
 gem "rotp"
 
+gem "uk_postcode"
+
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem "byebug", platforms: [:mri, :mingw, :x64_mingw]
