@@ -8,7 +8,7 @@ RSpec.describe Claims::EmailAddressHelper do
       let(:policy) { StudentLoans }
 
       it "generates the correct hint based on translation for 'email_address_hint'" do
-        expect(helper.email_govuk_hint(claim)).to include I18n.t("questions.email_address_hint")
+        expect(helper.email_govuk_hint(claim)).to include(I18n.t("questions.email_address_hint1"), I18n.t("questions.email_address_hint2"), "email-address-hint", "govuk-hint")
       end
     end
 
@@ -16,7 +16,7 @@ RSpec.describe Claims::EmailAddressHelper do
       let(:policy) { EarlyCareerPayments }
 
       it "generates the correct hint based on translation for 'email_address_hint1' and 'email_address_hint2'" do
-        expect(helper.email_govuk_hint(claim)).to include(I18n.t("early_career_payments.email_address_hint1"), I18n.t("early_career_payments.email_address_hint2"), "email-address-hint", "govuk-hint")
+        expect(helper.email_govuk_hint(claim)).to include(I18n.t("questions.email_address_hint1"), I18n.t("questions.email_address_hint2"), "email-address-hint", "govuk-hint")
       end
     end
   end
@@ -26,7 +26,7 @@ RSpec.describe Claims::EmailAddressHelper do
       let(:policy) { StudentLoans }
 
       it "is not generated to be rendered" do
-        expect(helper.personal_details_caption(claim)).to be_nil
+        expect(helper.personal_details_caption(claim)).to include(I18n.t("questions.personal_details"), "govuk-caption-xl")
       end
     end
 
@@ -34,7 +34,7 @@ RSpec.describe Claims::EmailAddressHelper do
       let(:policy) { EarlyCareerPayments }
 
       it "generates the correct text to display" do
-        expect(helper.personal_details_caption(claim)).to include(I18n.t("early_career_payments.personal_details"), "govuk-caption-xl")
+        expect(helper.personal_details_caption(claim)).to include(I18n.t("questions.personal_details"), "govuk-caption-xl")
       end
     end
   end

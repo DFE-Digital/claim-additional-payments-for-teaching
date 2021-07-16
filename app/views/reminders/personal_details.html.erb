@@ -1,10 +1,10 @@
-<% content_for(:page_title, page_title(t("early_career_payments.personal_details"), policy: current_policy_routing_name, show_error: @reminder.errors.any?)) %>
+<% content_for(:page_title, page_title(t("questions.personal_details"), policy: current_policy_routing_name, show_error: @reminder.errors.any?)) %>
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
     <%= render("shared/error_summary", instance: @reminder) if @reminder.errors.any? %>
     <%= form_for @reminder, url: reminders_path(current_policy_routing_name) do |form| %>
       <h1 class="govuk-heading-xl">
-        <%= t("early_career_payments.personal_details") %>
+        <%= t("questions.personal_details") %>
       </h1>
       <%= form_group_tag @reminder, :full_name do %>
         <h1 class="govuk-label-wrapper">

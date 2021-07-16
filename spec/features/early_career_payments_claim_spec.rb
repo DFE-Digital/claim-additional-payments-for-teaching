@@ -119,7 +119,7 @@ RSpec.feature "Teacher Early-Career Payments claims" do
     click_on "Continue"
 
     # - Personal details
-    expect(page).to have_text(I18n.t("early_career_payments.personal_details"))
+    expect(page).to have_text(I18n.t("questions.personal_details"))
     expect(page).to have_text(I18n.t("questions.name"))
 
     fill_in "claim_first_name", with: "Russell"
@@ -565,7 +565,7 @@ RSpec.feature "Teacher Early-Career Payments claims" do
     click_on "Continue"
 
     # - Personal details
-    expect(page).to have_text(I18n.t("early_career_payments.personal_details"))
+    expect(page).to have_text(I18n.t("questions.personal_details"))
     expect(page).to have_text(I18n.t("questions.name"))
 
     fill_in "claim_first_name", with: "Russell"
