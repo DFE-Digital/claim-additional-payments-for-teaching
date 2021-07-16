@@ -37,6 +37,8 @@ The format is based on [Keep a Changelog]
     in [YEAR]' screen
   - Update 'Which subject did you do your undergraduate itt/postgraduate
     itt/assessment only/overseas recognition qualification in?' page validation
+  - Update 'Do you teach chemistry/foreign languages/mathematics/physics now?'
+    page validation
 
 ## [Release 091] - 2021-06-24
 

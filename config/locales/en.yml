@@ -314,3 +314,10 @@ en:
                   postgraduate_itt: "Select which subject you did your postgraduate ITT in"
                   assessment_only: "Select which subject you did your assessment only in"
                   overseas_recognition: "Select which subject you did your overseas recognition qualification in"
+            teaching_subject_now:
+              blank:
+                subject:
+                  chemistry: "Select yes if you currently teach chemistry"
+                  mathematics: "Select yes if you currently teach mathematics"
+                  foreign_languages: "Select yes if you currently teach foreign languages"
+                  physics: "Select yes if you currently teach physics"
