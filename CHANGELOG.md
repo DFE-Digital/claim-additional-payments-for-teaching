@@ -35,6 +35,8 @@ The format is based on [Keep a Changelog]
   - Update admin claims index ID verification column with new statuses
   - Add claim calculation to 'You will be eligible for an early-career payment
     in [YEAR]' screen
+  - Update 'Which subject did you do your undergraduate itt/postgraduate
+    itt/assessment only/overseas recognition qualification in?' page validation
 
 ## [Release 091] - 2021-06-24
 
