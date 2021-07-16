@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+- All policies
+  - Update content for 'Email address' screen
 - ECP policy
   - Update content for ECP Start Page
   - Update performance questions 'poor performance' and 'disciplinary action'

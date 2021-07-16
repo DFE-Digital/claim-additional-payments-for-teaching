@@ -6,7 +6,7 @@
     <%= render("shared/error_summary", instance: current_claim) if current_claim.errors.any? %>
 
     <%= form_for current_claim, url: claim_path(current_policy_routing_name) do |form| %>
-      <span class="govuk-caption-xl"><%= t("early_career_payments.personal_details") %></span>
+      <span class="govuk-caption-xl"><%= t("questions.personal_details") %></span>
       <%= form_group_tag current_claim do %>
         <h1 class="govuk-label-wrapper">
           <%= form.label :mobile_number, t("questions.mobile_number"), class: "govuk-label govuk-label--#{shared_view_css_size}" %>

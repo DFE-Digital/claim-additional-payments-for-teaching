@@ -112,6 +112,7 @@ RSpec.feature "Maths & Physics claims" do
       expect(claim.student_loan_plan).to eq(StudentLoan::PLAN_1)
 
       expect(page).to have_text(I18n.t("questions.email_address"))
+      expect(page).to have_text(I18n.t("questions.email_address_hint1"))
       fill_in I18n.t("questions.email_address"), with: "name@example.com"
       click_on "Continue"
 
