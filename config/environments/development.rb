@@ -66,5 +66,5 @@ Rails.application.configure do
   config.file_watcher = ActiveSupport::EventedFileUpdateChecker
 
   # add '127.0.0.1 ecp.test' to your /etc/hosts to use this over localhost
-  config.hosts << 'ecp.test'
+  config.hosts << "ecp.test"
 end

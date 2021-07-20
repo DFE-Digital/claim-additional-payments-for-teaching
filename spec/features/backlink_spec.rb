@@ -9,11 +9,11 @@ RSpec.feature "Backlinking during a claim" do
       expect(page).to have_link("Back")
       choose_school schools(:penistone_grammar_school)
       click_on "Back"
-      expect(page).to have_current_path("/student-loans/claim-school",  ignore_query: true)
+      expect(page).to have_current_path("/student-loans/claim-school", ignore_query: true)
       click_on "Back"
-      expect(page).to have_current_path("/student-loans/claim-school",  ignore_query: true)
+      expect(page).to have_current_path("/student-loans/claim-school", ignore_query: true)
       click_on "Back"
-      expect(page).to have_current_path("/student-loans/existing-session",  ignore_query: true)
+      expect(page).to have_current_path("/student-loans/existing-session", ignore_query: true)
       expect(page).to_not have_link("Back")
     end
   end
