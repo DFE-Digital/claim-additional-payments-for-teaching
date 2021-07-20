@@ -65,6 +65,7 @@ Rails.application.configure do
   # routes, locales, etc. This feature depends on the listen gem.
   config.file_watcher = ActiveSupport::EventedFileUpdateChecker
 
-  # add '127.0.0.1 ecp.test' to your /etc/hosts to use this over localhost
+  # Add '127.0.0.1 ecp.test' to your /etc/hosts to use this over localhost.
+  # This allows you to use https://ecp.test:3000/ in your browser.
   config.hosts << "ecp.test"
 end
