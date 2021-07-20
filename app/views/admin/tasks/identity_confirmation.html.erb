@@ -13,27 +13,25 @@
   <% end %>
 
   <div class="govuk-grid-column-two-thirds">
-    <% if @task.persisted? %>
+    <% if !@task.passed.nil? %>
       <%= render "task_outcome", task: @task do %>
       <% end %>
     <% else %>
-      <%= form_with url: admin_claim_tasks_path(@claim, name: "identity_confirmation"), scope: :task do |f| %>
+      <%= form_with model: [:admin, @claim, @claim.tasks.where(name: "identity_confirmation").first_or_initialize] do |f| %>
         <div class="govuk-form-group">
           <fieldset class="govuk-fieldset govuk-!-margin-bottom-6">
             <legend class="govuk-fieldset__legend govuk-fieldset__legend--l ">
               <h3 class="govuk-heading-l">
-                <%= identity_confirmation_question(@claim) %>
+                <%= "Did #{@claim.full_name} submit the claim?" %>
               </h3>
             </legend>
 
-            <% unless @claim.identity_verified? %>
-              <p class="govuk-body">
-                The claimant did not complete GOV.UK Verify. Refer to the
-                <%= link_to "Confirming a claimant’s identity playbook", confirming_identity_playbook_url, class: "govuk-link" %>.
-              </p>
-            <% end %>
+            <p class="govuk-body">
+              The claimant’s identity has not matched DQT records. See <%= link_to "notes", admin_claim_notes_path(@claim) %>.
+            </p>
 
             <%= f.hidden_field :passed %>
+            <%= f.hidden_field :name, value: "identity_confirmation" %>
 
             <div class="govuk-radios govuk-radios--inline">
               <div class="govuk-radios__item">

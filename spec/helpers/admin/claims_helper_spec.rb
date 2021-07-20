@@ -187,111 +187,246 @@ describe Admin::ClaimsHelper do
     end
   end
 
-  describe "#task_status_tag" do
-    let(:claim) { build(:claim, tasks: tasks_arg) }
-    let(:task_status_tag) { helper.task_status_tag(claim, "employment") }
+  describe "#identity_confirmation_task_claim_verifier_match_status_tag" do
+    subject(:identity_confirmation_task_claim_verifier_match_status_tag) { helper.identity_confirmation_task_claim_verifier_match_status_tag(claim) }
+
+    let(:claim) do
+      build(
+        :claim,
+        tasks: claim_tasks
+      )
+    end
 
     context "without task" do
-      let(:tasks_arg) { [] }
+      let(:claim_tasks) { [] }
+
+      it "returns unverified task status tag" do
+        expect(identity_confirmation_task_claim_verifier_match_status_tag).to match("Unverified")
+        expect(identity_confirmation_task_claim_verifier_match_status_tag).to match("govuk-tag app-task-list__task-completed")
+        expect(identity_confirmation_task_claim_verifier_match_status_tag).to match("govuk-tag--grey")
+      end
+    end
+
+    context "with task" do
+      let(:claim_tasks) do
+        [
+          build(
+            :task,
+            claim_verifier_match: task_claim_verifier_match,
+            name: "identity_confirmation",
+            passed: true
+          )
+        ]
+      end
+
+      context "with task claim verifier match nil" do
+        let(:task_claim_verifier_match) { nil }
+
+        it "returns unverified task status tag" do
+          expect(identity_confirmation_task_claim_verifier_match_status_tag).to match("Unverified")
+          expect(identity_confirmation_task_claim_verifier_match_status_tag).to match("govuk-tag app-task-list__task-completed")
+          expect(identity_confirmation_task_claim_verifier_match_status_tag).to match("govuk-tag--grey")
+        end
+      end
+
+      context "with task claim verifier match all" do
+        let(:task_claim_verifier_match) { :all }
+
+        it "returns full match task status tag" do
+          expect(identity_confirmation_task_claim_verifier_match_status_tag).to match("Full match")
+          expect(identity_confirmation_task_claim_verifier_match_status_tag).to match("govuk-tag app-task-list__task-completed")
+          expect(identity_confirmation_task_claim_verifier_match_status_tag).to match("govuk-tag--green")
+        end
+      end
+
+      context "with task claim verifier match any" do
+        let(:task_claim_verifier_match) { :any }
+
+        it "returns full match task status tag" do
+          expect(identity_confirmation_task_claim_verifier_match_status_tag).to match("Partial match")
+          expect(identity_confirmation_task_claim_verifier_match_status_tag).to match("govuk-tag app-task-list__task-completed")
+          expect(identity_confirmation_task_claim_verifier_match_status_tag).to match("govuk-tag--yellow")
+        end
+      end
+
+      context "with task claim verifier match none" do
+        let(:task_claim_verifier_match) { :none }
+
+        it "returns no match task status tag" do
+          expect(identity_confirmation_task_claim_verifier_match_status_tag).to match("No match")
+          expect(identity_confirmation_task_claim_verifier_match_status_tag).to match("govuk-tag app-task-list__task-completed")
+          expect(identity_confirmation_task_claim_verifier_match_status_tag).to match("govuk-tag--red")
+        end
+      end
+    end
+  end
+
+  describe "#task_status_tag" do
+    subject(:task_status_tag) { helper.task_status_tag(claim, "employment") }
+
+    let(:claim) do
+      build(
+        :claim,
+        tasks: claim_tasks
+      )
+    end
+
+    context "without task" do
+      let(:claim_tasks) { [] }
 
       it "returns incomplete task status tag" do
         expect(task_status_tag).to match("Incomplete")
-        expect(task_status_tag).to match("govuk-tag app-task-list__task-completed govuk-tag--grey")
-      end
-    end
-
-    context "with full match task" do
-      let(:tasks_arg) do
-        [
-          build(
-            :task,
-            claim_verifier_match: :all,
-            name: "employment",
-            passed: nil
-          )
-        ]
-      end
-
-      it "returns full match task status tag" do
-        expect(task_status_tag).to match("Full match")
         expect(task_status_tag).to match("govuk-tag app-task-list__task-completed")
-        expect(task_status_tag).to match("govuk-tag--green")
+        expect(task_status_tag).to match("govuk-tag--grey")
       end
     end
 
-    context "with partial match task" do
-      let(:tasks_arg) do
+    context "with task passed true" do
+      let(:claim_tasks) do
         [
           build(
             :task,
-            claim_verifier_match: :any,
-            name: "employment",
-            passed: nil
-          )
-        ]
-      end
-
-      it "returns partial match task status tag" do
-        expect(task_status_tag).to match("Partial match")
-        expect(task_status_tag).to match("govuk-tag app-task-list__task-completed")
-        expect(task_status_tag).to match("govuk-tag--yellow")
-      end
-    end
-
-    context "with no match task" do
-      let(:tasks_arg) do
-        [
-          build(
-            :task,
-            claim_verifier_match: :none,
-            name: "employment",
-            passed: nil
-          )
-        ]
-      end
-
-      it "returns no match task status tag" do
-        expect(task_status_tag).to match("No match")
-        expect(task_status_tag).to match("govuk-tag app-task-list__task-completed")
-        expect(task_status_tag).to match("govuk-tag--red")
-      end
-    end
-
-    context "with passed task" do
-      let(:tasks_arg) do
-        [
-          build(
-            :task,
-            claim_verifier_match: nil,
+            claim_verifier_match: task_claim_verifier_match,
             name: "employment",
             passed: true
           )
         ]
       end
 
-      it "returns passed task status tag" do
-        expect(task_status_tag).to match("Passed")
-        expect(task_status_tag).to match("govuk-tag app-task-list__task-completed")
-        expect(task_status_tag).to match("govuk-tag--strong-green")
+      context "with task claim verifier match nil" do
+        let(:task_claim_verifier_match) { nil }
+
+        it "returns passed task status tag" do
+          expect(task_status_tag).to match("Passed")
+          expect(task_status_tag).to match("govuk-tag app-task-list__task-completed")
+          expect(task_status_tag).to match("govuk-tag--strong-green")
+        end
+      end
+
+      context "with task claim verifier match all" do
+        let(:task_claim_verifier_match) { :all }
+
+        it "returns passed task status tag" do
+          expect(task_status_tag).to match("Passed")
+          expect(task_status_tag).to match("govuk-tag app-task-list__task-completed")
+          expect(task_status_tag).to match("govuk-tag--strong-green")
+        end
+      end
+
+      context "with task claim verifier match any" do
+        let(:task_claim_verifier_match) { :any }
+
+        it "returns passed task status tag" do
+          expect(task_status_tag).to match("Passed")
+          expect(task_status_tag).to match("govuk-tag app-task-list__task-completed")
+          expect(task_status_tag).to match("govuk-tag--strong-green")
+        end
+      end
+
+      context "with task claim verifier match none" do
+        let(:task_claim_verifier_match) { :none }
+
+        it "returns passed task status tag" do
+          expect(task_status_tag).to match("Passed")
+          expect(task_status_tag).to match("govuk-tag app-task-list__task-completed")
+          expect(task_status_tag).to match("govuk-tag--strong-green")
+        end
       end
     end
 
-    context "with failed task" do
-      let(:tasks_arg) do
+    context "with task passed false" do
+      let(:claim_tasks) do
         [
           build(
             :task,
-            claim_verifier_match: nil,
+            claim_verifier_match: task_claim_verifier_match,
             name: "employment",
             passed: false
           )
         ]
       end
 
-      it "returns failed task status tag" do
-        expect(task_status_tag).to match("Failed")
-        expect(task_status_tag).to match("govuk-tag app-task-list__task-completed")
-        expect(task_status_tag).to match("govuk-tag--strong-red")
+      context "with task claim verifier match nil" do
+        let(:task_claim_verifier_match) { nil }
+
+        it "returns failed task status tag" do
+          expect(task_status_tag).to match("Failed")
+          expect(task_status_tag).to match("govuk-tag app-task-list__task-completed")
+          expect(task_status_tag).to match("govuk-tag--strong-red")
+        end
+      end
+
+      context "with task claim verifier match all" do
+        let(:task_claim_verifier_match) { :all }
+
+        it "returns failed task status tag" do
+          expect(task_status_tag).to match("Failed")
+          expect(task_status_tag).to match("govuk-tag app-task-list__task-completed")
+          expect(task_status_tag).to match("govuk-tag--strong-red")
+        end
+      end
+
+      context "with task claim verifier match any" do
+        let(:task_claim_verifier_match) { :any }
+
+        it "returns failed task status tag" do
+          expect(task_status_tag).to match("Failed")
+          expect(task_status_tag).to match("govuk-tag app-task-list__task-completed")
+          expect(task_status_tag).to match("govuk-tag--strong-red")
+        end
+      end
+
+      context "with task claim verifier match none" do
+        let(:task_claim_verifier_match) { :none }
+
+        it "returns failed task status tag" do
+          expect(task_status_tag).to match("Failed")
+          expect(task_status_tag).to match("govuk-tag app-task-list__task-completed")
+          expect(task_status_tag).to match("govuk-tag--strong-red")
+        end
+      end
+    end
+
+    context "with task passed nil" do
+      let(:claim_tasks) do
+        [
+          build(
+            :task,
+            claim_verifier_match: task_claim_verifier_match,
+            name: "employment",
+            passed: nil
+          )
+        ]
+      end
+
+      context "with task claim verifier matched all" do
+        let(:task_claim_verifier_match) { :all }
+
+        it "returns full match status tag" do
+          expect(task_status_tag).to match("Full match")
+          expect(task_status_tag).to match("govuk-tag app-task-list__task-completed")
+          expect(task_status_tag).to match("govuk-tag--green")
+        end
+      end
+
+      context "with task claim verifier matched any" do
+        let(:task_claim_verifier_match) { :any }
+
+        it "returns partial match status tag" do
+          expect(task_status_tag).to match("Partial match")
+          expect(task_status_tag).to match("govuk-tag app-task-list__task-completed")
+          expect(task_status_tag).to match("govuk-tag--yellow")
+        end
+      end
+
+      context "with task claim verifier matched none" do
+        let(:task_claim_verifier_match) { :none }
+
+        it "returns no match status tag" do
+          expect(task_status_tag).to match("No match")
+          expect(task_status_tag).to match("govuk-tag app-task-list__task-completed")
+          expect(task_status_tag).to match("govuk-tag--red")
+        end
       end
     end
   end

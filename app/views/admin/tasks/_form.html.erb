@@ -1,4 +1,4 @@
-<%= form_with url: admin_claim_tasks_path(claim, name: task_name), scope: :task do |f| %>
+<%= form_with model: [:admin, @claim, @claim.tasks.where(name: task_name).first_or_initialize] do |f| %>
   <div class="govuk-form-group">
     <fieldset class="govuk-fieldset govuk-!-margin-bottom-6">
       <legend class="govuk-fieldset__legend govuk-fieldset__legend--l ">
@@ -8,6 +8,7 @@
       </legend>
 
       <%= f.hidden_field :passed %>
+      <%= f.hidden_field :name, value: task_name %>
 
       <div class="govuk-radios govuk-radios--inline">
         <div class="govuk-radios__item">
