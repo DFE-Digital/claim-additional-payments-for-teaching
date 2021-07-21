@@ -68,6 +68,7 @@ RSpec.configure do |config|
   config.include DfeSignInHelpers
   config.include GeckoboardHelpers
   config.include DqtHelpers
+  config.include OrdnanceSurveyHelpers
   config.include FixtureHelpers
   config.include IsExpectedWithBlock
 
