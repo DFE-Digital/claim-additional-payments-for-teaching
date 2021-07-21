@@ -6,7 +6,7 @@
 
   // unhide backlink and add listener
   backlink.classList.remove("govuk-visually-hidden");
-  backlink.addEventListener("click", () => {
+  backlink.addEventListener("click", function () {
     history.back();
   });
 })();
