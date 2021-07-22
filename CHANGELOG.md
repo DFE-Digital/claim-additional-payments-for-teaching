@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+## [Release 092] - 2021-07-22
+
 - All policies
   - Update content for 'Email address' screen
 - ECP policy
@@ -763,7 +765,9 @@ The format is based on [Keep a Changelog]
 - First release for student loan repayments private beta
 
 [unreleased]:
-  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-091...HEAD
+  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-092...HEAD
+[release 092]:
+  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-091...release-092
 [release 091]:
   https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-090...release-091
 [release 090]:
