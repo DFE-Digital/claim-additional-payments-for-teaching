@@ -240,7 +240,7 @@ en:
     support_email_address: "earlycareerteacherpayments@digital.education.gov.uk"
     landing_page: "Apply for an early-career payment"
     ineligible:
-      poor_performance_heading: "You are not eligible for an early-careers payment"
+      poor_performance_heading: "You are not eligible for an early-career payment"
       heading: "You are not eligible"
       school_heading: "We could not find a school matching those details"
       reason:
