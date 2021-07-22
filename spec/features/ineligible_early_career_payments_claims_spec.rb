@@ -52,7 +52,6 @@ RSpec.feature "Ineligible Teacher Early-Career Payments claims" do
 
     expect(page).to have_text(I18n.t("early_career_payments.ineligible.heading"))
     expect(page).to have_link(href: EarlyCareerPayments.eligibility_page_url)
-    expect(page).to have_text(I18n.t("early_career_payments.ineligible.reason.poor_performance"))
   end
 
   scenario "when poor performance - subject to disciplinary action" do
@@ -79,7 +78,6 @@ RSpec.feature "Ineligible Teacher Early-Career Payments claims" do
 
     expect(page).to have_text(I18n.t("early_career_payments.ineligible.heading"))
     expect(page).to have_link(href: EarlyCareerPayments.eligibility_page_url)
-    expect(page).to have_text(I18n.t("early_career_payments.ineligible.reason.poor_performance"))
   end
 
   scenario "when poor performance - subject to disciplinary & formal performance action" do
@@ -106,7 +104,6 @@ RSpec.feature "Ineligible Teacher Early-Career Payments claims" do
 
     expect(page).to have_text(I18n.t("early_career_payments.ineligible.heading"))
     expect(page).to have_link(href: EarlyCareerPayments.eligibility_page_url)
-    expect(page).to have_text(I18n.t("early_career_payments.ineligible.reason.poor_performance"))
   end
 
   # Employed as Supply Teacher with contract less than an entire term
