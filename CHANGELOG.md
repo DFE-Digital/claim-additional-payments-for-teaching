@@ -42,6 +42,7 @@ The format is based on [Keep a Changelog]
   - Update 'Do you teach chemistry/foreign languages/mathematics/physics now?'
     page validation
   - Update poor performance page message
+  - Add client for Ordnanace Survey to make API calls for address/postcode data
 
 ## [Release 091] - 2021-06-24
 
