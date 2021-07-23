@@ -42,6 +42,7 @@ The format is based on [Keep a Changelog]
   - Update 'Do you teach chemistry/foreign languages/mathematics/physics now?'
     page validation
   - Update the 'application complete' for TSLR and M&P user journeys
+  - Update poor performance page message
 
 ## [Release 091] - 2021-06-24
 

@@ -114,7 +114,6 @@ module EarlyCareerPayments
       [
         :generic_ineligibility,
         :ineligible_current_school,
-        :poor_performance,
         :itt_subject_none_of_the_above,
         :not_teaching_now_in_eligible_itt_subject,
         :ineligible_nqt_in_academic_year_after_itt
@@ -252,6 +251,7 @@ module EarlyCareerPayments
     def generic_ineligibility?
       no_entire_term_contract? ||
         not_employed_directly? ||
+        poor_performance? ||
         ineligible_cohort?
     end
 

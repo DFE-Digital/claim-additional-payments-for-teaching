@@ -18,7 +18,7 @@ describe EarlyCareerPaymentsHelper do
       let(:eligibility) { build(:early_career_payments_eligibility, subject_to_formal_performance_action: true) }
 
       it "generates the correct heading for an ineligible claim based on poor performance" do
-        expect(helper.ineligible_heading(claim)).to include I18n.t("early_career_payments.ineligible.poor_performance_heading")
+        expect(helper.ineligible_heading(claim)).to include I18n.t("early_career_payments.ineligible.heading")
       end
     end
 
