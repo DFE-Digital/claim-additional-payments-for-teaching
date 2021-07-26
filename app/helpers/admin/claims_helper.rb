@@ -61,14 +61,6 @@ module Admin
       content_tag(:strong, pluralize(days_until_decision_deadline, "day"), class: "govuk-tag #{decision_deadline_warning_class}")
     end
 
-    def identity_confirmation_question(claim)
-      if claim.identity_verified?
-        "Do our records for this teacher match the above name and date of birth from this claim?"
-      else
-        "Did #{claim.full_name} submit the claim?"
-      end
-    end
-
     def matching_attributes(first_claim, second_claim)
       first_attributes = matching_attributes_for(first_claim)
       second_attributes = matching_attributes_for(second_claim)
@@ -77,32 +69,52 @@ module Admin
       matching_attributes.to_h.compact.keys.map(&:humanize).sort
     end
 
+    def identity_confirmation_task_claim_verifier_match_status_tag(claim)
+      task = claim.tasks.detect { |t| t.name == "identity_confirmation" }
+
+      if task.nil? || task.claim_verifier_match.nil?
+        status = "Unverified"
+        status_colour = "grey"
+      elsif task.claim_verifier_match_all?
+        status = "Full match"
+        status_colour = "green"
+      elsif task.claim_verifier_match_any?
+        status = "Partial match"
+        status_colour = "yellow"
+      elsif task.claim_verifier_match_none?
+        status = "No match"
+        status_colour = "red"
+      end
+
+      tag_classes = "govuk-tag app-task-list__task-completed govuk-tag--#{status_colour}"
+
+      content_tag("strong", status, class: tag_classes)
+    end
+
     def task_status_tag(claim, task_name)
       task = claim.tasks.detect { |t| t.name == task_name }
 
       if task.nil?
         status = "Incomplete"
         status_colour = "grey"
-      elsif !task.claim_verifier_match.nil?
-        if task.claim_verifier_match_all?
-          status = "Full match"
-          status_colour = "green"
-        elsif task.claim_verifier_match_any?
-          status = "Partial match"
-          status_colour = "yellow"
-        elsif task.claim_verifier_match_none?
-          status = "No match"
-          status_colour = "red"
-        end
       elsif task.passed?
         status = "Passed"
         status_colour = "green"
       elsif task.passed == false
         status = "Failed"
         status_colour = "red"
+      elsif task.claim_verifier_match_all?
+        status = "Full match"
+        status_colour = "green"
+      elsif task.claim_verifier_match_any?
+        status = "Partial match"
+        status_colour = "yellow"
+      elsif task.claim_verifier_match_none?
+        status = "No match"
+        status_colour = "red"
       end
 
-      tag_classes = "govuk-tag app-task-list__task-completed govuk-tag--#{task.nil? || !task.claim_verifier_match.nil? ? "" : "strong-"}#{status_colour}"
+      tag_classes = "govuk-tag app-task-list__task-completed govuk-tag--#{!task&.passed.nil? ? "strong-" : ""}#{status_colour}"
 
       content_tag("strong", status, class: tag_classes)
     end

@@ -167,7 +167,7 @@ module AutomatedChecks
               describe "#passed" do
                 subject(:passed) { identity_confirmation_task.passed }
 
-                it { is_expected.to eq true }
+                it { is_expected.to eq nil }
               end
 
               describe "#manual" do
@@ -289,7 +289,7 @@ module AutomatedChecks
               describe "#passed" do
                 subject(:passed) { identity_confirmation_task.passed }
 
-                it { is_expected.to eq true }
+                it { is_expected.to eq nil }
               end
 
               describe "#manual" do
@@ -350,7 +350,7 @@ module AutomatedChecks
               describe "#passed" do
                 subject(:passed) { identity_confirmation_task.passed }
 
-                it { is_expected.to eq true }
+                it { is_expected.to eq nil }
               end
 
               describe "#manual" do
@@ -460,7 +460,7 @@ module AutomatedChecks
               describe "#passed" do
                 subject(:passed) { identity_confirmation_task.passed }
 
-                it { is_expected.to eq true }
+                it { is_expected.to eq nil }
               end
 
               describe "#manual" do

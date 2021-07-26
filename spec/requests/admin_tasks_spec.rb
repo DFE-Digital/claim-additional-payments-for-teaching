@@ -46,7 +46,7 @@ RSpec.describe "Admin tasks", type: :request do
         describe "tasks#create" do
           it "creates a new passed task and redirects to the next task" do
             expect {
-              post admin_claim_tasks_path(claim, name: "qualifications", params: {task: {passed: "true"}})
+              post admin_claim_tasks_path(claim, params: {task: {name: "qualifications", passed: "true"}})
             }.to change { Task.count }.by(1)
 
             expect(claim.tasks.last.name).to eql("qualifications")
@@ -56,7 +56,7 @@ RSpec.describe "Admin tasks", type: :request do
           end
 
           it "creates a new failed task" do
-            post admin_claim_tasks_path(claim, name: "qualifications", params: {task: {passed: "false"}})
+            post admin_claim_tasks_path(claim, params: {task: {name: "qualifications", passed: "false"}})
 
             expect(claim.tasks.last.name).to eql("qualifications")
             expect(claim.tasks.last.passed?).to eql(false)
@@ -67,7 +67,7 @@ RSpec.describe "Admin tasks", type: :request do
 
             it "creates the task and redirects to the decision page" do
               expect {
-                post admin_claim_tasks_path(claim, name: last_task, params: {task: {passed: "true"}})
+                post admin_claim_tasks_path(claim, params: {task: {name: last_task, passed: "true"}})
               }.to change { Task.count }.by(1)
 
               expect(claim.tasks.reload.last.name).to eql(last_task)
@@ -80,7 +80,7 @@ RSpec.describe "Admin tasks", type: :request do
           context "when a task's passed flag is not set" do
             it "doesn't create a task and shows an error" do
               expect {
-                post admin_claim_tasks_path(claim, name: "qualifications", params: {task: {passed: ""}})
+                post admin_claim_tasks_path(claim, params: {task: {name: "qualifications", passed: ""}})
               }.not_to change { claim.tasks.count }
 
               expect(response.body).to match("You must select ‘Yes’ or ‘No’")
@@ -92,7 +92,7 @@ RSpec.describe "Admin tasks", type: :request do
               create(:task, name: "qualifications", claim: claim)
 
               expect {
-                post admin_claim_tasks_path(claim, name: "qualifications", params: {task: {passed: "true"}})
+                post admin_claim_tasks_path(claim, params: {task: {name: "qualifications", passed: "true"}})
               }.not_to change { Task.count }
 
               expect(response).to redirect_to(admin_claim_task_path(claim, name: "qualifications"))
