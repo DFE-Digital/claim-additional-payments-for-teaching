@@ -17,37 +17,7 @@
       <%= render "task_outcome", task: @task do %>
       <% end %>
     <% else %>
-      <%= form_with model: [:admin, @claim, @claim.tasks.where(name: "identity_confirmation").first_or_initialize] do |f| %>
-        <div class="govuk-form-group">
-          <fieldset class="govuk-fieldset govuk-!-margin-bottom-6">
-            <legend class="govuk-fieldset__legend govuk-fieldset__legend--l ">
-              <h3 class="govuk-heading-l">
-                <%= "Did #{@claim.full_name} submit the claim?" %>
-              </h3>
-            </legend>
-
-            <p class="govuk-body">
-              The claimant’s identity has not matched DQT records. See <%= link_to "notes", admin_claim_notes_path(@claim) %>.
-            </p>
-
-            <%= f.hidden_field :passed %>
-            <%= f.hidden_field :name, value: "identity_confirmation" %>
-
-            <div class="govuk-radios govuk-radios--inline">
-              <div class="govuk-radios__item">
-                <%= f.radio_button(:passed, true, class: "govuk-radios__input") %>
-                <%= f.label "passed_true", "Yes", class: "govuk-label govuk-radios__label" %>
-              </div>
-
-              <div class="govuk-radios__item">
-                <%= f.radio_button(:passed, false, class: "govuk-radios__input") %>
-                <%= f.label "passed_false", "No", class: "govuk-label govuk-radios__label" %>
-              </div>
-            </div>
-          </fieldset>
-          <%= f.submit "Save and continue", class: "govuk-button", data: {module: "govuk-button"} %>
-        </div>
-      <% end %>
+      <%= render "form", task_name: "identity_confirmation", claim: @claim %>
     <% end %>
   </div>
 </div>
