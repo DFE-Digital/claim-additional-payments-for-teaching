@@ -46,6 +46,7 @@ The format is based on [Keep a Changelog]
   - Add client for Ordnance Survey to make API calls for address/postcode data
   - Show admin claim identity confirmation task questions when claim verifier
     identity not fully matched
+  - Adds mobile number to claim summary
   - Adds mobile number request to TSLR and M&P
 
 ## [Release 091] - 2021-06-24
