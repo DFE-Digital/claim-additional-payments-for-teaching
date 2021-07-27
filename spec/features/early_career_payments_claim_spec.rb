@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.feature "Teacher Early-Career Payments claims" do
-  scenario "Teacher makes claim for 'Early-Career Payments' claim" do
+  scenario "Teacher makes claim for 'Early-Career Payments' claim", js: true do
     visit landing_page_path(EarlyCareerPayments.routing_name)
     expect(page).to have_link(href: EarlyCareerPayments.feedback_url)
 
@@ -80,7 +80,7 @@ RSpec.feature "Teacher Early-Career Payments claims" do
 
     # - In what academic year did you start your undergraduate ITT
     expect(page).to have_text(I18n.t("early_career_payments.questions.itt_academic_year.qualification.#{claim.eligibility.qualification}"))
-    expect(page).to have_text("You might still be eligible to claim if your ITT coincided with one of the academic years stated, even if it didn’t start or complete in one of those years.")
+    expect(page).to have_text("If you did a part time ITT")
 
     choose "2018 - 2019"
     click_on "Continue"
@@ -173,7 +173,13 @@ RSpec.feature "Teacher Early-Career Payments claims" do
     mail = ActionMailer::Base.deliveries.last
     otp_in_mail_sent = mail.body.decoded.scan(/\b[0-9]{6}\b/).first
 
-    fill_in "claim_one_time_password", with: otp_in_mail_sent
+    # - One time password wrong
+    fill_in "claim_one_time_password", with: '000000'
+    click_on "Confirm"
+    expect(page).to have_text("Enter the correct one time password that we emailed to you")
+
+    # - clear and ender correct OTP
+    fill_in "claim_one_time_password", with: otp_in_mail_sent, fill_options: { clear: :backspace }
     click_on "Confirm"
 
     # - Provide mobile number
