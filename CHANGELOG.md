@@ -47,6 +47,7 @@ The format is based on [Keep a Changelog]
   - Show admin claim identity confirmation task questions when claim verifier
     identity not fully matched
   - Adds mobile number to claim summary
+  - Adds mobile number request to TSLR and M&P
 
 ## [Release 091] - 2021-06-24
 
