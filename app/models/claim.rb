@@ -447,7 +447,7 @@ class Claim < ApplicationRecord
     return false unless one_time_password.present? && normalised_one_time_password.length == ONE_TIME_PASSWORD_LENGTH
 
     if verify_otp(one_time_password).nil?
-      if sent_one_time_password_at < OTP_PASSWORD_INTERVAL.seconds.ago
+      if sent_one_time_password_at && sent_one_time_password_at < OTP_PASSWORD_INTERVAL.seconds.ago
         errors.add(:one_time_password, "Your one time password has expired, request a new one")
       else
         errors.add(:one_time_password, "Enter the correct one time password that we emailed to you")
