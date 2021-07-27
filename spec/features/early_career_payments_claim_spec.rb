@@ -174,12 +174,12 @@ RSpec.feature "Teacher Early-Career Payments claims" do
     otp_in_mail_sent = mail.body.decoded.scan(/\b[0-9]{6}\b/).first
 
     # - One time password wrong
-    fill_in "claim_one_time_password", with: '000000'
+    fill_in "claim_one_time_password", with: "000000"
     click_on "Confirm"
     expect(page).to have_text("Enter the correct one time password that we emailed to you")
 
     # - clear and ender correct OTP
-    fill_in "claim_one_time_password", with: otp_in_mail_sent, fill_options: { clear: :backspace }
+    fill_in "claim_one_time_password", with: otp_in_mail_sent, fill_options: {clear: :backspace}
     click_on "Confirm"
 
     # - Provide mobile number
