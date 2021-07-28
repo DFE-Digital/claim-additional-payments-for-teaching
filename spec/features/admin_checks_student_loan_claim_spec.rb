@@ -32,7 +32,7 @@ RSpec.feature "Admin checking a Student Loans claim" do
 
     expect(claim.tasks.find_by!(name: "identity_confirmation").passed?).to eq(true)
 
-    expect(page).to have_content(I18n.t("student_loans.admin.task_questions.qualifications"))
+    expect(page).to have_content(I18n.t("student_loans.admin.task_questions.qualifications.title"))
     expect(page).to have_content("Award year")
     expect(page).to have_content(claim.eligibility.qts_award_year_answer)
 
@@ -41,7 +41,7 @@ RSpec.feature "Admin checking a Student Loans claim" do
 
     expect(claim.tasks.find_by!(name: "qualifications").passed?).to eq(true)
 
-    expect(page).to have_content(I18n.t("student_loans.admin.task_questions.employment"))
+    expect(page).to have_content(I18n.t("student_loans.admin.task_questions.employment.title"))
     expect(page).to have_content("Current school")
     expect(page).to have_link(claim.eligibility.current_school.name)
 
@@ -50,7 +50,7 @@ RSpec.feature "Admin checking a Student Loans claim" do
 
     expect(claim.tasks.find_by!(name: "employment").passed?).to eq(true)
 
-    expect(page).to have_content(I18n.t("student_loans.admin.task_questions.student_loan_amount"))
+    expect(page).to have_content(I18n.t("student_loans.admin.task_questions.student_loan_amount.title"))
     expect(page).to have_content("£1,987.65")
     expect(page).to have_content("Plan 2")
 

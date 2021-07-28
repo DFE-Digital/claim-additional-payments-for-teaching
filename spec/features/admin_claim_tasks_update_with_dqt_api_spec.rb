@@ -542,8 +542,8 @@ RSpec.feature "Admin claim tasks update with DQT API" do
         context "admin claim tasks qualifications view" do
           before { visit admin_claim_task_path(claim, :qualifications) }
 
-          scenario "shows task outcome performed by automated check" do
-            expect(task_outcome).to have_text("This task was performed by an automated check on #{I18n.l(claim.tasks.where(name: :qualifications).first.created_at)}")
+          scenario "shows qualifications question" do
+            expect(page).to have_content("Does the claimant’s initial teacher training (ITT) qualification year and specialist subject match the above information from their claim?")
           end
         end
 
@@ -585,8 +585,8 @@ RSpec.feature "Admin claim tasks update with DQT API" do
         context "admin claim tasks qualifications view" do
           before { visit admin_claim_task_path(claim, :qualifications) }
 
-          scenario "shows task outcome performed by automated check" do
-            expect(task_outcome).to have_text("This task was performed by an automated check on #{I18n.l(claim.tasks.where(name: :qualifications).first.created_at)}")
+          scenario "shows qualifications question" do
+            expect(page).to have_content("Does the claimant’s initial teacher training (ITT) qualification year and specialist subject match the above information from their claim?")
           end
         end
 
@@ -665,8 +665,8 @@ RSpec.feature "Admin claim tasks update with DQT API" do
       context "admin claim tasks qualifications view" do
         before { visit admin_claim_task_path(claim, :qualifications) }
 
-        scenario "shows task outcome performed by automated check" do
-          expect(task_outcome).to have_text("This task was performed by an automated check on #{I18n.l(claim.tasks.where(name: :qualifications).first.created_at)}")
+        scenario "shows qualifications question" do
+          expect(page).to have_content("Does the claimant’s initial teacher training (ITT) qualification year and specialist subject match the above information from their claim?")
         end
       end
 

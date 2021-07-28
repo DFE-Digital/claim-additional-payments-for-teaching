@@ -187,9 +187,16 @@ en:
       disciplinary_action: "Subject to disciplinary action?"
       formal_performance_action: "Subject to formal performance action?"
       task_questions:
-        qualifications: "Does the claimant’s initial teacher training (ITT) qualification year and specialist subject match the above information from their claim?"
-        employment: "Does the claimant’s current school match the above information from their claim?"
-        matching_details: "Is this claim still valid despite having matching details with other claims?"
+        identity_confirmation:
+          title: "Did %{claim_full_name} submit the claim?"
+          body: "The claimant’s identity has not matched DQT records. See %{link}."
+          notes: "notes"
+        qualifications:
+          title: "Does the claimant’s initial teacher training (ITT) qualification year and specialist subject match the above information from their claim?"
+        employment:
+          title: "Does the claimant’s current school match the above information from their claim?"
+        matching_details:
+          title: "Is this claim still valid despite having matching details with other claims?"
   student_loans:
     policy_name: "Teachers: claim back your student loan repayments"
     policy_short_name: "Student Loans"
@@ -221,10 +228,18 @@ en:
       student_loan_repayment_amount: "Student loan repayment amount"
       student_loan_repayment_plan: "Student loan repayment plan"
       task_questions:
-        qualifications: "Does the claimant’s initial teacher training (ITT) qualification year match the above information from their claim?"
-        employment: "Does the claimant’s previous and current schools match the above information from their claim?"
-        student_loan_amount: "Does the claimant’s student loan amount and plan type match the information we hold about their loan?"
-        matching_details: "Is this claim still valid despite having matching details with other claims?"
+        identity_confirmation:
+          title: "Did %{claim_full_name} submit the claim?"
+          body: "The claimant’s identity has not matched DQT records. See %{link}."
+          notes: "notes"
+        qualifications:
+          title: "Does the claimant’s initial teacher training (ITT) qualification year match the above information from their claim?"
+        employment:
+          title: "Does the claimant’s previous and current schools match the above information from their claim?"
+        student_loan_amount:
+          title: "Does the claimant’s student loan amount and plan type match the information we hold about their loan?"
+        matching_details:
+          title: "Is this claim still valid despite having matching details with other claims?"
   early_career_payments:
     check_your_answers:
       part_one:

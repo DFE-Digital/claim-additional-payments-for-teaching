@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+- Admin
+  - Show admin claim identity confirmation task questions when claim verifier
+    identity not fully matched
+
 ## [Release 092] - 2021-07-22
 
 - All policies
