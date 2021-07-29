@@ -10,11 +10,11 @@ module OneTimePassword
   private
 
   def generate_otp
-    ROTP::TOTP.new(OTP_SECRET, issuer: "Claim Additional Payments for Teaching", interval: OTP_PASSWORD_INTERVAL).now
+    ROTP::TOTP.new(OTP_SECRET, issuer: "Claim Additional Payments for Teaching").now
   end
 
   def verify_otp(challenge_code)
-    totp = ROTP::TOTP.new(OTP_SECRET, issuer: "Claim Additional Payments for Teaching", interval: OTP_PASSWORD_INTERVAL)
-    totp.verify(challenge_code)
+    totp = ROTP::TOTP.new(OTP_SECRET, issuer: "Claim Additional Payments for Teaching")
+    totp.verify(challenge_code, drift_behind: OTP_PASSWORD_INTERVAL)
   end
 end
