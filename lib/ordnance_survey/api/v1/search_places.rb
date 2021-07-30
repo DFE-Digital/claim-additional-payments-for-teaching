@@ -13,12 +13,12 @@ module OrdnanceSurvey
 
           response = client.get(path: "/search/places/v1/postcode", params: mapped_params)
 
-          return nil unless response
+          return nil unless response && response[:results].present?
 
           response[:results].map do |result|
             {
               address: result[:DPA][:ADDRESS],
-              address_line_1: address_line_1(sub_building_name: result[:DPA][:SUB_BUILDING_NAME], building_name: result[:DPA][:BUILDING_NAME]),
+              address_line_1: address_line_1(sub_building_name: result[:DPA][:SUB_BUILDING_NAME], building_name: result[:DPA][:BUILDING_NAME], building_number: result[:DPA][:BUILDING_NUMBER]),
               address_line_2: result[:DPA][:THOROUGHFARE_NAME],
               address_line_4: result[:DPA][:POST_TOWN],
               postcode: result[:DPA][:POSTCODE]
@@ -29,18 +29,19 @@ module OrdnanceSurvey
         def show(params:)
           mapped_params = {
             query: [params[:address_line_1], params[:postcode].delete(" ")].join(", "),
-            maxresults: 1
+            maxresults: 1,
+            minmatch: 0.4
           }
 
           response = client.get(path: "/search/places/v1/find", params: mapped_params)
 
-          return nil unless response
+          return nil unless response && response[:results].present?
 
           first_item = response[:results].first[:DPA]
 
           {
             address: first_item[:ADDRESS],
-            address_line_1: first_item[:BUILDING_NUMBER],
+            address_line_1: address_line_1(sub_building_name: first_item[:SUB_BUILDING_NAME], building_name: first_item[:BUILDING_NAME], building_number: first_item[:BUILDING_NUMBER]),
             address_line_2: first_item[:THOROUGHFARE_NAME],
             address_line_4: first_item[:POST_TOWN],
             postcode: first_item[:POSTCODE]
@@ -51,7 +52,8 @@ module OrdnanceSurvey
 
         attr_accessor :client
 
-        def address_line_1(sub_building_name:, building_name:)
+        def address_line_1(sub_building_name:, building_name:, building_number:)
+          return building_number if building_name.nil?
           return building_name if sub_building_name.nil?
 
           [sub_building_name, building_name].join(", ")
