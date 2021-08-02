@@ -195,7 +195,7 @@ GEM
       ast (~> 2.4.1)
     pg (1.2.3)
     public_suffix (4.0.6)
-    puma (5.3.2)
+    puma (5.4.0)
       nio4r (~> 2.0)
     racc (1.5.2)
     rack (2.2.3)
@@ -393,7 +393,7 @@ DEPENDENCIES
   omniauth-rails_csrf_protection
   omniauth_openid_connect
   pg (>= 0.18, < 2.0)
-  puma (~> 5.3)
+  puma (~> 5.4)
   rails (= 6.0.3.7)
   rails_semantic_logger
   rollbar
