@@ -190,7 +190,6 @@ class Claim < ApplicationRecord
   validate :otp_must_be_six_digits, on: [:"email-verification"]
   validate :otp_must_be_valid_challenge_code, on: [:"email-verification"], if: :persisted?
 
-  before_save :set_sent_one_time_password_at, if: :persisted?
   before_save :normalise_one_time_password, if: :one_time_password_changed?
 
   before_save :normalise_trn, if: :teacher_reference_number_changed?
@@ -425,10 +424,6 @@ class Claim < ApplicationRecord
     else
       Claim::NO_STUDENT_LOAN
     end
-  end
-
-  def set_sent_one_time_password_at
-    self.sent_one_time_password_at = sent_one_time_password_at
   end
 
   def normalise_one_time_password

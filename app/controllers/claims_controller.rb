@@ -32,10 +32,9 @@ class ClaimsController < BasePublicController
     current_claim.attributes = claim_params
     current_claim.reset_dependent_answers
     current_claim.eligibility.reset_dependent_answers
+    one_time_password
 
     if current_claim.save(context: page_sequence.current_slug.to_sym)
-      generate_one_time_password
-      store_in_session_one_time_password
       redirect_to claim_path(current_policy_routing_name, next_slug)
     else
       show
@@ -117,17 +116,14 @@ class ClaimsController < BasePublicController
     prepend_view_path("app/views/#{current_policy_routing_name.underscore}")
   end
 
-  def generate_one_time_password
-    if params[:slug] == "email-address"
+  def one_time_password
+    case params[:slug]
+    when "email-address"
       ClaimMailer.email_verification(current_claim, generate_otp).deliver_now
       session[:sent_one_time_password_at] = Time.now
-    elsif params[:slug] == "mobile-number"
+    when "mobile-number"
       Rails.logger.debug "\n\n  ** =================== **\nSMS one_time_password: \n#{generate_otp}\n  ** =================== **\n"
-    end
-  end
-
-  def store_in_session_one_time_password
-    if params[:slug] == "email-verification"
+    when "email-verification"
       current_claim.update_attributes(sent_one_time_password_at: session[:sent_one_time_password_at])
     end
   end

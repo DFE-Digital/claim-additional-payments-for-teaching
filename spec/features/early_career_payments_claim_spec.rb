@@ -178,7 +178,7 @@ RSpec.feature "Teacher Early-Career Payments claims" do
     click_on "Confirm"
     expect(page).to have_text("Enter the correct one time password that we emailed to you")
 
-    # - clear and ender correct OTP
+    # - clear and enter correct OTP
     fill_in "claim_one_time_password", with: otp_in_mail_sent, fill_options: {clear: :backspace}
     click_on "Confirm"
 
