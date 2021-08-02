@@ -29,6 +29,14 @@ class ClaimsController < BasePublicController
     render current_template
   end
 
+  def postcode
+    params[:claim][:postcode]
+  end
+
+  def invalid_postcode
+    current_claim.errors.add(:postcode, "Enter a real postcode") if postcode.blank? || !UKPostcode.parse(postcode).full_valid?
+  end
+
   def update
     current_claim.attributes = claim_params
     current_claim.reset_dependent_answers
