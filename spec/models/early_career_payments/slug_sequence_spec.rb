@@ -146,6 +146,7 @@ RSpec.describe EarlyCareerPayments::SlugSequence do
           eligibility-confirmed
           how-we-will-use-information-provided
           personal-details
+          postcode-search
           address
           email-address
           email-verification
@@ -180,6 +181,7 @@ RSpec.describe EarlyCareerPayments::SlugSequence do
           eligibility-confirmed
           how-we-will-use-information-provided
           personal-details
+          postcode-search
           address
           email-address
           email-verification

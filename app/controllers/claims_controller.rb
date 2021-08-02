@@ -25,6 +25,7 @@ class ClaimsController < BasePublicController
 
   def show
     search_schools if params[:school_search]
+    invalid_postcode if params[:slug] == "postcode-search" && params[:claim]
     render current_template
   end
 
@@ -130,5 +131,13 @@ class ClaimsController < BasePublicController
     if params[:slug] == "email-verification"
       current_claim.update_attributes(sent_one_time_password_at: session[:sent_one_time_password_at])
     end
+  end
+
+  def postcode
+    params[:claim][:postcode]
+  end
+
+  def invalid_postcode
+    current_claim.errors.add(:postcode, "Enter a real postcode") if postcode.blank? || !UKPostcode.parse(postcode).full_valid?
   end
 end

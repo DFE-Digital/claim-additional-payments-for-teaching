@@ -1,0 +1,43 @@
+<% content_for(:page_title, page_title(t("questions.home_address"), policy: current_policy_routing_name, show_error: current_claim.errors.any?)) %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= render("shared/error_summary", instance: current_claim) if current_claim.errors.any? %>
+
+    <%= form_for current_claim, url: claim_path(current_policy_routing_name), method: :get do |form| %>
+      <fieldset class="govuk-fieldset">
+        <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
+          <h1 class="govuk-heading-l"><%= I18n.t("questions.home_address") %></h1>
+        </legend>
+
+        <%= form_group_tag current_claim, :postcode do %>
+          <%= label_tag :"claim_postcode", "Postcode", class: "govuk-label govuk-label--m" %>
+          <%= errors_tag current_claim, :postcode %>
+          <%= text_field_tag :"claim[postcode]",
+            form.object.postcode,
+            id: "claim_postcode",
+            class: css_classes_for_input(current_claim, :postcode, "govuk-input--width-10"),
+            "aria-describedby" => "postcode-hint"
+          %>
+        <% end %>
+
+        <%= form_group_tag current_claim, :address_line_1 do %>
+          <%= form.label :address_line_1, class: "govuk-label govuk-label--m" do %>
+            House number or name (optional)<span class="govuk-visually-hidden">House number or name (optional)</span>
+          <% end %>
+          <%= errors_tag current_claim, :address_line_1 %>
+          <%= text_field_tag :"claim[address_line_1]",
+            form.object.address_line_1,
+            id: :claim_address_line_1,
+            class: css_classes_for_input(current_claim, :address_line_1, "govuk-input--width-20"),
+            "aria-describedby" => "address_line_1-hint"
+          %>
+        <% end %>
+        <%= link_to "#{I18n.t("questions.link_to_manual_address")}", claim_path(current_claim.policy.routing_name, "address"), class: "govuk-link", "aria-label": "#{I18n.t("questions.link_to_manual_address")}" %>
+      </fieldset>
+      <p class="govuk-!-padding-top-6">
+        <%= form.submit "Search", class: "govuk-button" %>
+      </p>
+    <% end %>
+  </div>
+</div>

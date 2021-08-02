@@ -9,6 +9,8 @@ The format is based on [Keep a Changelog]
 - Admin
   - Show admin claim identity confirmation task questions when claim verifier
     identity not fully matched
+- All policies
+  - Add home address search screen to claim journey
 
 ## [Release 092] - 2021-07-22
 
