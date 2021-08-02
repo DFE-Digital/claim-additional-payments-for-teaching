@@ -129,6 +129,22 @@ RSpec.describe EarlyCareerPayments::SlugSequence do
       end
     end
 
+    context "when claim has a valid postcode" do
+      it "excludes the 'address' slug" do
+        claim.postcode = "SO16 9FX"
+
+        expect(slug_sequence.slugs).not_to include("address")
+      end
+    end
+
+    context "when manual full address requested" do
+      it "includes the 'address' slug" do
+        claim.postcode = nil
+
+        expect(slug_sequence.slugs).to include("address")
+      end
+    end
+
     context "when the answer to 'paying off student loan' is 'No'" do
       it "excludes 'student-loan-country', 'student-loan-how-many-courses', 'student-loan-start-date', 'masters-loan' and 'doctoral-loan'" do
         claim.has_student_loan = false
@@ -147,6 +163,7 @@ RSpec.describe EarlyCareerPayments::SlugSequence do
           how-we-will-use-information-provided
           personal-details
           postcode-search
+          select-home-address
           address
           email-address
           email-verification
@@ -182,6 +199,7 @@ RSpec.describe EarlyCareerPayments::SlugSequence do
           how-we-will-use-information-provided
           personal-details
           postcode-search
+          select-home-address
           address
           email-address
           email-verification

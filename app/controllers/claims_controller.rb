@@ -1,6 +1,7 @@
 class ClaimsController < BasePublicController
   include PartOfClaimJourney
   include OneTimePassword
+  include AddressDetails
 
   skip_before_action :send_unstarted_claiments_to_the_start, only: [:new, :create, :timeout]
   before_action :check_page_is_in_sequence, only: [:show, :update]
@@ -25,16 +26,17 @@ class ClaimsController < BasePublicController
 
   def show
     search_schools if params[:school_search]
-    invalid_postcode if params[:slug] == "postcode-search" && params[:claim]
+    if params[:slug] == "postcode-search" && postcode
+      redirect_to claim_path(current_policy_routing_name, "select-home-address", {"claim[postcode]": postcode, "claim[address_line_1]": params[:claim][:address_line_1]}) and return unless invalid_postcode?
+    elsif params[:slug] == "select-home-address" && postcode
+      if address_data.nil?
+        current_claim.errors.add(:postcode, "Postcode valid but not found")
+        session[:postcode_not_found] = "Postcode not found"
+        redirect_to claim_path(current_policy_routing_name, "postcode-search") and return
+      end
+    end
+
     render current_template
-  end
-
-  def postcode
-    params[:claim][:postcode]
-  end
-
-  def invalid_postcode
-    current_claim.errors.add(:postcode, "Enter a real postcode") if postcode.blank? || !UKPostcode.parse(postcode).full_valid?
   end
 
   def update
@@ -135,13 +137,5 @@ class ClaimsController < BasePublicController
     when "email-verification"
       current_claim.update_attributes(sent_one_time_password_at: session[:sent_one_time_password_at])
     end
-  end
-
-  def postcode
-    params[:claim][:postcode]
-  end
-
-  def invalid_postcode
-    current_claim.errors.add(:postcode, "Enter a real postcode") if postcode.blank? || !UKPostcode.parse(postcode).full_valid?
   end
 end

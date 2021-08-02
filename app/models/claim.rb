@@ -141,8 +141,8 @@ class Claim < ApplicationRecord
   validates :address_line_2, on: [:address], presence: {message: "Enter a building and street address"}, if: :has_ecp_policy?
   validates :address_line_3, length: {maximum: 100, message: "Address lines must be 100 characters or less"}
   validates :address_line_3, on: [:address], presence: {message: "Enter a town or city"}
-  validates :address_line_4, length: {maximum: 100, message: "Address lines must be 100 characters or less"}
-  validates :address_line_4, on: [:address], presence: {message: "Enter a county"}
+  validates :address_line_4, length: {maximum: 100, message: "Address lines must be 100 characters or less"}, unless: :has_ecp_policy?
+  validates :address_line_4, on: [:address], presence: {message: "Enter a county"}, unless: :has_ecp_policy?
 
   validates :postcode, on: [:address, :submit], presence: {message: "Enter a real postcode"}
   validates :postcode, length: {maximum: 11, message: "Postcode must be 11 characters or less"}

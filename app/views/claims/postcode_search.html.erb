@@ -9,7 +9,6 @@
         <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
           <h1 class="govuk-heading-l"><%= I18n.t("questions.home_address") %></h1>
         </legend>
-
         <%= form_group_tag current_claim, :postcode do %>
           <%= label_tag :"claim_postcode", "Postcode", class: "govuk-label govuk-label--m" %>
           <%= errors_tag current_claim, :postcode %>

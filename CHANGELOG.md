@@ -13,6 +13,9 @@ The format is based on [Keep a Changelog]
   - Create admin claim note when identity confirmation mailer is sent
 - All policies
   - Add home address search screen to claim journey
+- ECP policies
+  - Add screen to allow claimant to select address from API provided results
+    presented as radio buttons
 
 ## [Release 092] - 2021-07-22
 
