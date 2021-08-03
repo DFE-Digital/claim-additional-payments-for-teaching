@@ -16,7 +16,7 @@ RSpec.feature "Given a one time password" do
   end
 
   scenario "that is expired" do
-    stub_const("OneTimePassword::OTP_PASSWORD_INTERVAL", -100)
+    stub_const("OneTimePassword::OTP_PASSWORD_DRIFT", -100)
     fill_in "claim_one_time_password", with: get_otp_from_email
     click_on "Confirm"
     expect(page).to have_text("Your one time password has expired, request a new one")
