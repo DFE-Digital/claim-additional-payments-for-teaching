@@ -54,14 +54,13 @@ en:
     hint1_html: "We have sent an %{email_or_mobile_message} to <b><strong>%{email_or_mobile_value}</strong></b> with a 6-digit password."
     hint1_suffix: "We recommend you copy and paste the password from the email."
     validity_duration: "You will have %{duration_valid} from receiving the %{email_or_mobile_message} before the password will expire."
-
-
-
   questions:
     current_school: "Which school are you currently employed to teach at?"
     qts_award_year: "When did you complete your initial teacher training?"
     name: "What is your full name?"
     address: "What is your address?"
+    home_address: "What is your home address?"
+    link_to_manual_address: "Enter your address manually"
     date_of_birth: "What is your date of birth?"
     teacher_reference_number: "What is your teacher reference number (TRN)?"
     national_insurance_number: "What's your National Insurance number?"

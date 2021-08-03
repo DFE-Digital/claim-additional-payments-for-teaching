@@ -141,6 +141,12 @@ RSpec.feature "Teacher Early-Career Payments claims" do
     expect(claim.reload.date_of_birth).to eq(Date.new(1988, 2, 28))
     expect(claim.reload.national_insurance_number).to eq("PX321499A")
 
+    # - What is your home address
+    expect(page).to have_text(I18n.t("questions.home_address"))
+    expect(page).to have_link(href: claim_path(EarlyCareerPayments.routing_name, "address"))
+
+    click_link(I18n.t("questions.link_to_manual_address"))
+
     # - What is your address
     expect(page).to have_text(I18n.t("questions.address"))
 
@@ -592,6 +598,12 @@ RSpec.feature "Teacher Early-Career Payments claims" do
     expect(claim.reload.surname).to eql("Wong")
     expect(claim.reload.date_of_birth).to eq(Date.new(1988, 2, 28))
     expect(claim.reload.national_insurance_number).to eq("PX321499A")
+
+    # - What is your home address
+    expect(page).to have_text(I18n.t("questions.home_address"))
+    expect(page).to have_link(href: claim_path(EarlyCareerPayments.routing_name, "address"))
+
+    click_link(I18n.t("questions.link_to_manual_address"))
 
     # - What is your address
     expect(page).to have_text(I18n.t("questions.address"))
