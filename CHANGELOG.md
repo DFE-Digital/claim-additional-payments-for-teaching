@@ -9,6 +9,7 @@ The format is based on [Keep a Changelog]
 - Admin
   - Show admin claim identity confirmation task questions when claim verifier
     identity not fully matched
+  - Add ECP admin claim identity confirmation task screen
 - All policies
   - Add home address search screen to claim journey
 

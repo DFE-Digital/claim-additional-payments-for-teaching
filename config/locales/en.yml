@@ -188,7 +188,7 @@ en:
       task_questions:
         identity_confirmation:
           title: "Did %{claim_full_name} submit the claim?"
-          body: "The claimant’s identity has not matched DQT records. See %{link}."
+          body: "The claimant’s identity matches DQT records. See %{link}."
           notes: "notes"
         qualifications:
           title: "Does the claimant’s initial teacher training (ITT) qualification year and specialist subject match the above information from their claim?"
@@ -229,7 +229,7 @@ en:
       task_questions:
         identity_confirmation:
           title: "Did %{claim_full_name} submit the claim?"
-          body: "The claimant’s identity has not matched DQT records. See %{link}."
+          body: "The claimant’s identity matches DQT records. See %{link}."
           notes: "notes"
         qualifications:
           title: "Does the claimant’s initial teacher training (ITT) qualification year match the above information from their claim?"
@@ -294,6 +294,11 @@ en:
     admin:
       employed_as_supply_teacher: "Employed as a supply teacher?"
       nqt_in_academic_year_after_itt: "NQT the academic year after ITT"
+      task_questions:
+        identity_confirmation:
+          title: "Did %{claim_full_name} submit the claim?"
+          body: "The claimant’s identity matches DQT records. See %{link}."
+          notes: "notes"
     answers:
       qualification:
         postgraduate_itt: "Postgraduate ITT"
