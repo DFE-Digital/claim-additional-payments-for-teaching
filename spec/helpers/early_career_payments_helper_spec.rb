@@ -33,15 +33,15 @@ describe EarlyCareerPaymentsHelper do
   end
 
   describe "#one_time_password_validity_duration" do
-    context "with 'OTP_PASSWORD_INTERVAL' constant set" do
+    context "with 'OTP_PASSWORD_DRIFT' constant set" do
       it "reports '1 minute' when 60 (seconds)" do
-        stub_const("OneTimePassword::OTP_PASSWORD_INTERVAL", 60)
+        stub_const("OneTimePassword::OTP_PASSWORD_DRIFT", 60)
 
         expect(helper.one_time_password_validity_duration).to eq("1 minute")
       end
 
       it "reports '1 minute' when 60 (seconds)" do
-        stub_const("OneTimePassword::OTP_PASSWORD_INTERVAL", 900)
+        stub_const("OneTimePassword::OTP_PASSWORD_DRIFT", 900)
 
         expect(helper.one_time_password_validity_duration).to eq("15 minutes")
       end

@@ -120,4 +120,9 @@ module FeatureHelpers
     choose "Yes"
     click_on "Continue"
   end
+
+  def get_otp_from_email
+    ActionMailer::Base.deliveries
+      .last.body.decoded.scan(/\b[0-9]{6}\b/).first
+  end
 end

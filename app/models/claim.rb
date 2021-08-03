@@ -190,7 +190,6 @@ class Claim < ApplicationRecord
   validate :otp_must_be_six_digits, on: [:"email-verification"]
   validate :otp_must_be_valid_challenge_code, on: [:"email-verification"], if: :persisted?
 
-  before_save :set_sent_one_time_password_at, if: :persisted?
   before_save :normalise_one_time_password, if: :one_time_password_changed?
 
   before_save :normalise_trn, if: :teacher_reference_number_changed?
@@ -427,10 +426,6 @@ class Claim < ApplicationRecord
     end
   end
 
-  def set_sent_one_time_password_at
-    self.sent_one_time_password_at = sent_one_time_password_at
-  end
-
   def normalise_one_time_password
     self.one_time_password = normalised_one_time_password
   end
@@ -447,7 +442,7 @@ class Claim < ApplicationRecord
     return false unless one_time_password.present? && normalised_one_time_password.length == ONE_TIME_PASSWORD_LENGTH
 
     if verify_otp(one_time_password).nil?
-      if sent_one_time_password_at && sent_one_time_password_at < OTP_PASSWORD_INTERVAL.seconds.ago
+      if sent_one_time_password_at && sent_one_time_password_at < OTP_PASSWORD_DRIFT.seconds.ago
         errors.add(:one_time_password, "Your one time password has expired, request a new one")
       else
         errors.add(:one_time_password, "Enter the correct one time password that we emailed to you")
