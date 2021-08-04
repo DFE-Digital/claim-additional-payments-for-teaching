@@ -15,12 +15,6 @@ RUN apk add nodejs
 RUN apk add curl
 RUN apk add libc6-compat
 RUN apk add shared-mime-info
-# adding the below to see if it will upgrade nokogiri
-RUN apk add --no-cache libxml2 libxslt && \
-  apk add --no-cache --virtual .gem-installdeps build-base libxml2-dev libxslt-dev && \
-  gem install nokogiri --platform=ruby -- --use-system-libraries && \
-  rm -rf $GEM_HOME/cache && \
-  apk del .gem-installdeps
 
 USER appuser
 
@@ -55,6 +49,9 @@ USER appuser
 # Install Ruby dependencies
 COPY Gemfile ${DEPS_HOME}/Gemfile
 COPY Gemfile.lock ${DEPS_HOME}/Gemfile.lock
+
+#explicit nokogiri install
+RUN gem install nokogiri
 
 RUN gem install bundler
 ENV BUNDLE_BUILD__SASSC=--disable-march-tune-native
