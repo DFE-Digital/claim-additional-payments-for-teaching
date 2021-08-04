@@ -20,7 +20,7 @@ module OrdnanceSurvey
               address: result[:DPA][:ADDRESS],
               address_line_1: address_line_1(sub_building_name: result[:DPA][:SUB_BUILDING_NAME], building_name: result[:DPA][:BUILDING_NAME], building_number: result[:DPA][:BUILDING_NUMBER]),
               address_line_2: result[:DPA][:THOROUGHFARE_NAME],
-              address_line_4: result[:DPA][:POST_TOWN],
+              address_line_3: result[:DPA][:POST_TOWN],
               postcode: result[:DPA][:POSTCODE]
             }
           end
@@ -43,7 +43,7 @@ module OrdnanceSurvey
             address: first_item[:ADDRESS],
             address_line_1: address_line_1(sub_building_name: first_item[:SUB_BUILDING_NAME], building_name: first_item[:BUILDING_NAME], building_number: first_item[:BUILDING_NUMBER]),
             address_line_2: first_item[:THOROUGHFARE_NAME],
-            address_line_4: first_item[:POST_TOWN],
+            address_line_3: first_item[:POST_TOWN],
             postcode: first_item[:POSTCODE]
           }
         end
