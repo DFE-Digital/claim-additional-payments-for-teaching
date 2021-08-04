@@ -50,8 +50,8 @@ USER appuser
 COPY Gemfile ${DEPS_HOME}/Gemfile
 COPY Gemfile.lock ${DEPS_HOME}/Gemfile.lock
 
-#explicit nokogiri install
-RUN gem install nokogiri
+# #explicit nokogiri install
+# RUN gem install nokogiri
 
 RUN gem install bundler
 ENV BUNDLE_BUILD__SASSC=--disable-march-tune-native
