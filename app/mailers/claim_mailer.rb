@@ -35,7 +35,7 @@ class ClaimMailer < ApplicationMailer
     set_common_instance_variables(claim)
     @subject = "We need to verify your identity #{@claim_description}, reference number: #{claim.reference}"
 
-    send_mail
+    claim.notes.create!({body: "Identity confirmation mailer sent"}) if send_mail
   end
 
   def email_verification(claim, one_time_password)
