@@ -3,6 +3,8 @@ require "rails_helper"
 module AutomatedChecks
   module ClaimVerifiers
     RSpec.describe Identity do
+      subject(:identity) { described_class.new(**identity_args) }
+
       before do
         if data.nil?
           body = <<~JSON
@@ -39,16 +41,14 @@ module AutomatedChecks
         stub_request(:get, "#{ENV["DQT_CLIENT_HOST"]}:#{ENV["DQT_CLIENT_PORT"]}/api/qualified-teachers/qualified-teaching-status").with(
           query: WebMock::API.hash_including(
             {
-              trn: claim.teacher_reference_number,
-              niNumber: claim.national_insurance_number
+              trn: claim_arg.teacher_reference_number,
+              niNumber: claim_arg.national_insurance_number
             }
           )
         ).to_return(body: body, status: status)
       end
 
-      subject(:identity) { described_class.new(**identity_args) }
-
-      let(:claim) do
+      let(:claim_arg) do
         claim = create(
           :claim,
           :submitted,
@@ -72,13 +72,22 @@ module AutomatedChecks
         claim
       end
 
+      let(:data) do
+        {
+          date_of_birth: claim_arg.date_of_birth,
+          name: "#{claim_arg.first_name} #{claim_arg.surname}",
+          national_insurance_number: claim_arg.national_insurance_number,
+          teacher_reference_number: claim_arg.teacher_reference_number
+        }
+      end
+
       let(:identity_args) do
         {
-          claim: claim,
+          claim: claim_arg,
           dqt_teacher_status: Dqt::Client.new.api.qualified_teaching_status.show(
             params: {
-              teacher_reference_number: claim.teacher_reference_number,
-              national_insurance_number: claim.national_insurance_number
+              teacher_reference_number: claim_arg.teacher_reference_number,
+              national_insurance_number: claim_arg.national_insurance_number
             }
           )
         }
@@ -90,17 +99,17 @@ module AutomatedChecks
         context "with matching DQT identity" do
           let(:data) do
             {
-              date_of_birth: claim.date_of_birth,
-              name: "#{claim.first_name} #{claim.surname}",
-              national_insurance_number: claim.national_insurance_number,
-              teacher_reference_number: claim.teacher_reference_number
+              date_of_birth: claim_arg.date_of_birth,
+              name: "#{claim_arg.first_name} #{claim_arg.surname}",
+              national_insurance_number: claim_arg.national_insurance_number,
+              teacher_reference_number: claim_arg.teacher_reference_number
             }
           end
 
           it { is_expected.to be_an_instance_of(Task) }
 
           describe "identity confirmation task" do
-            subject(:identity_confirmation_task) { claim.tasks.find_by(name: "identity_confirmation") }
+            subject(:identity_confirmation_task) { claim_arg.tasks.find_by(name: "identity_confirmation") }
 
             before { perform }
 
@@ -130,7 +139,7 @@ module AutomatedChecks
           end
 
           describe "note" do
-            subject(:note) { claim.notes.last }
+            subject(:note) { claim_arg.notes.last }
 
             it { is_expected.to eq(nil) }
           end
@@ -138,17 +147,17 @@ module AutomatedChecks
           context "except national insurance number" do
             let(:data) do
               {
-                date_of_birth: claim.date_of_birth,
-                name: "#{claim.first_name} #{claim.surname}",
+                date_of_birth: claim_arg.date_of_birth,
+                name: "#{claim_arg.first_name} #{claim_arg.surname}",
                 national_insurance_number: "QQ100000B",
-                teacher_reference_number: claim.teacher_reference_number
+                teacher_reference_number: claim_arg.teacher_reference_number
               }
             end
 
             it { is_expected.to be_an_instance_of(Task) }
 
             describe "identity confirmation task" do
-              subject(:identity_confirmation_task) { claim.tasks.find_by(name: "identity_confirmation") }
+              subject(:identity_confirmation_task) { claim_arg.tasks.find_by(name: "identity_confirmation") }
 
               before { perform }
 
@@ -178,7 +187,7 @@ module AutomatedChecks
             end
 
             describe "note" do
-              subject(:note) { claim.notes.last }
+              subject(:note) { claim_arg.notes.last }
 
               before { perform }
 
@@ -199,9 +208,9 @@ module AutomatedChecks
           context "except matching teacher reference number" do
             let(:data) do
               {
-                date_of_birth: claim.date_of_birth,
-                name: "#{claim.first_name} #{claim.surname}",
-                national_insurance_number: claim.national_insurance_number,
+                date_of_birth: claim_arg.date_of_birth,
+                name: "#{claim_arg.first_name} #{claim_arg.surname}",
+                national_insurance_number: claim_arg.national_insurance_number,
                 teacher_reference_number: "7654321"
               }
             end
@@ -209,7 +218,7 @@ module AutomatedChecks
             it { is_expected.to be_an_instance_of(Task) }
 
             describe "identity confirmation task" do
-              subject(:identity_confirmation_task) { claim.tasks.find_by(name: "identity_confirmation") }
+              subject(:identity_confirmation_task) { claim_arg.tasks.find_by(name: "identity_confirmation") }
 
               before { perform }
 
@@ -239,7 +248,7 @@ module AutomatedChecks
             end
 
             describe "note" do
-              subject(:note) { claim.notes.last }
+              subject(:note) { claim_arg.notes.last }
 
               before { perform }
 
@@ -260,17 +269,17 @@ module AutomatedChecks
           context "except matching first name" do
             let(:data) do
               {
-                date_of_birth: claim.date_of_birth,
-                name: "Except #{claim.surname}",
-                national_insurance_number: claim.national_insurance_number,
-                teacher_reference_number: claim.teacher_reference_number
+                date_of_birth: claim_arg.date_of_birth,
+                name: "Except #{claim_arg.surname}",
+                national_insurance_number: claim_arg.national_insurance_number,
+                teacher_reference_number: claim_arg.teacher_reference_number
               }
             end
 
             it { is_expected.to be_an_instance_of(Task) }
 
             describe "identity confirmation task" do
-              subject(:identity_confirmation_task) { claim.tasks.find_by(name: "identity_confirmation") }
+              subject(:identity_confirmation_task) { claim_arg.tasks.find_by(name: "identity_confirmation") }
 
               before { perform }
 
@@ -300,7 +309,7 @@ module AutomatedChecks
             end
 
             describe "note" do
-              subject(:note) { claim.notes.last }
+              subject(:note) { claim_arg.notes.last }
 
               before { perform }
 
@@ -321,17 +330,17 @@ module AutomatedChecks
           context "except matching surname" do
             let(:data) do
               {
-                date_of_birth: claim.date_of_birth,
-                name: "#{claim.first_name} Except",
-                national_insurance_number: claim.national_insurance_number,
-                teacher_reference_number: claim.teacher_reference_number
+                date_of_birth: claim_arg.date_of_birth,
+                name: "#{claim_arg.first_name} Except",
+                national_insurance_number: claim_arg.national_insurance_number,
+                teacher_reference_number: claim_arg.teacher_reference_number
               }
             end
 
             it { is_expected.to be_an_instance_of(Task) }
 
             describe "identity confirmation task" do
-              subject(:identity_confirmation_task) { claim.tasks.find_by(name: "identity_confirmation") }
+              subject(:identity_confirmation_task) { claim_arg.tasks.find_by(name: "identity_confirmation") }
 
               before { perform }
 
@@ -361,7 +370,7 @@ module AutomatedChecks
             end
 
             describe "note" do
-              subject(:note) { claim.notes.last }
+              subject(:note) { claim_arg.notes.last }
 
               before { perform }
 
@@ -382,17 +391,17 @@ module AutomatedChecks
           context "with middle names" do
             let(:data) do
               {
-                date_of_birth: claim.date_of_birth,
-                name: "#{claim.first_name} Middle Names #{claim.surname}",
-                national_insurance_number: claim.national_insurance_number,
-                teacher_reference_number: claim.teacher_reference_number
+                date_of_birth: claim_arg.date_of_birth,
+                name: "#{claim_arg.first_name} Middle Names #{claim_arg.surname}",
+                national_insurance_number: claim_arg.national_insurance_number,
+                teacher_reference_number: claim_arg.teacher_reference_number
               }
             end
 
             it { is_expected.to be_an_instance_of(Task) }
 
             describe "identity confirmation task" do
-              subject(:identity_confirmation_task) { claim.tasks.find_by(name: "identity_confirmation") }
+              subject(:identity_confirmation_task) { claim_arg.tasks.find_by(name: "identity_confirmation") }
 
               before { perform }
 
@@ -422,7 +431,7 @@ module AutomatedChecks
             end
 
             describe "note" do
-              subject(:note) { claim.notes.last }
+              subject(:note) { claim_arg.notes.last }
 
               it { is_expected.to eq(nil) }
             end
@@ -431,17 +440,17 @@ module AutomatedChecks
           context "except matching date of birth" do
             let(:data) do
               {
-                date_of_birth: claim.date_of_birth + 1.day,
-                name: "#{claim.first_name} #{claim.surname}",
-                national_insurance_number: claim.national_insurance_number,
-                teacher_reference_number: claim.teacher_reference_number
+                date_of_birth: claim_arg.date_of_birth + 1.day,
+                name: "#{claim_arg.first_name} #{claim_arg.surname}",
+                national_insurance_number: claim_arg.national_insurance_number,
+                teacher_reference_number: claim_arg.teacher_reference_number
               }
             end
 
             it { is_expected.to be_an_instance_of(Task) }
 
             describe "identity confirmation task" do
-              subject(:identity_confirmation_task) { claim.tasks.find_by(name: "identity_confirmation") }
+              subject(:identity_confirmation_task) { claim_arg.tasks.find_by(name: "identity_confirmation") }
 
               before { perform }
 
@@ -471,7 +480,7 @@ module AutomatedChecks
             end
 
             describe "note" do
-              subject(:note) { claim.notes.last }
+              subject(:note) { claim_arg.notes.last }
 
               before { perform }
 
@@ -490,7 +499,7 @@ module AutomatedChecks
           end
 
           context "with admin claims tasks identity confirmation passed" do
-            let(:claim) do
+            let(:claim_arg) do
               create(
                 :claim,
                 :submitted,
@@ -507,7 +516,7 @@ module AutomatedChecks
             it { is_expected.to eq(nil) }
 
             describe "identity confirmation task" do
-              subject(:identity_confirmation_task) { claim.tasks.find_by(name: "identity_confirmation") }
+              subject(:identity_confirmation_task) { claim_arg.tasks.find_by(name: "identity_confirmation") }
 
               before { perform }
 
@@ -537,7 +546,7 @@ module AutomatedChecks
             end
 
             describe "note" do
-              subject(:note) { claim.notes.last }
+              subject(:note) { claim_arg.notes.last }
 
               before { perform }
 
@@ -553,7 +562,7 @@ module AutomatedChecks
           it { is_expected_with_block.to have_enqueued_mail(ClaimMailer, :identity_confirmation) }
 
           describe "identity confirmation task" do
-            subject(:identity_confirmation_task) { claim.tasks.find_by(name: "identity_confirmation") }
+            subject(:identity_confirmation_task) { claim_arg.tasks.find_by(name: "identity_confirmation") }
 
             before { perform }
 
@@ -583,7 +592,7 @@ module AutomatedChecks
           end
 
           describe "note" do
-            subject(:note) { claim.notes.last }
+            subject(:note) { claim_arg.notes.last }
 
             before { perform }
 
