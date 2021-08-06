@@ -1,5 +1,5 @@
 module AdminSessionTimeout
-  ADMIN_TIMEOUT_LENGTH_IN_MINUTES = 30
+  ADMIN_TIMEOUT_LENGTH_IN_MINUTES = 60
 
   def end_expired_admin_sessions
     if admin_session_timed_out?
