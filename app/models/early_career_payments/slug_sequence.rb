@@ -30,6 +30,7 @@ module EarlyCareerPayments
       "how-we-will-use-information-provided",
       "personal-details",
       "postcode-search",
+      "select-home-address",
       "address",
       "email-address",
       "email-verification",
@@ -65,6 +66,7 @@ module EarlyCareerPayments
         sequence.delete("eligibility-confirmed") if claim.eligibility.ineligible? || claim.eligibility.eligible_later?
         sequence.delete("eligible-later") unless claim.eligibility.eligible_later?
         sequence.delete("ineligible") unless claim.eligibility.ineligible?
+        sequence.delete("address") unless claim.address.blank?
         sequence.delete("personal-bank-account") if claim.bank_or_building_society == "building_society"
         sequence.delete("building-society-account") if claim.bank_or_building_society == "personal_bank_account"
         sequence.delete("mobile-number") if claim.provide_mobile_number == false

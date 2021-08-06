@@ -17,7 +17,7 @@ module OrdnanceSurvey
 
           response[:results].map do |result|
             {
-              address: result[:DPA][:ADDRESS],
+              address: titleize_address(full_address: result[:DPA][:ADDRESS]),
               address_line_1: address_line_1(sub_building_name: result[:DPA][:SUB_BUILDING_NAME], building_name: result[:DPA][:BUILDING_NAME], building_number: result[:DPA][:BUILDING_NUMBER]),
               address_line_2: result[:DPA][:THOROUGHFARE_NAME],
               address_line_3: result[:DPA][:POST_TOWN],
@@ -37,20 +37,31 @@ module OrdnanceSurvey
 
           return nil unless response && response[:results].present?
 
-          first_item = response[:results].first[:DPA]
-
-          {
-            address: first_item[:ADDRESS],
-            address_line_1: address_line_1(sub_building_name: first_item[:SUB_BUILDING_NAME], building_name: first_item[:BUILDING_NAME], building_number: first_item[:BUILDING_NUMBER]),
-            address_line_2: first_item[:THOROUGHFARE_NAME],
-            address_line_3: first_item[:POST_TOWN],
-            postcode: first_item[:POSTCODE]
-          }
+          response[:results].map do |result|
+            {
+              address: titleize_address(full_address: result[:DPA][:ADDRESS]),
+              address_line_1: address_line_1(sub_building_name: result[:DPA][:SUB_BUILDING_NAME], building_name: result[:DPA][:BUILDING_NAME], building_number: result[:DPA][:BUILDING_NUMBER]),
+              address_line_2: result[:DPA][:THOROUGHFARE_NAME],
+              address_line_3: result[:DPA][:POST_TOWN],
+              postcode: result[:DPA][:POSTCODE]
+            }
+          end
         end
 
         private
 
         attr_accessor :client
+
+        def titleize_address(full_address:)
+          address = full_address.split(", ")
+          address_line_1 = /\A\d.*\z/.match?(address.first) ? address.first : address.first.titleize
+
+          [
+            address_line_1,
+            address.values_at(1..(address.size - 2)).join(", ").titleize,
+            address.last
+          ].split(", ").compact.join(", ")
+        end
 
         def address_line_1(sub_building_name:, building_name:, building_number:)
           return building_number if building_name.nil?
