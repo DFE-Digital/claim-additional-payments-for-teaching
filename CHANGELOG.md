@@ -52,6 +52,7 @@ The format is based on [Keep a Changelog]
     identity not fully matched
   - Adds mobile number to claim summary
   - Adds mobile number request to TSLR and M&P
+  - Adds OTP step to reminders journey
 
 ## [Release 091] - 2021-06-24
 
