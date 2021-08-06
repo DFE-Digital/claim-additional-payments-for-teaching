@@ -8,29 +8,31 @@
       <div class="govuk-!-margin-bottom-5">
         <h1 class="govuk-heading-xl"><%= t("questions.home_address") %></h1>
         <h2 class="govuk-heading-l govuk-!-margin-bottom-1">Postcode</h2>
+        <%= form_group_tag current_claim do %>
+          <fieldset class="govuk-fieldset" aria-describedby="address-search-result-hint">
+            <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
+              <h2 class="govuk-fieldset__heading govuk-!-margin-top-3">
+                Select an address
+              </h2>
+            </legend>
+            <div class="govuk-radios">
+              <% @address_data.each do |option| %>
+                <% address = option[:address].gsub(",", "").gsub(" ", "_").downcase %>
+                <% checked = params.dig(:claim, :address_line_1) == option[:address_line_1] %>
+
+                <div class="govuk-radios__item">
+                  <%= radio_button_tag :address, [option[:address], option[:address_line_1]].join(":"), checked, class: "govuk-radios__input", id: address %>
+                  <%= label_tag address, "#{option[:address]}", class: "govuk-label govuk-radios__label", id: address %>
+                </div>
+              <% end %>
+            </div>
+          </fieldset>
+        <% end %>
+        <%= link_to "#{I18n.t("questions.i_cannot_find")}", claim_path(current_claim.policy.routing_name, "address"), class: "govuk-link", "aria-label": "#{I18n.t("questions.i_cannot_find")}" %>
       </div>
-
-      <%= form_group_tag current_claim do %>
-        <fieldset class="govuk-fieldset" aria-describedby="address-search-result-hint">
-          <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
-            <h2 class="govuk-fieldset__heading govuk-!-margin-top-3">
-              Select an address
-            </h2>
-          </legend>
-          <div class="govuk-radios">
-            <% @address_data.each do |option| %>
-              <% address = option[:address].gsub(",", "").gsub(" ", "_").downcase %>
-              <% checked = params.dig(:claim, :address_line_1) == option[:address_line_1] %>
-
-              <div class="govuk-radios__item">
-                <%= radio_button_tag :address, [option[:address], option[:address_line_1]].join(":"), checked, class: "govuk-radios__input", id: address %>
-                <%= label_tag address, "#{option[:address]}", class: "govuk-label govuk-radios__label", id: address %>
-              </div>
-            <% end %>
-          </div>
-        </fieldset>
-      <% end %>
-      <%= form.submit "Continue", class: "govuk-button" %>
+      <p class="govuk-!-padding-top-3">
+        <%= form.submit "Continue", class: "govuk-button" %>
+      </p>
     <% end %>
   </div>
 </div>
