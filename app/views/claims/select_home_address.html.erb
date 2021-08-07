@@ -8,6 +8,9 @@
       <div class="govuk-!-margin-bottom-5">
         <h1 class="govuk-heading-xl"><%= t("questions.address.home.title") %></h1>
         <h2 class="govuk-heading-l govuk-!-margin-bottom-1">Postcode</h2>
+        <p>
+          <%= link_to "Change", claim_path(current_claim.policy.routing_name, "postcode-search"), class: "govuk-link govuk-!-margin-left-3", "aria-label": "Change" %>
+        </p>
         <%= form_group_tag current_claim do %>
           <fieldset class="govuk-fieldset" aria-describedby="address-search-result-hint">
             <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
