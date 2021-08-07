@@ -142,13 +142,13 @@ RSpec.feature "Teacher Early-Career Payments claims" do
     expect(claim.reload.national_insurance_number).to eq("PX321499A")
 
     # - What is your home address
-    expect(page).to have_text(I18n.t("questions.home_address"))
+    expect(page).to have_text(I18n.t("questions.address.home.title"))
     expect(page).to have_link(href: claim_path(EarlyCareerPayments.routing_name, "address"))
 
-    click_link(I18n.t("questions.link_to_manual_address"))
+    click_link(I18n.t("questions.address.home.link_to_manual_address"))
 
     # - What is your address
-    expect(page).to have_text(I18n.t("questions.address"))
+    expect(page).to have_text(I18n.t("questions.address.generic.title"))
 
     fill_in :claim_address_line_1, with: "57"
     fill_in :claim_address_line_2, with: "Walthamstow Drive"
@@ -600,13 +600,13 @@ RSpec.feature "Teacher Early-Career Payments claims" do
     expect(claim.reload.national_insurance_number).to eq("PX321499A")
 
     # - What is your home address
-    expect(page).to have_text(I18n.t("questions.home_address"))
+    expect(page).to have_text(I18n.t("questions.address.home.title"))
     expect(page).to have_link(href: claim_path(EarlyCareerPayments.routing_name, "address"))
 
-    click_link(I18n.t("questions.link_to_manual_address"))
+    click_link(I18n.t("questions.address.home.link_to_manual_address"))
 
     # - What is your address
-    expect(page).to have_text(I18n.t("questions.address"))
+    expect(page).to have_text(I18n.t("questions.address.generic.title"))
 
     fill_in :claim_address_line_1, with: "88"
     fill_in :claim_address_line_2, with: "Deanborough Street"
@@ -972,14 +972,14 @@ RSpec.feature "Teacher Early-Career Payments claims" do
       expect(claim.reload.national_insurance_number).to eq("PX321499A")
 
       # - What is your home address
-      expect(page).to have_text(I18n.t("questions.home_address"))
+      expect(page).to have_text(I18n.t("questions.address.home.title"))
       expect(page).to have_link(href: claim_path(EarlyCareerPayments.routing_name, "address"))
 
       fill_in "Postcode", with: "SO16 9FX"
       click_on "Search"
 
       # - Select your home address
-      expect(page).to have_text(I18n.t("questions.home_address"))
+      expect(page).to have_text(I18n.t("questions.address.home.title"))
 
       choose "flat_11_millbrook_tower_windermere_avenue_southampton_so16_9fx"
       click_on "Continue"
@@ -990,7 +990,7 @@ RSpec.feature "Teacher Early-Career Payments claims" do
       expect(claim.postcode).to eql "SO16 9FX"
 
       # - What is your address
-      expect(page).not_to have_text(I18n.t("questions.address"))
+      expect(page).not_to have_text(I18n.t("questions.address.generic.title"))
 
       # - Email address
       expect(page).to have_text(I18n.t("questions.email_address"))

@@ -147,14 +147,14 @@ RSpec.feature "Teacher Early-Career Payments claims" do
       visit claim_path(claim.policy.routing_name, "postcode-search")
 
       # - What is your home address
-      expect(page).to have_text(I18n.t("questions.home_address"))
+      expect(page).to have_text(I18n.t("questions.address.home.title"))
       expect(page).to have_link(href: claim_path(EarlyCareerPayments.routing_name, "address"))
 
       fill_in "Postcode", with: "SO16 9FX"
       click_on "Search"
 
       # - Select your home address
-      expect(page).to have_text(I18n.t("questions.home_address"))
+      expect(page).to have_text(I18n.t("questions.address.home.title"))
 
       choose "flat_11_millbrook_tower_windermere_avenue_southampton_so16_9fx"
       click_on "Continue"
@@ -176,21 +176,21 @@ RSpec.feature "Teacher Early-Career Payments claims" do
       visit claim_path(claim.policy.routing_name, "postcode-search")
 
       # - What is your home address
-      expect(page).to have_text(I18n.t("questions.home_address"))
+      expect(page).to have_text(I18n.t("questions.address.home.title"))
       expect(page).to have_link(href: claim_path(EarlyCareerPayments.routing_name, "address"))
 
       fill_in "Postcode", with: "SO16 9FX"
       click_on "Search"
 
       # - Select your home address
-      expect(page).to have_text(I18n.t("questions.home_address"))
+      expect(page).to have_text(I18n.t("questions.address.home.title"))
       expect(page).to have_text("Flat 11, Millbrook Tower, Windermere Avenue, Southampton, SO16 9FX")
       expect(page).to have_link(href: claim_path(EarlyCareerPayments.routing_name, "address"))
 
-      click_link(I18n.t("questions.i_cannot_find"))
+      click_link(I18n.t("questions.address.home.i_cannot_find"))
 
       # - What is your address
-      expect(page).to have_text(I18n.t("questions.address"))
+      expect(page).to have_text(I18n.t("questions.address.generic.title"))
 
       fill_in :claim_address_line_1, with: "Penthouse Apartment, Millbrook Tower"
       fill_in :claim_address_line_2, with: "Windermere Avenue"
@@ -287,7 +287,7 @@ RSpec.feature "Teacher Early-Career Payments claims" do
       visit claim_path(claim.policy.routing_name, "postcode-search")
 
       # - What is your home address
-      expect(page).to have_text(I18n.t("questions.home_address"))
+      expect(page).to have_text(I18n.t("questions.address.home.title"))
       expect(page).to have_link(href: claim_path(EarlyCareerPayments.routing_name, "address"))
 
       fill_in "Postcode", with: "SE13 7UN"
@@ -295,7 +295,7 @@ RSpec.feature "Teacher Early-Career Payments claims" do
       click_on "Search"
 
       # - Select your home address
-      expect(page).to have_text(I18n.t("questions.home_address"))
+      expect(page).to have_text(I18n.t("questions.address.home.title"))
 
       choose "38a_wearside_road_london_se13_7un"
       click_on "Continue"
@@ -306,7 +306,7 @@ RSpec.feature "Teacher Early-Career Payments claims" do
       expect(claim.postcode).to eql "SE13 7UN"
 
       # - What is your address
-      expect(page).not_to have_text(I18n.t("questions.address"))
+      expect(page).not_to have_text(I18n.t("questions.address.generic.title"))
 
       # - Email address
       expect(page).to have_text(I18n.t("questions.email_address"))
@@ -360,7 +360,7 @@ RSpec.feature "Teacher Early-Career Payments claims" do
       visit claim_path(claim.policy.routing_name, "postcode-search")
 
       # - What is your home address
-      expect(page).to have_text(I18n.t("questions.home_address"))
+      expect(page).to have_text(I18n.t("questions.address.home.title"))
       expect(page).to have_link(href: claim_path(EarlyCareerPayments.routing_name, "address"))
 
       fill_in "Postcode", with: "SE13 7UN"
@@ -368,7 +368,7 @@ RSpec.feature "Teacher Early-Career Payments claims" do
       click_on "Search"
 
       # - Select your home address
-      expect(page).to have_text(I18n.t("questions.home_address"))
+      expect(page).to have_text(I18n.t("questions.address.home.title"))
       expect(page).to have_text("There is a problem")
       expect(page).to have_text("Postcode not found")
 

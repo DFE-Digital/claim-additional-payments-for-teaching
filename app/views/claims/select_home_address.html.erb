@@ -1,4 +1,4 @@
-<% content_for(:page_title, page_title(t("questions.home_address"), policy: current_policy_routing_name, show_error: current_claim.errors.any?)) %>
+<% content_for(:page_title, page_title(t("questions.address.home.title"), policy: current_policy_routing_name, show_error: current_claim.errors.any?)) %>
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
@@ -6,7 +6,7 @@
 
     <%= form_for current_claim, url: claim_path(current_policy_routing_name) do |form| %>
       <div class="govuk-!-margin-bottom-5">
-        <h1 class="govuk-heading-xl"><%= t("questions.home_address") %></h1>
+        <h1 class="govuk-heading-xl"><%= t("questions.address.home.title") %></h1>
         <h2 class="govuk-heading-l govuk-!-margin-bottom-1">Postcode</h2>
         <%= form_group_tag current_claim do %>
           <fieldset class="govuk-fieldset" aria-describedby="address-search-result-hint">
@@ -28,7 +28,7 @@
             </div>
           </fieldset>
         <% end %>
-        <%= link_to "#{I18n.t("questions.i_cannot_find")}", claim_path(current_claim.policy.routing_name, "address"), class: "govuk-link", "aria-label": "#{I18n.t("questions.i_cannot_find")}" %>
+        <%= link_to I18n.t("questions.address.home.i_cannot_find"), claim_path(current_claim.policy.routing_name, "address"), class: "govuk-link", "aria-label": I18n.t("questions.address.home.i_cannot_find") %>
       </div>
       <p class="govuk-!-padding-top-3">
         <%= form.submit "Continue", class: "govuk-button" %>

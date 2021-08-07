@@ -56,10 +56,13 @@ en:
     current_school: "Which school are you currently employed to teach at?"
     qts_award_year: "When did you complete your initial teacher training?"
     name: "What is your full name?"
-    address: "What is your address?"
-    home_address: "What is your home address?"
-    link_to_manual_address: "Enter your address manually"
-    i_cannot_find: "I can't find my address in the list"
+    address:
+      generic:
+        title: "What is your address?"
+      home:
+        title: "What is your home address?"
+        link_to_manual_address: "Enter your address manually"
+        i_cannot_find: "I can't find my address in the list"
     date_of_birth: "What is your date of birth?"
     teacher_reference_number: "What is your teacher reference number (TRN)?"
     national_insurance_number: "What's your National Insurance number?"
