@@ -97,7 +97,7 @@ RSpec.feature "Teacher Early-Career Payments claims" do
     end
 
     within(".govuk-summary-list") do
-      expect(page).not_to have_text(I18n.t("early_career_payments.questions.postgraduate_masters_loan"))
+      expect(page).not_to have_text(I18n.t("questions.postgraduate_masters_loan"))
       expect(page).not_to have_text(I18n.t("early_career_payments.questions.postgraduate_doctoral_loan"))
     end
     click_on("Continue")
@@ -283,12 +283,12 @@ RSpec.feature "Teacher Early-Career Payments claims" do
     expect(claim.student_loan_plan).to eq(StudentLoan::PLAN_1)
 
     # - Did you take out a postgraduate masters loan on or after 1 August 2016
-    expect(page).to have_text(I18n.t("early_career_payments.questions.postgraduate_masters_loan"))
+    expect(page).to have_text(I18n.t("questions.postgraduate_masters_loan"))
 
     choose "Yes"
     click_on "Continue"
 
-    expect(claim.eligibility.reload.postgraduate_masters_loan).to eql true
+    expect(claim.reload.postgraduate_masters_loan).to eql true
 
     # - Did you take out a postgraduate doctoral loan on or after 1 August 2016
     expect(page).to have_text(I18n.t("early_career_payments.questions.postgraduate_doctoral_loan"))
@@ -306,7 +306,7 @@ RSpec.feature "Teacher Early-Career Payments claims" do
     end
 
     within(".govuk-summary-list:nth-of-type(3)") do
-      expect(page).to have_text(I18n.t("early_career_payments.questions.postgraduate_masters_loan"))
+      expect(page).to have_text(I18n.t("questions.postgraduate_masters_loan"))
       expect(page).to have_text(I18n.t("early_career_payments.questions.postgraduate_doctoral_loan"))
     end
 
@@ -554,7 +554,7 @@ RSpec.feature "Teacher Early-Career Payments claims" do
     end
 
     within(".govuk-summary-list") do
-      expect(page).not_to have_text(I18n.t("early_career_payments.questions.postgraduate_masters_loan"))
+      expect(page).not_to have_text(I18n.t("questions.postgraduate_masters_loan"))
       expect(page).not_to have_text(I18n.t("early_career_payments.questions.postgraduate_doctoral_loan"))
     end
 
@@ -733,12 +733,12 @@ RSpec.feature "Teacher Early-Career Payments claims" do
     expect(claim.student_loan_plan).to eq(StudentLoan::PLAN_1)
 
     # - Did you take out a postgraduate masters loan on or after 1 August 2016
-    expect(page).to have_text(I18n.t("early_career_payments.questions.postgraduate_masters_loan"))
+    expect(page).to have_text(I18n.t("questions.postgraduate_masters_loan"))
 
     choose "Yes"
     click_on "Continue"
 
-    expect(claim.eligibility.reload.postgraduate_masters_loan).to eql true
+    expect(claim.reload.postgraduate_masters_loan).to eql true
 
     # - Did you take out a postgraduate doctoral loan on or after 1 August 2016
     expect(page).to have_text(I18n.t("early_career_payments.questions.postgraduate_doctoral_loan"))
@@ -756,7 +756,7 @@ RSpec.feature "Teacher Early-Career Payments claims" do
     end
 
     within(".govuk-summary-list:nth-of-type(3)") do
-      expect(page).to have_text(I18n.t("early_career_payments.questions.postgraduate_masters_loan"))
+      expect(page).to have_text(I18n.t("questions.postgraduate_masters_loan"))
       expect(page).to have_text(I18n.t("early_career_payments.questions.postgraduate_doctoral_loan"))
     end
 
@@ -926,7 +926,7 @@ RSpec.feature "Teacher Early-Career Payments claims" do
       end
 
       within(".govuk-summary-list") do
-        expect(page).not_to have_text(I18n.t("early_career_payments.questions.postgraduate_masters_loan"))
+        expect(page).not_to have_text(I18n.t("questions.postgraduate_masters_loan"))
         expect(page).not_to have_text(I18n.t("early_career_payments.questions.postgraduate_doctoral_loan"))
       end
 
@@ -1104,12 +1104,12 @@ RSpec.feature "Teacher Early-Career Payments claims" do
       expect(claim.student_loan_plan).to eq(StudentLoan::PLAN_1)
 
       # - Did you take out a postgraduate masters loan on or after 1 August 2016
-      expect(page).to have_text(I18n.t("early_career_payments.questions.postgraduate_masters_loan"))
+      expect(page).to have_text(I18n.t("questions.postgraduate_masters_loan"))
 
       choose "Yes"
       click_on "Continue"
 
-      expect(claim.eligibility.reload.postgraduate_masters_loan).to eql true
+      expect(claim.reload.postgraduate_masters_loan).to eql true
 
       # - Did you take out a postgraduate doctoral loan on or after 1 August 2016
       expect(page).to have_text(I18n.t("early_career_payments.questions.postgraduate_doctoral_loan"))
@@ -1127,7 +1127,7 @@ RSpec.feature "Teacher Early-Career Payments claims" do
       end
 
       within(".govuk-summary-list:nth-of-type(3)") do
-        expect(page).to have_text(I18n.t("early_career_payments.questions.postgraduate_masters_loan"))
+        expect(page).to have_text(I18n.t("questions.postgraduate_masters_loan"))
         expect(page).to have_text(I18n.t("early_career_payments.questions.postgraduate_doctoral_loan"))
       end
 

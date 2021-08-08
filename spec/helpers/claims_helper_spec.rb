@@ -236,7 +236,7 @@ describe ClaimsHelper do
             t("answers.student_loan_start_date.one_course.before_first_september_2012"),
             "student-loan-start-date"
           ],
-          [t("early_career_payments.questions.postgraduate_masters_loan"), "Yes", "masters-loan"],
+          [t("questions.postgraduate_masters_loan"), "No", "masters-loan"],
           [t("early_career_payments.questions.postgraduate_doctoral_loan"), "No", "doctoral-loan"]
         ]
 
@@ -252,7 +252,7 @@ describe ClaimsHelper do
             [t("questions.student_loan_country"), "England", "student-loan-country"],
             [t("questions.student_loan_how_many_courses"), "Two or more courses", "student-loan-how-many-courses"],
             [t("questions.student_loan_start_date.two_or_more_courses"), t("answers.student_loan_start_date.two_or_more_courses.on_or_after_first_september_2012"), "student-loan-start-date"],
-            [t("early_career_payments.questions.postgraduate_masters_loan"), "Yes", "masters-loan"],
+            [t("questions.postgraduate_masters_loan"), "No", "masters-loan"],
             [t("early_career_payments.questions.postgraduate_doctoral_loan"), "No", "doctoral-loan"]
           ]
 
@@ -267,7 +267,7 @@ describe ClaimsHelper do
           expected_answers = [
             [t("questions.has_student_loan"), "Yes", "student-loan"],
             [t("questions.student_loan_country"), "Scotland", "student-loan-country"],
-            [t("early_career_payments.questions.postgraduate_masters_loan"), "Yes", "masters-loan"],
+            [t("questions.postgraduate_masters_loan"), "No", "masters-loan"],
             [t("early_career_payments.questions.postgraduate_doctoral_loan"), "No", "doctoral-loan"]
           ]
 
@@ -276,7 +276,7 @@ describe ClaimsHelper do
       end
 
       context "when claimant answered 'No' to 'Paying off Student Loan'" do
-        let(:eligibility) { build(:early_career_payments_eligibility, postgraduate_masters_loan: nil, postgraduate_doctoral_loan: nil) }
+        let(:eligibility) { build(:early_career_payments_eligibility, postgraduate_doctoral_loan: nil) }
         let(:trait) { :with_no_student_loan }
 
         it "returns an arry with a single question and answer" do

@@ -12,7 +12,6 @@ module EarlyCareerPayments
       :eligible_itt_subject,
       :teaching_subject_now,
       :itt_academic_year,
-      :postgraduate_masters_loan,
       :postgraduate_doctoral_loan
     ].freeze
     AMENDABLE_ATTRIBUTES = [].freeze
@@ -20,7 +19,7 @@ module EarlyCareerPayments
       "employed_as_supply_teacher" => ["has_entire_term_contract", "employed_directly"],
       "qualification" => ["eligible_itt_subject", "teaching_subject_now"],
       "eligible_itt_subject" => ["teaching_subject_now"],
-      "has_student_loan" => ["postgraduate_masters_loan", "postgraduate_doctoral_loan"]
+      "has_student_loan" => ["postgraduate_doctoral_loan"]
     }.freeze
 
     self.table_name = "early_career_payments_eligibilities"
@@ -61,7 +60,6 @@ module EarlyCareerPayments
     validates :eligible_itt_subject, on: [:"eligible-itt-subject", :submit], presence: {message: ->(object, data) { I18n.t("activerecord.errors.models.early_career_payments_eligibilities.attributes.eligible_itt_subject.blank.qualification.#{object.qualification}") }}
     validates :teaching_subject_now, on: [:"teaching-subject-now", :submit], inclusion: {in: [true, false], message: ->(object, data) { I18n.t("activerecord.errors.models.early_career_payments_eligibilities.attributes.teaching_subject_now.blank.subject.#{object.eligible_itt_subject}") }}
     validates :itt_academic_year, on: [:"itt-year", :submit], presence: {message: ->(object, data) { I18n.t("activerecord.errors.models.early_career_payments_eligibilities.attributes.itt_academic_year.blank.qualification.#{object.qualification}") }}
-    validates :postgraduate_masters_loan, on: [:"masters-loan", :submit], inclusion: {in: [true, false], message: "Select yes if you have a Postgraduate Master Loan taken out on or after 1st August 2016"}, unless: :no_student_loan?
     validates :postgraduate_doctoral_loan, on: [:"doctoral-loan", :submit], inclusion: {in: [true, false], message: "Select yes if you have a Postgraduate Doctoral Loan taken out on or after 1st August 2018"}, unless: :no_student_loan?
 
     delegate :name, to: :current_school, prefix: true, allow_nil: true

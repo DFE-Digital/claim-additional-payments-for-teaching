@@ -72,6 +72,7 @@ en:
     student_loan_start_date:
       one_course: "When did the first year of your higher education course start?"
       two_or_more_courses: "When did all of your higher education courses start?"
+    postgraduate_masters_loan: "Did you take out a Postgraduate Master's Loan?"
     email_address: "Email address"
     email_address_hint1: "We will use your email address to update you about your application. We recommend you use a personal email address."
     email_address_hint2: "We will send you an email with a 6-digit password, this will be used on the next screen."
@@ -290,7 +291,6 @@ en:
           postgraduate_itt: In what academic year did you start your postgraduate ITT?
           assessment_only: What academic year did you earn your qualified teacher status (QTS)?
           overseas_recognition: What academic year did you earn your qualified teacher status (QTS)?
-      postgraduate_masters_loan: "Did you take out a Postgraduate Master's Loan?"
       postgraduate_doctoral_loan: "Did you take out a Postgraduate Doctoral Loan?"
       national_insurance_number: "What is your National Insurance number?"
     admin:
