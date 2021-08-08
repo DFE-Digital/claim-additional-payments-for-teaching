@@ -531,15 +531,6 @@ RSpec.describe EarlyCareerPayments::Eligibility, type: :model do
         .to change { eligibility.employed_directly }
         .from(false).to(nil)
     end
-
-    it "resets 'postgraduate_doctoral_loan' when the value of 'claim.has_student_loan' changes from true to false" do
-      expect { eligibility.reset_dependent_answers }.not_to change { eligibility.attributes }
-
-      claim.has_student_loan = false
-      expect { eligibility.reset_dependent_answers }
-        .to change { eligibility.postgraduate_doctoral_loan }
-        .from(true).to(nil)
-    end
   end
 
   describe "validation contexts" do
@@ -624,42 +615,6 @@ RSpec.describe EarlyCareerPayments::Eligibility, type: :model do
       it "is not valid without a value for 'itt_academic_year'" do
         expect(EarlyCareerPayments::Eligibility.new).not_to be_valid(:"itt-year")
         expect(EarlyCareerPayments::Eligibility.new(itt_academic_year: "2020_2021")).to be_valid(:"itt-year")
-      end
-    end
-
-    describe "when saving in the 'postgraduate_doctoral_loan' context" do
-      let!(:claim) { build_stubbed(:claim, :with_student_loan, eligibility: eligibility) }
-      let(:eligibility) do
-        build_stubbed(
-          :early_career_payments_eligibility,
-          :eligible,
-          employed_as_supply_teacher: true,
-          has_entire_term_contract: false,
-          employed_directly: false,
-          qualification: :undergraduate_itt,
-          eligible_itt_subject: :none_of_the_above,
-          teaching_subject_now: false,
-          postgraduate_doctoral_loan: nil
-        )
-      end
-
-      context "with claim having a student loan" do
-        it "is not valid without a value for 'postgraduate_doctoral_loan'" do
-          expect(eligibility).not_to be_valid(:"doctoral-loan")
-
-          eligibility.postgraduate_doctoral_loan = true
-          expect(eligibility).to be_valid(:"doctoral-loan")
-
-          eligibility.postgraduate_doctoral_loan = false
-          expect(eligibility).to be_valid(:"doctoral-loan")
-        end
-      end
-
-      context "with claim having no_student_loan" do
-        it "is valid without a value for 'postgraduate_doctoral_loan'" do
-          subject.validate(on: :"doctoral-loan")
-          expect(subject.errors[:"doctoral-loan"]).to be_empty
-        end
       end
     end
   end

@@ -290,6 +290,26 @@ RSpec.describe Claim, type: :model do
         end
       end
     end
+
+    describe "when saving in the 'postgraduate_doctoral_loan' context" do
+      let(:claim) { build(:claim, :submittable, postgraduate_doctoral_loan: nil, policy: EarlyCareerPayments) }
+
+      context "with claim having a student loan" do
+        it "is not valid without a value for 'postgraduate_doctoral_loan'" do
+          expect(claim.has_student_loan?).to eql true
+          expect(claim).not_to be_valid(:"doctoral-loan")
+          expect(build(:claim, postgraduate_doctoral_loan: true)).to be_valid(:"doctoral-loan")
+          expect(build(:claim, postgraduate_doctoral_loan: false)).to be_valid(:"doctoral-loan")
+        end
+      end
+
+      context "with claim having no_student_loan" do
+        it "is valid without a value for 'postgraduate_doctoral_loan'" do
+          subject.validate(on: :"doctoral-loan")
+          expect(subject.errors[:"doctoral-loan"]).to be_empty
+        end
+      end
+    end
   end
 
   context "with maths and physics policy" do
@@ -306,6 +326,23 @@ RSpec.describe Claim, type: :model do
         it "is valid without a value for 'postgraduate_masters_loan'" do
           subject.validate(on: :"masters-loan")
           expect(subject.errors[:"masters-loan"]).to be_empty
+        end
+      end
+    end
+
+    describe "when saving in the 'postgraduate_doctoral_loan' context" do
+      let(:claim) { build(:claim, :submittable, postgraduate_doctoral_loan: nil, policy: MathsAndPhysics) }
+      context "with claim having a student loan" do
+        it "is valid without a value for 'postgraduate_doctoral_loan'" do
+          expect(claim.has_student_loan?).to eql true
+          expect(claim).to be_valid(:"doctoral-loan")
+        end
+      end
+
+      context "with claim having no_student_loan" do
+        it "is valid without a value for 'postgraduate_doctoral_loan'" do
+          subject.validate(on: :"doctoral-loan")
+          expect(subject.errors[:"doctoral-loan"]).to be_empty
         end
       end
     end
@@ -815,6 +852,7 @@ RSpec.describe Claim, type: :model do
       expect(claim.student_loan_start_date).to be_nil
       expect(claim.student_loan_plan).to eq Claim::NO_STUDENT_LOAN
       expect(claim.postgraduate_masters_loan).to be_nil
+      expect(claim.postgraduate_doctoral_loan).to be_nil
     end
 
     it "redetermines the student_loan_plan and resets subsequent loan plan answers when student_loan_country changes" do

@@ -41,7 +41,7 @@ RSpec.feature "Eligible later Teacher Early-Career Payments claims" do
 
           within(".govuk-summary-list") do
             expect(page).not_to have_text(I18n.t("questions.postgraduate_masters_loan"))
-            expect(page).not_to have_text(I18n.t("early_career_payments.questions.postgraduate_doctoral_loan"))
+            expect(page).not_to have_text(I18n.t("questions.postgraduate_doctoral_loan"))
           end
 
           click_on("Continue")
@@ -79,7 +79,7 @@ RSpec.feature "Eligible later Teacher Early-Career Payments claims" do
 
           within(".govuk-summary-list") do
             expect(page).not_to have_text(I18n.t("questions.postgraduate_masters_loan"))
-            expect(page).not_to have_text(I18n.t("early_career_payments.questions.postgraduate_doctoral_loan"))
+            expect(page).not_to have_text(I18n.t("questions.postgraduate_doctoral_loan"))
           end
 
           click_on("Continue")

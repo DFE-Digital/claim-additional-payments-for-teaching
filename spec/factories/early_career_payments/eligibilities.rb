@@ -10,7 +10,6 @@ FactoryBot.define do
       eligible_itt_subject { :mathematics }
       teaching_subject_now { true }
       itt_academic_year { "2018_2019" }
-      postgraduate_doctoral_loan { true }
     end
   end
 end
