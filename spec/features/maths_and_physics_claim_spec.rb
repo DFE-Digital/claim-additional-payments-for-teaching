@@ -66,7 +66,7 @@ RSpec.feature "Maths & Physics claims" do
       expect(claim.middle_name).to eql("Jennifer")
       expect(claim.surname).to eql("Winstanley")
 
-      expect(page).to have_text(I18n.t("questions.address"))
+      expect(page).to have_text(I18n.t("questions.address.generic.title"))
       fill_in_address
 
       expect(claim.reload.address_line_1).to eql("123 Main Street")

@@ -11,7 +11,7 @@ module ClaimsHelper
         a << [translate("questions.name"), claim.full_name, "name"] unless claim.name_verified?
       end
 
-      a << [translate("questions.address"), claim.address, "address"] unless claim.address_from_govuk_verify?
+      a << [translate("questions.address.generic.title"), claim.address, "address"] unless claim.address_from_govuk_verify?
 
       if claim.has_ecp_policy?
         a << [translate("questions.date_of_birth"), date_of_birth_string(claim), "personal-details"] unless claim.date_of_birth_verified?

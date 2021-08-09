@@ -1,4 +1,4 @@
-<% content_for(:page_title, page_title(t("questions.address"), policy: current_policy_routing_name, show_error: current_claim.errors.any?)) %>
+<% content_for(:page_title, page_title(t("questions.address.generic.title"), policy: current_policy_routing_name, show_error: current_claim.errors.any?)) %>
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
@@ -11,7 +11,7 @@
           <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
             <span class="govuk-caption-xl">Personal details</span>
             <h1 class="govuk-heading-xl">
-              What is your address?
+              <%= t("questions.address.generic.title") %>
             </h1>
           </legend>
 
@@ -35,7 +35,7 @@
         <% else %>
           <legend class="govuk-fieldset__legend govuk-fieldset__legend--<%= shared_view_css_class_size(current_claim) %>">
             <h1 class="govuk-fieldset__heading">
-              <%= t("questions.address") %>
+              <%= t("questions.address.generic.title") %>
             </h1>
           </legend>
 

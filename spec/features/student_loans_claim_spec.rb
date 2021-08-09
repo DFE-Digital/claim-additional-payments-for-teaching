@@ -64,7 +64,7 @@ RSpec.feature "Teacher Student Loan Repayments claims" do
       expect(claim.middle_name).to eql("Percival")
       expect(claim.surname).to eql("Hillary")
 
-      expect(page).to have_text(I18n.t("questions.address"))
+      expect(page).to have_text(I18n.t("questions.address.generic.title"))
       fill_in_address
 
       expect(claim.reload.address_line_1).to eql("123 Main Street")

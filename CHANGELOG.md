@@ -16,6 +16,8 @@ The format is based on [Keep a Changelog]
 - ECP policies
   - Add screen to allow claimant to select address from API provided results
     presented as radio buttons
+  - Add links that allow claimant to manually enter their address information
+    when on the two address auto-population screens
 
 ## [Release 092] - 2021-07-22
 

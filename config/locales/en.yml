@@ -47,8 +47,6 @@ en:
     heading_send_application: Confirm and send your application
     statement: By submitting this notification you are confirming that, to the best of your knowledge, the details you are providing are correct.
     btn_text: Confirm and send
-
-
   one_time_password:
     title: "One time password"
     hint1_html: "We have sent an %{email_or_mobile_message} to <b><strong>%{email_or_mobile_value}</strong></b> with a 6-digit password."
@@ -58,9 +56,13 @@ en:
     current_school: "Which school are you currently employed to teach at?"
     qts_award_year: "When did you complete your initial teacher training?"
     name: "What is your full name?"
-    address: "What is your address?"
-    home_address: "What is your home address?"
-    link_to_manual_address: "Enter your address manually"
+    address:
+      generic:
+        title: "What is your address?"
+      home:
+        title: "What is your home address?"
+        link_to_manual_address: "Enter your address manually"
+        i_cannot_find: "I can't find my address in the list"
     date_of_birth: "What is your date of birth?"
     teacher_reference_number: "What is your teacher reference number (TRN)?"
     national_insurance_number: "What's your National Insurance number?"
