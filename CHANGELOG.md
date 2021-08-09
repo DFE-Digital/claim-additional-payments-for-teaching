@@ -25,6 +25,8 @@ The format is based on [Keep a Changelog]
       when on the two address auto-population screens
   - Add posgraduate loans questions to M+P / TSLR journeys
   - Hiding mobile/SMS related OTP screens
+  - Update Northamptonshire local authority to reflect GIAS changes 1st April
+    2021
 - ECP policies
 - DAC Accessiblity Report fixes
   - Incorrect aria value
