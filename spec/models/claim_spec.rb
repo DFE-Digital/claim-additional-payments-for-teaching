@@ -312,6 +312,48 @@ RSpec.describe Claim, type: :model do
     end
   end
 
+  context "with student loans policy" do
+    describe "when saving in the 'postgraduate_masters_loan' context" do
+      let(:claim) { build(:claim, :submittable, postgraduate_masters_loan: nil, policy: StudentLoans) }
+
+      context "with claim having a student loan" do
+        it "is not valid without a value for 'postgraduate_masters_loan'" do
+          expect(claim.has_student_loan?).to eql true
+          expect(claim).not_to be_valid(:"masters-loan")
+          expect(build(:claim, postgraduate_masters_loan: true)).to be_valid(:"masters-loan")
+          expect(build(:claim, postgraduate_masters_loan: false)).to be_valid(:"masters-loan")
+        end
+      end
+
+      context "with claim having no_student_loan" do
+        it "is valid without a value for 'postgraduate_masters_loan'" do
+          subject.validate(on: :"masters-loan")
+          expect(subject.errors[:"masters-loan"]).to be_empty
+        end
+      end
+    end
+
+    describe "when saving in the 'postgraduate_doctoral_loan' context" do
+      let(:claim) { build(:claim, :submittable, postgraduate_doctoral_loan: nil, policy: StudentLoans) }
+
+      context "with claim having a student loan" do
+        it "is not valid without a value for 'postgraduate_doctoral_loan'" do
+          expect(claim.has_student_loan?).to eql true
+          expect(claim).not_to be_valid(:"doctoral-loan")
+          expect(build(:claim, postgraduate_doctoral_loan: true)).to be_valid(:"doctoral-loan")
+          expect(build(:claim, postgraduate_doctoral_loan: false)).to be_valid(:"doctoral-loan")
+        end
+      end
+
+      context "with claim having no_student_loan" do
+        it "is valid without a value for 'postgraduate_doctoral_loan'" do
+          subject.validate(on: :"doctoral-loan")
+          expect(subject.errors[:"doctoral-loan"]).to be_empty
+        end
+      end
+    end
+  end
+
   context "with maths and physics policy" do
     describe "when saving in the 'postgraduate_masters_loan' context" do
       let(:claim) { build(:claim, :submittable, postgraduate_masters_loan: nil, policy: MathsAndPhysics) }

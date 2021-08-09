@@ -184,7 +184,9 @@ describe ClaimsHelper do
             t("questions.student_loan_start_date.one_course"),
             t("answers.student_loan_start_date.one_course.before_first_september_2012"),
             "student-loan-start-date"
-          ]
+          ],
+          [t("questions.postgraduate_masters_loan"), "No", "masters-loan"],
+          [t("questions.postgraduate_doctoral_loan"), "No", "doctoral-loan"]
         ]
 
         expect(helper.student_loan_answers(claim)).to eq expected_answers
@@ -202,7 +204,9 @@ describe ClaimsHelper do
               t("questions.student_loan_start_date.two_or_more_courses"),
               t("answers.student_loan_start_date.two_or_more_courses.on_or_after_first_september_2012"),
               "student-loan-start-date"
-            ]
+            ],
+            [t("questions.postgraduate_masters_loan"), "No", "masters-loan"],
+            [t("questions.postgraduate_doctoral_loan"), "No", "doctoral-loan"]
           ]
 
           expect(helper.student_loan_answers(claim)).to eq expected_answers
@@ -215,7 +219,9 @@ describe ClaimsHelper do
         it "these are excluded" do
           expected_answers = [
             [t("questions.has_student_loan"), "Yes", "student-loan"],
-            [t("questions.student_loan_country"), "Scotland", "student-loan-country"]
+            [t("questions.student_loan_country"), "Scotland", "student-loan-country"],
+            [t("questions.postgraduate_masters_loan"), "No", "masters-loan"],
+            [t("questions.postgraduate_doctoral_loan"), "No", "doctoral-loan"]
           ]
 
           expect(helper.student_loan_answers(claim)).to eq expected_answers
