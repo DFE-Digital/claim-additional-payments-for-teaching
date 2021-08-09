@@ -358,9 +358,11 @@ RSpec.describe Claim, type: :model do
     describe "when saving in the 'postgraduate_masters_loan' context" do
       let(:claim) { build(:claim, :submittable, postgraduate_masters_loan: nil, policy: MathsAndPhysics) }
       context "with claim having a student loan" do
-        it "is valid without a value for 'postgraduate_masters_loan'" do
+        it "is not valid without a value for 'postgraduate_masters_loan'" do
           expect(claim.has_student_loan?).to eql true
-          expect(claim).to be_valid(:"masters-loan")
+          expect(claim).not_to be_valid(:"masters-loan")
+          expect(build(:claim, postgraduate_masters_loan: true)).to be_valid(:"masters-loan")
+          expect(build(:claim, postgraduate_masters_loan: false)).to be_valid(:"masters-loan")
         end
       end
 
@@ -375,9 +377,11 @@ RSpec.describe Claim, type: :model do
     describe "when saving in the 'postgraduate_doctoral_loan' context" do
       let(:claim) { build(:claim, :submittable, postgraduate_doctoral_loan: nil, policy: MathsAndPhysics) }
       context "with claim having a student loan" do
-        it "is valid without a value for 'postgraduate_doctoral_loan'" do
+        it "is not valid without a value for 'postgraduate_doctoral_loan'" do
           expect(claim.has_student_loan?).to eql true
-          expect(claim).to be_valid(:"doctoral-loan")
+          expect(claim).not_to be_valid(:"doctoral-loan")
+          expect(build(:claim, postgraduate_doctoral_loan: true)).to be_valid(:"doctoral-loan")
+          expect(build(:claim, postgraduate_doctoral_loan: false)).to be_valid(:"doctoral-loan")
         end
       end
 

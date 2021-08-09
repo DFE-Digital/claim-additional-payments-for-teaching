@@ -111,6 +111,22 @@ RSpec.feature "Maths & Physics claims" do
       expect(claim.student_loan_start_date).to eq(StudentLoan::BEFORE_1_SEPT_2012)
       expect(claim.student_loan_plan).to eq(StudentLoan::PLAN_1)
 
+      # - Did you take out a postgraduate masters loan on or after 1 August 2016
+      expect(page).to have_text(I18n.t("questions.postgraduate_masters_loan"))
+
+      choose "Yes"
+      click_on "Continue"
+
+      expect(claim.reload.postgraduate_masters_loan).to eql true
+
+      # - Did you take out a postgraduate doctoral loan on or after 1 August 2016
+      expect(page).to have_text(I18n.t("questions.postgraduate_doctoral_loan"))
+
+      choose "Yes"
+      click_on "Continue"
+
+      expect(claim.reload.postgraduate_doctoral_loan).to eql true
+
       expect(page).to have_text(I18n.t("questions.email_address"))
       expect(page).to have_text(I18n.t("questions.email_address_hint1"))
       fill_in I18n.t("questions.email_address"), with: "name@example.com"
