@@ -121,7 +121,7 @@ class ClaimsController < BasePublicController
       ClaimMailer.email_verification(current_claim, otp.code).deliver_now
       session[:sent_one_time_password_at] = Time.now
     when "mobile-number"
-      Rails.logger.debug "\n\n  ** =================== **\nSMS one_time_password: \n#{generate_otp}\n  ** =================== **\n"
+      Rails.logger.debug "\n\n  ** =================== **\nSMS one_time_password: \n#{otp.code}\n  ** =================== **\n"
     when "email-verification"
       current_claim.update_attributes(sent_one_time_password_at: session[:sent_one_time_password_at])
     end
