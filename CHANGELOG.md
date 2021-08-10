@@ -15,6 +15,7 @@ The format is based on [Keep a Changelog]
   - Add home address search screen to claim journey
   - Add posgraduate loans questions to M+P / TSLR journeys
   - Fix incorrect aria value
+  - Amend admin timeout from 30 mins to 60 mins
 - ECP policies
   - Add screen to allow claimant to select address from API provided results
     presented as radio buttons
