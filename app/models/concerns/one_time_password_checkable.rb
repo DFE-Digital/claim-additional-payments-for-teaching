@@ -10,6 +10,7 @@ module OneTimePasswordCheckable
   end
 
   private
+
   def set_sent_one_time_password_at
     self.sent_one_time_password_at = sent_one_time_password_at
   end

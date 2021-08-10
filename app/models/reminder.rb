@@ -7,7 +7,6 @@ class Reminder < ApplicationRecord
     set
   ].freeze
 
-
   validates :full_name, on: [:"personal-details"], presence: {message: "Enter your full name"}
   validates :full_name, length: {maximum: 100, message: "Full name must be 100 characters or less"}
 

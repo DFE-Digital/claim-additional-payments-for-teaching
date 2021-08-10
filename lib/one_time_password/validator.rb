@@ -1,9 +1,9 @@
 module OneTimePassword
   class Validator < Base
     def initialize(code, generated_at, issuer = ISSUER)
-      @code         = code
+      @code = code
       @generated_at = generated_at
-      @issuer       = issuer
+      @issuer = issuer
     end
 
     def valid?
@@ -18,6 +18,7 @@ module OneTimePassword
     end
 
     private
+
     attr_reader :code, :generated_at
 
     def wrong_length?
@@ -33,7 +34,7 @@ module OneTimePassword
     end
 
     def incorrect?
-      return @incorrect if defined? (@incorrect)
+      return @incorrect if defined? @incorrect
 
       @incorrect = rotp.new(SECRET, issuer: issuer).verify(code, drift_behind: DRIFT).nil?
     end
