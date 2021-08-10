@@ -20,6 +20,8 @@ module StudentLoans
       "eligibility-confirmed",
       "information-provided",
       "name",
+      "postcode-search",
+      "select-home-address",
       "address",
       "date-of-birth",
       "gender",
@@ -63,6 +65,7 @@ module StudentLoans
         sequence.delete("building-society-account") if claim.bank_or_building_society == "personal_bank_account"
         sequence.delete("mobile-number") if claim.provide_mobile_number == false
         sequence.delete("mobile-verification") if claim.provide_mobile_number == false
+        sequence.delete("address") unless claim.address.blank?
         sequence.delete("ineligible") unless claim.eligibility.ineligible?
       end
     end

@@ -35,9 +35,10 @@ RSpec.describe PageSequence do
     context "when address is populated from 'select-home-address'" do
       [
         {policy: EarlyCareerPayments, next_slug: "email-address", slug_sequence: OpenStruct.new(slugs: ["postcode-search", "select-home-address", "email-address"])},
-        {policy: MathsAndPhysics, next_slug: "date-of-birth", slug_sequence: OpenStruct.new(slugs: ["postcode-search", "select-home-address", "date-of-birth"])}
+        {policy: MathsAndPhysics, next_slug: "date-of-birth", slug_sequence: OpenStruct.new(slugs: ["postcode-search", "select-home-address", "date-of-birth"])},
+        {policy: StudentLoans, next_slug: "date-of-birth", slug_sequence: OpenStruct.new(slugs: ["postcode-search", "select-home-address", "date-of-birth"])}
       ].each do |scenario|
-        let(:claim) { build(:claim, policy: scenario[:policy])}
+        let(:claim) { build(:claim, policy: scenario[:policy]) }
 
         scenario "with #{scenario[:policy]} policy returns #{scenario[:next_slug]} as the next slug (NOT 'address')" do
           expect(PageSequence.new(claim, scenario[:slug_sequence], "address").next_slug).to eq scenario[:next_slug]

@@ -11,17 +11,19 @@ The format is based on [Keep a Changelog]
     identity not fully matched
   - Add ECP admin claim identity confirmation task screen
   - Create admin claim note when identity confirmation mailer is sent
-- All policies
-  - Add home address search screen to claim journey
-  - Add postgraduate loans questions to M+P / TSLR journeys
-  - Fix incorrect aria value
   - Amend admin timeout from 30 mins to 60 mins
+- All policies
+  - Home Address selection
+    - Add home address search screen to claim journey
+    - Add screen to allow claimant to select address from API provided results
+      presented as radio buttons
+    - Add links that allow claimant to manually enter their address information
+      when on the two address auto-population screens
+  - Add posgraduate loans questions to M+P / TSLR journeys
 - ECP policies
-  - Add screen to allow claimant to select address from API provided results
-    presented as radio buttons
-  - Add links that allow claimant to manually enter their address information
-    when on the two address auto-population screens
-  - Fix links opening in a new window
+- DAC Accessiblity Report fixes
+  - Incorrect aria value
+  - Links opening in a new window
 
 ## [Release 092] - 2021-07-22
 

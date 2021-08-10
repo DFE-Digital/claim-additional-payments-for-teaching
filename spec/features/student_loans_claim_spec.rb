@@ -64,6 +64,11 @@ RSpec.feature "Teacher Student Loan Repayments claims" do
       expect(claim.middle_name).to eql("Percival")
       expect(claim.surname).to eql("Hillary")
 
+      expect(page).to have_text(I18n.t("questions.address.home.title"))
+      expect(page).to have_link(href: claim_path(StudentLoans.routing_name, "address"))
+
+      click_link(I18n.t("questions.address.home.link_to_manual_address"))
+
       expect(page).to have_text(I18n.t("questions.address.generic.title"))
       fill_in_address
 
