@@ -25,6 +25,6 @@ module OneTimePasswordCheckable
   end
 
   def otp
-    @otp ||= OneTimePassword::Validator.new(one_time_password, generated_at: set_sent_one_time_password_at)
+    @otp ||= OneTimePassword::Validator.new(one_time_password, set_sent_one_time_password_at)
   end
 end

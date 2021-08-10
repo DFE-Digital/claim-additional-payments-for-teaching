@@ -1,9 +1,9 @@
 module OneTimePassword
   class Validator < Base
-    def initialize(code, generated_at:, issuer:)
+    def initialize(code, generated_at, issuer = ISSUER)
       @code         = code
       @generated_at = generated_at
-      @issuer       = issuer || ISSUER
+      @issuer       = issuer
     end
 
     def valid?

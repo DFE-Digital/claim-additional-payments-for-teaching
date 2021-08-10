@@ -2,7 +2,7 @@
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
     <%= render("shared/error_summary", instance: current_reminder) if current_reminder.errors.any? %>
-    <%= form_for current_reminder, url: reminder_path(current_policy_routing_name, "personal-details") do |form| %>
+    <%= form_for current_reminder, url: reminders_path(current_policy_routing_name) do |form| %>
       <h1 class="govuk-heading-xl">
         <%= t("questions.personal_details") %>
       </h1>

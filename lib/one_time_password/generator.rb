@@ -1,6 +1,6 @@
 module OneTimePassword
   class Generator < Base
-    def initialize(issuer:)
+    def initialize(issuer = nil)
       @issuer = issuer || ISSUER
     end
 

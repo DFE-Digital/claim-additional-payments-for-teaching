@@ -1,5 +1,6 @@
 class ReminderMailer < ApplicationMailer
   helper :application
+  helper :early_career_payments
 
   def email_verification(reminder, one_time_password)
     @one_time_password = one_time_password
