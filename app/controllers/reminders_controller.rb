@@ -1,6 +1,5 @@
 class RemindersController < BasePublicController
   helper_method :current_reminder
-  # before_action :check_page_is_in_sequence, only: [:show, :update]
 
   def new
     render first_template_in_sequence
@@ -31,12 +30,6 @@ class RemindersController < BasePublicController
   end
 
   private
-
-  # def check_page_is_in_sequence
-  #   unless Reminder::SLUGS.include?(current_slug)
-  #     raise ActionController::RoutingError.new("Not Found")
-  #   end
-  # end
 
   def first_template_in_sequence
     Reminder::SLUGS.first.underscore
