@@ -1,7 +1,7 @@
 require "rails_helper"
 
-RSpec.describe "Set Reminders when Eligible Later for an Early Career Payment" do
-  it "Claimant can enter personal details" do
+RSpec.feature "Set Reminders when Eligible Later for an Early Career Payment" do
+  scenario "Claimant enters peronal details and OTP" do
     claim = start_early_career_payments_claim
     claim.eligibility.update!(
       attributes_for(
@@ -40,14 +40,16 @@ RSpec.describe "Set Reminders when Eligible Later for an Early Career Payment" d
     expect(page).to have_text("Personal details")
     expect(page).to have_text("Tell us the email address you'd like us to send your reminders to. We recommend you use a personal email address.")
 
-    fill_in "Full name", with: "Miss Sandia Patel"
-    fill_in "Email address", with: "s.patel2000gb@gmail.com"
+    fill_in "Full name", with: "David Tau"
+    fill_in "Email address", with: "david.tau1988@hotmail.co.uk"
 
+    allow_any_instance_of(OneTimePassword::Validator).to receive(:valid?).and_return(true)
     click_on "Continue"
-
+    fill_in "reminder_one_time_password", with: "123456"
+    click_on "Confirm"
     reminder = Reminder.order(:created_at).last
-    expect(reminder.full_name).to eq "Miss Sandia Patel"
-    expect(reminder.email_address).to eq "s.patel2000gb@gmail.com"
+    expect(reminder.full_name).to eq "David Tau"
+    expect(reminder.email_address).to eq "david.tau1988@hotmail.co.uk"
 
     expect(page).to have_text("We have set your reminders")
   end
