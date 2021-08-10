@@ -48,10 +48,9 @@ en:
     statement: By submitting this notification you are confirming that, to the best of your knowledge, the details you are providing are correct.
     btn_text: Confirm and send
   one_time_password:
-    email_hint: "We have sent an email to <b><strong>%{email}</strong></b> with a #{length}-digit password."
     title: "One time password"
     hint1_html: "We have sent an %{email_or_mobile_message} to <b><strong>%{email_or_mobile_value}</strong></b> with a 6-digit password."
-    hint1_suffix: "We recommend you copy and paste the password from the message."
+    hint1_suffix: "We recommend you copy and paste the password from the email."
     validity_duration: "You will have %{duration_valid} from receiving the %{email_or_mobile_message} before the password will expire."
   questions:
     current_school: "Which school are you currently employed to teach at?"
