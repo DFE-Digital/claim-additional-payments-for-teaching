@@ -1,4 +1,4 @@
-<% content_for(:page_title, page_title(t("questions.address"), policy: current_policy_routing_name, show_error: current_claim.errors.any?)) %>
+<% content_for(:page_title, page_title(t("questions.address.generic.title"), policy: current_policy_routing_name, show_error: current_claim.errors.any?)) %>
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
@@ -6,14 +6,14 @@
     <%= render("shared/error_summary", instance: current_claim) if current_claim.errors.any? %>
 
     <%= form_for current_claim, url: claim_path(current_policy_routing_name) do |form| %>
-    <fieldset class="govuk-fieldset">
-    <% if current_claim.has_ecp_policy? %>
-       <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
-          <span class="govuk-caption-xl">Personal details</span>
+      <fieldset class="govuk-fieldset">
+        <% if current_claim.has_ecp_policy? %>
+          <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
+            <span class="govuk-caption-xl">Personal details</span>
             <h1 class="govuk-heading-xl">
-              What is your address?
+              <%= t("questions.address.generic.title") %>
             </h1>
-        </legend>
+          </legend>
 
           <%= form_group_tag current_claim, :address_line_1 do %>
             <%= form.label :address_line_1, class: "govuk-label" do %>
@@ -32,14 +32,14 @@
             <%= form.text_field :address_line_2, autocomplete: "address-line2",
               class: css_classes_for_input(current_claim, :address_line_2) %>
           <% end %>
-          <% else %>
-            <legend class="govuk-fieldset__legend govuk-fieldset__legend--<%= shared_view_css_class_size(current_claim) %>">
-              <h1 class="govuk-fieldset__heading">
-                <%= t("questions.address") %>
-              </h1>
-            </legend>
+        <% else %>
+          <legend class="govuk-fieldset__legend govuk-fieldset__legend--<%= shared_view_css_class_size(current_claim) %>">
+            <h1 class="govuk-fieldset__heading">
+              <%= t("questions.address.generic.title") %>
+            </h1>
+          </legend>
 
-            <%= form_group_tag current_claim, :address_line_1 do %>
+          <%= form_group_tag current_claim, :address_line_1 do %>
             <%= form.label :address_line_1, class: "govuk-label" do %>
               Building and street <span class="govuk-visually-hidden">line 1 of 2</span>
             <% end %>
@@ -47,6 +47,7 @@
             <%= form.text_field :address_line_1, autocomplete: "street-address",
               class: css_classes_for_input(current_claim, :address_line_1) %>
           <% end %>
+
           <%= form_group_tag current_claim, :address_line_2 do %>
             <%= form.label :address_line_2, class: "govuk-label" do %>
               <span class="govuk-visually-hidden">Building and street line 2 of 2</span>
@@ -83,7 +84,6 @@
           <%= form.text_field :postcode, autocomplete: "postal-code",
             class: css_classes_for_input(current_claim, :postcode, "govuk-input--width-10") %>
         <% end %>
-
       </fieldset>
       <%= form.submit "Continue", class: "govuk-button" %>
     <% end %>

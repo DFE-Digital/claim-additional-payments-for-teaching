@@ -1,5 +1,6 @@
 class ClaimsController < BasePublicController
   include PartOfClaimJourney
+  include AddressDetails
 
   skip_before_action :send_unstarted_claiments_to_the_start, only: [:new, :create, :timeout]
   before_action :check_page_is_in_sequence, only: [:show, :update]
@@ -24,6 +25,16 @@ class ClaimsController < BasePublicController
 
   def show
     search_schools if params[:school_search]
+    if params[:slug] == "postcode-search" && postcode
+      redirect_to claim_path(current_policy_routing_name, "select-home-address", {"claim[postcode]": postcode, "claim[address_line_1]": params[:claim][:address_line_1]}) and return unless invalid_postcode?
+    elsif params[:slug] == "select-home-address" && postcode
+      if address_data.nil?
+        current_claim.errors.add(:postcode, "Postcode valid but not found")
+        session[:postcode_not_found] = "Postcode not found"
+        redirect_to claim_path(current_policy_routing_name, "postcode-search") and return
+      end
+    end
+
     render current_template
   end
 

@@ -64,7 +64,7 @@ RSpec.feature "Teacher Student Loan Repayments claims" do
       expect(claim.middle_name).to eql("Percival")
       expect(claim.surname).to eql("Hillary")
 
-      expect(page).to have_text(I18n.t("questions.address"))
+      expect(page).to have_text(I18n.t("questions.address.generic.title"))
       fill_in_address
 
       expect(claim.reload.address_line_1).to eql("123 Main Street")
@@ -114,6 +114,22 @@ RSpec.feature "Teacher Student Loan Repayments claims" do
       click_on "Continue"
 
       expect(claim.eligibility.reload.student_loan_repayment_amount).to eql(1100.00)
+
+      # - Did you take out a postgraduate masters loan on or after 1 August 2016
+      expect(page).to have_text(I18n.t("questions.postgraduate_masters_loan"))
+
+      choose "Yes"
+      click_on "Continue"
+
+      expect(claim.reload.postgraduate_masters_loan).to eql true
+
+      # - Did you take out a postgraduate doctoral loan on or after 1 August 2016
+      expect(page).to have_text(I18n.t("questions.postgraduate_doctoral_loan"))
+
+      choose "Yes"
+      click_on "Continue"
+
+      expect(claim.reload.postgraduate_doctoral_loan).to eql true
 
       expect(page).to have_text(I18n.t("questions.email_address"))
       expect(page).to have_text(I18n.t("questions.email_address_hint1"))

@@ -103,6 +103,8 @@ FactoryBot.define do
       student_loan_start_date { StudentLoan::BEFORE_1_SEPT_2012 }
       # student_loan_start_date { StudentLoan::ON_OR_AFTER_1_SEPT_2012 }
       student_loan_plan { StudentLoan::PLAN_1 }
+      postgraduate_masters_loan { false }
+      postgraduate_doctoral_loan { false }
     end
 
     trait :with_student_loan_for_two_courses do
@@ -124,6 +126,8 @@ FactoryBot.define do
       student_loan_courses { nil }
       student_loan_start_date { nil }
       student_loan_plan { nil }
+      postgraduate_masters_loan { nil }
+      postgraduate_doctoral_loan { nil }
     end
   end
 end

@@ -24,6 +24,8 @@ class Claim < ApplicationRecord
     :student_loan_country,
     :student_loan_courses,
     :student_loan_start_date,
+    :postgraduate_masters_loan,
+    :postgraduate_doctoral_loan,
     :email_address,
     :provide_mobile_number,
     :mobile_number,
@@ -55,6 +57,8 @@ class Claim < ApplicationRecord
     student_loan_country: false,
     student_loan_courses: false,
     student_loan_start_date: false,
+    postgraduate_masters_loan: false,
+    postgraduate_doctoral_loan: false,
     email_address: true,
     provide_mobile_number: false,
     mobile_number: true,
@@ -85,7 +89,7 @@ class Claim < ApplicationRecord
   DECISION_DEADLINE = 12.weeks
   DECISION_DEADLINE_WARNING_POINT = 2.weeks
   ATTRIBUTE_DEPENDENCIES = {
-    "has_student_loan" => ["student_loan_country"],
+    "has_student_loan" => ["student_loan_country", "postgraduate_masters_loan", "postgraduate_doctoral_loan"],
     "student_loan_country" => ["student_loan_courses"],
     "student_loan_courses" => ["student_loan_start_date"],
     "bank_or_building_society" => ["banking_name", "bank_account_number", "bank_sort_code", "building_society_roll_number"],
@@ -137,8 +141,8 @@ class Claim < ApplicationRecord
   validates :address_line_2, on: [:address], presence: {message: "Enter a building and street address"}, if: :has_ecp_policy?
   validates :address_line_3, length: {maximum: 100, message: "Address lines must be 100 characters or less"}
   validates :address_line_3, on: [:address], presence: {message: "Enter a town or city"}
-  validates :address_line_4, length: {maximum: 100, message: "Address lines must be 100 characters or less"}
-  validates :address_line_4, on: [:address], presence: {message: "Enter a county"}
+  validates :address_line_4, length: {maximum: 100, message: "Address lines must be 100 characters or less"}, unless: :has_ecp_policy?
+  validates :address_line_4, on: [:address], presence: {message: "Enter a county"}, unless: :has_ecp_policy?
 
   validates :postcode, on: [:address, :submit], presence: {message: "Enter a real postcode"}
   validates :postcode, length: {maximum: 11, message: "Postcode must be 11 characters or less"}
@@ -158,6 +162,8 @@ class Claim < ApplicationRecord
   validates :student_loan_start_date, on: [:"student-loan-start-date"], presence: {message: ->(object, data) { I18n.t("validation_errors.student_loan_start_date.#{object.student_loan_courses}") }}
   validates :student_loan_plan, on: [:submit], presence: {message: "We have not been able determined your student loan repayment plan. Answer all questions about your student loan."}
   validates :student_loan_plan, on: [:amendment], inclusion: {in: [Claim::NO_STUDENT_LOAN], message: "You can’t amend the student loan plan type because the claimant said they are no longer paying off their student loan"}, if: :no_student_loan?
+  validates :postgraduate_masters_loan, on: [:"masters-loan", :submit], inclusion: {in: [true, false], message: "Select yes if you have a Postgraduate Master Loan taken out on or after 1st August 2016"}, if: -> { has_student_loan? }
+  validates :postgraduate_doctoral_loan, on: [:"doctoral-loan", :submit], inclusion: {in: [true, false], message: "Select yes if you have a Postgraduate Doctoral Loan taken out on or after 1st August 2018"}, if: -> { has_student_loan? }
 
   validates :email_address, on: [:"email-address", :submit], presence: {message: "Enter an email address"}
   validates :email_address, format: {with: URI::MailTo::EMAIL_REGEXP, message: "Enter an email in the format name@example.com"},

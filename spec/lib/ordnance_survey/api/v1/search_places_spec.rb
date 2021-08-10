@@ -34,31 +34,31 @@ module OrdnanceSurvey
               expect(index).to eq(
                 [
                   {
-                    address: "1, WEARSIDE ROAD, LONDON, SE13 7UN",
+                    address: "1, Wearside Road, London, SE13 7UN",
                     address_line_1: "1",
                     address_line_2: "WEARSIDE ROAD",
-                    address_line_4: "LONDON",
+                    address_line_3: "LONDON",
                     postcode: "SE13 7UN"
                   },
                   {
-                    address: "2, WEARSIDE ROAD, LONDON, SE13 7UN",
+                    address: "2, Wearside Road, London, SE13 7UN",
                     address_line_1: "2",
                     address_line_2: "WEARSIDE ROAD",
-                    address_line_4: "LONDON",
+                    address_line_3: "LONDON",
                     postcode: "SE13 7UN"
                   },
                   {
-                    address: "38A, WEARSIDE ROAD, LONDON, SE13 7UN",
+                    address: "38A, Wearside Road, London, SE13 7UN",
                     address_line_1: "38A",
                     address_line_2: "WEARSIDE ROAD",
-                    address_line_4: "LONDON",
+                    address_line_3: "LONDON",
                     postcode: "SE13 7UN"
                   },
                   {
-                    address: "38B-38C, WEARSIDE ROAD, LONDON, SE13 7UN",
+                    address: "38B-38C, Wearside Road, London, SE13 7UN",
                     address_line_1: "38B-38C",
                     address_line_2: "WEARSIDE ROAD",
-                    address_line_4: "LONDON",
+                    address_line_3: "LONDON",
                     postcode: "SE13 7UN"
                   }
                 ]
@@ -73,24 +73,24 @@ module OrdnanceSurvey
               expect(index).to eq(
                 [
                   {
-                    address: "FLAT 1, MILLBROOK TOWER, WINDERMERE AVENUE, SOUTHAMPTON, SO16 9FX",
+                    address: "Flat 1, Millbrook Tower, Windermere Avenue, Southampton, SO16 9FX",
                     address_line_1: "FLAT 1, MILLBROOK TOWER",
                     address_line_2: "WINDERMERE AVENUE",
-                    address_line_4: "SOUTHAMPTON",
+                    address_line_3: "SOUTHAMPTON",
                     postcode: "SO16 9FX"
                   },
                   {
-                    address: "FLAT 10, MILLBROOK TOWER, WINDERMERE AVENUE, SOUTHAMPTON, SO16 9FX",
+                    address: "Flat 10, Millbrook Tower, Windermere Avenue, Southampton, SO16 9FX",
                     address_line_1: "FLAT 10, MILLBROOK TOWER",
                     address_line_2: "WINDERMERE AVENUE",
-                    address_line_4: "SOUTHAMPTON",
+                    address_line_3: "SOUTHAMPTON",
                     postcode: "SO16 9FX"
                   },
                   {
-                    address: "FLAT 11, MILLBROOK TOWER, WINDERMERE AVENUE, SOUTHAMPTON, SO16 9FX",
+                    address: "Flat 11, Millbrook Tower, Windermere Avenue, Southampton, SO16 9FX",
                     address_line_1: "FLAT 11, MILLBROOK TOWER",
                     address_line_2: "WINDERMERE AVENUE",
-                    address_line_4: "SOUTHAMPTON",
+                    address_line_3: "SOUTHAMPTON",
                     postcode: "SO16 9FX"
                   }
                 ]
@@ -124,13 +124,15 @@ module OrdnanceSurvey
           context "with a searchable address" do
             it "returns a single address" do
               expect(show).to eq(
-                {
-                  address: "19, TURNER PLACE, BRADFORD, BD7 3BE",
-                  address_line_1: "19",
-                  address_line_2: "TURNER PLACE",
-                  address_line_4: "BRADFORD",
-                  postcode: "BD7 3BE"
-                }
+                [
+                  {
+                    address: "19, Turner Place, Bradford, BD7 3BE",
+                    address_line_1: "19",
+                    address_line_2: "TURNER PLACE",
+                    address_line_3: "BRADFORD",
+                    postcode: "BD7 3BE"
+                  }
+                ]
               )
             end
           end

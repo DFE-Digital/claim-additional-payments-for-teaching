@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_07_01_152930) do
+ActiveRecord::Schema.define(version: 2021_08_09_072246) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -66,6 +66,8 @@ ActiveRecord::Schema.define(version: 2021_07_01_152930) do
     t.integer "bank_or_building_society"
     t.boolean "provide_mobile_number"
     t.string "mobile_number"
+    t.boolean "postgraduate_masters_loan"
+    t.boolean "postgraduate_doctoral_loan"
     t.index ["academic_year"], name: "index_claims_on_academic_year"
     t.index ["created_at"], name: "index_claims_on_created_at"
     t.index ["eligibility_type", "eligibility_id"], name: "index_claims_on_eligibility_type_and_eligibility_id"
@@ -128,8 +130,6 @@ ActiveRecord::Schema.define(version: 2021_07_01_152930) do
     t.integer "eligible_itt_subject"
     t.boolean "teaching_subject_now"
     t.integer "itt_academic_year"
-    t.boolean "postgraduate_masters_loan"
-    t.boolean "postgraduate_doctoral_loan"
     t.uuid "current_school_id"
     t.index ["current_school_id"], name: "index_early_career_payments_eligibilities_on_current_school_id"
   end
