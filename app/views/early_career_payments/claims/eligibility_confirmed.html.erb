@@ -25,18 +25,10 @@
       <li>
           your 7-digit teacher reference number - you can get this from
           your school, the certificate you got when you qualified, or
-          by contacting the teacher qualifications helpdesk on
-          <%= link_to "0207 593 5394",
-            "#",
-            class: "govuk-link",
-            title: "Opens in a new tab",
-            target: "_blank"
-          %> or
-          <%= link_to "qts.enquiries@education.gov.uk",
-            "#",
-            class: "govuk-link",
-            title: "Opens in a new tab",
-            target: "_blank"
+          by contacting the teacher qualifications helpdesk on 020 7593 5394 or
+          <%= mail_to "qts.enquiries@education.gov.uk",
+            "qts.enquiries@education.gov.uk",
+            class: "govuk-link"
           %>
       </li>
       <li>
@@ -45,7 +37,8 @@
           <%= link_to "student loan account",
             EarlyCareerPayments.student_loan_balance_url,
             class: "govuk-link",
-            title: "Opens in a new tab",
+            title: "govuk-link (opens in new tab)",
+            rel: "noreferrer noopener",
             target: "_blank"
           %>
       </li>
