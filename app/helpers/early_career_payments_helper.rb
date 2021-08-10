@@ -12,6 +12,6 @@ module EarlyCareerPaymentsHelper
   end
 
   def one_time_password_validity_duration
-    pluralize(OneTimePassword::OTP_PASSWORD_DRIFT / 60, "minute")
+    pluralize(OneTimePassword::Base::DRIFT / 60, "minute")
   end
 end

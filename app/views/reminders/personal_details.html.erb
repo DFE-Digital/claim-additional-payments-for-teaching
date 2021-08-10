@@ -1,20 +1,20 @@
-<% content_for(:page_title, page_title(t("questions.personal_details"), policy: current_policy_routing_name, show_error: @reminder.errors.any?)) %>
+<% content_for(:page_title, page_title(t("questions.personal_details"), policy: current_policy_routing_name, show_error: current_reminder.errors.any?)) %>
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-    <%= render("shared/error_summary", instance: @reminder) if @reminder.errors.any? %>
-    <%= form_for @reminder, url: reminders_path(current_policy_routing_name) do |form| %>
+    <%= render("shared/error_summary", instance: current_reminder) if current_reminder.errors.any? %>
+    <%= form_for current_reminder, url: reminders_path(current_policy_routing_name) do |form| %>
       <h1 class="govuk-heading-xl">
         <%= t("questions.personal_details") %>
       </h1>
-      <%= form_group_tag @reminder, :full_name do %>
+      <%= form_group_tag current_reminder, :full_name do %>
         <h1 class="govuk-label-wrapper">
           <%= form.label :full_name, t("early_career_payments.reminders.full_name"), {class: "govuk-label govuk-label--l"}  %>
         </h1>
-        <%= errors_tag @reminder, :full_name %>
-        <%= form.text_field :full_name, class: css_classes_for_input(@reminder, :full_name), type: "text", spellcheck: "false", autocomplete: "given-name" %>
+        <%= errors_tag current_reminder, :full_name %>
+        <%= form.text_field :full_name, class: css_classes_for_input(current_reminder, :full_name), type: "text", spellcheck: "false", autocomplete: "given-name" %>
       <% end %>
 
-      <%= form_group_tag @reminder, :full_name do %>
+      <%= form_group_tag current_reminder, :full_name do %>
         <h1 class="govuk-label-wrapper">
           <%= form.label :email_address, t("questions.email_address"), {class: "govuk-label govuk-label--l"}  %>
         </h1>
@@ -28,8 +28,8 @@
             password. You will need to input that password on the next screen.
           </p>
         </div>
-        <%= errors_tag @reminder, :email_address %>
-         <%= form.text_field :email_address, class: css_classes_for_input(@reminder, :email_address), type: "text", spellcheck: "false", autocomplete: "given-name" %>
+        <%= errors_tag current_reminder, :email_address %>
+         <%= form.text_field :email_address, class: css_classes_for_input(current_reminder, :email_address), type: "text", spellcheck: "false", autocomplete: "given-name" %>
       <% end %>
       <%= form.submit "Continue", class: "govuk-button", data: {module: "govuk-button"} %>
     <% end %>

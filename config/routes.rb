@@ -54,8 +54,8 @@ Rails.application.routes.draw do
 
     scope constraints: {policy: Policies.all.detect { |policy| policy.routing_name == "early-career-payments" }.routing_name} do
       get "reminders/personal-details", as: :new_reminder, to: "reminders#new"
-      post "reminders/personal-details", to: "reminders#create", as: :reminders
-      get "reminders/reminder-set", to: "reminders#show", as: :reminder
+      post "reminders/personal-details", as: :reminders, to: "reminders#create"
+      resources :reminders, only: [:show, :update], param: :slug, constraints: {slug: %r{#{Reminder::SLUGS.join("|")}}}
     end
 
     scope path: "/", constraints: {policy: Policies.all.detect { |policy| policy.routing_name == "early-career-payments" }.routing_name} do
