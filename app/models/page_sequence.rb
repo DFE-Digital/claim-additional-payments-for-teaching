@@ -22,7 +22,7 @@ class PageSequence
     # the next slug needs to be returned. Otherwise the 2nd slug (index 1) will be retuned
     # for 'address'.
     # This happened due to using a link to render the 'address' page from the show action on 'postcode-search'
-    return slugs[slugs.index("select-home-address") + 1] if current_slug == "address" && claim.has_ecp_policy?
+    return slugs[slugs.index("select-home-address") + 1] if current_slug == "address" && (claim.has_ecp_policy? || claim.policy == MathsAndPhysics)
 
     slugs[current_slug_index + 1]
   end
