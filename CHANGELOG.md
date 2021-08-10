@@ -13,6 +13,7 @@ The format is based on [Keep a Changelog]
   - Create admin claim note when identity confirmation mailer is sent
 - All policies
   - Add home address search screen to claim journey
+  - Add posgraduate loans questions to M+P / TSLR journeys
   - Fix incorrect aria value
 - ECP policies
   - Add screen to allow claimant to select address from API provided results
