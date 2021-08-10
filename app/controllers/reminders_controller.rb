@@ -1,5 +1,6 @@
 class RemindersController < BasePublicController
   helper_method :current_reminder
+  after_action :reminder_set_email, only: [:show]
 
   def new
     render first_template_in_sequence
@@ -83,5 +84,11 @@ class RemindersController < BasePublicController
 
   def otp
     @otp ||= OneTimePassword::Generator.new
+  end
+
+  def reminder_set_email
+    return unless current_slug == "set"
+
+    ReminderMailer.reminder_set(current_reminder).deliver_now
   end
 end

@@ -11,6 +11,12 @@ class ReminderMailer < ApplicationMailer
     send_mail
   end
 
+  def reminder_set(reminder)
+    @reminder = reminder
+    @subject = "Your reminder has been set"
+    send_mail
+  end
+
   private
 
   def send_mail

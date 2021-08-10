@@ -52,5 +52,7 @@ RSpec.feature "Set Reminders when Eligible Later for an Early Career Payment" do
     expect(reminder.email_address).to eq "david.tau1988@hotmail.co.uk"
 
     expect(page).to have_text("We have set your reminders")
+    reminder_set_email = ActionMailer::Base.deliveries.last.body
+    expect(reminder_set_email).to have_text("We will send you a reminder in September 2022")
   end
 end
