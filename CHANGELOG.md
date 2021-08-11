@@ -13,7 +13,7 @@ The format is based on [Keep a Changelog]
   - Create admin claim note when identity confirmation mailer is sent
 - All policies
   - Add home address search screen to claim journey
-  - Add posgraduate loans questions to M+P / TSLR journeys
+  - Add postgraduate loans questions to M+P / TSLR journeys
   - Fix incorrect aria value
   - Amend admin timeout from 30 mins to 60 mins
 - ECP policies
@@ -21,6 +21,7 @@ The format is based on [Keep a Changelog]
     presented as radio buttons
   - Add links that allow claimant to manually enter their address information
     when on the two address auto-population screens
+  - Fix links opening in a new window
 
 ## [Release 092] - 2021-07-22
 
