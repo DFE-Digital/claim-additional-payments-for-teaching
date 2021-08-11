@@ -24,6 +24,7 @@ The format is based on [Keep a Changelog]
 - DAC Accessiblity Report fixes
   - Incorrect aria value
   - Links opening in a new window
+  - Incorrect ID in 'for' attribute for one time password
 
 ## [Release 092] - 2021-07-22
 
