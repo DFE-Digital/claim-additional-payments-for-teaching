@@ -70,5 +70,21 @@ RSpec.describe StudentLoans::SlugSequence do
         expect(slug_sequence.slugs).not_to include("personal-bank-account")
       end
     end
+
+    context "when auto-populating address from 'postcode-search' and 'select-home-address'" do
+      it "excludes the 'address' slug" do
+        claim.postcode = "SE13 7UN"
+
+        expect(slug_sequence.slugs).not_to include("address")
+      end
+    end
+
+    context "when manual full address requested" do
+      it "includes the 'address' slug" do
+        claim.postcode = nil
+
+        expect(slug_sequence.slugs).to include("address")
+      end
+    end
   end
 end

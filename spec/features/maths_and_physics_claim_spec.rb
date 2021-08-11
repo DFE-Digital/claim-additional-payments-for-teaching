@@ -66,6 +66,11 @@ RSpec.feature "Maths & Physics claims" do
       expect(claim.middle_name).to eql("Jennifer")
       expect(claim.surname).to eql("Winstanley")
 
+      expect(page).to have_text(I18n.t("questions.address.home.title"))
+      expect(page).to have_link(href: claim_path(MathsAndPhysics.routing_name, "address"))
+
+      click_link(I18n.t("questions.address.home.link_to_manual_address"))
+
       expect(page).to have_text(I18n.t("questions.address.generic.title"))
       fill_in_address
 
