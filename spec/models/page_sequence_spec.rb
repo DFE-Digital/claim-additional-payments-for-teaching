@@ -34,9 +34,9 @@ RSpec.describe PageSequence do
 
     context "when address is populated from 'select-home-address'" do
       [
-        {policy: EarlyCareerPayments, next_slug: "email-address", slug_sequence: OpenStruct.new(slugs: ["postcode-search", "select-home-address", "email-address"])},
-        {policy: MathsAndPhysics, next_slug: "date-of-birth", slug_sequence: OpenStruct.new(slugs: ["postcode-search", "select-home-address", "date-of-birth"])},
-        {policy: StudentLoans, next_slug: "date-of-birth", slug_sequence: OpenStruct.new(slugs: ["postcode-search", "select-home-address", "date-of-birth"])}
+        {policy: EarlyCareerPayments, next_slug: "email-address", slug_sequence: OpenStruct.new(slugs: ["postcode-search", "select-home-address", "address", "email-address"])},
+        {policy: MathsAndPhysics, next_slug: "date-of-birth", slug_sequence: OpenStruct.new(slugs: ["postcode-search", "select-home-address", "address", "date-of-birth"])},
+        {policy: StudentLoans, next_slug: "date-of-birth", slug_sequence: OpenStruct.new(slugs: ["postcode-search", "select-home-address", "address", "date-of-birth"])}
       ].each do |scenario|
         let(:claim) { build(:claim, policy: scenario[:policy]) }
 
