@@ -5,14 +5,16 @@ RSpec.describe EarlyCareerPayments::AdminTasksPresenter, type: :model do
   let(:eligibility) { claim.eligibility }
 
   let(:claim) do
-    build(:claim,
-      academic_year: "2019/2020",
-      eligibility: build(:maths_and_physics_eligibility,
-        teaching_maths_or_physics: true,
+    build(
+      :claim,
+      academic_year: AcademicYear::Type.new.serialize(AcademicYear.new(2021)),
+      eligibility: build(
+        :early_career_payments_eligibility,
         current_school: school,
-        initial_teacher_training_subject: :maths,
-        initial_teacher_training_subject_specialism: nil,
-        qts_award_year: "on_or_after_cut_off_date"))
+        eligible_itt_subject: :mathematics,
+        itt_academic_year: AcademicYear::Type.new.serialize(AcademicYear.new(2018))
+      )
+    )
   end
 
   subject(:presenter) { described_class.new(claim) }
@@ -23,6 +25,22 @@ RSpec.describe EarlyCareerPayments::AdminTasksPresenter, type: :model do
         ["Current school", school.name],
         ["Contact number", school.phone_number]
       ]
+    end
+  end
+
+  describe "#qualifications" do
+    it "returns an array of label and values for displaying information for qualification checks" do
+      expected_array = [
+        ["ITT start/end year", "In the academic year 2018 to 2019"],
+        ["ITT subject", "Mathematics"]
+      ]
+
+      expect(presenter.qualifications).to eq expected_array
+    end
+
+    it "sets the “Award year” value based on the academic year the claim was made in" do
+      expected_qts_answer = presenter.qualifications[0][1]
+      expect(expected_qts_answer).to eq "In the academic year 2018 to 2019"
     end
   end
 end

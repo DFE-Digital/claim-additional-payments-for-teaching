@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_08_09_072246) do
+ActiveRecord::Schema.define(version: 2021_08_11_120912) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -129,7 +129,7 @@ ActiveRecord::Schema.define(version: 2021_08_09_072246) do
     t.boolean "subject_to_formal_performance_action"
     t.integer "eligible_itt_subject"
     t.boolean "teaching_subject_now"
-    t.integer "itt_academic_year"
+    t.string "itt_academic_year", limit: 9
     t.uuid "current_school_id"
     t.index ["current_school_id"], name: "index_early_career_payments_eligibilities_on_current_school_id"
   end

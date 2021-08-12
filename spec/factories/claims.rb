@@ -10,8 +10,18 @@ FactoryBot.define do
     end
 
     after(:build) do |claim, evaluator|
+      extend Admin::PolicyConfigurationsHelper
+
       claim.eligibility = build(*evaluator.eligibility_factory) unless claim.eligibility
-      claim.academic_year = "2019/2020" unless claim.academic_year_before_type_cast
+
+      claim_academic_year =
+        if claim.policy == EarlyCareerPayments
+          AcademicYear::Type.new.serialize(options_for_academic_year.sample)
+        else
+          AcademicYear::Type.new.serialize(AcademicYear.new(2019))
+        end
+
+      claim.academic_year = claim_academic_year unless claim.academic_year_before_type_cast
     end
 
     trait :submittable do

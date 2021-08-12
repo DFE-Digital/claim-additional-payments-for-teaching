@@ -15,6 +15,7 @@ class ClaimsController < BasePublicController
 
   def create
     current_claim.attributes = claim_params
+
     if current_claim.save(context: page_sequence.slugs.first.to_sym)
       session[:claim_id] = current_claim.to_param
       redirect_to claim_path(current_policy_routing_name, next_slug)

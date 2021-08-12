@@ -120,6 +120,7 @@ en:
     qts_award_years:
       before_cut_off_date: "In or before the academic year %{year}"
       on_or_after_cut_off_date: "In or after the academic year %{year}"
+      on_date: "In the academic year %{year}"
     student_loan_start_date:
       one_course:
         before_first_september_2012: "Before 1 September 2012"
@@ -301,6 +302,8 @@ en:
           title: "Did %{claim_full_name} submit the claim?"
           body: "The claimant’s identity matches DQT records. See %{link}."
           notes: "notes"
+        qualifications:
+          title: "Does the claimant’s initial teacher training (ITT) start/end year and subject match the above information from their claim?"
     answers:
       qualification:
         postgraduate_itt: "Postgraduate ITT"

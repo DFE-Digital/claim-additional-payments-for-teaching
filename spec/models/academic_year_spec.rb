@@ -24,14 +24,58 @@ RSpec.describe AcademicYear do
 
   describe AcademicYear::Type do
     describe "#serialize" do
-      it "returns the String representation of an AcademicYear" do
-        expect(AcademicYear::Type.new.serialize(AcademicYear.new(2020))).to eq "2020/2021"
+      subject(:serialize) { described_class.new.serialize(arg) }
+
+      context "with AcademicYear 2018" do
+        let(:arg) { AcademicYear.new(2018) }
+
+        it "returns 2018/2019" do
+          expect(serialize).to eq "2018/2019"
+        end
+      end
+
+      context "with AcademicYear nil" do
+        let(:arg) { AcademicYear.new }
+
+        it "returns None" do
+          expect(serialize).to eq "None"
+        end
+      end
+
+      context "with nil" do
+        let(:arg) { nil }
+
+        it "returns nil" do
+          expect(serialize).to be nil
+        end
       end
     end
 
     describe "#cast" do
-      it "returns an Academic year based on the provided serialised string version" do
-        expect(AcademicYear::Type.new.cast("2024/2025")).to eq AcademicYear.new(2024)
+      subject(:cast) { described_class.new.cast(arg) }
+
+      context "with 2018/2019" do
+        let(:arg) { "2018/2019" }
+
+        it "returns AcademicYear 2018" do
+          expect(cast).to eq AcademicYear.new(2018)
+        end
+      end
+
+      context "with None" do
+        let(:arg) { "None" }
+
+        it "returns AcademicYear nil" do
+          expect(cast).to eq AcademicYear.new
+        end
+      end
+
+      context "with nil" do
+        let(:arg) { nil }
+
+        it "returns nil" do
+          expect(cast).to be nil
+        end
       end
     end
   end
@@ -63,14 +107,56 @@ RSpec.describe AcademicYear do
     expect(AcademicYear.new(2008) + 3).to eq(AcademicYear.new(2011))
   end
 
+  describe "#==" do
+    subject(:eq) { described_class.new(2018).==(arg) }
+
+    context "with eq" do
+      let(:arg) { described_class.new(2018) }
+
+      it "returns true" do
+        expect(eq).to be true
+      end
+    end
+
+    context "with not eq" do
+      let(:arg) { described_class.new }
+
+      it "returns false" do
+        expect(eq).to be false
+      end
+    end
+  end
+
+  describe "#eql?" do
+    subject(:eql?) { AcademicYear.new(2018).eql?(other_academic_year) }
+
+    context "when eql" do
+      let(:other_academic_year) { AcademicYear.new(2018) }
+
+      it "returns true" do
+        expect(eql?).to be true
+      end
+    end
+
+    context "when not eql" do
+      let(:other_academic_year) { AcademicYear.new(2019) }
+
+      it "returns false" do
+        expect(eql?).to be false
+      end
+    end
+  end
+
   describe "#to_s" do
     it "returns the accepted short format for displaying academic years" do
+      expect(AcademicYear.new.to_s).to eq "None"
       expect(AcademicYear.new(2014).to_s).to eq "2014/2015"
       expect(AcademicYear.new("2020").to_s).to eq "2020/2021"
       expect(AcademicYear.new("2020/2021").to_s).to eq "2020/2021"
     end
 
     it "can return the long-form, more human-friendly version of the academic year" do
+      expect(AcademicYear.new.to_s(:long)).to eq "None"
       expect(AcademicYear.new(2014).to_s(:long)).to eq "2014 to 2015"
       expect(AcademicYear.new("2020").to_s(:long)).to eq "2020 to 2021"
       expect(AcademicYear.new("2020/2021").to_s(:long)).to eq "2020 to 2021"
