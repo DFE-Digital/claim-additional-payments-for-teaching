@@ -25,6 +25,7 @@ The format is based on [Keep a Changelog]
   - Incorrect aria value
   - Links opening in a new window
   - Incorrect ID in 'for' attribute for one time password
+  - Multiple level 1 headings
 
 ## [Release 092] - 2021-07-22
 
