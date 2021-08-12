@@ -26,6 +26,7 @@ The format is based on [Keep a Changelog]
   - Links opening in a new window
   - Incorrect ID in 'for' attribute for one time password
   - Multiple level 1 headings
+  - Error skip links
 
 ## [Release 092] - 2021-07-22
 
