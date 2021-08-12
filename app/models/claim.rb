@@ -66,6 +66,9 @@ class Claim < ApplicationRecord
     bank_account_number: true,
     created_at: false,
     date_of_birth: true,
+    date_of_birth_day: true,
+    date_of_birth_month: true,
+    date_of_birth_year: true,
     eligibility_id: false,
     eligibility_type: false,
     first_name: true,
@@ -100,6 +103,10 @@ class Claim < ApplicationRecord
   # Use AcademicYear as custom ActiveRecord attribute type
   attribute :academic_year, AcademicYear::Type.new
 
+  attribute :date_of_birth_day, :integer
+  attribute :date_of_birth_month, :integer
+  attribute :date_of_birth_year, :integer
+
   enum student_loan_country: StudentLoan::COUNTRIES
   enum student_loan_start_date: StudentLoan::COURSE_START_DATES
   enum student_loan_courses: {one_course: 0, two_or_more_courses: 1}
@@ -127,13 +134,27 @@ class Claim < ApplicationRecord
 
   validates :payroll_gender, on: [:gender, :submit], presence: {message: "Choose the option for the gender your school’s payroll system associates with you"}
 
-  validates :first_name, on: [:name, :submit], presence: {message: "Enter your first name"}
-  validates :first_name, length: {maximum: 100, message: "First name must be 100 characters or less"}
+  validates :first_name, on: [:name, :"personal-details", :submit], presence: {message: "Enter your first name"}
+  validates :first_name, length: {maximum: 100, message: "First name must be 100 characters or less"}, unless: :has_ecp_policy?
+  validates :first_name,
+    on: [:"personal-details", :submit],
+    length: {
+      in: 2..30,
+      message: "First name must be between 2 and 30 characters"
+    },
+    if: -> { :has_ecp_policy? && first_name.present? }
 
   validates :middle_name, length: {maximum: 100, message: "Middle name must be 100 characters or less"}
 
-  validates :surname, on: [:name, :submit], presence: {message: "Enter your last name"}
-  validates :surname, length: {maximum: 100, message: "Last name must be 100 characters or less"}
+  validates :surname, on: [:name, :"personal-details", :submit], presence: {message: "Enter your last name"}
+  validates :surname, length: {maximum: 100, message: "Last name must be 100 characters or less"}, unless: :has_ecp_policy?
+  validates :surname,
+    on: [:"personal-details", :submit],
+    length: {
+      in: 2..30,
+      message: "Last name must be between 2 and 30 characters"
+    },
+    if: -> { :has_ecp_policy? && surname.present? }
 
   validates :address_line_1, on: [:address], presence: {message: "Enter a house number or name"}, if: :has_ecp_policy?
   validates :address_line_1, on: [:address, :submit], presence: {message: "Enter a building and street address"}, unless: :has_ecp_policy?
@@ -150,11 +171,12 @@ class Claim < ApplicationRecord
   validate :postcode_is_valid, if: -> { postcode.present? }
 
   validates :date_of_birth, on: [:"date-of-birth", :submit], presence: {message: "Enter your date of birth"}
+  validate :date_of_birth_criteria, on: [:"personal-details", :submit], if: :has_ecp_policy?
 
   validates :teacher_reference_number, on: [:"teacher-reference-number", :submit], presence: {message: "Enter your teacher reference number"}
   validate :trn_must_be_seven_digits
 
-  validates :national_insurance_number, on: [:"national-insurance-number", :submit], presence: {message: "Enter your National Insurance number"}
+  validates :national_insurance_number, on: [:"national-insurance-number", :"personal-details", :submit], presence: {message: "Enter a National Insurance number in the correct format"}
   validate :ni_number_is_correct_format
 
   validates :has_student_loan, on: [:"student-loan", :submit], inclusion: {in: [true, false], message: "Select yes if you have a student loan"}
@@ -432,5 +454,31 @@ class Claim < ApplicationRecord
 
   def postcode_is_valid?
     UKPostcode.parse(postcode).full_valid?
+  end
+
+  def date_has_day_month_year_components
+    [
+      date_of_birth_day,
+      date_of_birth_month,
+      date_of_birth_year
+    ].compact.size
+  end
+
+  def date_of_birth_criteria
+    if date_of_birth.present?
+      errors.add(:date_of_birth, "Date of birth must be in the past") if date_of_birth > Time.zone.today
+      errors.add(:date_of_birth, "Date of birth must be after 1900") if date_of_birth < Date.new(1899, 12, 31)
+
+      return true if errors[:date_of_birth].empty?
+    else
+      errors.add(:date_of_birth, "Date of birth must include day/month/year") if date_has_day_month_year_components.between?(1, 2)
+
+      begin
+        Date.new(date_of_birth_year, date_of_birth_month, date_of_birth_day) if date_has_day_month_year_components == 3
+      rescue ArgumentError
+        errors.add(:date_of_birth, "Enter a date of birth in the correct format")
+      end
+      errors.add(:date_of_birth, "Enter your date of birth") if errors[:date_of_birth].empty?
+    end
   end
 end

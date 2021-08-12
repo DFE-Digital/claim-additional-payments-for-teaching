@@ -2,7 +2,7 @@
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-    <%= render("shared/error_summary", instance: current_claim) if current_claim.errors.any? %>
+    <%= render("shared/error_summary", instance: current_claim, errored_field_id_overrides: { date_of_birth: "claim_date_of_birth_3i"}) if current_claim.errors.any? %>
 
     <%= form_for current_claim, url: claim_path(current_policy_routing_name) do |form| %>
       <fieldset class="govuk-fieldset">
@@ -51,6 +51,7 @@
             For example, 31 03 1980. We need this information to verify your identity.
           </div>
 
+          <%= errors_tag current_claim, :date_of_birth %>
           <div class="govuk-date-input">
             <div class="govuk-date-input__item">
               <div class="govuk-form-group">
