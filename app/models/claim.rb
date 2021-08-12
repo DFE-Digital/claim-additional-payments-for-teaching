@@ -174,10 +174,11 @@ class Claim < ApplicationRecord
   validates :mobile_number, on: [:"mobile-number"], presence: {message: "Enter a mobile number in the correct format, for example 07123456789"}, if: :has_ecp_policy?
   validates :mobile_number, on: [:"mobile-number"], format: {with: /\A\+?(?:\d\s?){11}\z/, message: "A mobile number must be 11 digits"}, if: :has_ecp_policy?
 
-  validates :bank_or_building_society, on: [:"bank-or-building-society", :submit], presence: {message: "Choose the option for payment"}
-  validates :banking_name, on: [:"bank-details", :submit], presence: {message: "Enter the name on your bank account"}
-  validates :bank_sort_code, on: [:"bank-details", :submit], presence: {message: "Enter a sort code"}
-  validates :bank_account_number, on: [:"bank-details", :submit], presence: {message: "Enter an account number"}
+  validates :bank_or_building_society, on: [:"bank-or-building-society", :submit], presence: {message: "Select personal bank account or building society"}
+  validates :banking_name, on: [:"personal-bank-account", :"building-society-account", :submit], presence: {message: "Enter a name on the account"}
+  validates :bank_sort_code, on: [:"personal-bank-account", :"building-society-account", :submit], presence: {message: "Enter a sort code"}
+  validates :bank_account_number, on: [:"personal-bank-account", :"building-society-account", :submit], presence: {message: "Enter an account number"}
+  validates :building_society_roll_number, on: [:"building-society-account", :submit], presence: {message: "Enter a roll number"}, if: -> { building_society? }
 
   validates :payroll_gender, on: [:"payroll-gender-task", :submit], presence: {message: "You must select a gender that will be passed to HMRC"}
 
@@ -394,12 +395,12 @@ class Claim < ApplicationRecord
   end
 
   def bank_account_number_must_be_eight_digits
-    errors.add(:bank_account_number, "Bank account number must be 8 digits  – check you've entered the correct number or check with your bank for an 8 digit version") \
+    errors.add(:bank_account_number, "Account number must be 8 digits") \
       if bank_account_number.present? && normalised_bank_detail(bank_account_number) !~ /\A\d{8}\z/
   end
 
   def bank_sort_code_must_be_six_digits
-    errors.add(:bank_sort_code, "Sort code must contain six digits") \
+    errors.add(:bank_sort_code, "Sort code must be 6 digits") \
       if bank_sort_code.present? && normalised_bank_detail(bank_sort_code) !~ /\A\d{6}\z/
   end
 

@@ -412,12 +412,27 @@ RSpec.describe Claim, type: :model do
     end
   end
 
-  context "when saving in the “bank-details” validation context" do
+  context "when saving in the “personal-bank-account” validation context" do
     it "validates that the bank_account_number and bank_sort_code are present" do
       invalid_claim = build(:claim)
       valid_claim = build(:claim, bank_sort_code: "123456", bank_account_number: "87654321", banking_name: "Jo Bloggs")
-      expect(invalid_claim).not_to be_valid(:"bank-details")
-      expect(valid_claim).to be_valid(:"bank-details")
+      expect(invalid_claim).not_to be_valid(:"personal-bank-account")
+      expect(valid_claim).to be_valid(:"personal-bank-account")
+    end
+  end
+
+  context "when saving in the “building-society-account” validation context" do
+    it "validates that the bank_account_number and bank_sort_code are present" do
+      invalid_claim = build(:claim, bank_or_building_society: :building_society)
+      valid_claim = build(
+        :claim,
+        bank_sort_code: "123456",
+        bank_account_number: "87654321",
+        banking_name: "Jo Bloggs",
+        building_society_roll_number: "CXJ-K6 897/98X"
+      )
+      expect(invalid_claim).not_to be_valid(:"building-society-account")
+      expect(valid_claim).to be_valid(:"building-society-account")
     end
   end
 
