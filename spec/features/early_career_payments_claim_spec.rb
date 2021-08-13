@@ -172,8 +172,8 @@ RSpec.feature "Teacher Early-Career Payments claims" do
     expect(claim.reload.email_address).to eql("david.tau1988@hotmail.co.uk")
 
     # - One time password
-    expect(page).to have_text("Email verification")
-    expect(page).to have_text("One time password")
+    expect(page).to have_text("Email address verification")
+    expect(page).to have_text("Enter the 6-digit password")
     expect(page).to have_text("We recommend you copy and paste the password from the email.")
 
     mail = ActionMailer::Base.deliveries.last
@@ -206,7 +206,7 @@ RSpec.feature "Teacher Early-Career Payments claims" do
 
     # - Mobile number one-time password
     expect(page).to have_text("Password verification")
-    expect(page).to have_text("One time password")
+    expect(page).to have_text("Enter the 6-digit password")
     expect(page).not_to have_text("We recommend you copy and paste the password from the email.")
 
     # fill_in "claim_one_time_password", with: otp_sent_to_mobile
@@ -630,8 +630,8 @@ RSpec.feature "Teacher Early-Career Payments claims" do
     expect(claim.reload.email_address).to eql("david.tau1988@hotmail.co.uk")
 
     # - One time password
-    expect(page).to have_text("Email verification")
-    expect(page).to have_text("One time password")
+    expect(page).to have_text("Email address verification")
+    expect(page).to have_text("Enter the 6-digit password")
     expect(page).to have_text("We recommend you copy and paste the password from the email.")
 
     mail = ActionMailer::Base.deliveries.last
@@ -658,7 +658,7 @@ RSpec.feature "Teacher Early-Career Payments claims" do
 
     # - Mobile number one-time password
     expect(page).to have_text("Password verification")
-    expect(page).to have_text("One time password")
+    expect(page).to have_text("Enter the 6-digit password")
     expect(page).not_to have_text("We recommend you copy and paste the password from the email.")
 
     # fill_in "claim_one_time_password", with: otp_sent_to_mobile
@@ -1001,8 +1001,8 @@ RSpec.feature "Teacher Early-Career Payments claims" do
       expect(claim.reload.email_address).to eql("david.tau1988@hotmail.co.uk")
 
       # - One time password
-      expect(page).to have_text("Email verification")
-      expect(page).to have_text("One time password")
+      expect(page).to have_text("Email address verification")
+      expect(page).to have_text("Enter the 6-digit password")
       expect(page).to have_text("We recommend you copy and paste the password from the email.")
 
       mail = ActionMailer::Base.deliveries.last
@@ -1029,7 +1029,7 @@ RSpec.feature "Teacher Early-Career Payments claims" do
 
       # - Mobile number one-time password
       expect(page).to have_text("Password verification")
-      expect(page).to have_text("One time password")
+      expect(page).to have_text("Enter the 6-digit password")
       expect(page).not_to have_text("We recommend you copy and paste the password from the email.")
 
       # fill_in "claim_one_time_password", with: otp_sent_to_mobile

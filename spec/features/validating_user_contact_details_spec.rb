@@ -12,7 +12,7 @@ RSpec.feature "Confirming Claimant Contact details" do
 
     visit claim_path(claim.policy.routing_name, "email-verification")
 
-    expect(page).to have_text("One time password")
+    expect(page).to have_text("Enter the 6-digit password")
     expect(page).to have_link(href: claim_path(EarlyCareerPayments.routing_name, "email-address"))
 
     click_link("Use a different email address")
