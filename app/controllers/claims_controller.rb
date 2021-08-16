@@ -1,6 +1,6 @@
 class ClaimsController < BasePublicController
   include PartOfClaimJourney
-  include OneTimePassword
+  include AddressDetails
 
   skip_before_action :send_unstarted_claiments_to_the_start, only: [:new, :create, :timeout]
   before_action :check_page_is_in_sequence, only: [:show, :update]
@@ -15,6 +15,7 @@ class ClaimsController < BasePublicController
 
   def create
     current_claim.attributes = claim_params
+
     if current_claim.save(context: page_sequence.slugs.first.to_sym)
       session[:claim_id] = current_claim.to_param
       redirect_to claim_path(current_policy_routing_name, next_slug)
@@ -25,6 +26,16 @@ class ClaimsController < BasePublicController
 
   def show
     search_schools if params[:school_search]
+    if params[:slug] == "postcode-search" && postcode
+      redirect_to claim_path(current_policy_routing_name, "select-home-address", {"claim[postcode]": postcode, "claim[address_line_1]": params[:claim][:address_line_1]}) and return unless invalid_postcode?
+    elsif params[:slug] == "select-home-address" && postcode
+      if address_data.nil?
+        current_claim.errors.add(:postcode, "Postcode valid but not found")
+        session[:postcode_not_found] = "Postcode not found"
+        redirect_to claim_path(current_policy_routing_name, "postcode-search") and return
+      end
+    end
+
     render current_template
   end
 
@@ -32,10 +43,9 @@ class ClaimsController < BasePublicController
     current_claim.attributes = claim_params
     current_claim.reset_dependent_answers
     current_claim.eligibility.reset_dependent_answers
+    one_time_password
 
     if current_claim.save(context: page_sequence.current_slug.to_sym)
-      generate_one_time_password
-      store_in_session_one_time_password
       redirect_to claim_path(current_policy_routing_name, next_slug)
     else
       show
@@ -117,20 +127,19 @@ class ClaimsController < BasePublicController
     prepend_view_path("app/views/#{current_policy_routing_name.underscore}")
   end
 
-  def generate_one_time_password
-    if params[:slug] == "email-address"
-      one_time_password = generate_otp
-      ClaimMailer.email_verification(current_claim, one_time_password).deliver_now
+  def one_time_password
+    case params[:slug]
+    when "email-address"
+      ClaimMailer.email_verification(current_claim, otp.code).deliver_now
       session[:sent_one_time_password_at] = Time.now
-    elsif params[:slug] == "mobile-number"
-      one_time_password = generate_otp
-      Rails.logger.debug "\n\n  ** =================== **\nSMS one_time_password: \n#{one_time_password}\n  ** =================== **\n"
+    when "mobile-number"
+      Rails.logger.debug "\n\n  ** =================== **\nSMS one_time_password: \n#{otp.code}\n  ** =================== **\n"
+    when "email-verification"
+      current_claim.update_attributes(sent_one_time_password_at: session[:sent_one_time_password_at])
     end
   end
 
-  def store_in_session_one_time_password
-    if params[:slug] == "email-verification"
-      current_claim.update_attributes(sent_one_time_password_at: session[:sent_one_time_password_at])
-    end
+  def otp
+    @otp ||= OneTimePassword::Generator.new
   end
 end

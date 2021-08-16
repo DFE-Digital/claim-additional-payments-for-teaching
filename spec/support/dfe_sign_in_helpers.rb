@@ -93,7 +93,7 @@ module DfeSignInHelpers
   def stub_failed_dfe_sign_in_user_info_request(user_id, organisation_id)
     url = dfe_sign_in_user_info_url(user_id, organisation_id)
     api_response = {
-      "error": "An error occurred"
+      error: "An error occurred"
     }.to_json
 
     stub_request(:get, url)

@@ -54,8 +54,8 @@ Rails.application.routes.draw do
 
     scope constraints: {policy: Policies.all.detect { |policy| policy.routing_name == "early-career-payments" }.routing_name} do
       get "reminders/personal-details", as: :new_reminder, to: "reminders#new"
-      post "reminders/personal-details", to: "reminders#create", as: :reminders
-      get "reminders/reminder-set", to: "reminders#show", as: :reminder
+      post "reminders/personal-details", as: :reminders, to: "reminders#create"
+      resources :reminders, only: [:show, :update], param: :slug, constraints: {slug: %r{#{Reminder::SLUGS.join("|")}}}
     end
 
     scope path: "/", constraints: {policy: Policies.all.detect { |policy| policy.routing_name == "early-career-payments" }.routing_name} do
@@ -84,7 +84,7 @@ Rails.application.routes.draw do
     get "/auth/failure", to: "auth#failure"
 
     resources :claims, only: [:index, :show] do
-      resources :tasks, only: [:index, :show, :create], param: :name, constraints: {name: %r{#{Task::NAMES.join("|")}}}
+      resources :tasks, only: [:index, :show, :create, :update], param: :name, constraints: {name: %r{#{Task::NAMES.join("|")}}}
       resources :payroll_gender_tasks, only: [:create], param: :name, name: "payroll_gender"
       resources :decisions, only: [:create, :new] do
         resources :undos, only: [:create, :new], controller: "decisions_undo"

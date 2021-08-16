@@ -24,6 +24,8 @@ module MathsAndPhysics
       "eligibility-confirmed",
       "information-provided",
       "name",
+      "postcode-search",
+      "select-home-address",
       "address",
       "date-of-birth",
       "gender",
@@ -33,8 +35,13 @@ module MathsAndPhysics
       "student-loan-country",
       "student-loan-how-many-courses",
       "student-loan-start-date",
+      "masters-loan",
+      "doctoral-loan",
       "email-address",
       "email-verification",
+      "provide-mobile-number",
+      "mobile-number",
+      "mobile-verification",
       "bank-or-building-society",
       "personal-bank-account",
       "building-society-account",
@@ -57,8 +64,12 @@ module MathsAndPhysics
         sequence.delete("student-loan-country") if claim.no_student_loan?
         sequence.delete("student-loan-how-many-courses") if claim.no_student_loan? || claim.student_loan_country_with_one_plan?
         sequence.delete("student-loan-start-date") if claim.no_student_loan? || claim.student_loan_country_with_one_plan?
+        sequence.delete("masters-loan") if claim.no_student_loan?
+        sequence.delete("doctoral-loan") if claim.no_student_loan?
         sequence.delete("personal-bank-account") if claim.bank_or_building_society == "building_society"
         sequence.delete("building-society-account") if claim.bank_or_building_society == "personal_bank_account"
+        sequence.delete("mobile-number") if claim.provide_mobile_number == false
+        sequence.delete("mobile-verification") if claim.provide_mobile_number == false
         sequence.delete("ineligible") unless claim.eligibility.ineligible?
       end
     end

@@ -37,10 +37,16 @@ module AutomatedChecks
         create_task(match: :all, passed: true)
       end
 
-      def create_note(field_body = nil)
+      def create_field_note(name:)
+        body = "#{name} not matched"
+
+        create_note(body: body)
+      end
+
+      def create_note(body:)
         claim.notes.create!(
           {
-            body: "#{field_body ? field_body + " n" : "N"}ot matched",
+            body: body,
             created_by: admin_user
           }
         )
@@ -80,31 +86,31 @@ module AutomatedChecks
 
         ClaimMailer.identity_confirmation(claim).deliver_later
 
-        create_note
+        create_note(body: "Not matched")
         create_task(match: :none)
       end
 
       def partial_match
         if trn_matched? && name_matched? && dob_matched?
-          create_note("National Insurance number")
+          create_field_note(name: "National Insurance number")
 
-          return create_task(match: :any, passed: true)
+          return create_task(match: :any)
         end
 
         if trn_matched? && national_insurance_number_matched? && dob_matched?
-          create_note("First name or surname")
+          create_field_note(name: "First name or surname")
 
-          return create_task(match: :any, passed: true)
+          return create_task(match: :any)
         end
 
         if trn_matched? && national_insurance_number_matched? && name_matched?
-          create_note("Date of birth")
+          create_field_note(name: "Date of birth")
 
-          return create_task(match: :any, passed: true)
+          return create_task(match: :any)
         end
 
         if national_insurance_number_matched? && name_matched? & dob_matched?
-          create_note("Teacher reference number")
+          create_field_note(name: "Teacher reference number")
 
           create_task(match: :any)
         end

@@ -1,13 +1,31 @@
-<%= form_with url: admin_claim_tasks_path(claim, name: task_name), scope: :task do |f| %>
+<% translation = "#{claim.policy.to_s.underscore}.admin.task_questions.#{task_name}" %>
+<%= form_with model: [:admin, @claim, @claim.tasks.where(name: task_name).first_or_initialize] do |f| %>
   <div class="govuk-form-group">
     <fieldset class="govuk-fieldset govuk-!-margin-bottom-6">
       <legend class="govuk-fieldset__legend govuk-fieldset__legend--l ">
         <h3 class="govuk-heading-l">
-          <%= I18n.t("#{claim.policy.to_s.underscore}.admin.task_questions.#{task_name}") %>
+          <%= I18n.t("#{translation}.title", claim_full_name: @claim.full_name) %>
         </h3>
       </legend>
 
+      <%
+          I18n.t(
+            "#{translation}.body",
+            default: nil,
+            link: link_to(
+              I18n.t("#{translation}.notes"),
+              admin_claim_notes_path(@claim)
+            )
+          )&.html_safe.tap do |translation| %>
+        <% break unless translation %>
+
+        <p class="govuk-body">
+          <%= translation %>
+        </p>
+      <% end %>
+
       <%= f.hidden_field :passed %>
+      <%= f.hidden_field :name, value: task_name %>
 
       <div class="govuk-radios govuk-radios--inline">
         <div class="govuk-radios__item">

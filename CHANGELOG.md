@@ -6,6 +6,34 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+- Admin
+  - Show admin claim identity confirmation task questions when claim verifier
+    identity not fully matched
+  - Add ECP admin claim identity confirmation task screen
+  - Create admin claim note when identity confirmation mailer is sent
+  - Amend admin timeout from 30 mins to 60 mins
+  - Add ECP admin claim qualifications task screen
+- All policies
+  - Home Address selection
+    - Add home address search screen to claim journey
+    - Add screen to allow claimant to select address from API provided results
+      presented as radio buttons
+    - Add links that allow claimant to manually enter their address information
+      when on the two address auto-population screens
+  - Add posgraduate loans questions to M+P / TSLR journeys
+- ECP policies
+- DAC Accessiblity Report fixes
+  - Incorrect aria value
+  - Links opening in a new window
+  - Incorrect ID in 'for' attribute for one time password
+  - Multiple level 1 headings
+  - Error skip links
+  - Non-descriptive links
+
+## [Release 092] - 2021-07-22
+
+- All policies
+  - Update content for 'Email address' screen
 - ECP policy
   - Update content for ECP Start Page
   - Update performance questions 'poor performance' and 'disciplinary action'
@@ -30,6 +58,21 @@ The format is based on [Keep a Changelog]
   - Update DQT client qualified teacher status to handle 404 response
   - Fix admin claim tasks update with DQT API without matching DQT identity
   - Add multiple statuses to admin task statuses
+  - Update admin claims index ID verification column with new statuses
+  - Add claim calculation to 'You will be eligible for an early-career payment
+    in [YEAR]' screen
+  - Update 'Which subject did you do your undergraduate itt/postgraduate
+    itt/assessment only/overseas recognition qualification in?' page validation
+  - Update 'Do you teach chemistry/foreign languages/mathematics/physics now?'
+    page validation
+  - Update the 'application complete' for TSLR and M&P user journeys
+  - Update poor performance page message
+  - Add client for Ordnance Survey to make API calls for address/postcode data
+  - Show admin claim identity confirmation task questions when claim verifier
+    identity not fully matched
+  - Adds mobile number to claim summary
+  - Adds mobile number request to TSLR and M&P
+  - Adds OTP step to reminders journey
 
 ## [Release 091] - 2021-06-24
 
@@ -37,7 +80,7 @@ The format is based on [Keep a Changelog]
   - Add 'What account do you want the money paid into?' screen
 - ECP policy
   - Add subject cohort ineligibility to eligibility
-  - Update content for'How many higher education courses did you take a student
+  - Update content for 'How many higher education courses did you take a student
     loan out for?' screen
   - Update content for 'Did you take out a Postgraduate Masters Loan?' screen
   - Update content for 'Did you take out a Postgraduate Doctoral Loan?' screen
@@ -47,6 +90,8 @@ The format is based on [Keep a Changelog]
   - Add 'Would you like to provide your phone number?' screen
   - Update payment account details for 'Enter your bank/building society account
     details' screen
+  - Change admin manage services accepting claims for academic year select to
+    display four years instead of two
 
 ## [Release 090] - 2021-06-02
 
@@ -752,7 +797,9 @@ The format is based on [Keep a Changelog]
 - First release for student loan repayments private beta
 
 [unreleased]:
-  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-091...HEAD
+  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-092...HEAD
+[release 092]:
+  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-091...release-092
 [release 091]:
   https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-090...release-091
 [release 090]:

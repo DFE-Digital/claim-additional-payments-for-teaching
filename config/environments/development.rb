@@ -64,4 +64,8 @@ Rails.application.configure do
   # Use an evented file watcher to asynchronously detect changes in source code,
   # routes, locales, etc. This feature depends on the listen gem.
   config.file_watcher = ActiveSupport::EventedFileUpdateChecker
+
+  # Add '127.0.0.1 ecp.test' to your /etc/hosts to use this over localhost.
+  # This allows you to use https://ecp.test:3000/ in your browser.
+  config.hosts << "ecp.test"
 end

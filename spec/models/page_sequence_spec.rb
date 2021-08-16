@@ -31,10 +31,24 @@ RSpec.describe PageSequence do
         expect(PageSequence.new(claim, slug_sequence, ["third-slug"]).next_slug).to eq "check-your-answers"
       end
     end
+
+    context "when address is populated from 'select-home-address'" do
+      [
+        {policy: EarlyCareerPayments, next_slug: "email-address", slug_sequence: OpenStruct.new(slugs: ["postcode-search", "select-home-address", "address", "email-address"])},
+        {policy: MathsAndPhysics, next_slug: "date-of-birth", slug_sequence: OpenStruct.new(slugs: ["postcode-search", "select-home-address", "address", "date-of-birth"])},
+        {policy: StudentLoans, next_slug: "date-of-birth", slug_sequence: OpenStruct.new(slugs: ["postcode-search", "select-home-address", "address", "date-of-birth"])}
+      ].each do |scenario|
+        let(:claim) { build(:claim, policy: scenario[:policy]) }
+
+        scenario "with #{scenario[:policy]} policy returns #{scenario[:next_slug]} as the next slug (NOT 'address')" do
+          expect(PageSequence.new(claim, scenario[:slug_sequence], "address").next_slug).to eq scenario[:next_slug]
+        end
+      end
+    end
   end
 
   describe "in_sequence?" do
-    let(:page_sequence) { PageSequence.new(claim, slug_sequence, ["third-slug"]) }
+    let(:page_sequence) { PageSequence.new(claim, slug_sequence, "third-slug") }
 
     it "returns true when the slug is part of the sequence" do
       expect(page_sequence.in_sequence?("first-slug")).to eq(true)

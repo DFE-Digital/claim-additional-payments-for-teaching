@@ -91,7 +91,7 @@ RSpec.describe ClaimMailer, type: :mailer do
       end
 
       describe "#identity_confirmation" do
-        let(:claim) { build(:claim, :submitted, policy: policy) }
+        let(:claim) { create(:claim, :submitted, policy: policy) }
         let(:mail) { ClaimMailer.identity_confirmation(claim) }
 
         it_behaves_like "an email related to a claim", policy
@@ -106,6 +106,27 @@ RSpec.describe ClaimMailer, type: :mailer do
               )
             )
           )
+        end
+      end
+
+      context "with #identity_confirmation" do
+        let(:claim) { create(:claim, :submitted, policy: policy) }
+        let(:identity_confirmation) { ClaimMailer.identity_confirmation(claim) }
+
+        context "with #deliver" do
+          before { identity_confirmation.deliver }
+
+          describe "note" do
+            subject(:note) { claim.notes.last }
+
+            describe "#body" do
+              subject(:body) { note.body }
+
+              it "returns Manual verification" do
+                expect(body).to have_content("Identity confirmation mailer sent")
+              end
+            end
+          end
         end
       end
     end

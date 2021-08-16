@@ -204,7 +204,7 @@ RSpec.feature "Changing the answers on a submittable claim" do
       visit claim_path(StudentLoans.routing_name, "check-your-answers")
 
       expect(page).to have_content(I18n.t("questions.name"))
-      expect(page).to have_content(I18n.t("questions.address"))
+      expect(page).to have_content(I18n.t("questions.address.generic.title"))
       expect(page).to have_content(I18n.t("questions.date_of_birth"))
       expect(page).to have_content(I18n.t("questions.payroll_gender"))
       expect(page).to have_selector(:css, "a[href='#{claim_path(StudentLoans.routing_name, "name")}']")

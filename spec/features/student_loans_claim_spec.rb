@@ -64,7 +64,12 @@ RSpec.feature "Teacher Student Loan Repayments claims" do
       expect(claim.middle_name).to eql("Percival")
       expect(claim.surname).to eql("Hillary")
 
-      expect(page).to have_text(I18n.t("questions.address"))
+      expect(page).to have_text(I18n.t("questions.address.home.title"))
+      expect(page).to have_link(href: claim_path(StudentLoans.routing_name, "address"))
+
+      click_link(I18n.t("questions.address.home.link_to_manual_address"))
+
+      expect(page).to have_text(I18n.t("questions.address.generic.title"))
       fill_in_address
 
       expect(claim.reload.address_line_1).to eql("123 Main Street")
@@ -115,21 +120,61 @@ RSpec.feature "Teacher Student Loan Repayments claims" do
 
       expect(claim.eligibility.reload.student_loan_repayment_amount).to eql(1100.00)
 
+      # - Did you take out a postgraduate masters loan on or after 1 August 2016
+      expect(page).to have_text(I18n.t("questions.postgraduate_masters_loan"))
+
+      choose "Yes"
+      click_on "Continue"
+
+      expect(claim.reload.postgraduate_masters_loan).to eql true
+
+      # - Did you take out a postgraduate doctoral loan on or after 1 August 2016
+      expect(page).to have_text(I18n.t("questions.postgraduate_doctoral_loan"))
+
+      choose "Yes"
+      click_on "Continue"
+
+      expect(claim.reload.postgraduate_doctoral_loan).to eql true
+
       expect(page).to have_text(I18n.t("questions.email_address"))
-      expect(page).to have_text("We will only use your email address to update you about your claim, and to inform you about future opportunities to claim.")
+      expect(page).to have_text(I18n.t("questions.email_address_hint1"))
       fill_in I18n.t("questions.email_address"), with: "name@example.tld"
       click_on "Continue"
 
       expect(claim.reload.email_address).to eq("name@example.tld")
 
       # - One time password
-      expect(page).to have_text("One time password")
+      expect(page).to have_text("Enter the 6-digit password")
 
       mail = ActionMailer::Base.deliveries.last
       otp_in_mail_sent = mail.body.decoded.scan(/\b[0-9]{6}\b/).first
 
       fill_in "claim_one_time_password", with: otp_in_mail_sent
 
+      click_on "Confirm"
+
+      # - Provide mobile number
+      expect(page).to have_text(I18n.t("questions.provide_mobile_number"))
+
+      choose "Yes"
+      click_on "Continue"
+
+      expect(claim.reload.provide_mobile_number).to eql true
+
+      # - Mobile number
+      expect(page).to have_text(I18n.t("questions.mobile_number"))
+
+      fill_in "claim_mobile_number", with: "07123456789"
+      click_on "Continue"
+
+      expect(claim.reload.mobile_number).to eql("07123456789")
+
+      # - Mobile number one-time password
+      expect(page).to have_text("Password verification")
+      expect(page).to have_text("Enter the 6-digit password")
+      expect(page).not_to have_text("We recommend you copy and paste the password from the email.")
+
+      # fill_in "claim_one_time_password", with: otp_sent_to_mobile
       click_on "Confirm"
 
       expect(page).to have_text(I18n.t("questions.bank_or_building_society"))

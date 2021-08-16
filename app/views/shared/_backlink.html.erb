@@ -1,0 +1,15 @@
+<%
+backlink_exclude_rules = /
+  \/claim$|
+  \/complete$|
+  \/existing-session$|
+  \/eligible-now$|
+  \/eligibility-confirmed$|
+  \/eligible-later$|
+  \/ineligible$
+/x
+%>
+
+<% unless backlink_exclude_rules =~ request.path %>
+  <%= link_to 'Back', '#', class: "govuk-back-link govuk-visually-hidden", id: "backlink" %>
+<% end %>

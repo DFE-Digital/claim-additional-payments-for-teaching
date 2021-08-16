@@ -8,7 +8,7 @@ class Admin::PayrollGenderTasksController < Admin::TasksController
       redirect_to next_task_path
     else
       @tasks_presenter = @claim.policy::AdminTasksPresenter.new(@claim)
-      render current_task_name
+      render @task.name
     end
   end
 

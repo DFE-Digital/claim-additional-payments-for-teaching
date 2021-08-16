@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class Claim < ApplicationRecord
-  include OneTimePassword
+  include ::OneTimePasswordCheckable
 
   TRN_LENGTH = 7
   NO_STUDENT_LOAN = "not_applicable"
@@ -24,6 +24,8 @@ class Claim < ApplicationRecord
     :student_loan_country,
     :student_loan_courses,
     :student_loan_start_date,
+    :postgraduate_masters_loan,
+    :postgraduate_doctoral_loan,
     :email_address,
     :provide_mobile_number,
     :mobile_number,
@@ -55,6 +57,8 @@ class Claim < ApplicationRecord
     student_loan_country: false,
     student_loan_courses: false,
     student_loan_start_date: false,
+    postgraduate_masters_loan: false,
+    postgraduate_doctoral_loan: false,
     email_address: true,
     provide_mobile_number: false,
     mobile_number: true,
@@ -85,7 +89,7 @@ class Claim < ApplicationRecord
   DECISION_DEADLINE = 12.weeks
   DECISION_DEADLINE_WARNING_POINT = 2.weeks
   ATTRIBUTE_DEPENDENCIES = {
-    "has_student_loan" => ["student_loan_country"],
+    "has_student_loan" => ["student_loan_country", "postgraduate_masters_loan", "postgraduate_doctoral_loan"],
     "student_loan_country" => ["student_loan_courses"],
     "student_loan_courses" => ["student_loan_start_date"],
     "bank_or_building_society" => ["banking_name", "bank_account_number", "bank_sort_code", "building_society_roll_number"],
@@ -94,10 +98,6 @@ class Claim < ApplicationRecord
 
   # Use AcademicYear as custom ActiveRecord attribute type
   attribute :academic_year, AcademicYear::Type.new
-
-  # Use virtual attributes for OTP validation
-  attribute :one_time_password, :string, limit: 6
-  attribute :sent_one_time_password_at, :datetime
 
   enum student_loan_country: StudentLoan::COUNTRIES
   enum student_loan_start_date: StudentLoan::COURSE_START_DATES
@@ -134,14 +134,19 @@ class Claim < ApplicationRecord
   validates :surname, on: [:name, :submit], presence: {message: "Enter your last name"}
   validates :surname, length: {maximum: 100, message: "Last name must be 100 characters or less"}
 
-  validates :address_line_1, on: [:address, :submit], presence: {message: "Enter your building and street address"}
+  validates :address_line_1, on: [:address], presence: {message: "Enter a house number or name"}, if: :has_ecp_policy?
+  validates :address_line_1, on: [:address, :submit], presence: {message: "Enter a building and street address"}, unless: :has_ecp_policy?
   validates :address_line_1, length: {maximum: 100, message: "Address lines must be 100 characters or less"}
   validates :address_line_2, length: {maximum: 100, message: "Address lines must be 100 characters or less"}
+  validates :address_line_2, on: [:address], presence: {message: "Enter a building and street address"}, if: :has_ecp_policy?
   validates :address_line_3, length: {maximum: 100, message: "Address lines must be 100 characters or less"}
-  validates :address_line_4, length: {maximum: 100, message: "Address lines must be 100 characters or less"}
+  validates :address_line_3, on: [:address], presence: {message: "Enter a town or city"}
+  validates :address_line_4, length: {maximum: 100, message: "Address lines must be 100 characters or less"}, unless: :has_ecp_policy?
+  validates :address_line_4, on: [:address], presence: {message: "Enter a county"}, unless: :has_ecp_policy?
 
-  validates :postcode, on: [:address, :submit], presence: {message: "Enter your postcode"}
+  validates :postcode, on: [:address, :submit], presence: {message: "Enter a real postcode"}
   validates :postcode, length: {maximum: 11, message: "Postcode must be 11 characters or less"}
+  validate :postcode_is_valid, if: -> { postcode.present? }
 
   validates :date_of_birth, on: [:"date-of-birth", :submit], presence: {message: "Enter your date of birth"}
 
@@ -157,6 +162,8 @@ class Claim < ApplicationRecord
   validates :student_loan_start_date, on: [:"student-loan-start-date"], presence: {message: ->(object, data) { I18n.t("validation_errors.student_loan_start_date.#{object.student_loan_courses}") }}
   validates :student_loan_plan, on: [:submit], presence: {message: "We have not been able determined your student loan repayment plan. Answer all questions about your student loan."}
   validates :student_loan_plan, on: [:amendment], inclusion: {in: [Claim::NO_STUDENT_LOAN], message: "You can’t amend the student loan plan type because the claimant said they are no longer paying off their student loan"}, if: :no_student_loan?
+  validates :postgraduate_masters_loan, on: [:"masters-loan", :submit], inclusion: {in: [true, false], message: "Select yes if you have a Postgraduate Master Loan taken out on or after 1st August 2016"}, if: -> { has_student_loan? }
+  validates :postgraduate_doctoral_loan, on: [:"doctoral-loan", :submit], inclusion: {in: [true, false], message: "Select yes if you have a Postgraduate Doctoral Loan taken out on or after 1st August 2018"}, if: -> { has_student_loan? }
 
   validates :email_address, on: [:"email-address", :submit], presence: {message: "Enter an email address"}
   validates :email_address, format: {with: URI::MailTo::EMAIL_REGEXP, message: "Enter an email in the format name@example.com"},
@@ -167,10 +174,11 @@ class Claim < ApplicationRecord
   validates :mobile_number, on: [:"mobile-number"], presence: {message: "Enter a mobile number in the correct format, for example 07123456789"}, if: :has_ecp_policy?
   validates :mobile_number, on: [:"mobile-number"], format: {with: /\A\+?(?:\d\s?){11}\z/, message: "A mobile number must be 11 digits"}, if: :has_ecp_policy?
 
-  validates :bank_or_building_society, on: [:"bank-or-building-society", :submit], presence: {message: "Choose the option for payment"}
-  validates :banking_name, on: [:"bank-details", :submit], presence: {message: "Enter the name on your bank account"}
-  validates :bank_sort_code, on: [:"bank-details", :submit], presence: {message: "Enter a sort code"}
-  validates :bank_account_number, on: [:"bank-details", :submit], presence: {message: "Enter an account number"}
+  validates :bank_or_building_society, on: [:"bank-or-building-society", :submit], presence: {message: "Select personal bank account or building society"}
+  validates :banking_name, on: [:"personal-bank-account", :"building-society-account", :submit], presence: {message: "Enter a name on the account"}
+  validates :bank_sort_code, on: [:"personal-bank-account", :"building-society-account", :submit], presence: {message: "Enter a sort code"}
+  validates :bank_account_number, on: [:"personal-bank-account", :"building-society-account", :submit], presence: {message: "Enter an account number"}
+  validates :building_society_roll_number, on: [:"building-society-account", :submit], presence: {message: "Enter a roll number"}, if: -> { building_society? }
 
   validates :payroll_gender, on: [:"payroll-gender-task", :submit], presence: {message: "You must select a gender that will be passed to HMRC"}
 
@@ -180,13 +188,6 @@ class Claim < ApplicationRecord
   validate :building_society_roll_number_must_be_in_a_valid_format
 
   validate :claim_must_not_be_ineligible, on: :submit
-
-  validates :one_time_password, on: [:"email-verification"], presence: {message: "Enter your one time password that we emailed to you"}
-  validate :otp_must_be_six_digits, on: [:"email-verification"]
-  validate :otp_must_be_valid_challenge_code, on: [:"email-verification"], if: :persisted?
-
-  before_save :set_sent_one_time_password_at, if: :persisted?
-  before_save :normalise_one_time_password, if: :one_time_password_changed?
 
   before_save :normalise_trn, if: :teacher_reference_number_changed?
   before_save :normalise_ni_number, if: :national_insurance_number_changed?
@@ -394,12 +395,12 @@ class Claim < ApplicationRecord
   end
 
   def bank_account_number_must_be_eight_digits
-    errors.add(:bank_account_number, "Bank account number must be 8 digits  – check you've entered the correct number or check with your bank for an 8 digit version") \
+    errors.add(:bank_account_number, "Account number must be 8 digits") \
       if bank_account_number.present? && normalised_bank_detail(bank_account_number) !~ /\A\d{8}\z/
   end
 
   def bank_sort_code_must_be_six_digits
-    errors.add(:bank_sort_code, "Sort code must contain six digits") \
+    errors.add(:bank_sort_code, "Sort code must be 6 digits") \
       if bank_sort_code.present? && normalised_bank_detail(bank_sort_code) !~ /\A\d{6}\z/
   end
 
@@ -422,31 +423,13 @@ class Claim < ApplicationRecord
     end
   end
 
-  def set_sent_one_time_password_at
-    self.sent_one_time_password_at = sent_one_time_password_at
-  end
-
-  def normalise_one_time_password
-    self.one_time_password = normalised_one_time_password
-  end
-
-  def normalised_one_time_password
-    one_time_password.gsub(/\D/, "")
-  end
-
-  def otp_must_be_six_digits
-    errors.add(:one_time_password, "Your one time password must be 6-digits") if one_time_password.present? && normalised_one_time_password.length != ONE_TIME_PASSWORD_LENGTH
-  end
-
-  def otp_must_be_valid_challenge_code
-    return false unless one_time_password.present? && normalised_one_time_password.length == ONE_TIME_PASSWORD_LENGTH
-
-    if verify_otp(one_time_password).nil?
-      if sent_one_time_password_at < OTP_PASSWORD_INTERVAL.seconds.ago
-        errors.add(:one_time_password, "Your one time password has expired, request a new one")
-      else
-        errors.add(:one_time_password, "Enter the correct one time password that we emailed to you")
-      end
+  def postcode_is_valid
+    unless postcode_is_valid?
+      errors.add(:postcode, "Enter a postcode in the correct format")
     end
+  end
+
+  def postcode_is_valid?
+    UKPostcode.parse(postcode).full_valid?
   end
 end

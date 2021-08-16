@@ -18,6 +18,10 @@ class PageSequence
     return "ineligible" if claim.eligibility.ineligible?
     return "check-your-answers" if claim.submittable?
 
+    # This allows 'address' page to be skipped when the postcode is present
+    # Occurs when populated from 'postcode-search' and the subsequent 'select-home-address' screens
+    return slugs[slugs.index("select-home-address") + 2] if current_slug == "select-home-address" && claim.postcode.present?
+
     slugs[current_slug_index + 1]
   end
 

@@ -45,7 +45,7 @@ describe ClaimsHelper do
       it "returns an array of identity-related questions and answers for displaying to the user for review" do
         expected_answers = [
           [I18n.t("questions.name"), "Jo Bloggs", "name"],
-          [I18n.t("questions.address"), "Flat 1, 1 Test Road, Test Town, AB1 2CD", "address"],
+          [I18n.t("questions.address.generic.title"), "Flat 1, 1 Test Road, Test Town, AB1 2CD", "address"],
           [I18n.t("questions.date_of_birth"), "10 January 1980", "date-of-birth"],
           [I18n.t("questions.payroll_gender"), "Don’t know", "gender"],
           [I18n.t("questions.teacher_reference_number"), "1234567", "teacher-reference-number"],
@@ -73,7 +73,7 @@ describe ClaimsHelper do
 
         expected_answers = [
           [I18n.t("questions.name"), "Jo Bloggs", "name"],
-          [I18n.t("questions.address"), "Flat 1, 1 Test Road, Test Town, AB1 2CD", "address"],
+          [I18n.t("questions.address.generic.title"), "Flat 1, 1 Test Road, Test Town, AB1 2CD", "address"],
           [I18n.t("questions.date_of_birth"), nil, "date-of-birth"],
           [I18n.t("questions.payroll_gender"), "Don’t know", "gender"],
           [I18n.t("questions.teacher_reference_number"), "1234567", "teacher-reference-number"],
@@ -94,7 +94,7 @@ describe ClaimsHelper do
 
         expected_answers = [
           [I18n.t("questions.name"), "Jo Bloggs", "personal-details"],
-          [I18n.t("questions.address"), "Flat 1, 1 Test Road, Test Town, AB1 2CD", "address"],
+          [I18n.t("questions.address.generic.title"), "Flat 1, 1 Test Road, Test Town, AB1 2CD", "address"],
           [I18n.t("questions.date_of_birth"), "10 January 1980", "personal-details"],
           [I18n.t("questions.payroll_gender"), "Don’t know", "gender"],
           [I18n.t("questions.teacher_reference_number"), "1234567", "teacher-reference-number"],
@@ -112,7 +112,7 @@ describe ClaimsHelper do
 
         expected_answers = [
           [I18n.t("questions.name"), "Jo Bloggs", "personal-details"],
-          [I18n.t("questions.address"), "Flat 1, 1 Test Road, Test Town, AB1 2CD", "address"],
+          [I18n.t("questions.address.generic.title"), "Flat 1, 1 Test Road, Test Town, AB1 2CD", "address"],
           [I18n.t("questions.date_of_birth"), nil, "personal-details"],
           [I18n.t("questions.payroll_gender"), "Don’t know", "gender"],
           [I18n.t("questions.teacher_reference_number"), "1234567", "teacher-reference-number"],
@@ -184,7 +184,9 @@ describe ClaimsHelper do
             t("questions.student_loan_start_date.one_course"),
             t("answers.student_loan_start_date.one_course.before_first_september_2012"),
             "student-loan-start-date"
-          ]
+          ],
+          [t("questions.postgraduate_masters_loan"), "No", "masters-loan"],
+          [t("questions.postgraduate_doctoral_loan"), "No", "doctoral-loan"]
         ]
 
         expect(helper.student_loan_answers(claim)).to eq expected_answers
@@ -202,7 +204,9 @@ describe ClaimsHelper do
               t("questions.student_loan_start_date.two_or_more_courses"),
               t("answers.student_loan_start_date.two_or_more_courses.on_or_after_first_september_2012"),
               "student-loan-start-date"
-            ]
+            ],
+            [t("questions.postgraduate_masters_loan"), "No", "masters-loan"],
+            [t("questions.postgraduate_doctoral_loan"), "No", "doctoral-loan"]
           ]
 
           expect(helper.student_loan_answers(claim)).to eq expected_answers
@@ -215,7 +219,9 @@ describe ClaimsHelper do
         it "these are excluded" do
           expected_answers = [
             [t("questions.has_student_loan"), "Yes", "student-loan"],
-            [t("questions.student_loan_country"), "Scotland", "student-loan-country"]
+            [t("questions.student_loan_country"), "Scotland", "student-loan-country"],
+            [t("questions.postgraduate_masters_loan"), "No", "masters-loan"],
+            [t("questions.postgraduate_doctoral_loan"), "No", "doctoral-loan"]
           ]
 
           expect(helper.student_loan_answers(claim)).to eq expected_answers
@@ -224,7 +230,7 @@ describe ClaimsHelper do
     end
 
     context "Early-Career Payment policy" do
-      let(:eligibility) { build(:early_career_payments_eligibility, postgraduate_masters_loan: true, postgraduate_doctoral_loan: false) }
+      let(:eligibility) { build(:early_career_payments_eligibility) }
 
       it "returns an array of question and answers for the student loan questions" do
         expected_answers = [
@@ -236,8 +242,8 @@ describe ClaimsHelper do
             t("answers.student_loan_start_date.one_course.before_first_september_2012"),
             "student-loan-start-date"
           ],
-          [t("early_career_payments.questions.postgraduate_masters_loan"), "Yes", "masters-loan"],
-          [t("early_career_payments.questions.postgraduate_doctoral_loan"), "No", "doctoral-loan"]
+          [t("questions.postgraduate_masters_loan"), "No", "masters-loan"],
+          [t("questions.postgraduate_doctoral_loan"), "No", "doctoral-loan"]
         ]
 
         expect(helper.student_loan_answers(claim)).to eq expected_answers
@@ -252,8 +258,8 @@ describe ClaimsHelper do
             [t("questions.student_loan_country"), "England", "student-loan-country"],
             [t("questions.student_loan_how_many_courses"), "Two or more courses", "student-loan-how-many-courses"],
             [t("questions.student_loan_start_date.two_or_more_courses"), t("answers.student_loan_start_date.two_or_more_courses.on_or_after_first_september_2012"), "student-loan-start-date"],
-            [t("early_career_payments.questions.postgraduate_masters_loan"), "Yes", "masters-loan"],
-            [t("early_career_payments.questions.postgraduate_doctoral_loan"), "No", "doctoral-loan"]
+            [t("questions.postgraduate_masters_loan"), "No", "masters-loan"],
+            [t("questions.postgraduate_doctoral_loan"), "No", "doctoral-loan"]
           ]
 
           expect(helper.student_loan_answers(claim)).to eq expected_answers
@@ -267,8 +273,8 @@ describe ClaimsHelper do
           expected_answers = [
             [t("questions.has_student_loan"), "Yes", "student-loan"],
             [t("questions.student_loan_country"), "Scotland", "student-loan-country"],
-            [t("early_career_payments.questions.postgraduate_masters_loan"), "Yes", "masters-loan"],
-            [t("early_career_payments.questions.postgraduate_doctoral_loan"), "No", "doctoral-loan"]
+            [t("questions.postgraduate_masters_loan"), "No", "masters-loan"],
+            [t("questions.postgraduate_doctoral_loan"), "No", "doctoral-loan"]
           ]
 
           expect(helper.student_loan_answers(claim)).to eq expected_answers
@@ -276,7 +282,7 @@ describe ClaimsHelper do
       end
 
       context "when claimant answered 'No' to 'Paying off Student Loan'" do
-        let(:eligibility) { build(:early_career_payments_eligibility, postgraduate_masters_loan: nil, postgraduate_doctoral_loan: nil) }
+        let(:eligibility) { build(:early_career_payments_eligibility) }
         let(:trait) { :with_no_student_loan }
 
         it "returns an arry with a single question and answer" do

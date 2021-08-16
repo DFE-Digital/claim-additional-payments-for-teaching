@@ -11,7 +11,7 @@ module ClaimsHelper
         a << [translate("questions.name"), claim.full_name, "name"] unless claim.name_verified?
       end
 
-      a << [translate("questions.address"), claim.address, "address"] unless claim.address_from_govuk_verify?
+      a << [translate("questions.address.generic.title"), claim.address, "address"] unless claim.address_from_govuk_verify?
 
       if claim.has_ecp_policy?
         a << [translate("questions.date_of_birth"), date_of_birth_string(claim), "personal-details"] unless claim.date_of_birth_verified?
@@ -41,8 +41,8 @@ module ClaimsHelper
       a << [translate("questions.student_loan_country"), claim.student_loan_country.titleize, "student-loan-country"] if claim.student_loan_country.present?
       a << [translate("questions.student_loan_how_many_courses"), claim.student_loan_courses.humanize, "student-loan-how-many-courses"] if claim.student_loan_courses.present?
       a << [translate("questions.student_loan_start_date.#{claim.student_loan_courses}"), t("answers.student_loan_start_date.#{claim.student_loan_courses}.#{claim.student_loan_start_date}"), "student-loan-start-date"] if claim.student_loan_courses.present?
-      a << [translate("early_career_payments.questions.postgraduate_masters_loan"), (claim.eligibility.postgraduate_masters_loan ? "Yes" : "No"), "masters-loan"] if claim.has_ecp_policy? && claim.has_student_loan?
-      a << [translate("early_career_payments.questions.postgraduate_doctoral_loan"), (claim.eligibility.postgraduate_doctoral_loan ? "Yes" : "No"), "doctoral-loan"] if claim.has_ecp_policy? && claim.has_student_loan?
+      a << [translate("questions.postgraduate_masters_loan"), (claim.postgraduate_masters_loan ? "Yes" : "No"), "masters-loan"] if claim.has_student_loan?
+      a << [translate("questions.postgraduate_doctoral_loan"), (claim.postgraduate_doctoral_loan ? "Yes" : "No"), "doctoral-loan"] if claim.has_student_loan?
     end
   end
 

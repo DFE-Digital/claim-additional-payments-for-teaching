@@ -11,7 +11,7 @@ RSpec.describe EarlyCareerPayments::EligibilityAnswersPresenter, type: :model do
       qualification: :postgraduate_itt,
       eligible_itt_subject: :chemistry,
       teaching_subject_now: true,
-      itt_academic_year: "2019_2020"
+      itt_academic_year: AcademicYear::Type.new.serialize(AcademicYear.new(2019))
     }
   end
   let(:eligibility) { claim.eligibility }
@@ -64,7 +64,7 @@ RSpec.describe EarlyCareerPayments::EligibilityAnswersPresenter, type: :model do
         qualification: :undergraduate_itt,
         eligible_itt_subject: :foreign_languages,
         teaching_subject_now: true,
-        itt_academic_year: "2018_2019"
+        itt_academic_year: AcademicYear.new(2018)
       }
     end
 

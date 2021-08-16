@@ -16,7 +16,8 @@ RSpec.describe "Admin tasks", type: :request do
                 payroll_gender: "male"
               },
               task: {
-                passed: true
+                passed: true,
+                name: "payroll_gender"
               }
             }
           }
