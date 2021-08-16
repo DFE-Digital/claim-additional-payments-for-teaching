@@ -90,7 +90,7 @@ USER root
 # Set up install environment
 RUN mkdir -p ${APP_HOME}
 WORKDIR ${APP_HOME}
-RUN chmod -R 777 ${APP_HOME}
+RUN chmod 777 ${APP_HOME}
 # End
 
 USER appuser
@@ -127,8 +127,7 @@ USER root
 # Copy app code (sorted by vague frequency of change for caching)
 RUN mkdir -p ${APP_HOME}/log
 RUN mkdir -p ${APP_HOME}/tmp
-RUN chmod -R 766 ${APP_HOME}/log
-RUN chmod -R 766 ${APP_HOME}/tmp
+RUN chmod -R 777 ${APP_HOME}
 
 USER appuser
 
