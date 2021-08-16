@@ -3,11 +3,11 @@ output "common_tags" {
     "Environment"      = local.env_tag
     "Parent Business"  = "Teacher Training and Qualifications"
     "Portfolio"        = "Early Years and Schools Group"
-    "Product"          = "Claim Additional Payments (for teaching)"
-    "Service"          = "Teacher Training and Qualifications"
+    "Product"          = "Claim Additional Payments for teaching"
+    "Service"          = "Teacher services"
     "Service Line"     = "Teaching Workforce"
     "Service Offering" = "Claim Additional Payments (for teaching)"
-# "CostCentre"       = "DataCollections"    
+    # "CostCentre"       = "DataCollections"    
   }, var.std_tags)
 }
 

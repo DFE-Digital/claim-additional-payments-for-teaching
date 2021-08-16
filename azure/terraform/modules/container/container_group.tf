@@ -43,8 +43,8 @@ resource "azurerm_container_group" "cont_grp_01" {
       "GOOGLE_ANALYTICS_ID"                            = ""
       "LOGSTASH_HOST"                                  = data.azurerm_key_vault_secret.LogstashHost.value
       "LOGSTASH_PORT"                                  = local.stash_port
-      "ORDNANCE_SURVEY_CLIENT_PARAMS"                  = data.azurerm_key_vault_secret.ordsurvapibaseurl
-      "ORDNANCE_SURVEY_API_BASE_URL"                   = data.azurerm_key_vault_secret.ordsurclientparms
+      "ORDNANCE_SURVEY_CLIENT_PARAMS"                  = data.azurerm_key_vault_secret.ordnancesurveyapibaseurl.value
+      "ORDNANCE_SURVEY_API_BASE_URL"                   = data.azurerm_key_vault_secret.ordnancesurveyclientparms.value
       "NOTIFY_API_KEY"                                 = data.azurerm_key_vault_secret.NotifyApiKey.value
       "RAILS_ENV"                                      = "production" #local.environment
       "RAILS_SERVE_STATIC_FILES"                       = "true"
@@ -109,6 +109,8 @@ resource "azurerm_container_group" "cont_grp_02" {
       "LOGSTASH_HOST"                                  = data.azurerm_key_vault_secret.LogstashHost.value
       "LOGSTASH_PORT"                                  = local.stash_port
       "NOTIFY_API_KEY"                                 = data.azurerm_key_vault_secret.NotifyApiKey.value
+      "ORDNANCE_SURVEY_CLIENT_PARAMS"                  = data.azurerm_key_vault_secret.ordnancesurveyapibaseurl.value
+      "ORDNANCE_SURVEY_API_BASE_URL"                   = data.azurerm_key_vault_secret.ordnancesurveyclientparms.value
       "RAILS_ENV"                                      = "production"
       "RAILS_SERVE_STATIC_FILES"                       = "true"
       "ROLLBAR_ACCESS_TOKEN"                           = data.azurerm_key_vault_secret.RollbarInfraToken.value

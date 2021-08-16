@@ -92,14 +92,14 @@ data "azurerm_key_vault_secret" "DqtProxyApiKey" {
   key_vault_id = data.azurerm_key_vault.secrets_kv.id
 }
 
-data "azurerm_key_vault_secret" "ordsurvapibaseurl" {
+data "azurerm_key_vault_secret" "ordnancesurveyapibaseurl" {
   name         = "OrdnanceSurveyAPIBaseURL"
   key_vault_id = data.azurerm_key_vault.secrets_kv.id
 }
-data "azurerm_key_vault_secret" "ordsurclientparms" {
+
+data "azurerm_key_vault_secret" "ordnancesurveyclientparms" {
   name         = "OrdnanceSurveyClientParams"
   key_vault_id = data.azurerm_key_vault.secrets_kv.id
-
 }
 
 
