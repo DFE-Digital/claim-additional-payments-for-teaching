@@ -19,7 +19,7 @@ RSpec.feature "Service configuration" do
 
     fill_in "Availability message", with: "You will be able to make a claim when the service enters public beta in November."
 
-    click_on "Save"
+    expect { click_on "Save" }.to_not enqueue_job(SendReminderEmailsJob)
 
     expect(current_path).to eq(admin_policy_configurations_path)
 
@@ -47,8 +47,8 @@ RSpec.feature "Service configuration" do
     end
 
     within_fieldset("Service status") { choose("Open") }
-
-    click_on "Save"
+    
+    expect { click_on "Save" }.to_not enqueue_job(SendReminderEmailsJob)
 
     expect(current_path).to eq(admin_policy_configurations_path)
 
@@ -81,8 +81,8 @@ RSpec.feature "Service configuration" do
       expect(page).to_not have_content(I18n.t("admin.policy_configuration.reminder_warning", count: count))
       within_fieldset("Service status") { choose("Open") }
       expect(page).to have_content(I18n.t("admin.policy_configuration.reminder_warning", count: count))
-      click_on "Save"
-  
+      # make sure email reminder jobjob is queued
+      expect { click_on "Save" }.to enqueue_job(SendReminderEmailsJob).with("2020/2021")
       expect(current_path).to eq(admin_policy_configurations_path)
   
       within(find("tr[data-policy-configuration-id=\"#{policy_configuration.id}\"]")) do
@@ -105,7 +105,7 @@ RSpec.feature "Service configuration" do
       end
 
       select "2023/2024", from: "Accepting claims for academic year"
-      click_on "Save"
+      expect { click_on "Save" }.to_not enqueue_job(SendReminderEmailsJob)
 
       within(find("tr[data-policy-configuration-id=\"#{policy_configuration.id}\"]")) do
         expect(page).to have_content("2023/2024")
