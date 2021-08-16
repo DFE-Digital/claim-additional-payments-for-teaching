@@ -1,4 +1,5 @@
 require "simplecov"
+require "faker"
 
 SimpleCov.start do
   add_filter %r{^/spec/.*$}

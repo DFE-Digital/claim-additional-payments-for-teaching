@@ -116,6 +116,8 @@ GEM
     factory_bot_rails (6.2.0)
       factory_bot (~> 6.2.0)
       railties (>= 5.0.0)
+    faker (2.18.0)
+      i18n (>= 1.6, < 2)
     ffi (1.15.3)
     foreman (0.87.2)
     geckoboard-ruby (0.4.0)
@@ -379,6 +381,7 @@ DEPENDENCIES
   dotenv-rails
   ethon (~> 0.14.0)
   factory_bot_rails
+  faker (~> 2.0)
   foreman
   geckoboard-ruby
   govuk_design_system_formbuilder
@@ -418,4 +421,4 @@ RUBY VERSION
    ruby 2.6.7p197
 
 BUNDLED WITH
-   2.1.4
+   2.2.23
