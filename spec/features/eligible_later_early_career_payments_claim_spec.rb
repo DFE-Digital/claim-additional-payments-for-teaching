@@ -18,15 +18,17 @@ RSpec.feature "Eligible later Teacher Early-Career Payments claims" do
       let(:current_school) { School.find(ActiveRecord::FixtureSet.identify(:penistone_grammar_school, :uuid)) }
 
       [
-        {itt_subject: "Mathematics", itt_academic_year: "2019 - 2020", award_amount: number_to_currency(7_500, precision: 0)},
-        {itt_subject: "Mathematics", itt_academic_year: "2020 - 2021", award_amount: number_to_currency(3_000, precision: 0)},
-        {itt_subject: "Physics", itt_academic_year: "2020 - 2021", award_amount: number_to_currency(3_000, precision: 0)},
-        {itt_subject: "Chemistry", itt_academic_year: "2020 - 2021", award_amount: number_to_currency(3_000, precision: 0)},
-        {itt_subject: "Foreign languages", itt_academic_year: "2020 - 2021", award_amount: number_to_currency(3_000, precision: 0)}
+        {itt_subject: "mathematics", itt_academic_year: AcademicYear.new(2019), award_amount: number_to_currency(7_500, precision: 0)},
+        {itt_subject: "mathematics", itt_academic_year: AcademicYear.new(2020), award_amount: number_to_currency(3_000, precision: 0)},
+        {itt_subject: "physics", itt_academic_year: AcademicYear.new(2020), award_amount: number_to_currency(3_000, precision: 0)},
+        {itt_subject: "chemistry", itt_academic_year: AcademicYear.new(2020), award_amount: number_to_currency(3_000, precision: 0)},
+        {itt_subject: "foreign_languages", itt_academic_year: AcademicYear.new(2020), award_amount: number_to_currency(3_000, precision: 0)}
       ].each do |scenario|
         scenario "with ITT subject #{scenario[:itt_subject]} in ITT academic year #{scenario[:itt_academic_year]} it displays award amount of #{scenario[:award_amount]}" do
-          claim.eligibility.public_send("itt_subject_#{scenario[:itt_subject].gsub(/\s/, "_").downcase}!")
-          claim.eligibility.public_send("itt_academic_year_#{scenario[:itt_academic_year].gsub(/\s-\s/, "_")}!")
+          claim.eligibility.update(
+            eligible_itt_subject: scenario[:itt_subject],
+            itt_academic_year: scenario[:itt_academic_year]
+          )
 
           visit claim_path(claim.policy.routing_name, "check-your-answers-part-one")
 
@@ -56,15 +58,17 @@ RSpec.feature "Eligible later Teacher Early-Career Payments claims" do
       let(:current_school) { School.find(ActiveRecord::FixtureSet.identify(:hampstead_school, :uuid)) }
 
       [
-        {itt_subject: "Mathematics", itt_academic_year: "2019 - 2020", award_amount: number_to_currency(5_000, precision: 0)},
-        {itt_subject: "Mathematics", itt_academic_year: "2020 - 2021", award_amount: number_to_currency(2_000, precision: 0)},
-        {itt_subject: "Physics", itt_academic_year: "2020 - 2021", award_amount: number_to_currency(2_000, precision: 0)},
-        {itt_subject: "Chemistry", itt_academic_year: "2020 - 2021", award_amount: number_to_currency(2_000, precision: 0)},
-        {itt_subject: "Foreign languages", itt_academic_year: "2020 - 2021", award_amount: number_to_currency(2_000, precision: 0)}
+        {itt_subject: "mathematics", itt_academic_year: AcademicYear.new(2019), award_amount: number_to_currency(5_000, precision: 0)},
+        {itt_subject: "mathematics", itt_academic_year: AcademicYear.new(2020), award_amount: number_to_currency(2_000, precision: 0)},
+        {itt_subject: "physics", itt_academic_year: AcademicYear.new(2020), award_amount: number_to_currency(2_000, precision: 0)},
+        {itt_subject: "chemistry", itt_academic_year: AcademicYear.new(2020), award_amount: number_to_currency(2_000, precision: 0)},
+        {itt_subject: "foreign_languages", itt_academic_year: AcademicYear.new(2020), award_amount: number_to_currency(2_000, precision: 0)}
       ].each do |scenario|
-        scenario "with ITT subject #{scenario[:itt_subject]} in ITT academic year #{scenario[:itt_academic_year]} it displays award amount of #{scenario[:award_amount]}" do
-          claim.eligibility.public_send("itt_subject_#{scenario[:itt_subject].gsub(/\s/, "_").downcase}!")
-          claim.eligibility.public_send("itt_academic_year_#{scenario[:itt_academic_year].gsub(/\s-\s/, "_")}!")
+        scenario "with ITT subject #{scenario[:itt_subject].humanize} in ITT academic year #{scenario[:itt_academic_year]} it displays award amount of #{scenario[:award_amount]}" do
+          claim.eligibility.update(
+            eligible_itt_subject: scenario[:itt_subject],
+            itt_academic_year: scenario[:itt_academic_year]
+          )
 
           visit claim_path(claim.policy.routing_name, "check-your-answers-part-one")
 

@@ -50,7 +50,7 @@ RSpec.describe EarlyCareerPayments::SlugSequence do
         build(
           :early_career_payments_eligibility,
           :eligible,
-          eligible_itt_subject: :foreign_languages
+          eligible_itt_subject: "foreign_languages"
         )
       end
 
@@ -74,17 +74,17 @@ RSpec.describe EarlyCareerPayments::SlugSequence do
       end
 
       [
-        {itt_subject: "Mathematics", itt_academic_year: "2019 - 2020"},
-        {itt_subject: "Mathematics", itt_academic_year: "2020 - 2021"},
-        {itt_subject: "Physics", itt_academic_year: "2020 - 2021"},
-        {itt_subject: "Chemistry", itt_academic_year: "2020 - 2021"},
-        {itt_subject: "Foreign languages", itt_academic_year: "2020 - 2021"}
+        {itt_subject: "mathematics", itt_academic_year: AcademicYear::Type.new.serialize(AcademicYear.new(2019))},
+        {itt_subject: "mathematics", itt_academic_year: AcademicYear::Type.new.serialize(AcademicYear.new(2020))},
+        {itt_subject: "physics", itt_academic_year: AcademicYear::Type.new.serialize(AcademicYear.new(2020))},
+        {itt_subject: "chemistry", itt_academic_year: AcademicYear::Type.new.serialize(AcademicYear.new(2020))},
+        {itt_subject: "foreign_languages", itt_academic_year: AcademicYear::Type.new.serialize(AcademicYear.new(2020))}
       ].each do |context|
-        context "with ITT subject #{context[:itt_subject]}" do
-          let(:itt_subject) { context[:itt_subject].gsub(/\s/, "_").downcase }
+        context "with ITT subject #{context[:itt_subject].humanize}" do
+          let(:itt_subject) { context[:itt_subject] }
 
           context "with ITT academic year #{context[:itt_academic_year]}" do
-            let(:itt_academic_year) { context[:itt_academic_year].gsub(/\s-\s/, "_") }
+            let(:itt_academic_year) { context[:itt_academic_year] }
 
             it "excludes the 'eligibility-confirmed' slug" do
               expect(slug_sequence.slugs).not_to include("eligibility-confirmed")
@@ -103,8 +103,8 @@ RSpec.describe EarlyCareerPayments::SlugSequence do
         build(
           :early_career_payments_eligibility,
           :eligible,
-          eligible_itt_subject: :mathematics,
-          itt_academic_year: "2018_2019"
+          eligible_itt_subject: "mathematics",
+          itt_academic_year: AcademicYear::Type.new.serialize(AcademicYear.new(2018))
         )
       end
 

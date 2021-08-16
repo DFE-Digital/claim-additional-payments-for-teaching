@@ -317,7 +317,7 @@ RSpec.feature "Ineligible Teacher Early-Career Payments claims" do
     choose "None of the above"
     click_on "Continue"
 
-    expect(claim.eligibility.reload.itt_academic_year).to eql "none_of_the_above"
+    expect(claim.eligibility.reload.itt_academic_year).to eql AcademicYear.new
 
     expect(page).to have_text(I18n.t("early_career_payments.ineligible.heading"))
     expect(page).to have_link(href: EarlyCareerPayments.eligibility_page_url)
@@ -325,14 +325,14 @@ RSpec.feature "Ineligible Teacher Early-Career Payments claims" do
   end
 
   [
-    {itt_subject: "Physics", itt_academic_year: "2018 - 2019"},
-    {itt_subject: "Physics", itt_academic_year: "2019 - 2020"},
-    {itt_subject: "Chemistry", itt_academic_year: "2018 - 2019"},
-    {itt_subject: "Chemistry", itt_academic_year: "2019 - 2020"},
-    {itt_subject: "Foreign languages", itt_academic_year: "2018 - 2019"},
-    {itt_subject: "Foreign languages", itt_academic_year: "2019 - 2020"}
+    {itt_subject: "physics", itt_academic_year: AcademicYear.new(2018)},
+    {itt_subject: "physics", itt_academic_year: AcademicYear.new(2019)},
+    {itt_subject: "chemistry", itt_academic_year: AcademicYear.new(2018)},
+    {itt_subject: "chemistry", itt_academic_year: AcademicYear.new(2019)},
+    {itt_subject: "foreign_languages", itt_academic_year: AcademicYear.new(2018)},
+    {itt_subject: "foreign_languages", itt_academic_year: AcademicYear.new(2019)}
   ].each do |scenario|
-    scenario "with ITT subject #{scenario[:itt_subject]} in ITT academic year #{scenario[:itt_academic_year]}" do
+    scenario "with ITT subject #{scenario[:itt_subject].humanize} in ITT academic year #{scenario[:itt_academic_year]}" do
       start_early_career_payments_claim
       claim = Claim.order(:created_at).last
 
@@ -366,10 +366,10 @@ RSpec.feature "Ineligible Teacher Early-Career Payments claims" do
       # - Which subject did you do your undergraduate ITT in
       expect(page).to have_text(I18n.t("early_career_payments.questions.eligible_itt_subject", qualification: claim.eligibility.qualification_name))
 
-      choose scenario[:itt_subject]
+      choose scenario[:itt_subject].humanize
       click_on "Continue"
 
-      expect(claim.eligibility.reload.eligible_itt_subject).to eq scenario[:itt_subject].gsub(/\s/, "_").downcase
+      expect(claim.eligibility.reload.eligible_itt_subject).to eq scenario[:itt_subject]
 
       # - Do you teach the eligible ITT subject now
       expect(page).to have_text(I18n.t("early_career_payments.questions.teaching_subject_now", eligible_itt_subject: claim.eligibility.eligible_itt_subject.humanize.downcase))
@@ -382,10 +382,10 @@ RSpec.feature "Ineligible Teacher Early-Career Payments claims" do
       # - In what academic year did you start your undergraduate ITT
       expect(page).to have_text(I18n.t("early_career_payments.questions.itt_academic_year.qualification.#{claim.eligibility.qualification}"))
 
-      choose scenario[:itt_academic_year]
+      choose scenario[:itt_academic_year].to_s(:long)
       click_on "Continue"
 
-      expect(claim.eligibility.reload.itt_academic_year).to eql scenario[:itt_academic_year].gsub(/\s-\s/, "_")
+      expect(claim.eligibility.reload.itt_academic_year).to eql scenario[:itt_academic_year]
 
       expect(page).to have_text(I18n.t("early_career_payments.ineligible.heading"))
       expect(page).to have_link(href: EarlyCareerPayments.eligibility_page_url)

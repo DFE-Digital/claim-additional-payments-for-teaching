@@ -118,7 +118,7 @@ module EarlyCareerPayments
     def itt_academic_year
       [
         I18n.t("early_career_payments.questions.itt_academic_year.qualification.#{eligibility.qualification}"),
-        eligibility.itt_academic_year.dasherize.gsub("-", " - "),
+        eligibility.itt_academic_year.to_s.gsub("/", " - "),
         "itt-year"
       ]
     end
