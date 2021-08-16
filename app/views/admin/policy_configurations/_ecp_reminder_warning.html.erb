@@ -1,13 +1,13 @@
 <% if policy_configuration.early_career_payments? && Reminder.not_yet_sent.any? %>
-<div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="reminders-warning-message">
-  <div class="govuk-form-group">
-      <div class="govuk-warning-text" id="ecp-reminder-count-warning">
-      <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
-        <strong class="govuk-warning-text__text">
-          <span class="govuk-warning-text__assistive">Warning</span>
-          <%= t("admin.policy_configuration.reminder_warning", count: Reminder.not_yet_sent.count) %>
-        </strong>
-      </div>
+  <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="reminders-warning-message">
+    <div class="govuk-form-group">
+        <div class="govuk-warning-text" id="ecp-reminder-count-warning">
+        <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
+          <strong class="govuk-warning-text__text">
+            <span class="govuk-warning-text__assistive">Warning</span>
+            <%= t("admin.policy_configuration.reminder_warning", count: Reminder.not_yet_sent.count) %>
+          </strong>
+        </div>
+    </div>
   </div>
-</div>
 <% end %>

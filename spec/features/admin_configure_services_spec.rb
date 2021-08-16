@@ -47,7 +47,7 @@ RSpec.feature "Service configuration" do
     end
 
     within_fieldset("Service status") { choose("Open") }
-    
+
     expect { click_on "Save" }.to_not enqueue_job(SendReminderEmailsJob)
 
     expect(current_path).to eq(admin_policy_configurations_path)
@@ -69,9 +69,9 @@ RSpec.feature "Service configuration" do
     scenario "Service operator opens an ECP service for submissions", js: true do
       policy_configuration.update(open_for_submissions: false)
       sign_in_as_service_operator
-  
+
       click_on "Manage services"
-  
+
       expect(page).to have_content("Claim an early-career payment")
       within(find("tr[data-policy-configuration-id=\"#{policy_configuration.id}\"]")) do
         expect(page).to have_content("Closed")
@@ -84,15 +84,14 @@ RSpec.feature "Service configuration" do
       # make sure email reminder jobjob is queued
       expect { click_on "Save" }.to enqueue_job(SendReminderEmailsJob).with("2020/2021")
       expect(current_path).to eq(admin_policy_configurations_path)
-  
+
       within(find("tr[data-policy-configuration-id=\"#{policy_configuration.id}\"]")) do
         expect(page).to have_content("Open")
         expect(page).not_to have_content("Closed")
       end
-  
+
       expect(policy_configuration.reload.open_for_submissions).to be true
     end
-  
   end
   scenario "Service operator changes the academic year a service is accepting payments for" do
     travel_to Date.new(2023) do

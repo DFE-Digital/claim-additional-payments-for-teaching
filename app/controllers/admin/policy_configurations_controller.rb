@@ -8,7 +8,8 @@ module Admin
       @policy_configurations = PolicyConfiguration.order(:policy_type)
     end
 
-    def edit; end
+    def edit
+    end
 
     def update
       policy_configuration.update!(policy_configuration_params)
