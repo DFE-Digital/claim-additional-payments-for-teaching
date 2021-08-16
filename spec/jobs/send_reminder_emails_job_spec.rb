@@ -26,7 +26,7 @@ RSpec.describe SendReminderEmailsJob do
       # check email body is correct
       reminder_email = ActionMailer::Base.deliveries.last.body.to_s
       expect(reminder_email).to include("Dear #{reminders.last.full_name},\n\nThe 2021/2022 early-career payment window is now open.")
-      
+
       # reminder emails once sent have sent_at's
       reminders.each do |reminder|
         expect(reminder.reload.email_sent_at).to_not eq(nil)
