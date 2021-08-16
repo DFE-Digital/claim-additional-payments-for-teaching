@@ -10,6 +10,12 @@ module EarlyCareerPayments
       @claim = claim
     end
 
+    def employment
+      [
+        [translate("admin.current_school"), display_school(eligibility.current_school)]
+      ]
+    end
+
     def identity_confirmation
       [
         ["Current school", eligibility.current_school.name],

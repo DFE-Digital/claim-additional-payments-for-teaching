@@ -19,6 +19,14 @@ RSpec.describe EarlyCareerPayments::AdminTasksPresenter, type: :model do
 
   subject(:presenter) { described_class.new(claim) }
 
+  describe "#employment" do
+    it "returns an array of label and values for displaying information for employment checks" do
+      expect(presenter.employment).to eq [
+        [I18n.t("admin.current_school"), presenter.display_school(eligibility.current_school)]
+      ]
+    end
+  end
+
   describe "#identity_confirmation" do
     it "returns an array of label and values for displaying information for the identity confirmation check" do
       expect(presenter.identity_confirmation).to eq [
