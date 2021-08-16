@@ -20,6 +20,7 @@ The format is based on [Keep a Changelog]
     - Add links that allow claimant to manually enter their address information
       when on the two address auto-population screens
   - Add posgraduate loans questions to M+P / TSLR journeys
+  - Hiding mobile/SMS related OTP screens
 - ECP policies
 - DAC Accessiblity Report fixes
   - Incorrect aria value
