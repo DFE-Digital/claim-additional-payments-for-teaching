@@ -48,14 +48,14 @@ resource "azurerm_app_service_slot" "app_as_slot" {
     "LOGSTASH_HOST"                                  = data.azurerm_key_vault_secret.LogstashHost.value
     "LOGSTASH_PORT"                                  = local.stash_port
     "NOTIFY_API_KEY"                                 = data.azurerm_key_vault_secret.NotifyApiKey.value
-    "ORDNANCE_SURVEY_CLIENT_PARAMS"                  = data.azurerm_key_vault_secret.ordnancesurveyapibaseurl.value
-    "ORDNANCE_SURVEY_API_BASE_URL"                   = data.azurerm_key_vault_secret.ordnancesurveyclientparms.value
-    "RAILS_ENV"                                      = "production" #local.environment
-    "RAILS_SERVE_STATIC_FILES"                       = "true"
-    "ROLLBAR_ACCESS_TOKEN"                           = data.azurerm_key_vault_secret.RollbarInfraToken.value
-    "SECRET_KEY_BASE"                                = data.azurerm_key_vault_secret.SecretKeyBase.value
-    "WORKER_COUNT"                                   = "2"
-    "DOCKER_REGISTRY_SERVER_URL"                     = "https://index.docker.io"
+    # "ORDNANCE_SURVEY_CLIENT_PARAMS"                  = data.azurerm_key_vault_secret.ordnancesurveyapibaseurl.value
+    # "ORDNANCE_SURVEY_API_BASE_URL"                   = data.azurerm_key_vault_secret.ordnancesurveyclientparms.value
+    "RAILS_ENV"                  = "production" #local.environment
+    "RAILS_SERVE_STATIC_FILES"   = "true"
+    "ROLLBAR_ACCESS_TOKEN"       = data.azurerm_key_vault_secret.RollbarInfraToken.value
+    "SECRET_KEY_BASE"            = data.azurerm_key_vault_secret.SecretKeyBase.value
+    "WORKER_COUNT"               = "2"
+    "DOCKER_REGISTRY_SERVER_URL" = "https://index.docker.io"
   }
 
   tags = merge({
