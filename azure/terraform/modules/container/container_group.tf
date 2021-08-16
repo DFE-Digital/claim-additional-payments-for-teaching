@@ -43,6 +43,8 @@ resource "azurerm_container_group" "cont_grp_01" {
       "GOOGLE_ANALYTICS_ID"                            = ""
       "LOGSTASH_HOST"                                  = data.azurerm_key_vault_secret.LogstashHost.value
       "LOGSTASH_PORT"                                  = local.stash_port
+      "ORDNANCE_SURVEY_CLIENT_PARAMS"                  = data.azurerm_key_vault_secret.ordsurvapibaseurl
+      "ORDNANCE_SURVEY_API_BASE_URL"                   = data.azurerm_key_vault_secret.ordsurclientparms
       "NOTIFY_API_KEY"                                 = data.azurerm_key_vault_secret.NotifyApiKey.value
       "RAILS_ENV"                                      = "production" #local.environment
       "RAILS_SERVE_STATIC_FILES"                       = "true"
