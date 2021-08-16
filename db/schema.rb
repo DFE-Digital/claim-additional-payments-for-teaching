@@ -130,7 +130,7 @@ ActiveRecord::Schema.define(version: 2021_08_13_064629) do
     t.boolean "subject_to_formal_performance_action"
     t.integer "eligible_itt_subject"
     t.boolean "teaching_subject_now"
-    t.integer "itt_academic_year"
+    t.string "itt_academic_year", limit: 9
     t.uuid "current_school_id"
     t.index ["current_school_id"], name: "index_early_career_payments_eligibilities_on_current_school_id"
   end

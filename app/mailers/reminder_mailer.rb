@@ -28,7 +28,7 @@ class ReminderMailer < ApplicationMailer
   def send_mail
     view_mail(
       NOTIFY_TEMPLATE_ID,
-      to: @reminder,
+      to: @reminder.email_address,
       subject: @subject
     )
   end

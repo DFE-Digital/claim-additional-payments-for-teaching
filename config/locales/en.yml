@@ -48,7 +48,7 @@ en:
     statement: By submitting this notification you are confirming that, to the best of your knowledge, the details you are providing are correct.
     btn_text: Confirm and send
   one_time_password:
-    title: "One time password"
+    title: "Enter the 6-digit password"
     hint1_html: "We have sent an %{email_or_mobile_message} to <b><strong>%{email_or_mobile_value}</strong></b> with a 6-digit password."
     hint1_suffix: "We recommend you copy and paste the password from the email."
     validity_duration: "You will have %{duration_valid} from receiving the %{email_or_mobile_message} before the password will expire."
@@ -122,6 +122,7 @@ en:
     qts_award_years:
       before_cut_off_date: "In or before the academic year %{year}"
       on_or_after_cut_off_date: "In or after the academic year %{year}"
+      on_date: "In the academic year %{year}"
     student_loan_start_date:
       one_course:
         before_first_september_2012: "Before 1 September 2012"
@@ -303,6 +304,8 @@ en:
           title: "Did %{claim_full_name} submit the claim?"
           body: "The claimant’s identity matches DQT records. See %{link}."
           notes: "notes"
+        qualifications:
+          title: "Does the claimant’s initial teacher training (ITT) start/end year and subject match the above information from their claim?"
     answers:
       qualification:
         postgraduate_itt: "Postgraduate ITT"

@@ -82,10 +82,10 @@ RSpec.feature "Teacher Early-Career Payments claims" do
     expect(page).to have_text(I18n.t("early_career_payments.questions.itt_academic_year.qualification.#{claim.eligibility.qualification}"))
     expect(page).to have_text("If you did a part time ITT")
 
-    choose "2018 - 2019"
+    choose "2018 to 2019"
     click_on "Continue"
 
-    expect(claim.eligibility.reload.itt_academic_year).to eql "2018_2019"
+    expect(claim.eligibility.reload.itt_academic_year).to eql AcademicYear.new(2018)
 
     # - Check your answers for eligibility
     expect(page).to have_text(I18n.t("early_career_payments.check_your_answers.part_one.primary_heading"))
@@ -172,8 +172,8 @@ RSpec.feature "Teacher Early-Career Payments claims" do
     expect(claim.reload.email_address).to eql("david.tau1988@hotmail.co.uk")
 
     # - One time password
-    expect(page).to have_text("Email verification")
-    expect(page).to have_text("One time password")
+    expect(page).to have_text("Email address verification")
+    expect(page).to have_text("Enter the 6-digit password")
     expect(page).to have_text("We recommend you copy and paste the password from the email.")
 
     mail = ActionMailer::Base.deliveries.last
@@ -206,7 +206,7 @@ RSpec.feature "Teacher Early-Career Payments claims" do
 
     # - Mobile number one-time password
     expect(page).to have_text("Password verification")
-    expect(page).to have_text("One time password")
+    expect(page).to have_text("Enter the 6-digit password")
     expect(page).not_to have_text("We recommend you copy and paste the password from the email.")
 
     # fill_in "claim_one_time_password", with: otp_sent_to_mobile
@@ -417,10 +417,10 @@ RSpec.feature "Teacher Early-Career Payments claims" do
       expect(page).to have_text(I18n.t("early_career_payments.questions.itt_academic_year.qualification.#{claim.eligibility.qualification}"))
       expect(page).not_to have_text("You might still be eligible to claim if your ITT coincided with one of the academic years stated, even if it didn’t start or complete in one of those years.")
 
-      choose "2018 - 2019"
+      choose "2018 to 2019"
       click_on "Continue"
 
-      expect(claim.eligibility.reload.itt_academic_year).to eql "2018_2019"
+      expect(claim.eligibility.reload.itt_academic_year).to eql AcademicYear.new(2018)
     end
 
     scenario "when Overseas recognition" do
@@ -454,10 +454,10 @@ RSpec.feature "Teacher Early-Career Payments claims" do
       expect(page).to have_text(I18n.t("early_career_payments.questions.itt_academic_year.qualification.#{claim.eligibility.qualification}"))
       expect(page).not_to have_text("You might still be eligible to claim if your ITT coincided with one of the academic years stated, even if it didn’t start or complete in one of those years.")
 
-      choose "2018 - 2019"
+      choose "2018 to 2019"
       click_on "Continue"
 
-      expect(claim.eligibility.reload.itt_academic_year).to eql "2018_2019"
+      expect(claim.eligibility.reload.itt_academic_year).to eql AcademicYear.new(2018)
     end
   end
 
@@ -539,10 +539,10 @@ RSpec.feature "Teacher Early-Career Payments claims" do
     # - In what academic year did you start your postgraduate ITT
     expect(page).to have_text(I18n.t("early_career_payments.questions.itt_academic_year.qualification.#{claim.eligibility.qualification}"))
 
-    choose "2018 - 2019"
+    choose "2018 to 2019"
     click_on "Continue"
 
-    expect(claim.eligibility.reload.itt_academic_year).to eql "2018_2019"
+    expect(claim.eligibility.reload.itt_academic_year).to eql AcademicYear.new(2018)
 
     # - Check your answers for eligibility
     expect(page).to have_text(I18n.t("early_career_payments.check_your_answers.part_one.primary_heading"))
@@ -630,8 +630,8 @@ RSpec.feature "Teacher Early-Career Payments claims" do
     expect(claim.reload.email_address).to eql("david.tau1988@hotmail.co.uk")
 
     # - One time password
-    expect(page).to have_text("Email verification")
-    expect(page).to have_text("One time password")
+    expect(page).to have_text("Email address verification")
+    expect(page).to have_text("Enter the 6-digit password")
     expect(page).to have_text("We recommend you copy and paste the password from the email.")
 
     mail = ActionMailer::Base.deliveries.last
@@ -658,7 +658,7 @@ RSpec.feature "Teacher Early-Career Payments claims" do
 
     # - Mobile number one-time password
     expect(page).to have_text("Password verification")
-    expect(page).to have_text("One time password")
+    expect(page).to have_text("Enter the 6-digit password")
     expect(page).not_to have_text("We recommend you copy and paste the password from the email.")
 
     # fill_in "claim_one_time_password", with: otp_sent_to_mobile
@@ -1001,8 +1001,8 @@ RSpec.feature "Teacher Early-Career Payments claims" do
       expect(claim.reload.email_address).to eql("david.tau1988@hotmail.co.uk")
 
       # - One time password
-      expect(page).to have_text("Email verification")
-      expect(page).to have_text("One time password")
+      expect(page).to have_text("Email address verification")
+      expect(page).to have_text("Enter the 6-digit password")
       expect(page).to have_text("We recommend you copy and paste the password from the email.")
 
       mail = ActionMailer::Base.deliveries.last
@@ -1029,7 +1029,7 @@ RSpec.feature "Teacher Early-Career Payments claims" do
 
       # - Mobile number one-time password
       expect(page).to have_text("Password verification")
-      expect(page).to have_text("One time password")
+      expect(page).to have_text("Enter the 6-digit password")
       expect(page).not_to have_text("We recommend you copy and paste the password from the email.")
 
       # fill_in "claim_one_time_password", with: otp_sent_to_mobile

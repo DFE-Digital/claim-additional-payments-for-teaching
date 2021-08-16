@@ -16,17 +16,17 @@ RSpec.feature "Set Reminders when Eligible Later for an Early Career Payment" do
 
     visit claim_path(EarlyCareerPayments.routing_name, "itt-year")
 
-    choose "2020 - 2021"
+    choose "2020 to 2021"
     click_on "Continue"
 
-    expect(claim.eligibility.reload.itt_academic_year).to eql "2020_2021"
+    expect(claim.eligibility.reload.itt_academic_year).to eql AcademicYear.new(2020)
 
     # - Check your answers for eligibility
     expect(page).to have_text(I18n.t("early_career_payments.check_your_answers.part_one.primary_heading"))
     expect(page).to have_text(I18n.t("early_career_payments.check_your_answers.part_one.secondary_heading"))
     expect(page).to have_text(I18n.t("early_career_payments.check_your_answers.part_one.confirmation_notice"))
 
-    expect(claim.eligibility.itt_academic_year).to eq "2020_2021"
+    expect(claim.eligibility.itt_academic_year).to eq AcademicYear.new(2020)
     expect(claim.errors.messages).to be_empty
 
     click_on "Continue"

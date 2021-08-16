@@ -18,11 +18,9 @@ class PageSequence
     return "ineligible" if claim.eligibility.ineligible?
     return "check-your-answers" if claim.submittable?
 
-    # to avoid the #current_slug_index returning 0 when a slug has been deleted in policy::SlugSequence.slugs
-    # the next slug needs to be returned. Otherwise the 2nd slug (index 1) will be retuned
-    # for 'address'.
-    # This happened due to using a link to render the 'address' page from the show action on 'postcode-search'
-    return slugs[slugs.index("select-home-address") + 1] if current_slug == "address"
+    # This allows 'address' page to be skipped when the postcode is present
+    # Occurs when populated from 'postcode-search' and the subsequent 'select-home-address' screens
+    return slugs[slugs.index("select-home-address") + 2] if current_slug == "select-home-address" && claim.postcode.present?
 
     slugs[current_slug_index + 1]
   end
