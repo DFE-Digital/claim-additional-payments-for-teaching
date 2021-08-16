@@ -8,7 +8,7 @@
 
     <% if current_claim.eligibility.ineligibility_reason != :ineligible_current_school && current_claim.eligibility.ineligibility_reason != :ineligible_nqt_in_academic_year_after_itt %>
       <p class="govuk-body">
-        If you want to know more about who can apply, check our
+        If you need to know more about who can apply, check our
         <%= link_to "eligibility page", EarlyCareerPayments.eligibility_page_url, class: "govuk-link" %>.
       </p>
     <% end %>

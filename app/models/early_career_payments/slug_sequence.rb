@@ -29,6 +29,8 @@ module EarlyCareerPayments
       # personal details phase of claim journey
       "how-we-will-use-information-provided",
       "personal-details",
+      "postcode-search",
+      "select-home-address",
       "address",
       "email-address",
       "email-verification",

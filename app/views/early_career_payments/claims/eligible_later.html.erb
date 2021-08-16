@@ -5,33 +5,19 @@
   <div class="govuk-grid-column-two-thirds">
     <h1 class="govuk-heading-xl">You will be eligible <%= I18n.t("early_career_payments.claim_description") %> in 2022</h1>
     <p class="govuk-body">
-      So long as your circumstances remain the same, you’ll be able to claim
-      <%= number_to_currency(current_claim.eligibility.award_amounts[:base], precision: 0) %> in autumn 2022. This could increase to <%= number_to_currency(current_claim.eligibility.award_amounts[:uplift], precision: 0) %> if the school you
-      teach at is considered to be in an uplift area.
-    </p>
-
-    <p>
-      <%= link_to "Uplift areas",
-        "#{EarlyCareerPayments.eligibility_page_url}#local-authorities-with-uplift-payments",
-        class: "govuk-link",
-        title: "Opens in a new tab",
-        target: "_blank"
-      %>
+      So long as your circumstances remain the same, you&rsquo;ll be able to claim <%= number_to_currency(current_claim.eligibility.award_amount, precision: 0) %> in autumn 2022.
     </p>
 
     <h2 class="govuk-heading-l">What you can do next</h2>
 
     <p class="govuk-body">
-      You can set up a reminder. We will send this to your preferred email address
-      when your application window is open.
+      Set up a reminder with us and we will email you when your application window opens. We will send this to your preferred email address.
+    </p>
+
+    <p class="govuk-inset-text">
+      It is your responsibility to apply for each payment you are eligible for. The Department for Education cannot issue payments unless you apply for one nor can we issue payments for claims made after the window has closed.
     </p>
 
     <%= button_to "Continue", new_reminder_path, method: :get, class: "govuk-button" %>
-
-    <p class="govuk-body">
-      It is your responsibility to apply for the payment. The Department for
-      Education cannot issue payments unless you apply for one.
-    </p>
-
   </div>
 </div>

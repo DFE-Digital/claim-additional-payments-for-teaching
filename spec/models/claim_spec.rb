@@ -205,7 +205,7 @@ RSpec.describe Claim, type: :model do
     it "validates the presence of address_line_1 and postcode" do
       expect(build(:claim)).not_to be_valid(:address)
 
-      valid_address_attributes = {address_line_1: "123 Main Street", postcode: "12345"}
+      valid_address_attributes = {address_line_1: "123 Main Street", address_line_3: "City", address_line_4: "County", postcode: "PE11 3EW"}
       expect(build(:claim, valid_address_attributes)).to be_valid(:address)
     end
   end
@@ -270,6 +270,130 @@ RSpec.describe Claim, type: :model do
     end
   end
 
+  context "with early-career payments policy" do
+    describe "when saving in the 'postgraduate_masters_loan' context" do
+      let(:claim) { build(:claim, :submittable, postgraduate_masters_loan: nil, policy: EarlyCareerPayments) }
+
+      context "with claim having a student loan" do
+        it "is not valid without a value for 'postgraduate_masters_loan'" do
+          expect(claim.has_student_loan?).to eql true
+          expect(claim).not_to be_valid(:"masters-loan")
+          expect(build(:claim, postgraduate_masters_loan: true)).to be_valid(:"masters-loan")
+          expect(build(:claim, postgraduate_masters_loan: false)).to be_valid(:"masters-loan")
+        end
+      end
+
+      context "with claim having no_student_loan" do
+        it "is valid without a value for 'postgraduate_masters_loan'" do
+          subject.validate(on: :"masters-loan")
+          expect(subject.errors[:"masters-loan"]).to be_empty
+        end
+      end
+    end
+
+    describe "when saving in the 'postgraduate_doctoral_loan' context" do
+      let(:claim) { build(:claim, :submittable, postgraduate_doctoral_loan: nil, policy: EarlyCareerPayments) }
+
+      context "with claim having a student loan" do
+        it "is not valid without a value for 'postgraduate_doctoral_loan'" do
+          expect(claim.has_student_loan?).to eql true
+          expect(claim).not_to be_valid(:"doctoral-loan")
+          expect(build(:claim, postgraduate_doctoral_loan: true)).to be_valid(:"doctoral-loan")
+          expect(build(:claim, postgraduate_doctoral_loan: false)).to be_valid(:"doctoral-loan")
+        end
+      end
+
+      context "with claim having no_student_loan" do
+        it "is valid without a value for 'postgraduate_doctoral_loan'" do
+          subject.validate(on: :"doctoral-loan")
+          expect(subject.errors[:"doctoral-loan"]).to be_empty
+        end
+      end
+    end
+  end
+
+  context "with student loans policy" do
+    describe "when saving in the 'postgraduate_masters_loan' context" do
+      let(:claim) { build(:claim, :submittable, postgraduate_masters_loan: nil, policy: StudentLoans) }
+
+      context "with claim having a student loan" do
+        it "is not valid without a value for 'postgraduate_masters_loan'" do
+          expect(claim.has_student_loan?).to eql true
+          expect(claim).not_to be_valid(:"masters-loan")
+          expect(build(:claim, postgraduate_masters_loan: true)).to be_valid(:"masters-loan")
+          expect(build(:claim, postgraduate_masters_loan: false)).to be_valid(:"masters-loan")
+        end
+      end
+
+      context "with claim having no_student_loan" do
+        it "is valid without a value for 'postgraduate_masters_loan'" do
+          subject.validate(on: :"masters-loan")
+          expect(subject.errors[:"masters-loan"]).to be_empty
+        end
+      end
+    end
+
+    describe "when saving in the 'postgraduate_doctoral_loan' context" do
+      let(:claim) { build(:claim, :submittable, postgraduate_doctoral_loan: nil, policy: StudentLoans) }
+
+      context "with claim having a student loan" do
+        it "is not valid without a value for 'postgraduate_doctoral_loan'" do
+          expect(claim.has_student_loan?).to eql true
+          expect(claim).not_to be_valid(:"doctoral-loan")
+          expect(build(:claim, postgraduate_doctoral_loan: true)).to be_valid(:"doctoral-loan")
+          expect(build(:claim, postgraduate_doctoral_loan: false)).to be_valid(:"doctoral-loan")
+        end
+      end
+
+      context "with claim having no_student_loan" do
+        it "is valid without a value for 'postgraduate_doctoral_loan'" do
+          subject.validate(on: :"doctoral-loan")
+          expect(subject.errors[:"doctoral-loan"]).to be_empty
+        end
+      end
+    end
+  end
+
+  context "with maths and physics policy" do
+    describe "when saving in the 'postgraduate_masters_loan' context" do
+      let(:claim) { build(:claim, :submittable, postgraduate_masters_loan: nil, policy: MathsAndPhysics) }
+      context "with claim having a student loan" do
+        it "is not valid without a value for 'postgraduate_masters_loan'" do
+          expect(claim.has_student_loan?).to eql true
+          expect(claim).not_to be_valid(:"masters-loan")
+          expect(build(:claim, postgraduate_masters_loan: true)).to be_valid(:"masters-loan")
+          expect(build(:claim, postgraduate_masters_loan: false)).to be_valid(:"masters-loan")
+        end
+      end
+
+      context "with claim having no_student_loan" do
+        it "is valid without a value for 'postgraduate_masters_loan'" do
+          subject.validate(on: :"masters-loan")
+          expect(subject.errors[:"masters-loan"]).to be_empty
+        end
+      end
+    end
+
+    describe "when saving in the 'postgraduate_doctoral_loan' context" do
+      let(:claim) { build(:claim, :submittable, postgraduate_doctoral_loan: nil, policy: MathsAndPhysics) }
+      context "with claim having a student loan" do
+        it "is not valid without a value for 'postgraduate_doctoral_loan'" do
+          expect(claim.has_student_loan?).to eql true
+          expect(claim).not_to be_valid(:"doctoral-loan")
+          expect(build(:claim, postgraduate_doctoral_loan: true)).to be_valid(:"doctoral-loan")
+          expect(build(:claim, postgraduate_doctoral_loan: false)).to be_valid(:"doctoral-loan")
+        end
+      end
+
+      context "with claim having no_student_loan" do
+        it "is valid without a value for 'postgraduate_doctoral_loan'" do
+          subject.validate(on: :"doctoral-loan")
+          expect(subject.errors[:"doctoral-loan"]).to be_empty
+        end
+      end
+    end
+  end
+
   context "when saving in the “email-address” validation context" do
     it "validates the presence of email_address" do
       expect(build(:claim)).not_to be_valid(:"email-address")
@@ -288,12 +412,27 @@ RSpec.describe Claim, type: :model do
     end
   end
 
-  context "when saving in the “bank-details” validation context" do
+  context "when saving in the “personal-bank-account” validation context" do
     it "validates that the bank_account_number and bank_sort_code are present" do
       invalid_claim = build(:claim)
       valid_claim = build(:claim, bank_sort_code: "123456", bank_account_number: "87654321", banking_name: "Jo Bloggs")
-      expect(invalid_claim).not_to be_valid(:"bank-details")
-      expect(valid_claim).to be_valid(:"bank-details")
+      expect(invalid_claim).not_to be_valid(:"personal-bank-account")
+      expect(valid_claim).to be_valid(:"personal-bank-account")
+    end
+  end
+
+  context "when saving in the “building-society-account” validation context" do
+    it "validates that the bank_account_number and bank_sort_code are present" do
+      invalid_claim = build(:claim, bank_or_building_society: :building_society)
+      valid_claim = build(
+        :claim,
+        bank_sort_code: "123456",
+        bank_account_number: "87654321",
+        banking_name: "Jo Bloggs",
+        building_society_roll_number: "CXJ-K6 897/98X"
+      )
+      expect(invalid_claim).not_to be_valid(:"building-society-account")
+      expect(valid_claim).to be_valid(:"building-society-account")
     end
   end
 
@@ -773,6 +912,8 @@ RSpec.describe Claim, type: :model do
       expect(claim.student_loan_courses).to be_nil
       expect(claim.student_loan_start_date).to be_nil
       expect(claim.student_loan_plan).to eq Claim::NO_STUDENT_LOAN
+      expect(claim.postgraduate_masters_loan).to be_nil
+      expect(claim.postgraduate_doctoral_loan).to be_nil
     end
 
     it "redetermines the student_loan_plan and resets subsequent loan plan answers when student_loan_country changes" do

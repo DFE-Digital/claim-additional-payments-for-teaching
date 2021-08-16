@@ -78,17 +78,17 @@ RSpec.describe EarlyCareerPayments::Eligibility, type: :model do
       end
 
       [
-        {itt_subject: "Mathematics", itt_academic_year: "2019 - 2020"},
-        {itt_subject: "Mathematics", itt_academic_year: "2020 - 2021"},
-        {itt_subject: "Physics", itt_academic_year: "2020 - 2021"},
-        {itt_subject: "Chemistry", itt_academic_year: "2020 - 2021"},
-        {itt_subject: "Foreign languages", itt_academic_year: "2020 - 2021"}
+        {itt_subject: "mathematics", itt_academic_year: AcademicYear::Type.new.serialize(AcademicYear.new(2019))},
+        {itt_subject: "mathematics", itt_academic_year: AcademicYear::Type.new.serialize(AcademicYear.new(2020))},
+        {itt_subject: "physics", itt_academic_year: AcademicYear::Type.new.serialize(AcademicYear.new(2020))},
+        {itt_subject: "chemistry", itt_academic_year: AcademicYear::Type.new.serialize(AcademicYear.new(2020))},
+        {itt_subject: "foreign_languages", itt_academic_year: AcademicYear::Type.new.serialize(AcademicYear.new(2020))}
       ].each do |context|
-        context "with ITT subject #{context[:itt_subject]}" do
-          let(:itt_subject) { context[:itt_subject].gsub(/\s/, "_").downcase }
+        context "with ITT subject #{context[:itt_subject].to_s.humanize}" do
+          let(:itt_subject) { context[:itt_subject] }
 
           context "with ITT academic year #{context[:itt_academic_year]}" do
-            let(:itt_academic_year) { context[:itt_academic_year].gsub(/\s-\s/, "_") }
+            let(:itt_academic_year) { context[:itt_academic_year] }
 
             it "returns true" do
               expect(EarlyCareerPayments::Eligibility.new(eligibility_args).eligible_later?).to eql true
@@ -101,28 +101,14 @@ RSpec.describe EarlyCareerPayments::Eligibility, type: :model do
     context "when claim is not eligible later" do
       let(:eligibility_args) do
         {
-          eligible_itt_subject: :mathematics,
-          itt_academic_year: "2018_2019"
+          eligible_itt_subject: "mathematics",
+          itt_academic_year: AcademicYear::Type.new.serialize(AcademicYear.new(2018))
         }
       end
 
       it "returns false" do
         expect(EarlyCareerPayments::Eligibility.new(eligibility_args).eligible_later?).to eql false
       end
-    end
-  end
-
-  describe "itt_academic_year" do
-    it "rejects invalid values" do
-      expect { EarlyCareerPayments::Eligibility.new(itt_academic_year: "2025_2026") }.to raise_error(ArgumentError)
-    end
-
-    it "has handily named boolean methods for the possible values" do
-      eligibility = EarlyCareerPayments::Eligibility.new(itt_academic_year: "2018_2019")
-
-      expect(eligibility.itt_academic_year_2018_2019?).to eq true
-      expect(eligibility.itt_academic_year_2019_2020?).to eq false
-      expect(eligibility.itt_academic_year_2020_2021?).to eq false
     end
   end
 
@@ -174,19 +160,19 @@ RSpec.describe EarlyCareerPayments::Eligibility, type: :model do
     end
 
     it "returns true when the ITT postgraduate start date OR ITT undergraduate complete date not in 2018 - 2019, 2019 - 2020, 2020 - 2021" do
-      expect(EarlyCareerPayments::Eligibility.new(itt_academic_year: :none_of_the_above).ineligible?).to eql true
-      expect(EarlyCareerPayments::Eligibility.new(itt_academic_year: "2018_2019").ineligible?).to eql false
-      expect(EarlyCareerPayments::Eligibility.new(itt_academic_year: "2019_2020").ineligible?).to eql false
-      expect(EarlyCareerPayments::Eligibility.new(itt_academic_year: "2020_2021").ineligible?).to eql false
+      expect(EarlyCareerPayments::Eligibility.new(itt_academic_year: "None").ineligible?).to eql true
+      expect(EarlyCareerPayments::Eligibility.new(itt_academic_year: "2018/2019").ineligible?).to eql false
+      expect(EarlyCareerPayments::Eligibility.new(itt_academic_year: "2019/2020").ineligible?).to eql false
+      expect(EarlyCareerPayments::Eligibility.new(itt_academic_year: "2020/2021").ineligible?).to eql false
     end
 
     [
-      {itt_subject: :mathematics, itt_academic_year: :"2018_2019"},
-      {itt_subject: :mathematics, itt_academic_year: :"2019_2020"},
-      {itt_subject: :mathematics, itt_academic_year: :"2020_2021"},
-      {itt_subject: :physics, itt_academic_year: :"2020_2021"},
-      {itt_subject: :chemistry, itt_academic_year: :"2020_2021"},
-      {itt_subject: :foreign_languages, itt_academic_year: :"2020_2021"}
+      {itt_subject: "mathematics", itt_academic_year: AcademicYear::Type.new.serialize(AcademicYear.new(2018))},
+      {itt_subject: "mathematics", itt_academic_year: AcademicYear::Type.new.serialize(AcademicYear.new(2019))},
+      {itt_subject: "mathematics", itt_academic_year: AcademicYear::Type.new.serialize(AcademicYear.new(2020))},
+      {itt_subject: "physics", itt_academic_year: AcademicYear::Type.new.serialize(AcademicYear.new(2020))},
+      {itt_subject: "chemistry", itt_academic_year: AcademicYear::Type.new.serialize(AcademicYear.new(2020))},
+      {itt_subject: "foreign_languages", itt_academic_year: AcademicYear::Type.new.serialize(AcademicYear.new(2020))}
     ].each do |spec|
       context "when cohort is eligible" do
         let(:eligibility_args) do
@@ -212,12 +198,12 @@ RSpec.describe EarlyCareerPayments::Eligibility, type: :model do
       expect(EarlyCareerPayments::Eligibility.new(nqt_in_academic_year_after_itt: false).ineligibility_reason).to eq :ineligible_nqt_in_academic_year_after_itt
       expect(EarlyCareerPayments::Eligibility.new(employed_as_supply_teacher: true, has_entire_term_contract: false).ineligibility_reason).to eql :generic_ineligibility
       expect(EarlyCareerPayments::Eligibility.new(employed_as_supply_teacher: true, employed_directly: false).ineligibility_reason).to eql :generic_ineligibility
-      expect(EarlyCareerPayments::Eligibility.new(subject_to_formal_performance_action: true).ineligibility_reason).to eq :poor_performance
-      expect(EarlyCareerPayments::Eligibility.new(subject_to_disciplinary_action: true).ineligibility_reason).to eql :poor_performance
-      expect(EarlyCareerPayments::Eligibility.new(subject_to_formal_performance_action: true, subject_to_disciplinary_action: true).ineligibility_reason).to eq :poor_performance
+      expect(EarlyCareerPayments::Eligibility.new(subject_to_formal_performance_action: true).ineligibility_reason).to eq :generic_ineligibility
+      expect(EarlyCareerPayments::Eligibility.new(subject_to_disciplinary_action: true).ineligibility_reason).to eql :generic_ineligibility
+      expect(EarlyCareerPayments::Eligibility.new(subject_to_formal_performance_action: true, subject_to_disciplinary_action: true).ineligibility_reason).to eq :generic_ineligibility
       expect(EarlyCareerPayments::Eligibility.new(eligible_itt_subject: :none_of_the_above).ineligibility_reason).to eq :itt_subject_none_of_the_above
       expect(EarlyCareerPayments::Eligibility.new(teaching_subject_now: false).ineligibility_reason).to eql :not_teaching_now_in_eligible_itt_subject
-      expect(EarlyCareerPayments::Eligibility.new(itt_academic_year: :none_of_the_above).ineligibility_reason).to eql :generic_ineligibility
+      expect(EarlyCareerPayments::Eligibility.new(itt_academic_year: "None").ineligibility_reason).to eql :generic_ineligibility
     end
   end
 
@@ -225,8 +211,8 @@ RSpec.describe EarlyCareerPayments::Eligibility, type: :model do
     [
       {
         context: {
-          itt_subject: :mathematics,
-          itt_academic_year: :"2018_2019"
+          itt_subject: "mathematics",
+          itt_academic_year: AcademicYear::Type.new.serialize(AcademicYear.new(2018))
         },
         expect: {
           base_amount: 5_000,
@@ -235,8 +221,8 @@ RSpec.describe EarlyCareerPayments::Eligibility, type: :model do
       },
       {
         context: {
-          itt_subject: :mathematics,
-          itt_academic_year: :"2019_2020"
+          itt_subject: "mathematics",
+          itt_academic_year: AcademicYear::Type.new.serialize(AcademicYear.new(2019))
         },
         expect: {
           base_amount: 5_000,
@@ -245,8 +231,8 @@ RSpec.describe EarlyCareerPayments::Eligibility, type: :model do
       },
       {
         context: {
-          itt_subject: :mathematics,
-          itt_academic_year: :"2020_2021"
+          itt_subject: "mathematics",
+          itt_academic_year: AcademicYear::Type.new.serialize(AcademicYear.new(2020))
         },
         expect: {
           base_amount: 2_000,
@@ -255,8 +241,8 @@ RSpec.describe EarlyCareerPayments::Eligibility, type: :model do
       },
       {
         context: {
-          itt_subject: :physics,
-          itt_academic_year: :"2020_2021"
+          itt_subject: "physics",
+          itt_academic_year: AcademicYear::Type.new.serialize(AcademicYear.new(2020))
         },
         expect: {
           base_amount: 2_000,
@@ -265,8 +251,8 @@ RSpec.describe EarlyCareerPayments::Eligibility, type: :model do
       },
       {
         context: {
-          itt_subject: :chemistry,
-          itt_academic_year: :"2020_2021"
+          itt_subject: "chemistry",
+          itt_academic_year: AcademicYear::Type.new.serialize(AcademicYear.new(2020))
         },
         expect: {
           base_amount: 2_000,
@@ -275,8 +261,8 @@ RSpec.describe EarlyCareerPayments::Eligibility, type: :model do
       },
       {
         context: {
-          itt_subject: :foreign_languages,
-          itt_academic_year: :"2020_2021"
+          itt_subject: "foreign_languages",
+          itt_academic_year: AcademicYear::Type.new.serialize(AcademicYear.new(2020))
         },
         expect: {
           base_amount: 2_000,
@@ -318,8 +304,8 @@ RSpec.describe EarlyCareerPayments::Eligibility, type: :model do
     context "when cohort ineligible" do
       let(:eligibility_args) do
         {
-          eligible_itt_subject: :physics,
-          itt_academic_year: :"2018_2019",
+          eligible_itt_subject: "physics",
+          itt_academic_year: "2018/2019",
           current_school: School.find(ActiveRecord::FixtureSet.identify(:hampstead_school, :uuid))
         }
       end
@@ -344,8 +330,8 @@ RSpec.describe EarlyCareerPayments::Eligibility, type: :model do
     context "without school" do
       let(:eligibility_args) do
         {
-          eligible_itt_subject: :mathematics,
-          itt_academic_year: :"2018_2019"
+          eligible_itt_subject: "mathematics",
+          itt_academic_year: "2018/2019"
         }
       end
 
@@ -359,8 +345,8 @@ RSpec.describe EarlyCareerPayments::Eligibility, type: :model do
     [
       {
         context: {
-          itt_subject: :mathematics,
-          itt_academic_year: :"2018_2019"
+          itt_subject: "mathematics",
+          itt_academic_year: AcademicYear::Type.new.serialize(AcademicYear.new(2018))
         },
         expect: {
           base_amount: 5_000,
@@ -369,8 +355,8 @@ RSpec.describe EarlyCareerPayments::Eligibility, type: :model do
       },
       {
         context: {
-          itt_subject: :mathematics,
-          itt_academic_year: :"2019_2020"
+          itt_subject: "mathematics",
+          itt_academic_year: AcademicYear::Type.new.serialize(AcademicYear.new(2019))
         },
         expect: {
           base_amount: 5_000,
@@ -379,8 +365,8 @@ RSpec.describe EarlyCareerPayments::Eligibility, type: :model do
       },
       {
         context: {
-          itt_subject: :mathematics,
-          itt_academic_year: :"2020_2021"
+          itt_subject: "mathematics",
+          itt_academic_year: AcademicYear::Type.new.serialize(AcademicYear.new(2020))
         },
         expect: {
           base_amount: 2_000,
@@ -389,8 +375,8 @@ RSpec.describe EarlyCareerPayments::Eligibility, type: :model do
       },
       {
         context: {
-          itt_subject: :physics,
-          itt_academic_year: :"2020_2021"
+          itt_subject: "physics",
+          itt_academic_year: AcademicYear::Type.new.serialize(AcademicYear.new(2020))
         },
         expect: {
           base_amount: 2_000,
@@ -399,8 +385,8 @@ RSpec.describe EarlyCareerPayments::Eligibility, type: :model do
       },
       {
         context: {
-          itt_subject: :chemistry,
-          itt_academic_year: :"2020_2021"
+          itt_subject: "chemistry",
+          itt_academic_year: AcademicYear::Type.new.serialize(AcademicYear.new(2020))
         },
         expect: {
           base_amount: 2_000,
@@ -409,8 +395,8 @@ RSpec.describe EarlyCareerPayments::Eligibility, type: :model do
       },
       {
         context: {
-          itt_subject: :foreign_languages,
-          itt_academic_year: :"2020_2021"
+          itt_subject: "foreign_languages",
+          itt_academic_year: AcademicYear::Type.new.serialize(AcademicYear.new(2020))
         },
         expect: {
           base_amount: 2_000,
@@ -440,8 +426,8 @@ RSpec.describe EarlyCareerPayments::Eligibility, type: :model do
     context "when cohort ineligible" do
       let(:eligibility_args) do
         {
-          eligible_itt_subject: :physics,
-          itt_academic_year: :"2018_2019"
+          eligible_itt_subject: "physics",
+          itt_academic_year: "2018/2019"
         }
       end
 
@@ -467,8 +453,121 @@ RSpec.describe EarlyCareerPayments::Eligibility, type: :model do
     end
   end
 
+  describe "#first_eligible_itt_academic_year" do
+    subject(:first_eligible_itt_academic_year) do
+      eligibility = build_stubbed(
+        :early_career_payments_eligibility,
+        eligible_itt_subject: eligible_itt_subject
+      )
+
+      build_stubbed(
+        :claim,
+        academic_year: claim_academic_year,
+        eligibility: eligibility
+      )
+
+      eligibility.first_eligible_itt_academic_year
+    end
+
+    [
+      {
+        eligible_itt_subject: "mathematics",
+        claim_academic_year: AcademicYear::Type.new.serialize(AcademicYear.new(2021)),
+        itt_academic_year: AcademicYear.new(2018)
+      },
+      {
+        eligible_itt_subject: :physics,
+        claim_academic_year: AcademicYear::Type.new.serialize(AcademicYear.new(2021)),
+        itt_academic_year: nil
+      },
+      {
+        eligible_itt_subject: :chemistry,
+        claim_academic_year: AcademicYear::Type.new.serialize(AcademicYear.new(2021)),
+        itt_academic_year: nil
+      },
+      {
+        eligible_itt_subject: :foreign_languages,
+        claim_academic_year: AcademicYear::Type.new.serialize(AcademicYear.new(2021)),
+        itt_academic_year: nil
+      },
+      {
+        eligible_itt_subject: :mathematics,
+        claim_academic_year: AcademicYear::Type.new.serialize(AcademicYear.new(2022)),
+        itt_academic_year: AcademicYear.new(2019)
+      },
+      {
+        eligible_itt_subject: :physics,
+        claim_academic_year: AcademicYear::Type.new.serialize(AcademicYear.new(2022)),
+        itt_academic_year: AcademicYear.new(2020)
+      },
+      {
+        eligible_itt_subject: :chemistry,
+        claim_academic_year: AcademicYear::Type.new.serialize(AcademicYear.new(2022)),
+        itt_academic_year: AcademicYear.new(2020)
+      },
+      {
+        eligible_itt_subject: :foreign_languages,
+        claim_academic_year: AcademicYear::Type.new.serialize(AcademicYear.new(2022)),
+        itt_academic_year: AcademicYear.new(2020)
+      },
+      {
+        eligible_itt_subject: :mathematics,
+        claim_academic_year: AcademicYear::Type.new.serialize(AcademicYear.new(2023)),
+        itt_academic_year: AcademicYear.new(2018)
+      },
+      {
+        eligible_itt_subject: :physics,
+        claim_academic_year: AcademicYear::Type.new.serialize(AcademicYear.new(2023)),
+        itt_academic_year: AcademicYear.new(2020)
+      },
+      {
+        eligible_itt_subject: :chemistry,
+        claim_academic_year: AcademicYear::Type.new.serialize(AcademicYear.new(2023)),
+        itt_academic_year: AcademicYear.new(2020)
+      },
+      {
+        eligible_itt_subject: :foreign_languages,
+        claim_academic_year: AcademicYear::Type.new.serialize(AcademicYear.new(2023)),
+        itt_academic_year: AcademicYear.new(2020)
+      },
+      {
+        eligible_itt_subject: :mathematics,
+        claim_academic_year: AcademicYear::Type.new.serialize(AcademicYear.new(2024)),
+        itt_academic_year: AcademicYear.new(2019)
+      },
+      {
+        eligible_itt_subject: :physics,
+        claim_academic_year: AcademicYear::Type.new.serialize(AcademicYear.new(2024)),
+        itt_academic_year: AcademicYear.new(2020)
+      },
+      {
+        eligible_itt_subject: :chemistry,
+        claim_academic_year: AcademicYear::Type.new.serialize(AcademicYear.new(2024)),
+        itt_academic_year: AcademicYear.new(2020)
+      },
+      {
+        eligible_itt_subject: :foreign_languages,
+        claim_academic_year: AcademicYear::Type.new.serialize(AcademicYear.new(2024)),
+        itt_academic_year: AcademicYear.new(2020)
+      }
+    ].each do |spec|
+      context "with eligible ITT subject #{spec[:eligible_itt_subject]}" do
+        let(:eligible_itt_subject) { spec[:eligible_itt_subject] }
+
+        context "with claim academic year" do
+          let(:claim_academic_year) { spec[:claim_academic_year] }
+
+          it "returns ITT academic year #{spec[:itt_academic_year]}" do
+            expect(first_eligible_itt_academic_year).to eq spec[:itt_academic_year]
+          end
+        end
+      end
+    end
+  end
+
   describe "#reset_dependent_answers" do
     let!(:claim) { build_stubbed(:claim, :with_student_loan, eligibility: eligibility) }
+
     let(:eligibility) do
       build_stubbed(
         :early_career_payments_eligibility,
@@ -530,24 +629,6 @@ RSpec.describe EarlyCareerPayments::Eligibility, type: :model do
       expect { eligibility.reset_dependent_answers }
         .to change { eligibility.employed_directly }
         .from(false).to(nil)
-    end
-
-    it "resets 'postgraduate_masters_loan' when the value of 'claim.has_student_loan' changes from true to false" do
-      expect { eligibility.reset_dependent_answers }.not_to change { eligibility.attributes }
-
-      claim.has_student_loan = false
-      expect { eligibility.reset_dependent_answers }
-        .to change { eligibility.postgraduate_masters_loan }
-        .from(true).to(nil)
-    end
-
-    it "resets 'postgraduate_doctoral_loan' when the value of 'claim.has_student_loan' changes from true to false" do
-      expect { eligibility.reset_dependent_answers }.not_to change { eligibility.attributes }
-
-      claim.has_student_loan = false
-      expect { eligibility.reset_dependent_answers }
-        .to change { eligibility.postgraduate_doctoral_loan }
-        .from(true).to(nil)
     end
   end
 
@@ -632,79 +713,7 @@ RSpec.describe EarlyCareerPayments::Eligibility, type: :model do
     context "when saving in the 'itt_academic_year' context" do
       it "is not valid without a value for 'itt_academic_year'" do
         expect(EarlyCareerPayments::Eligibility.new).not_to be_valid(:"itt-year")
-        expect(EarlyCareerPayments::Eligibility.new(itt_academic_year: "2020_2021")).to be_valid(:"itt-year")
-      end
-    end
-
-    describe "when saving in the 'postgraduate_masters_loan' context" do
-      let!(:claim) { build_stubbed(:claim, :with_student_loan, eligibility: eligibility) }
-      let(:eligibility) do
-        build_stubbed(
-          :early_career_payments_eligibility,
-          :eligible,
-          employed_as_supply_teacher: true,
-          has_entire_term_contract: false,
-          employed_directly: false,
-          qualification: :undergraduate_itt,
-          eligible_itt_subject: :none_of_the_above,
-          teaching_subject_now: false,
-          postgraduate_masters_loan: nil
-        )
-      end
-
-      context "with claim having a student loan" do
-        it "is not valid without a value for 'postgraduate_masters_loan'" do
-          expect(eligibility).not_to be_valid(:"masters-loan")
-
-          eligibility.postgraduate_masters_loan = true
-          expect(eligibility).to be_valid(:"masters-loan")
-
-          eligibility.postgraduate_masters_loan = false
-          expect(eligibility).to be_valid(:"masters-loan")
-        end
-      end
-
-      context "with claim having no_student_loan" do
-        it "is valid without a value for 'postgraduate_masters_loan'" do
-          subject.validate(on: :"masters-loan")
-          expect(subject.errors[:"masters-loan"]).to be_empty
-        end
-      end
-    end
-
-    describe "when saving in the 'postgraduate_doctoral_loan' context" do
-      let!(:claim) { build_stubbed(:claim, :with_student_loan, eligibility: eligibility) }
-      let(:eligibility) do
-        build_stubbed(
-          :early_career_payments_eligibility,
-          :eligible,
-          employed_as_supply_teacher: true,
-          has_entire_term_contract: false,
-          employed_directly: false,
-          qualification: :undergraduate_itt,
-          eligible_itt_subject: :none_of_the_above,
-          teaching_subject_now: false,
-          postgraduate_doctoral_loan: nil
-        )
-      end
-
-      context "with claim having a student loan" do
-        it "is not valid without a value for 'postgraduate_doctoral_loan'" do
-          expect(eligibility).not_to be_valid(:"doctoral-loan")
-
-          eligibility.postgraduate_doctoral_loan = true
-          expect(eligibility).to be_valid(:"doctoral-loan")
-
-          eligibility.postgraduate_doctoral_loan = false
-          expect(eligibility).to be_valid(:"doctoral-loan")
-        end
-      end
-
-      context "with claim having no_student_loan" do
-        it "is valid without a value for 'postgraduate_doctoral_loan'" do
-          subject.validate(on: :"doctoral-loan")
-          expect(subject.errors[:"doctoral-loan"]).to be_empty
-        end
+        expect(EarlyCareerPayments::Eligibility.new(itt_academic_year: AcademicYear.new(2020))).to be_valid(:"itt-year")
       end
     end
   end

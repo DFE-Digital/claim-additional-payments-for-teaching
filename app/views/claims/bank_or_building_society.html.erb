@@ -2,7 +2,7 @@
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-    <%= render("shared/error_summary", instance: current_claim, errored_field_id_overrides: { bank_or_building_society: "bank_or_building_society_personal_bank_account" }) if current_claim.errors.any? %>
+    <%= render("shared/error_summary", instance: current_claim, errored_field_id_overrides: { bank_or_building_society: "claim_bank_or_building_society_personal_bank_account" }) if current_claim.errors.any? %>
     <%= form_for current_claim, url: claim_path(current_policy_routing_name) do |form| %>
       <%= form.hidden_field :bank_or_building_society %>
       <%= form_group_tag current_claim do %>

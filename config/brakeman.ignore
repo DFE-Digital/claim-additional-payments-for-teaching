@@ -1,6 +1,46 @@
 {
   "ignored_warnings": [
     {
+      "warning_type": "Dynamic Render Path",
+      "warning_code": 15,
+      "fingerprint": "23e1b8f42ab87b9f17f883de7ac8b7b11261ec3dd8f8ad11f06aaae2a3b6fc51",
+      "check_name": "Render",
+      "message": "Render path contains parameter value",
+      "file": "app/controllers/admin/tasks_controller.rb",
+      "line": 40,
+      "link": "https://brakemanscanner.org/docs/warning_types/dynamic_render_path/",
+      "code": "render(action => Claim.includes(:tasks).find(params[:claim_id]).tasks.where(:name => params[:name]).first.name, {})",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "Admin::TasksController",
+        "method": "update"
+      },
+      "user_input": "params[:name]",
+      "confidence": "Weak",
+      "note": "Create and update should be flagged but change is not different from existing behaviour, raising issue."
+    },
+    {
+      "warning_type": "Dynamic Render Path",
+      "warning_code": 15,
+      "fingerprint": "2e15a7fa4c8b8254b7724a1c5b8553cf4f7372f62b9401e1f5cbda1abe8c62ef",
+      "check_name": "Render",
+      "message": "Render path contains parameter value",
+      "file": "app/controllers/admin/tasks_controller.rb",
+      "line": 15,
+      "link": "https://brakemanscanner.org/docs/warning_types/dynamic_render_path/",
+      "code": "render(action => Claim.includes(:tasks).find(params[:claim_id]).tasks.find_or_initialize_by(:name => params[:name]).name, {})",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "Admin::TasksController",
+        "method": "show"
+      },
+      "user_input": "params[:name]",
+      "confidence": "Weak",
+      "note": "Constrained to valid input by routes"
+    },
+    {
       "warning_type": "SQL Injection",
       "warning_code": 0,
       "fingerprint": "46bfd0a9d4a19eb048a883184b501b060aa4d6006accc3c76bbfc00722b44dbf",
@@ -61,6 +101,6 @@
       "note": "We generate the filename based on non-user input so we can ignore this"
     }
   ],
-  "updated": "2020-03-24 11:25:44 +0000",
-  "brakeman_version": "4.8.0"
+  "updated": "2021-07-23 17:21:29 +0100",
+  "brakeman_version": "5.0.4"
 }

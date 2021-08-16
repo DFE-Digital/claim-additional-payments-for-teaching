@@ -42,7 +42,7 @@
             <tr class="govuk-table__row">
               <th scope="row" class="govuk-table__header"><%= claim.reference %></th>
               <td class="govuk-table__cell"><%= claim.full_name %></td>
-              <td class="govuk-table__cell"><%= id_verification_status(claim) %></td>
+              <td class="govuk-table__cell"><%= identity_confirmation_task_claim_verifier_match_status_tag(claim) %></td>
               <td class="govuk-table__cell"><%= claim.policy.short_name %></td>
               <% if claims_with_warning.nonzero? %>
                 <td class="govuk-table__cell"><%= decision_deadline_warning(claim) %></td>

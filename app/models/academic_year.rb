@@ -20,10 +20,16 @@ class AcademicYear
   # See the Claim#academic_year attribute.
   class Type < ActiveRecord::Type::Value
     def serialize(value)
+      return nil if value.nil?
+
       value.to_s
     end
 
     def cast(value)
+      return nil if value.nil?
+
+      value = nil if value == "None"
+
       AcademicYear.new(value)
     end
   end
@@ -47,17 +53,26 @@ class AcademicYear
     end
   end
 
-  def initialize(start_year)
-    @start_year = start_year.to_s.split("/").first.to_i
-    @end_year = @start_year + 1
+  def initialize(start_year = nil)
+    self.years = start_year
+  end
+
+  def eql?(other)
+    to_s == other.to_s
   end
 
   def to_s(format = :default)
+    return "None" if [start_year, end_year].include? nil
+
     if format == :long
       "#{start_year} to #{end_year}"
     else
       "#{start_year}/#{end_year}"
     end
+  end
+
+  def ==(other)
+    to_s == other.to_s
   end
 
   def <=>(other)
@@ -79,5 +94,16 @@ class AcademicYear
 
   def +(other)
     AcademicYear.new(start_year + other)
+  end
+
+  private
+
+  def years=(start_year)
+    if start_year.nil?
+      @start_year = @end_year = nil
+    else
+      @start_year = start_year.to_s.split("/").first.to_i
+      @end_year = self.start_year + 1
+    end
   end
 end

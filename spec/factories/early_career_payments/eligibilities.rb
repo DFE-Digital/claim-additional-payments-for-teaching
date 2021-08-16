@@ -9,9 +9,7 @@ FactoryBot.define do
       qualification { :postgraduate_itt }
       eligible_itt_subject { :mathematics }
       teaching_subject_now { true }
-      itt_academic_year { "2018_2019" }
-      postgraduate_masters_loan { true }
-      postgraduate_doctoral_loan { true }
+      itt_academic_year { AcademicYear::Type.new.serialize(AcademicYear.new(2018)) }
     end
   end
 end

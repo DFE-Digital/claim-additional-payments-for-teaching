@@ -57,11 +57,15 @@ RSpec.describe MathsAndPhysics::SlugSequence do
       expect(slug_sequence.slugs).not_to include("student-loan-country")
       expect(slug_sequence.slugs).not_to include("student-loan-how-many-courses")
       expect(slug_sequence.slugs).not_to include("student-loan-start-date")
+      expect(slug_sequence.slugs).not_to include("masters-loan")
+      expect(slug_sequence.slugs).not_to include("doctoral-loan")
 
       claim.has_student_loan = true
       expect(slug_sequence.slugs).to include("student-loan-country")
       expect(slug_sequence.slugs).to include("student-loan-how-many-courses")
       expect(slug_sequence.slugs).to include("student-loan-start-date")
+      expect(slug_sequence.slugs).to include("masters-loan")
+      expect(slug_sequence.slugs).to include("doctoral-loan")
     end
 
     it "excludes the remaining student loan plan slugs if the claimant received their student loan in a Plan 1 country" do

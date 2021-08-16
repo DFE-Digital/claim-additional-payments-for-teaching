@@ -1,0 +1,44 @@
+<% content_for(:page_title, page_title(t("questions.postgraduate_masters_loan"), policy: current_policy_routing_name, show_error: current_claim.errors.any?)) %>
+<% path_for_form = current_claim.persisted? ? claim_path(current_policy_routing_name) : claims_path(current_policy_routing_name) %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= render("shared/error_summary", instance: current_claim, errored_field_id_overrides: { postgraduate_masters_loan: "claim_postgraduate_masters_loan_true" }) if current_claim.errors.any? %>
+    <%= form_for current_claim, url: path_for_form do |form| %>
+      <span class="govuk-caption-xl">About your student loans</span>
+      <%= form_group_tag current_claim do %>
+        <%= form.hidden_field :postgraduate_masters_loan %>
+        <div class="govuk-form-group">
+          <fieldset class="govuk-fieldset">
+            <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
+              <h1 class="govuk-fieldset__heading">
+                <%= t("questions.postgraduate_masters_loan") %>
+              </h1>
+            </legend>
+
+            <span class="govuk-hint" id="masters-loan-hint">
+              Postgraduate Masters Loans have only been available since the 2016/17
+              academic year. This is different to the student loan you took out as an
+              undergraduate. They are different to ITT course loans.
+            </span>
+
+            <%= errors_tag current_claim, :postgraduate_masters_loan %>
+
+            <div class="govuk-radios govuk-radios--inline">
+              <div class="govuk-radios__item">
+                <%= form.radio_button(:postgraduate_masters_loan, true, class: "govuk-radios__input") %>
+                <%= form.label :postgraduate_masters_loan_true, "Yes", class: "govuk-label govuk-radios__label" %>
+              </div>
+              <div class="govuk-radios__item">
+                <%= form.radio_button(:postgraduate_masters_loan, false, class: "govuk-radios__input") %>
+                <%= form.label :postgraduate_masters_loan_false, "No", class: "govuk-label govuk-radios__label" %>
+              </div>
+            </div>
+          </fieldset>
+        </div>
+      <% end %>
+
+      <%= form.submit "Continue", class: "govuk-button", data: {module: "govuk-button"} %>
+    <% end %>
+  </div>
+</div>

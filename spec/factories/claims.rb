@@ -10,8 +10,18 @@ FactoryBot.define do
     end
 
     after(:build) do |claim, evaluator|
+      extend Admin::PolicyConfigurationsHelper
+
       claim.eligibility = build(*evaluator.eligibility_factory) unless claim.eligibility
-      claim.academic_year = "2019/2020" unless claim.academic_year_before_type_cast
+
+      claim_academic_year =
+        if claim.policy == EarlyCareerPayments
+          AcademicYear::Type.new.serialize(options_for_academic_year.sample)
+        else
+          AcademicYear::Type.new.serialize(AcademicYear.new(2019))
+        end
+
+      claim.academic_year = claim_academic_year unless claim.academic_year_before_type_cast
     end
 
     trait :submittable do
@@ -20,7 +30,7 @@ FactoryBot.define do
       first_name { "Jo" }
       surname { "Bloggs" }
       address_line_1 { "1 Test Road" }
-      postcode { "AB1 2CD" }
+      postcode { "WIA OAA" }
       date_of_birth { 20.years.ago.to_date }
       teacher_reference_number { generate(:teacher_reference_number) }
       national_insurance_number { generate(:national_insurance_number) }
@@ -103,6 +113,8 @@ FactoryBot.define do
       student_loan_start_date { StudentLoan::BEFORE_1_SEPT_2012 }
       # student_loan_start_date { StudentLoan::ON_OR_AFTER_1_SEPT_2012 }
       student_loan_plan { StudentLoan::PLAN_1 }
+      postgraduate_masters_loan { false }
+      postgraduate_doctoral_loan { false }
     end
 
     trait :with_student_loan_for_two_courses do
@@ -124,6 +136,8 @@ FactoryBot.define do
       student_loan_courses { nil }
       student_loan_start_date { nil }
       student_loan_plan { nil }
+      postgraduate_masters_loan { nil }
+      postgraduate_doctoral_loan { nil }
     end
   end
 end

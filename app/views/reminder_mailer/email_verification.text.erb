@@ -1,0 +1,9 @@
+Dear <%= @display_name %>,
+
+This is your 6-digit one time password:
+
+<%= @one_time_password %>
+
+It is valid for <%= one_time_password_validity_duration %>. We recommend you copy and paste this into the text field on the email verification screen in the service.
+
+If you have any issues with the password, email us at: <%= support_email_address("early-career-payments") %> with your unique reference and your query.
