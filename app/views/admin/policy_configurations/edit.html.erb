@@ -36,9 +36,10 @@
           </legend>
           <div class="govuk-radios govuk-radios--conditional" data-module="govuk-radios">
             <div class="govuk-radios__item">
-              <%= f.radio_button :open_for_submissions, true, class: "govuk-radios__input" %>
+              <%= f.radio_button :open_for_submissions, true, class: "govuk-radios__input", data: { aria_controls: "reminders-warning-message" } %>
               <%= f.label :open_for_submissions, "Open", value: true, class: "govuk-label govuk-radios__label" %>
             </div>
+            <%= render 'ecp_warning' %>
             <div class="govuk-radios__item">
               <%= f.radio_button :open_for_submissions, false, class: "govuk-radios__input", data: { aria_controls: "conditional-availability-message-conditional" } %>
               <%= f.label :open_for_submissions, "Closed", value: false, class: "govuk-label govuk-radios__label" %>

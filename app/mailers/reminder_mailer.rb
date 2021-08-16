@@ -6,8 +6,7 @@ class ReminderMailer < ApplicationMailer
     @reminder = reminder
     @one_time_password = one_time_password
     @display_name = reminder.full_name
-    @subject = "Reminder email verification"
-
+    @subject = "Please verify your reminder email"
     send_mail
   end
 
@@ -17,12 +16,19 @@ class ReminderMailer < ApplicationMailer
     send_mail
   end
 
+  def reminder(reminder, year)
+    @reminder = reminder
+    @year = year
+    @subject = "The #{year} early-career payment window is now open"
+    send_mail
+  end
+
   private
 
   def send_mail
     view_mail(
       NOTIFY_TEMPLATE_ID,
-      to: @reminder.email_address,
+      to: @reminder,
       subject: @subject
     )
   end
