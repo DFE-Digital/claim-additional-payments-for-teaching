@@ -1,4 +1,4 @@
-Remove-Item '.terraform' -Recurse
+# Remove-Item '.terraform' -Recurse
 
 # These relate to the location of the key vault holding the informationi
 $AzureTenantId = "9c7d9dd3-840c-4b3f-818e-552865082e16"
