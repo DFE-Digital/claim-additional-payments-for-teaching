@@ -1,7 +1,7 @@
 class SendReminderEmailsJob < ApplicationJob
   def perform(year)
     reminders.each do |reminder|
-      ReminderEmailJob.perform_later(reminder, year)
+      SendReminderEmailJob.perform_later(reminder, year)
     end
   end
 

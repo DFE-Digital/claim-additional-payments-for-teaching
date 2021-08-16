@@ -30,7 +30,7 @@ module Admin
     def send_reminders
       return unless policy_configuration.open_for_submissions && policy_configuration.early_career_payments?
 
-      SendReminderEmailsJob.peform_later(policy_configuration.current_academic_year)
+      SendReminderEmailsJob.perform_later(policy_configuration.current_academic_year.to_s)
     end
   end
 end

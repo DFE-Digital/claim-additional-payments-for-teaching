@@ -63,12 +63,11 @@ RSpec.feature "Service configuration" do
   context "Reminders exist" do
     let(:policy_configuration) { policy_configurations(:early_career_payments) }
     let(:count) { [*1..5].sample }
-    let(:reminders) do
-      create_list(:reminder, count)
+    before do
+      create_list(:reminder, count, email_verified: true)
     end
-    scenario "Service operator opens an ECP service for submissions" do
+    scenario "Service operator opens an ECP service for submissions", js: true do
       policy_configuration.update(open_for_submissions: false)
-  
       sign_in_as_service_operator
   
       click_on "Manage services"
