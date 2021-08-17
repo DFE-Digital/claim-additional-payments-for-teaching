@@ -128,6 +128,8 @@ USER root
 RUN mkdir -p ${APP_HOME}/log
 RUN mkdir -p ${APP_HOME}/tmp
 RUN chmod -R 777 ${APP_HOME}
+RUN chown -R appuser ${APP_HOME}/log
+RUN chown -R appuser ${APP_HOME}/tmp
 
 USER appuser
 
