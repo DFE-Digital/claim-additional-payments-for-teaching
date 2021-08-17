@@ -1,6 +1,6 @@
 class SendReminderEmailsJob < ApplicationJob
   def perform(year)
-    reminders.each do |reminder|
+    reminders.find_each(batch_size: 100) do |reminder|
       SendReminderEmailJob.perform_later(reminder, year)
     end
   end
