@@ -83,6 +83,7 @@ class Claim < ApplicationRecord
     payment_id: false,
     academic_year: false,
     personal_data_removed_at: false,
+    email_verified: false,
     one_time_password: true,
     sent_one_time_password_at: false
   }.freeze
