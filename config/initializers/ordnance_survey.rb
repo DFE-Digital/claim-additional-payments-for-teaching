@@ -8,6 +8,8 @@ OrdnanceSurvey.configure do |config|
       string
     when :hash
       JSON.parse(string.gsub("=>", ":"), symbolize_names: true)
+    when :integer
+      string.to_i
     end
   end
 
