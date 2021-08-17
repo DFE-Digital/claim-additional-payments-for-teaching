@@ -116,6 +116,8 @@ en:
     undo_decision:
       approved: "Undo approval"
       rejected: "Undo rejection"
+    policy_configuration:
+      reminder_warning: "Setting the service status to open will send %{count} reminder emails."
   answers:
     qts_award_years:
       before_cut_off_date: "In or before the academic year %{year}"

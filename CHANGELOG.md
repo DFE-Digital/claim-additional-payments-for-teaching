@@ -13,6 +13,8 @@ The format is based on [Keep a Changelog]
   - Create admin claim note when identity confirmation mailer is sent
   - Amend admin timeout from 30 mins to 60 mins
   - Add ECP admin claim qualifications task screen
+  - Warning added upon changing ECP to open
+  - Reminder emails triggered upon opening ECP
   - Add ECP admin claim employment task screen
 - All policies
   - Home Address selection

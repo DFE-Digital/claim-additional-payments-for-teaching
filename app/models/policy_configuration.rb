@@ -25,4 +25,8 @@ class PolicyConfiguration < ApplicationRecord
   def policy
     policy_type.constantize
   end
+
+  def early_career_payments?
+    policy == EarlyCareerPayments
+  end
 end

@@ -87,7 +87,7 @@ class RemindersController < BasePublicController
   end
 
   def reminder_set_email
-    return unless current_slug == "set"
+    return unless current_slug == "set" && current_reminder.email_verified?
 
     ReminderMailer.reminder_set(current_reminder).deliver_now
   end

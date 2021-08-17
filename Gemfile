@@ -112,6 +112,7 @@ group :test do
   gem "launchy"
   gem "climate_control"
   gem "simplecov", require: false
+  gem "faker", "~> 2.0"
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem

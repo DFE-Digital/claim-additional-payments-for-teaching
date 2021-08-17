@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_08_11_120912) do
+ActiveRecord::Schema.define(version: 2021_08_13_064629) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -68,6 +68,7 @@ ActiveRecord::Schema.define(version: 2021_08_11_120912) do
     t.string "mobile_number"
     t.boolean "postgraduate_masters_loan"
     t.boolean "postgraduate_doctoral_loan"
+    t.boolean "email_verified", default: false
     t.index ["academic_year"], name: "index_claims_on_academic_year"
     t.index ["created_at"], name: "index_claims_on_created_at"
     t.index ["eligibility_type", "eligibility_id"], name: "index_claims_on_eligibility_type_and_eligibility_id"
@@ -223,6 +224,8 @@ ActiveRecord::Schema.define(version: 2021_08_11_120912) do
     t.string "email_address"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.boolean "email_verified", default: false
+    t.datetime "email_sent_at"
   end
 
   create_table "schools", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
