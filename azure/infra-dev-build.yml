@@ -25,6 +25,7 @@ steps:
 
       docker-compose --file=docker-compose.test.yml build
     displayName: Build test Docker image
+    
   - script: docker-compose --file=docker-compose.test.yml run --rm test
     displayName: Run tests on Docker
 
@@ -55,7 +56,7 @@ steps:
   - script: |
       docker build \
         --file=Dockerfile \
-        --tag=local/dfe-teachers-payment-service:web-dependencies \
+        --tag=local/dfe-teachers-payment-service:web-dependencies-infra \
         --target=dependencies \
         .
     displayName: Build web dependencies Docker image without cache
@@ -80,7 +81,7 @@ steps:
       docker build \
         --file=Dockerfile \
         --cache-from=local/dfe-teachers-payment-service:web-dependencies \
-        --tag=local/dfe-teachers-payment-service:web \
+        --tag=local/dfe-teachers-payment-service:web-infra \
         --target=web \
         --build-arg GIT_COMMIT_HASH=$(Build.SourceVersion) \
         .
@@ -89,32 +90,32 @@ steps:
     # condition: eq(variables['Build.SourceBranch'], 'refs/heads/master')
   # Push test images
   - script: |
-      docker tag local/dfe-teachers-payment-service:test-dependencies $(dockerRegistry)/$(dockerImageName):cache-test-dependencies
+      docker tag local/dfe-teachers-payment-service:test-dependencies $(dockerRegistry)/$(dockerImageName):cache-test-dependencies-infra
 
-      docker push $(dockerRegistry)/$(dockerImageName):cache-test-dependencies
+      docker push $(dockerRegistry)/$(dockerImageName):cache-test-dependencies-infra
     displayName: Push test dependencies Docker image for caching
 
     # condition: eq(variables['Build.SourceBranch'], 'refs/heads/master')
   - script: |
-      docker tag local/dfe-teachers-payment-service:test $(dockerRegistry)/$(dockerImageName):cache-test
+      docker tag local/dfe-teachers-payment-service:test $(dockerRegistry)/$(dockerImageName):cache-test-infra
 
-      docker push $(dockerRegistry)/$(dockerImageName):cache-test
+      docker push $(dockerRegistry)/$(dockerImageName):cache-test-infra
     displayName: Push test Docker image for caching
 
     # condition: eq(variables['Build.SourceBranch'], 'refs/heads/master')
   # Push web images
   - script: |
-      docker tag local/dfe-teachers-payment-service:web-dependencies $(dockerRegistry)/$(dockerImageName):cache-web-dependencies
+      docker tag local/dfe-teachers-payment-service:web-dependencies $(dockerRegistry)/$(dockerImageName):cache-web-dependencies-infra
 
-      docker push $(dockerRegistry)/$(dockerImageName):cache-web-dependencies
+      docker push $(dockerRegistry)/$(dockerImageName):cache-web-dependencies-infra
     displayName: Push web dependencies Docker image for caching
 
     # condition: eq(variables['Build.SourceBranch'], 'refs/heads/master')
   - script: |
-      docker tag local/dfe-teachers-payment-service:web $(dockerRegistry)/$(dockerImageName):$(Build.BuildNumber)
-      docker tag local/dfe-teachers-payment-service:web $(dockerRegistry)/$(dockerImageName):latest
+      docker tag local/dfe-teachers-payment-service:web $(dockerRegistry)/$(dockerImageName):$(Build.BuildNumber)-infra
+      docker tag local/dfe-teachers-payment-service:web $(dockerRegistry)/$(dockerImageName):latest-infra
 
-      docker push $(dockerRegistry)/$(dockerImageName):$(Build.BuildNumber)
-      docker push $(dockerRegistry)/$(dockerImageName):latest
+      docker push $(dockerRegistry)/$(dockerImageName):$(Build.BuildNumber)-infra
+      docker push $(dockerRegistry)/$(dockerImageName):latest-infra
     displayName: Push web Docker image
     # condition: eq(variables['Build.SourceBranch'], 'refs/heads/master')
