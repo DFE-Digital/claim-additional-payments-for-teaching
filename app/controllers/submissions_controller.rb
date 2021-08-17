@@ -15,6 +15,6 @@ class SubmissionsController < BasePublicController
 
   def show
     render :show
-    clear_claim_session
+    clear_claim_session unless current_claim.has_ecp_policy?
   end
 end
