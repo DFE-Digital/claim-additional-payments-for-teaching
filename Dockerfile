@@ -177,6 +177,6 @@ CMD [ "bundle", "exec", "rake" ]
 USER root
 
 RUN chown -R appuser:appgroup ${APP_HOME}
-RUN chown -R appuser:appgroup ${DEPS_HOME}
+# RUN chown -R appuser:appgroup ${DEPS_HOME}
 
 USER appuser
