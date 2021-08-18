@@ -178,5 +178,6 @@ USER root
 
 RUN chown -R appuser:appgroup ${APP_HOME}/log
 RUN chown -R appuser:appgroup ${APP_HOME}/app
+RUN chown -R appuser:appgroup ${APP_HOME}/tmp
 
 USER appuser
