@@ -4,7 +4,7 @@
 
 FROM ruby:2.6.7-alpine AS base
 
-# RUN addgroup -S appgroup && adduser -S appuser -G appgroup
+RUN addgroup -S appgroup && adduser -S appuser -G appgroup
 
 USER root
 
@@ -15,8 +15,6 @@ RUN apk add nodejs
 RUN apk add curl
 RUN apk add libc6-compat
 RUN apk add shared-mime-info
-
-# USER appuser
 
 ENV APP_HOME /app
 ENV DEPS_HOME /deps
@@ -31,8 +29,6 @@ ENV NODE_ENV ${RAILS_ENV:-production}
 
 FROM base AS dependencies
 
-# USER root
-
 RUN apk add build-base
 RUN apk add git
 RUN apk add yarn
@@ -40,11 +36,8 @@ RUN apk add yarn
 # Set up install environment
 RUN mkdir -p ${DEPS_HOME}
 WORKDIR ${DEPS_HOME}
-RUN chmod -R 777 ${DEPS_HOME}
 
 # End
-
-# USER appuser
 
 # Install Ruby dependencies
 COPY Gemfile ${DEPS_HOME}/Gemfile
@@ -70,8 +63,6 @@ RUN bundle install --retry 3
 COPY package.json ${DEPS_HOME}/package.json
 COPY yarn.lock ${DEPS_HOME}/yarn.lock
 
-# USER root
-
 RUN if [ ${RAILS_ENV} = "production" ]; then \
   yarn install --frozen-lockfile --production; \
   else \
@@ -85,15 +76,11 @@ RUN if [ ${RAILS_ENV} = "production" ]; then \
 
 FROM base AS web
 
-# USER root
 
 # Set up install environment
 RUN mkdir -p ${APP_HOME}
 WORKDIR ${APP_HOME}
-RUN chmod 777 ${APP_HOME}
 # End
-
-# USER appuser
 
 # Download and install filebeat for sending logs to logstash
 ENV FILEBEAT_VERSION=7.6.2
@@ -122,16 +109,9 @@ COPY --from=dependencies ${GEM_HOME} ${GEM_HOME}
 COPY --from=dependencies ${DEPS_HOME}/node_modules ${APP_HOME}/node_modules
 # End
 
-# USER root
-
 # Copy app code (sorted by vague frequency of change for caching)
 RUN mkdir -p ${APP_HOME}/log
 RUN mkdir -p ${APP_HOME}/tmp
-RUN chmod -R 777 ${APP_HOME}
-# RUN chown -R appuser ${APP_HOME}/log
-# RUN chown -R appuser ${APP_HOME}/tmp
-# 
-# USER appuser
 
 COPY config.ru ${APP_HOME}/config.ru
 COPY Rakefile ${APP_HOME}/Rakefile
@@ -144,8 +124,6 @@ COPY config ${APP_HOME}/config
 COPY db ${APP_HOME}/db
 COPY app ${APP_HOME}/app
 # End
-
-# USER root
 
 RUN if [ ${RAILS_ENV} = "production" ]; then \
   DFE_SIGN_IN_API_CLIENT_ID= \
@@ -160,8 +138,6 @@ RUN if [ ${RAILS_ENV} = "production" ]; then \
   fi
 
 EXPOSE 3000
-
-# USER appuser
 
 ARG GIT_COMMIT_HASH
 ENV GIT_COMMIT_HASH ${GIT_COMMIT_HASH}
@@ -180,11 +156,7 @@ FROM koalaman/shellcheck:stable AS shellcheck
 
 FROM web AS test
 
-# USER root
-
 RUN apk add chromium chromium-chromedriver
-
-# USER appuser
 
 # Install ShellCheck
 COPY --from=shellcheck / /opt/shellcheck/
@@ -200,3 +172,11 @@ COPY . ${APP_HOME}/
 # End
 
 CMD [ "bundle", "exec", "rake" ]
+
+# move all app directories and files to appuser and the appgroup
+USER root
+
+RUN chown -R appuser:appgroup ${APP_HOME}
+RUN chown -R appuser:appgroup ${DEPS_HOME}
+
+USER appuser
