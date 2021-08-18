@@ -1,6 +1,6 @@
 OrdnanceSurvey.configure do |config|
   def parse_string(string:, content_type: :string)
-    raise ArgumentError if [:hash, :integer, :string].exclude?(content_type)
+    raise ArgumentError if [:hash, :string].exclude?(content_type)
     return if string.blank?
 
     case content_type
@@ -8,8 +8,6 @@ OrdnanceSurvey.configure do |config|
       string
     when :hash
       JSON.parse(string.gsub("=>", ":"), symbolize_names: true)
-    when :integer
-      string.to_i
     end
   end
 
