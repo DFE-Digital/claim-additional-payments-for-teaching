@@ -13,6 +13,8 @@ class SubmissionsController < BasePublicController
     end
   end
 
+  # Clear session unless this was an ECP policy. If ECP policy, user has
+  # oppotunity to set a reminder up where name and email is re-used from claim.
   def show
     render :show
     clear_claim_session unless current_claim.has_ecp_policy?
