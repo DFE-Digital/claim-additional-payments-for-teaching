@@ -173,13 +173,13 @@ COPY . ${APP_HOME}/
 
 CMD [ "bundle", "exec", "rake" ]
 
-# move all app directories and files to appuser and the appgroup
-USER root
+# # move all app directories and files to appuser and the appgroup
+# USER root
 
-RUN chmod 777 -R ${APP_HOME}/app
+# RUN chmod 777 -R ${APP_HOME}/app
 
-RUN chown -R appuser:appgroup ${APP_HOME}/log
-RUN chown -R appuser:appgroup ${APP_HOME}/app
-RUN chown -R appuser:appgroup ${APP_HOME}/tmp
+# RUN chown -R appuser:appgroup ${APP_HOME}/log
+# RUN chown -R appuser:appgroup ${APP_HOME}/app
+# RUN chown -R appuser:appgroup ${APP_HOME}/tmp
 
-USER appuser
+# USER appuser
