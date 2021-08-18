@@ -12,5 +12,6 @@ RSpec.feature "Elible now can set a reminder for next year." do
     click_on "Continue"
     expect(page).to have_field("reminder_email_address", with: claim.email_address)
     expect(page).to have_field("reminder_full_name", with: claim.full_name)
+    click_on "Continue"
   end
 end

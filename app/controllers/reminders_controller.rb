@@ -1,6 +1,6 @@
 class RemindersController < BasePublicController
   helper_method :current_reminder
-  after_action :reminder_set_email, :clear_sessions, only: [:show]
+  after_action :reminder_set_email, only: [:show]
 
   def new
     render first_template_in_sequence

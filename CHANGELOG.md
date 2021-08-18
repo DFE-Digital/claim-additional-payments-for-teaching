@@ -24,6 +24,7 @@ The format is based on [Keep a Changelog]
   - Add posgraduate loans questions to M+P / TSLR journeys
   - Hiding mobile/SMS related OTP screens
 - ECP policies
+  - Adds set reminder flow to eligible now flow
 - DAC Accessiblity Report fixes
   - Incorrect aria value
   - Links opening in a new window

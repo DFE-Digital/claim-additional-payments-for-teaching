@@ -40,7 +40,7 @@ FactoryBot.define do
       bank_sort_code { rand(100000..999999) }
       bank_account_number { rand(10000000..99999999) }
       payroll_gender { :female }
-      provide_mobile_number { :false }
+      provide_mobile_number { false }
 
       eligibility_factory { ["#{policy.to_s.underscore}_eligibility".to_sym, :eligible] }
 
