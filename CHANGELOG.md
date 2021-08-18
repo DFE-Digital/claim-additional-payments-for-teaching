@@ -35,6 +35,8 @@ The format is based on [Keep a Changelog]
   - Multiple level 1 headings
   - Error skip links
   - Non-descriptive links
+- Google Analytics
+  - Add Google Tag Manager to admin and application
 
 ## [Release 092] - 2021-07-22
 

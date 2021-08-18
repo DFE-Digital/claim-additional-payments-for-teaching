@@ -22,6 +22,8 @@
     <% if ENV["GOOGLE_ANALYTICS_ID"] %>
       <%= javascript_include_tag "google_analytics/analytics" %>
       <%= javascript_include_tag "google_analytics", data: { "ga-id" => ENV["GOOGLE_ANALYTICS_ID"] } %>
+
+      <%= javascript_include_tag "google_gtm" %>
     <% end %>
 
     <%= stylesheet_link_tag 'application', media: 'all' %>
@@ -29,6 +31,10 @@
 
   <body class="govuk-template__body">
     <%= javascript_include_tag 'js_check' %>
+
+    <% if ENV["GOOGLE_ANALYTICS_ID"] %>
+      <%= javascript_include_tag "google_gtm_iframe" %>
+    <% end %>
 
     <%= render("timeout_dialog", timeout_in_minutes: claim_timeout_in_minutes, path_on_timeout: timeout_claim_path(current_policy_routing_name), refresh_session_path: refresh_session_path) if claim_in_progress? %>
 
