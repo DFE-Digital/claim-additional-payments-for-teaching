@@ -120,8 +120,8 @@ USER root
 RUN mkdir -p ${APP_HOME}/log
 RUN mkdir -p ${APP_HOME}/tmp
 RUN chmod -R 777 ${APP_HOME}
-RUN chown -R appuser:appgroup ${APP_HOME}/log
-RUN chown -R appuser:appgroup ${APP_HOME}/tmp
+RUN chown -hR appuser:appgroup ${APP_HOME}/log
+RUN chown -hR appuser:appgroup ${APP_HOME}/tmp
 
 USER appuser
 
@@ -137,6 +137,10 @@ COPY app ${APP_HOME}/app
 
 # End
 USER root
+
+RUN chmod -R 777 ${APP_HOME}/
+RUN chown -hR appuser:appgroup ${APP_HOME}/
+
 RUN if [ ${RAILS_ENV} = "production" ]; then \
   DFE_SIGN_IN_API_CLIENT_ID= \
   DFE_SIGN_IN_API_SECRET= \
