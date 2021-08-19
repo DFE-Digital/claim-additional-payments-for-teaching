@@ -76,7 +76,7 @@ RSpec.feature "Admin claim tasks update with DQT API" do
               "ittSubject1Code": "#{data.dig(:itt_subject_codes, 0)}",
               "ittSubject2Code": "#{data.dig(:itt_subject_codes, 1)}",
               "ittSubject3Code": "#{data.dig(:itt_subject_codes, 2)}",
-              "activeAlert": true
+              "activeAlert": #{data[:active_alert] || false}
             }
           ],
           "message": null
@@ -439,6 +439,51 @@ RSpec.feature "Admin claim tasks update with DQT API" do
             expect(notes).not_to include(
               have_text(%r{[Nn]ot matched}).and(
                 have_text("by an automated check")
+              )
+            )
+          end
+        end
+      end
+
+      context "with teacher status alert" do
+        let(:data) do
+          {
+            active_alert: true,
+            date_of_birth: claim.date_of_birth,
+            name: "#{claim.first_name} #{claim.surname}",
+            national_insurance_number: claim.national_insurance_number,
+            teacher_reference_number: claim.teacher_reference_number
+          }
+        end
+
+        context "admin claim tasks view" do
+          before { visit admin_claim_tasks_path(claim) }
+
+          scenario "shows identity confirmation passed" do
+            expect(task("Identity confirmation")).to have_text("Partial match")
+          end
+        end
+
+        context "admin claim tasks identity confirmation view" do
+          before { visit admin_claim_task_path(claim, :identity_confirmation) }
+
+          scenario "shows identity confirmation question" do
+            expect(page).to have_content("Did #{claim.full_name} submit the claim?")
+            expect(page).to have_link(href: admin_claim_notes_path(claim))
+          end
+        end
+
+        context "admin claim notes view" do
+          before { visit admin_claim_notes_path(claim) }
+
+          scenario "shows date of birth not matched by an automated check" do
+            expect(notes).to include(
+              have_text(
+                "IMPORTANT: Teacher’s identity has an active alert. Speak to manager before checking this claim."
+              ).and(
+                have_text(
+                  "by an automated check on #{I18n.l(claim.notes.last.created_at)}"
+                )
               )
             )
           end

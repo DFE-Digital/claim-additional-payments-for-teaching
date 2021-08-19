@@ -17,6 +17,7 @@ The format is based on [Keep a Changelog]
   - Reminder emails triggered upon opening ECP
   - Add ECP admin claim employment task screen
   - Remove verify notice from claim summary
+  - Add a note if DQT active alert flag is set to true
 - All policies
   - Home Address selection
     - Add home address search screen to claim journey

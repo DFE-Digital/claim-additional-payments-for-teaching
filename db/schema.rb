@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_08_13_064629) do
+ActiveRecord::Schema.define(version: 2021_08_19_171001) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -131,6 +131,8 @@ ActiveRecord::Schema.define(version: 2021_08_13_064629) do
     t.integer "eligible_itt_subject"
     t.boolean "teaching_subject_now"
     t.string "itt_academic_year", limit: 9
+    t.boolean "postgraduate_masters_loan"
+    t.boolean "postgraduate_doctoral_loan"
     t.uuid "current_school_id"
     t.index ["current_school_id"], name: "index_early_career_payments_eligibilities_on_current_school_id"
   end
@@ -171,7 +173,6 @@ ActiveRecord::Schema.define(version: 2021_08_13_064629) do
     t.uuid "created_by_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.index ["claim_id", "created_at"], name: "index_notes_on_claim_id_and_created_at", unique: true
     t.index ["claim_id"], name: "index_notes_on_claim_id"
     t.index ["created_by_id"], name: "index_notes_on_created_by_id"
   end

@@ -20,7 +20,7 @@ RSpec.feature "Admin claim tasks update with DQT CSV" do
     attach_file("Upload a CSV file", example_dqt_report_csv.path)
 
     click_on "Upload"
-    expect(page).to have_content "DQT report uploaded successfully. Automatically completed 10 tasks for 7 checked claims."
+    expect(page).to have_content "DQT report uploaded successfully. Automatically completed 13 tasks for 7 checked claims."
 
     expect(claim_with_eligible_dqt_record.tasks.find_by!(name: "qualifications").passed?).to eq(true)
     expect(claim_with_eligible_dqt_record.tasks.find_by!(name: "identity_confirmation").passed?).to eq(true)
