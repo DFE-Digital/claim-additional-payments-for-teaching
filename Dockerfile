@@ -138,7 +138,7 @@ COPY app ${APP_HOME}/app
 # End
 USER root
 
-RUN chmod -hR 777 ${APP_HOME}/
+RUN chmod -R 777 ${APP_HOME}/
 RUN chown -hR appuser:appgroup ${APP_HOME}/
 
 RUN if [ ${RAILS_ENV} = "production" ]; then \
