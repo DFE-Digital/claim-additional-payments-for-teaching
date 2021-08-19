@@ -197,6 +197,8 @@ RUN chown -hR appuser:appgroup ${APP_HOME}/log
 RUN chown -hR appuser:appgroup ${APP_HOME}/app
 RUN chown -hR appuser:appgroup ${APP_HOME}/tmp
 
+RUN touch ${APP_HOME}/log/production.log
+
 RUN chmod 0666 ${APP_HOME}/log/production.log
 
 USER appuser
