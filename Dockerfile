@@ -119,9 +119,9 @@ USER root
 # Copy app code (sorted by vague frequency of change for caching)
 RUN mkdir -p ${APP_HOME}/log
 RUN mkdir -p ${APP_HOME}/tmp
-RUN chmod -R 777 ${APP_HOME}
-RUN chown -R appuser:appgroup ${APP_HOME}/log
-RUN chown -R appuser:appgroup ${APP_HOME}/tmp
+RUN chmod -hR 777 ${APP_HOME}
+RUN chown -hR appuser:appgroup ${APP_HOME}/log
+RUN chown -hR appuser:appgroup ${APP_HOME}/tmp
 
 USER appuser
 
@@ -137,6 +137,10 @@ COPY app ${APP_HOME}/app
 
 # End
 USER root
+
+RUN chmod -hR 777 ${APP_HOME}/
+RUN chown -hR appuser:appgroup ${APP_HOME}/
+
 RUN if [ ${RAILS_ENV} = "production" ]; then \
   DFE_SIGN_IN_API_CLIENT_ID= \
   DFE_SIGN_IN_API_SECRET= \
