@@ -14,15 +14,19 @@ module AutomatedChecks
       def perform
         return unless awaiting_task?("identity_confirmation")
 
-        # Order matters so that subsequent conditions in methods fall through to execute the right thing
+        # Order of matching matters so that subsequent conditions in methods fall through to execute the right thing
         no_match ||
-          complete_match ||
-          partial_match
+          partial_match ||
+          complete_match
       end
 
       private
 
       attr_accessor :admin_user, :claim, :dqt_teacher_status
+
+      def active_alert?
+        dqt_teacher_status[:active_alert]
+      end
 
       def awaiting_task?(task_name)
         claim.tasks.none? { |task| task.name == task_name }
@@ -32,7 +36,8 @@ module AutomatedChecks
         return unless trn_matched? &&
           national_insurance_number_matched? &&
           name_matched? &&
-          dob_matched?
+          dob_matched? &&
+          !active_alert?
 
         create_task(match: :all, passed: true)
       end
@@ -91,26 +96,32 @@ module AutomatedChecks
       end
 
       def partial_match
-        if trn_matched? && name_matched? && dob_matched?
+        if !national_insurance_number_matched?
           create_field_note(name: "National Insurance number")
 
           return create_task(match: :any)
         end
 
-        if trn_matched? && national_insurance_number_matched? && dob_matched?
+        if !name_matched?
           create_field_note(name: "First name or surname")
 
           return create_task(match: :any)
         end
 
-        if trn_matched? && national_insurance_number_matched? && name_matched?
+        if !dob_matched?
           create_field_note(name: "Date of birth")
 
           return create_task(match: :any)
         end
 
-        if national_insurance_number_matched? && name_matched? & dob_matched?
+        if !trn_matched?
           create_field_note(name: "Teacher reference number")
+
+          return create_task(match: :any)
+        end
+
+        if active_alert?
+          create_note(body: "IMPORTANT: Teacher’s identity has an active alert. Speak to manager before checking this claim.")
 
           create_task(match: :any)
         end

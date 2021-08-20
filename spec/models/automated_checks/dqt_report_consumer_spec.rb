@@ -17,7 +17,7 @@ RSpec.describe AutomatedChecks::DqtReportConsumer do
     before { dqt_report_consumer.ingest }
 
     it "sets attributes that report the number of tasks automatically completed and the number of claims checked" do
-      expect(dqt_report_consumer.completed_tasks).to eq(8)
+      expect(dqt_report_consumer.completed_tasks).to eq(11)
       expect(dqt_report_consumer.total_claims_checked).to eq(6)
     end
 

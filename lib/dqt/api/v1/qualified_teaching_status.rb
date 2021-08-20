@@ -32,7 +32,7 @@ module Dqt
               first_item[:ittSubject2Code],
               first_item[:ittSubject3Code]
             ],
-            active_alert: true
+            active_alert: first_item[:activeAlert]
           }
         end
 

@@ -28,7 +28,7 @@ module AutomatedChecks
                   "ittSubject1Code": "#{data.dig(:itt_subject_codes, 0)}",
                   "ittSubject2Code": "#{data.dig(:itt_subject_codes, 1)}",
                   "ittSubject3Code": "#{data.dig(:itt_subject_codes, 2)}",
-                  "activeAlert": true
+                  "activeAlert": #{data[:active_alert] || false}
                 }
               ],
               "message": null
@@ -551,6 +551,68 @@ module AutomatedChecks
               before { perform }
 
               it { is_expected.to eq(nil) }
+            end
+          end
+
+          context "with teacher status alert" do
+            let(:data) do
+              {
+                active_alert: true,
+                date_of_birth: claim_arg.date_of_birth,
+                name: "#{claim_arg.first_name} #{claim_arg.surname}",
+                national_insurance_number: claim_arg.national_insurance_number,
+                teacher_reference_number: claim_arg.teacher_reference_number
+              }
+            end
+
+            it { is_expected.to be_an_instance_of(Task) }
+
+            describe "identity confirmation task" do
+              subject(:identity_confirmation_task) { claim_arg.tasks.find_by(name: "identity_confirmation") }
+
+              before { perform }
+
+              describe "#claim_verifier_match" do
+                subject(:claim_verifier_match) { identity_confirmation_task.claim_verifier_match }
+
+                it { is_expected.to eq "any" }
+              end
+
+              describe "#created_by" do
+                subject(:created_by) { identity_confirmation_task.created_by }
+
+                it { is_expected.to eq nil }
+              end
+
+              describe "#passed" do
+                subject(:passed) { identity_confirmation_task.passed }
+
+                it { is_expected.to eq nil }
+              end
+
+              describe "#manual" do
+                subject(:manual) { identity_confirmation_task.manual }
+
+                it { is_expected.to eq false }
+              end
+            end
+
+            describe "note" do
+              subject(:note) { claim_arg.notes.last }
+
+              before { perform }
+
+              describe "#body" do
+                subject(:body) { note.body }
+
+                it { is_expected.to eq("IMPORTANT: Teacher’s identity has an active alert. Speak to manager before checking this claim.") }
+              end
+
+              describe "#created_by" do
+                subject(:created_by) { note.created_by }
+
+                it { is_expected.to eq(nil) }
+              end
             end
           end
         end
