@@ -13,6 +13,8 @@ The format is based on [Keep a Changelog]
   - Create admin claim note when identity confirmation mailer is sent
   - Amend admin timeout from 30 mins to 60 mins
   - Add ECP admin claim qualifications task screen
+  - Warning added upon changing ECP to open
+  - Reminder emails triggered upon opening ECP
   - Add ECP admin claim employment task screen
 - All policies
   - Home Address selection
@@ -23,6 +25,8 @@ The format is based on [Keep a Changelog]
       when on the two address auto-population screens
   - Add posgraduate loans questions to M+P / TSLR journeys
   - Hiding mobile/SMS related OTP screens
+  - Update Northamptonshire local authority to reflect GIAS changes 1st April
+    2021
 - ECP policies
   - Adds set reminder flow to eligible now flow
 - DAC Accessiblity Report fixes
@@ -32,6 +36,8 @@ The format is based on [Keep a Changelog]
   - Multiple level 1 headings
   - Error skip links
   - Non-descriptive links
+- Google Analytics
+  - Add Google Tag Manager to admin and application
 
 ## [Release 092] - 2021-07-22
 

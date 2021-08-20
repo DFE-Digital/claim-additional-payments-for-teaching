@@ -1,6 +1,6 @@
 OrdnanceSurvey.configure do |config|
   def parse_string(string:, content_type: :string)
-    raise ArgumentError if [:hash, :integer, :string].exclude?(content_type)
+    raise ArgumentError if [:hash, :string].exclude?(content_type)
     return if string.blank?
 
     case content_type

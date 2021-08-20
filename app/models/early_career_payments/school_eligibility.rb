@@ -174,12 +174,13 @@ module EarlyCareerPayments
       "E07000147", # North Norfolk
       "E07000148", # Norwich
       "E07000149", # South Norfolk
-      "E07000150", # Corby
       "E07000151", # Daventry
       "E07000152", # East Northamptonshire
       "E07000153", # Kettering
       "E07000154", # Northampton
       "E07000155", # South Northamptonshire
+      "E06000061", # North Northamptonshire (North Northants)
+      "E06000062", # West Northamptonshire (West Northants)
       "E07000156", # Wellingborough
       "E07000163", # Craven
       "E07000164", # Hambleton

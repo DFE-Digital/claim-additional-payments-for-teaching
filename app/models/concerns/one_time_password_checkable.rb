@@ -20,7 +20,7 @@ module OneTimePasswordCheckable
   end
 
   def otp_validate
-    return false if otp.valid?
+    return write_attribute(:email_verified, true) if otp.valid?
 
     errors.add(:one_time_password, otp.warning)
   end

@@ -13,6 +13,7 @@ RSpec.feature "Given a one time password" do
     fill_in "claim_one_time_password", with: get_otp_from_email
     click_on "Confirm"
     expect(page).to_not have_css(".govuk-error-summary")
+    expect(Claim.last.email_verified).to equal(true)
   end
 
   scenario "that is expired" do
@@ -20,11 +21,13 @@ RSpec.feature "Given a one time password" do
     fill_in "claim_one_time_password", with: get_otp_from_email
     click_on "Confirm"
     expect(page).to have_text("Your one time password has expired, request a new one")
+    expect(Claim.last.email_verified).to_not equal(true)
   end
 
   scenario "that is wrong" do
     fill_in "claim_one_time_password", with: "000000"
     click_on "Confirm"
     expect(page).to have_text("Enter the correct one time password that we emailed to you")
+    expect(Claim.last.email_verified).to_not equal(true)
   end
 end

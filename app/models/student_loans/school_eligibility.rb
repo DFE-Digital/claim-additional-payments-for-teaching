@@ -16,8 +16,8 @@ module StudentLoans
       806, # Middlesbrough
       926, # Norfolk
       812, # North-east Lincolnshire
+      940, # North Northamptonshire (North Northants)
       815, # North Yorkshire
-      928, # Northamptonshire
       929, # Northumberland
       353, # Oldham
       874, # Peterborough
@@ -26,7 +26,8 @@ module StudentLoans
       343, # Sefton
       342, # St Helens
       861, # Stoke-on-Trent
-      935 # Suffolk
+      935, # Suffolk
+      941 # West Northamptonshire (West Northants)
     ].freeze
 
     def initialize(school)

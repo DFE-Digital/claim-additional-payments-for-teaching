@@ -1,8 +1,6 @@
 require "rails_helper"
 
 RSpec.describe Reminder, type: :model do
-  subject { described_class.new }
-
   context "that has a email address" do
     it "validates that the value is in the correct format" do
       expect(build(:reminder, email_address: "notan email@address.com")).not_to be_valid
@@ -29,6 +27,37 @@ RSpec.describe Reminder, type: :model do
 
     it "validates the presence of email_address" do
       expect(build(:reminder, email_address: nil)).not_to be_valid(:"personal-details")
+    end
+  end
+
+  describe ".not_yet_sent" do
+    let(:count) { [*1..5].sample }
+    let(:email_sent_at) { nil }
+    let(:verified) { false }
+
+    before do
+      create_list(:reminder, count, email_verified: verified, email_sent_at: email_sent_at)
+    end
+
+    context "that are un-verified, not yet sent" do
+      it "returns 0" do
+        expect(Reminder.not_yet_sent.count).to eq(0)
+      end
+    end
+
+    context "that are verified, not yet sent" do
+      let(:verified) { true }
+      it "returns correct count" do
+        expect(Reminder.not_yet_sent.count).to eq(count)
+      end
+    end
+
+    context "that are verified, sent" do
+      let(:verified) { true }
+      let(:email_sent_at) { Time.now }
+      it "returns 0" do
+        expect(Reminder.not_yet_sent.count).to eq(0)
+      end
     end
   end
 end
