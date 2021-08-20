@@ -30,6 +30,7 @@ The format is based on [Keep a Changelog]
     2021
 - ECP policies
   - Adds set reminder flow to eligible now flow
+  - Fix no validation occuring on 'Personal Details' screens
 - DAC Accessiblity Report fixes
   - Incorrect aria value
   - Links opening in a new window

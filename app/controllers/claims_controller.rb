@@ -40,7 +40,12 @@ class ClaimsController < BasePublicController
   end
 
   def update
-    current_claim.attributes = claim_params
+    if params[:slug] == "personal-details" && current_claim.has_ecp_policy?
+      check_date_params
+    else
+      current_claim.attributes = claim_params
+    end
+
     current_claim.reset_dependent_answers
     current_claim.eligibility.reset_dependent_answers
     one_time_password
@@ -89,6 +94,17 @@ class ClaimsController < BasePublicController
 
   def claim_params
     params.fetch(:claim, {}).permit(Claim::PermittedParameters.new(current_claim).keys)
+  end
+
+  def check_date_params
+    dob_params = {
+      "date_of_birth_day" => claim_params.dig("date_of_birth(3i)").to_s,
+      "date_of_birth_month" => claim_params.dig("date_of_birth(2i)").to_s,
+      "date_of_birth_year" => claim_params.dig("date_of_birth(1i)").to_s
+    }
+    current_claim.attributes = claim_params.merge!(dob_params)
+  rescue ActiveRecord::MultiparameterAssignmentErrors
+    current_claim.attributes = claim_params.except("date_of_birth(3i)", "date_of_birth(2i)", "date_of_birth(1i)") if params[:slug] == "personal-details"
   end
 
   def current_template
