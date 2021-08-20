@@ -202,6 +202,12 @@ module AutomatedChecks
 
                 it { is_expected.to eq(nil) }
               end
+
+              describe "#important" do
+                subject(:important) { note.important }
+
+                it { is_expected.to eq false }
+              end
             end
           end
 
@@ -262,6 +268,12 @@ module AutomatedChecks
                 subject(:created_by) { note.created_by }
 
                 it { is_expected.to eq(nil) }
+              end
+
+              describe "#important" do
+                subject(:important) { note.important }
+
+                it { is_expected.to eq false }
               end
             end
           end
@@ -324,6 +336,12 @@ module AutomatedChecks
 
                 it { is_expected.to eq(nil) }
               end
+
+              describe "#important" do
+                subject(:important) { note.important }
+
+                it { is_expected.to eq false }
+              end
             end
           end
 
@@ -384,6 +402,12 @@ module AutomatedChecks
                 subject(:created_by) { note.created_by }
 
                 it { is_expected.to eq(nil) }
+              end
+
+              describe "#important" do
+                subject(:important) { note.important }
+
+                it { is_expected.to eq false }
               end
             end
           end
@@ -494,6 +518,12 @@ module AutomatedChecks
                 subject(:created_by) { note.created_by }
 
                 it { is_expected.to eq(nil) }
+              end
+
+              describe "#important" do
+                subject(:important) { note.important }
+
+                it { is_expected.to eq false }
               end
             end
           end
@@ -612,6 +642,12 @@ module AutomatedChecks
                 subject(:created_by) { note.created_by }
 
                 it { is_expected.to eq(nil) }
+              end
+
+              describe "#important" do
+                subject(:important) { note.important }
+
+                it { is_expected.to eq true }
               end
             end
           end

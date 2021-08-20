@@ -338,6 +338,10 @@ class Claim < ApplicationRecord
     policy == EarlyCareerPayments
   end
 
+  def important_notes
+    notes&.where(important: true)
+  end
+
   private
 
   def normalise_trn
