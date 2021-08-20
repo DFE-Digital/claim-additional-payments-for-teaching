@@ -18,6 +18,7 @@ class RemindersController < BasePublicController
 
   def show
     render current_template
+    session.delete(:claim_id) if current_template == "set"
   end
 
   def update
@@ -61,11 +62,26 @@ class RemindersController < BasePublicController
   end
 
   def current_reminder
-    @current_reminder ||= reminder_from_session || Reminder.new
+    @current_reminder ||=
+      reminder_from_session ||
+      build_reminder_from_claim ||
+      Reminder.new
   end
 
   def reminder_from_session
-    Reminder.find(session[:reminder_id]) if session.key?(:reminder_id)
+    return unless session.key?(:reminder_id)
+
+    Reminder.find(session[:reminder_id])
+  end
+
+  def build_reminder_from_claim
+    return unless session.key?(:claim_id)
+
+    claim = Claim.find(session[:claim_id])
+    Reminder.new(
+      full_name: claim.full_name,
+      email_address: claim.email_address
+    )
   end
 
   def reminder_params

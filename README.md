@@ -145,6 +145,18 @@ bundle exec rake
 
 To run the feature specs you will need Chrome installed.
 
+### View feature specs live
+
+Prefix the ENV variable VIEW when running a spec, e.g.:
+
+```
+VIEW=true be rspec spec/features/your_feature_spec.rb
+```
+
+To disable, just set `VIEW=false` (or anything but `true`) once.
+
+_be = bundle exec_
+
 ### Code linting rules
 
 Code linting is performed using:

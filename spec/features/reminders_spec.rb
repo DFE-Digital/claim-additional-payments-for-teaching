@@ -31,7 +31,7 @@ RSpec.feature "Set Reminders when Eligible Later for an Early Career Payment" do
 
     click_on "Continue"
 
-    expect(page).to have_text("You will be eligible for an early-career payment in 2022")
+    expect(page).to have_text("You will be eligible for an early-career payment in #{AcademicYear.next}")
 
     expect(page).to have_content("Set up a reminder with us and we will email you when your application window opens.")
 
@@ -53,6 +53,6 @@ RSpec.feature "Set Reminders when Eligible Later for an Early Career Payment" do
 
     expect(page).to have_text("We have set your reminders")
     reminder_set_email = ActionMailer::Base.deliveries.last.body
-    expect(reminder_set_email).to have_text("We will send you a reminder in September 2022")
+    expect(reminder_set_email).to have_text("We will send you a reminder in September #{AcademicYear.next}")
   end
 end

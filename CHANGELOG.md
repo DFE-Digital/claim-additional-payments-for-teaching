@@ -28,6 +28,7 @@ The format is based on [Keep a Changelog]
   - Update Northamptonshire local authority to reflect GIAS changes 1st April
     2021
 - ECP policies
+  - Adds set reminder flow to eligible now flow
 - DAC Accessiblity Report fixes
   - Incorrect aria value
   - Links opening in a new window

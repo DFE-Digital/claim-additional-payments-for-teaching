@@ -41,6 +41,10 @@ class AcademicYear
       self.for(Date.today)
     end
 
+    def next
+      current.end_year + 1
+    end
+
     # Returns the academic year for a given date, based on September 1st being
     # the start of the year.
     def for(date)
