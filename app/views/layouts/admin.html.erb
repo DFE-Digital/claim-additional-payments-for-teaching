@@ -34,7 +34,14 @@
     <%= javascript_include_tag 'js_check' %>
 
     <% if ENV["GOOGLE_ANALYTICS_ID"] %>
-      <%= javascript_include_tag "google_gtm_iframe" %>
+      <noscript>
+        <iframe
+          src="https://www.googletagmanager.com/ns.html?id=GTM-NL8QB4F"
+          height="0"
+          width="0"
+          style="display:none;visibility:hidden">
+        </iframe>
+      </noscript>
     <% end %>
 
     <%= render("timeout_dialog", timeout_in_minutes: admin_timeout_in_minutes, path_on_timeout: admin_sign_in_path, refresh_session_path: admin_refresh_session_path) if admin_signed_in? %>
