@@ -141,7 +141,7 @@ module AutomatedChecks
             let(:data) do
               {
                 qts_award_date: Date.new(
-                  MathsAndPhysics.first_eligible_qts_award_year.start_year - 1.year,
+                  MathsAndPhysics.first_eligible_qts_award_year.start_year - 1.year.to_i,
                   9,
                   1
                 ),
@@ -324,7 +324,7 @@ module AutomatedChecks
           let(:data) do
             {
               qts_award_date: Date.new(
-                MathsAndPhysics.first_eligible_qts_award_year.start_year - 1.year,
+                MathsAndPhysics.first_eligible_qts_award_year.start_year - 1.year.to_i,
                 9,
                 1
               ),
