@@ -159,6 +159,24 @@ ARG GIT_COMMIT_HASH
 ENV GIT_COMMIT_HASH ${GIT_COMMIT_HASH}
 CMD /filebeat/filebeat -c /filebeat/filebeat.yml & bundle exec rails server
 
+# move all app directories and files to appuser and the appgroup
+USER root
+
+RUN chmod 777 -R ${APP_HOME}/app
+
+RUN chown -hR appuser:appgroup ${APP_HOME}/log
+RUN chown -hR appuser:appgroup ${APP_HOME}/app
+RUN chown -hR appuser:appgroup ${APP_HOME}/tmp
+
+# RUN touch ${APP_HOME}/log/production.log
+
+RUN chown -hR appuser:appgroup ${APP_HOME}/log/production.log
+
+RUN chmod 777 ${APP_HOME}/log/production.log
+
+USER appuser
+
+
 # ------------------------------------------------------------------------------
 # shellcheck
 # ------------------------------------------------------------------------------
