@@ -29,6 +29,7 @@ The format is based on [Keep a Changelog]
   - Hiding mobile/SMS related OTP screens
   - Update Northamptonshire local authority to reflect GIAS changes 1st April
     2021
+  - Add ECP link in README for developers to use
 - ECP policies
   - Adds set reminder flow to eligible now flow
   - Fix no validation occuring on 'Personal Details' screens
