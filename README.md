@@ -63,6 +63,7 @@ Architecture decision records can be found in the
 
 - **Student Loans:** https://localhost:3000/student-loans/claim
 - **Maths and Physics:** https://localhost:3000/maths-and-physics/claim
+- **Early-Career Payments:** https://localhost:3000/early-career-payments/claim
 
 ### How to set up DfE Sign-In locally
 
