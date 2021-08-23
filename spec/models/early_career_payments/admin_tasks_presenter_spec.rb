@@ -39,7 +39,7 @@ RSpec.describe EarlyCareerPayments::AdminTasksPresenter, type: :model do
   describe "#qualifications" do
     it "returns an array of label and values for displaying information for qualification checks" do
       expected_array = [
-        ["ITT start/end year", "In the academic year 2018 to 2019"],
+        ["ITT start/end year", "In the academic year 2018/2019"],
         ["ITT subject", "Mathematics"]
       ]
 
@@ -48,7 +48,7 @@ RSpec.describe EarlyCareerPayments::AdminTasksPresenter, type: :model do
 
     it "sets the “Award year” value based on the academic year the claim was made in" do
       expected_qts_answer = presenter.qualifications[0][1]
-      expect(expected_qts_answer).to eq "In the academic year 2018 to 2019"
+      expect(expected_qts_answer).to eq "In the academic year 2018/2019"
     end
   end
 end
