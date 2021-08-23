@@ -17,12 +17,12 @@
        <div class="govuk-grid-column-two-thirds">
           <%= render "admin/support_tickets/widget", claim: @claim, support_ticket: (@claim.support_ticket || SupportTicket.new) %>
 
-          <h2 class="govuk-heading-m">Claim notes</h2>
+          <h2 class="govuk-heading-m">Notes</h2>
 
           <div class="hmcts-timeline">
             <% @claim.notes.order(created_at: :desc).each do |note| %>
               <div class="hmcts-timeline__item">
-                <section>
+                <section<%= " class=banner" if note.important %>>
                   <%= simple_format note.body, class: "govuk-body" %>
                 </section>
 

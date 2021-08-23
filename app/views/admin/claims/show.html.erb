@@ -20,6 +20,9 @@
         <%= link_to "Amend claim", new_admin_claim_amendment_url(@claim), class: "govuk-link" if @claim.amendable? %>
       </span>
     </h1>
+
+    <%= render("banner", important_notes: @claim.important_notes) if @claim.important_notes.any? %>
+
   </div>
 </div>
 

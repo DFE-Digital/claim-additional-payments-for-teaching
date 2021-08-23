@@ -38,6 +38,10 @@ RSpec.feature "Admin claim tasks update with DQT API" do
     Capybara.session_name = current_session
   end
 
+  def banner
+    page.find("div", class: ["banner"])
+  end
+
   def notes
     page.all("div", class: ["hmcts-timeline__item"])
   end
@@ -479,13 +483,23 @@ RSpec.feature "Admin claim tasks update with DQT API" do
           scenario "shows date of birth not matched by an automated check" do
             expect(notes).to include(
               have_text(
-                "IMPORTANT: Teacher’s identity has an active alert. Speak to manager before checking this claim."
+                within(".banner") do
+                  "Teacher’s identity has an active alert. Speak to manager before checking this claim."
+                end
               ).and(
                 have_text(
                   "by an automated check on #{I18n.l(claim.notes.last.created_at)}"
                 )
               )
             )
+          end
+        end
+
+        context "admin claim" do
+          before { visit admin_claim_path(claim) }
+
+          scenario "shows note in banner" do
+            expect(banner).to have_text("Teacher’s identity has an active alert. Speak to manager before checking this claim.")
           end
         end
       end

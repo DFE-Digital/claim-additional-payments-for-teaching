@@ -1235,4 +1235,24 @@ RSpec.describe Claim, type: :model do
       end
     end
   end
+
+  describe "#important_notes" do
+    subject(:important_notes) do
+      claim.important_notes
+    end
+
+    let(:claim) { create(:claim, notes: notes) }
+
+    context "without important notes" do
+      let(:notes) { create_list(:note, 2, important: false) }
+
+      it { is_expected.to be_empty }
+    end
+
+    context "with important notes" do
+      let(:notes) { create_list(:note, 2, important: true) }
+
+      it { is_expected.to eq notes }
+    end
+  end
 end
