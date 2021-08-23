@@ -249,7 +249,7 @@ en:
   early_career_payments:
     check_your_answers:
       part_one:
-        primary_heading: Check your answers for your eligibility?
+        primary_heading: Check your answers for your eligibility
         secondary_heading: Eligibility details
         confirmation_notice: By selecting continue you are confirming that, to the best of your knowledge, the details you are providing are correct.
       heading_send_application: Now send your application
