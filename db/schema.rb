@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_08_19_171001) do
+ActiveRecord::Schema.define(version: 2021_08_23_092342) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -131,8 +131,6 @@ ActiveRecord::Schema.define(version: 2021_08_19_171001) do
     t.integer "eligible_itt_subject"
     t.boolean "teaching_subject_now"
     t.string "itt_academic_year", limit: 9
-    t.boolean "postgraduate_masters_loan"
-    t.boolean "postgraduate_doctoral_loan"
     t.uuid "current_school_id"
     t.index ["current_school_id"], name: "index_early_career_payments_eligibilities_on_current_school_id"
   end
@@ -227,6 +225,7 @@ ActiveRecord::Schema.define(version: 2021_08_19_171001) do
     t.datetime "updated_at", precision: 6, null: false
     t.boolean "email_verified", default: false
     t.datetime "email_sent_at"
+    t.string "itt_academic_year", limit: 9
   end
 
   create_table "schools", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|

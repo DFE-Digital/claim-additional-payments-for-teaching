@@ -16,10 +16,9 @@ class ReminderMailer < ApplicationMailer
     send_mail
   end
 
-  def reminder(reminder, year)
+  def reminder(reminder)
     @reminder = reminder
-    @year = year
-    @subject = "The #{year} early-career payment window is now open"
+    @subject = "The #{reminder.itt_academic_year} early-career payment window is now open"
     send_mail
   end
 

@@ -42,7 +42,7 @@ class AcademicYear
     end
 
     def next
-      current.end_year + 1
+      current + 1
     end
 
     # Returns the academic year for a given date, based on September 1st being

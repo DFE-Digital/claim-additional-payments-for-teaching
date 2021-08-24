@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.feature "Elible now can set a reminder for next year." do
-  it "auto-sets a reminders email and name from claim params" do
+  it "auto-sets a reminders email and name from claim params and displays the correct year" do
     claim = start_early_career_payments_claim
     claim.update!(attributes_for(:claim, :submittable))
     claim.eligibility.update!(attributes_for(:early_career_payments_eligibility, :eligible))
@@ -13,5 +13,9 @@ RSpec.feature "Elible now can set a reminder for next year." do
     expect(page).to have_field("reminder_email_address", with: claim.email_address)
     expect(page).to have_field("reminder_full_name", with: claim.full_name)
     click_on "Continue"
+    allow_any_instance_of(OneTimePassword::Validator).to receive(:valid?).and_return(true)
+    fill_in "reminder_one_time_password", with: "123456"
+    click_on "Confirm"
+    expect(page).to have_text("We will send you a reminder in 2023")
   end
 end

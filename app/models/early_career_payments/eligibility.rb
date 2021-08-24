@@ -92,6 +92,16 @@ module EarlyCareerPayments
         }
       ).present?
     end
+    
+    # This code is only useful for initial rollout and will become defunct at
+    # the start of academic year 2022 
+    def eligible_later_year
+      if eligible_itt_subject == "mathematics" && itt_academic_year == AcademicYear.new(2018)
+        AcademicYear.new(2023)
+      else
+        AcademicYear.new(2022)
+      end
+    end
 
     # This doesn't mean it's eligible either, ie, eligibility could be undetermined
     def ineligible?

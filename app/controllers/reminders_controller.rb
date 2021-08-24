@@ -65,7 +65,7 @@ class RemindersController < BasePublicController
     @current_reminder ||=
       reminder_from_session ||
       build_reminder_from_claim ||
-      Reminder.new
+      default_reminder
   end
 
   def reminder_from_session
@@ -75,13 +75,24 @@ class RemindersController < BasePublicController
   end
 
   def build_reminder_from_claim
-    return unless session.key?(:claim_id)
+    return unless current_claim
 
-    claim = Claim.find(session[:claim_id])
     Reminder.new(
-      full_name: claim.full_name,
-      email_address: claim.email_address
+      full_name: current_claim.full_name,
+      email_address: current_claim.email_address,
+      itt_academic_year: current_claim.eligibility.eligible_later_year
     )
+  end
+
+  # fallback reminder will set reminder date to the next academic year
+  def default_reminder
+    Reminder.new(itt_academic_year: AcademicYear.next)
+  end
+
+  def current_claim
+    return @current_claim if defined?(@current_claim)
+
+    @current_claim = Claim.find_by_id(session[:claim_id])
   end
 
   def reminder_params
