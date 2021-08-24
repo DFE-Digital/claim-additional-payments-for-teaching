@@ -48,11 +48,12 @@ module AutomatedChecks
         create_note(body: body)
       end
 
-      def create_note(body:)
+      def create_note(body:, important: false)
         claim.notes.create!(
           {
             body: body,
-            created_by: admin_user
+            created_by: admin_user,
+            important: important
           }
         )
       end
@@ -121,7 +122,7 @@ module AutomatedChecks
         end
 
         if active_alert?
-          create_note(body: "IMPORTANT: Teacher’s identity has an active alert. Speak to manager before checking this claim.")
+          create_note(body: "IMPORTANT: Teacher’s identity has an active alert. Speak to manager before checking this claim.", important: true)
 
           create_task(match: :any)
         end

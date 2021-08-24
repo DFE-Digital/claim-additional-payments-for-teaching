@@ -171,6 +171,7 @@ ActiveRecord::Schema.define(version: 2021_08_23_092342) do
     t.uuid "created_by_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.boolean "important"
     t.index ["claim_id"], name: "index_notes_on_claim_id"
     t.index ["created_by_id"], name: "index_notes_on_created_by_id"
   end

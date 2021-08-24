@@ -1,0 +1,11 @@
+<div class="banner">
+  <h2 class="govuk-body-l">
+    Important Notes
+  </h2>
+
+  <ul class="govuk-body">
+    <% important_notes.each do |note| %>
+      <li><%= note.body %></li>
+    <% end %>
+  </ul>
+</div>

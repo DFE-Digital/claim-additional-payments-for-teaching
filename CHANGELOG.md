@@ -18,6 +18,8 @@ The format is based on [Keep a Changelog]
   - Add ECP admin claim employment task screen
   - Remove verify notice from claim summary
   - Add a note if DQT active alert flag is set to true
+  - Add important notes to claim summary (DQT active alert)
+  - Add ECP admin claim matching details task screen
 - All policies
   - Home Address selection
     - Add home address search screen to claim journey
@@ -29,6 +31,7 @@ The format is based on [Keep a Changelog]
   - Hiding mobile/SMS related OTP screens
   - Update Northamptonshire local authority to reflect GIAS changes 1st April
     2021
+  - Add ECP link in README for developers to use
 - ECP policies
   - Adds set reminder flow to eligible now flow
   - Fix no validation occuring on 'Personal Details' screens

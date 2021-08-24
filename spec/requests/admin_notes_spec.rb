@@ -11,7 +11,7 @@ RSpec.describe "admin/notes controller" do
 
       get admin_claim_notes_path(claim)
 
-      expect(response.body).to include("Claim notes")
+      expect(response.body).to include("Notes")
       expect(response.body).to include("Need to verify the student loan amount")
       expect(response.body).to include("by #{user.full_name}")
     end
