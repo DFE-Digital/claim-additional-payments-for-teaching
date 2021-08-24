@@ -92,9 +92,9 @@ module EarlyCareerPayments
         }
       ).present?
     end
-    
+
     # This code is only useful for initial rollout and will become defunct at
-    # the start of academic year 2022 
+    # the start of academic year 2022
     def eligible_later_year
       if eligible_itt_subject == "mathematics" && itt_academic_year == AcademicYear.new(2018)
         AcademicYear.new(2023)

@@ -18,11 +18,11 @@ RSpec.feature "Eligible later Teacher Early-Career Payments claims" do
       let(:current_school) { School.find(ActiveRecord::FixtureSet.identify(:penistone_grammar_school, :uuid)) }
 
       [
-        {itt_subject: "mathematics", itt_academic_year: AcademicYear.new(2019), award_amount: number_to_currency(7_500, precision: 0)}
-        # {itt_subject: "mathematics", itt_academic_year: AcademicYear.new(2020), award_amount: number_to_currency(3_000, precision: 0)},
-        # {itt_subject: "physics", itt_academic_year: AcademicYear.new(2020), award_amount: number_to_currency(3_000, precision: 0)},
-        # {itt_subject: "chemistry", itt_academic_year: AcademicYear.new(2020), award_amount: number_to_currency(3_000, precision: 0)},
-        # {itt_subject: "foreign_languages", itt_academic_year: AcademicYear.new(2020), award_amount: number_to_currency(3_000, precision: 0)}
+        {itt_subject: "mathematics", itt_academic_year: AcademicYear.new(2019), award_amount: number_to_currency(7_500, precision: 0)},
+        {itt_subject: "mathematics", itt_academic_year: AcademicYear.new(2020), award_amount: number_to_currency(3_000, precision: 0)},
+        {itt_subject: "physics", itt_academic_year: AcademicYear.new(2020), award_amount: number_to_currency(3_000, precision: 0)},
+        {itt_subject: "chemistry", itt_academic_year: AcademicYear.new(2020), award_amount: number_to_currency(3_000, precision: 0)},
+        {itt_subject: "foreign_languages", itt_academic_year: AcademicYear.new(2020), award_amount: number_to_currency(3_000, precision: 0)}
       ].each do |scenario|
         scenario "with ITT subject #{scenario[:itt_subject]} in ITT academic year #{scenario[:itt_academic_year]} it displays award amount of #{scenario[:award_amount]}" do
           claim.eligibility.update(
