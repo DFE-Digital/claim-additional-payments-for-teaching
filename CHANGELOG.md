@@ -19,6 +19,7 @@ The format is based on [Keep a Changelog]
   - Remove verify notice from claim summary
   - Add a note if DQT active alert flag is set to true
   - Add important notes to claim summary (DQT active alert)
+  - Add ECP admin claim matching details task screen
 - All policies
   - Home Address selection
     - Add home address search screen to claim journey

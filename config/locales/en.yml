@@ -308,6 +308,8 @@ en:
           notes: "notes"
         qualifications:
           title: "Does the claimant’s initial teacher training (ITT) start/end year and subject match the above information from their claim?"
+        matching_details:
+          title: "Is this claim still valid despite having matching details with other claims?"
     answers:
       qualification:
         postgraduate_itt: "Postgraduate ITT"
