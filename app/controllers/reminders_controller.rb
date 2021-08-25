@@ -1,6 +1,6 @@
 class RemindersController < BasePublicController
   helper_method :current_reminder
-  after_action :reminder_set_email, only: [:show]
+  after_action :reminder_set_email, :clear_sessions, only: [:show]
 
   def new
     render first_template_in_sequence
@@ -8,6 +8,7 @@ class RemindersController < BasePublicController
 
   def create
     current_reminder.attributes = reminder_params
+    one_time_password
     if current_reminder.save(context: current_slug.to_sym)
       session[:reminder_id] = current_reminder.to_param
       redirect_to reminder_path(current_policy_routing_name, next_slug)
@@ -18,7 +19,6 @@ class RemindersController < BasePublicController
 
   def show
     render current_template
-    session.delete(:claim_id) if current_template == "set"
   end
 
   def update
@@ -117,5 +117,12 @@ class RemindersController < BasePublicController
     return unless current_slug == "set" && current_reminder.email_verified?
 
     ReminderMailer.reminder_set(current_reminder).deliver_now
+  end
+
+  def clear_sessions
+    return unless current_template == "set"
+
+    session.delete(:claim_id)
+    session.delete(:reminder_id)
   end
 end
