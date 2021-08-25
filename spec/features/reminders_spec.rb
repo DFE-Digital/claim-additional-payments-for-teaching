@@ -42,18 +42,20 @@ RSpec.feature "Set Reminder when Eligible Later for an Early Career Payment" do
       click_on "Continue"
 
       expect(page).to have_text("Personal details")
-      expect(page).to have_text("Tell us the email address you'd like us to send your reminder to. We recommend you use a personal email address.")
+      expect(page).to have_text("Tell us the email address you'd like us to send your reminders to. We recommend you use a personal email address")
 
       fill_in "Full name", with: "David Tau"
       fill_in "Email address", with: "david.tau1988@hotmail.co.uk"
 
-      allow_any_instance_of(OneTimePassword::Validator).to receive(:valid?).and_return(true)
+      allow(OneTimePassword::Validator).to receive_messages(new: double(valid?: true))
       click_on "Continue"
       fill_in "reminder_one_time_password", with: "123456"
       click_on "Confirm"
       reminder = Reminder.order(:created_at).last
       expect(reminder.full_name).to eq "David Tau"
       expect(reminder.email_address).to eq "david.tau1988@hotmail.co.uk"
+      expect(reminder.itt_academic_year).to eq AcademicYear.new(args[:next_year])
+      expect(reminder.itt_subject).to eq args[:subject]
 
       expect(page).to have_text("We have set your reminder")
       reminder_set_email = ActionMailer::Base.deliveries.last.body

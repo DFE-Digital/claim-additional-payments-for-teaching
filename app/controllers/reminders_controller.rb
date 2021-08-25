@@ -80,7 +80,8 @@ class RemindersController < BasePublicController
     Reminder.new(
       full_name: current_claim.full_name,
       email_address: current_claim.email_address,
-      itt_academic_year: current_claim.eligibility.eligible_later_year
+      itt_academic_year: current_claim.eligibility.eligible_later_year,
+      itt_subject: current_claim.eligibility.eligible_itt_subject
     )
   end
 
