@@ -105,7 +105,7 @@ class RemindersController < BasePublicController
       ReminderMailer.email_verification(current_reminder, otp.code).deliver_now
       session[:sent_one_time_password_at] = Time.now
     when "email-verification"
-      current_reminder.update_attributes(sent_one_time_password_at: session[:sent_one_time_password_at])
+      current_reminder.update(sent_one_time_password_at: session[:sent_one_time_password_at])
     end
   end
 
