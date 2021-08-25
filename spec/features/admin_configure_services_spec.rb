@@ -82,7 +82,7 @@ RSpec.feature "Service configuration" do
       within_fieldset("Service status") { choose("Open") }
       expect(page).to have_content(I18n.t("admin.policy_configuration.reminder_warning", count: count))
       # make sure email reminder jobjob is queued
-      expect { click_on "Save" }.to enqueue_job(SendReminderEmailsJob).with("2020/2021")
+      expect { click_on "Save" }.to enqueue_job(SendReminderEmailsJob)
       expect(current_path).to eq(admin_policy_configurations_path)
 
       within(find("tr[data-policy-configuration-id=\"#{policy_configuration.id}\"]")) do

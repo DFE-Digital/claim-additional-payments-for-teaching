@@ -16,6 +16,6 @@ RSpec.feature "Elible now can set a reminder for next year." do
     allow(OneTimePassword::Validator).to receive_messages(new: double(valid?: true))
     fill_in "reminder_one_time_password", with: "123456"
     click_on "Confirm"
-    expect(page).to have_text("We will send you a reminder in 2023")
+    expect(page).to have_text("We will send you a reminder in September 2023")
   end
 end
