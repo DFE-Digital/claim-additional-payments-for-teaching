@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.feature "Set Reminders when Eligible Later for an Early Career Payment" do
+RSpec.feature "Set Reminder when Eligible Later for an Early Career Payment" do
   [
     {subject: "chemistry", cohort: "2020 to 2021", academic_year: AcademicYear.new(2020), next_year: 2022},
     {subject: "mathematics", cohort: "2019 to 2020", academic_year: AcademicYear.new(2019), next_year: 2022}
@@ -42,20 +42,18 @@ RSpec.feature "Set Reminders when Eligible Later for an Early Career Payment" do
       click_on "Continue"
 
       expect(page).to have_text("Personal details")
-      expect(page).to have_text("Tell us the email address you'd like us to send your reminders to. We recommend you use a personal email address.")
+      expect(page).to have_text("Tell us the email address you'd like us to send your reminder to. We recommend you use a personal email address.")
 
       fill_in "Full name", with: "David Tau"
       fill_in "Email address", with: "david.tau1988@hotmail.co.uk"
-
-      allow_any_instance_of(OneTimePassword::Validator).to receive(:valid?).and_return(true)
       click_on "Continue"
-      fill_in "reminder_one_time_password", with: "123456"
+      fill_in "reminder_one_time_password", with: get_otp_from_email
       click_on "Confirm"
       reminder = Reminder.order(:created_at).last
+
       expect(reminder.full_name).to eq "David Tau"
       expect(reminder.email_address).to eq "david.tau1988@hotmail.co.uk"
-
-      expect(page).to have_text("We have set your reminders")
+      expect(page).to have_text("We have set your reminder")
       reminder_set_email = ActionMailer::Base.deliveries.last.body
       expect(reminder_set_email).to have_text("We will send you a reminder in September #{args[:next_year]}")
     end
