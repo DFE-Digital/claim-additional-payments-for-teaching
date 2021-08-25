@@ -194,7 +194,7 @@ module AutomatedChecks
               describe "#body" do
                 subject(:body) { note.body }
 
-                it { is_expected.to eq("National Insurance number not matched") }
+                it { is_expected.to include("National Insurance number not matched") }
               end
 
               describe "#created_by" do

@@ -40,6 +40,7 @@ module AutomatedChecks
           !active_alert?
 
         create_task(match: :all, passed: true)
+        id_matched_note
       end
 
       def create_field_note(name:)
@@ -87,18 +88,31 @@ module AutomatedChecks
         claim.national_insurance_number == dqt_teacher_status.fetch(:national_insurance_number)
       end
 
+      def id_matched_note
+        create_note(body: "Claimant inputted value: Name: #{claim.first_name} #{claim.surname}, NIN: #{claim.national_insurance_number}, DOB: #{claim.date_of_birth}")
+        if name_matched? && !national_insurance_number_matched?
+          create_note(body: "Name returned from DQT: #{dqt_teacher_status.fetch(:first_name) || ""} #{dqt_teacher_status.fetch(:surname) || ""}, National Insurance number not matched, DOB: #{dqt_teacher_status.fetch(:date_of_birth) || "DOB not found"}")
+        elsif name_matched? && national_insurance_number_matched? && dob_matched?
+          create_note(body: "Name returned from DQT: #{dqt_teacher_status.fetch(:first_name) || ""} #{dqt_teacher_status.fetch(:surname) || ""}, NIN: #{dqt_teacher_status.fetch(:national_insurance_number) || ""} DOB: #{dqt_teacher_status.fetch(:date_of_birth) || " "}")
+        else
+          create_note(body: "No details found in DQT for claimant inputted value")
+        end
+      end
+
       def no_match
         return unless dqt_teacher_status.nil?
 
         ClaimMailer.identity_confirmation(claim).deliver_later
 
         create_note(body: "Not matched")
+        id_matched_note
         create_task(match: :none)
       end
 
       def partial_match
         if !national_insurance_number_matched?
           create_field_note(name: "National Insurance number")
+          id_matched_note
 
           return create_task(match: :any)
         end
