@@ -50,7 +50,7 @@ RSpec.feature "Set Reminder when Eligible Later for an Early Career Payment" do
       fill_in "reminder_one_time_password", with: get_otp_from_email
       click_on "Confirm"
       reminder = Reminder.order(:created_at).last
-      
+
       expect(reminder.full_name).to eq "David Tau"
       expect(reminder.email_address).to eq "david.tau1988@hotmail.co.uk"
       expect(page).to have_text("We have set your reminder")
