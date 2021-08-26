@@ -33,6 +33,11 @@ The format is based on [Keep a Changelog]
     2021
   - Add ECP link in README for developers to use
   - Add normalisation to claim name fields
+  - Split Postgraduate loans (ITT course) from Postgraduate Masters/Doctoral
+    loans
+  - Update Postgraduate Masters and Doctoral Loans questions to be only being
+    asked if the answer to 'Do you have postgraduate masters and/or doctoral'
+    loans is 'Yes'
 - ECP policies
   - Adds set reminder flow to eligible now flow
   - Fix no validation occuring on 'Personal Details' screens

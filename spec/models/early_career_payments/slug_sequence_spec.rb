@@ -130,8 +130,9 @@ RSpec.describe EarlyCareerPayments::SlugSequence do
     end
 
     context "when the answer to 'paying off student loan' is 'No'" do
-      it "excludes 'student-loan-country', 'student-loan-how-many-courses', 'student-loan-start-date', 'masters-loan' and 'doctoral-loan'" do
+      it "excludes 'student-loan-country', 'student-loan-how-many-courses' and, 'student-loan-start-date'" do
         claim.has_student_loan = false
+        claim.has_masters_doctoral_loan = true
 
         expected_slugs = %w[
           nqt-in-academic-year-after-itt
@@ -159,6 +160,9 @@ RSpec.describe EarlyCareerPayments::SlugSequence do
           gender
           teacher-reference-number
           student-loan
+          masters-doctoral-loan
+          masters-loan
+          doctoral-loan
           check-your-answers
         ]
 
@@ -195,10 +199,16 @@ RSpec.describe EarlyCareerPayments::SlugSequence do
           teacher-reference-number
           student-loan
           student-loan-country
+          masters-doctoral-loan
           masters-loan
           doctoral-loan
           check-your-answers
         ]
+      end
+
+      before do
+        claim.has_student_loan = true
+        claim.has_masters_doctoral_loan = true
       end
 
       it "excludes 'student-loan-how-many-courses', 'student-loan-start-date' - Northern Ireland" do
@@ -209,6 +219,87 @@ RSpec.describe EarlyCareerPayments::SlugSequence do
 
       it "excludes 'student-loan-how-many-courses', 'student-loan-start-date' - Scotland" do
         claim.student_loan_country = StudentLoan::SCOTLAND
+
+        expect(slug_sequence.slugs).to eq expected_slugs
+      end
+    end
+
+    context "when the answer to 'paying off postgraduate masters/doctoral loan' is 'No'" do
+      it "excludes 'masters-loan' and 'doctoral-loan'" do
+        claim.has_student_loan = true
+        claim.has_masters_doctoral_loan = false
+
+        expected_slugs = %w[
+          nqt-in-academic-year-after-itt
+          current-school
+          supply-teacher
+          poor-performance
+          qualification
+          eligible-itt-subject
+          teaching-subject-now
+          itt-year
+          check-your-answers-part-one
+          eligibility-confirmed
+          how-we-will-use-information-provided
+          personal-details
+          postcode-search
+          select-home-address
+          address
+          email-address
+          email-verification
+          provide-mobile-number
+          mobile-number
+          bank-or-building-society
+          personal-bank-account
+          building-society-account
+          gender
+          teacher-reference-number
+          student-loan
+          student-loan-country
+          student-loan-how-many-courses
+          student-loan-start-date
+          masters-doctoral-loan
+          check-your-answers
+        ]
+
+        expect(slug_sequence.slugs).to eq expected_slugs
+      end
+    end
+
+    context "when the answer to 'paying off student loan' is 'No' AND to 'paying of a postgraduate masters/doctoral loans is 'No'" do
+      it "excludes 'student-loan-country', 'student-loan-how-many-courses', 'student-loan-start-date', 'masters-loan' and 'doctoral-loan'" do
+        claim.has_student_loan = false
+        claim.has_masters_doctoral_loan = false
+
+        expected_slugs = %w[
+          nqt-in-academic-year-after-itt
+          current-school
+          supply-teacher
+          poor-performance
+          qualification
+          eligible-itt-subject
+          teaching-subject-now
+          itt-year
+          check-your-answers-part-one
+          eligibility-confirmed
+          how-we-will-use-information-provided
+          personal-details
+          postcode-search
+          select-home-address
+          address
+          email-address
+          email-verification
+          provide-mobile-number
+          mobile-number
+          bank-or-building-society
+          personal-bank-account
+          building-society-account
+          gender
+          teacher-reference-number
+          student-loan
+          masters-doctoral-loan
+          check-your-answers
+        ]
 
         expect(slug_sequence.slugs).to eq expected_slugs
       end
