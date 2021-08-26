@@ -98,8 +98,10 @@ module EarlyCareerPayments
     def eligible_later_year
       if eligible_itt_subject == "mathematics" && itt_academic_year == AcademicYear.new(2018)
         AcademicYear.new(2023)
+      elsif eligible_itt_subject == "mathematics" && itt_academic_year == AcademicYear.new(2019)
+        AcademicYear.new(2024)
       else
-        AcademicYear.new(2022)
+        AcademicYear.next
       end
     end
 
