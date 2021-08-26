@@ -26,7 +26,7 @@ RSpec.describe SendReminderEmailsJob do
 
       # check email body is correct
       reminder_email = ActionMailer::Base.deliveries.find { |email| email.to[0] == reminders.first.email_address }
-      expect(reminder_email.body.to_s).to include("Dear #{reminders.first.full_name},\n\nThe 2020/2021 early-career payment window is now open.")
+      expect(reminder_email.body.to_s).to include("Dear #{reminders.first.full_name},\n\nThe #{AcademicYear.current} early-career payment window is now open.")
 
       # reminder emails once sent have sent_at's
       reminders.each do |reminder|
