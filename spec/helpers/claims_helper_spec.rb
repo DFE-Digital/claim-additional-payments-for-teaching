@@ -169,13 +169,14 @@ describe ClaimsHelper do
   end
 
   describe "#student_loan_answers" do
-    let(:claim) { build(:claim, trait, eligibility: eligibility) }
-    let(:trait) { :with_student_loan }
+    let(:claim) { build(:claim, student_loan_trait, masters_doctoral_trait, eligibility: eligibility) }
+    let(:student_loan_trait) { :with_student_loan }
 
     context "TSLR (Student Loans) policy" do
       let(:eligibility) { build(:student_loans_eligibility, student_loan_repayment_amount: 1987.65) }
+      let(:masters_doctoral_trait) { :with_postgraduate_masters_loan_without_postgraduate_doctoral_loan_when_has_student_loan }
 
-      it "returns an array of question and answers for the student loan questions" do
+      it "returns an array of question and answers for the student loan and postgraduate masters and doctoral loan questions" do
         expected_answers = [
           [t("questions.has_student_loan"), "Yes", "student-loan"],
           [t("questions.student_loan_country"), "England", "student-loan-country"],
@@ -185,7 +186,7 @@ describe ClaimsHelper do
             t("answers.student_loan_start_date.one_course.before_first_september_2012"),
             "student-loan-start-date"
           ],
-          [t("questions.postgraduate_masters_loan"), "No", "masters-loan"],
+          [t("questions.postgraduate_masters_loan"), "Yes", "masters-loan"],
           [t("questions.postgraduate_doctoral_loan"), "No", "doctoral-loan"]
         ]
 
@@ -193,7 +194,7 @@ describe ClaimsHelper do
       end
 
       context "with the loan start date and answer" do
-        let(:trait) { :with_student_loan_for_two_courses }
+        let(:student_loan_trait) { :with_student_loan_for_two_courses }
 
         it "adjusts according to the number of courses answer" do
           expected_answers = [
@@ -205,7 +206,7 @@ describe ClaimsHelper do
               t("answers.student_loan_start_date.two_or_more_courses.on_or_after_first_september_2012"),
               "student-loan-start-date"
             ],
-            [t("questions.postgraduate_masters_loan"), "No", "masters-loan"],
+            [t("questions.postgraduate_masters_loan"), "Yes", "masters-loan"],
             [t("questions.postgraduate_doctoral_loan"), "No", "doctoral-loan"]
           ]
 
@@ -214,14 +215,13 @@ describe ClaimsHelper do
       end
 
       context "when it has unanswered questions" do
-        let(:trait) { :with_unanswered_student_loan_questions }
+        let(:student_loan_trait) { :with_unanswered_student_loan_questions }
+        let(:masters_doctoral_trait) { :with_no_postgraduate_masters_doctoral_loan }
 
         it "these are excluded" do
           expected_answers = [
             [t("questions.has_student_loan"), "Yes", "student-loan"],
-            [t("questions.student_loan_country"), "Scotland", "student-loan-country"],
-            [t("questions.postgraduate_masters_loan"), "No", "masters-loan"],
-            [t("questions.postgraduate_doctoral_loan"), "No", "doctoral-loan"]
+            [t("questions.student_loan_country"), "Scotland", "student-loan-country"]
           ]
 
           expect(helper.student_loan_answers(claim)).to eq expected_answers
@@ -231,8 +231,9 @@ describe ClaimsHelper do
 
     context "Early-Career Payment policy" do
       let(:eligibility) { build(:early_career_payments_eligibility) }
+      let(:masters_doctoral_trait) { :with_postgraduate_doctoral_loan_without_postgraduate_masters_loan_when_has_student_loan }
 
-      it "returns an array of question and answers for the student loan questions" do
+      it "returns an array of question and answers for the student loan and postgraduate masters and doctoral loan questions" do
         expected_answers = [
           [t("questions.has_student_loan"), "Yes", "student-loan"],
           [t("questions.student_loan_country"), "England", "student-loan-country"],
@@ -243,14 +244,14 @@ describe ClaimsHelper do
             "student-loan-start-date"
           ],
           [t("questions.postgraduate_masters_loan"), "No", "masters-loan"],
-          [t("questions.postgraduate_doctoral_loan"), "No", "doctoral-loan"]
+          [t("questions.postgraduate_doctoral_loan"), "Yes", "doctoral-loan"]
         ]
 
         expect(helper.student_loan_answers(claim)).to eq expected_answers
       end
 
       context "with the loan start date and answer" do
-        let(:trait) { :with_student_loan_for_two_courses }
+        let(:student_loan_trait) { :with_student_loan_for_two_courses }
 
         it "adjusts according to the number of courses answer" do
           expected_answers = [
@@ -259,7 +260,7 @@ describe ClaimsHelper do
             [t("questions.student_loan_how_many_courses"), "Two or more courses", "student-loan-how-many-courses"],
             [t("questions.student_loan_start_date.two_or_more_courses"), t("answers.student_loan_start_date.two_or_more_courses.on_or_after_first_september_2012"), "student-loan-start-date"],
             [t("questions.postgraduate_masters_loan"), "No", "masters-loan"],
-            [t("questions.postgraduate_doctoral_loan"), "No", "doctoral-loan"]
+            [t("questions.postgraduate_doctoral_loan"), "Yes", "doctoral-loan"]
           ]
 
           expect(helper.student_loan_answers(claim)).to eq expected_answers
@@ -267,27 +268,45 @@ describe ClaimsHelper do
       end
 
       context "when it has unanswered questions" do
-        let(:trait) { :with_unanswered_student_loan_questions }
+        let(:student_loan_trait) { :with_unanswered_student_loan_questions }
+        let(:masters_doctoral_trait) { :with_no_postgraduate_masters_doctoral_loan }
 
         it "these are excluded" do
           expected_answers = [
             [t("questions.has_student_loan"), "Yes", "student-loan"],
-            [t("questions.student_loan_country"), "Scotland", "student-loan-country"],
-            [t("questions.postgraduate_masters_loan"), "No", "masters-loan"],
-            [t("questions.postgraduate_doctoral_loan"), "No", "doctoral-loan"]
+            [t("questions.student_loan_country"), "Scotland", "student-loan-country"]
           ]
 
           expect(helper.student_loan_answers(claim)).to eq expected_answers
         end
       end
 
-      context "when claimant answered 'No' to 'Paying off Student Loan'" do
+      context "when claimant answered 'No' to 'Paying off Student Loan' and 'Yes' to 'Take out a Postgraduate Masters or Doctoral Loan'" do
+        let(:claim) { build(:claim, student_loan_trait, masters_doctoral_trait, has_masters_doctoral_loan: true, eligibility: eligibility) }
         let(:eligibility) { build(:early_career_payments_eligibility) }
-        let(:trait) { :with_no_student_loan }
+        let(:student_loan_trait) { :with_no_student_loan }
 
-        it "returns an arry with a single question and answer" do
+        it "returns an array of question and answers for the student loan and postgraduate masters and doctoral loan questions" do
           expected_answers = [
-            [t("questions.has_student_loan"), "No", "student-loan"]
+            [t("questions.has_student_loan"), "No", "student-loan"],
+            [t("questions.has_masters_and_or_doctoral_loan"), "Yes", "masters-doctoral-loan"],
+            [t("questions.postgraduate_masters_loan"), "No", "masters-loan"],
+            [t("questions.postgraduate_doctoral_loan"), "Yes", "doctoral-loan"]
+          ]
+
+          expect(helper.student_loan_answers(claim)).to eq expected_answers
+        end
+      end
+
+      context "when claimant answered 'No' to 'Paying off Student Loan' and 'No' to 'Take out a Postgraduate Masters or Doctoral Loan'" do
+        let(:claim) { build(:claim, student_loan_trait, masters_doctoral_trait, has_masters_doctoral_loan: false, eligibility: eligibility) }
+        let(:eligibility) { build(:early_career_payments_eligibility) }
+        let(:student_loan_trait) { :with_no_student_loan }
+
+        it "returns an array with a single question and answer for each top level question" do
+          expected_answers = [
+            [t("questions.has_student_loan"), "No", "student-loan"],
+            [t("questions.has_masters_and_or_doctoral_loan"), "No", "masters-doctoral-loan"]
           ]
 
           expect(helper.student_loan_answers(claim)).to eq expected_answers

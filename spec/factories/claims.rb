@@ -26,6 +26,7 @@ FactoryBot.define do
 
     trait :submittable do
       with_student_loan
+      with_postgraduate_masters_doctoral_loan
 
       first_name { "Jo" }
       surname { "Bloggs" }
@@ -112,9 +113,21 @@ FactoryBot.define do
       student_loan_country { StudentLoan::ENGLAND }
       student_loan_courses { :one_course }
       student_loan_start_date { StudentLoan::BEFORE_1_SEPT_2012 }
-      # student_loan_start_date { StudentLoan::ON_OR_AFTER_1_SEPT_2012 }
       student_loan_plan { StudentLoan::PLAN_1 }
+    end
+
+    trait :with_postgraduate_masters_doctoral_loan do
       postgraduate_masters_loan { false }
+      postgraduate_doctoral_loan { true }
+    end
+
+    trait :with_postgraduate_doctoral_loan_without_postgraduate_masters_loan_when_has_student_loan do
+      postgraduate_masters_loan { false }
+      postgraduate_doctoral_loan { true }
+    end
+
+    trait :with_postgraduate_masters_loan_without_postgraduate_doctoral_loan_when_has_student_loan do
+      postgraduate_masters_loan { true }
       postgraduate_doctoral_loan { false }
     end
 
@@ -122,7 +135,6 @@ FactoryBot.define do
       with_student_loan
 
       student_loan_courses { :two_or_more_courses }
-      # student_loan_start_date { StudentLoan::BEFORE_1_SEPT_2012 }
       student_loan_start_date { StudentLoan::ON_OR_AFTER_1_SEPT_2012 }
     end
 
@@ -137,6 +149,10 @@ FactoryBot.define do
       student_loan_courses { nil }
       student_loan_start_date { nil }
       student_loan_plan { nil }
+    end
+
+    trait :with_no_postgraduate_masters_doctoral_loan do
+      has_masters_doctoral_loan { false }
       postgraduate_masters_loan { nil }
       postgraduate_doctoral_loan { nil }
     end
