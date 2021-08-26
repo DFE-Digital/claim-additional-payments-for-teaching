@@ -96,6 +96,12 @@ module EarlyCareerPayments
     # next eligible ignores current eligibility and is always looking forward
     # to the next application window, used for reminder setting.
     # definitions come from https://www.gov.uk/guidance/early-career-payments-guidance-for-teachers-and-schools
+    #
+    ## subject {
+    ##     selected cohort year {
+    ##       current academic year => next applicable academic year to apply
+    ##     }
+    ## }
     def eligible_later_year
       {
         mathematics: {
