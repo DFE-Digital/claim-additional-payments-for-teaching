@@ -1,7 +1,7 @@
 --View a list of submitted ECP claims' eligibility criteria
 select * 
   from public.early_career_payments_eligibilities
- where created_at BETWEEN '2021-06-08T00:00:01' and '2021-10-29T14:33:14' -- e.g. Datetime format 2021-04-29T14:33:14
+ where created_at BETWEEN '2021-06-01T00:00:01' and '2021-10-29T14:33:14' -- e.g. Datetime format 2021-04-29T14:33:14
  order by created_at
 
 --View a list of submitted ECP claims
@@ -14,6 +14,18 @@ select *
 select count(*) 
   from public.claims 
  where eligibility_type = 'EarlyCareerPayments::Eligibility';
+
+--Get total number of submitted ECP claims
+select count(*), eligibility_type 
+  from public.claims 
+ where created_at BETWEEN '2021-06-01T00:00:01' and '2021-10-29T14:33:14' -- e.g. Datetime format 2021-04-29T14:33:14
+ group by eligibility_type
+ order by count(*);
+
+select * 
+  from public.claims 
+ where created_at BETWEEN '2021-06-01T00:00:01' and '2021-10-29T14:33:14' -- e.g. Datetime format 2021-04-29T14:33:14
+   and eligibility_type = 'StudentLoans::Eligibility';
 
 select eligibility_type
        , max(created_at) "maxcreated"
@@ -33,7 +45,18 @@ select c.first_name,
   from public.early_career_payments_eligibilities a,
   	   public.claims c
 where a.id = c.eligibility_id
-  and a.created_at BETWEEN '2021-06-08T00:00:01' and '2021-10-29T14:33:14'; -- e.g. Datetime format 2021-04-29T14:33:14
+  and a.created_at BETWEEN '2021-06-01T00:00:01' and '2021-10-29T14:33:14'; -- e.g. Datetime format 2021-04-29T14:33:14
+
+--View a list of submitted ECP claims' eligibility criteria
+select c.first_name, 
+	   c.surname, 
+	   a.id "sl-id", 
+	   c.id "claim-id"
+  from public.student_loans_eligibilities a,
+  	   public.claims c
+where a.id = c.eligibility_id
+  and a.created_at BETWEEN '2021-06-01T00:00:01' and '2021-10-29T14:33:14'; -- e.g. Datetime format 2021-04-29T14:33:14
+
 
 --View a list of submitted ECP claims
 select * from 

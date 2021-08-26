@@ -13,3 +13,7 @@ select *
 insert into public.claims
 select * 
   from claims_bkp;
+  
+insert into public.student_loans_eligibilities  
+select * 
+  from student_loans_eligibilities_bkp;

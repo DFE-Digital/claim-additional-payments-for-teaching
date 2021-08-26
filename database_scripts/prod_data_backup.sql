@@ -7,6 +7,19 @@ create table manual_claim_clear_down as
 	   public.claims c
 where ecpe.id = c.eligibility_id);
 
+insert into manual_claim_clear_down (claim_id, eligibility_id) 
+select c.id "claim_id",
+	   a.id "eligibility_id"
+  from public.student_loans_eligibilities a,
+  	   public.claims c
+ where a.id = c.eligibility_id
+   and a.created_at BETWEEN '2021-06-01T00:00:01' and '2021-10-29T14:33:14';
+
+select * 
+  from public.student_loans_eligibilities n
+ where id in (select eligibility_id
+					  from public.manual_claim_clear_down);
+
 select * 
   from public.notes n
  where claim_id in (select claim_id
@@ -27,6 +40,12 @@ select *
  where id in (select claim_id
 					  from public.manual_claim_clear_down);
 					  
+create table student_loans_eligibilities_bkp as
+select * 
+  from public.student_loans_eligibilities n
+ where id in (select eligibility_id
+					  from public.manual_claim_clear_down);
+
 create table notes_bkp as
 select * 
   from public.notes n
