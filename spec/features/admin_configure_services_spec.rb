@@ -64,7 +64,11 @@ RSpec.feature "Service configuration" do
     let(:policy_configuration) { policy_configurations(:early_career_payments) }
     let(:count) { [*1..5].sample }
     before do
-      create_list(:reminder, count, email_verified: true)
+      create_list(:reminder, count, email_verified: true, itt_academic_year: AcademicYear.current)
+      # should not be included
+      create(:reminder, email_verified: true, itt_academic_year: AcademicYear.next)
+      create(:reminder, email_verified: true, itt_academic_year: AcademicYear.current, email_sent_at: Date.today)
+      create(:reminder, email_verified: false, itt_academic_year: AcademicYear.current)
     end
     scenario "Service operator opens an ECP service for submissions", js: true do
       policy_configuration.update(open_for_submissions: false)

@@ -30,7 +30,7 @@ RSpec.describe Reminder, type: :model do
     end
   end
 
-  describe ".not_yet_sent" do
+  describe ".to_be_sent" do
     let(:count) { [*1..5].sample }
     let(:email_sent_at) { nil }
     let(:verified) { false }
