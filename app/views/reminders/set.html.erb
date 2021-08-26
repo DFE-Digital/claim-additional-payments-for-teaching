@@ -4,7 +4,7 @@
   <div class="govuk-grid-column-two-thirds">
     <div class="govuk-grid-row" >
     <div class="govuk-panel govuk-panel--confirmation">
-      <h1 class="govuk-panel__title" id="reminders-title">We have set your reminders</h1>
+      <h1 class="govuk-panel__title" id="reminders-title">We have set your reminder</h1>
     </div>
 
     <h2 class="govuk-heading-m">What happens next</h2>
@@ -14,26 +14,25 @@
       us on <%= mail_to "earlycareerteacherpayments@digital.education.gov.uk","earlycareerteacherpayments@digital.education.gov.uk", class: "govuk-link" %>.
     </p>
 
-    <h3 class="govuk-heading-s">When will your reminders be sent?</h3>
+    <h3 class="govuk-heading-s">When will your reminder be sent?</h3>
 
     <p class="govuk-body">
-      We will send you a reminder in <%= AcademicYear.next %>
+      We will send you a reminder in September <%= current_reminder.send_year %>
     </p>
 
     <p class="govuk-body">
       This is because, based on your answers, you will be able to apply for an early-career
-      payment at each of these times.
+      payment at this time.
     </p>
 
     <p class="govuk-body">
-      After receiving each reminder email, you will have five months to complete an
+      After receiving the reminder email, you will have five months to complete an
       application. If any of your employment circumstances change it might affect your
       eligibility.
     </p>
 
-    <p class="govuk-body">
-      It is your responsibility to apply for the payment. The Department for Education
-      cannot issue payments unless you apply for one.
+    <p class="govuk-inset-text">
+      It is your responsibility to apply for the payment you are eligible for. The Department for Education cannot issue payments unless you apply for one nor can we issue payments for claims made after the window has closed.
     </p>
 
     <p class="govuk-body">

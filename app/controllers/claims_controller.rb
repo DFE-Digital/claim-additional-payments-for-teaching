@@ -151,7 +151,7 @@ class ClaimsController < BasePublicController
     when "mobile-number"
       Rails.logger.debug "\n\n  ** =================== **\nSMS one_time_password: \n#{otp.code}\n  ** =================== **\n"
     when "email-verification"
-      current_claim.update_attributes(sent_one_time_password_at: session[:sent_one_time_password_at])
+      current_claim.update(sent_one_time_password_at: session[:sent_one_time_password_at])
     end
   end
 

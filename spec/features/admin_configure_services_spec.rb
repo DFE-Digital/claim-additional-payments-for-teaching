@@ -64,7 +64,11 @@ RSpec.feature "Service configuration" do
     let(:policy_configuration) { policy_configurations(:early_career_payments) }
     let(:count) { [*1..5].sample }
     before do
-      create_list(:reminder, count, email_verified: true)
+      create_list(:reminder, count, email_verified: true, itt_academic_year: AcademicYear.current)
+      # should not be included
+      create(:reminder, email_verified: true, itt_academic_year: AcademicYear.next)
+      create(:reminder, email_verified: true, itt_academic_year: AcademicYear.current, email_sent_at: Date.today)
+      create(:reminder, email_verified: false, itt_academic_year: AcademicYear.current)
     end
     scenario "Service operator opens an ECP service for submissions", js: true do
       policy_configuration.update(open_for_submissions: false)
@@ -82,7 +86,7 @@ RSpec.feature "Service configuration" do
       within_fieldset("Service status") { choose("Open") }
       expect(page).to have_content(I18n.t("admin.policy_configuration.reminder_warning", count: count))
       # make sure email reminder jobjob is queued
-      expect { click_on "Save" }.to enqueue_job(SendReminderEmailsJob).with("2020/2021")
+      expect { click_on "Save" }.to enqueue_job(SendReminderEmailsJob)
       expect(current_path).to eq(admin_policy_configurations_path)
 
       within(find("tr[data-policy-configuration-id=\"#{policy_configuration.id}\"]")) do

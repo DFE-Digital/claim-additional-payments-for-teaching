@@ -93,6 +93,49 @@ module EarlyCareerPayments
       ).present?
     end
 
+    # next eligible ignores current eligibility and is always looking forward
+    # to the next application window, used for reminder setting.
+    # definitions come from https://www.gov.uk/guidance/early-career-payments-guidance-for-teachers-and-schools
+    #
+    ## subject {
+    ##     selected cohort year {
+    ##       current academic year => next applicable academic year to apply
+    ##     }
+    ## }
+    def eligible_later_year
+      {
+        mathematics: {
+          AcademicYear.new(2018) => {
+            2021 => AcademicYear.new(2023),
+            2022 => AcademicYear.new(2023)
+          },
+          AcademicYear.new(2019) => {
+            2021 => AcademicYear.new(2022),
+            2022 => AcademicYear.new(2024),
+            2023 => AcademicYear.new(2024)
+          },
+          AcademicYear.new(2020) => {
+            AcademicYear.current.start_year => AcademicYear.next
+          }
+        },
+        chemistry: {
+          AcademicYear.new(2020) => {
+            AcademicYear.current.start_year => AcademicYear.next
+          }
+        },
+        physics: {
+          AcademicYear.new(2020) => {
+            AcademicYear.current.start_year => AcademicYear.next
+          }
+        },
+        foreign_languages: {
+          AcademicYear.new(2020) => {
+            AcademicYear.current.start_year => AcademicYear.next
+          }
+        }
+      }.dig(eligible_itt_subject.to_sym, itt_academic_year, AcademicYear.current.start_year)
+    end
+
     # This doesn't mean it's eligible either, ie, eligibility could be undetermined
     def ineligible?
       ineligible_nqt_in_academic_year_after_itt? ||

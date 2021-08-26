@@ -1,6 +1,6 @@
 class RemindersController < BasePublicController
   helper_method :current_reminder
-  after_action :reminder_set_email, only: [:show]
+  after_action :reminder_set_email, :clear_sessions, only: [:show]
 
   def new
     render first_template_in_sequence
@@ -8,6 +8,7 @@ class RemindersController < BasePublicController
 
   def create
     current_reminder.attributes = reminder_params
+    one_time_password
     if current_reminder.save(context: current_slug.to_sym)
       session[:reminder_id] = current_reminder.to_param
       redirect_to reminder_path(current_policy_routing_name, next_slug)
@@ -18,7 +19,6 @@ class RemindersController < BasePublicController
 
   def show
     render current_template
-    session.delete(:claim_id) if current_template == "set"
   end
 
   def update
@@ -65,7 +65,7 @@ class RemindersController < BasePublicController
     @current_reminder ||=
       reminder_from_session ||
       build_reminder_from_claim ||
-      Reminder.new
+      default_reminder
   end
 
   def reminder_from_session
@@ -75,13 +75,25 @@ class RemindersController < BasePublicController
   end
 
   def build_reminder_from_claim
-    return unless session.key?(:claim_id)
+    return unless current_claim
 
-    claim = Claim.find(session[:claim_id])
     Reminder.new(
-      full_name: claim.full_name,
-      email_address: claim.email_address
+      full_name: current_claim.full_name,
+      email_address: current_claim.email_address,
+      itt_academic_year: current_claim.eligibility.eligible_later_year,
+      itt_subject: current_claim.eligibility.eligible_itt_subject
     )
+  end
+
+  # fallback reminder will set reminder date to the next academic year
+  def default_reminder
+    Reminder.new(itt_academic_year: AcademicYear.next)
+  end
+
+  def current_claim
+    return @current_claim if defined?(@current_claim)
+
+    @current_claim = Claim.find_by_id(session[:claim_id])
   end
 
   def reminder_params
@@ -89,12 +101,12 @@ class RemindersController < BasePublicController
   end
 
   def one_time_password
-    case params[:slug]
+    case current_slug
     when "personal-details"
       ReminderMailer.email_verification(current_reminder, otp.code).deliver_now
       session[:sent_one_time_password_at] = Time.now
     when "email-verification"
-      current_reminder.update_attributes(sent_one_time_password_at: session[:sent_one_time_password_at])
+      current_reminder.update(sent_one_time_password_at: session[:sent_one_time_password_at])
     end
   end
 
@@ -106,5 +118,12 @@ class RemindersController < BasePublicController
     return unless current_slug == "set" && current_reminder.email_verified?
 
     ReminderMailer.reminder_set(current_reminder).deliver_now
+  end
+
+  def clear_sessions
+    return unless current_template == "set"
+
+    session.delete(:claim_id)
+    session.delete(:reminder_id)
   end
 end
