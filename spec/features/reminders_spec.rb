@@ -9,7 +9,7 @@ RSpec.feature "Set Reminder when Eligible Later for an Early Career Payment" do
   ].each do |args|
     scenario "Claimant enters peronal details and OTP for #{args[:subject]} for #{args[:cohort]}" do
       # set current date to academic year 2021 (or whatever is passed in from frozen_year)
-      Timecop.freeze(args[:frozen_year]) do
+      travel_to args[:frozen_year] do
         claim = start_early_career_payments_claim
         claim.eligibility.update!(
           attributes_for(
