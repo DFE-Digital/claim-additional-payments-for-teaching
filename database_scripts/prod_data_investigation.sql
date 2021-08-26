@@ -18,9 +18,14 @@ select count(*)
 --Get total number of submitted ECP claims
 select count(*), eligibility_type 
   from public.claims 
- where created_at BETWEEN '2021-06-01T00:00:01' and '2021-10-29T14:33:14' -- e.g. Datetime format 2021-04-29T14:33:14
+ where created_at BETWEEN '2021-04-01T00:00:00' and '2021-05-31T23:59:59' -- e.g. Datetime format 2021-04-29T14:33:14
  group by eligibility_type
  order by count(*);
+
+select * 
+  from public.claims 
+ where created_at BETWEEN '2021-04-01T00:00:00' and '2021-05-31T23:59:59' -- e.g. Datetime format 2021-04-29T14:33:14
+ 
 
 select * 
   from public.claims 
