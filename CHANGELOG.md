@@ -33,6 +33,7 @@ The format is based on [Keep a Changelog]
     2021
   - Add ECP link in README for developers to use
   - Add normalisation to claim name fields
+  - ECP OTP email content change
 - ECP policies
   - Adds set reminder flow to eligible now flow
   - Fix no validation occuring on 'Personal Details' screens
