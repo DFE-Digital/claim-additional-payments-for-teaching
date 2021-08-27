@@ -85,8 +85,8 @@ RSpec.describe ClaimMailer, type: :mailer do
         it_behaves_like "an email related to a claim", policy
 
         it "mentions that the claim is still being reviewed in the subject and body" do
-          expect(mail.subject).to include("still reviewing your claim")
-          expect(mail.body.encoded).to include("still reviewing your claim")
+          expect(mail.subject).to include("still reviewing your application")
+          expect(mail.body.encoded).to include("We're still reviewing your application")
         end
       end
 

@@ -26,7 +26,7 @@ class ClaimMailer < ApplicationMailer
 
   def update_after_three_weeks(claim)
     set_common_instance_variables(claim)
-    @subject = "We are still reviewing your claim #{@claim_description}, reference number: #{claim.reference}"
+    @subject = "We are still reviewing your application #{@claim_description}, reference number: #{claim.reference}"
 
     send_mail
   end
