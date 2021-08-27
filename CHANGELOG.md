@@ -34,6 +34,7 @@ The format is based on [Keep a Changelog]
   - Add ECP link in README for developers to use
   - Add normalisation to claim name fields
   - Claim approved template content change
+  - Claim submitted content change
 - ECP policies
   - Adds set reminder flow to eligible now flow
   - Fix no validation occuring on 'Personal Details' screens
