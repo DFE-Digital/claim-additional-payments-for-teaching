@@ -1,16 +1,22 @@
 Dear <%= @display_name %>,
 
-Your claim <%= @claim_description %> has been approved.
+# Your application <%= @claim_description %> has been approved.
 
-You will receive your payment within 6 weeks. We will send you another email when we make your payment.
+You will receive your payment within 12 weeks.
 
-This email will confirm the amount you'll receive and include a breakdown of your payment.
+We will send you another email when we make your payment. That email will confirm the amount you’ll receive and include a breakdown of your payment.
 
 The payment breakdown will show the following contributions:
 
 * student loan repayment, which is deducted from your payment if applicable
 * Income Tax and Employee National Insurance
 
+This payment is treated as pay and is therefore subject to a student loan contribution, if applicable.
+
+Your payment is also subject to Income Tax and National Insurance (NI) contributions, which we pay to HMRC on your behalf. This does not affect the amount you receive and we only share this with you in case you need the information in the future.
+
 For more information about these contributions, read the eligibility and payment guidance at <%= @policy.eligibility_page_url %>.
 
-If you have any questions about your claim, please contact <%= support_email_address(@policy.routing_name) %> giving your reference:  <%= @claim.reference %>.
+# Contact us
+
+If you have any questions about your application, please contact <%= support_email_address(@policy.routing_name) %> giving your reference:  <%= @claim.reference %>.
