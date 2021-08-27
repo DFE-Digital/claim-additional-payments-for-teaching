@@ -4,7 +4,7 @@ class ClaimMailer < ApplicationMailer
 
   def submitted(claim)
     set_common_instance_variables(claim)
-    @subject = "Your claim #{@claim_description} has been received, reference number: #{claim.reference}"
+    @subject = "Your application #{@claim_description} has been received, reference number: #{claim.reference}"
 
     send_mail
   end
