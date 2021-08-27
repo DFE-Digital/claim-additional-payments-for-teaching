@@ -41,8 +41,9 @@ module ClaimsHelper
       a << [translate("questions.student_loan_country"), claim.student_loan_country.titleize, "student-loan-country"] if claim.student_loan_country.present?
       a << [translate("questions.student_loan_how_many_courses"), claim.student_loan_courses.humanize, "student-loan-how-many-courses"] if claim.student_loan_courses.present?
       a << [translate("questions.student_loan_start_date.#{claim.student_loan_courses}"), t("answers.student_loan_start_date.#{claim.student_loan_courses}.#{claim.student_loan_start_date}"), "student-loan-start-date"] if claim.student_loan_courses.present?
-      a << [translate("questions.postgraduate_masters_loan"), (claim.postgraduate_masters_loan ? "Yes" : "No"), "masters-loan"] if claim.has_student_loan?
-      a << [translate("questions.postgraduate_doctoral_loan"), (claim.postgraduate_doctoral_loan ? "Yes" : "No"), "doctoral-loan"] if claim.has_student_loan?
+      a << [translate("questions.has_masters_and_or_doctoral_loan"), (claim.has_masters_doctoral_loan ? "Yes" : "No"), "masters-doctoral-loan"]
+      a << [translate("questions.postgraduate_masters_loan"), (claim.postgraduate_masters_loan ? "Yes" : "No"), "masters-loan"] if claim.has_masters_doctoral_loan?
+      a << [translate("questions.postgraduate_doctoral_loan"), (claim.postgraduate_doctoral_loan ? "Yes" : "No"), "doctoral-loan"] if claim.has_masters_doctoral_loan?
     end
   end
 
