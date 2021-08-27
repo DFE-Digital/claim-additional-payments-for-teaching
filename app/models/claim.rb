@@ -216,6 +216,8 @@ class Claim < ApplicationRecord
   before_save :normalise_ni_number, if: :national_insurance_number_changed?
   before_save :normalise_bank_account_number, if: :bank_account_number_changed?
   before_save :normalise_bank_sort_code, if: :bank_sort_code_changed?
+  before_save :normalise_first_name, if: :first_name_changed?
+  before_save :normalise_surname, if: :surname_changed?
 
   scope :unsubmitted, -> { where(submitted_at: nil) }
   scope :submitted, -> { where.not(submitted_at: nil) }
@@ -384,6 +386,14 @@ class Claim < ApplicationRecord
 
   def normalised_ni_number
     national_insurance_number.gsub(/\s/, "").upcase
+  end
+
+  def normalise_first_name
+    first_name.strip!
+  end
+
+  def normalise_surname
+    surname.strip!
   end
 
   def ni_number_is_correct_format

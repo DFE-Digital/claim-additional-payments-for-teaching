@@ -32,6 +32,7 @@ The format is based on [Keep a Changelog]
   - Update Northamptonshire local authority to reflect GIAS changes 1st April
     2021
   - Add ECP link in README for developers to use
+  - Add normalisation to claim name fields
 - ECP policies
   - Adds set reminder flow to eligible now flow
   - Fix no validation occuring on 'Personal Details' screens
