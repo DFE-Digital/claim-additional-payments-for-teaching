@@ -78,16 +78,13 @@ module AutomatedChecks
       end
 
       def partial_match
-        if dqt_teacher_status.eligible_qts_date?
-          create_note("ITT subject codes")
+        notes = []
 
-          return create_task(match: :any)
-        end
+        notes << create_note("ITT subject codes") unless dqt_teacher_status.eligible_qualification_subject?
 
-        if dqt_teacher_status.eligible_qualification_subject?
-          create_note("QTS award date")
-          create_task(match: :any)
-        end
+        notes << create_note("QTS award date") unless dqt_teacher_status.eligible_qts_date?
+
+        create_task(match: :any) if notes.any?
       end
 
       def tasks=(tasks)
