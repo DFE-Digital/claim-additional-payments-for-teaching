@@ -64,17 +64,15 @@ RSpec.describe ClaimMailer, type: :mailer do
           expect(mail.subject).to include("rejected")
           expect(mail.body.encoded).to include("not been able to approve")
 
-          ineligible_year = policy.last_ineligible_qts_award_year.to_s(:long)
           expect(mail.body.encoded)
-            .to include("completed your initial teacher training in or before the academic year #{ineligible_year}")
+            .to include("We have not been able to approve your application")
         end
 
         it "changes the ITT reason based on the policy's configured current_academic_year" do
           PolicyConfiguration.for(policy).update!(current_academic_year: "2025/2026")
 
-          ineligible_year = policy.last_ineligible_qts_award_year.to_s(:long)
           expect(mail.body.encoded)
-            .to include("completed your initial teacher training in or before the academic year #{ineligible_year}")
+            .to include("We have not been able to approve your application")
         end
       end
 
@@ -85,8 +83,8 @@ RSpec.describe ClaimMailer, type: :mailer do
         it_behaves_like "an email related to a claim", policy
 
         it "mentions that the claim is still being reviewed in the subject and body" do
-          expect(mail.subject).to include("still reviewing your claim")
-          expect(mail.body.encoded).to include("still reviewing your claim")
+          expect(mail.subject).to include("still reviewing your application")
+          expect(mail.body.encoded).to include("We're still reviewing your application")
         end
       end
 

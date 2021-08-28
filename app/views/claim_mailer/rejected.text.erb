@@ -1,11 +1,13 @@
 Dear <%= @display_name %>,
 
-We have not been able to approve your claim <%= @claim_description %>.
+# We have not been able to approve your application <%= @claim_description %>.
 
-Your claim has not been approved because our records show one of the following:
+Your application has not been approved because our records show one of the following:
 
 <%= render "claim_mailer/rejection_reasons/#{@policy.locale_key}" %>
 
 You can find more information about the eligibility criteria for this service at <%= @policy.eligibility_page_url %>
 
-If you have any questions about your claim, please contact <%= support_email_address(@policy.routing_name) %> giving your reference: <%= @claim.reference %>.
+# Contact us
+
+If you have any questions about your application, please contact <%= support_email_address(@policy.routing_name) %> giving your reference: <%= @claim.reference %>.
