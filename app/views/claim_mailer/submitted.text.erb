@@ -1,17 +1,13 @@
 Dear <%= @display_name %>,
 
-We've received your claim <%= @claim_description %>.
-
-Your unique reference is <%= @claim.reference %>. You will need this if you contact us about your claim.
+We've received your application <%= @claim_description %>. Your unique reference is <%= @claim.reference %>. You will need this if you contact us about your claim.
 
 # What happens next
 
-We'll check the details you provided in your application and we'll tell you within <%= claim_decision_deadline_in_weeks %> if your claim was successful.
-
-From the point your claim is approved it can take a further 6 weeks to make a payment into your account.
-
-If we cannot make the payment within 6 weeks we will let you know.
+* We'll check the details you provided in your application and we'll tell you within 6 weeks if your claim is successful.
+* From the point your claim is approved it can take a further 12 weeks to make a payment into your account.
+* If we cannot make the payment within 12 weeks we will let you know.
 
 # Contact us
 
-Reply to this email or send an email to <%= support_email_address(@policy.routing_name) %> with your unique reference and your query.
+If you have any questions about your claim, please reply to this email or contact: <%= support_email_address(@policy.routing_name) %> with your unique reference and your query. ((<%= @claim.reference %>))

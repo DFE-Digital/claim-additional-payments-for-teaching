@@ -33,6 +33,7 @@ The format is based on [Keep a Changelog]
     2021
   - Add ECP link in README for developers to use
   - Add normalisation to claim name fields
+  - Claim received template content change
   - Claim rejected template content change
   - ECP OTP email content change
   - Claim approved template content change
