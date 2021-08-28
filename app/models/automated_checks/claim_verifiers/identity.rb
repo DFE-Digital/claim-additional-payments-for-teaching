@@ -42,8 +42,18 @@ module AutomatedChecks
         create_task(match: :all, passed: true)
       end
 
-      def create_field_note(name:)
-        body = "#{name} not matched"
+      def create_field_note(
+        name:,
+        claimant:,
+        dqt:
+      )
+        body = <<~HTML
+          #{name} not matched:
+          <pre>
+            Claimant: <span class="dark-grey">"</span><span class="red">#{claimant}</span><span class="dark-grey">"</span>
+            DQT:      <span class="dark-grey">"</span><span class="green">#{dqt}</span><span class="dark-grey">"</span>
+          </pre>
+        HTML
 
         create_note(body: body)
       end
@@ -99,13 +109,37 @@ module AutomatedChecks
       def partial_match
         notes = []
 
-        notes << create_field_note(name: "National Insurance number") unless national_insurance_number_matched?
+        unless national_insurance_number_matched?
+          notes << create_field_note(
+            name: "National Insurance number",
+            claimant: claim.national_insurance_number,
+            dqt: dqt_teacher_status.fetch(:national_insurance_number)
+          )
+        end
 
-        notes << create_field_note(name: "First name or surname") unless name_matched?
+        unless name_matched?
+          notes << create_field_note(
+            name: "First name or surname",
+            claimant: claim.full_name,
+            dqt: "#{dqt_teacher_status.fetch(:first_name)} #{dqt_teacher_status.fetch(:surname)}"
+          )
+        end
 
-        notes << create_field_note(name: "Date of birth") unless dob_matched?
+        unless dob_matched?
+          notes << create_field_note(
+            name: "Date of birth",
+            claimant: claim.date_of_birth,
+            dqt: dqt_teacher_status.fetch(:date_of_birth)
+          )
+        end
 
-        notes << create_field_note(name: "Teacher reference number") unless trn_matched?
+        unless trn_matched?
+          notes << create_field_note(
+            name: "Teacher reference number",
+            claimant: claim.teacher_reference_number,
+            dqt: dqt_teacher_status.fetch(:teacher_reference_number)
+          )
+        end
 
         notes << create_note(body: "IMPORTANT: Teacher’s identity has an active alert. Speak to manager before checking this claim.", important: true) if active_alert?
 
