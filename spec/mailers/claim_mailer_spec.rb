@@ -87,46 +87,6 @@ RSpec.describe ClaimMailer, type: :mailer do
           expect(mail.body.encoded).to include("We're still reviewing your application")
         end
       end
-
-      describe "#identity_confirmation" do
-        let(:claim) { create(:claim, :submitted, policy: policy) }
-        let(:mail) { ClaimMailer.identity_confirmation(claim) }
-
-        it_behaves_like "an email related to a claim", policy
-
-        it "mentions the claimant's identity needs to be confirmed" do
-          expect(mail.subject).to include("verify your identity")
-
-          expect(mail.body.encoded).to(
-            include(claim.national_insurance_number).and(
-              include(claim.teacher_reference_number).and(
-                include("we need to be able to identify your teacher record")
-              )
-            )
-          )
-        end
-      end
-
-      context "with #identity_confirmation" do
-        let(:claim) { create(:claim, :submitted, policy: policy) }
-        let(:identity_confirmation) { ClaimMailer.identity_confirmation(claim) }
-
-        context "with #deliver" do
-          before { identity_confirmation.deliver }
-
-          describe "note" do
-            subject(:note) { claim.notes.last }
-
-            describe "#body" do
-              subject(:body) { note.body }
-
-              it "returns Manual verification" do
-                expect(body).to have_content("Identity confirmation mailer sent")
-              end
-            end
-          end
-        end
-      end
     end
   end
 

@@ -90,8 +90,6 @@ module AutomatedChecks
       def no_match
         return unless dqt_teacher_status.nil?
 
-        ClaimMailer.identity_confirmation(claim).deliver_later
-
         create_note(body: "Not matched")
         create_task(match: :none)
       end
