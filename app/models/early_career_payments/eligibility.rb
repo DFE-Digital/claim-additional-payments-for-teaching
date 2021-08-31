@@ -229,10 +229,12 @@ module EarlyCareerPayments
       {
         mathematics: {
           AcademicYear.new(2018) => {
+            2020 => AcademicYear.new(2021),
             2021 => AcademicYear.new(2023),
             2022 => AcademicYear.new(2023)
           },
           AcademicYear.new(2019) => {
+            2020 => AcademicYear.new(2022),
             2021 => AcademicYear.new(2022),
             2022 => AcademicYear.new(2024),
             2023 => AcademicYear.new(2024)
