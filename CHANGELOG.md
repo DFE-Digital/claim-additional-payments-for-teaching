@@ -23,6 +23,8 @@ The format is based on [Keep a Changelog]
   - DQT identity check mailer removed
   - Add admin claim verifier ECP qualifications
   - Update claim verifiers to handle multiple partial matches
+  - Add identity claim verifier admin claim notes claimant vs DQT mismatch
+    information
 - All policies
   - Home Address selection
     - Add home address search screen to claim journey
