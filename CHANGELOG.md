@@ -42,6 +42,7 @@ The format is based on [Keep a Changelog]
   - Adds set reminder flow to eligible now flow
   - Fix no validation occuring on 'Personal Details' screens
   - Fix typo on 'How we will use the information you provide' page
+  - Content change for 'Performance issues' screen
 - DAC Accessiblity Report fixes
   - Incorrect aria value
   - Links opening in a new window

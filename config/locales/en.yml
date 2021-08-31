@@ -277,9 +277,9 @@ en:
       nqt_in_academic_year_after_itt: "Have you started your first year as a newly qualified teacher?"
       poor_performance: Performance issues
       disciplinary_action: "Are you currently subject to disciplinary action?"
-      disciplinary_action_hint: This could be because of gross misconduct. It is something we may check with your school as it will affect your eligibility.
+      disciplinary_action_hint: "This is more serious than performance measures and could be because of misconduct. It is something we may check with your school as it will affect your eligibility."
       formal_performance_action: "Have any performance measures been started against you?"
-      formal_performance_action_hint: This will be as a result of your serious underperformance as a teacher over a period of time. It will put your employment at the school at risk.
+      formal_performance_action_hint: "This will be as a result of your underperformance as a teacher over a period of time. It could put your employment at the school at risk and is something we may check with your school as it will affect your eligibility."
       qualification:
         heading: "Which route into teaching did you take?"
         hint:
