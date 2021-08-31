@@ -382,7 +382,7 @@ RSpec.feature "Admin claim tasks update with DQT API" do
           context "admin claim tasks view" do
             before { visit admin_claim_tasks_path(claim) }
 
-            scenario "shows identity confirmation passed" do
+            scenario "shows identity confirmation partial match" do
               expect(task("Identity confirmation")).to have_text("Partial match")
             end
           end
@@ -501,6 +501,60 @@ RSpec.feature "Admin claim tasks update with DQT API" do
 
             scenario "shows note in banner" do
               expect(banner).to have_text("Teacher’s identity has an active alert. Speak to manager before checking this claim.")
+            end
+          end
+        end
+
+        context "except multiple matches" do
+          let(:data) do
+            {
+              date_of_birth: claim.date_of_birth + 1.day,
+              name: "Except #{claim.surname}",
+              national_insurance_number: claim.national_insurance_number,
+              teacher_reference_number: claim.teacher_reference_number
+            }
+          end
+
+          context "admin claim tasks view" do
+            before { visit admin_claim_tasks_path(claim) }
+
+            scenario "shows identity confirmation partial match" do
+              expect(task("Identity confirmation")).to have_text("Partial match")
+            end
+          end
+
+          context "admin claim tasks identity confirmation view" do
+            before { visit admin_claim_task_path(claim, :identity_confirmation) }
+
+            scenario "shows identity confirmation question" do
+              expect(page).to have_content("Did #{claim.full_name} submit the claim?")
+              expect(page).to have_link(href: admin_claim_notes_path(claim))
+            end
+          end
+
+          context "admin claim notes view" do
+            before { visit admin_claim_notes_path(claim) }
+
+            scenario "shows multiple not matched by an automated check" do
+              expect(notes).to include(
+                have_text(
+                  "Date of birth not matched"
+                ).and(
+                  have_text(
+                    "by an automated check on #{I18n.l(claim.notes.last.created_at)}"
+                  )
+                )
+              )
+
+              expect(notes).to include(
+                have_text(
+                  "First name or surname not matched"
+                ).and(
+                  have_text(
+                    "by an automated check on #{I18n.l(claim.notes.last.created_at)}"
+                  )
+                )
+              )
             end
           end
         end
@@ -1149,6 +1203,60 @@ RSpec.feature "Admin claim tasks update with DQT API" do
             end
           end
         end
+
+        context "except multiple matches" do
+          let(:data) do
+            {
+              date_of_birth: claim.date_of_birth + 1.day,
+              name: "Except #{claim.surname}",
+              national_insurance_number: claim.national_insurance_number,
+              teacher_reference_number: claim.teacher_reference_number
+            }
+          end
+
+          context "admin claim tasks view" do
+            before { visit admin_claim_tasks_path(claim) }
+
+            scenario "shows identity confirmation partial match" do
+              expect(task("Identity confirmation")).to have_text("Partial match")
+            end
+          end
+
+          context "admin claim tasks identity confirmation view" do
+            before { visit admin_claim_task_path(claim, :identity_confirmation) }
+
+            scenario "shows identity confirmation question" do
+              expect(page).to have_content("Did #{claim.full_name} submit the claim?")
+              expect(page).to have_link(href: admin_claim_notes_path(claim))
+            end
+          end
+
+          context "admin claim notes view" do
+            before { visit admin_claim_notes_path(claim) }
+
+            scenario "shows multiple not matched by an automated check" do
+              expect(notes).to include(
+                have_text(
+                  "Date of birth not matched"
+                ).and(
+                  have_text(
+                    "by an automated check on #{I18n.l(claim.notes.last.created_at)}"
+                  )
+                )
+              )
+
+              expect(notes).to include(
+                have_text(
+                  "First name or surname not matched"
+                ).and(
+                  have_text(
+                    "by an automated check on #{I18n.l(claim.notes.last.created_at)}"
+                  )
+                )
+              )
+            end
+          end
+        end
       end
 
       context "without matching DQT identity" do
@@ -1794,6 +1902,60 @@ RSpec.feature "Admin claim tasks update with DQT API" do
 
             scenario "shows note in banner" do
               expect(banner).to have_text("Teacher’s identity has an active alert. Speak to manager before checking this claim.")
+            end
+          end
+        end
+
+        context "except multiple matches" do
+          let(:data) do
+            {
+              date_of_birth: claim.date_of_birth + 1.day,
+              name: "Except #{claim.surname}",
+              national_insurance_number: claim.national_insurance_number,
+              teacher_reference_number: claim.teacher_reference_number
+            }
+          end
+
+          context "admin claim tasks view" do
+            before { visit admin_claim_tasks_path(claim) }
+
+            scenario "shows identity confirmation partial match" do
+              expect(task("Identity confirmation")).to have_text("Partial match")
+            end
+          end
+
+          context "admin claim tasks identity confirmation view" do
+            before { visit admin_claim_task_path(claim, :identity_confirmation) }
+
+            scenario "shows identity confirmation question" do
+              expect(page).to have_content("Did #{claim.full_name} submit the claim?")
+              expect(page).to have_link(href: admin_claim_notes_path(claim))
+            end
+          end
+
+          context "admin claim notes view" do
+            before { visit admin_claim_notes_path(claim) }
+
+            scenario "shows multiple not matched by an automated check" do
+              expect(notes).to include(
+                have_text(
+                  "Date of birth not matched"
+                ).and(
+                  have_text(
+                    "by an automated check on #{I18n.l(claim.notes.last.created_at)}"
+                  )
+                )
+              )
+
+              expect(notes).to include(
+                have_text(
+                  "First name or surname not matched"
+                ).and(
+                  have_text(
+                    "by an automated check on #{I18n.l(claim.notes.last.created_at)}"
+                  )
+                )
+              )
             end
           end
         end
