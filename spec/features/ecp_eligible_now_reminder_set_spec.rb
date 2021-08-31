@@ -9,8 +9,8 @@ RSpec.feature "Elible now can set a reminder for next year." do
       visit claim_path(claim.policy.routing_name, "check-your-answers")
       expect(page).to have_text(claim.first_name)
       click_on "Accept and send"
-      expect(page).to have_text("Set a reminder for when your application window opens")
-      click_on "Continue"
+      expect(page).to have_text("Set a reminder for when your next application window opens")
+      click_on "Set reminder"
       expect(page).to have_field("reminder_email_address", with: claim.email_address)
       expect(page).to have_field("reminder_full_name", with: claim.full_name)
       click_on "Continue"
