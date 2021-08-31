@@ -5,7 +5,10 @@ create table manual_claim_clear_down as
  		ecpe.id  "eligibility_id"
   from public.early_career_payments_eligibilities ecpe,
 	   public.claims c
-where ecpe.id = c.eligibility_id);
+ where ecpe.id = c.eligibility_id);
+
+ alter table manual_claim_clear_down
+   add primary key (claim_id, eligibility_id);
 
 insert into manual_claim_clear_down (claim_id, eligibility_id) 
 select c.id "claim_id",
@@ -13,7 +16,13 @@ select c.id "claim_id",
   from public.student_loans_eligibilities a,
   	   public.claims c
  where a.id = c.eligibility_id
-   and a.created_at BETWEEN '2021-06-01T00:00:01' and '2021-10-29T14:33:14';
+   and a.created_at BETWEEN '2021-04-01T00:00:01' and '2021-10-29T14:33:14';
+
+select teacher_reference_number, reference  
+  from public.claims 
+ where id in (select claim_id
+                from manual_claim_clear_down);
+ 
 
 select * 
   from public.student_loans_eligibilities n
@@ -69,3 +78,9 @@ select *
   from public.claims
  where id in (select claim_id
 					  from public.manual_claim_clear_down);					  
+					  
+select count(*) from notes_bkp;
+select count(*) from early_career_payments_eligibilities_bkp;
+select count(*) from student_loans_eligibilities_bkp;
+select count(*) from tasks_bkp;
+select count(*) from claims_bkp;					  
