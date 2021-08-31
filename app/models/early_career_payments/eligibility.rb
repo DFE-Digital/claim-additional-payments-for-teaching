@@ -1,5 +1,128 @@
 module EarlyCareerPayments
   class Eligibility < ApplicationRecord
+    AwardAmount = Struct.new(
+      :itt_subject,
+      :itt_academic_year,
+      :claim_academic_year,
+      :base_amount,
+      :uplift_amount,
+      keyword_init: true
+    )
+
+    AWARD_AMOUNTS = [
+      AwardAmount.new(
+        itt_subject: :mathematics,
+        itt_academic_year: AcademicYear.new(2018),
+        claim_academic_year: AcademicYear.new(2021),
+        base_amount: 5_000,
+        uplift_amount: 7_500
+      ),
+      AwardAmount.new(
+        itt_subject: :mathematics,
+        itt_academic_year: AcademicYear.new(2019),
+        claim_academic_year: AcademicYear.new(2022),
+        base_amount: 5_000,
+        uplift_amount: 7_500
+      ),
+      AwardAmount.new(
+        itt_subject: :mathematics,
+        itt_academic_year: AcademicYear.new(2020),
+        claim_academic_year: AcademicYear.new(2022),
+        base_amount: 2_000,
+        uplift_amount: 3_000
+      ),
+      AwardAmount.new(
+        itt_subject: :physics,
+        itt_academic_year: AcademicYear.new(2020),
+        claim_academic_year: AcademicYear.new(2022),
+        base_amount: 2_000,
+        uplift_amount: 3_000
+      ),
+      AwardAmount.new(
+        itt_subject: :chemistry,
+        itt_academic_year: AcademicYear.new(2020),
+        claim_academic_year: AcademicYear.new(2022),
+        base_amount: 2_000,
+        uplift_amount: 3_000
+      ),
+      AwardAmount.new(
+        itt_subject: :foreign_languages,
+        itt_academic_year: AcademicYear.new(2020),
+        claim_academic_year: AcademicYear.new(2022),
+        base_amount: 2_000,
+        uplift_amount: 3_000
+      ),
+      AwardAmount.new(
+        itt_subject: :mathematics,
+        itt_academic_year: AcademicYear.new(2018),
+        claim_academic_year: AcademicYear.new(2023),
+        base_amount: 5_000,
+        uplift_amount: 7_500
+      ),
+      AwardAmount.new(
+        itt_subject: :mathematics,
+        itt_academic_year: AcademicYear.new(2020),
+        claim_academic_year: AcademicYear.new(2023),
+        base_amount: 2_000,
+        uplift_amount: 3_000
+      ),
+      AwardAmount.new(
+        itt_subject: :physics,
+        itt_academic_year: AcademicYear.new(2020),
+        claim_academic_year: AcademicYear.new(2023),
+        base_amount: 2_000,
+        uplift_amount: 3_000
+      ),
+      AwardAmount.new(
+        itt_subject: :chemistry,
+        itt_academic_year: AcademicYear.new(2020),
+        claim_academic_year: AcademicYear.new(2023),
+        base_amount: 2_000,
+        uplift_amount: 3_000
+      ),
+      AwardAmount.new(
+        itt_subject: :foreign_languages,
+        itt_academic_year: AcademicYear.new(2020),
+        claim_academic_year: AcademicYear.new(2023),
+        base_amount: 2_000,
+        uplift_amount: 3_000
+      ),
+      AwardAmount.new(
+        itt_subject: :mathematics,
+        itt_academic_year: AcademicYear.new(2019),
+        claim_academic_year: AcademicYear.new(2024),
+        base_amount: 5_000,
+        uplift_amount: 7_500
+      ),
+      AwardAmount.new(
+        itt_subject: :mathematics,
+        itt_academic_year: AcademicYear.new(2020),
+        claim_academic_year: AcademicYear.new(2024),
+        base_amount: 2_000,
+        uplift_amount: 3_000
+      ),
+      AwardAmount.new(
+        itt_subject: :physics,
+        itt_academic_year: AcademicYear.new(2020),
+        claim_academic_year: AcademicYear.new(2024),
+        base_amount: 2_000,
+        uplift_amount: 3_000
+      ),
+      AwardAmount.new(
+        itt_subject: :chemistry,
+        itt_academic_year: AcademicYear.new(2020),
+        claim_academic_year: AcademicYear.new(2024),
+        base_amount: 2_000,
+        uplift_amount: 3_000
+      ),
+      AwardAmount.new(
+        itt_subject: :foreign_languages,
+        itt_academic_year: AcademicYear.new(2020),
+        claim_academic_year: AcademicYear.new(2024),
+        base_amount: 2_000,
+        uplift_amount: 3_000
+      )
+    ].freeze
     EDITABLE_ATTRIBUTES = [
       :nqt_in_academic_year_after_itt,
       :current_school_id,
@@ -217,132 +340,8 @@ module EarlyCareerPayments
       award_amounts
     end
 
-    AwardAmount = Struct.new(
-      :itt_subject,
-      :itt_academic_year,
-      :claim_academic_year,
-      :base_amount,
-      :uplift_amount,
-      keyword_init: true
-    )
-
     def first_eligible_itt_academic_year
-      award_amounts = [
-        AwardAmount.new(
-          itt_subject: :mathematics,
-          itt_academic_year: AcademicYear.new(2018),
-          claim_academic_year: AcademicYear.new(2021),
-          base_amount: 5_000,
-          uplift_amount: 7_500
-        ),
-        AwardAmount.new(
-          itt_subject: :mathematics,
-          itt_academic_year: AcademicYear.new(2019),
-          claim_academic_year: AcademicYear.new(2022),
-          base_amount: 5_000,
-          uplift_amount: 7_500
-        ),
-        AwardAmount.new(
-          itt_subject: :mathematics,
-          itt_academic_year: AcademicYear.new(2020),
-          claim_academic_year: AcademicYear.new(2022),
-          base_amount: 2_000,
-          uplift_amount: 3_000
-        ),
-        AwardAmount.new(
-          itt_subject: :physics,
-          itt_academic_year: AcademicYear.new(2020),
-          claim_academic_year: AcademicYear.new(2022),
-          base_amount: 2_000,
-          uplift_amount: 3_000
-        ),
-        AwardAmount.new(
-          itt_subject: :chemistry,
-          itt_academic_year: AcademicYear.new(2020),
-          claim_academic_year: AcademicYear.new(2022),
-          base_amount: 2_000,
-          uplift_amount: 3_000
-        ),
-        AwardAmount.new(
-          itt_subject: :foreign_languages,
-          itt_academic_year: AcademicYear.new(2020),
-          claim_academic_year: AcademicYear.new(2022),
-          base_amount: 2_000,
-          uplift_amount: 3_000
-        ),
-        AwardAmount.new(
-          itt_subject: :mathematics,
-          itt_academic_year: AcademicYear.new(2018),
-          claim_academic_year: AcademicYear.new(2023),
-          base_amount: 5_000,
-          uplift_amount: 7_500
-        ),
-        AwardAmount.new(
-          itt_subject: :mathematics,
-          itt_academic_year: AcademicYear.new(2020),
-          claim_academic_year: AcademicYear.new(2023),
-          base_amount: 2_000,
-          uplift_amount: 3_000
-        ),
-        AwardAmount.new(
-          itt_subject: :physics,
-          itt_academic_year: AcademicYear.new(2020),
-          claim_academic_year: AcademicYear.new(2023),
-          base_amount: 2_000,
-          uplift_amount: 3_000
-        ),
-        AwardAmount.new(
-          itt_subject: :chemistry,
-          itt_academic_year: AcademicYear.new(2020),
-          claim_academic_year: AcademicYear.new(2023),
-          base_amount: 2_000,
-          uplift_amount: 3_000
-        ),
-        AwardAmount.new(
-          itt_subject: :foreign_languages,
-          itt_academic_year: AcademicYear.new(2020),
-          claim_academic_year: AcademicYear.new(2023),
-          base_amount: 2_000,
-          uplift_amount: 3_000
-        ),
-        AwardAmount.new(
-          itt_subject: :mathematics,
-          itt_academic_year: AcademicYear.new(2019),
-          claim_academic_year: AcademicYear.new(2024),
-          base_amount: 5_000,
-          uplift_amount: 7_500
-        ),
-        AwardAmount.new(
-          itt_subject: :mathematics,
-          itt_academic_year: AcademicYear.new(2020),
-          claim_academic_year: AcademicYear.new(2024),
-          base_amount: 2_000,
-          uplift_amount: 3_000
-        ),
-        AwardAmount.new(
-          itt_subject: :physics,
-          itt_academic_year: AcademicYear.new(2020),
-          claim_academic_year: AcademicYear.new(2024),
-          base_amount: 2_000,
-          uplift_amount: 3_000
-        ),
-        AwardAmount.new(
-          itt_subject: :chemistry,
-          itt_academic_year: AcademicYear.new(2020),
-          claim_academic_year: AcademicYear.new(2024),
-          base_amount: 2_000,
-          uplift_amount: 3_000
-        ),
-        AwardAmount.new(
-          itt_subject: :foreign_languages,
-          itt_academic_year: AcademicYear.new(2020),
-          claim_academic_year: AcademicYear.new(2024),
-          base_amount: 2_000,
-          uplift_amount: 3_000
-        )
-      ]
-
-      award_amount = award_amounts.find do |award_amount|
+      award_amount = AWARD_AMOUNTS.find do |award_amount|
         award_amount.claim_academic_year == claim.academic_year &&
           award_amount.itt_subject.to_s == eligible_itt_subject
       end

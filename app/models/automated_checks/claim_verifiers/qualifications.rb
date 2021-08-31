@@ -22,14 +22,15 @@ module AutomatedChecks
 
       private
 
-      attr_accessor :admin_user, :claim, :dqt_teacher_status
+      attr_accessor :admin_user, :claim
+      attr_reader :dqt_teacher_status
 
       def awaiting_task?(task_name)
         claim.tasks.none? { |task| task.name == task_name }
       end
 
       def complete_match
-        return unless claim.policy::DqtRecord.new(dqt_teacher_status).eligible?
+        return unless dqt_teacher_status.eligible?
 
         create_task(match: :all, passed: true)
       end
@@ -59,11 +60,17 @@ module AutomatedChecks
         task
       end
 
+      def dqt_teacher_status=(dqt_teacher_status)
+        return if dqt_teacher_status.nil?
+
+        @dqt_teacher_status = claim.policy::DqtRecord.new(dqt_teacher_status, claim)
+      end
+
       def no_match
         return unless dqt_teacher_status.nil? ||
           (
-            !claim.policy::DqtRecord.new(dqt_teacher_status).eligible_qts_date? &&
-            !claim.policy::DqtRecord.new(dqt_teacher_status).eligible_qualification_subject?
+            !dqt_teacher_status.eligible_qts_date? &&
+            !dqt_teacher_status.eligible_qualification_subject?
           )
 
         create_note
@@ -71,13 +78,13 @@ module AutomatedChecks
       end
 
       def partial_match
-        if claim.policy::DqtRecord.new(dqt_teacher_status).eligible_qts_date?
+        if dqt_teacher_status.eligible_qts_date?
           create_note("ITT subject codes")
 
           return create_task(match: :any)
         end
 
-        if claim.policy::DqtRecord.new(dqt_teacher_status).eligible_qualification_subject?
+        if dqt_teacher_status.eligible_qualification_subject?
           create_note("QTS award date")
           create_task(match: :any)
         end
