@@ -61,6 +61,9 @@ The format is based on [Keep a Changelog]
   - Non-descriptive links
 - Google Analytics
   - Add Google Tag Manager to admin and application
+- Claims
+  - Stop claim full name adding redundant spaces when middle name is an empty or
+    blank string
 
 ## [Release 092] - 2021-07-22
 

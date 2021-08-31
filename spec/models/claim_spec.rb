@@ -937,6 +937,14 @@ RSpec.describe Claim, type: :model do
       expect(Claim.new(first_name: "Isambard", surname: "Brunel").full_name).to eq "Isambard Brunel"
     end
 
+    it "joins the first name and surname together with only one space when middle name is an empty string" do
+      expect(Claim.new(first_name: "Isambard", middle_name: "", surname: "Brunel").full_name).to eq "Isambard Brunel"
+    end
+
+    it "joins the first name and surname together with only one space when middle name is a blank string" do
+      expect(Claim.new(first_name: "Isambard", middle_name: " ", surname: "Brunel").full_name).to eq "Isambard Brunel"
+    end
+
     it "includes a middle name when present" do
       expect(
         Claim.new(first_name: "Isambard", middle_name: "Kingdom", surname: "Brunel").full_name
