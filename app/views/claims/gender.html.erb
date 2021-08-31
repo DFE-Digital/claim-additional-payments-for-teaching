@@ -14,11 +14,8 @@
           </legend>
 
           <span class="govuk-hint" id="payroll_gender-hint">
-            Your school will need to send HMRC a "Male" or
-            "Female" gender to pay you. We ask so we can
-            provide this information to HMRC who use it
-            along with other data to find you in their
-            database, allowing us to make a payment to you.
+            If you don't know what gender is held on record we will contact HMRC or the Teachers Pension Scheme.
+            We don't need to record this information but it is required to make tax contributions on your behalf to HMRC.
           </span>
 
           <div class="govuk-radios">
@@ -41,21 +38,6 @@
       <% end %>
 
       <%= form.submit "Continue", class: "govuk-button" %>
-
-      <details class="govuk-details" data-module="govuk-details">
-        <summary class="govuk-details__summary">
-          <span class="govuk-details__summary-text">
-            If you don't know
-          </span>
-        </summary>
-        <div class="govuk-details__text">
-          If you don't know what gender is held on record
-          we will contact HMRC or the Teachers Pension
-          Scheme. We don't need to record this information
-          but it is required to make tax contributions on
-          your behalf to HMRC.
-        </div>
-      </details>
 
     <% end %>
   </div>

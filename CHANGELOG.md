@@ -38,6 +38,8 @@ The format is based on [Keep a Changelog]
   - ECP OTP email content change
   - Claim approved template content change
   - Claim submitted content change
+  - 'What gender does your school's payroll system associate with you?' content
+    change
 - ECP policies
   - Adds set reminder flow to eligible now flow
   - Fix no validation occuring on 'Personal Details' screens
