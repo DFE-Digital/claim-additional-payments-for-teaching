@@ -255,7 +255,7 @@ en:
       heading_send_application: Now send your application
       statement: By submitting this you are confirming that, to the best of your knowledge, the details you are providing are correct.
       btn_text: Accept and send
-    policy_name: "Claim an early-career payment"
+    policy_name: "Early-career payments"
     policy_short_name: "Early-Career Payments"
     claim_description: "for an early-career payment"
     support_email_address: "earlycareerteacherpayments@digital.education.gov.uk"
