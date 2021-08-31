@@ -152,6 +152,7 @@ en:
     policy_name: "Claim a payment for teaching maths or physics"
     policy_short_name: "Maths and Physics"
     claim_description: "for a payment for teaching maths or physics"
+    claim_subject: "Maths and Physics"
     claim_amount_description: "Payment for teaching maths or physics"
     claim_action: "claim £2,000 for teaching maths or physics"
     award_description: "£2,000 payment"
@@ -207,6 +208,7 @@ en:
     policy_name: "Teachers: claim back your student loan repayments"
     policy_short_name: "Student Loans"
     claim_description: "to get back your student loan repayments"
+    claim_subject: "Student loan repayment"
     claim_amount_description: "Student loan repayments you’ve claimed back"
     claim_action: "claim back student loan repayments"
     award_description: "claim payment"
@@ -258,6 +260,7 @@ en:
     policy_name: "Claim an early-career payment"
     policy_short_name: "Early-Career Payments"
     claim_description: "for an early-career payment"
+    claim_subject: "Early-career payment"
     support_email_address: "earlycareerteacherpayments@digital.education.gov.uk"
     landing_page: "Apply for an early-career payment"
     ineligible:

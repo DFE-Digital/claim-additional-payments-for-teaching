@@ -42,6 +42,7 @@ The format is based on [Keep a Changelog]
   - Claim submitted content change
   - 'What gender does your school's payroll system associate with you?' content
     change
+  - Update subject heading on TSLR and ECP OTP email
 - ECP policies
   - Adds set reminder flow to eligible now flow
   - Fix no validation occuring on 'Personal Details' screens
