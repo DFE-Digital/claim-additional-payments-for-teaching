@@ -81,7 +81,7 @@ en:
     mobile_number: "Mobile number"
     personal_details: "Personal details"
     bank_details: "Enter bank account details"
-    payroll_gender: "What gender does your school's payroll system associate with you?"
+    payroll_gender: "How is your gender recorded on your school’s payroll system?"
     bank_or_building_society: What account do you want the money paid into?
     account_details: Enter your %{bank_or_building_society} details
     account_hint: "For example: your name as it appears on your %{bank_or_building_society} statements or %{card} card."
