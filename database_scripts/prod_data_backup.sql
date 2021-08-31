@@ -18,12 +18,16 @@ select c.id "claim_id",
  where a.id = c.eligibility_id
    and a.created_at BETWEEN '2021-04-01T00:00:01' and '2021-10-29T14:33:14';
 
+-- remove two live records:
+
+delete from public.manual_claim_clear_down 
+ where claim_id in ('53bb575d-1cf0-4be4-a37f-b370acb70085', '526c4313-4e97-485d-91e4-e25d3ccf4b01')
+
 select teacher_reference_number, reference  
   from public.claims 
  where id in (select claim_id
                 from manual_claim_clear_down);
  
-
 select * 
   from public.student_loans_eligibilities n
  where id in (select eligibility_id
