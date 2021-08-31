@@ -50,6 +50,7 @@ The format is based on [Keep a Changelog]
   - Fix no validation occuring on 'Personal Details' screens
   - Fix typo on 'How we will use the information you provide' page
   - Content change for 'Performance issues' screen
+  - Content change for 'Application complete' page
 - DAC Accessiblity Report fixes
   - Incorrect aria value
   - Links opening in a new window
