@@ -20,6 +20,7 @@ The format is based on [Keep a Changelog]
   - Add a note if DQT active alert flag is set to true
   - Add important notes to claim summary (DQT active alert)
   - Add ECP admin claim matching details task screen
+  - DQT identity check mailer removed
   - Add admin claim verifier ECP qualifications
   - Update claim verifiers to handle multiple partial matches
   - Add identity claim verifier admin claim notes claimant vs DQT mismatch
