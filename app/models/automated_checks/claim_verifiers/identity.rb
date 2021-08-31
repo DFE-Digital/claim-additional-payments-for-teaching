@@ -95,35 +95,19 @@ module AutomatedChecks
       end
 
       def partial_match
-        if !national_insurance_number_matched?
-          create_field_note(name: "National Insurance number")
+        notes = []
 
-          return create_task(match: :any)
-        end
+        notes << create_field_note(name: "National Insurance number") unless national_insurance_number_matched?
 
-        if !name_matched?
-          create_field_note(name: "First name or surname")
+        notes << create_field_note(name: "First name or surname") unless name_matched?
 
-          return create_task(match: :any)
-        end
+        notes << create_field_note(name: "Date of birth") unless dob_matched?
 
-        if !dob_matched?
-          create_field_note(name: "Date of birth")
+        notes << create_field_note(name: "Teacher reference number") unless trn_matched?
 
-          return create_task(match: :any)
-        end
+        notes << create_note(body: "IMPORTANT: Teacher’s identity has an active alert. Speak to manager before checking this claim.", important: true) if active_alert?
 
-        if !trn_matched?
-          create_field_note(name: "Teacher reference number")
-
-          return create_task(match: :any)
-        end
-
-        if active_alert?
-          create_note(body: "IMPORTANT: Teacher’s identity has an active alert. Speak to manager before checking this claim.", important: true)
-
-          create_task(match: :any)
-        end
+        create_task(match: :any) if notes.any?
       end
 
       def tasks=(tasks)

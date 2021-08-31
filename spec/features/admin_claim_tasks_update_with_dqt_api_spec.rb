@@ -5,8 +5,8 @@ RSpec.feature "Admin claim tasks update with DQT API" do
     claim = nil
 
     in_browser(:claimant) do
-      claim = start_maths_and_physics_claim
-      claim_attributes[:policy] = MathsAndPhysics
+      policy_underscored = claim_attributes[:policy].to_s.underscore
+      claim = send("start_#{policy_underscored}_claim")
 
       claim.update!(
         attributes_for(
@@ -18,14 +18,13 @@ RSpec.feature "Admin claim tasks update with DQT API" do
 
       claim.eligibility.update!(
         attributes_for(
-          :maths_and_physics_eligibility,
-          :eligible,
-          initial_teacher_training_subject: :maths
+          :"#{policy_underscored}_eligibility",
+          :eligible
         )
       )
 
       visit claim_path(claim.policy.routing_name, "check-your-answers")
-      click_on "Confirm and send"
+      claim_attributes[:policy] == EarlyCareerPayments ? click_on("Accept and send") : click_on("Confirm and send")
     end
 
     claim
@@ -102,239 +101,30 @@ RSpec.feature "Admin claim tasks update with DQT API" do
     perform_enqueued_jobs
   end
 
-  context "with submitted claim" do
-    let(:claim) do
-      claimant_submits_claim(
-        claim_attributes: {
-          date_of_birth: Date.new(1990, 8, 23),
-          first_name: "Fred",
-          national_insurance_number: "QQ100000C",
-          reference: "AB123456",
-          surname: "ELIGIBLE",
-          teacher_reference_number: "1234567"
-        }
-      )
-    end
+  context "with EarlyCareerPayments policy" do
+    let(:policy) { EarlyCareerPayments }
 
-    context "with matching DQT identity" do
-      let(:data) do
-        {
-          date_of_birth: claim.date_of_birth,
-          name: "#{claim.first_name} #{claim.surname}",
-          national_insurance_number: claim.national_insurance_number,
-          teacher_reference_number: claim.teacher_reference_number
-        }
+    context "with submitted claim" do
+      let(:claim) do
+        claimant_submits_claim(
+          claim_attributes: {
+            academic_year: AcademicYear.new(2021),
+            date_of_birth: Date.new(1990, 8, 23),
+            first_name: "Fred",
+            national_insurance_number: "QQ100000C",
+            policy: policy,
+            reference: "AB123456",
+            surname: "ELIGIBLE",
+            teacher_reference_number: "1234567"
+          }
+        )
       end
 
-      context "admin claim tasks view" do
-        before { visit admin_claim_tasks_path(claim) }
-
-        scenario "shows identity confirmation passed" do
-          expect(task("Identity confirmation")).to have_text("Passed")
-        end
-      end
-
-      context "admin claim tasks identity confirmation view" do
-        before { visit admin_claim_task_path(claim, :identity_confirmation) }
-
-        scenario "shows task outcome performed by automated check" do
-          expect(task_outcome).to have_text("This task was performed by an automated check on #{I18n.l(claim.tasks.where(name: :identity_confirmation).first.created_at)}")
-        end
-      end
-
-      context "admin claim notes view" do
-        before { visit admin_claim_notes_path(claim) }
-
-        scenario "doesn't show not matched by an automated check" do
-          expect(notes).not_to include(
-            have_text(%r{[Nn]ot matched}).and(
-              have_text("by an automated check")
-            )
-          )
-        end
-      end
-
-      context "except national insurance number" do
+      context "with matching DQT identity" do
         let(:data) do
           {
             date_of_birth: claim.date_of_birth,
             name: "#{claim.first_name} #{claim.surname}",
-            national_insurance_number: "QQ100000B",
-            teacher_reference_number: claim.teacher_reference_number
-          }
-        end
-
-        context "admin claim tasks view" do
-          before { visit admin_claim_tasks_path(claim) }
-
-          scenario "shows identity confirmation passed" do
-            expect(task("Identity confirmation")).to have_text("Partial match")
-          end
-        end
-
-        context "admin claim tasks identity confirmation view" do
-          before { visit admin_claim_task_path(claim, :identity_confirmation) }
-
-          scenario "shows identity confirmation question" do
-            expect(page).to have_content("Did #{claim.full_name} submit the claim?")
-            expect(page).to have_link(href: admin_claim_notes_path(claim))
-          end
-        end
-
-        context "admin claim notes view" do
-          before { visit admin_claim_notes_path(claim) }
-
-          scenario "shows National Insurance number not matched by an automated check" do
-            expect(notes).to include(
-              have_text(
-                "National Insurance number not matched"
-              ).and(
-                have_text(
-                  "by an automated check on #{I18n.l(claim.notes.last.created_at)}"
-                )
-              )
-            )
-          end
-        end
-      end
-
-      context "except matching teacher reference number" do
-        let(:data) do
-          {
-            date_of_birth: claim.date_of_birth,
-            name: "#{claim.first_name} #{claim.surname}",
-            national_insurance_number: claim.national_insurance_number,
-            teacher_reference_number: "7654321"
-          }
-        end
-
-        context "admin claim tasks view" do
-          before { visit admin_claim_tasks_path(claim) }
-
-          scenario "shows identity confirmation incomplete" do
-            expect(task("Identity confirmation")).to have_text("Partial match")
-          end
-        end
-
-        context "admin claim tasks identity confirmation view" do
-          before { visit admin_claim_task_path(claim, :identity_confirmation) }
-
-          scenario "shows identity confirmation question" do
-            expect(page).to have_content("Did #{claim.full_name} submit the claim?")
-            expect(page).to have_link(href: admin_claim_notes_path(claim))
-          end
-        end
-
-        context "admin claim notes view" do
-          before { visit admin_claim_notes_path(claim) }
-
-          scenario "shows teacher reference number not matched by an automated check" do
-            expect(notes).to include(
-              have_text("Teacher reference number not matched").and(
-                have_text("by an automated check")
-              )
-            )
-          end
-        end
-      end
-
-      context "except matching first name" do
-        let(:data) do
-          {
-            date_of_birth: claim.date_of_birth,
-            name: "Except #{claim.surname}",
-            national_insurance_number: claim.national_insurance_number,
-            teacher_reference_number: claim.teacher_reference_number
-          }
-        end
-
-        context "admin claim tasks view" do
-          before { visit admin_claim_tasks_path(claim) }
-
-          scenario "shows identity confirmation passed" do
-            expect(task("Identity confirmation")).to have_text("Partial match")
-          end
-        end
-
-        context "admin claim tasks identity confirmation view" do
-          before { visit admin_claim_task_path(claim, :identity_confirmation) }
-
-          scenario "shows identity confirmation question" do
-            expect(page).to have_content("Did #{claim.full_name} submit the claim?")
-            expect(page).to have_link(href: admin_claim_notes_path(claim))
-          end
-        end
-
-        context "admin claim notes view" do
-          before { visit admin_claim_notes_path(claim) }
-
-          scenario "shows first name or surname not matched by an automated check" do
-            expect(notes).to include(
-              have_text(
-                "First name or surname not matched"
-              ).and(
-                have_text(
-                  "by an automated check on #{I18n.l(claim.notes.last.created_at)}"
-                )
-              )
-            )
-          end
-        end
-      end
-
-      context "except matching surname" do
-        let(:data) do
-          {
-            date_of_birth: claim.date_of_birth,
-            name: "#{claim.first_name} Except",
-            national_insurance_number: claim.national_insurance_number,
-            teacher_reference_number: claim.teacher_reference_number
-          }
-        end
-
-        context "admin claim tasks view" do
-          before { visit admin_claim_tasks_path(claim) }
-
-          scenario "shows identity confirmation passed" do
-            expect(task("Identity confirmation")).to have_text("Partial match")
-          end
-        end
-
-        context "admin claim tasks identity confirmation view" do
-          before { visit admin_claim_task_path(claim, :identity_confirmation) }
-
-          scenario "shows identity confirmation question" do
-            expect(page).to have_content("Did #{claim.full_name} submit the claim?")
-            expect(page).to have_link(href: admin_claim_notes_path(claim))
-          end
-        end
-
-        context "admin claim notes view" do
-          before { visit admin_claim_notes_path(claim) }
-
-          context "admin claim notes view" do
-            before { visit admin_claim_notes_path(claim) }
-
-            scenario "shows first name or surname not matched by an automated check" do
-              expect(notes).to include(
-                have_text(
-                  "First name or surname not matched"
-                ).and(
-                  have_text(
-                    "by an automated check on #{I18n.l(claim.notes.last.created_at)}"
-                  )
-                )
-              )
-            end
-          end
-        end
-      end
-
-      context "with middle names" do
-        let(:data) do
-          {
-            date_of_birth: claim.date_of_birth,
-            name: "#{claim.first_name} Middle Names #{claim.surname}",
             national_insurance_number: claim.national_insurance_number,
             teacher_reference_number: claim.teacher_reference_number
           }
@@ -367,23 +157,417 @@ RSpec.feature "Admin claim tasks update with DQT API" do
             )
           end
         end
+
+        context "except national insurance number" do
+          let(:data) do
+            {
+              date_of_birth: claim.date_of_birth,
+              name: "#{claim.first_name} #{claim.surname}",
+              national_insurance_number: "QQ100000B",
+              teacher_reference_number: claim.teacher_reference_number
+            }
+          end
+
+          context "admin claim tasks view" do
+            before { visit admin_claim_tasks_path(claim) }
+
+            scenario "shows identity confirmation passed" do
+              expect(task("Identity confirmation")).to have_text("Partial match")
+            end
+          end
+
+          context "admin claim tasks identity confirmation view" do
+            before { visit admin_claim_task_path(claim, :identity_confirmation) }
+
+            scenario "shows identity confirmation question" do
+              expect(page).to have_content("Did #{claim.full_name} submit the claim?")
+              expect(page).to have_link(href: admin_claim_notes_path(claim))
+            end
+          end
+
+          context "admin claim notes view" do
+            before { visit admin_claim_notes_path(claim) }
+
+            scenario "shows National Insurance number not matched by an automated check" do
+              expect(notes).to include(
+                have_text(
+                  "National Insurance number not matched"
+                ).and(
+                  have_text(
+                    "by an automated check on #{I18n.l(claim.notes.last.created_at)}"
+                  )
+                )
+              )
+            end
+          end
+        end
+
+        context "except matching teacher reference number" do
+          let(:data) do
+            {
+              date_of_birth: claim.date_of_birth,
+              name: "#{claim.first_name} #{claim.surname}",
+              national_insurance_number: claim.national_insurance_number,
+              teacher_reference_number: "7654321"
+            }
+          end
+
+          context "admin claim tasks view" do
+            before { visit admin_claim_tasks_path(claim) }
+
+            scenario "shows identity confirmation incomplete" do
+              expect(task("Identity confirmation")).to have_text("Partial match")
+            end
+          end
+
+          context "admin claim tasks identity confirmation view" do
+            before { visit admin_claim_task_path(claim, :identity_confirmation) }
+
+            scenario "shows identity confirmation question" do
+              expect(page).to have_content("Did #{claim.full_name} submit the claim?")
+              expect(page).to have_link(href: admin_claim_notes_path(claim))
+            end
+          end
+
+          context "admin claim notes view" do
+            before { visit admin_claim_notes_path(claim) }
+
+            scenario "shows teacher reference number not matched by an automated check" do
+              expect(notes).to include(
+                have_text("Teacher reference number not matched").and(
+                  have_text("by an automated check")
+                )
+              )
+            end
+          end
+        end
+
+        context "except matching first name" do
+          let(:data) do
+            {
+              date_of_birth: claim.date_of_birth,
+              name: "Except #{claim.surname}",
+              national_insurance_number: claim.national_insurance_number,
+              teacher_reference_number: claim.teacher_reference_number
+            }
+          end
+
+          context "admin claim tasks view" do
+            before { visit admin_claim_tasks_path(claim) }
+
+            scenario "shows identity confirmation passed" do
+              expect(task("Identity confirmation")).to have_text("Partial match")
+            end
+          end
+
+          context "admin claim tasks identity confirmation view" do
+            before { visit admin_claim_task_path(claim, :identity_confirmation) }
+
+            scenario "shows identity confirmation question" do
+              expect(page).to have_content("Did #{claim.full_name} submit the claim?")
+              expect(page).to have_link(href: admin_claim_notes_path(claim))
+            end
+          end
+
+          context "admin claim notes view" do
+            before { visit admin_claim_notes_path(claim) }
+
+            scenario "shows first name or surname not matched by an automated check" do
+              expect(notes).to include(
+                have_text(
+                  "First name or surname not matched"
+                ).and(
+                  have_text(
+                    "by an automated check on #{I18n.l(claim.notes.last.created_at)}"
+                  )
+                )
+              )
+            end
+          end
+        end
+
+        context "except matching surname" do
+          let(:data) do
+            {
+              date_of_birth: claim.date_of_birth,
+              name: "#{claim.first_name} Except",
+              national_insurance_number: claim.national_insurance_number,
+              teacher_reference_number: claim.teacher_reference_number
+            }
+          end
+
+          context "admin claim tasks view" do
+            before { visit admin_claim_tasks_path(claim) }
+
+            scenario "shows identity confirmation passed" do
+              expect(task("Identity confirmation")).to have_text("Partial match")
+            end
+          end
+
+          context "admin claim tasks identity confirmation view" do
+            before { visit admin_claim_task_path(claim, :identity_confirmation) }
+
+            scenario "shows identity confirmation question" do
+              expect(page).to have_content("Did #{claim.full_name} submit the claim?")
+              expect(page).to have_link(href: admin_claim_notes_path(claim))
+            end
+          end
+
+          context "admin claim notes view" do
+            before { visit admin_claim_notes_path(claim) }
+
+            scenario "shows first name or surname not matched by an automated check" do
+              expect(notes).to include(
+                have_text(
+                  "First name or surname not matched"
+                ).and(
+                  have_text(
+                    "by an automated check on #{I18n.l(claim.notes.last.created_at)}"
+                  )
+                )
+              )
+            end
+          end
+        end
+
+        context "with middle names" do
+          let(:data) do
+            {
+              date_of_birth: claim.date_of_birth,
+              name: "#{claim.first_name} Middle Names #{claim.surname}",
+              national_insurance_number: claim.national_insurance_number,
+              teacher_reference_number: claim.teacher_reference_number
+            }
+          end
+
+          context "admin claim tasks view" do
+            before { visit admin_claim_tasks_path(claim) }
+
+            scenario "shows identity confirmation passed" do
+              expect(task("Identity confirmation")).to have_text("Passed")
+            end
+          end
+
+          context "admin claim tasks identity confirmation view" do
+            before { visit admin_claim_task_path(claim, :identity_confirmation) }
+
+            scenario "shows task outcome performed by automated check" do
+              expect(task_outcome).to have_text("This task was performed by an automated check on #{I18n.l(claim.tasks.where(name: :identity_confirmation).first.created_at)}")
+            end
+          end
+
+          context "admin claim notes view" do
+            before { visit admin_claim_notes_path(claim) }
+
+            scenario "doesn't show not matched by an automated check" do
+              expect(notes).not_to include(
+                have_text(%r{[Nn]ot matched}).and(
+                  have_text("by an automated check")
+                )
+              )
+            end
+          end
+        end
+
+        context "except matching date of birth" do
+          let(:data) do
+            {
+              date_of_birth: claim.date_of_birth + 1.day,
+              name: "#{claim.first_name} #{claim.surname}",
+              national_insurance_number: claim.national_insurance_number,
+              teacher_reference_number: claim.teacher_reference_number
+            }
+          end
+
+          context "admin claim tasks view" do
+            before { visit admin_claim_tasks_path(claim) }
+
+            scenario "shows identity confirmation partial match" do
+              expect(task("Identity confirmation")).to have_text("Partial match")
+            end
+          end
+
+          context "admin claim tasks identity confirmation view" do
+            before { visit admin_claim_task_path(claim, :identity_confirmation) }
+
+            scenario "shows identity confirmation question" do
+              expect(page).to have_content("Did #{claim.full_name} submit the claim?")
+              expect(page).to have_link(href: admin_claim_notes_path(claim))
+            end
+          end
+
+          context "admin claim notes view" do
+            before { visit admin_claim_notes_path(claim) }
+
+            scenario "shows date of birth not matched by an automated check" do
+              expect(notes).to include(
+                have_text(
+                  "Date of birth not matched"
+                ).and(
+                  have_text(
+                    "by an automated check on #{I18n.l(claim.notes.last.created_at)}"
+                  )
+                )
+              )
+            end
+          end
+        end
+
+        context "with admin claims tasks identity confirmation passed" do
+          let(:claim) do
+            claimant_submits_claim(
+              claim_attributes: {
+                date_of_birth: Date.new(1990, 8, 23),
+                first_name: "Fred",
+                national_insurance_number: "QQ100000C",
+                policy: policy,
+                reference: "AB123456",
+                surname: "ELIGIBLE",
+                tasks: [build(:task, name: :identity_confirmation)],
+                teacher_reference_number: "1234567"
+              }
+            )
+          end
+
+          context "admin claim tasks identity confirmation view" do
+            before { visit admin_claim_task_path(claim, :identity_confirmation) }
+
+            scenario "shows task outcome previously performed by user" do
+              expect(task_outcome).to have_text("This task was performed by #{claim.tasks.where(name: :identity_confirmation).first.created_by.full_name} on #{I18n.l(claim.tasks.where(name: :identity_confirmation).first.created_at)}")
+            end
+          end
+
+          context "admin claim notes view" do
+            before { visit admin_claim_notes_path(claim) }
+
+            scenario "doesn't show not matched by automated check" do
+              expect(notes).not_to include(
+                have_text(%r{[Nn]ot matched}).and(
+                  have_text("by an automated check")
+                )
+              )
+            end
+          end
+        end
+
+        context "with teacher status alert" do
+          let(:data) do
+            {
+              active_alert: true,
+              date_of_birth: claim.date_of_birth,
+              name: "#{claim.first_name} #{claim.surname}",
+              national_insurance_number: claim.national_insurance_number,
+              teacher_reference_number: claim.teacher_reference_number
+            }
+          end
+
+          context "admin claim tasks view" do
+            before { visit admin_claim_tasks_path(claim) }
+
+            scenario "shows identity confirmation passed" do
+              expect(task("Identity confirmation")).to have_text("Partial match")
+            end
+          end
+
+          context "admin claim tasks identity confirmation view" do
+            before { visit admin_claim_task_path(claim, :identity_confirmation) }
+
+            scenario "shows identity confirmation question" do
+              expect(page).to have_content("Did #{claim.full_name} submit the claim?")
+              expect(page).to have_link(href: admin_claim_notes_path(claim))
+            end
+          end
+
+          context "admin claim notes view" do
+            before { visit admin_claim_notes_path(claim) }
+
+            scenario "shows date of birth not matched by an automated check" do
+              expect(notes).to include(
+                have_text(
+                  within(".banner") do
+                    "Teacher’s identity has an active alert. Speak to manager before checking this claim."
+                  end
+                ).and(
+                  have_text(
+                    "by an automated check on #{I18n.l(claim.notes.last.created_at)}"
+                  )
+                )
+              )
+            end
+          end
+
+          context "admin claim" do
+            before { visit admin_claim_path(claim) }
+
+            scenario "shows note in banner" do
+              expect(banner).to have_text("Teacher’s identity has an active alert. Speak to manager before checking this claim.")
+            end
+          end
+        end
+
+        context "except multiple matches" do
+          let(:data) do
+            {
+              date_of_birth: claim.date_of_birth + 1.day,
+              name: "Except #{claim.surname}",
+              national_insurance_number: claim.national_insurance_number,
+              teacher_reference_number: claim.teacher_reference_number
+            }
+          end
+
+          context "admin claim tasks view" do
+            before { visit admin_claim_tasks_path(claim) }
+
+            scenario "shows identity confirmation partial match" do
+              expect(task("Identity confirmation")).to have_text("Partial match")
+            end
+          end
+
+          context "admin claim tasks identity confirmation view" do
+            before { visit admin_claim_task_path(claim, :identity_confirmation) }
+
+            scenario "shows identity confirmation question" do
+              expect(page).to have_content("Did #{claim.full_name} submit the claim?")
+              expect(page).to have_link(href: admin_claim_notes_path(claim))
+            end
+          end
+
+          context "admin claim notes view" do
+            before { visit admin_claim_notes_path(claim) }
+
+            scenario "shows multiple not matched by an automated check" do
+              expect(notes).to include(
+                have_text(
+                  "Date of birth not matched"
+                ).and(
+                  have_text(
+                    "by an automated check on #{I18n.l(claim.notes.last.created_at)}"
+                  )
+                )
+              )
+
+              expect(notes).to include(
+                have_text(
+                  "First name or surname not matched"
+                ).and(
+                  have_text(
+                    "by an automated check on #{I18n.l(claim.notes.last.created_at)}"
+                  )
+                )
+              )
+            end
+          end
+        end
       end
 
-      context "except matching date of birth" do
-        let(:data) do
-          {
-            date_of_birth: claim.date_of_birth + 1.day,
-            name: "#{claim.first_name} #{claim.surname}",
-            national_insurance_number: claim.national_insurance_number,
-            teacher_reference_number: claim.teacher_reference_number
-          }
-        end
+      context "without matching DQT identity" do
+        let(:data) { nil }
 
         context "admin claim tasks view" do
           before { visit admin_claim_tasks_path(claim) }
 
-          scenario "shows identity confirmation passed" do
-            expect(task("Identity confirmation")).to have_text("Partial match")
+          scenario "shows identity confirmation no match" do
+            expect(task("Identity confirmation")).to have_text("No match")
           end
         end
 
@@ -399,49 +583,9 @@ RSpec.feature "Admin claim tasks update with DQT API" do
         context "admin claim notes view" do
           before { visit admin_claim_notes_path(claim) }
 
-          scenario "shows date of birth not matched by an automated check" do
+          scenario "shows note not matched by automated check" do
             expect(notes).to include(
-              have_text(
-                "Date of birth not matched"
-              ).and(
-                have_text(
-                  "by an automated check on #{I18n.l(claim.notes.last.created_at)}"
-                )
-              )
-            )
-          end
-        end
-      end
-
-      context "with admin claims tasks identity confirmation passed" do
-        let(:claim) do
-          claimant_submits_claim(
-            claim_attributes: {
-              date_of_birth: Date.new(1990, 8, 23),
-              first_name: "Fred",
-              national_insurance_number: "QQ100000C",
-              reference: "AB123456",
-              surname: "ELIGIBLE",
-              tasks: [build(:task, name: :identity_confirmation)],
-              teacher_reference_number: "1234567"
-            }
-          )
-        end
-
-        context "admin claim tasks identity confirmation view" do
-          before { visit admin_claim_task_path(claim, :identity_confirmation) }
-
-          scenario "shows task outcome previously performed by user" do
-            expect(task_outcome).to have_text("This task was performed by #{claim.tasks.where(name: :identity_confirmation).first.created_by.full_name} on #{I18n.l(claim.tasks.where(name: :identity_confirmation).first.created_at)}")
-          end
-        end
-
-        context "admin claim notes view" do
-          before { visit admin_claim_notes_path(claim) }
-
-          scenario "doesn't show not matched by automated check" do
-            expect(notes).not_to include(
-              have_text(%r{[Nn]ot matched}).and(
+              have_text("Not matched").and(
                 have_text("by an automated check")
               )
             )
@@ -449,183 +593,172 @@ RSpec.feature "Admin claim tasks update with DQT API" do
         end
       end
 
-      context "with teacher status alert" do
+      context "with eligible qualifications" do
         let(:data) do
           {
-            active_alert: true,
-            date_of_birth: claim.date_of_birth,
-            name: "#{claim.first_name} #{claim.surname}",
-            national_insurance_number: claim.national_insurance_number,
-            teacher_reference_number: claim.teacher_reference_number
-          }
-        end
-
-        context "admin claim tasks view" do
-          before { visit admin_claim_tasks_path(claim) }
-
-          scenario "shows identity confirmation passed" do
-            expect(task("Identity confirmation")).to have_text("Partial match")
-          end
-        end
-
-        context "admin claim tasks identity confirmation view" do
-          before { visit admin_claim_task_path(claim, :identity_confirmation) }
-
-          scenario "shows identity confirmation question" do
-            expect(page).to have_content("Did #{claim.full_name} submit the claim?")
-            expect(page).to have_link(href: admin_claim_notes_path(claim))
-          end
-        end
-
-        context "admin claim notes view" do
-          before { visit admin_claim_notes_path(claim) }
-
-          scenario "shows date of birth not matched by an automated check" do
-            expect(notes).to include(
-              have_text(
-                within(".banner") do
-                  "Teacher’s identity has an active alert. Speak to manager before checking this claim."
-                end
-              ).and(
-                have_text(
-                  "by an automated check on #{I18n.l(claim.notes.last.created_at)}"
-                )
-              )
-            )
-          end
-        end
-
-        context "admin claim" do
-          before { visit admin_claim_path(claim) }
-
-          scenario "shows note in banner" do
-            expect(banner).to have_text("Teacher’s identity has an active alert. Speak to manager before checking this claim.")
-          end
-        end
-      end
-    end
-
-    context "without matching DQT identity" do
-      let(:data) { nil }
-
-      context "admin claim tasks view" do
-        before { visit admin_claim_tasks_path(claim) }
-
-        scenario "shows identity confirmation no match" do
-          expect(task("Identity confirmation")).to have_text("No match")
-        end
-      end
-
-      context "admin claim tasks identity confirmation view" do
-        before { visit admin_claim_task_path(claim, :identity_confirmation) }
-
-        scenario "shows identity confirmation question" do
-          expect(page).to have_content("Did #{claim.full_name} submit the claim?")
-          expect(page).to have_link(href: admin_claim_notes_path(claim))
-        end
-      end
-
-      context "admin claim notes view" do
-        before { visit admin_claim_notes_path(claim) }
-
-        scenario "shows note not matched by automated check" do
-          expect(notes).to include(
-            have_text("Not matched").and(
-              have_text("by an automated check")
-            )
-          )
-        end
-      end
-    end
-
-    context "with eligible qualifications" do
-      let(:data) do
-        {
-          qts_award_date: Date.new( # 1st September is start of academic year
-            MathsAndPhysics.first_eligible_qts_award_year(claim.academic_year).start_year,
-            9,
-            1
-          ),
-          itt_subject_codes: [MathsAndPhysics::DqtRecord::ELIGIBLE_MATHS_HECOS_CODES.first]
-        }
-      end
-
-      context "admin claim tasks view" do
-        before { visit admin_claim_tasks_path(claim) }
-
-        scenario "shows qualifications passed" do
-          expect(task("Qualifications")).to have_text("Passed")
-        end
-      end
-
-      context "admin claim tasks qualifications view" do
-        before { visit admin_claim_task_path(claim, :qualifications) }
-
-        scenario "shows task outcome performed by automated check" do
-          expect(task_outcome).to have_text("This task was performed by an automated check on #{I18n.l(claim.tasks.where(name: :qualifications).first.created_at)}")
-        end
-      end
-
-      context "admin claim notes view" do
-        before { visit admin_claim_notes_path(claim) }
-
-        scenario "doesn't show not eligible by an automated check" do
-          expect(notes).not_to include(
-            have_text(%r{[Nn]ot eligible}).and(
-              have_text("by an automated check")
-            )
-          )
-        end
-      end
-
-      context "except QTS award date" do
-        let(:data) do
-          {
-            qts_award_date: Date.new(
-              MathsAndPhysics.first_eligible_qts_award_year(claim.academic_year).start_year - 1.year,
+            qts_award_date: Date.new( # 1st September is start of academic year
+              claim.eligibility.first_eligible_itt_academic_year.start_year,
               9,
               1
             ),
-            itt_subject_codes: [MathsAndPhysics::DqtRecord::ELIGIBLE_MATHS_HECOS_CODES.first]
+            itt_subject_codes: [EarlyCareerPayments::DqtRecord::ELIGIBLE_HECOS_CODES[:mathematics].first]
           }
         end
 
         context "admin claim tasks view" do
           before { visit admin_claim_tasks_path(claim) }
 
-          scenario "shows qualifications incomplete" do
-            expect(task("Qualifications")).to have_text("Partial match")
+          scenario "shows qualifications passed" do
+            expect(task("Qualifications")).to have_text("Passed")
           end
         end
 
         context "admin claim tasks qualifications view" do
           before { visit admin_claim_task_path(claim, :qualifications) }
 
-          scenario "shows qualifications question" do
-            expect(page).to have_content("Does the claimant’s initial teacher training (ITT) qualification year and specialist subject match the above information from their claim?")
+          scenario "shows task outcome performed by automated check" do
+            expect(task_outcome).to have_text("This task was performed by an automated check on #{I18n.l(claim.tasks.where(name: :qualifications).first.created_at)}")
           end
         end
 
         context "admin claim notes view" do
           before { visit admin_claim_notes_path(claim) }
 
-          scenario "shows QTS award date not eligible by an automated check" do
-            expect(notes).to include(
-              have_content(
-                "QTS award date not eligible"
-              ).and(
-                have_content("by an automated check")
+          scenario "doesn't show not eligible by an automated check" do
+            expect(notes).not_to include(
+              have_text(%r{[Nn]ot eligible}).and(
+                have_text("by an automated check")
               )
             )
           end
         end
+
+        context "except QTS award date" do
+          let(:data) do
+            {
+              qts_award_date: Date.new(
+                claim.eligibility.first_eligible_itt_academic_year.start_year - 1.year,
+                9,
+                1
+              ),
+              itt_subject_codes: [EarlyCareerPayments::DqtRecord::ELIGIBLE_HECOS_CODES[:mathematics].first]
+            }
+          end
+
+          context "admin claim tasks view" do
+            before { visit admin_claim_tasks_path(claim) }
+
+            scenario "shows qualifications no match" do
+              expect(task("Qualifications")).to have_text("No match")
+            end
+          end
+
+          context "admin claim tasks qualifications view" do
+            before { visit admin_claim_task_path(claim, :qualifications) }
+
+            scenario "shows qualifications question" do
+              expect(page).to have_content("Does the claimant’s initial teacher training (ITT) start/end year and subject match the above information from their claim?")
+            end
+          end
+
+          context "admin claim notes view" do
+            before { visit admin_claim_notes_path(claim) }
+
+            scenario "shows note not eligible by automated check" do
+              expect(notes).to include(
+                have_text("Not eligible").and(
+                  have_text("by an automated check")
+                )
+              )
+            end
+          end
+        end
+
+        context "except ITT subjects codes" do
+          let(:data) do
+            {
+              qts_award_date: Date.new( # 1st September is start of academic year
+                claim.eligibility.first_eligible_itt_academic_year.start_year,
+                9,
+                1
+              ),
+              itt_subject_codes: ["NoCode"]
+            }
+          end
+
+          context "admin claim tasks view" do
+            before { visit admin_claim_tasks_path(claim) }
+
+            scenario "shows qualifications no match" do
+              expect(task("Qualifications")).to have_text("No match")
+            end
+          end
+
+          context "admin claim tasks qualifications view" do
+            before { visit admin_claim_task_path(claim, :qualifications) }
+
+            scenario "shows qualifications question" do
+              expect(page).to have_content("Does the claimant’s initial teacher training (ITT) start/end year and subject match the above information from their claim?")
+            end
+          end
+
+          context "admin claim notes view" do
+            before { visit admin_claim_notes_path(claim) }
+
+            scenario "shows note not eligible by automated check" do
+              expect(notes).to include(
+                have_text("Not eligible").and(
+                  have_text("by an automated check")
+                )
+              )
+            end
+          end
+        end
+
+        context "with admin claims tasks qualifications passed" do
+          let(:claim) do
+            claimant_submits_claim(
+              claim_attributes: {
+                academic_year: AcademicYear.new(2021),
+                date_of_birth: Date.new(1990, 8, 23),
+                first_name: "Fred",
+                national_insurance_number: "QQ100000C",
+                policy: policy,
+                reference: "AB123456",
+                surname: "ELIGIBLE",
+                tasks: [build(:task, name: "qualifications")],
+                teacher_reference_number: "1234567"
+              }
+            )
+          end
+
+          context "admin claim tasks qualifications view" do
+            before { visit admin_claim_task_path(claim, :qualifications) }
+
+            scenario "shows task outcome previously performed by user" do
+              expect(task_outcome).to have_text("This task was performed by #{claim.tasks.where(name: :qualifications).first.created_by.full_name} on #{I18n.l(claim.tasks.where(name: :qualifications).first.created_at)}")
+            end
+          end
+
+          context "admin claim notes view" do
+            before { visit admin_claim_notes_path(claim) }
+
+            scenario "doesn't show not eligible by automated check" do
+              expect(notes).not_to include(
+                have_text(%r{[Nn]ot eligible}).and(
+                  have_text("by an automated check")
+                )
+              )
+            end
+          end
+        end
       end
 
-      context "except ITT subjects codes" do
+      context "without eligible qualifications" do
         let(:data) do
           {
-            qts_award_date: Date.new( # 1st September is start of academic year
-              MathsAndPhysics.first_eligible_qts_award_year(claim.academic_year).start_year,
+            qts_award_date: Date.new(
+              claim.eligibility.first_eligible_itt_academic_year.start_year - 1.year,
               9,
               1
             ),
@@ -637,7 +770,709 @@ RSpec.feature "Admin claim tasks update with DQT API" do
           before { visit admin_claim_tasks_path(claim) }
 
           scenario "shows qualifications incomplete" do
-            expect(task("Qualifications")).to have_text("Partial match")
+            expect(task("Qualifications")).to have_text("No match")
+          end
+        end
+
+        context "admin claim tasks qualifications view" do
+          before { visit admin_claim_task_path(claim, :qualifications) }
+
+          scenario "shows qualifications question" do
+            expect(page).to have_content("Does the claimant’s initial teacher training (ITT) start/end year and subject match the above information from their claim?")
+          end
+        end
+
+        context "admin claim notes view" do
+          before { visit admin_claim_notes_path(claim) }
+
+          scenario "shows not eligible by an automated check" do
+            expect(notes).to include(
+              have_text("Not eligible").and(
+                have_text("by an automated check")
+              )
+            )
+          end
+        end
+      end
+    end
+  end
+
+  context "with MathsAndPhysics policy" do
+    let(:policy) { MathsAndPhysics }
+
+    context "with submitted claim" do
+      let(:claim) do
+        claimant_submits_claim(
+          claim_attributes: {
+            date_of_birth: Date.new(1990, 8, 23),
+            first_name: "Fred",
+            national_insurance_number: "QQ100000C",
+            policy: policy,
+            reference: "AB123456",
+            surname: "ELIGIBLE",
+            teacher_reference_number: "1234567"
+          }
+        )
+      end
+
+      context "with matching DQT identity" do
+        let(:data) do
+          {
+            date_of_birth: claim.date_of_birth,
+            name: "#{claim.first_name} #{claim.surname}",
+            national_insurance_number: claim.national_insurance_number,
+            teacher_reference_number: claim.teacher_reference_number
+          }
+        end
+
+        context "admin claim tasks view" do
+          before { visit admin_claim_tasks_path(claim) }
+
+          scenario "shows identity confirmation passed" do
+            expect(task("Identity confirmation")).to have_text("Passed")
+          end
+        end
+
+        context "admin claim tasks identity confirmation view" do
+          before { visit admin_claim_task_path(claim, :identity_confirmation) }
+
+          scenario "shows task outcome performed by automated check" do
+            expect(task_outcome).to have_text("This task was performed by an automated check on #{I18n.l(claim.tasks.where(name: :identity_confirmation).first.created_at)}")
+          end
+        end
+
+        context "admin claim notes view" do
+          before { visit admin_claim_notes_path(claim) }
+
+          scenario "doesn't show not matched by an automated check" do
+            expect(notes).not_to include(
+              have_text(%r{[Nn]ot matched}).and(
+                have_text("by an automated check")
+              )
+            )
+          end
+        end
+
+        context "except national insurance number" do
+          let(:data) do
+            {
+              date_of_birth: claim.date_of_birth,
+              name: "#{claim.first_name} #{claim.surname}",
+              national_insurance_number: "QQ100000B",
+              teacher_reference_number: claim.teacher_reference_number
+            }
+          end
+
+          context "admin claim tasks view" do
+            before { visit admin_claim_tasks_path(claim) }
+
+            scenario "shows identity confirmation passed" do
+              expect(task("Identity confirmation")).to have_text("Partial match")
+            end
+          end
+
+          context "admin claim tasks identity confirmation view" do
+            before { visit admin_claim_task_path(claim, :identity_confirmation) }
+
+            scenario "shows identity confirmation question" do
+              expect(page).to have_content("Did #{claim.full_name} submit the claim?")
+              expect(page).to have_link(href: admin_claim_notes_path(claim))
+            end
+          end
+
+          context "admin claim notes view" do
+            before { visit admin_claim_notes_path(claim) }
+
+            scenario "shows National Insurance number not matched by an automated check" do
+              expect(notes).to include(
+                have_text(
+                  "National Insurance number not matched"
+                ).and(
+                  have_text(
+                    "by an automated check on #{I18n.l(claim.notes.last.created_at)}"
+                  )
+                )
+              )
+            end
+          end
+        end
+
+        context "except matching teacher reference number" do
+          let(:data) do
+            {
+              date_of_birth: claim.date_of_birth,
+              name: "#{claim.first_name} #{claim.surname}",
+              national_insurance_number: claim.national_insurance_number,
+              teacher_reference_number: "7654321"
+            }
+          end
+
+          context "admin claim tasks view" do
+            before { visit admin_claim_tasks_path(claim) }
+
+            scenario "shows identity confirmation incomplete" do
+              expect(task("Identity confirmation")).to have_text("Partial match")
+            end
+          end
+
+          context "admin claim tasks identity confirmation view" do
+            before { visit admin_claim_task_path(claim, :identity_confirmation) }
+
+            scenario "shows identity confirmation question" do
+              expect(page).to have_content("Did #{claim.full_name} submit the claim?")
+              expect(page).to have_link(href: admin_claim_notes_path(claim))
+            end
+          end
+
+          context "admin claim notes view" do
+            before { visit admin_claim_notes_path(claim) }
+
+            scenario "shows teacher reference number not matched by an automated check" do
+              expect(notes).to include(
+                have_text("Teacher reference number not matched").and(
+                  have_text("by an automated check")
+                )
+              )
+            end
+          end
+        end
+
+        context "except matching first name" do
+          let(:data) do
+            {
+              date_of_birth: claim.date_of_birth,
+              name: "Except #{claim.surname}",
+              national_insurance_number: claim.national_insurance_number,
+              teacher_reference_number: claim.teacher_reference_number
+            }
+          end
+
+          context "admin claim tasks view" do
+            before { visit admin_claim_tasks_path(claim) }
+
+            scenario "shows identity confirmation passed" do
+              expect(task("Identity confirmation")).to have_text("Partial match")
+            end
+          end
+
+          context "admin claim tasks identity confirmation view" do
+            before { visit admin_claim_task_path(claim, :identity_confirmation) }
+
+            scenario "shows identity confirmation question" do
+              expect(page).to have_content("Did #{claim.full_name} submit the claim?")
+              expect(page).to have_link(href: admin_claim_notes_path(claim))
+            end
+          end
+
+          context "admin claim notes view" do
+            before { visit admin_claim_notes_path(claim) }
+
+            scenario "shows first name or surname not matched by an automated check" do
+              expect(notes).to include(
+                have_text(
+                  "First name or surname not matched"
+                ).and(
+                  have_text(
+                    "by an automated check on #{I18n.l(claim.notes.last.created_at)}"
+                  )
+                )
+              )
+            end
+          end
+        end
+
+        context "except matching surname" do
+          let(:data) do
+            {
+              date_of_birth: claim.date_of_birth,
+              name: "#{claim.first_name} Except",
+              national_insurance_number: claim.national_insurance_number,
+              teacher_reference_number: claim.teacher_reference_number
+            }
+          end
+
+          context "admin claim tasks view" do
+            before { visit admin_claim_tasks_path(claim) }
+
+            scenario "shows identity confirmation passed" do
+              expect(task("Identity confirmation")).to have_text("Partial match")
+            end
+          end
+
+          context "admin claim tasks identity confirmation view" do
+            before { visit admin_claim_task_path(claim, :identity_confirmation) }
+
+            scenario "shows identity confirmation question" do
+              expect(page).to have_content("Did #{claim.full_name} submit the claim?")
+              expect(page).to have_link(href: admin_claim_notes_path(claim))
+            end
+          end
+
+          context "admin claim notes view" do
+            before { visit admin_claim_notes_path(claim) }
+
+            context "admin claim notes view" do
+              before { visit admin_claim_notes_path(claim) }
+
+              scenario "shows first name or surname not matched by an automated check" do
+                expect(notes).to include(
+                  have_text(
+                    "First name or surname not matched"
+                  ).and(
+                    have_text(
+                      "by an automated check on #{I18n.l(claim.notes.last.created_at)}"
+                    )
+                  )
+                )
+              end
+            end
+          end
+        end
+
+        context "with middle names" do
+          let(:data) do
+            {
+              date_of_birth: claim.date_of_birth,
+              name: "#{claim.first_name} Middle Names #{claim.surname}",
+              national_insurance_number: claim.national_insurance_number,
+              teacher_reference_number: claim.teacher_reference_number
+            }
+          end
+
+          context "admin claim tasks view" do
+            before { visit admin_claim_tasks_path(claim) }
+
+            scenario "shows identity confirmation passed" do
+              expect(task("Identity confirmation")).to have_text("Passed")
+            end
+          end
+
+          context "admin claim tasks identity confirmation view" do
+            before { visit admin_claim_task_path(claim, :identity_confirmation) }
+
+            scenario "shows task outcome performed by automated check" do
+              expect(task_outcome).to have_text("This task was performed by an automated check on #{I18n.l(claim.tasks.where(name: :identity_confirmation).first.created_at)}")
+            end
+          end
+
+          context "admin claim notes view" do
+            before { visit admin_claim_notes_path(claim) }
+
+            scenario "doesn't show not matched by an automated check" do
+              expect(notes).not_to include(
+                have_text(%r{[Nn]ot matched}).and(
+                  have_text("by an automated check")
+                )
+              )
+            end
+          end
+        end
+
+        context "except matching date of birth" do
+          let(:data) do
+            {
+              date_of_birth: claim.date_of_birth + 1.day,
+              name: "#{claim.first_name} #{claim.surname}",
+              national_insurance_number: claim.national_insurance_number,
+              teacher_reference_number: claim.teacher_reference_number
+            }
+          end
+
+          context "admin claim tasks view" do
+            before { visit admin_claim_tasks_path(claim) }
+
+            scenario "shows identity confirmation passed" do
+              expect(task("Identity confirmation")).to have_text("Partial match")
+            end
+          end
+
+          context "admin claim tasks identity confirmation view" do
+            before { visit admin_claim_task_path(claim, :identity_confirmation) }
+
+            scenario "shows identity confirmation question" do
+              expect(page).to have_content("Did #{claim.full_name} submit the claim?")
+              expect(page).to have_link(href: admin_claim_notes_path(claim))
+            end
+          end
+
+          context "admin claim notes view" do
+            before { visit admin_claim_notes_path(claim) }
+
+            scenario "shows date of birth not matched by an automated check" do
+              expect(notes).to include(
+                have_text(
+                  "Date of birth not matched"
+                ).and(
+                  have_text(
+                    "by an automated check on #{I18n.l(claim.notes.last.created_at)}"
+                  )
+                )
+              )
+            end
+          end
+        end
+
+        context "with admin claims tasks identity confirmation passed" do
+          let(:claim) do
+            claimant_submits_claim(
+              claim_attributes: {
+                date_of_birth: Date.new(1990, 8, 23),
+                first_name: "Fred",
+                national_insurance_number: "QQ100000C",
+                policy: policy,
+                reference: "AB123456",
+                surname: "ELIGIBLE",
+                tasks: [build(:task, name: :identity_confirmation)],
+                teacher_reference_number: "1234567"
+              }
+            )
+          end
+
+          context "admin claim tasks identity confirmation view" do
+            before { visit admin_claim_task_path(claim, :identity_confirmation) }
+
+            scenario "shows task outcome previously performed by user" do
+              expect(task_outcome).to have_text("This task was performed by #{claim.tasks.where(name: :identity_confirmation).first.created_by.full_name} on #{I18n.l(claim.tasks.where(name: :identity_confirmation).first.created_at)}")
+            end
+          end
+
+          context "admin claim notes view" do
+            before { visit admin_claim_notes_path(claim) }
+
+            scenario "doesn't show not matched by automated check" do
+              expect(notes).not_to include(
+                have_text(%r{[Nn]ot matched}).and(
+                  have_text("by an automated check")
+                )
+              )
+            end
+          end
+        end
+
+        context "with teacher status alert" do
+          let(:data) do
+            {
+              active_alert: true,
+              date_of_birth: claim.date_of_birth,
+              name: "#{claim.first_name} #{claim.surname}",
+              national_insurance_number: claim.national_insurance_number,
+              teacher_reference_number: claim.teacher_reference_number
+            }
+          end
+
+          context "admin claim tasks view" do
+            before { visit admin_claim_tasks_path(claim) }
+
+            scenario "shows identity confirmation passed" do
+              expect(task("Identity confirmation")).to have_text("Partial match")
+            end
+          end
+
+          context "admin claim tasks identity confirmation view" do
+            before { visit admin_claim_task_path(claim, :identity_confirmation) }
+
+            scenario "shows identity confirmation question" do
+              expect(page).to have_content("Did #{claim.full_name} submit the claim?")
+              expect(page).to have_link(href: admin_claim_notes_path(claim))
+            end
+          end
+
+          context "admin claim notes view" do
+            before { visit admin_claim_notes_path(claim) }
+
+            scenario "shows date of birth not matched by an automated check" do
+              expect(notes).to include(
+                have_text(
+                  within(".banner") do
+                    "Teacher’s identity has an active alert. Speak to manager before checking this claim."
+                  end
+                ).and(
+                  have_text(
+                    "by an automated check on #{I18n.l(claim.notes.last.created_at)}"
+                  )
+                )
+              )
+            end
+          end
+
+          context "admin claim" do
+            before { visit admin_claim_path(claim) }
+
+            scenario "shows note in banner" do
+              expect(banner).to have_text("Teacher’s identity has an active alert. Speak to manager before checking this claim.")
+            end
+          end
+        end
+
+        context "except multiple matches" do
+          let(:data) do
+            {
+              date_of_birth: claim.date_of_birth + 1.day,
+              name: "Except #{claim.surname}",
+              national_insurance_number: claim.national_insurance_number,
+              teacher_reference_number: claim.teacher_reference_number
+            }
+          end
+
+          context "admin claim tasks view" do
+            before { visit admin_claim_tasks_path(claim) }
+
+            scenario "shows identity confirmation partial match" do
+              expect(task("Identity confirmation")).to have_text("Partial match")
+            end
+          end
+
+          context "admin claim tasks identity confirmation view" do
+            before { visit admin_claim_task_path(claim, :identity_confirmation) }
+
+            scenario "shows identity confirmation question" do
+              expect(page).to have_content("Did #{claim.full_name} submit the claim?")
+              expect(page).to have_link(href: admin_claim_notes_path(claim))
+            end
+          end
+
+          context "admin claim notes view" do
+            before { visit admin_claim_notes_path(claim) }
+
+            scenario "shows multiple not matched by an automated check" do
+              expect(notes).to include(
+                have_text(
+                  "Date of birth not matched"
+                ).and(
+                  have_text(
+                    "by an automated check on #{I18n.l(claim.notes.last.created_at)}"
+                  )
+                )
+              )
+
+              expect(notes).to include(
+                have_text(
+                  "First name or surname not matched"
+                ).and(
+                  have_text(
+                    "by an automated check on #{I18n.l(claim.notes.last.created_at)}"
+                  )
+                )
+              )
+            end
+          end
+        end
+      end
+
+      context "without matching DQT identity" do
+        let(:data) { nil }
+
+        context "admin claim tasks view" do
+          before { visit admin_claim_tasks_path(claim) }
+
+          scenario "shows identity confirmation no match" do
+            expect(task("Identity confirmation")).to have_text("No match")
+          end
+        end
+
+        context "admin claim tasks identity confirmation view" do
+          before { visit admin_claim_task_path(claim, :identity_confirmation) }
+
+          scenario "shows identity confirmation question" do
+            expect(page).to have_content("Did #{claim.full_name} submit the claim?")
+            expect(page).to have_link(href: admin_claim_notes_path(claim))
+          end
+        end
+
+        context "admin claim notes view" do
+          before { visit admin_claim_notes_path(claim) }
+
+          scenario "shows note not matched by automated check" do
+            expect(notes).to include(
+              have_text("Not matched").and(
+                have_text("by an automated check")
+              )
+            )
+          end
+        end
+      end
+
+      context "with eligible qualifications" do
+        let(:data) do
+          {
+            qts_award_date: Date.new( # 1st September is start of academic year
+              MathsAndPhysics.first_eligible_qts_award_year(claim.academic_year).start_year,
+              9,
+              1
+            ),
+            itt_subject_codes: [MathsAndPhysics::DqtRecord::ELIGIBLE_MATHS_HECOS_CODES.first]
+          }
+        end
+
+        context "admin claim tasks view" do
+          before { visit admin_claim_tasks_path(claim) }
+
+          scenario "shows qualifications passed" do
+            expect(task("Qualifications")).to have_text("Passed")
+          end
+        end
+
+        context "admin claim tasks qualifications view" do
+          before { visit admin_claim_task_path(claim, :qualifications) }
+
+          scenario "shows task outcome performed by automated check" do
+            expect(task_outcome).to have_text("This task was performed by an automated check on #{I18n.l(claim.tasks.where(name: :qualifications).first.created_at)}")
+          end
+        end
+
+        context "admin claim notes view" do
+          before { visit admin_claim_notes_path(claim) }
+
+          scenario "doesn't show not eligible by an automated check" do
+            expect(notes).not_to include(
+              have_text(%r{[Nn]ot eligible}).and(
+                have_text("by an automated check")
+              )
+            )
+          end
+        end
+
+        context "except QTS award date" do
+          let(:data) do
+            {
+              qts_award_date: Date.new(
+                MathsAndPhysics.first_eligible_qts_award_year(claim.academic_year).start_year - 1.year,
+                9,
+                1
+              ),
+              itt_subject_codes: [MathsAndPhysics::DqtRecord::ELIGIBLE_MATHS_HECOS_CODES.first]
+            }
+          end
+
+          context "admin claim tasks view" do
+            before { visit admin_claim_tasks_path(claim) }
+
+            scenario "shows qualifications incomplete" do
+              expect(task("Qualifications")).to have_text("Partial match")
+            end
+          end
+
+          context "admin claim tasks qualifications view" do
+            before { visit admin_claim_task_path(claim, :qualifications) }
+
+            scenario "shows qualifications question" do
+              expect(page).to have_content("Does the claimant’s initial teacher training (ITT) qualification year and specialist subject match the above information from their claim?")
+            end
+          end
+
+          context "admin claim notes view" do
+            before { visit admin_claim_notes_path(claim) }
+
+            scenario "shows QTS award date not eligible by an automated check" do
+              expect(notes).to include(
+                have_content(
+                  "QTS award date not eligible"
+                ).and(
+                  have_content("by an automated check")
+                )
+              )
+            end
+          end
+        end
+
+        context "except ITT subjects codes" do
+          let(:data) do
+            {
+              qts_award_date: Date.new( # 1st September is start of academic year
+                MathsAndPhysics.first_eligible_qts_award_year(claim.academic_year).start_year,
+                9,
+                1
+              ),
+              itt_subject_codes: ["NoCode"]
+            }
+          end
+
+          context "admin claim tasks view" do
+            before { visit admin_claim_tasks_path(claim) }
+
+            scenario "shows qualifications incomplete" do
+              expect(task("Qualifications")).to have_text("Partial match")
+            end
+          end
+
+          context "admin claim tasks qualifications view" do
+            before { visit admin_claim_task_path(claim, :qualifications) }
+
+            scenario "shows qualifications question" do
+              expect(page).to have_content("Does the claimant’s initial teacher training (ITT) qualification year and specialist subject match the above information from their claim?")
+            end
+          end
+
+          context "admin claim notes view" do
+            before { visit admin_claim_notes_path(claim) }
+
+            scenario "shows ITT subject codes not eligible by an automated check" do
+              expect(notes).to include(
+                have_content(
+                  "ITT subject codes not eligible"
+                ).and(
+                  have_content("by an automated check")
+                )
+              )
+            end
+          end
+        end
+
+        context "with admin claims tasks qualifications passed" do
+          let(:claim) do
+            claimant_submits_claim(
+              claim_attributes: {
+                date_of_birth: Date.new(1990, 8, 23),
+                first_name: "Fred",
+                national_insurance_number: "QQ100000C",
+                policy: policy,
+                reference: "AB123456",
+                surname: "ELIGIBLE",
+                tasks: [build(:task, name: "qualifications")],
+                teacher_reference_number: "1234567"
+              }
+            )
+          end
+
+          context "admin claim tasks qualifications view" do
+            before { visit admin_claim_task_path(claim, :qualifications) }
+
+            scenario "shows task outcome previously performed by user" do
+              expect(task_outcome).to have_text("This task was performed by #{claim.tasks.where(name: :qualifications).first.created_by.full_name} on #{I18n.l(claim.tasks.where(name: :qualifications).first.created_at)}")
+            end
+          end
+
+          context "admin claim notes view" do
+            before { visit admin_claim_notes_path(claim) }
+
+            scenario "doesn't show not eligible by automated check" do
+              expect(notes).not_to include(
+                have_text(%r{[Nn]ot eligible}).and(
+                  have_text("by an automated check")
+                )
+              )
+            end
+          end
+        end
+      end
+
+      context "without eligible qualifications" do
+        let(:data) do
+          {
+            qts_award_date: Date.new(
+              MathsAndPhysics.first_eligible_qts_award_year(claim.academic_year).start_year - 1.year,
+              9,
+              1
+            ),
+            itt_subject_codes: ["NoCode"]
+          }
+        end
+
+        context "admin claim tasks view" do
+          before { visit admin_claim_tasks_path(claim) }
+
+          scenario "shows qualifications incomplete" do
+            expect(task("Qualifications")).to have_text("No match")
           end
         end
 
@@ -652,47 +1487,9 @@ RSpec.feature "Admin claim tasks update with DQT API" do
         context "admin claim notes view" do
           before { visit admin_claim_notes_path(claim) }
 
-          scenario "shows ITT subject codes not eligible by an automated check" do
+          scenario "shows not eligible by an automated check" do
             expect(notes).to include(
-              have_content(
-                "ITT subject codes not eligible"
-              ).and(
-                have_content("by an automated check")
-              )
-            )
-          end
-        end
-      end
-
-      context "with admin claims tasks qualifications passed" do
-        let(:claim) do
-          claimant_submits_claim(
-            claim_attributes: {
-              date_of_birth: Date.new(1990, 8, 23),
-              first_name: "Fred",
-              national_insurance_number: "QQ100000C",
-              reference: "AB123456",
-              surname: "ELIGIBLE",
-              tasks: [build(:task, name: "qualifications")],
-              teacher_reference_number: "1234567"
-            }
-          )
-        end
-
-        context "admin claim tasks qualifications view" do
-          before { visit admin_claim_task_path(claim, :qualifications) }
-
-          scenario "shows task outcome previously performed by user" do
-            expect(task_outcome).to have_text("This task was performed by #{claim.tasks.where(name: :qualifications).first.created_by.full_name} on #{I18n.l(claim.tasks.where(name: :qualifications).first.created_at)}")
-          end
-        end
-
-        context "admin claim notes view" do
-          before { visit admin_claim_notes_path(claim) }
-
-          scenario "doesn't show not eligible by automated check" do
-            expect(notes).not_to include(
-              have_text(%r{[Nn]ot eligible}).and(
+              have_text("Not eligible").and(
                 have_text("by an automated check")
               )
             )
@@ -700,44 +1497,662 @@ RSpec.feature "Admin claim tasks update with DQT API" do
         end
       end
     end
+  end
 
-    context "without eligible qualifications" do
-      let(:data) do
-        {
-          qts_award_date: Date.new(
-            MathsAndPhysics.first_eligible_qts_award_year(claim.academic_year).start_year - 1.year,
-            9,
-            1
-          ),
-          itt_subject_codes: ["NoCode"]
-        }
+  context "with StudentLoans policy" do
+    let(:policy) { StudentLoans }
+
+    context "with submitted claim" do
+      let(:claim) do
+        claimant_submits_claim(
+          claim_attributes: {
+            date_of_birth: Date.new(1990, 8, 23),
+            first_name: "Fred",
+            national_insurance_number: "QQ100000C",
+            policy: policy,
+            reference: "AB123456",
+            surname: "ELIGIBLE",
+            teacher_reference_number: "1234567"
+          }
+        )
       end
 
-      context "admin claim tasks view" do
-        before { visit admin_claim_tasks_path(claim) }
-
-        scenario "shows qualifications incomplete" do
-          expect(task("Qualifications")).to have_text("No match")
+      context "with matching DQT identity" do
+        let(:data) do
+          {
+            date_of_birth: claim.date_of_birth,
+            name: "#{claim.first_name} #{claim.surname}",
+            national_insurance_number: claim.national_insurance_number,
+            teacher_reference_number: claim.teacher_reference_number
+          }
         end
-      end
 
-      context "admin claim tasks qualifications view" do
-        before { visit admin_claim_task_path(claim, :qualifications) }
+        context "admin claim tasks view" do
+          before { visit admin_claim_tasks_path(claim) }
 
-        scenario "shows qualifications question" do
-          expect(page).to have_content("Does the claimant’s initial teacher training (ITT) qualification year and specialist subject match the above information from their claim?")
+          scenario "shows identity confirmation passed" do
+            expect(task("Identity confirmation")).to have_text("Passed")
+          end
         end
-      end
 
-      context "admin claim notes view" do
-        before { visit admin_claim_notes_path(claim) }
+        context "admin claim tasks identity confirmation view" do
+          before { visit admin_claim_task_path(claim, :identity_confirmation) }
 
-        scenario "shows not eligible by an automated check" do
-          expect(notes).to include(
-            have_text("Not eligible").and(
-              have_text("by an automated check")
+          scenario "shows task outcome performed by automated check" do
+            expect(task_outcome).to have_text("This task was performed by an automated check on #{I18n.l(claim.tasks.where(name: :identity_confirmation).first.created_at)}")
+          end
+        end
+
+        context "admin claim notes view" do
+          before { visit admin_claim_notes_path(claim) }
+
+          scenario "doesn't show not matched by an automated check" do
+            expect(notes).not_to include(
+              have_text(%r{[Nn]ot matched}).and(
+                have_text("by an automated check")
+              )
             )
-          )
+          end
+        end
+
+        context "except national insurance number" do
+          let(:data) do
+            {
+              date_of_birth: claim.date_of_birth,
+              name: "#{claim.first_name} #{claim.surname}",
+              national_insurance_number: "QQ100000B",
+              teacher_reference_number: claim.teacher_reference_number
+            }
+          end
+
+          context "admin claim tasks view" do
+            before { visit admin_claim_tasks_path(claim) }
+
+            scenario "shows identity confirmation passed" do
+              expect(task("Identity confirmation")).to have_text("Partial match")
+            end
+          end
+
+          context "admin claim tasks identity confirmation view" do
+            before { visit admin_claim_task_path(claim, :identity_confirmation) }
+
+            scenario "shows identity confirmation question" do
+              expect(page).to have_content("Did #{claim.full_name} submit the claim?")
+              expect(page).to have_link(href: admin_claim_notes_path(claim))
+            end
+          end
+
+          context "admin claim notes view" do
+            before { visit admin_claim_notes_path(claim) }
+
+            scenario "shows National Insurance number not matched by an automated check" do
+              expect(notes).to include(
+                have_text(
+                  "National Insurance number not matched"
+                ).and(
+                  have_text(
+                    "by an automated check on #{I18n.l(claim.notes.last.created_at)}"
+                  )
+                )
+              )
+            end
+          end
+        end
+
+        context "except matching teacher reference number" do
+          let(:data) do
+            {
+              date_of_birth: claim.date_of_birth,
+              name: "#{claim.first_name} #{claim.surname}",
+              national_insurance_number: claim.national_insurance_number,
+              teacher_reference_number: "7654321"
+            }
+          end
+
+          context "admin claim tasks view" do
+            before { visit admin_claim_tasks_path(claim) }
+
+            scenario "shows identity confirmation incomplete" do
+              expect(task("Identity confirmation")).to have_text("Partial match")
+            end
+          end
+
+          context "admin claim tasks identity confirmation view" do
+            before { visit admin_claim_task_path(claim, :identity_confirmation) }
+
+            scenario "shows identity confirmation question" do
+              expect(page).to have_content("Did #{claim.full_name} submit the claim?")
+              expect(page).to have_link(href: admin_claim_notes_path(claim))
+            end
+          end
+
+          context "admin claim notes view" do
+            before { visit admin_claim_notes_path(claim) }
+
+            scenario "shows teacher reference number not matched by an automated check" do
+              expect(notes).to include(
+                have_text("Teacher reference number not matched").and(
+                  have_text("by an automated check")
+                )
+              )
+            end
+          end
+        end
+
+        context "except matching first name" do
+          let(:data) do
+            {
+              date_of_birth: claim.date_of_birth,
+              name: "Except #{claim.surname}",
+              national_insurance_number: claim.national_insurance_number,
+              teacher_reference_number: claim.teacher_reference_number
+            }
+          end
+
+          context "admin claim tasks view" do
+            before { visit admin_claim_tasks_path(claim) }
+
+            scenario "shows identity confirmation passed" do
+              expect(task("Identity confirmation")).to have_text("Partial match")
+            end
+          end
+
+          context "admin claim tasks identity confirmation view" do
+            before { visit admin_claim_task_path(claim, :identity_confirmation) }
+
+            scenario "shows identity confirmation question" do
+              expect(page).to have_content("Did #{claim.full_name} submit the claim?")
+              expect(page).to have_link(href: admin_claim_notes_path(claim))
+            end
+          end
+
+          context "admin claim notes view" do
+            before { visit admin_claim_notes_path(claim) }
+
+            scenario "shows first name or surname not matched by an automated check" do
+              expect(notes).to include(
+                have_text(
+                  "First name or surname not matched"
+                ).and(
+                  have_text(
+                    "by an automated check on #{I18n.l(claim.notes.last.created_at)}"
+                  )
+                )
+              )
+            end
+          end
+        end
+
+        context "except matching surname" do
+          let(:data) do
+            {
+              date_of_birth: claim.date_of_birth,
+              name: "#{claim.first_name} Except",
+              national_insurance_number: claim.national_insurance_number,
+              teacher_reference_number: claim.teacher_reference_number
+            }
+          end
+
+          context "admin claim tasks view" do
+            before { visit admin_claim_tasks_path(claim) }
+
+            scenario "shows identity confirmation passed" do
+              expect(task("Identity confirmation")).to have_text("Partial match")
+            end
+          end
+
+          context "admin claim tasks identity confirmation view" do
+            before { visit admin_claim_task_path(claim, :identity_confirmation) }
+
+            scenario "shows identity confirmation question" do
+              expect(page).to have_content("Did #{claim.full_name} submit the claim?")
+              expect(page).to have_link(href: admin_claim_notes_path(claim))
+            end
+          end
+
+          context "admin claim notes view" do
+            before { visit admin_claim_notes_path(claim) }
+
+            context "admin claim notes view" do
+              before { visit admin_claim_notes_path(claim) }
+
+              scenario "shows first name or surname not matched by an automated check" do
+                expect(notes).to include(
+                  have_text(
+                    "First name or surname not matched"
+                  ).and(
+                    have_text(
+                      "by an automated check on #{I18n.l(claim.notes.last.created_at)}"
+                    )
+                  )
+                )
+              end
+            end
+          end
+        end
+
+        context "with middle names" do
+          let(:data) do
+            {
+              date_of_birth: claim.date_of_birth,
+              name: "#{claim.first_name} Middle Names #{claim.surname}",
+              national_insurance_number: claim.national_insurance_number,
+              teacher_reference_number: claim.teacher_reference_number
+            }
+          end
+
+          context "admin claim tasks view" do
+            before { visit admin_claim_tasks_path(claim) }
+
+            scenario "shows identity confirmation passed" do
+              expect(task("Identity confirmation")).to have_text("Passed")
+            end
+          end
+
+          context "admin claim tasks identity confirmation view" do
+            before { visit admin_claim_task_path(claim, :identity_confirmation) }
+
+            scenario "shows task outcome performed by automated check" do
+              expect(task_outcome).to have_text("This task was performed by an automated check on #{I18n.l(claim.tasks.where(name: :identity_confirmation).first.created_at)}")
+            end
+          end
+
+          context "admin claim notes view" do
+            before { visit admin_claim_notes_path(claim) }
+
+            scenario "doesn't show not matched by an automated check" do
+              expect(notes).not_to include(
+                have_text(%r{[Nn]ot matched}).and(
+                  have_text("by an automated check")
+                )
+              )
+            end
+          end
+        end
+
+        context "except matching date of birth" do
+          let(:data) do
+            {
+              date_of_birth: claim.date_of_birth + 1.day,
+              name: "#{claim.first_name} #{claim.surname}",
+              national_insurance_number: claim.national_insurance_number,
+              teacher_reference_number: claim.teacher_reference_number
+            }
+          end
+
+          context "admin claim tasks view" do
+            before { visit admin_claim_tasks_path(claim) }
+
+            scenario "shows identity confirmation passed" do
+              expect(task("Identity confirmation")).to have_text("Partial match")
+            end
+          end
+
+          context "admin claim tasks identity confirmation view" do
+            before { visit admin_claim_task_path(claim, :identity_confirmation) }
+
+            scenario "shows identity confirmation question" do
+              expect(page).to have_content("Did #{claim.full_name} submit the claim?")
+              expect(page).to have_link(href: admin_claim_notes_path(claim))
+            end
+          end
+
+          context "admin claim notes view" do
+            before { visit admin_claim_notes_path(claim) }
+
+            scenario "shows date of birth not matched by an automated check" do
+              expect(notes).to include(
+                have_text(
+                  "Date of birth not matched"
+                ).and(
+                  have_text(
+                    "by an automated check on #{I18n.l(claim.notes.last.created_at)}"
+                  )
+                )
+              )
+            end
+          end
+        end
+
+        context "with admin claims tasks identity confirmation passed" do
+          let(:claim) do
+            claimant_submits_claim(
+              claim_attributes: {
+                date_of_birth: Date.new(1990, 8, 23),
+                first_name: "Fred",
+                national_insurance_number: "QQ100000C",
+                policy: policy,
+                reference: "AB123456",
+                surname: "ELIGIBLE",
+                tasks: [build(:task, name: :identity_confirmation)],
+                teacher_reference_number: "1234567"
+              }
+            )
+          end
+
+          context "admin claim tasks identity confirmation view" do
+            before { visit admin_claim_task_path(claim, :identity_confirmation) }
+
+            scenario "shows task outcome previously performed by user" do
+              expect(task_outcome).to have_text("This task was performed by #{claim.tasks.where(name: :identity_confirmation).first.created_by.full_name} on #{I18n.l(claim.tasks.where(name: :identity_confirmation).first.created_at)}")
+            end
+          end
+
+          context "admin claim notes view" do
+            before { visit admin_claim_notes_path(claim) }
+
+            scenario "doesn't show not matched by automated check" do
+              expect(notes).not_to include(
+                have_text(%r{[Nn]ot matched}).and(
+                  have_text("by an automated check")
+                )
+              )
+            end
+          end
+        end
+
+        context "with teacher status alert" do
+          let(:data) do
+            {
+              active_alert: true,
+              date_of_birth: claim.date_of_birth,
+              name: "#{claim.first_name} #{claim.surname}",
+              national_insurance_number: claim.national_insurance_number,
+              teacher_reference_number: claim.teacher_reference_number
+            }
+          end
+
+          context "admin claim tasks view" do
+            before { visit admin_claim_tasks_path(claim) }
+
+            scenario "shows identity confirmation passed" do
+              expect(task("Identity confirmation")).to have_text("Partial match")
+            end
+          end
+
+          context "admin claim tasks identity confirmation view" do
+            before { visit admin_claim_task_path(claim, :identity_confirmation) }
+
+            scenario "shows identity confirmation question" do
+              expect(page).to have_content("Did #{claim.full_name} submit the claim?")
+              expect(page).to have_link(href: admin_claim_notes_path(claim))
+            end
+          end
+
+          context "admin claim notes view" do
+            before { visit admin_claim_notes_path(claim) }
+
+            scenario "shows date of birth not matched by an automated check" do
+              expect(notes).to include(
+                have_text(
+                  within(".banner") do
+                    "Teacher’s identity has an active alert. Speak to manager before checking this claim."
+                  end
+                ).and(
+                  have_text(
+                    "by an automated check on #{I18n.l(claim.notes.last.created_at)}"
+                  )
+                )
+              )
+            end
+          end
+
+          context "admin claim" do
+            before { visit admin_claim_path(claim) }
+
+            scenario "shows note in banner" do
+              expect(banner).to have_text("Teacher’s identity has an active alert. Speak to manager before checking this claim.")
+            end
+          end
+        end
+
+        context "except multiple matches" do
+          let(:data) do
+            {
+              date_of_birth: claim.date_of_birth + 1.day,
+              name: "Except #{claim.surname}",
+              national_insurance_number: claim.national_insurance_number,
+              teacher_reference_number: claim.teacher_reference_number
+            }
+          end
+
+          context "admin claim tasks view" do
+            before { visit admin_claim_tasks_path(claim) }
+
+            scenario "shows identity confirmation partial match" do
+              expect(task("Identity confirmation")).to have_text("Partial match")
+            end
+          end
+
+          context "admin claim tasks identity confirmation view" do
+            before { visit admin_claim_task_path(claim, :identity_confirmation) }
+
+            scenario "shows identity confirmation question" do
+              expect(page).to have_content("Did #{claim.full_name} submit the claim?")
+              expect(page).to have_link(href: admin_claim_notes_path(claim))
+            end
+          end
+
+          context "admin claim notes view" do
+            before { visit admin_claim_notes_path(claim) }
+
+            scenario "shows multiple not matched by an automated check" do
+              expect(notes).to include(
+                have_text(
+                  "Date of birth not matched"
+                ).and(
+                  have_text(
+                    "by an automated check on #{I18n.l(claim.notes.last.created_at)}"
+                  )
+                )
+              )
+
+              expect(notes).to include(
+                have_text(
+                  "First name or surname not matched"
+                ).and(
+                  have_text(
+                    "by an automated check on #{I18n.l(claim.notes.last.created_at)}"
+                  )
+                )
+              )
+            end
+          end
+        end
+      end
+
+      context "without matching DQT identity" do
+        let(:data) { nil }
+
+        context "admin claim tasks view" do
+          before { visit admin_claim_tasks_path(claim) }
+
+          scenario "shows identity confirmation no match" do
+            expect(task("Identity confirmation")).to have_text("No match")
+          end
+        end
+
+        context "admin claim tasks identity confirmation view" do
+          before { visit admin_claim_task_path(claim, :identity_confirmation) }
+
+          scenario "shows identity confirmation question" do
+            expect(page).to have_content("Did #{claim.full_name} submit the claim?")
+            expect(page).to have_link(href: admin_claim_notes_path(claim))
+          end
+        end
+
+        context "admin claim notes view" do
+          before { visit admin_claim_notes_path(claim) }
+
+          scenario "shows note not matched by automated check" do
+            expect(notes).to include(
+              have_text("Not matched").and(
+                have_text("by an automated check")
+              )
+            )
+          end
+        end
+      end
+
+      context "with eligible qualifications" do
+        let(:data) do
+          {
+            qts_award_date: Date.new( # 1st September is start of academic year
+              StudentLoans.first_eligible_qts_award_year(claim.academic_year).start_year,
+              9,
+              1
+            ),
+            itt_subject_codes: ["CODE"]
+          }
+        end
+
+        context "admin claim tasks view" do
+          before { visit admin_claim_tasks_path(claim) }
+
+          scenario "shows qualifications passed" do
+            expect(task("Qualifications")).to have_text("Passed")
+          end
+        end
+
+        context "admin claim tasks qualifications view" do
+          before { visit admin_claim_task_path(claim, :qualifications) }
+
+          scenario "shows task outcome performed by automated check" do
+            expect(task_outcome).to have_text("This task was performed by an automated check on #{I18n.l(claim.tasks.where(name: :qualifications).first.created_at)}")
+          end
+        end
+
+        context "admin claim notes view" do
+          before { visit admin_claim_notes_path(claim) }
+
+          scenario "doesn't show not eligible by an automated check" do
+            expect(notes).not_to include(
+              have_text(%r{[Nn]ot eligible}).and(
+                have_text("by an automated check")
+              )
+            )
+          end
+        end
+
+        context "except QTS award date" do
+          let(:data) do
+            {
+              qts_award_date: Date.new(
+                StudentLoans.first_eligible_qts_award_year(claim.academic_year).start_year - 1.year,
+                9,
+                1
+              ),
+              itt_subject_codes: ["CODE"]
+            }
+          end
+
+          context "admin claim tasks view" do
+            before { visit admin_claim_tasks_path(claim) }
+
+            scenario "shows qualifications incomplete" do
+              expect(task("Qualifications")).to have_text("No match")
+            end
+          end
+
+          context "admin claim tasks qualifications view" do
+            before { visit admin_claim_task_path(claim, :qualifications) }
+
+            scenario "shows qualifications question" do
+              expect(page).to have_content("Does the claimant’s initial teacher training (ITT) qualification year match the above information from their claim?")
+            end
+          end
+
+          context "admin claim notes view" do
+            before { visit admin_claim_notes_path(claim) }
+
+            scenario "shows QTS award date not eligible by an automated check" do
+              include(
+                have_content(
+                  "Not eligible"
+                ).and(
+                  have_content("by an automated check")
+                )
+              )
+            end
+          end
+        end
+
+        context "with admin claims tasks qualifications passed" do
+          let(:claim) do
+            claimant_submits_claim(
+              claim_attributes: {
+                date_of_birth: Date.new(1990, 8, 23),
+                first_name: "Fred",
+                national_insurance_number: "QQ100000C",
+                policy: policy,
+                reference: "AB123456",
+                surname: "ELIGIBLE",
+                tasks: [build(:task, name: "qualifications")],
+                teacher_reference_number: "1234567"
+              }
+            )
+          end
+
+          context "admin claim tasks qualifications view" do
+            before { visit admin_claim_task_path(claim, :qualifications) }
+
+            scenario "shows task outcome previously performed by user" do
+              expect(task_outcome).to have_text("This task was performed by #{claim.tasks.where(name: :qualifications).first.created_by.full_name} on #{I18n.l(claim.tasks.where(name: :qualifications).first.created_at)}")
+            end
+          end
+
+          context "admin claim notes view" do
+            before { visit admin_claim_notes_path(claim) }
+
+            scenario "doesn't show not eligible by automated check" do
+              expect(notes).not_to include(
+                have_text(%r{[Nn]ot eligible}).and(
+                  have_text("by an automated check")
+                )
+              )
+            end
+          end
+        end
+      end
+
+      context "without eligible qualifications" do
+        let(:data) do
+          {
+            qts_award_date: Date.new(
+              MathsAndPhysics.first_eligible_qts_award_year(claim.academic_year).start_year - 1.year,
+              9,
+              1
+            ),
+            itt_subject_codes: ["NoCode"]
+          }
+        end
+
+        context "admin claim tasks view" do
+          before { visit admin_claim_tasks_path(claim) }
+
+          scenario "shows qualifications incomplete" do
+            expect(task("Qualifications")).to have_text("No match")
+          end
+        end
+
+        context "admin claim tasks qualifications view" do
+          before { visit admin_claim_task_path(claim, :qualifications) }
+
+          scenario "shows qualifications question" do
+            expect(page).to have_content("Does the claimant’s initial teacher training (ITT) qualification year match the above information from their claim?")
+          end
+        end
+
+        context "admin claim notes view" do
+          before { visit admin_claim_notes_path(claim) }
+
+          scenario "shows not eligible by an automated check" do
+            expect(notes).to include(
+              have_text("Not eligible").and(
+                have_text("by an automated check")
+              )
+            )
+          end
         end
       end
     end

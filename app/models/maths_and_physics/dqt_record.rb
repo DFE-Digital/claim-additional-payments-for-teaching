@@ -78,7 +78,7 @@ module MathsAndPhysics
     # :degree_codes      - An array of the claimants degree JAC or HECOS codes.
     # Previously only JAC codes were checked, however changes to the DQT mean subject codes can be either JACS or HECOS codes.
 
-    def initialize(record)
+    def initialize(record, _ = nil)
       @qts_award_date = record.fetch(:qts_date)
       @itt_subject_codes = record.fetch(:itt_subject_codes)
       @degree_codes = record.fetch(:degree_codes)

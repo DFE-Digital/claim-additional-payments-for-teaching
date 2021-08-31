@@ -16,7 +16,7 @@ module StudentLoans
     # The record transformed from a DQTReportCsv. Expected to contain the keys:
     # :qts_date - The date the teacher achieved qualified teacher status.
     #             Format: %d/%m/%Y
-    def initialize(record)
+    def initialize(record, _ = nil)
       @qts_award_date = record.fetch(:qts_date)
       @degree_codes = record.fetch(:degree_codes, ["ANY"])
       @itt_subject_codes = record.fetch(:itt_subject_codes, ["ANY"])

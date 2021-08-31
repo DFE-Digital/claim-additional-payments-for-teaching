@@ -704,6 +704,97 @@ module AutomatedChecks
               it { is_expected.to eq(nil) }
             end
           end
+
+          context "except multiple matches" do
+            let(:data) do
+              {
+                date_of_birth: claim_arg.date_of_birth + 1.day,
+                name: "Except #{claim_arg.surname}",
+                national_insurance_number: claim_arg.national_insurance_number,
+                teacher_reference_number: claim_arg.teacher_reference_number
+              }
+            end
+
+            it { is_expected.to be_an_instance_of(Task) }
+
+            describe "identity confirmation task" do
+              subject(:identity_confirmation_task) { claim_arg.tasks.find_by(name: "identity_confirmation") }
+
+              before { perform }
+
+              describe "#claim_verifier_match" do
+                subject(:claim_verifier_match) { identity_confirmation_task.claim_verifier_match }
+
+                it { is_expected.to eq "any" }
+              end
+
+              describe "#created_by" do
+                subject(:created_by) { identity_confirmation_task.created_by }
+
+                it { is_expected.to eq nil }
+              end
+
+              describe "#passed" do
+                subject(:passed) { identity_confirmation_task.passed }
+
+                it { is_expected.to eq nil }
+              end
+
+              describe "#manual" do
+                subject(:manual) { identity_confirmation_task.manual }
+
+                it { is_expected.to eq false }
+              end
+            end
+
+            describe "first name or surname note" do
+              subject(:note) { claim_arg.notes.find_by(body: "First name or surname not matched") }
+
+              before { perform }
+
+              describe "#body" do
+                subject(:body) { note.body }
+
+                it { is_expected.to eq("First name or surname not matched") }
+              end
+
+              describe "#created_by" do
+                subject(:created_by) { note.created_by }
+
+                it { is_expected.to eq(nil) }
+              end
+
+              describe "#important" do
+                subject(:important) { note.important }
+
+                it { is_expected.to eq false }
+              end
+            end
+
+            describe "date of birth note" do
+              subject(:note) { claim_arg.notes.find_by(body: "Date of birth not matched") }
+
+              before { perform }
+
+              describe "#body" do
+                subject(:body) { note.body }
+
+                it { is_expected.to eq("Date of birth not matched") }
+              end
+
+              describe "#created_by" do
+                subject(:created_by) { note.created_by }
+
+                it { is_expected.to eq(nil) }
+              end
+
+              describe "#important" do
+                subject(:important) { note.important }
+
+                it { is_expected.to eq false }
+              end
+            end
+          end
         end
 
         context "without matching DQT identity" do

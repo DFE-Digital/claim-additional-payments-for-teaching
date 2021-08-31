@@ -21,6 +21,8 @@ The format is based on [Keep a Changelog]
   - Add important notes to claim summary (DQT active alert)
   - Add ECP admin claim matching details task screen
   - DQT identity check mailer removed
+  - Add admin claim verifier ECP qualifications
+  - Update claim verifiers to handle multiple partial matches
 - All policies
   - Home Address selection
     - Add home address search screen to claim journey
@@ -39,6 +41,8 @@ The format is based on [Keep a Changelog]
   - ECP OTP email content change
   - Claim approved template content change
   - Claim submitted content change
+  - 'What gender does your school's payroll system associate with you?' content
+    change
 - ECP policies
   - Adds set reminder flow to eligible now flow
   - Fix no validation occuring on 'Personal Details' screens
