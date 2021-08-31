@@ -33,7 +33,7 @@ class ClaimMailer < ApplicationMailer
 
   def email_verification(claim, one_time_password)
     set_common_instance_variables(claim)
-    @subject = "#{@claim_description} email verification"
+    @subject = "#{@claim_subject} email verification"
     @one_time_password = one_time_password
 
     send_mail
@@ -44,6 +44,7 @@ class ClaimMailer < ApplicationMailer
   def set_common_instance_variables(claim)
     @claim = claim
     @claim_description = translate("#{@claim.policy.locale_key}.claim_description")
+    @claim_subject = translate("#{@claim.policy.locale_key}.claim_subject")
     @display_name = [@claim.first_name, @claim.surname].join(" ")
     @policy = @claim.policy
   end
