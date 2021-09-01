@@ -62,6 +62,7 @@ The format is based on [Keep a Changelog]
   - Content change for 'Application complete' page
 - TSLR policies
   - Move PG screens in the user journey (student loan amount)
+  - Update location of student loan amount question in check your answers
 - DAC Accessibility Report fixes
   - Incorrect aria value
   - Links opening in a new window
