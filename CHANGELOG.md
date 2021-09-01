@@ -34,7 +34,7 @@ The format is based on [Keep a Changelog]
       presented as radio buttons
     - Add links that allow claimant to manually enter their address information
       when on the two address auto-population screens
-  - Add posgraduate loans questions to M+P / TSLR journeys
+  - Add postgraduate loans questions to M+P / TSLR journeys
   - Hiding mobile/SMS related OTP screens
   - Update Northamptonshire local authority to reflect GIAS changes 1st April
     2021
@@ -50,11 +50,11 @@ The format is based on [Keep a Changelog]
   - Update subject heading on TSLR and ECP OTP email
 - ECP policies
   - Adds set reminder flow to eligible now flow
-  - Fix no validation occuring on 'Personal Details' screens
+  - Fix no validation occurring on 'Personal Details' screens
   - Fix typo on 'How we will use the information you provide' page
   - Content change for 'Performance issues' screen
   - Content change for 'Application complete' page
-- DAC Accessiblity Report fixes
+- DAC Accessibility Report fixes
   - Incorrect aria value
   - Links opening in a new window
   - Incorrect ID in 'for' attribute for one time password
