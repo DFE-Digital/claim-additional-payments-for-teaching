@@ -75,6 +75,9 @@ The format is based on [Keep a Changelog]
 - Claims
   - Stop claim full name adding redundant spaces when middle name is an empty or
     blank string
+- Student Loan Plan Types
+  - Add plan type 3 - Postgraduate Masters and/or Doctoral loan
+  - Add plan type 4 - Scotland
 
 ## [Release 092] - 2021-07-22
 
