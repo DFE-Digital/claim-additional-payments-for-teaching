@@ -1274,6 +1274,34 @@ RSpec.describe Claim, type: :model do
     end
   end
 
+  describe "#has_tslr_policy?" do
+    let(:claim) { create(:claim, policy: policy) }
+
+    context "with student loans policy" do
+      let(:policy) { StudentLoans }
+
+      it "returns true" do
+        expect(claim.has_tslr_policy?).to eq(true)
+      end
+    end
+
+    context "with maths and physics policy" do
+      let(:policy) { MathsAndPhysics }
+
+      it "returns false" do
+        expect(claim.has_tslr_policy?).to eq(false)
+      end
+    end
+
+    context "with early-career payments policy" do
+      let(:policy) { EarlyCareerPayments }
+
+      it "returns false" do
+        expect(claim.has_tslr_policy?).to eq(false)
+      end
+    end
+  end
+
   describe "#important_notes" do
     subject(:important_notes) do
       claim.important_notes

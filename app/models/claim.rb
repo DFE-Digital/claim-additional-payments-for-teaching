@@ -370,6 +370,10 @@ class Claim < ApplicationRecord
     policy == EarlyCareerPayments
   end
 
+  def has_tslr_policy?
+    policy == StudentLoans
+  end
+
   def important_notes
     notes&.where(important: true)
   end
