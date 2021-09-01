@@ -51,6 +51,7 @@ The format is based on [Keep a Changelog]
   - Update Postgraduate Masters and Doctoral Loans questions to be only being
     asked if the answer to 'Do you have postgraduate masters and/or doctoral'
     loans is 'Yes'
+  - Remove HTML 5 validation messages on national insurance number
 - ECP policies
   - Adds set reminder flow to eligible now flow
   - Fix no validation occuring on 'Personal Details' screens
