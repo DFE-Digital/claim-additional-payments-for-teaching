@@ -16,7 +16,7 @@ select c.id "claim_id",
   from public.student_loans_eligibilities a,
   	   public.claims c
  where a.id = c.eligibility_id
-   and a.created_at BETWEEN '2021-04-01T00:00:01' and '2021-10-29T14:33:14';
+   and a.created_at BETWEEN '2021-04-01T00:00:01' and '2021-09-05T23:59:59';
 
 -- remove two live records:
 
