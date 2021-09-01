@@ -18,7 +18,9 @@ module DqtHelpers
             ittSubject1Code: "string",
             ittSubject2Code: "string",
             ittSubject3Code: "string",
-            activeAlert: true
+            activeAlert: true,
+            qualificationName: "NULL",
+            ittStartDate: "2021-03-23T10:54:57.199Z"
           }
         ],
         message: nil
