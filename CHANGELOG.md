@@ -25,6 +25,8 @@ The format is based on [Keep a Changelog]
   - Update claim verifiers to handle multiple partial matches
   - Add identity claim verifier admin claim notes claimant vs DQT mismatch
     information
+  - Fix ECP admin claim qualifications task question to first claim year
+    eligibility (Mathematics 2018)
 - All policies
   - Home Address selection
     - Add home address search screen to claim journey

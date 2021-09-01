@@ -27,12 +27,12 @@ module EarlyCareerPayments
       [].tap do |a|
         a << [
           "ITT start/end year",
-          I18n.t("answers.qts_award_years.on_date", year: eligibility.first_eligible_itt_academic_year.to_s(:long))
+          I18n.t("answers.qts_award_years.on_date", year: AcademicYear.new(2018).to_s(:long))
         ]
 
         a << [
           "ITT subject",
-          eligibility.eligible_itt_subject.humanize
+          I18n.t("early_career_payments.answers.eligible_itt_subject.mathematics")
         ]
       end
     end
