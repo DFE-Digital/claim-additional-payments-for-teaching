@@ -14,10 +14,7 @@ module AutomatedChecks
       def perform
         return unless awaiting_task?("qualifications")
 
-        # Order matters so that subsequent conditions in methods fall through to execute the right thing
-        no_match ||
-          complete_match ||
-          partial_match
+        no_match || complete_match
       end
 
       private
@@ -35,10 +32,23 @@ module AutomatedChecks
         create_task(match: :all, passed: true)
       end
 
-      def create_note(field_body = nil)
+      def create_note(match:)
+        body = if dqt_teacher_status.nil?
+          "Not eligible"
+        else
+          <<~HTML
+            #{match == :none ? "Ine" : "E"}ligible:
+            <pre>
+              ITT subject codes: #{dqt_teacher_status.itt_subject_codes}
+              Degree codes:      #{dqt_teacher_status.degree_codes}
+              QTS award date:    #{dqt_teacher_status.qts_award_date}
+            </pre>
+          HTML
+        end
+
         claim.notes.create!(
           {
-            body: "#{field_body ? field_body + " n" : "N"}ot eligible",
+            body: body,
             created_by: admin_user
           }
         )
@@ -57,6 +67,8 @@ module AutomatedChecks
 
         task.save!(context: :claim_verifier)
 
+        create_note(match: match)
+
         task
       end
 
@@ -67,24 +79,9 @@ module AutomatedChecks
       end
 
       def no_match
-        return unless dqt_teacher_status.nil? ||
-          (
-            !dqt_teacher_status.eligible_qts_date? &&
-            !dqt_teacher_status.eligible_qualification_subject?
-          )
+        return unless dqt_teacher_status.nil? || !dqt_teacher_status.eligible?
 
-        create_note
         create_task(match: :none)
-      end
-
-      def partial_match
-        notes = []
-
-        notes << create_note("ITT subject codes") unless dqt_teacher_status.eligible_qualification_subject?
-
-        notes << create_note("QTS award date") unless dqt_teacher_status.eligible_qts_date?
-
-        create_task(match: :any) if notes.any?
       end
 
       def tasks=(tasks)

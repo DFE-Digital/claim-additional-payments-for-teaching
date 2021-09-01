@@ -159,7 +159,7 @@ module AutomatedChecks
               describe "#claim_verifier_match" do
                 subject(:claim_verifier_match) { qualifications_task.claim_verifier_match }
 
-                it { is_expected.to eq "any" }
+                it { is_expected.to eq "none" }
               end
 
               describe "#created_by" do
@@ -189,7 +189,18 @@ module AutomatedChecks
               describe "#body" do
                 subject(:body) { note.body }
 
-                it { is_expected.to eq("QTS award date not eligible") }
+                it do
+                  is_expected.to eq(
+                    <<~HTML
+                      Ineligible:
+                      <pre>
+                        ITT subject codes: ["100400", "", ""]
+                        Degree codes:      []
+                        QTS award date:    -31554937-09-01T00:00:00+00:00
+                      </pre>
+                    HTML
+                  )
+                end
               end
 
               describe "#created_by" do
@@ -222,7 +233,7 @@ module AutomatedChecks
               describe "#claim_verifier_match" do
                 subject(:claim_verifier_match) { qualifications_task.claim_verifier_match }
 
-                it { is_expected.to eq "any" }
+                it { is_expected.to eq "none" }
               end
 
               describe "#created_by" do
@@ -252,7 +263,18 @@ module AutomatedChecks
               describe "#body" do
                 subject(:body) { note.body }
 
-                it { is_expected.to eq("ITT subject codes not eligible") }
+                it do
+                  is_expected.to eq(
+                    <<~HTML
+                      Ineligible:
+                      <pre>
+                        ITT subject codes: ["NoCode", "", ""]
+                        Degree codes:      []
+                        QTS award date:    2015-09-01T00:00:00+00:00
+                      </pre>
+                    HTML
+                  )
+                end
               end
 
               describe "#created_by" do
@@ -372,7 +394,18 @@ module AutomatedChecks
             describe "#body" do
               subject(:body) { note.body }
 
-              it { is_expected.to eq("Not eligible") }
+              it do
+                is_expected.to eq(
+                  <<~HTML
+                    Ineligible:
+                    <pre>
+                      ITT subject codes: ["NoCode", "", ""]
+                      Degree codes:      []
+                      QTS award date:    -31554937-09-01T00:00:00+00:00
+                    </pre>
+                  HTML
+                )
+              end
             end
 
             describe "#created_by" do
