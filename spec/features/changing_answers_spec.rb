@@ -170,17 +170,11 @@ RSpec.feature "Changing the answers on a submittable claim" do
         choose "No"
         click_on "Continue"
 
-        expect(current_path).to eq(claim_path(StudentLoans.routing_name, "student-loan-amount"))
         expect(claim.reload.has_student_loan).to eq false
         expect(claim.student_loan_country).to be_nil
         expect(claim.student_loan_courses).to be_nil
         expect(claim.student_loan_start_date).to be_nil
         expect(claim.student_loan_plan).to eq Claim::NO_STUDENT_LOAN
-
-        expect(page).to have_text(student_loan_amount_question)
-        click_on "Continue"
-
-        expect(claim.eligibility.reload.student_loan_repayment_amount).to eql(1000.00)
 
         expect(current_path).to eq(claim_path(StudentLoans.routing_name, "masters-doctoral-loan"))
         expect(page).to have_text(I18n.t("questions.has_masters_and_or_doctoral_loan"))
@@ -242,12 +236,6 @@ RSpec.feature "Changing the answers on a submittable claim" do
         expect(claim.student_loan_courses).to be_nil
         expect(claim.student_loan_start_date).to be_nil
         expect(claim.student_loan_plan).to eq StudentLoan::PLAN_1
-
-        expect(current_path).to eq(claim_path(StudentLoans.routing_name, "student-loan-amount"))
-
-        click_on "Continue"
-
-        expect(claim.eligibility.reload.student_loan_repayment_amount).to eql(1000.00)
 
         expect(current_path).not_to eq(claim_path(StudentLoans.routing_name, "masters-doctoral-loan"))
         expect(page).not_to have_text(I18n.t("questions.has_masters_and_or_doctoral_loan"))

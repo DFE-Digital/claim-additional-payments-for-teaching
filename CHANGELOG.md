@@ -58,6 +58,8 @@ The format is based on [Keep a Changelog]
   - Fix typo on 'How we will use the information you provide' page
   - Content change for 'Performance issues' screen
   - Content change for 'Application complete' page
+- TSLR policies
+  - Move PG screens in the user journey (student loan amount)
 - DAC Accessiblity Report fixes
   - Incorrect aria value
   - Links opening in a new window
