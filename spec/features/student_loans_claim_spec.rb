@@ -120,6 +120,10 @@ RSpec.feature "Teacher Student Loan Repayments claims" do
 
       expect(claim.eligibility.reload.student_loan_repayment_amount).to eql(1100.00)
 
+      # - Are you currently paying off your masters/doctoral loan
+      expect(page).not_to have_text(I18n.t("questions.has_masters_and_or_doctoral_loan"))
+      expect(claim.reload.has_masters_doctoral_loan).to be_nil
+
       # - Did you take out a postgraduate masters loan on or after 1 August 2016
       expect(page).to have_text(I18n.t("questions.postgraduate_masters_loan"))
 

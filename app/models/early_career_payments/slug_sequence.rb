@@ -1,9 +1,9 @@
 module EarlyCareerPayments
   # Determines the slugs that make up the claim process for a Early-Career Payments
   # claim. Based on the existing answers on the claim, the sequence of slugs
-  # will change. For example, if the claimant has said they are
-  # FIXME change when exclusions are known
-  # will not be part of the sequence.
+  # will change. For example, if the claimant has said they are not a supply teacher
+  # then they will not answer the two questions that are associated with supply
+  # teaching. 'entire-term-contract' and 'employed-directly'will not be part of the sequence.
   #
   # Note that the sequence is recalculated on each call to `slugs` so that it
   # accounts for any changes that may have been made to the claim and always
@@ -25,7 +25,6 @@ module EarlyCareerPayments
       "check-your-answers-part-one",
       "eligibility-confirmed",
       "eligible-later",
-      # eligible later phase of claim journey
       # personal details phase of claim journey
       "how-we-will-use-information-provided",
       "personal-details",
@@ -36,6 +35,7 @@ module EarlyCareerPayments
       "email-verification",
       "provide-mobile-number",
       "mobile-number",
+      # payment details phase
       "bank-or-building-society",
       "personal-bank-account",
       "building-society-account",
@@ -46,6 +46,7 @@ module EarlyCareerPayments
       "student-loan-country",
       "student-loan-how-many-courses",
       "student-loan-start-date",
+      "masters-doctoral-loan",
       "masters-loan",
       "doctoral-loan",
       "check-your-answers",
@@ -69,7 +70,9 @@ module EarlyCareerPayments
         sequence.delete("building-society-account") if claim.bank_or_building_society == "personal_bank_account"
         sequence.delete("mobile-number") if claim.provide_mobile_number == false
         sequence.delete("mobile-verification") if claim.provide_mobile_number == false
-        remove_student_loan_slugs(sequence) if claim.has_student_loan == false
+        remove_student_loan_slugs(sequence) if claim.no_student_loan?
+        sequence.delete("masters-doctoral-loan") if claim.has_student_loan?
+        remove_masters_doctoral_loan_slugs(sequence) if claim.has_masters_doctoral_loan == false
         remove_student_loan_country_slugs(sequence)
       end
     end
@@ -81,6 +84,13 @@ module EarlyCareerPayments
         student-loan-country
         student-loan-how-many-courses
         student-loan-start-date
+      ]
+
+      slugs.each { |slug| sequence.delete(slug) }
+    end
+
+    def remove_masters_doctoral_loan_slugs(sequence, slugs = nil)
+      slugs ||= %w[
         masters-loan
         doctoral-loan
       ]

@@ -67,6 +67,7 @@ en:
     teacher_reference_number: "What is your teacher reference number (TRN)?"
     national_insurance_number: "What's your National Insurance number?"
     has_student_loan: "Are you currently paying off your student loan?"
+    has_masters_and_or_doctoral_loan: "Did you take out a Postgraduate Masters or a Postgraduate Doctoral loan?"
     student_loan_country: "When you applied for your student loan where was your home address?"
     student_loan_how_many_courses: "How many higher education courses did you take a student loan out for?"
     student_loan_start_date:

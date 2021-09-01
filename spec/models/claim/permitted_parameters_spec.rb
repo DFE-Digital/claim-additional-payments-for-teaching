@@ -20,6 +20,7 @@ RSpec.describe Claim::PermittedParameters do
       :student_loan_country,
       :student_loan_courses,
       :student_loan_start_date,
+      :has_masters_doctoral_loan,
       :postgraduate_masters_loan,
       :postgraduate_doctoral_loan,
       :email_address,

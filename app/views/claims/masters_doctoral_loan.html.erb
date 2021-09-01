@@ -1,0 +1,48 @@
+<% content_for(:page_title, page_title(t("questions.has_masters_and_or_doctoral_loan"), policy: current_policy_routing_name, show_error: current_claim.errors.any?)) %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= render("shared/error_summary", instance: current_claim, errored_field_id_overrides: { has_masters_doctoral_loan: "claim_has_masters_doctoral_loan_true" }) if current_claim.errors.any? %>
+
+    <%= form_for current_claim, url: claim_path(current_policy_routing_name) do |form| %>
+      <%= form.hidden_field :has_masters_doctoral_loan %>
+        <%= form_group_tag current_claim do %>
+          <fieldset class="govuk-fieldset" role="group">
+            <legend class="govuk-fieldset__legend govuk-fieldset__legend--<%= shared_view_css_class_size(current_claim) %>">
+              <span class="govuk-caption-xl">About your student loans</span>
+              <h1 class="govuk-fieldset__heading">
+                <%= t("questions.has_masters_and_or_doctoral_loan") %>
+              </h1>
+            </legend>
+
+            <%= errors_tag current_claim, :has_masters_doctoral_loan %>
+
+            <div class="govuk-radios govuk-radios--inline">
+              <div class="govuk-radios__item">
+                <%= form.radio_button(:has_masters_doctoral_loan, true, class: "govuk-radios__input")%>
+                <%= form.label :has_masters_doctoral_loan_true, "Yes", class: "govuk-label govuk-radios__label" %>
+              </div>
+              <div class="govuk-radios__item">
+                <%= form.radio_button(:has_masters_doctoral_loan, false, class: "govuk-radios__input")%>
+                <%= form.label :has_masters_doctoral_loan_false, "No", class: "govuk-label govuk-radios__label" %>
+              </div>
+            </div>
+          </fieldset>
+        <% end %>
+        <%= form.submit "Continue", class: "govuk-button" %>
+      <% end %>
+
+      <details class="govuk-details" data-module="govuk-details">
+        <summary class="govuk-details__summary">
+          <span class="govuk-details__summary-text">
+            Why do you need to know about my student loans?
+          </span>
+        </summary>
+        <div class="govuk-details__text">
+          <p class="govuk-body">
+            We work out your student loan plan type using these questions so we make the correct student loan contributions to HMRC.
+          </p>
+        </div>
+      </details>
+  </div>
+</div>

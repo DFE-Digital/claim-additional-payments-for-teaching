@@ -35,6 +35,7 @@ module MathsAndPhysics
       "student-loan-country",
       "student-loan-how-many-courses",
       "student-loan-start-date",
+      "masters-doctoral-loan",
       "masters-loan",
       "doctoral-loan",
       "email-address",
@@ -63,8 +64,9 @@ module MathsAndPhysics
         sequence.delete("student-loan-country") if claim.no_student_loan?
         sequence.delete("student-loan-how-many-courses") if claim.no_student_loan? || claim.student_loan_country_with_one_plan?
         sequence.delete("student-loan-start-date") if claim.no_student_loan? || claim.student_loan_country_with_one_plan?
-        sequence.delete("masters-loan") if claim.no_student_loan?
-        sequence.delete("doctoral-loan") if claim.no_student_loan?
+        sequence.delete("masters-doctoral-loan") if claim.has_student_loan?
+        sequence.delete("masters-loan") if claim.has_masters_doctoral_loan == false
+        sequence.delete("doctoral-loan") if claim.has_masters_doctoral_loan == false
         sequence.delete("personal-bank-account") if claim.bank_or_building_society == "building_society"
         sequence.delete("building-society-account") if claim.bank_or_building_society == "personal_bank_account"
         sequence.delete("mobile-number") if claim.provide_mobile_number == false

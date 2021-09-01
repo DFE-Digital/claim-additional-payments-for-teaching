@@ -161,20 +161,116 @@ RSpec.feature "Changing the answers on a submittable claim" do
       expect(page).to have_content("Check your answers before sending your application")
     end
 
-    scenario "changing student loan answer to “No” resets the other student loan-related answers" do
-      visit claim_path(StudentLoans.routing_name, "check-your-answers")
+    context "when changing student loan answer to “No” resets the other" do
+      scenario "student loan and postgraduate masters/doctoral loan related answers" do
+        visit claim_path(StudentLoans.routing_name, "check-your-answers")
 
-      find("a[href='#{claim_path(StudentLoans.routing_name, "student-loan")}']").click
+        find("a[href='#{claim_path(StudentLoans.routing_name, "student-loan")}']").click
 
-      choose "No"
-      click_on "Continue"
+        choose "No"
+        click_on "Continue"
 
-      expect(current_path).to eq(claim_path(StudentLoans.routing_name, "check-your-answers"))
-      expect(claim.reload.has_student_loan).to eq false
-      expect(claim.student_loan_country).to be_nil
-      expect(claim.student_loan_courses).to be_nil
-      expect(claim.student_loan_start_date).to be_nil
-      expect(claim.student_loan_plan).to eq Claim::NO_STUDENT_LOAN
+        expect(current_path).to eq(claim_path(StudentLoans.routing_name, "student-loan-amount"))
+        expect(claim.reload.has_student_loan).to eq false
+        expect(claim.student_loan_country).to be_nil
+        expect(claim.student_loan_courses).to be_nil
+        expect(claim.student_loan_start_date).to be_nil
+        expect(claim.student_loan_plan).to eq Claim::NO_STUDENT_LOAN
+
+        expect(page).to have_text(student_loan_amount_question)
+        click_on "Continue"
+
+        expect(claim.eligibility.reload.student_loan_repayment_amount).to eql(1000.00)
+
+        expect(current_path).to eq(claim_path(StudentLoans.routing_name, "masters-doctoral-loan"))
+        expect(page).to have_text(I18n.t("questions.has_masters_and_or_doctoral_loan"))
+
+        choose "No"
+        click_on "Continue"
+
+        expect(current_path).to eq(claim_path(StudentLoans.routing_name, "check-your-answers"))
+        expect(claim.reload.has_masters_doctoral_loan).to eq false
+        expect(claim.postgraduate_masters_loan).to be_nil
+        expect(claim.postgraduate_doctoral_loan).to be_nil
+      end
+    end
+
+    context "when changing student loan answer to “Yes” resets the other" do
+      scenario "student loan and postgraduate masters/doctoral loan related answers" do
+        claim.update!(attributes_for(:claim, :submittable, :with_no_student_loan))
+        visit claim_path(StudentLoans.routing_name, "check-your-answers")
+
+        find("a[href='#{claim_path(StudentLoans.routing_name, "student-loan")}']").click
+
+        choose "Yes"
+        click_on "Continue"
+
+        expect(current_path).to eq(claim_path(StudentLoans.routing_name, "student-loan-country"))
+        expect(claim.reload.has_student_loan).to eq true
+        expect(claim.student_loan_country).to be_nil
+        expect(claim.student_loan_courses).to be_nil
+        expect(claim.student_loan_start_date).to be_nil
+        expect(claim.student_loan_plan).to be_nil
+        expect(claim.eligibility.reload.student_loan_repayment_amount).to eql(1000.00)
+        expect(claim.reload.has_masters_doctoral_loan).to be_nil
+        expect(claim.postgraduate_masters_loan).to be_nil
+        expect(claim.postgraduate_doctoral_loan).to be_nil
+      end
+
+      scenario "answer student loan and postgraduate masters/doctoral loans" do
+        claim.update!(attributes_for(:claim, :submittable, :with_no_student_loan, :with_no_postgraduate_masters_doctoral_loan))
+        visit claim_path(StudentLoans.routing_name, "check-your-answers")
+
+        find("a[href='#{claim_path(StudentLoans.routing_name, "student-loan")}']").click
+
+        choose "Yes"
+        click_on "Continue"
+
+        expect(current_path).to eq(claim_path(StudentLoans.routing_name, "student-loan-country"))
+        expect(claim.reload.has_student_loan).to eq true
+        expect(claim.student_loan_country).to be_nil
+        expect(claim.student_loan_courses).to be_nil
+        expect(claim.student_loan_start_date).to be_nil
+        expect(claim.student_loan_plan).to be_nil
+
+        expect(page).to have_text(I18n.t("questions.student_loan_country"))
+
+        choose "Northern Ireland"
+        click_on "Continue"
+
+        expect(claim.reload.student_loan_country).to eql StudentLoan::NORTHERN_IRELAND
+        expect(claim.student_loan_courses).to be_nil
+        expect(claim.student_loan_start_date).to be_nil
+        expect(claim.student_loan_plan).to eq StudentLoan::PLAN_1
+
+        expect(current_path).to eq(claim_path(StudentLoans.routing_name, "student-loan-amount"))
+
+        click_on "Continue"
+
+        expect(claim.eligibility.reload.student_loan_repayment_amount).to eql(1000.00)
+
+        expect(current_path).not_to eq(claim_path(StudentLoans.routing_name, "masters-doctoral-loan"))
+        expect(page).not_to have_text(I18n.t("questions.has_masters_and_or_doctoral_loan"))
+        expect(claim.reload.has_masters_doctoral_loan).to be_nil
+
+        expect(current_path).to eq(claim_path(StudentLoans.routing_name, "masters-loan"))
+        expect(page).to have_text(I18n.t("questions.postgraduate_masters_loan"))
+
+        choose "Yes"
+        click_on "Continue"
+
+        expect(claim.reload.postgraduate_masters_loan).to eq true
+
+        expect(current_path).to eq(claim_path(StudentLoans.routing_name, "doctoral-loan"))
+        expect(page).to have_text(I18n.t("questions.postgraduate_doctoral_loan"))
+
+        choose "No"
+        click_on "Continue"
+
+        expect(claim.reload.postgraduate_doctoral_loan).to eq false
+
+        expect(current_path).to eq(claim_path(StudentLoans.routing_name, "check-your-answers"))
+      end
     end
 
     scenario "changing student loan country forces dependent questions to be re-answered" do
