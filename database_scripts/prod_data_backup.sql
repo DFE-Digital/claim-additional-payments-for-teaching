@@ -81,10 +81,17 @@ create table claims_bkp as
 select * 
   from public.claims
  where id in (select claim_id
-					  from public.manual_claim_clear_down);					  
+					  from public.manual_claim_clear_down);		
+
+create table amendments_bkp as
+select * 
+  from public.amendments
+ where claim_id in (select claim_id
+					  from public.manual_claim_clear_down);							  
 					  
 select count(*) from notes_bkp;
 select count(*) from early_career_payments_eligibilities_bkp;
 select count(*) from student_loans_eligibilities_bkp;
 select count(*) from tasks_bkp;
 select count(*) from claims_bkp;					  
+select count(*) from amendments_bkp;
