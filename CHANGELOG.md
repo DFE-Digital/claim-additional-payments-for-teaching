@@ -31,6 +31,7 @@ The format is based on [Keep a Changelog]
     matching
   - Update ECP admin claim verifier qualifications eligibility to use dates
     based on qualification type
+  - Add new DQT fields to admin claim verifier qualifications notes
 - All policies
   - Home Address selection
     - Add home address search screen to claim journey

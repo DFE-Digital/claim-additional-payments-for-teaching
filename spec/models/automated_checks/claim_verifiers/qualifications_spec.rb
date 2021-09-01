@@ -20,15 +20,15 @@ module AutomatedChecks
                 {
                   "trn": "#{data[:teacher_reference_number]}",
                   "name": "#{data[:name]}",
-                  "doB": "#{data[:date_of_birth] || Date.today}",
+                  "doB": "#{data[:date_of_birth] || DateTime.now}",
                   "niNumber": "#{data[:national_insurance_number]}",
-                  "qtsAwardDate": "#{data[:qts_award_date] || Date.today}",
+                  "qtsAwardDate": "#{data[:qts_award_date] || DateTime.now}",
                   "ittSubject1Code": "#{data.dig(:itt_subject_codes, 0)}",
                   "ittSubject2Code": "#{data.dig(:itt_subject_codes, 1)}",
                   "ittSubject3Code": "#{data.dig(:itt_subject_codes, 2)}",
                   "activeAlert": true,
                   "qualificationName": "#{data[:qualification_name] || "BA"}",
-                  "ittStartDate": "#{data[:itt_start_date] || Date.today}"
+                  "ittStartDate": "#{data[:itt_start_date] || DateTime.now}"
                 }
               ],
               "message": null
@@ -196,9 +196,11 @@ module AutomatedChecks
                     <<~HTML
                       Ineligible:
                       <pre>
-                        ITT subject codes: ["100400", "", ""]
-                        Degree codes:      []
-                        QTS award date:    -31554937-09-01T00:00:00+00:00
+                        ITT subject codes:  ["100400", "", ""]
+                        Degree codes:       []
+                        ITT start date:     #{DateTime.now}
+                        QTS award date:     -31554937-09-01T00:00:00+00:00
+                        Qualification name: BA
                       </pre>
                     HTML
                   )
@@ -270,9 +272,11 @@ module AutomatedChecks
                     <<~HTML
                       Ineligible:
                       <pre>
-                        ITT subject codes: ["NoCode", "", ""]
-                        Degree codes:      []
-                        QTS award date:    2015-09-01T00:00:00+00:00
+                        ITT subject codes:  ["NoCode", "", ""]
+                        Degree codes:       []
+                        ITT start date:     #{DateTime.now}
+                        QTS award date:     2015-09-01T00:00:00+00:00
+                        Qualification name: BA
                       </pre>
                     HTML
                   )
@@ -401,9 +405,11 @@ module AutomatedChecks
                   <<~HTML
                     Ineligible:
                     <pre>
-                      ITT subject codes: ["NoCode", "", ""]
-                      Degree codes:      []
-                      QTS award date:    -31554937-09-01T00:00:00+00:00
+                      ITT subject codes:  ["NoCode", "", ""]
+                      Degree codes:       []
+                      ITT start date:     #{DateTime.now}
+                      QTS award date:     -31554937-09-01T00:00:00+00:00
+                      Qualification name: BA
                     </pre>
                   HTML
                 )
