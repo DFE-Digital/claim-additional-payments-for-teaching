@@ -25,6 +25,8 @@ The format is based on [Keep a Changelog]
   - Update claim verifiers to handle multiple partial matches
   - Add identity claim verifier admin claim notes claimant vs DQT mismatch
     information
+  - Fix ECP admin claim qualifications task question to first claim year
+    eligibility (Mathematics 2018)
 - All policies
   - Home Address selection
     - Add home address search screen to claim journey
@@ -32,7 +34,7 @@ The format is based on [Keep a Changelog]
       presented as radio buttons
     - Add links that allow claimant to manually enter their address information
       when on the two address auto-population screens
-  - Add posgraduate loans questions to M+P / TSLR journeys
+  - Add postgraduate loans questions to M+P / TSLR journeys
   - Hiding mobile/SMS related OTP screens
   - Update Northamptonshire local authority to reflect GIAS changes 1st April
     2021
@@ -54,11 +56,11 @@ The format is based on [Keep a Changelog]
   - Remove HTML 5 validation messages on national insurance number
 - ECP policies
   - Adds set reminder flow to eligible now flow
-  - Fix no validation occuring on 'Personal Details' screens
+  - Fix no validation occurring on 'Personal Details' screens
   - Fix typo on 'How we will use the information you provide' page
   - Content change for 'Performance issues' screen
   - Content change for 'Application complete' page
-- DAC Accessiblity Report fixes
+- DAC Accessibility Report fixes
   - Incorrect aria value
   - Links opening in a new window
   - Incorrect ID in 'for' attribute for one time password
