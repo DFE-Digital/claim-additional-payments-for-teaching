@@ -19,7 +19,6 @@
         <%= form.text_field :national_insurance_number,
               spellcheck: "false",
               autocomplete: "off",
-              minlength: 9,
               class: css_classes_for_input(current_claim, :national_insurance_number, 'govuk-input--width-10'),
               "aria-describedby" => "national_insurance_number-hint" %>
       <% end %>
