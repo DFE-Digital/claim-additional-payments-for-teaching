@@ -334,7 +334,7 @@ class Claim < ApplicationRecord
   end
 
   def full_name
-    [first_name, middle_name, surname].compact.join(" ")
+    [first_name, middle_name, surname].reject(&:blank?).join(" ")
   end
 
   def self.filtered_params
