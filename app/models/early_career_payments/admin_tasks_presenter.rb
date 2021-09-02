@@ -26,7 +26,14 @@ module EarlyCareerPayments
     def qualifications
       [].tap do |a|
         a << [
-          "ITT start/end year",
+          "Qualification",
+          I18n.t("early_career_payments.answers.qualification.#{eligibility.qualification}")
+        ]
+
+        year_type = eligibility.postgraduate_itt? ? "start" : "end"
+
+        a << [
+          "ITT #{year_type} year",
           I18n.t("answers.qts_award_years.on_date", year: AcademicYear.new(2018).to_s(:long))
         ]
 
