@@ -43,7 +43,7 @@ RSpec.describe EarlyCareerPayments::AdminTasksPresenter, type: :model do
     it "returns an array of label and values for displaying information for qualification checks" do
       expected_array = [
         ["Qualification", "Undergraduate ITT"],
-        ["ITT start/end year", "In the academic year 2018 to 2019"],
+        ["ITT end year", "In the academic year 2018 to 2019"],
         ["ITT subject", "Mathematics"]
       ]
 
@@ -56,17 +56,23 @@ RSpec.describe EarlyCareerPayments::AdminTasksPresenter, type: :model do
     end
 
     [
-      {qualification: :assessment_only, text: "Assessment only"},
-      {qualification: :overseas_recognition, text: "Overseas recognition"},
-      {qualification: :postgraduate_itt, text: "Postgraduate ITT"},
-      {qualification: :undergraduate_itt, text: "Undergraduate ITT"}
+      {qualification: :assessment_only, qualification_text: "Assessment only", year_text: "end"},
+      {qualification: :overseas_recognition, qualification_text: "Overseas recognition", year_text: "end"},
+      {qualification: :postgraduate_itt, qualification_text: "Postgraduate ITT", year_text: "start"},
+      {qualification: :undergraduate_itt, qualification_text: "Undergraduate ITT", year_text: "end"}
     ].each do |spec|
       context "with qualification #{spec[:qualification]}" do
         let(:qualification) { spec[:qualification] }
 
-        it "returns array with qualification #{spec[:text]}" do
+        it "returns array with qualification #{spec[:qualification_text]}" do
           expect(presenter.qualifications).to include(
-            ["Qualification", spec[:text]]
+            ["Qualification", spec[:qualification_text]]
+          )
+        end
+
+        it "returns array with year #{spec[:year_text]}" do
+          expect(presenter.qualifications).to include(
+            ["ITT #{spec[:year_text]} year", "In the academic year 2018 to 2019"]
           )
         end
       end
