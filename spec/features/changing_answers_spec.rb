@@ -262,6 +262,7 @@ RSpec.feature "Changing the answers on a submittable claim" do
     end
 
     scenario "changing student loan country forces dependent questions to be re-answered" do
+      claim.update!(attributes_for(:claim, :submittable, :with_no_postgraduate_masters_doctoral_loan))
       visit claim_path(StudentLoans.routing_name, "check-your-answers")
 
       find("a[href='#{claim_path(StudentLoans.routing_name, "student-loan-country")}']").click
