@@ -54,6 +54,7 @@ The format is based on [Keep a Changelog]
     asked if the answer to 'Do you have postgraduate masters and/or doctoral'
     loans is 'Yes'
   - Remove HTML 5 validation messages on national insurance number
+  - Update references to DQT with Teaching Regulation Agency
 - ECP policies
   - Adds set reminder flow to eligible now flow
   - Fix no validation occurring on 'Personal Details' screens
