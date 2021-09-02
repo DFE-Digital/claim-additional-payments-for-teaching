@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+## [Release 093] - 2021-09-02
+
 - Admin
   - Show admin claim identity confirmation task questions when claim verifier
     identity not fully matched
@@ -852,7 +854,9 @@ The format is based on [Keep a Changelog]
 - First release for student loan repayments private beta
 
 [unreleased]:
-  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-092...HEAD
+  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-093...HEAD
+[release 093]:
+  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-092...release-093
 [release 092]:
   https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-091...release-092
 [release 091]:
