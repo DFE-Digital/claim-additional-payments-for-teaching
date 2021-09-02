@@ -12,10 +12,13 @@ RSpec.describe EarlyCareerPayments::AdminTasksPresenter, type: :model do
         :early_career_payments_eligibility,
         current_school: school,
         eligible_itt_subject: :mathematics,
-        itt_academic_year: AcademicYear::Type.new.serialize(AcademicYear.new(2018))
+        itt_academic_year: AcademicYear::Type.new.serialize(AcademicYear.new(2018)),
+        qualification: qualification
       )
     )
   end
+
+  let(:qualification) { :undergraduate_itt }
 
   subject(:presenter) { described_class.new(claim) }
 
@@ -39,6 +42,7 @@ RSpec.describe EarlyCareerPayments::AdminTasksPresenter, type: :model do
   describe "#qualifications" do
     it "returns an array of label and values for displaying information for qualification checks" do
       expected_array = [
+        ["Qualification", "Undergraduate ITT"],
         ["ITT start/end year", "In the academic year 2018 to 2019"],
         ["ITT subject", "Mathematics"]
       ]
@@ -47,8 +51,25 @@ RSpec.describe EarlyCareerPayments::AdminTasksPresenter, type: :model do
     end
 
     it "sets the “Award year” value based on the academic year the claim was made in" do
-      expected_qts_answer = presenter.qualifications[0][1]
+      expected_qts_answer = presenter.qualifications[1][1]
       expect(expected_qts_answer).to eq "In the academic year 2018 to 2019"
+    end
+
+    [
+      {qualification: :assessment_only, text: "Assessment only"},
+      {qualification: :overseas_recognition, text: "Overseas recognition"},
+      {qualification: :postgraduate_itt, text: "Postgraduate ITT"},
+      {qualification: :undergraduate_itt, text: "Undergraduate ITT"}
+    ].each do |spec|
+      context "with qualification #{spec[:qualification]}" do
+        let(:qualification) { spec[:qualification] }
+
+        it "returns array with qualification #{spec[:text]}" do
+          expect(presenter.qualifications).to include(
+            ["Qualification", spec[:text]]
+          )
+        end
+      end
     end
   end
 end
