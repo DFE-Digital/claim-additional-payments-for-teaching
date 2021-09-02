@@ -11,7 +11,13 @@ module StudentLoans
   #   qts_award_date: The date the teacher achieved qualified
   #                   teacher status.
   class DqtRecord
-    attr_reader :qts_award_date, :itt_subject_codes, :degree_codes
+    attr_reader(
+      :qts_award_date,
+      :itt_subject_codes,
+      :itt_start_date,
+      :degree_codes,
+      :qualification_name
+    )
 
     # The record transformed from a DQTReportCsv. Expected to contain the keys:
     # :qts_date - The date the teacher achieved qualified teacher status.
@@ -19,7 +25,9 @@ module StudentLoans
     def initialize(record, _ = nil)
       @qts_award_date = record.fetch(:qts_date)
       @degree_codes = record.fetch(:degree_codes, ["ANY"])
+      @itt_start_date = record.fetch(:itt_date, nil)
       @itt_subject_codes = record.fetch(:itt_subject_codes, ["ANY"])
+      @qualification_name = record.fetch(:qualification_name, nil)
     end
 
     def eligible?

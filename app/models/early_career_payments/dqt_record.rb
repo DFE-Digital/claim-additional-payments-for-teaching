@@ -124,9 +124,9 @@ module EarlyCareerPayments
       @claim = claim
       @qts_award_date = record.fetch(:qts_date)
       @itt_subject_codes = record.fetch(:itt_subject_codes)
-      @itt_start_date = record.fetch(:itt_date)
+      @itt_start_date = record.fetch(:itt_date, nil)
       @degree_codes = record.fetch(:degree_codes)
-      @qualification_name = record.fetch(:qualification_name)
+      @qualification_name = record.fetch(:qualification_name, nil)
     end
 
     def eligible?

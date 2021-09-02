@@ -15,7 +15,13 @@ module MathsAndPhysics
   #   degree_codes:       The corresponding JAC codes or HECOS to the subject(s)
   #                       the teacher completed their degree in.
   class DqtRecord
-    attr_reader :qts_award_date, :itt_subject_codes, :degree_codes
+    attr_reader(
+      :qts_award_date,
+      :itt_subject_codes,
+      :itt_start_date,
+      :degree_codes,
+      :qualification_name
+    )
 
     # Full list of JAC principal subject codes can be found:
     # https://www.hesa.ac.uk/support/documentation/jacs/jacs3-principal
@@ -81,7 +87,9 @@ module MathsAndPhysics
     def initialize(record, _ = nil)
       @qts_award_date = record.fetch(:qts_date)
       @itt_subject_codes = record.fetch(:itt_subject_codes)
+      @itt_start_date = record.fetch(:itt_date, nil)
       @degree_codes = record.fetch(:degree_codes)
+      @qualification_name = record.fetch(:qualification_name, nil)
     end
 
     def eligible?
