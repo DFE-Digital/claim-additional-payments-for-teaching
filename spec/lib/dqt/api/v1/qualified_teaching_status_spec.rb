@@ -43,7 +43,9 @@ module Dqt
                   "string",
                   "string"
                 ],
-                active_alert: true
+                active_alert: true,
+                qualification_name: nil,
+                itt_date: DateTime.parse("2021-03-23T10:54:57.199Z")
               }
             )
           end

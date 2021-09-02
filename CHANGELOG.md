@@ -29,6 +29,8 @@ The format is based on [Keep a Changelog]
     eligibility (Mathematics 2018)
   - Make admin claim verifier qualifications matching comparable to previous CSV
     matching
+  - Update ECP admin claim verifier qualifications eligibility to use dates
+    based on qualification type
 - All policies
   - Home Address selection
     - Add home address search screen to claim journey
