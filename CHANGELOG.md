@@ -78,6 +78,7 @@ The format is based on [Keep a Changelog]
 - Student Loan Plan Types
   - Add plan type 3 - Postgraduate Masters and/or Doctoral loan
   - Add plan type 4 - Scotland
+  - Update the CSV Payroll file to include new plan types
 
 ## [Release 092] - 2021-07-22
 
