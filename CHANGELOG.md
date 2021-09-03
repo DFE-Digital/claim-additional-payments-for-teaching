@@ -8,6 +8,9 @@ The format is based on [Keep a Changelog]
 
 - Site wide
   - Update to Privacy Policy
+- All policies
+  - Update to allow claimant to provide feedback via email (replaces google
+    forms)
 - Admin
   - Student Loan Plan Types
     - Update the CSV Payroll file to include new plan types

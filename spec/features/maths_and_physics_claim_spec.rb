@@ -5,7 +5,7 @@ RSpec.feature "Maths & Physics claims" do
     js_status = javascript_enabled ? "enabled" : "disabled"
     scenario "Teacher claims for Maths & Physics payment with JavaScript #{js_status}", js: javascript_enabled do
       visit new_claim_path(MathsAndPhysics.routing_name)
-      expect(page).to have_link(href: MathsAndPhysics.feedback_url)
+      expect(page).to have_link(href: "mailto:#{MathsAndPhysics.feedback_email}")
 
       expect(page).to have_text(I18n.t("maths_and_physics.questions.teaching_maths_or_physics"))
 
