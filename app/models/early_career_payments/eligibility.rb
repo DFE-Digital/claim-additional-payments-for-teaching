@@ -359,6 +359,14 @@ module EarlyCareerPayments
       end
     end
 
+    def subject
+      eligible_itt_subject.gsub("ematic", "")
+    end
+
+    def school
+      current_school
+    end
+
     private
 
     def find_cohort(cohorts:)

@@ -115,6 +115,14 @@ module StudentLoans
       I18n.t("answers.qts_award_years.#{qts_award_year}", year: year_for_answer.to_s(:long))
     end
 
+    def subject
+      subjects_taught.first.to_s.gsub("_taught", "")
+    end
+
+    def school
+      claim_school
+    end
+
     private
 
     def ineligible_qts_award_year?
