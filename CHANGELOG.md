@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+- All policies
+  - Update to allow claimant to provide feedback via email (replaces google
+    forms)
+
 ## [Release 093] - 2021-09-02
 
 - Admin
