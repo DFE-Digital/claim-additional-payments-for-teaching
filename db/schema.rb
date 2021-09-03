@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_08_26_080653) do
+ActiveRecord::Schema.define(version: 2021_09_01_084543) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -321,4 +321,76 @@ ActiveRecord::Schema.define(version: 2021_08_26_080653) do
   add_foreign_key "support_tickets", "dfe_sign_in_users", column: "created_by_id"
   add_foreign_key "tasks", "claims"
   add_foreign_key "tasks", "dfe_sign_in_users", column: "created_by_id"
+
+  create_view "claim_decisions", sql_definition: <<-SQL
+      WITH eligibilities AS (
+           SELECT early_career_payments_eligibilities.id,
+              early_career_payments_eligibilities.current_school_id AS school_id,
+                  CASE early_career_payments_eligibilities.eligible_itt_subject
+                      WHEN 0 THEN 'chemistry'::text
+                      WHEN 1 THEN 'foreign languages'::text
+                      WHEN 2 THEN 'maths'::text
+                      WHEN 3 THEN 'physics'::text
+                      WHEN 4 THEN 'none'::text
+                      ELSE NULL::text
+                  END AS subject
+             FROM early_career_payments_eligibilities
+          UNION ALL
+           SELECT maths_and_physics_eligibilities.id,
+              maths_and_physics_eligibilities.current_school_id AS school_id,
+                  CASE maths_and_physics_eligibilities.initial_teacher_training_subject
+                      WHEN 0 THEN 'maths'::text
+                      WHEN 1 THEN 'physics'::text
+                      WHEN 2 THEN 'science'::text
+                      WHEN 3 THEN 'none'::text
+                      ELSE NULL::text
+                  END AS subject
+             FROM maths_and_physics_eligibilities
+          UNION ALL
+           SELECT student_loans_eligibilities.id,
+              student_loans_eligibilities.claim_school_id AS school_id,
+                  CASE
+                      WHEN (student_loans_eligibilities.biology_taught IS TRUE) THEN 'biology'::text
+                      WHEN (student_loans_eligibilities.chemistry_taught IS TRUE) THEN 'chemistry'::text
+                      WHEN (student_loans_eligibilities.computing_taught IS TRUE) THEN 'computing'::text
+                      WHEN (student_loans_eligibilities.languages_taught IS TRUE) THEN 'languages'::text
+                      WHEN (student_loans_eligibilities.physics_taught IS TRUE) THEN 'physics'::text
+                      ELSE 'none'::text
+                  END AS subject
+             FROM student_loans_eligibilities
+          )
+   SELECT c.id AS application_id,
+      d.created_at AS decision_date,
+      c.teacher_reference_number AS trn,
+          CASE d.result
+              WHEN 0 THEN 'approved'::text
+              WHEN 1 THEN 'rejected'::text
+              ELSE NULL::text
+          END AS application_decision,
+          CASE c.eligibility_type
+              WHEN 'EarlyCareerPayments::Eligibility'::text THEN 'early career payments'::text
+              WHEN 'StudentLoans::Eligibility'::text THEN 'student loans'::text
+              WHEN 'MathsAndPhysics::Eligibility'::text THEN 'maths and physics'::text
+              ELSE NULL::text
+          END AS application_policy,
+      e.subject,
+      s.name AS school_name,
+      la.name AS local_authorities_name,
+      lad.name AS local_authority_district_name,
+      (date_part('year'::text, age(now(), (c.date_of_birth)::timestamp with time zone)))::integer AS claimant_age,
+          CASE c.payroll_gender
+              WHEN 0 THEN 'don''t know'::text
+              WHEN 1 THEN 'female'::text
+              WHEN 2 THEN 'male'::text
+              ELSE NULL::text
+          END AS claimant_gender,
+      c.academic_year AS claimant_year_qualified
+     FROM decisions d,
+      claims c,
+      schools s,
+      eligibilities e,
+      local_authorities la,
+      local_authority_districts lad
+    WHERE ((d.claim_id = c.id) AND (c.eligibility_id = e.id) AND (e.school_id = s.id) AND (s.local_authority_id = la.id) AND (s.local_authority_district_id = lad.id));
+  SQL
 end
