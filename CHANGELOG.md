@@ -6,6 +6,12 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+- Site wide
+  - Update to Privacy Policy
+- Admin
+  - Student Loan Plan Types
+    - Update the CSV Payroll file to include new plan types
+
 ## [Release 093] - 2021-09-02
 
 - Admin
@@ -63,6 +69,9 @@ The format is based on [Keep a Changelog]
     loans is 'Yes'
   - Remove HTML 5 validation messages on national insurance number
   - Update references to DQT with Teaching Regulation Agency
+  - Student Loan Plan Types
+    - Add plan type 3 - Postgraduate Masters and/or Doctoral loan
+    - Add plan type 4 - Scotland
 - ECP policies
   - Adds set reminder flow to eligible now flow
   - Fix no validation occurring on 'Personal Details' screens
@@ -84,10 +93,6 @@ The format is based on [Keep a Changelog]
 - Claims
   - Stop claim full name adding redundant spaces when middle name is an empty or
     blank string
-- Student Loan Plan Types
-  - Add plan type 3 - Postgraduate Masters and/or Doctoral loan
-  - Add plan type 4 - Scotland
-  - Update the CSV Payroll file to include new plan types
 
 ## [Release 092] - 2021-07-22
 
