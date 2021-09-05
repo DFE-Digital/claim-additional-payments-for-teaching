@@ -11,6 +11,8 @@ The format is based on [Keep a Changelog]
 - All policies
   - Update to allow claimant to provide feedback via email (replaces google
     forms)
+- Early Career Payments
+  - Fix link to set reminder - I am a Trainee Teacher (NQT question)
 - Admin
   - Student Loan Plan Types
     - Update the CSV Payroll file to include new plan types

@@ -66,3 +66,46 @@ RSpec.feature "Set Reminder when Eligible Later for an Early Career Payment" do
     end
   end
 end
+
+RSpec.feature "Set Reminder for an Early Career Payment" do
+  scenario "when NQT not in Academic Year after ITT is false - Trainee Teacher" do
+    visit landing_page_path(EarlyCareerPayments.routing_name)
+    expect(page).to have_link(href: "mailto:#{EarlyCareerPayments.feedback_email}")
+
+    # - Landing (start)
+    expect(page).to have_text(I18n.t("early_career_payments.landing_page"))
+    click_on "Start Now"
+
+    # - NQT in Academic Year after ITT
+    expect(page).to have_text(I18n.t("early_career_payments.questions.nqt_in_academic_year_after_itt"))
+
+    choose "No"
+    click_on "Continue"
+
+    expect(page).to have_text(I18n.t("early_career_payments.ineligible.reason.nqt_after_itt"))
+    claim = Claim.order(:created_at).last
+    expect(claim.errors.messages).to be_empty
+
+    expect(page).to have_link("Set reminder", href: new_reminder_path(EarlyCareerPayments.routing_name))
+    click_link "Set reminder"
+
+    expect(page).to have_text("Personal details")
+    expect(page).to have_text("Tell us the email address you'd like us to send your reminder to. We recommend you use a personal email address.")
+
+    fill_in "Full name", with: "Samantha Ablesflower"
+    fill_in "Email address", with: "s.ablesflower@gmail.com"
+    click_on "Continue"
+
+    fill_in "reminder_one_time_password", with: get_otp_from_email
+    click_on "Confirm"
+    reminder = Reminder.order(:created_at).last
+
+    expect(reminder.full_name).to eq "Samantha Ablesflower"
+    expect(reminder.email_address).to eq "s.ablesflower@gmail.com"
+    expect(reminder.itt_academic_year).to eq AcademicYear.next
+    expect(reminder.itt_subject).to be_nil
+
+    reminder_set_email = ActionMailer::Base.deliveries.last.body
+    expect(reminder_set_email).to have_text("We will send you a reminder in September #{AcademicYear.next.start_year}")
+  end
+end
