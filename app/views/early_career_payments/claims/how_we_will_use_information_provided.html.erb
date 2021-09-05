@@ -33,7 +33,7 @@
       on your behalf.
     </p>
 
-    <%= button_to "Continue", claim_path(current_policy_routing_name, next_slug), method: :get, class: "govuk-button" %>
+    <%= link_to "Continue", claim_path(current_policy_routing_name, next_slug), class: "govuk-button", role: :button, data: { module: "govuk-button"} %>
 
   </div>
 </div>

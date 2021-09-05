@@ -13,6 +13,8 @@ The format is based on [Keep a Changelog]
     forms)
 - Early Career Payments
   - Fix link to set reminder - I am a Trainee Teacher (NQT question)
+  - Remove '?' at end of some URL's (information provided / eligibility
+    confirmed)
 - Admin
   - Student Loan Plan Types
     - Update the CSV Payroll file to include new plan types
