@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+## [Release 094] - 2021-09-06
+
 - Site wide
   - Update to Privacy Policy
 - All policies
@@ -868,7 +870,9 @@ The format is based on [Keep a Changelog]
 - First release for student loan repayments private beta
 
 [unreleased]:
-  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-093...HEAD
+  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-094...HEAD
+[release 094]:
+  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-093...release-094
 [release 093]:
   https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-092...release-093
 [release 092]:
