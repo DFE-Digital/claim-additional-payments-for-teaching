@@ -28,6 +28,7 @@
 # Ignore secrets
 .env.local
 .env
+google_cloud_storage.json
 
 # Ignore development certificates
 localhost.crt
