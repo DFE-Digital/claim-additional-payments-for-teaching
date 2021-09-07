@@ -18,6 +18,6 @@
       It is your responsibility to apply for each payment you are eligible for. The Department for Education cannot issue payments unless you apply for one nor can we issue payments for claims made after the window has closed.
     </p>
 
-    <%= button_to "Continue", new_reminder_path, method: :get, class: "govuk-button" %>
+    <%= link_to "Continue", new_reminder_path, class: "govuk-button", role: :button, data: { module: "govuk-button"} %>
   </div>
 </div>

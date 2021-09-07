@@ -27,7 +27,6 @@ module StudentLoans
         a << subjects_taught
         a << leadership_position
         a << mostly_performed_leadership_duties if eligibility.had_leadership_position?
-        a << student_loan_amount
       end
     end
 
@@ -78,14 +77,6 @@ module StudentLoans
         mostly_performed_leadership_duties_question,
         (eligibility.mostly_performed_leadership_duties? ? "Yes" : "No"),
         "mostly-performed-leadership-duties"
-      ]
-    end
-
-    def student_loan_amount
-      [
-        student_loan_amount_question,
-        number_to_currency(eligibility.student_loan_repayment_amount),
-        "student-loan-amount"
       ]
     end
   end

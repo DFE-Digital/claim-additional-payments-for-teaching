@@ -20,13 +20,15 @@ module AutomatedChecks
                 {
                   "trn": "#{data[:teacher_reference_number]}",
                   "name": "#{data[:name]}",
-                  "doB": "#{data[:date_of_birth] || Date.today}",
+                  "doB": "#{data[:date_of_birth] || "2015-09-01T00:00:00+00:00"}",
                   "niNumber": "#{data[:national_insurance_number]}",
-                  "qtsAwardDate": "#{data[:qts_award_date] || Date.today}",
+                  "qtsAwardDate": "#{data[:qts_award_date] || "2015-09-01T00:00:00+00:00"}",
                   "ittSubject1Code": "#{data.dig(:itt_subject_codes, 0)}",
                   "ittSubject2Code": "#{data.dig(:itt_subject_codes, 1)}",
                   "ittSubject3Code": "#{data.dig(:itt_subject_codes, 2)}",
-                  "activeAlert": true
+                  "activeAlert": true,
+                  "qualificationName": "#{data[:qualification_name] || "BA"}",
+                  "ittStartDate": "#{data[:itt_start_date] || "2015-09-01T00:00:00+00:00"}"
                 }
               ],
               "message": null
@@ -159,7 +161,7 @@ module AutomatedChecks
               describe "#claim_verifier_match" do
                 subject(:claim_verifier_match) { qualifications_task.claim_verifier_match }
 
-                it { is_expected.to eq "any" }
+                it { is_expected.to eq "none" }
               end
 
               describe "#created_by" do
@@ -189,7 +191,20 @@ module AutomatedChecks
               describe "#body" do
                 subject(:body) { note.body }
 
-                it { is_expected.to eq("QTS award date not eligible") }
+                it do
+                  is_expected.to eq(
+                    <<~HTML
+                      Ineligible:
+                      <pre>
+                        ITT subject codes:  ["100400", "", ""]
+                        Degree codes:       []
+                        ITT start date:     2015-09-01T00:00:00+00:00
+                        QTS award date:     -31554937-09-01T00:00:00+00:00
+                        Qualification name: BA
+                      </pre>
+                    HTML
+                  )
+                end
               end
 
               describe "#created_by" do
@@ -222,7 +237,7 @@ module AutomatedChecks
               describe "#claim_verifier_match" do
                 subject(:claim_verifier_match) { qualifications_task.claim_verifier_match }
 
-                it { is_expected.to eq "any" }
+                it { is_expected.to eq "none" }
               end
 
               describe "#created_by" do
@@ -252,7 +267,20 @@ module AutomatedChecks
               describe "#body" do
                 subject(:body) { note.body }
 
-                it { is_expected.to eq("ITT subject codes not eligible") }
+                it do
+                  is_expected.to eq(
+                    <<~HTML
+                      Ineligible:
+                      <pre>
+                        ITT subject codes:  ["NoCode", "", ""]
+                        Degree codes:       []
+                        ITT start date:     2015-09-01T00:00:00+00:00
+                        QTS award date:     2015-09-01T00:00:00+00:00
+                        Qualification name: BA
+                      </pre>
+                    HTML
+                  )
+                end
               end
 
               describe "#created_by" do
@@ -372,7 +400,20 @@ module AutomatedChecks
             describe "#body" do
               subject(:body) { note.body }
 
-              it { is_expected.to eq("Not eligible") }
+              it do
+                is_expected.to eq(
+                  <<~HTML
+                    Ineligible:
+                    <pre>
+                      ITT subject codes:  ["NoCode", "", ""]
+                      Degree codes:       []
+                      ITT start date:     2015-09-01T00:00:00+00:00
+                      QTS award date:     -31554937-09-01T00:00:00+00:00
+                      Qualification name: BA
+                    </pre>
+                  HTML
+                )
+              end
             end
 
             describe "#created_by" do

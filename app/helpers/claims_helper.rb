@@ -44,6 +44,7 @@ module ClaimsHelper
       a << [translate("questions.has_masters_and_or_doctoral_loan"), (claim.has_masters_doctoral_loan ? "Yes" : "No"), "masters-doctoral-loan"] if claim.no_student_loan?
       a << [translate("questions.postgraduate_masters_loan"), (claim.postgraduate_masters_loan ? "Yes" : "No"), "masters-loan"] unless claim.no_masters_doctoral_loan?
       a << [translate("questions.postgraduate_doctoral_loan"), (claim.postgraduate_doctoral_loan ? "Yes" : "No"), "doctoral-loan"] unless claim.no_masters_doctoral_loan?
+      a << [translate("student_loans.questions.student_loan_amount", financial_year: StudentLoans.current_financial_year), number_to_currency(claim.eligibility.student_loan_repayment_amount), "student-loan-amount"] if claim.has_tslr_policy?
     end
   end
 

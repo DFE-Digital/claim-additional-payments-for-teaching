@@ -297,7 +297,7 @@ class Claim < ApplicationRecord
   end
 
   def student_loan_country_with_one_plan?
-    StudentLoan::PLAN_1_COUNTRIES.include?(student_loan_country)
+    StudentLoan::PLAN_1_COUNTRIES.include?(student_loan_country) || StudentLoan::PLAN_4_COUNTRIES.include?(student_loan_country)
   end
 
   # Returns true if the claim has a verified identity received from GOV.UK Verify.
@@ -370,8 +370,16 @@ class Claim < ApplicationRecord
     policy == EarlyCareerPayments
   end
 
+  def has_tslr_policy?
+    policy == StudentLoans
+  end
+
   def important_notes
     notes&.where(important: true)
+  end
+
+  def has_postgraduate_loan?
+    [postgraduate_masters_loan, postgraduate_doctoral_loan].any?
   end
 
   private
@@ -461,11 +469,7 @@ class Claim < ApplicationRecord
   end
 
   def determine_student_loan_plan
-    if has_student_loan?
-      StudentLoan.determine_plan(student_loan_country, student_loan_start_date)
-    else
-      Claim::NO_STUDENT_LOAN
-    end
+    StudentLoan.determine_plan(has_student_loan?, has_postgraduate_loan?, student_loan_country, student_loan_start_date)
   end
 
   def postcode_is_valid

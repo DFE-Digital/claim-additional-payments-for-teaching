@@ -23,10 +23,12 @@ RSpec.describe Payroll::PaymentCsvRow do
         email_address: "email@example.com"
       }
     end
+
     let(:claims) do
       [
         create(:claim, :approved, personal_details.merge(policy: StudentLoans)),
-        create(:claim, :approved, personal_details.merge(policy: MathsAndPhysics))
+        create(:claim, :approved, personal_details.merge(policy: MathsAndPhysics)),
+        create(:claim, :approved, personal_details.merge(policy: EarlyCareerPayments))
       ]
     end
 

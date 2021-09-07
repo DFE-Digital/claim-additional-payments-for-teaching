@@ -971,7 +971,7 @@ RSpec.describe Claim, type: :model do
   end
 
   describe "#reset_dependent_answers" do
-    let(:claim) { create(:claim, :submittable, bank_or_building_society: "building_society") }
+    let(:claim) { create(:claim, :submittable, :with_no_postgraduate_masters_doctoral_loan, bank_or_building_society: "building_society") }
 
     it "redetermines the student_loan_plan and resets loan plan answers when has_student_loan changes" do
       claim.has_student_loan = true
@@ -1011,7 +1011,7 @@ RSpec.describe Claim, type: :model do
       expect(claim.student_loan_country).to eq "scotland"
       expect(claim.student_loan_courses).to be_nil
       expect(claim.student_loan_start_date).to be_nil
-      expect(claim.student_loan_plan).to eq StudentLoan::PLAN_1
+      expect(claim.student_loan_plan).to eq StudentLoan::PLAN_4
     end
 
     it "redetermines the student_loan_plan and resets subsequent loan plan answers when student_loan_courses changes" do
@@ -1270,6 +1270,34 @@ RSpec.describe Claim, type: :model do
 
       it "returns true" do
         expect(claim.has_ecp_policy?).to eq(true)
+      end
+    end
+  end
+
+  describe "#has_tslr_policy?" do
+    let(:claim) { create(:claim, policy: policy) }
+
+    context "with student loans policy" do
+      let(:policy) { StudentLoans }
+
+      it "returns true" do
+        expect(claim.has_tslr_policy?).to eq(true)
+      end
+    end
+
+    context "with maths and physics policy" do
+      let(:policy) { MathsAndPhysics }
+
+      it "returns false" do
+        expect(claim.has_tslr_policy?).to eq(false)
+      end
+    end
+
+    context "with early-career payments policy" do
+      let(:policy) { EarlyCareerPayments }
+
+      it "returns false" do
+        expect(claim.has_tslr_policy?).to eq(false)
       end
     end
   end

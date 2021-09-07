@@ -3,7 +3,7 @@ require "rails_helper"
 RSpec.feature "Teacher Early-Career Payments claims" do
   scenario "Teacher makes claim for 'Early-Career Payments' claim", js: true do
     visit landing_page_path(EarlyCareerPayments.routing_name)
-    expect(page).to have_link(href: EarlyCareerPayments.feedback_url)
+    expect(page).to have_link(href: "mailto:#{EarlyCareerPayments.feedback_email}")
 
     # - Landing (start)
     expect(page).to have_text(I18n.t("early_career_payments.landing_page"))
@@ -332,7 +332,7 @@ RSpec.feature "Teacher Early-Career Payments claims" do
 
   scenario "Supply Teacher makes claim for 'Early Career Payments' with a contract to teach for entire term & employed directly by school" do
     visit landing_page_path(EarlyCareerPayments.routing_name)
-    expect(page).to have_link(href: EarlyCareerPayments.feedback_url)
+    expect(page).to have_link(href: "mailto:#{EarlyCareerPayments.feedback_email}")
 
     # - Landing (start)
     expect(page).to have_text(I18n.t("early_career_payments.landing_page"))
@@ -467,7 +467,7 @@ RSpec.feature "Teacher Early-Career Payments claims" do
 
   scenario "Teacher makes claim for 'Early Career Payments' without uplift school" do
     visit landing_page_path(EarlyCareerPayments.routing_name)
-    expect(page).to have_link(href: EarlyCareerPayments.feedback_url)
+    expect(page).to have_link(href: "mailto:#{EarlyCareerPayments.feedback_email}")
 
     # - Landing (start)
     expect(page).to have_text(I18n.t("early_career_payments.landing_page"))

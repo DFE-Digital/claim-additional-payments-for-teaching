@@ -13,7 +13,7 @@ RSpec.feature "Teacher Student Loan Repayments claims" do
     scenario "Teacher claims back student loan repayments with javascript #{js_status}", js: javascript_enabled do
       visit new_claim_path(StudentLoans.routing_name)
       expect(page).to have_text(I18n.t("questions.qts_award_year"))
-      expect(page).to have_link(href: StudentLoans.feedback_url)
+      expect(page).to have_link(href: "mailto:#{StudentLoans.feedback_email}")
 
       choose_qts_year
       claim = Claim.order(:created_at).last
@@ -114,12 +114,6 @@ RSpec.feature "Teacher Student Loan Repayments claims" do
       expect(claim.student_loan_start_date).to eq(StudentLoan::BEFORE_1_SEPT_2012)
       expect(claim.student_loan_plan).to eq(StudentLoan::PLAN_1)
 
-      expect(page).to have_text(student_loan_amount_question)
-      fill_in student_loan_amount_question, with: "1100"
-      click_on "Continue"
-
-      expect(claim.eligibility.reload.student_loan_repayment_amount).to eql(1100.00)
-
       # - Are you currently paying off your masters/doctoral loan
       expect(page).not_to have_text(I18n.t("questions.has_masters_and_or_doctoral_loan"))
       expect(claim.reload.has_masters_doctoral_loan).to be_nil
@@ -139,6 +133,12 @@ RSpec.feature "Teacher Student Loan Repayments claims" do
       click_on "Continue"
 
       expect(claim.reload.postgraduate_doctoral_loan).to eql true
+
+      expect(page).to have_text(student_loan_amount_question)
+      fill_in student_loan_amount_question, with: "1100"
+      click_on "Continue"
+
+      expect(claim.eligibility.reload.student_loan_repayment_amount).to eql(1100.00)
 
       expect(page).to have_text(I18n.t("questions.email_address"))
       expect(page).to have_text(I18n.t("questions.email_address_hint1"))

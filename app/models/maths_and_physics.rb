@@ -40,6 +40,10 @@ module MathsAndPhysics
     "https://docs.google.com/forms/d/e/1FAIpQLSfwPUxmNHqSnQ6RJ-0nedu5F2FRibBF5UIJ_EciTPcWQg581A/viewform"
   end
 
+  def feedback_email
+    "mathsphysicsteacherpayment@digital.education.gov.uk"
+  end
+
   def short_name
     I18n.t("maths_and_physics.policy_short_name")
   end
