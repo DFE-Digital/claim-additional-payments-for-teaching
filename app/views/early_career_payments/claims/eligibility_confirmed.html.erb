@@ -2,12 +2,7 @@
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-    <h1 class="govuk-heading-xl">You are eligible <%= I18n.t("early_career_payments.claim_description") %></h1>
-    <p class="govuk-body">
-      Based on the answers you have provided you will be able to claim <%= number_to_currency(current_claim.eligibility.award_amount, precision: 0) %>.
-    </p>
-
-    <%= render "uplift_payment_area" %>
+    <h1 class="govuk-heading-xl">You are eligible to apply for a <%= number_to_currency(current_claim.eligibility.award_amount, precision: 0) %> early-career payment</h1>
 
     <h2 class="govuk-heading-l">What happens next?</h2>
 

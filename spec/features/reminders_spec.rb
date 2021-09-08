@@ -7,7 +7,7 @@ RSpec.feature "Set Reminder when Eligible Later for an Early Career Payment" do
     {subject: "mathematics", cohort: "2019 to 2020", academic_year: AcademicYear.new(2019), next_year: 2022, frozen_year: Date.new(2021, 9, 1)},
     {subject: "mathematics", cohort: "2020 to 2021", academic_year: AcademicYear.new(2020), next_year: 2022, frozen_year: Date.new(2021, 9, 1)}
   ].each do |args|
-    scenario "Claimant enters peronal details and OTP for #{args[:subject]} for #{args[:cohort]}" do
+    scenario "Claimant enters personal details and OTP for #{args[:subject]} for #{args[:cohort]}" do
       # set current date to academic year 2021 (or whatever is passed in from frozen_year)
       travel_to args[:frozen_year] do
         claim = start_early_career_payments_claim
@@ -39,7 +39,8 @@ RSpec.feature "Set Reminder when Eligible Later for an Early Career Payment" do
 
         click_on "Continue"
 
-        expect(page).to have_text("You will be eligible for an early-career payment in #{args[:next_year]}")
+        expect(page).to have_text("You will be eligible")
+        expect(page).to have_text("early-career payment in #{args[:next_year]}")
 
         expect(page).to have_content("Set up a reminder with us and we will email you when your application window opens.")
 
