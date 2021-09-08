@@ -6,6 +6,9 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+- DAC Accessibility Report fixes
+  - Non-descriptive error message
+
 ## [Release 094] - 2021-09-06
 
 - Site wide
