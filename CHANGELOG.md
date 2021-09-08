@@ -10,6 +10,7 @@ The format is based on [Keep a Changelog]
   - Non-descriptive error message
   - Illogical heading structure for start page
   - Illogical heading structure for uplift link
+  - Incorrect autocomplete value
 
 ## [Release 094] - 2021-09-06
 
