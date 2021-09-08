@@ -9,6 +9,8 @@ The format is based on [Keep a Changelog]
 - DAC Accessibility Report fixes
   - Non-descriptive error message
   - Illogical heading structure for start page
+  - Illogical heading structure for uplift link
+  - Incorrect autocomplete value
 - Support
   - Fix local authority district code
 

@@ -103,8 +103,8 @@ RSpec.feature "Teacher Early-Career Payments claims" do
     click_on("Continue")
 
     # - You are eligible for an early career payment
-    expect(page).to have_text("You are eligible " + I18n.t("early_career_payments.claim_description"))
-    expect(page).to have_text("able to claim £7,500")
+    expect(page).to have_text("You are eligible")
+    expect(page).to have_text("for a £7,500 early-career payment")
 
     within(".govuk-list--bullet") do
       expect(page).to have_text("your National Insurance number")
@@ -565,8 +565,8 @@ RSpec.feature "Teacher Early-Career Payments claims" do
     click_on("Continue")
 
     # - You are eligible for an early career payment
-    expect(page).to have_text("You are eligible " + I18n.t("early_career_payments.claim_description"))
-    expect(page).to have_text("able to claim £5,000")
+    expect(page).to have_text("You are eligible")
+    expect(page).to have_text("for a £5,000 early-career payment")
 
     within(".govuk-list--bullet") do
       expect(page).to have_text("your National Insurance number")
@@ -941,8 +941,8 @@ RSpec.feature "Teacher Early-Career Payments claims" do
       click_on("Continue")
 
       # - You are eligible for an early career payment
-      expect(page).to have_text("You are eligible " + I18n.t("early_career_payments.claim_description"))
-      expect(page).to have_text("able to claim £7,500")
+      expect(page).to have_text("You are eligible")
+      expect(page).to have_text("for a £7,500 early-career payment")
 
       within(".govuk-list--bullet") do
         expect(page).to have_text("your National Insurance number")

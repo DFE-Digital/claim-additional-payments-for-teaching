@@ -3,7 +3,7 @@
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-    <h1 class="govuk-heading-xl">You will be eligible <%= I18n.t("early_career_payments.claim_description") %> in <%= year %></h1>
+    <h1 class="govuk-heading-xl">You will be eligible for a <%= number_to_currency(current_claim.eligibility.award_amount, precision: 0) %> early-career payment in <%= year %></h1>
     <p class="govuk-body">
       So long as your circumstances remain the same, you&rsquo;ll be able to claim <%= number_to_currency(current_claim.eligibility.award_amount, precision: 0) %> in autumn <%= year%>.
     </p>
