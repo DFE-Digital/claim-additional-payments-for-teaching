@@ -286,7 +286,7 @@ module EarlyCareerPayments
       "E08000034", # Kirklees
       "E08000035", # Leeds
       "E08000036", # Wakefield
-      "E09000037", # Gateshead
+      "E08000037", # Gateshead
       "E09000001", # City of London
       "E09000002", # Barking and Dagenham
       "E09000003", # Barnet
