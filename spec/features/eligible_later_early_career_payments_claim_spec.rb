@@ -49,7 +49,7 @@ RSpec.feature "Eligible later Teacher Early-Career Payments claims" do
 
             click_on("Continue")
 
-            expect(page).to have_text("You will be eligible for an early-career payment in 2022")
+            expect(page).to have_text("You will be eligible for a #{scenario[:award_amount]} early-career payment in 2022")
             expect(page).to have_text("you’ll be able to claim #{scenario[:award_amount]} in autumn 2022")
           end
         end
@@ -91,7 +91,7 @@ RSpec.feature "Eligible later Teacher Early-Career Payments claims" do
 
             click_on("Continue")
 
-            expect(page).to have_text("You will be eligible for an early-career payment in 2022")
+            expect(page).to have_text("You will be eligible for a #{scenario[:award_amount]} early-career payment in 2022")
             expect(page).to have_text("you’ll be able to claim #{scenario[:award_amount]} in autumn 2022")
           end
         end
