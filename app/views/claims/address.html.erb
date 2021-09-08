@@ -44,7 +44,7 @@
               Building and street <span class="govuk-visually-hidden">line 1 of 2</span>
             <% end %>
             <%= errors_tag current_claim, :address_line_1 %>
-            <%= form.text_field :address_line_1, autocomplete: "street-address",
+            <%= form.text_field :address_line_1, autocomplete: "address-line1",
               class: css_classes_for_input(current_claim, :address_line_1) %>
           <% end %>
 
@@ -53,7 +53,7 @@
               <span class="govuk-visually-hidden">Building and street line 2 of 2</span>
             <% end %>
             <%= errors_tag current_claim, :address_line_2 %>
-            <%= form.text_field :address_line_2, autocomplete: "street-address",
+            <%= form.text_field :address_line_2, autocomplete: "address-line2",
               class: css_classes_for_input(current_claim, :address_line_2) %>
           <% end %>
         <% end %>
@@ -63,7 +63,7 @@
             Town or city
           <% end %>
           <%= errors_tag current_claim, :address_line_3 %>
-          <%= form.text_field :address_line_3, autocomplete: "locality",
+          <%= form.text_field :address_line_3, autocomplete: "address-level2",
             class: css_classes_for_input(current_claim, :address_line_3, "govuk-!-width-two-thirds") %>
         <% end %>
 
@@ -72,7 +72,7 @@
             County
           <% end %>
           <%= errors_tag current_claim, :address_line_4 %>
-          <%= form.text_field :address_line_4, autocomplete: "region",
+          <%= form.text_field :address_line_4, autocomplete: "off",
             class: css_classes_for_input(current_claim, :address_line_4, "govuk-input govuk-!-width-two-thirds") %>
         <% end %>
 

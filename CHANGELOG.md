@@ -9,6 +9,7 @@ The format is based on [Keep a Changelog]
 - DAC Accessibility Report fixes
   - Non-descriptive error message
   - Illogical heading structure for start page
+  - Incorrect autocomplete value
 
 ## [Release 094] - 2021-09-06
 
