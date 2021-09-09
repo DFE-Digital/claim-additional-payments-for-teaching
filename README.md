@@ -107,11 +107,13 @@ GOOGLE_ANALYTICS_ID=<UA PROPERTY>
 GCS is used for uploading and storing files. This requires service account
 credentials. Either retrieve a test one from a developer or:
 
-1. Create a [Google Cloud Account](https://console.cloud.google.com/freetrial) (if you don't have one)
+1. Create a [Google Cloud Account](https://console.cloud.google.com/freetrial)
+   (if you don't have one)
 2. Create a [new project](https://console.cloud.google.com/projectcreate)
 3. Create a [new bucket](https://console.cloud.google.com/storage/) and give it
    a unique name for you. Add this name to your .env file as `STORAGE_BUCKET`
-4. Create a [service account](https://cloud.google.com/docs/authentication/getting-started)
+4. Create a
+   [service account](https://cloud.google.com/docs/authentication/getting-started)
    and save the json file to the root of this project as
    `google_cloud_storage.json`
 
