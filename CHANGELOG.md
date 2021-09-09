@@ -29,6 +29,8 @@ The format is based on [Keep a Changelog]
 - Admin
   - Student Loan Plan Types
     - Update the CSV Payroll file to include new plan types
+- Google Analytics
+  - Add scheduled job to deliver decisions CSV to GCS
 
 ## [Release 093] - 2021-09-02
 
