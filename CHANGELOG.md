@@ -11,6 +11,7 @@ The format is based on [Keep a Changelog]
   - Illogical heading structure for start page
   - Illogical heading structure for uplift link
   - Incorrect autocomplete value
+  - Abbreviations
 - Support
   - Fix local authority district code
 
