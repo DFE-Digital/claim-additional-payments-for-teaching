@@ -18,7 +18,7 @@ class SendDecisionsAnalyticsJob < CronJob
   end
 
   def file_name
-   @file_name ||= "decisions-analytics_#{date}.csv" 
+    @file_name ||= "decisions-analytics_#{date}.csv"
   end
 
   def date

@@ -1,10 +1,11 @@
-class UploadToGoogleCloudStorage
+class Upload
   class MissingBucketNameError < StandardError; end
   require "google/cloud/storage"
 
-  def initialize(local_file_path:, file_name: nil)
+  def initialize(local_file_path:, file_name:, storage: Google::Cloud::Storage.new)
     @local_file_path = local_file_path
-    @file_name = file_name 
+    @file_name = file_name
+    @storage = storage
   end
 
   def call
@@ -13,7 +14,7 @@ class UploadToGoogleCloudStorage
 
   private
 
-  attr_reader :local_file_path, :file_name
+  attr_reader :local_file_path, :file_name, :storage
 
   def bucket
     @bucket ||= storage.bucket bucket_name
@@ -21,13 +22,9 @@ class UploadToGoogleCloudStorage
 
   def bucket_name
     @bucket_name ||= begin
-      bn = ENV['STORAGE_BUCKET']
+      bn = ENV["STORAGE_BUCKET"]
       raise MissingBucketNameError, "Missing ENV variable 'STORAGE_BUCKET'" unless bn.present?
       bn
     end
-  end
-
-  def storage
-    @storage ||= Google::Cloud::Storage.new
   end
 end

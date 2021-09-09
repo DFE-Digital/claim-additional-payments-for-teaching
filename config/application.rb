@@ -18,7 +18,7 @@ require_relative "../lib/dqt"
 require_relative "../lib/ordnance_survey"
 require_relative "../lib/one_time_password"
 require_relative "../lib/send_analytics_csv"
-require_relative "../lib/upload_to_google_cloud_storage"
+require_relative "../lib/upload"
 
 # Require the gems listed in Gemfile, including any gems
 # you've limited to :test, :development, or :production.
