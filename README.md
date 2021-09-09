@@ -116,6 +116,7 @@ credentials. Either retrieve a test one from a developer or:
    [service account](https://cloud.google.com/docs/authentication/getting-started)
    and save the json file to the root of this project as
    `google_cloud_storage.json`
+5. Add an ENV to point to this `STORAGE_CREDENTIALS=./google_cloud_storage.json`
 
 ### Running `CronJob`s
 
