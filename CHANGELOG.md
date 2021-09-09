@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+## [Release 095] - 2021-09-09
+
 - DAC Accessibility Report fixes
   - Non-descriptive error message
   - Illogical heading structure for start page
@@ -14,6 +16,8 @@ The format is based on [Keep a Changelog]
   - Abbreviations
 - Support
   - Fix local authority district code
+- Google Analytics
+  - Add scheduled job to deliver decisions CSV to GCS
 
 ## [Release 094] - 2021-09-06
 
@@ -29,8 +33,6 @@ The format is based on [Keep a Changelog]
 - Admin
   - Student Loan Plan Types
     - Update the CSV Payroll file to include new plan types
-- Google Analytics
-  - Add scheduled job to deliver decisions CSV to GCS
 
 ## [Release 093] - 2021-09-02
 
@@ -882,7 +884,9 @@ The format is based on [Keep a Changelog]
 - First release for student loan repayments private beta
 
 [unreleased]:
-  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-094...HEAD
+  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-095...HEAD
+[release 095]:
+  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-094...release-095
 [release 094]:
   https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-093...release-094
 [release 093]:
