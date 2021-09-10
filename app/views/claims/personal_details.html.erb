@@ -3,15 +3,12 @@
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
     <%= render("shared/error_summary", instance: current_claim, errored_field_id_overrides: { date_of_birth: "claim_date_of_birth_3i"}) if current_claim.errors.any? %>
-
     <%= form_for current_claim, url: claim_path(current_policy_routing_name) do |form| %>
-      <fieldset class="govuk-fieldset">
-        <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl govuk-!-padding-bottom-6">
-          <h1 class="govuk-fieldset__heading">
-              <%= t("questions.personal_details") %>
-          </h1>
-        </legend>
+      <h1 class="govuk-heading-xl">
+        <%= t("questions.personal_details") %>
+      </h1>
 
+      <fieldset class="govuk-fieldset">
         <div class="govuk-!-padding-bottom-6">
           <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
             <h2 class="govuk-fieldset__heading govuk-!-padding-bottom-3">
@@ -24,13 +21,11 @@
             <%= errors_tag current_claim, :first_name %>
             <%= form.text_field :first_name, class: css_classes_for_input(current_claim, :first_name), autocomplete: "given-name" %>
           <% end %>
-
           <%= form_group_tag current_claim, :middle_name do %>
             <%= form.label :middle_name, "Middle names", class: "govuk-label" %>
             <%= errors_tag current_claim, :middle_name %>
             <%= form.text_field :middle_name, class: css_classes_for_input(current_claim, :middle_name), autocomplete: "given-name" %>
           <% end %>
-
           <%= form_group_tag current_claim, :surname do %>
             <%= form.label :surname, "Last name", class: "govuk-label" %>
             <%= errors_tag current_claim, :surname %>
@@ -77,7 +72,7 @@
 
       <div class="govuk-!-padding-bottom-6">
         <h2 class="govuk-label-wrapper">
-          <%= form.label :national_insurance_number, t("early_career_payments.questions.national_insurance_number"), {class: "govuk-label govuk-label--l"}  %>
+          <%= form.label :national_insurance_number, t("questions.national_insurance_number"), {class: "govuk-label govuk-label--l"}  %>
         </h2>
 
         <div class="govuk-hint" id="national_insurance_number-hint">
@@ -86,7 +81,6 @@
         </div>
 
         <%= errors_tag current_claim, :national_insurance_number %>
-
         <%= form.text_field :national_insurance_number,
               spellcheck: "false",
               autocomplete: "off",
@@ -95,7 +89,6 @@
       </div>
 
       <%= form.submit "Continue", class: "govuk-button" %>
-
     <% end %>
   </div>
 </div>

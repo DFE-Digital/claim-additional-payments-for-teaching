@@ -40,7 +40,7 @@ class ClaimsController < BasePublicController
   end
 
   def update
-    if params[:slug] == "personal-details" && current_claim.has_ecp_policy?
+    if params[:slug] == "personal-details"
       check_date_params
     else
       current_claim.attributes = claim_params

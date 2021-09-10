@@ -12,6 +12,8 @@ The format is based on [Keep a Changelog]
   - Add Teacher Trainee mini journey (for 2021 ONLY)
 - DAC Accessibility Report fixes
   - Expanded wording of ITT when first used in ECP service
+- TSLR and M&P
+  - Combining teacher personal details onto one page
 
 ## [Release 095] - 2021-09-09
 

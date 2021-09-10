@@ -131,7 +131,7 @@ RSpec.feature "Teacher Early-Career Payments claims" do
     fill_in "Month", with: "2"
     fill_in "Year", with: "1988"
 
-    expect(page).to have_text(I18n.t("early_career_payments.questions.national_insurance_number"))
+    expect(page).to have_text(I18n.t("questions.national_insurance_number"))
 
     fill_in "National Insurance number", with: "PX321499A"
     click_on "Continue"
@@ -593,7 +593,7 @@ RSpec.feature "Teacher Early-Career Payments claims" do
     fill_in "Month", with: "2"
     fill_in "Year", with: "1988"
 
-    expect(page).to have_text(I18n.t("early_career_payments.questions.national_insurance_number"))
+    expect(page).to have_text(I18n.t("questions.national_insurance_number"))
 
     fill_in "National Insurance number", with: "PX321499A"
     click_on "Continue"
@@ -969,7 +969,7 @@ RSpec.feature "Teacher Early-Career Payments claims" do
       fill_in "Month", with: "2"
       fill_in "Year", with: "1988"
 
-      expect(page).to have_text(I18n.t("early_career_payments.questions.national_insurance_number"))
+      expect(page).to have_text(I18n.t("questions.national_insurance_number"))
 
       fill_in "National Insurance number", with: "PX321499A"
       click_on "Continue"
