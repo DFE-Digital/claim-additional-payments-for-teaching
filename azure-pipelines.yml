@@ -121,11 +121,7 @@ steps:
 
   - script: |
       docker tag local/dfe-teachers-payment-service:web $(dockerRegistry)/$(dockerImageName):$(Build.BuildNumber)
-#      docker tag local/dfe-teachers-payment-service:web $(dockerRegistry)/$(dockerImageName):latest
-
+      
       docker push $(dockerRegistry)/$(dockerImageName):$(Build.BuildNumber)
     displayName: Push web Docker image
-
-#      docker push $(dockerRegistry)/$(dockerImageName):latest    
-#    condition: eq(variables['Build.SourceBranch'], 'refs/heads/master')
     condition: ne(variables['Build.SourceBranch'], 'refs/heads/master')
