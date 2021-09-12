@@ -271,7 +271,8 @@ en:
       reason:
         itt_subject: "Early-career payments are only available for teachers who did their ITT in:"
         not_teaching_subject: "You can only get this payment if you are still teaching maths/chemistry/physics/foreign languages."
-        nqt_after_itt: "You might be eligible to claim in the future when you’ve completed your ITT"
+        trainee_teacher_only_in_claim_academic_year_2021: "You might be eligible to claim in the future when you’ve completed your ITT"
+        generic: "Based on the answers you have provided you are not eligible for an early-career payment"
     questions:
       current_school_search: "Which school do you teach at?"
       current_school_results: "Select the school you teach at"
