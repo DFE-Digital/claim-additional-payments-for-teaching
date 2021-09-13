@@ -16,7 +16,7 @@ class ClaimStats
 
       def daily(date: Date.yesterday)
         ActiveRecord::Base.connection.exec_query(
-          <<~SQL
+          <<~SQL.squish
             SELECT
             '#{date}' AS extract_date,
               policy,
@@ -24,24 +24,26 @@ class ClaimStats
                 AS average_claim_submission_length,
               ROUND(AVG(decision_length))
                 AS average_claim_decision_length,
-              count(claim_id)
+              COUNT(claim_id)
                 AS applications_started_total,
-              count(claim_id) filter (where claim_submitted_at is not null)
+              COUNT(claim_id) filter (where claim_submitted_at is not null)
                 AS applications_submitted_total,
-              count(claim_id) filter (where result = 'rejected')
+              COUNT(claim_id) filter (where result = 'rejected')
                 AS applications_rejected_total,
-              count(claim_id) filter (where result = 'accepted')
+              COUNT(claim_id) filter (where result = 'accepted')
                 AS applications_accepted_total,
-              count(claim_id) filter (where claim_started_at::date = '#{date}')
+              COUNT(claim_id) filter (where claim_started_at::date = '#{date}')
                 AS applications_started_daily,
-              count(claim_id) filter (where claim_submitted_at::date = '#{date}')
+              COUNT(claim_id) filter (where claim_submitted_at::date = '#{date}')
                 AS applications_submitted_daily,
-              count(claim_id) filter (where result = 'rejected' and decision_made_at::date = '#{date}')
+              COUNT(claim_id) filter (where result = 'rejected' and decision_made_at::date = '#{date}')
                 AS applications_rejected_daily,
-              count(claim_id) filter (where result = 'accepted' and decision_made_at::date = '#{date}')
+              COUNT(claim_id) filter (where result = 'accepted' and decision_made_at::date = '#{date}')
                 AS applications_accepted_daily
             FROM
               #{ClaimStats.table_name}
+            WHERE
+              claim_started_at < '#{date.end_of_day}'
             GROUP BY
               policy
             ORDER BY
