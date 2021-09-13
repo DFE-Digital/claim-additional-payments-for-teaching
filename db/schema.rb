@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_09_01_084543) do
+ActiveRecord::Schema.define(version: 2021_09_10_134249) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -392,5 +392,32 @@ ActiveRecord::Schema.define(version: 2021_09_01_084543) do
       local_authorities la,
       local_authority_districts lad
     WHERE ((d.claim_id = c.id) AND (c.eligibility_id = e.id) AND (e.school_id = s.id) AND (s.local_authority_id = la.id) AND (s.local_authority_district_id = lad.id));
+  SQL
+  create_view "claim_stats", materialized: true, sql_definition: <<-SQL
+      SELECT c.id AS claim_id,
+          CASE c.eligibility_type
+              WHEN 'EarlyCareerPayments::Eligibility'::text THEN 'early career payments'::text
+              WHEN 'StudentLoans::Eligibility'::text THEN 'student loans'::text
+              WHEN 'MathsAndPhysics::Eligibility'::text THEN 'maths and physics'::text
+              ELSE NULL::text
+          END AS policy,
+      c.created_at AS claim_started_at,
+      c.submitted_at AS claim_submitted_at,
+      d.created_at AS decision_made_at,
+          CASE d.result
+              WHEN 0 THEN 'accepted'::text
+              WHEN 1 THEN 'rejected'::text
+              ELSE NULL::text
+          END AS result,
+          CASE c.submitted_at
+              WHEN NULL::timestamp without time zone THEN NULL::double precision
+              ELSE date_part('epoch'::text, (c.submitted_at - c.created_at))
+          END AS submission_length,
+          CASE d.created_at
+              WHEN NULL::timestamp without time zone THEN NULL::double precision
+              ELSE date_part('epoch'::text, (d.created_at - c.submitted_at))
+          END AS decision_length
+     FROM (decisions d
+       RIGHT JOIN claims c ON ((c.id = d.claim_id)));
   SQL
 end
