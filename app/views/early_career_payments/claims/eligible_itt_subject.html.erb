@@ -1,4 +1,4 @@
-<% content_for(:page_title, page_title(t("early_career_payments.questions.eligible_itt_subject", qualification: current_claim.eligibility.qualification_name), policy: current_policy_routing_name, show_error: current_claim.errors.any?)) %>
+<% content_for(:page_title, page_title(eligible_itt_subject_translation(current_claim), policy: current_policy_routing_name, show_error: current_claim.errors.any?)) %>
 <% path_for_form = current_claim.persisted? ? claim_path(current_policy_routing_name) : claims_path(current_policy_routing_name) %>
 <% subjects = EarlyCareerPayments::Eligibility.eligible_itt_subjects.keys.reject { |subject| subject == "none_of_the_above" } %>
 
@@ -15,7 +15,7 @@
 
             <legend class="govuk-fieldset__legend govuk-fieldset__legend--<%= shared_view_css_class_size(current_claim) %>">
               <h1 class="govuk-fieldset__heading">
-                <%= t("early_career_payments.questions.eligible_itt_subject", qualification: current_claim.eligibility.qualification_name) %>
+                <%= eligible_itt_subject_translation(current_claim) %>
               </h1>
             </legend>
 

@@ -1,0 +1,22 @@
+<% content_for(:page_title, page_title(t("early_career_payments.ineligible.reason.trainee_teacher_only_in_claim_academic_year_2021"), policy: current_policy_routing_name)) %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <h1 class="govuk-heading-l"><%= I18n.t("early_career_payments.ineligible.reason.trainee_teacher_only_in_claim_academic_year_2021") %></h1>
+    <p class="govuk-body">
+      If you’re a trainee teacher and plan to complete your studies in this academic year you might be able to apply in the next academic year.
+    </p>
+
+    <h2 class="govuk-heading-m">What you can do next</h2>
+
+    <p class="govuk-body">
+      Set up a reminder with us and we will email you when your application window opens. We will send this to your preferred email address.
+    </p>
+
+    <p class="govuk-inset-text">
+      It is your responsibility to apply for each payment you are eligible for. The Department for Education cannot issue payments unless you apply for one nor can we issue payments for claims made after the window has closed.
+    </p>
+
+    <%= link_to "Continue", new_reminder_path, class: "govuk-button", role: :button, data: { module: "govuk-button"} %>
+  </div>
+</div>

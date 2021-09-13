@@ -59,4 +59,8 @@ module EarlyCareerPayments
   def student_loan_balance_url
     "https://www.gov.uk/sign-in-to-manage-your-student-loan-balance"
   end
+
+  def configuration
+    PolicyConfiguration.for(self)
+  end
 end

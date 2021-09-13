@@ -302,5 +302,30 @@ RSpec.describe EarlyCareerPayments::SlugSequence do
         expect(slug_sequence.slugs).to eq expected_slugs
       end
     end
+
+    context "when a trainee teacher in the 2021 Academic Year" do
+      before do
+        @ecp_policy_date = PolicyConfiguration.for(EarlyCareerPayments).current_academic_year
+        PolicyConfiguration.for(EarlyCareerPayments).update(current_academic_year: AcademicYear.new(2021))
+      end
+
+      after do
+        PolicyConfiguration.for(EarlyCareerPayments).update(current_academic_year: @ecp_policy_date)
+      end
+
+      it "includes only the slugs related to this micro-journey" do
+        claim.eligibility.nqt_in_academic_year_after_itt = false
+
+        expected_slugs = %w[
+          nqt-in-academic-year-after-itt
+          eligible-itt-subject
+          itt-year
+          future-eligibility
+          ineligible
+        ]
+
+        expect(slug_sequence.slugs).to eq expected_slugs
+      end
+    end
   end
 end
