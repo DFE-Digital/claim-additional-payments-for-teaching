@@ -6,6 +6,9 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+- Early Career Payments
+  - Add Teacher Trainee mini journey (for 2021 ONLY)
+
 ## [Release 095] - 2021-09-09
 
 - DAC Accessibility Report fixes
