@@ -293,6 +293,7 @@ en:
           assessment_only: "This is the subject you qualified with."
           overseas_recognition: "This is the subject you qualified with."
       eligible_itt_subject: "Which subject did you do your %{qualification} in?"
+      eligible_itt_subject_trainee_teacher_in_2021: "Which subject are you currently doing your postgraduate ITT in?"
       teaching_subject_now: "Do you teach %{eligible_itt_subject} now?"
       itt_academic_year:
         qualification:
