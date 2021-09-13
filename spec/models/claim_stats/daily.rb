@@ -20,7 +20,7 @@ RSpec.describe ClaimStats::Daily do
       CSV
     end
 
-    it "returns a csv with the correct stats" do 
+    it "returns a csv with the correct stats" do
       expect(subject.to_csv).to eq(expected_csv)
     end
   end

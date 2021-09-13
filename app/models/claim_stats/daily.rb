@@ -7,7 +7,7 @@ class ClaimStats
         results = daily(date: date)
         CSV.generate(headers: true) do |csv|
           csv << results.columns
-    
+
           results.rows.each do |row|
             csv << row
           end
@@ -18,7 +18,7 @@ class ClaimStats
         ActiveRecord::Base.connection.exec_query(
           <<~SQL
             SELECT
-            '#{date.to_s}' AS extract_date,
+            '#{date}' AS extract_date,
               policy,
               ROUND(AVG(submission_length))
                 AS average_claim_submission_length,
@@ -32,13 +32,13 @@ class ClaimStats
                 AS applications_rejected_total,
               count(claim_id) filter (where result = 'accepted')
                 AS applications_accepted_total,
-              count(claim_id) filter (where claim_started_at::date = '#{date.to_s}')
+              count(claim_id) filter (where claim_started_at::date = '#{date}')
                 AS applications_started_daily,
-              count(claim_id) filter (where claim_submitted_at::date = '#{date.to_s}')
+              count(claim_id) filter (where claim_submitted_at::date = '#{date}')
                 AS applications_submitted_daily,
-              count(claim_id) filter (where result = 'rejected' and decision_made_at::date = '#{date.to_s}')
+              count(claim_id) filter (where result = 'rejected' and decision_made_at::date = '#{date}')
                 AS applications_rejected_daily,
-              count(claim_id) filter (where result = 'accepted' and decision_made_at::date = '#{date.to_s}')
+              count(claim_id) filter (where result = 'accepted' and decision_made_at::date = '#{date}')
                 AS applications_accepted_daily
             FROM
               #{ClaimStats.table_name}
