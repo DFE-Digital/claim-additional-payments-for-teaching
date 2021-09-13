@@ -318,8 +318,8 @@ en:
           title: "Is this claim still valid despite having matching details with other claims?"
     answers:
       qualification:
-        postgraduate_itt: "Postgraduate ITT"
-        undergraduate_itt: "Undergraduate ITT"
+        postgraduate_itt: "Postgraduate initial teacher training (ITT)"
+        undergraduate_itt: "Undergraduate initial teacher training (ITT)"
         assessment_only: "Assessment only"
         overseas_recognition: "Overseas recognition"
       eligible_itt_subject:
