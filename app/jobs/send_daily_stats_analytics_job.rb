@@ -5,6 +5,8 @@ class SendDailyStatsAnalyticsJob < CronJob
 
   def perform
     Rails.logger.info "Sending Daily Stats CSV..."
+    # refresh the materialized view backing this
+    ClaimStats.refresh
     SendAnalyticsCsv.new(
       query: query,
       file_name: file_name
