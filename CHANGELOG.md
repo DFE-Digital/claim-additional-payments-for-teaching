@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+- Google Analytics
+  - Adds CSV view for claim stats
 - Early Career Payments
   - Add Teacher Trainee mini journey (for 2021 ONLY)
 - DAC Accessibility Report fixes
