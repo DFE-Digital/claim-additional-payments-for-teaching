@@ -271,7 +271,8 @@ en:
       reason:
         itt_subject: "Early-career payments are only available for teachers who did their ITT in:"
         not_teaching_subject: "You can only get this payment if you are still teaching maths/chemistry/physics/foreign languages."
-        nqt_after_itt: "You might be eligible to claim in the future when you’ve completed your ITT"
+        trainee_teacher_only_in_claim_academic_year_2021: "You might be eligible to claim in the future when you’ve completed your ITT"
+        generic: "Based on the answers you have provided you are not eligible for an early-career payment"
     questions:
       current_school_search: "Which school do you teach at?"
       current_school_results: "Select the school you teach at"
@@ -292,6 +293,7 @@ en:
           assessment_only: "This is the subject you qualified with."
           overseas_recognition: "This is the subject you qualified with."
       eligible_itt_subject: "Which subject did you do your %{qualification} in?"
+      eligible_itt_subject_trainee_teacher_in_2021: "Which subject are you currently doing your postgraduate initial teacher training (ITT) in?"
       teaching_subject_now: "Do you teach %{eligible_itt_subject} now?"
       itt_academic_year:
         qualification:
@@ -316,8 +318,8 @@ en:
           title: "Is this claim still valid despite having matching details with other claims?"
     answers:
       qualification:
-        postgraduate_itt: "Postgraduate ITT"
-        undergraduate_itt: "Undergraduate ITT"
+        postgraduate_itt: "Postgraduate initial teacher training (ITT)"
+        undergraduate_itt: "Undergraduate initial teacher training (ITT)"
         assessment_only: "Assessment only"
         overseas_recognition: "Overseas recognition"
       eligible_itt_subject:

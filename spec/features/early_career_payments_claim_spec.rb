@@ -56,7 +56,7 @@ RSpec.feature "Teacher Early-Career Payments claims" do
     # - What route into teaching did you take?
     expect(page).to have_text(I18n.t("early_career_payments.questions.qualification.heading"))
 
-    choose "Postgraduate ITT"
+    choose "Postgraduate initial teacher training (ITT)"
     click_on "Continue"
 
     expect(claim.eligibility.reload.qualification).to eq "postgraduate_itt"
@@ -519,7 +519,7 @@ RSpec.feature "Teacher Early-Career Payments claims" do
     # - What route into teaching did you take?
     expect(page).to have_text(I18n.t("early_career_payments.questions.qualification.heading"))
 
-    choose "Postgraduate ITT"
+    choose "Postgraduate initial teacher training (ITT)"
     click_on "Continue"
 
     expect(claim.eligibility.reload.qualification).to eq "postgraduate_itt"

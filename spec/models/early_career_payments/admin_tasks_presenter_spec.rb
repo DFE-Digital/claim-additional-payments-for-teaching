@@ -42,7 +42,7 @@ RSpec.describe EarlyCareerPayments::AdminTasksPresenter, type: :model do
   describe "#qualifications" do
     it "returns an array of label and values for displaying information for qualification checks" do
       expected_array = [
-        ["Qualification", "Undergraduate ITT"],
+        ["Qualification", "Undergraduate initial teacher training (ITT)"],
         ["ITT end year", "In the academic year 2018 to 2019"],
         ["ITT subject", "Mathematics"]
       ]
@@ -58,8 +58,8 @@ RSpec.describe EarlyCareerPayments::AdminTasksPresenter, type: :model do
     [
       {qualification: :assessment_only, qualification_text: "Assessment only", year_text: "end"},
       {qualification: :overseas_recognition, qualification_text: "Overseas recognition", year_text: "end"},
-      {qualification: :postgraduate_itt, qualification_text: "Postgraduate ITT", year_text: "start"},
-      {qualification: :undergraduate_itt, qualification_text: "Undergraduate ITT", year_text: "end"}
+      {qualification: :postgraduate_itt, qualification_text: "Postgraduate initial teacher training (ITT)", year_text: "start"},
+      {qualification: :undergraduate_itt, qualification_text: "Undergraduate initial teacher training (ITT)", year_text: "end"}
     ].each do |spec|
       context "with qualification #{spec[:qualification]}" do
         let(:qualification) { spec[:qualification] }

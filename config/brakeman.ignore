@@ -81,6 +81,26 @@
       "note": "The concetenated attributes in the CONCAT operation are not user-generated, so this can be safely ignored"
     },
     {
+      "warning_type": "SQL Injection",
+      "warning_code": 0,
+      "fingerprint": "c4fdf9ee92b32192d72283914eab27b9347688634b08078a5f0a5986efa12dab",
+      "check_name": "SQL",
+      "message": "Possible SQL injection",
+      "file": "app/models/claim_stats/daily.rb",
+      "line": 20,
+      "link": "https://brakemanscanner.org/docs/warning_types/sql_injection/",
+      "code": "ActiveRecord::Base.connection.exec_query(\"SELECT\\n'#{date}' AS extract_date,\\n  policy,\\n  ROUND(AVG(submission_length))\\n    AS average_claim_submission_length,\\n  ROUND(AVG(decision_length))\\n    AS average_claim_decision_length,\\n  COUNT(claim_id)\\n    AS applications_started_total,\\n  COUNT(claim_id) filter (where claim_submitted_at is not null)\\n    AS applications_submitted_total,\\n  COUNT(claim_id) filter (where result = 'rejected')\\n    AS applications_rejected_total,\\n  COUNT(claim_id) filter (where result = 'accepted')\\n    AS applications_accepted_total,\\n  COUNT(claim_id) filter (where claim_started_at::date = '#{date}')\\n    AS applications_started_daily,\\n  COUNT(claim_id) filter (where claim_submitted_at::date = '#{date}')\\n    AS applications_submitted_daily,\\n  COUNT(claim_id) filter (where result = 'rejected' and decision_made_at::date = '#{date}')\\n    AS applications_rejected_daily,\\n  COUNT(claim_id) filter (where result = 'accepted' and decision_made_at::date = '#{date}')\\n    AS applications_accepted_daily\\nFROM\\n  #{ClaimStats.table_name}\\nWHERE\\n  claim_started_at < '#{date.end_of_day}'\\nGROUP BY\\n  policy\\nORDER BY\\n  policy\\n\".squish)",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "Daily",
+        "method": "daily"
+      },
+      "user_input": "date",
+      "confidence": "Medium",
+      "note": ""
+    },
+    {
       "warning_type": "File Access",
       "warning_code": 16,
       "fingerprint": "dc2ed132897187b2950a4358e22d70cf3f57a65db3730cc0f81e807de5977758",
@@ -101,6 +121,6 @@
       "note": "We generate the filename based on non-user input so we can ignore this"
     }
   ],
-  "updated": "2021-07-23 17:21:29 +0100",
-  "brakeman_version": "5.0.4"
+  "updated": "2021-09-14 10:51:51 +0100",
+  "brakeman_version": "5.1.1"
 }
