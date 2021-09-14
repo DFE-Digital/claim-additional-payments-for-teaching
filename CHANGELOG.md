@@ -8,6 +8,10 @@ The format is based on [Keep a Changelog]
 
 - Google Analytics
   - Adds CSV view for claim stats
+- Early Career Payments
+  - Add Teacher Trainee mini journey (for 2021 ONLY)
+- DAC Accessibility Report fixes
+  - Expanded wording of ITT when first used in ECP service
 
 ## [Release 095] - 2021-09-09
 

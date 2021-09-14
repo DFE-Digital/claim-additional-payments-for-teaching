@@ -47,4 +47,35 @@ describe EarlyCareerPaymentsHelper do
       end
     end
   end
+
+  describe "#eligible_itt_subject_translation" do
+    let(:policy) { EarlyCareerPayments }
+
+    context "trainee teacher in 2021" do
+      let(:eligibility) do
+        build(:early_career_payments_eligibility, nqt_in_academic_year_after_itt: false, qualification: :postgraduate_itt)
+      end
+
+      before do
+        @ecp_policy_date = PolicyConfiguration.for(EarlyCareerPayments).current_academic_year
+        PolicyConfiguration.for(EarlyCareerPayments).update(current_academic_year: AcademicYear.new(2021))
+      end
+
+      after do
+        PolicyConfiguration.for(EarlyCareerPayments).update(current_academic_year: @ecp_policy_date)
+      end
+
+      it "generates the correct heading based on being a traineer teacher in 2021" do
+        expect(helper.eligible_itt_subject_translation(claim)).to eq("Which subject are you currently doing your postgraduate initial teacher training (ITT) in?")
+      end
+    end
+
+    context "not traineer teacher" do
+      let(:eligibility) { build(:early_career_payments_eligibility, :eligible) }
+
+      it "generates the correct heading" do
+        expect(helper.eligible_itt_subject_translation(claim)).to eq("Which subject did you do your postgraduate initial teacher training (ITT) in?")
+      end
+    end
+  end
 end
