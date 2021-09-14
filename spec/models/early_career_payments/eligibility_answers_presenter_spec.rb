@@ -28,7 +28,7 @@ RSpec.describe EarlyCareerPayments::EligibilityAnswersPresenter, type: :model do
       [I18n.t("early_career_payments.questions.disciplinary_action"), "No", "poor-performance"],
       [
         I18n.t("early_career_payments.questions.qualification.heading"),
-        "Postgraduate ITT",
+        "Postgraduate initial teacher training (ITT)",
         "qualification"
       ],
       [
@@ -79,7 +79,7 @@ RSpec.describe EarlyCareerPayments::EligibilityAnswersPresenter, type: :model do
         [I18n.t("early_career_payments.questions.disciplinary_action"), "No", "poor-performance"],
         [
           I18n.t("early_career_payments.questions.qualification.heading"),
-          "Undergraduate ITT",
+          "Undergraduate initial teacher training (ITT)",
           "qualification"
         ],
         [
