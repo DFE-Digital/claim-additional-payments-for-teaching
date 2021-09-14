@@ -1,6 +1,7 @@
+require "google/cloud/storage"
+
 class Upload
   class MissingBucketNameError < StandardError; end
-  require "google/cloud/storage"
 
   def initialize(local_file_path:, file_name:, storage: Google::Cloud::Storage.new)
     @local_file_path = local_file_path
