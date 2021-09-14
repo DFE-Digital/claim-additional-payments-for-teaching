@@ -101,12 +101,16 @@ production as follows:
   right.
 - Note the build number of this build (for example, `20210913.13`).
 - Navigate to Pipelines > Releases.
-- A release will have been created automatically off the successful build from master (above)
+- A release will have been created automatically off the successful build from
+  master (above)
 - The Release will ONLY deploy to DEV automatically
-- To deploy to TEST click on the “Deploy Test” button that should have a blue icon in it.
+- To deploy to TEST click on the “Deploy Test” button that should have a blue
+  icon in it.
 - The Release will need to be approved to deploy to TEST.
-- To deploy to Production click on “Deploy Production” and manually trigger the deployment by clicking on Deploy in the top menu then Deploy on the Deploy Release screen
-- This deployment will also require approvals. 
+- To deploy to Production click on “Deploy Production” and manually trigger the
+  deployment by clicking on Deploy in the top menu then Deploy on the Deploy
+  Release screen
+- This deployment will also require approvals.
 
 ### 5. Database Migration
 

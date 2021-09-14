@@ -3,22 +3,25 @@
 All of our infrastructure is hosted on DfE's Cloud Infrastructure Platform in
 [Microsoft Azure][azure].
 
-The setup is specified as [Infrastructure as Code][iac] using Terraform, stored in the `azure` folder in the root of the
-project.
+The setup is specified as [Infrastructure as Code][iac] using Terraform, stored
+in the `azure` folder in the root of the project.
 
 ## Automated deployment
 
 [Azure DevOps](https://dev.azure.com/dfe-ssp/S118-Teacher-Payments-Service) is
-responsible for automated infrastructure deployments, this is seperate from the deployment of a
-version of the application.
+responsible for automated infrastructure deployments, this is seperate from the
+deployment of a version of the application.
 
 ## Manual deployment
 
-Deployments of changes to the infrastructure are a lot less frequent than the application so they can be triggered manually.
+Deployments of changes to the infrastructure are a lot less frequent than the
+application so they can be triggered manually.
 
 ### Deploying to an environment
 
-The same terraform templates are used to deploy to all three environments, all three deployments are done via Azure DevOps and have approval gates for the two higher environments.
+The same terraform templates are used to deploy to all three environments, all
+three deployments are done via Azure DevOps and have approval gates for the two
+higher environments.
 
 ### Requesting permissions to acess the infrastructure in higer environments
 
