@@ -95,16 +95,22 @@ production as follows:
 - Log in to this project on
   [Azure DevOps](https://dev.azure.com/dfe-ssp/S118-Teacher-Payments-Service).
 - Navigate to Pipelines > Pipelines.
-- Find the "Run" which corresponds to the merge commit created by merging the
+- Find the “Run” which corresponds to the merge commit created by merging the
   release pull request into `master`. This is the build which you want to
   release. You can filter by branch using the filter / funnel icon in the top
   right.
-- Note the build number of this build (for example, `20190717.2`).
+- Note the build number of this build (for example, `20210913.13`).
 - Navigate to Pipelines > Releases.
-- Click on the "Deploy" pipeline.
-- Click on the release matching the build number of the build you want to
-  release.
-- Click on "Deploy Production" and manually trigger the deployment.
+- A release will have been created automatically off the successful build from
+  master (above)
+- The Release will ONLY deploy to DEV automatically
+- To deploy to TEST click on the “Deploy Test” button that should have a blue
+  icon in it.
+- The Release will need to be approved to deploy to TEST.
+- To deploy to Production click on “Deploy Production” and manually trigger the
+  deployment by clicking on Deploy in the top menu then Deploy on the Deploy
+  Release screen
+- This deployment will also require approvals.
 
 ### 5. Database Migration
 
