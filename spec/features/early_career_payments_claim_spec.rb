@@ -3,7 +3,7 @@ require "rails_helper"
 RSpec.feature "Teacher Early-Career Payments claims" do
   scenario "Teacher makes claim for 'Early-Career Payments' claim", js: true do
     visit landing_page_path(EarlyCareerPayments.routing_name)
-    expect(page).to have_link(href: EarlyCareerPayments.feedback_url)
+    expect(page).to have_link(href: "mailto:#{EarlyCareerPayments.feedback_email}")
 
     # - Landing (start)
     expect(page).to have_text(I18n.t("early_career_payments.landing_page"))
@@ -56,7 +56,7 @@ RSpec.feature "Teacher Early-Career Payments claims" do
     # - What route into teaching did you take?
     expect(page).to have_text(I18n.t("early_career_payments.questions.qualification.heading"))
 
-    choose "Postgraduate ITT"
+    choose "Postgraduate initial teacher training (ITT)"
     click_on "Continue"
 
     expect(claim.eligibility.reload.qualification).to eq "postgraduate_itt"
@@ -103,8 +103,8 @@ RSpec.feature "Teacher Early-Career Payments claims" do
     click_on("Continue")
 
     # - You are eligible for an early career payment
-    expect(page).to have_text("You are eligible " + I18n.t("early_career_payments.claim_description"))
-    expect(page).to have_text("able to claim £7,500")
+    expect(page).to have_text("You are eligible")
+    expect(page).to have_text("for a £7,500 early-career payment")
 
     within(".govuk-list--bullet") do
       expect(page).to have_text("your National Insurance number")
@@ -332,7 +332,7 @@ RSpec.feature "Teacher Early-Career Payments claims" do
 
   scenario "Supply Teacher makes claim for 'Early Career Payments' with a contract to teach for entire term & employed directly by school" do
     visit landing_page_path(EarlyCareerPayments.routing_name)
-    expect(page).to have_link(href: EarlyCareerPayments.feedback_url)
+    expect(page).to have_link(href: "mailto:#{EarlyCareerPayments.feedback_email}")
 
     # - Landing (start)
     expect(page).to have_text(I18n.t("early_career_payments.landing_page"))
@@ -467,7 +467,7 @@ RSpec.feature "Teacher Early-Career Payments claims" do
 
   scenario "Teacher makes claim for 'Early Career Payments' without uplift school" do
     visit landing_page_path(EarlyCareerPayments.routing_name)
-    expect(page).to have_link(href: EarlyCareerPayments.feedback_url)
+    expect(page).to have_link(href: "mailto:#{EarlyCareerPayments.feedback_email}")
 
     # - Landing (start)
     expect(page).to have_text(I18n.t("early_career_payments.landing_page"))
@@ -519,7 +519,7 @@ RSpec.feature "Teacher Early-Career Payments claims" do
     # - What route into teaching did you take?
     expect(page).to have_text(I18n.t("early_career_payments.questions.qualification.heading"))
 
-    choose "Postgraduate ITT"
+    choose "Postgraduate initial teacher training (ITT)"
     click_on "Continue"
 
     expect(claim.eligibility.reload.qualification).to eq "postgraduate_itt"
@@ -565,8 +565,8 @@ RSpec.feature "Teacher Early-Career Payments claims" do
     click_on("Continue")
 
     # - You are eligible for an early career payment
-    expect(page).to have_text("You are eligible " + I18n.t("early_career_payments.claim_description"))
-    expect(page).to have_text("able to claim £5,000")
+    expect(page).to have_text("You are eligible")
+    expect(page).to have_text("for a £5,000 early-career payment")
 
     within(".govuk-list--bullet") do
       expect(page).to have_text("your National Insurance number")
@@ -941,8 +941,8 @@ RSpec.feature "Teacher Early-Career Payments claims" do
       click_on("Continue")
 
       # - You are eligible for an early career payment
-      expect(page).to have_text("You are eligible " + I18n.t("early_career_payments.claim_description"))
-      expect(page).to have_text("able to claim £7,500")
+      expect(page).to have_text("You are eligible")
+      expect(page).to have_text("for a £7,500 early-career payment")
 
       within(".govuk-list--bullet") do
         expect(page).to have_text("your National Insurance number")

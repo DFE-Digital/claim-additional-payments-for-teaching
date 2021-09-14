@@ -30,8 +30,8 @@ RSpec.describe EarlyCareerPayments::Eligibility, type: :model do
     context "when qualificaton is 'postgraduate_itt' or 'undergraduate_itt'" do
       eligibility = EarlyCareerPayments::Eligibility.new(qualification: "postgraduate_itt")
 
-      it "returns the qualification in the format '<qualification> ITT'" do
-        expect(eligibility.qualification_name).to eq "postgraduate ITT"
+      it "returns the qualification in the format '<qualification> initial teacher training (ITT)'" do
+        expect(eligibility.qualification_name).to eq "postgraduate initial teacher training (ITT)"
       end
     end
 
@@ -195,7 +195,7 @@ RSpec.describe EarlyCareerPayments::Eligibility, type: :model do
     end
 
     it "returns a symbol indicating the reason for ineligibility" do
-      expect(EarlyCareerPayments::Eligibility.new(nqt_in_academic_year_after_itt: false).ineligibility_reason).to eq :ineligible_nqt_in_academic_year_after_itt
+      expect(EarlyCareerPayments::Eligibility.new(nqt_in_academic_year_after_itt: false).ineligibility_reason).to eq :generic_ineligibility
       expect(EarlyCareerPayments::Eligibility.new(employed_as_supply_teacher: true, has_entire_term_contract: false).ineligibility_reason).to eql :generic_ineligibility
       expect(EarlyCareerPayments::Eligibility.new(employed_as_supply_teacher: true, employed_directly: false).ineligibility_reason).to eql :generic_ineligibility
       expect(EarlyCareerPayments::Eligibility.new(subject_to_formal_performance_action: true).ineligibility_reason).to eq :generic_ineligibility
@@ -629,6 +629,47 @@ RSpec.describe EarlyCareerPayments::Eligibility, type: :model do
       expect { eligibility.reset_dependent_answers }
         .to change { eligibility.employed_directly }
         .from(false).to(nil)
+    end
+  end
+
+  describe "#trainee_teacher_in_2021?" do
+    context "when EarlyCareerPayments policy AcademicYear - 2021" do
+      let(:eligibility) { build_stubbed(:early_career_payments_eligibility, nqt_in_academic_year_after_itt: false) }
+
+      before do
+        @ecp_policy_date = PolicyConfiguration.for(EarlyCareerPayments).current_academic_year
+        PolicyConfiguration.for(EarlyCareerPayments).update(current_academic_year: AcademicYear.new(2021))
+      end
+
+      after do
+        PolicyConfiguration.for(EarlyCareerPayments).update(current_academic_year: @ecp_policy_date)
+      end
+
+      it "returns true" do
+        expect(eligibility.trainee_teacher_in_2021?).to be true
+      end
+
+      it "returns false" do
+        eligibility.nqt_in_academic_year_after_itt = true
+        expect(eligibility.trainee_teacher_in_2021?).to be false
+      end
+    end
+
+    context "when EarlyCareerPayments policy AcademicYear - NOT 2021" do
+      before do
+        @ecp_policy_date = PolicyConfiguration.for(EarlyCareerPayments).current_academic_year
+        PolicyConfiguration.for(EarlyCareerPayments).update(current_academic_year: AcademicYear.new(2022))
+      end
+
+      after do
+        PolicyConfiguration.for(EarlyCareerPayments).update(current_academic_year: @ecp_policy_date)
+      end
+
+      it "returns false" do
+        eligibility = EarlyCareerPayments::Eligibility.new(nqt_in_academic_year_after_itt: false)
+
+        expect(eligibility.trainee_teacher_in_2021?).to be false
+      end
     end
   end
 

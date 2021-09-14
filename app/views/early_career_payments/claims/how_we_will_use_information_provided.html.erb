@@ -13,7 +13,7 @@
 
     <ul class="govuk-list govuk-list--bullet">
       <li>the school you are currently employed to teach at</li>
-      <li>the Department for Education's (DfE) database of qualified teachers</li>
+      <li>the Teaching Regulation Agency</li>
       <li>the Teacher Pension Scheme</li>
     </ul>
 
@@ -33,7 +33,7 @@
       on your behalf.
     </p>
 
-    <%= button_to "Continue", claim_path(current_policy_routing_name, next_slug), method: :get, class: "govuk-button" %>
+    <%= link_to "Continue", claim_path(current_policy_routing_name, next_slug), class: "govuk-button", role: :button, data: { module: "govuk-button"} %>
 
   </div>
 </div>

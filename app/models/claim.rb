@@ -181,7 +181,7 @@ class Claim < ApplicationRecord
   validates :national_insurance_number, on: [:"national-insurance-number", :"personal-details", :submit], presence: {message: "Enter a National Insurance number in the correct format"}
   validate :ni_number_is_correct_format
 
-  validates :has_student_loan, on: [:"student-loan", :submit], inclusion: {in: [true, false], message: "Select yes if you have a student loan"}
+  validates :has_student_loan, on: [:"student-loan", :submit], inclusion: {in: [true, false], message: "Select yes if you are currently paying off your student loan"}
   validates :student_loan_country, on: [:"student-loan-country"], presence: {message: "Select the country you lived in when you applied for your student loan"}
   validates :student_loan_courses, on: [:"student-loan-how-many-courses"], presence: {message: "Select the number of student loans you have taken out"}
   validates :student_loan_start_date, on: [:"student-loan-start-date"], presence: {message: ->(object, data) { I18n.t("validation_errors.student_loan_start_date.#{object.student_loan_courses}") }}
@@ -297,7 +297,7 @@ class Claim < ApplicationRecord
   end
 
   def student_loan_country_with_one_plan?
-    StudentLoan::PLAN_1_COUNTRIES.include?(student_loan_country)
+    StudentLoan::PLAN_1_COUNTRIES.include?(student_loan_country) || StudentLoan::PLAN_4_COUNTRIES.include?(student_loan_country)
   end
 
   # Returns true if the claim has a verified identity received from GOV.UK Verify.
@@ -370,8 +370,16 @@ class Claim < ApplicationRecord
     policy == EarlyCareerPayments
   end
 
+  def has_tslr_policy?
+    policy == StudentLoans
+  end
+
   def important_notes
     notes&.where(important: true)
+  end
+
+  def has_postgraduate_loan?
+    [postgraduate_masters_loan, postgraduate_doctoral_loan].any?
   end
 
   private
@@ -461,11 +469,7 @@ class Claim < ApplicationRecord
   end
 
   def determine_student_loan_plan
-    if has_student_loan?
-      StudentLoan.determine_plan(student_loan_country, student_loan_start_date)
-    else
-      Claim::NO_STUDENT_LOAN
-    end
+    StudentLoan.determine_plan(has_student_loan?, has_postgraduate_loan?, student_loan_country, student_loan_start_date)
   end
 
   def postcode_is_valid

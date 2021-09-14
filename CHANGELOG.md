@@ -6,6 +6,43 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+- Google Analytics
+  - Adds CSV view for claim stats
+- Early Career Payments
+  - Add Teacher Trainee mini journey (for 2021 ONLY)
+- DAC Accessibility Report fixes
+  - Expanded wording of ITT when first used in ECP service
+
+## [Release 095] - 2021-09-09
+
+- DAC Accessibility Report fixes
+  - Non-descriptive error message
+  - Illogical heading structure for start page
+  - Illogical heading structure for uplift link
+  - Incorrect autocomplete value
+  - Abbreviations
+- Support
+  - Fix local authority district code
+- Google Analytics
+  - Add scheduled job to deliver decisions CSV to GCS
+
+## [Release 094] - 2021-09-06
+
+- Site wide
+  - Update to Privacy Policy
+- All policies
+  - Update to allow claimant to provide feedback via email (replaces google
+    forms)
+- Early Career Payments
+  - Fix link to set reminder - I am a Trainee Teacher (NQT question)
+  - Remove '?' at end of some URL's (information provided / eligibility
+    confirmed)
+- Admin
+  - Student Loan Plan Types
+    - Update the CSV Payroll file to include new plan types
+
+## [Release 093] - 2021-09-02
+
 - Admin
   - Show admin claim identity confirmation task questions when claim verifier
     identity not fully matched
@@ -25,6 +62,14 @@ The format is based on [Keep a Changelog]
   - Update claim verifiers to handle multiple partial matches
   - Add identity claim verifier admin claim notes claimant vs DQT mismatch
     information
+  - Fix ECP admin claim qualifications task question to first claim year
+    eligibility (Mathematics 2018)
+  - Make admin claim verifier qualifications matching comparable to previous CSV
+    matching
+  - Update ECP admin claim verifier qualifications eligibility to use dates
+    based on qualification type
+  - Add new DQT fields to admin claim verifier qualifications notes
+  - Add qualification name to admin ECP claim qualification task presenter
 - All policies
   - Home Address selection
     - Add home address search screen to claim journey
@@ -32,7 +77,7 @@ The format is based on [Keep a Changelog]
       presented as radio buttons
     - Add links that allow claimant to manually enter their address information
       when on the two address auto-population screens
-  - Add posgraduate loans questions to M+P / TSLR journeys
+  - Add postgraduate loans questions to M+P / TSLR journeys
   - Hiding mobile/SMS related OTP screens
   - Update Northamptonshire local authority to reflect GIAS changes 1st April
     2021
@@ -52,13 +97,20 @@ The format is based on [Keep a Changelog]
     asked if the answer to 'Do you have postgraduate masters and/or doctoral'
     loans is 'Yes'
   - Remove HTML 5 validation messages on national insurance number
+  - Update references to DQT with Teaching Regulation Agency
+  - Student Loan Plan Types
+    - Add plan type 3 - Postgraduate Masters and/or Doctoral loan
+    - Add plan type 4 - Scotland
 - ECP policies
   - Adds set reminder flow to eligible now flow
-  - Fix no validation occuring on 'Personal Details' screens
+  - Fix no validation occurring on 'Personal Details' screens
   - Fix typo on 'How we will use the information you provide' page
   - Content change for 'Performance issues' screen
   - Content change for 'Application complete' page
-- DAC Accessiblity Report fixes
+- TSLR policies
+  - Move PG screens in the user journey (student loan amount)
+  - Update location of student loan amount question in check your answers
+- DAC Accessibility Report fixes
   - Incorrect aria value
   - Links opening in a new window
   - Incorrect ID in 'for' attribute for one time password
@@ -67,6 +119,7 @@ The format is based on [Keep a Changelog]
   - Non-descriptive links
 - Google Analytics
   - Add Google Tag Manager to admin and application
+  - Adds CSV view for claims decsions
 - Claims
   - Stop claim full name adding redundant spaces when middle name is an empty or
     blank string
@@ -838,7 +891,13 @@ The format is based on [Keep a Changelog]
 - First release for student loan repayments private beta
 
 [unreleased]:
-  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-092...HEAD
+  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-095...HEAD
+[release 095]:
+  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-094...release-095
+[release 094]:
+  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-093...release-094
+[release 093]:
+  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-092...release-093
 [release 092]:
   https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-091...release-092
 [release 091]:

@@ -61,7 +61,9 @@ RSpec.describe AutomatedChecks::DqtReportCsvToRecords do
           date_of_birth: Date.new(1980, 9, 10),
           national_insurance_number: "QQ123456C",
           degree_codes: ["G100", "F100", "R100"],
-          itt_subject_codes: ["E100"]
+          itt_subject_codes: ["E100"],
+          itt_date: nil,
+          qualification_name: nil
         },
         {
           claim_reference: "XX999999",
@@ -72,7 +74,9 @@ RSpec.describe AutomatedChecks::DqtReportCsvToRecords do
           date_of_birth: Date.new(1993, 3, 5),
           national_insurance_number: "QQ123456B",
           degree_codes: ["X100"],
-          itt_subject_codes: ["X100"]
+          itt_subject_codes: ["X100"],
+          itt_date: nil,
+          qualification_name: nil
         }
       ]
       expect(dqt_report_csv_to_records.transform).to eql(expected_records)
@@ -110,7 +114,9 @@ RSpec.describe AutomatedChecks::DqtReportCsvToRecords do
           date_of_birth: Date.new(1988, 3, 24),
           national_insurance_number: nil,
           degree_codes: [],
-          itt_subject_codes: []
+          itt_subject_codes: [],
+          itt_date: nil,
+          qualification_name: nil
         }
       ]
       expect(dqt_report_csv_to_records.transform).to eql(expected_records)

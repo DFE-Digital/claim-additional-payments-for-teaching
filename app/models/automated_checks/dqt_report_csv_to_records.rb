@@ -18,7 +18,9 @@ module AutomatedChecks
           date_of_birth: parse_date(grouped_rows.first.fetch("birthdate")),
           national_insurance_number: grouped_rows.first.fetch("dfeta ninumber"),
           degree_codes: collate_fields_from_rows(%w[HESubject1Value HESubject2Value HESubject3Value], grouped_rows),
-          itt_subject_codes: collate_fields_from_rows(%w[ITTSub1Value ITTSub2Value ITTSub3Value], grouped_rows)
+          itt_subject_codes: collate_fields_from_rows(%w[ITTSub1Value ITTSub2Value ITTSub3Value], grouped_rows),
+          itt_date: nil,
+          qualification_name: nil
         }
       end
     end

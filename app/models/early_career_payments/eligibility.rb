@@ -170,7 +170,7 @@ module EarlyCareerPayments
     has_one :claim, as: :eligibility, inverse_of: :eligibility
     belongs_to :current_school, optional: true, class_name: "School"
 
-    validates :nqt_in_academic_year_after_itt, on: [:"nqt-in-academic-year-after-itt", :submit], inclusion: {in: [true, false], message: "Select yes if you did your NQT in the academic year after your ITT"}
+    validates :nqt_in_academic_year_after_itt, on: [:"nqt-in-academic-year-after-itt", :submit], inclusion: {in: [true, false], message: "Select yes if you have started your first year as a newly qualified teacher"}
     validates :current_school, on: [:"current-school", :submit], presence: {message: "Select a school from the list or search again for a different school"}
     validates :employed_as_supply_teacher, on: [:"supply-teacher", :submit], inclusion: {in: [true, false], message: "Select yes if you are currently employed as a supply teacher"}
     validates :has_entire_term_contract, on: [:"entire-term-contract", :submit], inclusion: {in: [true, false], message: "Select yes if you have a contract to teach at the same school for one term or longer"}, if: :employed_as_supply_teacher?
@@ -182,14 +182,20 @@ module EarlyCareerPayments
     validates :teaching_subject_now, on: [:"teaching-subject-now", :submit], inclusion: {in: [true, false], message: ->(object, data) { I18n.t("activerecord.errors.models.early_career_payments_eligibilities.attributes.teaching_subject_now.blank.subject.#{object.eligible_itt_subject}") }}
     validates :itt_academic_year, on: [:"itt-year", :submit], presence: {message: ->(object, data) { I18n.t("activerecord.errors.models.early_career_payments_eligibilities.attributes.itt_academic_year.blank.qualification.#{object.qualification}") }}
 
+    before_save :set_qualification_if_trainee_teacher, if: :nqt_in_academic_year_after_itt_changed?
+
     delegate :name, to: :current_school, prefix: true, allow_nil: true
 
     def policy
       EarlyCareerPayments
     end
 
+    def trainee_teacher_in_2021?
+      nqt_in_academic_year_after_itt == false && policy.configuration.current_academic_year == "2021/2022"
+    end
+
     def qualification_name
-      return qualification.gsub("_itt", " ITT") if qualification.split("_").last == "itt"
+      return qualification.gsub("_itt", " initial teacher training (ITT)") if qualification.split("_").last == "itt"
 
       qualification_attained = qualification.humanize.downcase
 
@@ -278,8 +284,7 @@ module EarlyCareerPayments
         :generic_ineligibility,
         :ineligible_current_school,
         :itt_subject_none_of_the_above,
-        :not_teaching_now_in_eligible_itt_subject,
-        :ineligible_nqt_in_academic_year_after_itt
+        :not_teaching_now_in_eligible_itt_subject
       ].find { |eligibility_check| send("#{eligibility_check}?") }
     end
 
@@ -396,7 +401,7 @@ module EarlyCareerPayments
     end
 
     def ineligible_nqt_in_academic_year_after_itt?
-      nqt_in_academic_year_after_itt == false
+      nqt_in_academic_year_after_itt == false && policy.configuration.current_academic_year != "2021/2022"
     end
 
     def ineligible_current_school?
@@ -421,7 +426,8 @@ module EarlyCareerPayments
     end
 
     def generic_ineligibility?
-      no_entire_term_contract? ||
+      ineligible_nqt_in_academic_year_after_itt? ||
+        no_entire_term_contract? ||
         not_employed_directly? ||
         poor_performance? ||
         ineligible_cohort?
@@ -429,6 +435,12 @@ module EarlyCareerPayments
 
     def no_student_loan?
       claim.no_student_loan?
+    end
+
+    def set_qualification_if_trainee_teacher
+      return unless trainee_teacher_in_2021?
+
+      self.qualification = :postgraduate_itt
     end
   end
 end

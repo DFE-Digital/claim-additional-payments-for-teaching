@@ -79,7 +79,9 @@ RSpec.feature "Admin claim tasks update with DQT API" do
               "ittSubject1Code": "#{data.dig(:itt_subject_codes, 0)}",
               "ittSubject2Code": "#{data.dig(:itt_subject_codes, 1)}",
               "ittSubject3Code": "#{data.dig(:itt_subject_codes, 2)}",
-              "activeAlert": #{data[:active_alert] || false}
+              "activeAlert": #{data[:active_alert] || false},
+              "qualificationName": "#{data[:qualification_name] || "BA"}",
+              "ittStartDate": "#{data[:itt_start_date] || Date.today}"
             }
           ],
           "message": null
@@ -666,7 +668,7 @@ RSpec.feature "Admin claim tasks update with DQT API" do
 
             scenario "shows note not eligible by automated check" do
               expect(notes).to include(
-                have_text("Not eligible").and(
+                have_text("Ineligible").and(
                   have_text("by an automated check")
                 )
               )
@@ -707,7 +709,7 @@ RSpec.feature "Admin claim tasks update with DQT API" do
 
             scenario "shows note not eligible by automated check" do
               expect(notes).to include(
-                have_text("Not eligible").and(
+                have_text("Ineligible").and(
                   have_text("by an automated check")
                 )
               )
@@ -787,7 +789,7 @@ RSpec.feature "Admin claim tasks update with DQT API" do
 
           scenario "shows not eligible by an automated check" do
             expect(notes).to include(
-              have_text("Not eligible").and(
+              have_text("Ineligible").and(
                 have_text("by an automated check")
               )
             )
@@ -1348,7 +1350,7 @@ RSpec.feature "Admin claim tasks update with DQT API" do
             before { visit admin_claim_tasks_path(claim) }
 
             scenario "shows qualifications incomplete" do
-              expect(task("Qualifications")).to have_text("Partial match")
+              expect(task("Qualifications")).to have_text("No match")
             end
           end
 
@@ -1363,12 +1365,10 @@ RSpec.feature "Admin claim tasks update with DQT API" do
           context "admin claim notes view" do
             before { visit admin_claim_notes_path(claim) }
 
-            scenario "shows QTS award date not eligible by an automated check" do
+            scenario "shows not eligible by an automated check" do
               expect(notes).to include(
-                have_content(
-                  "QTS award date not eligible"
-                ).and(
-                  have_content("by an automated check")
+                have_text("Ineligible").and(
+                  have_text("by an automated check")
                 )
               )
             end
@@ -1391,7 +1391,7 @@ RSpec.feature "Admin claim tasks update with DQT API" do
             before { visit admin_claim_tasks_path(claim) }
 
             scenario "shows qualifications incomplete" do
-              expect(task("Qualifications")).to have_text("Partial match")
+              expect(task("Qualifications")).to have_text("No match")
             end
           end
 
@@ -1406,12 +1406,10 @@ RSpec.feature "Admin claim tasks update with DQT API" do
           context "admin claim notes view" do
             before { visit admin_claim_notes_path(claim) }
 
-            scenario "shows ITT subject codes not eligible by an automated check" do
+            scenario "shows not eligible by an automated check" do
               expect(notes).to include(
-                have_content(
-                  "ITT subject codes not eligible"
-                ).and(
-                  have_content("by an automated check")
+                have_text("Ineligible").and(
+                  have_text("by an automated check")
                 )
               )
             end
@@ -1489,7 +1487,7 @@ RSpec.feature "Admin claim tasks update with DQT API" do
 
           scenario "shows not eligible by an automated check" do
             expect(notes).to include(
-              have_text("Not eligible").and(
+              have_text("Ineligible").and(
                 have_text("by an automated check")
               )
             )
@@ -2148,7 +2146,7 @@ RSpec.feature "Admin claim tasks update with DQT API" do
 
           scenario "shows not eligible by an automated check" do
             expect(notes).to include(
-              have_text("Not eligible").and(
+              have_text("Ineligible").and(
                 have_text("by an automated check")
               )
             )

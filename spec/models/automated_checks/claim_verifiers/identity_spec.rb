@@ -28,7 +28,9 @@ module AutomatedChecks
                   "ittSubject1Code": "#{data.dig(:itt_subject_codes, 0)}",
                   "ittSubject2Code": "#{data.dig(:itt_subject_codes, 1)}",
                   "ittSubject3Code": "#{data.dig(:itt_subject_codes, 2)}",
-                  "activeAlert": #{data[:active_alert] || false}
+                  "activeAlert": #{data[:active_alert] || false},
+                  "qualificationName": "#{data[:qualification_name] || "BA"}",
+                  "ittStartDate": "#{data[:itt_start_date] || Date.today}"
                 }
               ],
               "message": null

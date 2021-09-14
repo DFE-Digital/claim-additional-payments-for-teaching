@@ -40,6 +40,10 @@ module EarlyCareerPayments
     "https://docs.google.com/forms/TO-BE-REPLACED-by-response-to-ECP-509/viewform"
   end
 
+  def feedback_email
+    "earlycareerteacherpayments@digital.education.gov.uk"
+  end
+
   def short_name
     I18n.t("early_career_payments.policy_short_name")
   end
@@ -54,5 +58,9 @@ module EarlyCareerPayments
 
   def student_loan_balance_url
     "https://www.gov.uk/sign-in-to-manage-your-student-loan-balance"
+  end
+
+  def configuration
+    PolicyConfiguration.for(self)
   end
 end

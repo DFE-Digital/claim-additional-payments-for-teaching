@@ -15,6 +15,11 @@ module Payroll
     HAS_STUDENT_LOAN = "T"
     STUDENT_LOAN_PLAN_1 = "1"
     STUDENT_LOAN_PLAN_2 = "2"
+    STUDENT_LOAN_PLAN_4 = "4"
+    STUDENT_LOAN_PLAN_1_AND_3 = "1 and 3"
+    STUDENT_LOAN_PLAN_2_AND_3 = "2 and 3"
+    STUDENT_LOAN_PLAN_4_AND_3 = "4 and 3"
+    STUDENT_LOAN_PLAN_3 = "3"
 
     def to_s
       CSV.generate_line(data)
@@ -120,6 +125,16 @@ module Payroll
         STUDENT_LOAN_PLAN_1
       elsif model.student_loan_plan == "plan_2"
         STUDENT_LOAN_PLAN_2
+      elsif model.student_loan_plan == "plan_4"
+        STUDENT_LOAN_PLAN_4
+      elsif model.student_loan_plan == "plan_1_and_3" || model.student_loan_plan == "plan_1_and_2_and_3"
+        STUDENT_LOAN_PLAN_1_AND_3
+      elsif model.student_loan_plan == "plan_2_and_3"
+        STUDENT_LOAN_PLAN_2_AND_3
+      elsif model.student_loan_plan == "plan_4_and_3"
+        STUDENT_LOAN_PLAN_4_AND_3
+      elsif model.student_loan_plan == "plan_3"
+        STUDENT_LOAN_PLAN_3
       end
     end
 

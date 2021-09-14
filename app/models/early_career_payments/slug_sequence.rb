@@ -25,6 +25,7 @@ module EarlyCareerPayments
       "check-your-answers-part-one",
       "eligibility-confirmed",
       "eligible-later",
+      "future-eligibility",
       # personal details phase of claim journey
       "how-we-will-use-information-provided",
       "personal-details",
@@ -65,7 +66,7 @@ module EarlyCareerPayments
         sequence.delete("employed-directly") unless claim.eligibility.employed_as_supply_teacher?
         sequence.delete("eligibility-confirmed") if claim.eligibility.ineligible? || claim.eligibility.eligible_later?
         sequence.delete("eligible-later") unless claim.eligibility.eligible_later?
-        sequence.delete("ineligible") unless claim.eligibility.ineligible?
+        sequence.delete("ineligible") unless claim.eligibility.ineligible? || claim.eligibility.trainee_teacher_in_2021?
         sequence.delete("personal-bank-account") if claim.bank_or_building_society == "building_society"
         sequence.delete("building-society-account") if claim.bank_or_building_society == "personal_bank_account"
         sequence.delete("mobile-number") if claim.provide_mobile_number == false
@@ -74,6 +75,8 @@ module EarlyCareerPayments
         sequence.delete("masters-doctoral-loan") if claim.has_student_loan?
         remove_masters_doctoral_loan_slugs(sequence) if claim.has_masters_doctoral_loan == false
         remove_student_loan_country_slugs(sequence)
+        trainee_teacher_slugs(sequence) if claim.eligibility.trainee_teacher_in_2021?
+        sequence.delete("future-eligibility") unless claim.eligibility.trainee_teacher_in_2021?
       end
     end
 
@@ -110,6 +113,18 @@ module EarlyCareerPayments
       ].include?(claim.student_loan_country)
         remove_student_loan_slugs(sequence, slugs)
       end
+    end
+
+    def trainee_teacher_slugs(sequence)
+      trainee_slugs = %w[
+        nqt-in-academic-year-after-itt
+        eligible-itt-subject
+        itt-year
+        future-eligibility
+        ineligible
+      ]
+
+      [sequence.dup - trainee_slugs].flatten.each { |slug| sequence.delete(slug) }
     end
   end
 end

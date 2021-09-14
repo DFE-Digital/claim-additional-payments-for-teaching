@@ -14,6 +14,7 @@ penistone_grammar_school:
   county: South Yorkshire
   postcode: S36 7BX
   phone_number: "01226762114"
+  establishment_number: 4027
 
 ## Closed schools
 
@@ -31,12 +32,13 @@ the_samuel_lister_academy:
   county: West Yorkshire
   postcode: BD16 1TZ
   phone_number: "01274567281"
+  establishment_number: 4006
 
 # Student loans ineligible as claim school, Maths and Physics Ineligible
 
 hampstead_school:
   name: Hampstead School
-  urn: 4567
+  urn: 100052
   phase: secondary
   school_type_group: la_maintained
   school_type: community_school
@@ -47,6 +49,7 @@ hampstead_school:
   town: London
   postcode: NW2 3RT
   phone_number: "02077948133"
+  establishment_number: 4275
 
 # Student loans ineligible as current school
 
@@ -62,3 +65,4 @@ bradford_grammar_school:
   town: Bradford
   postcode: BD9 4JP
   phone_number: "01274542492"
+  establishment_number: 6103

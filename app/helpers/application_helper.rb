@@ -35,6 +35,10 @@ module ApplicationHelper
     current_policy.feedback_url
   end
 
+  def feedback_email
+    current_policy.feedback_email
+  end
+
   def start_page_url
     current_policy.start_page_url
   end

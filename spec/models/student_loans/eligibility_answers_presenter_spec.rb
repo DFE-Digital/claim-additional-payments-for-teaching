@@ -10,8 +10,7 @@ RSpec.describe StudentLoans::EligibilityAnswersPresenter, type: :model do
       claim_school: school,
       current_school: school,
       had_leadership_position: true,
-      mostly_performed_leadership_duties: false,
-      student_loan_repayment_amount: 1987.65
+      mostly_performed_leadership_duties: false
     }.merge(subject_attributes)
   end
   let(:subject_attributes) { {chemistry_taught: true, physics_taught: true} }
@@ -27,8 +26,7 @@ RSpec.describe StudentLoans::EligibilityAnswersPresenter, type: :model do
       [I18n.t("questions.current_school"), school.name, "still-teaching"],
       [subjects_taught_question(school_name: school.name), "Chemistry and Physics", "subjects-taught"],
       [leadership_position_question, "Yes", "leadership-position"],
-      [mostly_performed_leadership_duties_question, "No", "mostly-performed-leadership-duties"],
-      [student_loan_amount_question, "£1,987.65", "student-loan-amount"]
+      [mostly_performed_leadership_duties_question, "No", "mostly-performed-leadership-duties"]
     ]
 
     expect(presenter.answers).to eq expected_answers

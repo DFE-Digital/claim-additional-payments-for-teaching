@@ -102,6 +102,22 @@ To enable Google Analytics set the following environment variable:
 GOOGLE_ANALYTICS_ID=<UA PROPERTY>
 ```
 
+### Using Google Cloud Storage
+
+GCS is used for uploading and storing files. This requires service account
+credentials. Either retrieve a test one from a developer or:
+
+1. Create a [Google Cloud Account](https://console.cloud.google.com/freetrial)
+   (if you don't have one)
+2. Create a [new project](https://console.cloud.google.com/projectcreate)
+3. Create a [new bucket](https://console.cloud.google.com/storage/) and give it
+   a unique name for you. Add this name to your .env file as `STORAGE_BUCKET`
+4. Create a
+   [service account](https://cloud.google.com/docs/authentication/getting-started)
+   and save the json file to the root of this project as
+   `google_cloud_storage.json`
+5. Add an ENV to point to this `STORAGE_CREDENTIALS=./google_cloud_storage.json`
+
 ### Running `CronJob`s
 
 To schedule recurring jobs, run the following:
@@ -327,27 +343,3 @@ the user IP address as part of the payload data sent to Application Insights in
 [`lib/application_insights`](lib/application_insights). See
 [`config/initializers/application_insights.rb`](config/initializers/application_insights.rb)
 for how to mixin this code to your Rails application.
-
-### Azure ARM templates
-
-There are some templates that we've abstracted out of our resource group
-templates, which are likely useful for other projects. Find them in
-[`azure/templates`](azure/templates). You can copy them, or include them in your
-template directly using a `Microsoft.Resources/deployments` resource. For
-example:
-
-```json
-{
-  "type": "Microsoft.Resources/deployments",
-  "apiVersion": "2017-05-10",
-  "name": "DEPLOYMENT_NAME",
-  "properties": {
-    "mode": "Incremental",
-    "templateLink": {
-      "uri": "https://raw.githubusercontent.com/DFE-Digital/dfe-teachers-payment-service/COMMIT_SHA_OR_BRANCH_NAME/azure/templates/NAME.json",
-      "contentVersion": "1.0.0.0"
-    },
-    "parameters": {}
-  }
-}
-```

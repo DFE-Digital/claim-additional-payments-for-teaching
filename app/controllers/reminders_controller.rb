@@ -76,6 +76,7 @@ class RemindersController < BasePublicController
 
   def build_reminder_from_claim
     return unless current_claim
+    return if current_claim.eligibility.nqt_in_academic_year_after_itt == false && current_claim.has_ecp_policy?
 
     Reminder.new(
       full_name: current_claim.full_name,

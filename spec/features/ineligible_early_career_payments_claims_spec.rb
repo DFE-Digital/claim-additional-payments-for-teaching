@@ -1,21 +1,32 @@
 require "rails_helper"
 
 RSpec.feature "Ineligible Teacher Early-Career Payments claims" do
-  scenario "NQT not in Academic Year after ITT" do
-    visit landing_page_path(EarlyCareerPayments.routing_name)
-    expect(page).to have_link(href: EarlyCareerPayments.feedback_url)
+  context "when PolicyConfiguration current_academic_year is NOT 2021" do
+    before do
+      @ecp_policy_date = PolicyConfiguration.for(EarlyCareerPayments).current_academic_year
+      PolicyConfiguration.for(EarlyCareerPayments).update(current_academic_year: AcademicYear.new(2022))
+    end
 
-    # - Landing (start)
-    expect(page).to have_text(I18n.t("early_career_payments.landing_page"))
-    click_on "Start Now"
+    after do
+      PolicyConfiguration.for(EarlyCareerPayments).update(current_academic_year: @ecp_policy_date)
+    end
 
-    # - NQT in Academic Year after ITT
-    expect(page).to have_text(I18n.t("early_career_payments.questions.nqt_in_academic_year_after_itt"))
+    scenario "NQT not in Academic Year after ITT" do
+      visit landing_page_path(EarlyCareerPayments.routing_name)
+      expect(page).to have_link(href: "mailto:#{EarlyCareerPayments.feedback_email}")
 
-    choose "No"
-    click_on "Continue"
+      # - Landing (start)
+      expect(page).to have_text(I18n.t("early_career_payments.landing_page"))
+      click_on "Start Now"
 
-    expect(page).to have_text(I18n.t("early_career_payments.ineligible.reason.nqt_after_itt"))
+      # - NQT in Academic Year after ITT
+      expect(page).to have_text(I18n.t("early_career_payments.questions.nqt_in_academic_year_after_itt"))
+
+      choose "No"
+      click_on "Continue"
+
+      expect(page).to have_text(I18n.t("early_career_payments.ineligible.reason.generic"))
+    end
   end
 
   scenario "When the school selected is ineligible" do
@@ -190,7 +201,7 @@ RSpec.feature "Ineligible Teacher Early-Career Payments claims" do
     # - What route into teaching did you take?
     expect(page).to have_text(I18n.t("early_career_payments.questions.qualification.heading"))
 
-    choose "Undergraduate ITT"
+    choose "Undergraduate initial teacher training (ITT)"
     click_on "Continue"
 
     expect(claim.eligibility.reload.qualification).to eq "undergraduate_itt"
@@ -234,7 +245,7 @@ RSpec.feature "Ineligible Teacher Early-Career Payments claims" do
     # - What route into teaching did you take?
     expect(page).to have_text(I18n.t("early_career_payments.questions.qualification.heading"))
 
-    choose "Undergraduate ITT"
+    choose "Undergraduate initial teacher training (ITT)"
     click_on "Continue"
 
     expect(claim.eligibility.reload.qualification).to eq "undergraduate_itt"
@@ -286,7 +297,7 @@ RSpec.feature "Ineligible Teacher Early-Career Payments claims" do
     # - What route into teaching did you take?
     expect(page).to have_text(I18n.t("early_career_payments.questions.qualification.heading"))
 
-    choose "Undergraduate ITT"
+    choose "Undergraduate initial teacher training (ITT)"
     click_on "Continue"
 
     expect(claim.eligibility.reload.qualification).to eq "undergraduate_itt"

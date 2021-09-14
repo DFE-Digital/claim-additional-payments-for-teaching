@@ -1,6 +1,12 @@
 module EarlyCareerPayments
   class DqtRecord
-    attr_reader :qts_award_date, :itt_subject_codes, :degree_codes
+    attr_reader(
+      :qts_award_date,
+      :itt_subject_codes,
+      :itt_start_date,
+      :degree_codes,
+      :qualification_name
+    )
 
     ELIGIBLE_JAC_CODES = {
       chemistry: %w[
@@ -71,17 +77,73 @@ module EarlyCareerPayments
       ]
     }.freeze
 
+    GRADUATE_TYPE = {
+      post: [
+        nil,
+        "Degree",
+        "Degree Equivalent (this will include foreign qualifications)",
+        "EEA",
+        "Flexible - PGCE",
+        "Flexible - ProfGCE",
+        "Graduate Certificate in Education",
+        "Graduate Diploma",
+        "GTP",
+        "Masters, not by research",
+        "Northern Ireland",
+        "OTT",
+        "OTT Recognition",
+        "Postgraduate Certificate in Education",
+        "Postgraduate Certificate in Education (Flexible)",
+        "Postgraduate Diploma in Education",
+        "Professional Graduate Certificate in Education",
+        "Professional Graduate Diploma in Education",
+        "QTS Assessment only",
+        "QTS Award only",
+        "Scotland",
+        "Teach First",
+        "Teach First (TNP)",
+        "Teachers Certificate",
+        "Unknown"
+      ],
+      under: [
+        "BA",
+        "BA (Hons)",
+        "BA (Hons) Combined Studies/Education of the Deaf",
+        "BA/Education (QTS)",
+        "BEd",
+        "BEd (Hons)",
+        "BSc",
+        "BSc (Hons)",
+        "BSc (Hons) with Intercalated PGCE",
+        "BSc/Education (QTS)",
+        "Undergraduate Master of Teaching"
+      ]
+    }.freeze
+
     def initialize(record, claim)
       @claim = claim
       @qts_award_date = record.fetch(:qts_date)
       @itt_subject_codes = record.fetch(:itt_subject_codes)
+      @itt_start_date = record.fetch(:itt_date, nil)
       @degree_codes = record.fetch(:degree_codes)
+      @qualification_name = record.fetch(:qualification_name, nil)
     end
 
     def eligible?
       award_amount = Eligibility::AWARD_AMOUNTS.find do |award_amount|
+        graduate_type = GRADUATE_TYPE.find { |key, values|
+          values.include?(qualification_name)
+        }&.first
+
+        date =
+          if graduate_type == :under
+            qts_award_date
+          elsif graduate_type == :post
+            itt_start_date
+          end
+
         itt_subject_group == award_amount.itt_subject &&
-          AcademicYear.for(qts_award_date) == award_amount.itt_academic_year &&
+          AcademicYear.for(date) == award_amount.itt_academic_year &&
           claim.academic_year == award_amount.claim_academic_year
       end
 

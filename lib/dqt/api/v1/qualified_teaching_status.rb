@@ -32,7 +32,9 @@ module Dqt
               first_item[:ittSubject2Code],
               first_item[:ittSubject3Code]
             ],
-            active_alert: first_item[:activeAlert]
+            active_alert: first_item[:activeAlert],
+            qualification_name: first_item[:qualificationName] == "NULL" ? nil : first_item[:qualificationName],
+            itt_date: DateTime.parse(first_item[:ittStartDate])
           }
         end
 
