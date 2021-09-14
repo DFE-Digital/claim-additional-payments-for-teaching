@@ -103,6 +103,8 @@ RUN curl https://artifacts.elastic.co/downloads/beats/filebeat/filebeat-${FILEBE
   mv filebeat-${FILEBEAT_VERSION}-linux-x86_64 /filebeat && \
   rm -f /filebeat/filebeat.yml
 
+RUN chmod -R 777 /filebeat
+
 USER appuser
 
 # Copy our local filebeat config to the installation
