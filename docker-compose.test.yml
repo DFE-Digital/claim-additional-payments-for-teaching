@@ -7,7 +7,7 @@ services:
         - dfedigital/teacher-payments-service:cache-test-dependencies
       target: dependencies
       args:
-        RAILS_ENV: development
+        RAILS_ENV: test
     image: local/dfe-teachers-payment-service:test-dependencies
 
   test:
@@ -18,7 +18,7 @@ services:
         - dfedigital/teacher-payments-service:cache-test
       target: test
       args:
-        RAILS_ENV: development
+        RAILS_ENV: test
     image: local/dfe-teachers-payment-service:test
     entrypoint: bundle exec rake db:prepare default
     depends_on:
