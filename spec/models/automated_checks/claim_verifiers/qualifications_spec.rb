@@ -143,7 +143,7 @@ module AutomatedChecks
             let(:data) do
               {
                 qts_award_date: Date.new(
-                  MathsAndPhysics.first_eligible_qts_award_year.start_year - 1.year,
+                  MathsAndPhysics.first_eligible_qts_award_year.start_year - 1,
                   9,
                   1
                 ),
@@ -199,7 +199,7 @@ module AutomatedChecks
                         ITT subject codes:  ["100400", "", ""]
                         Degree codes:       []
                         ITT start date:     2015-09-01T00:00:00+00:00
-                        QTS award date:     -31554937-09-01T00:00:00+00:00
+                        QTS award date:     2014-09-01T00:00:00+00:00
                         Qualification name: BA
                       </pre>
                     HTML
@@ -352,7 +352,7 @@ module AutomatedChecks
           let(:data) do
             {
               qts_award_date: Date.new(
-                MathsAndPhysics.first_eligible_qts_award_year.start_year - 1.year,
+                MathsAndPhysics.first_eligible_qts_award_year.start_year - 1,
                 9,
                 1
               ),
@@ -408,7 +408,7 @@ module AutomatedChecks
                       ITT subject codes:  ["NoCode", "", ""]
                       Degree codes:       []
                       ITT start date:     2015-09-01T00:00:00+00:00
-                      QTS award date:     -31554937-09-01T00:00:00+00:00
+                      QTS award date:     2014-09-01T00:00:00+00:00
                       Qualification name: BA
                     </pre>
                   HTML
