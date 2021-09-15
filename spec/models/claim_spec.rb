@@ -35,24 +35,10 @@ RSpec.describe Claim, type: :model do
     end
   end
 
-  context "that has a first name" do
-    it "validates the length of name is 100 characters or less" do
-      expect(build(:claim, first_name: "Name " * 50)).not_to be_valid
-      expect(build(:claim, first_name: "John")).to be_valid
-    end
-  end
-
   context "that has a middle name" do
     it "validates the length of middle name is 100 characters or less" do
       expect(build(:claim, middle_name: "Name " * 50)).not_to be_valid
       expect(build(:claim, middle_name: "Arnold")).to be_valid
-    end
-  end
-
-  context "that has a surname" do
-    it "validates the length of surname is 100 characters or less" do
-      expect(build(:claim, surname: "Name " * 50)).not_to be_valid
-      expect(build(:claim, surname: "Kimble")).to be_valid
     end
   end
 
@@ -192,17 +178,7 @@ RSpec.describe Claim, type: :model do
     end
   end
 
-  context "when saving in the name validation context" do
-    it "validates the presence of the first_name and surname attributes" do
-      expect(build(:claim)).not_to be_valid(:name)
-      expect(build(:claim, first_name: "Cheryl")).not_to be_valid(:name)
-      expect(build(:claim, surname: "Lynn")).not_to be_valid(:name)
-
-      expect(build(:claim, first_name: "Cheryl", surname: "Lynn")).to be_valid(:name)
-    end
-  end
-
-  context "when validating in the 'personal-details' context with an early-career payments policy" do
+  context "when validating in the 'personal-details' context" do
     describe "with first_name" do
       it "is not valid without a value between 2 and 30 characters" do
         expect(build(:claim, policy: EarlyCareerPayments)).not_to be_valid(:"personal-details")
@@ -237,28 +213,39 @@ RSpec.describe Claim, type: :model do
     end
   end
 
-  context "when saving in the “date-of-birth” validation context" do
-    it "validates the presence of date_of_birth" do
-      expect(build(:claim)).not_to be_valid(:"date-of-birth")
-      expect(build(:claim, date_of_birth: Date.new(2000, 2, 1))).to be_valid(:"date-of-birth")
-    end
-  end
-
   context "with early-career payments policy validates 'date_of_birth' in the 'personal-details' context" do
     it "is on or after 1st Jan 1900" do
-      expect(build(:claim, policy: EarlyCareerPayments, date_of_birth: Date.new(1899, 12, 31))).not_to be_valid(:"personal-details")
+      expect(build(:claim, first_name: "Martha", surname: "Stevens", national_insurance_number: "AB755003B", policy: EarlyCareerPayments, date_of_birth: Date.new(1899, 12, 31))).not_to be_valid(:"personal-details")
     end
 
     it "must be in the past" do
-      expect(build(:claim, policy: EarlyCareerPayments, date_of_birth: Date.today + 5)).not_to be_valid(:"personal-details")
+      expect(build(:claim, first_name: "Matthew", surname: "Cook", national_insurance_number: "EF755003B", policy: EarlyCareerPayments, date_of_birth: Date.today + 5)).not_to be_valid(:"personal-details")
     end
 
     it "must include day/month/year" do
-      expect { build(:claim, policy: EarlyCareerPayments, date_of_birth: Date.new(2021, 31)) }.to raise_error(ArgumentError)
+      expect { build(:claim, first_name: "Wayne", surname: "Lee", national_insurance_number: "TX551003B", policy: EarlyCareerPayments, date_of_birth: Date.new(2021, 31)) }.to raise_error(ArgumentError)
     end
 
     it "must be in the right format" do
-      expect { build(:claim, policy: EarlyCareerPayments, date_of_birth: Date.new(1998, 14, 12)) }.to raise_error("invalid date")
+      expect { build(:claim, first_name: "Hannah", surname: "Clay-Simmones", national_insurance_number: "TX661003C", policy: EarlyCareerPayments, date_of_birth: Date.new(1998, 14, 12)) }.to raise_error("invalid date")
+    end
+  end
+
+  context "with student loans policy validates 'date_of_birth' in the 'personal-details' context" do
+    it "is on or after 1st Jan 1900" do
+      expect(build(:claim, first_name: "Molly", surname: "Ringwald", national_insurance_number: "EF755003B", policy: StudentLoans, date_of_birth: Date.new(1899, 12, 31))).not_to be_valid(:"personal-details")
+    end
+
+    it "must be in the past" do
+      expect(build(:claim, first_name: "Matt", surname: "Reed", national_insurance_number: "TX755003B", policy: StudentLoans, date_of_birth: Date.today + 5)).not_to be_valid(:"personal-details")
+    end
+
+    it "must include day/month/year" do
+      expect { build(:claim, first_name: "Grace", surname: "Hollywell", national_insurance_number: "TX668003B", policy: StudentLoans, date_of_birth: Date.new(2021, 31)) }.to raise_error(ArgumentError)
+    end
+
+    it "must be in the right format" do
+      expect { build(:claim, first_name: "Lara", surname: "Royce-Simmones", national_insurance_number: "TX113203D", policy: StudentLoans, date_of_birth: Date.new(1994, 14, 10)) }.to raise_error("invalid date")
     end
   end
 
@@ -269,10 +256,14 @@ RSpec.describe Claim, type: :model do
     end
   end
 
-  context "when saving in the “national-insurance-number” validation context" do
+  context "when saving in the “personal-details” validation context" do
     it "validates the presence of national_insurance_number" do
-      expect(build(:claim)).not_to be_valid(:"national-insurance-number")
-      expect(build(:claim, national_insurance_number: "QQ123456C")).to be_valid(:"national-insurance-number")
+      expect(build(:claim)).not_to be_valid(:"personal-details")
+      expect(build(:claim,
+        national_insurance_number: "QQ123456C",
+        first_name: "Walter",
+        surname: "Somersmith",
+        date_of_birth: Date.new(1987, 2, 2))).to be_valid(:"personal-details")
     end
   end
 

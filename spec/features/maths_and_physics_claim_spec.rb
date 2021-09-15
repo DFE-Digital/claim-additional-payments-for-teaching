@@ -56,15 +56,28 @@ RSpec.feature "Maths & Physics claims" do
       expect(page).to have_text("How we will use the information you provide")
       click_on "Continue"
 
+      # - Personal details
+      expect(page).to have_text(I18n.t("questions.personal_details"))
       expect(page).to have_text(I18n.t("questions.name"))
-      fill_in "First name", with: "Sarah"
-      fill_in "Middle names", with: "Jennifer"
-      fill_in "Last name", with: "Winstanley"
+
+      fill_in "claim_first_name", with: "Russell"
+      fill_in "claim_surname", with: "Wong"
+
+      expect(page).to have_text(I18n.t("questions.date_of_birth"))
+
+      fill_in "Day", with: "28"
+      fill_in "Month", with: "2"
+      fill_in "Year", with: "1988"
+
+      expect(page).to have_text(I18n.t("questions.national_insurance_number"))
+
+      fill_in "National Insurance number", with: "PX321499A"
       click_on "Continue"
 
-      expect(claim.reload.first_name).to eql("Sarah")
-      expect(claim.middle_name).to eql("Jennifer")
-      expect(claim.surname).to eql("Winstanley")
+      expect(claim.reload.first_name).to eql("Russell")
+      expect(claim.reload.surname).to eql("Wong")
+      expect(claim.reload.date_of_birth).to eq(Date.new(1988, 2, 28))
+      expect(claim.reload.national_insurance_number).to eq("PX321499A")
 
       expect(page).to have_text(I18n.t("questions.address.home.title"))
       expect(page).to have_link(href: claim_path(MathsAndPhysics.routing_name, "address"))
@@ -80,14 +93,6 @@ RSpec.feature "Maths & Physics claims" do
       expect(claim.address_line_4).to eql("Washington")
       expect(claim.postcode).to eql("M1 7HL")
 
-      expect(page).to have_text(I18n.t("questions.date_of_birth"))
-      fill_in "Day", with: "03"
-      fill_in "Month", with: "7"
-      fill_in "Year", with: "1990"
-      click_on "Continue"
-
-      expect(claim.reload.date_of_birth).to eq(Date.new(1990, 7, 3))
-
       expect(page).to have_text(I18n.t("questions.payroll_gender"))
       choose "Female"
       click_on "Continue"
@@ -99,12 +104,6 @@ RSpec.feature "Maths & Physics claims" do
       click_on "Continue"
 
       expect(claim.reload.teacher_reference_number).to eql("1234567")
-
-      expect(page).to have_text(I18n.t("questions.national_insurance_number"))
-      fill_in "National Insurance number", with: "QQ123456C"
-      click_on "Continue"
-
-      expect(claim.reload.national_insurance_number).to eq("QQ123456C")
 
       expect(page).to have_text(I18n.t("questions.has_student_loan"))
 

@@ -151,7 +151,7 @@ RSpec.feature "Changing the answers on a submittable claim" do
       new_number = "AB123456C"
 
       expect {
-        find("a[href='#{claim_path(StudentLoans.routing_name, "national-insurance-number")}']").click
+        page.first("a[href='#{claim_path(StudentLoans.routing_name, "personal-details")}']", minimum: 1).click
         fill_in "National Insurance number", with: new_number
         click_on "Continue"
       }.to change {
@@ -292,12 +292,11 @@ RSpec.feature "Changing the answers on a submittable claim" do
       expect(page).to have_content(I18n.t("questions.address.generic.title"))
       expect(page).to have_content(I18n.t("questions.date_of_birth"))
       expect(page).to have_content(I18n.t("questions.payroll_gender"))
-      expect(page).to have_selector(:css, "a[href='#{claim_path(StudentLoans.routing_name, "name")}']")
+      expect(page).to have_selector(:css, "a[href='#{claim_path(StudentLoans.routing_name, "personal-details")}']")
       expect(page).to have_selector(:css, "a[href='#{claim_path(StudentLoans.routing_name, "address")}']")
-      expect(page).to have_selector(:css, "a[href='#{claim_path(StudentLoans.routing_name, "date-of-birth")}']")
       expect(page).to have_selector(:css, "a[href='#{claim_path(StudentLoans.routing_name, "gender")}']")
 
-      find("a[href='#{claim_path(StudentLoans.routing_name, "name")}']").click
+      page.first("a[href='#{claim_path(StudentLoans.routing_name, "personal-details")}']", minimum: 1).click
       fill_in "First name", with: "Bobby"
       click_on "Continue"
 

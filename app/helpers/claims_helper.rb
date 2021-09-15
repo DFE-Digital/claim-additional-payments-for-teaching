@@ -5,28 +5,16 @@ module ClaimsHelper
 
   def identity_answers(claim)
     [].tap do |a|
-      if claim.has_ecp_policy?
-        a << [translate("questions.name"), claim.full_name, "personal-details"] unless claim.name_verified?
-      else
-        a << [translate("questions.name"), claim.full_name, "name"] unless claim.name_verified?
-      end
+      a << [translate("questions.name"), claim.full_name, "personal-details"] unless claim.name_verified?
 
       a << [translate("questions.address.generic.title"), claim.address, "address"] unless claim.address_from_govuk_verify?
 
-      if claim.has_ecp_policy?
-        a << [translate("questions.date_of_birth"), date_of_birth_string(claim), "personal-details"] unless claim.date_of_birth_verified?
-      else
-        a << [translate("questions.date_of_birth"), date_of_birth_string(claim), "date-of-birth"] unless claim.date_of_birth_verified?
-      end
+      a << [translate("questions.date_of_birth"), date_of_birth_string(claim), "personal-details"] unless claim.date_of_birth_verified?
 
       a << [translate("questions.payroll_gender"), t("answers.payroll_gender.#{claim.payroll_gender}"), "gender"] unless claim.payroll_gender_verified?
       a << [translate("questions.teacher_reference_number"), claim.teacher_reference_number, "teacher-reference-number"]
 
-      a << if claim.has_ecp_policy?
-        [translate("questions.national_insurance_number"), claim.national_insurance_number, "personal-details"]
-      else
-        [translate("questions.national_insurance_number"), claim.national_insurance_number, "national-insurance-number"]
-      end
+      a << [translate("questions.national_insurance_number"), claim.national_insurance_number, "personal-details"]
 
       a << [translate("questions.email_address"), claim.email_address, "email-address"]
 
