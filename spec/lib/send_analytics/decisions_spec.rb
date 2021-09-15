@@ -1,11 +1,10 @@
 require "rails_helper"
 
-RSpec.describe SendAnalyticsCsv do
-  subject { SendAnalyticsCsv }
+RSpec.describe SendAnalytics::Decisions do
+  subject { SendAnalytics::Decisions }
   describe "#call" do
-    let(:query) { ClaimDecision }
-    let(:file_name) { "test.csv" }
     let(:uploader) { instance_double("Upload", call: true) }
+    let(:date)    { Date.yesterday }
 
     before do
       allow(Upload).to receive(:new).and_return(uploader)
@@ -14,8 +13,7 @@ RSpec.describe SendAnalyticsCsv do
     it "runs without error" do
       expect {
         subject.new(
-          query: query,
-          file_name: file_name
+          date: date
         ).call
       }.to_not raise_error
     end
