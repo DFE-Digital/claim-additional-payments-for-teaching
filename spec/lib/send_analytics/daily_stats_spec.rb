@@ -4,7 +4,7 @@ RSpec.describe SendAnalytics::DailyStats do
   subject { SendAnalytics::DailyStats }
   describe "#call" do
     let(:uploader) { instance_double("Upload", call: true) }
-    let(:date)    { Date.yesterday }
+    let(:date) { Date.yesterday }
 
     before do
       allow(Upload).to receive(:new).and_return(uploader)
