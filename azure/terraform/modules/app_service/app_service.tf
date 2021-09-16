@@ -59,6 +59,8 @@ resource "azurerm_app_service" "app_as" {
     "RAILS_SERVE_STATIC_FILES"                       = "true"
     "ROLLBAR_ACCESS_TOKEN"                           = data.azurerm_key_vault_secret.RollbarInfraToken.value
     "SECRET_KEY_BASE"                                = data.azurerm_key_vault_secret.SecretKeyBase.value
+    "STORAGE_BUCKET"                                 = data.azurerm_key_vault_secret.StorageBucket.value
+    "STORAGE_CREDENTIALS"                            = data.azurerm_key_vault_secret.StorageCredentials.value
     "WORKER_COUNT"                                   = "2"
   }
 
