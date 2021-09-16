@@ -1,6 +1,6 @@
-class ClaimDecision < ApplicationRecord
-  require "csv"
+require "csv"
 
+class ClaimDecision < ApplicationRecord
   self.primary_key = "application_id"
 
   def readonly?
