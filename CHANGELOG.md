@@ -6,6 +6,9 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+- All policies
+  - TRN hint text content change
+
 ## [Release 096] - 2021-09-16
 
 - Google Analytics
