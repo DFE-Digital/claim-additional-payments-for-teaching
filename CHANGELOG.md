@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+## [Release 096] - 2021-09-16
+
 - Google Analytics
   - Adds CSV view for claim stats
 - Early Career Payments
@@ -893,7 +895,9 @@ The format is based on [Keep a Changelog]
 - First release for student loan repayments private beta
 
 [unreleased]:
-  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-095...HEAD
+  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-096...HEAD
+[release 096]:
+  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-095...release-096
 [release 095]:
   https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-094...release-095
 [release 094]:
