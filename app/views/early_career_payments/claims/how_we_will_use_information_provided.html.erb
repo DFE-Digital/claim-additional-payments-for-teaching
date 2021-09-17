@@ -5,10 +5,10 @@
 
     <h1 class="govuk-heading-xl">How we will use the information you provide</h1>
 
-    <h2 class="govuk-heading-m">To process your claim</h2>
+    <h2 class="govuk-heading-m">To process your application</h2>
 
     <p class="govuk-body">
-      We may check the information in your application with:
+      We may check the information with:
     </p>
 
     <ul class="govuk-list govuk-list--bullet">
@@ -20,20 +20,50 @@
     <h2 class="govuk-heading-m">To pay you</h2>
 
     <p class="govuk-body">
-      Our payroll partner will make the payment to you.
+      We'll send some of your personal information to our payroll partner Cantium, who are responsible
+      for processing your payment.
     </p>
 
     <p class="govuk-body">
-      If you have a student loan then a small deduction will go towards repaying
-      your student loan. This is taken off your payment automatically.
+      We also send some of your information to HMRC so that:
     </p>
 
-    <p class="govuk-body">
-      DfE will pay Income Tax and National Insurance on the early-career payment
-      on your behalf.
-    </p>
+    <ul class="govuk-list govuk-list--bullet">
+      <li>your student loan repayment can be deducted from your payment, if applicable</li>
+      <li>we can pay Income Tax and National Insurance (NI) on your behalf</li>
+    </ul>
 
     <%= link_to "Continue", claim_path(current_policy_routing_name, next_slug), class: "govuk-button", role: :button, data: { module: "govuk-button"} %>
+
+    <details class="govuk-details" data-module="govuk-details">
+      <summary class="govuk-details__summary">
+        <span class="govuk-details__summary-text">
+          What information is sent to HMRC and Cantium?
+        </span>
+      </summary>
+      <div class="govuk-details__text">
+        <p class="govuk-body">
+          We send Cantium and HMRC your:
+        </p>
+
+        <ul class="govuk-list govuk-list--bullet">
+          <li>full name</li>
+          <li>NI number</li>
+          <li>gender</li>
+          <li>date of birth</li>
+          <li>address</li>
+        </ul>
+
+        <p class="govuk-body">
+          We also send Cantium your:
+        </p>
+
+        <ul class="govuk-list govuk-list--bullet">
+          <li>email address</li>
+          <li>bank details</li>
+        </ul>
+      </div>
+    </details>
 
   </div>
 </div>
