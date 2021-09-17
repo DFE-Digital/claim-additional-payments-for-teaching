@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+- All policies
+  - 'How is your gender recorded on your school’s payroll system?' page content
+    change
+
 ## [Release 096] - 2021-09-16
 
 - Google Analytics
