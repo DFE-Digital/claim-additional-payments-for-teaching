@@ -8,6 +8,8 @@ The format is based on [Keep a Changelog]
 
 - All policies
   - TRN hint text content change
+  - 'How is your gender recorded on your school’s payroll system?' page content
+    change
 
 ## [Release 096] - 2021-09-16
 
