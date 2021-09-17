@@ -7,6 +7,9 @@ The format is based on [Keep a Changelog]
 ## [Unreleased]
 
 - All policies
+  - TRN hint text content change
+  - 'How is your gender recorded on your school’s payroll system?' page content
+    change
   - 'How we will use the information you provide' page content change
 
 ## [Release 096] - 2021-09-16
