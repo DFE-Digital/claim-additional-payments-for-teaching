@@ -44,7 +44,7 @@ module AutomatedChecks
           query: WebMock::API.hash_including(
             {
               trn: "1234567",
-              niNumber: "QQ100000C"
+              ni: "QQ100000C"
             }
           )
         ).to_return(body: body, status: status)
