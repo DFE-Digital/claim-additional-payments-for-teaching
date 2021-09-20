@@ -16,6 +16,8 @@ module EarlyCareerPaymentsHelper
   def eligible_itt_subject_translation(claim)
     if claim.eligibility.trainee_teacher_in_2021?
       I18n.t("early_career_payments.questions.eligible_itt_subject_trainee_teacher_in_2021")
+    elsif claim.eligibility.qualification_name == "overseas recognition qualification"
+      I18n.t("early_career_payments.questions.eligible_itt_subject_overseas_recognition")
     else
       I18n.t("early_career_payments.questions.eligible_itt_subject", qualification: claim.eligibility.qualification_name)
     end
