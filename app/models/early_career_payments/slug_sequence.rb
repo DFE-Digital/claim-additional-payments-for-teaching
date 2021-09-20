@@ -36,6 +36,7 @@ module EarlyCareerPayments
       "email-verification",
       "provide-mobile-number",
       "mobile-number",
+      "mobile-verification",
       # payment details phase
       "bank-or-building-society",
       "personal-bank-account",

@@ -11,7 +11,7 @@ RSpec.describe NotifySmsMessage do
       }
     )
   end
-  let(:sms_client) { instance_double('Notifications::Client') }
+  let(:sms_client) { instance_double("Notifications::Client") }
 
   describe "#deliver!" do
     before do
@@ -26,9 +26,7 @@ RSpec.describe NotifySmsMessage do
 
     context "when the Nofify client raises an error" do
       before do
-        err = instance_double('Net::HTTPClientError')
-        allow(err).to receive(:code).and_return(400)
-        allow(err).to receive(:body).and_return('boom')
+        err = instance_double("Net::HTTPClientError", code: 400, body: "boom")
 
         message.send(:instance_variable_set, :@sms_client, sms_client)
         allow(sms_client).to receive(:send_sms).and_raise(NotifySmsMessage::NotifySmsError, err)

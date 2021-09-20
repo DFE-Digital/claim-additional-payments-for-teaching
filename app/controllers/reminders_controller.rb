@@ -104,10 +104,10 @@ class RemindersController < BasePublicController
   def one_time_password
     case current_slug
     when "personal-details"
-      ReminderMailer.email_verification(current_reminder, otp.code).deliver_now
+      ReminderMailer.email_verification(current_reminder, otp.code).deliver_now if current_reminder.valid?(:"email-address")
       session[:sent_one_time_password_at] = Time.now
     when "email-verification"
-      current_reminder.update(sent_one_time_password_at: session[:sent_one_time_password_at])
+      current_reminder.update(sent_one_time_password_at: session[:sent_one_time_password_at], one_time_password_category: :reminder_email)
     end
   end
 

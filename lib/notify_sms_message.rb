@@ -1,4 +1,4 @@
-require 'notifications/client'
+require "notifications/client"
 
 class NotifySmsMessage
   class NotifySmsError < StandardError; end

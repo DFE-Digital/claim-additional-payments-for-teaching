@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+- Add capability to send SMS messages to GOVUK Notify
+- Early Career Payments
+  - integrate GOVUK Notify SMS capabilities to ECP journey
+
 ## [Release 098] - 2021-09-30
 
 - DAC Accessibility Report fixes
