@@ -1,7 +1,7 @@
 # ------------------------------------------------------------------------------
 # base
 # ------------------------------------------------------------------------------
-FROM ruby:2.7.2-alpine AS base
+FROM ruby:2.7.3-alpine AS base
 
 RUN addgroup -S appgroup && adduser -S appuser -G appgroup
 
