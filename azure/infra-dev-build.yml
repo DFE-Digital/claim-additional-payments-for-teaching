@@ -25,7 +25,7 @@ steps:
 
       docker-compose --file=docker-compose.test.yml build
     displayName: Build test Docker image
-    
+
   - script: docker-compose --file=docker-compose.test.yml run --rm test
     displayName: Run tests on Docker
 

@@ -1,0 +1,62 @@
+version: "3.7"
+
+x-env_files:
+  &default_env_files
+  - .env.production.local
+  - .env.local
+  - .env.production
+
+services:
+  dependencies:
+    build:
+      context: .
+      target: dependencies
+    image: local/dfe-teachers-payment-service:web-dependencies
+
+  web:
+    build:
+      context: .
+      cache_from:
+        - local/dfe-teachers-payment-service:web-dependencies
+      target: web
+    command: bash -c "rm -f tmp/pids/server.pid && bundle exec rails s -b 'ssl://0.0.0.0:3000?key=localhost.key&cert=localhost.crt'"
+    image: local/dfe-teachers-payment-service:web
+    depends_on:
+      - dependencies
+      - db
+    env_file: *default_env_files
+    ports:
+      - "3000:3000"
+    tty: true
+    stdin_open: true
+    volumes:
+      - .:/app
+      - assets:/app/public/assets
+
+  delayed_job:
+    build:
+      context: .
+      cache_from:
+        - local/dfe-teachers-payment-service:web-dependencies
+        - dfedigital/teacher-payments-service:web
+      target: web
+    command: bin/start-worker
+    image: local/dfe-teachers-payment-service:web
+    depends_on:
+      - web
+    environment:
+      WORKER_COUNT: 2
+    env_file: *default_env_files
+    volumes:
+      - .:/app
+
+  db:
+    image: postgres
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_PASSWORD: password
+
+volumes:
+  assets:
+  db-data:

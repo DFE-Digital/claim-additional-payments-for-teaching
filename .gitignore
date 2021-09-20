@@ -26,7 +26,7 @@
 /config/master.key
 
 # Ignore secrets
-.env.local
+.env*.local
 .env
 google_cloud_storage.json
 
