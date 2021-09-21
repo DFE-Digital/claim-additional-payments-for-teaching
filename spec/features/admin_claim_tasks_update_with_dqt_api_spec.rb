@@ -95,7 +95,7 @@ RSpec.feature "Admin claim tasks update with DQT API" do
       query: WebMock::API.hash_including(
         {
           trn: claim.teacher_reference_number,
-          niNumber: claim.national_insurance_number
+          ni: claim.national_insurance_number
         }
       )
     ).to_return(body: body, status: status)

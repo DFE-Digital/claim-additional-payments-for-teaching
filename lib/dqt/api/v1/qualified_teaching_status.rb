@@ -9,7 +9,7 @@ module Dqt
         def show(params:)
           mapped_params = {
             trn: params[:teacher_reference_number],
-            niNumber: params[:national_insurance_number]
+            ni: params[:national_insurance_number]
           }
 
           response = client.get(path: "/api/qualified-teachers/qualified-teaching-status", params: mapped_params)
