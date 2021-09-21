@@ -292,8 +292,9 @@ en:
           postgraduate_itt: "Postgraduate ITT includes: university-led and school-led courses like the Postgraduate Certificate of Education (PGCE), Teach First, School Direct ITT and School Centred ITT (SCITT)."
           undergraduate_itt: "Undergraduate ITT includes: Bachelor of Arts (BA) or Bachelor of Science (BSc) degrees."
           assessment_only: "This is the subject you qualified with."
-          overseas_recognition: "This is the subject you qualified with."
+          overseas_recognition: "This is the subject you trained in overseas."
       eligible_itt_subject: "Which subject did you do your %{qualification} in?"
+      eligible_itt_subject_overseas_recognition: "Which subject did you do your teaching qualification in?"
       eligible_itt_subject_trainee_teacher_in_2021: "Which subject are you currently doing your postgraduate initial teacher training (ITT) in?"
       teaching_subject_now: "Do you teach %{eligible_itt_subject} now?"
       itt_academic_year:
