@@ -13,6 +13,7 @@ The format is based on [Keep a Changelog]
   - 'How we will use the information you provide' page content change
   - Early Career Payments
     - 'Which subject did you do your teaching qualification in?' content change
+    - 'Check your eligibility today' link update
 
 ## [Release 096] - 2021-09-16
 
