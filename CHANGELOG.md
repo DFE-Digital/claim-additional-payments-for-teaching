@@ -6,14 +6,17 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+## [Release 097] - 2021-09-23
+
 - All policies
   - TRN hint text content change
   - 'How is your gender recorded on your school’s payroll system?' page content
     change
   - 'How we will use the information you provide' page content change
-  - Early Career Payments
-    - 'Which subject did you do your teaching qualification in?' content change
-    - 'Check your eligibility today' link update
+- Early Career Payments
+  - 'Which subject did you do your teaching qualification in?' content change
+  - 'Check your eligibility today' link update
+- Upgrade to Ruby 2.7.3
 
 ## [Release 096] - 2021-09-16
 
@@ -904,7 +907,9 @@ The format is based on [Keep a Changelog]
 - First release for student loan repayments private beta
 
 [unreleased]:
-  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-096...HEAD
+  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-097...HEAD
+[release 097]:
+  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-096...release-097
 [release 096]:
   https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-095...release-096
 [release 095]:
