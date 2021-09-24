@@ -15,7 +15,7 @@ RUN apk add curl
 RUN apk add libc6-compat
 RUN apk add shared-mime-info
 
-USER appuser
+# USER appuser
 
 ENV APP_HOME /app
 ENV DEPS_HOME /deps
@@ -28,7 +28,7 @@ ENV NODE_ENV ${RAILS_ENV:-production}
 # ------------------------------------------------------------------------------
 FROM base AS dependencies
 
-USER root
+# USER root
 
 RUN apk add build-base
 RUN apk add git
@@ -40,7 +40,7 @@ WORKDIR ${DEPS_HOME}
 RUN chmod -R 777 ${DEPS_HOME}
 # End
 
-USER appuser
+# USER appuser
 
 # Install Ruby dependencies
 COPY Gemfile ${DEPS_HOME}/Gemfile
@@ -64,7 +64,7 @@ RUN bundle install --retry 3
 COPY package.json ${DEPS_HOME}/package.json
 COPY yarn.lock ${DEPS_HOME}/yarn.lock
 
-USER root
+# USER root
 
 RUN if [ ${RAILS_ENV} = "production" ]; then \
   yarn install --frozen-lockfile --production; \
@@ -79,7 +79,7 @@ RUN if [ ${RAILS_ENV} = "production" ]; then \
 
 FROM base AS web
 
-USER root
+# USER root
 
 # Set up install environment
 RUN mkdir -p ${APP_HOME}
@@ -87,14 +87,14 @@ WORKDIR ${APP_HOME}
 RUN chmod -R 777 ${APP_HOME}
 
 # End
-USER appuser
+# USER appuser
 
 # Download and install filebeat for sending logs to logstash
 ENV FILEBEAT_VERSION=7.6.2
 ENV FILEBEAT_DOWNLOAD_PATH=/tmp/filebeat.tar.gz
 ENV FILEBEAT_CHECKSUM=482304509aed80db78ef63a0fed88e4453ebe7b11f6b4ab3168036a78f6a413e2f6a5c039f405e13984653b1a094c23f7637ac7daf3da75a032692d1c34a9b65
 
-USER root
+# USER root
 
 RUN curl https://artifacts.elastic.co/downloads/beats/filebeat/filebeat-${FILEBEAT_VERSION}-linux-x86_64.tar.gz -o ${FILEBEAT_DOWNLOAD_PATH} && \
   [ "$(sha512sum ${FILEBEAT_DOWNLOAD_PATH})" = "${FILEBEAT_CHECKSUM}  ${FILEBEAT_DOWNLOAD_PATH}" ] && \
@@ -105,7 +105,7 @@ RUN curl https://artifacts.elastic.co/downloads/beats/filebeat/filebeat-${FILEBE
 
 RUN chmod -R 777 /filebeat
 
-USER appuser
+# USER appuser
 
 # Copy our local filebeat config to the installation
 COPY filebeat.yml /filebeat/filebeat.yml
@@ -117,7 +117,8 @@ COPY --from=dependencies ${GEM_HOME} ${GEM_HOME}
 COPY --from=dependencies ${DEPS_HOME}/node_modules ${APP_HOME}/node_modules
 # End
 
-USER root
+# USER root
+
 # Copy app code (sorted by vague frequency of change for caching)
 RUN mkdir -p ${APP_HOME}/log
 RUN mkdir -p ${APP_HOME}/tmp
@@ -125,7 +126,7 @@ RUN chmod -R 777 ${APP_HOME}
 RUN chown -hR appuser:appgroup ${APP_HOME}/log
 RUN chown -hR appuser:appgroup ${APP_HOME}/tmp
 
-USER appuser
+# USER appuser
 
 COPY config.ru ${APP_HOME}/config.ru
 COPY Rakefile ${APP_HOME}/Rakefile
@@ -138,7 +139,8 @@ COPY db ${APP_HOME}/db
 COPY app ${APP_HOME}/app
 
 # End
-USER root
+
+# USER root
 
 RUN chmod -R 777 ${APP_HOME}/
 RUN chown -hR appuser:appgroup ${APP_HOME}/
@@ -156,13 +158,13 @@ RUN if [ ${RAILS_ENV} = "production" ]; then \
   fi
 EXPOSE 3000
 
-USER appuser
+# USER appuser
 ARG GIT_COMMIT_HASH
 ENV GIT_COMMIT_HASH ${GIT_COMMIT_HASH}
 CMD /filebeat/filebeat -c /filebeat/filebeat.yml & bundle exec rails server
 
 # move all app directories and files to appuser and the appgroup
-USER root
+# USER root
 
 RUN chmod 777 -R ${APP_HOME}/app
 
@@ -176,7 +178,7 @@ RUN chown -hR appuser:appgroup ${APP_HOME}/log/${RAILS_ENV}.log
 
 RUN chmod 777 ${APP_HOME}/log/${RAILS_ENV}.log
 
-USER appuser
+# USER appuser
 
 
 # ------------------------------------------------------------------------------
@@ -190,11 +192,11 @@ FROM koalaman/shellcheck:stable AS shellcheck
 # ------------------------------------------------------------------------------
 FROM web AS test
 
-USER root
+# USER root
 
 RUN apk add chromium chromium-chromedriver
 
-USER appuser
+# USER appuser
 # Install ShellCheck
 COPY --from=shellcheck / /opt/shellcheck/
 ENV PATH /opt/shellcheck/bin:${PATH}
@@ -209,7 +211,7 @@ COPY . ${APP_HOME}/
 CMD [ "bundle", "exec", "rake" ]
 
 # move all app directories and files to appuser and the appgroup
-USER root
+# USER root
 
 RUN chmod 777 -R ${APP_HOME}/app
 
@@ -223,4 +225,4 @@ RUN chown -hR appuser:appgroup ${APP_HOME}/log/${RAILS_ENV}.log
 
 RUN chmod 777 ${APP_HOME}/log/${RAILS_ENV}.log
 
-USER appuser
+# USER appuser
