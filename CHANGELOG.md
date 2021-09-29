@@ -6,6 +6,9 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+- DAC Accessibility Report fixes
+  - Error skip link
+
 ## [Release 097] - 2021-09-23
 
 - All policies
