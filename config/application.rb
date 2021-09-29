@@ -19,6 +19,7 @@ require_relative "../lib/ordnance_survey"
 require_relative "../lib/one_time_password"
 require_relative "../lib/send_analytics"
 require_relative "../lib/upload"
+require_relative "../lib/fwy"
 
 # Require the gems listed in Gemfile, including any gems
 # you've limited to :test, :development, or :production.
