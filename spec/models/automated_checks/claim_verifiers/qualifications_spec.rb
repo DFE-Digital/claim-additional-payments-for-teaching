@@ -4,53 +4,34 @@ module AutomatedChecks
   module ClaimVerifiers
     RSpec.describe Qualifications do
       before do
-        if data.nil?
-          body = <<~JSON
-            {
-              "data": null,
-              "message": "No records found."
-            }
-          JSON
-
-          status = 404
-        else
-          body = <<~JSON
-            {
-              "data": [
-                {
-                  "trn": "#{data[:teacher_reference_number]}",
-                  "name": "#{data[:name]}",
-                  "doB": "#{data[:date_of_birth] || "2015-09-01T00:00:00+00:00"}",
-                  "niNumber": "#{data[:national_insurance_number]}",
-                  "qtsAwardDate": "#{data[:qts_award_date] || "2015-09-01T00:00:00+00:00"}",
-                  "ittSubject1Code": "#{data.dig(:itt_subject_codes, 0)}",
-                  "ittSubject2Code": "#{data.dig(:itt_subject_codes, 1)}",
-                  "ittSubject3Code": "#{data.dig(:itt_subject_codes, 2)}",
-                  "activeAlert": true,
-                  "qualificationName": "#{data[:qualification_name] || "BA"}",
-                  "ittStartDate": "#{data[:itt_start_date] || "2015-09-01T00:00:00+00:00"}"
-                }
-              ],
-              "message": null
-            }
-          JSON
+        if data
+          body = {
+            data: [data]
+          }
 
           status = 200
+        else
+          body = {
+            data: nil,
+            message: "No records found."
+          }
+
+          status = 404
         end
 
-        stub_request(:get, "#{ENV["DQT_CLIENT_HOST"]}:#{ENV["DQT_CLIENT_PORT"]}/api/qualified-teachers/qualified-teaching-status").with(
-          query: WebMock::API.hash_including(
-            {
-              trn: claim.teacher_reference_number,
-              ni: claim.national_insurance_number
-            }
-          )
-        ).to_return(body: body, status: status)
+        stub_qualified_teaching_statuses_show(
+          query: {
+            trn: claim_arg.teacher_reference_number,
+            ni: claim_arg.national_insurance_number
+          },
+          body: body,
+          status: status
+        )
       end
 
       subject(:qualifications) { described_class.new(**qualifications_args) }
 
-      let(:claim) do
+      let(:claim_arg) do
         claim = create(
           :claim,
           :submitted,
@@ -76,11 +57,11 @@ module AutomatedChecks
 
       let(:qualifications_args) do
         {
-          claim: claim,
-          dqt_teacher_status: Dqt::Client.new.api.qualified_teaching_status.show(
+          claim: claim_arg,
+          dqt_teacher_statuses: Dqt::Client.new.api.qualified_teaching_statuses.show(
             params: {
-              teacher_reference_number: claim.teacher_reference_number,
-              national_insurance_number: claim.national_insurance_number
+              teacher_reference_number: claim_arg.teacher_reference_number,
+              national_insurance_number: claim_arg.national_insurance_number
             }
           )
         }
@@ -92,19 +73,21 @@ module AutomatedChecks
         context "with eligible qualifications" do
           let(:data) do
             {
-              qts_award_date: Date.new(
+              ittStartDate: Date.new(2015, 9, 1),
+              ittSubject1Code: MathsAndPhysics::DqtRecord::ELIGIBLE_MATHS_HECOS_CODES.first,
+              qualificationName: "BA",
+              qtsAwardDate: Date.new(
                 MathsAndPhysics.first_eligible_qts_award_year.start_year,
                 9,
                 1
-              ),
-              itt_subject_codes: [MathsAndPhysics::DqtRecord::ELIGIBLE_MATHS_HECOS_CODES.first]
+              )
             }
           end
 
           it { is_expected.to be_an_instance_of(Task) }
 
           describe "qualifications task" do
-            subject(:qualifications_task) { claim.tasks.find_by(name: "qualifications") }
+            subject(:qualifications_task) { claim_arg.tasks.find_by(name: "qualifications") }
 
             before { perform }
 
@@ -134,27 +117,28 @@ module AutomatedChecks
           end
 
           describe "note" do
-            subject(:note) { claim.notes.last }
+            subject(:note) { claim_arg.notes.last }
 
             it { is_expected.to eq(nil) }
           end
 
-          context "except QTS award date" do
+          context "without eligible QTS award date" do
             let(:data) do
-              {
-                qts_award_date: Date.new(
-                  MathsAndPhysics.first_eligible_qts_award_year.start_year - 1,
-                  9,
-                  1
-                ),
-                itt_subject_codes: [MathsAndPhysics::DqtRecord::ELIGIBLE_MATHS_HECOS_CODES.first]
-              }
+              super().merge(
+                {
+                  qtsAwardDate: Date.new(
+                    MathsAndPhysics.first_eligible_qts_award_year.start_year - 1,
+                    9,
+                    1
+                  )
+                }
+              )
             end
 
             it { is_expected.to be_an_instance_of(Task) }
 
             describe "qualifications task" do
-              subject(:qualifications_task) { claim.tasks.find_by(name: "qualifications") }
+              subject(:qualifications_task) { claim_arg.tasks.find_by(name: "qualifications") }
 
               before { perform }
 
@@ -184,7 +168,7 @@ module AutomatedChecks
             end
 
             describe "note" do
-              subject(:note) { claim.notes.last }
+              subject(:note) { claim_arg.notes.last }
 
               before { perform }
 
@@ -196,10 +180,10 @@ module AutomatedChecks
                     <<~HTML
                       Ineligible:
                       <pre>
-                        ITT subject codes:  ["100400", "", ""]
+                        ITT subject codes:  ["100400"]
                         Degree codes:       []
-                        ITT start date:     2015-09-01T00:00:00+00:00
-                        QTS award date:     2014-09-01T00:00:00+00:00
+                        ITT start date:     2015-09-01
+                        QTS award date:     2014-09-01
                         Qualification name: BA
                       </pre>
                     HTML
@@ -215,22 +199,19 @@ module AutomatedChecks
             end
           end
 
-          context "except ITT subjects codes" do
+          context "without eligible ITT subjects codes" do
             let(:data) do
-              {
-                qts_award_date: Date.new(
-                  MathsAndPhysics.first_eligible_qts_award_year.start_year,
-                  9,
-                  1
-                ),
-                itt_subject_codes: ["NoCode"]
-              }
+              super().merge(
+                {
+                  ittSubject1Code: "NoCode"
+                }
+              )
             end
 
             it { is_expected.to be_an_instance_of(Task) }
 
             describe "qualifications task" do
-              subject(:qualifications_task) { claim.tasks.find_by(name: "qualifications") }
+              subject(:qualifications_task) { claim_arg.tasks.find_by(name: "qualifications") }
 
               before { perform }
 
@@ -260,7 +241,7 @@ module AutomatedChecks
             end
 
             describe "note" do
-              subject(:note) { claim.notes.last }
+              subject(:note) { claim_arg.notes.last }
 
               before { perform }
 
@@ -272,10 +253,10 @@ module AutomatedChecks
                     <<~HTML
                       Ineligible:
                       <pre>
-                        ITT subject codes:  ["NoCode", "", ""]
+                        ITT subject codes:  ["NoCode"]
                         Degree codes:       []
-                        ITT start date:     2015-09-01T00:00:00+00:00
-                        QTS award date:     2015-09-01T00:00:00+00:00
+                        ITT start date:     2015-09-01
+                        QTS award date:     2015-09-01
                         Qualification name: BA
                       </pre>
                     HTML
@@ -292,7 +273,7 @@ module AutomatedChecks
           end
 
           context "with admin claims tasks qualifications passed" do
-            let(:claim) do
+            let(:claim_arg) do
               create(
                 :claim,
                 :submitted,
@@ -309,7 +290,7 @@ module AutomatedChecks
             it { is_expected.to eq(nil) }
 
             describe "qualifications task" do
-              subject(:qualifications_task) { claim.tasks.find_by(name: "qualifications") }
+              subject(:qualifications_task) { claim_arg.tasks.find_by(name: "qualifications") }
 
               before { perform }
 
@@ -339,87 +320,89 @@ module AutomatedChecks
             end
 
             describe "note" do
-              subject(:note) { claim.notes.last }
+              subject(:note) { claim_arg.notes.last }
 
               before { perform }
 
               it { is_expected.to eq(nil) }
             end
           end
-        end
 
-        context "without eligible qualifications" do
-          let(:data) do
-            {
-              qts_award_date: Date.new(
-                MathsAndPhysics.first_eligible_qts_award_year.start_year - 1,
-                9,
-                1
-              ),
-              itt_subject_codes: ["NoCode"]
-            }
-          end
-
-          it { is_expected.to be_an_instance_of(Task) }
-
-          describe "qualifications task" do
-            subject(:qualifications_task) { claim.tasks.find_by(name: "qualifications") }
-
-            before { perform }
-
-            describe "#claim_verifier_match" do
-              subject(:claim_verifier_match) { qualifications_task.claim_verifier_match }
-
-              it { is_expected.to eq "none" }
+          context "without multiple eligibilities" do
+            let(:data) do
+              super().merge(
+                {
+                  ittSubject1Code: "NoCode",
+                  qtsAwardDate: Date.new(
+                    MathsAndPhysics.first_eligible_qts_award_year.start_year - 1,
+                    9,
+                    1
+                  )
+                }
+              )
             end
 
-            describe "#created_by" do
-              subject(:created_by) { qualifications_task.created_by }
+            it { is_expected.to be_an_instance_of(Task) }
 
-              it { is_expected.to eq nil }
-            end
+            describe "qualifications task" do
+              subject(:qualifications_task) { claim_arg.tasks.find_by(name: "qualifications") }
 
-            describe "#passed" do
-              subject(:passed) { qualifications_task.passed }
+              before { perform }
 
-              it { is_expected.to eq nil }
-            end
+              describe "#claim_verifier_match" do
+                subject(:claim_verifier_match) { qualifications_task.claim_verifier_match }
 
-            describe "#manual" do
-              subject(:manual) { qualifications_task.manual }
+                it { is_expected.to eq "none" }
+              end
 
-              it { is_expected.to eq false }
-            end
-          end
+              describe "#created_by" do
+                subject(:created_by) { qualifications_task.created_by }
 
-          describe "note" do
-            subject(:note) { claim.notes.last }
+                it { is_expected.to eq nil }
+              end
 
-            before { perform }
+              describe "#passed" do
+                subject(:passed) { qualifications_task.passed }
 
-            describe "#body" do
-              subject(:body) { note.body }
+                it { is_expected.to eq nil }
+              end
 
-              it do
-                is_expected.to eq(
-                  <<~HTML
-                    Ineligible:
-                    <pre>
-                      ITT subject codes:  ["NoCode", "", ""]
-                      Degree codes:       []
-                      ITT start date:     2015-09-01T00:00:00+00:00
-                      QTS award date:     2014-09-01T00:00:00+00:00
-                      Qualification name: BA
-                    </pre>
-                  HTML
-                )
+              describe "#manual" do
+                subject(:manual) { qualifications_task.manual }
+
+                it { is_expected.to eq false }
               end
             end
 
-            describe "#created_by" do
-              subject(:created_by) { note.created_by }
+            describe "note" do
+              subject(:note) { claim_arg.notes.last }
 
-              it { is_expected.to eq(nil) }
+              before { perform }
+
+              describe "#body" do
+                subject(:body) { note.body }
+
+                it do
+                  is_expected.to eq(
+                    <<~HTML
+                      Ineligible:
+                      <pre>
+                        ITT subject codes:  ["NoCode"]
+                        Degree codes:       []
+                        ITT start date:     2015-09-01
+                        QTS award date:     2014-09-01
+                        Qualification name: BA
+                      </pre>
+                    HTML
+                  )
+                end
+              end
+
+              describe "#created_by" do
+                subject(:created_by) { note.created_by }
+
+                it { is_expected.to eq(nil) }
+              end
             end
           end
         end
@@ -430,7 +413,7 @@ module AutomatedChecks
           it { is_expected.to be_an_instance_of(Task) }
 
           describe "qualifications task" do
-            subject(:qualifications_task) { claim.tasks.find_by(name: "qualifications") }
+            subject(:qualifications_task) { claim_arg.tasks.find_by(name: "qualifications") }
 
             before { perform }
 
@@ -460,7 +443,7 @@ module AutomatedChecks
           end
 
           describe "note" do
-            subject(:note) { claim.notes.last }
+            subject(:note) { claim_arg.notes.last }
 
             before { perform }
 

@@ -1,4 +1,4 @@
-require_relative "v1/qualified_teaching_status"
+require_relative "v1/qualified_teaching_statuses"
 
 module Dqt
   class Api
@@ -7,8 +7,8 @@ module Dqt
         self.client = client
       end
 
-      def qualified_teaching_status
-        @qualified_teaching_status ||= QualifiedTeachingStatus.new(client: client)
+      def qualified_teaching_statuses
+        @qualified_teaching_statuses ||= QualifiedTeachingStatuses.new(client: client)
       end
 
       private

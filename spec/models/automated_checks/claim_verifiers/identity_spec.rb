@@ -6,48 +6,29 @@ module AutomatedChecks
       subject(:identity) { described_class.new(**identity_args) }
 
       before do
-        if data.nil?
-          body = <<~JSON
-            {
-              "data": null,
-              "message": "No records found."
-            }
-          JSON
-
-          status = 404
-        else
-          body = <<~JSON
-            {
-              "data": [
-                {
-                  "trn": "#{data[:teacher_reference_number]}",
-                  "name": "#{data[:name]}",
-                  "doB": "#{data[:date_of_birth] || Date.today}",
-                  "niNumber": "#{data[:national_insurance_number]}",
-                  "qtsAwardDate": "#{data[:qts_award_date] || Date.today}",
-                  "ittSubject1Code": "#{data.dig(:itt_subject_codes, 0)}",
-                  "ittSubject2Code": "#{data.dig(:itt_subject_codes, 1)}",
-                  "ittSubject3Code": "#{data.dig(:itt_subject_codes, 2)}",
-                  "activeAlert": #{data[:active_alert] || false},
-                  "qualificationName": "#{data[:qualification_name] || "BA"}",
-                  "ittStartDate": "#{data[:itt_start_date] || Date.today}"
-                }
-              ],
-              "message": null
-            }
-          JSON
+        if data
+          body = {
+            data: [data]
+          }
 
           status = 200
+        else
+          body = {
+            data: nil,
+            message: "No records found."
+          }
+
+          status = 404
         end
 
-        stub_request(:get, "#{ENV["DQT_CLIENT_HOST"]}:#{ENV["DQT_CLIENT_PORT"]}/api/qualified-teachers/qualified-teaching-status").with(
-          query: WebMock::API.hash_including(
-            {
-              trn: "1234567",
-              ni: "QQ100000C"
-            }
-          )
-        ).to_return(body: body, status: status)
+        stub_qualified_teaching_statuses_show(
+          query: {
+            trn: claim_arg.teacher_reference_number,
+            ni: claim_arg.national_insurance_number
+          },
+          body: body,
+          status: status
+        )
       end
 
       let(:claim_arg) do
@@ -78,7 +59,7 @@ module AutomatedChecks
       let(:identity_args) do
         {
           claim: claim_arg,
-          dqt_teacher_status: Dqt::Client.new.api.qualified_teaching_status.show(
+          dqt_teacher_statuses: Dqt::Client.new.api.qualified_teaching_statuses.show(
             params: {
               teacher_reference_number: claim_arg.teacher_reference_number,
               national_insurance_number: claim_arg.national_insurance_number
@@ -101,10 +82,10 @@ module AutomatedChecks
             context "with matching DQT identity" do
               let(:data) do
                 {
-                  date_of_birth: Date.new(1990, 8, 23),
-                  name: "Fred ELIGIBLE",
-                  national_insurance_number: "QQ100000C",
-                  teacher_reference_number: "1234567"
+                  doB: claim_arg.date_of_birth,
+                  name: claim_arg.full_name,
+                  niNumber: claim_arg.national_insurance_number,
+                  trn: claim_arg.teacher_reference_number
                 }
               end
 
@@ -146,15 +127,8 @@ module AutomatedChecks
                 it { is_expected.to eq(nil) }
               end
 
-              context "except national insurance number" do
-                let(:data) do
-                  {
-                    date_of_birth: claim_arg.date_of_birth,
-                    name: "#{claim_arg.first_name} #{claim_arg.surname}",
-                    national_insurance_number: "QQ100000B",
-                    teacher_reference_number: claim_arg.teacher_reference_number
-                  }
-                end
+              context "without matching national insurance number" do
+                let(:data) { super().merge({niNumber: "QQ100000B"}) }
 
                 it { is_expected.to be_an_instance_of(Task) }
 
@@ -223,15 +197,8 @@ module AutomatedChecks
                 end
               end
 
-              context "except matching teacher reference number" do
-                let(:data) do
-                  {
-                    date_of_birth: claim_arg.date_of_birth,
-                    name: "#{claim_arg.first_name} #{claim_arg.surname}",
-                    national_insurance_number: claim_arg.national_insurance_number,
-                    teacher_reference_number: "7654321"
-                  }
-                end
+              context "without matching teacher reference number" do
+                let(:data) { super().merge({trn: "7654321"}) }
 
                 it { is_expected.to be_an_instance_of(Task) }
 
@@ -300,15 +267,8 @@ module AutomatedChecks
                 end
               end
 
-              context "except matching first name" do
-                let(:data) do
-                  {
-                    date_of_birth: claim_arg.date_of_birth,
-                    name: "Except #{claim_arg.surname}",
-                    national_insurance_number: claim_arg.national_insurance_number,
-                    teacher_reference_number: claim_arg.teacher_reference_number
-                  }
-                end
+              context "without matching first name" do
+                let(:data) { super().merge({name: "Except #{claim_arg.surname}"}) }
 
                 it { is_expected.to be_an_instance_of(Task) }
 
@@ -377,15 +337,8 @@ module AutomatedChecks
                 end
               end
 
-              context "except matching surname" do
-                let(:data) do
-                  {
-                    date_of_birth: claim_arg.date_of_birth,
-                    name: "#{claim_arg.first_name} Except",
-                    national_insurance_number: claim_arg.national_insurance_number,
-                    teacher_reference_number: claim_arg.teacher_reference_number
-                  }
-                end
+              context "without matching surname" do
+                let(:data) { super().merge({name: "#{claim_arg.first_name} Except"}) }
 
                 it { is_expected.to be_an_instance_of(Task) }
 
@@ -455,14 +408,7 @@ module AutomatedChecks
               end
 
               context "with middle names" do
-                let(:data) do
-                  {
-                    date_of_birth: claim_arg.date_of_birth,
-                    name: "#{claim_arg.first_name} Middle Names #{claim_arg.surname}",
-                    national_insurance_number: claim_arg.national_insurance_number,
-                    teacher_reference_number: claim_arg.teacher_reference_number
-                  }
-                end
+                let(:data) { super().merge({name: "#{claim_arg.first_name} Middle Names #{claim_arg.surname}"}) }
 
                 it { is_expected.to be_an_instance_of(Task) }
 
@@ -503,15 +449,8 @@ module AutomatedChecks
                 end
               end
 
-              context "except matching date of birth" do
-                let(:data) do
-                  {
-                    date_of_birth: claim_arg.date_of_birth + 1.day,
-                    name: "#{claim_arg.first_name} #{claim_arg.surname}",
-                    national_insurance_number: claim_arg.national_insurance_number,
-                    teacher_reference_number: claim_arg.teacher_reference_number
-                  }
-                end
+              context "without matching date of birth" do
+                let(:data) { super().merge({doB: claim_arg.date_of_birth + 1.day}) }
 
                 it { is_expected.to be_an_instance_of(Task) }
 
@@ -559,7 +498,7 @@ module AutomatedChecks
                           Date of birth not matched:
                           <pre>
                             Claimant: <span class="dark-grey">"</span><span class="red">1990-08-23</span><span class="dark-grey">"</span>
-                            DQT:      <span class="dark-grey">"</span><span class="green">1990-08-24T00:00:00+00:00</span><span class="dark-grey">"</span>
+                            DQT:      <span class="dark-grey">"</span><span class="green">1990-08-24</span><span class="dark-grey">"</span>
                           </pre>
                         HTML
                       )
@@ -637,15 +576,7 @@ module AutomatedChecks
               end
 
               context "with teacher status alert" do
-                let(:data) do
-                  {
-                    active_alert: true,
-                    date_of_birth: claim_arg.date_of_birth,
-                    name: "#{claim_arg.first_name} #{claim_arg.surname}",
-                    national_insurance_number: claim_arg.national_insurance_number,
-                    teacher_reference_number: claim_arg.teacher_reference_number
-                  }
-                end
+                let(:data) { super().merge({activeAlert: true}) }
 
                 it { is_expected.to be_an_instance_of(Task) }
 
@@ -704,7 +635,7 @@ module AutomatedChecks
                 end
               end
 
-              context "when claim field have extra whitespace" do
+              context "when claim values have extra whitespace" do
                 let(:claim_arg) do
                   claim = create(
                     :claim,
@@ -766,14 +697,14 @@ module AutomatedChecks
                 end
               end
 
-              context "except multiple matches" do
+              context "without multiple matches" do
                 let(:data) do
-                  {
-                    date_of_birth: claim_arg.date_of_birth + 1.day,
-                    name: "Except #{claim_arg.surname}",
-                    national_insurance_number: claim_arg.national_insurance_number,
-                    teacher_reference_number: claim_arg.teacher_reference_number
-                  }
+                  super().merge(
+                    {
+                      doB: claim_arg.date_of_birth + 1.day,
+                      name: "Except #{claim_arg.surname}"
+                    }
+                  )
                 end
 
                 it { is_expected.to be_an_instance_of(Task) }
@@ -856,7 +787,7 @@ module AutomatedChecks
                           Date of birth not matched:
                           <pre>
                             Claimant: <span class="dark-grey">"</span><span class="red">1990-08-23</span><span class="dark-grey">"</span>
-                            DQT:      <span class="dark-grey">"</span><span class="green">1990-08-24T00:00:00+00:00</span><span class="dark-grey">"</span>
+                            DQT:      <span class="dark-grey">"</span><span class="green">1990-08-24</span><span class="dark-grey">"</span>
                           </pre>
                         HTML
                       )
@@ -878,7 +809,7 @@ module AutomatedChecks
               end
             end
 
-            context "without matching DQT identity" do
+            context "without matching DQT record" do
               let(:data) { nil }
 
               it { is_expected.to be_an_instance_of(Task) }

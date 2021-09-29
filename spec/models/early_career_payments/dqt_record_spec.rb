@@ -16,13 +16,15 @@ RSpec.describe EarlyCareerPayments::DqtRecord do
   end
 
   let(:record) do
-    {
-      degree_codes: record_degree_codes,
-      itt_subject_codes: record_itt_subject_codes,
-      itt_date: record_itt_date,
-      qts_date: record_qts_date,
-      qualification_name: record_qualification_name
-    }
+    OpenStruct.new(
+      {
+        degree_codes: record_degree_codes,
+        itt_subject_codes: record_itt_subject_codes,
+        itt_start_date: record_itt_date,
+        qts_award_date: record_qts_date,
+        qualification_name: record_qualification_name
+      }
+    )
   end
 
   describe "#eligible?" do

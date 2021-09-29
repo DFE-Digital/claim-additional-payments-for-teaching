@@ -13,7 +13,12 @@ RSpec.describe "Submissions", type: :request do
         in_progress_claim.update!(attributes_for(:claim, :submittable))
         in_progress_claim.eligibility.update!(attributes_for(:student_loans_eligibility, :eligible))
 
-        stub_qualified_teaching_status_show(claim: in_progress_claim)
+        stub_qualified_teaching_statuses_show(
+          query: {
+            trn: in_progress_claim.teacher_reference_number,
+            ni: in_progress_claim.national_insurance_number
+          }
+        )
       end
 
       it "submits the claim, sends a confirmation email and redirects to the confirmation page" do

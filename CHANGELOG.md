@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+- Admin
+  - Improve DQT client qualified teacher status data casting
 - All policies
   - TRN hint text content change
   - 'How is your gender recorded on your school’s payroll system?' page content

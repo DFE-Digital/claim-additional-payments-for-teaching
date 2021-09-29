@@ -1,40 +1,39 @@
 module DqtHelpers
-  def stub_qualified_teaching_status_show(claim:, overrides: nil)
-    defaults = {
-      query: WebMock::API.hash_including(
-        {
-          trn: claim.teacher_reference_number,
-          ni: claim.national_insurance_number
-        }
-      ),
-      body: {
-        data: [
-          {
-            trn: claim.teacher_reference_number,
-            name: "#{claim.first_name} #{claim.surname}",
-            doB: claim.date_of_birth,
-            niNumber: claim.national_insurance_number,
-            qtsAwardDate: "2021-03-23T10:54:57.199Z",
-            ittSubject1Code: "string",
-            ittSubject2Code: "string",
-            ittSubject3Code: "string",
-            activeAlert: true,
-            qualificationName: "NULL",
-            ittStartDate: "2021-03-23T10:54:57.199Z"
-          }
-        ],
-        message: nil
-      },
-      status: 200
-    }
+  def stub_qualified_teaching_statuses_show(
+    body: {},
+    query: {},
+    status: 200
+  )
 
-    args = overrides ? merge_recursively(defaults, overrides) : defaults
+    query = {
+      trn: 1231234,
+      ni: "AB123123A"
+    }.merge(query)
+
+    body = merge_recursively({
+      data: [
+        {
+          trn: query[:trn],
+          name: "Rick Sanchez",
+          doB: "66-06-06T00:00:00",
+          niNumber: query[:niNumber],
+          qtsAwardDate: "1666-06-06T00:00:00",
+          ittSubject1Code: "G100",
+          ittSubject2Code: nil,
+          ittSubject3Code: nil,
+          activeAlert: true,
+          qualificationName: nil,
+          ittStartDate: "666-06-06T00:00:00"
+        }
+      ],
+      message: nil
+    }, body)
 
     stub_request(:get, "#{ENV["DQT_CLIENT_HOST"]}:#{ENV["DQT_CLIENT_PORT"]}/api/qualified-teachers/qualified-teaching-status")
-      .with(query: args[:query])
+      .with(query: WebMock::API.hash_including(query))
       .to_return(
-        body: args[:body].to_json,
-        status: args[:status]
+        body: body.to_json,
+        status: status
       )
   end
 
