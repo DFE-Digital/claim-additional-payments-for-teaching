@@ -14,10 +14,9 @@ module Fwy
 
     def connection
       @connection ||= Faraday.new(ENV["FWY_BASE_URL"]) do |c|
-        c.request :authorization, 'Bearer', Bearer.get_auth_token
+        c.request :authorization, "Bearer", Bearer.get_auth_token
         c.request :json
         c.response :json, content_type: "application/json"
-
         c.adapter adapter, @stubs
       end
     end
