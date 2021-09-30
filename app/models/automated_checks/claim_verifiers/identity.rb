@@ -25,7 +25,7 @@ module AutomatedChecks
       attr_accessor :admin_user, :claim, :dqt_teacher_status
 
       def active_alert?
-        dqt_teacher_status[:active_alert]
+        dqt_teacher_status.active_alert
       end
 
       def awaiting_task?(task_name)
@@ -85,16 +85,16 @@ module AutomatedChecks
       end
 
       def dob_matched?
-        claim.date_of_birth == dqt_teacher_status.fetch(:date_of_birth)
+        claim.date_of_birth == dqt_teacher_status.date_of_birth
       end
 
       def name_matched?
-        dqt_teacher_status.fetch(:first_name)&.casecmp?(claim.first_name) &&
-          dqt_teacher_status.fetch(:surname)&.casecmp?(claim.surname)
+        dqt_teacher_status.first_name&.casecmp?(claim.first_name) &&
+          dqt_teacher_status.surname&.casecmp?(claim.surname)
       end
 
       def national_insurance_number_matched?
-        claim.national_insurance_number == dqt_teacher_status.fetch(:national_insurance_number)
+        claim.national_insurance_number == dqt_teacher_status.national_insurance_number
       end
 
       def no_match
@@ -111,7 +111,7 @@ module AutomatedChecks
           notes << create_field_note(
             name: "National Insurance number",
             claimant: claim.national_insurance_number,
-            dqt: dqt_teacher_status.fetch(:national_insurance_number)
+            dqt: dqt_teacher_status.national_insurance_number
           )
         end
 
@@ -119,7 +119,7 @@ module AutomatedChecks
           notes << create_field_note(
             name: "First name or surname",
             claimant: claim.full_name,
-            dqt: "#{dqt_teacher_status.fetch(:first_name)} #{dqt_teacher_status.fetch(:surname)}"
+            dqt: "#{dqt_teacher_status.first_name} #{dqt_teacher_status.surname}"
           )
         end
 
@@ -127,7 +127,7 @@ module AutomatedChecks
           notes << create_field_note(
             name: "Date of birth",
             claimant: claim.date_of_birth,
-            dqt: dqt_teacher_status.fetch(:date_of_birth)
+            dqt: dqt_teacher_status.date_of_birth
           )
         end
 
@@ -135,7 +135,7 @@ module AutomatedChecks
           notes << create_field_note(
             name: "Teacher reference number",
             claimant: claim.teacher_reference_number,
-            dqt: dqt_teacher_status.fetch(:teacher_reference_number)
+            dqt: dqt_teacher_status.teacher_reference_number
           )
         end
 
@@ -149,7 +149,7 @@ module AutomatedChecks
       end
 
       def trn_matched?
-        claim.teacher_reference_number == dqt_teacher_status.fetch(:teacher_reference_number)
+        claim.teacher_reference_number == dqt_teacher_status.teacher_reference_number
       end
     end
   end

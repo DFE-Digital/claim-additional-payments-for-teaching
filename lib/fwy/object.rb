@@ -9,6 +9,8 @@ module Fwy
         OpenStruct.new(obj.map { |k, v| [k, to_ostruct(v)] }.to_h)
       elsif obj.is_a?(Array)
         obj.map { |o| to_ostruct(o) }
+      elsif obj.is_a?(String)
+        obj.strip
       else # Likely a primative value
         obj
       end

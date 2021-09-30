@@ -85,11 +85,11 @@ module MathsAndPhysics
     # Previously only JAC codes were checked, however changes to the DQT mean subject codes can be either JACS or HECOS codes.
 
     def initialize(record, _ = nil)
-      @qts_award_date = record.fetch(:qts_date)
-      @itt_subject_codes = record.fetch(:itt_subject_codes)
-      @itt_start_date = record.fetch(:itt_date, nil)
-      @degree_codes = record.fetch(:degree_codes)
-      @qualification_name = record.fetch(:qualification_name, nil)
+      @qts_award_date = record.qts_date
+      @itt_subject_codes = record.itt_subject_codes
+      @itt_start_date = record.itt_date
+      @degree_codes = record.degree_codes
+      @qualification_name = record.qualification_name
     end
 
     def eligible?

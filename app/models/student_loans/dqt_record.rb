@@ -23,11 +23,11 @@ module StudentLoans
     # :qts_date - The date the teacher achieved qualified teacher status.
     #             Format: %d/%m/%Y
     def initialize(record, _ = nil)
-      @qts_award_date = record.fetch(:qts_date)
-      @degree_codes = record.fetch(:degree_codes, ["ANY"])
-      @itt_start_date = record.fetch(:itt_date, nil)
-      @itt_subject_codes = record.fetch(:itt_subject_codes, ["ANY"])
-      @qualification_name = record.fetch(:qualification_name, nil)
+      @qts_award_date = record.qts_date)
+      @degree_codes = record.degree_codes || ["ANY"]
+      @itt_start_date = record.itt_date
+      @itt_subject_codes = record.itt_subject_codes || ["ANY"]
+      @qualification_name = record.qualification_name
     end
 
     def eligible?
