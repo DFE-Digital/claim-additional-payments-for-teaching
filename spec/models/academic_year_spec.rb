@@ -20,6 +20,10 @@ RSpec.describe AcademicYear do
       expect(AcademicYear.for(Date.new(2018, 1, 1))).to eq AcademicYear.new(2017)
       expect(AcademicYear.for(Date.new(2018, 10, 1))).to eq AcademicYear.new(2018)
     end
+
+    it "returns nil when given date is nil" do
+      expect(AcademicYear.for(nil)).to equal nil
+    end
   end
 
   describe AcademicYear::Type do

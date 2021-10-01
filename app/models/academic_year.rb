@@ -48,6 +48,8 @@ class AcademicYear
     # Returns the academic year for a given date, based on September 1st being
     # the start of the year.
     def for(date)
+      return if date.nil?
+
       start_of_autumn_term = Date.new(date.year, 9, 1)
       if date < start_of_autumn_term
         new(date.year - 1)
