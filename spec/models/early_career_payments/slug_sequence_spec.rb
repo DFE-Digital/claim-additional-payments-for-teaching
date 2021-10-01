@@ -30,7 +30,7 @@ RSpec.describe EarlyCareerPayments::SlugSequence do
         expect(slug_sequence.slugs).not_to include("mobile-number")
       end
 
-      xit "excludes the 'mobile-verification' slug" do
+      it "excludes the 'mobile-verification' slug" do
         claim.provide_mobile_number = false
 
         expect(slug_sequence.slugs).not_to include("mobile-verification")
@@ -153,6 +153,7 @@ RSpec.describe EarlyCareerPayments::SlugSequence do
           email-verification
           provide-mobile-number
           mobile-number
+          mobile-verification
           bank-or-building-society
           personal-bank-account
           building-society-account
@@ -196,6 +197,7 @@ RSpec.describe EarlyCareerPayments::SlugSequence do
           email-verification
           provide-mobile-number
           mobile-number
+          mobile-verification
           bank-or-building-society
           personal-bank-account
           building-society-account
@@ -234,6 +236,7 @@ RSpec.describe EarlyCareerPayments::SlugSequence do
           email-verification
           provide-mobile-number
           mobile-number
+          mobile-verification
           bank-or-building-society
           personal-bank-account
           building-society-account
@@ -289,6 +292,7 @@ RSpec.describe EarlyCareerPayments::SlugSequence do
           email-verification
           provide-mobile-number
           mobile-number
+          mobile-verification
           bank-or-building-society
           personal-bank-account
           building-society-account
