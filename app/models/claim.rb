@@ -101,7 +101,9 @@ class Claim < ApplicationRecord
     "student_loan_country" => ["student_loan_courses"],
     "student_loan_courses" => ["student_loan_start_date"],
     "bank_or_building_society" => ["banking_name", "bank_account_number", "bank_sort_code", "building_society_roll_number"],
-    "provide_mobile_number" => ["mobile_number"]
+    "provide_mobile_number" => ["mobile_number"],
+    "mobile_number" => ["mobile_verified"],
+    "email_address" => ["email_verified"]
   }.freeze
 
   # Use AcademicYear as custom ActiveRecord attribute type
@@ -256,7 +258,7 @@ class Claim < ApplicationRecord
   end
 
   def submittable?
-    valid?(:submit) && !submitted?
+    valid?(:submit) && !submitted? && submittable_email_details? && submittable_mobile_details?
   end
 
   def approvable?
@@ -509,5 +511,17 @@ class Claim < ApplicationRecord
       end
       errors.add(:date_of_birth, "Enter your date of birth") if errors[:date_of_birth].empty?
     end
+  end
+
+  def submittable_mobile_details?
+    return true unless has_ecp_policy?
+    return true if provide_mobile_number && mobile_number.present? && mobile_verified == true
+    return true if provide_mobile_number == false && mobile_number.nil? && mobile_verified == false
+    return true if provide_mobile_number == false && mobile_verified.nil?
+    false
+  end
+
+  def submittable_email_details?
+    email_address.present? && email_verified == true
   end
 end

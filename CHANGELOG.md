@@ -14,6 +14,7 @@ The format is based on [Keep a Changelog]
   - Error message fix
 - Early Career Payments
   - integrate GOVUK Notify SMS capabilities to ECP journey
+  - allow OTP to be entered when changing mobile or email details
 
 ## [Release 098] - 2021-09-30
 

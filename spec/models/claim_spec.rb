@@ -1054,6 +1054,16 @@ RSpec.describe Claim, type: :model do
       expect(claim.provide_mobile_number).to eq false
       expect(claim.mobile_number).to be_nil
     end
+
+    it "resets mobile_verified when the value of mobile_number changes" do
+      expect { claim.reset_dependent_answers }.not_to change { claim.attributes }
+
+      claim.mobile_number = "07425999124"
+      claim.reset_dependent_answers
+
+      expect(claim.mobile_number).to eq "07425999124"
+      expect(claim.mobile_verified).to be_nil
+    end
   end
 
   describe ".filtered_params" do
