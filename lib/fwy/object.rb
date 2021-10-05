@@ -10,7 +10,7 @@ module Fwy
       elsif obj.is_a?(Array)
         obj.map { |o| to_ostruct(o) }
       elsif obj.is_a?(String)
-        obj.strip
+        obj.strip.presence
       else # Likely a primative value
         obj
       end

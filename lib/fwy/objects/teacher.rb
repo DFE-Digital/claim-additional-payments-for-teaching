@@ -1,19 +1,19 @@
 module Fwy
   class Teacher < Object
     def date_of_birth
-      dob.presence&.to_date
+      dob&.to_date
     end
 
     def first_name
-      name.presence&.split&.first
+      name&.split&.first
     end
 
     def surname
-      name.presence&.split&.split.last
+      name&.split&.last
     end
 
     def qts_date
-      qualified_teacher_status.presence&.qts_date.presence&.to_date
+      qualified_teacher_status&.qts_date&.to_date
     end
 
     def itt_subject_codes
@@ -21,11 +21,11 @@ module Fwy
         itt&.subject1,
         itt&.subject2,
         itt&.subject3
-      ]
+      ].compact
     end
 
     def itt_date
-      itt.presence&.programme_start_date.presence&.to_date
+      itt.presence&.programme_start_date&.to_date
     end
 
     def qualification_name
