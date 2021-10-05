@@ -191,26 +191,17 @@ RSpec.feature "Teacher Early-Career Payments claims" do
     # - Provide mobile number
     expect(page).to have_text(I18n.t("questions.provide_mobile_number"))
 
-    choose "Yes"
+    choose "No"
     click_on "Continue"
 
-    expect(claim.reload.provide_mobile_number).to eql true
+    expect(claim.reload.provide_mobile_number).to eql false
 
     # - Mobile number
-    expect(page).to have_text(I18n.t("questions.mobile_number"))
-
-    fill_in "claim_mobile_number", with: "07123456789"
-    click_on "Continue"
-
-    expect(claim.reload.mobile_number).to eql("07123456789")
+    expect(page).not_to have_text(I18n.t("questions.mobile_number"))
 
     # - Mobile number one-time password
-    # expect(page).to have_text("Password verification")
-    # expect(page).to have_text("Enter the 6-digit password")
-    # expect(page).not_to have_text("We recommend you copy and paste the password from the email.")
-
-    # fill_in "claim_one_time_password", with: otp_sent_to_mobile
-    # click_on "Confirm"
+    expect(page).not_to have_text("Enter the 6-digit password")
+    expect(page).not_to have_text("We recommend you copy and paste the password from the email.")
 
     # Payment to Bank or Building Society
     expect(page).to have_text(I18n.t("questions.bank_or_building_society"))
@@ -647,26 +638,17 @@ RSpec.feature "Teacher Early-Career Payments claims" do
     # - Provide mobile number
     expect(page).to have_text(I18n.t("questions.provide_mobile_number"))
 
-    choose "Yes"
+    choose "No"
     click_on "Continue"
 
-    expect(claim.reload.provide_mobile_number).to eql true
+    expect(claim.reload.provide_mobile_number).to eql false
 
     # - Mobile number
-    expect(page).to have_text(I18n.t("questions.mobile_number"))
-
-    fill_in "Mobile number", with: "01234567899"
-    click_on "Continue"
-
-    expect(claim.reload.mobile_number).to eql "01234567899"
+    expect(page).not_to have_text(I18n.t("questions.mobile_number"))
 
     # - Mobile number one-time password
-    # expect(page).to have_text("Password verification")
-    # expect(page).to have_text("Enter the 6-digit password")
-    # expect(page).not_to have_text("We recommend you copy and paste the password from the email.")
-
-    # fill_in "claim_one_time_password", with: otp_sent_to_mobile
-    # click_on "Confirm"
+    expect(page).not_to have_text("Enter the 6-digit password")
+    expect(page).not_to have_text("We recommend you copy and paste the password from the email.")
 
     # Payment to Bank or Building Society
     expect(page).to have_text(I18n.t("questions.bank_or_building_society"))
@@ -1022,26 +1004,17 @@ RSpec.feature "Teacher Early-Career Payments claims" do
       # - Provide mobile number
       expect(page).to have_text(I18n.t("questions.provide_mobile_number"))
 
-      choose "Yes"
+      choose "No"
       click_on "Continue"
 
-      expect(claim.reload.provide_mobile_number).to eql true
+      expect(claim.reload.provide_mobile_number).to eql false
 
       # - Mobile number
-      expect(page).to have_text(I18n.t("questions.mobile_number"))
-
-      fill_in "Mobile number", with: "01234567899"
-      click_on "Continue"
-
-      expect(claim.reload.mobile_number).to eql "01234567899"
+      expect(page).not_to have_text(I18n.t("questions.mobile_number"))
 
       # - Mobile number one-time password
-      # expect(page).to have_text("Password verification")
-      # expect(page).to have_text("Enter the 6-digit password")
-      # expect(page).not_to have_text("We recommend you copy and paste the password from the email.")
-
-      # fill_in "claim_one_time_password", with: otp_sent_to_mobile
-      # click_on "Confirm"
+      expect(page).not_to have_text("Enter the 6-digit password")
+      expect(page).not_to have_text("We recommend you copy and paste the password from the email.")
 
       # Payment to Bank or Building Society
       expect(page).to have_text(I18n.t("questions.bank_or_building_society"))

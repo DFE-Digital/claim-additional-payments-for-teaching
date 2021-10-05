@@ -30,7 +30,7 @@
 
     <p class="govuk-body">
       If you are one of the below teachers, you can still 
-      <%= link_to "check your eligibility today", "#{EarlyCareerPayments.eligibility_page_url}", class: "govuk-link" %>.
+      <%= link_to "check your eligibility today", "#{new_claim_url(EarlyCareerPayments.routing_name)}", class: "govuk-link" %>.
       If you are eligible, you will need to return when your application window opens.
     </p>
 

@@ -146,12 +146,23 @@ class ClaimsController < BasePublicController
   def one_time_password
     case params[:slug]
     when "email-address"
-      ClaimMailer.email_verification(current_claim, otp.code).deliver_now
+      ClaimMailer.email_verification(current_claim, otp.code).deliver_now if current_claim.valid?(:"email-address")
       session[:sent_one_time_password_at] = Time.now
     when "mobile-number"
-      Rails.logger.debug "\n\n  ** =================== **\nSMS one_time_password: \n#{otp.code}\n  ** =================== **\n"
+      if current_claim.valid?(:"mobile-number")
+        response = NotifySmsMessage.new(
+          phone_number: current_claim.mobile_number,
+          template_id: "86ae1fe4-4f98-460b-9d57-181804b4e218",
+          personalisation: {
+            otp: otp.code
+          }
+        ).deliver!
+      end
+      session[:sent_one_time_password_at] = Time.now unless response.nil?
     when "email-verification"
-      current_claim.update(sent_one_time_password_at: session[:sent_one_time_password_at])
+      current_claim.update(sent_one_time_password_at: session[:sent_one_time_password_at], one_time_password_category: :claim_email)
+    when "mobile-verification"
+      current_claim.update(sent_one_time_password_at: session[:sent_one_time_password_at], one_time_password_category: :claim_mobile)
     end
   end
 
