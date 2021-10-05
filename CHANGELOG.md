@@ -10,6 +10,8 @@ The format is based on [Keep a Changelog]
   - Improve DQT client qualified teacher status data casting
 - Add capability to send SMS messages to GOVUK Notify
 - Add GTM_Analytics to Azure
+- DAC Accessibility Report fixes
+  - Error message fix
 - Early Career Payments
   - integrate GOVUK Notify SMS capabilities to ECP journey
 

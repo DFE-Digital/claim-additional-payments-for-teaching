@@ -20,6 +20,8 @@
             Teachers Pension Scheme.
           </span>
 
+          <%= errors_tag current_claim, :payroll_gender %>
+
           <div class="govuk-radios">
             <div class="govuk-radios__item">
               <%= form.radio_button(:payroll_gender, :female, class: "govuk-radios__input") %>
