@@ -41,6 +41,7 @@ resource "azurerm_container_group" "cont_grp_01" {
       "ENVIRONMENT_NAME"                               = local.environment
       "GECKOBOARD_API_KEY"                             = data.azurerm_key_vault_secret.GeckoboardAPIKey.value
       "GOOGLE_ANALYTICS_ID"                            = ""
+      "GTM_ANALYTICS"                                  = data.azurerm_key_vault_secret.GTMAnalytics.value
       "LOGSTASH_HOST"                                  = data.azurerm_key_vault_secret.LogstashHost.value
       "LOGSTASH_PORT"                                  = local.stash_port
       "ORDNANCE_SURVEY_CLIENT_PARAMS"                  = data.azurerm_key_vault_secret.ordnancesurveyclientparms.value
@@ -108,6 +109,7 @@ resource "azurerm_container_group" "cont_grp_02" {
       "ENVIRONMENT_NAME"                               = local.environment
       "GECKOBOARD_API_KEY"                             = data.azurerm_key_vault_secret.GeckoboardAPIKey.value
       "GOOGLE_ANALYTICS_ID"                            = ""
+      "GTM_ANALYTICS"                                  = data.azurerm_key_vault_secret.GTMAnalytics.value
       "LOGSTASH_HOST"                                  = data.azurerm_key_vault_secret.LogstashHost.value
       "LOGSTASH_PORT"                                  = local.stash_port
       "NOTIFY_API_KEY"                                 = data.azurerm_key_vault_secret.NotifyApiKey.value
