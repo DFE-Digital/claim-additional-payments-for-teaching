@@ -7,6 +7,7 @@ The format is based on [Keep a Changelog]
 ## [Unreleased]
 
 - Add capability to send SMS messages to GOVUK Notify
+- Add GTM_Analytics to Azure
 - Early Career Payments
   - integrate GOVUK Notify SMS capabilities to ECP journey
 

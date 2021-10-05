@@ -110,6 +110,11 @@ data "azurerm_key_vault_secret" "StorageCredentials" {
   key_vault_id = data.azurerm_key_vault.secrets_kv.id
 }
 
+data "azurerm_key_vault_secret" "GTMAnalytics" {
+  name         = "GTMAnalytics"
+  key_vault_id = data.azurerm_key_vault.secrets_kv.id
+}
+
 # data "azurerm_key_vault_secret" "SamlEncryptionKey" {
 #   name         = "TeacherPaymentsDevVspSamlEncryption8KeyBase64"
 #   key_vault_id = data.azurerm_key_vault.secrets_kv.id
