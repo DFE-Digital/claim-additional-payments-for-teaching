@@ -79,7 +79,7 @@ RSpec.feature "Admin claim tasks update with DQT API" do
               "ittSubject1Code": "#{data.dig(:itt_subject_codes, 0)}",
               "ittSubject2Code": "#{data.dig(:itt_subject_codes, 1)}",
               "ittSubject3Code": "#{data.dig(:itt_subject_codes, 2)}",
-              "activeAlert": #{data[:active_alert] || false},
+              "activeAlert": #{data[:active_alert?] || false},
               "qualificationName": "#{data[:qualification_name] || "BA"}",
               "ittStartDate": "#{data[:itt_start_date] || Date.today}"
             }
@@ -455,7 +455,7 @@ RSpec.feature "Admin claim tasks update with DQT API" do
         context "with teacher status alert" do
           let(:data) do
             {
-              active_alert: true,
+              active_alert?: true,
               date_of_birth: claim.date_of_birth,
               name: "#{claim.first_name} #{claim.surname}",
               national_insurance_number: claim.national_insurance_number,
@@ -1154,7 +1154,7 @@ RSpec.feature "Admin claim tasks update with DQT API" do
         context "with teacher status alert" do
           let(:data) do
             {
-              active_alert: true,
+              active_alert?: true,
               date_of_birth: claim.date_of_birth,
               name: "#{claim.first_name} #{claim.surname}",
               national_insurance_number: claim.national_insurance_number,
@@ -1852,7 +1852,7 @@ RSpec.feature "Admin claim tasks update with DQT API" do
         context "with teacher status alert" do
           let(:data) do
             {
-              active_alert: true,
+              active_alert?: true,
               date_of_birth: claim.date_of_birth,
               name: "#{claim.first_name} #{claim.surname}",
               national_insurance_number: claim.national_insurance_number,

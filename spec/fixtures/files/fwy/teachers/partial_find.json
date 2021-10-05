@@ -1,0 +1,64 @@
+{
+  "trn": "1001000",
+  "ni_number": "JR501209A",
+  "name": "Fenton Laing",
+  "dob": "1987-08-22T00:00:00",
+  "active_alert": false,
+  "state": 0,
+  "state_name": "Active",
+  "qualified_teacher_status": {
+      "name": "Qualified teacher (trained)",
+      "qts_date": "2020-04-03T00:00:00",
+      "state": 0,
+      "state_name": "Active"
+  },
+  "induction": {
+      "start_date": "2021-07-01T00:00:00Z",
+      "completion_date": "2021-07-05T00:00:00Z",
+      "status": "Pass",
+      "state": 0,
+      "state_name": "Active"
+  },
+  "initial_teacher_training": {
+      "programme_start_date": "2021-06-27T00:00:00Z",
+      "programme_end_date": "2021-07-04T00:00:00Z",
+      "programme_type": "Overseas Trained Teacher Programme",
+      "result": "Pass",
+      "subject1": "G100",
+      "subject2": "NULL",
+      "subject3": "NULL",
+      "qualification": "Graduate Diploma",
+      "state": 0,
+      "state_name": "Active"
+  },
+  "qualifications": [
+      {
+          "name": "Higher Education",
+          "date_awarded": null
+      },
+      {
+          "name": "NPQH",
+          "date_awarded": "2021-07-05T00:00:00Z"
+      },
+      {
+          "name": "Mandatory Qualification",
+          "date_awarded": null
+      },
+      {
+          "name": "HLTA",
+          "date_awarded": null
+      },
+      {
+          "name": "NPQML",
+          "date_awarded": "2021-07-05T00:00:00Z"
+      },
+      {
+          "name": "NPQSL",
+          "date_awarded": "2021-07-04T00:00:00Z"
+      },
+      {
+          "name": "NPQEL",
+          "date_awarded": "2021-07-04T00:00:00Z"
+      }
+  ]
+}

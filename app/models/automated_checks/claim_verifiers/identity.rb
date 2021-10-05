@@ -3,12 +3,12 @@ module AutomatedChecks
     class Identity
       def initialize(
         claim:,
-        dqt_teacher_status:,
+        dqt_teacher_statuses:,
         admin_user: nil
       )
         self.admin_user = admin_user
         self.claim = claim
-        self.dqt_teacher_status = dqt_teacher_status
+        self.dqt_teacher_status = dqt_teacher_statuses&.first
       end
 
       def perform
@@ -25,7 +25,7 @@ module AutomatedChecks
       attr_accessor :admin_user, :claim, :dqt_teacher_status
 
       def active_alert?
-        dqt_teacher_status.active_alert
+        dqt_teacher_status.active_alert?
       end
 
       def awaiting_task?(task_name)

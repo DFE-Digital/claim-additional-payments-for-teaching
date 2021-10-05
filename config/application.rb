@@ -20,6 +20,7 @@ require_relative "../lib/one_time_password"
 require_relative "../lib/send_analytics"
 require_relative "../lib/upload"
 require_relative "../lib/fwy"
+require_relative "../lib/notify_sms_message"
 
 # Require the gems listed in Gemfile, including any gems
 # you've limited to :test, :development, or :production.

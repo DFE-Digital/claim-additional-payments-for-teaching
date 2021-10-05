@@ -10,18 +10,18 @@ RSpec.describe Fwy::TeacherResource, type: :request do
       date_of_birth: Date.new(1996,7,2),
       first_name: "Mostly",
       surname: "Populated",
-      qts_date: Date.new(2021,7,5),
+      qts_award_date: Date.new(2021,7,5),
       itt_subject_codes: [
         "applied biology",
         "applied chemistry",
         "applied computing"
       ],
-      itt_date: Date.new(2021,6,27),
+      itt_start_date: Date.new(2021,6,27),
       qualification_name: "BA (Hons)",
       degree_codes: [],
       national_insurance_number: "AB123456D",
       teacher_reference_number: "1001000",
-      active_alert: false
+      active_alert?: false
     }
   end
 

@@ -1,11 +1,12 @@
 module EarlyCareerPayments
   class DqtRecord
-    attr_reader(
+    delegate(
       :qts_award_date,
       :itt_subject_codes,
       :itt_start_date,
       :degree_codes,
-      :qualification_name
+      :qualification_name,
+      to: :record
     )
 
     ELIGIBLE_JAC_CODES = {
@@ -122,11 +123,7 @@ module EarlyCareerPayments
 
     def initialize(record, claim)
       @claim = claim
-      @qts_award_date = record.qts_date
-      @itt_subject_codes = record.itt_subject_codes
-      @itt_start_date = record.itt_date
-      @degree_codes = record.degree_codes
-      @qualification_name = record.qualification_name
+      @record = record
     end
 
     def eligible?
@@ -150,7 +147,7 @@ module EarlyCareerPayments
       !award_amount.nil?
     end
 
-    def eligible_qts_date?
+    def eligible_qts_award_date?
       eligible?
     end
 
@@ -160,7 +157,7 @@ module EarlyCareerPayments
 
     private
 
-    attr_reader :claim
+    attr_reader :claim, :record
 
     def itt_subject_group
       [*itt_subject_codes, *degree_codes].each do |subject_code|

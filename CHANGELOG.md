@@ -6,6 +6,14 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+- Admin
+  - Improve DQT client qualified teacher status data casting
+- Add capability to send SMS messages to GOVUK Notify
+- Early Career Payments
+  - integrate GOVUK Notify SMS capabilities to ECP journey
+
+## [Release 098] - 2021-09-30
+
 - DAC Accessibility Report fixes
   - Error skip link
 
@@ -910,7 +918,9 @@ The format is based on [Keep a Changelog]
 - First release for student loan repayments private beta
 
 [unreleased]:
-  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-097...HEAD
+  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-098...HEAD
+[release 098]:
+  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-097...release-098
 [release 097]:
   https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-096...release-097
 [release 096]:

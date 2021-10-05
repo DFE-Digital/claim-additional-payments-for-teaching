@@ -10,10 +10,63 @@ module Fwy
       elsif obj.is_a?(Array)
         obj.map { |o| to_ostruct(o) }
       elsif obj.is_a?(String)
-        obj.strip.presence
+        string_reader(obj)&.strip
       else # Likely a primative value
         obj
       end
+    end
+
+    def date_reader(value)
+      return if nil_value?(value)
+
+      begin
+        Date.parse(value)
+      rescue Date::Error, TypeError
+        begin
+          Time.at(Integer(value), in: "UTC").to_date
+        rescue ArgumentError => e
+          Rollbar.error(e)
+
+          nil
+        end
+      end
+    end
+
+    def boolean_reader(value)
+      return if nil_value?(value)
+
+      value.to_s.strip.downcase == "true"
+    end
+
+    def integer_reader(value)
+      return if nil_value?(value)
+
+      begin
+        Integer(value)
+      rescue ArgumentError => e
+        Rollbar.error(e)
+
+        nil
+      end
+    end
+
+    def string_reader(value)
+      return if nil_value?(value)
+
+      value = value.to_s
+      value = yield value if block_given?
+
+      value
+    end
+
+    def nil_value?(value)
+      value.nil? ||
+        ["nil", "null"].any?(
+          value
+            .to_s
+            .strip
+            .downcase
+        )
     end
   end
 end
