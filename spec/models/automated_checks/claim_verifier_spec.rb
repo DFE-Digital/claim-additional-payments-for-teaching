@@ -10,7 +10,7 @@ RSpec.describe AutomatedChecks::ClaimVerifier do
       let(:claim_verifier_args) do
         {
           claim: nil,
-          dqt_teacher_status: nil,
+          dqt_teacher_statuses: nil,
           verifiers: [
             double("first verifier", perform: nil),
             double("second verifier", perform: Task.new),

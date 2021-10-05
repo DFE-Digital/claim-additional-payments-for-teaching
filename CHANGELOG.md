@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+- Admin
+  - Improve DQT client qualified teacher status data casting
 - Add capability to send SMS messages to GOVUK Notify
 - Early Career Payments
   - integrate GOVUK Notify SMS capabilities to ECP journey

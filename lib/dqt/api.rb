@@ -1,6 +1,6 @@
 module Dqt
   class Api
-    delegate :qualified_teaching_status, to: :v1
+    delegate :qualified_teaching_statuses, to: :v1
 
     def initialize(client:)
       self.client = client

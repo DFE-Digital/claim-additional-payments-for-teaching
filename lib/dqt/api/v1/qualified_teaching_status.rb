@@ -2,45 +2,124 @@ module Dqt
   class Api
     class V1
       class QualifiedTeachingStatus
-        def initialize(client:)
-          self.client = client
+        def initialize(response:)
+          self.response = response
         end
 
-        def show(params:)
-          mapped_params = {
-            trn: params[:teacher_reference_number],
-            ni: params[:national_insurance_number]
-          }
+        def id
+          integer_reader(response[:id])
+        end
 
-          response = client.get(path: "/api/qualified-teachers/qualified-teaching-status", params: mapped_params)
+        def teacher_reference_number
+          string_reader(response[:trn])
+        end
 
-          return nil unless response
+        def first_name
+          string_reader(response[:name]) do |string|
+            string.split.first
+          end
+        end
 
-          # API returns multiple items but we only ever use the first one. Decided to create a consistent interface here for automated checks rather than spend time creating an abstract interface.
-          first_item = response[:data].first
+        def surname
+          string_reader(response[:name]) do |string|
+            string.split.last
+          end
+        end
 
-          {
-            teacher_reference_number: first_item[:trn],
-            first_name: first_item[:name].split.first,
-            surname: first_item[:name].split.last,
-            date_of_birth: DateTime.parse(first_item[:doB]),
-            degree_codes: [],
-            national_insurance_number: first_item[:niNumber],
-            qts_date: DateTime.parse(first_item[:qtsAwardDate]),
-            itt_subject_codes: [
-              first_item[:ittSubject1Code],
-              first_item[:ittSubject2Code],
-              first_item[:ittSubject3Code]
-            ],
-            active_alert: first_item[:activeAlert],
-            qualification_name: first_item[:qualificationName] == "NULL" ? nil : first_item[:qualificationName],
-            itt_date: DateTime.parse(first_item[:ittStartDate])
-          }
+        def date_of_birth
+          date_reader(response[:doB])
+        end
+
+        def degree_codes
+          []
+        end
+
+        def national_insurance_number
+          string_reader(response[:niNumber]) do |string|
+            string.strip
+          end
+        end
+
+        def qts_award_date
+          date_reader(response[:qtsAwardDate])
+        end
+
+        def itt_subject_codes
+          (1..3).filter_map do |n|
+            string_reader(response[:"ittSubject#{n}Code"])
+          end
+        end
+
+        def active_alert?
+          boolean_reader(response[:activeAlert])
+        end
+
+        def qualification_name
+          string_reader(response[:qualificationName]) do |string|
+            string.strip
+          end
+        end
+
+        def itt_start_date
+          date_reader(response[:ittStartDate])
         end
 
         private
 
-        attr_accessor :client
+        attr_accessor :response
+
+        def date_reader(value)
+          return if nil_value?(value)
+
+          begin
+            Date.parse(value)
+          rescue Date::Error, TypeError
+            begin
+              Time.at(Integer(value), in: "UTC").to_date
+            rescue ArgumentError => e
+              Rollbar.error(e)
+
+              nil
+            end
+          end
+        end
+
+        def boolean_reader(value)
+          return if nil_value?(value)
+
+          value.to_s.strip.downcase == "true"
+        end
+
+        def integer_reader(value)
+          return if nil_value?(value)
+
+          begin
+            Integer(value)
+          rescue ArgumentError => e
+            Rollbar.error(e)
+
+            nil
+          end
+        end
+
+        def string_reader(value)
+          return if nil_value?(value)
+
+          value = value.to_s
+          value = yield value if block_given?
+
+          value
+        end
+
+        def nil_value?(value)
+          value.nil? ||
+            ["nil", "null"].any?(
+              value
+                .to_s
+                .strip
+                .downcase
+            )
+        end
       end
     end
   end

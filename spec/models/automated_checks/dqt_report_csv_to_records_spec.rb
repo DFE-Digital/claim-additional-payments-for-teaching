@@ -52,32 +52,36 @@ RSpec.describe AutomatedChecks::DqtReportCsvToRecords do
   describe "#transform" do
     it "transforms multiple rows with the same reference to unique records" do
       expected_records = [
-        {
-          claim_reference: "AB123456",
-          teacher_reference_number: "1234567",
-          qts_date: Date.new(2017, 10, 24),
-          first_name: "Jonathan",
-          surname: "Bishop",
-          date_of_birth: Date.new(1980, 9, 10),
-          national_insurance_number: "QQ123456C",
-          degree_codes: ["G100", "F100", "R100"],
-          itt_subject_codes: ["E100"],
-          itt_date: nil,
-          qualification_name: nil
-        },
-        {
-          claim_reference: "XX999999",
-          teacher_reference_number: "7654321",
-          qts_date: Date.new(2016, 6, 17),
-          first_name: "Phillip",
-          surname: "Collins",
-          date_of_birth: Date.new(1993, 3, 5),
-          national_insurance_number: "QQ123456B",
-          degree_codes: ["X100"],
-          itt_subject_codes: ["X100"],
-          itt_date: nil,
-          qualification_name: nil
-        }
+        described_class::Row.new(
+          {
+            claim_reference: "AB123456",
+            teacher_reference_number: "1234567",
+            qts_award_date: Date.new(2017, 10, 24),
+            first_name: "Jonathan",
+            surname: "Bishop",
+            date_of_birth: Date.new(1980, 9, 10),
+            national_insurance_number: "QQ123456C",
+            degree_codes: ["G100", "F100", "R100"],
+            itt_subject_codes: ["E100"],
+            itt_start_date: nil,
+            qualification_name: nil
+          }
+        ),
+        described_class::Row.new(
+          {
+            claim_reference: "XX999999",
+            teacher_reference_number: "7654321",
+            qts_award_date: Date.new(2016, 6, 17),
+            first_name: "Phillip",
+            surname: "Collins",
+            date_of_birth: Date.new(1993, 3, 5),
+            national_insurance_number: "QQ123456B",
+            degree_codes: ["X100"],
+            itt_subject_codes: ["X100"],
+            itt_start_date: nil,
+            qualification_name: nil
+          }
+        )
       ]
       expect(dqt_report_csv_to_records.transform).to eql(expected_records)
     end
@@ -105,19 +109,21 @@ RSpec.describe AutomatedChecks::DqtReportCsvToRecords do
 
     it "handles nil values" do
       expected_records = [
-        {
-          claim_reference: "RE123456",
-          teacher_reference_number: nil,
-          qts_date: nil,
-          first_name: nil,
-          surname: nil,
-          date_of_birth: Date.new(1988, 3, 24),
-          national_insurance_number: nil,
-          degree_codes: [],
-          itt_subject_codes: [],
-          itt_date: nil,
-          qualification_name: nil
-        }
+        described_class::Row.new(
+          {
+            claim_reference: "RE123456",
+            teacher_reference_number: nil,
+            qts_award_date: nil,
+            first_name: nil,
+            surname: nil,
+            date_of_birth: Date.new(1988, 3, 24),
+            national_insurance_number: nil,
+            degree_codes: [],
+            itt_subject_codes: [],
+            itt_start_date: nil,
+            qualification_name: nil
+          }
+        )
       ]
       expect(dqt_report_csv_to_records.transform).to eql(expected_records)
     end

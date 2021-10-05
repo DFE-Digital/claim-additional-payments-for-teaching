@@ -15,12 +15,13 @@ module MathsAndPhysics
   #   degree_codes:       The corresponding JAC codes or HECOS to the subject(s)
   #                       the teacher completed their degree in.
   class DqtRecord
-    attr_reader(
+    delegate(
       :qts_award_date,
       :itt_subject_codes,
       :itt_start_date,
       :degree_codes,
-      :qualification_name
+      :qualification_name,
+      to: :record
     )
 
     # Full list of JAC principal subject codes can be found:
@@ -85,18 +86,14 @@ module MathsAndPhysics
     # Previously only JAC codes were checked, however changes to the DQT mean subject codes can be either JACS or HECOS codes.
 
     def initialize(record, _ = nil)
-      @qts_award_date = record.fetch(:qts_date)
-      @itt_subject_codes = record.fetch(:itt_subject_codes)
-      @itt_start_date = record.fetch(:itt_date, nil)
-      @degree_codes = record.fetch(:degree_codes)
-      @qualification_name = record.fetch(:qualification_name, nil)
+      @record = record
     end
 
     def eligible?
-      eligible_qts_date? && eligible_qualification_subject?
+      eligible_qts_award_date? && eligible_qualification_subject?
     end
 
-    def eligible_qts_date?
+    def eligible_qts_award_date?
       qts_award_date.present? && AcademicYear.for(qts_award_date) >= MathsAndPhysics.first_eligible_qts_award_year
     end
 
@@ -105,6 +102,8 @@ module MathsAndPhysics
     end
 
     private
+
+    attr_reader :record
 
     def itt_subject_maths_or_physics?
       itt_subject_codes.any? { |subject_code|

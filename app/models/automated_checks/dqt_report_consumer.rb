@@ -31,7 +31,7 @@ module AutomatedChecks
             @completed_tasks += ClaimVerifier.new(
               claim: claim,
               admin_user: @admin_user,
-              dqt_teacher_status: record
+              dqt_teacher_statuses: [record]
             ).perform
           end
         end
@@ -53,7 +53,7 @@ module AutomatedChecks
     end
 
     def claim_for_record(record)
-      claims.detect { |c| c.reference == record.fetch(:claim_reference) }
+      claims.detect { |c| c.reference == record.claim_reference }
     end
 
     def dqt_records
