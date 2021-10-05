@@ -201,7 +201,7 @@ GEM
       activesupport (>= 4.2)
       aes_key_wrap
       bindata
-    jwt (2.2.3)
+    jwt (2.3.0)
     launchy (2.5.0)
       addressable (~> 2.7)
     listen (3.7.0)
