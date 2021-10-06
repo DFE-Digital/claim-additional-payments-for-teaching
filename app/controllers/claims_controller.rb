@@ -149,7 +149,7 @@ class ClaimsController < BasePublicController
       ClaimMailer.email_verification(current_claim, otp.code).deliver_now if current_claim.valid?(:"email-address")
       session[:sent_one_time_password_at] = Time.now
     when "mobile-number"
-      if current_claim.valid?(:"mobile-number")
+      if current_claim.valid?(:"mobile-number") && current_claim.mobile_number_changed?
         response = NotifySmsMessage.new(
           phone_number: current_claim.mobile_number,
           template_id: "86ae1fe4-4f98-460b-9d57-181804b4e218",
