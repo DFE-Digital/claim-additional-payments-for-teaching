@@ -1,7 +1,7 @@
 module Fwy
   class Teacher < Object
     def date_of_birth
-      dob&.to_date
+      date_reader(dob)
     end
 
     def first_name
@@ -31,7 +31,7 @@ module Fwy
     end
 
     def qualification_name
-      itt&.qualification
+      string_reader(itt&.qualification)
     end
 
     def degree_codes
@@ -39,11 +39,11 @@ module Fwy
     end
 
     def national_insurance_number
-      ni_number
+      string_reader(ni_number)
     end
     
     def teacher_reference_number
-      trn
+      string_reader(trn)
     end
     
     def itt

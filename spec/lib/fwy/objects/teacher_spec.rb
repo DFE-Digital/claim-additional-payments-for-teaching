@@ -1,73 +1,41 @@
 require "rails_helper"
 
-RSpec.describe Fwy::Teacher do
-  subject(:subject) { described_class.new(qualified_teaching_status_response) }
-
-  let(:qualified_teaching_status_response) do
-    file_fixture("fwy/teachers/partial_find.json").read.with_indifferent_access
+class Hash
+  def get_at_path(path)
+    dig(*steps_from(path))
   end
 
-  shared_examples "integer reader" do |response_key|
-    context "when response value Integer" do
-      before { qualified_teaching_status_response.dig(*response_keys) = 1 }
+  def replace_at_path(path, new_value)
+    *steps, leaf = steps_from path
 
-      it "returns Integer" do
-        expect(subject).to equal 1
+    # steps is empty in the "name" example, in that case, we are operating on
+    # the root (self) hash, not a subhash
+    hash = steps.empty? ? self : dig(*steps)
+    # note that `hash` here doesn't _have_ to be a Hash, but it needs to
+    # respond to `[]=`
+    hash[leaf] = new_value
+  end
+
+  private
+  # the example hash uses symbols as the keys, so we'll convert each step in
+  # the path to symbols. If a step doesn't contain a non-digit character,
+  # we'll convert it to an integer to be treated as the index into an array
+  def steps_from path
+    path.split("/").map do |step|
+      unless step.match?(/D/)
+        step.to_sym
+      else
+        step.to_i
       end
     end
+  end
+end
 
-    context "when response value Integer as String" do
-      before { qualified_teaching_status_response.dig(*response_keys) = "2" }
+RSpec.describe Fwy::Teacher do
+  subject(:qualified_teaching_status) { described_class.new(qualified_teaching_status_response) }
 
-      it "returns Integer" do
-        expect(subject).to equal 2
-      end
-    end
-
-    context "when response value non Integer String" do
-      before { qualified_teaching_status_response.dig(*response_keys) = "x" }
-
-      it "reports error to Rollbar" do
-        allow(Rollbar).to receive(:error)
-
-        subject
-
-        expect(Rollbar).to have_received(:error)
-      end
-
-      it "returns nil" do
-        expect(subject).to equal nil
-      end
-    end
-
-    context "when response value nil" do
-      before { qualified_teaching_status_response.dig(*response_keys) = nil }
-
-      it "returns nil" do
-        expect(subject).to equal nil
-      end
-    end
-
-    [
-      "nil",
-      "NIL",
-      "Nil",
-      "NiL",
-      " nil ",
-      "null",
-      "NULL",
-      "Null",
-      "NuLl",
-      " null "
-    ].each do |nil_string|
-      context "when response value nil (eg '#{nil_string}') as String" do
-        before { qualified_teaching_status_response.dig(*response_keys) = nil_string }
-
-        it "returns nil" do
-          expect(subject).to equal nil
-        end
-      end
-    end
+  let(:qualified_teaching_status_response) do
+    JSON.parse(file_fixture("fwy/teachers/partial_find.json").read).to_hash.symbolize_keys
   end
 
   shared_examples "string reader" do |response_keys|
@@ -79,7 +47,7 @@ RSpec.describe Fwy::Teacher do
     end
 
     def response(response)
-      response_func = ->(response_key) { qualified_teaching_status_response.dig(*response_keys) = response }
+      response_func = ->(response_key) { qualified_teaching_status_response.replace_at_path(response_key, response) }
 
       if collection
         response_keys.each do |response_key|
@@ -136,9 +104,9 @@ RSpec.describe Fwy::Teacher do
     end
   end
 
-  shared_examples "date reader" do |response_key|
+  shared_examples "date reader" do |response_keys|
     context "when response value Date as String" do
-      before { qualified_teaching_status_response.dig(*response_keys) = "1944-10-22" }
+      before { qualified_teaching_status_response.replace_at_path(response_keys, "1944-10-22") }
 
       it "returns String" do
         expect(subject).to eq Date.new(1944, 10, 22)
@@ -152,7 +120,7 @@ RSpec.describe Fwy::Teacher do
       "1944-10-22T00:00:00.1440844-00:00"
     ].each do |date_time|
       context "when response value DateTime as String (eg '#{date_time}')" do
-        before { qualified_teaching_status_response.dig(*response_keys) = date_time }
+        before { qualified_teaching_status_response.replace_at_path(response_keys, date_time) }
 
         it "returns Date" do
           expect(subject).to eq Date.new(1944, 10, 22)
@@ -161,7 +129,7 @@ RSpec.describe Fwy::Teacher do
     end
 
     context "when response value Time as Integer" do
-      before { qualified_teaching_status_response.dig(*response_keys) = -795052800 }
+      before { qualified_teaching_status_response.replace_at_path(response_keys, -795052800) }
 
       it "returns Date" do
         expect(subject).to eq Date.new(1944, 10, 22)
@@ -169,7 +137,7 @@ RSpec.describe Fwy::Teacher do
     end
 
     context "when response value Time as String" do
-      before { qualified_teaching_status_response.dig(*response_keys) = "-795052800" }
+      before { qualified_teaching_status_response.replace_at_path(response_keys, "-795052800") }
 
       it "returns Date" do
         expect(subject).to eq Date.new(1944, 10, 22)
@@ -177,7 +145,7 @@ RSpec.describe Fwy::Teacher do
     end
 
     context "when response value non Date as String" do
-      before { qualified_teaching_status_response.dig(*response_keys) = "x" }
+      before { qualified_teaching_status_response.replace_at_path(response_keys, "x") }
 
       it "reports error to Rollbar" do
         allow(Rollbar).to receive(:error)
@@ -193,7 +161,7 @@ RSpec.describe Fwy::Teacher do
     end
 
     context "when response value nil" do
-      before { qualified_teaching_status_response.dig(*response_keys) = nil }
+      before { qualified_teaching_status_response.replace_at_path(response_keys, nil) }
 
       it "returns nil" do
         expect(subject).to equal nil
@@ -213,7 +181,7 @@ RSpec.describe Fwy::Teacher do
       " null "
     ].each do |nil_string|
       context "when response value nil (eg '#{nil_string}') as String" do
-        before { qualified_teaching_status_response.dig(*response_keys) = nil_string }
+        before { qualified_teaching_status_response.replace_at_path(response_keys, nil_string) }
 
         it "returns nil" do
           expect(subject).to equal nil
@@ -222,9 +190,9 @@ RSpec.describe Fwy::Teacher do
     end
   end
 
-  shared_examples "boolean reader" do |response_key|
+  shared_examples "boolean reader" do |response_keys|
     context "when response value true" do
-      before { qualified_teaching_status_response.dig(*response_keys) = true }
+      before { qualified_teaching_status_response.replace_at_path(response_keys, true) }
 
       it "returns true" do
         expect(subject).to equal true
@@ -232,7 +200,7 @@ RSpec.describe Fwy::Teacher do
     end
 
     context "when response value false" do
-      before { qualified_teaching_status_response.dig(*response_keys) = false }
+      before { qualified_teaching_status_response.replace_at_path(response_keys, false) }
 
       it "returns false" do
         expect(subject).to equal false
@@ -247,7 +215,7 @@ RSpec.describe Fwy::Teacher do
       " true "
     ].each do |true_string|
       context "when response value true as String (eg '#{true_string}')" do
-        before { qualified_teaching_status_response.dig(*response_keys) = true_string }
+        before { qualified_teaching_status_response.replace_at_path(response_keys, true_string) }
 
         it "returns true" do
           expect(subject).to equal true
@@ -263,7 +231,7 @@ RSpec.describe Fwy::Teacher do
       " false "
     ].each do |false_string|
       context "when response value false as String (eg '#{false_string}')" do
-        before { qualified_teaching_status_response.dig(*response_keys) = false_string }
+        before { qualified_teaching_status_response.replace_at_path(response_keys, false_string) }
 
         it "returns false" do
           expect(subject).to equal false
@@ -272,7 +240,7 @@ RSpec.describe Fwy::Teacher do
     end
 
     context "when response value nil" do
-      before { qualified_teaching_status_response.dig(*response_keys) = nil }
+      before { qualified_teaching_status_response.replace_at_path(response_keys, nil) }
 
       it "returns nil" do
         expect(subject).to equal nil
@@ -292,7 +260,7 @@ RSpec.describe Fwy::Teacher do
       " null "
     ].each do |nil_string|
       context "when response value nil (eg '#{nil_string}') as String" do
-        before { qualified_teaching_status_response.dig(*response_keys) = nil_string }
+        before { qualified_teaching_status_response.replace_at_path(response_keys, nil_string) }
 
         it "returns nil" do
           expect(subject).to equal nil
@@ -304,13 +272,13 @@ RSpec.describe Fwy::Teacher do
   describe "#teacher_reference_number" do
     subject(:teacher_reference_number) { qualified_teaching_status.teacher_reference_number }
 
-    it_behaves_like "string reader", [:trn]
+    it_behaves_like "string reader", "trn"
   end
 
   describe "#first_name" do
     subject(:first_name) { qualified_teaching_status.first_name }
 
-    it_behaves_like "string reader", [:name]
+    it_behaves_like "string reader", "name"
 
     [
       {name: "Fenton Laing", first_name: "Fenton"},
@@ -331,7 +299,7 @@ RSpec.describe Fwy::Teacher do
   describe "#surname" do
     subject(:surname) { qualified_teaching_status.surname }
 
-    it_behaves_like "string reader", [:name]
+    it_behaves_like "string reader", "name"
 
     [
       {name: "Fenton Laing", surname: "Laing"},
@@ -352,7 +320,7 @@ RSpec.describe Fwy::Teacher do
   describe "#date_of_birth" do
     subject(:date_of_birth) { qualified_teaching_status.date_of_birth }
 
-    it_behaves_like "date reader", [:dob]
+    it_behaves_like "date reader", "dob"
   end
 
   describe "#degree_codes" do
@@ -366,13 +334,13 @@ RSpec.describe Fwy::Teacher do
   describe "#national_insurance_number" do
     subject(:national_insurance_number) { qualified_teaching_status.national_insurance_number }
 
-    it_behaves_like "string reader", [:ni_number]
+    it_behaves_like "string reader", "ni_number"
   end
 
   describe "#qts_award_date" do
     subject(:qts_award_date) { qualified_teaching_status.qts_award_date }
 
-    it_behaves_like "date reader", [:qualified_teacher_status, :qts_date]
+    it_behaves_like "date reader", "qualified_teacher_status/qts_date"
   end
 
   describe "#itt_subject_codes" do
@@ -380,25 +348,25 @@ RSpec.describe Fwy::Teacher do
 
     it_behaves_like(
       "string reader",
-      (1..3).map { |n| "subject#{n}".to_sym }
+      (1..3).map { |n| "initial_teacher_training/subject#{n}" }
     )
   end
 
   describe "#active_alert?" do
     subject(:active_alert?) { qualified_teaching_status.active_alert? }
 
-    it_behaves_like "boolean reader", [:active_alert]
+    it_behaves_like "boolean reader", "active_alert"
   end
 
   describe "#qualification_name" do
     subject(:qualification_name) { qualified_teaching_status.qualification_name }
 
-    it_behaves_like "string reader", [:qualified_teacher_status, :name]
+    it_behaves_like "string reader", "initial_teacher_training/qualification"
   end
 
   describe "#itt_start_date" do
     subject(:itt_start_date) { qualified_teaching_status.itt_start_date }
 
-    it_behaves_like "date reader", [:initial_teacher_training, :programme_start_date]
+    it_behaves_like "date reader", "initial_teacher_training/programme_start_date"
   end
 end
