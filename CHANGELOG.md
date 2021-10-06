@@ -12,6 +12,7 @@ The format is based on [Keep a Changelog]
 - Add GTM_Analytics to Azure
 - DAC Accessibility Report fixes
   - Error message fix
+  - Contrast enhanced
 - Early Career Payments
   - integrate GOVUK Notify SMS capabilities to ECP journey
 
