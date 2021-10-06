@@ -21,7 +21,7 @@ module Fwy
       when 403
         raise Error, "You are not allowed to perform that action. [#{response.status}: #{response.body["message"]}]"
       when 404
-        raise Error, "No results were found for your request. [#{response.status}: #{response.body["message"]}]"
+        return nil
       when 429
         raise Error, "Your request exceeded the API rate limit. [#{response.status}: #{response.body["message"]}]"
       when 500

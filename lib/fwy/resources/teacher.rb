@@ -1,11 +1,12 @@
 module Fwy
   class TeacherResource < Resource
     def find(trn, **params)
-      Teacher.new(
-        get_request(
-          "teachers/#{trn}", params: params
-        ).body
-      )
+      response = get_request(
+        "teachers/#{trn}", params: params
+      )&.body
+      return unless response
+
+      Teacher.new(response)
     end
   end
 end

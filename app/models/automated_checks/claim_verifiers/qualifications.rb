@@ -3,12 +3,12 @@ module AutomatedChecks
     class Qualifications
       def initialize(
         claim:,
-        dqt_teacher_statuses:,
+        dqt_teacher_status:,
         admin_user: nil
       )
         self.admin_user = admin_user
         self.claim = claim
-        self.dqt_teacher_status = dqt_teacher_statuses&.first
+        self.dqt_teacher_status = dqt_teacher_status
       end
 
       def perform
