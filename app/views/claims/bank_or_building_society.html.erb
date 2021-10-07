@@ -6,7 +6,7 @@
     <%= form_for current_claim, url: claim_path(current_policy_routing_name) do |form| %>
       <%= form.hidden_field :bank_or_building_society %>
       <%= form_group_tag current_claim do %>
-        <fieldset class="govuk-fieldset" role="group">
+        <fieldset class="govuk-fieldset" role="group" aria-describedby="bank_details-hint">
 
           <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
             <h1 class="govuk-fieldset__heading">
