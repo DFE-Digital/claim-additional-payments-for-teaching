@@ -106,7 +106,7 @@ resource "azurerm_container_group" "cont_grp_02" {
       "DQT_BEARER_GRANT_TYPE"                          = data.azurerm_key_vault_secret.DQTBearerGrantType.value
       "DQT_BEARER_SCOPE"                               = data.azurerm_key_vault_secret.DQTBearerScope.value
       "DQT_BEARER_CLIENT_ID"                           = data.azurerm_key_vault_secret.DQTBearerClientId.value
-      "DQT_BEARER_CLIENT_SECRET"                       = data.azurerm_key_vault_secret.DQTBearerClientSecret.value
+      "DQT_BEARER_CLIENT_SECRET"                       = data.azurerm_key_vault_secret.DqtBearerClientSecret.value
       "DQT_BASE_URL"                                   = data.azurerm_key_vault_secret.DQTBaseUrl.value
       "DQT_SUBSCRIPTION_KEY"                           = data.azurerm_key_vault_secret.DQTSubscriptionKey.value
       "ENVIRONMENT_NAME"                               = local.environment

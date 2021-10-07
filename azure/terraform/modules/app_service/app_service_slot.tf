@@ -43,7 +43,7 @@ resource "azurerm_app_service_slot" "app_as_slot" {
     "DQT_BEARER_GRANT_TYPE"                          = data.azurerm_key_vault_secret.DQTBearerGrantType.value
     "DQT_BEARER_SCOPE"                               = data.azurerm_key_vault_secret.DQTBearerScope.value
     "DQT_BEARER_CLIENT_ID"                           = data.azurerm_key_vault_secret.DQTBearerClientId.value
-    "DQT_BEARER_CLIENT_SECRET"                       = data.azurerm_key_vault_secret.DQTBearerClientSecret.value
+    "DQT_BEARER_CLIENT_SECRET"                       = data.azurerm_key_vault_secret.DqtBearerClientSecret.value
     "DQT_BASE_URL"                                   = data.azurerm_key_vault_secret.DQTBaseUrl.value
     "DQT_SUBSCRIPTION_KEY"                           = data.azurerm_key_vault_secret.DQTSubscriptionKey.value
     "ENVIRONMENT_NAME"                               = local.environment

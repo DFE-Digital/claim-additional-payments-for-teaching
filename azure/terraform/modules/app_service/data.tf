@@ -130,8 +130,8 @@ data "azurerm_key_vault_secret" "DQTBearerClientId" {
   key_vault_id = data.azurerm_key_vault.secrets_kv.id
 }
 
-data "azurerm_key_vault_secret" "DQTBearerClientSecret" {
-  name         = "DQTBearerClientSecret"
+data "azurerm_key_vault_secret" "DqtBearerClientSecret" {
+  name         = "DqtBearerClientSecret"
   key_vault_id = data.azurerm_key_vault.secrets_kv.id
 }
 
