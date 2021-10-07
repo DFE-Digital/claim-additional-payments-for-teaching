@@ -1,4 +1,4 @@
-module Fwy
+module Dqt
   class TeacherResource < Resource
     def find(trn, **params)
       response = get_request(

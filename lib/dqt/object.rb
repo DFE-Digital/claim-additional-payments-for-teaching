@@ -1,4 +1,4 @@
-module Fwy
+module Dqt
   class Object < OpenStruct
     def initialize(attributes)
       super to_ostruct(attributes)

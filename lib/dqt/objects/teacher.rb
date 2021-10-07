@@ -1,4 +1,4 @@
-module Fwy
+module Dqt
   class Teacher < Object
     def date_of_birth
       date_reader(dob)

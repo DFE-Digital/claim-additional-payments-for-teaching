@@ -54,7 +54,7 @@ module AutomatedChecks
       let(:qualifications_args) do
         {
           claim: claim_arg,
-          dqt_teacher_status: Fwy::Client.new.teacher.find(
+          dqt_teacher_status: Dqt::Client.new.teacher.find(
             claim_arg.teacher_reference_number,
             birthdate: claim_arg.date_of_birth,
             nino: claim_arg.national_insurance_number

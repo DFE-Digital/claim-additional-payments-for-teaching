@@ -27,11 +27,44 @@ class Hash
   end
 end
 
-RSpec.describe Fwy::Teacher do
+RSpec.describe Dqt::Teacher do
   subject(:qualified_teaching_status) { described_class.new(qualified_teaching_status_response) }
 
   let(:qualified_teaching_status_response) do
-    JSON.parse(file_fixture("fwy/teachers/partial_find.json").read).to_hash.symbolize_keys
+    {
+      trn: "1001000",
+      ni_number: "JR501209A",
+      name: "Fenton Laing",
+      dob: "1987-08-22T00:00:00",
+      active_alert: false,
+      state: 0,
+      state_name: "Active",
+      qualified_teacher_status: {
+          name: "Qualified teacher (trained)",
+          qts_date: "2020-04-03T00:00:00",
+          state: 0,
+          state_name: "Active"
+      },
+      induction: {
+          start_date: "2021-07-01T00:00:00Z",
+          completion_date: "2021-07-05T00:00:00Z",
+          status: "Pass",
+          state: 0,
+          state_name: "Active"
+      },
+      initial_teacher_training: {
+          programme_start_date: "2021-06-27T00:00:00Z",
+          programme_end_date: "2021-07-04T00:00:00Z",
+          programme_type: "Overseas Trained Teacher Programme",
+          result: "Pass",
+          subject1: "G100",
+          subject2: "NULL",
+          subject3: "NULL",
+          qualification: "Graduate Diploma",
+          state: 0,
+          state_name: "Active"
+      }
+    }
   end
 
   shared_examples "string reader" do |response_keys|

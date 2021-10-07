@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe Fwy::Client, type: :request do
+RSpec.describe Dqt::Client, type: :request do
   let(:trn) { 1001000 }
 
   let(:params) do
@@ -19,7 +19,7 @@ RSpec.describe Fwy::Client, type: :request do
 
   describe "#teacher#find" do
     subject(:subject) do
-      Fwy::Client.new.teacher.find(
+      Dqt::Client.new.teacher.find(
         trn,
         birthdate: params[:birthdate],
         nino: params[:nino]

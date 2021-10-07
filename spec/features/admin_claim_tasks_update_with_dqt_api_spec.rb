@@ -100,13 +100,13 @@ RSpec.feature "Admin claim tasks update with DQT API" do
       status = 200
     end
 
-    stub_request(:post, "#{ENV['FWY_BEARER_BASE_URL']}")
+    stub_request(:post, "#{ENV['DQT_BEARER_BASE_URL']}")
       .with(body: Faraday::FlatParamsEncoder.encode(
         {
-          grant_type: ENV["FWY_BEARER_GRANT_TYPE"],
-          scope: ENV["FWY_BEARER_SCOPE"],
-          client_id: ENV["FWY_BEARER_CLIENT_ID"],
-          client_secret: ENV["FWY_BEARER_CLIENT_SECRET"]
+          grant_type: ENV["DQT_BEARER_GRANT_TYPE"],
+          scope: ENV["DQT_BEARER_SCOPE"],
+          client_id: ENV["DQT_BEARER_CLIENT_ID"],
+          client_secret: ENV["DQT_BEARER_CLIENT_SECRET"]
         }
       ))
       .to_return(
@@ -114,7 +114,7 @@ RSpec.feature "Admin claim tasks update with DQT API" do
         status: 200
       )
 
-    stub_request(:get, "#{ENV['FWY_BASE_URL']}teachers/#{claim.teacher_reference_number}")
+    stub_request(:get, "#{ENV['DQT_BASE_URL']}teachers/#{claim.teacher_reference_number}")
       .with(query: WebMock::API.hash_including({
         birthdate: claim.date_of_birth.to_s,
         nino: claim.national_insurance_number
