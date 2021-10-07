@@ -39,9 +39,13 @@ resource "azurerm_app_service_slot" "app_as_slot" {
     "DFE_TEACHERS_PAYMENT_SERVICE_DATABASE_NAME"     = local.environment
     "DFE_TEACHERS_PAYMENT_SERVICE_DATABASE_PASSWORD" = data.azurerm_key_vault_secret.DatabasePassword.value
     "DFE_TEACHERS_PAYMENT_SERVICE_DATABASE_USERNAME" = format("%s@%s", data.azurerm_key_vault_secret.DatabaseUsername.value, format("%s-%s", var.app_rg_name, "db")) # "tps_development@s118d01-app-db"
-    "DQT_CLIENT_HEADERS"                             = data.azurerm_key_vault_secret.DqtClientHeaders.value
-    "DQT_CLIENT_HOST"                                = data.azurerm_key_vault_secret.DqtClientHost.value
-    "DQT_CLIENT_PARAMS"                              = data.azurerm_key_vault_secret.DqtClientParams.value
+    "DQT_BEARER_BASE_URL"                            = data.azurerm_key_vault_secret.DQTBearerBaseUrl.value
+    "DQT_BEARER_GRANT_TYPE"                          = data.azurerm_key_vault_secret.DQTBearerGrantType.value
+    "DQT_BEARER_SCOPE"                               = data.azurerm_key_vault_secret.DQTBearerScope.value
+    "DQT_BEARER_CLIENT_ID"                           = data.azurerm_key_vault_secret.DQTBearerClientId.value
+    "DQT_BEARER_CLIENT_SECRET"                       = data.azurerm_key_vault_secret.DQTBearerClientSecret.value
+    "DQT_BASE_URL"                                   = data.azurerm_key_vault_secret.DQTBaseUrl.value
+    "DQT_SUBSCRIPTION_KEY"                           = data.azurerm_key_vault_secret.DQTSubscriptionKey.value
     "ENVIRONMENT_NAME"                               = local.environment
     "GECKOBOARD_API_KEY"                             = data.azurerm_key_vault_secret.GeckoboardAPIKey.value
     "GOOGLE_ANALYTICS_ID"                            = ""

@@ -112,6 +112,41 @@ data "azurerm_key_vault_secret" "StorageCredentials" {
   key_vault_id = data.azurerm_key_vault.secrets_kv.id
 }
 
+data "azurerm_key_vault_secret" "DQTBearerBaseUrl" {
+  name         = "DQTBearerBaseUrl"
+  key_vault_id = data.azurerm_key_vault.secrets_kv.id
+}
+
+data "azurerm_key_vault_secret" "DQTBearerGrantType" {
+  name         = "DQTBearerGrantType"
+  key_vault_id = data.azurerm_key_vault.secrets_kv.id
+}
+
+data "azurerm_key_vault_secret" "DQTBearerScope" {
+  name         = "DQTBearerScope"
+  key_vault_id = data.azurerm_key_vault.secrets_kv.id
+}
+
+data "azurerm_key_vault_secret" "DQTBearerClientId" {
+  name         = "DQTBearerClientId"
+  key_vault_id = data.azurerm_key_vault.secrets_kv.id
+}
+
+data "azurerm_key_vault_secret" "DQTBearerClientSecret" {
+  name         = "DQTBearerClientSecret"
+  key_vault_id = data.azurerm_key_vault.secrets_kv.id
+}
+
+data "azurerm_key_vault_secret" "DQTBaseUrl" {
+  name         = "DQTBaseUrl"
+  key_vault_id = data.azurerm_key_vault.secrets_kv.id
+}
+
+data "azurerm_key_vault_secret" "DQTSubscriptionKey" {
+  name         = "DQTSubscriptionKey"
+  key_vault_id = data.azurerm_key_vault.secrets_kv.id
+}
+
 # data "azurerm_key_vault_secret" "TeacherPaymentsDevVspSamlEncryption2Key" {
 #   name         = "TeacherPaymentsDevVspSamlEncryption2Key"
 #   key_vault_id = data.azurerm_key_vault.secrets_kv.id
