@@ -12,6 +12,7 @@ The format is based on [Keep a Changelog]
   - Postgraduate doctoral loan DAC hint fix
   - Postgraduate masters loan DAC hint fix
   - Provide mobile number DAC hint fix
+  - Personal details DAC hint fix
 - Reminders
   - OTP - reduce size of OTP input
 
