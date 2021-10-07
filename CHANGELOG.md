@@ -8,6 +8,7 @@ The format is based on [Keep a Changelog]
 
 - DAC Accessibility Report fixes
   - ECP poor performance hint incorrectly named
+  - Bank or Building Society DAC hint fix
 - Reminders
   - OTP - reduce size of OTP input
 
