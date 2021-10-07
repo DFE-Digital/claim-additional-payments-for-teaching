@@ -6,6 +6,9 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+- DAC Accessibility Report fixes
+  - ECP poor performance hint incorrectly named
+
 ## [Release 099] - 2021-10-07
 
 - Admin
