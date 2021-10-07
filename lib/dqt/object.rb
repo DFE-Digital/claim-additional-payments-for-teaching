@@ -1,3 +1,5 @@
+# Generic Object. Takes the hash/Json returned from DQT
+# and gives us openstruct objects for easier reading/consuming
 module Dqt
   class Object < OpenStruct
     def initialize(attributes)
