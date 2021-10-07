@@ -47,16 +47,16 @@ module RequestHelpers
     follow_redirect!
   end
 
-  # spec/fixtures/fwy/teachers/find.json
-  def stub_response(fixture:, status: 200, headers: {"Content-Type" => "application/json"})
-    [status, headers, file_fixture("fwy/#{fixture}.json").read]
-  end
+  # # spec/fixtures/fwy/teachers/find.json
+  # def stub_response(fixture:, status: 200, headers: {"Content-Type" => "application/json"})
+  #   [status, headers, file_fixture("fwy/#{fixture}.json").read]
+  # end
 
-  def stub_request(path, response:, method: :get, body: {})
-    Faraday::Adapter::Test::Stubs.new do |stub|
-      arguments = [method, "/#{path}"]
-      arguments << body.to_json if [:post, :put, :patch].include?(method)
-      stub.send(*arguments) { |env| response }
-    end
-  end
+  # def stub_request(path, response:, method: :get, body: {})
+  #   Faraday::Adapter::Test::Stubs.new do |stub|
+  #     arguments = [method, "/#{path}"]
+  #     arguments << body.to_json if [:post, :put, :patch].include?(method)
+  #     stub.send(*arguments) { |env| response }
+  #   end
+  # end
 end

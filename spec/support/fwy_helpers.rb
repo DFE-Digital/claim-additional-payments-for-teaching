@@ -46,6 +46,7 @@ module FwyHelpers
       }
     }, body)
 
+
     stub_request(:post, "#{ENV['FWY_BEARER_BASE_URL']}")
       .with(body: Faraday::FlatParamsEncoder.encode(bearer_params))
       .to_return(

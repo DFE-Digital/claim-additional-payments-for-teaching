@@ -1,10 +1,6 @@
 require "rails_helper"
 
 class Hash
-  def get_at_path(path)
-    dig(*steps_from(path))
-  end
-
   def replace_at_path(path, new_value)
     *steps, leaf = steps_from path
 

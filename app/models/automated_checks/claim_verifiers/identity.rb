@@ -22,7 +22,16 @@ module AutomatedChecks
 
       private
 
-      attr_accessor :admin_user, :claim, :dqt_teacher_status
+      attr_accessor :admin_user, :claim
+      attr_reader :dqt_teacher_status
+
+      def dqt_teacher_status=(dqt_teacher_status)
+        if dqt_teacher_status.instance_of?(Array)
+          @dqt_teacher_status = dqt_teacher_status.first
+        else
+          @dqt_teacher_status = dqt_teacher_status
+        end
+      end
 
       def active_alert?
         dqt_teacher_status.active_alert?

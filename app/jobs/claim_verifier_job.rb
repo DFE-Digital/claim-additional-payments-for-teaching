@@ -4,7 +4,7 @@ class ClaimVerifierJob < ApplicationJob
       claim: claim,
       dqt_teacher_status: Fwy::Client.new.teacher.find(
         claim.teacher_reference_number,
-        birthdate: claim.date_of_birth,
+        birthdate: claim.date_of_birth.to_s,
         nino: claim.national_insurance_number
       )
     ).perform

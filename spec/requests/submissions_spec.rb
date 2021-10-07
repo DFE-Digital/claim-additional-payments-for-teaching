@@ -14,9 +14,10 @@ RSpec.describe "Submissions", type: :request do
         in_progress_claim.eligibility.update!(attributes_for(:student_loans_eligibility, :eligible))
 
         stub_qualified_teaching_statuses_show(
-          query: {
-            trn: in_progress_claim.teacher_reference_number,
-            ni: in_progress_claim.national_insurance_number
+          trn: in_progress_claim.teacher_reference_number,
+          params: {
+            birthdate: in_progress_claim.date_of_birth&.to_s,
+            nino: in_progress_claim.national_insurance_number
           }
         )
       end

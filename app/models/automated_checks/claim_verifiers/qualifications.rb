@@ -77,6 +77,12 @@ module AutomatedChecks
       def dqt_teacher_status=(dqt_teacher_status)
         return if dqt_teacher_status.nil?
 
+        dqt_teacher_status = if dqt_teacher_status.instance_of?(Array)
+          dqt_teacher_status.first
+        else
+          dqt_teacher_status
+        end
+
         @dqt_teacher_status = claim.policy::DqtRecord.new(dqt_teacher_status, claim)
       end
 
