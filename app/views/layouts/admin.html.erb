@@ -36,7 +36,7 @@
     <% if ENV["GOOGLE_ANALYTICS_ID"] %>
       <noscript>
         <iframe
-          src="https://www.googletagmanager.com/ns.html?id=GTM-NL8QB4F"
+          src="https://www.googletagmanager.com/ns.html?<%= ENV["GTM_ANALYTICS"] %>"
           height="0"
           width="0"
           style="display:none;visibility:hidden">
@@ -52,8 +52,8 @@
       <div class="govuk-width-container">
         <p class="govuk-cookie-banner__message"><%= t("service_name") %> uses cookies to make the site simpler.</p>
         <div class="govuk-cookie-banner__buttons">
-          <button id="accept-cookies" class="govuk-button govuk-button--secondary" type="submit" data-module="govuk-button">Accept cookies</button>
-          <%= link_to('Cookie information', cookies_path(StudentLoans.routing_name), class: "govuk-button govuk-button--secondary", role: "button", data: {module: "govuk-button"}) %>
+          <button id="accept-cookies" class="govuk-button" type="submit" data-module="govuk-button">Accept cookies</button>
+          <%= link_to('Cookie information', cookies_path(StudentLoans.routing_name), class: "govuk-cookie-banner__link" ) %>
         </div>
       </div>
     </div>

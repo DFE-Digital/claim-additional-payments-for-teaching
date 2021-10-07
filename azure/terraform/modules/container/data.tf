@@ -147,6 +147,11 @@ data "azurerm_key_vault_secret" "DQTSubscriptionKey" {
   key_vault_id = data.azurerm_key_vault.secrets_kv.id
 }
 
+data "azurerm_key_vault_secret" "GTMAnalytics" {
+  name         = "GTMAnalytics"
+  key_vault_id = data.azurerm_key_vault.secrets_kv.id
+}
+
 # data "azurerm_key_vault_secret" "TeacherPaymentsDevVspSamlEncryption2Key" {
 #   name         = "TeacherPaymentsDevVspSamlEncryption2Key"
 #   key_vault_id = data.azurerm_key_vault.secrets_kv.id

@@ -6,12 +6,32 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+- DAC Accessibility Report fixes
+  - ECP poor performance hint incorrectly named
+  - Bank or Building Society DAC hint fix
+  - Postgraduate doctoral loan DAC hint fix
+  - Postgraduate masters loan DAC hint fix
+  - Provide mobile number DAC hint fix
+  - Personal details DAC hint fix
+  - TRN DAC hint fix
+- Reminders
+  - OTP - reduce size of OTP input
+
+## [Release 099] - 2021-10-07
+
 - Admin
   - Improve DQT client qualified teacher status data casting
   - DQT client now consumes from official API
 - Add capability to send SMS messages to GOVUK Notify
+- Add GTM_Analytics to Azure
+- DAC Accessibility Report fixes
+  - Error message fix
+  - Contrast enhanced
 - Early Career Payments
   - integrate GOVUK Notify SMS capabilities to ECP journey
+  - allow OTP to be entered when changing mobile or email details
+- All policies
+  - OTP - reduce size of OTP input
 
 ## [Release 098] - 2021-09-30
 
@@ -919,7 +939,9 @@ The format is based on [Keep a Changelog]
 - First release for student loan repayments private beta
 
 [unreleased]:
-  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-098...HEAD
+  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-099...HEAD
+[release 099]:
+  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-098...release-099
 [release 098]:
   https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-097...release-098
 [release 097]:

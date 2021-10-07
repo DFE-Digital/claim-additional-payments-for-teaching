@@ -336,4 +336,155 @@ RSpec.feature "Changing the answers on a submittable claim" do
       expect(claim.building_society_roll_number).to eq "6284/000390713"
     end
   end
+
+  describe "Teacher changes a field that requires OTP validation" do
+    let!(:claim) { start_early_career_payments_claim }
+    let(:eligibility) { claim.eligibility }
+
+    before do
+      claim.update!(attributes_for(:claim, :submittable))
+      eligibility.update!(attributes_for(:early_career_payments_eligibility, :eligible))
+      claim.update!(personal_details_attributes)
+
+      visit claim_path(EarlyCareerPayments.routing_name, "check-your-answers")
+    end
+
+    context "when email address" do
+      let(:personal_details_attributes) { {} }
+
+      scenario "is asked to provide the OTP challenge code for validation" do
+        old_email = claim.email_address
+        new_email = "fiona.adouboux@protonmail.com"
+
+        expect {
+          page.first("a[href='#{claim_path(EarlyCareerPayments.routing_name, "email-address")}']", minimum: 1).click
+          fill_in "Email address", with: new_email
+          click_on "Continue"
+        }.to change {
+          claim.reload.email_address
+        }.from(old_email).to(new_email)
+
+        expect(page).not_to have_content("Check your answers before sending your application")
+        expect(page).to have_content("Email address verification")
+
+        mail = ActionMailer::Base.deliveries.last
+        otp_in_mail_sent = mail.body.decoded.scan(/\b[0-9]{6}\b/).first
+
+        fill_in "claim_one_time_password", with: otp_in_mail_sent, fill_options: {clear: :backspace}
+        click_on "Confirm"
+
+        expect(claim.reload.email_verified).to eq true
+        expect(claim.submittable?).to be true
+        expect(page).to have_content("Check your answers before sending your application")
+      end
+    end
+
+    context "with no mobile number" do
+      before do
+        allow(NotifySmsMessage).to receive(:new).with(
+          phone_number: new_mobile,
+          template_id: "86ae1fe4-4f98-460b-9d57-181804b4e218",
+          personalisation: {
+            otp: otp_code
+          }
+        ).and_return(notify)
+        allow(OneTimePassword::Generator).to receive(:new).and_return(instance_double("OneTimePassword::Generator", code: otp_code))
+        allow(OneTimePassword::Validator).to receive(:new).and_return(instance_double("OneTimePassword::Validator", valid?: true))
+      end
+
+      let(:otp_code) { "019121" }
+      let(:notify) { instance_double("NotifySmsMessage", deliver!: true) }
+      let(:personal_details_attributes) do
+        {
+          provide_mobile_number: false
+        }
+      end
+      let(:new_mobile) { "07475112801" }
+
+      scenario "is asked to provide the OTP challenge code for validation" do
+        expect {
+          page.first("a[href='#{claim_path(EarlyCareerPayments.routing_name, "provide-mobile-number")}']", minimum: 1).click
+          choose "Yes"
+          click_on "Continue"
+        }.to change {
+          claim.reload.provide_mobile_number
+        }.from(false).to(true)
+
+        expect(page).not_to have_content("Check your answers before sending your application")
+        expect(page).to have_content("Enter your mobile number")
+        expect(page).to have_text(I18n.t("questions.mobile_number"))
+
+        fill_in "claim_mobile_number", with: new_mobile
+        click_on "Continue"
+
+        expect(claim.reload.mobile_number).to eql new_mobile
+
+        # - Mobile number one-time password
+        expect(page).to have_text("Password verification")
+        expect(page).to have_text("Enter the 6-digit password")
+        expect(page).not_to have_text("We recommend you copy and paste the password from the email.")
+
+        fill_in "claim_one_time_password", with: otp_code
+        click_on "Confirm"
+
+        expect(page).not_to have_text("Some places are both a bank and a building society")
+        expect(claim.reload.mobile_verified).to eq true
+        expect(claim.submittable?).to be true
+        expect(page).to have_content("Check your answers before sending your application")
+      end
+    end
+
+    context "with an existing mobile number" do
+      before do
+        allow(NotifySmsMessage).to receive(:new).with(
+          phone_number: new_mobile,
+          template_id: "86ae1fe4-4f98-460b-9d57-181804b4e218",
+          personalisation: {
+            otp: otp_code
+          }
+        ).and_return(notify)
+        allow(OneTimePassword::Generator).to receive(:new).and_return(instance_double("OneTimePassword::Generator", code: otp_code))
+        allow(OneTimePassword::Validator).to receive(:new).and_return(instance_double("OneTimePassword::Validator", valid?: true))
+      end
+
+      let(:otp_code) { "229213" }
+      let(:notify) { instance_double("NotifySmsMessage", deliver!: true) }
+      let(:personal_details_attributes) do
+        {
+          provide_mobile_number: true,
+          mobile_number: old_mobile,
+          mobile_verified: true
+        }
+      end
+      let(:new_mobile) { "07475112801" }
+      let(:old_mobile) { "07813090710" }
+
+      scenario "is asked to provide the OTP challenge code for validation" do
+        old_mobile = claim.mobile_number
+
+        expect {
+          page.first("a[href='#{claim_path(EarlyCareerPayments.routing_name, "mobile-number")}']", minimum: 1).click
+          fill_in "Mobile number", with: new_mobile
+          click_on "Continue"
+        }.to change {
+          claim.reload.mobile_number
+        }.from(old_mobile).to(new_mobile)
+
+        expect(page).not_to have_content("Check your answers before sending your application")
+
+        # - Mobile number one-time password
+        expect(page).to have_text("Password verification")
+        expect(page).to have_text("Enter the 6-digit password")
+        expect(page).not_to have_text("We recommend you copy and paste the password from the email.")
+
+        fill_in "claim_one_time_password", with: otp_code
+        click_on "Confirm"
+
+        expect(page).not_to have_text("Some places are both a bank and a building society")
+        expect(claim.reload.mobile_verified).to eq true
+        expect(claim.submittable?).to be true
+        expect(page).to have_content("Check your answers before sending your application")
+      end
+    end
+  end
 end

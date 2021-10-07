@@ -36,6 +36,7 @@ FactoryBot.define do
       teacher_reference_number { generate(:teacher_reference_number) }
       national_insurance_number { generate(:national_insurance_number) }
       email_address { generate(:email_address) }
+      email_verified { true }
       bank_or_building_society { :personal_bank_account }
       banking_name { "Jo Bloggs" }
       bank_sort_code { rand(100000..999999) }
@@ -49,6 +50,7 @@ FactoryBot.define do
         if claim.has_ecp_policy?
           claim.provide_mobile_number = true
           claim.mobile_number = "07474000123"
+          claim.mobile_verified = true
         end
       end
     end

@@ -142,6 +142,11 @@ data "azurerm_key_vault_secret" "DQTBaseUrl" {
 
 data "azurerm_key_vault_secret" "DQTSubscriptionKey" {
   name         = "DQTSubscriptionKey"
+    key_vault_id = data.azurerm_key_vault.secrets_kv.id
+}
+
+data "azurerm_key_vault_secret" "GTMAnalytics" {
+  name         = "GTMAnalytics"
   key_vault_id = data.azurerm_key_vault.secrets_kv.id
 }
 

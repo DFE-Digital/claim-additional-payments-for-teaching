@@ -1,7 +1,7 @@
 @import "govuk-frontend/govuk/all";
 
 $govuk-cookie-banner-background: govuk-colour("white");
-$govuk-cookie-banner-text-green: #00823b;
+$govuk-cookie-banner-text-black: govuk-colour("black");
 
 .js-enabled .govuk-cookie-banner {
   display: none;
@@ -31,7 +31,7 @@ $govuk-cookie-banner-text-green: #00823b;
   margin: govuk-spacing(0);
   padding-right: govuk-spacing(4);
   padding-bottom: govuk-spacing(2);
-  color: $govuk-cookie-banner-text-green;
+  color: $govuk-cookie-banner-text-black;
 }
 
 .govuk-cookie-banner__buttons {
@@ -43,12 +43,15 @@ $govuk-cookie-banner-text-green: #00823b;
 
   vertical-align: super;
 
-  .govuk-button--secondary {
+  .govuk-button {
     padding: 8px 10px;
     margin-bottom: govuk-spacing(2);
-    border-color: $govuk-cookie-banner-text-green;
-    color: $govuk-cookie-banner-text-green;
-    background-color: govuk-colour("white");
     box-shadow: none;
+  }
+
+  .govuk-cookie-banner__link {
+    padding-left: 30px;
+    padding-top: 10px;
+    vertical-align: middle;
   }
 }
