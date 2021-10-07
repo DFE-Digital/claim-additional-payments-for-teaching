@@ -6,6 +6,9 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+- Reminders
+  - OTP - reduce size of OTP input
+
 ## [Release 099] - 2021-10-07
 
 - Admin
