@@ -26,10 +26,10 @@ module AutomatedChecks
       attr_reader :dqt_teacher_status
 
       def dqt_teacher_status=(dqt_teacher_status)
-        if dqt_teacher_status.instance_of?(Array)
-          @dqt_teacher_status = dqt_teacher_status.first
+        @dqt_teacher_status = if dqt_teacher_status.instance_of?(Array)
+          dqt_teacher_status.first
         else
-          @dqt_teacher_status = dqt_teacher_status
+          dqt_teacher_status
         end
       end
 

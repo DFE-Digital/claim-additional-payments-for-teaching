@@ -68,7 +68,7 @@ module AutomatedChecks
         context "with eligible qualifications" do
           let(:data) do
             {
-              initial_teacher_training: { 
+              initial_teacher_training: {
                 programme_start_date: Date.new(2015, 9, 1),
                 subject1: MathsAndPhysics::DqtRecord::ELIGIBLE_MATHS_HECOS_CODES.first,
                 qualification: "BA"
@@ -125,7 +125,7 @@ module AutomatedChecks
             let(:data) do
               super().merge(
                 {
-                  qualified_teacher_status: { 
+                  qualified_teacher_status: {
                     qts_date: Date.new(
                       MathsAndPhysics.first_eligible_qts_award_year.start_year - 1,
                       9,
@@ -207,7 +207,7 @@ module AutomatedChecks
                   initial_teacher_training: {
                     subject1: "NoCode",
                     programme_start_date: super().dig(:initial_teacher_training, :programme_start_date),
-                    qualification: super().dig(:initial_teacher_training, :qualification),
+                    qualification: super().dig(:initial_teacher_training, :qualification)
                   }
                 }
               )

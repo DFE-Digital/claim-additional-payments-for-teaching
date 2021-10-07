@@ -13,15 +13,16 @@ class Hash
   end
 
   private
+
   # the example hash uses symbols as the keys, so we'll convert each step in
   # the path to symbols. If a step doesn't contain a non-digit character,
   # we'll convert it to an integer to be treated as the index into an array
   def steps_from path
     path.split("/").map do |step|
-      unless step.match?(/D/)
-        step.to_sym
-      else
+      if step.match?(/D/)
         step.to_i
+      else
+        step.to_sym
       end
     end
   end
@@ -40,29 +41,29 @@ RSpec.describe Dqt::Teacher do
       state: 0,
       state_name: "Active",
       qualified_teacher_status: {
-          name: "Qualified teacher (trained)",
-          qts_date: "2020-04-03T00:00:00",
-          state: 0,
-          state_name: "Active"
+        name: "Qualified teacher (trained)",
+        qts_date: "2020-04-03T00:00:00",
+        state: 0,
+        state_name: "Active"
       },
       induction: {
-          start_date: "2021-07-01T00:00:00Z",
-          completion_date: "2021-07-05T00:00:00Z",
-          status: "Pass",
-          state: 0,
-          state_name: "Active"
+        start_date: "2021-07-01T00:00:00Z",
+        completion_date: "2021-07-05T00:00:00Z",
+        status: "Pass",
+        state: 0,
+        state_name: "Active"
       },
       initial_teacher_training: {
-          programme_start_date: "2021-06-27T00:00:00Z",
-          programme_end_date: "2021-07-04T00:00:00Z",
-          programme_type: "Overseas Trained Teacher Programme",
-          result: "Pass",
-          subject1: "G100",
-          subject2: "NULL",
-          subject3: "NULL",
-          qualification: "Graduate Diploma",
-          state: 0,
-          state_name: "Active"
+        programme_start_date: "2021-06-27T00:00:00Z",
+        programme_end_date: "2021-07-04T00:00:00Z",
+        programme_type: "Overseas Trained Teacher Programme",
+        result: "Pass",
+        subject1: "G100",
+        subject2: "NULL",
+        subject3: "NULL",
+        qualification: "Graduate Diploma",
+        state: 0,
+        state_name: "Active"
       }
     }
   end

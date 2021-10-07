@@ -41,11 +41,11 @@ module Dqt
     def national_insurance_number
       string_reader(ni_number)
     end
-    
+
     def teacher_reference_number
       string_reader(trn)
     end
-    
+
     def itt
       initial_teacher_training
     end

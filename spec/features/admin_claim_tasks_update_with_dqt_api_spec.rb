@@ -71,36 +71,36 @@ RSpec.feature "Admin claim tasks update with DQT API" do
         state: 0,
         state_name: "Active",
         qualified_teacher_status: {
-            name: "Qualified teacher (trained)",
-            qts_date: "#{data[:qts_award_date] || Date.today}",
-            state: 0,
-            state_name: "Active"
+          name: "Qualified teacher (trained)",
+          qts_date: (data[:qts_award_date] || Date.today).to_s,
+          state: 0,
+          state_name: "Active"
         },
         induction: {
-            start_date: "2021-07-01T00:00:00Z",
-            completion_date: "2021-07-05T00:00:00Z",
-            status: "Pass",
-            state: 0,
-            state_name: "Active"
+          start_date: "2021-07-01T00:00:00Z",
+          completion_date: "2021-07-05T00:00:00Z",
+          status: "Pass",
+          state: 0,
+          state_name: "Active"
         },
         initial_teacher_training: {
-            programme_start_date: "#{data[:itt_start_date] || Date.today}",
-            programme_end_date: "2021-07-04T00:00:00Z",
-            programme_type: "Overseas Trained Teacher Programme",
-            result: "Pass",
-            subject1: "#{data.dig(:itt_subject_codes, 0)}",
-            subject2: "#{data.dig(:itt_subject_codes, 1)}",
-            subject3: "#{data.dig(:itt_subject_codes, 2)}",
-            qualification: "#{data[:qualification_name] || "BA"}",
-            state: 0,
-            state_name: "Active"
+          programme_start_date: (data[:itt_start_date] || Date.today).to_s,
+          programme_end_date: "2021-07-04T00:00:00Z",
+          programme_type: "Overseas Trained Teacher Programme",
+          result: "Pass",
+          subject1: data.dig(:itt_subject_codes, 0).to_s,
+          subject2: data.dig(:itt_subject_codes, 1).to_s,
+          subject3: data.dig(:itt_subject_codes, 2).to_s,
+          qualification: (data[:qualification_name] || "BA").to_s,
+          state: 0,
+          state_name: "Active"
         }
       }
 
       status = 200
     end
 
-    stub_request(:post, "#{ENV['DQT_BEARER_BASE_URL']}")
+    stub_request(:post, (ENV["DQT_BEARER_BASE_URL"]).to_s)
       .with(body: Faraday::FlatParamsEncoder.encode(
         {
           grant_type: ENV["DQT_BEARER_GRANT_TYPE"],
@@ -110,11 +110,11 @@ RSpec.feature "Admin claim tasks update with DQT API" do
         }
       ))
       .to_return(
-        body: { access_token: "1234" }.to_json,
+        body: {access_token: "1234"}.to_json,
         status: 200
       )
 
-    stub_request(:get, "#{ENV['DQT_BASE_URL']}teachers/#{claim.teacher_reference_number}")
+    stub_request(:get, "#{ENV["DQT_BASE_URL"]}teachers/#{claim.teacher_reference_number}")
       .with(query: WebMock::API.hash_including({
         birthdate: claim.date_of_birth.to_s,
         nino: claim.national_insurance_number
@@ -122,7 +122,7 @@ RSpec.feature "Admin claim tasks update with DQT API" do
       .to_return(
         body: body.to_json,
         status: status,
-        headers: {"Content-Type"=> "application/json"}
+        headers: {"Content-Type" => "application/json"}
       )
 
     perform_enqueued_jobs

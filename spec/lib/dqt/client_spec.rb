@@ -1,4 +1,4 @@
-require 'rails_helper'
+require "rails_helper"
 
 RSpec.describe Dqt::Client, type: :request do
   let(:trn) { 1001000 }
@@ -23,9 +23,9 @@ RSpec.describe Dqt::Client, type: :request do
         trn,
         birthdate: params[:birthdate],
         nino: params[:nino]
-      ) 
+      )
     end
-    
+
     it "does not raise an error" do
       expect { subject }.to_not raise_error
     end
