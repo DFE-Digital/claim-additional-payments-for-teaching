@@ -17,7 +17,8 @@
       <%= errors_tag current_claim, :banking_name %>
       <%= form.text_field :banking_name,
         class: css_classes_for_input(current_claim, :banking_name),
-        spellcheck: "false" %>
+        spellcheck: "false",
+        "aria-describedby" => "name-on-the-account-hint" %>
     <% end %>
 
     <%= form_group_tag current_claim, :bank_sort_code do %>
