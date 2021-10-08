@@ -8,8 +8,8 @@
         <%= t("questions.personal_details") %>
       </h1>
 
-      <fieldset class="govuk-fieldset" role="group" aria-describedby="full-name-hint" id="full-name-fieldset">
-        <div class="govuk-!-padding-bottom-6">
+      <div class="govuk-form-group govuk-!-padding-bottom-6">
+        <fieldset class="govuk-fieldset" role="group" aria-describedby="full-name-hint" id="full-name-fieldset">
           <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
             <h2 class="govuk-fieldset__heading govuk-!-padding-bottom-3" id="full-name-hint">
               <%= t("questions.name") %>
@@ -31,11 +31,11 @@
             <%= errors_tag current_claim, :surname %>
             <%= form.text_field :surname, class: css_classes_for_input(current_claim, :surname), autocomplete: "family-name" %>
           <% end %>
-        </div>
-      </fieldset>
+        </fieldset>
+      </div>
 
-      <fieldset class="govuk-fieldset" role="group" aria-describedby="date-of-birth-hint" id="date-of-birth-fieldset">
-        <div class="govuk-!-padding-bottom-6">
+      <div class="govuk-form-group govuk-!-padding-bottom-6">
+        <fieldset class="govuk-fieldset" role="group" aria-describedby="date-of-birth-hint" id="date-of-birth-fieldset">
           <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
             <h2 class="govuk-fieldset__heading">
               <%= t("questions.date_of_birth") %>
@@ -67,8 +67,8 @@
               </div>
             </div>
           </div>
-        </div>
-      </fieldset>
+        </fieldset>
+      </div>
 
       <div class="govuk-!-padding-bottom-6">
         <h2 class="govuk-label-wrapper">
