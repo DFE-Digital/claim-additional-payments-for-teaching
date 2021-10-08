@@ -14,6 +14,7 @@ The format is based on [Keep a Changelog]
   - Provide mobile number DAC hint fix
   - Personal details DAC hint fix
   - TRN DAC hint fix
+  - Bank details DAC hint fix
 - Reminders
   - OTP - reduce size of OTP input
 
