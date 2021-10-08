@@ -1,57 +1,22 @@
 module Dqt
   class Client
-    def initialize(
-      headers: Dqt.configuration.client.headers,
-      host: Dqt.configuration.client.host,
-      params: Dqt.configuration.client.params,
-      port: Dqt.configuration.client.port
-    )
-      self.headers = headers
-      self.host = host
-      self.params = params
-      self.port = port
+    attr_reader :adapter
+
+    def initialize(adapter: Faraday.default_adapter)
+      @adapter = adapter
     end
 
-    def api
-      @api ||= Api.new(client: self)
+    def teacher
+      TeacherResource.new(self)
     end
 
-    def get(path: "/", params: {})
-      request(method: :get, path: path, params: params, body: nil)
-    end
-
-    private
-
-    attr_accessor :headers, :host, :params, :port
-
-    # Accessing readers with send because < Ruby 2.7
-    def request(method:, path: "/", params: {}, body: {})
-      headers = {
-        'Content-Type': "application/json"
-      }.merge(send(:headers))
-
-      body = {request: body}.to_json unless body.blank?
-      params = params.merge(send(:params))
-
-      response = Response.new(
-        response: Typhoeus.public_send(
-          method,
-          url(path),
-          headers: headers,
-          params: params,
-          body: body
-        )
-      )
-
-      return nil if response.code == 404
-
-      raise ResponseError.new(response) if [*0..199, *300..403, *405..599].include? response.code
-
-      response.body
-    end
-
-    def url(path)
-      "#{host}#{":" unless port.nil?}#{port}#{path}"
+    def connection
+      @connection ||= Faraday.new(ENV["DQT_BASE_URL"]) do |c|
+        c.request :authorization, "Bearer", Bearer.get_auth_token
+        c.request :json
+        c.response :json, content_type: "application/json"
+        c.adapter adapter
+      end
     end
   end
 end

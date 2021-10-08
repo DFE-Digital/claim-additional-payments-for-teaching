@@ -31,7 +31,7 @@ module AutomatedChecks
             @completed_tasks += ClaimVerifier.new(
               claim: claim,
               admin_user: @admin_user,
-              dqt_teacher_statuses: [record]
+              dqt_teacher_status: [record]
             ).perform
           end
         end

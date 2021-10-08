@@ -5,24 +5,20 @@ module AutomatedChecks
     RSpec.describe Qualifications do
       before do
         if data
-          body = {
-            data: [data]
-          }
+          body = data
 
           status = 200
         else
-          body = {
-            data: nil,
-            message: "No records found."
-          }
+          body = {}
 
           status = 404
         end
 
         stub_qualified_teaching_statuses_show(
-          query: {
-            trn: claim_arg.teacher_reference_number,
-            ni: claim_arg.national_insurance_number
+          trn: claim_arg.teacher_reference_number,
+          params: {
+            birthdate: claim_arg.date_of_birth&.to_s,
+            nino: claim_arg.national_insurance_number
           },
           body: body,
           status: status
@@ -58,11 +54,10 @@ module AutomatedChecks
       let(:qualifications_args) do
         {
           claim: claim_arg,
-          dqt_teacher_statuses: Dqt::Client.new.api.qualified_teaching_statuses.show(
-            params: {
-              teacher_reference_number: claim_arg.teacher_reference_number,
-              national_insurance_number: claim_arg.national_insurance_number
-            }
+          dqt_teacher_status: Dqt::Client.new.teacher.find(
+            claim_arg.teacher_reference_number,
+            birthdate: claim_arg.date_of_birth,
+            nino: claim_arg.national_insurance_number
           )
         }
       end
@@ -73,14 +68,18 @@ module AutomatedChecks
         context "with eligible qualifications" do
           let(:data) do
             {
-              ittStartDate: Date.new(2015, 9, 1),
-              ittSubject1Code: MathsAndPhysics::DqtRecord::ELIGIBLE_MATHS_HECOS_CODES.first,
-              qualificationName: "BA",
-              qtsAwardDate: Date.new(
-                MathsAndPhysics.first_eligible_qts_award_year.start_year,
-                9,
-                1
-              )
+              initial_teacher_training: {
+                programme_start_date: Date.new(2015, 9, 1),
+                subject1: MathsAndPhysics::DqtRecord::ELIGIBLE_MATHS_HECOS_CODES.first,
+                qualification: "BA"
+              },
+              qualified_teacher_status: {
+                qts_date: Date.new(
+                  MathsAndPhysics.first_eligible_qts_award_year.start_year,
+                  9,
+                  1
+                )
+              }
             }
           end
 
@@ -126,11 +125,13 @@ module AutomatedChecks
             let(:data) do
               super().merge(
                 {
-                  qtsAwardDate: Date.new(
-                    MathsAndPhysics.first_eligible_qts_award_year.start_year - 1,
-                    9,
-                    1
-                  )
+                  qualified_teacher_status: {
+                    qts_date: Date.new(
+                      MathsAndPhysics.first_eligible_qts_award_year.start_year - 1,
+                      9,
+                      1
+                    )
+                  }
                 }
               )
             end
@@ -203,7 +204,11 @@ module AutomatedChecks
             let(:data) do
               super().merge(
                 {
-                  ittSubject1Code: "NoCode"
+                  initial_teacher_training: {
+                    subject1: "NoCode",
+                    programme_start_date: super().dig(:initial_teacher_training, :programme_start_date),
+                    qualification: super().dig(:initial_teacher_training, :qualification)
+                  }
                 }
               )
             end
@@ -332,12 +337,18 @@ module AutomatedChecks
             let(:data) do
               super().merge(
                 {
-                  ittSubject1Code: "NoCode",
-                  qtsAwardDate: Date.new(
-                    MathsAndPhysics.first_eligible_qts_award_year.start_year - 1,
-                    9,
-                    1
-                  )
+                  initial_teacher_training: {
+                    subject1: "NoCode",
+                    qualification: super().dig(:initial_teacher_training, :qualification),
+                    programme_start_date: super().dig(:initial_teacher_training, :programme_start_date)
+                  },
+                  qualified_teacher_status: {
+                    qts_date: Date.new(
+                      MathsAndPhysics.first_eligible_qts_award_year.start_year - 1,
+                      9,
+                      1
+                    )
+                  }
                 }
               )
             end

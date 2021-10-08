@@ -190,9 +190,10 @@ RSpec.feature "Teacher Student Loan Repayments claims" do
       expect(page).to have_text("Check your answers before sending your application")
 
       stub_qualified_teaching_statuses_show(
-        query: {
-          trn: claim.teacher_reference_number,
-          ni: claim.national_insurance_number
+        trn: claim.teacher_reference_number,
+        params: {
+          birthdate: claim.date_of_birth.to_s,
+          nino: claim.national_insurance_number
         }
       )
 

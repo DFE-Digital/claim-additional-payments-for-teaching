@@ -58,47 +58,72 @@ RSpec.feature "Admin claim tasks update with DQT API" do
     sign_in_as_service_operator
 
     if data.nil?
-      body = <<~JSON
-        {
-          "data": null,
-          "message": "No records found."
-        }
-      JSON
+      body = nil
 
       status = 404
     else
-      body = <<~JSON
-        {
-          "data": [
-            {
-              "trn": "#{data[:teacher_reference_number]}",
-              "name": "#{data[:name]}",
-              "doB": "#{data[:date_of_birth] || Date.today}",
-              "niNumber": "#{data[:national_insurance_number]}",
-              "qtsAwardDate": "#{data[:qts_award_date] || Date.today}",
-              "ittSubject1Code": "#{data.dig(:itt_subject_codes, 0)}",
-              "ittSubject2Code": "#{data.dig(:itt_subject_codes, 1)}",
-              "ittSubject3Code": "#{data.dig(:itt_subject_codes, 2)}",
-              "activeAlert": #{data[:active_alert] || false},
-              "qualificationName": "#{data[:qualification_name] || "BA"}",
-              "ittStartDate": "#{data[:itt_start_date] || Date.today}"
-            }
-          ],
-          "message": null
+      body = {
+        trn: data[:teacher_reference_number],
+        ni_number: data[:national_insurance_number],
+        name: data[:name],
+        dob: data[:date_of_birth] || Date.today,
+        active_alert: data[:active_alert?] || false,
+        state: 0,
+        state_name: "Active",
+        qualified_teacher_status: {
+          name: "Qualified teacher (trained)",
+          qts_date: (data[:qts_award_date] || Date.today).to_s,
+          state: 0,
+          state_name: "Active"
+        },
+        induction: {
+          start_date: "2021-07-01T00:00:00Z",
+          completion_date: "2021-07-05T00:00:00Z",
+          status: "Pass",
+          state: 0,
+          state_name: "Active"
+        },
+        initial_teacher_training: {
+          programme_start_date: (data[:itt_start_date] || Date.today).to_s,
+          programme_end_date: "2021-07-04T00:00:00Z",
+          programme_type: "Overseas Trained Teacher Programme",
+          result: "Pass",
+          subject1: data.dig(:itt_subject_codes, 0).to_s,
+          subject2: data.dig(:itt_subject_codes, 1).to_s,
+          subject3: data.dig(:itt_subject_codes, 2).to_s,
+          qualification: (data[:qualification_name] || "BA").to_s,
+          state: 0,
+          state_name: "Active"
         }
-      JSON
+      }
 
       status = 200
     end
 
-    stub_request(:get, "#{ENV["DQT_CLIENT_HOST"]}:#{ENV["DQT_CLIENT_PORT"]}/api/qualified-teachers/qualified-teaching-status").with(
-      query: WebMock::API.hash_including(
+    stub_request(:post, (ENV["DQT_BEARER_BASE_URL"]).to_s)
+      .with(body: Faraday::FlatParamsEncoder.encode(
         {
-          trn: claim.teacher_reference_number,
-          ni: claim.national_insurance_number
+          grant_type: ENV["DQT_BEARER_GRANT_TYPE"],
+          scope: ENV["DQT_BEARER_SCOPE"],
+          client_id: ENV["DQT_BEARER_CLIENT_ID"],
+          client_secret: ENV["DQT_BEARER_CLIENT_SECRET"]
         }
+      ))
+      .to_return(
+        body: {access_token: "1234"}.to_json,
+        status: 200
       )
-    ).to_return(body: body, status: status)
+
+    stub_request(:get, "#{ENV["DQT_BASE_URL"]}teachers/#{claim.teacher_reference_number}")
+      .with(query: WebMock::API.hash_including({
+        birthdate: claim.date_of_birth.to_s,
+        nino: claim.national_insurance_number
+      }))
+      .to_return(
+        body: body.to_json,
+        status: status,
+        headers: {"Content-Type" => "application/json"}
+      )
 
     perform_enqueued_jobs
   end
@@ -455,7 +480,7 @@ RSpec.feature "Admin claim tasks update with DQT API" do
         context "with teacher status alert" do
           let(:data) do
             {
-              active_alert: true,
+              active_alert?: true,
               date_of_birth: claim.date_of_birth,
               name: "#{claim.first_name} #{claim.surname}",
               national_insurance_number: claim.national_insurance_number,
@@ -1154,7 +1179,7 @@ RSpec.feature "Admin claim tasks update with DQT API" do
         context "with teacher status alert" do
           let(:data) do
             {
-              active_alert: true,
+              active_alert?: true,
               date_of_birth: claim.date_of_birth,
               name: "#{claim.first_name} #{claim.surname}",
               national_insurance_number: claim.national_insurance_number,
@@ -1852,7 +1877,7 @@ RSpec.feature "Admin claim tasks update with DQT API" do
         context "with teacher status alert" do
           let(:data) do
             {
-              active_alert: true,
+              active_alert?: true,
               date_of_birth: claim.date_of_birth,
               name: "#{claim.first_name} #{claim.surname}",
               national_insurance_number: claim.national_insurance_number,

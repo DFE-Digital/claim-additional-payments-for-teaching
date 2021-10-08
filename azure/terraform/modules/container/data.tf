@@ -112,6 +112,41 @@ data "azurerm_key_vault_secret" "StorageCredentials" {
   key_vault_id = data.azurerm_key_vault.secrets_kv.id
 }
 
+data "azurerm_key_vault_secret" "DQTBearerBaseUrl" {
+  name         = "DQTBearerBaseUrl"
+  key_vault_id = data.azurerm_key_vault.secrets_kv.id
+}
+
+data "azurerm_key_vault_secret" "DQTBearerGrantType" {
+  name         = "DQTBearerGrantType"
+  key_vault_id = data.azurerm_key_vault.secrets_kv.id
+}
+
+data "azurerm_key_vault_secret" "DQTBearerScope" {
+  name         = "DQTBearerScope"
+  key_vault_id = data.azurerm_key_vault.secrets_kv.id
+}
+
+data "azurerm_key_vault_secret" "DQTBearerClientId" {
+  name         = "DQTBearerClientId"
+  key_vault_id = data.azurerm_key_vault.secrets_kv.id
+}
+
+data "azurerm_key_vault_secret" "DqtBearerClientSecret" {
+  name         = "DqtBearerClientSecret"
+  key_vault_id = data.azurerm_key_vault.secrets_kv.id
+}
+
+data "azurerm_key_vault_secret" "DQTBaseUrl" {
+  name         = "DQTBaseUrl"
+  key_vault_id = data.azurerm_key_vault.secrets_kv.id
+}
+
+data "azurerm_key_vault_secret" "DQTSubscriptionKey" {
+  name         = "DQTSubscriptionKey"
+  key_vault_id = data.azurerm_key_vault.secrets_kv.id
+}
+
 data "azurerm_key_vault_secret" "GTMAnalytics" {
   name         = "GTMAnalytics"
   key_vault_id = data.azurerm_key_vault.secrets_kv.id

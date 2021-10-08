@@ -7,24 +7,20 @@ module AutomatedChecks
 
       before do
         if data
-          body = {
-            data: [data]
-          }
+          body = data
 
           status = 200
         else
-          body = {
-            data: nil,
-            message: "No records found."
-          }
+          body = {}
 
           status = 404
         end
 
         stub_qualified_teaching_statuses_show(
-          query: {
-            trn: claim_arg.teacher_reference_number,
-            ni: claim_arg.national_insurance_number
+          trn: claim_arg.teacher_reference_number,
+          params: {
+            birthdate: claim_arg.date_of_birth&.to_s,
+            nino: claim_arg.national_insurance_number
           },
           body: body,
           status: status
@@ -59,11 +55,10 @@ module AutomatedChecks
       let(:identity_args) do
         {
           claim: claim_arg,
-          dqt_teacher_statuses: Dqt::Client.new.api.qualified_teaching_statuses.show(
-            params: {
-              teacher_reference_number: claim_arg.teacher_reference_number,
-              national_insurance_number: claim_arg.national_insurance_number
-            }
+          dqt_teacher_status: Dqt::Client.new.teacher.find(
+            claim_arg.teacher_reference_number,
+            birthdate: claim_arg.date_of_birth,
+            nino: claim_arg.national_insurance_number
           )
         }
       end
@@ -82,9 +77,9 @@ module AutomatedChecks
             context "with matching DQT identity" do
               let(:data) do
                 {
-                  doB: claim_arg.date_of_birth,
+                  dob: claim_arg.date_of_birth,
                   name: claim_arg.full_name,
-                  niNumber: claim_arg.national_insurance_number,
+                  nino: claim_arg.national_insurance_number,
                   trn: claim_arg.teacher_reference_number
                 }
               end
@@ -128,7 +123,7 @@ module AutomatedChecks
               end
 
               context "without matching national insurance number" do
-                let(:data) { super().merge({niNumber: "QQ100000B"}) }
+                let(:data) { super().merge({ni_number: "QQ100000B"}) }
 
                 it { is_expected.to be_an_instance_of(Task) }
 
@@ -450,7 +445,7 @@ module AutomatedChecks
               end
 
               context "without matching date of birth" do
-                let(:data) { super().merge({doB: claim_arg.date_of_birth + 1.day}) }
+                let(:data) { super().merge({dob: claim_arg.date_of_birth + 1.day}) }
 
                 it { is_expected.to be_an_instance_of(Task) }
 
@@ -576,7 +571,7 @@ module AutomatedChecks
               end
 
               context "with teacher status alert" do
-                let(:data) { super().merge({activeAlert: true}) }
+                let(:data) { super().merge({active_alert: true}) }
 
                 it { is_expected.to be_an_instance_of(Task) }
 
@@ -701,7 +696,7 @@ module AutomatedChecks
                 let(:data) do
                   super().merge(
                     {
-                      doB: claim_arg.date_of_birth + 1.day,
+                      dob: claim_arg.date_of_birth + 1.day,
                       name: "Except #{claim_arg.surname}"
                     }
                   )

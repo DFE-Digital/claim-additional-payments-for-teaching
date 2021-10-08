@@ -1,17 +1,7 @@
-module Dqt
-  def self.configuration
-    @configuration ||= Configuration.new
-  end
-
-  def self.configure
-    yield(configuration) if block_given?
-  end
-end
-
-require_relative "dqt/api"
-require_relative "dqt/api/v1"
-require_relative "dqt/api/v1/qualified_teaching_statuses"
+require_relative "dqt/error"
+require_relative "dqt/bearer"
 require_relative "dqt/client"
-require_relative "dqt/client/response"
-require_relative "dqt/client/response_error"
-require_relative "dqt/configuration"
+require_relative "dqt/object"
+require_relative "dqt/objects/teacher"
+require_relative "dqt/resource"
+require_relative "dqt/resources/teacher"

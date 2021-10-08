@@ -22,6 +22,7 @@ The format is based on [Keep a Changelog]
 
 - Admin
   - Improve DQT client qualified teacher status data casting
+  - DQT client now consumes from official API
 - Add capability to send SMS messages to GOVUK Notify
 - Add GTM_Analytics to Azure
 - DAC Accessibility Report fixes
