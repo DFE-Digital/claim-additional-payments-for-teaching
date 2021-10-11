@@ -109,7 +109,7 @@ module StudentLoans
     # Returns a String that is the human-readable answer given for the QTS
     # question when the claim was made.
     def qts_award_year_answer
-      year_for_answer = StudentLoans.first_eligible_qts_award_year(claim_academic_year)
+      year_for_answer = StudentLoans.first_eligible_qts_award_year(claim.academic_year)
       year_for_answer -= 1 if awarded_qualified_status_before_cut_off_date?
 
       I18n.t("answers.qts_award_years.#{qts_award_year}", year: year_for_answer.to_s(:long))
