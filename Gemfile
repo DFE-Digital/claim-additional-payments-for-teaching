@@ -70,7 +70,7 @@ gem "daemons"
 gem "govuk_design_system_formbuilder"
 
 # See https://github.com/typhoeus/ethon/issues/185
-gem "ethon", "~> 0.14.0"
+gem "ethon", "~> 0.15.0"
 gem "typhoeus", "~> 1.4.0"
 
 # ROTP requried for Early Career Payments one-time password
