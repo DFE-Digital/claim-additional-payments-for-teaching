@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+## [Release 100] - 2021-10-14
+
 - DAC Accessibility Report fixes
   - ECP poor performance hint incorrectly named
   - Bank or Building Society DAC hint fix
@@ -943,7 +945,9 @@ The format is based on [Keep a Changelog]
 - First release for student loan repayments private beta
 
 [unreleased]:
-  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-099...HEAD
+  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-100...HEAD
+[release 100]:
+  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-099...release-100
 [release 099]:
   https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-098...release-099
 [release 098]:
