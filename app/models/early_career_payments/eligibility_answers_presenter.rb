@@ -1,6 +1,7 @@
 module EarlyCareerPayments
   class EligibilityAnswersPresenter
     include ActionView::Helpers::TranslationHelper
+    include EarlyCareerPaymentsHelper
 
     attr_reader :eligibility
 
@@ -45,7 +46,7 @@ module EarlyCareerPayments
 
     def nqt_in_academic_year_after_itt
       [
-        translate("early_career_payments.questions.nqt_in_academic_year_after_itt"),
+        nqt_h1_text(eligibility.claim),
         (eligibility.nqt_in_academic_year_after_itt? ? "Yes" : "No"),
         "nqt-in-academic-year-after-itt"
       ]

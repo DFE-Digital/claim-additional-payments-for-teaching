@@ -1,6 +1,16 @@
 require "rails_helper"
 
 RSpec.feature "Teacher Early-Career Payments claims" do
+  before do
+    @ecp_policy_date = PolicyConfiguration.for(EarlyCareerPayments).current_academic_year
+    PolicyConfiguration.for(EarlyCareerPayments).update(current_academic_year: academic_year)
+  end
+
+  after do
+    PolicyConfiguration.for(EarlyCareerPayments).update(current_academic_year: @ecp_policy_date)
+  end
+  let(:academic_year) { AcademicYear.new(2021) }
+
   scenario "Teacher makes claim for 'Early-Career Payments' claim", js: true do
     visit landing_page_path(EarlyCareerPayments.routing_name)
     expect(page).to have_link(href: "mailto:#{EarlyCareerPayments.feedback_email}")
@@ -10,7 +20,7 @@ RSpec.feature "Teacher Early-Career Payments claims" do
     click_on "Start Now"
 
     # - NQT in Academic Year after ITT
-    expect(page).to have_text(I18n.t("early_career_payments.questions.nqt_in_academic_year_after_itt"))
+    expect(page).to have_text(I18n.t("early_career_payments.questions.nqt_in_academic_year_after_itt.heading.2021"))
 
     choose "Yes"
     click_on "Continue"
@@ -330,7 +340,7 @@ RSpec.feature "Teacher Early-Career Payments claims" do
     click_on "Start Now"
 
     # - NQT in Academic Year after ITT
-    expect(page).to have_text(I18n.t("early_career_payments.questions.nqt_in_academic_year_after_itt"))
+    expect(page).to have_text(I18n.t("early_career_payments.questions.nqt_in_academic_year_after_itt.heading.2021"))
 
     choose "Yes"
     click_on "Continue"
@@ -465,7 +475,7 @@ RSpec.feature "Teacher Early-Career Payments claims" do
     click_on "Start Now"
 
     # - NQT in Academic Year after ITT
-    expect(page).to have_text(I18n.t("early_career_payments.questions.nqt_in_academic_year_after_itt"))
+    expect(page).to have_text(I18n.t("early_career_payments.questions.nqt_in_academic_year_after_itt.heading.2021"))
 
     choose "Yes"
     click_on "Continue"

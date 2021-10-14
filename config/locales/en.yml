@@ -280,7 +280,11 @@ en:
       employed_as_supply_teacher: "Are you currently employed as a supply teacher?"
       has_entire_term_contract: "Do you have a contract to teach at the same school for an entire term or longer?"
       employed_directly: "Are you employed directly by your school?"
-      nqt_in_academic_year_after_itt: "Have you started your first year as a newly qualified teacher?"
+      nqt_in_academic_year_after_itt:
+        heading:
+          2021: Have you started your first year as a newly qualified teacher?
+          default: Have you %{started_or_completed} your first year as a newly qualified teacher or early-career teacher?
+        hint: This is sometimes referred to as your induction %{year_or_period} and is the first year after you have gained your qualified teacher status (QTS).
       poor_performance: Performance issues
       disciplinary_action: "Are you currently subject to disciplinary action?"
       disciplinary_action_hint: "This is more serious than performance measures and could be because of misconduct. It is something we may check with your school as it will affect your eligibility."
