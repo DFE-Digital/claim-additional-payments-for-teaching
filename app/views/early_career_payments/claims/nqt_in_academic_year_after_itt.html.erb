@@ -1,6 +1,7 @@
 <% content_for(:page_title, page_title(t("early_career_payments.questions.nqt_in_academic_year_after_itt"), policy: current_policy_routing_name, show_error: current_claim.errors.any?)) %>
 <% path_for_form = current_claim.persisted? ? claim_path(current_policy_routing_name) : claims_path(current_policy_routing_name) %>
 <% shared_view_css_size = current_claim.policy == EarlyCareerPayments ? "l" : "xl" %>
+<% false_label_content = EarlyCareerPayments.configuration.current_academic_year == "2021/2022" ? "No, I’m a trainee teacher" : "No" %>
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
@@ -35,7 +36,7 @@
 
               <div class="govuk-radios__item">
                 <%= fields.radio_button(:nqt_in_academic_year_after_itt, false, class: "govuk-radios__input") %>
-                <%= fields.label :nqt_in_academic_year_after_itt_false, "No, I’m a trainee teacher", class: "govuk-label govuk-radios__label" %>
+                <%= fields.label :nqt_in_academic_year_after_itt_false, false_label_content, class: "govuk-label govuk-radios__label" %>
               </div>
 
             </div>

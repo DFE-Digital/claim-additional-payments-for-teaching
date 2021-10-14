@@ -17,6 +17,8 @@ The format is based on [Keep a Changelog]
   - Bank details DAC hint fix
 - Reminders
   - OTP - reduce size of OTP input
+- ECP Journey
+  - toggle 'trainee teacher' false (No) text for NQT question
 
 ## [Release 099] - 2021-10-07
 
