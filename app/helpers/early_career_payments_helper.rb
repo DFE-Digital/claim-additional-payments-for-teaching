@@ -22,4 +22,21 @@ module EarlyCareerPaymentsHelper
       I18n.t("early_career_payments.questions.eligible_itt_subject", qualification: claim.eligibility.qualification_name)
     end
   end
+
+  def nqt_h1_text(claim)
+    policy_year = PolicyConfiguration.for(EarlyCareerPayments).current_academic_year.to_s
+    started_or_completed = policy_year == "2022/2023" ? :started : :completed
+    case policy_year
+    when "2021/2022"
+      I18n.t("early_career_payments.questions.nqt_in_academic_year_after_itt.heading.2021")
+    else
+      I18n.t("early_career_payments.questions.nqt_in_academic_year_after_itt.heading.default", started_or_completed: started_or_completed)
+    end
+  end
+
+  def nqt_hint_text(claim)
+    policy_year = PolicyConfiguration.for(EarlyCareerPayments).current_academic_year.to_s
+    year_or_period = policy_year == "2021/2022" ? :year : :period
+    I18n.t("early_career_payments.questions.nqt_in_academic_year_after_itt.hint", year_or_period: year_or_period)
+  end
 end

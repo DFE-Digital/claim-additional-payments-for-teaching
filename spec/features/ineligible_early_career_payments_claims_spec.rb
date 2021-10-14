@@ -20,7 +20,7 @@ RSpec.feature "Ineligible Teacher Early-Career Payments claims" do
       click_on "Start Now"
 
       # - NQT in Academic Year after ITT
-      expect(page).to have_text(I18n.t("early_career_payments.questions.nqt_in_academic_year_after_itt"))
+      expect(page).to have_text(I18n.t("early_career_payments.questions.nqt_in_academic_year_after_itt.heading.default", started_or_completed: "started"))
 
       choose "No"
       click_on "Continue"

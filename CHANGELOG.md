@@ -19,6 +19,7 @@ The format is based on [Keep a Changelog]
   - OTP - reduce size of OTP input
 - ECP Journey
   - toggle 'trainee teacher' false (No) text for NQT question
+  - NQT question content updates for future years
 
 ## [Release 099] - 2021-10-07
 

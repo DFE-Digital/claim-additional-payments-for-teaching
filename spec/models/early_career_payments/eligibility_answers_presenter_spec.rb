@@ -1,6 +1,16 @@
 require "rails_helper"
 
 RSpec.describe EarlyCareerPayments::EligibilityAnswersPresenter, type: :model do
+  before do
+    @ecp_policy_date = PolicyConfiguration.for(EarlyCareerPayments).current_academic_year
+    PolicyConfiguration.for(EarlyCareerPayments).update(current_academic_year: academic_year)
+  end
+
+  after do
+    PolicyConfiguration.for(EarlyCareerPayments).update(current_academic_year: @ecp_policy_date)
+  end
+  let(:academic_year) { AcademicYear.new(2021) }
+
   let(:eligibility_attributes) do
     {
       nqt_in_academic_year_after_itt: true,
@@ -15,13 +25,13 @@ RSpec.describe EarlyCareerPayments::EligibilityAnswersPresenter, type: :model do
     }
   end
   let(:eligibility) { claim.eligibility }
-  let(:claim) { build(:claim, eligibility: build(:early_career_payments_eligibility, eligibility_attributes)) }
+  let(:claim) { build(:claim, academic_year: academic_year, eligibility: build(:early_career_payments_eligibility, eligibility_attributes)) }
 
   subject(:presenter) { described_class.new(eligibility) }
 
   it "returns an array of questions and answers to be presented to the user for checking" do
     expected_answers = [
-      [I18n.t("early_career_payments.questions.nqt_in_academic_year_after_itt"), "Yes", "nqt-in-academic-year-after-itt"],
+      [I18n.t("early_career_payments.questions.nqt_in_academic_year_after_itt.heading.2021"), "Yes", "nqt-in-academic-year-after-itt"],
       [I18n.t("questions.current_school"), "Penistone Grammar School", "current-school"],
       [I18n.t("early_career_payments.questions.employed_as_supply_teacher"), "No", "supply-teacher"],
       [I18n.t("early_career_payments.questions.formal_performance_action"), "No", "poor-performance"],
@@ -70,7 +80,7 @@ RSpec.describe EarlyCareerPayments::EligibilityAnswersPresenter, type: :model do
 
     it "includes supply teacher questions" do
       expected_answers = [
-        [I18n.t("early_career_payments.questions.nqt_in_academic_year_after_itt"), "Yes", "nqt-in-academic-year-after-itt"],
+        [I18n.t("early_career_payments.questions.nqt_in_academic_year_after_itt.heading.2021"), "Yes", "nqt-in-academic-year-after-itt"],
         [I18n.t("questions.current_school"), "Penistone Grammar School", "current-school"],
         [I18n.t("early_career_payments.questions.employed_as_supply_teacher"), "Yes", "supply-teacher"],
         [I18n.t("early_career_payments.questions.has_entire_term_contract"), "Yes", "entire-term-contract"],
