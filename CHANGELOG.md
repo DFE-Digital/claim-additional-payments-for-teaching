@@ -6,6 +6,9 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+- ECP Journey
+  - Landing page future year update
+
 ## [Release 100] - 2021-10-14
 
 - DAC Accessibility Report fixes

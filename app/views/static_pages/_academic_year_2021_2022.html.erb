@@ -1,0 +1,78 @@
+<h1 class="govuk-heading-xl">Apply for an early-career payment</h1>
+<p class="govuk-body">
+  The early-career payment service is exclusively for teachers in state-funded
+  schools who are qualified in, and currently teaching either:
+</p>
+
+<ul class="govuk-list govuk-list--bullet">
+  <li><span class="govuk-body">chemistry</span></li>
+  <li><span class="govuk-body">mathematics</span></li>
+  <li><span class="govuk-body">foreign languages</span></li>
+  <li><span class="govuk-body">physics</span></li>
+</ul>
+
+<p class="govuk-body">
+  This service will tell you if you are eligible now, in the future or not at all. Those eligible now will be able to apply for the payment.
+</p>
+
+<h2 class="govuk-heading-l">Who is eligible in 2021/22?</h2>
+<p class="govuk-body">
+  Mathematics teachers who completed an undergraduate initial teacher training (ITT) or started a postgraduate ITT in the 2018 to 2019 academic year can apply by 31 January 2022.
+</p>
+<p class="govuk-body">
+  If you want to know more about the qualifying criteria, check our
+  <%= link_to "eligibility page", "#{EarlyCareerPayments.eligibility_page_url}", class: "govuk-link" %>.
+</p>
+
+<h2 class="govuk-heading-l">Who can apply in the future?</h2>
+
+<p class="govuk-body">
+  If you are one of the below teachers, you can still
+  <%= link_to "check your eligibility today", "#{new_claim_url(EarlyCareerPayments.routing_name)}", class: "govuk-link" %>.
+  If you are eligible, you will need to return when your application window opens.
+</p>
+
+<p class="govuk-body govuk-!-font-weight-bold">
+  Mathematics teachers who completed an undergraduate ITT or started a postgraduate ITT in the:
+</p>
+
+<ul class="govuk-list govuk-list--bullet">
+  <li>
+    <span class="govuk-body">
+      2019 to 2020 academic year - applications open autumn 2022
+    </span>
+  </li>
+  <li>
+    <span class="govuk-body">
+      2020 to 2021 academic year - applications open autumn 2022
+    </span>
+  </li>
+</ul>
+
+<p class="govuk-body govuk-!-font-weight-bold">
+  Physics, chemistry or foreign languages teachers who completed an undergraduate ITT or started a postgraduate ITT in the:
+</p>
+
+<ul class="govuk-list govuk-list--bullet">
+  <li>
+    <p class="govuk-body">
+      2020 to 2021 academic year - applications open autumn 2022
+    </p>
+  </li>
+</ul>
+
+<p class="govuk-body">If you do not fall into any of these groups then you will not be eligible for a payment.</p>
+
+<%= link_to new_claim_url(EarlyCareerPayments.routing_name), role: :button, draggable: false, class: "govuk-button govuk-button--start", data: { module: "govuk-button"} do %>
+  Start Now
+  <%= render partial: "shared/svg_for_govuk_button_start_icon" %>
+<% end %>
+
+<h2 class="govuk-heading-l">More information</h2>
+
+<p class="govuk-body">
+  Email <%= mail_to "earlycareerteacherpayments@digital.education.gov.uk", "earlycareerteacherpayments@digital.education.gov.uk", class: "govuk-link" %> for more information.
+</p>
+<p class="govuk-body">
+  Published 28 January 2020 Last updated 28th October 2020
+</p>
