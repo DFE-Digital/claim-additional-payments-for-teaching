@@ -232,18 +232,33 @@ RSpec.describe StudentLoans::Eligibility, type: :model do
   end
 
   describe "#qts_award_year_answer" do
-    it "returns a String representing the answer of the QTS question based on qts_award_year and the academic year the claim was made in" do
-      claim = Claim.new(academic_year: 2019)
-      eligibility = StudentLoans::Eligibility.new(claim: claim)
+    [
+      {
+        academic_year: "2019/2020",
+        qts_award_year_answer_before: "In or before the academic year 2012 to 2013",
+        qts_award_year_answer_after: "In or after the academic year 2013 to 2014"
+      },
+      {
+        academic_year: "2025/2026",
+        qts_award_year_answer_before: "In or before the academic year 2013 to 2014",
+        qts_award_year_answer_after: "In or after the academic year 2014 to 2015"
+      },
+      {
+        academic_year: "2031/2032",
+        qts_award_year_answer_before: "In or before the academic year 2019 to 2020",
+        qts_award_year_answer_after: "In or after the academic year 2020 to 2021"
+      }
+    ].each do |args|
+      it "returns a String representing the answer of the QTS question based on qts_award_year and the academic year (#{args[:academic_year]}) the claim was made in" do
+        claim = Claim.new(academic_year: args[:academic_year])
+        eligibility = StudentLoans::Eligibility.new(claim: claim)
 
-      eligibility.qts_award_year = :before_cut_off_date
-      expect(eligibility.qts_award_year_answer).to eq "In or before the academic year 2012 to 2013"
+        eligibility.qts_award_year = :before_cut_off_date
+        expect(eligibility.qts_award_year_answer).to eq args[:qts_award_year_answer_before]
 
-      eligibility.qts_award_year = :on_or_after_cut_off_date
-      expect(eligibility.qts_award_year_answer).to eq "In or after the academic year 2013 to 2014"
-
-      claim.academic_year = "2025/2026"
-      expect(eligibility.qts_award_year_answer).to eq "In or after the academic year 2014 to 2015"
+        eligibility.qts_award_year = :on_or_after_cut_off_date
+        expect(eligibility.qts_award_year_answer).to eq args[:qts_award_year_answer_after]
+      end
     end
   end
 

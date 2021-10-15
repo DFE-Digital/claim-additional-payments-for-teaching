@@ -32,6 +32,25 @@ RSpec.describe StudentLoans::DqtRecord do
       expect(StudentLoans::DqtRecord.new(OpenStruct.new({qts_award_date: Date.parse("8/3/2000")})).eligible_qts_award_date?).to eql false
     end
 
+    it "returns false if the given QTS award date is not an eligible year" do
+      expect(StudentLoans::DqtRecord.new(OpenStruct.new({qts_award_date: Date.parse("15/9/2013")})).eligible_qts_award_date?).to eql false
+    end
+
+    context "in academic year 2029/30" do
+      before do
+        @existing_config = PolicyConfiguration.for(StudentLoans).current_academic_year
+        PolicyConfiguration.for(StudentLoans).update(current_academic_year: "2029/2030")
+      end
+
+      after do
+        PolicyConfiguration.for(StudentLoans).update(current_academic_year: @existing_config)
+      end
+
+      it "returns false if the given QTS award date is not an eligible year" do
+        expect(StudentLoans::DqtRecord.new(OpenStruct.new({qts_award_date: Date.parse("1/7/2018")})).eligible_qts_award_date?).to eql false
+      end
+    end
+
     it "returns false if the given QTS award date is blank" do
       expect(StudentLoans::DqtRecord.new(OpenStruct.new({qts_award_date: ""})).eligible_qts_award_date?).to eql false
     end

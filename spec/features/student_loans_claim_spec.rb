@@ -213,6 +213,63 @@ RSpec.feature "Teacher Student Loan Repayments claims" do
     end
   end
 
+  [
+    2019,
+    2025,
+    2031
+  ].each do |academic_year|
+    context "in academic year #{academic_year}" do
+      before do
+        @ecp_policy_date = PolicyConfiguration.for(StudentLoans).current_academic_year
+        PolicyConfiguration.for(StudentLoans).update(current_academic_year: AcademicYear.new(academic_year))
+      end
+
+      after do
+        PolicyConfiguration.for(StudentLoans).update(current_academic_year: @ecp_policy_date)
+      end
+
+      scenario "Teacher claims back student loan repayments" do
+        visit new_claim_path(StudentLoans.routing_name)
+        expect(page).to have_text(I18n.t("questions.qts_award_year"))
+        expect(page).to have_link(href: "mailto:#{StudentLoans.feedback_email}")
+
+        choose_qts_year
+        claim = Claim.order(:created_at).last
+
+        expect(claim.eligibility.reload.qts_award_year).to eql("on_or_after_cut_off_date")
+
+        expect(page).to have_text(claim_school_question)
+
+        choose_school schools(:penistone_grammar_school)
+        expect(claim.eligibility.reload.claim_school).to eql schools(:penistone_grammar_school)
+        expect(page).to have_text(subjects_taught_question(school_name: schools(:penistone_grammar_school).name))
+
+        check "Physics"
+        click_on "Continue"
+        expect(page).to have_text(I18n.t("student_loans.questions.employment_status"))
+
+        choose_still_teaching
+        expect(claim.eligibility.reload.employment_status).to eql("claim_school")
+        expect(claim.eligibility.current_school).to eql(schools(:penistone_grammar_school))
+
+        expect(claim.eligibility.reload.subjects_taught).to eq([:physics_taught])
+
+        expect(page).to have_text(leadership_position_question)
+        choose "Yes"
+        click_on "Continue"
+
+        expect(claim.eligibility.reload.had_leadership_position?).to eq(true)
+
+        expect(page).to have_text(mostly_performed_leadership_duties_question)
+        choose "No"
+        click_on "Continue"
+
+        expect(claim.eligibility.reload.mostly_performed_leadership_duties?).to eq(false)
+        expect(page).to have_text("you can claim back the student loan repayments you made between #{StudentLoans.current_financial_year}.")
+      end
+    end
+  end
+
   scenario "currently works at a different school to the claim school" do
     claim = start_student_loans_claim
 
