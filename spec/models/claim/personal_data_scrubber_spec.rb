@@ -58,6 +58,7 @@ RSpec.describe Claim::PersonalDataScrubber, type: :model do
       expect(cleaned_claim.bank_account_number).to be_nil
       expect(cleaned_claim.building_society_roll_number).to be_nil
       expect(cleaned_claim.banking_name).to be_nil
+      expect(cleaned_claim.mobile_number).to be_nil
       expect(cleaned_claim.personal_data_removed_at).to eq(Time.zone.now)
     end
   end
@@ -85,6 +86,7 @@ RSpec.describe Claim::PersonalDataScrubber, type: :model do
       expect(cleaned_claim.bank_account_number).to be_nil
       expect(cleaned_claim.building_society_roll_number).to be_nil
       expect(cleaned_claim.banking_name).to be_nil
+      expect(cleaned_claim.mobile_number).to be_nil
       expect(cleaned_claim.personal_data_removed_at).to eq(Time.zone.now)
     end
   end
