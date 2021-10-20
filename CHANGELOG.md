@@ -8,6 +8,8 @@ The format is based on [Keep a Changelog]
 
 - ECP Journey
   - Landing page future year update
+- All policies
+  - Remove mobile_number when scrubbing personal data from a claim
 
 ## [Release 100] - 2021-10-14
 
