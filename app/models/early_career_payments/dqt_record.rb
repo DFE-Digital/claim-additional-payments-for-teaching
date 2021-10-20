@@ -160,7 +160,9 @@ module EarlyCareerPayments
     attr_reader :claim, :record
 
     def itt_subject_group
-      [*itt_subject_codes, *degree_codes].each do |subject_code|
+      return itt_subject_codes.first if itt_subject_codes.present?
+
+      degree_codes.each do |subject_code|
         return ELIGIBLE_JAC_CODES.find { |key, values|
           subject_code.start_with?(*values)
         }&.first ||

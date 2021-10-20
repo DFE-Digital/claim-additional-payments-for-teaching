@@ -22,7 +22,7 @@ module Dqt
 
     def itt_subject_codes
       (1..3).filter_map do |n|
-        string_reader(itt&.send("subject#{n}"))
+        string_reader(itt&.send("subject#{n}"))&.downcase&.to_sym
       end
     end
 
