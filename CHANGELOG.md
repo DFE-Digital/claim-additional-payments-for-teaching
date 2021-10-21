@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+## [Release 101] - 2021-10-21
+
 - ECP Journey
   - Landing page future year update
 - All policies
@@ -27,6 +29,8 @@ The format is based on [Keep a Changelog]
 - ECP Journey
   - toggle 'trainee teacher' false (No) text for NQT question
   - NQT question content updates for future years
+- All policies
+  - DQT switchover
 
 ## [Release 099] - 2021-10-07
 
@@ -950,7 +954,9 @@ The format is based on [Keep a Changelog]
 - First release for student loan repayments private beta
 
 [unreleased]:
-  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-100...HEAD
+  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-101...HEAD
+[release 101]:
+  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-100...release-101
 [release 100]:
   https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-099...release-100
 [release 099]:
