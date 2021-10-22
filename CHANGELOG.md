@@ -6,6 +6,9 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+- ECP policy
+  - Eligibility link update for ineligible screens
+
 ## [Release 101] - 2021-10-21
 
 - ECP Journey

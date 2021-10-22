@@ -9,6 +9,15 @@ module EarlyCareerPaymentsHelper
     end
   end
 
+  def guidance_eligibility_page_link(claim)
+    eligibility_page_url = if claim.eligibility.send(:no_entire_term_contract?)
+      EarlyCareerPayments.eligibility_page_url + "#supply-private-school-and-sixth-form-college-teachers"
+    else
+      EarlyCareerPayments.eligibility_page_url
+    end
+    link_to("eligibility page", eligibility_page_url, class: "govuk-link")
+  end
+
   def one_time_password_validity_duration
     pluralize(OneTimePassword::Base::DRIFT / 60, "minute")
   end

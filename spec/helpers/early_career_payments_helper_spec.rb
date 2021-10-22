@@ -143,4 +143,23 @@ describe EarlyCareerPaymentsHelper do
       end
     end
   end
+
+  describe "#ineligible_eligibility_link" do
+    context "A generic ineligible ECP claim" do
+      let(:policy) { EarlyCareerPayments }
+
+      it "generates the generic link for an ineligible claim" do
+        expect(helper.guidance_eligibility_page_link(claim)).to include(EarlyCareerPayments.eligibility_page_url)
+      end
+    end
+
+    context "An ineligible ECP claim based on being a supply teacher" do
+      let(:policy) { EarlyCareerPayments }
+      let(:eligibility) { build(:early_career_payments_eligibility, employed_as_supply_teacher: true, has_entire_term_contract: false) }
+
+      it "generates the correct heading for an ineligible claim based on being a supply teacher" do
+        expect(helper.guidance_eligibility_page_link(claim)).to include("#{EarlyCareerPayments.eligibility_page_url}#supply-private-school-and-sixth-form-college-teachers")
+      end
+    end
+  end
 end
