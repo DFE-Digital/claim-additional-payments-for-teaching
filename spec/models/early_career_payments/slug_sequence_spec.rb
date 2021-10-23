@@ -3,8 +3,8 @@ require "rails_helper"
 RSpec.describe EarlyCareerPayments::SlugSequence do
   subject(:slug_sequence) { EarlyCareerPayments::SlugSequence.new(claim) }
 
-  let(:eligibility) { build(:early_career_payments_eligibility) }
-  let(:claim) { build(:claim, eligibility: eligibility) }
+  let(:eligibility) { build(:early_career_payments_eligibility, :eligible) }
+  let(:claim) { build(:claim, academic_year: AcademicYear.new(2021), eligibility: eligibility) }
 
   describe "The sequence as defined by #slugs" do
     it "excludes the 'ineligible' slug if the claim's eligibility is undetermined" do

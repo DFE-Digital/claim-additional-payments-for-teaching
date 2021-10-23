@@ -69,14 +69,17 @@ RSpec.describe EarlyCareerPayments::Eligibility, type: :model do
   end
 
   describe "#eligible_later?" do
-    context "when claim is eligible later" do
-      let(:eligibility_args) do
-        {
-          eligible_itt_subject: itt_subject,
-          itt_academic_year: itt_academic_year
-        }
-      end
+    let!(:claim) { build_stubbed(:claim, academic_year: claim_academic_year, eligibility: eligibility) }
+    let(:claim_academic_year) { AcademicYear::Type.new.serialize(AcademicYear.new(2021)) }
+    let(:eligibility) do
+      build(
+        :early_career_payments_eligibility,
+        eligible_itt_subject: itt_subject,
+        itt_academic_year: itt_academic_year
+      )
+    end
 
+    context "when claim is eligible later" do
       [
         {itt_subject: "mathematics", itt_academic_year: AcademicYear::Type.new.serialize(AcademicYear.new(2019))},
         {itt_subject: "mathematics", itt_academic_year: AcademicYear::Type.new.serialize(AcademicYear.new(2020))},
@@ -91,7 +94,7 @@ RSpec.describe EarlyCareerPayments::Eligibility, type: :model do
             let(:itt_academic_year) { context[:itt_academic_year] }
 
             it "returns true" do
-              expect(EarlyCareerPayments::Eligibility.new(eligibility_args).eligible_later?).to eql true
+              expect(eligibility.eligible_later?).to eql true
             end
           end
         end
@@ -99,71 +102,139 @@ RSpec.describe EarlyCareerPayments::Eligibility, type: :model do
     end
 
     context "when claim is not eligible later" do
-      let(:eligibility_args) do
-        {
-          eligible_itt_subject: "mathematics",
-          itt_academic_year: AcademicYear::Type.new.serialize(AcademicYear.new(2018))
-        }
-      end
+      let(:itt_subject) { "chemistry" }
+      let(:itt_academic_year) { AcademicYear::Type.new.serialize(AcademicYear.new(2018)) }
 
       it "returns false" do
-        expect(EarlyCareerPayments::Eligibility.new(eligibility_args).eligible_later?).to eql false
+        expect(eligibility.eligible_later?).to eql false
       end
     end
   end
 
   describe "#ineligible?" do
-    it "returns false when the eligibility cannot be determined" do
-      expect(EarlyCareerPayments::Eligibility.new.ineligible?).to eql false
+    before do
+      build_stubbed(
+        :claim,
+        academic_year: claim_academic_year,
+        eligibility: eligibility
+      )
+    end
+    let(:claim_academic_year) { AcademicYear::Type.new.serialize(AcademicYear.new(2022)) }
+    let(:eligibility) do
+      build(
+        :early_career_payments_eligibility,
+        itt_academic_year: AcademicYear::Type.new.serialize(AcademicYear.new(2018)),
+        eligible_itt_subject: :mathematics
+      )
     end
 
-    it "returns true when the NQT acdemic year was not the year after the ITT" do
-      expect(EarlyCareerPayments::Eligibility.new(nqt_in_academic_year_after_itt: false).ineligible?).to eql true
-      expect(EarlyCareerPayments::Eligibility.new(nqt_in_academic_year_after_itt: true).ineligible?).to eql false
+    it "returns false when the eligibility cannot be determined" do
+      expect(eligibility.ineligible?).to eql false
+    end
+
+    [
+      {policy_year: AcademicYear::Type.new.serialize(AcademicYear.new(2021)), expected_result: false},
+      {policy_year: AcademicYear::Type.new.serialize(AcademicYear.new(2022)), expected_result: true}
+    ].each do |scenario|
+      context "with a policy configuration for #{scenario[:policy_year]}" do
+        before do
+          @ecp_policy_date = PolicyConfiguration.for(EarlyCareerPayments).current_academic_year
+          PolicyConfiguration.for(EarlyCareerPayments).update(current_academic_year: scenario[:policy_year])
+        end
+
+        after do
+          PolicyConfiguration.for(EarlyCareerPayments).update(current_academic_year: @ecp_policy_date)
+        end
+
+        it "returns true when the NQT acdemic year was not the year after the ITT" do
+          eligibility.nqt_in_academic_year_after_itt = true
+          expect(eligibility.ineligible?).to eql false
+
+          eligibility.nqt_in_academic_year_after_itt = false
+          expect(eligibility.ineligible?).to eql scenario[:expected_result]
+        end
+      end
     end
 
     it "returns true when claimant is a supply teacher without a contract of at least one term" do
-      expect(EarlyCareerPayments::Eligibility.new(employed_as_supply_teacher: true, has_entire_term_contract: false).ineligible?).to eql true
-      expect(EarlyCareerPayments::Eligibility.new(employed_as_supply_teacher: true, has_entire_term_contract: true).ineligible?).to eql false
+      eligibility.employed_as_supply_teacher = true
+      eligibility.has_entire_term_contract = false
+      expect(eligibility.ineligible?).to eql true
+
+      eligibility.has_entire_term_contract = true
+      expect(eligibility.ineligible?).to eql false
     end
 
     it "returns true when claimant is a supply teacher employed by a private agency" do
-      expect(EarlyCareerPayments::Eligibility.new(employed_as_supply_teacher: true, employed_directly: false).ineligible?).to eql true
-      expect(EarlyCareerPayments::Eligibility.new(employed_as_supply_teacher: true, employed_directly: true).ineligible?).to eql false
+      eligibility.employed_as_supply_teacher = true
+      eligibility.employed_directly = false
+      expect(eligibility.ineligible?).to eql true
+
+      eligibility.employed_as_supply_teacher = true
+      eligibility.employed_directly = true
+      expect(eligibility.ineligible?).to eql false
     end
 
     context "poor performance" do
       it "returns true when subject to formal performance action" do
-        expect(EarlyCareerPayments::Eligibility.new(subject_to_formal_performance_action: true, subject_to_disciplinary_action: false).ineligible?).to eql true
-        expect(EarlyCareerPayments::Eligibility.new(subject_to_formal_performance_action: false, subject_to_disciplinary_action: false).ineligible?).to eql false
+        eligibility.subject_to_formal_performance_action = true
+        eligibility.subject_to_disciplinary_action = false
+        expect(eligibility.ineligible?).to eql true
+
+        eligibility.subject_to_formal_performance_action = false
+        eligibility.subject_to_disciplinary_action = false
+        expect(eligibility.ineligible?).to eql false
       end
 
       it "returns true when subject to disciplinary action" do
-        expect(EarlyCareerPayments::Eligibility.new(subject_to_formal_performance_action: false, subject_to_disciplinary_action: true).ineligible?).to eql true
-        expect(EarlyCareerPayments::Eligibility.new(subject_to_formal_performance_action: false, subject_to_disciplinary_action: false).ineligible?).to eql false
+        eligibility.subject_to_formal_performance_action = false
+        eligibility.subject_to_disciplinary_action = true
+        expect(eligibility.ineligible?).to eql true
+
+        eligibility.subject_to_formal_performance_action = false
+        eligibility.subject_to_disciplinary_action = false
+        expect(eligibility.ineligible?).to eql false
       end
 
       it "returns true when subject to formal performance and disciplinary action" do
-        expect(EarlyCareerPayments::Eligibility.new(subject_to_formal_performance_action: true, subject_to_disciplinary_action: true).ineligible?).to eql true
-        expect(EarlyCareerPayments::Eligibility.new(subject_to_formal_performance_action: false, subject_to_disciplinary_action: false).ineligible?).to eql false
+        eligibility.subject_to_formal_performance_action = true
+        eligibility.subject_to_disciplinary_action = true
+        expect(eligibility.ineligible?).to eql true
+
+        eligibility.subject_to_formal_performance_action = false
+        eligibility.subject_to_disciplinary_action = false
+        expect(eligibility.ineligible?).to eql false
       end
     end
 
     it "returns true when none of the eligible ITT courses were taken" do
-      expect(EarlyCareerPayments::Eligibility.new(eligible_itt_subject: :none_of_the_above).ineligible?).to eql true
-      expect(EarlyCareerPayments::Eligibility.new(eligible_itt_subject: :mathematics).ineligible?).to eql false
+      eligibility.eligible_itt_subject = :none_of_the_above
+      expect(eligibility.ineligible?).to eql true
+
+      eligibility.eligible_itt_subject = :mathematics
+      expect(eligibility.ineligible?).to eql false
     end
 
     it "returns true when still teaching now the course indentified as being eligible ITT subject" do
-      expect(EarlyCareerPayments::Eligibility.new(teaching_subject_now: false).ineligible?).to eql true
-      expect(EarlyCareerPayments::Eligibility.new(teaching_subject_now: true).ineligible?).to eql false
+      eligibility.teaching_subject_now = false
+      expect(eligibility.ineligible?).to eql true
+
+      eligibility.teaching_subject_now = true
+      expect(eligibility.ineligible?).to eql false
     end
 
     it "returns true when the ITT postgraduate start date OR ITT undergraduate complete date not in 2018 - 2019, 2019 - 2020, 2020 - 2021" do
-      expect(EarlyCareerPayments::Eligibility.new(itt_academic_year: "None").ineligible?).to eql true
-      expect(EarlyCareerPayments::Eligibility.new(itt_academic_year: "2018/2019").ineligible?).to eql false
-      expect(EarlyCareerPayments::Eligibility.new(itt_academic_year: "2019/2020").ineligible?).to eql false
-      expect(EarlyCareerPayments::Eligibility.new(itt_academic_year: "2020/2021").ineligible?).to eql false
+      eligibility.itt_academic_year = AcademicYear::Type.new.serialize(AcademicYear.new)
+      expect(eligibility.ineligible?).to eql true
+
+      eligibility.itt_academic_year = AcademicYear::Type.new.serialize(AcademicYear.new(2018))
+      expect(eligibility.ineligible?).to eql false
+
+      eligibility.itt_academic_year = AcademicYear::Type.new.serialize(AcademicYear.new(2019))
+      expect(eligibility.ineligible?).to eql false
+
+      eligibility.itt_academic_year = AcademicYear::Type.new.serialize(AcademicYear.new(2020))
+      expect(eligibility.ineligible?).to eql false
     end
 
     [
@@ -175,6 +246,8 @@ RSpec.describe EarlyCareerPayments::Eligibility, type: :model do
       {itt_subject: "foreign_languages", itt_academic_year: AcademicYear::Type.new.serialize(AcademicYear.new(2020))}
     ].each do |spec|
       context "when cohort is eligible" do
+        let(:claim_academic_year) { AcademicYear::Type.new.serialize(AcademicYear.new(2021)) }
+
         let(:eligibility_args) do
           {
             eligible_itt_subject: spec[:itt_subject],
@@ -182,34 +255,90 @@ RSpec.describe EarlyCareerPayments::Eligibility, type: :model do
           }
         end
 
+        let(:eligibility) { EarlyCareerPayments::Eligibility.new(eligibility_args) }
+
         it "returns false" do
-          expect(EarlyCareerPayments::Eligibility.new(eligibility_args).ineligible?).to eql false
+          expect(eligibility.ineligible?).to eql false
+        end
+      end
+    end
+
+    [
+      {itt_subject: "chemistry", itt_academic_year: AcademicYear::Type.new.serialize(AcademicYear.new(2019))},
+      {itt_subject: "foreign_languages", itt_academic_year: AcademicYear::Type.new.serialize(AcademicYear.new(2018))}
+    ].each do |spec|
+      context "when cohort is ineligible" do
+        let(:claim_academic_year) { AcademicYear::Type.new.serialize(AcademicYear.new(2021)) }
+
+        let(:eligibility_args) do
+          {
+            eligible_itt_subject: spec[:itt_subject],
+            itt_academic_year: spec[:itt_academic_year]
+          }
+        end
+
+        let(:eligibility) { EarlyCareerPayments::Eligibility.new(eligibility_args) }
+
+        it "returns true" do
+          expect(eligibility.ineligible?).to eql true
         end
       end
     end
   end
 
   describe "#ineligibility_reason" do
-    it "returns nil when the reason for ineligibility cannot be determined" do
-      expect(EarlyCareerPayments::Eligibility.new.ineligibility_reason).to be_nil
+    let(:eligibility) do
+      build(
+        :early_career_payments_eligibility,
+        itt_academic_year: AcademicYear::Type.new.serialize(AcademicYear.new(2018)),
+        eligible_itt_subject: :mathematics
+      )
     end
 
-    it "returns a symbol indicating the reason for ineligibility" do
-      expect(EarlyCareerPayments::Eligibility.new(nqt_in_academic_year_after_itt: false).ineligibility_reason).to eq :generic_ineligibility
-      expect(EarlyCareerPayments::Eligibility.new(employed_as_supply_teacher: true, has_entire_term_contract: false).ineligibility_reason).to eql :generic_ineligibility
-      expect(EarlyCareerPayments::Eligibility.new(employed_as_supply_teacher: true, employed_directly: false).ineligibility_reason).to eql :generic_ineligibility
-      expect(EarlyCareerPayments::Eligibility.new(subject_to_formal_performance_action: true).ineligibility_reason).to eq :generic_ineligibility
-      expect(EarlyCareerPayments::Eligibility.new(subject_to_disciplinary_action: true).ineligibility_reason).to eql :generic_ineligibility
-      expect(EarlyCareerPayments::Eligibility.new(subject_to_formal_performance_action: true, subject_to_disciplinary_action: true).ineligibility_reason).to eq :generic_ineligibility
-      expect(EarlyCareerPayments::Eligibility.new(eligible_itt_subject: :none_of_the_above).ineligibility_reason).to eq :itt_subject_none_of_the_above
-      expect(EarlyCareerPayments::Eligibility.new(teaching_subject_now: false).ineligibility_reason).to eql :not_teaching_now_in_eligible_itt_subject
-      expect(EarlyCareerPayments::Eligibility.new(itt_academic_year: "None").ineligibility_reason).to eql :generic_ineligibility
+    [
+      {policy_year: AcademicYear::Type.new.serialize(AcademicYear.new(2021)), ineligibility_reason: nil},
+      {policy_year: AcademicYear::Type.new.serialize(AcademicYear.new(2022)), ineligibility_reason: :generic_ineligibility}
+    ].each do |scenario|
+      context "with a policy configuration for #{scenario[:policy_year]}" do
+        before do
+          @ecp_policy_date = PolicyConfiguration.for(EarlyCareerPayments).current_academic_year
+          PolicyConfiguration.for(EarlyCareerPayments).update(current_academic_year: scenario[:policy_year])
+
+          build_stubbed(
+            :claim,
+            academic_year: scenario[:policy_year],
+            eligibility: eligibility
+          )
+        end
+
+        after do
+          PolicyConfiguration.for(EarlyCareerPayments).update(current_academic_year: @ecp_policy_date)
+        end
+
+        it "returns a symbol indicating the reason for ineligibility" do
+          eligibility.nqt_in_academic_year_after_itt = true
+          expect(eligibility.ineligibility_reason).to be_nil
+
+          eligibility.nqt_in_academic_year_after_itt = false
+          expect(eligibility.ineligibility_reason).to eql scenario[:ineligibility_reason]
+
+          expect(EarlyCareerPayments::Eligibility.new(employed_as_supply_teacher: true, has_entire_term_contract: false).ineligibility_reason).to eql :generic_ineligibility
+          expect(EarlyCareerPayments::Eligibility.new(employed_as_supply_teacher: true, employed_directly: false).ineligibility_reason).to eql :generic_ineligibility
+          expect(EarlyCareerPayments::Eligibility.new(subject_to_formal_performance_action: true).ineligibility_reason).to eq :generic_ineligibility
+          expect(EarlyCareerPayments::Eligibility.new(subject_to_disciplinary_action: true).ineligibility_reason).to eql :generic_ineligibility
+          expect(EarlyCareerPayments::Eligibility.new(subject_to_formal_performance_action: true, subject_to_disciplinary_action: true).ineligibility_reason).to eq :generic_ineligibility
+          expect(EarlyCareerPayments::Eligibility.new(eligible_itt_subject: :none_of_the_above).ineligibility_reason).to eq :itt_subject_none_of_the_above
+          expect(EarlyCareerPayments::Eligibility.new(teaching_subject_now: false).ineligibility_reason).to eql :not_teaching_now_in_eligible_itt_subject
+          expect(EarlyCareerPayments::Eligibility.new(itt_academic_year: AcademicYear.new).ineligibility_reason).to be_nil
+        end
+      end
     end
   end
 
   describe "#award_amount" do
     [
       {
+        policy_year: AcademicYear::Type.new.serialize(AcademicYear.new(2021)),
         context: {
           itt_subject: "mathematics",
           itt_academic_year: AcademicYear::Type.new.serialize(AcademicYear.new(2018))
@@ -220,6 +349,7 @@ RSpec.describe EarlyCareerPayments::Eligibility, type: :model do
         }
       },
       {
+        policy_year: AcademicYear::Type.new.serialize(AcademicYear.new(2022)),
         context: {
           itt_subject: "mathematics",
           itt_academic_year: AcademicYear::Type.new.serialize(AcademicYear.new(2019))
@@ -230,6 +360,7 @@ RSpec.describe EarlyCareerPayments::Eligibility, type: :model do
         }
       },
       {
+        policy_year: AcademicYear::Type.new.serialize(AcademicYear.new(2022)),
         context: {
           itt_subject: "mathematics",
           itt_academic_year: AcademicYear::Type.new.serialize(AcademicYear.new(2020))
@@ -240,6 +371,7 @@ RSpec.describe EarlyCareerPayments::Eligibility, type: :model do
         }
       },
       {
+        policy_year: AcademicYear::Type.new.serialize(AcademicYear.new(2022)),
         context: {
           itt_subject: "physics",
           itt_academic_year: AcademicYear::Type.new.serialize(AcademicYear.new(2020))
@@ -250,6 +382,7 @@ RSpec.describe EarlyCareerPayments::Eligibility, type: :model do
         }
       },
       {
+        policy_year: AcademicYear::Type.new.serialize(AcademicYear.new(2022)),
         context: {
           itt_subject: "chemistry",
           itt_academic_year: AcademicYear::Type.new.serialize(AcademicYear.new(2020))
@@ -260,6 +393,117 @@ RSpec.describe EarlyCareerPayments::Eligibility, type: :model do
         }
       },
       {
+        policy_year: AcademicYear::Type.new.serialize(AcademicYear.new(2022)),
+        context: {
+          itt_subject: "foreign_languages",
+          itt_academic_year: AcademicYear::Type.new.serialize(AcademicYear.new(2020))
+        },
+        expect: {
+          base_amount: 2_000,
+          uplift_amount: 3_000
+        }
+      },
+      {
+        policy_year: AcademicYear::Type.new.serialize(AcademicYear.new(2023)),
+        context: {
+          itt_subject: "mathematics",
+          itt_academic_year: AcademicYear::Type.new.serialize(AcademicYear.new(2018))
+        },
+        expect: {
+          base_amount: 5_000,
+          uplift_amount: 7_500
+        }
+      },
+      {
+        policy_year: AcademicYear::Type.new.serialize(AcademicYear.new(2023)),
+        context: {
+          itt_subject: "mathematics",
+          itt_academic_year: AcademicYear::Type.new.serialize(AcademicYear.new(2020))
+        },
+        expect: {
+          base_amount: 2_000,
+          uplift_amount: 3_000
+        }
+      },
+      {
+        policy_year: AcademicYear::Type.new.serialize(AcademicYear.new(2023)),
+        context: {
+          itt_subject: "physics",
+          itt_academic_year: AcademicYear::Type.new.serialize(AcademicYear.new(2020))
+        },
+        expect: {
+          base_amount: 2_000,
+          uplift_amount: 3_000
+        }
+      },
+      {
+        policy_year: AcademicYear::Type.new.serialize(AcademicYear.new(2023)),
+        context: {
+          itt_subject: "chemistry",
+          itt_academic_year: AcademicYear::Type.new.serialize(AcademicYear.new(2020))
+        },
+        expect: {
+          base_amount: 2_000,
+          uplift_amount: 3_000
+        }
+      },
+      {
+        policy_year: AcademicYear::Type.new.serialize(AcademicYear.new(2023)),
+        context: {
+          itt_subject: "foreign_languages",
+          itt_academic_year: AcademicYear::Type.new.serialize(AcademicYear.new(2020))
+        },
+        expect: {
+          base_amount: 2_000,
+          uplift_amount: 3_000
+        }
+      },
+      {
+        policy_year: AcademicYear::Type.new.serialize(AcademicYear.new(2024)),
+        context: {
+          itt_subject: "mathematics",
+          itt_academic_year: AcademicYear::Type.new.serialize(AcademicYear.new(2019))
+        },
+        expect: {
+          base_amount: 5_000,
+          uplift_amount: 7_500
+        }
+      },
+      {
+        policy_year: AcademicYear::Type.new.serialize(AcademicYear.new(2024)),
+        context: {
+          itt_subject: "mathematics",
+          itt_academic_year: AcademicYear::Type.new.serialize(AcademicYear.new(2020))
+        },
+        expect: {
+          base_amount: 2_000,
+          uplift_amount: 3_000
+        }
+      },
+      {
+        policy_year: AcademicYear::Type.new.serialize(AcademicYear.new(2024)),
+        context: {
+          itt_subject: "physics",
+          itt_academic_year: AcademicYear::Type.new.serialize(AcademicYear.new(2020))
+        },
+        expect: {
+          base_amount: 2_000,
+          uplift_amount: 3_000
+        }
+      },
+      {
+        policy_year: AcademicYear::Type.new.serialize(AcademicYear.new(2024)),
+        context: {
+          itt_subject: "chemistry",
+          itt_academic_year: AcademicYear::Type.new.serialize(AcademicYear.new(2020))
+        },
+        expect: {
+          base_amount: 2_000,
+          uplift_amount: 3_000
+        }
+      },
+      {
+        policy_year: AcademicYear::Type.new.serialize(AcademicYear.new(2024)),
         context: {
           itt_subject: "foreign_languages",
           itt_academic_year: AcademicYear::Type.new.serialize(AcademicYear.new(2020))
@@ -270,13 +514,29 @@ RSpec.describe EarlyCareerPayments::Eligibility, type: :model do
         }
       }
     ].each do |spec|
-      context "when cohort eligible" do
+      context "when cohort eligible in Claim window #{spec[:policy_year]}" do
+        before do
+          @ecp_policy_date = PolicyConfiguration.for(EarlyCareerPayments).current_academic_year
+          PolicyConfiguration.for(EarlyCareerPayments).update(current_academic_year: spec[:policy_year])
+        end
+
+        after do
+          PolicyConfiguration.for(EarlyCareerPayments).update(current_academic_year: @ecp_policy_date)
+        end
+
         let(:eligibility_args) do
           {
             eligible_itt_subject: spec[:context][:itt_subject],
             itt_academic_year: spec[:context][:itt_academic_year],
-            current_school: current_school_arg
+            current_school: current_school_arg,
+            claim: claim
           }
+        end
+        let(:claim) do
+          build_stubbed(
+            :claim,
+            academic_year: spec[:policy_year]
+          )
         end
 
         context "without uplift school" do
@@ -344,111 +604,218 @@ RSpec.describe EarlyCareerPayments::Eligibility, type: :model do
   describe "#award_amounts" do
     [
       {
-        context: {
-          itt_subject: "mathematics",
-          itt_academic_year: AcademicYear::Type.new.serialize(AcademicYear.new(2018))
-        },
-        expect: {
-          base_amount: 5_000,
-          uplift_amount: 7_500
-        }
+        policy_year: AcademicYear::Type.new.serialize(AcademicYear.new(2021)),
+        eligible_now: [
+          {
+            itt_subject: "mathematics",
+            itt_academic_year: AcademicYear::Type.new.serialize(AcademicYear.new(2018)),
+            base_amount: 5_000,
+            uplift_amount: 7_500
+          }
+        ],
+        ineligible: [
+          {
+            itt_subject: "physics",
+            itt_academic_year: AcademicYear::Type.new.serialize(AcademicYear.new(2018)),
+            base_amount: BigDecimal("0.00"),
+            uplift_amount: BigDecimal("0.00")
+          }
+        ]
       },
       {
-        context: {
-          itt_subject: "mathematics",
-          itt_academic_year: AcademicYear::Type.new.serialize(AcademicYear.new(2019))
-        },
-        expect: {
-          base_amount: 5_000,
-          uplift_amount: 7_500
-        }
+        policy_year: AcademicYear::Type.new.serialize(AcademicYear.new(2022)),
+        eligible_now: [
+          {
+            itt_subject: "mathematics",
+            itt_academic_year: AcademicYear::Type.new.serialize(AcademicYear.new(2019)),
+            base_amount: 5_000,
+            uplift_amount: 7_500
+          },
+          {
+            itt_subject: :mathematics,
+            itt_academic_year: AcademicYear::Type.new.serialize(AcademicYear.new(2020)),
+            base_amount: 2_000,
+            uplift_amount: 3_000
+          },
+          {
+            itt_subject: :physics,
+            itt_academic_year: AcademicYear::Type.new.serialize(AcademicYear.new(2020)),
+            base_amount: 2_000,
+            uplift_amount: 3_000
+          },
+          {
+            itt_subject: :chemistry,
+            itt_academic_year: AcademicYear::Type.new.serialize(AcademicYear.new(2020)),
+            base_amount: 2_000,
+            uplift_amount: 3_000
+          },
+          {
+            itt_subject: :foreign_languages,
+            itt_academic_year: AcademicYear::Type.new.serialize(AcademicYear.new(2020)),
+            base_amount: 2_000,
+            uplift_amount: 3_000
+          }
+        ],
+        ineligible: [
+          {
+            itt_subject: :chemistry,
+            itt_academic_year: AcademicYear::Type.new.serialize(AcademicYear.new(2019)),
+            base_amount: BigDecimal("0.00"),
+            uplift_amount: BigDecimal("0.00")
+          }
+        ]
       },
       {
-        context: {
-          itt_subject: "mathematics",
-          itt_academic_year: AcademicYear::Type.new.serialize(AcademicYear.new(2020))
-        },
-        expect: {
-          base_amount: 2_000,
-          uplift_amount: 3_000
-        }
+        policy_year: AcademicYear::Type.new.serialize(AcademicYear.new(2023)),
+        eligible_now: [
+          {
+            itt_subject: :mathematics,
+            itt_academic_year: AcademicYear::Type.new.serialize(AcademicYear.new(2018)),
+            base_amount: 5_000,
+            uplift_amount: 7_500
+          },
+          {
+            itt_subject: "mathematics",
+            itt_academic_year: AcademicYear::Type.new.serialize(AcademicYear.new(2020)),
+            base_amount: 2_000,
+            uplift_amount: 3_000
+          },
+          {
+            itt_subject: "physics",
+            itt_academic_year: AcademicYear::Type.new.serialize(AcademicYear.new(2020)),
+            base_amount: 2_000,
+            uplift_amount: 3_000
+          },
+          {
+            itt_subject: "chemistry",
+            itt_academic_year: AcademicYear::Type.new.serialize(AcademicYear.new(2020)),
+            base_amount: 2_000,
+            uplift_amount: 3_000
+          },
+          {
+            itt_subject: "foreign_languages",
+            itt_academic_year: AcademicYear::Type.new.serialize(AcademicYear.new(2020)),
+            base_amount: 2_000,
+            uplift_amount: 3_000
+          }
+        ],
+        ineligible: [
+          {
+            itt_subject: :foreign_languages,
+            itt_academic_year: AcademicYear::Type.new.serialize(AcademicYear.new(2018)),
+            base_amount: BigDecimal("0.00"),
+            uplift_amount: BigDecimal("0.00")
+          }
+        ]
       },
       {
-        context: {
-          itt_subject: "physics",
-          itt_academic_year: AcademicYear::Type.new.serialize(AcademicYear.new(2020))
-        },
-        expect: {
-          base_amount: 2_000,
-          uplift_amount: 3_000
-        }
-      },
-      {
-        context: {
-          itt_subject: "chemistry",
-          itt_academic_year: AcademicYear::Type.new.serialize(AcademicYear.new(2020))
-        },
-        expect: {
-          base_amount: 2_000,
-          uplift_amount: 3_000
-        }
-      },
-      {
-        context: {
-          itt_subject: "foreign_languages",
-          itt_academic_year: AcademicYear::Type.new.serialize(AcademicYear.new(2020))
-        },
-        expect: {
-          base_amount: 2_000,
-          uplift_amount: 3_000
-        }
+        policy_year: AcademicYear::Type.new.serialize(AcademicYear.new(2024)),
+        eligible_now: [
+          {
+            itt_subject: :mathematics,
+            itt_academic_year: AcademicYear::Type.new.serialize(AcademicYear.new(2019)),
+            base_amount: 5_000,
+            uplift_amount: 7_500
+          },
+          {
+            itt_subject: "mathematics",
+            itt_academic_year: AcademicYear::Type.new.serialize(AcademicYear.new(2020)),
+            base_amount: 2_000,
+            uplift_amount: 3_000
+          },
+          {
+            itt_subject: :physics,
+            itt_academic_year: AcademicYear::Type.new.serialize(AcademicYear.new(2020)),
+            base_amount: 2_000,
+            uplift_amount: 3_000
+          },
+          {
+            itt_subject: :chemistry,
+            itt_academic_year: AcademicYear::Type.new.serialize(AcademicYear.new(2020)),
+            base_amount: 2_000,
+            uplift_amount: 3_000
+          },
+          {
+            itt_subject: :foreign_languages,
+            itt_academic_year: AcademicYear::Type.new.serialize(AcademicYear.new(2020)),
+            base_amount: 2_000,
+            uplift_amount: 3_000
+          }
+        ],
+        ineligible: [
+          {
+            itt_subject: :mathematics,
+            itt_academic_year: AcademicYear::Type.new.serialize(AcademicYear.new(2018)),
+            base_amount: BigDecimal("0.00"),
+            uplift_amount: BigDecimal("0.00")
+          }
+        ]
       }
-    ].each do |spec|
-      context "when cohort eligible" do
-        let(:eligibility_args) do
-          {
-            eligible_itt_subject: spec[:context][:itt_subject],
-            itt_academic_year: spec[:context][:itt_academic_year]
-          }
+    ].each do |example|
+      context "with a policy configuration for #{example[:policy_year]} and when cohort is eligible" do
+        before do
+          @ecp_policy_date = PolicyConfiguration.for(EarlyCareerPayments).current_academic_year
+          PolicyConfiguration.for(EarlyCareerPayments).update(current_academic_year: example[:policy_year])
         end
 
-        it "returns hash with correct values" do
-          expect(EarlyCareerPayments::Eligibility.new(eligibility_args).award_amounts).to eq(
-            {
-              base: spec[:expect][:base_amount],
-              uplift: spec[:expect][:uplift_amount]
-            }
-          )
+        after do
+          PolicyConfiguration.for(EarlyCareerPayments).update(current_academic_year: @ecp_policy_date)
         end
-      end
-    end
 
-    context "when cohort ineligible" do
-      let(:eligibility_args) do
-        {
-          eligible_itt_subject: "physics",
-          itt_academic_year: "2018/2019"
-        }
-      end
+        example[:eligible_now].each do |scenario|
+          context "with ITT subject #{scenario[:itt_subject]} in ITT academic year #{scenario[:itt_academic_year]}" do
+            before do
+              build_stubbed(
+                :claim,
+                academic_year: example[:policy_year],
+                eligibility: eligibility
+              )
+            end
+            let(:eligibility) do
+              build(
+                :early_career_payments_eligibility,
+                eligible_itt_subject: scenario[:itt_subject],
+                itt_academic_year: scenario[:itt_academic_year]
+              )
+            end
 
-      it "returns hash with 0.00 values" do
-        expect(EarlyCareerPayments::Eligibility.new(eligibility_args).award_amounts).to eq(
-          {
-            base: BigDecimal("0.00"),
-            uplift: BigDecimal("0.00")
-          }
-        )
+            it "returns an array with the correct values" do
+              expect(eligibility.award_amounts).to be_an_instance_of(Array)
+              expect(eligibility.award_amounts.collect { |award_amount| [award_amount.base_amount, award_amount.uplift_amount] }).to eq [[scenario[:base_amount], scenario[:uplift_amount]]]
+            end
+          end
+        end
+
+        example[:ineligible].each do |scenario|
+          context "when cohort ineligible (ITT subject: #{scenario[:itt_subject]}, ITT academic year: #{scenario[:itt_academic_year]})" do
+            before do
+              build_stubbed(
+                :claim,
+                academic_year: example[:policy_year],
+                eligibility: eligibility
+              )
+            end
+            let(:eligibility) do
+              build(
+                :early_career_payments_eligibility,
+                eligible_itt_subject: scenario[:itt_subject],
+                itt_academic_year: scenario[:itt_academic_year]
+              )
+            end
+
+            it "returns an array with 0.00 values" do
+              expect(eligibility.award_amounts).to be_an_instance_of(Array)
+              expect(eligibility.award_amounts.collect { |award_amount| [award_amount.base_amount, award_amount.uplift_amount] }).to eq [[scenario[:base_amount], scenario[:uplift_amount]]]
+            end
+          end
+        end
       end
     end
 
     context "without cohort" do
       it "returns hash with 0.00 values" do
-        expect(EarlyCareerPayments::Eligibility.new.award_amounts).to eq(
-          {
-            base: BigDecimal("0.00"),
-            uplift: BigDecimal("0.00")
-          }
-        )
+        expect(EarlyCareerPayments::Eligibility.new.award_amounts).to be_an_instance_of(Array)
+        expect(EarlyCareerPayments::Eligibility.new.award_amounts.collect { |award_amount| [award_amount.base_amount, award_amount.uplift_amount] }.flatten).to eq [BigDecimal("0.00"), BigDecimal("0.00")]
       end
     end
   end
@@ -459,7 +826,6 @@ RSpec.describe EarlyCareerPayments::Eligibility, type: :model do
         :early_career_payments_eligibility,
         eligible_itt_subject: eligible_itt_subject
       )
-
       build_stubbed(
         :claim,
         academic_year: claim_academic_year,

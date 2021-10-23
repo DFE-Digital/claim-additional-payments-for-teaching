@@ -65,8 +65,8 @@ module EarlyCareerPayments
       SLUGS.dup.tap do |sequence|
         sequence.delete("entire-term-contract") unless claim.eligibility.employed_as_supply_teacher?
         sequence.delete("employed-directly") unless claim.eligibility.employed_as_supply_teacher?
-        sequence.delete("eligibility-confirmed") if claim.eligibility.ineligible? || claim.eligibility.eligible_later?
-        sequence.delete("eligible-later") unless claim.eligibility.eligible_later?
+        sequence.delete("eligibility-confirmed") unless claim.eligibility.eligible_now?
+        sequence.delete("eligible-later") unless claim.eligibility.eligible_later? && !claim.eligibility.eligible_now?
         sequence.delete("ineligible") unless claim.eligibility.ineligible? || claim.eligibility.trainee_teacher_in_2021?
         sequence.delete("personal-bank-account") if claim.bank_or_building_society == "building_society"
         sequence.delete("building-society-account") if claim.bank_or_building_society == "personal_bank_account"

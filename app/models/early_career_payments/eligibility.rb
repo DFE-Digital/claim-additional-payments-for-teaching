@@ -202,69 +202,23 @@ module EarlyCareerPayments
       qualification_attained == "assessment only" ? qualification_attained : qualification_attained + " qualification"
     end
 
+    def eligible_later
+      find_cohorts(match_criteria: :partial_find_all).reject { |award_amount| award_amount.claim_academic_year <= claim.academic_year }
+    end
+
+    def eligible_now?
+      find_cohorts(match_criteria: :exact).one?
+    end
+
     def eligible_later?
-      find_cohort(
-        cohorts: {
-          mathematics: [
-            AcademicYear.new(2019),
-            AcademicYear.new(2020)
-          ],
-          chemistry: [
-            AcademicYear.new(2020)
-          ],
-          physics: [
-            AcademicYear.new(2020)
-          ],
-          foreign_languages: [
-            AcademicYear.new(2020)
-          ]
-        }
-      ).present?
+      eligible_later.present?
     end
 
     # next eligible ignores current eligibility and is always looking forward
     # to the next application window, used for reminder setting.
     # definitions come from https://www.gov.uk/guidance/early-career-payments-guidance-for-teachers-and-schools
-    #
-    ## subject {
-    ##     selected cohort year {
-    ##       current academic year => next applicable academic year to apply
-    ##     }
-    ## }
     def eligible_later_year
-      {
-        mathematics: {
-          AcademicYear.new(2018) => {
-            2020 => AcademicYear.new(2021),
-            2021 => AcademicYear.new(2023),
-            2022 => AcademicYear.new(2023)
-          },
-          AcademicYear.new(2019) => {
-            2020 => AcademicYear.new(2022),
-            2021 => AcademicYear.new(2022),
-            2022 => AcademicYear.new(2024),
-            2023 => AcademicYear.new(2024)
-          },
-          AcademicYear.new(2020) => {
-            AcademicYear.current.start_year => AcademicYear.next
-          }
-        },
-        chemistry: {
-          AcademicYear.new(2020) => {
-            AcademicYear.current.start_year => AcademicYear.next
-          }
-        },
-        physics: {
-          AcademicYear.new(2020) => {
-            AcademicYear.current.start_year => AcademicYear.next
-          }
-        },
-        foreign_languages: {
-          AcademicYear.new(2020) => {
-            AcademicYear.current.start_year => AcademicYear.next
-          }
-        }
-      }.dig(eligible_itt_subject.to_sym, itt_academic_year, AcademicYear.current.start_year)
+      eligible_later.first&.claim_academic_year
     end
 
     # This doesn't mean it's eligible either, ie, eligibility could be undetermined
@@ -291,69 +245,31 @@ module EarlyCareerPayments
     def award_amount
       return BigDecimal("0.00") if current_school.nil?
 
-      current_school.eligible_for_early_career_payments_as_uplift? ? award_amounts[:uplift] : award_amounts[:base]
+      current_school.eligible_for_early_career_payments_as_uplift? ? award_amounts.first.uplift_amount : award_amounts.first.base_amount
     end
 
     def award_amounts
-      if without_cohort?
-        return {
-          base: BigDecimal("0.00"),
-          uplift: BigDecimal("0.00")
-        }
-      end
+      zero_award = [AwardAmount.new(
+        itt_subject: :not_eligible,
+        itt_academic_year: AcademicYear.new,
+        claim_academic_year: AcademicYear.new,
+        base_amount: BigDecimal("0.00"),
+        uplift_amount: BigDecimal("0.00")
+      )]
+      return zero_award if without_cohort?
 
-      award_amounts = {
-        mathematics: {
-          AcademicYear.new(2018) => {
-            base: BigDecimal("5000.00"),
-            uplift: BigDecimal("7500.00")
-          },
-          AcademicYear.new(2019) => {
-            base: BigDecimal("5000.00"),
-            uplift: BigDecimal("7500.00")
-          },
-          AcademicYear.new(2020) => {
-            base: BigDecimal("2000.00"),
-            uplift: BigDecimal("3000.00")
-          }
-        },
-        chemistry: {
-          AcademicYear.new(2020) => {
-            base: BigDecimal("2000.00"),
-            uplift: BigDecimal("3000.00")
-          }
-        },
-        physics: {
-          AcademicYear.new(2020) => {
-            base: BigDecimal("2000.00"),
-            uplift: BigDecimal("3000.00")
-          }
-        },
-        foreign_languages: {
-          AcademicYear.new(2020) => {
-            base: BigDecimal("2000.00"),
-            uplift: BigDecimal("3000.00")
-          }
-        }
-      }.dig(eligible_itt_subject.to_sym, itt_academic_year)
-
-      if award_amounts.nil?
-        return {
-          base: BigDecimal("0.00"),
-          uplift: BigDecimal("0.00")
-        }
+      if eligible_now?
+        award_amounts = find_cohorts(match_criteria: :exact)
+      elsif eligible_later?
+        award_amounts = find_cohorts(match_criteria: :partial_find_all)
       end
+      return zero_award if award_amounts.nil?
 
       award_amounts
     end
 
     def first_eligible_itt_academic_year
-      award_amount = AWARD_AMOUNTS.find do |award_amount|
-        award_amount.claim_academic_year == claim.academic_year &&
-          award_amount.itt_subject.to_s == eligible_itt_subject
-      end
-
-      award_amount&.itt_academic_year
+      find_cohorts(match_criteria: :partial_find)&.itt_academic_year
     end
 
     def reset_dependent_answers
@@ -366,9 +282,23 @@ module EarlyCareerPayments
 
     private
 
-    def find_cohort(cohorts:)
-      cohorts.find do |cohort_itt_subject, cohort_itt_academic_years|
-        cohort_itt_subject.to_s == eligible_itt_subject && cohort_itt_academic_years.any?(itt_academic_year)
+    def find_cohorts(match_criteria:)
+      if match_criteria == :exact
+        AWARD_AMOUNTS.find_all do |award_amount|
+          award_amount.itt_academic_year == itt_academic_year &&
+            award_amount.itt_subject.to_s == eligible_itt_subject &&
+            award_amount.claim_academic_year == claim.academic_year
+        end
+      elsif match_criteria == :partial_find_all
+        AWARD_AMOUNTS.find_all do |award_amount|
+          award_amount.itt_academic_year == itt_academic_year &&
+            award_amount.itt_subject.to_s == eligible_itt_subject
+        end
+      elsif match_criteria == :partial_find
+        AWARD_AMOUNTS.find do |award_amount|
+          award_amount.claim_academic_year == claim.academic_year &&
+            award_amount.itt_subject.to_s == eligible_itt_subject
+        end
       end
     end
 
@@ -379,29 +309,14 @@ module EarlyCareerPayments
     def ineligible_cohort?
       return true if itt_academic_year == AcademicYear.new
       return false if without_cohort?
+      return false if eligible_later.present?
 
-      find_cohort(
-        cohorts: {
-          mathematics: [
-            AcademicYear.new(2018),
-            AcademicYear.new(2019),
-            AcademicYear.new(2020)
-          ],
-          chemistry: [
-            AcademicYear.new(2020)
-          ],
-          physics: [
-            AcademicYear.new(2020)
-          ],
-          foreign_languages: [
-            AcademicYear.new(2020)
-          ]
-        }
-      ).blank?
+      find_cohorts(match_criteria: :exact).none?
     end
 
     def ineligible_nqt_in_academic_year_after_itt?
-      nqt_in_academic_year_after_itt == false && policy.configuration.current_academic_year != "2021/2022"
+      return false if trainee_teacher_in_2021?
+      nqt_in_academic_year_after_itt == false
     end
 
     def ineligible_current_school?
