@@ -1,10 +1,16 @@
-<h3 class="govuk-heading-m">
-  School selected
-</h3>
-
-<p class="govuk-body">
-  <%= current_claim.school.name %>
-</p>
+<table class="govuk-table">
+  <caption class="govuk-table__caption govuk-table__caption--m">School selected</caption>
+  <tbody class="govuk-table__body">
+    <tr class="govuk-table__row">
+      <th scope="row" class="govuk-table__header">Name</th>
+      <td class="govuk-table__cell"><%= current_claim.school.name %></th>
+    </tr>
+    <tr class="govuk-table__row">
+      <th scope="row" class="govuk-table__header">Address</th>
+      <td class="govuk-table__cell"><%= current_claim.school.address %></th>
+    </tr>
+  </tbody>
+</table>
 
 <div class="govuk-!-padding-bottom-6">
   <%= link_to "Change school", claim_path(current_policy_routing_name, "current-school"), class: "govuk-button govuk-button--secondary", role: "button", draggable: false, data: {module: "govuk-button"} %>
@@ -30,32 +36,8 @@
   </li>
     <li>
     <span class="govuk-body">
-      The spelling of the school does not match our records.
-    </span>
-  </li>
-</ul>
-
-<h3 class="govuk-heading-m">
-  What you can do next
-</h3>
-
-<ul class="govuk-list govuk-list--bullet">
-  <li>
-    <span class="govuk-body">
-      Check the spelling, including any apostrophes or full stops used in the school’s name.
-    </span>
-  </li>
-  <li>
-    <span class="govuk-body">
-      Check to make sure the school you selected is not listed as closed, if it has
-      changed status to become an academy.
-    </span>
-  </li>
-  <li>
-    <span class="govuk-body">
-      Check to make sure you selected the correct school. 
-      If your school shares a name with others in the country, 
-      make sure you select the one with the correct postcode.
+      The spelling of the school does not match our records. Check the spelling,
+      including any apostrophes, hyphens or full stops used in the school's name.
     </span>
   </li>
 </ul>

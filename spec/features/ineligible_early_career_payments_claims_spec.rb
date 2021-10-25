@@ -36,7 +36,7 @@ RSpec.feature "Ineligible Teacher Early-Career Payments claims" do
     expect(page).to have_text(I18n.t("early_career_payments.questions.current_school_search"))
     choose_school schools(:bradford_grammar_school)
 
-    expect(page).to have_text("We could not find a school matching those details")
+    expect(page).to have_text("The school you have selected is not eligible")
   end
 
   scenario "when poor performance - subject to formal performance action" do
