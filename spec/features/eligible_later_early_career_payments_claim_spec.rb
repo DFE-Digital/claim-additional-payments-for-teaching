@@ -39,18 +39,18 @@ RSpec.feature "Eligible later Teacher Early-Career Payments" do
             {itt_subject: "mathematics", itt_academic_year: AcademicYear.new(2019), award_amount: number_to_currency(7_500, precision: 0), next_eligible_year: AcademicYear.new(2024)}
           ]
         }
-      ].each do |policy_year|
-        context "when accepting claims for AcademicYear #{policy_year[:policy_year]}" do
+      ].each do |policy|
+        context "when accepting claims for AcademicYear #{policy[:policy_year]}" do
           before do
             @ecp_policy_date = PolicyConfiguration.for(EarlyCareerPayments).current_academic_year
-            PolicyConfiguration.for(EarlyCareerPayments).update(current_academic_year: policy_year[:policy_year])
+            PolicyConfiguration.for(EarlyCareerPayments).update(current_academic_year: policy[:policy_year])
           end
 
           after do
             PolicyConfiguration.for(EarlyCareerPayments).update(current_academic_year: @ecp_policy_date)
           end
 
-          policy_year[:eligible_later].each do |scenario|
+          policy[:eligible_later].each do |scenario|
             scenario "with ITT subject #{scenario[:itt_subject]} in ITT academic year #{scenario[:itt_academic_year]} it displays award amount of #{scenario[:award_amount]}" do
               claim.eligibility.update(
                 eligible_itt_subject: scenario[:itt_subject],
@@ -107,18 +107,18 @@ RSpec.feature "Eligible later Teacher Early-Career Payments" do
             {itt_subject: "mathematics", itt_academic_year: AcademicYear.new(2019), award_amount: number_to_currency(5_000, precision: 0), next_eligible_year: AcademicYear.new(2024)}
           ]
         }
-      ].each do |policy_year|
-        context "when accepting claims for AcademicYear #{policy_year[:policy_year]}" do
+      ].each do |policy|
+        context "when accepting claims for AcademicYear #{policy[:policy_year]}" do
           before do
             @ecp_policy_date = PolicyConfiguration.for(EarlyCareerPayments).current_academic_year
-            PolicyConfiguration.for(EarlyCareerPayments).update(current_academic_year: policy_year[:policy_year])
+            PolicyConfiguration.for(EarlyCareerPayments).update(current_academic_year: policy[:policy_year])
           end
 
           after do
             PolicyConfiguration.for(EarlyCareerPayments).update(current_academic_year: @ecp_policy_date)
           end
 
-          policy_year[:eligible_later].each do |scenario|
+          policy[:eligible_later].each do |scenario|
             scenario "with ITT subject #{scenario[:itt_subject]} in ITT academic year #{scenario[:itt_academic_year]} it displays award amount of #{scenario[:award_amount]}" do
               claim.eligibility.update(
                 eligible_itt_subject: scenario[:itt_subject],

@@ -206,10 +206,6 @@ module EarlyCareerPayments
       find_cohorts(match_criteria: :partial_find_all).reject { |award_amount| award_amount.claim_academic_year <= claim.academic_year }
     end
 
-    def eligible_now?
-      find_cohorts(match_criteria: :exact).one?
-    end
-
     def eligible_later?
       eligible_later.present?
     end
@@ -219,6 +215,10 @@ module EarlyCareerPayments
     # definitions come from https://www.gov.uk/guidance/early-career-payments-guidance-for-teachers-and-schools
     def eligible_later_year
       eligible_later.first&.claim_academic_year
+    end
+
+    def eligible_now?
+      find_cohorts(match_criteria: :exact).one?
     end
 
     # This doesn't mean it's eligible either, ie, eligibility could be undetermined

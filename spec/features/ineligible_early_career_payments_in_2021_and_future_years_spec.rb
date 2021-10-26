@@ -1,8 +1,6 @@
 require "rails_helper"
 
 RSpec.feature "Ineligible Teacher Early-Career Payments claims by cohort" do
-  extend ActionView::Helpers::NumberHelper
-
   [
     {
       policy_year: AcademicYear.new(2021),
@@ -43,11 +41,11 @@ RSpec.feature "Ineligible Teacher Early-Career Payments claims by cohort" do
         {itt_subject: "mathematics", itt_academic_year: AcademicYear.new(2018)}
       ]
     }
-  ].each do |policy_year|
-    context "when accepting claims for AcademicYear #{policy_year[:policy_year]}" do
+  ].each do |policy|
+    context "when accepting claims for AcademicYear #{policy[:policy_year]}" do
       before do
         @ecp_policy_date = PolicyConfiguration.for(EarlyCareerPayments).current_academic_year
-        PolicyConfiguration.for(EarlyCareerPayments).update(current_academic_year: policy_year[:policy_year])
+        PolicyConfiguration.for(EarlyCareerPayments).update(current_academic_year: policy[:policy_year])
       end
 
       after do
@@ -63,7 +61,7 @@ RSpec.feature "Ineligible Teacher Early-Career Payments claims by cohort" do
         claim
       end
 
-      policy_year[:ineligible_cohorts].each do |scenario|
+      policy[:ineligible_cohorts].each do |scenario|
         scenario "with cohort ITT subject #{scenario[:itt_subject]} in ITT academic year #{scenario[:itt_academic_year]}" do
           visit claim_path(claim.policy.routing_name, "eligible-itt-subject")
 
@@ -95,7 +93,7 @@ RSpec.feature "Ineligible Teacher Early-Career Payments claims by cohort" do
           expect(page).to have_link(href: EarlyCareerPayments.eligibility_page_url)
           expect(page).to have_text("Based on the answers you have provided you are not eligible #{I18n.t("early_career_payments.claim_description")}")
 
-          expect(page).not_to have_text("You will be eligible for a ") # #{scenario[:award_amount]} early-career payment in #{scenario[:next_eligible_year].start_year}")
+          expect(page).not_to have_text("You will be eligible for a ")
           expect(page).not_to have_text("you’ll be able to claim")
         end
       end
