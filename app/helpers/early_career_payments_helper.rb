@@ -12,6 +12,8 @@ module EarlyCareerPaymentsHelper
   def guidance_eligibility_page_link(claim)
     eligibility_page_url = if claim.eligibility.send(:no_entire_term_contract?)
       EarlyCareerPayments.eligibility_page_url + "#supply-private-school-and-sixth-form-college-teachers"
+    elsif claim.eligibility.send(:not_teaching_now_in_eligible_itt_subject?)
+      EarlyCareerPayments.eligibility_page_url + "#eligibility-criteria"
     else
       EarlyCareerPayments.eligibility_page_url
     end

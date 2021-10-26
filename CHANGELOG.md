@@ -9,6 +9,7 @@ The format is based on [Keep a Changelog]
 - ECP policy
   - Eligibility link update for ineligible screens
   - Ineligible school content change
+  - Not teaching subject now ineligible page content change
 
 ## [Release 101] - 2021-10-21
 
