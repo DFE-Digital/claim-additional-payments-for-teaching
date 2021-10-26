@@ -12,11 +12,18 @@ module EarlyCareerPaymentsHelper
   def guidance_eligibility_page_link(claim)
     eligibility_page_url = if claim.eligibility.send(:no_entire_term_contract?)
       EarlyCareerPayments.eligibility_page_url + "#supply-private-school-and-sixth-form-college-teachers"
-    elsif claim.eligibility.send(:not_teaching_now_in_eligible_itt_subject?)
+    elsif claim.eligibility.send(:itt_subject_none_of_the_above?) ||
+        claim.eligibility.send(:ineligible_cohort?) ||
+        claim.eligibility.send(:not_employed_directly?)
       EarlyCareerPayments.eligibility_page_url + "#eligibility-criteria"
+    elsif claim.eligibility.send(:not_teaching_now_in_eligible_itt_subject?)
+      EarlyCareerPayments.eligibility_page_url + "#employment"
+    elsif claim.eligibility.send(:poor_performance?)
+      EarlyCareerPayments.eligibility_page_url + "#performance"
     else
       EarlyCareerPayments.eligibility_page_url
     end
+
     link_to("eligibility page", eligibility_page_url, class: "govuk-link")
   end
 

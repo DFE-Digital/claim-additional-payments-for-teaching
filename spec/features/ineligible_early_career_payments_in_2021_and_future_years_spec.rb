@@ -90,7 +90,7 @@ RSpec.feature "Ineligible Teacher Early-Career Payments claims by cohort" do
           expect(claim.eligibility.reload.itt_academic_year).to eql scenario[:itt_academic_year]
 
           expect(page).to have_text(I18n.t("early_career_payments.ineligible.heading"))
-          expect(page).to have_link(href: EarlyCareerPayments.eligibility_page_url)
+          expect(page).to have_link(href: "#{EarlyCareerPayments.eligibility_page_url}#eligibility-criteria")
           expect(page).to have_text("Based on the answers you have provided you are not eligible #{I18n.t("early_career_payments.claim_description")}")
 
           expect(page).not_to have_text("You will be eligible for a ")
