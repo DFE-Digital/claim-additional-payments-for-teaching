@@ -729,7 +729,7 @@ RSpec.describe Claim, type: :model do
   end
 
   describe "#submittable?" do
-    let(:claim) { build(:claim, trait, first_name: first_name, policy: policy) }
+    let(:claim) { build(:claim, trait, academic_year: AcademicYear.new(2021), first_name: first_name, policy: policy) }
 
     context "with student loans policy eligibility" do
       let(:policy) { StudentLoans }
@@ -777,7 +777,7 @@ RSpec.describe Claim, type: :model do
       let(:eligibility) { build(:early_career_payments_eligibility, :eligible) }
 
       it "returns true when the claim is valid and has not been submitted" do
-        claim = build(:claim, :submittable, first_name: "Dee", govuk_verify_fields: [], eligibility: eligibility)
+        claim = build(:claim, :submittable, academic_year: AcademicYear.new(2021), first_name: "Dee", govuk_verify_fields: [], eligibility: eligibility)
 
         expect(claim.submittable?).to eq true
       end
