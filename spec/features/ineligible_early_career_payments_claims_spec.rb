@@ -62,7 +62,7 @@ RSpec.feature "Ineligible Teacher Early-Career Payments claims" do
     click_on "Continue"
 
     expect(page).to have_text(I18n.t("early_career_payments.ineligible.heading"))
-    expect(page).to have_link(href: EarlyCareerPayments.eligibility_page_url)
+    expect(page).to have_link(href: "#{EarlyCareerPayments.eligibility_page_url}#performance")
   end
 
   scenario "when poor performance - subject to disciplinary action" do
@@ -88,7 +88,7 @@ RSpec.feature "Ineligible Teacher Early-Career Payments claims" do
     click_on "Continue"
 
     expect(page).to have_text(I18n.t("early_career_payments.ineligible.heading"))
-    expect(page).to have_link(href: EarlyCareerPayments.eligibility_page_url)
+    expect(page).to have_link(href: "#{EarlyCareerPayments.eligibility_page_url}#performance")
   end
 
   scenario "when poor performance - subject to disciplinary & formal performance action" do
@@ -114,7 +114,7 @@ RSpec.feature "Ineligible Teacher Early-Career Payments claims" do
     click_on "Continue"
 
     expect(page).to have_text(I18n.t("early_career_payments.ineligible.heading"))
-    expect(page).to have_link(href: EarlyCareerPayments.eligibility_page_url)
+    expect(page).to have_link(href: "#{EarlyCareerPayments.eligibility_page_url}#performance")
   end
 
   # Employed as Supply Teacher with contract less than an entire term
@@ -171,7 +171,7 @@ RSpec.feature "Ineligible Teacher Early-Career Payments claims" do
     click_on "Continue"
 
     expect(page).to have_text(I18n.t("early_career_payments.ineligible.heading"))
-    expect(page).to have_link(href: EarlyCareerPayments.eligibility_page_url)
+    expect(page).to have_link(href: "#{EarlyCareerPayments.eligibility_page_url}#eligibility-criteria")
     expect(page).to have_text("Based on the answers you have provided you are not eligible #{I18n.t("early_career_payments.claim_description")}")
   end
 
@@ -215,7 +215,7 @@ RSpec.feature "Ineligible Teacher Early-Career Payments claims" do
     expect(claim.eligibility.reload.eligible_itt_subject).to eql "none_of_the_above"
 
     expect(page).to have_text(I18n.t("early_career_payments.ineligible.heading"))
-    expect(page).to have_link(href: EarlyCareerPayments.eligibility_page_url)
+    expect(page).to have_link(href: "#{EarlyCareerPayments.eligibility_page_url}#eligibility-criteria")
     expect(page).to have_text(I18n.t("early_career_payments.ineligible.reason.itt_subject"))
   end
 
@@ -267,7 +267,7 @@ RSpec.feature "Ineligible Teacher Early-Career Payments claims" do
     expect(claim.eligibility.reload.teaching_subject_now).to eql false
 
     expect(page).to have_text(I18n.t("early_career_payments.ineligible.heading"))
-    expect(page).to have_link(href: "#{EarlyCareerPayments.eligibility_page_url}#eligibility-criteria")
+    expect(page).to have_link(href: "#{EarlyCareerPayments.eligibility_page_url}#employment")
     expect(page).to have_text(I18n.t("early_career_payments.ineligible.reason.not_teaching_subject"))
   end
 
@@ -331,7 +331,7 @@ RSpec.feature "Ineligible Teacher Early-Career Payments claims" do
     expect(claim.eligibility.reload.itt_academic_year).to eql AcademicYear.new
 
     expect(page).to have_text(I18n.t("early_career_payments.ineligible.heading"))
-    expect(page).to have_link(href: EarlyCareerPayments.eligibility_page_url)
+    expect(page).to have_link(href: "#{EarlyCareerPayments.eligibility_page_url}#eligibility-criteria")
     expect(page).to have_text("Based on the answers you have provided you are not eligible #{I18n.t("early_career_payments.claim_description")}")
   end
 end
