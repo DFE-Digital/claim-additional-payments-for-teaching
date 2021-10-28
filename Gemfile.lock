@@ -322,7 +322,7 @@ GEM
       uber (< 0.2.0)
     retriable (3.1.2)
     rexml (3.2.5)
-    rollbar (3.2.0)
+    rollbar (3.3.0)
     rotp (6.2.0)
     rspec-core (3.10.1)
       rspec-support (~> 3.10.0)
