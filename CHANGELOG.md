@@ -10,7 +10,9 @@ The format is based on [Keep a Changelog]
   - Eligibility link update for ineligible screens
   - Ineligible school content change
   - Not teaching subject now ineligible page content change
-  - Future years - eligible/ineligiblity configuration
+  - Future years
+    - eligible/ineligiblity configuration
+    - application complete display reminders section when eligible
 
 ## [Release 101] - 2021-10-21
 
