@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+## [Release 102] - 2021-10-28
+
 - ECP policy
   - Eligibility link update for ineligible screens
   - Ineligible school content change
@@ -962,7 +964,9 @@ The format is based on [Keep a Changelog]
 - First release for student loan repayments private beta
 
 [unreleased]:
-  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-101...HEAD
+  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-102...HEAD
+[release 102]:
+  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-101...release-102
 [release 101]:
   https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-100...release-101
 [release 100]:
