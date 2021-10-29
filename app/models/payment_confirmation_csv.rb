@@ -12,7 +12,8 @@ class PaymentConfirmationCsv
     "Student Loans",
     "Tax",
     "Net Pay",
-    "Claim Policies"
+    "Claim Policies",
+    "Postgraduate Loans"
   ].freeze
 
   def initialize(file)

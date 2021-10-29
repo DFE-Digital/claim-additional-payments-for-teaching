@@ -10,13 +10,11 @@ FactoryBot.define do
     end
 
     after(:build) do |claim, evaluator|
-      extend Admin::PolicyConfigurationsHelper
-
       claim.eligibility = build(*evaluator.eligibility_factory) unless claim.eligibility
 
       claim_academic_year =
         if claim.policy == EarlyCareerPayments
-          AcademicYear::Type.new.serialize(options_for_academic_year.sample)
+          PolicyConfiguration.for(EarlyCareerPayments).current_academic_year
         else
           AcademicYear::Type.new.serialize(AcademicYear.new(2019))
         end

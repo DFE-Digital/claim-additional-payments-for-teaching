@@ -13,8 +13,8 @@ RSpec.describe PaymentConfirmationCsv do
   context "The CSV is valid and has all the correct data" do
     let(:csv) do
       <<~CSV
-        Payroll Reference,Gross Value,Payment ID,NI,Employers NI,Student Loans,Tax,Net Pay,Claim Policies
-        DFE00001,487.48,88b5dba7-ccf1-4ffd-a3ce-20bd3ce1e500,33.9,38.98,0,89.6,325,"MathsAndPhysics StudentLoans"
+        Payroll Reference,Gross Value,Payment ID,NI,Employers NI,Student Loans,Tax,Net Pay,Claim Policies,Postgraduate Loans
+        DFE00001,487.48,88b5dba7-ccf1-4ffd-a3ce-20bd3ce1e500,33.9,38.98,0,89.6,325,"MathsAndPhysics StudentLoans",
       CSV
     end
 
@@ -47,7 +47,7 @@ RSpec.describe PaymentConfirmationCsv do
     end
 
     it "fails and populates its errors" do
-      expect(subject.errors).to eq(["The selected file is missing some expected columns: Payroll Reference, Gross Value"])
+      expect(subject.errors).to eq(["The selected file is missing some expected columns: Payroll Reference, Gross Value, Postgraduate Loans"])
     end
   end
 
@@ -69,8 +69,8 @@ RSpec.describe PaymentConfirmationCsv do
     let(:byte_order_mark) { "\xEF\xBB\xBF" }
     let(:csv) do
       <<~CSV
-        Payroll Reference,Gross Value,Payment ID,NI,Employers NI,Student Loans,Tax,Net Pay,Claim Policies
-        DFE00001,487.48,88b5dba7-ccf1-4ffd-a3ce-20bd3ce1e500,33.9,38.98,0,89.6,325,StudentLoans
+        Payroll Reference,Gross Value,Payment ID,NI,Employers NI,Student Loans,Tax,Net Pay,Claim Policies,Postgraduate Loans
+        DFE00001,487.48,88b5dba7-ccf1-4ffd-a3ce-20bd3ce1e500,33.9,38.98,0,89.6,325,StudentLoans,
       CSV
     end
 

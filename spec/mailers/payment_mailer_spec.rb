@@ -5,7 +5,7 @@ RSpec.describe PaymentMailer, type: :mailer do
   Policies.all.each do |policy|
     context "with a payment with a single #{policy} claim" do
       describe "#confirmation" do
-        let(:payment) { create(:payment, :with_figures, net_pay: 500.00, student_loan_repayment: 60, claims: [claim], scheduled_payment_date: Date.parse("2019-01-01")) }
+        let(:payment) { create(:payment, :with_figures, net_pay: 500.00, student_loan_repayment: 60, postgraduate_loan_repayment: 40, claims: [claim], scheduled_payment_date: Date.parse("2019-01-01")) }
         let(:claim) { build(:claim, :submitted, policy: policy) }
         let(:mail) { PaymentMailer.confirmation(payment) }
 
@@ -50,11 +50,16 @@ RSpec.describe PaymentMailer, type: :mailer do
         end
 
         context "when user has a student loan" do
-          let(:payment) { create(:payment, :with_figures, student_loan_repayment: 10, claims: [claim]) }
+          let(:payment) { create(:payment, :with_figures, student_loan_repayment: 10, postgraduate_loan_repayment: 8, claims: [claim]) }
 
           it "mentions the student loan deduction content and lists their contribution" do
             expect(mail.body.encoded).to include("This payment is treated as pay and is therefore subject to a student loan contribution, if applicable.")
             expect(mail.body.encoded).to include("Student loan contribution: £10.00")
+          end
+
+          it "mentions the postgraduate loan deduction content and lists their contribution" do
+            expect(mail.body.encoded).to include("This payment is treated as pay and is therefore subject to a student loan contribution, if applicable.")
+            expect(mail.body.encoded).to include("Postgraduate loan contribution: £8.00")
           end
         end
       end

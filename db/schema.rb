@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_09_23_112453) do
+ActiveRecord::Schema.define(version: 2021_10_29_142607) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -191,6 +191,7 @@ ActiveRecord::Schema.define(version: 2021_09_23_112453) do
     t.decimal "tax", precision: 7, scale: 2
     t.decimal "net_pay", precision: 7, scale: 2
     t.decimal "gross_pay", precision: 7, scale: 2
+    t.decimal "postgraduate_loan_repayment", precision: 7, scale: 2
     t.index ["created_at"], name: "index_payments_on_created_at"
     t.index ["payroll_run_id"], name: "index_payments_on_payroll_run_id"
   end
