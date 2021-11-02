@@ -38,6 +38,6 @@ module StudentLoansHelper
   # Returns the question for the student-loan-amount question in the Student
   # Loans journey.
   def student_loan_amount_question
-    translate("student_loans.questions.student_loan_amount", financial_year: StudentLoans.current_financial_year)
+    translate("student_loans.questions.student_loan_amount", financial_year: StudentLoans.current_financial_year(:short))
   end
 end

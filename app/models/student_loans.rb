@@ -25,6 +25,10 @@ module StudentLoans
     "https://www.gov.uk/government/publications/additional-payments-for-teaching-eligibility-and-payment-details/teachers-claim-back-your-student-loan-repayments-eligibility-and-payment-details"
   end
 
+  def student_loan_balance_url
+    "https://www.gov.uk/sign-in-to-manage-your-student-loan-balance"
+  end
+
   def routing_name
     "student-loans"
   end
@@ -82,11 +86,15 @@ module StudentLoans
   # year for the StudentLoans policy. For example:
   #
   #   "6 April 2018 and 5 April 2019"
-  def current_financial_year
+  def current_financial_year(format = :default)
     end_year = configuration.current_academic_year.start_year
     start_year = end_year - 1
 
-    "6 April #{start_year} and 5 April #{end_year}"
+    if format == :short
+      "#{start_year}/#{end_year}"
+    else
+      "6 April #{start_year} and 5 April #{end_year}"
+    end
   end
 
   def configuration
