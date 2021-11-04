@@ -52,7 +52,6 @@ resource "azurerm_app_service" "app_as" {
     "DQT_SUBSCRIPTION_KEY"                           = data.azurerm_key_vault_secret.DQTSubscriptionKey.value
     "DOCKER_REGISTRY_SERVER_URL"                     = "https://index.docker.io"
     "ENVIRONMENT_NAME"                               = local.environment
-    "GECKOBOARD_API_KEY"                             = data.azurerm_key_vault_secret.GeckoboardAPIKey.value
     "GOOGLE_ANALYTICS_ID"                            = ""
     "GTM_ANALYTICS"                                  = data.azurerm_key_vault_secret.GTMAnalytics.value
     "LOGSTASH_HOST"                                  = data.azurerm_key_vault_secret.LogstashHost.value
