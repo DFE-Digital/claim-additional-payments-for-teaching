@@ -6,7 +6,6 @@ RSpec.describe "Admin decisions", type: :request do
 
     before do
       @signed_in_user = sign_in_as_service_operator
-      @dataset_post_stub = stub_geckoboard_dataset_update
     end
 
     describe "decisions#new" do
@@ -82,14 +81,6 @@ RSpec.describe "Admin decisions", type: :request do
 
         expect(claim.latest_decision.created_by).to eq(@signed_in_user)
         expect(claim.latest_decision.result).to eq("rejected")
-      end
-
-      it "updates the claim dataset on Geckoboard" do
-        perform_enqueued_jobs { post admin_claim_decisions_path(claim_id: claim.id, decision: {result: "approved"}) }
-
-        expect(@dataset_post_stub.with { |request|
-          request_body_matches_geckoboard_data_for_claims?(request, [claim.reload])
-        }).to have_been_requested
       end
 
       context "when no result is selected" do

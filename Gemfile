@@ -39,9 +39,6 @@ gem "mail-notify"
 gem "delayed_job_active_record"
 gem "delayed_cron_job"
 
-# Geckoboard for stats
-gem "geckoboard-ruby"
-
 # Use ActiveStorage variant
 # gem 'mini_magick', '~> 4.8'
 

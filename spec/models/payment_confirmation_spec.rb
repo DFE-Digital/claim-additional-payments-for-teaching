@@ -16,7 +16,6 @@ RSpec.describe PaymentConfirmation do
     tempfile
   end
   let(:admin_user) { build(:dfe_signin_user) }
-  let!(:dataset_post_stub) { stub_geckoboard_dataset_update("claims.test") }
   subject(:payment_confirmation) { described_class.new(payroll_run, file, admin_user) }
 
   context "the claims in the CSV match the claims of the payroll run" do
@@ -77,16 +76,6 @@ RSpec.describe PaymentConfirmation do
         expect(first_email.body.raw_source).to include(the_following_friday)
         expect(second_email.body.raw_source).to include(the_following_friday)
       end
-    end
-
-    it "sends each claim's reference, policy and scheduled payment date to Geckoboard" do
-      perform_enqueued_jobs do
-        payment_confirmation.ingest
-      end
-
-      expect(dataset_post_stub.with { |request|
-        request_body_matches_geckoboard_data_for_claims?(request, payroll_run.claims)
-      }).to have_been_requested
     end
   end
 

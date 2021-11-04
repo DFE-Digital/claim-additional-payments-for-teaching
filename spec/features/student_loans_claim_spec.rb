@@ -3,8 +3,6 @@ require "rails_helper"
 RSpec.feature "Teacher Student Loan Repayments claims" do
   include StudentLoansHelper
 
-  before { stub_geckoboard_dataset_update }
-
   [
     true,
     false

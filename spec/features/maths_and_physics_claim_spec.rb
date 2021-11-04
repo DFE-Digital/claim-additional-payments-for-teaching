@@ -186,8 +186,6 @@ RSpec.feature "Maths & Physics claims" do
 
       expect(page).to have_text("Check your answers before sending your application")
 
-      stub_geckoboard_dataset_update
-
       stub_qualified_teaching_statuses_show(
         trn: claim.teacher_reference_number,
         params: {

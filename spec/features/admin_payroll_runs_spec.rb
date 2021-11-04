@@ -1,8 +1,6 @@
 require "rails_helper"
 
 RSpec.feature "Payroll" do
-  let!(:dataset_post_stub) { stub_geckoboard_dataset_update("claims.test") }
-
   before { @signed_in_user = sign_in_as_service_operator }
 
   scenario "Service operator creates a payroll run" do
@@ -156,7 +154,5 @@ RSpec.feature "Payroll" do
       "We’re paying your claim to get back your student loan repayments, reference number: #{payroll_run.claims[0].reference}",
       "We’re paying your claim to get back your student loan repayments, reference number: #{payroll_run.claims[1].reference}"
     ])
-
-    expect(dataset_post_stub).to have_been_requested.once
   end
 end

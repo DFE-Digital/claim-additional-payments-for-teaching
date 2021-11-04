@@ -54,7 +54,6 @@ RSpec.feature "Admin claim tasks update with DQT API" do
   end
 
   before do
-    stub_geckoboard_dataset_update
     sign_in_as_service_operator
 
     if data.nil?

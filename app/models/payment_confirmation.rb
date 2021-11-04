@@ -30,8 +30,6 @@ class PaymentConfirmation
         payroll_run.payments.each do |payment|
           PaymentMailer.confirmation(payment).deliver_later
         end
-
-        RecordOrUpdateGeckoboardDatasetJob.perform_later(payroll_run.claims.pluck(:id))
       else
         raise ActiveRecord::Rollback
       end
