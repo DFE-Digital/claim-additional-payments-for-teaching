@@ -136,24 +136,6 @@ user has given consent, we record it in a cookie called `accept_cookies`.
 In JavaScript before setting a cookie, you can check the user's consent by using
 the function: `TeacherPayments.cookies.checkNonEssentialCookiesAccepted()`
 
-## Geckoboard
-
-The application has a Geckoboard dashboard that is updated every time a Claim is
-submitted or approved, or a payment is recorded. The class that does most of the
-work can be found in app/models/claim/geckoboard_dataset.rb.
-
-If any changes are made to the `DATASET_FIELDS` constant, then it's important
-that the underlying Geckoboard dataset is reset, as the Geckoboard API doesn't
-support adding new fields to an already existing dataset. The easiest way to do
-this is to run the following Rake command:
-
-```bash
-bundle exec rake geckoboard:reset
-```
-
-This deletes the existing dataset, and then recreates the dataset with the
-exisiting claim data.
-
 ## Running specs, brakeman, and code linting
 
 ```
