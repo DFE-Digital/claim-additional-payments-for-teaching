@@ -6,8 +6,6 @@ RSpec.describe "Submissions", type: :request do
   describe "#create" do
     context "with a submittable claim" do
       before do
-        @dataset_post_stub = stub_geckoboard_dataset_update
-
         start_student_loans_claim
         # Make the claim submittable
         in_progress_claim.update!(attributes_for(:claim, :submittable))
@@ -32,13 +30,6 @@ RSpec.describe "Submissions", type: :request do
         expect(email.to).to eql([in_progress_claim.email_address])
         expect(email.subject).to match("been received")
         expect(email.body).to include("Your unique reference is #{in_progress_claim.reference}.")
-      end
-
-      it "sends the claim's details to the “submitted” dataset on Geckoboard" do
-        perform_enqueued_jobs { post claim_submission_path(StudentLoans.routing_name) }
-        expect(@dataset_post_stub.with { |request|
-          request_body_matches_geckoboard_data_for_claims?(request, [in_progress_claim.reload])
-        }).to have_been_requested
       end
 
       # None of these specs should be here, should be in features.

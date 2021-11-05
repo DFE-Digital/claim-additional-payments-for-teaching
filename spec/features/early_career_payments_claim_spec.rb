@@ -315,8 +315,6 @@ RSpec.feature "Teacher Early-Career Payments claims" do
       expect(page).to have_text(I18n.t("questions.postgraduate_doctoral_loan"))
     end
 
-    stub_geckoboard_dataset_update
-
     freeze_time do
       click_on "Accept and send"
 
@@ -760,8 +758,6 @@ RSpec.feature "Teacher Early-Career Payments claims" do
       expect(page).to have_text(I18n.t("questions.postgraduate_doctoral_loan"))
     end
 
-    stub_geckoboard_dataset_update
-
     freeze_time do
       click_on "Accept and send"
 
@@ -1125,8 +1121,6 @@ RSpec.feature "Teacher Early-Career Payments claims" do
         expect(page).to have_text(I18n.t("questions.postgraduate_masters_loan"))
         expect(page).to have_text(I18n.t("questions.postgraduate_doctoral_loan"))
       end
-
-      stub_geckoboard_dataset_update
 
       freeze_time do
         click_on "Accept and send"

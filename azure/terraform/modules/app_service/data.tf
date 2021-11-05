@@ -73,10 +73,6 @@ data "azurerm_key_vault_secret" "LogstashHost" {
   name         = "LogstashHost"
   key_vault_id = data.azurerm_key_vault.secrets_kv.id
 }
-data "azurerm_key_vault_secret" "GeckoboardAPIKey" {
-  name         = "GeckoboardAPIKey"
-  key_vault_id = data.azurerm_key_vault.secrets_kv.id
-}
 data "azurerm_key_vault_secret" "NotifyApiKey" {
   name         = "NotifyApiKey"
   key_vault_id = data.azurerm_key_vault.secrets_kv.id

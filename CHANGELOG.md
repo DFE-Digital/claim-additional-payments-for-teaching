@@ -6,6 +6,7 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+- Remove Geckoboard
 - TSLR
   - How much student loan did you repay page content change
 
