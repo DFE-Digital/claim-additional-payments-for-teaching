@@ -14,6 +14,7 @@ This payment is treated as pay and is therefore subject to a student loan contri
 
 * Amount you claimed for: <%= number_to_currency(@payment.award_amount) %>
 * Student loan contribution: <%= number_to_currency(@payment.student_loan_repayment) %>
+* Postgraduate loan contribution: <%= number_to_currency(@payment.postgraduate_loan_repayment) %>
 * Payment you receive: <%= number_to_currency(@payment.net_pay) %>
 
 # Contributions made to HMRC on your behalf

@@ -84,6 +84,7 @@ class PaymentConfirmation
     payment.national_insurance = cast_as_numeric(row["NI"])
     payment.employers_national_insurance = cast_as_numeric(row["Employers NI"])
     payment.student_loan_repayment = cast_as_numeric(row["Student Loans"])
+    payment.postgraduate_loan_repayment = cast_as_numeric(row["Postgraduate Loans"])
     payment.tax = cast_as_numeric(row["Tax"])
     payment.net_pay = cast_as_numeric(row["Net Pay"])
     payment.gross_pay = cast_as_numeric(row["Gross Value"]).to_d - cast_as_numeric(row["Employers NI"]).to_d

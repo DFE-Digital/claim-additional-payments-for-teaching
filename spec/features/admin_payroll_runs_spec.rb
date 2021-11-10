@@ -121,9 +121,9 @@ RSpec.feature "Payroll" do
     expect(page).to have_content("Upload Payment Confirmation Report")
 
     csv = <<~CSV
-      Payroll Reference,Gross Value,Payment ID,NI,Employers NI,Student Loans,Tax,Net Pay,Claim Policies
-      DFE00001,487.48,#{payroll_run.payments[0].id},33.9,38.98,0,89.6,325,StudentLoans
-      DFE00002,904.15,#{payroll_run.payments[1].id},77.84,89.51,40,162.8,534,StudentLoans
+      Payroll Reference,Gross Value,Payment ID,NI,Employers NI,Student Loans,Tax,Net Pay,Claim Policies,Postgraduate Loans
+      DFE00001,487.48,#{payroll_run.payments[0].id},33.9,38.98,0,89.6,325,StudentLoans,
+      DFE00002,904.15,#{payroll_run.payments[1].id},77.84,89.51,40,162.8,534,StudentLoans,
     CSV
 
     file = Tempfile.new
