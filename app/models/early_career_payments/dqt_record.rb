@@ -2,6 +2,7 @@ module EarlyCareerPayments
   class DqtRecord
     delegate(
       :qts_award_date,
+      :itt_subjects,
       :itt_subject_codes,
       :itt_start_date,
       :degree_codes,
@@ -160,6 +161,8 @@ module EarlyCareerPayments
     attr_reader :claim, :record
 
     def itt_subject_group
+      return itt_subjects.first.downcase.tr(" ", "_").to_sym if itt_subjects.present? && itt_subject_codes.blank?
+
       [*itt_subject_codes, *degree_codes].each do |subject_code|
         return ELIGIBLE_JAC_CODES.find { |key, values|
           subject_code.start_with?(*values)

@@ -70,7 +70,8 @@ module AutomatedChecks
             {
               initial_teacher_training: {
                 programme_start_date: Date.new(2015, 9, 1),
-                subject1: MathsAndPhysics::DqtRecord::ELIGIBLE_MATHS_HECOS_CODES.first,
+                subject1: "mathematics",
+                subject1_code: MathsAndPhysics::DqtRecord::ELIGIBLE_MATHS_HECOS_CODES.first,
                 qualification: "BA"
               },
               qualified_teacher_status: {
@@ -181,6 +182,7 @@ module AutomatedChecks
                     <<~HTML
                       Ineligible:
                       <pre>
+                        ITT subjects: ["mathematics"]
                         ITT subject codes:  ["100400"]
                         Degree codes:       []
                         ITT start date:     2015-09-01
@@ -205,7 +207,8 @@ module AutomatedChecks
               super().merge(
                 {
                   initial_teacher_training: {
-                    subject1: "NoCode",
+                    subject1: nil,
+                    subject1_code: "NoCode",
                     programme_start_date: super().dig(:initial_teacher_training, :programme_start_date),
                     qualification: super().dig(:initial_teacher_training, :qualification)
                   }
@@ -258,6 +261,7 @@ module AutomatedChecks
                     <<~HTML
                       Ineligible:
                       <pre>
+                        ITT subjects: []
                         ITT subject codes:  ["NoCode"]
                         Degree codes:       []
                         ITT start date:     2015-09-01
@@ -338,7 +342,8 @@ module AutomatedChecks
               super().merge(
                 {
                   initial_teacher_training: {
-                    subject1: "NoCode",
+                    subject1: nil,
+                    subject1_code: "NoCode",
                     qualification: super().dig(:initial_teacher_training, :qualification),
                     programme_start_date: super().dig(:initial_teacher_training, :programme_start_date)
                   },
@@ -398,6 +403,7 @@ module AutomatedChecks
                     <<~HTML
                       Ineligible:
                       <pre>
+                        ITT subjects: []
                         ITT subject codes:  ["NoCode"]
                         Degree codes:       []
                         ITT start date:     2015-09-01
