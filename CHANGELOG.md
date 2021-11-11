@@ -12,6 +12,9 @@ The format is based on [Keep a Changelog]
   - Fix issue where reminder OTP page link was not going anwyhere
 - TSLR
   - How much student loan did you repay page content change
+- Early Career Payments
+  - DqT temporary use of subject(n) in response to report JACS/HECOS codes used
+    in the determination of matching DqT response with claim ITT subject
 - All policies
   - Adding postgraduate loan contribution to payroll confirmation
 

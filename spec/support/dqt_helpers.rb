@@ -37,9 +37,12 @@ module DqtHelpers
         programme_end_date: "2021-07-04T00:00:00Z",
         programme_type: "Overseas Trained Teacher Programme",
         result: "Pass",
-        subject1: "G100",
+        subject1: "mathematics",
+        subject1_code: "G100",
         subject2: nil,
+        subject2_code: nil,
         subject3: nil,
+        subject3_code: nil,
         qualification: "BA (Hons)",
         state: 0,
         state_name: "Active"
