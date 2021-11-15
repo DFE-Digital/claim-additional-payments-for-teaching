@@ -35,13 +35,6 @@ RSpec.describe Claim, type: :model do
     end
   end
 
-  context "that has a middle name" do
-    it "validates the length of middle name is 100 characters or less" do
-      expect(build(:claim, middle_name: "Name " * 50)).not_to be_valid
-      expect(build(:claim, middle_name: "Arnold")).to be_valid
-    end
-  end
-
   context "that has a postcode" do
     it "validates the length of postcode is not greater than 11" do
       expect(build(:claim, postcode: "M12345 23453WD")).not_to be_valid
@@ -188,6 +181,14 @@ RSpec.describe Claim, type: :model do
 
       it "is valid when is between 2 and 30 characters in length" do
         expect(build(:claim, :submittable, policy: EarlyCareerPayments)).to be_valid(:"personal-details")
+      end
+    end
+
+    describe "with middle names" do
+      it "validates the length of middle name is 61 characters or less" do
+        expect(build(:claim, :submittable, policy: EarlyCareerPayments, middle_name: "ab" * 31)).not_to be_valid(:"personal-details")
+        expect(build(:claim, :submittable, policy: EarlyCareerPayments, middle_name: "a" * 61)).to be_valid(:"personal-details")
+        expect(build(:claim, middle_name: "Arnold")).to be_valid
       end
     end
 
