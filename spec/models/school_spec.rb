@@ -159,4 +159,36 @@ RSpec.describe School, type: :model do
       expect(instance_double).to have_received(:eligible_uplift?)
     end
   end
+
+  describe "#open?" do
+    let(:oulder_hill) do
+      School.find(ActiveRecord::FixtureSet.identify(:oulder_hill_community_school_and_language_college, :uuid))
+    end
+
+    context "with a close_date of 31-Dec-2021 that is today or in the past" do
+      it "is false" do
+        travel_to(Time.zone.local(2022, 9, 1)) do
+          expect(oulder_hill.open?).to be false
+        end
+      end
+    end
+
+    context "with a close_date of 31-Dec-2021 that is in the future" do
+      it "is true" do
+        travel_to Time.zone.local(2021, 9, 27) do
+          expect(oulder_hill.open?).to be true
+        end
+      end
+    end
+
+    context "with a close_date that is nil" do
+      it "is true" do
+        oulder_hill.update(close_date: nil)
+
+        travel_to Time.zone.local(2021, 9, 20) do
+          expect(oulder_hill.open?).to be true
+        end
+      end
+    end
+  end
 end
