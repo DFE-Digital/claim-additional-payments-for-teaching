@@ -7,6 +7,8 @@ The format is based on [Keep a Changelog]
 ## [Unreleased]
 
 - Remove Geckoboard
+- ECP
+  - Fix issue where reminder OTP page link was not going anwyhere
 - TSLR
   - How much student loan did you repay page content change
 - All policies
