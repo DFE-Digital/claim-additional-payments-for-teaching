@@ -189,5 +189,37 @@ RSpec.describe EarlyCareerPayments::SchoolEligibility do
 
       expect(EarlyCareerPayments::SchoolEligibility.new(uplift_school).eligible_uplift?).to be true
     end
+
+    context "when has a close date in the future" do
+      it "returns true when the school is in an uplifted local authority" do
+        travel_to(Date.new(2021, 9, 20)) do
+          uplift_school = School.new(
+            close_date: Date.new(2021, 12, 31),
+            school_type: :city_technology_college,
+            school_type_group: :independent_schools,
+            statutory_high_age: 16,
+            local_authority_district: local_authority_districts(:barnsley)
+          )
+
+          expect(EarlyCareerPayments::SchoolEligibility.new(uplift_school).eligible_uplift?).to be true
+        end
+      end
+    end
+
+    context "when has a close date in the past" do
+      it "returns false when the school is in an uplifted local authority" do
+        travel_to(Date.new(2022, 9, 1)) do
+          uplift_school = School.new(
+            close_date: Date.new(2021, 12, 31),
+            school_type: :city_technology_college,
+            school_type_group: :independent_schools,
+            statutory_high_age: 16,
+            local_authority_district: local_authority_districts(:barnsley)
+          )
+
+          expect(EarlyCareerPayments::SchoolEligibility.new(uplift_school).eligible_uplift?).to be false
+        end
+      end
+    end
   end
 end

@@ -6,6 +6,7 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+- Report school as open when it has a close_date in the future
 - Remove Geckoboard
 - ECP
   - Fix issue where reminder OTP page link was not going anwyhere

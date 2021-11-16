@@ -66,3 +66,19 @@ bradford_grammar_school:
   postcode: BD9 4JP
   phone_number: "01274542492"
   establishment_number: 6103
+
+# Early Career Payments - fix for incorrect uplift
+oulder_hill_community_school_and_language_college:
+  name: Oulder Hill Community School and Language College
+  urn: 105840
+  phase: secondary
+  school_type_group: la_maintained
+  school_type: community_school
+  local_authority: rochdale
+  local_authority_district: rochdale
+  street: Hudsons Walk
+  town: Rochdale
+  postcode: OL11 5EF
+  phone_number: "1706645522"
+  establishment_number: 4089
+  close_date: 2021-12-31
