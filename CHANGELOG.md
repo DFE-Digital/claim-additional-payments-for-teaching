@@ -7,6 +7,8 @@ The format is based on [Keep a Changelog]
 ## [Unreleased]
 
 - Report school as open when it has a close_date in the future
+- Ensure JS school search autocomplete only reports school as closed after close
+  date
 - Remove Geckoboard
 - ECP
   - Fix issue where reminder OTP page link was not going anwyhere
