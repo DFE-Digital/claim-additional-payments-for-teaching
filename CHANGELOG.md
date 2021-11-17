@@ -6,9 +6,13 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+- Update school data import to include GIAS OpenDate
+- Report school as open when
+  - it has a close_date in the future
+  - it has a open_date that is in the past
+
 ## [Release 103] - 2021-11-18
 
-- Report school as open when it has a close_date in the future
 - Ensure JS school search autocomplete only reports school as closed after close
   date
 - Remove Geckoboard

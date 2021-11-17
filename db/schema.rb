@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_10_29_142607) do
+ActiveRecord::Schema.define(version: 2021_11_17_111202) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -252,6 +252,7 @@ ActiveRecord::Schema.define(version: 2021_10_29_142607) do
     t.integer "establishment_number"
     t.integer "statutory_high_age"
     t.string "phone_number", limit: 20
+    t.date "open_date"
     t.index ["created_at"], name: "index_schools_on_created_at"
     t.index ["local_authority_district_id"], name: "index_schools_on_local_authority_district_id"
     t.index ["local_authority_id"], name: "index_schools_on_local_authority_id"

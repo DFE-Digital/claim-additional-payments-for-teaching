@@ -68,6 +68,7 @@ bradford_grammar_school:
   establishment_number: 6103
 
 # Early Career Payments - fix for incorrect uplift
+# the school has a CloseDate, but at time of correction was in future
 oulder_hill_community_school_and_language_college:
   name: Oulder Hill Community School and Language College
   urn: 105840
@@ -82,3 +83,19 @@ oulder_hill_community_school_and_language_college:
   phone_number: "1706645522"
   establishment_number: 4089
   close_date: 2021-12-31
+
+# 11-Nov-2021 School has a GIAS OpenDate but its in the future
+oulder_hill_leadership_academy:
+  name: Oulder Hill Leadership Academy
+  urn: 148847
+  phase: secondary
+  school_type_group: academies
+  school_type: academy_sponsor_led
+  local_authority: rochdale
+  local_authority_district: rochdale
+  street: Hudsons Walk
+  town: Rochdale
+  postcode: OL11 5EF
+  phone_number: "1706645522"
+  establishment_number: 4005
+  open_date: 2022-01-01
