@@ -14,6 +14,7 @@ The format is based on [Keep a Changelog]
   - How much student loan did you repay page content change
 - All policies
   - Adding postgraduate loan contribution to payroll confirmation
+  - Middle names input field change
 
 ## [Release 102] - 2021-10-28
 

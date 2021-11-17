@@ -149,7 +149,13 @@ class Claim < ApplicationRecord
     },
     if: -> { first_name.present? }
 
-  validates :middle_name, length: {maximum: 100, message: "Middle name must be 100 characters or less"}
+  validates :middle_name,
+    on: [:"personal-details", :submit],
+    length: {
+      maximum: 61,
+      message: "Middle names must be less than 61 characters"
+    },
+    if: -> { middle_name.present? }
 
   validates :surname, on: [:"personal-details", :submit], presence: {message: "Enter your last name"}
   validates :surname,
