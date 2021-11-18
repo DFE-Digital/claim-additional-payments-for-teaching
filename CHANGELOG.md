@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+## [Release 103] - 2021-11-18
+
 - Report school as open when it has a close_date in the future
 - Ensure JS school search autocomplete only reports school as closed after close
   date
@@ -976,7 +978,9 @@ The format is based on [Keep a Changelog]
 - First release for student loan repayments private beta
 
 [unreleased]:
-  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-102...HEAD
+  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-103...HEAD
+[release 103]:
+  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-102...release-103
 [release 102]:
   https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-101...release-102
 [release 101]:
