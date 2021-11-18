@@ -41,7 +41,7 @@
                     </div>
                     <span class="govuk-hint govuk-radios__hint"><%= b.object.address %></span>
                   </div>
-                  <% if b.object.close_date.present? %>
+                  <% if b.object.close_date.present? && b.object.close_date < Date.current %>
                     <div class="school-search__closed-status">
                       <span class="govuk-hint govuk-radios__hint govuk-!-margin-bottom-1">Closed on <%= l(b.object.close_date) %></span>
                     </div>
