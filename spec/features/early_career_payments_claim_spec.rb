@@ -124,6 +124,8 @@ RSpec.feature "Teacher Early-Career Payments claims" do
     end
     click_on "Continue"
 
+    expect(claim.eligibility.reload.award_amount).to eq 7_500
+
     # - How will we use the information you provide
     expect(page).to have_text("How we will use the information you provide")
     click_on "Continue"

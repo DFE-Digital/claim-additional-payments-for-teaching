@@ -35,6 +35,7 @@ module Admin
                  when "date_of_birth" then l(value, format: :day_month_year)
                  when "student_loan_repayment_amount" then number_to_currency(value)
                  when "student_loan_plan" then value.to_s == "not_applicable" ? "not applicable" : value&.humanize
+                 when "award_amount" then number_to_currency(value)
       end
 
       override || value.to_s
