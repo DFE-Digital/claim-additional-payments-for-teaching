@@ -6,6 +6,9 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+- All policies
+  - Amend 'no address found' screen
+
 ## [Release 103] - 2021-11-18
 
 - Report school as open when it has a close_date in the future

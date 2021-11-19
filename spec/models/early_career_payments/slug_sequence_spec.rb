@@ -147,6 +147,7 @@ RSpec.describe EarlyCareerPayments::SlugSequence do
           how-we-will-use-information-provided
           personal-details
           postcode-search
+          no-address-found
           select-home-address
           address
           email-address
@@ -191,6 +192,7 @@ RSpec.describe EarlyCareerPayments::SlugSequence do
           how-we-will-use-information-provided
           personal-details
           postcode-search
+          no-address-found
           select-home-address
           address
           email-address
@@ -230,6 +232,7 @@ RSpec.describe EarlyCareerPayments::SlugSequence do
           how-we-will-use-information-provided
           personal-details
           postcode-search
+          no-address-found
           select-home-address
           address
           email-address
@@ -286,6 +289,7 @@ RSpec.describe EarlyCareerPayments::SlugSequence do
           how-we-will-use-information-provided
           personal-details
           postcode-search
+          no-address-found
           select-home-address
           address
           email-address
