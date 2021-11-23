@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+- All policies
+  - Amend 'no address found' screen
 - Update school data import to include GIAS OpenDate
 - Report school as open when
   - it has a close_date in the future

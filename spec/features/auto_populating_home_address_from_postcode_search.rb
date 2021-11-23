@@ -510,6 +510,66 @@ RSpec.feature "Teacher Early-Career Payments claims" do
             "User-Agent" => "Typhoeus - https://github.com/typhoeus/typhoeus"
           }
         ).to_return(status: 200, body: body_results_for_searchable_postcode_and_address_and_postcode_not_found, headers: {})
+
+      body_no_results_for_postcode_se13_7un_no_4 = <<-RESULTS_SE13__7UN
+        {
+          "header" : {
+            "uri" : "https://api.os.uk/search/places/v1/find?key=api-key-value&maxresults=1&minmatch=0.4&query=4,%20SE137UN",
+            "query" : "query=4, SE137UN",
+            "offset" : 0,
+            "totalresults" : 1029335,
+            "format" : "JSON",
+            "dataset" : "DPA",
+            "lr" : "EN,CY",
+            "maxresults" : 1,
+            "matchprecision" : 1,
+            "epoch" : "88",
+            "minmatch" : 0.4,
+            "output_srs" : "EPSG:27700"
+          },
+          "results" : [
+            {
+              "DPA" : {
+                "UPRN" : "100022018435",
+                "UDPRN" : "21645238",
+                "ADDRESS" : "4, WEARSIDE ROAD, LONDON, SE13 7UN",
+                "BUILDING_NUMBER" : "4",
+                "THOROUGHFARE_NAME" : "WEARSIDE ROAD",
+                "POST_TOWN" : "LONDON",
+                "POSTCODE" : "SE13 7UN",
+                "RPC" : "1",
+                "X_COORDINATE" : 537915.0,
+                "Y_COORDINATE" : 174996.0,
+                "STATUS" : "APPROVED",
+                "LOGICAL_STATUS_CODE" : "1",
+                "CLASSIFICATION_CODE" : "RD04",
+                "CLASSIFICATION_CODE_DESCRIPTION" : "Terraced",
+                "LOCAL_CUSTODIAN_CODE" : 5690,
+                "LOCAL_CUSTODIAN_CODE_DESCRIPTION" : "LEWISHAM",
+                "POSTAL_ADDRESS_CODE" : "D",
+                "POSTAL_ADDRESS_CODE_DESCRIPTION" : "A record which is linked to PAF",
+                "BLPU_STATE_CODE" : null,
+                "BLPU_STATE_CODE_DESCRIPTION" : "Unknown/Not applicable",
+                "TOPOGRAPHY_LAYER_TOID" : "osgb1000041787221",
+                "LAST_UPDATE_DATE" : "10/02/2016",
+                "ENTRY_DATE" : "15/09/2001",
+                "LANGUAGE" : "EN",
+                "MATCH" : 0.4,
+                "MATCH_DESCRIPTION" : "NO MATCH"
+              }
+            }
+          ]
+        }
+      RESULTS_SE13__7UN
+
+      stub_request(:get, "https://api.os.uk/search/places/v1/find?key=api-key-value&maxresults=1&minmatch=0.4&query=4,%20SE137UN")
+        .with(
+          headers: {
+            "Content-Type" => "application/json",
+            "Expect" => "",
+            "User-Agent" => "Typhoeus - https://github.com/typhoeus/typhoeus"
+          }
+        ).to_return(status: 200, body: body_no_results_for_postcode_se13_7un_no_4, headers: {})
     end
 
     let(:claim) do
@@ -536,14 +596,22 @@ RSpec.feature "Teacher Early-Career Payments claims" do
       click_on "Search"
 
       # - Select your home address
-      expect(page).to have_text(I18n.t("questions.address.home.title"))
-      expect(page).to have_text("There is a problem")
-      expect(page).to have_text("Postcode not found")
+      expect(page).to have_text(I18n.t("questions.address.home.no_address_found"))
+      expect(page).to have_text("SE13 7UN")
+      expect(page).to have_text("40")
+      expect(page).to have_link("Change")
 
-      expect(claim.reload.address_line_1).not_to eql "38A"
-      expect(claim.address_line_2).not_to eql "Wearside Road"
-      expect(claim.address_line_3).not_to eql "London"
-      expect(claim.postcode).not_to eql "SE13 7UN"
+      click_link("Change", match: :first)
+      expect(page).to have_text(I18n.t("questions.address.home.title"))
+      expect(page).to have_link(href: claim_path(EarlyCareerPayments.routing_name, "address"))
+
+      fill_in "Postcode", with: "SE13 7UN"
+      fill_in "House number or name (optional)", with: "4"
+      click_on "Search"
+
+      expect(page).to have_text("4, Wearside Road, London, SE13 7UN")
+
+      click_on "Continue"
     end
   end
 end

@@ -30,6 +30,7 @@ module EarlyCareerPayments
       "how-we-will-use-information-provided",
       "personal-details",
       "postcode-search",
+      "no-address-found",
       "select-home-address",
       "address",
       "email-address",

@@ -63,6 +63,7 @@ en:
         title: "What is your home address?"
         link_to_manual_address: "Enter your address manually"
         i_cannot_find: "I can't find my address in the list"
+        no_address_found: "No addresses found matching those details"
     date_of_birth: "What is your date of birth?"
     teacher_reference_number: "What is your teacher reference number (TRN)?"
     national_insurance_number: "What's your National Insurance number?"

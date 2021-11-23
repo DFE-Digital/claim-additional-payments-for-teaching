@@ -27,12 +27,12 @@ class ClaimsController < BasePublicController
   def show
     search_schools if params[:school_search]
     if params[:slug] == "postcode-search" && postcode
-      redirect_to claim_path(current_policy_routing_name, "select-home-address", {"claim[postcode]": postcode, "claim[address_line_1]": params[:claim][:address_line_1]}) and return unless invalid_postcode?
+      redirect_to claim_path(current_policy_routing_name, "select-home-address", {"claim[postcode]": params[:claim][:postcode], "claim[address_line_1]": params[:claim][:address_line_1]}) and return unless invalid_postcode?
     elsif params[:slug] == "select-home-address" && postcode
       if address_data.nil?
-        current_claim.errors.add(:postcode, "Postcode valid but not found")
-        session[:postcode_not_found] = "Postcode not found"
-        redirect_to claim_path(current_policy_routing_name, "postcode-search") and return
+        session[:claim_postcode] = params[:claim][:postcode]
+        session[:claim_address_line_1] = params[:claim][:address_line_1]
+        redirect_to claim_path(current_policy_routing_name, "no-address-found") and return
       end
     end
 
