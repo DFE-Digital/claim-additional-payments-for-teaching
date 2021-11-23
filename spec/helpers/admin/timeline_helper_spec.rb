@@ -3,7 +3,6 @@ require "rails_helper"
 describe Admin::TimelineHelper do
   describe "#admin_amendment_details" do
     context "TSLR claim" do
-
       let(:amendment) {
         build(:amendment, :personal_data_removed, claim_changes: {
           "teacher_reference_number" => [generate(:teacher_reference_number).to_s, generate(:teacher_reference_number).to_s],
@@ -56,6 +55,5 @@ describe Admin::TimelineHelper do
         expect(helper.admin_amendment_details(amendment)).to include(["Award amount", "£2,000.00", "£3,000.00"])
       end
     end
-
   end
 end

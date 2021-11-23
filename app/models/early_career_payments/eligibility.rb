@@ -186,7 +186,6 @@ module EarlyCareerPayments
     validates_numericality_of :award_amount, message: "Enter a valid monetary amount", allow_nil: true, greater_than_or_equal_to: 0, less_than_or_equal_to: 7500
     validates :award_amount, on: :amendment, numericality: {less_than: 7501, message: "Enter an amount below £7,501"}
 
-
     before_save :set_qualification_if_trainee_teacher, if: :nqt_in_academic_year_after_itt_changed?
 
     delegate :name, to: :current_school, prefix: true, allow_nil: true
