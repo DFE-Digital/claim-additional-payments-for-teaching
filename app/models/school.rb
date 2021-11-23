@@ -108,8 +108,8 @@ class School < ApplicationRecord
   enum school_type_group: SCHOOL_TYPE_GROUPS
   enum school_type: SCHOOL_TYPES
 
-  scope :open, -> { where("close_date > ? OR close_date IS NULL", Date.current) }
-  scope :closed, -> { where.not("close_date > ? OR close_date IS NULL", Date.current) }
+  scope :open, -> { where("(open_date IS NULL OR open_date <= ?) AND (close_date IS NULL OR close_date >= ?)", Date.current, Date.current) }
+  scope :closed, -> { where.not("(open_date IS NULL OR open_date <= ?) AND (close_date IS NULL OR close_date >= ?)", Date.current, Date.current) }
 
   def self.search(search_term)
     raise ArgumentError, SEARCH_NOT_ENOUGH_CHARACTERS_ERROR if search_term.length < SEARCH_MINIMUM_LENGTH
@@ -150,7 +150,7 @@ class School < ApplicationRecord
   end
 
   def open?
-    close_date.nil? || close_date >= Date.current
+    (open_date.nil? || open_date <= Date.current) && (close_date.nil? || close_date >= Date.current)
   end
 
   def dfe_number

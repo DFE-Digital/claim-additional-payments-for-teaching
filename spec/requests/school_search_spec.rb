@@ -58,5 +58,14 @@ RSpec.describe "School search", type: :request do
 
       expect(response.body).not_to include(schools(:the_samuel_lister_academy).name)
     end
+
+    it "excludes schools that have GIAS OpenDate that is in future" do
+      travel_to Time.zone.local(2021, 10, 11, 0, 0, 0) do
+        post school_search_index_path, params: {query: "Oulder Hill", exclude_closed: true}
+
+        expect(response.body).not_to include(schools(:oulder_hill_leadership_academy).name)
+        expect(response.body).to include(schools(:oulder_hill_community_school_and_language_college).name)
+      end
+    end
   end
 end

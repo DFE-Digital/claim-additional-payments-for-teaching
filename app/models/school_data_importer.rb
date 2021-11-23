@@ -45,6 +45,7 @@ class SchoolDataImporter
     school.establishment_number = row.fetch("EstablishmentNumber")
     school.statutory_high_age = row.fetch("StatutoryHighAge")
     school.phone_number = row.fetch("TelephoneNum")
+    school.open_date = row.fetch("OpenDate")
     school
   end
 end

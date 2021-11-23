@@ -161,14 +161,21 @@ RSpec.describe School, type: :model do
   end
 
   describe "#open?" do
-    let(:oulder_hill) do
+    # Both of these are the same physical school, but are different entities with unique URN's
+    # Oulder Hill Community School and Language College is proposed to close 2021-12-31
+    # Oulder Hill Leadership Academy is proposed to open 2022-01-01
+    let(:oulder_hill_school_closing_dec_2021) do
       School.find(ActiveRecord::FixtureSet.identify(:oulder_hill_community_school_and_language_college, :uuid))
+    end
+
+    let(:oulder_hill_academy_opening_jan_2022) do
+      School.find(ActiveRecord::FixtureSet.identify(:oulder_hill_leadership_academy, :uuid))
     end
 
     context "with a close_date of 31-Dec-2021 that is today or in the past" do
       it "is false" do
         travel_to(Time.zone.local(2022, 9, 1)) do
-          expect(oulder_hill.open?).to be false
+          expect(oulder_hill_school_closing_dec_2021.open?).to be false
         end
       end
     end
@@ -176,17 +183,33 @@ RSpec.describe School, type: :model do
     context "with a close_date of 31-Dec-2021 that is in the future" do
       it "is true" do
         travel_to Time.zone.local(2021, 9, 27) do
-          expect(oulder_hill.open?).to be true
+          expect(oulder_hill_school_closing_dec_2021.open?).to be true
         end
       end
     end
 
     context "with a close_date that is nil" do
       it "is true" do
-        oulder_hill.update(close_date: nil)
+        oulder_hill_school_closing_dec_2021.update(close_date: nil)
 
         travel_to Time.zone.local(2021, 9, 20) do
-          expect(oulder_hill.open?).to be true
+          expect(oulder_hill_school_closing_dec_2021.open?).to be true
+        end
+      end
+    end
+
+    context "with a open_date of 1-Jan-2022 in the future" do
+      it "is false" do
+        travel_to Time.zone.local(2021, 9, 27) do
+          expect(oulder_hill_academy_opening_jan_2022.open?).to be false
+        end
+      end
+    end
+
+    context "with a open_date of 1-Jan-2022 in the future" do
+      it "is true" do
+        travel_to Time.zone.local(2022, 1, 1) do
+          expect(oulder_hill_academy_opening_jan_2022.open?).to be true
         end
       end
     end
