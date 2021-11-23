@@ -43,6 +43,7 @@ RSpec.describe SchoolDataImporter do
         expect(imported_school.establishment_number).to eq(4027)
         expect(imported_school.statutory_high_age).to eq(18)
         expect(imported_school.phone_number).to eq("01226762114")
+        expect(imported_school.open_date).to be_nil
       end
 
       it "imports a closed school with the date it closed" do
@@ -51,6 +52,14 @@ RSpec.describe SchoolDataImporter do
         closed_school = School.find_by(urn: 117137)
         expect(closed_school.name).to eql("Fleetville Junior School")
         expect(closed_school.close_date).to eql(Date.new(2012, 5, 31))
+      end
+
+      it "imports a school opening in the future with the date it is scheduled to open" do
+        school_data_importer.run
+
+        future_opening_school = School.find_by(urn: 148847)
+        expect(future_opening_school.name).to eql("Oulder Hill Leadership Academy")
+        expect(future_opening_school.open_date).to eql(Date.new(2021, 12, 1))
       end
 
       it "correctly handles any Latin1 encoded characters in the data file" do
