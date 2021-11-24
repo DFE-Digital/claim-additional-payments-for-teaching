@@ -63,37 +63,51 @@ module Payroll
       model.date_of_birth.strftime(DATE_FORMAT)
     end
 
-    def address_lines
-      @address_lines ||= [
-        model.address_line_1,
-        model.address_line_2,
-        model.address_line_3,
-        model.address_line_4,
-        model.postcode
-      ].compact
+    def claim_address
+      model.claims[0].address
+    end
+
+    def claim_address_component_size
+      # Is the address 4/5/6 parts?
+      @claim_address_component_size ||= claim_address.split(",").size
     end
 
     def address_line_1
-      address_lines[0]
+      # Cantium - House or Flat Name and/or Number (optional)
+      model.address_line_1 if claim_address_component_size == 6
     end
 
     def address_line_2
-      address_lines[1]
+      # Cantium - Number and Street Name
+      case claim_address_component_size
+        when 4
+          model.address_line_1
+        when 5
+          [model.address_line_1, model.address_line_2].join(", ")
+        when 6
+          model.address_line_2
+      end
     end
 
     def address_line_3
-      address_lines[2]
+      # Cantium - Local Area (optional)
+      nil
     end
 
     def address_line_4
-      address_lines[3]
+      # Cantium - Town
+      model.address_line_3
     end
 
     def address_line_5
-      address_lines[4]
+      # Cantium - County
+      # not returned from Ordnance Survey, we copy POST_TOWN to this field
+      model.address_line_4
     end
 
     def address_line_6
+      # Cantium - PostCode
+      model.postcode
     end
 
     def country

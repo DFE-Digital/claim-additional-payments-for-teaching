@@ -53,7 +53,9 @@ module AddressDetails
     full_address = address_parts[0].split(",")
 
     current_claim.postcode = full_address.pop.strip
-    current_claim.address_line_3 = full_address.pop.strip
+    address_part_postal_town_and_county = full_address.pop.strip
+    current_claim.address_line_4 = address_part_postal_town_and_county # Cantium - County
+    current_claim.address_line_3 = address_part_postal_town_and_county # Cantium - Town/City
     current_claim.address_line_2 = full_address.pop.strip
     current_claim.address_line_1 = full_address.join(",").strip
   end
