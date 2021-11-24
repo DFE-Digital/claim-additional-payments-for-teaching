@@ -21,4 +21,5 @@ SELECT
     ELSE extract(epoch from d.created_at - c.submitted_at)
   END AS decision_length
 FROM decisions d
-RIGHT JOIN claims c ON c.id = d.claim_id;
+RIGHT JOIN claims c ON c.id = d.claim_id
+WHERE c.created_at > make_timestamptz(2021, 9, 6, 0, 0, 0);

@@ -6,6 +6,7 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+- Fix Statistics for 2021/2022 AY to be from 6th Sept, 2021
 - All policies
   - Amend 'no address found' screen
   - Update SLA timescales for claim submitted and claim approved screens and
