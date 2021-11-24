@@ -134,9 +134,10 @@ module EarlyCareerPayments
       :qualification,
       :eligible_itt_subject,
       :teaching_subject_now,
-      :itt_academic_year
+      :itt_academic_year,
+      :award_amount
     ].freeze
-    AMENDABLE_ATTRIBUTES = [].freeze
+    AMENDABLE_ATTRIBUTES = [:award_amount].freeze
     ATTRIBUTE_DEPENDENCIES = {
       "employed_as_supply_teacher" => ["has_entire_term_contract", "employed_directly"],
       "qualification" => ["eligible_itt_subject", "teaching_subject_now"],
@@ -181,6 +182,9 @@ module EarlyCareerPayments
     validates :eligible_itt_subject, on: [:"eligible-itt-subject", :submit], presence: {message: ->(object, data) { I18n.t("activerecord.errors.models.early_career_payments_eligibilities.attributes.eligible_itt_subject.blank.qualification.#{object.qualification}") }}
     validates :teaching_subject_now, on: [:"teaching-subject-now", :submit], inclusion: {in: [true, false], message: ->(object, data) { I18n.t("activerecord.errors.models.early_career_payments_eligibilities.attributes.teaching_subject_now.blank.subject.#{object.eligible_itt_subject}") }}
     validates :itt_academic_year, on: [:"itt-year", :submit], presence: {message: ->(object, data) { I18n.t("activerecord.errors.models.early_career_payments_eligibilities.attributes.itt_academic_year.blank.qualification.#{object.qualification}") }}
+    validates :award_amount, on: [:submit], presence: {message: "Enter an award amount"}
+    validates_numericality_of :award_amount, message: "Enter a valid monetary amount", allow_nil: true, greater_than_or_equal_to: 0, less_than_or_equal_to: 7500
+    validates :award_amount, on: :amendment, numericality: {less_than: 7501, message: "Enter an amount below £7,501"}
 
     before_save :set_qualification_if_trainee_teacher, if: :nqt_in_academic_year_after_itt_changed?
 
@@ -243,6 +247,14 @@ module EarlyCareerPayments
     end
 
     def award_amount
+      super || calculate_award_amount
+    end
+
+    def award_amount=(value)
+      super(value.to_s.gsub(/[£,\s]/, ""))
+    end
+
+    def calculate_award_amount
       return BigDecimal("0.00") if current_school.nil?
 
       current_school.eligible_for_early_career_payments_as_uplift? ? award_amounts.first.uplift_amount : award_amounts.first.base_amount

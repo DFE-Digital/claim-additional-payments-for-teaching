@@ -198,28 +198,65 @@ RSpec.describe Amendment, type: :model do
     end
 
     context "when amending the claim’s eligibility attributes" do
-      let(:claim) do
-        create(:claim, :submitted, eligibility: build(:student_loans_eligibility, :eligible, student_loan_repayment_amount: 1000))
-      end
+      context "with a Student Loans (TSLR) claim" do
+        let(:claim) do
+          create(:claim, :submitted, eligibility: build(:student_loans_eligibility, :eligible, student_loan_repayment_amount: 1000))
+        end
 
-      let(:claim_attributes) do
-        {
-          eligibility_attributes: {
-            student_loan_repayment_amount: 555
+        let(:claim_attributes) do
+          {
+            eligibility_attributes: {
+              student_loan_repayment_amount: 555
+            }
           }
-        }
-      end
-      let(:amendment_attributes) do
-        {
-          notes: "This is a change",
-          created_by: dfe_signin_user
-        }
+        end
+        let(:amendment_attributes) do
+          {
+            notes: "This is a change",
+            created_by: dfe_signin_user
+          }
+        end
+
+        it "stores the value in the amendment’s claim_changes" do
+          amendment = described_class.amend_claim(claim, claim_attributes, amendment_attributes)
+
+          expect(amendment.claim_changes).to eq("student_loan_repayment_amount" => [1000, 555])
+        end
       end
 
-      it "stores the value in the amendment’s claim_changes" do
-        amendment = described_class.amend_claim(claim, claim_attributes, amendment_attributes)
+      context "with a Early Career Payments claim" do
+        let(:note) do
+          <<~NOTE_TEXT
+            Teaching at Oulder Hill Community School and Language College.
+            GIAS reported as non-uplift school for the original claim as part of the October, 2021 payroll.
+            Teacher was paid only £5,000.00.
+            This is the claim and payment for the uplift of £2,500.00
+          NOTE_TEXT
+        end
+        let(:eligibility) do
+          build(:early_career_payments_eligibility, :eligible, award_amount: 7_500)
+        end
+        let(:claim) do
+          create(:claim, :submitted, policy: EarlyCareerPayments, eligibility: eligibility)
+        end
+        let(:claim_attributes) do
+          {
+            eligibility_attributes: {
+              award_amount: "£2,500.00"
+            }
+          }
+        end
+        let(:amendment_attributes) do
+          {
+            notes: note,
+            created_by: dfe_signin_user
+          }
+        end
+        it "stores the value in the amendment’s claim_changes" do
+          amendment = described_class.amend_claim(claim, claim_attributes, amendment_attributes)
 
-        expect(amendment.claim_changes).to eq("student_loan_repayment_amount" => [1000, 555])
+          expect(amendment.claim_changes).to eq("award_amount" => [7_500, 2_500])
+        end
       end
     end
 

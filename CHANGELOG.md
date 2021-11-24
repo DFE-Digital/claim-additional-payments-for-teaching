@@ -8,6 +8,10 @@ The format is based on [Keep a Changelog]
 
 - All policies
   - Amend 'no address found' screen
+- ECP
+  - Ensure claim award_amount is set during claimant eligible journey
+  - Back-populate existing claims to have award_amount, if payment made use
+    payment amount, otherwise use value from lookup
 - Update school data import to include GIAS OpenDate
 - Report school as open when
   - it has a close_date in the future

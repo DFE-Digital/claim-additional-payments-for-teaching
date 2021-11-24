@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_11_17_111202) do
+ActiveRecord::Schema.define(version: 2021_11_17_162803) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -134,6 +134,7 @@ ActiveRecord::Schema.define(version: 2021_11_17_111202) do
     t.boolean "teaching_subject_now"
     t.string "itt_academic_year", limit: 9
     t.uuid "current_school_id"
+    t.decimal "award_amount", precision: 7, scale: 2
     t.index ["current_school_id"], name: "index_early_career_payments_eligibilities_on_current_school_id"
   end
 
