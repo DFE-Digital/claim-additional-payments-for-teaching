@@ -327,6 +327,7 @@ RSpec.feature "Teacher Early-Career Payments claims" do
     expect(page).to have_text("Application complete")
     expect(page).to have_text("What happens next")
     expect(page).to have_text("Set a reminder for when your next application window opens")
+    expect(page).to have_text("It can take up to 13 weeks to process your application")
     expect(page).to have_text("What did you think of this service?")
     expect(page).to have_text(claim.reference)
   end

@@ -8,6 +8,8 @@ The format is based on [Keep a Changelog]
 
 - All policies
   - Amend 'no address found' screen
+  - Update SLA timescales for claim submitted and claim approved screens and
+    emails
 - ECP
   - Ensure claim award_amount is set during claimant eligible journey
   - Back-populate existing claims to have award_amount, if payment made use
