@@ -6,8 +6,14 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
-- Fix Statistics for 2021/2022 AY to be from 6th Sept, 2021
+## [Release 104] - 2021-11-25
+
 - All policies
+  - Update school data import to include GIAS OpenDate
+  - Report school as open when
+    - it has a close_date in the future
+    - it has a open_date that is in the past
+  - Fix Statistics for 2021/2022 AY to be from 6th Sept, 2021
   - Amend 'no address found' screen
   - Update SLA timescales for claim submitted and claim approved screens and
     emails
@@ -15,10 +21,6 @@ The format is based on [Keep a Changelog]
   - Ensure claim award_amount is set during claimant eligible journey
   - Back-populate existing claims to have award_amount, if payment made use
     payment amount, otherwise use value from lookup
-- Update school data import to include GIAS OpenDate
-- Report school as open when
-  - it has a close_date in the future
-  - it has a open_date that is in the past
 
 ## [Release 103] - 2021-11-18
 
@@ -991,7 +993,9 @@ The format is based on [Keep a Changelog]
 - First release for student loan repayments private beta
 
 [unreleased]:
-  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-103...HEAD
+  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-104...HEAD
+[release 104]:
+  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-103...release-104
 [release 103]:
   https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-102...release-103
 [release 102]:
