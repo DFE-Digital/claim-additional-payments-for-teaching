@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_11_17_162803) do
+ActiveRecord::Schema.define(version: 2021_11_24_172344) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -422,6 +422,7 @@ ActiveRecord::Schema.define(version: 2021_11_17_162803) do
               ELSE date_part('epoch'::text, (d.created_at - c.submitted_at))
           END AS decision_length
      FROM (decisions d
-       RIGHT JOIN claims c ON ((c.id = d.claim_id)));
+       RIGHT JOIN claims c ON ((c.id = d.claim_id)))
+    WHERE (c.created_at > make_timestamptz(2021, 9, 6, 0, 0, (0)::double precision));
   SQL
 end
