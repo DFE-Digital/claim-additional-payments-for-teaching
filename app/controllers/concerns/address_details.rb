@@ -2,7 +2,7 @@ module AddressDetails
   extend ActiveSupport::Concern
 
   included do
-    before_action :check_session_for_postcode_not_found, only: [:show]
+    before_action :check_session_for_address_not_found, only: [:show], if: -> { params[:slug] == "select-home-address" }
     before_action :split_full_address_to_parts, only: [:update], if: -> { params[:slug] == "select-home-address" }
   end
 
@@ -22,10 +22,10 @@ module AddressDetails
     end
   end
 
-  def check_session_for_postcode_not_found
-    if session[:postcode_not_found]
-      current_claim.errors.add(:postcode, session[:postcode_not_found])
-      session[:postcode_not_found] = nil
+  def check_session_for_address_not_found
+    if session[:no_address_selected]
+      current_claim.errors.add(:address, session[:no_address_selected])
+      session[:no_address_selected] = nil
     end
   end
 
@@ -46,6 +46,9 @@ module AddressDetails
   end
 
   def split_full_address_to_parts
+    session[:no_address_selected] = "Select an address from the list or search again for a different address"
+    redirect_to claim_path(current_policy_routing_name, "select-home-address", {"claim[postcode]": params[:postcode]}) and return if params[:address].nil?
+
     address_parts = params[:address].split(":")
     full_address = address_parts[0].split(",")
 

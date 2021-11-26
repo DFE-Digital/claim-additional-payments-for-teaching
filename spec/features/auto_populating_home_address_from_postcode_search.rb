@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.feature "Teacher Early-Career Payments claims" do
+RSpec.feature "Teacher claiming Early-Career Payments uses the address auto-population" do
   before do
     body_results_for_postcode_so16_9fx = <<-RESULTS_SO16__9FX
       {
@@ -248,7 +248,7 @@ RSpec.feature "Teacher Early-Career Payments claims" do
       ).to_return(status: 200, body: body_results_for_postcode_se13_7un, headers: {})
   end
 
-  context "Auto-populate address details with supplied postcode" do
+  context "with a supplied postcode" do
     let(:claim) do
       claim = start_early_career_payments_claim
       claim.eligibility.update!(attributes_for(:early_career_payments_eligibility, :eligible))
@@ -376,7 +376,7 @@ RSpec.feature "Teacher Early-Career Payments claims" do
     end
   end
 
-  context "Auto-populate address details with supplied postcode and door number" do
+  context "with a supplied postcode and door number" do
     before do
       body_results_for_searchable_postcode_and_address = <<-RESULTS_SE13__7UN_NO_38A
         {
@@ -450,7 +450,7 @@ RSpec.feature "Teacher Early-Career Payments claims" do
       claim
     end
 
-    scenario "with Ordnance Survey API data" do
+    scenario "and Ordnance Survey API data is returned" do
       expect(claim.valid?(:submit)).to eq false
       visit claim_path(claim.policy.routing_name, "postcode-search")
 
@@ -479,9 +479,35 @@ RSpec.feature "Teacher Early-Career Payments claims" do
       # - Email address
       expect(page).to have_text(I18n.t("questions.email_address"))
     end
-  end
 
-  context "Auto-populate address details with supplied postcode and door number" do
+    scenario "and no address is selected" do
+      expect(claim.valid?(:submit)).to eq false
+      visit claim_path(claim.policy.routing_name, "postcode-search")
+
+      # - What is your home address
+      expect(page).to have_text(I18n.t("questions.address.home.title"))
+      expect(page).to have_link(href: claim_path(EarlyCareerPayments.routing_name, "address"))
+
+      fill_in "Postcode", with: "SO16 9FX"
+      # fill_in "House number or name (optional)", with: "38A"
+      click_on "Search"
+
+      # - Select your home address
+      expect(page).to have_text(I18n.t("questions.address.home.title"))
+
+      click_on "Continue"
+
+      expect(page).to have_text("There is a problem")
+      expect(page).to have_text("Select an address from the list or search again for a different address")
+      expect(claim.postcode).not_to eql "SO16 9FX"
+
+      # - What is your address
+      expect(page).not_to have_text(I18n.t("questions.address.generic.title"))
+
+      # - Email address
+      expect(page).not_to have_text(I18n.t("questions.email_address"))
+    end
+
     before do
       body_results_for_searchable_postcode_and_address_and_postcode_not_found = <<-RESULTS_SE13__7UN_NO_40_RESPONSE_NULL
         {
@@ -583,7 +609,7 @@ RSpec.feature "Teacher Early-Career Payments claims" do
       claim
     end
 
-    scenario "when no results returned from the API display error message" do
+    scenario "when no results returned from the API display an error message" do
       expect(claim.valid?(:submit)).to eq false
       visit claim_path(claim.policy.routing_name, "postcode-search")
 
@@ -612,6 +638,12 @@ RSpec.feature "Teacher Early-Career Payments claims" do
       expect(page).to have_text("4, Wearside Road, London, SE13 7UN")
 
       click_on "Continue"
+
+      # - What is your address
+      expect(page).not_to have_text(I18n.t("questions.address.generic.title"))
+
+      # - Email address
+      expect(page).to have_text(I18n.t("questions.email_address"))
     end
   end
 end

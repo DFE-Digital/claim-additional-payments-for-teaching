@@ -5,6 +5,7 @@ module ClaimSessionTimeout
     session.delete(:claim_id)
     session.delete(:claim_postcode)
     session.delete(:claim_address_line_1)
+    session.delete(:no_address_selected)
     @current_claim = nil
   end
 
