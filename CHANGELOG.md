@@ -6,6 +6,9 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+- All policies
+  - Prevent non-selection of an address option on the home address page
+
 ## [Release 104] - 2021-11-25
 
 - All policies
