@@ -38,6 +38,7 @@ module StudentLoans
       "email-verification",
       "provide-mobile-number",
       "mobile-number",
+      "mobile-verification",
       "bank-or-building-society",
       "personal-bank-account",
       "building-society-account",

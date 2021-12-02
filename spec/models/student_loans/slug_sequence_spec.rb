@@ -80,5 +80,33 @@ RSpec.describe StudentLoans::SlugSequence do
         expect(slug_sequence.slugs).not_to include("personal-bank-account")
       end
     end
+
+    context "when 'provide_mobile_number' is 'No'" do
+      it "excludes the 'mobile-number' slug" do
+        claim.provide_mobile_number = false
+
+        expect(slug_sequence.slugs).not_to include("mobile-number")
+      end
+
+      it "excludes the 'mobile-verification' slug" do
+        claim.provide_mobile_number = false
+
+        expect(slug_sequence.slugs).not_to include("mobile-verification")
+      end
+    end
+
+    context "when 'provide_mobile_number' is 'Yes'" do
+      it "includes the 'mobile-number' slug" do
+        claim.provide_mobile_number = true
+
+        expect(slug_sequence.slugs).to include("mobile-number")
+      end
+
+      it "includes the 'mobile-verification' slug" do
+        claim.provide_mobile_number = true
+
+        expect(slug_sequence.slugs).to include("mobile-verification")
+      end
+    end
   end
 end
