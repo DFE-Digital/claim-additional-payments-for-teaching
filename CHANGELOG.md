@@ -6,10 +6,13 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+## [Release 105] - 2021-12-02
+
 - All policies
   - Prevent non-selection of an address option on the home address page
   - Add mobile verification with OTP to TSLR & M+P policies
   - Decision deadline update
+  - Fix address output in csv payroll file for Cantium
 
 ## [Release 104] - 2021-11-25
 
@@ -998,7 +1001,9 @@ The format is based on [Keep a Changelog]
 - First release for student loan repayments private beta
 
 [unreleased]:
-  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-104...HEAD
+  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-105...HEAD
+[release 105]:
+  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-104...release-105
 [release 104]:
   https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-103...release-104
 [release 103]:
