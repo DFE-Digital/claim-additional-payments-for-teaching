@@ -30,11 +30,11 @@ RSpec.describe EarlyCareerPayments::SchoolEligibility do
     context "with an explicitly eligible school in an ineligible local authority district" do
       let(:explicitly_eligible_school) {
         School.new(
-          school_type_group: :la_maintained,
+          school_type_group: :free_schools,
           phase: :secondary,
           close_date: nil,
-          urn: 136791,
-          local_authority_district: local_authority_districts(:camden)
+          urn: 148577,
+          local_authority_district: nil
         )
       }
 

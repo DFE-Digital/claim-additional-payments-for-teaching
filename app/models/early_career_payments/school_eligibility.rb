@@ -364,13 +364,20 @@ module EarlyCareerPayments
       "E08000031" # Wolverhampton
     ].freeze
 
+    # Schools that for whatever reason should be eligile but are not
+    # e.g. Leigh Academy Rainham, a new school - GIAS data is missing the
+    # :ward and :district information so it gets rejected
+    SCHOOL_URNS_CONSIDERED_AS_ELIGIBLE_LOCAL_AUTHORITY_DISTRICT = [
+      148577 # Leigh Academy Rainham
+    ].freeze
+
     def initialize(school)
       @school = school
     end
 
     def eligible_current_school?
       @school.open? &&
-        eligible_local_authority_district? &&
+        (eligible_local_authority_district? || considered_as_eligible_local_authority_district?) &&
         (@school.state_funded? || @school.secure_unit?) &&
         @school.secondary_or_equivalent?
     end
@@ -383,7 +390,13 @@ module EarlyCareerPayments
     private
 
     def eligible_local_authority_district?
+      return false if @school.local_authority_district.nil?
+
       ELIGIBLE_LOCAL_AUTHORITY_DISTRICT_CODES.include?(@school.local_authority_district.code)
+    end
+
+    def considered_as_eligible_local_authority_district?
+      SCHOOL_URNS_CONSIDERED_AS_ELIGIBLE_LOCAL_AUTHORITY_DISTRICT.include?(@school.urn)
     end
 
     def uplift_local_authority_district?

@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+- ECP
+  - Make Leigh Academy Rainham an eligible school as currently it is not as it
+    has no local_authority_district.code
+
 ## [Release 105] - 2021-12-02
 
 - All policies
