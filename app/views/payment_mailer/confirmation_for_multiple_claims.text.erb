@@ -7,8 +7,6 @@ We’re paying:
 
 ^ You will receive <%=number_to_currency(@payment.net_pay) %> on or after <%= l(@payment_date) %>.
 
-You may see the name of our payments processor ‘Cantium Business Solutions’ on your bank statement as the sender of this payment.
-
 <% if @payment.student_loan_repayment.present? %>
 
 # Breakdown of payment
@@ -52,6 +50,10 @@ Your payment is also subject to Income Tax and National Insurance (NI) contribut
 The Gross amount is comprised of the payment you receive, and the Income Tax and Employee NI set out above. You may see this figure on any tax statements or other correspondence relating to taxable pay.
 
 <% end %>
+
+The payment you claim for is the Net Payment (after Income Tax and NI deductions). The student loan deduction is calculated from your Gross Pay (before Income Tax and NI deductions are taken). We are following HMRC guidance in treating this retention payment, for the purpose of employee deductions, as weekly pay.
+
+The amount you receive is <%= number_to_currency(@payment.net_pay) %>. As this payment is treated as pay, a deduction has been automatically made from the <%= number_to_currency(@payment.award_amount) %> to contribute towards repaying your student loan.
 
 You may also see ‘Teaching payments DfE retention scheme’ listed as the secondary employer that made this payment.
 

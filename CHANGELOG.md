@@ -6,6 +6,9 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+- All policies
+  - Amend payment breakdown email
+
 ## [Release 106] - 2021-12-06
 
 - ECP
