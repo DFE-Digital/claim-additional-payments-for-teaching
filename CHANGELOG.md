@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+## [Release 106] - 2021-12-06
+
 - ECP
   - Make Leigh Academy Rainham an eligible school as currently it is not as it
     has no local_authority_district.code
@@ -1005,7 +1007,9 @@ The format is based on [Keep a Changelog]
 - First release for student loan repayments private beta
 
 [unreleased]:
-  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-105...HEAD
+  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-106...HEAD
+[release 106]:
+  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-105...release-106
 [release 105]:
   https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-104...release-105
 [release 104]:
