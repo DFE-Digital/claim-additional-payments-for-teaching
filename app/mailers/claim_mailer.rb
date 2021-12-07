@@ -6,7 +6,7 @@ class ClaimMailer < ApplicationMailer
     set_common_instance_variables(claim)
     @subject = "Your application #{@claim_description} has been received, reference number: #{claim.reference}"
 
-    send_mail
+    send_mail(:rails)
   end
 
   def approved(claim)
@@ -35,8 +35,12 @@ class ClaimMailer < ApplicationMailer
     set_common_instance_variables(claim)
     @subject = "#{@claim_subject} email verification"
     @one_time_password = one_time_password
+    personalisation = {
+      first_name: @claim.first_name,
+      one_time_password: @one_time_password
+    }
 
-    send_mail
+    send_mail(:notify, OTP_EMAIL_NOTIFY_TEMPLATE_ID, personalisation)
   end
 
   private
@@ -49,12 +53,23 @@ class ClaimMailer < ApplicationMailer
     @policy = @claim.policy
   end
 
-  def send_mail
-    view_mail(
-      NOTIFY_TEMPLATE_ID,
-      to: @claim.email_address,
-      subject: @subject,
-      reply_to_id: @policy.notify_reply_to_id
-    )
+  def send_mail(templating = :rails, template_id = :default, personalisation = {})
+    if templating == :rails
+      view_mail(
+        NOTIFY_TEMPLATE_ID,
+        to: @claim.email_address,
+        subject: @subject,
+        reply_to_id: @policy.notify_reply_to_id
+      )
+    else
+      puts "Using GOVUK Notify templating - template_id: #{template_id}"
+      template_mail(
+        template_id,
+        to: @claim.email_address,
+        subject: @subject,
+        reply_to_id: @policy.notify_reply_to_id,
+        personalisation: personalisation
+      )
+    end
   end
 end

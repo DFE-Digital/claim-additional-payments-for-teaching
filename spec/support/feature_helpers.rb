@@ -123,6 +123,6 @@ module FeatureHelpers
 
   def get_otp_from_email
     ActionMailer::Base.deliveries
-      .last.body.decoded.scan(/\b[0-9]{6}\b/).first
+      .last[:personalisation].decoded.scan(/\b[0-9]{6}\b/).first
   end
 end
