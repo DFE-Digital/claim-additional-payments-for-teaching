@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+## [Release 107] - 2021-12-09
+
 - All policies
   - Amend payment breakdown email
 - ECP
@@ -1012,7 +1014,9 @@ The format is based on [Keep a Changelog]
 - First release for student loan repayments private beta
 
 [unreleased]:
-  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-106...HEAD
+  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-107...HEAD
+[release 107]:
+  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-106...release-107
 [release 106]:
   https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-105...release-106
 [release 105]:
