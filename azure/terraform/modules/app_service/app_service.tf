@@ -43,7 +43,7 @@ resource "azurerm_app_service" "app_as" {
     "DFE_TEACHERS_PAYMENT_SERVICE_DATABASE_HOST"     = data.azurerm_key_vault_secret.DatabaseServerName.value
     "DFE_TEACHERS_PAYMENT_SERVICE_DATABASE_NAME"     = local.environment
     "DFE_TEACHERS_PAYMENT_SERVICE_DATABASE_PASSWORD" = data.azurerm_key_vault_secret.DatabasePassword.value
-    "DFE_TEACHERS_PAYMENT_SERVICE_DATABASE_USERNAME" = format("%s@%s", data.azurerm_key_vault_secret.DatabaseUsername.value, format("%s-%s", var.app_rg_name, "db")) # "tps_development@s118d01-app-db"
+    "DFE_TEACHERS_PAYMENT_SERVICE_DATABASE_USERNAME" = format("%s@%s", data.azurerm_key_vault_secret.DatabaseUsername.value, format("%s-%s", var.app_rg_name, "db11")) 
     "DQT_CLIENT_HEADERS"                             = data.azurerm_key_vault_secret.DqtClientHeaders.value
     "DQT_CLIENT_HOST"                                = data.azurerm_key_vault_secret.DqtClientHost.value
     "DQT_CLIENT_PARAMS"                              = data.azurerm_key_vault_secret.DqtClientParams.value
