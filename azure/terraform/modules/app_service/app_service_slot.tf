@@ -25,16 +25,16 @@ resource "azurerm_app_service_slot" "app_as_slot" {
   }
 
   app_settings = {
-    "ADMIN_ALLOWED_IPS"                              = data.azurerm_key_vault_secret.AdminAllowedIPs.value
-    "APPINSIGHTS_INSTRUMENTATIONKEY"                 = data.azurerm_application_insights.app_ai.instrumentation_key
-    "CANONICAL_HOSTNAME"                             = local.verify_entity_id
-    "DFE_SIGN_IN_API_CLIENT_ID"                      = data.azurerm_key_vault_secret.DfeSignInApiClientId.value
-    "DFE_SIGN_IN_API_ENDPOINT"                       = data.azurerm_key_vault_secret.DfeSignInApiEndpoint.value
-    "DFE_SIGN_IN_API_SECRET"                         = data.azurerm_key_vault_secret.DfeSignInApiSecret.value
-    "DFE_SIGN_IN_IDENTIFIER"                         = data.azurerm_key_vault_secret.DfeSignInIdentifier.value
-    "DFE_SIGN_IN_ISSUER"                             = data.azurerm_key_vault_secret.DfeSignInIssuer.value
-    "DFE_SIGN_IN_REDIRECT_BASE_URL"                  = data.azurerm_key_vault_secret.DfeSignInRedirectBaseUrl.value
-    "DFE_SIGN_IN_SECRET"                             = data.azurerm_key_vault_secret.DfeSignInSecret.value
+    "ADMIN_ALLOWED_IPS"              = data.azurerm_key_vault_secret.AdminAllowedIPs.value
+    "APPINSIGHTS_INSTRUMENTATIONKEY" = data.azurerm_application_insights.app_ai.instrumentation_key
+    "CANONICAL_HOSTNAME"             = local.verify_entity_id
+    "DFE_SIGN_IN_API_CLIENT_ID"      = data.azurerm_key_vault_secret.DfeSignInApiClientId.value
+    "DFE_SIGN_IN_API_ENDPOINT"       = data.azurerm_key_vault_secret.DfeSignInApiEndpoint.value
+    "DFE_SIGN_IN_API_SECRET"         = data.azurerm_key_vault_secret.DfeSignInApiSecret.value
+    "DFE_SIGN_IN_IDENTIFIER"         = data.azurerm_key_vault_secret.DfeSignInIdentifier.value
+    "DFE_SIGN_IN_ISSUER"             = data.azurerm_key_vault_secret.DfeSignInIssuer.value
+    "DFE_SIGN_IN_REDIRECT_BASE_URL"  = data.azurerm_key_vault_secret.DfeSignInRedirectBaseUrl.value
+    "DFE_SIGN_IN_SECRET"             = data.azurerm_key_vault_secret.DfeSignInSecret.value
     #"DFE_TEACHERS_PAYMENT_SERVICE_DATABASE_HOST"     = format("%s.%s", format("%s-%s", var.app_rg_name, "db"), "postgres.database.azure.com")
     "DFE_TEACHERS_PAYMENT_SERVICE_DATABASE_HOST"     = data.azurerm_key_vault_secret.DatabaseServerName.value
     "DFE_TEACHERS_PAYMENT_SERVICE_DATABASE_NAME"     = local.environment
