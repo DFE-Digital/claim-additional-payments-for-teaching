@@ -63,6 +63,11 @@ data "azurerm_key_vault_secret" "DatabasePassword" {
   name         = "DatabasePassword"
   key_vault_id = data.azurerm_key_vault.secrets_kv.id
 }
+data "azurerm_key_vault_secret" "DatabaseServerName" {
+  name         = "DatabaseServerName"
+  key_vault_id = data.azurerm_key_vault.secrets_kv.id
+}
+
 data "azurerm_key_vault_secret" "DatabaseUsername" {
   name         = "DatabaseUsername"
   key_vault_id = data.azurerm_key_vault.secrets_kv.id
