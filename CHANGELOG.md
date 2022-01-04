@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+- Admin
+  - display results of Dqt API qualification matching status
 - Early Career Payments
   - DqT temporary use of subject(n) in response to report JACS/HECOS codes used
     in the determination of matching DqT response with claim ITT subject
