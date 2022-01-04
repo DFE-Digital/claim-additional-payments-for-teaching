@@ -17,7 +17,6 @@ module MathsAndPhysics
   class DqtRecord
     delegate(
       :qts_award_date,
-      :itt_subjects,
       :itt_subject_codes,
       :itt_start_date,
       :degree_codes,
