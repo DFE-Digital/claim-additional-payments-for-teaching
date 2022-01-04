@@ -9,6 +9,14 @@ The format is based on [Keep a Changelog]
 - Early Career Payments
   - DqT temporary use of subject(n) in response to report JACS/HECOS codes used
     in the determination of matching DqT response with claim ITT subject
+  - use QTS Award Date for qualification matching for:
+    - EEA
+    - Northern Ireland
+    - OTT
+    - OTT Recognition
+    - QTS Assessment only
+    - QTS Award only
+    - Scotland
 
 ## [Release 107] - 2021-12-09
 

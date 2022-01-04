@@ -84,7 +84,7 @@ RSpec.describe EarlyCareerPayments::DqtRecord do
         record_itt_subjects: ["mathematics"],
         record_itt_subject_codes: ["100403"],
         record_itt_date: Date.parse("1/9/2018"),
-        record_qts_date: Date.parse("1/9/2017"),
+        record_qts_date: Date.parse("1/9/2018"),
         record_qualification_name: "EEA"
       },
       {
@@ -231,7 +231,7 @@ RSpec.describe EarlyCareerPayments::DqtRecord do
         record_itt_subjects: ["mathematics"],
         record_itt_subject_codes: ["100403"],
         record_itt_date: Date.parse("1/9/2020"),
-        record_qts_date: Date.parse("1/9/2017"),
+        record_qts_date: Date.parse("1/9/2019"),
         record_qualification_name: "Northern Ireland"
       },
       {
@@ -249,7 +249,7 @@ RSpec.describe EarlyCareerPayments::DqtRecord do
         record_itt_subjects: ["mathematics"],
         record_itt_subject_codes: [],
         record_itt_date: Date.parse("1/9/2020"),
-        record_qts_date: Date.parse("1/9/2017"),
+        record_qts_date: Date.parse("1/9/2019"),
         record_qualification_name: "OTT"
       },
       # end of mathematics for 2022
@@ -269,8 +269,8 @@ RSpec.describe EarlyCareerPayments::DqtRecord do
         record_degree_codes: [],
         record_itt_subjects: ["physics"],
         record_itt_subject_codes: ["F300"],
-        record_itt_date: Date.parse("1/9/2020"),
-        record_qts_date: Date.parse("1/9/2017"),
+        record_itt_date: Date.parse("1/9/2018"),
+        record_qts_date: Date.parse("31/12/2020"),
         record_qualification_name: "OTT Recognition"
       },
       {
@@ -380,8 +380,8 @@ RSpec.describe EarlyCareerPayments::DqtRecord do
         record_degree_codes: [],
         record_itt_subjects: ["chemistry"],
         record_itt_subject_codes: ["100417"],
-        record_itt_date: Date.parse("1/9/2020"),
-        record_qts_date: Date.parse("1/9/2017"),
+        record_itt_date: Date.parse("10/05/2020"),
+        record_qts_date: Date.parse("07/06/2021"),
         record_qualification_name: "QTS Assessment only"
       },
       {
@@ -398,8 +398,8 @@ RSpec.describe EarlyCareerPayments::DqtRecord do
         record_degree_codes: ["100417"],
         record_itt_subjects: ["chemistry"],
         record_itt_subject_codes: [],
-        record_itt_date: Date.parse("1/9/2020"),
-        record_qts_date: Date.parse("1/9/2017"),
+        record_itt_date: Date.parse("1/9/2018"),
+        record_qts_date: Date.parse("17/05/2021"),
         record_qualification_name: "QTS Award only"
       },
       # end of chemistry for 2022
@@ -419,8 +419,8 @@ RSpec.describe EarlyCareerPayments::DqtRecord do
         record_degree_codes: [],
         record_itt_subjects: ["foreign languages"],
         record_itt_subject_codes: ["Q100"],
-        record_itt_date: Date.parse("1/9/2020"),
-        record_qts_date: Date.parse("1/9/2017"),
+        record_itt_date: Date.parse("1/9/2019"),
+        record_qts_date: Date.parse("1/9/2020"),
         record_qualification_name: "Scotland"
       },
       {
