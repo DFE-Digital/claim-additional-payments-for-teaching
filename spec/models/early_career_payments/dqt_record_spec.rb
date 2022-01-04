@@ -19,7 +19,6 @@ RSpec.describe EarlyCareerPayments::DqtRecord do
     OpenStruct.new(
       {
         degree_codes: record_degree_codes,
-        itt_subjects: record_itt_subjects,
         itt_subject_codes: record_itt_subject_codes,
         itt_start_date: record_itt_date,
         qts_award_date: record_qts_date,
@@ -32,11 +31,9 @@ RSpec.describe EarlyCareerPayments::DqtRecord do
     subject(:eligible?) { dqt_record.eligible? }
 
     [
-      # start of mathematics for 2021
       {
         claim_academic_year: AcademicYear.new(2021),
         record_degree_codes: [],
-        record_itt_subjects: ["mathematics"],
         record_itt_subject_codes: ["G100"],
         record_itt_date: Date.parse("1/9/2017"),
         record_qts_date: Date.parse("1/9/2018"),
@@ -45,7 +42,6 @@ RSpec.describe EarlyCareerPayments::DqtRecord do
       {
         claim_academic_year: AcademicYear.new(2021),
         record_degree_codes: [],
-        record_itt_subjects: ["mathematics"],
         record_itt_subject_codes: ["G100"],
         record_itt_date: Date.parse("1/9/2018"),
         record_qts_date: Date.parse("1/9/2017"),
@@ -54,7 +50,6 @@ RSpec.describe EarlyCareerPayments::DqtRecord do
       {
         claim_academic_year: AcademicYear.new(2021),
         record_degree_codes: ["G100"],
-        record_itt_subjects: ["mathematics"],
         record_itt_subject_codes: [],
         record_itt_date: Date.parse("1/9/2017"),
         record_qts_date: Date.parse("1/9/2018"),
@@ -63,7 +58,6 @@ RSpec.describe EarlyCareerPayments::DqtRecord do
       {
         claim_academic_year: AcademicYear.new(2021),
         record_degree_codes: ["G100"],
-        record_itt_subjects: ["mathematics"],
         record_itt_subject_codes: [],
         record_itt_date: Date.parse("1/9/2018"),
         record_qts_date: Date.parse("1/9/2017"),
@@ -72,7 +66,6 @@ RSpec.describe EarlyCareerPayments::DqtRecord do
       {
         claim_academic_year: AcademicYear.new(2021),
         record_degree_codes: [],
-        record_itt_subjects: ["mathematics"],
         record_itt_subject_codes: ["100403"],
         record_itt_date: Date.parse("1/9/2017"),
         record_qts_date: Date.parse("1/9/2018"),
@@ -81,7 +74,6 @@ RSpec.describe EarlyCareerPayments::DqtRecord do
       {
         claim_academic_year: AcademicYear.new(2021),
         record_degree_codes: [],
-        record_itt_subjects: ["mathematics"],
         record_itt_subject_codes: ["100403"],
         record_itt_date: Date.parse("1/9/2018"),
         record_qts_date: Date.parse("1/9/2017"),
@@ -90,7 +82,6 @@ RSpec.describe EarlyCareerPayments::DqtRecord do
       {
         claim_academic_year: AcademicYear.new(2021),
         record_degree_codes: ["100403"],
-        record_itt_subjects: ["mathematics"],
         record_itt_subject_codes: [],
         record_itt_date: Date.parse("1/9/2017"),
         record_qts_date: Date.parse("1/9/2018"),
@@ -99,19 +90,14 @@ RSpec.describe EarlyCareerPayments::DqtRecord do
       {
         claim_academic_year: AcademicYear.new(2021),
         record_degree_codes: ["100403"],
-        record_itt_subjects: ["mathematics"],
         record_itt_subject_codes: [],
         record_itt_date: Date.parse("1/9/2018"),
         record_qts_date: Date.parse("1/9/2017"),
         record_qualification_name: nil
       },
-      # end of mathematics for 2021
-
-      # start of mathematics for 2022
       {
         claim_academic_year: AcademicYear.new(2022),
         record_degree_codes: [],
-        record_itt_subjects: ["mathematics"],
         record_itt_subject_codes: ["G100"],
         record_itt_date: Date.parse("1/9/2017"),
         record_qts_date: Date.parse("1/9/2019"),
@@ -120,7 +106,6 @@ RSpec.describe EarlyCareerPayments::DqtRecord do
       {
         claim_academic_year: AcademicYear.new(2022),
         record_degree_codes: [],
-        record_itt_subjects: ["mathematics"],
         record_itt_subject_codes: ["G100"],
         record_itt_date: Date.parse("1/9/2019"),
         record_qts_date: Date.parse("1/9/2017"),
@@ -129,7 +114,6 @@ RSpec.describe EarlyCareerPayments::DqtRecord do
       {
         claim_academic_year: AcademicYear.new(2022),
         record_degree_codes: ["G100"],
-        record_itt_subjects: ["mathematics"],
         record_itt_subject_codes: [],
         record_itt_date: Date.parse("1/9/2017"),
         record_qts_date: Date.parse("1/9/2019"),
@@ -138,7 +122,6 @@ RSpec.describe EarlyCareerPayments::DqtRecord do
       {
         claim_academic_year: AcademicYear.new(2022),
         record_degree_codes: ["G100"],
-        record_itt_subjects: ["mathematics"],
         record_itt_subject_codes: [],
         record_itt_date: Date.parse("1/9/2019"),
         record_qts_date: Date.parse("1/9/2017"),
@@ -147,7 +130,6 @@ RSpec.describe EarlyCareerPayments::DqtRecord do
       {
         claim_academic_year: AcademicYear.new(2022),
         record_degree_codes: [],
-        record_itt_subjects: ["mathematics"],
         record_itt_subject_codes: ["100403"],
         record_itt_date: Date.parse("1/9/2017"),
         record_qts_date: Date.parse("1/9/2019"),
@@ -156,7 +138,6 @@ RSpec.describe EarlyCareerPayments::DqtRecord do
       {
         claim_academic_year: AcademicYear.new(2022),
         record_degree_codes: [],
-        record_itt_subjects: ["mathematics"],
         record_itt_subject_codes: ["100403"],
         record_itt_date: Date.parse("1/9/2019"),
         record_qts_date: Date.parse("1/9/2017"),
@@ -165,7 +146,6 @@ RSpec.describe EarlyCareerPayments::DqtRecord do
       {
         claim_academic_year: AcademicYear.new(2022),
         record_degree_codes: ["100403"],
-        record_itt_subjects: ["mathematics"],
         record_itt_subject_codes: [],
         record_itt_date: Date.parse("1/9/2017"),
         record_qts_date: Date.parse("1/9/2019"),
@@ -174,7 +154,6 @@ RSpec.describe EarlyCareerPayments::DqtRecord do
       {
         claim_academic_year: AcademicYear.new(2022),
         record_degree_codes: ["100403"],
-        record_itt_subjects: ["mathematics"],
         record_itt_subject_codes: [],
         record_itt_date: Date.parse("1/9/2019"),
         record_qts_date: Date.parse("1/9/2017"),
@@ -183,7 +162,6 @@ RSpec.describe EarlyCareerPayments::DqtRecord do
       {
         claim_academic_year: AcademicYear.new(2022),
         record_degree_codes: [],
-        record_itt_subjects: ["mathematics"],
         record_itt_subject_codes: ["G100"],
         record_itt_date: Date.parse("1/9/2017"),
         record_qts_date: Date.parse("1/9/2020"),
@@ -192,7 +170,6 @@ RSpec.describe EarlyCareerPayments::DqtRecord do
       {
         claim_academic_year: AcademicYear.new(2022),
         record_degree_codes: [],
-        record_itt_subjects: ["mathematics"],
         record_itt_subject_codes: ["G100"],
         record_itt_date: Date.parse("1/9/2020"),
         record_qts_date: Date.parse("1/9/2017"),
@@ -201,7 +178,6 @@ RSpec.describe EarlyCareerPayments::DqtRecord do
       {
         claim_academic_year: AcademicYear.new(2022),
         record_degree_codes: ["G100"],
-        record_itt_subjects: ["mathematics"],
         record_itt_subject_codes: [],
         record_itt_date: Date.parse("1/9/2017"),
         record_qts_date: Date.parse("1/9/2020"),
@@ -210,7 +186,6 @@ RSpec.describe EarlyCareerPayments::DqtRecord do
       {
         claim_academic_year: AcademicYear.new(2022),
         record_degree_codes: ["G100"],
-        record_itt_subjects: ["mathematics"],
         record_itt_subject_codes: [],
         record_itt_date: Date.parse("1/9/2020"),
         record_qts_date: Date.parse("1/9/2017"),
@@ -219,7 +194,6 @@ RSpec.describe EarlyCareerPayments::DqtRecord do
       {
         claim_academic_year: AcademicYear.new(2022),
         record_degree_codes: [],
-        record_itt_subjects: ["mathematics"],
         record_itt_subject_codes: ["100403"],
         record_itt_date: Date.parse("1/9/2017"),
         record_qts_date: Date.parse("1/9/2020"),
@@ -228,7 +202,6 @@ RSpec.describe EarlyCareerPayments::DqtRecord do
       {
         claim_academic_year: AcademicYear.new(2022),
         record_degree_codes: [],
-        record_itt_subjects: ["mathematics"],
         record_itt_subject_codes: ["100403"],
         record_itt_date: Date.parse("1/9/2020"),
         record_qts_date: Date.parse("1/9/2017"),
@@ -237,7 +210,6 @@ RSpec.describe EarlyCareerPayments::DqtRecord do
       {
         claim_academic_year: AcademicYear.new(2022),
         record_degree_codes: ["100403"],
-        record_itt_subjects: ["mathematics"],
         record_itt_subject_codes: [],
         record_itt_date: Date.parse("1/9/2017"),
         record_qts_date: Date.parse("1/9/2020"),
@@ -246,19 +218,14 @@ RSpec.describe EarlyCareerPayments::DqtRecord do
       {
         claim_academic_year: AcademicYear.new(2022),
         record_degree_codes: ["100403"],
-        record_itt_subjects: ["mathematics"],
         record_itt_subject_codes: [],
         record_itt_date: Date.parse("1/9/2020"),
         record_qts_date: Date.parse("1/9/2017"),
         record_qualification_name: "OTT"
       },
-      # end of mathematics for 2022
-
-      # start of physics for 2022
       {
         claim_academic_year: AcademicYear.new(2022),
         record_degree_codes: [],
-        record_itt_subjects: ["physics"],
         record_itt_subject_codes: ["F300"],
         record_itt_date: Date.parse("1/9/2017"),
         record_qts_date: Date.parse("1/9/2020"),
@@ -267,7 +234,6 @@ RSpec.describe EarlyCareerPayments::DqtRecord do
       {
         claim_academic_year: AcademicYear.new(2022),
         record_degree_codes: [],
-        record_itt_subjects: ["physics"],
         record_itt_subject_codes: ["F300"],
         record_itt_date: Date.parse("1/9/2020"),
         record_qts_date: Date.parse("1/9/2017"),
@@ -276,7 +242,6 @@ RSpec.describe EarlyCareerPayments::DqtRecord do
       {
         claim_academic_year: AcademicYear.new(2022),
         record_degree_codes: ["F300"],
-        record_itt_subjects: ["physics"],
         record_itt_subject_codes: [],
         record_itt_date: Date.parse("1/9/2017"),
         record_qts_date: Date.parse("1/9/2020"),
@@ -285,7 +250,6 @@ RSpec.describe EarlyCareerPayments::DqtRecord do
       {
         claim_academic_year: AcademicYear.new(2022),
         record_degree_codes: ["F300"],
-        record_itt_subjects: ["physics"],
         record_itt_subject_codes: [],
         record_itt_date: Date.parse("1/9/2020"),
         record_qts_date: Date.parse("1/9/2017"),
@@ -294,7 +258,6 @@ RSpec.describe EarlyCareerPayments::DqtRecord do
       {
         claim_academic_year: AcademicYear.new(2022),
         record_degree_codes: [],
-        record_itt_subjects: ["physics"],
         record_itt_subject_codes: ["100425"],
         record_itt_date: Date.parse("1/9/2017"),
         record_qts_date: Date.parse("1/9/2020"),
@@ -303,7 +266,6 @@ RSpec.describe EarlyCareerPayments::DqtRecord do
       {
         claim_academic_year: AcademicYear.new(2022),
         record_degree_codes: [],
-        record_itt_subjects: ["physics"],
         record_itt_subject_codes: ["100425"],
         record_itt_date: Date.parse("1/9/2020"),
         record_qts_date: Date.parse("1/9/2017"),
@@ -312,7 +274,6 @@ RSpec.describe EarlyCareerPayments::DqtRecord do
       {
         claim_academic_year: AcademicYear.new(2022),
         record_degree_codes: ["100425"],
-        record_itt_subjects: ["physics"],
         record_itt_subject_codes: [],
         record_itt_date: Date.parse("1/9/2017"),
         record_qts_date: Date.parse("1/9/2020"),
@@ -321,19 +282,14 @@ RSpec.describe EarlyCareerPayments::DqtRecord do
       {
         claim_academic_year: AcademicYear.new(2022),
         record_degree_codes: ["100425"],
-        record_itt_subjects: ["physics"],
         record_itt_subject_codes: [],
         record_itt_date: Date.parse("1/9/2020"),
         record_qts_date: Date.parse("1/9/2017"),
         record_qualification_name: "Postgraduate Diploma in Education"
       },
-      # end of physics for 2022
-
-      # start of chemistry for 2022
       {
         claim_academic_year: AcademicYear.new(2022),
         record_degree_codes: [],
-        record_itt_subjects: ["chemistry"],
         record_itt_subject_codes: ["F100"],
         record_itt_date: Date.parse("1/9/2017"),
         record_qts_date: Date.parse("1/9/2020"),
@@ -342,7 +298,6 @@ RSpec.describe EarlyCareerPayments::DqtRecord do
       {
         claim_academic_year: AcademicYear.new(2022),
         record_degree_codes: [],
-        record_itt_subjects: ["chemistry"],
         record_itt_subject_codes: ["F100"],
         record_itt_date: Date.parse("1/9/2020"),
         record_qts_date: Date.parse("1/9/2017"),
@@ -351,7 +306,6 @@ RSpec.describe EarlyCareerPayments::DqtRecord do
       {
         claim_academic_year: AcademicYear.new(2022),
         record_degree_codes: ["F100"],
-        record_itt_subjects: ["chemistry"],
         record_itt_subject_codes: [],
         record_itt_date: Date.parse("1/9/2017"),
         record_qts_date: Date.parse("1/9/2020"),
@@ -360,7 +314,6 @@ RSpec.describe EarlyCareerPayments::DqtRecord do
       {
         claim_academic_year: AcademicYear.new(2022),
         record_degree_codes: ["F100"],
-        record_itt_subjects: ["chemistry"],
         record_itt_subject_codes: [],
         record_itt_date: Date.parse("1/9/2020"),
         record_qts_date: Date.parse("1/9/2017"),
@@ -369,7 +322,6 @@ RSpec.describe EarlyCareerPayments::DqtRecord do
       {
         claim_academic_year: AcademicYear.new(2022),
         record_degree_codes: [],
-        record_itt_subjects: ["chemistry"],
         record_itt_subject_codes: ["100417"],
         record_itt_date: Date.parse("1/9/2017"),
         record_qts_date: Date.parse("1/9/2020"),
@@ -378,7 +330,6 @@ RSpec.describe EarlyCareerPayments::DqtRecord do
       {
         claim_academic_year: AcademicYear.new(2022),
         record_degree_codes: [],
-        record_itt_subjects: ["chemistry"],
         record_itt_subject_codes: ["100417"],
         record_itt_date: Date.parse("1/9/2020"),
         record_qts_date: Date.parse("1/9/2017"),
@@ -387,7 +338,6 @@ RSpec.describe EarlyCareerPayments::DqtRecord do
       {
         claim_academic_year: AcademicYear.new(2022),
         record_degree_codes: ["100417"],
-        record_itt_subjects: ["chemistry"],
         record_itt_subject_codes: [],
         record_itt_date: Date.parse("1/9/2017"),
         record_qts_date: Date.parse("1/9/2020"),
@@ -396,19 +346,14 @@ RSpec.describe EarlyCareerPayments::DqtRecord do
       {
         claim_academic_year: AcademicYear.new(2022),
         record_degree_codes: ["100417"],
-        record_itt_subjects: ["chemistry"],
         record_itt_subject_codes: [],
         record_itt_date: Date.parse("1/9/2020"),
         record_qts_date: Date.parse("1/9/2017"),
         record_qualification_name: "QTS Award only"
       },
-      # end of chemistry for 2022
-
-      # start of foreign_languages for 2022
       {
         claim_academic_year: AcademicYear.new(2022),
         record_degree_codes: [],
-        record_itt_subjects: ["foreign languages"],
         record_itt_subject_codes: ["Q100"],
         record_itt_date: Date.parse("1/9/2017"),
         record_qts_date: Date.parse("1/9/2020"),
@@ -417,7 +362,6 @@ RSpec.describe EarlyCareerPayments::DqtRecord do
       {
         claim_academic_year: AcademicYear.new(2022),
         record_degree_codes: [],
-        record_itt_subjects: ["foreign languages"],
         record_itt_subject_codes: ["Q100"],
         record_itt_date: Date.parse("1/9/2020"),
         record_qts_date: Date.parse("1/9/2017"),
@@ -426,7 +370,6 @@ RSpec.describe EarlyCareerPayments::DqtRecord do
       {
         claim_academic_year: AcademicYear.new(2022),
         record_degree_codes: ["Q100"],
-        record_itt_subjects: ["foreign languages"],
         record_itt_subject_codes: [],
         record_itt_date: Date.parse("1/9/2017"),
         record_qts_date: Date.parse("1/9/2020"),
@@ -435,7 +378,6 @@ RSpec.describe EarlyCareerPayments::DqtRecord do
       {
         claim_academic_year: AcademicYear.new(2022),
         record_degree_codes: ["Q100"],
-        record_itt_subjects: ["foreign languages"],
         record_itt_subject_codes: [],
         record_itt_date: Date.parse("1/9/2020"),
         record_qts_date: Date.parse("1/9/2017"),
@@ -444,7 +386,6 @@ RSpec.describe EarlyCareerPayments::DqtRecord do
       {
         claim_academic_year: AcademicYear.new(2022),
         record_degree_codes: [],
-        record_itt_subjects: ["foreign languages"],
         record_itt_subject_codes: ["100321"],
         record_itt_date: Date.parse("1/9/2017"),
         record_qts_date: Date.parse("1/9/2020"),
@@ -453,7 +394,6 @@ RSpec.describe EarlyCareerPayments::DqtRecord do
       {
         claim_academic_year: AcademicYear.new(2022),
         record_degree_codes: [],
-        record_itt_subjects: ["foreign languages"],
         record_itt_subject_codes: ["100321"],
         record_itt_date: Date.parse("1/9/2020"),
         record_qts_date: Date.parse("1/9/2017"),
@@ -462,7 +402,6 @@ RSpec.describe EarlyCareerPayments::DqtRecord do
       {
         claim_academic_year: AcademicYear.new(2022),
         record_degree_codes: ["100321"],
-        record_itt_subjects: ["foreign languages"],
         record_itt_subject_codes: [],
         record_itt_date: Date.parse("1/9/2017"),
         record_qts_date: Date.parse("1/9/2020"),
@@ -471,19 +410,14 @@ RSpec.describe EarlyCareerPayments::DqtRecord do
       {
         claim_academic_year: AcademicYear.new(2022),
         record_degree_codes: ["100321"],
-        record_itt_subjects: ["foreign languages"],
         record_itt_subject_codes: [],
         record_itt_date: Date.parse("1/9/2020"),
         record_qts_date: Date.parse("1/9/2017"),
         record_qualification_name: "Teachers Certificate"
       },
-      # end of foreign_languages for 2022
-
-      # start of mathematics for 2023
       {
         claim_academic_year: AcademicYear.new(2023),
         record_degree_codes: [],
-        record_itt_subjects: ["mathematics"],
         record_itt_subject_codes: ["G100"],
         record_itt_date: Date.parse("1/9/2017"),
         record_qts_date: Date.parse("1/9/2018"),
@@ -492,7 +426,6 @@ RSpec.describe EarlyCareerPayments::DqtRecord do
       {
         claim_academic_year: AcademicYear.new(2023),
         record_degree_codes: [],
-        record_itt_subjects: ["mathematics"],
         record_itt_subject_codes: ["G100"],
         record_itt_date: Date.parse("1/9/2018"),
         record_qts_date: Date.parse("1/9/2017"),
@@ -501,7 +434,6 @@ RSpec.describe EarlyCareerPayments::DqtRecord do
       {
         claim_academic_year: AcademicYear.new(2023),
         record_degree_codes: ["G100"],
-        record_itt_subjects: ["mathematics"],
         record_itt_subject_codes: [],
         record_itt_date: Date.parse("1/9/2017"),
         record_qts_date: Date.parse("1/9/2018"),
@@ -510,7 +442,6 @@ RSpec.describe EarlyCareerPayments::DqtRecord do
       {
         claim_academic_year: AcademicYear.new(2023),
         record_degree_codes: [],
-        record_itt_subjects: ["mathematics"],
         record_itt_subject_codes: ["100403"],
         record_itt_date: Date.parse("1/9/2017"),
         record_qts_date: Date.parse("1/9/2018"),
@@ -519,7 +450,6 @@ RSpec.describe EarlyCareerPayments::DqtRecord do
       {
         claim_academic_year: AcademicYear.new(2023),
         record_degree_codes: ["100403"],
-        record_itt_subjects: ["mathematics"],
         record_itt_subject_codes: [],
         record_itt_date: Date.parse("1/9/2017"),
         record_qts_date: Date.parse("1/9/2018"),
@@ -528,7 +458,6 @@ RSpec.describe EarlyCareerPayments::DqtRecord do
       {
         claim_academic_year: AcademicYear.new(2023),
         record_degree_codes: [],
-        record_itt_subjects: ["mathematics"],
         record_itt_subject_codes: ["G100"],
         record_itt_date: Date.parse("1/9/2017"),
         record_qts_date: Date.parse("1/9/2020"),
@@ -537,7 +466,6 @@ RSpec.describe EarlyCareerPayments::DqtRecord do
       {
         claim_academic_year: AcademicYear.new(2023),
         record_degree_codes: ["G100"],
-        record_itt_subjects: ["mathematics"],
         record_itt_subject_codes: [],
         record_itt_date: Date.parse("1/9/2017"),
         record_qts_date: Date.parse("1/9/2020"),
@@ -546,7 +474,6 @@ RSpec.describe EarlyCareerPayments::DqtRecord do
       {
         claim_academic_year: AcademicYear.new(2023),
         record_degree_codes: [],
-        record_itt_subjects: ["mathematics"],
         record_itt_subject_codes: ["100403"],
         record_itt_date: Date.parse("1/9/2017"),
         record_qts_date: Date.parse("1/9/2020"),
@@ -555,19 +482,14 @@ RSpec.describe EarlyCareerPayments::DqtRecord do
       {
         claim_academic_year: AcademicYear.new(2023),
         record_degree_codes: ["100403"],
-        record_itt_subjects: ["mathematics"],
         record_itt_subject_codes: [],
         record_itt_date: Date.parse("1/9/2017"),
         record_qts_date: Date.parse("1/9/2020"),
         record_qualification_name: "BA"
       },
-      # end of mathematics for 2023
-
-      # start of physics for 2023
       {
         claim_academic_year: AcademicYear.new(2023),
         record_degree_codes: [],
-        record_itt_subjects: ["physics"],
         record_itt_subject_codes: ["F300"],
         record_itt_date: Date.parse("1/9/2017"),
         record_qts_date: Date.parse("1/9/2020"),
@@ -576,7 +498,6 @@ RSpec.describe EarlyCareerPayments::DqtRecord do
       {
         claim_academic_year: AcademicYear.new(2023),
         record_degree_codes: ["F300"],
-        record_itt_subjects: ["physics"],
         record_itt_subject_codes: [],
         record_itt_date: Date.parse("1/9/2017"),
         record_qts_date: Date.parse("1/9/2020"),
@@ -585,7 +506,6 @@ RSpec.describe EarlyCareerPayments::DqtRecord do
       {
         claim_academic_year: AcademicYear.new(2023),
         record_degree_codes: [],
-        record_itt_subjects: ["physics"],
         record_itt_subject_codes: ["100425"],
         record_itt_date: Date.parse("1/9/2017"),
         record_qts_date: Date.parse("1/9/2020"),
@@ -594,19 +514,14 @@ RSpec.describe EarlyCareerPayments::DqtRecord do
       {
         claim_academic_year: AcademicYear.new(2023),
         record_degree_codes: ["100425"],
-        record_itt_subjects: ["physics"],
         record_itt_subject_codes: [],
         record_itt_date: Date.parse("1/9/2017"),
         record_qts_date: Date.parse("1/9/2020"),
         record_qualification_name: "BA"
       },
-      # end of physics for 2023
-
-      # start of chemistry for 2023
       {
         claim_academic_year: AcademicYear.new(2023),
         record_degree_codes: [],
-        record_itt_subjects: ["chemistry"],
         record_itt_subject_codes: ["F100"],
         record_itt_date: Date.parse("1/9/2017"),
         record_qts_date: Date.parse("1/9/2020"),
@@ -615,7 +530,6 @@ RSpec.describe EarlyCareerPayments::DqtRecord do
       {
         claim_academic_year: AcademicYear.new(2023),
         record_degree_codes: ["F100"],
-        record_itt_subjects: ["chemistry"],
         record_itt_subject_codes: [],
         record_itt_date: Date.parse("1/9/2017"),
         record_qts_date: Date.parse("1/9/2020"),
@@ -624,7 +538,6 @@ RSpec.describe EarlyCareerPayments::DqtRecord do
       {
         claim_academic_year: AcademicYear.new(2023),
         record_degree_codes: [],
-        record_itt_subjects: ["chemistry"],
         record_itt_subject_codes: ["100417"],
         record_itt_date: Date.parse("1/9/2017"),
         record_qts_date: Date.parse("1/9/2020"),
@@ -633,19 +546,14 @@ RSpec.describe EarlyCareerPayments::DqtRecord do
       {
         claim_academic_year: AcademicYear.new(2023),
         record_degree_codes: ["100417"],
-        record_itt_subjects: ["chemistry"],
         record_itt_subject_codes: [],
         record_itt_date: Date.parse("1/9/2017"),
         record_qts_date: Date.parse("1/9/2020"),
         record_qualification_name: "BA"
       },
-      # end of chemistry for 2023
-
-      # start of foreign_languages for 2023
       {
         claim_academic_year: AcademicYear.new(2023),
         record_degree_codes: [],
-        record_itt_subjects: ["foreign languages"],
         record_itt_subject_codes: ["Q100"],
         record_itt_date: Date.parse("1/9/2017"),
         record_qts_date: Date.parse("1/9/2020"),
@@ -654,7 +562,6 @@ RSpec.describe EarlyCareerPayments::DqtRecord do
       {
         claim_academic_year: AcademicYear.new(2023),
         record_degree_codes: ["Q100"],
-        record_itt_subjects: ["foreign languages"],
         record_itt_subject_codes: [],
         record_itt_date: Date.parse("1/9/2017"),
         record_qts_date: Date.parse("1/9/2020"),
@@ -663,7 +570,6 @@ RSpec.describe EarlyCareerPayments::DqtRecord do
       {
         claim_academic_year: AcademicYear.new(2023),
         record_degree_codes: [],
-        record_itt_subjects: ["foreign languages"],
         record_itt_subject_codes: ["100321"],
         record_itt_date: Date.parse("1/9/2017"),
         record_qts_date: Date.parse("1/9/2020"),
@@ -672,19 +578,14 @@ RSpec.describe EarlyCareerPayments::DqtRecord do
       {
         claim_academic_year: AcademicYear.new(2023),
         record_degree_codes: ["100321"],
-        record_itt_subjects: ["foreign languages"],
         record_itt_subject_codes: [],
         record_itt_date: Date.parse("1/9/2017"),
         record_qts_date: Date.parse("1/9/2020"),
         record_qualification_name: "BA"
       },
-      # end of foreign_languages for 2023
-
-      # start of mathematics for 2024
       {
         claim_academic_year: AcademicYear.new(2024),
         record_degree_codes: [],
-        record_itt_subjects: ["mathematics"],
         record_itt_subject_codes: ["G100"],
         record_itt_date: Date.parse("1/9/2017"),
         record_qts_date: Date.parse("1/9/2019"),
@@ -693,7 +594,6 @@ RSpec.describe EarlyCareerPayments::DqtRecord do
       {
         claim_academic_year: AcademicYear.new(2024),
         record_degree_codes: ["G100"],
-        record_itt_subjects: ["mathematics"],
         record_itt_subject_codes: [],
         record_itt_date: Date.parse("1/9/2017"),
         record_qts_date: Date.parse("1/9/2019"),
@@ -702,7 +602,6 @@ RSpec.describe EarlyCareerPayments::DqtRecord do
       {
         claim_academic_year: AcademicYear.new(2024),
         record_degree_codes: [],
-        record_itt_subjects: ["mathematics"],
         record_itt_subject_codes: ["100403"],
         record_itt_date: Date.parse("1/9/2017"),
         record_qts_date: Date.parse("1/9/2019"),
@@ -711,7 +610,6 @@ RSpec.describe EarlyCareerPayments::DqtRecord do
       {
         claim_academic_year: AcademicYear.new(2024),
         record_degree_codes: ["100403"],
-        record_itt_subjects: ["mathematics"],
         record_itt_subject_codes: [],
         record_itt_date: Date.parse("1/9/2017"),
         record_qts_date: Date.parse("1/9/2019"),
@@ -720,7 +618,6 @@ RSpec.describe EarlyCareerPayments::DqtRecord do
       {
         claim_academic_year: AcademicYear.new(2024),
         record_degree_codes: [],
-        record_itt_subjects: ["mathematics"],
         record_itt_subject_codes: ["G100"],
         record_itt_date: Date.parse("1/9/2017"),
         record_qts_date: Date.parse("1/9/2020"),
@@ -729,7 +626,6 @@ RSpec.describe EarlyCareerPayments::DqtRecord do
       {
         claim_academic_year: AcademicYear.new(2024),
         record_degree_codes: ["G100"],
-        record_itt_subjects: ["mathematics"],
         record_itt_subject_codes: [],
         record_itt_date: Date.parse("1/9/2017"),
         record_qts_date: Date.parse("1/9/2020"),
@@ -738,7 +634,6 @@ RSpec.describe EarlyCareerPayments::DqtRecord do
       {
         claim_academic_year: AcademicYear.new(2024),
         record_degree_codes: [],
-        record_itt_subjects: ["mathematics"],
         record_itt_subject_codes: ["100403"],
         record_itt_date: Date.parse("1/9/2017"),
         record_qts_date: Date.parse("1/9/2020"),
@@ -747,19 +642,14 @@ RSpec.describe EarlyCareerPayments::DqtRecord do
       {
         claim_academic_year: AcademicYear.new(2024),
         record_degree_codes: ["100403"],
-        record_itt_subjects: ["mathematics"],
         record_itt_subject_codes: [],
         record_itt_date: Date.parse("1/9/2017"),
         record_qts_date: Date.parse("1/9/2020"),
         record_qualification_name: "BA"
       },
-      # end of mathematics for 2024
-
-      # start of physics for 2024
       {
         claim_academic_year: AcademicYear.new(2024),
         record_degree_codes: [],
-        record_itt_subjects: ["physics"],
         record_itt_subject_codes: ["F300"],
         record_itt_date: Date.parse("1/9/2017"),
         record_qts_date: Date.parse("1/9/2020"),
@@ -768,7 +658,6 @@ RSpec.describe EarlyCareerPayments::DqtRecord do
       {
         claim_academic_year: AcademicYear.new(2024),
         record_degree_codes: ["F300"],
-        record_itt_subjects: ["physics"],
         record_itt_subject_codes: [],
         record_itt_date: Date.parse("1/9/2017"),
         record_qts_date: Date.parse("1/9/2020"),
@@ -777,7 +666,6 @@ RSpec.describe EarlyCareerPayments::DqtRecord do
       {
         claim_academic_year: AcademicYear.new(2024),
         record_degree_codes: [],
-        record_itt_subjects: ["physics"],
         record_itt_subject_codes: ["100425"],
         record_itt_date: Date.parse("1/9/2017"),
         record_qts_date: Date.parse("1/9/2020"),
@@ -786,19 +674,14 @@ RSpec.describe EarlyCareerPayments::DqtRecord do
       {
         claim_academic_year: AcademicYear.new(2024),
         record_degree_codes: ["100425"],
-        record_itt_subjects: ["physics"],
         record_itt_subject_codes: [],
         record_itt_date: Date.parse("1/9/2017"),
         record_qts_date: Date.parse("1/9/2020"),
         record_qualification_name: "BA"
       },
-      # end of physics for 2024
-
-      # start of chemistry for 2024
       {
         claim_academic_year: AcademicYear.new(2024),
         record_degree_codes: [],
-        record_itt_subjects: ["chemistry"],
         record_itt_subject_codes: ["F100"],
         record_itt_date: Date.parse("1/9/2017"),
         record_qts_date: Date.parse("1/9/2020"),
@@ -807,7 +690,6 @@ RSpec.describe EarlyCareerPayments::DqtRecord do
       {
         claim_academic_year: AcademicYear.new(2024),
         record_degree_codes: ["F100"],
-        record_itt_subjects: ["chemistry"],
         record_itt_subject_codes: [],
         record_itt_date: Date.parse("1/9/2017"),
         record_qts_date: Date.parse("1/9/2020"),
@@ -816,7 +698,6 @@ RSpec.describe EarlyCareerPayments::DqtRecord do
       {
         claim_academic_year: AcademicYear.new(2024),
         record_degree_codes: [],
-        record_itt_subjects: ["chemistry"],
         record_itt_subject_codes: ["100417"],
         record_itt_date: Date.parse("1/9/2017"),
         record_qts_date: Date.parse("1/9/2020"),
@@ -825,19 +706,14 @@ RSpec.describe EarlyCareerPayments::DqtRecord do
       {
         claim_academic_year: AcademicYear.new(2024),
         record_degree_codes: ["100417"],
-        record_itt_subjects: ["chemistry"],
         record_itt_subject_codes: [],
         record_itt_date: Date.parse("1/9/2017"),
         record_qts_date: Date.parse("1/9/2020"),
         record_qualification_name: "BA"
       },
-      # end of chemistry for 2024
-
-      # start of foreign_languages for 2024
       {
         claim_academic_year: AcademicYear.new(2024),
         record_degree_codes: [],
-        record_itt_subjects: ["foreign languages"],
         record_itt_subject_codes: ["Q100"],
         record_itt_date: Date.parse("1/9/2017"),
         record_qts_date: Date.parse("1/9/2020"),
@@ -846,7 +722,6 @@ RSpec.describe EarlyCareerPayments::DqtRecord do
       {
         claim_academic_year: AcademicYear.new(2024),
         record_degree_codes: ["Q100"],
-        record_itt_subjects: ["foreign languages"],
         record_itt_subject_codes: [],
         record_itt_date: Date.parse("1/9/2017"),
         record_qts_date: Date.parse("1/9/2020"),
@@ -855,7 +730,6 @@ RSpec.describe EarlyCareerPayments::DqtRecord do
       {
         claim_academic_year: AcademicYear.new(2024),
         record_degree_codes: [],
-        record_itt_subjects: ["foreign languages"],
         record_itt_subject_codes: ["100321"],
         record_itt_date: Date.parse("1/9/2017"),
         record_qts_date: Date.parse("1/9/2020"),
@@ -864,13 +738,11 @@ RSpec.describe EarlyCareerPayments::DqtRecord do
       {
         claim_academic_year: AcademicYear.new(2024),
         record_degree_codes: ["100321"],
-        record_itt_subjects: ["foreign languages"],
         record_itt_subject_codes: [],
         record_itt_date: Date.parse("1/9/2017"),
         record_qts_date: Date.parse("1/9/2020"),
         record_qualification_name: "BA"
       }
-      # end of foreign_languages for 2024
     ].each do |context|
       context "when claim academic year #{context[:claim_academic_year]}" do
         let(:claim_academic_year) { context[:claim_academic_year] }
@@ -878,23 +750,19 @@ RSpec.describe EarlyCareerPayments::DqtRecord do
         context "when record degree codes #{context[:record_degree_codes]}" do
           let(:record_degree_codes) { context[:record_degree_codes] }
 
-          context "when record ITT subjects #{context[:record_itt_subjects]}" do
-            let(:record_itt_subjects) { context[:record_itt_subjects] }
+          context "when record ITT subject codes #{context[:record_itt_subject_codes]}" do
+            let(:record_itt_subject_codes) { context[:record_itt_subject_codes] }
 
-            context "when record ITT subject codes #{context[:record_itt_subject_codes]}" do
-              let(:record_itt_subject_codes) { context[:record_itt_subject_codes] }
+            context "when record QTS date #{context[:record_qts_date]}" do
+              let(:record_qts_date) { context[:record_qts_date] }
 
-              context "when record QTS date #{context[:record_qts_date]}" do
-                let(:record_qts_date) { context[:record_qts_date] }
+              context "when record ITT date #{context[:record_itt_date]}" do
+                let(:record_itt_date) { context[:record_itt_date] }
 
-                context "when record ITT date #{context[:record_itt_date]}" do
-                  let(:record_itt_date) { context[:record_itt_date] }
+                context "when record qualification name #{context[:record_qualification_name]}" do
+                  let(:record_qualification_name) { context[:record_qualification_name] }
 
-                  context "when record qualification name #{context[:record_qualification_name]}" do
-                    let(:record_qualification_name) { context[:record_qualification_name] }
-
-                    it { is_expected.to eql true }
-                  end
+                  it { is_expected.to eql true }
                 end
               end
             end
@@ -904,11 +772,9 @@ RSpec.describe EarlyCareerPayments::DqtRecord do
     end
 
     [
-      # start of mathematics for 2021
       {
         claim_academic_year: AcademicYear.new(2021),
         record_degree_codes: [],
-        record_itt_subjects: ["mathematics"],
         record_itt_subject_codes: ["G100"],
         record_itt_date: Date.parse("1/9/2018"),
         record_qts_date: Date.parse("1/9/2019"),
@@ -917,7 +783,6 @@ RSpec.describe EarlyCareerPayments::DqtRecord do
       {
         claim_academic_year: AcademicYear.new(2021),
         record_degree_codes: ["G100"],
-        record_itt_subjects: ["mathematics"],
         record_itt_subject_codes: [],
         record_itt_date: Date.parse("1/9/2018"),
         record_qts_date: Date.parse("1/9/2019"),
@@ -926,7 +791,6 @@ RSpec.describe EarlyCareerPayments::DqtRecord do
       {
         claim_academic_year: AcademicYear.new(2021),
         record_degree_codes: [],
-        record_itt_subjects: ["mathematics"],
         record_itt_subject_codes: ["100403"],
         record_itt_date: Date.parse("1/9/2018"),
         record_qts_date: Date.parse("1/9/2019"),
@@ -935,7 +799,6 @@ RSpec.describe EarlyCareerPayments::DqtRecord do
       {
         claim_academic_year: AcademicYear.new(2021),
         record_degree_codes: ["100403"],
-        record_itt_subjects: ["mathematics"],
         record_itt_subject_codes: [],
         record_itt_date: Date.parse("1/9/2018"),
         record_qts_date: Date.parse("1/9/2019"),
@@ -944,7 +807,6 @@ RSpec.describe EarlyCareerPayments::DqtRecord do
       {
         claim_academic_year: AcademicYear.new(2021),
         record_degree_codes: [],
-        record_itt_subjects: ["mathematics"],
         record_itt_subject_codes: ["G100"],
         record_itt_date: Date.parse("1/9/2018"),
         record_qts_date: Date.parse("1/9/2020"),
@@ -953,7 +815,6 @@ RSpec.describe EarlyCareerPayments::DqtRecord do
       {
         claim_academic_year: AcademicYear.new(2021),
         record_degree_codes: ["G100"],
-        record_itt_subjects: ["mathematics"],
         record_itt_subject_codes: [],
         record_itt_date: Date.parse("1/9/2018"),
         record_qts_date: Date.parse("1/9/2020"),
@@ -962,7 +823,6 @@ RSpec.describe EarlyCareerPayments::DqtRecord do
       {
         claim_academic_year: AcademicYear.new(2021),
         record_degree_codes: [],
-        record_itt_subjects: ["mathematics"],
         record_itt_subject_codes: ["100403"],
         record_itt_date: Date.parse("1/9/2018"),
         record_qts_date: Date.parse("1/9/2020"),
@@ -971,19 +831,14 @@ RSpec.describe EarlyCareerPayments::DqtRecord do
       {
         claim_academic_year: AcademicYear.new(2021),
         record_degree_codes: ["100403"],
-        record_itt_subjects: ["mathematics"],
         record_itt_subject_codes: [],
         record_itt_date: Date.parse("1/9/2018"),
         record_qts_date: Date.parse("1/9/2020"),
         record_qualification_name: "BA"
       },
-      # end of mathematics for 2021
-
-      # start of physics for 2021
       {
         claim_academic_year: AcademicYear.new(2021),
         record_degree_codes: [],
-        record_itt_subjects: ["physics"],
         record_itt_subject_codes: ["F300"],
         record_itt_date: Date.parse("1/9/2018"),
         record_qts_date: Date.parse("1/9/2020"),
@@ -992,7 +847,6 @@ RSpec.describe EarlyCareerPayments::DqtRecord do
       {
         claim_academic_year: AcademicYear.new(2021),
         record_degree_codes: ["F300"],
-        record_itt_subjects: ["physics"],
         record_itt_subject_codes: [],
         record_itt_date: Date.parse("1/9/2018"),
         record_qts_date: Date.parse("1/9/2020"),
@@ -1001,7 +855,6 @@ RSpec.describe EarlyCareerPayments::DqtRecord do
       {
         claim_academic_year: AcademicYear.new(2021),
         record_degree_codes: [],
-        record_itt_subjects: ["physics"],
         record_itt_subject_codes: ["100425"],
         record_itt_date: Date.parse("1/9/2018"),
         record_qts_date: Date.parse("1/9/2020"),
@@ -1010,19 +863,14 @@ RSpec.describe EarlyCareerPayments::DqtRecord do
       {
         claim_academic_year: AcademicYear.new(2021),
         record_degree_codes: ["100425"],
-        record_itt_subjects: ["physics"],
         record_itt_subject_codes: [],
         record_itt_date: Date.parse("1/9/2018"),
         record_qts_date: Date.parse("1/9/2020"),
         record_qualification_name: "BA"
       },
-      # end of physics for 2021
-
-      # start of chemistry for 2021
       {
         claim_academic_year: AcademicYear.new(2021),
         record_degree_codes: [],
-        record_itt_subjects: ["Chemistry"],
         record_itt_subject_codes: ["F100"],
         record_itt_date: Date.parse("1/9/2018"),
         record_qts_date: Date.parse("1/9/2020"),
@@ -1031,7 +879,6 @@ RSpec.describe EarlyCareerPayments::DqtRecord do
       {
         claim_academic_year: AcademicYear.new(2021),
         record_degree_codes: ["F100"],
-        record_itt_subjects: ["Chemistry"],
         record_itt_subject_codes: [],
         record_itt_date: Date.parse("1/9/2018"),
         record_qts_date: Date.parse("1/9/2020"),
@@ -1040,7 +887,6 @@ RSpec.describe EarlyCareerPayments::DqtRecord do
       {
         claim_academic_year: AcademicYear.new(2021),
         record_degree_codes: [],
-        record_itt_subjects: ["Chemistry"],
         record_itt_subject_codes: ["100417"],
         record_itt_date: Date.parse("1/9/2018"),
         record_qts_date: Date.parse("1/9/2020"),
@@ -1049,7 +895,6 @@ RSpec.describe EarlyCareerPayments::DqtRecord do
       {
         claim_academic_year: AcademicYear.new(2021),
         record_degree_codes: ["100417"],
-        record_itt_subjects: ["Chemistry"],
         record_itt_subject_codes: [],
         record_itt_date: Date.parse("1/9/2018"),
         record_qts_date: Date.parse("1/9/2020"),
@@ -1058,19 +903,14 @@ RSpec.describe EarlyCareerPayments::DqtRecord do
       {
         claim_academic_year: AcademicYear.new(2021),
         record_degree_codes: [],
-        record_itt_subjects: ["Chemistry"],
         record_itt_subject_codes: ["Q100"],
         record_itt_date: Date.parse("1/9/2018"),
         record_qts_date: Date.parse("1/9/2020"),
         record_qualification_name: "BA"
       },
-      # end of chemistry for 2021
-
-      # start of foreign_languages for 2021
       {
         claim_academic_year: AcademicYear.new(2021),
         record_degree_codes: ["Q100"],
-        record_itt_subjects: ["Foreign Languages"],
         record_itt_subject_codes: [],
         record_itt_date: Date.parse("1/9/2018"),
         record_qts_date: Date.parse("1/9/2020"),
@@ -1079,7 +919,6 @@ RSpec.describe EarlyCareerPayments::DqtRecord do
       {
         claim_academic_year: AcademicYear.new(2021),
         record_degree_codes: [],
-        record_itt_subjects: ["Foreign Languages"],
         record_itt_subject_codes: ["100321"],
         record_itt_date: Date.parse("1/9/2018"),
         record_qts_date: Date.parse("1/9/2020"),
@@ -1088,19 +927,14 @@ RSpec.describe EarlyCareerPayments::DqtRecord do
       {
         claim_academic_year: AcademicYear.new(2021),
         record_degree_codes: ["100321"],
-        record_itt_subjects: ["Foreign Languages"],
         record_itt_subject_codes: [],
         record_itt_date: Date.parse("1/9/2018"),
         record_qts_date: Date.parse("1/9/2020"),
         record_qualification_name: "BA"
       },
-      # end of foreign_languages for 2021
-
-      # start of mathematics for 2022
       {
         claim_academic_year: AcademicYear.new(2022),
         record_degree_codes: [],
-        record_itt_subjects: ["mathematics"],
         record_itt_subject_codes: ["G100"],
         record_itt_date: Date.parse("1/9/2019"),
         record_qts_date: Date.parse("1/9/2018"),
@@ -1109,7 +943,6 @@ RSpec.describe EarlyCareerPayments::DqtRecord do
       {
         claim_academic_year: AcademicYear.new(2022),
         record_degree_codes: ["G100"],
-        record_itt_subjects: ["mathematics"],
         record_itt_subject_codes: [],
         record_itt_date: Date.parse("1/9/2019"),
         record_qts_date: Date.parse("1/9/2018"),
@@ -1118,7 +951,6 @@ RSpec.describe EarlyCareerPayments::DqtRecord do
       {
         claim_academic_year: AcademicYear.new(2022),
         record_degree_codes: [],
-        record_itt_subjects: ["mathematics"],
         record_itt_subject_codes: ["100403"],
         record_itt_date: Date.parse("1/9/2019"),
         record_qts_date: Date.parse("1/9/2018"),
@@ -1127,19 +959,14 @@ RSpec.describe EarlyCareerPayments::DqtRecord do
       {
         claim_academic_year: AcademicYear.new(2022),
         record_degree_codes: ["100403"],
-        record_itt_subjects: ["mathematics"],
         record_itt_subject_codes: [],
         record_itt_date: Date.parse("1/9/2019"),
         record_qts_date: Date.parse("1/9/2018"),
         record_qualification_name: "BA"
       },
-      # end of mathematics for 2022
-
-      # start of mathematics for 2023
       {
         claim_academic_year: AcademicYear.new(2023),
         record_degree_codes: [],
-        record_itt_subjects: ["mathematics"],
         record_itt_subject_codes: ["G100"],
         record_itt_date: Date.parse("1/9/2018"),
         record_qts_date: Date.parse("1/9/2019"),
@@ -1148,7 +975,6 @@ RSpec.describe EarlyCareerPayments::DqtRecord do
       {
         claim_academic_year: AcademicYear.new(2023),
         record_degree_codes: ["G100"],
-        record_itt_subjects: ["mathematics"],
         record_itt_subject_codes: [],
         record_itt_date: Date.parse("1/9/2018"),
         record_qts_date: Date.parse("1/9/2019"),
@@ -1157,7 +983,6 @@ RSpec.describe EarlyCareerPayments::DqtRecord do
       {
         claim_academic_year: AcademicYear.new(2023),
         record_degree_codes: [],
-        record_itt_subjects: ["mathematics"],
         record_itt_subject_codes: ["100403"],
         record_itt_date: Date.parse("1/9/2018"),
         record_qts_date: Date.parse("1/9/2019"),
@@ -1166,19 +991,14 @@ RSpec.describe EarlyCareerPayments::DqtRecord do
       {
         claim_academic_year: AcademicYear.new(2023),
         record_degree_codes: ["100403"],
-        record_itt_subjects: ["mathematics"],
         record_itt_subject_codes: [],
         record_itt_date: Date.parse("1/9/2018"),
         record_qts_date: Date.parse("1/9/2019"),
         record_qualification_name: "BA"
       },
-      # end of mathematics for 2023
-
-      # start of mathematics for 2024
       {
         claim_academic_year: AcademicYear.new(2024),
         record_degree_codes: [],
-        record_itt_subjects: ["mathematics"],
         record_itt_subject_codes: ["G100"],
         record_itt_date: Date.parse("1/9/2019"),
         record_qts_date: Date.parse("1/9/2018"),
@@ -1187,7 +1007,6 @@ RSpec.describe EarlyCareerPayments::DqtRecord do
       {
         claim_academic_year: AcademicYear.new(2024),
         record_degree_codes: ["G100"],
-        record_itt_subjects: ["mathematics"],
         record_itt_subject_codes: [],
         record_itt_date: Date.parse("1/9/2019"),
         record_qts_date: Date.parse("1/9/2018"),
@@ -1196,7 +1015,6 @@ RSpec.describe EarlyCareerPayments::DqtRecord do
       {
         claim_academic_year: AcademicYear.new(2024),
         record_degree_codes: [],
-        record_itt_subjects: ["mathematics"],
         record_itt_subject_codes: ["100403"],
         record_itt_date: Date.parse("1/9/2019"),
         record_qts_date: Date.parse("1/9/2018"),
@@ -1205,7 +1023,6 @@ RSpec.describe EarlyCareerPayments::DqtRecord do
       {
         claim_academic_year: AcademicYear.new(2024),
         record_degree_codes: ["100403"],
-        record_itt_subjects: ["mathematics"],
         record_itt_subject_codes: [],
         record_itt_date: Date.parse("1/9/2019"),
         record_qts_date: Date.parse("1/9/2018"),
@@ -1214,7 +1031,6 @@ RSpec.describe EarlyCareerPayments::DqtRecord do
       {
         claim_academic_year: AcademicYear.new(2025),
         record_degree_codes: ["100403"],
-        record_itt_subjects: ["mathematics"],
         record_itt_subject_codes: [],
         record_itt_date: Date.parse("1/9/2019"),
         record_qts_date: Date.parse("1/9/2018"),
@@ -1223,7 +1039,6 @@ RSpec.describe EarlyCareerPayments::DqtRecord do
       {
         claim_academic_year: AcademicYear.new(2024),
         record_degree_codes: ["1004030"],
-        record_itt_subjects: ["mathematics"],
         record_itt_subject_codes: [],
         record_itt_date: Date.parse("1/9/2019"),
         record_qts_date: Date.parse("1/9/2018"),
@@ -1232,13 +1047,11 @@ RSpec.describe EarlyCareerPayments::DqtRecord do
       {
         claim_academic_year: AcademicYear.new(2024),
         record_degree_codes: ["100403"],
-        record_itt_subjects: ["mathematics"],
         record_itt_subject_codes: [],
         record_itt_date: Date.parse("1/9/2019"),
         record_qts_date: Date.parse("1/9/2010"),
         record_qualification_name: "BA"
       }
-      # end of mathematics for 2024
     ].each do |context|
       context "when claim academic year #{context[:claim_academic_year]}" do
         let(:claim_academic_year) { context[:claim_academic_year] }
@@ -1246,23 +1059,19 @@ RSpec.describe EarlyCareerPayments::DqtRecord do
         context "when record degree codes #{context[:record_degree_codes]}" do
           let(:record_degree_codes) { context[:record_degree_codes] }
 
-          context "when record ITT subjects #{context[:record_itt_subjects]}" do
-            let(:record_itt_subjects) { context[:record_itt_subjects] }
+          context "when record ITT subject codes #{context[:record_itt_subject_codes]}" do
+            let(:record_itt_subject_codes) { context[:record_itt_subject_codes] }
 
-            context "when record ITT subject codes #{context[:record_itt_subject_codes]}" do
-              let(:record_itt_subject_codes) { context[:record_itt_subject_codes] }
+            context "when record QTS date #{context[:record_qts_date]}" do
+              let(:record_qts_date) { context[:record_qts_date] }
 
-              context "when record QTS date #{context[:record_qts_date]}" do
-                let(:record_qts_date) { context[:record_qts_date] }
+              context "when record ITT date #{context[:record_itt_date]}" do
+                let(:record_itt_date) { context[:record_itt_date] }
 
-                context "when record ITT date #{context[:record_itt_date]}" do
-                  let(:record_itt_date) { context[:record_itt_date] }
+                context "when record qualification name #{context[:record_qualification_name]}" do
+                  let(:record_qualification_name) { context[:record_qualification_name] }
 
-                  context "when record qualification name #{context[:record_qualification_name]}" do
-                    let(:record_qualification_name) { context[:record_qualification_name] }
-
-                    it { is_expected.to eql false }
-                  end
+                  it { is_expected.to eql false }
                 end
               end
             end

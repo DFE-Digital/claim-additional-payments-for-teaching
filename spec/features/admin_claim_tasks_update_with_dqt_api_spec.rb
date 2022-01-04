@@ -87,12 +87,9 @@ RSpec.feature "Admin claim tasks update with DQT API" do
           programme_end_date: "2021-07-04T00:00:00Z",
           programme_type: "Overseas Trained Teacher Programme",
           result: "Pass",
-          subject1: data.dig(:itt_subjects, 0).to_s,
-          subject1_code: data.dig(:itt_subject_codes, 0).to_s,
-          subject2: data.dig(:itt_subjects, 1).to_s,
-          subject2_code: data.dig(:itt_subject_codes, 1).to_s,
-          subject3: data.dig(:itt_subjects, 2).to_s,
-          subject3_codes: data.dig(:itt_subject_codes, 2).to_s,
+          subject1: data.dig(:itt_subject_codes, 0).to_s,
+          subject2: data.dig(:itt_subject_codes, 1).to_s,
+          subject3: data.dig(:itt_subject_codes, 2).to_s,
           qualification: (data[:qualification_name] || "BA").to_s,
           state: 0,
           state_name: "Active"
@@ -630,7 +627,6 @@ RSpec.feature "Admin claim tasks update with DQT API" do
               9,
               1
             ),
-            itt_subjects: ["mathematics"],
             itt_subject_codes: [EarlyCareerPayments::DqtRecord::ELIGIBLE_HECOS_CODES[:mathematics].first]
           }
         end
@@ -671,7 +667,6 @@ RSpec.feature "Admin claim tasks update with DQT API" do
                 9,
                 1
               ),
-              itt_subjects: ["applied mathematics", "maths and statistics", :maths],
               itt_subject_codes: [EarlyCareerPayments::DqtRecord::ELIGIBLE_HECOS_CODES[:mathematics].first]
             }
           end
@@ -713,7 +708,6 @@ RSpec.feature "Admin claim tasks update with DQT API" do
                 9,
                 1
               ),
-              itt_subjects: [],
               itt_subject_codes: ["NoCode"]
             }
           end
@@ -794,7 +788,6 @@ RSpec.feature "Admin claim tasks update with DQT API" do
               9,
               1
             ),
-            itt_subjects: [],
             itt_subject_codes: ["NoCode"]
           }
         end
@@ -1333,7 +1326,6 @@ RSpec.feature "Admin claim tasks update with DQT API" do
               9,
               1
             ),
-            itt_subjects: ["applied mathematics", "maths and statistics", "mathematics"],
             itt_subject_codes: [MathsAndPhysics::DqtRecord::ELIGIBLE_MATHS_HECOS_CODES.first]
           }
         end
@@ -1374,7 +1366,6 @@ RSpec.feature "Admin claim tasks update with DQT API" do
                 9,
                 1
               ),
-              itt_subjects: ["applied mathematics", "maths and statistics", "mathematics"],
               itt_subject_codes: [MathsAndPhysics::DqtRecord::ELIGIBLE_MATHS_HECOS_CODES.first]
             }
           end
@@ -1416,7 +1407,6 @@ RSpec.feature "Admin claim tasks update with DQT API" do
                 9,
                 1
               ),
-              itt_subjects: [],
               itt_subject_codes: ["NoCode"]
             }
           end
@@ -1496,7 +1486,6 @@ RSpec.feature "Admin claim tasks update with DQT API" do
               9,
               1
             ),
-            itt_subjects: ["applied mathematics", "maths and statistics", "maths"],
             itt_subject_codes: ["NoCode"]
           }
         end
@@ -2035,7 +2024,6 @@ RSpec.feature "Admin claim tasks update with DQT API" do
               9,
               1
             ),
-            itt_subjects: ["SUBJECT"],
             itt_subject_codes: ["CODE"]
           }
         end
@@ -2076,7 +2064,6 @@ RSpec.feature "Admin claim tasks update with DQT API" do
                 9,
                 1
               ),
-              itt_subjects: ["SUBJECT"],
               itt_subject_codes: ["CODE"]
             }
           end
@@ -2158,7 +2145,6 @@ RSpec.feature "Admin claim tasks update with DQT API" do
               9,
               1
             ),
-            itt_subjects: ["Subject"],
             itt_subject_codes: ["NoCode"]
           }
         end
