@@ -79,29 +79,22 @@ module EarlyCareerPayments
       ]
     }.freeze
 
-    GRADUATE_TYPE = {
+    QUALIFICATON_MATCHING_TYPE = {
       post: [
         nil,
         "Degree",
         "Degree Equivalent (this will include foreign qualifications)",
-        "EEA",
         "Flexible - PGCE",
         "Flexible - ProfGCE",
         "Graduate Certificate in Education",
         "Graduate Diploma",
         "GTP",
         "Masters, not by research",
-        "Northern Ireland",
-        "OTT",
-        "OTT Recognition",
         "Postgraduate Certificate in Education",
         "Postgraduate Certificate in Education (Flexible)",
         "Postgraduate Diploma in Education",
         "Professional Graduate Certificate in Education",
         "Professional Graduate Diploma in Education",
-        "QTS Assessment only",
-        "QTS Award only",
-        "Scotland",
         "Teach First",
         "Teach First (TNP)",
         "Teachers Certificate",
@@ -119,6 +112,15 @@ module EarlyCareerPayments
         "BSc (Hons) with Intercalated PGCE",
         "BSc/Education (QTS)",
         "Undergraduate Master of Teaching"
+      ],
+      other: [
+        "EEA",
+        "Northern Ireland",
+        "OTT",
+        "OTT Recognition",
+        "QTS Assessment only",
+        "QTS Award only",
+        "Scotland"
       ]
     }.freeze
 
@@ -129,14 +131,14 @@ module EarlyCareerPayments
 
     def eligible?
       award_amount = Eligibility::AWARD_AMOUNTS.find do |award_amount|
-        graduate_type = GRADUATE_TYPE.find { |key, values|
+        matching_type = QUALIFICATON_MATCHING_TYPE.find { |key, values|
           values.include?(qualification_name)
         }&.first
 
         date =
-          if graduate_type == :under
+          if matching_type == :under || matching_type == :other
             qts_award_date
-          elsif graduate_type == :post
+          elsif matching_type == :post
             itt_start_date
           end
 
