@@ -1,4 +1,6 @@
 class ReminderMailer < ApplicationMailer
+  include EarlyCareerPaymentsHelper
+
   helper :application
   helper :early_career_payments
 
@@ -7,9 +9,13 @@ class ReminderMailer < ApplicationMailer
     @one_time_password = one_time_password
     @display_name = reminder.full_name
     @subject = "Please verify your reminder email"
+    support_email_address = translate("early_career_payments.support_email_address")
     personalisation = {
+      email_subject: @subject,
       first_name: @display_name,
-      one_time_password: @one_time_password
+      one_time_password: @one_time_password,
+      support_email_address: support_email_address,
+      validity_duration: one_time_password_validity_duration
     }
 
     send_mail(:notify, OTP_EMAIL_NOTIFY_TEMPLATE_ID, personalisation)
@@ -37,10 +43,10 @@ class ReminderMailer < ApplicationMailer
         subject: @subject
       )
     else
-      puts "Using GOVUK Notify templating - template_id: #{template_id}"
       template_mail(
         template_id,
         to: @reminder.email_address,
+        reply_to_id: EarlyCareerPayments.notify_reply_to_id,
         subject: @subject,
         personalisation: personalisation
       )

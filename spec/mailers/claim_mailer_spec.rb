@@ -116,7 +116,7 @@ RSpec.describe ClaimMailer, type: :mailer do
       let(:one_time_password) { 123124 }
 
       it "mentions the personalisation keys one time password and first_name" do
-        expect(mail[:personalisation].decoded).to eq("{:first_name=>\"Ellie\", :one_time_password=>123124}")
+        expect(mail[:personalisation].decoded).to eq("{:email_subject=>\"Early-career payment email verification\", :first_name=>\"Ellie\", :one_time_password=>123124, :support_email_address=>\"earlycareerteacherpayments@digital.education.gov.uk\", :validity_duration=>\"15 minutes\"}")
         expect(mail.body.encoded).to be_empty
       end
     end
