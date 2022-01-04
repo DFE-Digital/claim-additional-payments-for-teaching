@@ -13,9 +13,9 @@ Capybara.register_driver view_mode do |app|
   Capybara::Selenium::Driver.new(
     app,
     browser: :chrome,
-    options: Selenium::WebDriver::Chrome::Options.new(
+    capabilities: [Selenium::WebDriver::Chrome::Options.new(
       args: args
-    )
+    )]
   )
 end
 
