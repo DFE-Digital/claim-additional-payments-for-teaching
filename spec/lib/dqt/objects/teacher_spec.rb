@@ -58,9 +58,12 @@ RSpec.describe Dqt::Teacher do
         programme_end_date: "2021-07-04T00:00:00Z",
         programme_type: "Overseas Trained Teacher Programme",
         result: "Pass",
-        subject1: "G100",
+        subject1: "mathematics",
+        subject1_code: "G100",
         subject2: "NULL",
+        subject2_code: "NULL",
         subject3: "NULL",
+        subject3_code: "NULL",
         qualification: "Graduate Diploma",
         state: 0,
         state_name: "Active"
@@ -373,12 +376,21 @@ RSpec.describe Dqt::Teacher do
     it_behaves_like "date reader", "qualified_teacher_status/qts_date"
   end
 
+  describe "#itt_subjects" do
+    subject(:itt_subjects) { qualified_teaching_status.itt_subjects }
+
+    it_behaves_like(
+      "string reader",
+      (1..3).map { |n| "initial_teacher_training/subject#{n}" }
+    )
+  end
+
   describe "#itt_subject_codes" do
     subject(:itt_subject_codes) { qualified_teaching_status.itt_subject_codes }
 
     it_behaves_like(
       "string reader",
-      (1..3).map { |n| "initial_teacher_training/subject#{n}" }
+      (1..3).map { |n| "initial_teacher_training/subject#{n}_code" }
     )
   end
 

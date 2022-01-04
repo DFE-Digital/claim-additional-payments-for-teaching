@@ -39,6 +39,7 @@ module AutomatedChecks
           <<~HTML
             #{match == :none ? "Ine" : "E"}ligible:
             <pre>
+              ITT subjects: #{dqt_teacher_status.itt_subjects}
               ITT subject codes:  #{dqt_teacher_status.itt_subject_codes}
               Degree codes:       #{dqt_teacher_status.degree_codes}
               ITT start date:     #{dqt_teacher_status.itt_start_date}
