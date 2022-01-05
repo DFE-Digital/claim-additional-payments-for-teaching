@@ -1,4 +1,6 @@
 module EarlyCareerPaymentsHelper
+  include ActionView::Helpers::TextHelper
+
   def ineligible_heading(claim)
     if claim.eligibility.ineligibility_reason == :poor_performance
       content_tag(:h1, I18n.t("early_career_payments.ineligible.poor_performance_heading"), class: "govuk-heading-xl")

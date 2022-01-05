@@ -19,6 +19,10 @@ The format is based on [Keep a Changelog]
     - QTS Assessment only
     - QTS Award only
     - Scotland
+- Transition to use GOVUK Notify Mail Templates to allow business users to
+  modify wording
+  - OTP email verification - All Policies
+  - OTP ECP Reminders
 
 ## [Release 107] - 2021-12-09
 

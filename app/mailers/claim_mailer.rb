@@ -1,4 +1,5 @@
 class ClaimMailer < ApplicationMailer
+  include EarlyCareerPaymentsHelper
   helper :application
   helper :early_career_payments
 
@@ -6,7 +7,7 @@ class ClaimMailer < ApplicationMailer
     set_common_instance_variables(claim)
     @subject = "Your application #{@claim_description} has been received, reference number: #{claim.reference}"
 
-    send_mail
+    send_mail(:rails)
   end
 
   def approved(claim)
@@ -35,8 +36,16 @@ class ClaimMailer < ApplicationMailer
     set_common_instance_variables(claim)
     @subject = "#{@claim_subject} email verification"
     @one_time_password = one_time_password
+    support_email_address = translate("#{@claim.policy.locale_key}.support_email_address")
+    personalisation = {
+      email_subject: @subject,
+      first_name: @claim.first_name,
+      one_time_password: @one_time_password,
+      support_email_address: support_email_address,
+      validity_duration: one_time_password_validity_duration
+    }
 
-    send_mail
+    send_mail(:notify, OTP_EMAIL_NOTIFY_TEMPLATE_ID, personalisation)
   end
 
   private
@@ -49,12 +58,22 @@ class ClaimMailer < ApplicationMailer
     @policy = @claim.policy
   end
 
-  def send_mail
-    view_mail(
-      NOTIFY_TEMPLATE_ID,
-      to: @claim.email_address,
-      subject: @subject,
-      reply_to_id: @policy.notify_reply_to_id
-    )
+  def send_mail(templating = :rails, template_id = :default, personalisation = {})
+    if templating == :rails
+      view_mail(
+        NOTIFY_TEMPLATE_ID,
+        to: @claim.email_address,
+        subject: @subject,
+        reply_to_id: @policy.notify_reply_to_id
+      )
+    else
+      template_mail(
+        template_id,
+        to: @claim.email_address,
+        subject: @subject,
+        reply_to_id: @policy.notify_reply_to_id,
+        personalisation: personalisation
+      )
+    end
   end
 end
