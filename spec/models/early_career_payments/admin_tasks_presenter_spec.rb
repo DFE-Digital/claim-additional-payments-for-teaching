@@ -56,12 +56,26 @@ RSpec.describe EarlyCareerPayments::AdminTasksPresenter, type: :model do
     end
 
     [
-      {qualification: :assessment_only, qualification_text: "Assessment only", year_text: "end"},
-      {qualification: :overseas_recognition, qualification_text: "Overseas recognition", year_text: "end"},
-      {qualification: :postgraduate_itt, qualification_text: "Postgraduate initial teacher training (ITT)", year_text: "start"},
-      {qualification: :undergraduate_itt, qualification_text: "Undergraduate initial teacher training (ITT)", year_text: "end"}
+      {qualification: :assessment_only, qualification_text: "Assessment only", year_text: "end", subject_text: :physics},
+      {qualification: :overseas_recognition, qualification_text: "Overseas recognition", year_text: "end", subject_text: :chemistry},
+      {qualification: :postgraduate_itt, qualification_text: "Postgraduate initial teacher training (ITT)", year_text: "start", subject_text: :foreign_languages},
+      {qualification: :undergraduate_itt, qualification_text: "Undergraduate initial teacher training (ITT)", year_text: "end", subject_text: :mathematics}
     ].each do |spec|
       context "with qualification #{spec[:qualification]}" do
+        let(:claim) do
+          build(
+            :claim,
+            academic_year: AcademicYear::Type.new.serialize(AcademicYear.new(2023)),
+            eligibility: build(
+              :early_career_payments_eligibility,
+              current_school: school,
+              eligible_itt_subject: spec[:subject_text],
+              itt_academic_year: AcademicYear::Type.new.serialize(AcademicYear.new(2020)),
+              qualification: qualification
+            )
+          )
+        end
+
         let(:qualification) { spec[:qualification] }
 
         it "returns array with qualification #{spec[:qualification_text]}" do
@@ -72,7 +86,13 @@ RSpec.describe EarlyCareerPayments::AdminTasksPresenter, type: :model do
 
         it "returns array with year #{spec[:year_text]}" do
           expect(presenter.qualifications).to include(
-            ["ITT #{spec[:year_text]} year", "In the academic year 2018 to 2019"]
+            ["ITT #{spec[:year_text]} year", "In the academic year 2020 to 2021"]
+          )
+        end
+
+        it "returns array with subject #{spec[:subject_text]}" do
+          expect(presenter.qualifications).to include(
+            ["ITT subject", I18n.t("early_career_payments.answers.eligible_itt_subject.#{spec[:subject_text]}")]
           )
         end
       end
