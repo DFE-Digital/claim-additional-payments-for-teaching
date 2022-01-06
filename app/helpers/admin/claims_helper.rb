@@ -91,6 +91,10 @@ module Admin
       content_tag("strong", status, class: tag_classes)
     end
 
+    def qualification_status_tag(claim)
+      task_status_tag(claim, task_name)
+    end
+
     def task_status_tag(claim, task_name)
       task = claim.tasks.detect { |t| t.name == task_name }
 
@@ -114,7 +118,7 @@ module Admin
         status_colour = "red"
       end
 
-      tag_classes = "govuk-tag app-task-list__task-completed govuk-tag--#{!task&.passed.nil? ? "strong-" : ""}#{status_colour}"
+      tag_classes = "govuk-tag app-task-list__task-completed govuk-tag--#{status_colour}"
 
       content_tag("strong", status, class: tag_classes)
     end

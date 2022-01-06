@@ -7,7 +7,7 @@ The format is based on [Keep a Changelog]
 ## [Unreleased]
 
 - Admin
-  - display results of Dqt API qualification matching status
+  - Display results of Dqt API qualification matching status
   - Fix ITT year and ITT subject for future years admin ECP qualifications task
   - Fix Manual checks to display updated time, not time of claim submission
 - Early Career Payments

@@ -299,7 +299,7 @@ describe Admin::ClaimsHelper do
         it "returns passed task status tag" do
           expect(task_status_tag).to match("Passed")
           expect(task_status_tag).to match("govuk-tag app-task-list__task-completed")
-          expect(task_status_tag).to match("govuk-tag--strong-green")
+          expect(task_status_tag).to match("govuk-tag--green")
         end
       end
 
@@ -309,7 +309,7 @@ describe Admin::ClaimsHelper do
         it "returns passed task status tag" do
           expect(task_status_tag).to match("Passed")
           expect(task_status_tag).to match("govuk-tag app-task-list__task-completed")
-          expect(task_status_tag).to match("govuk-tag--strong-green")
+          expect(task_status_tag).to match("govuk-tag--green")
         end
       end
 
@@ -319,7 +319,7 @@ describe Admin::ClaimsHelper do
         it "returns passed task status tag" do
           expect(task_status_tag).to match("Passed")
           expect(task_status_tag).to match("govuk-tag app-task-list__task-completed")
-          expect(task_status_tag).to match("govuk-tag--strong-green")
+          expect(task_status_tag).to match("govuk-tag--green")
         end
       end
 
@@ -329,7 +329,7 @@ describe Admin::ClaimsHelper do
         it "returns passed task status tag" do
           expect(task_status_tag).to match("Passed")
           expect(task_status_tag).to match("govuk-tag app-task-list__task-completed")
-          expect(task_status_tag).to match("govuk-tag--strong-green")
+          expect(task_status_tag).to match("govuk-tag--green")
         end
       end
     end
@@ -352,7 +352,7 @@ describe Admin::ClaimsHelper do
         it "returns failed task status tag" do
           expect(task_status_tag).to match("Failed")
           expect(task_status_tag).to match("govuk-tag app-task-list__task-completed")
-          expect(task_status_tag).to match("govuk-tag--strong-red")
+          expect(task_status_tag).to match("govuk-tag--red")
         end
       end
 
@@ -362,7 +362,7 @@ describe Admin::ClaimsHelper do
         it "returns failed task status tag" do
           expect(task_status_tag).to match("Failed")
           expect(task_status_tag).to match("govuk-tag app-task-list__task-completed")
-          expect(task_status_tag).to match("govuk-tag--strong-red")
+          expect(task_status_tag).to match("govuk-tag--red")
         end
       end
 
@@ -372,7 +372,7 @@ describe Admin::ClaimsHelper do
         it "returns failed task status tag" do
           expect(task_status_tag).to match("Failed")
           expect(task_status_tag).to match("govuk-tag app-task-list__task-completed")
-          expect(task_status_tag).to match("govuk-tag--strong-red")
+          expect(task_status_tag).to match("govuk-tag--red")
         end
       end
 
@@ -382,7 +382,7 @@ describe Admin::ClaimsHelper do
         it "returns failed task status tag" do
           expect(task_status_tag).to match("Failed")
           expect(task_status_tag).to match("govuk-tag app-task-list__task-completed")
-          expect(task_status_tag).to match("govuk-tag--strong-red")
+          expect(task_status_tag).to match("govuk-tag--red")
         end
       end
     end
