@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+## [Release 108] - 2022-01-06
+
 - Admin
   - Display results of Dqt API qualification matching status
   - Fix ITT year and ITT subject for future years admin ECP qualifications task
@@ -1034,7 +1036,9 @@ The format is based on [Keep a Changelog]
 - First release for student loan repayments private beta
 
 [unreleased]:
-  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-107...HEAD
+  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-108...HEAD
+[release 108]:
+  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-107...release-108
 [release 107]:
   https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-106...release-107
 [release 106]:
