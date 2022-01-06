@@ -9,6 +9,7 @@ The format is based on [Keep a Changelog]
 - Admin
   - display results of Dqt API qualification matching status
   - Fix ITT year and ITT subject for future years admin ECP qualifications task
+  - Fix Manual checks to display updated time, not time of claim submission
 - Early Career Payments
   - DqT temporary use of subject(n) in response to report JACS/HECOS codes used
     in the determination of matching DqT response with claim ITT subject
