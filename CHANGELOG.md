@@ -6,6 +6,9 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+- ECP Policy
+  - DqT - Match against subject names while not receiving subject codes
+
 ## [Release 108] - 2022-01-06
 
 - Admin

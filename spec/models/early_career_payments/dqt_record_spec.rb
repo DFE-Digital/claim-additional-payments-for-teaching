@@ -869,8 +869,38 @@ RSpec.describe EarlyCareerPayments::DqtRecord do
         record_itt_date: Date.parse("1/9/2017"),
         record_qts_date: Date.parse("1/9/2020"),
         record_qualification_name: "BA"
-      }
+      },
       # end of foreign_languages for 2024
+
+      # start of testing for HECOS/JAC Names for 2021
+      {
+        claim_academic_year: AcademicYear.new(2021),
+        record_degree_codes: [],
+        record_itt_subjects: ["Applied Mathematics"],
+        record_itt_subject_codes: [],
+        record_itt_date: Date.parse("1/9/2018"),
+        record_qts_date: Date.parse("31/8/2019"),
+        record_qualification_name: "BA"
+      },
+      {
+        claim_academic_year: AcademicYear.new(2021),
+        record_degree_codes: ["G1100"],
+        record_itt_subjects: ["Applied Mathematics"],
+        record_itt_subject_codes: [],
+        record_itt_date: Date.parse("1/9/2018"),
+        record_qts_date: Date.parse("31/8/2019"),
+        record_qualification_name: "BA"
+      },
+      {
+        claim_academic_year: AcademicYear.new(2021),
+        record_degree_codes: [],
+        record_itt_subjects: ["Applied Mathematics"],
+        record_itt_subject_codes: ["G1100"],
+        record_itt_date: Date.parse("1/9/2018"),
+        record_qts_date: Date.parse("31/8/2019"),
+        record_qualification_name: "BA"
+      }
+      # end of testing for HECOS/JAC Names for 2021
     ].each do |context|
       context "when claim academic year #{context[:claim_academic_year]}" do
         let(:claim_academic_year) { context[:claim_academic_year] }

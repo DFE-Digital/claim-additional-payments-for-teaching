@@ -21,7 +21,7 @@ module Dqt
     end
 
     def itt_subject_codes
-      return [] unless itt.respond_to?("subject1_code")
+      return [] unless itt.respond_to?(:subject1_code)
 
       (1..3).filter_map do |n|
         string_reader(itt&.send("subject#{n}_code"))
