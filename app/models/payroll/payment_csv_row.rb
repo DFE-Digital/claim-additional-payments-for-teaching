@@ -63,29 +63,20 @@ module Payroll
       model.date_of_birth.strftime(DATE_FORMAT)
     end
 
-    def claim_address
-      model.claims[0].address
-    end
-
-    def claim_address_component_size
-      # Is the address 4/5/6 parts?
-      @claim_address_component_size ||= claim_address.split(",").size
+    def address_line_1_components_size
+      model.address_line_1.split.size
     end
 
     def address_line_1
       # Cantium - House or Flat Name and/or Number (optional)
-      model.address_line_1 if claim_address_component_size == 6
+      model.address_line_1 if address_line_1_components_size > 1
     end
 
     def address_line_2
-      # Cantium - Number and Street Name
-      case claim_address_component_size
-        when 4
-          model.address_line_1
-        when 5
-          [model.address_line_1, model.address_line_2].join(", ")
-        when 6
-          model.address_line_2
+      if address_line_1_components_size > 1
+        model.address_line_2
+      else
+        [model.address_line_1, model.address_line_2].join(", ")
       end
     end
 
@@ -102,7 +93,7 @@ module Payroll
     def address_line_5
       # Cantium - County
       # not returned from Ordnance Survey, we copy POST_TOWN to this field
-      model.address_line_4
+      model.address_line_4.present? ? model.address_line_4 : model.address_line_3
     end
 
     def address_line_6
