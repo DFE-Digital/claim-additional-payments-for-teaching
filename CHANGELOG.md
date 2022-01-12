@@ -6,6 +6,12 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+- Admin
+  - Fix how the data for Cantium is presented
+- All Policies
+  - Change how auto-population of addresses in 'select-home-address' screen is
+    built from the results of the call to Ordnance Survey API, and how the data
+    is saved
 - ECP Policy
   - DqT - Match against subject names while not receiving subject codes
 

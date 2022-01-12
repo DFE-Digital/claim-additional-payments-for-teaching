@@ -28,7 +28,7 @@
                 <% checked = params.dig(:claim, :address_line_1) == option[:address_line_1] %>
 
                 <div class="govuk-radios__item">
-                  <%= radio_button_tag :address, [option[:address], option[:address_line_1]].join(":"), checked, class: "govuk-radios__input", id: address %>
+                  <%= radio_button_tag :address, [option[:address], option[:address_line_1], option[:address_line_2], option[:address_line_3], option[:postcode]].join(":"), checked, class: "govuk-radios__input", id: address %>
                   <%= label_tag address, "#{option[:address]}", class: "govuk-label govuk-radios__label", id: address %>
                 </div>
               <% end %>
