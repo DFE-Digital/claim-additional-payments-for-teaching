@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+## [Release 109] - 2022-01-13
+
 - Admin
   - Fix how the data for Cantium is presented
 - All Policies
@@ -1045,7 +1047,9 @@ The format is based on [Keep a Changelog]
 - First release for student loan repayments private beta
 
 [unreleased]:
-  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-108...HEAD
+  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-109...HEAD
+[release 109]:
+  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-108...release-109
 [release 108]:
   https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-107...release-108
 [release 107]:
