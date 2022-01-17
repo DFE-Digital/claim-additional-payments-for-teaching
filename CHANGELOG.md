@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+- ECP + TSLR policies transition to use GOVUK Notify Mail Templates to allow
+  business users to modify wording
+  - Claim submitted / received
+
 ## [Release 109] - 2022-01-13
 
 - Admin

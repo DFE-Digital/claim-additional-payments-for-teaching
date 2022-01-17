@@ -1,13 +1,23 @@
 class ClaimMailer < ApplicationMailer
   include EarlyCareerPaymentsHelper
   helper :application
-  helper :early_career_payments
 
   def submitted(claim)
     set_common_instance_variables(claim)
-    @subject = "Your application #{@claim_description} has been received, reference number: #{claim.reference}"
 
-    send_mail(:rails)
+    if [StudentLoans, EarlyCareerPayments].include?(claim.policy)
+      personalisation = {
+        first_name: @claim.first_name,
+        ref_number: @claim.reference,
+        support_email_address: @support_email_address
+      }
+
+      send_mail(:notify, template_ids(claim)[:CLAIM_RECEIVED_NOTIFY_TEMPLATE_ID], personalisation)
+    else # MathsAndPhysics
+      @subject = "Your application #{@claim_description} has been received, reference number: #{claim.reference}"
+
+      send_mail(:rails)
+    end
   end
 
   def approved(claim)
@@ -36,12 +46,11 @@ class ClaimMailer < ApplicationMailer
     set_common_instance_variables(claim)
     @subject = "#{@claim_subject} email verification"
     @one_time_password = one_time_password
-    support_email_address = translate("#{@claim.policy.locale_key}.support_email_address")
     personalisation = {
       email_subject: @subject,
       first_name: @claim.first_name,
       one_time_password: @one_time_password,
-      support_email_address: support_email_address,
+      support_email_address: @support_email_address,
       validity_duration: one_time_password_validity_duration
     }
 
@@ -56,6 +65,11 @@ class ClaimMailer < ApplicationMailer
     @claim_subject = translate("#{@claim.policy.locale_key}.claim_subject")
     @display_name = [@claim.first_name, @claim.surname].join(" ")
     @policy = @claim.policy
+    @support_email_address = translate("#{@claim.policy.locale_key}.support_email_address")
+  end
+
+  def template_ids(claim)
+    "ApplicationMailer::#{claim.policy.to_s.underscore.upcase}".safe_constantize
   end
 
   def send_mail(templating = :rails, template_id = :default, personalisation = {})
