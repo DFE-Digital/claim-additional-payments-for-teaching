@@ -31,9 +31,7 @@ RSpec.feature "Admin checks a claim" do
 
         mail = ActionMailer::Base.deliveries.first
 
-        expect(mail.subject).to match("been approved")
         expect(mail.to).to eq([claim_to_approve.email_address])
-        expect(mail.body.raw_source).to match("been approved")
       end
     end
 

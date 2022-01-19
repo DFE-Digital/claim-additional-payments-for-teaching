@@ -22,9 +22,20 @@ class ClaimMailer < ApplicationMailer
 
   def approved(claim)
     set_common_instance_variables(claim)
-    @subject = "Your application #{@claim_description} has been approved, reference number: #{claim.reference}"
 
-    send_mail
+    if [StudentLoans, EarlyCareerPayments].include?(claim.policy)
+      personalisation = {
+        first_name: @claim.first_name,
+        ref_number: @claim.reference,
+        support_email_address: @support_email_address
+      }
+
+      send_mail(:notify, template_ids(claim)[:CLAIM_APPROVED_NOTIFY_TEMPLATE_ID], personalisation)
+    else # MathsAndPhysics
+      @subject = "Your application #{@claim_description} has been approved, reference number: #{claim.reference}"
+
+      send_mail(:rails)
+    end
   end
 
   def rejected(claim)
