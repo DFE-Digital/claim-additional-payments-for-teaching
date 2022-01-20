@@ -1,0 +1,16 @@
+<div class="hmcts-timeline__item">
+  <section<%= " class=banner" if note.important %>>
+    <%= simple_format note.body, class: "govuk-body" %>
+  </section>
+
+  <% if display_description %>
+    <p class="hmcts-timeline__description">
+      <% if note.created_by %>
+        by <%= user_details(note.created_by, include_line_break: false) %>
+      <% else %>
+        by an automated check
+      <% end %>
+      on <%= l(note.created_at) %>
+    </p>
+  <% end %>
+</div>
