@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+## [Release 110] - 2022-01-20
+
 - ECP + TSLR policies transition to use GOVUK Notify Mail Templates to allow
   business users to modify wording
   - Claim submitted / received
@@ -1051,7 +1053,9 @@ The format is based on [Keep a Changelog]
 - First release for student loan repayments private beta
 
 [unreleased]:
-  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-109...HEAD
+  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-110...HEAD
+[release 110]:
+  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-109...release-110
 [release 109]:
   https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-108...release-109
 [release 108]:
