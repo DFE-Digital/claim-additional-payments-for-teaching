@@ -40,10 +40,22 @@ class ClaimMailer < ApplicationMailer
 
   def rejected(claim)
     set_common_instance_variables(claim)
-    @subject = "Your claim #{@claim_description} has been rejected, reference number: #{claim.reference}"
-    @ineligible_qts_year = @claim.policy.last_ineligible_qts_award_year
 
-    send_mail
+    if [StudentLoans, EarlyCareerPayments].include?(claim.policy)
+      personalisation = {
+        first_name: @claim.first_name,
+        ref_number: @claim.reference,
+        support_email_address: @support_email_address,
+        current_financial_year: claim.policy == StudentLoans ? StudentLoans.current_financial_year : ""
+      }
+
+      send_mail(:notify, template_ids(claim)[:CLAIM_REJECTED_NOTIFY_TEMPLATE_ID], personalisation)
+    else # MathsAndPhysics
+      @subject = "Your claim #{@claim_description} has been rejected, reference number: #{claim.reference}"
+      @ineligible_qts_year = @claim.policy.last_ineligible_qts_award_year
+
+      send_mail(:rails)
+    end
   end
 
   def update_after_three_weeks(claim)

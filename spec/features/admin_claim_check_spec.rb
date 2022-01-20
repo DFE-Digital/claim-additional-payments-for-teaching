@@ -59,9 +59,7 @@ RSpec.feature "Admin checks a claim" do
 
       mail = ActionMailer::Base.deliveries.last
 
-      expect(mail.subject).to match("been rejected")
       expect(mail.to).to eq([claim_to_reject.email_address])
-      expect(mail.body.raw_source).to match("not been able to approve")
     end
 
     scenario "User can see completed tasks" do
