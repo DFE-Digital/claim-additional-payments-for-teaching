@@ -50,7 +50,7 @@ RSpec.describe ClaimMailer, type: :mailer do
 
     it "includes a personalisation key for 'support_email_address'" do
       support_email_address = I18n.t("#{claim.policy.locale_key}.support_email_address")
-      expect(mail[:personalisation].decoded).to include(":support_email_address=>\"#{support_email_address}\"}")
+      expect(mail[:personalisation].decoded).to include(":support_email_address=>\"#{support_email_address}\"")
     end
   end
 
@@ -121,11 +121,18 @@ RSpec.describe ClaimMailer, type: :mailer do
         let(:claim) { build(:claim, :submitted, policy: policy) }
         let(:mail) { ClaimMailer.update_after_three_weeks(claim) }
 
-        it_behaves_like "an email related to a claim using the generic template", policy
+        it_behaves_like "an email related to a claim using GOVUK Notify templates", policy
 
-        it "mentions that the claim is still being reviewed in the subject and body" do
-          expect(mail.subject).to include("still reviewing your application")
-          expect(mail.body.encoded).to include("We're still reviewing your application")
+        context "when EarlyCareerPayments", if: policy == EarlyCareerPayments do
+          it "uses the correct template" do
+            expect(mail[:template_id].decoded).to eq "0ef1e702-ea64-43a5-a084-330f2f51836e"
+          end
+        end
+
+        context "when StudentLoans", if: policy == StudentLoans do
+          it "uses the correct template" do
+            expect(mail[:template_id].decoded).to eq "c43bac94-67ff-4440-8f26-506eb4c232e8"
+          end
         end
       end
     end

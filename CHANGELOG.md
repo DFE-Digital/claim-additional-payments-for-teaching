@@ -10,6 +10,7 @@ The format is based on [Keep a Changelog]
 - ECP + TSLR policies transition to use GOVUK Notify Mail Templates to allow
   business users to modify wording
   - Claim approved
+  - Update after three weeks
 
 ## [Release 110] - 2022-01-20
 
