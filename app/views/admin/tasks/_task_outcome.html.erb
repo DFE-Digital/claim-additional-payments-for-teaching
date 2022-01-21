@@ -5,10 +5,6 @@
     <%= task_status_tag(task.claim, task.name) %>
   </p>
 
-<!-- # Design has the note(s) in here -->
-
-<!-- # End of design note(s) -->
-
   <p class="govuk-body">
     <% if task.manual %>
       This task was performed by <%= user_details(task.created_by, include_line_break: false) %> on <%= l(task.updated_at) %>

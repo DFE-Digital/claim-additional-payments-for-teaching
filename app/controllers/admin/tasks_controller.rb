@@ -11,7 +11,11 @@ class Admin::TasksController < Admin::BaseAdminController
   def show
     @tasks_presenter = @claim.policy::AdminTasksPresenter.new(@claim)
     @task = @claim.tasks.find_or_initialize_by(name: params[:name])
-    @notes = if params[:name] == "qualifications"
+    @notes = if params[:name] == "identity_confirmation"
+      @claim.notes.order(created_at: :desc).select do |note|
+        note.body =~ %r{National Insurance|Teacher reference|First name or surname|Date of birth|Not matched}
+      end
+    elsif params[:name] == "qualifications"
       @claim.notes.order(created_at: :desc).select { |note| note.body.include?("ligible") }
     else
       []

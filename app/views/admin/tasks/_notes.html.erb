@@ -1,5 +1,4 @@
 <% if notes.present? %>
-<!--   <div>Size: <span><%= @notes.size %></span></div> -->
   <div class="hmcts-timeline">
     <% notes.each do |note| %>
       <%= render "admin/notes/note", note: note, display_description: false %>

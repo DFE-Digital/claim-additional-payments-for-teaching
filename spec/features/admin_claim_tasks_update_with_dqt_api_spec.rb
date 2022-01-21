@@ -226,6 +226,18 @@ RSpec.feature "Admin claim tasks update with DQT API" do
               expect(page).to have_content("Did #{claim.full_name} submit the claim?")
               expect(page).to have_link(href: admin_claim_notes_path(claim))
             end
+
+            scenario "shows the notes added as part of automated identity checking" do
+              expect(notes).to include(
+                have_text("National Insurance number not matched").and(
+                  have_text("Claimant: \"#{claim.national_insurance_number}\"").and(
+                    have_text("DQT: \"QQ100000B\"").and(
+                      have_text("by an automated check")
+                    )
+                  )
+                )
+              )
+            end
           end
 
           context "admin claim notes view" do
@@ -270,6 +282,18 @@ RSpec.feature "Admin claim tasks update with DQT API" do
               expect(page).to have_content("Did #{claim.full_name} submit the claim?")
               expect(page).to have_link(href: admin_claim_notes_path(claim))
             end
+
+            scenario "shows the notes added as part of automated identity checking" do
+              expect(notes).to include(
+                have_text("Teacher reference number not matched").and(
+                  have_text("Claimant: \"#{claim.teacher_reference_number}\"").and(
+                    have_text("DQT: \"7654321\"").and(
+                      have_text("by an automated check")
+                    )
+                  )
+                )
+              )
+            end
           end
 
           context "admin claim notes view" do
@@ -309,6 +333,18 @@ RSpec.feature "Admin claim tasks update with DQT API" do
             scenario "shows identity confirmation question" do
               expect(page).to have_content("Did #{claim.full_name} submit the claim?")
               expect(page).to have_link(href: admin_claim_notes_path(claim))
+            end
+
+            scenario "shows the notes added as part of automated identity checking" do
+              expect(notes).to include(
+                have_text("First name or surname not matched").and(
+                  have_text("Claimant: \"#{claim.full_name}\"").and(
+                    have_text("DQT: \"Except #{claim.surname}\"").and(
+                      have_text("by an automated check")
+                    )
+                  )
+                )
+              )
             end
           end
 
@@ -353,6 +389,18 @@ RSpec.feature "Admin claim tasks update with DQT API" do
             scenario "shows identity confirmation question" do
               expect(page).to have_content("Did #{claim.full_name} submit the claim?")
               expect(page).to have_link(href: admin_claim_notes_path(claim))
+            end
+
+            scenario "shows the notes added as part of automated identity checking" do
+              expect(notes).to include(
+                have_text("First name or surname not matched").and(
+                  have_text("Claimant: \"#{claim.full_name}\"").and(
+                    have_text("DQT: \"#{claim.first_name} Except\"").and(
+                      have_text("by an automated check")
+                    )
+                  )
+                )
+              )
             end
           end
 
@@ -436,6 +484,18 @@ RSpec.feature "Admin claim tasks update with DQT API" do
             scenario "shows identity confirmation question" do
               expect(page).to have_content("Did #{claim.full_name} submit the claim?")
               expect(page).to have_link(href: admin_claim_notes_path(claim))
+            end
+
+            scenario "shows the notes added as part of automated identity checking" do
+              expect(notes).to include(
+                have_text("Date of birth not matched").and(
+                  have_text("Claimant: \"#{claim.date_of_birth}\"").and(
+                    have_text("DQT: \"#{claim.date_of_birth + 1.day}\"").and(
+                      have_text("by an automated check")
+                    )
+                  )
+                )
+              )
             end
           end
 
@@ -620,6 +680,14 @@ RSpec.feature "Admin claim tasks update with DQT API" do
           scenario "shows identity confirmation question" do
             expect(page).to have_content("Did #{claim.full_name} submit the claim?")
             expect(page).to have_link(href: admin_claim_notes_path(claim))
+          end
+
+          scenario "shows the notes added as part of automated identity checking" do
+            expect(notes).to include(
+              have_text("Not matched").and(
+                have_text("by an automated check")
+              )
+            )
           end
         end
 
@@ -982,6 +1050,18 @@ RSpec.feature "Admin claim tasks update with DQT API" do
               expect(page).to have_content("Did #{claim.full_name} submit the claim?")
               expect(page).to have_link(href: admin_claim_notes_path(claim))
             end
+
+            scenario "shows the notes added as part of automated identity checking" do
+              expect(notes).to include(
+                have_text("National Insurance number not matched").and(
+                  have_text("Claimant: \"#{claim.national_insurance_number}\"").and(
+                    have_text("DQT: \"QQ100000B\"").and(
+                      have_text("by an automated check")
+                    )
+                  )
+                )
+              )
+            end
           end
 
           context "admin claim notes view" do
@@ -1026,6 +1106,18 @@ RSpec.feature "Admin claim tasks update with DQT API" do
               expect(page).to have_content("Did #{claim.full_name} submit the claim?")
               expect(page).to have_link(href: admin_claim_notes_path(claim))
             end
+
+            scenario "shows the notes added as part of automated identity checking" do
+              expect(notes).to include(
+                have_text("Teacher reference number not matched").and(
+                  have_text("Claimant: \"#{claim.teacher_reference_number}\"").and(
+                    have_text("DQT: \"7654321\"").and(
+                      have_text("by an automated check")
+                    )
+                  )
+                )
+              )
+            end
           end
 
           context "admin claim notes view" do
@@ -1065,6 +1157,18 @@ RSpec.feature "Admin claim tasks update with DQT API" do
             scenario "shows identity confirmation question" do
               expect(page).to have_content("Did #{claim.full_name} submit the claim?")
               expect(page).to have_link(href: admin_claim_notes_path(claim))
+            end
+
+            scenario "shows the notes added as part of automated identity checking" do
+              expect(notes).to include(
+                have_text("First name or surname not matched").and(
+                  have_text("Claimant: \"#{claim.full_name}\"").and(
+                    have_text("DQT: \"Except #{claim.surname}\"").and(
+                      have_text("by an automated check")
+                    )
+                  )
+                )
+              )
             end
           end
 
@@ -1109,6 +1213,18 @@ RSpec.feature "Admin claim tasks update with DQT API" do
             scenario "shows identity confirmation question" do
               expect(page).to have_content("Did #{claim.full_name} submit the claim?")
               expect(page).to have_link(href: admin_claim_notes_path(claim))
+            end
+
+            scenario "shows the notes added as part of automated identity checking" do
+              expect(notes).to include(
+                have_text("First name or surname not matched").and(
+                  have_text("Claimant: \"#{claim.full_name}\"").and(
+                    have_text("DQT: \"#{claim.first_name} Except\"").and(
+                      have_text("by an automated check")
+                    )
+                  )
+                )
+              )
             end
           end
 
@@ -1196,6 +1312,18 @@ RSpec.feature "Admin claim tasks update with DQT API" do
             scenario "shows identity confirmation question" do
               expect(page).to have_content("Did #{claim.full_name} submit the claim?")
               expect(page).to have_link(href: admin_claim_notes_path(claim))
+            end
+
+            scenario "shows the notes added as part of automated identity checking" do
+              expect(notes).to include(
+                have_text("Date of birth not matched").and(
+                  have_text("Claimant: \"#{claim.date_of_birth}\"").and(
+                    have_text("DQT: \"#{claim.date_of_birth + 1.day}\"").and(
+                      have_text("by an automated check")
+                    )
+                  )
+                )
+              )
             end
           end
 
@@ -1380,6 +1508,14 @@ RSpec.feature "Admin claim tasks update with DQT API" do
           scenario "shows identity confirmation question" do
             expect(page).to have_content("Did #{claim.full_name} submit the claim?")
             expect(page).to have_link(href: admin_claim_notes_path(claim))
+          end
+
+          scenario "shows the notes added as part of automated identity checking" do
+            expect(notes).to include(
+              have_text("Not matched").and(
+                have_text("by an automated check")
+              )
+            )
           end
         end
 
@@ -1737,6 +1873,18 @@ RSpec.feature "Admin claim tasks update with DQT API" do
               expect(page).to have_content("Did #{claim.full_name} submit the claim?")
               expect(page).to have_link(href: admin_claim_notes_path(claim))
             end
+
+            scenario "shows the notes added as part of automated identity checking" do
+              expect(notes).to include(
+                have_text("National Insurance number not matched").and(
+                  have_text("Claimant: \"#{claim.national_insurance_number}\"").and(
+                    have_text("DQT: \"QQ100000B\"").and(
+                      have_text("by an automated check")
+                    )
+                  )
+                )
+              )
+            end
           end
 
           context "admin claim notes view" do
@@ -1781,6 +1929,18 @@ RSpec.feature "Admin claim tasks update with DQT API" do
               expect(page).to have_content("Did #{claim.full_name} submit the claim?")
               expect(page).to have_link(href: admin_claim_notes_path(claim))
             end
+
+            scenario "shows the notes added as part of automated identity checking" do
+              expect(notes).to include(
+                have_text("Teacher reference number not matched").and(
+                  have_text("Claimant: \"#{claim.teacher_reference_number}\"").and(
+                    have_text("DQT: \"7654321\"").and(
+                      have_text("by an automated check")
+                    )
+                  )
+                )
+              )
+            end
           end
 
           context "admin claim notes view" do
@@ -1820,6 +1980,18 @@ RSpec.feature "Admin claim tasks update with DQT API" do
             scenario "shows identity confirmation question" do
               expect(page).to have_content("Did #{claim.full_name} submit the claim?")
               expect(page).to have_link(href: admin_claim_notes_path(claim))
+            end
+
+            scenario "shows the notes added as part of automated identity checking" do
+              expect(notes).to include(
+                have_text("First name or surname not matched").and(
+                  have_text("Claimant: \"#{claim.full_name}\"").and(
+                    have_text("DQT: \"Except #{claim.surname}\"").and(
+                      have_text("by an automated check")
+                    )
+                  )
+                )
+              )
             end
           end
 
@@ -1864,6 +2036,18 @@ RSpec.feature "Admin claim tasks update with DQT API" do
             scenario "shows identity confirmation question" do
               expect(page).to have_content("Did #{claim.full_name} submit the claim?")
               expect(page).to have_link(href: admin_claim_notes_path(claim))
+            end
+
+            scenario "shows the notes added as part of automated identity checking" do
+              expect(notes).to include(
+                have_text("First name or surname not matched").and(
+                  have_text("Claimant: \"#{claim.full_name}\"").and(
+                    have_text("DQT: \"#{claim.first_name} Except\"").and(
+                      have_text("by an automated check")
+                    )
+                  )
+                )
+              )
             end
           end
 
@@ -1951,6 +2135,18 @@ RSpec.feature "Admin claim tasks update with DQT API" do
             scenario "shows identity confirmation question" do
               expect(page).to have_content("Did #{claim.full_name} submit the claim?")
               expect(page).to have_link(href: admin_claim_notes_path(claim))
+            end
+
+            scenario "shows the notes added as part of automated identity checking" do
+              expect(notes).to include(
+                have_text("Date of birth not matched").and(
+                  have_text("Claimant: \"#{claim.date_of_birth}\"").and(
+                    have_text("DQT: \"#{claim.date_of_birth + 1.day}\"").and(
+                      have_text("by an automated check")
+                    )
+                  )
+                )
+              )
             end
           end
 
@@ -2135,6 +2331,14 @@ RSpec.feature "Admin claim tasks update with DQT API" do
           scenario "shows identity confirmation question" do
             expect(page).to have_content("Did #{claim.full_name} submit the claim?")
             expect(page).to have_link(href: admin_claim_notes_path(claim))
+          end
+
+          scenario "shows the notes added as part of automated identity checking" do
+            expect(notes).to include(
+              have_text("Not matched").and(
+                have_text("by an automated check")
+              )
+            )
           end
         end
 
