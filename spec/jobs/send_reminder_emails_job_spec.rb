@@ -11,6 +11,8 @@ RSpec.describe SendReminderEmailsJob do
   end
 
   describe "#perform" do
+    let(:mail) { ReminderMailer.reminder(reminders.first) }
+
     it "sends correct email to correct addresses" do
       # reminder emails to be sent have blank sent_at's
       reminders.each do |reminder|
@@ -24,9 +26,8 @@ RSpec.describe SendReminderEmailsJob do
         end
       }.to change { ActionMailer::Base.deliveries.count }.by(count)
 
-      # check email body is correct
-      reminder_email = ActionMailer::Base.deliveries.find { |email| email.to[0] == reminders.first.email_address }
-      expect(reminder_email.body.to_s).to include("Dear #{reminders.first.full_name},\n\nThe #{AcademicYear.current} early-career payment window is now open.")
+      # check template id is correct
+      expect(mail[:template_id].decoded).to eq "a8a36571-f93b-4474-93e2-35775fa753a0"
 
       # reminder emails once sent have sent_at's
       reminders.each do |reminder|

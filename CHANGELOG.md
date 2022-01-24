@@ -11,6 +11,7 @@ The format is based on [Keep a Changelog]
   business users to modify wording
   - Claim approved
   - Update after three weeks
+  - Reminder - application window open
 
 ## [Release 110] - 2022-01-20
 

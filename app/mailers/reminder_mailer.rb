@@ -29,11 +29,23 @@ class ReminderMailer < ApplicationMailer
 
   def reminder(reminder)
     @reminder = reminder
-    @subject = "The #{reminder.itt_academic_year} early-career payment window is now open"
-    send_mail
+    support_email_address = translate("early_career_payments.support_email_address")
+    service_start_page_url = EarlyCareerPayments.start_page_url
+    personalisation = {
+      first_name: extract_first_name(@reminder.full_name),
+      support_email_address: support_email_address,
+      itt_academic_year: @reminder.itt_academic_year,
+      service_start_page_url: service_start_page_url
+    }
+
+    send_mail(:notify, REMINDER_APPLICATION_WINDOW_OPEN_NOTIFY_TEMPLATE_ID, personalisation)
   end
 
   private
+
+  def extract_first_name(fullname)
+    (fullname || "").split(" ").first
+  end
 
   def send_mail(templating = :rails, template_id = :default, personalisation = {})
     if templating == :rails
