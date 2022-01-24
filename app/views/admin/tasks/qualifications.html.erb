@@ -12,7 +12,7 @@
 
   <div class="govuk-grid-column-two-thirds">
     <% if !@task.passed.nil? %>
-      <%= render "task_outcome", task: @task do %>
+      <%= render "task_outcome", task: @task, notes: @notes do %>
       <% end %>
     <% else %>
       <%= render "form", task_name: "qualifications", claim: @claim %>

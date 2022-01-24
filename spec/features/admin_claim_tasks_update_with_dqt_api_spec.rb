@@ -130,6 +130,20 @@ RSpec.feature "Admin claim tasks update with DQT API" do
     perform_enqueued_jobs
   end
 
+  let(:note_body) do
+    <<~HTML
+      Ineligible:
+      <pre>
+        ITT subjects: ["Theology and the Universe", "", ""]
+        ITT subject codes:  ["TT100", "", ""]
+        Degree codes:       []
+        ITT start date:     2015-09-01
+        QTS award date:     2014-09-01
+        Qualification name: BA
+      </pre>
+    HTML
+  end
+
   context "with EarlyCareerPayments policy" do
     let(:policy) { EarlyCareerPayments }
 
@@ -212,6 +226,18 @@ RSpec.feature "Admin claim tasks update with DQT API" do
               expect(page).to have_content("Did #{claim.full_name} submit the claim?")
               expect(page).to have_link(href: admin_claim_notes_path(claim))
             end
+
+            scenario "shows the notes added as part of automated identity checking" do
+              expect(notes).to include(
+                have_text("National Insurance number not matched").and(
+                  have_text("Claimant: \"#{claim.national_insurance_number}\"").and(
+                    have_text("DQT: \"QQ100000B\"").and(
+                      have_text("by an automated check")
+                    )
+                  )
+                )
+              )
+            end
           end
 
           context "admin claim notes view" do
@@ -256,6 +282,18 @@ RSpec.feature "Admin claim tasks update with DQT API" do
               expect(page).to have_content("Did #{claim.full_name} submit the claim?")
               expect(page).to have_link(href: admin_claim_notes_path(claim))
             end
+
+            scenario "shows the notes added as part of automated identity checking" do
+              expect(notes).to include(
+                have_text("Teacher reference number not matched").and(
+                  have_text("Claimant: \"#{claim.teacher_reference_number}\"").and(
+                    have_text("DQT: \"7654321\"").and(
+                      have_text("by an automated check")
+                    )
+                  )
+                )
+              )
+            end
           end
 
           context "admin claim notes view" do
@@ -295,6 +333,18 @@ RSpec.feature "Admin claim tasks update with DQT API" do
             scenario "shows identity confirmation question" do
               expect(page).to have_content("Did #{claim.full_name} submit the claim?")
               expect(page).to have_link(href: admin_claim_notes_path(claim))
+            end
+
+            scenario "shows the notes added as part of automated identity checking" do
+              expect(notes).to include(
+                have_text("First name or surname not matched").and(
+                  have_text("Claimant: \"#{claim.full_name}\"").and(
+                    have_text("DQT: \"Except #{claim.surname}\"").and(
+                      have_text("by an automated check")
+                    )
+                  )
+                )
+              )
             end
           end
 
@@ -339,6 +389,18 @@ RSpec.feature "Admin claim tasks update with DQT API" do
             scenario "shows identity confirmation question" do
               expect(page).to have_content("Did #{claim.full_name} submit the claim?")
               expect(page).to have_link(href: admin_claim_notes_path(claim))
+            end
+
+            scenario "shows the notes added as part of automated identity checking" do
+              expect(notes).to include(
+                have_text("First name or surname not matched").and(
+                  have_text("Claimant: \"#{claim.full_name}\"").and(
+                    have_text("DQT: \"#{claim.first_name} Except\"").and(
+                      have_text("by an automated check")
+                    )
+                  )
+                )
+              )
             end
           end
 
@@ -422,6 +484,18 @@ RSpec.feature "Admin claim tasks update with DQT API" do
             scenario "shows identity confirmation question" do
               expect(page).to have_content("Did #{claim.full_name} submit the claim?")
               expect(page).to have_link(href: admin_claim_notes_path(claim))
+            end
+
+            scenario "shows the notes added as part of automated identity checking" do
+              expect(notes).to include(
+                have_text("Date of birth not matched").and(
+                  have_text("Claimant: \"#{claim.date_of_birth}\"").and(
+                    have_text("DQT: \"#{claim.date_of_birth + 1.day}\"").and(
+                      have_text("by an automated check")
+                    )
+                  )
+                )
+              )
             end
           end
 
@@ -607,6 +681,14 @@ RSpec.feature "Admin claim tasks update with DQT API" do
             expect(page).to have_content("Did #{claim.full_name} submit the claim?")
             expect(page).to have_link(href: admin_claim_notes_path(claim))
           end
+
+          scenario "shows the notes added as part of automated identity checking" do
+            expect(notes).to include(
+              have_text("Not matched").and(
+                have_text("by an automated check")
+              )
+            )
+          end
         end
 
         context "admin claim notes view" do
@@ -645,6 +727,22 @@ RSpec.feature "Admin claim tasks update with DQT API" do
 
         context "admin claim tasks qualifications view" do
           before { visit admin_claim_task_path(claim, :qualifications) }
+
+          scenario "shows the notes added as part of qualification checking" do
+            expect(notes).to include(
+              have_text("Eligible").and(
+                have_text("mathematics").and(
+                  have_text("100403")
+                )
+              )
+            )
+          end
+
+          scenario "note doesn't show by an automated check" do
+            expect(notes).not_to include(
+              have_text("by an automated check")
+            )
+          end
 
           scenario "shows task outcome performed by automated check" do
             expect(task_outcome).to have_text("This task was performed by an automated check on #{I18n.l(claim.tasks.where(name: :qualifications).first.created_at)}")
@@ -687,6 +785,18 @@ RSpec.feature "Admin claim tasks update with DQT API" do
           context "admin claim tasks qualifications view" do
             before { visit admin_claim_task_path(claim, :qualifications) }
 
+            scenario "shows the notes added as part of qualification checking" do
+              expect(notes).to include(
+                have_text("Ineligible").and(
+                  have_text("applied mathematics").and(
+                    have_text("100403").and(
+                      have_text("by an automated check")
+                    )
+                  )
+                )
+              )
+            end
+
             scenario "shows qualifications question" do
               expect(page).to have_content("Does the claimant’s initial teacher training (ITT) start/end year and subject match the above information from their claim?")
             end
@@ -714,7 +824,7 @@ RSpec.feature "Admin claim tasks update with DQT API" do
                 1
               ),
               itt_subjects: [],
-              itt_subject_codes: ["NoCode"]
+              itt_subject_codes: []
             }
           end
 
@@ -728,6 +838,16 @@ RSpec.feature "Admin claim tasks update with DQT API" do
 
           context "admin claim tasks qualifications view" do
             before { visit admin_claim_task_path(claim, :qualifications) }
+
+            scenario "shows the notes added as part of qualification checking" do
+              expect(notes).to include(
+                have_text("Ineligible").and(
+                  have_no_text("mathematics").and(
+                    have_text("by an automated check")
+                  )
+                )
+              )
+            end
 
             scenario "shows qualifications question" do
               expect(page).to have_content("Does the claimant’s initial teacher training (ITT) start/end year and subject match the above information from their claim?")
@@ -747,7 +867,7 @@ RSpec.feature "Admin claim tasks update with DQT API" do
           end
         end
 
-        context "with admin claims tasks qualifications passed" do
+        context "with manually confirmed admin claim tasks qualifications passed" do
           let(:claim) do
             claimant_submits_claim(
               claim_attributes: {
@@ -758,7 +878,8 @@ RSpec.feature "Admin claim tasks update with DQT API" do
                 policy: policy,
                 reference: "AB123456",
                 surname: "ELIGIBLE",
-                tasks: [build(:task, name: "qualifications")],
+                tasks: [build(:task, name: "qualifications")], # manual: true in factory!
+                notes: [build(:note, body: note_body)],
                 teacher_reference_number: "1234567"
               }
             )
@@ -766,6 +887,14 @@ RSpec.feature "Admin claim tasks update with DQT API" do
 
           context "admin claim tasks qualifications view" do
             before { visit admin_claim_task_path(claim, :qualifications) }
+
+            scenario "shows the notes added as part of qualification checking" do
+              expect(notes).to include(
+                have_text("Ineligible").and(
+                  have_text("ITT subject codes: [\"TT100\", \"\", \"\"]")
+                )
+              )
+            end
 
             scenario "shows task outcome previously performed by user" do
               expect(task_outcome).to have_text("This task was performed by #{claim.tasks.where(name: :qualifications).first.created_by.full_name} on #{I18n.l(claim.tasks.where(name: :qualifications).first.created_at)}")
@@ -794,8 +923,8 @@ RSpec.feature "Admin claim tasks update with DQT API" do
               9,
               1
             ),
-            itt_subjects: [],
-            itt_subject_codes: ["NoCode"]
+            itt_subjects: ["Music and Performance"],
+            itt_subject_codes: []
           }
         end
 
@@ -812,6 +941,16 @@ RSpec.feature "Admin claim tasks update with DQT API" do
 
           scenario "shows qualifications question" do
             expect(page).to have_content("Does the claimant’s initial teacher training (ITT) start/end year and subject match the above information from their claim?")
+          end
+
+          scenario "shows the notes added as part of qualification checking" do
+            expect(notes).to include(
+              have_text("Ineligible").and(
+                have_text("Music and Performance").and(
+                  have_text("by an automated check")
+                )
+              )
+            )
           end
         end
 
@@ -911,6 +1050,18 @@ RSpec.feature "Admin claim tasks update with DQT API" do
               expect(page).to have_content("Did #{claim.full_name} submit the claim?")
               expect(page).to have_link(href: admin_claim_notes_path(claim))
             end
+
+            scenario "shows the notes added as part of automated identity checking" do
+              expect(notes).to include(
+                have_text("National Insurance number not matched").and(
+                  have_text("Claimant: \"#{claim.national_insurance_number}\"").and(
+                    have_text("DQT: \"QQ100000B\"").and(
+                      have_text("by an automated check")
+                    )
+                  )
+                )
+              )
+            end
           end
 
           context "admin claim notes view" do
@@ -955,6 +1106,18 @@ RSpec.feature "Admin claim tasks update with DQT API" do
               expect(page).to have_content("Did #{claim.full_name} submit the claim?")
               expect(page).to have_link(href: admin_claim_notes_path(claim))
             end
+
+            scenario "shows the notes added as part of automated identity checking" do
+              expect(notes).to include(
+                have_text("Teacher reference number not matched").and(
+                  have_text("Claimant: \"#{claim.teacher_reference_number}\"").and(
+                    have_text("DQT: \"7654321\"").and(
+                      have_text("by an automated check")
+                    )
+                  )
+                )
+              )
+            end
           end
 
           context "admin claim notes view" do
@@ -994,6 +1157,18 @@ RSpec.feature "Admin claim tasks update with DQT API" do
             scenario "shows identity confirmation question" do
               expect(page).to have_content("Did #{claim.full_name} submit the claim?")
               expect(page).to have_link(href: admin_claim_notes_path(claim))
+            end
+
+            scenario "shows the notes added as part of automated identity checking" do
+              expect(notes).to include(
+                have_text("First name or surname not matched").and(
+                  have_text("Claimant: \"#{claim.full_name}\"").and(
+                    have_text("DQT: \"Except #{claim.surname}\"").and(
+                      have_text("by an automated check")
+                    )
+                  )
+                )
+              )
             end
           end
 
@@ -1038,6 +1213,18 @@ RSpec.feature "Admin claim tasks update with DQT API" do
             scenario "shows identity confirmation question" do
               expect(page).to have_content("Did #{claim.full_name} submit the claim?")
               expect(page).to have_link(href: admin_claim_notes_path(claim))
+            end
+
+            scenario "shows the notes added as part of automated identity checking" do
+              expect(notes).to include(
+                have_text("First name or surname not matched").and(
+                  have_text("Claimant: \"#{claim.full_name}\"").and(
+                    have_text("DQT: \"#{claim.first_name} Except\"").and(
+                      have_text("by an automated check")
+                    )
+                  )
+                )
+              )
             end
           end
 
@@ -1125,6 +1312,18 @@ RSpec.feature "Admin claim tasks update with DQT API" do
             scenario "shows identity confirmation question" do
               expect(page).to have_content("Did #{claim.full_name} submit the claim?")
               expect(page).to have_link(href: admin_claim_notes_path(claim))
+            end
+
+            scenario "shows the notes added as part of automated identity checking" do
+              expect(notes).to include(
+                have_text("Date of birth not matched").and(
+                  have_text("Claimant: \"#{claim.date_of_birth}\"").and(
+                    have_text("DQT: \"#{claim.date_of_birth + 1.day}\"").and(
+                      have_text("by an automated check")
+                    )
+                  )
+                )
+              )
             end
           end
 
@@ -1310,6 +1509,14 @@ RSpec.feature "Admin claim tasks update with DQT API" do
             expect(page).to have_content("Did #{claim.full_name} submit the claim?")
             expect(page).to have_link(href: admin_claim_notes_path(claim))
           end
+
+          scenario "shows the notes added as part of automated identity checking" do
+            expect(notes).to include(
+              have_text("Not matched").and(
+                have_text("by an automated check")
+              )
+            )
+          end
         end
 
         context "admin claim notes view" do
@@ -1348,6 +1555,20 @@ RSpec.feature "Admin claim tasks update with DQT API" do
 
         context "admin claim tasks qualifications view" do
           before { visit admin_claim_task_path(claim, :qualifications) }
+
+          scenario "shows the notes added as part of qualification checking" do
+            expect(notes).to include(
+              have_text("Eligible").and(
+                have_text("applied mathematics\", \"maths and statistics\", \"mathematics")
+              )
+            )
+          end
+
+          scenario "note doesn't show by an automated check" do
+            expect(notes).not_to include(
+              have_text("by an automated check")
+            )
+          end
 
           scenario "shows task outcome performed by automated check" do
             expect(task_outcome).to have_text("This task was performed by an automated check on #{I18n.l(claim.tasks.where(name: :qualifications).first.created_at)}")
@@ -1393,6 +1614,16 @@ RSpec.feature "Admin claim tasks update with DQT API" do
             scenario "shows qualifications question" do
               expect(page).to have_content("Does the claimant’s initial teacher training (ITT) qualification year and specialist subject match the above information from their claim?")
             end
+
+            scenario "shows the notes added as part of qualification checking" do
+              expect(notes).to include(
+                have_text("Ineligible").and(
+                  have_text("applied mathematics\", \"maths and statistics\", \"mathematics").and(
+                    have_text("by an automated check")
+                  )
+                )
+              )
+            end
           end
 
           context "admin claim notes view" do
@@ -1416,8 +1647,8 @@ RSpec.feature "Admin claim tasks update with DQT API" do
                 9,
                 1
               ),
-              itt_subjects: [],
-              itt_subject_codes: ["NoCode"]
+              itt_subjects: ["Theological Numeracy"],
+              itt_subject_codes: ["TT100"]
             }
           end
 
@@ -1435,6 +1666,16 @@ RSpec.feature "Admin claim tasks update with DQT API" do
             scenario "shows qualifications question" do
               expect(page).to have_content("Does the claimant’s initial teacher training (ITT) qualification year and specialist subject match the above information from their claim?")
             end
+
+            scenario "shows the notes added as part of qualification checking" do
+              expect(notes).to include(
+                have_text("Ineligible").and(
+                  have_text("ITT subject codes: [\"TT100\", \"\"]").and(
+                    have_text("by an automated check")
+                  )
+                )
+              )
+            end
           end
 
           context "admin claim notes view" do
@@ -1450,7 +1691,7 @@ RSpec.feature "Admin claim tasks update with DQT API" do
           end
         end
 
-        context "with admin claims tasks qualifications passed" do
+        context "with manually confirmed admin claim tasks qualifications passed" do
           let(:claim) do
             claimant_submits_claim(
               claim_attributes: {
@@ -1461,6 +1702,7 @@ RSpec.feature "Admin claim tasks update with DQT API" do
                 reference: "AB123456",
                 surname: "ELIGIBLE",
                 tasks: [build(:task, name: "qualifications")],
+                notes: [build(:note, body: note_body)],
                 teacher_reference_number: "1234567"
               }
             )
@@ -1468,6 +1710,14 @@ RSpec.feature "Admin claim tasks update with DQT API" do
 
           context "admin claim tasks qualifications view" do
             before { visit admin_claim_task_path(claim, :qualifications) }
+
+            scenario "shows the notes added as part of qualification checking" do
+              expect(notes).to include(
+                have_text("Ineligible").and(
+                  have_text("ITT subject codes: [\"TT100\", \"\", \"\"]")
+                )
+              )
+            end
 
             scenario "shows task outcome previously performed by user" do
               expect(task_outcome).to have_text("This task was performed by #{claim.tasks.where(name: :qualifications).first.created_by.full_name} on #{I18n.l(claim.tasks.where(name: :qualifications).first.created_at)}")
@@ -1496,8 +1746,8 @@ RSpec.feature "Admin claim tasks update with DQT API" do
               9,
               1
             ),
-            itt_subjects: ["applied mathematics", "maths and statistics", "maths"],
-            itt_subject_codes: ["NoCode"]
+            itt_subjects: ["Theology", "economics and statistics", "economics"],
+            itt_subject_codes: []
           }
         end
 
@@ -1514,6 +1764,16 @@ RSpec.feature "Admin claim tasks update with DQT API" do
 
           scenario "shows qualifications question" do
             expect(page).to have_content("Does the claimant’s initial teacher training (ITT) qualification year and specialist subject match the above information from their claim?")
+          end
+
+          scenario "shows the notes added as part of qualification checking" do
+            expect(notes).to include(
+              have_text("Ineligible").and(
+                have_text("Theology\", \"economics and statistics\", \"economics").and(
+                  have_text("by an automated check")
+                )
+              )
+            )
           end
         end
 
@@ -1613,6 +1873,18 @@ RSpec.feature "Admin claim tasks update with DQT API" do
               expect(page).to have_content("Did #{claim.full_name} submit the claim?")
               expect(page).to have_link(href: admin_claim_notes_path(claim))
             end
+
+            scenario "shows the notes added as part of automated identity checking" do
+              expect(notes).to include(
+                have_text("National Insurance number not matched").and(
+                  have_text("Claimant: \"#{claim.national_insurance_number}\"").and(
+                    have_text("DQT: \"QQ100000B\"").and(
+                      have_text("by an automated check")
+                    )
+                  )
+                )
+              )
+            end
           end
 
           context "admin claim notes view" do
@@ -1657,6 +1929,18 @@ RSpec.feature "Admin claim tasks update with DQT API" do
               expect(page).to have_content("Did #{claim.full_name} submit the claim?")
               expect(page).to have_link(href: admin_claim_notes_path(claim))
             end
+
+            scenario "shows the notes added as part of automated identity checking" do
+              expect(notes).to include(
+                have_text("Teacher reference number not matched").and(
+                  have_text("Claimant: \"#{claim.teacher_reference_number}\"").and(
+                    have_text("DQT: \"7654321\"").and(
+                      have_text("by an automated check")
+                    )
+                  )
+                )
+              )
+            end
           end
 
           context "admin claim notes view" do
@@ -1696,6 +1980,18 @@ RSpec.feature "Admin claim tasks update with DQT API" do
             scenario "shows identity confirmation question" do
               expect(page).to have_content("Did #{claim.full_name} submit the claim?")
               expect(page).to have_link(href: admin_claim_notes_path(claim))
+            end
+
+            scenario "shows the notes added as part of automated identity checking" do
+              expect(notes).to include(
+                have_text("First name or surname not matched").and(
+                  have_text("Claimant: \"#{claim.full_name}\"").and(
+                    have_text("DQT: \"Except #{claim.surname}\"").and(
+                      have_text("by an automated check")
+                    )
+                  )
+                )
+              )
             end
           end
 
@@ -1740,6 +2036,18 @@ RSpec.feature "Admin claim tasks update with DQT API" do
             scenario "shows identity confirmation question" do
               expect(page).to have_content("Did #{claim.full_name} submit the claim?")
               expect(page).to have_link(href: admin_claim_notes_path(claim))
+            end
+
+            scenario "shows the notes added as part of automated identity checking" do
+              expect(notes).to include(
+                have_text("First name or surname not matched").and(
+                  have_text("Claimant: \"#{claim.full_name}\"").and(
+                    have_text("DQT: \"#{claim.first_name} Except\"").and(
+                      have_text("by an automated check")
+                    )
+                  )
+                )
+              )
             end
           end
 
@@ -1827,6 +2135,18 @@ RSpec.feature "Admin claim tasks update with DQT API" do
             scenario "shows identity confirmation question" do
               expect(page).to have_content("Did #{claim.full_name} submit the claim?")
               expect(page).to have_link(href: admin_claim_notes_path(claim))
+            end
+
+            scenario "shows the notes added as part of automated identity checking" do
+              expect(notes).to include(
+                have_text("Date of birth not matched").and(
+                  have_text("Claimant: \"#{claim.date_of_birth}\"").and(
+                    have_text("DQT: \"#{claim.date_of_birth + 1.day}\"").and(
+                      have_text("by an automated check")
+                    )
+                  )
+                )
+              )
             end
           end
 
@@ -2012,6 +2332,14 @@ RSpec.feature "Admin claim tasks update with DQT API" do
             expect(page).to have_content("Did #{claim.full_name} submit the claim?")
             expect(page).to have_link(href: admin_claim_notes_path(claim))
           end
+
+          scenario "shows the notes added as part of automated identity checking" do
+            expect(notes).to include(
+              have_text("Not matched").and(
+                have_text("by an automated check")
+              )
+            )
+          end
         end
 
         context "admin claim notes view" do
@@ -2035,8 +2363,8 @@ RSpec.feature "Admin claim tasks update with DQT API" do
               9,
               1
             ),
-            itt_subjects: ["SUBJECT"],
-            itt_subject_codes: ["CODE"]
+            itt_subjects: ["Mathematics"],
+            itt_subject_codes: ["100403"]
           }
         end
 
@@ -2050,6 +2378,22 @@ RSpec.feature "Admin claim tasks update with DQT API" do
 
         context "admin claim tasks qualifications view" do
           before { visit admin_claim_task_path(claim, :qualifications) }
+
+          scenario "shows the notes added as part of qualification checking" do
+            expect(notes).to include(
+              have_text("Eligible").and(
+                have_text("Mathematics").and(
+                  have_text("100403")
+                )
+              )
+            )
+          end
+
+          scenario "note doesn't show by an automated check" do
+            expect(notes).not_to include(
+              have_text("by an automated check")
+            )
+          end
 
           scenario "shows task outcome performed by automated check" do
             expect(task_outcome).to have_text("This task was performed by an automated check on #{I18n.l(claim.tasks.where(name: :qualifications).first.created_at)}")
@@ -2076,8 +2420,8 @@ RSpec.feature "Admin claim tasks update with DQT API" do
                 9,
                 1
               ),
-              itt_subjects: ["SUBJECT"],
-              itt_subject_codes: ["CODE"]
+              itt_subjects: ["A Ineligible SUBJECT"],
+              itt_subject_codes: ["821009"]
             }
           end
 
@@ -2091,6 +2435,18 @@ RSpec.feature "Admin claim tasks update with DQT API" do
 
           context "admin claim tasks qualifications view" do
             before { visit admin_claim_task_path(claim, :qualifications) }
+
+            scenario "shows the notes added as part of qualification checking" do
+              expect(notes).to include(
+                have_text("Ineligible").and(
+                  have_text("A Ineligible SUBJECT").and(
+                    have_text("821009").and(
+                      have_text("by an automated check")
+                    )
+                  )
+                )
+              )
+            end
 
             scenario "shows qualifications question" do
               expect(page).to have_content("Does the claimant’s initial teacher training (ITT) qualification year match the above information from their claim?")
@@ -2112,7 +2468,7 @@ RSpec.feature "Admin claim tasks update with DQT API" do
           end
         end
 
-        context "with admin claims tasks qualifications passed" do
+        context "with manually confirmed admin claim tasks qualifications passed" do
           let(:claim) do
             claimant_submits_claim(
               claim_attributes: {
@@ -2123,6 +2479,7 @@ RSpec.feature "Admin claim tasks update with DQT API" do
                 reference: "AB123456",
                 surname: "ELIGIBLE",
                 tasks: [build(:task, name: "qualifications")],
+                notes: [build(:note, body: note_body)],
                 teacher_reference_number: "1234567"
               }
             )
@@ -2130,6 +2487,14 @@ RSpec.feature "Admin claim tasks update with DQT API" do
 
           context "admin claim tasks qualifications view" do
             before { visit admin_claim_task_path(claim, :qualifications) }
+
+            scenario "shows the notes added as part of qualification checking" do
+              expect(notes).to include(
+                have_text("Ineligible").and(
+                  have_text("ITT subject codes: [\"TT100\", \"\", \"\"]")
+                )
+              )
+            end
 
             scenario "shows task outcome previously performed by user" do
               expect(task_outcome).to have_text("This task was performed by #{claim.tasks.where(name: :qualifications).first.created_by.full_name} on #{I18n.l(claim.tasks.where(name: :qualifications).first.created_at)}")
@@ -2158,8 +2523,8 @@ RSpec.feature "Admin claim tasks update with DQT API" do
               9,
               1
             ),
-            itt_subjects: ["Subject"],
-            itt_subject_codes: ["NoCode"]
+            itt_subjects: ["Student Loans Ineligible Subject"],
+            itt_subject_codes: ["010101"]
           }
         end
 
@@ -2176,6 +2541,16 @@ RSpec.feature "Admin claim tasks update with DQT API" do
 
           scenario "shows qualifications question" do
             expect(page).to have_content("Does the claimant’s initial teacher training (ITT) qualification year match the above information from their claim?")
+          end
+
+          scenario "shows the notes added as part of qualification checking" do
+            expect(notes).to include(
+              have_text("Ineligible").and(
+                have_text("Student Loans Ineligible Subject").and(
+                  have_text("by an automated check")
+                )
+              )
+            )
           end
         end
 

@@ -1,7 +1,10 @@
+<%= render "admin/tasks/notes", notes: @notes, display_description: false %>
+
 <div class="govuk-inset-text">
   <p class="govuk-body">
     <%= task_status_tag(task.claim, task.name) %>
   </p>
+
   <p class="govuk-body">
     <% if task.manual %>
       This task was performed by <%= user_details(task.created_by, include_line_break: false) %> on <%= l(task.updated_at) %>
