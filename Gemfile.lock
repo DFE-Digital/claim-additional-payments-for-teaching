@@ -52,6 +52,8 @@ GEM
     activerecord (6.0.3.7)
       activemodel (= 6.0.3.7)
       activesupport (= 6.0.3.7)
+    activerecord-copy (1.1.0)
+      activerecord (>= 3.1)
     activestorage (6.0.3.7)
       actionpack (= 6.0.3.7)
       activejob (= 6.0.3.7)
@@ -460,6 +462,7 @@ PLATFORMS
   x86_64-darwin-18
 
 DEPENDENCIES
+  activerecord-copy
   application_insights!
   bootsnap (>= 1.1.0)
   brakeman
