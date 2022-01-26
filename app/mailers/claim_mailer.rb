@@ -48,9 +48,21 @@ class ClaimMailer < ApplicationMailer
 
   def update_after_three_weeks(claim)
     set_common_instance_variables(claim)
-    @subject = "We are still reviewing your application #{@claim_description}, reference number: #{claim.reference}"
 
-    send_mail
+    if [StudentLoans, EarlyCareerPayments].include?(claim.policy)
+      personalisation = {
+        first_name: @claim.first_name,
+        ref_number: @claim.reference,
+        support_email_address: @support_email_address,
+        application_date: l(@claim.submitted_at.to_date)
+      }
+
+      send_mail(:notify, template_ids(claim)[:CLAIM_UPDATE_AFTER_THREE_WEEKS_NOTIFY_TEMPLATE_ID], personalisation)
+    else # MathsAndPhysics
+      @subject = "We are still reviewing your application #{@claim_description}, reference number: #{claim.reference}"
+
+      send_mail(:rails)
+    end
   end
 
   def email_verification(claim, one_time_password)
