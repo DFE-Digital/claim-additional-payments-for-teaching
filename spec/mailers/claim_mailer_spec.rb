@@ -80,11 +80,18 @@ RSpec.describe ClaimMailer, type: :mailer do
         let(:claim) { build(:claim, :approved, policy: policy) }
         let(:mail) { ClaimMailer.approved(claim) }
 
-        it_behaves_like "an email related to a claim using the generic template", policy
+        it_behaves_like "an email related to a claim using GOVUK Notify templates", policy
 
-        it "mentions that claim has been approved in the subject and body" do
-          expect(mail.subject).to include("approved")
-          expect(mail.body.encoded).to include("been approved")
+        context "when EarlyCareerPayments", if: policy == EarlyCareerPayments do
+          it "uses the correct template" do
+            expect(mail[:template_id].decoded).to eq "3974db1c-c7dd-44cf-97b9-bb96d211a996"
+          end
+        end
+
+        context "when StudentLoans", if: policy == StudentLoans do
+          it "uses the correct template" do
+            expect(mail[:template_id].decoded).to eq "2032be01-6aee-4a1a-81ce-cf91e09de8d7"
+          end
         end
       end
 

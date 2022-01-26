@@ -7,6 +7,9 @@ The format is based on [Keep a Changelog]
 ## [Unreleased]
 
 - Add DqT task automation notes in Admin task confirmation screens
+- ECP + TSLR policies transition to use GOVUK Notify Mail Templates to allow
+  business users to modify wording
+  - Claim approved
 
 ## [Release 110] - 2022-01-20
 
