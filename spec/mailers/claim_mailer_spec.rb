@@ -99,21 +99,18 @@ RSpec.describe ClaimMailer, type: :mailer do
         let(:claim) { build(:claim, :submitted, policy: policy) }
         let(:mail) { ClaimMailer.rejected(claim) }
 
-        it_behaves_like "an email related to a claim using the generic template", policy
+        it_behaves_like "an email related to a claim using GOVUK Notify templates", policy
 
-        it "mentions that claim has been rejected in the subject and body" do
-          expect(mail.subject).to include("rejected")
-          expect(mail.body.encoded).to include("not been able to approve")
-
-          expect(mail.body.encoded)
-            .to include("We have not been able to approve your application")
+        context "when EarlyCareerPayments", if: policy == EarlyCareerPayments do
+          it "uses the correct template" do
+            expect(mail[:template_id].decoded).to eq "49a25f3c-6dea-443f-a79f-58654363dc9a"
+          end
         end
 
-        it "changes the ITT reason based on the policy's configured current_academic_year" do
-          PolicyConfiguration.for(policy).update!(current_academic_year: "2025/2026")
-
-          expect(mail.body.encoded)
-            .to include("We have not been able to approve your application")
+        context "when StudentLoans", if: policy == StudentLoans do
+          it "uses the correct template" do
+            expect(mail[:template_id].decoded).to eq "57ca138c-9536-4323-92ba-1876f7957360"
+          end
         end
       end
 
@@ -196,25 +193,6 @@ RSpec.describe ClaimMailer, type: :mailer do
           expect(mail.subject).to include("still reviewing your application")
           expect(mail.body.encoded).to include("We're still reviewing your application")
         end
-      end
-    end
-  end
-
-  context "with a StudentLoans claim" do
-    describe "#rejected" do
-      let(:claim) { build(:claim, :submitted, policy: StudentLoans) }
-      let(:mail) { ClaimMailer.rejected(claim) }
-
-      it "mentions “the eligible-school during the financial year” reason" do
-        # Based on the current academic year set by the policy_configurations.yml fixtures
-        expect(mail.body.encoded).to include("you did not teach at an eligible school between 6 April 2024 and 5 April 2025")
-      end
-
-      it "changes the financial year based on the policy's configured current_academic_year" do
-        policy_configurations(:student_loans).update!(current_academic_year: "2019/2020")
-
-        expect(mail.body.encoded)
-          .to include("you did not teach at an eligible school between 6 April 2018 and 5 April 2019")
       end
     end
   end

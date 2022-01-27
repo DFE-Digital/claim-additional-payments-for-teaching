@@ -12,6 +12,7 @@ The format is based on [Keep a Changelog]
   - TSLR + ECP
     - Claim approved
     - Update after three weeks
+    - Claim rejected
   - ECP
     - Reminder - application window open
     - Reminder set up confirmation
