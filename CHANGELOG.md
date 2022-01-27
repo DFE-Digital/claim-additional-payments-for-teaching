@@ -7,11 +7,14 @@ The format is based on [Keep a Changelog]
 ## [Unreleased]
 
 - Add DqT task automation notes in Admin task confirmation screens
-- ECP + TSLR policies transition to use GOVUK Notify Mail Templates to allow
-  business users to modify wording
-  - Claim approved
-  - Update after three weeks
-  - Reminder - application window open
+- Align policies to transition to GOVUK Notify Mail Templates to allow business
+  users to modify wording
+  - TSLR + ECP
+    - Claim approved
+    - Update after three weeks
+  - ECP
+    - Reminder - application window open
+    - Reminder set up confirmation
 
 ## [Release 110] - 2022-01-20
 

@@ -7,6 +7,8 @@ RSpec.feature "Set Reminder when Eligible Later for an Early Career Payment" do
     {subject: "mathematics", cohort: "2019 to 2020", academic_year: AcademicYear.new(2019), next_year: 2022, frozen_year: Date.new(2021, 9, 1)},
     {subject: "mathematics", cohort: "2020 to 2021", academic_year: AcademicYear.new(2020), next_year: 2022, frozen_year: Date.new(2021, 9, 1)}
   ].each do |args|
+    let(:mail) { ReminderMailer.reminder_set(Reminder.order(:created_at).last) }
+
     scenario "Claimant enters personal details and OTP for #{args[:subject]} for #{args[:cohort]}" do
       # set current date to academic year 2021 (or whatever is passed in from frozen_year)
       travel_to args[:frozen_year] do
@@ -61,8 +63,7 @@ RSpec.feature "Set Reminder when Eligible Later for an Early Career Payment" do
         expect(reminder.itt_academic_year).to eq AcademicYear.new(args[:next_year])
         expect(reminder.itt_subject).to eq args[:subject]
         expect(page).to have_text("We have set your reminder")
-        reminder_set_email = ActionMailer::Base.deliveries.last.body
-        expect(reminder_set_email).to have_text("We will send you a reminder in September #{args[:next_year]}")
+        expect(mail[:template_id].decoded).to eq "0dc80ba9-adae-43cd-98bf-58882ee401c3"
       end
     end
   end
@@ -140,8 +141,7 @@ RSpec.feature "Set Reminder when Eligible Later for an Early Career Payment" do
           expect(reminder.itt_academic_year).to eq AcademicYear.new(args[:next_year])
           expect(reminder.itt_subject).to eq args[:subject]
           expect(page).to have_text("We have set your reminder")
-          reminder_set_email = ActionMailer::Base.deliveries.last.body
-          expect(reminder_set_email).to have_text("We will send you a reminder in September #{args[:next_year]}")
+          expect(mail[:template_id].decoded).to eq "0dc80ba9-adae-43cd-98bf-58882ee401c3"
         end
       end
     end

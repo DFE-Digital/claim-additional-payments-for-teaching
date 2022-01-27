@@ -23,8 +23,15 @@ class ReminderMailer < ApplicationMailer
 
   def reminder_set(reminder)
     @reminder = reminder
-    @subject = "Your reminder has been set"
-    send_mail
+    support_email_address = translate("early_career_payments.support_email_address")
+
+    personalisation = {
+      first_name: extract_first_name(@reminder.full_name),
+      support_email_address: support_email_address,
+      next_application_window: @reminder.send_year
+    }
+
+    send_mail(:notify, REMINDER_SET_NOTIFY_TEMPLATE_ID, personalisation)
   end
 
   def reminder(reminder)
