@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+- Update the release process documentation
+
 ## [Release 111] - 2022-01-27
 
 - Add DqT task automation notes in Admin task confirmation screens
