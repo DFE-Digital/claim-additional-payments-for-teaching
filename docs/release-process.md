@@ -2,38 +2,8 @@
 
 ## Get Approval
 
-### 1. Create Release Note documentation
-
-Create a release note (using the ECP Beta Release Note template) by creating a
-new confluence page and changing the title to correspond with the release number
-under the Release Process confluence page and the page must have the following
-information e.g.
-[`Release 1`](https://dfedigital.atlassian.net/wiki/spaces/TP/pages/3021406211/Release+1)
-Information | Notes --- | --- Release Date | Planned production release date
-Approver | Name of the person who is going to approve the release Approval Date
-| The date approval was granted Status | Set the PENDING status, when the team
-is ready to release in production. Summary | Provide a short summary of the
-release and it’s associated business value Important highlights from this
-release | High level explanation of what is included in this release. NOTE: This
-section and CHANGELOG release notes must match. All update for this release |
-Provide a list of Jira tickets that are going to released with links to the Jira
-issue. Tickets should be split into the features and bugs section of the note.
-Testing | Provide the testing approach you are taking/have taken for the release
-and links to any results/reports from lower environment testing. Rollback |
-Define the rollback plan if the event that the release doesn’t go as planned.
-Failover Plan | Define the failover plan in the event of catastrophic failure.
-
-### 2. Get Approval
-
-Send an email to the approver and other key stakeholders to obtain approval to
-release to production and supply the created release note.
-
-### 3. After Approval
-
-Update the Release note with the following information
-
-- Change the status from PENDING to APPROVED
-- Set the approval date.
+Contact the approver and other key stakeholders to obtain approval to release to
+production and supply the created release note.
 
 ## Conduct Release
 
@@ -77,7 +47,12 @@ reflects the changes included in the release:
   the service that also need updating; environment variables that need
   changing/adding; third-party services that need to be set up/updated
 
-### 3. Push the tag
+### 3. Testing
+
+Perform exploratory testing on Azure TEST to ensure the service is working as
+expected.
+
+### 4. Push the tag
 
 Once the pull request has been merged, create a tag against the merge commit in
 the format `release-xxx` (zero-padded again) and push it to GitHub:
@@ -87,7 +62,7 @@ git tag release-xxx merge-commit-for-release
 git push origin refs/tags/release-xxx
 ```
 
-### 4. Trigger a production release in Azure DevOps
+### 5. Trigger a production release in Azure DevOps
 
 Once the build has passed for the newly tagged commit, you can deploy to
 production as follows:
@@ -112,23 +87,14 @@ production as follows:
   Release screen
 - This deployment will also require approvals.
 
-### 5. Database Migration
+### 6. Database Migration
 
 Follow the
 [`guideline`](https://github.com/DFE-Digital/claim-additional-payments-for-teaching/blob/master/README.md#creating-data-migrations)
 to run the database migration if required.
 
-### 6. Testing
+### 7. Announce the release in #claim_early_career_payments_tech
 
-Perform exploratory testing and ensures the service is working as expected. Also
-ensures that the service’s webtests and health check tests are passing.
-
-### 7. Update Confluence page
-
-Update the SUCCESS or FAIL status information on the release document on the
-confluence page.
-
-### 8. Announce the release in #twd_claim_payments
-
-Post an update in the team's main Slack channel #twd_claim_payments to let
-people know about the new release and the changes that have just gone out.
+Post an update in the team's main Slack channel
+#claim_early_career_payments_tech to let people know about the new release and
+the changes that have just gone out.
