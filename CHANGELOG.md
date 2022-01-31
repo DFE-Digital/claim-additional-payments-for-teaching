@@ -7,6 +7,7 @@ The format is based on [Keep a Changelog]
 ## [Unreleased]
 
 - Update the release process documentation
+- Update cookie policy to include collection of IP addresses
 
 ## [Release 111] - 2022-01-27
 
