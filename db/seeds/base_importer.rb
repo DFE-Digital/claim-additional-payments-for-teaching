@@ -4,6 +4,8 @@ require "benchmark"
 if ENV["ENVIRONMENT_NAME"] == "development" ||
     ENV["ENVIRONMENT_NAME"] == "test" ||
     ENV["ENVIRONMENT_NAME"] == "local"
+  require "faker"
+
   Faker::Config.random = Random.new(srand(1234))
   Faker::Config.locale = "en-GB"
   Faker::UniqueGenerator.clear
