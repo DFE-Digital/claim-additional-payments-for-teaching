@@ -57,15 +57,15 @@ if Rails.env.development?
 
       policy = StudentLoans
       create_list(:claim, 4, :approved, policy: policy)
-      create_list(:claim, 3, :submitted, policy: policy)
-      create_list(:claim, 2, :rejected, policy: policy)
+      create_list(:claim, 1, :submitted, policy: policy)
+      create_list(:claim, 1, :rejected, policy: policy)
       create_list(:claim, 1, :unverified, policy: policy)
 
       policy = EarlyCareerPayments
       create_list(:claim, 12, :approved, policy: policy)
-      create_list(:claim, 5, :submitted, policy: policy)
+      create_list(:claim, 1, :submitted, policy: policy)
       create_list(:claim, 1, :rejected, policy: policy)
-      create_list(:claim, 2, :unverified, policy: policy)
+      create_list(:claim, 1, :unverified, policy: policy)
     end
   end
 end

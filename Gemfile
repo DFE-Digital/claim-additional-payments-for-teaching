@@ -96,6 +96,9 @@ group :development, :test do
   gem "shoulda-matchers"
   gem "factory_bot_rails"
   gem "dotenv-rails"
+  # speed up bulk imports
+  gem "activerecord-copy"
+  gem "faker", "~> 2.19"
 end
 
 group :development do
@@ -117,7 +120,6 @@ group :test do
   gem "launchy"
   gem "climate_control"
   gem "simplecov", require: false
-  gem "faker", "~> 2.19"
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
