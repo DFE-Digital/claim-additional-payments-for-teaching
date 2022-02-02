@@ -48,6 +48,12 @@ class BaseImporter
       elsif ENV["ENVIRONMENT_NAME"] == "production"
         Rails.root.join("db", "test_seeders", "data", "dqt_testing", "ecp_test_seed_data_254_records.csv")
       end
+    elsif policy == StudentLoans
+      if ENV["ENVIRONMENT_NAME"] == "local"
+        Rails.root.join("db", "test_seeders", "data", "dqt_testing", "tslr_test_seed_data_two_records.csv")
+      elsif ENV["ENVIRONMENT_NAME"] == "production"
+        Rails.root.join("db", "test_seeders", "data", "dqt_testing", "tslr_test_seed_data_98_records.csv")
+      end
     end
   end
 

@@ -10,6 +10,8 @@ The format is based on [Keep a Changelog]
 - Update cookie policy to include collection of IP addresses
 - ECP
   - Add ability to upload from CSV (developer process) DqT test data
+- TSLR
+  - Add ability to upload from CSV (developer process) DqT test data
 
 ## [Release 111] - 2022-01-27
 

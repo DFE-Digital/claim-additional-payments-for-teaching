@@ -1,6 +1,7 @@
 require_relative "base_importer"
 require_relative "eligibilities/early_career_payments"
 require_relative "eligibilities/early_career_payments/importer"
+require_relative "eligibilities/student_loans_importer"
 require_relative "base_csv_import_validator"
 require_relative "eligibilities/early_career_payments/csv_import_validator"
 require_relative "claims_importer"
@@ -26,6 +27,9 @@ class DataImporter < BaseImporter
     when EarlyCareerPayments
       TestSeeders::Eligibilities::EarlyCareerPayments::Importer.new(records).run
       @eligibilities = EarlyCareerPayments::Eligibility.order(created_at: :asc).to_a
+    when StudentLoans
+      TestSeeders::Eligibilities::StudentLoansImporter.new(records).run
+      @eligibilities = StudentLoans::Eligibility.order(created_at: :asc).to_a
     end
   end
 
