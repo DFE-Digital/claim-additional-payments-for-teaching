@@ -1,6 +1,6 @@
-module Seeds
+module TestSeeders
   module Eligibilities
-    class EarlyCareerPaymentsSeeder
+    class EarlyCareerPaymentsImporter
       ELIGIBILITY_COLUMNS = [
         :nqt_in_academic_year_after_itt,
         :qualification,
