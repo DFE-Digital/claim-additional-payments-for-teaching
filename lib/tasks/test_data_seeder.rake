@@ -15,8 +15,20 @@ namespace :test_data_seeder do
     logger.info "Seeding data import complete!"
   end
 
+  desc "bulk imports data from csv for DqT testing of TSLR claims"
+  task "dqt_data:tslr" => :environment do
+    abort("Not to be run in 'PRODUCTION!") if ENV.fetch("ENVIRONMENT_NAME") == "production" && Rails.env.production?
+
+    logger = Logger.new($stdout)
+    logger.info "Importing StudentLoans DqT seed data, this may take a couple minutes..."
+    DataImporter.new(policies: [StudentLoans], test_type: :dqt_csv, quantities: {student_loans: nil}).run
+    logger.info "Seeding data import complete!"
+  end
+
   desc "bulk imports ECP & TSLR data to postgresql for volume testing"
   task :bulk, [:early_career_payments, :student_loans] => :environment do |t, args|
+    abort("Not to be run in 'PRODUCTION!") if ENV.fetch("ENVIRONMENT_NAME") == "production" && Rails.env.production?
+
     args.with_defaults(early_career_payments: 2000, student_loans: 0)
     logger = Logger.new($stdout)
     policies = []

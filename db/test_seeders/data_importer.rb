@@ -4,6 +4,9 @@ require_relative "base_csv_import_validator"
 require_relative "eligibilities/early_career_payments"
 require_relative "eligibilities/early_career_payments/importer"
 require_relative "eligibilities/early_career_payments/csv_import_validator"
+require_relative "eligibilities/student_loans"
+require_relative "eligibilities/student_loans/importer"
+require_relative "eligibilities/student_loans/csv_import_validator"
 require_relative "claims_importer"
 require_relative "decisions_importer"
 require_relative "record_builder"
@@ -15,11 +18,12 @@ class DataImporter < BaseImporter
 
   def run
     policies.each do |policy|
-      if [EarlyCareerPayments].include?(policy)
+      logger.info BOLD_LINE
+      if [EarlyCareerPayments, StudentLoans].include?(policy)
         @policy = policy
         logger.info policy.to_s
       else
-        logger.warn "#{policy} Policy not supported."
+        logger.warn "#{FAILURE} #{policy} Policy not supported."
         break
       end
       if test_type == :volume
@@ -28,20 +32,20 @@ class DataImporter < BaseImporter
           logger.info "0 #{policy} records requested !"
           break
         end
-        if records.empty?
-          self.records = RecordBuilder.new(quantity: quantity).records
-        end
+        self.records = RecordBuilder.new(quantity: quantity).records
       elsif test_type == :dqt_csv
         read_test_csv
       end
 
       insert_eligibilities
+      logger.info LINE
       insert_claims
       submit_claims
       run_jobs
       validate_import
     end
     approve_and_generate_payroll
+    logger.info BOLD_LINE
   end
 
   private
@@ -58,6 +62,9 @@ class DataImporter < BaseImporter
         TestSeeders::Eligibilities::EarlyCareerPayments::Importer.new(records, test_type: test_type, quantity: quantity).run
       end
       @eligibilities = EarlyCareerPayments::Eligibility.order(created_at: :asc).to_a
+    when StudentLoans
+      TestSeeders::Eligibilities::StudentLoans::Importer.new(records).run
+      @eligibilities = StudentLoans::Eligibility.order(created_at: :asc).to_a
     end
   end
 
@@ -68,12 +75,18 @@ class DataImporter < BaseImporter
   def validate_import
     return unless test_type == :dqt_csv
 
-    TestSeeders::Eligibilities::EarlyCareerPayments::CsvImportValidator.new(records, policy).run
+    case policy
+    when EarlyCareerPayments
+      TestSeeders::Eligibilities::EarlyCareerPayments::CsvImportValidator.new(records, policy).run
+    when StudentLoans
+      TestSeeders::Eligibilities::StudentLoans::CsvImportValidator.new(records, policy).run
+    end
   end
 
   def approve_and_generate_payroll
     return if test_type == :dqt_csv
 
+    logger.info BOLD_LINE
     logger.info "Post Submission steps"
     insert_decisions
     generate_payroll
