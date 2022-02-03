@@ -85,6 +85,8 @@ gem "faraday_middleware"
 
 # required for prod due to Azure DEV/TEST all running as 'production'
 gem "faker", "~> 2.19", require: false
+# speed up bulk imports
+gem "activerecord-copy", require: false
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
@@ -99,8 +101,6 @@ group :development, :test do
   gem "shoulda-matchers"
   gem "factory_bot_rails"
   gem "dotenv-rails"
-  # speed up bulk imports
-  gem "activerecord-copy"
 end
 
 group :development do
