@@ -18,8 +18,6 @@ class BaseImporter
     @records = []
     @logger = Logger.new($stdout)
     clear_data
-    load_policies
-    load_essential_fixtures
     read_test_csv
   end
 
@@ -40,27 +38,10 @@ class BaseImporter
     Payment.delete_all
     PayrollRun.delete_all
     Reminder.delete_all
-    DfeSignIn::User.delete_all
-    School.delete_all
-    LocalAuthorityDistrict.delete_all
-    LocalAuthority.delete_all
-    PolicyConfiguration.delete_all
-  end
-
-  def load_policies
-    PolicyConfiguration.create!(policy_type: StudentLoans, current_academic_year: AcademicYear.current)
-    PolicyConfiguration.create!(policy_type: MathsAndPhysics, current_academic_year: AcademicYear.current)
-    PolicyConfiguration.create!(policy_type: EarlyCareerPayments, current_academic_year: AcademicYear.current)
-  end
-
-  def load_essential_fixtures
-    ENV["FIXTURES_PATH"] = "spec/fixtures"
-    ENV["FIXTURES"] = "local_authorities,local_authority_districts,schools"
-    Rake::Task["db:fixtures:load"].invoke
   end
 
   def filename
-    Rails.root.join("spec", "fixtures", "files", "dqt_testing", "ecp_test_seed_data_254_records.csv") if policy == EarlyCareerPayments
+    Rails.root.join("db", "test_seeders", "data", "dqt_testing", "ecp_test_seed_data_254_records.csv") if policy == EarlyCareerPayments
   end
 
   def read_test_csv
