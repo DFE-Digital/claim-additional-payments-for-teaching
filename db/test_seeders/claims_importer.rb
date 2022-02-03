@@ -1,5 +1,5 @@
-module Seeds
-  class ClaimsSeeder
+module TestSeeders
+  class ClaimsImporter
     CLAIM_COLUMNS = [
       :first_name,
       :surname,
@@ -21,7 +21,7 @@ module Seeds
       :address_line_1,
       :address_line_2,
       :address_line_3,
-      # :address_line_4,
+      :address_line_4,
       :postcode,
       :has_student_loan,
       :student_loan_country,
@@ -31,8 +31,6 @@ module Seeds
       :postgraduate_masters_loan,
       :postgraduate_doctoral_loan,
       :student_loan_plan,
-      # :reference,
-      # :submitted_at,
       :created_at,
       :updated_at
     ].freeze
@@ -84,6 +82,7 @@ module Seeds
             address[:address_line_1],
             address[:address_line_2],
             address[:address_line_3],
+            nil,
             address[:postcode],
             student_loans[:has_student_loan],
             student_loans[:student_loan_country],
@@ -117,11 +116,7 @@ module Seeds
     end
 
     def email_address
-      if ENV.fetch("ENVIRONMENT_NAME") == "production"
-        "rick.jones@digital.education.gov.uk"
-      else # (local, development, test)
-        [initials_first_name, ".", surname.downcase, "@example.com"].join
-      end
+      [initials_first_name, ".", surname.downcase, "@example.com"].join
     end
 
     def build_address
