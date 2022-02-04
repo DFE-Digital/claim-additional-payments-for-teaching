@@ -21,13 +21,14 @@ module TestSeeders
       end
 
       def run
+        @school_id ||= schools_id
         logger.info "seeding #{records.size} ECP Eligibilities"
         insert_eligibilities
       end
 
       private
 
-      attr_reader :records, :logger
+      attr_reader :records, :logger, :school_id
 
       # the existing version of the activerecord-copy gem does not support
       # binary copy of decimals, so for now 'award_amount' has been excluded
@@ -49,12 +50,16 @@ module TestSeeders
               false,
               false,
               false,
-              "c3a72961-340d-5e01-8fe0-73058c8e2f38",
+              school_id,
               time,
               time
             ]
           end
         end
+      end
+
+      def schools_id
+        School.find_by(name: "Penistone Grammar School").id
       end
 
       def qualification(route_into_teaching)
