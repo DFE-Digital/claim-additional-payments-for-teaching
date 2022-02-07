@@ -42,7 +42,7 @@ module TestSeeders
     end
 
     def run
-      logger.info "seeding #{records.size} Claims"
+      logger.info "Seeding #{records.size} Claims"
       insert_claims
     end
 
@@ -51,6 +51,8 @@ module TestSeeders
     attr_reader :records, :logger, :eligibilities, :first_name, :surname, :initials_first_name
 
     def insert_claims
+      elegibility_type ||= eligibilities.first.class.name
+      claim_academic_year ||= PolicyConfiguration.for(eligibilities.first.policy).current_academic_year.to_s
       Claim.copy_from_client CLAIM_COLUMNS do |copy|
         records.each do |data|
           time = Time.now.getutc
@@ -70,9 +72,9 @@ module TestSeeders
             personal_details[:national_insurance_number],
             personal_details[:email_address],
             personal_details[:email_verified],
-            PolicyConfiguration.for(EarlyCareerPayments).current_academic_year.to_s,
+            claim_academic_year,
             eligibility.id,
-            "EarlyCareerPayments::Eligibility",
+            elegibility_type,
             bank_details[:banking_name],
             bank_details[:personal_bank_account],
             bank_details[:sort_code],
