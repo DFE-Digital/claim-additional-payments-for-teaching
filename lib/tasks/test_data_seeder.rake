@@ -2,7 +2,7 @@ require_relative "../../db/test_seeders/data_importer"
 
 # NB This task is NOT to be run in PRODUCTION. It clears down the database.
 # Its sole purpose is to seed large volumes of realistic test data for testing
-# - DqT test data (ECP-1379)
+# - DqT test data (ECP-1379/1381)
 # - Large volume data for Payroll move from Cantium to In-house (ECP-1380)
 namespace :test_data_seeder do
   desc "bulk imports data from csv for DqT testing of ECP claims"
@@ -11,7 +11,31 @@ namespace :test_data_seeder do
 
     logger = Logger.new($stdout)
     logger.info "Importing EarlyCareerPayments DqT seed data, this may take a couple minutes..."
-    DataImporter.new(policy: EarlyCareerPayments).run
+    DataImporter.new(policies: [EarlyCareerPayments], test_type: :dqt_csv, quantities: {early_career_payments: nil}).run
+    logger.info "Seeding data import complete!"
+  end
+
+  desc "bulk imports ECP & TSLR data to postgresql for volume testing"
+  task :bulk, [:early_career_payments, :student_loans] => :environment do |t, args|
+    args.with_defaults(early_career_payments: 2000, student_loans: 0)
+    logger = Logger.new($stdout)
+    policies = []
+    quantities = {}
+    early_career_payments_volume = args[:early_career_payments]
+    student_loans_volume = args[:student_loans]
+    if early_career_payments_volume.to_i > 0
+      policies << EarlyCareerPayments
+      quantities[:early_career_payments] = early_career_payments_volume
+    end
+    if student_loans_volume.to_i > 0
+      policies << StudentLoans
+      quantities[:student_loans] = student_loans_volume
+    end
+
+    logger.info "EarlyCareerPayments volume: #{early_career_payments_volume}"
+    logger.info "StudentLoans volume: #{student_loans_volume}"
+    logger.info "Generating & importing seed data, this may take a couple minutes..."
+    DataImporter.new(policies: policies, test_type: :volume, quantities: quantities).run
     logger.info "Seeding data import complete!"
   end
 end

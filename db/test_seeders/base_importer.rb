@@ -14,17 +14,25 @@ if ENV["ENVIRONMENT_NAME"] == "development" ||
 end
 
 class BaseImporter
-  def initialize(policy:)
-    @policy = policy
+  include Seeder
+
+  def initialize(policies:, **kwargs)
+    @policies = policies
+    @test_type = kwargs[:test_type]
+    @quantities = kwargs[:quantities]
     @records = []
     @logger = Logger.new($stdout)
     clear_data
-    read_test_csv
   end
 
   private
 
-  attr_reader :policy, :records, :logger
+  attr_reader :policies,
+    :policy,
+    :logger,
+    :test_type,
+    :quantities,
+    :quantity
 
   def clear_data
     Note.delete_all
@@ -58,16 +66,34 @@ class BaseImporter
     end
   end
 
-  def run_jobs
-    logger.info "Clearing down Delayed::Jobs (worker)"
-    Rake::Task["jobs:clear"].invoke
+  def submit_claims
     claims = Claim.unsubmitted
     logger.info "Submitting #{claims.size} unsumitted claims for Claim Verification"
     claims.map(&:submit!)
-    claims.each do |claim|
+  end
+
+  # only run for DqT CSV Seeded data
+  # 99.9% of randomly generated data will never match (unless a fluke)
+  def run_jobs
+    return if test_type == :volume
+
+    logger.info "Clearing down Delayed::Jobs (worker)"
+    Rake::Task["jobs:clear"].invoke
+    Claim.submitted.each do |claim|
       ClaimVerifierJob.perform_later(claim)
     end
 
     Rake::Task["jobs:workoff"].invoke
+  end
+
+  def admin_approver
+    user = DfeSignIn::User.find { |u| u.role_codes.include?("teacher_payments_access") }
+    if user.nil?
+      logger.warn "#{WARN} - No Admin User found with 'teacher_payments_access' role"
+      logger.warn "#{WARN} - Please sign-out of Claims Admin Cantium Business Solutions ('teacher_payments_payroll')"
+      logger.warn "#{WARN} - Please sign-in as Department for Education Admin user ('teacher_payments_access')"
+      exit 100
+    end
+    user
   end
 end

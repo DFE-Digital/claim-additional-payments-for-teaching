@@ -1,10 +1,6 @@
 module TestSeeders
   class BaseCsvImportValidator
-    FAILURE = "❌"
-    LINE = "---------------------------------------------"
-    PASS = "✅"
-    WARN = "\e[31m 🢂 \e[0m"
-    WARN_L2 = "   🢂 "
+    include Seeder
 
     def initialize(records, policy)
       @records = records

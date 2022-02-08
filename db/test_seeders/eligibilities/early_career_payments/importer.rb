@@ -18,20 +18,21 @@ module TestSeeders
           :updated_at
         ].freeze
 
-        def initialize(records)
+        def initialize(records, **kwargs)
           @records = records
           @logger = Logger.new($stdout)
+          @test_type = kwargs[:test_type]
+          @quantity = kwargs[:quantity]
         end
 
         def run
-          @school_id ||= schools_id
           logger.info "Seeding #{records.size} ECP Eligibilities"
           insert_eligibilities
         end
 
         private
 
-        attr_reader :records, :logger, :school_id
+        attr_reader :records, :logger, :test_type, :quantity
 
         # the existing version of the activerecord-copy gem does not support
         # binary copy of decimals, so for now 'award_amount' has been excluded
@@ -53,7 +54,7 @@ module TestSeeders
                 false,
                 false,
                 false,
-                school_id,
+                schools_id,
                 time,
                 time
               ]
@@ -62,7 +63,10 @@ module TestSeeders
         end
 
         def schools_id
-          School.find_by(name: "Penistone Grammar School").id
+          uplift = [1, 4].include? Random.rand(10)
+          return School.find_by(name: "Penistone Grammar School").id if uplift
+
+          School.find_by(name: "Hampstead School").id
         end
       end
     end
