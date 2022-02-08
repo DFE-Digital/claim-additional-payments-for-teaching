@@ -42,7 +42,13 @@ class BaseImporter
   end
 
   def filename
-    Rails.root.join("db", "test_seeders", "data", "dqt_testing", "ecp_test_seed_data_254_records.csv") if policy == EarlyCareerPayments
+    if policy == EarlyCareerPayments
+      if ENV["ENVIRONMENT_NAME"] == "local"
+        Rails.root.join("db", "test_seeders", "data", "dqt_testing", "ecp_test_seed_data_five_records.csv")
+      elsif ENV["ENVIRONMENT_NAME"] == "production"
+        Rails.root.join("db", "test_seeders", "data", "dqt_testing", "ecp_test_seed_data_254_records.csv")
+      end
+    end
   end
 
   def read_test_csv
