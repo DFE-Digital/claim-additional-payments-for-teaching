@@ -1,9 +1,11 @@
 require_relative "base_importer"
+require_relative "base_csv_import_validator"
 require_relative "eligibilities/early_career_payments"
 require_relative "eligibilities/early_career_payments/importer"
-require_relative "eligibilities/student_loans_importer"
-require_relative "base_csv_import_validator"
 require_relative "eligibilities/early_career_payments/csv_import_validator"
+require_relative "eligibilities/student_loans"
+require_relative "eligibilities/student_loans/importer"
+require_relative "eligibilities/student_loans/csv_import_validator"
 require_relative "claims_importer"
 
 class DataImporter < BaseImporter
@@ -28,7 +30,7 @@ class DataImporter < BaseImporter
       TestSeeders::Eligibilities::EarlyCareerPayments::Importer.new(records).run
       @eligibilities = EarlyCareerPayments::Eligibility.order(created_at: :asc).to_a
     when StudentLoans
-      TestSeeders::Eligibilities::StudentLoansImporter.new(records).run
+      TestSeeders::Eligibilities::StudentLoans::Importer.new(records).run
       @eligibilities = StudentLoans::Eligibility.order(created_at: :asc).to_a
     end
   end
@@ -38,6 +40,11 @@ class DataImporter < BaseImporter
   end
 
   def validate_import
-    TestSeeders::Eligibilities::EarlyCareerPayments::CsvImportValidator.new(records, policy).run
+    case policy
+    when EarlyCareerPayments
+      TestSeeders::Eligibilities::EarlyCareerPayments::CsvImportValidator.new(records, policy).run
+    when StudentLoans
+      TestSeeders::Eligibilities::StudentLoans::CsvImportValidator.new(records, policy).run
+    end
   end
 end
