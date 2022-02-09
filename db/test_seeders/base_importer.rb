@@ -53,13 +53,13 @@ class BaseImporter
     if policy == EarlyCareerPayments
       if ENV["ENVIRONMENT_NAME"] == "local"
         Rails.root.join("db", "test_seeders", "data", "dqt_testing", "ecp_test_seed_data_five_records.csv")
-      elsif ENV["ENVIRONMENT_NAME"] == "production"
+      elsif ENV["ENVIRONMENT_NAME"] == "development" || ENV["ENVIRONMENT_NAME"] == "test"
         Rails.root.join("db", "test_seeders", "data", "dqt_testing", "ecp_test_seed_data_254_records.csv")
       end
     elsif policy == StudentLoans
       if ENV["ENVIRONMENT_NAME"] == "local"
         Rails.root.join("db", "test_seeders", "data", "dqt_testing", "tslr_test_seed_data_24_records.csv")
-      elsif ENV["ENVIRONMENT_NAME"] == "production"
+      elsif ENV["ENVIRONMENT_NAME"] == "development" || ENV["ENVIRONMENT_NAME"] == "test"
         Rails.root.join("db", "test_seeders", "data", "dqt_testing", "tslr_test_seed_data_98_records.csv")
       end
     end
