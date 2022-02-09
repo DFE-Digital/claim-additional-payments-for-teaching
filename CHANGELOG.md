@@ -8,7 +8,10 @@ The format is based on [Keep a Changelog]
 
 - Update the release process documentation
 - Update cookie policy to include collection of IP addresses
+- Add ability to generate Payroll Test data for ECP and/or TSLR
 - ECP
+  - Add ability to upload from CSV (developer process) DqT test data
+- TSLR
   - Add ability to upload from CSV (developer process) DqT test data
 
 ## [Release 111] - 2022-01-27

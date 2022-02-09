@@ -19,9 +19,13 @@ module TestSeeders
       data[:row] = idx + 1 # as 1st row is header
       data[:csv_trn] = record["Trn"]
       trn_mismatch(data, claim, record)
-      route_into_teaching_mismatch(data, eligibility, record)
-      eligible_itt_subject_mismatch(data, eligibility, record)
-      itt_academic_year_mismatch(data, eligibility, record)
+      if eligibility.policy == EarlyCareerPayments
+        route_into_teaching_mismatch(data, eligibility, record)
+        eligible_itt_subject_mismatch(data, eligibility, record)
+        itt_academic_year_mismatch(data, eligibility, record)
+      elsif eligibility.policy == StudentLoans
+        subject_taught_mismatch(data, eligibility, record)
+      end
       unmatched_records << data if data.size > 2
     end
 

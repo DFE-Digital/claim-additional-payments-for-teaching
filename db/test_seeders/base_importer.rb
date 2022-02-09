@@ -56,6 +56,12 @@ class BaseImporter
       elsif ENV["ENVIRONMENT_NAME"] == "production"
         Rails.root.join("db", "test_seeders", "data", "dqt_testing", "ecp_test_seed_data_254_records.csv")
       end
+    elsif policy == StudentLoans
+      if ENV["ENVIRONMENT_NAME"] == "local"
+        Rails.root.join("db", "test_seeders", "data", "dqt_testing", "tslr_test_seed_data_24_records.csv")
+      elsif ENV["ENVIRONMENT_NAME"] == "production"
+        Rails.root.join("db", "test_seeders", "data", "dqt_testing", "tslr_test_seed_data_98_records.csv")
+      end
     end
   end
 
@@ -68,6 +74,7 @@ class BaseImporter
 
   def submit_claims
     claims = Claim.unsubmitted
+    logger.info LINE
     logger.info "Submitting #{claims.size} unsumitted claims for Claim Verification"
     claims.map(&:submit!)
   end
@@ -77,6 +84,7 @@ class BaseImporter
   def run_jobs
     return if test_type == :volume
 
+    logger.info BOLD_LINE
     logger.info "Clearing down Delayed::Jobs (worker)"
     Rake::Task["jobs:clear"].invoke
     Claim.submitted.each do |claim|
@@ -84,6 +92,7 @@ class BaseImporter
     end
 
     Rake::Task["jobs:workoff"].invoke
+    logger.info BOLD_LINE
   end
 
   def admin_approver
