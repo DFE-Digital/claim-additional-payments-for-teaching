@@ -6,11 +6,10 @@ require "excel_utils"
 
 module Payroll
   class PaymentCsvRow < SimpleDelegator
-    DATE_FORMAT = "%Y%m%d"
+    DATE_FORMAT = "%d-%m-%Y"
     UNITED_KINGDOM = "United Kingdom"
     BASIC_RATE_TAX_CODE = "BR"
     CUMULATIVE_TAX_BASIS = "0"
-    NOT_EMPLOYEES_ONLY_JOB = "3"
     NI_CATEGORY_FOR_ALL_EMPLOYEES = "A"
     HAS_STUDENT_LOAN = "T"
     STUDENT_LOAN_PLAN_1 = "1"
@@ -20,6 +19,11 @@ module Payroll
     STUDENT_LOAN_PLAN_2_AND_3 = "2 and 3"
     STUDENT_LOAN_PLAN_4_AND_3 = "4 and 3"
     STUDENT_LOAN_PLAN_3 = "3"
+    MARITAL_STATUS = "Other"
+    PAYMENT_METHOD = "BACS"
+    PAYMENT_FREQUENCY = "Weekly"
+    TITLE = "Prof"
+    RIGHT_TO_WORK_CONFIRM_STATUS = "2"
 
     def to_s
       CSV.generate_line(data)
@@ -38,11 +42,15 @@ module Payroll
       # Hardcoded as HMRC require it, but we don't collect it. As HMRC will already hold
       # a record for teachers, they will be able to match to their existing record based
       # on other fields such as name, dob, NI number
-      "Captain"
+      TITLE
     end
 
     def payroll_gender
       model.payroll_gender.chr.upcase
+    end
+
+    def marital_status
+      MARITAL_STATUS
     end
 
     def start_date
@@ -96,11 +104,6 @@ module Payroll
       model.address_line_4.present? ? model.address_line_4 : model.address_line_3
     end
 
-    def address_line_6
-      # Cantium - PostCode
-      model.postcode
-    end
-
     def country
       UNITED_KINGDOM
     end
@@ -111,10 +114,6 @@ module Payroll
 
     def tax_basis
       CUMULATIVE_TAX_BASIS
-    end
-
-    def new_employee
-      NOT_EMPLOYEES_ONLY_JOB
     end
 
     def ni_category
@@ -147,6 +146,10 @@ module Payroll
       model.banking_name
     end
 
+    def bank_sort_code
+      model.bank_sort_code.scan(/.{2}/).join("-")
+    end
+
     def scheme_amount
       model.award_amount.to_s
     end
@@ -157,6 +160,18 @@ module Payroll
 
     def payment_id
       model.id
+    end
+
+    def payment_method
+      PAYMENT_METHOD
+    end
+
+    def payment_frequency
+      PAYMENT_FREQUENCY
+    end
+
+    def right_to_work_confirm_status
+      RIGHT_TO_WORK_CONFIRM_STATUS
     end
 
     def model
