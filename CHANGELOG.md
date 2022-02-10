@@ -6,13 +6,16 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+## [Release 112] - 2022-02-10
+
 - Update the release process documentation
 - Update cookie policy to include collection of IP addresses
-- Add ability to generate Payroll Test data for ECP and/or TSLR
-- ECP
-  - Add ability to upload from CSV (developer process) DqT test data
-- TSLR
-  - Add ability to upload from CSV (developer process) DqT test data
+- In DEV/TEST environments (NOT PROD) add data seeding/loading capabilities
+  - For DfE Payroll moving in-house UAT Testing
+    - Add ability to generate Payroll Test data for ECP and/or TSLR
+  - For DqT Testing
+    - Add ability to upload from CSV (developer process) data sent to the DqT
+      for use in System/Integration Testing for ECP & TSLR
 
 ## [Release 111] - 2022-01-27
 
@@ -1074,7 +1077,9 @@ The format is based on [Keep a Changelog]
 - First release for student loan repayments private beta
 
 [unreleased]:
-  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-111...HEAD
+  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-112...HEAD
+[release 112]:
+  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-111...release-112
 [release 111]:
   https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-110...release-111
 [release 110]:
