@@ -11,7 +11,7 @@ module Dqt
     end
 
     def connection
-      @connection ||= Faraday.new(ENV["DQT_BASE_URL"]) do |c|
+      @connection ||= Faraday.new(ENV["DQT_API_URL"]) do |c|
         c.request :authorization, "Bearer", Bearer.get_auth_token
         c.request :json
         c.response :json, content_type: "application/json"
