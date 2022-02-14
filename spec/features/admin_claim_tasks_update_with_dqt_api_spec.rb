@@ -50,7 +50,7 @@ RSpec.feature "Admin claim tasks update with DQT API" do
   end
 
   def task_outcome
-    page.find("div", class: ["govuk-inset-text"])
+    page.find("div", class: ["govuk-inset-text task-outcome"])
   end
 
   before do

@@ -1091,7 +1091,8 @@ RSpec.describe Claim, type: :model do
         :surname,
         :banking_name,
         :building_society_roll_number,
-        :one_time_password
+        :one_time_password,
+        :assigned_to_id
       ])
     end
   end

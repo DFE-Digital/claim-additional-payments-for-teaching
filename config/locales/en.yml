@@ -121,6 +121,17 @@ en:
       rejected: "Undo rejection"
     policy_configuration:
       reminder_warning: "Setting the service status to open will send %{count} reminder emails."
+    assigned_user_banner:
+      assigned_to_self: You are currently assigned this claim
+      assigned_to_other: "CAUTION: This claim is currently assigned to %{dfe_user}"
+      unassigned: This claim is currently unassigned
+      unassign: Unassign
+      assign_to_self: Assign to yourself
+    allocations:
+      bulk_allocate:
+        success: "%{quantity} claims have been assigned to %{dfe_user}"
+      bulk_deallocate:
+        success: All claims for %{dfe_user} have been unassigned
   answers:
     qts_award_years:
       before_cut_off_date: "In or before the academic year %{year}"

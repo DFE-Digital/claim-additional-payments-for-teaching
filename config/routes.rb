@@ -108,5 +108,10 @@ Rails.application.routes.draw do
 
     resources :policy_configurations, only: [:index, :edit, :update]
     get "refresh-session", to: "sessions#refresh", as: :refresh_session
+
+    patch "allocate/:id", to: "allocations#allocate", as: :allocate
+    delete "allocate/:id", to: "allocations#deallocate", as: :deallocate
+    patch "bulk_allocate", to: "allocations#bulk_allocate"
+    patch "bulk_deallocate", to: "allocations#bulk_deallocate"
   end
 end

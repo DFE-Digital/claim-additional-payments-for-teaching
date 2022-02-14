@@ -6,7 +6,9 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
-- Upload school workforce census data onto admin site
+- Admin
+  - Upload school workforce census data onto admin site
+  - Add ability to allocate claims to claims team members
 
 ## [Release 112] - 2022-02-10
 
