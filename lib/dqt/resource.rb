@@ -32,11 +32,5 @@ module Dqt
 
       response
     end
-
-    private
-
-    def default_headers
-      {"Ocp-Apim-Subscription-Key" => ENV["DQT_SUBSCRIPTION_KEY"]}
-    end
   end
 end
