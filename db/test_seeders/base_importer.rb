@@ -11,6 +11,9 @@ if ENV["ENVIRONMENT_NAME"] == "development" ||
   Faker::Config.locale = "en-GB"
   Faker::UniqueGenerator.clear
   Random.new(srand(1234))
+else
+  puts "#{ENV["ENVIRONMENT_NAME"]} is not a valid environment"
+  exit
 end
 
 class BaseImporter
@@ -35,6 +38,7 @@ class BaseImporter
     :quantity
 
   def clear_data
+    exit if ENV["ENVIRONMENT_NAME"] == "production"
     Note.delete_all
     Task.delete_all
     Amendment.delete_all
