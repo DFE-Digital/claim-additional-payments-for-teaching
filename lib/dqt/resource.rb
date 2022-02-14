@@ -9,7 +9,7 @@ module Dqt
     private
 
     def get_request(url, params: {}, headers: {})
-      handle_response client.connection.get(url, params, headers.merge(default_headers))
+      handle_response client.connection.get(url, params, headers)
     end
 
     def handle_response(response)
