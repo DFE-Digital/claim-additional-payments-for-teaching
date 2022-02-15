@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_02_12_232000) do
+ActiveRecord::Schema.define(version: 2022_02_16_103638) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -319,6 +319,18 @@ ActiveRecord::Schema.define(version: 2022_02_12_232000) do
     t.index ["claim_id"], name: "index_tasks_on_claim_id"
     t.index ["created_by_id"], name: "index_tasks_on_created_by_id"
     t.index ["name", "claim_id"], name: "index_tasks_on_name_and_claim_id", unique: true
+  end
+
+  create_table "tps_data", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "teacher_reference_number"
+    t.datetime "start_date"
+    t.datetime "end_date"
+    t.integer "la_urn"
+    t.integer "school_urn"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["teacher_reference_number", "start_date"], name: "index_tps_data_on_teacher_reference_number_and_start_date", unique: true
+    t.index ["teacher_reference_number"], name: "index_tps_data_on_teacher_reference_number"
   end
 
   add_foreign_key "amendments", "claims"
