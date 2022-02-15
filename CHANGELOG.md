@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+- Upload school workforce census data onto admin site
+
 ## [Release 112] - 2022-02-10
 
 - Update the release process documentation

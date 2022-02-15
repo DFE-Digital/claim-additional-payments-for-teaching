@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_11_24_172344) do
+ActiveRecord::Schema.define(version: 2022_02_11_104111) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -232,6 +232,21 @@ ActiveRecord::Schema.define(version: 2021_11_24_172344) do
     t.datetime "email_sent_at"
     t.string "itt_academic_year", limit: 9
     t.string "itt_subject"
+  end
+
+  create_table "school_workforce_censuses", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "teacher_reference_number"
+    t.string "subject_1"
+    t.string "subject_2"
+    t.string "subject_3"
+    t.string "subject_4"
+    t.string "subject_5"
+    t.string "subject_6"
+    t.string "subject_7"
+    t.string "subject_8"
+    t.string "subject_9"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
   end
 
   create_table "schools", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
