@@ -21,8 +21,9 @@ RSpec.feature "Admin checking a Student Loans claim" do
 
     expect(page).to have_content("1. Identity confirmation")
     expect(page).to have_content("2. Qualifications")
-    expect(page).to have_content("3. Employment")
-    expect(page).to have_content("4. Decision")
+    expect(page).to have_content("3. Census subjects taught")
+    expect(page).to have_content("4. Employment")
+    expect(page).to have_content("5. Decision")
 
     click_on I18n.t("admin.tasks.identity_confirmation")
 
@@ -43,6 +44,14 @@ RSpec.feature "Admin checking a Student Loans claim" do
     click_on "Save and continue"
 
     expect(claim.tasks.find_by!(name: "qualifications").passed?).to eq(true)
+
+    expect(page).to have_content(I18n.t("early_career_payments.admin.task_questions.census_subjects_taught.title"))
+    expect(page).to have_content("Subject Mathematics")
+
+    choose "Yes"
+    click_on "Save and continue"
+
+    expect(claim.tasks.find_by!(name: "census_subjects_taught").passed?).to eq(true)
 
     expect(page).to have_content(I18n.t("early_career_payments.admin.task_questions.employment.title"))
     expect(page).to have_content("Current school")

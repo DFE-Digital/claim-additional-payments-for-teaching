@@ -98,4 +98,14 @@ RSpec.describe EarlyCareerPayments::AdminTasksPresenter, type: :model do
       end
     end
   end
+
+  describe "#census_subjects_taught" do
+    it "returns an array of label and values for school worforce census checks" do
+      expected_array = [
+        ["Subject", "Mathematics"]
+      ]
+
+      expect(presenter.census_subjects_taught).to eq expected_array
+    end
+  end
 end

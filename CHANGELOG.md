@@ -10,6 +10,7 @@ The format is based on [Keep a Changelog]
   - Allocate claims by policy
   - Unallocate claims by policy
   - Add ability to filter claims by team member
+  - Add automation for School Workforce Census checks - (TSLR + ECP only)
 
 ## [Release 114] - 2022-02-24
 

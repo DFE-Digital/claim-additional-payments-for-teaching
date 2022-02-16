@@ -2,6 +2,7 @@ module StudentLoans
   # Used to display the information a claim checker needs to check to either
   # approve or reject a claim.
   class AdminTasksPresenter
+    include StudentLoans::PresenterMethods
     include Admin::PresenterMethods
     include ActionView::Helpers::NumberHelper
 
@@ -35,6 +36,12 @@ module StudentLoans
       [
         ["Current school", eligibility.current_school.name],
         ["Contact number", eligibility.current_school.phone_number]
+      ]
+    end
+
+    def census_subjects_taught
+      [
+        ["Subjects taught", subject_list(eligibility.subjects_taught)]
       ]
     end
 

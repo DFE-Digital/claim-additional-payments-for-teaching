@@ -12,7 +12,10 @@ RSpec.describe StudentLoans::AdminTasksPresenter, type: :model do
         qts_award_year: "on_or_after_cut_off_date",
         claim_school: school,
         current_school: school,
-        student_loan_repayment_amount: "670.99"
+        student_loan_repayment_amount: "670.99",
+        chemistry_taught: true,
+        physics_taught: nil,
+        languages_taught: true
       ))
   end
   subject(:presenter) { described_class.new(claim) }
@@ -66,6 +69,14 @@ RSpec.describe StudentLoans::AdminTasksPresenter, type: :model do
       expect(presenter.identity_confirmation).to eq [
         ["Current school", school.name],
         ["Contact number", school.phone_number]
+      ]
+    end
+  end
+
+  describe "#census_subjects_taught" do
+    it "returns an array of label and values for displaying information for School Workforce Census checks" do
+      expect(presenter.census_subjects_taught).to eq [
+        ["Subjects taught", "Chemistry and Languages"]
       ]
     end
   end

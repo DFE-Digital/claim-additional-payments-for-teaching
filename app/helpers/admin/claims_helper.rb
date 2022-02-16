@@ -116,6 +116,9 @@ module Admin
       elsif task.claim_verifier_match_none?
         status = "No match"
         status_colour = "red"
+      elsif task.claim_verifier_match.nil? && task_name == "census_subjects_taught"
+        status = "No data"
+        status_colour = "red"
       end
 
       tag_classes = "govuk-tag app-task-list__task-completed govuk-tag--#{status_colour}"
