@@ -8,6 +8,11 @@ module DfeSignIn
       "dfe_sign_in_users"
     end
 
+    has_many :assigned_claims, class_name: "Claim",
+      foreign_key: :assigned_to_id,
+      inverse_of: :assigned_to,
+      dependent: :nullify
+
     def self.from_session(session)
       user = where(dfe_sign_in_id: session.user_id).first_or_initialize
       user.role_codes = session.role_codes
@@ -32,6 +37,16 @@ module DfeSignIn
 
     def has_admin_access?
       is_service_operator? || is_support_agent? || is_payroll_operator?
+    end
+
+    def self.options_for_select
+      where(role_codes: ["teacher_payments_access"])
+        .order(email: :asc)
+        .collect do |user|
+        [
+          user.full_name.titleize, user.id
+        ]
+      end
     end
   end
 end

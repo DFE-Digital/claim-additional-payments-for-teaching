@@ -81,4 +81,25 @@ RSpec.describe DfeSignIn::User, type: :model do
       expect(user.has_admin_access?).to eq false
     end
   end
+
+  describe ".options_for_select" do
+    let!(:davide) { create(:dfe_signin_user, given_name: "Davide", family_name: "Muzani", organisation_name: "Department for Education", role_codes: [DfeSignIn::User::SERVICE_OPERATOR_DFE_SIGN_IN_ROLE_CODE]) }
+    let!(:tina) { create(:dfe_signin_user, given_name: "Tina", family_name: "Dee", organisation_name: "Department for Education", role_codes: [DfeSignIn::User::SERVICE_OPERATOR_DFE_SIGN_IN_ROLE_CODE]) }
+    let!(:muhammad) { create(:dfe_signin_user, given_name: "Muhammad", family_name: "Khan", organisation_name: "Department for Education", role_codes: [DfeSignIn::User::SERVICE_OPERATOR_DFE_SIGN_IN_ROLE_CODE]) }
+    let!(:tripti) { create(:dfe_signin_user, given_name: "Tripti", family_name: "Kumar", organisation_name: "Cantium Business Services", role_codes: [DfeSignIn::User::PAYROLL_OPERATOR_DFE_SIGN_IN_ROLE_CODE]) }
+
+    it "returns an array of 'Service Operators' for use with select helper" do
+      expect(described_class.options_for_select).to match_array(
+        [
+          [davide.full_name.titleize, davide.id],
+          [tina.full_name.titleize, tina.id],
+          [muhammad.full_name.titleize, muhammad.id]
+        ]
+      )
+    end
+
+    it "does not include 'Payroll Operator' role" do
+      expect(described_class.options_for_select).not_to include([tripti.full_name.titleize, tripti.id])
+    end
+  end
 end

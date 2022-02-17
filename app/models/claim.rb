@@ -92,7 +92,8 @@ class Claim < ApplicationRecord
     one_time_password: true,
     sent_one_time_password_at: false,
     mobile_verified: false,
-    one_time_password_category: false
+    one_time_password_category: false,
+    assigned_to_id: true
   }.freeze
   DECISION_DEADLINE = 6.weeks
   DECISION_DEADLINE_WARNING_POINT = 2.weeks
@@ -129,6 +130,9 @@ class Claim < ApplicationRecord
   accepts_nested_attributes_for :eligibility, update_only: true
 
   belongs_to :payment, optional: true
+  belongs_to :assigned_to, class_name: "DfeSignIn::User",
+    inverse_of: :assigned_claims,
+    optional: true
 
   enum payroll_gender: {
     dont_know: 0,

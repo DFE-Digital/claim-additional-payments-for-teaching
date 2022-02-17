@@ -24,6 +24,9 @@
       <%= link_to "Download report request file", admin_claims_path(format: :csv), class: "govuk-button govuk-button--secondary", data: { module: "govuk-button" }, role: :button %>
       <%= link_to "Upload DQT report", new_admin_qualification_report_upload_path, class: "govuk-button govuk-button--secondary", data: { module: "govuk-button" }, role: :button %>
       <%= link_to "Upload School Workforce Census data", new_admin_school_workforce_census_data_upload_path, class: "govuk-button govuk-button--secondary", data: { module: "govuk-button" }, role: :button %>
+
+      <%= render "allocations_form" %>
+
       <table class="govuk-table">
         <thead class="govuk-table__head">
           <tr class="govuk-table__row">
@@ -36,6 +39,7 @@
               <th scope="col" class="govuk-table__header">Decision warning</th>
             <% end %>
             <th scope="col" class="govuk-table__header">Decision deadline</th>
+            <th scope="col" class="govuk-table__header">Assigned to</th>
             <th scope="col" class="govuk-table__header"><span class="govuk-visually-hidden">Actions</span></th>
           </tr>
         </thead>
@@ -51,6 +55,7 @@
                 <td class="govuk-table__cell"><%= decision_deadline_warning(claim) %></td>
               <% end %>
               <td class="govuk-table__cell"><%= l(claim.decision_deadline_date) %></td>
+              <td class="govuk-table__cell"><%= claim.assigned_to.present? ? claim.assigned_to.full_name.titleize : nil %></td>
               <td class="govuk-table__cell">
                 <%= link_to 'View tasks', admin_claim_tasks_path(claim), class: "govuk-link" %>
               </td>

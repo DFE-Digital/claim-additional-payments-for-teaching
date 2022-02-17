@@ -139,6 +139,12 @@ module Admin
       end
     end
 
+    def allocate_btn_text(allocate_claim_count)
+      return "claims" if allocate_claim_count.zero?
+
+      pluralize(allocate_claim_count, "claim")
+    end
+
     private
 
     def matching_attributes_for(claim)
