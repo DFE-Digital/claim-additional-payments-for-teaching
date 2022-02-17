@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+## [Release 113] - 2022-02-17
+
 - Admin
   - Upload school workforce census data onto admin site
   - Add ability to allocate claims to claims team members
@@ -1081,7 +1083,9 @@ The format is based on [Keep a Changelog]
 - First release for student loan repayments private beta
 
 [unreleased]:
-  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-112...HEAD
+  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-113...HEAD
+[release 113]:
+  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-112...release-113
 [release 112]:
   https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-111...release-112
 [release 111]:
