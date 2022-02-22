@@ -8,6 +8,7 @@ class ClaimDecision < ApplicationRecord
   end
 
   scope :yesterday, -> { where(decision_date: 1.day.ago.all_day) }
+  scope :reporting_date, ->(date) { where(decision_date: date.all_day) }
 
   def self.to_csv
     CSV.generate(headers: true) do |csv|

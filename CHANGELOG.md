@@ -8,6 +8,7 @@ The format is based on [Keep a Changelog]
 
 - Admin
   - Upload TPS data onto admin site
+- Decisions stats dashboard showing incorrect data fix
 
 ## [Release 113] - 2022-02-17
 

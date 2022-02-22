@@ -9,7 +9,7 @@ module SendAnalytics
 
     def csv
       @csv ||=
-        ::ClaimDecision.yesterday.to_csv
+        ::ClaimDecision.reporting_date(date).to_csv
     end
   end
 end
