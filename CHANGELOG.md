@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+## [Release 114] - 2022-02-24
+
 - Admin
   - Upload TPS data onto admin site
 - Decisions stats dashboard showing incorrect data fix
@@ -1087,7 +1089,9 @@ The format is based on [Keep a Changelog]
 - First release for student loan repayments private beta
 
 [unreleased]:
-  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-113...HEAD
+  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-114...HEAD
+[release 114]:
+  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-113...release-114
 [release 113]:
   https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-112...release-113
 [release 112]:
