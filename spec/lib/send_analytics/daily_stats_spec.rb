@@ -17,5 +17,11 @@ RSpec.describe SendAnalytics::DailyStats do
         ).call
       }.to_not raise_error
     end
+
+    it "runs without error when no date is entered" do
+      expect {
+        subject.new.call
+      }.to_not raise_error
+    end
   end
 end

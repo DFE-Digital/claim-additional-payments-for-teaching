@@ -45,3 +45,6 @@ coverage/
 *.tfstate
 *.tfstate.*
 *terraform.lock*
+
+# Editor specific files
+.vscode/
