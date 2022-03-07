@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+- Admin
+  - Allocate claims by policy
+  - Unallocate claims by policy
+
 ## [Release 114] - 2022-02-24
 
 - Admin
