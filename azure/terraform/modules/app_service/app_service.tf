@@ -51,6 +51,8 @@ resource "azurerm_app_service" "app_as" {
     "DQT_BEARER_CLIENT_SECRET"                       = data.azurerm_key_vault_secret.DqtBearerClientSecret.value
     "DQT_BASE_URL"                                   = data.azurerm_key_vault_secret.DQTBaseUrl.value
     "DQT_SUBSCRIPTION_KEY"                           = data.azurerm_key_vault_secret.DQTSubscriptionKey.value
+    "DQT_API_URL"                                    = data.azurerm_key_vault_secret.DQTApiUrl.value
+    "DQT_API_KEY"                                    = data.azurerm_key_vault_secret.DQTApiKey.value
     "DOCKER_REGISTRY_SERVER_URL"                     = "https://index.docker.io"
     "ENVIRONMENT_NAME"                               = local.environment
     "GOOGLE_ANALYTICS_ID"                            = ""

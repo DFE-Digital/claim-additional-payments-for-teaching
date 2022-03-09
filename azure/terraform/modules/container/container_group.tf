@@ -42,6 +42,8 @@ resource "azurerm_container_group" "cont_grp_01" {
       "DQT_BEARER_CLIENT_SECRET"                       = data.azurerm_key_vault_secret.DqtBearerClientSecret.value
       "DQT_BASE_URL"                                   = data.azurerm_key_vault_secret.DQTBaseUrl.value
       "DQT_SUBSCRIPTION_KEY"                           = data.azurerm_key_vault_secret.DQTSubscriptionKey.value
+      "DQT_API_URL"                                    = data.azurerm_key_vault_secret.DQTApiUrl.value
+      "DQT_API_KEY"                                    = data.azurerm_key_vault_secret.DQTApiKey.value
       "ENVIRONMENT_NAME"                               = local.environment
       "GOOGLE_ANALYTICS_ID"                            = ""
       "GTM_ANALYTICS"                                  = data.azurerm_key_vault_secret.GTMAnalytics.value
@@ -113,6 +115,8 @@ resource "azurerm_container_group" "cont_grp_02" {
       "DQT_BEARER_CLIENT_SECRET"                       = data.azurerm_key_vault_secret.DqtBearerClientSecret.value
       "DQT_BASE_URL"                                   = data.azurerm_key_vault_secret.DQTBaseUrl.value
       "DQT_SUBSCRIPTION_KEY"                           = data.azurerm_key_vault_secret.DQTSubscriptionKey.value
+      "DQT_API_URL"                                    = data.azurerm_key_vault_secret.DQTApiUrl.value
+      "DQT_API_KEY"                                    = data.azurerm_key_vault_secret.DQTApiKey.value
       "ENVIRONMENT_NAME"                               = local.environment
       "GOOGLE_ANALYTICS_ID"                            = ""
       "GTM_ANALYTICS"                                  = data.azurerm_key_vault_secret.GTMAnalytics.value
