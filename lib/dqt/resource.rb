@@ -9,7 +9,7 @@ module Dqt
     private
 
     def get_request(url, params: {}, headers: {})
-      handle_response client.connection.get(url, params, headers.merge(default_headers))
+      handle_response client.connection.get(url, params, headers)
     end
 
     def handle_response(response)
@@ -31,12 +31,6 @@ module Dqt
       end
 
       response
-    end
-
-    private
-
-    def default_headers
-      {"Ocp-Apim-Subscription-Key" => ENV["DQT_SUBSCRIPTION_KEY"]}
     end
   end
 end

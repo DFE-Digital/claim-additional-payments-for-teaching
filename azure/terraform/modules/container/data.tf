@@ -143,6 +143,15 @@ data "azurerm_key_vault_secret" "DQTBaseUrl" {
   key_vault_id = data.azurerm_key_vault.secrets_kv.id
 }
 
+data "azurerm_key_vault_secret" "DQTApiUrl" {
+  name         = "DQTApiUrl"
+  key_vault_id = data.azurerm_key_vault.secrets_kv.id
+}
+data "azurerm_key_vault_secret" "DQTApiKey" {
+  name         = "DQTApiKey"
+  key_vault_id = data.azurerm_key_vault.secrets_kv.id
+}
+
 data "azurerm_key_vault_secret" "DQTSubscriptionKey" {
   name         = "DQTSubscriptionKey"
   key_vault_id = data.azurerm_key_vault.secrets_kv.id

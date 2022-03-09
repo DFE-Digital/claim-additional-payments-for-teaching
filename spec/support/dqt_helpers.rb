@@ -49,14 +49,7 @@ module DqtHelpers
       }
     }, body)
 
-    stub_request(:post, (ENV["DQT_BEARER_BASE_URL"]).to_s)
-      .with(body: Faraday::FlatParamsEncoder.encode(bearer_params))
-      .to_return(
-        body: {access_token: "1234"}.to_json,
-        status: 200
-      )
-
-    stub_request(:get, "#{ENV["DQT_BASE_URL"]}teachers/#{trn}")
+    stub_request(:get, "#{ENV["DQT_API_URL"]}teachers/#{trn}")
       .with(query: WebMock::API.hash_including(params))
       .to_return(
         body: body.to_json,
@@ -66,15 +59,6 @@ module DqtHelpers
   end
 
   private
-
-  def bearer_params
-    {
-      grant_type: ENV["DQT_BEARER_GRANT_TYPE"],
-      scope: ENV["DQT_BEARER_SCOPE"],
-      client_id: ENV["DQT_BEARER_CLIENT_ID"],
-      client_secret: ENV["DQT_BEARER_CLIENT_SECRET"]
-    }
-  end
 
   def merge_recursively(a, b)
     a.merge!(b) do |key, a_item, b_item|
