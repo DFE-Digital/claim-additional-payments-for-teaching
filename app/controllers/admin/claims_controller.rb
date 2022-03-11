@@ -4,6 +4,7 @@ class Admin::ClaimsController < Admin::BaseAdminController
   def index
     @claims = Claim.includes(:decisions, eligibility: [:claim_school, :current_school]).awaiting_decision.order(:submitted_at)
     @claims = @claims.by_policy(filtered_policy) if filtered_policy
+    @claims = @claims.by_claims_team_member(filtered_team_member) if filtered_team_member
 
     respond_to do |format|
       format.html
@@ -37,5 +38,12 @@ class Admin::ClaimsController < Admin::BaseAdminController
 
   def filtered_policy
     Policies[params[:policy]]
+  end
+
+  def filtered_team_member
+    return if params[:team_member].blank?
+
+    name = params[:team_member].split("-")
+    DfeSignIn::User.find_by(given_name: name.shift, family_name: name).id
   end
 end

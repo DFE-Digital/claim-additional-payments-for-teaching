@@ -7,6 +7,11 @@ RSpec.describe "Admin claims", type: :request do
     let!(:claims) { create_list(:claim, 3, :submitted) }
     let!(:approved_claim) { create :claim, :approved }
 
+    let!(:mary) { create(:dfe_signin_user, given_name: "mary", family_name: "wasu-wabi", organisation_name: "Department for Education", role_codes: [DfeSignIn::User::SERVICE_OPERATOR_DFE_SIGN_IN_ROLE_CODE]) }
+    let!(:valentino) { create(:dfe_signin_user, given_name: "Valentino", family_name: "Ricci", organisation_name: "Department for Education", role_codes: [DfeSignIn::User::SERVICE_OPERATOR_DFE_SIGN_IN_ROLE_CODE]) }
+    let!(:mette) { create(:dfe_signin_user, given_name: "Mette", family_name: "Jørgensen", organisation_name: "Department for Education", role_codes: [DfeSignIn::User::SERVICE_OPERATOR_DFE_SIGN_IN_ROLE_CODE]) }
+    let!(:raj) { create(:dfe_signin_user, given_name: "raj", family_name: "sathikumar", organisation_name: "Cantium Business Services", role_codes: [DfeSignIn::User::PAYROLL_OPERATOR_DFE_SIGN_IN_ROLE_CODE]) }
+
     it "lists all claims awaiting a decision" do
       get admin_claims_path
 
@@ -40,6 +45,47 @@ RSpec.describe "Admin claims", type: :request do
 
       claims.each do |c|
         expect(response.body).to include(c.reference)
+      end
+    end
+
+    it "can filter by team member" do
+      student_loans_claims_for_mette = create_list(:claim, 3, :submitted, policy: StudentLoans)
+      student_loans_claims_for_valentino = create_list(:claim, 2, :submitted, policy: StudentLoans)
+      early_career_payments_claims_for_mary = create_list(:claim, 4, :submitted, policy: EarlyCareerPayments)
+      early_career_payments_claims_for_mette = create_list(:claim, 6, :submitted, policy: EarlyCareerPayments)
+
+      student_loans_claims_for_mette.each { |c|
+        c.assigned_to = mette
+        c.save
+      }
+      student_loans_claims_for_valentino.each { |c|
+        c.assigned_to = valentino
+        c.save
+      }
+      early_career_payments_claims_for_mary.each { |c|
+        c.assigned_to = mary
+        c.save
+      }
+      early_career_payments_claims_for_mette.each { |c|
+        c.assigned_to = mette
+        c.save
+      }
+
+      get admin_claims_path, params: {team_member: "Mette-Jørgensen"}
+
+      [
+        student_loans_claims_for_mette,
+        early_career_payments_claims_for_mette
+      ].flatten.each do |c|
+        expect(response.body).to include(c.reference)
+      end
+
+      [
+        claims,
+        student_loans_claims_for_valentino,
+        early_career_payments_claims_for_mary
+      ].flatten.each do |c|
+        expect(response.body).to_not include(c.reference)
       end
     end
   end

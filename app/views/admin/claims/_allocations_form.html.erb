@@ -2,7 +2,7 @@
 
 <%= form_with url: admin_bulk_allocate_path, method: :patch do |form| %>
   <%= form.hidden_field :allocate_claim_count, value: allocate_claim_count %>
-  <div class="govuk-form-group admin-filter-group">
+  <div class="govuk-form-group admin-filter-group" id="allocations">
     <div>
       <label class="govuk-label" for="allocate_to_team_member">
         Team members:

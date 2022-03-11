@@ -73,7 +73,7 @@ RSpec.feature "Claims awaiting a decision" do
     scenario "assign first 25 to one Claim's checker" do
       click_on "View claims"
 
-      within(".admin-filter-group") do
+      within("#allocations") do
         expect(page).to have_select("allocate_to_team_member", options: ["Jo Bloggs", "Sarah Strawbridge", "Frank Yee", "Abdul Rafiq"])
         expect(page).to have_select("allocate_to_policy", options: ["All", "Student Loans", "Maths and Physics", "Early-Career Payments"])
         expect(page).to have_button("Allocate claims", disabled: false)
@@ -151,7 +151,7 @@ RSpec.feature "Claims awaiting a decision" do
 
       expect(@submitted_claims.size).to eq 35
 
-      within(".admin-filter-group") do
+      within("#allocations") do
         expect(page).to have_select("allocate_to_team_member", options: ["Jo Bloggs", "Sarah Strawbridge", "Frank Yee", "Abdul Rafiq"])
         expect(page).to have_select("allocate_to_policy", options: ["All", "Student Loans", "Maths and Physics", "Early-Career Payments"])
         expect(page).to have_button("Allocate claims", disabled: false)
