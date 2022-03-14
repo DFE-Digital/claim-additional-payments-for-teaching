@@ -465,24 +465,4 @@ describe Admin::ClaimsHelper do
       end
     end
   end
-
-  describe "#allocate_btn_text" do
-    context "when allocate_claim_count is zero" do
-      it "returns 'claims'" do
-        expect(allocate_btn_text(0)).to eq "claims"
-      end
-    end
-
-    context "when allocate_claim_count is 1" do
-      it "returns 'claim'" do
-        expect(allocate_btn_text(1)).to eq "1 claim"
-      end
-    end
-
-    context "when allocate_claim_count is 25" do
-      it "returns 'claims'" do
-        expect(allocate_btn_text(25)).to eq "25 claims"
-      end
-    end
-  end
 end

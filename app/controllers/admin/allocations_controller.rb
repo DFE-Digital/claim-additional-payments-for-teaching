@@ -21,15 +21,34 @@ class Admin::AllocationsController < Admin::BaseAdminController
 
   def bulk_allocate
     claims = Claim.where(assigned_to: nil).includes(:decisions, eligibility: [:claim_school, :current_school]).awaiting_decision.order(:submitted_at).limit(params[:allocate_claim_count])
-    ClaimAllocator.new(claim_ids: claims.map(&:id), admin_user_id: params[:allocate_to]).call
+    claims = claims.by_policy(filtered_policy) if filtered_policy
 
-    redirect_to request.referrer, notice: I18n.t("admin.allocations.bulk_allocate.success", quantity: params[:allocate_claim_count], dfe_user: @team_member.full_name)
+    redirect_to admin_claims_path, notice: I18n.t("admin.allocations.bulk_allocate.info", allocate_to_policy: params[:allocate_to_policy].titleize, dfe_user: @team_member.full_name.titleize) and return if claims.size.zero?
+
+    ClaimAllocator.new(claim_ids: claims.map(&:id), admin_user_id: params[:allocate_to_team_member]).call
+    allocate_to_policy = params[:allocate_to_policy].nil? ? "" : params[:allocate_to_policy].titleize
+
+    redirect_to request.referrer, notice: I18n.t("admin.allocations.bulk_allocate.success", quantity: claims.size, pluralized_or_singular_claim: "claim".pluralize(claims.size), allocate_to_policy: allocate_to_policy, dfe_user: @team_member.full_name.titleize)
   end
 
   def bulk_deallocate
-    ClaimDeallocator.new(claim_ids: [], admin_user_id: params[:allocate_to], bulk: true).call
+    claims = Claim.where(assigned_to_id: @team_member.id)
 
-    redirect_to admin_claims_path, notice: I18n.t("admin.allocations.bulk_deallocate.success", dfe_user: @team_member.full_name)
+    if filtered_policy
+      claims = claims.by_policy(filtered_policy) if filtered_policy
+
+      redirect_to admin_claims_path, notice: I18n.t("admin.allocations.bulk_deallocate.info", allocate_to_policy: params[:allocate_to_policy].titleize, dfe_user: @team_member.full_name.titleize) and return if claims.size.zero?
+
+      ClaimDeallocator.new(claim_ids: claims.ids, admin_user_id: @team_member.id).call
+
+      redirect_to admin_claims_path, notice: I18n.t("admin.allocations.bulk_deallocate.success", allocate_to_policy: params[:allocate_to_policy].titleize, dfe_user: @team_member.full_name.titleize) and return
+    else
+      redirect_to admin_claims_path, notice: I18n.t("admin.allocations.bulk_deallocate.info", allocate_to_policy: "", dfe_user: @team_member.full_name.titleize) and return if claims.size.zero?
+
+      ClaimDeallocator.new(claim_ids: claims.ids, admin_user_id: params[:allocate_to_team_member]).call
+
+      redirect_to admin_claims_path, notice: I18n.t("admin.allocations.bulk_deallocate.success", allocate_to_policy: "", dfe_user: @team_member.full_name.titleize) and return
+    end
   end
 
   private
@@ -39,6 +58,10 @@ class Admin::AllocationsController < Admin::BaseAdminController
   end
 
   def load_team_member
-    @team_member = DfeSignIn::User.find params[:allocate_to]
+    @team_member = DfeSignIn::User.find params[:allocate_to_team_member]
+  end
+
+  def filtered_policy
+    Policies[params[:allocate_to_policy]]
   end
 end
