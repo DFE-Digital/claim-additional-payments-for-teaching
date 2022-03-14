@@ -249,6 +249,7 @@ class Claim < ApplicationRecord
   scope :payrollable, -> { approved.where(payment: nil) }
   scope :by_policy, ->(policy) { where(eligibility_type: policy::Eligibility.to_s) }
   scope :by_academic_year, ->(academic_year) { where(academic_year: academic_year) }
+  scope :by_claims_team_member, ->(service_operator_id) { where(assigned_to_id: service_operator_id) }
 
   delegate :award_amount, to: :eligibility
   delegate :scheduled_payment_date, to: :payment, allow_nil: true

@@ -48,5 +48,15 @@ module DfeSignIn
         ]
       end
     end
+
+    def self.options_for_select_by_name
+      where(role_codes: ["teacher_payments_access"])
+        .order(email: :asc)
+        .collect do |user|
+        [
+          user.full_name.titleize, user.full_name.tr(" ", "-")
+        ]
+      end
+    end
   end
 end

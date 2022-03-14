@@ -9,6 +9,7 @@ The format is based on [Keep a Changelog]
 - Admin
   - Allocate claims by policy
   - Unallocate claims by policy
+  - Add ability to filter claims by team member
 
 ## [Release 114] - 2022-02-24
 

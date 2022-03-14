@@ -8,12 +8,22 @@
     </h1>
 
     <%= form_with url: admin_claims_path, method: :get do |form| %>
-      <div class="govuk-form-group">
-        <label class="govuk-label" for="policy">
-          Filter by service:
-        </label>
-        <%= form.select :policy, options_for_select(Policies.options_for_select, params[:policy]), {include_blank: "All"}, class: "govuk-select" %>
-        <%= form.submit "Go", class: "govuk-button govuk-button--secondary" %>
+      <div class="govuk-form-group admin-filter-group">
+        <div>
+          <label class="govuk-label" for="policy">
+            Filter by service:
+          </label>
+          <%= form.select :policy, options_for_select(Policies.options_for_select, params[:policy]), {include_blank: "All"}, class: "govuk-select" %>
+        </div>
+        <div>
+          <label class="govuk-label" for="team_member">
+            Team members:
+          </label>
+          <%= form.select :team_member, options_for_select(DfeSignIn::User.options_for_select_by_name, params[:team_member]), {include_blank: "All"}, class: "govuk-select" %>
+        </div>
+        <div>
+          <%= form.submit "Go", class: "govuk-button govuk-button--secondary admin-filter-group__button" %>
+        </div>
       </div>
     <% end %>
 
