@@ -23,6 +23,12 @@ module EarlyCareerPayments
       ]
     end
 
+    def census_subjects_taught
+      [
+        ["Subject", eligibility.eligible_itt_subject.titleize]
+      ]
+    end
+
     def qualifications
       [].tap do |a|
         a << [

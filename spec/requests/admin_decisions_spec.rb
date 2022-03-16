@@ -20,6 +20,7 @@ RSpec.describe "Admin decisions", type: :request do
         before do
           create(:task, name: "identity_confirmation", claim: claim)
           create(:task, name: "qualifications", claim: claim)
+          create(:task, name: "census_subjects_taught", claim: claim)
           create(:task, name: "employment", claim: claim)
         end
 

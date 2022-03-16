@@ -14,6 +14,10 @@ module AutomatedChecks
           admin_user: admin_user,
           claim: claim,
           dqt_teacher_status: dqt_teacher_status
+        ),
+        ClaimVerifiers::CensusSubjectsTaught.new(
+          admin_user: admin_user,
+          claim: claim
         )
       ]
     )

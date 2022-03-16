@@ -44,7 +44,18 @@ RSpec.describe "Admin tasks", type: :request do
         end
 
         describe "tasks#create" do
-          it "creates a new passed task and redirects to the next task" do
+          it "creates a new passed task and redirects to the next task", if: policy == StudentLoans do
+            expect {
+              post admin_claim_tasks_path(claim, params: {task: {name: "qualifications", passed: "true"}})
+            }.to change { Task.count }.by(1)
+
+            expect(claim.tasks.last.name).to eql("qualifications")
+            expect(claim.tasks.last.passed?).to eql(true)
+            expect(claim.tasks.last.created_by).to eql(@signed_in_user)
+            expect(response).to redirect_to(admin_claim_task_path(claim, name: "census_subjects_taught"))
+          end
+
+          it "creates a new passed task and redirects to the next task", if: policy == MathsAndPhysics do
             expect {
               post admin_claim_tasks_path(claim, params: {task: {name: "qualifications", passed: "true"}})
             }.to change { Task.count }.by(1)
