@@ -110,11 +110,11 @@ module AutomatedChecks
                   subject(:body) { note.body }
 
                   it "returns 'Eligible' with the school workforce census subjects", if: policy == EarlyCareerPayments do
-                    expect(subject).to eq("Eligible:\n<pre>Subject 1: Mathematics / Mathematical Development (Early Years)\nSubject 2: Statistics\n</pre>\n")
+                    expect(subject).to eq("[School Workforce Census] - Eligible:\n<pre>Subject 1: Mathematics / Mathematical Development (Early Years)\nSubject 2: Statistics\n</pre>\n")
                   end
 
                   it "returns 'Eligible' with the school workforce census subjects", if: policy == StudentLoans do
-                    expect(subject).to eq("Eligible:\n<pre>Subject 1: Science\nSubject 2: Biology / Botany / Zoology / Ecology\nSubject 3: Computer Science\n</pre>\n")
+                    expect(subject).to eq("[School Workforce Census] - Eligible:\n<pre>Subject 1: Science\nSubject 2: Biology / Botany / Zoology / Ecology\nSubject 3: Computer Science\n</pre>\n")
                   end
                 end
 
@@ -170,11 +170,11 @@ module AutomatedChecks
                   subject(:body) { note.body }
 
                   it "returns 'Ineligible' with the school workforce census subjects", if: policy == EarlyCareerPayments do
-                    expect(subject).to eq("Ineligible:\n<pre>Subject 1: Problem Solving, Reasoning and Numeracy\nSubject 2: Design and Technology - Electronics\n</pre>\n")
+                    expect(subject).to eq("[School Workforce Census] - Ineligible:\n<pre>Subject 1: Problem Solving, Reasoning and Numeracy\nSubject 2: Design and Technology - Electronics\n</pre>\n")
                   end
 
                   it "returns 'Ineligible' with the school workforce census subjects", if: policy == StudentLoans do
-                    expect(subject).to eq("Ineligible:\n<pre>Subject 1: Other Mathematical Subject\nSubject 2: Design and Technology - Electronics\n</pre>\n")
+                    expect(subject).to eq("[School Workforce Census] - Ineligible:\n<pre>Subject 1: Other Mathematical Subject\nSubject 2: Design and Technology - Electronics\n</pre>\n")
                   end
                 end
 
@@ -227,7 +227,7 @@ module AutomatedChecks
                 describe "#body" do
                   subject(:body) { note.body }
 
-                  it { is_expected.to eq("No data") }
+                  it { is_expected.to eq("[School Workforce Census] - No data") }
                 end
 
                 describe "#created_by" do

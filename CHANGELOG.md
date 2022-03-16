@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+- Admin
+  - Add labels to automated tasks so they can be easily identified by data
+    source and automated task in the notes screen
+
 ## [Release 115] - 2022-03-17
 
 - Switch to TWD_TRA_DQT_API (V3 DqT API)

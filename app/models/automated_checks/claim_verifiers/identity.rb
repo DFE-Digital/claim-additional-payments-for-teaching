@@ -57,7 +57,7 @@ module AutomatedChecks
         dqt:
       )
         body = <<~HTML
-          #{name} not matched:
+          [DQT Identity] - #{name} not matched:
           <pre>
             Claimant: <span class="dark-grey">"</span><span class="red">#{claimant}</span><span class="dark-grey">"</span>
             DQT:      <span class="dark-grey">"</span><span class="green">#{dqt}</span><span class="dark-grey">"</span>
@@ -109,7 +109,7 @@ module AutomatedChecks
       def no_match
         return unless dqt_teacher_status.nil?
 
-        create_note(body: "Not matched")
+        create_note(body: "[DQT Identity] - Not matched")
         create_task(match: :none)
       end
 

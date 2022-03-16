@@ -180,7 +180,7 @@ module AutomatedChecks
                 it do
                   is_expected.to eq(
                     <<~HTML
-                      Ineligible:
+                      [DQT Qualification] - Ineligible:
                       <pre>
                         ITT subjects: ["mathematics"]
                         ITT subject codes:  ["100400"]
@@ -259,7 +259,7 @@ module AutomatedChecks
                 it do
                   is_expected.to eq(
                     <<~HTML
-                      Ineligible:
+                      [DQT Qualification] - Ineligible:
                       <pre>
                         ITT subjects: []
                         ITT subject codes:  ["NoCode"]
@@ -401,7 +401,7 @@ module AutomatedChecks
                 it do
                   is_expected.to eq(
                     <<~HTML
-                      Ineligible:
+                      [DQT Qualification] - Ineligible:
                       <pre>
                         ITT subjects: []
                         ITT subject codes:  ["NoCode"]
@@ -467,7 +467,7 @@ module AutomatedChecks
             describe "#body" do
               subject(:body) { note.body }
 
-              it { is_expected.to eq("Not eligible") }
+              it { is_expected.to eq("[DQT Qualification] - Not eligible") }
             end
 
             describe "#created_by" do

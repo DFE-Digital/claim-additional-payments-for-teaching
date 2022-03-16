@@ -34,10 +34,10 @@ module AutomatedChecks
 
       def create_note(match:)
         body = if dqt_teacher_status.nil?
-          "Not eligible"
+          "[DQT Qualification] - Not eligible"
         else
           <<~HTML
-            #{match == :none ? "Ine" : "E"}ligible:
+            [DQT Qualification] - #{match == :none ? "Ine" : "E"}ligible:
             <pre>
               ITT subjects: #{dqt_teacher_status.itt_subjects}
               ITT subject codes:  #{dqt_teacher_status.itt_subject_codes}
