@@ -12,6 +12,8 @@ The format is based on [Keep a Changelog]
   - Tasks that have passed also show in the 'view claims' section
   - Update the claims index view to display status of identity and qualification
     tasks if they have been manually passed/failed
+- Update documentation
+  - Automated address lookup
 
 ## [Release 115] - 2022-03-17
 
