@@ -6,6 +6,11 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+## [Release 115] - 2022-03-17
+
+- Switch to TWD_TRA_DQT_API (V3 DqT API)
+  - used for identity checking
+  - used for qualifications checking
 - Admin
   - Allocate claims by policy
   - Unallocate claims by policy
@@ -1095,7 +1100,9 @@ The format is based on [Keep a Changelog]
 - First release for student loan repayments private beta
 
 [unreleased]:
-  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-114...HEAD
+  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-115...HEAD
+[release 115]:
+  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-114...release-115
 [release 114]:
   https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-113...release-114
 [release 113]:
