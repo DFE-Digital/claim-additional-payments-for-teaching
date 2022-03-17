@@ -75,6 +75,12 @@ module Admin
       if task.nil? || task.claim_verifier_match.nil?
         status = "Unverified"
         status_colour = "grey"
+      elsif task.passed?
+        status = "Passed"
+        status_colour = "green"
+      elsif task.passed == false
+        status = "Failed"
+        status_colour = "red"
       elsif task.claim_verifier_match_all?
         status = "Full match"
         status_colour = "green"

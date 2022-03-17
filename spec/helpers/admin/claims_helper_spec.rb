@@ -233,7 +233,7 @@ describe Admin::ClaimsHelper do
         let(:task_claim_verifier_match) { :all }
 
         it "returns full match task status tag" do
-          expect(identity_confirmation_task_claim_verifier_match_status_tag).to match("Full match")
+          expect(identity_confirmation_task_claim_verifier_match_status_tag).to match("Passed")
           expect(identity_confirmation_task_claim_verifier_match_status_tag).to match("govuk-tag app-task-list__task-completed")
           expect(identity_confirmation_task_claim_verifier_match_status_tag).to match("govuk-tag--green")
         end
@@ -243,9 +243,9 @@ describe Admin::ClaimsHelper do
         let(:task_claim_verifier_match) { :any }
 
         it "returns full match task status tag" do
-          expect(identity_confirmation_task_claim_verifier_match_status_tag).to match("Partial match")
+          expect(identity_confirmation_task_claim_verifier_match_status_tag).to match("Passed")
           expect(identity_confirmation_task_claim_verifier_match_status_tag).to match("govuk-tag app-task-list__task-completed")
-          expect(identity_confirmation_task_claim_verifier_match_status_tag).to match("govuk-tag--yellow")
+          expect(identity_confirmation_task_claim_verifier_match_status_tag).to match("govuk-tag--green")
         end
       end
 
@@ -253,9 +253,9 @@ describe Admin::ClaimsHelper do
         let(:task_claim_verifier_match) { :none }
 
         it "returns no match task status tag" do
-          expect(identity_confirmation_task_claim_verifier_match_status_tag).to match("No match")
+          expect(identity_confirmation_task_claim_verifier_match_status_tag).to match("Passed")
           expect(identity_confirmation_task_claim_verifier_match_status_tag).to match("govuk-tag app-task-list__task-completed")
-          expect(identity_confirmation_task_claim_verifier_match_status_tag).to match("govuk-tag--red")
+          expect(identity_confirmation_task_claim_verifier_match_status_tag).to match("govuk-tag--green")
         end
       end
     end
