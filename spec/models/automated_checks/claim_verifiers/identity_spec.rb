@@ -168,7 +168,7 @@ module AutomatedChecks
                     it do
                       is_expected.to eq(
                         <<~HTML
-                          National Insurance number not matched:
+                          [DQT Identity] - National Insurance number not matched:
                           <pre>
                             Claimant: <span class="dark-grey">"</span><span class="red">QQ100000C</span><span class="dark-grey">"</span>
                             DQT:      <span class="dark-grey">"</span><span class="green">QQ100000B</span><span class="dark-grey">"</span>
@@ -238,7 +238,7 @@ module AutomatedChecks
                     it do
                       is_expected.to eq(
                         <<~HTML
-                          Teacher reference number not matched:
+                          [DQT Identity] - Teacher reference number not matched:
                           <pre>
                             Claimant: <span class="dark-grey">"</span><span class="red">1234567</span><span class="dark-grey">"</span>
                             DQT:      <span class="dark-grey">"</span><span class="green">7654321</span><span class="dark-grey">"</span>
@@ -308,7 +308,7 @@ module AutomatedChecks
                     it do
                       is_expected.to eq(
                         <<~HTML
-                          First name or surname not matched:
+                          [DQT Identity] - First name or surname not matched:
                           <pre>
                             Claimant: <span class="dark-grey">"</span><span class="red">Fred ELIGIBLE</span><span class="dark-grey">"</span>
                             DQT:      <span class="dark-grey">"</span><span class="green">Except ELIGIBLE</span><span class="dark-grey">"</span>
@@ -378,7 +378,7 @@ module AutomatedChecks
                     it do
                       is_expected.to eq(
                         <<~HTML
-                          First name or surname not matched:
+                          [DQT Identity] - First name or surname not matched:
                           <pre>
                             Claimant: <span class="dark-grey">"</span><span class="red">Fred ELIGIBLE</span><span class="dark-grey">"</span>
                             DQT:      <span class="dark-grey">"</span><span class="green">Fred Except</span><span class="dark-grey">"</span>
@@ -490,7 +490,7 @@ module AutomatedChecks
                     it do
                       is_expected.to eq(
                         <<~HTML
-                          Date of birth not matched:
+                          [DQT Identity] - Date of birth not matched:
                           <pre>
                             Claimant: <span class="dark-grey">"</span><span class="red">1990-08-23</span><span class="dark-grey">"</span>
                             DQT:      <span class="dark-grey">"</span><span class="green">1990-08-24</span><span class="dark-grey">"</span>
@@ -735,7 +735,7 @@ module AutomatedChecks
                 end
 
                 describe "first name or surname note" do
-                  subject(:note) { claim_arg.notes.find_by("body LIKE ?", "First name or surname not matched%") }
+                  subject(:note) { claim_arg.notes.find_by("body LIKE ?", "[DQT Identity] - First name or surname not matched%") }
 
                   before { perform }
 
@@ -745,7 +745,7 @@ module AutomatedChecks
                     it do
                       is_expected.to eq(
                         <<~HTML
-                          First name or surname not matched:
+                          [DQT Identity] - First name or surname not matched:
                           <pre>
                             Claimant: <span class="dark-grey">"</span><span class="red">Fred ELIGIBLE</span><span class="dark-grey">"</span>
                             DQT:      <span class="dark-grey">"</span><span class="green">Except ELIGIBLE</span><span class="dark-grey">"</span>
@@ -769,7 +769,7 @@ module AutomatedChecks
                 end
 
                 describe "date of birth note" do
-                  subject(:note) { claim_arg.notes.find_by("body LIKE ?", "Date of birth not matched%") }
+                  subject(:note) { claim_arg.notes.find_by("body LIKE ?", "[DQT Identity] - Date of birth not matched%") }
 
                   before { perform }
 
@@ -779,7 +779,7 @@ module AutomatedChecks
                     it do
                       is_expected.to eq(
                         <<~HTML
-                          Date of birth not matched:
+                          [DQT Identity] - Date of birth not matched:
                           <pre>
                             Claimant: <span class="dark-grey">"</span><span class="red">1990-08-23</span><span class="dark-grey">"</span>
                             DQT:      <span class="dark-grey">"</span><span class="green">1990-08-24</span><span class="dark-grey">"</span>
@@ -847,7 +847,7 @@ module AutomatedChecks
                 describe "#body" do
                   subject(:body) { note.body }
 
-                  it { is_expected.to eq("Not matched") }
+                  it { is_expected.to eq("[DQT Identity] - Not matched") }
                 end
 
                 describe "#created_by" do

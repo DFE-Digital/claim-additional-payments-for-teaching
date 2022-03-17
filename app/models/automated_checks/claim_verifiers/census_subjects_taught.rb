@@ -109,7 +109,7 @@ module AutomatedChecks
 
       def create_note(match:)
         body = if school_workforce_census.nil?
-          "No data"
+          "[School Workforce Census] - No data"
         else
           swc_subjects = ""
           school_workforce_census_subjects.each_with_index do |subject, idx|
@@ -117,7 +117,7 @@ module AutomatedChecks
           end
 
           <<~HTML
-            #{match == :none ? "Ine" : "E"}ligible:
+            [School Workforce Census] - #{match == :none ? "Ine" : "E"}ligible:
             <pre>#{swc_subjects}</pre>
           HTML
         end
