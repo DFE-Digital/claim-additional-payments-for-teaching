@@ -84,6 +84,25 @@ DFE_SIGN_IN_API_SECRET=<paste secret>
 To access the admin routes, you will also need to
 [request an account on DfE Sign In's pre-production environment](docs/dfe-sign-in.md#adding-a-new-user-to-the-pre-production-environment).
 
+### Automated Address Lookup
+
+The Ordnance Survey API is used for searching for addresses. The project makes
+use of two endpoints, which are used when teachers enter their address details
+in the user journey:
+
+1. `/search/places/v1/postcode` - for postcode
+2. `/search/places/v1/find` - for postcode and building name and flat
+   number/street number
+
+This can be found in the `SearchPlaces` class.
+
+To enable address lookup set the following environment variables:
+
+```
+ORDNANCE_SURVEY_API_BASE_URL=<paste url here>
+ORDNANCE_SURVEY_CLIENT_PARAMS={"key": <paste api key>}
+```
+
 ### GOV.UK Notify
 
 We use Notify to send emails however it is turned off by default in development.
