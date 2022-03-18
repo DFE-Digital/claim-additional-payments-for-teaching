@@ -91,7 +91,9 @@ RSpec.feature "Admin checks a claim" do
     end
 
     scenario "User can see existing decision details" do
-      claim_with_decision = create(:claim, :submitted, decisions: [build(:decision, result: :approved, notes: "Everything matches")])
+      claim_with_decision = create(:claim, :submitted)
+      create(:decision, claim: claim_with_decision, result: :approved, notes: "Everything matches")
+
       visit admin_claim_path(claim_with_decision)
 
       expect(page).not_to have_button("Confirm decision")

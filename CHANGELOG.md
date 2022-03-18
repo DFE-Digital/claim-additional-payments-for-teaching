@@ -7,13 +7,18 @@ The format is based on [Keep a Changelog]
 ## [Unreleased]
 
 - Admin
+
   - Add labels to automated tasks so they can be easily identified by data
     source and automated task in the notes screen
   - Tasks that have passed also show in the 'view claims' section
   - Update the claims index view to display status of identity and qualification
     tasks if they have been manually passed/failed
+
 - Update documentation
+
   - Automated address lookup
+
+- Update rails from 6.0.3.7 to 6.0.4.7
 
 ## [Release 115] - 2022-03-17
 

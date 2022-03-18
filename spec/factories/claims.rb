@@ -72,14 +72,14 @@ FactoryBot.define do
     trait :approved do
       submitted
       after(:build) do |claim|
-        claim.decisions.append(build(:decision, :approved))
+        create(:decision, claim: claim, result: "approved")
       end
     end
 
     trait :rejected do
       submitted
       after(:build) do |claim|
-        claim.decisions.append(build(:decision, :rejected))
+        create(:decision, claim: claim, result: "rejected")
       end
     end
 

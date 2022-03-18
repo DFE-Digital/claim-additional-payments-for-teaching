@@ -804,11 +804,23 @@ RSpec.describe Claim, type: :model do
       expect(build(:claim, :submitted, payroll_gender: :dont_know).approvable?).to eq false
     end
 
-    it "returns false for a claim that already has a persisted check" do
-      expect(build(:claim, :approved).approvable?).to eq true
+    it "returns true for a claim that already does not have a decision" do
+      expect(build(:claim, :submitted).approvable?).to eq true
+    end
 
-      expect(create(:claim, :approved).approvable?).to eq false
-      expect(create(:claim, :rejected).approvable?).to eq false
+    it "returns false when a claim has already been approved" do
+      claim_with_decision = create(:claim, :submitted)
+      expect(claim_with_decision.approvable?).to eq true
+      create(:decision, claim: claim_with_decision, result: :approved)
+
+      expect(claim_with_decision.approvable?).to eq false
+    end
+
+    it "returns false when a claim has already been rejected" do
+      claim_with_decision = create(:claim, :submitted)
+      create(:decision, claim: claim_with_decision, result: :rejected)
+
+      expect(claim_with_decision.approvable?).to eq false
     end
 
     it "returns false when there exists another payrollable claim with the same teacher reference number but with inconsistent attributes that would prevent us from running payroll" do
