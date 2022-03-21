@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe TpsDataImporter do
+RSpec.describe TeachersPensionsServiceImporter do
   let(:file) do
     tempfile = Tempfile.new
     tempfile.write(csv)
@@ -95,7 +95,7 @@ RSpec.describe TpsDataImporter do
 
     it "has no errors and parses the CSV" do
       subject.run
-      expect(subject.errors).to eq(["The TPS record with TRN 1234567 with StartDate 2019-09-01 is repeated at line 2"])
+      expect(subject.errors).to eq(["The Teachers Pensions Service record with TRN 1234567 with StartDate 2019-09-01 is repeated at line 2"])
       expect(subject.run).to be_falsey
 
       expect(subject.rows.first["Teacher reference number"]).to eq("1234567")

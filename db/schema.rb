@@ -340,7 +340,7 @@ ActiveRecord::Schema.define(version: 2022_07_07_120226) do
     t.index ["name", "claim_id"], name: "index_tasks_on_name_and_claim_id", unique: true
   end
 
-  create_table "tps_data", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+  create_table "teachers_pensions_service", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "teacher_reference_number"
     t.datetime "start_date"
     t.datetime "end_date"
@@ -349,7 +349,7 @@ ActiveRecord::Schema.define(version: 2022_07_07_120226) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["teacher_reference_number", "start_date"], name: "index_tps_data_on_teacher_reference_number_and_start_date", unique: true
-    t.index ["teacher_reference_number"], name: "index_tps_data_on_teacher_reference_number"
+    t.index ["teacher_reference_number"], name: "index_teachers_pensions_service_on_teacher_reference_number"
   end
 
   add_foreign_key "amendments", "claims"

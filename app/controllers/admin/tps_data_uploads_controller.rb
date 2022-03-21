@@ -6,7 +6,7 @@ module Admin
     end
 
     def create
-      @tps_data_importer = TpsDataImporter.new(params[:file])
+      @tps_data_importer = TeachersPensionsServiceImporter.new(params[:file])
 
       if @tps_data_importer.errors.any?
         render :new
@@ -15,7 +15,7 @@ module Admin
         if @tps_data_importer.errors.any?
           render :new and return
         end
-        redirect_to admin_claims_path, notice: "TPS data uploaded successfully"
+        redirect_to admin_claims_path, notice: "Teachers Pensions Service data uploaded successfully"
       end
     rescue ActiveRecord::RecordInvalid
       redirect_to new_tps_data_upload_path, alert: "There was a problem, please try again"
