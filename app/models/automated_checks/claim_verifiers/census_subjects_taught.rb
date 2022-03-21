@@ -41,7 +41,7 @@ module AutomatedChecks
       end
 
       def no_match
-        return if school_workforce_census.nil? || eligible?
+        return unless school_workforce_census.nil? || !eligible?
 
         create_task(match: :none)
       end

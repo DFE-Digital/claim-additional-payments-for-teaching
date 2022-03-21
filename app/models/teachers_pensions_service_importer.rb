@@ -1,7 +1,7 @@
 require "file_download"
 require "csv"
 
-class TpsDataImporter
+class TeachersPensionsServiceImporter
   attr_reader :errors, :rows
 
   EXPECTED_HEADERS = [
@@ -28,7 +28,7 @@ class TpsDataImporter
         tps_data = row_to_tps(row)
         tps_data.save!
       rescue ActiveRecord::RecordNotUnique
-        errors.append("The TPS record with TRN #{tps_data.teacher_reference_number} with StartDate #{tps_data.start_date.strftime("%Y-%m-%d")} is repeated at line #{idx + 1}")
+        errors.append("The Teachers Pensions Service record with TRN #{tps_data.teacher_reference_number} with StartDate #{tps_data.start_date.strftime("%Y-%m-%d")} is repeated at line #{idx + 1}")
         raise ActiveRecord::Rollback
       end
     end
@@ -56,7 +56,8 @@ class TpsDataImporter
   end
 
   def row_to_tps(row)
-    tps_data = TpsData.new(teacher_reference_number: row.fetch("Teacher reference number"))
+    tps_data = TeachersPensionsService.new(teacher_reference_number: row.fetch("Teacher reference number"))
+    # tps_data.national_insurance_number = row.fetch("NINO")
     tps_data.start_date = row.fetch("Start Date")
     tps_data.end_date = row.fetch("End Date")
     tps_data.la_urn = row.fetch("LA URN")
