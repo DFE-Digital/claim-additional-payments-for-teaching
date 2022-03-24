@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+## [Release 116] - 2022-03-24
+
 - Admin
 
   - Add labels to automated tasks so they can be easily identified by data
@@ -1114,7 +1116,9 @@ The format is based on [Keep a Changelog]
 - First release for student loan repayments private beta
 
 [unreleased]:
-  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-115...HEAD
+  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-116...HEAD
+[release 116]:
+  https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-115...release-116
 [release 115]:
   https://github.com/DFE-Digital/dfe-teachers-payment-service/compare/release-114...release-115
 [release 114]:
