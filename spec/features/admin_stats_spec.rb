@@ -23,11 +23,7 @@ RSpec.feature "Admin stats" do
 
   scenario "Service operator is shown \% of claims and status for the School Workforce Census check" do
     expect(page).to have_text("School Workforce Census Stats")
-    expect(page).to have_text("Not checked\n#{((Claim.submitted.count.to_f - Task.census_subjects_taught.count) / Claim.submitted.count.to_f * 100 / 1).round(1)}")
-    expect(page).to have_text("Any Match\n7.7%")
-    expect(page).to have_text("No Match\n7.7%")
+    expect(page).to have_text("Any matches\n7.7%")
     expect(page).to have_text("No data\n7.7%")
-    expect(page).to have_text("Passed\n23.1%")
-    expect(page).to have_text("Failed\n0.0%")
   end
 end

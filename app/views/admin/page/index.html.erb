@@ -32,32 +32,16 @@
     <h1 class="govuk-heading-l">School Workforce Census Stats</h1>
   </div>
 </div>
-<div class="govuk-grid-row">
-  <div class="govuk-grid-column-one-quarter">
-    <h2 class="govuk-heading-m">Not checked</h2>
-    <p class="govuk-body govuk-!-font-size-36"><%= number_to_percentage(ClaimStats::SchoolWorkforceCensus.not_checked, precision: 1) %></p>
-  </div>
-  <div class="govuk-grid-column-one-quarter">
-    <h2 class="govuk-heading-m">Any Match</h2>
-    <p class="govuk-body govuk-!-font-size-36"><%= number_to_percentage(ClaimStats::SchoolWorkforceCensus.any_match_count, precision: 1) %></p>
-  </div>
-  <div class="govuk-grid-column-one-quarter">
-    <h2 class="govuk-heading-m">No Match</h2>
-    <p class="govuk-body govuk-!-font-size-36"><%= number_to_percentage(ClaimStats::SchoolWorkforceCensus.no_match_count, precision: 1) %></p>
-  </div>
-  <div class="govuk-grid-column-one-quarter">
-    <h2 class="govuk-heading-m">No data</h2>
-    <p class="govuk-body govuk-!-font-size-36"><%= number_to_percentage(ClaimStats::SchoolWorkforceCensus.no_data_census_subjects_taught_count, precision: 1) %></p>
-  </div>
-</div>
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-one-half">
-    <h2 class="govuk-heading-m">Passed</h2>
-    <p class="govuk-body govuk-!-font-size-36"><%= number_to_percentage(Task.passed_census_subjects_taught.count / Claim.submitted.count.to_f * 100, precision: 1) %></p>
+    <h2 class="govuk-heading-m">No data</h2>
+    <p class="govuk-body govuk-!-font-size-36"><%= number_to_percentage(ClaimStats::SchoolWorkforceCensus.no_data_census_subjects_taught_count, precision: 1) %></p>
+    <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
   </div>
   <div class="govuk-grid-column-one-half">
-    <h2 class="govuk-heading-m">Failed</h2>
-    <p class="govuk-body govuk-!-font-size-36"><%= number_to_percentage(Task.failed_census_subjects_taught.count / Claim.submitted.count.to_f * 100, precision: 1) %></p>
+    <h2 class="govuk-heading-m">Any matches</h2>
+    <p class="govuk-body govuk-!-font-size-36"><%= number_to_percentage(ClaimStats::SchoolWorkforceCensus.any_match_count, precision: 1) %></p>
+    <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
   </div>
 </div>

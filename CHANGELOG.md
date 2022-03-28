@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+- Admin
+
+  - Display stats for outcomes of School Workforce Census checks
+
 ## [Release 116] - 2022-03-24
 
 - Admin
@@ -15,7 +19,6 @@ The format is based on [Keep a Changelog]
   - Tasks that have passed also show in the 'view claims' section
   - Update the claims index view to display status of identity and qualification
     tasks if they have been manually passed/failed
-  - Display stats for outcomes of School Workforce Census checks
 
 - Update documentation
 
