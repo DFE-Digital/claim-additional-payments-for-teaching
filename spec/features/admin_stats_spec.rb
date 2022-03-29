@@ -22,7 +22,7 @@ RSpec.feature "Admin stats" do
   end
 
   scenario "Service operator is shown \% of claims and status for the School Workforce Census check" do
-    expect(page).to have_text("School Workforce Census Stats")
+    expect(page).to have_text("School Workforce Census Statistics")
     expect(page).to have_text("Any matches\n7.7%")
     expect(page).to have_text("No data\n7.7%")
   end
