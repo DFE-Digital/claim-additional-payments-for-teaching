@@ -1,8 +1,11 @@
 require "rails_helper"
 
 RSpec.feature "Admin stats" do
+  let(:submitted_claims) { create_list(:claim, 6, :submitted) }
+  let!(:school_workforce_census_task_any_match) { create(:task, claim: submitted_claims.first, name: "census_subjects_taught", claim_verifier_match: :any) }
+  let!(:school_workforce_census_task_no_match) { create(:task, claim: submitted_claims.second, name: "census_subjects_taught", claim_verifier_match: :none) }
+  let!(:school_workforce_census_task_no_data) { create(:task, claim: submitted_claims.third, name: "census_subjects_taught") }
   before do
-    @submitted_claims = create_list(:claim, 6, :submitted)
     @approved_claims = create_list(:claim, 4, :approved, submitted_at: 10.weeks.ago)
     @unfinished_claims = create_list(:claim, 1, :submittable)
     @claims_approaching_deadline = create_list(:claim, 2, :submitted, submitted_at: (Claim::DECISION_DEADLINE - 1.week).ago)
@@ -16,5 +19,11 @@ RSpec.feature "Admin stats" do
     expect(page).to have_text("Claims awaiting a decision\n#{Claim.awaiting_decision.count}")
     expect(page).to have_text("Claims approaching deadline\n#{@claims_approaching_deadline.count}")
     expect(page).to have_text("Claims passed deadline\n#{@claims_passed_deadline.count}")
+  end
+
+  scenario "Service operator is shown \% of claims and status for the School Workforce Census check" do
+    expect(page).to have_text("School Workforce Census Statistics")
+    expect(page).to have_text("Any matches\n7.7%")
+    expect(page).to have_text("No data\n7.7%")
   end
 end

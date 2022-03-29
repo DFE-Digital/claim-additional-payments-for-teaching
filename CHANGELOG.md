@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog]
 
 ## [Unreleased]
 
+- Admin
+
+  - Display stats for outcomes of School Workforce Census checks
+
 ## [Release 116] - 2022-03-24
 
 - Admin

@@ -28,6 +28,10 @@ class Task < ApplicationRecord
   validates :claim_verifier_match, allow_nil: true, inclusion: {in: claim_verifier_matches.keys}
   validates :manual, allow_nil: true, inclusion: {in: [true, false]}
 
+  scope :census_subjects_taught, -> { where(name: "census_subjects_taught") }
+  scope :passed_census_subjects_taught, -> { census_subjects_taught.where(passed: true) }
+  scope :failed_census_subjects_taught, -> { census_subjects_taught.where(passed: false) }
+
   def to_param
     name
   end
