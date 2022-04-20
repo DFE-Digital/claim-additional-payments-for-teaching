@@ -85,15 +85,23 @@ RSpec.describe AcademicYear do
   end
 
   it "can be initialised with the full academic year as a String" do
-    expect(AcademicYear.new("2014/2015").start_year).to eq 2014
+    expect(AcademicYear.new("2014/2015")).to have_attributes(start_year: 2014, end_year: 2015)
+  end
+
+  it "errors when the years are not consecutive" do
+    expect { AcademicYear.new("2014/2016") }.to raise_error("2014/2016 are not increasing consecutive years")
+  end
+
+  it "errors when the years are not increasing" do
+    expect { AcademicYear.new("2014/2013") }.to raise_error("2014/2013 are not increasing consecutive years")
   end
 
   it "can be initialised with a single Integer year" do
-    expect(AcademicYear.new(2020).start_year).to eq 2020
+    expect(AcademicYear.new(2020)).to have_attributes(start_year: 2020, end_year: 2021)
   end
 
   it "can be initialised with a single String year" do
-    expect(AcademicYear.new("2019").start_year).to eq 2019
+    expect(AcademicYear.new("2019")).to have_attributes(start_year: 2019, end_year: 2020)
   end
 
   it "is comparable" do

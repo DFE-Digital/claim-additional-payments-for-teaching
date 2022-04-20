@@ -59,8 +59,29 @@ class AcademicYear
     end
   end
 
-  def initialize(start_year = nil)
-    self.years = start_year
+  def initialize(year_or_academic_year_or_string = nil)
+    if year_or_academic_year_or_string.nil?
+      # would have thought this should be an error really but maintaining interface for now
+      @start_year = @end_year = nil
+    elsif year_or_academic_year_or_string.is_a? Integer
+      @start_year = year_or_academic_year_or_string
+      @end_year = @start_year + 1
+    elsif year_or_academic_year_or_string.is_a? AcademicYear
+      @start_year = year_or_academic_year_or_string.start_year
+      @end_year = year_or_academic_year_or_string.end_year
+    elsif year_or_academic_year_or_string.match?(/^\d{4}$/)
+      @start_year = year_or_academic_year_or_string.to_i
+      @end_year = @start_year + 1
+    elsif /^(?<start_year_string>\d{4})\/(?<end_year_string>\d{4})$/ =~ year_or_academic_year_or_string
+      start_year_i, end_year_i = start_year_string.to_i, end_year_string.to_i
+
+      if end_year_i == start_year_i + 1
+        @start_year = start_year_i
+        @end_year = end_year_i
+      else
+        raise "#{year_or_academic_year_or_string} are not increasing consecutive years"
+      end
+    end
   end
 
   def eql?(other)
@@ -100,16 +121,5 @@ class AcademicYear
 
   def +(other)
     AcademicYear.new(start_year + other)
-  end
-
-  private
-
-  def years=(start_year)
-    if start_year.nil?
-      @start_year = @end_year = nil
-    else
-      @start_year = start_year.to_s.split("/").first.to_i
-      @end_year = self.start_year + 1
-    end
   end
 end
