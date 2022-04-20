@@ -31,19 +31,19 @@ RSpec.feature "Backlinking during a claim" do
     scenario "backlink is not present on pages that exclude it" do
       # ecp journey
       %w[claim eligibility-confirmed eligible-later ineligible].each do |slug|
-        ClaimsController.any_instance.stub(:current_template).and_return(slug)
+        allow_any_instance_of(ClaimsController).to receive(:current_template).and_return(slug)
         visit "/early-career-payments/#{slug}"
         expect(page).to_not have_link("Back")
       end
       # student loan journey
       %w[claim eligibility-confirmed ineligible].each do |slug|
-        ClaimsController.any_instance.stub(:current_template).and_return(slug)
+        allow_any_instance_of(ClaimsController).to receive(:current_template).and_return(slug)
         visit "/student-loans/#{slug}"
         expect(page).to_not have_link("Back")
       end
       # maths and physics journey
       %w[claim eligibility-confirmed ineligible].each do |slug|
-        ClaimsController.any_instance.stub(:current_template).and_return(slug)
+        allow_any_instance_of(ClaimsController).to receive(:current_template).and_return(slug)
         visit "/maths-and-physics/#{slug}"
         expect(page).to_not have_link("Back")
       end
