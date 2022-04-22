@@ -1,8 +1,9 @@
 <%= render("shared/error_summary", instance: current_claim, errored_field_id_overrides: { school_search: "school_search" }) if current_claim.errors.any? %>
 <% shared_view_css_size = current_claim.policy == EarlyCareerPayments ? "l" : "xl" %>
+<% path_for_form = current_claim.persisted? ? claim_path(current_policy_routing_name) : claims_path(current_policy_routing_name) %>
 
 <%= form_for current_claim,
-             url: claim_path(current_policy_routing_name),
+             url: path_for_form,
              method: :get,
              data: {
                "school-id-param": "claim_eligibility_attributes_#{school_id_param}",

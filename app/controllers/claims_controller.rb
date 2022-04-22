@@ -10,15 +10,27 @@ class ClaimsController < BasePublicController
   before_action :prepend_view_path_for_policy
 
   def new
-    render first_template_in_sequence
+    # school search is used in multiple places so assuming we're at the first step in the wizard (choose-school)
+    if params[:school_search]
+      create
+    else
+      render first_template_in_sequence
+    end
   end
 
   def create
     current_claim.attributes = claim_params
+    first_slug = page_sequence.slugs.first.to_sym
 
-    if current_claim.save(context: page_sequence.slugs.first.to_sym)
+    if current_claim.save(context: first_slug)
       session[:claim_id] = current_claim.to_param
-      redirect_to claim_path(current_policy_routing_name, next_slug)
+
+      if params[:school_search] # school search is used in multiple places so assuming we're at the first step in the wizard
+        # go back to current-school step to display results
+        redirect_to claim_path(current_policy_routing_name, first_slug, school_search: params[:school_search])
+      else
+        redirect_to claim_path(current_policy_routing_name, next_slug)
+      end
     else
       render first_template_in_sequence
     end
