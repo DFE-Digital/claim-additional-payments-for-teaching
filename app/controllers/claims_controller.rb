@@ -8,6 +8,7 @@ class ClaimsController < BasePublicController
   before_action :check_claim_not_in_progress, only: [:new]
   before_action :clear_claim_session, only: [:new]
   before_action :prepend_view_path_for_policy
+  before_action :persist, only: [:new]
 
   def new
     render first_template_in_sequence
@@ -81,6 +82,16 @@ class ClaimsController < BasePublicController
   helper_method :next_slug
   def next_slug
     page_sequence.next_slug
+  end
+
+  def persist
+    end_expired_claim_sessions # investigate why superclass callback has to be called manually
+    current_claim.attributes = claim_params
+
+    current_claim.save!
+    session[:claim_id] = current_claim.to_param
+    update_last_seen_at # investigate why superclass callback has to be called manually
+    redirect_to claim_path(current_policy_routing_name, page_sequence.slugs.first.to_sym)
   end
 
   def search_schools
