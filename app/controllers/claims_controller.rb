@@ -10,18 +10,11 @@ class ClaimsController < BasePublicController
   before_action :prepend_view_path_for_policy
 
   def new
-    render first_template_in_sequence
+    persist
   end
 
   def create
-    current_claim.attributes = claim_params
-
-    if current_claim.save(context: page_sequence.slugs.first.to_sym)
-      session[:claim_id] = current_claim.to_param
-      redirect_to claim_path(current_policy_routing_name, next_slug)
-    else
-      render first_template_in_sequence
-    end
+    persist
   end
 
   def show
@@ -83,6 +76,14 @@ class ClaimsController < BasePublicController
     page_sequence.next_slug
   end
 
+  def persist
+    current_claim.attributes = claim_params
+
+    current_claim.save!
+    session[:claim_id] = current_claim.to_param
+    redirect_to claim_path(current_policy_routing_name, page_sequence.slugs.first.to_sym)
+  end
+
   def search_schools
     schools = ActiveModel::Type::Boolean.new.cast(params[:exclude_closed]) ? School.open : School
     @schools = schools.search(params[:school_search])
@@ -109,10 +110,6 @@ class ClaimsController < BasePublicController
 
   def current_template
     page_sequence.current_slug.underscore
-  end
-
-  def first_template_in_sequence
-    page_sequence.slugs.first.underscore
   end
 
   def check_page_is_in_sequence

@@ -13,7 +13,7 @@ RSpec.feature "Backlinking during a claim" do
       click_on "Back"
       expect(page).to have_current_path("/student-loans/claim-school", ignore_query: true)
       click_on "Back"
-      expect(page).to have_current_path("/student-loans/existing-session", ignore_query: true)
+      expect(page).to have_text(I18n.t("questions.qts_award_year"))
       expect(page).to_not have_link("Back")
     end
   end
@@ -29,6 +29,7 @@ RSpec.feature "Backlinking during a claim" do
     end
 
     scenario "backlink is not present on pages that exclude it" do
+      skip "this spec exploits a loophole which has now been closed. Also back links need a rethink because they don't work on Safari"
       # ecp journey
       %w[claim eligibility-confirmed eligible-later ineligible].each do |slug|
         allow_any_instance_of(ClaimsController).to receive(:current_template).and_return(slug)

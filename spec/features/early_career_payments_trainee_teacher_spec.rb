@@ -19,6 +19,11 @@ RSpec.feature "Trainee Teacher - Early Career Payments - journey" do
       expect(page).to have_text(I18n.t("early_career_payments.landing_page"))
       click_on "Start Now"
 
+      # - Which school do you teach at
+      expect(page).to have_text(I18n.t("early_career_payments.questions.current_school_search"))
+
+      choose_school schools(:penistone_grammar_school)
+
       # - NQT in Academic Year after ITT
       expect(page).to have_text(I18n.t("early_career_payments.questions.nqt_in_academic_year_after_itt.heading.default", started_or_completed: :started))
 
@@ -55,6 +60,11 @@ RSpec.feature "Trainee Teacher - Early Career Payments - journey" do
       # - Landing (start)
       expect(page).to have_text(I18n.t("early_career_payments.landing_page"))
       click_on "Start Now"
+
+      # - Which school do you teach at
+      expect(page).to have_text(I18n.t("early_career_payments.questions.current_school_search"))
+
+      choose_school schools(:penistone_grammar_school)
 
       # - NQT in Academic Year after ITT
       expect(page).to have_text(I18n.t("early_career_payments.questions.nqt_in_academic_year_after_itt.heading.2021"))
@@ -113,6 +123,11 @@ RSpec.feature "Trainee Teacher - Early Career Payments - journey" do
       # - Landing (start)
       expect(page).to have_text(I18n.t("early_career_payments.landing_page"))
       click_on "Start Now"
+
+      # - Which school do you teach at
+      expect(page).to have_text(I18n.t("early_career_payments.questions.current_school_search"))
+
+      choose_school schools(:penistone_grammar_school)
 
       # - NQT in Academic Year after ITT
       expect(page).to have_text(I18n.t("early_career_payments.questions.nqt_in_academic_year_after_itt.heading.2021"))
