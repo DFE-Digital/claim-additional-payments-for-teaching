@@ -5,6 +5,7 @@ RSpec.describe "Claims", type: :request do
     context "the user has not already started a claim" do
       it "renders the first page in the sequence" do
         get new_claim_path(StudentLoans.routing_name)
+        follow_redirect!
         expect(response.body).to include(I18n.t("questions.qts_award_year"))
       end
     end

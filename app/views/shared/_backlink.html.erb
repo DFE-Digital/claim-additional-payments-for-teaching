@@ -1,5 +1,9 @@
 <%
+  # only `qts-year` is in there for now to address a failing spec,
+  # but this needs to exclude *all* first slugs for *all* wizards
+  # because first wizard steps now redirect away from `/claim`
 backlink_exclude_rules = /
+  \/qts-year$|
   \/claim$|
   \/complete$|
   \/existing-session$|
