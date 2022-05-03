@@ -35,7 +35,7 @@ The format is based on [Keep a Changelog]
   - used for qualifications checking
 - Admin
   - Allocate claims by policy
-  - Unallocate claims by policy
+  - Deallocate claims by policy
   - Add ability to filter claims by team member
   - Add automation for School Workforce Census checks - (TSLR + ECP only)
 
@@ -157,7 +157,7 @@ The format is based on [Keep a Changelog]
   date
 - Remove Geckoboard
 - ECP
-  - Fix issue where reminder OTP page link was not going anwyhere
+  - Fix issue where reminder OTP page link was not going anywhere
 - TSLR
   - How much student loan did you repay page content change
 - All policies
@@ -171,7 +171,7 @@ The format is based on [Keep a Changelog]
   - Ineligible school content change
   - Not teaching subject now ineligible page content change
   - Future years
-    - eligible/ineligiblity configuration
+    - eligible/ineligibility configuration
     - application complete display reminders section when eligible
 
 ## [Release 101] - 2021-10-21
@@ -350,7 +350,7 @@ The format is based on [Keep a Changelog]
   - Non-descriptive links
 - Google Analytics
   - Add Google Tag Manager to admin and application
-  - Adds CSV view for claims decsions
+  - Adds CSV view for claims decisions
 - Claims
   - Stop claim full name adding redundant spaces when middle name is an empty or
     blank string
@@ -496,7 +496,7 @@ The format is based on [Keep a Changelog]
 ## [Release 085] - 2020-10-07
 
 - Update payment email copy
-- Seperate policies in payment with a space
+- Separate policies in payment with a space
 
 ## [Release 084] - 2020-09-30
 
@@ -525,7 +525,7 @@ The format is based on [Keep a Changelog]
 ## [Release 079] - 2020-06-25
 
 - Add contextual information when incorrect data is in a confirmation report
-- Remove thousand seperators from numeric columns in confirmation reports
+- Remove thousand separators from numeric columns in confirmation reports
 
 ## [Release 078] - 2020-06-22
 
@@ -589,7 +589,7 @@ The format is based on [Keep a Changelog]
 - Fix a bug with automated DQT checks where the report has multiple rows for the
   same claim
 - Allow a claim's decision to be amended by a service operator
-- Move claim amendments to a seperate tab
+- Move claim amendments to a separate tab
 - Automated DQT checks verify that the surname in DQT matches the one in the
   claim
 
@@ -740,7 +740,7 @@ The format is based on [Keep a Changelog]
 ## [Release 048] - 2020-01-28
 
 - QLS questions now refer to academic year, instead of "1 September"
-- Styling tweaks to make the service AAA accessible. Accessiblity updated to
+- Styling tweaks to make the service AAA accessible. Accessibility updated to
   reflect AAA status
 - Remove basic authentication on the Maths and Physics journey
 - Update the "Claim submitted" page so all journeys link to the done page on
@@ -762,7 +762,7 @@ The format is based on [Keep a Changelog]
 ## [Release 046] - 2020-01-21
 
 - Feedback link tells users it will open in a new tab
-- Changed existing session page to use radios and tidy up the iterruption card
+- Changed existing session page to use radios and tidy up the interruption card
 - Semantic Logger has been added to make log entries more concise and useful
 - Application logs can now be sent to Logstash for aggregation, analysis and
   monitoring
@@ -963,7 +963,7 @@ The format is based on [Keep a Changelog]
   amount the claimant receives
 - Inform the user that their claim is ineligible, if the school that they are
   currently employed at is not eligible
-- Claimants recieve payment notifications once a payroll run has been processed
+- Claimants receive payment notifications once a payroll run has been processed
 
 ## [Release 022] - 2019-10-24
 

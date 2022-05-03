@@ -300,8 +300,8 @@ class Claim < ApplicationRecord
     (submitted_at + DECISION_DEADLINE - DECISION_DEADLINE_WARNING_POINT).to_date
   end
 
-  def address(seperator = ", ")
-    Claim::ADDRESS_ATTRIBUTES.map { |attr| send(attr) }.reject(&:blank?).join(seperator)
+  def address(separator = ", ")
+    Claim::ADDRESS_ATTRIBUTES.map { |attr| send(attr) }.reject(&:blank?).join(separator)
   end
 
   def no_student_loan?

@@ -299,7 +299,7 @@ Accessing a live console on production requires a
 ### Usage
 
 When accessing the Rails console on a live system, do so in sandbox mode to
-avoid making unintented changes to the database state:
+avoid making unintended changes to the database state:
 
 `bin/rails console --sandbox`.
 

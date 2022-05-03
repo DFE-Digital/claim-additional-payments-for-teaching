@@ -1,4 +1,4 @@
--- Eligibility for a claim comes from a seperate table based on the claim type.
+-- Eligibility for a claim comes from a separate table based on the claim type.
 -- This temporary table combines them into one eligibities table which is
 -- referenced in the main select below. We can UNION like this as the IDs are
 -- UUIDs so we can be sure there are no repeated IDs.

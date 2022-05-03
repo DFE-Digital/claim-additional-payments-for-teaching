@@ -9,7 +9,7 @@ in the `azure` folder in the root of the project.
 ## Automated deployment
 
 [Azure DevOps](https://dev.azure.com/dfe-ssp/S118-Teacher-Payments-Service) is
-responsible for automated infrastructure deployments, this is seperate from the
+responsible for automated infrastructure deployments, this is separate from the
 deployment of a version of the application.
 
 ## Manual deployment
