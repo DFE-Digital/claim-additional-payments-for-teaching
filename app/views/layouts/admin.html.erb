@@ -23,10 +23,10 @@
     <% if ENV["GOOGLE_ANALYTICS_ID"] %>
       <%= javascript_include_tag "google_analytics/analytics" %>
       <%= javascript_include_tag "google_analytics", data: { "ga-id" => ENV["GOOGLE_ANALYTICS_ID"] } %>
-    <% end %>
 
-    <% if ENV["GTM_ANALYTICS"] %>
-      <%= javascript_include_tag "google_gtm" %>
+      <% if ENV["GTM_ANALYTICS"] %>
+        <%= javascript_include_tag "google_gtm" %>
+      <% end %>
     <% end %>
 
     <%= stylesheet_link_tag 'application', media: 'all' %>
