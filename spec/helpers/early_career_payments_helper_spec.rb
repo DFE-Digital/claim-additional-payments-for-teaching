@@ -66,12 +66,12 @@ describe EarlyCareerPaymentsHelper do
         PolicyConfiguration.for(EarlyCareerPayments).update(current_academic_year: @ecp_policy_date)
       end
 
-      it "generates the correct heading based on being a traineer teacher in 2021" do
+      it "generates the correct heading based on being a trainee teacher in 2021" do
         expect(helper.eligible_itt_subject_translation(claim)).to eq("Which subject are you currently doing your postgraduate initial teacher training (ITT) in?")
       end
     end
 
-    context "not traineer teacher" do
+    context "not trainee teacher" do
       let(:eligibility) { build(:early_career_payments_eligibility, :eligible) }
 
       it "generates the correct heading" do
