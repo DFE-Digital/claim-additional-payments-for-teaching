@@ -1,28 +1,3 @@
-<%
-  # This needs a rethink because we'll have to keep this updated
-  # with all the first steps for each wizard (perhaps dynamically)
-  # now that we're redirecting away from `/claim`.
-  #
-  # Also this hides a subtle bug: `current-school` is a first step
-  # for ECP/LUP but is the second step for Maths & Physics and is the
-  # fifth step for Student Loans. This means those steps would
-  # erroneously lose their back links too.
-  #
-  # Backlinks are broken on the Safari Web browser anyway so
-  # need to be revisited.
-backlink_exclude_rules = /
-  \/current-school$|
-  \/teaching-maths-or-physics$|
-  \/qts-year$|
-  \/complete$|
-  \/existing-session$|
-  \/eligible-now$|
-  \/eligibility-confirmed$|
-  \/eligible-later$|
-  \/ineligible$
-/x
-%>
-
-<% unless backlink_exclude_rules =~ request.path %>
-  <%= link_to 'Back', '#', class: "govuk-back-link govuk-visually-hidden", id: "backlink" %>
+<% if @backlink_path.present? %>
+  <%= link_to 'Back', @backlink_path, class: "govuk-back-link", id: "backlink" %>
 <% end %>

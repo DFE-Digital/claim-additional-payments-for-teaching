@@ -5,6 +5,7 @@ class ClaimsController < BasePublicController
   skip_before_action :send_unstarted_claimants_to_the_start, only: [:new, :create, :timeout]
   before_action :check_page_is_in_sequence, only: [:show, :update]
   before_action :update_session_with_current_slug, only: [:show]
+  before_action :set_backlink_path, only: [:show]
   before_action :check_claim_not_in_progress, only: [:new]
   before_action :clear_claim_session, only: [:new]
   before_action :prepend_view_path_for_policy
@@ -74,6 +75,15 @@ class ClaimsController < BasePublicController
   helper_method :next_slug
   def next_slug
     page_sequence.next_slug
+  end
+
+  def set_backlink_path
+    previous_slug = previous_slug()
+    @backlink_path = claim_path(current_policy_routing_name, previous_slug) if previous_slug.present?
+  end
+
+  def previous_slug
+    page_sequence.previous_slug
   end
 
   def persist

@@ -47,6 +47,31 @@ RSpec.describe PageSequence do
     end
   end
 
+  describe "previous_slug" do
+    context "first slug in wizard" do
+      specify { expect(PageSequence.new(claim, slug_sequence, "first-slug").previous_slug).to be_nil }
+    end
+
+    context "second slug in wizard" do
+      specify { expect(PageSequence.new(claim, slug_sequence, "second-slug").previous_slug).to eq("first-slug") }
+    end
+
+    context "third slug in wizard" do
+      specify { expect(PageSequence.new(claim, slug_sequence, "third-slug").previous_slug).to eq("second-slug") }
+    end
+
+    context "dead ends" do
+      let(:slug_sequence_with_dead_ends) { OpenStruct.new(slugs: ["first-slug", "complete", "existing-session", "eligible-now", "eligibility-confirmed", "eligible-later", "ineligible"]) }
+
+      specify { expect(PageSequence.new(claim, slug_sequence_with_dead_ends, "complete").previous_slug).to be_nil }
+      specify { expect(PageSequence.new(claim, slug_sequence_with_dead_ends, "existing-session").previous_slug).to be_nil }
+      specify { expect(PageSequence.new(claim, slug_sequence_with_dead_ends, "eligible-now").previous_slug).to be_nil }
+      specify { expect(PageSequence.new(claim, slug_sequence_with_dead_ends, "eligibility-confirmed").previous_slug).to be_nil }
+      specify { expect(PageSequence.new(claim, slug_sequence_with_dead_ends, "eligible-later").previous_slug).to be_nil }
+      specify { expect(PageSequence.new(claim, slug_sequence_with_dead_ends, "ineligible").previous_slug).to be_nil }
+    end
+  end
+
   describe "in_sequence?" do
     let(:page_sequence) { PageSequence.new(claim, slug_sequence, "third-slug") }
 
