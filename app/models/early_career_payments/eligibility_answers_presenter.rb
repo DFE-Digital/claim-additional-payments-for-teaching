@@ -54,7 +54,7 @@ module EarlyCareerPayments
 
     def nqt_in_academic_year_after_itt
       [
-        nqt_h1_text(eligibility.claim),
+        nqt_h1_text,
         (eligibility.nqt_in_academic_year_after_itt? ? "Yes" : "No"),
         "nqt-in-academic-year-after-itt"
       ]

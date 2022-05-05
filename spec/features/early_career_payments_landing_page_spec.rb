@@ -27,7 +27,7 @@ RSpec.feature "Landing page - Early Career Payments - journey" do
       choose_school schools(:penistone_grammar_school)
 
       # - NQT in Academic Year after ITT
-      expect(page).to have_text(I18n.t("early_career_payments.questions.nqt_in_academic_year_after_itt.heading.2021"))
+      expect(page).to have_text("your first year as an early career teacher?")
     end
   end
 
@@ -57,7 +57,7 @@ RSpec.feature "Landing page - Early Career Payments - journey" do
       choose_school schools(:penistone_grammar_school)
 
       # - NQT in Academic Year after ITT
-      expect(page).to have_text(I18n.t("early_career_payments.questions.nqt_in_academic_year_after_itt.heading.default", started_or_completed: :started))
+      expect(page).to have_text(I18n.t("early_career_payments.questions.nqt_in_academic_year_after_itt.heading", started_or_completed: :started))
     end
   end
 
@@ -87,7 +87,7 @@ RSpec.feature "Landing page - Early Career Payments - journey" do
       choose_school schools(:penistone_grammar_school)
 
       # - NQT in Academic Year after ITT
-      expect(page).to have_text("Have you completed your first year as a newly qualified teacher or early-career teacher?")
+      expect(page).to have_text("Have you completed your first year as an early career teacher?")
     end
   end
 
@@ -117,7 +117,7 @@ RSpec.feature "Landing page - Early Career Payments - journey" do
       choose_school schools(:penistone_grammar_school)
 
       # - NQT in Academic Year after ITT
-      expect(page).to have_text("Have you completed your first year as a newly qualified teacher or early-career teacher?")
+      expect(page).to have_text("Have you completed your first year as an early career teacher?")
     end
   end
 end

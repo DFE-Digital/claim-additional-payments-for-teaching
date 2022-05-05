@@ -25,7 +25,7 @@ RSpec.feature "Teacher Early-Career Payments claims" do
     choose_school schools(:penistone_grammar_school)
 
     # - NQT in Academic Year after ITT
-    expect(page).to have_text(I18n.t("early_career_payments.questions.nqt_in_academic_year_after_itt.heading.2021"))
+    expect(page).to have_text("your first year as an early career teacher?")
 
     choose "Yes"
     click_on "Continue"
@@ -345,7 +345,7 @@ RSpec.feature "Teacher Early-Career Payments claims" do
     choose_school schools(:penistone_grammar_school)
 
     # - NQT in Academic Year after ITT
-    expect(page).to have_text(I18n.t("early_career_payments.questions.nqt_in_academic_year_after_itt.heading.2021"))
+    expect(page).to have_text("your first year as an early career teacher?")
 
     choose "Yes"
     click_on "Continue"
@@ -479,7 +479,7 @@ RSpec.feature "Teacher Early-Career Payments claims" do
     choose_school schools(:hampstead_school)
 
     # - NQT in Academic Year after ITT
-    expect(page).to have_text(I18n.t("early_career_payments.questions.nqt_in_academic_year_after_itt.heading.2021"))
+    expect(page).to have_text("your first year as an early career teacher?")
 
     choose "Yes"
     click_on "Continue"
