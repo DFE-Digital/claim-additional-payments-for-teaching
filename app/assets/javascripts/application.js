@@ -18,3 +18,4 @@
 //= require_tree .
 //= stub js_check.js
 //= stub google_analytics.js
+//= stub google_gtm.js

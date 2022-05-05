@@ -121,6 +121,12 @@ To enable Google Analytics set the following environment variable:
 GOOGLE_ANALYTICS_ID=<UA PROPERTY>
 ```
 
+To enable Google Tag Manager set the following environment variable:
+
+```
+GTM_ANALYTICS=<GTM PROPERTY>
+```
+
 ### Using Google Cloud Storage
 
 GCS is used for uploading and storing files. This requires service account
