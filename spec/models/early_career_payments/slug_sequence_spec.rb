@@ -153,9 +153,9 @@ RSpec.describe EarlyCareerPayments::SlugSequence do
           supply-teacher
           poor-performance
           qualification
+          itt-year
           eligible-itt-subject
           teaching-subject-now
-          itt-year
           check-your-answers-part-one
           eligibility-confirmed
           how-we-will-use-information-provided
@@ -198,9 +198,9 @@ RSpec.describe EarlyCareerPayments::SlugSequence do
           supply-teacher
           poor-performance
           qualification
+          itt-year
           eligible-itt-subject
           teaching-subject-now
-          itt-year
           check-your-answers-part-one
           eligibility-confirmed
           how-we-will-use-information-provided
@@ -238,9 +238,9 @@ RSpec.describe EarlyCareerPayments::SlugSequence do
           supply-teacher
           poor-performance
           qualification
+          itt-year
           eligible-itt-subject
           teaching-subject-now
-          itt-year
           check-your-answers-part-one
           eligibility-confirmed
           how-we-will-use-information-provided
@@ -295,9 +295,9 @@ RSpec.describe EarlyCareerPayments::SlugSequence do
           supply-teacher
           poor-performance
           qualification
+          itt-year
           eligible-itt-subject
           teaching-subject-now
-          itt-year
           check-your-answers-part-one
           eligibility-confirmed
           how-we-will-use-information-provided
@@ -340,8 +340,8 @@ RSpec.describe EarlyCareerPayments::SlugSequence do
 
         expected_slugs = %w[
           nqt-in-academic-year-after-itt
-          eligible-itt-subject
           itt-year
+          eligible-itt-subject
           future-eligibility
           ineligible
         ]

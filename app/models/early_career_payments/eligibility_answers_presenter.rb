@@ -28,9 +28,9 @@ module EarlyCareerPayments
         a << subject_to_formal_performance_action
         a << subject_to_disciplinary_action
         a << qualification
+        a << itt_academic_year
         a << eligible_itt_subject
         a << teaching_subject_now
-        a << itt_academic_year
       end
     end
 

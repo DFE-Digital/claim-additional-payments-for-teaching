@@ -70,6 +70,13 @@ RSpec.feature "Teacher Early-Career Payments claims" do
 
     expect(claim.eligibility.reload.qualification).to eq "postgraduate_itt"
 
+    # - In what academic year did you start your undergraduate ITT
+    expect(page).to have_text(I18n.t("early_career_payments.questions.itt_academic_year.qualification.#{claim.eligibility.qualification}"))
+    expect(page).to have_text("If you did a part time ITT")
+
+    choose "2018 to 2019"
+    click_on "Continue"
+
     # - Which subject did you do your postgraduate ITT in
     expect(page).to have_text(I18n.t("early_career_payments.questions.eligible_itt_subject", qualification: claim.eligibility.qualification_name))
     expect(page).to have_text(I18n.t("early_career_payments.questions.qualification.hint.#{claim.eligibility.qualification}"))
@@ -86,13 +93,6 @@ RSpec.feature "Teacher Early-Career Payments claims" do
     click_on "Continue"
 
     expect(claim.eligibility.reload.teaching_subject_now).to eql true
-
-    # - In what academic year did you start your undergraduate ITT
-    expect(page).to have_text(I18n.t("early_career_payments.questions.itt_academic_year.qualification.#{claim.eligibility.qualification}"))
-    expect(page).to have_text("If you did a part time ITT")
-
-    choose "2018 to 2019"
-    click_on "Continue"
 
     expect(claim.eligibility.reload.itt_academic_year).to eql AcademicYear.new(2018)
 
@@ -401,8 +401,15 @@ RSpec.feature "Teacher Early-Career Payments claims" do
 
       expect(claim.eligibility.reload.qualification).to eq "assessment_only"
 
+      # - In what academic year did you start your undergraduate ITT
+      expect(page).to have_text(I18n.t("early_career_payments.questions.itt_academic_year.qualification.#{claim.eligibility.qualification}"))
+      expect(page).not_to have_text("You might still be eligible to claim if your ITT coincided with one of the academic years stated, even if it didn’t start or complete in one of those years.")
+
+      choose "2018 to 2019"
+      click_on "Continue"
+
       # - Which subject did you do your postgraduate ITT in
-      expect(page).to have_text(I18n.t("early_career_payments.questions.eligible_itt_subject", qualification: claim.eligibility.qualification_name))
+      expect(page).to have_text(I18n.t("early_career_payments.questions.eligible_itt_subject_assessment_only"))
 
       choose "Mathematics"
       click_on "Continue"
@@ -417,11 +424,6 @@ RSpec.feature "Teacher Early-Career Payments claims" do
 
       expect(claim.eligibility.reload.teaching_subject_now).to eql true
 
-      # - In what academic year did you start your undergraduate ITT
-      expect(page).to have_text(I18n.t("early_career_payments.questions.itt_academic_year.qualification.#{claim.eligibility.qualification}"))
-      expect(page).not_to have_text("You might still be eligible to claim if your ITT coincided with one of the academic years stated, even if it didn’t start or complete in one of those years.")
-
-      choose "2018 to 2019"
       click_on "Continue"
 
       expect(claim.eligibility.reload.itt_academic_year).to eql AcademicYear.new(2018)
@@ -438,6 +440,13 @@ RSpec.feature "Teacher Early-Career Payments claims" do
 
       expect(claim.eligibility.reload.qualification).to eq "overseas_recognition"
 
+      # - In what academic year did you you earn your qualified teacher status (QTS)?
+      expect(page).to have_text(I18n.t("early_career_payments.questions.itt_academic_year.qualification.#{claim.eligibility.qualification}"))
+      expect(page).not_to have_text("You might still be eligible to claim if your ITT coincided with one of the academic years stated, even if it didn’t start or complete in one of those years.")
+
+      choose "2018 to 2019"
+      click_on "Continue"
+
       # - Which subject did you do your postgraduate ITT in
       expect(page).to have_text(I18n.t("early_career_payments.questions.eligible_itt_subject_overseas_recognition"))
 
@@ -453,13 +462,6 @@ RSpec.feature "Teacher Early-Career Payments claims" do
       click_on "Continue"
 
       expect(claim.eligibility.reload.teaching_subject_now).to eql true
-
-      # - In what academic year did you you earn your qualified teacher status (QTS)?
-      expect(page).to have_text(I18n.t("early_career_payments.questions.itt_academic_year.qualification.#{claim.eligibility.qualification}"))
-      expect(page).not_to have_text("You might still be eligible to claim if your ITT coincided with one of the academic years stated, even if it didn’t start or complete in one of those years.")
-
-      choose "2018 to 2019"
-      click_on "Continue"
 
       expect(claim.eligibility.reload.itt_academic_year).to eql AcademicYear.new(2018)
     end
@@ -523,6 +525,12 @@ RSpec.feature "Teacher Early-Career Payments claims" do
 
     expect(claim.eligibility.reload.qualification).to eq "postgraduate_itt"
 
+    # - In what academic year did you start your postgraduate ITT
+    expect(page).to have_text(I18n.t("early_career_payments.questions.itt_academic_year.qualification.#{claim.eligibility.qualification}"))
+
+    choose "2018 to 2019"
+    click_on "Continue"
+
     # - Which subject did you do your postgraduate ITT in
     expect(page).to have_text(I18n.t("early_career_payments.questions.eligible_itt_subject", qualification: claim.eligibility.qualification_name))
 
@@ -538,12 +546,6 @@ RSpec.feature "Teacher Early-Career Payments claims" do
     click_on "Continue"
 
     expect(claim.eligibility.reload.teaching_subject_now).to eql true
-
-    # - In what academic year did you start your postgraduate ITT
-    expect(page).to have_text(I18n.t("early_career_payments.questions.itt_academic_year.qualification.#{claim.eligibility.qualification}"))
-
-    choose "2018 to 2019"
-    click_on "Continue"
 
     expect(claim.eligibility.reload.itt_academic_year).to eql AcademicYear.new(2018)
 

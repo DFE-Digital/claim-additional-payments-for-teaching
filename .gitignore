@@ -51,3 +51,4 @@ coverage/
 
 # Editor specific files
 .vscode/
+.rspec-local

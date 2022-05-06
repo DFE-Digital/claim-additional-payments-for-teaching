@@ -63,7 +63,14 @@ RSpec.feature "Ineligible Teacher Early-Career Payments claims by cohort" do
 
       policy[:ineligible_cohorts].each do |scenario|
         scenario "with cohort ITT subject #{scenario[:itt_subject]} in ITT academic year #{scenario[:itt_academic_year]}" do
-          visit claim_path(claim.policy.routing_name, "eligible-itt-subject")
+          visit claim_path(claim.policy.routing_name, "itt-year")
+
+          # - In what academic year did you start your undergraduate ITT
+          expect(page).to have_text(I18n.t("early_career_payments.questions.itt_academic_year.qualification.#{claim.eligibility.qualification}"))
+          choose scenario[:itt_academic_year].to_s(:long)
+          click_on "Continue"
+
+          expect(claim.eligibility.reload.itt_academic_year).to eql scenario[:itt_academic_year]
 
           # - Which subject did you do your undergraduate ITT in
           expect(page).to have_text(I18n.t("early_career_payments.questions.eligible_itt_subject", qualification: claim.eligibility.qualification_name))
@@ -72,22 +79,6 @@ RSpec.feature "Ineligible Teacher Early-Career Payments claims by cohort" do
           click_on "Continue"
 
           expect(claim.eligibility.reload.eligible_itt_subject).to eq scenario[:itt_subject]
-
-          # - Do you teach the eligible ITT subject now
-          expect(page).to have_text(I18n.t("early_career_payments.questions.teaching_subject_now", eligible_itt_subject: claim.eligibility.eligible_itt_subject.humanize.downcase))
-
-          choose "Yes"
-          click_on "Continue"
-
-          expect(claim.eligibility.reload.teaching_subject_now).to eql true
-
-          # - In what academic year did you start your undergraduate ITT
-          expect(page).to have_text(I18n.t("early_career_payments.questions.itt_academic_year.qualification.#{claim.eligibility.qualification}"))
-
-          choose scenario[:itt_academic_year].to_s(:long)
-          click_on "Continue"
-
-          expect(claim.eligibility.reload.itt_academic_year).to eql scenario[:itt_academic_year]
 
           expect(page).to have_text(I18n.t("early_career_payments.ineligible.heading"))
           expect(page).to have_link(href: "#{EarlyCareerPayments.eligibility_page_url}#eligibility-criteria")

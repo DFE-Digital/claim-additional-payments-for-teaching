@@ -29,6 +29,13 @@ RSpec.feature "Set Reminder when Eligible Later for an Early Career Payment" do
         choose args[:cohort]
         click_on "Continue"
 
+        # - Which subject did you do your postgraduate initial teacher training (ITT) in?
+        click_on "Continue"
+
+        # - Do you teach subject now?
+        choose "Yes"
+        click_on "Continue"
+
         expect(claim.eligibility.reload.itt_academic_year).to eql args[:academic_year]
 
         # - Check your answers for eligibility
@@ -101,6 +108,12 @@ RSpec.feature "Set Reminder when Eligible Later for an Early Career Payment" do
           click_on "Continue"
 
           expect(claim.eligibility.reload.itt_academic_year).to eql args[:academic_year]
+
+          click_on "Continue"
+
+          # - Do you teach subject now?
+          choose "Yes"
+          click_on "Continue"
 
           # - Check your answers for eligibility
           expect(page).to have_text(I18n.t("early_career_payments.check_your_answers.part_one.primary_heading"))
