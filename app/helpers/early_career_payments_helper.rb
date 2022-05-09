@@ -43,20 +43,17 @@ module EarlyCareerPaymentsHelper
     end
   end
 
-  def nqt_h1_text(claim)
-    policy_year = PolicyConfiguration.for(EarlyCareerPayments).current_academic_year.to_s
-    started_or_completed = policy_year == "2022/2023" ? :started : :completed
-    case policy_year
-    when "2021/2022"
-      I18n.t("early_career_payments.questions.nqt_in_academic_year_after_itt.heading.2021")
-    else
-      I18n.t("early_career_payments.questions.nqt_in_academic_year_after_itt.heading.default", started_or_completed: started_or_completed)
-    end
+  def nqt_h1_text
+    policy_year = PolicyConfiguration.for(EarlyCareerPayments).current_academic_year
+    last_academic_year_to_display_as_started = AcademicYear.new("2022/2023")
+    started_or_completed = policy_year > last_academic_year_to_display_as_started ? :completed : :started
+    I18n.t("early_career_payments.questions.nqt_in_academic_year_after_itt.heading", started_or_completed: started_or_completed)
   end
 
-  def nqt_hint_text(claim)
-    policy_year = PolicyConfiguration.for(EarlyCareerPayments).current_academic_year.to_s
-    year_or_period = policy_year == "2021/2022" ? :year : :period
+  def nqt_hint_text
+    policy_year = PolicyConfiguration.for(EarlyCareerPayments).current_academic_year
+    last_academic_year_to_display_as_year = AcademicYear.new("2021/2022")
+    year_or_period = policy_year > last_academic_year_to_display_as_year ? :period : :year
     I18n.t("early_career_payments.questions.nqt_in_academic_year_after_itt.hint", year_or_period: year_or_period)
   end
 end

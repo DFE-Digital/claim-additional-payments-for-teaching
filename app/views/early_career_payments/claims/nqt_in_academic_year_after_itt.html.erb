@@ -1,4 +1,4 @@
-<% content_for(:page_title, page_title(nqt_h1_text(current_claim), policy: current_policy_routing_name, show_error: current_claim.errors.any?)) %>
+<% content_for(:page_title, page_title(nqt_h1_text, policy: current_policy_routing_name, show_error: current_claim.errors.any?)) %>
 <% path_for_form = current_claim.persisted? ? claim_path(current_policy_routing_name) : claims_path(current_policy_routing_name) %>
 <% shared_view_css_size = current_claim.policy == EarlyCareerPayments ? "l" : "xl" %>
 <% false_label_content = EarlyCareerPayments.configuration.current_academic_year == "2021/2022" ? "No, I’m a trainee teacher" : "No" %>
@@ -16,12 +16,12 @@
 
             <legend class="govuk-fieldset__legend govuk-fieldset__legend--<%= shared_view_css_size %>">
               <h1 class="govuk-fieldset__heading">
-                <%= nqt_h1_text(current_claim) %>
+                <%= nqt_h1_text %>
               </h1>
             </legend>
 
             <span class="govuk-hint" id="nqt_in_academic_year_after_itt-hint">
-              <%= nqt_hint_text(current_claim) %>
+              <%= nqt_hint_text %>
             </span>
 
             <%= errors_tag current_claim.eligibility, :nqt_in_academic_year_after_itt %>

@@ -5,6 +5,7 @@ RSpec.describe "Claims", type: :request do
     context "the user has not already started a claim" do
       it "renders the first page in the sequence" do
         get new_claim_path(StudentLoans.routing_name)
+        follow_redirect!
         expect(response.body).to include(I18n.t("questions.qts_award_year"))
       end
     end
@@ -35,12 +36,7 @@ RSpec.describe "Claims", type: :request do
         expect(claim.eligibility).to be_kind_of(policy::Eligibility)
         expect(claim.academic_year).to eq(current_academic_year)
 
-        expect(response).to redirect_to(claim_path(policy.routing_name, policy::SlugSequence::SLUGS[1]))
-      end
-
-      it "does not create a #{policy.name} claim if validations fail" do
-        expect { post claims_path(policy.routing_name) }.not_to change { Claim.count }
-        expect(response.body).to include("There is a problem")
+        expect(response).to redirect_to(claim_path(policy.routing_name, policy::SlugSequence::SLUGS[0]))
       end
     end
   end

@@ -20,8 +20,8 @@ module EarlyCareerPayments
     # [2]: slug for changing the answer.
     def answers
       [].tap do |a|
-        a << nqt_in_academic_year_after_itt
         a << current_school
+        a << nqt_in_academic_year_after_itt
         a << employed_as_supply_teacher
         a << has_entire_term_contract if eligibility.employed_as_supply_teacher?
         a << employed_directly if eligibility.employed_as_supply_teacher?
@@ -44,19 +44,19 @@ module EarlyCareerPayments
       ]
     end
 
-    def nqt_in_academic_year_after_itt
-      [
-        nqt_h1_text(eligibility.claim),
-        (eligibility.nqt_in_academic_year_after_itt? ? "Yes" : "No"),
-        "nqt-in-academic-year-after-itt"
-      ]
-    end
-
     def current_school
       [
         translate("questions.current_school"),
         eligibility.current_school_name,
         "current-school"
+      ]
+    end
+
+    def nqt_in_academic_year_after_itt
+      [
+        nqt_h1_text,
+        (eligibility.nqt_in_academic_year_after_itt? ? "Yes" : "No"),
+        "nqt-in-academic-year-after-itt"
       ]
     end
 

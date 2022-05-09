@@ -12,8 +12,8 @@ module EarlyCareerPayments
   class SlugSequence
     SLUGS = [
       # eligibility phase of claim journey
-      "nqt-in-academic-year-after-itt",
       "current-school",
+      "nqt-in-academic-year-after-itt",
       "supply-teacher",
       "entire-term-contract",
       "employed-directly",

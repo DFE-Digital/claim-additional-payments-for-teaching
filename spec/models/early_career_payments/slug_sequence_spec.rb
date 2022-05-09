@@ -122,8 +122,8 @@ RSpec.describe EarlyCareerPayments::SlugSequence do
         )
       end
 
-      it "excludes the 'eligibile-later' slug" do
-        expect(slug_sequence.slugs).not_to include("eligibile-later")
+      it "excludes the 'eligible-later' slug" do
+        expect(slug_sequence.slugs).not_to include("eligible-later")
       end
     end
 
@@ -148,8 +148,8 @@ RSpec.describe EarlyCareerPayments::SlugSequence do
         claim.has_student_loan = true
 
         expected_slugs = %w[
-          nqt-in-academic-year-after-itt
           current-school
+          nqt-in-academic-year-after-itt
           supply-teacher
           poor-performance
           qualification
@@ -193,8 +193,8 @@ RSpec.describe EarlyCareerPayments::SlugSequence do
         claim.has_masters_doctoral_loan = true
 
         expected_slugs = %w[
-          nqt-in-academic-year-after-itt
           current-school
+          nqt-in-academic-year-after-itt
           supply-teacher
           poor-performance
           qualification
@@ -230,11 +230,11 @@ RSpec.describe EarlyCareerPayments::SlugSequence do
       end
     end
 
-    context "when the answer to 'student loan - home address ' is 'Scotland' OR 'Northen Ireland'" do
+    context "when the answer to 'student loan - home address ' is 'Scotland' OR 'Northern Ireland'" do
       let(:expected_slugs) do
         %w[
-          nqt-in-academic-year-after-itt
           current-school
+          nqt-in-academic-year-after-itt
           supply-teacher
           poor-performance
           qualification
@@ -290,8 +290,8 @@ RSpec.describe EarlyCareerPayments::SlugSequence do
         claim.has_masters_doctoral_loan = false
 
         expected_slugs = %w[
-          nqt-in-academic-year-after-itt
           current-school
+          nqt-in-academic-year-after-itt
           supply-teacher
           poor-performance
           qualification
