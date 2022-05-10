@@ -18,27 +18,27 @@ Rails.application.routes.draw do
   # Used to constrain claim journey routing so only slugs
   # that are part of a policy’s slug sequence are routed.
   restrict_to_sequence_slugs = Class.new {
-    attr_reader :policy
+    attr_reader :journey
 
-    def initialize(policy)
-      @policy = policy
+    def initialize(journey)
+      @journey = journey
     end
 
     def matches?(request)
-      request["policy"] == policy.routing_name && policy::SlugSequence::SLUGS.include?(request["slug"])
+      request["policy"] == journey[:routing_name] && journey[:slugs].include?(request["slug"])
     end
   }
 
   # Define routes that are specific to each Policy's page sequence
-  Policies.all.each do |policy|
-    constraints(restrict_to_sequence_slugs.new(policy)) do
+  Journey::ALL.each do |journey|
+    constraints(restrict_to_sequence_slugs.new(journey)) do
       scope path: ":policy" do
         resources :claims, only: [:show, :update], param: :slug, path: "/"
       end
     end
   end
   # Define the generic routes that aren't specific to any given policy
-  scope path: ":policy", constraints: {policy: %r{#{Policies.all.map(&:routing_name).join("|")}}} do
+  scope path: ":policy", constraints: {policy: %r{#{Journey.all_journey_routing_names.join('|')}}} do
     get "claim", as: :new_claim, to: "claims#new"
     post "claim", as: :claims, to: "claims#create"
     post "claim/submit", as: :claim_submission, to: "submissions#create"
@@ -52,13 +52,13 @@ Rails.application.routes.draw do
       get page_name.dasherize, to: "static_pages##{page_name}", as: page_name
     end
 
-    scope constraints: {policy: Policies.all.detect { |policy| policy.routing_name == "early-career-payments" }.routing_name} do
+    scope constraints: {policy: "early-career-payments"} do
       get "reminders/personal-details", as: :new_reminder, to: "reminders#new"
       post "reminders/personal-details", as: :reminders, to: "reminders#create"
       resources :reminders, only: [:show, :update], param: :slug, constraints: {slug: %r{#{Reminder::SLUGS.join("|")}}}
     end
 
-    scope path: "/", constraints: {policy: Policies.all.detect { |policy| policy.routing_name == "early-career-payments" }.routing_name} do
+    scope path: "/", constraints: {policy: "early-career-payments"} do
       get "landing-page", to: "static_pages#landing_page", as: :landing_page
     end
   end
