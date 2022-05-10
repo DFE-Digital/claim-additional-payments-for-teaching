@@ -247,6 +247,12 @@ RSpec.feature "Ineligible Teacher Early-Career Payments claims" do
 
     expect(claim.eligibility.reload.qualification).to eq "undergraduate_itt"
 
+    # - In what academic year did you complete your undergraduate ITT?
+    expect(page).to have_text(I18n.t("early_career_payments.questions.itt_academic_year.qualification.#{claim.eligibility.qualification}"))
+
+    choose "2018 to 2019"
+    click_on "Continue"
+
     # - Which subject did you do your undergraduate ITT in
     expect(page).to have_text(I18n.t("early_career_payments.questions.eligible_itt_subject", qualification: claim.eligibility.qualification_name))
 
@@ -296,6 +302,12 @@ RSpec.feature "Ineligible Teacher Early-Career Payments claims" do
     click_on "Continue"
 
     expect(claim.eligibility.reload.qualification).to eq "undergraduate_itt"
+
+    # - In what academic year did you start your undergraduate ITT
+    expect(page).to have_text(I18n.t("early_career_payments.questions.itt_academic_year.qualification.#{claim.eligibility.qualification}"))
+
+    choose "2020 to 2021" # Have to select one that's eligible for foreign languages
+    click_on "Continue"
 
     # - Which subject did you do your undergraduate ITT in
     expect(page).to have_text(I18n.t("early_career_payments.questions.eligible_itt_subject", qualification: claim.eligibility.qualification_name))
@@ -354,26 +366,6 @@ RSpec.feature "Ineligible Teacher Early-Career Payments claims" do
     click_on "Continue"
 
     expect(claim.eligibility.reload.qualification).to eq "undergraduate_itt"
-
-    # - Which subject did you do your undergraduate ITT in
-    expect(page).to have_text(
-      I18n.t(
-        "early_career_payments.questions.eligible_itt_subject",
-        qualification: claim.eligibility.qualification_name
-      )
-    )
-    choose "Foreign languages"
-    click_on "Continue"
-
-    expect(claim.eligibility.reload.eligible_itt_subject).to eql "foreign_languages"
-
-    # - Do you teach the eligible ITT subject now
-    expect(page).to have_text(I18n.t("early_career_payments.questions.teaching_subject_now", eligible_itt_subject: claim.eligibility.eligible_itt_subject.humanize.downcase))
-
-    choose "Yes"
-    click_on "Continue"
-
-    expect(claim.eligibility.reload.teaching_subject_now).to eql true
 
     # - In what academic year did you start your undergraduate ITT
     expect(page).to have_text(I18n.t("early_career_payments.questions.itt_academic_year.qualification.#{claim.eligibility.qualification}"))

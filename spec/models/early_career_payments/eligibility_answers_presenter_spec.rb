@@ -42,6 +42,11 @@ RSpec.describe EarlyCareerPayments::EligibilityAnswersPresenter, type: :model do
         "qualification"
       ],
       [
+        I18n.t("early_career_payments.questions.itt_academic_year.qualification.#{eligibility.qualification}"),
+        "2019 - 2020",
+        "itt-year"
+      ],
+      [
         I18n.t("early_career_payments.questions.eligible_itt_subject", qualification: eligibility.qualification_name),
         "Chemistry",
         "eligible-itt-subject"
@@ -50,11 +55,6 @@ RSpec.describe EarlyCareerPayments::EligibilityAnswersPresenter, type: :model do
         I18n.t("early_career_payments.questions.teaching_subject_now", eligible_itt_subject: eligibility.eligible_itt_subject),
         "Yes",
         "teaching-subject-now"
-      ],
-      [
-        I18n.t("early_career_payments.questions.itt_academic_year.qualification.#{eligibility.qualification}"),
-        "2019 - 2020",
-        "itt-year"
       ]
     ]
 
@@ -93,6 +93,11 @@ RSpec.describe EarlyCareerPayments::EligibilityAnswersPresenter, type: :model do
           "qualification"
         ],
         [
+          I18n.t("early_career_payments.questions.itt_academic_year.qualification.#{eligibility.qualification}"),
+          "2018 - 2019",
+          "itt-year"
+        ],
+        [
           I18n.t("early_career_payments.questions.eligible_itt_subject", qualification: eligibility.qualification_name),
           "Foreign languages",
           "eligible-itt-subject"
@@ -101,11 +106,6 @@ RSpec.describe EarlyCareerPayments::EligibilityAnswersPresenter, type: :model do
           I18n.t("early_career_payments.questions.teaching_subject_now", eligible_itt_subject: eligibility.eligible_itt_subject),
           "Yes",
           "teaching-subject-now"
-        ],
-        [
-          I18n.t("early_career_payments.questions.itt_academic_year.qualification.#{eligibility.qualification}"),
-          "2018 - 2019",
-          "itt-year"
         ]
       ]
 

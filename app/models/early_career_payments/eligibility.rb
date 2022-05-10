@@ -239,9 +239,9 @@ module EarlyCareerPayments
 
     def ineligibility_reason
       [
+        :itt_subject_none_of_the_above,
         :generic_ineligibility,
         :ineligible_current_school,
-        :itt_subject_none_of_the_above,
         :not_teaching_now_in_eligible_itt_subject
       ].find { |eligibility_check| send("#{eligibility_check}?") }
     end
