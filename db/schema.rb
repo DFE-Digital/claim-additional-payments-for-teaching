@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_02_16_103638) do
+ActiveRecord::Schema.define(version: 2022_05_06_172026) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -137,6 +137,11 @@ ActiveRecord::Schema.define(version: 2022_02_16_103638) do
     t.uuid "current_school_id"
     t.decimal "award_amount", precision: 7, scale: 2
     t.index ["current_school_id"], name: "index_early_career_payments_eligibilities_on_current_school_id"
+  end
+
+  create_table "levelling_up_payments_eligibilities", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
   end
 
   create_table "local_authorities", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
