@@ -25,7 +25,7 @@ module EarlyCareerPayments
   end
 
   def routing_name
-    "early-career-payments"
+    Journey.routing_name_for_policy(self)
   end
 
   def locale_key

@@ -25,7 +25,7 @@ module MathsAndPhysics
   end
 
   def routing_name
-    "maths-and-physics"
+    Journey.routing_name_for_policy(self)
   end
 
   def locale_key
