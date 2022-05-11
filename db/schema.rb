@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_05_06_172026) do
+ActiveRecord::Schema.define(version: 2022_05_11_143638) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -142,6 +142,20 @@ ActiveRecord::Schema.define(version: 2022_05_06_172026) do
   create_table "levelling_up_payments_eligibilities", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.boolean "nqt_in_academic_year_after_itt"
+    t.boolean "employed_as_supply_teacher"
+    t.integer "qualification"
+    t.boolean "has_entire_term_contract"
+    t.boolean "employed_directly"
+    t.boolean "subject_to_disciplinary_action"
+    t.boolean "subject_to_formal_performance_action"
+    t.integer "eligible_itt_subject"
+    t.boolean "teaching_subject_now"
+    t.string "itt_academic_year", limit: 9
+    t.uuid "current_school_id"
+    t.decimal "award_amount", precision: 7, scale: 2
+    t.boolean "eligible_degree_subject"
+    t.index ["current_school_id"], name: "index_levelling_up_payments_eligibilities_on_current_school_id"
   end
 
   create_table "local_authorities", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -344,6 +358,7 @@ ActiveRecord::Schema.define(version: 2022_05_06_172026) do
   add_foreign_key "claims", "payments"
   add_foreign_key "decisions", "dfe_sign_in_users", column: "created_by_id"
   add_foreign_key "early_career_payments_eligibilities", "schools", column: "current_school_id"
+  add_foreign_key "levelling_up_payments_eligibilities", "schools", column: "current_school_id"
   add_foreign_key "maths_and_physics_eligibilities", "schools", column: "current_school_id"
   add_foreign_key "notes", "claims"
   add_foreign_key "notes", "dfe_sign_in_users", column: "created_by_id"
