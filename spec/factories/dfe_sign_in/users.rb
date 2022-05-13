@@ -1,9 +1,9 @@
 FactoryBot.define do
   factory :dfe_signin_user, class: "DfeSignIn::User" do
     dfe_sign_in_id { SecureRandom.uuid }
-    given_name { "Jo" }
-    family_name { "Bloggs" }
-    email { "jo.bloggs@education.gov.uk" }
+    given_name { "Aaron" }
+    family_name { "Admin" }
+    email { "aaron.admin@education.gov.uk" }
     organisation_name { "Department for Education" }
 
     trait :without_data do

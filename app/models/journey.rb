@@ -29,6 +29,10 @@ class Journey
     ALL.map { |j| j[:routing_name] }
   end
 
+  def self.all_policies
+    ALL.map { |j| j[:policies] }.flatten
+  end
+
   # This is prep work for combined policy journey, mimick one policy per journey for now
   def self.policy_for_routing_name(routing_name)
     ALL.detect { |j| j[:routing_name] == routing_name }[:policies]&.first

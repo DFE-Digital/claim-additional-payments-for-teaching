@@ -74,7 +74,7 @@ RSpec.feature "Claims awaiting a decision" do
       click_on "View claims"
 
       within("#allocations") do
-        expect(page).to have_select("allocate_to_team_member", options: ["Jo Bloggs", "Sarah Strawbridge", "Frank Yee", "Abdul Rafiq"])
+        expect(page).to have_select("allocate_to_team_member", options: ["Aaron Admin", "Sarah Strawbridge", "Frank Yee", "Abdul Rafiq"])
         expect(page).to have_select("allocate_to_policy", options: ["All", "Student Loans", "Maths and Physics", "Early-Career Payments"])
         expect(page).to have_button("Allocate claims", disabled: false)
         expect(page).to have_button("Unallocate claims")
@@ -117,7 +117,7 @@ RSpec.feature "Claims awaiting a decision" do
         claim.assigned_to = @signed_in_user
         claim.save
 
-        expect(claim.reload.assigned_to.full_name).to eq "Jo Bloggs"
+        expect(claim.reload.assigned_to.full_name).to eq "Aaron Admin"
       end
 
       click_on "View claims"
@@ -152,7 +152,7 @@ RSpec.feature "Claims awaiting a decision" do
       expect(@submitted_claims.size).to eq 35
 
       within("#allocations") do
-        expect(page).to have_select("allocate_to_team_member", options: ["Jo Bloggs", "Sarah Strawbridge", "Frank Yee", "Abdul Rafiq"])
+        expect(page).to have_select("allocate_to_team_member", options: ["Aaron Admin", "Sarah Strawbridge", "Frank Yee", "Abdul Rafiq"])
         expect(page).to have_select("allocate_to_policy", options: ["All", "Student Loans", "Maths and Physics", "Early-Career Payments"])
         expect(page).to have_button("Allocate claims", disabled: false)
         expect(page).to have_button("Unallocate claims")
@@ -304,64 +304,6 @@ RSpec.feature "Claims awaiting a decision" do
       student_loan_claims.each do |claim|
         expect(claim.reload.assigned_to.full_name).to eq "Tripti Kumar"
       end
-    end
-  end
-
-  context "when viewing an individual claim" do
-    let!(:claim) { create(:claim, :submitted, policy: EarlyCareerPayments) }
-
-    scenario "user can allocate an unallocated claim to themselves" do
-      visit admin_claim_tasks_path(claim)
-
-      expect(claim.assigned_to).to be_nil
-      expect(page).to have_content "This claim is currently unassigned"
-      expect(page).to have_link "Assign to yourself"
-
-      click_link "Assign to yourself"
-
-      expect(claim.reload.assigned_to.full_name).to eq "Jo Bloggs"
-      expect(page).to have_content "You are currently assigned this claim"
-      expect(page).to have_link "Unassign"
-    end
-
-    scenario "user can unallocate a claim" do
-      expect(claim.assigned_to).to be_nil
-      claim.assigned_to = sarah
-      claim.save
-
-      visit admin_claim_tasks_path(claim)
-
-      expect(page).to have_link "Unassign"
-      expect(page).to have_content "CAUTION: This claim is currently assigned to Sarah Strawbridge"
-
-      click_link "Unassign"
-
-      expect(claim.reload.assigned_to).to be_nil
-      expect(page).to have_content "This claim is currently unassigned"
-      expect(page).to have_link "Assign to yourself"
-    end
-
-    scenario "user can allocate a claim allocated to another user to themselves" do
-      expect(claim.assigned_to).to be_nil
-      claim.assigned_to = sarah
-      claim.save
-
-      visit admin_claim_tasks_path(claim)
-
-      expect(page).to have_link "Unassign"
-      expect(page).to have_content "CAUTION: This claim is currently assigned to Sarah Strawbridge"
-
-      click_link "Unassign"
-
-      expect(claim.reload.assigned_to).to be_nil
-      expect(page).to have_content "This claim is currently unassigned"
-      expect(page).to have_link "Assign to yourself"
-
-      click_link "Assign to yourself"
-
-      expect(claim.reload.assigned_to.full_name).to eq "Jo Bloggs"
-      expect(page).to have_content "You are currently assigned this claim"
-      expect(page).to have_link "Unassign"
     end
   end
 end
