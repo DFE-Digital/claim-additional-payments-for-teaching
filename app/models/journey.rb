@@ -34,6 +34,10 @@ class Journey
     ALL.detect { |j| j[:routing_name] == routing_name }[:policies]&.first
   end
 
+  def self.routing_name_for_policy(policy)
+    ALL.detect { |j| policy.in? j[:policies] }[:routing_name]
+  end
+
   def self.policies_for_routing_name(routing_name)
     ALL.detect { |j| j[:routing_name] == routing_name }[:policies]
   end

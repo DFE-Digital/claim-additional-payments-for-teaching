@@ -378,3 +378,5 @@ en:
                   mathematics: "Select yes if you currently teach mathematics"
                   foreign_languages: "Select yes if you currently teach foreign languages"
                   physics: "Select yes if you currently teach physics"
+  levelling_up_payments:
+    policy_short_name: "Levelling Up Payments"
