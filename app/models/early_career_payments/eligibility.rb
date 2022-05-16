@@ -141,7 +141,8 @@ module EarlyCareerPayments
     ATTRIBUTE_DEPENDENCIES = {
       "employed_as_supply_teacher" => ["has_entire_term_contract", "employed_directly"],
       "qualification" => ["eligible_itt_subject", "teaching_subject_now"],
-      "eligible_itt_subject" => ["teaching_subject_now"]
+      "eligible_itt_subject" => ["teaching_subject_now"],
+      "itt_academic_year" => ["eligible_itt_subject"]
     }.freeze
 
     self.table_name = "early_career_payments_eligibilities"
