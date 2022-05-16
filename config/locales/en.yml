@@ -275,7 +275,7 @@ en:
       heading_send_application: Now send your application
       statement: By submitting this you are confirming that, to the best of your knowledge, the details you are providing are correct.
       btn_text: Accept and send
-    policy_name: "Early-career and levelling up payment"
+    policy_name: "Early-career and levelling up premium payment"
     policy_short_name: "Early-Career Payments"
     claim_description: "for an early-career payment"
     claim_subject: "Early-career payment"
@@ -378,5 +378,5 @@ en:
                   mathematics: "Select yes if you currently teach mathematics"
                   foreign_languages: "Select yes if you currently teach foreign languages"
                   physics: "Select yes if you currently teach physics"
-  levelling_up_payments:
-    policy_short_name: "Levelling Up Payments"
+  levelling_up_premium_payments:
+    policy_short_name: "Levelling Up Premium Payments"

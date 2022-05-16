@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe LevellingUpPayments::AcademicYearEligibility do
+RSpec.describe LevellingUpPremiumPayments::AcademicYearEligibility do
   describe ".new" do
     specify { expect { described_class.new(nil) }.to raise_error("nil academic year") }
   end

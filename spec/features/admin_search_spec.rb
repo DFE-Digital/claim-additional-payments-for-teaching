@@ -5,7 +5,7 @@ RSpec.feature "Admin search" do
 
   let!(:claim1) { create(:claim, :submitted, surname: "Wayne") }
   let!(:claim2) { create(:claim, :submitted, surname: "Wayne") }
-  let!(:lup_claim) { create(:claim, :submitted, surname: "Smith", policy: LevellingUpPayments) }
+  let!(:lup_claim) { create(:claim, :submitted, surname: "Smith", policy: LevellingUpPremiumPayments) }
 
   scenario "redirects a service operator to the claim if there is only one match" do
     visit search_admin_claims_path
@@ -38,6 +38,6 @@ RSpec.feature "Admin search" do
     click_button "Search"
 
     expect(page).to have_content(lup_claim.reference)
-    expect(page).to have_content("Levelling Up Payments")
+    expect(page).to have_content("Levelling Up Premium Payments")
   end
 end

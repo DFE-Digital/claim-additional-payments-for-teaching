@@ -1,4 +1,4 @@
-module LevellingUpPayments
+module LevellingUpPremiumPayments
   # there'll be a better way of doing this
   ELIGIBLE_ACADEMIC_YEARS = [
     AcademicYear.new("2017/2018"),

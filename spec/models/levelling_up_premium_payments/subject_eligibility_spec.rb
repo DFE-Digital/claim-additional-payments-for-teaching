@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe LevellingUpPayments::SubjectEligibility do
+RSpec.describe LevellingUpPremiumPayments::SubjectEligibility do
   let(:eligible_itt) { double("ITT", eligible?: true) }
   let(:ineligible_itt) { double("ITT", eligible?: false) }
   let(:eligible_degree) { double("Degree", eligible?: true) }

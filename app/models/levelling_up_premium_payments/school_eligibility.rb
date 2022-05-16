@@ -1,4 +1,4 @@
-module LevellingUpPayments
+module LevellingUpPremiumPayments
   # Checks if a school is eligible for LUP. A school being
   # eligible is necessary but not sufficient for an LUP award to be made.
   #
@@ -12,7 +12,7 @@ module LevellingUpPayments
     end
 
     def eligible?
-      LevellingUpPayments::Award.new(@school).has_award?
+      LevellingUpPremiumPayments::Award.new(@school).has_award?
     end
   end
 end
