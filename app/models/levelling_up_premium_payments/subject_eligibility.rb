@@ -1,4 +1,4 @@
-module LevellingUpPayments
+module LevellingUpPremiumPayments
   # Checks if the subject studied, ITT'd and a teacher's teaching timetable are eligible
   # for LUP. This is necessary but not sufficient to award LUP.
   #

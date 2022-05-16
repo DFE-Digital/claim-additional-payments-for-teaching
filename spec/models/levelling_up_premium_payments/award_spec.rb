@@ -1,9 +1,9 @@
 require "rails_helper"
 
-RSpec.describe LevellingUpPayments::Award do
-  let(:eligible_school) { build(:school, :levelling_up_payments_eligible) }
-  let(:ineligible_school) { build(:school, :levelling_up_payments_ineligible) }
-  let(:not_found) { build(:school, :not_found_in_levelling_up_payments_spreadsheet) }
+RSpec.describe LevellingUpPremiumPayments::Award do
+  let(:eligible_school) { build(:school, :levelling_up_premium_payments_eligible) }
+  let(:ineligible_school) { build(:school, :levelling_up_premium_payments_ineligible) }
+  let(:not_found) { build(:school, :not_found_in_levelling_up_premium_payments_spreadsheet) }
 
   describe ".new" do
     specify { expect { described_class.new(nil) }.to raise_error("nil school") }

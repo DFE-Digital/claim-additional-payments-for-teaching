@@ -1,7 +1,7 @@
 FactoryBot.define do
-  factory :levelling_up_payments_eligibility, class: "LevellingUpPayments::Eligibility" do
+  factory :levelling_up_premium_payments_eligibility, class: "LevellingUpPremiumPayments::Eligibility" do
     trait :eligible do
-      association :current_school, :levelling_up_payments_eligible, factory: :school
+      association :current_school, :levelling_up_premium_payments_eligible, factory: :school
       nqt_in_academic_year_after_itt { true }
       employed_as_supply_teacher { false }
       subject_to_formal_performance_action { false }
@@ -13,7 +13,7 @@ FactoryBot.define do
     end
 
     trait :ineligible_feature do
-      association :current_school, :levelling_up_payments_ineligible, factory: :school
+      association :current_school, :levelling_up_premium_payments_ineligible, factory: :school
     end
   end
 end

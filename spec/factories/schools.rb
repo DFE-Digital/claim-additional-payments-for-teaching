@@ -28,17 +28,17 @@ FactoryBot.define do
       phase { School::SECONDARY_PHASES.sample }
     end
 
-    trait :levelling_up_payments_eligible do
+    trait :levelling_up_premium_payments_eligible do
       # fake whilst set of eligible schools is outside public domain
       sequence(:urn, 150000)
     end
 
-    trait :levelling_up_payments_ineligible do
+    trait :levelling_up_premium_payments_ineligible do
       # fake whilst set of eligible schools is outside public domain
       sequence(:urn, 160000)
     end
 
-    trait :not_found_in_levelling_up_payments_spreadsheet do
+    trait :not_found_in_levelling_up_premium_payments_spreadsheet do
       # fake whilst set of eligible schools is outside public domain
       sequence(:urn, 170000)
     end

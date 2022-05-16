@@ -1,4 +1,4 @@
-module LevellingUpPayments
+module LevellingUpPremiumPayments
   # completely fake until information is in the public domain
   URN_TO_AWARD_AMOUNT_IN_POUNDS = {
     150000 => 1_000,
