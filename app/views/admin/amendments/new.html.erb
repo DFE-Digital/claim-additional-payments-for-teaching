@@ -151,7 +151,7 @@
       <% end %>
     <% end %>
 
-    <% if @amendment.claim.policy == EarlyCareerPayments %>
+    <% if editable_award_amount_policy?(@claim.policy) %>
       <%= claim_form.fields_for :eligibility, @amendment.claim.eligibility, include_id: false do |eligibility_form| %>
         <div class="govuk-grid-row">
           <div class="govuk-grid-column-one-third">
