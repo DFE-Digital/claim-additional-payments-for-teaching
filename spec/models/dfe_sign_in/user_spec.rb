@@ -26,7 +26,7 @@ RSpec.describe DfeSignIn::User, type: :model do
 
   describe "#full_name" do
     it "returns a full name" do
-      expect(user.full_name).to eq("Jo Bloggs")
+      expect(user.full_name).to eq("Aaron Admin")
     end
   end
 
