@@ -6,6 +6,7 @@ module LevellingUpPremiumPayments
 
     # use first year of LUP for now but this must come from a PolicyConfiguration
     validates :award_amount, on: :amendment, award_range: {max: LevellingUpPremiumPayments::Award.max(AcademicYear.new(2022))}
+    validates :eligible_degree_subject, on: [:"eligible-degree-subject", :submit], inclusion: {in: [true, false], message: "Select yes if you have a degree in an eligible subject"}
 
     EDITABLE_ATTRIBUTES = [
       :nqt_in_academic_year_after_itt,
@@ -19,9 +20,12 @@ module LevellingUpPremiumPayments
       :eligible_itt_subject,
       :teaching_subject_now,
       :itt_academic_year,
-      :award_amount
+      :award_amount,
+      :eligible_degree_subject
     ].freeze
+
     AMENDABLE_ATTRIBUTES = [:award_amount].freeze
+
     ATTRIBUTE_DEPENDENCIES = {
       "employed_as_supply_teacher" => ["has_entire_term_contract", "employed_directly"],
       "qualification" => ["eligible_itt_subject", "teaching_subject_now"],
@@ -55,10 +59,9 @@ module LevellingUpPremiumPayments
       LevellingUpPremiumPayments
     end
 
-    # maintains interface
     def ineligible?
-      # only checking school for now
-      has_ineligible_school?
+      has_ineligible_school? ||
+      ineligible_itt_subject?
     end
 
     def eligible_now?
@@ -92,5 +95,16 @@ module LevellingUpPremiumPayments
       # use first year of LUP for now but this must come from a PolicyConfiguration
       BigDecimal LevellingUpPremiumPayments::Award.new(school: current_school, year: AcademicYear.new(2022)).amount_in_pounds if current_school.present?
     end
+
+    def ineligible_itt_subject?
+      itt_subject_none_of_the_above? && !postgraduate_itt?
+    end
+
+    def eligible_none_of_the_above?
+      itt_subject_none_of_the_above? && postgraduate_itt?
+    end
+
+    # TODO cohort logic should be tweaked to pass none of the above option:
+    # award_amount.itt_subject.to_s == eligible_itt_subject || eligible_none_of_the_above?
   end
 end

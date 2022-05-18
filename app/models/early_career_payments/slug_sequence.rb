@@ -21,6 +21,7 @@ module EarlyCareerPayments
       "qualification",
       "itt-year",
       "eligible-itt-subject",
+      "eligible-degree-subject",
       "teaching-subject-now",
       "check-your-answers-part-one",
       "eligibility-confirmed",
@@ -79,6 +80,7 @@ module EarlyCareerPayments
         remove_student_loan_country_slugs(sequence)
         trainee_teacher_slugs(sequence) if claim.eligibility.trainee_teacher_in_2021?
         sequence.delete("future-eligibility") unless claim.eligibility.trainee_teacher_in_2021?
+        sequence.delete("eligible-degree-subject") unless claim.eligibility.eligible_none_of_the_above?
       end
     end
 
