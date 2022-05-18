@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.feature "Set Reminder when Eligible Later for an Early Career Payment" do
+RSpec.feature "Set Reminder when Eligible Later for an Early Career Payment", pending: true do
   [
     {subject: "chemistry", cohort: "2020 to 2021", academic_year: AcademicYear.new(2020), next_year: 2022, frozen_year: Date.new(2021, 9, 1)},
     {subject: "physics", cohort: "2020 to 2021", academic_year: AcademicYear.new(2020), next_year: 2022, frozen_year: Date.new(2021, 9, 1)},

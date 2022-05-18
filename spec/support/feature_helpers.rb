@@ -112,7 +112,7 @@ module FeatureHelpers
   # Early-Career Payment Policy specific helpers
   def start_early_career_payments_claim
     visit new_claim_path(EarlyCareerPayments.routing_name)
-    Claim.order(:created_at).last
+    Claim.by_policy(EarlyCareerPayments).order(:created_at).last
   end
 
   def get_otp_from_email

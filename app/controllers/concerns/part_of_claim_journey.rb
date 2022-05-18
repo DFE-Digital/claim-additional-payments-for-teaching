@@ -25,22 +25,22 @@ module PartOfClaimJourney
     redirect_to current_policy.start_page_url unless current_claim.persisted?
   end
 
-  # Keep this for StudentLoans and MathsAndPhysics journeys
-  # Keep ECP journey working for now with current_claim as we build out combined journey
   def current_claim
     @current_claim ||= claim_from_session || build_new_claim
   end
 
-  # TASK: does NOT support multiple claims yet!
   def claim_from_session
-    Claim.find(session[:claim_id]) if session.key?(:claim_id)
+    if session.key?(:claim_id)
+      claim_ids = session[:claim_id].split(",")
+      claims = claim_ids.map { |cid| Claim.find(cid) }
+      CurrentClaim.new(claims: claims)
+    end
   end
 
   def build_new_claim
     CurrentClaim.new(claims: build_new_claims)
   end
 
-  # Beginning of setting up multiple claims in a combined journey
   def build_new_claims
     Journey.policies_for_routing_name(current_policy_routing_name).map do |policy|
       Claim.new(

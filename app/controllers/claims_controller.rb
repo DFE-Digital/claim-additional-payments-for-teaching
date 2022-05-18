@@ -80,7 +80,7 @@ class ClaimsController < BasePublicController
     current_claim.attributes = claim_params
 
     current_claim.save!
-    session[:claim_id] = current_claim.to_param
+    session[:claim_id] = current_claim.claim_ids
     redirect_to claim_path(current_policy_routing_name, page_sequence.slugs.first.to_sym)
   end
 

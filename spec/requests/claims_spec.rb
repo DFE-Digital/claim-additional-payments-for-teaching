@@ -26,11 +26,14 @@ RSpec.describe "Claims", type: :request do
   end
 
   describe "claims#create request" do
+    # Should be based on Journey
     Policies.all.each do |policy|
       it "creates a new #{policy.name} claim for the current academic year and redirects to the next question in the sequence" do
-        expect { start_claim(policy) }.to change { Claim.count }.by(1)
+        policies_for_journey = Journey.policies_for_routing_name(policy.routing_name)
 
-        claim = Claim.last
+        expect { start_claim(policy) }.to change { Claim.count }.by(policies_for_journey.count)
+
+        claim = Claim.by_policy(policy).order(:created_at).last
         current_academic_year = policy_configurations(policy.locale_key).current_academic_year
 
         expect(claim.eligibility).to be_kind_of(policy::Eligibility)

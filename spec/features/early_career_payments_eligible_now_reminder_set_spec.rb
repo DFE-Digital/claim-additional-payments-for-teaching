@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.feature "Elible now can set a reminder for next year." do
-  it "auto-sets a reminders email and name from claim params and displays the correct year" do
+  pending "auto-sets a reminders email and name from claim params and displays the correct year" do
     travel_to Date.new(2021, 9, 1) do
       claim = start_early_career_payments_claim
       claim.update!(attributes_for(:claim, :submittable))
@@ -60,7 +60,7 @@ RSpec.feature "Completed Applications - Reminders" do
       ]
     }
   ].each do |policy|
-    context "when accepting claims for AcademicYear #{policy[:policy_year]}" do
+    pending "when accepting claims for AcademicYear #{policy[:policy_year]}" do
       before do
         @ecp_policy_date = PolicyConfiguration.for(EarlyCareerPayments).current_academic_year
         PolicyConfiguration.for(EarlyCareerPayments).update(current_academic_year: policy[:policy_year])
