@@ -66,10 +66,6 @@ module StudentLoans
       SUBJECT_ATTRIBUTES.select { |attribute_name| public_send("#{attribute_name}?") }
     end
 
-    def student_loan_repayment_amount=(value)
-      super(value.to_s.gsub(/[£,\s]/, ""))
-    end
-
     def ineligible?
       ineligible_qts_award_year? ||
         ineligible_claim_school? ||

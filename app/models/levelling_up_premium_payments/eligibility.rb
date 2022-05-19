@@ -10,13 +10,8 @@ module LevellingUpPremiumPayments
       LevellingUpPremiumPayments
     end
 
+    # maintains interface
     def ineligible?
-    end
-
-    # allows wider range of input formats like ECP (and student_loan_repayment_amount in TSLR) does
-    # (this is a copy of that code for now)
-    def award_amount=(value)
-      super(value.to_s.gsub(/[£,\s]/, ""))
     end
   end
 end

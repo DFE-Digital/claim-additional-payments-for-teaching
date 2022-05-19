@@ -257,10 +257,6 @@ module EarlyCareerPayments
       super || calculate_award_amount
     end
 
-    def award_amount=(value)
-      super(value.to_s.gsub(/[£,\s]/, ""))
-    end
-
     def calculate_award_amount
       return BigDecimal("0.00") if current_school.nil?
 
