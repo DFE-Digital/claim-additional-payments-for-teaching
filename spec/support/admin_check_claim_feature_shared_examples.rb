@@ -4,13 +4,13 @@ RSpec.shared_examples "Admin Check Claim Feature" do |policy|
 
     scenario "User can approve a claim" do
       freeze_time do
-        submitted_claims = create_list(:claim, 5, :submitted, policy: policy)
+        submitted_claims = create_list(:claim, 2, :submitted, policy: policy)
         claim_to_approve = submitted_claims.first
 
         click_on "View claims"
 
         expect(page).to have_content(claim_to_approve.reference)
-        expect(page).to have_content("5 claims awaiting a decision")
+        expect(page).to have_content("2 claims awaiting a decision")
 
         find("a[href='#{admin_claim_tasks_path(claim_to_approve)}']").click
         click_on "Approve or reject this claim"
@@ -34,13 +34,13 @@ RSpec.shared_examples "Admin Check Claim Feature" do |policy|
     end
 
     scenario "they can reject a claim" do
-      submitted_claims = create_list(:claim, 5, :submitted)
+      submitted_claims = create_list(:claim, 2, :submitted)
       claim_to_reject = submitted_claims.first
 
       click_on "View claims"
 
       expect(page).to have_content(claim_to_reject.reference)
-      expect(page).to have_content("5 claims awaiting a decision")
+      expect(page).to have_content("2 claims awaiting a decision")
 
       find("a[href='#{admin_claim_tasks_path(claim_to_reject)}']").click
       click_on "Approve or reject this claim"
