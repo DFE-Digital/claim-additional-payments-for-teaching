@@ -1340,10 +1340,10 @@ RSpec.describe Claim, type: :model do
   describe "#destroy" do
     let!(:claim) { create(:claim, :submitted, policy: EarlyCareerPayments) }
 
-    let!(:notes) { create_list(:note, 1, claim: claim) }
-    let!(:tasks) { create_list(:task, 1, claim: claim) }
-    let!(:amendments) { create_list(:amendment, 1, claim: claim) }
-    let!(:decisions) { create_list(:decision, 1, :approved, claim: claim) }
+    let!(:notes) { create(:note, claim: claim) }
+    let!(:tasks) { create(:task, claim: claim) }
+    let!(:amendments) { create(:amendment, claim: claim) }
+    let!(:decisions) { create(:decision, :approved, claim: claim) }
     let!(:support_ticket) { create(:support_ticket, claim: claim) }
 
     it "destroys associated records" do
