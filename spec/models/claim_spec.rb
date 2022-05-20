@@ -1336,4 +1336,24 @@ RSpec.describe Claim, type: :model do
       it { is_expected.to eq notes }
     end
   end
+
+  describe "#destroy" do
+    let!(:claim) { create(:claim, :submitted, policy: EarlyCareerPayments) }
+
+    let!(:notes) { create_list(:note, 1, claim: claim) }
+    let!(:tasks) { create_list(:task, 1, claim: claim) }
+    let!(:amendments) { create_list(:amendment, 1, claim: claim) }
+    let!(:decisions) { create_list(:decision, 1, :approved, claim: claim) }
+    let!(:support_ticket) { create(:support_ticket, claim: claim) }
+
+    it "destroys associated records" do
+      claim.reload.destroy!
+      expect(EarlyCareerPayments::Eligibility.count).to be_zero
+      expect(Note.count).to be_zero
+      expect(Task.count).to be_zero
+      expect(Amendment.count).to be_zero
+      expect(Decision.count).to be_zero
+      expect(SupportTicket.count).to be_zero
+    end
+  end
 end
