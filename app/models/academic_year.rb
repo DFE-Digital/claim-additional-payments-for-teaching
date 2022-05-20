@@ -1,4 +1,4 @@
-# Used to model an academic year, which is normally dispayed in the format
+# Used to model an academic year, which is normally displayed in the format
 # "YYYY/YYYY". Supports comparison and basic arithmetic operations.
 #
 # Can be initialised both with a single start year, or the academic year as a

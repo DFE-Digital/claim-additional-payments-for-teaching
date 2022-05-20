@@ -182,5 +182,64 @@ describe EarlyCareerPaymentsHelper do
         expect(helper.guidance_eligibility_page_link(claim)).to include("#{EarlyCareerPayments.eligibility_page_url}#supply-private-school-and-sixth-form-college-teachers")
       end
     end
+
+    describe "#graduate_itt?" do
+      subject { helper.graduate_itt?(claim) }
+
+      let(:policy) { EarlyCareerPayments }
+
+      context "when the qualification is UG degree" do
+        let(:eligibility) { build(:early_career_payments_eligibility, qualification: :undergraduate_itt) }
+
+        it { is_expected.to be true }
+      end
+
+      context "when the qualification is PG degree" do
+        let(:eligibility) { build(:early_career_payments_eligibility, qualification: :postgraduate_itt) }
+
+        it { is_expected.to be true }
+      end
+
+      context "when the qualification is assessment only" do
+        let(:eligibility) { build(:early_career_payments_eligibility, qualification: :assessment_only) }
+
+        it { is_expected.to be false }
+      end
+
+      context "when the qualification is overseas recognition" do
+        let(:eligibility) { build(:early_career_payments_eligibility, qualification: :overseas_recognition) }
+
+        it { is_expected.to be false }
+      end
+    end
+
+    describe "#qts?" do
+      subject { helper.qts?(claim) }
+      let(:policy) { EarlyCareerPayments }
+
+      context "when the qualification is UG degree" do
+        let(:eligibility) { build(:early_career_payments_eligibility, qualification: :undergraduate_itt) }
+
+        it { is_expected.to be false }
+      end
+
+      context "when the qualification is PG degree" do
+        let(:eligibility) { build(:early_career_payments_eligibility, qualification: :postgraduate_itt) }
+
+        it { is_expected.to be false }
+      end
+
+      context "when the qualification is assessment only" do
+        let(:eligibility) { build(:early_career_payments_eligibility, qualification: :assessment_only) }
+
+        it { is_expected.to be true }
+      end
+
+      context "when the qualification is overseas recognition" do
+        let(:eligibility) { build(:early_career_payments_eligibility, qualification: :overseas_recognition) }
+
+        it { is_expected.to be true }
+      end
+    end
   end
 end

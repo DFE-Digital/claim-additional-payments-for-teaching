@@ -61,4 +61,12 @@ module EarlyCareerPaymentsHelper
     year_or_period = policy_year > last_academic_year_to_display_as_year ? :period : :year
     I18n.t("early_career_payments.questions.nqt_in_academic_year_after_itt.hint", year_or_period: year_or_period)
   end
+
+  def graduate_itt?(claim)
+    %w[undergraduate_itt postgraduate_itt].include? claim.eligibility.qualification
+  end
+
+  def qts?(claim)
+    %w[assessment_only overseas_recognition].include? claim.eligibility.qualification
+  end
 end

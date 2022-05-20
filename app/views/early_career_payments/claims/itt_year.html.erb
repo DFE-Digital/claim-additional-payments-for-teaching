@@ -22,6 +22,13 @@
             <%= errors_tag current_claim.eligibility, :itt_academic_year %>
 
             <div class="govuk-radios">
+              <% if qts?(current_claim) %>
+                <div class="govuk-radios__item">
+                  <%= fields.radio_button(:itt_academic_year, AcademicYear.new(2017), class: "govuk-radios__input") %>
+                  <%= fields.label "itt_academic_year_20172018", AcademicYear.new(2017).to_s(:long), class: "govuk-label govuk-radios__label" %>
+                </div>
+              <% end %>
+
               <div class="govuk-radios__item">
                 <%= fields.radio_button(:itt_academic_year, AcademicYear.new(2018), class: "govuk-radios__input") %>
                 <%= fields.label "itt_academic_year_20182019", AcademicYear.new(2018).to_s(:long), class: "govuk-label govuk-radios__label" %>
@@ -37,6 +44,12 @@
                 <%= fields.label "itt_academic_year_20202021", AcademicYear.new(2020).to_s(:long), class: "govuk-label govuk-radios__label" %>
               </div>
 
+              <% if qts?(current_claim) %>
+                <div class="govuk-radios__item">
+                  <%= fields.radio_button(:itt_academic_year, AcademicYear.new(2021), class: "govuk-radios__input") %>
+                  <%= fields.label "itt_academic_year_20212022", AcademicYear.new(2021).to_s(:long), class: "govuk-label govuk-radios__label" %>
+                </div>
+              <% end %>
               <div class="govuk-radios__divider">or</div>
 
               <div class="govuk-radios__item">
@@ -50,7 +63,7 @@
         <% end %>
         <br/>
         <br/>
-        <% if %w[undergraduate_itt postgraduate_itt].include? current_claim.eligibility.qualification %>
+        <% if graduate_itt?(current_claim) %>
           <details class="govuk-details" data-module="govuk-details">
             <summary class="govuk-details__summary">
               <span class="govuk-details__summary-text">
