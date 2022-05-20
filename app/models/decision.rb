@@ -14,6 +14,7 @@ class Decision < ApplicationRecord
   }
 
   def readonly?
+    return false if destroyed_by_association
     persisted? && !undone
   end
 

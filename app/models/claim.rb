@@ -120,11 +120,11 @@ class Claim < ApplicationRecord
   enum student_loan_plan: STUDENT_LOAN_PLAN_OPTIONS
   enum bank_or_building_society: {personal_bank_account: 0, building_society: 1}
 
-  has_many :decisions
-  has_many :tasks
-  has_many :amendments
-  has_many :notes
-  has_one :support_ticket
+  has_many :decisions, dependent: :destroy
+  has_many :tasks, dependent: :destroy
+  has_many :amendments, dependent: :destroy
+  has_many :notes, dependent: :destroy
+  has_one :support_ticket, dependent: :destroy
 
   belongs_to :eligibility, polymorphic: true, inverse_of: :claim, dependent: :destroy
   accepts_nested_attributes_for :eligibility, update_only: true
