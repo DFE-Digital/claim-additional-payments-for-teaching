@@ -74,6 +74,11 @@ RSpec.feature "Teacher Early-Career Payments claims" do
     # - In what academic year did you start your undergraduate ITT
     expect(page).to have_text(I18n.t("early_career_payments.questions.itt_academic_year.qualification.#{claim.eligibility.qualification}"))
     expect(page).to have_text("If you did a part time ITT")
+    expect(page).not_to have_text("2017 to 2018")
+    expect(page).to have_text("2018 to 2019")
+    expect(page).to have_text("2019 to 2020")
+    expect(page).to have_text("2020 to 2021")
+    expect(page).not_to have_text("2021 to 2022")
 
     choose "2018 to 2019"
     click_on "Continue"
@@ -405,6 +410,11 @@ RSpec.feature "Teacher Early-Career Payments claims" do
       # - In what academic year did you start your undergraduate ITT
       expect(page).to have_text(I18n.t("early_career_payments.questions.itt_academic_year.qualification.#{claim.eligibility.qualification}"))
       expect(page).not_to have_text("You might still be eligible to claim if your ITT coincided with one of the academic years stated, even if it didn’t start or complete in one of those years.")
+      expect(page).to have_text("2017 to 2018")
+      expect(page).to have_text("2018 to 2019")
+      expect(page).to have_text("2019 to 2020")
+      expect(page).to have_text("2020 to 2021")
+      expect(page).to have_text("2021 to 2022")
 
       choose "2018 to 2019"
       click_on "Continue"
@@ -444,6 +454,11 @@ RSpec.feature "Teacher Early-Career Payments claims" do
       # - In what academic year did you you earn your qualified teacher status (QTS)?
       expect(page).to have_text(I18n.t("early_career_payments.questions.itt_academic_year.qualification.#{claim.eligibility.qualification}"))
       expect(page).not_to have_text("You might still be eligible to claim if your ITT coincided with one of the academic years stated, even if it didn’t start or complete in one of those years.")
+      expect(page).to have_text("2017 to 2018")
+      expect(page).to have_text("2018 to 2019")
+      expect(page).to have_text("2019 to 2020")
+      expect(page).to have_text("2020 to 2021")
+      expect(page).to have_text("2021 to 2022")
 
       choose "2018 to 2019"
       click_on "Continue"
@@ -528,6 +543,11 @@ RSpec.feature "Teacher Early-Career Payments claims" do
 
     # - In what academic year did you start your postgraduate ITT
     expect(page).to have_text(I18n.t("early_career_payments.questions.itt_academic_year.qualification.#{claim.eligibility.qualification}"))
+    expect(page).not_to have_text("2017 to 2018")
+    expect(page).to have_text("2018 to 2019")
+    expect(page).to have_text("2019 to 2020")
+    expect(page).to have_text("2020 to 2021")
+    expect(page).not_to have_text("2021 to 2022")
 
     choose "2018 to 2019"
     click_on "Continue"

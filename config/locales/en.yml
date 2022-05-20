@@ -320,8 +320,8 @@ en:
         qualification:
           undergraduate_itt: In what academic year did you complete your undergraduate ITT?
           postgraduate_itt: In what academic year did you start your postgraduate ITT?
-          assessment_only: What academic year did you earn your qualified teacher status (QTS)?
-          overseas_recognition: What academic year did you earn your qualified teacher status (QTS)?
+          assessment_only: In which academic year did you earn your qualified teacher status (QTS)?
+          overseas_recognition: In which academic year did you earn your qualified teacher status (QTS)?
     admin:
       employed_as_supply_teacher: "Employed as a supply teacher?"
       nqt_in_academic_year_after_itt: "NQT the academic year after ITT"
