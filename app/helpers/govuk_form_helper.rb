@@ -80,7 +80,7 @@ module GovukFormHelper
     return unless object.errors.messages[attribute].present?
 
     messages = object.errors.messages[attribute].map { |message| content_tag(:span, "Error:", class: "govuk-visually-hidden") + " " + message }
-    content_tag(:span, messages.join("<br>").html_safe, {class: "govuk-error-message", id: error_id(object.class.model_name.singular, attribute)})
+    content_tag(:span, messages.join("<br>").html_safe, {class: "govuk-error-message", id: error_id(object.model_name.singular, attribute)})
   end
 
   # Returns a string of the GOVUK css classes for the +<select>+ html element along with any

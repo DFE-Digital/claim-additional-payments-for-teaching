@@ -12,7 +12,7 @@ RSpec.feature "Maths & Physics claims" do
       choose "Yes"
       click_on "Continue"
 
-      claim = Claim.order(:created_at).last
+      claim = Claim.by_policy(MathsAndPhysics).order(:created_at).last
       eligibility = claim.eligibility
 
       expect(eligibility.teaching_maths_or_physics).to eql true
@@ -221,7 +221,7 @@ RSpec.feature "Maths & Physics claims" do
     choose "Yes"
     click_on "Continue"
 
-    claim = Claim.order(:created_at).last
+    claim = Claim.by_policy(MathsAndPhysics).order(:created_at).last
     eligibility = claim.eligibility
 
     expect(eligibility.teaching_maths_or_physics).to eql true
@@ -254,7 +254,7 @@ RSpec.feature "Maths & Physics claims" do
     choose "Yes"
     click_on "Continue"
 
-    claim = Claim.order(:created_at).last
+    claim = Claim.by_policy(MathsAndPhysics).order(:created_at).last
     eligibility = claim.eligibility
 
     expect(eligibility.teaching_maths_or_physics).to eql true
@@ -302,7 +302,7 @@ RSpec.feature "Maths & Physics claims" do
     choose "Yes"
     click_on "Continue"
 
-    claim = Claim.order(:created_at).last
+    claim = Claim.by_policy(MathsAndPhysics).order(:created_at).last
     eligibility = claim.eligibility
 
     expect(eligibility.teaching_maths_or_physics).to eql true

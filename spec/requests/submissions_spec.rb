@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.describe "Submissions", type: :request do
-  let(:in_progress_claim) { Claim.last }
+  let(:in_progress_claim) { Claim.by_policy(StudentLoans).order(:created_at).last }
 
   describe "#create" do
     context "with a submittable claim" do
