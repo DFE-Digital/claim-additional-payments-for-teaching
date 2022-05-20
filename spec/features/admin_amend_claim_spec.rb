@@ -1,5 +1,10 @@
 require "rails_helper"
 
+# These existing specs are too complicated, so using
+# `spec/features/admin_edit_claim_spec.rb` for ECP
+# and LUP instead. Keeping these here because they
+# at least cover TSLR and Maths & Physics (which
+# themselves are slightly different from ECP and LUP).
 RSpec.feature "Admin amends a claim" do
   let(:claim) do
     create(:claim, :submitted,
@@ -126,38 +131,6 @@ RSpec.feature "Admin amends a claim" do
       expect(page).to have_content("Student loan repayment amount\nchanged from £550.00 to £300.00")
 
       expect(page).to have_content("The claimant calculated the incorrect student loan repayment amount")
-      expect(page).to have_content("by #{@signed_in_user.full_name} on #{I18n.l(Time.current)}")
-    end
-  end
-
-  context "with a Early Career Payments claim" do
-    let(:claim) do
-      create(:claim, :submitted, policy: EarlyCareerPayments, eligibility: build(:early_career_payments_eligibility, :eligible, award_amount: 5_000))
-    end
-
-    scenario "Service operator amends the award amount" do
-      visit admin_claim_url(claim)
-
-      click_on "Amend claim"
-
-      fill_in "Award amount", with: "£2,500"
-      fill_in "Change notes", with: "The claimants school is eligible for an uplift, increasing the amount to give total of $7,500"
-      expect { click_on "Amend claim" }.to change { claim.reload.amendments.size }.by(1)
-
-      amendment = claim.amendments.last
-      expect(amendment.claim_changes).to eq({
-        "award_amount" => [5_000, 2_500]
-      })
-      expect(amendment.notes).to eq("The claimants school is eligible for an uplift, increasing the amount to give total of $7,500")
-      expect(amendment.created_by).to eq(@signed_in_user)
-
-      expect(claim.eligibility.award_amount).to eq(2_500)
-
-      click_on "Claim amendments"
-
-      expect(page).to have_content("Award amount\nchanged from £5,000.00 to £2,500.00")
-
-      expect(page).to have_content("The claimants school is eligible for an uplift, increasing the amount to give total of $7,500")
       expect(page).to have_content("by #{@signed_in_user.full_name} on #{I18n.l(Time.current)}")
     end
   end

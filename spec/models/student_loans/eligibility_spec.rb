@@ -32,12 +32,12 @@ RSpec.describe StudentLoans::Eligibility, type: :model do
   describe "student_loan_repayment_amount attribute" do
     it "validates that the loan repayment amount is numerical" do
       expect(StudentLoans::Eligibility.new(student_loan_repayment_amount: "don’t know")).not_to be_valid
-      expect(StudentLoans::Eligibility.new(student_loan_repayment_amount: "£1,234.56")).to be_valid
+      expect(StudentLoans::Eligibility.new(student_loan_repayment_amount: "£1,234.56")).not_to be_valid
     end
 
     it "validates that the loan repayment is under £99,999" do
-      expect(StudentLoans::Eligibility.new(student_loan_repayment_amount: "100000000")).not_to be_valid
-      expect(StudentLoans::Eligibility.new(student_loan_repayment_amount: "99999")).to be_valid
+      expect(StudentLoans::Eligibility.new(student_loan_repayment_amount: 100_000)).not_to be_valid
+      expect(StudentLoans::Eligibility.new(student_loan_repayment_amount: 99_999)).to be_valid
     end
 
     it "validates that the loan repayment a positive number" do
@@ -81,14 +81,6 @@ RSpec.describe StudentLoans::Eligibility, type: :model do
     it "returns an array of the subject attributes that are true" do
       expect(StudentLoans::Eligibility.new.subjects_taught).to eq []
       expect(StudentLoans::Eligibility.new(biology_taught: true, physics_taught: true, chemistry_taught: false).subjects_taught).to eq [:biology_taught, :physics_taught]
-    end
-  end
-
-  describe "#student_loan_repayment_amount=" do
-    it "sets loan repayment amount with monetary characters stripped out" do
-      eligibility = build(:student_loans_eligibility)
-      eligibility.student_loan_repayment_amount = "£ 5,000.40"
-      expect(eligibility.student_loan_repayment_amount).to eql(5000.40)
     end
   end
 
@@ -343,7 +335,7 @@ RSpec.describe StudentLoans::Eligibility, type: :model do
   context "when saving in the “student-loan-amount” validation context" do
     it "validates the presence of student_loan_repayment_amount" do
       expect(StudentLoans::Eligibility.new).not_to be_valid(:"student-loan-amount")
-      expect(StudentLoans::Eligibility.new(student_loan_repayment_amount: "£1,100")).to be_valid(:"student-loan-amount")
+      expect(StudentLoans::Eligibility.new(student_loan_repayment_amount: 1_100)).to be_valid(:"student-loan-amount")
     end
   end
 

@@ -169,6 +169,12 @@ module EarlyCareerPayments
       AcademicYear.new => AcademicYear::Type.new.serialize(AcademicYear.new)
     }
 
+    @@max_award_amount_in_pounds = AWARD_AMOUNTS.collect(&:uplift_amount).max
+
+    def self.max_award_amount_in_pounds
+      @@max_award_amount_in_pounds
+    end
+
     has_one :claim, as: :eligibility, inverse_of: :eligibility
     belongs_to :current_school, optional: true, class_name: "School"
 
@@ -185,7 +191,7 @@ module EarlyCareerPayments
     validates :itt_academic_year, on: [:"itt-year", :submit], presence: {message: ->(object, data) { I18n.t("activerecord.errors.models.early_career_payments_eligibilities.attributes.itt_academic_year.blank.qualification.#{object.qualification}") }}
     validates :award_amount, on: [:submit], presence: {message: "Enter an award amount"}
     validates_numericality_of :award_amount, message: "Enter a valid monetary amount", allow_nil: true, greater_than_or_equal_to: 0, less_than_or_equal_to: 7500
-    validates :award_amount, on: :amendment, numericality: {less_than: 7501, message: "Enter an amount below £7,501"}
+    validates :award_amount, on: :amendment, award_range: {max: max_award_amount_in_pounds}
 
     before_save :set_qualification_if_trainee_teacher, if: :nqt_in_academic_year_after_itt_changed?
 
@@ -249,10 +255,6 @@ module EarlyCareerPayments
 
     def award_amount
       super || calculate_award_amount
-    end
-
-    def award_amount=(value)
-      super(value.to_s.gsub(/[£,\s]/, ""))
     end
 
     def calculate_award_amount

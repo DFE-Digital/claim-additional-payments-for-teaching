@@ -484,6 +484,11 @@ RSpec.describe EarlyCareerPayments::Eligibility, type: :model do
   end
 
   describe "#award_amount" do
+    context "amendment" do
+      it { should_not allow_values(0, nil).for(:award_amount).on(:amendment) }
+      it { should validate_numericality_of(:award_amount).on(:amendment).is_greater_than(0).is_less_than_or_equal_to(7_500).with_message("Enter a positive amount up to £7,500.00 (inclusive)") }
+    end
+
     context "with a value of 1_000" do
       let(:eligibility) do
         create(
@@ -1208,7 +1213,7 @@ RSpec.describe EarlyCareerPayments::Eligibility, type: :model do
     context "award_amount attribute" do
       it "validates the award_amount is numerical" do
         expect(EarlyCareerPayments::Eligibility.new(award_amount: "don't know")).not_to be_valid
-        expect(EarlyCareerPayments::Eligibility.new(award_amount: "£2,000.00")).to be_valid
+        expect(EarlyCareerPayments::Eligibility.new(award_amount: "£2,000.00")).not_to be_valid
       end
 
       it "validates that award_amount is a positive number" do
@@ -1221,8 +1226,9 @@ RSpec.describe EarlyCareerPayments::Eligibility, type: :model do
       end
 
       it "validates that the award_amount is less than £7,500 when amending a claim" do
-        expect(EarlyCareerPayments::Eligibility.new(award_amount: "£7,501")).not_to be_valid(:amendment)
-        expect(EarlyCareerPayments::Eligibility.new(award_amount: "£2,500")).to be_valid(:amendment)
+        expect(EarlyCareerPayments::Eligibility.new(award_amount: 7_501)).not_to be_valid(:amendment)
+        expect(EarlyCareerPayments::Eligibility.new(award_amount: 7_500)).to be_valid(:amendment)
+        expect(EarlyCareerPayments::Eligibility.new(award_amount: 7_499)).to be_valid(:amendment)
       end
     end
 
@@ -1309,5 +1315,9 @@ RSpec.describe EarlyCareerPayments::Eligibility, type: :model do
         expect(EarlyCareerPayments::Eligibility.new(itt_academic_year: AcademicYear.new(2020))).to be_valid(:"itt-year")
       end
     end
+  end
+
+  describe ".max_award_amount_in_pounds" do
+    specify { expect(described_class.max_award_amount_in_pounds).to eq(7_500) }
   end
 end
