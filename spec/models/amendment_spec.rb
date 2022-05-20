@@ -242,7 +242,7 @@ RSpec.describe Amendment, type: :model do
         let(:claim_attributes) do
           {
             eligibility_attributes: {
-              award_amount: "£2,500.00"
+              award_amount: 2_500
             }
           }
         end

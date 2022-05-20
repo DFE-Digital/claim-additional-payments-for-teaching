@@ -1,12 +1,4 @@
 module LevellingUpPremiumPayments
-  # completely fake until information is in the public domain
-  URN_TO_AWARD_AMOUNT_IN_POUNDS = {
-    150000 => 1_000,
-    150001 => 2_000,
-    160000 => 0,
-    160001 => 0
-  }
-
   # This is concerned with the award information from the spreadsheet, which will
   # contain the pre-computed amount, thereby we don't need to check the EIA or pupil premium
   # status ourselves.
@@ -25,12 +17,26 @@ module LevellingUpPremiumPayments
       @school = school
     end
 
+    def self.max
+      @@maximum_award_amount_in_pounds
+    end
+
     def has_award?
       amount_in_pounds.positive?
     end
 
     def amount_in_pounds
-      URN_TO_AWARD_AMOUNT_IN_POUNDS.fetch(@school.urn, 0)
+      @@urn_to_award_amount_in_pounds.fetch(@school.urn, 0)
     end
+
+    # completely fake until information is in the public domain
+    @@urn_to_award_amount_in_pounds = {
+      150000 => 1_000,
+      150001 => 3_000,
+      160000 => 0,
+      160001 => 0
+    }
+
+    @@maximum_award_amount_in_pounds = @@urn_to_award_amount_in_pounds.values.max
   end
 end

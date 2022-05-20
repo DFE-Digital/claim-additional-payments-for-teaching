@@ -12,5 +12,9 @@ module Admin
 
       nested_claim_attributes_to_ids.merge(claim_changes_attribute_to_id)
     end
+
+    def editable_award_amount_policy?(policy)
+      policy.in? [EarlyCareerPayments, LevellingUpPremiumPayments]
+    end
   end
 end

@@ -23,4 +23,8 @@ RSpec.describe LevellingUpPremiumPayments::Award do
     specify { expect(described_class.new(not_found)).to_not have_award }
     specify { expect(described_class.new(not_found).amount_in_pounds).to be_zero }
   end
+
+  describe ".max" do
+    specify { expect(described_class.max).to eq(3_000) }
+  end
 end
