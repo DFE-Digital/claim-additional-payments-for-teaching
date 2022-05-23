@@ -4,7 +4,8 @@ module LevellingUpPremiumPayments
     has_one :claim, as: :eligibility, inverse_of: :eligibility
     belongs_to :current_school, optional: true, class_name: "School"
 
-    validates :award_amount, on: :amendment, award_range: {max: LevellingUpPremiumPayments::Award.max}
+    # use first year of LUP for now but this must come from a PolicyConfiguration
+    validates :award_amount, on: :amendment, award_range: {max: LevellingUpPremiumPayments::Award.max(AcademicYear.new(2022))}
 
     EDITABLE_ATTRIBUTES = [
       :nqt_in_academic_year_after_itt,
