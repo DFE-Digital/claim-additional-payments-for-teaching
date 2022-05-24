@@ -34,7 +34,7 @@ module LevellingUpPremiumPayments
     end
 
     def has_award?
-      check_for_positive_value_in_case_zero_award_has_crept_into_hash
+      amount_in_pounds.positive?
     end
 
     def amount_in_pounds
@@ -2699,12 +2699,6 @@ module LevellingUpPremiumPayments
         148932 => 1_500,
         148965 => 3_000
       }.freeze
-    end
-
-    private
-
-    def check_for_positive_value_in_case_zero_award_has_crept_into_hash
-      amount_in_pounds.positive?
     end
   end
 end
