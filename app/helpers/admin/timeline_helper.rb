@@ -23,7 +23,7 @@ module Admin
 
     def admin_amendment_attribute_name(attribute)
       override = case attribute.to_s
-                 when "student_loan_plan" then t("student_loans.admin.student_loan_repayment_plan")
+      when "student_loan_plan" then t("student_loans.admin.student_loan_repayment_plan")
       end
 
       override || attribute.to_s.humanize
@@ -31,11 +31,11 @@ module Admin
 
     def admin_amendment_format_attribute(attribute, value)
       override = case attribute.to_s
-                 when "payroll_gender" then "don’t know" if value.to_s == "dont_know"
-                 when "date_of_birth" then l(value, format: :day_month_year)
-                 when "student_loan_repayment_amount" then number_to_currency(value)
-                 when "student_loan_plan" then value.to_s == "not_applicable" ? "not applicable" : value&.humanize
-                 when "award_amount" then number_to_currency(value)
+      when "payroll_gender" then "don’t know" if value.to_s == "dont_know"
+      when "date_of_birth" then l(value, format: :day_month_year)
+      when "student_loan_repayment_amount" then number_to_currency(value)
+      when "student_loan_plan" then value.to_s == "not_applicable" ? "not applicable" : value&.humanize
+      when "award_amount" then number_to_currency(value)
       end
 
       override || value.to_s

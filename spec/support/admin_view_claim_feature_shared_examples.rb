@@ -26,12 +26,12 @@ RSpec.shared_examples "Admin View Claim Feature" do |policy|
 
   def expect_page_to_have_policy_sections(policy)
     sections = case policy
-               when StudentLoans
-                 ["Identity confirmation", "Qualifications", "Census subjects taught", "Employment", "Student loan amount", "Decision"]
-               when MathsAndPhysics
-                 ["Identity confirmation", "Qualifications", "Employment", "Decision"]
-               else
-                 ["Identity confirmation", "Qualifications", "Census subjects taught", "Employment", "Decision"]
+    when StudentLoans
+      ["Identity confirmation", "Qualifications", "Census subjects taught", "Employment", "Student loan amount", "Decision"]
+    when MathsAndPhysics
+      ["Identity confirmation", "Qualifications", "Employment", "Decision"]
+    else
+      ["Identity confirmation", "Qualifications", "Census subjects taught", "Employment", "Decision"]
     end
 
     sections.each_with_index do |title, i|
