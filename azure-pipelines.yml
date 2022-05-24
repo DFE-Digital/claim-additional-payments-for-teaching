@@ -18,13 +18,13 @@ steps:
       pass: $(dockerPassword)
     displayName: Login to DockerHub
   #####check pullrequest variables
- - bash: echo This script could use $System.PullRequest.PullRequestId
+  - bash: echo This script could use $System.PullRequest.PullRequestId
     env:
       System.PullRequest.PullRequestId: $(System.PullRequest.PullRequestId)
   - powershell: | 
       Write-Host "This is a script that could use $env:System.PullRequest.PullRequestId"
       Write-Host "$env:System.PullRequest.PullRequestId = $(System.PullRequest.PullRequestId)"
-    env:
+     env:
       System.PullRequest.PullRequestId: $(System.PullRequest.PullRequestId))
 
   # Build and run tests
