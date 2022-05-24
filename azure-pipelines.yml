@@ -11,22 +11,18 @@ pool:
 variables:
   - group: docker-settings
 
+- task: PowerShell@2
+  inputs:
+    targetType: 'inline'
+    script: 'Write-Host "PR ID is:-" $env:System_PullRequest_PullRequestId'
+
 steps:
   # Login to DockerHub
   - script: docker login -u $(dockerId) -p $pass
     env:
       pass: $(dockerPassword)
     displayName: Login to DockerHub
-  #####check pullrequest variables
-  - bash: echo This script could use $System.PullRequest.PullRequestId
-    env:
-      System.PullRequest.PullRequestId: $(System.PullRequest.PullRequestId)
-  - powershell: | 
-      Write-Host "This is a script that could use $env:System.PullRequest.PullRequestId"
-      Write-Host "$env:System.PullRequest.PullRequestId = $(System.PullRequest.PullRequestId)"
-    env:
-      System.PullRequest.PullRequestId: $(System.PullRequest.PullRequestId))
-
+    
   # Build and run tests
   - script: |
       docker pull $(dockerRegistry)/$(dockerImageName):cache-test-dependencies || true
