@@ -4,10 +4,6 @@ module TestSeeders
       class CsvImportValidator < BaseCsvImportValidator
         include EarlyCareerPayments
 
-        def initialize(records, policy)
-          super
-        end
-
         def run
           logger.info "Validating CSV import"
           # iterate over CSV records and find the claim that matches the trn

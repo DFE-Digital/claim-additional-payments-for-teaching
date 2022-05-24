@@ -13,7 +13,7 @@ module OrdnanceSurvey
       it "add content type header" do
         stub = stub_request(method, %r{test}).with(
           headers: {
-            'Content-Type': "application/json"
+            "Content-Type": "application/json"
           }
         )
 

@@ -23,7 +23,7 @@ module OrdnanceSurvey
     # Accessing readers with send because < Ruby 2.7
     def request(method:, path: "/", params: {}, body: {})
       headers = {
-        'Content-Type': "application/json"
+        "Content-Type": "application/json"
       }
 
       params = params.merge(send(:params))

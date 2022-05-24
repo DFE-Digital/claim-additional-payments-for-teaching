@@ -56,10 +56,10 @@ module AutomatedChecks
         return false if school_workforce_census.nil?
 
         match_against = case claim.policy
-          when EarlyCareerPayments
-            early_career_payments_policy_subjects
-          when StudentLoans
-            student_loans_policy_subjects
+        when EarlyCareerPayments
+          early_career_payments_policy_subjects
+        when StudentLoans
+          student_loans_policy_subjects
         end
 
         match_against.intersection(school_workforce_census_subjects).any?
