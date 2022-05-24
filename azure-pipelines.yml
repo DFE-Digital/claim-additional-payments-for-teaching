@@ -15,11 +15,17 @@ pool:
 variables:
   - group: docker-settings
 
+– task: Bash@3
+    inputs:
+      targetType: 'inline'
+      script: 'env | sort'
+
 steps:
   # Get PR Request Number
   - powershell: | 
       #Write-Host "Variable is:-" $System.PullRequest.PullRequestNumber
       Write-Host "Variable is:-" $SYSTEM_PULLREQUEST_PULLREQUESTNUMBER
+ 
 
   # Login to DockerHub
   - script: docker login -u $(dockerId) -p $pass
