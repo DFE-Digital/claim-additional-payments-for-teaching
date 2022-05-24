@@ -44,21 +44,13 @@ class CurrentClaim
   end
 
   def method_missing(method_name, *args, &block)
-    Rails.logger.info("======<CurrentClaim#method_missing>======")
-    Rails.logger.info(method_name.inspect)
-    Rails.logger.info(args.inspect)
-
     if [:attributes=, :save, :save!, :update, :update!, :reset_dependent_answers].include?(method_name)
       claims.each do |c|
-        result = c.send(method_name, *args, &block) unless c == main_claim
-        Rails.logger.info(result.inspect)
+        c.send(method_name, *args, &block) unless c == main_claim
       end
     end
 
-    result = main_claim.send(method_name, *args, &block)
-    Rails.logger.info(result.inspect)
-    Rails.logger.info("======<END>==============================")
-    result
+    main_claim.send(method_name, *args, &block)
   end
 
   def respond_to_missing?(method_name, *args)

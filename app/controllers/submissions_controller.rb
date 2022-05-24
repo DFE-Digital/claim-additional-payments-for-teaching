@@ -3,6 +3,7 @@ class SubmissionsController < BasePublicController
 
   def create
     if current_claim.submit!
+      # TODO - main_claim may need to be dealing with the `submitted_claim` here...
       ClaimMailer.submitted(current_claim.main_claim).deliver_later
       ClaimVerifierJob.perform_later(current_claim.main_claim)
 

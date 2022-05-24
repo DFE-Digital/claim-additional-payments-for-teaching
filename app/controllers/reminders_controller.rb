@@ -101,7 +101,7 @@ class RemindersController < BasePublicController
     claims = Claim.where(id: session[:claim_id])
     cc = CurrentClaim.new(claims: claims)
 
-    # PLACEHOLDER until reminders are setup for the combined journey
+    # TODO - PLACEHOLDER until reminders are setup for the combined journey
     @current_claim = cc.main_claim
   end
 
