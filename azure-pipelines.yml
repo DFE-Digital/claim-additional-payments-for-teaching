@@ -22,12 +22,12 @@ steps:
     inputs:
       targetType: 'inline'
       script: 'env | sort'
-      
+
   # Get PR Request Number
   - powershell: | 
       #Write-Host "Variable is:-" $System.PullRequest.PullRequestNumber
-      Write-Host "Variable is:-" $SYSTEM_PULLREQUEST_PULLREQUESTNUMBER
- 
+      #Write-Host "Variable is:-" $SYSTEM_PULLREQUEST_PULLREQUESTNUMBER
+         
 
   # Login to DockerHub
   - script: docker login -u $(dockerId) -p $pass
