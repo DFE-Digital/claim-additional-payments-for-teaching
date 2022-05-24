@@ -16,6 +16,14 @@ RSpec.describe LevellingUpPremiumPayments::Eligibility, type: :model do
     specify { expect(subject).to respond_to(:ineligible?) }
   end
 
+  describe "#eligible_now?" do
+    specify { expect(subject).to respond_to(:eligible_now?) }
+  end
+
+  describe "#eligible_later?" do
+    specify { expect(subject).to respond_to(:eligible_later?) }
+  end
+
   describe "#award_amount" do
     it { should_not allow_values(0, nil).for(:award_amount).on(:amendment) }
     it { should validate_numericality_of(:award_amount).on(:amendment).is_greater_than(0).is_less_than_or_equal_to(3_000).with_message("Enter a positive amount up to £3,000.00 (inclusive)") }
