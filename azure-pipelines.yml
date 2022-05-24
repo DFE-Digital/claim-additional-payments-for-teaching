@@ -1,4 +1,8 @@
-pr: none
+pr:
+  branches:
+    include:
+    - prvariabletest
+#pr: none
 
 trigger:
   branches:
