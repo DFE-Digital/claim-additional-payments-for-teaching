@@ -13,10 +13,12 @@ variables:
 
 
 steps:
-  #
-  - script: 'Write-Host "PR ID is:-" $env:System_PullRequest_PullRequestId'
-    #env:
-    displayName: Get PR Number
+  # Get PR Request Number
+  - powershell: | 
+      Write-Host "This is a script that could use $env:System_PullRequest_PullRequestId"
+      Write-Host "$env:System_PullRequest_PullRequestId = $(System_PullRequest_PullRequestId)"
+    env:
+      SYSTEM_ACCESSTOKEN: $(System.AccessToken)
    
   # Login to DockerHub
   - script: docker login -u $(dockerId) -p $pass
