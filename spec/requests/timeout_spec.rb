@@ -8,11 +8,11 @@ RSpec.describe "Claim session timing out", type: :request do
       start_student_loans_claim
     end
 
-    let(:current_claim) { Claim.order(:created_at).last }
+    let(:current_claim) { CurrentClaim.new(claims: [Claim.by_policy(StudentLoans).order(:created_at).last]) }
     let(:after_expiry) { timeout_length_in_minutes.minutes + 1.second }
 
     it "clears the session and redirects to the timeout page" do
-      expect(session[:claim_id]).to eql current_claim.to_param
+      expect(session[:claim_id]).to eql current_claim.claim_ids
 
       travel after_expiry do
         put claim_path(StudentLoans.routing_name, "qts-year"), params: {claim: {qts_award_year: "on_or_after_cut_off_date"}}
@@ -28,7 +28,6 @@ RSpec.describe "Claim session timing out", type: :request do
       start_student_loans_claim
     end
 
-    let(:current_claim) { Claim.order(:created_at).last }
     let(:before_expiry) { timeout_length_in_minutes.minutes - 2.seconds }
 
     it "does not timeout the session" do

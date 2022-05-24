@@ -25,25 +25,23 @@ module PartOfClaimJourney
     redirect_to current_policy.start_page_url unless current_claim.persisted?
   end
 
-  # Keep this for StudentLoans and MathsAndPhysics journeys
-  # Keep ECP journey working for now with current_claim as we build out combined journey
   def current_claim
     @current_claim ||= claim_from_session || build_new_claim
   end
 
-  # TASK: does NOT support multiple claims yet!
   def claim_from_session
-    Claim.find(session[:claim_id]) if session.key?(:claim_id)
+    if session.key?(:claim_id)
+      claims = Claim.where(id: session[:claim_id])
+      CurrentClaim.new(claims: claims)
+    end
   end
 
   def build_new_claim
-    # hack to keep old single claim journeys, will need refactoring to be cleaner
-    build_new_claims.first
+    CurrentClaim.new(claims: build_new_claims)
   end
 
-  # Beginning of setting up multiple claims in a combined journey
   def build_new_claims
-    @claims = Journey.policies_for_routing_name(current_policy_routing_name).map do |policy|
+    Journey.policies_for_routing_name(current_policy_routing_name).map do |policy|
       Claim.new(
         eligibility: policy::Eligibility.new,
         academic_year: policy_configuration.current_academic_year

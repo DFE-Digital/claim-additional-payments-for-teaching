@@ -1,8 +1,8 @@
 FactoryBot.define do
   factory :levelling_up_premium_payments_eligibility, class: "LevellingUpPremiumPayments::Eligibility" do
     trait :eligible do
-      association :current_school, :levelling_up_premium_payments_eligible, factory: :school
       nqt_in_academic_year_after_itt { true }
+      current_school { School.find(ActiveRecord::FixtureSet.identify(:penistone_grammar_school, :uuid)) }
       employed_as_supply_teacher { false }
       subject_to_formal_performance_action { false }
       subject_to_disciplinary_action { false }

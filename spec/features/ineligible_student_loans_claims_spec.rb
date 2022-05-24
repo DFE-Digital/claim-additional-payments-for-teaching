@@ -8,7 +8,7 @@ RSpec.feature "Ineligible Teacher Student Loan Repayments claims" do
 
     visit new_claim_path(StudentLoans.routing_name)
     choose_qts_year(:before_cut_off_date)
-    claim = Claim.order(:created_at).last
+    claim = Claim.by_policy(StudentLoans).order(:created_at).last
 
     expect(claim.eligibility.reload.qts_award_year).to eql("before_cut_off_date")
     expect(page).to have_text("You’re not eligible")

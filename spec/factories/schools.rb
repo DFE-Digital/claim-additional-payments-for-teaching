@@ -29,17 +29,11 @@ FactoryBot.define do
     end
 
     trait :levelling_up_premium_payments_eligible do
-      # fake whilst set of eligible schools is outside public domain
-      sequence(:urn, 150000)
+      # this is a huge array but if it ever cycles, there'll be a message about duplicate URNs
+      sequence :urn, LevellingUpPremiumPayments::Award.urn_to_award_amount_in_pounds(AcademicYear.new(2022)).keys.cycle
     end
 
     trait :levelling_up_premium_payments_ineligible do
-      # fake whilst set of eligible schools is outside public domain
-      sequence(:urn, 160000)
-    end
-
-    trait :not_found_in_levelling_up_premium_payments_spreadsheet do
-      # fake whilst set of eligible schools is outside public domain
       sequence(:urn, 170000)
     end
   end

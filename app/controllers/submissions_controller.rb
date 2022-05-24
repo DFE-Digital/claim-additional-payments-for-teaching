@@ -3,8 +3,9 @@ class SubmissionsController < BasePublicController
 
   def create
     if current_claim.submit!
-      ClaimMailer.submitted(current_claim).deliver_later
-      ClaimVerifierJob.perform_later(current_claim)
+      # TODO - main_claim may need to be dealing with the `submitted_claim` here...
+      ClaimMailer.submitted(current_claim.main_claim).deliver_later
+      ClaimVerifierJob.perform_later(current_claim.main_claim)
 
       redirect_to current_claim.has_ecp_policy? ? claim_completion_path : claim_confirmation_path
     else

@@ -30,7 +30,7 @@ RSpec.feature "Trainee Teacher - Early Career Payments - journey" do
       choose "No"
       click_on "Continue"
 
-      claim = Claim.order(:created_at).last
+      claim = Claim.by_policy(EarlyCareerPayments).order(:created_at).last
       eligibility = claim.eligibility
 
       expect(eligibility.nqt_in_academic_year_after_itt).to eql false
@@ -72,7 +72,7 @@ RSpec.feature "Trainee Teacher - Early Career Payments - journey" do
       choose "No, I’m a trainee teacher"
       click_on "Continue"
 
-      claim = Claim.order(:created_at).last
+      claim = Claim.by_policy(EarlyCareerPayments).order(:created_at).last
       eligibility = claim.eligibility
 
       expect(eligibility.nqt_in_academic_year_after_itt).to eql false
@@ -135,7 +135,7 @@ RSpec.feature "Trainee Teacher - Early Career Payments - journey" do
       choose "No, I’m a trainee teacher"
       click_on "Continue"
 
-      claim = Claim.order(:created_at).last
+      claim = Claim.by_policy(EarlyCareerPayments).order(:created_at).last
       eligibility = claim.eligibility
 
       expect(eligibility.nqt_in_academic_year_after_itt).to eql false

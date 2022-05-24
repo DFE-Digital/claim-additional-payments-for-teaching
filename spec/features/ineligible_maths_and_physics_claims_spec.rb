@@ -5,7 +5,7 @@ RSpec.feature "Ineligible Maths and Physics claims" do
     visit new_claim_path(MathsAndPhysics.routing_name)
     choose "No"
     click_on "Continue"
-    claim = Claim.order(:created_at).last
+    claim = Claim.by_policy(MathsAndPhysics).order(:created_at).last
 
     expect(claim.eligibility.teaching_maths_or_physics).to eql false
     expect(page).to have_text("You’re not eligible")
