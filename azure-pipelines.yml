@@ -11,12 +11,13 @@ pool:
 variables:
   - group: docker-settings
 
-- task: PowerShell@2
-  inputs:
-    targetType: 'inline'
-    script: 'Write-Host "PR ID is:-" $env:System_PullRequest_PullRequestId'
 
 steps:
+  #
+  - script: 'Write-Host "PR ID is:-" $env:System_PullRequest_PullRequestId'
+    #env:
+    displayName: Get PR Number
+   
   # Login to DockerHub
   - script: docker login -u $(dockerId) -p $pass
     env:
