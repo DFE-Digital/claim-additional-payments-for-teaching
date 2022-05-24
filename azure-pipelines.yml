@@ -18,7 +18,7 @@ variables:
 steps:
   # Get PR Request Number
   - powershell: | 
-      #Write-Host "Variable is:-" $(System.PullRequest.PullRequestNumber)
+      #Write-Host "Variable is:-" $System.PullRequest.PullRequestNumber
       Write-Host "Variable is:-" $System.PullRequest.PullID
 
   # Login to DockerHub
