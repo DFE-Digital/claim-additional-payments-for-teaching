@@ -18,8 +18,7 @@ steps:
       pass: $(dockerPassword)
     displayName: Login to DockerHub
   #####check pullrequest variables
- steps:
-  - bash: echo This script could use $System.PullRequest.PullRequestId
+ - bash: echo This script could use $System.PullRequest.PullRequestId
     env:
       System.PullRequest.PullRequestId: $(System.PullRequest.PullRequestId)
   - powershell: | 
