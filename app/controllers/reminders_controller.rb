@@ -98,7 +98,11 @@ class RemindersController < BasePublicController
   def current_claim
     return @current_claim if defined?(@current_claim)
 
-    @current_claim = Claim.find_by_id(session[:claim_id])
+    claims = Claim.where(id: session[:claim_id])
+    cc = CurrentClaim.new(claims: claims)
+
+    # TODO - PLACEHOLDER until reminders are setup for the combined journey
+    @current_claim = cc.main_claim
   end
 
   def reminder_params

@@ -212,7 +212,7 @@ RSpec.feature "Ineligible Teacher Early-Career Payments claims" do
 
   scenario "when subject for undergraduate ITT or postgraduate ITT is 'none of the above'" do
     start_early_career_payments_claim
-    claim = Claim.order(:created_at).last
+    claim = Claim.by_policy(EarlyCareerPayments).order(:created_at).last
 
     # - Which school do you teach at
     expect(page).to have_text(I18n.t("early_career_payments.questions.current_school_search"))
@@ -243,6 +243,7 @@ RSpec.feature "Ineligible Teacher Early-Career Payments claims" do
     expect(page).to have_text(I18n.t("early_career_payments.questions.qualification.heading"))
 
     choose "Undergraduate initial teacher training (ITT)"
+
     click_on "Continue"
 
     expect(claim.eligibility.reload.qualification).to eq "undergraduate_itt"
@@ -268,7 +269,7 @@ RSpec.feature "Ineligible Teacher Early-Career Payments claims" do
 
   scenario "when no longer teaching an eligible ITT subject" do
     start_early_career_payments_claim
-    claim = Claim.order(:created_at).last
+    claim = Claim.by_policy(EarlyCareerPayments).order(:created_at).last
 
     # - Which school do you teach at
     expect(page).to have_text(I18n.t("early_career_payments.questions.current_school_search"))
@@ -332,7 +333,7 @@ RSpec.feature "Ineligible Teacher Early-Career Payments claims" do
 
   scenario "when academic year completed undergraduate ITT or started postgraduate ITT is 'none of the above'" do
     start_early_career_payments_claim
-    claim = Claim.order(:created_at).last
+    claim = Claim.by_policy(EarlyCareerPayments).order(:created_at).last
 
     # - Which school do you teach at
     expect(page).to have_text(I18n.t("early_career_payments.questions.current_school_search"))

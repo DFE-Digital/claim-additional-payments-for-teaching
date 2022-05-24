@@ -2,7 +2,7 @@ module FeatureHelpers
   def start_maths_and_physics_claim
     visit new_claim_path(MathsAndPhysics.routing_name)
     choose_teaching_maths_or_physics
-    Claim.order(:created_at).last
+    Claim.by_policy(MathsAndPhysics).order(:created_at).last
   end
 
   def choose_teaching_maths_or_physics(response = "Yes")
@@ -28,7 +28,7 @@ module FeatureHelpers
   def start_student_loans_claim
     visit new_claim_path(StudentLoans.routing_name)
     choose_qts_year
-    Claim.order(:created_at).last
+    Claim.by_policy(StudentLoans).order(:created_at).last
   end
 
   def choose_qts_year(option = :on_or_after_cut_off_date)
@@ -112,7 +112,7 @@ module FeatureHelpers
   # Early-Career Payment Policy specific helpers
   def start_early_career_payments_claim
     visit new_claim_path(EarlyCareerPayments.routing_name)
-    Claim.order(:created_at).last
+    Claim.by_policy(EarlyCareerPayments).order(:created_at).last
   end
 
   def get_otp_from_email

@@ -40,7 +40,7 @@ class ClaimsController < BasePublicController
     end
 
     current_claim.reset_dependent_answers
-    current_claim.eligibility.reset_dependent_answers
+    current_claim.reset_eligibility_dependent_answers
     one_time_password
 
     if current_claim.save(context: page_sequence.current_slug.to_sym)
@@ -80,7 +80,7 @@ class ClaimsController < BasePublicController
     current_claim.attributes = claim_params
 
     current_claim.save!
-    session[:claim_id] = current_claim.to_param
+    session[:claim_id] = current_claim.claim_ids
     redirect_to claim_path(current_policy_routing_name, page_sequence.slugs.first.to_sym)
   end
 
