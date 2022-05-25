@@ -15,23 +15,11 @@ pool:
 variables:
   - group: docker-settings
 
-- task: PowerShell@2
-  inputs:
-    targetType: 'inline'
-    script: |
-      # Write your PowerShell commands here.
-      
-      Write-Host "pullrequest"
-      Write-Host "PR Number is:-" $(System.PullRequest.PullRequestId)"
-      Write-Host "PR Number is:-" $(System.PullRequest.PullRequestNumber)"
-
-
 
   # Get PR Request Number
   - powershell: | 
-      #Write-Host "Variable is:-" $System.PullRequest.PullRequestNumber
-      #Write-Host "Variable is:-" $SYSTEM_PULLREQUEST_PULLREQUESTNUMBER
-      Get-ChildItem -Path Env:\ | Format-List
+      Write-Host "PR Number is:-" $(System.PullRequest.PullRequestId)"
+      Write-Host "PR Number is:-" $(System.PullRequest.PullRequestNumber)"
        
 
   # Login to DockerHub
