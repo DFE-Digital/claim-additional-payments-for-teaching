@@ -15,7 +15,7 @@ class PageSequence
   end
 
   def next_slug
-    return "ineligible" if claim.eligibility.ineligible?
+    return "ineligible" if claim.ineligible?
     return "check-your-answers" if claim.submittable?
 
     # This allows 'address' page to be skipped when the postcode is present

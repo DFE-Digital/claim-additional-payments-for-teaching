@@ -297,6 +297,10 @@ module EarlyCareerPayments
       end
     end
 
+    def eligible_none_of_the_above?
+      false
+    end
+
     private
 
     def find_cohorts(match_criteria:)
