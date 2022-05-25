@@ -1,0 +1,97 @@
+--- 
+steps: 
+  - 
+    displayName: "Use Terraform latest"
+    task: charleszipp.azure-pipelines-tasks-terraform.azure-pipelines-tasks-terraform-installer.TerraformInstaller@0
+  - 
+    displayName: "Terraform Init"
+    inputs: 
+      backendAzureRmContainerName: s118d01conttfstate
+      backendAzureRmKey: terraform.tfstate
+      backendAzureRmResourceGroupName: s118d01-tfbackend
+      backendAzureRmStorageAccountName: s118d01tfbackendsa
+      backendServiceArm: azdo.pipelines.cip.S118D.armfe1ef140-8bef-4043-b5ee-c449e6f951ef
+      backendType: azurerm
+      command: init
+      workingDirectory: $(System.DefaultWorkingDirectory)/Build/repository/azure/terraform
+    task: charleszipp.azure-pipelines-tasks-terraform.azure-pipelines-tasks-terraform-cli.TerraformCLI@0
+  - 
+    displayName: "Disable KV network firewall rule"
+    inputs: 
+      Inline: |
+          # Setting Variables
+          $KeyVaultId = '/subscriptions/8655985a-2f87-44d7-a541-0be9a8c2779d/resourceGroups/s118d01-secrets/providers/Microsoft.KeyVault/vaults/s118d01-secrets-kv'
+          $KeyVault = Get-AzResource -ResourceId $KeyVaultId -ErrorAction SilentlyContinue
+          If ($null -eq $KeyVault) {
+            Write-Output "##vso[task.logissue type=warning;]The Key Vault with Id $KeyVaultId does not exist"
+            Exit 0
+          }
+          $KeyVault = Get-AzKeyVault -ResourceGroupName $KeyVault.ResourceGroupName -VaultName $KeyVault.Name
+          Write-Output 'Updating Key Vault rules...'
+          $KeyVault | Update-AzKeyVaultNetworkRuleSet -DefaultAction Allow 
+          $LoopCount = 0
+          Write-Output "Waiting for Access..." 
+          # This will check every 5 seconds, up to a maximum of 30 seconds
+          Do {
+              $AccessAllowed = $KeyVault | Get-AzKeyVaultSecret -ErrorAction SilentlyContinue
+              $LoopCount++
+              Start-Sleep -Seconds 5
+          }
+          While ($null -eq $AccessAllowed -and $LoopCount -lt 6)
+      ScriptType: InlineScript
+      azureSubscription: azdo.pipelines.cip.S118D.armfe1ef140-8bef-4043-b5ee-c449e6f951ef
+      preferredAzurePowerShellVersion: "3.1.0"
+    task: AzurePowerShell@5
+  - 
+    displayName: "Terraform Plan"
+    inputs: 
+      command: plan
+      commandOptions: "-var=\"input_region=westeurope\" -var=\"input_environment=Development\" -var=\"input_container_version=$(Release.Artifacts.Build.BuildNumber)\""
+      environmentServiceName: azdo.pipelines.cip.S118D.armfe1ef140-8bef-4043-b5ee-c449e6f951ef
+      workingDirectory: $(System.DefaultWorkingDirectory)/Build/repository/azure/terraform
+    task: charleszipp.azure-pipelines-tasks-terraform.azure-pipelines-tasks-terraform-cli.TerraformCLI@0
+  - 
+    displayName: "Terraform Apply"
+    inputs: 
+      command: apply
+      commandOptions: "-var=\"input_region=westeurope\" -var=\"input_environment=Development\" -var=\"input_container_version=$(Release.Artifacts.Build.BuildNumber)\""
+      environmentServiceName: azdo.pipelines.cip.S118D.armfe1ef140-8bef-4043-b5ee-c449e6f951ef
+      workingDirectory: $(System.DefaultWorkingDirectory)/Build/repository/azure/terraform
+    task: charleszipp.azure-pipelines-tasks-terraform.azure-pipelines-tasks-terraform-cli.TerraformCLI@0
+  - 
+    displayName: "Enable KV network firewall rule"
+    inputs: 
+      Inline: "# Setting Variables\n\
+          $KeyVaultId = '/subscriptions/8655985a-2f87-44d7-a541-0be9a8c2779d/resourceGroups/s118d01-secrets/providers/Microsoft.KeyVault/vaults/s118d01-secrets-kv'\n\
+          $KeyVault = Get-AzResource -ResourceId $KeyVaultId -ErrorAction SilentlyContinue\n\
+          $KeyVault = Get-AzKeyVault -ResourceGroupName $KeyVault.ResourceGroupName -VaultName $KeyVault.Name\n\
+          Write-Output 'Updating Key Vault rules...'\n\
+          $KeyVault | Update-AzKeyVaultNetworkRuleSet -DefaultAction Deny \n"
+      ScriptType: InlineScript
+      azureSubscription: azdo.pipelines.cip.S118D.armfe1ef140-8bef-4043-b5ee-c449e6f951ef
+      preferredAzurePowerShellVersion: "3.1.0"
+    task: AzurePowerShell@5
+  - 
+    displayName: "Swap Slots: s118d01-app-as"
+    inputs: 
+      ResourceGroupName: s118d01-app
+      SourceSlot: staging
+      WebAppName: s118d01-app-as
+      azureSubscription: azdo.pipelines.cip.S118D.armfe1ef140-8bef-4043-b5ee-c449e6f951ef
+    task: AzureAppServiceManage@0
+    timeoutInMinutes: 20
+  - 
+    displayName: "Send Slack Notification"
+    inputs: 
+      arguments: "development $(Release.Artifacts.Build.BuildNumber) $(Release.ReleaseId) https://hooks.slack.com/services/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 SUCCESS"
+      filePath: ./$(System.DefaultWorkingDirectory)/Build/repository/bin/slack-alert
+      targetType: filePath
+    task: Bash@3
+  - 
+    condition: failed()
+    displayName: "Send Slack Failure Notification"
+    inputs: 
+      arguments: "development $(Release.Artifacts.Build.BuildNumber) $(Release.ReleaseId) https://hooks.slack.com/services/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 FAILURE"
+      filePath: ./$(System.DefaultWorkingDirectory)/Build/repository/bin/slack-alert
+      targetType: filePath
+    task: Bash@3
