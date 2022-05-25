@@ -1,8 +1,6 @@
 require "rails_helper"
 
 RSpec.describe LevellingUpPremiumPayments, type: :model do
-  let(:policy_configuration) { policy_configurations(:levelling_up_premium_payments) }
-
   specify {
     expect(subject).to have_attributes(routing_name: "early-career-payments",
       short_name: "Levelling Up Premium Payments",

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_05_16_095658) do
+ActiveRecord::Schema.define(version: 2022_05_23_175052) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -233,14 +233,13 @@ ActiveRecord::Schema.define(version: 2022_05_16_095658) do
   end
 
   create_table "policy_configurations", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.string "policy_type", null: false
     t.boolean "open_for_submissions", default: true, null: false
     t.string "availability_message"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "current_academic_year", limit: 9
+    t.text "policy_types", default: [], array: true
     t.index ["created_at"], name: "index_policy_configurations_on_created_at"
-    t.index ["policy_type"], name: "index_policy_configurations_on_policy_type", unique: true
   end
 
   create_table "reminders", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|

@@ -5,7 +5,7 @@ module Admin
     after_action :send_reminders, only: [:update]
 
     def index
-      @policy_configurations = PolicyConfiguration.order(:policy_type)
+      @policy_configurations = PolicyConfiguration.order(created_at: :desc)
     end
 
     def edit
