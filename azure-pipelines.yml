@@ -2,7 +2,6 @@ pr:
   branches:
     include:
     - '*' 
-#pr: none
 
 #trigger:
 #  branches:
@@ -15,18 +14,16 @@ pool:
 variables:
   - group: docker-settings
 
-
-  # Get PR Request Number
-  - powershell: | 
-      Write-Host "PR Number is:-" $(System.PullRequest.PullRequestId)"
-      Write-Host "PR Number is:-" $(System.PullRequest.PullRequestNumber)"
-       
-
+steps:
   # Login to DockerHub
   - script: docker login -u $(dockerId) -p $pass
     env:
       pass: $(dockerPassword)
     displayName: Login to DockerHub
+
+  - powershell: | 
+      Write-Host "PR Number is:-" $(System.PullRequest.PullRequestId)"
+      Write-Host "PR Number is:-" $(System.PullRequest.PullRequestNumber)"
 
   # Build and run tests
   - script: |
@@ -130,4 +127,3 @@ variables:
       docker push $(dockerRegistry)/$(dockerImageName):latest
     displayName: Push web Docker image
     condition: and(eq(variables['Build.SourceBranch'], 'refs/heads/master'), succeeded())
-
