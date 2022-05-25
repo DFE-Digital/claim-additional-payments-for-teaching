@@ -23,6 +23,7 @@ Capybara.configure do |config|
   config.default_driver = :rack_test
   config.javascript_driver = view_mode
   config.default_max_wait_time = 5
+  config.server = :puma, {Silent: true}
 end
 
 Capybara.automatic_label_click = true
