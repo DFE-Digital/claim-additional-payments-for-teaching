@@ -1,13 +1,13 @@
 pr:
   branches:
     include:
-    - prvariabletest
+    - '*' 
 #pr: none
 
-trigger:
-  branches:
-    include:
-    - '*'
+#trigger:
+#  branches:
+#    include:
+#    - '*'
 
 pool:
   vmImage: ubuntu-latest
@@ -131,3 +131,13 @@ variables:
       docker push $(dockerRegistry)/$(dockerImageName):latest
     displayName: Push web Docker image
     condition: and(eq(variables['Build.SourceBranch'], 'refs/heads/master'), succeeded())
+
+ - task: PowerShell@2
+  inputs:
+    targetType: 'inline'
+    script: |
+      # Write your PowerShell commands here.
+      
+      Write-Host "pullrequest"
+      Write-Host "PR Number is:-" $(System.PullRequest.PullRequestId)"
+      Write-Host "PR Number is:-" $(System.PullRequest.PullRequestNumber)"
