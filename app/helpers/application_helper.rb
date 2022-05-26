@@ -23,8 +23,8 @@ module ApplicationHelper
     t(translation_key)
   end
 
-  def policy_service_name(policy = nil)
-    policy ? t("#{policy.underscore}.policy_name") : t("service_name")
+  def policy_service_name(routing_name = nil)
+    routing_name ? t("#{routing_name.underscore}.policy_name") : t("service_name")
   end
 
   def policy_description(policy)

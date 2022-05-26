@@ -15,18 +15,19 @@ class PolicyConfiguration < ApplicationRecord
   # Use AcademicYear as custom ActiveRecord attribute type
   attribute :current_academic_year, AcademicYear::Type.new
 
-  validates :policy_type, inclusion: {in: Policies.all.map(&:name)}
   validates :current_academic_year_before_type_cast, format: {with: ACADEMIC_YEAR_REGEXP}
 
   def self.for(policy)
-    find_by policy_type: policy.name
+    where("? = ANY (policy_types)", policy.name).first
   end
 
-  def policy
-    policy_type.constantize
+  # TODO: Journey class can be merged into PolicyConfiguration, it's really serving the same purpose
+  def routing_name
+    Journey.routing_name_for_policy(policy_types.first.constantize)
   end
 
+  # TODO: Eventually this shouldn't be used
   def early_career_payments?
-    policy == EarlyCareerPayments
+    policy_types.include?(EarlyCareerPayments.name)
   end
 end

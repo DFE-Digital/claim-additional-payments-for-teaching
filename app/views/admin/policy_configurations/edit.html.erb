@@ -1,10 +1,10 @@
-<% content_for(:page_title) { page_title("Manage #{policy_service_name(@policy_configuration.policy.routing_name)}") } %>
+<% content_for(:page_title) { page_title("Manage #{policy_service_name(@policy_configuration.routing_name)}") } %>
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
     <h1 class="govuk-heading-xl">
       <span class="govuk-caption-xl">Manage services</span>
-      <%= policy_service_name(@policy_configuration.policy.routing_name) %>
+      <%= policy_service_name(@policy_configuration.routing_name) %>
     </h1>
 
     <div class="govuk-panel govuk-panel--informational">

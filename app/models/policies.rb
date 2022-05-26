@@ -1,4 +1,6 @@
 # Module providing access to all the currently active policies for the service.
+
+# TODO: Add LUP here
 module Policies
   POLICIES = [
     StudentLoans,

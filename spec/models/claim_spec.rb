@@ -1333,7 +1333,7 @@ RSpec.describe Claim, type: :model do
     context "with important notes" do
       let(:notes) { create_list(:note, 2, important: true) }
 
-      it { is_expected.to eq notes }
+      it { is_expected.to match_array notes }
     end
   end
 
