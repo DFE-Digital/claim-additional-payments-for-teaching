@@ -25,6 +25,14 @@ class PageSequence
     slugs[current_slug_index + 1]
   end
 
+  def previous_slug
+    slug_index = current_slug_index
+    dead_end_slugs = %w[complete existing-session eligible-now eligibility-confirmed eligible-later ineligible]
+
+    return nil if slug_index.zero? || current_slug.in?(dead_end_slugs)
+    slugs[slug_index - 1]
+  end
+
   def in_sequence?(slug)
     slugs.include?(slug)
   end
