@@ -11,7 +11,7 @@ RSpec.feature "Teacher Early-Career Payments claims" do
   end
   let(:academic_year) { AcademicYear.new(2021) }
 
-  # create a school eligible for ECP and LUP so can walk whole journey
+  # create a school eligible for ECP and LUP so can walk the whole journey
   let!(:school) { create(:school, :levelling_up_premium_payments_eligible, :early_career_payments_eligible) }
 
   scenario "Teacher makes claim for 'Early-Career Payments' claim", js: true do

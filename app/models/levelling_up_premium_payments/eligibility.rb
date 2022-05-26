@@ -57,11 +57,8 @@ module LevellingUpPremiumPayments
 
     # maintains interface
     def ineligible?
-      if current_school.present?
-        !LevellingUpPremiumPayments::SchoolEligibility.new(current_school).eligible?
-      else
-        false
-      end
+      # only checking school for now
+      has_ineligible_school?
     end
 
     def eligible_now?
@@ -81,6 +78,10 @@ module LevellingUpPremiumPayments
     end
 
     private
+
+    def has_ineligible_school?
+      current_school.present? and !LevellingUpPremiumPayments::SchoolEligibility.new(current_school).eligible?
+    end
 
     # unlike ECP, the situation cannot change for a teacher in the future
     def same_as_now
