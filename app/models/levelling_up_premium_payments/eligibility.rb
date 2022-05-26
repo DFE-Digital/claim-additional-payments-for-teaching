@@ -69,8 +69,7 @@ module LevellingUpPremiumPayments
     end
 
     def eligible_later?
-      # apparently the rules are identical to ECP
-      false
+      same_as_now
     end
 
     def award_amount
@@ -82,6 +81,11 @@ module LevellingUpPremiumPayments
     end
 
     private
+
+    # unlike ECP, the situation cannot change for a teacher in the future
+    def same_as_now
+      eligible_now?
+    end
 
     def calculate_award_amount
       # use first year of LUP for now but this must come from a PolicyConfiguration

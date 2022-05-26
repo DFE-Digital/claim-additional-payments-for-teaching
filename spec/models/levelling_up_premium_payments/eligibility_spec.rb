@@ -17,11 +17,31 @@ RSpec.describe LevellingUpPremiumPayments::Eligibility, type: :model do
   end
 
   describe "#eligible_now?" do
-    specify { expect(subject).to respond_to(:eligible_now?) }
+    context "eligible" do
+      subject { build(:levelling_up_premium_payments_eligibility, :eligible) }
+
+      it { is_expected.to be_eligible_now }
+    end
+
+    context "ineligible" do
+      subject { build(:levelling_up_premium_payments_eligibility, :ineligible) }
+
+      it { is_expected.not_to be_eligible_now }
+    end
   end
 
   describe "#eligible_later?" do
-    specify { expect(subject).to respond_to(:eligible_later?) }
+    context "eligible" do
+      subject { build(:levelling_up_premium_payments_eligibility, :eligible) }
+
+      it { is_expected.to be_eligible_later }
+    end
+
+    context "ineligible" do
+      subject { build(:levelling_up_premium_payments_eligibility, :ineligible) }
+
+      it { is_expected.not_to be_eligible_later }
+    end
   end
 
   describe "#award_amount" do
