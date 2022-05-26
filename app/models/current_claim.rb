@@ -44,19 +44,13 @@ class CurrentClaim
   end
 
   def method_missing(method_name, *args, &block)
-    lup_only = eligible_degree_subject?(method_name, args)
-
-    if [:attributes=, :save, :save!, :update, :update!, :reset_dependent_answers].include?(method_name) && !lup_only
+    if [:attributes=, :save, :save!, :update, :update!, :reset_dependent_answers].include?(method_name)
       claims.each do |c|
         c.send(method_name, *args, &block) unless c == main_claim
       end
     end
 
-    if lup_only
-      for_policy(LevellingUpPremiumPayments).send(method_name, *args, &block)
-    else
-      main_claim.send(method_name, *args, &block)
-    end
+    main_claim.send(method_name, *args, &block)
   end
 
   def respond_to_missing?(method_name, *args)
@@ -69,11 +63,5 @@ class CurrentClaim
 
   def editable_attributes
     claims.flat_map { |c| c.eligibility.class::EDITABLE_ATTRIBUTES }.uniq
-  end
-
-  private
-
-  def eligible_degree_subject?(method_name, args)
-    method_name == :attributes= && args.first.dig("eligibility_attributes", "eligible_degree_subject")
   end
 end
