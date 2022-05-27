@@ -19,12 +19,6 @@ RSpec.feature "Admin checking a Student Loans claim" do
     visit admin_claims_path
     find("a[href='#{admin_claim_tasks_path(claim)}']").click
 
-    expect(page).to have_content("1. Identity confirmation")
-    expect(page).to have_content("2. Qualifications")
-    expect(page).to have_content("3. Census subjects taught")
-    expect(page).to have_content("4. Employment")
-    expect(page).to have_content("5. Decision")
-
     click_on I18n.t("admin.tasks.identity_confirmation")
 
     expect(page).to have_content("Did #{claim.full_name} submit the claim?")
