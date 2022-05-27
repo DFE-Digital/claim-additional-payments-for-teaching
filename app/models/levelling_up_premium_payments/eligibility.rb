@@ -29,7 +29,7 @@ module LevellingUpPremiumPayments
     ATTRIBUTE_DEPENDENCIES = {
       "employed_as_supply_teacher" => ["has_entire_term_contract", "employed_directly"],
       "qualification" => ["eligible_itt_subject", "teaching_subject_now"],
-      "eligible_itt_subject" => ["teaching_subject_now"],
+      "eligible_itt_subject" => ["teaching_subject_now", "eligible_degree_subject"],
       "itt_academic_year" => ["eligible_itt_subject"]
     }.freeze
 
@@ -61,7 +61,9 @@ module LevellingUpPremiumPayments
 
     def ineligible?
       has_ineligible_school? ||
-      ineligible_itt_subject?
+        ineligible_itt_subject? ||
+        with_eligible_none_of_the_above_without_eligible_degree_subject? ||
+        with_eligible_degree_subject_not_teaching_subject_now?
     end
 
     def eligible_now?
@@ -78,6 +80,11 @@ module LevellingUpPremiumPayments
 
     # TODO - this need implementing later
     def reset_dependent_answers
+      ATTRIBUTE_DEPENDENCIES.each do |attribute_name, dependent_attribute_names|
+        dependent_attribute_names.each do |dependent_attribute_name|
+          write_attribute(dependent_attribute_name, nil) if changed.include?(attribute_name)
+        end
+      end
     end
 
     private
@@ -102,6 +109,22 @@ module LevellingUpPremiumPayments
 
     def eligible_none_of_the_above?
       itt_subject_none_of_the_above? && postgraduate_itt?
+    end
+
+    def with_eligible_none_of_the_above_without_eligible_degree_subject?
+      eligible_none_of_the_above? && without_eligible_degree_subject?
+    end
+
+    def with_eligible_degree_subject_not_teaching_subject_now?
+      eligible_none_of_the_above? && eligible_degree_subject && not_teaching_subject_now?
+    end
+
+    def not_teaching_subject_now?
+      teaching_subject_now == false
+    end
+
+    def without_eligible_degree_subject?
+      eligible_degree_subject == false
     end
 
     # TODO cohort logic should be tweaked to pass none of the above option:

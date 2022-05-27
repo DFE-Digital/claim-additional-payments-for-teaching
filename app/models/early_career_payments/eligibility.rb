@@ -207,6 +207,8 @@ module EarlyCareerPayments
       EarlyCareerPayments
     end
 
+    # Rescues from errors for assignments coming from LUP-only fields
+    # eg. `claim.eligibility.eligible_degree_subject = true` will get ignored
     def assign_attributes(*args)
       super
     rescue ActiveRecord::UnknownAttributeError
