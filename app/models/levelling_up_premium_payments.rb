@@ -6,7 +6,7 @@ module LevellingUpPremiumPayments
   end
 
   def routing_name
-    Journey.routing_name_for_policy(self)
+    PolicyConfiguration.routing_name_for_policy(self)
   end
 
   def locale_key
@@ -20,5 +20,9 @@ module LevellingUpPremiumPayments
 
   def eligibility_page_url
     "https://www.gov.uk/guidance/levelling-up-premium-payments-for-teachers"
+  end
+
+  def configuration
+    PolicyConfiguration.for(self)
   end
 end
