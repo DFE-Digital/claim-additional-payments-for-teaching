@@ -60,10 +60,15 @@ module LevellingUpPremiumPayments
     end
 
     def ineligible?
-      has_ineligible_school? ||
+      ineligible_nqt_in_academic_year_after_itt? ||
+        has_ineligible_school? ||
+        no_entire_term_contract? ||
+        not_employed_directly? ||
+        poor_performance? ||
         ineligible_itt_subject? ||
         with_eligible_none_of_the_above_without_eligible_degree_subject? ||
-        with_eligible_degree_subject_not_teaching_subject_now?
+        with_eligible_degree_subject_not_teaching_subject_now? ||
+        ineligible_cohort?
     end
 
     def eligible_now?
@@ -87,6 +92,10 @@ module LevellingUpPremiumPayments
       end
     end
 
+    def eligible_none_of_the_above?
+      itt_subject_none_of_the_above? && postgraduate_itt?
+    end
+
     private
 
     def has_ineligible_school?
@@ -107,10 +116,6 @@ module LevellingUpPremiumPayments
       itt_subject_none_of_the_above? && !postgraduate_itt?
     end
 
-    def eligible_none_of_the_above?
-      itt_subject_none_of_the_above? && postgraduate_itt?
-    end
-
     def with_eligible_none_of_the_above_without_eligible_degree_subject?
       eligible_none_of_the_above? && without_eligible_degree_subject?
     end
@@ -127,7 +132,43 @@ module LevellingUpPremiumPayments
       eligible_degree_subject == false
     end
 
-    # TODO cohort logic should be tweaked to pass none of the above option:
+    # Start LUP duplicates
+
+    def ineligible_nqt_in_academic_year_after_itt?
+      return false if trainee_teacher_in_2021?
+
+      nqt_in_academic_year_after_itt == false
+    end
+
+    def trainee_teacher_in_2021?
+      nqt_in_academic_year_after_itt == false && PolicyConfiguration.for(policy).current_academic_year == "2021/2022"
+    end
+
+    def no_entire_term_contract?
+      employed_as_supply_teacher? && has_entire_term_contract == false
+    end
+
+    def not_employed_directly?
+      employed_as_supply_teacher? && employed_directly == false
+    end
+
+    def poor_performance?
+      subject_to_formal_performance_action? ||
+        subject_to_disciplinary_action?
+    end
+
+    def ineligible_cohort?
+      return true if itt_academic_year == AcademicYear.new
+      return false if without_cohort?
+    end
+
+    def without_cohort?
+      [eligible_itt_subject, itt_academic_year].any?(nil)
+    end
+
+    # End LUP duplicates
+
+    # TODO: cohort logic should be tweaked to pass none of the above option:
     # award_amount.itt_subject.to_s == eligible_itt_subject || eligible_none_of_the_above?
   end
 end
