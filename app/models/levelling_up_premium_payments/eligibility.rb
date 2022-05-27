@@ -57,10 +57,40 @@ module LevellingUpPremiumPayments
 
     # maintains interface
     def ineligible?
+      # only checking school for now
+      has_ineligible_school?
+    end
+
+    def eligible_now?
+      !ineligible?
+    end
+
+    def eligible_later?
+      same_as_now
+    end
+
+    def award_amount
+      calculate_award_amount
     end
 
     # TODO - this need implementing later
     def reset_dependent_answers
+    end
+
+    private
+
+    def has_ineligible_school?
+      current_school.present? and !LevellingUpPremiumPayments::SchoolEligibility.new(current_school).eligible?
+    end
+
+    # unlike ECP, the situation cannot change for a teacher in the future
+    def same_as_now
+      eligible_now?
+    end
+
+    def calculate_award_amount
+      # use first year of LUP for now but this must come from a PolicyConfiguration
+      BigDecimal LevellingUpPremiumPayments::Award.new(school: current_school, year: AcademicYear.new(2022)).amount_in_pounds if current_school.present?
     end
   end
 end

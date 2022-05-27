@@ -11,6 +11,9 @@ RSpec.feature "Teacher Early-Career Payments claims" do
   end
   let(:academic_year) { AcademicYear.new(2021) }
 
+  # create a school eligible for ECP and LUP so can walk the whole journey
+  let!(:school) { create(:school, :levelling_up_premium_payments_eligible, :early_career_payments_eligible) }
+
   scenario "Teacher makes claim for 'Early-Career Payments' claim", js: true do
     visit landing_page_path(EarlyCareerPayments.routing_name)
     expect(page).to have_link("Early-career and levelling up premium payment", href: "/early-career-payments/claim")
@@ -23,7 +26,7 @@ RSpec.feature "Teacher Early-Career Payments claims" do
     # - Which school do you teach at
     expect(page).to have_text(I18n.t("early_career_payments.questions.current_school_search"))
 
-    choose_school schools(:penistone_grammar_school)
+    choose_school school
 
     # - NQT in Academic Year after ITT
     expect(page).to have_text("your first year as an early career teacher?")
@@ -354,7 +357,7 @@ RSpec.feature "Teacher Early-Career Payments claims" do
     # - Which school do you teach at
     expect(page).to have_text(I18n.t("early_career_payments.questions.current_school_search"))
 
-    choose_school schools(:penistone_grammar_school)
+    choose_school school
 
     # - NQT in Academic Year after ITT
     expect(page).to have_text("your first year as an early career teacher?")
@@ -405,12 +408,14 @@ RSpec.feature "Teacher Early-Career Payments claims" do
     let!(:claim) do
       claim = start_early_career_payments_claim
       claim.eligibility.update!(attributes_for(:early_career_payments_eligibility, :eligible))
+      claim.eligibility.update!(current_school: school)
       claim
     end
 
     let!(:lup_claim) do
       lup_claim = Claim.by_policy(LevellingUpPremiumPayments).order(:created_at).last
       lup_claim.eligibility.update!(attributes_for(:levelling_up_premium_payments_eligibility, :eligible))
+      lup_claim.eligibility.update!(current_school: school)
       lup_claim
     end
 
@@ -964,12 +969,14 @@ RSpec.feature "Teacher Early-Career Payments claims" do
     let!(:claim) do
       claim = start_early_career_payments_claim
       claim.eligibility.update!(attributes_for(:early_career_payments_eligibility, :eligible))
+      claim.eligibility.update!(current_school: school)
       claim
     end
 
     let!(:lup_claim) do
       lup_claim = Claim.by_policy(LevellingUpPremiumPayments).order(:created_at).last
       lup_claim.eligibility.update!(attributes_for(:levelling_up_premium_payments_eligibility, :eligible))
+      lup_claim.eligibility.update!(current_school: school)
       lup_claim
     end
 
