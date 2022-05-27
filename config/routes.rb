@@ -30,7 +30,7 @@ Rails.application.routes.draw do
   }
 
   # Define routes that are specific to each Policy's page sequence
-  Journey::ALL.each do |journey|
+  PolicyConfiguration::SERVICES.each do |journey|
     constraints(restrict_to_sequence_slugs.new(journey)) do
       scope path: ":policy" do
         resources :claims, only: [:show, :update], param: :slug, path: "/"
@@ -38,7 +38,7 @@ Rails.application.routes.draw do
     end
   end
   # Define the generic routes that aren't specific to any given policy
-  scope path: ":policy", constraints: {policy: %r{#{Journey.all_journey_routing_names.join('|')}}} do
+  scope path: ":policy", constraints: {policy: %r{#{PolicyConfiguration.all_routing_names.join('|')}}} do
     get "claim", as: :new_claim, to: "claims#new"
     post "claim", as: :claims, to: "claims#create"
     post "claim/submit", as: :claim_submission, to: "submissions#create"

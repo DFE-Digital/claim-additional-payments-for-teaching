@@ -3,7 +3,7 @@
 # Doing so without changing every form in the views and helpers from acting on a single model approach.
 #
 # All references to `current_claim` used to be on a Claim model, this acts as a wrapper to delegate
-# to multiple claims for different policies if a `Journey` specifies multiple policies.
+# to multiple claims for different policies if a `PolicyConfiguration` specifies multiple policies.
 #
 # Existing single policy journeys will work as they were (StudentLoans, MathsAndPhysics).
 #
