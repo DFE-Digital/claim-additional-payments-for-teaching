@@ -12,7 +12,7 @@ RSpec.shared_examples "Admin Edit Claim Feature" do |policy|
     build(
       "#{policy.to_s.underscore}_eligibility".to_sym,
       :eligible,
-      award_amount: old_award_amount,
+      award_amount: old_award_amount
     )
   end
 

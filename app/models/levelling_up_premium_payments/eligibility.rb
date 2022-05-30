@@ -65,7 +65,6 @@ module LevellingUpPremiumPayments
         no_entire_term_contract? ||
         not_employed_directly? ||
         poor_performance? ||
-        ineligible_itt_subject? ||
         with_eligible_none_of_the_above_without_eligible_degree_subject? ||
         with_eligible_degree_subject_not_teaching_subject_now? ||
         ineligible_cohort?
@@ -93,7 +92,7 @@ module LevellingUpPremiumPayments
     end
 
     def eligible_none_of_the_above?
-      itt_subject_none_of_the_above? && postgraduate_itt?
+      itt_subject_none_of_the_above?
     end
 
     private
@@ -110,10 +109,6 @@ module LevellingUpPremiumPayments
     def calculate_award_amount
       # use first year of LUP for now but this must come from a PolicyConfiguration
       BigDecimal LevellingUpPremiumPayments::Award.new(school: current_school, year: AcademicYear.new(2022)).amount_in_pounds if current_school.present?
-    end
-
-    def ineligible_itt_subject?
-      itt_subject_none_of_the_above? && !postgraduate_itt?
     end
 
     def with_eligible_none_of_the_above_without_eligible_degree_subject?
@@ -159,16 +154,8 @@ module LevellingUpPremiumPayments
 
     def ineligible_cohort?
       return true if itt_academic_year == AcademicYear.new
-      return false if without_cohort?
+
+      false
     end
-
-    def without_cohort?
-      [eligible_itt_subject, itt_academic_year].any?(nil)
-    end
-
-    # End LUP duplicates
-
-    # TODO: cohort logic should be tweaked to pass none of the above option:
-    # award_amount.itt_subject.to_s == eligible_itt_subject || eligible_none_of_the_above?
   end
 end
