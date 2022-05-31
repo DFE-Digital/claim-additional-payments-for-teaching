@@ -4,11 +4,7 @@
   <div class="govuk-grid-column-two-thirds">
     <%= ineligible_heading(current_claim) %>
 
-    <% if current_claim.for_policy(LevellingUpPremiumPayments).eligibility.ineligible? %>
-      <%= render "ineligibility_reason_generic_ineligibility" %>
-    <% else %>
-      <%= render "ineligibility_reason_#{current_claim.eligibility.ineligibility_reason}" %>
-    <% end %>
+    <%= render "ineligibility_reason_#{current_claim.eligibility.ineligibility_reason}" %>
 
     <% if current_claim.eligibility.ineligibility_reason != :ineligible_current_school && current_claim.eligibility.ineligibility_reason != :ineligible_nqt_in_academic_year_after_itt %>
       <p class="govuk-body">
