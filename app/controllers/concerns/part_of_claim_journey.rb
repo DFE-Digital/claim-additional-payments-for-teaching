@@ -41,7 +41,7 @@ module PartOfClaimJourney
   end
 
   def build_new_claims
-    Journey.policies_for_routing_name(current_policy_routing_name).map do |policy|
+    policy_configuration.policies.map do |policy|
       Claim.new(
         eligibility: policy::Eligibility.new,
         academic_year: policy_configuration.current_academic_year
@@ -50,7 +50,7 @@ module PartOfClaimJourney
   end
 
   def policy_configuration
-    @policy_configuration ||= Journey.policy_configuration_for(current_policy_routing_name)
+    @policy_configuration ||= PolicyConfiguration.for_routing_name(current_policy_routing_name)
   end
 
   def set_cache_headers

@@ -12,6 +12,27 @@
 class PolicyConfiguration < ApplicationRecord
   ACADEMIC_YEAR_REGEXP = /\A20\d{2}\/20\d{2}\z/.freeze
 
+  SERVICES = [
+    {
+      routing_name: "student-loans",
+      slugs: StudentLoans::SlugSequence::SLUGS,
+      policies: [StudentLoans]
+    },
+    {
+      routing_name: "maths-and-physics",
+      slugs: MathsAndPhysics::SlugSequence::SLUGS,
+      policies: [MathsAndPhysics]
+    },
+    {
+      # TODO: This will need a new routing_name
+      routing_name: "early-career-payments",
+      slugs: EarlyCareerPayments::SlugSequence::SLUGS,
+      policies: [EarlyCareerPayments, LevellingUpPremiumPayments],
+      # view_path - folder where view templates are, unless folder is the same as routing-name
+      view_path: "early_career_payments"
+    }
+  ].freeze
+
   # Use AcademicYear as custom ActiveRecord attribute type
   attribute :current_academic_year, AcademicYear::Type.new
 
@@ -21,13 +42,45 @@ class PolicyConfiguration < ApplicationRecord
     where("? = ANY (policy_types)", policy.name).first
   end
 
-  # TODO: Journey class can be merged into PolicyConfiguration, it's really serving the same purpose
+  def self.for_routing_name(routing_name)
+    policy = SERVICES.detect { |j| j[:routing_name] == routing_name }[:policies]&.first
+    self.for(policy)
+  end
+
+  def self.policy_for_routing_name(routing_name)
+    SERVICES.detect { |j| j[:routing_name] == routing_name }[:policies]&.first
+  end
+
+  def self.policies_for_routing_name(routing_name)
+    SERVICES.detect { |j| j[:routing_name] == routing_name }[:policies]
+  end
+
+  def self.view_paths
+    SERVICES.map { |j| j[:view_path] }.compact
+  end
+
+  def self.all_routing_names
+    SERVICES.map { |j| j[:routing_name] }
+  end
+
+  def self.routing_name_for_policy(policy)
+    SERVICES.detect { |j| policy.in? j[:policies] }[:routing_name]
+  end
+
+  def self.all_policies
+    SERVICES.map { |j| j[:policies] }.flatten
+  end
+
+  def policies
+    policy_types.map(&:constantize)
+  end
+
   def routing_name
-    Journey.routing_name_for_policy(policy_types.first.constantize)
+    SERVICES.detect { |j| policies.first.in? j[:policies] }[:routing_name]
   end
 
   # TODO: Eventually this shouldn't be used
   def early_career_payments?
-    policy_types.include?(EarlyCareerPayments.name)
+    policies.include?(EarlyCareerPayments)
   end
 end
