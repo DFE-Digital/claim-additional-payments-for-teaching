@@ -120,7 +120,6 @@ end
 group :test do
   gem "selenium-webdriver"
   gem "launchy"
-  gem "climate_control"
   gem "simplecov", require: false
 end
 
