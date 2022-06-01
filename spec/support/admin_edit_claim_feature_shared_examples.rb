@@ -8,8 +8,25 @@ RSpec.shared_examples "Admin Edit Claim Feature" do |policy|
 
   let(:old_award_amount) { 3_000 }
 
+  let(:eligibility) do
+    build(
+      "#{policy.to_s.underscore}_eligibility".to_sym,
+      :eligible,
+      award_amount: old_award_amount
+    )
+  end
+
   let(:claim) do
-    create(:claim, :submitted, policy: policy, eligibility: build("#{policy.to_s.underscore}_eligibility".to_sym, :eligible, award_amount: old_award_amount))
+    create(
+      :claim,
+      :submitted,
+      policy: policy,
+      eligibility: eligibility
+    )
+  end
+
+  before do
+    eligibility.update(eligible_degree_subject: false) if policy == LevellingUpPremiumPayments
   end
 
   context "non-claim attribute" do

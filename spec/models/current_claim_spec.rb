@@ -10,7 +10,7 @@ RSpec.describe CurrentClaim, type: :model do
 
     describe "#attributes=" do
       it "sets the attributes on both claims" do
-        cc = CurrentClaim.new(claims: [ecp_claim, lup_claim])
+        cc = described_class.new(claims: [ecp_claim, lup_claim])
 
         expect { cc.attributes = {"eligibility_attributes" => {"current_school_id" => school.id}} }
           .to change { cc.claims.first.school&.id }.from(nil).to(school.id)
@@ -20,7 +20,7 @@ RSpec.describe CurrentClaim, type: :model do
 
     describe "#save!" do
       it "saves both claims" do
-        cc = CurrentClaim.new(claims: [ecp_claim, lup_claim])
+        cc = described_class.new(claims: [ecp_claim, lup_claim])
         cc.attributes = {"eligibility_attributes" => {"current_school_id" => school.id}}
 
         cc.save!
@@ -32,7 +32,7 @@ RSpec.describe CurrentClaim, type: :model do
 
     describe "#reset_dependent_answers" do
       it "calls reset reset_dependent_answers on both claims" do
-        cc = CurrentClaim.new(claims: [ecp_claim, lup_claim])
+        cc = described_class.new(claims: [ecp_claim, lup_claim])
 
         expect(ecp_claim).to receive(:reset_dependent_answers)
         expect(lup_claim).to receive(:reset_dependent_answers)
@@ -49,7 +49,7 @@ RSpec.describe CurrentClaim, type: :model do
         expect(ecp_claim.eligibility).to receive(:reset_dependent_answers)
         expect(lup_claim.eligibility).to receive(:reset_dependent_answers)
 
-        cc = CurrentClaim.new(claims: [ecp_claim, lup_claim])
+        cc = described_class.new(claims: [ecp_claim, lup_claim])
         cc.reset_eligibility_dependent_answers
       end
     end
@@ -61,17 +61,17 @@ RSpec.describe CurrentClaim, type: :model do
       let(:student_loans_claim) { build(:claim, academic_year: "2022/2023", policy: student_loans_policy) }
 
       it "returns the single maths and physics claim" do
-        cc = CurrentClaim.new(claims: [maths_and_physics_claim])
+        cc = described_class.new(claims: [maths_and_physics_claim])
         expect(cc.for_policy(MathsAndPhysics)).to eq(maths_and_physics_claim)
       end
 
       it "returns the single student loans claims" do
-        cc = CurrentClaim.new(claims: [student_loans_claim])
+        cc = described_class.new(claims: [student_loans_claim])
         expect(cc.for_policy(StudentLoans)).to eq(student_loans_claim)
       end
 
       context "multiple claims" do
-        let(:cc) { CurrentClaim.new(claims: [ecp_claim, lup_claim]) }
+        let(:cc) { described_class.new(claims: [ecp_claim, lup_claim]) }
 
         it "returns the ECP claim with 2 claims" do
           expect(cc.for_policy(EarlyCareerPayments)).to eq(ecp_claim)
@@ -80,6 +80,118 @@ RSpec.describe CurrentClaim, type: :model do
         it "returns the LUP claim with 2 claims" do
           expect(cc.for_policy(LevellingUpPremiumPayments)).to eq(lup_claim)
         end
+      end
+    end
+
+    describe "#ineligible?" do
+      subject { cc.ineligible? }
+
+      let(:ecp_eligibility) { build(:early_career_payments_eligibility, :eligible) }
+      let(:lup_eligibility) { build(:levelling_up_premium_payments_eligibility, :eligible) }
+
+      let(:ecp_claim) { build(:claim, academic_year: "2022/2023", eligibility: ecp_eligibility) }
+      let(:lup_claim) { build(:claim, academic_year: "2022/2023", eligibility: lup_eligibility) }
+
+      let(:cc) { described_class.new(claims: [ecp_claim, lup_claim]) }
+
+      context "when both claims are eligible" do
+        let(:ecp_eligibility) { build(:early_career_payments_eligibility, :eligible) }
+
+        it { is_expected.to be false }
+      end
+
+      context "when ECP claims is ineligible" do
+        let(:ecp_eligibility) { build(:early_career_payments_eligibility, :ineligible) }
+
+        it { is_expected.to be false }
+      end
+
+      context "when LUP claims is ineligible" do
+        let(:lup_eligibility) { build(:levelling_up_premium_payments_eligibility, :ineligible) }
+
+        it { is_expected.to be false }
+      end
+
+      context "when both claims are ineligible" do
+        let(:ecp_eligibility) { build(:early_career_payments_eligibility, :ineligible) }
+        let(:lup_eligibility) { build(:levelling_up_premium_payments_eligibility, :ineligible) }
+
+        it { is_expected.to be true }
+      end
+    end
+
+    describe "#editable_attributes" do
+      subject { cc.editable_attributes }
+
+      let(:ecp_eligibility) { build(:early_career_payments_eligibility, :eligible) }
+      let(:lup_eligibility) { build(:levelling_up_premium_payments_eligibility, :eligible) }
+
+      let(:ecp_claim) { build(:claim, academic_year: "2022/2023", eligibility: ecp_eligibility) }
+      let(:lup_claim) { build(:claim, academic_year: "2022/2023", eligibility: lup_eligibility) }
+
+      let(:cc) { described_class.new(claims: [ecp_claim, lup_claim]) }
+
+      context "when current claim has ECP and LUP claims" do
+        expected = [
+          :nqt_in_academic_year_after_itt,
+          :current_school_id,
+          :employed_as_supply_teacher,
+          :has_entire_term_contract,
+          :employed_directly,
+          :subject_to_formal_performance_action,
+          :subject_to_disciplinary_action,
+          :qualification,
+          :eligible_itt_subject,
+          :teaching_subject_now,
+          :itt_academic_year,
+          :award_amount,
+          :eligible_degree_subject
+        ]
+
+        it { is_expected.to eq expected }
+      end
+
+      context "when current claim has an ECP claim" do
+        let(:cc) { described_class.new(claims: [ecp_claim]) }
+
+        expected = [
+          :nqt_in_academic_year_after_itt,
+          :current_school_id,
+          :employed_as_supply_teacher,
+          :has_entire_term_contract,
+          :employed_directly,
+          :subject_to_formal_performance_action,
+          :subject_to_disciplinary_action,
+          :qualification,
+          :eligible_itt_subject,
+          :teaching_subject_now,
+          :itt_academic_year,
+          :award_amount
+        ]
+
+        it { is_expected.to eq expected }
+      end
+
+      context "when current claim has an LUP claim" do
+        let(:cc) { described_class.new(claims: [lup_claim]) }
+
+        expected = [
+          :nqt_in_academic_year_after_itt,
+          :current_school_id,
+          :employed_as_supply_teacher,
+          :has_entire_term_contract,
+          :employed_directly,
+          :subject_to_formal_performance_action,
+          :subject_to_disciplinary_action,
+          :qualification,
+          :eligible_itt_subject,
+          :teaching_subject_now,
+          :itt_academic_year,
+          :award_amount,
+          :eligible_degree_subject
+        ]
+
+        it { is_expected.to eq expected }
       end
     end
   end

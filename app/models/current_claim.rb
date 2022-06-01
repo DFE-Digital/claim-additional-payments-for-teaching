@@ -56,4 +56,12 @@ class CurrentClaim
   def respond_to_missing?(method_name, *args)
     main_claim.respond_to?(method_name, *args)
   end
+
+  def ineligible?
+    claims.all? { |c| c.eligibility.ineligible? }
+  end
+
+  def editable_attributes
+    claims.flat_map { |c| c.eligibility.class::EDITABLE_ATTRIBUTES }.uniq
+  end
 end

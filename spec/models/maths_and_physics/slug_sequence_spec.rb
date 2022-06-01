@@ -1,9 +1,10 @@
 require "rails_helper"
 
 RSpec.describe MathsAndPhysics::SlugSequence do
-  let(:claim) { build(:claim, eligibility: build(:maths_and_physics_eligibility)) }
+  subject(:slug_sequence) { MathsAndPhysics::SlugSequence.new(current_claim) }
 
-  subject(:slug_sequence) { MathsAndPhysics::SlugSequence.new(claim) }
+  let(:claim) { build(:claim, eligibility: build(:maths_and_physics_eligibility)) }
+  let(:current_claim) { CurrentClaim.new(claims: [claim]) }
 
   describe "The sequence as defined by #slugs" do
     it "excludes the “ineligible” slug if the claim is not actually ineligible" do

@@ -1,10 +1,14 @@
 require "rails_helper"
 
 RSpec.describe EarlyCareerPayments::SlugSequence do
-  subject(:slug_sequence) { EarlyCareerPayments::SlugSequence.new(claim) }
+  subject(:slug_sequence) { EarlyCareerPayments::SlugSequence.new(current_claim) }
 
   let(:eligibility) { build(:early_career_payments_eligibility, :eligible) }
+  let(:eligibility_lup) { build(:levelling_up_premium_payments_eligibility, :eligible) }
+
   let(:claim) { build(:claim, academic_year: AcademicYear.new(2021), eligibility: eligibility) }
+  let(:lup_claim) { build(:claim, academic_year: AcademicYear.new(2021), eligibility: eligibility_lup) }
+  let(:current_claim) { CurrentClaim.new(claims: [claim, lup_claim]) }
 
   describe "The sequence as defined by #slugs" do
     it "excludes the 'ineligible' slug if the claim's eligibility is undetermined" do
@@ -60,13 +64,8 @@ RSpec.describe EarlyCareerPayments::SlugSequence do
     end
 
     context "when claim is ineligible" do
-      let(:eligibility) do
-        build(
-          :early_career_payments_eligibility,
-          :eligible,
-          eligible_itt_subject: "foreign_languages"
-        )
-      end
+      let(:eligibility) { build(:early_career_payments_eligibility, :ineligible) }
+      let(:eligibility_lup) { build(:levelling_up_premium_payments_eligibility, :ineligible) }
 
       it "includes the 'ineligible' slug" do
         expect(slug_sequence.slugs).to include("ineligible")

@@ -115,6 +115,11 @@ module FeatureHelpers
     Claim.by_policy(EarlyCareerPayments).order(:created_at).last
   end
 
+  def start_levelling_up_premium_payments_claim
+    visit new_claim_path(LevellingUpPremiumPayments.routing_name)
+    Claim.by_policy(LevellingUpPremiumPayments).order(:created_at).last
+  end
+
   def get_otp_from_email
     ActionMailer::Base.deliveries
       .last[:personalisation].decoded.scan(/\b[0-9]{6}\b/).first

@@ -21,7 +21,7 @@ class Claim
     end
 
     def eligibility_attributes
-      {eligibility_attributes: claim.eligibility.class::EDITABLE_ATTRIBUTES.dup}
+      {eligibility_attributes: claim.editable_attributes}
     end
   end
 end

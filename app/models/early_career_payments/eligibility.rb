@@ -145,6 +145,10 @@ module EarlyCareerPayments
       "itt_academic_year" => ["eligible_itt_subject"]
     }.freeze
 
+    IGNORED_ATTRIBUTES = [
+      "eligible_degree_subject"
+    ]
+
     self.table_name = "early_career_payments_eligibilities"
 
     enum qualification: {
@@ -201,6 +205,15 @@ module EarlyCareerPayments
 
     def policy
       EarlyCareerPayments
+    end
+
+    # Rescues from errors for assignments coming from LUP-only fields
+    # eg. `claim.eligibility.eligible_degree_subject = true` will get ignored
+    def assign_attributes(*args)
+      super
+    rescue ActiveRecord::UnknownAttributeError
+      all_attributes_ignored = (args.first.keys - IGNORED_ATTRIBUTES).empty?
+      raise unless all_attributes_ignored
     end
 
     def trainee_teacher_in_2021?
@@ -295,6 +308,10 @@ module EarlyCareerPayments
           write_attribute(dependent_attribute_name, nil) if changed.include?(attribute_name)
         end
       end
+    end
+
+    def eligible_none_of_the_above?
+      false
     end
 
     private

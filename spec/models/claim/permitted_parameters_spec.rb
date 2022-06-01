@@ -2,6 +2,7 @@ require "rails_helper"
 
 RSpec.describe Claim::PermittedParameters do
   let(:student_loan_claim) { Claim.new(eligibility: StudentLoans::Eligibility.new) }
+  let(:current_claim) { CurrentClaim.new(claims: [student_loan_claim]) }
   let(:editable_attributes_for_student_loans_claim) do
     [
       :first_name,
@@ -50,7 +51,7 @@ RSpec.describe Claim::PermittedParameters do
     ]
   end
 
-  subject(:permitted_parameters) { Claim::PermittedParameters.new(student_loan_claim) }
+  subject(:permitted_parameters) { Claim::PermittedParameters.new(current_claim) }
 
   describe "#keys" do
     it "returns all the editable attributes for a claim, including those for its eligibility" do

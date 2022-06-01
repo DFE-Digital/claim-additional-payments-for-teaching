@@ -135,7 +135,7 @@ class ClaimsController < BasePublicController
   end
 
   def claim_in_progress?
-    session[:claim_id].present? && !current_claim.eligibility.ineligible?
+    session[:claim_id].present? && !current_claim.ineligible?
   end
 
   def page_sequence
