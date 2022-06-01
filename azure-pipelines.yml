@@ -11,5 +11,5 @@ pool:
   vmImage: 'ubuntu-latest'
 
 stages:
-- template: pipeline-templates/azure-build-pipelines.yml
-- template: pipeline-templates/azure-release.yml
+- template: azure-build-pipelines.yml
+- template: azure-release.yml
