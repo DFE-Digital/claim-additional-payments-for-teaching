@@ -23,9 +23,15 @@
 <ul class="govuk-list govuk-list--bullet">
   <li>
     <span class="govuk-body">
-      It is not a state-funded secondary school in England and is therefore not eligible. 
-      For more information, check the 
-      <%= link_to "early career payments eligibility criteria", EarlyCareerPayments.eligibility_page_url, class: "govuk-link" %>.
+    It is not a state-funded secondary school in England.
+    </span>
+  </li>
+  <li>
+    <span class="govuk-body">
+      It is a school that is not eligible for additional payments, check the eligibility criteria for
+      <%= link_to "levelling up premium payments", LevellingUpPremiumPayments.eligibility_page_url, class: "govuk-link" %>
+      and
+      <%= link_to "early career payments", EarlyCareerPayments.eligibility_page_url, class: "govuk-link" %>.
     </span>
   </li>
   <li>
