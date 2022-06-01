@@ -82,7 +82,6 @@ module LevellingUpPremiumPayments
       calculate_award_amount
     end
 
-    # TODO - this need implementing later
     def reset_dependent_answers
       ATTRIBUTE_DEPENDENCIES.each do |attribute_name, dependent_attribute_names|
         dependent_attribute_names.each do |dependent_attribute_name|
@@ -153,9 +152,7 @@ module LevellingUpPremiumPayments
     end
 
     def ineligible_cohort?
-      return true if itt_academic_year == AcademicYear.new
-
-      false
+      itt_academic_year == AcademicYear.new
     end
   end
 end

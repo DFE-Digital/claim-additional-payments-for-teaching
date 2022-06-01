@@ -20,5 +20,10 @@ FactoryBot.define do
       subject_to_disciplinary_action { false }
       qualification { :postgraduate_itt }
     end
+
+    trait :ineligible do
+      eligible
+      eligible_itt_subject { "foreign_languages" }
+    end
   end
 end
