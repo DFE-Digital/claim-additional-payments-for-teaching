@@ -1,29 +1,14 @@
-pr:
-  branches:
-    include:
-    - reviewapps 
+stages:
+- stage: Deploy
+  jobs:
+  - job: Deploy
+    pool:
+      name: Hosted VS2017
 
-#trigger:
-#  branches:
-#    include:
-#    - '*'
-
-pool:
-  vmImage: ubuntu-latest
+#pool:
+#  vmImage: ubuntu-latest
 
 steps:
-  # Clean up
-  - script: |
-      git reset --hard
-      git clean -xdf
-    displayName: Clean repository
-
-  # Publish
-  - publish: $(System.DefaultWorkingDirectory)
-    artifact: repository
-    displayName: Publish repository as artifact
-
-  
   #####install terraform########
   - task: charleszipp.azure-pipelines-tasks-terraform.azure-pipelines-tasks-terraform-installer.TerraformInstaller@0
     displayName: 'Use Terraform latest'
