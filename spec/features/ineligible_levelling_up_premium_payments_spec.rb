@@ -12,6 +12,21 @@ RSpec.feature "Ineligible Levelling up premium payments claims" do
     choose_school schools(:penistone_grammar_school)
     click_on "Continue"
     expect(eligibility.reload.ineligible?).to be true
+
+    expect(page).not_to have_text("The school you have selected is not eligible")
+  end
+
+  scenario "When the school selected is both ECP and LUP ineligible" do
+    start_levelling_up_premium_payments_claim
+
+    # - Which school do you teach at
+    expect(page).to have_text(I18n.t("early_career_payments.questions.current_school_search"))
+    expect(eligibility.ineligible?).to be false
+    choose_school schools(:bradford_grammar_school)
+    click_on "Continue"
+    expect(eligibility.reload.ineligible?).to be true
+
+    expect(page).to have_text("The school you have selected is not eligible")
   end
 
   scenario "When subject 'none of the above' and user does not have an eligible degree" do
