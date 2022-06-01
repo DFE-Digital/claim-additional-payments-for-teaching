@@ -12,4 +12,4 @@ pool:
 
 stages:
 - template: azure-build-pipelines.yml
-- template: azure-release.yml
+#- template: azure-release.yml
