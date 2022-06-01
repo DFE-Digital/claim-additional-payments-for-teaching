@@ -1,0 +1,104 @@
+pr:
+  branches:
+    include:
+    - reviewapps 
+
+#trigger:
+#  branches:
+#    include:
+#    - '*'
+
+pool:
+  vmImage: ubuntu-latest
+
+steps:
+  # Clean up
+  - script: |
+      git reset --hard
+      git clean -xdf
+    displayName: Clean repository
+
+  # Publish
+  - publish: $(System.DefaultWorkingDirectory)
+    artifact: repository
+    displayName: Publish repository as artifact
+
+  
+  #####install terraform########
+  - task: charleszipp.azure-pipelines-tasks-terraform.azure-pipelines-tasks-terraform-installer.TerraformInstaller@0
+    displayName: 'Use Terraform latest'
+  - task: charleszipp.azure-pipelines-tasks-terraform.azure-pipelines-tasks-terraform-cli.TerraformCLI@0
+
+  ####check terraform files directory#######
+  - script: |
+     echo Write your commands here
+     echo SHOW SYSTEM WORKING DIRECTORY
+     echo "$(System.DefaultWorkingDirectory)/Build/repository/azure/terraform"
+    displayName: 'Command Line Script'
+  
+  #####Show Directory Structure on Build
+  - powershell: |
+     Write-Host "Show all folder content"
+     Get-ChildItem -Path $(Agent.WorkFolder)\*.* -Recurse -Force
+    errorActionPreference: continue
+    displayName: 'PowerShell Script List folder structure'
+    continueOnError: true
+
+  - task: charleszipp.azure-pipelines-tasks-terraform.azure-pipelines-tasks-terraform-cli.TerraformCLI@0
+    displayName: 'Terraform Init'
+    inputs:
+      command: init
+      workingDirectory: '$(System.DefaultWorkingDirectory)/Build/repository/azure/terraform'
+      #workingDirectory: '/opt/hostedtoolcache/terraform/1.2.1/x64'
+      backendType: azurerm
+      backendServiceArm: 'azdo.pipelines.cip.S118D.armfe1ef140-8bef-4043-b5ee-c449e6f951ef'
+      backendAzureRmResourceGroupName: 's118d01-tfbackend'
+      backendAzureRmStorageAccountName: s118d01tfbackendsa
+      backendAzureRmContainerName: s118d01conttfstate
+      backendAzureRmKey: terraform.tfstate
+
+  # - task: AzurePowerShell@5
+  #   displayName: 'Disable KV network firewall rule'
+  #   inputs:
+  #     azureSubscription: 'azdo.pipelines.cip.S118D.armfe1ef140-8bef-4043-b5ee-c449e6f951ef'
+  #     ScriptType: InlineScript
+  #     Inline: |
+  #      # Setting Variables
+  #      $KeyVaultId = '/subscriptions/8655985a-2f87-44d7-a541-0be9a8c2779d/resourceGroups/s118d01-secrets/providers/Microsoft.KeyVault/vaults/s118d01-secrets-kv'
+  #      $KeyVault = Get-AzResource -ResourceId $KeyVaultId -ErrorAction SilentlyContinue
+  #      If ($null -eq $KeyVault) {
+  #      Write-Output "##vso[task.logissue type=warning;]The Key Vault with Id $KeyVaultId does not exist"
+  #      Exit 0
+  #       }
+  
+  - task: charleszipp.azure-pipelines-tasks-terraform.azure-pipelines-tasks-terraform-cli.TerraformCLI@0
+    displayName: 'Terraform Plan'
+    inputs:
+      command: plan
+      workingDirectory: '$(System.DefaultWorkingDirectory)/Build/repository/azure/terraform'
+      #workingDirectory: '/opt/hostedtoolcache/terraform/1.2.1/x64'
+      environmentServiceName: 'azdo.pipelines.cip.S118D.armfe1ef140-8bef-4043-b5ee-c449e6f951ef'
+      commandOptions: '-var="input_region=westeurope" -var="input_environment=Development" -var="input_container_version=$(Release.Artifacts.Build.BuildNumber)"'
+
+
+
+
+  # - task: AzurePowerShell@5
+  #   displayName: 'Enable KV network firewall rule'
+  #   inputs:
+  #    azureSubscription: 'azdo.pipelines.cip.S118D.armfe1ef140-8bef-4043-b5ee-c449e6f951ef'
+  #    ScriptType: InlineScript
+  #    Inline: |
+  #     # Setting Variables
+  #     $KeyVaultId = '/subscriptions/8655985a-2f87-44d7-a541-0be9a8c2779d/resourceGroups/s118d01-secrets/providers/Microsoft.KeyVault/vaults/s118d01-secrets-kv'
+  #     $KeyVault = Get-AzResource -ResourceId $KeyVaultId -ErrorAction SilentlyContinue
+  #     $KeyVault = Get-AzKeyVault -ResourceGroupName $KeyVault.ResourceGroupName -VaultName $KeyVault.Name
+  #     Write-Output 'Updating Key Vault rules...'
+  #     $KeyVault | Update-AzKeyVaultNetworkRuleSet -DefaultAction Deny 
+  #    preferredAzurePowerShellVersion: 3.1.0
+
+
+
+
+
+
