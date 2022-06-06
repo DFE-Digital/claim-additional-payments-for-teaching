@@ -1,10 +1,10 @@
 module RequestHelpers
   def start_student_loans_claim
-    start_claim(StudentLoans)
+    start_claim(StudentLoans.routing_name)
   end
 
-  def start_claim(policy)
-    post claims_path(policy.routing_name)
+  def start_claim(routing_name)
+    post claims_path(routing_name)
   end
 
   def non_service_operator_roles

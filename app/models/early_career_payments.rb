@@ -28,6 +28,10 @@ module EarlyCareerPayments
     PolicyConfiguration.routing_name_for_policy(self)
   end
 
+  def policy_type
+    name.underscore.dasherize
+  end
+
   def locale_key
     routing_name.underscore
   end

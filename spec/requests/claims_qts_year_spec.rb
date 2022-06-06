@@ -5,7 +5,7 @@ RSpec.describe "The QTS year question", type: :request do
 
   it "changes the QTS year option labels based on the current academic year the policy is accepting claims for" do
     maths_and_physics_configuration.update!(current_academic_year: "2019/2020")
-    start_claim(MathsAndPhysics)
+    start_claim(MathsAndPhysics.routing_name)
 
     get claim_path(MathsAndPhysics.routing_name, "qts-year")
 
