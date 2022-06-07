@@ -67,16 +67,16 @@ class PolicyConfiguration < ApplicationRecord
     SERVICES.detect { |j| policy.in? j[:policies] }[:routing_name]
   end
 
-  def self.all_policies
-    SERVICES.map { |j| j[:policies] }.flatten
-  end
-
   def policies
     policy_types.map(&:constantize)
   end
 
   def routing_name
     SERVICES.detect { |j| policies.first.in? j[:policies] }[:routing_name]
+  end
+
+  def slugs
+    SERVICES.detect { |j| policies.first.in? j[:policies] }[:slugs]
   end
 
   # TODO: Eventually this shouldn't be used

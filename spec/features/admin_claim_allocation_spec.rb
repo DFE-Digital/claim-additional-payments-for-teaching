@@ -4,12 +4,28 @@ RSpec.feature "Claims awaiting a decision" do
   before do
     submitted_claims = []
     @signed_in_user = sign_in_as_service_operator
+
+    # index: 0-1
     submitted_claims << create_list(:claim, 2, :submitted, policy: StudentLoans)
+
+    # index: 2-14
     submitted_claims << create_list(:claim, 13, :submitted, policy: EarlyCareerPayments)
+
+    # index: 15-18
     submitted_claims << create_list(:claim, 4, :submitted, policy: StudentLoans)
+
+    # index: 19
     submitted_claims << create_list(:claim, 1, :submitted, policy: EarlyCareerPayments)
+
+    # index: 20-22
     submitted_claims << create_list(:claim, 3, :submitted, policy: StudentLoans)
+
+    # index: 23-34
     submitted_claims << create_list(:claim, 12, :submitted, policy: EarlyCareerPayments)
+
+    # index: 35-38
+    submitted_claims << create_list(:claim, 4, :submitted, policy: LevellingUpPremiumPayments)
+
     @submitted_claims = submitted_claims.flatten
   end
 
@@ -58,11 +74,13 @@ RSpec.feature "Claims awaiting a decision" do
 
   let(:early_career_payment_claims) do
     [
-      @submitted_claims.slice(3...14),
+      @submitted_claims.slice(2..14),
       twentieth_claim,
-      @submitted_claims.slice(24...35)
+      @submitted_claims.slice(23..34)
     ].flatten
   end
+
+  let(:levelling_up_premium_payments) { @submitted_claims.slice(36...35) }
 
   let!(:sarah) { create(:dfe_signin_user, given_name: "Sarah", family_name: "Strawbridge", organisation_name: "Department for Education", role_codes: [DfeSignIn::User::SERVICE_OPERATOR_DFE_SIGN_IN_ROLE_CODE]) }
   let!(:frank) { create(:dfe_signin_user, given_name: "Frank", family_name: "Yee", organisation_name: "Department for Education", role_codes: [DfeSignIn::User::SERVICE_OPERATOR_DFE_SIGN_IN_ROLE_CODE]) }
@@ -75,11 +93,11 @@ RSpec.feature "Claims awaiting a decision" do
 
       within("#allocations") do
         expect(page).to have_select("allocate_to_team_member", options: ["Aaron Admin", "Sarah Strawbridge", "Frank Yee", "Abdul Rafiq"])
-        expect(page).to have_select("allocate_to_policy", options: ["All", "Student Loans", "Maths and Physics", "Early-Career Payments"])
+        expect(page).to have_select("allocate_to_policy", options: ["All", "Student Loans", "Maths and Physics", "Early-Career Payments", "Levelling Up Premium Payments"])
         expect(page).to have_button("Allocate claims", disabled: false)
         expect(page).to have_button("Unallocate claims")
       end
-      expect(@submitted_claims.size).to eq 35
+      expect(@submitted_claims.size).to eq 39
 
       @submitted_claims.each do |claim|
         expect(claim.assigned_to).to be_nil
@@ -130,14 +148,14 @@ RSpec.feature "Claims awaiting a decision" do
       within(".govuk-flash__notice") do
         expect(page).to have_text I18n.t(
           "admin.allocations.bulk_allocate.success",
-          quantity: 10,
+          quantity: 14,
           pluralized_or_singular_claim: "claims",
           allocate_to_policy: "",
           dfe_user: frank.full_name.titleize
         ).squeeze(" ")
       end
 
-      @submitted_claims.slice(25, 36).each do |claim|
+      @submitted_claims.slice(25, 10).each do |claim|
         expect(claim.reload.assigned_to.full_name).to eq "Frank Yee"
       end
 
@@ -149,11 +167,11 @@ RSpec.feature "Claims awaiting a decision" do
     scenario "Student Loans" do
       click_on "View claims"
 
-      expect(@submitted_claims.size).to eq 35
+      expect(@submitted_claims.size).to eq 39
 
       within("#allocations") do
         expect(page).to have_select("allocate_to_team_member", options: ["Aaron Admin", "Sarah Strawbridge", "Frank Yee", "Abdul Rafiq"])
-        expect(page).to have_select("allocate_to_policy", options: ["All", "Student Loans", "Maths and Physics", "Early-Career Payments"])
+        expect(page).to have_select("allocate_to_policy", options: ["All", "Student Loans", "Maths and Physics", "Early-Career Payments", "Levelling Up Premium Payments"])
         expect(page).to have_button("Allocate claims", disabled: false)
         expect(page).to have_button("Unallocate claims")
       end

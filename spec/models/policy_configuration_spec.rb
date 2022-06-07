@@ -63,10 +63,6 @@ RSpec.describe PolicyConfiguration do
     end
   end
 
-  describe ".all_policies" do
-    specify { expect(described_class.all_policies).to contain_exactly(LevellingUpPremiumPayments, EarlyCareerPayments, MathsAndPhysics, StudentLoans) }
-  end
-
   describe "#policies" do
     it "returns the policies" do
       expect(described_class.for(StudentLoans).policies).to eq [StudentLoans]

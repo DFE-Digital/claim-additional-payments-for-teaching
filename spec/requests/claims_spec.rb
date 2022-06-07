@@ -26,19 +26,69 @@ RSpec.describe "Claims", type: :request do
   end
 
   describe "claims#create request" do
-    Policies.all.each do |policy|
-      it "creates a new #{policy.name} claim for the current academic year and redirects to the next question in the sequence" do
-        policies_for_journey = PolicyConfiguration.policies_for_routing_name(policy.routing_name)
+    # TODO: When and if when PolicyConfigurations are using factory_bot no need for this before/after
+    before do
+      @student_loans_policy_date = PolicyConfiguration.for(StudentLoans).current_academic_year
+      @maths_and_physics_policy_date = PolicyConfiguration.for(MathsAndPhysics).current_academic_year
+      @ecp_lup_policy_date = PolicyConfiguration.for(EarlyCareerPayments).current_academic_year
 
-        expect { start_claim(policy) }.to change { Claim.count }.by(policies_for_journey.count)
+      PolicyConfiguration.for(StudentLoans).update(current_academic_year: policy_configurations(:student_loans).current_academic_year)
+      PolicyConfiguration.for(MathsAndPhysics).update(current_academic_year: policy_configurations(:maths_and_physics).current_academic_year)
+      PolicyConfiguration.for(EarlyCareerPayments).update(current_academic_year: policy_configurations(:early_career_payments).current_academic_year)
+    end
 
-        claim = Claim.by_policy(policy).order(:created_at).last
-        current_academic_year = policy_configurations(policy.locale_key).current_academic_year
+    after do
+      PolicyConfiguration.for(StudentLoans).update(current_academic_year: @student_loans_policy_date)
+      PolicyConfiguration.for(MathsAndPhysics).update(current_academic_year: @maths_and_physics_policy_date)
+      PolicyConfiguration.for(EarlyCareerPayments).update(current_academic_year: @ecp_lup_policy_date)
+    end
 
-        expect(claim.eligibility).to be_kind_of(policy::Eligibility)
-        expect(claim.academic_year).to eq(current_academic_year)
+    def check_claims_created
+      expect { start_claim(@policy_configuration.routing_name) }.to change { Claim.count }.by(@policy_configuration.policies.count)
+    end
 
-        expect(response).to redirect_to(claim_path(policy.routing_name, policy::SlugSequence::SLUGS[0]))
+    def check_claims_eligibility_created
+      claims = @policy_configuration.policies.map { |p| Claim.by_policy(p).order(:created_at).last }
+      current_claim = CurrentClaim.new(claims: claims)
+
+      puts current_claim.inspect
+      current_claim.claims.each_with_index do |claim, i|
+        expect(claim.eligibility).to be_kind_of(@policy_configuration.policies[i]::Eligibility)
+        expect(claim.academic_year).to eq(@policy_configuration.current_academic_year)
+      end
+    end
+
+    def check_slug_redirection
+      expect(response).to redirect_to(claim_path(@policy_configuration.routing_name, @policy_configuration.slugs.first))
+    end
+
+    context "student loans claim" do
+      it "created for the current academic year and redirects to the next question in the sequence" do
+        @policy_configuration = PolicyConfiguration.for(StudentLoans)
+
+        check_claims_created
+        check_claims_eligibility_created
+        check_slug_redirection
+      end
+    end
+
+    context "maths and physics claim" do
+      it "created for the current academic year and redirects to the next question in the sequence" do
+        @policy_configuration = PolicyConfiguration.for(MathsAndPhysics)
+
+        check_claims_created
+        check_claims_eligibility_created
+        check_slug_redirection
+      end
+    end
+
+    context "ecp and lup combined claim" do
+      it "created for the current academic year and redirects to the next question in the sequence" do
+        @policy_configuration = PolicyConfiguration.for(EarlyCareerPayments)
+
+        check_claims_created
+        check_claims_eligibility_created
+        check_slug_redirection
       end
     end
   end
