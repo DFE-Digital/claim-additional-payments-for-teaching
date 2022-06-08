@@ -3,7 +3,7 @@ module EarlyCareerPayments
   # claim. Based on the existing answers on the claim, the sequence of slugs
   # will change. For example, if the claimant has said they are not a supply teacher
   # then they will not answer the two questions that are associated with supply
-  # teaching. 'entire-term-contract' and 'employed-directly'will not be part of the sequence.
+  # teaching. 'entire-term-contract' and 'employed-directly' will not be part of the sequence.
   #
   # Note that the sequence is recalculated on each call to `slugs` so that it
   # accounts for any changes that may have been made to the claim and always
@@ -65,15 +65,22 @@ module EarlyCareerPayments
 
     def slugs
       SLUGS.dup.tap do |sequence|
-        sequence.delete("entire-term-contract") unless claim.eligibility.employed_as_supply_teacher?
-        sequence.delete("employed-directly") unless claim.eligibility.employed_as_supply_teacher?
+        unless claim.eligibility.employed_as_supply_teacher?
+          sequence.delete("entire-term-contract")
+          sequence.delete("employed-directly")
+        end
+
         sequence.delete("eligibility-confirmed") unless claim.eligibility.eligible_now?
         sequence.delete("eligible-later") unless claim.eligibility.eligible_later? && !claim.eligibility.eligible_now?
         sequence.delete("ineligible") unless claim.ineligible? || claim.eligibility.trainee_teacher_in_2021?
         sequence.delete("personal-bank-account") if claim.bank_or_building_society == "building_society"
         sequence.delete("building-society-account") if claim.bank_or_building_society == "personal_bank_account"
-        sequence.delete("mobile-number") if claim.provide_mobile_number == false
-        sequence.delete("mobile-verification") if claim.provide_mobile_number == false
+
+        if claim.provide_mobile_number == false
+          sequence.delete("mobile-number")
+          sequence.delete("mobile-verification")
+        end
+
         remove_student_loan_slugs(sequence) if claim.no_student_loan?
         sequence.delete("masters-doctoral-loan") if claim.has_student_loan?
         remove_masters_doctoral_loan_slugs(sequence) if claim.has_masters_doctoral_loan == false
