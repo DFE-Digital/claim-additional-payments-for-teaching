@@ -64,7 +64,7 @@ RSpec.feature "Ineligible Levelling up premium payments claims" do
 
     click_on "Continue"
 
-    # - In what academic year did you complete your undergraduate ITT?
+    # - In which academic year did you complete your undergraduate ITT?
     expect(page).to have_text(I18n.t("early_career_payments.questions.itt_academic_year.qualification.undergraduate_itt"))
 
     choose "2018 to 2019"

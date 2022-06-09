@@ -248,7 +248,7 @@ RSpec.feature "Ineligible Teacher Early-Career Payments claims" do
 
     expect(claim.eligibility.reload.qualification).to eq "undergraduate_itt"
 
-    # - In what academic year did you complete your undergraduate ITT?
+    # - In which academic year did you complete your undergraduate ITT?
     expect(page).to have_text(I18n.t("early_career_payments.questions.itt_academic_year.qualification.#{claim.eligibility.qualification}"))
 
     choose "2018 to 2019"
@@ -304,7 +304,7 @@ RSpec.feature "Ineligible Teacher Early-Career Payments claims" do
 
     expect(claim.eligibility.reload.qualification).to eq "undergraduate_itt"
 
-    # - In what academic year did you start your undergraduate ITT
+    # - In which academic year did you start your undergraduate ITT
     expect(page).to have_text(I18n.t("early_career_payments.questions.itt_academic_year.qualification.#{claim.eligibility.qualification}"))
 
     choose "2020 to 2021" # Have to select one that's eligible for foreign languages
@@ -368,7 +368,7 @@ RSpec.feature "Ineligible Teacher Early-Career Payments claims" do
 
     expect(claim.eligibility.reload.qualification).to eq "undergraduate_itt"
 
-    # - In what academic year did you start your undergraduate ITT
+    # - In which academic year did you start your undergraduate ITT
     expect(page).to have_text(I18n.t("early_career_payments.questions.itt_academic_year.qualification.#{claim.eligibility.qualification}"))
 
     choose "None of the above"
