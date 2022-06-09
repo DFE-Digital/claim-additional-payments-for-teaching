@@ -78,22 +78,17 @@ RSpec.feature "Trainee Teacher - Early Career Payments - journey" do
       expect(eligibility.nqt_in_academic_year_after_itt).to eql false
       expect(claim.eligibility.reload.qualification).to eq "postgraduate_itt"
 
-      # - In what academic year did you start your postgraduate ITT
-      expect(page).to have_text(I18n.t("early_career_payments.questions.itt_academic_year.qualification.#{claim.eligibility.qualification}"))
-
-      choose "2018 to 2019"
-      click_on "Continue"
-
       # - Which subject did you do your postgraduate ITT in
       expect(page).to have_text(
         I18n.t("early_career_payments.questions.eligible_itt_subject_trainee_teacher_in_2021")
       )
+
+      # for CAPT-350 will want to make sure `expect(page).to have_no_text("Foreign languages")` passes
+      # and to exercise it you could choose "Computing" instead of "Mathematics" here
       choose "Mathematics"
       click_on "Continue"
 
       expect(claim.eligibility.reload.eligible_itt_subject).to eql "mathematics"
-
-      expect(claim.eligibility.reload.itt_academic_year).to eql AcademicYear.new(2018)
 
       expect(page).to have_text(I18n.t("early_career_payments.ineligible.reason.trainee_teacher_only_in_claim_academic_year_2021"))
       expect(page).to have_text("If you’re a trainee teacher and plan to complete your studies in this academic year you might be able to apply in the next academic year.")
@@ -113,7 +108,7 @@ RSpec.feature "Trainee Teacher - Early Career Payments - journey" do
       fill_in "reminder_one_time_password", with: get_otp_from_email
       click_on "Confirm"
 
-      expect(page).to have_text("We will send you a reminder in September 2023")
+      expect(page).to have_text("We will send you a reminder in September")
     end
 
     scenario "successfully completes the journey for chemistry 2020/21" do
@@ -141,12 +136,6 @@ RSpec.feature "Trainee Teacher - Early Career Payments - journey" do
       expect(eligibility.nqt_in_academic_year_after_itt).to eql false
       expect(claim.eligibility.reload.qualification).to eq "postgraduate_itt"
 
-      # - In what academic year did you start your postgraduate ITT
-      expect(page).to have_text(I18n.t("early_career_payments.questions.itt_academic_year.qualification.#{claim.eligibility.qualification}"))
-
-      choose "2020 to 2021"
-      click_on "Continue"
-
       # - Which subject did you do your postgraduate ITT in
       expect(page).to have_text(
         I18n.t("early_career_payments.questions.eligible_itt_subject_trainee_teacher_in_2021")
@@ -155,8 +144,6 @@ RSpec.feature "Trainee Teacher - Early Career Payments - journey" do
       click_on "Continue"
 
       expect(claim.eligibility.reload.eligible_itt_subject).to eql "chemistry"
-
-      expect(claim.eligibility.reload.itt_academic_year).to eql AcademicYear.new(2020)
 
       expect(page).to have_text(I18n.t("early_career_payments.ineligible.reason.trainee_teacher_only_in_claim_academic_year_2021"))
       expect(page).to have_text("If you’re a trainee teacher and plan to complete your studies in this academic year you might be able to apply in the next academic year.")
@@ -176,7 +163,7 @@ RSpec.feature "Trainee Teacher - Early Career Payments - journey" do
       fill_in "reminder_one_time_password", with: get_otp_from_email
       click_on "Confirm"
 
-      expect(page).to have_text("We will send you a reminder in September 2022")
+      expect(page).to have_text("We will send you a reminder in September")
     end
   end
 end

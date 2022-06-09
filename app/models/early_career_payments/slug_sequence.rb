@@ -130,7 +130,6 @@ module EarlyCareerPayments
       trainee_slugs = %w[
         nqt-in-academic-year-after-itt
         eligible-itt-subject
-        itt-year
         future-eligibility
         ineligible
       ]
