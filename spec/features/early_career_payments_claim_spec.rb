@@ -76,12 +76,15 @@ RSpec.feature "Teacher Early-Career Payments claims" do
 
     # - In which academic year did you start your undergraduate ITT
     expect(page).to have_text(I18n.t("early_career_payments.questions.itt_academic_year.qualification.#{claim.eligibility.qualification}"))
-    expect(page).to have_text("Did you do a deferred or part time undergraduate ITT")
     expect(page).to have_text("2017 to 2018")
     expect(page).to have_text("2018 to 2019")
     expect(page).to have_text("2019 to 2020")
     expect(page).to have_text("2020 to 2021")
     expect(page).to have_text("2021 to 2022")
+
+    expect(page).to have_text("Did you do a deferred or part time undergraduate ITT")
+    find("span", text: "Did you do a deferred or part time undergraduate ITT").click
+    expect(page).to have_text("You can still select the year you completed your part time or deferred ITT.")
 
     choose "2018 to 2019"
     click_on "Continue"
@@ -578,12 +581,15 @@ RSpec.feature "Teacher Early-Career Payments claims" do
 
     # - In which academic year did you start your postgraduate ITT
     expect(page).to have_text(I18n.t("early_career_payments.questions.itt_academic_year.qualification.#{claim.eligibility.qualification}"))
-    expect(page).to have_text("Did you do a deferred or part time postgraduate ITT")
     expect(page).to have_text("2017 to 2018")
     expect(page).to have_text("2018 to 2019")
     expect(page).to have_text("2019 to 2020")
     expect(page).to have_text("2020 to 2021")
     expect(page).to have_text("2021 to 2022")
+
+    expect(page).to have_text("Did you do a deferred or part time postgraduate ITT")
+    find("span", text: "Did you do a deferred or part time postgraduate ITT").click
+    expect(page).to have_text("You can still select the year you started your part time or deferred ITT.")
 
     choose "2018 to 2019"
     click_on "Continue"
