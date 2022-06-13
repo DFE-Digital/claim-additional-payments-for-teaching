@@ -53,7 +53,7 @@ RSpec.feature "Trainee Teacher - Early Career Payments - journey" do
       PolicyConfiguration.for(EarlyCareerPayments).update(current_academic_year: @ecp_policy_date)
     end
 
-    scenario "successfully completes the journey for maths 2018/19" do
+    scenario "successfully completes the journey for computing 2018/19" do
       visit landing_page_path(EarlyCareerPayments.routing_name)
       expect(page).to have_link(href: "mailto:#{EarlyCareerPayments.feedback_email}")
 
@@ -83,12 +83,12 @@ RSpec.feature "Trainee Teacher - Early Career Payments - journey" do
         I18n.t("early_career_payments.questions.eligible_itt_subject_trainee_teacher_in_2021")
       )
 
-      # for CAPT-350 will want to make sure `expect(page).to have_no_text("Foreign languages")` passes
-      # and to exercise it you could choose "Computing" instead of "Mathematics" here
-      choose "Mathematics"
+      expect(page).to have_no_text("Foreign languages")
+
+      choose "Computing"
       click_on "Continue"
 
-      expect(claim.eligibility.reload.eligible_itt_subject).to eql "mathematics"
+      expect(claim.eligibility.reload.eligible_itt_subject).to eql "computing"
 
       expect(page).to have_text(I18n.t("early_career_payments.ineligible.reason.trainee_teacher_only_in_claim_academic_year_2021"))
       expect(page).to have_text("If you’re a trainee teacher and plan to complete your studies in this academic year you might be able to apply in the next academic year.")

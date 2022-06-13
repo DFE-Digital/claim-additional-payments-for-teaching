@@ -45,7 +45,8 @@ module LevellingUpPremiumPayments
       foreign_languages: 1,
       mathematics: 2,
       physics: 3,
-      none_of_the_above: 4
+      none_of_the_above: 4,
+      computing: 5
     }, _prefix: :itt_subject
 
     enum itt_academic_year: {
