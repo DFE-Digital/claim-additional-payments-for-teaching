@@ -69,19 +69,23 @@ RSpec.feature "Teacher Early-Career Payments claims" do
     # - What route into teaching did you take?
     expect(page).to have_text(I18n.t("early_career_payments.questions.qualification.heading"))
 
-    choose "Postgraduate initial teacher training (ITT)"
+    choose "Undergraduate initial teacher training (ITT)"
     click_on "Continue"
 
-    expect(claim.eligibility.reload.qualification).to eq "postgraduate_itt"
+    expect(claim.eligibility.reload.qualification).to eq "undergraduate_itt"
 
-    # - In what academic year did you start your undergraduate ITT
+    # - In which academic year did you start your undergraduate ITT
     expect(page).to have_text(I18n.t("early_career_payments.questions.itt_academic_year.qualification.#{claim.eligibility.qualification}"))
-    expect(page).to have_text("If you did a part time ITT")
-    expect(page).not_to have_text("2017 to 2018")
+    expect(page).to have_text("2017 to 2018")
     expect(page).to have_text("2018 to 2019")
     expect(page).to have_text("2019 to 2020")
     expect(page).to have_text("2020 to 2021")
-    expect(page).not_to have_text("2021 to 2022")
+    expect(page).to have_text("2021 to 2022")
+
+    expect(page).to have_text("Did you do a deferred or part time undergraduate ITT")
+    expect(page).not_to have_text("You can still select the year you completed your part time or deferred ITT.")
+    find("span", text: "Did you do a deferred or part time undergraduate ITT").click
+    expect(page).to have_text("You can still select the year you completed your part time or deferred ITT.")
 
     choose "2018 to 2019"
     click_on "Continue"
@@ -430,9 +434,8 @@ RSpec.feature "Teacher Early-Career Payments claims" do
 
       expect(claim.eligibility.reload.qualification).to eq "assessment_only"
 
-      # - In what academic year did you start your undergraduate ITT
+      # - In which academic year did you earn your qualified teacher status (QTS)
       expect(page).to have_text(I18n.t("early_career_payments.questions.itt_academic_year.qualification.#{claim.eligibility.qualification}"))
-      expect(page).not_to have_text("You might still be eligible to claim if your ITT coincided with one of the academic years stated, even if it didn’t start or complete in one of those years.")
       expect(page).to have_text("2017 to 2018")
       expect(page).to have_text("2018 to 2019")
       expect(page).to have_text("2019 to 2020")
@@ -480,9 +483,8 @@ RSpec.feature "Teacher Early-Career Payments claims" do
 
       expect(claim.eligibility.reload.qualification).to eq "overseas_recognition"
 
-      # - In what academic year did you you earn your qualified teacher status (QTS)?
+      # - In which academic year did you you earn your qualified teacher status (QTS)?
       expect(page).to have_text(I18n.t("early_career_payments.questions.itt_academic_year.qualification.#{claim.eligibility.qualification}"))
-      expect(page).not_to have_text("You might still be eligible to claim if your ITT coincided with one of the academic years stated, even if it didn’t start or complete in one of those years.")
       expect(page).to have_text("2017 to 2018")
       expect(page).to have_text("2018 to 2019")
       expect(page).to have_text("2019 to 2020")
@@ -518,7 +520,7 @@ RSpec.feature "Teacher Early-Career Payments claims" do
     end
   end
 
-  scenario "Teacher makes claim for 'Early Career Payments' without uplift school" do
+  scenario "Teacher makes claim for 'Early Career Payments' without uplift school", js: true do
     visit landing_page_path(EarlyCareerPayments.routing_name)
     expect(page).to have_link(href: "mailto:#{EarlyCareerPayments.feedback_email}")
 
@@ -576,13 +578,18 @@ RSpec.feature "Teacher Early-Career Payments claims" do
 
     expect(claim.eligibility.reload.qualification).to eq "postgraduate_itt"
 
-    # - In what academic year did you start your postgraduate ITT
+    # - In which academic year did you start your postgraduate ITT
     expect(page).to have_text(I18n.t("early_career_payments.questions.itt_academic_year.qualification.#{claim.eligibility.qualification}"))
-    expect(page).not_to have_text("2017 to 2018")
+    expect(page).to have_text("2017 to 2018")
     expect(page).to have_text("2018 to 2019")
     expect(page).to have_text("2019 to 2020")
     expect(page).to have_text("2020 to 2021")
-    expect(page).not_to have_text("2021 to 2022")
+    expect(page).to have_text("2021 to 2022")
+
+    expect(page).to have_text("Did you do a deferred or part time postgraduate ITT")
+    expect(page).not_to have_text("You can still select the year you started your part time or deferred ITT.")
+    find("span", text: "Did you do a deferred or part time postgraduate ITT").click
+    expect(page).to have_text("You can still select the year you started your part time or deferred ITT.")
 
     choose "2018 to 2019"
     click_on "Continue"

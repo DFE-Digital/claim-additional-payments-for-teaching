@@ -22,12 +22,10 @@
             <%= errors_tag current_claim.eligibility, :itt_academic_year %>
 
             <div class="govuk-radios">
-              <% if qts?(current_claim) %>
-                <div class="govuk-radios__item">
-                  <%= fields.radio_button(:itt_academic_year, AcademicYear.new(2017), class: "govuk-radios__input") %>
-                  <%= fields.label "itt_academic_year_20172018", AcademicYear.new(2017).to_s(:long), class: "govuk-label govuk-radios__label" %>
-                </div>
-              <% end %>
+              <div class="govuk-radios__item">
+                <%= fields.radio_button(:itt_academic_year, AcademicYear.new(2017), class: "govuk-radios__input") %>
+                <%= fields.label "itt_academic_year_20172018", AcademicYear.new(2017).to_s(:long), class: "govuk-label govuk-radios__label" %>
+              </div>
 
               <div class="govuk-radios__item">
                 <%= fields.radio_button(:itt_academic_year, AcademicYear.new(2018), class: "govuk-radios__input") %>
@@ -44,12 +42,11 @@
                 <%= fields.label "itt_academic_year_20202021", AcademicYear.new(2020).to_s(:long), class: "govuk-label govuk-radios__label" %>
               </div>
 
-              <% if qts?(current_claim) %>
-                <div class="govuk-radios__item">
-                  <%= fields.radio_button(:itt_academic_year, AcademicYear.new(2021), class: "govuk-radios__input") %>
-                  <%= fields.label "itt_academic_year_20212022", AcademicYear.new(2021).to_s(:long), class: "govuk-label govuk-radios__label" %>
-                </div>
-              <% end %>
+              <div class="govuk-radios__item">
+                <%= fields.radio_button(:itt_academic_year, AcademicYear.new(2021), class: "govuk-radios__input") %>
+                <%= fields.label "itt_academic_year_20212022", AcademicYear.new(2021).to_s(:long), class: "govuk-label govuk-radios__label" %>
+              </div>
+
               <div class="govuk-radios__divider">or</div>
 
               <div class="govuk-radios__item">
@@ -67,14 +64,12 @@
           <details class="govuk-details" data-module="govuk-details">
             <summary class="govuk-details__summary">
               <span class="govuk-details__summary-text">
-                If you did a part time ITT
+                Did you do a deferred or part time <%= t("early_career_payments.questions.itt_academic_year.route_into_teaching.#{current_claim.eligibility.qualification}") %>
               </span>
             </summary>
             <div class="govuk-details__text">
               <p class="govuk-body">
-                You might still be eligible to claim if your ITT coincided with one of the
-                academic years stated, even if it didn’t start or complete in one of those
-                years.
+                You can still select the year you <%= t("early_career_payments.questions.itt_academic_year.itt_action.#{current_claim.eligibility.qualification}") %> your part time or deferred ITT.
               </p>
             </div>
           </details>

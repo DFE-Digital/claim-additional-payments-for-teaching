@@ -65,7 +65,7 @@ RSpec.feature "Ineligible Teacher Early-Career Payments claims by cohort" do
         scenario "with cohort ITT subject #{scenario[:itt_subject]} in ITT academic year #{scenario[:itt_academic_year]}" do
           visit claim_path(claim.policy.routing_name, "itt-year")
 
-          # - In what academic year did you start your undergraduate ITT
+          # - In which academic year did you start your undergraduate ITT
           expect(page).to have_text(I18n.t("early_career_payments.questions.itt_academic_year.qualification.#{claim.eligibility.qualification}"))
           choose scenario[:itt_academic_year].to_s(:long)
           click_on "Continue"

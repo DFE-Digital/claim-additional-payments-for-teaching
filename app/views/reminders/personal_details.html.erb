@@ -29,7 +29,7 @@
           </p>
         </div>
         <%= errors_tag current_reminder, :email_address %>
-         <%= form.text_field :email_address, class: css_classes_for_input(current_reminder, :email_address), type: "text", spellcheck: "false", autocomplete: "given-name" %>
+         <%= form.text_field :email_address, class: css_classes_for_input(current_reminder, :email_address), type: "text", spellcheck: "false", autocomplete: "email" %>
       <% end %>
       <%= form.submit "Continue", class: "govuk-button", data: {module: "govuk-button"} %>
     <% end %>
