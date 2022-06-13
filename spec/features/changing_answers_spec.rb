@@ -370,7 +370,7 @@ RSpec.feature "Changing the answers on a submittable claim" do
         mail = ActionMailer::Base.deliveries.last
         otp_in_mail_sent = mail[:personalisation].decoded.scan(/\b[0-9]{6}\b/).first
 
-        fill_in "claim_one_time_password", with: otp_in_mail_sent, fill_options: {clear: :backspace}
+        fill_in "claim_one_time_password", with: otp_in_mail_sent
         click_on "Confirm"
 
         expect(claim.reload.email_verified).to eq true

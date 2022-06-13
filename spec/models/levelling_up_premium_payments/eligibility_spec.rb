@@ -14,6 +14,16 @@ RSpec.describe LevellingUpPremiumPayments::Eligibility, type: :model do
 
   describe "#ineligible?" do
     specify { expect(subject).to respond_to(:ineligible?) }
+
+    context "when ITT year is 2017" do
+      before do
+        subject.itt_academic_year = AcademicYear::Type.new.serialize(AcademicYear.new(2017))
+      end
+
+      it "returns false" do
+        expect(subject.ineligible?).to eql false
+      end
+    end
   end
 
   describe "#eligible_now?" do

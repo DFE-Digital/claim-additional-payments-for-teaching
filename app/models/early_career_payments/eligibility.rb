@@ -343,6 +343,8 @@ module EarlyCareerPayments
 
     def ineligible_cohort?
       return true if itt_academic_year == AcademicYear.new
+      return true if itt_academic_year == AcademicYear.new("2017/2018")
+
       return false if without_cohort?
       return false if eligible_later.present?
 
