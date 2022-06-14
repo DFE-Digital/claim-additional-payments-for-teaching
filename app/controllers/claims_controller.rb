@@ -41,7 +41,7 @@ class ClaimsController < BasePublicController
     end
 
     current_claim.reset_dependent_answers
-    current_claim.reset_eligibility_dependent_answers
+    current_claim.reset_eligibility_dependent_answers(reset_attrs)
     one_time_password
 
     if current_claim.save(context: page_sequence.current_slug.to_sym)
@@ -175,5 +175,11 @@ class ClaimsController < BasePublicController
 
   def otp
     @otp ||= OneTimePassword::Generator.new
+  end
+
+  def reset_attrs
+    return [] unless claim_params["eligibility_attributes"]
+
+    claim_params["eligibility_attributes"].keys
   end
 end
