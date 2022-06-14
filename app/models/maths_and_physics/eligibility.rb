@@ -96,10 +96,12 @@ module MathsAndPhysics
       BigDecimal("2000.00")
     end
 
-    def reset_dependent_answers
+    def reset_dependent_answers(reset_attrs = [])
+      attrs = ineligible? ? changed.concat(reset_attrs) : changed
+
       ATTRIBUTE_DEPENDENCIES.each do |attribute_name, dependent_attribute_names|
         dependent_attribute_names.each do |dependent_attribute_name|
-          write_attribute(dependent_attribute_name, nil) if changed.include?(attribute_name)
+          write_attribute(dependent_attribute_name, nil) if attrs.include?(attribute_name)
         end
       end
     end

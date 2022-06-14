@@ -37,9 +37,9 @@ class CurrentClaim
     claims.map(&:id)
   end
 
-  def reset_eligibility_dependent_answers
+  def reset_eligibility_dependent_answers(reset_attrs = [])
     claims.each do |c|
-      c.eligibility.reset_dependent_answers
+      c.eligibility.reset_dependent_answers(reset_attrs)
     end
   end
 
