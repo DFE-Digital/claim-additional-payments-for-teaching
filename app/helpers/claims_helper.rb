@@ -50,21 +50,4 @@ module ClaimsHelper
   def date_of_birth_string(claim)
     claim.date_of_birth && l(claim.date_of_birth)
   end
-
-  # TODO: This is to be moved to the View Component for the eligible-itt-subject slug/page - not done yet
-  # Temporary helper method for "nqt_in_academic_year_after_itt = false" route
-  def eligible_itt_subjects
-    remove_subjects = ["none_of_the_above"]
-    remove_subjects << "foreign_languages" unless allows_foreign_languages?
-
-    EarlyCareerPayments::Eligibility.eligible_itt_subjects.keys.reject { |subject| remove_subjects.include?(subject) }.sort
-  end
-
-  private
-
-  # Hide `foreign languages` for trainee teachers and claims not eligible for ECP
-  def allows_foreign_languages?
-    current_claim.eligibility.nqt_in_academic_year_after_itt? &&
-      !current_claim.for_policy(EarlyCareerPayments).eligibility.ineligible?
-  end
 end
