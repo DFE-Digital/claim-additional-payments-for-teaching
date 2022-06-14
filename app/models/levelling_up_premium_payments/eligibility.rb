@@ -50,9 +50,11 @@ module LevellingUpPremiumPayments
     }, _prefix: :itt_subject
 
     enum itt_academic_year: {
+      AcademicYear.new(2017) => AcademicYear::Type.new.serialize(AcademicYear.new(2017)),
       AcademicYear.new(2018) => AcademicYear::Type.new.serialize(AcademicYear.new(2018)),
       AcademicYear.new(2019) => AcademicYear::Type.new.serialize(AcademicYear.new(2019)),
       AcademicYear.new(2020) => AcademicYear::Type.new.serialize(AcademicYear.new(2020)),
+      AcademicYear.new(2021) => AcademicYear::Type.new.serialize(AcademicYear.new(2021)),
       AcademicYear.new => AcademicYear::Type.new.serialize(AcademicYear.new)
     }
 
@@ -153,7 +155,7 @@ module LevellingUpPremiumPayments
     end
 
     def ineligible_cohort?
-      itt_academic_year == AcademicYear.new
+      itt_academic_year == AcademicYear.new # `None of the above` selected
     end
   end
 end

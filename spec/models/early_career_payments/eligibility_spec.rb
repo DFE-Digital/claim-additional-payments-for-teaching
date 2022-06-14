@@ -432,6 +432,16 @@ RSpec.describe EarlyCareerPayments::Eligibility, type: :model do
         end
       end
     end
+
+    context "when ITT year is 2017" do
+      before do
+        eligibility.itt_academic_year = AcademicYear::Type.new.serialize(AcademicYear.new(2017))
+      end
+
+      it "returns true" do
+        expect(eligibility.ineligible?).to eql true
+      end
+    end
   end
 
   describe "#ineligibility_reason" do
