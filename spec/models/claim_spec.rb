@@ -1317,6 +1317,35 @@ RSpec.describe Claim, type: :model do
     end
   end
 
+  describe "#has_lupp_policy?" do
+    subject(:result) { claim.has_lupp_policy? }
+    let(:claim) { create(:claim, policy: policy) }
+
+    context "with student loans policy" do
+      let(:policy) { StudentLoans }
+
+      it { is_expected.to be false }
+    end
+
+    context "with maths and physics policy" do
+      let(:policy) { MathsAndPhysics }
+
+      it { is_expected.to be false }
+    end
+
+    context "with early-career payments policy" do
+      let(:policy) { EarlyCareerPayments }
+
+      it { is_expected.to be false }
+    end
+
+    context "with levelling-up premium payments policy" do
+      let(:policy) { LevellingUpPremiumPayments }
+
+      it { is_expected.to be true }
+    end
+  end
+
   describe "#important_notes" do
     subject(:important_notes) do
       claim.important_notes

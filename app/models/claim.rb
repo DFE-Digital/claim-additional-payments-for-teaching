@@ -390,6 +390,10 @@ class Claim < ApplicationRecord
     policy == StudentLoans
   end
 
+  def has_lupp_policy?
+    policy == LevellingUpPremiumPayments
+  end
+
   def important_notes
     notes&.where(important: true)
   end

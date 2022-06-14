@@ -38,4 +38,50 @@ RSpec.describe Claims::ShowHelper do
       end
     end
   end
+
+  describe "#policy_name" do
+    subject(:name) { helper.policy_name(claim) }
+
+    context "with a StudentLoans policy" do
+      let(:policy) { StudentLoans }
+
+      it "returns a text string" do
+        expect(name).to eq "student loan"
+      end
+    end
+
+    context "with a EarlyCareerPayments policy" do
+      let(:policy) { EarlyCareerPayments }
+
+      it "returns a text string" do
+        expect(name).to eq "early-career payment"
+      end
+    end
+
+    context "with a MathsAndPhysics policy" do
+      let(:policy) { MathsAndPhysics }
+
+      it "returns a text string" do
+        expect(name).to eq "maths and physic" # Not a bug; a feature
+      end
+    end
+
+    context "with a LevellingUpPremiumPayments policy" do
+      let(:policy) { LevellingUpPremiumPayments }
+
+      it "returns a text string" do
+        expect(name).to eq "levelling up premium payment"
+      end
+    end
+  end
+
+  describe "#award_amount" do
+    let(:claim) { build(:claim, policy: LevellingUpPremiumPayments, eligibility: eligibility) }
+    let(:eligibility) { build(:levelling_up_premium_payments_eligibility, :eligible, award_amount: award_amount) }
+    let(:award_amount) { 2000.0 }
+
+    it "returns a string currency representation" do
+      expect(helper.award_amount(claim)).to eq("£2,000")
+    end
+  end
 end

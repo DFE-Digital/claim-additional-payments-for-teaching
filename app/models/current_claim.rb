@@ -64,4 +64,12 @@ class CurrentClaim
   def editable_attributes
     claims.flat_map { |c| c.eligibility.class::EDITABLE_ATTRIBUTES }.uniq
   end
+
+  def eligible_now
+    claims.select { |c| c.eligibility.eligible_now? }
+  end
+
+  def eligible_now_and_sorted
+    eligible_now.group_by { |c| c.award_amount }.map { |k, claims| claims.sort_by { |c| c.policy.short_name } }.reverse.flatten
+  end
 end

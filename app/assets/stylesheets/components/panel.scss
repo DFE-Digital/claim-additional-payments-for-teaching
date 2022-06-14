@@ -1,6 +1,10 @@
 .govuk-panel--informational {
-  background-color: $govuk-link-colour;
+  background-color: $govuk-brand-colour;
   color: govuk-colour("white");
+  margin-bottom: govuk-spacing(7);
+}
+
+.govuk-panel--small {
   text-align: left;
   padding: govuk-spacing(3) - $govuk-border-width;
   margin-bottom: govuk-spacing(5);
