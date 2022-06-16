@@ -84,7 +84,7 @@ module LevellingUpPremiumPayments
     end
 
     def award_amount
-      calculate_award_amount
+      super || calculate_award_amount
     end
 
     def reset_dependent_answers(reset_attrs = [])
