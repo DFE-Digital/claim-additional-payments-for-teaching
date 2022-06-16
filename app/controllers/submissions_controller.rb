@@ -9,6 +9,7 @@ class SubmissionsController < BasePublicController
 
       redirect_to current_claim.has_ecp_policy? ? claim_completion_path : claim_confirmation_path
     else
+      current_claim.valid?(:submit)
       render "claims/check_your_answers"
     end
   end
