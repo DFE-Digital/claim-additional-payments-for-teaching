@@ -351,6 +351,24 @@ RSpec.describe EarlyCareerPayments::SlugSequence do
 
         specify { expect(slug_sequence.slugs).to include_array_subsequence(["eligible-itt-subject", "teaching-subject-now"]) }
       end
+
+      context "computing" do
+        before { claim.eligibility.eligible_itt_subject = "computing" }
+
+        specify { expect(slug_sequence.slugs).to include_array_subsequence(["eligible-itt-subject", "teaching-subject-now"]) }
+      end
+
+      context "mathematics" do
+        before { claim.eligibility.eligible_itt_subject = "mathematics" }
+
+        specify { expect(slug_sequence.slugs).to include_array_subsequence(["eligible-itt-subject", "teaching-subject-now"]) }
+      end
+
+      context "physics" do
+        before { claim.eligibility.eligible_itt_subject = "physics" }
+
+        specify { expect(slug_sequence.slugs).to include_array_subsequence(["eligible-itt-subject", "teaching-subject-now"]) }
+      end
     end
   end
 end
