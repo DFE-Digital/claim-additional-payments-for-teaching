@@ -341,4 +341,15 @@ RSpec.describe EarlyCareerPayments::SlugSequence do
       end
     end
   end
+
+  describe "year and subject" do
+    context "2017/2018" do
+      it "checks" do
+        claim.eligibility.itt_academic_year = AcademicYear.new(2017)
+        claim.eligibility.eligible_itt_subject = "chemistry"
+
+        expect(slug_sequence.slugs.each_cons(2)).to include(["eligible-itt-subject", "teaching-subject-now"])
+      end
+    end
+  end
 end
