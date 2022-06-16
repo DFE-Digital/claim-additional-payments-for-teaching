@@ -342,14 +342,15 @@ RSpec.describe EarlyCareerPayments::SlugSequence do
     end
   end
 
-  describe "year and subject" do
+  describe "year and subject flow" do
     context "2017/2018" do
-      it "checks" do
-        claim.eligibility.itt_academic_year = AcademicYear.new(2017)
-        claim.eligibility.eligible_itt_subject = "chemistry"
+      before { claim.eligibility.itt_academic_year = AcademicYear.new(2017) }
 
-        expect(slug_sequence.slugs.each_cons(2)).to include(["eligible-itt-subject", "teaching-subject-now"])
+      context "chemistry" do
+        before { claim.eligibility.eligible_itt_subject = "chemistry" }
       end
+
+      specify { expect(slug_sequence.slugs).to include_array_subsequence(["eligible-itt-subject", "teaching-subject-now"]) }
     end
   end
 end
