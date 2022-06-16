@@ -369,6 +369,12 @@ RSpec.describe EarlyCareerPayments::SlugSequence do
 
         specify { expect(slug_sequence.slugs).to include_array_subsequence(["eligible-itt-subject", "teaching-subject-now"]) }
       end
+
+      context "none of the above" do
+        before { claim.eligibility.eligible_itt_subject = "none_of_the_above" }
+
+        specify { expect(slug_sequence.slugs).to include_array_subsequence(["eligible-itt-subject", "eligible-degree-subject"]) }
+      end
     end
   end
 end
