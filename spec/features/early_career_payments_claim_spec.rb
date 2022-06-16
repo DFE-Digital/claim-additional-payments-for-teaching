@@ -130,18 +130,11 @@ RSpec.feature "Teacher Early-Career Payments claims" do
     click_on("Continue")
 
     # - You are eligible for an early career payment
-    expect(page).to have_text("You are eligible")
-    expect(page).to have_text("for a £7,500 early-career payment")
+    expect(page).to have_text("You’re eligible for an additional payment")
+    expect(page).to have_text("£7,500 early-career payment")
 
-    within(".govuk-list--bullet") do
-      expect(page).to have_text("your National Insurance number")
-      ["bank account details", "teacher reference number", "student loan"].each do |bullet_point|
-        expect(page).to have_text bullet_point
-      end
-    end
-    click_on "Continue"
-
-    expect(claim.eligibility.reload.award_amount).to eq 7_500
+    choose "£7,500 early-career payment"
+    click_on "Apply now"
 
     # - How will we use the information you provide
     expect(page).to have_text("How we will use the information you provide")
@@ -628,16 +621,11 @@ RSpec.feature "Teacher Early-Career Payments claims" do
     click_on("Continue")
 
     # - You are eligible for an early career payment
-    expect(page).to have_text("You are eligible")
-    expect(page).to have_text("for a £5,000 early-career payment")
+    expect(page).to have_text("You’re eligible for an additional payment")
+    expect(page).to have_text("£5,000 early-career payment")
 
-    within(".govuk-list--bullet") do
-      expect(page).to have_text("your National Insurance number")
-      ["bank account details", "teacher reference number", "student loan"].each do |bullet_point|
-        expect(page).to have_text bullet_point
-      end
-    end
-    click_on "Continue"
+    choose "£5,000 early-career payment"
+    click_on "Apply now"
 
     # - How will we use the information you provide
     expect(page).to have_text("How we will use the information you provide")
@@ -1007,16 +995,11 @@ RSpec.feature "Teacher Early-Career Payments claims" do
       click_on("Continue")
 
       # - You are eligible for an early career payment
-      expect(page).to have_text("You are eligible")
-      expect(page).to have_text("for a £7,500 early-career payment")
+      expect(page).to have_text("You’re eligible for an additional payment")
+      expect(page).to have_text("£7,500 early-career payment")
 
-      within(".govuk-list--bullet") do
-        expect(page).to have_text("your National Insurance number")
-        ["bank account details", "teacher reference number", "student loan"].each do |bullet_point|
-          expect(page).to have_text bullet_point
-        end
-      end
-      click_on "Continue"
+      choose "£7,500 early-career payment"
+      click_on "Apply now"
 
       # - How will we use the information you provide
       expect(page).to have_text("How we will use the information you provide")

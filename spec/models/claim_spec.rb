@@ -599,7 +599,8 @@ RSpec.describe Claim, type: :model do
     end
 
     context "when the claim is submittable" do
-      let(:claim) { create(:claim, :submittable) }
+      let(:claim) { build(:claim, :submittable, eligibility: eligibility) }
+      let(:eligibility) { build(:levelling_up_premium_payments_eligibility, :eligible) }
 
       before { claim.submit! }
 
@@ -609,6 +610,10 @@ RSpec.describe Claim, type: :model do
 
       it "generates a reference" do
         expect(claim.reference).to_not eq nil
+      end
+
+      it "sets the eligibility award amount" do
+        expect(claim.eligibility.attributes["award_amount"]).to be_a(BigDecimal)
       end
     end
 
@@ -629,7 +634,7 @@ RSpec.describe Claim, type: :model do
     context "when the claim is ineligible" do
       let(:claim) { create(:claim, :ineligible) }
 
-      before { claim.submit! }
+      before { claim.submit! rescue nil }
 
       it "doesn't set submitted_at" do
         expect(claim.submitted_at).to be_nil
@@ -642,21 +647,25 @@ RSpec.describe Claim, type: :model do
       it "adds an error" do
         expect(claim.errors.messages[:base]).to include("You’re not eligible for this payment")
       end
+
+      it "raises an exception" do
+        expect { claim.submit! }.to raise_error(Claim::NotSubmittable)
+      end
     end
 
     context "when the claim has already been submitted" do
       let(:claim) { create(:claim, :submitted, submitted_at: 2.days.ago) }
 
-      it "returns false" do
-        expect(claim.submit!).to eq false
+      it "raises an exception" do
+        expect { claim.submit! }.to raise_error(Claim::NotSubmittable)
       end
 
       it "doesn't change the reference number" do
-        expect { claim.submit! }.not_to(change { claim.reference })
+        expect { claim.submit! rescue nil }.not_to(change { claim.reference })
       end
 
       it "doesn't change the submitted_at" do
-        expect { claim.submit! }.not_to(change { claim.submitted_at })
+        expect { claim.submit! rescue nil }.not_to(change { claim.submitted_at })
       end
     end
   end

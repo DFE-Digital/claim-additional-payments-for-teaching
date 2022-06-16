@@ -6,7 +6,7 @@ module LevellingUpPremiumPayments
 
     # use first year of LUP for now but this must come from a PolicyConfiguration
     validates :award_amount, on: :amendment, award_range: {max: LevellingUpPremiumPayments::Award.max(AcademicYear.new(2022))}
-    validates :eligible_degree_subject, on: [:"eligible-degree-subject", :submit], inclusion: {in: [true, false], message: "Select yes if you have a degree in an eligible subject"}
+    validates :eligible_degree_subject, on: [:"eligible-degree-subject"], inclusion: {in: [true, false], message: "Select yes if you have a degree in an eligible subject"}
 
     EDITABLE_ATTRIBUTES = [
       :nqt_in_academic_year_after_itt,
@@ -20,7 +20,6 @@ module LevellingUpPremiumPayments
       :eligible_itt_subject,
       :teaching_subject_now,
       :itt_academic_year,
-      :award_amount,
       :eligible_degree_subject
     ].freeze
 
@@ -99,6 +98,11 @@ module LevellingUpPremiumPayments
 
     def eligible_none_of_the_above?
       itt_subject_none_of_the_above?
+    end
+
+    def submit!
+      self.award_amount = award_amount
+      save!
     end
 
     private

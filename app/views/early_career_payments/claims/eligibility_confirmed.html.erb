@@ -1,4 +1,4 @@
-<% content_for(:page_title, page_title("You’re eligible for an additional payment", policy: current_policy_routing_name)) %>
+<% content_for(:page_title, page_title("You’re eligible for an additional payment", policy: current_policy_routing_name, show_error: current_claim.errors.any?)) %>
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
@@ -9,7 +9,7 @@
     <% if current_claim.eligible_now.size == 1 %>
       <%= render partial: "eligibility_confirmed_single", locals: { claim: current_claim.eligible_now.first } %>
     <% else %>
-      <%= render partial: "eligibility_confirmed_multiple", locals: { claims: current_claim.eligible_now } %>
+      <%= render partial: "eligibility_confirmed_multiple", locals: { claims: current_claim.eligible_now_and_sorted } %>
     <% end %>
 
     <h2 class="govuk-heading-m govuk-!-margin-top-6">What happens next?</h2>

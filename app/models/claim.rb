@@ -255,13 +255,12 @@ class Claim < ApplicationRecord
   delegate :scheduled_payment_date, to: :payment, allow_nil: true
 
   def submit!
-    if submittable?
-      self.submitted_at = Time.zone.now
-      self.reference = unique_reference
-      save!
-    else
-      false
-    end
+    raise NotSubmittable unless submittable?
+
+    self.submitted_at = Time.zone.now
+    self.reference = unique_reference
+    eligibility&.submit!
+    save!
   end
 
   def submitted?

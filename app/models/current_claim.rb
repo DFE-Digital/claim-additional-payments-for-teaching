@@ -43,6 +43,16 @@ class CurrentClaim
     end
   end
 
+  def submit!(policy)
+    policy ||= main_claim.policy
+
+    ActiveRecord::Base.transaction do
+      claim = for_policy(policy)
+      claim.submit!
+      destroy_claims_except!(claim)
+    end
+  end
+
   def method_missing(method_name, *args, &block)
     if [:attributes=, :save, :save!, :update, :update!, :reset_dependent_answers].include?(method_name)
       claims.each do |c|
@@ -70,6 +80,13 @@ class CurrentClaim
   end
 
   def eligible_now_and_sorted
-    eligible_now.group_by { |c| c.award_amount }.map { |k, claims| claims.sort_by { |c| c.policy.short_name } }.reverse.flatten
+    eligible_now.group_by { |c| c.award_amount.to_i }.map { |k, claims| claims.sort_by { |c| c.policy.short_name } }.reverse.flatten
+  end
+
+  private
+
+  def destroy_claims_except!(claim)
+    claims.where.not(id: claim.id).destroy_all
+    claims.reload
   end
 end

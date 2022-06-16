@@ -144,7 +144,6 @@ RSpec.describe CurrentClaim, type: :model do
           :eligible_itt_subject,
           :teaching_subject_now,
           :itt_academic_year,
-          :award_amount,
           :eligible_degree_subject
         ]
 
@@ -165,8 +164,7 @@ RSpec.describe CurrentClaim, type: :model do
           :qualification,
           :eligible_itt_subject,
           :teaching_subject_now,
-          :itt_academic_year,
-          :award_amount
+          :itt_academic_year
         ]
 
         it { is_expected.to eq expected }
@@ -187,7 +185,6 @@ RSpec.describe CurrentClaim, type: :model do
           :eligible_itt_subject,
           :teaching_subject_now,
           :itt_academic_year,
-          :award_amount,
           :eligible_degree_subject
         ]
 
@@ -252,6 +249,51 @@ RSpec.describe CurrentClaim, type: :model do
 
         it "orders the claims by highest award amount" do
           expect(result).to eq([lup_claim, ecp_claim])
+        end
+      end
+    end
+
+    describe "#submit!" do
+      subject(:result) { cc.submit!(policy) }
+
+      let!(:ecp_claim) { create(:claim, :submittable) }
+      let!(:lup_claim) { create(:claim, :submittable) }
+
+      let(:cc) { described_class.new(claims: Claim.all) }
+
+      context "when a claim for the supplied policy is found" do
+        let(:policy) { ecp_claim.policy }
+
+        before { result }
+
+        it "destroys the other claims" do
+          expect { lup_claim.reload }.to raise_error(ActiveRecord::RecordNotFound)
+        end
+
+        it "removes the other claims from the set" do
+          expect(cc.claims.map(&:policy)).to eq([policy])
+        end
+
+        it "submits the specified claim" do
+          expect(ecp_claim.reload).to be_submitted
+        end
+      end
+
+      context "when nil policy is supplied" do
+        let(:policy) { nil }
+
+        before { result }
+
+        it "submits the main claim" do
+          expect(ecp_claim.reload).to be_submitted
+        end
+      end
+
+      context "when a claim for the supplied policy is not found" do
+        let(:policy) { "not_found" }
+
+        it "raises an Exception" do
+          expect { result }.to raise_error(NoMethodError)
         end
       end
     end
