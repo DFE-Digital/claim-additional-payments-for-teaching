@@ -3,7 +3,7 @@ module AddressDetails
 
   included do
     before_action :check_session_for_address_not_found, only: [:show], if: -> { params[:slug] == "select-home-address" }
-    before_action :split_address_to_parts, only: [:update], if: -> { params[:slug] == "select-home-address" }
+    before_action :save_address_to_claim, only: [:update], if: -> { params[:slug] == "select-home-address" }
   end
 
   private
@@ -45,14 +45,16 @@ module AddressDetails
     params.dig(:claim, :postcode)
   end
 
-  def split_address_to_parts
+  def save_address_to_claim
     session[:no_address_selected] = "Select an address from the list or search again for a different address"
     redirect_to claim_path(current_policy_routing_name, "select-home-address", {"claim[postcode]": params[:postcode]}) and return if params[:address].nil?
 
     address_parts = params[:address].split(":")
-    current_claim.address_line_1 = address_parts[1].titleize
-    current_claim.address_line_2 = address_parts[2].titleize
-    current_claim.address_line_3 = address_parts[3].titleize # Cantium - Town/City & County
-    current_claim.postcode = address_parts[4]
+    current_claim.attributes = {
+      address_line_1: address_parts[1].titleize,
+      address_line_2: address_parts[2].titleize,
+      address_line_3: address_parts[3].titleize, # Cantium - Town/City & County
+      postcode: address_parts[4]
+    }
   end
 end
