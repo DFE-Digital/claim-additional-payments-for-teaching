@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.feature "Elible now can set a reminder for next year." do
+RSpec.feature "Eligible now can set a reminder for next year." do
   it "auto-sets a reminders email and name from claim params and displays the correct year" do
     travel_to Date.new(2021, 9, 1) do
       claim = start_early_career_payments_claim
