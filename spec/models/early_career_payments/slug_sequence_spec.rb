@@ -348,9 +348,9 @@ RSpec.describe EarlyCareerPayments::SlugSequence do
 
       context "chemistry" do
         before { claim.eligibility.eligible_itt_subject = "chemistry" }
-      end
 
-      specify { expect(slug_sequence.slugs).to include_array_subsequence(["eligible-itt-subject", "teaching-subject-now"]) }
+        specify { expect(slug_sequence.slugs).to include_array_subsequence(["eligible-itt-subject", "teaching-subject-now"]) }
+      end
     end
   end
 end
