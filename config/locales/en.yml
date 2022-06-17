@@ -317,7 +317,7 @@ en:
       eligible_itt_subject_assessment_only: "Which subject did you do your assessment in?"
       eligible_itt_subject_overseas_recognition: "Which subject did you do your teaching qualification in?"
       eligible_itt_subject_trainee_teacher: "Which subject are you currently doing your Initial Teacher Training (ITT) in?"
-      teaching_subject_now: "Do you teach %{eligible_itt_subject} now?"
+      teaching_subject_now: "Do you spend at least half of your contracted hours teaching eligible subjects?"
       itt_academic_year:
         qualification:
           undergraduate_itt: In which academic year did you complete your undergraduate ITT?
