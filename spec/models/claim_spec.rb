@@ -634,7 +634,13 @@ RSpec.describe Claim, type: :model do
     context "when the claim is ineligible" do
       let(:claim) { create(:claim, :ineligible) }
 
-      before { claim.submit! rescue nil }
+      before {
+        begin
+          claim.submit!
+        rescue
+          nil
+        end
+      }
 
       it "doesn't set submitted_at" do
         expect(claim.submitted_at).to be_nil
@@ -661,11 +667,23 @@ RSpec.describe Claim, type: :model do
       end
 
       it "doesn't change the reference number" do
-        expect { claim.submit! rescue nil }.not_to(change { claim.reference })
+        expect {
+          begin
+            claim.submit!
+          rescue
+            nil
+          end
+        }.not_to(change { claim.reference })
       end
 
       it "doesn't change the submitted_at" do
-        expect { claim.submit! rescue nil }.not_to(change { claim.submitted_at })
+        expect {
+          begin
+            claim.submit!
+          rescue
+            nil
+          end
+        }.not_to(change { claim.submitted_at })
       end
     end
   end

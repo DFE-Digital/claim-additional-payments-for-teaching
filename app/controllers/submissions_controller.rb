@@ -2,17 +2,15 @@ class SubmissionsController < BasePublicController
   include PartOfClaimJourney
 
   def create
-    begin
-      current_claim.submit!(session[:selected_claim_policy])
+    current_claim.submit!(session[:selected_claim_policy])
 
-      ClaimMailer.submitted(current_claim.main_claim).deliver_later
-      ClaimVerifierJob.perform_later(current_claim.main_claim)
+    ClaimMailer.submitted(current_claim.main_claim).deliver_later
+    ClaimVerifierJob.perform_later(current_claim.main_claim)
 
-      redirect_to current_claim.has_ecp_policy? ? claim_completion_path : claim_confirmation_path
-    rescue Claim::NotSubmittable
-      current_claim.valid?(:submit)
-      render "claims/check_your_answers"
-    end
+    redirect_to current_claim.has_ecp_policy? ? claim_completion_path : claim_confirmation_path
+  rescue Claim::NotSubmittable
+    current_claim.valid?(:submit)
+    render "claims/check_your_answers"
   end
 
   # Clear session unless this was an ECP policy. If ECP policy, user has
