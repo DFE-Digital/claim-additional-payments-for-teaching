@@ -85,6 +85,7 @@ RSpec.describe EarlyCareerPayments::SlugSequence do
           itt_academic_year: itt_academic_year
         )
       end
+      let(:eligibility_lup) { build(:levelling_up_premium_payments_eligibility, :ineligible) }
 
       [
         {itt_subject: "mathematics", itt_academic_year: AcademicYear::Type.new.serialize(AcademicYear.new(2019))},
