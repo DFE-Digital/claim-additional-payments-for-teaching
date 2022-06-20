@@ -1,39 +1,6 @@
 require "rails_helper"
 
 RSpec.feature "Ineligible Teacher Early-Career Payments claims" do
-  context "when PolicyConfiguration current_academic_year is NOT 2021" do
-    before do
-      @ecp_policy_date = PolicyConfiguration.for(EarlyCareerPayments).current_academic_year
-      PolicyConfiguration.for(EarlyCareerPayments).update(current_academic_year: AcademicYear.new(2022))
-    end
-
-    after do
-      PolicyConfiguration.for(EarlyCareerPayments).update(current_academic_year: @ecp_policy_date)
-    end
-
-    scenario "NQT not in Academic Year after ITT" do
-      visit landing_page_path(EarlyCareerPayments.routing_name)
-      expect(page).to have_link(href: "mailto:#{EarlyCareerPayments.feedback_email}")
-
-      # - Landing (start)
-      expect(page).to have_text(I18n.t("early_career_payments.landing_page"))
-      click_on "Start Now"
-
-      # - Which school do you teach at
-      expect(page).to have_text(I18n.t("early_career_payments.questions.current_school_search"))
-
-      choose_school schools(:penistone_grammar_school)
-
-      # - NQT in Academic Year after ITT
-      expect(page).to have_text(I18n.t("early_career_payments.questions.nqt_in_academic_year_after_itt.heading", started_or_completed: "started"))
-
-      choose "No"
-      click_on "Continue"
-
-      expect(page).to have_text(I18n.t("early_career_payments.ineligible.reason.generic"))
-    end
-  end
-
   scenario "When the school selected is ineligible" do
     start_early_career_payments_claim
 
@@ -264,7 +231,6 @@ RSpec.feature "Ineligible Teacher Early-Career Payments claims" do
 
     expect(page).to have_text(I18n.t("early_career_payments.ineligible.heading"))
     expect(page).to have_link(href: "#{EarlyCareerPayments.eligibility_page_url}#eligibility-criteria")
-    expect(page).to have_text(I18n.t("early_career_payments.ineligible.reason.itt_subject"))
   end
 
   scenario "when no longer teaching an eligible ITT subject" do

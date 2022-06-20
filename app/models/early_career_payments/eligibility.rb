@@ -217,8 +217,8 @@ module EarlyCareerPayments
       raise unless all_attributes_ignored
     end
 
-    def trainee_teacher_in_2021?
-      nqt_in_academic_year_after_itt == false && policy.configuration.current_academic_year == "2021/2022"
+    def trainee_teacher?
+      nqt_in_academic_year_after_itt == false
     end
 
     def qualification_name
@@ -249,8 +249,9 @@ module EarlyCareerPayments
     end
 
     # This doesn't mean it's eligible either, ie, eligibility could be undetermined
+    # TODO: :itt_subject_none_of_the_above? might need to be more specific for CAPT-392 (not yet done)
     def ineligible?
-      ineligible_nqt_in_academic_year_after_itt? ||
+      trainee_teacher_with_itt_subject_none_of_the_above ||
         ineligible_current_school? ||
         no_entire_term_contract? ||
         not_employed_directly? ||
@@ -262,8 +263,8 @@ module EarlyCareerPayments
 
     def ineligibility_reason
       [
-        :itt_subject_none_of_the_above,
         :generic_ineligibility,
+        :itt_subject_none_of_the_above,
         :ineligible_current_school,
         :not_teaching_now_in_eligible_itt_subject
       ].find { |eligibility_check| send("#{eligibility_check}?") }
@@ -353,11 +354,6 @@ module EarlyCareerPayments
       find_cohorts(match_criteria: :exact).none?
     end
 
-    def ineligible_nqt_in_academic_year_after_itt?
-      return false if trainee_teacher_in_2021?
-      nqt_in_academic_year_after_itt == false
-    end
-
     def ineligible_current_school?
       current_school.present? && !current_school.eligible_for_early_career_payments?
     end
@@ -380,7 +376,7 @@ module EarlyCareerPayments
     end
 
     def generic_ineligibility?
-      ineligible_nqt_in_academic_year_after_itt? ||
+      trainee_teacher_with_itt_subject_none_of_the_above ||
         no_entire_term_contract? ||
         not_employed_directly? ||
         poor_performance? ||
@@ -392,9 +388,13 @@ module EarlyCareerPayments
     end
 
     def set_qualification_if_trainee_teacher
-      return unless trainee_teacher_in_2021?
+      return unless trainee_teacher?
 
       self.qualification = :postgraduate_itt
+    end
+
+    def trainee_teacher_with_itt_subject_none_of_the_above
+      trainee_teacher? && itt_subject_none_of_the_above?
     end
   end
 end

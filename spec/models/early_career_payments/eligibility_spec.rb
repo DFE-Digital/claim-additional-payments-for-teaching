@@ -281,7 +281,7 @@ RSpec.describe EarlyCareerPayments::Eligibility, type: :model do
     end
 
     [
-      {policy_year: AcademicYear::Type.new.serialize(AcademicYear.new(2021)), expected_result: false},
+      {policy_year: AcademicYear::Type.new.serialize(AcademicYear.new(2021)), expected_result: true},
       {policy_year: AcademicYear::Type.new.serialize(AcademicYear.new(2022)), expected_result: true}
     ].each do |scenario|
       context "with a policy configuration for #{scenario[:policy_year]}" do
@@ -298,7 +298,9 @@ RSpec.describe EarlyCareerPayments::Eligibility, type: :model do
           eligibility.nqt_in_academic_year_after_itt = true
           expect(eligibility.ineligible?).to eql false
 
+          # TODO: CAPT-350 means this is ineligible, CAPT-392 will add an additional question if :none_of_the_above
           eligibility.nqt_in_academic_year_after_itt = false
+          eligibility.eligible_itt_subject = :none_of_the_above
           expect(eligibility.ineligible?).to eql scenario[:expected_result]
         end
       end
@@ -454,7 +456,7 @@ RSpec.describe EarlyCareerPayments::Eligibility, type: :model do
     end
 
     [
-      {policy_year: AcademicYear::Type.new.serialize(AcademicYear.new(2021)), ineligibility_reason: nil},
+      {policy_year: AcademicYear::Type.new.serialize(AcademicYear.new(2021)), ineligibility_reason: :generic_ineligibility},
       {policy_year: AcademicYear::Type.new.serialize(AcademicYear.new(2022)), ineligibility_reason: :generic_ineligibility}
     ].each do |scenario|
       context "with a policy configuration for #{scenario[:policy_year]}" do
@@ -477,7 +479,9 @@ RSpec.describe EarlyCareerPayments::Eligibility, type: :model do
           eligibility.nqt_in_academic_year_after_itt = true
           expect(eligibility.ineligibility_reason).to be_nil
 
+          # TODO: CAPT-350 means this is ineligible, CAPT-392 will add an additional question if :none_of_the_above
           eligibility.nqt_in_academic_year_after_itt = false
+          eligibility.eligible_itt_subject = :none_of_the_above
           expect(eligibility.ineligibility_reason).to eql scenario[:ineligibility_reason]
 
           expect(EarlyCareerPayments::Eligibility.new(employed_as_supply_teacher: true, has_entire_term_contract: false).ineligibility_reason).to eql :generic_ineligibility
@@ -1178,44 +1182,25 @@ RSpec.describe EarlyCareerPayments::Eligibility, type: :model do
     end
   end
 
-  describe "#trainee_teacher_in_2021?" do
-    context "when EarlyCareerPayments policy AcademicYear - 2021" do
-      let(:eligibility) { build_stubbed(:early_career_payments_eligibility, nqt_in_academic_year_after_itt: false) }
+  describe "#trainee_teacher?" do
+    let(:eligibility) { build_stubbed(:early_career_payments_eligibility, nqt_in_academic_year_after_itt: false) }
 
-      before do
-        @ecp_policy_date = PolicyConfiguration.for(EarlyCareerPayments).current_academic_year
-        PolicyConfiguration.for(EarlyCareerPayments).update(current_academic_year: AcademicYear.new(2021))
-      end
-
-      after do
-        PolicyConfiguration.for(EarlyCareerPayments).update(current_academic_year: @ecp_policy_date)
-      end
-
-      it "returns true" do
-        expect(eligibility.trainee_teacher_in_2021?).to be true
-      end
-
-      it "returns false" do
-        eligibility.nqt_in_academic_year_after_itt = true
-        expect(eligibility.trainee_teacher_in_2021?).to be false
-      end
+    before do
+      @ecp_policy_date = PolicyConfiguration.for(EarlyCareerPayments).current_academic_year
+      PolicyConfiguration.for(EarlyCareerPayments).update(current_academic_year: AcademicYear.new(2022))
     end
 
-    context "when EarlyCareerPayments policy AcademicYear - NOT 2021" do
-      before do
-        @ecp_policy_date = PolicyConfiguration.for(EarlyCareerPayments).current_academic_year
-        PolicyConfiguration.for(EarlyCareerPayments).update(current_academic_year: AcademicYear.new(2022))
-      end
+    after do
+      PolicyConfiguration.for(EarlyCareerPayments).update(current_academic_year: @ecp_policy_date)
+    end
 
-      after do
-        PolicyConfiguration.for(EarlyCareerPayments).update(current_academic_year: @ecp_policy_date)
-      end
+    it "returns true" do
+      expect(eligibility).to be_a_trainee_teacher
+    end
 
-      it "returns false" do
-        eligibility = EarlyCareerPayments::Eligibility.new(nqt_in_academic_year_after_itt: false)
-
-        expect(eligibility.trainee_teacher_in_2021?).to be false
-      end
+    it "returns false" do
+      eligibility.nqt_in_academic_year_after_itt = true
+      expect(eligibility).to_not be_a_trainee_teacher
     end
   end
 

@@ -34,8 +34,8 @@ module EarlyCareerPaymentsHelper
   end
 
   def eligible_itt_subject_translation(claim)
-    if claim.eligibility.trainee_teacher_in_2021?
-      return I18n.t("early_career_payments.questions.eligible_itt_subject_trainee_teacher_in_2021")
+    if claim.eligibility.trainee_teacher?
+      return I18n.t("early_career_payments.questions.eligible_itt_subject_trainee_teacher")
     end
 
     case claim.eligibility.qualification_name

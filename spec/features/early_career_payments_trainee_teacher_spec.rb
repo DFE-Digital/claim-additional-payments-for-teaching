@@ -1,52 +1,10 @@
 require "rails_helper"
 
 RSpec.feature "Trainee Teacher - Early Career Payments - journey" do
-  context "when Claim AcademicYear is not 2021" do
+  context "when Claim AcademicYear is 2022/2023" do
     before do
       @ecp_policy_date = PolicyConfiguration.for(EarlyCareerPayments).current_academic_year
       PolicyConfiguration.for(EarlyCareerPayments).update(current_academic_year: AcademicYear.new(2022))
-    end
-
-    after do
-      PolicyConfiguration.for(EarlyCareerPayments).update(current_academic_year: @ecp_policy_date)
-    end
-
-    scenario "cannot enter the journey to request a reminder" do
-      visit landing_page_path(EarlyCareerPayments.routing_name)
-      expect(page).to have_link(href: "mailto:#{EarlyCareerPayments.feedback_email}")
-
-      # - Landing (start)
-      expect(page).to have_text(I18n.t("early_career_payments.landing_page"))
-      click_on "Start Now"
-
-      # - Which school do you teach at
-      expect(page).to have_text(I18n.t("early_career_payments.questions.current_school_search"))
-
-      choose_school schools(:penistone_grammar_school)
-
-      # - NQT in Academic Year after ITT
-      expect(page).to have_text(I18n.t("early_career_payments.questions.nqt_in_academic_year_after_itt.heading", started_or_completed: :started))
-
-      choose "No"
-      click_on "Continue"
-
-      claim = Claim.by_policy(EarlyCareerPayments).order(:created_at).last
-      eligibility = claim.eligibility
-
-      expect(eligibility.nqt_in_academic_year_after_itt).to eql false
-      expect(page).to have_text("You are not eligible")
-    end
-  end
-
-  # As a one off due to the COVID Pandemic halting Teacher Training in 2020 and 2021
-  # a new journey was introduced so that if the Claim Academic Year for the policy is
-  # 2021, then claimants will have an extra year to complete their ITT
-  # As such, they have answered "No I am a Trainee Teacher" to the NQT question (Q1)
-  # and can setup a reminder so they can make a claim in the next eligible year.
-  context "when Claim AcademicYear is 2021" do
-    before do
-      @ecp_policy_date = PolicyConfiguration.for(EarlyCareerPayments).current_academic_year
-      PolicyConfiguration.for(EarlyCareerPayments).update(current_academic_year: AcademicYear.new(2021))
     end
 
     after do
@@ -76,11 +34,13 @@ RSpec.feature "Trainee Teacher - Early Career Payments - journey" do
       eligibility = claim.eligibility
 
       expect(eligibility.nqt_in_academic_year_after_itt).to eql false
+
+      # TODO: not sure why this needs setting?
       expect(claim.eligibility.reload.qualification).to eq "postgraduate_itt"
 
       # - Which subject did you do your postgraduate ITT in
       expect(page).to have_text(
-        I18n.t("early_career_payments.questions.eligible_itt_subject_trainee_teacher_in_2021")
+        I18n.t("early_career_payments.questions.eligible_itt_subject_trainee_teacher")
       )
 
       expect(page).to have_no_text("Foreign languages")
@@ -138,7 +98,7 @@ RSpec.feature "Trainee Teacher - Early Career Payments - journey" do
 
       # - Which subject did you do your postgraduate ITT in
       expect(page).to have_text(
-        I18n.t("early_career_payments.questions.eligible_itt_subject_trainee_teacher_in_2021")
+        I18n.t("early_career_payments.questions.eligible_itt_subject_trainee_teacher")
       )
       choose "Chemistry"
       click_on "Continue"

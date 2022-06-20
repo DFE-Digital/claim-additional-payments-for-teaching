@@ -72,7 +72,7 @@ module EarlyCareerPayments
 
         sequence.delete("eligibility-confirmed") unless claim.eligibility.eligible_now?
         sequence.delete("eligible-later") unless claim.eligibility.eligible_later? && !claim.eligibility.eligible_now?
-        sequence.delete("ineligible") unless claim.ineligible? || claim.eligibility.trainee_teacher_in_2021?
+        sequence.delete("ineligible") unless claim.ineligible? || claim.eligibility.trainee_teacher?
         sequence.delete("personal-bank-account") if claim.bank_or_building_society == "building_society"
         sequence.delete("building-society-account") if claim.bank_or_building_society == "personal_bank_account"
 
@@ -85,8 +85,8 @@ module EarlyCareerPayments
         sequence.delete("masters-doctoral-loan") if claim.has_student_loan?
         remove_masters_doctoral_loan_slugs(sequence) if claim.has_masters_doctoral_loan == false
         remove_student_loan_country_slugs(sequence)
-        trainee_teacher_slugs(sequence) if claim.eligibility.trainee_teacher_in_2021?
-        sequence.delete("future-eligibility") unless claim.eligibility.trainee_teacher_in_2021?
+        trainee_teacher_slugs(sequence) if claim.eligibility.trainee_teacher?
+        sequence.delete("future-eligibility") unless claim.eligibility.trainee_teacher?
         sequence.delete("eligible-degree-subject") unless claim.for_policy(LevellingUpPremiumPayments).eligibility.eligible_none_of_the_above?
       end
     end
