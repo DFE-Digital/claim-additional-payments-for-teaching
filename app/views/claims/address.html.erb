@@ -7,7 +7,7 @@
 
     <%= form_for current_claim, url: claim_path(current_policy_routing_name) do |form| %>
       <fieldset class="govuk-fieldset">
-        <% if current_claim.has_ecp_policy? %>
+        <% if current_claim.has_ecp_or_lupp_policy? %>
           <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
             <span class="govuk-caption-xl">Personal details</span>
             <h1 class="govuk-heading-xl">

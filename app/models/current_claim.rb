@@ -71,6 +71,14 @@ class CurrentClaim
     claims.all? { |c| c.eligibility.ineligible? }
   end
 
+  def eligible_now?
+    claims.any? { |c| c.eligibility.eligible_now? }
+  end
+
+  def eligible_later?
+    claims.any? { |c| c.eligibility.eligible_later? }
+  end
+
   def editable_attributes
     claims.flat_map { |c| c.eligibility.class::EDITABLE_ATTRIBUTES }.uniq
   end

@@ -7,7 +7,7 @@ class SubmissionsController < BasePublicController
     ClaimMailer.submitted(current_claim.main_claim).deliver_later
     ClaimVerifierJob.perform_later(current_claim.main_claim)
 
-    redirect_to current_claim.has_ecp_policy? ? claim_completion_path : claim_confirmation_path
+    redirect_to current_claim.has_ecp_or_lupp_policy? ? claim_completion_path : claim_confirmation_path
   rescue Claim::NotSubmittable
     current_claim.valid?(:submit)
     render "claims/check_your_answers"
@@ -17,6 +17,6 @@ class SubmissionsController < BasePublicController
   # oppotunity to set a reminder up where name and email is re-used from claim.
   def show
     render :show
-    clear_claim_session unless current_claim.has_ecp_policy?
+    clear_claim_session unless current_claim.has_ecp_or_lupp_policy?
   end
 end

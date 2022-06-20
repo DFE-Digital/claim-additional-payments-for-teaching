@@ -89,7 +89,7 @@ RSpec.describe CurrentClaim, type: :model do
       let(:ecp_eligibility) { build(:early_career_payments_eligibility, :eligible) }
       let(:lup_eligibility) { build(:levelling_up_premium_payments_eligibility, :eligible) }
 
-      let(:ecp_claim) { build(:claim, academic_year: "2022/2023", eligibility: ecp_eligibility) }
+      let(:ecp_claim) { build(:claim, academic_year: "2021/2022", eligibility: ecp_eligibility) }
       let(:lup_claim) { build(:claim, academic_year: "2022/2023", eligibility: lup_eligibility) }
 
       let(:cc) { described_class.new(claims: [ecp_claim, lup_claim]) }
@@ -117,6 +117,76 @@ RSpec.describe CurrentClaim, type: :model do
         let(:lup_eligibility) { build(:levelling_up_premium_payments_eligibility, :ineligible) }
 
         it { is_expected.to be true }
+      end
+    end
+
+    describe "#eligible_now?" do
+      subject { cc.eligible_now? }
+
+      let(:ecp_eligibility) { build(:early_career_payments_eligibility, :eligible) }
+      let(:lup_eligibility) { build(:levelling_up_premium_payments_eligibility, :eligible) }
+
+      let(:ecp_claim) { build(:claim, academic_year: "2021/2022", eligibility: ecp_eligibility) }
+      let(:lup_claim) { build(:claim, academic_year: "2022/2023", eligibility: lup_eligibility) }
+
+      let(:cc) { described_class.new(claims: [ecp_claim, lup_claim]) }
+
+      context "when both claims are eligible" do
+        it { is_expected.to be true }
+      end
+
+      context "when ECP claim is ineligible" do
+        let(:ecp_eligibility) { build(:early_career_payments_eligibility, :ineligible) }
+
+        it { is_expected.to be true }
+      end
+
+      context "when LUP claim is ineligible" do
+        let(:lup_eligibility) { build(:levelling_up_premium_payments_eligibility, :ineligible) }
+
+        it { is_expected.to be true }
+      end
+
+      context "when both claims are ineligible" do
+        let(:ecp_eligibility) { build(:early_career_payments_eligibility, :ineligible) }
+        let(:lup_eligibility) { build(:levelling_up_premium_payments_eligibility, :ineligible) }
+
+        it { is_expected.to be false }
+      end
+    end
+
+    describe "#eligible_later?" do
+      subject { cc.eligible_later? }
+
+      let(:ecp_eligibility) { build(:early_career_payments_eligibility, :eligible) }
+      let(:lup_eligibility) { build(:levelling_up_premium_payments_eligibility, :eligible) }
+
+      let(:ecp_claim) { build(:claim, academic_year: "2021/2022", eligibility: ecp_eligibility) }
+      let(:lup_claim) { build(:claim, academic_year: "2022/2023", eligibility: lup_eligibility) }
+
+      let(:cc) { described_class.new(claims: [ecp_claim, lup_claim]) }
+
+      context "when both claims are eligible" do
+        it { is_expected.to be true }
+      end
+
+      context "when ECP claim is ineligible" do
+        let(:ecp_eligibility) { build(:early_career_payments_eligibility, :ineligible) }
+
+        it { is_expected.to be true }
+      end
+
+      context "when LUP claim is ineligible" do
+        let(:lup_eligibility) { build(:levelling_up_premium_payments_eligibility, :ineligible) }
+
+        it { is_expected.to be true }
+      end
+
+      context "when both claims are ineligible" do
+        let(:ecp_eligibility) { build(:early_career_payments_eligibility, :ineligible) }
+        let(:lup_eligibility) { build(:levelling_up_premium_payments_eligibility, :ineligible) }
+
+        it { is_expected.to be false }
       end
     end
 
