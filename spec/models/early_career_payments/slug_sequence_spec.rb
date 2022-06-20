@@ -328,6 +328,7 @@ RSpec.describe EarlyCareerPayments::SlugSequence do
     context "when a trainee teacher" do
       it "includes only the slugs related to this micro-journey" do
         claim.eligibility.nqt_in_academic_year_after_itt = false
+        lup_claim.eligibility.nqt_in_academic_year_after_itt = false
 
         expected_slugs = %w[
           nqt-in-academic-year-after-itt

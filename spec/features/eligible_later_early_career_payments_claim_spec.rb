@@ -28,18 +28,18 @@ RSpec.feature "Eligible later Teacher Early-Career Payments", pending: "Reminder
         #     {itt_subject: "foreign_languages", itt_academic_year: AcademicYear.new(2020), award_amount: number_to_currency(3_000, precision: 0), next_eligible_year: AcademicYear.new(2022)}
         #   ]
         # },
-        {
-          policy_year: AcademicYear.new(2022),
-          eligible_later: [
-            {itt_subject: "mathematics", itt_academic_year: AcademicYear.new(2018), award_amount: number_to_currency(7_500, precision: 0), next_eligible_year: AcademicYear.new(2023)}
-          ]
-        },
-        {
-          policy_year: AcademicYear.new(2023),
-          eligible_later: [
-            {itt_subject: "mathematics", itt_academic_year: AcademicYear.new(2019), award_amount: number_to_currency(7_500, precision: 0), next_eligible_year: AcademicYear.new(2024)}
-          ]
-        }
+        # {
+        #   policy_year: AcademicYear.new(2022),
+        #   eligible_later: [
+        #     {itt_subject: "mathematics", itt_academic_year: AcademicYear.new(2018), award_amount: number_to_currency(7_500, precision: 0), next_eligible_year: AcademicYear.new(2023)}
+        #   ]
+        # },
+        # {
+        #   policy_year: AcademicYear.new(2023),
+        #   eligible_later: [
+        #     {itt_subject: "mathematics", itt_academic_year: AcademicYear.new(2019), award_amount: number_to_currency(7_500, precision: 0), next_eligible_year: AcademicYear.new(2024)}
+        #   ]
+        # }
       ].each do |policy|
         context "when accepting claims for AcademicYear #{policy[:policy_year]}" do
           before do
