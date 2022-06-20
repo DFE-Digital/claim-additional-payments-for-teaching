@@ -72,6 +72,11 @@ RSpec.feature "Levelling up premium payments claims" do
 
     click_on("Continue")
 
+    expect(page).to have_text("You’re eligible for an additional payment")
+    expect(page).to have_text("levelling up premium payment of:\n£2,000")
+
+    click_on("Apply now")
+
     # - How will we use the information you provide
     expect(page).to have_text("How we will use the information you provide")
     click_on "Continue"

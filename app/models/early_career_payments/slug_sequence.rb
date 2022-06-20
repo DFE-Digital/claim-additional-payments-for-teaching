@@ -70,7 +70,7 @@ module EarlyCareerPayments
           sequence.delete("employed-directly")
         end
 
-        sequence.delete("eligibility-confirmed") unless claim.eligibility.eligible_now?
+        sequence.delete("eligibility-confirmed") unless claim.claims.any? { |c| c.eligibility.eligible_now? }
         sequence.delete("eligible-later") unless claim.eligibility.eligible_later? && !claim.eligibility.eligible_now?
         sequence.delete("ineligible") unless claim.ineligible? || claim.eligibility.trainee_teacher?
         sequence.delete("personal-bank-account") if claim.bank_or_building_society == "building_society"
