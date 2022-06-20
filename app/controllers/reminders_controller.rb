@@ -77,11 +77,14 @@ class RemindersController < BasePublicController
 
   def build_reminder_from_claim
     return unless current_claim
-    if !current_claim.eligibility.trainee_teacher_in_2021? &&
-        current_claim.eligibility.nqt_in_academic_year_after_itt == false &&
-        current_claim.has_ecp_policy?
-      return
-    end
+
+    # TODO: Commenting out for now until we handle the reminders service
+    # as trainee_teacher_in_2021 is no longer a thing...
+    # if !current_claim.eligibility.trainee_teacher_in_2021? &&
+    #     current_claim.eligibility.nqt_in_academic_year_after_itt == false &&
+    #     current_claim.has_ecp_policy?
+    #   return
+    # end
 
     Reminder.new(
       full_name: current_claim.full_name,

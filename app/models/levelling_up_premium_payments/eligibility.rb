@@ -58,12 +58,14 @@ module LevellingUpPremiumPayments
       AcademicYear.new => AcademicYear::Type.new.serialize(AcademicYear.new)
     }
 
+    before_save :set_qualification_if_trainee_teacher, if: :nqt_in_academic_year_after_itt_changed?
+
     def policy
       LevellingUpPremiumPayments
     end
 
     def ineligible?
-      ineligible_nqt_in_academic_year_after_itt? ||
+      trainee_teacher_with_itt_subject_none_of_the_above ||
         has_ineligible_school? ||
         no_entire_term_contract? ||
         not_employed_directly? ||
@@ -133,14 +135,8 @@ module LevellingUpPremiumPayments
 
     # Start LUP duplicates
 
-    def ineligible_nqt_in_academic_year_after_itt?
-      return false if trainee_teacher_in_2021?
-
+    def trainee_teacher?
       nqt_in_academic_year_after_itt == false
-    end
-
-    def trainee_teacher_in_2021?
-      nqt_in_academic_year_after_itt == false && PolicyConfiguration.for(policy).current_academic_year == "2021/2022"
     end
 
     def no_entire_term_contract?
@@ -158,6 +154,16 @@ module LevellingUpPremiumPayments
 
     def ineligible_cohort?
       itt_academic_year == AcademicYear.new # `None of the above` selected
+    end
+
+    def set_qualification_if_trainee_teacher
+      return unless trainee_teacher?
+
+      self.qualification = :postgraduate_itt
+    end
+
+    def trainee_teacher_with_itt_subject_none_of_the_above
+      trainee_teacher? && itt_subject_none_of_the_above?
     end
   end
 end
