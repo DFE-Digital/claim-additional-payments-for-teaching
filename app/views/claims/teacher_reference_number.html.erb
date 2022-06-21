@@ -11,7 +11,7 @@
           <%= form.label :teacher_reference_number, t("questions.teacher_reference_number"), class: "govuk-label govuk-label--#{shared_view_css_size}" %>
         </h1>
 
-        <% if current_claim.has_ecp_policy? %>
+        <% if current_claim.has_ecp_or_lupp_policy? %>
             
           <span class="govuk-hint" id="teacher_reference_number-hint">
             You can get this from your school or on the certificate you got when you qualified as a teacher. 

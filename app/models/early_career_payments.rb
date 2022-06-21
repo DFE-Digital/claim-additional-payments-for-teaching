@@ -33,7 +33,7 @@ module EarlyCareerPayments
   end
 
   def locale_key
-    routing_name.underscore
+    name.underscore
   end
 
   def notify_reply_to_id

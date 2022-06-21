@@ -82,10 +82,9 @@ class RemindersController < BasePublicController
     # as trainee_teacher_in_2021 is no longer a thing...
     # if !current_claim.eligibility.trainee_teacher_in_2021? &&
     #     current_claim.eligibility.nqt_in_academic_year_after_itt == false &&
-    #     current_claim.has_ecp_policy?
+    #     current_claim.has_ecp_or_lupp_policy?
     #   return
     # end
-
     Reminder.new(
       full_name: current_claim.full_name,
       email_address: current_claim.email_address,

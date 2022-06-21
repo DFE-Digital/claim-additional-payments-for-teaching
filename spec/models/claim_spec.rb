@@ -599,7 +599,8 @@ RSpec.describe Claim, type: :model do
     end
 
     context "when the claim is submittable" do
-      let(:claim) { create(:claim, :submittable) }
+      let(:claim) { build(:claim, :submittable, eligibility: eligibility) }
+      let(:eligibility) { build(:levelling_up_premium_payments_eligibility, :eligible) }
 
       before { claim.submit! }
 
@@ -609,6 +610,10 @@ RSpec.describe Claim, type: :model do
 
       it "generates a reference" do
         expect(claim.reference).to_not eq nil
+      end
+
+      it "sets the eligibility award amount" do
+        expect(claim.eligibility.attributes["award_amount"]).to be_a(BigDecimal).and be_positive
       end
     end
 
@@ -629,17 +634,11 @@ RSpec.describe Claim, type: :model do
     context "when the claim is ineligible" do
       let(:claim) { create(:claim, :ineligible) }
 
-      before { claim.submit! }
-
-      it "doesn't set submitted_at" do
-        expect(claim.submitted_at).to be_nil
-      end
-
-      it "doesn't generate a reference" do
-        expect(claim.reference).to eq nil
-      end
-
-      it "adds an error" do
+      it "raises an exception and adds an error" do
+        expect { claim.submit! }
+          .to raise_error(Claim::NotSubmittable)
+          .and not_change { claim.reference }
+          .and not_change { claim.submitted_at }
         expect(claim.errors.messages[:base]).to include("You’re not eligible for this payment")
       end
     end
@@ -647,16 +646,11 @@ RSpec.describe Claim, type: :model do
     context "when the claim has already been submitted" do
       let(:claim) { create(:claim, :submitted, submitted_at: 2.days.ago) }
 
-      it "returns false" do
-        expect(claim.submit!).to eq false
-      end
-
-      it "doesn't change the reference number" do
-        expect { claim.submit! }.not_to(change { claim.reference })
-      end
-
-      it "doesn't change the submitted_at" do
-        expect { claim.submit! }.not_to(change { claim.submitted_at })
+      it "raises an exception" do
+        expect { claim.submit! }
+          .to raise_error(Claim::NotSubmittable)
+          .and not_change { claim.reference }
+          .and not_change { claim.submitted_at }
       end
     end
   end
@@ -1314,6 +1308,64 @@ RSpec.describe Claim, type: :model do
       it "returns false" do
         expect(claim.has_tslr_policy?).to eq(false)
       end
+    end
+  end
+
+  describe "#has_lupp_policy?" do
+    subject(:result) { claim.has_lupp_policy? }
+    let(:claim) { create(:claim, policy: policy) }
+
+    context "with student loans policy" do
+      let(:policy) { StudentLoans }
+
+      it { is_expected.to be false }
+    end
+
+    context "with maths and physics policy" do
+      let(:policy) { MathsAndPhysics }
+
+      it { is_expected.to be false }
+    end
+
+    context "with early-career payments policy" do
+      let(:policy) { EarlyCareerPayments }
+
+      it { is_expected.to be false }
+    end
+
+    context "with levelling-up premium payments policy" do
+      let(:policy) { LevellingUpPremiumPayments }
+
+      it { is_expected.to be true }
+    end
+  end
+
+  describe "#has_ecp_or_lupp_policy?" do
+    subject(:result) { claim.has_ecp_or_lupp_policy? }
+    let(:claim) { create(:claim, policy: policy) }
+
+    context "with student loans policy" do
+      let(:policy) { StudentLoans }
+
+      it { is_expected.to be false }
+    end
+
+    context "with maths and physics policy" do
+      let(:policy) { MathsAndPhysics }
+
+      it { is_expected.to be false }
+    end
+
+    context "with early-career payments policy" do
+      let(:policy) { EarlyCareerPayments }
+
+      it { is_expected.to be true }
+    end
+
+    context "with levelling-up premium payments policy" do
+      let(:policy) { LevellingUpPremiumPayments }
+
+      it { is_expected.to be true }
     end
   end
 

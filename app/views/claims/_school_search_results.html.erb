@@ -6,7 +6,7 @@
   <%= form_group_tag current_claim do %>
     <fieldset class="govuk-fieldset" aria-describedby="school-search-result-hint">
 
-      <% if current_claim.has_ecp_policy? %>
+      <% if current_claim.has_ecp_or_lupp_policy? %>
         <legend class="govuk-fieldset__legend govuk-fieldset__legend--<%= shared_view_css_class_size(current_claim) %>">
           <h1 class="govuk-fieldset__heading">
             <%= ecp_question %>
@@ -57,7 +57,7 @@
   <% end %>
 
   <%= form.submit "Continue", class: "govuk-button" %>
-  <% if ! current_claim.has_ecp_policy? %>
+  <% if ! current_claim.has_ecp_or_lupp_policy? %>
     <%= link_to "Search again", claim_path, class: "govuk-button govuk-button--secondary", role: "button", data: {module: "govuk-button"} %>
   <% end %>
 <% end %>

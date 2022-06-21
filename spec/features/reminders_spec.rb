@@ -1,6 +1,7 @@
 require "rails_helper"
 
-RSpec.feature "Set Reminder when Eligible Later for an Early Career Payment" do
+# TODO - LUPP claims change behaviour. These scenarios to be fixed when reminder service stories are progressed
+RSpec.feature "Set Reminder when Eligible Later for an Early Career Payment", pending: "Reminder service" do
   [
     {subject: "chemistry", cohort: "2020 to 2021", academic_year: AcademicYear.new(2020), next_year: 2022, frozen_year: Date.new(2021, 9, 1)},
     {subject: "physics", cohort: "2020 to 2021", academic_year: AcademicYear.new(2020), next_year: 2022, frozen_year: Date.new(2021, 9, 1)},

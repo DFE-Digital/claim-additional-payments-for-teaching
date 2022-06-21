@@ -85,6 +85,7 @@ RSpec.describe EarlyCareerPayments::SlugSequence do
           itt_academic_year: itt_academic_year
         )
       end
+      let(:eligibility_lup) { build(:levelling_up_premium_payments_eligibility, :ineligible) }
 
       [
         {itt_subject: "mathematics", itt_academic_year: AcademicYear::Type.new.serialize(AcademicYear.new(2019))},
@@ -327,6 +328,7 @@ RSpec.describe EarlyCareerPayments::SlugSequence do
     context "when a trainee teacher" do
       it "includes only the slugs related to this micro-journey" do
         claim.eligibility.nqt_in_academic_year_after_itt = false
+        lup_claim.eligibility.nqt_in_academic_year_after_itt = false
 
         expected_slugs = %w[
           nqt-in-academic-year-after-itt

@@ -134,8 +134,7 @@ module EarlyCareerPayments
       :qualification,
       :eligible_itt_subject,
       :teaching_subject_now,
-      :itt_academic_year,
-      :award_amount
+      :itt_academic_year
     ].freeze
     AMENDABLE_ATTRIBUTES = [:award_amount].freeze
     ATTRIBUTE_DEPENDENCIES = {
@@ -316,6 +315,11 @@ module EarlyCareerPayments
 
     def eligible_none_of_the_above?
       false
+    end
+
+    def submit!
+      self.award_amount = award_amount
+      save!
     end
 
     private

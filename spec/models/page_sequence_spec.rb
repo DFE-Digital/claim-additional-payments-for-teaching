@@ -67,7 +67,6 @@ RSpec.describe PageSequence do
       specify { expect(PageSequence.new(current_claim, slug_sequence_with_dead_ends, "complete").previous_slug).to be_nil }
       specify { expect(PageSequence.new(current_claim, slug_sequence_with_dead_ends, "existing-session").previous_slug).to be_nil }
       specify { expect(PageSequence.new(current_claim, slug_sequence_with_dead_ends, "eligible-now").previous_slug).to be_nil }
-      specify { expect(PageSequence.new(current_claim, slug_sequence_with_dead_ends, "eligibility-confirmed").previous_slug).to be_nil }
       specify { expect(PageSequence.new(current_claim, slug_sequence_with_dead_ends, "eligible-later").previous_slug).to be_nil }
       specify { expect(PageSequence.new(current_claim, slug_sequence_with_dead_ends, "ineligible").previous_slug).to be_nil }
     end

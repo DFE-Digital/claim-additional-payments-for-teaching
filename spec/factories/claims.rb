@@ -45,7 +45,7 @@ FactoryBot.define do
       eligibility_factory { ["#{policy.to_s.underscore}_eligibility".to_sym, :eligible] }
 
       after(:build) do |claim|
-        if claim.has_ecp_policy?
+        if claim.has_ecp_or_lupp_policy?
           claim.provide_mobile_number = true
           claim.mobile_number = "07474000123"
           claim.mobile_verified = true
