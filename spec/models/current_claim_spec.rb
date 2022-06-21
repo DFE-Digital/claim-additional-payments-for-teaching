@@ -324,8 +324,6 @@ RSpec.describe CurrentClaim, type: :model do
     end
 
     describe "#submit!" do
-      subject(:result) { cc.submit!(policy) }
-
       let!(:ecp_claim) { create(:claim, :submittable) }
       let!(:lup_claim) { create(:claim, :submittable) }
 
@@ -334,7 +332,7 @@ RSpec.describe CurrentClaim, type: :model do
       context "when a claim for the supplied policy is found" do
         let(:policy) { ecp_claim.policy }
 
-        before { result }
+        before { cc.submit!(policy) }
 
         it "destroys the other claims" do
           expect { lup_claim.reload }.to raise_error(ActiveRecord::RecordNotFound)
@@ -352,7 +350,7 @@ RSpec.describe CurrentClaim, type: :model do
       context "when nil policy is supplied" do
         let(:policy) { nil }
 
-        before { result }
+        before { cc.submit!(policy) }
 
         it "submits the main claim" do
           expect(ecp_claim.reload).to be_submitted
@@ -360,6 +358,8 @@ RSpec.describe CurrentClaim, type: :model do
       end
 
       context "when a claim for the supplied policy is not found" do
+        subject(:result) { cc.submit!(policy) }
+
         let(:policy) { "not_found" }
 
         it "raises an Exception" do

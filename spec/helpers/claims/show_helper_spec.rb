@@ -45,33 +45,25 @@ RSpec.describe Claims::ShowHelper do
     context "with a StudentLoans policy" do
       let(:policy) { StudentLoans }
 
-      it "returns a text string" do
-        expect(name).to eq "student loan"
-      end
+      it { is_expected.to eq "student loan" }
     end
 
     context "with a EarlyCareerPayments policy" do
       let(:policy) { EarlyCareerPayments }
 
-      it "returns a text string" do
-        expect(name).to eq "early-career payment"
-      end
+      it { is_expected.to eq "early-career payment" }
     end
 
     context "with a MathsAndPhysics policy" do
       let(:policy) { MathsAndPhysics }
 
-      it "returns a text string" do
-        expect(name).to eq "maths and physic" # Not a bug; a feature
-      end
+      it { is_expected.to eq "maths and physic" } # Not a bug; a feature ;)
     end
 
     context "with a LevellingUpPremiumPayments policy" do
       let(:policy) { LevellingUpPremiumPayments }
 
-      it "returns a text string" do
-        expect(name).to eq "levelling up premium payment"
-      end
+      it { is_expected.to eq "levelling up premium payment" }
     end
   end
 

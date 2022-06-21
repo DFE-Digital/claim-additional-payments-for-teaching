@@ -6,7 +6,7 @@
       <h1 class="govuk-panel__title">You’re eligible for an additional payment</h1>
     </div>
 
-    <% if current_claim.eligible_now.size == 1 %>
+    <% if current_claim.eligible_now.one? %>
       <%= render partial: "eligibility_confirmed_single", locals: { claim: current_claim.eligible_now.first } %>
     <% else %>
       <%= render partial: "eligibility_confirmed_multiple", locals: { claims: current_claim.eligible_now_and_sorted } %>

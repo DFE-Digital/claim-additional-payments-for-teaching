@@ -613,7 +613,7 @@ RSpec.describe Claim, type: :model do
       end
 
       it "sets the eligibility award amount" do
-        expect(claim.eligibility.attributes["award_amount"]).to be_a(BigDecimal)
+        expect(claim.eligibility.attributes["award_amount"]).to be_a(BigDecimal).and be_positive
       end
     end
 
@@ -634,28 +634,12 @@ RSpec.describe Claim, type: :model do
     context "when the claim is ineligible" do
       let(:claim) { create(:claim, :ineligible) }
 
-      before {
-        begin
-          claim.submit!
-        rescue
-          nil
-        end
-      }
-
-      it "doesn't set submitted_at" do
-        expect(claim.submitted_at).to be_nil
-      end
-
-      it "doesn't generate a reference" do
-        expect(claim.reference).to eq nil
-      end
-
-      it "adds an error" do
+      it "raises an exception and adds an error" do
+        expect { claim.submit! }
+          .to raise_error(Claim::NotSubmittable)
+          .and not_change { claim.reference }
+          .and not_change { claim.submitted_at }
         expect(claim.errors.messages[:base]).to include("You’re not eligible for this payment")
-      end
-
-      it "raises an exception" do
-        expect { claim.submit! }.to raise_error(Claim::NotSubmittable)
       end
     end
 
@@ -663,27 +647,10 @@ RSpec.describe Claim, type: :model do
       let(:claim) { create(:claim, :submitted, submitted_at: 2.days.ago) }
 
       it "raises an exception" do
-        expect { claim.submit! }.to raise_error(Claim::NotSubmittable)
-      end
-
-      it "doesn't change the reference number" do
-        expect {
-          begin
-            claim.submit!
-          rescue
-            nil
-          end
-        }.not_to(change { claim.reference })
-      end
-
-      it "doesn't change the submitted_at" do
-        expect {
-          begin
-            claim.submit!
-          rescue
-            nil
-          end
-        }.not_to(change { claim.submitted_at })
+        expect { claim.submit! }
+          .to raise_error(Claim::NotSubmittable)
+          .and not_change { claim.reference }
+          .and not_change { claim.submitted_at }
       end
     end
   end
