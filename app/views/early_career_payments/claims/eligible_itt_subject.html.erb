@@ -1,6 +1,7 @@
 <% content_for(:page_title, page_title(eligible_itt_subject_translation(current_claim), policy: current_policy_routing_name, show_error: current_claim.errors.any?)) %>
 <% path_for_form = current_claim.persisted? ? claim_path(current_policy_routing_name) : claims_path(current_policy_routing_name) %>
-<% subjects = IttSubjectSet.from_current_claim(current_claim).subjects %>
+<% lup_claim_eligibility = current_claim.for_policy(LevellingUpPremiumPayments).eligibility %>
+<% subjects = subjects(trainee_teacher: !lup_claim_eligibility.nqt_in_academic_year_after_itt, itt_academic_year: lup_claim_eligibility.itt_academic_year, ineligible_for_lup: lup_claim_eligibility.ineligible?) %>
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
