@@ -34,12 +34,6 @@ RSpec.feature "Ineligible Teacher Early-Career Payments claims by cohort" do
         {itt_subject: "chemistry", itt_academic_year: AcademicYear.new(2019)},
         {itt_subject: "foreign_languages", itt_academic_year: AcademicYear.new(2019)}
       ]
-    },
-    {
-      policy_year: AcademicYear.new(2024),
-      ineligible_cohorts: [
-        {itt_subject: "mathematics", itt_academic_year: AcademicYear.new(2018)}
-      ]
     }
   ].each do |policy|
     context "when accepting claims for AcademicYear #{policy[:policy_year]}" do

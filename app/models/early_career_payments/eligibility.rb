@@ -255,7 +255,7 @@ module EarlyCareerPayments
         no_entire_term_contract? ||
         not_employed_directly? ||
         poor_performance? ||
-        itt_subject_none_of_the_above? ||
+        itt_subject_ineligible_given_legacy_specs_and_new_combined_ecp_and_lup_journey? ||
         not_teaching_now_in_eligible_itt_subject? ||
         ineligible_cohort?
     end
@@ -323,6 +323,36 @@ module EarlyCareerPayments
     end
 
     private
+
+    def itt_subject_ineligible_given_legacy_specs_and_new_combined_ecp_and_lup_journey?
+      return false if claim.academic_year.blank?
+
+      first_year_of_combined_ecp_and_lup_journey = AcademicYear.new(2022)
+
+      if claim.academic_year < first_year_of_combined_ecp_and_lup_journey
+        itt_subject_none_of_the_above?
+      else
+        has_itt_subject_other_than_those_eligible_now_or_in_the_future?
+      end
+    end
+
+    def has_itt_subject_other_than_those_eligible_now_or_in_the_future?
+      itt_subject = eligible_itt_subject # attribute name implies eligibility which isn't always the case
+      return false if itt_subject.blank?
+
+      # this keeps legacy specs passing
+      begin
+        itt_subject_checker = JourneySubjectEligibilityChecker.new(claim_year: claim.academic_year, itt_year: itt_academic_year)
+      rescue
+        # have bad year for policy, but you can't say for sure it's got an invalid subject
+        return false
+      end
+
+      # TODO: this might not work if display and symbol diverge, e.g. if `Foreign Languages`
+      # changes to `Languages` but we keep the symbol as `:foreign_languages`
+      itt_subject_symbol = itt_subject.to_sym
+      !itt_subject_symbol.in?(itt_subject_checker.current_and_future_subject_symbols(policy))
+    end
 
     def find_cohorts(match_criteria:)
       if match_criteria == :exact

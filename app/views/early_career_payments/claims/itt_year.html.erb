@@ -22,30 +22,13 @@
             <%= errors_tag current_claim.eligibility, :itt_academic_year %>
 
             <div class="govuk-radios">
-              <div class="govuk-radios__item">
-                <%= fields.radio_button(:itt_academic_year, AcademicYear.new(2017), class: "govuk-radios__input") %>
-                <%= fields.label "itt_academic_year_20172018", AcademicYear.new(2017).to_s(:long), class: "govuk-label govuk-radios__label" %>
-              </div>
-
-              <div class="govuk-radios__item">
-                <%= fields.radio_button(:itt_academic_year, AcademicYear.new(2018), class: "govuk-radios__input") %>
-                <%= fields.label "itt_academic_year_20182019", AcademicYear.new(2018).to_s(:long), class: "govuk-label govuk-radios__label" %>
-              </div>
-
-              <div class="govuk-radios__item">
-                <%= fields.radio_button(:itt_academic_year, AcademicYear.new(2019), class: "govuk-radios__input") %>
-                <%= fields.label "itt_academic_year_20192020", AcademicYear.new(2019).to_s(:long), class: "govuk-label govuk-radios__label" %>
-              </div>
-
-              <div class="govuk-radios__item">
-                <%= fields.radio_button(:itt_academic_year, AcademicYear.new(2020), class: "govuk-radios__input") %>
-                <%= fields.label "itt_academic_year_20202021", AcademicYear.new(2020).to_s(:long), class: "govuk-label govuk-radios__label" %>
-              </div>
-
-              <div class="govuk-radios__item">
-                <%= fields.radio_button(:itt_academic_year, AcademicYear.new(2021), class: "govuk-radios__input") %>
-                <%= fields.label "itt_academic_year_20212022", AcademicYear.new(2021).to_s(:long), class: "govuk-label govuk-radios__label" %>
-              </div>
+<!--              TODO this needs to get the year from the PolicyConfiguration-->
+              <%= JourneySubjectEligibilityChecker.selectable_itt_years_for_claim_year(AcademicYear.new(2022)).each do |year| %>
+                <div class="govuk-radios__item">
+                  <%= fields.radio_button(:itt_academic_year, year, class: "govuk-radios__input") %>
+                  <%= fields.label "itt_academic_year_#{year.start_year}#{year.end_year}", year.to_s(:long), class: "govuk-label govuk-radios__label" %>
+                </div>
+              <% end %>
 
               <div class="govuk-radios__divider">or</div>
 

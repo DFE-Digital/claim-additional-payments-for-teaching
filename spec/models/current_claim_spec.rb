@@ -113,6 +113,12 @@ RSpec.describe CurrentClaim, type: :model do
       end
     end
 
+    describe "#policies" do
+      let(:cc) { described_class.new(claims: [ecp_claim, lup_claim]) }
+
+      specify { expect(cc.policies).to contain_exactly(EarlyCareerPayments, LevellingUpPremiumPayments) }
+    end
+
     describe "#ineligible?" do
       subject { cc.ineligible? }
 

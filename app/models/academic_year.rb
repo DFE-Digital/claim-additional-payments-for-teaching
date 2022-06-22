@@ -102,6 +102,11 @@ class AcademicYear
     to_s == other.to_s
   end
 
+  # allows this class to be used in a Range
+  def succ
+    AcademicYear.new(@start_year + 1)
+  end
+
   def <=>(other)
     start_year <=> other.start_year
   end
