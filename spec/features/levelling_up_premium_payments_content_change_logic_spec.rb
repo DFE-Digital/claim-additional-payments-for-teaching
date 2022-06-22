@@ -18,7 +18,7 @@ RSpec.feature "Claims with different eligibilities content change logic" do
     click_on "Back"
     choose "2018 to 2019"
     click_on "Continue"
-    expected_subjects = ["Chemistry", "Computing", "Foreign languages", "Mathematics", "Physics", "None of the above"]
+    expected_subjects = ["Chemistry", "Computing", "Mathematics", "Physics", "None of the above"]
     expect(radio_labels).to eq(expected_subjects)
   end
 
