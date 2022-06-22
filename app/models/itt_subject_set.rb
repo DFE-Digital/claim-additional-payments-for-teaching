@@ -18,32 +18,32 @@ class IttSubjectSet
   end
 
   def subjects
-    return %i(chemistry computing mathematics physics) if @trainee_teacher
+    return %i[chemistry computing mathematics physics] if @trainee_teacher
 
     case @itt_academic_year
     when AcademicYear.new(2017)
       if @ineligible_for_lup
         []
       else
-        %i(chemistry computing mathematics physics)
+        %i[chemistry computing mathematics physics]
       end
     when AcademicYear.new(2018), AcademicYear.new(2019)
       if @ineligible_for_lup
-        %i(mathematics)
+        %i[mathematics]
       else
-        %i(chemistry computing mathematics physics)
+        %i[chemistry computing mathematics physics]
       end
     when AcademicYear.new(2020)
       if @ineligible_for_lup
-        %i(chemistry foreign_languages mathematics physics)
+        %i[chemistry foreign_languages mathematics physics]
       else
-        %i(chemistry computing foreign_languages mathematics physics)
+        %i[chemistry computing foreign_languages mathematics physics]
       end
     when AcademicYear.new(2021)
       if @ineligible_for_lup
         []
       else
-        %i(chemistry computing mathematics physics)
+        %i[chemistry computing mathematics physics]
       end
     end
   end

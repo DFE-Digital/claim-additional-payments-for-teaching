@@ -87,7 +87,7 @@ module EarlyCareerPayments
         remove_student_loan_country_slugs(sequence)
         trainee_teacher_slugs(sequence) if claim.eligibility.trainee_teacher?
         sequence.delete("future-eligibility") unless claim.eligibility.trainee_teacher?
-        sequence.delete("eligible-degree-subject") unless claim.eligibility.eligible_none_of_the_above?
+        sequence.delete("eligible-degree-subject") unless claim.eligibility.itt_subject_none_of_the_above?
       end
     end
 
