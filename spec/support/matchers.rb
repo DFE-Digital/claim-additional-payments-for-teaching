@@ -13,3 +13,5 @@ RSpec::Matchers.define :mirror do |expected|
     Hashdiff.diff(expected_attributes, actual_attributes).empty?
   end
 end
+
+RSpec::Matchers.define_negated_matcher :not_change, :change

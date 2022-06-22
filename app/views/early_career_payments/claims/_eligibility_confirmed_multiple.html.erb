@@ -1,0 +1,66 @@
+<%= render("shared/error_summary", instance: current_claim) if current_claim.errors.any? %>
+
+<%= form_for current_claim, url: claim_path(current_policy_routing_name), method: :patch do |form| %>
+  <%= form_group_tag current_claim do %>
+    <fieldset class="govuk-fieldset">
+      <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
+        <h1 class="govuk-fieldset__heading govuk-!-padding-top-2">
+          Which additional payment do you want to choose?
+        </h1>
+      </legend>
+
+      <div id="payments-hint" class="govuk-hint govuk-!-padding-bottom-2">
+        You’ll need to select one option to continue your application.
+      </div>
+
+      <%= errors_tag current_claim, :policy %>
+
+      <div class="govuk-radios" id="claim_base" data-module="govuk-radios">
+        <% claims.each do |claim| %>
+          <div class="govuk-radios__item">
+            <%= form.radio_button(:policy, claim.policy, class: "govuk-radios__input", checked: (session[:selected_claim_policy] == claim.policy.to_s)) %>
+            <%= form.label "policy_#{claim.policy.to_s.downcase}", "#{award_amount(claim)} #{policy_name(claim)}", class: "govuk-label govuk-radios__label" %>
+            <div class="govuk-hint govuk-radios__hint">
+              <%= t("#{claim.policy.locale_key}.purpose") %>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    </fieldset>
+  <% end %>
+
+  <%= form.submit "Apply now", class: "govuk-button", data: { module: "govuk-button" } %>
+<% end %>
+
+<h2 class="govuk-heading-m govuk-!-margin-top-6">Choosing your payment</h2>
+
+<p class="govuk-body">
+  For the majority of teachers, the larger payment is the most beneficial option. In rare cases, some may prefer to choose the smaller option, such as if you are close to the threshold for the <%= link_to "higher rate of tax (opens in new tab)", "https://www.gov.uk/income-tax-rates", class: "govuk-link govuk-link--no-visited-state", target: "_blank" %>.
+</p>
+
+<p class="govuk-body">
+  The payment you choose does not impact your ability to apply for additional payments in the future.
+</p>
+
+<p class="govuk-body">
+  So long as your circumstances stay the same, you may be able to claim for additional payments next year. This depends on the years you studied or when you began teaching.
+</p>
+
+<h2 class="govuk-heading-m govuk-!-margin-top-6">The different additional payment options</h2>
+
+<p class="govuk-body">
+  For more information about why you are eligible for different additional payments, read about:
+</p>
+
+<ul class='govuk-list govuk-list--bullet'>
+  <li>
+    <%= link_to "early-career payments (opens in new tab)", "https://www.gov.uk/guidance/early-career-payments-guidance-for-teachers-and-schools", class: "govuk-link govuk-link--no-visited-state", target: "_blank" %>
+  </li>
+  <li>
+    <%= link_to "levelling up premium payments (opens in new tab)", "https://www.gov.uk/guidance/levelling-up-premium-payments-for-teachers", class: "govuk-link govuk-link--no-visited-state", target: "_blank" %>
+  </li>
+</ul>
+
+<p class="govuk-body">
+  So long as your circumstances stay the same, you may be able to claim for additional payments next year. This may depend on the years you studied or when you began teaching.
+</p>

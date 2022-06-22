@@ -1,48 +1,25 @@
-<% content_for(:page_title, page_title("You are eligible to claim for early-career payment", policy: current_policy_routing_name)) %>
+<% content_for(:page_title, page_title("You’re eligible for an additional payment", policy: current_policy_routing_name, show_error: current_claim.errors.any?)) %>
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-    <% current_claim.claims.each do |claim| %>
-      <% if claim.eligibility.eligible_now? %>
-        <h1 class="govuk-heading-xl">You are eligible to apply for a <%= number_to_currency(claim.eligibility.award_amount, precision: 0) %> <%= claim.eligibility.policy.short_name.downcase.singularize %></h1>
-      <% end %>
+    <div class="govuk-panel govuk-panel--informational">
+      <h1 class="govuk-panel__title">You’re eligible for an additional payment</h1>
+    </div>
+
+    <% if current_claim.eligible_now.one? %>
+      <%= render partial: "eligibility_confirmed_single", locals: { claim: current_claim.eligible_now.first } %>
+    <% else %>
+      <%= render partial: "eligibility_confirmed_multiple", locals: { claims: current_claim.eligible_now_and_sorted } %>
     <% end %>
 
-    <h2 class="govuk-heading-l">What happens next?</h2>
+    <h2 class="govuk-heading-m govuk-!-margin-top-6">What happens next?</h2>
 
-    <p class="govuk-body govuk-!-font-weight-bold">
-      We now need to gather some personal details. In order to continue you’ll need:
+    <p class="govuk-body">
+      By providing us with further information we can verify and process your claim.
     </p>
 
-    <ul class="govuk-list govuk-list--bullet">
-      <li>
-          your National Insurance number
-      </li>
-      <li>
-          your bank account details
-      </li>
-      <li>
-          your 7-digit teacher reference number - you can get this from
-          your school, the certificate you got when you qualified, or
-          by contacting the teacher qualifications helpdesk on 020 7593 5394 or
-          <%= mail_to "qts.enquiries@education.gov.uk",
-            "qts.enquiries@education.gov.uk",
-            class: "govuk-link"
-          %>
-      </li>
-      <li>
-          when you took out your student loan (if you have one) - if
-          you don't know when this was, you can find out by logging into your
-          <%= link_to "student loan account",
-            EarlyCareerPayments.student_loan_balance_url,
-            class: "govuk-link",
-            title: "govuk-link (opens in new tab)",
-            rel: "noreferrer noopener",
-            target: "_blank"
-          %>
-      </li>
-    </ul>
-
-    <%= button_to "Continue", claim_path(current_policy_routing_name), method: :patch, class: "govuk-button", role: :button, data: { module: "govuk-button"}, params: { claim: { eligibility_attributes: {award_amount: current_claim.award_amount } } } %>
+    <p class="govuk-body">
+      Once approved, the Department for Education will make the payment directly to you in one lump sum.
+    </p>
   </div>
 </div>

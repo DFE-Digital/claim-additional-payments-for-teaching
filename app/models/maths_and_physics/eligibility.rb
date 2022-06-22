@@ -122,6 +122,9 @@ module MathsAndPhysics
       I18n.t("answers.qts_award_years.#{qts_award_year}", year: year_for_answer.to_s(:long))
     end
 
+    def submit!
+    end
+
     private
 
     def not_teaching_maths_or_physics?

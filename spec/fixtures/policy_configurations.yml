@@ -8,5 +8,5 @@ maths_and_physics:
   policy_types: ["MathsAndPhysics"]
 
 early_career_payments:
-  current_academic_year: "2021/2022"
+  current_academic_year: "2022/2023"
   policy_types: ["EarlyCareerPayments", "LevellingUpPremiumPayments"]

@@ -34,8 +34,11 @@ class ClaimsController < BasePublicController
   end
 
   def update
-    if params[:slug] == "personal-details"
+    case params[:slug]
+    when "personal-details"
       check_date_params
+    when "eligibility-confirmed"
+      return select_claim
     else
       current_claim.attributes = claim_params
     end
@@ -181,5 +184,18 @@ class ClaimsController < BasePublicController
     return [] unless claim_params["eligibility_attributes"]
 
     claim_params["eligibility_attributes"].keys
+  end
+
+  def select_claim
+    policy = params.fetch(:claim, {}).permit(:policy)[:policy]
+
+    unless policy
+      current_claim.errors.add(:policy, "Select an additional payment")
+      return show
+    end
+
+    session[:selected_claim_policy] = policy
+
+    redirect_to claim_path(current_policy_routing_name, next_slug)
   end
 end

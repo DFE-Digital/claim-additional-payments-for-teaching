@@ -17,7 +17,7 @@
 
     <h2 class="govuk-heading-m">What happens next</h2>
 
-    <% if current_claim.has_ecp_policy? %>
+    <% if current_claim.has_ecp_or_lupp_policy? %>
       <%= render partial: "completion" %>
     <% else %>
       <%= render partial: "confirmation", locals: { current_policy_routing_name: current_policy_routing_name } %>

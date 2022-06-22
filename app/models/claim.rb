@@ -170,11 +170,11 @@ class Claim < ApplicationRecord
     },
     if: -> { surname.present? }
 
-  validates :address_line_1, on: [:address], presence: {message: "Enter a house number or name"}, if: :has_ecp_policy?
-  validates :address_line_1, on: [:address, :submit], presence: {message: "Enter a building and street address"}, unless: :has_ecp_policy?
+  validates :address_line_1, on: [:address], presence: {message: "Enter a house number or name"}, if: :has_ecp_or_lupp_policy?
+  validates :address_line_1, on: [:address, :submit], presence: {message: "Enter a building and street address"}, unless: :has_ecp_or_lupp_policy?
   validates :address_line_1, length: {maximum: 100, message: "Address lines must be 100 characters or less"}
   validates :address_line_2, length: {maximum: 100, message: "Address lines must be 100 characters or less"}
-  validates :address_line_2, on: [:address], presence: {message: "Enter a building and street address"}, if: :has_ecp_policy?
+  validates :address_line_2, on: [:address], presence: {message: "Enter a building and street address"}, if: :has_ecp_or_lupp_policy?
   validates :address_line_3, length: {maximum: 100, message: "Address lines must be 100 characters or less"}
   validates :address_line_3, on: [:address], presence: {message: "Enter a town or city"}
   validates :address_line_4, length: {maximum: 100, message: "Address lines must be 100 characters or less"}
@@ -208,13 +208,13 @@ class Claim < ApplicationRecord
   validates :email_address, format: {with: URI::MailTo::EMAIL_REGEXP, message: "Enter an email in the format name@example.com"},
     length: {maximum: 256, message: "Email address must be 256 characters or less"}, if: -> { email_address.present? }
 
-  validates :provide_mobile_number, on: [:"provide-mobile-number", :submit], inclusion: {in: [true, false], message: "Choose yes if you want to provide a mobile number"}, if: :has_ecp_policy?
-  validates :mobile_number, on: [:"mobile-number", :submit], presence: {message: "Enter a mobile number in the correct format, for example 07123456789"}, if: -> { provide_mobile_number == true && has_ecp_policy? }
+  validates :provide_mobile_number, on: [:"provide-mobile-number", :submit], inclusion: {in: [true, false], message: "Choose yes if you want to provide a mobile number"}, if: :has_ecp_or_lupp_policy?
+  validates :mobile_number, on: [:"mobile-number", :submit], presence: {message: "Enter a mobile number in the correct format, for example 07123456789"}, if: -> { provide_mobile_number == true && has_ecp_or_lupp_policy? }
   validates :mobile_number,
     format: {
       with: /\A\+?(?:\d\s?){11}\z/,
       message: "A mobile number must be 11 digits"
-    }, if: -> { provide_mobile_number == true && mobile_number.present? && has_ecp_policy? }
+    }, if: -> { provide_mobile_number == true && mobile_number.present? && has_ecp_or_lupp_policy? }
 
   validates :bank_or_building_society, on: [:"bank-or-building-society", :submit], presence: {message: "Select personal bank account or building society"}
   validates :banking_name, on: [:"personal-bank-account", :"building-society-account", :submit], presence: {message: "Enter a name on the account"}
@@ -255,13 +255,12 @@ class Claim < ApplicationRecord
   delegate :scheduled_payment_date, to: :payment, allow_nil: true
 
   def submit!
-    if submittable?
-      self.submitted_at = Time.zone.now
-      self.reference = unique_reference
-      save!
-    else
-      false
-    end
+    raise NotSubmittable unless submittable?
+
+    self.submitted_at = Time.zone.now
+    self.reference = unique_reference
+    eligibility&.submit!
+    save!
   end
 
   def submitted?
@@ -388,6 +387,14 @@ class Claim < ApplicationRecord
 
   def has_tslr_policy?
     policy == StudentLoans
+  end
+
+  def has_lupp_policy?
+    policy == LevellingUpPremiumPayments
+  end
+
+  def has_ecp_or_lupp_policy?
+    has_ecp_policy? || has_lupp_policy?
   end
 
   def important_notes
@@ -525,7 +532,7 @@ class Claim < ApplicationRecord
   end
 
   def submittable_mobile_details?
-    return true unless has_ecp_policy?
+    return true unless has_ecp_or_lupp_policy?
     return true if provide_mobile_number && mobile_number.present? && mobile_verified == true
     return true if provide_mobile_number == false && mobile_number.nil? && mobile_verified == false
     return true if provide_mobile_number == false && mobile_verified.nil?

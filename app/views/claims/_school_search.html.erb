@@ -22,7 +22,7 @@
 
     <%= hidden_field_tag :exclude_closed, exclude_closed, id: nil %>
    
-   <% if current_claim.has_ecp_policy? %>
+   <% if current_claim.has_ecp_or_lupp_policy? %>
      <h1 class="govuk-label-wrapper">
       <%= label_tag :school_search, ecp_question, class: "govuk-label govuk-label--#{shared_view_css_size}" %>
      </h1>

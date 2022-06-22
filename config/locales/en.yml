@@ -279,6 +279,7 @@ en:
     policy_short_name: "Early-Career Payments"
     claim_description: "for an early-career payment"
     claim_subject: "Early-career payment"
+    purpose: "For early career teachers who teach certain subjects."
     support_email_address: "earlycareerteacherpayments@digital.education.gov.uk"
     landing_page: "Apply for an early-career payment"
     ineligible:
@@ -315,7 +316,7 @@ en:
       eligible_itt_subject: "Which subject did you do your %{qualification} in?"
       eligible_itt_subject_assessment_only: "Which subject did you do your assessment in?"
       eligible_itt_subject_overseas_recognition: "Which subject did you do your teaching qualification in?"
-      eligible_itt_subject_trainee_teacher_in_2021: "Which subject are you currently doing your Initial Teacher Training (ITT) in?"
+      eligible_itt_subject_trainee_teacher: "Which subject are you currently doing your Initial Teacher Training (ITT) in?"
       teaching_subject_now: "Do you teach %{eligible_itt_subject} now?"
       itt_academic_year:
         qualification:
@@ -360,6 +361,9 @@ en:
         none_of_the_above: "None of the above"
     reminders:
       full_name: Full name
+  levelling_up_premium_payments:
+    purpose: For early career teachers who teach certain subjects and work in disadvantaged schools.
+    policy_short_name: "Levelling Up Premium Payments"
   activerecord:
     errors:
       models:
@@ -386,5 +390,3 @@ en:
                   mathematics: "Select yes if you currently teach mathematics"
                   foreign_languages: "Select yes if you currently teach foreign languages"
                   physics: "Select yes if you currently teach physics"
-  levelling_up_premium_payments:
-    policy_short_name: "Levelling Up Premium Payments"
