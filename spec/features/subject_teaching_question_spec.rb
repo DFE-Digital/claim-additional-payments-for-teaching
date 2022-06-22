@@ -24,6 +24,9 @@ RSpec.feature "Resetting dependant attributes when the claim is ineligible" do
 
       visit claim_path(claim.policy.routing_name, "teaching-subject-now")
       expect(page).to have_text("chemistry, computing, foreign languages, mathematics or physics")
+
+      click_on "Continue"
+      expect(page).to have_text("Select yes if you currently spend at least half of your contracted hours teaching eligible subjects")
     end
   end
 

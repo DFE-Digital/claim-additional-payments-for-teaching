@@ -341,40 +341,4 @@ RSpec.describe EarlyCareerPayments::SlugSequence do
       end
     end
   end
-
-  describe "year and subject flow" do
-    context "2017/2018" do
-      before { claim.eligibility.itt_academic_year = AcademicYear.new(2017) }
-
-      context "chemistry" do
-        before { claim.eligibility.eligible_itt_subject = "chemistry" }
-
-        specify { expect(slug_sequence.slugs).to include_array_subsequence(["eligible-itt-subject", "teaching-subject-now"]) }
-      end
-
-      context "computing" do
-        before { claim.eligibility.eligible_itt_subject = "computing" }
-
-        specify { expect(slug_sequence.slugs).to include_array_subsequence(["eligible-itt-subject", "teaching-subject-now"]) }
-      end
-
-      context "mathematics" do
-        before { claim.eligibility.eligible_itt_subject = "mathematics" }
-
-        specify { expect(slug_sequence.slugs).to include_array_subsequence(["eligible-itt-subject", "teaching-subject-now"]) }
-      end
-
-      context "physics" do
-        before { claim.eligibility.eligible_itt_subject = "physics" }
-
-        specify { expect(slug_sequence.slugs).to include_array_subsequence(["eligible-itt-subject", "teaching-subject-now"]) }
-      end
-
-      context "none of the above" do
-        before { claim.eligibility.eligible_itt_subject = "none_of_the_above" }
-
-        specify { expect(slug_sequence.slugs).to include_array_subsequence(["eligible-itt-subject", "eligible-degree-subject"]) }
-      end
-    end
-  end
 end
