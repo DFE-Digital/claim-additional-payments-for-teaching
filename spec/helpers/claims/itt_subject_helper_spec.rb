@@ -88,4 +88,10 @@ RSpec.describe Claims::IttSubjectHelper do
       end
     end
   end
+
+  describe "#itt_subjects" do
+    subject { helper.subjects_to_sentence(trainee_teacher: true) }
+
+    it { is_expected.to eq("chemistry, computing, mathematics or physics") }
+  end
 end

@@ -243,16 +243,4 @@ describe EarlyCareerPaymentsHelper do
       end
     end
   end
-
-  describe "#itt_subjects" do
-    subject { helper.itt_subjects(current_claim) }
-
-    let(:ecp_policy) { EarlyCareerPayments }
-    let(:lup_policy) { LevellingUpPremiumPayments }
-    let(:ecp_claim) { build(:claim, academic_year: "2022/2023", policy: ecp_policy) }
-    let(:lup_claim) { build(:claim, academic_year: "2022/2023", policy: lup_policy) }
-    let(:current_claim) { CurrentClaim.new(claims: [ecp_claim, lup_claim]) }
-
-    it { is_expected.to eq("chemistry, computing, mathematics or physics") }
-  end
 end

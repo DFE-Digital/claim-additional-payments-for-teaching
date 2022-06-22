@@ -69,11 +69,4 @@ module EarlyCareerPaymentsHelper
   def qts?(claim)
     %w[assessment_only overseas_recognition].include? claim.eligibility.qualification
   end
-
-  def itt_subjects(current_claim)
-    subjects = IttSubjectSet.from_current_claim(current_claim).subjects
-    subjects.map { |sub| t("early_career_payments.answers.eligible_itt_subject.#{sub}") }
-      .to_sentence(last_word_connector: " or ")
-      .downcase
-  end
 end
