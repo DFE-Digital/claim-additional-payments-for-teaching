@@ -46,7 +46,7 @@ module EarlyCareerPayments
 
     def current_school
       [
-        translate("questions.current_school"),
+        translate("early_career_payments.questions.current_school_search"),
         eligibility.current_school_name,
         "current-school"
       ]
