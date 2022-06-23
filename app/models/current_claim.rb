@@ -64,7 +64,7 @@ class CurrentClaim
   end
 
   def save(*args)
-    claims.all? { |c| c.save(*args) }
+    claims.map { |c| c.save(*args) }.all?
   end
 
   def respond_to_missing?(method_name, *args)
