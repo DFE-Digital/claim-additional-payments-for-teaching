@@ -24,5 +24,11 @@ module Claims
         end
       end
     end
+
+    def subjects_to_sentence(*args)
+      subjects(*args).map { |sub| t("early_career_payments.answers.eligible_itt_subject.#{sub}") }
+        .to_sentence(last_word_connector: " or ")
+        .downcase
+    end
   end
 end
