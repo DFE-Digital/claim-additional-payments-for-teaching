@@ -54,13 +54,17 @@ class CurrentClaim
   end
 
   def method_missing(method_name, *args, &block)
-    if [:attributes=, :save, :save!, :update, :update!, :reset_dependent_answers].include?(method_name)
+    if [:attributes=, :save!, :update, :update!, :reset_dependent_answers].include?(method_name)
       claims.each do |c|
         c.send(method_name, *args, &block) unless c == main_claim
       end
     end
 
     main_claim.send(method_name, *args, &block)
+  end
+
+  def save(*args)
+    claims.all? { |c| c.save(*args) }
   end
 
   def respond_to_missing?(method_name, *args)
