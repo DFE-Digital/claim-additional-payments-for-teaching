@@ -11,7 +11,7 @@
       <div class="govuk-form-group admin-filter-group">
         <div>
           <label class="govuk-label" for="policy">
-            Filter by service:
+            Filter by policy:
           </label>
           <%= form.select :policy, options_for_select(Policies.options_for_select, params[:policy]), {include_blank: "All"}, class: "govuk-select" %>
         </div>
@@ -45,7 +45,7 @@
             <th scope="col" class="govuk-table__header">Applicant Name</th>
             <th scope="col" class="govuk-table__header">ID Verification</th>
             <th scope="col" class="govuk-table__header">Qualification Status</th>
-            <th scope="col" class="govuk-table__header">Service</th>
+            <th scope="col" class="govuk-table__header">Policy</th>
             <% if claims_with_warning.nonzero? %>
               <th scope="col" class="govuk-table__header">Decision warning</th>
             <% end %>
