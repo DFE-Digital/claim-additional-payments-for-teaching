@@ -3,6 +3,8 @@
 <% content_for(:page_title, page_title(t("early_career_payments.questions.teaching_subject_now", eligible_itt_subject: eligible_itt_subject), policy: current_policy_routing_name, show_error: current_claim.errors.any?)) %>
 <% path_for_form = current_claim.persisted? ? claim_path(current_policy_routing_name) : claims_path(current_policy_routing_name) %>
 <% shared_view_css_size = current_claim.policy == EarlyCareerPayments ? "l" : "xl" %>
+<% lup_claim_eligibility = current_claim.for_policy(LevellingUpPremiumPayments).eligibility %>
+<% subjects = subjects_to_sentence(trainee_teacher: !lup_claim_eligibility.nqt_in_academic_year_after_itt, itt_academic_year: lup_claim_eligibility.itt_academic_year, ineligible_for_lup: lup_claim_eligibility.ineligible?) %>
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
@@ -16,15 +18,15 @@
 
           <fieldset class="govuk-fieldset" aria-describedby="teaching_subject_now-hint" role="group">
 
-            <legend class="govuk-fieldset__legend govuk-fieldset__legend--<%= shared_view_css_size %> govuk-!-margin-bottom-1">
+            <legend class="govuk-fieldset__legend govuk-fieldset__legend--<%= shared_view_css_size %>">
               <h1 class="govuk-fieldset__heading">
-                <%= t("early_career_payments.questions.teaching_subject_now", eligible_itt_subject: translated_eligible_itt_subject) %>
+                <%= t("early_career_payments.questions.teaching_subject_now") %>
               </h1>
             </legend>
 
             <span class="govuk-hint" id="teaching_subject_now-hint">
-              You can still claim even if you teach another subject but the majority of your timetable must be teaching one or
-              more of the eligible subjects (mathematics, physics, chemistry or languages).
+             At least 50% of your contracted hours allocated to teaching must be spent
+             teaching <%= subjects %>.
             </span>
 
             <%= errors_tag current_claim.eligibility, :teaching_subject_now %>

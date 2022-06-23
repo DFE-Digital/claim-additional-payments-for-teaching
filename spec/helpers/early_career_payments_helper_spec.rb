@@ -215,6 +215,7 @@ describe EarlyCareerPaymentsHelper do
 
     describe "#qts?" do
       subject { helper.qts?(claim) }
+
       let(:policy) { EarlyCareerPayments }
 
       context "when the qualification is UG degree" do
