@@ -279,7 +279,7 @@ RSpec.feature "Teacher Student Loan Repayments claims" do
     expect(claim.eligibility.reload.employment_status).to eql("different_school")
 
     fill_in :school_search, with: "Hampstead"
-    click_on "Search"
+    click_on "Continue"
 
     choose "Hampstead School"
     click_on "Continue"

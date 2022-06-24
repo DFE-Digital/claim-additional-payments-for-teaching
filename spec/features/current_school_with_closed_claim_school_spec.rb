@@ -25,6 +25,6 @@ RSpec.feature "Current school with closed claim school" do
 
     expect(claim.eligibility.employment_status).to eq("different_school")
     expect(page).to have_text(I18n.t("questions.current_school"))
-    expect(page).to have_button("Search")
+    expect(page).to have_button("Continue")
   end
 end
