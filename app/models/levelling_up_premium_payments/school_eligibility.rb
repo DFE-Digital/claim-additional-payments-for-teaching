@@ -5,15 +5,15 @@ module LevellingUpPremiumPayments
   # Whether a school is eligible for LUP could be checked via a new database
   # column on `School`.
   class SchoolEligibility
-    def initialize(school)
+    def initialize(school, policy_year=PolicyConfiguration.for(LevellingUpPremiumPayments).current_academic_year)
       raise "nil school" if school.nil?
 
       @school = school
+      @policy_year = policy_year
     end
 
     def eligible?
-      # TODO: use first year of LUP for now but this must come from a PolicyConfiguration
-      LevellingUpPremiumPayments::Award.new(school: @school, year: AcademicYear.new(2022)).has_award?
+      LevellingUpPremiumPayments::Award.new(school: @school, year: @policy_year).has_award?
     end
   end
 end
