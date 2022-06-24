@@ -30,6 +30,36 @@ RSpec.describe CurrentClaim, type: :model do
       end
     end
 
+    describe "#save" do
+      subject { current_claim.save }
+
+      let(:current_claim) { described_class.new(claims: [ecp_claim, lup_claim]) }
+
+      context "when claim attributes are invalid" do
+        let(:lup_claim) { build(:claim, academic_year: "2022/2023", policy: lup_policy, email_address: "invalid") }
+
+        it "calls save on both claims" do
+          expect(lup_claim).to receive(:save)
+          expect(ecp_claim).to receive(:save)
+          subject
+        end
+
+        it { is_expected.to be false }
+      end
+
+      context "when claim attributes are valid" do
+        let(:lup_claim) { build(:claim, academic_year: "2022/2023", policy: lup_policy, email_address: "email@example.com") }
+
+        it "calls save on both claims" do
+          expect(lup_claim).to receive(:save)
+          expect(ecp_claim).to receive(:save)
+          subject
+        end
+
+        it { is_expected.to be true }
+      end
+    end
+
     describe "#reset_dependent_answers" do
       it "calls reset reset_dependent_answers on both claims" do
         cc = described_class.new(claims: [ecp_claim, lup_claim])
