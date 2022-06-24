@@ -30,8 +30,7 @@ class BasePublicController < ApplicationController
 
   # Needed for the combined journey, as the view templates are still in early_career_payments folder
   def add_view_paths
-    PolicyConfiguration.view_paths.each do |p|
-      append_view_path(Rails.root.join("app", "views", p))
-    end
+    path = PolicyConfiguration.view_path(current_policy_routing_name)
+    prepend_view_path(Rails.root.join("app", "views", path)) if path
   end
 end

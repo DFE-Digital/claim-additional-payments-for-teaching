@@ -52,15 +52,13 @@ Rails.application.routes.draw do
       get page_name.dasherize, to: "static_pages##{page_name}", as: page_name
     end
 
-    # TODO: Needs changing when the routing_name is changed
-    scope constraints: {policy: "early-career-payments"} do
+    scope constraints: {policy: "additional-payments"} do
       get "reminders/personal-details", as: :new_reminder, to: "reminders#new"
       post "reminders/personal-details", as: :reminders, to: "reminders#create"
       resources :reminders, only: [:show, :update], param: :slug, constraints: {slug: %r{#{Reminder::SLUGS.join("|")}}}
     end
 
-    # TODO: Needs changing when the routing_name is changed
-    scope path: "/", constraints: {policy: "early-career-payments"} do
+    scope path: "/", constraints: {policy: "additional-payments"} do
       get "landing-page", to: "static_pages#landing_page", as: :landing_page
     end
   end
