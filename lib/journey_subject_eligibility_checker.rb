@@ -72,7 +72,7 @@ class JourneySubjectEligibilityChecker
 
   def subject_symbols(policy:, claim_year:, itt_year:)
     # TODO: routing name will eventually be renamed to something which covers both ECP and LUP
-    raise "Unsupported policy: #{policy}" unless policy.in?(PolicyConfiguration.policies_for_routing_name("early-career-payments"))
+    raise "Unsupported policy: #{policy}" unless policy.in?(PolicyConfiguration.policies_for_routing_name("additional-payments"))
 
     case policy
     when EarlyCareerPayments

@@ -227,4 +227,28 @@ RSpec.describe "Claims", type: :request do
       end
     end
   end
+
+  # 2022/2023 onwards /additional-payments covers ECP and LUP claims
+  describe "when navigating to /early-career-payments/* urls " do
+    context "base url" do
+      it "redirects to the additional-payments gov page" do
+        get "/early-career-payments"
+        expect(response).to redirect_to("https://www.gov.uk/government/collections/additional-payments-for-teaching-eligibility-and-payment-details")
+      end
+    end
+
+    context "base url + trailing slash" do
+      it "redirects to the additional-payments gov page" do
+        get "/early-career-payments/"
+        expect(response).to redirect_to("https://www.gov.uk/government/collections/additional-payments-for-teaching-eligibility-and-payment-details")
+      end
+    end
+
+    context "base url + anything else" do
+      it "redirects to the additional-payments gov page" do
+        get "/early-career-payments/claim"
+        expect(response).to redirect_to("https://www.gov.uk/government/collections/additional-payments-for-teaching-eligibility-and-payment-details")
+      end
+    end
+  end
 end

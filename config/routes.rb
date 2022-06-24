@@ -2,6 +2,9 @@ Rails.application.routes.draw do
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
   root to: redirect(Rails.application.config.guidance_url)
 
+  # /early-career-payments is now /additional-payments - redirect old urls to a gov page
+  get "early-career-payments(/*anything)", to: redirect("https://www.gov.uk/government/collections/additional-payments-for-teaching-eligibility-and-payment-details")
+
   # setup a simple healthcheck endpoint for monitoring purposes
   get "/healthcheck", to: proc { [200, {}, ["OK"]] }
 
