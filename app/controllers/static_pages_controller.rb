@@ -15,5 +15,6 @@ class StaticPagesController < BasePublicController
   end
 
   def landing_page
+    @academic_year = PolicyConfiguration.for(EarlyCareerPayments).current_academic_year
   end
 end
