@@ -7,6 +7,8 @@ module LevellingUpPremiumPayments
       raise "nil school" if school.nil?
       raise "nil year" if year.nil?
 
+      raise "no LUP award mapping for #{year}" unless year.in? self.class.year_to_awards
+
       @school = school
       @year = year
     end
@@ -24,7 +26,7 @@ module LevellingUpPremiumPayments
     end
 
     def self.urn_to_award_amount_in_pounds(year)
-      year_to_awards.fetch(year, {})
+      year_to_awards.fetch(year)
     end
 
     def self.year_to_awards

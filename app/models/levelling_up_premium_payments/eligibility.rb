@@ -4,7 +4,8 @@ module LevellingUpPremiumPayments
     has_one :claim, as: :eligibility, inverse_of: :eligibility
     belongs_to :current_school, optional: true, class_name: "School"
 
-    validates :award_amount, on: :amendment, award_range: {max: LevellingUpPremiumPayments::Award.max(PolicyConfiguration.for(LevellingUpPremiumPayments).current_academic_year)}
+    # TODO: use first year of LUP for now but this must come from a PolicyConfiguration
+    validates :award_amount, on: :amendment, award_range: {max: LevellingUpPremiumPayments::Award.max(AcademicYear.new(2022))}
     validates :eligible_degree_subject, on: [:"eligible-degree-subject"], inclusion: {in: [true, false], message: "Select yes if you have a degree in an eligible subject"}
 
     EDITABLE_ATTRIBUTES = [
@@ -116,8 +117,8 @@ module LevellingUpPremiumPayments
     end
 
     def calculate_award_amount
-      policy_year = PolicyConfiguration.for(LevellingUpPremiumPayments).current_academic_year
-      BigDecimal LevellingUpPremiumPayments::Award.new(school: current_school, year: policy_year).amount_in_pounds if current_school.present?
+      # TODO: use first year of LUP for now but this must come from a PolicyConfiguration
+      BigDecimal LevellingUpPremiumPayments::Award.new(school: current_school, year: AcademicYear.new(2022)).amount_in_pounds if current_school.present?
     end
 
     def with_eligible_none_of_the_above_without_eligible_degree_subject?

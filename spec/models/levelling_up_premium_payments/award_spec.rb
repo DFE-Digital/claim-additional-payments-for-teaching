@@ -11,6 +11,10 @@ RSpec.describe LevellingUpPremiumPayments::Award do
   describe ".new" do
     specify { expect { described_class.new(school: nil, year: academic_year_2022_23) }.to raise_error("nil school") }
     specify { expect { described_class.new(school: eligible_school_for_2022_23, year: nil) }.to raise_error("nil year") }
+
+    specify { expect { described_class.new(school: eligible_school_for_2022_23, year: academic_year_2021_22) }.to raise_error("no LUP award mapping for 2021/2022") }
+    specify { expect { described_class.new(school: eligible_school_for_2022_23, year: academic_year_2022_23) }.not_to raise_error }
+    specify { expect { described_class.new(school: eligible_school_for_2022_23, year: academic_year_2023_24) }.to raise_error("no LUP award mapping for 2023/2024") }
   end
 
   context "eligible" do
@@ -56,14 +60,6 @@ RSpec.describe LevellingUpPremiumPayments::Award do
         )
       }
       specify { expect(subject).to be_frozen }
-    end
-
-    context "2023/24" do
-      subject { described_class.urn_to_award_amount_in_pounds(academic_year_2023_24) }
-
-      # In 2022/23 we don't know for now what the values are. Future developers will
-      # need to fill this in
-      specify { expect(subject).to be_empty }
     end
   end
 end
