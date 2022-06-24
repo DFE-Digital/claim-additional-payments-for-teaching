@@ -301,7 +301,7 @@ en:
       nqt_in_academic_year_after_itt:
         heading: Have you %{started_or_completed} your first year as an early career teacher?
         hint: This is sometimes referred to as your induction %{year_or_period} or newly qualified teacher (NQT) and is the first year after you have gained your qualified teacher status (QTS).
-      poor_performance: Performance issues
+      poor_performance: Tell us if you are currently under any performance measures or disciplinary action
       disciplinary_action: "Are you currently subject to disciplinary action?"
       disciplinary_action_hint: "This is more serious than performance measures and could be because of misconduct. It is something we may check with your school as it will affect your eligibility."
       formal_performance_action: "Have any performance measures been started against you?"
