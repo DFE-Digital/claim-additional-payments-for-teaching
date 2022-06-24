@@ -77,6 +77,9 @@ RSpec.feature "Ineligible Levelling up premium payments claims" do
 
     # Do you have an undergraduate or postgraduate degree in an eligible subject?
     expect(page).to have_text(I18n.t("early_career_payments.questions.eligible_degree_subject"))
+    click_on "Continue"
+    expect(page).to have_text("Select yes if you have a degree in an eligible subject")
+
     choose "No"
 
     expect(eligibility.ineligible?).to be false

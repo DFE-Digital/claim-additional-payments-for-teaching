@@ -277,7 +277,7 @@ en:
       btn_text: Accept and send
     policy_name: "Claim Additional Payments for Teaching"
     policy_short_name: "Early-Career Payments"
-    claim_description: "for an early-career payment"
+    claim_description: "for an additional payment for teaching"
     claim_subject: "Early-career payment"
     purpose: "For early career teachers who teach certain subjects."
     support_email_address: "earlycareerteacherpayments@digital.education.gov.uk"
