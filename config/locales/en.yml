@@ -378,6 +378,6 @@ en:
               blank:
                 qualification:
                   undergraduate_itt: "Select which subject you did your undergraduate ITT in"
-                  postgraduate_itt: "Select the subject you are currently doing your Initial Teacher Training (ITT) in"
+                  postgraduate_itt: "Select a subject"
                   assessment_only: "Select which subject you did your assessment in"
                   overseas_recognition: "Select which subject you did your overseas recognition qualification in"
