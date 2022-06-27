@@ -275,9 +275,9 @@ en:
       heading_send_application: Now send your application
       statement: By submitting this you are confirming that, to the best of your knowledge, the details you are providing are correct.
       btn_text: Accept and send
-    policy_name: "Early-career and levelling up premium payment"
+    policy_name: "Claim Additional Payments for Teaching"
     policy_short_name: "Early-Career Payments"
-    claim_description: "for an early-career payment"
+    claim_description: "for an additional payment for teaching"
     claim_subject: "Early-career payment"
     purpose: "For early career teachers who teach certain subjects."
     support_email_address: "earlycareerteacherpayments@digital.education.gov.uk"
