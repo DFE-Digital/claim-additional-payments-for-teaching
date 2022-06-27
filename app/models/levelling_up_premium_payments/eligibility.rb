@@ -114,7 +114,8 @@ module LevellingUpPremiumPayments
     end
 
     def has_indicated_a_bad_itt_subject?
-      !eligible_itt_subject.nil? and !eligible_itt_subject.to_sym.in?([:chemistry, :computing, :mathematics, :physics])
+      lup_subjects = JourneySubjectEligibilityChecker.fixed_lup_subject_symbols
+      !eligible_itt_subject.nil? and !eligible_itt_subject.to_sym.in?(lup_subjects)
     end
 
     def submit!

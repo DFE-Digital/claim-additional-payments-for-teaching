@@ -884,4 +884,8 @@ RSpec.describe JourneySubjectEligibilityChecker do
       end
     end
   end
+
+  describe ".fixed_lup_subject_symbols" do
+    specify { expect(described_class.fixed_lup_subject_symbols).to contain_exactly(:chemistry, :computing, :mathematics, :physics) }
+  end
 end

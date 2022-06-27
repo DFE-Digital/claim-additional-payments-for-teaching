@@ -33,7 +33,7 @@ RSpec.describe LevellingUpPremiumPayments::Eligibility, type: :model do
 
         it "is eligible then switches to ineligible with a non-LUP ITT subject" do
           expect(eligible).not_to be_ineligible
-          eligible.update(eligible_itt_subject: :foreign_languages)
+          eligible.itt_subject_foreign_languages!
           expect(eligible).to be_ineligible
         end
       end

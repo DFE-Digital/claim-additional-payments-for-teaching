@@ -5,9 +5,8 @@ module Claims
     def subject_symbols(current_claim)
       subjects = if trainee_teacher?(current_claim)
         # they get the standard, unchanging LUP subject set because they won't have qualified in time for ECP by 2022/2023
-        [:chemistry, :computing, :mathematics, :physics]
+        JourneySubjectEligibilityChecker.fixed_lup_subject_symbols
       else
-        current_policy_year = current_policy_year(current_claim)
         JourneySubjectEligibilityChecker.new(claim_year: current_policy_year(current_claim), itt_year: itt_year(current_claim)).selectable_subject_symbols(current_claim)
       end
 

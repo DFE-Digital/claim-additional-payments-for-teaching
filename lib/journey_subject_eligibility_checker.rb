@@ -21,6 +21,10 @@ class JourneySubjectEligibilityChecker
     (AcademicYear.new(claim_year - 5)..AcademicYear.new(claim_year - 1)).to_a
   end
 
+  def self.fixed_lup_subject_symbols
+    [:chemistry, :computing, :mathematics, :physics]
+  end
+
   def current_and_future_subject_symbols(policy)
     (current_subject_symbols(policy) + future_subject_symbols(policy)).uniq
   end

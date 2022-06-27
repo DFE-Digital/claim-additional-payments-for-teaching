@@ -336,15 +336,14 @@ module EarlyCareerPayments
 
       begin
         itt_subject_checker = JourneySubjectEligibilityChecker.new(claim_year: claim.academic_year, itt_year: itt_academic_year)
+        # TODO: this might not work if display and symbol diverge, e.g. if `Foreign Languages`
+        # changes to `Languages` but we keep the symbol as `:foreign_languages`
+        itt_subject_symbol = itt_subject.to_sym
+        !itt_subject_symbol.in?(itt_subject_checker.current_and_future_subject_symbols(policy))
       rescue
-        # have bad year for policy, but you can't say for sure it's got an invalid subject
-        return false
+        # have bad year for policy, but can still rule some out
+        itt_subject_none_of_the_above?
       end
-
-      # TODO: this might not work if display and symbol diverge, e.g. if `Foreign Languages`
-      # changes to `Languages` but we keep the symbol as `:foreign_languages`
-      itt_subject_symbol = itt_subject.to_sym
-      !itt_subject_symbol.in?(itt_subject_checker.current_and_future_subject_symbols(policy))
     end
 
     def find_cohorts(match_criteria:)
