@@ -54,7 +54,7 @@ module EarlyCareerPayments
 
     def nqt_in_academic_year_after_itt
       [
-        nqt_h1_text,
+        translate("early_career_payments.questions.nqt_in_academic_year_after_itt.heading"),
         (eligibility.nqt_in_academic_year_after_itt? ? "Yes" : "No"),
         "nqt-in-academic-year-after-itt"
       ]
