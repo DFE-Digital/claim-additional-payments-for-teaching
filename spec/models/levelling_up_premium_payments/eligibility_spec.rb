@@ -24,6 +24,20 @@ RSpec.describe LevellingUpPremiumPayments::Eligibility, type: :model do
         expect(subject.ineligible?).to eql false
       end
     end
+
+    describe "ITT subject" do
+      let(:eligible) { build(:levelling_up_premium_payments_eligibility, :eligible) }
+
+      context "without eligible degree" do
+        before { eligible.eligible_degree_subject = false }
+
+        it "is eligible then switches to ineligible with a non-LUP ITT subject" do
+          expect(eligible).not_to be_ineligible
+          eligible.itt_subject_foreign_languages!
+          expect(eligible).to be_ineligible
+        end
+      end
+    end
   end
 
   describe "#eligible_now?" do

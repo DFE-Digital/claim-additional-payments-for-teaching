@@ -255,7 +255,7 @@ module EarlyCareerPayments
         no_entire_term_contract? ||
         not_employed_directly? ||
         poor_performance? ||
-        itt_subject_none_of_the_above? ||
+        itt_subject_ineligible? ||
         not_teaching_now_in_eligible_itt_subject? ||
         ineligible_cohort?
     end
@@ -323,6 +323,28 @@ module EarlyCareerPayments
     end
 
     private
+
+    def itt_subject_ineligible?
+      return false if claim.academic_year.blank?
+
+      has_itt_subject_other_than_those_eligible_now_or_in_the_future?
+    end
+
+    def has_itt_subject_other_than_those_eligible_now_or_in_the_future?
+      itt_subject = eligible_itt_subject # attribute name implies eligibility which isn't always the case
+      return false if itt_subject.blank?
+
+      begin
+        itt_subject_checker = JourneySubjectEligibilityChecker.new(claim_year: claim.academic_year, itt_year: itt_academic_year)
+        # TODO: this might not work if display and symbol diverge, e.g. if `Foreign Languages`
+        # changes to `Languages` but we keep the symbol as `:foreign_languages`
+        itt_subject_symbol = itt_subject.to_sym
+        !itt_subject_symbol.in?(itt_subject_checker.current_and_future_subject_symbols(policy))
+      rescue
+        # have bad year for policy, but can still rule some out
+        itt_subject_none_of_the_above?
+      end
+    end
 
     def find_cohorts(match_criteria:)
       if match_criteria == :exact

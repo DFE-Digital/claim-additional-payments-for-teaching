@@ -4,7 +4,7 @@ module LevellingUpPremiumPayments
     has_one :claim, as: :eligibility, inverse_of: :eligibility
     belongs_to :current_school, optional: true, class_name: "School"
 
-    # use first year of LUP for now but this must come from a PolicyConfiguration
+    # TODO: use first year of LUP for now but this must come from a PolicyConfiguration
     validates :award_amount, on: :amendment, award_range: {max: LevellingUpPremiumPayments::Award.max(AcademicYear.new(2022))}
     validates :eligible_degree_subject, on: [:"eligible-degree-subject"], inclusion: {in: [true, false], message: "Select yes if you have a degree in an eligible subject"}
 
@@ -48,6 +48,15 @@ module LevellingUpPremiumPayments
       computing: 5
     }, _prefix: :itt_subject
 
+    # TODO this is *inadequate* for future policy years
+    # Whatever the current policy year is, a teacher should be able to
+    # choose from the previous five academic years. To cover the life
+    # of LUP, this needs to be from 2017/2018 to 2023/2024 (inclusive) but remember
+    # only the previous five should ever be selectable (and valid) for the
+    # current policy year.
+    #
+    # You can get the previous five academic years for display (and validation) from
+    # the `JourneySubjectEligibilityChecker.selectable_itt_years_for_claim_year` method
     enum itt_academic_year: {
       AcademicYear.new(2017) => AcademicYear::Type.new.serialize(AcademicYear.new(2017)),
       AcademicYear.new(2018) => AcademicYear::Type.new.serialize(AcademicYear.new(2018)),
@@ -69,7 +78,7 @@ module LevellingUpPremiumPayments
         no_entire_term_contract? ||
         not_employed_directly? ||
         poor_performance? ||
-        with_eligible_none_of_the_above_without_eligible_degree_subject? ||
+        has_bad_itt_subject_and_no_relevant_degree? ||
         with_eligible_degree_subject_not_teaching_subject_now? ||
         ineligible_cohort?
     end
@@ -79,7 +88,15 @@ module LevellingUpPremiumPayments
     end
 
     def eligible_later?
-      same_as_now
+      final_lup_policy_year = AcademicYear.new(2024)
+
+      if PolicyConfiguration.for(LevellingUpPremiumPayments).current_academic_year < final_lup_policy_year
+        # it'll be the same as now because the LUP set of valid subjects is meant to stay constant
+        eligible_now?
+      else
+        # there is no LUP policy year after this
+        false
+      end
     end
 
     def award_amount
@@ -96,8 +113,9 @@ module LevellingUpPremiumPayments
       end
     end
 
-    def eligible_none_of_the_above?
-      itt_subject_none_of_the_above?
+    def has_indicated_a_bad_itt_subject?
+      lup_subjects = JourneySubjectEligibilityChecker.fixed_lup_subject_symbols
+      !eligible_itt_subject.nil? and !eligible_itt_subject.to_sym.in?(lup_subjects)
     end
 
     def submit!
@@ -107,33 +125,28 @@ module LevellingUpPremiumPayments
 
     private
 
+    def has_bad_itt_subject_and_no_relevant_degree?
+      has_indicated_a_bad_itt_subject? and has_indicated_they_lack_eligible_degree?
+    end
+
     def has_ineligible_school?
       current_school.present? and !LevellingUpPremiumPayments::SchoolEligibility.new(current_school).eligible?
     end
 
-    # unlike ECP, the situation cannot change for a teacher in the future
-    def same_as_now
-      eligible_now?
-    end
-
     def calculate_award_amount
-      # use first year of LUP for now but this must come from a PolicyConfiguration
+      # TODO: use first year of LUP for now but this must come from a PolicyConfiguration
       BigDecimal LevellingUpPremiumPayments::Award.new(school: current_school, year: AcademicYear.new(2022)).amount_in_pounds if current_school.present?
     end
 
-    def with_eligible_none_of_the_above_without_eligible_degree_subject?
-      eligible_none_of_the_above? && without_eligible_degree_subject?
-    end
-
     def with_eligible_degree_subject_not_teaching_subject_now?
-      eligible_none_of_the_above? && eligible_degree_subject && not_teaching_subject_now?
+      has_indicated_a_bad_itt_subject? && eligible_degree_subject && not_teaching_subject_now?
     end
 
     def not_teaching_subject_now?
       teaching_subject_now == false
     end
 
-    def without_eligible_degree_subject?
+    def has_indicated_they_lack_eligible_degree?
       eligible_degree_subject == false
     end
 

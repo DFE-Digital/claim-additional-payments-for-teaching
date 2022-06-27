@@ -3,17 +3,6 @@ require "rails_helper"
 RSpec.feature "Ineligible Teacher Early-Career Payments claims by cohort" do
   [
     {
-      policy_year: AcademicYear.new(2021),
-      ineligible_cohorts: [
-        {itt_subject: "physics", itt_academic_year: AcademicYear.new(2018)},
-        {itt_subject: "chemistry", itt_academic_year: AcademicYear.new(2018)},
-        {itt_subject: "foreign_languages", itt_academic_year: AcademicYear.new(2018)},
-        {itt_subject: "physics", itt_academic_year: AcademicYear.new(2019)},
-        {itt_subject: "chemistry", itt_academic_year: AcademicYear.new(2019)},
-        {itt_subject: "foreign_languages", itt_academic_year: AcademicYear.new(2019)}
-      ]
-    },
-    {
       policy_year: AcademicYear.new(2022),
       ineligible_cohorts: [
         {itt_subject: "chemistry", itt_academic_year: AcademicYear.new(2018)},
@@ -33,12 +22,6 @@ RSpec.feature "Ineligible Teacher Early-Career Payments claims by cohort" do
         {itt_subject: "physics", itt_academic_year: AcademicYear.new(2019)},
         {itt_subject: "chemistry", itt_academic_year: AcademicYear.new(2019)},
         {itt_subject: "foreign_languages", itt_academic_year: AcademicYear.new(2019)}
-      ]
-    },
-    {
-      policy_year: AcademicYear.new(2024),
-      ineligible_cohorts: [
-        {itt_subject: "mathematics", itt_academic_year: AcademicYear.new(2018)}
       ]
     }
   ].each do |policy|

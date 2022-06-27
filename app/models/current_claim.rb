@@ -23,6 +23,10 @@ class CurrentClaim
     claims.find { |c| c.eligibility_type == "#{policy}::Eligibility" }
   end
 
+  def policies
+    claims.collect { |claim| claim.policy }
+  end
+
   # This might need to change default to ECP for now
   def main_claim
     for_policy(EarlyCareerPayments) || claims.first
