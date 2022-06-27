@@ -1,6 +1,7 @@
 class JourneySubjectEligibilityChecker
   def initialize(claim_year:, itt_year:)
-    validate_claim_year(claim_year)
+    raise "Claim year #{claim_year} is after ECP and LUP both ended" if claim_year > AcademicYear.new(2024)
+
     @claim_year = claim_year
 
     validate_itt_year(itt_year)
@@ -59,14 +60,6 @@ class JourneySubjectEligibilityChecker
   def potentially_still_eligible_policies(current_claim)
     potentially_still_eligible_claims = current_claim.claims.select { |claim| !claim.eligibility.ineligible? }
     potentially_still_eligible_claims.collect { |claim| claim.policy }
-  end
-
-  def validate_claim_year(claim_year)
-    if claim_year < AcademicYear.new(2022)
-      raise "Claim year #{claim_year} is before combined ECP/LUP journey"
-    elsif claim_year > AcademicYear.new(2024)
-      raise "Claim year #{claim_year} is after ECP and LUP both ended"
-    end
   end
 
   def validate_itt_year(itt_year)

@@ -11,7 +11,7 @@ RSpec.shared_examples "ECP and LUP Combined Journey Admin Tasks Presenter" do |p
       identity_confirmation: [["Current school", school.name], ["Contact number", school.phone_number]],
       census_subjects_taught: [["Subject", "Mathematics"]],
       qualifications: [["Qualification", "Postgraduate initial teacher training (ITT)"],
-        ["ITT start year", "In the academic year 2018 to 2019"],
+        ["ITT start year", "In the academic year 2019 to 2020"],
         ["ITT subject", "Mathematics"]]
     )
   }

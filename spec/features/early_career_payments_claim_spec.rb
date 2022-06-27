@@ -1,18 +1,11 @@
 require "rails_helper"
 
 RSpec.feature "Teacher Early-Career Payments claims" do
-  before do
-    @ecp_policy_date = PolicyConfiguration.for(EarlyCareerPayments).current_academic_year
-    PolicyConfiguration.for(EarlyCareerPayments).update(current_academic_year: academic_year)
-  end
-
-  after do
-    PolicyConfiguration.for(EarlyCareerPayments).update(current_academic_year: @ecp_policy_date)
-  end
-  let(:academic_year) { AcademicYear.new(2021) }
-
   # create a school eligible for ECP and LUP so can walk the whole journey
   let!(:school) { create(:school, :levelling_up_premium_payments_eligible, :early_career_payments_eligible) }
+  let(:current_academic_year) { PolicyConfiguration.for(EarlyCareerPayments).current_academic_year }
+
+  let(:itt_year) { current_academic_year - 3 }
 
   scenario "Teacher makes claim for 'Early-Career Payments' claim", js: true do
     visit landing_page_path(EarlyCareerPayments.routing_name)
@@ -87,7 +80,7 @@ RSpec.feature "Teacher Early-Career Payments claims" do
     find("span", text: "Did you do a deferred or part time undergraduate ITT").click
     expect(page).to have_text("You can still select the year you completed your part time or deferred ITT.")
 
-    choose "2018 to 2019"
+    choose "#{itt_year.start_year} to #{itt_year.end_year}"
     click_on "Continue"
 
     # - Which subject did you do your postgraduate ITT in
@@ -106,7 +99,7 @@ RSpec.feature "Teacher Early-Career Payments claims" do
 
     expect(claim.eligibility.reload.teaching_subject_now).to eql true
 
-    expect(claim.eligibility.reload.itt_academic_year).to eql AcademicYear.new(2018)
+    expect(claim.eligibility.reload.itt_academic_year).to eql itt_year
 
     # TODO - PLACEHOLDER compare the LUP claim is same as the ECP claim in terms of attributes - this may change
     lup_claim = Claim.by_policy(LevellingUpPremiumPayments).order(:created_at).last
@@ -434,7 +427,7 @@ RSpec.feature "Teacher Early-Career Payments claims" do
       expect(page).to have_text("2020 to 2021")
       expect(page).to have_text("2021 to 2022")
 
-      choose "2018 to 2019"
+      choose "#{itt_year.start_year} to #{itt_year.end_year}"
       click_on "Continue"
 
       # - Which subject did you do your postgraduate ITT in
@@ -455,7 +448,7 @@ RSpec.feature "Teacher Early-Career Payments claims" do
 
       click_on "Continue"
 
-      expect(claim.eligibility.reload.itt_academic_year).to eql AcademicYear.new(2018)
+      expect(claim.eligibility.reload.itt_academic_year).to eql itt_year
 
       # TODO - PLACEHOLDER compare the LUP claim is same as the ECP claim in terms of attributes - this may change
       claim.reload
@@ -483,7 +476,7 @@ RSpec.feature "Teacher Early-Career Payments claims" do
       expect(page).to have_text("2020 to 2021")
       expect(page).to have_text("2021 to 2022")
 
-      choose "2018 to 2019"
+      choose "#{itt_year.start_year} to #{itt_year.end_year}"
       click_on "Continue"
 
       # - Which subject did you do your postgraduate ITT in
@@ -502,7 +495,7 @@ RSpec.feature "Teacher Early-Career Payments claims" do
 
       expect(claim.eligibility.reload.teaching_subject_now).to eql true
 
-      expect(claim.eligibility.reload.itt_academic_year).to eql AcademicYear.new(2018)
+      expect(claim.eligibility.reload.itt_academic_year).to eql itt_year
 
       # TODO - PLACEHOLDER compare the LUP claim is same as the ECP claim in terms of attributes - this may change
       claim.reload
@@ -583,7 +576,7 @@ RSpec.feature "Teacher Early-Career Payments claims" do
     find("span", text: "Did you do a deferred or part time postgraduate ITT").click
     expect(page).to have_text("You can still select the year you started your part time or deferred ITT.")
 
-    choose "2018 to 2019"
+    choose "#{itt_year.start_year} to #{itt_year.end_year}"
     click_on "Continue"
 
     # - Which subject did you do your postgraduate ITT in
@@ -602,7 +595,7 @@ RSpec.feature "Teacher Early-Career Payments claims" do
 
     expect(claim.eligibility.reload.teaching_subject_now).to eql true
 
-    expect(claim.eligibility.reload.itt_academic_year).to eql AcademicYear.new(2018)
+    expect(claim.eligibility.reload.itt_academic_year).to eql itt_year
 
     # - Check your answers for eligibility
     expect(page).to have_text(I18n.t("early_career_payments.check_your_answers.part_one.primary_heading"))

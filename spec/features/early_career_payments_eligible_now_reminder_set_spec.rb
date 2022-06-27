@@ -1,23 +1,26 @@
 require "rails_helper"
 
 RSpec.feature "Eligible now can set a reminder for next year." do
+  let(:eligibility_attributes) { attributes_for(:early_career_payments_eligibility, :eligible) }
+  let(:reminder_year) { (AcademicYear.new(eligibility_attributes[:itt_academic_year]) + 5).start_year }
+
   it "auto-sets a reminders email and name from claim params and displays the correct year" do
-    travel_to Date.new(2021, 9, 1) do
-      claim = start_early_career_payments_claim
-      claim.update!(attributes_for(:claim, :submittable))
-      claim.eligibility.update!(attributes_for(:early_career_payments_eligibility, :eligible))
-      visit claim_path(claim.policy.routing_name, "check-your-answers")
-      expect(page).to have_text(claim.first_name)
-      click_on "Accept and send"
-      expect(page).to have_text("Set a reminder for when your next application window opens")
-      click_on "Set reminder"
-      expect(page).to have_field("reminder_email_address", with: claim.email_address)
-      expect(page).to have_field("reminder_full_name", with: claim.full_name)
-      click_on "Continue"
-      fill_in "reminder_one_time_password", with: get_otp_from_email
-      click_on "Confirm"
-      expect(page).to have_text("We will send you a reminder in September 2023")
-    end
+    claim = start_early_career_payments_claim
+
+    claim.update!(attributes_for(:claim, :submittable))
+    claim.eligibility.update!(eligibility_attributes)
+
+    visit claim_path(claim.policy.routing_name, "check-your-answers")
+    expect(page).to have_text(claim.first_name)
+    click_on "Accept and send"
+    expect(page).to have_text("Set a reminder for when your next application window opens")
+    click_on "Set reminder"
+    expect(page).to have_field("reminder_email_address", with: claim.email_address)
+    expect(page).to have_field("reminder_full_name", with: claim.full_name)
+    click_on "Continue"
+    fill_in "reminder_one_time_password", with: get_otp_from_email
+    click_on "Confirm"
+    expect(page).to have_text("We will send you a reminder in September #{reminder_year}")
   end
 end
 

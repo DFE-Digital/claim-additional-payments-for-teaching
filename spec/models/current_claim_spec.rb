@@ -162,8 +162,8 @@ RSpec.describe CurrentClaim, type: :model do
       let(:ecp_eligibility) { build(:early_career_payments_eligibility, :eligible) }
       let(:lup_eligibility) { build(:levelling_up_premium_payments_eligibility, :eligible) }
 
-      let(:ecp_claim) { build(:claim, academic_year: "2021/2022", eligibility: ecp_eligibility) }
-      let(:lup_claim) { build(:claim, academic_year: "2022/2023", eligibility: lup_eligibility) }
+      let(:ecp_claim) { build(:claim, eligibility: ecp_eligibility) }
+      let(:lup_claim) { build(:claim, eligibility: lup_eligibility) }
 
       let(:cc) { described_class.new(claims: [ecp_claim, lup_claim]) }
 
@@ -304,8 +304,8 @@ RSpec.describe CurrentClaim, type: :model do
       let(:ecp_eligibility) { build(:early_career_payments_eligibility, :ineligible) }
       let(:lup_eligibility) { build(:levelling_up_premium_payments_eligibility, :eligible) }
 
-      let(:ecp_claim) { create(:claim, academic_year: "2021/2022", eligibility: ecp_eligibility) }
-      let(:lup_claim) { create(:claim, academic_year: "2021/2022", eligibility: lup_eligibility) }
+      let(:ecp_claim) { create(:claim, eligibility: ecp_eligibility) }
+      let(:lup_claim) { create(:claim, eligibility: lup_eligibility) }
 
       let(:cc) { described_class.new(claims: [ecp_claim, lup_claim]) }
 
@@ -333,8 +333,8 @@ RSpec.describe CurrentClaim, type: :model do
     describe "#eligible_now_and_sorted" do
       subject(:result) { cc.eligible_now_and_sorted }
 
-      let(:ecp_claim) { create(:claim, academic_year: "2021/2022", eligibility: ecp_eligibility) }
-      let(:lup_claim) { create(:claim, academic_year: "2021/2022", eligibility: lup_eligibility) }
+      let(:ecp_claim) { create(:claim, eligibility: ecp_eligibility) }
+      let(:lup_claim) { create(:claim, eligibility: lup_eligibility) }
       let(:ecp_eligibility) { build(:early_career_payments_eligibility, :eligible, award_amount: ecp_amount) }
       let(:lup_eligibility) { build(:levelling_up_premium_payments_eligibility, :eligible, award_amount: lup_amount) }
 

@@ -7,7 +7,8 @@ module Claims
         # they get the standard, unchanging LUP subject set because they won't have qualified in time for ECP by 2022/2023
         [:chemistry, :computing, :mathematics, :physics]
       else
-        handle_legacy_specs_and_future_combined_journey(current_claim)
+        current_policy_year = current_policy_year(current_claim)
+        JourneySubjectEligibilityChecker.new(claim_year: current_policy_year(current_claim), itt_year: itt_year(current_claim)).selectable_subject_symbols(current_claim)
       end
 
       # TODO this might not work when subject keys and display values diverge, like when
@@ -24,18 +25,6 @@ module Claims
     end
 
     private
-
-    # this allows legacy specs to pass
-    def handle_legacy_specs_and_future_combined_journey(current_claim)
-      current_policy_year = current_policy_year(current_claim)
-
-      if current_policy_year >= AcademicYear.new(2022)
-        JourneySubjectEligibilityChecker.new(claim_year: current_policy_year(current_claim), itt_year: itt_year(current_claim)).selectable_subject_symbols(current_claim)
-      else
-        # let them pick *anything* for legacy tests
-        [:chemistry, :computing, :foreign_languages, :mathematics, :physics]
-      end
-    end
 
     # TODO: something like this could move elsewhere
     def current_policy_year(current_claim)

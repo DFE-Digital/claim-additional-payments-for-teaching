@@ -4,10 +4,6 @@ require "journey_subject_eligibility_checker"
 RSpec.describe JourneySubjectEligibilityChecker do
   describe ".new" do
     context "claim year validation" do
-      context "before LUP merged into ECP journey" do
-        specify { expect { described_class.new(claim_year: AcademicYear.new(2021), itt_year: AcademicYear.new(2020)) }.to raise_error("Claim year 2021/2022 is before combined ECP/LUP journey") }
-      end
-
       context "after LUP and ECP" do
         specify { expect { described_class.new(claim_year: AcademicYear.new(2025), itt_year: AcademicYear.new(2024)) }.to raise_error("Claim year 2025/2026 is after ECP and LUP both ended") }
       end
@@ -858,8 +854,8 @@ RSpec.describe JourneySubjectEligibilityChecker do
       context "2018 ITT year" do
         let(:itt_year) { AcademicYear.new(2018) }
 
-        let(:ineligible_ecp_eligibility) { build(:early_career_payments_eligibility, :ineligible, eligible_itt_subject: :mathematics) }
-        let(:ineligible_lup_eligibility) { build(:levelling_up_premium_payments_eligibility, :ineligible, eligible_itt_subject: :mathematics) }
+        let(:ineligible_ecp_eligibility) { build(:early_career_payments_eligibility, :ineligible, eligible_itt_subject: :mathematics, itt_academic_year: itt_year) }
+        let(:ineligible_lup_eligibility) { build(:levelling_up_premium_payments_eligibility, :ineligible, eligible_itt_subject: :mathematics, itt_academic_year: itt_year) }
 
         let(:ineligible_ecp_claim) { build(:claim, :first_lup_claim_year, eligibility: ineligible_ecp_eligibility) }
         let(:ineligible_lup_claim) { build(:claim, :first_lup_claim_year, eligibility: ineligible_lup_eligibility) }
@@ -876,8 +872,8 @@ RSpec.describe JourneySubjectEligibilityChecker do
       context "2019 ITT year" do
         let(:itt_year) { AcademicYear.new(2019) }
 
-        let(:ineligible_ecp_eligibility) { build(:early_career_payments_eligibility, :ineligible, eligible_itt_subject: :mathematics) }
-        let(:ineligible_lup_eligibility) { build(:levelling_up_premium_payments_eligibility, :ineligible, eligible_itt_subject: :mathematics) }
+        let(:ineligible_ecp_eligibility) { build(:early_career_payments_eligibility, :ineligible, eligible_itt_subject: :mathematics, itt_academic_year: itt_year) }
+        let(:ineligible_lup_eligibility) { build(:levelling_up_premium_payments_eligibility, :ineligible, eligible_itt_subject: :mathematics, itt_academic_year: itt_year) }
 
         let(:ineligible_ecp_claim) { build(:claim, :first_lup_claim_year, eligibility: ineligible_ecp_eligibility) }
         let(:ineligible_lup_claim) { build(:claim, :first_lup_claim_year, eligibility: ineligible_lup_eligibility) }

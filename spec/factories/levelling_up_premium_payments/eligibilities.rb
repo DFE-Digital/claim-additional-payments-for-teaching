@@ -9,7 +9,8 @@ FactoryBot.define do
       qualification { :postgraduate_itt }
       eligible_itt_subject { :mathematics }
       teaching_subject_now { true }
-      itt_academic_year { AcademicYear::Type.new.serialize(AcademicYear.new(2018)) }
+      # TODO: the year should be dynamic based on the policy configuration current academic year, otherwise it might fail when the year increments
+      itt_academic_year { AcademicYear::Type.new.serialize(AcademicYear.new(2019)) }
     end
 
     trait :ineligible do
