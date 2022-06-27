@@ -13,7 +13,7 @@ RSpec.feature "Resetting dependant attributes when the claim is ineligible" do
 
     choose "None of the above"
     click_on "Continue"
-    expect(page).to have_text("Do you have an undergraduate or postgraduate degree in an eligible subject?")
+    expect(page).to have_text("Do you have a degree in an eligible subject?")
 
     choose "No"
     click_on "Continue"
@@ -22,6 +22,6 @@ RSpec.feature "Resetting dependant attributes when the claim is ineligible" do
     visit claim_path(claim.policy.routing_name, "eligible-itt-subject")
     choose "None of the above"
     click_on "Continue"
-    expect(page).to have_text("Do you have an undergraduate or postgraduate degree in an eligible subject?")
+    expect(page).to have_text("Do you have a degree in an eligible subject?")
   end
 end

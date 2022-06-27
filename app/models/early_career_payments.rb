@@ -13,11 +13,7 @@ module EarlyCareerPayments
   POLICY_START_YEAR = AcademicYear.new(2021).freeze
 
   def start_page_url
-    if Rails.env.production?
-      "https://www.gov.uk/guidance/early-career-payments-guidance-for-teachers-and-schools"
-    else
-      "/#{routing_name}/claim"
-    end
+    Rails.application.routes.url_helpers.landing_page_path(routing_name)
   end
 
   def eligibility_page_url

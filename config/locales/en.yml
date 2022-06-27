@@ -281,7 +281,7 @@ en:
     claim_subject: "Early-career payment"
     purpose: "For early career teachers who teach certain subjects."
     support_email_address: "earlycareerteacherpayments@digital.education.gov.uk"
-    landing_page: "Apply for an early-career payment"
+    landing_page: "Find out if you are eligible for any additional payments"
     ineligible:
       poor_performance_heading: "You are not eligible for an early-career payment"
       heading: "You are not eligible"
@@ -297,11 +297,11 @@ en:
       employed_as_supply_teacher: "Are you currently employed as a supply teacher?"
       has_entire_term_contract: "Do you have a contract to teach at the same school for an entire term or longer?"
       employed_directly: "Are you employed directly by your school?"
-      eligible_degree_subject: "Do you have an undergraduate or postgraduate degree in an eligible subject?"
+      eligible_degree_subject: "Do you have a degree in an eligible subject?"
       nqt_in_academic_year_after_itt:
         heading: Have you %{started_or_completed} your first year as an early career teacher?
         hint: This is sometimes referred to as your induction %{year_or_period} or newly qualified teacher (NQT) and is the first year after you have gained your qualified teacher status (QTS).
-      poor_performance: Performance issues
+      poor_performance: Tell us if you are currently under any performance measures or disciplinary action
       disciplinary_action: "Are you currently subject to disciplinary action?"
       disciplinary_action_hint: "This is more serious than performance measures and could be because of misconduct. It is something we may check with your school as it will affect your eligibility."
       formal_performance_action: "Have any performance measures been started against you?"
@@ -309,10 +309,8 @@ en:
       qualification:
         heading: "Which route into teaching did you take?"
         hint:
-          postgraduate_itt: "Postgraduate ITT includes: university-led and school-led courses like the Postgraduate Certificate of Education (PGCE), Teach First, School Direct ITT and School Centred ITT (SCITT)."
-          undergraduate_itt: "Undergraduate ITT includes: Bachelor of Arts (BA) or Bachelor of Science (BSc) degrees."
-          assessment_only: "This is the subject you qualified with."
-          overseas_recognition: "This is the subject you trained in overseas."
+          postgraduate_itt: "Postgraduate Certificate of Education (PGCE), Teach First, School Direct ITT and School Centered ITT (SCITT)."
+          undergraduate_itt: "Bachelor of Arts (BA) or Bachelor of Science (BSc) degrees."
       eligible_itt_subject: "Which subject did you do your %{qualification} in?"
       eligible_itt_subject_assessment_only: "Which subject did you do your assessment in?"
       eligible_itt_subject_overseas_recognition: "Which subject did you do your teaching qualification in?"
@@ -380,6 +378,6 @@ en:
               blank:
                 qualification:
                   undergraduate_itt: "Select which subject you did your undergraduate ITT in"
-                  postgraduate_itt: "Select the subject you are currently doing your Initial Teacher Training (ITT) in"
+                  postgraduate_itt: "Select a subject"
                   assessment_only: "Select which subject you did your assessment in"
                   overseas_recognition: "Select which subject you did your overseas recognition qualification in"

@@ -33,7 +33,7 @@ RSpec.feature "Ineligible Teacher Student Loan Repayments claims" do
     choose_still_teaching "Yes, at another school"
 
     fill_in :school_search, with: "Bradford"
-    click_on "Search"
+    click_on "Continue"
 
     choose "Bradford Grammar School"
     click_on "Continue"

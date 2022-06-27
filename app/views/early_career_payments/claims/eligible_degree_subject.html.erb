@@ -16,18 +16,14 @@
 
           <fieldset class="govuk-fieldset" aria-describedby="eligible_degree_subject-hint" role="group">
 
-            <legend class="govuk-fieldset__legend govuk-fieldset__legend--<%= shared_view_css_size %>">
+            <legend class="govuk-fieldset__legend govuk-fieldset__legend--<%= shared_view_css_class_size(current_claim) %>">
               <h1 class="govuk-fieldset__heading">
                 <%= t("early_career_payments.questions.eligible_degree_subject") %>
               </h1>
             </legend>
 
             <span class="govuk-hint" id="has_uk_maths_or_physics_degree-hint">
-              <p>If you have an undergraduate or postgraduate degree in chemistry, computing,
-              mathematics or physics, you may still be eligible for a payment.</p>
-
-              <p>For more information on which subjects are eligible, see the
-              <%= link_to "qualifications criteria", "https://www.gov.uk/guidance/levelling-up-premium-payments-for-teachers#qualifications", class: "govuk-link" %> for this service.</p>
+              <p>This can be an undergraduate or postgraduate degree in chemistry, computing, mathematics or physics.</p>
             </span>
 
             <%= errors_tag claim.eligibility, :eligible_degree_subject %>

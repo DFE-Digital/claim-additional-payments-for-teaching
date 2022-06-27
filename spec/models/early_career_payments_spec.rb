@@ -10,17 +10,8 @@ RSpec.describe EarlyCareerPayments, type: :model do
   end
 
   describe ".start_page_url" do
-    context "Production environment" do
-      it "returns a url containing 'https://www.gov.uk/guidance/'" do
-        allow(Rails).to receive(:env) { "production".inquiry }
-        expect(subject.start_page_url).to include("https://www.gov.uk/guidance/")
-      end
-    end
-
-    context "Non-Production environments" do
-      it "returns a url containing '/early-career-payments/claim'" do
-        expect(subject.start_page_url).to include("/early-career-payments/claim")
-      end
+    it "returns a url containing '/early-career-payments/landing-page'" do
+      expect(subject.start_page_url).to include("/early-career-payments/landing-page")
     end
   end
 

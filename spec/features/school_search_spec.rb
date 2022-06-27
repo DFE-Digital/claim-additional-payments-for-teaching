@@ -7,7 +7,7 @@ RSpec.feature "Searching for school during Teacher Student Loan Repayments claim
     claim = start_student_loans_claim
 
     fill_in :school_search, with: "Penistone"
-    click_on "Search"
+    click_on "Continue"
 
     click_on "Continue"
 
@@ -25,12 +25,12 @@ RSpec.feature "Searching for school during Teacher Student Loan Repayments claim
     claim = start_student_loans_claim
 
     fill_in :school_search, with: "hamp"
-    click_on "Search"
+    click_on "Continue"
 
     click_on "Search again"
 
     fill_in :school_search, with: "penistone"
-    click_on "Search"
+    click_on "Continue"
 
     choose "Penistone Grammar School"
     click_on "Continue"
@@ -43,7 +43,7 @@ RSpec.feature "Searching for school during Teacher Student Loan Repayments claim
     start_student_loans_claim
 
     expect(page).to have_text(claim_school_question)
-    expect(page).to have_button("Search")
+    expect(page).to have_button("Continue")
 
     fill_in :school_search, with: "Penistone"
     find("li", text: schools(:penistone_grammar_school).name).click
@@ -64,7 +64,7 @@ RSpec.feature "Searching for school during Teacher Student Loan Repayments claim
     choose_still_teaching "Yes, at another school"
 
     expect(page).to have_text(I18n.t("questions.current_school"))
-    expect(page).to have_button("Search")
+    expect(page).to have_button("Continue")
 
     fill_in :school_search, with: "Penistone"
     using_wait_time 8 do
@@ -82,14 +82,14 @@ RSpec.feature "Searching for school during Teacher Student Loan Repayments claim
     start_student_loans_claim
 
     expect(page).to have_text(claim_school_question)
-    expect(page).to have_button("Search")
+    expect(page).to have_button("Continue")
 
     fill_in :school_search, with: "Penistone"
 
     expect(page).to have_text(schools(:penistone_grammar_school).name)
-    expect(page).to have_button("Search")
+    expect(page).to have_button("Continue")
 
-    click_button "Search"
+    click_button "Continue"
 
     expect(page).to have_text("Select your school from the search results.")
     expect(page).to have_text(schools(:penistone_grammar_school).name)
@@ -99,7 +99,7 @@ RSpec.feature "Searching for school during Teacher Student Loan Repayments claim
     start_student_loans_claim
 
     expect(page).to have_text(claim_school_question)
-    expect(page).to have_button("Search")
+    expect(page).to have_button("Continue")
 
     fill_in :school_search, with: "Penistone"
     find("li", text: schools(:penistone_grammar_school).name).click
@@ -111,9 +111,9 @@ RSpec.feature "Searching for school during Teacher Student Loan Repayments claim
     using_wait_time 8 do
       expect(page).to have_text(schools(:hampstead_school).name)
     end
-    expect(page).to have_button("Search")
+    expect(page).to have_button("Continue")
 
-    click_button "Search"
+    click_button "Continue"
 
     expect(page).to have_text("Select your school from the search results.")
     expect(page).to have_text(schools(:hampstead_school).name)
@@ -123,10 +123,10 @@ RSpec.feature "Searching for school during Teacher Student Loan Repayments claim
     start_student_loans_claim
 
     expect(page).to have_text(claim_school_question)
-    expect(page).to have_button("Search")
+    expect(page).to have_button("Continue")
 
     fill_in :school_search, with: "Lister"
-    click_button "Search"
+    click_button "Continue"
 
     expect(page).to have_text(schools(:the_samuel_lister_academy).name)
   end
@@ -138,10 +138,10 @@ RSpec.feature "Searching for school during Teacher Student Loan Repayments claim
     choose_still_teaching "Yes, at another school"
 
     expect(page).to have_text(I18n.t("questions.current_school"))
-    expect(page).to have_button("Search")
+    expect(page).to have_button("Continue")
 
     fill_in :school_search, with: "Lister"
-    click_button "Search"
+    click_button "Continue"
 
     expect(page).not_to have_text(schools(:the_samuel_lister_academy).name)
   end
@@ -150,7 +150,7 @@ RSpec.feature "Searching for school during Teacher Student Loan Repayments claim
     start_student_loans_claim
 
     expect(page).to have_text(claim_school_question)
-    expect(page).to have_button("Search")
+    expect(page).to have_button("Continue")
 
     fill_in :school_search, with: "Lister"
     expect(page).to have_text(schools(:the_samuel_lister_academy).name)
@@ -164,7 +164,7 @@ RSpec.feature "Searching for school during Teacher Student Loan Repayments claim
     choose_still_teaching "Yes, at another school"
 
     expect(page).to have_text(I18n.t("questions.current_school"))
-    expect(page).to have_button("Search")
+    expect(page).to have_button("Continue")
 
     fill_in :school_search, with: "Lister"
     expect(page).not_to have_text(schools(:the_samuel_lister_academy).name)

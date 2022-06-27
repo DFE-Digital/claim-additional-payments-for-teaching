@@ -38,7 +38,7 @@ module FeatureHelpers
 
   def choose_school(school)
     fill_in :school_search, with: school.name.sub("The ", "").split(" ").first
-    click_on "Search"
+    click_on "Continue"
 
     choose school.name
     click_on "Continue"

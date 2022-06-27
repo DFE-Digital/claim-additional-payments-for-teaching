@@ -17,7 +17,7 @@ RSpec.feature "Trainee Teacher - Early Career Payments - journey" do
 
       # - Landing (start)
       expect(page).to have_text(I18n.t("early_career_payments.landing_page"))
-      click_on "Start Now"
+      click_on "Start now"
 
       # - Which school do you teach at
       expect(page).to have_text(I18n.t("early_career_payments.questions.current_school_search"))
@@ -77,7 +77,7 @@ RSpec.feature "Trainee Teacher - Early Career Payments - journey" do
 
       # - Landing (start)
       expect(page).to have_text(I18n.t("early_career_payments.landing_page"))
-      click_on "Start Now"
+      click_on "Start now"
 
       # - Which school do you teach at
       expect(page).to have_text(I18n.t("early_career_payments.questions.current_school_search"))
