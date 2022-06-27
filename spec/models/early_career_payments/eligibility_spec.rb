@@ -1289,10 +1289,11 @@ RSpec.describe EarlyCareerPayments::Eligibility, type: :model do
         expect(EarlyCareerPayments::Eligibility.new(eligible_itt_subject: :none_of_the_above)).to be_valid(:"eligible-itt-subject")
       end
 
-      it "is valid when the value for 'eligible_itt_subject' is one of 'chemistry, languages, mathematics or physics'" do
+      it "is valid when the value for 'eligible_itt_subject' is one of 'chemistry, foreign_languages, mathematics or physics'" do
         expect(EarlyCareerPayments::Eligibility.new(eligible_itt_subject: :chemistry)).to be_valid(:"eligible-itt-subject")
         expect(EarlyCareerPayments::Eligibility.new(eligible_itt_subject: :physics)).to be_valid(:"eligible-itt-subject")
         expect(EarlyCareerPayments::Eligibility.new(eligible_itt_subject: :foreign_languages)).to be_valid(:"eligible-itt-subject")
+        expect(-> { EarlyCareerPayments::Eligibility.new(eligible_itt_subject: :languages) }).to raise_error(ArgumentError)
       end
     end
 
