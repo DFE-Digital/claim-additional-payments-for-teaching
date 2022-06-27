@@ -56,7 +56,7 @@ module LevellingUpPremiumPayments
     # current policy year.
     #
     # You can get the previous five academic years for display (and validation) from
-    # the `JourneySubjectEligibilityChecker#selectable_itt_years` method
+    # the `JourneySubjectEligibilityChecker.selectable_itt_years_for_claim_year` method
     enum itt_academic_year: {
       AcademicYear.new(2017) => AcademicYear::Type.new.serialize(AcademicYear.new(2017)),
       AcademicYear.new(2018) => AcademicYear::Type.new.serialize(AcademicYear.new(2018)),
