@@ -15,13 +15,13 @@ describe "Routes", type: :routing do
     it "routes POST /:policy/claim to the create action" do
       expect(post: "student-loans/claim").to route_to "claims#create", policy: "student-loans"
       expect(post: "maths-and-physics/claim").to route_to "claims#create", policy: "maths-and-physics"
-      expect(post: "early-career-payments/claim").to route_to "claims#create", policy: "early-career-payments"
+      expect(post: "additional-payments/claim").to route_to "claims#create", policy: "additional-payments"
     end
 
     it "routes policy page sequence slugs to the update action" do
       expect(put: "student-loans/claim-school").to route_to "claims#update", slug: "claim-school", policy: "student-loans"
       expect(put: "maths-and-physics/teaching-maths-or-physics").to route_to "claims#update", slug: "teaching-maths-or-physics", policy: "maths-and-physics"
-      expect(put: "early-career-payments/employed-directly").to route_to "claims#update", slug: "employed-directly", policy: "early-career-payments"
+      expect(put: "additional-payments/employed-directly").to route_to "claims#update", slug: "employed-directly", policy: "additional-payments"
     end
 
     it "does not route for unrecognised policies" do

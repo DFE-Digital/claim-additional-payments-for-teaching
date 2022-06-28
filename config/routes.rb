@@ -2,6 +2,9 @@ Rails.application.routes.draw do
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
   root to: redirect(Rails.application.config.guidance_url)
 
+  # /early-career-payments is now /additional-payments - redirect old urls to a gov page
+  get "early-career-payments(/*anything)", to: redirect("https://www.gov.uk/government/collections/additional-payments-for-teaching-eligibility-and-payment-details")
+
   # setup a simple healthcheck endpoint for monitoring purposes
   get "/healthcheck", to: proc { [200, {}, ["OK"]] }
 
@@ -52,15 +55,13 @@ Rails.application.routes.draw do
       get page_name.dasherize, to: "static_pages##{page_name}", as: page_name
     end
 
-    # TODO: Needs changing when the routing_name is changed
-    scope constraints: {policy: "early-career-payments"} do
+    scope constraints: {policy: "additional-payments"} do
       get "reminders/personal-details", as: :new_reminder, to: "reminders#new"
       post "reminders/personal-details", as: :reminders, to: "reminders#create"
       resources :reminders, only: [:show, :update], param: :slug, constraints: {slug: %r{#{Reminder::SLUGS.join("|")}}}
     end
 
-    # TODO: Needs changing when the routing_name is changed
-    scope path: "/", constraints: {policy: "early-career-payments"} do
+    scope path: "/", constraints: {policy: "additional-payments"} do
       get "landing-page", to: "static_pages#landing_page", as: :landing_page
     end
   end

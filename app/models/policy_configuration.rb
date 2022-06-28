@@ -16,20 +16,22 @@ class PolicyConfiguration < ApplicationRecord
     {
       routing_name: "student-loans",
       slugs: StudentLoans::SlugSequence::SLUGS,
-      policies: [StudentLoans]
+      policies: [StudentLoans],
+      i18n_namespace: "student_loans"
     },
     {
       routing_name: "maths-and-physics",
       slugs: MathsAndPhysics::SlugSequence::SLUGS,
-      policies: [MathsAndPhysics]
+      policies: [MathsAndPhysics],
+      i18n_namespace: "maths_and_physics"
     },
     {
-      # TODO: This will need a new routing_name
-      routing_name: "early-career-payments",
+      routing_name: "additional-payments",
       slugs: EarlyCareerPayments::SlugSequence::SLUGS,
       policies: [EarlyCareerPayments, LevellingUpPremiumPayments],
       # view_path - folder where view templates are, unless folder is the same as routing-name
-      view_path: "early_career_payments"
+      view_path: "early_career_payments",
+      i18n_namespace: "early_career_payments"
     }
   ].freeze
 
@@ -42,21 +44,29 @@ class PolicyConfiguration < ApplicationRecord
     where("? = ANY (policy_types)", policy.name).first
   end
 
+  def self.service_for_routing_name(routing_name)
+    SERVICES.detect { |j| j[:routing_name] == routing_name } || {}
+  end
+
   def self.for_routing_name(routing_name)
-    policy = SERVICES.detect { |j| j[:routing_name] == routing_name }[:policies]&.first
+    policy = service_for_routing_name(routing_name)[:policies]&.first
     self.for(policy)
   end
 
   def self.policy_for_routing_name(routing_name)
-    SERVICES.detect { |j| j[:routing_name] == routing_name }[:policies]&.first
+    service_for_routing_name(routing_name)[:policies]&.first
+  end
+
+  def self.i18n_namespace_for_routing_name(routing_name)
+    service_for_routing_name(routing_name)[:i18n_namespace]
   end
 
   def self.policies_for_routing_name(routing_name)
-    SERVICES.detect { |j| j[:routing_name] == routing_name }[:policies]
+    service_for_routing_name(routing_name)[:policies]
   end
 
-  def self.view_paths
-    SERVICES.map { |j| j[:view_path] }.compact
+  def self.view_path(routing_name)
+    service_for_routing_name(routing_name)[:view_path]
   end
 
   def self.all_routing_names

@@ -2,7 +2,7 @@ require "rails_helper"
 
 RSpec.describe LevellingUpPremiumPayments, type: :model do
   specify {
-    expect(subject).to have_attributes(routing_name: "early-career-payments",
+    expect(subject).to have_attributes(routing_name: "additional-payments",
       short_name: "Levelling Up Premium Payments",
       locale_key: "levelling_up_premium_payments",
       notify_reply_to_id: "3f85a1f7-9400-4b48-9a31-eaa643d6b977",

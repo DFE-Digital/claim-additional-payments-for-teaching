@@ -18,17 +18,23 @@ module ApplicationHelper
     number_to_currency(value, delimiter: "", unit: "")
   end
 
-  def support_email_address(policy = nil)
-    translation_key = [policy&.underscore, "support_email_address"].compact.join(".")
-    t(translation_key)
+  def support_email_address(routing_name = nil)
+    return t("support_email_address") unless routing_name
+
+    namespace = PolicyConfiguration.i18n_namespace_for_routing_name(routing_name)
+    t("#{namespace}.support_email_address")
   end
 
   def policy_service_name(routing_name = nil)
-    routing_name ? t("#{routing_name.underscore}.policy_name") : t("service_name")
+    return t("service_name") unless routing_name
+
+    namespace = PolicyConfiguration.i18n_namespace_for_routing_name(routing_name)
+    t("#{namespace}.policy_name")
   end
 
-  def policy_description(policy)
-    translate("#{policy.underscore}.claim_description")
+  def policy_description(routing_name)
+    namespace = PolicyConfiguration.i18n_namespace_for_routing_name(routing_name)
+    t("#{namespace}.claim_description")
   end
 
   def feedback_url
