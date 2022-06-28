@@ -43,7 +43,13 @@ module Dqt
     end
 
     def degree_codes
-      []
+      return [] unless qualifications&.first.respond_to?(:he_subject1_code)
+
+      qualifications.map do |qualification|
+        (1..3).filter_map do |n|
+          string_reader(qualification&.send("he_subject#{n}_code"))
+        end
+      end.flatten
     end
 
     def national_insurance_number
