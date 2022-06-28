@@ -15,6 +15,10 @@ class PageSequence
   end
 
   def next_slug
+    if lup_policy_and_trainee_teacher_at_lup_school?
+      return handle_trainee_teacher
+    end
+
     return "ineligible" if claim.ineligible?
     return "check-your-answers" if claim.submittable?
 
@@ -38,6 +42,31 @@ class PageSequence
   end
 
   private
+
+  def lup_policy_and_trainee_teacher_at_lup_school?
+    LevellingUpPremiumPayments.in?(claim.policies) && lup_teacher_at_lup_school
+  end
+
+  def lup_teacher_at_lup_school
+    claim.eligibility.nqt_in_academic_year_after_itt == false && LevellingUpPremiumPayments::SchoolEligibility.new(claim.eligibility.current_school).eligible?
+  end
+
+  def handle_trainee_teacher
+    case current_slug
+    when "nqt-in-academic-year-after-itt"
+      if claim.eligibility.nqt_in_academic_year_after_itt
+        "supply-teacher"
+      else
+        "eligible-itt-subject"
+      end
+    when "eligible-itt-subject"
+      if claim.eligibility.eligible_itt_subject.to_sym.in? JourneySubjectEligibilityChecker.fixed_lup_subject_symbols
+        "future-eligibility"
+      else
+        "ineligible"
+      end
+    end
+  end
 
   def current_slug_index
     slugs.index(current_slug) || 0

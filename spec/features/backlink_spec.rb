@@ -15,9 +15,12 @@ RSpec.feature "Backlinking during a claim" do
   end
 
   scenario "ECP/LUP journey" do
+    lup_school = schools(:hampstead_school)
+    expect(LevellingUpPremiumPayments::SchoolEligibility.new(lup_school)).to be_eligible
+
     visit new_claim_path(EarlyCareerPayments.routing_name)
     expect(page).to have_no_link("Back")
-    choose_school schools(:penistone_grammar_school)
+    choose_school lup_school
     expect(page).to have_link("Back")
 
     # go to deadend
@@ -30,8 +33,12 @@ RSpec.feature "Backlinking during a claim" do
   end
 
   scenario "ECP/LUP trainee mini journey" do
+    lup_school = schools(:hampstead_school)
+    expect(LevellingUpPremiumPayments::SchoolEligibility.new(lup_school)).to be_eligible
+
     visit new_claim_path(EarlyCareerPayments.routing_name)
-    choose_school schools(:penistone_grammar_school)
+    choose_school lup_school
+
     choose "No, I’m a trainee teacher"
     click_on "Continue"
     click_on "Back"

@@ -281,7 +281,7 @@ module EarlyCareerPayments
       ]
     }.freeze
 
-    QUALIFICATON_MATCHING_TYPE = {
+    QUALIFICATION_MATCHING_TYPE = {
       post: [
         nil,
         "Degree",
@@ -332,24 +332,28 @@ module EarlyCareerPayments
     end
 
     def eligible?
-      award_amount = Eligibility::AWARD_AMOUNTS.find do |award_amount|
-        matching_type = QUALIFICATON_MATCHING_TYPE.find { |key, values|
-          values.include?(qualification_name)
-        }&.first
+      matching_type = QUALIFICATION_MATCHING_TYPE.find { |key, values|
+        values.include?(qualification_name)
+      }&.first
 
-        date =
-          if matching_type == :under || matching_type == :other
-            qts_award_date
-          elsif matching_type == :post
-            itt_start_date
-          end
-
-        itt_subject_group == award_amount.itt_subject &&
-          AcademicYear.for(date) == award_amount.itt_academic_year &&
-          claim.academic_year == award_amount.claim_academic_year
+      date = case matching_type
+      when :under, :other
+        qts_award_date
+      when :post
+        itt_start_date
       end
 
-      !award_amount.nil?
+      policy_year = claim.academic_year
+      itt_year = AcademicYear.for(date)
+      subject_symbol = itt_subject_group
+
+      award_args = {policy_year: policy_year, itt_year: itt_year, subject_symbol: subject_symbol}
+
+      if award_args.values.any?(&:blank?)
+        false
+      else
+        AwardAmountCalculator.award?(award_args)
+      end
     end
 
     private

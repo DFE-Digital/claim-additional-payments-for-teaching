@@ -11,6 +11,10 @@ module EarlyCareerPaymentsHelper
     end
   end
 
+  # TODO: This calls private `Eligibility` methods using `#send` which makes refactoring difficult.
+  # There ought to be a separate class which looks at an `Eligibility` and tells you
+  # why it's ineligible. *This is too tightly coupled*. LUP and ECP eligibility are so similar
+  # there ought to be a new class which deals with the common rules for both.
   def guidance_eligibility_page_link(claim)
     eligibility_page_url = if claim.eligibility.send(:no_entire_term_contract?)
       EarlyCareerPayments.eligibility_page_url + "#supply-private-school-and-sixth-form-college-teachers"

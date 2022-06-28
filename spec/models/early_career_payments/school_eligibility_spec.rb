@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.describe EarlyCareerPayments::SchoolEligibility do
-  describe "#eligible_current_school?" do
+  describe "#eligible?" do
     context "with a secondary school" do
       let(:secondary_school) {
         School.new(
@@ -13,17 +13,17 @@ RSpec.describe EarlyCareerPayments::SchoolEligibility do
       }
 
       it "returns true with an open, state funded secondary school in an eligible local authority district" do
-        expect(EarlyCareerPayments::SchoolEligibility.new(secondary_school).eligible_current_school?).to eql true
+        expect(EarlyCareerPayments::SchoolEligibility.new(secondary_school)).to be_eligible
       end
 
       it "returns false when closed" do
         secondary_school.assign_attributes(close_date: Date.new)
-        expect(EarlyCareerPayments::SchoolEligibility.new(secondary_school).eligible_current_school?).to eql false
+        expect(EarlyCareerPayments::SchoolEligibility.new(secondary_school)).not_to be_eligible
       end
 
       it "returns false when not state funded" do
         secondary_school.assign_attributes(school_type_group: :independent_schools)
-        expect(EarlyCareerPayments::SchoolEligibility.new(secondary_school).eligible_current_school?).to eql false
+        expect(EarlyCareerPayments::SchoolEligibility.new(secondary_school)).not_to be_eligible
       end
     end
 
@@ -39,17 +39,17 @@ RSpec.describe EarlyCareerPayments::SchoolEligibility do
       }
 
       it "returns true if the school is otherwise eligible" do
-        expect(EarlyCareerPayments::SchoolEligibility.new(explicitly_eligible_school).eligible_current_school?).to eql true
+        expect(EarlyCareerPayments::SchoolEligibility.new(explicitly_eligible_school)).to be_eligible
       end
 
       it "returns false when closed" do
         explicitly_eligible_school.assign_attributes(close_date: Date.new)
-        expect(EarlyCareerPayments::SchoolEligibility.new(explicitly_eligible_school).eligible_current_school?).to eql false
+        expect(EarlyCareerPayments::SchoolEligibility.new(explicitly_eligible_school)).not_to be_eligible
       end
 
       it "returns false when not state funded" do
         explicitly_eligible_school.assign_attributes(school_type_group: :independent_schools)
-        expect(EarlyCareerPayments::SchoolEligibility.new(explicitly_eligible_school).eligible_current_school?).to eql false
+        expect(EarlyCareerPayments::SchoolEligibility.new(explicitly_eligible_school)).not_to be_eligible
       end
     end
 
@@ -65,22 +65,22 @@ RSpec.describe EarlyCareerPayments::SchoolEligibility do
       }
 
       it "returns true with an open, state funded secondary equivalent special school in an eligible local authority district" do
-        expect(EarlyCareerPayments::SchoolEligibility.new(special_school).eligible_current_school?).to eql true
+        expect(EarlyCareerPayments::SchoolEligibility.new(special_school)).to be_eligible
       end
 
       it "returns false when closed" do
         special_school.assign_attributes(close_date: Date.new)
-        expect(EarlyCareerPayments::SchoolEligibility.new(special_school).eligible_current_school?).to eql false
+        expect(EarlyCareerPayments::SchoolEligibility.new(special_school)).not_to be_eligible
       end
 
       it "returns false when not state funded" do
         special_school.assign_attributes(school_type_group: :independent_schools)
-        expect(EarlyCareerPayments::SchoolEligibility.new(special_school).eligible_current_school?).to eql false
+        expect(EarlyCareerPayments::SchoolEligibility.new(special_school)).not_to be_eligible
       end
 
       it "returns false when not secondary equivalent" do
         special_school.assign_attributes(statutory_high_age: 11)
-        expect(EarlyCareerPayments::SchoolEligibility.new(special_school).eligible_current_school?).to eql false
+        expect(EarlyCareerPayments::SchoolEligibility.new(special_school)).not_to be_eligible
       end
     end
 
@@ -96,22 +96,22 @@ RSpec.describe EarlyCareerPayments::SchoolEligibility do
       }
 
       it "returns true with an open, state funded secondary equivalent alternative provision school in an eligible local authority district" do
-        expect(EarlyCareerPayments::SchoolEligibility.new(alternative_provision_school).eligible_current_school?).to eq true
+        expect(EarlyCareerPayments::SchoolEligibility.new(alternative_provision_school)).to be_eligible
       end
 
       it "returns false when closed" do
         alternative_provision_school.assign_attributes(close_date: Date.new)
-        expect(EarlyCareerPayments::SchoolEligibility.new(alternative_provision_school).eligible_current_school?).to eql false
+        expect(EarlyCareerPayments::SchoolEligibility.new(alternative_provision_school)).not_to be_eligible
       end
 
       it "returns false when not secondary equivalent" do
         alternative_provision_school.assign_attributes(statutory_high_age: 11)
-        expect(EarlyCareerPayments::SchoolEligibility.new(alternative_provision_school).eligible_current_school?).to eq false
+        expect(EarlyCareerPayments::SchoolEligibility.new(alternative_provision_school)).not_to be_eligible
       end
 
       it "returns true with a secure unit" do
         alternative_provision_school.assign_attributes(school_type_group: :other, school_type: :secure_unit)
-        expect(EarlyCareerPayments::SchoolEligibility.new(alternative_provision_school).eligible_current_school?).to eq true
+        expect(EarlyCareerPayments::SchoolEligibility.new(alternative_provision_school)).to be_eligible
       end
     end
 
@@ -127,17 +127,17 @@ RSpec.describe EarlyCareerPayments::SchoolEligibility do
       }
 
       it "returns true with an open, state funded secondary equivalent CTC in an eligible local authority district" do
-        expect(EarlyCareerPayments::SchoolEligibility.new(city_technology_college).eligible_current_school?).to eql true
+        expect(EarlyCareerPayments::SchoolEligibility.new(city_technology_college)).to be_eligible
       end
 
       it "returns false when closed" do
         city_technology_college.assign_attributes(close_date: Date.new)
-        expect(EarlyCareerPayments::SchoolEligibility.new(city_technology_college).eligible_current_school?).to eql false
+        expect(EarlyCareerPayments::SchoolEligibility.new(city_technology_college)).not_to be_eligible
       end
 
       it "returns false when not secondary equivalent" do
         city_technology_college.assign_attributes(statutory_high_age: 11)
-        expect(EarlyCareerPayments::SchoolEligibility.new(city_technology_college).eligible_current_school?).to eq false
+        expect(EarlyCareerPayments::SchoolEligibility.new(city_technology_college)).not_to be_eligible
       end
     end
   end
@@ -149,7 +149,7 @@ RSpec.describe EarlyCareerPayments::SchoolEligibility do
         school_type_group: :la_maintained,
         local_authority_district: local_authority_districts(:barnsley)
       )
-      expect(EarlyCareerPayments::SchoolEligibility.new(primary_school).eligible_current_school?).to eql false
+      expect(EarlyCareerPayments::SchoolEligibility.new(primary_school)).not_to be_eligible
     end
   end
 

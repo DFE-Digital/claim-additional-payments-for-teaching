@@ -375,7 +375,7 @@ module EarlyCareerPayments
       @school = school
     end
 
-    def eligible_current_school?
+    def eligible?
       @school.open? &&
         (eligible_local_authority_district? || considered_as_eligible_local_authority_district?) &&
         (@school.state_funded? || @school.secure_unit?) &&
@@ -383,7 +383,7 @@ module EarlyCareerPayments
     end
 
     def eligible_uplift?
-      eligible_current_school? &&
+      eligible? &&
         uplift_local_authority_district?
     end
 

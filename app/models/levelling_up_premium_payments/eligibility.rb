@@ -1,5 +1,8 @@
 module LevellingUpPremiumPayments
   class Eligibility < ApplicationRecord
+    include EligibilityCheckable
+    include EarlyCareerPaymentsHelpable # TODO only to maintain support for legacy helper which calls private methods with `send`
+
     self.table_name = "levelling_up_premium_payments_eligibilities"
     has_one :claim, as: :eligibility, inverse_of: :eligibility
     belongs_to :current_school, optional: true, class_name: "School"
@@ -66,37 +69,11 @@ module LevellingUpPremiumPayments
       AcademicYear.new => AcademicYear::Type.new.serialize(AcademicYear.new)
     }
 
+    # TODO don't know if we need this
     before_save :set_qualification_if_trainee_teacher, if: :nqt_in_academic_year_after_itt_changed?
 
     def policy
       LevellingUpPremiumPayments
-    end
-
-    def ineligible?
-      trainee_teacher_with_itt_subject_none_of_the_above ||
-        has_ineligible_school? ||
-        no_entire_term_contract? ||
-        not_employed_directly? ||
-        poor_performance? ||
-        has_bad_itt_subject_and_no_relevant_degree? ||
-        with_eligible_degree_subject_not_teaching_subject_now? ||
-        ineligible_cohort?
-    end
-
-    def eligible_now?
-      !ineligible?
-    end
-
-    def eligible_later?
-      final_lup_policy_year = AcademicYear.new(2024)
-
-      if PolicyConfiguration.for(LevellingUpPremiumPayments).current_academic_year < final_lup_policy_year
-        # it'll be the same as now because the LUP set of valid subjects is meant to stay constant
-        eligible_now?
-      else
-        # there is no LUP policy year after this
-        false
-      end
     end
 
     def award_amount
@@ -113,74 +90,87 @@ module LevellingUpPremiumPayments
       end
     end
 
-    def has_indicated_a_bad_itt_subject?
-      lup_subjects = JourneySubjectEligibilityChecker.fixed_lup_subject_symbols
-      !eligible_itt_subject.nil? and !eligible_itt_subject.to_sym.in?(lup_subjects)
-    end
-
     def submit!
       self.award_amount = award_amount
       save!
     end
 
+    def eligible_next_year_too?
+      any_future_policy_years? && eligible_now?
+    end
+
+    def indicated_ineligible_itt_subject?
+      return false if eligible_itt_subject.blank?
+
+      args = {claim_year: claim_year, itt_year: itt_academic_year}
+
+      if args.values.any?(&:blank?)
+        # trainee teacher who won't have given their ITT year
+        eligible_itt_subject.present? && !eligible_itt_subject.to_sym.in?(JourneySubjectEligibilityChecker.fixed_lup_subject_symbols)
+      else
+        itt_subject_checker = JourneySubjectEligibilityChecker.new(args)
+        eligible_itt_subject.present? && !eligible_itt_subject.to_sym.in?(itt_subject_checker.current_subject_symbols(policy))
+      end
+    end
+
     private
 
-    def has_bad_itt_subject_and_no_relevant_degree?
-      has_indicated_a_bad_itt_subject? and has_indicated_they_lack_eligible_degree?
+    def specific_eligible_now_attributes?
+      eligible_itt_subject_or_relevant_degree?
     end
 
-    def has_ineligible_school?
-      current_school.present? and !LevellingUpPremiumPayments::SchoolEligibility.new(current_school).eligible?
+    def eligible_itt_subject_or_relevant_degree?
+      good_itt_subject? || eligible_degree?
     end
 
-    def calculate_award_amount
-      # TODO: use first year of LUP for now but this must come from a PolicyConfiguration
-      BigDecimal LevellingUpPremiumPayments::Award.new(school: current_school, year: AcademicYear.new(2022)).amount_in_pounds if current_school.present?
+    def good_itt_subject?
+      return false if eligible_itt_subject.blank?
+
+      args = {claim_year: claim_year, itt_year: itt_academic_year}
+
+      if args.values.any?(&:blank?)
+        # trainee teacher who won't have given their ITT year
+        eligible_itt_subject.present? && eligible_itt_subject.to_sym.in?(JourneySubjectEligibilityChecker.fixed_lup_subject_symbols)
+      else
+        itt_subject_checker = JourneySubjectEligibilityChecker.new(args)
+        eligible_itt_subject.to_sym.in?(itt_subject_checker.current_subject_symbols(policy))
+      end
     end
 
-    def with_eligible_degree_subject_not_teaching_subject_now?
-      has_indicated_a_bad_itt_subject? && eligible_degree_subject && not_teaching_subject_now?
+    def eligible_degree?
+      eligible_degree_subject?
     end
 
-    def not_teaching_subject_now?
-      teaching_subject_now == false
+    def specific_ineligible_attributes?
+      trainee_teacher_with_ineligible_itt_subject? || ineligible_itt_subject_and_no_relevant_degree?
     end
 
-    def has_indicated_they_lack_eligible_degree?
+    def trainee_teacher_with_ineligible_itt_subject?
+      trainee_teacher? && indicated_ineligible_itt_subject?
+    end
+
+    def ineligible_itt_subject_and_no_relevant_degree?
+      indicated_ineligible_itt_subject? && lacks_eligible_degree?
+    end
+
+    def specific_eligible_later_attributes?
+      trainee_teacher? && eligible_itt_subject_or_relevant_degree?
+    end
+
+    def lacks_eligible_degree?
       eligible_degree_subject == false
     end
 
-    # Start LUP duplicates
-
-    def trainee_teacher?
-      nqt_in_academic_year_after_itt == false
+    def calculate_award_amount
+      # This doesn't need to be a BigDecimal but maintaining interface
+      BigDecimal LevellingUpPremiumPayments::Award.new(school: current_school, year: claim_year).amount_in_pounds if current_school.present?
     end
 
-    def no_entire_term_contract?
-      employed_as_supply_teacher? && has_entire_term_contract == false
-    end
-
-    def not_employed_directly?
-      employed_as_supply_teacher? && employed_directly == false
-    end
-
-    def poor_performance?
-      subject_to_formal_performance_action? ||
-        subject_to_disciplinary_action?
-    end
-
-    def ineligible_cohort?
-      itt_academic_year == AcademicYear.new # `None of the above` selected
-    end
-
+    # TODO originally copied from ECP. Don't know what this is.
     def set_qualification_if_trainee_teacher
       return unless trainee_teacher?
 
       self.qualification = :postgraduate_itt
-    end
-
-    def trainee_teacher_with_itt_subject_none_of_the_above
-      trainee_teacher? && itt_subject_none_of_the_above?
     end
   end
 end

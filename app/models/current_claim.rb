@@ -75,16 +75,44 @@ class CurrentClaim
     main_claim.respond_to?(method_name, *args)
   end
 
+  # Always give precedence to returning `:eligible_now` over `:eligible_later`
+  # because we only want to use `:eligible_later` if there's nothing eligible
+  # now.
+  def eligibility_status
+    if anything_eligible_now?
+      :eligible_now
+    elsif anything_eligible_later?
+      :eligible_later
+    elsif everything_ineligible?
+      :ineligible
+    else
+      :undetermined
+    end
+  end
+
+  # Non-combined journey code like Student Loans should really
+  # be using `eligibility_status` instead of this.
   def ineligible?
     claims.all? { |c| c.eligibility.ineligible? }
   end
 
+  # Non-combined journey code like Student Loans should really
+  # be using `eligibility_status` instead of this.
   def eligible_now?
     claims.any? { |c| c.eligibility.eligible_now? }
   end
 
+  # Non-combined journey code like Student Loans should really
+  # be using `eligibility_status` instead of this.
   def eligible_later?
     claims.any? { |c| c.eligibility.eligible_later? }
+  end
+
+  # This is for cases when you *know* they're eligible later (given
+  # a teacher's circumstances don't change). Use this when a teacher
+  # is eligible now and wants a reminder to claim *again* in a future year.
+  def eligible_next_year_too?
+    claims.any? { |c| c.eligibility.eligible_next_year_too? }
   end
 
   def editable_attributes
@@ -92,7 +120,7 @@ class CurrentClaim
   end
 
   def eligible_now
-    claims.select { |c| c.eligibility.eligible_now? }
+    claims.select { |c| c.eligibility.status == :eligible_now }
   end
 
   def eligible_now_and_sorted
@@ -100,6 +128,18 @@ class CurrentClaim
   end
 
   private
+
+  def anything_eligible_now?
+    claims.any? { |claim| claim.eligibility.status == :eligible_now }
+  end
+
+  def anything_eligible_later?
+    claims.any? { |claim| claim.eligibility.status == :eligible_later }
+  end
+
+  def everything_ineligible?
+    claims.all? { |claim| claim.eligibility.status == :ineligible }
+  end
 
   def destroy_claims_except!(claim)
     claims.where.not(id: claim.id).destroy_all
