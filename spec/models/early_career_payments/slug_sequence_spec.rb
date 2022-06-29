@@ -331,6 +331,7 @@ RSpec.describe EarlyCareerPayments::SlugSequence do
         lup_claim.eligibility.nqt_in_academic_year_after_itt = false
 
         expected_slugs = %w[
+          current-school
           nqt-in-academic-year-after-itt
           eligible-itt-subject
           future-eligibility
