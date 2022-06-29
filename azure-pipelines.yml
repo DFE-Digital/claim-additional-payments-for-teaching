@@ -18,225 +18,41 @@ stages:
   jobs:
   - job: Build
     steps:
-
-    # Login to DockerHub
-    - script: docker login -u $(dockerId) -p $pass
-      env:
-        pass: $(dockerPassword)
-      displayName: Login to DockerHub
-
-    # Build and run tests
-    - script: |
-        docker pull $(dockerRegistry)/$(dockerImageName):cache-test-dependencies || true
-        docker pull $(dockerRegistry)/$(dockerImageName):cache-test || true
-
-        docker-compose --file=docker-compose.test.yml build
-      displayName: Build test Docker image
-      continueOnError: false
-
-    - script: docker-compose --file=docker-compose.test.yml run --rm test
-      displayName: Run tests on Docker
-
-    # Clean up
-    - script: |
-        git reset --hard
-        git clean -xdf
-      displayName: Clean repository
-
-    # Publish
-    - publish: $(System.DefaultWorkingDirectory)
-      artifact: repository
-      displayName: Publish repository as artifact
-
-    # Build web dependencies
-    - script: |
-        docker pull $(dockerRegistry)/$(dockerImageName):cache-web-dependencies || true
-
-        docker build \
-          --file=Dockerfile \
-          --cache-from=$(dockerRegistry)/$(dockerImageName):cache-web-dependencies \
-          --tag=local/dfe-teachers-payment-service:web-dependencies \
-          --target=dependencies \
-          .
-      displayName: Build web dependencies Docker image using 'cache-web-dependencies' as cache
-      condition: and(ne(variables['Build.SourceBranch'], 'refs/heads/master'), succeeded())
-
-    - script: |
-        docker build \
-          --file=Dockerfile \
-          --tag=local/dfe-teachers-payment-service:web-dependencies \
-          --target=dependencies \
-          .
-
-      displayName: Build web dependencies Docker image without cache
-      condition: and(eq(variables['Build.SourceBranch'], 'refs/heads/master'), succeeded())
-
-    # Build web
-    - script: |
-        docker pull $(dockerRegistry)/$(dockerImageName):latest || true
-
-        docker build \
-          --file=Dockerfile \
-          --cache-from=local/dfe-teachers-payment-service:web-dependencies \
-          --cache-from=$(dockerRegistry)/$(dockerImageName):latest \
-          --tag=local/dfe-teachers-payment-service:web \
-          --target=web \
-          --build-arg GIT_COMMIT_HASH=$(Build.SourceVersion) \
-          .
-      displayName: Build web Docker image using 'latest' as cache
-      condition: and(ne(variables['Build.SourceBranch'], 'refs/heads/master'), succeeded())
-
-    - script: |
-        docker build \
-          --file=Dockerfile \
-          --cache-from=local/dfe-teachers-payment-service:web-dependencies \
-          --tag=local/dfe-teachers-payment-service:web \
-          --target=web \
-          --build-arg GIT_COMMIT_HASH=$(Build.SourceVersion) \
-          .
-      displayName: Build web Docker image without cache
-      condition: and(eq(variables['Build.SourceBranch'], 'refs/heads/master'), succeeded())
-
-    # Push test images
-    - script: |
-        docker tag local/dfe-teachers-payment-service:test-dependencies $(dockerRegistry)/$(dockerImageName):cache-test-dependencies
-
-        docker push $(dockerRegistry)/$(dockerImageName):cache-test-dependencies
-      displayName: Push test dependencies Docker image for caching
-      condition: and(eq(variables['Build.SourceBranch'], 'refs/heads/master'), succeeded())
-
-    - script: |
-        docker tag local/dfe-teachers-payment-service:test $(dockerRegistry)/$(dockerImageName):cache-test
-
-        docker push $(dockerRegistry)/$(dockerImageName):cache-test
-      displayName: Push test Docker image for caching
-      condition: and(eq(variables['Build.SourceBranch'], 'refs/heads/master'), succeeded())
-
-    # Push web images
-    - script: |
-        docker tag local/dfe-teachers-payment-service:web-dependencies $(dockerRegistry)/$(dockerImageName):cache-web-dependencies
-
-        docker push $(dockerRegistry)/$(dockerImageName):cache-web-dependencies
-      displayName: Push web dependencies Docker image for caching
-      condition: and(eq(variables['Build.SourceBranch'], 'refs/heads/master'), succeeded())
-
-    - script: |
-        docker tag local/dfe-teachers-payment-service:web $(dockerRegistry)/$(dockerImageName):$(Build.BuildNumber)
-        docker tag local/dfe-teachers-payment-service:web $(dockerRegistry)/$(dockerImageName):latest
-
-        docker push $(dockerRegistry)/$(dockerImageName):$(Build.BuildNumber)
-        docker push $(dockerRegistry)/$(dockerImageName):latest
-      displayName: Push web Docker image
-      condition: and(eq(variables['Build.SourceBranch'], 'refs/heads/master'), succeeded())
-
-    - script: |
-        echo "Show Variables"
-        echo $(Build.BuildNumber)
-        echo $(dockerRegistry)
-        echo $(dockerImageName)
-
+    - template: templates/build.yml  #Run Build Template
 
 - stage: Release
   condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
   jobs:
-  - job: Terraform
+  - job: DeployDev
+    variables:
+    - name: backendAzureRmContainerName
+      value: s118d01conttfstate
+
+    - name: backendAzureRmKey
+      value: terraform.tfstate
+
+    - name: backendAzureRmResourceGroupName
+      value: s118d01-tfbackend
+
+    - name: backendAzureRmStorageAccountName
+      value: s118d01tfbackendsa
+
+    - name: env
+      value: Development
+
+    - name: KeyVaultId
+      value : /subscriptions/8655985a-2f87-44d7-a541-0be9a8c2779d/resourceGroups/s118d01-secrets/providers/Microsoft.KeyVault/vaults/s118d01-secrets-kv
+
+    - name: ResourceGroupName
+      value: s118d01-app
+
+    - name: SourceSlot
+      value: staging
+
+    - name: WebAppName
+      value: s118d01-app-as
+
     steps:
-     - task: charleszipp.azure-pipelines-tasks-terraform.azure-pipelines-tasks-terraform-cli.TerraformCLI@0
-       displayName: 'Terraform Init'
-       inputs:
-         command: init
-         workingDirectory: $(Agent.BuildDirectory)/s/azure/terraform
-         backendType: azurerm
-         backendServiceArm: 'azdo.pipelines.cip.S118D.armfe1ef140-8bef-4043-b5ee-c449e6f951ef'
-         backendAzureRmResourceGroupName: 's118d01-tfbackend'
-         backendAzureRmStorageAccountName: s118d01tfbackendsa
-         backendAzureRmContainerName: s118d01conttfstate
-         backendAzureRmKey: terraform.tfstate
-
-     - task: AzurePowerShell@5
-       displayName: 'Show Variables'
-       inputs:
-         azureSubscription: 'azdo.pipelines.cip.S118D.armfe1ef140-8bef-4043-b5ee-c449e6f951ef'
-         ScriptType: InlineScript
-         Inline: |
-           # Setting Variables
-           Write-Output $(dockerRegistry)
-           Write-Output $(dockerImageName)
-           Write-Output $(Build.BuildNumber)
-
-         preferredAzurePowerShellVersion: 3.1.0
-
-     - task: AzurePowerShell@5
-       displayName: 'Disable KV network firewall rule'
-       inputs:
-         azureSubscription: 'azdo.pipelines.cip.S118D.armfe1ef140-8bef-4043-b5ee-c449e6f951ef'
-         ScriptType: InlineScript
-         Inline: |
-           # Setting Variables
-           $KeyVaultId = '/subscriptions/8655985a-2f87-44d7-a541-0be9a8c2779d/resourceGroups/s118d01-secrets/providers/Microsoft.KeyVault/vaults/s118d01-secrets-kv'
-           $KeyVault = Get-AzResource -ResourceId $KeyVaultId -ErrorAction SilentlyContinue
-           If ($null -eq $KeyVault) {
-              Write-Output "##vso[task.logissue type=warning;]The Key Vault with Id $KeyVaultId does not exist"
-              Exit 0
-           }
-           $KeyVault = Get-AzKeyVault -ResourceGroupName $KeyVault.ResourceGroupName -VaultName $KeyVault.Name
-           Write-Output 'Updating Key Vault rules...'
-           $KeyVault | Update-AzKeyVaultNetworkRuleSet -DefaultAction Allow
-           $LoopCount = 0
-           Write-Output "Waiting for Access..."
-           # This will check every 5 seconds, up to a maximum of 30 seconds
-           Do {
-              $AccessAllowed = $KeyVault | Get-AzKeyVaultSecret -ErrorAction SilentlyContinue
-              $LoopCount++
-              Start-Sleep -Seconds 5
-           }
-           While ($null -eq $AccessAllowed -and $LoopCount -lt 6)
-         preferredAzurePowerShellVersion: 3.1.0
-
-     - script: echo This is the Plan Stage
-
-     - script: docker login -u $(dockerId) -p $pass
-       env:
-         pass: $(dockerPassword)
-       displayName: Login to DockerHub
-
-     - task: charleszipp.azure-pipelines-tasks-terraform.azure-pipelines-tasks-terraform-cli.TerraformCLI@0
-       displayName: 'Terraform Plan'
-       inputs:
-          command: plan
-          workingDirectory: $(Agent.BuildDirectory)/s/azure/terraform
-          environmentServiceName: 'azdo.pipelines.cip.S118D.armfe1ef140-8bef-4043-b5ee-c449e6f951ef'
-          commandOptions: '-var="input_region=westeurope" -var="input_environment=Development" -var="input_container_version=$(Build.BuildNumber)"'
-
-     - task: charleszipp.azure-pipelines-tasks-terraform.azure-pipelines-tasks-terraform-cli.TerraformCLI@0
-       displayName: 'Terraform Apply'
-       inputs:
-         command: apply
-         workingDirectory: $(Agent.BuildDirectory)/s/azure/terraform
-         environmentServiceName: 'azdo.pipelines.cip.S118D.armfe1ef140-8bef-4043-b5ee-c449e6f951ef'
-         commandOptions: '-var="input_region=westeurope" -var="input_environment=Development" -var="input_container_version=$(Build.BuildNumber)"'
-
-     - task: AzurePowerShell@5
-       displayName: 'Enable KV network firewall rule'
-       inputs:
-         azureSubscription: 'azdo.pipelines.cip.S118D.armfe1ef140-8bef-4043-b5ee-c449e6f951ef'
-         ScriptType: InlineScript
-         Inline: |
-           # Setting Variables
-           $KeyVaultId = '/subscriptions/8655985a-2f87-44d7-a541-0be9a8c2779d/resourceGroups/s118d01-secrets/providers/Microsoft.KeyVault/vaults/s118d01-secrets-kv'
-           $KeyVault = Get-AzResource -ResourceId $KeyVaultId -ErrorAction SilentlyContinue
-           $KeyVault = Get-AzKeyVault -ResourceGroupName $KeyVault.ResourceGroupName -VaultName $KeyVault.Name
-           Write-Output 'Updating Key Vault rules...'
-           $KeyVault | Update-AzKeyVaultNetworkRuleSet -DefaultAction Deny
-         preferredAzurePowerShellVersion: 3.1.0
-
-
-    # ########################SWAP SLOTS###########################################################
-     - task: AzureAppServiceManage@0
-       displayName: 'Swap Slots: s118d01-app-as'
-       inputs:
-         azureSubscription: 'azdo.pipelines.cip.S118D.armfe1ef140-8bef-4043-b5ee-c449e6f951ef'
-         WebAppName: 's118d01-app-as'
-         ResourceGroupName: 's118d01-app'
-         SourceSlot: staging
-         timeoutInMinutes: 20
+    - template: templates/release.yml #Run Release Template
+      parameters :
+        ServiceConnection : azdo.pipelines.cip.S118D.armfe1ef140-8bef-4043-b5ee-c449e6f951ef
