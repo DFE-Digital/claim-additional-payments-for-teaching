@@ -385,9 +385,7 @@ RSpec.describe Dqt::Teacher do
   describe "#degree_codes" do
     subject(:degree_codes) { qualified_teaching_status.degree_codes }
 
-    it "returns an Array" do
-      expect(degree_codes).to eq ["100403", "100105"]
-    end
+    specify { expect(degree_codes).to contain_exactly("100403", "100105") }
   end
 
   describe "#national_insurance_number" do
