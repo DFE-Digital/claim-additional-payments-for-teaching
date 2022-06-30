@@ -19,7 +19,7 @@ stages:
   - job: Build
     steps:
     - template: templates/dummy.yml
-    - template: templates/build.yml  #Run Build Template
+    #- template: templates/build.yml  #Run Build Template
 
 - stage: Release
   condition: succeeded()
