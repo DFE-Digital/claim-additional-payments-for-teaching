@@ -40,24 +40,26 @@
                 <%= fields.label "eligible_itt_subject_none_of_the_above", t("early_career_payments.answers.eligible_itt_subject.none_of_the_above"), class: "govuk-label govuk-radios__label" %>
               </div>
             </div>
-
-            <br/>
-            <br/>
           </fieldset>
         <% end %>
 
-        <details class="govuk-details" data-module="govuk-details">
-          <summary class="govuk-details__summary">
-            <span class="govuk-details__summary-text">
-              If you qualified with science
-            </span>
-          </summary>
-          <div class="govuk-details__text">
-            <p class="govuk-body">
-              You will need to have specialised in either chemistry or physics to be eligible. If you specialised in biology then you will not be eligible. If you’re unsure, you can get this from the certificate you received when you qualified as a teacher.
-            </p>
-          </div>
-        </details>
+        <% if subject_symbols.any?{ |subject| [:chemistry, :physics].include?(subject) } %>
+          <br/>
+          <br/>
+
+          <details class="govuk-details" data-module="govuk-details">
+            <summary class="govuk-details__summary">
+              <span class="govuk-details__summary-text">
+                If you qualified with science
+              </span>
+            </summary>
+            <div class="govuk-details__text">
+              <p class="govuk-body">
+                You will need to have specialised in either chemistry or physics to be eligible. If you specialised in biology then you will not be eligible. If you’re unsure, you can get this from the certificate you received when you qualified as a teacher.
+              </p>
+            </div>
+          </details>
+        <% end %>
       <% end %>
 
       <%= form.submit "Continue", class: "govuk-button", data: {module: "govuk-button"} %>
