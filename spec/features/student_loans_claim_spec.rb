@@ -50,6 +50,7 @@ RSpec.feature "Teacher Student Loan Repayments claims" do
       click_on "Continue"
 
       expect(page).to have_text("How we will use the information you provide")
+      expect(page).to have_text("For more details, you can read about payments and deductions when claiming back your student loan repayments")
       click_on "Continue"
 
       # - Personal details

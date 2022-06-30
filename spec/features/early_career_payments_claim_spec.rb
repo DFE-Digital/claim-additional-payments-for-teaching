@@ -131,6 +131,7 @@ RSpec.feature "Teacher Early-Career Payments claims" do
 
     # - How will we use the information you provide
     expect(page).to have_text("How we will use the information you provide")
+    expect(page).to have_text("For more details, you can read about payments and deductions for the early-career payment")
     click_on "Continue"
 
     # - Personal details

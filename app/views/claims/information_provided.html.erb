@@ -13,56 +13,79 @@
 
     <ul class="govuk-list govuk-list--bullet">
       <li>the school you are currently employed to teach at</li>
-      <li>the Teaching Regulation Agency</li>
+      <li>the Department for Education's (DfE) database of qualified teachers</li>
       <li>the Teacher Pension Scheme</li>
     </ul>
 
     <h2 class="govuk-heading-m">To pay you</h2>
 
     <p class="govuk-body">
-      We'll send some of your personal information to our payroll partner Cantium, who are responsible
-      for processing your payment.
+      The Department for Education will make the payment directly to you.
     </p>
 
     <p class="govuk-body">
-      We also send some of your information to HMRC so that:
+      To complete the rest of the application, you will need your:
     </p>
 
     <ul class="govuk-list govuk-list--bullet">
-      <li>your student loan repayment can be deducted from your payment, if applicable</li>
-      <li>we can pay Income Tax and National Insurance (NI) on your behalf</li>
+      <li>National Insurance number</li>
+      <li>bank account details</li>
+      <li>teacher reference number</li>
     </ul>
 
-    <%= link_to "Continue", claim_path(current_policy_routing_name, next_slug), class: "govuk-button", role: :button, data: { module: "govuk-button"} %>
+    <p class="govuk-body">
+      If you have a student loan you will need to know what date you took it out. You can find this out on your <%= link_to "student loan account  (opens in new tab)", "https://www.gov.uk/student-finance-register-login", class: "govuk-link", target: "_blank" %>.
+    </p>
+
+    <p class="govuk-body">
+      If you are currently paying off a student loan, a small deduction from your additional payment will go towards repaying it.
+    </p>
 
     <details class="govuk-details" data-module="govuk-details">
       <summary class="govuk-details__summary">
         <span class="govuk-details__summary-text">
-          What information is sent to HMRC and Cantium?
+          Where can I find my teacher reference number (TRN)?
         </span>
       </summary>
       <div class="govuk-details__text">
         <p class="govuk-body">
-          We send Cantium and HMRC your:
+          Your TRN may be shown on a:
         </p>
 
+
         <ul class="govuk-list govuk-list--bullet">
-          <li>full name</li>
-          <li>NI number</li>
-          <li>gender</li>
-          <li>date of birth</li>
-          <li>address</li>
+          <li>payslip</li>
+          <li>teacher pension statement</li>
+          <li>teacher training records</li>
         </ul>
 
         <p class="govuk-body">
-          We also send Cantium your:
+          Get help to <%= link_to "find your TRN (opens in new tab)", "https://find-a-lost-trn.education.gov.uk/start", class: "govuk-link", target: "_blank" %> if you do not know it or have forgotten it.
         </p>
-
-        <ul class="govuk-list govuk-list--bullet">
-          <li>email address</li>
-          <li>bank details</li>
-        </ul>
       </div>
     </details>
+
+    <h2 class="govuk-heading-m">Income tax</h2>
+
+    <p class="govuk-body">
+      Your additional payment is taxable income, but the Department for Education will pay Income Tax and National Insurance contributions due to HMRC for you. This means that the payment amount is after tax.
+    </p>
+
+    <% if session[:selected_claim_policy] == "EarlyCareerPayments" %>
+      <p class="govuk-body">
+        For more details, you can read about payments and deductions for the <%= link_to "early-career payment (opens in new tab)", "https://www.gov.uk/guidance/early-career-payments-guidance-for-teachers-and-schools#paying-income-tax-and-national-insurance", class: "govuk-link govuk-link--no-visited-state", target: "_blank" %>.
+      </p>
+    <% elsif session[:selected_claim_policy] == "LevellingUpPremiumPayments" %>
+      <p class="govuk-body">
+        For more details, you can read about payments and deductions for the <%= link_to "levelling up premium payment (opens in new tab)", "https://www.gov.uk/guidance/levelling-up-premium-payments-for-teachers#payments-and-deductions", class: "govuk-link govuk-link--no-visited-state", target: "_blank" %>.
+      </p>
+    <% else %>
+      <p class="govuk-body">
+        For more details, you can read about payments and deductions when <%= link_to "claiming back your student loan repayments (opens in new tab)", "https://www.gov.uk/guidance/teachers-claim-back-your-student-loan-repayments#payment", class: "govuk-link govuk-link--no-visited-state", target: "_blank" %>.
+      </p>
+    <% end %>
+
+
+    <%= link_to "Continue", claim_path(current_policy_routing_name, next_slug), class: "govuk-button", role: :button, data: { module: "govuk-button"} %>
   </div>
 </div>
