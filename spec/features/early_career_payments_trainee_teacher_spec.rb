@@ -43,7 +43,7 @@ RSpec.feature "Trainee Teacher - Early Career Payments - journey" do
         I18n.t("early_career_payments.questions.eligible_itt_subject_trainee_teacher")
       )
 
-      expect(page).to have_no_text("Foreign languages")
+      expect(page).to have_no_text("Languages")
 
       choose "Computing"
       click_on "Continue"

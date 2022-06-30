@@ -20,7 +20,7 @@ RSpec.describe PolicyConfiguration do
       expect(described_class.for_routing_name("maths-and-physics")).to eq policy_configurations(:maths_and_physics)
 
       # ECP and LUP use the same routing name and share the same PolicyConfiguration
-      expect(described_class.for_routing_name("early-career-payments")).to eq policy_configurations(:early_career_payments)
+      expect(described_class.for_routing_name("additional-payments")).to eq policy_configurations(:early_career_payments)
     end
   end
 
@@ -28,7 +28,7 @@ RSpec.describe PolicyConfiguration do
     it "returns the first policy for that routing name" do
       expect(described_class.policy_for_routing_name("student-loans")).to eq StudentLoans
       expect(described_class.policy_for_routing_name("maths-and-physics")).to eq MathsAndPhysics
-      expect(described_class.policy_for_routing_name("early-career-payments")).to eq EarlyCareerPayments
+      expect(described_class.policy_for_routing_name("additional-payments")).to eq EarlyCareerPayments
     end
   end
 
@@ -36,19 +36,27 @@ RSpec.describe PolicyConfiguration do
     it "returns the policies for that routing name" do
       expect(described_class.policies_for_routing_name("student-loans")).to eq [StudentLoans]
       expect(described_class.policies_for_routing_name("maths-and-physics")).to eq [MathsAndPhysics]
-      expect(described_class.policies_for_routing_name("early-career-payments")).to eq [EarlyCareerPayments, LevellingUpPremiumPayments]
+      expect(described_class.policies_for_routing_name("additional-payments")).to eq [EarlyCareerPayments, LevellingUpPremiumPayments]
     end
   end
 
   describe ".view_paths" do
     it "returns any extra view paths" do
-      expect(described_class.view_paths).to eq ["early_career_payments"]
+      expect(described_class.view_path("additional-payments")).to eq "early_career_payments"
+    end
+
+    it "returns nil for no overriding view path for student-loans" do
+      expect(described_class.view_path("student-loans")).to be_nil
+    end
+
+    it "returns nil for no overriding view path for maths-and-physics" do
+      expect(described_class.view_path("maths-and-physics")).to be_nil
     end
   end
 
   describe ".all_routing_names" do
     it "returns all the routing names" do
-      expect(described_class.all_routing_names).to eq ["student-loans", "maths-and-physics", "early-career-payments"]
+      expect(described_class.all_routing_names).to eq ["student-loans", "maths-and-physics", "additional-payments"]
     end
   end
 
@@ -58,8 +66,8 @@ RSpec.describe PolicyConfiguration do
       expect(described_class.routing_name_for_policy(MathsAndPhysics)).to eq "maths-and-physics"
 
       # Same routing_name for ECP and LUP
-      expect(described_class.routing_name_for_policy(EarlyCareerPayments)).to eq "early-career-payments"
-      expect(described_class.routing_name_for_policy(LevellingUpPremiumPayments)).to eq "early-career-payments"
+      expect(described_class.routing_name_for_policy(EarlyCareerPayments)).to eq "additional-payments"
+      expect(described_class.routing_name_for_policy(LevellingUpPremiumPayments)).to eq "additional-payments"
     end
   end
 
@@ -77,8 +85,8 @@ RSpec.describe PolicyConfiguration do
       expect(described_class.for(MathsAndPhysics).routing_name).to eq "maths-and-physics"
 
       # Same routing_name for ECP and LUP
-      expect(described_class.for(EarlyCareerPayments).routing_name).to eq "early-career-payments"
-      expect(described_class.for(LevellingUpPremiumPayments).routing_name).to eq "early-career-payments"
+      expect(described_class.for(EarlyCareerPayments).routing_name).to eq "additional-payments"
+      expect(described_class.for(LevellingUpPremiumPayments).routing_name).to eq "additional-payments"
     end
   end
 

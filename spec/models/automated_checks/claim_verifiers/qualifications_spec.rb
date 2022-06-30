@@ -192,6 +192,38 @@ module AutomatedChecks
                     HTML
                   )
                 end
+
+                context "with qualifications" do
+                  let(:data) do
+                    super().merge(
+                      {
+                        qualifications: [
+                          {
+                            he_subject1_code: "100403",
+                            he_subject2_code: "100105",
+                            he_subject3_code: nil
+                          }
+                        ]
+                      }
+                    )
+                  end
+
+                  it do
+                    is_expected.to eq(
+                      <<~HTML
+                        [DQT Qualification] - Ineligible:
+                        <pre>
+                          ITT subjects: ["mathematics"]
+                          ITT subject codes:  ["100400"]
+                          Degree codes:       ["100403", "100105"]
+                          ITT start date:     2015-09-01
+                          QTS award date:     2014-09-01
+                          Qualification name: BA
+                        </pre>
+                      HTML
+                    )
+                  end
+                end
               end
 
               describe "#created_by" do

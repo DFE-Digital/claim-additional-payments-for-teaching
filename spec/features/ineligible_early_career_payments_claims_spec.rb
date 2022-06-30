@@ -273,13 +273,13 @@ RSpec.feature "Ineligible Teacher Early-Career Payments claims" do
     # - In which academic year did you start your undergraduate ITT
     expect(page).to have_text(I18n.t("early_career_payments.questions.itt_academic_year.qualification.#{claim.eligibility.qualification}"))
 
-    choose "2020 to 2021" # Have to select one that's eligible for foreign languages
+    choose "2020 to 2021" # Have to select one that's eligible for languages
     click_on "Continue"
 
     # - Which subject did you do your undergraduate ITT in
     expect(page).to have_text(I18n.t("early_career_payments.questions.eligible_itt_subject", qualification: claim.eligibility.qualification_name))
 
-    choose "Foreign languages"
+    choose "Languages"
     click_on "Continue"
 
     expect(claim.eligibility.reload.eligible_itt_subject).to eql "foreign_languages"

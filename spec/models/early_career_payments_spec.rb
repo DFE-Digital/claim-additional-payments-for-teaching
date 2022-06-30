@@ -4,14 +4,14 @@ RSpec.describe EarlyCareerPayments, type: :model do
   let(:policy_configuration) { policy_configurations(:early_career_payments) }
 
   describe ".routing_name" do
-    it "returns 'early-career-payments'" do
-      expect(subject.routing_name).to eq "early-career-payments"
+    it "returns 'additional-payments'" do
+      expect(subject.routing_name).to eq "additional-payments"
     end
   end
 
   describe ".start_page_url" do
-    it "returns a url containing '/early-career-payments/landing-page'" do
-      expect(subject.start_page_url).to include("/early-career-payments/landing-page")
+    it "returns a url containing '/additional-payments/landing-page'" do
+      expect(subject.start_page_url).to include("/additional-payments/landing-page")
     end
   end
 
@@ -29,8 +29,8 @@ RSpec.describe EarlyCareerPayments, type: :model do
   end
 
   describe ".locale_key" do
-    it "returns 'routing_name' in the correct format to match the 'root key' in the translation file" do
-      expect(subject.locale_key).to eql subject.routing_name.underscore
+    it "returns 'early_career_payments' rather than 'additional_payments' to reuse existing ECP en.yml namespacing" do
+      expect(subject.locale_key).to eql "early_career_payments"
     end
   end
 

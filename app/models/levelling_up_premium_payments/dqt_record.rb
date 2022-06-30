@@ -9,6 +9,7 @@ module LevellingUpPremiumPayments
       :itt_start_date,
       :degree_codes,
       :qualification_name,
+      :degree_codes,
       to: :record
     )
 

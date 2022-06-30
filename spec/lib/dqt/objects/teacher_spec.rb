@@ -67,7 +67,33 @@ RSpec.describe Dqt::Teacher do
         qualification: "Graduate Diploma",
         state: 0,
         state_name: "Active"
-      }
+      },
+      qualifications: [
+        {
+          name: "Higher Education",
+          date_awarded: "2022-02-10T00:00:00Z",
+          he_qualification_name: "BA (Hons) /Education",
+          he_subject1: "mathematics",
+          he_subject2: "accounting",
+          he_subject3: nil,
+          he_subject1_code: "100403",
+          he_subject2_code: "100105",
+          he_subject3_code: nil,
+          class: "FirstClassHonours"
+        },
+        {
+          name: "Mandatory Qualification",
+          date_awarded: "2022-01-01T00:00:00Z",
+          he_qualification_name: nil,
+          he_subject1: nil,
+          he_subject2: nil,
+          he_subject3: nil,
+          he_subject1_code: nil,
+          he_subject2_code: nil,
+          he_subject3_code: nil,
+          class: nil
+        }
+      ]
     }
   end
 
@@ -359,9 +385,7 @@ RSpec.describe Dqt::Teacher do
   describe "#degree_codes" do
     subject(:degree_codes) { qualified_teaching_status.degree_codes }
 
-    it "returns Array" do
-      expect(degree_codes).to eq []
-    end
+    specify { expect(degree_codes).to contain_exactly("100403", "100105") }
   end
 
   describe "#national_insurance_number" do

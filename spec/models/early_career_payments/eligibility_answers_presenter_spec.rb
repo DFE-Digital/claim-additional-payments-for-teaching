@@ -99,7 +99,7 @@ RSpec.describe EarlyCareerPayments::EligibilityAnswersPresenter, type: :model do
         ],
         [
           I18n.t("early_career_payments.questions.eligible_itt_subject", qualification: eligibility.qualification_name),
-          "Foreign languages",
+          "Languages",
           "eligible-itt-subject"
         ],
         [

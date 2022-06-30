@@ -57,9 +57,8 @@ class RemindersController < BasePublicController
     Reminder::SLUGS.index(params[:slug]) || 0
   end
 
-  # TODO: Needs changing when the routing_name is changed
   def current_policy_routing_name
-    "early-career-payments"
+    "additional-payments"
   end
 
   def current_reminder
