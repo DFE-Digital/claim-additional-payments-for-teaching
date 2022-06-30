@@ -381,8 +381,4 @@ en:
                   overseas_recognition: "Select which academic year you earned your qualified teacher status in"
             eligible_itt_subject:
               blank:
-                qualification:
-                  undergraduate_itt: "Select which subject you did your undergraduate ITT in"
-                  postgraduate_itt: "Select a subject"
-                  assessment_only: "Select which subject you did your assessment in"
-                  overseas_recognition: "Select which subject you did your overseas recognition qualification in"
+                qualification: "Select a subject"
