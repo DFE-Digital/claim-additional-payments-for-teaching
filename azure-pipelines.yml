@@ -22,7 +22,7 @@ stages:
     - template: templates/build.yml  #Run Build Template
 
 - stage: Release
-  condition: and succeeded()
+  condition: succeeded()
   #condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
   jobs:
   - job: DeployDev
