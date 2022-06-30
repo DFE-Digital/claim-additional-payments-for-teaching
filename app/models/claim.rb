@@ -208,7 +208,7 @@ class Claim < ApplicationRecord
   validates :email_address, format: {with: URI::MailTo::EMAIL_REGEXP, message: "Enter an email in the format name@example.com"},
     length: {maximum: 256, message: "Email address must be 256 characters or less"}, if: -> { email_address.present? }
 
-  validates :provide_mobile_number, on: [:"provide-mobile-number", :submit], inclusion: {in: [true, false], message: "Choose yes if you want to provide a mobile number"}, if: :has_ecp_or_lupp_policy?
+  validates :provide_mobile_number, on: [:"provide-mobile-number", :submit], inclusion: {in: [true, false], message: "Select yes if you would like to provide your mobile number"}, if: :has_ecp_or_lupp_policy?
   validates :mobile_number, on: [:"mobile-number", :submit], presence: {message: "Enter a mobile number in the correct format, for example 07123456789"}, if: -> { provide_mobile_number == true && has_ecp_or_lupp_policy? }
   validates :mobile_number,
     format: {
