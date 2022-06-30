@@ -498,7 +498,7 @@ RSpec.feature "Teacher claiming Early-Career Payments uses the address auto-popu
       click_on "Continue"
 
       expect(page).to have_text("There is a problem")
-      expect(page).to have_text("Select an address from the list or search again for a different address")
+      expect(page).to have_text("Select an address")
       expect(claim.postcode).not_to eql "SO16 9FX"
 
       # - What is your address
