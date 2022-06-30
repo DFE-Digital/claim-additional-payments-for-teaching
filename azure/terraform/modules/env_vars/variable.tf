@@ -33,7 +33,7 @@ variable "std_tags" {
 # }
 
 locals {
-  rg_prefix = var.input_environment == "PR" ? "s118ra01":"Development" ? "s118d01" : var.input_environment == "Test" ? "s118t01" : var.input_environment == "Production" ? "s118p01" : "s118d01-infradev"
+  rg_prefix = var.input_environment == "Development" ? "s118d01" : var.input_environment == "Test" ? "s118t01" : var.input_environment == "Production" ? "s118p01" : "s118d01-infradev"
   env_tag   = var.input_environment == "Development" ? "Dev" : var.input_environment == "Test" ? "Test" : var.input_environment == "Production" ? "Prod" : "Dev"
   # container_version = var.input_environment == "Development" ? "20210420.8" : var.input_environment == "Test" ? "20210331.2" : var.input_environment == "Production" ? "20210201.3" : "20210201.3"
 }

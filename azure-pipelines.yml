@@ -40,7 +40,7 @@ stages:
       value: s118d01tfbackendsa
 
     - name: env
-      value: PR
+      value: Development
 
     - name: KeyVaultId
       value : /subscriptions/8655985a-2f87-44d7-a541-0be9a8c2779d/resourceGroups/s118d01-secrets/providers/Microsoft.KeyVault/vaults/s118d01-secrets-kv
