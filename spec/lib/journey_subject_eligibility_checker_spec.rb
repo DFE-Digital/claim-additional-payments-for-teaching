@@ -193,6 +193,13 @@ RSpec.describe JourneySubjectEligibilityChecker do
       let(:policy) { LevellingUpPremiumPayments }
       let(:the_constant_lup_subjects) { [:chemistry, :computing, :mathematics, :physics] }
 
+      context "claim year before 2022" do
+        let(:claim_year) { AcademicYear.new(2021) }
+        let(:itt_year) { AcademicYear.new(2017) }
+
+        it { is_expected.to be_empty }
+      end
+
       context "2022 claim year" do
         let(:claim_year) { AcademicYear.new(2022) }
 
