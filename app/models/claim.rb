@@ -202,7 +202,7 @@ class Claim < ApplicationRecord
 
   validates :has_masters_doctoral_loan, on: [:"masters-doctoral-loan", :submit], inclusion: {in: [true, false], message: "Select yes if you have a postgraduate masters and/or doctoral loan"}, if: :no_student_loan?
   validates :postgraduate_masters_loan, on: [:"masters-loan", :submit], inclusion: {in: [true, false], message: "Select yes if you are currently repaying a Postgraduate Master’s Loan"}, unless: -> { no_masters_doctoral_loan? }
-  validates :postgraduate_doctoral_loan, on: [:"doctoral-loan", :submit], inclusion: {in: [true, false], message: "Select yes if you have a Postgraduate Doctoral Loan taken out on or after 1st August 2018"}, unless: -> { no_masters_doctoral_loan? }
+  validates :postgraduate_doctoral_loan, on: [:"doctoral-loan", :submit], inclusion: {in: [true, false], message: "Select yes if you are currently repaying a Postgraduate Doctoral Loan"}, unless: -> { no_masters_doctoral_loan? }
 
   validates :email_address, on: [:"email-address", :submit], presence: {message: "Enter an email address"}
   validates :email_address, format: {with: URI::MailTo::EMAIL_REGEXP, message: "Enter an email in the format name@example.com"},
