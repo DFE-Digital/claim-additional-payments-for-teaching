@@ -27,4 +27,6 @@ module "env_vars" {
 
 module "my_resource_group" {
     source = "./modules/azure-resource-group"
+    name = "ratest"
+    location = "west europe"
    }
