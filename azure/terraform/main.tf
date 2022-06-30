@@ -25,9 +25,6 @@ module "env_vars" {
 #   common_tags             = module.env_vars.common_tags
 # }
 
-module "rg" {
-  source                = "./modules/resourcegroup"
-  name                 = format("%s-%s", module.env_vars.rg_prefix, "rg")
-  location             = var.rg_location
-  common_tags          = module.env_vars.common_tags
-}
+module "my_resource_group" {
+    source = "./modules/azure-resource-group"
+   }
