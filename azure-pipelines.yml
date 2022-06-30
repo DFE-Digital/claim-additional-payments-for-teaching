@@ -18,10 +18,12 @@ stages:
   jobs:
   - job: Build
     steps:
+    - template: templates/dummy.yml
     - template: templates/build.yml  #Run Build Template
 
 - stage: Release
-  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
+  condition: and(succeeded()
+  #condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
   jobs:
   - job: DeployDev
     variables:
