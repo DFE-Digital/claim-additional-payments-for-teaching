@@ -216,7 +216,7 @@ class Claim < ApplicationRecord
       message: "A mobile number must be 11 digits"
     }, if: -> { provide_mobile_number == true && mobile_number.present? && has_ecp_or_lupp_policy? }
 
-  validates :bank_or_building_society, on: [:"bank-or-building-society", :submit], presence: {message: "Select personal bank account or building society"}
+  validates :bank_or_building_society, on: [:"bank-or-building-society", :submit], presence: {message: "Select if you want the money paid in to a personal bank account or building society"}
   validates :banking_name, on: [:"personal-bank-account", :"building-society-account", :submit], presence: {message: "Enter a name on the account"}
   validates :bank_sort_code, on: [:"personal-bank-account", :"building-society-account", :submit], presence: {message: "Enter a sort code"}
   validates :bank_account_number, on: [:"personal-bank-account", :"building-society-account", :submit], presence: {message: "Enter an account number"}
