@@ -13,7 +13,7 @@ RSpec.feature "Levelling up premium payments claims" do
     click_on "Continue"
 
     # - Have you started your first year as a newly qualified teacher?
-    expect(page).to have_text("your first year as an early career teacher?")
+    expect(page).to have_text(I18n.t("early_career_payments.questions.nqt_in_academic_year_after_itt.heading"))
 
     choose "Yes"
     click_on "Continue"

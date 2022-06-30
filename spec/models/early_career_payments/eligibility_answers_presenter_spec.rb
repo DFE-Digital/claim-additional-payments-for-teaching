@@ -32,7 +32,7 @@ RSpec.describe EarlyCareerPayments::EligibilityAnswersPresenter, type: :model do
   it "returns an array of questions and answers to be presented to the user for checking" do
     expected_answers = [
       [I18n.t("early_career_payments.questions.current_school_search"), "Penistone Grammar School", "current-school"],
-      ["Have you started your first year as an early career teacher?", "Yes", "nqt-in-academic-year-after-itt"],
+      [I18n.t("early_career_payments.questions.nqt_in_academic_year_after_itt.heading"), "Yes", "nqt-in-academic-year-after-itt"],
       [I18n.t("early_career_payments.questions.employed_as_supply_teacher"), "No", "supply-teacher"],
       [I18n.t("early_career_payments.questions.formal_performance_action"), "No", "poor-performance"],
       [I18n.t("early_career_payments.questions.disciplinary_action"), "No", "poor-performance"],
@@ -81,7 +81,7 @@ RSpec.describe EarlyCareerPayments::EligibilityAnswersPresenter, type: :model do
     it "includes supply teacher questions" do
       expected_answers = [
         [I18n.t("early_career_payments.questions.current_school_search"), "Penistone Grammar School", "current-school"],
-        ["Have you started your first year as an early career teacher?", "Yes", "nqt-in-academic-year-after-itt"],
+        [I18n.t("early_career_payments.questions.nqt_in_academic_year_after_itt.heading"), "Yes", "nqt-in-academic-year-after-itt"],
         [I18n.t("early_career_payments.questions.employed_as_supply_teacher"), "Yes", "supply-teacher"],
         [I18n.t("early_career_payments.questions.has_entire_term_contract"), "Yes", "entire-term-contract"],
         [I18n.t("early_career_payments.questions.employed_directly"), "Yes", "employed-directly"],
