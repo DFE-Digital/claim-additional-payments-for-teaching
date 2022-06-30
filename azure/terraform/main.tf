@@ -25,8 +25,8 @@ module "env_vars" {
 #   common_tags             = module.env_vars.common_tags
 # }
 
-module "resourcegroup" {
-  source                  = "./modules/resourcegoup"
+module "rg" {
+  source                  = "./modules/resource_group"
   name                 = format("%s-%s", module.env_vars.rg_prefix, "rg")
   location             = var.input_region
   common_tags          = module.env_vars.common_tags
