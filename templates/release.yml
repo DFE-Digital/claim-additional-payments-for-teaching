@@ -1,0 +1,84 @@
+parameters:
+  ServiceConnection:
+
+steps:
+    - task: charleszipp.azure-pipelines-tasks-terraform.azure-pipelines-tasks-terraform-cli.TerraformCLI@0
+      displayName: Terraform Init
+      inputs:
+        command: init
+        workingDirectory: $(Agent.BuildDirectory)/s/azure/terraform
+        backendType: azurerm
+        backendServiceArm: ${{ parameters.ServiceConnection }}
+        backendAzureRmResourceGroupName: $(backendAzureRmResourceGroupName)
+        backendAzureRmStorageAccountName: $(backendAzureRmStorageAccountName)
+        backendAzureRmContainerName: $(backendAzureRmContainerName)
+        backendAzureRmKey: $(backendAzureRmKey)
+
+    - task: AzurePowerShell@5
+      displayName: Disable KV network firewall rule
+      inputs:
+        azureSubscription: ${{ parameters.ServiceConnection }}
+        ScriptType: InlineScript
+        Inline: |
+          # Setting Variables
+          $KeyVault = Get-AzResource -ResourceId $(KeyVaultId) -ErrorAction SilentlyContinue
+          If ($null -eq $KeyVault) {
+             Write-Output "##vso[task.logissue type=warning;]The Key Vault with Id $KeyVaultId does not exist"
+             Exit 0
+          }
+          $KeyVault = Get-AzKeyVault -ResourceGroupName $KeyVault.ResourceGroupName -VaultName $KeyVault.Name
+          Write-Output 'Updating Key Vault rules...'
+          $KeyVault | Update-AzKeyVaultNetworkRuleSet -DefaultAction Allow
+          $LoopCount = 0
+          Write-Output "Waiting for Access..."
+          # This will check every 5 seconds, up to a maximum of 30 seconds
+          Do {
+             $AccessAllowed = $KeyVault | Get-AzKeyVaultSecret -ErrorAction SilentlyContinue
+             $LoopCount++
+             Start-Sleep -Seconds 5
+          }
+          While ($null -eq $AccessAllowed -and $LoopCount -lt 6)
+        preferredAzurePowerShellVersion: 3.1.0
+
+    - script: docker login -u $(dockerId) -p $pass
+      env:
+        pass: $(dockerPassword)
+      displayName: Login to DockerHub
+
+    - task: charleszipp.azure-pipelines-tasks-terraform.azure-pipelines-tasks-terraform-cli.TerraformCLI@0
+      displayName: Terraform Plan
+      inputs:
+         command: plan
+         workingDirectory: $(Agent.BuildDirectory)/s/azure/terraform
+         environmentServiceName: ${{ parameters.ServiceConnection }}
+         commandOptions: '-var="input_region=westeurope" -var="input_environment=$(env)" -var="input_container_version=$(Build.BuildNumber)"'
+
+    - task: charleszipp.azure-pipelines-tasks-terraform.azure-pipelines-tasks-terraform-cli.TerraformCLI@0
+      displayName: Terraform Apply
+      inputs:
+        command: apply
+        workingDirectory: $(Agent.BuildDirectory)/s/azure/terraform
+        environmentServiceName: ${{ parameters.ServiceConnection }}
+        commandOptions: '-var="input_region=westeurope" -var="input_environment=$(env)" -var="input_container_version=$(Build.BuildNumber)"'
+
+    - task: AzurePowerShell@5
+      displayName: Enable KV network firewall rule
+      inputs:
+        azureSubscription: ${{ parameters.ServiceConnection }}
+        ScriptType: InlineScript
+        Inline: |
+          # Setting Variables
+          $KeyVault = Get-AzResource -ResourceId $(KeyVaultId) -ErrorAction SilentlyContinue
+          $KeyVault = Get-AzKeyVault -ResourceGroupName $KeyVault.ResourceGroupName -VaultName $KeyVault.Name
+          Write-Output 'Updating Key Vault rules...'
+          $KeyVault | Update-AzKeyVaultNetworkRuleSet -DefaultAction Deny
+        preferredAzurePowerShellVersion: 3.1.0
+
+    - task: AzureAppServiceManage@0
+      displayName: Swap Slots s118d01-app-as
+      inputs:
+        azureSubscription: ${{ parameters.ServiceConnection }}
+        WebAppName: $(WebAppName)
+        ResourceGroupName: $(ResourceGroupName)
+        SourceSlot: $(SourceSlot)
+        timeoutInMinutes: 20
