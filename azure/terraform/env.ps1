@@ -32,12 +32,12 @@ $backendsa = "s118d01tfbackendsa"
 $LoggingLevel = $null
 [System.Environment]::SetEnvironmentVariable("TF_LOG", $LoggingLevel, "Process")
 
-# Log into Azure CLI
-$connection = Connect-AzAccount -Subscription $AzureSubscriptionId -Tenant $AzureTenantId
+# Log into Azure CLI##################################################################################
+#$connection = Connect-AzAccount -Subscription $AzureSubscriptionId -Tenant $AzureTenantId
 
-$storageaccount = Get-AzStorageAccount -ResourceGroupName $backendrg -Name $backendsa
+#$storageaccount = Get-AzStorageAccount -ResourceGroupName $backendrg -Name $backendsa
 
-$storageaccountkey = (Get-AzStorageAccountKey -ResourceGroupName $backendrg -Name $backendsa)[0].value
+#$storageaccountkey = (Get-AzStorageAccountKey -ResourceGroupName $backendrg -Name $backendsa)[0].value
 
 # Write the variables
 [System.Environment]::SetEnvironmentVariable("ARM_TENANT_ID", $AzureTenantId, "Process")
