@@ -1,4 +1,4 @@
-variable "app_rg_name" {
+variable "rg_name" {
   type        = string
   description = "Resource group for the application"
 }
