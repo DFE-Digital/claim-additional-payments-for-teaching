@@ -130,6 +130,8 @@ class JourneySubjectEligibilityChecker
         else
           []
         end
+      else
+        []
       end
     end
   end
