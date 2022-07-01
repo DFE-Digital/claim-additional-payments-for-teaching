@@ -221,7 +221,7 @@ module EarlyCareerPayments
     end
 
     def qualification_name
-      return qualification.gsub("_itt", " initial teacher training (ITT)") if qualification.split("_").last == "itt"
+      return qualification.gsub("_itt", " initial teaching training") if qualification.split("_").last == "itt"
 
       qualification_attained = qualification.humanize.downcase
 

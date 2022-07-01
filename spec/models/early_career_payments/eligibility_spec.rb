@@ -30,8 +30,8 @@ RSpec.describe EarlyCareerPayments::Eligibility, type: :model do
     context "when qualificaton is 'postgraduate_itt' or 'undergraduate_itt'" do
       eligibility = EarlyCareerPayments::Eligibility.new(qualification: "postgraduate_itt")
 
-      it "returns the qualification in the format '<qualification> initial teacher training (ITT)'" do
-        expect(eligibility.qualification_name).to eq "postgraduate initial teacher training (ITT)"
+      it "returns the qualification in the format '<qualification> initial teaching training'" do
+        expect(eligibility.qualification_name).to eq "postgraduate initial teaching training"
       end
     end
 
