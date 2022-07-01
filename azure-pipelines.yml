@@ -66,9 +66,7 @@ stages:
         ServiceConnection : azdo.pipelines.cip.S118D.armfe1ef140-8bef-4043-b5ee-c449e6f951ef
 
 - stage: ReviewAPP
-  #condition: and(succeeded(), ne(variables['System.PullRequest.PullRequestId'], 'Null'))
-  condition: eq(variables['System.PullRequest.PullRequestId']
-  #condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
+  condition: and(succeeded(), ne(variables['System.PullRequest.PullRequestId'], 'NotNull'))
   jobs:
   - job: ReviewApp
     steps:
