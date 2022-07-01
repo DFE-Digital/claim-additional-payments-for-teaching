@@ -1,7 +1,7 @@
 pr:
   branches:
     include:
-    - main
+    - master
 
 #trigger:
 #  branches:
@@ -71,5 +71,5 @@ stages:
   - job: ReviewApp
     steps:
      - powershell: |
-        write-host $(System.PullRequest.PullRequestId)
+        #write-host $(System.PullRequest.PullRequestId)
         write-host $(System.PullRequest.PullRequestNumber)
