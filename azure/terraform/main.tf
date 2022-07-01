@@ -7,7 +7,7 @@ module "env_vars" {
 #container
 module "container" {
   source                = "./modules/container"
-  app_rg_name           = format("%s-%s", module.env_vars.rg_prefix, "app")
+             = format("%s-%s", module.env_vars.rg_prefix, "app")
   projcore_network_prof = data.terraform_remote_state.infra.outputs.projcore_network_prof
   container_version     = var.input_container_version
   rg_prefix             = module.env_vars.rg_prefix
@@ -25,8 +25,8 @@ module "app_service" {
   common_tags             = module.env_vars.common_tags
 }
 
-# module "my_resource_group" {
-#     source = "./modules/azure-resource-group"
-#     name = "ratest"
-#     location = "west europe"
-#    }
+module "my_resource_group" {
+    source = "./modules/azure-resource-group"
+    name = "ratest"
+    location = "west europe"
+   }
