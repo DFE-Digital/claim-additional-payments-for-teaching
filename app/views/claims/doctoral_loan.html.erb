@@ -17,10 +17,7 @@
             </legend>
 
             <span class="govuk-hint" id="doctoral-loan-hint">
-              Postgraduate Doctoral Loans have only been available since the 2018/19
-              academic year. This is different to the student loans you might have taken out
-              as an undergraduate or masters student. They are different to ITT course
-              loans.
+              If you took out a Postgraduate Doctoral Loan, such as for a PhD, a deduction will automatically go towards repaying it.
             </span>
 
             <%= errors_tag current_claim, :postgraduate_doctoral_loan %>
@@ -38,6 +35,14 @@
           </fieldset>
         </div>
       <% end %>
+
+      <div class="govuk-warning-text">
+        <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
+        <strong class="govuk-warning-text__text">
+          <span class="govuk-warning-text__assistive">Warning</span>
+          This loan is different from a Postgraduate ITT or undergraduate loan
+        </strong>
+      </div>
 
       <%= form.submit "Continue", class: "govuk-button", data: {module: "govuk-button"} %>
     <% end %>

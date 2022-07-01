@@ -142,7 +142,7 @@ class Claim < ApplicationRecord
 
   validates :academic_year_before_type_cast, format: {with: PolicyConfiguration::ACADEMIC_YEAR_REGEXP}
 
-  validates :payroll_gender, on: [:gender, :submit], presence: {message: "Choose the option for the gender your school’s payroll system associates with you"}
+  validates :payroll_gender, on: [:gender, :submit], presence: {message: "Select the gender recorded on your school’s payroll system or select whether you do not know"}
 
   validates :first_name, on: [:"personal-details", :submit], presence: {message: "Enter your first name"}
   validates :first_name,
@@ -193,22 +193,22 @@ class Claim < ApplicationRecord
   validates :national_insurance_number, on: [:"personal-details", :submit], presence: {message: "Enter a National Insurance number in the correct format"}
   validate :ni_number_is_correct_format
 
-  validates :has_student_loan, on: [:"student-loan", :submit], inclusion: {in: [true, false], message: "Select yes if you are currently paying off your student loan"}
-  validates :student_loan_country, on: [:"student-loan-country"], presence: {message: "Select the country you lived in when you applied for your student loan"}
-  validates :student_loan_courses, on: [:"student-loan-how-many-courses"], presence: {message: "Select the number of student loans you have taken out"}
+  validates :has_student_loan, on: [:"student-loan", :submit], inclusion: {in: [true, false], message: "Select yes if you are currently repaying a student loan"}
+  validates :student_loan_country, on: [:"student-loan-country"], presence: {message: "Select where your home address was when you applied for your student loan"}
+  validates :student_loan_courses, on: [:"student-loan-how-many-courses"], presence: {message: "Select how many higher education courses you took out a student loan for"}
   validates :student_loan_start_date, on: [:"student-loan-start-date"], presence: {message: ->(object, data) { I18n.t("validation_errors.student_loan_start_date.#{object.student_loan_courses}") }}
   validates :student_loan_plan, on: [:submit], presence: {message: "We have not been able determined your student loan repayment plan. Answer all questions about your student loan."}
   validates :student_loan_plan, on: [:amendment], inclusion: {in: [Claim::NO_STUDENT_LOAN], message: "You can’t amend the student loan plan type because the claimant said they are no longer paying off their student loan"}, if: :no_student_loan?
 
   validates :has_masters_doctoral_loan, on: [:"masters-doctoral-loan", :submit], inclusion: {in: [true, false], message: "Select yes if you have a postgraduate masters and/or doctoral loan"}, if: :no_student_loan?
-  validates :postgraduate_masters_loan, on: [:"masters-loan", :submit], inclusion: {in: [true, false], message: "Select yes if you have a Postgraduate Master Loan taken out on or after 1st August 2016"}, unless: -> { no_masters_doctoral_loan? }
-  validates :postgraduate_doctoral_loan, on: [:"doctoral-loan", :submit], inclusion: {in: [true, false], message: "Select yes if you have a Postgraduate Doctoral Loan taken out on or after 1st August 2018"}, unless: -> { no_masters_doctoral_loan? }
+  validates :postgraduate_masters_loan, on: [:"masters-loan", :submit], inclusion: {in: [true, false], message: "Select yes if you are currently repaying a Postgraduate Master’s Loan"}, unless: -> { no_masters_doctoral_loan? }
+  validates :postgraduate_doctoral_loan, on: [:"doctoral-loan", :submit], inclusion: {in: [true, false], message: "Select yes if you are currently repaying a Postgraduate Doctoral Loan"}, unless: -> { no_masters_doctoral_loan? }
 
   validates :email_address, on: [:"email-address", :submit], presence: {message: "Enter an email address"}
   validates :email_address, format: {with: URI::MailTo::EMAIL_REGEXP, message: "Enter an email in the format name@example.com"},
     length: {maximum: 256, message: "Email address must be 256 characters or less"}, if: -> { email_address.present? }
 
-  validates :provide_mobile_number, on: [:"provide-mobile-number", :submit], inclusion: {in: [true, false], message: "Choose yes if you want to provide a mobile number"}, if: :has_ecp_or_lupp_policy?
+  validates :provide_mobile_number, on: [:"provide-mobile-number", :submit], inclusion: {in: [true, false], message: "Select yes if you would like to provide your mobile number"}, if: :has_ecp_or_lupp_policy?
   validates :mobile_number, on: [:"mobile-number", :submit], presence: {message: "Enter a mobile number in the correct format, for example 07123456789"}, if: -> { provide_mobile_number == true && has_ecp_or_lupp_policy? }
   validates :mobile_number,
     format: {
@@ -216,7 +216,7 @@ class Claim < ApplicationRecord
       message: "A mobile number must be 11 digits"
     }, if: -> { provide_mobile_number == true && mobile_number.present? && has_ecp_or_lupp_policy? }
 
-  validates :bank_or_building_society, on: [:"bank-or-building-society", :submit], presence: {message: "Select personal bank account or building society"}
+  validates :bank_or_building_society, on: [:"bank-or-building-society", :submit], presence: {message: "Select if you want the money paid in to a personal bank account or building society"}
   validates :banking_name, on: [:"personal-bank-account", :"building-society-account", :submit], presence: {message: "Enter a name on the account"}
   validates :bank_sort_code, on: [:"personal-bank-account", :"building-society-account", :submit], presence: {message: "Enter a sort code"}
   validates :bank_account_number, on: [:"personal-bank-account", :"building-society-account", :submit], presence: {message: "Enter an account number"}
