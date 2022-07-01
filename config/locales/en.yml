@@ -323,8 +323,8 @@ en:
       teaching_subject_now: "Do you spend at least half of your contracted hours teaching eligible subjects?"
       itt_academic_year:
         qualification:
-          undergraduate_itt: In which academic year did you complete your undergraduate ITT?
-          postgraduate_itt: In which academic year did you start your postgraduate ITT?
+          undergraduate_itt: In which academic year did you complete your undergraduate initial teaching training?
+          postgraduate_itt: In which academic year did you start your postgraduate initial teaching training?
           assessment_only: In which academic year did you earn your qualified teacher status (QTS)?
           overseas_recognition: In which academic year did you earn your qualified teacher status (QTS)?
         route_into_teaching:
