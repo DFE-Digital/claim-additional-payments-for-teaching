@@ -71,6 +71,6 @@ stages:
   jobs:
   - job: ReviewApp
     steps:
-      - powershell: echo $(System.PullRequest.PullRequestId)"
-      - powershell: echo $(System.PullRequest.PullRequestNumber)"
+      - powershell: echo $(System.PullRequest.PullRequestId)
+      - powershell: echo $(System.PullRequest.PullRequestNumber)
     #- script: echo $(System.PullRequest.PullRequestId)
