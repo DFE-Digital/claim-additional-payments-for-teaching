@@ -2,7 +2,7 @@ pr:
   branches:
     include:
     #- main
-    - revewapps
+    - reviewapps
 
 trigger:
   branches:
@@ -69,37 +69,8 @@ stages:
   #condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
   jobs:
   - job: ReviewApp
-    # variables:
-    # - name: backendAzureRmContainerName
-    #   value: s118d01conttfstate
-
-    # - name: backendAzureRmKey
-    #   value: terraform.tfstate
-
-    # - name: backendAzureRmResourceGroupName
-    #   value: s118d01-tfbackend
-
-    # - name: backendAzureRmStorageAccountName
-    #   value: s118d01tfbackendsa
-
-    # - name: env
-    #   value: Development
-
-    # - name: KeyVaultId
-    #   value : /subscriptions/8655985a-2f87-44d7-a541-0be9a8c2779d/resourceGroups/s118d01-secrets/providers/Microsoft.KeyVault/vaults/s118d01-secrets-kv
-
-    # - name: ResourceGroupName
-    #   value: s118d01-app
-
-    # - name: SourceSlot
-    #   value: staging
-
-    # - name: WebAppName
-    #   value: s118d01-app-as
     steps:
-    # run deployment
-    #- script: echo "PR number = ${{ github.event.pull_request.number }}"
-    - script: echo "PR number = ${{ env.PR_NUMBER }}"
-    #- template: templates/release.yml #Run Release Template
-      #parameters :
-      #  ServiceConnection : azdo.pipelines.cip.S118D.armfe1ef140-8bef-4043-b5ee-c449e6f951ef
+    - powershell: |
+      Write-Host "PR Number is:-" $(System.PullRequest.PullRequestId)"
+      Write-Host "PR Number is:-" $(System.PullRequest.PullRequestNumber)"
+    - script: echo $(System.PullRequest.PullRequestId)
