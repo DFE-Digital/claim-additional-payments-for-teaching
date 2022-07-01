@@ -74,4 +74,3 @@ stages:
      - powershell: |
         write-host $(System.PullRequest.PullRequestId)
         write-host $(System.PullRequest.PullRequestNumber)
-    displayname: "Show PR numbers"
