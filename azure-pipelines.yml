@@ -74,7 +74,7 @@ stages:
   - job: DeployReviewApp
     -steps :
     -script : echo "PR number = ${{ github.event.pull_request.number }}"
-    -script : echo "PR number = ${{ env.PR_NUMBER }}"
+    #-script : echo "PR number = ${{ env.PR_NUMBER }}"
 #     variables:
 #     - name: backendAzureRmContainerName
 #       value: s118$(pr-number)conttfstate
