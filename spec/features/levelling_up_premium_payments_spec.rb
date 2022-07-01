@@ -46,7 +46,7 @@ RSpec.feature "Levelling up premium payments claims" do
     click_on "Continue"
 
     # - Which subject did you do your undergraduate ITT in
-    expect(page).to have_text(I18n.t("early_career_payments.questions.eligible_itt_subject", qualification: "undergraduate initial teacher training (ITT)"))
+    expect(page).to have_text(I18n.t("early_career_payments.questions.eligible_itt_subject", qualification: "undergraduate initial teaching training"))
     choose "None of the above"
     click_on "Continue"
 
