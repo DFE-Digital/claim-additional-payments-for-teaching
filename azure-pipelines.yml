@@ -75,3 +75,5 @@ stages:
         #write-host $(System.PullRequest.PullRequestId)
         #write-host $(System.PullRequest.PullRequestNumber)
         write-host $(System.DefaultWorkingDirectory)
+        write-host $(Build.Repository.Name)
+        write-host $(Build.SourceBranch)
