@@ -128,6 +128,7 @@ module EarlyCareerPayments
 
     def trainee_teacher_slugs(sequence)
       trainee_slugs = %w[
+        current-school
         nqt-in-academic-year-after-itt
         eligible-itt-subject
         future-eligibility

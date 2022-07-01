@@ -28,4 +28,14 @@ RSpec.feature "Backlinking during a claim" do
     click_on "Continue"
     expect(page).to have_no_link("Back")
   end
+
+  scenario "ECP/LUP trainee mini journey" do
+    visit new_claim_path(EarlyCareerPayments.routing_name)
+    choose_school schools(:penistone_grammar_school)
+    choose "No, I’m a trainee teacher"
+    click_on "Continue"
+    click_on "Back"
+
+    expect(page).to have_link("Back")
+  end
 end
