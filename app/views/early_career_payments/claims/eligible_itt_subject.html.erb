@@ -43,7 +43,7 @@
           </fieldset>
         <% end %>
 
-        <% if subject_symbols.any?{ |subject| [:chemistry, :physics].include?(subject) } %>
+        <% if (subject_symbols & [:chemistry, :physics]).any? %>
           <br/>
           <br/>
 
