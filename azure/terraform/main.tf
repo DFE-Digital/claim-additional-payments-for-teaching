@@ -25,7 +25,7 @@ module "app_service" {
   common_tags             = module.env_vars.common_tags
 }
 
-module "my_resource_group" {
+module "azure-resource-group" {
     source = "./modules/azure-resource-group"
     name = "ratest"
     location = "west europe"
