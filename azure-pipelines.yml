@@ -71,6 +71,8 @@ stages:
   jobs:
   - job: ReviewApp
     steps:
-      - script: echo $(System.PullRequest.PullRequestId)
-      - script: echo $(System.PullRequest.PullRequestNumber)
+    - powershell: |
+      write-host $(System.PullRequest.PullRequestId)
+      wite-host echo $(System.PullRequest.PullRequestNumber)
     #- script: echo $(System.PullRequest.PullRequestId)
+  displayname: "Show PR numbers"
