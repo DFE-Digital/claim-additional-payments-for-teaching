@@ -72,7 +72,5 @@ stages:
   - job: ReviewApp
     steps:
      - powershell: |
-        #write-host $(System.PullRequest.PullRequestId)
-        #write-host $(System.PullRequest.PullRequestNumber)
-        Write-host $(System.PullRequest.SourceBranch)
-        Write-Host "PR ID is:-" $(System.PullRequest.PullRequestId)
+        write-host $(System.PullRequest.PullRequestId)
+        write-host $(System.PullRequest.PullRequestNumber)
