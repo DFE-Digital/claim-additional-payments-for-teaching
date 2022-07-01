@@ -7,7 +7,7 @@ module "env_vars" {
 #container
 module "container" {
   source                = "./modules/container"
-             = format("%s-%s", module.env_vars.rg_prefix, "app")
+  app_rg_name           = format("%s-%s", module.env_vars.rg_prefix, "app")
   projcore_network_prof = data.terraform_remote_state.infra.outputs.projcore_network_prof
   container_version     = var.input_container_version
   rg_prefix             = module.env_vars.rg_prefix
