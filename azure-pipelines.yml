@@ -4,10 +4,10 @@ pr:
     #- main
     - "."
 
-trigger:
-  branches:
-    include:
-    - '*'
+#trigger:
+#  branches:
+#    include:
+#    - '*'
 
 pool:
   vmImage: ubuntu-latest
