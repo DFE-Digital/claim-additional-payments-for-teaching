@@ -74,5 +74,5 @@ stages:
      - powershell: |
         #write-host $(System.PullRequest.PullRequestId)
         #write-host $(System.PullRequest.PullRequestNumber)
-        Write-Host "PR Number is:-" $(System.PullRequest.PullRequestId)
+
         Write-Host "PR ID is:-" $env:System_PullRequest_PullRequestId
