@@ -75,4 +75,4 @@ stages:
         #write-host $(System.PullRequest.PullRequestId)
         #write-host $(System.PullRequest.PullRequestNumber)
 
-        Write-Host "PR ID is:-" $env:System_PullRequest_PullRequestId
+        Write-Host "PR ID is:-" $System.PullRequest.PullRequestId
