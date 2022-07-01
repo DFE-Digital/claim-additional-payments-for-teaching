@@ -67,7 +67,7 @@ stages:
 
 - stage: ReviewAPP
   #condition: and(succeeded(), ne(variables['System.PullRequest.PullRequestId'], 'Null'))
-  condition: $[eq(variables['System.PullRequest.PullRequestId']
+  condition: eq(variables['System.PullRequest.PullRequestId']
   #condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
   jobs:
   - job: ReviewApp
