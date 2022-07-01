@@ -66,13 +66,14 @@ stages:
         ServiceConnection : azdo.pipelines.cip.S118D.armfe1ef140-8bef-4043-b5ee-c449e6f951ef
 
 - stage: ReviewAPP
-  condition: and(succeeded(), ne(variables['System.PullRequest.PullRequestId'], 'Null'))
+  #condition: and(succeeded(), ne(variables['System.PullRequest.PullRequestId'], 'Null'))
+  condition: $[eq(variables['System.PullRequest.PullRequestId']
   #condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
   jobs:
   - job: ReviewApp
     steps:
      - powershell: |
-        #write-host $(System.PullRequest.PullRequestId)
+        write-host $(System.PullRequest.PullRequestId)
         #write-host $(System.PullRequest.PullRequestNumber)
         write-host $(System.DefaultWorkingDirectory)
         write-host $(Build.Repository.Name)
