@@ -1,77 +1,72 @@
+---
+pool:
+  vmImage: ubuntu-latest
 pr:
   branches:
     include:
-    #- main
-    - "."
-
-#trigger:
-#  branches:
-#    include:
-#    - '*'
-
-pool:
-  vmImage: ubuntu-latest
-
-variables:
-  - group: docker-settings
-  - name: 'isbuildrelease'
-    value: $[eq(variables['Build.SourceBranch'], 'refs/heads/buildrelease')]
-
+      - "."
 stages:
-- stage: Build
-  jobs:
-  - job: Build
-    steps:
-    - template: templates/dummy.yml
-    #- template: templates/build.yml  #Run Build Template
-
-- stage: Release
-  condition: succeeded()
-  #condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
-  jobs:
-  - job: DeployDev
-    variables:
-    - name: backendAzureRmContainerName
-      value: s118d01conttfstate
-
-    - name: backendAzureRmKey
-      value: terraform.tfstate
-
-    - name: backendAzureRmResourceGroupName
-      value: s118d01-tfbackend
-
-    - name: backendAzureRmStorageAccountName
-      value: s118d01tfbackendsa
-
-    - name: env
-      value: Development
-
-    - name: KeyVaultId
-      value : /subscriptions/8655985a-2f87-44d7-a541-0be9a8c2779d/resourceGroups/s118d01-secrets/providers/Microsoft.KeyVault/vaults/s118d01-secrets-kv
-
-    - name: ResourceGroupName
-      value: s118d01-app
-
-    - name: SourceSlot
-      value: staging
-
-    - name: WebAppName
-      value: s118d01-app-as
-
-    steps:
-    # run deployment
-    #- template: templates/release.yml #Run Release Template
-    - template: templates/dummy.yml
-      parameters :
-        ServiceConnection : azdo.pipelines.cip.S118D.armfe1ef140-8bef-4043-b5ee-c449e6f951ef
-
-- stage: ReviewAPP
-  condition: and(succeeded(), ne(variables['System.PullRequest.PullRequestId'], 'Null'))
-  #condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
-  jobs:
-  - job: ReviewApp
-    steps:
-     - powershell: |
-       - powershell: echo $(System.PullRequest.PullRequestId)"
-       - powershell: echo $(System.PullRequest.PullRequestNumber)"
-    #- script: echo $(System.PullRequest.PullRequestId)
+  -
+    jobs:
+      -
+        job: Build
+        steps:
+          -
+            template: templates/dummy.yml
+    stage: Build
+  -
+    condition: succeeded()
+    jobs:
+      -
+        job: DeployDev
+        steps:
+          -
+            parameters:
+              ServiceConnection: azdo.pipelines.cip.S118D.armfe1ef140-8bef-4043-b5ee-c449e6f951ef
+            template: templates/dummy.yml
+        variables:
+          -
+            name: backendAzureRmContainerName
+            value: s118d01conttfstate
+          -
+            name: backendAzureRmKey
+            value: terraform.tfstate
+          -
+            name: backendAzureRmResourceGroupName
+            value: s118d01-tfbackend
+          -
+            name: backendAzureRmStorageAccountName
+            value: s118d01tfbackendsa
+          -
+            name: env
+            value: Development
+          -
+            name: KeyVaultId
+            value: /subscriptions/8655985a-2f87-44d7-a541-0be9a8c2779d/resourceGroups/s118d01-secrets/providers/Microsoft.KeyVault/vaults/s118d01-secrets-kv
+          -
+            name: ResourceGroupName
+            value: s118d01-app
+          -
+            name: SourceSlot
+            value: staging
+          -
+            name: WebAppName
+            value: s118d01-app-as
+    stage: Release
+  -
+    condition: "and(succeeded(), ne(variables['System.PullRequest.PullRequestId'], 'Null'))"
+    jobs:
+      -
+        job: ReviewApp
+        steps:
+          -
+            powershell: |
+                - powershell: echo $(System.PullRequest.PullRequestId)"
+                - powershell: echo $(System.PullRequest.PullRequestNumber)"
+    stage: ReviewAPP
+variables:
+  -
+    group: docker-settings
+  -
+    name: isbuildrelease
+    value: "$[eq(variables['Build.SourceBranch'], 'refs/heads/buildrelease')]"
