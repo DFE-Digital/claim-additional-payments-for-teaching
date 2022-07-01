@@ -1,4 +1,10 @@
-pr: none
+pr:
+  branches:
+    include:
+    #- main
+    - revewapps
+    exclude:
+    #- releases/old*
 
 trigger:
   branches:
@@ -61,10 +67,14 @@ stages:
         ServiceConnection : azdo.pipelines.cip.S118D.armfe1ef140-8bef-4043-b5ee-c449e6f951ef
 
 
-# - stage: DeployReviewAPP
-#   condition: and(eq(variables['System.PullRequest.TargetBranch'], 'refs/heads/Master'), eq(variables['Build.Reason'], 'PullRequest'))
-#   jobs:
-#   - job: DeployReviewApp
+- stage: DeployReviewAPP
+  condition: and(eq(variables['System.PullRequest.TargetBranch'], 'refs/heads/reviewapps'), eq(variables['Build.Reason'], 'PullRequest'))
+  #condition: and(eq(variables['System.PullRequest.TargetBranch'], 'refs/heads/Master'), eq(variables['Build.Reason'], 'PullRequest'))
+  jobs:
+  - job: DeployReviewApp
+    -steps :
+    -script : echo "PR number = ${{ github.event.pull_request.number }}"
+    -script : echo "PR number = ${{ env.PR_NUMBER }}"
 #     variables:
 #     - name: backendAzureRmContainerName
 #       value: s118$(pr-number)conttfstate
