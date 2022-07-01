@@ -158,7 +158,7 @@ RSpec.describe EarlyCareerPayments::SlugSequence do
           teaching-subject-now
           check-your-answers-part-one
           eligibility-confirmed
-          how-we-will-use-information-provided
+          information-provided
           personal-details
           postcode-search
           no-address-found
@@ -203,7 +203,7 @@ RSpec.describe EarlyCareerPayments::SlugSequence do
           teaching-subject-now
           check-your-answers-part-one
           eligibility-confirmed
-          how-we-will-use-information-provided
+          information-provided
           personal-details
           postcode-search
           no-address-found
@@ -243,7 +243,7 @@ RSpec.describe EarlyCareerPayments::SlugSequence do
           teaching-subject-now
           check-your-answers-part-one
           eligibility-confirmed
-          how-we-will-use-information-provided
+          information-provided
           personal-details
           postcode-search
           no-address-found
@@ -300,7 +300,7 @@ RSpec.describe EarlyCareerPayments::SlugSequence do
           teaching-subject-now
           check-your-answers-part-one
           eligibility-confirmed
-          how-we-will-use-information-provided
+          information-provided
           personal-details
           postcode-search
           no-address-found

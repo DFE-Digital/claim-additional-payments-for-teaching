@@ -28,7 +28,7 @@ module EarlyCareerPayments
       "eligible-later",
       "future-eligibility",
       # personal details phase of claim journey
-      "how-we-will-use-information-provided",
+      "information-provided",
       "personal-details",
       "postcode-search",
       "no-address-found",

@@ -80,6 +80,7 @@ RSpec.feature "Levelling up premium payments claims" do
 
     # - How will we use the information you provide
     expect(page).to have_text("How we will use the information you provide")
+    expect(page).to have_text("For more details, you can read about payments and deductions for the levelling up premium payment")
     click_on "Continue"
 
     # - Personal details

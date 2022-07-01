@@ -17,9 +17,7 @@
             </legend>
 
             <span class="govuk-hint" id="masters-loan-hint">
-              Postgraduate Masters Loans have only been available since the 2016/17
-              academic year. This is different to the student loan you took out as an
-              undergraduate. They are different to ITT course loans.
+              If you took out a Master’s Loan then a deduction will automatically go towards repaying it.
             </span>
 
             <%= errors_tag current_claim, :postgraduate_masters_loan %>
@@ -37,6 +35,14 @@
           </fieldset>
         </div>
       <% end %>
+
+      <div class="govuk-warning-text">
+        <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
+        <strong class="govuk-warning-text__text">
+          <span class="govuk-warning-text__assistive">Warning</span>
+          This loan is different from a Postgraduate ITT or undergraduate loan
+        </strong>
+      </div>
 
       <%= form.submit "Continue", class: "govuk-button", data: {module: "govuk-button"} %>
     <% end %>

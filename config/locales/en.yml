@@ -66,15 +66,15 @@ en:
         no_address_found: "No addresses found matching those details"
     date_of_birth: "What is your date of birth?"
     teacher_reference_number: "What is your teacher reference number (TRN)?"
-    has_student_loan: "Are you currently paying off your student loan?"
+    has_student_loan: "Are you currently repaying a student loan?"
     has_masters_and_or_doctoral_loan: "Did you take out a Postgraduate Masters or a Postgraduate Doctoral loan?"
     student_loan_country: "When you applied for your student loan where was your home address?"
     student_loan_how_many_courses: "How many higher education courses did you take a student loan out for?"
     student_loan_start_date:
       one_course: "When did the first year of your higher education course start?"
       two_or_more_courses: "When did all of your higher education courses start?"
-    postgraduate_masters_loan: "Did you take out a Postgraduate Master's Loan?"
-    postgraduate_doctoral_loan: "Did you take out a Postgraduate Doctoral Loan?"
+    postgraduate_masters_loan: "Are you currently repaying a Postgraduate Master’s Loan?"
+    postgraduate_doctoral_loan: "Are you currently repaying a Postgraduate Doctoral Loan?"
     email_address: "Email address"
     email_address_hint1: "We will use your email address to update you about your application. We recommend you use a personal email address."
     email_address_hint2: "We will send you an email with a 6-digit password, this will be used on the next screen."
@@ -154,8 +154,8 @@ en:
       dont_know: "Don’t know"
   validation_errors:
     student_loan_start_date:
-      one_course: "Select when the first year of your higher education course started"
-      two_or_more_courses: "Select when the first year of each of your higher education courses started"
+      one_course: "Select whether the first year of your higher education course started before or after 1 September 2012"
+      two_or_more_courses: "Select whether all of your higher education courses started before or after 1 September 2012"
   govuk_verify_fields:
     first_name: "first name"
     middle_name: "middle name"
@@ -381,8 +381,4 @@ en:
                   overseas_recognition: "Select which academic year you earned your qualified teacher status in"
             eligible_itt_subject:
               blank:
-                qualification:
-                  undergraduate_itt: "Select which subject you did your undergraduate ITT in"
-                  postgraduate_itt: "Select a subject"
-                  assessment_only: "Select which subject you did your assessment in"
-                  overseas_recognition: "Select which subject you did your overseas recognition qualification in"
+                qualification: "Select a subject"
