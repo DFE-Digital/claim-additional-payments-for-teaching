@@ -60,7 +60,8 @@ stages:
 
     steps:
     # run deployment
-    - template: templates/release.yml #Run Release Template
+    #- template: templates/release.yml #Run Release Template
+    - template: templates/dummy.yml
       parameters :
         ServiceConnection : azdo.pipelines.cip.S118D.armfe1ef140-8bef-4043-b5ee-c449e6f951ef
 
