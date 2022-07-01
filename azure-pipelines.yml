@@ -73,6 +73,5 @@ stages:
     steps:
     - powershell: |
       write-host $(System.PullRequest.PullRequestId)
-      wite-host echo $(System.PullRequest.PullRequestNumber)
-    #- script: echo $(System.PullRequest.PullRequestId)
+      wite-host $(System.PullRequest.PullRequestNumber)
   displayname: "Show PR numbers"
