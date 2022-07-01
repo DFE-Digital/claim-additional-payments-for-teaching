@@ -25,8 +25,22 @@ module "app_service" {
   common_tags             = module.env_vars.common_tags
 }
 
-module "azure-resource-group" {
-    source = "./modules/azure-resource-group"
-    name = "ratest"
-    location = "west europe"
-   }
+###Run if ENV eq PRNumber
+
+# module "azure-resource-group" {
+#     source = "./modules/azure-resource-group"
+#     name = "ratest"
+#     location = "west europe"
+#    }
+
+# module "claims-db" {
+#     source = "./modules/databses"
+#     name = "ratest"
+#     location = "west europe"
+#    }
+
+# module "redis_cache" {
+#     source = "./modules/redis_cache"
+#     name = "ratest"
+#     location = "west europe"
+#    }
