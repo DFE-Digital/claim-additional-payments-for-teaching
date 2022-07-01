@@ -3,8 +3,6 @@ pr:
     include:
     #- main
     - revewapps
-    exclude:
-    #- releases/old*
 
 trigger:
   branches:
@@ -24,8 +22,8 @@ stages:
   jobs:
   - job: Build
     steps:
-    #- template: templates/dummy.yml
-    - template: templates/build.yml  #Run Build Template
+    - template: templates/dummy.yml
+    #- template: templates/build.yml  #Run Build Template
 
 - stage: Release
   condition: succeeded()
@@ -70,38 +68,5 @@ stages:
 - stage: DeployReviewAPP
   condition: and(eq(variables['System.PullRequest.TargetBranch'], 'refs/heads/reviewapps'), eq(variables['Build.Reason'], 'PullRequest'))
   #condition: and(eq(variables['System.PullRequest.TargetBranch'], 'refs/heads/Master'), eq(variables['Build.Reason'], 'PullRequest'))
-  jobs:
-  - job: DeployReviewApp
-    -steps :
-    -script : echo "PR number = ${{ github.event.pull_request.number }}"
-    #-script : echo "PR number = ${{ env.PR_NUMBER }}"
-#     variables:
-#     - name: backendAzureRmContainerName
-#       value: s118$(pr-number)conttfstate
-
-#     - name: backendAzureRmKey
-#       value: terraform.tfstate
-
-#     - name: backendAzureRmResourceGroupName
-#       value: s118$(pr-number)-tfbackend
-
-#     - name: backendAzureRmStorageAccountName
-#       value: s118$(pr-number)tfbackendsa
-
-#     - name: env
-#       value: reviewapp
-
-#     - name: KeyVaultId
-#       value : /subscriptions/8655985a-2f87-44d7-a541-0be9a8c2779d/resourceGroups/s118d01-secrets/providers/Microsoft.KeyVault/vaults/s118d01-secrets-kv
-
-#     - name: ResourceGroupName
-#       value: s118$(pr-number)-app
-
-#     - name: SourceSlot
-#       value: staging
-
-#     - name: WebAppName
-#       value: s118$(pr-number)-app-as
-#     steps:
-#       - script: echo review app stage
-#       - template: templates/release.yml #Run Release Template
+    steps:
+       - script: echo "PR number = ${{ github.event.pull_request.number }}"
