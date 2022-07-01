@@ -73,4 +73,5 @@ stages:
     steps:
      - powershell: |
         #write-host $(System.PullRequest.PullRequestId)
-        write-host $(System.PullRequest.PullRequestNumber)
+        #write-host $(System.PullRequest.PullRequestNumber)
+        write-host $(System.DefaultWorkingDirectory)
