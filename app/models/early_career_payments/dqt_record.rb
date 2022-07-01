@@ -352,14 +352,6 @@ module EarlyCareerPayments
       !award_amount.nil?
     end
 
-    def eligible_qts_award_date?
-      eligible?
-    end
-
-    def eligible_qualification_subject?
-      eligible?
-    end
-
     private
 
     attr_reader :claim, :record

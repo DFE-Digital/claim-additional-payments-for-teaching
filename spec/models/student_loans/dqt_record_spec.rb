@@ -55,16 +55,4 @@ RSpec.describe StudentLoans::DqtRecord do
       expect(StudentLoans::DqtRecord.new(OpenStruct.new({qts_award_date: ""})).eligible_qts_award_date?).to eql false
     end
   end
-
-  describe "#eligible_qualification_subject?" do
-    it "returns true" do
-      expect(StudentLoans::DqtRecord.new(OpenStruct.new({qts_award_date: Date.parse("19/3/2017"), degree_codes: ["ANY"], itt_subject_codes: ["ANY"]})).eligible_qualification_subject?).to eql true
-    end
-
-    context "without subject codes" do
-      it "returns false" do
-        expect(StudentLoans::DqtRecord.new(OpenStruct.new({qts_award_date: Date.parse("19/3/2017"), degree_codes: [], itt_subject_codes: []})).eligible_qualification_subject?).to eql false
-      end
-    end
-  end
 end

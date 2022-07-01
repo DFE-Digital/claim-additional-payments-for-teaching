@@ -36,10 +36,6 @@ module StudentLoans
       qts_award_date.present? && AcademicYear.for(qts_award_date) >= StudentLoans.first_eligible_qts_award_year
     end
 
-    def eligible_qualification_subject?
-      [itt_subject_codes, degree_codes].none?(&:empty?)
-    end
-
     private
 
     attr_reader :record
