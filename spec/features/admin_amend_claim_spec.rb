@@ -28,6 +28,7 @@ RSpec.feature "Admin amends a claim" do
     new_date_of_birth = 30.years.ago.to_date
 
     fill_in "Teacher reference number", with: "7654321"
+    fill_in "National insurance number", with: "YZ873206D"
     fill_in "Day", with: new_date_of_birth.day
     fill_in "Month", with: new_date_of_birth.month
     fill_in "Year", with: new_date_of_birth.year
@@ -44,6 +45,7 @@ RSpec.feature "Admin amends a claim" do
     expect(amendment.claim_changes).to eq({
       "teacher_reference_number" => ["1234567", "7654321"],
       "date_of_birth" => [date_of_birth, new_date_of_birth],
+      "national_insurance_number" => ["QQ100000C", "YZ873206D"],
       "student_loan_plan" => ["plan_1", "plan_2"],
       "bank_sort_code" => ["010203", "111213"],
       "bank_account_number" => ["47274828", "18929492"],
