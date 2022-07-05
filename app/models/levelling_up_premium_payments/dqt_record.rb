@@ -11,78 +11,6 @@ module LevellingUpPremiumPayments
       to: :record
     )
 
-    ELIGIBLE_ITT_CODES = [
-      "101038",
-      "100358",
-      "101060",
-      "100417",
-      "100366",
-      "100403",
-      "100425",
-      "G100",
-      "I200",
-      "F110",
-      "F1100",
-      "G510",
-      "I900",
-      "G1100",
-      "F310",
-      "F3300",
-      "F1001",
-      "F1600",
-      "F100",
-      "G9009",
-      "G5401",
-      "G5400",
-      "G5007",
-      "G5001",
-      "I100",
-      "G5000",
-      "G5003",
-      "G5402",
-      "G9007",
-      "G5006",
-      "F140",
-      "G5602",
-      "G500",
-      "P2000",
-      "P2001",
-      "G5601",
-      "G5604",
-      "F1901",
-      "G1401",
-      "J9201",
-      "F3200",
-      "G1500",
-      "G1400",
-      "G5004",
-      "G9005",
-      "G9006",
-      "G9003",
-      "G1502",
-      "G5009",
-      "F3007",
-      "G5005",
-      "G9002",
-      "F300",
-      "F9623",
-      "F9632",
-      "F9613",
-      "F390",
-      "F6007",
-      "F6006",
-      "G1200",
-      "F9626",
-      "G1501",
-      "F9625",
-      "F1004",
-      "F3012",
-      "G4000",
-      "G5008",
-      "G9004",
-      "F3201"
-    ].freeze
-
     ELIGIBLE_JAC_CODES = [
       "F100",
       "F110",
@@ -324,21 +252,17 @@ module LevellingUpPremiumPayments
     end
 
     def eligible?
-      return true if eligible_qualification_itt?
+      return true if eligible_code?(itt_subject_codes)
 
-      eligible_qualification_degree?
+      eligible_code?(degree_codes)
     end
 
     private
 
     attr_reader :record
 
-    def eligible_qualification_itt?
-      (ELIGIBLE_ITT_CODES & itt_subject_codes).present?
-    end
-
-    def eligible_qualification_degree?
-      ((ELIGIBLE_JAC_CODES | ELIGIBLE_HECOS_CODES) & degree_codes).present?
+    def eligible_code?(code)
+      ((ELIGIBLE_JAC_CODES | ELIGIBLE_HECOS_CODES) & code).present?
     end
   end
 end
