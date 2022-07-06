@@ -1,4 +1,4 @@
-<% translation = claim.policy == LevellingUpPremiumPayments ? "early_career_payments.admin.task_questions.#{task_name}" : "#{claim.policy.to_s.underscore}.admin.task_questions.#{task_name}" %>
+<% translation = "#{claim.policy.to_s.underscore}.admin.task_questions.#{task_name}" %>
 <%= form_with model: [:admin, @claim, @claim.tasks.where(name: task_name).first_or_initialize] do |f| %>
   <div class="govuk-form-group">
     <fieldset class="govuk-fieldset govuk-!-margin-bottom-6">
