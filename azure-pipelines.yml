@@ -1,9 +1,12 @@
-pr: none
-
-trigger:
+pr:
   branches:
     include:
-    - '*'
+    - master
+
+#trigger:
+#  branches:
+#    include:
+#    - '*'
 
 pool:
   vmImage: ubuntu-latest
@@ -18,10 +21,12 @@ stages:
   jobs:
   - job: Build
     steps:
-    - template: templates/build.yml  #Run Build Template
+    - template: templates/dummy.yml
+    #- template: templates/build.yml  #Run Build Template
 
 - stage: Release
-  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
+  condition: succeeded()
+  #condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
   jobs:
   - job: DeployDev
     variables:
@@ -53,6 +58,18 @@ stages:
       value: s118d01-app-as
 
     steps:
-    - template: templates/release.yml #Run Release Template
+    # run deployment
+    #- template: templates/release.yml #Run Release Template
+    - template: templates/dummy.yml
       parameters :
         ServiceConnection : azdo.pipelines.cip.S118D.armfe1ef140-8bef-4043-b5ee-c449e6f951ef
+
+- stage: ReviewAPP
+  condition: and(succeeded(), eq(variables['System.PullRequest.PullRequestNumber'], 'NotNull'))
+  #condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
+  jobs:
+  - job: ReviewApp
+    steps:
+     - powershell: |
+        write-host $(System.PullRequest.PullRequestNumber)
+        write-host "PR Number listed above"
