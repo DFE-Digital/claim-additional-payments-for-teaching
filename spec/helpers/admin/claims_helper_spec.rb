@@ -131,7 +131,7 @@ describe Admin::ClaimsHelper do
     before { travel_to Time.zone.local(2019, 10, 11, 7, 0, 0) }
     after { travel_back }
 
-    context "when a claim is approaching it's deadline" do
+    context "when a claim is approaching its deadline" do
       let(:claim) { build(:claim, :submitted, submitted_at: 13.weeks.ago) }
 
       it { is_expected.to have_content("7 days") }
@@ -145,7 +145,7 @@ describe Admin::ClaimsHelper do
       it { is_expected.to have_selector(".tag--alert") }
     end
 
-    context "when a claim is not near it's deadline" do
+    context "when a claim is not near its deadline" do
       let(:claim) { build(:claim, :submitted, submitted_at: 1.day.ago) }
 
       it { is_expected.to be_nil }
