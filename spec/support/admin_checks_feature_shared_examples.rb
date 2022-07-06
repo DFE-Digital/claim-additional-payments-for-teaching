@@ -29,7 +29,7 @@ RSpec.shared_examples "Admin Checks for Early Career Payments and Levelling Up P
 
     expect(claim.tasks.find_by!(name: "identity_confirmation").passed?).to eq(true)
 
-    expect(page).to have_content(I18n.t("early_career_payments.admin.task_questions.qualifications.title"))
+    expect(page).to have_content(I18n.t("#{claim.policy.to_s.underscore}.admin.task_questions.qualifications.title"))
     expect(page).to have_content("ITT #{claim.eligibility.postgraduate_itt? ? "start" : "end"} year")
     expect(page).to have_content(claim.eligibility.itt_academic_year.to_s(:long))
     expect(page).to have_content("ITT subject")
@@ -40,7 +40,7 @@ RSpec.shared_examples "Admin Checks for Early Career Payments and Levelling Up P
 
     expect(claim.tasks.find_by!(name: "qualifications").passed?).to eq(true)
 
-    expect(page).to have_content(I18n.t("early_career_payments.admin.task_questions.census_subjects_taught.title"))
+    expect(page).to have_content(I18n.t("#{claim.policy.to_s.underscore}.admin.task_questions.census_subjects_taught.title"))
     expect(page).to have_content("Subject Mathematics")
 
     choose "Yes"
@@ -48,7 +48,7 @@ RSpec.shared_examples "Admin Checks for Early Career Payments and Levelling Up P
 
     expect(claim.tasks.find_by!(name: "census_subjects_taught").passed?).to eq(true)
 
-    expect(page).to have_content(I18n.t("early_career_payments.admin.task_questions.employment.title"))
+    expect(page).to have_content(I18n.t("#{claim.policy.to_s.underscore}.admin.task_questions.employment.title"))
     expect(page).to have_content("Current school")
     expect(page).to have_link(claim.eligibility.current_school.name)
 

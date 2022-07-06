@@ -259,7 +259,7 @@ en:
         qualifications:
           title: "Does the claimant’s initial teacher training (ITT) qualification year match the above information from their claim?"
         census_subjects_taught:
-          title: Does the claimant's subject match the schools workforce census subjects
+          title: Does the claimant’s subject match the schools workforce census subjects
         employment:
           title: "Does the claimant’s previous and current schools match the above information from their claim?"
         student_loan_amount:
@@ -367,6 +367,20 @@ en:
   levelling_up_premium_payments:
     purpose: For early career teachers who teach certain subjects and work in disadvantaged schools.
     policy_short_name: "Levelling Up Premium Payments"
+    admin:
+      task_questions:
+        employment:
+          title: "Does the claimant’s current school match the above information from their claim?"
+        identity_confirmation:
+          title: "Did %{claim_full_name} submit the claim?"
+          body: "The claimant’s identity matches DQT records. See %{link}."
+          notes: "notes"
+        qualifications:
+          title: "Does the claimant’s ITT start/end year and subject match the above information from their claim, or do they have an eligible degree?"
+        census_subjects_taught:
+          title: Does the claimant’s subject match the schools workforce census subjects
+        matching_details:
+          title: "Is this claim still valid despite having matching details with other claims?"
   activerecord:
     errors:
       models:
