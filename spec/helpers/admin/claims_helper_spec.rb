@@ -132,14 +132,14 @@ describe Admin::ClaimsHelper do
     after { travel_back }
 
     context "when a claim is approaching it's deadline" do
-      let(:claim) { build(:claim, :submitted, submitted_at: (Claim::DECISION_DEADLINE - 1.week).ago) }
+      let(:claim) { build(:claim, :submitted, submitted_at: 13.weeks.ago) }
 
       it { is_expected.to have_content("7 days") }
       it { is_expected.to have_selector(".tag--information") }
     end
 
-    context "when a claim has passed it's deadline" do
-      let(:claim) { build(:claim, :submitted, submitted_at: (Claim::DECISION_DEADLINE + 4.weeks).ago) }
+    context "when a claim has passed its deadline" do
+      let(:claim) { build(:claim, :submitted, submitted_at: 18.weeks.ago) }
 
       it { is_expected.to have_content("-28 days") }
       it { is_expected.to have_selector(".tag--alert") }
