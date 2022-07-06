@@ -17,6 +17,8 @@ provider "random" {
 }
 
 terraform {
+  required_version = "= 1.2.4"
+
   backend "azurerm" {
     key = "terraform.tfstate"
   }
@@ -36,4 +38,3 @@ terraform {
     }
   }
 }
-
