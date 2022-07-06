@@ -102,7 +102,7 @@ module EarlyCareerPayments
 
     def eligible_itt_subject
       [
-        translate("early_career_payments.questions.eligible_itt_subject", qualification: eligibility.qualification_name),
+        eligible_itt_subject_translation(eligibility.claim),
         translate("early_career_payments.answers.eligible_itt_subject.#{eligibility.eligible_itt_subject}"),
         "eligible-itt-subject"
       ]
