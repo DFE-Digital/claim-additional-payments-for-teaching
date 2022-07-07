@@ -20,6 +20,7 @@ module LevellingUpPremiumPayments
       [].tap do |a|
         a << nqt_in_academic_year_after_itt
         a << employed_as_supply_teacher
+        a << degree_in_an_eligible_subject
       end
     end
 
@@ -36,6 +37,13 @@ module LevellingUpPremiumPayments
       [
         translate("early_career_payments.admin.employed_as_supply_teacher"),
         (eligibility.employed_as_supply_teacher? ? "Yes" : "No")
+      ]
+    end
+
+    def degree_in_an_eligible_subject
+      [
+        translate("levelling_up_premium_payments.admin.degree_in_an_eligible_subject"),
+        (eligibility.eligible_degree_subject? ? "Yes" : "No")
       ]
     end
   end
