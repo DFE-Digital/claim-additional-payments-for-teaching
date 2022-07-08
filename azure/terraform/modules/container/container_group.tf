@@ -1,8 +1,7 @@
 resource "azurerm_container_group" "cont_grp_01" {
-  name                = format("%s-%s", var.app_rg_name, "worker-aci")
+  name                = local.cont_grp_01_name
   location            = var.rg_location
   resource_group_name = var.app_rg_name
-  ip_address_type     = "Private"
   os_type             = "Linux"
 
   # image_registry_credential {
@@ -12,7 +11,7 @@ resource "azurerm_container_group" "cont_grp_01" {
   # }
 
   container {
-    name = format("%s-%s", var.app_rg_name, "worker-container")
+    name = local.cont_01_name
     # image = format("%s%s", "s118d01contreg.azurecr.io/teacher-payments-service:", var.container_version)
     image = format("%s%s", "dfedigital/teacher-payments-service:", var.container_version)
 
@@ -76,7 +75,7 @@ resource "azurerm_container_group" "cont_grp_01" {
 }
 
 resource "azurerm_container_group" "cont_grp_02" {
-  name                = format("%s-%s", var.app_rg_name, "migration-runner-aci")
+  name                = local.cont_grp_02_name
   location            = var.rg_location
   resource_group_name = var.app_rg_name
   os_type             = "Linux"
@@ -134,7 +133,7 @@ resource "azurerm_container_group" "cont_grp_02" {
 
     }
 
-    name  = format("%s-%s", var.app_rg_name, "migration-runner-container")
+    name  = local.cont_02_name
     image = format("%s%s", "dfedigital/teacher-payments-service:", var.container_version)
     # image  = format("%s%s", "s118d01contreg.azurecr.io/teacher-payments-service:", var.container_version)
     cpu    = "1"

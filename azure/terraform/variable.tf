@@ -23,6 +23,11 @@ variable "rg_prefix" {
   type        = string
   description = "Resource group prefix"
 }
+variable "app_name" {
+  type        = string
+  description = "Identifier for review apps"
+  default     = null
+}
 
 # ---------------------------------------------------------------------------------------------------------------------
 # OPTIONAL PARAMETERS

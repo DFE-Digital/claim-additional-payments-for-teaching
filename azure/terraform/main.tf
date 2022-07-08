@@ -12,6 +12,7 @@ module "container" {
   rg_prefix             = var.rg_prefix
   rg_location           = var.input_region
   common_tags           = module.env_vars.common_tags
+  app_name              = var.app_name
 }
 
 module "app_service" {
@@ -21,6 +22,7 @@ module "app_service" {
   rg_prefix               = var.rg_prefix
   rg_location             = var.input_region
   common_tags             = module.env_vars.common_tags
+  app_name                = var.app_name
 }
 
 ###Run if ENV eq PRNumber
