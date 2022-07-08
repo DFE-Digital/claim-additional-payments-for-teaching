@@ -136,7 +136,7 @@ class School < ApplicationRecord
   end
 
   def eligible_for_early_career_payments?
-    EarlyCareerPayments::SchoolEligibility.new(self).eligible_current_school?
+    EarlyCareerPayments::SchoolEligibility.new(self).eligible?
   end
 
   def eligible_for_early_career_payments_as_uplift?

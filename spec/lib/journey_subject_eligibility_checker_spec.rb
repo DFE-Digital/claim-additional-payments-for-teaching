@@ -17,6 +17,10 @@ RSpec.describe JourneySubjectEligibilityChecker do
       context "outside window" do
         specify { expect { described_class.new(claim_year: AcademicYear.new(2022), itt_year: AcademicYear.new(2016)) }.to raise_error("ITT year 2016/2017 is outside the window for claim year 2022/2023") }
       end
+
+      context "None of the above" do
+        specify { expect { described_class.new(claim_year: AcademicYear.new(2022), itt_year: AcademicYear.new) }.not_to raise_error }
+      end
     end
   end
 
@@ -35,6 +39,12 @@ RSpec.describe JourneySubjectEligibilityChecker do
 
     context "2024/2025 claim year" do
       subject { described_class.new(claim_year: AcademicYear.new(2024), itt_year: AcademicYear.new(2023)) }
+
+      specify { expect(subject.future_claim_years).to be_empty }
+    end
+
+    context "None of the above ITT year" do
+      subject { described_class.new(claim_year: AcademicYear.new(2022), itt_year: AcademicYear.new) }
 
       specify { expect(subject.future_claim_years).to be_empty }
     end
@@ -88,6 +98,12 @@ RSpec.describe JourneySubjectEligibilityChecker do
 
       context "2022 claim year" do
         let(:claim_year) { AcademicYear.new(2022) }
+
+        context "None of the above ITT year" do
+          let(:itt_year) { AcademicYear.new }
+
+          it { is_expected.to be_empty }
+        end
 
         context "2017 ITT year" do
           let(:itt_year) { AcademicYear.new(2017) }
@@ -327,6 +343,12 @@ RSpec.describe JourneySubjectEligibilityChecker do
       context "2022 claim year" do
         let(:claim_year) { AcademicYear.new(2022) }
 
+        context "None of the above ITT year" do
+          let(:itt_year) { AcademicYear.new }
+
+          it { is_expected.to be_empty }
+        end
+
         context "2017 ITT year" do
           let(:itt_year) { AcademicYear.new(2017) }
 
@@ -545,6 +567,12 @@ RSpec.describe JourneySubjectEligibilityChecker do
 
       context "2022 claim year" do
         let(:claim_year) { AcademicYear.new(2022) }
+
+        context "None of the above ITT year" do
+          let(:itt_year) { AcademicYear.new }
+
+          it { is_expected.to be_empty }
+        end
 
         context "2017 ITT year" do
           let(:itt_year) { AcademicYear.new(2017) }
@@ -772,6 +800,14 @@ RSpec.describe JourneySubjectEligibilityChecker do
     context "2022 claim year" do
       let(:claim_year) { AcademicYear.new(2022) }
 
+      context "None of the above ITT year" do
+        let(:itt_year) { AcademicYear.new }
+
+        subject { described_class.new(claim_year: claim_year, itt_year: itt_year).selectable_subject_symbols(CurrentClaim.new(claims: [eligible_ecp_claim, eligible_lup_claim])) }
+
+        it { is_expected.to be_empty }
+      end
+
       context "2017 ITT year" do
         let(:itt_year) { AcademicYear.new(2017) }
 
@@ -858,8 +894,22 @@ RSpec.describe JourneySubjectEligibilityChecker do
     context "2022 claim year" do
       let(:claim_year) { AcademicYear.new(2022) }
 
+      context "None of the above ITT year" do
+        let(:itt_year) { AcademicYear.new }
+
+        let(:ineligible_ecp_eligibility) { build(:early_career_payments_eligibility, :ineligible, eligible_itt_subject: :mathematics, itt_academic_year: itt_year) }
+        let(:ineligible_lup_eligibility) { build(:levelling_up_premium_payments_eligibility, :ineligible, eligible_itt_subject: :mathematics, itt_academic_year: itt_year) }
+
+        let(:ineligible_ecp_claim) { build(:claim, :first_lup_claim_year, eligibility: ineligible_ecp_eligibility) }
+        let(:ineligible_lup_claim) { build(:claim, :first_lup_claim_year, eligibility: ineligible_lup_eligibility) }
+
+        subject { described_class.new(claim_year: claim_year, itt_year: itt_year).next_eligible_claim_year_after_current_claim_year(CurrentClaim.new(claims: [ineligible_ecp_claim, ineligible_lup_claim])) }
+
+        it { is_expected.to be_nil }
+      end
+
       context "2018 ITT year" do
-        let(:itt_year) { AcademicYear.new(2018) }
+        let(:itt_year) { AcademicYear::Type.new.serialize(AcademicYear.new(2018)) }
 
         let(:ineligible_ecp_eligibility) { build(:early_career_payments_eligibility, :ineligible, eligible_itt_subject: :mathematics, itt_academic_year: itt_year) }
         let(:ineligible_lup_eligibility) { build(:levelling_up_premium_payments_eligibility, :ineligible, eligible_itt_subject: :mathematics, itt_academic_year: itt_year) }
@@ -877,7 +927,7 @@ RSpec.describe JourneySubjectEligibilityChecker do
       let(:claim_year) { AcademicYear.new(2024) }
 
       context "2019 ITT year" do
-        let(:itt_year) { AcademicYear.new(2019) }
+        let(:itt_year) { AcademicYear::Type.new.serialize(AcademicYear.new(2019)) }
 
         let(:ineligible_ecp_eligibility) { build(:early_career_payments_eligibility, :ineligible, eligible_itt_subject: :mathematics, itt_academic_year: itt_year) }
         let(:ineligible_lup_eligibility) { build(:levelling_up_premium_payments_eligibility, :ineligible, eligible_itt_subject: :mathematics, itt_academic_year: itt_year) }
@@ -888,6 +938,208 @@ RSpec.describe JourneySubjectEligibilityChecker do
         subject { described_class.new(claim_year: claim_year, itt_year: itt_year).next_eligible_claim_year_after_current_claim_year(CurrentClaim.new(claims: [ineligible_ecp_claim, ineligible_lup_claim])) }
 
         it { is_expected.to be_nil }
+      end
+    end
+  end
+
+  describe ".first_eligible_itt_year_for_subject" do
+    subject { described_class.first_eligible_itt_year_for_subject(policy: policy, claim_year: claim_year, subject_symbol: subject_symbol) }
+
+    context "string instead of symbol" do
+      specify { expect { described_class.first_eligible_itt_year_for_subject(policy: EarlyCareerPayments, claim_year: AcademicYear.new(2022), subject_symbol: "mathematics") }.to raise_error "[mathematics] is not a symbol" }
+    end
+
+    context "ECP" do
+      let(:policy) { EarlyCareerPayments }
+
+      context "2022 claim year" do
+        let(:claim_year) { AcademicYear.new(2022) }
+
+        context "mathematics" do
+          let(:subject_symbol) { :mathematics }
+
+          it { is_expected.to eq(AcademicYear.new(2019)) }
+        end
+
+        context "physics" do
+          let(:subject_symbol) { :physics }
+
+          it { is_expected.to eq(AcademicYear.new(2020)) }
+        end
+
+        context "chemistry" do
+          let(:subject_symbol) { :chemistry }
+
+          it { is_expected.to eq(AcademicYear.new(2020)) }
+        end
+
+        context "computing" do
+          let(:subject_symbol) { :computing }
+
+          it { is_expected.to be_nil }
+        end
+
+        context "languages" do
+          let(:subject_symbol) { :foreign_languages }
+
+          it { is_expected.to eq(AcademicYear.new(2020)) }
+        end
+      end
+
+      context "2023 claim year" do
+        let(:claim_year) { AcademicYear.new(2023) }
+
+        context "mathematics" do
+          let(:subject_symbol) { :mathematics }
+
+          it { is_expected.to eq(AcademicYear.new(2018)) }
+        end
+
+        context "physics" do
+          let(:subject_symbol) { :physics }
+
+          it { is_expected.to eq(AcademicYear.new(2020)) }
+        end
+
+        context "chemistry" do
+          let(:subject_symbol) { :chemistry }
+
+          it { is_expected.to eq(AcademicYear.new(2020)) }
+        end
+
+        context "computing" do
+          let(:subject_symbol) { :computing }
+
+          it { is_expected.to be_nil }
+        end
+
+        context "languages" do
+          let(:subject_symbol) { :foreign_languages }
+
+          it { is_expected.to eq(AcademicYear.new(2020)) }
+        end
+      end
+
+      context "2024 claim year" do
+        let(:claim_year) { AcademicYear.new(2024) }
+
+        context "mathematics" do
+          let(:subject_symbol) { :mathematics }
+
+          it { is_expected.to eq(AcademicYear.new(2019)) }
+        end
+
+        context "physics" do
+          let(:subject_symbol) { :physics }
+
+          it { is_expected.to eq(AcademicYear.new(2020)) }
+        end
+
+        context "chemistry" do
+          let(:subject_symbol) { :chemistry }
+
+          it { is_expected.to eq(AcademicYear.new(2020)) }
+        end
+
+        context "computing" do
+          let(:subject_symbol) { :computing }
+
+          it { is_expected.to be_nil }
+        end
+
+        context "languages" do
+          let(:subject_symbol) { :foreign_languages }
+
+          it { is_expected.to eq(AcademicYear.new(2020)) }
+        end
+      end
+    end
+
+    context "LUP" do
+      let(:policy) { LevellingUpPremiumPayments }
+
+      context "2022 claim year" do
+        let(:claim_year) { AcademicYear.new(2022) }
+
+        context "mathematics" do
+          let(:subject_symbol) { :mathematics }
+
+          it { is_expected.to eq(AcademicYear.new(2017)) }
+        end
+
+        context "physics" do
+          let(:subject_symbol) { :physics }
+
+          it { is_expected.to eq(AcademicYear.new(2017)) }
+        end
+
+        context "chemistry" do
+          let(:subject_symbol) { :chemistry }
+
+          it { is_expected.to eq(AcademicYear.new(2017)) }
+        end
+
+        context "languages" do
+          let(:subject_symbol) { :foreign_languages }
+
+          it { is_expected.to be_nil }
+        end
+      end
+
+      context "2023 claim year" do
+        let(:claim_year) { AcademicYear.new(2023) }
+
+        context "mathematics" do
+          let(:subject_symbol) { :mathematics }
+
+          it { is_expected.to eq(AcademicYear.new(2018)) }
+        end
+
+        context "physics" do
+          let(:subject_symbol) { :physics }
+
+          it { is_expected.to eq(AcademicYear.new(2018)) }
+        end
+
+        context "chemistry" do
+          let(:subject_symbol) { :chemistry }
+
+          it { is_expected.to eq(AcademicYear.new(2018)) }
+        end
+
+        context "languages" do
+          let(:subject_symbol) { :foreign_languages }
+
+          it { is_expected.to be_nil }
+        end
+      end
+
+      context "2024 claim year" do
+        let(:claim_year) { AcademicYear.new(2024) }
+
+        context "mathematics" do
+          let(:subject_symbol) { :mathematics }
+
+          it { is_expected.to eq(AcademicYear.new(2019)) }
+        end
+
+        context "physics" do
+          let(:subject_symbol) { :physics }
+
+          it { is_expected.to eq(AcademicYear.new(2019)) }
+        end
+
+        context "chemistry" do
+          let(:subject_symbol) { :chemistry }
+
+          it { is_expected.to eq(AcademicYear.new(2019)) }
+        end
+
+        context "languages" do
+          let(:subject_symbol) { :foreign_languages }
+
+          it { is_expected.to be_nil }
+        end
       end
     end
   end

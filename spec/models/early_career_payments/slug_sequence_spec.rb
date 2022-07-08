@@ -76,42 +76,6 @@ RSpec.describe EarlyCareerPayments::SlugSequence do
       end
     end
 
-    context "when claim is eligible later" do
-      let(:eligibility) do
-        build(
-          :early_career_payments_eligibility,
-          :eligible,
-          eligible_itt_subject: itt_subject,
-          itt_academic_year: itt_academic_year
-        )
-      end
-      let(:eligibility_lup) { build(:levelling_up_premium_payments_eligibility, :ineligible) }
-
-      [
-        {itt_subject: "mathematics", itt_academic_year: AcademicYear::Type.new.serialize(AcademicYear.new(2019))},
-        {itt_subject: "mathematics", itt_academic_year: AcademicYear::Type.new.serialize(AcademicYear.new(2020))},
-        {itt_subject: "physics", itt_academic_year: AcademicYear::Type.new.serialize(AcademicYear.new(2020))},
-        {itt_subject: "chemistry", itt_academic_year: AcademicYear::Type.new.serialize(AcademicYear.new(2020))},
-        {itt_subject: "foreign_languages", itt_academic_year: AcademicYear::Type.new.serialize(AcademicYear.new(2020))}
-      ].each do |context|
-        context "with ITT subject #{context[:itt_subject].humanize}" do
-          let(:itt_subject) { context[:itt_subject] }
-
-          context "with ITT academic year #{context[:itt_academic_year]}" do
-            let(:itt_academic_year) { context[:itt_academic_year] }
-
-            it "excludes the 'eligibility-confirmed' slug" do
-              expect(slug_sequence.slugs).not_to include("eligibility-confirmed")
-            end
-
-            it "includes the 'eligible-later' slug" do
-              expect(slug_sequence.slugs).to include("eligible-later")
-            end
-          end
-        end
-      end
-    end
-
     context "when claim is not eligible later" do
       let(:eligibility) do
         build(
@@ -324,22 +288,37 @@ RSpec.describe EarlyCareerPayments::SlugSequence do
         expect(slug_sequence.slugs).to eq expected_slugs
       end
     end
+  end
 
-    context "when a trainee teacher" do
-      it "includes only the slugs related to this micro-journey" do
-        claim.eligibility.nqt_in_academic_year_after_itt = false
-        lup_claim.eligibility.nqt_in_academic_year_after_itt = false
+  describe "eligibility affect on slugs" do
+    let(:ecp_claim) { build(:claim, eligibility: ecp_eligibility) }
+    let(:lup_claim) { build(:claim, eligibility: lup_eligibility) }
+    let(:current_claim) { CurrentClaim.new(claims: [ecp_claim, lup_claim]) }
 
-        expected_slugs = %w[
-          current-school
-          nqt-in-academic-year-after-itt
-          eligible-itt-subject
-          future-eligibility
-          ineligible
-        ]
+    subject { described_class.new(current_claim).slugs }
 
-        expect(slug_sequence.slugs).to eq expected_slugs
-      end
+    context "current claim is :eligible_now" do
+      let(:ecp_eligibility) { build(:early_career_payments_eligibility, :eligible_later) }
+      let(:lup_eligibility) { build(:levelling_up_premium_payments_eligibility, :eligible_now) }
+
+      it { is_expected.to include("eligibility-confirmed") }
+      it { is_expected.not_to include("eligible-later", "ineligible") }
+    end
+
+    context "current claim is :eligible_later" do
+      let(:ecp_eligibility) { build(:early_career_payments_eligibility, :ineligible) }
+      let(:lup_eligibility) { build(:levelling_up_premium_payments_eligibility, :eligible_later) }
+
+      it { is_expected.to include("eligible-later") }
+      it { is_expected.not_to include("eligibility-confirmed") }
+    end
+
+    context "current claim is :ineligible" do
+      let(:ecp_eligibility) { build(:early_career_payments_eligibility, :ineligible) }
+      let(:lup_eligibility) { build(:levelling_up_premium_payments_eligibility, :ineligible) }
+
+      it { is_expected.to include("ineligible") }
+      it { is_expected.not_to include("eligibility-confirmed", "eligible-later") }
     end
   end
 end

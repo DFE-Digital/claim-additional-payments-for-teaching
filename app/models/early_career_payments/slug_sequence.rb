@@ -59,20 +59,24 @@ module EarlyCareerPayments
 
     attr_reader :claim
 
+    # Really this is a combined CurrentClaim
     def initialize(claim)
       @claim = claim
     end
 
     def slugs
+      overall_eligibility_status = claim.eligibility_status
+      lup_claim = claim.for_policy(LevellingUpPremiumPayments)
+
       SLUGS.dup.tap do |sequence|
         unless claim.eligibility.employed_as_supply_teacher?
           sequence.delete("entire-term-contract")
           sequence.delete("employed-directly")
         end
 
-        sequence.delete("eligibility-confirmed") unless claim.eligible_now?
-        sequence.delete("eligible-later") unless claim.eligible_later? && !claim.eligible_now?
-        sequence.delete("ineligible") unless claim.ineligible? || claim.eligibility.trainee_teacher?
+        sequence.delete("eligibility-confirmed") unless overall_eligibility_status == :eligible_now
+        sequence.delete("eligible-later") unless overall_eligibility_status == :eligible_later
+
         sequence.delete("personal-bank-account") if claim.bank_or_building_society == "building_society"
         sequence.delete("building-society-account") if claim.bank_or_building_society == "personal_bank_account"
 
@@ -85,9 +89,15 @@ module EarlyCareerPayments
         sequence.delete("masters-doctoral-loan") if claim.has_student_loan?
         remove_masters_doctoral_loan_slugs(sequence) if claim.has_masters_doctoral_loan == false
         remove_student_loan_country_slugs(sequence)
-        trainee_teacher_slugs(sequence) if claim.eligibility.trainee_teacher?
-        sequence.delete("future-eligibility") unless claim.eligibility.trainee_teacher?
-        sequence.delete("eligible-degree-subject") unless claim.eligibility.itt_subject_none_of_the_above?
+
+        if claim.eligibility.trainee_teacher?
+          trainee_teacher_slugs(sequence)
+        else
+          sequence.delete("ineligible") unless overall_eligibility_status == :ineligible || overall_eligibility_status == :eligible_later
+          sequence.delete("future-eligibility")
+        end
+
+        sequence.delete("eligible-degree-subject") unless lup_claim.eligibility.indicated_ineligible_itt_subject? && lup_claim.eligibility.status == :undetermined
       end
     end
 
@@ -126,6 +136,8 @@ module EarlyCareerPayments
       end
     end
 
+    # This method swaps out the entire slug sequence and replaces it with this tiny
+    # journey.
     def trainee_teacher_slugs(sequence)
       trainee_slugs = %w[
         current-school

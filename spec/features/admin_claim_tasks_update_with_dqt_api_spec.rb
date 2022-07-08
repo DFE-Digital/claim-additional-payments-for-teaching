@@ -137,7 +137,7 @@ RSpec.feature "Admin claim tasks update with DQT API" do
       let(:claim) do
         claimant_submits_claim(
           claim_attributes: {
-            academic_year: AcademicYear.new(2021),
+            academic_year: AcademicYear.new(2022),
             date_of_birth: Date.new(1990, 8, 23),
             first_name: "Fred",
             national_insurance_number: "QQ100000C",

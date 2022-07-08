@@ -9,6 +9,8 @@ class JourneySubjectEligibilityChecker
   end
 
   def future_claim_years
+    return [] if none_of_the_above?(@itt_year)
+
     combined_ecp_lup_scheme_years = AcademicYear.new(2022)..AcademicYear.new(2024)
     combined_ecp_lup_scheme_years.select { |academic_year| academic_year > @claim_year }
   end
@@ -25,19 +27,38 @@ class JourneySubjectEligibilityChecker
     [:chemistry, :computing, :mathematics, :physics]
   end
 
+  def self.first_eligible_itt_year_for_subject(policy:, claim_year:, subject_symbol:)
+    raise "[#{subject_symbol}] is not a symbol" unless subject_symbol.is_a?(Symbol)
+    itt_years = JourneySubjectEligibilityChecker.selectable_itt_years_for_claim_year(claim_year)
+
+    itt_years.detect do |itt_year|
+      checker = JourneySubjectEligibilityChecker.new(claim_year: claim_year, itt_year: itt_year)
+      subject_symbol.in?(checker.current_subject_symbols(policy))
+    end
+  end
+
   def current_and_future_subject_symbols(policy)
     (current_subject_symbols(policy) + future_subject_symbols(policy)).uniq
   end
 
   def current_subject_symbols(policy)
-    subject_symbols(policy: policy, claim_year: @claim_year, itt_year: @itt_year)
+    if none_of_the_above?(@itt_year)
+      []
+    else
+      subject_symbols(policy: policy, claim_year: @claim_year, itt_year: @itt_year)
+    end
   end
 
   def future_subject_symbols(policy)
-    future_claim_years.collect { |future_year| subject_symbols(policy: policy, claim_year: future_year, itt_year: @itt_year) }.flatten.uniq
+    if none_of_the_above?(@itt_year)
+      []
+    else
+      future_claim_years.collect { |future_year| subject_symbols(policy: policy, claim_year: future_year, itt_year: @itt_year) }.flatten.uniq
+    end
   end
 
   def selectable_subject_symbols(current_claim)
+    return [] if itt_year(current_claim).blank?
     potentially_still_eligible_policies(current_claim).collect { |policy| current_and_future_subject_symbols(policy) }.flatten.uniq
   end
 
@@ -47,6 +68,8 @@ class JourneySubjectEligibilityChecker
   def next_eligible_claim_year_after_current_claim_year(current_claim)
     itt_subject = itt_subject_symbol(current_claim)
     itt_year = itt_year(current_claim)
+
+    return nil if itt_year.blank?
 
     potentially_eligible_future_years = potentially_still_eligible_policies(current_claim).collect do |policy|
       future_claim_years.select do |future_claim_year|
@@ -62,12 +85,17 @@ class JourneySubjectEligibilityChecker
   private
 
   def potentially_still_eligible_policies(current_claim)
-    potentially_still_eligible_claims = current_claim.claims.select { |claim| !claim.eligibility.ineligible? }
+    potentially_still_eligible_claims = current_claim.claims.select { |claim| claim.eligibility.status != :ineligible }
     potentially_still_eligible_claims.collect { |claim| claim.policy }
   end
 
   def validate_itt_year(itt_year)
+    return if none_of_the_above?(itt_year)
     raise "ITT year #{itt_year} is outside the window for claim year #{@claim_year}" unless itt_year.in?(selectable_itt_years)
+  end
+
+  def none_of_the_above?(itt_year)
+    itt_year.in? [AcademicYear.new, "None"]
   end
 
   def subject_symbols(policy:, claim_year:, itt_year:)
