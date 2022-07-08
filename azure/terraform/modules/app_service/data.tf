@@ -168,3 +168,8 @@ data "azurerm_key_vault_secret" "GTMAnalytics" {
 #   name         = "TeacherPaymentsDevVspSamlSigning8KeyBase64"
 #   key_vault_id = data.azurerm_key_vault.secrets_kv.id
 # }
+
+data "azurerm_app_service_plan" "app" {
+  name                = format("%s-%s", var.app_rg_name, "asp")
+  resource_group_name = var.app_rg_name
+}

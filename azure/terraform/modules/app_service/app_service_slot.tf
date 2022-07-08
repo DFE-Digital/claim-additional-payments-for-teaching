@@ -3,7 +3,7 @@ resource "azurerm_app_service_slot" "app_as_slot" {
   app_service_name    = azurerm_app_service.app_as.name
   resource_group_name = var.app_rg_name
   location            = var.rg_location
-  app_service_plan_id = var.app_asp_id
+  app_service_plan_id = data.azurerm_app_service_plan.app.id
   https_only          = true
 
   site_config {

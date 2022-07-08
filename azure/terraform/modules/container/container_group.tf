@@ -4,7 +4,6 @@ resource "azurerm_container_group" "cont_grp_01" {
   resource_group_name = var.app_rg_name
   ip_address_type     = "Private"
   os_type             = "Linux"
-  network_profile_id  = var.projcore_network_prof
 
   # image_registry_credential {
   #   username = data.azurerm_container_registry.acr.admin_username
@@ -153,4 +152,3 @@ resource "azurerm_container_group" "cont_grp_02" {
     var.common_tags
   )
 }
-

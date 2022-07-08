@@ -2,7 +2,7 @@ resource "azurerm_app_service" "app_as" {
   name                = format("%s-%s", var.app_rg_name, "as")
   resource_group_name = var.app_rg_name
   location            = var.rg_location
-  app_service_plan_id = var.app_asp_id
+  app_service_plan_id = data.azurerm_app_service_plan.app.id
 
   client_affinity_enabled = true
   https_only              = true
