@@ -62,9 +62,9 @@ module AutomatedChecks
           levelling_up_premium_payments_policy_subjects
         when StudentLoans
           student_loans_policy_subjects
+        else
+          return false
         end
-
-        return false unless match_against
 
         match_against.intersection(school_workforce_census_subjects).any?
       end
