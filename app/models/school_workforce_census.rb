@@ -64,6 +64,34 @@ class SchoolWorkforceCensus < ApplicationRecord
     ]
   }.freeze
 
+  LUP_ELIGIBLE_SUBJECTS = {
+    chemistry: [
+      "Chemistry",
+      "Combined/General Science - Chemistry",
+      "Applied Science",
+      "Other Sciences",
+      "Science"
+    ],
+    computing: [
+      "Applied ICT",
+      "Computer Science",
+      "Information and Communication Technology"
+    ],
+    mathematics: [
+      "Economics",
+      "Other Mathematical Subject",
+      "Statistics",
+      "Mathematics / Mathematical Development (Early Years)"
+    ],
+    physics: [
+      "Combined/General Science - Physics",
+      "Physics",
+      "Applied Science",
+      "Other Sciences",
+      "Science"
+    ]
+  }.freeze
+
   TSLR_ELIGIBLE_SUBJECTS = {
     biology: [
       "Biology / Botany / Zoology / Ecology",
