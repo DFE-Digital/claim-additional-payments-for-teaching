@@ -322,11 +322,23 @@ RSpec.describe CurrentClaim, type: :model do
           expect(result).to eq([lup_claim, ecp_claim])
         end
       end
+
+      context "with different award amounts other way around" do
+        let(:ecp_amount) { 3000.0 }
+        let(:lup_amount) { 2000.0 }
+
+        it "orders the claims by highest award amount" do
+          expect(result).to eq([ecp_claim, lup_claim])
+        end
+      end
     end
 
     describe "#submit!" do
-      let!(:ecp_claim) { create(:claim, :submittable) }
-      let!(:lup_claim) { create(:claim, :submittable) }
+      let!(:ecp_claim) { create(:claim, :submittable, eligibility: ecp_eligibility) }
+      let!(:lup_claim) { create(:claim, :submittable, eligibility: lup_eligibility) }
+
+      let(:ecp_eligibility) { build(:early_career_payments_eligibility, :eligible, award_amount: 1000.0) }
+      let(:lup_eligibility) { build(:levelling_up_premium_payments_eligibility, :eligible, award_amount: 2000.0) }
 
       let(:cc) { described_class.new(claims: Claim.all) }
 
@@ -345,6 +357,49 @@ RSpec.describe CurrentClaim, type: :model do
 
         it "submits the specified claim" do
           expect(ecp_claim.reload).to be_submitted
+        end
+
+        it "stores the policy options provided on submission for both eligible policies" do
+          policy_options_provided = [
+            {"policy" => "LevellingUpPremiumPayments", "award_amount" => "2000.0"},
+            {"policy" => "EarlyCareerPayments", "award_amount" => "1000.0"}
+          ]
+
+          expect(ecp_claim.reload.policy_options_provided).to eq policy_options_provided
+        end
+      end
+
+      context "when only ECP is eligible" do
+        let(:lup_eligibility) { build(:levelling_up_premium_payments_eligibility, :ineligible) }
+        let!(:lup_claim) { create(:claim, :submittable, eligibility: lup_eligibility) }
+        let(:cc) { described_class.new(claims: Claim.where(id: [ecp_claim.id, lup_claim.id])) }
+        let(:policy) { ecp_claim.policy }
+
+        before { cc.submit!(policy) }
+
+        it "stores the policy option provided on submission just for the ECP policy" do
+          policy_options_provided = [
+            {"policy" => "EarlyCareerPayments", "award_amount" => "1000.0"}
+          ]
+
+          expect(ecp_claim.reload.policy_options_provided).to eq policy_options_provided
+        end
+      end
+
+      context "when only LUP is eligible" do
+        let(:ecp_eligibility) { build(:early_career_payments_eligibility, :ineligible) }
+        let!(:ecp_claim) { create(:claim, :submittable, eligibility: ecp_eligibility) }
+        let(:cc) { described_class.new(claims: Claim.where(id: [ecp_claim.id, lup_claim.id])) }
+        let(:policy) { lup_claim.policy }
+
+        before { cc.submit!(policy) }
+
+        it "stores the policy option provided on submission just for the LUP policy" do
+          policy_options_provided = [
+            {"policy" => "LevellingUpPremiumPayments", "award_amount" => "2000.0"}
+          ]
+
+          expect(lup_claim.reload.policy_options_provided).to eq policy_options_provided
         end
       end
 

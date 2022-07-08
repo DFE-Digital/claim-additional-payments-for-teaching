@@ -334,6 +334,13 @@ RSpec.feature "Teacher Early-Career Payments claims" do
     expect(page).to have_text("It can take up to 13 weeks to process your application")
     expect(page).to have_text("What did you think of this service?")
     expect(page).to have_text(claim.reference)
+
+    policy_options_provided = [
+      {"policy" => "EarlyCareerPayments", "award_amount" => "7500.0"},
+      {"policy" => "LevellingUpPremiumPayments", "award_amount" => "2000.0"}
+    ]
+
+    expect(claim.reload.policy_options_provided).to eq policy_options_provided
   end
 
   scenario "Supply Teacher makes claim for 'Early Career Payments' with a contract to teach for entire term & employed directly by school" do
@@ -822,6 +829,13 @@ RSpec.feature "Teacher Early-Career Payments claims" do
     expect(page).to have_text("Set a reminder for when your next application window opens")
     expect(page).to have_text("What did you think of this service?")
     expect(page).to have_text(claim.reference)
+
+    policy_options_provided = [
+      {"policy" => "EarlyCareerPayments", "award_amount" => "5000.0"},
+      {"policy" => "LevellingUpPremiumPayments", "award_amount" => "2000.0"}
+    ]
+
+    expect(claim.reload.policy_options_provided).to eq policy_options_provided
   end
 
   context "When auto-populating address details" do
@@ -1195,6 +1209,13 @@ RSpec.feature "Teacher Early-Career Payments claims" do
       expect(page).to have_text("Set a reminder for when your next application window opens")
       expect(page).to have_text("What did you think of this service?")
       expect(page).to have_text(claim.reference)
+
+      policy_options_provided = [
+        {"policy" => "EarlyCareerPayments", "award_amount" => "7500.0"},
+        {"policy" => "LevellingUpPremiumPayments", "award_amount" => "2000.0"}
+      ]
+
+      expect(claim.reload.policy_options_provided).to eq policy_options_provided
     end
   end
 end

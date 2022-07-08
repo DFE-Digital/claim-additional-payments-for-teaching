@@ -59,6 +59,31 @@ FactoryBot.define do
       reference { Reference.new.to_s }
     end
 
+    trait :policy_options_provided_with_both do
+      policy_options_provided {
+        [
+          {"policy" => "EarlyCareerPayments", "award_amount" => "2000.0"},
+          {"policy" => "LevellingUpPremiumPayments", "award_amount" => "2000.0"}
+        ]
+      }
+    end
+
+    trait :policy_options_provided_ecp_only do
+      policy_options_provided {
+        [
+          {"policy" => "EarlyCareerPayments", "award_amount" => "2000.0"}
+        ]
+      }
+    end
+
+    trait :policy_options_provided_lup_only do
+      policy_options_provided {
+        [
+          {"policy" => "LevellingUpPremiumPayments", "award_amount" => "2000.0"}
+        ]
+      }
+    end
+
     trait :verified do
       govuk_verify_fields { %w[first_name surname address_line_1 postcode date_of_birth payroll_gender] }
     end

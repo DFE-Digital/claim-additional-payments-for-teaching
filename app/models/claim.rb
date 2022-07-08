@@ -94,7 +94,8 @@ class Claim < ApplicationRecord
     sent_one_time_password_at: false,
     mobile_verified: false,
     one_time_password_category: false,
-    assigned_to_id: true
+    assigned_to_id: true,
+    policy_options_provided: false
   }.freeze
   DECISION_DEADLINE = 14.weeks
   DECISION_DEADLINE_WARNING_POINT = 2.weeks
