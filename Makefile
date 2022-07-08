@@ -26,4 +26,6 @@ terraform-init: set-azure-account
 		${BACKEND_KEY}
 
 terraform-plan: terraform-init
-	terraform -chdir=azure/terraform plan -var="input_region=westeurope" -var="input_environment=${DEPLOY_ENV}" -var="input_container_version=${IMAGE_TAG}"
+	terraform -chdir=azure/terraform plan \
+		-var="input_region=westeurope" -var="input_environment=${DEPLOY_ENV}" -var="input_container_version=${IMAGE_TAG}" \
+		-var-file workspace_variables/${DEPLOY_ENV}.tfvars.json

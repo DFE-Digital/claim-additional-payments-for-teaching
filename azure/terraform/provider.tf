@@ -3,8 +3,8 @@ provider "azurerm" {
   # Whilst version is optional, we /strongly recommend/ using it to pin the version of the Provider being used
 
   #source.com
-  subscription_id = local.sub_id
-  tenant_id       = "9c7d9dd3-840c-4b3f-818e-552865082e16"
+  # subscription_id = local.sub_id
+  # tenant_id       = "9c7d9dd3-840c-4b3f-818e-552865082e16"
 
   features {}
 

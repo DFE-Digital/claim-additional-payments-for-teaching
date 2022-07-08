@@ -7,18 +7,18 @@ module "env_vars" {
 #container
 module "container" {
   source                = "./modules/container"
-  app_rg_name           = format("%s-%s", module.env_vars.rg_prefix, "app")
+  app_rg_name           = format("%s-%s", var.rg_prefix, "app")
   container_version     = var.input_container_version
-  rg_prefix             = module.env_vars.rg_prefix
+  rg_prefix             = var.rg_prefix
   rg_location           = var.input_region
   common_tags           = module.env_vars.common_tags
 }
 
 module "app_service" {
   source                  = "./modules/app_service"
-  app_rg_name             = format("%s-%s", module.env_vars.rg_prefix, "app")
+  app_rg_name             = format("%s-%s", var.rg_prefix, "app")
   input_container_version = var.input_container_version
-  rg_prefix               = module.env_vars.rg_prefix
+  rg_prefix               = var.rg_prefix
   rg_location             = var.input_region
   common_tags             = module.env_vars.common_tags
 }
