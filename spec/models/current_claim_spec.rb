@@ -322,6 +322,15 @@ RSpec.describe CurrentClaim, type: :model do
           expect(result).to eq([lup_claim, ecp_claim])
         end
       end
+
+      context "with different award amounts other way around" do
+        let(:ecp_amount) { 3000.0 }
+        let(:lup_amount) { 2000.0 }
+
+        it "orders the claims by highest award amount" do
+          expect(result).to eq([ecp_claim, lup_claim])
+        end
+      end
     end
 
     describe "#submit!" do
