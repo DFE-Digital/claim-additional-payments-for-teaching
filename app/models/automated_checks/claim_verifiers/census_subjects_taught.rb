@@ -35,7 +35,7 @@ module AutomatedChecks
       end
 
       def no_data
-        return unless school_workforce_census.nil?
+        return if school_workforce_census.present?
 
         create_task(match: nil)
       end
@@ -58,8 +58,12 @@ module AutomatedChecks
         match_against = case claim.policy
         when EarlyCareerPayments
           early_career_payments_policy_subjects
+        when LevellingUpPremiumPayments
+          levelling_up_premium_payments_policy_subjects
         when StudentLoans
           student_loans_policy_subjects
+        else
+          return false
         end
 
         match_against.intersection(school_workforce_census_subjects).any?
@@ -72,6 +76,14 @@ module AutomatedChecks
         ].reduce({}, :update)
 
         ecp_subjects[claim.eligibility.eligible_itt_subject.to_sym]
+      end
+
+      def levelling_up_premium_payments_policy_subjects
+        lup_subjects = [
+          SchoolWorkforceCensus::LUP_ELIGIBLE_SUBJECTS
+        ].reduce({}, :update)
+
+        lup_subjects[claim.eligibility.eligible_itt_subject.to_sym]
       end
 
       def student_loans_policy_subjects

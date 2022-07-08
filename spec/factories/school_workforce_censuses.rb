@@ -12,6 +12,18 @@ FactoryBot.define do
       subject_2 { "Design and Technology - Electronics" }
     end
 
+    trait :levelling_up_premium_payments_matched do
+      teacher_reference_number { 1560179 }
+      subject_1 { "Computer Science" }
+      subject_2 { "Statistics" }
+    end
+
+    trait :levelling_up_premium_payments_unmatched do
+      teacher_reference_number { 1560179 }
+      subject_1 { "Problem Solving, Reasoning and Numeracy" }
+      subject_2 { "Design and Technology - Electronics" }
+    end
+
     trait :student_loans_matched do
       teacher_reference_number { 2109438 }
       subject_1 { "Science" }
