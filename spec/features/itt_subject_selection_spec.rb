@@ -93,8 +93,9 @@ RSpec.feature "ITT subject selection" do
         end
 
         scenario "choose subject ineligible for LUP" do
-          select_subject("Languages")
-          expect(page).to have_text(I18n.t("early_career_payments.questions.eligible_degree_subject"))
+          subject_display_string = "Languages"
+          select_subject(subject_display_string)
+          expect(page).to have_text(I18n.t("early_career_payments.questions.teaching_subject_now", eligible_itt_subject: subject_display_string))
         end
 
         scenario "choose eligible subject" do

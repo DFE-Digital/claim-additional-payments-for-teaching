@@ -1,6 +1,11 @@
 module EligibilityCheckable
   extend ActiveSupport::Concern
 
+  FIRST_COMBINED_ECP_AND_LUP_POLICY_YEAR = AcademicYear.new(2022)
+  FINAL_COMBINED_ECP_AND_LUP_POLICY_YEAR = AcademicYear.new(2024)
+  COMBINED_ECP_AND_LUP_POLICY_YEARS = FIRST_COMBINED_ECP_AND_LUP_POLICY_YEAR..FINAL_COMBINED_ECP_AND_LUP_POLICY_YEAR
+  COMBINED_ECP_AND_LUP_POLICY_YEARS_BEFORE_FINAL_YEAR = FIRST_COMBINED_ECP_AND_LUP_POLICY_YEAR...FINAL_COMBINED_ECP_AND_LUP_POLICY_YEAR
+
   def status
     if eligible_now?
       :eligible_now
@@ -120,7 +125,6 @@ module EligibilityCheckable
   end
 
   def any_future_policy_years?
-    final_combined_ecp_and_lup_policy_year = AcademicYear.new(2024)
-    claim_year < final_combined_ecp_and_lup_policy_year
+    claim_year < FINAL_COMBINED_ECP_AND_LUP_POLICY_YEAR
   end
 end

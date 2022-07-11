@@ -9,7 +9,7 @@
 PolicyConfiguration.create!(policy_types: [StudentLoans], current_academic_year: AcademicYear.current)
 PolicyConfiguration.create!(policy_types: [MathsAndPhysics], current_academic_year: AcademicYear.current)
 # Hardcoded whilst developing LUP for release in Sep 22
-PolicyConfiguration.create!(policy_types: [EarlyCareerPayments, LevellingUpPremiumPayments], current_academic_year: AcademicYear.new(2022))
+PolicyConfiguration.create!(policy_types: [EarlyCareerPayments, LevellingUpPremiumPayments], current_academic_year: EligibilityCheckable::FIRST_COMBINED_ECP_AND_LUP_POLICY_YEAR)
 
 if Rails.env.development? || ENV["ENVIRONMENT_NAME"] == "review"
   ENV["FIXTURES_PATH"] = "spec/fixtures"

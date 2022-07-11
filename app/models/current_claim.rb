@@ -129,6 +129,22 @@ class CurrentClaim
     eligible_now.sort_by { |c| [-c.award_amount.to_i, c.policy.short_name] }
   end
 
+  # No specific spec for this, but if this is wrong the other specs will show it up
+  def policy_year
+    raise "nil academic year" if policies.any? { |policy| PolicyConfiguration.for(policy).current_academic_year.nil? }
+    raise "none academic year" if policies.any? { |policy| PolicyConfiguration.for(policy).current_academic_year == AcademicYear.new }
+
+    policy_year_values_set = policies.collect { |policy| PolicyConfiguration.for(policy).current_academic_year }.to_set
+
+    if policy_year_values_set.one?
+      policy_year_values_set.first
+    elsif policy_year_values_set.many?
+      raise "Have more than one policy year in the same journey"
+    else
+      raise "Have no policy year for the journey"
+    end
+  end
+
   private
 
   def anything_eligible_now?
