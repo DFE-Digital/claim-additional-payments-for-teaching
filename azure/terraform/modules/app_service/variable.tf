@@ -31,6 +31,18 @@ variable "app_name" {
   type        = string
   description = "Identifier for review apps"
 }
+variable "db_host" {
+  type        = string
+  description = "FQDN of the postgres app database server"
+}
+variable "db_name" {
+  type        = string
+  description = "Name of the postgres app database"
+}
+variable "db_admin_username" {
+  type        = string
+  description = "Username of the postgres app database server administrator"
+}
 # ---------------------------------------------------------------------------------------------------------------------
 # OPTIONAL PARAMETERS
 # These parameters have reasonable defaults.

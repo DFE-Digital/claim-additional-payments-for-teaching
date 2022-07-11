@@ -40,10 +40,10 @@ resource "azurerm_app_service" "app_as" {
     "DFE_SIGN_IN_REDIRECT_BASE_URL"  = data.azurerm_key_vault_secret.DfeSignInRedirectBaseUrl.value
     "DFE_SIGN_IN_SECRET"             = data.azurerm_key_vault_secret.DfeSignInSecret.value
     #"DFE_TEACHERS_PAYMENT_SERVICE_DATABASE_HOST"     = format("%s.%s", format("%s-%s", var.app_rg_name, "db"), "postgres.database.azure.com")
-    "DFE_TEACHERS_PAYMENT_SERVICE_DATABASE_HOST"     = data.azurerm_key_vault_secret.DatabaseServerName.value
-    "DFE_TEACHERS_PAYMENT_SERVICE_DATABASE_NAME"     = local.environment
+    "DFE_TEACHERS_PAYMENT_SERVICE_DATABASE_HOST"     = var.db_host
+    "DFE_TEACHERS_PAYMENT_SERVICE_DATABASE_NAME"     = var.db_name
     "DFE_TEACHERS_PAYMENT_SERVICE_DATABASE_PASSWORD" = data.azurerm_key_vault_secret.DatabasePassword.value
-    "DFE_TEACHERS_PAYMENT_SERVICE_DATABASE_USERNAME" = format("%s@%s", data.azurerm_key_vault_secret.DatabaseUsername.value, trimsuffix(data.azurerm_key_vault_secret.DatabaseServerName.value, ".postgres.database.azure.com;"))
+    "DFE_TEACHERS_PAYMENT_SERVICE_DATABASE_USERNAME" = "${var.db_admin_username}@${var.db_host}"
     "DQT_BEARER_BASE_URL"                            = data.azurerm_key_vault_secret.DQTBearerBaseUrl.value
     "DQT_BEARER_GRANT_TYPE"                          = data.azurerm_key_vault_secret.DQTBearerGrantType.value
     "DQT_BEARER_SCOPE"                               = data.azurerm_key_vault_secret.DQTBearerScope.value
