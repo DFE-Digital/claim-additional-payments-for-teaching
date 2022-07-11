@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_05_23_175052) do
+ActiveRecord::Schema.define(version: 2022_07_07_120226) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -72,6 +72,7 @@ ActiveRecord::Schema.define(version: 2022_05_23_175052) do
     t.boolean "has_masters_doctoral_loan"
     t.boolean "mobile_verified", default: false
     t.string "assigned_to_id"
+    t.jsonb "policy_options_provided", default: []
     t.index ["academic_year"], name: "index_claims_on_academic_year"
     t.index ["created_at"], name: "index_claims_on_created_at"
     t.index ["eligibility_type", "eligibility_id"], name: "index_claims_on_eligibility_type_and_eligibility_id"

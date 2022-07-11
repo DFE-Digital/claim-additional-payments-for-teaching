@@ -156,7 +156,7 @@ RSpec.feature "Levelling up premium payments and early-career payments combined 
     click_on "Continue"
 
     # - Enter bank account details
-    expect(page).to have_text(I18n.t("questions.account_details", bank_or_building_society: claim.bank_or_building_society.humanize.downcase))
+    expect(page).to have_text(I18n.t("questions.account_details", bank_or_building_society: claim.reload.bank_or_building_society.humanize.downcase))
     expect(page).not_to have_text("Building society roll number")
 
     fill_in "Name on your account", with: "Jo Bloggs"
@@ -209,6 +209,13 @@ RSpec.feature "Levelling up premium payments and early-career payments combined 
     expect(page).to have_text("It can take up to 13 weeks to process your application")
     expect(page).to have_text("What did you think of this service?")
     expect(page).to have_text(claim.reload.reference)
+
+    policy_options_provided = [
+      {"policy" => "EarlyCareerPayments", "award_amount" => "2000.0"},
+      {"policy" => "LevellingUpPremiumPayments", "award_amount" => "2000.0"}
+    ]
+
+    expect(claim.reload.policy_options_provided).to eq policy_options_provided
   end
 
   scenario "Eligible for only one" do

@@ -283,5 +283,11 @@ RSpec.feature "Levelling up premium payments claims" do
     expect(page).to have_text("It can take up to 13 weeks to process your application")
     expect(page).to have_text("What did you think of this service?")
     expect(page).to have_text(claim.reference)
+
+    policy_options_provided = [
+      {"policy" => "LevellingUpPremiumPayments", "award_amount" => "2000.0"}
+    ]
+
+    expect(claim.reload.policy_options_provided).to eq policy_options_provided
   end
 end

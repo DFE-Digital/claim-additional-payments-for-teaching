@@ -465,4 +465,44 @@ describe Admin::ClaimsHelper do
       end
     end
   end
+
+  describe "#admin_policy_options_provided" do
+    context "Eligible for ECP and LUP" do
+      let(:claim) { create(:claim, :submitted, :policy_options_provided_with_both, policy: EarlyCareerPayments) }
+
+      it "returns both polices" do
+        answers = [["Early-career payment", "£2,000"], ["Levelling up premium payment", "£2,000"]]
+
+        expect(admin_policy_options_provided(claim)).to match_array answers
+      end
+    end
+
+    context "Eligible for ECP only" do
+      let(:claim) { create(:claim, :submitted, :policy_options_provided_ecp_only, policy: EarlyCareerPayments) }
+
+      it "returns ECP only" do
+        answers = [["Early-career payment", "£2,000"]]
+
+        expect(admin_policy_options_provided(claim)).to match_array answers
+      end
+    end
+
+    context "Eligible for LUP only" do
+      let(:claim) { create(:claim, :submitted, :policy_options_provided_lup_only, policy: LevellingUpPremiumPayments) }
+
+      it "returns LUP only" do
+        answers = [["Levelling up premium payment", "£2,000"]]
+
+        expect(admin_policy_options_provided(claim)).to match_array answers
+      end
+    end
+
+    context "No policy_options_provided (not ECP/LUP claim)" do
+      let(:claim) { create(:claim, :submitted) }
+
+      it "returns no options" do
+        expect(admin_policy_options_provided(claim)).to match_array []
+      end
+    end
+  end
 end

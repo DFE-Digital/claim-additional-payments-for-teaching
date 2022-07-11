@@ -52,6 +52,7 @@ class CurrentClaim
 
     ActiveRecord::Base.transaction do
       claim = for_policy(policy)
+      claim.policy_options_provided = generate_policy_options_provided
       claim.submit!
       destroy_claims_except!(claim)
     end
@@ -123,8 +124,9 @@ class CurrentClaim
     claims.select { |c| c.eligibility.status == :eligible_now }
   end
 
+  # award_amount highest first, policy name alphabetically if the amount is the same
   def eligible_now_and_sorted
-    eligible_now.group_by { |c| c.award_amount.to_i }.map { |k, claims| claims.sort_by { |c| c.policy.short_name } }.reverse.flatten
+    eligible_now.sort_by { |c| [-c.award_amount.to_i, c.policy.short_name] }
   end
 
   private
@@ -144,5 +146,16 @@ class CurrentClaim
   def destroy_claims_except!(claim)
     claims.where.not(id: claim.id).destroy_all
     claims.reload
+  end
+
+  def generate_policy_options_provided
+    return [] unless main_claim.has_ecp_or_lupp_policy?
+
+    eligible_now_and_sorted.map do |c|
+      {
+        "policy" => c.policy.to_s,
+        "award_amount" => BigDecimal(c.award_amount)
+      }
+    end
   end
 end

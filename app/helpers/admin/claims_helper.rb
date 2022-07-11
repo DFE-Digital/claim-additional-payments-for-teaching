@@ -14,6 +14,15 @@ module Admin
       claim.policy::EligibilityAdminAnswersPresenter.new(claim.eligibility).answers
     end
 
+    def admin_policy_options_provided(claim)
+      claim.policy_options_provided.map do |option|
+        label = t(:payment_name, scope: option["policy"].constantize.locale_key)
+        answer = number_to_currency(option["award_amount"], precision: 0)
+
+        [label, answer]
+      end
+    end
+
     def personal_data_removed_text
       content_tag(:span, "Removed", class: "capt-text-quiet")
     end
