@@ -11,6 +11,17 @@ module Admin
       ActionController::Base.helpers.sanitize(html, tags: %w[span a], attributes: %w[href class])
     end
 
+    def display_boolean(value)
+      case value
+      when false
+        "No"
+      when true
+        "Yes"
+      else
+        "N/A"
+      end
+    end
+
     private
 
     def link_to_school(school)

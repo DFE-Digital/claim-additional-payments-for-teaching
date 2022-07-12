@@ -43,7 +43,7 @@ module LevellingUpPremiumPayments
     def degree_in_an_eligible_subject
       [
         translate("levelling_up_premium_payments.admin.degree_in_an_eligible_subject"),
-        (eligibility.eligible_degree_subject? ? "Yes" : "No")
+        display_boolean(eligibility.eligible_degree_subject)
       ]
     end
   end

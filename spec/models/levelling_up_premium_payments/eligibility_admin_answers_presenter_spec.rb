@@ -18,7 +18,7 @@ RSpec.describe LevellingUpPremiumPayments::EligibilityAdminAnswersPresenter, typ
       expected_answers = [
         [I18n.t("early_career_payments.admin.nqt_in_academic_year_after_itt"), "Yes"],
         [I18n.t("early_career_payments.admin.employed_as_supply_teacher"), "No"],
-        [I18n.t("levelling_up_premium_payments.admin.degree_in_an_eligible_subject"), "No"]
+        [I18n.t("levelling_up_premium_payments.admin.degree_in_an_eligible_subject"), "N/A"]
       ]
 
       expect(presenter.answers).to eq expected_answers
