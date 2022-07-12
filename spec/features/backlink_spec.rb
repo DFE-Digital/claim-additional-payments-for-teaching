@@ -29,6 +29,8 @@ RSpec.feature "Backlinking during a claim" do
     expect(page).to have_link("Back")
     choose "None of the above"
     click_on "Continue"
+    choose "No"
+    click_on "Continue"
     expect(page).to have_no_link("Back")
   end
 

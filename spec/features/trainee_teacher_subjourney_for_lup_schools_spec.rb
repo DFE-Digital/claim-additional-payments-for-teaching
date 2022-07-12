@@ -30,18 +30,7 @@ RSpec.feature "Trainee teacher subjourney for LUP schools" do
     expect(page).to have_text(I18n.t("questions.personal_details"))
   end
 
-  scenario "LUP school lacking LUP ITT subject" do
-    get_to_itt_subject_question
-
-    choose "None of the above"
-    click_on "Continue"
-
-    expect(page).to have_text(I18n.t("early_career_payments.ineligible.heading"))
-    expect(page).to have_no_link("Back")
-  end
-
   scenario "LUP school with non-LUP ITT subject but eligible degree" do
-    pending("Will work once CAPT-411 is implemented")
     get_to_itt_subject_question
 
     choose "None of the above"
@@ -60,7 +49,6 @@ RSpec.feature "Trainee teacher subjourney for LUP schools" do
   end
 
   scenario "LUP school with non-LUP ITT subject and no eligible degree" do
-    pending("Will work once CAPT-411 is implemented")
     get_to_itt_subject_question
 
     choose "None of the above"

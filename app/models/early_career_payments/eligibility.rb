@@ -177,10 +177,6 @@ module EarlyCareerPayments
       itt_subject.to_sym.in?(itt_subject_checker.current_subject_symbols(policy))
     end
 
-    def claim_year
-      PolicyConfiguration.for(policy).current_academic_year
-    end
-
     def specific_ineligible_attributes?
       trainee_teacher? or itt_subject_ineligible_now_and_in_the_future?
     end

@@ -67,6 +67,7 @@ module EarlyCareerPayments
     def slugs
       overall_eligibility_status = claim.eligibility_status
       lup_claim = claim.for_policy(LevellingUpPremiumPayments)
+      ecp_claim = claim.for_policy(EarlyCareerPayments)
 
       SLUGS.dup.tap do |sequence|
         unless claim.eligibility.employed_as_supply_teacher?
@@ -92,12 +93,12 @@ module EarlyCareerPayments
 
         if claim.eligibility.trainee_teacher?
           trainee_teacher_slugs(sequence)
+          sequence.delete("eligible-degree-subject") unless lup_claim.eligibility.indicated_ineligible_itt_subject?
         else
           sequence.delete("ineligible") unless overall_eligibility_status == :ineligible || overall_eligibility_status == :eligible_later
           sequence.delete("future-eligibility")
+          sequence.delete("eligible-degree-subject") unless ecp_claim.eligibility.status == :ineligible && lup_claim.eligibility.indicated_ineligible_itt_subject?
         end
-
-        sequence.delete("eligible-degree-subject") unless lup_claim.eligibility.indicated_ineligible_itt_subject? && lup_claim.eligibility.status == :undetermined
       end
     end
 
@@ -143,6 +144,7 @@ module EarlyCareerPayments
         current-school
         nqt-in-academic-year-after-itt
         eligible-itt-subject
+        eligible-degree-subject
         future-eligibility
         ineligible
       ]

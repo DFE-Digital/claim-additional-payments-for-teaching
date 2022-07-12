@@ -1,6 +1,6 @@
 class JourneySubjectEligibilityChecker
   def initialize(claim_year:, itt_year:)
-    raise "Claim year #{claim_year} is after ECP and LUP both ended" if claim_year > AcademicYear.new(2024)
+    raise "Claim year #{claim_year} is after ECP and LUP both ended" if claim_year > EligibilityCheckable::FINAL_COMBINED_ECP_AND_LUP_POLICY_YEAR
 
     @claim_year = claim_year
 
@@ -9,10 +9,11 @@ class JourneySubjectEligibilityChecker
   end
 
   def future_claim_years
-    return [] if none_of_the_above?(@itt_year)
-
-    combined_ecp_lup_scheme_years = AcademicYear.new(2022)..AcademicYear.new(2024)
-    combined_ecp_lup_scheme_years.select { |academic_year| academic_year > @claim_year }
+    if none_of_the_above?(@itt_year)
+      []
+    else
+      ((@claim_year + 1)..EligibilityCheckable::FINAL_COMBINED_ECP_AND_LUP_POLICY_YEAR).to_a
+    end
   end
 
   def selectable_itt_years
@@ -20,9 +21,12 @@ class JourneySubjectEligibilityChecker
   end
 
   def self.selectable_itt_years_for_claim_year(claim_year)
-    (AcademicYear.new(claim_year - 5)..AcademicYear.new(claim_year - 1)).to_a
+    (AcademicYear.new(claim_year - 5)...AcademicYear.new(claim_year)).to_a
   end
 
+  # Ideally we wouldn't have this method at all. Unfortunately it was hardcoded like
+  # this before we realised trainee teachers weren't as special a case as we
+  # thought.
   def self.fixed_lup_subject_symbols
     [:chemistry, :computing, :mathematics, :physics]
   end
@@ -99,13 +103,12 @@ class JourneySubjectEligibilityChecker
   end
 
   def subject_symbols(policy:, claim_year:, itt_year:)
-    # TODO: routing name will eventually be renamed to something which covers both ECP and LUP
     raise "Unsupported policy: #{policy}" unless policy.in?(PolicyConfiguration.policies_for_routing_name("additional-payments"))
 
     case policy
     when EarlyCareerPayments
       case claim_year
-      when AcademicYear.new(2022)
+      when AcademicYear.new(2022), AcademicYear.new(2024)
         case itt_year
         when AcademicYear.new(2019)
           [:mathematics]
@@ -123,37 +126,14 @@ class JourneySubjectEligibilityChecker
         else
           []
         end
-      when AcademicYear.new(2024)
-        case itt_year
-        when AcademicYear.new(2019)
-          [:mathematics]
-        when AcademicYear.new(2020)
-          [:chemistry, :foreign_languages, :mathematics, :physics]
-        else
-          []
-        end
       else
         []
       end
     when LevellingUpPremiumPayments
       case claim_year
-      when AcademicYear.new(2022)
+      when EligibilityCheckable::COMBINED_ECP_AND_LUP_POLICY_YEARS
         case itt_year
-        when AcademicYear.new(2017)..AcademicYear.new(2021)
-          [:chemistry, :computing, :mathematics, :physics]
-        else
-          []
-        end
-      when AcademicYear.new(2023)
-        case itt_year
-        when AcademicYear.new(2018)..AcademicYear.new(2022)
-          [:chemistry, :computing, :mathematics, :physics]
-        else
-          []
-        end
-      when AcademicYear.new(2024)
-        case itt_year
-        when AcademicYear.new(2019)..AcademicYear.new(2023)
+        when (claim_year - 5)...claim_year
           [:chemistry, :computing, :mathematics, :physics]
         else
           []

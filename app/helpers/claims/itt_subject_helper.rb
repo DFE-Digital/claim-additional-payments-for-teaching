@@ -6,9 +6,13 @@ module Claims
       subjects = if trainee_teacher?(current_claim)
         # they get the standard, unchanging LUP subject set because they won't have qualified in time for ECP by 2022/2023
         # and they won't have given an ITT year
-        JourneySubjectEligibilityChecker.fixed_lup_subject_symbols
+        if current_claim.policy_year.in?(EligibilityCheckable::COMBINED_ECP_AND_LUP_POLICY_YEARS_BEFORE_FINAL_YEAR)
+          JourneySubjectEligibilityChecker.fixed_lup_subject_symbols
+        else
+          []
+        end
       else
-        JourneySubjectEligibilityChecker.new(claim_year: current_policy_year(current_claim), itt_year: itt_year(current_claim)).selectable_subject_symbols(current_claim)
+        JourneySubjectEligibilityChecker.new(claim_year: current_claim.policy_year, itt_year: itt_year(current_claim)).selectable_subject_symbols(current_claim)
       end
 
       # TODO this might not work when subject keys and display values diverge, like when
@@ -25,19 +29,6 @@ module Claims
     end
 
     private
-
-    # TODO: something like this could move elsewhere
-    def current_policy_year(current_claim)
-      non_nil_policy_year_values = current_claim.policies.collect { |policy| PolicyConfiguration.for(policy).current_academic_year }.compact.to_set
-
-      if non_nil_policy_year_values.one?
-        non_nil_policy_year_values.first
-      elsif non_nil_policy_year_values.many?
-        raise "Have more than one policy year in the same journey"
-      else
-        raise "Have no policy year for the journey"
-      end
-    end
 
     # TODO: something like this could move to `CurrentClaim`
     def trainee_teacher?(current_claim)

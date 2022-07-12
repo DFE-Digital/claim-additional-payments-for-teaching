@@ -54,13 +54,21 @@ class PageSequence
   def handle_trainee_teacher
     case current_slug
     when "nqt-in-academic-year-after-itt"
-      if claim.eligibility.nqt_in_academic_year_after_itt
+      if claim.eligibility.nqt_in_academic_year_after_itt?
         "supply-teacher"
       else
-        "eligible-itt-subject"
+        claim.policy_year.in?(EligibilityCheckable::COMBINED_ECP_AND_LUP_POLICY_YEARS_BEFORE_FINAL_YEAR) ? "eligible-itt-subject" : "ineligible"
       end
     when "eligible-itt-subject"
       if claim.eligibility.eligible_itt_subject.to_sym.in? JourneySubjectEligibilityChecker.fixed_lup_subject_symbols
+        "future-eligibility"
+      else
+        "eligible-degree-subject"
+      end
+    when "eligible-degree-subject"
+      lup_claim = claim.for_policy(LevellingUpPremiumPayments)
+
+      if lup_claim.eligibility.eligible_degree_subject?
         "future-eligibility"
       else
         "ineligible"
