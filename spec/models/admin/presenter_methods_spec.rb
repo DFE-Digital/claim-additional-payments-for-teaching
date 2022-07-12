@@ -23,4 +23,26 @@ RSpec.describe Admin::PresenterMethods do
       )
     end
   end
+
+  describe "#display_boolean" do
+    subject { admin_presenter.new.display_boolean(value) }
+
+    context "when answered No" do
+      let(:value) { false }
+
+      it { is_expected.to eq("No") }
+    end
+
+    context "when answered Yes" do
+      let(:value) { true }
+
+      it { is_expected.to eq("Yes") }
+    end
+
+    context "when not answered" do
+      let(:value) { nil }
+
+      it { is_expected.to eq("N/A") }
+    end
+  end
 end
