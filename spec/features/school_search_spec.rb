@@ -46,7 +46,7 @@ RSpec.feature "Searching for school during Teacher Student Loan Repayments claim
     expect(page).to have_button("Continue")
 
     fill_in :school_search, with: "Penistone"
-    find("li", text: schools(:penistone_grammar_school).name).click
+    find("li", text: schools(:penistone_grammar_school).name).click(wait: 1.0)
 
     expect(page).to have_button("Continue")
 
