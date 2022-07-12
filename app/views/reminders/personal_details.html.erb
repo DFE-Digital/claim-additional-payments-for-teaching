@@ -11,7 +11,7 @@
           <%= form.label :full_name, t("early_career_payments.reminders.full_name"), {class: "govuk-label govuk-label--l"}  %>
         </h1>
         <%= errors_tag current_reminder, :full_name %>
-        <%= form.text_field :full_name, class: css_classes_for_input(current_reminder, :full_name), type: "text", spellcheck: "false", autocomplete: "given-name" %>
+        <%= form.text_field :full_name, class: css_classes_for_input(current_reminder, :full_name), type: "text", spellcheck: "false", autocomplete: "name" %>
       <% end %>
 
       <%= form_group_tag current_reminder, :full_name do %>
