@@ -24,7 +24,7 @@
           <%= form_group_tag current_claim, :middle_name do %>
             <%= form.label :middle_name, "Middle names", class: "govuk-label" %>
             <%= errors_tag current_claim, :middle_name %>
-            <%= form.text_field :middle_name, class: css_classes_for_input(current_claim, :middle_name), autocomplete: "given-name" %>
+            <%= form.text_field :middle_name, class: css_classes_for_input(current_claim, :middle_name), autocomplete: "additional-name" %>
           <% end %>
           <%= form_group_tag current_claim, :surname do %>
             <%= form.label :surname, "Last name", class: "govuk-label" %>
