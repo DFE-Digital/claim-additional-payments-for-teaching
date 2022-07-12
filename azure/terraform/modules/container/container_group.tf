@@ -21,7 +21,7 @@ resource "azurerm_container_group" "cont_grp_01" {
     environment_variables = {
       "ADMIN_ALLOWED_IPS"                              = data.azurerm_key_vault_secret.AdminAllowedIPs.value
       "APPINSIGHTS_INSTRUMENTATIONKEY"                 = data.azurerm_application_insights.app_ai.instrumentation_key
-      "CANONICAL_HOSTNAME"                             = local.verify_entity_id
+      "CANONICAL_HOSTNAME"                             = "not.required"
       "DFE_SIGN_IN_API_CLIENT_ID"                      = data.azurerm_key_vault_secret.DfeSignInApiClientId.value
       "DFE_SIGN_IN_API_ENDPOINT"                       = data.azurerm_key_vault_secret.DfeSignInApiEndpoint.value
       "DFE_SIGN_IN_API_SECRET"                         = data.azurerm_key_vault_secret.DfeSignInApiSecret.value
@@ -94,7 +94,7 @@ resource "azurerm_container_group" "cont_grp_02" {
     environment_variables = {
       "ADMIN_ALLOWED_IPS"                              = data.azurerm_key_vault_secret.AdminAllowedIPs.value
       "APPINSIGHTS_INSTRUMENTATIONKEY"                 = data.azurerm_application_insights.app_ai.instrumentation_key
-      "CANONICAL_HOSTNAME"                             = local.verify_entity_id
+      "CANONICAL_HOSTNAME"                             = "not.required"
       "DFE_SIGN_IN_API_CLIENT_ID"                      = data.azurerm_key_vault_secret.DfeSignInApiClientId.value
       "DFE_SIGN_IN_API_ENDPOINT"                       = data.azurerm_key_vault_secret.DfeSignInApiEndpoint.value
       "DFE_SIGN_IN_API_SECRET"                         = data.azurerm_key_vault_secret.DfeSignInApiSecret.value
@@ -102,10 +102,10 @@ resource "azurerm_container_group" "cont_grp_02" {
       "DFE_SIGN_IN_ISSUER"                             = data.azurerm_key_vault_secret.DfeSignInIssuer.value
       "DFE_SIGN_IN_REDIRECT_BASE_URL"                  = data.azurerm_key_vault_secret.DfeSignInRedirectBaseUrl.value
       "DFE_SIGN_IN_SECRET"                             = data.azurerm_key_vault_secret.DfeSignInSecret.value
-      "DFE_TEACHERS_PAYMENT_SERVICE_DATABASE_HOST"     = data.azurerm_key_vault_secret.DatabaseServerName.value
-      "DFE_TEACHERS_PAYMENT_SERVICE_DATABASE_NAME"     = local.environment
+      "DFE_TEACHERS_PAYMENT_SERVICE_DATABASE_HOST"     = var.db_host
+      "DFE_TEACHERS_PAYMENT_SERVICE_DATABASE_NAME"     = var.db_name
       "DFE_TEACHERS_PAYMENT_SERVICE_DATABASE_PASSWORD" = data.azurerm_key_vault_secret.DatabasePassword.value
-      "DFE_TEACHERS_PAYMENT_SERVICE_DATABASE_USERNAME" = format("%s@%s", data.azurerm_key_vault_secret.DatabaseUsername.value, trimsuffix(data.azurerm_key_vault_secret.DatabaseServerName.value, ".postgres.database.azure.com;"))
+      "DFE_TEACHERS_PAYMENT_SERVICE_DATABASE_USERNAME" = "${var.db_admin_username}@${var.db_host}"
       "DQT_BEARER_BASE_URL"                            = data.azurerm_key_vault_secret.DQTBearerBaseUrl.value
       "DQT_BEARER_GRANT_TYPE"                          = data.azurerm_key_vault_secret.DQTBearerGrantType.value
       "DQT_BEARER_SCOPE"                               = data.azurerm_key_vault_secret.DQTBearerScope.value

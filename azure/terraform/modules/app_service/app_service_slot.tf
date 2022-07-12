@@ -27,7 +27,7 @@ resource "azurerm_app_service_slot" "app_as_slot" {
   app_settings = {
     "ADMIN_ALLOWED_IPS"              = data.azurerm_key_vault_secret.AdminAllowedIPs.value
     "APPINSIGHTS_INSTRUMENTATIONKEY" = data.azurerm_application_insights.app_ai.instrumentation_key
-    "CANONICAL_HOSTNAME"             = local.verify_entity_id
+    "CANONICAL_HOSTNAME"             = local.hostname
     "DFE_SIGN_IN_API_CLIENT_ID"      = data.azurerm_key_vault_secret.DfeSignInApiClientId.value
     "DFE_SIGN_IN_API_ENDPOINT"       = data.azurerm_key_vault_secret.DfeSignInApiEndpoint.value
     "DFE_SIGN_IN_API_SECRET"         = data.azurerm_key_vault_secret.DfeSignInApiSecret.value

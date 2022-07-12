@@ -13,6 +13,9 @@ module "container" {
   rg_location           = var.input_region
   common_tags           = module.env_vars.common_tags
   app_name              = var.app_name
+  db_host                 = data.azurerm_postgresql_server.app.fqdn
+  db_admin_username       = data.azurerm_postgresql_server.app.administrator_login
+  db_name                 = local.db_name
 }
 
 module "app_service" {

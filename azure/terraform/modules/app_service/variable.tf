@@ -65,10 +65,10 @@ locals {
   # verify_entity_id   = "www.claim-additional-teaching-payment.service.gov.uk"
   # verify_environment = "INTEGRATION"
 
-  verify_entity_id   = var.rg_prefix == "s118d01" ? "development.additional-teaching-payment.education.gov.uk" : var.rg_prefix == "s118t01" ? "test.additional-teaching-payment.education.gov.uk" : var.rg_prefix == "s118p01" ? "www.claim-additional-teaching-payment.service.gov.uk" : "development.additional-teaching-payment.education.gov.uk"
   verify_environment = var.rg_prefix == "s118d01" ? "DEVELOPMENT" : var.rg_prefix == "s118t01" ? "INTEGRATION" : var.rg_prefix == "s118p01" ? "PRODUCTION" : "INFRA_DEV"
   environment        = var.rg_prefix == "s118d01" ? "development" : var.rg_prefix == "s118t01" ? "test" : var.rg_prefix == "s118p01" ? "production" : "infradev"
   stash_port         = var.rg_prefix == "s118p01" ? "23888" : "17000"
 
   app_service_name = var.app_name == null ? format("%s-%s", var.app_rg_name, "as") : format("%s-%s-%s", var.app_rg_name, var.app_name, "as")
+  hostname = "${local.app_service_name}.azurewebsites.net"
 }
