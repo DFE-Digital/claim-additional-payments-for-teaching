@@ -9,3 +9,6 @@ bradford:
 camden:
   code: E09000007
   name: Camden
+rochdale:
+  code: E08000005
+  name: Rochdale
