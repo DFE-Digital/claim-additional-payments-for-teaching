@@ -95,8 +95,8 @@ module LevellingUpPremiumPayments
       save!
     end
 
-    def eligible_next_year_too?
-      any_future_policy_years? && eligible_now?
+    def eligible_now_and_again_sometime?
+      eligible_now? && any_future_policy_years?
     end
 
     def indicated_ineligible_itt_subject?

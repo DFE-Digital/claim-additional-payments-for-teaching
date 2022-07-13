@@ -109,11 +109,10 @@ class CurrentClaim
     claims.any? { |c| c.eligibility.eligible_later? }
   end
 
-  # This is for cases when you *know* they're eligible later (given
-  # a teacher's circumstances don't change). Use this when a teacher
-  # is eligible now and wants a reminder to claim *again* in a future year.
-  def eligible_next_year_too?
-    claims.any? { |c| c.eligibility.eligible_next_year_too? }
+  # Use this when a teacher is eligible now and wants a reminder to
+  # claim *again* in a future year.
+  def eligible_now_and_again_sometime?
+    claims.any? { |c| c.eligibility.eligible_now_and_again_sometime? }
   end
 
   def editable_attributes
