@@ -43,6 +43,11 @@ variable "db_admin_username" {
   type        = string
   description = "Username of the postgres app database server administrator"
 }
+variable "environment" {
+  type        = string
+  description = "Name of the application environment"
+  default     = null
+}
 # ---------------------------------------------------------------------------------------------------------------------
 # LOCAL CALCULATED
 # ---------------------------------------------------------------------------------------------------------------------
@@ -56,7 +61,7 @@ locals {
   # verify_environment = "INTEGRATION"
 
   verify_environment = var.rg_prefix == "s118d01" ? "DEVELOPMENT" : var.rg_prefix == "s118t01" ? "INTEGRATION" : var.rg_prefix == "s118p01" ? "PRODUCTION" : "INFRA_DEV"
-  environment        = var.rg_prefix == "s118d01" ? "development" : var.rg_prefix == "s118t01" ? "test" : var.rg_prefix == "s118p01" ? "production" : "infradev"
+  # environment        = var.rg_prefix == "s118d01" ? "development" : var.rg_prefix == "s118t01" ? "test" : var.rg_prefix == "s118p01" ? "production" : "infradev"
   stash_port         = var.rg_prefix == "s118p01" ? "23888" : "17000"
 
   cont_grp_01_name = var.app_name == null ? format("%s-%s", var.app_rg_name, "worker-aci") : format("%s-%s-%s", var.app_rg_name, var.app_name, "worker-aci")

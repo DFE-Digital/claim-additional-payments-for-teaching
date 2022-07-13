@@ -34,6 +34,12 @@ variable "db_name" {
   default     = null
 }
 
+variable "environment" {
+  type        = string
+  description = "Name of the application environment"
+  default     = null
+}
+
 # ---------------------------------------------------------------------------------------------------------------------
 # OPTIONAL PARAMETERS
 # These parameters have reasonable defaults.

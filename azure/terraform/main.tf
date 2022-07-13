@@ -16,6 +16,7 @@ module "container" {
   db_host                 = data.azurerm_postgresql_server.app.fqdn
   db_admin_username       = data.azurerm_postgresql_server.app.administrator_login
   db_name                 = local.db_name
+  environment             = var.environment
 }
 
 module "app_service" {
@@ -29,6 +30,7 @@ module "app_service" {
   db_host                 = data.azurerm_postgresql_server.app.fqdn
   db_admin_username       = data.azurerm_postgresql_server.app.administrator_login
   db_name                 = local.db_name
+  environment             = var.environment
 }
 
 ###Run if ENV eq PRNumber

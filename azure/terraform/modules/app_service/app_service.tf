@@ -54,7 +54,7 @@ resource "azurerm_app_service" "app_as" {
     "DQT_API_URL"                                    = data.azurerm_key_vault_secret.DQTApiUrl.value
     "DQT_API_KEY"                                    = data.azurerm_key_vault_secret.DQTApiKey.value
     "DOCKER_REGISTRY_SERVER_URL"                     = "https://index.docker.io"
-    "ENVIRONMENT_NAME"                               = local.environment
+    "ENVIRONMENT_NAME"                               = var.environment
     "GOOGLE_ANALYTICS_ID"                            = ""
     "GTM_ANALYTICS"                                  = data.azurerm_key_vault_secret.GTMAnalytics.value
     "LOGSTASH_HOST"                                  = data.azurerm_key_vault_secret.LogstashHost.value
@@ -62,7 +62,7 @@ resource "azurerm_app_service" "app_as" {
     "NOTIFY_API_KEY"                                 = data.azurerm_key_vault_secret.NotifyApiKey.value
     "ORDNANCE_SURVEY_CLIENT_PARAMS"                  = data.azurerm_key_vault_secret.ordnancesurveyclientparms.value
     "ORDNANCE_SURVEY_API_BASE_URL"                   = data.azurerm_key_vault_secret.ordnancesurveyapibaseurl.value
-    "RAILS_ENV"                                      = "production" #local.environment
+    "RAILS_ENV"                                      = "production"
     "RAILS_SERVE_STATIC_FILES"                       = "true"
     "ROLLBAR_ACCESS_TOKEN"                           = data.azurerm_key_vault_secret.RollbarInfraToken.value
     "SECRET_KEY_BASE"                                = data.azurerm_key_vault_secret.SecretKeyBase.value

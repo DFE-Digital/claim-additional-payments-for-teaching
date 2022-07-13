@@ -37,7 +37,7 @@ resource "azurerm_app_service_slot" "app_as_slot" {
     "DFE_SIGN_IN_SECRET"             = data.azurerm_key_vault_secret.DfeSignInSecret.value
     #"DFE_TEACHERS_PAYMENT_SERVICE_DATABASE_HOST"     = format("%s.%s", format("%s-%s", var.app_rg_name, "db"), "postgres.database.azure.com")
     "DFE_TEACHERS_PAYMENT_SERVICE_DATABASE_HOST"     = data.azurerm_key_vault_secret.DatabaseServerName.value
-    "DFE_TEACHERS_PAYMENT_SERVICE_DATABASE_NAME"     = local.environment
+    "DFE_TEACHERS_PAYMENT_SERVICE_DATABASE_NAME"     = var.db_name
     "DFE_TEACHERS_PAYMENT_SERVICE_DATABASE_PASSWORD" = data.azurerm_key_vault_secret.DatabasePassword.value
     "DFE_TEACHERS_PAYMENT_SERVICE_DATABASE_USERNAME" = format("%s@%s", data.azurerm_key_vault_secret.DatabaseUsername.value, trimsuffix(data.azurerm_key_vault_secret.DatabaseServerName.value, ".postgres.database.azure.com;"))
     "DQT_BEARER_BASE_URL"                            = data.azurerm_key_vault_secret.DQTBearerBaseUrl.value
@@ -49,7 +49,7 @@ resource "azurerm_app_service_slot" "app_as_slot" {
     "DQT_SUBSCRIPTION_KEY"                           = data.azurerm_key_vault_secret.DQTSubscriptionKey.value
     "DQT_API_URL"                                    = data.azurerm_key_vault_secret.DQTApiUrl.value
     "DQT_API_KEY"                                    = data.azurerm_key_vault_secret.DQTApiKey.value
-    "ENVIRONMENT_NAME"                               = local.environment
+    "ENVIRONMENT_NAME"                               = var.environment
     "GOOGLE_ANALYTICS_ID"                            = ""
     "GTM_ANALYTICS"                                  = data.azurerm_key_vault_secret.GTMAnalytics.value
     "LOGSTASH_HOST"                                  = data.azurerm_key_vault_secret.LogstashHost.value
@@ -57,7 +57,7 @@ resource "azurerm_app_service_slot" "app_as_slot" {
     "NOTIFY_API_KEY"                                 = data.azurerm_key_vault_secret.NotifyApiKey.value
     "ORDNANCE_SURVEY_CLIENT_PARAMS"                  = data.azurerm_key_vault_secret.ordnancesurveyclientparms.value
     "ORDNANCE_SURVEY_API_BASE_URL"                   = data.azurerm_key_vault_secret.ordnancesurveyapibaseurl.value
-    "RAILS_ENV"                                      = "production" #local.environment
+    "RAILS_ENV"                                      = "production"
     "RAILS_SERVE_STATIC_FILES"                       = "true"
     "ROLLBAR_ACCESS_TOKEN"                           = data.azurerm_key_vault_secret.RollbarInfraToken.value
     "SECRET_KEY_BASE"                                = data.azurerm_key_vault_secret.SecretKeyBase.value
