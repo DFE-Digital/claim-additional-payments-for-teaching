@@ -136,6 +136,7 @@ COPY lib ${APP_HOME}/lib
 COPY config ${APP_HOME}/config
 COPY db ${APP_HOME}/db
 COPY app ${APP_HOME}/app
+COPY spec ${APP_HOME}/spec
 
 # End
 USER root
