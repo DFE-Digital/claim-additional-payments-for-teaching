@@ -27,12 +27,6 @@ end
 RSpec.feature "Completed Applications - Reminders" do
   [
     {
-      policy_year: AcademicYear.new(2021),
-      eligible_now: [
-        {itt_subject: "mathematics", itt_academic_year: AcademicYear.new(2018), invited_to_set_reminder: true}
-      ]
-    },
-    {
       policy_year: AcademicYear.new(2022),
       eligible_now: [
         {itt_subject: "mathematics", itt_academic_year: AcademicYear.new(2019), invited_to_set_reminder: true},
