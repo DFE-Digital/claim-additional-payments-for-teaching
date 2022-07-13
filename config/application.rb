@@ -61,5 +61,7 @@ module DfeTeachersPaymentService
     config.log_tags = {
       request_id: :request_id
     }
+
+    config.active_record.yaml_column_permitted_classes = [BigDecimal, Date, Symbol]
   end
 end
