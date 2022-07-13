@@ -21,7 +21,7 @@ stages:
   jobs:
   - job: Build
     steps:
-    - template: templates/build.yml  #Run Build Template
+    - template: templates/build.yml  #Run Build Template#
 
 - stage: Release
   condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
@@ -56,16 +56,19 @@ stages:
       value: s118d01-app-as
 
     steps:
-    - template: templates/release.yml #Run Release Template
+    #- template: templates/release.yml #Run Release Template
+    - template: templates/dummy.yml
       parameters :
         ServiceConnection : azdo.pipelines.cip.S118D.armfe1ef140-8bef-4043-b5ee-c449e6f951ef
 
-# - stage: ReviewAPP
-#   condition: and(succeeded(), eq(variables['System.PullRequest.PullRequestNumber'], 'NotNull'))
-#   #condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
-#   jobs:
-#   - job: ReviewApp
-#     steps:
-#      - powershell: |
-#         write-host $(System.PullRequest.PullRequestNumber)
-#         write-host "PR Number listed above"
+ - stage: ReviewAPP
+   condition: and(succeeded(), eq(variables['System.PullRequest.PullRequestNumber'], 'NotNull'))
+   #condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
+   jobs:
+   - job: ReviewApp
+     steps:
+      - powershell: |
+         write-host $(System.PullRequest.PullRequestNumber)
+         write-host "PR Number listed above"
+      -script :
+         make review terraform-plan IMAGE_TAG=20220706.13 APP_NAME=$(System.PullRequest.PullRequestNumber)
