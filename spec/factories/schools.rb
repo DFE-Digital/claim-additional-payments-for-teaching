@@ -38,7 +38,6 @@ FactoryBot.define do
       # this is a huge array but if it ever cycles, there'll be a message about duplicate URNs
       sequence :urn, LevellingUpPremiumPayments::Award.urn_to_award_amount_in_pounds(AcademicYear.new(2022))
                                                       .keys
-                                                      .excluding(School.pluck(:urn))
                                                       .cycle
     end
 
