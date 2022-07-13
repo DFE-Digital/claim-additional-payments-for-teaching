@@ -70,4 +70,4 @@ stages:
     #  - powershell: |
     #     write-host $(System.PullRequest.PullRequestNumber)
     #     write-host "PR Number listed above"
-     - script : $(System.PullRequest.PullRequestNumber), $(System.PullRequest.PullRequestID)
+     - script : echo $(System.PullRequest.PullRequestNumber), $(System.PullRequest.PullRequestID)
