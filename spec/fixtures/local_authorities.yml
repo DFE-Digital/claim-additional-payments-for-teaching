@@ -10,3 +10,6 @@ bradford:
 camden:
   code: 202
   name: Camden
+rochdale:
+  code: 354
+  name: Rochdale
