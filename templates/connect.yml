@@ -8,7 +8,7 @@ steps:
     azureSubscription: ${{ parameters.ServiceConnection }}
     scriptType: bash
     scriptLocation: inlineScript
-    inlineScript: 'az group list'
+    inlineScript: 'az ad signed-in-user show'
 
 
 #  - task: AzureCLI@2
