@@ -16,7 +16,7 @@ variables:
   - name: 'isbuildrelease'
     value: $[eq(variables['Build.SourceBranch'], 'refs/heads/buildrelease')]
 
-# stages:
+stages:
 #  - stage: Build
 #    jobs:
 #    - job: Build
