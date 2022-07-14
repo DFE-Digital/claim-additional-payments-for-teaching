@@ -15,10 +15,11 @@ dev:
 	$(eval CONTAINER_NAME=s118d01conttfstate)
 	$(eval DEPLOY_ENV=Development)
 
-set-azure-account:
-	az account set -s ${AZ_SUBSCRIPTION}
+#set-azure-account:
+#	az account set -s ${AZ_SUBSCRIPTION}
 
-terraform-init: set-azure-account
+#terraform-init: set-azure-account
+terraform-init:
 	$(if $(IMAGE_TAG), , $(error Missing environment variable "IMAGE_TAG"))
 	terraform -chdir=azure/terraform init -reconfigure \
 		-backend-config=resource_group_name=${RESOURCE_GROUP_NAME} \
