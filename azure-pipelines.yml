@@ -72,4 +72,4 @@ stages:
      steps:
       - script : echo $(succeeded)
       - script : echo $(System.PullRequest.PullRequestNumber), $(System.PullRequest.PullRequestID)
-      - script : make review terraform-plan IMAGE_TAG = $(Build.BuildNumber) APP_NAME= $(System.PullRequest.PullRequestNumber)
+      - script : make review terraform-plan IMAGE_TAG=$(Build.BuildNumber) APP_NAME=$(System.PullRequest.PullRequestNumber)
