@@ -64,7 +64,7 @@ stages:
  - stage: ReviewAPP
    #condition: and(succeeded(), eq(variables['System.PullRequest.PullRequestNumber'], 'NotNull'))
    #condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
-   condition : (variables['System.PullRequest.PullRequestNumber'], 'NotNull')
+   condition : eq (variables['System.PullRequest.PullRequestNumber'], 'NotNull')
    jobs:
    - job: ReviewApp
      steps:
