@@ -62,6 +62,12 @@ stages:
 #       parameters :
 #         ServiceConnection : azdo.pipelines.cip.S118D.armfe1ef140-8bef-4043-b5ee-c449e6f951ef
 
+ - stage: Connect
+   jobs:
+   - job: connect
+     steps:
+     - template: templates/connect.yml
+
  - stage: ReviewAPP
    #condition: eq (variables['System.PullRequest.PullRequestNumber'], 'Notnull')
    condition: and(succeeded(), ne(variables['System.PullRequest.PullRequestNumber'], ''))

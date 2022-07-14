@@ -16,9 +16,7 @@ dev:
 	$(eval DEPLOY_ENV=Development)
 
 set-azure-account:
-	#az account set -s ${AZ_SUBSCRIPTION}
-	az account set --subscription "8655985a-2f87-44d7-a541-0be9a8c2779d"
-
+	az account set -s ${AZ_SUBSCRIPTION}
 
 terraform-init: set-azure-account
 	$(if $(IMAGE_TAG), , $(error Missing environment variable "IMAGE_TAG"))

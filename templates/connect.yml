@@ -1,0 +1,8 @@
+steps:
+- task: AzureCLI@2
+  displayName: 'Azure CLI '
+  inputs:
+    azureSubscription: 's118-teacherpaymentsservice-development'
+    scriptType: bash
+    scriptLocation: inlineScript
+    inlineScript: 'echo "hello there"'
