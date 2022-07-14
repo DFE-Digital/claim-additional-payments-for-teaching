@@ -62,11 +62,11 @@ stages:
 #       parameters :
 #         ServiceConnection : azdo.pipelines.cip.S118D.armfe1ef140-8bef-4043-b5ee-c449e6f951ef
 
- - stage: Connect
-   jobs:
-   - job: connect
-     steps:
-     - template: templates/connect.yml
+#  - stage: Connect
+#    jobs:
+#    - job: connect
+#      steps:
+#      - template: templates/connect.yml
 
  - stage: ReviewAPP
    #condition: eq (variables['System.PullRequest.PullRequestNumber'], 'Notnull')
@@ -76,6 +76,7 @@ stages:
    jobs:
    - job: ReviewApp
      steps:
+      - template: templates/connect.yml
       - script : echo $(succeeded)
       - script : echo $(System.PullRequest.PullRequestNumber), $(System.PullRequest.PullRequestID)
       #- script : make review terraform-plan IMAGE_TAG=$(Build.BuildNumber) APP_NAME=$(System.PullRequest.PullRequestNumber)
