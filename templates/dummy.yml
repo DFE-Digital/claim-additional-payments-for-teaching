@@ -1,3 +1,3 @@
  steps:
 
-     - script: echo this is a test
+     - script: echo this is a dummy stage

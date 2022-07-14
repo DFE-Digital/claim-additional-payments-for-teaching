@@ -17,11 +17,12 @@ variables:
     value: $[eq(variables['Build.SourceBranch'], 'refs/heads/buildrelease')]
 
 stages:
-#  - stage: Build
-#    jobs:
-#    - job: Build
-#      steps:
-#      - template: templates/build.yml  #Run Build Template
+ - stage: Build
+   jobs:
+   - job: Build
+     steps:
+     #- template: templates/build.yml  #Run Build Template
+     - template: templates/dummy.yml
 
 # - stage: Release
 #   condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
@@ -62,9 +63,10 @@ stages:
 #         ServiceConnection : azdo.pipelines.cip.S118D.armfe1ef140-8bef-4043-b5ee-c449e6f951ef
 
  - stage: ReviewAPP
-   #condition: and(succeeded(), eq(variables['System.PullRequest.PullRequestNumber'], 'NotNull'))
+   condition: and(succeeded(), ne(variables['System.PullRequest.PullRequestNumber'], ''))
    #condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
-   condition : eq (variables['System.PullRequest.PullRequestNumber'], 'NotNull')
+   #condition: and(succeeded(), ne('${{ parameters.database.name }}', ''))
+
    jobs:
    - job: ReviewApp
      steps:
