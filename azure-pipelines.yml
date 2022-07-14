@@ -16,12 +16,12 @@ variables:
   - name: 'isbuildrelease'
     value: $[eq(variables['Build.SourceBranch'], 'refs/heads/buildrelease')]
 
-stages:
- - stage: Build
-   jobs:
-   - job: Build
-     steps:
-     - template: templates/build.yml  #Run Build Template
+# stages:
+#  - stage: Build
+#    jobs:
+#    - job: Build
+#      steps:
+#      - template: templates/build.yml  #Run Build Template
 
 # - stage: Release
 #   condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
@@ -62,10 +62,12 @@ stages:
 #         ServiceConnection : azdo.pipelines.cip.S118D.armfe1ef140-8bef-4043-b5ee-c449e6f951ef
 
  - stage: ReviewAPP
-   condition: and(succeeded(), eq(variables['System.PullRequest.PullRequestNumber'], 'NotNull'))
+   #condition: and(succeeded(), eq(variables['System.PullRequest.PullRequestNumber'], 'NotNull'))
    #condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
+   condition : (variables['System.PullRequest.PullRequestNumber'], 'NotNull')
    jobs:
    - job: ReviewApp
      steps:
+      - script : echo $(succeeded)
       - script : echo $(System.PullRequest.PullRequestNumber), $(System.PullRequest.PullRequestID)
       - script : make review terraform-plan IMAGE_TAG = $(Build.BuildNumber) APP_NAME= $(System.PullRequest.PullRequestNumber)
