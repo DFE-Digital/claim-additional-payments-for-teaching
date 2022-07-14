@@ -76,7 +76,7 @@ stages:
    jobs:
    - job: ReviewApp
      steps:
-      #- template: templates/connect.yml
+      - template: templates/connect.yml
       - script : echo $(succeeded)
       - script : echo $(System.PullRequest.PullRequestNumber), $(System.PullRequest.PullRequestID)
       #- script : make review terraform-plan IMAGE_TAG=$(Build.BuildNumber) APP_NAME=$(System.PullRequest.PullRequestNumber)
