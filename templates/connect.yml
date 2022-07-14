@@ -1,3 +1,6 @@
+parameters:
+  ServiceConnection:
+
 steps:
 - task: AzureCLI@2
   displayName: 'Azure CLI '
