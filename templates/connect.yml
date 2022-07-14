@@ -2,7 +2,20 @@ steps:
 - task: AzureCLI@2
   displayName: 'Azure CLI '
   inputs:
-    azureSubscription: 'azdo.pipelines.cip.S118D.armfe1ef140-8bef-4043-b5ee-c449e6f951ef'
+    azureSubscription: ${{ parameters.ServiceConnection }}
     scriptType: bash
     scriptLocation: inlineScript
     inlineScript: 'echo "hello there"'
+
+
+#  - task: AzureCLI@2
+#         displayName: "Terraform"
+#         inputs:
+#           azureSubscription:  ${{ parameters.ServiceConnection }}
+#           scriptType: bash
+#           addSpnToEnvironment: true
+#           scriptLocation: inlineScript
+#           inlineScript: |
+#             export ARM_CLIENT_ID=$servicePrincipalId
+#             export ARM_CLIENT_SECRET=$servicePrincipalKey
+#             export ARM_TENANT_ID=$tenantId
