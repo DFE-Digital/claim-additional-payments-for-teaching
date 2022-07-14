@@ -17,7 +17,7 @@ provider "random" {
 }
 
 terraform {
-  required_version = "= 1.2.5"
+  required_version = "= 1.2.4"
 
   backend "azurerm" {
     key = "terraform.tfstate"
