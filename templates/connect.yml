@@ -8,7 +8,7 @@ steps:
     azureSubscription: ${{ parameters.ServiceConnection }}
     scriptType: bash
     scriptLocation: inlineScript
-    inlineScript: 'echo "hello there"'
+    inlineScript: 'az group list'
 
 
 #  - task: AzureCLI@2
