@@ -13,6 +13,7 @@ steps:
         backendAzureRmStorageAccountName: $(backendAzureRmStorageAccountName)
         backendAzureRmContainerName: $(backendAzureRmContainerName)
         backendAzureRmKey: $(backendAzureRmKey)
+        terraformVersion: 1.2.4
 
     - task: AzurePowerShell@5
       displayName: Disable KV network firewall rule
