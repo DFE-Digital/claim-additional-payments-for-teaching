@@ -1,23 +1,40 @@
-# variable "client_secret" {
-# }
-
-# We strongly recommend using the required_providers block to set the
-# Azure Provider source and version being used
-terraform {
-  required_providers {
-    azurerm = {
-      source  = "hashicorp/azurerm"
-      version = "=3.0.0"
-    }
-  }
-}
-
-# Configure the Microsoft Azure Provider
 provider "azurerm" {
+  #alias = "main"
+  # Whilst version is optional, we /strongly recommend/ using it to pin the version of the Provider being used
+
+  #source.com
+  # subscription_id = local.sub_id
+  # tenant_id       = "9c7d9dd3-840c-4b3f-818e-552865082e16"
+
   features {}
 
-  subscription_id = "8655985a-2f87-44d7-a541-0be9a8c2779d"
-  client_id       = "699d030d-46e4-4abb-a4f4-b114c8aed813"
-  client_secret   = "zxgp5Yy_nA_Thl_4_y4v3LC3G7~_3Gumka"
-  tenant_id       = "9c7d9dd3-840c-4b3f-818e-552865082e16"
+}
+
+provider "azuread" {
+}
+
+provider "random" {
+}
+
+terraform {
+  required_version = "= 1.2.4"
+
+  backend "azurerm" {
+    key = "terraform.tfstate"
+  }
+
+  required_providers {
+    azuread = {
+      source  = "hashicorp/azuread"
+      version = "=1.4.0"
+    }
+    azurerm = {
+      source  = "hashicorp/azurerm"
+      version = "=2.49.0"
+    }
+    random = {
+      source  = "hashicorp/random"
+      version = "=3.1.0"
+    }
+  }
 }
