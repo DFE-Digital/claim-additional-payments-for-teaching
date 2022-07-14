@@ -3,16 +3,10 @@ data "azurerm_application_insights" "app_ai" {
   resource_group_name = var.app_rg_name
 }
 
-data "azurerm_container_registry" "acr" {
-  name                = format("%s%s", var.rg_prefix, "contreg")
-  resource_group_name = format("%s-%s", var.rg_prefix, "contreg")
-}
-
 data "azurerm_key_vault" "secrets_kv" {
   name                = format("%s-%s", var.rg_prefix, "secrets-kv")
   resource_group_name = format("%s-%s", var.rg_prefix, "secrets")
 }
-
 
 data "azurerm_key_vault_secret" "AdminAllowedIPs" {
   name         = "AdminAllowedIPs"
@@ -63,15 +57,7 @@ data "azurerm_key_vault_secret" "DatabasePassword" {
   name         = "DatabasePassword"
   key_vault_id = data.azurerm_key_vault.secrets_kv.id
 }
-data "azurerm_key_vault_secret" "DatabaseServerName" {
-  name         = "DatabaseServerName"
-  key_vault_id = data.azurerm_key_vault.secrets_kv.id
-}
 
-data "azurerm_key_vault_secret" "DatabaseUsername" {
-  name         = "DatabaseUsername"
-  key_vault_id = data.azurerm_key_vault.secrets_kv.id
-}
 data "azurerm_key_vault_secret" "SecretKeyBase" {
   name         = "SecretKeyBase"
   key_vault_id = data.azurerm_key_vault.secrets_kv.id
@@ -161,13 +147,3 @@ data "azurerm_key_vault_secret" "GTMAnalytics" {
   name         = "GTMAnalytics"
   key_vault_id = data.azurerm_key_vault.secrets_kv.id
 }
-
-# data "azurerm_key_vault_secret" "TeacherPaymentsDevVspSamlEncryption2Key" {
-#   name         = "TeacherPaymentsDevVspSamlEncryption2Key"
-#   key_vault_id = data.azurerm_key_vault.secrets_kv.id
-# }
-
-# data "azurerm_app_service" "app_vsp_as" {
-#   name                = format("%s-%s", var.app_rg_name, "vsp-as")
-#   resource_group_name = var.app_rg_name
-# }

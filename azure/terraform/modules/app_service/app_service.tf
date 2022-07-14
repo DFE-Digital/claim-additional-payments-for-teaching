@@ -1,8 +1,8 @@
 resource "azurerm_app_service" "app_as" {
-  name                = format("%s-%s", var.app_rg_name, "as")
+  name                = local.app_service_name
   resource_group_name = var.app_rg_name
   location            = var.rg_location
-  app_service_plan_id = var.app_asp_id
+  app_service_plan_id = data.azurerm_app_service_plan.app.id
 
   client_affinity_enabled = true
   https_only              = true
@@ -24,14 +24,13 @@ resource "azurerm_app_service" "app_as" {
     scm_type                  = "None"
     use_32_bit_worker_process = true
     linux_fx_version          = format("%s%s", "DOCKER|dfedigital/teacher-payments-service:", var.input_container_version)
-    # linux_fx_version = format("%s%s", "DOCKER|s118d01contreg.azurecr.io/teacher-payments-service:", var.input_container_version)
   }
 
 
   app_settings = {
     "ADMIN_ALLOWED_IPS"              = data.azurerm_key_vault_secret.AdminAllowedIPs.value
     "APPINSIGHTS_INSTRUMENTATIONKEY" = data.azurerm_application_insights.app_ai.instrumentation_key
-    "CANONICAL_HOSTNAME"             = local.verify_entity_id
+    "CANONICAL_HOSTNAME"             = local.canonical_hostname
     "DFE_SIGN_IN_API_CLIENT_ID"      = data.azurerm_key_vault_secret.DfeSignInApiClientId.value
     "DFE_SIGN_IN_API_ENDPOINT"       = data.azurerm_key_vault_secret.DfeSignInApiEndpoint.value
     "DFE_SIGN_IN_API_SECRET"         = data.azurerm_key_vault_secret.DfeSignInApiSecret.value
@@ -39,11 +38,10 @@ resource "azurerm_app_service" "app_as" {
     "DFE_SIGN_IN_ISSUER"             = data.azurerm_key_vault_secret.DfeSignInIssuer.value
     "DFE_SIGN_IN_REDIRECT_BASE_URL"  = data.azurerm_key_vault_secret.DfeSignInRedirectBaseUrl.value
     "DFE_SIGN_IN_SECRET"             = data.azurerm_key_vault_secret.DfeSignInSecret.value
-    #"DFE_TEACHERS_PAYMENT_SERVICE_DATABASE_HOST"     = format("%s.%s", format("%s-%s", var.app_rg_name, "db"), "postgres.database.azure.com")
-    "DFE_TEACHERS_PAYMENT_SERVICE_DATABASE_HOST"     = data.azurerm_key_vault_secret.DatabaseServerName.value
-    "DFE_TEACHERS_PAYMENT_SERVICE_DATABASE_NAME"     = local.environment
+    "DFE_TEACHERS_PAYMENT_SERVICE_DATABASE_HOST"     = var.db_host
+    "DFE_TEACHERS_PAYMENT_SERVICE_DATABASE_NAME"     = var.db_name
     "DFE_TEACHERS_PAYMENT_SERVICE_DATABASE_PASSWORD" = data.azurerm_key_vault_secret.DatabasePassword.value
-    "DFE_TEACHERS_PAYMENT_SERVICE_DATABASE_USERNAME" = format("%s@%s", data.azurerm_key_vault_secret.DatabaseUsername.value, trimsuffix(data.azurerm_key_vault_secret.DatabaseServerName.value, ".postgres.database.azure.com;"))
+    "DFE_TEACHERS_PAYMENT_SERVICE_DATABASE_USERNAME" = "${var.db_admin_username}@${var.db_host}"
     "DQT_BEARER_BASE_URL"                            = data.azurerm_key_vault_secret.DQTBearerBaseUrl.value
     "DQT_BEARER_GRANT_TYPE"                          = data.azurerm_key_vault_secret.DQTBearerGrantType.value
     "DQT_BEARER_SCOPE"                               = data.azurerm_key_vault_secret.DQTBearerScope.value
@@ -54,7 +52,7 @@ resource "azurerm_app_service" "app_as" {
     "DQT_API_URL"                                    = data.azurerm_key_vault_secret.DQTApiUrl.value
     "DQT_API_KEY"                                    = data.azurerm_key_vault_secret.DQTApiKey.value
     "DOCKER_REGISTRY_SERVER_URL"                     = "https://index.docker.io"
-    "ENVIRONMENT_NAME"                               = local.environment
+    "ENVIRONMENT_NAME"                               = var.environment
     "GOOGLE_ANALYTICS_ID"                            = ""
     "GTM_ANALYTICS"                                  = data.azurerm_key_vault_secret.GTMAnalytics.value
     "LOGSTASH_HOST"                                  = data.azurerm_key_vault_secret.LogstashHost.value
@@ -62,7 +60,7 @@ resource "azurerm_app_service" "app_as" {
     "NOTIFY_API_KEY"                                 = data.azurerm_key_vault_secret.NotifyApiKey.value
     "ORDNANCE_SURVEY_CLIENT_PARAMS"                  = data.azurerm_key_vault_secret.ordnancesurveyclientparms.value
     "ORDNANCE_SURVEY_API_BASE_URL"                   = data.azurerm_key_vault_secret.ordnancesurveyapibaseurl.value
-    "RAILS_ENV"                                      = "production" #local.environment
+    "RAILS_ENV"                                      = "production"
     "RAILS_SERVE_STATIC_FILES"                       = "true"
     "ROLLBAR_ACCESS_TOKEN"                           = data.azurerm_key_vault_secret.RollbarInfraToken.value
     "SECRET_KEY_BASE"                                = data.azurerm_key_vault_secret.SecretKeyBase.value

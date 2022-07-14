@@ -13,15 +13,6 @@ data "azurerm_key_vault_secret" "AdminAllowedIPs" {
   key_vault_id = data.azurerm_key_vault.secrets_kv.id
 }
 
-# output "AdminAllowedIPs_value" {
-#   value = data.azurerm_key_vault_secret.AdminAllowedIPs.value
-# }
-
-data "azurerm_key_vault_secret" "DatabaseServerName" {
-  name         = "DatabaseServerName"
-  key_vault_id = data.azurerm_key_vault.secrets_kv.id
-}
-
 data "azurerm_key_vault_secret" "DfeSignInApiClientId" {
   name         = "DfeSignInApiClientId"
   key_vault_id = data.azurerm_key_vault.secrets_kv.id
@@ -66,10 +57,7 @@ data "azurerm_key_vault_secret" "DatabasePassword" {
   name         = "DatabasePassword"
   key_vault_id = data.azurerm_key_vault.secrets_kv.id
 }
-data "azurerm_key_vault_secret" "DatabaseUsername" {
-  name         = "DatabaseUsername"
-  key_vault_id = data.azurerm_key_vault.secrets_kv.id
-}
+
 data "azurerm_key_vault_secret" "SecretKeyBase" {
   name         = "SecretKeyBase"
   key_vault_id = data.azurerm_key_vault.secrets_kv.id
@@ -160,11 +148,7 @@ data "azurerm_key_vault_secret" "GTMAnalytics" {
   key_vault_id = data.azurerm_key_vault.secrets_kv.id
 }
 
-# data "azurerm_key_vault_secret" "SamlEncryptionKey" {
-#   name         = "TeacherPaymentsDevVspSamlEncryption8KeyBase64"
-#   key_vault_id = data.azurerm_key_vault.secrets_kv.id
-# }
-# data "azurerm_key_vault_secret" "SamlSigningKey" {
-#   name         = "TeacherPaymentsDevVspSamlSigning8KeyBase64"
-#   key_vault_id = data.azurerm_key_vault.secrets_kv.id
-# }
+data "azurerm_app_service_plan" "app" {
+  name                = format("%s-%s", var.app_rg_name, "asp")
+  resource_group_name = var.app_rg_name
+}
