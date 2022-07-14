@@ -18,8 +18,7 @@ dev:
 set-azure-account:
 	az account set -s ${AZ_SUBSCRIPTION}
 
-#terraform-init: set-azure-account
-terraform-init:
+terraform-init: set-azure-account
 	$(if $(IMAGE_TAG), , $(error Missing environment variable "IMAGE_TAG"))
 	terraform -chdir=azure/terraform init -reconfigure \
 		-backend-config=resource_group_name=${RESOURCE_GROUP_NAME} \
