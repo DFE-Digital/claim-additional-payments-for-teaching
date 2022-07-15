@@ -6,6 +6,7 @@ class Admin::TasksController < Admin::BaseAdminController
 
   def index
     @claim_checking_tasks = ClaimCheckingTasks.new(@claim)
+    @has_matching_claims = Claim::MatchingAttributeFinder.new(@claim).matching_claims.exists?
   end
 
   def show

@@ -7,6 +7,23 @@ RSpec.shared_examples "Admin View Claim Feature" do |policy|
     )
   }
 
+  let!(:multiple_claim) {
+    create(
+      :claim,
+      :submitted,
+      eligibility: build("#{policy.to_s.underscore}_eligibility".to_sym, :eligible)
+    )
+  }
+
+  let!(:similar_claim) {
+    create(
+      :claim,
+      :submitted,
+      eligibility: build("#{policy.to_s.underscore}_eligibility".to_sym, :eligible),
+      teacher_reference_number: multiple_claim.teacher_reference_number
+    )
+  }
+
   before do
     @signed_in_user = sign_in_as_service_operator
   end
@@ -22,6 +39,14 @@ RSpec.shared_examples "Admin View Claim Feature" do |policy|
 
     click_on "View full claim"
     expect(page).to have_content(policy.short_name)
+  end
+
+  scenario "has multiple claims" do
+    visit admin_claims_path
+
+    find("a[href='#{admin_claim_tasks_path(multiple_claim)}']").click
+
+    expect(page).to have_content("Multiple claims with matching details have been made in this claim window.")
   end
 
   def expect_page_to_have_policy_sections(policy)
