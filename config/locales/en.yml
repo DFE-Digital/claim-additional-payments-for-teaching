@@ -312,7 +312,7 @@ en:
         hint:
           postgraduate_itt: "Postgraduate Certificate of Education (PGCE), Teach First, School Direct ITT and School Centered ITT (SCITT)."
           undergraduate_itt: "Bachelor of Arts (BA) or Bachelor of Science (BSc) degrees."
-      eligible_itt_subject: "Which subject did you do your %{qualification} in?"
+      eligible_itt_subject: "Which subject did you do your %{qualification} (ITT) in?"
       eligible_itt_subject_assessment_only: "Which subject did you do your assessment in?"
       eligible_itt_subject_overseas_recognition: "Which subject did you do your teaching qualification in?"
       eligible_itt_subject_trainee_teacher: "Which subject are you currently doing your Initial Teacher Training (ITT) in?"
