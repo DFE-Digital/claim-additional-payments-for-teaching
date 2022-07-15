@@ -316,11 +316,7 @@ en:
       eligible_itt_subject_assessment_only: "Which subject did you do your assessment in?"
       eligible_itt_subject_overseas_recognition: "Which subject did you do your teaching qualification in?"
       eligible_itt_subject_trainee_teacher: "Which subject are you currently doing your Initial Teacher Training (ITT) in?"
-      eligible_itt_subject_hint:
-        postgraduate_itt: "Postgraduate ITT includes: university-led and school-led courses like the Postgraduate Certificate of Education (PGCE), Teach First, School Direct ITT and School Centred ITT (SCITT)."
-        undergraduate_itt: "Undergraduate ITT includes: Bachelor of Arts (BA) or Bachelor of Science (BSc) degrees."
-        assessment_only: "This is the subject you qualified with."
-        overseas_recognition: "This is the subject you trained in overseas."
+      eligible_itt_subject_hint: "The subjects listed are eligible for additional payment based on the school you teach in and the year you studied."
       teaching_subject_now: "Do you spend at least half of your contracted hours teaching eligible subjects?"
       itt_academic_year:
         qualification:
