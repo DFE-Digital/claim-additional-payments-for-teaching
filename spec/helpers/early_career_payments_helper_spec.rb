@@ -75,7 +75,7 @@ describe EarlyCareerPaymentsHelper do
       let(:eligibility) { build(:early_career_payments_eligibility, :eligible) }
 
       it "generates the correct heading" do
-        expect(helper.eligible_itt_subject_translation(claim)).to eq("Which subject did you do your postgraduate initial teaching training in?")
+        expect(helper.eligible_itt_subject_translation(claim)).to eq("Which subject did you do your postgraduate initial teaching training (ITT) in?")
       end
     end
   end
