@@ -39,8 +39,10 @@ class Claim
     private
 
     def claims_to_compare
+      policies = PolicyConfiguration.for(@source_claim.policy).policies
+
       Claim.submitted
-        .by_policy(@source_claim.policy)
+        .by_policies(policies)
         .by_academic_year(@source_claim.academic_year)
         .where.not(id: @source_claim.id)
     end

@@ -1,6 +1,52 @@
 require "rails_helper"
 
 RSpec.describe Claim::MatchingAttributeFinder do
+  describe "#matching_claims for ECP/LUP claims" do
+    let!(:source_claim) {
+      create(:claim,
+        teacher_reference_number: "0902344",
+        national_insurance_number: "QQ891011C",
+        email_address: "genghis.khan@mongol-empire.com",
+        bank_account_number: "34682151",
+        bank_sort_code: "972654",
+        academic_year: AcademicYear.new("2019"),
+        building_society_roll_number: "123456789/ABCD",
+        policy: EarlyCareerPayments)
+    }
+
+    let!(:student_loans_claim) {
+      create(:claim,
+        :submitted,
+        teacher_reference_number: "0902344",
+        national_insurance_number: "QQ891011C",
+        email_address: "genghis.khan@mongol-empire.com",
+        bank_account_number: "34682151",
+        bank_sort_code: "972654",
+        academic_year: AcademicYear.new("2019"),
+        building_society_roll_number: "123456789/ABCD",
+        policy: StudentLoans)
+    }
+
+    let!(:lup_claim) {
+      create(:claim,
+        :submitted,
+        teacher_reference_number: "0902344",
+        national_insurance_number: "QQ891011C",
+        email_address: "genghis.khan@mongol-empire.com",
+        bank_account_number: "34682151",
+        bank_sort_code: "972654",
+        academic_year: AcademicYear.new("2019"),
+        building_society_roll_number: "123456789/ABCD",
+        policy: LevellingUpPremiumPayments)
+    }
+
+    subject(:matching_claims) { Claim::MatchingAttributeFinder.new(source_claim).matching_claims }
+
+    it "includes only claims for ECP or LUP claims" do
+      expect(matching_claims).to eq([lup_claim])
+    end
+  end
+
   describe "#matching_claims" do
     let(:source_claim) {
       create(:claim,
