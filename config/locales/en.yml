@@ -332,7 +332,7 @@ en:
           postgraduate_itt: started
     admin:
       employed_as_supply_teacher: "Employed as a supply teacher?"
-      nqt_in_academic_year_after_itt: "NQT the academic year after ITT"
+      nqt_in_academic_year_after_itt: "Teaching as a qualified teacher?"
       task_questions:
         employment:
           title: "Does the claimant’s current school match the above information from their claim?"
