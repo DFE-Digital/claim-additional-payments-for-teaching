@@ -2,6 +2,11 @@ parameters:
   ServiceConnection:
 
 steps:
+    - task: charleszipp.azure-pipelines-tasks-terraform.azure-pipelines-tasks-terraform-installer.TerraformInstaller@0
+      displayName: Pin terraform version
+      inputs:
+        terraformVersion: 1.2.4
+
     - task: charleszipp.azure-pipelines-tasks-terraform.azure-pipelines-tasks-terraform-cli.TerraformCLI@0
       displayName: Terraform Init
       inputs:
@@ -13,7 +18,6 @@ steps:
         backendAzureRmStorageAccountName: $(backendAzureRmStorageAccountName)
         backendAzureRmContainerName: $(backendAzureRmContainerName)
         backendAzureRmKey: $(backendAzureRmKey)
-        terraformVersion: 1.2.4
 
     - task: AzurePowerShell@5
       displayName: Disable KV network firewall rule
@@ -52,7 +56,7 @@ steps:
          command: plan
          workingDirectory: $(Agent.BuildDirectory)/s/azure/terraform
          environmentServiceName: ${{ parameters.ServiceConnection }}
-         commandOptions: '-var="input_region=westeurope" -var="input_environment=$(env)" -var="input_container_version=$(Build.BuildNumber)"'
+         commandOptions: '-var="input_region=westeurope" -var="input_container_version=$(Build.BuildNumber)" -var-file workspace_variables/$(env).tfvars.json $(ExtraTerraformVariables)'
 
     - task: charleszipp.azure-pipelines-tasks-terraform.azure-pipelines-tasks-terraform-cli.TerraformCLI@0
       displayName: Terraform Apply
@@ -60,7 +64,7 @@ steps:
         command: apply
         workingDirectory: $(Agent.BuildDirectory)/s/azure/terraform
         environmentServiceName: ${{ parameters.ServiceConnection }}
-        commandOptions: '-var="input_region=westeurope" -var="input_environment=$(env)" -var="input_container_version=$(Build.BuildNumber)"'
+        commandOptions: '-var="input_region=westeurope" -var="input_container_version=$(Build.BuildNumber)" -var-file workspace_variables/$(env).tfvars.json $(ExtraTerraformVariables)'
 
     - task: AzurePowerShell@5
       displayName: Enable KV network firewall rule
@@ -76,7 +80,7 @@ steps:
         preferredAzurePowerShellVersion: 3.1.0
 
     - task: AzureAppServiceManage@0
-      displayName: Swap Slots s118d01-app-as
+      displayName: Swap Slots $(WebAppName)
       inputs:
         azureSubscription: ${{ parameters.ServiceConnection }}
         WebAppName: $(WebAppName)
