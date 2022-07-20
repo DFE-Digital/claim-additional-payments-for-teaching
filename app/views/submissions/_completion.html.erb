@@ -1,17 +1,10 @@
 <%= render 'confirmation' %>
 
 <% if current_claim.eligible_now_and_again_sometime? %>
-  <h2 class="govuk-heading-m">Set a reminder for when your next application window opens</h2>
+  <h3 class="govuk-heading-s">Set a reminder to apply next year</h3>
 
   <p class="govuk-body">
-    We will email you when your next application window opens, all you need to do is set a
-    reminder. We will send this email to your preferred email address.
-  </p>
-
-  <p class="govuk-inset-text">
-    It is your responsibility to apply for each payment you are eligible for. The Department for Education cannot
-    issue payments unless you apply for one nor can we issue payments for claims made after the
-    window has closed.
+    Receive a reminder email so you know when you can apply next year. We cannot issue payments unless you apply.
   </p>
 
   <%= link_to "Set reminder", new_reminder_path, class: "govuk-button", role: :button, data: { module: "govuk-button"} %>
