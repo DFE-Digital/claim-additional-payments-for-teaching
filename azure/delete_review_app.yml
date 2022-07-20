@@ -1,0 +1,87 @@
+trigger: none
+
+pr: none
+
+pool:
+  vmImage: ubuntu-latest
+
+variables:
+  - name: app_name
+    value: pr-$(pr_number)
+  - name: service_connection
+    value: azdo.pipelines.cip.S118D.armfe1ef140-8bef-4043-b5ee-c449e6f951ef
+  - name: backendAzureRmResourceGroupName
+    value: s118d02-review-tfbackend
+  - name: backendAzureRmStorageAccountName
+    value: s118d02reviewtfbackendsa
+  - name: backendAzureRmContainerName
+    value: s118d02conttfstate
+  - name: backendAzureRmKey
+    value: $(app_name).tfstate
+  - name: KeyVaultId
+    value: /subscriptions/8655985a-2f87-44d7-a541-0be9a8c2779d/resourceGroups/s118d02-secrets/providers/Microsoft.KeyVault/vaults/s118d02-secrets-kv
+
+steps:
+    - task: charleszipp.azure-pipelines-tasks-terraform.azure-pipelines-tasks-terraform-installer.TerraformInstaller@0
+      displayName: Pin terraform version
+      inputs:
+        terraformVersion: 1.2.4
+
+    - task: charleszipp.azure-pipelines-tasks-terraform.azure-pipelines-tasks-terraform-cli.TerraformCLI@0
+      displayName: Terraform Init
+      inputs:
+        command: init
+        workingDirectory: $(Agent.BuildDirectory)/s/azure/terraform
+        backendType: azurerm
+        backendServiceArm: $(service_connection)
+        backendAzureRmResourceGroupName: $(backendAzureRmResourceGroupName)
+        backendAzureRmStorageAccountName: $(backendAzureRmStorageAccountName)
+        backendAzureRmContainerName: $(backendAzureRmContainerName)
+        backendAzureRmKey: $(backendAzureRmKey)
+
+    - task: AzurePowerShell@5
+      displayName: Disable KV network firewall rule
+      inputs:
+        azureSubscription: $(service_connection)
+        ScriptType: InlineScript
+        Inline: |
+          ## Setting Variables
+          $KeyVault = Get-AzResource -ResourceId $(KeyVaultId) -ErrorAction SilentlyContinue
+          If ($null -eq $KeyVault) {
+             Write-Output "##vso[task.logissue type=warning;]The Key Vault with Id $KeyVaultId does not exist"
+             Exit 0
+          }
+          $KeyVault = Get-AzKeyVault -ResourceGroupName $KeyVault.ResourceGroupName -VaultName $KeyVault.Name
+          Write-Output 'Updating Key Vault rules...'
+          $KeyVault | Update-AzKeyVaultNetworkRuleSet -DefaultAction Allow
+          $LoopCount = 0
+          Write-Output "Waiting for Access..."
+          # This will check every 5 seconds, up to a maximum of 30 seconds
+          Do {
+             $AccessAllowed = $KeyVault | Get-AzKeyVaultSecret -ErrorAction SilentlyContinue
+             $LoopCount++
+             Start-Sleep -Seconds 5
+          }
+          While ($null -eq $AccessAllowed -and $LoopCount -lt 6)
+        preferredAzurePowerShellVersion: 3.1.0
+
+    - task: charleszipp.azure-pipelines-tasks-terraform.azure-pipelines-tasks-terraform-cli.TerraformCLI@0
+      displayName: Terraform destroy
+      inputs:
+        command: destroy
+        workingDirectory: $(Agent.BuildDirectory)/s/azure/terraform
+        environmentServiceName: azdo.pipelines.cip.S118D.armfe1ef140-8bef-4043-b5ee-c449e6f951ef
+        commandOptions: '-var="input_region=westeurope" -var="input_container_version=ignored" -var-file workspace_variables/review.tfvars.json -var="app_name=$(app_name)"'
+
+    - task: AzurePowerShell@5
+      displayName: Enable KV network firewall rule
+      inputs:
+        azureSubscription: $(service_connection)
+        ScriptType: InlineScript
+        Inline: |
+          # Setting Variables
+          $KeyVault = Get-AzResource -ResourceId $(KeyVaultId) -ErrorAction SilentlyContinue
+          $KeyVault = Get-AzKeyVault -ResourceGroupName $KeyVault.ResourceGroupName -VaultName $KeyVault.Name
+          Write-Output 'Updating Key Vault rules...'
+          $KeyVault | Update-AzKeyVaultNetworkRuleSet -DefaultAction Deny
+        preferredAzurePowerShellVersion: 3.1.0
