@@ -10,7 +10,7 @@
       </legend>
 
       <div id="payments-hint" class="govuk-hint govuk-!-padding-bottom-2">
-        You’ll need to select one option to continue your application.
+        You can only make one claim per academic year. Your choice does not impact your ability to apply in future years.
       </div>
 
       <%= errors_tag current_claim, :policy %>
@@ -29,38 +29,23 @@
     </fieldset>
   <% end %>
 
+  <details class="govuk-details" data-module="govuk-details">
+    <summary class="govuk-details__summary">
+      <span class="govuk-details__summary-text">
+        Help with choosing an additional payment
+      </span>
+    </summary>
+    <div class="govuk-details__text">
+      For the majority of teachers, the larger payment is the most beneficial option. In rare cases, some may prefer to choose the smaller option, such as if you are close to the threshold for the higher rate of tax.
+    </div>
+  </details>
+
   <%= form.submit "Apply now", class: "govuk-button", data: { module: "govuk-button" } %>
 <% end %>
 
-<h2 class="govuk-heading-m govuk-!-margin-top-6">Choosing your payment</h2>
-
 <p class="govuk-body">
-  For the majority of teachers, the larger payment is the most beneficial option. In rare cases, some may prefer to choose the smaller option, such as if you are close to the threshold for the <%= link_to "higher rate of tax (opens in new tab)", "https://www.gov.uk/income-tax-rates", class: "govuk-link govuk-link--no-visited-state", target: "_blank" %>.
-</p>
-
-<p class="govuk-body">
-  The payment you choose does not impact your ability to apply for additional payments in the future.
-</p>
-
-<p class="govuk-body">
-  So long as your circumstances stay the same, you may be able to claim for additional payments next year. This depends on the years you studied or when you began teaching.
-</p>
-
-<h2 class="govuk-heading-m govuk-!-margin-top-6">The different additional payment options</h2>
-
-<p class="govuk-body">
-  For more information about why you are eligible for different additional payments, read about:
-</p>
-
-<ul class='govuk-list govuk-list--bullet'>
-  <li>
-    <%= link_to "early-career payments (opens in new tab)", "https://www.gov.uk/guidance/early-career-payments-guidance-for-teachers-and-schools", class: "govuk-link govuk-link--no-visited-state", target: "_blank" %>
-  </li>
-  <li>
-    <%= link_to "levelling up premium payments (opens in new tab)", "https://www.gov.uk/guidance/levelling-up-premium-payments-for-teachers", class: "govuk-link govuk-link--no-visited-state", target: "_blank" %>
-  </li>
-</ul>
-
-<p class="govuk-body">
-  So long as your circumstances stay the same, you may be able to claim for additional payments next year. This may depend on the years you studied or when you began teaching.
+  For more information about why you are eligible for different additional payments, read about the
+  <%= link_to "early-career payments (opens in new tab)", "https://www.gov.uk/guidance/early-career-payments-guidance-for-teachers-and-schools", class: "govuk-link govuk-link--no-visited-state", target: "_blank" %>
+  and
+  <%= link_to "levelling up premium payments (opens in new tab)", "https://www.gov.uk/guidance/levelling-up-premium-payments-for-teachers", class: "govuk-link govuk-link--no-visited-state", target: "_blank" %>.
 </p>
