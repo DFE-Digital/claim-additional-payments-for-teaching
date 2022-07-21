@@ -203,10 +203,10 @@ RSpec.feature "Levelling up premium payments and early-career payments combined 
     click_on "Accept and send"
 
     # - Application complete
-    expect(page).to have_text("Application complete")
+    expect(page).to have_text("You applied for a levelling up premium payment")
     expect(page).to have_text("What happens next")
-    expect(page).to have_text("Set a reminder for when your next application window opens")
-    expect(page).to have_text("It can take up to 13 weeks to process your application")
+    expect(page).to have_text("Set a reminder to apply next year")
+    expect(page).to have_text("Apply for additional payment each academic year")
     expect(page).to have_text("What did you think of this service?")
     expect(page).to have_text(claim.reload.reference)
 

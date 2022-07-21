@@ -13,7 +13,7 @@ RSpec.feature "Eligible now can set a reminder for next year." do
     visit claim_path(claim.policy.routing_name, "check-your-answers")
     expect(page).to have_text(claim.first_name)
     click_on "Accept and send"
-    expect(page).to have_text("Set a reminder for when your next application window opens")
+    expect(page).to have_text("Set a reminder to apply next year")
     click_on "Set reminder"
     expect(page).to have_field("reminder_email_address", with: claim.email_address)
     expect(page).to have_field("reminder_full_name", with: claim.full_name)
@@ -87,12 +87,12 @@ RSpec.feature "Completed Applications - Reminders" do
 
           click_on "Accept and send"
 
-          expect(page).to have_text("Application complete")
+          expect(page).to have_text("You applied for an early-career payment")
           expect(page).to have_text("Your reference number")
           expect(page).to have_text(claim.reload.reference.to_s)
 
           if scenario[:invited_to_set_reminder] == true
-            expect(page).to have_text("Set a reminder for when your next application window opens")
+            expect(page).to have_text("Set a reminder to apply next year")
             click_on "Set reminder"
             expect(page).to have_field("reminder_email_address", with: claim.email_address)
             expect(page).to have_field("reminder_full_name", with: claim.full_name)
@@ -101,7 +101,7 @@ RSpec.feature "Completed Applications - Reminders" do
             click_on "Confirm"
             expect(page).to have_text("We will send you a reminder in September #{claim.eligibility.eligible_later_year.start_year}")
           elsif scenario[:invited_to_set_reminder] == false
-            expect(page).not_to have_text("Set a reminder for when your next application window opens")
+            expect(page).not_to have_text("Set a reminder to apply next year")
             expect(page).not_to have_link("Set reminder")
           end
           expect(page).to have_text("What did you think of this service?")

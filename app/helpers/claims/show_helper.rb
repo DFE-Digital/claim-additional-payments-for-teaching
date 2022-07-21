@@ -2,7 +2,11 @@ module Claims
   module ShowHelper
     def claim_submitted_title(claim)
       if claim.has_ecp_or_lupp_policy?
-        content_tag(:h1, "Application complete", class: "govuk-panel__title", id: "submitted-title")
+        text = "You applied for "
+        text << "an early-career payment" if claim.has_ecp_policy?
+        text << "a levelling up premium payment" if claim.has_lupp_policy?
+
+        content_tag(:h1, text, class: "govuk-panel__title", id: "submitted-title")
       else
         content_tag(:h1, "Claim submitted", class: "govuk-panel__title", id: "submitted-title")
       end

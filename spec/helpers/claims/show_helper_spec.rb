@@ -16,7 +16,15 @@ RSpec.describe Claims::ShowHelper do
       let(:policy) { EarlyCareerPayments }
 
       it "returns the correct content block" do
-        expect(helper.claim_submitted_title(claim)).to include("Application complete")
+        expect(helper.claim_submitted_title(claim)).to include("You applied for an early-career payment")
+      end
+    end
+
+    context "with a LevellingUpPremiumPayments policy" do
+      let(:policy) { LevellingUpPremiumPayments }
+
+      it "returns the correct content block" do
+        expect(helper.claim_submitted_title(claim)).to include("You applied for a levelling up premium payment")
       end
     end
   end
