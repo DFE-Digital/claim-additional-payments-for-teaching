@@ -1,6 +1,8 @@
 <p class="govuk-body">
-  It is for early-career teachers who teach certain subjects to encourage them to stay in the profession.
+  It is for early career teachers who teach certain subjects to encourage them to stay in the profession.
 </p>
+
+<%= button_to "Apply now", claim_path(current_policy_routing_name), method: :patch, class: "govuk-button", role: :button, data: { module: "govuk-button"}, params: { claim: { policy: claim.policy } } %>
 
 <p class="govuk-body">
   For more information about why you are eligible, read about the <%= link_to "early-career payment (opens in new tab)", "https://www.gov.uk/guidance/early-career-payments-guidance-for-teachers-and-schools", class: "govuk-link govuk-link--no-visited-state", target: "_blank" %>.

@@ -78,6 +78,12 @@ RSpec.describe LevellingUpPremiumPayments::Eligibility, type: :model do
   context "LUP-specific eligibility" do
     subject { eligibility.status }
 
+    context "ECP-only ITT subject" do
+      let(:eligibility) { build(:levelling_up_premium_payments_eligibility, :eligible_now, :ineligible_itt_subject) }
+
+      it { is_expected.to eq(:ineligible) }
+    end
+
     context "ITT subject or degree subject" do
       context "good ITT subject and no degree" do
         let(:eligibility) { build(:levelling_up_premium_payments_eligibility, :eligible_now, :lup_itt_subject, :no_relevant_degree) }

@@ -115,6 +115,10 @@ module LevellingUpPremiumPayments
 
     private
 
+    def indicated_ecp_only_itt_subject?
+      eligible_itt_subject.present? && (eligible_itt_subject.to_sym == :foreign_languages)
+    end
+
     def specific_eligible_now_attributes?
       eligible_itt_subject_or_relevant_degree?
     end
@@ -142,7 +146,7 @@ module LevellingUpPremiumPayments
     end
 
     def specific_ineligible_attributes?
-      trainee_teacher_with_ineligible_itt_subject? || ineligible_itt_subject_and_no_relevant_degree?
+      indicated_ecp_only_itt_subject? || trainee_teacher_with_ineligible_itt_subject? || ineligible_itt_subject_and_no_relevant_degree?
     end
 
     def trainee_teacher_with_ineligible_itt_subject?

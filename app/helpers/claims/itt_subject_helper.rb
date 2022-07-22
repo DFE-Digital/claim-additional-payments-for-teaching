@@ -22,7 +22,26 @@ module Claims
     end
 
     def subjects_to_sentence(current_claim)
-      subject_symbols(current_claim).map { |sub| t("early_career_payments.answers.eligible_itt_subject.#{sub}") }
+      ecp_only_subjects = [:foreign_languages]
+      lup_only_subjects = [:computing]
+
+      subject_selection = current_claim.eligibility.eligible_itt_subject
+      hint_subject_symbols = subject_symbols(current_claim)
+
+      if subject_selection.present?
+        subject_selection_symbol = subject_selection.to_sym
+
+        lup_claim_eligibility = current_claim.for_policy(LevellingUpPremiumPayments).eligibility
+        ecp_claim_eligibility = current_claim.for_policy(EarlyCareerPayments).eligibility
+
+        if subject_selection_symbol.in?(ecp_only_subjects) && lup_claim_eligibility.status == :ineligible
+          hint_subject_symbols -= lup_only_subjects
+        elsif subject_selection_symbol.in?(lup_only_subjects) && ecp_claim_eligibility.status == :ineligible
+          hint_subject_symbols -= ecp_only_subjects
+        end
+      end
+
+      hint_subject_symbols.map { |sub| t("early_career_payments.answers.eligible_itt_subject.#{sub}") }
         .sort
         .to_sentence(last_word_connector: " or ")
         .downcase
