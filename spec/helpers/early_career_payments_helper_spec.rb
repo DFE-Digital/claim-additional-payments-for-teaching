@@ -67,7 +67,7 @@ describe EarlyCareerPaymentsHelper do
       end
 
       it "generates the correct heading based on being a trainee teacher in 2021" do
-        expect(helper.eligible_itt_subject_translation(claim)).to eq("Which subject are you currently doing your Initial Teacher Training (ITT) in?")
+        expect(helper.eligible_itt_subject_translation(claim)).to eq("Which subject are you currently doing your initial teacher training (ITT) in?")
       end
     end
 
