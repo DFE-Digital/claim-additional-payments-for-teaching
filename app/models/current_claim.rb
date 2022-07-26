@@ -111,6 +111,7 @@ class CurrentClaim
 
   # Use this when a teacher is eligible now and wants a reminder to
   # claim *again* in a future year.
+  # TODO: Not used any more
   def eligible_now_and_again_sometime?
     claims.any? { |c| c.eligibility.eligible_now_and_again_sometime? }
   end
@@ -126,6 +127,12 @@ class CurrentClaim
   # award_amount highest first, policy name alphabetically if the amount is the same
   def eligible_now_and_sorted
     eligible_now.sort_by { |c| [-c.award_amount.to_i, c.policy.short_name] }
+  end
+
+  def set_a_reminder?
+    return false unless main_claim
+
+    Reminder.set_a_reminder?(policy_year: policy_year, itt_academic_year: main_claim.eligibility.itt_academic_year)
   end
 
   # No specific spec for this, but if this is wrong the other specs will show it up

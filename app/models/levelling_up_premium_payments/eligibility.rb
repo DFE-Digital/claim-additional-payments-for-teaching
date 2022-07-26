@@ -95,6 +95,7 @@ module LevellingUpPremiumPayments
       save!
     end
 
+    # TODO: Not used any more
     def eligible_now_and_again_sometime?
       eligible_now? && any_future_policy_years?
     end

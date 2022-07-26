@@ -30,10 +30,10 @@ module PartOfClaimJourney
   end
 
   def claim_from_session
-    if session.key?(:claim_id)
-      claims = Claim.where(id: session[:claim_id])
-      CurrentClaim.new(claims: claims)
-    end
+    return unless session.key?(:claim_id)
+
+    claims = Claim.where(id: session[:claim_id])
+    claims.present? ? CurrentClaim.new(claims: claims) : nil
   end
 
   def build_new_claim

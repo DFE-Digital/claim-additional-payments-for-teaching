@@ -61,6 +61,10 @@ class RemindersController < BasePublicController
     "additional-payments"
   end
 
+  def policy_configuration
+    @policy_configuration ||= PolicyConfiguration.for_routing_name(current_policy_routing_name)
+  end
+
   def current_reminder
     @current_reminder ||=
       reminder_from_session ||
@@ -77,34 +81,30 @@ class RemindersController < BasePublicController
   def build_reminder_from_claim
     return unless current_claim
 
-    # TODO: Commenting out for now until we handle the reminders service
-    # as trainee_teacher_in_2021 is no longer a thing...
-    # if !current_claim.eligibility.trainee_teacher_in_2021? &&
-    #     current_claim.eligibility.nqt_in_academic_year_after_itt == false &&
-    #     current_claim.has_ecp_or_lupp_policy?
-    #   return
-    # end
     Reminder.new(
       full_name: current_claim.full_name,
       email_address: current_claim.email_address,
-      itt_academic_year: current_claim.eligibility.eligible_later_year,
+      itt_academic_year: next_academic_year,
       itt_subject: current_claim.eligibility.eligible_itt_subject
     )
   end
 
+  # TODO: Not sure if this is ever used?
   # fallback reminder will set reminder date to the next academic year
   def default_reminder
-    Reminder.new(itt_academic_year: AcademicYear.next)
+    Reminder.new(itt_academic_year: next_academic_year)
+  end
+
+  def next_academic_year
+    policy_configuration.current_academic_year + 1
   end
 
   def current_claim
-    return @current_claim if defined?(@current_claim)
+    return @current_claim if @current_claim
+    return unless session.key?(:claim_id)
 
     claims = Claim.where(id: session[:claim_id])
-    cc = CurrentClaim.new(claims: claims)
-
-    # TODO - PLACEHOLDER until reminders are setup for the combined journey
-    @current_claim = cc.main_claim
+    @current_claim = claims.present? ? CurrentClaim.new(claims: claims) : nil
   end
 
   def reminder_params
