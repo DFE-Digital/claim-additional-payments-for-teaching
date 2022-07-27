@@ -18,12 +18,17 @@ variables:
 
 stages:
 
-- stage: Build
-  jobs:
-  - job: Build
-    steps:
-    # echo skipping build
-    #- template: templates/build.yml
+- stage: Variables Check
+  jobs: Check Vars
+  steps:
+    # check vars
+    - script: echo $(Agent.BuildDirectory),$(System.PullRequest.PullRequestNumber)
+
+# - stage: Build
+#   jobs:
+#   - job: Build
+#     steps:
+#     - template: templates/build.yml
 
 - stage: Release
   condition: and(succeeded('Build'), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
@@ -58,8 +63,6 @@ stages:
       value: s118d01-app-as
 
     steps:
-    script : echo $(System.PullRequest.PullRequestNumber)
-    script : echo $($(Agent.BuildDirectory)
     - template: templates/release.yml #Run Release Template
       parameters :
         ServiceConnection : azdo.pipelines.cip.S118D.armfe1ef140-8bef-4043-b5ee-c449e6f951ef
