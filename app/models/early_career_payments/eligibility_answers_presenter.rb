@@ -30,6 +30,7 @@ module EarlyCareerPayments
         a << qualification
         a << itt_academic_year
         a << eligible_itt_subject
+        a << eligible_degree_subject if eligibility.respond_to? :eligible_degree_subject
         a << teaching_subject_now
       end
     end
@@ -105,6 +106,14 @@ module EarlyCareerPayments
         eligible_itt_subject_translation(eligibility.claim),
         translate("early_career_payments.answers.eligible_itt_subject.#{eligibility.eligible_itt_subject}"),
         "eligible-itt-subject"
+      ]
+    end
+
+    def eligible_degree_subject
+      [
+        translate("early_career_payments.questions.eligible_degree_subject"),
+        (eligibility.eligible_degree_subject? ? "Yes" : "No"),
+        "eligible-degree-subject"
       ]
     end
 
