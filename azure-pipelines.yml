@@ -18,11 +18,11 @@ variables:
 
 stages:
 
-- stage: Variables Check
-  jobs: CheckVars
-  - job : CheckVars
+- stage: Checkvariables
+  jobs:
+  - job: Variables
     steps:
-    # check vars
+    #- template: templates/build.yml
     - script: echo $(Agent.BuildDirectory),$(System.PullRequest.PullRequestNumber)
 
 # - stage: Build
