@@ -27,9 +27,7 @@ stages:
 - stage: Release
   condition: and(succeeded('Build'), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
   jobs:
-  - deployment: Deploy App
-    environment: s118-teacherpaymentsservice-development
-  #- job: DeployDev
+  - job: DeployDev
     variables:
     - name: backendAzureRmContainerName
       value: s118d01conttfstate
@@ -59,6 +57,8 @@ stages:
       value: s118d01-app-as
 
     steps:
+    script : echo $(System.PullRequest.PullRequestNumber)
+    script : echo $($(Agent.BuildDirectory)
     - template: templates/release.yml #Run Release Template
       parameters :
         ServiceConnection : azdo.pipelines.cip.S118D.armfe1ef140-8bef-4043-b5ee-c449e6f951ef
