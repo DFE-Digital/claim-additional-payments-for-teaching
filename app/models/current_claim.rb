@@ -152,7 +152,9 @@ class CurrentClaim
   end
 
   def eligible_eligibility
-    return for_policy(LevellingUpPremiumPayments).eligibility if only_lup_eligible?
+    claims.each do |claim|
+      return claim.eligibility unless claim.eligibility.ineligible?
+    end
 
     main_claim.eligibility
   end
@@ -185,9 +187,5 @@ class CurrentClaim
         "award_amount" => BigDecimal(c.award_amount)
       }
     end
-  end
-
-  def only_lup_eligible?
-    main_claim.eligibility.ineligible? && !for_policy(LevellingUpPremiumPayments).eligibility.ineligible?
   end
 end
