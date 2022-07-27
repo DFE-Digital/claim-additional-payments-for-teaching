@@ -27,11 +27,11 @@ stages:
     - powershell: Get-ChildItem -Path $(Agent.BuildDirectory) -recurse
 
 
-# - stage: Build
-#   jobs:
-#   - job: Build
-#     steps:
-#     - template: templates/build.yml
+- stage: Build
+  jobs:
+  - job: Build
+    steps:
+    - template: templates/build.yml
 
 - stage: Release
   condition: and(succeeded('Build'), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
