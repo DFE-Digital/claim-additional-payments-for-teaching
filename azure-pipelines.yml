@@ -27,7 +27,9 @@ stages:
 - stage: Release
   condition: and(succeeded('Build'), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
   jobs:
-  - job: DeployDev
+  - deployment: Deploy App
+    environment: s118-teacherpaymentsservice-development
+  #- job: DeployDev
     variables:
     - name: backendAzureRmContainerName
       value: s118d01conttfstate
