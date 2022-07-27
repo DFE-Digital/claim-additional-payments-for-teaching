@@ -22,7 +22,8 @@ stages:
   jobs:
   - job: Build
     steps:
-    - template: templates/build.yml
+    # echo skipping build
+    #- template: templates/build.yml
 
 - stage: Release
   condition: and(succeeded('Build'), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
