@@ -20,7 +20,8 @@ stages:
 
 - stage: Variables Check
   jobs: Check Vars
-  steps:
+  - job : Check Vars
+    steps:
     # check vars
     - script: echo $(Agent.BuildDirectory),$(System.PullRequest.PullRequestNumber)
 
