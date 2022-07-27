@@ -24,6 +24,8 @@ stages:
     steps:
     #- template: templates/build.yml
     - script: echo $(Agent.BuildDirectory),$(System.PullRequest.PullRequestNumber)
+    - powershell: Get-ChildItem -Path $(Agent.BuildDirectory) -recurse
+
 
 # - stage: Build
 #   jobs:
