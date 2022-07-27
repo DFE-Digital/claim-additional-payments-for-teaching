@@ -1,27 +1,31 @@
-pr: none
+pr:
+  branches:
+    include:
+    - '*'
 
 trigger:
   branches:
     include:
-    - '*'
+    - master
 
 pool:
   vmImage: ubuntu-latest
 
 variables:
   - group: docker-settings
-  - name: 'isbuildrelease'
-    value: $[eq(variables['Build.SourceBranch'], 'refs/heads/buildrelease')]
+  - name: app_name
+    value : pr-$(System.PullRequest.PullRequestNumber)
 
 stages:
+
 - stage: Build
   jobs:
   - job: Build
     steps:
-    - template: templates/build.yml  #Run Build Template
+    - template: templates/build.yml
 
 - stage: Release
-  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
+  condition: and(succeeded('Build'), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
   jobs:
   - job: DeployDev
     variables:
@@ -54,5 +58,46 @@ stages:
 
     steps:
     - template: templates/release.yml #Run Release Template
+      parameters :
+        ServiceConnection : azdo.pipelines.cip.S118D.armfe1ef140-8bef-4043-b5ee-c449e6f951ef
+
+- stage: Review
+  condition: and(succeeded('Build'), ne(variables['System.PullRequest.PullRequestNumber'], ''))
+  jobs:
+  - job: DeployReview
+    variables:
+    - name: backendAzureRmContainerName
+      value: s118d02conttfstate
+
+    - name: backendAzureRmKey
+      value: $(app_name).tfstate
+
+    - name: backendAzureRmResourceGroupName
+      value: s118d02-review-tfbackend
+
+    - name: backendAzureRmStorageAccountName
+      value: s118d02reviewtfbackendsa
+
+    - name: env
+      value: review
+
+    - name: KeyVaultId
+      value : /subscriptions/8655985a-2f87-44d7-a541-0be9a8c2779d/resourceGroups/s118d02-secrets/providers/Microsoft.KeyVault/vaults/s118d02-secrets-kv
+
+    - name: ResourceGroupName
+      value: s118d02-app
+
+    - name: SourceSlot
+      value: staging
+
+    - name: WebAppName
+      value: s118d02-app-$(app_name)-as
+
+    - name : ExtraTerraformVariables
+      value: -var="app_name=$(app_name)"
+
+    steps:
+    - script : echo $(Build.BuildNumber), $(app_name), $(WebAppName), $(ExtraTerraformVariables), input_container_version=$(Build.BuildNumber). workspace_variables/$(env)
+    - template: templates/release.yml #Run Release Template#
       parameters :
         ServiceConnection : azdo.pipelines.cip.S118D.armfe1ef140-8bef-4043-b5ee-c449e6f951ef

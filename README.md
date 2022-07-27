@@ -240,6 +240,14 @@ report click on the generated link
 
 ## Deployment
 
+### Infrastrucure
+
+The base Azure infrastructure supporting the application is created from the
+[qts-api repository](https://github.com/DFE-Digital/claim-additional-payments-for-teaching-qts-api)
+via terraform.
+
+It creates resource groups, database server, app service plan, etc.
+
 ### Development
 
 Development is automatically built and deployed when commits are pushed to
@@ -265,6 +273,14 @@ will automatically have a
 created in Heroku once CI has passed.
 
 For more information, see the [app's Heroku docs](docs/heroku.md)
+
+### Azure review apps
+
+Pull requests automatically build a review app in Azure using the same
+technologies as the production environment. Each one can be accessed via this
+URL: `https://s118d02-app-pr-<PR NUMBER>-as.azurewebsites.net`
+
+The review app is then destroyed when the PR is closed or merged.
 
 ## Accessing production data with a live Rails console
 

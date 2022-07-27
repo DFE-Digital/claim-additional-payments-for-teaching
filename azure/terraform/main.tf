@@ -1,27 +1,29 @@
-#set common tags
-module "env_vars" {
-  source            = "./modules/env_vars"
-  input_environment = var.input_environment
-}
-
-#container
 module "container" {
   source                = "./modules/container"
-  app_rg_name           = format("%s-%s", module.env_vars.rg_prefix, "app")
-  projcore_network_prof = data.terraform_remote_state.infra.outputs.projcore_network_prof
+  app_rg_name           = format("%s-%s", var.rg_prefix, "app")
   container_version     = var.input_container_version
-  rg_prefix             = module.env_vars.rg_prefix
+  rg_prefix             = var.rg_prefix
   rg_location           = var.input_region
-  common_tags           = module.env_vars.common_tags
+  common_tags           = local.tags
+  app_name              = var.app_name
+  db_host                 = data.azurerm_postgresql_server.app.fqdn
+  db_admin_username       = data.azurerm_postgresql_server.app.administrator_login
+  db_name                 = local.db_name
+  environment             = var.environment
+  canonical_hostname      = var.canonical_hostname
 }
 
 module "app_service" {
   source                  = "./modules/app_service"
-  app_rg_name             = format("%s-%s", module.env_vars.rg_prefix, "app")
-  app_asp_id              = data.terraform_remote_state.infra.outputs.app_asp_id
+  app_rg_name             = local.app_rg_name
   input_container_version = var.input_container_version
-  rg_prefix               = module.env_vars.rg_prefix
+  rg_prefix               = var.rg_prefix
   rg_location             = var.input_region
-  common_tags             = module.env_vars.common_tags
-
+  common_tags             = local.tags
+  app_name                = var.app_name
+  db_host                 = data.azurerm_postgresql_server.app.fqdn
+  db_admin_username       = data.azurerm_postgresql_server.app.administrator_login
+  db_name                 = local.db_name
+  environment             = var.environment
+  canonical_hostname      = var.canonical_hostname
 }

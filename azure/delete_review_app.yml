@@ -1,5 +1,25 @@
-parameters:
-  ServiceConnection:
+trigger: none
+
+pr: none
+
+pool:
+  vmImage: ubuntu-latest
+
+variables:
+  - name: app_name
+    value: pr-$(pr_number)
+  - name: service_connection
+    value: azdo.pipelines.cip.S118D.armfe1ef140-8bef-4043-b5ee-c449e6f951ef
+  - name: backendAzureRmResourceGroupName
+    value: s118d02-review-tfbackend
+  - name: backendAzureRmStorageAccountName
+    value: s118d02reviewtfbackendsa
+  - name: backendAzureRmContainerName
+    value: s118d02conttfstate
+  - name: backendAzureRmKey
+    value: $(app_name).tfstate
+  - name: KeyVaultId
+    value: /subscriptions/8655985a-2f87-44d7-a541-0be9a8c2779d/resourceGroups/s118d02-secrets/providers/Microsoft.KeyVault/vaults/s118d02-secrets-kv
 
 steps:
     - task: charleszipp.azure-pipelines-tasks-terraform.azure-pipelines-tasks-terraform-installer.TerraformInstaller@0
@@ -13,7 +33,7 @@ steps:
         command: init
         workingDirectory: $(Agent.BuildDirectory)/s/azure/terraform
         backendType: azurerm
-        backendServiceArm: ${{ parameters.ServiceConnection }}
+        backendServiceArm: $(service_connection)
         backendAzureRmResourceGroupName: $(backendAzureRmResourceGroupName)
         backendAzureRmStorageAccountName: $(backendAzureRmStorageAccountName)
         backendAzureRmContainerName: $(backendAzureRmContainerName)
@@ -22,10 +42,10 @@ steps:
     - task: AzurePowerShell@5
       displayName: Disable KV network firewall rule
       inputs:
-        azureSubscription: ${{ parameters.ServiceConnection }}
+        azureSubscription: $(service_connection)
         ScriptType: InlineScript
         Inline: |
-          # Setting Variables
+          ## Setting Variables
           $KeyVault = Get-AzResource -ResourceId $(KeyVaultId) -ErrorAction SilentlyContinue
           If ($null -eq $KeyVault) {
              Write-Output "##vso[task.logissue type=warning;]The Key Vault with Id $KeyVaultId does not exist"
@@ -45,31 +65,18 @@ steps:
           While ($null -eq $AccessAllowed -and $LoopCount -lt 6)
         preferredAzurePowerShellVersion: 3.1.0
 
-    - script: docker login -u $(dockerId) -p $pass
-      env:
-        pass: $(dockerPassword)
-      displayName: Login to DockerHub
-
     - task: charleszipp.azure-pipelines-tasks-terraform.azure-pipelines-tasks-terraform-cli.TerraformCLI@0
-      displayName: Terraform Plan
+      displayName: Terraform destroy
       inputs:
-         command: plan
-         workingDirectory: $(Agent.BuildDirectory)/s/azure/terraform
-         environmentServiceName: ${{ parameters.ServiceConnection }}
-         commandOptions: '-var="input_region=westeurope" -var="input_container_version=$(Build.BuildNumber)" -var-file workspace_variables/$(env).tfvars.json $(ExtraTerraformVariables)'
-
-    - task: charleszipp.azure-pipelines-tasks-terraform.azure-pipelines-tasks-terraform-cli.TerraformCLI@0
-      displayName: Terraform Apply
-      inputs:
-        command: apply
+        command: destroy
         workingDirectory: $(Agent.BuildDirectory)/s/azure/terraform
-        environmentServiceName: ${{ parameters.ServiceConnection }}
-        commandOptions: '-var="input_region=westeurope" -var="input_container_version=$(Build.BuildNumber)" -var-file workspace_variables/$(env).tfvars.json $(ExtraTerraformVariables)'
+        environmentServiceName: azdo.pipelines.cip.S118D.armfe1ef140-8bef-4043-b5ee-c449e6f951ef
+        commandOptions: '-var="input_region=westeurope" -var="input_container_version=ignored" -var-file workspace_variables/review.tfvars.json -var="app_name=$(app_name)"'
 
     - task: AzurePowerShell@5
       displayName: Enable KV network firewall rule
       inputs:
-        azureSubscription: ${{ parameters.ServiceConnection }}
+        azureSubscription: $(service_connection)
         ScriptType: InlineScript
         Inline: |
           # Setting Variables
@@ -78,12 +85,3 @@ steps:
           Write-Output 'Updating Key Vault rules...'
           $KeyVault | Update-AzKeyVaultNetworkRuleSet -DefaultAction Deny
         preferredAzurePowerShellVersion: 3.1.0
-
-    - task: AzureAppServiceManage@0
-      displayName: Swap Slots $(WebAppName)
-      inputs:
-        azureSubscription: ${{ parameters.ServiceConnection }}
-        WebAppName: $(WebAppName)
-        ResourceGroupName: $(ResourceGroupName)
-        SourceSlot: $(SourceSlot)
-        timeoutInMinutes: 20
