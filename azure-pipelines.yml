@@ -28,11 +28,28 @@ stages:
 
 
 - stage: Build
+  displayName: 'BuildStage'
   jobs:
-  - deployment: DeployDev
-    environment: s118-teacherpaymentsservice-development
-    steps:
-    - template: templates/build.yml
+    - deployment: 'BuildDocker'
+      displayName: 'BuildDockerImages'
+      environment: s118-teacherpaymentsservice-development
+      pool:
+        vmImage: ubuntu-latest
+
+      strategy:
+        runOnce:
+          deploy:
+            steps:
+            - template: templates/build.yml
+
+
+
+# - stage: Build
+#   jobs:
+#   - deployment: DeployDev
+#     environment: s118-teacherpaymentsservice-development
+#     steps:
+#     - template: templates/build.yml
 
 - stage: Release
   condition: and(succeeded('Build'), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
