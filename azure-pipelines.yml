@@ -57,9 +57,10 @@ stages:
       value: s118d01-app-as
 
     steps:
-    - template: templates/release.yml #Run Release Template
-      parameters :
-        ServiceConnection : azdo.pipelines.cip.S118D.armfe1ef140-8bef-4043-b5ee-c449e6f951ef
+    - script : this is for development
+    #- template: templates/release.yml #Run Release Template
+    #  parameters :
+    #    ServiceConnection : azdo.pipelines.cip.S118D.armfe1ef140-8bef-4043-b5ee-c449e6f951ef
 
 - stage: TestRelease
   #condition: and(succeeded('Build'), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
