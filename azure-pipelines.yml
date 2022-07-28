@@ -35,7 +35,6 @@ stages:
       environment: s118-teacherpaymentsservice-development
       pool:
         vmImage: ubuntu-latest
-
       strategy:
         runOnce:
           deploy:
@@ -46,46 +45,18 @@ stages:
   displayName : 'BuildTheApp'
   condition: and(succeeded('Build'), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
   jobs:
-    - deployment: DeployDev
+    - deployment: 'DeployDev'
       displayname : 'DeploytoDevelopmentEnvironment'
       environment: s118-teacherpaymentsservice-development
       pool:
         vmImage: ununtu-latest
-
-      variables:
-      - name: backendAzureRmContainerName
-        value: s118d01conttfstate
-
-      - name: backendAzureRmKey
-        value: terraform.tfstate
-
-      - name: backendAzureRmResourceGroupName
-        value: s118d01-tfbackend
-
-      - name: backendAzureRmStorageAccountName
-        value: s118d01tfbackendsa
-
-      - name: env
-        value: Development
-
-      - name: KeyVaultId
-        value : /subscriptions/8655985a-2f87-44d7-a541-0be9a8c2779d/resourceGroups/s118d01-secrets/providers/Microsoft.KeyVault/vaults/s118d01-secrets-kv
-
-      - name: ResourceGroupName
-        value: s118d01-app
-
-      - name: SourceSlot
-        value: staging
-
-      - name: WebAppName
-        value: s118d01-app-as
       strategy:
           runOnce:
             deploy:
               steps:
               - template: templates/build.yml
-              parameters :
-                ServiceConnection : azdo.pipelines.cip.S118D.armfe1ef140-8bef-4043-b5ee-c449e6f951ef
+                parameters :
+                  ServiceConnection : azdo.pipelines.cip.S118D.armfe1ef140-8bef-4043-b5ee-c449e6f951ef
 
 
 
