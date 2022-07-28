@@ -61,6 +61,45 @@ stages:
       parameters :
         ServiceConnection : azdo.pipelines.cip.S118D.armfe1ef140-8bef-4043-b5ee-c449e6f951ef
 
+- stage: TestRelease
+  #condition: and(succeeded('Build'), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
+  condition: eq(variables['Build.Reason'], 'Manual')
+  jobs:
+  - job: DeployTest
+    variables:
+    - name: backendAzureRmContainerName
+      value: s118t01conttfstate
+
+    - name: backendAzureRmKey
+      value: terraform.tfstate
+
+    - name: backendAzureRmResourceGroupName
+      value: s118t01-tfbackend
+
+    - name: backendAzureRmStorageAccountName
+      value: s118t01tfbackendsa
+
+    - name: env
+      value: Development
+
+    - name: KeyVaultId
+      value : subscriptions/e9299169-9666-4f15-9da9-5332680145af/resourceGroups/s118t01-secrets/providers/Microsoft.KeyVault/vaults/s118t01-secrets-kv
+
+    - name: ResourceGroupName
+      value: s118t01-app
+
+    - name: SourceSlot
+      value: staging
+
+    - name: WebAppName
+      value: s118t01-app-as
+
+    steps:
+    #- template: templates/release.yml #Run Release Template
+    -script : this is for test
+      parameters :
+        ServiceConnection : azdo.pipelines.cip.S118T.arm03ce3ff5-9a61-4525-a063-6ecde34874cf
+
 - stage: Review
   condition: and(succeeded('Build'), ne(variables['System.PullRequest.PullRequestNumber'], ''))
   jobs:
