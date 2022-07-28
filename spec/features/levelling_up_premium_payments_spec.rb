@@ -61,7 +61,7 @@ RSpec.feature "Levelling up premium payments claims" do
     click_on "Continue"
 
     # - Do you spend at least half of your contracted hours teaching eligible subjects?
-    expect(page).to have_text(I18n.t("early_career_payments.questions.teaching_subject_now", eligible_itt_subject: "none of the above"))
+    expect(page).to have_text(I18n.t("early_career_payments.questions.teaching_subject_now"))
 
     choose "Yes"
     click_on "Continue"

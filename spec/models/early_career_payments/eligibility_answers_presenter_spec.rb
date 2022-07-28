@@ -56,7 +56,7 @@ RSpec.describe EarlyCareerPayments::EligibilityAnswersPresenter, type: :model do
         "eligible-itt-subject"
       ],
       [
-        I18n.t("early_career_payments.questions.teaching_subject_now", eligible_itt_subject: eligibility.eligible_itt_subject),
+        I18n.t("early_career_payments.questions.teaching_subject_now"),
         "Yes",
         "teaching-subject-now"
       ]
@@ -107,7 +107,7 @@ RSpec.describe EarlyCareerPayments::EligibilityAnswersPresenter, type: :model do
           "eligible-itt-subject"
         ],
         [
-          I18n.t("early_career_payments.questions.teaching_subject_now", eligible_itt_subject: eligibility.eligible_itt_subject),
+          I18n.t("early_career_payments.questions.teaching_subject_now"),
           "Yes",
           "teaching-subject-now"
         ]
@@ -149,7 +149,7 @@ RSpec.describe EarlyCareerPayments::EligibilityAnswersPresenter, type: :model do
           "eligible-degree-subject"
         ],
         [
-          I18n.t("early_career_payments.questions.teaching_subject_now", eligible_itt_subject: eligibility.eligible_itt_subject),
+          I18n.t("early_career_payments.questions.teaching_subject_now"),
           "Yes",
           "teaching-subject-now"
         ]

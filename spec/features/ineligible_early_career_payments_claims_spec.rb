@@ -288,7 +288,7 @@ RSpec.feature "Ineligible Teacher Early-Career Payments claims" do
     expect(claim.eligibility.reload.eligible_itt_subject).to eql "mathematics"
 
     # - Do you teach the eligible ITT subject now
-    expect(page).to have_text(I18n.t("early_career_payments.questions.teaching_subject_now", eligible_itt_subject: claim.eligibility.eligible_itt_subject.humanize.downcase))
+    expect(page).to have_text(I18n.t("early_career_payments.questions.teaching_subject_now"))
 
     choose "No"
     click_on "Continue"

@@ -74,7 +74,7 @@ RSpec.feature "Early-Career Payments claims with school ineligible for Levelling
     click_on "Continue"
 
     # - Do you teach maths now
-    expect(page).to have_text(I18n.t("early_career_payments.questions.teaching_subject_now", eligible_itt_subject: claim.eligibility.eligible_itt_subject))
+    expect(page).to have_text(I18n.t("early_career_payments.questions.teaching_subject_now"))
 
     choose "Yes"
     click_on "Continue"

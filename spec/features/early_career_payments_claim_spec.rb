@@ -94,7 +94,7 @@ RSpec.feature "Teacher Early-Career Payments claims" do
     expect(claim.eligibility.reload.eligible_itt_subject).to eql "mathematics"
 
     # - Do you teach maths now
-    expect(page).to have_text(I18n.t("early_career_payments.questions.teaching_subject_now", eligible_itt_subject: claim.eligibility.eligible_itt_subject))
+    expect(page).to have_text(I18n.t("early_career_payments.questions.teaching_subject_now"))
 
     choose "Yes"
     click_on "Continue"
@@ -450,7 +450,7 @@ RSpec.feature "Teacher Early-Career Payments claims" do
       expect(claim.eligibility.reload.eligible_itt_subject).to eql "mathematics"
 
       # - Do you teach maths now
-      expect(page).to have_text(I18n.t("early_career_payments.questions.teaching_subject_now", eligible_itt_subject: claim.eligibility.eligible_itt_subject))
+      expect(page).to have_text(I18n.t("early_career_payments.questions.teaching_subject_now"))
 
       choose "Yes"
       click_on "Continue"
@@ -499,7 +499,7 @@ RSpec.feature "Teacher Early-Career Payments claims" do
       expect(claim.eligibility.reload.eligible_itt_subject).to eql "mathematics"
 
       # - Do you teach maths now
-      expect(page).to have_text(I18n.t("early_career_payments.questions.teaching_subject_now", eligible_itt_subject: claim.eligibility.eligible_itt_subject))
+      expect(page).to have_text(I18n.t("early_career_payments.questions.teaching_subject_now"))
 
       choose "Yes"
       click_on "Continue"
@@ -599,7 +599,7 @@ RSpec.feature "Teacher Early-Career Payments claims" do
     expect(claim.eligibility.reload.eligible_itt_subject).to eql "mathematics"
 
     # - Do you teach maths now
-    expect(page).to have_text(I18n.t("early_career_payments.questions.teaching_subject_now", eligible_itt_subject: claim.eligibility.eligible_itt_subject))
+    expect(page).to have_text(I18n.t("early_career_payments.questions.teaching_subject_now"))
 
     choose "Yes"
     click_on "Continue"
