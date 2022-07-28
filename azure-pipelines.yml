@@ -16,6 +16,8 @@ variables:
   - name: app_name
     value : pr-$(System.PullRequest.PullRequestNumber)
 
+stages:
+
  stage: Checkvariables
   jobs:
   - job: Variables
@@ -26,10 +28,6 @@ variables:
     - script: echo $(Build.QueuedById)
     - script: echo $(Build.QueuedBy)
     #- powershell: Get-ChildItem -Path $(Agent.BuildDirectory) -recurse
-
-
-
-stages:
 
 - stage: Build
   jobs:
