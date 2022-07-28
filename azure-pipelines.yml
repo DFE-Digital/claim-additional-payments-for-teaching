@@ -43,11 +43,11 @@ stages:
             - template: templates/build.yml
 
 - stage: Release
-  displayName : 'Build The App'
+  displayName : 'BuildTheApp'
   condition: and(succeeded('Build'), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
   jobs:
     - deployment: DeployDev
-      displayname : 'Deploy to Development Environment'
+      displayname : 'DeploytoDevelopmentEnvironment'
       environment: s118-teacherpaymentsservice-development
       pool:
         vmImage: ununtu-latest
