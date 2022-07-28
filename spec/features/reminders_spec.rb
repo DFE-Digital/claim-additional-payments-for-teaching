@@ -1,17 +1,16 @@
 require "rails_helper"
 
-# TODO - LUPP claims change behaviour. These scenarios to be fixed when reminder service stories are progressed
-RSpec.feature "Set Reminder when Eligible Later for an Early Career Payment", pending: "Reminder service" do
+RSpec.feature "Set Reminder when Eligible Later for an Early Career Payment" do
   [
-    {subject: "chemistry", cohort: "2020 to 2021", academic_year: AcademicYear.new(2020), next_year: 2022, frozen_year: Date.new(2021, 9, 1)},
-    {subject: "physics", cohort: "2020 to 2021", academic_year: AcademicYear.new(2020), next_year: 2022, frozen_year: Date.new(2021, 9, 1)},
-    {subject: "mathematics", cohort: "2019 to 2020", academic_year: AcademicYear.new(2019), next_year: 2022, frozen_year: Date.new(2021, 9, 1)},
-    {subject: "mathematics", cohort: "2020 to 2021", academic_year: AcademicYear.new(2020), next_year: 2022, frozen_year: Date.new(2021, 9, 1)}
+    {subject: "mathematics", cohort: "2018 to 2019", academic_year: AcademicYear.new(2018), next_year: 2023, frozen_year: Date.new(2022, 9, 1)},
+    {subject: "mathematics", cohort: "2019 to 2020", academic_year: AcademicYear.new(2019), next_year: 2024, frozen_year: Date.new(2023, 9, 1)}
   ].each do |args|
     let(:mail) { ReminderMailer.reminder_set(Reminder.order(:created_at).last) }
 
     scenario "Claimant enters personal details and OTP for #{args[:subject]} for #{args[:cohort]}" do
-      # set current date to academic year 2021 (or whatever is passed in from frozen_year)
+      @ecp_policy_date = PolicyConfiguration.for(EarlyCareerPayments).current_academic_year
+      PolicyConfiguration.for(EarlyCareerPayments).update(current_academic_year: AcademicYear.new(args[:frozen_year].year))
+
       travel_to args[:frozen_year] do
         claim = start_early_career_payments_claim
         claim.eligibility.update!(
@@ -74,6 +73,8 @@ RSpec.feature "Set Reminder when Eligible Later for an Early Career Payment", pe
         expect(page).to have_text("We have set your reminder")
         expect(mail[:template_id].decoded).to eq "0dc80ba9-adae-43cd-98bf-58882ee401c3"
       end
+
+      PolicyConfiguration.for(EarlyCareerPayments).update(current_academic_year: @ecp_policy_date)
     end
   end
 
@@ -91,7 +92,6 @@ RSpec.feature "Set Reminder when Eligible Later for an Early Career Payment", pe
       {subject: "mathematics", cohort: "2018 to 2019", academic_year: AcademicYear.new(2018), next_year: 2023, frozen_year: Date.new(2022, 10, 5)}
     ].each do |args|
       scenario "to request a reminder for #{args[:subject]} for #{args[:cohort]}" do
-        skip "this flips between passing and failing but won't address now"
         travel_to args[:frozen_year] do
           claim = start_early_career_payments_claim
           claim.eligibility.update!(

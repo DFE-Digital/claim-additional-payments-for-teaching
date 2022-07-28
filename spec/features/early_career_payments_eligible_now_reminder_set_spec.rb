@@ -2,10 +2,10 @@ require "rails_helper"
 
 RSpec.feature "Eligible now can set a reminder for next year." do
   let(:eligibility_attributes) { attributes_for(:early_career_payments_eligibility, :eligible) }
-  let(:reminder_year) { (AcademicYear.new(eligibility_attributes[:itt_academic_year]) + 5).start_year }
 
   it "auto-sets a reminders email and name from claim params and displays the correct year" do
     claim = start_early_career_payments_claim
+    reminder_year = (PolicyConfiguration.for(claim.policy).current_academic_year + 1).start_year
 
     claim.update!(attributes_for(:claim, :submittable))
     claim.eligibility.update!(eligibility_attributes)
@@ -81,6 +81,7 @@ RSpec.feature "Completed Applications - Reminders" do
             eligible_itt_subject: scenario[:itt_subject],
             itt_academic_year: scenario[:itt_academic_year]
           )
+          reminder_year = (PolicyConfiguration.for(claim.policy).current_academic_year + 1).start_year
 
           visit claim_path(claim.policy.routing_name, "check-your-answers")
           expect(page).to have_text(claim.first_name)
@@ -99,7 +100,7 @@ RSpec.feature "Completed Applications - Reminders" do
             click_on "Continue"
             fill_in "reminder_one_time_password", with: get_otp_from_email
             click_on "Confirm"
-            expect(page).to have_text("We will send you a reminder in September #{claim.eligibility.eligible_later_year.start_year}")
+            expect(page).to have_text("We will send you a reminder in September #{reminder_year}")
           elsif scenario[:invited_to_set_reminder] == false
             expect(page).not_to have_text("Set a reminder to apply next year")
             expect(page).not_to have_link("Set reminder")

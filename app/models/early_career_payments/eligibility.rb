@@ -103,6 +103,7 @@ module EarlyCareerPayments
       qualification_attained == "assessment only" ? qualification_attained : qualification_attained + " qualification"
     end
 
+    # TODO: Not used any more
     def eligible_now_and_again_sometime?
       eligible_now? && any_future_policy_years? && common_eligible_now_attributes? && itt_subject_eligible_later?
     end
