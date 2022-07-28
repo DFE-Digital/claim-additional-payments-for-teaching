@@ -47,7 +47,7 @@ stages:
   condition: and(succeeded('Build'), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
   jobs:
     - deployment: DeployDev
-      displayname : Deploy to Development Environment
+      displayname : 'Deploy to Development Environment'
       environment: s118-teacherpaymentsservice-development
       pool:
         vmImage: ununtu-latest
