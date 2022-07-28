@@ -29,18 +29,18 @@ stages:
     - script: echo $(Build.QueuedBy)
     #- powershell: Get-ChildItem -Path $(Agent.BuildDirectory) -recurse
 
-- stage: Build
-  jobs:
-  - deployment: BuildDocker
-   displayName: deploy Web App
-  pool:
-    vmImage: 'ubuntu-latest'
-  environment: 's118-teacherpaymentsservice-development'
-  strategy:
-    runOnce:
-      deploy:
-        steps:
-        - template: templates/build.yml
+# - stage: Build
+#   jobs:
+#   - deployment: BuildDocker
+#    displayName: deploy Web App
+#   pool:
+#     vmImage: 'ubuntu-latest'
+#   environment: 's118-teacherpaymentsservice-development'
+#   strategy:
+#     runOnce:
+#       deploy:
+#         steps:
+#         - template: templates/build.yml
 
 
 # - stage: Build
