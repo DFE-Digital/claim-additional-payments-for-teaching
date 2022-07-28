@@ -3,7 +3,7 @@ require "rails_helper"
 RSpec.feature "Changing the answers on a submittable claim" do
   include StudentLoansHelper
 
-  scenario "Teacher changes an answer which is not a dependency of any of the other answers they’ve given, remaining eligible" do
+  scenario "Teacher changes an answer which is not a dependency of any of the other answers they've given, remaining eligible" do
     claim = start_maths_and_physics_claim
     claim.update!(attributes_for(:claim, :submittable))
     claim.eligibility.update!(attributes_for(:maths_and_physics_eligibility, :eligible, initial_teacher_training_subject: "maths"))
@@ -21,7 +21,7 @@ RSpec.feature "Changing the answers on a submittable claim" do
     expect(current_path).to eq(claim_path(MathsAndPhysics.routing_name, "check-your-answers"))
   end
 
-  scenario "Teacher changes an answer which is not a dependency of any of the other answers they’ve given, becoming ineligible" do
+  scenario "Teacher changes an answer which is not a dependency of any of the other answers they've given, becoming ineligible" do
     claim = start_student_loans_claim
     claim.update!(attributes_for(:claim, :submittable))
     claim.eligibility.update!(attributes_for(:student_loans_eligibility, :eligible))
@@ -40,7 +40,7 @@ RSpec.feature "Changing the answers on a submittable claim" do
     expect(page).to have_text("You can only get this payment if you completed your initial teacher training in or after the academic year #{StudentLoans.first_eligible_qts_award_year.to_s(:long)}.")
   end
 
-  scenario "Teacher changes an answer which is a dependency of some of the subsequent answers they’ve given, remaining eligible" do
+  scenario "Teacher changes an answer which is a dependency of some of the subsequent answers they've given, remaining eligible" do
     claim = start_student_loans_claim
     claim.update!(attributes_for(:claim, :submittable))
     claim.eligibility.update!(attributes_for(:student_loans_eligibility, :eligible))
@@ -78,7 +78,7 @@ RSpec.feature "Changing the answers on a submittable claim" do
     expect(current_path).to eq(claim_path(StudentLoans.routing_name, "check-your-answers"))
   end
 
-  scenario "Teacher changes an answer which is a dependency of some of the subsequent answers they’ve given, making them ineligible" do
+  scenario "Teacher changes an answer which is a dependency of some of the subsequent answers they've given, making them ineligible" do
     claim = start_student_loans_claim
     claim.update!(attributes_for(:claim, :submittable))
     claim.eligibility.update!(attributes_for(:student_loans_eligibility, :eligible, had_leadership_position: false))
@@ -101,7 +101,7 @@ RSpec.feature "Changing the answers on a submittable claim" do
     expect(page).to have_text("You can only get this payment if you spent less than half your working hours performing leadership duties between #{StudentLoans.current_financial_year}.")
   end
 
-  scenario "Teacher edits but does not change an answer which is a dependency of some of the subsequent answers they’ve given" do
+  scenario "Teacher edits but does not change an answer which is a dependency of some of the subsequent answers they've given" do
     claim = start_maths_and_physics_claim
     claim.update!(attributes_for(:claim, :submittable))
     claim.eligibility.update!(attributes_for(:maths_and_physics_eligibility, :eligible, employed_as_supply_teacher: true, has_entire_term_contract: true, employed_directly: true))

@@ -30,9 +30,8 @@ RSpec.feature "ITT subject selection" do
         end
 
         scenario "choose eligible subject" do
-          subject_display_string = "Mathematics"
-          select_subject(subject_display_string)
-          expect(page).to have_text(I18n.t("early_career_payments.questions.teaching_subject_now", eligible_itt_subject: subject_display_string))
+          select_subject("Mathematics")
+          expect(page).to have_text(I18n.t("early_career_payments.questions.teaching_subject_now"))
         end
       end
 
@@ -49,9 +48,8 @@ RSpec.feature "ITT subject selection" do
         end
 
         scenario "choose eligible subject" do
-          subject_display_string = "Mathematics"
-          select_subject(subject_display_string)
-          expect(page).to have_text(I18n.t("early_career_payments.questions.teaching_subject_now", eligible_itt_subject: subject_display_string))
+          select_subject("Mathematics")
+          expect(page).to have_text(I18n.t("early_career_payments.questions.teaching_subject_now"))
         end
       end
 
@@ -68,15 +66,13 @@ RSpec.feature "ITT subject selection" do
         end
 
         scenario "choose subject eligible for LUP only" do
-          subject_display_string = "Chemistry"
-          select_subject(subject_display_string)
-          expect(page).to have_text(I18n.t("early_career_payments.questions.teaching_subject_now", eligible_itt_subject: subject_display_string))
+          select_subject("Chemistry")
+          expect(page).to have_text(I18n.t("early_career_payments.questions.teaching_subject_now"))
         end
 
         scenario "choose subject eligible for both LUP and ECP" do
-          subject_display_string = "Mathematics"
-          select_subject(subject_display_string)
-          expect(page).to have_text(I18n.t("early_career_payments.questions.teaching_subject_now", eligible_itt_subject: subject_display_string))
+          select_subject("Mathematics")
+          expect(page).to have_text(I18n.t("early_career_payments.questions.teaching_subject_now"))
         end
       end
 
@@ -93,15 +89,13 @@ RSpec.feature "ITT subject selection" do
         end
 
         scenario "choose subject ineligible for LUP" do
-          subject_display_string = "Languages"
-          select_subject(subject_display_string)
-          expect(page).to have_text(I18n.t("early_career_payments.questions.teaching_subject_now", eligible_itt_subject: subject_display_string))
+          select_subject("Languages")
+          expect(page).to have_text(I18n.t("early_career_payments.questions.teaching_subject_now"))
         end
 
         scenario "choose eligible subject" do
-          subject_display_string = "Mathematics"
-          select_subject(subject_display_string)
-          expect(page).to have_text(I18n.t("early_career_payments.questions.teaching_subject_now", eligible_itt_subject: subject_display_string))
+          select_subject("Mathematics")
+          expect(page).to have_text(I18n.t("early_career_payments.questions.teaching_subject_now"))
         end
       end
 
@@ -118,9 +112,8 @@ RSpec.feature "ITT subject selection" do
         end
 
         scenario "choose eligible subject" do
-          subject_display_string = "Mathematics"
-          select_subject(subject_display_string)
-          expect(page).to have_text(I18n.t("early_career_payments.questions.teaching_subject_now", eligible_itt_subject: subject_display_string))
+          select_subject("Mathematics")
+          expect(page).to have_text(I18n.t("early_career_payments.questions.teaching_subject_now"))
         end
       end
     end
@@ -149,9 +142,8 @@ RSpec.feature "ITT subject selection" do
         end
 
         scenario "choose eligible subject and teach now" do
-          subject_display_string = "Mathematics"
-          select_subject(subject_display_string)
-          expect(page).to have_text(I18n.t("early_career_payments.questions.teaching_subject_now", eligible_itt_subject: subject_display_string))
+          select_subject("Mathematics")
+          expect(page).to have_text(I18n.t("early_career_payments.questions.teaching_subject_now"))
 
           choose "Yes"
           click_on "Continue"
@@ -163,9 +155,8 @@ RSpec.feature "ITT subject selection" do
         end
 
         scenario "choose eligible subject but don't teach now" do
-          subject_display_string = "Mathematics"
-          select_subject(subject_display_string)
-          expect(page).to have_text(I18n.t("early_career_payments.questions.teaching_subject_now", eligible_itt_subject: subject_display_string))
+          select_subject("Mathematics")
+          expect(page).to have_text(I18n.t("early_career_payments.questions.teaching_subject_now"))
 
           choose "No"
           click_on "Continue"
@@ -187,9 +178,8 @@ RSpec.feature "ITT subject selection" do
         end
 
         scenario "choose eligible subject" do
-          subject_display_string = "Mathematics"
-          select_subject(subject_display_string)
-          expect(page).to have_text(I18n.t("early_career_payments.questions.teaching_subject_now", eligible_itt_subject: subject_display_string))
+          select_subject("Mathematics")
+          expect(page).to have_text(I18n.t("early_career_payments.questions.teaching_subject_now"))
         end
       end
 
@@ -206,9 +196,8 @@ RSpec.feature "ITT subject selection" do
         end
 
         scenario "choose eligible subject" do
-          subject_display_string = "Mathematics"
-          select_subject(subject_display_string)
-          expect(page).to have_text(I18n.t("early_career_payments.questions.teaching_subject_now", eligible_itt_subject: subject_display_string))
+          select_subject("Mathematics")
+          expect(page).to have_text(I18n.t("early_career_payments.questions.teaching_subject_now"))
         end
       end
 

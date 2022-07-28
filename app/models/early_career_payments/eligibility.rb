@@ -95,15 +95,6 @@ module EarlyCareerPayments
       raise unless all_attributes_ignored
     end
 
-    def qualification_name
-      return qualification.gsub("_itt", " initial teaching training") if qualification.split("_").last == "itt"
-
-      qualification_attained = qualification.humanize.downcase
-
-      qualification_attained == "assessment only" ? qualification_attained : qualification_attained + " qualification"
-    end
-
-    # TODO: Not used any more
     def eligible_now_and_again_sometime?
       eligible_now? && any_future_policy_years? && common_eligible_now_attributes? && itt_subject_eligible_later?
     end

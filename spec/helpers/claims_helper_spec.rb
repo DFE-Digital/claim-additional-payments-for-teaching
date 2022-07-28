@@ -14,8 +14,10 @@ describe ClaimsHelper do
       build(:claim, eligibility: eligibility)
     end
 
+    let(:current_claim) { CurrentClaim.new(claims: [claim]) }
+
     it "returns the correct answers for the eligibility's policy" do
-      answers = helper.eligibility_answers(claim)
+      answers = helper.eligibility_answers(current_claim)
       expect(answers.first).to eq [I18n.t("questions.qts_award_year"), "In or after the academic year 2013 to 2014", "qts-year"]
     end
   end

@@ -1,14 +1,18 @@
 require "rails_helper"
 
 RSpec.describe EarlyCareerPayments::EligibilityAnswersPresenter, type: :model do
+  include EarlyCareerPaymentsHelper
+
   before do
-    @ecp_policy_date = PolicyConfiguration.for(EarlyCareerPayments).current_academic_year
-    PolicyConfiguration.for(EarlyCareerPayments).update(current_academic_year: academic_year)
+    @ecp_policy_date = PolicyConfiguration.for(policy).current_academic_year
+    PolicyConfiguration.for(policy).update(current_academic_year: academic_year)
   end
 
   after do
-    PolicyConfiguration.for(EarlyCareerPayments).update(current_academic_year: @ecp_policy_date)
+    PolicyConfiguration.for(policy).update(current_academic_year: @ecp_policy_date)
   end
+
+  let(:policy) { EarlyCareerPayments }
   let(:academic_year) { AcademicYear.new(2021) }
 
   let(:eligibility_attributes) do
@@ -24,10 +28,10 @@ RSpec.describe EarlyCareerPayments::EligibilityAnswersPresenter, type: :model do
       itt_academic_year: AcademicYear::Type.new.serialize(AcademicYear.new(2019))
     }
   end
-  let(:eligibility) { claim.eligibility }
-  let(:claim) { build(:claim, academic_year: academic_year, eligibility: build(:early_career_payments_eligibility, eligibility_attributes)) }
+  let(:eligibility) { build(:early_career_payments_eligibility, eligibility_attributes) }
+  let(:claim) { build(:claim, academic_year: academic_year, eligibility: eligibility) }
 
-  subject(:presenter) { described_class.new(eligibility) }
+  subject(:presenter) { described_class.new(claim.eligibility) }
 
   it "returns an array of questions and answers to be presented to the user for checking" do
     expected_answers = [
@@ -47,12 +51,12 @@ RSpec.describe EarlyCareerPayments::EligibilityAnswersPresenter, type: :model do
         "itt-year"
       ],
       [
-        I18n.t("early_career_payments.questions.eligible_itt_subject", qualification: eligibility.qualification_name),
+        I18n.t("early_career_payments.questions.eligible_itt_subject", qualification: qualification_name(eligibility.qualification)),
         "Chemistry",
         "eligible-itt-subject"
       ],
       [
-        I18n.t("early_career_payments.questions.teaching_subject_now", eligible_itt_subject: eligibility.eligible_itt_subject),
+        I18n.t("early_career_payments.questions.teaching_subject_now"),
         "Yes",
         "teaching-subject-now"
       ]
@@ -98,12 +102,54 @@ RSpec.describe EarlyCareerPayments::EligibilityAnswersPresenter, type: :model do
           "itt-year"
         ],
         [
-          I18n.t("early_career_payments.questions.eligible_itt_subject", qualification: eligibility.qualification_name),
+          I18n.t("early_career_payments.questions.eligible_itt_subject", qualification: qualification_name(eligibility.qualification)),
           "Languages",
           "eligible-itt-subject"
         ],
         [
-          I18n.t("early_career_payments.questions.teaching_subject_now", eligible_itt_subject: eligibility.eligible_itt_subject),
+          I18n.t("early_career_payments.questions.teaching_subject_now"),
+          "Yes",
+          "teaching-subject-now"
+        ]
+      ]
+
+      expect(presenter.answers).to eq(expected_answers)
+    end
+  end
+
+  context "when  levelling up premium payment" do
+    let(:policy) { LevellingUpPremiumPayments }
+    let(:eligibility) { build(:levelling_up_premium_payments_eligibility, :eligible_now, :ineligible_itt_subject, :relevant_degree) }
+
+    it "returns an array of questions and answers including the eligible degree subject question" do
+      expected_answers = [
+        [I18n.t("early_career_payments.questions.current_school_search"), "Acme Secondary School", "current-school"],
+        [I18n.t("early_career_payments.questions.nqt_in_academic_year_after_itt.heading"), "Yes", "nqt-in-academic-year-after-itt"],
+        [I18n.t("early_career_payments.questions.employed_as_supply_teacher"), "No", "supply-teacher"],
+        [I18n.t("early_career_payments.questions.formal_performance_action"), "No", "poor-performance"],
+        [I18n.t("early_career_payments.questions.disciplinary_action"), "No", "poor-performance"],
+        [
+          I18n.t("early_career_payments.questions.qualification.heading"),
+          "Postgraduate initial teacher training (ITT)",
+          "qualification"
+        ],
+        [
+          I18n.t("early_career_payments.questions.itt_academic_year.qualification.#{eligibility.qualification}"),
+          "2019 - 2020",
+          "itt-year"
+        ],
+        [
+          I18n.t("early_career_payments.questions.eligible_itt_subject", qualification: qualification_name(eligibility.qualification)),
+          "Languages",
+          "eligible-itt-subject"
+        ],
+        [
+          I18n.t("early_career_payments.questions.eligible_degree_subject"),
+          "Yes",
+          "eligible-degree-subject"
+        ],
+        [
+          I18n.t("early_career_payments.questions.teaching_subject_now"),
           "Yes",
           "teaching-subject-now"
         ]

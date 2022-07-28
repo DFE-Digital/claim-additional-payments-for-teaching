@@ -1,6 +1,8 @@
 require "rails_helper"
 
 RSpec.feature "Teacher Early-Career Payments claims" do
+  include EarlyCareerPaymentsHelper
+
   # create a school eligible for ECP and LUP so can walk the whole journey
   let!(:school) { create(:school, :levelling_up_premium_payments_eligible, :early_career_payments_eligible) }
   let(:current_academic_year) { PolicyConfiguration.for(EarlyCareerPayments).current_academic_year }
@@ -84,7 +86,7 @@ RSpec.feature "Teacher Early-Career Payments claims" do
     click_on "Continue"
 
     # - Which subject did you do your postgraduate ITT in
-    expect(page).to have_text(I18n.t("early_career_payments.questions.eligible_itt_subject", qualification: claim.eligibility.qualification_name))
+    expect(page).to have_text(I18n.t("early_career_payments.questions.eligible_itt_subject", qualification: qualification_name(claim.eligibility.qualification)))
 
     choose "Mathematics"
     click_on "Continue"
@@ -92,7 +94,7 @@ RSpec.feature "Teacher Early-Career Payments claims" do
     expect(claim.eligibility.reload.eligible_itt_subject).to eql "mathematics"
 
     # - Do you teach maths now
-    expect(page).to have_text(I18n.t("early_career_payments.questions.teaching_subject_now", eligible_itt_subject: claim.eligibility.eligible_itt_subject))
+    expect(page).to have_text(I18n.t("early_career_payments.questions.teaching_subject_now"))
 
     choose "Yes"
     click_on "Continue"
@@ -111,6 +113,7 @@ RSpec.feature "Teacher Early-Career Payments claims" do
     expect(page).to have_text(I18n.t("early_career_payments.check_your_answers.part_one.primary_heading"))
     expect(page).to have_text(I18n.t("early_career_payments.check_your_answers.part_one.secondary_heading"))
     expect(page).to have_text(I18n.t("early_career_payments.check_your_answers.part_one.confirmation_notice"))
+    expect(page).not_to have_text(I18n.t("early_career_payments.questions.eligible_degree_subject"))
 
     %w[Identity\ details Payment\ details Student\ loan\ details].each do |section_heading|
       expect(page).not_to have_text section_heading
@@ -447,7 +450,7 @@ RSpec.feature "Teacher Early-Career Payments claims" do
       expect(claim.eligibility.reload.eligible_itt_subject).to eql "mathematics"
 
       # - Do you teach maths now
-      expect(page).to have_text(I18n.t("early_career_payments.questions.teaching_subject_now", eligible_itt_subject: claim.eligibility.eligible_itt_subject))
+      expect(page).to have_text(I18n.t("early_career_payments.questions.teaching_subject_now"))
 
       choose "Yes"
       click_on "Continue"
@@ -496,7 +499,7 @@ RSpec.feature "Teacher Early-Career Payments claims" do
       expect(claim.eligibility.reload.eligible_itt_subject).to eql "mathematics"
 
       # - Do you teach maths now
-      expect(page).to have_text(I18n.t("early_career_payments.questions.teaching_subject_now", eligible_itt_subject: claim.eligibility.eligible_itt_subject))
+      expect(page).to have_text(I18n.t("early_career_payments.questions.teaching_subject_now"))
 
       choose "Yes"
       click_on "Continue"
@@ -588,7 +591,7 @@ RSpec.feature "Teacher Early-Career Payments claims" do
     click_on "Continue"
 
     # - Which subject did you do your postgraduate ITT in
-    expect(page).to have_text(I18n.t("early_career_payments.questions.eligible_itt_subject", qualification: claim.eligibility.qualification_name))
+    expect(page).to have_text(I18n.t("early_career_payments.questions.eligible_itt_subject", qualification: qualification_name(claim.eligibility.qualification)))
 
     choose "Mathematics"
     click_on "Continue"
@@ -596,7 +599,7 @@ RSpec.feature "Teacher Early-Career Payments claims" do
     expect(claim.eligibility.reload.eligible_itt_subject).to eql "mathematics"
 
     # - Do you teach maths now
-    expect(page).to have_text(I18n.t("early_career_payments.questions.teaching_subject_now", eligible_itt_subject: claim.eligibility.eligible_itt_subject))
+    expect(page).to have_text(I18n.t("early_career_payments.questions.teaching_subject_now"))
 
     choose "Yes"
     click_on "Continue"

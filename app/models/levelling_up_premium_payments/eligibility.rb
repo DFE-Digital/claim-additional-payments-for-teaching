@@ -11,6 +11,8 @@ module LevellingUpPremiumPayments
     validates :award_amount, on: :amendment, award_range: {max: LevellingUpPremiumPayments::Award.max(AcademicYear.new(2022))}
     validates :eligible_degree_subject, on: [:"eligible-degree-subject"], inclusion: {in: [true, false], message: "Select yes if you have a degree in an eligible subject"}
 
+    delegate :name, to: :current_school, prefix: true, allow_nil: true
+
     EDITABLE_ATTRIBUTES = [
       :nqt_in_academic_year_after_itt,
       :current_school_id,
