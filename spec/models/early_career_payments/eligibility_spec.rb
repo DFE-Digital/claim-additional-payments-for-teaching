@@ -26,32 +26,6 @@ RSpec.describe EarlyCareerPayments::Eligibility, type: :model do
     end
   end
 
-  describe "#qualification_name" do
-    context "when qualificaton is 'postgraduate_itt' or 'undergraduate_itt'" do
-      eligibility = EarlyCareerPayments::Eligibility.new(qualification: "postgraduate_itt")
-
-      it "returns the qualification in the format '<qualification> initial teaching training'" do
-        expect(eligibility.qualification_name).to eq "postgraduate initial teaching training"
-      end
-    end
-
-    context "when qualification is 'assessment_only'" do
-      eligibility = EarlyCareerPayments::Eligibility.new(qualification: "assessment_only")
-
-      it "returns the qualification in a humanized for that is lowercase" do
-        expect(eligibility.qualification_name).to eq "assessment only"
-      end
-    end
-
-    context "when qualification is 'overseas recognition'" do
-      eligibility = EarlyCareerPayments::Eligibility.new(qualification: "overseas_recognition")
-
-      it "returns the qualification in a humanized for that is lowercase" do
-        expect(eligibility.qualification_name).to eq "overseas recognition qualification"
-      end
-    end
-  end
-
   describe "eligible_itt_subject attribute" do
     it "rejects invalid values" do
       expect { EarlyCareerPayments::Eligibility.new(eligible_itt_subject: "not-in-list-of-options") }.to raise_error(ArgumentError)

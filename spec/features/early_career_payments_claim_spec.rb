@@ -1,6 +1,8 @@
 require "rails_helper"
 
 RSpec.feature "Teacher Early-Career Payments claims" do
+  include EarlyCareerPaymentsHelper
+
   # create a school eligible for ECP and LUP so can walk the whole journey
   let!(:school) { create(:school, :levelling_up_premium_payments_eligible, :early_career_payments_eligible) }
   let(:current_academic_year) { PolicyConfiguration.for(EarlyCareerPayments).current_academic_year }
@@ -84,7 +86,7 @@ RSpec.feature "Teacher Early-Career Payments claims" do
     click_on "Continue"
 
     # - Which subject did you do your postgraduate ITT in
-    expect(page).to have_text(I18n.t("early_career_payments.questions.eligible_itt_subject", qualification: claim.eligibility.qualification_name))
+    expect(page).to have_text(I18n.t("early_career_payments.questions.eligible_itt_subject", qualification: qualification_name(claim.eligibility.qualification)))
 
     choose "Mathematics"
     click_on "Continue"
@@ -589,7 +591,7 @@ RSpec.feature "Teacher Early-Career Payments claims" do
     click_on "Continue"
 
     # - Which subject did you do your postgraduate ITT in
-    expect(page).to have_text(I18n.t("early_career_payments.questions.eligible_itt_subject", qualification: claim.eligibility.qualification_name))
+    expect(page).to have_text(I18n.t("early_career_payments.questions.eligible_itt_subject", qualification: qualification_name(claim.eligibility.qualification)))
 
     choose "Mathematics"
     click_on "Continue"

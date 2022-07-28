@@ -36,12 +36,4 @@ module EarlyCareerPaymentsHelpable
   def trainee_teacher?
     nqt_in_academic_year_after_itt == false
   end
-
-  def qualification_name
-    return qualification.gsub("_itt", " initial teaching training") if qualification.split("_").last == "itt"
-
-    qualification_attained = qualification.humanize.downcase
-
-    qualification_attained == "assessment only" ? qualification_attained : qualification_attained + " qualification"
-  end
 end

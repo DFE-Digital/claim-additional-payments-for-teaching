@@ -1,6 +1,8 @@
 require "rails_helper"
 
 RSpec.describe EarlyCareerPayments::EligibilityAnswersPresenter, type: :model do
+  include EarlyCareerPaymentsHelper
+
   before do
     @ecp_policy_date = PolicyConfiguration.for(EarlyCareerPayments).current_academic_year
     PolicyConfiguration.for(EarlyCareerPayments).update(current_academic_year: academic_year)
@@ -47,7 +49,7 @@ RSpec.describe EarlyCareerPayments::EligibilityAnswersPresenter, type: :model do
         "itt-year"
       ],
       [
-        I18n.t("early_career_payments.questions.eligible_itt_subject", qualification: eligibility.qualification_name),
+        I18n.t("early_career_payments.questions.eligible_itt_subject", qualification: qualification_name(eligibility.qualification)),
         "Chemistry",
         "eligible-itt-subject"
       ],
@@ -98,7 +100,7 @@ RSpec.describe EarlyCareerPayments::EligibilityAnswersPresenter, type: :model do
           "itt-year"
         ],
         [
-          I18n.t("early_career_payments.questions.eligible_itt_subject", qualification: eligibility.qualification_name),
+          I18n.t("early_career_payments.questions.eligible_itt_subject", qualification: qualification_name(eligibility.qualification)),
           "Languages",
           "eligible-itt-subject"
         ],

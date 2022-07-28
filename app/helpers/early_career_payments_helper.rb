@@ -42,13 +42,13 @@ module EarlyCareerPaymentsHelper
       return I18n.t("early_career_payments.questions.eligible_itt_subject_trainee_teacher")
     end
 
-    case claim.eligibility.qualification_name
+    case qualification_name(claim.eligibility.qualification)
     when "assessment only"
       I18n.t("early_career_payments.questions.eligible_itt_subject_assessment_only")
     when "overseas recognition qualification"
       I18n.t("early_career_payments.questions.eligible_itt_subject_overseas_recognition")
     else
-      I18n.t("early_career_payments.questions.eligible_itt_subject", qualification: claim.eligibility.qualification_name)
+      I18n.t("early_career_payments.questions.eligible_itt_subject", qualification: qualification_name(claim.eligibility.qualification))
     end
   end
 
@@ -58,5 +58,13 @@ module EarlyCareerPaymentsHelper
 
   def qts?(claim)
     %w[assessment_only overseas_recognition].include? claim.eligibility.qualification
+  end
+
+  def qualification_name(qualification)
+    return qualification.gsub("_itt", " initial teaching training") if qualification.split("_").last == "itt"
+
+    qualification_attained = qualification.humanize.downcase
+
+    qualification_attained == "assessment only" ? qualification_attained : qualification_attained + " qualification"
   end
 end

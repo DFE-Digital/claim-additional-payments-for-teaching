@@ -1,6 +1,8 @@
 require "rails_helper"
 
 RSpec.feature "Early-Career Payments claims with school ineligible for Levelling-Up Premium Payment" do
+  include EarlyCareerPaymentsHelper
+
   # create a school eligible for ECP and ineligible LUPP
   let!(:school) { create(:school, :early_career_payments_eligible, :levelling_up_premium_payments_ineligible) }
   let(:current_academic_year) { PolicyConfiguration.for(EarlyCareerPayments).current_academic_year }
@@ -64,7 +66,7 @@ RSpec.feature "Early-Career Payments claims with school ineligible for Levelling
     click_on "Continue"
 
     # - Which subject did you do your postgraduate ITT in
-    expect(page).to have_text(I18n.t("early_career_payments.questions.eligible_itt_subject", qualification: claim.eligibility.qualification_name))
+    expect(page).to have_text(I18n.t("early_career_payments.questions.eligible_itt_subject", qualification: qualification_name(claim.eligibility.qualification)))
 
     expect(page).not_to have_text("If you qualified with science")
 

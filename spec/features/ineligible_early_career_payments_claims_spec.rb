@@ -1,6 +1,8 @@
 require "rails_helper"
 
 RSpec.feature "Ineligible Teacher Early-Career Payments claims" do
+  include EarlyCareerPaymentsHelper
+
   scenario "When the school selected is ineligible" do
     start_early_career_payments_claim
 
@@ -222,7 +224,7 @@ RSpec.feature "Ineligible Teacher Early-Career Payments claims" do
     click_on "Continue"
 
     # - Which subject did you do your undergraduate ITT in
-    expect(page).to have_text(I18n.t("early_career_payments.questions.eligible_itt_subject", qualification: claim.eligibility.qualification_name))
+    expect(page).to have_text(I18n.t("early_career_payments.questions.eligible_itt_subject", qualification: qualification_name(claim.eligibility.qualification)))
 
     choose "None of the above"
     click_on "Continue"
@@ -278,7 +280,7 @@ RSpec.feature "Ineligible Teacher Early-Career Payments claims" do
     click_on "Continue"
 
     # - Which subject did you do your undergraduate ITT in
-    expect(page).to have_text(I18n.t("early_career_payments.questions.eligible_itt_subject", qualification: claim.eligibility.qualification_name))
+    expect(page).to have_text(I18n.t("early_career_payments.questions.eligible_itt_subject", qualification: qualification_name(claim.eligibility.qualification)))
 
     choose "Mathematics"
     click_on "Continue"

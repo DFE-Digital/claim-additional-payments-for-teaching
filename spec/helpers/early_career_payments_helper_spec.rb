@@ -157,5 +157,31 @@ describe EarlyCareerPaymentsHelper do
         it { is_expected.to be true }
       end
     end
+
+    describe "#qualification_name" do
+      context "when qualification is 'postgraduate_itt' or 'undergraduate_itt'" do
+        eligibility = EarlyCareerPayments::Eligibility.new(qualification: "postgraduate_itt")
+
+        it "returns the qualification in the format '<qualification> initial teaching training'" do
+          expect(qualification_name(eligibility.qualification)).to eq "postgraduate initial teaching training"
+        end
+      end
+
+      context "when qualification is 'assessment_only'" do
+        eligibility = EarlyCareerPayments::Eligibility.new(qualification: "assessment_only")
+
+        it "returns the qualification in a humanized for that is lowercase" do
+          expect(qualification_name(eligibility.qualification)).to eq "assessment only"
+        end
+      end
+
+      context "when qualification is 'overseas recognition'" do
+        eligibility = EarlyCareerPayments::Eligibility.new(qualification: "overseas_recognition")
+
+        it "returns the qualification in a humanized for that is lowercase" do
+          expect(qualification_name(eligibility.qualification)).to eq "overseas recognition qualification"
+        end
+      end
+    end
   end
 end
