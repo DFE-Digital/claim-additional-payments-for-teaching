@@ -30,7 +30,7 @@ stages:
 - stage: Build
   jobs:
   - deployment: DeployDev
-      environment: s118-teacherpaymentsservice-development
+    environment: s118-teacherpaymentsservice-development
     steps:
     - template: templates/build.yml
 
