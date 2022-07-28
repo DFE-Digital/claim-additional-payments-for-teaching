@@ -111,6 +111,7 @@ RSpec.feature "Teacher Early-Career Payments claims" do
     expect(page).to have_text(I18n.t("early_career_payments.check_your_answers.part_one.primary_heading"))
     expect(page).to have_text(I18n.t("early_career_payments.check_your_answers.part_one.secondary_heading"))
     expect(page).to have_text(I18n.t("early_career_payments.check_your_answers.part_one.confirmation_notice"))
+    expect(page).not_to have_text(I18n.t("early_career_payments.questions.eligible_degree_subject"))
 
     %w[Identity\ details Payment\ details Student\ loan\ details].each do |section_heading|
       expect(page).not_to have_text section_heading

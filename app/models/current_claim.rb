@@ -152,7 +152,7 @@ class CurrentClaim
   end
 
   def eligible_eligibility
-    claims.each do |claim|
+    claims.sort_by(&:eligibility_type).each do |claim|
       return claim.eligibility unless claim.eligibility.ineligible?
     end
 
