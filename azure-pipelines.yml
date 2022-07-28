@@ -42,19 +42,15 @@ stages:
             steps:
             - template: templates/build.yml
 
-
-
-# - stage: Build
-#   jobs:
-#   - deployment: DeployDev
-#     environment: s118-teacherpaymentsservice-development
-#     steps:
-#     - template: templates/build.yml
-
 - stage: Release
   condition: and(succeeded('Build'), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
   jobs:
-  - job: DeployDev
+  - deployment: DeployDev
+    displayname : Deploy to Development Environment
+    environment: s118-teacherpaymentsservice-development
+    pool:
+      vmImage: ununtu-latest
+
     variables:
     - name: backendAzureRmContainerName
       value: s118d01conttfstate
@@ -82,11 +78,15 @@ stages:
 
     - name: WebAppName
       value: s118d01-app-as
+    strategy:
+        runOnce:
+          deploy:
+            steps:
+            - template: templates/build.yml
+            parameters :
+              ServiceConnection : azdo.pipelines.cip.S118D.armfe1ef140-8bef-4043-b5ee-c449e6f951ef
 
-    steps:
-    - template: templates/release.yml #Run Release Template
-      parameters :
-        ServiceConnection : azdo.pipelines.cip.S118D.armfe1ef140-8bef-4043-b5ee-c449e6f951ef
+
 
 - stage: Review
   condition: and(succeeded('Build'), ne(variables['System.PullRequest.PullRequestNumber'], ''))
