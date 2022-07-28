@@ -16,6 +16,19 @@ variables:
   - name: app_name
     value : pr-$(System.PullRequest.PullRequestNumber)
 
+ stage: Checkvariables
+  jobs:
+  - job: Variables
+    steps:
+    #- template: templates/build.yml
+    - script: echo $(Agent.BuildDirectory)
+    - script: echo $(System.PullRequest.PullRequestNumber)
+    - script: echo $(Build.QueuedById)
+    - script: echo $(Build.QueuedBy)
+    #- powershell: Get-ChildItem -Path $(Agent.BuildDirectory) -recurse
+
+
+
 stages:
 
 - stage: Build
