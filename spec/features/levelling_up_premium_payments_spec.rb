@@ -4,7 +4,7 @@ RSpec.feature "Levelling up premium payments claims" do
   let(:claim) { Claim.by_policy(LevellingUpPremiumPayments).order(:created_at).last }
   let(:eligibility) { claim.eligibility }
 
-  scenario "When subject 'none of the above' and user has an eligible degree" do
+  def claim_up_to_itt_subject
     start_levelling_up_premium_payments_claim
 
     # - Which school do you teach at
@@ -47,16 +47,20 @@ RSpec.feature "Levelling up premium payments claims" do
 
     # - Which subject did you do your undergraduate ITT in
     expect(page).to have_text(I18n.t("early_career_payments.questions.eligible_itt_subject", qualification: "undergraduate initial teaching training"))
+  end
+
+  scenario "When subject 'none of the above' and user has an eligible degree" do
+    claim_up_to_itt_subject
+
     choose "None of the above"
     click_on "Continue"
 
-    # Do you have an undergraduate or postgraduate degree in an eligible subject?
+    # - Do you have an undergraduate or postgraduate degree in an eligible subject?
     expect(page).to have_text(I18n.t("early_career_payments.questions.eligible_degree_subject"))
     choose "Yes"
     click_on "Continue"
 
-    # TODO: Update with the new teach now question
-    # - Do you teach 'none of the above' now
+    # - Do you spend at least half of your contracted hours teaching eligible subjects?
     expect(page).to have_text(I18n.t("early_career_payments.questions.teaching_subject_now", eligible_itt_subject: "none of the above"))
 
     choose "Yes"
@@ -169,7 +173,7 @@ RSpec.feature "Levelling up premium payments claims" do
     expect(page).not_to have_text("Enter the 6-digit password")
     expect(page).not_to have_text("We recommend you copy and paste the password from the email.")
 
-    # Payment to Bank or Building Society
+    # - Payment to Bank or Building Society
     expect(page).to have_text(I18n.t("questions.bank_or_building_society"))
 
     choose "Personal bank account"
@@ -290,5 +294,24 @@ RSpec.feature "Levelling up premium payments claims" do
     ]
 
     expect(claim.reload.policy_options_provided).to eq policy_options_provided
+  end
+
+  scenario "When subject 'Computing'" do
+    claim_up_to_itt_subject
+
+    choose "Computing"
+    click_on "Continue"
+
+    # - Do you spend at least half of your contracted hours teaching eligible subjects?
+    expect(page).to have_text(I18n.t("early_career_payments.questions.teaching_subject_now"))
+
+    choose "Yes"
+    click_on "Continue"
+
+    # - Check your answers for eligibility
+    expect(page).to have_text(I18n.t("early_career_payments.check_your_answers.part_one.primary_heading"))
+    expect(page).to have_text(I18n.t("early_career_payments.check_your_answers.part_one.secondary_heading"))
+    expect(page).to have_text(I18n.t("early_career_payments.check_your_answers.part_one.confirmation_notice"))
+    expect(page).not_to have_text(I18n.t("early_career_payments.questions.eligible_degree_subject"))
   end
 end
