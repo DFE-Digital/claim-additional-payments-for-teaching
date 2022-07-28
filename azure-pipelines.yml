@@ -22,7 +22,6 @@ stages:
   jobs:
   - job: Variables
     steps:
-    #- template: templates/build.yml
     - script: echo $(Agent.BuildDirectory)
     - script: echo $(System.PullRequest.PullRequestNumber)
     - script: echo $(Build.QueuedById)
