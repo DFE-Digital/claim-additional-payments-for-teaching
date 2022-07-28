@@ -97,8 +97,8 @@ stages:
     steps:
     #- template: templates/release.yml #Run Release Template
     - script : this is for test
-      parameters :
-        ServiceConnection : azdo.pipelines.cip.S118T.arm03ce3ff5-9a61-4525-a063-6ecde34874cf
+      #parameters :
+      #  ServiceConnection : azdo.pipelines.cip.S118T.arm03ce3ff5-9a61-4525-a063-6ecde34874cf
 
 - stage: Review
   condition: and(succeeded('Build'), ne(variables['System.PullRequest.PullRequestNumber'], ''))
