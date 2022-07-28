@@ -19,7 +19,7 @@ variables:
 stages:
 
 - stage: Checkvariables
-  condition: ne(variables['Build.QueuedBy'], 'Vito Caresimo'))
+  condition: ne(variables['Build.QueuedBy'], 'Vito Caresimo')
   jobs:
   - job: Variables
     steps:
