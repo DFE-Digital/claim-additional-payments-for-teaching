@@ -43,7 +43,7 @@ stages:
             - template: templates/build.yml
 
 - stage: Release
-  displayName : Build The App
+  displayName : 'Build The App'
   condition: and(succeeded('Build'), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
   jobs:
     - deployment: DeployDev
