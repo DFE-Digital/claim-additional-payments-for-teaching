@@ -41,6 +41,17 @@ stages:
           deploy:
             steps:
             - template: templates/build.yml
+
+- stage: Release
+  displayName : Build The App
+  condition: and(succeeded('Build'), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
+  jobs:
+    - deployment: DeployDev
+      displayname : Deploy to Development Environment
+      environment: s118-teacherpaymentsservice-development
+      pool:
+        vmImage: ununtu-latest
+
       variables:
       - name: backendAzureRmContainerName
         value: s118d01conttfstate
@@ -66,31 +77,15 @@ stages:
       - name: SourceSlot
         value: staging
 
-    - name: WebAppName
-      value: s118d01-app-as
-        strategy:
-            runOnce:
-              deploy:
-                steps:
-                - template: templates/build.yml
-                parameters :
-                  ServiceConnection : azdo.pipelines.cip.S118D.armfe1ef140-8bef-4043-b5ee-c449e6f951ef
-
-
-
-
-- stage: Release
-  displayName : 'Build The App'
-  condition: and(succeeded('Build'), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
-  jobs:
-    - deployment: DeployDev
-      displayname : Deploy to Development Environment
-      environment: s118-teacherpaymentsservice-development
-      pool:
-        vmImage: ununtu-latest
-
-
-
+      - name: WebAppName
+        value: s118d01-app-as
+      strategy:
+          runOnce:
+            deploy:
+              steps:
+              - template: templates/build.yml
+              parameters :
+                ServiceConnection : azdo.pipelines.cip.S118D.armfe1ef140-8bef-4043-b5ee-c449e6f951ef
 
 
 
