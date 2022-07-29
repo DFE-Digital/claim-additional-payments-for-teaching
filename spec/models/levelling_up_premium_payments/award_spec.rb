@@ -41,9 +41,9 @@ RSpec.describe LevellingUpPremiumPayments::Award do
 
       # *attempt* to check if the hash has been altered
       specify { expect(subject.values).to all be_positive }
-      specify { expect(subject.values.sum).to eq(5_764_500) }
+      specify { expect(subject.values.sum).to eq(5_926_500) }
       specify { expect(subject.values.uniq).to contain_exactly(1_500, 2_000, 2_500, 3_000) }
-      specify { expect(subject.count).to eq(2_655) }
+      specify { expect(subject.count).to eq(2_749) }
       specify {
         expect(subject).not_to include(
           100182, # first ineligible school
@@ -56,7 +56,7 @@ RSpec.describe LevellingUpPremiumPayments::Award do
           100053 => 1_500, # first £1,500 award
           103760 => 2_500, # first £2,500 award
           103765 => 3_000, # first £3,000 award
-          148965 => 3_000 # last eligible school
+          149205 => 2_500 # last eligible school
         )
       }
       specify { expect(subject).to be_frozen }
