@@ -25,6 +25,7 @@ stages:
     - template: templates/build.yml
 
 - stage: Release
+jobs:
 - deployment: DeployWebDev
   displayName: deploy Web App Dev
   pool:
