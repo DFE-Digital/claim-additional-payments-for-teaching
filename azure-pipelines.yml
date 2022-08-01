@@ -25,20 +25,20 @@ stages:
     - template: templates/build.yml
 
 - stage: Release
-jobs:
-- deployment: DeployWebDev
-  displayName: deploy Web App Dev
-  pool:
-    vmImage: 'ubuntu-latest'
-  # Creates an environment if it doesn't exist.
-  environment: 's118-teacherpaymentsservice-development'
-  strategy:
-    # Default deployment strategy, more coming...
-    runOnce:
-      deploy:
-        steps:
-        - checkout: self
-        - script: echo my first deployment
+  jobs:
+  - deployment: DeployWebDev
+    displayName: deploy Web App Dev
+    pool:
+      vmImage: 'ubuntu-latest'
+    # Creates an environment if it doesn't exist.
+    environment: 's118-teacherpaymentsservice-development'
+    strategy:
+      # Default deployment strategy, more coming...
+      runOnce:
+        deploy:
+          steps:
+          - checkout: self
+          - script: echo my first deployment
 
 - stage: Review
   condition: and(succeeded('Build'), ne(variables['System.PullRequest.PullRequestNumber'], ''))
