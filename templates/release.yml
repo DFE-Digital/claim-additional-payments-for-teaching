@@ -51,7 +51,7 @@ steps:
         pass: $(dockerPassword)
       displayName: Login to DockerHub
 
-    - powershell : Write-Host "$(env).tfvars.json"
+    - powershell : Write-Host workspace_variables/$(env)
     - powershell : Get-ChildItem $(Agent.BuildDirectory)/s/azure
 
 
