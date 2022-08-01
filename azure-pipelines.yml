@@ -18,113 +18,29 @@ variables:
 
 stages:
 
-- stage: Checkvariables
-  condition: ne(variables['Build.QueuedBy'], 'Vito Caresimo')
+- stage: Build
   jobs:
-  - job: Variables
+  - job: Build
     steps:
-    - script: echo $(Agent.BuildDirectory)
-    - script: echo $(System.PullRequest.PullRequestNumber)
-    - script: echo $(Build.QueuedById)
-    - script: echo $(Build.QueuedBy)
-    #- powershell: Get-ChildItem -Path $(Agent.BuildDirectory) -recurse
+    - template: templates/build.yml
 
-# - stage: Build
-#   jobs:
-#   - deployment: BuildDocker
-#    displayName: deploy Web App
-#   pool:
-#     vmImage: 'ubuntu-latest'
-#   environment: 's118-teacherpaymentsservice-development'
-#   strategy:
-#     runOnce:
-#       deploy:
-#         steps:
-#         - template: templates/build.yml
+jobs:
 
 
-# - stage: Build
-#   jobs:
-#   - job: Build
-#     steps:
-#     - template: templates/build.yml
-
-# - stage: Release
-#   condition: and(succeeded('Build'), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
-#   jobs:
-#   - job: DeployDev
-#     variables:
-#     - name: backendAzureRmContainerName
-#       value: s118d01conttfstate
-
-#     - name: backendAzureRmKey
-#       value: terraform.tfstate
-
-#     - name: backendAzureRmResourceGroupName
-#       value: s118d01-tfbackend
-
-#     - name: backendAzureRmStorageAccountName
-#       value: s118d01tfbackendsa
-
-#     - name: env
-#       value: Development
-
-#     - name: KeyVaultId
-#       value : /subscriptions/8655985a-2f87-44d7-a541-0be9a8c2779d/resourceGroups/s118d01-secrets/providers/Microsoft.KeyVault/vaults/s118d01-secrets-kv
-
-#     - name: ResourceGroupName
-#       value: s118d01-app
-
-#     - name: SourceSlot
-#       value: staging
-
-#     - name: WebAppName
-#       value: s118d01-app-as
-
-#     steps:
-#     - script : this is for development
-#     #- template: templates/release.yml #Run Release Template
-#     #  parameters :
-#     #    ServiceConnection : azdo.pipelines.cip.S118D.armfe1ef140-8bef-4043-b5ee-c449e6f951ef
-
-- stage: TestRelease
-  #condition: and(succeeded('Build'), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
-  condition: eq(variables['Build.Reason'], 'Manual')
-  jobs:
-  - job: DeployTest
-    variables:
-    - name: backendAzureRmContainerName
-      value: s118t01conttfstate
-
-    - name: backendAzureRmKey
-      value: terraform.tfstate
-
-    - name: backendAzureRmResourceGroupName
-      value: s118t01-tfbackend
-
-    - name: backendAzureRmStorageAccountName
-      value: s118t01tfbackendsa
-
-    - name: env
-      value: Development
-
-    - name: KeyVaultId
-      value : subscriptions/e9299169-9666-4f15-9da9-5332680145af/resourceGroups/s118t01-secrets/providers/Microsoft.KeyVault/vaults/s118t01-secrets-kv
-
-    - name: ResourceGroupName
-      value: s118t01-app
-
-    - name: SourceSlot
-      value: staging
-
-    - name: WebAppName
-      value: s118t01-app-as
-
-    steps:
-    - template: templates/test.yml
-    #- template: templates/release.yml #Run Release Template
-      #parameters :
-      #  ServiceConnection : azdo.pipelines.cip.S118T.arm03ce3ff5-9a61-4525-a063-6ecde34874cf
+- stage: Release
+  - deployment: DeployWebDev
+  displayName: deploy Web App Dev
+  pool:
+    vmImage: 'ubuntu-latest'
+  # Creates an environment if it doesn't exist.
+  environment: 's118-teacherpaymentsservice-development'
+  strategy:
+    # Default deployment strategy, more coming...
+    runOnce:
+      deploy:
+        steps:
+        - checkout: self
+        - script: echo my first deployment
 
 - stage: Review
   condition: and(succeeded('Build'), ne(variables['System.PullRequest.PullRequestNumber'], ''))
