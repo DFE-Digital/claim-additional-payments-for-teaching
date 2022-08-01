@@ -60,7 +60,6 @@ steps:
 
     - script: |
       echo $(env).tfvars.json
-      displayName: 'Command Line Script'
 
     - task: charleszipp.azure-pipelines-tasks-terraform.azure-pipelines-tasks-terraform-cli.TerraformCLI@0
       displayName: Terraform Apply
