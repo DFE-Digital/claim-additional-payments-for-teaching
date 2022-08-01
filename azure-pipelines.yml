@@ -28,7 +28,7 @@ jobs:
 
 
 - stage: Release
-  - deployment: DeployWebDev
+- deployment: DeployWebDev
   displayName: deploy Web App Dev
   pool:
     vmImage: 'ubuntu-latest'
