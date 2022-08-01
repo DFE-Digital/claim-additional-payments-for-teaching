@@ -2,6 +2,8 @@ parameters:
   ServiceConnection:
 
 steps:
+    - powershell : Write-Host "Hello World"
+
     - task: charleszipp.azure-pipelines-tasks-terraform.azure-pipelines-tasks-terraform-installer.TerraformInstaller@0
       displayName: Pin terraform version
       inputs:
@@ -57,9 +59,6 @@ steps:
          workingDirectory: $(Agent.BuildDirectory)/s/azure/terraform
          environmentServiceName: ${{ parameters.ServiceConnection }}
          commandOptions: '-var="input_region=westeurope" -var="input_container_version=$(Build.BuildNumber)" -var-file workspace_variables/$(env).tfvars.json $(ExtraTerraformVariables)'
-
-    - script: |
-      echo $(env).tfvars.json
 
     - task: charleszipp.azure-pipelines-tasks-terraform.azure-pipelines-tasks-terraform-cli.TerraformCLI@0
       displayName: Terraform Apply
