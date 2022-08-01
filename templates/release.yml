@@ -2,7 +2,7 @@ parameters:
   ServiceConnection:
 
 steps:
-    - powershell : Write-Host "Hello World"
+    - powershell : Write-Host "$(env).tfvars.json"
 
     - task: charleszipp.azure-pipelines-tasks-terraform.azure-pipelines-tasks-terraform-installer.TerraformInstaller@0
       displayName: Pin terraform version
