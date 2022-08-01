@@ -61,7 +61,7 @@ steps:
          command: plan
          workingDirectory: $(Agent.BuildDirectory)/s/azure/terraform
          environmentServiceName: ${{ parameters.ServiceConnection }}
-         commandOptions: '-var="input_region=westeurope" -var="input_container_version=$(Build.BuildNumber)" -var-file workspace_variables/$(env).tfvars.json $(ExtraTerraformVariables)'
+         #commandOptions: '-var="input_region=westeurope" -var="input_container_version=$(Build.BuildNumber)" -var-file workspace_variables/$(env).tfvars.json $(ExtraTerraformVariables)'
          commandOptions: '-var="input_region=westeurope" -var="input_container_version=$(Build.BuildNumber)" -var-file workspace_variables/development.tfvars.json'
 
 
