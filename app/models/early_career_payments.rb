@@ -20,6 +20,10 @@ module EarlyCareerPayments
     "https://www.gov.uk/guidance/early-career-payments-guidance-for-teachers-and-schools"
   end
 
+  def eligibility_criteria_url
+    eligibility_page_url + "#eligibility-criteria"
+  end
+
   def routing_name
     PolicyConfiguration.routing_name_for_policy(self)
   end

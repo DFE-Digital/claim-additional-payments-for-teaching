@@ -1,13 +1,15 @@
 require "rails_helper"
 
 RSpec.describe EarlyCareerPayments, type: :model do
-  let(:policy_configuration) { policy_configurations(:early_career_payments) }
+  specify {
+    expect(subject).to have_attributes(routing_name: "additional-payments",
+      short_name: "Early-Career Payments",
+      locale_key: "early_career_payments",
+      eligibility_page_url: "https://www.gov.uk/guidance/early-career-payments-guidance-for-teachers-and-schools",
+      eligibility_criteria_url: "https://www.gov.uk/guidance/early-career-payments-guidance-for-teachers-and-schools#eligibility-criteria")
+  }
 
-  describe ".routing_name" do
-    it "returns 'additional-payments'" do
-      expect(subject.routing_name).to eq "additional-payments"
-    end
-  end
+  let(:policy_configuration) { policy_configurations(:early_career_payments) }
 
   describe ".start_page_url" do
     it "returns a url containing '/additional-payments/landing-page'" do
@@ -22,18 +24,6 @@ RSpec.describe EarlyCareerPayments, type: :model do
     end
   end
 
-  describe ".short_name" do
-    it "returns the 'policy_short_name' translation" do
-      expect(subject.short_name).to eql "Early-Career Payments"
-    end
-  end
-
-  describe ".locale_key" do
-    it "returns 'early_career_payments' rather than 'additional_payments' to reuse existing ECP en.yml namespacing" do
-      expect(subject.locale_key).to eql "early_career_payments"
-    end
-  end
-
   describe ".notify_reply_to_id" do
     let(:ecp_notify_reply_to_id) do
       "3f85a1f7-9400-4b48-9a31-eaa643d6b977"
@@ -41,12 +31,6 @@ RSpec.describe EarlyCareerPayments, type: :model do
     it "returns the notify_reply_to_id" do
       # replace with valid ID - ECP-515
       expect(subject.notify_reply_to_id).to eql ecp_notify_reply_to_id
-    end
-  end
-
-  describe ".eligibility_page_url" do
-    it "returns a link to the guidance page for eligibility url" do
-      expect(subject.eligibility_page_url).to include("https://www.gov.uk/guidance/early-career-payments-guidance-for-teachers-and-schools")
     end
   end
 

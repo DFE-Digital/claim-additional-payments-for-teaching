@@ -1,0 +1,16 @@
+<p class="govuk-body">
+  You are not eligible for the
+  <%= link_to("early-career payment", EarlyCareerPayments.eligibility_criteria_url, class: "govuk-link") %>
+  because of when you did your initial teacher training (ITT). To be eligible for early-career payments,
+  your ITT course must have started (postgraduate) or finished (undergraduate) in:
+</p>
+<ul class="govuk-list govuk-list--bullet">
+  <li>mathematics in the 2018 to 2019, 2019 to 2020 or 2020 to 2021 academic year</li>
+  <li>chemistry, languages and physics in the 2020 to 2021 academic year</li>
+</ul>
+<p class="govuk-body">
+  You are not eligible for the
+  <%= link_to("levelling up premium payment", LevellingUpPremiumPayments.eligibility_criteria_url, class: "govuk-link") %>
+  because you do not teach in an eligible school. Levelling up premium payments are offered in state-funded
+  secondary schools identified as having a higher need for teacher.
+</p>
