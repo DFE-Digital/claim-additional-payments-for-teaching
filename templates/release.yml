@@ -58,6 +58,10 @@ steps:
          environmentServiceName: ${{ parameters.ServiceConnection }}
          commandOptions: '-var="input_region=westeurope" -var="input_container_version=$(Build.BuildNumber)" -var-file workspace_variables/$(env).tfvars.json $(ExtraTerraformVariables)'
 
+    - script: |
+      echo $(env).tfvars.json
+      displayName: 'Command Line Script'
+
     - task: charleszipp.azure-pipelines-tasks-terraform.azure-pipelines-tasks-terraform-cli.TerraformCLI@0
       displayName: Terraform Apply
       inputs:

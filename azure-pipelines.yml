@@ -18,14 +18,14 @@ variables:
 
 stages:
 
-- stage: Build
-  jobs:
-  - job: Build
-    steps:
-    - template: templates/build.yml
+# - stage: Build
+#   jobs:
+#   - job: Build
+#     steps:
+#     - template: templates/build.yml
 
 - stage: Release
-  condition: and(succeeded('Build'), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
+  #condition: and(succeeded('Build'), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
   jobs:
   - job: DeployDev
     variables:
