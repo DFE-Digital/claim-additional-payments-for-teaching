@@ -2,8 +2,6 @@ parameters:
   ServiceConnection:
 
 steps:
-    - powershell : Write-Host "$(env).tfvars.json"
-    - powershell : Get-ChildItem
 
     - task: charleszipp.azure-pipelines-tasks-terraform.azure-pipelines-tasks-terraform-installer.TerraformInstaller@0
       displayName: Pin terraform version
@@ -52,6 +50,10 @@ steps:
       env:
         pass: $(dockerPassword)
       displayName: Login to DockerHub
+
+    - powershell : Write-Host "$(env).tfvars.json"
+    - powershell : Get-ChildItem $(Agent.BuildDirectory)
+
 
     - task: charleszipp.azure-pipelines-tasks-terraform.azure-pipelines-tasks-terraform-cli.TerraformCLI@0
       displayName: Terraform Plan
