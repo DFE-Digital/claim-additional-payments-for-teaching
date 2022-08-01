@@ -24,9 +24,6 @@ stages:
     steps:
     - template: templates/build.yml
 
-jobs:
-
-
 - stage: Release
 - deployment: DeployWebDev
   displayName: deploy Web App Dev
