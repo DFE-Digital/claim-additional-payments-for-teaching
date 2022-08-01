@@ -3,6 +3,7 @@ parameters:
 
 steps:
     - powershell : Write-Host "$(env).tfvars.json"
+    - powershell : Get-ChildItem
 
     - task: charleszipp.azure-pipelines-tasks-terraform.azure-pipelines-tasks-terraform-installer.TerraformInstaller@0
       displayName: Pin terraform version
