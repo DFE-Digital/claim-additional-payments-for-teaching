@@ -52,7 +52,7 @@ steps:
       displayName: Login to DockerHub
 
     - powershell : Write-Host "$(env).tfvars.json"
-    - powershell : Get-ChildItem $(Agent.BuildDirectory)
+    - powershell : Get-ChildItem $(Agent.BuildDirectory)/s/azure
 
 
     - task: charleszipp.azure-pipelines-tasks-terraform.azure-pipelines-tasks-terraform-cli.TerraformCLI@0
