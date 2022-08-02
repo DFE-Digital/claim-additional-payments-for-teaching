@@ -1,3 +1,5 @@
+require "journey_subject_eligibility_checker"
+
 module LevellingUpPremiumPayments
   class DqtRecord
     delegate(
@@ -247,22 +249,42 @@ module LevellingUpPremiumPayments
       "101400"
     ].freeze
 
-    def initialize(record, _claim)
+    def initialize(record, claim)
       @record = record
+      @claim = claim
     end
 
     def eligible?
-      return true if eligible_code?(itt_subject_codes)
+      matching_type = Dqt::Codes::QUALIFICATION_MATCHING_TYPE.find { |key, values|
+        values.include?(qualification_name)
+      }&.first
 
-      eligible_code?(degree_codes)
+      date = case matching_type
+      when :under, :other
+        qts_award_date
+      when :post
+        itt_start_date
+      end
+
+      policy_year = PolicyConfiguration.for(claim.policy).current_academic_year
+      itt_year = AcademicYear.for(date)
+      eligible_itt_years = JourneySubjectEligibilityChecker.selectable_itt_years_for_claim_year(policy_year)
+
+      (eligible_code?(itt_subject_codes) || eligible_code?(degree_codes)) && eligible_itt_years.include?(itt_year) && eligible_subject?
     end
 
     private
 
-    attr_reader :record
+    attr_reader :record, :claim
 
     def eligible_code?(code)
       ((ELIGIBLE_JAC_CODES | ELIGIBLE_HECOS_CODES) & code).present?
+    end
+
+    def eligible_subject?
+      jac_names = Dqt::Codes::ELIGIBLE_JAC_NAMES.values.flatten
+      hecos_names = Dqt::Codes::ELIGIBLE_HECOS_NAMES.values.flatten
+      ((jac_names | hecos_names) & itt_subjects).present?
     end
   end
 end

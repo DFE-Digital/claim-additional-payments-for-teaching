@@ -9,8 +9,9 @@ RSpec.describe LevellingUpPremiumPayments::DqtRecord do
   end
 
   let(:claim) do
-    build_stubbed(
+    build(
       :claim,
+      policy: LevellingUpPremiumPayments,
       academic_year: AcademicYear.new(2022)
     )
   end

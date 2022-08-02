@@ -1,6 +1,7 @@
 require_relative "dqt/error"
 require_relative "dqt/bearer"
 require_relative "dqt/client"
+require_relative "dqt/codes"
 require_relative "dqt/object"
 require_relative "dqt/objects/teacher"
 require_relative "dqt/resource"
