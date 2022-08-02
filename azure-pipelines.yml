@@ -37,9 +37,6 @@ stages:
       # Default deployment strategy, more coming...
       runOnce:
         deploy:
-        variables:
-        -name : env
-        value : development
           steps:
           - checkout: self
           - template: templates/test.yml #Run Release Template
