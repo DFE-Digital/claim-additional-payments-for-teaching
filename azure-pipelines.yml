@@ -33,7 +33,7 @@ stages:
     # Creates an environment if it doesn't exist.
     environment: 's118-teacherpaymentsservice-development'
     variables:
-          name : webapp
+          -name : webapp
           value : test
     strategy:
       # Default deployment strategy, more coming...
