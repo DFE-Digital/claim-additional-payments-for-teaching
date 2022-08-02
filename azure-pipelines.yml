@@ -18,15 +18,15 @@ variables:
 
 stages:
 
-- stage: Build
-  jobs:
-  - job: Build
-    steps:
-    - template: templates/build.yml
+# - stage: Build
+#   jobs:
+#   - job: Build
+#     steps:
+#     - template: templates/build.yml
 
-- stage: Release
+- stage: dev
   jobs:
-  - deployment: DeployWebDev
+  - deployment: DeployDev
     displayName: deploy Web App Dev
     pool:
       vmImage: 'ubuntu-latest'
@@ -38,45 +38,52 @@ stages:
         deploy:
           steps:
           - checkout: self
-          - script: echo my first deployment
+          - script: echo Development Environment
 
-- stage: Review
-  condition: and(succeeded('Build'), ne(variables['System.PullRequest.PullRequestNumber'], ''))
+- stage: test
   jobs:
-  - job: DeployReview
-    variables:
-    - name: backendAzureRmContainerName
-      value: s118d02conttfstate
+  - deployment: DeployTest
+    displayName: deploy Web App Test
+    pool:
+      vmImage: 'ubuntu-latest'
+    # Creates an environment if it doesn't exist.
+    environment: 's118-teacherpaymentsservice-test'
+    strategy:
+      # Default deployment strategy, more coming...
+      runOnce:
+        deploy:
+          steps:
+          - checkout: self
+          - script: echo Test Environment
 
-    - name: backendAzureRmKey
-      value: $(app_name).tfstate
+- stage: prod
+  jobs:
+  - deployment: Deployprod
+    displayName: deploy Web App Prod
+    pool:
+      vmImage: 'ubuntu-latest'
+    # Creates an environment if it doesn't exist.
+    environment: 's118-teacherpaymentsservice-production'
+    strategy:
+      # Default deployment strategy, more coming...
+      runOnce:
+        deploy:
+          steps:
+          - checkout: self
+          - script: echo Production Environment
 
-    - name: backendAzureRmResourceGroupName
-      value: s118d02-review-tfbackend
-
-    - name: backendAzureRmStorageAccountName
-      value: s118d02reviewtfbackendsa
-
-    - name: env
-      value: review
-
-    - name: KeyVaultId
-      value : /subscriptions/8655985a-2f87-44d7-a541-0be9a8c2779d/resourceGroups/s118d02-secrets/providers/Microsoft.KeyVault/vaults/s118d02-secrets-kv
-
-    - name: ResourceGroupName
-      value: s118d02-app
-
-    - name: SourceSlot
-      value: staging
-
-    - name: WebAppName
-      value: s118d02-app-$(app_name)-as
-
-    - name : ExtraTerraformVariables
-      value: -var="app_name=$(app_name)"
-
-    steps:
-    - script : echo $(Build.BuildNumber), $(app_name), $(WebAppName), $(ExtraTerraformVariables), input_container_version=$(Build.BuildNumber). workspace_variables/$(env)
-    - template: templates/release.yml #Run Release Template#
-      parameters :
-        ServiceConnection : azdo.pipelines.cip.S118D.armfe1ef140-8bef-4043-b5ee-c449e6f951ef
+- stage: Reviewapp
+  jobs:
+  - deployment: DeployReviewApp
+    displayName: deploy review app
+    pool:
+      vmImage: 'ubuntu-latest'
+    # Creates an environment if it doesn't exist.
+    environment: 's118-teacherpaymentsservice-development'
+    strategy:
+      # Default deployment strategy, more coming...
+      runOnce:
+        deploy:
+          steps:
+          - checkout: self
+          - script: echo Review App - Development Environment
