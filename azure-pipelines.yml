@@ -43,6 +43,7 @@ stages:
           steps:
           - checkout: self
           - script: echo Development Environment
+          - script : echo $(webapp)
 
 # - stage: test
 #   jobs:
