@@ -25,7 +25,7 @@ stages:
     - template: templates/build.yml
 
 - stage: Release
-  #condition: and(succeeded('Build'), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
+  condition: and(succeeded('Build'), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
   jobs:
   - job: DeployDev
     variables:
