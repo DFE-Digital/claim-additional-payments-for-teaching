@@ -56,6 +56,9 @@ stages:
     - name: WebAppName
       value: s118d01-app-as
 
+    - name : ExtraTerraformVariables
+      value:
+
     steps:
     - template: templates/release.yml #Run Release Template
       parameters :
