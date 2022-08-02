@@ -42,8 +42,10 @@ stages:
         value : development
           steps:
           - checkout: self
-          - script: echo Development Environment
-          - script : echo $(env)
+          - template: templates/test.yml #Run Release Template
+            parameters :
+              testparam : testing parameter passing
+
 
 
 # - stage: test
