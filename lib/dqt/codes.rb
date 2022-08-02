@@ -1,6 +1,5 @@
 module Dqt
   class Codes
-   # match JAC CODES to all names in order
     ELIGIBLE_JAC_NAMES = {
       chemistry: [
         # F1
