@@ -32,14 +32,14 @@ stages:
       vmImage: 'ubuntu-latest'
     # Creates an environment if it doesn't exist.
     environment: 's118-teacherpaymentsservice-development'
-    variables:
-        -name : env
-        value : development
+
     strategy:
       # Default deployment strategy, more coming...
       runOnce:
         deploy:
-
+        variables:
+        -name : env
+        value : development
           steps:
           - checkout: self
           - script: echo Development Environment
