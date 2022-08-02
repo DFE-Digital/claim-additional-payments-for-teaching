@@ -36,54 +36,57 @@ stages:
       # Default deployment strategy, more coming...
       runOnce:
         deploy:
+          variables:
+          name : webapp
+          value : test
           steps:
           - checkout: self
           - script: echo Development Environment
 
-- stage: test
-  jobs:
-  - deployment: DeployTest
-    displayName: deploy Web App Test
-    pool:
-      vmImage: 'ubuntu-latest'
-    # Creates an environment if it doesn't exist.
-    environment: 's118-teacherpaymentsservice-test'
-    strategy:
-      # Default deployment strategy, more coming...
-      runOnce:
-        deploy:
-          steps:
-          - checkout: self
-          - script: echo Test Environment
+# - stage: test
+#   jobs:
+#   - deployment: DeployTest
+#     displayName: deploy Web App Test
+#     pool:
+#       vmImage: 'ubuntu-latest'
+#     # Creates an environment if it doesn't exist.
+#     environment: 's118-teacherpaymentsservice-test'
+#     strategy:
+#       # Default deployment strategy, more coming...
+#       runOnce:
+#         deploy:
+#           steps:
+#           - checkout: self
+#           - script: echo Test Environment
 
-- stage: prod
-  jobs:
-  - deployment: Deployprod
-    displayName: deploy Web App Prod
-    pool:
-      vmImage: 'ubuntu-latest'
-    # Creates an environment if it doesn't exist.
-    environment: 's118-teacherpaymentsservice-production'
-    strategy:
-      # Default deployment strategy, more coming...
-      runOnce:
-        deploy:
-          steps:
-          - checkout: self
-          - script: echo Production Environment
+# - stage: prod
+#   jobs:
+#   - deployment: Deployprod
+#     displayName: deploy Web App Prod
+#     pool:
+#       vmImage: 'ubuntu-latest'
+#     # Creates an environment if it doesn't exist.
+#     environment: 's118-teacherpaymentsservice-production'
+#     strategy:
+#       # Default deployment strategy, more coming...
+#       runOnce:
+#         deploy:
+#           steps:
+#           - checkout: self
+#           - script: echo Production Environment
 
-- stage: Reviewapp
-  jobs:
-  - deployment: DeployReviewApp
-    displayName: deploy review app
-    pool:
-      vmImage: 'ubuntu-latest'
-    # Creates an environment if it doesn't exist.
-    environment: 's118-teacherpaymentsservice-development'
-    strategy:
-      # Default deployment strategy, more coming...
-      runOnce:
-        deploy:
-          steps:
-          - checkout: self
-          - script: echo Review App - Development Environment
+# - stage: Reviewapp
+#   jobs:
+#   - deployment: DeployReviewApp
+#     displayName: deploy review app
+#     pool:
+#       vmImage: 'ubuntu-latest'
+#     # Creates an environment if it doesn't exist.
+#     environment: 's118-teacherpaymentsservice-development'
+#     strategy:
+#       # Default deployment strategy, more coming...
+#       runOnce:
+#         deploy:
+#           steps:
+#           - checkout: self
+#           - script: echo Review App - Development Environment
