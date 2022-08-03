@@ -49,12 +49,10 @@ RSpec.feature "Set Reminder when Eligible Later for an Early Career Payment" do
 
         click_on "Continue"
 
-        expect(page).to have_text("You will be eligible")
-        expect(page).to have_text("early-career payment in #{args[:next_year]}")
+        expect(page).to have_text("you could claim for an early-career payment in the #{AcademicYear.new(args[:next_year]).to_s(:long)} academic year")
+        expect(page).to have_content("Set a reminder to apply next year")
 
-        expect(page).to have_content("Set up a reminder with us and we will email you when your application window opens.")
-
-        click_on "Continue"
+        click_on "Set reminder"
 
         expect(page).to have_text("Personal details")
         expect(page).to have_text("Tell us the email address you'd like us to send your reminder to. We recommend you use a personal email address.")
@@ -129,12 +127,10 @@ RSpec.feature "Set Reminder when Eligible Later for an Early Career Payment" do
 
           click_on "Continue"
 
-          expect(page).to have_text("You will be eligible")
-          expect(page).to have_text("early-career payment in #{args[:next_year]}")
+          expect(page).to have_text("you could claim for an early-career payment in the #{AcademicYear.new(args[:next_year]).to_s(:long)} academic year")
+          expect(page).to have_content("Set a reminder to apply next year")
 
-          expect(page).to have_content("Set up a reminder with us and we will email you when your application window opens.")
-
-          click_on "Continue"
+          click_on "Set reminder"
 
           expect(page).to have_text("Personal details")
           expect(page).to have_text("Tell us the email address you'd like us to send your reminder to. We recommend you use a personal email address.")
