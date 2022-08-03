@@ -150,8 +150,7 @@ RSpec.feature "ITT subject selection" do
 
           click_on "Continue"
 
-          expect(page).to have_text("You will be eligible")
-          expect(page).to have_text("in autumn 2023")
+          expect(page).to have_text("you could claim for an early-career payment in the 2023 to 2024 academic year")
         end
 
         scenario "choose eligible subject but don't teach now" do

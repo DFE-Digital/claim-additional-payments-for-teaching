@@ -1,23 +1,53 @@
-<% year = current_claim.eligibility.eligible_later_year.start_year %>
-<% content_for(:page_title, page_title("You will be eligible for an early-career payment in #{year}", policy: current_policy_routing_name)) %>
+<% content_for(:page_title, page_title("You could be eligible for an early-career payment next year")) %>
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-    <h1 class="govuk-heading-xl">You will be eligible for a <%= number_to_currency(current_claim.eligibility.award_amount, precision: 0) %> early-career payment in <%= year %></h1>
+    <h1 class="govuk-heading-l">You could be eligible for an early-career payment next year</h1>
+
+    <h2 class="govuk-heading-m">You are not eligible this year</h2>
+
+    <% if current_claim.eligibility.undergraduate_itt? %>
+      <p class="govuk-body">
+        You are not eligible for the
+        <%= link_to "early-career payment (opens in new tab)", "https://www.gov.uk/guidance/early-career-payments-guidance-for-teachers-and-schools", class: "govuk-link govuk-link--no-visited-state", target: "_blank" %>
+        because you completed your undergraduate initial teacher training in the <%= current_claim.eligibility.itt_academic_year.to_s(:long) -%> academic year.
+      </p>
+    <% end %>
+
+    <% if current_claim.eligibility.postgraduate_itt? %>
+      <p class="govuk-body">
+        You are not eligible for the
+        <%= link_to "early-career payment (opens in new tab)", "https://www.gov.uk/guidance/early-career-payments-guidance-for-teachers-and-schools", class: "govuk-link govuk-link--no-visited-state", target: "_blank" %>
+        because you started your postgraduate initial teacher training in the <%= current_claim.eligibility.itt_academic_year.to_s(:long) -%> academic year.
+      </p>
+    <% end %>
+
+    <% if current_claim.eligibility.assessment_only? || current_claim.eligibility.overseas_recognition? %>
+      <p class="govuk-body">
+        You are not eligible for the
+        <%= link_to "early-career payment (opens in new tab)", "https://www.gov.uk/guidance/early-career-payments-guidance-for-teachers-and-schools", class: "govuk-link govuk-link--no-visited-state", target: "_blank" %>
+        because you earned your qualified teacher status in the <%= current_claim.eligibility.itt_academic_year.to_s(:long) -%> academic year.
+      </p>
+    <% end %>
+
     <p class="govuk-body">
-      So long as your circumstances remain the same, you&rsquo;ll be able to claim <%= number_to_currency(current_claim.eligibility.award_amount, precision: 0) %> in autumn <%= year%>.
+      You are not eligible for the
+      <%= link_to "levelling up premium payment (opens in new tab)", "https://www.gov.uk/guidance/levelling-up-premium-payments-for-teachers", class: "govuk-link govuk-link--no-visited-state", target: "_blank" %>
+      because the school you teach in is not eligible. Levelling up premium payments are offered in schools identified as having a higher need for teachers.
     </p>
 
-    <h2 class="govuk-heading-l">What you can do next</h2>
+    <h2 class="govuk-heading-m">You may be eligible next year</h2>
 
     <p class="govuk-body">
-      Set up a reminder with us and we will email you when your application window opens. We will send this to your preferred email address.
+      So long as your circumstances stay the same, you could claim for an early-career payment in the <%= (current_claim.academic_year + 1).to_s(:long)  -%> academic year.
     </p>
 
-    <p class="govuk-inset-text">
-      It is your responsibility to apply for each payment you are eligible for. The Department for Education cannot issue payments unless you apply for one nor can we issue payments for claims made after the window has closed.
+    <h3 class="govuk-heading-s">Set a reminder to apply next year</h3>
+
+    <p class="govuk-body">
+      Receive a reminder email so you know when to apply. We cannot issue payments unless you apply.
     </p>
 
-    <%= link_to "Continue", new_reminder_path, class: "govuk-button", role: :button, data: { module: "govuk-button"} %>
+    <%= link_to "Set reminder", new_reminder_path, class: "govuk-button", role: :button, data: { module: "govuk-button"} %>
   </div>
 </div>

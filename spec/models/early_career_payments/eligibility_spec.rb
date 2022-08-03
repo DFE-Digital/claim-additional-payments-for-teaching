@@ -341,7 +341,7 @@ RSpec.describe EarlyCareerPayments::Eligibility, type: :model do
         expect(EarlyCareerPayments::Eligibility.new(eligible_itt_subject: :chemistry)).to be_valid(:"eligible-itt-subject")
         expect(EarlyCareerPayments::Eligibility.new(eligible_itt_subject: :physics)).to be_valid(:"eligible-itt-subject")
         expect(EarlyCareerPayments::Eligibility.new(eligible_itt_subject: :foreign_languages)).to be_valid(:"eligible-itt-subject")
-        expect(-> { EarlyCareerPayments::Eligibility.new(eligible_itt_subject: :languages) }).to raise_error(ArgumentError)
+        expect { EarlyCareerPayments::Eligibility.new(eligible_itt_subject: :languages) }.to raise_error(ArgumentError)
       end
     end
 
