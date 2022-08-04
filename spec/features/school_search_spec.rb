@@ -39,7 +39,7 @@ RSpec.feature "Searching for school during Teacher Student Loan Repayments claim
     expect(page).to have_text(subjects_taught_question(school_name: schools(:penistone_grammar_school).name))
   end
 
-  scenario "Claim school search with autocomplete", js: true, if: ENV["ENVIRONMENT_NAME"] == "test" do
+  scenario "Claim school search with autocomplete", js: true, unless: ENV["APP_HOME"] do
     start_student_loans_claim
 
     expect(page).to have_text(claim_school_question)
@@ -55,7 +55,7 @@ RSpec.feature "Searching for school during Teacher Student Loan Repayments claim
     expect(page).to have_text(subjects_taught_question(school_name: schools(:penistone_grammar_school).name))
   end
 
-  scenario "Current school search with autocomplete", js: true, if: ENV["ENVIRONMENT_NAME"] == "test" do
+  scenario "Current school search with autocomplete", js: true, unless: ENV["APP_HOME"] do
     start_student_loans_claim
 
     choose_school schools(:penistone_grammar_school)
@@ -95,7 +95,7 @@ RSpec.feature "Searching for school during Teacher Student Loan Repayments claim
     expect(page).to have_text(schools(:penistone_grammar_school).name)
   end
 
-  scenario "Editing school search after autocompletion clears last selection", js: true, if: ENV["ENVIRONMENT_NAME"] == "test" do
+  scenario "Editing school search after autocompletion clears last selection", js: true, unless: ENV["APP_HOME"] do
     start_student_loans_claim
 
     expect(page).to have_text(claim_school_question)
