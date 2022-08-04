@@ -46,9 +46,20 @@ RSpec.describe EarlyCareerPayments::DqtRecord do
   let(:claim) do
     build_stubbed(
       :claim,
-      academic_year: claim_academic_year
+      academic_year: claim_academic_year,
+      eligibility: eligibility
     )
   end
+
+  let(:eligibility) do
+    build(
+      :early_career_payments_eligibility,
+      :eligible,
+      eligible_itt_subject: eligible_itt_subject
+    )
+  end
+
+  let(:eligible_itt_subject) { :mathematics }
 
   let(:record) do
     OpenStruct.new(
@@ -74,27 +85,30 @@ RSpec.describe EarlyCareerPayments::DqtRecord do
         record_itt_subject_codes: ["G100"],
         record_itt_date: Date.parse("1/9/2017"),
         record_qts_date: Date.parse("1/9/2018"),
-        record_qualification_name: "BA"
+        record_qualification_name: "BA",
+        eligible_itt_subject: :mathematics
       },
 
       {
         claim_academic_year: AcademicYear.new(2022),
         record_degree_codes: [],
-        record_itt_subjects: ["Foreign Languages"],
+        record_itt_subjects: ["French language"],
         record_itt_subject_codes: [],
         record_itt_date: Date.parse("1/9/2017"),
         record_qts_date: Date.parse("1/9/2020"),
-        record_qualification_name: "BA"
+        record_qualification_name: "BA",
+        eligible_itt_subject: :foreign_languages
       },
 
       {
         claim_academic_year: AcademicYear.new(2022),
         record_degree_codes: [],
-        record_itt_subjects: ["Foreign Languages"],
+        record_itt_subjects: ["French language"],
         record_itt_subject_codes: ["F300"],
         record_itt_date: Date.parse("1/9/2017"),
         record_qts_date: Date.parse("1/9/2020"),
-        record_qualification_name: "BA"
+        record_qualification_name: "BA",
+        eligible_itt_subject: :foreign_languages
       }
     ].each do |context|
       context "when claim academic year #{context[:claim_academic_year]}" do
@@ -105,6 +119,7 @@ RSpec.describe EarlyCareerPayments::DqtRecord do
 
           context "when record ITT subjects #{context[:record_itt_subjects]}" do
             let(:record_itt_subjects) { context[:record_itt_subjects] }
+            let(:eligible_itt_subject) { context[:eligible_itt_subject] }
 
             context "when record ITT subject codes #{context[:record_itt_subject_codes]}" do
               let(:record_itt_subject_codes) { context[:record_itt_subject_codes] }

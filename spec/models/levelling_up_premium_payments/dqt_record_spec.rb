@@ -12,15 +12,26 @@ RSpec.describe LevellingUpPremiumPayments::DqtRecord do
     build(
       :claim,
       policy: LevellingUpPremiumPayments,
-      academic_year: AcademicYear.new(2022)
+      academic_year: AcademicYear.new(2022),
+      eligibility: eligibility
     )
   end
+
+  let(:eligibility) do
+    build(
+      :levelling_up_premium_payments_eligibility,
+      :eligible,
+      eligible_itt_subject: eligible_itt_subject
+    )
+  end
+
+  let(:eligible_itt_subject) { :mathematics }
 
   let(:record) do
     OpenStruct.new(
       {
         degree_codes: degree_codes,
-        itt_subjects: ["Applied Mathematics"],
+        itt_subjects: ["mathematics"],
         itt_subject_codes: itt_subject_codes,
         itt_start_date: Date.parse("1/9/2018"),
         qts_award_date: Date.parse("31/8/2019"),

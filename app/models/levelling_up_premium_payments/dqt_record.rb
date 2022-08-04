@@ -249,6 +249,25 @@ module LevellingUpPremiumPayments
       "101400"
     ].freeze
 
+    ELIGIBLE_ITT_SUBJECTS = {
+      chemistry: [
+        "applied chemistry"
+      ],
+      foreign_languages: [
+        "French language"
+      ],
+      mathematics: [
+        "mathematics"
+      ],
+      physics: [
+        "applied physics"
+      ],
+      computing: [
+        "Applied ICT",
+        "computer science"
+      ]
+    }
+
     def initialize(record, claim)
       @record = record
       @claim = claim
@@ -282,9 +301,9 @@ module LevellingUpPremiumPayments
     end
 
     def eligible_subject?
-      jac_names = Dqt::Codes::ELIGIBLE_JAC_NAMES.values.flatten
-      hecos_names = Dqt::Codes::ELIGIBLE_HECOS_NAMES.values.flatten
-      ((jac_names | hecos_names) & itt_subjects).present?
+      return true if claim.eligibility.itt_subject_none_of_the_above?
+
+      (ELIGIBLE_ITT_SUBJECTS[claim.eligibility.eligible_itt_subject.to_sym] & itt_subjects).present?
     end
   end
 end
