@@ -251,20 +251,83 @@ module LevellingUpPremiumPayments
 
     ELIGIBLE_ITT_SUBJECTS = {
       chemistry: [
-        "applied chemistry"
-      ],
-      foreign_languages: [
-        "French language"
-      ],
-      mathematics: [
-        "mathematics"
-      ],
-      physics: [
-        "applied physics"
+        "applied chemistry",
+        "chemistry",
+        "Applied Chemistry",
+        "Applied Chemistry",
+        "Chemical Sciences",
+        "Chemical Technology",
+        "Chemistry",
+        "Environmental Chemistry",
+        "Inorganic Chemistry",
+        "Science With Chemistry",
+        "Science-Chemistry-Bath Ude"
       ],
       computing: [
+        "applied computing",
+        "computer science",
+        "Information and Communications Technology",
         "Applied ICT",
-        "computer science"
+        "Applied ICT",
+        "Computer and Information Tech",
+        "Computer Educ With Science",
+        "Computer Education",
+        "Computer Education With Maths",
+        "Computer Science",
+        "Computer Science",
+        "Computer Studies",
+        "Computing",
+        "Computing and Science",
+        "Computing and Technology",
+        "Computing Science",
+        "Info Technlgy/Computing",
+        "Information and Communications Technology",
+        "Information Science",
+        "Information Studies",
+        "Information Technology",
+        "Information Tech'ogy:computing",
+        "Micro-Computing"
+      ],
+      mathematics: [
+        "mathematics",
+        "Mathematics",
+        "Applied Mathematics",
+        "Mathematical Education",
+        "Mathematical Engineering",
+        "Mathematical Science",
+        "Mathematical Studies",
+        "Mathematics & Computer Studies",
+        "Mathematics and Science",
+        "Maths and Info. Technology",
+        "Maths With Computer Science",
+        "Maths.Science and Technology",
+        "Maths.Stats. and Computing",
+        "Mechanics",
+        "Numeracy",
+        "Operational Rsearch Techniques",
+        "Pure Mathematics",
+        "Science With Mathematics",
+        "Statistics",
+        "Technological Mathematics",
+        "Technology and Mathematics"
+      ],
+      physics: [
+        "applied physics",
+        "physics",
+        "Applied Physics",
+        "Chemical Physics",
+        "Mathematical Physics",
+        "Natural Philosophy",
+        "Physics",
+        "Physics (With Science)",
+        "Physics and Science",
+        "Physics With Core Science",
+        "Physics with Maths",
+        "Physics With Technology",
+        "Physics/Engineering Science",
+        "Science With Physics",
+        "Science-Physics-Bath Ude",
+        "Theoretical Physics"
       ]
     }
 

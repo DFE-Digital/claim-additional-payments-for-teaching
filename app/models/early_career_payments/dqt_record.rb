@@ -327,6 +327,9 @@ module EarlyCareerPayments
             }&.first ||
             ELIGIBLE_JAC_NAMES.find { |key, values|
               values.include?(subject_code)
+            }&.first ||
+            ELIGIBLE_HECOS_NAMES.find { |key, values|
+              values.include?(subject_code)
             }&.first
       end
     end
