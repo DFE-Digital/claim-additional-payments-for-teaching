@@ -39,14 +39,14 @@ RSpec.feature "Searching for school during Teacher Student Loan Repayments claim
     expect(page).to have_text(subjects_taught_question(school_name: schools(:penistone_grammar_school).name))
   end
 
-  scenario "Claim school search with autocomplete", js: true do
+  scenario "Claim school search with autocomplete", js: true, if: ENV["ENVIRONMENT_NAME"] == "test" do
     start_student_loans_claim
 
     expect(page).to have_text(claim_school_question)
     expect(page).to have_button("Continue")
 
     fill_in :school_search, with: "Penistone"
-    find("li", text: schools(:penistone_grammar_school).name).click(wait: 1.0)
+    find("li", text: schools(:penistone_grammar_school).name)
 
     expect(page).to have_button("Continue")
 
@@ -55,7 +55,7 @@ RSpec.feature "Searching for school during Teacher Student Loan Repayments claim
     expect(page).to have_text(subjects_taught_question(school_name: schools(:penistone_grammar_school).name))
   end
 
-  scenario "Current school search with autocomplete", js: true do
+  scenario "Current school search with autocomplete", js: true, if: ENV["ENVIRONMENT_NAME"] == "test" do
     start_student_loans_claim
 
     choose_school schools(:penistone_grammar_school)
@@ -68,7 +68,7 @@ RSpec.feature "Searching for school during Teacher Student Loan Repayments claim
 
     fill_in :school_search, with: "Penistone"
     using_wait_time 8 do
-      find("li", text: schools(:penistone_grammar_school).name).click(wait: 1.0)
+      find("li", text: schools(:penistone_grammar_school).name)
     end
 
     expect(page).to have_button("Continue")
@@ -95,14 +95,14 @@ RSpec.feature "Searching for school during Teacher Student Loan Repayments claim
     expect(page).to have_text(schools(:penistone_grammar_school).name)
   end
 
-  scenario "Editing school search after autocompletion clears last selection", js: true do
+  scenario "Editing school search after autocompletion clears last selection", js: true, if: ENV["ENVIRONMENT_NAME"] == "test" do
     start_student_loans_claim
 
     expect(page).to have_text(claim_school_question)
     expect(page).to have_button("Continue")
 
     fill_in :school_search, with: "Penistone"
-    find("li", text: schools(:penistone_grammar_school).name).click(wait: 1.0)
+    find("li", text: schools(:penistone_grammar_school).name)
 
     expect(page).to have_button("Continue")
 
