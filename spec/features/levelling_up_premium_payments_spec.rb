@@ -143,8 +143,7 @@ RSpec.feature "Levelling up premium payments claims" do
 
     # - One time password
     expect(page).to have_text("Email address verification")
-    expect(page).to have_text("Enter the 6-digit password")
-    expect(page).to have_text("We recommend you copy and paste the password from the email.")
+    expect(page).to have_text("Enter the 6-digit passcode")
 
     mail = ActionMailer::Base.deliveries.last
     otp_in_mail_sent = mail[:personalisation].decoded.scan(/\b[0-9]{6}\b/).first
@@ -152,7 +151,7 @@ RSpec.feature "Levelling up premium payments claims" do
     # - One time password wrong
     fill_in "claim_one_time_password", with: "000000"
     click_on "Confirm"
-    expect(page).to have_text("Enter the correct one time password that we emailed to you")
+    expect(page).to have_text("Enter a valid passcode")
 
     # - clear and enter correct OTP
     fill_in "claim_one_time_password", with: otp_in_mail_sent, fill_options: {clear: :backspace}
@@ -170,8 +169,7 @@ RSpec.feature "Levelling up premium payments claims" do
     expect(page).not_to have_text(I18n.t("questions.mobile_number"))
 
     # - Mobile number one-time password
-    expect(page).not_to have_text("Enter the 6-digit password")
-    expect(page).not_to have_text("We recommend you copy and paste the password from the email.")
+    expect(page).not_to have_text("Enter the 6-digit passcode")
 
     # - Payment to Bank or Building Society
     expect(page).to have_text(I18n.t("questions.bank_or_building_society"))

@@ -3,6 +3,8 @@ module OneTimePassword
     def initialize(code, generated_at, otp_category = nil)
       @code = code
       @generated_at = generated_at
+
+      # TODO: no longer used
       @otp_category = otp_category
     end
 
@@ -11,10 +13,10 @@ module OneTimePassword
     end
 
     def warning
-      return "Enter your one time password" if code.blank?
-      return "Your one time password must be #{LENGTH}-digits" if wrong_length?
-      return "Your one time password has expired, request a new one" if expired?
-      "Enter the correct one time password that we #{delivery_method_text}" if incorrect?
+      return "Enter a passcode" if code.blank?
+      return "Passcode must contain #{LENGTH}-digits" if wrong_length?
+      return "Your passcode has expired, request a new one" if expired?
+      "Enter a valid passcode" if incorrect?
     end
 
     private
@@ -37,11 +39,6 @@ module OneTimePassword
       return @incorrect if defined? @incorrect
 
       @incorrect = rotp.new(SECRET, issuer: ISSUER).verify(code, drift_behind: DRIFT).nil?
-    end
-
-    def delivery_method_text
-      return "sent to you in a text message" if otp_category == "claim_mobile"
-      "emailed to you" if otp_category == "claim_email" || otp_category.nil?
     end
   end
 end

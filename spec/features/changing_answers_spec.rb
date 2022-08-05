@@ -421,8 +421,7 @@ RSpec.feature "Changing the answers on a submittable claim" do
 
         # - Mobile number one-time password
         expect(page).to have_text("Password verification")
-        expect(page).to have_text("Enter the 6-digit password")
-        expect(page).not_to have_text("We recommend you copy and paste the password from the email.")
+        expect(page).to have_text("Enter the 6-digit passcode")
 
         fill_in "claim_one_time_password", with: otp_code
         click_on "Confirm"
@@ -474,8 +473,7 @@ RSpec.feature "Changing the answers on a submittable claim" do
 
         # - Mobile number one-time password
         expect(page).to have_text("Password verification")
-        expect(page).to have_text("Enter the 6-digit password")
-        expect(page).not_to have_text("We recommend you copy and paste the password from the email.")
+        expect(page).to have_text("Enter the 6-digit passcode")
 
         fill_in "claim_one_time_password", with: otp_code
         click_on "Confirm"

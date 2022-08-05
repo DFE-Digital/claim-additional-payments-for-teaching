@@ -143,7 +143,7 @@ RSpec.feature "Maths & Physics claims" do
       expect(claim.reload.email_address).to eq("name@example.com")
 
       # - One time password
-      expect(page).to have_text("Enter the 6-digit password")
+      expect(page).to have_text("Enter the 6-digit passcode")
 
       mail = ActionMailer::Base.deliveries.last
       otp_in_mail_sent = mail[:personalisation].decoded.scan(/\b[0-9]{6}\b/).first
