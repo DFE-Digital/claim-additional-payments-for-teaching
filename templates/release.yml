@@ -1,5 +1,15 @@
 parameters:
   ServiceConnection:
+  backendAzureRmContainerName :
+  backendAzureRmKey :
+  backendAzureRmResourceGroupName :
+  backendAzureRmStorageAccountName :
+  env :
+  KeyVaultId :
+  ResourceGroupName :
+  SourceSlot :
+  WebAppName :
+  ExtraTerraformVariables :
 
 steps:
     - task: charleszipp.azure-pipelines-tasks-terraform.azure-pipelines-tasks-terraform-installer.TerraformInstaller@0
@@ -14,10 +24,10 @@ steps:
         workingDirectory: $(Agent.BuildDirectory)/s/azure/terraform
         backendType: azurerm
         backendServiceArm: ${{ parameters.ServiceConnection }}
-        backendAzureRmResourceGroupName: $(backendAzureRmResourceGroupName)
-        backendAzureRmStorageAccountName: $(backendAzureRmStorageAccountName)
-        backendAzureRmContainerName: $(backendAzureRmContainerName)
-        backendAzureRmKey: $(backendAzureRmKey)
+        backendAzureRmResourceGroupName: ${{ parameters.backendAzureRmResourceGroupName}}
+        backendAzureRmStorageAccountName: ${{ parameters.backendAzureRmStorageAccountName}}
+        backendAzureRmContainerName: ${{ parameters.backendAzureRmContainerName}}
+        backendAzureRmKey: ${{ parameters.backendAzureRmKey}}
 
     - task: AzurePowerShell@5
       displayName: Disable KV network firewall rule
@@ -26,7 +36,7 @@ steps:
         ScriptType: InlineScript
         Inline: |
           # Setting Variables
-          $KeyVault = Get-AzResource -ResourceId $(KeyVaultId) -ErrorAction SilentlyContinue
+          $KeyVault = Get-AzResource -ResourceId ${{ parameters.KeyVaultId}} -ErrorAction SilentlyContinue
           If ($null -eq $KeyVault) {
              Write-Output "##vso[task.logissue type=warning;]The Key Vault with Id $KeyVaultId does not exist"
              Exit 0
@@ -56,7 +66,7 @@ steps:
          command: plan
          workingDirectory: $(Agent.BuildDirectory)/s/azure/terraform
          environmentServiceName: ${{ parameters.ServiceConnection }}
-         commandOptions: '-var="input_region=westeurope" -var="input_container_version=$(Build.BuildNumber)" -var-file workspace_variables/$(env).tfvars.json $(ExtraTerraformVariables)'
+         commandOptions: '-var="input_region=westeurope" -var="input_container_version=$(Build.BuildNumber)" -var-file workspace_variables/${{ parameters.env}}.tfvars.json ${{ parameters.ExtraTerraformVariables}}'
 
     - task: charleszipp.azure-pipelines-tasks-terraform.azure-pipelines-tasks-terraform-cli.TerraformCLI@0
       displayName: Terraform Apply
@@ -64,7 +74,7 @@ steps:
         command: apply
         workingDirectory: $(Agent.BuildDirectory)/s/azure/terraform
         environmentServiceName: ${{ parameters.ServiceConnection }}
-        commandOptions: '-var="input_region=westeurope" -var="input_container_version=$(Build.BuildNumber)" -var-file workspace_variables/$(env).tfvars.json $(ExtraTerraformVariables)'
+        commandOptions: '-var="input_region=westeurope" -var="input_container_version=$(Build.BuildNumber)" -var-file workspace_variables/${{ parameters.env}}.tfvars.json ${{ parameters.ExtraTerraformVariables}}'
 
     - task: AzurePowerShell@5
       displayName: Enable KV network firewall rule
@@ -73,17 +83,17 @@ steps:
         ScriptType: InlineScript
         Inline: |
           # Setting Variables
-          $KeyVault = Get-AzResource -ResourceId $(KeyVaultId) -ErrorAction SilentlyContinue
+          $KeyVault = Get-AzResource -ResourceId ${{ parameters.KeyVaultId}} -ErrorAction SilentlyContinue
           $KeyVault = Get-AzKeyVault -ResourceGroupName $KeyVault.ResourceGroupName -VaultName $KeyVault.Name
           Write-Output 'Updating Key Vault rules...'
           $KeyVault | Update-AzKeyVaultNetworkRuleSet -DefaultAction Deny
         preferredAzurePowerShellVersion: 3.1.0
 
     - task: AzureAppServiceManage@0
-      displayName: Swap Slots $(WebAppName)
+      displayName: Swap Slots ${{ parameters.WebAppName}}
       inputs:
         azureSubscription: ${{ parameters.ServiceConnection }}
-        WebAppName: $(WebAppName)
-        ResourceGroupName: $(ResourceGroupName)
-        SourceSlot: $(SourceSlot)
+        WebAppName: ${{ parameters.WebAppName}}
+        ResourceGroupName: ${{ parameters.ResourceGroupName}}
+        SourceSlot: ${{ parameters.SourceSlot}}
         timeoutInMinutes: 20
