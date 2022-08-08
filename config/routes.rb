@@ -85,6 +85,7 @@ Rails.application.routes.draw do
     post "/auth/dfe", as: :dfe_sign_in
     get "/auth/callback", to: "auth#callback"
     get "/auth/failure", to: "auth#failure"
+    post "/auth/developer/callback", to: "auth#bypass_callback", as: :dfe_sign_in_bypass_callback
 
     resources :claims, only: [:index, :show] do
       resources :tasks, only: [:index, :show, :create, :update], param: :name, constraints: {name: %r{#{Task::NAMES.join("|")}}}

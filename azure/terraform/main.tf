@@ -11,6 +11,7 @@ module "container" {
   db_name                 = local.db_name
   environment             = var.environment
   canonical_hostname      = var.canonical_hostname
+  bypass_dfe_sign_in      = var.bypass_dfe_sign_in
 }
 
 module "app_service" {
@@ -26,4 +27,5 @@ module "app_service" {
   db_name                 = local.db_name
   environment             = var.environment
   canonical_hostname      = var.canonical_hostname
+  bypass_dfe_sign_in      = var.bypass_dfe_sign_in
 }

@@ -67,6 +67,7 @@ resource "azurerm_app_service" "app_as" {
     "STORAGE_BUCKET"                                 = data.azurerm_key_vault_secret.StorageBucket.value
     "STORAGE_CREDENTIALS"                            = data.azurerm_key_vault_secret.StorageCredentials.value
     "WORKER_COUNT"                                   = "2"
+    "BYPASS_DFE_SIGN_IN"                             = var.bypass_dfe_sign_in
   }
 
   tags = merge({
