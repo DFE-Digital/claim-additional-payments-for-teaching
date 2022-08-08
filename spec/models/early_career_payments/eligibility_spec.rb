@@ -87,56 +87,6 @@ RSpec.describe EarlyCareerPayments::Eligibility, type: :model do
     end
   end
 
-  describe "#ineligibility_reason" do
-    let(:eligibility) do
-      build(
-        :early_career_payments_eligibility,
-        itt_academic_year: AcademicYear::Type.new.serialize(AcademicYear.new(2018)),
-        eligible_itt_subject: :mathematics
-      )
-    end
-
-    [
-      {policy_year: AcademicYear::Type.new.serialize(AcademicYear.new(2022)), ineligibility_reason: :generic_ineligibility}
-    ].each do |scenario|
-      context "with a policy configuration for #{scenario[:policy_year]}" do
-        before do
-          @ecp_policy_date = PolicyConfiguration.for(EarlyCareerPayments).current_academic_year
-          PolicyConfiguration.for(EarlyCareerPayments).update(current_academic_year: scenario[:policy_year])
-
-          build_stubbed(
-            :claim,
-            academic_year: scenario[:policy_year],
-            eligibility: eligibility
-          )
-        end
-
-        after do
-          PolicyConfiguration.for(EarlyCareerPayments).update(current_academic_year: @ecp_policy_date)
-        end
-
-        it "returns a symbol indicating the reason for ineligibility" do
-          eligibility.nqt_in_academic_year_after_itt = true
-          expect(eligibility.ineligibility_reason).to be_nil
-
-          # TODO: CAPT-350 means this is ineligible, CAPT-392 will add an additional question if :none_of_the_above
-          eligibility.nqt_in_academic_year_after_itt = false
-          eligibility.eligible_itt_subject = :none_of_the_above
-          expect(eligibility.ineligibility_reason).to eql scenario[:ineligibility_reason]
-
-          expect(EarlyCareerPayments::Eligibility.new(employed_as_supply_teacher: true, has_entire_term_contract: false).ineligibility_reason).to eql :generic_ineligibility
-          expect(EarlyCareerPayments::Eligibility.new(employed_as_supply_teacher: true, employed_directly: false).ineligibility_reason).to eql :generic_ineligibility
-          expect(EarlyCareerPayments::Eligibility.new(subject_to_formal_performance_action: true).ineligibility_reason).to eq :generic_ineligibility
-          expect(EarlyCareerPayments::Eligibility.new(subject_to_disciplinary_action: true).ineligibility_reason).to eql :generic_ineligibility
-          expect(EarlyCareerPayments::Eligibility.new(subject_to_formal_performance_action: true, subject_to_disciplinary_action: true).ineligibility_reason).to eq :generic_ineligibility
-          expect(EarlyCareerPayments::Eligibility.new(eligible_itt_subject: :none_of_the_above).ineligibility_reason).to eq :itt_subject_none_of_the_above
-          expect(EarlyCareerPayments::Eligibility.new(teaching_subject_now: false).ineligibility_reason).to eql :not_teaching_now_in_eligible_itt_subject
-          expect(EarlyCareerPayments::Eligibility.new(itt_academic_year: AcademicYear.new).ineligibility_reason).to eq :generic_ineligibility
-        end
-      end
-    end
-  end
-
   describe "#award_amount" do
     context "amendment" do
       it { should_not allow_values(0, nil).for(:award_amount).on(:amendment) }

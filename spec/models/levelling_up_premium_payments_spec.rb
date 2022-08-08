@@ -6,6 +6,7 @@ RSpec.describe LevellingUpPremiumPayments, type: :model do
       short_name: "Levelling Up Premium Payments",
       locale_key: "levelling_up_premium_payments",
       notify_reply_to_id: "3f85a1f7-9400-4b48-9a31-eaa643d6b977",
-      eligibility_page_url: "https://www.gov.uk/guidance/levelling-up-premium-payments-for-teachers")
+      eligibility_page_url: "https://www.gov.uk/guidance/levelling-up-premium-payments-for-teachers",
+      eligibility_criteria_url: "https://www.gov.uk/guidance/levelling-up-premium-payments-for-teachers#eligibility-criteria-for-teachers")
   }
 end

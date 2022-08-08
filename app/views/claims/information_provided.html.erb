@@ -73,11 +73,11 @@
 
     <% if session[:selected_claim_policy] == "EarlyCareerPayments" %>
       <p class="govuk-body">
-        For more details, you can read about payments and deductions for the <%= link_to "early-career payment (opens in new tab)", "https://www.gov.uk/guidance/early-career-payments-guidance-for-teachers-and-schools#paying-income-tax-and-national-insurance", class: "govuk-link govuk-link--no-visited-state", target: "_blank" %>.
+        For more details, you can read about payments and deductions for the <%= link_to "early-career payment (opens in new tab)", EarlyCareerPayments.eligibility_page_url + "#paying-income-tax-and-national-insurance", class: "govuk-link govuk-link--no-visited-state", target: "_blank" %>.
       </p>
     <% elsif session[:selected_claim_policy] == "LevellingUpPremiumPayments" %>
       <p class="govuk-body">
-        For more details, you can read about payments and deductions for the <%= link_to "levelling up premium payment (opens in new tab)", "https://www.gov.uk/guidance/levelling-up-premium-payments-for-teachers#payments-and-deductions", class: "govuk-link govuk-link--no-visited-state", target: "_blank" %>.
+        For more details, you can read about payments and deductions for the <%= link_to "levelling up premium payment (opens in new tab)", LevellingUpPremiumPayments.eligibility_page_url + "#payments-and-deductions", class: "govuk-link govuk-link--no-visited-state", target: "_blank" %>.
       </p>
     <% else %>
       <p class="govuk-body">

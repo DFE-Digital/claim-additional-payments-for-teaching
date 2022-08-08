@@ -26,6 +26,10 @@ module LevellingUpPremiumPayments
     "https://www.gov.uk/guidance/levelling-up-premium-payments-for-teachers"
   end
 
+  def eligibility_criteria_url
+    eligibility_page_url + "#eligibility-criteria-for-teachers"
+  end
+
   def configuration
     PolicyConfiguration.for(self)
   end

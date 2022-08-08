@@ -1,0 +1,48 @@
+<table class="govuk-table">
+  <caption class="govuk-table__caption govuk-table__caption--m">School selected</caption>
+  <tbody class="govuk-table__body">
+    <tr class="govuk-table__row">
+      <th scope="row" class="govuk-table__header">Name</th>
+      <td class="govuk-table__cell"><%= current_claim.school.name %></th>
+    </tr>
+    <tr class="govuk-table__row">
+      <th scope="row" class="govuk-table__header">Address</th>
+      <td class="govuk-table__cell"><%= current_claim.school.address %></th>
+    </tr>
+  </tbody>
+</table>
+
+<p class="govuk-body">
+  The reason could be:
+</p>
+
+<ul class="govuk-list govuk-list--bullet">
+  <li>
+    <span class="govuk-body">
+    it is not a state-funded secondary school in England
+    </span>
+  </li>
+  <li>
+    <span class="govuk-body">
+      the school you listed is closed. This could be the case if it has
+      changed status to become an academy or has been rebranded
+    </span>
+  </li>
+    <li>
+    <span class="govuk-body">
+      the spelling of the school does not match our records. Check the spelling,
+      including any apostrophes, hyphens or full stops used in the school's name
+    </span>
+  </li>
+</ul>
+
+<div class="govuk-!-padding-bottom-6">
+  <%= link_to "Change school", claim_path(current_policy_routing_name, "current-school"), class: "govuk-button", role: "button", draggable: false, data: {module: "govuk-button"} %>
+</div>
+
+<p class="govuk-body">
+  For more information, check the school eligibility criteria for
+  <%= link_to("early-career payments", EarlyCareerPayments.eligibility_criteria_url, class: "govuk-link") %>
+  and
+  <%= link_to("levelling up premium payments", LevellingUpPremiumPayments.eligibility_criteria_url, class: "govuk-link") %>.
+</p>

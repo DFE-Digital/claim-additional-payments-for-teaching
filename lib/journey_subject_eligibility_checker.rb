@@ -9,7 +9,7 @@ class JourneySubjectEligibilityChecker
   end
 
   def future_claim_years
-    if none_of_the_above?(@itt_year)
+    if none_of_the_above_or_blank?(@itt_year)
       []
     else
       ((@claim_year + 1)..EligibilityCheckable::FINAL_COMBINED_ECP_AND_LUP_POLICY_YEAR).to_a
@@ -46,7 +46,7 @@ class JourneySubjectEligibilityChecker
   end
 
   def current_subject_symbols(policy)
-    if none_of_the_above?(@itt_year)
+    if none_of_the_above_or_blank?(@itt_year)
       []
     else
       subject_symbols(policy: policy, claim_year: @claim_year, itt_year: @itt_year)
@@ -54,7 +54,7 @@ class JourneySubjectEligibilityChecker
   end
 
   def future_subject_symbols(policy)
-    if none_of_the_above?(@itt_year)
+    if none_of_the_above_or_blank?(@itt_year)
       []
     else
       future_claim_years.collect { |future_year| subject_symbols(policy: policy, claim_year: future_year, itt_year: @itt_year) }.flatten.uniq
@@ -94,8 +94,13 @@ class JourneySubjectEligibilityChecker
   end
 
   def validate_itt_year(itt_year)
-    return if none_of_the_above?(itt_year)
-    raise "ITT year #{itt_year} is outside the window for claim year #{@claim_year}" unless itt_year.in?(selectable_itt_years)
+    unless none_of_the_above_or_blank?(itt_year)
+      raise "ITT year #{itt_year} is outside the window for claim year #{@claim_year}" unless itt_year.in?(selectable_itt_years)
+    end
+  end
+
+  def none_of_the_above_or_blank?(itt_year)
+    itt_year.blank? || none_of_the_above?(itt_year)
   end
 
   def none_of_the_above?(itt_year)
@@ -160,9 +165,6 @@ class JourneySubjectEligibilityChecker
     end
   end
 
-  # TODO: I can't tell yet but this might break when "Foreign Languages" changes to "Languages"
-  # in the view and we haven't yet had time to update its enum value from `:foreign_languages`
-  # to `:languages`
   def itt_subject_symbol(current_claim)
     itt_subject(current_claim).to_sym
   end
