@@ -1,7 +1,6 @@
 module LevellingUpPremiumPayments
   class Eligibility < ApplicationRecord
     include EligibilityCheckable
-    include EarlyCareerPaymentsHelpable # TODO only to maintain support for legacy helper which calls private methods with `send`
 
     self.table_name = "levelling_up_premium_payments_eligibilities"
     has_one :claim, as: :eligibility, inverse_of: :eligibility

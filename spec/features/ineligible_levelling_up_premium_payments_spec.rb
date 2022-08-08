@@ -87,6 +87,6 @@ RSpec.feature "Ineligible Levelling up premium payments claims" do
     expect(eligibility.reload.ineligible?).to be true
 
     expect(page).to have_text(I18n.t("early_career_payments.ineligible.heading"))
-    expect(page).to have_link(href: "#{EarlyCareerPayments.eligibility_page_url}#eligibility-criteria")
+    expect(page).to have_css("div#lack_both_valid_itt_subject_and_degree")
   end
 end

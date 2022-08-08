@@ -1,7 +1,6 @@
 module EarlyCareerPayments
   class Eligibility < ApplicationRecord
     include EligibilityCheckable
-    include EarlyCareerPaymentsHelpable
 
     EDITABLE_ATTRIBUTES = [
       :nqt_in_academic_year_after_itt,
@@ -109,15 +108,6 @@ module EarlyCareerPayments
       end
     end
 
-    def ineligibility_reason
-      [
-        :generic_ineligibility,
-        :itt_subject_none_of_the_above, # TODO: this should check the subject is not in the set of eligible subjects for that year instead
-        :ineligible_current_school,
-        :not_teaching_now_in_eligible_itt_subject
-      ].find { |eligibility_check| send("#{eligibility_check}?") }
-    end
-
     # TODO: be careful this can return BigDecimal or Integers, this isn't ideal
     def award_amount
       super || calculate_award_amount
@@ -215,13 +205,6 @@ module EarlyCareerPayments
         itt_subject_symbol = itt_subject.to_sym
         !itt_subject_symbol.in?(itt_subject_checker.current_and_future_subject_symbols(policy))
       end
-    end
-
-    # This method has *no* bearing on the actual eligibility of a ECP claim.
-    # It was created for the EarlyCareerPaymentsHelper and is only to do with
-    # displaying an eligibility reason
-    def generic_ineligibility?
-      helper_generic_ineligibility?
     end
 
     # TODO don't know if we need this

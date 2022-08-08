@@ -42,7 +42,7 @@ RSpec.feature "Ineligible Teacher Early-Career Payments claims" do
     click_on "Continue"
 
     expect(page).to have_text(I18n.t("early_career_payments.ineligible.heading"))
-    expect(page).to have_link(href: "#{EarlyCareerPayments.eligibility_page_url}#performance")
+    expect(page).to have_css("div#generic")
   end
 
   scenario "when poor performance - subject to disciplinary action" do
@@ -74,7 +74,7 @@ RSpec.feature "Ineligible Teacher Early-Career Payments claims" do
     click_on "Continue"
 
     expect(page).to have_text(I18n.t("early_career_payments.ineligible.heading"))
-    expect(page).to have_link(href: "#{EarlyCareerPayments.eligibility_page_url}#performance")
+    expect(page).to have_css("div#generic")
   end
 
   scenario "when poor performance - subject to disciplinary & formal performance action" do
@@ -106,7 +106,7 @@ RSpec.feature "Ineligible Teacher Early-Career Payments claims" do
     click_on "Continue"
 
     expect(page).to have_text(I18n.t("early_career_payments.ineligible.heading"))
-    expect(page).to have_link(href: "#{EarlyCareerPayments.eligibility_page_url}#performance")
+    expect(page).to have_css("div#generic")
   end
 
   # Employed as Supply Teacher with contract less than an entire term
@@ -137,8 +137,7 @@ RSpec.feature "Ineligible Teacher Early-Career Payments claims" do
     click_on "Continue"
 
     expect(page).to have_text(I18n.t("early_career_payments.ineligible.heading"))
-    expect(page).to have_link(href: "#{EarlyCareerPayments.eligibility_page_url}#supply-private-school-and-sixth-form-college-teachers")
-    expect(page).to have_text("Based on the answers you have provided you are not eligible #{I18n.t("early_career_payments.claim_description")}")
+    expect(page).to have_css("div#generic")
   end
 
   # Employed as Supply Teacher by Private Agency
@@ -175,8 +174,7 @@ RSpec.feature "Ineligible Teacher Early-Career Payments claims" do
     click_on "Continue"
 
     expect(page).to have_text(I18n.t("early_career_payments.ineligible.heading"))
-    expect(page).to have_link(href: "#{EarlyCareerPayments.eligibility_page_url}#eligibility-criteria")
-    expect(page).to have_text("Based on the answers you have provided you are not eligible #{I18n.t("early_career_payments.claim_description")}")
+    expect(page).to have_css("div#generic")
   end
 
   scenario "when subject for undergraduate ITT or postgraduate ITT is 'none of the above'" do
@@ -232,7 +230,7 @@ RSpec.feature "Ineligible Teacher Early-Career Payments claims" do
     expect(claim.eligibility.reload.eligible_itt_subject).to eql "none_of_the_above"
 
     expect(page).to have_text(I18n.t("early_career_payments.ineligible.heading"))
-    expect(page).to have_link(href: "#{EarlyCareerPayments.eligibility_page_url}#eligibility-criteria")
+    expect(page).to have_css("div#bad_itt_year_for_ecp")
   end
 
   scenario "when no longer teaching an eligible ITT subject" do
@@ -296,8 +294,7 @@ RSpec.feature "Ineligible Teacher Early-Career Payments claims" do
     expect(claim.eligibility.reload.teaching_subject_now).to eql false
 
     expect(page).to have_text(I18n.t("early_career_payments.ineligible.heading"))
-    expect(page).to have_link(href: "#{EarlyCareerPayments.eligibility_page_url}#employment")
-    expect(page).to have_text(I18n.t("early_career_payments.ineligible.reason.not_teaching_subject"))
+    expect(page).to have_css("div#would_be_eligible_for_ecp_only_except_for_insufficient_teaching")
   end
 
   scenario "when academic year completed undergraduate ITT or started postgraduate ITT is 'none of the above'" do
@@ -346,7 +343,6 @@ RSpec.feature "Ineligible Teacher Early-Career Payments claims" do
     expect(claim.eligibility.reload.itt_academic_year).to eql AcademicYear.new
 
     expect(page).to have_text(I18n.t("early_career_payments.ineligible.heading"))
-    expect(page).to have_link(href: "#{EarlyCareerPayments.eligibility_page_url}#eligibility-criteria")
-    expect(page).to have_text("Based on the answers you have provided you are not eligible #{I18n.t("early_career_payments.claim_description")}")
+    expect(page).to have_css("div#generic")
   end
 end

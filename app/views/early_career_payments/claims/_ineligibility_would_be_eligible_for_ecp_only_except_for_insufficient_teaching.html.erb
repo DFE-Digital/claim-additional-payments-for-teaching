@@ -1,0 +1,14 @@
+<p class="govuk-body">
+  You are not eligible for the
+  <%= link_to("early-career payment", EarlyCareerPayments.eligibility_criteria_url, class: "govuk-link") %>
+  because you do not spend at least half of your contracted hours teaching chemistry, languages, mathematics or physics.
+</p>
+<p class="govuk-body">
+  You are not eligible for the
+  <%= link_to("levelling up premium payment", LevellingUpPremiumPayments.eligibility_criteria_url, class: "govuk-link") %>
+  because either:
+</p>
+<ul class="govuk-list govuk-list--bullet">
+  <li>your school is not eligible. Levelling up premium payments are offered in state-funded secondary schools identified as having a high need for teachers.<br /> or</li>
+  <li>the subject you studied is not eligible. To be eligible your initial teacher training (ITT) course must be in chemistry, computing, mathematics or physics.</li>
+</ul>

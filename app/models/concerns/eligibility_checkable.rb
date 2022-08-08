@@ -42,6 +42,10 @@ module EligibilityCheckable
     common_eligible_later_attributes? && specific_eligible_later_attributes?
   end
 
+  def trainee_teacher?
+    nqt_in_academic_year_after_itt == false
+  end
+
   private
 
   def common_ineligible_attributes?
@@ -50,10 +54,6 @@ module EligibilityCheckable
 
   def indicated_ineligible_school?
     current_school.present? && !policy::SchoolEligibility.new(current_school).eligible?
-  end
-
-  def trainee_teacher?
-    nqt_in_academic_year_after_itt == false
   end
 
   def supply_teacher_lacking_either_long_contract_or_direct_employment?
