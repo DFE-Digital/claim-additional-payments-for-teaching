@@ -40,6 +40,12 @@ variable "create_database" {
   default     = false
 }
 
+variable "bypass_dfe_sign_in" {
+  type        = bool
+  description = "Bypass DFE Sign-In authentication and use a default role"
+  default     = false
+}
+
 locals {
   db_name         = var.app_name == null ? var.environment : "${var.environment}-${var.app_name}"
   create_db_list  = var.create_database ? [local.db_name] : []

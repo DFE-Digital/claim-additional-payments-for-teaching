@@ -63,6 +63,7 @@ resource "azurerm_app_service_slot" "app_as_slot" {
     "STORAGE_CREDENTIALS"                            = data.azurerm_key_vault_secret.StorageCredentials.value
     "WORKER_COUNT"                                   = "2"
     "DOCKER_REGISTRY_SERVER_URL"                     = "https://index.docker.io"
+    "BYPASS_DFE_SIGN_IN"                             = var.bypass_dfe_sign_in
   }
 
   tags = merge({

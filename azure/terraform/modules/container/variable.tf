@@ -44,6 +44,10 @@ variable "canonical_hostname" {
   description = "External domain name for the app service"
   default     = null
 }
+variable "bypass_dfe_sign_in" {
+  type        = bool
+  description = "Bypass DFE Sign-In authentication and use a default role"
+}
 
 locals {
   stash_port         = var.rg_prefix == "s118p01" ? "23888" : "17000"
