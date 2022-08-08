@@ -27,4 +27,16 @@ options = {
   }
 }
 
-Rails.application.config.middleware.use OmniAuth::Strategies::OpenIDConnect, options
+module ::DfESignIn
+  def self.bypass?
+    (Rails.env.development? || ENV["ENVIRONMENT_NAME"] == "review") && ENV["BYPASS_DFE_SIGN_IN"] == "true"
+  end
+end
+
+if DfESignIn.bypass?
+  Rails.application.config.middleware.use OmniAuth::Builder do
+    provider :developer
+  end
+else
+  Rails.application.config.middleware.use OmniAuth::Strategies::OpenIDConnect, options
+end
