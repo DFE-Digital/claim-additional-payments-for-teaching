@@ -20,7 +20,8 @@ RSpec.feature "Eligible now can set a reminder for next year." do
     click_on "Continue"
     fill_in "reminder_one_time_password", with: get_otp_from_email
     click_on "Confirm"
-    expect(page).to have_text("We will send you a reminder in September #{reminder_year}")
+    expect(page).to have_text("We will send you a reminder in:")
+    expect(page).to have_text("September #{reminder_year}")
   end
 end
 
@@ -100,12 +101,13 @@ RSpec.feature "Completed Applications - Reminders" do
             click_on "Continue"
             fill_in "reminder_one_time_password", with: get_otp_from_email
             click_on "Confirm"
-            expect(page).to have_text("We will send you a reminder in September #{reminder_year}")
+            expect(page).to have_text("We will send you a reminder in:")
+            expect(page).to have_text("September #{reminder_year}")
           elsif scenario[:invited_to_set_reminder] == false
             expect(page).not_to have_text("Set a reminder to apply next year")
             expect(page).not_to have_link("Set reminder")
           end
-          expect(page).to have_text("What did you think of this service?")
+          expect(page).to have_text("What do you think of this service?")
         end
       end
     end
