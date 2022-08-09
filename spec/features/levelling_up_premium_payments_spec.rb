@@ -284,7 +284,7 @@ RSpec.feature "Levelling up premium payments claims" do
     expect(page).to have_text("What happens next")
     expect(page).to have_text("Set a reminder to apply next year")
     expect(page).to have_text("Apply for additional payment each academic year")
-    expect(page).to have_text("What did you think of this service?")
+    expect(page).to have_text("What do you think of this service?")
     expect(page).to have_text(claim.reference)
 
     policy_options_provided = [
