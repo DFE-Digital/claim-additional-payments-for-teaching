@@ -48,10 +48,9 @@ en:
     statement: By submitting this notification you are confirming that, to the best of your knowledge, the details you are providing are correct.
     btn_text: Confirm and send
   one_time_password:
-    title: "Enter the 6-digit password"
-    hint1_html: "We have sent an %{email_or_mobile_message} to <b><strong>%{email_or_mobile_value}</strong></b> with a 6-digit password."
-    hint1_suffix: "We recommend you copy and paste the password from the email."
-    validity_duration: "You will have %{duration_valid} from receiving the %{email_or_mobile_message} before the password will expire."
+    title: "Enter the 6-digit passcode"
+    hint1_html: "We have sent an %{email_or_mobile_message} to <b><strong>%{email_or_mobile_value}</strong></b> with a 6-digit passcode."
+    validity_duration: "The passcode will expire %{duration_valid} after you receive it."
   questions:
     current_school: "Which school are you currently employed to teach at?"
     qts_award_year: "When did you complete your initial teacher training?"
@@ -289,7 +288,7 @@ en:
       reason:
         itt_subject: "Early-career payments are only available for teachers who did their ITT in:"
         not_teaching_subject: "You are only eligible for this payment if you are qualified in, and are currently teaching either:"
-        trainee_teacher_only_in_claim_academic_year_2021: "You might be eligible to claim in the future when you’ve completed your ITT"
+        trainee_teacher_future_eligibility: "You are not eligible this year"
         generic: "Based on the answers you have provided you are not eligible for an early-career payment"
     questions:
       current_school_search: "Which school do you teach at?"

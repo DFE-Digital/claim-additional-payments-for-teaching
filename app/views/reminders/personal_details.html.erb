@@ -1,11 +1,14 @@
 <% content_for(:page_title, page_title(t("questions.personal_details"), policy: current_policy_routing_name, show_error: current_reminder.errors.any?)) %>
+
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
     <%= render("shared/error_summary", instance: current_reminder) if current_reminder.errors.any? %>
+
     <%= form_for current_reminder, url: reminders_path(current_policy_routing_name) do |form| %>
       <h1 class="govuk-heading-xl">
         <%= t("questions.personal_details") %>
       </h1>
+
       <%= form_group_tag current_reminder, :full_name do %>
         <h1 class="govuk-label-wrapper">
           <%= form.label :full_name, t("early_career_payments.reminders.full_name"), {class: "govuk-label govuk-label--l"}  %>
@@ -20,17 +23,30 @@
         </h1>
         <div class="govuk-hint" id="email_address-hint">
           <p>
-            Tell us the email address you'd like us to send your reminder to. We
-            recommend you use a personal email address.
+            Tell us the email you want us to send reminders to.
+            We recommend you use a non-work email address in case your circumstances change.
           </p>
           <p>
-            To verify your email address we will send you an email with a 6-digit
-            password. You will need to input that password on the next screen.
+            To verify your email address we will send you an email with a 6-digit passcode.
+            You can enter the passcode on the next screen.
           </p>
         </div>
         <%= errors_tag current_reminder, :email_address %>
          <%= form.text_field :email_address, class: css_classes_for_input(current_reminder, :email_address), type: "text", spellcheck: "false", autocomplete: "email" %>
       <% end %>
+
+      <details class="govuk-details" data-module="govuk-details">
+        <summary class="govuk-details__summary">
+          <span class="govuk-details__summary-text">Get help with access codes</span>
+        </summary>
+        <div class="govuk-details__text">
+          <p class="govuk-body">
+            If you have any issues with the passcode, email us at:
+            <%= mail_to support_email_address, support_email_address, class: "govuk-link" -%>.
+          </p>
+        </div>
+      </details>
+
       <%= form.submit "Continue", class: "govuk-button", data: {module: "govuk-button"} %>
     <% end %>
   </div>

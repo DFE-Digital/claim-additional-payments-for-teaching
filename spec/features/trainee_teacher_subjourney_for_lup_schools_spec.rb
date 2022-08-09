@@ -23,9 +23,9 @@ RSpec.feature "Trainee teacher subjourney for LUP schools" do
     choose "Mathematics"
     click_on "Continue"
 
-    expect(page).to have_text(I18n.t("early_career_payments.ineligible.reason.trainee_teacher_only_in_claim_academic_year_2021"))
+    expect(page).to have_text(I18n.t("early_career_payments.ineligible.reason.trainee_teacher_future_eligibility"))
 
-    click_on "Continue"
+    click_on "Set reminder"
 
     expect(page).to have_text(I18n.t("questions.personal_details"))
   end
@@ -41,9 +41,9 @@ RSpec.feature "Trainee teacher subjourney for LUP schools" do
     choose "Yes"
     click_on "Continue"
 
-    I18n.t("early_career_payments.ineligible.reason.trainee_teacher_only_in_claim_academic_year_2021")
+    I18n.t("early_career_payments.ineligible.reason.trainee_teacher_future_eligibility")
 
-    click_on "Continue"
+    click_on "Set reminder"
 
     expect(page).to have_text(I18n.t("questions.personal_details"))
   end

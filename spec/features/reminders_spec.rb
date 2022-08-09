@@ -55,7 +55,7 @@ RSpec.feature "Set Reminder when Eligible Later for an Early Career Payment" do
         click_on "Set reminder"
 
         expect(page).to have_text("Personal details")
-        expect(page).to have_text("Tell us the email address you'd like us to send your reminder to. We recommend you use a personal email address.")
+        expect(page).to have_text("Tell us the email you want us to send reminders to. We recommend you use a non-work email address in case your circumstances change.")
 
         fill_in "Full name", with: "David Tau"
         fill_in "Email address", with: "david.tau1988@hotmail.co.uk"
@@ -133,15 +133,15 @@ RSpec.feature "Set Reminder when Eligible Later for an Early Career Payment" do
           click_on "Set reminder"
 
           expect(page).to have_text("Personal details")
-          expect(page).to have_text("Tell us the email address you'd like us to send your reminder to. We recommend you use a personal email address.")
+          expect(page).to have_text("Tell us the email you want us to send reminders to. We recommend you use a non-work email address in case your circumstances change.")
 
           fill_in "Full name", with: "David Tau"
           fill_in "Email address", with: "david.tau1988@hotmail.co.uk"
           click_on "Continue"
 
-          expect(page).to have_link("Resend password (goes back to the personal details page)", href: new_reminder_path(policy: claim.policy.routing_name))
+          expect(page).to have_link("Resend passcode (you will be sent back to the email address page)", href: new_reminder_path(policy: claim.policy.routing_name))
 
-          click_link "Resend password"
+          click_link "Resend passcode"
           expect(page).to have_text("Personal details")
           click_on "Continue"
 
