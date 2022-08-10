@@ -33,8 +33,6 @@ RSpec.describe Claims::IttSubjectHelper do
   describe "#subjects_to_sentence_for_hint_text" do
     let(:ecp_claim) { build(:claim, :first_lup_claim_year, eligibility: ecp_eligibility) }
     let(:lup_claim) { build(:claim, :first_lup_claim_year, eligibility: lup_eligibility) }
-    let(:academic_year_2019) { AcademicYear::Type.new.serialize(AcademicYear.new(2019)) }
-    let(:academic_year_2020) { AcademicYear::Type.new.serialize(AcademicYear.new(2020)) }
 
     subject { helper.subjects_to_sentence_for_hint_text(CurrentClaim.new(claims: [ecp_claim, lup_claim])) }
 
