@@ -46,7 +46,7 @@ RSpec.feature "Levelling up premium payments and early-career payments combined 
     click_on "Continue"
 
     # - Which subject did you do your undergraduate ITT in
-    expect(page).to have_text(I18n.t("early_career_payments.questions.eligible_itt_subject", qualification: "postgraduate initial teaching training"))
+    expect(page).to have_text("Which subject")
     choose "Mathematics"
     click_on "Continue"
 
@@ -257,8 +257,7 @@ RSpec.feature "Levelling up premium payments and early-career payments combined 
     choose "2020 to 2021"
     click_on "Continue"
 
-    # - Which subject did you do your undergraduate ITT in
-    expect(page).to have_text(I18n.t("early_career_payments.questions.eligible_itt_subject", qualification: "postgraduate initial teaching training"))
+    expect(page).to have_text("Which subject")
     choose "Mathematics"
     click_on "Continue"
 

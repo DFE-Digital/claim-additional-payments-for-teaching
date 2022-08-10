@@ -19,7 +19,7 @@
               </h1>
             </legend>
 
-            <% if current_claim.eligibility.nqt_in_academic_year_after_itt %>
+            <% if current_claim.eligibility.nqt_in_academic_year_after_itt && subject_symbols.many? %>
               <span class="govuk-hint">
                 <%= t("early_career_payments.questions.eligible_itt_subject_hint") %>
               </span>
@@ -28,19 +28,31 @@
             <%= errors_tag current_claim.eligibility, :eligible_itt_subject %>
 
             <div class="govuk-radios">
-              <% subject_symbols.each do |option| %>
+              <% if subject_symbols.many? %>
+                <% subject_symbols.each do |option| %>
+                  <div class="govuk-radios__item">
+                    <%= fields.radio_button(:eligible_itt_subject, option, class: "govuk-radios__input") %>
+                    <%= fields.label "eligible_itt_subject_#{option}", t("early_career_payments.answers.eligible_itt_subject.#{option}"), class: "govuk-label govuk-radios__label" %>
+                  </div>
+                <% end %>
+
+                <div class="govuk-radios__divider">or</div>
+
                 <div class="govuk-radios__item">
-                  <%= fields.radio_button(:eligible_itt_subject, option, class: "govuk-radios__input") %>
-                  <%= fields.label "eligible_itt_subject_#{option}", t("early_career_payments.answers.eligible_itt_subject.#{option}"), class: "govuk-label govuk-radios__label" %>
+                  <%= fields.radio_button(:eligible_itt_subject, :none_of_the_above, class: "govuk-radios__input") %>
+                  <%= fields.label "eligible_itt_subject_none_of_the_above", t("early_career_payments.answers.eligible_itt_subject.none_of_the_above"), class: "govuk-label govuk-radios__label" %>
+                </div>
+              <% else %>
+                <% subject_symbol = subject_symbols.first %>
+                <div class="govuk-radios__item">
+                  <%= fields.radio_button(:eligible_itt_subject, subject_symbol, class: "govuk-radios__input") %>
+                  <%= fields.label "eligible_itt_subject_#{subject_symbol}", "Yes", class: "govuk-label govuk-radios__label" %>
+                </div>
+                <div class="govuk-radios__item">
+                  <%= fields.radio_button(:eligible_itt_subject, :none_of_the_above, class: "govuk-radios__input") %>
+                  <%= fields.label "eligible_itt_subject_none_of_the_above", "No", class: "govuk-label govuk-radios__label" %>
                 </div>
               <% end %>
-
-              <div class="govuk-radios__divider">or</div>
-
-              <div class="govuk-radios__item">
-                <%= fields.radio_button(:eligible_itt_subject, :none_of_the_above, class: "govuk-radios__input") %>
-                <%= fields.label "eligible_itt_subject_none_of_the_above", t("early_career_payments.answers.eligible_itt_subject.none_of_the_above"), class: "govuk-label govuk-radios__label" %>
-              </div>
             </div>
           </fieldset>
         <% end %>
@@ -50,16 +62,29 @@
           <br/>
 
           <details class="govuk-details" data-module="govuk-details">
-            <summary class="govuk-details__summary">
+            <% if current_claim.eligibility.nqt_in_academic_year_after_itt? %>
+              <summary class="govuk-details__summary">
               <span class="govuk-details__summary-text">
                 If you qualified with science
               </span>
-            </summary>
-            <div class="govuk-details__text">
-              <p class="govuk-body">
-                You will need to have specialised in either chemistry or physics to be eligible. If you specialised in biology then you will not be eligible. If you’re unsure, you can get this from the certificate you received when you qualified as a teacher.
-              </p>
-            </div>
+              </summary>
+              <div class="govuk-details__text">
+                <p class="govuk-body">
+                  You will need to have specialised in either chemistry or physics to be eligible. If you specialised in biology then you will not be eligible. If you’re unsure, you can get this from the certificate you received when you qualified as a teacher.
+                </p>
+              </div>
+            <% else %>
+              <summary class="govuk-details__summary">
+              <span class="govuk-details__summary-text">
+                If you qualify with science
+              </span>
+              </summary>
+              <div class="govuk-details__text">
+                <p class="govuk-body">
+                  You will need to specialise in either chemistry or physics to be eligible for an additional payment. If you specialise in biology then you will not be eligible.
+                </p>
+              </div>
+            <% end %>
           </details>
         <% end %>
       <% end %>

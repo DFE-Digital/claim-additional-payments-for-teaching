@@ -221,10 +221,9 @@ RSpec.feature "Ineligible Teacher Early-Career Payments claims" do
     choose "2018 to 2019"
     click_on "Continue"
 
-    # - Which subject did you do your undergraduate ITT in
-    expect(page).to have_text(I18n.t("early_career_payments.questions.eligible_itt_subject", qualification: qualification_name(claim.eligibility.qualification)))
+    expect(page).to have_text("Did you do your undergraduate initial teacher training (ITT) in mathematics?")
 
-    choose "None of the above"
+    choose "No"
     click_on "Continue"
 
     expect(claim.eligibility.reload.eligible_itt_subject).to eql "none_of_the_above"
@@ -278,7 +277,7 @@ RSpec.feature "Ineligible Teacher Early-Career Payments claims" do
     click_on "Continue"
 
     # - Which subject did you do your undergraduate ITT in
-    expect(page).to have_text(I18n.t("early_career_payments.questions.eligible_itt_subject", qualification: qualification_name(claim.eligibility.qualification)))
+    expect(page).to have_text("Which subject")
 
     choose "Mathematics"
     click_on "Continue"

@@ -2,6 +2,7 @@ module EarlyCareerPayments
   class EligibilityAnswersPresenter
     include ActionView::Helpers::TranslationHelper
     include EarlyCareerPaymentsHelper
+    include Claims::IttSubjectHelper
 
     attr_reader :eligibility
 
@@ -103,8 +104,8 @@ module EarlyCareerPayments
 
     def eligible_itt_subject
       [
-        eligible_itt_subject_translation(eligibility.claim),
-        translate("early_career_payments.answers.eligible_itt_subject.#{eligibility.eligible_itt_subject}"),
+        eligible_itt_subject_translation(CurrentClaim.new(claims: [eligibility.claim])),
+        text_for_subject_answer,
         "eligible-itt-subject"
       ]
     end
@@ -133,6 +134,19 @@ module EarlyCareerPayments
         eligibility.itt_academic_year.to_s.gsub("/", " - "),
         "itt-year"
       ]
+    end
+
+    def text_for_subject_answer
+      policy = eligibility.policy
+      subjects = JourneySubjectEligibilityChecker.new(claim_year: PolicyConfiguration.for(policy).current_academic_year,
+        itt_year: eligibility.itt_academic_year).current_and_future_subject_symbols(policy)
+
+      if subjects.many?
+        translate("early_career_payments.answers.eligible_itt_subject.#{eligibility.eligible_itt_subject}")
+      else
+        subject_symbol = subjects.first
+        subject_symbol == eligibility.eligible_itt_subject.to_sym ? "Yes" : "No"
+      end
     end
   end
 end

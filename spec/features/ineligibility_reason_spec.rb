@@ -172,7 +172,8 @@ RSpec.feature "Ineligibility reason" do
     scenario "2018 ITT" do
       select_itt_year(AcademicYear.new(2018))
 
-      choose "None of the above"
+      # subject
+      choose "No"
       click_on "Continue"
 
       expect(page).to have_css("div#bad_itt_year_for_ecp")
@@ -181,7 +182,8 @@ RSpec.feature "Ineligibility reason" do
     scenario "2019 ITT" do
       select_itt_year(AcademicYear.new(2019))
 
-      choose "None of the above"
+      # subject
+      choose "No"
       click_on "Continue"
 
       expect(page).to have_css("div#bad_itt_year_for_ecp")

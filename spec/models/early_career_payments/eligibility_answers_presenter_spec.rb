@@ -1,161 +1,157 @@
 require "rails_helper"
 
-RSpec.describe EarlyCareerPayments::EligibilityAnswersPresenter, type: :model do
-  include EarlyCareerPaymentsHelper
+RSpec.describe EarlyCareerPayments::EligibilityAnswersPresenter do
+  describe "#answers" do
+    let(:policy_year) { AcademicYear.new(2022) }
+    let(:claim) { build(:claim, academic_year: policy_year, eligibility: eligibility) }
 
-  before do
-    @ecp_policy_date = PolicyConfiguration.for(policy).current_academic_year
-    PolicyConfiguration.for(policy).update(current_academic_year: academic_year)
-  end
+    subject { described_class.new(claim.eligibility).answers }
 
-  after do
-    PolicyConfiguration.for(policy).update(current_academic_year: @ecp_policy_date)
-  end
+    context "ECP" do
+      context "long-term directly employed supply teacher" do
+        let(:eligibility) { build(:early_career_payments_eligibility, :eligible, :long_term_directly_employed_supply_teacher) }
 
-  let(:policy) { EarlyCareerPayments }
-  let(:academic_year) { AcademicYear.new(2021) }
+        it {
+          is_expected.to include(
+            ["Are you currently employed as a supply teacher?", "Yes", "supply-teacher"],
+            ["Do you have a contract to teach at the same school for an entire term or longer?", "Yes", "entire-term-contract"],
+            ["Are you employed directly by your school?", "Yes", "employed-directly"]
+          )
+        }
 
-  let(:eligibility_attributes) do
-    {
-      current_school: schools(:penistone_grammar_school),
-      nqt_in_academic_year_after_itt: true,
-      employed_as_supply_teacher: false,
-      subject_to_formal_performance_action: false,
-      subject_to_disciplinary_action: false,
-      qualification: :postgraduate_itt,
-      eligible_itt_subject: :chemistry,
-      teaching_subject_now: true,
-      itt_academic_year: AcademicYear::Type.new.serialize(AcademicYear.new(2019))
-    }
-  end
-  let(:eligibility) { build(:early_career_payments_eligibility, eligibility_attributes) }
-  let(:claim) { build(:claim, academic_year: academic_year, eligibility: eligibility) }
+        specify {
+          expect(questions(subject)).to eq([
+            "Which school do you teach at?",
+            "Are you currently teaching as a qualified teacher?",
+            "Are you currently employed as a supply teacher?",
+            "Do you have a contract to teach at the same school for an entire term or longer?",
+            "Are you employed directly by your school?",
+            "Have any performance measures been started against you?",
+            "Are you currently subject to disciplinary action?",
+            "Which route into teaching did you take?",
+            "In which academic year did you start your postgraduate initial teacher training (ITT)?",
+            "Did you do your postgraduate initial teacher training (ITT) in mathematics?",
+            "Do you spend at least half of your contracted hours teaching eligible subjects?"
+          ])
+        }
+      end
 
-  subject(:presenter) { described_class.new(claim.eligibility) }
+      context "non-supply teacher" do
+        let(:eligibility) { build(:early_career_payments_eligibility, :eligible, :not_a_supply_teacher) }
 
-  it "returns an array of questions and answers to be presented to the user for checking" do
-    expected_answers = [
-      [I18n.t("early_career_payments.questions.current_school_search"), "Penistone Grammar School", "current-school"],
-      [I18n.t("early_career_payments.questions.nqt_in_academic_year_after_itt.heading"), "Yes", "nqt-in-academic-year-after-itt"],
-      [I18n.t("early_career_payments.questions.employed_as_supply_teacher"), "No", "supply-teacher"],
-      [I18n.t("early_career_payments.questions.formal_performance_action"), "No", "poor-performance"],
-      [I18n.t("early_career_payments.questions.disciplinary_action"), "No", "poor-performance"],
-      [
-        I18n.t("early_career_payments.questions.qualification.heading"),
-        "Postgraduate initial teacher training (ITT)",
-        "qualification"
-      ],
-      [
-        I18n.t("early_career_payments.questions.itt_academic_year.qualification.#{eligibility.qualification}"),
-        "2019 - 2020",
-        "itt-year"
-      ],
-      [
-        I18n.t("early_career_payments.questions.eligible_itt_subject", qualification: qualification_name(eligibility.qualification)),
-        "Chemistry",
-        "eligible-itt-subject"
-      ],
-      [
-        I18n.t("early_career_payments.questions.teaching_subject_now"),
-        "Yes",
-        "teaching-subject-now"
-      ]
-    ]
+        it { is_expected.to include(["Are you currently employed as a supply teacher?", "No", "supply-teacher"]) }
 
-    expect(presenter.answers).to eq(expected_answers)
-  end
+        it {
+          is_expected.not_to include(
+            ["Do you have a contract to teach at the same school for an entire term or longer?", a_string_matching(/(Yes|No)/), "entire-term-contract"],
+            ["Are you employed directly by your school?", a_string_matching(/(Yes|No)/), "employed-directly"]
+          )
+        }
 
-  context "when employed as a supply teacher" do
-    let(:eligibility_attributes) do
-      {
-        current_school: schools(:penistone_grammar_school),
-        nqt_in_academic_year_after_itt: true,
-        employed_as_supply_teacher: true,
-        has_entire_term_contract: true,
-        employed_directly: true,
-        subject_to_formal_performance_action: false,
-        subject_to_disciplinary_action: false,
-        qualification: :undergraduate_itt,
-        eligible_itt_subject: :foreign_languages,
-        teaching_subject_now: true,
-        itt_academic_year: AcademicYear.new(2018)
-      }
+        specify {
+          expect(questions(subject)).to eq([
+            "Which school do you teach at?",
+            "Are you currently teaching as a qualified teacher?",
+            "Are you currently employed as a supply teacher?",
+            "Have any performance measures been started against you?",
+            "Are you currently subject to disciplinary action?",
+            "Which route into teaching did you take?",
+            "In which academic year did you start your postgraduate initial teacher training (ITT)?",
+            "Did you do your postgraduate initial teacher training (ITT) in mathematics?",
+            "Do you spend at least half of your contracted hours teaching eligible subjects?"
+          ])
+        }
+      end
+
+      context "single subject option" do
+        let(:itt_year) { AcademicYear::Type.new.serialize(AcademicYear.new(2019)) }
+        let(:eligibility) { build(:early_career_payments_eligibility, :eligible, itt_academic_year: itt_year) }
+
+        it { is_expected.to include(["Did you do your postgraduate initial teacher training (ITT) in mathematics?", "Yes", "eligible-itt-subject"]) }
+      end
+
+      context "multiple subject options" do
+        let(:itt_year) { AcademicYear::Type.new.serialize(AcademicYear.new(2020)) }
+        let(:eligibility) { build(:early_career_payments_eligibility, :eligible, itt_academic_year: itt_year) }
+
+        it { is_expected.to include(["Which subject did you do your postgraduate initial teacher training (ITT) in?", "Mathematics", "eligible-itt-subject"]) }
+      end
     end
 
-    it "includes supply teacher questions" do
-      expected_answers = [
-        [I18n.t("early_career_payments.questions.current_school_search"), "Penistone Grammar School", "current-school"],
-        [I18n.t("early_career_payments.questions.nqt_in_academic_year_after_itt.heading"), "Yes", "nqt-in-academic-year-after-itt"],
-        [I18n.t("early_career_payments.questions.employed_as_supply_teacher"), "Yes", "supply-teacher"],
-        [I18n.t("early_career_payments.questions.has_entire_term_contract"), "Yes", "entire-term-contract"],
-        [I18n.t("early_career_payments.questions.employed_directly"), "Yes", "employed-directly"],
-        [I18n.t("early_career_payments.questions.formal_performance_action"), "No", "poor-performance"],
-        [I18n.t("early_career_payments.questions.disciplinary_action"), "No", "poor-performance"],
-        [
-          I18n.t("early_career_payments.questions.qualification.heading"),
-          "Undergraduate initial teacher training (ITT)",
-          "qualification"
-        ],
-        [
-          I18n.t("early_career_payments.questions.itt_academic_year.qualification.#{eligibility.qualification}"),
-          "2018 - 2019",
-          "itt-year"
-        ],
-        [
-          I18n.t("early_career_payments.questions.eligible_itt_subject", qualification: qualification_name(eligibility.qualification)),
-          "Languages",
-          "eligible-itt-subject"
-        ],
-        [
-          I18n.t("early_career_payments.questions.teaching_subject_now"),
-          "Yes",
-          "teaching-subject-now"
-        ]
-      ]
+    context "LUP" do
+      context "entire output" do
+        let(:eligibility) { build(:levelling_up_premium_payments_eligibility, :eligible, :long_term_directly_employed_supply_teacher, :ineligible_itt_subject, :relevant_degree) }
 
-      expect(presenter.answers).to eq(expected_answers)
+        it {
+          is_expected.to eq(
+            [
+              ["Which school do you teach at?", "Acme Secondary School", "current-school"],
+              ["Are you currently teaching as a qualified teacher?", "Yes", "nqt-in-academic-year-after-itt"],
+              ["Are you currently employed as a supply teacher?", "Yes", "supply-teacher"],
+              ["Do you have a contract to teach at the same school for an entire term or longer?", "Yes", "entire-term-contract"],
+              ["Are you employed directly by your school?", "Yes", "employed-directly"],
+              ["Have any performance measures been started against you?", "No", "poor-performance"],
+              ["Are you currently subject to disciplinary action?", "No", "poor-performance"],
+              ["Which route into teaching did you take?", "Postgraduate initial teacher training (ITT)", "qualification"],
+              ["In which academic year did you start your postgraduate initial teacher training (ITT)?", "2019 - 2020", "itt-year"],
+              ["Which subject did you do your postgraduate initial teacher training (ITT) in?", "Languages", "eligible-itt-subject"],
+              ["Do you have a degree in an eligible subject?", "Yes", "eligible-degree-subject"],
+              ["Do you spend at least half of your contracted hours teaching eligible subjects?", "Yes", "teaching-subject-now"]
+            ]
+          )
+        }
+      end
+
+      context "eligible ITT" do
+        let(:eligibility) { build(:levelling_up_premium_payments_eligibility, :eligible) }
+
+        it { is_expected.to include(["Which subject did you do your postgraduate initial teacher training (ITT) in?", "Mathematics", "eligible-itt-subject"]) }
+        it { is_expected.not_to include(["Do you have a degree in an eligible subject?", a_string_matching(/(Yes|No)/), "eligible-degree-subject"]) }
+
+        specify {
+          expect(questions(subject)).to eq([
+            "Which school do you teach at?",
+            "Are you currently teaching as a qualified teacher?",
+            "Are you currently employed as a supply teacher?",
+            "Have any performance measures been started against you?",
+            "Are you currently subject to disciplinary action?",
+            "Which route into teaching did you take?",
+            "In which academic year did you start your postgraduate initial teacher training (ITT)?",
+            "Which subject did you do your postgraduate initial teacher training (ITT) in?",
+            "Do you spend at least half of your contracted hours teaching eligible subjects?"
+          ])
+        }
+      end
+
+      context "ineligible ITT" do
+        let(:eligibility) { build(:levelling_up_premium_payments_eligibility, :eligible, :ineligible_itt_subject, :relevant_degree) }
+
+        it {
+          is_expected.to include(
+            ["Which subject did you do your postgraduate initial teacher training (ITT) in?", "Languages", "eligible-itt-subject"],
+            ["Do you have a degree in an eligible subject?", "Yes", "eligible-degree-subject"]
+          )
+        }
+
+        specify {
+          expect(questions(subject)).to eq([
+            "Which school do you teach at?",
+            "Are you currently teaching as a qualified teacher?",
+            "Are you currently employed as a supply teacher?",
+            "Have any performance measures been started against you?",
+            "Are you currently subject to disciplinary action?",
+            "Which route into teaching did you take?",
+            "In which academic year did you start your postgraduate initial teacher training (ITT)?",
+            "Which subject did you do your postgraduate initial teacher training (ITT) in?",
+            "Do you have a degree in an eligible subject?",
+            "Do you spend at least half of your contracted hours teaching eligible subjects?"
+          ])
+        }
+      end
     end
   end
 
-  context "when  levelling up premium payment" do
-    let(:policy) { LevellingUpPremiumPayments }
-    let(:eligibility) { build(:levelling_up_premium_payments_eligibility, :eligible_now, :ineligible_itt_subject, :relevant_degree) }
-
-    it "returns an array of questions and answers including the eligible degree subject question" do
-      expected_answers = [
-        [I18n.t("early_career_payments.questions.current_school_search"), "Acme Secondary School", "current-school"],
-        [I18n.t("early_career_payments.questions.nqt_in_academic_year_after_itt.heading"), "Yes", "nqt-in-academic-year-after-itt"],
-        [I18n.t("early_career_payments.questions.employed_as_supply_teacher"), "No", "supply-teacher"],
-        [I18n.t("early_career_payments.questions.formal_performance_action"), "No", "poor-performance"],
-        [I18n.t("early_career_payments.questions.disciplinary_action"), "No", "poor-performance"],
-        [
-          I18n.t("early_career_payments.questions.qualification.heading"),
-          "Postgraduate initial teacher training (ITT)",
-          "qualification"
-        ],
-        [
-          I18n.t("early_career_payments.questions.itt_academic_year.qualification.#{eligibility.qualification}"),
-          "2019 - 2020",
-          "itt-year"
-        ],
-        [
-          I18n.t("early_career_payments.questions.eligible_itt_subject", qualification: qualification_name(eligibility.qualification)),
-          "Languages",
-          "eligible-itt-subject"
-        ],
-        [
-          I18n.t("early_career_payments.questions.eligible_degree_subject"),
-          "Yes",
-          "eligible-degree-subject"
-        ],
-        [
-          I18n.t("early_career_payments.questions.teaching_subject_now"),
-          "Yes",
-          "teaching-subject-now"
-        ]
-      ]
-
-      expect(presenter.answers).to eq(expected_answers)
-    end
+  def questions(questions_and_answers_array)
+    questions_and_answers_array.collect(&:first)
   end
 end

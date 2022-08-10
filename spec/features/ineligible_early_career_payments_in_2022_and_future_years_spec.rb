@@ -58,7 +58,7 @@ RSpec.feature "Ineligible Teacher Early-Career Payments claims by cohort" do
           expect(claim.eligibility.reload.itt_academic_year).to eql scenario[:itt_academic_year]
 
           # - Which subject did you do your undergraduate ITT in
-          expect(page).to have_text(I18n.t("early_career_payments.questions.eligible_itt_subject", qualification: qualification_name(claim.eligibility.qualification)))
+          expect(page).to have_text("Which subject")
 
           subject_name = scenario[:itt_subject].humanize
 

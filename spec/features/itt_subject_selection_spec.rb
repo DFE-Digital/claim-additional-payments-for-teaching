@@ -137,12 +137,12 @@ RSpec.feature "ITT subject selection" do
         end
 
         scenario "choose ineligible subject" do
-          select_subject("None of the above")
+          select_subject("No")
           expect(page).to have_text(I18n.t("early_career_payments.ineligible.heading"))
         end
 
         scenario "choose eligible subject and teach now" do
-          select_subject("Mathematics")
+          select_subject("Yes")
           expect(page).to have_text(I18n.t("early_career_payments.questions.teaching_subject_now"))
 
           choose "Yes"
@@ -154,7 +154,7 @@ RSpec.feature "ITT subject selection" do
         end
 
         scenario "choose eligible subject but don't teach now" do
-          select_subject("Mathematics")
+          select_subject("Yes")
           expect(page).to have_text(I18n.t("early_career_payments.questions.teaching_subject_now"))
 
           choose "No"
@@ -172,12 +172,12 @@ RSpec.feature "ITT subject selection" do
         end
 
         scenario "choose ineligible subject" do
-          select_subject("None of the above")
+          select_subject("No")
           expect(page).to have_text(I18n.t("early_career_payments.ineligible.heading"))
         end
 
         scenario "choose eligible subject" do
-          select_subject("Mathematics")
+          select_subject("Yes")
           expect(page).to have_text(I18n.t("early_career_payments.questions.teaching_subject_now"))
         end
       end
@@ -260,15 +260,20 @@ RSpec.feature "ITT subject selection" do
   end
 
   def expect_displayed_subjects(displayed_subject_display_strings)
-    displayed_subject_display_strings.each do |subject_display_string|
-      expect(page).to have_field(subject_display_string)
-    end
+    if displayed_subject_display_strings.one?
+      question_text = find("h1.govuk-fieldset__heading").text
+      expect(question_text).to include(displayed_subject_display_strings.first.downcase)
+    else
+      displayed_subject_display_strings.each do |subject_display_string|
+        expect(page).to have_field(subject_display_string)
+      end
 
-    entire_set_of_lup_and_ecp_subject_display_strings = ["Chemistry", "Computing", "Languages", "Mathematics", "Physics"]
-    missing_subject_display_strings = entire_set_of_lup_and_ecp_subject_display_strings - displayed_subject_display_strings
+      entire_set_of_lup_and_ecp_subject_display_strings = ["Chemistry", "Computing", "Languages", "Mathematics", "Physics"]
+      missing_subject_display_strings = entire_set_of_lup_and_ecp_subject_display_strings - displayed_subject_display_strings
 
-    missing_subject_display_strings.each do |missing_subject_display_string|
-      expect(page).to have_no_field(missing_subject_display_string)
+      missing_subject_display_strings.each do |missing_subject_display_string|
+        expect(page).to have_no_field(missing_subject_display_string)
+      end
     end
   end
 end
