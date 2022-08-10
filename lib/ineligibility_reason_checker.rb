@@ -115,7 +115,7 @@ class IneligibilityReasonChecker
   end
 
   def subject_invalid_for_ecp?
-    !@current_claim.eligibility.eligible_itt_subject&.to_sym.in?(ecp_subject_options)
+    !@current_claim.eligibility.eligible_itt_subject&.to_sym&.in?(ecp_subject_options)
   end
 
   def ecp_subject_options
