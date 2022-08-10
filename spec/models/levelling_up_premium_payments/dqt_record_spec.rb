@@ -33,9 +33,9 @@ RSpec.describe LevellingUpPremiumPayments::DqtRecord do
         degree_codes: degree_codes,
         itt_subjects: ["mathematics"],
         itt_subject_codes: itt_subject_codes,
-        itt_start_date: Date.parse("1/9/2018"),
+        itt_start_date: Date.parse("1/9/2019"),
         qts_award_date: Date.parse("31/8/2019"),
-        qualification_name: "BA"
+        qualification_name: "Postgraduate Certificate in Education"
       }
     )
   end

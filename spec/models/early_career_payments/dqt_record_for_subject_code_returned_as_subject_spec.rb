@@ -133,7 +133,7 @@ RSpec.describe EarlyCareerPayments::DqtRecord do
                   context "when record qualification name #{context[:record_qualification_name]}" do
                     let(:record_qualification_name) { context[:record_qualification_name] }
 
-                    it { is_expected.to eql true }
+                    xit { is_expected.to eql true }
                   end
                 end
               end

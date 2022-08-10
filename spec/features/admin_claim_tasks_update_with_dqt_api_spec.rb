@@ -83,7 +83,7 @@ RSpec.feature "Admin claim tasks update with DQT API" do
           state_name: "Active"
         },
         initial_teacher_training: {
-          programme_start_date: (data[:itt_start_date] || Date.today).to_s,
+          programme_start_date: (data[:itt_start_date] || "2020-07-04T00:00:00Z").to_s,
           programme_end_date: "2021-07-04T00:00:00Z",
           programme_type: "Overseas Trained Teacher Programme",
           result: "Pass",
@@ -93,7 +93,7 @@ RSpec.feature "Admin claim tasks update with DQT API" do
           subject2_code: data.dig(:itt_subject_codes, 1).to_s,
           subject3: data.dig(:itt_subjects, 2).to_s,
           subject3_codes: data.dig(:itt_subject_codes, 2).to_s,
-          qualification: (data[:qualification_name] || "BA").to_s,
+          qualification: (data[:qualification_name] || "Postgraduate Certificate in Education").to_s,
           state: 0,
           state_name: "Active"
         }
