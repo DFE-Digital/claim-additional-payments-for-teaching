@@ -21,11 +21,15 @@ RSpec.describe LevellingUpPremiumPayments::DqtRecord do
     build(
       :levelling_up_premium_payments_eligibility,
       :eligible,
-      eligible_itt_subject: eligible_itt_subject
+      eligible_itt_subject: eligible_itt_subject,
+      qualification: qualification,
+      itt_academic_year: itt_academic_year
     )
   end
 
   let(:eligible_itt_subject) { :mathematics }
+  let(:qualification) { :postgraduate_itt }
+  let(:itt_academic_year) { AcademicYear::Type.new.serialize(AcademicYear.new(2019)) }
 
   let(:record) do
     OpenStruct.new(
@@ -79,6 +83,24 @@ RSpec.describe LevellingUpPremiumPayments::DqtRecord do
       let(:degree_codes) { ["I100"] }
 
       it { is_expected.to be_eligible }
+
+      context "when the selected subject doesn't match" do
+        let(:eligible_itt_subject) { :physics }
+
+        it { is_expected.not_to be_eligible }
+      end
+
+      context "when the selected qualification doesn't match" do
+        let(:qualification) { :undergraduate_itt }
+
+        it { is_expected.not_to be_eligible }
+      end
+
+      context "when the selected year doesn't match" do
+        let(:itt_academic_year) { AcademicYear::Type.new.serialize(AcademicYear.new(2020)) }
+
+        it { is_expected.not_to be_eligible }
+      end
     end
   end
 end

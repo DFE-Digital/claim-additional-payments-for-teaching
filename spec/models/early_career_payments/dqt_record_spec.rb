@@ -1238,7 +1238,9 @@ RSpec.describe EarlyCareerPayments::DqtRecord do
         record_itt_date: Date.parse("1/9/2018"),
         record_qts_date: Date.parse("1/9/2019"),
         record_qualification_name: "BA",
-        eligible_itt_subject: :mathematics
+        eligible_itt_subject: :mathematics,
+        qualification: :undergraduate_itt,
+        itt_academic_year: AcademicYear::Type.new.serialize(AcademicYear.new(2019))
       },
       {
         claim_academic_year: AcademicYear.new(2021),
@@ -1248,7 +1250,9 @@ RSpec.describe EarlyCareerPayments::DqtRecord do
         record_itt_date: Date.parse("1/9/2018"),
         record_qts_date: Date.parse("1/9/2019"),
         record_qualification_name: "BA",
-        eligible_itt_subject: :mathematics
+        eligible_itt_subject: :mathematics,
+        qualification: :undergraduate_itt,
+        itt_academic_year: AcademicYear::Type.new.serialize(AcademicYear.new(2019))
       },
       {
         claim_academic_year: AcademicYear.new(2021),
@@ -1258,7 +1262,9 @@ RSpec.describe EarlyCareerPayments::DqtRecord do
         record_itt_date: Date.parse("1/9/2018"),
         record_qts_date: Date.parse("1/9/2019"),
         record_qualification_name: "BA",
-        eligible_itt_subject: :mathematics
+        eligible_itt_subject: :mathematics,
+        qualification: :undergraduate_itt,
+        itt_academic_year: AcademicYear::Type.new.serialize(AcademicYear.new(2019))
       },
       {
         claim_academic_year: AcademicYear.new(2021),
@@ -1268,7 +1274,9 @@ RSpec.describe EarlyCareerPayments::DqtRecord do
         record_itt_date: Date.parse("1/9/2018"),
         record_qts_date: Date.parse("1/9/2019"),
         record_qualification_name: "BA",
-        eligible_itt_subject: :mathematics
+        eligible_itt_subject: :mathematics,
+        qualification: :undergraduate_itt,
+        itt_academic_year: AcademicYear::Type.new.serialize(AcademicYear.new(2019))
       },
       {
         claim_academic_year: AcademicYear.new(2021),
@@ -1278,7 +1286,9 @@ RSpec.describe EarlyCareerPayments::DqtRecord do
         record_itt_date: Date.parse("1/9/2018"),
         record_qts_date: Date.parse("1/9/2020"),
         record_qualification_name: "BA",
-        eligible_itt_subject: :mathematics
+        eligible_itt_subject: :mathematics,
+        qualification: :undergraduate_itt,
+        itt_academic_year: AcademicYear::Type.new.serialize(AcademicYear.new(2020))
       },
       {
         claim_academic_year: AcademicYear.new(2021),
@@ -1288,7 +1298,9 @@ RSpec.describe EarlyCareerPayments::DqtRecord do
         record_itt_date: Date.parse("1/9/2018"),
         record_qts_date: Date.parse("1/9/2020"),
         record_qualification_name: "BA",
-        eligible_itt_subject: :mathematics
+        eligible_itt_subject: :mathematics,
+        qualification: :undergraduate_itt,
+        itt_academic_year: AcademicYear::Type.new.serialize(AcademicYear.new(2020))
       },
       {
         claim_academic_year: AcademicYear.new(2021),
@@ -1298,7 +1310,9 @@ RSpec.describe EarlyCareerPayments::DqtRecord do
         record_itt_date: Date.parse("1/9/2018"),
         record_qts_date: Date.parse("1/9/2020"),
         record_qualification_name: "BA",
-        eligible_itt_subject: :mathematics
+        eligible_itt_subject: :mathematics,
+        qualification: :undergraduate_itt,
+        itt_academic_year: AcademicYear::Type.new.serialize(AcademicYear.new(2020))
       },
       {
         claim_academic_year: AcademicYear.new(2021),
@@ -1308,7 +1322,9 @@ RSpec.describe EarlyCareerPayments::DqtRecord do
         record_itt_date: Date.parse("1/9/2018"),
         record_qts_date: Date.parse("1/9/2020"),
         record_qualification_name: "BA",
-        eligible_itt_subject: :mathematics
+        eligible_itt_subject: :mathematics,
+        qualification: :undergraduate_itt,
+        itt_academic_year: AcademicYear::Type.new.serialize(AcademicYear.new(2020))
       },
       # end of mathematics for 2021
 
@@ -1321,7 +1337,9 @@ RSpec.describe EarlyCareerPayments::DqtRecord do
         record_itt_date: Date.parse("1/9/2018"),
         record_qts_date: Date.parse("1/9/2020"),
         record_qualification_name: "BA",
-        eligible_itt_subject: :physics
+        eligible_itt_subject: :physics,
+        qualification: :undergraduate_itt,
+        itt_academic_year: AcademicYear::Type.new.serialize(AcademicYear.new(2020))
       },
       {
         claim_academic_year: AcademicYear.new(2021),
@@ -1331,7 +1349,9 @@ RSpec.describe EarlyCareerPayments::DqtRecord do
         record_itt_date: Date.parse("1/9/2018"),
         record_qts_date: Date.parse("1/9/2020"),
         record_qualification_name: "BA",
-        eligible_itt_subject: :physics
+        eligible_itt_subject: :physics,
+        qualification: :undergraduate_itt,
+        itt_academic_year: AcademicYear::Type.new.serialize(AcademicYear.new(2020))
       },
       {
         claim_academic_year: AcademicYear.new(2021),
@@ -1341,7 +1361,9 @@ RSpec.describe EarlyCareerPayments::DqtRecord do
         record_itt_date: Date.parse("1/9/2018"),
         record_qts_date: Date.parse("1/9/2020"),
         record_qualification_name: "BA",
-        eligible_itt_subject: :physics
+        eligible_itt_subject: :physics,
+        qualification: :undergraduate_itt,
+        itt_academic_year: AcademicYear::Type.new.serialize(AcademicYear.new(2020))
       },
       {
         claim_academic_year: AcademicYear.new(2021),
@@ -1351,7 +1373,9 @@ RSpec.describe EarlyCareerPayments::DqtRecord do
         record_itt_date: Date.parse("1/9/2018"),
         record_qts_date: Date.parse("1/9/2020"),
         record_qualification_name: "BA",
-        eligible_itt_subject: :physics
+        eligible_itt_subject: :physics,
+        qualification: :undergraduate_itt,
+        itt_academic_year: AcademicYear::Type.new.serialize(AcademicYear.new(2020))
       },
       # end of physics for 2021
 
@@ -1364,7 +1388,9 @@ RSpec.describe EarlyCareerPayments::DqtRecord do
         record_itt_date: Date.parse("1/9/2018"),
         record_qts_date: Date.parse("1/9/2020"),
         record_qualification_name: "BA",
-        eligible_itt_subject: :chemistry
+        eligible_itt_subject: :chemistry,
+        qualification: :undergraduate_itt,
+        itt_academic_year: AcademicYear::Type.new.serialize(AcademicYear.new(2020))
       },
       {
         claim_academic_year: AcademicYear.new(2021),
@@ -1374,7 +1400,9 @@ RSpec.describe EarlyCareerPayments::DqtRecord do
         record_itt_date: Date.parse("1/9/2018"),
         record_qts_date: Date.parse("1/9/2020"),
         record_qualification_name: "BA",
-        eligible_itt_subject: :chemistry
+        eligible_itt_subject: :chemistry,
+        qualification: :undergraduate_itt,
+        itt_academic_year: AcademicYear::Type.new.serialize(AcademicYear.new(2020))
       },
       {
         claim_academic_year: AcademicYear.new(2021),
@@ -1384,7 +1412,9 @@ RSpec.describe EarlyCareerPayments::DqtRecord do
         record_itt_date: Date.parse("1/9/2018"),
         record_qts_date: Date.parse("1/9/2020"),
         record_qualification_name: "BA",
-        eligible_itt_subject: :chemistry
+        eligible_itt_subject: :chemistry,
+        qualification: :undergraduate_itt,
+        itt_academic_year: AcademicYear::Type.new.serialize(AcademicYear.new(2020))
       },
       {
         claim_academic_year: AcademicYear.new(2021),
@@ -1394,7 +1424,9 @@ RSpec.describe EarlyCareerPayments::DqtRecord do
         record_itt_date: Date.parse("1/9/2018"),
         record_qts_date: Date.parse("1/9/2020"),
         record_qualification_name: "BA",
-        eligible_itt_subject: :chemistry
+        eligible_itt_subject: :chemistry,
+        qualification: :undergraduate_itt,
+        itt_academic_year: AcademicYear::Type.new.serialize(AcademicYear.new(2020))
       },
       {
         claim_academic_year: AcademicYear.new(2021),
@@ -1404,7 +1436,9 @@ RSpec.describe EarlyCareerPayments::DqtRecord do
         record_itt_date: Date.parse("1/9/2018"),
         record_qts_date: Date.parse("1/9/2020"),
         record_qualification_name: "BA",
-        eligible_itt_subject: :chemistry
+        eligible_itt_subject: :chemistry,
+        qualification: :undergraduate_itt,
+        itt_academic_year: AcademicYear::Type.new.serialize(AcademicYear.new(2020))
       },
       # end of chemistry for 2021
 
@@ -1417,7 +1451,9 @@ RSpec.describe EarlyCareerPayments::DqtRecord do
         record_itt_date: Date.parse("1/9/2018"),
         record_qts_date: Date.parse("1/9/2020"),
         record_qualification_name: "BA",
-        eligible_itt_subject: :foreign_languages
+        eligible_itt_subject: :foreign_languages,
+        qualification: :undergraduate_itt,
+        itt_academic_year: AcademicYear::Type.new.serialize(AcademicYear.new(2020))
       },
       {
         claim_academic_year: AcademicYear.new(2021),
@@ -1427,7 +1463,9 @@ RSpec.describe EarlyCareerPayments::DqtRecord do
         record_itt_date: Date.parse("1/9/2018"),
         record_qts_date: Date.parse("1/9/2020"),
         record_qualification_name: "BA",
-        eligible_itt_subject: :foreign_languages
+        eligible_itt_subject: :foreign_languages,
+        qualification: :undergraduate_itt,
+        itt_academic_year: AcademicYear::Type.new.serialize(AcademicYear.new(2020))
       },
       {
         claim_academic_year: AcademicYear.new(2021),
@@ -1437,7 +1475,9 @@ RSpec.describe EarlyCareerPayments::DqtRecord do
         record_itt_date: Date.parse("1/9/2018"),
         record_qts_date: Date.parse("1/9/2020"),
         record_qualification_name: "BA",
-        eligible_itt_subject: :foreign_languages
+        eligible_itt_subject: :foreign_languages,
+        qualification: :undergraduate_itt,
+        itt_academic_year: AcademicYear::Type.new.serialize(AcademicYear.new(2020))
       },
       # end of foreign_languages for 2021
 
@@ -1450,7 +1490,9 @@ RSpec.describe EarlyCareerPayments::DqtRecord do
         record_itt_date: Date.parse("1/9/2019"),
         record_qts_date: Date.parse("1/9/2018"),
         record_qualification_name: "BA",
-        eligible_itt_subject: :mathematics
+        eligible_itt_subject: :mathematics,
+        qualification: :undergraduate_itt,
+        itt_academic_year: AcademicYear::Type.new.serialize(AcademicYear.new(2018))
       },
       {
         claim_academic_year: AcademicYear.new(2022),
@@ -1460,7 +1502,9 @@ RSpec.describe EarlyCareerPayments::DqtRecord do
         record_itt_date: Date.parse("1/9/2019"),
         record_qts_date: Date.parse("1/9/2018"),
         record_qualification_name: "BA",
-        eligible_itt_subject: :mathematics
+        eligible_itt_subject: :mathematics,
+        qualification: :undergraduate_itt,
+        itt_academic_year: AcademicYear::Type.new.serialize(AcademicYear.new(2018))
       },
       {
         claim_academic_year: AcademicYear.new(2022),
@@ -1470,7 +1514,9 @@ RSpec.describe EarlyCareerPayments::DqtRecord do
         record_itt_date: Date.parse("1/9/2019"),
         record_qts_date: Date.parse("1/9/2018"),
         record_qualification_name: "BA",
-        eligible_itt_subject: :mathematics
+        eligible_itt_subject: :mathematics,
+        qualification: :undergraduate_itt,
+        itt_academic_year: AcademicYear::Type.new.serialize(AcademicYear.new(2018))
       },
       {
         claim_academic_year: AcademicYear.new(2022),
@@ -1480,7 +1526,9 @@ RSpec.describe EarlyCareerPayments::DqtRecord do
         record_itt_date: Date.parse("1/9/2019"),
         record_qts_date: Date.parse("1/9/2018"),
         record_qualification_name: "BA",
-        eligible_itt_subject: :mathematics
+        eligible_itt_subject: :mathematics,
+        qualification: :undergraduate_itt,
+        itt_academic_year: AcademicYear::Type.new.serialize(AcademicYear.new(2018))
       },
       # end of mathematics for 2022
 
@@ -1493,7 +1541,9 @@ RSpec.describe EarlyCareerPayments::DqtRecord do
         record_itt_date: Date.parse("1/9/2018"),
         record_qts_date: Date.parse("1/9/2019"),
         record_qualification_name: "BA",
-        eligible_itt_subject: :mathematics
+        eligible_itt_subject: :mathematics,
+        qualification: :undergraduate_itt,
+        itt_academic_year: AcademicYear::Type.new.serialize(AcademicYear.new(2019))
       },
       {
         claim_academic_year: AcademicYear.new(2023),
@@ -1503,7 +1553,9 @@ RSpec.describe EarlyCareerPayments::DqtRecord do
         record_itt_date: Date.parse("1/9/2018"),
         record_qts_date: Date.parse("1/9/2019"),
         record_qualification_name: "BA",
-        eligible_itt_subject: :mathematics
+        eligible_itt_subject: :mathematics,
+        qualification: :undergraduate_itt,
+        itt_academic_year: AcademicYear::Type.new.serialize(AcademicYear.new(2019))
       },
       {
         claim_academic_year: AcademicYear.new(2023),
@@ -1513,7 +1565,9 @@ RSpec.describe EarlyCareerPayments::DqtRecord do
         record_itt_date: Date.parse("1/9/2018"),
         record_qts_date: Date.parse("1/9/2019"),
         record_qualification_name: "BA",
-        eligible_itt_subject: :mathematics
+        eligible_itt_subject: :mathematics,
+        qualification: :undergraduate_itt,
+        itt_academic_year: AcademicYear::Type.new.serialize(AcademicYear.new(2019))
       },
       {
         claim_academic_year: AcademicYear.new(2023),
@@ -1523,7 +1577,9 @@ RSpec.describe EarlyCareerPayments::DqtRecord do
         record_itt_date: Date.parse("1/9/2018"),
         record_qts_date: Date.parse("1/9/2019"),
         record_qualification_name: "BA",
-        eligible_itt_subject: :mathematics
+        eligible_itt_subject: :mathematics,
+        qualification: :undergraduate_itt,
+        itt_academic_year: AcademicYear::Type.new.serialize(AcademicYear.new(2019))
       },
       # end of mathematics for 2023
 
@@ -1536,7 +1592,9 @@ RSpec.describe EarlyCareerPayments::DqtRecord do
         record_itt_date: Date.parse("1/9/2019"),
         record_qts_date: Date.parse("1/9/2018"),
         record_qualification_name: "BA",
-        eligible_itt_subject: :mathematics
+        eligible_itt_subject: :mathematics,
+        qualification: :undergraduate_itt,
+        itt_academic_year: AcademicYear::Type.new.serialize(AcademicYear.new(2018))
       },
       {
         claim_academic_year: AcademicYear.new(2024),
@@ -1546,7 +1604,9 @@ RSpec.describe EarlyCareerPayments::DqtRecord do
         record_itt_date: Date.parse("1/9/2019"),
         record_qts_date: Date.parse("1/9/2018"),
         record_qualification_name: "BA",
-        eligible_itt_subject: :mathematics
+        eligible_itt_subject: :mathematics,
+        qualification: :undergraduate_itt,
+        itt_academic_year: AcademicYear::Type.new.serialize(AcademicYear.new(2018))
       },
       {
         claim_academic_year: AcademicYear.new(2024),
@@ -1556,7 +1616,9 @@ RSpec.describe EarlyCareerPayments::DqtRecord do
         record_itt_date: Date.parse("1/9/2019"),
         record_qts_date: Date.parse("1/9/2018"),
         record_qualification_name: "BA",
-        eligible_itt_subject: :mathematics
+        eligible_itt_subject: :mathematics,
+        qualification: :undergraduate_itt,
+        itt_academic_year: AcademicYear::Type.new.serialize(AcademicYear.new(2018))
       },
       {
         claim_academic_year: AcademicYear.new(2024),
@@ -1566,7 +1628,9 @@ RSpec.describe EarlyCareerPayments::DqtRecord do
         record_itt_date: Date.parse("1/9/2019"),
         record_qts_date: Date.parse("1/9/2018"),
         record_qualification_name: "BA",
-        eligible_itt_subject: :mathematics
+        eligible_itt_subject: :mathematics,
+        qualification: :undergraduate_itt,
+        itt_academic_year: AcademicYear::Type.new.serialize(AcademicYear.new(2018))
       },
       {
         claim_academic_year: AcademicYear.new(2025),
@@ -1576,7 +1640,9 @@ RSpec.describe EarlyCareerPayments::DqtRecord do
         record_itt_date: Date.parse("1/9/2019"),
         record_qts_date: Date.parse("1/9/2018"),
         record_qualification_name: "BA",
-        eligible_itt_subject: :mathematics
+        eligible_itt_subject: :mathematics,
+        qualification: :undergraduate_itt,
+        itt_academic_year: AcademicYear::Type.new.serialize(AcademicYear.new(2018))
       },
       {
         claim_academic_year: AcademicYear.new(2024),
@@ -1586,7 +1652,9 @@ RSpec.describe EarlyCareerPayments::DqtRecord do
         record_itt_date: Date.parse("1/9/2019"),
         record_qts_date: Date.parse("1/9/2018"),
         record_qualification_name: "BA",
-        eligible_itt_subject: :mathematics
+        eligible_itt_subject: :mathematics,
+        qualification: :undergraduate_itt,
+        itt_academic_year: AcademicYear::Type.new.serialize(AcademicYear.new(2018))
       },
       {
         claim_academic_year: AcademicYear.new(2024),
@@ -1594,9 +1662,11 @@ RSpec.describe EarlyCareerPayments::DqtRecord do
         record_itt_subjects: ["mathematics"],
         record_itt_subject_codes: [],
         record_itt_date: Date.parse("1/9/2019"),
-        record_qts_date: Date.parse("1/9/2010"),
+        record_qts_date: Date.parse("1/9/2018"),
         record_qualification_name: "BA",
-        eligible_itt_subject: :mathematics
+        eligible_itt_subject: :mathematics,
+        qualification: :undergraduate_itt,
+        itt_academic_year: AcademicYear::Type.new.serialize(AcademicYear.new(2018))
       },
       # end of mathematics for 2024
 
@@ -1609,7 +1679,9 @@ RSpec.describe EarlyCareerPayments::DqtRecord do
         record_itt_date: Date.parse("1/9/2017"),
         record_qts_date: Date.parse("1/9/2018"),
         record_qualification_name: "BA",
-        eligible_itt_subject: :physics
+        eligible_itt_subject: :physics,
+        qualification: :undergraduate_itt,
+        itt_academic_year: AcademicYear::Type.new.serialize(AcademicYear.new(2018))
       },
       {
         claim_academic_year: AcademicYear.new(2022),
@@ -1619,7 +1691,9 @@ RSpec.describe EarlyCareerPayments::DqtRecord do
         record_itt_date: Date.parse("1/9/2020"),
         record_qts_date: Date.parse("1/9/2017"),
         record_qualification_name: "Postgraduate Diploma in Education",
-        eligible_itt_subject: :mathematics
+        eligible_itt_subject: :mathematics,
+        qualification: :postgraduate_itt,
+        itt_academic_year: AcademicYear::Type.new.serialize(AcademicYear.new(2020))
       },
       {
         claim_academic_year: AcademicYear.new(2022),
@@ -1629,7 +1703,9 @@ RSpec.describe EarlyCareerPayments::DqtRecord do
         record_itt_date: Date.parse("1/9/2017"),
         record_qts_date: Date.parse("1/9/2020"),
         record_qualification_name: "BA",
-        eligible_itt_subject: :physics
+        eligible_itt_subject: :physics,
+        qualification: :undergraduate_itt,
+        itt_academic_year: AcademicYear::Type.new.serialize(AcademicYear.new(2020))
       },
       {
         claim_academic_year: AcademicYear.new(2022),
@@ -1639,9 +1715,65 @@ RSpec.describe EarlyCareerPayments::DqtRecord do
         record_itt_date: Date.parse("1/9/2017"),
         record_qts_date: Date.parse("1/9/2020"),
         record_qualification_name: "BA",
-        eligible_itt_subject: :physics
-      }
+        eligible_itt_subject: :physics,
+        qualification: :undergraduate_itt,
+        itt_academic_year: AcademicYear::Type.new.serialize(AcademicYear.new(2020))
+      },
       # end of ITT subjects that don't match the selected subject
+
+      # start of qualifications that don't match the selected qualification
+      {
+        claim_academic_year: AcademicYear.new(2021),
+        record_degree_codes: [],
+        record_itt_subjects: ["mathematics"],
+        record_itt_subject_codes: ["G100"],
+        record_itt_date: Date.parse("1/9/2017"),
+        record_qts_date: Date.parse("1/9/2018"),
+        record_qualification_name: "BA",
+        eligible_itt_subject: :mathematics,
+        qualification: :postgraduate_itt,
+        itt_academic_year: AcademicYear::Type.new.serialize(AcademicYear.new(2017))
+      },
+      {
+        claim_academic_year: AcademicYear.new(2021),
+        record_degree_codes: [],
+        record_itt_subjects: ["mathematics"],
+        record_itt_subject_codes: ["G100"],
+        record_itt_date: Date.parse("1/9/2017"),
+        record_qts_date: Date.parse("1/9/2018"),
+        record_qualification_name: "Postgraduate Certificate in Education",
+        eligible_itt_subject: :mathematics,
+        qualification: :undergraduate_itt,
+        itt_academic_year: AcademicYear::Type.new.serialize(AcademicYear.new(2018))
+      },
+      # end of qualifications that don't match the selected qualification
+
+      # start of ITT/QTS years that don't match the selected year
+      {
+        claim_academic_year: AcademicYear.new(2021),
+        record_degree_codes: [],
+        record_itt_subjects: ["mathematics"],
+        record_itt_subject_codes: ["G100"],
+        record_itt_date: Date.parse("1/9/2017"),
+        record_qts_date: Date.parse("1/9/2018"),
+        record_qualification_name: "BA",
+        eligible_itt_subject: :mathematics,
+        qualification: :undergraduate_itt,
+        itt_academic_year: AcademicYear::Type.new.serialize(AcademicYear.new(2017))
+      },
+      {
+        claim_academic_year: AcademicYear.new(2021),
+        record_degree_codes: [],
+        record_itt_subjects: ["mathematics"],
+        record_itt_subject_codes: ["G100"],
+        record_itt_date: Date.parse("1/9/2017"),
+        record_qts_date: Date.parse("1/9/2018"),
+        record_qualification_name: "Postgraduate Certificate in Education",
+        eligible_itt_subject: :mathematics,
+        qualification: :postgraduate_itt,
+        itt_academic_year: AcademicYear::Type.new.serialize(AcademicYear.new(2018))
+      }
+      # end of ITT/QTS years that don't match the selected year
     ].each do |context|
       context "when claim academic year #{context[:claim_academic_year]}" do
         let(:claim_academic_year) { context[:claim_academic_year] }
@@ -1652,6 +1784,8 @@ RSpec.describe EarlyCareerPayments::DqtRecord do
           context "when record ITT subjects #{context[:record_itt_subjects]}" do
             let(:record_itt_subjects) { context[:record_itt_subjects] }
             let(:eligible_itt_subject) { context[:eligible_itt_subject] }
+            let(:qualification) { context[:qualification] }
+            let(:itt_academic_year) { context[:itt_academic_year] }
 
             context "when record ITT subject codes #{context[:record_itt_subject_codes]}" do
               let(:record_itt_subject_codes) { context[:record_itt_subject_codes] }
