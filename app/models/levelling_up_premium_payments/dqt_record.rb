@@ -34,13 +34,13 @@ module LevellingUpPremiumPayments
     attr_reader :record, :claim
 
     def eligible_code?(code)
-      ((Dqt::Matchers::LevellingUpPremiumPayments::ELIGIBLE_JAC_CODES | Dqt::Matchers::LevellingUpPremiumPayments::ELIGIBLE_HECOS_CODES) & code).present?
+      ((Dqt::Matchers::LevellingUpPremiumPayments::ELIGIBLE_JAC_CODES | Dqt::Matchers::LevellingUpPremiumPayments::ELIGIBLE_HECOS_CODES) & code).any?
     end
 
     def eligible_subject?
       return true if claim.eligibility.itt_subject_none_of_the_above?
 
-      (ELIGIBLE_ITT_SUBJECTS[claim.eligibility.eligible_itt_subject.to_sym] & itt_subjects).present?
+      (ELIGIBLE_ITT_SUBJECTS[claim.eligibility.eligible_itt_subject.to_sym] & itt_subjects).any?
     end
   end
 end

@@ -72,6 +72,10 @@ module Dqt
       def eligible_itt_year?
         AcademicYear.new(itt_year).eql?(claim.eligibility.itt_academic_year)
       end
+
+      def eligible_subject?
+        (ELIGIBLE_ITT_SUBJECTS[claim.eligibility.eligible_itt_subject.to_sym] & itt_subjects).any?
+      end
     end
   end
 end

@@ -53,7 +53,7 @@ module EarlyCareerPayments
     end
 
     def eligible_subject?
-      (ELIGIBLE_ITT_SUBJECTS[claim.eligibility.eligible_itt_subject.to_sym] & itt_subjects).present?
+      (ELIGIBLE_ITT_SUBJECTS[claim.eligibility.eligible_itt_subject.to_sym] & itt_subjects).any?
     end
   end
 end
