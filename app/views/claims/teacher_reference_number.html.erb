@@ -11,29 +11,9 @@
           <%= form.label :teacher_reference_number, t("questions.teacher_reference_number"), class: "govuk-label govuk-label--#{shared_view_css_size}" %>
         </h1>
 
-        <% if current_claim.has_ecp_or_lupp_policy? %>
-            
-          <span class="govuk-hint" id="teacher_reference_number-hint">
-            You can get this from your school or on the certificate you got when you qualified as a teacher. 
-            You can also call the teacher qualifications helpdesk on 020 7593 5394 between 9am and 5pm from Monday to Thursday or between 9am and 4:30pm on Friday.
-            <br><br>
-            TRN must contain seven digits
-          </span>
-      
-        <% else %>
-
-          <span class="govuk-hint" id="teacher_reference_number-hint">
-            You can get this from your school, the certificate you got when you
-            qualified as a teacher or from the
-            <a href="https://www.gov.uk/guidance/individual-teacher-records-information-for-teachers#contact"  class="govuk-link">
-              teacher qualifications helpdesk
-            </a>.
-            You can also call the teacher qualifications helpdesk on 020 7593 5394 between 9am and 5pm from Monday to Thursday or between 9am and 4:30pm on Friday.
-            <br><br>
-            TRN must contain seven digits
-          </span>
-      
-        <% end %>
+        <span class="govuk-hint" id="teacher_reference_number-hint">
+          You can get this from your payslip, teacher pension statement or teacher training records.
+        </span>
 
         <div class="govuk-form-group">
           <%= errors_tag current_claim, :teacher_reference_number %>
@@ -44,6 +24,20 @@
                               "aria-describedby" => "teacher_reference_number-hint" %>
         </div>
       <% end %>
+      <details class="govuk-details" data-module="govuk-details">
+        <summary class="govuk-details__summary">
+              <span class="govuk-details__summary-text">
+                Help to find a lost TRN
+              </span>
+        </summary>
+        <div class="govuk-details__text">
+          <p class="govuk-body">
+            Use the online service to
+            <%= link_to "find a lost TRN (opens in new tab)", "https://find-a-lost-trn.education.gov.uk/start", class: "govuk-link", target: "_blank" %>
+            if you are unable to find it on your payslip, teacher pension statement or teacher training records.
+          </p>
+        </div>
+      </details>
       <%= form.submit "Continue", class: "govuk-button" %>
     <% end %>
   </div>
