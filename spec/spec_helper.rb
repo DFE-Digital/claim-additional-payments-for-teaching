@@ -113,5 +113,5 @@ RSpec.configure do |config|
   #   # as the one that triggered the failure.
   #   Kernel.srand config.seed
 
-  config.filter_run_excluding flaky: true unless ENV["RUN_FLAKY_SPECS"]
+  config.filter_run_excluding flaky: true unless ENV["RUN_FLAKY_SPECS"] == "true"
 end
