@@ -13,7 +13,7 @@
         </h1>
 
         <div id="mobile-number-hint" class="govuk-hint">
-          Enter your mobile number
+          To verify your mobile number we will send you a text message with a 6-digit passcode. You can enter the passcode on the next screen.
         </div>
 
         <%= errors_tag current_claim, :mobile_number %>
@@ -23,6 +23,7 @@
                              class: css_classes_for_input(current_claim, :mobile_number),
                              "aria-describedby" => "mobile-number-hint" %>
       <% end %>
+      <%= render "help_with_access_codes", communication_type: "Mobile" %>
       <%= form.submit "Continue", class: "govuk-button" %>
     <% end %>
   </div>
