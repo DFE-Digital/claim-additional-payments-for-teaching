@@ -70,8 +70,7 @@ RSpec.feature "Ineligible Levelling up premium payments claims" do
     choose "2018 to 2019"
     click_on "Continue"
 
-    # - Which subject did you do your undergraduate ITT in
-    expect(page).to have_text(I18n.t("early_career_payments.questions.eligible_itt_subject", qualification: "undergraduate initial teaching training"))
+    expect(page).to have_text("Which subject")
     choose "None of the above"
     click_on "Continue"
 

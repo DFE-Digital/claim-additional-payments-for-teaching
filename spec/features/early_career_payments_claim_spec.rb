@@ -85,8 +85,7 @@ RSpec.feature "Teacher Early-Career Payments claims" do
     choose "#{itt_year.start_year} to #{itt_year.end_year}"
     click_on "Continue"
 
-    # - Which subject did you do your postgraduate ITT in
-    expect(page).to have_text(I18n.t("early_career_payments.questions.eligible_itt_subject", qualification: qualification_name(claim.eligibility.qualification)))
+    expect(page).to have_text("Which subject")
 
     choose "Mathematics"
     click_on "Continue"
@@ -439,8 +438,7 @@ RSpec.feature "Teacher Early-Career Payments claims" do
       choose "#{itt_year.start_year} to #{itt_year.end_year}"
       click_on "Continue"
 
-      # - Which subject did you do your postgraduate ITT in
-      expect(page).to have_text(I18n.t("early_career_payments.questions.eligible_itt_subject_assessment_only"))
+      expect(page).to have_text("Which subject")
 
       choose "Mathematics"
       click_on "Continue"
@@ -488,8 +486,7 @@ RSpec.feature "Teacher Early-Career Payments claims" do
       choose "#{itt_year.start_year} to #{itt_year.end_year}"
       click_on "Continue"
 
-      # - Which subject did you do your postgraduate ITT in
-      expect(page).to have_text(I18n.t("early_career_payments.questions.eligible_itt_subject_overseas_recognition"))
+      expect(page).to have_text("Which subject")
 
       choose "Mathematics"
       click_on "Continue"
@@ -588,8 +585,7 @@ RSpec.feature "Teacher Early-Career Payments claims" do
     choose "#{itt_year.start_year} to #{itt_year.end_year}"
     click_on "Continue"
 
-    # - Which subject did you do your postgraduate ITT in
-    expect(page).to have_text(I18n.t("early_career_payments.questions.eligible_itt_subject", qualification: qualification_name(claim.eligibility.qualification)))
+    expect(page).to have_text("Which subject")
 
     choose "Mathematics"
     click_on "Continue"

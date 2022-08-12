@@ -20,7 +20,7 @@ RSpec.feature "Resetting dependant attributes when the claim is ineligible" do
     expect(page).to have_text("You are not eligible")
 
     visit claim_path(claim.policy.routing_name, "eligible-itt-subject")
-    choose "None of the above"
+    choose "No"
     click_on "Continue"
     expect(page).to have_text("Do you have a degree in an eligible subject?")
   end

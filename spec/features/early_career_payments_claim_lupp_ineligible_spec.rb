@@ -65,12 +65,11 @@ RSpec.feature "Early-Career Payments claims with school ineligible for Levelling
     choose "#{itt_year.start_year} to #{itt_year.end_year}"
     click_on "Continue"
 
-    # - Which subject did you do your postgraduate ITT in
-    expect(page).to have_text(I18n.t("early_career_payments.questions.eligible_itt_subject", qualification: qualification_name(claim.eligibility.qualification)))
+    expect(page).to have_text("Did you do your undergraduate initial teacher training (ITT) in mathematics?")
 
     expect(page).not_to have_text("If you qualified with science")
 
-    choose "Mathematics"
+    choose "Yes"
     click_on "Continue"
 
     # - Do you teach maths now

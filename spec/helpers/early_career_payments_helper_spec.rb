@@ -1,10 +1,6 @@
 require "rails_helper"
 
 describe EarlyCareerPaymentsHelper do
-  let(:claim) { build(:claim, policy: policy, eligibility: eligibility, academic_year: academic_year) }
-  let(:academic_year) { AcademicYear.new(2021) }
-  let(:eligibility) { build(:early_career_payments_eligibility) }
-
   describe "#one_time_password_validity_duration" do
     context "with 'DRIFT' constant set" do
       it "reports '1 minute' when 60 (seconds)" do
@@ -22,32 +18,76 @@ describe EarlyCareerPaymentsHelper do
   end
 
   describe "#eligible_itt_subject_translation" do
-    let(:policy) { EarlyCareerPayments }
+    let(:ecp_claim) { build(:claim, :first_lup_claim_year, eligibility: ecp_eligibility) }
+    let(:lup_claim) { build(:claim, :first_lup_claim_year, eligibility: lup_eligibility) }
 
-    context "trainee teacher in 2021" do
-      let(:eligibility) do
-        build(:early_career_payments_eligibility, nqt_in_academic_year_after_itt: false, qualification: :postgraduate_itt)
-      end
+    subject { helper.eligible_itt_subject_translation(CurrentClaim.new(claims: [ecp_claim, lup_claim])) }
 
-      before do
-        @ecp_policy_date = PolicyConfiguration.for(EarlyCareerPayments).current_academic_year
-        PolicyConfiguration.for(EarlyCareerPayments).update(current_academic_year: AcademicYear.new(2021))
-      end
+    context "trainee teacher" do
+      let(:ecp_eligibility) { build(:early_career_payments_eligibility, :trainee_teacher) }
+      let(:lup_eligibility) { build(:levelling_up_premium_payments_eligibility, :trainee_teacher) }
 
-      after do
-        PolicyConfiguration.for(EarlyCareerPayments).update(current_academic_year: @ecp_policy_date)
-      end
-
-      it "generates the correct heading based on being a trainee teacher in 2021" do
-        expect(helper.eligible_itt_subject_translation(claim)).to eq("Which subject are you currently doing your initial teacher training (ITT) in?")
-      end
+      it { is_expected.to eq("Which subject are you currently doing your initial teacher training (ITT) in?") }
     end
 
-    context "not trainee teacher" do
-      let(:eligibility) { build(:early_career_payments_eligibility, :eligible) }
+    context "qualified teacher" do
+      let(:ecp_eligibility) { build(:early_career_payments_eligibility, :eligible, itt_academic_year: itt_year, qualification: qualification) }
+      let(:lup_eligibility) { build(:levelling_up_premium_payments_eligibility, :ineligible, itt_academic_year: itt_year, qualification: qualification) }
 
-      it "generates the correct heading" do
-        expect(helper.eligible_itt_subject_translation(claim)).to eq("Which subject did you do your postgraduate initial teaching training (ITT) in?")
+      context "one option" do
+        let(:itt_year) { AcademicYear::Type.new.serialize(AcademicYear.new(2019)) }
+
+        context "undergraduate" do
+          let(:qualification) { :undergraduate_itt }
+
+          it { is_expected.to eq("Did you do your undergraduate initial teacher training (ITT) in mathematics?") }
+        end
+
+        context "postgraduate" do
+          let(:qualification) { :postgraduate_itt }
+
+          it { is_expected.to eq("Did you do your postgraduate initial teacher training (ITT) in mathematics?") }
+        end
+
+        context "overseas" do
+          let(:qualification) { :overseas_recognition }
+
+          it { is_expected.to eq("Did you do your teaching qualification in mathematics?") }
+        end
+
+        context "assessment" do
+          let(:qualification) { :assessment_only }
+
+          it { is_expected.to eq("Did you do your assessment in mathematics?") }
+        end
+      end
+
+      context "multiple options" do
+        let(:itt_year) { AcademicYear::Type.new.serialize(AcademicYear.new(2020)) }
+
+        context "undergraduate" do
+          let(:qualification) { :undergraduate_itt }
+
+          it { is_expected.to eq("Which subject did you do your undergraduate initial teacher training (ITT) in?") }
+        end
+
+        context "postgraduate" do
+          let(:qualification) { :postgraduate_itt }
+
+          it { is_expected.to eq("Which subject did you do your postgraduate initial teacher training (ITT) in?") }
+        end
+
+        context "overseas" do
+          let(:qualification) { :overseas_recognition }
+
+          it { is_expected.to eq("Which subject did you do your teaching qualification in?") }
+        end
+
+        context "assessment" do
+          let(:qualification) { :assessment_only }
+
+          it { is_expected.to eq("Which subject did you do your assessment in?") }
+        end
       end
     end
   end
