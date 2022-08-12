@@ -211,11 +211,11 @@ class Claim < ApplicationRecord
     length: {maximum: 256, message: "Email address must be 256 characters or less"}, if: -> { email_address.present? }
 
   validates :provide_mobile_number, on: [:"provide-mobile-number", :submit], inclusion: {in: [true, false], message: "Select yes if you would like to provide your mobile number"}, if: :has_ecp_or_lupp_policy?
-  validates :mobile_number, on: [:"mobile-number", :submit], presence: {message: "Enter a mobile number in the correct format, for example 07123456789"}, if: -> { provide_mobile_number == true && has_ecp_or_lupp_policy? }
+  validates :mobile_number, on: [:"mobile-number", :submit], presence: {message: "Enter a mobile telephone number, like 07700 900 982"}, if: -> { provide_mobile_number == true && has_ecp_or_lupp_policy? }
   validates :mobile_number,
     format: {
       with: /\A\+?(?:\d\s?){11}\z/,
-      message: "A mobile number must be 11 digits"
+      message: "Enter a valid mobile telephone number, like 07700 900 982"
     }, if: -> { provide_mobile_number == true && mobile_number.present? && has_ecp_or_lupp_policy? }
 
   validates :bank_or_building_society, on: [:"bank-or-building-society", :submit], presence: {message: "Select if you want the money paid in to a personal bank account or building society"}

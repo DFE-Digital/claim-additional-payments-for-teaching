@@ -22,6 +22,7 @@
                              class: css_classes_for_input(current_claim, :email_address),
                              "aria-describedby" => "email-address-hint" %>
       <% end %>
+      <%= render "help_with_access_codes", communication_type: "Email" %>
       <%= form.submit "Continue", class: "govuk-button" %>
     <% end %>
   </div>

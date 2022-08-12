@@ -411,7 +411,6 @@ RSpec.feature "Changing the answers on a submittable claim" do
         }.from(false).to(true)
 
         expect(page).not_to have_content("Check your answers before sending your application")
-        expect(page).to have_content("Enter your mobile number")
         expect(page).to have_text(I18n.t("questions.mobile_number"))
 
         fill_in "claim_mobile_number", with: new_mobile
