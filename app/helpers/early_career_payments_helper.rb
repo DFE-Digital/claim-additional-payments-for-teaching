@@ -5,10 +5,6 @@ module EarlyCareerPaymentsHelper
     pluralize(OneTimePassword::Base::DRIFT / 60, "minute")
   end
 
-  def graduate_itt?(claim)
-    %w[undergraduate_itt postgraduate_itt].include? claim.eligibility.qualification
-  end
-
   def eligible_itt_subject_translation(claim)
     if claim.eligibility.trainee_teacher?
       return I18n.t("early_career_payments.questions.eligible_itt_subject_trainee_teacher")
