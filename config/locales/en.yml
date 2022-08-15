@@ -364,7 +364,7 @@ en:
     payment_name: "Levelling up premium payment"
     claim_description: "for an additional payment for teaching"
     claim_subject: "Levelling up premium payment"
-    support_email_address: "additionalteachingpayment@digital.education.gov.uk"
+    support_email_address: "levellinguppremiumpayments@digital.education.gov.uk"
     admin:
       degree_in_an_eligible_subject: "Do you have an UG or a PG degree in an eligible subject?"
       task_questions:
