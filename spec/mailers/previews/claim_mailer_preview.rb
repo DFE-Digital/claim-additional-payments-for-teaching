@@ -1,18 +1,34 @@
 class ClaimMailerPreview < ActionMailer::Preview
-  def submitted
-    ClaimMailer.submitted(claim_for(Claim.submitted))
+  def submitted_ecp
+    ClaimMailer.submitted(claim_for(Claim.submitted.by_policy(EarlyCareerPayments)))
   end
 
-  def approved
-    ClaimMailer.approved(claim_for(Claim.approved))
+  def submitted_lup
+    ClaimMailer.submitted(claim_for(Claim.submitted.by_policy(LevellingUpPremiumPayments)))
   end
 
-  def rejected
-    ClaimMailer.rejected(claim_for(Claim.rejected))
+  def approved_ecp
+    ClaimMailer.approved(claim_for(Claim.approved.by_policy(EarlyCareerPayments)))
   end
 
-  def update_after_three_weeks
-    ClaimMailer.update_after_three_weeks(claim_for(Claim.approved))
+  def approved_lup
+    ClaimMailer.approved(claim_for(Claim.approved.by_policy(LevellingUpPremiumPayments)))
+  end
+
+  def rejected_ecp
+    ClaimMailer.rejected(claim_for(Claim.rejected.by_policy(EarlyCareerPayments)))
+  end
+
+  def rejected_lup
+    ClaimMailer.rejected(claim_for(Claim.rejected.by_policy(LevellingUpPremiumPayments)))
+  end
+
+  def update_after_three_weeks_ecp
+    ClaimMailer.update_after_three_weeks(claim_for(Claim.approved.by_policy(EarlyCareerPayments)))
+  end
+
+  def update_after_three_weeks_lup
+    ClaimMailer.update_after_three_weeks(claim_for(Claim.approved.by_policy(LevellingUpPremiumPayments)))
   end
 
   def email_verification
