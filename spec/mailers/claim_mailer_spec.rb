@@ -55,7 +55,7 @@ RSpec.describe ClaimMailer, type: :mailer do
   end
 
   # Characteristics common to all policies
-  [EarlyCareerPayments, StudentLoans].each do |policy|
+  [EarlyCareerPayments, StudentLoans, LevellingUpPremiumPayments].each do |policy|
     context "with a #{policy} claim" do
       describe "#submitted" do
         let(:claim) { build(:claim, :submitted, policy: policy) }
@@ -66,6 +66,12 @@ RSpec.describe ClaimMailer, type: :mailer do
         context "when EarlyCareerPayments", if: policy == EarlyCareerPayments do
           it "uses the correct template" do
             expect(mail[:template_id].decoded).to eq "cb319af7-a769-42e4-8f01-5cbb9fc24846"
+          end
+        end
+
+        context "when LevellingUpPremiumPayments", if: policy == LevellingUpPremiumPayments do
+          it "uses the correct template" do
+            expect(mail[:template_id].decoded).to eq "0158e1c4-ffa2-4b5e-86f9-0dead4e68587"
           end
         end
 
@@ -88,6 +94,12 @@ RSpec.describe ClaimMailer, type: :mailer do
           end
         end
 
+        context "when LevellingUpPremiumPayments", if: policy == LevellingUpPremiumPayments do
+          it "uses the correct template" do
+            expect(mail[:template_id].decoded).to eq "78e4bf4a-5d4b-4328-9384-116c08183a77"
+          end
+        end
+
         context "when StudentLoans", if: policy == StudentLoans do
           it "uses the correct template" do
             expect(mail[:template_id].decoded).to eq "2032be01-6aee-4a1a-81ce-cf91e09de8d7"
@@ -107,6 +119,12 @@ RSpec.describe ClaimMailer, type: :mailer do
           end
         end
 
+        context "when LevellingUpPremiumPayments", if: policy == LevellingUpPremiumPayments do
+          it "uses the correct template" do
+            expect(mail[:template_id].decoded).to eq "90089dbe-b75b-497b-8c0b-362d65395562"
+          end
+        end
+
         context "when StudentLoans", if: policy == StudentLoans do
           it "uses the correct template" do
             expect(mail[:template_id].decoded).to eq "57ca138c-9536-4323-92ba-1876f7957360"
@@ -123,6 +141,12 @@ RSpec.describe ClaimMailer, type: :mailer do
         context "when EarlyCareerPayments", if: policy == EarlyCareerPayments do
           it "uses the correct template" do
             expect(mail[:template_id].decoded).to eq "0ef1e702-ea64-43a5-a084-330f2f51836e"
+          end
+        end
+
+        context "when LevellingUpPremiumPayments", if: policy == LevellingUpPremiumPayments do
+          it "uses the correct template" do
+            expect(mail[:template_id].decoded).to eq "a10322ed-7829-44b2-95c6-d5cc686d2c04"
           end
         end
 
@@ -197,14 +221,24 @@ RSpec.describe ClaimMailer, type: :mailer do
     end
   end
 
-  context "with an EarlyCareerPayments claim" do
-    describe "#email_verification" do
-      let(:claim) { build(:claim, policy: EarlyCareerPayments, first_name: "Ellie") }
-      let(:mail) { ClaimMailer.email_verification(claim, one_time_password) }
-      let(:one_time_password) { 123124 }
+  describe "#email_verification" do
+    let(:mail) { ClaimMailer.email_verification(claim, one_time_password) }
+    let(:one_time_password) { 123124 }
+    let(:policy) { 123124 }
+    let(:claim) { build(:claim, policy: policy, first_name: "Ellie") }
 
+    context "with an EarlyCareerPayments claim" do
+      let(:policy) { EarlyCareerPayments }
       it "has personalisation keys for: one time password, validity_duration,first_name and support_email_address" do
         expect(mail[:personalisation].decoded).to eq("{:email_subject=>\"Early-career payment email verification\", :first_name=>\"Ellie\", :one_time_password=>123124, :support_email_address=>\"earlycareerteacherpayments@digital.education.gov.uk\", :validity_duration=>\"15 minutes\"}")
+        expect(mail.body.encoded).to be_empty
+      end
+    end
+
+    context "with an LevellingUpPremiumPayments claim" do
+      let(:policy) { LevellingUpPremiumPayments }
+      it "has personalisation keys for: one time password, validity_duration,first_name and support_email_address" do
+        expect(mail[:personalisation].decoded).to eq("{:email_subject=>\"Levelling up premium payment email verification\", :first_name=>\"Ellie\", :one_time_password=>123124, :support_email_address=>\"additionalteachingpayment@digital.education.gov.uk\", :validity_duration=>\"15 minutes\"}")
         expect(mail.body.encoded).to be_empty
       end
     end
