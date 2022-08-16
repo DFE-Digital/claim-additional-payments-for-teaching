@@ -28,6 +28,23 @@ RSpec.feature "Trainee teacher subjourney for LUP schools" do
     click_on "Set reminder"
 
     expect(page).to have_text(I18n.t("questions.personal_details"))
+    expect(page).to have_text("Tell us the email you want us to send reminders to. We recommend you use a non-work email address in case your circumstances change.")
+
+    fill_in "Full name", with: "David Tau"
+    fill_in "Email address", with: "david.tau1988@hotmail.co.uk"
+    click_on "Continue"
+    fill_in "reminder_one_time_password", with: get_otp_from_email
+    click_on "Confirm"
+    reminder = Reminder.order(:created_at).last
+
+    expect(reminder.full_name).to eq "David Tau"
+    expect(reminder.email_address).to eq "david.tau1988@hotmail.co.uk"
+    expect(reminder.itt_academic_year).to eq PolicyConfiguration.for(LevellingUpPremiumPayments).current_academic_year + 1
+    expect(reminder.itt_subject).to eq "mathematics"
+    expect(page).to have_text("We have set your reminder")
+
+    mail = ReminderMailer.reminder_set(Reminder.order(:created_at).last)
+    expect(mail[:template_id].decoded).to eq "0dc80ba9-adae-43cd-98bf-58882ee401c3"
   end
 
   scenario "LUP school with non-LUP ITT subject but eligible degree" do
@@ -46,6 +63,23 @@ RSpec.feature "Trainee teacher subjourney for LUP schools" do
     click_on "Set reminder"
 
     expect(page).to have_text(I18n.t("questions.personal_details"))
+    expect(page).to have_text("Tell us the email you want us to send reminders to. We recommend you use a non-work email address in case your circumstances change.")
+
+    fill_in "Full name", with: "David Tau"
+    fill_in "Email address", with: "david.tau1988@hotmail.co.uk"
+    click_on "Continue"
+    fill_in "reminder_one_time_password", with: get_otp_from_email
+    click_on "Confirm"
+    reminder = Reminder.order(:created_at).last
+
+    expect(reminder.full_name).to eq "David Tau"
+    expect(reminder.email_address).to eq "david.tau1988@hotmail.co.uk"
+    expect(reminder.itt_academic_year).to eq PolicyConfiguration.for(LevellingUpPremiumPayments).current_academic_year + 1
+    expect(reminder.itt_subject).to eq "none_of_the_above"
+    expect(page).to have_text("We have set your reminder")
+
+    mail = ReminderMailer.reminder_set(Reminder.order(:created_at).last)
+    expect(mail[:template_id].decoded).to eq "0dc80ba9-adae-43cd-98bf-58882ee401c3"
   end
 
   scenario "LUP school with non-LUP ITT subject and no eligible degree" do
