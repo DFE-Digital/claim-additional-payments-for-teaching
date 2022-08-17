@@ -46,6 +46,11 @@ variable "bypass_dfe_sign_in" {
   default     = false
 }
 
+variable "pr_number" {
+  type        = string
+  description = "Pull Request Number for Review App"
+}
+
 locals {
   db_name         = var.app_name == null ? var.environment : "${var.environment}-${var.app_name}"
   create_db_list  = var.create_database ? [local.db_name] : []
