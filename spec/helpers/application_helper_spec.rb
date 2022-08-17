@@ -41,10 +41,22 @@ describe ApplicationHelper do
       expect(support_email_address).to eq t("support_email_address")
     end
 
-    it "returns a policy-specific email address" do
+    it "returns a policy-specific email address based on routing path" do
       expect(support_email_address("student-loans")).to eq t("student_loans.support_email_address")
       expect(support_email_address("maths-and-physics")).to eq t("maths_and_physics.support_email_address")
       expect(support_email_address("additional-payments")).to eq t("early_career_payments.support_email_address")
+    end
+  end
+
+  describe "#support_email_address_for_selected_claim_policy" do
+    it "returns a ECP specific email if the session contains selected ECP claim" do
+      session[:selected_claim_policy] = "EarlyCareerPayments"
+      expect(support_email_address_for_selected_claim_policy).to eq t("early_career_payments.support_email_address")
+    end
+
+    it "returns a LUP specific email if the session contains selected LUP claim" do
+      session[:selected_claim_policy] = "LevellingUpPremiumPayments"
+      expect(support_email_address_for_selected_claim_policy).to eq t("levelling_up_premium_payments.support_email_address")
     end
   end
 

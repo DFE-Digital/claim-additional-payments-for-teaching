@@ -16,7 +16,7 @@
 
         <%= errors_tag current_claim, :email_address %>
 
-        <%= form.email_field :email_address,
+        <%= form.text_field :email_address,
                              autocomplete: "email",
                              spellcheck: "false",
                              class: css_classes_for_input(current_claim, :email_address),

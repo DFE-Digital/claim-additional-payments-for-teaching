@@ -238,7 +238,7 @@ RSpec.describe ClaimMailer, type: :mailer do
     context "with an LevellingUpPremiumPayments claim" do
       let(:policy) { LevellingUpPremiumPayments }
       it "has personalisation keys for: one time password, validity_duration,first_name and support_email_address" do
-        expect(mail[:personalisation].decoded).to eq("{:email_subject=>\"Levelling up premium payment email verification\", :first_name=>\"Ellie\", :one_time_password=>123124, :support_email_address=>\"additionalteachingpayment@digital.education.gov.uk\", :validity_duration=>\"15 minutes\"}")
+        expect(mail[:personalisation].decoded).to eq("{:email_subject=>\"Levelling up premium payment email verification\", :first_name=>\"Ellie\", :one_time_password=>123124, :support_email_address=>\"levellinguppremiumpayments@digital.education.gov.uk\", :validity_duration=>\"15 minutes\"}")
         expect(mail.body.encoded).to be_empty
       end
     end

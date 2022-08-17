@@ -18,11 +18,20 @@ module ApplicationHelper
     number_to_currency(value, delimiter: "", unit: "")
   end
 
+  # TODO: routing_name is not best way to do this due to the combined journey
+  # This remains for backwards compatibility of the existing mailers without a refactor
   def support_email_address(routing_name = nil)
     return t("support_email_address") unless routing_name
 
     namespace = PolicyConfiguration.i18n_namespace_for_routing_name(routing_name)
     t("#{namespace}.support_email_address")
+  end
+
+  def support_email_address_for_selected_claim_policy
+    return t("early_career_payments.support_email_address") if session[:selected_claim_policy] == "EarlyCareerPayments"
+    return t("levelling_up_premium_payments.support_email_address") if session[:selected_claim_policy] == "LevellingUpPremiumPayments"
+
+    t("support_email_address")
   end
 
   def policy_service_name(routing_name = nil)
