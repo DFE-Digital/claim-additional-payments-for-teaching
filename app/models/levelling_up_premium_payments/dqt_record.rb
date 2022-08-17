@@ -21,7 +21,7 @@ module LevellingUpPremiumPayments
     end
 
     def eligible?
-      return false unless eligible_subject? && eligible_qualification? && eligible_itt_year?
+      return false unless eligible_subject_and_none_of_the_above? && eligible_qualification? && eligible_itt_year?
 
       policy_year = PolicyConfiguration.for(claim.policy).current_academic_year
       eligible_itt_years = JourneySubjectEligibilityChecker.selectable_itt_years_for_claim_year(policy_year)
@@ -37,7 +37,8 @@ module LevellingUpPremiumPayments
       ((Dqt::Matchers::LevellingUpPremiumPayments::ELIGIBLE_JAC_CODES | Dqt::Matchers::LevellingUpPremiumPayments::ELIGIBLE_HECOS_CODES) & code).any?
     end
 
-    def eligible_subject?
+    def eligible_subject_and_none_of_the_above?
+      return false if claim.eligibility.itt_subject_none_of_the_above? && (ELIGIBLE_ITT_SUBJECTS.values.flatten & itt_subjects).any?
       return true if claim.eligibility.itt_subject_none_of_the_above?
 
       (ELIGIBLE_ITT_SUBJECTS[claim.eligibility.eligible_itt_subject.to_sym] & itt_subjects).any?

@@ -35,7 +35,7 @@ RSpec.describe LevellingUpPremiumPayments::DqtRecord do
     OpenStruct.new(
       {
         degree_codes: degree_codes,
-        itt_subjects: ["mathematics"],
+        itt_subjects: itt_subjects,
         itt_subject_codes: itt_subject_codes,
         itt_start_date: Date.parse("1/9/2019"),
         qts_award_date: Date.parse("31/8/2019"),
@@ -44,6 +44,7 @@ RSpec.describe LevellingUpPremiumPayments::DqtRecord do
     )
   end
 
+  let(:itt_subjects) { ["mathematics"] }
   let(:itt_subject_codes) { [] }
   let(:degree_codes) { [] }
 
@@ -100,6 +101,20 @@ RSpec.describe LevellingUpPremiumPayments::DqtRecord do
         let(:itt_academic_year) { AcademicYear::Type.new.serialize(AcademicYear.new(2020)) }
 
         it { is_expected.not_to be_eligible }
+      end
+
+      context "when the subject is 'None of the above'" do
+        let(:eligible_itt_subject) { :none_of_the_above }
+
+        context "when the claimant has a valid ITT subject" do
+          it { is_expected.not_to be_eligible }
+        end
+
+        context "when the claimant doesn't have a valid ITT subject" do
+          let(:itt_subjects) { ["law"] }
+
+          it { is_expected.to be_eligible }
+        end
       end
     end
   end
