@@ -104,6 +104,7 @@ stages:
               WebAppName: s118d02-app-$(app_name)-as
               ExtraTerraformVariables: -var="app_name=$(app_name)"
               ServiceConnection: azdo.pipelines.cip.S118D.armfe1ef140-8bef-4043-b5ee-c449e6f951ef
+              pullRequestNumber : $(System.PullRequest.PullRequestNumber)
 
 - stage: ProductionRelease
   condition: and(succeeded('TestRelease'), eq(variables['Build.SourceBranch'], 'refs/heads/master'))

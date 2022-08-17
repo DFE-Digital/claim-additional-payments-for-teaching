@@ -49,6 +49,11 @@ variable "bypass_dfe_sign_in" {
   description = "Bypass DFE Sign-In authentication and use a default role"
 }
 
+variable "pr_number" {
+  type        = string
+  description = "Pull Request Number for Review App"
+}
+
 locals {
   stash_port         = var.rg_prefix == "s118p01" ? "23888" : "17000"
 
