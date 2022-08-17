@@ -15,11 +15,6 @@ RSpec.feature "Eligible now can set a reminder for next year." do
     click_on "Accept and send"
     expect(page).to have_text("Set a reminder to apply next year")
     click_on "Set reminder"
-    expect(page).to have_field("reminder_email_address", with: claim.email_address)
-    expect(page).to have_field("reminder_full_name", with: claim.full_name)
-    click_on "Continue"
-    fill_in "reminder_one_time_password", with: get_otp_from_email
-    click_on "Confirm"
     expect(page).to have_text("We will send you a reminder in:")
     expect(page).to have_text("September #{reminder_year}")
   end
@@ -96,11 +91,6 @@ RSpec.feature "Completed Applications - Reminders" do
           if scenario[:invited_to_set_reminder] == true
             expect(page).to have_text("Set a reminder to apply next year")
             click_on "Set reminder"
-            expect(page).to have_field("reminder_email_address", with: claim.email_address)
-            expect(page).to have_field("reminder_full_name", with: claim.full_name)
-            click_on "Continue"
-            fill_in "reminder_one_time_password", with: get_otp_from_email
-            click_on "Confirm"
             expect(page).to have_text("We will send you a reminder in:")
             expect(page).to have_text("September #{reminder_year}")
           elsif scenario[:invited_to_set_reminder] == false
