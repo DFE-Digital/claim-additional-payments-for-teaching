@@ -49,7 +49,7 @@ en:
     btn_text: Confirm and send
   one_time_password:
     title: "Enter the 6-digit passcode"
-    hint1_html: "We have sent an %{email_or_mobile_message} to <b><strong>%{email_or_mobile_value}</strong></b> with a 6-digit passcode."
+    hint1_html: "We have sent %{email_or_mobile_message} to <b><strong>%{email_or_mobile_value}</strong></b> with a 6-digit passcode."
     validity_duration: "The passcode will expire %{duration_valid} after you receive it."
   questions:
     current_school: "Which school are you currently employed to teach at?"
