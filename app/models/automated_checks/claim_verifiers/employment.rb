@@ -88,7 +88,7 @@ module AutomatedChecks
 
           <<~HTML
             [Employment] - #{match == :none ? "Ine" : "E"}ligible:
-            <pre>#{schools_details}</pre>
+            <pre>#{schools_details.present? ? schools_details : "School data missing"}</pre>
           HTML
         end
 
