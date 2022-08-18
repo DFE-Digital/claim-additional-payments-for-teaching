@@ -32,7 +32,7 @@ RSpec.describe "Admin qualification report upload" do
       it "creates qualification and identity_confirmation tasks for the claim" do
         expect {
           post admin_qualification_report_uploads_path, params: {file: file}
-        }.to change { claim.tasks.count }.by(2)
+        }.to change { claim.tasks.count }.by(3)
 
         qualification_task = claim.tasks.find_by(name: "qualifications")
         expect(qualification_task.created_by).to eql(@signed_in_user)
@@ -40,7 +40,7 @@ RSpec.describe "Admin qualification report upload" do
         id_confirmation_task = claim.tasks.find_by(name: "identity_confirmation")
         expect(id_confirmation_task.created_by).to eql(@signed_in_user)
 
-        expect(flash[:notice]).to eql("DQT report uploaded successfully. Automatically completed 2 tasks for 1 checked claim.")
+        expect(flash[:notice]).to eql("DQT report uploaded successfully. Automatically completed 3 tasks for 1 checked claim.")
         expect(response).to redirect_to(admin_claims_path)
       end
     end
