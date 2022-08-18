@@ -419,7 +419,7 @@ RSpec.feature "Changing the answers on a submittable claim" do
         expect(claim.reload.mobile_number).to eql new_mobile
 
         # - Mobile number one-time password
-        expect(page).to have_text("Password verification")
+        expect(page).to have_text("Mobile number verification")
         expect(page).to have_text("Enter the 6-digit passcode")
 
         fill_in "claim_one_time_password", with: otp_code
@@ -471,7 +471,7 @@ RSpec.feature "Changing the answers on a submittable claim" do
         expect(page).not_to have_content("Check your answers before sending your application")
 
         # - Mobile number one-time password
-        expect(page).to have_text("Password verification")
+        expect(page).to have_text("Mobile number verification")
         expect(page).to have_text("Enter the 6-digit passcode")
 
         fill_in "claim_one_time_password", with: otp_code

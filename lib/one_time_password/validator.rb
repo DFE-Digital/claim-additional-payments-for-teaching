@@ -14,7 +14,7 @@ module OneTimePassword
 
     def warning
       return "Enter a passcode" if code.blank?
-      return "Passcode must contain #{LENGTH}-digits" if wrong_length?
+      return "Enter a valid passcode containing #{LENGTH}-digits" if wrong_length?
       return "Your passcode has expired, request a new one" if expired?
       "Enter a valid passcode" if incorrect?
     end
