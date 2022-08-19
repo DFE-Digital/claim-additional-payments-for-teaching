@@ -1,4 +1,5 @@
 class BasePublicController < ApplicationController
+  include DfE::Analytics::Requests
   include ClaimSessionTimeout
 
   helper_method :current_policy, :current_policy_routing_name, :claim_timeout_in_minutes

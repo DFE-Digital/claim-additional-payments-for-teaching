@@ -1,0 +1,21 @@
+---
+shared:
+  :claims:
+  - first_name
+  - middle_name
+  - surname
+  - date_of_birth
+  - date_of_birth_day
+  - date_of_birth_month
+  - date_of_birth_year
+  - address_line_1
+  - address_line_2
+  - address_line_3
+  - address_line_4
+  - postcode
+  - national_insurance_number
+  - bank_sort_code
+  - bank_account_number
+  - building_society_roll_number
+  - banking_name
+  - mobile_number
