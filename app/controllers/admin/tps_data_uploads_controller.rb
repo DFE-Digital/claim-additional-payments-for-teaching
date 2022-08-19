@@ -15,10 +15,23 @@ module Admin
         if @tps_data_importer.errors.any?
           render :new and return
         end
+        perform_employment_checks
         redirect_to admin_claims_path, notice: "Teachers Pensions Service data uploaded successfully"
       end
     rescue ActiveRecord::RecordInvalid
       redirect_to new_tps_data_upload_path, alert: "There was a problem, please try again"
+    end
+
+    private
+
+    def perform_employment_checks
+      claims = Claim.awaiting_task("qualifications")
+
+      claims.each do |claim|
+        AutomatedChecks::ClaimVerifiers::Employment.new(
+          claim: claim
+        ).perform_later
+      end
     end
   end
 end
