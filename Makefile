@@ -34,7 +34,7 @@ set-azure-account:
 
 terraform-init: set-azure-account
 	$(if $(IMAGE_TAG), , $(error Missing environment variable "IMAGE_TAG"))
-	terraform -chdir=azure/terraform init -reconfigure \
+	terraform -chdir=azure/terraform init -reconfigure -upgrade \
 		-backend-config=resource_group_name=${RESOURCE_GROUP_NAME} \
 		-backend-config=storage_account_name=${STORAGE_ACCOUNT_NAME} \
 		-backend-config=container_name=${CONTAINER_NAME} \
