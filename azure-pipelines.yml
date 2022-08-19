@@ -25,7 +25,7 @@ stages:
     - template: templates/build.yml
 
 - stage: TestRelease
-  condition: and(succeeded('DevelopmentRelease'), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
+  condition: and(succeeded('Build'), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
   jobs:
   - deployment: TestRelease
     displayName: Deploy to test environment
