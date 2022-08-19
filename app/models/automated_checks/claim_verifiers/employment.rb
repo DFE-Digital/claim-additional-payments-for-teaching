@@ -1,10 +1,7 @@
 module AutomatedChecks
   module ClaimVerifiers
     class Employment
-      def initialize(
-        claim:,
-        admin_user: nil
-      )
+      def initialize(claim:, admin_user: nil)
         self.admin_user = admin_user
         self.claim = claim
         self.teachers_pensions_service = TeachersPensionsService.by_teacher_reference_number(claim.teacher_reference_number)
@@ -88,7 +85,7 @@ module AutomatedChecks
 
           <<~HTML
             [Employment] - #{match == :none ? "Ine" : "E"}ligible:
-            <pre>#{schools_details.present? ? schools_details : "School data missing"}</pre>
+            <pre>#{schools_details}</pre>
           HTML
         end
 
