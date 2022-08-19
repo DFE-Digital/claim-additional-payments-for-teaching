@@ -64,6 +64,10 @@ locals {
   environment_variables = {
     "ADMIN_ALLOWED_IPS"              = data.azurerm_key_vault_secret.AdminAllowedIPs.value
     "APPINSIGHTS_INSTRUMENTATIONKEY" = data.azurerm_application_insights.app_ai.instrumentation_key
+    "BIGQUERY_TABLE_NAME"            = data.azurerm_key_vault_secret.BigqueryTableName.value
+    "BIGQUERY_PROJECT_ID"            = data.azurerm_key_vault_secret.BigqueryProjectId.value
+    "BIGQUERY_DATASET"               = data.azurerm_key_vault_secret.BigqueryDataset.value
+    "BIGQUERY_API_JSON_KEY"          = data.azurerm_key_vault_secret.BigqueryApiJsonKey.value
     "CANONICAL_HOSTNAME"             = local.canonical_hostname
     "DFE_SIGN_IN_API_CLIENT_ID"      = data.azurerm_key_vault_secret.DfeSignInApiClientId.value
     "DFE_SIGN_IN_API_ENDPOINT"       = data.azurerm_key_vault_secret.DfeSignInApiEndpoint.value
