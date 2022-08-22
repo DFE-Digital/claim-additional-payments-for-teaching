@@ -148,6 +148,26 @@ data "azurerm_key_vault_secret" "GTMAnalytics" {
   key_vault_id = data.azurerm_key_vault.secrets_kv.id
 }
 
+data "azurerm_key_vault_secret" "BigqueryTableName" {
+  name         = "BigqueryTableName"
+  key_vault_id = data.azurerm_key_vault.secrets_kv.id
+}
+
+data "azurerm_key_vault_secret" "BigqueryProjectId" {
+  name         = "BigqueryProjectId"
+  key_vault_id = data.azurerm_key_vault.secrets_kv.id
+}
+
+data "azurerm_key_vault_secret" "BigqueryDataset" {
+  name         = "BigqueryDataset"
+  key_vault_id = data.azurerm_key_vault.secrets_kv.id
+}
+
+data "azurerm_key_vault_secret" "BigqueryApiJsonKey" {
+  name         = "BigqueryApiJsonKey"
+  key_vault_id = data.azurerm_key_vault.secrets_kv.id
+}
+
 data "azurerm_service_plan" "app" {
   name                = format("%s-%s", var.app_rg_name, "asp")
   resource_group_name = var.app_rg_name
