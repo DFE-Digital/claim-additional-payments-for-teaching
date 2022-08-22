@@ -184,7 +184,7 @@ RSpec.describe PaymentConfirmation do
     end
 
     it "does not queue emails" do
-      expect { payment_confirmation.ingest }.to_not have_enqueued_job
+      expect { payment_confirmation.ingest }.to_not have_enqueued_job(PaymentMailer)
     end
   end
 
@@ -207,7 +207,7 @@ RSpec.describe PaymentConfirmation do
     end
 
     it "does not queue emails" do
-      expect { payment_confirmation.ingest }.to_not have_enqueued_job
+      expect { payment_confirmation.ingest }.to_not have_enqueued_job(PaymentMailer)
     end
   end
 end
