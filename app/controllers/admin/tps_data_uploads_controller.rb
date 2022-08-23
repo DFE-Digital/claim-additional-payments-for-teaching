@@ -30,7 +30,7 @@ module Admin
       claims.each do |claim|
         AutomatedChecks::ClaimVerifiers::Employment.new(
           claim: claim
-        ).perform_later
+        ).perform
       end
     end
   end
