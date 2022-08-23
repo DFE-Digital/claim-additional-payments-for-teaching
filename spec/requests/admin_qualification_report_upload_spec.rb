@@ -32,7 +32,7 @@ RSpec.describe "Admin qualification report upload" do
       it "creates qualification and identity_confirmation tasks for the claim" do
         expect {
           post admin_qualification_report_uploads_path, params: {file: file}
-        }.to change { claim.tasks.count }.by(3)
+        }.to change { claim.tasks.count }.by(2)
 
         qualification_task = claim.tasks.find_by(name: "qualifications")
         expect(qualification_task.created_by).to eql(@signed_in_user)
