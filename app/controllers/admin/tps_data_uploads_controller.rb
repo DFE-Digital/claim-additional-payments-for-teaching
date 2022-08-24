@@ -25,7 +25,7 @@ module Admin
     private
 
     def perform_employment_checks
-      claims = Claim.awaiting_task("qualifications")
+      claims = Claim.awaiting_task("employment")
 
       claims.each do |claim|
         AutomatedChecks::ClaimVerifiers::Employment.new(
