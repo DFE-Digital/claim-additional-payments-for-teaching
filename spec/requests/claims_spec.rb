@@ -117,7 +117,7 @@ RSpec.describe "Claims", type: :request do
           get claim_path(StudentLoans.routing_name, "claim-school"), params: {school_search: "Pe"}
 
           expect(response.body).to include("There is a problem")
-          expect(response.body).to include("Enter your details to continue")
+          expect(response.body).to include("Enter a school or postcode")
           expect(response.body).not_to include(schools(:penistone_grammar_school).name)
         end
 
