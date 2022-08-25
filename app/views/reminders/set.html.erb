@@ -2,7 +2,6 @@
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-    <div class="govuk-grid-row">
       <div class="govuk-panel govuk-panel--confirmation">
         <h1 class="govuk-panel__title" id="reminders-title">We have set your reminder</h1>
       </div>
@@ -17,15 +16,7 @@
       <h3 class="govuk-heading-s">When will your reminder be sent?</h3>
 
       <p class="govuk-body">
-        We will send you a reminder in:
-      </p>
-
-      <ul class="govuk-list govuk-list--bullet">
-        <li>September <%= current_reminder.send_year %></li>
-      </ul>
-
-      <p class="govuk-body">
-        This is because, based on your answers, you will be able to apply for an additional payment at this time.
+        We will send you a reminder by email in September <%= current_reminder.send_year -%>. You will be able to check your eligibility and apply at this time.
       </p>
 
       <p class="govuk-body">
@@ -41,6 +32,5 @@
         <%= link_to "What do you think of this service?", done_page_url, class: "govuk-link" %>
         (takes 30 seconds)
       </p>
-    </div>
   </div>
 </div>
