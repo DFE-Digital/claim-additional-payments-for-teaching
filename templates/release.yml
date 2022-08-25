@@ -89,6 +89,7 @@ steps:
           $webappname = ${{ parameters.WebAppName}}
           $ResourceGroupName = ${{ parameters.ResourceGroupName }}
           $keyvault = ${{ parameters.KeyVaultName }}
+          write-host $webappname
 
           ### Add Custom Domain Name
           Set-AzWebApp -Name $webappname -ResourceGroupName $ResourceGroupName -HostNames @($fqdn,"$webappname.azurewebsites.net")
