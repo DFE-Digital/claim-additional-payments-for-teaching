@@ -77,6 +77,23 @@ steps:
         environmentServiceName: ${{ parameters.ServiceConnection }}
         commandOptions: '-var="pr_number=${{ parameters.pullRequestNumber}}" -var="input_region=westeurope" -var="input_container_version=$(Build.BuildNumber)" -var-file workspace_variables/${{ parameters.env}}.tfvars.json ${{ parameters.ExtraTerraformVariables}}'
 
+    ######hostname and cert###################
+    - task: AzurePowerShell@5
+      displayName: Get certificate and bind hostname
+      inputs:
+        azureSubscription: ${{ parameters.ServiceConnection }}
+        ScriptType: InlineScript
+        Inline: |
+          # Setting Variables
+          $webappname = ${{ parameters.WebAppName}}
+          Import-AzWebAppKeyVaultCertificate -ResourceGroupName ${{ parameters.ResourceGroupName}} -WebAppName $webappname -KeyVaultName "s118d01-secrets-kv" -CertName "development-additional-teaching-payment-education-gov-uk"
+         # Add a custom domain name to the web app.
+          #Set-AzWebApp -Name $webappname -ResourceGroupName ${{ parameters.ResourceGroupName}} -HostNames @($fqdn,"$webappname.azurewebsites.net")
+
+        preferredAzurePowerShellVersion: 3.1.0
+
+
+
     - task: AzurePowerShell@5
       displayName: Enable KV network firewall rule
       inputs:
