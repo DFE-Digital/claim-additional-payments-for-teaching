@@ -105,3 +105,5 @@ stages:
               WebAppName: s118p01-app-as
               ExtraTerraformVariables:
               ServiceConnection: azdo.pipelines.cip.S118P.armf895c908-777c-49ec-b814-3c50d459c6ab
+
+###remove when test done#############
