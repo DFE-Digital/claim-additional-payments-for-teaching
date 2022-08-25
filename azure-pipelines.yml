@@ -24,14 +24,14 @@ stages:
     steps:
     - template: templates/build.yml
 
-- stage: TestRelease
-  condition: and(succeeded('Build'), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
+- stage: DevelopmentRelease
+  #condition: and(succeeded('Build'), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
   jobs:
-  - deployment: TestRelease
-    displayName: Deploy to test environment
+  - deployment: DevelopmentRelease
+    displayName: Deploy to development environment
     pool:
       vmImage: ubuntu-latest
-    environment: s118-teacherpaymentsservice-test
+    environment: s118-teacherpaymentsservice-development
     strategy:
       runOnce:
         deploy:
@@ -39,69 +39,97 @@ stages:
           - checkout: self
           - template: templates/release.yml
             parameters:
-              backendAzureRmContainerName: s118t01conttfstate
+              backendAzureRmContainerName: s118d01conttfstate
               backendAzureRmKey: terraform.tfstate
-              backendAzureRmResourceGroupName: s118t01-tfbackend
-              backendAzureRmStorageAccountName: s118t01tfbackendsa
-              env: test
-              KeyVaultId: /subscriptions/e9299169-9666-4f15-9da9-5332680145af/resourceGroups/s118t01-secrets/providers/Microsoft.KeyVault/vaults/s118t01-secrets-kv
-              ResourceGroupName: s118t01-app
+              backendAzureRmResourceGroupName: s118d01-tfbackend
+              backendAzureRmStorageAccountName: s118d01tfbackendsa
+              env: development
+              KeyVaultId: /subscriptions/8655985a-2f87-44d7-a541-0be9a8c2779d/resourceGroups/s118d01-secrets/providers/Microsoft.KeyVault/vaults/s118d01-secrets-kv
+              KeyVaultName : "s118d01-secrets"
+              ResourceGroupName: "s118d01-app"
               SourceSlot: staging
-              WebAppName: s118t01-app-as
+              WebAppName: "s118d01-app-as"
               ExtraTerraformVariables:
-              ServiceConnection: azdo.pipelines.cip.S118T.arm03ce3ff5-9a61-4525-a063-6ecde34874cf
-
-- stage: ReviewRelease
-  condition: and(succeeded('Build'), ne(variables['Build.SourceBranch'], 'refs/heads/master'),  ne(variables['System.PullRequest.PullRequestNumber'], ''))
-  jobs:
-  - deployment: ReviewRelease
-    displayName: Deploy review app s118d02-app-$(app_name)-as to review environment
-    pool:
-      vmImage: ubuntu-latest
-    environment: s118-teacherpaymentsservice-reviewapp
-    strategy:
-      runOnce:
-        deploy:
-          steps:
-          - checkout: self
-          - template: templates/release.yml
-            parameters:
-              backendAzureRmContainerName: s118d02conttfstate
-              backendAzureRmKey: $(app_name).tfstate
-              backendAzureRmResourceGroupName: s118d02-review-tfbackend
-              backendAzureRmStorageAccountName: s118d02reviewtfbackendsa
-              env: review
-              KeyVaultId: /subscriptions/8655985a-2f87-44d7-a541-0be9a8c2779d/resourceGroups/s118d02-secrets/providers/Microsoft.KeyVault/vaults/s118d02-secrets-kv
-              ResourceGroupName: s118d02-app
-              SourceSlot: staging
-              WebAppName: s118d02-app-$(app_name)-as
-              ExtraTerraformVariables: -var="app_name=$(app_name)"
               ServiceConnection: azdo.pipelines.cip.S118D.armfe1ef140-8bef-4043-b5ee-c449e6f951ef
-              pullRequestNumber : $(System.PullRequest.PullRequestNumber)
 
-- stage: ProductionRelease
-  condition: and(succeeded('TestRelease'), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
-  jobs:
-  - deployment: ProductionRelease
-    displayName: Deploy to production environment
-    pool:
-      vmImage: ubuntu-latest
-    environment: s118-teacherpaymentsservice-production
-    strategy:
-      runOnce:
-        deploy:
-          steps:
-          - checkout: self
-          - template: templates/release.yml
-            parameters:
-              backendAzureRmContainerName: s118p01conttfstate
-              backendAzureRmKey: terraform.tfstate
-              backendAzureRmResourceGroupName: s118p01-tfbackend
-              backendAzureRmStorageAccountName: s118p01tfbackendsa
-              env: production
-              KeyVaultId: /subscriptions/88bd392f-df19-458b-a100-22b4429060ed/resourceGroups/s118p01-secrets/providers/Microsoft.KeyVault/vaults/s118p01-secrets-kv
-              ResourceGroupName: s118p01-app
-              SourceSlot: staging
-              WebAppName: s118p01-app-as
-              ExtraTerraformVariables:
-              ServiceConnection: azdo.pipelines.cip.S118P.armf895c908-777c-49ec-b814-3c50d459c6ab
+# - stage: TestRelease
+#   condition: and(succeeded('Build'), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
+#   jobs:
+#   - deployment: TestRelease
+#     displayName: Deploy to test environment
+#     pool:
+#       vmImage: ubuntu-latest
+#     environment: s118-teacherpaymentsservice-test
+#     strategy:
+#       runOnce:
+#         deploy:
+#           steps:
+#           - checkout: self
+#           - template: templates/release.yml
+#             parameters:
+#               backendAzureRmContainerName: s118t01conttfstate
+#               backendAzureRmKey: terraform.tfstate
+#               backendAzureRmResourceGroupName: s118t01-tfbackend
+#               backendAzureRmStorageAccountName: s118t01tfbackendsa
+#               env: test
+#               KeyVaultId: /subscriptions/e9299169-9666-4f15-9da9-5332680145af/resourceGroups/s118t01-secrets/providers/Microsoft.KeyVault/vaults/s118t01-secrets-kv
+#               ResourceGroupName: s118t01-app
+#               SourceSlot: staging
+#               WebAppName: s118t01-app-as
+#               ExtraTerraformVariables:
+#               ServiceConnection: azdo.pipelines.cip.S118T.arm03ce3ff5-9a61-4525-a063-6ecde34874cf
+
+# - stage: ReviewRelease
+#   condition: and(succeeded('Build'), ne(variables['Build.SourceBranch'], 'refs/heads/master'),  ne(variables['System.PullRequest.PullRequestNumber'], ''))
+#   jobs:
+#   - deployment: ReviewRelease
+#     displayName: Deploy review app s118d02-app-$(app_name)-as to review environment
+#     pool:
+#       vmImage: ubuntu-latest
+#     environment: s118-teacherpaymentsservice-reviewapp
+#     strategy:
+#       runOnce:
+#         deploy:
+#           steps:
+#           - checkout: self
+#           - template: templates/release.yml
+#             parameters:
+#               backendAzureRmContainerName: s118d02conttfstate
+#               backendAzureRmKey: $(app_name).tfstate
+#               backendAzureRmResourceGroupName: s118d02-review-tfbackend
+#               backendAzureRmStorageAccountName: s118d02reviewtfbackendsa
+#               env: review
+#               KeyVaultId: /subscriptions/8655985a-2f87-44d7-a541-0be9a8c2779d/resourceGroups/s118d02-secrets/providers/Microsoft.KeyVault/vaults/s118d02-secrets-kv
+#               ResourceGroupName: s118d02-app
+#               SourceSlot: staging
+#               WebAppName: s118d02-app-$(app_name)-as
+#               ExtraTerraformVariables: -var="app_name=$(app_name)"
+#               ServiceConnection: azdo.pipelines.cip.S118D.armfe1ef140-8bef-4043-b5ee-c449e6f951ef
+#               pullRequestNumber : $(System.PullRequest.PullRequestNumber)
+
+# - stage: ProductionRelease
+#   condition: and(succeeded('TestRelease'), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
+#   jobs:
+#   - deployment: ProductionRelease
+#     displayName: Deploy to production environment
+#     pool:
+#       vmImage: ubuntu-latest
+#     environment: s118-teacherpaymentsservice-production
+#     strategy:
+#       runOnce:
+#         deploy:
+#           steps:
+#           - checkout: self
+#           - template: templates/release.yml
+#             parameters:
+#               backendAzureRmContainerName: s118p01conttfstate
+#               backendAzureRmKey: terraform.tfstate
+#               backendAzureRmResourceGroupName: s118p01-tfbackend
+#               backendAzureRmStorageAccountName: s118p01tfbackendsa
+#               env: production
+#               KeyVaultId: /subscriptions/88bd392f-df19-458b-a100-22b4429060ed/resourceGroups/s118p01-secrets/providers/Microsoft.KeyVault/vaults/s118p01-secrets-kv
+#               ResourceGroupName: s118p01-app
+#               SourceSlot: staging
+#               WebAppName: s118p01-app-as
+#               ExtraTerraformVariables:
+#               ServiceConnection: azdo.pipelines.cip.S118P.armf895c908-777c-49ec-b814-3c50d459c6ab
