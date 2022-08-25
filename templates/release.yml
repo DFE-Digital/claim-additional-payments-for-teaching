@@ -6,6 +6,7 @@ parameters:
   backendAzureRmStorageAccountName :
   env :
   KeyVaultId :
+  KeyVaultName :
   ResourceGroupName :
   SourceSlot :
   WebAppName :
@@ -77,22 +78,30 @@ steps:
         environmentServiceName: ${{ parameters.ServiceConnection }}
         commandOptions: '-var="pr_number=${{ parameters.pullRequestNumber}}" -var="input_region=westeurope" -var="input_container_version=$(Build.BuildNumber)" -var-file workspace_variables/${{ parameters.env}}.tfvars.json ${{ parameters.ExtraTerraformVariables}}'
 
-    ######hostname and cert###################
     - task: AzurePowerShell@5
-      displayName: Get certificate and bind hostname
+      displayName: Add Custom Domain Certificate and Bindings
       inputs:
         azureSubscription: ${{ parameters.ServiceConnection }}
         ScriptType: InlineScript
         Inline: |
           # Setting Variables
+          $fqdn = "$(env).additional-teaching-payment.education.gov.uk"
           $webappname = ${{ parameters.WebAppName}}
-          Import-AzWebAppKeyVaultCertificate -ResourceGroupName ${{ parameters.ResourceGroupName}} -WebAppName $webappname -KeyVaultName "s118d01-secrets-kv" -CertName "development-additional-teaching-payment-education-gov-uk"
-         # Add a custom domain name to the web app.
-          #Set-AzWebApp -Name $webappname -ResourceGroupName ${{ parameters.ResourceGroupName}} -HostNames @($fqdn,"$webappname.azurewebsites.net")
+          $ResourceGroupName = ${{ parameters.ResourceGroupName }}
+          $keyvault = ${{ parameters.KeyVaultName }}
 
+          ### Add Custom Domain Name
+          Set-AzWebApp -Name $webappname -ResourceGroupName $ResourceGroupName -HostNames @($fqdn,"$webappname.azurewebsites.net")
+
+          ## Add Cert
+          $certname = "$(env)-additional-teaching-payment-education-gov-uk"
+          #Set-AzureRmKeyVaultAccessPolicy -VaultName $keyvault -ServicePrincipalName abfa0a7c-a6b6-4736-8310-5855508787cd -PermissionsToSecrets get
+          Import-AzWebAppKeyVaultCertificate -ResourceGroupName $ResourceGroupName -WebAppName $webappname -KeyVaultName $keyvault -CertName $certname
+
+          ###Add binding
+          $azurecert = Get-AzKeyVaultCertificate -VaultName $keyvault -Name $certname
+          New-AzWebAppSSLBinding -ResourceGroupName $ResourceGroupName -WebAppName $webappname -Thumbprint $azurecert.Thumbprint -Name $fqdn
         preferredAzurePowerShellVersion: 3.1.0
-
-
 
     - task: AzurePowerShell@5
       displayName: Enable KV network firewall rule
