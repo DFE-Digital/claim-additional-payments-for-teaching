@@ -101,7 +101,7 @@ module AutomatedChecks
               subject(:body) { note.body }
 
               it "returns 'Eligible' with the school of employment" do
-                expect(subject).to eq("[Employment] - Eligible:\n<pre>School 1: LA Code: 370 / Establishment Number: 8091\n</pre>\n")
+                expect(subject).to eq("[Employment] - Eligible:\n<pre>Current school: LA Code: 370 / Establishment Number: 8091\n</pre>\n")
               end
             end
 
@@ -162,7 +162,7 @@ module AutomatedChecks
               subject(:body) { note.body }
 
               it "returns 'Ineligible' with the school details" do
-                expect(subject).to eq("[Employment] - Ineligible:\n<pre>School 1: LA Code: 383 / Establishment Number: 4026\n</pre>\n")
+                expect(subject).to eq("[Employment] - Ineligible:\n<pre>Current school: LA Code: 383 / Establishment Number: 4026\n</pre>\n")
               end
             end
 

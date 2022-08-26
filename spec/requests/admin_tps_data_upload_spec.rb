@@ -60,6 +60,7 @@ RSpec.describe "TPS data upload" do
         create(
           :claim,
           :submitted,
+          policy: EarlyCareerPayments,
           teacher_reference_number: 1000106,
           submitted_at: Date.new(2022, 7, 15)
         )
@@ -69,6 +70,7 @@ RSpec.describe "TPS data upload" do
         create(
           :claim,
           :submitted,
+          policy: EarlyCareerPayments,
           teacher_reference_number: 1000107,
           submitted_at: Date.new(2022, 7, 15)
         )
@@ -77,27 +79,29 @@ RSpec.describe "TPS data upload" do
       let!(:claim_no_data) { create(:claim, :submitted) }
 
       it "runs the tasks, adds notes and redirects to the right page" do
-        expect { post admin_tps_data_uploads_path, params: {file: file} }.to(
-          change do
-            [
-              claim_matched.reload.tasks.size,
-              claim_no_match.reload.tasks.size,
-              claim_no_data.reload.tasks.size,
-              claim_matched.reload.notes.size,
-              claim_no_match.reload.notes.size,
-              claim_no_data.reload.notes.size
-            ]
-          end
-        )
+        aggregate_failures "testing tasks and notes" do
+          expect { post admin_tps_data_uploads_path, params: {file: file} }.to(
+            change do
+              [
+                claim_matched.reload.tasks.size,
+                claim_no_match.reload.tasks.size,
+                claim_no_data.reload.tasks.size,
+                claim_matched.reload.notes.size,
+                claim_no_match.reload.notes.size,
+                claim_no_data.reload.notes.size
+              ]
+            end
+          )
 
-        expect(claim_matched.tasks.last.claim_verifier_match).to eq "all"
-        expect(claim_no_match.tasks.last.claim_verifier_match).to eq "none"
-        expect(claim_no_data.tasks.last.claim_verifier_match).to be_nil
-        expect(claim_matched.notes.last[:body]).to eq "[Employment] - Eligible:\n<pre>School 1: LA Code: 370 / Establishment Number: 4027\n</pre>\n"
-        expect(claim_no_match.notes.last[:body]).to eq "[Employment] - Ineligible:\n<pre>School 1: LA Code: 111 / Establishment Number: 2222\n</pre>\n"
-        expect(claim_no_data.notes.last[:body]).to eq "[Employment] - No data"
+          expect(claim_matched.tasks.last.claim_verifier_match).to eq "all"
+          expect(claim_no_match.tasks.last.claim_verifier_match).to eq "none"
+          expect(claim_no_data.tasks.last.claim_verifier_match).to be_nil
+          expect(claim_matched.notes.last[:body]).to eq "[Employment] - Eligible:\n<pre>Current school: LA Code: 370 / Establishment Number: 4027\n</pre>\n"
+          expect(claim_no_match.notes.last[:body]).to eq "[Employment] - Ineligible:\n<pre>Current school: LA Code: 111 / Establishment Number: 2222\n</pre>\n"
+          expect(claim_no_data.notes.last[:body]).to eq "[Employment] - No data"
 
-        expect(response).to redirect_to(admin_claims_path)
+          expect(response).to redirect_to(admin_claims_path)
+        end
       end
     end
   end
