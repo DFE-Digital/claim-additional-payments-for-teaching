@@ -78,10 +78,10 @@ steps:
         environmentServiceName: ${{ parameters.ServiceConnection }}
         commandOptions: '-var="pr_number=${{ parameters.pullRequestNumber}}" -var="input_region=westeurope" -var="input_container_version=$(Build.BuildNumber)" -var-file workspace_variables/${{ parameters.env}}.tfvars.json ${{ parameters.ExtraTerraformVariables}}'
 
-    - task: AzureCLI@2
+    - task: AzureCLI@1
       displayName: 'Azure CLI '
       inputs:
-        scriptType: ps
+        #scriptType: ps
         scriptLocation: inlineScript
         inlineScript: |
           # Setting variables
