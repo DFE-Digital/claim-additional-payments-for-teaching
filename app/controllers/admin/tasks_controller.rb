@@ -20,6 +20,8 @@ class Admin::TasksController < Admin::BaseAdminController
       @claim.notes.order(created_at: :desc).select { |note| note.body.include?("ligible") && note.body.include?("ITT start date") }
     elsif params[:name] == "census_subjects_taught"
       @claim.notes.order(created_at: :desc).select { |note| note.body.include?("ligible") && note.body.include?("Subject 1") }
+    elsif params[:name] == "employment"
+      @claim.notes.order(created_at: :desc).select { |note| note.body.include?("ligible") && note.body.include?("[Employment]") }
     else
       []
     end

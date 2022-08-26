@@ -131,7 +131,7 @@ module Admin
       elsif task.claim_verifier_match_none?
         status = "No match"
         status_colour = "red"
-      elsif task.claim_verifier_match.nil? && task_name == "census_subjects_taught"
+      elsif task.claim_verifier_match.nil? && %w[census_subjects_taught employment].include?(task_name)
         status = "No data"
         status_colour = "red"
       end
