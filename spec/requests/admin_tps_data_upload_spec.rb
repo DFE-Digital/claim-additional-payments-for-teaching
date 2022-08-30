@@ -48,59 +48,124 @@ RSpec.describe "TPS data upload" do
     end
 
     context "when a valid CSV is uploaded" do
-      let(:csv) do
-        <<~CSV
-          Teacher reference number,NINO,Start Date,End Date,Annual salary,Monthly pay,N/A,LA URN,School URN
-          1000106,ZX043155C,01/07/2022,30/09/2022,24373,2031.08,5016,370,4027
-          1000107,ZX043155C,01/07/2022,30/09/2022,24373,2031.08,5016,111,2222
-        CSV
-      end
+      context "when the claim is not TSLR" do
+        let(:csv) do
+          <<~CSV
+            Teacher reference number,NINO,Start Date,End Date,Annual salary,Monthly pay,N/A,LA URN,School URN
+            1000106,ZX043155C,01/07/2022,30/09/2022,24373,2031.08,5016,370,4027
+            1000107,ZX043155C,01/07/2022,30/09/2022,24373,2031.08,5016,111,2222
+          CSV
+        end
 
-      let!(:claim_matched) do
-        create(
-          :claim,
-          :submitted,
-          policy: EarlyCareerPayments,
-          teacher_reference_number: 1000106,
-          submitted_at: Date.new(2022, 7, 15)
-        )
-      end
-
-      let!(:claim_no_match) do
-        create(
-          :claim,
-          :submitted,
-          policy: EarlyCareerPayments,
-          teacher_reference_number: 1000107,
-          submitted_at: Date.new(2022, 7, 15)
-        )
-      end
-
-      let!(:claim_no_data) { create(:claim, :submitted) }
-
-      it "runs the tasks, adds notes and redirects to the right page" do
-        aggregate_failures "testing tasks and notes" do
-          expect { post admin_tps_data_uploads_path, params: {file: file} }.to(
-            change do
-              [
-                claim_matched.reload.tasks.size,
-                claim_no_match.reload.tasks.size,
-                claim_no_data.reload.tasks.size,
-                claim_matched.reload.notes.size,
-                claim_no_match.reload.notes.size,
-                claim_no_data.reload.notes.size
-              ]
-            end
+        let!(:claim_matched) do
+          create(
+            :claim,
+            :submitted,
+            policy: EarlyCareerPayments,
+            teacher_reference_number: 1000106,
+            submitted_at: Date.new(2022, 7, 15)
           )
+        end
 
-          expect(claim_matched.tasks.last.claim_verifier_match).to eq "all"
-          expect(claim_no_match.tasks.last.claim_verifier_match).to eq "none"
-          expect(claim_no_data.tasks.last.claim_verifier_match).to be_nil
-          expect(claim_matched.notes.last[:body]).to eq "[Employment] - Eligible:\n<pre>Current school: LA Code: 370 / Establishment Number: 4027\n</pre>\n"
-          expect(claim_no_match.notes.last[:body]).to eq "[Employment] - Ineligible:\n<pre>Current school: LA Code: 111 / Establishment Number: 2222\n</pre>\n"
-          expect(claim_no_data.notes.last[:body]).to eq "[Employment] - No data"
+        let!(:claim_no_match) do
+          create(
+            :claim,
+            :submitted,
+            policy: EarlyCareerPayments,
+            teacher_reference_number: 1000107,
+            submitted_at: Date.new(2022, 7, 15)
+          )
+        end
 
-          expect(response).to redirect_to(admin_claims_path)
+        let!(:claim_no_data) { create(:claim, :submitted) }
+
+        it "runs the tasks, adds notes and redirects to the right page" do
+          aggregate_failures "testing tasks and notes" do
+            expect { post admin_tps_data_uploads_path, params: {file: file} }.to(
+              change do
+                [
+                  claim_matched.reload.tasks.size,
+                  claim_no_match.reload.tasks.size,
+                  claim_no_data.reload.tasks.size,
+                  claim_matched.reload.notes.size,
+                  claim_no_match.reload.notes.size,
+                  claim_no_data.reload.notes.size
+                ]
+              end
+            )
+
+            expect(claim_matched.tasks.last.claim_verifier_match).to eq "all"
+            expect(claim_no_match.tasks.last.claim_verifier_match).to eq "none"
+            expect(claim_no_data.tasks.last.claim_verifier_match).to be_nil
+            expect(claim_matched.notes.last[:body]).to eq "[Employment] - Eligible:\n<pre>Current school: LA Code: 370 / Establishment Number: 4027\n</pre>\n"
+            expect(claim_no_match.notes.last[:body]).to eq "[Employment] - Ineligible:\n<pre>Current school: LA Code: 111 / Establishment Number: 2222\n</pre>\n"
+            expect(claim_no_data.notes.last[:body]).to eq "[Employment] - No data"
+
+            expect(response).to redirect_to(admin_claims_path)
+          end
+        end
+      end
+
+      context "when the claim is TSLR" do
+        before do
+          PolicyConfiguration.for(StudentLoans).update!(current_academic_year: "2022/2023")
+        end
+
+        let(:csv) do
+          <<~CSV
+            Teacher reference number,NINO,Start Date,End Date,Annual salary,Monthly pay,N/A,LA URN,School URN
+            1000106,ZX043155C,01/07/2022,30/09/2022,24373,2031.08,5016,370,4027
+            1000107,ZX043155C,01/07/2022,30/09/2022,24373,2031.08,5016,111,2222
+            1000106,ZX043155C,01/07/2021,30/03/2022,24373,2031.08,5016,370,4027
+          CSV
+        end
+
+        let!(:claim_matched) do
+          create(
+            :claim,
+            :submitted,
+            policy: StudentLoans,
+            teacher_reference_number: 1000106,
+            submitted_at: Date.new(2022, 7, 15)
+          )
+        end
+
+        let!(:claim_no_match) do
+          create(
+            :claim,
+            :submitted,
+            policy: StudentLoans,
+            teacher_reference_number: 1000107,
+            submitted_at: Date.new(2022, 7, 15)
+          )
+        end
+
+        let!(:claim_no_data) { create(:claim, :submitted) }
+
+        it "runs the tasks, adds notes and redirects to the right page" do
+          aggregate_failures "testing tasks and notes" do
+            expect { post admin_tps_data_uploads_path, params: {file: file} }.to(
+              change do
+                [
+                  claim_matched.reload.tasks.size,
+                  claim_no_match.reload.tasks.size,
+                  claim_no_data.reload.tasks.size,
+                  claim_matched.reload.notes.size,
+                  claim_no_match.reload.notes.size,
+                  claim_no_data.reload.notes.size
+                ]
+              end
+            )
+
+            expect(claim_matched.tasks.last.claim_verifier_match).to eq "all"
+            expect(claim_no_match.tasks.last.claim_verifier_match).to eq "none"
+            expect(claim_no_data.tasks.last.claim_verifier_match).to be_nil
+            expect(claim_matched.notes.last[:body]).to eq "[Employment] - Eligible:\n<pre>Current school: LA Code: 370 / Establishment Number: 4027\nClaim school: LA Code: 370 / Establishment Number: 4027\n</pre>\n"
+            expect(claim_no_match.notes.last[:body]).to eq "[Employment] - Ineligible:\n<pre>Current school: LA Code: 111 / Establishment Number: 2222\nClaim school: LA Code: 111 / Establishment Number: 2222\n</pre>\n"
+            expect(claim_no_data.notes.last[:body]).to eq "[Employment] - No data"
+
+            expect(response).to redirect_to(admin_claims_path)
+          end
         end
       end
     end

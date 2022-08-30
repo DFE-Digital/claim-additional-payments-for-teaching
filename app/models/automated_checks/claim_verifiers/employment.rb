@@ -34,9 +34,9 @@ module AutomatedChecks
 
         return unless claim.policy == StudentLoans
 
-        @teachers_pensions_service_claim_schools = teachers_pensions_service_between_dates(
-          from: start_of_financial_year,
-          to: end_of_financial_year
+        @teachers_pensions_service_claim_schools = teachers_pensions_service_at_least_a_month_in_previous_financial_year(
+          latest_start_date: end_of_previous_financial_year - 1.month,
+          earliest_end_date: start_of_previous_financial_year + 1.month
         )
       end
 
@@ -47,11 +47,19 @@ module AutomatedChecks
           .uniq
       end
 
-      def start_of_financial_year
-        Date.new(PolicyConfiguration.for(StudentLoans).current_academic_year - 1.start_year, 4, 6)
+      def teachers_pensions_service_at_least_a_month_in_previous_financial_year(latest_start_date:, earliest_end_date:)
+        teachers_pensions_service
+          .claim_dates_interval(latest_start_date, earliest_end_date)
+          .map { |r| [r.la_urn, r.school_urn] }
+          .uniq
       end
 
-      def end_of_financial_year
+      def start_of_previous_financial_year
+        previous_academic_year = PolicyConfiguration.for(StudentLoans).current_academic_year - 1
+        Date.new(previous_academic_year.start_year, 4, 6)
+      end
+
+      def end_of_previous_financial_year
         Date.new(PolicyConfiguration.for(StudentLoans).current_academic_year.start_year, 4, 5)
       end
 
