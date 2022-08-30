@@ -5,8 +5,6 @@ module AutomatedChecks
         self.admin_user = admin_user
         self.claim = claim
         self.teachers_pensions_service = TeachersPensionsService.by_teacher_reference_number(claim.teacher_reference_number)
-        self.teachers_pensions_service_claim_schools = []
-        self.teachers_pensions_service_schools = teachers_pensions_service
       end
 
       def perform
@@ -17,41 +15,38 @@ module AutomatedChecks
 
       private
 
-      attr_accessor :admin_user, :claim, :teachers_pensions_service, :teachers_pensions_service_claim_schools
-      attr_reader :teachers_pensions_service_schools
+      attr_accessor :admin_user, :claim, :teachers_pensions_service
 
       def awaiting_task?(task_name)
         claim.tasks.none? { |task| task.name == task_name }
       end
 
-      def teachers_pensions_service_schools=(teachers_pensions_service)
-        return if teachers_pensions_service.empty?
+      def teachers_pensions_service_schools
+        return [] if teachers_pensions_service.empty?
 
-        @teachers_pensions_service_schools = teachers_pensions_service_between_dates(
-          from: claim.submitted_at.beginning_of_month.prev_month,
-          to: claim.submitted_at.end_of_month
-        )
+        @teachers_pensions_service_schools ||= begin
+          from = claim.submitted_at.beginning_of_month.prev_month
+          to = claim.submitted_at.end_of_month
 
-        return unless claim.policy == StudentLoans
-
-        @teachers_pensions_service_claim_schools = teachers_pensions_service_at_least_a_month_in_previous_financial_year(
-          latest_start_date: end_of_previous_financial_year - 1.month,
-          earliest_end_date: start_of_previous_financial_year + 1.month
-        )
+          teachers_pensions_service
+            .between_claim_dates(from, to)
+            .map { |r| [r.la_urn, r.school_urn] }
+            .uniq
+        end
       end
 
-      def teachers_pensions_service_between_dates(from:, to:)
-        teachers_pensions_service
-          .between_claim_dates(from, to)
-          .map { |r| [r.la_urn, r.school_urn] }
-          .uniq
-      end
+      def teachers_pensions_service_claim_schools
+        return [] unless teachers_pensions_service.any? && claim.policy == StudentLoans
 
-      def teachers_pensions_service_at_least_a_month_in_previous_financial_year(latest_start_date:, earliest_end_date:)
-        teachers_pensions_service
-          .claim_dates_interval(latest_start_date, earliest_end_date)
-          .map { |r| [r.la_urn, r.school_urn] }
-          .uniq
+        @teachers_pensions_service_claim_schools ||= begin
+          latest_start_date = end_of_previous_financial_year - 1.month
+          earliest_end_date = start_of_previous_financial_year + 1.month
+
+          teachers_pensions_service
+            .claim_dates_interval(latest_start_date, earliest_end_date)
+            .map { |r| [r.la_urn, r.school_urn] }
+            .uniq
+        end
       end
 
       def start_of_previous_financial_year

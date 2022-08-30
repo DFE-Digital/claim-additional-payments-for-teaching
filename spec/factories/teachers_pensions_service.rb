@@ -34,5 +34,26 @@ FactoryBot.define do
       school_urn { 4026 }
       start_date { DateTime.new(2021, 12, 1, 16, 0, 0) }
     end
+
+    trait :student_loans_matched_first do
+      teacher_reference_number { 1334426 }
+      la_urn { 202 }
+      school_urn { 8091 }
+      start_date { DateTime.new(2021, 12, 1, 16, 0, 0) }
+    end
+
+    trait :student_loans_matched_second do
+      teacher_reference_number { 1334426 }
+      la_urn { 202 }
+      school_urn { 8091 }
+      start_date { DateTime.new(2022, 1, 1, 16, 0, 0) }
+    end
+
+    trait :student_loans_matched_third do
+      teacher_reference_number { 1334426 }
+      la_urn { 370 }
+      school_urn { 4027 }
+      start_date { DateTime.new(2022, 2, 1, 16, 0, 0) }
+    end
   end
 end
