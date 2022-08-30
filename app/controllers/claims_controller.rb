@@ -28,6 +28,10 @@ class ClaimsController < BasePublicController
         session[:claim_address_line_1] = params[:claim][:address_line_1]
         redirect_to claim_path(current_policy_routing_name, "no-address-found") and return
       end
+    elsif params[:slug] == "select-home-address" && !postcode.present?
+      session[:claim_postcode] = nil
+      session[:claim_address_line_1] = nil
+      redirect_to claim_path(current_policy_routing_name, "postcode-search") and return
     end
 
     render current_template

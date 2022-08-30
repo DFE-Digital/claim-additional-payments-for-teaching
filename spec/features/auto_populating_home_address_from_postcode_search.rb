@@ -301,6 +301,7 @@ RSpec.feature "Teacher claiming Early-Career Payments uses the address auto-popu
       click_on "Search"
 
       # - Select your home address
+      expect(page).to have_text("SO16 9FX Change")
       expect(page).to have_text(I18n.t("questions.address.home.title"))
       expect(page).to have_text("Flat 11, Millbrook Tower, Windermere Avenue, Southampton, SO16 9FX")
       expect(page).to have_link(href: claim_path(EarlyCareerPayments.routing_name, "address"))
@@ -323,6 +324,31 @@ RSpec.feature "Teacher claiming Early-Career Payments uses the address auto-popu
 
       # - Email address
       expect(page).to have_text(I18n.t("questions.email_address"))
+    end
+
+    # Bugfix - did cause an exception after pressing back
+    scenario "Claimant cannot find the correct address so chooses to manually enter address, presses back before filling anything to go to the postcode search again" do
+      expect(claim.valid?(:submit)).to eq false
+      visit claim_path(claim.policy.routing_name, "postcode-search")
+
+      # - What is your home address
+      expect(page).to have_text(I18n.t("questions.address.home.title"))
+      expect(page).to have_link(href: claim_path(EarlyCareerPayments.routing_name, "address"))
+
+      fill_in "Postcode", with: "SO16 9FX"
+      click_on "Search"
+
+      # - Select your home address
+      expect(page).to have_text("SO16 9FX Change")
+      expect(page).to have_text(I18n.t("questions.address.home.title"))
+      expect(page).to have_text("Flat 11, Millbrook Tower, Windermere Avenue, Southampton, SO16 9FX")
+      expect(page).to have_link(href: claim_path(EarlyCareerPayments.routing_name, "address"))
+
+      click_link(I18n.t("questions.address.home.i_cannot_find"))
+      click_link("Back")
+
+      # - Redirects to a fresh postcode search
+      expect(page).to have_text(I18n.t("questions.address.home.title"))
     end
 
     scenario "Claimant decides they want to change the POSTCODE from the 'select-home-address' screen" do
@@ -394,7 +420,7 @@ RSpec.feature "Teacher claiming Early-Career Payments uses the address auto-popu
             "minmatch" : 0.4,
             "output_srs" : "EPSG:27700"
           },
-          "results" : [ 
+          "results" : [
             {
               "DPA" : {
                 "UPRN" : "100022018452",
@@ -424,7 +450,7 @@ RSpec.feature "Teacher claiming Early-Career Payments uses the address auto-popu
                 "MATCH" : 0.4,
                 "MATCH_DESCRIPTION" : "NO MATCH"
               }
-            } 
+            }
           ]
         }
       RESULTS_SE13__7UN_NO_38A
