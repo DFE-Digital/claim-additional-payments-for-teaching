@@ -12,6 +12,7 @@ parameters:
   WebAppName :
   ExtraTerraformVariables :
   pullRequestNumber :
+  TestBuildBuildNumber :
 
 steps:
     - task: charleszipp.azure-pipelines-tasks-terraform.azure-pipelines-tasks-terraform-installer.TerraformInstaller@0
@@ -68,7 +69,8 @@ steps:
          command: plan
          workingDirectory: $(Agent.BuildDirectory)/s/azure/terraform
          environmentServiceName: ${{ parameters.ServiceConnection }}
-         commandOptions: '-var="pr_number=${{ parameters.pullRequestNumber}}" -var="input_region=westeurope" -var="input_container_version=$(Build.BuildNumber)" -var-file workspace_variables/${{ parameters.env}}.tfvars.json ${{ parameters.ExtraTerraformVariables}}'
+         #commandOptions: '-var="pr_number=${{ parameters.pullRequestNumber}}" -var="input_region=westeurope" -var="input_container_version=$(Build.BuildNumber)" -var-file workspace_variables/${{ parameters.env}}.tfvars.json ${{ parameters.ExtraTerraformVariables}}'
+         commandOptions: '-var="pr_number=${{ parameters.pullRequestNumber}}" -var="input_region=westeurope" -var="input_container_version={{ parameters.TestBuildBuildNumber}}" -var-file workspace_variables/${{ parameters.env}}.tfvars.json ${{ parameters.ExtraTerraformVariables}}'
 
     - task: charleszipp.azure-pipelines-tasks-terraform.azure-pipelines-tasks-terraform-cli.TerraformCLI@0
       displayName: Terraform Apply
@@ -76,32 +78,34 @@ steps:
         command: apply
         workingDirectory: $(Agent.BuildDirectory)/s/azure/terraform
         environmentServiceName: ${{ parameters.ServiceConnection }}
-        commandOptions: '-var="pr_number=${{ parameters.pullRequestNumber}}" -var="input_region=westeurope" -var="input_container_version=$(Build.BuildNumber)" -var-file workspace_variables/${{ parameters.env}}.tfvars.json ${{ parameters.ExtraTerraformVariables}}'
+        #commandOptions: '-var="pr_number=${{ parameters.pullRequestNumber}}" -var="input_region=westeurope" -var="input_container_version=$(Build.BuildNumber)" -var-file workspace_variables/${{ parameters.env}}.tfvars.json ${{ parameters.ExtraTerraformVariables}}'
+        commandOptions: '-var="pr_number=${{ parameters.pullRequestNumber}}" -var="input_region=westeurope" -var="input_container_version={{ parameters.TestBuildBuildNumber}}" -var-file workspace_variables/${{ parameters.env}}.tfvars.json ${{ parameters.ExtraTerraformVariables}}'
 
-    - task: AzureCLI@1
+    - task: AzureCLI@2
       displayName: 'Azure CLI '
       inputs:
-        #scriptType: ps
+        azureSubscription: ${{ parameters.ServiceConnection }}
+        scriptType: ps
         scriptLocation: inlineScript
         inlineScript: |
-          # Setting variables
-          $webappname = ${{ parameters.WebAppName }}
-          $ResourceGroupName = ${{ parameters.ServiceConnection }}
-          $fqdn="development.additional-teaching-payment.education.gov.uk"
-          $keyvault =${{ parameters.ResourceGroupName }}
+            # Setting variables
+            $webappname = ${{ parameters.WebAppName }}
+            $ResourceGroupName = ${{ parameters.ServiceConnection }}
+            $fqdn="development.additional-teaching-payment.education.gov.uk"
+            $keyvault =${{ parameters.ResourceGroupName }}
 
-          #add custom domain name
-          Set-AzWebApp -Name $webappname -ResourceGroupName $ResourceGroupName -HostNames @($fqdn,"$webappname.azurewebsites.net")
+            #add custom domain name
+            Set-AzWebApp -Name $webappname -ResourceGroupName $ResourceGroupName -HostNames @($fqdn,"$webappname.azurewebsites.net")
 
-          ###add cert
-          $keyvault = "s118d01-secrets-kv"
-          $certname = "development-additional-teaching-payment-education-gov-uk"
-          Set-AzureRmKeyVaultAccessPolicy -VaultName $keyvault -ServicePrincipalName abfa0a7c-a6b6-4736-8310-5855508787cd -PermissionsToSecrets get
-          Import-AzWebAppKeyVaultCertificate -ResourceGroupName $ResourceGroupName -WebAppName $webappname -KeyVaultName $keyvault -CertName $certname
+            ###add cert
+            $keyvault = "s118d01-secrets-kv"
+            $certname = "development-additional-teaching-payment-education-gov-uk"
+            Set-AzureRmKeyVaultAccessPolicy -VaultName $keyvault -ServicePrincipalName abfa0a7c-a6b6-4736-8310-5855508787cd -PermissionsToSecrets get
+            Import-AzWebAppKeyVaultCertificate -ResourceGroupName $ResourceGroupName -WebAppName $webappname -KeyVaultName $keyvault -CertName $certname
 
-          ###ad binding
-          $azurecert = Get-AzKeyVaultCertificate -VaultName $keyvault -Name $certname
-          New-AzWebAppSSLBinding -ResourceGroupName $ResourceGroupName -WebAppName $webappname -Thumbprint $azurecert.Thumbprint -Name $fqdn
+            ###ad binding
+            $azurecert = Get-AzKeyVaultCertificate -VaultName $keyvault -Name $certname
+            New-AzWebAppSSLBinding -ResourceGroupName $ResourceGroupName -WebAppName $webappname -Thumbprint $azurecert.Thumbprint -Name $fqdn
 
     - task: AzurePowerShell@5
       displayName: Enable KV network firewall rule
