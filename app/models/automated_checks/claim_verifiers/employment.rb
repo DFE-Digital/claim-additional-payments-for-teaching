@@ -79,7 +79,7 @@ module AutomatedChecks
       def eligible?
         eligible_current_school = eligible_school?(teachers_pensions_service_schools, claim.eligibility.current_school)
 
-        return eligible_current_school unless claim.policy == StudentLoans
+        return eligible_current_school unless claim.policy == StudentLoans && eligible_current_school
 
         eligible_school?(teachers_pensions_service_claim_schools, claim.eligibility.claim_school)
       end

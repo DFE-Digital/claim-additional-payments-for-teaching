@@ -53,6 +53,8 @@ RSpec.describe "TPS data upload" do
           <<~CSV
             Teacher reference number,NINO,Start Date,End Date,Annual salary,Monthly pay,N/A,LA URN,School URN
             1000106,ZX043155C,01/07/2022,30/09/2022,24373,2031.08,5016,370,4027
+            1000107,ZX043155C,01/07/2019,30/09/2019,24373,2031.08,5016,111,2222
+            1000107,ZX043155C,01/07/2020,30/09/2020,24373,2031.08,5016,111,2222
             1000107,ZX043155C,01/07/2022,30/09/2022,24373,2031.08,5016,111,2222
           CSV
         end
