@@ -15,14 +15,16 @@ variables:
   - group: docker-settings
   - name: app_name
     value: pr-$(System.PullRequest.PullRequestNumber)
+  - name : TestBuildBuildNumber
+    value : "20220831.1"
 
 stages:
 
-- stage: Build
-  jobs:
-  - job: Build
-    steps:
-    - template: templates/build.yml
+# - stage: Build
+#   jobs:
+#   - job: Build
+#     steps:
+#     - template: templates/build.yml
 
 - stage: DevelopmentRelease
   #condition: and(succeeded('Build'), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
@@ -51,6 +53,7 @@ stages:
               WebAppName: "s118d01-app-as"
               ExtraTerraformVariables:
               ServiceConnection: azdo.pipelines.cip.S118D.armfe1ef140-8bef-4043-b5ee-c449e6f951ef
+
 
 # - stage: TestRelease
 #   condition: and(succeeded('Build'), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
