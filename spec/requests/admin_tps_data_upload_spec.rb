@@ -169,6 +169,33 @@ RSpec.describe "TPS data upload" do
             expect(response).to redirect_to(admin_claims_path)
           end
         end
+
+        context "when a current school is ineligible and the claim school is eligible" do
+          let(:csv) do
+            <<~CSV
+              Teacher reference number,NINO,Start Date,End Date,Annual salary,Monthly pay,N/A,LA URN,School URN
+              1000106,ZX043155C,01/07/2022,30/09/2022,24373,2031.08,5016,371,4027
+              1000106,ZX043155C,01/07/2021,30/03/2022,24373,2031.08,5016,370,4027
+            CSV
+          end
+
+          it "runs the tasks, adds notes and redirects to the right page" do
+            aggregate_failures "testing tasks and notes" do
+              expect { post admin_tps_data_uploads_path, params: {file: file} }.to(
+                change do
+                  [
+                    claim_matched.reload.tasks.size,
+                    claim_matched.reload.notes.size
+                  ]
+                end
+              )
+              expect(claim_matched.tasks.last.claim_verifier_match).to eq "none"
+              expect(claim_matched.notes.last[:body]).to eq "[Employment] - Ineligible:\n<pre>Current school: LA Code: 371 / Establishment Number: 4027\nClaim school: LA Code: 371 / Establishment Number: 4027\nClaim school: LA Code: 370 / Establishment Number: 4027\n</pre>\n"
+
+              expect(response).to redirect_to(admin_claims_path)
+            end
+          end
+        end
       end
     end
   end
