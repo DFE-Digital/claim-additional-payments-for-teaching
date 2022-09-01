@@ -153,6 +153,7 @@ RUN if [ ${RAILS_ENV} = "production" ]; then \
   DQT_CLIENT_PARAMS= \
   ADMIN_ALLOWED_IPS= \
   ENVIRONMENT_NAME= \
+  SUPPRESS_DFE_ANALYTICS_INIT= \
   bundle exec rake assets:precompile; \
   fi
 EXPOSE 3000
