@@ -1,10 +1,15 @@
 class Admin::ClaimsController < Admin::BaseAdminController
+  include Pagy::Backend
+
   before_action :ensure_service_operator
 
   def index
     @claims = Claim.includes(:decisions, eligibility: [:claim_school, :current_school]).awaiting_decision.order(:submitted_at)
     @claims = @claims.by_policy(filtered_policy) if filtered_policy
     @claims = @claims.by_claims_team_member(filtered_team_member) if filtered_team_member
+
+    @total_claim_count = @claims.count
+    @pagy, @claims = pagy(@claims)
 
     respond_to do |format|
       format.html
