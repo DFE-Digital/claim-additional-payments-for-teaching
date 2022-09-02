@@ -97,4 +97,4 @@ steps:
         WebAppName: ${{ parameters.WebAppName}}
         ResourceGroupName: ${{ parameters.ResourceGroupName}}
         SourceSlot: ${{ parameters.SourceSlot}}
-        timeoutInMinutes: 20
+        timeoutInMinutes: 10

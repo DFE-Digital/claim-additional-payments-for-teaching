@@ -22,9 +22,7 @@ test:
 	$(eval CONTAINER_NAME=s118t01conttfstate)
 	$(eval DEPLOY_ENV=test)
 
-production:
-	$(eval AZ_SUBSCRIPTION=s118-teacherpaymentsservice-production)
-	$(eval RESOURCE_GROUP_NAME=s118p01-tfbackend)
+production:az l
 	$(eval STORAGE_ACCOUNT_NAME=s118p01tfbackendsa)
 	$(eval CONTAINER_NAME=s118p01conttfstate)
 	$(eval DEPLOY_ENV=production)
