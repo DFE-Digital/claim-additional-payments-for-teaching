@@ -18,13 +18,15 @@ module Admin
         perform_employment_checks
         redirect_to admin_claims_path, notice: "Teachers Pensions Service data uploaded successfully"
       end
-    rescue ActiveRecord::RecordInvalid
-      redirect_to new_tps_data_upload_path, alert: "There was a problem, please try again"
+    rescue ActiveRecord::RecordInvalid => e
+      Rollbar.error(e)
+      redirect_to new_admin_tps_data_upload_path, alert: "There was a problem, please try again"
     end
 
     private
 
     def perform_employment_checks
+      delete_no_data_employment_tasks
       claims = Claim.awaiting_task("employment")
 
       claims.each do |claim|
@@ -32,6 +34,10 @@ module Admin
           claim: claim
         ).perform
       end
+    end
+
+    def delete_no_data_employment_tasks
+      Task.where(name: "employment", claim_verifier_match: nil).delete_all
     end
   end
 end
