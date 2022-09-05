@@ -71,7 +71,7 @@ steps:
         command: destroy
         workingDirectory: $(Agent.BuildDirectory)/s/azure/terraform
         environmentServiceName: azdo.pipelines.cip.S118D.armfe1ef140-8bef-4043-b5ee-c449e6f951ef
-        commandOptions: '-var="input_region=westeurope" -var="input_container_version=ignored" -var-file workspace_variables/review.tfvars.json -var="app_name=$(app_name)"'
+        commandOptions: '-var="pr_number=$(pr_number)" -var="input_region=westeurope" -var="input_container_version=ignored" -var-file workspace_variables/review.tfvars.json -var="app_name=$(app_name)"'
 
     - task: AzurePowerShell@5
       displayName: Enable KV network firewall rule
