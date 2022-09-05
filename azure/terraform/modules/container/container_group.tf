@@ -60,7 +60,7 @@ resource "azurerm_container_group" "cont_grp_01" {
       "SECRET_KEY_BASE"                                = data.azurerm_key_vault_secret.SecretKeyBase.value
       "STORAGE_BUCKET"                                 = data.azurerm_key_vault_secret.StorageBucket.value
       "STORAGE_CREDENTIALS"                            = data.azurerm_key_vault_secret.StorageCredentials.value
-      "WORKER_COUNT"                                   = "2"
+      "WORKER_COUNT"                                   = "4"
       "BYPASS_DFE_SIGN_IN"                             = var.bypass_dfe_sign_in
     }
 
@@ -138,7 +138,7 @@ resource "azurerm_container_group" "cont_grp_02" {
       "SECRET_KEY_BASE"                                = data.azurerm_key_vault_secret.SecretKeyBase.value
       "STORAGE_BUCKET"                                 = data.azurerm_key_vault_secret.StorageBucket.value
       "STORAGE_CREDENTIALS"                            = data.azurerm_key_vault_secret.StorageCredentials.value
-      "WORKER_COUNT"                                   = "2"
+      "WORKER_COUNT"                                   = "4"
       "BYPASS_DFE_SIGN_IN"                             = var.bypass_dfe_sign_in
     }
 
