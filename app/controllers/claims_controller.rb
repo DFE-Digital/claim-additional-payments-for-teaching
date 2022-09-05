@@ -126,7 +126,7 @@ class ClaimsController < BasePublicController
   end
 
   def check_page_is_in_sequence
-    redirect_to new_claim_path and return unless correct_policy?
+    redirect_to new_claim_path and return unless correct_policy_namespace?
 
     raise ActionController::RoutingError.new("Not Found") unless page_sequence.in_sequence?(params[:slug])
   end
