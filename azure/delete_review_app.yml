@@ -21,7 +21,18 @@ variables:
   - name: KeyVaultId
     value: /subscriptions/8655985a-2f87-44d7-a541-0be9a8c2779d/resourceGroups/s118d02-secrets/providers/Microsoft.KeyVault/vaults/s118d02-secrets-kv
 
+# Force checking out the master branch to avoid fetching a non existing branch when a PR is closed
+resources:
+  repositories:
+  - repository: claim
+    type: github
+    endpoint: DFE-Digital
+    name: DFE-Digital/claim-additional-payments-for-teaching
+    ref: master
+
 steps:
+    - checkout: claim
+
     - task: charleszipp.azure-pipelines-tasks-terraform.azure-pipelines-tasks-terraform-installer.TerraformInstaller@0
       displayName: Pin terraform version
       inputs:
