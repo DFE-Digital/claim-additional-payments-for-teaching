@@ -126,6 +126,8 @@ class ClaimsController < BasePublicController
   end
 
   def check_page_is_in_sequence
+    redirect_to new_claim_path and return unless correct_policy?
+
     raise ActionController::RoutingError.new("Not Found") unless page_sequence.in_sequence?(params[:slug])
   end
 
@@ -197,5 +199,18 @@ class ClaimsController < BasePublicController
     session[:selected_claim_policy] = policy
 
     redirect_to claim_path(current_policy_routing_name, next_slug)
+  end
+
+  def correct_policy?
+    case params[:policy]
+    when "additional-payments"
+      [EarlyCareerPayments].include?(current_claim.policy) # current claim should never have a LevellingUpPremiumPayments policy
+    when "student-loans"
+      current_claim.policy == StudentLoans
+    when "maths-and-physics"
+      current_claim.policy == MathsAndPhysics
+    else
+      false
+    end
   end
 end
