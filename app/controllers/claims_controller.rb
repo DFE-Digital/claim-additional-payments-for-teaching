@@ -201,10 +201,10 @@ class ClaimsController < BasePublicController
     redirect_to claim_path(current_policy_routing_name, next_slug)
   end
 
-  def correct_policy?
+  def correct_policy_namespace?
     case params[:policy]
     when "additional-payments"
-      [EarlyCareerPayments].include?(current_claim.policy) # current claim should never have a LevellingUpPremiumPayments policy
+      [EarlyCareerPayments, LevellingUpPremiumPayments].include?(current_claim.policy)
     when "student-loans"
       current_claim.policy == StudentLoans
     when "maths-and-physics"
