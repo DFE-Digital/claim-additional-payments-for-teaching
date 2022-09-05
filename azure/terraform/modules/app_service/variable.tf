@@ -103,7 +103,7 @@ locals {
     "SECRET_KEY_BASE"                                = data.azurerm_key_vault_secret.SecretKeyBase.value
     "STORAGE_BUCKET"                                 = data.azurerm_key_vault_secret.StorageBucket.value
     "STORAGE_CREDENTIALS"                            = data.azurerm_key_vault_secret.StorageCredentials.value
-    "WORKER_COUNT"                                   = "2"
+    "WORKER_COUNT"                                   = "4"
     "DOCKER_REGISTRY_SERVER_URL"                     = "https://${local.docker_registry}"
     "BYPASS_DFE_SIGN_IN"                             = var.bypass_dfe_sign_in
     "PR_NUMBER"                                      = var.pr_number

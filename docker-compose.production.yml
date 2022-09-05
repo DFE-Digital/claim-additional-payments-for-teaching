@@ -45,7 +45,7 @@ services:
     depends_on:
       - web
     environment:
-      WORKER_COUNT: 2
+      WORKER_COUNT: 4
     env_file: *default_env_files
     volumes:
       - .:/app
