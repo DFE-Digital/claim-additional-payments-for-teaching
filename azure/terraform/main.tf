@@ -1,4 +1,9 @@
 module "container" {
+  # Only impacts review apps: makes sure the app is deleted before the database
+  depends_on = [
+    azurerm_postgresql_database.app
+  ]
+
   source                = "./modules/container"
   app_rg_name           = format("%s-%s", var.rg_prefix, "app")
   container_version     = var.input_container_version
@@ -15,6 +20,11 @@ module "container" {
 }
 
 module "app_service" {
+  # Only impacts review apps: makes sure the app is deleted before the database
+  depends_on = [
+    azurerm_postgresql_database.app
+  ]
+
   source                  = "./modules/app_service"
   app_rg_name             = local.app_rg_name
   input_container_version = var.input_container_version
