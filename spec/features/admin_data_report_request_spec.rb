@@ -10,6 +10,8 @@ RSpec.feature "Data report request" do
       create(:claim, :submitted, policy: EarlyCareerPayments)
     ]
 
+    create_list(:claim, 100, :submitted) # Making sure CSV is not paginated at 50 claims/page
+
     click_on "View claims"
 
     click_on "Download report request file"
@@ -18,7 +20,7 @@ RSpec.feature "Data report request" do
 
     csv = CSV.parse(body, headers: true)
 
-    expect(csv.count).to eq(3)
+    expect(csv.count).to eq(103)
 
     claims.each_with_index do |claim, index|
       expect(csv[index].fields("Claim reference")).to include(claim.reference)
