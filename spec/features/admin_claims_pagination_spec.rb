@@ -11,18 +11,21 @@ RSpec.feature "Admin paginated claims page" do
 
     expect(page).to have_content("102 claims awaiting a decision")
 
+    expect(all("tr.govuk-table__row").count).to eq(51) # 50 + 1 heading row
     expect(all("div.govuk-pagination__prev").count).to eq(0)
     expect(all("li.govuk-pagination__item").count).to eq(3)
     expect(all("div.govuk-pagination__next").count).to eq(1)
 
     click_on "Next"
 
+    expect(all("tr.govuk-table__row").count).to eq(51)
     expect(all("div.govuk-pagination__prev").count).to eq(1)
     expect(all("li.govuk-pagination__item").count).to eq(3)
     expect(all("div.govuk-pagination__next").count).to eq(1)
 
     click_on "Next"
 
+    expect(all("tr.govuk-table__row").count).to eq(3)
     expect(all("div.govuk-pagination__prev").count).to eq(1)
     expect(all("li.govuk-pagination__item").count).to eq(3)
     expect(all("div.govuk-pagination__next").count).to eq(0)
