@@ -93,11 +93,11 @@ module EarlyCareerPayments
 
         if claim.eligibility.trainee_teacher?
           trainee_teacher_slugs(sequence)
-          sequence.delete("eligible-degree-subject") unless lup_claim.eligibility.indicated_ineligible_itt_subject?
+          sequence.delete("eligible-degree-subject") unless lup_claim&.eligibility&.indicated_ineligible_itt_subject?
         else
-          sequence.delete("ineligible") unless overall_eligibility_status == :ineligible || overall_eligibility_status == :eligible_later
+          sequence.delete("ineligible") unless [:ineligible, :eligible_later].include?(overall_eligibility_status)
           sequence.delete("future-eligibility")
-          sequence.delete("eligible-degree-subject") unless ecp_claim.eligibility.status == :ineligible && lup_claim.eligibility.indicated_ineligible_itt_subject?
+          sequence.delete("eligible-degree-subject") unless ecp_claim&.eligibility&.status == :ineligible && lup_claim&.eligibility&.indicated_ineligible_itt_subject?
         end
       end
     end

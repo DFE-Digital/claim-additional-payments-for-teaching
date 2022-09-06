@@ -126,6 +126,11 @@ class ClaimsController < BasePublicController
   end
 
   def check_page_is_in_sequence
+    unless correct_policy_namespace?
+      clear_claim_session
+      redirect_to new_claim_path and return
+    end
+
     raise ActionController::RoutingError.new("Not Found") unless page_sequence.in_sequence?(params[:slug])
   end
 
@@ -197,5 +202,9 @@ class ClaimsController < BasePublicController
     session[:selected_claim_policy] = policy
 
     redirect_to claim_path(current_policy_routing_name, next_slug)
+  end
+
+  def correct_policy_namespace?
+    PolicyConfiguration.policies_for_routing_name(params[:policy]).include?(current_claim.policy)
   end
 end
