@@ -5,7 +5,7 @@ module "container" {
   rg_prefix             = var.rg_prefix
   rg_location           = var.input_region
   common_tags           = local.tags
-  app_name              = var.app_name
+  app_name              = local.app_name
   db_host                 = data.azurerm_postgresql_server.app.fqdn
   db_admin_username       = data.azurerm_postgresql_server.app.administrator_login
   db_name                 = local.db_name
@@ -21,7 +21,7 @@ module "app_service" {
   rg_prefix               = var.rg_prefix
   rg_location             = var.input_region
   common_tags             = local.tags
-  app_name                = var.app_name
+  app_name                = local.app_name
   db_host                 = data.azurerm_postgresql_server.app.fqdn
   db_admin_username       = data.azurerm_postgresql_server.app.administrator_login
   db_name                 = local.db_name

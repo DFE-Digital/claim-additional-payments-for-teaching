@@ -1,13 +1,12 @@
 review:
-	$(if $(APP_NAME), , $(error Missing environment variable "APP_NAME", Please specify a name for your review app))
-	$(if $(PR_NUMBER), , $(error Missing environment variable "PR_NUMBER", Please specify the pull request id))
+	$(if ${PR_NUMBER}, , $(error Missing environment variable "PR_NUMBER", Please specify the pull request id))
+	$(eval APP_NAME=pr-${PR_NUMBER})
 	$(eval AZ_SUBSCRIPTION=s118-teacherpaymentsservice-development)
 	$(eval RESOURCE_GROUP_NAME=s118d02-review-tfbackend)
 	$(eval STORAGE_ACCOUNT_NAME=s118d02reviewtfbackendsa)
 	$(eval CONTAINER_NAME=s118d02conttfstate)
 	$(eval DEPLOY_ENV=review)
 	$(eval BACKEND_KEY=-backend-config=key=${APP_NAME}.tfstate)
-	$(eval export TF_VAR_app_name=${APP_NAME})
 	$(eval export TF_VAR_pr_number=${PR_NUMBER})
 
 dev:
