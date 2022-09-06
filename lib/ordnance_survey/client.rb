@@ -20,13 +20,12 @@ module OrdnanceSurvey
 
     attr_accessor :api_key, :base_url, :headers, :params
 
-    # Accessing readers with send because < Ruby 2.7
     def request(method:, path: "/", params: {}, body: {})
       headers = {
         "Content-Type": "application/json"
       }
 
-      params = params.merge(send(:params))
+      params = params.merge(self.params)
 
       response = Response.new(
         response: Typhoeus.public_send(
