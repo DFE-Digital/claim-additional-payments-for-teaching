@@ -49,6 +49,7 @@ variable "bypass_dfe_sign_in" {
 variable "pr_number" {
   type        = string
   description = "Pull Request Number for Review App"
+  default     = ""
 }
 
 locals {
