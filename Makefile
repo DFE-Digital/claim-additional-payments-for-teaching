@@ -43,15 +43,15 @@ terraform-init: set-azure-account
 
 terraform-plan: terraform-init
 	terraform -chdir=azure/terraform plan \
-		-var="input_region=westeurope" -var="input_container_version=${IMAGE_TAG}" \
+		-var="input_container_version=${IMAGE_TAG}" \
 		-var-file workspace_variables/${DEPLOY_ENV}.tfvars.json
 
 terraform-apply: terraform-init
 	terraform -chdir=azure/terraform apply \
-		-var="input_region=westeurope" -var="input_container_version=${IMAGE_TAG}" \
+		-var="input_container_version=${IMAGE_TAG}" \
 		-var-file workspace_variables/${DEPLOY_ENV}.tfvars.json
 
 terraform-destroy: terraform-init
 	terraform -chdir=azure/terraform destroy \
-		-var="input_region=westeurope" -var="input_container_version=${IMAGE_TAG}" \
+		-var="input_container_version=${IMAGE_TAG}" \
 		-var-file workspace_variables/${DEPLOY_ENV}.tfvars.json

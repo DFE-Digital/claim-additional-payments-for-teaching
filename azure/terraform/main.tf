@@ -3,7 +3,7 @@ module "container" {
   app_rg_name           = format("%s-%s", var.rg_prefix, "app")
   container_version     = var.input_container_version
   rg_prefix             = var.rg_prefix
-  rg_location           = var.input_region
+  rg_location           = local.input_region
   common_tags           = local.tags
   app_name              = local.app_name
   db_host                 = data.azurerm_postgresql_server.app.fqdn
@@ -19,7 +19,7 @@ module "app_service" {
   app_rg_name             = local.app_rg_name
   input_container_version = var.input_container_version
   rg_prefix               = var.rg_prefix
-  rg_location             = var.input_region
+  rg_location             = local.input_region
   common_tags             = local.tags
   app_name                = local.app_name
   db_host                 = data.azurerm_postgresql_server.app.fqdn

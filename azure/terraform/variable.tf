@@ -1,7 +1,3 @@
-variable "input_region" {
-  type        = string
-  description = "Location for all of the Azure resources "
-}
 variable "input_container_version" {
   type        = string
   description = "Which version of the container is to be built"
@@ -61,4 +57,5 @@ locals {
     "Service Line"     = "Teaching Workforce"
     "Service Offering" = "Claim Additional Payments (for teaching)"
   }
+  input_region = "westeurope"
 }
