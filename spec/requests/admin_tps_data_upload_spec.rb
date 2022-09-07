@@ -79,7 +79,7 @@ RSpec.describe "TPS data upload" do
           )
         end
 
-        let!(:claim_no_data) { create(:claim, :submitted) }
+        let!(:claim_no_data) { create(:claim, :submitted, teacher_reference_number: 1000108) }
 
         it "runs the tasks, adds notes and redirects to the right page" do
           aggregate_failures "testing tasks and notes" do
@@ -104,6 +104,32 @@ RSpec.describe "TPS data upload" do
             expect(claim_no_data.notes.last[:body]).to eq "[Employment] - No data"
 
             expect(response).to redirect_to(admin_claims_path)
+          end
+        end
+
+        context "when uploading TPS data and claims marked as NO MATCH exist" do
+          before do
+            post admin_tps_data_uploads_path, params: {file: file}
+          end
+
+          it "runs the employment task again for NO MATCH claims" do
+            csv = <<~CSV
+              Teacher reference number,NINO,Start Date,End Date,Annual salary,Monthly pay,N/A,LA URN,School URN
+              #{claim_no_data.teacher_reference_number},ZX043155C,01/07/2022,30/09/2022,24373,2031.08,5016,#{claim_no_data.school.local_authority.code},#{claim_no_data.school.establishment_number}
+            CSV
+
+            file = Rack::Test::UploadedFile.new(StringIO.new(csv), "text/csv", original_filename: "tps_data.csv")
+
+            expect { post admin_tps_data_uploads_path, params: {file: file} }
+              .to(
+                change { claim_no_data.tasks.last.claim_verifier_match }.from(nil).to("none")
+                .and(not_change { claim_no_data.tasks.size })
+                .and(change { claim_no_data.notes.size }.from(1).to(2))
+                .and(not_change { claim_no_match.tasks.last.updated_at })
+                .and(not_change { claim_no_match.notes.size })
+                .and(not_change { claim_matched.tasks.last.updated_at })
+                .and(not_change { claim_matched.notes.size })
+              )
           end
         end
       end
