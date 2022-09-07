@@ -24,12 +24,9 @@ class TeachersPensionsServiceImporter
 
   def run
     ActiveRecord::Base.transaction do
-      rows.each_with_index do |row, idx|
+      rows.each do |row|
         tps_data = row_to_tps(row)
-        tps_data.save!
-      rescue ActiveRecord::RecordNotUnique
-        errors.append("The Teachers Pensions Service record with TRN #{tps_data.teacher_reference_number} with StartDate #{tps_data.start_date.strftime("%Y-%m-%d")} is repeated at line #{idx + 1}")
-        raise ActiveRecord::Rollback
+        tps_data.save! if tps_data.valid?
       end
     end
   end
@@ -37,10 +34,10 @@ class TeachersPensionsServiceImporter
   private
 
   def check_headers
-    if rows
-      missing_headers = EXPECTED_HEADERS - rows.headers
-      errors.append("The selected file is missing some expected columns: #{missing_headers.join(", ")}") if missing_headers.any?
-    end
+    return unless rows
+
+    missing_headers = EXPECTED_HEADERS - rows.headers
+    errors.append("The selected file is missing some expected columns: #{missing_headers.join(", ")}") if missing_headers.any?
   end
 
   def parse_csv(file)
