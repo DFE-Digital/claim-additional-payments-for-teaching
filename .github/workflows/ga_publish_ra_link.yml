@@ -1,0 +1,12 @@
+on: pull_request
+
+jobs:
+  post_comment_on_pr:
+    runs-on: ubuntu-latest
+    name: Post review app url in comment on PR
+    steps:
+      - name: Post sticky pull request comment
+        uses: marocchino/sticky-pull-request-comment@v2
+        with:
+          message: |
+            Review app deployed to <https://s118d02-app-pr-${{ github.event.pull_request.number }}-as.azurewebsites.net/additional-payments/claim>
