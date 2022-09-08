@@ -25,6 +25,7 @@ RSpec.feature "Data report request" do
     claims.each_with_index do |claim, index|
       expect(csv[index].fields("Claim reference")).to include(claim.reference)
       expect(csv[index].fields("Teacher reference number")).to include(claim.teacher_reference_number)
+      expect(csv[index].fields("NINO")).to include(claim.national_insurance_number)
       expect(csv[index].fields("Full name")).to include(claim.full_name)
       expect(csv[index].fields("Email")).to include(claim.email_address)
       expect(csv[index].fields("Date of birth")).to include(claim.date_of_birth.to_s)

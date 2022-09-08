@@ -23,6 +23,7 @@ RSpec.describe Claim::DataReportRequest do
       claims.each_with_index do |claim, index|
         expect(report_request_csv[index].fields("Claim reference")).to include(claim.reference)
         expect(report_request_csv[index].fields("Teacher reference number")).to include(claim.teacher_reference_number)
+        expect(report_request_csv[index].fields("NINO")).to include(claim.national_insurance_number)
         expect(report_request_csv[index].fields("Full name")).to include(claim.full_name)
         expect(report_request_csv[index].fields("Email")).to include(claim.email_address)
         expect(report_request_csv[index].fields("Date of birth")).to include(claim.date_of_birth.to_s)

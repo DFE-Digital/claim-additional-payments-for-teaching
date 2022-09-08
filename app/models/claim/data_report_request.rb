@@ -8,6 +8,7 @@ class Claim
     HEADERS = [
       "Claim reference",
       "Teacher reference number",
+      "NINO",
       "Full name",
       "Email",
       "Date of birth",
@@ -25,6 +26,7 @@ class Claim
           csv << [
             claim.reference,
             claim.teacher_reference_number,
+            claim.national_insurance_number,
             claim.full_name,
             claim.email_address,
             claim.date_of_birth,
