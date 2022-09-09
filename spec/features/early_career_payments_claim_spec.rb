@@ -1201,4 +1201,57 @@ RSpec.feature "Teacher Early-Career Payments claims" do
       expect(claim.reload.policy_options_provided).to eq policy_options_provided
     end
   end
+
+  context "ECP school" do
+    let!(:school) { create(:school, :early_career_payments_eligible) }
+
+    scenario "Prevent eligible itt subject page loading form from browser Back navigation causing errors", js: true do
+      visit landing_page_path(EarlyCareerPayments.routing_name)
+      click_on "Start now"
+
+      # - Which school do you teach at
+      choose_school school
+
+      # - NQT in Academic Year after ITT
+      choose "Yes"
+      click_on "Continue"
+
+      # - Are you currently employed as a supply teacher
+      choose "No"
+      click_on "Continue"
+
+      # - Performance Issues
+      # No
+      choose "claim_eligibility_attributes_subject_to_formal_performance_action_false"
+      # "No"
+      choose "claim_eligibility_attributes_subject_to_disciplinary_action_false"
+      click_on "Continue"
+
+      # - What route into teaching did you take?
+      choose "Undergraduate initial teacher training (ITT)"
+      click_on "Continue"
+
+      # - In which academic year did you start your undergraduate ITT
+      choose "2018 to 2019"
+      click_on "Continue"
+
+      # - eligible_itt_subject page - Choose Yes/No on Mathematics page only because 2018/2019 was selected
+      click_on "Back"
+
+      # - Change the year and no longer eligible
+      choose "2017 to 2018"
+      click_on "Continue"
+
+      # Click back twice and land back on the eligible_itt_subject page
+      page.go_back
+      page.go_back
+
+      # At stage if you click continue you will get "'on' is not a valid eligible_itt_subject" exception
+      # click_on "Continue"
+
+      # The bugfix is the form is hidden to prevent it being submitted
+      expect(page).not_to have_text("Did you do your undergraduate initial teacher training (ITT) in ?")
+      expect(page).not_to have_button("Continue")
+    end
+  end
 end
