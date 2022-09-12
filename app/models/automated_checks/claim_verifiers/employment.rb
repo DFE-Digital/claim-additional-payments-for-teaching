@@ -5,7 +5,6 @@ module AutomatedChecks
         self.admin_user = admin_user
         self.claim = claim
         self.teachers_pensions_service = TeachersPensionsService.by_teacher_reference_number(claim.teacher_reference_number)
-        self.teachers_pensions_service_schools = teachers_pensions_service
       end
 
       def perform
@@ -17,19 +16,46 @@ module AutomatedChecks
       private
 
       attr_accessor :admin_user, :claim, :teachers_pensions_service
-      attr_reader :teachers_pensions_service_schools
 
       def awaiting_task?(task_name)
         claim.tasks.none? { |task| task.name == task_name }
       end
 
-      def teachers_pensions_service_schools=(teachers_pensions_service)
-        return if teachers_pensions_service.empty?
+      def teachers_pensions_service_schools
+        return [] if teachers_pensions_service.empty?
 
-        @teachers_pensions_service_schools = teachers_pensions_service.between_claim_dates(
-          claim.submitted_at.beginning_of_month.prev_month,
-          claim.submitted_at.end_of_month
-        ).map { |r| [r.la_urn, r.school_urn] }.uniq
+        @teachers_pensions_service_schools ||= begin
+          from = claim.submitted_at.beginning_of_month.prev_month
+          to = claim.submitted_at.end_of_month
+
+          teachers_pensions_service
+            .between_claim_dates(from, to)
+            .map { |r| [r.la_urn, r.school_urn] }
+            .uniq
+        end
+      end
+
+      def teachers_pensions_service_claim_schools
+        return [] unless teachers_pensions_service.any? && claim.policy == StudentLoans
+
+        @teachers_pensions_service_claim_schools ||= begin
+          latest_start_date = end_of_previous_financial_year - 1.month
+          earliest_end_date = start_of_previous_financial_year + 1.month
+
+          teachers_pensions_service
+            .claim_dates_interval(latest_start_date, earliest_end_date)
+            .map { |r| [r.la_urn, r.school_urn] }
+            .uniq
+        end
+      end
+
+      def start_of_previous_financial_year
+        previous_academic_year = PolicyConfiguration.for(StudentLoans).current_academic_year - 1
+        Date.new(previous_academic_year.start_year, 4, 6)
+      end
+
+      def end_of_previous_financial_year
+        Date.new(PolicyConfiguration.for(StudentLoans).current_academic_year.start_year, 4, 5)
       end
 
       def no_data
@@ -51,8 +77,16 @@ module AutomatedChecks
       end
 
       def eligible?
-        teachers_pensions_service_schools.select do |code, establishment_number|
-          claim.eligibility.current_school.local_authority.code == code && claim.eligibility.current_school.establishment_number == establishment_number
+        eligible_current_school = eligible_school?(teachers_pensions_service_schools, claim.eligibility.current_school)
+
+        return eligible_current_school unless claim.policy == StudentLoans && eligible_current_school
+
+        eligible_school?(teachers_pensions_service_claim_schools, claim.eligibility.claim_school)
+      end
+
+      def eligible_school?(tps_schools, school)
+        tps_schools.select do |code, establishment_number|
+          school.local_authority.code == code && school.establishment_number == establishment_number
         end.any?
       end
 
@@ -79,8 +113,12 @@ module AutomatedChecks
           "[Employment] - No data"
         else
           schools_details = ""
-          teachers_pensions_service_schools.each_with_index do |school, idx|
-            schools_details += "School #{idx + 1}: LA Code: #{school[0]} / Establishment Number: #{school[1]}\n"
+          teachers_pensions_service_schools.each do |school|
+            schools_details += "Current school: LA Code: #{school[0]} / Establishment Number: #{school[1]}\n"
+          end
+
+          teachers_pensions_service_claim_schools.each do |school|
+            schools_details += "Claim school: LA Code: #{school[0]} / Establishment Number: #{school[1]}\n"
           end
 
           <<~HTML

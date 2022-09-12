@@ -84,12 +84,14 @@ gem "google-cloud-storage"
 gem "faraday_middleware"
 
 # required for prod due to Azure DEV/TEST all running as 'production'
-gem "faker", "~> 2.22", require: false
+gem "faker", "~> 2.23", require: false
 # speed up bulk imports
 gem "activerecord-copy", require: false
 
+gem "pagy"
+
 group :development, :test do
-  gem "awesome_print"
+  gem "amazing_print"
   gem "byebug", platforms: [:mri, :mingw, :x64_mingw]
   gem "rspec-rails"
   gem "capybara"

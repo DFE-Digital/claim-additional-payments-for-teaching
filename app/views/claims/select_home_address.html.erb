@@ -8,7 +8,8 @@
       <div class="govuk-!-margin-bottom-5">
         <h1 class="govuk-heading-xl"><%= t("questions.address.home.title") %></h1>
         <h2 class="govuk-heading-l govuk-!-margin-bottom-1">Postcode</h2>
-        <p>
+        <p class="govuk-body">
+          <%= params["claim"]["postcode"] %>
           <%= link_to "Change", claim_path(current_claim.policy.routing_name, "postcode-search"), class: "govuk-link govuk-!-margin-left-3", "aria-label": "Change" %>
         </p>
         <%= form_group_tag current_claim do %>

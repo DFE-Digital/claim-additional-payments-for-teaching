@@ -1,4 +1,6 @@
 class Admin::ClaimsController < Admin::BaseAdminController
+  include Pagy::Backend
+
   before_action :ensure_service_operator
 
   def index
@@ -6,10 +8,14 @@ class Admin::ClaimsController < Admin::BaseAdminController
     @claims = @claims.by_policy(filtered_policy) if filtered_policy
     @claims = @claims.by_claims_team_member(filtered_team_member) if filtered_team_member
 
+    all_claims = @claims
+    @total_claim_count = all_claims.count
+    @pagy, @claims = pagy(@claims)
+
     respond_to do |format|
       format.html
       format.csv {
-        send_data Claim::DataReportRequest.new(@claims).to_csv,
+        send_data Claim::DataReportRequest.new(all_claims).to_csv,
           filename: "dqt_report_request_#{Date.today.iso8601}.csv"
       }
     end

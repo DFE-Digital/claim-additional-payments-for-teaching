@@ -1,6 +1,7 @@
 module Admin
   module ClaimsHelper
     include StudentLoans::PresenterMethods
+    include Pagy::Frontend
 
     def claim_links(claims)
       claims.map { |claim| link_to(claim.reference, admin_claim_path(claim), class: "govuk-link") }.to_sentence.html_safe

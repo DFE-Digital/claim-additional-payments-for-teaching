@@ -28,6 +28,10 @@ class ClaimsController < BasePublicController
         session[:claim_address_line_1] = params[:claim][:address_line_1]
         redirect_to claim_path(current_policy_routing_name, "no-address-found") and return
       end
+    elsif params[:slug] == "select-home-address" && !postcode.present?
+      session[:claim_postcode] = nil
+      session[:claim_address_line_1] = nil
+      redirect_to claim_path(current_policy_routing_name, "postcode-search") and return
     end
 
     render current_template
@@ -126,6 +130,11 @@ class ClaimsController < BasePublicController
   end
 
   def check_page_is_in_sequence
+    unless correct_policy_namespace?
+      clear_claim_session
+      redirect_to new_claim_path and return
+    end
+
     raise ActionController::RoutingError.new("Not Found") unless page_sequence.in_sequence?(params[:slug])
   end
 
@@ -197,5 +206,9 @@ class ClaimsController < BasePublicController
     session[:selected_claim_policy] = policy
 
     redirect_to claim_path(current_policy_routing_name, next_slug)
+  end
+
+  def correct_policy_namespace?
+    PolicyConfiguration.policies_for_routing_name(params[:policy]).include?(current_claim.policy)
   end
 end

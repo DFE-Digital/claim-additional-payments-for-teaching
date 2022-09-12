@@ -5,7 +5,7 @@ module AutomatedChecks
     RSpec.describe Employment do
       subject(:employment) { described_class.new(**employment_args) }
       let(:barnsley) { LocalAuthority.find(ActiveRecord::FixtureSet.identify(:barnsley, :uuid)) }
-      let(:ecp_school) do
+      let(:school) do
         create(:school,
           :early_career_payments_eligible,
           establishment_number: 8091,
@@ -30,7 +30,7 @@ module AutomatedChecks
           attributes_for(
             :"#{policy_underscored}_eligibility",
             :eligible,
-            current_school_id: ecp_school.id
+            current_school_id: school.id
           )
         )
 
@@ -101,7 +101,7 @@ module AutomatedChecks
               subject(:body) { note.body }
 
               it "returns 'Eligible' with the school of employment" do
-                expect(subject).to eq("[Employment] - Eligible:\n<pre>School 1: LA Code: 370 / Establishment Number: 8091\n</pre>\n")
+                expect(subject).to eq("[Employment] - Eligible:\n<pre>Current school: LA Code: 370 / Establishment Number: 8091\n</pre>\n")
               end
             end
 
@@ -109,6 +109,37 @@ module AutomatedChecks
               subject(:created_by) { note.created_by }
 
               it { is_expected.to eq(nil) }
+            end
+          end
+
+          context "when the claim is TSLR" do
+            subject(:perform) { employment.perform }
+
+            let(:teacher_reference_number) { 1334426 }
+            let(:camden) { LocalAuthority.find(ActiveRecord::FixtureSet.identify(:camden, :uuid)) }
+            let(:school) do
+              create(:school,
+                establishment_number: 8091,
+                local_authority: camden)
+            end
+
+            let(:policy) { StudentLoans }
+
+            describe "#note" do
+              subject(:note) { claim_arg.notes.last }
+
+              before do
+                PolicyConfiguration.for(StudentLoans).update!(current_academic_year: "2022/2023")
+                perform
+              end
+
+              describe "#body" do
+                subject(:body) { note.body }
+
+                it "returns 'Eligible' with the schools of employment" do
+                  expect(body).to eq("[Employment] - Eligible:\n<pre>Current school: LA Code: 202 / Establishment Number: 8091\nClaim school: LA Code: 202 / Establishment Number: 8091\nClaim school: LA Code: 370 / Establishment Number: 4027\n</pre>\n")
+                end
+              end
             end
           end
         end
@@ -162,7 +193,7 @@ module AutomatedChecks
               subject(:body) { note.body }
 
               it "returns 'Ineligible' with the school details" do
-                expect(subject).to eq("[Employment] - Ineligible:\n<pre>School 1: LA Code: 383 / Establishment Number: 4026\n</pre>\n")
+                expect(subject).to eq("[Employment] - Ineligible:\n<pre>Current school: LA Code: 383 / Establishment Number: 4026\n</pre>\n")
               end
             end
 

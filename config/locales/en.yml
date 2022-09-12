@@ -380,6 +380,8 @@ en:
           title: Does the claimant’s subject match the schools workforce census subjects
         matching_details:
           title: "Is this claim still valid despite having matching details with other claims?"
+  additional_payments:
+    claim_description: "for an additional payment for teaching"
   activerecord:
     errors:
       models:

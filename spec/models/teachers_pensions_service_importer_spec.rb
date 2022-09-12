@@ -1,14 +1,14 @@
 require "rails_helper"
 
 RSpec.describe TeachersPensionsServiceImporter do
+  subject { described_class.new(file) }
+
   let(:file) do
     tempfile = Tempfile.new
     tempfile.write(csv)
     tempfile.rewind
     tempfile
   end
-
-  subject { described_class.new(file) }
 
   context "The CSV is valid and has all the correct data" do
     let(:csv) do
@@ -19,7 +19,7 @@ RSpec.describe TeachersPensionsServiceImporter do
     end
 
     it "has no errors and parses the CSV" do
-      subject.run
+      expect { subject.run }.to(change(TeachersPensionsService, :count).by(1))
       expect(subject.errors).to be_empty
 
       expect(subject.rows.count).to eq(1)
@@ -90,16 +90,20 @@ RSpec.describe TeachersPensionsServiceImporter do
         Teacher reference number,NINO,Start Date,End Date,Annual salary,Monthly pay,N/A,LA URN,School URN
         1234567,ZX043155C,01/09/2019,30/09/2019,24373,2031.08,5016,383,4026
         1234567,ZX043155C,01/09/2019,30/09/2019,24373,2031.08,5016,383,4026
+        1234568,ZX043155C,01/09/2020,30/09/2020,24373,2031.08,5016,383,4026
+        1234568,ZX043155C,01/09/2020,30/09/2020,24373,2031.08,5016,383,4026
       CSV
     end
 
-    it "has no errors and parses the CSV" do
-      subject.run
-      expect(subject.errors).to eq(["The Teachers Pensions Service record with TRN 1234567 with StartDate 2019-09-01 is repeated at line 2"])
-      expect(subject.run).to be_falsey
+    it "excludes duplicates and parses the CSV" do
+      expect { subject.run }.to(change(TeachersPensionsService, :count).by(2))
 
-      expect(subject.rows.first["Teacher reference number"]).to eq("1234567")
-      expect(subject.rows.first["End Date"]).to eq("30/09/2019")
+      expect(subject.errors).to be_empty
+      expect(subject.rows.count).to eq(4)
+      expect(TeachersPensionsService.first[:teacher_reference_number]).to eq("1234567")
+      expect(TeachersPensionsService.first[:start_date].to_date).to eq(Date.new(2019, 9, 1))
+      expect(TeachersPensionsService.second[:teacher_reference_number]).to eq("1234568")
+      expect(TeachersPensionsService.second[:start_date].to_date).to eq(Date.new(2020, 9, 1))
     end
   end
 
@@ -112,7 +116,7 @@ RSpec.describe TeachersPensionsServiceImporter do
     end
 
     it "has no errors and parses the CSV" do
-      subject.run
+      expect { subject.run }.to(change(TeachersPensionsService, :count).by(1))
 
       expect(subject.rows.first["Teacher reference number"]).to eq("1234567")
       expect(subject.rows.first["End Date"]).to eq("31/12/2021")
@@ -128,7 +132,7 @@ RSpec.describe TeachersPensionsServiceImporter do
     end
 
     it "has no errors and parses the CSV" do
-      subject.run
+      expect { subject.run }.to(change(TeachersPensionsService, :count).by(1))
 
       expect(subject.rows.first["Teacher reference number"]).to eq("1234567")
       expect(subject.rows.first["End Date"]).to eq("01/09/2021")

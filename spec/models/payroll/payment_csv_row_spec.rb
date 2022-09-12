@@ -54,15 +54,15 @@ RSpec.describe Payroll::PaymentCsvRow do
             claim = claims.first
 
             expect(row).to eq([
-              "Captain",
+              "Prof",
               claim.first_name,
               claim.middle_name,
               claim.surname,
               claim.national_insurance_number,
               "F",
-              "20190909",
-              "20190915",
-              claim.date_of_birth.strftime("%Y%m%d"),
+              "09/09/2019",
+              "15/09/2019",
+              claim.date_of_birth.strftime("%d/%m/%Y"),
               claim.email_address,
               claim.address_line_1,
               "",
@@ -78,7 +78,7 @@ RSpec.describe Payroll::PaymentCsvRow do
               "T",
               "2",
               claim.banking_name,
-              claim.bank_sort_code,
+              "00-11-22",
               claim.bank_account_number,
               claim.building_society_roll_number,
               payment_award_amount.to_s,
@@ -127,15 +127,15 @@ RSpec.describe Payroll::PaymentCsvRow do
             claim = claims.first
 
             expect(row).to eq([
-              "Captain",
+              "Prof",
               claim.first_name,
               claim.middle_name,
               claim.surname,
               claim.national_insurance_number,
               "M",
-              "20190909",
-              "20190915",
-              claim.date_of_birth.strftime("%Y%m%d"),
+              "09/09/2019",
+              "15/09/2019",
+              claim.date_of_birth.strftime("%d/%m/%Y"),
               claim.email_address,
               claim.address_line_1,
               claim.address_line_2,
@@ -151,7 +151,7 @@ RSpec.describe Payroll::PaymentCsvRow do
               "T",
               "1 and 3",
               claim.banking_name,
-              claim.bank_sort_code,
+              "33-09-90",
               claim.bank_account_number,
               nil,
               payment_award_amount.to_s,
@@ -197,15 +197,15 @@ RSpec.describe Payroll::PaymentCsvRow do
             claim = claims.first
 
             expect(row).to eq([
-              "Captain",
+              "Prof",
               claim.first_name,
               claim.middle_name,
               claim.surname,
               claim.national_insurance_number,
               "F",
-              "20190909",
-              "20190915",
-              claim.date_of_birth.strftime("%Y%m%d"),
+              "09/09/2019",
+              "15/09/2019",
+              claim.date_of_birth.strftime("%d/%m/%Y"),
               claim.email_address,
               nil,
               "4, Wearside Road",
@@ -221,7 +221,7 @@ RSpec.describe Payroll::PaymentCsvRow do
               "T",
               "1",
               claim.banking_name,
-              claim.bank_sort_code,
+              "21-09-09",
               claim.bank_account_number,
               nil,
               payment_award_amount.to_s,
@@ -238,8 +238,8 @@ RSpec.describe Payroll::PaymentCsvRow do
         it "returns the date of the second Monday and Sunday" do
           travel_to Date.parse "20 February 2019" do
             row = CSV.parse(subject.to_s).first
-            expect(row[6]).to eq "20190211"
-            expect(row[7]).to eq "20190217"
+            expect(row[6]).to eq "11/02/2019"
+            expect(row[7]).to eq "17/02/2019"
           end
         end
       end
@@ -248,8 +248,8 @@ RSpec.describe Payroll::PaymentCsvRow do
         it "returns the date of the second Monday and Sunday" do
           travel_to Date.parse "9 July 2040" do
             row = CSV.parse(subject.to_s).first
-            expect(row[6]).to eq "20400709"
-            expect(row[7]).to eq "20400715"
+            expect(row[6]).to eq "09/07/2040"
+            expect(row[7]).to eq "15/07/2040"
           end
         end
       end
@@ -258,8 +258,8 @@ RSpec.describe Payroll::PaymentCsvRow do
         it "returns the date of the second Monday and Sunday" do
           travel_to Date.parse "1 June 2020" do
             row = CSV.parse(subject.to_s).first
-            expect(row[6]).to eq "20200608"
-            expect(row[7]).to eq "20200614"
+            expect(row[6]).to eq "08/06/2020"
+            expect(row[7]).to eq "14/06/2020"
           end
         end
       end
