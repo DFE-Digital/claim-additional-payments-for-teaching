@@ -5,7 +5,7 @@ We’re paying:
 * your claim <%= I18n.t("#{claim.policy.locale_key}.claim_description") %>, reference: <%= claim.reference %>
 <% end %>
 
-^ You will receive <%=number_to_currency(@payment.net_pay) %> on or after <%= l(@payment_date) %>.
+^ You will receive <%=number_to_currency(@payment.net_pay) %> on or after Friday <%= @payment_date.to_s(:custom_ordinal) %>.
 
 <% if @payment.student_loan_repayment.present? %>
 
