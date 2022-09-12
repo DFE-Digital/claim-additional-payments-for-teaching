@@ -25,6 +25,7 @@ stages:
     - template: templates/build.yml
 
 - stage: TestRelease
+  lockBehavior: sequential
   condition: and(succeeded('Build'), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
   jobs:
   - deployment: TestRelease
@@ -52,6 +53,7 @@ stages:
               ServiceConnection: azdo.pipelines.cip.S118T.arm03ce3ff5-9a61-4525-a063-6ecde34874cf
 
 - stage: ReviewRelease
+  lockBehavior: sequential
   condition: and(succeeded('Build'), ne(variables['Build.SourceBranch'], 'refs/heads/master'),  ne(variables['System.PullRequest.PullRequestNumber'], ''))
   jobs:
   - deployment: ReviewRelease
@@ -79,6 +81,7 @@ stages:
               ServiceConnection: azdo.pipelines.cip.S118D.armfe1ef140-8bef-4043-b5ee-c449e6f951ef
 
 - stage: ProductionRelease
+  lockBehavior: sequential
   condition: and(succeeded('TestRelease'), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
   jobs:
   - deployment: ProductionRelease
