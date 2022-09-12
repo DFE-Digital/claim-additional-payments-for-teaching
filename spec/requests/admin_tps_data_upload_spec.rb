@@ -1,7 +1,9 @@
 require "rails_helper"
 
 RSpec.describe "TPS data upload" do
-  before { @signed_in_user = sign_in_as_service_operator }
+  before do
+    @signed_in_user = sign_in_as_service_operator
+  end
 
   describe "#new" do
     it "shows the upload form" do
@@ -48,6 +50,16 @@ RSpec.describe "TPS data upload" do
     end
 
     context "when a valid CSV is uploaded" do
+      def upload_tps_data_csm_file(file)
+        perform_enqueued_jobs do
+          post admin_tps_data_uploads_path, params: {file: file}
+        end
+      end
+
+      before do
+        PolicyConfiguration.for(EarlyCareerPayments).update!(current_academic_year: "2021/2022")
+      end
+
       context "when the claim is not TSLR" do
         let(:csv) do
           <<~CSV
@@ -65,7 +77,8 @@ RSpec.describe "TPS data upload" do
             :submitted,
             policy: EarlyCareerPayments,
             teacher_reference_number: 1000106,
-            submitted_at: Date.new(2022, 7, 15)
+            submitted_at: Date.new(2022, 7, 15),
+            academic_year: AcademicYear::Type.new.serialize(AcademicYear.new(2021))
           )
         end
 
@@ -75,15 +88,25 @@ RSpec.describe "TPS data upload" do
             :submitted,
             policy: EarlyCareerPayments,
             teacher_reference_number: 1000107,
-            submitted_at: Date.new(2022, 7, 15)
+            submitted_at: Date.new(2022, 7, 15),
+            academic_year: AcademicYear::Type.new.serialize(AcademicYear.new(2021))
           )
         end
 
-        let!(:claim_no_data) { create(:claim, :submitted, teacher_reference_number: 1000108) }
+        let!(:claim_no_data) do
+          create(
+            :claim,
+            :submitted,
+            policy: EarlyCareerPayments,
+            teacher_reference_number: 1000108,
+            submitted_at: Date.new(2022, 7, 15),
+            academic_year: AcademicYear::Type.new.serialize(AcademicYear.new(2021))
+          )
+        end
 
         it "runs the tasks, adds notes and redirects to the right page" do
           aggregate_failures "testing tasks and notes" do
-            expect { post admin_tps_data_uploads_path, params: {file: file} }.to(
+            expect { upload_tps_data_csm_file(file) }.to(
               change do
                 [
                   claim_matched.reload.tasks.size,
@@ -109,7 +132,9 @@ RSpec.describe "TPS data upload" do
 
         context "when uploading TPS data and claims marked as NO MATCH exist" do
           before do
-            post admin_tps_data_uploads_path, params: {file: file}
+            perform_enqueued_jobs do
+              upload_tps_data_csm_file(file)
+            end
           end
 
           it "runs the employment task again for NO MATCH claims" do
@@ -120,9 +145,9 @@ RSpec.describe "TPS data upload" do
 
             file = Rack::Test::UploadedFile.new(StringIO.new(csv), "text/csv", original_filename: "tps_data.csv")
 
-            expect { post admin_tps_data_uploads_path, params: {file: file} }
+            expect { upload_tps_data_csm_file(file) }
               .to(
-                change { claim_no_data.tasks.last.claim_verifier_match }.from(nil).to("none")
+                change { claim_no_data.tasks.last.claim_verifier_match }.from(nil).to("all")
                 .and(not_change { claim_no_data.tasks.size })
                 .and(change { claim_no_data.notes.size }.from(1).to(2))
                 .and(not_change { claim_no_match.tasks.last.updated_at })
@@ -136,7 +161,7 @@ RSpec.describe "TPS data upload" do
 
       context "when the claim is TSLR" do
         before do
-          PolicyConfiguration.for(StudentLoans).update!(current_academic_year: "2022/2023")
+          PolicyConfiguration.for(StudentLoans).update!(current_academic_year: "2021/2022")
         end
 
         let(:csv) do
@@ -154,7 +179,8 @@ RSpec.describe "TPS data upload" do
             :submitted,
             policy: StudentLoans,
             teacher_reference_number: 1000106,
-            submitted_at: Date.new(2022, 7, 15)
+            submitted_at: Date.new(2022, 7, 15),
+            academic_year: AcademicYear::Type.new.serialize(AcademicYear.new(2021))
           )
         end
 
@@ -164,15 +190,22 @@ RSpec.describe "TPS data upload" do
             :submitted,
             policy: StudentLoans,
             teacher_reference_number: 1000107,
-            submitted_at: Date.new(2022, 7, 15)
+            submitted_at: Date.new(2022, 7, 15),
+            academic_year: AcademicYear::Type.new.serialize(AcademicYear.new(2021))
           )
         end
 
-        let!(:claim_no_data) { create(:claim, :submitted) }
+        let!(:claim_no_data) do
+          create(
+            :claim,
+            :submitted,
+            academic_year: AcademicYear::Type.new.serialize(AcademicYear.new(2021))
+          )
+        end
 
         it "runs the tasks, adds notes and redirects to the right page" do
           aggregate_failures "testing tasks and notes" do
-            expect { post admin_tps_data_uploads_path, params: {file: file} }.to(
+            expect { upload_tps_data_csm_file(file) }.to(
               change do
                 [
                   claim_matched.reload.tasks.size,
@@ -207,7 +240,7 @@ RSpec.describe "TPS data upload" do
 
           it "runs the tasks, adds notes and redirects to the right page" do
             aggregate_failures "testing tasks and notes" do
-              expect { post admin_tps_data_uploads_path, params: {file: file} }.to(
+              expect { upload_tps_data_csm_file(file) }.to(
                 change do
                   [
                     claim_matched.reload.tasks.size,
