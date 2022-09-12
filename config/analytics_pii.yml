@@ -19,3 +19,23 @@ shared:
   - building_society_roll_number
   - banking_name
   - mobile_number
+  - teacher_reference_number
+  - email_address
+  - payroll_gender
+  - one_time_password
+  :reminders:
+  - full_name
+  - email_address
+  - one_time_password
+  :claim_decisions:
+  - trn
+  - claimant_age
+  - claimant_gender
+  :school_workforce_censuses:
+  - teacher_reference_number
+  :tps_data:
+  - teacher_reference_number
+  :dfe_sign_in_users:
+  - given_name
+  - family_name
+  - email
