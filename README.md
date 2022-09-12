@@ -243,7 +243,7 @@ report click on the generated link
 ### Infrastrucure
 
 The base Azure infrastructure supporting the application is created from the
-[qts-api repository](https://github.com/DFE-Digital/claim-additional-payments-for-teaching-qts-api)
+[infrastructure repository](https://github.com/DFE-Digital/claim-additional-payments-for-teaching-infrastructure)
 via terraform.
 
 It creates resource groups, database server, app service plan, etc.
