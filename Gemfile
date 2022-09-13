@@ -127,4 +127,4 @@ end
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem "tzinfo-data", platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 
-gem "dfe-analytics", github: "DFE-Digital/dfe-analytics", tag: "v1.4.0"
+gem "dfe-analytics", github: "kenfodder/dfe-analytics", ref: "1eb9099e8c3c09c04ff692dfb2209614dec54824"

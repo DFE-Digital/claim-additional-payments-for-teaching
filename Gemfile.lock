@@ -1,7 +1,7 @@
 GIT
-  remote: https://github.com/DFE-Digital/dfe-analytics.git
-  revision: 6e355be3bd65890887e2cdbc0588ff2a00a892e5
-  tag: v1.4.0
+  remote: https://github.com/kenfodder/dfe-analytics.git
+  revision: 1eb9099e8c3c09c04ff692dfb2209614dec54824
+  ref: 1eb9099e8c3c09c04ff692dfb2209614dec54824
   specs:
     dfe-analytics (1.4.0)
       google-cloud-bigquery (~> 1.38)
@@ -167,7 +167,7 @@ GEM
       raabro (~> 1.4)
     globalid (1.0.0)
       activesupport (>= 5.0)
-    google-apis-bigquery_v2 (0.39.0)
+    google-apis-bigquery_v2 (0.40.0)
       google-apis-core (>= 0.7, < 2.a)
     google-apis-core (0.7.0)
       addressable (~> 2.5, >= 2.5.1)
@@ -484,6 +484,7 @@ GEM
 PLATFORMS
   ruby
   x86_64-darwin-18
+  x86_64-darwin-20
   x86_64-darwin-21
 
 DEPENDENCIES
