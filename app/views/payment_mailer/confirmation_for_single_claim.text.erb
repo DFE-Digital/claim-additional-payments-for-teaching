@@ -2,54 +2,45 @@ Dear <%= @display_name %>,
 
 We’re paying your claim <%= @claim_description %>.
 
-^ You will receive <%=number_to_currency(@payment.net_pay) %> on or after Friday <%= @payment_date.to_s(:custom_ordinal) %>.
-
-<% if @payment.student_loan_repayment.present? %>
+^ You will receive <%=number_to_currency(@payment.net_pay) %> on Friday <%= @payment_date.to_s(:custom_ordinal) %>.
 
 # Breakdown of payment
 
+<% if @payment.student_loan_repayment.present? %>
 This payment is treated as pay and is therefore subject to a student loan contribution, if applicable.
 
-* Amount you claimed for: <%= number_to_currency(@payment.award_amount) %>
+* Amount you applied for: <%= number_to_currency(@payment.award_amount) %>
 * Student loan contribution: <%= number_to_currency(@payment.student_loan_repayment) %>
-* Postgraduate loan contribution: <%= number_to_currency(@payment.postgraduate_loan_repayment) %>
+* Postgraduate Master’s or PhD loan contribution: <%= number_to_currency(@payment.postgraduate_loan_repayment) %>
 * Payment you receive: <%= number_to_currency(@payment.net_pay) %>
 
-# Contributions made to HMRC on your behalf
-
-Your payment is also subject to Income Tax and National Insurance (NI) contributions, which we pay to HMRC on your behalf. This does not affect the amount you receive.
+Your payment is also subject to Income Tax and National Insurance (NI) contributions, which we pay to HMRC on your behalf. This does not affect the amount you receive and we only share this with you in case you need the information in the future.
 
 * Income Tax: <%= number_to_currency(@payment.tax) %>
 * Employee NI: <%= number_to_currency(@payment.national_insurance) %>
 * Gross amount paid by us: <%= number_to_currency(@payment.gross_pay) %>
-
-The Gross amount is comprised of the payment you receive, your student loan contribution, and the Income Tax and Employee NI set out above. You may see this figure on any tax statements or other correspondence relating to taxable pay.
 
 <% else %>
+* Amount you applied for: <%= number_to_currency(@payment.award_amount) %>
+* Payment you receive: <%= number_to_currency(@payment.net_pay) %>
 
-# Contributions made to HMRC on your behalf
-
-This payment is treated as pay and is therefore subject to Income Tax and National Insurance (NI) contributions, which we pay to HMRC on your behalf. This does not affect the amount you receive.
+Your payment is also subject to Income Tax and National Insurance (NI) contributions, which we pay to HMRC on your behalf. This does not affect the amount you receive and we only share this with you in case you need the information in the future.
 
 * Income Tax: <%= number_to_currency(@payment.tax) %>
 * Employee NI: <%= number_to_currency(@payment.national_insurance) %>
 * Gross amount paid by us: <%= number_to_currency(@payment.gross_pay) %>
-
-The Gross amount is comprised of the payment you receive, and the Income Tax and Employee NI set out above. You may see this figure on any tax statements or other correspondence relating to taxable pay.
 
 <% end %>
 
-The payment you claim for is the Net Payment (after Income Tax and NI deductions). The student loan deduction is calculated from your Gross Pay (before Income Tax and NI deductions are taken). We are following HMRC guidance in treating this retention payment, for the purpose of employee deductions, as weekly pay.
+The Gross amount is comprised of the payment you receive, your student loan contribution, and the Income Tax and Employee NI set out above. You may see this figure on any tax statements or other correspondence relating to taxable pay.
 
-The amount you receive is <%= number_to_currency(@payment.net_pay) %>. As this payment is treated as pay, a deduction has been automatically made from the <%= number_to_currency(@payment.award_amount) %> to contribute towards repaying your student loan.
+The payment will come from the Department for Education.
 
-You may also see ‘Teaching payments DfE retention scheme’ listed as the secondary employer that made this payment.
-
-^ This email should be treated as a payslip, and as such kept for your own records in line with HMRC recommendations (22 months after the financial year the payment relates to). The payment breakdown details will not appear on your P60, and cannot be reissued.
+^ This email should be treated as a payslip, and kept for your own records in line with HMRC recommendations (22 months after the financial year the payment relates to). The payment breakdown details will not appear on your P60, and cannot be reissued.
 
 # Contact us
 
-Email <%= support_email_address(@policy.routing_name) %> giving your reference: <%= @reference %>, if you have any questions.
+If you have any questions about your claim, please reply to this email: with your unique reference and your query: <%= @reference %>.
 
 ----
 

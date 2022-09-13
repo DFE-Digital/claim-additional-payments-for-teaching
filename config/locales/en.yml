@@ -279,6 +279,7 @@ en:
     payment_name: "Early-career payment"
     claim_description: "for an additional payment for teaching"
     claim_subject: "Early-career payment"
+    claim_amount_description: "Additional payment for teaching"
     purpose: "For early career teachers who teach certain subjects."
     support_email_address: "earlycareerteacherpayments@digital.education.gov.uk"
     landing_page: "Find out if you are eligible for any additional payments"
@@ -364,6 +365,7 @@ en:
     payment_name: "Levelling up premium payment"
     claim_description: "for an additional payment for teaching"
     claim_subject: "Levelling up premium payment"
+    claim_amount_description: "Additional payment for teaching"
     support_email_address: "levellinguppremiumpayments@digital.education.gov.uk"
     admin:
       degree_in_an_eligible_subject: "Do you have an UG or a PG degree in an eligible subject?"
