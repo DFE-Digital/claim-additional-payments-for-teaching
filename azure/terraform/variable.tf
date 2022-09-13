@@ -37,6 +37,12 @@ variable "bypass_dfe_sign_in" {
   default     = false
 }
 
+variable "kentest" {
+  type        = string
+  description = "Ken test"
+  default     = null
+}
+
 variable "pr_number" {
   type        = string
   description = "Pull Request Number for Review App"

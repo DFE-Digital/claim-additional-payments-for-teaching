@@ -62,6 +62,7 @@ resource "azurerm_container_group" "cont_grp_01" {
       "STORAGE_CREDENTIALS"                            = data.azurerm_key_vault_secret.StorageCredentials.value
       "WORKER_COUNT"                                   = "4"
       "BYPASS_DFE_SIGN_IN"                             = var.bypass_dfe_sign_in
+      "KENTEST"                                        = var.kentest
     }
 
     ports {
@@ -140,6 +141,7 @@ resource "azurerm_container_group" "cont_grp_02" {
       "STORAGE_CREDENTIALS"                            = data.azurerm_key_vault_secret.StorageCredentials.value
       "WORKER_COUNT"                                   = "4"
       "BYPASS_DFE_SIGN_IN"                             = var.bypass_dfe_sign_in
+      "KENTEST"                                        = var.kentest
     }
 
     name  = local.cont_02_name

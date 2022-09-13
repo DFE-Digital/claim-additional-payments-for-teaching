@@ -48,6 +48,11 @@ variable "bypass_dfe_sign_in" {
   type        = bool
   description = "Bypass DFE Sign-In authentication and use a default role"
 }
+variable "kentest" {
+  type        = string
+  description = "Ken test"
+  default     = null
+}
 
 variable "pr_number" {
   type        = string
@@ -107,5 +112,6 @@ locals {
     "DOCKER_REGISTRY_SERVER_URL"                     = "https://${local.docker_registry}"
     "BYPASS_DFE_SIGN_IN"                             = var.bypass_dfe_sign_in
     "PR_NUMBER"                                      = var.pr_number
+    "KENTEST"                                        = var.kentest
   }
 }
