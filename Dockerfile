@@ -19,9 +19,7 @@ USER appuser
 
 ENV APP_HOME /app
 ENV DEPS_HOME /deps
-ARG RAILS_ENV
-ENV RAILS_ENV ${RAILS_ENV:-production}
-ENV NODE_ENV ${RAILS_ENV:-production}
+ENV RAILS_ENV production
 
 # ------------------------------------------------------------------------------
 # dependencies
@@ -48,13 +46,7 @@ COPY Gemfile.lock ${DEPS_HOME}/Gemfile.lock
 RUN gem install bundler
 ENV BUNDLE_BUILD__SASSC=--disable-march-tune-native
 RUN bundle config set frozen 'true'
-RUN if [ ${RAILS_ENV} = "production" ]; then \
-  bundle config set without 'development test'; \
-  elif [ ${RAILS_ENV} = "test" ]; then \
-  bundle config set without 'development'; \
-  else \
-  bundle config set without 'test'; \
-  fi
+RUN bundle config set without 'development test';
 # End
 
 RUN bundle config
@@ -66,11 +58,7 @@ COPY yarn.lock ${DEPS_HOME}/yarn.lock
 
 USER root
 
-RUN if [ ${RAILS_ENV} = "production" ]; then \
-  yarn install --frozen-lockfile --production; \
-  else \
-  yarn install --frozen-lockfile; \
-  fi
+RUN yarn install --frozen-lockfile --production
 # End
 
 # ------------------------------------------------------------------------------
@@ -144,8 +132,7 @@ USER root
 RUN chmod -R 777 ${APP_HOME}/
 RUN chown -hR appuser:appgroup ${APP_HOME}/
 
-RUN if [ ${RAILS_ENV} = "production" ]; then \
-  DFE_SIGN_IN_API_CLIENT_ID= \
+RUN DFE_SIGN_IN_API_CLIENT_ID= \
   DFE_SIGN_IN_API_SECRET= \
   DFE_SIGN_IN_API_ENDPOINT= \
   DQT_CLIENT_HEADERS= \
@@ -153,8 +140,7 @@ RUN if [ ${RAILS_ENV} = "production" ]; then \
   DQT_CLIENT_PARAMS= \
   ADMIN_ALLOWED_IPS= \
   ENVIRONMENT_NAME= \
-  bundle exec rake assets:precompile; \
-  fi
+  bundle exec rake assets:precompile \
 EXPOSE 3000
 
 USER appuser
@@ -193,6 +179,9 @@ FROM web AS test
 
 USER root
 
+ENV RAILS_ENV test
+ENV NODE_ENV test
+
 RUN apk add chromium chromium-chromedriver
 
 USER appuser
@@ -200,7 +189,23 @@ USER appuser
 COPY --from=shellcheck / /opt/shellcheck/
 ENV PATH /opt/shellcheck/bin:${PATH}
 
-# End
+# Install additional dependencies
+COPY Gemfile ${DEPS_HOME}/Gemfile
+COPY Gemfile.lock ${DEPS_HOME}/Gemfile.lock
+RUN gem install bundler
+ENV BUNDLE_BUILD__SASSC=--disable-march-tune-native
+RUN bundle config set frozen 'true'
+
+RUN bundle config
+RUN bundle install --retry 3
+
+# Install JavaScript dependencies
+COPY package.json ${DEPS_HOME}/package.json
+COPY yarn.lock ${DEPS_HOME}/yarn.lock
+
+RUN yarn install --frozen-lockfile
+
+
 # Copy all files
 # This is only for the test target and ensures that all the files that could be linted locally are also linted on CI.
 # We need to be mindful of files that get added to the project, if they are secrets or superfluous we should add them

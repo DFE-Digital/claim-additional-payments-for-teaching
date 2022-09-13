@@ -7,9 +7,6 @@
 
     # Build and run tests
     - script: |
-        docker pull $(dockerRegistry)/$(dockerImageName):cache-test-dependencies || true
-        docker pull $(dockerRegistry)/$(dockerImageName):cache-test || true
-
         docker-compose --file=docker-compose.test.yml build
       displayName: Build test Docker image
       continueOnError: false
