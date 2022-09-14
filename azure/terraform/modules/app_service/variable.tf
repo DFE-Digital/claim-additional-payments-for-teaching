@@ -54,6 +54,12 @@ variable "pr_number" {
   description = "Pull Request Number for Review App"
 }
 
+variable "suppress_dfe_analytics_init" {
+  type        = string
+  description = "Stop DfE-analytics from booting"
+  default     = null
+}
+
 locals {
   stash_port         = var.rg_prefix == "s118p01" ? "23888" : "17000"
 
