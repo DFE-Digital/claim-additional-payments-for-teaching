@@ -60,7 +60,7 @@ RSpec.describe PaymentConfirmation do
 
     it "populates the payroll run's confirmation_report_uploaded_by and sets a payment date of the upcoming Friday" do
       a_tuesday = Date.parse("2019-01-01")
-      the_following_friday = Date.parse("2019-01-04")
+      the_following_friday = Date.parse("2019-01-25")
 
       travel_to a_tuesday do
         payment_confirmation.ingest
@@ -73,7 +73,7 @@ RSpec.describe PaymentConfirmation do
 
     it "sends payment confirmation emails with a payment date of the following Friday" do
       a_tuesday = Date.parse("2019-01-01")
-      the_following_friday = "4 January 2019"
+      the_following_friday = "Friday 25th January 2019"
       travel_to a_tuesday do
         perform_enqueued_jobs do
           payment_confirmation.ingest

@@ -39,7 +39,9 @@ class PaymentConfirmation
   private
 
   def scheduled_payment_date
-    Date.today.next_occurring(:friday)
+    end_of_month = Date.today.end_of_month
+
+    end_of_month.wday == 5 ? Date.today : end_of_month.prev_occurring(:friday)
   end
 
   def validate
