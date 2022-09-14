@@ -6,6 +6,7 @@ pool:
   vmImage: ubuntu-latest
 
 variables:
+  - group: azure-review-app
   - name: app_name
     value: pr-$(pr_number)
   - name: service_connection
@@ -83,6 +84,17 @@ steps:
         workingDirectory: $(Agent.BuildDirectory)/s/azure/terraform
         environmentServiceName: azdo.pipelines.cip.S118D.armfe1ef140-8bef-4043-b5ee-c449e6f951ef
         commandOptions: '-var="pr_number=$(pr_number)" -var="input_container_version=ignored" -var-file workspace_variables/review.tfvars.json'
+
+    - task: AzurePowerShell@5
+      displayName: Delete State File
+      inputs:
+        azureSubscription: $(service_connection)
+        ScriptType: InlineScript
+        Inline: |
+          $connectionstring= Get-AzKeyVaultSecret -VaultName "s118d02-secrets-kv" -Name "connectionstring" -AsPlainText
+          az storage blob delete --account-name $connectionstring --container-name $(backendAzureRmContainerName) --name  $(backendAzureRmKey) --connection-string $(connectionstring) --verbose
+        preferredAzurePowerShellVersion: 3.1.0
+
 
     - task: AzurePowerShell@5
       displayName: Enable KV network firewall rule
