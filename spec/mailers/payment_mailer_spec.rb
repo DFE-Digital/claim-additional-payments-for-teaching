@@ -17,10 +17,9 @@ RSpec.describe PaymentMailer, type: :mailer do
           expect(mail["reply_to_id"].value).to eql(policy.notify_reply_to_id)
         end
 
-        it "mentions the type of claim in the subject and body" do
+        it "mentions the type of claim in the subject" do
           claim_description = I18n.t("#{policy.locale_key}.claim_description")
           expect(mail.subject).to include(claim_description)
-          expect(mail.body.encoded).to include(claim_description)
         end
 
         it "includes the claim reference in the subject and body" do
@@ -32,20 +31,19 @@ RSpec.describe PaymentMailer, type: :mailer do
           expect(mail.body.encoded).to start_with("Dear #{payment.first_name} #{payment.surname},")
         end
 
-        it "mentions that claim is being paid in the subject and body" do
+        it "mentions that claim is being paid in the subject" do
           expect(mail.subject).to include("paying")
-          expect(mail.body.encoded).to include("We’re paying your claim")
         end
 
         it "includes the NET pay amount and payment date in the body" do
-          expect(mail.body.encoded).to include("You will receive £500.00 on or after Friday 1st January 2019")
+          expect(mail.body.encoded).to include("You will receive £500.00 on Friday 1st January 2019")
         end
 
         context "when user does not currently have a student loan" do
           let(:payment) { create(:payment, :with_figures, student_loan_repayment: nil, claims: [claim]) }
 
           it "does not mention the content relating to student loan deductions" do
-            expect(mail.body.encoded).to_not include("student loan contribution")
+            expect(mail.body.encoded).to_not include("subject to a student loan contribution")
           end
         end
 
@@ -59,7 +57,7 @@ RSpec.describe PaymentMailer, type: :mailer do
 
           it "mentions the postgraduate loan deduction content and lists their contribution" do
             expect(mail.body.encoded).to include("This payment is treated as pay and is therefore subject to a student loan contribution, if applicable.")
-            expect(mail.body.encoded).to include("Postgraduate loan contribution: £8.00")
+            expect(mail.body.encoded).to include("Postgraduate Master’s or PhD loan contribution: £8.00")
           end
         end
       end
@@ -97,27 +95,18 @@ RSpec.describe PaymentMailer, type: :mailer do
         expect(mail.body.encoded).to start_with("Dear #{payment.first_name} #{payment.surname},")
       end
 
-      it "mentions that claims are being paid in the body" do
-        expect(mail.body.encoded).to include("We’re paying:")
-      end
-
       it "includes the NET pay amount and payment date in the body" do
-        expect(mail.body.encoded).to include("You will receive £2,500.00 on or after Friday 1st January 2019")
+        expect(mail.body.encoded).to include("You will receive £2,500.00 on Friday 1st January 2019")
       end
 
       it "mentions the type of claim in the body" do
-        expect(mail.body.encoded).to include(I18n.t("#{claims[0].policy.locale_key}.claim_description"))
-        expect(mail.body.encoded).to include(I18n.t("#{claims[1].policy.locale_key}.claim_description"))
+        expect(mail.body.encoded).to include(I18n.t("#{claims[0].policy.locale_key}.claim_amount_description"))
+        expect(mail.body.encoded).to include(I18n.t("#{claims[1].policy.locale_key}.claim_amount_description"))
       end
 
       it "includes the claims' references in the body" do
         expect(mail.body.encoded).to include(claims[0].reference)
         expect(mail.body.encoded).to include(claims[1].reference)
-      end
-
-      it "includes the support email address for each policy" do
-        expect(mail.body.encoded).to include(I18n.t("maths_and_physics.support_email_address"))
-        expect(mail.body.encoded).to include(I18n.t("student_loans.support_email_address"))
       end
 
       it "includes the amount claimed for each claim" do
@@ -129,7 +118,7 @@ RSpec.describe PaymentMailer, type: :mailer do
         let(:payment) { create(:payment, :with_figures, student_loan_repayment: nil, claims: claims) }
 
         it "does not mention the content relating to student loan deductions" do
-          expect(mail.body.encoded).to_not include("student loan contribution")
+          expect(mail.body.encoded).to_not include("subject to a student loan contribution")
         end
       end
 

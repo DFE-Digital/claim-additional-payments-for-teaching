@@ -1,8 +1,6 @@
 Dear <%= @display_name %>,
 
-We’re paying your claim <%= @claim_description %>.
-
-^ You will receive <%=number_to_currency(@payment.net_pay) %> on Friday <%= @payment_date.to_s(:custom_ordinal) %>.
+You will receive <%=number_to_currency(@payment.net_pay) %> on Friday <%= @payment_date.to_s(:custom_ordinal) %>.
 
 # Breakdown of payment
 
@@ -40,7 +38,7 @@ The payment will come from the Department for Education.
 
 # Contact us
 
-If you have any questions about your claim, please reply to this email: with your unique reference and your query: <%= @reference %>.
+If you have any questions about your claim, please reply to this email with your unique reference and your query: <%= @reference %>.
 
 ----
 
