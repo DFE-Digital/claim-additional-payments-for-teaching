@@ -10,7 +10,6 @@ module Payroll
     UNITED_KINGDOM = "United Kingdom"
     BASIC_RATE_TAX_CODE = "BR"
     CUMULATIVE_TAX_BASIS = "0"
-    NOT_EMPLOYEES_ONLY_JOB = "3"
     NI_CATEGORY_FOR_ALL_EMPLOYEES = "A"
     HAS_STUDENT_LOAN = "T"
     STUDENT_LOAN_PLAN_1 = "1"
@@ -20,6 +19,11 @@ module Payroll
     STUDENT_LOAN_PLAN_2_AND_3 = "2 and 3"
     STUDENT_LOAN_PLAN_4_AND_3 = "4 and 3"
     STUDENT_LOAN_PLAN_3 = "3"
+    MARITAL_STATUS = "Other"
+    PAYMENT_FREQUENCY = "Weekly"
+    PAYMENT_METHOD = "Direct BACS"
+    RIGHT_TO_WORK_CONFIRM_STATUS = "2"
+    TITLE = "Prof."
 
     def to_s
       CSV.generate_line(data)
@@ -35,7 +39,7 @@ module Payroll
     end
 
     def title
-      "Prof"
+      TITLE
     end
 
     def payroll_gender
@@ -110,10 +114,6 @@ module Payroll
       CUMULATIVE_TAX_BASIS
     end
 
-    def new_employee
-      NOT_EMPLOYEES_ONLY_JOB
-    end
-
     def ni_category
       NI_CATEGORY_FOR_ALL_EMPLOYEES
     end
@@ -158,6 +158,22 @@ module Payroll
 
     def payment_id
       model.id
+    end
+
+    def marital_status
+      MARITAL_STATUS
+    end
+
+    def payment_method
+      PAYMENT_METHOD
+    end
+
+    def payment_frequency
+      PAYMENT_FREQUENCY
+    end
+
+    def right_to_work_confirm_status
+      RIGHT_TO_WORK_CONFIRM_STATUS
     end
 
     def model

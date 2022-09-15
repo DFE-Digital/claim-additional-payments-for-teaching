@@ -54,12 +54,13 @@ RSpec.describe Payroll::PaymentCsvRow do
             claim = claims.first
 
             expect(row).to eq([
-              "Prof",
+              "Prof.",
               claim.first_name,
               claim.middle_name,
               claim.surname,
               claim.national_insurance_number,
               "F",
+              "Other",
               "09/09/2019",
               "15/09/2019",
               claim.date_of_birth.strftime("%d/%m/%Y"),
@@ -73,17 +74,19 @@ RSpec.describe Payroll::PaymentCsvRow do
               "United Kingdom",
               "BR",
               "0",
-              "3",
               "A",
               "T",
               "2",
+              "Direct BACS",
+              "Weekly",
               claim.banking_name,
               "00-11-22",
               claim.bank_account_number,
               claim.building_society_roll_number,
               payment_award_amount.to_s,
               payment.id,
-              payment.policies_in_payment
+              payment.policies_in_payment,
+              "2"
             ])
           end
         end
@@ -127,12 +130,13 @@ RSpec.describe Payroll::PaymentCsvRow do
             claim = claims.first
 
             expect(row).to eq([
-              "Prof",
+              "Prof.",
               claim.first_name,
               claim.middle_name,
               claim.surname,
               claim.national_insurance_number,
               "M",
+              "Other",
               "09/09/2019",
               "15/09/2019",
               claim.date_of_birth.strftime("%d/%m/%Y"),
@@ -146,17 +150,19 @@ RSpec.describe Payroll::PaymentCsvRow do
               "United Kingdom",
               "BR",
               "0",
-              "3",
               "A",
               "T",
               "1 and 3",
+              "Direct BACS",
+              "Weekly",
               claim.banking_name,
               "33-09-90",
               claim.bank_account_number,
               nil,
               payment_award_amount.to_s,
               payment.id,
-              payment.policies_in_payment
+              payment.policies_in_payment,
+              "2"
             ])
           end
         end
@@ -197,12 +203,13 @@ RSpec.describe Payroll::PaymentCsvRow do
             claim = claims.first
 
             expect(row).to eq([
-              "Prof",
+              "Prof.",
               claim.first_name,
               claim.middle_name,
               claim.surname,
               claim.national_insurance_number,
               "F",
+              "Other",
               "09/09/2019",
               "15/09/2019",
               claim.date_of_birth.strftime("%d/%m/%Y"),
@@ -216,17 +223,19 @@ RSpec.describe Payroll::PaymentCsvRow do
               "United Kingdom",
               "BR",
               "0",
-              "3",
               "A",
               "T",
               "1",
+              "Direct BACS",
+              "Weekly",
               claim.banking_name,
               "21-09-09",
               claim.bank_account_number,
               nil,
               payment_award_amount.to_s,
               payment.id,
-              payment.policies_in_payment
+              payment.policies_in_payment,
+              "2"
             ])
           end
         end
@@ -238,8 +247,8 @@ RSpec.describe Payroll::PaymentCsvRow do
         it "returns the date of the second Monday and Sunday" do
           travel_to Date.parse "20 February 2019" do
             row = CSV.parse(subject.to_s).first
-            expect(row[6]).to eq "11/02/2019"
-            expect(row[7]).to eq "17/02/2019"
+            expect(row[7]).to eq "11/02/2019"
+            expect(row[8]).to eq "17/02/2019"
           end
         end
       end
@@ -248,8 +257,8 @@ RSpec.describe Payroll::PaymentCsvRow do
         it "returns the date of the second Monday and Sunday" do
           travel_to Date.parse "9 July 2040" do
             row = CSV.parse(subject.to_s).first
-            expect(row[6]).to eq "09/07/2040"
-            expect(row[7]).to eq "15/07/2040"
+            expect(row[7]).to eq "09/07/2040"
+            expect(row[8]).to eq "15/07/2040"
           end
         end
       end
@@ -258,8 +267,8 @@ RSpec.describe Payroll::PaymentCsvRow do
         it "returns the date of the second Monday and Sunday" do
           travel_to Date.parse "1 June 2020" do
             row = CSV.parse(subject.to_s).first
-            expect(row[6]).to eq "08/06/2020"
-            expect(row[7]).to eq "14/06/2020"
+            expect(row[7]).to eq "08/06/2020"
+            expect(row[8]).to eq "14/06/2020"
           end
         end
       end
@@ -267,7 +276,7 @@ RSpec.describe Payroll::PaymentCsvRow do
 
     describe "PAYMENT_ID" do
       it "is 36 characters long, satisfying Cantium’s length validation" do
-        expect(row[28].length).to eq(36)
+        expect(row[30].length).to eq(36)
       end
     end
 
