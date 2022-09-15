@@ -40,11 +40,11 @@ The Gross amount is comprised of the payment you receive, your student loan cont
 
 The payment will come from the Department for Education.
 
-^ This email should be treated as a payslip, and kept for your own records in line with HMRC recommendations (22 months after the financial year the payment relates to). The payment breakdown details will not appear on your P60, and cannot be reissued.
+This email should be treated as a payslip, and kept for your own records in line with HMRC recommendations (22 months after the financial year the payment relates to). The payment breakdown details will not appear on your P60, and cannot be reissued.
 
 # Contact us
 
-If you have any questions about your claim, please reply to this email with your unique reference and your query.
+^ If you have any questions about your claim, please reply to this email with your unique reference and your query.
 <% @payment.claims.each do |claim| %>
 * <%= I18n.t("#{claim.policy.locale_key}.claim_subject") %>, reference: <%= claim.reference %>
 <% end %>

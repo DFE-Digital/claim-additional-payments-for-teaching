@@ -59,21 +59,21 @@ RSpec.describe PaymentConfirmation do
     end
 
     it "populates the payroll run's confirmation_report_uploaded_by and sets a payment date of the upcoming Friday" do
-      a_tuesday = Date.parse("2019-01-01")
-      the_following_friday = Date.parse("2019-01-25")
+      a_tuesday = Date.parse("2022-09-13")
+      last_friday_of_the_month = Date.parse("2022-09-30")
 
       travel_to a_tuesday do
         payment_confirmation.ingest
         payroll_run.reload
 
         expect(payroll_run.confirmation_report_uploaded_by).to eq(admin_user)
-        expect(payroll_run.scheduled_payment_date).to eq(the_following_friday)
+        expect(payroll_run.scheduled_payment_date).to eq(last_friday_of_the_month)
       end
     end
 
     it "sends payment confirmation emails with a payment date of the following Friday" do
-      a_tuesday = Date.parse("2019-01-01")
-      the_following_friday = "Friday 25th January 2019"
+      a_tuesday = Date.parse("2022-09-13")
+      last_friday_of_the_month = "Friday 30th September 2022"
       travel_to a_tuesday do
         perform_enqueued_jobs do
           payment_confirmation.ingest
@@ -89,9 +89,9 @@ RSpec.describe PaymentConfirmation do
         expect(second_email.to).to eq([payroll_run.payments[1].claims.first.email_address])
         expect(third_email.to).to eq([payroll_run.payments[2].claims.first.email_address])
 
-        expect(first_email.body.raw_source).to include(the_following_friday)
-        expect(second_email.body.raw_source).to include(the_following_friday)
-        expect(third_email.body.raw_source).to include(the_following_friday)
+        expect(first_email.body.raw_source).to include(last_friday_of_the_month)
+        expect(second_email.body.raw_source).to include(last_friday_of_the_month)
+        expect(third_email.body.raw_source).to include(last_friday_of_the_month)
       end
     end
   end

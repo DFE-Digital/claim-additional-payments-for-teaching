@@ -18,8 +18,7 @@ module LevellingUpPremiumPayments
   end
 
   def notify_reply_to_id
-    # TODO real value
-    "3f85a1f7-9400-4b48-9a31-eaa643d6b977"
+    "03ece7eb-2a5b-461b-9c91-6630d0051aa6"
   end
 
   def eligibility_page_url
