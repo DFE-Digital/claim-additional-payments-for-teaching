@@ -11,6 +11,7 @@ module Payroll
       surname: "SURNAME",
       national_insurance_number: "SS_NO",
       payroll_gender: "GENDER",
+      marital_status: "MARITAL_STATUS",
       start_date: "START_DATE",
       end_date: "END_DATE",
       date_of_birth: "BIRTH_DATE",
@@ -24,17 +25,19 @@ module Payroll
       country: "ADDRESS_COUNTRY",
       tax_code: "TAX_CODE",
       tax_basis: "TAX_BASIS",
-      new_employee: "NEW_EMP_Q_VL",
       ni_category: "NI_CATEGORY",
       has_student_loan: "CON_STU_LOAN_I",
       student_loan_plan: "PLAN_TYPE",
+      payment_method: "PAYMENT_METHOD",
+      payment_frequency: "PAYMENT_FREQUENCY",
       banking_name: "BANK_NAME",
       bank_sort_code: "SORT_CODE",
       bank_account_number: "ACCOUNT_NUMBER",
       roll_number: "ROLL_NUMBER",
       scheme_amount: "SCHEME_AMOUNT",
       payment_id: "PAYMENT_ID",
-      policies_in_payment: "CLAIM_POLICIES"
+      policies_in_payment: "CLAIM_POLICIES",
+      right_to_work_confirm_status: "RIGHT_TO_WORK_CONFIRM_STATUS"
     }.freeze
 
     def initialize(payroll_run)

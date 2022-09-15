@@ -21,6 +21,7 @@ RSpec.describe Payroll::PaymentsCsv do
         SURNAME
         SS_NO
         GENDER
+        MARITAL_STATUS
         START_DATE
         END_DATE
         BIRTH_DATE
@@ -34,10 +35,11 @@ RSpec.describe Payroll::PaymentsCsv do
         ADDRESS_COUNTRY
         TAX_CODE
         TAX_BASIS
-        NEW_EMP_Q_VL
         NI_CATEGORY
         CON_STU_LOAN_I
         PLAN_TYPE
+        PAYMENT_METHOD
+        PAYMENT_FREQUENCY
         BANK_NAME
         SORT_CODE
         ACCOUNT_NUMBER
@@ -45,6 +47,7 @@ RSpec.describe Payroll::PaymentsCsv do
         SCHEME_AMOUNT
         PAYMENT_ID
         CLAIM_POLICIES
+        RIGHT_TO_WORK_CONFIRM_STATUS
       ].join(",")
 
       expect(file_lines[0]).to eq(expected_header_row)
