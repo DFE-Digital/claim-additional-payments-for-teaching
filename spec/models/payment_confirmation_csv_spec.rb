@@ -14,7 +14,7 @@ RSpec.describe PaymentConfirmationCsv do
     let(:csv) do
       <<~CSV
         Payroll Reference,Gross Value,Payment ID,NI,Employers NI,Student Loans,Tax,Net Pay,Claim Policies,Postgraduate Loans
-        DFE00001,487.48,88b5dba7-ccf1-4ffd-a3ce-20bd3ce1e500,33.9,38.98,0,89.6,325,"MathsAndPhysics StudentLoans",
+        DFE00001,448.5,88b5dba7-ccf1-4ffd-a3ce-20bd3ce1e500,33.9,38.98,0,89.6,325,"MathsAndPhysics StudentLoans",0.00
       CSV
     end
 
@@ -42,7 +42,7 @@ RSpec.describe PaymentConfirmationCsv do
     let(:csv) do
       <<~CSV
         Payroll Ref,Gross Val,Payment ID,NI,Employers NI,Student Loans,Tax,Net Pay,Claim Policies
-        DFE00001,487.48,88b5dba7-ccf1-4ffd-a3ce-20bd3ce1e500,33.9,38.98,0,89.6,325,StudentLoans
+        DFE00001,448.5,88b5dba7-ccf1-4ffd-a3ce-20bd3ce1e500,33.9,38.98,0,89.6,325,StudentLoans
       CSV
     end
 
@@ -70,7 +70,7 @@ RSpec.describe PaymentConfirmationCsv do
     let(:csv) do
       <<~CSV
         Payroll Reference,Gross Value,Payment ID,NI,Employers NI,Student Loans,Tax,Net Pay,Claim Policies,Postgraduate Loans
-        DFE00001,487.48,88b5dba7-ccf1-4ffd-a3ce-20bd3ce1e500,33.9,38.98,0,89.6,325,StudentLoans,
+        DFE00001,448.5,88b5dba7-ccf1-4ffd-a3ce-20bd3ce1e500,33.9,38.98,0,89.6,325,StudentLoans,0.00
       CSV
     end
 

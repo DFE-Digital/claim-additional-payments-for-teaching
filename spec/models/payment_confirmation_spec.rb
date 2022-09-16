@@ -4,10 +4,10 @@ RSpec.describe PaymentConfirmation do
   let(:payroll_run) { create(:payroll_run, claims_counts: {[MathsAndPhysics, StudentLoans] => 1, StudentLoans => 1, EarlyCareerPayments => 1}) }
   let(:csv) do
     <<~CSV
-      Payroll Reference,Gross Value,Payment ID,NI,Employers NI,Student Loans,Postgraduate Loans,Tax,Net Pay,Claim Policies
-      DFE00001,487.48,#{payroll_run.payments[0].id},33.9,38.98,0,0,89.6,325,StudentLoans
-      DFE00002,"1,211.15",#{payroll_run.payments[1].id},77.84,89.51,40,0,162.8,534,"MathsAndPhysics,StudentLoans"
-      DFE00003,"11,027.46",#{payroll_run.payments[2].id},268.84,1316.63,839,9710.83,1942,6660.99,EarlyCareerPayments
+      Payroll Reference,Gross Value,Payment ID,NI,Employers NI,Student Loans,Tax,Net Pay,Claim Policies,Postgraduate Loans
+      DFE00001,448.5,#{payroll_run.payments[0].id},33.9,38.98,0,89.6,325,StudentLoans,0
+      DFE00002,814.64,#{payroll_run.payments[1].id},77.84,89.51,40,162.8,534,"MathsAndPhysics,StudentLoans",0
+      DFE00003,9710.83,#{payroll_run.payments[2].id},268.84,1316.63,839,1942,6660.99,EarlyCareerPayments,9710.83
     CSV
   end
   let(:file) do
@@ -38,14 +38,14 @@ RSpec.describe PaymentConfirmation do
       expect(first_payment.gross_pay).to eq("448.5".to_d)
 
       expect(second_payment.payroll_reference).to eq("DFE00002")
-      expect(second_payment.gross_value).to eq("1211.15".to_d)
+      expect(second_payment.gross_value).to eq("904.15".to_d)
       expect(second_payment.national_insurance).to eq("77.84".to_d)
       expect(second_payment.employers_national_insurance).to eq("89.51".to_d)
       expect(second_payment.student_loan_repayment).to eq("40".to_d)
       expect(second_payment.postgraduate_loan_repayment).to eq("0".to_d)
       expect(second_payment.tax).to eq("162.8".to_d)
       expect(second_payment.net_pay).to eq("534".to_d)
-      expect(second_payment.gross_pay).to eq("1121.64".to_d)
+      expect(second_payment.gross_pay).to eq("814.64".to_d)
 
       expect(third_payment.payroll_reference).to eq("DFE00003")
       expect(third_payment.gross_value).to eq("11_027.46".to_d)
@@ -100,8 +100,8 @@ RSpec.describe PaymentConfirmation do
     let(:payroll_run) { create(:payroll_run, claims_counts: {StudentLoans => 1}) }
     let(:csv) do
       <<~CSV
-        Payroll Reference,Gross Value,Payment ID,NI,Employers NI,Student Loans,Postgraduate Loans,Tax,Net Pay,Claim Policies
-        DFE00001,487.48,#{payroll_run.payments[0].id},33.9,38.98,,,6,325,StudentLoans
+        Payroll Reference,Gross Value,Payment ID,NI,Employers NI,Student Loans,Tax,Net Pay,Claim Policies,Postgraduate Loans
+        DFE00001,448.5,#{payroll_run.payments[0].id},33.9,38.98,,89.6,325,StudentLoans,
       CSV
     end
 
@@ -126,11 +126,11 @@ RSpec.describe PaymentConfirmation do
     let(:extra_claim) { create(:claim) }
     let(:csv) do
       <<~CSV
-        Payroll Reference,Gross Value,Payment ID,NI,Employers NI,Student Loans,Postgraduate Loans,Tax,Net Pay,Claim Policies
-        DFE00001,487.48,#{payroll_run.payments[0].id},33.9,38.98,0,0,89.6,325,StudentLoans
-        DFE00002,904.15,#{payroll_run.payments[1].id},77.84,89.51,40,0,162.8,534,StudentLoans
-        DFE00003,"11,027.46",#{payroll_run.payments[2].id},268.84,1316.63,839,9710.83,1942,6660.99,EarlyCareerPayments
-        DFE00004,904.15,#{extra_claim.reference},77.84,89.51,40,0,162.8,534,StudentLoans
+        Payroll Reference,Gross Value,Payment ID,NI,Employers NI,Student Loans,Tax,Net Pay,Claim Policies,Postgraduate Loans
+        DFE00001,448.5,#{payroll_run.payments[0].id},33.9,38.98,0,89.6,325,StudentLoans,0
+        DFE00002,814.64,#{payroll_run.payments[1].id},77.84,89.51,40,162.8,534,StudentLoans,0
+        DFE00003,9710.83,#{payroll_run.payments[2].id},268.84,1316.63,839,1942,6660.99,EarlyCareerPayments,9710.83
+        DFE00004,814.64,#{extra_claim.reference},77.84,89.51,40,162.8,534,StudentLoans,0
       CSV
     end
 
@@ -147,9 +147,9 @@ RSpec.describe PaymentConfirmation do
   context "The CSV has a claim missing from the run" do
     let(:csv) do
       <<~CSV
-        Payroll Reference,Gross Value,Payment ID,NI,Employers NI,Student Loans,Postgraduate Loans,Tax,Net Pay,Claim Policies
-        DFE00001,487.48,#{payroll_run.payments[0].id},33.9,38.98,0,,89.6,325,MathsAndPhysics
-        DFE00003,"11,027.46",#{payroll_run.payments[2].id},268.84,1316.63,839,9710.83,1942,6660.99,EarlyCareerPayments
+        Payroll Reference,Gross Value,Payment ID,NI,Employers NI,Student Loans,Tax,Net Pay,Claim Policies,Postgraduate Loans
+        DFE00001,448.5,#{payroll_run.payments[0].id},33.9,38.98,0,89.6,325,MathsAndPhysics,
+        DFE00003,9710.83,#{payroll_run.payments[2].id},268.84,1316.63,839,1942,6660.99,EarlyCareerPayments,9710.83
       CSV
     end
 
@@ -167,11 +167,11 @@ RSpec.describe PaymentConfirmation do
   context "The CSV has a duplicate claim" do
     let(:csv) do
       <<~CSV
-        Payroll Reference,Gross Value,Payment ID,NI,Employers NI,Student Loans,Postgraduate Loans,Tax,Net Pay,Claim Policies
-        DFE00001,487.48,#{payroll_run.payments[0].id},33.9,38.98,0,,89.6,325,StudentLoans
-        DFE00002,904.15,#{payroll_run.payments[1].id},77.84,89.51,40,,162.8,534,StudentLoans
-        DFE00002,904.15,#{payroll_run.payments[1].id},77.84,89.51,40,0,162.8,534,StudentLoans
-        DFE00003,"11,027.46",#{payroll_run.payments[2].id},268.84,1316.63,839,9710.83,1942,6660.99,EarlyCareerPayments
+        Payroll Reference,Gross Value,Payment ID,NI,Employers NI,Student Loans,Tax,Net Pay,Claim Policies,Postgraduate Loans
+        DFE00001,448.5,#{payroll_run.payments[0].id},33.9,38.98,0,89.6,325,StudentLoans,
+        DFE00002,814.64,#{payroll_run.payments[1].id},77.84,89.51,40,162.8,534,StudentLoans,
+        DFE00002,814.64,#{payroll_run.payments[1].id},77.84,89.51,40,162.8,534,StudentLoans,0
+        DFE00003,9710.83,#{payroll_run.payments[2].id},268.84,1316.63,839,1942,6660.99,EarlyCareerPayments,9710.83
       CSV
     end
 
@@ -191,16 +191,16 @@ RSpec.describe PaymentConfirmation do
   context "The CSV has a blank value for a required field" do
     let(:csv) do
       <<~CSV
-        Payroll Reference,Gross Value,Payment ID,NI,Employers NI,Student Loans,Postgraduate Loans,Tax,Net Pay,Claim Policies
+        Payroll Reference,Gross Value,Payment ID,NI,Employers NI,Student Loans,Tax,Net Pay,Claim Policies,Postgraduate Loans
         DFE00001,,#{payroll_run.payments[0].id},,38.98,0,0,89.6,325,StudentLoans
-        DFE00002,904.15,#{payroll_run.payments[1].id},77.84,89.51,40,0,162.8,534,StudentLoans
-        DFE00003,"11,027.46",#{payroll_run.payments[2].id},268.84,1316.63,839,9710.83,1942,6660.99,EarlyCareerPayments
+        DFE00002,814.64,#{payroll_run.payments[1].id},77.84,89.51,40,162.8,534,StudentLoans,0
+        DFE00003,9710.83,#{payroll_run.payments[2].id},268.84,1316.63,839,1942,6660.99,EarlyCareerPayments,9710.83
       CSV
     end
 
     it "fails and populates its errors, and does not update the payments" do
       expect(payment_confirmation.ingest).to be_falsey
-      expect(payment_confirmation.errors).to eq(["The claim at line 2 has invalid data - Gross value can't be blank and National insurance can't be blank"])
+      expect(payment_confirmation.errors).to eq(["The claim at line 2 has invalid data - National insurance can't be blank and Gross pay can't be blank"])
 
       expect(payroll_run.payments[0].reload.payroll_reference).to eq(nil)
       expect(payroll_run.payments[1].reload.payroll_reference).to eq(nil)
