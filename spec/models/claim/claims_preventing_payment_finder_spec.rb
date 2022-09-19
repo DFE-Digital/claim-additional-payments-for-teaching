@@ -52,5 +52,18 @@ RSpec.describe Claim::ClaimsPreventingPaymentFinder do
         expect(claims_preventing_payment).to be_empty
       end
     end
+
+    context "when there is another claim with a blank value" do
+      let(:blank_personal_details) do
+        personal_details.merge(
+          building_society_roll_number: ""
+        )
+      end
+
+      it "does not include the other claim" do
+        create(:claim, :approved, blank_personal_details)
+        expect(claims_preventing_payment).to be_empty
+      end
+    end
   end
 end

@@ -32,7 +32,12 @@ class Claim
     end
 
     def attribute_does_not_match?(claim_to_compare, attribute)
-      claim_to_compare.read_attribute(attribute) != claim.read_attribute(attribute)
+      compare_attribute_value = claim_to_compare.read_attribute(attribute)
+      attribute_value = claim.read_attribute(attribute)
+
+      return false if [compare_attribute_value, attribute_value].all?(&:blank?)
+
+      compare_attribute_value != attribute_value
     end
   end
 end
