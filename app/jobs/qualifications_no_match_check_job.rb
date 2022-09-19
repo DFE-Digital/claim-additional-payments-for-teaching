@@ -1,12 +1,10 @@
 # This job is not called anywhere in the code but can be used manually to re-run
 # NO MATCH claims that initially got an incorrect response from the DQT API.
-# QualificationsCheckJob.perform_later
+# QualificationsNoMatchCheckJob.perform_later
 
 class QualificationsNoMatchCheckJob < ApplicationJob
   def perform
-    no_match_claims = claims_with_no_match_qualification_tasks
-
-    no_match_claims.each_slice(300) do |claims|
+    claims_with_no_match_qualification_tasks.each_slice(300) do |claims|
       Task.where(claim_id: claims.pluck(:id), name: "qualifications").delete_all
 
       claims.each do |claim|
@@ -25,6 +23,14 @@ class QualificationsNoMatchCheckJob < ApplicationJob
   private
 
   def claims_with_no_match_qualification_tasks
-    Claim.joins(:tasks).where(tasks: {name: "qualifications", claim_verifier_match: :none, manual: false})
+    current_year_claims.joins(:tasks).where(tasks: {name: "qualifications", claim_verifier_match: :none, manual: false})
+  end
+
+  def current_year_claims
+    Claim.by_academic_year(current_academic_year)
+  end
+
+  def current_academic_year
+    PolicyConfiguration.for(EarlyCareerPayments).current_academic_year
   end
 end
