@@ -5,6 +5,7 @@ permissions:
   pull-requests: write
   issues: write
   repository-projects: write
+  deployments: write
 
 jobs:
   post_comment_on_pr:
