@@ -122,8 +122,8 @@ RSpec.feature "Payroll" do
 
     csv = <<~CSV
       Payroll Reference,Gross Value,Payment ID,NI,Employers NI,Student Loans,Tax,Net Pay,Claim Policies,Postgraduate Loans
-      DFE00001,487.48,#{payroll_run.payments[0].id},33.9,38.98,0,89.6,325,StudentLoans,
-      DFE00002,904.15,#{payroll_run.payments[1].id},77.84,89.51,40,162.8,534,StudentLoans,
+      DFE00001,448.5,#{payroll_run.payments[0].id},33.9,38.98,0,89.6,325,StudentLoans,0.00
+      DFE00002,814.64,#{payroll_run.payments[1].id},77.84,89.51,40,162.8,534,StudentLoans,0.00
     CSV
 
     file = Tempfile.new
@@ -138,7 +138,8 @@ RSpec.feature "Payroll" do
     expect(page.find("table")).to have_content("Uploaded")
 
     expect(payroll_run.reload.confirmation_report_uploaded_by).to eq(@signed_in_user)
-    expect(payroll_run.payments[0].reload.gross_value).to eq("487.48".to_d)
+    expect(payroll_run.payments[0].reload.gross_value).to eq("448.5".to_d + "38.98".to_d)
+    expect(payroll_run.payments[0].reload.gross_pay).to eq("448.5".to_d)
 
     expect(ActionMailer::Base.deliveries.count).to eq(2)
 
