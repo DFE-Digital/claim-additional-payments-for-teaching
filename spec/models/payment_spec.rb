@@ -68,42 +68,49 @@ RSpec.describe Payment do
       expect(subject).to be_valid
     end
 
-    it "is invalid when claims’ teacher reference numbers do not match" do
+    it "is valid when claims have different type of blank values for the same field" do
+      claims[0].building_society_roll_number = ""
+      claims[1].building_society_roll_number = nil
+
+      expect(subject).to be_valid
+    end
+
+    it "is invalid when claims' teacher reference numbers do not match" do
       claims[0].teacher_reference_number = "9988776"
 
       expect(subject).not_to be_valid
       expect(subject.errors[:claims]).to eq(["#{claims[0].reference} and #{claims[1].reference} have different values for teacher reference number"])
     end
 
-    it "is invalid when claims’ dates of birth do not match" do
+    it "is invalid when claims' dates of birth do not match" do
       claims[0].date_of_birth = 20.years.ago.to_date
 
       expect(subject).not_to be_valid
       expect(subject.errors[:claims]).to eq(["#{claims[0].reference} and #{claims[1].reference} have different values for date of birth"])
     end
 
-    it "is invalid when claims’ bank account numbers do not match" do
+    it "is invalid when claims' bank account numbers do not match" do
       claims[0].bank_account_number = "34192192"
 
       expect(subject).not_to be_valid
       expect(subject.errors[:claims]).to eq(["#{claims[0].reference} and #{claims[1].reference} have different values for bank account number"])
     end
 
-    it "is invalid when claims’ bank sort codes do not match" do
+    it "is invalid when claims' bank sort codes do not match" do
       claims[0].bank_sort_code = "024828"
 
       expect(subject).not_to be_valid
       expect(subject.errors[:claims]).to eq(["#{claims[0].reference} and #{claims[1].reference} have different values for bank sort code"])
     end
 
-    it "is invalid when claims’ building society roll numbers do not match" do
+    it "is invalid when claims' building society roll numbers do not match" do
       claims[0].building_society_roll_number = "123456789/ABCD"
 
       expect(subject).not_to be_valid
       expect(subject.errors[:claims]).to eq(["#{claims[0].reference} and #{claims[1].reference} have different values for building society roll number"])
     end
 
-    it "is invalid when claims’ student loan plans do not match" do
+    it "is invalid when claims' student loan plans do not match" do
       claims[0].student_loan_plan = StudentLoan::PLAN_2
 
       expect(subject).not_to be_valid
@@ -118,7 +125,7 @@ RSpec.describe Payment do
       expect(subject.errors[:claims]).to eq(["#{claims[0].reference} and #{claims[1].reference} have different values for bank sort code and bank account number"])
     end
 
-    it "remains valid when claims’ names do not match" do
+    it "remains valid when claims' names do not match" do
       claims[0].first_name = "David"
       claims[0].middle_name = "Michael"
       claims[0].surname = "Rollins"
@@ -127,19 +134,19 @@ RSpec.describe Payment do
       expect(subject).to be_valid
     end
 
-    it "remains valid when claims’ payroll gender do not match" do
+    it "remains valid when claims' payroll gender do not match" do
       claims[0].payroll_gender = :male
 
       expect(subject).to be_valid
     end
 
-    it "remains valid when claims’ addresses do not match" do
+    it "remains valid when claims' addresses do not match" do
       claims[0].address_line_1 = "129 Brookland Drive"
 
       expect(subject).to be_valid
     end
 
-    it "is valid when claims’ National Insurance numbers do not match" do
+    it "is valid when claims' National Insurance numbers do not match" do
       claims[0].national_insurance_number = "JM102019D"
 
       expect(subject).to be_valid
@@ -162,7 +169,7 @@ RSpec.describe Payment do
       ]
     end
 
-    it "is taken from the payment’s most recently submitted claim" do
+    it "is taken from the payment's most recently submitted claim" do
       expect(payment.first_name).to eq("Margaret")
       expect(payment.address_line_1).to eq("17 Green Road")
       expect(payment.payroll_gender).to eq("female")
