@@ -44,7 +44,8 @@ class Payment < ApplicationRecord
 
   def personal_details_must_be_consistent
     mismatching_attributes = PERSONAL_DETAILS_ATTRIBUTES_FORBIDDING_DISCREPANCIES.select { |attribute|
-      claims.map(&attribute).uniq.count > 1
+      attribute_values = claims.map(&attribute)
+      attribute_values.uniq.count > 1 && !attribute_values.all?(&:blank?)
     }
 
     if mismatching_attributes.any?
