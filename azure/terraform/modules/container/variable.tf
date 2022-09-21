@@ -48,6 +48,11 @@ variable "bypass_dfe_sign_in" {
   type        = bool
   description = "Bypass DFE Sign-In authentication and use a default role"
 }
+variable "suppress_dfe_analytics_init" {
+  type        = string
+  description = "Stop DfE-analytics from booting"
+  default     = null
+}
 
 locals {
   stash_port         = var.rg_prefix == "s118p01" ? "23888" : "17000"

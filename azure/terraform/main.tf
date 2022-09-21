@@ -17,6 +17,7 @@ module "container" {
   environment             = var.environment
   canonical_hostname      = var.canonical_hostname
   bypass_dfe_sign_in      = var.bypass_dfe_sign_in
+  suppress_dfe_analytics_init = var.suppress_dfe_analytics_init
 }
 
 module "app_service" {
@@ -39,4 +40,5 @@ module "app_service" {
   canonical_hostname      = var.canonical_hostname
   bypass_dfe_sign_in      = var.bypass_dfe_sign_in
   pr_number               = var.pr_number
+  suppress_dfe_analytics_init = var.suppress_dfe_analytics_init
 }

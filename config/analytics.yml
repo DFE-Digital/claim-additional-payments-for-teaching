@@ -1,19 +1,5 @@
 ---
 shared:
-  :delayed_jobs:
-  - id
-  - priority
-  - attempts
-  - handler
-  - last_error
-  - run_at
-  - locked_at
-  - failed_at
-  - locked_by
-  - queue
-  - created_at
-  - updated_at
-  - cron
   :policy_configurations:
   - id
   - open_for_submissions
@@ -105,28 +91,6 @@ shared:
   - date_of_birth_day
   - date_of_birth_month
   - date_of_birth_year
-  :claim_decisions:
-  - application_id
-  - decision_date
-  - trn
-  - application_decision
-  - application_policy
-  - subject
-  - school_name
-  - local_authorities_name
-  - local_authority_district_name
-  - claimant_age
-  - claimant_gender
-  - claimant_year_qualified
-  :claim_stats:
-  - claim_id
-  - policy
-  - claim_started_at
-  - claim_submitted_at
-  - decision_made_at
-  - result
-  - submission_length
-  - decision_length
   :decisions:
   - id
   - result
@@ -283,7 +247,7 @@ shared:
   - created_by_id
   - created_at
   - updated_at
-  :tps_data:
+  :teachers_pensions_service:
   - id
   - teacher_reference_number
   - start_date
