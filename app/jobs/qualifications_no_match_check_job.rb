@@ -23,11 +23,11 @@ class QualificationsNoMatchCheckJob < ApplicationJob
   private
 
   def claims_with_no_match_qualification_tasks
-    current_year_claims.joins(:tasks).where(tasks: {name: "qualifications", claim_verifier_match: :none, manual: false})
+    current_year_claims_awaiting_decision.joins(:tasks).where(tasks: {name: "qualifications", claim_verifier_match: :none, manual: false})
   end
 
-  def current_year_claims
-    Claim.by_academic_year(current_academic_year)
+  def current_year_claims_awaiting_decision
+    Claim.by_academic_year(current_academic_year).awaiting_decision
   end
 
   def current_academic_year
