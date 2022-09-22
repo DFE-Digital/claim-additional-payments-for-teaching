@@ -1,8 +1,9 @@
 name: Delete Review App
 
 on:
-  pull_request:
-    types: [closed]
+  push:
+  # pull_request:
+  #   types: [closed]
 
 jobs:
   delete-review-app:
