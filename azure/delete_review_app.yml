@@ -18,7 +18,8 @@ variables:
   - name: backendAzureRmContainerName
     value: s118d02conttfstate
   - name: backendAzureRmKey
-    value: $(app_name).tfstate
+    #value: $(app_name).tfstate
+    value: "pr-2054.tfstate"
   - name: KeyVaultId
     value: /subscriptions/8655985a-2f87-44d7-a541-0be9a8c2779d/resourceGroups/s118d02-secrets/providers/Microsoft.KeyVault/vaults/s118d02-secrets-kv
 
@@ -32,24 +33,24 @@ resources:
     ref: master
 
 steps:
-    - checkout: claim
+    # - checkout: claim
 
-    - task: charleszipp.azure-pipelines-tasks-terraform.azure-pipelines-tasks-terraform-installer.TerraformInstaller@0
-      displayName: Pin terraform version
-      inputs:
-        terraformVersion: 1.2.4
+    # - task: charleszipp.azure-pipelines-tasks-terraform.azure-pipelines-tasks-terraform-installer.TerraformInstaller@0
+    #   displayName: Pin terraform version
+    #   inputs:
+    #     terraformVersion: 1.2.4
 
-    - task: charleszipp.azure-pipelines-tasks-terraform.azure-pipelines-tasks-terraform-cli.TerraformCLI@0
-      displayName: Terraform Init
-      inputs:
-        command: init
-        workingDirectory: $(Agent.BuildDirectory)/s/azure/terraform
-        backendType: azurerm
-        backendServiceArm: $(service_connection)
-        backendAzureRmResourceGroupName: $(backendAzureRmResourceGroupName)
-        backendAzureRmStorageAccountName: $(backendAzureRmStorageAccountName)
-        backendAzureRmContainerName: $(backendAzureRmContainerName)
-        backendAzureRmKey: $(backendAzureRmKey)
+    # - task: charleszipp.azure-pipelines-tasks-terraform.azure-pipelines-tasks-terraform-cli.TerraformCLI@0
+    #   displayName: Terraform Init
+    #   inputs:
+    #     command: init
+    #     workingDirectory: $(Agent.BuildDirectory)/s/azure/terraform
+    #     backendType: azurerm
+    #     backendServiceArm: $(service_connection)
+    #     backendAzureRmResourceGroupName: $(backendAzureRmResourceGroupName)
+    #     backendAzureRmStorageAccountName: $(backendAzureRmStorageAccountName)
+    #     backendAzureRmContainerName: $(backendAzureRmContainerName)
+    #     backendAzureRmKey: $(backendAzureRmKey)
 
     - task: AzurePowerShell@5
       displayName: Disable KV network firewall rule
@@ -77,13 +78,13 @@ steps:
           While ($null -eq $AccessAllowed -and $LoopCount -lt 6)
         preferredAzurePowerShellVersion: 3.1.0
 
-    - task: charleszipp.azure-pipelines-tasks-terraform.azure-pipelines-tasks-terraform-cli.TerraformCLI@0
-      displayName: Terraform destroy
-      inputs:
-        command: destroy
-        workingDirectory: $(Agent.BuildDirectory)/s/azure/terraform
-        environmentServiceName: azdo.pipelines.cip.S118D.armfe1ef140-8bef-4043-b5ee-c449e6f951ef
-        commandOptions: '-var="pr_number=$(pr_number)" -var="input_container_version=ignored" -var-file workspace_variables/review.tfvars.json'
+    # - task: charleszipp.azure-pipelines-tasks-terraform.azure-pipelines-tasks-terraform-cli.TerraformCLI@0
+    #   displayName: Terraform destroy
+    #   inputs:
+    #     command: destroy
+    #     workingDirectory: $(Agent.BuildDirectory)/s/azure/terraform
+    #     environmentServiceName: azdo.pipelines.cip.S118D.armfe1ef140-8bef-4043-b5ee-c449e6f951ef
+    #     commandOptions: '-var="pr_number=$(pr_number)" -var="input_container_version=ignored" -var-file workspace_variables/review.tfvars.json'
 
     - task: AzurePowerShell@5
       displayName: Delete State File
@@ -91,8 +92,11 @@ steps:
         azureSubscription: $(service_connection)
         ScriptType: InlineScript
         Inline: |
-          $connectionstring= Get-AzKeyVaultSecret -VaultName "s118d02-secrets-kv" -Name "connectionstring" -AsPlainText
-          az storage blob delete --account-name $connectionstring --container-name $(backendAzureRmContainerName) --name  $(backendAzureRmKey) --connection-string $(connectionstring) --verbose
+          #$connectionstring= Get-AzKeyVaultSecret -VaultName "s118d02-secrets-kv" -Name "connectionstring" -AsPlainText
+          $saKey = (Get-AzStorageAccountKey -ResourceGroupName $(backendAzureRmResourceGroupName) -Name $(backendAzureRmStorageAccountName))[0].Value
+          'DefaultEndpointsProtocol=https;AccountName=' + $saName + ';AccountKey=' + $saKey + ';EndpointSuffix=core.windows.net'
+          az storage blob delete --account-name $sakey--container-name $(backendAzureRmContainerName) --name  $(backendAzureRmKey) --connection-string $(connectionstring) --verbose
+          #az storage blob delete --account-name $connectionstring --container-name $(backendAzureRmContainerName) --name  $(backendAzureRmKey) --connection-string $(connectionstring) --verbose
         preferredAzurePowerShellVersion: 3.1.0
 
 

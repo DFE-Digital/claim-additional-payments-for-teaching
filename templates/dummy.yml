@@ -1,0 +1,7 @@
+- task: AzurePowerShell@5
+      displayName: TEST
+      inputs:
+        ScriptType: InlineScript
+        Inline: |
+        Write-Host "test"
+        preferredAzurePowerShellVersion: 3.1.0
