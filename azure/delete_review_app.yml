@@ -85,6 +85,16 @@ steps:
         commandOptions: '-var="pr_number=$(pr_number)" -var="input_container_version=ignored" -var-file workspace_variables/review.tfvars.json'
 
     - task: AzurePowerShell@5
+      displayName: Delete State File
+      inputs:
+        azureSubscription: $(service_connection)
+        ScriptType: InlineScript
+        Inline: |
+          $saKey = (Get-AzStorageAccount -ResourceGroupName $(backendAzureRmResourceGroupName) -Name $(backendAzureRmStorageAccountName)).Context.ConnectionString
+          az storage blob delete --account-name $(backendAzureRmStorageAccountName) --container-name $(backendAzureRmContainerName) --name  $(backendAzureRmKey) --connection-string $sakey
+        preferredAzurePowerShellVersion: 3.1.0
+
+    - task: AzurePowerShell@5
       displayName: Enable KV network firewall rule
       inputs:
         azureSubscription: $(service_connection)
