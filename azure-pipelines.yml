@@ -17,7 +17,7 @@ variables:
     value: pr-$(System.PullRequest.PullRequestNumber)
 
 stages:
-
+###testprclose
 - stage: Build
   jobs:
   - job: Build
