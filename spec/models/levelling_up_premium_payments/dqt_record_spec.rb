@@ -38,8 +38,8 @@ RSpec.describe LevellingUpPremiumPayments::DqtRecord do
         itt_subjects: itt_subjects,
         itt_subject_codes: itt_subject_codes,
         itt_start_date: Date.parse("1/9/2019"),
-        qts_award_date: Date.parse("31/8/2019"),
-        qualification_name: "Postgraduate Certificate in Education"
+        qts_award_date: qts_award_date,
+        qualification_name: qualification_name
       }
     )
   end
@@ -47,6 +47,8 @@ RSpec.describe LevellingUpPremiumPayments::DqtRecord do
   let(:itt_subjects) { ["mathematics"] }
   let(:itt_subject_codes) { [] }
   let(:degree_codes) { [] }
+  let(:qts_award_date) { Date.parse("30/9/2019") }
+  let(:qualification_name) { "Postgraduate Certificate in Education" }
 
   describe "#eligible?" do
     context "without ITT and degree codes" do
@@ -115,6 +117,21 @@ RSpec.describe LevellingUpPremiumPayments::DqtRecord do
 
           it { is_expected.to be_eligible }
         end
+      end
+    end
+
+    context "when QTS award date is before ITT start date" do
+      let(:itt_subject_codes) { ["G100"] }
+      let(:qts_award_date) { Date.parse("30/8/2019") }
+
+      it { is_expected.not_to be_eligible }
+
+      context "when route into teaching is different than postgrad" do
+        let(:qualification) { :undergraduate_itt }
+        let(:qualification_name) { "BA" }
+        let(:itt_academic_year) { AcademicYear::Type.new.serialize(AcademicYear.new(2018)) }
+
+        it { is_expected.to be_eligible }
       end
     end
   end
