@@ -55,18 +55,13 @@ steps:
           While ($null -eq $AccessAllowed -and $LoopCount -lt 6)
         preferredAzurePowerShellVersion: 3.1.0
 
-    - script: docker login -u $(dockerId) -p $pass
-      env:
-        pass: $(dockerPassword)
-      displayName: Login to DockerHub
-
     - task: charleszipp.azure-pipelines-tasks-terraform.azure-pipelines-tasks-terraform-cli.TerraformCLI@0
       displayName: Terraform Plan
       inputs:
          command: plan
          workingDirectory: $(Agent.BuildDirectory)/s/azure/terraform
          environmentServiceName: ${{ parameters.ServiceConnection }}
-         commandOptions: '-var="input_container_version=$(Build.BuildNumber)" -var-file workspace_variables/${{ parameters.env}}.tfvars.json ${{ parameters.ExtraTerraformVariables}}'
+         commandOptions: '-var="input_container_version=web-$(COMMIT_ID)" -var-file workspace_variables/${{ parameters.env}}.tfvars.json ${{ parameters.ExtraTerraformVariables}}'
 
     - task: charleszipp.azure-pipelines-tasks-terraform.azure-pipelines-tasks-terraform-cli.TerraformCLI@0
       displayName: Terraform Apply
@@ -74,7 +69,7 @@ steps:
         command: apply
         workingDirectory: $(Agent.BuildDirectory)/s/azure/terraform
         environmentServiceName: ${{ parameters.ServiceConnection }}
-        commandOptions: '-var="input_container_version=$(Build.BuildNumber)" -var-file workspace_variables/${{ parameters.env}}.tfvars.json ${{ parameters.ExtraTerraformVariables}}'
+        commandOptions: '-var="input_container_version=web-$(COMMIT_ID)" -var-file workspace_variables/${{ parameters.env}}.tfvars.json ${{ parameters.ExtraTerraformVariables}}'
 
     - task: AzurePowerShell@5
       displayName: Enable KV network firewall rule
