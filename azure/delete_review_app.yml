@@ -7,7 +7,7 @@ pool:
 
 variables:
   - name: app_name
-    value: pr-$(pr_number)
+    value: pr-2054
   - name: service_connection
     value: azdo.pipelines.cip.S118D.armfe1ef140-8bef-4043-b5ee-c449e6f951ef
   - name: backendAzureRmResourceGroupName
