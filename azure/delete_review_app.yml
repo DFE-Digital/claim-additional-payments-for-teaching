@@ -94,15 +94,15 @@ steps:
           az storage blob delete --account-name $(backendAzureRmStorageAccountName) --container-name $(backendAzureRmContainerName) --name  $(backendAzureRmKey) --connection-string $sakey
         preferredAzurePowerShellVersion: 3.1.0
 
-    - task: AzurePowerShell@5
-      displayName: Enable KV network firewall rule
-      inputs:
-        azureSubscription: $(service_connection)
-        ScriptType: InlineScript
-        Inline: |
-          # Setting Variables
-          $KeyVault = Get-AzResource -ResourceId $(KeyVaultId) -ErrorAction SilentlyContinue
-          $KeyVault = Get-AzKeyVault -ResourceGroupName $KeyVault.ResourceGroupName -VaultName $KeyVault.Name
-          Write-Output 'Updating Key Vault rules...'
-          $KeyVault | Update-AzKeyVaultNetworkRuleSet -DefaultAction Deny
-        preferredAzurePowerShellVersion: 3.1.0
+    # - task: AzurePowerShell@5
+    #   displayName: Enable KV network firewall rule
+    #   inputs:
+    #     azureSubscription: $(service_connection)
+    #     ScriptType: InlineScript
+    #     Inline: |
+    #       # Setting Variables
+    #       $KeyVault = Get-AzResource -ResourceId $(KeyVaultId) -ErrorAction SilentlyContinue
+    #       $KeyVault = Get-AzKeyVault -ResourceGroupName $KeyVault.ResourceGroupName -VaultName $KeyVault.Name
+    #       Write-Output 'Updating Key Vault rules...'
+    #       $KeyVault | Update-AzKeyVaultNetworkRuleSet -DefaultAction Deny
+    #     preferredAzurePowerShellVersion: 3.1.0
