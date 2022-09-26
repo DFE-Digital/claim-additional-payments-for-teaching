@@ -1,102 +1,112 @@
     steps:
-    # Login to DockerHub
     - script: docker login -u $(dockerId) -p $pass
       env:
         pass: $(dockerPassword)
       displayName: Login to DockerHub
 
-    # Build and run tests
     - script: |
-        docker pull $(dockerRegistry)/$(dockerImageName):cache-test-dependencies || true
-        docker pull $(dockerRegistry)/$(dockerImageName):cache-test || true
+        docker version
+        docker buildx version
+      displayName: Print docker version
 
-        docker-compose --file=docker-compose.test.yml build
-      displayName: Build test Docker image
-      continueOnError: false
+    - script: |
+        BRANCH_FULL=$(Build.SourceBranch)
+        BRANCH=${BRANCH_FULL##*/}
+        echo "##vso[task.setvariable variable=BRANCH;]${BRANCH}"
+      condition: eq(variables['System.PullRequest.PullRequestNumber'], '')
+      displayName: Set short branch name (not pull request)
 
-    - script: docker-compose --file=docker-compose.test.yml run --rm test
+    - script: |
+        BRANCH_FULL=$(System.PullRequest.SourceBranch)
+        BRANCH=${BRANCH_FULL##*/}
+        echo "##vso[task.setvariable variable=BRANCH;]${BRANCH}"
+      condition: ne(variables['System.PullRequest.PullRequestNumber'], '')
+      displayName: Set short branch name (pull request)
+
+    - script: |
+        docker buildx create --use --name docker-container
+        docker buildx inspect --bootstrap --builder docker-container
+      displayName: Create buildx driver
+
+    - script: |
+        docker buildx build --target base --load \
+          -t dfedigital/teacher-payments-service:base-$(BRANCH) \
+          --cache-from dfedigital/teacher-payments-service:base-$(BRANCH) \
+          --cache-to type=inline \
+          .
+      displayName: Build base image
+
+    - script: |
+        docker buildx build --target dependencies --load \
+          -t dfedigital/teacher-payments-service:dependencies-$(BRANCH) \
+          --cache-from dfedigital/teacher-payments-service:base-$(BRANCH) \
+          --cache-from dfedigital/teacher-payments-service:dependencies-$(BRANCH) \
+          --cache-to type=inline \
+          .
+      displayName: Build dependencies image
+
+    - script: |
+        docker buildx build --target web --load \
+          -t dfedigital/teacher-payments-service:$(Build.BuildNumber) \
+          -t dfedigital/teacher-payments-service:web-$(BRANCH) \
+          -t dfedigital/teacher-payments-service:web-$(Build.SourceVersion) \
+          -t dfedigital/teacher-payments-service:web-$(COMMIT_ID) \
+          --cache-from dfedigital/teacher-payments-service:base-$(BRANCH) \
+          --cache-from dfedigital/teacher-payments-service:dependencies-$(BRANCH) \
+          --cache-from dfedigital/teacher-payments-service:web-$(BRANCH) \
+          --cache-to type=inline \
+          .
+      displayName: Build web image
+
+    - script: |
+        docker buildx build --target test --load \
+          -t dfedigital/teacher-payments-service:test-$(BRANCH) \
+          --cache-from dfedigital/teacher-payments-service:base-$(BRANCH) \
+          --cache-from dfedigital/teacher-payments-service:dependencies-$(BRANCH) \
+          --cache-from dfedigital/teacher-payments-service:test-$(BRANCH) \
+          --cache-to type=inline \
+          .
+      displayName: Build test image
+
+    - script: docker compose --file=docker-compose.test.yml run --rm test
       displayName: Run tests on Docker
 
-    # Clean up
-    - script: |
-        git reset --hard
-        git clean -xdf
-      displayName: Clean repository
+    - task: Docker@2
+      displayName: Push base image
+      inputs:
+        command: push
+        repository: docker.io/dfedigital/teacher-payments-service
+        tags: base-$(BRANCH)
+      env:
+        DOCKER_BUILDKIT: 1
 
-    # Publish
-    - publish: $(System.DefaultWorkingDirectory)
-      artifact: repository
-      displayName: Publish repository as artifact
+    - task: Docker@2
+      displayName: Push dependencies image
+      inputs:
+        command: push
+        repository: docker.io/dfedigital/teacher-payments-service
+        tags: dependencies-$(BRANCH)
+      env:
+        DOCKER_BUILDKIT: 1
 
-    # Build web dependencies
-    - script: |
-        docker pull $(dockerRegistry)/$(dockerImageName):cache-web-dependencies || true
-        docker build \
-          --file=Dockerfile \
-          --cache-from=$(dockerRegistry)/$(dockerImageName):cache-web-dependencies \
-          --tag=local/dfe-teachers-payment-service:web-dependencies \
-          --target=dependencies \
-          .
-      displayName: Build web dependencies Docker image using 'cache-web-dependencies' as cache
-      condition: and(ne(variables['Build.SourceBranch'], 'refs/heads/master'), succeeded())
+    - task: Docker@2
+      displayName: Push web image
+      inputs:
+        command: push
+        repository: docker.io/dfedigital/teacher-payments-service
+        tags: |
+          $(Build.BuildNumber)
+          web-$(BRANCH)
+          web-$(Build.SourceVersion)
+          web-$(COMMIT_ID)
+      env:
+        DOCKER_BUILDKIT: 1
 
-    - script: |
-        docker build \
-          --file=Dockerfile \
-          --tag=local/dfe-teachers-payment-service:web-dependencies \
-          --target=dependencies \
-          .
-
-      displayName: Build web dependencies Docker image without cache
-
-    # Build web
-    - script: |
-        docker pull $(dockerRegistry)/$(dockerImageName):latest || true
-
-        docker build \
-          --file=Dockerfile \
-          --cache-from=local/dfe-teachers-payment-service:web-dependencies \
-          --cache-from=$(dockerRegistry)/$(dockerImageName):latest \
-          --tag=local/dfe-teachers-payment-service:web \
-          --target=web \
-          --build-arg GIT_COMMIT_HASH=$(Build.SourceVersion) \
-          .
-      displayName: Build web Docker image using 'latest' as cache
-
-    - script: |
-        docker build \
-          --file=Dockerfile \
-          --cache-from=local/dfe-teachers-payment-service:web-dependencies \
-          --tag=local/dfe-teachers-payment-service:web \
-          --target=web \
-          --build-arg GIT_COMMIT_HASH=$(Build.SourceVersion) \
-          .
-      displayName: Build web Docker image without cache
-
-    # Push test images
-    - script: |
-        docker tag local/dfe-teachers-payment-service:test-dependencies $(dockerRegistry)/$(dockerImageName):cache-test-dependencies
-
-        docker push $(dockerRegistry)/$(dockerImageName):cache-test-dependencies
-      displayName: Push test dependencies Docker image for caching
-
-    - script: |
-        docker tag local/dfe-teachers-payment-service:test $(dockerRegistry)/$(dockerImageName):cache-test
-
-        docker push $(dockerRegistry)/$(dockerImageName):cache-test
-      displayName: Push test Docker image for caching
-
-    # Push web images
-    - script: |
-        docker tag local/dfe-teachers-payment-service:web-dependencies $(dockerRegistry)/$(dockerImageName):cache-web-dependencies
-
-        docker push $(dockerRegistry)/$(dockerImageName):cache-web-dependencies
-      displayName: Push web dependencies Docker image for caching
-
-    - script: |
-        docker tag local/dfe-teachers-payment-service:web $(dockerRegistry)/$(dockerImageName):$(Build.BuildNumber)
-        docker tag local/dfe-teachers-payment-service:web $(dockerRegistry)/$(dockerImageName):latest
-
-        docker push $(dockerRegistry)/$(dockerImageName):$(Build.BuildNumber)
-        docker push $(dockerRegistry)/$(dockerImageName):latest
-      displayName: Push web Docker image
+    - task: Docker@2
+      displayName: Push test image
+      inputs:
+        command: push
+        repository: docker.io/dfedigital/teacher-payments-service
+        tags: test-$(BRANCH)
+      env:
+        DOCKER_BUILDKIT: 1
