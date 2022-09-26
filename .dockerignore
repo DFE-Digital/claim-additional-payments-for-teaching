@@ -13,3 +13,6 @@ localhost.key
 .rakeTasks
 .byebug_history
 .generators
+
+**/.terraform
+.vscode
