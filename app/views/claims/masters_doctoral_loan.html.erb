@@ -29,20 +29,21 @@
             </div>
           </fieldset>
         <% end %>
+
+        <details class="govuk-details" data-module="govuk-details">
+          <summary class="govuk-details__summary">
+            <span class="govuk-details__summary-text">
+              Why do you need to know about my student loans?
+            </span>
+          </summary>
+          <div class="govuk-details__text">
+            <p class="govuk-body">
+              We work out your student loan plan type using these questions so we make the correct student loan contributions to HMRC.
+            </p>
+          </div>
+        </details>
+
         <%= form.submit "Continue", class: "govuk-button" %>
       <% end %>
-
-      <details class="govuk-details" data-module="govuk-details">
-        <summary class="govuk-details__summary">
-          <span class="govuk-details__summary-text">
-            Why do you need to know about my student loans?
-          </span>
-        </summary>
-        <div class="govuk-details__text">
-          <p class="govuk-body">
-            We work out your student loan plan type using these questions so we make the correct student loan contributions to HMRC.
-          </p>
-        </div>
-      </details>
   </div>
 </div>
