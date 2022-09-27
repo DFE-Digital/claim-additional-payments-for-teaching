@@ -19,7 +19,10 @@ module EarlyCareerPayments
     end
 
     def eligible?
-      return false unless eligible_subject? && eligible_qualification? && eligible_itt_year?
+      return false unless eligible_subject? &&
+        eligible_qualification? &&
+        eligible_itt_year? &&
+        qts_award_date_after_itt_start_date?
 
       award_args = {policy_year: claim.academic_year, itt_year: itt_year, subject_symbol: itt_subject_group}
 
