@@ -531,10 +531,12 @@ class Claim < ApplicationRecord
       errors.add(:date_of_birth, "Enter your date of birth") if errors[:date_of_birth].empty?
     end
 
-    if date_of_birth_year.present?
-      if date_of_birth_year < 1000
+    year = date_of_birth_year || date_of_birth&.year
+
+    if year.present?
+      if year < 1000
         errors.add(:date_of_birth, "Year must include 4 numbers")
-      elsif date_of_birth_year <= 1900
+      elsif year <= 1900
         errors.add(:date_of_birth, "Year must be after 1900")
       end
     end
@@ -547,6 +549,7 @@ class Claim < ApplicationRecord
     return true if provide_mobile_number && mobile_number.present? && mobile_verified == true
     return true if provide_mobile_number == false && mobile_number.nil? && mobile_verified == false
     return true if provide_mobile_number == false && mobile_verified.nil?
+
     false
   end
 

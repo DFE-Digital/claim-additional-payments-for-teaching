@@ -233,12 +233,51 @@ RSpec.describe Claim, type: :model do
   end
 
   context "with student loans policy validates 'date_of_birth' in the 'personal-details' context" do
-    it "is on or after 1st Jan 1900" do
-      expect(build(:claim, first_name: "Molly", surname: "Ringwald", national_insurance_number: "EF755003B", policy: StudentLoans, date_of_birth: Date.new(1899, 12, 31))).not_to be_valid(:"personal-details")
+    let(:claim) do
+      build(
+        :claim,
+        first_name: "Molly",
+        surname: "Ringwald",
+        national_insurance_number: "EF755003B",
+        policy: StudentLoans,
+        date_of_birth: date_of_birth
+      )
     end
 
-    it "must be in the past" do
-      expect(build(:claim, first_name: "Matt", surname: "Reed", national_insurance_number: "TX755003B", policy: StudentLoans, date_of_birth: Date.today + 5)).not_to be_valid(:"personal-details")
+    context "when date is on or after 1st Jan 1900" do
+      let(:date_of_birth) { Date.new(1899, 12, 31) }
+
+      it "is invalid" do
+        expect(claim).not_to be_valid(:"personal-details")
+        expect(claim.errors.messages[:date_of_birth]).to eq(["Year must be after 1900"])
+      end
+    end
+
+    context "when the year has fewer than 4 digits" do
+      let(:date_of_birth) { Date.new(999, 12, 31) }
+
+      it "is invalid" do
+        expect(claim).not_to be_valid(:"personal-details")
+        expect(claim.errors.messages[:date_of_birth]).to eq(["Year must include 4 numbers"])
+      end
+    end
+
+    context "when date is in the future" do
+      let(:date_of_birth) { Date.today + 5 }
+
+      it "is invalid" do
+        expect(claim).not_to be_valid(:"personal-details")
+        expect(claim.errors.messages[:date_of_birth]).to eq(["Date of birth must be in the past"])
+      end
+    end
+
+    context "when date is missing" do
+      let(:date_of_birth) { nil }
+
+      it "is invalid" do
+        expect(claim).not_to be_valid(:"personal-details")
+        expect(claim.errors.messages[:date_of_birth]).to eq(["Enter your date of birth"])
+      end
     end
 
     it "must include day/month/year" do
