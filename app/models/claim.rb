@@ -186,7 +186,6 @@ class Claim < ApplicationRecord
   validates :postcode, length: {maximum: 11, message: "Postcode must be 11 characters or less"}
   validate :postcode_is_valid, if: -> { postcode.present? }
 
-  validates :date_of_birth, on: [:"personal-details", :submit], presence: {message: "Enter your date of birth"}
   validate :date_of_birth_criteria, on: [:"personal-details", :submit]
 
   validates :teacher_reference_number, on: [:"teacher-reference-number", :submit], presence: {message: "Enter your teacher reference number"}
@@ -519,19 +518,28 @@ class Claim < ApplicationRecord
   def date_of_birth_criteria
     if date_of_birth.present?
       errors.add(:date_of_birth, "Date of birth must be in the past") if date_of_birth > Time.zone.today
-      errors.add(:date_of_birth, "Date of birth must be after 1900") if date_of_birth <= Date.new(1899, 12, 31)
-
-      return true if errors[:date_of_birth].empty?
     else
-      errors.add(:date_of_birth, "Date of birth must include day/month/year") if date_has_day_month_year_components.between?(1, 2)
+
+      errors.add(:date_of_birth, "Date of birth must include a day, month and year in the correct format, for example 01 01 1980") if date_has_day_month_year_components.between?(1, 2)
 
       begin
         Date.new(date_of_birth_year, date_of_birth_month, date_of_birth_day) if date_has_day_month_year_components == 3
       rescue ArgumentError
         errors.add(:date_of_birth, "Enter a date of birth in the correct format")
       end
+
       errors.add(:date_of_birth, "Enter your date of birth") if errors[:date_of_birth].empty?
     end
+
+    if date_of_birth_year.present?
+      if date_of_birth_year < 1000
+        errors.add(:date_of_birth, "Year must include 4 numbers")
+      elsif date_of_birth_year <= 1900
+        errors.add(:date_of_birth, "Year must be after 1900")
+      end
+    end
+
+    errors[:date_of_birth].empty?
   end
 
   def submittable_mobile_details?
