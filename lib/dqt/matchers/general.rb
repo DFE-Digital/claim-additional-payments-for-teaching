@@ -63,11 +63,7 @@ module Dqt
       }.freeze
 
       def academic_date
-        matching_type = QUALIFICATION_MATCHING_TYPE.find { |_key, values|
-          values.include?(qualification_name)
-        }&.first
-
-        case matching_type
+        case route_into_teaching
         when :undergraduate_itt, :assessment_only, :overseas_recognition
           qts_award_date
         when :postgraduate_itt
@@ -85,6 +81,19 @@ module Dqt
 
       def eligible_itt_year?
         AcademicYear.new(itt_year).eql?(claim.eligibility.itt_academic_year)
+      end
+
+      def qts_award_date_after_itt_start_date?
+        return true unless route_into_teaching == :postgraduate_itt
+        return false if qts_award_date.blank?
+
+        qts_award_date >= itt_start_date
+      end
+
+      def route_into_teaching
+        @route_into_teaching ||= QUALIFICATION_MATCHING_TYPE.find { |_key, values|
+          values.include?(qualification_name)
+        }&.first
       end
     end
   end

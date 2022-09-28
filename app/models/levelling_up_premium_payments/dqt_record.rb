@@ -21,7 +21,10 @@ module LevellingUpPremiumPayments
     end
 
     def eligible?
-      return false unless eligible_subject_and_none_of_the_above? && eligible_qualification? && eligible_itt_year?
+      return false unless eligible_subject_and_none_of_the_above? &&
+        eligible_qualification? &&
+        eligible_itt_year? &&
+        qts_award_date_after_itt_start_date?
 
       policy_year = PolicyConfiguration.for(claim.policy).current_academic_year
       eligible_itt_years = JourneySubjectEligibilityChecker.selectable_itt_years_for_claim_year(policy_year)
