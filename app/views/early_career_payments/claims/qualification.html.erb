@@ -23,16 +23,17 @@
             <div class="govuk-radios">
 
               <div class="govuk-radios__item">
+                <%= fields.radio_button(:qualification, :postgraduate_itt, class: "govuk-radios__input") %>
+                <%= fields.label :qualification_postgraduate_itt, t("early_career_payments.answers.qualification.postgraduate_itt"), class: "govuk-label govuk-radios__label" %>
+                <div class="govuk-hint govuk-radios__hint"><%= t("early_career_payments.questions.qualification.hint.postgraduate_itt") %></div>
+              </div>
+
+              <div class="govuk-radios__item">
                 <%= fields.radio_button(:qualification, :undergraduate_itt, class: "govuk-radios__input") %>
                 <%= fields.label :qualification_undergraduate_itt, t("early_career_payments.answers.qualification.undergraduate_itt"), class: "govuk-label govuk-radios__label" %>
                 <div class="govuk-hint govuk-radios__hint"><%= t("early_career_payments.questions.qualification.hint.undergraduate_itt") %></div>
               </div>
 
-              <div class="govuk-radios__item">
-                <%= fields.radio_button(:qualification, :postgraduate_itt, class: "govuk-radios__input") %>
-                <%= fields.label :qualification_postgraduate_itt, t("early_career_payments.answers.qualification.postgraduate_itt"), class: "govuk-label govuk-radios__label" %>
-                <div class="govuk-hint govuk-radios__hint"><%= t("early_career_payments.questions.qualification.hint.postgraduate_itt") %></div>
-              </div>
 
               <div class="govuk-radios__item">
                 <%= fields.radio_button(:qualification, :assessment_only, class: "govuk-radios__input") %>
