@@ -23,10 +23,13 @@ class ClaimsController < BasePublicController
     if params[:slug] == "postcode-search" && postcode
       redirect_to claim_path(current_policy_routing_name, "select-home-address", {"claim[postcode]": params[:claim][:postcode], "claim[address_line_1]": params[:claim][:address_line_1]}) and return unless invalid_postcode?
     elsif params[:slug] == "select-home-address" && postcode
+      session[:claim_postcode] = params[:claim][:postcode]
+      session[:claim_address_line_1] = params[:claim][:address_line_1]
       if address_data.nil?
-        session[:claim_postcode] = params[:claim][:postcode]
-        session[:claim_address_line_1] = params[:claim][:address_line_1]
         redirect_to claim_path(current_policy_routing_name, "no-address-found") and return
+      else
+        # otherwise it takes you to "no-address-found" on the backlink from the slug sequence
+        @backlink_path = claim_path(current_policy_routing_name, "postcode-search")
       end
     elsif params[:slug] == "select-home-address" && !postcode.present?
       session[:claim_postcode] = nil
