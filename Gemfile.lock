@@ -1,9 +1,9 @@
 GIT
   remote: https://github.com/DFE-Digital/dfe-analytics.git
-  revision: be36a63a0d22b45300550ff3e8d20cdeb468f484
-  tag: v1.5.1
+  revision: 6e355be3bd65890887e2cdbc0588ff2a00a892e5
+  tag: v1.4.0
   specs:
-    dfe-analytics (1.5.1)
+    dfe-analytics (1.4.0)
       google-cloud-bigquery (~> 1.38)
       request_store_rails (~> 2)
 
@@ -167,8 +167,8 @@ GEM
       raabro (~> 1.4)
     globalid (1.0.0)
       activesupport (>= 5.0)
-    google-apis-bigquery_v2 (0.41.0)
-      google-apis-core (>= 0.9.0, < 2.a)
+    google-apis-bigquery_v2 (0.39.0)
+      google-apis-core (>= 0.7, < 2.a)
     google-apis-core (0.9.0)
       addressable (~> 2.5, >= 2.5.1)
       googleauth (>= 0.16.2, < 2.a)
