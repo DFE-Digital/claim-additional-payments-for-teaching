@@ -98,8 +98,7 @@ class RemindersController < BasePublicController
     )
   end
 
-  # TODO: Not sure if this is ever used?
-  # fallback reminder will set reminder date to the next academic year
+  # Fallback reminder will set reminder date to the next academic year
   def default_reminder
     Reminder.new(itt_academic_year: next_academic_year)
   end

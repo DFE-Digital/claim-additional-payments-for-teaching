@@ -76,7 +76,6 @@ module EarlyCareerPayments
     validates_numericality_of :award_amount, message: "Enter a valid monetary amount", allow_nil: true, greater_than_or_equal_to: 0, less_than_or_equal_to: 7500
     validates :award_amount, on: :amendment, award_range: {max: max_award_amount_in_pounds}
 
-    # TODO don't know if we need this
     before_save :set_qualification_if_trainee_teacher, if: :nqt_in_academic_year_after_itt_changed?
 
     delegate :name, to: :current_school, prefix: true, allow_nil: true
@@ -92,10 +91,6 @@ module EarlyCareerPayments
     rescue ActiveRecord::UnknownAttributeError
       all_attributes_ignored = (args.first.keys - IGNORED_ATTRIBUTES).empty?
       raise unless all_attributes_ignored
-    end
-
-    def eligible_now_and_again_sometime?
-      eligible_now? && any_future_policy_years? && common_eligible_now_attributes? && itt_subject_eligible_later?
     end
 
     def eligible_later_year
@@ -207,7 +202,6 @@ module EarlyCareerPayments
       end
     end
 
-    # TODO don't know if we need this
     def set_qualification_if_trainee_teacher
       return unless trainee_teacher?
 

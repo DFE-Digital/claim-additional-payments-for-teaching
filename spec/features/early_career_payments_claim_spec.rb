@@ -97,12 +97,6 @@ RSpec.feature "Teacher Early-Career Payments claims" do
 
     expect(claim.eligibility.reload.itt_academic_year).to eql itt_year
 
-    # TODO - PLACEHOLDER compare the LUP claim is same as the ECP claim in terms of attributes - this may change
-    lup_claim = Claim.by_policy(LevellingUpPremiumPayments).order(:created_at).last
-    claim.reload
-    expect(lup_claim).to mirror(claim)
-    expect(lup_claim.eligibility).to mirror(claim.eligibility)
-
     # - Check your answers for eligibility
     expect(page).to have_text(I18n.t("early_career_payments.check_your_answers.part_one.primary_heading"))
     expect(page).to have_text(I18n.t("early_career_payments.check_your_answers.part_one.secondary_heading"))
@@ -388,12 +382,6 @@ RSpec.feature "Teacher Early-Career Payments claims" do
 
     # - Are you currently subject to action for poor performance
     expect(page).to have_text(I18n.t("early_career_payments.questions.formal_performance_action"))
-
-    # TODO - PLACEHOLDER compare the LUP claim is same as the ECP claim in terms of attributes - this may change
-    lup_claim = Claim.by_policy(LevellingUpPremiumPayments).order(:created_at).last
-    claim.reload
-    expect(lup_claim).to mirror(claim)
-    expect(lup_claim.eligibility).to mirror(claim.eligibility)
   end
 
   context "Route into teaching" do
@@ -451,12 +439,6 @@ RSpec.feature "Teacher Early-Career Payments claims" do
       click_on "Continue"
 
       expect(claim.eligibility.reload.itt_academic_year).to eql itt_year
-
-      # TODO - PLACEHOLDER compare the LUP claim is same as the ECP claim in terms of attributes - this may change
-      claim.reload
-      lup_claim.reload
-      expect(lup_claim).to mirror(claim)
-      expect(lup_claim.eligibility).to mirror(claim.eligibility)
     end
 
     scenario "when Overseas recognition" do
@@ -497,12 +479,6 @@ RSpec.feature "Teacher Early-Career Payments claims" do
       expect(claim.eligibility.reload.teaching_subject_now).to eql true
 
       expect(claim.eligibility.reload.itt_academic_year).to eql itt_year
-
-      # TODO - PLACEHOLDER compare the LUP claim is same as the ECP claim in terms of attributes - this may change
-      claim.reload
-      lup_claim.reload
-      expect(lup_claim).to mirror(claim)
-      expect(lup_claim.eligibility).to mirror(claim.eligibility)
     end
   end
 
@@ -618,12 +594,6 @@ RSpec.feature "Teacher Early-Career Payments claims" do
     # - How will we use the information you provide
     expect(page).to have_text("How we will use the information you provide")
     click_on "Continue"
-
-    # TODO - PLACEHOLDER compare the LUP claim is same as the ECP claim in terms of attributes - this may change
-    lup_claim = Claim.by_policy(LevellingUpPremiumPayments).order(:created_at).last
-    claim.reload
-    expect(lup_claim).to mirror(claim)
-    expect(lup_claim.eligibility).to mirror(claim.eligibility)
 
     # - Personal details
     expect(page).to have_text(I18n.t("questions.personal_details"))
@@ -997,12 +967,6 @@ RSpec.feature "Teacher Early-Career Payments claims" do
       # - How will we use the information you provide
       expect(page).to have_text("How we will use the information you provide")
       click_on "Continue"
-
-      # TODO - PLACEHOLDER compare the LUP claim is same as the ECP claim in terms of attributes - this may change
-      claim.reload
-      lup_claim.reload
-      expect(lup_claim).to mirror(claim)
-      expect(lup_claim.eligibility).to mirror(claim.eligibility)
 
       # - Personal details
       expect(page).to have_text(I18n.t("questions.personal_details"))

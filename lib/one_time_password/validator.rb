@@ -3,9 +3,6 @@ module OneTimePassword
     def initialize(code, generated_at, otp_category = nil)
       @code = code
       @generated_at = generated_at
-
-      # TODO: no longer used
-      @otp_category = otp_category
     end
 
     def valid?
