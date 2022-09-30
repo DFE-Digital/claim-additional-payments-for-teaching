@@ -101,6 +101,11 @@ FactoryBot.define do
       end
     end
 
+    trait :payrollable do
+      approved
+      payment { nil }
+    end
+
     trait :rejected do
       submitted
       after(:build) do |claim|

@@ -4,9 +4,16 @@ class Admin::ClaimsController < Admin::BaseAdminController
   before_action :ensure_service_operator
 
   def index
-    @claims = Claim.includes(:decisions, eligibility: [:claim_school, :current_school]).awaiting_decision.order(:submitted_at)
+    @claims = Claim.approved if params[:status] == "approved"
+    @claims = Claim.payrollable if params[:status] == "approved_awaiting_payroll"
+    @claims = Claim.rejected if params[:status] == "rejected"
+    @claims ||= Claim.includes(:decisions).awaiting_decision
+
     @claims = @claims.by_policy(filtered_policy) if filtered_policy
     @claims = @claims.by_claims_team_member(filtered_team_member) if filtered_team_member
+
+    @claims = @claims.includes(:tasks, eligibility: [:claim_school, :current_school])
+    @claims = @claims.order(:submitted_at)
 
     all_claims = @claims
     @total_claim_count = all_claims.count

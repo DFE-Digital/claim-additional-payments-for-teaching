@@ -24,8 +24,68 @@ RSpec.shared_examples "Admin View Claim Feature" do |policy|
     )
   }
 
+  let!(:approved_awaiting_payroll_claim) {
+    create(
+      :claim,
+      :payrollable,
+      eligibility: build("#{policy.to_s.underscore}_eligibility".to_sym, :eligible)
+    )
+  }
+
+  let!(:approved_paid_claim) {
+    create(
+      :claim,
+      :approved,
+      eligibility: build("#{policy.to_s.underscore}_eligibility".to_sym, :eligible)
+    )
+  }
+
+  let!(:rejected_claim) {
+    create(
+      :claim,
+      :rejected,
+      eligibility: build("#{policy.to_s.underscore}_eligibility".to_sym, :eligible)
+    )
+  }
+
   before do
     @signed_in_user = sign_in_as_service_operator
+
+    PayrollRun.create_with_claims!([approved_paid_claim], created_by: @signed_in_user)
+  end
+
+  scenario "filter approved awaiting payroll claims" do
+    visit admin_claims_path
+
+    select "Approved awaiting payroll", from: "Status"
+    click_on "Go"
+
+    find("a[href='#{admin_claim_tasks_path(approved_awaiting_payroll_claim)}']").click
+
+    expect(page).to have_content("– Approved")
+    expect(page).to have_content("Approved awaiting payroll")
+  end
+
+  scenario "filter approved claims" do
+    visit admin_claims_path
+
+    select "Approved", from: "Status"
+    click_on "Go"
+
+    find("a[href='#{admin_claim_tasks_path(approved_paid_claim)}']").click
+
+    expect(page).to have_content("– Approved")
+  end
+
+  scenario "filter rejected claims" do
+    visit admin_claims_path
+
+    select "Rejected", from: "Status"
+    click_on "Go"
+
+    find("a[href='#{admin_claim_tasks_path(rejected_claim)}']").click
+
+    expect(page).to have_content("– Rejected")
   end
 
   scenario "view full claim details from index" do
