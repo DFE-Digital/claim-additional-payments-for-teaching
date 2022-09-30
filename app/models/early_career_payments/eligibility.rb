@@ -103,9 +103,8 @@ module EarlyCareerPayments
       end
     end
 
-    # TODO: be careful this can return BigDecimal or Integers, this isn't ideal
     def award_amount
-      super || calculate_award_amount
+      super || BigDecimal(calculate_award_amount || 0)
     end
 
     def first_eligible_itt_academic_year
