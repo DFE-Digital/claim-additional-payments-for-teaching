@@ -150,11 +150,15 @@ module Admin
       end
     end
 
-    def payroll_run_status(claim)
+    def status(claim)
       if claim.payrolled?
         link_to(claim.payment.payroll_run.created_at.strftime("%B %Y"), admin_payroll_run_path(claim.payment.payroll_run))
+      elsif claim.latest_decision&.approved?
+        "Approved awaiting payroll"
+      elsif claim.latest_decision&.rejected?
+        "Rejected"
       else
-        "Awaiting payroll"
+        "Awaiting decision"
       end
     end
 
