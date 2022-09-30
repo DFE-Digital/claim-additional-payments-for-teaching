@@ -37,7 +37,6 @@ module EarlyCareerPayments
 
     attr_reader :claim, :record
 
-    # TODO: This method needs some investigation.
     def itt_subject_group
       [*itt_subject_codes, *degree_codes, *itt_subjects].each do |subject_code|
         return ELIGIBLE_JAC_CODES.find { |key, values|

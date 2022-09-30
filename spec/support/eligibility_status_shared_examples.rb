@@ -86,16 +86,4 @@ RSpec.shared_examples "Eligibility status" do |eligibility_factory_symbol|
       end
     end
   end
-
-  describe "#eligible_now_and_again_sometime?" do
-    subject { eligibility }
-
-    context "eligible both now and later" do
-      let(:eligibility) { build(eligibility_factory_symbol, :eligible_next_year_too) }
-
-      specify { expect(subject.status).to eq(:eligible_now) }
-      it { is_expected.to be_eligible_now }
-      it { is_expected.to be_eligible_now_and_again_sometime }
-    end
-  end
 end

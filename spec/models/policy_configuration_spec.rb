@@ -90,14 +90,14 @@ RSpec.describe PolicyConfiguration do
     end
   end
 
-  describe "#early_career_payments?" do
+  describe "#additional_payments?" do
     it "returns true" do
-      expect(policy_configurations(:early_career_payments).early_career_payments?).to be true
+      expect(policy_configurations(:early_career_payments).additional_payments?).to be true
     end
 
     it "returns false" do
-      expect(policy_configurations(:student_loans).early_career_payments?).to be false
-      expect(policy_configurations(:maths_and_physics).early_career_payments?).to be false
+      expect(policy_configurations(:student_loans).additional_payments?).to be false
+      expect(policy_configurations(:maths_and_physics).additional_payments?).to be false
     end
   end
 

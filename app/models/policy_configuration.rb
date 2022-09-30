@@ -89,8 +89,7 @@ class PolicyConfiguration < ApplicationRecord
     SERVICES.detect { |j| policies.first.in? j[:policies] }[:slugs]
   end
 
-  # TODO: Eventually this shouldn't be used
-  def early_career_payments?
-    policies.include?(EarlyCareerPayments)
+  def additional_payments?
+    policies.include?(EarlyCareerPayments) || policies.include?(LevellingUpPremiumPayments)
   end
 end

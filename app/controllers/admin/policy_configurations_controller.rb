@@ -29,7 +29,7 @@ module Admin
     end
 
     def send_reminders
-      return unless policy_configuration.open_for_submissions && policy_configuration.early_career_payments?
+      return unless policy_configuration.open_for_submissions && policy_configuration.additional_payments?
 
       SendReminderEmailsJob.perform_later
     end

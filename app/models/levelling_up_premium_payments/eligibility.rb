@@ -70,7 +70,6 @@ module LevellingUpPremiumPayments
       AcademicYear.new => AcademicYear::Type.new.serialize(AcademicYear.new)
     }
 
-    # TODO don't know if we need this
     before_save :set_qualification_if_trainee_teacher, if: :nqt_in_academic_year_after_itt_changed?
 
     def policy
@@ -78,7 +77,7 @@ module LevellingUpPremiumPayments
     end
 
     def award_amount
-      super || calculate_award_amount
+      super || BigDecimal(calculate_award_amount || 0)
     end
 
     def reset_dependent_answers(reset_attrs = [])
@@ -94,11 +93,6 @@ module LevellingUpPremiumPayments
     def submit!
       self.award_amount = award_amount
       save!
-    end
-
-    # TODO: Not used any more
-    def eligible_now_and_again_sometime?
-      eligible_now? && any_future_policy_years?
     end
 
     def indicated_ineligible_itt_subject?
@@ -172,7 +166,6 @@ module LevellingUpPremiumPayments
       BigDecimal LevellingUpPremiumPayments::Award.new(school: current_school, year: claim_year).amount_in_pounds if current_school.present?
     end
 
-    # TODO originally copied from ECP. Don't know what this is.
     def set_qualification_if_trainee_teacher
       return unless trainee_teacher?
 

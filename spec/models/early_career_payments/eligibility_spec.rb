@@ -346,34 +346,4 @@ RSpec.describe EarlyCareerPayments::Eligibility, type: :model do
       it { is_expected.to eq(:ineligible) }
     end
   end
-
-  describe "#eligible_now_and_again_sometime?" do
-    subject { eligibility }
-
-    context "ineligible now but eligible next year" do
-      let(:eligibility) { build(:early_career_payments_eligibility, :ineligible_now_but_eligible_next_year) }
-
-      specify { expect(subject.status).to eq(:eligible_later) }
-
-      it "is not eligible *again* in the future because it's not even eligible now" do
-        is_expected.not_to be_eligible_now_and_again_sometime
-      end
-    end
-
-    context "eligible now and again next year" do
-      let(:eligibility) { build(:early_career_payments_eligibility, :eligible_next_year_too) }
-
-      specify { expect(subject.status).to eq(:eligible_now) }
-
-      it { is_expected.to be_eligible_now_and_again_sometime }
-    end
-
-    context "eligible now and again but two years later (so not next year)" do
-      let(:eligibility) { build(:early_career_payments_eligibility, :eligible_now_and_again_but_two_years_later) }
-
-      specify { expect(subject.status).to eq(:eligible_now) }
-
-      it { is_expected.to be_eligible_now_and_again_sometime }
-    end
-  end
 end
