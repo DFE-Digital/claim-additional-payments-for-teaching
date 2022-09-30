@@ -449,19 +449,41 @@ describe Admin::ClaimsHelper do
     end
   end
 
-  describe "#payroll_run_status" do
-    it "returns a payroll status where a claim hasn't gone through payroll" do
-      claim = create(:claim, :approved)
+  describe "#status" do
+    context "claim submitted but not approved" do
+      let(:claim) { create(:claim, :submitted) }
 
-      expect(payroll_run_status(claim)).to eq "Awaiting payroll"
+      it "returns a status of Awaiting decision" do
+        expect(status(claim)).to eq "Awaiting decision"
+      end
     end
 
-    it "returns a payroll status where a claim has gone through payroll" do
-      claim = create(:claim, :approved)
-      create(:payment, claims: [claim])
-      freeze_time do
-        expect(payroll_run_status(claim)).to include(Time.zone.now.strftime("%B %Y"))
-        expect(payroll_run_status(claim)).to include(admin_payroll_run_path(claim.payment.payroll_run))
+    context "claim approved" do
+      it "returns a status of Approved awaiting payroll" do
+        claim = create(:claim, :approved)
+
+        expect(status(claim)).to eq "Approved awaiting payroll"
+      end
+    end
+
+    context "claim rejected" do
+      it "returns a status of Rejected" do
+        claim = create(:claim, :rejected)
+
+        expect(status(claim)).to eq "Rejected"
+      end
+    end
+
+    context "claim has been included in a payroll" do
+      let(:claim) { create(:claim, :approved) }
+
+      before { create(:payment, claims: [claim]) }
+
+      it "returns a status with a link to the payroll run" do
+        freeze_time do
+          expect(status(claim)).to include(Time.zone.now.strftime("%B %Y"))
+          expect(status(claim)).to include(admin_payroll_run_path(claim.payment.payroll_run))
+        end
       end
     end
   end
