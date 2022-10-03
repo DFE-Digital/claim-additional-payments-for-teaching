@@ -87,7 +87,7 @@ module Dqt
         return true unless route_into_teaching == :postgraduate_itt
         return false if qts_award_date.blank?
 
-        qts_award_date >= itt_start_date
+        qts_award_date > itt_start_date
       end
 
       def route_into_teaching
