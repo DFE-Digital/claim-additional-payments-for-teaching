@@ -42,5 +42,15 @@ FactoryBot.define do
     trait :levelling_up_premium_payments_ineligible do
       sequence(:urn, 170000)
     end
+
+    trait :closed do
+      open_date { 100.days.ago }
+      close_date { 10.days.ago }
+    end
+
+    trait :open do
+      open_date { 10.days.ago }
+      close_date { nil }
+    end
   end
 end
