@@ -1,5 +1,6 @@
 # This job is not called anywhere in the code but can be used manually to re-run
 # NO MATCH claims that initially got an incorrect response from the DQT API.
+# DQT API has a limit of 300 requests/minute
 # QualificationsNoMatchCheckJob.perform_later
 
 class QualificationsNoMatchCheckJob < ApplicationJob
@@ -17,7 +18,13 @@ class QualificationsNoMatchCheckJob < ApplicationJob
           )
         ).perform
       end
+
+      sleep 60
     end
+  end
+
+  def max_attempts
+    1
   end
 
   private
