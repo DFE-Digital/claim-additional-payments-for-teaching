@@ -63,5 +63,7 @@ module DfeTeachersPaymentService
     }
 
     config.active_record.yaml_column_permitted_classes = [BigDecimal, Date, Symbol]
+
+    config.email_regexp = /\A[a-zA-Z0-9.!\#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)+\z/
   end
 end

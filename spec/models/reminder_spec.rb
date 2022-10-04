@@ -5,6 +5,7 @@ RSpec.describe Reminder, type: :model do
     it "validates that the value is in the correct format" do
       expect(build(:reminder, email_address: "notan email@address.com")).not_to be_valid
       expect(build(:reminder, email_address: "david.tau.2020.gb@example.com")).to be_valid
+      expect(build(:reminder, email_address: "name@example")).not_to be_valid
     end
 
     it "checks that the email address in not longer than 256 characters" do
