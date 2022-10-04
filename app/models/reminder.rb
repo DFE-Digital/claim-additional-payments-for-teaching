@@ -11,7 +11,7 @@ class Reminder < ApplicationRecord
   validates :full_name, length: {maximum: 100, message: "Full name must be 100 characters or less"}
 
   validates :email_address, on: [:"personal-details"], presence: {message: "Enter an email address"}
-  validates :email_address, format: {with: URI::MailTo::EMAIL_REGEXP, message: "Enter an email address in the correct format, like name@example.com"},
+  validates :email_address, format: {with: Rails.application.config.email_regexp, message: "Enter an email address in the correct format, like name@example.com"},
     length: {maximum: 256, message: "Email address must be 256 characters or less"}, if: -> { email_address.present? }
 
   scope :email_verified, -> { where(email_verified: true) }
