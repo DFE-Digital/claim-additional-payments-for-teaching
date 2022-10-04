@@ -5,7 +5,9 @@
 
 class QualificationsNoMatchCheckJob < ApplicationJob
   def perform
-    claims_with_no_match_qualification_tasks.each_slice(300) do |claims|
+    claims_with_no_match_qualification_tasks.each_slice(1).with_index do |claims, index|
+      sleep 60 unless index.zero?
+
       Task.where(claim_id: claims.pluck(:id), name: "qualifications").delete_all
 
       claims.each do |claim|
@@ -18,8 +20,6 @@ class QualificationsNoMatchCheckJob < ApplicationJob
           )
         ).perform
       end
-
-      sleep 60
     end
   end
 
