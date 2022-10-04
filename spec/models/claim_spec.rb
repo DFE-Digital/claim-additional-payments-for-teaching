@@ -17,6 +17,7 @@ RSpec.describe Claim, type: :model do
   context "that has a email address" do
     it "validates that the value is in the correct format" do
       expect(build(:claim, email_address: "notan email@address.com")).not_to be_valid
+      expect(build(:claim, email_address: "name@example")).not_to be_valid
       expect(build(:claim, email_address: "name@example.com")).to be_valid
       expect(build(:claim, email_address: "")).to be_valid
     end

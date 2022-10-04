@@ -206,7 +206,7 @@ class Claim < ApplicationRecord
   validates :postgraduate_doctoral_loan, on: [:"doctoral-loan", :submit], inclusion: {in: [true, false], message: "Select yes if you are currently repaying a Postgraduate Doctoral Loan"}, unless: -> { no_masters_doctoral_loan? }
 
   validates :email_address, on: [:"email-address", :submit], presence: {message: "Enter an email address"}
-  validates :email_address, format: {with: URI::MailTo::EMAIL_REGEXP, message: "Enter an email address in the correct format, like name@example.com"},
+  validates :email_address, format: {with: Rails.application.config.email_regexp, message: "Enter an email address in the correct format, like name@example.com"},
     length: {maximum: 256, message: "Email address must be 256 characters or less"}, if: -> { email_address.present? }
 
   validates :provide_mobile_number, on: [:"provide-mobile-number", :submit], inclusion: {in: [true, false], message: "Select yes if you would like to provide your mobile number"}, if: :has_ecp_or_lupp_policy?
