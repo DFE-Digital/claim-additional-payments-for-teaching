@@ -23,7 +23,7 @@
 
     <%= form_group_tag current_claim, :bank_sort_code do %>
       <%= form.label :bank_sort_code, "Sort code", class: "govuk-label" %>
-      <span id="sort-code-hint" class="govuk-hint">For example: 44 00 26</span>
+      <span id="sort-code-hint" class="govuk-hint">For example: 309430</span>
       <%= errors_tag current_claim, :bank_sort_code %>
       <%= form.text_field :bank_sort_code,
         class: css_classes_for_input(current_claim, :bank_sort_code, "govuk-!-width-one-quarter"),
@@ -33,7 +33,7 @@
 
     <%= form_group_tag current_claim, :bank_account_number do %>
       <%= form.label :bank_account_number, "Account number", class: "govuk-label" %>
-      <span id="account-number-hint" class="govuk-hint">For example: 70872490</span>
+      <span id="account-number-hint" class="govuk-hint">For example: 00733445</span>
       <%= errors_tag current_claim, :bank_account_number %>
       <%= form.text_field :bank_account_number,
         class: css_classes_for_input(current_claim, :bank_account_number, "govuk-input--width-20"),
@@ -55,6 +55,14 @@
     <% end %>
 
   </fieldset>
-  <p class='govuk-body'><%= t("questions.check_your_account_details", bank_or_building_society: current_claim.bank_or_building_society == "personal_bank_account"? "bank" : "building society") %></p>
+
+  <div class="govuk-warning-text">
+    <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
+    <strong class="govuk-warning-text__text">
+      <span class="govuk-warning-text__assistive">Warning</span>
+      <%= t("questions.check_your_account_details") %>
+    </strong>
+  </div>
+
   <%= form.submit "Continue", class: "govuk-button" %>
 <% end %>

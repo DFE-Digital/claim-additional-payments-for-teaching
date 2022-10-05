@@ -85,8 +85,8 @@ en:
     payroll_gender: "How is your gender recorded on your school’s payroll system?"
     bank_or_building_society: What account do you want the money paid into?
     account_details: Enter your %{bank_or_building_society} details
-    account_hint: "For example: your name as it appears on your %{bank_or_building_society} statements or %{card} card."
-    check_your_account_details: Please check you have provided the correct %{bank_or_building_society} details. Incorrect details will cause a delay to your payment.
+    account_hint: "For example: your name as it appears on your %{bank_or_building_society} statement or %{card} card."
+    check_your_account_details: Incorrect details will cause a delay to your payment.
   admin:
     qts_award_year: "Award year"
     current_school: "Current school"
