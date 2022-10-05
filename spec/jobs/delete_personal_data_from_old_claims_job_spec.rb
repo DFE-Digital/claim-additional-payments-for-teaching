@@ -2,14 +2,15 @@ require "rails_helper"
 
 RSpec.describe DeletePersonalDataFromOldClaimsJob do
   describe "#perform" do
-    let(:over_two_months_ago) { 2.months.ago - 1.day }
+    let(:current_academic_year) { AcademicYear.for(Date.today) }
+    let(:last_academic_year) { Time.zone.local(current_academic_year.start_year, 8, 1) }
 
     it "deletes the personal data from eligible claims" do
       submitted_claim = create(:claim, :submitted)
       rejected_claim = create(:claim, :submitted)
-      create(:decision, :rejected, claim: rejected_claim, created_at: over_two_months_ago)
+      create(:decision, :rejected, claim: rejected_claim, created_at: last_academic_year)
       paid_claim = create(:claim, :approved)
-      create(:payment, :with_figures, claims: [paid_claim], scheduled_payment_date: over_two_months_ago)
+      create(:payment, :with_figures, claims: [paid_claim], scheduled_payment_date: last_academic_year)
 
       DeletePersonalDataFromOldClaimsJob.new.perform
 

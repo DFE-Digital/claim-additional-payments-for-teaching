@@ -1,16 +1,17 @@
 require "rails_helper"
 
 RSpec.describe Claim::PersonalDataScrubber, type: :model do
-  let(:over_two_months_ago) { 2.months.ago - 1.day }
+  let(:current_academic_year) { AcademicYear.for(Date.today) }
+  let(:last_academic_year) { Time.zone.local(current_academic_year.start_year, 8, 1) }
 
   it "does not delete details from a submitted claim" do
-    claim = create(:claim, :submitted, updated_at: over_two_months_ago)
+    claim = create(:claim, :submitted, updated_at: last_academic_year)
 
     expect { Claim::PersonalDataScrubber.new.scrub_completed_claims }.not_to change { claim.reload.attributes }
   end
 
   it "does not delete details from an approved but unpaid claim" do
-    claim = create(:claim, :approved, updated_at: over_two_months_ago)
+    claim = create(:claim, :approved, updated_at: last_academic_year)
 
     expect { Claim::PersonalDataScrubber.new.scrub_completed_claims }.not_to change { claim.reload.attributes }
   end
@@ -30,7 +31,7 @@ RSpec.describe Claim::PersonalDataScrubber, type: :model do
 
   it "does not delete details from a claim with a rejection which is old but undone" do
     claim = create(:claim, :submitted)
-    create(:decision, :rejected, :undone, claim: claim, created_at: over_two_months_ago)
+    create(:decision, :rejected, :undone, claim: claim, created_at: last_academic_year)
 
     expect { Claim::PersonalDataScrubber.new.scrub_completed_claims }.not_to change { claim.reload.attributes }
   end
@@ -38,7 +39,7 @@ RSpec.describe Claim::PersonalDataScrubber, type: :model do
   it "deletes expected details from an old rejected claim, setting a personal_data_removed_at timestamp" do
     freeze_time do
       claim = create(:claim, :submitted)
-      create(:decision, :rejected, claim: claim, created_at: over_two_months_ago)
+      create(:decision, :rejected, claim: claim, created_at: last_academic_year)
 
       Claim::PersonalDataScrubber.new.scrub_completed_claims
       cleaned_claim = Claim.find(claim.id)
@@ -66,7 +67,7 @@ RSpec.describe Claim::PersonalDataScrubber, type: :model do
   it "deletes expected details from an old paid claim, setting a personal_data_removed_at timestamp" do
     freeze_time do
       claim = create(:claim, :approved)
-      create(:payment, :with_figures, claims: [claim], scheduled_payment_date: over_two_months_ago)
+      create(:payment, :with_figures, claims: [claim], scheduled_payment_date: last_academic_year)
 
       Claim::PersonalDataScrubber.new.scrub_completed_claims
       cleaned_claim = Claim.find(claim.id)
@@ -91,23 +92,29 @@ RSpec.describe Claim::PersonalDataScrubber, type: :model do
     end
   end
 
-  it "calculates the date past which claims are considered old at runtime" do
+  it "only scrubs claims from the previous academic year" do
     # Initialise the scrubber, and create a claim
     scrubber = Claim::PersonalDataScrubber.new
+
     claim = create(:claim, :submitted)
     create(:decision, :rejected, claim: claim)
 
-    # Travel three months forwards. At this point the claim should be considered
-    # old enough to scrub information from.
-    travel_to(3.months.from_now)
-    scrubber.scrub_completed_claims
-    cleaned_claim = Claim.find(claim.id)
-    expect(cleaned_claim.personal_data_removed_at).to eq(Time.zone.now)
+    travel_to(last_academic_year) do
+      claim = create(:claim, :submitted)
+      create(:decision, :rejected, claim: claim)
+    end
+
+    freeze_time do
+      scrubber.scrub_completed_claims
+      claims = Claim.order(created_at: :asc)
+      expect(claims.first.personal_data_removed_at).to eq(Time.zone.now)
+      expect(claims.last.personal_data_removed_at).to be_nil
+    end
   end
 
   it "also deletes expected details from the scrubbed claims’ amendments, setting a personal_data_removed_at timestamp on the amendments" do
     claim, amendment = nil
-    travel_to over_two_months_ago - 1.week do
+    travel_to last_academic_year - 1.week do
       claim = create(:claim, :submitted)
       amendment = create(:amendment, claim: claim, claim_changes: {
         "teacher_reference_number" => [generate(:teacher_reference_number).to_s, claim.teacher_reference_number],
@@ -118,8 +125,8 @@ RSpec.describe Claim::PersonalDataScrubber, type: :model do
         "bank_account_number" => ["84818482", claim.bank_account_number],
         "building_society_roll_number" => ["123456789/ABCD", claim.building_society_roll_number]
       })
-      create(:decision, :approved, claim: claim, created_at: over_two_months_ago)
-      create(:payment, :with_figures, claims: [claim], scheduled_payment_date: over_two_months_ago)
+      create(:decision, :approved, claim: claim, created_at: last_academic_year)
+      create(:payment, :with_figures, claims: [claim], scheduled_payment_date: last_academic_year)
     end
 
     freeze_time do
