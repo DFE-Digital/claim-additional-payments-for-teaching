@@ -11,7 +11,7 @@
       <h1 class="govuk-heading-l">
         <%= t("early_career_payments.questions.poor_performance") %>
       </h1>
-      <%= form_group_tag current_claim do %>
+      <%= form_group_tag current_claim.eligibility, :subject_to_formal_performance_action do %>
         <%= form.fields_for :eligibility, include_id: false do |fields| %>
           
           <%= fields.hidden_field :subject_to_formal_performance_action %>
@@ -49,7 +49,7 @@
         <% end %>
       <% end %>
 
-      <%= form_group_tag current_claim do %>
+      <%= form_group_tag current_claim.eligibility, :subject_to_disciplinary_action do %>
         <%= form.fields_for :eligibility, include_id: false do |fields| %>
 
           <%= fields.hidden_field :subject_to_disciplinary_action %>
