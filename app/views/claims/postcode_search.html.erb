@@ -10,7 +10,7 @@
           <h1 class="govuk-heading-l"><%= I18n.t("questions.address.home.title") %></h1>
         </legend>
         <%= form_group_tag current_claim, :postcode do %>
-          <% postcode = form.object.postcode.present? ? form.object.postcode : session[:claim_postcode] %>
+          <% postcode = form.object.postcode.present? && !session[:claim_postcode] ? form.object.postcode : session[:claim_postcode] %>
           <%= label_tag :"claim_postcode", "Postcode", class: "govuk-label govuk-label--m" %>
           <%= errors_tag current_claim, :postcode %>
           <%= text_field_tag :"claim[postcode]",
