@@ -25,8 +25,6 @@ class Claim
       :mobile_number
     ]
 
-    TIME_BEFORE_CLAIM_CONSIDERED_OLD = 2.months
-
     def scrub_completed_claims
       Claim.transaction do
         old_claims_rejected_or_paid.includes(:amendments).each do |claim|
@@ -51,9 +49,17 @@ class Claim
         .where(personal_data_removed_at: nil)
         .where(
           "(decisions.undone = false AND decisions.result = :rejected AND decisions.created_at < :minimum_time) OR scheduled_payment_date < :minimum_time",
-          minimum_time: TIME_BEFORE_CLAIM_CONSIDERED_OLD.ago,
+          minimum_time: minimum_time,
           rejected: Decision.results.fetch(:rejected)
         )
+    end
+
+    def minimum_time
+      Time.zone.local(current_academic_year.start_year, 9, 1)
+    end
+
+    def current_academic_year
+      AcademicYear.for(Date.today)
     end
 
     def scrub_amendments_personal_data(claim)
