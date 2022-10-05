@@ -72,7 +72,7 @@ RSpec.describe "Admin claim amendments" do
 
         expect(response).to have_http_status(:ok)
 
-        expect(response.body).to include("Teacher reference number must contain seven digits")
+        expect(response.body).to include("Teacher reference number must be 7 digits")
         expect(response.body).to include("Enter an account number")
       end
 
