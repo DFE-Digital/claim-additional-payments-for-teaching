@@ -48,23 +48,26 @@
             </div>
 
             <%= errors_tag current_claim, :date_of_birth %>
+            <%
+              dob_class = current_claim.errors[:date_of_birth].any? ? "govuk-input--error" : ""
+            %>
             <div class="govuk-date-input">
               <div class="govuk-date-input__item">
                 <div class="govuk-form-group">
                   <%= label_tag :"claim_date_of_birth_3i", "Day", class: "govuk-label govuk-date-input__label" %>
-                  <%= text_field_tag :"claim[date_of_birth(3i)]", form.object.date_of_birth.try(:day) || form.object.date_of_birth_day, id: "claim_date_of_birth_3i", class: "govuk-input govuk-date-input__input govuk-input--width-2", type: "number", autocomplete: "bday-day", pattern: "[0-9]*" %>
+                  <%= text_field_tag :"claim[date_of_birth(3i)]", form.object.date_of_birth.try(:day) || form.object.date_of_birth_day, id: "claim_date_of_birth_3i", class: "govuk-input govuk-date-input__input govuk-input--width-2 #{dob_class}", type: "number", autocomplete: "bday-day", pattern: "[0-9]*" %>
                 </div>
               </div>
               <div class="govuk-date-input__item">
                 <div class="govuk-form-group">
                   <%= label_tag :"claim_date_of_birth_2i", "Month", class: "govuk-label govuk-date-input__label" %>
-                  <%= text_field_tag :"claim[date_of_birth(2i)]", form.object.date_of_birth.try(:month) || form.object.date_of_birth_month, id: "claim_date_of_birth_2i", class: "govuk-input govuk-date-input__input govuk-input--width-2", type: "number", autocomplete: "bday-month", pattern: "[0-9]*" %>
+                  <%= text_field_tag :"claim[date_of_birth(2i)]", form.object.date_of_birth.try(:month) || form.object.date_of_birth_month, id: "claim_date_of_birth_2i", class: "govuk-input govuk-date-input__input govuk-input--width-2 #{dob_class}", type: "number", autocomplete: "bday-month", pattern: "[0-9]*" %>
                 </div>
               </div>
               <div class="govuk-date-input__item">
                 <div class="govuk-form-group">
                   <%= label_tag :"claim_date_of_birth_1i", "Year", class: "govuk-label govuk-date-input__label" %>
-                  <%= text_field_tag :"claim[date_of_birth(1i)]", form.object.date_of_birth.try(:year) || form.object.date_of_birth_year, id: "claim_date_of_birth_1i", class: "govuk-input govuk-date-input__input govuk-input--width-4", type: "number", autocomplete: "bday-year", pattern: "[0-9]*" %>
+                  <%= text_field_tag :"claim[date_of_birth(1i)]", form.object.date_of_birth.try(:year) || form.object.date_of_birth_year, id: "claim_date_of_birth_1i", class: "govuk-input govuk-date-input__input govuk-input--width-4 #{dob_class}", type: "number", autocomplete: "bday-year", pattern: "[0-9]*" %>
                 </div>
               </div>
             </div>
