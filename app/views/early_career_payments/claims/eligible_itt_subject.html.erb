@@ -20,9 +20,9 @@
             </legend>
 
             <% if current_claim.eligibility.nqt_in_academic_year_after_itt && subject_symbols.many? %>
-              <span class="govuk-hint">
+              <div class="govuk-hint">
                 <%= t("early_career_payments.questions.eligible_itt_subject_hint") %>
-              </span>
+              </div>
             <% end %>
 
             <%= errors_tag current_claim.eligibility, :eligible_itt_subject %>

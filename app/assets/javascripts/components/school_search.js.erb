@@ -97,18 +97,18 @@ document.addEventListener("DOMContentLoaded", function () {
           '<label class="govuk-label govuk-label--s">' +
           school.name +
           "</label>" +
-          '<span class="govuk-hint">' +
+          '<div class="govuk-hint">' +
           school.address +
-          "</span>" +
+          "</div>" +
           "</div>";
 
         if (school.closeDate) {
           suggestion +=
             '<div class="school-search__closed-status">' +
-            '<span class="govuk-hint govuk-!-margin-bottom-1">' +
+            '<div class="govuk-hint govuk-!-margin-bottom-1">' +
             "Closed on<br>" +
             school.closeDate +
-            "</span>" +
+            "</div>" +
             "</div>";
         }
 

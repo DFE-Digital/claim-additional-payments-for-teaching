@@ -11,9 +11,9 @@
     <%= form_group_tag support_ticket, :url do %>
       <%= errors_tag support_ticket, :url %>
       <%= form.label :url, "Support ticket", class: "govuk-label govuk-label--m" %>
-      <span class="govuk-hint" id="ticket-hint">
+      <div class="govuk-hint" id="ticket-hint">
         Create a ticket on Zendesk and enter the URL here.
-      </span>
+      </div>
       <%= form.text_field :url, class: "govuk-input govuk-input", autocomplete: "off", "aria-describedby" => "ticket-hint" %>
     <% end %>
 
