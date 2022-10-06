@@ -11,9 +11,9 @@
 
     <%= form_group_tag current_claim, :banking_name do %>
       <%= form.label :banking_name, "Name on your account", class: "govuk-label" %>
-      <span class="govuk-hint" id="name-on-the-account-hint">
+      <div class="govuk-hint" id="name-on-the-account-hint">
         <%= t("questions.account_hint", bank_or_building_society: account_hint, card: account_card) %>
-      </span>
+      </div>
       <%= errors_tag current_claim, :banking_name %>
       <%= form.text_field :banking_name,
         class: css_classes_for_input(current_claim, :banking_name),
@@ -23,7 +23,7 @@
 
     <%= form_group_tag current_claim, :bank_sort_code do %>
       <%= form.label :bank_sort_code, "Sort code", class: "govuk-label" %>
-      <span id="sort-code-hint" class="govuk-hint">For example: 309430</span>
+      <div id="sort-code-hint" class="govuk-hint">For example: 309430</div>
       <%= errors_tag current_claim, :bank_sort_code %>
       <%= form.text_field :bank_sort_code,
         class: css_classes_for_input(current_claim, :bank_sort_code, "govuk-!-width-one-quarter"),
@@ -33,7 +33,7 @@
 
     <%= form_group_tag current_claim, :bank_account_number do %>
       <%= form.label :bank_account_number, "Account number", class: "govuk-label" %>
-      <span id="account-number-hint" class="govuk-hint">For example: 00733445</span>
+      <div id="account-number-hint" class="govuk-hint">For example: 00733445</div>
       <%= errors_tag current_claim, :bank_account_number %>
       <%= form.text_field :bank_account_number,
         class: css_classes_for_input(current_claim, :bank_account_number, "govuk-input--width-20"),
@@ -44,7 +44,7 @@
     <% if bank_or_building_society == "building society" %>
       <%= form_group_tag current_claim, :building_society_roll_number do %>
         <%= form.label :building_society_roll_number, "Building society roll number", class: "govuk-label" %>
-        <span id="roll-number-hint" class="govuk-hint">You can find it on your card, statement or passbook</span>
+        <div id="roll-number-hint" class="govuk-hint">You can find it on your card, statement or passbook</div>
         <%= errors_tag current_claim, :building_society_roll_number %>
         <%= form.text_field :building_society_roll_number,
           class: css_classes_for_input(current_claim, :building_society_roll_number, "govuk-input--width-20"),

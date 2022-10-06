@@ -22,10 +22,10 @@
               </h1>
             </legend>
 
-            <span class="govuk-hint" id="teaching_subject_now-hint">
+            <div class="govuk-hint" id="teaching_subject_now-hint">
              At least 50% of your contracted hours allocated to teaching must be spent
              teaching <%= subjects_to_sentence_for_hint_text(current_claim) %>.
-            </span>
+            </div>
 
             <%= errors_tag current_claim.eligibility, :teaching_subject_now %>
 

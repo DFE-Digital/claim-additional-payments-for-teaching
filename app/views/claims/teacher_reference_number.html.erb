@@ -11,9 +11,9 @@
           <%= form.label :teacher_reference_number, t("questions.teacher_reference_number"), class: "govuk-label govuk-label--#{shared_view_css_size}" %>
         </h1>
 
-        <span class="govuk-hint" id="teacher_reference_number-hint">
+        <div class="govuk-hint" id="teacher_reference_number-hint">
           You can get this from your payslip, teacher pension statement or teacher training records.
-        </span>
+        </div>
 
         <div class="govuk-form-group">
           <%= errors_tag current_claim, :teacher_reference_number %>
