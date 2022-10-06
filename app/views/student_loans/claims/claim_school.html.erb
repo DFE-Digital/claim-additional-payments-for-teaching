@@ -16,7 +16,8 @@
       <%= render "school_search_results",
                  question: claim_school_question(additional_school: params[:additional_school]),
                  school_param: :claim_school,
-                 school_id_param: :claim_school_id
+                 school_id_param: :claim_school_id,
+                 exclude_closed: false
       %>
     <% end %>
   </div>

@@ -25,6 +25,7 @@
         </span>
 
       <%= hidden_field_tag :school_search, params[:school_search] %>
+      <%= hidden_field_tag :exclude_closed, exclude_closed %>
 
       <%= errors_tag current_claim.eligibility, school_param %>
 
