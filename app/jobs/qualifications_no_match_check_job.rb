@@ -1,16 +1,26 @@
 # This job is not called anywhere in the code but can be used manually to re-run
 # NO MATCH claims that initially got an incorrect response from the DQT API.
 # DQT API has a limit of 300 requests/minute
+# Task can be stopped by running `Delayed::Job.where("handler LIKE ?", "%QualificationsNoMatchCheckJob%").destroy_all`
 # QualificationsNoMatchCheckJob.perform_later
 
 class QualificationsNoMatchCheckJob < ApplicationJob
-  def perform
-    claims_with_no_match_qualification_tasks.each_slice(250).with_index do |claims, index|
+  def perform(filter: nil)
+    claims = claims_with_no_match_qualification_tasks
+
+    if filter == :qts_award_for_non_pg
+      claims = claims.select do |claim|
+        claim.notes.where("body LIKE ?", "%Qualification name: QTS Award\n%").any? &&
+          (claim.eligibility.undergraduate_itt? || claim.eligibility.assessment_only?)
+      end
+    end
+
+    claims.each_slice(250).with_index do |cl, index|
       sleep 60 unless index.zero?
 
-      Task.where(claim_id: claims.pluck(:id), name: "qualifications").delete_all
+      Task.where(claim_id: cl.pluck(:id), name: "qualifications").delete_all
 
-      claims.each do |claim|
+      cl.each do |claim|
         AutomatedChecks::ClaimVerifiers::Qualifications.new(
           claim: claim,
           dqt_teacher_status: Dqt::Client.new.teacher.find(
