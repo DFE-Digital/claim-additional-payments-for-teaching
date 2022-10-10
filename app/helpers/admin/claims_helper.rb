@@ -150,12 +150,33 @@ module Admin
       end
     end
 
-    def payroll_run_status(claim)
+    def status(claim)
       if claim.payrolled?
         link_to(claim.payment.payroll_run.created_at.strftime("%B %Y"), admin_payroll_run_path(claim.payment.payroll_run))
+      elsif claim.latest_decision&.approved?
+        "Approved awaiting payroll"
+      elsif claim.latest_decision&.rejected?
+        "Rejected"
       else
-        "Awaiting payroll"
+        "Awaiting decision"
       end
+    end
+
+    def index_status_filter(status)
+      return "approved awaiting payroll" if status == "approved_awaiting_payroll"
+      return status if ["approved", "rejected"].include?(status)
+
+      "awaiting a decision"
+    end
+
+    NO_CLAIMS = {
+      "approved_awaiting_payroll" => "There are currently no approved claims awaiting payroll.",
+      "approved" => "There are currently no approved claims.",
+      "rejected" => "There are currently no rejected claims."
+    }
+
+    def no_claims(status)
+      NO_CLAIMS[status] || "There are currently no claims to approve."
     end
 
     private

@@ -22,6 +22,12 @@
           <%= form.select :team_member, options_for_select(DfeSignIn::User.options_for_select_by_name, params[:team_member]), {include_blank: "All"}, class: "govuk-select" %>
         </div>
         <div>
+          <label class="govuk-label" for="status">
+            Status:
+          </label>
+          <%= form.select :status, options_for_select([["Approved awaiting payroll", "approved_awaiting_payroll"], ["Approved", "approved"], ["Rejected", "rejected"]], params[:status]), {include_blank: "Awaiting decision"}, class: "govuk-select" %>
+        </div>
+        <div>
           <%= form.submit "Go", class: "govuk-button govuk-button--secondary admin-filter-group__button" %>
         </div>
       </div>
@@ -30,7 +36,7 @@
     <% if @claims.any? %>
       <% claims_with_warning = Claim.approaching_decision_deadline.count + Claim.passed_decision_deadline.count %>
 
-      <h2 class="govuk-heading-m"><%= pluralize(@total_claim_count, "claim") %> awaiting a decision</h2>
+      <h2 class="govuk-heading-m"><%= pluralize(@total_claim_count, "claim") %> <%= index_status_filter(params[:status]) %></h2>
       <%= link_to "Download report request file", admin_claims_path(format: :csv), class: "govuk-button govuk-button--secondary", data: { module: "govuk-button" }, role: :button %>
       <%= link_to "Upload DQT report", new_admin_qualification_report_upload_path, class: "govuk-button govuk-button--secondary", data: { module: "govuk-button" }, role: :button %>
       <%= link_to "Upload School Workforce Census data", new_admin_school_workforce_census_data_upload_path, class: "govuk-button govuk-button--secondary", data: { module: "govuk-button" }, role: :button %>
@@ -77,9 +83,7 @@
 
       <%== render partial: 'pagination', locals: { pagy: @pagy } %>
     <% else %>
-
-      <h2 class="govuk-heading-m">There are currently no claims to approve.</h2>
-
+      <h2 class="govuk-heading-m"><%= no_claims(params[:status])%></h2>
     <% end %>
   </div>
 </div>
