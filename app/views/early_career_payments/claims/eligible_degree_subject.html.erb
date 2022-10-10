@@ -22,10 +22,10 @@
               </h1>
             </legend>
 
-            <span class="govuk-hint" id="has_uk_maths_or_physics_degree-hint">
+            <div class="govuk-hint" id="has_uk_maths_or_physics_degree-hint">
               This can be an undergraduate or postgraduate degree in
               <%= JourneySubjectEligibilityChecker.fixed_lup_subject_symbols.to_sentence(last_word_connector: ' or ') %>.
-            </span>
+            </div>
 
             <%= errors_tag claim.eligibility, :eligible_degree_subject %>
 

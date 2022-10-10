@@ -18,14 +18,14 @@
               </h1>
             </legend>
 
-            <span class="govuk-hint" id="has_uk_maths_or_physics_degree-hint">
+            <div class="govuk-hint" id="has_uk_maths_or_physics_degree-hint">
               <p>You must have specialised in maths or physics to be able to
               claim. If you studied maths or physics for less than 50% of your
               degree, please select No.</p>
 
               <p>For more information on which subjects are eligible, see the
               <%= link_to "qualifications criteria", "https://www.gov.uk/guidance/apply-for-mathematics-and-physics-teacher-retention-payments#opportinity-area", class: "govuk-link" %> for this service.</p>
-            </span>
+            </div>
 
             <%= errors_tag current_claim.eligibility, :has_uk_maths_or_physics_degree %>
 

@@ -13,7 +13,15 @@ RSpec.describe QualificationsNoMatchCheckJob do
     create(:task, claim: claim, name: "qualifications", claim_verifier_match: claim_verifier_match, manual: false)
   end
 
-  let(:claim) { create(:claim, :submitted, academic_year: PolicyConfiguration.for(EarlyCareerPayments).current_academic_year) }
+  let(:claim) do
+    create(
+      :claim,
+      :submitted,
+      academic_year: PolicyConfiguration.for(EarlyCareerPayments).current_academic_year,
+      policy: EarlyCareerPayments
+    )
+  end
+
   let(:claim_verifier_match) { nil }
 
   describe "#perform" do
@@ -45,6 +53,45 @@ RSpec.describe QualificationsNoMatchCheckJob do
         expect { described_class.new.perform }
           .to change { claim.notes.count }.by(1)
           .and(change { claim.tasks.last.created_at })
+      end
+
+      context "when passing a qts_award_for_non_pg scope" do
+        before do
+          described_class.new.perform
+        end
+
+        it "re-runs the task without updates" do
+          expect { described_class.new.perform(filter: :qts_award_for_non_pg) }
+            .to not_change { claim.notes.count }
+            .and(not_change { claim.tasks.last.created_at })
+        end
+
+        context "when the conditions of the filter are being met" do
+          before do
+            note_body =
+              <<~HTML
+                Ineligible:
+                <pre>
+                  ITT subjects: ["Theology and the Universe", "", ""]
+                  ITT subject codes:  ["TT100", "", ""]
+                  Degree codes:       []
+                  ITT start date:     2015-09-01
+                  QTS award date:     2016-09-01
+                  Qualification name: QTS Award
+                </pre>
+              HTML
+
+            claim.notes = [build(:note, body: note_body)]
+            claim.eligibility.qualification = :undergraduate_itt
+            claim.save
+          end
+
+          it "re-runs the task with updates" do
+            expect { described_class.new.perform(filter: :qts_award_for_non_pg) }
+              .to change { claim.notes.count }.by(1)
+              .and(change { claim.tasks.last.created_at })
+          end
+        end
       end
     end
 

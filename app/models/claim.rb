@@ -420,7 +420,7 @@ class Claim < ApplicationRecord
   end
 
   def trn_must_be_seven_digits
-    errors.add(:teacher_reference_number, "Teacher reference number must contain seven digits") if teacher_reference_number.present? && normalised_trn.length != TRN_LENGTH
+    errors.add(:teacher_reference_number, "Teacher reference number must be 7 digits") if teacher_reference_number.present? && normalised_trn.length != TRN_LENGTH
   end
 
   def normalise_ni_number
