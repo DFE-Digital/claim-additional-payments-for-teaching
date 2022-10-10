@@ -43,18 +43,21 @@ module Dqt
           "BSc (Hons) with Intercalated PGCE",
           "BSc/Certificate in Education (QTS)",
           "BSc/Education (QTS)",
+          "QTS Award",
           "RTP",
           "Troops to Teach",
           "Undergraduate Master of Teaching"
         ],
         assessment_only: [
           "Assessment Only Route",
+          "QTS Award",
           "QTS Assessment only",
           "QTS Award only"
         ],
         overseas_recognition: [
           "EEA",
           "Northern Ireland",
+          "QTS Award",
           "Qualification gained in Europe",
           "OTT",
           "OTT Recognition",
