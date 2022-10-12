@@ -46,7 +46,7 @@ module LevellingUpPremiumPayments
     #   <AcademicYear:0x00007f7d87428c98 @start_year=nil, @end_year=nil> => "None"
     # }
     SELECTABLE_ITT_ACADEMIC_YEARS =
-      JourneySubjectEligibilityChecker.selectable_itt_years_for_claim_year(AcademicYear.for(Date.today)).each_with_object({}) do |year, hsh|
+      JourneySubjectEligibilityChecker.selectable_itt_years_for_claim_year(PolicyConfiguration.for(LevellingUpPremiumPayments).current_academic_year).each_with_object({}) do |year, hsh|
         hsh[year] = AcademicYear::Type.new.serialize(year)
       end.merge({AcademicYear.new => AcademicYear::Type.new.serialize(AcademicYear.new)})
 
