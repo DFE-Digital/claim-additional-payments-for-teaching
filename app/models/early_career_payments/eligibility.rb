@@ -29,6 +29,17 @@ module EarlyCareerPayments
 
     self.table_name = "early_career_payments_eligibilities"
 
+    # Generates an object similar to
+    # {
+    #   <AcademicYear:0x00007f7d87429238 @start_year=2020, @end_year=2021> => "2020/2021",
+    #   <AcademicYear:0x00007f7d87429210 @start_year=2021, @end_year=2022> => "2021/2022",
+    #   <AcademicYear:0x00007f7d87428c98 @start_year=nil, @end_year=nil> => "None"
+    # }
+    SELECTABLE_ITT_ACADEMIC_YEARS =
+      JourneySubjectEligibilityChecker.selectable_itt_years_for_claim_year(PolicyConfiguration.for(EarlyCareerPayments).current_academic_year).each_with_object({}) do |year, hsh|
+        hsh[year] = AcademicYear::Type.new.serialize(year)
+      end.merge({AcademicYear.new => AcademicYear::Type.new.serialize(AcademicYear.new)})
+
     enum qualification: {
       postgraduate_itt: 0,
       undergraduate_itt: 1,
@@ -45,14 +56,7 @@ module EarlyCareerPayments
       computing: 5
     }, _prefix: :itt_subject
 
-    enum itt_academic_year: {
-      AcademicYear.new(2017) => AcademicYear::Type.new.serialize(AcademicYear.new(2017)),
-      AcademicYear.new(2018) => AcademicYear::Type.new.serialize(AcademicYear.new(2018)),
-      AcademicYear.new(2019) => AcademicYear::Type.new.serialize(AcademicYear.new(2019)),
-      AcademicYear.new(2020) => AcademicYear::Type.new.serialize(AcademicYear.new(2020)),
-      AcademicYear.new(2021) => AcademicYear::Type.new.serialize(AcademicYear.new(2021)),
-      AcademicYear.new => AcademicYear::Type.new.serialize(AcademicYear.new)
-    }
+    enum itt_academic_year: SELECTABLE_ITT_ACADEMIC_YEARS
 
     def self.max_award_amount_in_pounds
       AwardAmountCalculator.max_award_amount_in_pounds

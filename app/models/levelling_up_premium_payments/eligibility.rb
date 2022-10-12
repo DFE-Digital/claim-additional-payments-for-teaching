@@ -38,9 +38,6 @@ module LevellingUpPremiumPayments
 
     # Generates an object similar to
     # {
-    #   <AcademicYear:0x00007f7d874293c8 @start_year=2017, @end_year=2018> => "2017/2018",
-    #   <AcademicYear:0x00007f7d87429288 @start_year=2018, @end_year=2019> => "2018/2019",
-    #   <AcademicYear:0x00007f7d87429260 @start_year=2019, @end_year=2020> => "2019/2020",
     #   <AcademicYear:0x00007f7d87429238 @start_year=2020, @end_year=2021> => "2020/2021",
     #   <AcademicYear:0x00007f7d87429210 @start_year=2021, @end_year=2022> => "2021/2022",
     #   <AcademicYear:0x00007f7d87428c98 @start_year=nil, @end_year=nil> => "None"
