@@ -1,13 +1,13 @@
 module LevellingUpPremiumPayments
   class Eligibility < ApplicationRecord
     include EligibilityCheckable
+    include ActiveSupport::NumberHelper
 
     self.table_name = "levelling_up_premium_payments_eligibilities"
     has_one :claim, as: :eligibility, inverse_of: :eligibility
     belongs_to :current_school, optional: true, class_name: "School"
 
-    # TODO: use first year of LUP for now but this must come from a PolicyConfiguration
-    validates :award_amount, on: :amendment, award_range: {max: LevellingUpPremiumPayments::Award.max(AcademicYear.new(2022))}
+    validate :award_amount_must_be_in_range, on: :amendment
     validates :eligible_degree_subject, on: [:"eligible-degree-subject"], inclusion: {in: [true, false], message: "Select yes if you have a degree in an eligible subject"}
 
     delegate :name, to: :current_school, prefix: true, allow_nil: true
@@ -36,6 +36,20 @@ module LevellingUpPremiumPayments
       "itt_academic_year" => ["eligible_itt_subject"]
     }.freeze
 
+    # Generates an object similar to
+    # {
+    #   <AcademicYear:0x00007f7d874293c8 @start_year=2017, @end_year=2018> => "2017/2018",
+    #   <AcademicYear:0x00007f7d87429288 @start_year=2018, @end_year=2019> => "2018/2019",
+    #   <AcademicYear:0x00007f7d87429260 @start_year=2019, @end_year=2020> => "2019/2020",
+    #   <AcademicYear:0x00007f7d87429238 @start_year=2020, @end_year=2021> => "2020/2021",
+    #   <AcademicYear:0x00007f7d87429210 @start_year=2021, @end_year=2022> => "2021/2022",
+    #   <AcademicYear:0x00007f7d87428c98 @start_year=nil, @end_year=nil> => "None"
+    # }
+    SELECTABLE_ITT_ACADEMIC_YEARS =
+      JourneySubjectEligibilityChecker.selectable_itt_years_for_claim_year(AcademicYear.for(Date.today)).each_with_object({}) do |year, hsh|
+        hsh[year] = AcademicYear::Type.new.serialize(year)
+      end.merge({AcademicYear.new => AcademicYear::Type.new.serialize(AcademicYear.new)})
+
     enum qualification: {
       postgraduate_itt: 0,
       undergraduate_itt: 1,
@@ -52,23 +66,7 @@ module LevellingUpPremiumPayments
       computing: 5
     }, _prefix: :itt_subject
 
-    # TODO this is *inadequate* for future policy years
-    # Whatever the current policy year is, a teacher should be able to
-    # choose from the previous five academic years. To cover the life
-    # of LUP, this needs to be from 2017/2018 to 2023/2024 (inclusive) but remember
-    # only the previous five should ever be selectable (and valid) for the
-    # current policy year.
-    #
-    # You can get the previous five academic years for display (and validation) from
-    # the `JourneySubjectEligibilityChecker.selectable_itt_years_for_claim_year` method
-    enum itt_academic_year: {
-      AcademicYear.new(2017) => AcademicYear::Type.new.serialize(AcademicYear.new(2017)),
-      AcademicYear.new(2018) => AcademicYear::Type.new.serialize(AcademicYear.new(2018)),
-      AcademicYear.new(2019) => AcademicYear::Type.new.serialize(AcademicYear.new(2019)),
-      AcademicYear.new(2020) => AcademicYear::Type.new.serialize(AcademicYear.new(2020)),
-      AcademicYear.new(2021) => AcademicYear::Type.new.serialize(AcademicYear.new(2021)),
-      AcademicYear.new => AcademicYear::Type.new.serialize(AcademicYear.new)
-    }
+    enum itt_academic_year: SELECTABLE_ITT_ACADEMIC_YEARS
 
     before_save :set_qualification_if_trainee_teacher, if: :nqt_in_academic_year_after_itt_changed?
 
@@ -170,6 +168,14 @@ module LevellingUpPremiumPayments
       return unless trainee_teacher?
 
       self.qualification = :postgraduate_itt
+    end
+
+    def award_amount_must_be_in_range
+      max = LevellingUpPremiumPayments::Award.max(claim_year)
+
+      unless award_amount.between?(1, max)
+        errors.add(:award_amount, "Enter a positive amount up to #{number_to_currency(max)} (inclusive)")
+      end
     end
   end
 end
