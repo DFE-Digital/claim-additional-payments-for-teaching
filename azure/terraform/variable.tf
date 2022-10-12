@@ -49,6 +49,12 @@ variable "suppress_dfe_analytics_init" {
   default     = null
 }
 
+variable "enable_basic_auth" {
+  type        = bool
+  description = "Enable basic HTTP authentication"
+  default     = false
+}
+
 locals {
   app_name = var.pr_number == null ? null : "pr-${var.pr_number}"
   db_name         = local.app_name == null ? var.environment : "${var.environment}-${local.app_name}"

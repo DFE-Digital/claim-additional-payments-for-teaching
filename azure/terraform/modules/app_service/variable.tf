@@ -60,6 +60,12 @@ variable "suppress_dfe_analytics_init" {
   default     = null
 }
 
+variable "enable_basic_auth" {
+  type        = bool
+  description = "Enable basic HTTP authentication"
+  default     = false
+}
+
 locals {
   stash_port         = var.rg_prefix == "s118p01" ? "23888" : "17000"
 
@@ -67,7 +73,7 @@ locals {
   canonical_hostname = var.canonical_hostname != null ? var.canonical_hostname : "${local.app_service_name}.azurewebsites.net"
 
   docker_registry = "index.docker.io"
-  environment_variables = {
+  default_environment_variables = {
     "ADMIN_ALLOWED_IPS"              = data.azurerm_key_vault_secret.AdminAllowedIPs.value
     "APPINSIGHTS_INSTRUMENTATIONKEY" = data.azurerm_application_insights.app_ai.instrumentation_key
     "BIGQUERY_TABLE_NAME"            = data.azurerm_key_vault_secret.BigqueryTableName.value
@@ -114,4 +120,9 @@ locals {
     "BYPASS_DFE_SIGN_IN"                             = var.bypass_dfe_sign_in
     "PR_NUMBER"                                      = var.pr_number
   }
+
+  environment_variables = var.enable_basic_auth ? merge(local.default_environment_variables, {
+      BASIC_AUTH_USERNAME = data.azurerm_key_vault_secret.BasicAuthUsername[0].value
+      BASIC_AUTH_PASSWORD = data.azurerm_key_vault_secret.BasicAuthPassword[0].value
+    }) : local.default_environment_variables
 }
