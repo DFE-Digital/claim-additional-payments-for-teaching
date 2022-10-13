@@ -90,7 +90,7 @@ module EarlyCareerPayments
 
     # Rescues from errors for assignments coming from LUP-only fields
     # eg. `claim.eligibility.eligible_degree_subject = true` will get ignored
-    def assign_attributes(*args)
+    def assign_attributes(*args, **kwargs)
       super
     rescue ActiveRecord::UnknownAttributeError
       all_attributes_ignored = (args.first.keys - IGNORED_ATTRIBUTES).empty?
@@ -140,7 +140,7 @@ module EarlyCareerPayments
       if args.values.any?(&:blank?)
         0
       else
-        AwardAmountCalculator.new(args).amount_in_pounds
+        AwardAmountCalculator.new(**args).amount_in_pounds
       end
     end
 
@@ -199,7 +199,7 @@ module EarlyCareerPayments
         # can still rule some out
         itt_subject_none_of_the_above?
       else
-        itt_subject_checker = JourneySubjectEligibilityChecker.new(args)
+        itt_subject_checker = JourneySubjectEligibilityChecker.new(**args)
         itt_subject_symbol = itt_subject.to_sym
         !itt_subject_symbol.in?(itt_subject_checker.current_and_future_subject_symbols(policy))
       end

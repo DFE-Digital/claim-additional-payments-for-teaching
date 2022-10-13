@@ -10,7 +10,7 @@
 # * current_academic_year: the academic year the service is currently accepting
 #   claims for.
 class PolicyConfiguration < ApplicationRecord
-  ACADEMIC_YEAR_REGEXP = /\A20\d{2}\/20\d{2}\z/.freeze
+  ACADEMIC_YEAR_REGEXP = /\A20\d{2}\/20\d{2}\z/
 
   SERVICES = [
     {
