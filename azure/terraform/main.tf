@@ -41,4 +41,5 @@ module "app_service" {
   bypass_dfe_sign_in      = var.bypass_dfe_sign_in
   pr_number               = var.pr_number
   suppress_dfe_analytics_init = var.suppress_dfe_analytics_init
+  enable_basic_auth       = var.enable_basic_auth
 }
