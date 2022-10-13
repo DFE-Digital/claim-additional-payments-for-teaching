@@ -14,7 +14,7 @@ module LevellingUpPremiumPayments
     def eligible?
       LevellingUpPremiumPayments::Award.new(
         school: @school,
-        year: AcademicYear.for(Date.today)
+        year: PolicyConfiguration.for(LevellingUpPremiumPayments).current_academic_year
       ).has_award?
     end
   end
