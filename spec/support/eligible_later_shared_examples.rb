@@ -8,7 +8,6 @@ RSpec.shared_examples "Eligible later" do |opts|
     before do
       @ecp_policy_date = PolicyConfiguration.for(EarlyCareerPayments).current_academic_year
       PolicyConfiguration.for(EarlyCareerPayments).update(current_academic_year: policy_year)
-      PolicyConfiguration.for(LevellingUpPremiumPayments).update(current_academic_year: AcademicYear.for(Date.new(2022, 10, 10)))
 
       eligibility_attrs = attributes_for(:early_career_payments_eligibility, :eligible, qualification: qualification)
       eligibility_attrs[:current_school] = current_school
