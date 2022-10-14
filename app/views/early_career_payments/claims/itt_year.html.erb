@@ -33,8 +33,7 @@
             <% end %>
 
             <div class="govuk-radios">
-<!--              TODO this needs to get the year from the PolicyConfiguration-->
-              <% JourneySubjectEligibilityChecker.selectable_itt_years_for_claim_year(AcademicYear.new(2022)).each do |year| %>
+              <% JourneySubjectEligibilityChecker.selectable_itt_years_for_claim_year(PolicyConfiguration.for(EarlyCareerPayments).current_academic_year).each do |year| %>
                 <div class="govuk-radios__item">
                   <%= fields.radio_button(:itt_academic_year, year, class: "govuk-radios__input") %>
                   <%= fields.label "itt_academic_year_#{year.start_year}#{year.end_year}", year.to_s(:long), class: "govuk-label govuk-radios__label" %>

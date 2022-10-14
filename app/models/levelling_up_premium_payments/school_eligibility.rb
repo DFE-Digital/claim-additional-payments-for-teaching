@@ -12,7 +12,6 @@ module LevellingUpPremiumPayments
     end
 
     def eligible?
-      # TODO: use first year of LUP for now but this must come from a PolicyConfiguration
       LevellingUpPremiumPayments::Award.new(school: @school, year: AcademicYear.new(2022)).has_award?
     end
   end
