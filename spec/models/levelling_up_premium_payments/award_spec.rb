@@ -41,7 +41,7 @@ RSpec.describe LevellingUpPremiumPayments::Award do
 
       # *attempt* to check if the hash has been altered
       specify { expect(subject.values).to all be_positive }
-      specify { expect(subject.values.sum).to eq(5_916_000) }
+      specify { expect(subject.values.sum).to eq(5_917_500) }
       specify { expect(subject.values.uniq).to contain_exactly(1_500, 2_000, 2_500, 3_000) }
       specify { expect(subject.count).to eq(2_745) }
       specify {
