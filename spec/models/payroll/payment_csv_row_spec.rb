@@ -40,7 +40,7 @@ RSpec.describe Payroll::PaymentCsvRow do
       ]
     end
 
-    # Cantium Address format is described here:
+    # DfE Payroll Address format is described here:
     # ADDR_LINE_1 - House Name (optional)
     # ADDR_LINE_2 - Number and Street Name *
     # ADDR_LINE_3 - Local Area (optional)
@@ -49,7 +49,7 @@ RSpec.describe Payroll::PaymentCsvRow do
     # ADDR_LINE_6 - Postcode *
     context "with a StudentLoans and MathsAndPhysics claim" do
       context "with a four part address" do
-        it "generates a csv row formatted to match Cantium address" do
+        it "generates a csv row formatted to match DfE Payroll address" do
           travel_to Date.new(2019, 9, 26) do
             claim = claims.first
 
@@ -125,7 +125,7 @@ RSpec.describe Payroll::PaymentCsvRow do
           ]
         end
 
-        it "generates a csv row formatted to match Cantium address" do
+        it "generates a csv row formatted to match DfE Payroll address" do
           travel_to Date.new(2019, 9, 26) do
             claim = claims.first
 
@@ -198,7 +198,7 @@ RSpec.describe Payroll::PaymentCsvRow do
           ]
         end
 
-        it "generates a csv row formatted to match Cantium address" do
+        it "generates a csv row formatted to match DfE Payroll address" do
           travel_to Date.new(2019, 9, 26) do
             claim = claims.first
 
@@ -275,7 +275,7 @@ RSpec.describe Payroll::PaymentCsvRow do
     end
 
     describe "PAYMENT_ID" do
-      it "is 36 characters long, satisfying Cantium’s length validation" do
+      it "is 36 characters long, satisfying DfE Payroll’s length validation" do
         expect(row[30].length).to eq(36)
       end
     end
