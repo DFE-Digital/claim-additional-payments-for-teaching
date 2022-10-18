@@ -24,7 +24,7 @@ RSpec.feature "Admin claim filtering" do
 
     click_on "View claims"
     select "Maths and Physics", from: "policy"
-    click_on "Go"
+    click_on "Apply filters"
 
     maths_and_physics_claims.each do |c|
       expect(page).to have_content(c.reference)
@@ -44,7 +44,7 @@ RSpec.feature "Admin claim filtering" do
     click_on "View claims"
 
     select "Mette Jørgensen", from: "team_member"
-    click_on "Go"
+    click_on "Apply filters"
 
     [
       student_loans_claims_for_mette,
