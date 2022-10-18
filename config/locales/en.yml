@@ -166,6 +166,7 @@ en:
   maths_and_physics:
     policy_name: "Claim a payment for teaching maths or physics"
     policy_short_name: "Maths and Physics"
+    policy_acronym: "Maths and Physics"
     claim_description: "for a payment for teaching maths or physics"
     claim_subject: "Maths and Physics"
     claim_amount_description: "Payment for teaching maths or physics"
@@ -222,6 +223,7 @@ en:
   student_loans:
     policy_name: "Teachers: claim back your student loan repayments"
     policy_short_name: "Student Loans"
+    policy_acronym: "TSLR"
     claim_description: "to get back your student loan repayments"
     claim_subject: "Student loan repayment"
     claim_amount_description: "Student loan repayments you’ve claimed back"
@@ -276,6 +278,7 @@ en:
       btn_text: Accept and send
     policy_name: "Claim Additional Payments for Teaching"
     policy_short_name: "Early-Career Payments"
+    policy_acronym: "ECP"
     payment_name: "Early-career payment"
     claim_description: "for an additional payment for teaching"
     claim_subject: "Early-career payment"
@@ -362,6 +365,7 @@ en:
   levelling_up_premium_payments:
     purpose: For early career teachers who teach certain subjects and work in disadvantaged schools.
     policy_short_name: "Levelling Up Premium Payments"
+    policy_acronym: "LUP"
     payment_name: "Levelling up premium payment"
     claim_description: "for an additional payment for teaching"
     claim_subject: "Levelling up premium payment"

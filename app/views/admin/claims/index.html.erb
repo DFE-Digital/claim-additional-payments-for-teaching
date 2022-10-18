@@ -61,25 +61,21 @@
             <% end %>
             <th scope="col" class="govuk-table__header">Decision deadline</th>
             <th scope="col" class="govuk-table__header">Assigned to</th>
-            <th scope="col" class="govuk-table__header"><span class="govuk-visually-hidden">Actions</span></th>
           </tr>
         </thead>
         <tbody class="govuk-table__body">
           <% @claims.each do |claim| %>
             <tr class="govuk-table__row">
-              <th scope="row" class="govuk-table__header"><%= claim.reference %></th>
+              <th scope="row" class="govuk-table__header"><%= link_to claim.reference, admin_claim_tasks_path(claim), class: "govuk-link" %></th>
               <td class="govuk-table__cell"><%= claim.full_name %></td>
               <td class="govuk-table__cell"><%= identity_confirmation_task_claim_verifier_match_status_tag(claim) %></td>
               <td class="govuk-table__cell"><%= task_status_tag(claim, "qualifications") %></td>
-              <td class="govuk-table__cell"><%= claim.policy.short_name %></td>
+              <td class="govuk-table__cell"><%= I18n.t("#{claim.policy.locale_key}.policy_acronym") %></td>
               <% if claims_with_warning.nonzero? %>
                 <td class="govuk-table__cell"><%= decision_deadline_warning(claim) %></td>
               <% end %>
               <td class="govuk-table__cell"><%= l(claim.decision_deadline_date) %></td>
               <td class="govuk-table__cell"><%= claim.assigned_to.present? ? claim.assigned_to.full_name.titleize : nil %></td>
-              <td class="govuk-table__cell">
-                <%= link_to 'View tasks', admin_claim_tasks_path(claim), class: "govuk-link" %>
-              </td>
             </tr>
           <% end %>
         </tbody>
