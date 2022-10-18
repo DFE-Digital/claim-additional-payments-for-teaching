@@ -70,7 +70,7 @@ module EligibilityCheckable
     if args.values.any?(&:blank?)
       false
     else
-      JourneySubjectEligibilityChecker.new(args).current_and_future_subject_symbols(policy).empty?
+      JourneySubjectEligibilityChecker.new(**args).current_and_future_subject_symbols(policy).empty?
     end
   end
 
