@@ -31,6 +31,11 @@ FactoryBot.define do
       subject_3 { "Computer Science" }
     end
 
+    trait :student_loans_matched_languages_only do
+      teacher_reference_number { 3403431 }
+      subject_1 { "French" }
+    end
+
     trait :student_loans_unmatched do
       teacher_reference_number { 2109438 }
       subject_1 { "Other Mathematical Subject" }
