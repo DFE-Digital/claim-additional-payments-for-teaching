@@ -1,10 +1,10 @@
 source "https://rubygems.org"
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
-ruby "2.7.6"
+ruby "3.0.4"
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem "rails", "6.0.6"
+gem "rails", "6.1.7"
 # Use postgresql as the database for Active Record
 gem "pg", ">= 0.18", "< 2.0"
 # Use Puma as the app server
@@ -64,7 +64,7 @@ gem "httpclient"
 gem "daemons"
 
 # Gov form builder to structure claims
-gem "govuk_design_system_formbuilder"
+gem "govuk_design_system_formbuilder", "~> 2.8.0"
 
 # See https://github.com/typhoeus/ethon/issues/185
 gem "ethon", "~> 0.15.0"
@@ -91,8 +91,7 @@ gem "activerecord-copy", require: false
 gem "pagy"
 
 group :development, :test do
-  gem "amazing_print"
-  gem "byebug", platforms: [:mri, :mingw, :x64_mingw]
+  gem "debug"
   gem "rspec-rails"
   gem "capybara"
   gem "brakeman", require: false

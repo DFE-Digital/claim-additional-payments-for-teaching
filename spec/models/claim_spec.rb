@@ -164,7 +164,7 @@ RSpec.describe Claim, type: :model do
     # Tests a single attribute, possibly should test multiple attributes
     it "validates eligibility" do
       expect(claim).not_to be_valid(:"qts-year")
-      expect(claim.errors.values).to include(["Select when you completed your initial teacher training"])
+      expect(claim.errors.first.message).to eq("Select when you completed your initial teacher training")
     end
   end
 
@@ -174,7 +174,7 @@ RSpec.describe Claim, type: :model do
     # Tests a single attribute, possibly should test multiple attributes
     it "validates eligibility" do
       expect(claim).not_to be_valid(:"nqt-in-academic-year-after-itt")
-      expect(claim.errors.values).to include(["Select yes if you are currently teaching as a qualified teacher"])
+      expect(claim.errors.first.message).to eq("Select yes if you are currently teaching as a qualified teacher")
     end
   end
 
