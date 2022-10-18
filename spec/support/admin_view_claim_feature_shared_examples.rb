@@ -68,7 +68,7 @@ RSpec.shared_examples "Admin View Claim Feature" do |policy|
       visit admin_claims_path
 
       select "Approved awaiting payroll", from: "Status"
-      click_on "Go"
+      click_on "Apply filters"
 
       find("a[href='#{admin_claim_tasks_path(approved_awaiting_payroll_claim)}']").click
 
@@ -82,7 +82,7 @@ RSpec.shared_examples "Admin View Claim Feature" do |policy|
       visit admin_claims_path
 
       select "Approved", from: "Status"
-      click_on "Go"
+      click_on "Apply filters"
 
       find("a[href='#{admin_claim_tasks_path(approved_paid_claim)}']").click
 
@@ -95,7 +95,7 @@ RSpec.shared_examples "Admin View Claim Feature" do |policy|
       visit admin_claims_path
 
       select "Rejected", from: "Status"
-      click_on "Go"
+      click_on "Apply filters"
 
       find("a[href='#{admin_claim_tasks_path(rejected_claim)}']").click
 
