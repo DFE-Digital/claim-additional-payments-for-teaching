@@ -22,6 +22,7 @@ class Admin::DecisionsController < Admin::BaseAdminController
       redirect_to admin_claims_path, notice: "Claim has been #{@claim.latest_decision.result} successfully"
     else
       @claims_preventing_payment = claims_preventing_payment_finder.claims_preventing_payment
+      set_pagination
       render "new"
     end
   end
