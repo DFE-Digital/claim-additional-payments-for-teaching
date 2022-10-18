@@ -7,19 +7,28 @@
       Claims
     </h1>
 
+    <%= link_to "Download report request file", admin_claims_path(format: :csv), class: "govuk-button govuk-button--secondary", data: { module: "govuk-button" }, role: :button %>
+    <%= link_to "Upload DQT report", new_admin_qualification_report_upload_path, class: "govuk-button govuk-button--secondary", data: { module: "govuk-button" }, role: :button %>
+    <%= link_to "Upload School Workforce Census data", new_admin_school_workforce_census_data_upload_path, class: "govuk-button govuk-button--secondary", data: { module: "govuk-button" }, role: :button %>
+    <%= link_to "Upload TPS data", new_admin_tps_data_upload_path, class: "govuk-button govuk-button--secondary", data: { module: "govuk-button" }, role: :button %>
+
+    <%= render "allocations_form" %>
+
+    <h2 class="govuk-heading-m">Filter claims</h2>
+
     <%= form_with url: admin_claims_path, method: :get do |form| %>
       <div class="govuk-form-group admin-filter-group">
         <div>
-          <label class="govuk-label" for="policy">
-            Filter by policy:
-          </label>
-          <%= form.select :policy, options_for_select(Policies.options_for_select, params[:policy]), {include_blank: "All"}, class: "govuk-select" %>
-        </div>
-        <div>
           <label class="govuk-label" for="team_member">
-            Team members:
+            Team member:
           </label>
           <%= form.select :team_member, options_for_select(DfeSignIn::User.options_for_select_by_name, params[:team_member]), {include_blank: "All"}, class: "govuk-select" %>
+        </div>
+        <div>
+          <label class="govuk-label" for="policy">
+            Policy:
+          </label>
+          <%= form.select :policy, options_for_select(Policies.options_for_select, params[:policy]), {include_blank: "All"}, class: "govuk-select" %>
         </div>
         <div>
           <label class="govuk-label" for="status">
@@ -28,7 +37,8 @@
           <%= form.select :status, options_for_select([["Approved awaiting payroll", "approved_awaiting_payroll"], ["Approved", "approved"], ["Rejected", "rejected"]], params[:status]), {include_blank: "Awaiting decision"}, class: "govuk-select" %>
         </div>
         <div>
-          <%= form.submit "Go", class: "govuk-button govuk-button--secondary admin-filter-group__button" %>
+          <%= form.submit "Apply filters", class: "govuk-button govuk-button--secondary admin-filter-group__button" %>
+          <%= form.submit "Clear filters", type: "reset", class: "button-link admin-filter-group__button" %>
         </div>
       </div>
     <% end %>
@@ -37,12 +47,6 @@
       <% claims_with_warning = Claim.approaching_decision_deadline.count + Claim.passed_decision_deadline.count %>
 
       <h2 class="govuk-heading-m"><%= pluralize(@total_claim_count, "claim") %> <%= index_status_filter(params[:status]) %></h2>
-      <%= link_to "Download report request file", admin_claims_path(format: :csv), class: "govuk-button govuk-button--secondary", data: { module: "govuk-button" }, role: :button %>
-      <%= link_to "Upload DQT report", new_admin_qualification_report_upload_path, class: "govuk-button govuk-button--secondary", data: { module: "govuk-button" }, role: :button %>
-      <%= link_to "Upload School Workforce Census data", new_admin_school_workforce_census_data_upload_path, class: "govuk-button govuk-button--secondary", data: { module: "govuk-button" }, role: :button %>
-      <%= link_to "Upload TPS data", new_admin_tps_data_upload_path, class: "govuk-button govuk-button--secondary", data: { module: "govuk-button" }, role: :button %>
-
-      <%= render "allocations_form" %>
 
       <table class="govuk-table">
         <thead class="govuk-table__head">
@@ -57,25 +61,21 @@
             <% end %>
             <th scope="col" class="govuk-table__header">Decision deadline</th>
             <th scope="col" class="govuk-table__header">Assigned to</th>
-            <th scope="col" class="govuk-table__header"><span class="govuk-visually-hidden">Actions</span></th>
           </tr>
         </thead>
         <tbody class="govuk-table__body">
           <% @claims.each do |claim| %>
             <tr class="govuk-table__row">
-              <th scope="row" class="govuk-table__header"><%= claim.reference %></th>
+              <th scope="row" class="govuk-table__header"><%= link_to claim.reference, admin_claim_tasks_path(claim), class: "govuk-link" %></th>
               <td class="govuk-table__cell"><%= claim.full_name %></td>
               <td class="govuk-table__cell"><%= identity_confirmation_task_claim_verifier_match_status_tag(claim) %></td>
               <td class="govuk-table__cell"><%= task_status_tag(claim, "qualifications") %></td>
-              <td class="govuk-table__cell"><%= claim.policy.short_name %></td>
+              <td class="govuk-table__cell"><%= I18n.t("#{claim.policy.locale_key}.policy_acronym") %></td>
               <% if claims_with_warning.nonzero? %>
                 <td class="govuk-table__cell"><%= decision_deadline_warning(claim) %></td>
               <% end %>
               <td class="govuk-table__cell"><%= l(claim.decision_deadline_date) %></td>
               <td class="govuk-table__cell"><%= claim.assigned_to.present? ? claim.assigned_to.full_name.titleize : nil %></td>
-              <td class="govuk-table__cell">
-                <%= link_to 'View tasks', admin_claim_tasks_path(claim), class: "govuk-link" %>
-              </td>
             </tr>
           <% end %>
         </tbody>

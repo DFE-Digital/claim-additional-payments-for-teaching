@@ -20,11 +20,11 @@ RSpec.feature "Admin claim filtering" do
     click_on "View claims"
 
     expect(page.find("table")).to have_content("Maths and Physics").exactly(3).times
-    expect(page.find("table")).to have_content("Student Loans").exactly(7).times
+    expect(page.find("table")).to have_content("TSLR").exactly(7).times
 
     click_on "View claims"
     select "Maths and Physics", from: "policy"
-    click_on "Go"
+    click_on "Apply filters"
 
     maths_and_physics_claims.each do |c|
       expect(page).to have_content(c.reference)
@@ -38,13 +38,13 @@ RSpec.feature "Admin claim filtering" do
   scenario "the service operater can filter by themselves or other team members" do
     click_on "View claims"
 
-    expect(page.find("table")).to have_content("Student Loans").exactly(5).times
-    expect(page.find("table")).to have_content("Early-Career Payments").exactly(10).times
+    expect(page.find("table")).to have_content("TSLR").exactly(5).times
+    expect(page.find("table")).to have_content("ECP").exactly(10).times
 
     click_on "View claims"
 
     select "Mette Jørgensen", from: "team_member"
-    click_on "Go"
+    click_on "Apply filters"
 
     [
       student_loans_claims_for_mette,

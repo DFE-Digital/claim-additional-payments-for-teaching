@@ -116,7 +116,7 @@
               <th scope="row" rowspan="<%= number_of_claims %>" class="govuk-table__header"><%= payment.id %></th>
               <td class="govuk-table__cell" rowspan="<%= number_of_claims %>"><%= payment.banking_name %></td>
             <% end %>
-            <td class="govuk-table__cell"><%= claim.reference %></td>
+            <td class="govuk-table__cell"><%= link_to claim.reference, admin_claim_path(claim), class: "govuk-link" %></td>
             <td class="govuk-table__cell"><%= claim.policy.short_name %></td>
             <td class="govuk-table__cell"><%= number_to_currency(claim.award_amount) %></td>
             <% if index == 0 %>
