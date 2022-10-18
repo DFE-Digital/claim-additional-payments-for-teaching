@@ -29,7 +29,7 @@ module EarlyCareerPayments
       if award_args.values.any?(&:blank?)
         false
       else
-        AwardAmountCalculator.award?(award_args)
+        AwardAmountCalculator.award?(**award_args)
       end
     end
 
