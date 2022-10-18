@@ -191,7 +191,7 @@ RSpec.feature "Teacher Early-Career Payments claims" do
     expect(page).to have_text("Enter a valid passcode")
 
     # - clear and enter correct OTP
-    fill_in "claim_one_time_password", with: otp_in_mail_sent, fill_options: {clear: :backspace}
+    fill_in "claim_one_time_password", with: otp_in_mail_sent
     click_on "Confirm"
 
     # - Provide mobile number

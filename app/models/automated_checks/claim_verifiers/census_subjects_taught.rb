@@ -92,6 +92,9 @@ module AutomatedChecks
           SchoolWorkforceCensus::TSLR_ELIGIBLE_SUBJECTS
         ].reduce({}, :update)
 
+        # tslr claims are keyed on :languages not :foreign_languages
+        tslr_subjects[:languages] = tslr_subjects.delete(:foreign_languages)
+
         subjects_taught = claim.eligibility.subjects_taught.reduce([]) do |array, subject|
           array << subject.to_s.split("_").first.to_sym
         end
