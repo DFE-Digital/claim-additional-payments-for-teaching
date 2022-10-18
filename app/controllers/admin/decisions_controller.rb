@@ -1,4 +1,6 @@
 class Admin::DecisionsController < Admin::BaseAdminController
+  include AdminTaskPagination
+
   before_action :ensure_service_operator
   before_action :load_claim
   before_action :reject_decided_claims
@@ -8,6 +10,7 @@ class Admin::DecisionsController < Admin::BaseAdminController
   def new
     @decision = Decision.new
     @claim_checking_tasks = ClaimCheckingTasks.new(@claim)
+    set_pagination
     @claims_preventing_payment = claims_preventing_payment_finder.claims_preventing_payment
   end
 
@@ -59,5 +62,9 @@ class Admin::DecisionsController < Admin::BaseAdminController
 
   def decision_params
     params.require(:decision).permit(:result, :notes)
+  end
+
+  def current_task_name
+    "decision"
   end
 end
