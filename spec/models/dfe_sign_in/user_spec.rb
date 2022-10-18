@@ -86,7 +86,7 @@ RSpec.describe DfeSignIn::User, type: :model do
     let!(:davide) { create(:dfe_signin_user, given_name: "Davide", family_name: "Muzani", organisation_name: "Department for Education", role_codes: [DfeSignIn::User::SERVICE_OPERATOR_DFE_SIGN_IN_ROLE_CODE]) }
     let!(:tina) { create(:dfe_signin_user, given_name: "Tina", family_name: "Dee", organisation_name: "Department for Education", role_codes: [DfeSignIn::User::SERVICE_OPERATOR_DFE_SIGN_IN_ROLE_CODE]) }
     let!(:muhammad) { create(:dfe_signin_user, given_name: "Muhammad", family_name: "Khan", organisation_name: "Department for Education", role_codes: [DfeSignIn::User::SERVICE_OPERATOR_DFE_SIGN_IN_ROLE_CODE]) }
-    let!(:tripti) { create(:dfe_signin_user, given_name: "Tripti", family_name: "Kumar", organisation_name: "Cantium Business Services", role_codes: [DfeSignIn::User::PAYROLL_OPERATOR_DFE_SIGN_IN_ROLE_CODE]) }
+    let!(:tripti) { create(:dfe_signin_user, given_name: "Tripti", family_name: "Kumar", organisation_name: "DfE Payroll", role_codes: [DfeSignIn::User::PAYROLL_OPERATOR_DFE_SIGN_IN_ROLE_CODE]) }
 
     it "returns an array of 'Service Operators' for use with select helper" do
       expect(described_class.options_for_select).to match_array(
@@ -107,7 +107,7 @@ RSpec.describe DfeSignIn::User, type: :model do
     let!(:florence) { create(:dfe_signin_user, given_name: "Florence", family_name: "Mani", organisation_name: "Department for Education", role_codes: [DfeSignIn::User::SERVICE_OPERATOR_DFE_SIGN_IN_ROLE_CODE]) }
     let!(:rudi) { create(:dfe_signin_user, given_name: "Rudi", family_name: "Gogen-Swift", organisation_name: "Department for Education", role_codes: [DfeSignIn::User::SERVICE_OPERATOR_DFE_SIGN_IN_ROLE_CODE]) }
     let!(:henrietta) { create(:dfe_signin_user, given_name: "henrietta", family_name: "krafstein", organisation_name: "Department for Education", role_codes: [DfeSignIn::User::SERVICE_OPERATOR_DFE_SIGN_IN_ROLE_CODE]) }
-    let!(:miguel) { create(:dfe_signin_user, given_name: "Miguel", family_name: "Hernández", organisation_name: "Cantium Business Services", role_codes: [DfeSignIn::User::PAYROLL_OPERATOR_DFE_SIGN_IN_ROLE_CODE]) }
+    let!(:miguel) { create(:dfe_signin_user, given_name: "Miguel", family_name: "Hernández", organisation_name: "DfE Payroll", role_codes: [DfeSignIn::User::PAYROLL_OPERATOR_DFE_SIGN_IN_ROLE_CODE]) }
 
     it "returns an array of 'Service Operators' for use with select helper" do
       expect(described_class.options_for_select_by_name).to match_array(
