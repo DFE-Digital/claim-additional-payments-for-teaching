@@ -8,6 +8,8 @@
   <%= render "claim_summary", claim: @claim, heading: "Payroll gender" %>
 
   <div class="govuk-grid-column-two-thirds">
+    <h2 class="govuk-heading-l"><%= @current_task_name.humanize %></h2>
+
     <% if @task.persisted? %>
       <%= render "task_outcome", task: @task %>
     <% else %>
@@ -43,5 +45,7 @@
         <% end %>
       </div>
     <% end %>
+
+    <%= render partial: "admin/task_pagination" %>
   </div>
 </div>

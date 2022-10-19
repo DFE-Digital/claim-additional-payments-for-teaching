@@ -12,6 +12,8 @@ RSpec.feature "Admin checking a Maths & Physics claim" do
     click_on I18n.t("admin.tasks.identity_confirmation")
 
     expect(page).to have_content("Did #{claim.full_name} submit the claim?")
+    expect(page).to have_link("Next: Qualifications")
+    expect(page).not_to have_link("Previous")
 
     choose "Yes"
     click_on "Save and continue"
@@ -21,6 +23,8 @@ RSpec.feature "Admin checking a Maths & Physics claim" do
     expect(page).to have_content(I18n.t("maths_and_physics.admin.task_questions.qualifications.title"))
     expect(page).to have_content("Award year")
     expect(page).to have_content(claim.eligibility.qts_award_year_answer)
+    expect(page).to have_link("Next: Employment")
+    expect(page).to have_link("Previous: Identity confirmation")
 
     choose "Yes"
     click_on "Save and continue"
@@ -30,6 +34,8 @@ RSpec.feature "Admin checking a Maths & Physics claim" do
     expect(page).to have_content(I18n.t("maths_and_physics.admin.task_questions.employment.title"))
     expect(page).to have_content("Current school")
     expect(page).to have_link(claim.eligibility.current_school.name)
+    expect(page).to have_link("Next: Decision")
+    expect(page).to have_link("Previous: Qualifications")
 
     choose "Yes"
     click_on "Save and continue"
