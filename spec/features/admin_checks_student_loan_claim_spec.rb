@@ -20,6 +20,8 @@ RSpec.feature "Admin checking a Student Loans claim" do
     click_on I18n.t("admin.tasks.identity_confirmation")
 
     expect(page).to have_content("Did #{claim.full_name} submit the claim?")
+    expect(page).to have_link("Next: Qualifications")
+    expect(page).not_to have_link("Previous")
 
     choose "Yes"
     click_on "Save and continue"
@@ -29,6 +31,8 @@ RSpec.feature "Admin checking a Student Loans claim" do
     expect(page).to have_content(I18n.t("student_loans.admin.task_questions.qualifications.title"))
     expect(page).to have_content("Award year")
     expect(page).to have_content(claim.eligibility.qts_award_year_answer)
+    expect(page).to have_link("Next: Census subjects taught")
+    expect(page).to have_link("Previous: Identity confirmation")
 
     choose "Yes"
     click_on "Save and continue"
@@ -37,6 +41,8 @@ RSpec.feature "Admin checking a Student Loans claim" do
 
     expect(page).to have_content(I18n.t("student_loans.admin.task_questions.census_subjects_taught.title"))
     expect(page).to have_content("Subjects taught Physics")
+    expect(page).to have_link("Next: Employment")
+    expect(page).to have_link("Previous: Qualifications")
 
     choose "Yes"
     click_on "Save and continue"
@@ -46,6 +52,8 @@ RSpec.feature "Admin checking a Student Loans claim" do
     expect(page).to have_content(I18n.t("student_loans.admin.task_questions.employment.title"))
     expect(page).to have_content("Current school")
     expect(page).to have_link(claim.eligibility.current_school.name)
+    expect(page).to have_link("Next: Student loan amount")
+    expect(page).to have_link("Previous: Census subjects taught")
 
     choose "Yes"
     click_on "Save and continue"
@@ -55,6 +63,8 @@ RSpec.feature "Admin checking a Student Loans claim" do
     expect(page).to have_content(I18n.t("student_loans.admin.task_questions.student_loan_amount.title"))
     expect(page).to have_content("£1,987.65")
     expect(page).to have_content("Plan 2")
+    expect(page).to have_link("Next: Decision")
+    expect(page).to have_link("Previous: Employment")
 
     choose "Yes"
     click_on "Save and continue"
@@ -62,6 +72,8 @@ RSpec.feature "Admin checking a Student Loans claim" do
     expect(claim.tasks.find_by!(name: "student_loan_amount").passed?).to eq(true)
 
     expect(page).to have_content("Claim decision")
+    expect(page).not_to have_link("Next")
+    expect(page).to have_link("Previous: Student loan amount")
 
     choose "Approve"
     fill_in "Decision notes", with: "All checks passed!"
