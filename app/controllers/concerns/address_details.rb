@@ -53,7 +53,7 @@ module AddressDetails
     current_claim.attributes = {
       address_line_1: address_parts[1].titleize,
       address_line_2: address_parts[2].titleize,
-      address_line_3: address_parts[3].titleize, # Cantium - Town/City & County
+      address_line_3: address_parts[3].titleize, # Payroll - Town/City & County
       postcode: address_parts[4]
     }
   end
