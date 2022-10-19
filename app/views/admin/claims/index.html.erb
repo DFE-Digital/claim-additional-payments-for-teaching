@@ -38,7 +38,11 @@
         </div>
         <div>
           <%= form.submit "Apply filters", class: "govuk-button govuk-button--secondary admin-filter-group__button" %>
-          <%= form.submit "Clear filters", type: "reset", class: "button-link admin-filter-group__button" %>
+          <% if params[:commit].present? %>
+            <%= link_to "Clear filters", admin_claims_path, class: "button-link admin-filter-group__button" %>
+          <% else %>
+            <%= form.submit "Clear filters", type: "reset", class: "button-link admin-filter-group__button" %>
+          <% end %>
         </div>
       </div>
     <% end %>
