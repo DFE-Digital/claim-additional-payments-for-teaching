@@ -6,6 +6,10 @@
 
   <%= render "claim_summary", claim: @claim, heading: "Identity confirmation" %>
 
+  <div class="govuk-grid-column-two-thirds">
+    <h2 class="govuk-heading-l"><%= @current_task_name.humanize %></h2>
+  </div>
+
   <% unless @claim.identity_verified? %>
     <div class="govuk-grid-column-two-thirds">
       <%= render "admin/claims/answers", answers: @tasks_presenter.identity_confirmation %>
@@ -19,5 +23,7 @@
     <% else %>
       <%= render "form", task_name: "identity_confirmation", claim: @claim %>
     <% end %>
+
+    <%= render partial: "admin/task_pagination" %>
   </div>
 </div>
