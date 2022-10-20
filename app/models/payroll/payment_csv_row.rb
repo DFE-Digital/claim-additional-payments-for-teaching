@@ -69,7 +69,7 @@ module Payroll
     end
 
     def address_line_1
-      # Cantium - House or Flat Name and/or Number (optional)
+      # Payroll - House or Flat Name and/or Number (optional)
       model.address_line_1 if address_line_1_components_size > 1
     end
 
@@ -82,23 +82,23 @@ module Payroll
     end
 
     def address_line_3
-      # Cantium - Local Area (optional)
+      # Payroll - Local Area (optional)
       nil
     end
 
     def address_line_4
-      # Cantium - Town
+      # Payroll - Town
       model.address_line_3
     end
 
     def address_line_5
-      # Cantium - County
+      # Payroll - County
       # not returned from Ordnance Survey, we copy POST_TOWN to this field
       model.address_line_4.present? ? model.address_line_4 : model.address_line_3
     end
 
     def address_line_6
-      # Cantium - PostCode
+      # Payroll - PostCode
       model.postcode
     end
 

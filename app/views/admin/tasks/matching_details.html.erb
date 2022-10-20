@@ -7,6 +7,8 @@
   <%= render "claim_summary", claim: @claim, heading: "Claims with matching details" %>
 
   <div class="govuk-grid-column-two-thirds">
+    <h2 class="govuk-heading-l"><%= @current_task_name.humanize %></h2>
+
     <%= render("admin/claims/claims_with_matching_details", {matching_claims: @matching_claims, claim: @claim, show_caption: false}) %>
   </div>
 
@@ -16,5 +18,7 @@
     <% else %>
       <%= render "form", task_name: "matching_details", claim: @claim %>
     <% end %>
+
+    <%= render partial: "admin/task_pagination" %>
   </div>
 </div>
