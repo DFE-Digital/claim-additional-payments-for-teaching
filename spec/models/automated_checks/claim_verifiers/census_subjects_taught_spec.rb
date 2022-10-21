@@ -315,6 +315,51 @@ module AutomatedChecks
             end
           end
         end
+
+        context "TSLR - languages_taught is mapped to foreign_languages" do
+          let(:teacher_reference_number) { 3403431 }
+
+          let(:claim_arg) do
+            claim = create(
+              :claim,
+              :submitted,
+              date_of_birth: Date.new(1988, 7, 18),
+              first_name: "Martine",
+              national_insurance_number: "RT901113D",
+              reference: "QKCVAQ3K",
+              surname: "Bonnet-Fontaine",
+              teacher_reference_number: teacher_reference_number,
+              policy: StudentLoans
+            )
+
+            claim.eligibility.update!(
+              attributes_for(
+                :student_loans_eligibility,
+                :eligible,
+                biology_taught: false,
+                computing_taught: false,
+                physics_taught: false,
+                languages_taught: true
+              )
+            )
+
+            claim
+          end
+
+          context "with any eligible subject matched" do
+            let!(:matched) { create(:school_workforce_census, :student_loans_matched_languages_only) }
+
+            subject(:census_subjects_taught_task) { claim_arg.tasks.find_by(name: "census_subjects_taught") }
+
+            before { perform }
+
+            describe "#claim_verifier_match" do
+              subject(:claim_verifier_match) { census_subjects_taught_task.claim_verifier_match }
+
+              it { is_expected.to eq "any" }
+            end
+          end
+        end
       end
     end
   end

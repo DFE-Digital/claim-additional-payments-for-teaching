@@ -1,3 +1,5 @@
+@import "remove_default_button_styling";
+
 .admin-filter-group {
   display: flex;
   flex-wrap: wrap;
@@ -9,4 +11,17 @@
 .admin-filter-group__button {
   justify-self: center;
   margin-top: 1.85rem;
+}
+
+.button-link {
+  padding: 0;
+  display: inline-block;
+  // optional
+  font-family: arial, sans-serif; //input has OS specific font-family
+  font: inherit;
+  text-decoration: underline;
+  color: $govuk-link-colour;
+  @include remove-default-button-styling;
+  @include govuk-link-common;
+  @include govuk-responsive-padding(2);
 }
