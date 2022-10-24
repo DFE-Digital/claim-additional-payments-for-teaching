@@ -97,6 +97,8 @@ en:
     started_at: "Started at"
     submitted_at: "Submitted at"
     decision_deadline: "Decision deadline"
+    decision_overdue: "Overdue"
+    decision_overdue_not_applicable: "N/A"
     decision:
       created_at: "Created at"
       result: "Result"
