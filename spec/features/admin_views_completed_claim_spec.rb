@@ -31,7 +31,7 @@ RSpec.feature "Admin can view completed claims" do
 
     visit admin_claim_tasks_path(claim_with_payment)
 
-    expect(page).to have_content("Payroll status #{payroll_run_date}")
+    expect(page).to have_content("Status #{payroll_run_date}")
     expect(page).to have_link(payroll_run_date, href: admin_payroll_run_path(payroll_run))
   end
 
@@ -40,6 +40,6 @@ RSpec.feature "Admin can view completed claims" do
 
     visit admin_claim_tasks_path(claim_with_decision)
 
-    expect(page).to have_content("Payroll status Approved awaiting payroll")
+    expect(page).to have_content("Status Approved awaiting payroll")
   end
 end
