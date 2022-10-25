@@ -26,6 +26,15 @@
     </div>
     <div class="govuk-summary-list__row">
       <dt class="govuk-summary-list__key">
+        NI number
+      </dt>
+
+      <dd class="govuk-summary-list__value">
+        <%= claim.personal_data_removed? ? personal_data_removed_text : claim.national_insurance_number %>
+      </dd>
+    </div>
+    <div class="govuk-summary-list__row">
+      <dt class="govuk-summary-list__key">
         Full name
       </dt>
 
@@ -44,46 +53,26 @@
     </div>
     <div class="govuk-summary-list__row">
       <dt class="govuk-summary-list__key">
-        Submitted
+        Email address
       </dt>
 
       <dd class="govuk-summary-list__value">
-        <%= l(claim.submitted_at) %>
-      </dd>
-    </div>
-
-    <div class="govuk-summary-list__row">
-      <dt class="govuk-summary-list__key">
-        Status
-      </dt>
-
-      <dd class="govuk-summary-list__value">
-        <%= status(claim) %>
-      </dd>
-    </div>
-
-  </dl>
-</div>
-<div class="govuk-grid-column-one-half">
-  <dl class="govuk-summary-list govuk-!-margin-bottom-9">
-    <div class="govuk-summary-list__row">
-      <dt class="govuk-summary-list__key">
-        NI number
-      </dt>
-
-      <dd class="govuk-summary-list__value">
-        <%= claim.personal_data_removed? ? personal_data_removed_text : claim.national_insurance_number %>
+        <%= claim.email_address %>
       </dd>
     </div>
     <div class="govuk-summary-list__row">
       <dt class="govuk-summary-list__key">
-        Mobile
+        Mobile number
       </dt>
 
       <dd class="govuk-summary-list__value">
         <%= claim.mobile_number %>
       </dd>
     </div>
+  </dl>
+</div>
+<div class="govuk-grid-column-one-half">
+  <dl class="govuk-summary-list govuk-!-margin-bottom-9">
     <div class="govuk-summary-list__row">
       <dt class="govuk-summary-list__key">
         Reference
@@ -95,21 +84,40 @@
     </div>
     <div class="govuk-summary-list__row">
       <dt class="govuk-summary-list__key">
-        Email address
+        Submitted
       </dt>
 
       <dd class="govuk-summary-list__value">
-        <%= claim.email_address %>
+        <%= l(claim.submitted_at) %>
       </dd>
     </div>
     <div class="govuk-summary-list__row">
       <dt class="govuk-summary-list__key">
-        SLA
+        Decision due
       </dt>
 
       <dd class="govuk-summary-list__value">
         <%= l(claim.decision_deadline_date) %>
+      </dd>
+    </div>
+
+    <div class="govuk-summary-list__row">
+      <dt class="govuk-summary-list__key">
+        <%= t("admin.decision_overdue") %>
+      </dt>
+
+      <dd class="govuk-summary-list__value">
         <%= decision_deadline_warning(claim) %>
+      </dd>
+    </div>
+
+    <div class="govuk-summary-list__row">
+      <dt class="govuk-summary-list__key">
+        Payroll status
+      </dt>
+
+      <dd class="govuk-summary-list__value">
+        <%= status(claim) %>
       </dd>
     </div>
     <div class="govuk-summary-list__row">
