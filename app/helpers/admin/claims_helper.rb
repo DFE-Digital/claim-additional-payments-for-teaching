@@ -50,7 +50,8 @@ module Admin
       [
         [translate("admin.started_at"), l(claim.created_at)],
         [translate("admin.submitted_at"), l(claim.submitted_at)],
-        [translate("admin.decision_deadline"), [l(claim.decision_deadline_date), decision_deadline_warning(claim)].compact.join.html_safe]
+        [translate("admin.decision_deadline"), l(claim.decision_deadline_date)],
+        [translate("admin.decision_overdue"), decision_deadline_warning(claim)]
       ]
     end
 
@@ -65,7 +66,7 @@ module Admin
 
     def decision_deadline_warning(claim)
       days_until_decision_deadline = days_between(Date.today, claim.decision_deadline_date)
-      return if days_until_decision_deadline.days > Claim::DECISION_DEADLINE_WARNING_POINT
+      return I18n.t("admin.decision_overdue_not_applicable") if days_until_decision_deadline.days > Claim::DECISION_DEADLINE_WARNING_POINT
 
       decision_deadline_warning_class = days_until_decision_deadline < 0 ? "tag--alert" : "tag--information"
       content_tag(:strong, pluralize(days_until_decision_deadline, "day"), class: "govuk-tag #{decision_deadline_warning_class}")
