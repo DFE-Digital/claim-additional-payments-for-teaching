@@ -105,6 +105,7 @@ class ClaimsController < BasePublicController
   end
 
   def search_schools
+    @backlink_path = page_sequence.current_slug
     schools = ActiveModel::Type::Boolean.new.cast(params[:exclude_closed]) ? School.open : School
     @schools = schools.search(params[:school_search])
   rescue ArgumentError => e
