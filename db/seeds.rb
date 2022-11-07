@@ -6,11 +6,11 @@
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
 
-PolicyConfiguration.create!(policy_types: [StudentLoans], current_academic_year: AcademicYear.current)
-PolicyConfiguration.create!(policy_types: [MathsAndPhysics], current_academic_year: AcademicYear.current)
-PolicyConfiguration.create!(policy_types: [EarlyCareerPayments, LevellingUpPremiumPayments], current_academic_year: AcademicYear.current)
-
 if Rails.env.development? || ENV["ENVIRONMENT_NAME"] == "review"
+  PolicyConfiguration.create!(policy_types: [StudentLoans], current_academic_year: AcademicYear.current)
+  PolicyConfiguration.create!(policy_types: [MathsAndPhysics], current_academic_year: AcademicYear.current)
+  PolicyConfiguration.create!(policy_types: [EarlyCareerPayments, LevellingUpPremiumPayments], current_academic_year: AcademicYear.current)
+
   ENV["FIXTURES_PATH"] = "spec/fixtures"
   ENV["FIXTURES"] = "local_authorities,local_authority_districts,schools"
   Rake::Task["db:fixtures:load"].invoke
