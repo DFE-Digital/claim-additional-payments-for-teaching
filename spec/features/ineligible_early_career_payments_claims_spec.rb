@@ -3,6 +3,8 @@ require "rails_helper"
 RSpec.feature "Ineligible Teacher Early-Career Payments claims" do
   include EarlyCareerPaymentsHelper
 
+  before { create(:policy_configuration, :additional_payments) }
+
   scenario "When the school selected is ineligible" do
     start_early_career_payments_claim
 

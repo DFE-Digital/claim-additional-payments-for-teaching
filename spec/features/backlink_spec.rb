@@ -2,6 +2,8 @@ require "rails_helper"
 
 RSpec.feature "Backlinking during a claim" do
   scenario "Student Loans journey" do
+    create(:policy_configuration, :student_loans)
+
     visit new_claim_path(StudentLoans.routing_name)
     expect(page).to have_no_link("Back")
     choose_qts_year
@@ -15,6 +17,8 @@ RSpec.feature "Backlinking during a claim" do
   end
 
   scenario "ECP/LUP journey" do
+    create(:policy_configuration, :additional_payments)
+
     lup_school = schools(:hampstead_school)
     expect(LevellingUpPremiumPayments::SchoolEligibility.new(lup_school)).to be_eligible
 
@@ -35,6 +39,8 @@ RSpec.feature "Backlinking during a claim" do
   end
 
   scenario "ECP/LUP trainee mini journey" do
+    create(:policy_configuration, :additional_payments)
+
     lup_school = schools(:hampstead_school)
     expect(LevellingUpPremiumPayments::SchoolEligibility.new(lup_school)).to be_eligible
 

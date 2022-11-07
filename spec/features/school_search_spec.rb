@@ -4,6 +4,8 @@ RSpec.feature "Searching for school during Teacher Student Loan Repayments claim
   include StudentLoansHelper
 
   context "Student Loans claim" do
+    before { create(:policy_configuration, :student_loans) }
+
     scenario "doesn't select a school from the search results the first time around" do
       claim = start_student_loans_claim
 
@@ -173,6 +175,8 @@ RSpec.feature "Searching for school during Teacher Student Loan Repayments claim
   end
 
   context "combined ECP/LUPP journey claim" do
+    before { create(:policy_configuration, :additional_payments) }
+
     scenario "doesn't select a school from the search results the first time around" do
       visit new_claim_path(LevellingUpPremiumPayments.routing_name)
 

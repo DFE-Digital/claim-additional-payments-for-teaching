@@ -5,7 +5,10 @@ RSpec.feature "Ineligibility reason" do
   let(:ecp_only_school) { create(:school, :early_career_payments_eligible) }
   let(:primary_school) { create(:school, :early_career_payments_ineligible) }
 
-  before { visit new_claim_path(LevellingUpPremiumPayments.routing_name) }
+  before do
+    create(:policy_configuration, :additional_payments)
+    visit new_claim_path(LevellingUpPremiumPayments.routing_name)
+  end
 
   context "supply teacher" do
     before do

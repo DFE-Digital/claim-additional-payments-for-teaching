@@ -5,7 +5,8 @@ RSpec.feature "Teacher Early-Career Payments claims" do
 
   # create a school eligible for ECP and LUP so can walk the whole journey
   let!(:school) { create(:school, :levelling_up_premium_payments_eligible, :early_career_payments_eligible) }
-  let(:current_academic_year) { PolicyConfiguration.for(EarlyCareerPayments).current_academic_year }
+  let!(:policy_configuration) { create(:policy_configuration, :additional_payments) }
+  let(:current_academic_year) { policy_configuration.current_academic_year }
 
   let(:itt_year) { current_academic_year - 3 }
 

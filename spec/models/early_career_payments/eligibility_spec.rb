@@ -53,6 +53,8 @@ RSpec.describe EarlyCareerPayments::Eligibility, type: :model do
       )
     end
 
+    before { create(:policy_configuration, :additional_payments) }
+
     context "when claim is eligible later" do
       [
         {itt_subject: "mathematics", itt_academic_year: AcademicYear::Type.new.serialize(AcademicYear.new(2019)), claim_academic_year: AcademicYear::Type.new.serialize(AcademicYear.new(2024))},
@@ -114,6 +116,7 @@ RSpec.describe EarlyCareerPayments::Eligibility, type: :model do
   end
 
   describe "#reset_dependent_answers" do
+    let!(:policy_configuration) { create(:policy_configuration, :additional_payments) }
     let!(:claim) { build_stubbed(:claim, :with_student_loan, eligibility: eligibility) }
 
     let(:eligibility) do
@@ -183,14 +186,7 @@ RSpec.describe EarlyCareerPayments::Eligibility, type: :model do
   describe "#trainee_teacher?" do
     let(:eligibility) { build_stubbed(:early_career_payments_eligibility, nqt_in_academic_year_after_itt: false) }
 
-    before do
-      @ecp_policy_date = PolicyConfiguration.for(EarlyCareerPayments).current_academic_year
-      PolicyConfiguration.for(EarlyCareerPayments).update(current_academic_year: AcademicYear.new(2022))
-    end
-
-    after do
-      PolicyConfiguration.for(EarlyCareerPayments).update(current_academic_year: @ecp_policy_date)
-    end
+    before { create(:policy_configuration, :additional_payments, current_academic_year: AcademicYear.new(2022)) }
 
     it "returns true" do
       expect(eligibility).to be_a_trainee_teacher
@@ -279,6 +275,8 @@ RSpec.describe EarlyCareerPayments::Eligibility, type: :model do
     end
 
     context "when saving in the 'eligible_itt_subject' context" do
+      before { create(:policy_configuration, :additional_payments) }
+
       it "is not valid without a value for 'eligible_itt_subject'" do
         expect(EarlyCareerPayments::Eligibility.new).not_to be_valid(:"eligible-itt-subject")
       end
@@ -315,10 +313,12 @@ RSpec.describe EarlyCareerPayments::Eligibility, type: :model do
     specify { expect(described_class.max_award_amount_in_pounds).to eq(7_500) }
   end
 
-  it_behaves_like "Eligibility status", :early_career_payments_eligibility
+  it_behaves_like "Eligibility status", :early_career_payments
 
   context "ECP-specific eligibility" do
     subject { eligibility.status }
+
+    before { create(:policy_configuration, :additional_payments) }
 
     # By the 2022 policy year it's too late for this to apply to LUP so is ECP-specific now but
     # technically this check is generally needed for all policies

@@ -1,6 +1,8 @@
 RSpec.shared_examples "Admin Claim Allocation and Deallocation Feature" do |policy|
   let!(:admin_user) { sign_in_as_service_operator }
 
+  before { create(:policy_configuration, policy.to_s.underscore) }
+
   context "when viewing an individual claim" do
     let!(:claim) { create(:claim, :submitted, policy: policy) }
     let!(:other_user) { create(:dfe_signin_user, given_name: "Colin", family_name: "Claimhandler", organisation_name: "Department for Education", role_codes: [DfeSignIn::User::SERVICE_OPERATOR_DFE_SIGN_IN_ROLE_CODE]) }

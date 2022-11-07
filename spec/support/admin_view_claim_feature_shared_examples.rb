@@ -1,8 +1,12 @@
 RSpec.shared_examples "Admin View Claim Feature" do |policy|
+  let!(:policy_configuration) { create(:policy_configuration, policy.to_s.underscore) }
+  let(:academic_year) { policy_configuration.current_academic_year }
+
   let!(:claim) {
     create(
       :claim,
       :submitted,
+      policy: policy,
       eligibility: build("#{policy.to_s.underscore}_eligibility".to_sym, :eligible)
     )
   }
@@ -11,6 +15,7 @@ RSpec.shared_examples "Admin View Claim Feature" do |policy|
     create(
       :claim,
       :submitted,
+      policy: policy,
       eligibility: build("#{policy.to_s.underscore}_eligibility".to_sym, :eligible)
     )
   }
@@ -19,6 +24,7 @@ RSpec.shared_examples "Admin View Claim Feature" do |policy|
     create(
       :claim,
       :submitted,
+      policy: policy,
       eligibility: build("#{policy.to_s.underscore}_eligibility".to_sym, :eligible),
       teacher_reference_number: multiple_claim.teacher_reference_number
     )
@@ -28,6 +34,7 @@ RSpec.shared_examples "Admin View Claim Feature" do |policy|
     create(
       :claim,
       :payrollable,
+      policy: policy,
       eligibility: build("#{policy.to_s.underscore}_eligibility".to_sym, :eligible)
     )
   }
@@ -36,6 +43,7 @@ RSpec.shared_examples "Admin View Claim Feature" do |policy|
     create(
       :claim,
       :approved,
+      policy: policy,
       eligibility: build("#{policy.to_s.underscore}_eligibility".to_sym, :eligible)
     )
   }
@@ -44,6 +52,7 @@ RSpec.shared_examples "Admin View Claim Feature" do |policy|
     create(
       :claim,
       :rejected,
+      policy: policy,
       eligibility: build("#{policy.to_s.underscore}_eligibility".to_sym, :eligible)
     )
   }

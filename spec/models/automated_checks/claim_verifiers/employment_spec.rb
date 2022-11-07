@@ -4,6 +4,8 @@ module AutomatedChecks
   module ClaimVerifiers
     RSpec.describe Employment do
       subject(:employment) { described_class.new(**employment_args) }
+
+      let!(:policy_configuration) { create(:policy_configuration, policy.to_s.underscore) }
       let(:barnsley) { LocalAuthority.find(ActiveRecord::FixtureSet.identify(:barnsley, :uuid)) }
       let(:school) do
         create(:school,
@@ -127,11 +129,9 @@ module AutomatedChecks
 
             describe "#note" do
               subject(:note) { claim_arg.notes.last }
+              let!(:policy_configuration) { create(:policy_configuration, policy.to_s.underscore, current_academic_year: "2022/2023") }
 
-              before do
-                PolicyConfiguration.for(StudentLoans).update!(current_academic_year: "2022/2023")
-                perform
-              end
+              before { perform }
 
               describe "#body" do
                 subject(:body) { note.body }

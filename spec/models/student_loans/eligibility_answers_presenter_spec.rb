@@ -20,6 +20,7 @@ RSpec.describe StudentLoans::EligibilityAnswersPresenter, type: :model do
   subject(:presenter) { described_class.new(eligibility) }
 
   it "returns an array of questions, answers, and slugs for displaying to the user for review" do
+    create(:policy_configuration, :student_loans)
     expected_answers = [
       [I18n.t("questions.qts_award_year"), "In or after the academic year 2013 to 2014", "qts-year"],
       [claim_school_question, school.name, "claim-school"],

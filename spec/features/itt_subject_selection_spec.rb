@@ -4,6 +4,8 @@ RSpec.feature "ITT subject selection" do
   let(:lup_school) { schools(:hampstead_school) }
   let(:ecp_only_school) { schools(:penistone_grammar_school) }
 
+  before { create(:policy_configuration, :additional_payments) }
+
   # Note: If we ever change the UI to show all the options in all cases,
   # you *should* choose a subject instead of "None of the above" in the specs below.
   # Also in that case there's no point in asserting the displayed subject options

@@ -4,6 +4,8 @@ RSpec.feature "Levelling up premium payments and early-career payments combined 
   let(:claim) { Claim.by_policy(LevellingUpPremiumPayments).order(:created_at).last }
   let(:eligibility) { claim.eligibility }
 
+  before { create(:policy_configuration, :additional_payments) }
+
   scenario "Eligible for both" do
     visit new_claim_path(EarlyCareerPayments.routing_name)
 

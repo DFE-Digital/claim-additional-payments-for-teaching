@@ -5,6 +5,7 @@ RSpec.describe MathsAndPhysics::EligibilityAdminAnswersPresenter, type: :model d
   let(:eligibility) { claim.eligibility }
   let(:claim) do
     build(:claim,
+      policy: MathsAndPhysics,
       academic_year: "2019/2020",
       eligibility: build(:maths_and_physics_eligibility,
         teaching_maths_or_physics: true,

@@ -56,9 +56,7 @@ RSpec.describe "TPS data upload" do
         end
       end
 
-      before do
-        PolicyConfiguration.for(EarlyCareerPayments).update!(current_academic_year: "2021/2022")
-      end
+      before { create(:policy_configuration, :additional_payments, current_academic_year: "2021/2022") }
 
       context "when the claim is not TSLR" do
         let(:csv) do
@@ -160,9 +158,7 @@ RSpec.describe "TPS data upload" do
       end
 
       context "when the claim is TSLR" do
-        before do
-          PolicyConfiguration.for(StudentLoans).update!(current_academic_year: "2021/2022")
-        end
+        before { create(:policy_configuration, :student_loans, current_academic_year: "2021/2022") }
 
         let(:csv) do
           <<~CSV

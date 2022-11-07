@@ -3,6 +3,8 @@ require "rails_helper"
 RSpec.feature "Teacher Student Loan Repayments claims" do
   include StudentLoansHelper
 
+  let!(:policy_configuration) { create(:policy_configuration, :student_loans) }
+
   [
     true,
     false
@@ -218,14 +220,7 @@ RSpec.feature "Teacher Student Loan Repayments claims" do
     2031
   ].each do |academic_year|
     context "in academic year #{academic_year}" do
-      before do
-        @ecp_policy_date = PolicyConfiguration.for(StudentLoans).current_academic_year
-        PolicyConfiguration.for(StudentLoans).update(current_academic_year: AcademicYear.new(academic_year))
-      end
-
-      after do
-        PolicyConfiguration.for(StudentLoans).update(current_academic_year: @ecp_policy_date)
-      end
+      let!(:policy_configuration) { create(:policy_configuration, :student_loans, current_academic_year: AcademicYear.new(academic_year)) }
 
       scenario "Teacher claims back student loan repayments" do
         visit new_claim_path(StudentLoans.routing_name)

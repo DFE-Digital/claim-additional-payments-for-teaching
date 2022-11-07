@@ -5,14 +5,7 @@ RSpec.feature "Trainee Teacher - Early Career Payments - journey" do
     # TODO remove fixture dependence
     let(:ecp_only_school) { schools(:penistone_grammar_school) }
 
-    before do
-      @ecp_policy_date = PolicyConfiguration.for(EarlyCareerPayments).current_academic_year
-      PolicyConfiguration.for(EarlyCareerPayments).update(current_academic_year: AcademicYear.new(2022))
-    end
-
-    after do
-      PolicyConfiguration.for(EarlyCareerPayments).update(current_academic_year: @ecp_policy_date)
-    end
+    before { create(:policy_configuration, :additional_payments) }
 
     scenario "ECP-only school with trainee teacher" do
       visit landing_page_path(EarlyCareerPayments.routing_name)

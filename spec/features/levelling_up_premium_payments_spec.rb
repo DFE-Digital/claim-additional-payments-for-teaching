@@ -4,6 +4,8 @@ RSpec.feature "Levelling up premium payments claims" do
   let(:claim) { Claim.by_policy(LevellingUpPremiumPayments).order(:created_at).last }
   let(:eligibility) { claim.eligibility }
 
+  before { create(:policy_configuration, :additional_payments) }
+
   def claim_up_to_itt_subject
     start_levelling_up_premium_payments_claim
 

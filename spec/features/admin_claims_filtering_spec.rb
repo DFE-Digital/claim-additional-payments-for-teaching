@@ -1,7 +1,10 @@
 require "rails_helper"
 
 RSpec.feature "Admin claim filtering" do
-  before { sign_in_as_service_operator }
+  before do
+    create(:policy_configuration, :additional_payments)
+    sign_in_as_service_operator
+  end
 
   let!(:mary) { create(:dfe_signin_user, given_name: "mary", family_name: "wasu-wabi", organisation_name: "Department for Education", role_codes: [DfeSignIn::User::SERVICE_OPERATOR_DFE_SIGN_IN_ROLE_CODE]) }
   let!(:valentino) { create(:dfe_signin_user, given_name: "Valentino", family_name: "Ricci", organisation_name: "Department for Education", role_codes: [DfeSignIn::User::SERVICE_OPERATOR_DFE_SIGN_IN_ROLE_CODE]) }

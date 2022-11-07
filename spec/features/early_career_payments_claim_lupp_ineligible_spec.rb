@@ -5,7 +5,8 @@ RSpec.feature "Early-Career Payments claims with school ineligible for Levelling
 
   # create a school eligible for ECP and ineligible LUPP
   let!(:school) { create(:school, :early_career_payments_eligible, :levelling_up_premium_payments_ineligible) }
-  let(:current_academic_year) { PolicyConfiguration.for(EarlyCareerPayments).current_academic_year }
+  let!(:policy_configuration) { create(:policy_configuration, :additional_payments) }
+  let(:current_academic_year) { policy_configuration.current_academic_year }
 
   let(:itt_year) do
     case current_academic_year

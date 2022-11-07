@@ -48,10 +48,10 @@ RSpec.describe PayrollRun, type: :model do
         build(:claim, :approved, eligibility: build(:student_loans_eligibility, :eligible, student_loan_repayment_amount: 1500))
       ])
       payment_2 = build(:payment, claims: [
-        build(:claim, :approved, eligibility: build(:maths_and_physics_eligibility, :eligible))
+        build(:claim, :approved, policy: MathsAndPhysics, eligibility: build(:maths_and_physics_eligibility, :eligible))
       ])
       payment_3 = build(:payment, claims: [
-        build(:claim, :approved, eligibility: build(:maths_and_physics_eligibility, :eligible))
+        build(:claim, :approved, policy: MathsAndPhysics, eligibility: build(:maths_and_physics_eligibility, :eligible))
       ])
 
       payroll_run = PayrollRun.create!(created_by: user, payments: [payment_1, payment_2, payment_3])
@@ -67,16 +67,16 @@ RSpec.describe PayrollRun, type: :model do
         build(:claim, :approved, eligibility: build(:student_loans_eligibility, :eligible, student_loan_repayment_amount: 1500))
       ])
       payment_2 = build(:payment, claims: [
-        build(:claim, :approved, eligibility: build(:maths_and_physics_eligibility, :eligible))
+        build(:claim, :approved, policy: MathsAndPhysics, eligibility: build(:maths_and_physics_eligibility, :eligible))
       ])
       payment_3 = build(:payment, claims: [
-        build(:claim, :approved, eligibility: build(:maths_and_physics_eligibility, :eligible))
+        build(:claim, :approved, policy: MathsAndPhysics, eligibility: build(:maths_and_physics_eligibility, :eligible))
       ])
       payment_4 = build(:payment, claims: [
         build(:claim, :approved, eligibility: build(:student_loans_eligibility, :eligible, student_loan_repayment_amount: 1000))
       ])
       payment_5 = build(:payment, claims: [
-        build(:claim, :approved, teacher_reference_number: "1234567", bank_sort_code: "123456", bank_account_number: "12345678", eligibility: build(:maths_and_physics_eligibility, :eligible)),
+        build(:claim, :approved, policy: MathsAndPhysics, teacher_reference_number: "1234567", bank_sort_code: "123456", bank_account_number: "12345678", eligibility: build(:maths_and_physics_eligibility, :eligible)),
         build(:claim, :approved, teacher_reference_number: "1234567", bank_sort_code: "123456", bank_account_number: "12345678", eligibility: build(:student_loans_eligibility, :eligible, student_loan_repayment_amount: 1000))
       ])
 

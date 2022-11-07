@@ -1,6 +1,8 @@
 require "rails_helper"
 
 RSpec.describe StudentLoans::DqtRecord do
+  let!(:policy_configuration) { create(:policy_configuration, :student_loans) }
+
   describe "#eligble?" do
     it "returns true if the given QTS award date is after the first eligible academic year" do
       expect(StudentLoans::DqtRecord.new(OpenStruct.new({qts_award_date: Date.parse("19/3/2017")})).eligible?).to eql true
@@ -33,18 +35,11 @@ RSpec.describe StudentLoans::DqtRecord do
     end
 
     it "returns false if the given QTS award date is not an eligible year" do
-      expect(StudentLoans::DqtRecord.new(OpenStruct.new({qts_award_date: Date.parse("15/9/2013")})).eligible_qts_award_date?).to eql false
+      expect(StudentLoans::DqtRecord.new(OpenStruct.new({qts_award_date: Date.parse("15/8/2013")})).eligible_qts_award_date?).to eql false
     end
 
     context "in academic year 2029/30" do
-      before do
-        @existing_config = PolicyConfiguration.for(StudentLoans).current_academic_year
-        PolicyConfiguration.for(StudentLoans).update(current_academic_year: "2029/2030")
-      end
-
-      after do
-        PolicyConfiguration.for(StudentLoans).update(current_academic_year: @existing_config)
-      end
+      let!(:policy_configuration) { create(:policy_configuration, :student_loans, current_academic_year: "2029/2030") }
 
       it "returns false if the given QTS award date is not an eligible year" do
         expect(StudentLoans::DqtRecord.new(OpenStruct.new({qts_award_date: Date.parse("1/7/2018")})).eligible_qts_award_date?).to eql false

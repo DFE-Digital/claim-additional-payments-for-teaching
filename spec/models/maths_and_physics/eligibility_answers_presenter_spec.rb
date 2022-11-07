@@ -13,7 +13,7 @@ RSpec.describe MathsAndPhysics::EligibilityAnswersPresenter do
     }
   end
   let(:eligibility) { claim.eligibility }
-  let(:claim) { build(:claim, eligibility: build(:maths_and_physics_eligibility, eligibility_attributes)) }
+  let(:claim) { build(:claim, policy: MathsAndPhysics, eligibility: build(:maths_and_physics_eligibility, eligibility_attributes)) }
 
   subject(:presenter) { described_class.new(eligibility) }
 

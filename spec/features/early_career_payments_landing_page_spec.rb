@@ -1,6 +1,8 @@
 require "rails_helper"
 
 RSpec.feature "Landing page - Early Career Payments - journey" do
+  before { create(:policy_configuration, :additional_payments) }
+
   scenario "navigate to first page in ECP journey" do
     visit landing_page_path(EarlyCareerPayments.routing_name)
     expect(page).to have_link(href: "mailto:#{EarlyCareerPayments.feedback_email}")

@@ -3,8 +3,8 @@ require "rails_helper"
 RSpec.feature "Applicant worked at multiple schools" do
   include StudentLoansHelper
 
+  let!(:policy_configuration) { create(:policy_configuration, :student_loans) }
   let!(:eligible_school) { create(:school, :student_loan_eligible) }
-
   let!(:claim) { start_student_loans_claim }
 
   scenario "first claim school is ineligible and subsequent school is eligible" do

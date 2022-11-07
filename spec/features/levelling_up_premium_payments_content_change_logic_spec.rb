@@ -4,6 +4,7 @@ RSpec.feature "Claims with different eligibilities content change logic" do
   let(:claim) { start_early_career_payments_claim }
 
   before do
+    create(:policy_configuration, :additional_payments)
     claim.update!(attributes_for(:claim, :submittable))
     claim.eligibility.update!(attributes_for(:early_career_payments_eligibility, :eligible))
   end

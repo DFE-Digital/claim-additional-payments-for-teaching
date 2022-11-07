@@ -54,6 +54,10 @@ RSpec.feature "Admin claim tasks update with DQT API" do
   end
 
   before do
+    create(:policy_configuration, :student_loans)
+    create(:policy_configuration, :maths_and_physics)
+    create(:policy_configuration, :additional_payments)
+
     sign_in_as_service_operator
 
     if data.nil?

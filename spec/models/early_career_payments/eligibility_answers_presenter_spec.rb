@@ -3,7 +3,9 @@ require "rails_helper"
 RSpec.describe EarlyCareerPayments::EligibilityAnswersPresenter do
   describe "#answers" do
     let(:policy_year) { AcademicYear.new(2022) }
-    let(:claim) { build(:claim, academic_year: policy_year, eligibility: eligibility) }
+    let(:policy) { EarlyCareerPayments }
+    let(:claim) { build(:claim, policy: policy, academic_year: policy_year, eligibility: eligibility) }
+    let!(:policy_configuration) { create(:policy_configuration, :additional_payments) }
 
     subject { described_class.new(claim.eligibility).answers }
 
@@ -79,8 +81,11 @@ RSpec.describe EarlyCareerPayments::EligibilityAnswersPresenter do
     end
 
     context "LUP" do
+      let(:policy) { LevellingUpPremiumPayments }
+
       context "entire output" do
         let(:eligibility) { build(:levelling_up_premium_payments_eligibility, :eligible, :long_term_directly_employed_supply_teacher, :ineligible_itt_subject, :relevant_degree) }
+        let(:expected_itt_year) { AcademicYear.new(eligibility.itt_academic_year) }
 
         it {
           is_expected.to eq(
@@ -93,7 +98,7 @@ RSpec.describe EarlyCareerPayments::EligibilityAnswersPresenter do
               ["Have any performance measures been started against you?", "No", "poor-performance"],
               ["Are you currently subject to disciplinary action?", "No", "poor-performance"],
               ["Which route into teaching did you take?", "Postgraduate initial teacher training (ITT)", "qualification"],
-              ["In which academic year did you start your postgraduate initial teacher training (ITT)?", "2019 - 2020", "itt-year"],
+              ["In which academic year did you start your postgraduate initial teacher training (ITT)?", "#{expected_itt_year.start_year} - #{expected_itt_year.end_year}", "itt-year"],
               ["Which subject did you do your postgraduate initial teacher training (ITT) in?", "Languages", "eligible-itt-subject"],
               ["Do you have a degree in an eligible subject?", "Yes", "eligible-degree-subject"],
               ["Do you spend at least half of your contracted hours teaching eligible subjects?", "Yes", "teaching-subject-now"]

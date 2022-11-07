@@ -5,6 +5,7 @@ RSpec.describe "Admin decisions", type: :request do
     let(:claim) { create(:claim, :submitted, policy: MathsAndPhysics) }
 
     before do
+      create(:policy_configuration, :maths_and_physics)
       @signed_in_user = sign_in_as_service_operator
     end
 
@@ -34,7 +35,7 @@ RSpec.describe "Admin decisions", type: :request do
 
       context "when some tasks have not been completed" do
         let(:claim) {
-          create(:claim, :submitted, tasks: [
+          create(:claim, :submitted, policy: MathsAndPhysics, tasks: [
             build(:task, name: "qualifications")
           ])
         }
@@ -50,7 +51,7 @@ RSpec.describe "Admin decisions", type: :request do
       end
 
       context "when a decision has already been made" do
-        let(:claim) { create(:claim, :approved) }
+        let(:claim) { create(:claim, :approved, policy: MathsAndPhysics) }
 
         it "redirects and shows an error" do
           get new_admin_claim_decision_path(claim)
@@ -94,7 +95,7 @@ RSpec.describe "Admin decisions", type: :request do
       end
 
       context "when a decision has already been made" do
-        let(:claim) { create(:claim, :approved) }
+        let(:claim) { create(:claim, :approved, policy: MathsAndPhysics) }
 
         it "shows an error" do
           post admin_claim_decisions_path(claim_id: claim.id, decision: {result: "approved"})
@@ -106,7 +107,8 @@ RSpec.describe "Admin decisions", type: :request do
       end
 
       context "when the claim is missing a payroll gender" do
-        let(:claim) { create(:claim, :submitted, payroll_gender: :dont_know) }
+        let(:claim) { create(:claim, :submitted, payroll_gender: :dont_know, policy: MathsAndPhysics) }
+
         before do
           post admin_claim_decisions_path(claim_id: claim.id, decision: {result: result})
           follow_redirect!
@@ -114,6 +116,7 @@ RSpec.describe "Admin decisions", type: :request do
 
         context "and the user attempts to approve" do
           let(:result) { "approved" }
+
           it "shows an error" do
             expect(response.body).to include("Claim cannot be approved")
           end
@@ -121,6 +124,7 @@ RSpec.describe "Admin decisions", type: :request do
 
         context "and the user attempts to reject" do
           let(:result) { "rejected" }
+
           it "doesn’t show an error and rejects successfully" do
             expect(response.body).not_to include("Claim cannot be approved")
             expect(response.body).to include("Claim has been rejected successfully")
@@ -141,8 +145,9 @@ RSpec.describe "Admin decisions", type: :request do
             building_society_roll_number: nil
           }
         end
-        let(:claim) { create(:claim, :submitted, personal_details.merge(bank_sort_code: "582939", bank_account_number: "74727752")) }
-        let!(:approved_claim) { create(:claim, :approved, personal_details.merge(bank_sort_code: "112233", bank_account_number: "29482823")) }
+        let(:claim) { create(:claim, :submitted, personal_details.merge(bank_sort_code: "582939", bank_account_number: "74727752", policy: MathsAndPhysics)) }
+        let!(:approved_claim) { create(:claim, :approved, personal_details.merge(bank_sort_code: "112233", bank_account_number: "29482823", policy: MathsAndPhysics)) }
+
         before do
           post admin_claim_decisions_path(claim_id: claim.id, decision: {result: result})
           follow_redirect!

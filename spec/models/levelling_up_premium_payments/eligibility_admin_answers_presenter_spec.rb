@@ -6,12 +6,15 @@ RSpec.describe LevellingUpPremiumPayments::EligibilityAdminAnswersPresenter, typ
   let(:claim) do
     build(
       :claim,
+      :submittable,
+      policy: LevellingUpPremiumPayments,
       academic_year: "2021/2022",
-      eligibility: build(:levelling_up_premium_payments_eligibility, :eligible)
     )
   end
 
   subject(:presenter) { described_class.new(eligibility) }
+
+  before { create(:policy_configuration, :additional_payments) }
 
   describe "#answers" do
     it "returns an array of questions and answers for displaying to service operator" do

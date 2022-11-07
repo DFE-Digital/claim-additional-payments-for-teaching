@@ -3,6 +3,12 @@ require "rails_helper"
 RSpec.feature "Changing the answers on a submittable claim" do
   include StudentLoansHelper
 
+  before do
+    create(:policy_configuration, :student_loans)
+    create(:policy_configuration, :maths_and_physics)
+    create(:policy_configuration, :additional_payments)
+  end
+
   scenario "Teacher changes an answer which is not a dependency of any of the other answers they've given, remaining eligible" do
     claim = start_maths_and_physics_claim
     claim.update!(attributes_for(:claim, :submittable))

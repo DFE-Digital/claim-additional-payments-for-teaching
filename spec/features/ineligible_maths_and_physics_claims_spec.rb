@@ -1,6 +1,8 @@
 require "rails_helper"
 
 RSpec.feature "Ineligible Maths and Physics claims" do
+  let!(:policy_configuration) { create(:policy_configuration, :maths_and_physics) }
+
   scenario "not teaching maths or physics" do
     visit new_claim_path(MathsAndPhysics.routing_name)
     choose "No"
@@ -36,7 +38,7 @@ RSpec.feature "Ineligible Maths and Physics claims" do
   end
 
   scenario "qualified before the first eligible QTS year" do
-    policy_configurations(:maths_and_physics).update!(current_academic_year: "2020/2021")
+    policy_configuration.update!(current_academic_year: "2020/2021")
     claim = start_maths_and_physics_claim
 
     choose_school schools(:penistone_grammar_school)

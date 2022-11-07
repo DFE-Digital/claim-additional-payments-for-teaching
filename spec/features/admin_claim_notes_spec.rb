@@ -1,7 +1,10 @@
 require "rails_helper"
 
 RSpec.feature "Admin claim notes" do
-  before { @signed_in_user = sign_in_as_service_operator }
+  before do
+    create(:policy_configuration, :student_loans)
+    @signed_in_user = sign_in_as_service_operator
+  end
 
   scenario "the service operator adds notes to a claim" do
     claim = create(:claim, :submitted)

@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.describe "Service configuration" do
-  let(:policy_configuration) { policy_configurations(:student_loans) }
+  let(:policy_configuration) { create(:policy_configuration, :student_loans) }
 
   context "when signed in as a service operator" do
     before { sign_in_as_service_operator }

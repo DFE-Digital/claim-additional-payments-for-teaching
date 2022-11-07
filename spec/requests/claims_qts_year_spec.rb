@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.describe "The QTS year question", type: :request do
-  let(:maths_and_physics_configuration) { policy_configurations(:maths_and_physics) }
+  let(:maths_and_physics_configuration) { create(:policy_configuration, :maths_and_physics) }
 
   it "changes the QTS year option labels based on the current academic year the policy is accepting claims for" do
     maths_and_physics_configuration.update!(current_academic_year: "2019/2020")

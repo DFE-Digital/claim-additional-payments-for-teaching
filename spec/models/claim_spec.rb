@@ -676,10 +676,13 @@ RSpec.describe Claim, type: :model do
     end
 
     context "when the claim is submittable" do
-      let(:claim) { build(:claim, :submittable, eligibility: eligibility) }
+      let(:claim) { build(:claim, :submittable, policy: LevellingUpPremiumPayments, eligibility: eligibility) }
       let(:eligibility) { build(:levelling_up_premium_payments_eligibility, :eligible) }
 
-      before { claim.submit! }
+      before do
+        create(:policy_configuration, :additional_payments)
+        claim.submit!
+      end
 
       it "sets submitted_at to now" do
         expect(claim.submitted_at).to eq Time.zone.now
@@ -848,14 +851,16 @@ RSpec.describe Claim, type: :model do
     context "Early-Career Payments claim" do
       let(:eligibility) { build(:early_career_payments_eligibility, :eligible) }
 
+      before { create(:policy_configuration, :additional_payments) }
+
       it "returns true when the claim is valid and has not been submitted" do
-        claim = build(:claim, :submittable, academic_year: AcademicYear.new(2021), first_name: "Dee", govuk_verify_fields: [], eligibility: eligibility)
+        claim = build(:claim, :submittable, policy: EarlyCareerPayments, academic_year: AcademicYear.new(2021), first_name: "Dee", govuk_verify_fields: [], eligibility: eligibility)
 
         expect(claim.submittable?).to eq true
       end
 
       it "returns false when it has already been submitted" do
-        claim = build(:claim, :unverified, eligibility: eligibility)
+        claim = build(:claim, :unverified, policy: EarlyCareerPayments, eligibility: eligibility)
 
         expect(claim.submittable?).to eq false
       end

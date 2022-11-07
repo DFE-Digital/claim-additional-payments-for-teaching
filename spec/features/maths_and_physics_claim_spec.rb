@@ -1,6 +1,8 @@
 require "rails_helper"
 
 RSpec.feature "Maths & Physics claims" do
+  before { create(:policy_configuration, :maths_and_physics) }
+
   [true, false].each do |javascript_enabled|
     js_status = javascript_enabled ? "enabled" : "disabled"
     scenario "Teacher claims for Maths & Physics payment with JavaScript #{js_status}", js: javascript_enabled do

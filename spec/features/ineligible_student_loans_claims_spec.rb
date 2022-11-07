@@ -3,8 +3,10 @@ require "rails_helper"
 RSpec.feature "Ineligible Teacher Student Loan Repayments claims" do
   include StudentLoansHelper
 
+  let!(:policy_configuration) { create(:policy_configuration, :student_loans) }
+
   scenario "qualified before the first eligible QTS year" do
-    policy_configurations(:student_loans).update!(current_academic_year: "2025/2026")
+    policy_configuration.update!(current_academic_year: "2025/2026")
 
     visit new_claim_path(StudentLoans.routing_name)
     choose_qts_year(:before_cut_off_date)

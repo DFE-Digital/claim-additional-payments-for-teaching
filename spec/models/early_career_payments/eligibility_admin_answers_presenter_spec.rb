@@ -2,16 +2,9 @@ require "rails_helper"
 
 RSpec.describe EarlyCareerPayments::EligibilityAdminAnswersPresenter, type: :model do
   let(:school) { schools(:penistone_grammar_school) }
-  let(:eligibility) { claim.eligibility }
-  let(:claim) do
-    build(
-      :claim,
-      academic_year: "2021/2022",
-      eligibility: build(:early_career_payments_eligibility, :eligible)
-    )
-  end
+  let(:claim) { build(:claim, :submittable, policy: EarlyCareerPayments, academic_year: "2021/2022") }
 
-  subject(:presenter) { described_class.new(eligibility) }
+  subject(:presenter) { described_class.new(claim.eligibility) }
 
   describe "#answers" do
     it "returns an array of questions and answers for displaying to service operator" do
