@@ -6,7 +6,7 @@ RSpec.describe "Admin tasks", type: :request do
   context "when signed in as a service operator" do
     before { @signed_in_user = sign_in_as_service_operator }
 
-    [MathsAndPhysics, StudentLoans].each do |policy|
+    [MathsAndPhysics, StudentLoans, EarlyCareerPayments, LevellingUpPremiumPayments].each do |policy|
       context "with a #{policy} claim" do
         describe "payroll_gender_tasks#create" do
           let(:claim) { create(:claim, :submitted, policy: policy, payroll_gender: :dont_know) }
