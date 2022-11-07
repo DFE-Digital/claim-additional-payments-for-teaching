@@ -55,8 +55,8 @@ RSpec.shared_examples "Admin View Claim Feature" do |policy|
 
     # NOTE: mirror claims factory for academic_year attribute "hardcoding" of 2019
     current_academic_year =
-      if policy == EarlyCareerPayments
-        PolicyConfiguration.for(EarlyCareerPayments).current_academic_year
+      if [EarlyCareerPayments, LevellingUpPremiumPayments].include?(policy)
+        academic_year
       else
         AcademicYear.new(2019)
       end
