@@ -58,6 +58,12 @@ RSpec.describe PolicyConfiguration do
         expect(maths_and_physics.additional_payments?).to be false
       end
     end
+
+    describe "validations" do
+      it "prevents saving a record for a policy already configured" do
+        expect { create(:policy_configuration, policy_types: [EarlyCareerPayments]) }.to raise_error(ActiveRecord::RecordInvalid)
+      end
+    end
   end
 
   describe ".policy_for_routing_name" do
