@@ -212,7 +212,6 @@ RSpec.describe ClaimMailer, type: :mailer do
               .to include("We have not been able to approve your application")
           end
         end
-
       end
 
       describe "#update_after_three_weeks" do

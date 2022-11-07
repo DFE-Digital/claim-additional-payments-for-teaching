@@ -97,7 +97,7 @@ class PolicyConfiguration < ApplicationRecord
   private
 
   def policy_types_must_not_be_configured_already
-    unless policy_types.map{ |policy| self.class.for(policy) }.compact.empty?
+    unless policy_types.map { |policy| self.class.for(policy) }.compact.empty?
       errors.add(:policy_types, "is already configured")
     end
   end

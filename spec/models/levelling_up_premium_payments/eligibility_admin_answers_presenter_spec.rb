@@ -8,7 +8,7 @@ RSpec.describe LevellingUpPremiumPayments::EligibilityAdminAnswersPresenter, typ
       :claim,
       :submittable,
       policy: LevellingUpPremiumPayments,
-      academic_year: "2021/2022",
+      academic_year: "2021/2022"
     )
   end
 
