@@ -23,13 +23,10 @@ class SchoolWorkforceCensusDataImporter
     "15th"
   ].freeze
 
-  def initialize(file: nil, csv_string: nil)
-    raise "either file or csv_string required not both" if file.present? && csv_string.present?
-
+  def initialize(file)
     @errors = []
-    if file.present? || csv_string.present?
-      @rows = parse_csv_file(file) if file.present?
-      @rows = parse_csv_string(csv_string) if csv_string.present?
+    if file.present?
+      @rows = parse_csv_file(file)
       check_headers
     else
       errors.append("Select a file")
@@ -37,15 +34,21 @@ class SchoolWorkforceCensusDataImporter
   end
 
   def run
-    ActiveRecord::Base.transaction do
-      SchoolWorkforceCensus.delete_all
+    SchoolWorkforceCensus.delete_all
 
-      rows.each do |row|
+    batch = 1
+    rows.each_slice(500) do |batch_rows|
+      Rails.logger.info "Processing batch #{batch}"
+
+      record_hashes = batch_rows.map do |row|
         next if row.fetch("TRN").blank?
 
-        school_workforce_census = row_to_school_workforce_census(row)
-        school_workforce_census.save!
-      end
+        row_to_school_workforce_census_hash(row)
+      end.compact
+
+      SchoolWorkforceCensus.insert_all(record_hashes) unless record_hashes.empty?
+
+      batch += 1
     end
   end
 
@@ -65,30 +68,29 @@ class SchoolWorkforceCensusDataImporter
     nil
   end
 
-  def parse_csv_string(csv_string)
-    CSV.new(csv_string, headers: true).read
-  rescue CSV::MalformedCSVError
-    errors.append("The selected file must be a CSV")
-    nil
-  end
+  # NOTE: since there will be lots of rows, avoid instantiating model object
+  def row_to_school_workforce_census_hash(row)
+    now = Time.now.utc
 
-  def row_to_school_workforce_census(row)
-    school_workforce_census = SchoolWorkforceCensus.new(teacher_reference_number: row.fetch("TRN"))
-    school_workforce_census.subject_1 = row.fetch("GeneralSubjectDescription")
-    school_workforce_census.subject_2 = row.fetch("2nd")
-    school_workforce_census.subject_3 = row.fetch("3rd")
-    school_workforce_census.subject_4 = row.fetch("4th")
-    school_workforce_census.subject_5 = row.fetch("5th")
-    school_workforce_census.subject_6 = row.fetch("6th")
-    school_workforce_census.subject_7 = row.fetch("7th")
-    school_workforce_census.subject_8 = row.fetch("8th")
-    school_workforce_census.subject_9 = row.fetch("9th")
-    school_workforce_census.subject_10 = row.fetch("10th")
-    school_workforce_census.subject_11 = row.fetch("11th")
-    school_workforce_census.subject_12 = row.fetch("12th")
-    school_workforce_census.subject_13 = row.fetch("13th")
-    school_workforce_census.subject_14 = row.fetch("14th")
-    school_workforce_census.subject_15 = row.fetch("15th")
-    school_workforce_census
+    {
+      teacher_reference_number: row.fetch("TRN"),
+      subject_1: row.fetch("GeneralSubjectDescription"),
+      subject_2: row.fetch("2nd"),
+      subject_3: row.fetch("3rd"),
+      subject_4: row.fetch("4th"),
+      subject_5: row.fetch("5th"),
+      subject_6: row.fetch("6th"),
+      subject_7: row.fetch("7th"),
+      subject_8: row.fetch("8th"),
+      subject_9: row.fetch("9th"),
+      subject_10: row.fetch("10th"),
+      subject_11: row.fetch("11th"),
+      subject_12: row.fetch("12th"),
+      subject_13: row.fetch("13th"),
+      subject_14: row.fetch("14th"),
+      subject_15: row.fetch("15th"),
+      created_at: now,
+      updated_at: now
+    }
   end
 end

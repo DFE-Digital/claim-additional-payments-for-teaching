@@ -7,7 +7,7 @@ RSpec.describe ImportCensusJob do
       let(:file_upload) { create(:file_upload) }
 
       it "imports census data, sends success email and deletes the file upload" do
-        subject.perform(file_upload)
+        subject.perform(file_upload.id)
 
         # imports the census data
         expect(SchoolWorkforceCensus.count).to eq(1)
@@ -24,35 +24,14 @@ RSpec.describe ImportCensusJob do
     context "csv data encounters an error" do
       let(:mail) { AdminMailer.census_csv_processing_error(file_upload.uploaded_by.email) }
       let(:file_upload) { create(:file_upload) }
-      let(:entry) {
-        instance_double(
-          SchoolWorkforceCensus,
-          "subject_1=" => "Design and Technlogy - Textiles",
-          "subject_2=" => nil,
-          "subject_3=" => nil,
-          "subject_4=" => nil,
-          "subject_5=" => nil,
-          "subject_6=" => nil,
-          "subject_7=" => nil,
-          "subject_8=" => nil,
-          "subject_9=" => nil,
-          "subject_10=" => nil,
-          "subject_11=" => nil,
-          "subject_12=" => nil,
-          "subject_13=" => nil,
-          "subject_14=" => nil,
-          "subject_15=" => nil
-        )
-      }
 
       before do
-        allow(entry).to receive(:save!).and_raise(ActiveRecord::RecordInvalid)
-        allow(SchoolWorkforceCensus).to receive(:new).with(teacher_reference_number: "1234567").and_return(entry)
+        allow(SchoolWorkforceCensus).to receive(:insert_all).and_raise(ActiveRecord::RecordInvalid)
         allow(Rollbar).to receive(:error)
       end
 
       it "does not import census data, sends error email and keeps the file upload" do
-        subject.perform(file_upload)
+        subject.perform(file_upload.id)
 
         # does not import census data
         expect(SchoolWorkforceCensus.count).to eq(0)

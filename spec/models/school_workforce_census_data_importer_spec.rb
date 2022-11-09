@@ -9,7 +9,7 @@ RSpec.describe SchoolWorkforceCensusDataImporter do
   end
 
   describe "#new" do
-    subject { described_class.new(file: file) }
+    subject { described_class.new(file) }
 
     context "The CSV is valid and has all the correct data" do
       let(:csv) do
@@ -94,7 +94,7 @@ RSpec.describe SchoolWorkforceCensusDataImporter do
       CSV
     end
 
-    subject { described_class.new(file: file).run }
+    subject { described_class.new(file).run }
 
     context "no errors" do
       it "imports all rows with TRNS" do
@@ -142,31 +142,11 @@ RSpec.describe SchoolWorkforceCensusDataImporter do
         CSV
       end
 
-      it "will rollback if there are any errors - existing data remains unchanged" do
-        entry = instance_double(
-          SchoolWorkforceCensus,
-          "subject_1=" => "Design and Technlogy - Textiles",
-          "subject_2=" => nil,
-          "subject_3=" => nil,
-          "subject_4=" => nil,
-          "subject_5=" => nil,
-          "subject_6=" => nil,
-          "subject_7=" => nil,
-          "subject_8=" => nil,
-          "subject_9=" => nil,
-          "subject_10=" => nil,
-          "subject_11=" => nil,
-          "subject_12=" => nil,
-          "subject_13=" => nil,
-          "subject_14=" => nil,
-          "subject_15=" => nil
-        )
-
-        allow(entry).to receive(:save!).and_raise(ActiveRecord::RecordInvalid)
-        allow(SchoolWorkforceCensus).to receive(:new).with(teacher_reference_number: "1234567").and_return(entry)
+      it "delete all entries so it can be uploaded again" do
+        allow(SchoolWorkforceCensus).to receive(:insert_all).and_raise(ActiveRecord::RecordInvalid)
 
         expect { subject }.to raise_error(ActiveRecord::RecordInvalid)
-        expect(SchoolWorkforceCensus.find_by_id(existing_census_entry.id)).to be_present
+        expect(SchoolWorkforceCensus.find_by_id(existing_census_entry.id)).not_to be_present
       end
     end
   end
