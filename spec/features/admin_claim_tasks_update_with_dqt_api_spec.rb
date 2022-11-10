@@ -16,12 +16,8 @@ RSpec.feature "Admin claim tasks update with DQT API" do
         )
       )
 
-      claim.eligibility.update!(
-        attributes_for(
-          :"#{policy_underscored}_eligibility",
-          :eligible
-        )
-      )
+      claim.eligibility = create("#{policy_underscored}_eligibility", :eligible)
+      claim.save!
 
       visit claim_path(claim.policy.routing_name, "check-your-answers")
       claim_attributes[:policy] == EarlyCareerPayments ? click_on("Accept and send") : click_on("Confirm and send")
@@ -1348,7 +1344,9 @@ RSpec.feature "Admin claim tasks update with DQT API" do
           end
 
           context "admin claim tasks identity confirmation view" do
-            before { visit admin_claim_task_path(claim, :identity_confirmation) }
+            before {
+              visit admin_claim_task_path(claim, :identity_confirmation)
+            }
 
             scenario "shows task outcome previously performed by user" do
               expect(task_outcome).to have_text("This task was performed by #{claim.tasks.where(name: :identity_confirmation).first.created_by.full_name} on #{I18n.l(claim.tasks.where(name: :identity_confirmation).first.created_at)}")

@@ -26,8 +26,7 @@ FactoryBot.define do
     end
 
     trait :eligible_school do
-      # TODO remove fixture dependence
-      current_school { School.find(ActiveRecord::FixtureSet.identify(:penistone_grammar_school, :uuid)) }
+      association :current_school, factory: [:school, :early_career_payments_eligible]
     end
 
     trait :ineligible_school do
@@ -66,7 +65,7 @@ FactoryBot.define do
     # TODO want to delete this but it's used by a feature spec
     trait :ineligible_feature do
       nqt_in_academic_year_after_itt { true }
-      current_school { School.find(ActiveRecord::FixtureSet.identify(:penistone_grammar_school, :uuid)) }
+      eligible_school
       employed_as_supply_teacher { false }
       subject_to_formal_performance_action { false }
       subject_to_disciplinary_action { false }

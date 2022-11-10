@@ -11,7 +11,8 @@ RSpec.describe "Submissions", type: :request do
         start_student_loans_claim
         # Make the claim submittable
         in_progress_claim.update!(attributes_for(:claim, :submittable))
-        in_progress_claim.eligibility.update!(attributes_for(:student_loans_eligibility, :eligible))
+        in_progress_claim.eligibility = create(:student_loans_eligibility, :eligible)
+        in_progress_claim.save!
 
         stub_qualified_teaching_statuses_show(
           trn: in_progress_claim.teacher_reference_number,

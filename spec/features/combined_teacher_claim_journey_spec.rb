@@ -7,11 +7,13 @@ RSpec.feature "Levelling up premium payments and early-career payments combined 
   before { create(:policy_configuration, :additional_payments) }
 
   scenario "Eligible for both" do
+    school = create(:school, :combined_journey_eligibile_for_all)
+
     visit new_claim_path(EarlyCareerPayments.routing_name)
 
     # - Which school do you teach at
     expect(page).to have_text(I18n.t("early_career_payments.questions.current_school_search"))
-    choose_school schools(:hampstead_school)
+    choose_school school
     click_on "Continue"
 
     # - Have you started your first year as a newly qualified teacher?
@@ -219,11 +221,13 @@ RSpec.feature "Levelling up premium payments and early-career payments combined 
   end
 
   scenario "Eligible for only one" do
+    school = create(:school, :early_career_payments_uplifted)
+
     visit new_claim_path(EarlyCareerPayments.routing_name)
 
     # - Which school do you teach at
     expect(page).to have_text(I18n.t("early_career_payments.questions.current_school_search"))
-    choose_school schools(:penistone_grammar_school)
+    choose_school school
     click_on "Continue"
 
     # - Have you started your first year as a newly qualified teacher?

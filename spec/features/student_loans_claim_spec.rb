@@ -4,6 +4,7 @@ RSpec.feature "Teacher Student Loan Repayments claims" do
   include StudentLoansHelper
 
   let!(:policy_configuration) { create(:policy_configuration, :student_loans) }
+  let!(:school) { create(:school, :student_loans_eligible) }
 
   [
     true,
@@ -22,17 +23,17 @@ RSpec.feature "Teacher Student Loan Repayments claims" do
 
       expect(page).to have_text(claim_school_question)
 
-      choose_school schools(:penistone_grammar_school)
-      expect(claim.eligibility.reload.claim_school).to eql schools(:penistone_grammar_school)
-      expect(page).to have_text(subjects_taught_question(school_name: schools(:penistone_grammar_school).name))
+      choose_school school
+      expect(claim.eligibility.reload.claim_school).to eql school
+      expect(page).to have_text(subjects_taught_question(school_name: school.name))
 
       check "Physics"
       click_on "Continue"
       expect(page).to have_text(I18n.t("student_loans.questions.employment_status"))
 
-      choose_still_teaching
+      choose_still_teaching("Yes, at #{school.name}")
       expect(claim.eligibility.reload.employment_status).to eql("claim_school")
-      expect(claim.eligibility.current_school).to eql(schools(:penistone_grammar_school))
+      expect(claim.eligibility.current_school).to eql(school)
 
       expect(claim.eligibility.reload.subjects_taught).to eq([:physics_taught])
 
@@ -234,17 +235,17 @@ RSpec.feature "Teacher Student Loan Repayments claims" do
 
         expect(page).to have_text(claim_school_question)
 
-        choose_school schools(:penistone_grammar_school)
-        expect(claim.eligibility.reload.claim_school).to eql schools(:penistone_grammar_school)
-        expect(page).to have_text(subjects_taught_question(school_name: schools(:penistone_grammar_school).name))
+        choose_school school
+        expect(claim.eligibility.reload.claim_school).to eql school
+        expect(page).to have_text(subjects_taught_question(school_name: school.name))
 
         check "Physics"
         click_on "Continue"
         expect(page).to have_text(I18n.t("student_loans.questions.employment_status"))
 
-        choose_still_teaching
+        choose_still_teaching("Yes, at #{school.name}")
         expect(claim.eligibility.reload.employment_status).to eql("claim_school")
-        expect(claim.eligibility.current_school).to eql(schools(:penistone_grammar_school))
+        expect(claim.eligibility.current_school).to eql(school)
 
         expect(claim.eligibility.reload.subjects_taught).to eq([:physics_taught])
 
@@ -265,22 +266,23 @@ RSpec.feature "Teacher Student Loan Repayments claims" do
   end
 
   scenario "currently works at a different school to the claim school" do
+    different_school = create(:school, :student_loans_eligible)
     claim = start_student_loans_claim
 
-    choose_school schools(:penistone_grammar_school)
+    choose_school school
     choose_subjects_taught
 
-    choose_still_teaching "Yes, at another school"
+    choose_still_teaching("Yes, at another school")
 
     expect(claim.eligibility.reload.employment_status).to eql("different_school")
 
-    fill_in :school_search, with: "Hampstead"
+    fill_in :school_search, with: different_school.name
     click_on "Continue"
 
-    choose "Hampstead School"
+    choose different_school.name
     click_on "Continue"
 
-    expect(claim.eligibility.reload.current_school).to eql schools(:hampstead_school)
+    expect(claim.eligibility.reload.current_school).to eql different_school
 
     expect(page).to have_text(leadership_position_question)
   end

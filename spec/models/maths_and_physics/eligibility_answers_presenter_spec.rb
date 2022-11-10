@@ -4,7 +4,6 @@ RSpec.describe MathsAndPhysics::EligibilityAnswersPresenter do
   let(:eligibility_attributes) do
     {
       teaching_maths_or_physics: true,
-      current_school: schools(:penistone_grammar_school),
       initial_teacher_training_subject: :maths,
       qts_award_year: "on_or_after_cut_off_date",
       employed_as_supply_teacher: false,
@@ -13,14 +12,14 @@ RSpec.describe MathsAndPhysics::EligibilityAnswersPresenter do
     }
   end
   let(:eligibility) { claim.eligibility }
-  let(:claim) { build(:claim, policy: MathsAndPhysics, eligibility: build(:maths_and_physics_eligibility, eligibility_attributes)) }
+  let(:claim) { build(:claim, policy: MathsAndPhysics, eligibility: build(:maths_and_physics_eligibility, :eligible, eligibility_attributes)) }
 
   subject(:presenter) { described_class.new(eligibility) }
 
   it "returns an array of questions and answers to be presented to the user for checking" do
     expected_answers = [
       [I18n.t("maths_and_physics.questions.teaching_maths_or_physics"), "Yes", "teaching-maths-or-physics"],
-      [I18n.t("questions.current_school"), "Penistone Grammar School", "current-school"],
+      [I18n.t("questions.current_school"), eligibility.current_school.name, "current-school"],
       [I18n.t("maths_and_physics.questions.initial_teacher_training_subject"), "Maths", "initial-teacher-training-subject"],
       [I18n.t("questions.qts_award_year"), "In or after the academic year 2014 to 2015", "qts-year"],
       [I18n.t("maths_and_physics.questions.employed_as_supply_teacher"), "No", "supply-teacher"],
@@ -45,7 +44,6 @@ RSpec.describe MathsAndPhysics::EligibilityAnswersPresenter do
     let(:eligibility_attributes) do
       {
         teaching_maths_or_physics: true,
-        current_school: schools(:penistone_grammar_school),
         initial_teacher_training_subject: :none_of_the_subjects,
         has_uk_maths_or_physics_degree: "has_non_uk",
         qts_award_year: "on_or_after_cut_off_date",
@@ -58,7 +56,7 @@ RSpec.describe MathsAndPhysics::EligibilityAnswersPresenter do
     it "includes the specialism and degree in the questions and answers" do
       expected_answers = [
         [I18n.t("maths_and_physics.questions.teaching_maths_or_physics"), "Yes", "teaching-maths-or-physics"],
-        [I18n.t("questions.current_school"), "Penistone Grammar School", "current-school"],
+        [I18n.t("questions.current_school"), eligibility.current_school.name, "current-school"],
         [I18n.t("maths_and_physics.questions.initial_teacher_training_subject"), "None of these subjects", "initial-teacher-training-subject"],
         [I18n.t("maths_and_physics.questions.has_uk_maths_or_physics_degree"), "I have a non-UK degree in Maths or Physics", "has-uk-maths-or-physics-degree"],
         [I18n.t("questions.qts_award_year"), "In or after the academic year 2014 to 2015", "qts-year"],
@@ -75,7 +73,6 @@ RSpec.describe MathsAndPhysics::EligibilityAnswersPresenter do
     let(:eligibility_attributes) do
       {
         teaching_maths_or_physics: true,
-        current_school: schools(:penistone_grammar_school),
         initial_teacher_training_subject: :science,
         initial_teacher_training_subject_specialism: :not_sure,
         has_uk_maths_or_physics_degree: "has_non_uk",
@@ -89,7 +86,7 @@ RSpec.describe MathsAndPhysics::EligibilityAnswersPresenter do
     it "includes the specialism and degree in the questions and answers" do
       expected_answers = [
         [I18n.t("maths_and_physics.questions.teaching_maths_or_physics"), "Yes", "teaching-maths-or-physics"],
-        [I18n.t("questions.current_school"), "Penistone Grammar School", "current-school"],
+        [I18n.t("questions.current_school"), eligibility.current_school.name, "current-school"],
         [I18n.t("maths_and_physics.questions.initial_teacher_training_subject"), "Science (physics, biology and chemistry)", "initial-teacher-training-subject"],
         [I18n.t("maths_and_physics.questions.initial_teacher_training_subject_specialism"), "I’m not sure", "initial-teacher-training-subject-specialism"],
         [I18n.t("maths_and_physics.questions.has_uk_maths_or_physics_degree"), "I have a non-UK degree in Maths or Physics", "has-uk-maths-or-physics-degree"],
@@ -107,7 +104,6 @@ RSpec.describe MathsAndPhysics::EligibilityAnswersPresenter do
     let(:eligibility_attributes) do
       {
         teaching_maths_or_physics: true,
-        current_school: schools(:penistone_grammar_school),
         initial_teacher_training_subject: :physics,
         initial_teacher_training_subject_specialism: :physics,
         qts_award_year: "on_or_after_cut_off_date",
@@ -122,7 +118,7 @@ RSpec.describe MathsAndPhysics::EligibilityAnswersPresenter do
     it "includes supply teacher questions" do
       expected_answers = [
         [I18n.t("maths_and_physics.questions.teaching_maths_or_physics"), "Yes", "teaching-maths-or-physics"],
-        [I18n.t("questions.current_school"), "Penistone Grammar School", "current-school"],
+        [I18n.t("questions.current_school"), eligibility.current_school.name, "current-school"],
         [I18n.t("maths_and_physics.questions.initial_teacher_training_subject"), "Physics", "initial-teacher-training-subject"],
         [I18n.t("maths_and_physics.questions.initial_teacher_training_subject_specialism"), "Physics", "initial-teacher-training-subject-specialism"],
         [I18n.t("questions.qts_award_year"), "In or after the academic year 2014 to 2015", "qts-year"],

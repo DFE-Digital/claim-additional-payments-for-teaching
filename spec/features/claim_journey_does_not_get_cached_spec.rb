@@ -6,7 +6,9 @@ RSpec.feature "Claim journey does not get cached", js: true do
   it "redirects the user to the start of the claim journey if they go back after the claim is completed" do
     claim = start_student_loans_claim
     claim.update!(attributes_for(:claim, :submittable))
-    claim.eligibility.update!(attributes_for(:student_loans_eligibility, :eligible))
+    claim.eligibility = create(:student_loans_eligibility, :eligible)
+    claim.save!
+
     visit claim_path(claim.policy.routing_name, "check-your-answers")
 
     expect(page).to have_text(claim.first_name)

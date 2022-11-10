@@ -87,6 +87,6 @@ RSpec.feature "Early-Career Payments claims with school ineligible for Levelling
     click_on("Continue")
 
     # - You are eligible for an early career payment
-    expect(page).to have_text("Based on what you told us, you can apply for an early-career payment of:\n£7,500")
+    expect(page).to have_text("Based on what you told us, you can apply for an early-career payment of:\n£5,000")
   end
 end

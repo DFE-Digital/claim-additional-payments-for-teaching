@@ -6,12 +6,13 @@ RSpec.feature "Ineligible Levelling up premium payments claims" do
   before { create(:policy_configuration, :additional_payments) }
 
   scenario "When the school selected is LUP ineligible" do
+    school = create(:school, :early_career_payments_eligible, :levelling_up_premium_payments_ineligible)
     start_levelling_up_premium_payments_claim
 
     # - Which school do you teach at
     expect(page).to have_text(I18n.t("early_career_payments.questions.current_school_search"))
     expect(eligibility.ineligible?).to be false
-    choose_school schools(:penistone_grammar_school)
+    choose_school school
     click_on "Continue"
     expect(eligibility.reload.ineligible?).to be true
 
@@ -19,12 +20,13 @@ RSpec.feature "Ineligible Levelling up premium payments claims" do
   end
 
   scenario "When the school selected is both ECP and LUP ineligible" do
+    school = create(:school, :early_career_payments_ineligible, :levelling_up_premium_payments_ineligible)
     start_levelling_up_premium_payments_claim
 
     # - Which school do you teach at
     expect(page).to have_text(I18n.t("early_career_payments.questions.current_school_search"))
     expect(eligibility.ineligible?).to be false
-    choose_school schools(:bradford_grammar_school)
+    choose_school school
     click_on "Continue"
     expect(eligibility.reload.ineligible?).to be true
 
@@ -32,11 +34,13 @@ RSpec.feature "Ineligible Levelling up premium payments claims" do
   end
 
   scenario "When subject 'none of the above' and user does not have an eligible degree" do
+    school = create(:school, :levelling_up_premium_payments_eligible)
+
     start_levelling_up_premium_payments_claim
 
     # - Which school do you teach at
     expect(page).to have_text(I18n.t("early_career_payments.questions.current_school_search"))
-    choose_school schools(:hampstead_school)
+    choose_school school
     click_on "Continue"
 
     # - Have you started your first year as a newly qualified teacher?

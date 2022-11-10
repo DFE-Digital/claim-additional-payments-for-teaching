@@ -3,57 +3,63 @@ RSpec.shared_examples "Admin View Claim Feature" do |policy|
   let(:academic_year) { policy_configuration.current_academic_year }
 
   let!(:claim) {
+    eligibility = create("#{policy.to_s.underscore}_eligibility".to_sym, :eligible)
     create(
       :claim,
       :submitted,
       policy: policy,
-      eligibility: build("#{policy.to_s.underscore}_eligibility".to_sym, :eligible)
+      eligibility: eligibility
     )
   }
 
   let!(:multiple_claim) {
+    eligibility = create("#{policy.to_s.underscore}_eligibility".to_sym, :eligible)
     create(
       :claim,
       :submitted,
       policy: policy,
-      eligibility: build("#{policy.to_s.underscore}_eligibility".to_sym, :eligible)
+      eligibility: eligibility
     )
   }
 
   let!(:similar_claim) {
+    eligibility = create("#{policy.to_s.underscore}_eligibility".to_sym, :eligible)
     create(
       :claim,
       :submitted,
       policy: policy,
-      eligibility: build("#{policy.to_s.underscore}_eligibility".to_sym, :eligible),
+      eligibility: eligibility,
       teacher_reference_number: multiple_claim.teacher_reference_number
     )
   }
 
   let!(:approved_awaiting_payroll_claim) {
+    eligibility = create("#{policy.to_s.underscore}_eligibility".to_sym, :eligible)
     create(
       :claim,
       :payrollable,
       policy: policy,
-      eligibility: build("#{policy.to_s.underscore}_eligibility".to_sym, :eligible)
+      eligibility: eligibility
     )
   }
 
   let!(:approved_paid_claim) {
+    eligibility = create("#{policy.to_s.underscore}_eligibility".to_sym, :eligible)
     create(
       :claim,
       :approved,
       policy: policy,
-      eligibility: build("#{policy.to_s.underscore}_eligibility".to_sym, :eligible)
+      eligibility: eligibility
     )
   }
 
   let!(:rejected_claim) {
+    eligibility = create("#{policy.to_s.underscore}_eligibility".to_sym, :eligible)
     create(
       :claim,
       :rejected,
       policy: policy,
-      eligibility: build("#{policy.to_s.underscore}_eligibility".to_sym, :eligible)
+      eligibility: eligibility
     )
   }
 

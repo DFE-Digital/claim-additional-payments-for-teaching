@@ -8,12 +8,13 @@ FactoryBot.define do
       policy { StudentLoans }
       eligibility_factory { "#{policy.to_s.underscore}_eligibility".to_sym }
       eligibility_trait { nil }
+      eligibility_attributes { nil }
     end
 
     after(:build) do |claim, evaluator|
       create(:policy_configuration, evaluator.policy.to_s.underscore) unless PolicyConfiguration.for(evaluator.policy).present?
 
-      claim.eligibility = build(*evaluator.eligibility_factory, evaluator.eligibility_trait) unless claim.eligibility
+      claim.eligibility = build(evaluator.eligibility_factory, evaluator.eligibility_trait, **evaluator.eligibility_attributes || {}) unless claim.eligibility
 
       raise "Policy of Claim (#{evaluator.policy}) must match Eligibility class (#{claim.eligibility.policy})" if evaluator.policy != claim.eligibility.policy
 
@@ -114,6 +115,7 @@ FactoryBot.define do
     trait :rejected do
       submitted
       after(:build) do |claim|
+        claim.save
         create(:decision, claim: claim, result: "rejected")
       end
     end

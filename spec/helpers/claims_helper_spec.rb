@@ -2,7 +2,7 @@ require "rails_helper"
 
 describe ClaimsHelper do
   describe "#eligibility_answers" do
-    let(:school) { schools(:penistone_grammar_school) }
+    let(:school) { create(:school) }
     let(:eligibility) do
       build(
         :student_loans_eligibility,

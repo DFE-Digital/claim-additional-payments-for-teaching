@@ -4,6 +4,8 @@ RSpec.feature "Ineligible Teacher Student Loan Repayments claims" do
   include StudentLoansHelper
 
   let!(:policy_configuration) { create(:policy_configuration, :student_loans) }
+  let!(:school) { create(:school, :student_loans_eligible) }
+  let!(:ineligible_school) { create(:school, :student_loans_ineligible) }
 
   scenario "qualified before the first eligible QTS year" do
     policy_configuration.update!(current_academic_year: "2025/2026")
@@ -19,34 +21,30 @@ RSpec.feature "Ineligible Teacher Student Loan Repayments claims" do
 
   scenario "chooses an ineligible claim school" do
     claim = start_student_loans_claim
-    choose_school schools(:hampstead_school)
+    choose_school ineligible_school
 
-    expect(claim.eligibility.reload.claim_school).to eq schools(:hampstead_school)
+    expect(claim.eligibility.reload.claim_school).to eq ineligible_school
     expect(page).to have_text("This school is not eligible")
-    expect(page).to have_text("Hampstead School is not an eligible school.")
+    expect(page).to have_text("#{ineligible_school.name} is not an eligible school.")
   end
 
   scenario "chooses an ineligible current school" do
     start_student_loans_claim
 
-    choose_school schools(:penistone_grammar_school)
+    choose_school school
     choose_subjects_taught
 
     choose_still_teaching "Yes, at another school"
 
-    fill_in :school_search, with: "Bradford"
-    click_on "Continue"
-
-    choose "Bradford Grammar School"
-    click_on "Continue"
+    choose_school ineligible_school
 
     expect(page).to have_text("You’re not eligible")
-    expect(page).to have_text("Bradford Grammar School, where you are currently employed to teach, is not a state-funded secondary school.")
+    expect(page).to have_text("#{ineligible_school.name}, where you are currently employed to teach, is not a state-funded secondary school.")
   end
 
   scenario "no longer teaching" do
     claim = start_student_loans_claim
-    choose_school schools(:penistone_grammar_school)
+    choose_school school
     choose_subjects_taught
 
     choose_still_teaching "No"
@@ -58,7 +56,7 @@ RSpec.feature "Ineligible Teacher Student Loan Repayments claims" do
 
   scenario "did not teach an eligible subject" do
     claim = start_student_loans_claim
-    choose_school schools(:penistone_grammar_school)
+    choose_school school
 
     choose I18n.t("student_loans.questions.eligible_subjects.none_taught")
     click_on "Continue"
@@ -70,11 +68,11 @@ RSpec.feature "Ineligible Teacher Student Loan Repayments claims" do
 
   scenario "was in a leadership position and performed leadership duties for more than half of their time" do
     claim = start_student_loans_claim
-    choose_school schools(:penistone_grammar_school)
+    choose_school school
     check "Biology"
     click_on "Continue"
 
-    choose_still_teaching
+    choose_still_teaching("Yes, at #{school.name}")
 
     choose "Yes"
     click_on "Continue"
@@ -89,7 +87,7 @@ RSpec.feature "Ineligible Teacher Student Loan Repayments claims" do
 
   scenario "claimant can start a fresh claim after being told they are ineligible, by visiting the start page" do
     start_student_loans_claim
-    choose_school schools(:hampstead_school)
+    choose_school ineligible_school
     expect(page).to have_text("This school is not eligible")
 
     visit new_claim_path(StudentLoans.routing_name)
@@ -100,8 +98,8 @@ RSpec.feature "Ineligible Teacher Student Loan Repayments claims" do
     expect(page).not_to have_css("input[checked]")
     choose_qts_year
 
-    choose_school schools(:penistone_grammar_school)
+    choose_school school
 
-    expect(page).to have_text(subjects_taught_question(school_name: schools(:penistone_grammar_school).name))
+    expect(page).to have_text(subjects_taught_question(school_name: school.name))
   end
 end

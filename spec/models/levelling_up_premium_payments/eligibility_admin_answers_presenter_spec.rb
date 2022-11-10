@@ -1,7 +1,6 @@
 require "rails_helper"
 
 RSpec.describe LevellingUpPremiumPayments::EligibilityAdminAnswersPresenter, type: :model do
-  let(:school) { schools(:penistone_grammar_school) }
   let(:eligibility) { claim.eligibility }
   let(:claim) do
     build(

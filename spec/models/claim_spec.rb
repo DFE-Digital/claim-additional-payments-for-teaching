@@ -660,9 +660,11 @@ RSpec.describe Claim, type: :model do
   end
 
   describe "#school" do
+    let(:school) { build(:school) }
+
     it "returns the current_school of the claim eligiblity" do
-      claim = Claim.new(eligibility: StudentLoans::Eligibility.new(current_school: schools(:penistone_grammar_school)))
-      expect(claim.school).to eq schools(:penistone_grammar_school)
+      claim = Claim.new(eligibility: StudentLoans::Eligibility.new(current_school: school))
+      expect(claim.school).to eq school
     end
 
     it "returns nil if no eligibility is set" do

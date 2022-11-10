@@ -2,6 +2,7 @@ require "rails_helper"
 
 RSpec.feature "Set Reminder when Eligible Later for an Early Career Payment" do
   let(:mail) { ReminderMailer.reminder_set(Reminder.order(:created_at).last) }
+  let(:school) { create(:school, :early_career_payments_eligible) }
 
   [
     {subject: "mathematics", cohort: "2018 to 2019", academic_year: AcademicYear.new(2018), next_year: 2023, frozen_year: Date.new(2022, 9, 1)},
@@ -17,7 +18,8 @@ RSpec.feature "Set Reminder when Eligible Later for an Early Career Payment" do
             attributes_for(
               :early_career_payments_eligibility,
               :eligible,
-              eligible_itt_subject: args[:subject]
+              eligible_itt_subject: args[:subject],
+              current_school_id: school.id
             )
           )
 
@@ -88,7 +90,8 @@ RSpec.feature "Set Reminder when Eligible Later for an Early Career Payment" do
             attributes_for(
               :early_career_payments_eligibility,
               :eligible,
-              eligible_itt_subject: args[:subject]
+              eligible_itt_subject: args[:subject],
+              current_school_id: school.id
             )
           )
 

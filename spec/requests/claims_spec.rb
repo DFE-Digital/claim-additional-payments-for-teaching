@@ -96,20 +96,23 @@ RSpec.describe "Claims", type: :request do
       end
 
       context "when searching for a school on the claim-school page" do
-        it "searches for schools using the search term" do
-          get claim_path(StudentLoans.routing_name, "claim-school"), params: {school_search: "Penistone"}
+        let!(:school_1) { create(:school) }
+        let!(:school_2) { create(:school) }
 
-          expect(response.body).to include schools(:penistone_grammar_school).name
-          expect(response.body).not_to include schools(:hampstead_school).name
+        it "searches for schools using the search term" do
+          get claim_path(StudentLoans.routing_name, "claim-school"), params: {school_search: school_1.name}
+
+          expect(response.body).to include school_1.name
+          expect(response.body).not_to include school_2.name
           expect(response.body).to include "Continue"
         end
 
         it "only returns results if the search term is more than two characters" do
-          get claim_path(StudentLoans.routing_name, "claim-school"), params: {school_search: "Pe"}
+          get claim_path(StudentLoans.routing_name, "claim-school"), params: {school_search: "ab"}
 
           expect(response.body).to include("There is a problem")
           expect(response.body).to include("Enter a school or postcode")
-          expect(response.body).not_to include(schools(:penistone_grammar_school).name)
+          expect(response.body).not_to include(school_1.name)
         end
 
         it "shows an appropriate message when there are no search results" do
@@ -198,19 +201,23 @@ RSpec.describe "Claims", type: :request do
       end
 
       context "having searched for a school but not selected a school from the results on the claim-school page" do
+        let!(:school) { create(:school) }
+
         it "re-renders the school search results with an error message" do
-          put claim_path(StudentLoans.routing_name, "claim-school"), params: {school_search: "peniston", claim: {eligibility_attributes: {claim_school_id: ""}}}
+          put claim_path(StudentLoans.routing_name, "claim-school"), params: {school_search: school.name, claim: {eligibility_attributes: {claim_school_id: ""}}}
 
           expect(response).to be_successful
           expect(response.body).to include("There is a problem")
           expect(response.body).to include("Select a school from the list")
-          expect(response.body).to include(schools(:penistone_grammar_school).name)
+          expect(response.body).to include(school.name)
         end
       end
 
       context "when the update makes the claim ineligible" do
+        let(:ineligible_school) { create(:school, :student_loans_ineligible) }
+
         it "redirects to the “ineligible” page" do
-          put claim_path(StudentLoans.routing_name, "claim-school"), params: {claim: {eligibility_attributes: {claim_school_id: schools(:hampstead_school).to_param}}}
+          put claim_path(StudentLoans.routing_name, "claim-school"), params: {claim: {eligibility_attributes: {claim_school_id: ineligible_school.to_param}}}
 
           expect(response).to redirect_to(claim_path(StudentLoans.routing_name, "ineligible"))
         end

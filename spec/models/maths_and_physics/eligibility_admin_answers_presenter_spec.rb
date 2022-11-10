@@ -1,18 +1,14 @@
 require "rails_helper"
 
 RSpec.describe MathsAndPhysics::EligibilityAdminAnswersPresenter, type: :model do
-  let(:school) { schools(:penistone_grammar_school) }
   let(:eligibility) { claim.eligibility }
   let(:claim) do
     build(:claim,
       policy: MathsAndPhysics,
       academic_year: "2019/2020",
       eligibility: build(:maths_and_physics_eligibility,
-        teaching_maths_or_physics: true,
-        current_school: school,
-        initial_teacher_training_subject: :maths,
+        :eligible,
         initial_teacher_training_subject_specialism: :not_sure,
-        qts_award_year: "on_or_after_cut_off_date",
         has_uk_maths_or_physics_degree: "has_non_uk",
         employed_as_supply_teacher: true,
         has_entire_term_contract: true,
@@ -26,7 +22,7 @@ RSpec.describe MathsAndPhysics::EligibilityAdminAnswersPresenter, type: :model d
     it "returns an array of questions and answers for displaying to service operator" do
       expected_answers = [
         [I18n.t("maths_and_physics.admin.teaching_maths_or_physics"), "Yes"],
-        [I18n.t("admin.current_school"), presenter.display_school(school)],
+        [I18n.t("admin.current_school"), presenter.display_school(eligibility.current_school)],
         [I18n.t("maths_and_physics.admin.initial_teacher_training_subject"), "Maths"],
         [I18n.t("maths_and_physics.admin.initial_teacher_training_subject_specialism"), "I’m not sure"],
         [I18n.t("maths_and_physics.admin.has_uk_maths_or_physics_degree"), "I have a non-UK degree in Maths or Physics"],

@@ -9,10 +9,15 @@ RSpec.feature "Changing the answers on a submittable claim" do
     create(:policy_configuration, :additional_payments)
   end
 
+  let(:maths_and_physics_school) { create(:school, :maths_and_physics_eligible) }
+  let(:student_loans_school) { create(:school, :student_loans_eligible) }
+  let(:ecp_school) { create(:school, :early_career_payments_eligible) }
+
   scenario "Teacher changes an answer which is not a dependency of any of the other answers they've given, remaining eligible" do
     claim = start_maths_and_physics_claim
     claim.update!(attributes_for(:claim, :submittable))
-    claim.eligibility.update!(attributes_for(:maths_and_physics_eligibility, :eligible, initial_teacher_training_subject: "maths"))
+    claim.eligibility.update!(attributes_for(:maths_and_physics_eligibility, :eligible, initial_teacher_training_subject: "maths", current_school_id: maths_and_physics_school.id))
+
     visit claim_path(MathsAndPhysics.routing_name, "check-your-answers")
 
     find("a[href='#{claim_path(MathsAndPhysics.routing_name, "initial-teacher-training-subject")}']").click
@@ -30,7 +35,7 @@ RSpec.feature "Changing the answers on a submittable claim" do
   scenario "Teacher changes an answer which is not a dependency of any of the other answers they've given, becoming ineligible" do
     claim = start_student_loans_claim
     claim.update!(attributes_for(:claim, :submittable))
-    claim.eligibility.update!(attributes_for(:student_loans_eligibility, :eligible))
+    claim.eligibility.update!(attributes_for(:student_loans_eligibility, :eligible, current_school_id: student_loans_school.id, claim_school_id: student_loans_school.id))
     visit claim_path(StudentLoans.routing_name, "check-your-answers")
 
     find("a[href='#{claim_path(StudentLoans.routing_name, "qts-year")}']").click
@@ -49,10 +54,10 @@ RSpec.feature "Changing the answers on a submittable claim" do
   scenario "Teacher changes an answer which is a dependency of some of the subsequent answers they've given, remaining eligible" do
     claim = start_student_loans_claim
     claim.update!(attributes_for(:claim, :submittable))
-    claim.eligibility.update!(attributes_for(:student_loans_eligibility, :eligible))
+    claim.eligibility.update!(attributes_for(:student_loans_eligibility, :eligible, current_school_id: student_loans_school.id, claim_school_id: student_loans_school.id))
     visit claim_path(StudentLoans.routing_name, "check-your-answers")
 
-    new_claim_school = create(:school, :student_loan_eligible, name: "Claim School")
+    new_claim_school = create(:school, :student_loans_eligible, name: "Claim School")
 
     find("a[href='#{claim_path(StudentLoans.routing_name, "claim-school")}']").click
 
@@ -87,7 +92,7 @@ RSpec.feature "Changing the answers on a submittable claim" do
   scenario "Teacher changes an answer which is a dependency of some of the subsequent answers they've given, making them ineligible" do
     claim = start_student_loans_claim
     claim.update!(attributes_for(:claim, :submittable))
-    claim.eligibility.update!(attributes_for(:student_loans_eligibility, :eligible, had_leadership_position: false))
+    claim.eligibility.update!(attributes_for(:student_loans_eligibility, :eligible, had_leadership_position: false, current_school_id: student_loans_school.id, claim_school_id: student_loans_school.id))
     visit claim_path(StudentLoans.routing_name, "check-your-answers")
 
     find("a[href='#{claim_path(StudentLoans.routing_name, "leadership-position")}']").click
@@ -110,7 +115,7 @@ RSpec.feature "Changing the answers on a submittable claim" do
   scenario "Teacher edits but does not change an answer which is a dependency of some of the subsequent answers they've given" do
     claim = start_maths_and_physics_claim
     claim.update!(attributes_for(:claim, :submittable))
-    claim.eligibility.update!(attributes_for(:maths_and_physics_eligibility, :eligible, employed_as_supply_teacher: true, has_entire_term_contract: true, employed_directly: true))
+    claim.eligibility.update!(attributes_for(:maths_and_physics_eligibility, :eligible, employed_as_supply_teacher: true, has_entire_term_contract: true, employed_directly: true, current_school_id: maths_and_physics_school.id))
     visit claim_path(MathsAndPhysics.routing_name, "check-your-answers")
 
     find("a[href='#{claim_path(MathsAndPhysics.routing_name, "supply-teacher")}']").click
@@ -129,7 +134,7 @@ RSpec.feature "Changing the answers on a submittable claim" do
   scenario "when changing the student loan repayment amount the user can change answer and it preserves two decimal places" do
     claim = start_student_loans_claim
     claim.update!(attributes_for(:claim, :submittable))
-    claim.eligibility.update!(attributes_for(:student_loans_eligibility, :eligible, student_loan_repayment_amount: 100.1))
+    claim.eligibility.update!(attributes_for(:student_loans_eligibility, :eligible, student_loan_repayment_amount: 100.1, current_school_id: student_loans_school.id, claim_school_id: student_loans_school.id))
     visit claim_path(StudentLoans.routing_name, "check-your-answers")
 
     expect(page).to have_content("£100.10")
@@ -148,7 +153,7 @@ RSpec.feature "Changing the answers on a submittable claim" do
 
     before do
       claim.update!(attributes_for(:claim, :submittable))
-      eligibility.update!(attributes_for(:student_loans_eligibility, :eligible))
+      eligibility.update!(attributes_for(:student_loans_eligibility, :eligible, current_school_id: student_loans_school.id, claim_school_id: student_loans_school.id))
       visit claim_path(StudentLoans.routing_name, "check-your-answers")
     end
 
@@ -349,7 +354,7 @@ RSpec.feature "Changing the answers on a submittable claim" do
 
     before do
       claim.update!(attributes_for(:claim, :submittable))
-      eligibility.update!(attributes_for(:early_career_payments_eligibility, :eligible))
+      eligibility.update!(attributes_for(:early_career_payments_eligibility, :eligible, current_school_id: ecp_school.id))
       claim.update!(personal_details_attributes)
 
       visit claim_path(EarlyCareerPayments.routing_name, "check-your-answers")

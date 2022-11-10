@@ -90,7 +90,7 @@ RSpec.describe EarlyCareerPayments::EligibilityAnswersPresenter do
         it {
           is_expected.to eq(
             [
-              ["Which school do you teach at?", "Acme Secondary School", "current-school"],
+              ["Which school do you teach at?", eligibility.current_school.name, "current-school"],
               ["Are you currently teaching as a qualified teacher?", "Yes", "nqt-in-academic-year-after-itt"],
               ["Are you currently employed as a supply teacher?", "Yes", "supply-teacher"],
               ["Do you have a contract to teach at the same school for an entire term or longer?", "Yes", "entire-term-contract"],

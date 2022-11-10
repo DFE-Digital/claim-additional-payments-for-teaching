@@ -1,9 +1,6 @@
 require "rails_helper"
 
 RSpec.feature "ITT subject selection" do
-  let(:lup_school) { schools(:hampstead_school) }
-  let(:ecp_only_school) { schools(:penistone_grammar_school) }
-
   before { create(:policy_configuration, :additional_payments) }
 
   # Note: If we ever change the UI to show all the options in all cases,
@@ -17,7 +14,7 @@ RSpec.feature "ITT subject selection" do
     end
 
     context "LUP school" do
-      let(:school) { lup_school }
+      let!(:school) { create(:school, :early_career_payments_eligible, :levelling_up_premium_payments_eligible) }
 
       context "ITT year 2017" do
         let(:itt_year) { AcademicYear.new(2017) }
@@ -121,7 +118,7 @@ RSpec.feature "ITT subject selection" do
     end
 
     context "ECP-only school" do
-      let(:school) { ecp_only_school }
+      let!(:school) { create(:school, :early_career_payments_eligible, :levelling_up_premium_payments_ineligible) }
 
       context "ITT year 2017" do
         let(:itt_year) { AcademicYear.new(2017) }

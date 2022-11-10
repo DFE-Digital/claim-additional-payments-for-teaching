@@ -2,8 +2,7 @@ require "rails_helper"
 
 RSpec.feature "Trainee Teacher - Early Career Payments - journey" do
   context "when Claim AcademicYear is 2022/2023" do
-    # TODO remove fixture dependence
-    let(:ecp_only_school) { schools(:penistone_grammar_school) }
+    let(:ecp_only_school) { create(:school, :early_career_payments_eligible) }
 
     before { create(:policy_configuration, :additional_payments) }
 

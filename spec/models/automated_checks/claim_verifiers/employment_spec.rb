@@ -6,12 +6,13 @@ module AutomatedChecks
       subject(:employment) { described_class.new(**employment_args) }
 
       let!(:policy_configuration) { create(:policy_configuration, policy.to_s.underscore) }
-      let(:barnsley) { LocalAuthority.find(ActiveRecord::FixtureSet.identify(:barnsley, :uuid)) }
-      let(:school) do
+      let!(:local_authority_barnsley) { create(:local_authority, code: "370", name: "Barnsley") }
+      let!(:local_authority_camden) { create(:local_authority, code: "202", name: "Camden") }
+      let!(:school) do
         create(:school,
           :early_career_payments_eligible,
           establishment_number: 8091,
-          local_authority: barnsley)
+          local_authority: local_authority_barnsley)
       end
 
       let(:claim_arg) do
@@ -118,14 +119,16 @@ module AutomatedChecks
             subject(:perform) { employment.perform }
 
             let(:teacher_reference_number) { 1334426 }
-            let(:camden) { LocalAuthority.find(ActiveRecord::FixtureSet.identify(:camden, :uuid)) }
-            let(:school) do
+            let!(:school) do
               create(:school,
+                :student_loans_eligible,
                 establishment_number: 8091,
-                local_authority: camden)
+                local_authority: local_authority_camden)
             end
 
             let(:policy) { StudentLoans }
+
+            before { claim_arg.eligibility.update!(claim_school: school) }
 
             describe "#note" do
               subject(:note) { claim_arg.notes.last }

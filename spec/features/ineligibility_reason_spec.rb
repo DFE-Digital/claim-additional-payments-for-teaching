@@ -1,9 +1,8 @@
 require "rails_helper"
 
 RSpec.feature "Ineligibility reason" do
-  let(:lup_and_ecp_school) { schools(:hampstead_school) }
-  let(:ecp_only_school) { create(:school, :early_career_payments_eligible) }
-  let(:primary_school) { create(:school, :early_career_payments_ineligible) }
+  let!(:lup_and_ecp_school) { create(:school, :combined_journey_eligibile_for_all) }
+  let!(:ecp_only_school) { create(:school, :early_career_payments_eligible) }
 
   before do
     create(:policy_configuration, :additional_payments)
@@ -240,6 +239,8 @@ RSpec.feature "Ineligibility reason" do
   end
 
   context "school ineligible for both ECP and LUP" do
+    let!(:primary_school) { create(:school, :early_career_payments_ineligible) }
+
     scenario "primary school" do
       choose_school(primary_school)
 
