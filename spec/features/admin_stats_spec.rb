@@ -27,3 +27,23 @@ RSpec.feature "Admin stats" do
     expect(page).to have_text("No data\n7.7%")
   end
 end
+
+RSpec.feature "School workforce census contains rows" do
+  scenario "Shows a warning" do
+    sign_in_as_service_operator
+    visit admin_root_path
+    expect(page).to have_text("There is currently no school workforce data present")
+  end
+end
+
+RSpec.feature "School workforce census contains NO rows" do
+  before do
+    create(:school_workforce_census, :early_career_payments_matched)
+  end
+
+  scenario "Does not show a warning" do
+    sign_in_as_service_operator
+    visit admin_root_path
+    expect(page).not_to have_text("There is currently no school workforce data present")
+  end
+end
