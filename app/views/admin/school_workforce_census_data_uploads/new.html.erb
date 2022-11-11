@@ -3,6 +3,29 @@
     <h1 class="govuk-heading-xl">
       Choose and upload school workforce census data
     </h1>
+    <dl class="govuk-summary-list govuk-!-margin-bottom-9">
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+          Number of TRNs currently uploaded
+        </dt>
+
+        <dd class="govuk-summary-list__value">
+          <%= SchoolWorkforceCensus.count %>
+        </dd>
+      </div>
+    </dl>
+
+    <p class="govuk-body">
+      Before uploading please note the following:
+    </p>
+
+    <ul class="govuk-list govuk-list--bullet">
+      <li>All previously uploaded school workforce census data will be wiped.</li>
+      <li>Previously uploaded data will remain wiped if there are any errors processing the uploaded file.</li>
+      <li>Do not upload another file until an email has been received of success or failure.</li>
+      <li>You can wipe all data by uploading a CSV file with just the header row and no data rows.</li>
+    </ul>
+
     <%= form_with url: admin_school_workforce_census_data_uploads_path, multipart: true do |f| %>
       <div class="govuk-form-group">
         <%= f.label "file", "Upload a CSV file", class: "govuk-label" %>
