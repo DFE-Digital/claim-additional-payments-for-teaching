@@ -16,4 +16,3 @@ RSpec.configure do |config|
     Thread.current[:factory_registry].register :local_authority_district_ecp_eligible_codes, EarlyCareerPayments::SchoolEligibility::ELIGIBLE_LOCAL_AUTHORITY_DISTRICT_CODES
   end
 end
-

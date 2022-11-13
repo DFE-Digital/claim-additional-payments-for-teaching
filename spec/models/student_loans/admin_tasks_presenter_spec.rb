@@ -44,7 +44,7 @@ RSpec.describe StudentLoans::AdminTasksPresenter, type: :model do
         eligibility: build(
           :student_loans_eligibility,
           :eligible,
-          qts_award_year: "on_or_after_cut_off_date",
+          qts_award_year: "on_or_after_cut_off_date"
         ))
       presenter_2025 = described_class.new(claim_2025)
       expect(presenter_2025.employment[0][0]).to eq "6 April 2024 to 5 April 2025"
