@@ -64,7 +64,7 @@ gem "httpclient"
 gem "daemons"
 
 # Gov form builder to structure claims
-gem "govuk_design_system_formbuilder", "~> 2.8.0"
+gem "govuk_design_system_formbuilder", "~> 3.2.0"
 
 # See https://github.com/typhoeus/ethon/issues/185
 gem "ethon", "~> 0.15.0"
