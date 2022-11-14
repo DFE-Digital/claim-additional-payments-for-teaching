@@ -59,7 +59,7 @@ class Claim
     end
 
     def current_academic_year
-      AcademicYear.for(Date.today)
+      AcademicYear.current
     end
 
     def scrub_amendments_personal_data(claim)

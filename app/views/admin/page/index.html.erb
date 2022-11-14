@@ -2,24 +2,30 @@
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-one-half">
-    <h2 class="govuk-heading-m">Claims awaiting a decision</h2>
-    <p class="govuk-body govuk-!-font-size-36"><%= Claim.awaiting_decision.count %></p>
+    <h2 class="govuk-heading-m">Claims received (<%= AcademicYear.current %>)</h2>
+    <p class="govuk-body govuk-!-font-size-36"><%= @claims_received %></p>
     <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
 
+    <h2 class="govuk-heading-m">Claims approved (<%= AcademicYear.current %>)</h2>
+    <p class="govuk-body govuk-!-font-size-36"><%= @claims_approved %></p>
+    <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
+
+    <h2 class="govuk-heading-m">Claims rejected (<%= AcademicYear.current %>)</h2>
+    <p class="govuk-body govuk-!-font-size-36"><%= @claims_rejected %></p>
+    <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
+  </div>
+
+  <div class="govuk-grid-column-one-half">
     <h2 class="govuk-heading-m">Total claims received</h2>
-    <p class="govuk-body govuk-!-font-size-36"><%= Claim.submitted.count %></p>
+    <p class="govuk-body govuk-!-font-size-36"><%= @total_claims_received %></p>
     <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
-  </div>
 
-  <div class="govuk-grid-column-one-half">
     <h2 class="govuk-heading-m">Claims approaching deadline</h2>
-    <p class="govuk-body govuk-!-font-size-36"><%= Claim.approaching_decision_deadline.count %></p>
+    <p class="govuk-body govuk-!-font-size-36"><%= @claims_approaching_deadline %></p>
     <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
-  </div>
 
-  <div class="govuk-grid-column-one-half">
     <h2 class="govuk-heading-m">Claims passed deadline</h2>
-    <p class="govuk-body govuk-!-font-size-36"><%= Claim.passed_decision_deadline.count %></p>
+    <p class="govuk-body govuk-!-font-size-36"><%= @claims_passed_decision_deadline %></p>
     <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
   </div>
 </div>
@@ -35,12 +41,13 @@
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-one-half">
     <h2 class="govuk-heading-m">No data</h2>
-    <p class="govuk-body govuk-!-font-size-36"><%= number_to_percentage(ClaimStats::SchoolWorkforceCensus.no_data_census_subjects_taught_count, precision: 1) %></p>
+    <p class="govuk-body govuk-!-font-size-36"><%= number_to_percentage(@no_data_census_subjects_taught_count, precision: 1) %></p>
     <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
   </div>
+
   <div class="govuk-grid-column-one-half">
     <h2 class="govuk-heading-m">Any matches</h2>
-    <p class="govuk-body govuk-!-font-size-36"><%= number_to_percentage(ClaimStats::SchoolWorkforceCensus.any_match_count, precision: 1) %></p>
+    <p class="govuk-body govuk-!-font-size-36"><%= number_to_percentage(@any_match_count, precision: 1) %></p>
     <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
   </div>
 </div>
