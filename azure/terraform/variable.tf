@@ -25,6 +25,12 @@ variable "canonical_hostname" {
   default     = null
 }
 
+variable "ssl_hostnames" {
+  type        = list
+  description = "External domain names for the app service. They must be declared as SANs on the SSL certificate"
+  default     = []
+}
+
 variable "create_database" {
   type        = bool
   description = "Create database via this terraform as opposed to the infrastructure terraform"
@@ -53,6 +59,12 @@ variable "enable_basic_auth" {
   type        = bool
   description = "Enable basic HTTP authentication"
   default     = false
+}
+
+variable keyvault_cert_name {
+  type        = string
+  description = "Key vault certificate for app service"
+  default     = null
 }
 
 locals {
