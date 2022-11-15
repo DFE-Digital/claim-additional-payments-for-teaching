@@ -44,6 +44,10 @@ variable "canonical_hostname" {
   description = "External domain name for the app service"
   default     = null
 }
+variable "ssl_hostnames" {
+  type        = list
+  description = "External domain names for the app service. They must be declared as SANs on the SSL certificate"
+}
 variable "bypass_dfe_sign_in" {
   type        = bool
   description = "Bypass DFE Sign-In authentication and use a default role"
@@ -64,6 +68,11 @@ variable "enable_basic_auth" {
   type        = bool
   description = "Enable basic HTTP authentication"
   default     = false
+}
+
+variable keyvault_cert_name {
+  type        = string
+  description = "Key vault certificate for app service"
 }
 
 locals {
@@ -125,4 +134,6 @@ locals {
       BASIC_AUTH_USERNAME = data.azurerm_key_vault_secret.BasicAuthUsername[0].value
       BASIC_AUTH_PASSWORD = data.azurerm_key_vault_secret.BasicAuthPassword[0].value
     }) : local.default_environment_variables
+  cert_set = var.keyvault_cert_name != null ? toset([var.keyvault_cert_name]) : toset([])
+  # app_service_cert_name = "${data.azurerm_key_vault.secrets_kv.name}-${var.keyvault_cert_name}"
 }
