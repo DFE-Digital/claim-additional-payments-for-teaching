@@ -3,6 +3,8 @@ FactoryBot.define do
     name { Faker::Address.community }
     sequence(:code, 1000) { |n| "E0000#{n}" }
 
+    initialize_with { LocalAuthorityDistrict.find_or_create_by(code: code) }
+
     trait :early_career_payments_eligible do
       code { Thread.current[:factory_registry].find(:local_authority_district_ecp_eligible_codes).shuffle!.pop }
     end

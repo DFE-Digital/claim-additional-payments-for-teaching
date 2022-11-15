@@ -42,6 +42,8 @@ RSpec.describe ClaimStats::Daily do
     }
 
     before do
+      allow_any_instance_of(Decision).to receive(:readonly?).and_return(false)
+
       [EarlyCareerPayments, MathsAndPhysics, StudentLoans].each do |policy|
         started_yesterday.times { create(:claim, policy: policy, created_at: yesterday) }
         started_previously.times { create(:claim, policy: policy, created_at: previously) }
@@ -52,8 +54,6 @@ RSpec.describe ClaimStats::Daily do
         rejected_yesterday.times { create(:claim, :rejected, policy: policy, created_at: yesterday, submitted_at: yesterday + 60.seconds) }
         rejected_previously.times { create(:claim, :rejected, policy: policy, created_at: previously, submitted_at: previously + 60.seconds) }
       end
-
-      allow_any_instance_of(Decision).to receive(:readonly?).and_return(false)
 
       Claim.all.each do |c|
         next unless c.decisions.any?
