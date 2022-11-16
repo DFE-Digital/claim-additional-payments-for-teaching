@@ -77,6 +77,64 @@ module AutomatedChecks
               end
             end
 
+            context "eligible_itt_subject is none_of_the_above" do
+              let!(:matched) { create(:school_workforce_census, :"#{policy_underscored}_matched") }
+
+              let(:claim_arg) do
+                claim = create(
+                  :claim,
+                  :submitted,
+                  date_of_birth: Date.new(1988, 7, 18),
+                  first_name: "Martine",
+                  national_insurance_number: "RT901113D",
+                  reference: "QKCVAQ3K",
+                  surname: "Bonnet-Fontaine",
+                  teacher_reference_number: teacher_reference_number,
+                  policy: policy
+                )
+
+                if policy == EarlyCareerPayments
+                  claim.eligibility.update!(
+                    attributes_for(
+                      :"#{policy_underscored}_eligibility",
+                      :eligible,
+                      eligible_itt_subject: :none_of_the_above
+                    )
+                  )
+                elsif policy == LevellingUpPremiumPayments
+                  claim.eligibility.update!(
+                    attributes_for(
+                      :"#{policy_underscored}_eligibility",
+                      :eligible,
+                      eligible_itt_subject: :none_of_the_above
+                    )
+                  )
+                elsif policy == StudentLoans
+                  claim.eligibility.update!(
+                    attributes_for(
+                      :"#{policy_underscored}_eligibility",
+                      :eligible,
+                      biology_taught: false,
+                      computing_taught: false,
+                      physics_taught: false
+                    )
+                  )
+                end
+
+                claim
+              end
+
+              subject(:census_subjects_taught_task) { claim_arg.tasks.find_by(name: "census_subjects_taught") }
+
+              before { perform }
+
+              describe "#claim_verifier_match" do
+                subject(:claim_verifier_match) { census_subjects_taught_task.claim_verifier_match }
+
+                it { is_expected.to eq "none" }
+              end
+            end
+
             context "with any eligible subject matched" do
               let!(:matched) { create(:school_workforce_census, :"#{policy_underscored}_matched") }
 
