@@ -8,6 +8,8 @@ RSpec.describe IneligibilityReasonChecker do
   let(:school_eligible_for_ecp_but_not_lup) { build(:school, :early_career_payments_eligible) }
   let(:school_ineligible_for_both_ecp_and_lup) { build(:school, :early_career_payments_ineligible) }
 
+  before { create(:policy_configuration, :additional_payments) }
+
   # sanity check of factories
   specify { expect(EarlyCareerPayments::SchoolEligibility.new(school_eligible_for_ecp_but_not_lup)).to be_eligible }
   specify { expect(LevellingUpPremiumPayments::SchoolEligibility.new(school_eligible_for_ecp_but_not_lup)).not_to be_eligible }
@@ -19,8 +21,6 @@ RSpec.describe IneligibilityReasonChecker do
 
   describe "#reason" do
     subject { described_class.new(current_claim).reason }
-
-    before { create(:policy_configuration, :additional_payments) }
 
     context "school ineligible for both ECP and LUP" do
       let(:ecp_eligibility) { build(:early_career_payments_eligibility, :eligible, current_school: school_ineligible_for_both_ecp_and_lup) }

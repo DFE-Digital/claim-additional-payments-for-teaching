@@ -69,8 +69,7 @@ FactoryBot.define do
 
     trait :levelling_up_premium_payments_eligible do
       # this is a huge array but if it ever cycles, there'll be a message about duplicate URNs
-      # TODO: 2022 should not be hard-coded here
-      sequence :urn, LevellingUpPremiumPayments::Award.urn_to_award_amount_in_pounds(AcademicYear.new(2022)).keys.cycle
+      sequence :urn, LevellingUpPremiumPayments::Award.urn_to_award_amount_in_pounds(PolicyConfiguration.for(LevellingUpPremiumPayments)&.current_academic_year || AcademicYear.current).keys.cycle
     end
 
     trait :levelling_up_premium_payments_ineligible do
