@@ -1,6 +1,10 @@
-RSpec.shared_examples "Eligibility status" do |eligibility_factory_symbol|
+RSpec.shared_examples "Eligibility status" do |policy|
   describe "#status" do
+    let(:eligibility_factory_symbol) { "#{policy}_eligibility" }
+
     subject { eligibility.status }
+
+    before { create(:policy_configuration, policy) }
 
     context "ineligible" do
       let(:eligibility) { build(eligibility_factory_symbol, :ineligible) }

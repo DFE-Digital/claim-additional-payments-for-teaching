@@ -1,6 +1,10 @@
 require "rails_helper"
 
 RSpec.feature "Maths & Physics claims" do
+  before { create(:policy_configuration, :maths_and_physics) }
+
+  let!(:school) { create(:school, :maths_and_physics_eligible) }
+
   [true, false].each do |javascript_enabled|
     js_status = javascript_enabled ? "enabled" : "disabled"
     scenario "Teacher claims for Maths & Physics payment with JavaScript #{js_status}", js: javascript_enabled do
@@ -18,8 +22,8 @@ RSpec.feature "Maths & Physics claims" do
       expect(eligibility.teaching_maths_or_physics).to eql true
 
       expect(page).to have_text(I18n.t("questions.current_school"))
-      choose_school schools(:penistone_grammar_school)
-      expect(claim.eligibility.reload.current_school).to eql schools(:penistone_grammar_school)
+      choose_school school
+      expect(claim.eligibility.reload.current_school).to eql school
 
       expect(page).to have_text(I18n.t("maths_and_physics.questions.initial_teacher_training_subject"))
       choose "Science"
@@ -227,8 +231,8 @@ RSpec.feature "Maths & Physics claims" do
     expect(eligibility.teaching_maths_or_physics).to eql true
 
     expect(page).to have_text(I18n.t("questions.current_school"))
-    choose_school schools(:penistone_grammar_school)
-    expect(claim.eligibility.reload.current_school).to eql schools(:penistone_grammar_school)
+    choose_school school
+    expect(claim.eligibility.reload.current_school).to eql school
 
     expect(page).to have_text(I18n.t("maths_and_physics.questions.initial_teacher_training_subject"))
     choose "None of these subjects"
@@ -260,8 +264,8 @@ RSpec.feature "Maths & Physics claims" do
     expect(eligibility.teaching_maths_or_physics).to eql true
 
     expect(page).to have_text(I18n.t("questions.current_school"))
-    choose_school schools(:penistone_grammar_school)
-    expect(claim.eligibility.reload.current_school).to eql schools(:penistone_grammar_school)
+    choose_school school
+    expect(claim.eligibility.reload.current_school).to eql school
 
     expect(page).to have_text(I18n.t("maths_and_physics.questions.initial_teacher_training_subject"))
     choose "None of these subjects"
@@ -278,7 +282,7 @@ RSpec.feature "Maths & Physics claims" do
 
   scenario "Teacher is still eligible for Maths and Physics without a degree if they are not sure about their ITT specialism" do
     start_maths_and_physics_claim
-    choose_school schools(:penistone_grammar_school)
+    choose_school school
 
     choose_initial_teacher_training_subject "Science (physics, biology and chemistry)"
     choose_initial_teacher_training_subject_specialism "I’m not sure"
@@ -308,8 +312,8 @@ RSpec.feature "Maths & Physics claims" do
     expect(eligibility.teaching_maths_or_physics).to eql true
 
     expect(page).to have_text(I18n.t("questions.current_school"))
-    choose_school schools(:penistone_grammar_school)
-    expect(claim.eligibility.reload.current_school).to eql schools(:penistone_grammar_school)
+    choose_school school
+    expect(claim.eligibility.reload.current_school).to eql school
 
     expect(page).to have_text(I18n.t("maths_and_physics.questions.initial_teacher_training_subject"))
     choose "Physics"

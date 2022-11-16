@@ -3,6 +3,8 @@ require "rails_helper"
 RSpec.feature "Resetting dependant attributes when the claim is ineligible" do
   let(:claim) { start_early_career_payments_claim }
 
+  before { create(:policy_configuration, :additional_payments) }
+
   before do
     claim.update!(attributes_for(:claim, :submittable))
     claim.eligibility.update!(attributes_for(:early_career_payments_eligibility, :eligible))

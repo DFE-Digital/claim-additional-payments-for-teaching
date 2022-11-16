@@ -17,37 +17,29 @@ FactoryBot.define do
 
     trait :ineligible_now_but_eligible_next_year do
       eligible_now_with_mathematics
-      itt_academic_year { AcademicYear::Type.new.serialize(AcademicYear.new(2018)) } # this makes it ineligible
+      itt_academic_year { PolicyConfiguration.for(EarlyCareerPayments).current_academic_year - 4 } # this makes it ineligible
     end
 
     trait :eligible_now_and_again_but_two_years_later do
       eligible_now_with_mathematics
-      itt_academic_year { AcademicYear::Type.new.serialize(AcademicYear.new(2019)) }
-    end
-
-    trait :eligible_next_year_too do
-      eligible_now_with_mathematics
-      itt_academic_year { AcademicYear::Type.new.serialize(AcademicYear.new(2020)) }
+      itt_academic_year { PolicyConfiguration.for(EarlyCareerPayments).current_academic_year - 3 }
     end
 
     trait :eligible_school do
-      # TODO remove fixture dependence
-      current_school { School.find(ActiveRecord::FixtureSet.identify(:penistone_grammar_school, :uuid)) }
+      association :current_school, factory: [:school, :early_career_payments_eligible]
     end
 
     trait :ineligible_school do
       association :current_school, factory: [:school, :early_career_payments_ineligible]
     end
 
-    # Assumes 2022 policy year
     trait :eligible_itt_subject_now do
-      itt_academic_year { AcademicYear::Type.new.serialize(AcademicYear.new(2019)) }
+      itt_academic_year { PolicyConfiguration.for(EarlyCareerPayments).current_academic_year - 3 }
       eligible_itt_subject { :mathematics }
     end
 
-    # Assumes 2022 policy year
     trait :eligible_itt_subject_later do
-      itt_academic_year { AcademicYear::Type.new.serialize(AcademicYear.new(2018)) }
+      itt_academic_year { PolicyConfiguration.for(EarlyCareerPayments).current_academic_year - 4 }
       eligible_itt_subject { :mathematics }
     end
 
@@ -55,10 +47,9 @@ FactoryBot.define do
       eligible_itt_subject { :computing }
     end
 
-    # Assumes 2022 policy year
     trait :no_eligible_subjects do
       eligible_now
-      itt_academic_year { AcademicYear::Type.new.serialize(AcademicYear.new(2021)) }
+      itt_academic_year { PolicyConfiguration.for(EarlyCareerPayments).current_academic_year - 1 }
     end
 
     trait :ineligible do
@@ -74,7 +65,7 @@ FactoryBot.define do
     # TODO want to delete this but it's used by a feature spec
     trait :ineligible_feature do
       nqt_in_academic_year_after_itt { true }
-      current_school { School.find(ActiveRecord::FixtureSet.identify(:penistone_grammar_school, :uuid)) }
+      eligible_school
       employed_as_supply_teacher { false }
       subject_to_formal_performance_action { false }
       subject_to_disciplinary_action { false }

@@ -1,6 +1,8 @@
 require "rails_helper"
 
 RSpec.feature "Confirming Claimant Contact details" do
+  before { create(:policy_configuration, :additional_payments) }
+
   it "redirects to 'email-address' if 'Change email address' is clicked on the One Time Password page" do
     claim = start_early_career_payments_claim
     claim.update!(attributes_for(:claim, :submittable))

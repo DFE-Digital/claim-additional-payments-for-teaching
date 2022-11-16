@@ -4,12 +4,13 @@ RSpec.feature "Teacher Early-Career Payments claims" do
   include EarlyCareerPaymentsHelper
 
   # create a school eligible for ECP and LUP so can walk the whole journey
-  let!(:school) { create(:school, :levelling_up_premium_payments_eligible, :early_career_payments_eligible) }
-  let(:current_academic_year) { PolicyConfiguration.for(EarlyCareerPayments).current_academic_year }
+  let!(:policy_configuration) { create(:policy_configuration, :additional_payments) }
+  let!(:school) { create(:school, :combined_journey_eligibile_for_all) }
+  let(:current_academic_year) { policy_configuration.current_academic_year }
 
   let(:itt_year) { current_academic_year - 3 }
 
-  scenario "Teacher makes claim for 'Early-Career Payments' claim", js: true do
+  scenario "Teacher makes claim for 'Early-Career Payments' claim" do
     visit landing_page_path(EarlyCareerPayments.routing_name)
     expect(page).to have_link("Claim Additional Payments for Teaching", href: "/additional-payments/landing-page")
     expect(page).to have_link(href: "mailto:#{EarlyCareerPayments.feedback_email}")
@@ -115,9 +116,9 @@ RSpec.feature "Teacher Early-Career Payments claims" do
 
     # - You are eligible for an early career payment
     expect(page).to have_text("You’re eligible for an additional payment")
-    expect(page).to have_text("£7,500 early-career payment")
+    expect(page).to have_text("£5,000 early-career payment")
 
-    choose "£7,500 early-career payment"
+    choose "£5,000 early-career payment"
     click_on "Apply now"
 
     # - How will we use the information you provide
@@ -325,7 +326,7 @@ RSpec.feature "Teacher Early-Career Payments claims" do
     expect(page).to have_text(claim.reference)
 
     policy_options_provided = [
-      {"policy" => "EarlyCareerPayments", "award_amount" => "7500.0"},
+      {"policy" => "EarlyCareerPayments", "award_amount" => "5000.0"},
       {"policy" => "LevellingUpPremiumPayments", "award_amount" => "2000.0"}
     ]
 
@@ -482,7 +483,7 @@ RSpec.feature "Teacher Early-Career Payments claims" do
     end
   end
 
-  scenario "Teacher makes claim for 'Early Career Payments' without uplift school", js: true do
+  scenario "Teacher makes claim for 'Early Career Payments' without uplift school" do
     visit landing_page_path(EarlyCareerPayments.routing_name)
     expect(page).to have_link(href: "mailto:#{EarlyCareerPayments.feedback_email}")
 
@@ -493,7 +494,7 @@ RSpec.feature "Teacher Early-Career Payments claims" do
     # - Which school do you teach at
     expect(page).to have_text(I18n.t("early_career_payments.questions.current_school_search"))
 
-    choose_school schools(:hampstead_school)
+    choose_school school
 
     # - NQT in Academic Year after ITT
     expect(page).to have_text(I18n.t("early_career_payments.questions.nqt_in_academic_year_after_itt.heading"))
@@ -959,9 +960,9 @@ RSpec.feature "Teacher Early-Career Payments claims" do
 
       # - You are eligible for an early career payment
       expect(page).to have_text("You’re eligible for an additional payment")
-      expect(page).to have_text("£7,500 early-career payment")
+      expect(page).to have_text("£5,000 early-career payment")
 
-      choose "£7,500 early-career payment"
+      choose "£5,000 early-career payment"
       click_on "Apply now"
 
       # - How will we use the information you provide
@@ -1158,7 +1159,7 @@ RSpec.feature "Teacher Early-Career Payments claims" do
       expect(page).to have_text(claim.reference)
 
       policy_options_provided = [
-        {"policy" => "EarlyCareerPayments", "award_amount" => "7500.0"},
+        {"policy" => "EarlyCareerPayments", "award_amount" => "5000.0"},
         {"policy" => "LevellingUpPremiumPayments", "award_amount" => "2000.0"}
       ]
 

@@ -1,8 +1,8 @@
 require "rails_helper"
 
 describe Admin::ClaimsHelper do
-  let(:claim_school) { schools(:penistone_grammar_school) }
-  let(:current_school) { create(:school, :student_loan_eligible) }
+  let(:claim_school) { create(:school) }
+  let(:current_school) { create(:school, :student_loans_eligible) }
 
   describe "#admin_personal_details" do
     let(:claim) do

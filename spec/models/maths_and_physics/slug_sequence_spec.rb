@@ -3,7 +3,7 @@ require "rails_helper"
 RSpec.describe MathsAndPhysics::SlugSequence do
   subject(:slug_sequence) { MathsAndPhysics::SlugSequence.new(current_claim) }
 
-  let(:claim) { build(:claim, eligibility: build(:maths_and_physics_eligibility)) }
+  let(:claim) { build(:claim, policy: MathsAndPhysics, eligibility: build(:maths_and_physics_eligibility)) }
   let(:current_claim) { CurrentClaim.new(claims: [claim]) }
 
   describe "The sequence as defined by #slugs" do

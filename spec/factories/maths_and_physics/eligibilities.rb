@@ -1,8 +1,8 @@
 FactoryBot.define do
   factory :maths_and_physics_eligibility, class: "MathsAndPhysics::Eligibility" do
     trait :eligible do
+      association :current_school, factory: [:school, :maths_and_physics_eligible]
       teaching_maths_or_physics { true }
-      current_school { School.find(ActiveRecord::FixtureSet.identify(:penistone_grammar_school, :uuid)) }
       initial_teacher_training_subject { :maths }
       qts_award_year { :on_or_after_cut_off_date }
       employed_as_supply_teacher { false }

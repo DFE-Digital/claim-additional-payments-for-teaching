@@ -3,24 +3,66 @@
 require "rails_helper"
 
 RSpec.describe PolicyConfiguration do
-  describe ".for" do
-    it "returns the configuration for a given policy" do
-      expect(described_class.for(StudentLoans)).to eq policy_configurations(:student_loans)
-      expect(described_class.for(MathsAndPhysics)).to eq policy_configurations(:maths_and_physics)
+  context "with policy configuration records" do
+    let!(:student_loans) { create(:policy_configuration, :student_loans) }
+    let!(:maths_and_physics) { create(:policy_configuration, :maths_and_physics) }
+    let!(:additional_payments) { create(:policy_configuration, :additional_payments) }
 
-      # Same PolicyConfiguration for ECP and LUP
-      expect(described_class.for(EarlyCareerPayments)).to eq policy_configurations(:early_career_payments)
-      expect(described_class.for(LevellingUpPremiumPayments)).to eq policy_configurations(:early_career_payments)
+    describe ".for" do
+      it "returns the configuration for a given policy" do
+        expect(described_class.for(StudentLoans)).to eq student_loans
+        expect(described_class.for(MathsAndPhysics)).to eq maths_and_physics
+
+        # Same PolicyConfiguration for ECP and LUP
+        expect(described_class.for(EarlyCareerPayments)).to eq additional_payments
+        expect(described_class.for(LevellingUpPremiumPayments)).to eq additional_payments
+      end
     end
-  end
 
-  describe ".for_routing_name" do
-    it "returns the configuration for a given routing name" do
-      expect(described_class.for_routing_name("student-loans")).to eq policy_configurations(:student_loans)
-      expect(described_class.for_routing_name("maths-and-physics")).to eq policy_configurations(:maths_and_physics)
+    describe ".for_routing_name" do
+      it "returns the configuration for a given routing name" do
+        expect(described_class.for_routing_name("student-loans")).to eq student_loans
+        expect(described_class.for_routing_name("maths-and-physics")).to eq maths_and_physics
 
-      # ECP and LUP use the same routing name and share the same PolicyConfiguration
-      expect(described_class.for_routing_name("additional-payments")).to eq policy_configurations(:early_career_payments)
+        # ECP and LUP use the same routing name and share the same PolicyConfiguration
+        expect(described_class.for_routing_name("additional-payments")).to eq additional_payments
+      end
+    end
+
+    describe "#policies" do
+      it "returns the policies" do
+        expect(described_class.for(StudentLoans).policies).to eq [StudentLoans]
+        expect(described_class.for(MathsAndPhysics).policies).to eq [MathsAndPhysics]
+        expect(described_class.for(EarlyCareerPayments).policies).to eq [EarlyCareerPayments, LevellingUpPremiumPayments]
+      end
+    end
+
+    describe "#routing_name" do
+      it "returns routing for PolicyConfiguration" do
+        expect(described_class.for(StudentLoans).routing_name).to eq "student-loans"
+        expect(described_class.for(MathsAndPhysics).routing_name).to eq "maths-and-physics"
+
+        # Same routing_name for ECP and LUP
+        expect(described_class.for(EarlyCareerPayments).routing_name).to eq "additional-payments"
+        expect(described_class.for(LevellingUpPremiumPayments).routing_name).to eq "additional-payments"
+      end
+    end
+
+    describe "#additional_payments?" do
+      it "returns true" do
+        expect(additional_payments.additional_payments?).to be true
+      end
+
+      it "returns false" do
+        expect(student_loans.additional_payments?).to be false
+        expect(maths_and_physics.additional_payments?).to be false
+      end
+    end
+
+    describe "validations" do
+      it "prevents saving a record for a policy already configured" do
+        expect { create(:policy_configuration, policy_types: [EarlyCareerPayments]) }.to raise_error(ActiveRecord::RecordInvalid)
+      end
     end
   end
 
@@ -68,36 +110,6 @@ RSpec.describe PolicyConfiguration do
       # Same routing_name for ECP and LUP
       expect(described_class.routing_name_for_policy(EarlyCareerPayments)).to eq "additional-payments"
       expect(described_class.routing_name_for_policy(LevellingUpPremiumPayments)).to eq "additional-payments"
-    end
-  end
-
-  describe "#policies" do
-    it "returns the policies" do
-      expect(described_class.for(StudentLoans).policies).to eq [StudentLoans]
-      expect(described_class.for(MathsAndPhysics).policies).to eq [MathsAndPhysics]
-      expect(described_class.for(EarlyCareerPayments).policies).to eq [EarlyCareerPayments, LevellingUpPremiumPayments]
-    end
-  end
-
-  describe "#routing_name" do
-    it "returns routing for PolicyConfiguration" do
-      expect(described_class.for(StudentLoans).routing_name).to eq "student-loans"
-      expect(described_class.for(MathsAndPhysics).routing_name).to eq "maths-and-physics"
-
-      # Same routing_name for ECP and LUP
-      expect(described_class.for(EarlyCareerPayments).routing_name).to eq "additional-payments"
-      expect(described_class.for(LevellingUpPremiumPayments).routing_name).to eq "additional-payments"
-    end
-  end
-
-  describe "#additional_payments?" do
-    it "returns true" do
-      expect(policy_configurations(:early_career_payments).additional_payments?).to be true
-    end
-
-    it "returns false" do
-      expect(policy_configurations(:student_loans).additional_payments?).to be false
-      expect(policy_configurations(:maths_and_physics).additional_payments?).to be false
     end
   end
 

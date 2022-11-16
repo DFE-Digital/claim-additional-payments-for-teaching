@@ -1,5 +1,6 @@
-# Student loans and Maths and Physics Eligible
+# NOTE: Not used in specs, only used for seeding development and review environments
 
+# Student loans and Maths and Physics Eligible
 penistone_grammar_school:
   name: Penistone Grammar School
   urn: 1234

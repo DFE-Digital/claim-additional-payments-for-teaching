@@ -39,9 +39,10 @@ class PolicyConfiguration < ApplicationRecord
   attribute :current_academic_year, AcademicYear::Type.new
 
   validates :current_academic_year_before_type_cast, format: {with: ACADEMIC_YEAR_REGEXP}
+  validate :policy_types_must_not_be_configured_already, on: :create
 
   def self.for(policy)
-    where("? = ANY (policy_types)", policy.name).first
+    where("? = ANY (policy_types)", policy.to_s).first
   end
 
   def self.service_for_routing_name(routing_name)
@@ -91,5 +92,13 @@ class PolicyConfiguration < ApplicationRecord
 
   def additional_payments?
     policies.include?(EarlyCareerPayments) || policies.include?(LevellingUpPremiumPayments)
+  end
+
+  private
+
+  def policy_types_must_not_be_configured_already
+    unless policy_types.map { |policy| self.class.for(policy) }.compact.empty?
+      errors.add(:policy_types, "is already configured")
+    end
   end
 end

@@ -3,6 +3,9 @@
 require "rails_helper"
 
 RSpec.describe StudentLoans::Eligibility, type: :model do
+  let(:eligible_school) { build(:school, :student_loans_eligible) }
+  let(:ineligible_school) { build(:school, :student_loans_ineligible) }
+
   describe "qts_award_year attribute" do
     it "rejects invalid values" do
       expect { StudentLoans::Eligibility.new(qts_award_year: "non-existence") }.to raise_error(ArgumentError)
@@ -57,8 +60,8 @@ RSpec.describe StudentLoans::Eligibility, type: :model do
 
   describe "#claim_school_name" do
     it "returns the name of the claim school" do
-      eligibility = StudentLoans::Eligibility.new(claim_school: schools(:penistone_grammar_school))
-      expect(eligibility.claim_school_name).to eq schools(:penistone_grammar_school).name
+      eligibility = StudentLoans::Eligibility.new(claim_school: eligible_school)
+      expect(eligibility.claim_school_name).to eq eligible_school.name
     end
 
     it "does not error if the claim school is not set" do
@@ -68,8 +71,8 @@ RSpec.describe StudentLoans::Eligibility, type: :model do
 
   describe "#current_school_name" do
     it "returns the name of the current school" do
-      claim = StudentLoans::Eligibility.new(current_school: schools(:penistone_grammar_school))
-      expect(claim.current_school_name).to eq schools(:penistone_grammar_school).name
+      claim = StudentLoans::Eligibility.new(current_school: eligible_school)
+      expect(claim.current_school_name).to eq eligible_school.name
     end
 
     it "does not error if the current school is not set" do
@@ -94,14 +97,36 @@ RSpec.describe StudentLoans::Eligibility, type: :model do
       expect(StudentLoans::Eligibility.new(qts_award_year: "on_or_after_cut_off_date").ineligible?).to eql false
     end
 
-    it "returns true when the claim_school is not eligible" do
-      expect(StudentLoans::Eligibility.new(claim_school: schools(:hampstead_school)).ineligible?).to eql true
-      expect(StudentLoans::Eligibility.new(claim_school: schools(:penistone_grammar_school)).ineligible?).to eql false
+    describe "claim_school eligibility" do
+      subject(:eligibility) { StudentLoans::Eligibility.new(claim_school: school) }
+
+      context "when the claim_school is not eligible" do
+        let(:school) { ineligible_school }
+
+        it { is_expected.to be_ineligible }
+      end
+
+      context "when the claim_school is eligible" do
+        let(:school) { eligible_school }
+
+        it { is_expected.not_to be_ineligible }
+      end
     end
 
-    it "returns true when the current_school is not eligible" do
-      expect(StudentLoans::Eligibility.new(current_school: schools(:bradford_grammar_school)).ineligible?).to eql true
-      expect(StudentLoans::Eligibility.new(current_school: schools(:penistone_grammar_school)).ineligible?).to eql false
+    describe "current_school eligibility" do
+      subject(:eligibility) { StudentLoans::Eligibility.new(current_school: school) }
+
+      context "when the current_school is not eligible" do
+        let(:school) { ineligible_school }
+
+        it { is_expected.to be_ineligible }
+      end
+
+      context "when the claim_school is eligible" do
+        let(:school) { eligible_school }
+
+        it { is_expected.not_to be_ineligible }
+      end
     end
 
     it "returns true when no longer teaching" do
@@ -127,9 +152,9 @@ RSpec.describe StudentLoans::Eligibility, type: :model do
 
     it "returns a symbol indicating the reason for ineligibility" do
       expect(StudentLoans::Eligibility.new(qts_award_year: "before_cut_off_date").ineligibility_reason).to eq :ineligible_qts_award_year
-      expect(StudentLoans::Eligibility.new(claim_school: schools(:hampstead_school)).ineligibility_reason).to eq :ineligible_claim_school
+      expect(StudentLoans::Eligibility.new(claim_school: ineligible_school).ineligibility_reason).to eq :ineligible_claim_school
       expect(StudentLoans::Eligibility.new(employment_status: :no_school).ineligibility_reason).to eq :employed_at_no_school
-      expect(StudentLoans::Eligibility.new(current_school: schools(:the_samuel_lister_academy)).ineligibility_reason).to eq :ineligible_current_school
+      expect(StudentLoans::Eligibility.new(current_school: ineligible_school).ineligibility_reason).to eq :ineligible_current_school
       expect(StudentLoans::Eligibility.new(taught_eligible_subjects: false).ineligibility_reason).to eq :not_taught_eligible_subjects
       expect(StudentLoans::Eligibility.new(mostly_performed_leadership_duties: true).ineligibility_reason).to eq :not_taught_enough
     end
@@ -147,8 +172,8 @@ RSpec.describe StudentLoans::Eligibility, type: :model do
       create(
         :student_loans_eligibility,
         :eligible,
-        claim_school: schools(:penistone_grammar_school),
-        current_school: schools(:hampstead_school),
+        claim_school: build(:school, :student_loans_eligible),
+        current_school: build(:school, :student_loans_eligible),
         taught_eligible_subjects: true,
         chemistry_taught: true,
         physics_taught: true,
@@ -160,20 +185,17 @@ RSpec.describe StudentLoans::Eligibility, type: :model do
     end
 
     it "resets employment_status when the value of claim_school changes" do
-      eligibility.claim_school = schools(:penistone_grammar_school)
+      eligibility.claim_school = eligibility.claim_school
       expect { eligibility.reset_dependent_answers }.not_to change { eligibility.attributes }
 
-      eligibility.claim_school = schools(:hampstead_school)
+      eligibility.claim_school = eligibility.current_school
       expect { eligibility.reset_dependent_answers }
         .to change { eligibility.employment_status }
         .from("different_school").to(nil)
     end
 
     it "resets the subject fields when the value of the claim_school changes" do
-      eligibility.claim_school = schools(:penistone_grammar_school)
-      expect { eligibility.reset_dependent_answers }.not_to change { eligibility.attributes }
-
-      eligibility.claim_school = schools(:hampstead_school)
+      eligibility.claim_school = eligibility.current_school
       eligibility.reset_dependent_answers
 
       expect(eligibility.taught_eligible_subjects).to eq(nil)
@@ -198,23 +220,23 @@ RSpec.describe StudentLoans::Eligibility, type: :model do
       eligibility.employment_status = :claim_school
       expect { eligibility.reset_dependent_answers }
         .to change { eligibility.current_school }
-        .from(schools(:hampstead_school)).to(schools(:penistone_grammar_school))
+        .from(eligibility.current_school).to(eligibility.claim_school)
     end
 
     it "clears current_school when employment_status changes from :claim_school to :different_school" do
-      eligibility.update!(employment_status: :claim_school, current_school: schools(:penistone_grammar_school))
+      eligibility.update!(employment_status: :claim_school, current_school: eligibility.claim_school)
 
       eligibility.employment_status = :different_school
       expect { eligibility.reset_dependent_answers }
         .to change { eligibility.current_school }
-        .from(schools(:penistone_grammar_school)).to(nil)
+        .from(eligibility.claim_school).to(nil)
     end
 
     it "clears current_school when employment_status changes to :no_school" do
       eligibility.employment_status = :no_school
       expect { eligibility.reset_dependent_answers }
         .to change { eligibility.current_school }
-        .from(schools(:hampstead_school)).to(nil)
+        .from(eligibility.current_school).to(nil)
     end
 
     it "doesn't change current_school if employment_status is unchanged" do
@@ -268,7 +290,7 @@ RSpec.describe StudentLoans::Eligibility, type: :model do
   context "when saving in the “claim-school” context" do
     it "validates the presence of the claim_school" do
       expect(StudentLoans::Eligibility.new).not_to be_valid(:"claim-school")
-      expect(StudentLoans::Eligibility.new(claim_school: schools(:penistone_grammar_school))).to be_valid(:"claim-school")
+      expect(StudentLoans::Eligibility.new(claim_school: eligible_school)).to be_valid(:"claim-school")
     end
   end
 
@@ -279,17 +301,17 @@ RSpec.describe StudentLoans::Eligibility, type: :model do
     end
 
     it "includes the claim school name in the error message" do
-      eligibility = build(:student_loans_eligibility, claim_school: schools(:penistone_grammar_school), employment_status: nil)
+      eligibility = build(:student_loans_eligibility, claim_school: eligible_school, employment_status: nil)
 
       expect(eligibility).not_to be_valid(:"still-teaching")
-      expect(eligibility.errors[:employment_status]).to eq(["Select if you still work at Penistone Grammar School, another school or no longer teach in England"])
+      expect(eligibility.errors[:employment_status]).to eq(["Select if you still work at #{eligible_school.name}, another school or no longer teach in England"])
     end
   end
 
   context "when saving in the “current-school” context" do
     it "validates the presence of the current_school" do
       expect(StudentLoans::Eligibility.new).not_to be_valid(:"current-school")
-      expect(StudentLoans::Eligibility.new(current_school: schools(:hampstead_school))).to be_valid(:"current-school")
+      expect(StudentLoans::Eligibility.new(current_school: eligible_school)).to be_valid(:"current-school")
     end
   end
 

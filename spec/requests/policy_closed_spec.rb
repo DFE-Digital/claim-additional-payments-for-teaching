@@ -2,8 +2,7 @@ require "rails_helper"
 
 RSpec.describe "Maintenance Mode", type: :request do
   context "when a policy configuration is closed for submissions" do
-    let(:policy_configuration) { policy_configurations(:student_loans) }
-    before { policy_configuration.update(open_for_submissions: false) }
+    let!(:policy_configuration) { create(:policy_configuration, :student_loans, :closed) }
 
     it "shows the policy closed page for GET requests" do
       get new_claim_path(StudentLoans.routing_name)
@@ -27,6 +26,8 @@ RSpec.describe "Maintenance Mode", type: :request do
     end
 
     it "still allows access to a different policy" do
+      create(:policy_configuration, :maths_and_physics)
+
       get new_claim_path(MathsAndPhysics.routing_name)
       follow_redirect!
       expect(response).to have_http_status(:ok)

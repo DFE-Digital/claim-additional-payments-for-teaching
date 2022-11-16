@@ -2,7 +2,9 @@ require "rails_helper"
 
 RSpec.feature "Given a one time password" do
   let(:claim) { start_early_career_payments_claim }
+
   before do
+    create(:policy_configuration, :additional_payments)
     claim.eligibility.update!(attributes_for(:early_career_payments_eligibility, :eligible))
     visit claim_path(claim.policy.routing_name, "email-address")
     fill_in "Email address", with: "david.tau1988@hotmail.co.uk"

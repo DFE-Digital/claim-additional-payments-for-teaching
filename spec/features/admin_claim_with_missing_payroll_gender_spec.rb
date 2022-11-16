@@ -1,7 +1,10 @@
 require "rails_helper"
 
 RSpec.feature "Admin checking a claim missing a payroll gender" do
-  before { @signed_in_user = sign_in_as_service_operator }
+  before do
+    create(:policy_configuration, :student_loans)
+    @signed_in_user = sign_in_as_service_operator
+  end
 
   scenario "service operator can add a payroll gender as part of the checking process" do
     claim = create(:claim, :submitted, policy: StudentLoans, payroll_gender: :dont_know)

@@ -2,7 +2,7 @@ require "rails_helper"
 
 RSpec.describe MathsAndPhysics, type: :model do
   describe ".first_eligible_qts_award_year" do
-    let(:policy_configuration) { policy_configurations(:maths_and_physics) }
+    let!(:policy_configuration) { create(:policy_configuration, :maths_and_physics) }
 
     it "returns an AcademicYear five years before the currently configured current_academic_year" do
       policy_configuration.update!(current_academic_year: "2019/2020")

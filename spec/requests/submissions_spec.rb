@@ -3,13 +3,16 @@ require "rails_helper"
 RSpec.describe "Submissions", type: :request do
   let(:in_progress_claim) { Claim.by_policy(StudentLoans).order(:created_at).last }
 
+  before { create(:policy_configuration, :student_loans) }
+
   describe "#create" do
     context "with a submittable claim" do
       before do
         start_student_loans_claim
         # Make the claim submittable
         in_progress_claim.update!(attributes_for(:claim, :submittable))
-        in_progress_claim.eligibility.update!(attributes_for(:student_loans_eligibility, :eligible))
+        in_progress_claim.eligibility = create(:student_loans_eligibility, :eligible)
+        in_progress_claim.save!
 
         stub_qualified_teaching_statuses_show(
           trn: in_progress_claim.teacher_reference_number,
@@ -32,7 +35,7 @@ RSpec.describe "Submissions", type: :request do
         expect(email[:personalisation].decoded).to include(in_progress_claim.reference)
       end
 
-      # None of these specs should be here, should be in features.
+      # TODO: one of these specs should be here, should be in features.
       #
       # Instead of refactoring everything as part of an already large PR, I've
       # just added another spec here.

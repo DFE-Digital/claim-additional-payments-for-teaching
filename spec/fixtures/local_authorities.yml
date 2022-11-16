@@ -1,3 +1,4 @@
+# NOTE: Not used in specs, only used for seeding development and review environments
 # Student loans, Maths and Physics and Early Career Payments Eligible
 barnsley:
   code: 370

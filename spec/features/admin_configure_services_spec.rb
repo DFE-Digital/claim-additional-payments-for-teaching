@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.feature "Service configuration" do
-  let(:policy_configuration) { policy_configurations(:student_loans) }
+  let!(:policy_configuration) { create(:policy_configuration, :student_loans) }
 
   scenario "Service operator closes a service for submissions" do
     sign_in_as_service_operator
@@ -61,8 +61,9 @@ RSpec.feature "Service configuration" do
   end
 
   context "Reminders exist" do
-    let(:policy_configuration) { policy_configurations(:early_career_payments) }
+    let!(:policy_configuration) { create(:policy_configuration, :additional_payments) }
     let(:count) { [*1..5].sample }
+
     before do
       create_list(:reminder, count, email_verified: true, itt_academic_year: AcademicYear.current)
       # should not be included
@@ -70,6 +71,7 @@ RSpec.feature "Service configuration" do
       create(:reminder, email_verified: true, itt_academic_year: AcademicYear.current, email_sent_at: Date.today)
       create(:reminder, email_verified: false, itt_academic_year: AcademicYear.current)
     end
+
     scenario "Service operator opens an ECP service for submissions", js: true do
       policy_configuration.update(open_for_submissions: false)
       sign_in_as_service_operator
@@ -97,6 +99,7 @@ RSpec.feature "Service configuration" do
       expect(policy_configuration.reload.open_for_submissions).to be true
     end
   end
+
   scenario "Service operator changes the academic year a service is accepting payments for" do
     travel_to Date.new(2023) do
       sign_in_as_service_operator

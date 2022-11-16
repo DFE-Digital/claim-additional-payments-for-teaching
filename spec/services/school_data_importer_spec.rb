@@ -26,7 +26,7 @@ RSpec.describe SchoolDataImporter do
       let!(:request) { stub_request(:get, todays_file_url).to_return(body: example_csv_file) }
 
       it "imports each row as a school with associated Local Authority" do
-        expect { school_data_importer.run }.to change { School.count }.by 3
+        expect { school_data_importer.run }.to change { School.count }.by 4
         expect(request).to have_been_requested
 
         imported_school = School.find_by(urn: 106653)
@@ -89,28 +89,24 @@ RSpec.describe SchoolDataImporter do
       end
 
       context "when the local authority already exists" do
-        before do
-          local_authorities(:barnsley).update!(name: "South Yorkshire")
-        end
+        let!(:local_authority) { create(:local_authority, name: "Not Barnsley", code: "370") }
 
         it "updates the local authority record" do
           school_data_importer.run
-          local_authorities(:barnsley).reload
+          local_authority.reload
 
-          expect(local_authorities(:barnsley).name).to eql("Barnsley")
+          expect(local_authority.name).to eql("Barnsley")
         end
       end
 
       context "when the local authority district already exists" do
-        before do
-          local_authority_districts(:barnsley).update!(name: "South Yorkshire")
-        end
+        let!(:local_authority_district) { create(:local_authority_district, name: "Not Barnsley", code: "E08000016") }
 
         it "updates the local authority district" do
           school_data_importer.run
-          local_authority_districts(:barnsley).reload
+          local_authority_district.reload
 
-          expect(local_authority_districts(:barnsley).name).to eql("Barnsley")
+          expect(local_authority_district.name).to eql("Barnsley")
         end
       end
     end

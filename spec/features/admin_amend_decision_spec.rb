@@ -3,6 +3,8 @@ require "rails_helper"
 RSpec.feature "Undoing a claim's decision" do
   let(:claim) { create(:claim, :rejected) }
 
+  before { create(:policy_configuration, :student_loans) }
+
   scenario "Service operator can undo a claim's decision" do
     signed_in_user = sign_in_as_service_operator
 
