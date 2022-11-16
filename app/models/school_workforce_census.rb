@@ -67,7 +67,8 @@ class SchoolWorkforceCensus < ApplicationRecord
       "Other Mathematical Subject",
       "Statistics",
       "Mathematics / Mathematical Development (Early Years)"
-    ]
+    ],
+    none_of_the_above: []
   }.freeze
 
   LUP_ELIGIBLE_SUBJECTS = {
@@ -95,7 +96,8 @@ class SchoolWorkforceCensus < ApplicationRecord
       "Applied Science",
       "Other Sciences",
       "Science"
-    ]
+    ],
+    none_of_the_above: []
   }.freeze
 
   TSLR_ELIGIBLE_SUBJECTS = {
