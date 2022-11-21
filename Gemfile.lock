@@ -130,7 +130,7 @@ GEM
     erubi (1.11.0)
     et-orbi (1.2.7)
       tzinfo
-    ethon (0.15.0)
+    ethon (0.16.0)
       ffi (>= 1.15.0)
     execjs (2.8.1)
     factory_bot (6.2.1)
@@ -519,7 +519,7 @@ DEPENDENCIES
   delayed_job_active_record
   dfe-analytics!
   dotenv-rails
-  ethon (~> 0.15.0)
+  ethon (~> 0.16.0)
   factory_bot_rails
   faker (~> 3.0)
   faraday_middleware
