@@ -513,7 +513,10 @@ RSpec.describe Claim, type: :model do
     end
 
     context "with mobile number" do
-      before { claim.mobile_number = mobile_number }
+      before do
+        claim.provide_mobile_number = true
+        claim.mobile_number = mobile_number
+      end
 
       context "with UK number without spaces" do
         let(:mobile_number) { "07474000123" }
@@ -533,6 +536,11 @@ RSpec.describe Claim, type: :model do
       context "with international format number with spaces" do
         let(:mobile_number) { "+44 7474 000 123" }
         it { is_expected.to be_valid(:mobile_number) }
+      end
+
+      context "with international format non-UK number" do
+        let(:mobile_number) { "+33 12 34 56 78" }
+        it { is_expected.not_to be_valid(:mobile_number) }
       end
     end
   end
