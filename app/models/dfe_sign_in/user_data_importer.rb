@@ -21,6 +21,7 @@ module DfeSignIn
         user.family_name = u.family_name
         user.email = u.email
         user.organisation_name = u.organisation_name
+        user.deleted_at = nil
 
         user.save!
       end

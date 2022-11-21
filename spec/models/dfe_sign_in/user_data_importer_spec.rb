@@ -50,7 +50,7 @@ RSpec.describe DfeSignIn::UserDataImporter, type: :model do
 
         it "marks the user as not deleted" do
           DfeSignIn::UserDataImporter.new.run
-          expect(existing_user.reload.deleted_at).not_to be_nil
+          expect(existing_user.reload.deleted_at).to be_nil
         end
       end
     end
