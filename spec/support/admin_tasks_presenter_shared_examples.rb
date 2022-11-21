@@ -5,16 +5,21 @@ RSpec.shared_examples "ECP and LUP Combined Journey Admin Tasks Presenter" do |p
 
   subject(:presenter) { described_class.new(claim) }
 
-  it {
-    is_expected.to have_attributes(
-      employment: [[I18n.t("admin.current_school"), presenter.display_school(eligibility.current_school)]],
-      identity_confirmation: [["Current school", school.name], ["Contact number", school.phone_number]],
-      census_subjects_taught: [["Subject", "Mathematics"]],
-      qualifications: [["Qualification", "Postgraduate initial teacher training (ITT)"],
-        ["ITT start year", "In the academic year 2019 to 2020"],
-        ["ITT subject", "Mathematics"]]
-    )
-  }
+  describe "attributes" do
+    let!(:policy_configuration) { create(:policy_configuration, policy.to_s.underscore) }
+    let(:expected_itt_year) { eligibility.itt_academic_year }
+
+    it {
+      is_expected.to have_attributes(
+        employment: [[I18n.t("admin.current_school"), presenter.display_school(eligibility.current_school)]],
+        identity_confirmation: [["Current school", school.name], ["Contact number", school.phone_number]],
+        census_subjects_taught: [["Subject", "Mathematics"]],
+        qualifications: [["Qualification", "Postgraduate initial teacher training (ITT)"],
+          ["ITT start year", "In the academic year #{expected_itt_year.start_year} to #{expected_itt_year.end_year}"],
+          ["ITT subject", "Mathematics"]]
+      )
+    }
+  end
 
   # The following is moved from an old spec. Haven't taken the effort to refactor it here.
   describe "#qualifications" do
@@ -29,6 +34,7 @@ RSpec.shared_examples "ECP and LUP Combined Journey Admin Tasks Presenter" do |p
           build(
             :claim,
             academic_year: AcademicYear::Type.new.serialize(AcademicYear.new(2023)),
+            policy: policy,
             eligibility: build(
               "#{policy.to_s.underscore}_eligibility".to_sym,
               eligible_itt_subject: spec[:subject_text],

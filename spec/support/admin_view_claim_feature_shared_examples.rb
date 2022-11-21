@@ -1,50 +1,65 @@
 RSpec.shared_examples "Admin View Claim Feature" do |policy|
+  let!(:policy_configuration) { create(:policy_configuration, policy.to_s.underscore) }
+  let(:academic_year) { policy_configuration.current_academic_year }
+
   let!(:claim) {
+    eligibility = create("#{policy.to_s.underscore}_eligibility".to_sym, :eligible)
     create(
       :claim,
       :submitted,
-      eligibility: build("#{policy.to_s.underscore}_eligibility".to_sym, :eligible)
+      policy: policy,
+      eligibility: eligibility
     )
   }
 
   let!(:multiple_claim) {
+    eligibility = create("#{policy.to_s.underscore}_eligibility".to_sym, :eligible)
     create(
       :claim,
       :submitted,
-      eligibility: build("#{policy.to_s.underscore}_eligibility".to_sym, :eligible)
+      policy: policy,
+      eligibility: eligibility
     )
   }
 
   let!(:similar_claim) {
+    eligibility = create("#{policy.to_s.underscore}_eligibility".to_sym, :eligible)
     create(
       :claim,
       :submitted,
-      eligibility: build("#{policy.to_s.underscore}_eligibility".to_sym, :eligible),
+      policy: policy,
+      eligibility: eligibility,
       teacher_reference_number: multiple_claim.teacher_reference_number
     )
   }
 
   let!(:approved_awaiting_payroll_claim) {
+    eligibility = create("#{policy.to_s.underscore}_eligibility".to_sym, :eligible)
     create(
       :claim,
       :payrollable,
-      eligibility: build("#{policy.to_s.underscore}_eligibility".to_sym, :eligible)
+      policy: policy,
+      eligibility: eligibility
     )
   }
 
   let!(:approved_paid_claim) {
+    eligibility = create("#{policy.to_s.underscore}_eligibility".to_sym, :eligible)
     create(
       :claim,
       :approved,
-      eligibility: build("#{policy.to_s.underscore}_eligibility".to_sym, :eligible)
+      policy: policy,
+      eligibility: eligibility
     )
   }
 
   let!(:rejected_claim) {
+    eligibility = create("#{policy.to_s.underscore}_eligibility".to_sym, :eligible)
     create(
       :claim,
       :rejected,
-      eligibility: build("#{policy.to_s.underscore}_eligibility".to_sym, :eligible)
+      policy: policy,
+      eligibility: eligibility
     )
   }
 
@@ -55,8 +70,8 @@ RSpec.shared_examples "Admin View Claim Feature" do |policy|
 
     # NOTE: mirror claims factory for academic_year attribute "hardcoding" of 2019
     current_academic_year =
-      if policy == EarlyCareerPayments
-        PolicyConfiguration.for(EarlyCareerPayments).current_academic_year
+      if [EarlyCareerPayments, LevellingUpPremiumPayments].include?(policy)
+        academic_year
       else
         AcademicYear.new(2019)
       end

@@ -4,6 +4,8 @@ module AutomatedChecks
   module ClaimVerifiers
     RSpec.describe Qualifications do
       before do
+        create(:policy_configuration, :maths_and_physics)
+
         if data
           body = data
 
@@ -318,6 +320,7 @@ module AutomatedChecks
               create(
                 :claim,
                 :submitted,
+                policy: MathsAndPhysics,
                 date_of_birth: Date.new(1990, 8, 23),
                 first_name: "Fred",
                 national_insurance_number: "QQ100000C",

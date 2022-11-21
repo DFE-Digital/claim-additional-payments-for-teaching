@@ -1,7 +1,7 @@
 class PayrollRun < ApplicationRecord
   DOWNLOAD_FILE_TIMEOUT = 30
 
-  has_many :payments
+  has_many :payments, dependent: :destroy
   has_many :claims, through: :payments
 
   belongs_to :created_by, class_name: "DfeSignIn::User"

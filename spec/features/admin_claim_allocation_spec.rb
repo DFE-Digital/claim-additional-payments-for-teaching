@@ -2,6 +2,9 @@ require "rails_helper"
 
 RSpec.feature "Claims awaiting a decision" do
   before do
+    create(:policy_configuration, :student_loans)
+    create(:policy_configuration, :additional_payments)
+
     submitted_claims = []
     @signed_in_user = sign_in_as_service_operator
 

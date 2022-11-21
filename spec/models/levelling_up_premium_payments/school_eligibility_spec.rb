@@ -4,6 +4,8 @@ RSpec.describe LevellingUpPremiumPayments::SchoolEligibility do
   let(:eligible_school) { build(:school, :levelling_up_premium_payments_eligible) }
   let(:ineligible_school) { build(:school, :levelling_up_premium_payments_ineligible) }
 
+  before { create(:policy_configuration, :additional_payments) }
+
   describe ".new" do
     specify { expect { described_class.new(nil) }.to raise_error("nil school") }
   end

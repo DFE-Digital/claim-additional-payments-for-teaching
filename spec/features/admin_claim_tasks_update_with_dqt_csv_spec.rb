@@ -1,7 +1,10 @@
 require "rails_helper"
 
 RSpec.feature "Admin claim tasks update with DQT CSV" do
-  before { sign_in_as_service_operator }
+  before do
+    create(:policy_configuration, :student_loans)
+    sign_in_as_service_operator
+  end
 
   scenario "Service operators can upload and run automated DQT checks" do
     claim_with_eligible_dqt_record = claim_from_example_dqt_report(:eligible_claim_with_matching_data)

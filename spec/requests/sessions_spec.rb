@@ -1,6 +1,8 @@
 require "rails_helper"
 
 RSpec.describe "Sessions", type: :request do
+  before { create(:policy_configuration, :student_loans) }
+
   describe "#refresh" do
     it "updates the last_seen_at session timestamp and responds with OK" do
       start_student_loans_claim

@@ -1,7 +1,10 @@
 require "rails_helper"
 
 RSpec.feature "Admin checking a claim with personal data removed" do
-  before { sign_in_as_service_operator }
+  before do
+    create(:policy_configuration, :student_loans)
+    sign_in_as_service_operator
+  end
 
   scenario "the service operator sees that personal data has been removed from the full claim view" do
     claim_with_personal_data_removed = create(:claim, :rejected, :personal_data_removed)

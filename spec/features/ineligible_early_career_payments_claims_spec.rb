@@ -3,12 +3,17 @@ require "rails_helper"
 RSpec.feature "Ineligible Teacher Early-Career Payments claims" do
   include EarlyCareerPaymentsHelper
 
+  let!(:eligible_school) { create(:school, :early_career_payments_eligible) }
+
+  before { create(:policy_configuration, :additional_payments) }
+
   scenario "When the school selected is ineligible" do
+    ineligible_school = create(:school, :early_career_payments_ineligible)
     start_early_career_payments_claim
 
     # - Which school do you teach at
     expect(page).to have_text(I18n.t("early_career_payments.questions.current_school_search"))
-    choose_school schools(:bradford_grammar_school)
+    choose_school ineligible_school
 
     expect(page).to have_text("The school you have selected is not eligible")
   end
@@ -19,7 +24,7 @@ RSpec.feature "Ineligible Teacher Early-Career Payments claims" do
     # - Which school do you teach at
     expect(page).to have_text(I18n.t("early_career_payments.questions.current_school_search"))
 
-    choose_school schools(:penistone_grammar_school)
+    choose_school eligible_school
 
     # - Have you started your first year as a newly qualified teacher?
     expect(page).to have_text(I18n.t("early_career_payments.questions.nqt_in_academic_year_after_itt.heading"))
@@ -51,7 +56,7 @@ RSpec.feature "Ineligible Teacher Early-Career Payments claims" do
     # - Which school do you teach at
     expect(page).to have_text(I18n.t("early_career_payments.questions.current_school_search"))
 
-    choose_school schools(:penistone_grammar_school)
+    choose_school eligible_school
 
     # - Have you started your first year as a newly qualified teacher?
     expect(page).to have_text(I18n.t("early_career_payments.questions.nqt_in_academic_year_after_itt.heading"))
@@ -83,7 +88,7 @@ RSpec.feature "Ineligible Teacher Early-Career Payments claims" do
     # - Which school do you teach at
     expect(page).to have_text(I18n.t("early_career_payments.questions.current_school_search"))
 
-    choose_school schools(:penistone_grammar_school)
+    choose_school eligible_school
 
     # - Have you started your first year as a newly qualified teacher?
     expect(page).to have_text(I18n.t("early_career_payments.questions.nqt_in_academic_year_after_itt.heading"))
@@ -116,7 +121,7 @@ RSpec.feature "Ineligible Teacher Early-Career Payments claims" do
     # - Which school do you teach at
     expect(page).to have_text(I18n.t("early_career_payments.questions.current_school_search"))
 
-    choose_school schools(:penistone_grammar_school)
+    choose_school eligible_school
 
     # - Have you started your first year as a newly qualified teacher?
     expect(page).to have_text(I18n.t("early_career_payments.questions.nqt_in_academic_year_after_itt.heading"))
@@ -147,7 +152,7 @@ RSpec.feature "Ineligible Teacher Early-Career Payments claims" do
     # - Which school do you teach at
     expect(page).to have_text(I18n.t("early_career_payments.questions.current_school_search"))
 
-    choose_school schools(:penistone_grammar_school)
+    choose_school eligible_school
 
     # - Have you started your first year as a newly qualified teacher?
     expect(page).to have_text(I18n.t("early_career_payments.questions.nqt_in_academic_year_after_itt.heading"))
@@ -184,7 +189,7 @@ RSpec.feature "Ineligible Teacher Early-Career Payments claims" do
     # - Which school do you teach at
     expect(page).to have_text(I18n.t("early_career_payments.questions.current_school_search"))
 
-    choose_school schools(:penistone_grammar_school)
+    choose_school eligible_school
 
     # - Have you started your first year as a newly qualified teacher?
     expect(page).to have_text(I18n.t("early_career_payments.questions.nqt_in_academic_year_after_itt.heading"))
@@ -239,7 +244,7 @@ RSpec.feature "Ineligible Teacher Early-Career Payments claims" do
     # - Which school do you teach at
     expect(page).to have_text(I18n.t("early_career_payments.questions.current_school_search"))
 
-    ecp_only_school = schools(:penistone_grammar_school)
+    ecp_only_school = eligible_school
     choose_school ecp_only_school
 
     # - Have you started your first year as a newly qualified teacher?
@@ -303,7 +308,7 @@ RSpec.feature "Ineligible Teacher Early-Career Payments claims" do
     # - Which school do you teach at
     expect(page).to have_text(I18n.t("early_career_payments.questions.current_school_search"))
 
-    choose_school schools(:penistone_grammar_school)
+    choose_school eligible_school
 
     # - Have you started your first year as a newly qualified teacher?
     expect(page).to have_text(I18n.t("early_career_payments.questions.nqt_in_academic_year_after_itt.heading"))

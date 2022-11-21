@@ -1,17 +1,20 @@
 require "rails_helper"
 
 RSpec.feature "Admin can view completed claims" do
-  before { @signed_in_user = sign_in_as_service_operator }
+  before do
+    create(:policy_configuration, :student_loans)
+    @signed_in_user = sign_in_as_service_operator
+  end
 
-  scenario "Viewing a claim that has a decision made " do
-    claim_with_decision = create(:claim, :approved, policy: MathsAndPhysics)
+  scenario "Viewing a claim that has a decision made" do
+    claim_with_decision = create(:claim, :approved)
 
     visit admin_claim_tasks_path(claim_with_decision)
 
     within("span#claim-heading") do
       expect(page).to have_content("Approved")
     end
-    expect(page).to have_content("Claim amount £2,000.00")
+    expect(page).to have_content("Claim amount £1,000.00")
   end
 
   scenario "Viewing a claim that does not have decision made" do

@@ -4,6 +4,8 @@ RSpec.describe PaymentMailer, type: :mailer do
   # Characteristics common to all policies
   Policies.all.each do |policy|
     context "with a payment with a single #{policy} claim" do
+      before { create(:policy_configuration, policy.to_s.underscore) }
+
       describe "#confirmation" do
         let(:payment) { create(:payment, :with_figures, net_pay: 500.00, student_loan_repayment: 60, postgraduate_loan_repayment: 40, claims: [claim], scheduled_payment_date: Date.parse("2019-01-01")) }
         let(:claim) { build(:claim, :submitted, policy: policy) }

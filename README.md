@@ -248,16 +248,15 @@ via terraform.
 
 It creates resource groups, database server, app service plan, etc.
 
-### Development
+### Test
 
-Development is automatically built and deployed when commits are pushed to
-`master`.
+Test is automatically built and deployed when commits are pushed to `master`.
 
 You can check the progress of the build and release in
 [Azure DevOps](https://dev.azure.com/dfe-ssp/S118-Teacher-Payments-Service).
 
-The development website is at
-https://development.additional-teaching-payment.education.gov.uk.
+The test website is at
+https://test.additional-teaching-payment.education.gov.uk.
 
 ### Production
 
@@ -309,7 +308,7 @@ We have a helpful script you can run that will connect you to the right resource
 first):
 
 ```bash
-bin/azure-console $ENVIRONMENT # (development/production)
+bin/azure-console $ENVIRONMENT # (test/production)
 ```
 
 From there, you can run a Rails console with `bin/rails console`. Pass the

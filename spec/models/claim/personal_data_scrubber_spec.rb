@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.describe Claim::PersonalDataScrubber, type: :model do
-  let(:current_academic_year) { AcademicYear.for(Date.today) }
+  let(:current_academic_year) { AcademicYear.current }
   let(:last_academic_year) { Time.zone.local(current_academic_year.start_year, 8, 1) }
 
   it "does not delete details from a submitted claim" do

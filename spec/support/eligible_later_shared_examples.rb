@@ -6,17 +6,12 @@ RSpec.shared_examples "Eligible later" do |opts|
     let(:qualification) { opts[:qualification] }
 
     before do
-      @ecp_policy_date = PolicyConfiguration.for(EarlyCareerPayments).current_academic_year
-      PolicyConfiguration.for(EarlyCareerPayments).update(current_academic_year: policy_year)
+      create(:policy_configuration, :additional_payments, current_academic_year: policy_year)
 
       eligibility_attrs = attributes_for(:early_career_payments_eligibility, :eligible, qualification: qualification)
       eligibility_attrs[:current_school] = current_school
       claim.eligibility.update!(eligibility_attrs)
       lup_claim.eligibility.update!(eligibility_attrs)
-    end
-
-    after do
-      PolicyConfiguration.for(EarlyCareerPayments).update(current_academic_year: @ecp_policy_date)
     end
 
     scenario "with ITT subject mathematics in ITT academic year #{opts[:itt_academic_year]} with a #{opts[:qualification]} qualification" do

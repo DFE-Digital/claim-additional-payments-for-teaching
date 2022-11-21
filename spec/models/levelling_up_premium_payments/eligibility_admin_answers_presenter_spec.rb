@@ -1,17 +1,19 @@
 require "rails_helper"
 
 RSpec.describe LevellingUpPremiumPayments::EligibilityAdminAnswersPresenter, type: :model do
-  let(:school) { schools(:penistone_grammar_school) }
   let(:eligibility) { claim.eligibility }
   let(:claim) do
     build(
       :claim,
-      academic_year: "2021/2022",
-      eligibility: build(:levelling_up_premium_payments_eligibility, :eligible)
+      :submittable,
+      policy: LevellingUpPremiumPayments,
+      academic_year: "2021/2022"
     )
   end
 
   subject(:presenter) { described_class.new(eligibility) }
+
+  before { create(:policy_configuration, :additional_payments) }
 
   describe "#answers" do
     it "returns an array of questions and answers for displaying to service operator" do
