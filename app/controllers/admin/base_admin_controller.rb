@@ -18,7 +18,7 @@ module Admin
     end
 
     def admin_user
-      @admin_user ||= DfeSignIn::User.find(session[:user_id])
+      @admin_user ||= DfeSignIn::User.not_deleted.find(session[:user_id])
     end
 
     def service_operator_signed_in?

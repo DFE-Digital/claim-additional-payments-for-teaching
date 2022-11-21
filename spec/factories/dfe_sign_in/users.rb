@@ -12,5 +12,9 @@ FactoryBot.define do
       email { nil }
       organisation_name { nil }
     end
+
+    trait :deleted do
+      deleted_at { Time.zone.now }
+    end
   end
 end

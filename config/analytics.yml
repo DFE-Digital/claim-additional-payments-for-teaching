@@ -252,3 +252,4 @@ shared:
   - created_at
   - updated_at
   - role_codes
+  - deleted_at

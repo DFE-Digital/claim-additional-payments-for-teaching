@@ -76,6 +76,22 @@ RSpec.describe "Admin authentication", type: :request do
       end
     end
 
+    context "when the user is deleted" do
+      let!(:user) { create(:dfe_signin_user, :deleted) }
+
+      it "returns an Unauthorised response and doesn’t set a session" do
+        stub_dfe_sign_in_with_role(DfeSignIn::User::SERVICE_OPERATOR_DFE_SIGN_IN_ROLE_CODE, user.dfe_sign_in_id)
+        post admin_dfe_sign_in_path
+        expect(response).to redirect_to(admin_auth_callback_path)
+        follow_redirect!
+
+        expect(session[:user_id]).to be_nil
+
+        expect(response.code).to eq("401")
+        expect(response.body).to include("Not authorised")
+      end
+    end
+
     context "when the callback from DfE Sign-in is for invalid credentials" do
       it "redirects to the auth failure page and doesn’t set a session" do
         OmniAuth.config.mock_auth[:dfe] = :invalid_credentials
