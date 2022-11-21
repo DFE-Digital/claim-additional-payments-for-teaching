@@ -1170,7 +1170,7 @@ RSpec.feature "Teacher Early-Career Payments claims" do
   context "ECP school" do
     let!(:school) { create(:school, :early_career_payments_eligible) }
 
-    scenario "Prevent eligible itt subject page loading form from browser Back navigation causing errors", js: true do
+    scenario "Prevent eligible itt subject page loading form from browser Back navigation causing errors", js: true, flaky: true do
       visit landing_page_path(EarlyCareerPayments.routing_name)
       click_on "Start now"
 
