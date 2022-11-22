@@ -3,6 +3,11 @@ module Admin
     include StudentLoans::PresenterMethods
     include Pagy::Frontend
 
+    # Take user back to where View Claim was clicked from
+    def claims_backlink_path
+      session[:claims_backlink_path] || admin_claims_path
+    end
+
     def claim_links(claims)
       claims.map { |claim| link_to(claim.reference, admin_claim_path(claim), class: "govuk-link") }.to_sentence.html_safe
     end
