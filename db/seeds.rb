@@ -17,8 +17,13 @@ if Rails.env.development? || ENV["ENVIRONMENT_NAME"] == "review"
 end
 
 if Rails.env.development?
+  require "./lib/factory_helpers"
+
   class Seeds
     extend FactoryBot::Syntax::Methods
+
+    FactoryHelpers.create_factory_registry
+    FactoryHelpers.reset_factory_registry
 
     if ENV["SEED_ACADEMIC_YEAR"].nil?
       # use original project defaults
