@@ -57,6 +57,6 @@ class Admin::ClaimsController < Admin::BaseAdminController
     return if params[:team_member].blank?
 
     name = params[:team_member].split("-")
-    DfeSignIn::User.find_by(given_name: name.shift, family_name: name).id
+    DfeSignIn::User.not_deleted.find_by(given_name: name.shift, family_name: name).id
   end
 end

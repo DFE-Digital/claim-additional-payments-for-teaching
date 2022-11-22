@@ -14,7 +14,7 @@ module Admin
     def callback
       dfe_sign_in_user = DfeSignIn::User.from_session(admin_session)
 
-      if dfe_sign_in_user.has_admin_access?
+      if dfe_sign_in_user.has_admin_access? && !dfe_sign_in_user.deleted?
         dfe_sign_in_user.save
 
         session[:user_id] = dfe_sign_in_user.id
