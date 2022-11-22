@@ -123,4 +123,57 @@ RSpec.describe DfeSignIn::User, type: :model do
       expect(described_class.options_for_select_by_name).not_to include([miguel.full_name.titleize, "miguel-hernández"])
     end
   end
+
+  describe ".not_deleted" do
+    let!(:not_deleted_user) { create(:dfe_signin_user) }
+
+    before { create(:dfe_signin_user, :deleted) }
+
+    it "returns only users without deleted timestamp" do
+      expect(described_class.not_deleted.to_a).to eq [not_deleted_user]
+    end
+  end
+
+  describe "#mark_as_deleted!" do
+    context "when the user is not already deleted" do
+      let(:user) { create(:dfe_signin_user) }
+
+      it "sets the user 'deleted_at' timestamp to the current time" do
+        freeze_time do
+          expect { user.mark_as_deleted! }.to change { user.deleted_at }.from(nil).to(Time.zone.now)
+        end
+      end
+
+      context "when the user has claims assigned" do
+        let!(:claim) { create(:claim, :submitted, assigned_to: user) }
+
+        it "unassigns their claims" do
+          user.mark_as_deleted!
+          expect(claim.reload.assigned_to).to be_nil
+        end
+      end
+    end
+
+    context "when the user is already deleted" do
+      let(:user) { create(:dfe_signin_user, :deleted) }
+
+      it "does not change the flag if was already enabled" do
+        expect { user.mark_as_deleted! }.not_to change(user, :deleted_at)
+      end
+    end
+  end
+
+  describe "#deleted?" do
+    context "when the user is deleted" do
+      subject(:user) { create(:dfe_signin_user, :deleted) }
+
+      it { is_expected.to be_deleted }
+    end
+
+    context "when the user is not already deleted" do
+      subject(:user) { create(:dfe_signin_user) }
+
+      it { is_expected.not_to be_deleted }
+    end
+  end
 end

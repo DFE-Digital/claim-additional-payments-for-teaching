@@ -1,5 +1,7 @@
 module DfeSignIn
   class User < ApplicationRecord
+    include Deletable
+
     SERVICE_OPERATOR_DFE_SIGN_IN_ROLE_CODE = "teacher_payments_access"
     SUPPORT_AGENT_DFE_SIGN_IN_ROLE_CODE = "teacher_payments_support"
     PAYROLL_OPERATOR_DFE_SIGN_IN_ROLE_CODE = "teacher_payments_payroll"
@@ -57,6 +59,17 @@ module DfeSignIn
           user.full_name.titleize, user.full_name.tr(" ", "-")
         ]
       end
+    end
+
+    def mark_as_deleted!
+      super
+      unassign_claims
+    end
+
+    private
+
+    def unassign_claims
+      assigned_claims.update_all(assigned_to_id: nil)
     end
   end
 end
