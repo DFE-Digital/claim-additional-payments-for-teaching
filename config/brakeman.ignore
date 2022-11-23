@@ -1,13 +1,36 @@
 {
   "ignored_warnings": [
     {
+      "warning_type": "File Access",
+      "warning_code": 16,
+      "fingerprint": "007f1c0e795b4a4c93ed5fd209e7ab64dc4198022360b69a91b5845b641f6385",
+      "check_name": "FileAccess",
+      "message": "Parameter value used in file name",
+      "file": "app/controllers/admin/school_workforce_census_data_uploads_controller.rb",
+      "line": 15,
+      "link": "https://brakemanscanner.org/docs/warning_types/file_access/",
+      "code": "File.read(params[:file])",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "Admin::SchoolWorkforceCensusDataUploadsController",
+        "method": "create"
+      },
+      "user_input": "params[:file]",
+      "confidence": "High",
+      "cwe_id": [
+        22
+      ],
+      "note": ""
+    },
+    {
       "warning_type": "Dynamic Render Path",
       "warning_code": 15,
       "fingerprint": "23e1b8f42ab87b9f17f883de7ac8b7b11261ec3dd8f8ad11f06aaae2a3b6fc51",
       "check_name": "Render",
       "message": "Render path contains parameter value",
       "file": "app/controllers/admin/tasks_controller.rb",
-      "line": 40,
+      "line": 61,
       "link": "https://brakemanscanner.org/docs/warning_types/dynamic_render_path/",
       "code": "render(action => Claim.includes(:tasks).find(params[:claim_id]).tasks.where(:name => params[:name]).first.name, {})",
       "render_path": null,
@@ -18,6 +41,9 @@
       },
       "user_input": "params[:name]",
       "confidence": "Weak",
+      "cwe_id": [
+        22
+      ],
       "note": "Create and update should be flagged but change is not different from existing behaviour, raising issue."
     },
     {
@@ -27,7 +53,7 @@
       "check_name": "Render",
       "message": "Render path contains parameter value",
       "file": "app/controllers/admin/tasks_controller.rb",
-      "line": 15,
+      "line": 34,
       "link": "https://brakemanscanner.org/docs/warning_types/dynamic_render_path/",
       "code": "render(action => Claim.includes(:tasks).find(params[:claim_id]).tasks.find_or_initialize_by(:name => params[:name]).name, {})",
       "render_path": null,
@@ -38,6 +64,9 @@
       },
       "user_input": "params[:name]",
       "confidence": "Weak",
+      "cwe_id": [
+        22
+      ],
       "note": "Constrained to valid input by routes"
     },
     {
@@ -58,6 +87,9 @@
       },
       "user_input": "attribute",
       "confidence": "Medium",
+      "cwe_id": [
+        89
+      ],
       "note": ""
     },
     {
@@ -78,6 +110,9 @@
       },
       "user_input": "attributes.join(\",\")",
       "confidence": "Medium",
+      "cwe_id": [
+        89
+      ],
       "note": "The concetenated attributes in the CONCAT operation are not user-generated, so this can be safely ignored"
     },
     {
@@ -87,7 +122,7 @@
       "check_name": "SQL",
       "message": "Possible SQL injection",
       "file": "app/models/claim_stats/daily.rb",
-      "line": 20,
+      "line": 21,
       "link": "https://brakemanscanner.org/docs/warning_types/sql_injection/",
       "code": "ActiveRecord::Base.connection.exec_query(\"SELECT\\n'#{date}' AS extract_date,\\n  policy,\\n  ROUND(AVG(submission_length))\\n    AS average_claim_submission_length,\\n  ROUND(AVG(decision_length))\\n    AS average_claim_decision_length,\\n  COUNT(claim_id)\\n    AS applications_started_total,\\n  COUNT(claim_id) filter (where claim_submitted_at is not null)\\n    AS applications_submitted_total,\\n  COUNT(claim_id) filter (where result = 'rejected')\\n    AS applications_rejected_total,\\n  COUNT(claim_id) filter (where result = 'accepted')\\n    AS applications_accepted_total,\\n  COUNT(claim_id) filter (where claim_started_at::date = '#{date}')\\n    AS applications_started_daily,\\n  COUNT(claim_id) filter (where claim_submitted_at::date = '#{date}')\\n    AS applications_submitted_daily,\\n  COUNT(claim_id) filter (where result = 'rejected' and decision_made_at::date = '#{date}')\\n    AS applications_rejected_daily,\\n  COUNT(claim_id) filter (where result = 'accepted' and decision_made_at::date = '#{date}')\\n    AS applications_accepted_daily\\nFROM\\n  #{ClaimStats.table_name}\\nWHERE\\n  claim_started_at < '#{date.end_of_day}'\\nGROUP BY\\n  policy\\nORDER BY\\n  policy\\n\".squish)",
       "render_path": null,
@@ -98,6 +133,9 @@
       },
       "user_input": "date",
       "confidence": "Medium",
+      "cwe_id": [
+        89
+      ],
       "note": ""
     },
     {
@@ -118,9 +156,12 @@
       },
       "user_input": "Payroll::PaymentsCsv.new(PayrollRun.find(params[:payroll_run_id])).file",
       "confidence": "Medium",
+      "cwe_id": [
+        22
+      ],
       "note": "We generate the filename based on non-user input so we can ignore this"
     }
   ],
-  "updated": "2021-09-14 10:51:51 +0100",
-  "brakeman_version": "5.1.1"
+  "updated": "2022-11-10 20:15:22 +0000",
+  "brakeman_version": "5.3.1"
 }

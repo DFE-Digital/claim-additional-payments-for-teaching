@@ -2,6 +2,7 @@ require "rails_helper"
 
 # The following is moved from an old spec. Haven't taken the effort to refactor it here.
 RSpec.shared_examples "Admin Checks for Early Career Payments and Levelling Up Premium Payments" do |policy|
+  let!(:policy_configuration) { create(:policy_configuration, policy.to_s.underscore) }
   let!(:claim) {
     create(
       :claim,
@@ -23,6 +24,8 @@ RSpec.shared_examples "Admin Checks for Early Career Payments and Levelling Up P
     click_on I18n.t("admin.tasks.identity_confirmation")
 
     expect(page).to have_content("Did #{claim.full_name} submit the claim?")
+    expect(page).to have_link("Next: Qualifications")
+    expect(page).not_to have_link("Previous")
 
     choose "Yes"
     click_on "Save and continue"
@@ -34,6 +37,8 @@ RSpec.shared_examples "Admin Checks for Early Career Payments and Levelling Up P
     expect(page).to have_content(claim.eligibility.itt_academic_year.to_s(:long))
     expect(page).to have_content("ITT subject")
     expect(page).to have_content(claim.eligibility.eligible_itt_subject.humanize)
+    expect(page).to have_link("Next: Census subjects taught")
+    expect(page).to have_link("Previous: Identity confirmation")
 
     choose "Yes"
     click_on "Save and continue"
@@ -42,6 +47,8 @@ RSpec.shared_examples "Admin Checks for Early Career Payments and Levelling Up P
 
     expect(page).to have_content(I18n.t("#{claim.policy.to_s.underscore}.admin.task_questions.census_subjects_taught.title"))
     expect(page).to have_content("Subject Mathematics")
+    expect(page).to have_link("Next: Employment")
+    expect(page).to have_link("Previous: Qualifications")
 
     choose "Yes"
     click_on "Save and continue"
@@ -51,6 +58,8 @@ RSpec.shared_examples "Admin Checks for Early Career Payments and Levelling Up P
     expect(page).to have_content(I18n.t("#{claim.policy.to_s.underscore}.admin.task_questions.employment.title"))
     expect(page).to have_content("Current school")
     expect(page).to have_link(claim.eligibility.current_school.name)
+    expect(page).to have_link("Next: Decision")
+    expect(page).to have_link("Previous: Census subjects taught")
 
     choose "Yes"
     click_on "Save and continue"
@@ -58,6 +67,8 @@ RSpec.shared_examples "Admin Checks for Early Career Payments and Levelling Up P
     expect(claim.tasks.find_by!(name: "employment").passed?).to eq(true)
 
     expect(page).to have_content("Claim decision")
+    expect(page).not_to have_link("Next")
+    expect(page).to have_link("Previous: Employment")
 
     choose "Approve"
     fill_in "Decision notes", with: "All checks passed!"

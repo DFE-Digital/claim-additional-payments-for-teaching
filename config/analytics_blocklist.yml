@@ -36,3 +36,29 @@ shared:
   - result
   - submission_length
   - decision_length
+  :file_uploads:
+  - id
+  - uploaded_by_id
+  - body
+  - created_at
+  - updated_at
+  :school_workforce_censuses:
+  - id
+  - teacher_reference_number
+  - subject_1
+  - subject_2
+  - subject_3
+  - subject_4
+  - subject_5
+  - subject_6
+  - subject_7
+  - subject_8
+  - subject_9
+  - subject_10
+  - subject_11
+  - subject_12
+  - subject_13
+  - subject_14
+  - subject_15
+  - created_at
+  - updated_at

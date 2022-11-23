@@ -89,7 +89,7 @@ RSpec.describe Amendment, type: :model do
         expect(claim.teacher_reference_number).to eq("1234567")
         expect(claim.bank_account_number).to eq("12345678")
 
-        expect(amendment.errors.keys).to eq([:notes])
+        expect(amendment.errors.attribute_names).to eq([:notes])
       end
     end
 
@@ -120,7 +120,7 @@ RSpec.describe Amendment, type: :model do
         expect(claim.teacher_reference_number).to eq("1234567")
         expect(claim.bank_account_number).to eq("12345678")
 
-        expect(amendment.errors.keys).to match_array([:teacher_reference_number])
+        expect(amendment.errors.attribute_names).to match_array([:teacher_reference_number])
       end
     end
 
@@ -150,7 +150,7 @@ RSpec.describe Amendment, type: :model do
         expect(claim.teacher_reference_number).to eq("1234567")
         expect(claim.bank_account_number).to eq("12345678")
 
-        expect(amendment.errors.keys).to match_array([:notes, :teacher_reference_number])
+        expect(amendment.errors.attribute_names).to match_array([:notes, :teacher_reference_number])
       end
     end
 
@@ -173,7 +173,7 @@ RSpec.describe Amendment, type: :model do
         expect(amendment).to_not be_persisted
         expect(claim.reload.amendments).to be_empty
 
-        expect(amendment.errors.keys).to eq([:claim_changes])
+        expect(amendment.errors.attribute_names).to eq([:claim_changes])
       end
     end
 
@@ -252,6 +252,9 @@ RSpec.describe Amendment, type: :model do
             created_by: dfe_signin_user
           }
         end
+
+        before { create(:policy_configuration, :additional_payments) }
+
         it "stores the value in the amendment’s claim_changes" do
           amendment = described_class.amend_claim(claim, claim_attributes, amendment_attributes)
 

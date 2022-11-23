@@ -11,12 +11,6 @@ FactoryBot.define do
       lup_itt_subject
     end
 
-    trait :eligible_next_year_too do
-      eligible_now
-      itt_academic_year { AcademicYear::Type.new.serialize(AcademicYear.new(2020)) }
-      eligible_itt_subject { :mathematics }
-    end
-
     trait :eligible_school do
       association :current_school, factory: [:school, :levelling_up_premium_payments_eligible]
     end
@@ -26,7 +20,7 @@ FactoryBot.define do
     end
 
     trait :itt_year_good_for_life_of_lup_policy do
-      itt_academic_year { AcademicYear::Type.new.serialize(AcademicYear.new(2019)) }
+      itt_academic_year { PolicyConfiguration.for(LevellingUpPremiumPayments).current_academic_year - 1 }
     end
 
     trait :lup_itt_subject do

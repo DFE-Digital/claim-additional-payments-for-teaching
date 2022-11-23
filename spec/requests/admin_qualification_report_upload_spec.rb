@@ -20,6 +20,7 @@ RSpec.describe "Admin qualification report upload" do
     end
     let(:claim) do
       create(:claim, :submitted,
+        policy: MathsAndPhysics,
         teacher_reference_number: "1234567",
         first_name: "Fred",
         surname: "Smith",
@@ -29,6 +30,8 @@ RSpec.describe "Admin qualification report upload" do
     end
 
     context "when the data in CSV matches the data in the claim" do
+      before { create(:policy_configuration, :maths_and_physics) }
+
       it "creates qualification and identity_confirmation tasks for the claim" do
         expect {
           post admin_qualification_report_uploads_path, params: {file: file}

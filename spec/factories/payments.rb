@@ -22,7 +22,7 @@ FactoryBot.define do
     award_amount { claims.sum(&:award_amount) }
 
     trait :with_figures do
-      # This is a rough approximation of the "grossing up" done by Cantium. It
+      # This is a rough approximation of the "grossing up" done by DfE Payroll. It
       # gives realistic-ish numbers.
       gross_value { gross_pay + employers_national_insurance }
       gross_pay { award_amount + tax + national_insurance }

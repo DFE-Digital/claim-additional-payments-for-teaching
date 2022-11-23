@@ -2,7 +2,7 @@ require "rails_helper"
 
 RSpec.describe DeletePersonalDataFromOldClaimsJob do
   describe "#perform" do
-    let(:current_academic_year) { AcademicYear.for(Date.today) }
+    let(:current_academic_year) { AcademicYear.current }
     let(:last_academic_year) { Time.zone.local(current_academic_year.start_year, 8, 1) }
 
     it "deletes the personal data from eligible claims" do

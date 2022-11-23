@@ -29,6 +29,20 @@ module EarlyCareerPayments
 
     self.table_name = "early_career_payments_eligibilities"
 
+    # Generates an object similar to
+    # {
+    #   <AcademicYear:0x00007f7d87429238 @start_year=2020, @end_year=2021> => "2020/2021",
+    #   <AcademicYear:0x00007f7d87429210 @start_year=2021, @end_year=2022> => "2021/2022",
+    #   <AcademicYear:0x00007f7d87428c98 @start_year=nil, @end_year=nil> => "None"
+    # }
+    # Note: ECP policy began in academic year 2021/22 so the persisted options
+    # should include 2016/17 onward.
+    # In test environment the policy configuration record may not exist
+    ITT_ACADEMIC_YEARS =
+      ((AcademicYear.new(2016)...(PolicyConfiguration.for(EarlyCareerPayments)&.current_academic_year || AcademicYear.current))).each_with_object({}) do |year, hsh|
+        hsh[year] = AcademicYear::Type.new.serialize(year)
+      end.merge({AcademicYear.new => AcademicYear::Type.new.serialize(AcademicYear.new)})
+
     enum qualification: {
       postgraduate_itt: 0,
       undergraduate_itt: 1,
@@ -45,14 +59,7 @@ module EarlyCareerPayments
       computing: 5
     }, _prefix: :itt_subject
 
-    enum itt_academic_year: {
-      AcademicYear.new(2017) => AcademicYear::Type.new.serialize(AcademicYear.new(2017)),
-      AcademicYear.new(2018) => AcademicYear::Type.new.serialize(AcademicYear.new(2018)),
-      AcademicYear.new(2019) => AcademicYear::Type.new.serialize(AcademicYear.new(2019)),
-      AcademicYear.new(2020) => AcademicYear::Type.new.serialize(AcademicYear.new(2020)),
-      AcademicYear.new(2021) => AcademicYear::Type.new.serialize(AcademicYear.new(2021)),
-      AcademicYear.new => AcademicYear::Type.new.serialize(AcademicYear.new)
-    }
+    enum itt_academic_year: ITT_ACADEMIC_YEARS
 
     def self.max_award_amount_in_pounds
       AwardAmountCalculator.max_award_amount_in_pounds
@@ -86,7 +93,7 @@ module EarlyCareerPayments
 
     # Rescues from errors for assignments coming from LUP-only fields
     # eg. `claim.eligibility.eligible_degree_subject = true` will get ignored
-    def assign_attributes(*args)
+    def assign_attributes(*args, **kwargs)
       super
     rescue ActiveRecord::UnknownAttributeError
       all_attributes_ignored = (args.first.keys - IGNORED_ATTRIBUTES).empty?
@@ -136,7 +143,7 @@ module EarlyCareerPayments
       if args.values.any?(&:blank?)
         0
       else
-        AwardAmountCalculator.new(args).amount_in_pounds
+        AwardAmountCalculator.new(**args).amount_in_pounds
       end
     end
 
@@ -195,7 +202,7 @@ module EarlyCareerPayments
         # can still rule some out
         itt_subject_none_of_the_above?
       else
-        itt_subject_checker = JourneySubjectEligibilityChecker.new(args)
+        itt_subject_checker = JourneySubjectEligibilityChecker.new(**args)
         itt_subject_symbol = itt_subject.to_sym
         !itt_subject_symbol.in?(itt_subject_checker.current_and_future_subject_symbols(policy))
       end

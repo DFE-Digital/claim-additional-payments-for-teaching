@@ -1,6 +1,8 @@
 require "rails_helper"
 
 RSpec.feature "Admin checking a claim with matching details" do
+  before { create(:policy_configuration, :student_loans) }
+
   scenario "service operator can check a claim with matching details" do
     claim = create(:claim, :submitted, policy: StudentLoans)
     claim_with_matching_details = create(:claim, :submitted, teacher_reference_number: claim.teacher_reference_number)

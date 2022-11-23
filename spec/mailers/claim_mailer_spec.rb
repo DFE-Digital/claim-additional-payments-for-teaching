@@ -57,6 +57,8 @@ RSpec.describe ClaimMailer, type: :mailer do
   # Characteristics common to all policies
   [EarlyCareerPayments, StudentLoans, LevellingUpPremiumPayments].each do |policy|
     context "with a #{policy} claim" do
+      let!(:policy_configuration) { create(:policy_configuration, policy.to_s.underscore) }
+
       describe "#submitted" do
         let(:claim) { build(:claim, :submitted, policy: policy) }
         let(:mail) { ClaimMailer.submitted(claim) }
@@ -161,6 +163,8 @@ RSpec.describe ClaimMailer, type: :mailer do
 
   [MathsAndPhysics].each do |policy|
     context "with a #{policy} claim" do
+      let!(:policy_configuration) { create(:policy_configuration, policy.to_s.underscore) }
+
       describe "#submitted" do
         let(:claim) { build(:claim, :submitted, policy: policy) }
         let(:mail) { ClaimMailer.submitted(claim) }
@@ -199,11 +203,14 @@ RSpec.describe ClaimMailer, type: :mailer do
             .to include("We have not been able to approve your application")
         end
 
-        it "changes the ITT reason based on the policy's configured current_academic_year" do
-          PolicyConfiguration.for(policy).update!(current_academic_year: "2025/2026")
+        context "with future academic year" do
+          let(:current_year) { AcademicYear.current }
+          let!(:policy_configuration) { create(:policy_configuration, policy.to_s.underscore, current_academic_year: current_year + 4) }
 
-          expect(mail.body.encoded)
-            .to include("We have not been able to approve your application")
+          it "changes the ITT reason based on the policy's configured current_academic_year" do
+            expect(mail.body.encoded)
+              .to include("We have not been able to approve your application")
+          end
         end
       end
 
@@ -224,11 +231,13 @@ RSpec.describe ClaimMailer, type: :mailer do
   describe "#email_verification" do
     let(:mail) { ClaimMailer.email_verification(claim, one_time_password) }
     let(:one_time_password) { 123124 }
-    let(:policy) { 123124 }
     let(:claim) { build(:claim, policy: policy, first_name: "Ellie") }
+
+    before { create(:policy_configuration, policy.to_s.underscore) }
 
     context "with an EarlyCareerPayments claim" do
       let(:policy) { EarlyCareerPayments }
+
       it "has personalisation keys for: one time password, validity_duration,first_name and support_email_address" do
         expect(mail[:personalisation].decoded).to eq("{:email_subject=>\"Early-career payment email verification\", :first_name=>\"Ellie\", :one_time_password=>123124, :support_email_address=>\"earlycareerteacherpayments@digital.education.gov.uk\", :validity_duration=>\"15 minutes\"}")
         expect(mail.body.encoded).to be_empty
@@ -237,6 +246,7 @@ RSpec.describe ClaimMailer, type: :mailer do
 
     context "with an LevellingUpPremiumPayments claim" do
       let(:policy) { LevellingUpPremiumPayments }
+
       it "has personalisation keys for: one time password, validity_duration,first_name and support_email_address" do
         expect(mail[:personalisation].decoded).to eq("{:email_subject=>\"Levelling up premium payment email verification\", :first_name=>\"Ellie\", :one_time_password=>123124, :support_email_address=>\"levellinguppremiumpayments@digital.education.gov.uk\", :validity_duration=>\"15 minutes\"}")
         expect(mail.body.encoded).to be_empty

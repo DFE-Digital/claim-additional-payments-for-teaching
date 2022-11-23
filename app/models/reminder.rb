@@ -36,4 +36,8 @@ class Reminder < ApplicationRecord
       read_attribute(:itt_academic_year)
     )
   end
+
+  def add_invalid_email_error(msg)
+    errors.add(:email_address, :invalid, message: msg)
+  end
 end

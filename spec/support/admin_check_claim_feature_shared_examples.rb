@@ -1,6 +1,9 @@
 RSpec.shared_examples "Admin Check Claim Feature" do |policy|
   context "User is logged in as a service operator" do
-    before { @signed_in_user = sign_in_as_service_operator }
+    before do
+      create(:policy_configuration, policy.to_s.underscore)
+      @signed_in_user = sign_in_as_service_operator
+    end
 
     scenario "User can approve a claim" do
       freeze_time do
@@ -34,7 +37,7 @@ RSpec.shared_examples "Admin Check Claim Feature" do |policy|
     end
 
     scenario "they can reject a claim" do
-      submitted_claims = create_list(:claim, 2, :submitted)
+      submitted_claims = create_list(:claim, 2, :submitted, policy: policy)
       claim_to_reject = submitted_claims.first
 
       click_on "View claims"
@@ -67,7 +70,7 @@ RSpec.shared_examples "Admin Check Claim Feature" do |policy|
       uploading_user = create(:dfe_signin_user, given_name: "Trevor", family_name: "Nelson")
       qualification_task = build(:task, name: "qualifications", created_by: uploading_user, created_at: ten_minutes_ago, manual: false)
       employment_task = build(:task, name: "employment", created_by: checking_user, created_at: ten_minutes_ago, updated_at: one_minute_ago, passed: false, manual: true)
-      claim_with_tasks = create(:claim, :submitted, tasks: [qualification_task, employment_task])
+      claim_with_tasks = create(:claim, :submitted, policy: policy, tasks: [qualification_task, employment_task])
       visit admin_claim_tasks_path(claim_with_tasks)
 
       expect(page).to have_content("Confirm the claimant made the claim Incomplete")
@@ -89,7 +92,7 @@ RSpec.shared_examples "Admin Check Claim Feature" do |policy|
     end
 
     scenario "User can see existing decision details" do
-      claim_with_decision = create(:claim, :submitted)
+      claim_with_decision = create(:claim, :submitted, policy: policy)
       create(:decision, claim: claim_with_decision, result: :approved, notes: "Everything matches")
 
       visit admin_claim_path(claim_with_decision)
@@ -103,7 +106,7 @@ RSpec.shared_examples "Admin Check Claim Feature" do |policy|
     end
 
     scenario "they see an error if they don't choose a Yes/No option on a check" do
-      claim = create(:claim, :submitted)
+      claim = create(:claim, :submitted, policy: policy)
       visit admin_claim_tasks_path(claim)
 
       click_on "Check qualification information"

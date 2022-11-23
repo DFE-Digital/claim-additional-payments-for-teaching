@@ -13,6 +13,8 @@ RSpec.describe MathsAndPhysics::DqtRecord do
 
   # Where are date tests?
   describe "#eligible?" do
+    before { create(:policy_configuration, :maths_and_physics) }
+
     example_eligible_jac_codes.each do |jac_code|
       context "when the given ITT subject (#{jac_code}) is eligible" do
         let(:attributes) { {itt_subject_codes: [jac_code], degree_codes: []} }

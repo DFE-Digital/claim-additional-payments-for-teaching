@@ -1,11 +1,14 @@
 require "rails_helper"
 
 RSpec.feature "Trainee teacher subjourney for LUP schools" do
+  let!(:policy_configuration) { create(:policy_configuration, :additional_payments) }
+  let(:academic_year) { policy_configuration.current_academic_year }
+
   scenario "non-LUP school" do
-    non_lup_school = schools(:penistone_grammar_school)
+    non_lup_school = create(:school, :early_career_payments_eligible, :levelling_up_premium_payments_ineligible)
     expect(LevellingUpPremiumPayments::SchoolEligibility.new(non_lup_school)).not_to be_eligible
 
-    visit new_claim_path(EarlyCareerPayments.routing_name)
+    visit new_claim_path(LevellingUpPremiumPayments.routing_name)
     choose_school non_lup_school
 
     expect(page).to have_text(I18n.t("early_career_payments.questions.nqt_in_academic_year_after_itt.heading"))
@@ -39,7 +42,7 @@ RSpec.feature "Trainee teacher subjourney for LUP schools" do
 
     expect(reminder.full_name).to eq "David Tau"
     expect(reminder.email_address).to eq "david.tau1988@hotmail.co.uk"
-    expect(reminder.itt_academic_year).to eq PolicyConfiguration.for(LevellingUpPremiumPayments).current_academic_year + 1
+    expect(reminder.itt_academic_year).to eq(academic_year + 1)
     expect(reminder.itt_subject).to eq "mathematics"
     expect(page).to have_text("We have set your reminder")
 
@@ -74,7 +77,7 @@ RSpec.feature "Trainee teacher subjourney for LUP schools" do
 
     expect(reminder.full_name).to eq "David Tau"
     expect(reminder.email_address).to eq "david.tau1988@hotmail.co.uk"
-    expect(reminder.itt_academic_year).to eq PolicyConfiguration.for(LevellingUpPremiumPayments).current_academic_year + 1
+    expect(reminder.itt_academic_year).to eq academic_year + 1
     expect(reminder.itt_subject).to eq "none_of_the_above"
     expect(page).to have_text("We have set your reminder")
 
@@ -100,7 +103,7 @@ RSpec.feature "Trainee teacher subjourney for LUP schools" do
   private
 
   def get_to_itt_subject_question
-    lup_school = schools(:hampstead_school)
+    lup_school = create(:school, :combined_journey_eligibile_for_all)
     expect(LevellingUpPremiumPayments::SchoolEligibility.new(lup_school)).to be_eligible
 
     visit new_claim_path(EarlyCareerPayments.routing_name)

@@ -167,6 +167,16 @@ data "azurerm_key_vault_secret" "BigqueryApiJsonKey" {
   name         = "BigqueryApiJsonKey"
   key_vault_id = data.azurerm_key_vault.secrets_kv.id
 }
+data "azurerm_key_vault_secret" "BasicAuthUsername" {
+  count = var.enable_basic_auth ? 1 : 0
+  name         = "BasicAuthUsername"
+  key_vault_id = data.azurerm_key_vault.secrets_kv.id
+}
+data "azurerm_key_vault_secret" "BasicAuthPassword" {
+  count = var.enable_basic_auth ? 1 : 0
+  name         = "BasicAuthPassword"
+  key_vault_id = data.azurerm_key_vault.secrets_kv.id
+}
 
 data "azurerm_service_plan" "app" {
   name                = format("%s-%s", var.app_rg_name, "asp")

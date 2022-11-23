@@ -1,50 +1,65 @@
 RSpec.shared_examples "Admin View Claim Feature" do |policy|
+  let!(:policy_configuration) { create(:policy_configuration, policy.to_s.underscore) }
+  let(:academic_year) { policy_configuration.current_academic_year }
+
   let!(:claim) {
+    eligibility = create("#{policy.to_s.underscore}_eligibility".to_sym, :eligible)
     create(
       :claim,
       :submitted,
-      eligibility: build("#{policy.to_s.underscore}_eligibility".to_sym, :eligible)
+      policy: policy,
+      eligibility: eligibility
     )
   }
 
   let!(:multiple_claim) {
+    eligibility = create("#{policy.to_s.underscore}_eligibility".to_sym, :eligible)
     create(
       :claim,
       :submitted,
-      eligibility: build("#{policy.to_s.underscore}_eligibility".to_sym, :eligible)
+      policy: policy,
+      eligibility: eligibility
     )
   }
 
   let!(:similar_claim) {
+    eligibility = create("#{policy.to_s.underscore}_eligibility".to_sym, :eligible)
     create(
       :claim,
       :submitted,
-      eligibility: build("#{policy.to_s.underscore}_eligibility".to_sym, :eligible),
+      policy: policy,
+      eligibility: eligibility,
       teacher_reference_number: multiple_claim.teacher_reference_number
     )
   }
 
   let!(:approved_awaiting_payroll_claim) {
+    eligibility = create("#{policy.to_s.underscore}_eligibility".to_sym, :eligible)
     create(
       :claim,
       :payrollable,
-      eligibility: build("#{policy.to_s.underscore}_eligibility".to_sym, :eligible)
+      policy: policy,
+      eligibility: eligibility
     )
   }
 
   let!(:approved_paid_claim) {
+    eligibility = create("#{policy.to_s.underscore}_eligibility".to_sym, :eligible)
     create(
       :claim,
       :approved,
-      eligibility: build("#{policy.to_s.underscore}_eligibility".to_sym, :eligible)
+      policy: policy,
+      eligibility: eligibility
     )
   }
 
   let!(:rejected_claim) {
+    eligibility = create("#{policy.to_s.underscore}_eligibility".to_sym, :eligible)
     create(
       :claim,
       :rejected,
-      eligibility: build("#{policy.to_s.underscore}_eligibility".to_sym, :eligible)
+      policy: policy,
+      eligibility: eligibility
     )
   }
 
@@ -52,61 +67,80 @@ RSpec.shared_examples "Admin View Claim Feature" do |policy|
     @signed_in_user = sign_in_as_service_operator
 
     PayrollRun.create_with_claims!([approved_paid_claim], created_by: @signed_in_user)
+
+    # NOTE: mirror claims factory for academic_year attribute "hardcoding" of 2019
+    current_academic_year =
+      if [EarlyCareerPayments, LevellingUpPremiumPayments].include?(policy)
+        academic_year
+      else
+        AcademicYear.new(2019)
+      end
+    @within_academic_year = Time.zone.local(current_academic_year.start_year, 9, 1)
   end
 
-  scenario "filter approved awaiting payroll claims" do
-    visit admin_claims_path
+  scenario "#{policy} filter approved awaiting payroll claims" do
+    travel_to(@within_academic_year) do
+      visit admin_claims_path
 
-    select "Approved awaiting payroll", from: "Status"
-    click_on "Go"
+      select "Approved awaiting payroll", from: "Status"
+      click_on "Apply filters"
 
-    find("a[href='#{admin_claim_tasks_path(approved_awaiting_payroll_claim)}']").click
+      find("a[href='#{admin_claim_tasks_path(approved_awaiting_payroll_claim)}']").click
 
-    expect(page).to have_content("– Approved")
-    expect(page).to have_content("Approved awaiting payroll")
+      expect(page).to have_content("– Approved")
+      expect(page).to have_content("Approved awaiting payroll")
+    end
   end
 
-  scenario "filter approved claims" do
-    visit admin_claims_path
+  scenario "#{policy} filter approved claims" do
+    travel_to(@within_academic_year) do
+      visit admin_claims_path
 
-    select "Approved", from: "Status"
-    click_on "Go"
+      select "Approved", from: "Status"
+      click_on "Apply filters"
 
-    find("a[href='#{admin_claim_tasks_path(approved_paid_claim)}']").click
+      find("a[href='#{admin_claim_tasks_path(approved_paid_claim)}']").click
 
-    expect(page).to have_content("– Approved")
+      expect(page).to have_content("– Approved")
+    end
   end
 
-  scenario "filter rejected claims" do
-    visit admin_claims_path
+  scenario "#{policy} filter rejected claims" do
+    travel_to(@within_academic_year) do
+      visit admin_claims_path
 
-    select "Rejected", from: "Status"
-    click_on "Go"
+      select "Rejected", from: "Status"
+      click_on "Apply filters"
 
-    find("a[href='#{admin_claim_tasks_path(rejected_claim)}']").click
+      find("a[href='#{admin_claim_tasks_path(rejected_claim)}']").click
 
-    expect(page).to have_content("– Rejected")
+      expect(page).to have_content("– Rejected")
+    end
   end
 
-  scenario "view full claim details from index" do
-    visit admin_claims_path
+  scenario "#{policy} view full claim details from index" do
+    travel_to(@within_academic_year) do
+      visit admin_claims_path
 
-    find("a[href='#{admin_claim_tasks_path(claim)}']").click
+      find("a[href='#{admin_claim_tasks_path(claim)}']").click
 
-    expect(page).to have_content(policy.short_name)
+      expect(page).to have_content(policy.short_name)
 
-    expect_page_to_have_policy_sections policy
+      expect_page_to_have_policy_sections policy
 
-    click_on "View full claim"
-    expect(page).to have_content(policy.short_name)
+      click_on "View full claim"
+      expect(page).to have_content(policy.short_name)
+    end
   end
 
-  scenario "has multiple claims" do
-    visit admin_claims_path
+  scenario "#{policy} has multiple claims" do
+    travel_to(@within_academic_year) do
+      visit admin_claims_path
 
-    find("a[href='#{admin_claim_tasks_path(multiple_claim)}']").click
+      find("a[href='#{admin_claim_tasks_path(multiple_claim)}']").click
 
-    expect(page).to have_content("Multiple claims with matching details have been made in this claim window.")
+      expect(page).to have_content("Multiple claims with matching details have been made in this claim window.")
+    end
   end
 
   def expect_page_to_have_policy_sections(policy)

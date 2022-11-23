@@ -6,20 +6,24 @@
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
 
-PolicyConfiguration.create!(policy_types: [StudentLoans], current_academic_year: AcademicYear.current)
-PolicyConfiguration.create!(policy_types: [MathsAndPhysics], current_academic_year: AcademicYear.current)
-# Hardcoded whilst developing LUP for release in Sep 22
-PolicyConfiguration.create!(policy_types: [EarlyCareerPayments, LevellingUpPremiumPayments], current_academic_year: EligibilityCheckable::FIRST_COMBINED_ECP_AND_LUP_POLICY_YEAR)
-
 if Rails.env.development? || ENV["ENVIRONMENT_NAME"] == "review"
+  PolicyConfiguration.create!(policy_types: [StudentLoans], current_academic_year: AcademicYear.current)
+  PolicyConfiguration.create!(policy_types: [MathsAndPhysics], current_academic_year: AcademicYear.current)
+  PolicyConfiguration.create!(policy_types: [EarlyCareerPayments, LevellingUpPremiumPayments], current_academic_year: AcademicYear.current)
+
   ENV["FIXTURES_PATH"] = "spec/fixtures"
   ENV["FIXTURES"] = "local_authorities,local_authority_districts,schools"
   Rake::Task["db:fixtures:load"].invoke
 end
 
 if Rails.env.development?
+  require "./lib/factory_helpers"
+
   class Seeds
     extend FactoryBot::Syntax::Methods
+
+    FactoryHelpers.create_factory_registry
+    FactoryHelpers.reset_factory_registry
 
     if ENV["SEED_ACADEMIC_YEAR"].nil?
       # use original project defaults

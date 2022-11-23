@@ -4,9 +4,9 @@ class Admin::ClaimsController < Admin::BaseAdminController
   before_action :ensure_service_operator
 
   def index
-    @claims = Claim.approved if params[:status] == "approved"
-    @claims = Claim.payrollable if params[:status] == "approved_awaiting_payroll"
-    @claims = Claim.rejected if params[:status] == "rejected"
+    @claims = Claim.current_academic_year.approved if params[:status] == "approved"
+    @claims = Claim.current_academic_year.payrollable if params[:status] == "approved_awaiting_payroll"
+    @claims = Claim.current_academic_year.rejected if params[:status] == "rejected"
     @claims ||= Claim.includes(:decisions).awaiting_decision
 
     @claims = @claims.by_policy(filtered_policy) if filtered_policy
@@ -57,6 +57,6 @@ class Admin::ClaimsController < Admin::BaseAdminController
     return if params[:team_member].blank?
 
     name = params[:team_member].split("-")
-    DfeSignIn::User.find_by(given_name: name.shift, family_name: name).id
+    DfeSignIn::User.not_deleted.find_by(given_name: name.shift, family_name: name).id
   end
 end

@@ -22,7 +22,7 @@ module StudentLoans
   end
 
   def eligibility_page_url
-    "https://www.gov.uk/government/publications/additional-payments-for-teaching-eligibility-and-payment-details/teachers-claim-back-your-student-loan-repayments-eligibility-and-payment-details"
+    "https://www.gov.uk/guidance/teachers-claim-back-your-student-loan-repayments"
   end
 
   def student_loan_balance_url

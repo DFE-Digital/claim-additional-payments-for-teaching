@@ -1,5 +1,8 @@
 RSpec.shared_examples "Admin Search Feature" do |policy|
-  before { sign_in_as_service_operator }
+  before do
+    create(:policy_configuration, policy.to_s.underscore)
+    sign_in_as_service_operator
+  end
 
   let!(:claim1) { create(:claim, :submitted, surname: "Wayne", policy: policy) }
   let!(:claim2) { create(:claim, :submitted, surname: "Wayne", policy: policy) }

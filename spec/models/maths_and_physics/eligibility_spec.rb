@@ -1,6 +1,9 @@
 require "rails_helper"
 
 RSpec.describe MathsAndPhysics::Eligibility, type: :model do
+  let(:eligible_school) { build(:school, :maths_and_physics_eligible) }
+  let(:ineligible_school) { build(:school, :maths_and_physics_ineligible) }
+
   describe "#ineligible?" do
     it "returns false when the eligibility cannot be determined" do
       expect(MathsAndPhysics::Eligibility.new.ineligible?).to eql false
@@ -11,9 +14,20 @@ RSpec.describe MathsAndPhysics::Eligibility, type: :model do
       expect(MathsAndPhysics::Eligibility.new(teaching_maths_or_physics: true).ineligible?).to eql false
     end
 
-    it "returns true when teaching at an ineligible school" do
-      expect(MathsAndPhysics::Eligibility.new(current_school: schools(:hampstead_school)).ineligible?).to eql true
-      expect(MathsAndPhysics::Eligibility.new(current_school: schools(:penistone_grammar_school)).ineligible?).to eql false
+    describe "eligibility of schools" do
+      subject(:eligibility) { MathsAndPhysics::Eligibility.new(current_school: school) }
+
+      context "with an ineligible school" do
+        let(:school) { ineligible_school }
+
+        it { is_expected.to be_ineligible }
+      end
+
+      context "with an eligible school" do
+        let(:school) { eligible_school }
+
+        it { is_expected.not_to be_ineligible }
+      end
     end
 
     it "returns true when initial teacher training was not in science and the claimant has no degree in maths or physics" do
@@ -65,7 +79,7 @@ RSpec.describe MathsAndPhysics::Eligibility, type: :model do
 
     it "returns a symbol indicating the reason for ineligibility" do
       expect(MathsAndPhysics::Eligibility.new(teaching_maths_or_physics: false).ineligibility_reason).to eq :not_teaching_maths_or_physics
-      expect(MathsAndPhysics::Eligibility.new(current_school: schools(:hampstead_school)).ineligibility_reason).to eq :ineligible_current_school
+      expect(MathsAndPhysics::Eligibility.new(current_school: ineligible_school).ineligibility_reason).to eq :ineligible_current_school
       expect(MathsAndPhysics::Eligibility.new(initial_teacher_training_subject: :none_of_the_subjects, has_uk_maths_or_physics_degree: "no").ineligibility_reason).to eq :no_maths_or_physics_qualification
       expect(MathsAndPhysics::Eligibility.new(qts_award_year: "before_cut_off_date").ineligibility_reason).to eq :ineligible_qts_award_year
       expect(MathsAndPhysics::Eligibility.new(employed_as_supply_teacher: true, has_entire_term_contract: false).ineligibility_reason).to eql :no_entire_term_contract
@@ -82,8 +96,8 @@ RSpec.describe MathsAndPhysics::Eligibility, type: :model do
 
   describe "#current_school_name" do
     it "returns the name of the current school" do
-      eligibility = MathsAndPhysics::Eligibility.new(current_school: schools(:penistone_grammar_school))
-      expect(eligibility.current_school_name).to eq schools(:penistone_grammar_school).name
+      eligibility = MathsAndPhysics::Eligibility.new(current_school: eligible_school)
+      expect(eligibility.current_school_name).to eq eligibility.current_school.name
     end
 
     it "does not error if the current school is not set" do
@@ -206,7 +220,7 @@ RSpec.describe MathsAndPhysics::Eligibility, type: :model do
   context "when saving in the “current-school” context" do
     it "validates the presence of the current_school" do
       expect(MathsAndPhysics::Eligibility.new).not_to be_valid(:"current-school")
-      expect(MathsAndPhysics::Eligibility.new(current_school: schools(:penistone_grammar_school))).to be_valid(:"current-school")
+      expect(MathsAndPhysics::Eligibility.new(current_school: eligible_school)).to be_valid(:"current-school")
     end
   end
 
@@ -288,7 +302,7 @@ RSpec.describe MathsAndPhysics::Eligibility, type: :model do
 
     it "is not valid without a value for current_school" do
       expect(build(:maths_and_physics_eligibility, :eligible, current_school: nil)).not_to be_valid(:submit)
-      expect(build(:maths_and_physics_eligibility, :eligible, current_school: schools(:penistone_grammar_school))).to be_valid(:submit)
+      expect(build(:maths_and_physics_eligibility, :eligible, current_school: eligible_school)).to be_valid(:submit)
     end
 
     it "is not valid without a value for initial_teacher_training_subject" do

@@ -1,7 +1,12 @@
 require "rails_helper"
 
 RSpec.describe "Admin claims", type: :request do
-  before { sign_in_as_service_operator }
+  before do
+    create(:policy_configuration, :student_loans)
+    create(:policy_configuration, :maths_and_physics)
+    create(:policy_configuration, :additional_payments)
+    sign_in_as_service_operator
+  end
 
   describe "claims#index" do
     let!(:claims) { create_list(:claim, 3, :submitted) }
@@ -10,7 +15,7 @@ RSpec.describe "Admin claims", type: :request do
     let!(:mary) { create(:dfe_signin_user, given_name: "mary", family_name: "wasu-wabi", organisation_name: "Department for Education", role_codes: [DfeSignIn::User::SERVICE_OPERATOR_DFE_SIGN_IN_ROLE_CODE]) }
     let!(:valentino) { create(:dfe_signin_user, given_name: "Valentino", family_name: "Ricci", organisation_name: "Department for Education", role_codes: [DfeSignIn::User::SERVICE_OPERATOR_DFE_SIGN_IN_ROLE_CODE]) }
     let!(:mette) { create(:dfe_signin_user, given_name: "Mette", family_name: "Jørgensen", organisation_name: "Department for Education", role_codes: [DfeSignIn::User::SERVICE_OPERATOR_DFE_SIGN_IN_ROLE_CODE]) }
-    let!(:raj) { create(:dfe_signin_user, given_name: "raj", family_name: "sathikumar", organisation_name: "Cantium Business Services", role_codes: [DfeSignIn::User::PAYROLL_OPERATOR_DFE_SIGN_IN_ROLE_CODE]) }
+    let!(:raj) { create(:dfe_signin_user, given_name: "raj", family_name: "sathikumar", organisation_name: "DfE Payroll", role_codes: [DfeSignIn::User::PAYROLL_OPERATOR_DFE_SIGN_IN_ROLE_CODE]) }
 
     it "lists all claims awaiting a decision" do
       get admin_claims_path
@@ -91,7 +96,7 @@ RSpec.describe "Admin claims", type: :request do
   end
 
   # Compatible with claims from each policy
-  [MathsAndPhysics, StudentLoans].each do |policy|
+  [MathsAndPhysics, StudentLoans, EarlyCareerPayments, LevellingUpPremiumPayments].each do |policy|
     context "with a #{policy} claim" do
       describe "claims#show" do
         let(:claim) { create(:claim, :submitted, policy: policy) }
@@ -99,10 +104,10 @@ RSpec.describe "Admin claims", type: :request do
         it "displays the claim and eligibility details" do
           get admin_claim_path(claim)
 
-          expect(response.body).to include(claim.reference)
-          expect(response.body).to include(claim.teacher_reference_number)
-          expect(response.body).to include(claim.eligibility.current_school_name)
-          expect(response.body).to include(claim.eligibility.qts_award_year_answer)
+          claim.policy::EligibilityAdminAnswersPresenter.new(claim.eligibility).answers.each do |answer|
+            expect(response.body).to include(answer.first)
+            expect(response.body).to include(answer.last)
+          end
         end
 
         context "when another claim has matching attributes" do

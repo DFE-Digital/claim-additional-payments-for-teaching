@@ -1,6 +1,9 @@
 require "rails_helper"
 
 RSpec.feature "Ineligible Maths and Physics claims" do
+  let!(:policy_configuration) { create(:policy_configuration, :maths_and_physics) }
+  let!(:school) { create(:school, :maths_and_physics_eligible) }
+
   scenario "not teaching maths or physics" do
     visit new_claim_path(MathsAndPhysics.routing_name)
     choose "No"
@@ -13,11 +16,12 @@ RSpec.feature "Ineligible Maths and Physics claims" do
   end
 
   scenario "chooses an ineligible current school" do
+    school = create(:school, :maths_and_physics_ineligible)
     claim = start_maths_and_physics_claim
 
-    choose_school schools(:hampstead_school)
+    choose_school school
 
-    expect(claim.eligibility.reload.current_school).to eq schools(:hampstead_school)
+    expect(claim.eligibility.reload.current_school).to eq school
     expect(page).to have_text("This school is not eligible")
     expect(page).to have_text("You can only get this payment if you are employed to teach at an eligible state-funded secondary school.")
   end
@@ -25,7 +29,7 @@ RSpec.feature "Ineligible Maths and Physics claims" do
   scenario "chooses no degree in maths or physics" do
     claim = start_maths_and_physics_claim
 
-    choose_school schools(:penistone_grammar_school)
+    choose_school school
     choose_initial_teacher_training_subject("Science")
     choose_initial_teacher_training_subject_specialism("Chemistry")
     choose_maths_and_physics_degree("No")
@@ -36,10 +40,10 @@ RSpec.feature "Ineligible Maths and Physics claims" do
   end
 
   scenario "qualified before the first eligible QTS year" do
-    policy_configurations(:maths_and_physics).update!(current_academic_year: "2020/2021")
+    policy_configuration.update!(current_academic_year: "2020/2021")
     claim = start_maths_and_physics_claim
 
-    choose_school schools(:penistone_grammar_school)
+    choose_school school
     choose_initial_teacher_training_subject
     choose_qts_year(:before_cut_off_date)
 
@@ -51,7 +55,7 @@ RSpec.feature "Ineligible Maths and Physics claims" do
   scenario "supply teacher doesn't have a contract for a whole term" do
     claim = start_maths_and_physics_claim
 
-    choose_school schools(:penistone_grammar_school)
+    choose_school school
     choose_initial_teacher_training_subject
     choose_qts_year(:on_or_after_cut_off_date)
 
@@ -68,7 +72,7 @@ RSpec.feature "Ineligible Maths and Physics claims" do
   scenario "supply teacher isn't employed directly by school" do
     claim = start_maths_and_physics_claim
 
-    choose_school schools(:penistone_grammar_school)
+    choose_school school
     choose_initial_teacher_training_subject
     choose_qts_year(:on_or_after_cut_off_date)
 
@@ -87,7 +91,7 @@ RSpec.feature "Ineligible Maths and Physics claims" do
   scenario "subject to disciplinary action" do
     claim = start_maths_and_physics_claim
 
-    choose_school schools(:penistone_grammar_school)
+    choose_school school
     choose_initial_teacher_training_subject
     choose_qts_year(:on_or_after_cut_off_date)
 
@@ -104,7 +108,7 @@ RSpec.feature "Ineligible Maths and Physics claims" do
   scenario "subject to formal action for performance" do
     claim = start_maths_and_physics_claim
 
-    choose_school schools(:penistone_grammar_school)
+    choose_school school
     choose_initial_teacher_training_subject
     choose_qts_year(:on_or_after_cut_off_date)
 

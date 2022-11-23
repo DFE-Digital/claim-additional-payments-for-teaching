@@ -16,7 +16,18 @@ class RemindersController < BasePublicController
 
   def create
     current_reminder.attributes = reminder_params
-    one_time_password
+
+    begin
+      one_time_password
+    rescue Notifications::Client::BadRequestError => e
+      if notify_email_error?(e.message)
+        render first_template_in_sequence
+        return
+      else
+        raise
+      end
+    end
+
     if current_reminder.save(context: current_slug.to_sym)
       session[:reminder_id] = current_reminder.to_param
       redirect_to reminder_path(current_policy_routing_name, next_slug)
@@ -122,8 +133,10 @@ class RemindersController < BasePublicController
   def one_time_password
     case current_slug
     when "personal-details"
-      ReminderMailer.email_verification(current_reminder, otp.code).deliver_now if current_reminder.valid?(:"email-address")
-      session[:sent_one_time_password_at] = Time.now
+      if current_reminder.valid?(:"personal-details")
+        ReminderMailer.email_verification(current_reminder, otp.code).deliver_now
+        session[:sent_one_time_password_at] = Time.now
+      end
     when "email-verification"
       current_reminder.update(sent_one_time_password_at: session[:sent_one_time_password_at], one_time_password_category: :reminder_email)
     end
@@ -144,5 +157,18 @@ class RemindersController < BasePublicController
 
     session.delete(:claim_id)
     session.delete(:reminder_id)
+  end
+
+  def notify_email_error?(msg)
+    case msg
+    when "ValidationError: email_address is a required property"
+      current_reminder.add_invalid_email_error("Enter an email address in the correct format, like name@example.com")
+      true
+    when "BadRequestError: Can’t send to this recipient using a team-only API key"
+      current_reminder.add_invalid_email_error("Only authorised email addresses can be used when using a team-only API key")
+      true
+    else
+      false
+    end
   end
 end

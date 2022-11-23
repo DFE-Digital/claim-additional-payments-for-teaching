@@ -86,7 +86,7 @@ RSpec.describe DfeSignIn::User, type: :model do
     let!(:davide) { create(:dfe_signin_user, given_name: "Davide", family_name: "Muzani", organisation_name: "Department for Education", role_codes: [DfeSignIn::User::SERVICE_OPERATOR_DFE_SIGN_IN_ROLE_CODE]) }
     let!(:tina) { create(:dfe_signin_user, given_name: "Tina", family_name: "Dee", organisation_name: "Department for Education", role_codes: [DfeSignIn::User::SERVICE_OPERATOR_DFE_SIGN_IN_ROLE_CODE]) }
     let!(:muhammad) { create(:dfe_signin_user, given_name: "Muhammad", family_name: "Khan", organisation_name: "Department for Education", role_codes: [DfeSignIn::User::SERVICE_OPERATOR_DFE_SIGN_IN_ROLE_CODE]) }
-    let!(:tripti) { create(:dfe_signin_user, given_name: "Tripti", family_name: "Kumar", organisation_name: "Cantium Business Services", role_codes: [DfeSignIn::User::PAYROLL_OPERATOR_DFE_SIGN_IN_ROLE_CODE]) }
+    let!(:tripti) { create(:dfe_signin_user, given_name: "Tripti", family_name: "Kumar", organisation_name: "DfE Payroll", role_codes: [DfeSignIn::User::PAYROLL_OPERATOR_DFE_SIGN_IN_ROLE_CODE]) }
 
     it "returns an array of 'Service Operators' for use with select helper" do
       expect(described_class.options_for_select).to match_array(
@@ -107,7 +107,7 @@ RSpec.describe DfeSignIn::User, type: :model do
     let!(:florence) { create(:dfe_signin_user, given_name: "Florence", family_name: "Mani", organisation_name: "Department for Education", role_codes: [DfeSignIn::User::SERVICE_OPERATOR_DFE_SIGN_IN_ROLE_CODE]) }
     let!(:rudi) { create(:dfe_signin_user, given_name: "Rudi", family_name: "Gogen-Swift", organisation_name: "Department for Education", role_codes: [DfeSignIn::User::SERVICE_OPERATOR_DFE_SIGN_IN_ROLE_CODE]) }
     let!(:henrietta) { create(:dfe_signin_user, given_name: "henrietta", family_name: "krafstein", organisation_name: "Department for Education", role_codes: [DfeSignIn::User::SERVICE_OPERATOR_DFE_SIGN_IN_ROLE_CODE]) }
-    let!(:miguel) { create(:dfe_signin_user, given_name: "Miguel", family_name: "Hernández", organisation_name: "Cantium Business Services", role_codes: [DfeSignIn::User::PAYROLL_OPERATOR_DFE_SIGN_IN_ROLE_CODE]) }
+    let!(:miguel) { create(:dfe_signin_user, given_name: "Miguel", family_name: "Hernández", organisation_name: "DfE Payroll", role_codes: [DfeSignIn::User::PAYROLL_OPERATOR_DFE_SIGN_IN_ROLE_CODE]) }
 
     it "returns an array of 'Service Operators' for use with select helper" do
       expect(described_class.options_for_select_by_name).to match_array(
@@ -121,6 +121,59 @@ RSpec.describe DfeSignIn::User, type: :model do
 
     it "does not include 'Payroll Operator' role" do
       expect(described_class.options_for_select_by_name).not_to include([miguel.full_name.titleize, "miguel-hernández"])
+    end
+  end
+
+  describe ".not_deleted" do
+    let!(:not_deleted_user) { create(:dfe_signin_user) }
+
+    before { create(:dfe_signin_user, :deleted) }
+
+    it "returns only users without deleted timestamp" do
+      expect(described_class.not_deleted.to_a).to eq [not_deleted_user]
+    end
+  end
+
+  describe "#mark_as_deleted!" do
+    context "when the user is not already deleted" do
+      let(:user) { create(:dfe_signin_user) }
+
+      it "sets the user 'deleted_at' timestamp to the current time" do
+        freeze_time do
+          expect { user.mark_as_deleted! }.to change { user.deleted_at }.from(nil).to(Time.zone.now)
+        end
+      end
+
+      context "when the user has claims assigned" do
+        let!(:claim) { create(:claim, :submitted, assigned_to: user) }
+
+        it "unassigns their claims" do
+          user.mark_as_deleted!
+          expect(claim.reload.assigned_to).to be_nil
+        end
+      end
+    end
+
+    context "when the user is already deleted" do
+      let(:user) { create(:dfe_signin_user, :deleted) }
+
+      it "does not change the flag if was already enabled" do
+        expect { user.mark_as_deleted! }.not_to change(user, :deleted_at)
+      end
+    end
+  end
+
+  describe "#deleted?" do
+    context "when the user is deleted" do
+      subject(:user) { create(:dfe_signin_user, :deleted) }
+
+      it { is_expected.to be_deleted }
+    end
+
+    context "when the user is not already deleted" do
+      subject(:user) { create(:dfe_signin_user) }
+
+      it { is_expected.not_to be_deleted }
     end
   end
 end

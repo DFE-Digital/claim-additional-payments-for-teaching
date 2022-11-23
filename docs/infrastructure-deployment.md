@@ -14,14 +14,8 @@ deployment of a version of the application.
 
 ## Manual deployment
 
-Deployments of changes to the infrastructure are a lot less frequent than the
-application so they can be triggered manually.
-
-### Deploying to an environment
-
-The same terraform templates are used to deploy to all three environments, all
-three deployments are done via Azure DevOps and have approval gates for the two
-higher environments.
+Automated deployment should always be the first option but it may be required to
+deploy manually for troubleshooting.
 
 ### Requesting permissions to acess the infrastructure in higer environments
 
@@ -36,18 +30,20 @@ higher environments.
   requested permissions and will be able to grant your permissions.
 
 You will need to carry out a Privileged Identity Management request to deploy to
-the test environment. See
+the test or production environments. See
 [Privileged Identity Management requests](https://dfedigital.atlassian.net/wiki/spaces/TP/pages/1192624202/Privileged+Identity+Management+requests)
 for more.
 
-Deployments rely on having web access to the current version of the Git
-repository (they attempt to fetch the current commit hash from GitHub). To test
-changes, you'll need to push them up to GitHub in a work in progress commit
-before running `bin/azure-deploy`. **Beware of accidentally pushing up secrets
-when doing this.**
+### Deploying to an environment
+
+The docker image must be already built. It may be required to create a pull
+request to let the build process run. All the available image tags are listed on
+DockerHub: https://hub.docker.com/r/dfedigital/teacher-payments-service/tags
+
+- Verify changes: `make <environment> terraform-plan IMAGE_TAG=xyz`
+- Apply changes: `make <environment> terraform-apply IMAGE_TAG=xyz`
 
 [azure]: https://azure.microsoft.com/en-gb/
 [iac]: https://en.wikipedia.org/wiki/Infrastructure_as_code
 [arm]: https://azure.microsoft.com/en-gb/resources/templates/
-[building_blocks]: https://github.com/DFE-Digital/bat-platform-building-blocks
 [azure_portal]: https://portal.azure.com/

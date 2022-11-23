@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.describe StudentLoans, type: :model do
-  let(:policy_configuration) { policy_configurations(:student_loans) }
+  let!(:policy_configuration) { create(:policy_configuration, :student_loans) }
 
   describe ".first_eligible_qts_award_year" do
     it "returns 11 years prior to the currently configured academic year, with a floor of the 2013/2014 academic year" do
@@ -25,9 +25,6 @@ RSpec.describe StudentLoans, type: :model do
 
   describe ".current_financial_year" do
     it "returns a human-friendly string for the financial year the policy is currently accepting claims for" do
-      # Based on the current academic year set by the policy_configurations.yml fixtures
-      expect(StudentLoans.current_financial_year).to eq "6 April 2024 and 5 April 2025"
-
       policy_configuration.update!(current_academic_year: "2020/2021")
       expect(StudentLoans.current_financial_year).to eq "6 April 2019 and 5 April 2020"
     end

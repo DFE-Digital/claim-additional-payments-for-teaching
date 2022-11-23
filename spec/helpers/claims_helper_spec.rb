@@ -2,7 +2,7 @@ require "rails_helper"
 
 describe ClaimsHelper do
   describe "#eligibility_answers" do
-    let(:school) { schools(:penistone_grammar_school) }
+    let(:school) { create(:school) }
     let(:eligibility) do
       build(
         :student_loans_eligibility,
@@ -171,12 +171,15 @@ describe ClaimsHelper do
   end
 
   describe "#student_loan_answers" do
-    let(:claim) { build(:claim, student_loan_trait, masters_doctoral_trait, eligibility: eligibility) }
+    let(:claim) { build(:claim, student_loan_trait, masters_doctoral_trait, policy: policy, eligibility: eligibility) }
     let(:student_loan_trait) { :with_student_loan }
 
     context "TSLR (Student Loans) policy" do
+      let(:policy) { StudentLoans }
       let(:eligibility) { build(:student_loans_eligibility, student_loan_repayment_amount: 1987.65) }
       let(:masters_doctoral_trait) { :with_postgraduate_masters_loan_without_postgraduate_doctoral_loan_when_has_student_loan }
+
+      before { create(:policy_configuration, :student_loans) }
 
       it "returns an array of question and answers for the student loan and postgraduate masters and doctoral loan questions" do
         expected_answers = [
@@ -235,6 +238,7 @@ describe ClaimsHelper do
     end
 
     context "Early-Career Payment policy" do
+      let(:policy) { EarlyCareerPayments }
       let(:eligibility) { build(:early_career_payments_eligibility) }
       let(:masters_doctoral_trait) { :with_postgraduate_doctoral_loan_without_postgraduate_masters_loan_when_has_student_loan }
 
@@ -287,7 +291,7 @@ describe ClaimsHelper do
       end
 
       context "when claimant answered 'No' to 'Paying off Student Loan' and 'Yes' to 'Take out a Postgraduate Masters or Doctoral Loan'" do
-        let(:claim) { build(:claim, student_loan_trait, masters_doctoral_trait, has_masters_doctoral_loan: true, eligibility: eligibility) }
+        let(:claim) { build(:claim, student_loan_trait, masters_doctoral_trait, policy: EarlyCareerPayments, has_masters_doctoral_loan: true, eligibility: eligibility) }
         let(:eligibility) { build(:early_career_payments_eligibility) }
         let(:student_loan_trait) { :with_no_student_loan }
 
@@ -304,7 +308,7 @@ describe ClaimsHelper do
       end
 
       context "when claimant answered 'No' to 'Paying off Student Loan' and 'No' to 'Take out a Postgraduate Masters or Doctoral Loan'" do
-        let(:claim) { build(:claim, student_loan_trait, masters_doctoral_trait, has_masters_doctoral_loan: false, eligibility: eligibility) }
+        let(:claim) { build(:claim, student_loan_trait, masters_doctoral_trait, policy: EarlyCareerPayments, has_masters_doctoral_loan: false, eligibility: eligibility) }
         let(:eligibility) { build(:early_career_payments_eligibility) }
         let(:student_loan_trait) { :with_no_student_loan }
 
