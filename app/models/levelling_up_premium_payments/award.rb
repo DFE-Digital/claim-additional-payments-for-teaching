@@ -1,46 +1,10 @@
 module LevellingUpPremiumPayments
-  class Award
-    # The spreadsheet attached to https://dfedigital.atlassian.net/browse/CAPT-253
-    # contains the pre-computed amount as a currency string like "£2,000.00" or
-    # "No payment".
-    def initialize(school:, year:)
-      raise "nil school" if school.nil?
-      raise "nil year" if year.nil?
+  class Award < ApplicationRecord
+    self.table_name = "levelling_up_premium_payments_awards"
 
-      raise "no LUP award mapping for #{year}" unless year.in? self.class.year_to_awards
+    belongs_to :school, foreign_key: :school_urn, primary_key: :urn, inverse_of: :levelling_up_premium_payments_awards, optional: true
 
-      @school = school
-      @year = year
-    end
-
-    def self.max(year)
-      if @year_to_max.nil?
-        @year_to_max = {}
-      end
-
-      unless @year_to_max.has_key?(year)
-        @year_to_max.store(year, urn_to_award_amount_in_pounds(year).values.max)
-      end
-
-      @year_to_max.fetch(year)
-    end
-
-    def self.urn_to_award_amount_in_pounds(year)
-      year_to_awards.fetch(year)
-    end
-
-    def self.year_to_awards
-      {AcademicYear.new(2022) => urn_to_award_amount_in_pounds_for_2022_to_2023}
-    end
-
-    def has_award?
-      amount_in_pounds.positive?
-    end
-
-    def amount_in_pounds
-      self.class.urn_to_award_amount_in_pounds(@year).fetch(@school.urn, 0)
-    end
-
+    # TODO: this data is OUTDATED and the method should be removed some time after the database migration is run
     private_class_method def self.urn_to_award_amount_in_pounds_for_2022_to_2023
       @urn_to_award_amount_in_pounds_for_2022_to_2023 ||= {
         100006 => 2_000,

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_11_21_140400) do
+ActiveRecord::Schema.define(version: 2022_11_24_114947) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -147,6 +147,18 @@ ActiveRecord::Schema.define(version: 2022_11_21_140400) do
     t.text "body"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "levelling_up_premium_payments_awards", force: :cascade do |t|
+    t.string "academic_year", limit: 9, null: false
+    t.integer "school_urn", null: false
+    t.decimal "award_amount", precision: 7, scale: 2
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["academic_year", "school_urn"], name: "lupp_award_by_year_and_urn"
+    t.index ["academic_year"], name: "lupp_award_by_year"
+    t.index ["award_amount"], name: "lupp_award_by_amount"
+    t.index ["school_urn"], name: "lupp_award_by_urn"
   end
 
   create_table "levelling_up_premium_payments_eligibilities", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
