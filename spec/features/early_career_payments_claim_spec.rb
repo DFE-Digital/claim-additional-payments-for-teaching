@@ -12,7 +12,7 @@ RSpec.feature "Teacher Early-Career Payments claims" do
 
   scenario "Teacher makes claim for 'Early-Career Payments' claim" do
     visit landing_page_path(EarlyCareerPayments.routing_name)
-    expect(page).to have_link("Claim Additional Payments for Teaching", href: "/additional-payments/landing-page")
+    expect(page).to have_link("Claim additional payments for teaching", href: "/additional-payments/landing-page")
     expect(page).to have_link(href: "mailto:#{EarlyCareerPayments.feedback_email}")
 
     # - Landing (start)
