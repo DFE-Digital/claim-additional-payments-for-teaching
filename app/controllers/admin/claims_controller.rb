@@ -20,7 +20,14 @@ class Admin::ClaimsController < Admin::BaseAdminController
     @pagy, @claims = pagy(@claims)
 
     respond_to do |format|
-      format.html
+      format.html {
+        claims_backlink_path!(admin_claims_path(
+          team_member: params[:team_member],
+          policy: params[:policy],
+          status: params[:status],
+          commit: params[:commit]
+        ))
+      }
       format.csv {
         send_data Claim::DataReportRequest.new(all_claims).to_csv,
           filename: "dqt_report_request_#{Date.today.iso8601}.csv"
@@ -43,7 +50,10 @@ class Admin::ClaimsController < Admin::BaseAdminController
     if @claims.none?
       flash.now[:notice] = "Cannot find a claim for query \"#{params[:query]}\""
     elsif @claims.one?
+      claims_backlink_path!(search_admin_claims_path)
       redirect_to(admin_claim_tasks_url(@claims.first))
+    else
+      claims_backlink_path!(search_admin_claims_path(query: params[:query]))
     end
   end
 
@@ -58,5 +68,10 @@ class Admin::ClaimsController < Admin::BaseAdminController
 
     name = params[:team_member].split("-")
     DfeSignIn::User.not_deleted.find_by(given_name: name.shift, family_name: name).id
+  end
+
+  # Stores where View Claim originated from, e.g. claims index or search results
+  def claims_backlink_path!(source_path)
+    session[:claims_backlink_path] = source_path
   end
 end
