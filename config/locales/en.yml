@@ -278,7 +278,7 @@ en:
       heading_send_application: Now send your application
       statement: By submitting this you are confirming that, to the best of your knowledge, the details you are providing are correct.
       btn_text: Accept and send
-    policy_name: "Claim Additional Payments for Teaching"
+    policy_name: "Claim additional payments for teaching"
     policy_short_name: "Early-Career Payments"
     policy_acronym: "ECP"
     payment_name: "Early-career payment"

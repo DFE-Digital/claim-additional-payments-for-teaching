@@ -78,7 +78,7 @@ RSpec.feature "Service configuration" do
 
       click_on "Manage services"
 
-      expect(page).to have_content("Claim Additional Payments for Teaching")
+      expect(page).to have_content("Claim additional payments for teaching")
       within(find("tr[data-policy-configuration-id=\"#{policy_configuration.id}\"]")) do
         expect(page).to have_content("Closed")
         expect(page).not_to have_content("Open")
