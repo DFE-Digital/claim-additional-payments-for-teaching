@@ -67,3 +67,44 @@
     <% end %>
   </div>
 </div>
+
+<hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
+
+<% if @policy_configuration.additional_payments? %>
+<div class="govuk-grid-row" id="download">
+  <div class="govuk-grid-column-two-thirds">
+    <h2 class="govuk-heading-m">
+      Download Levelling Up Premium Payments School Awards
+    </h2>
+
+    <div class="govuk-panel govuk-panel--informational govuk-panel--small">
+      <% if lupp_awards_last_updated_at %>
+        <p class="govuk-panel__body">
+          The award amounts for academic year <%= @policy_configuration.current_academic_year %> were updated on <%= l(lupp_awards_last_updated_at) %>
+        </p>
+      <% else %>
+        <p class="govuk-panel__body">
+          No award amounts present for academic year <%= @policy_configuration.current_academic_year %>.
+        </p>
+      <% end %>
+    </div>
+
+    <% if lupp_awards_academic_years.any? %>
+      <%= form_with model: [:admin, LevellingUpPremiumPayments::Award], method: :get do |form| %>
+      <div class="govuk-form-group">
+        <label class="govuk-label" for="download_academic_year">
+          Academic year
+        </label>
+        <select class="govuk-select" id="download_academic_year" name="academic_year">
+          <% lupp_awards_academic_years.each do |option| %>
+            <option value="<%= option %>"><%= option %></option>
+          <% end %>
+        </select>
+
+        <%= form.submit "Download CSV", class: "govuk-button", data: { module: "govuk-button" } %>
+      </div>
+      <% end %>
+    <% end %>
+  </div>
+</div>
+<% end %>

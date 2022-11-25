@@ -1,6 +1,6 @@
 module Admin
   class PolicyConfigurationsController < BaseAdminController
-    helper_method :policy_configuration
+    helper_method :policy_configuration, :lupp_awards_last_updated_at, :lupp_awards_academic_years
     before_action :ensure_service_operator, :policy_configuration
     after_action :send_reminders, only: [:update]
 
@@ -32,6 +32,14 @@ module Admin
       return unless policy_configuration.open_for_submissions && policy_configuration.additional_payments?
 
       SendReminderEmailsJob.perform_later
+    end
+
+    def lupp_awards_last_updated_at
+      LevellingUpPremiumPayments::Award.last_updated_at(@policy_configuration.current_academic_year) if @policy_configuration.additional_payments?
+    end
+
+    def lupp_awards_academic_years
+      LevellingUpPremiumPayments::Award.distinct_academic_years if @policy_configuration.additional_payments?
     end
   end
 end

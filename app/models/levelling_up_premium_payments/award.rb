@@ -1,8 +1,30 @@
+require "csv"
+
 module LevellingUpPremiumPayments
   class Award < ApplicationRecord
     self.table_name = "levelling_up_premium_payments_awards"
 
     belongs_to :school, foreign_key: :school_urn, primary_key: :urn, inverse_of: :levelling_up_premium_payments_awards, optional: true
+
+    def self.csv_for_academic_year(academic_year)
+      attribute_names = [:school_urn, :award_amount]
+
+      CSV.generate(headers: true) do |csv|
+        csv << attribute_names
+
+        where(academic_year: academic_year.to_s).each do |row|
+          csv << attribute_names.map { |attr| row.send(attr) }
+        end
+      end
+    end
+
+    def self.last_updated_at(academic_year)
+      where(academic_year: academic_year.to_s).last&.updated_at
+    end
+
+    def self.distinct_academic_years
+      select(:academic_year).distinct.order(academic_year: :desc).map(&:academic_year)
+    end
 
     # TODO: this data is OUTDATED and the method should be removed some time after the database migration is run
     private_class_method def self.urn_to_award_amount_in_pounds_for_2022_to_2023

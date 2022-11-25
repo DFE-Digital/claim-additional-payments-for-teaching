@@ -112,6 +112,8 @@ Rails.application.routes.draw do
     end
 
     resources :policy_configurations, only: [:index, :edit, :update]
+    resources :levelling_up_premium_payments_awards, only: [:index]
+
     get "refresh-session", to: "sessions#refresh", as: :refresh_session
 
     patch "allocate/:id", to: "allocations#allocate", as: :allocate
