@@ -6,6 +6,11 @@ module LevellingUpPremiumPayments
 
     belongs_to :school, foreign_key: :school_urn, primary_key: :urn, inverse_of: :levelling_up_premium_payments_awards, optional: true
 
+    validates :academic_year, presence: true
+    validates :school_urn, presence: true, numericality: true
+    validates :award_amount, presence: true
+    validates :award_amount, numericality: {greater_than: 0}
+
     def self.csv_for_academic_year(academic_year)
       attribute_names = [:school_urn, :award_amount]
 
