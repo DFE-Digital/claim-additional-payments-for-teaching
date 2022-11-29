@@ -16,6 +16,7 @@ RSpec.feature "Admin claim filtering" do
   let!(:student_loans_claims_for_valentino) { create_list(:claim, 1, :submitted, policy: StudentLoans, assigned_to: valentino) }
   let!(:early_career_payments_claims_for_mary) { create_list(:claim, 2, :submitted, policy: EarlyCareerPayments, assigned_to: mary) }
   let!(:early_career_payments_claims_for_mette) { create_list(:claim, 8, :submitted, policy: EarlyCareerPayments, assigned_to: mette) }
+  let!(:lup_claims_unassigned) { create_list(:claim, 2, :submitted, policy: LevellingUpPremiumPayments) }
 
   scenario "the service operator can filter claims by policy" do
     maths_and_physics_claims = create_list(:claim, 3, :submitted, policy: MathsAndPhysics)
@@ -48,7 +49,7 @@ RSpec.feature "Admin claim filtering" do
     click_on "View claims"
 
     # Excludes payroll users and deleted users
-    expect(page).to have_select("team_member", options: ["All", "#{user.given_name} #{user.family_name}", "Mary Wasu Wabi", "Valentino Ricci", "Mette Jørgensen"])
+    expect(page).to have_select("team_member", options: ["All", "Unassigned", "#{user.given_name} #{user.family_name}", "Mary Wasu Wabi", "Valentino Ricci", "Mette Jørgensen"])
 
     select "Mette Jørgensen", from: "team_member"
     click_on "Apply filters"
@@ -62,7 +63,29 @@ RSpec.feature "Admin claim filtering" do
 
     [
       student_loans_claims_for_valentino,
-      early_career_payments_claims_for_mary
+      early_career_payments_claims_for_mary,
+      lup_claims_unassigned
+    ].flatten.each do |c|
+      expect(page).to_not have_content(c.reference)
+    end
+  end
+
+  scenario "filter unassigned claims" do
+    click_on "View claims"
+    select "Unassigned", from: "team_member"
+    click_on "Apply filters"
+
+    expect(page.find("table")).to have_content("LUP").exactly(2).times
+
+    lup_claims_unassigned.each do |c|
+      expect(page).to have_content(c.reference)
+    end
+
+    [
+      student_loans_claims_for_mette,
+      student_loans_claims_for_valentino,
+      early_career_payments_claims_for_mary,
+      early_career_payments_claims_for_mette
     ].flatten.each do |c|
       expect(page).to_not have_content(c.reference)
     end

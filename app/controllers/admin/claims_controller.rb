@@ -11,6 +11,7 @@ class Admin::ClaimsController < Admin::BaseAdminController
 
     @claims = @claims.by_policy(filtered_policy) if filtered_policy
     @claims = @claims.by_claims_team_member(filtered_team_member) if filtered_team_member
+    @claims = @claims.unassigned if filtered_unassigned
 
     @claims = @claims.includes(:tasks, eligibility: [:claim_school, :current_school])
     @claims = @claims.order(:submitted_at)
@@ -64,10 +65,14 @@ class Admin::ClaimsController < Admin::BaseAdminController
   end
 
   def filtered_team_member
-    return if params[:team_member].blank?
+    return if params[:team_member].blank? || filtered_unassigned
 
     name = params[:team_member].split("-")
     DfeSignIn::User.not_deleted.find_by(given_name: name.shift, family_name: name).id
+  end
+
+  def filtered_unassigned
+    params[:team_member] == "unassigned"
   end
 
   # Stores where View Claim originated from, e.g. claims index or search results

@@ -122,7 +122,7 @@ module AutomatedChecks
           end
 
           <<~HTML
-            [Employment] - #{match == :none ? "Ine" : "E"}ligible:
+            [Employment] - #{(match == :none) ? "Ine" : "E"}ligible:
             <pre>#{schools_details}</pre>
           HTML
         end

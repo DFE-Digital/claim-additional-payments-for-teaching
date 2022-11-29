@@ -73,7 +73,7 @@ module Admin
       days_until_decision_deadline = days_between(Date.today, claim.decision_deadline_date)
       return I18n.t("admin.decision_overdue_not_applicable") if days_until_decision_deadline.days > Claim::DECISION_DEADLINE_WARNING_POINT
 
-      decision_deadline_warning_class = days_until_decision_deadline < 0 ? "tag--alert" : "tag--information"
+      decision_deadline_warning_class = (days_until_decision_deadline < 0) ? "tag--alert" : "tag--information"
       content_tag(:strong, pluralize(days_until_decision_deadline, "day"), class: "govuk-tag #{decision_deadline_warning_class}")
     end
 

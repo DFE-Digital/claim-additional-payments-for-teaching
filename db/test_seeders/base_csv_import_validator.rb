@@ -64,7 +64,7 @@ module TestSeeders
           record["Trn"] == unsubmitted_claim.teacher_reference_number
         end
         logger.warn "#{WARN} Row: #{records_with_unsubmitted_claims + 1} / Trn: #{unsubmitted_claim.teacher_reference_number} / Error(s):"
-        logger.warn "#{WARN_L2} \'#{unsubmitted_claim.errors.messages[:base].first}\'"
+        logger.warn "#{WARN_L2} '#{unsubmitted_claim.errors.messages[:base].first}'"
         logger.warn "#{WARN_L2} CSV ITT Cohort Year: #{records[records_with_unsubmitted_claims + 1]["ITT Cohort Year"]}"
       end
     end

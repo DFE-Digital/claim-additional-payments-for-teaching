@@ -20,7 +20,7 @@ RSpec.feature "Admin claim tasks update with DQT API" do
       claim.save!
 
       visit claim_path(claim.policy.routing_name, "check-your-answers")
-      claim_attributes[:policy] == EarlyCareerPayments ? click_on("Accept and send") : click_on("Confirm and send")
+      (claim_attributes[:policy] == EarlyCareerPayments) ? click_on("Accept and send") : click_on("Confirm and send")
     end
 
     claim
