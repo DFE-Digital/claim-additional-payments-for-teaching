@@ -42,7 +42,7 @@ class RecordBuilder
   def build_record
     gender ||= payroll_gender
     Struct::DataRecord.new(
-      gender == :male ? "M" : "F",
+      (gender == :male) ? "M" : "F",
       [first_name(gender), surname].join(" "),
       dob,
       rand(1000000..9999999).to_s,
@@ -73,7 +73,7 @@ class RecordBuilder
 
   def payroll_gender
     gender = %i[male female dont_know].sample
-    gender == :dont_know ? %i[male female].sample : gender
+    (gender == :dont_know) ? %i[male female].sample : gender
   end
 
   def first_name(gender)

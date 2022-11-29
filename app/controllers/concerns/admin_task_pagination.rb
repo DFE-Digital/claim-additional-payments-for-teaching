@@ -3,7 +3,7 @@ module AdminTaskPagination
     return @claim_checking_tasks.applicable_task_names.last unless current_task_index.present?
 
     previous_index = current_task_index - 1
-    previous_index >= 0 ? @claim_checking_tasks.applicable_task_names[current_task_index - 1] : nil
+    (previous_index >= 0) ? @claim_checking_tasks.applicable_task_names[current_task_index - 1] : nil
   end
 
   def next_task_name

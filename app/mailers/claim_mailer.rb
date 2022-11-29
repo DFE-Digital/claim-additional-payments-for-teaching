@@ -45,7 +45,7 @@ class ClaimMailer < ApplicationMailer
         first_name: @claim.first_name,
         ref_number: @claim.reference,
         support_email_address: @support_email_address,
-        current_financial_year: claim.policy == StudentLoans ? StudentLoans.current_financial_year : ""
+        current_financial_year: (claim.policy == StudentLoans) ? StudentLoans.current_financial_year : ""
       }
 
       send_mail(:notify, template_ids(claim)[:CLAIM_REJECTED_NOTIFY_TEMPLATE_ID], personalisation)

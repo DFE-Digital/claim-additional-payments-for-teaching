@@ -7,7 +7,7 @@ module DfeSignIn
     private
 
     def unknown_user(user, include_line_break)
-      join_chr = include_line_break == true ? "<br/>" : " "
+      join_chr = (include_line_break == true) ? "<br/>" : " "
 
       [
         "Unknown user",

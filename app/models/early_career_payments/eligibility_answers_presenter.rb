@@ -145,7 +145,7 @@ module EarlyCareerPayments
         translate("early_career_payments.answers.eligible_itt_subject.#{eligibility.eligible_itt_subject}")
       else
         subject_symbol = subjects.first
-        subject_symbol == eligibility.eligible_itt_subject.to_sym ? "Yes" : "No"
+        (subject_symbol == eligibility.eligible_itt_subject.to_sym) ? "Yes" : "No"
       end
     end
   end
