@@ -3,10 +3,7 @@ module Admin
     helper_method :policy_configuration
 
     def index
-      response.headers["Content-Type"] = "text/csv"
-      response.headers["Content-Disposition"] = "attachment; filename=awards_#{academic_year}.csv"
-
-      send_data LevellingUpPremiumPayments::Award.csv_for_academic_year(academic_year), filename: "awards_#{academic_year}.csv"
+      send_data LevellingUpPremiumPayments::Award.csv_for_academic_year(academic_year), type: "text/csv", filename: "awards_#{academic_year}.csv"
     end
 
     def create
