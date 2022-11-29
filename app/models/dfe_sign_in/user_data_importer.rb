@@ -32,7 +32,7 @@ module DfeSignIn
     end
 
     def users_no_longer_present
-      DfeSignIn::User.all.map(&:dfe_sign_in_id) - dfe_sign_in_users.map(&:user_id)
+      (DfeSignIn::User.all.map(&:dfe_sign_in_id) - dfe_sign_in_users.map(&:user_id)).compact
     end
   end
 end
