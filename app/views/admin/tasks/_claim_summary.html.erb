@@ -11,6 +11,10 @@
   </h1>
 </div>
 
+<div class="govuk-grid-column-full">
+  <%= render("admin/claims/banner", important_notes: @claim.important_notes) if @claim.important_notes.any? %>
+</div>
+
 <%= render "shared/assignment_banner", claim: @claim %>
 
 <div class="govuk-grid-column-one-half">

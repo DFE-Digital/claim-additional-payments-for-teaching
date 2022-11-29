@@ -62,6 +62,16 @@ RSpec.describe DfeSignIn::UserDataImporter, type: :model do
         DfeSignIn::UserDataImporter.new.run
         expect(existing_user.reload).to be_deleted
       end
+
+      # This scenario happens after first login when using the 'bypass DfE Sign-in' button
+      context "when the user does not have a dfe_sign_in_id (dummy user)" do
+        let!(:existing_user) { create(:dfe_signin_user, dfe_sign_in_id: nil) }
+
+        it "does not delete the user" do
+          DfeSignIn::UserDataImporter.new.run
+          expect(existing_user.reload).not_to be_deleted
+        end
+      end
     end
   end
 end
