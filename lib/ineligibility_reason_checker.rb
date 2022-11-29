@@ -80,7 +80,7 @@ class IneligibilityReasonChecker
   end
 
   def would_be_eligible_for_one_policy_only_except_for_insufficient_teaching?(policy)
-    other_policy = policy == EarlyCareerPayments ? LevellingUpPremiumPayments : EarlyCareerPayments
+    other_policy = (policy == EarlyCareerPayments) ? LevellingUpPremiumPayments : EarlyCareerPayments
 
     [
       eligible_with_sufficient_teaching?(policy),

@@ -68,7 +68,7 @@ RSpec.feature "Completed Applications - Reminders" do
       end
 
       policy[:eligible_now].each do |scenario|
-        reminder_status = scenario[:invited_to_set_reminder] == true ? "CAN" : "CANNOT"
+        reminder_status = (scenario[:invited_to_set_reminder] == true) ? "CAN" : "CANNOT"
         scenario "with cohort ITT subject #{scenario[:itt_subject]} in ITT academic year #{scenario[:itt_academic_year]} - a reminder #{reminder_status} be set" do
           claim.eligibility.update(
             eligible_itt_subject: scenario[:itt_subject],
