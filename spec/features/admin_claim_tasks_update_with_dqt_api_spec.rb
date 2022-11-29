@@ -553,6 +553,10 @@ RSpec.feature "Admin claim tasks update with DQT API" do
           context "admin claim tasks view" do
             before { visit admin_claim_tasks_path(claim) }
 
+            scenario "show banner for important notes" do
+              expect(banner).to have_text("Teacher’s identity has an active alert. Speak to manager before checking this claim.")
+            end
+
             scenario "shows identity confirmation passed" do
               expect(task("Identity confirmation")).to have_text("Partial match")
             end
@@ -573,7 +577,7 @@ RSpec.feature "Admin claim tasks update with DQT API" do
             scenario "shows date of birth not matched by an automated check" do
               expect(notes).to include(
                 have_text(
-                  within(".banner") do
+                  within("section.banner") do
                     "Teacher’s identity has an active alert. Speak to manager before checking this claim."
                   end
                 ).and(
@@ -1400,7 +1404,7 @@ RSpec.feature "Admin claim tasks update with DQT API" do
             scenario "shows date of birth not matched by an automated check" do
               expect(notes).to include(
                 have_text(
-                  within(".banner") do
+                  within("section.banner") do
                     "Teacher’s identity has an active alert. Speak to manager before checking this claim."
                   end
                 ).and(
@@ -2223,7 +2227,7 @@ RSpec.feature "Admin claim tasks update with DQT API" do
             scenario "shows date of birth not matched by an automated check" do
               expect(notes).to include(
                 have_text(
-                  within(".banner") do
+                  within("section.banner") do
                     "Teacher’s identity has an active alert. Speak to manager before checking this claim."
                   end
                 ).and(
