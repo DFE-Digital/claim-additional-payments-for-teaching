@@ -68,9 +68,12 @@ FactoryBot.define do
     end
 
     trait :levelling_up_premium_payments_eligible do
-      # this is a huge array but if it ever cycles, there'll be a message about duplicate URNs
-      sequence :urn do |n|
-        LevellingUpPremiumPayments::Award.urn_to_award_amount_in_pounds(PolicyConfiguration.for(LevellingUpPremiumPayments)&.current_academic_year || AcademicYear.current).keys[n]
+      transient do
+        levelling_up_premium_payments_award_amount { 2_000 }
+      end
+
+      after(:build) do |school, evaluator|
+        create(:levelling_up_premium_payments_award, school: school, award_amount: evaluator.levelling_up_premium_payments_award_amount)
       end
     end
 

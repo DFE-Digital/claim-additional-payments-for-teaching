@@ -12,7 +12,7 @@ module LevellingUpPremiumPayments
     end
 
     def eligible?
-      LevellingUpPremiumPayments::Award.new(school: @school, year: current_academic_year).has_award?
+      @school.levelling_up_premium_payments_awards.where(academic_year: current_academic_year.to_s).any?
     end
 
     private

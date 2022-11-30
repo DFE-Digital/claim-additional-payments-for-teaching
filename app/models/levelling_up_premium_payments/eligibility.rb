@@ -160,8 +160,7 @@ module LevellingUpPremiumPayments
     end
 
     def calculate_award_amount
-      # This doesn't need to be a BigDecimal but maintaining interface
-      BigDecimal LevellingUpPremiumPayments::Award.new(school: current_school, year: claim_year).amount_in_pounds if current_school.present?
+      current_school.levelling_up_premium_payments_awards.find_by(academic_year: claim_year.to_s).award_amount if current_school.present?
     end
 
     def set_qualification_if_trainee_teacher
@@ -171,7 +170,7 @@ module LevellingUpPremiumPayments
     end
 
     def award_amount_must_be_in_range
-      max = LevellingUpPremiumPayments::Award.max(claim_year)
+      max = LevellingUpPremiumPayments::Award.where(academic_year: claim_year.to_s).maximum(:award_amount)
 
       unless award_amount.between?(1, max)
         errors.add(:award_amount, "Enter a positive amount up to #{number_to_currency(max)} (inclusive)")
