@@ -4,7 +4,7 @@ RSpec.shared_examples "Admin Edit Claim Feature" do |policy|
   let(:moment_of_submission) { 2.minutes.ago }
   let(:moment_of_submission_string) { I18n.l(moment_of_submission) }
 
-  let(:old_award_amount) { 3_000 }
+  let(:old_award_amount) { 2_000 }
 
   let(:eligibility) do
     build(

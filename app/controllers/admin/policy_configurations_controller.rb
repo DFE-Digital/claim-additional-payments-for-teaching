@@ -9,6 +9,7 @@ module Admin
     end
 
     def edit
+      @csv_upload = LevellingUpPremiumPayments::AwardCsvImporter.new if policy_configuration.additional_payments?
     end
 
     def update

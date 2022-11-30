@@ -1,18 +1,18 @@
-<% content_for(:page_title) { page_title("Manage #{policy_service_name(@policy_configuration.routing_name)}") } %>
+<% content_for(:page_title) { page_title("Manage #{policy_service_name(policy_configuration.routing_name)}") } %>
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
     <h1 class="govuk-heading-xl">
       <span class="govuk-caption-xl">Manage services</span>
-      <%= policy_service_name(@policy_configuration.routing_name) %>
+      <%= policy_service_name(policy_configuration.routing_name) %>
     </h1>
 
     <div class="govuk-panel govuk-panel--informational govuk-panel--small">
-      <% if @policy_configuration.open_for_submissions? %>
+      <% if policy_configuration.open_for_submissions? %>
         <h2 class="govuk-panel__title">Service open</h2>
         <p class="govuk-panel__body">
           This service is currently open and accepting claims for the
-          <%= @policy_configuration.current_academic_year%> academic year.
+          <%= policy_configuration.current_academic_year%> academic year.
         </p>
       <% else %>
         <h2 class="govuk-panel__title">Service closed</h2>
@@ -22,7 +22,21 @@
       <% end %>
     </div>
 
-    <%= form_with model: [:admin, @policy_configuration] do |f| %>
+    <% if policy_configuration.additional_payments? %>
+      <div class="govuk-panel govuk-panel--informational govuk-panel--small">
+        <% if lupp_awards_last_updated_at %>
+          <p class="govuk-panel__body">
+            The Levelling Up Premium Payments school award amounts for academic year <%= policy_configuration.current_academic_year %> were updated on <%= l(lupp_awards_last_updated_at) %>.
+          </p>
+        <% else %>
+          <p class="govuk-panel__body">
+            No Levelling Up Premium Payments school award data has been uploaded for academic year <%= policy_configuration.current_academic_year %>.
+          </p>
+        <% end %>
+      </div>
+    <% end %>
+
+    <%= form_with model: [:admin, policy_configuration] do |f| %>
 
       <div class="govuk-form-group">
         <%= f.label :current_academic_year, "Accepting claims for academic year", class: "govuk-label" %>
@@ -39,7 +53,7 @@
               <%= f.radio_button :open_for_submissions, true, class: "govuk-radios__input", data: { aria_controls: "reminders-warning-message" } %>
               <%= f.label :open_for_submissions, "Open", value: true, class: "govuk-label govuk-radios__label" %>
             </div>
-            <%= render 'ecp_reminder_warning' %>
+            <%= render 'admin/policy_configurations/ecp_reminder_warning' %>
             <div class="govuk-radios__item">
               <%= f.radio_button :open_for_submissions, false, class: "govuk-radios__input", data: { aria_controls: "conditional-availability-message-conditional" } %>
               <%= f.label :open_for_submissions, "Closed", value: false, class: "govuk-label govuk-radios__label" %>
@@ -67,3 +81,65 @@
     <% end %>
   </div>
 </div>
+
+<hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
+
+<% if policy_configuration.additional_payments? %>
+  <div class="govuk-grid-row" id="download">
+    <div class="govuk-grid-column-two-thirds">
+      <h2 class="govuk-heading-m">
+        Download Levelling Up Premium Payments School Awards
+      </h2>
+
+      <% if lupp_awards_academic_years.any? %>
+        <%= form_with model: [:admin, LevellingUpPremiumPayments::Award], method: :get do |form| %>
+        <div class="govuk-form-group">
+          <label class="govuk-label" for="download_academic_year">
+            Academic year
+          </label>
+
+          <%= form.select :academic_year, lupp_awards_academic_years, {}, class: "govuk-select", id: "download_academic_year" %>
+
+          <%= form.submit "Download CSV", class: "govuk-button", data: { module: "govuk-button" } %>
+        </div>
+        <% end %>
+      <% else %>
+        <p class="govuk-body">No school award data has been uploaded.</p>
+      <% end %>
+    </div>
+  </div>
+
+  <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
+
+  <div class="govuk-grid-row" id="upload">
+    <div class="govuk-grid-column-two-thirds">
+      <h2 class="govuk-heading-m">
+        Upload Levelling Up Premium Payments School Awards
+      </h2>
+
+      <%= render("shared/error_summary", instance: @csv_upload) if @csv_upload.errors.any? %>
+
+      <%= form_with model: @csv_upload, url: admin_levelling_up_premium_payments_awards_path, multipart: true do |form| %>
+        <%= form_group_tag @csv_upload, :academic_year do %>
+          <label class="govuk-label" for="upload_academic_year">
+            Academic year
+          </label>
+
+          <%= form.select :academic_year, options_for_academic_year, {}, class: "govuk-select", id: "upload_academic_year" %>
+        <% end %>
+
+        <%= form_group_tag @csv_upload, :csv_data do %>
+          <%= errors_tag @csv_upload, :csv_data %>
+
+          <%= form.label :csv_data, "CSV file", class: "govuk-label" %>
+
+          <%= form.file_field :csv_data, class: "govuk-file-upload#{" govuk-file-upload--error" if @csv_upload&.errors[:csv_data]&.any?}" %>
+        <% end %>
+
+        <div class="govuk-button-group">
+          <%= form.submit "Upload CSV", class: "govuk-button", data: { module: "govuk-button" } %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+<% end %>
