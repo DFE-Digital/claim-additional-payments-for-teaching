@@ -139,4 +139,25 @@ RSpec.feature "Admin amends a claim" do
       expect(page).to have_content("by #{@signed_in_user.full_name} on #{I18n.l(Time.current)}")
     end
   end
+
+  context "with a submitted claim that would now fail validation on submit context" do
+    let(:claim) { create(:claim, :submitted, policy: StudentLoans) }
+
+    before do
+      claim.eligibility.claim_school = create(:school, :student_loans_ineligible)
+      claim.eligibility.save!
+    end
+
+    scenario "Service operator amends the claim" do
+      visit admin_claim_url(claim)
+      click_on "Amend claim"
+
+      fill_in "Student loan repayment amount", with: "300"
+      fill_in "Change notes", with: "The claimant calculated the incorrect student loan repayment amount"
+      click_on "Amend claim"
+
+      expect(page).not_to have_text "There is a problem"
+      expect(page).to have_content("Claim has been amended successfully")
+    end
+  end
 end
