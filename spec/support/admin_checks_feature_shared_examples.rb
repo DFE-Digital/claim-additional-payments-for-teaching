@@ -2,6 +2,7 @@ require "rails_helper"
 
 # The following is moved from an old spec. Haven't taken the effort to refactor it here.
 RSpec.shared_examples "Admin Checks for Early Career Payments and Levelling Up Premium Payments" do |policy|
+  let!(:policy_configuration) { create(:policy_configuration, policy.to_s.underscore) }
   let!(:claim) {
     create(
       :claim,

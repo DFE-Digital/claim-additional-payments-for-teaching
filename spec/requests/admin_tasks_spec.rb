@@ -3,8 +3,16 @@ require "rails_helper"
 RSpec.describe "Admin tasks", type: :request do
   let(:claim) { create(:claim, :submitted) }
 
+  before do
+    create(:policy_configuration, :student_loans)
+    create(:policy_configuration, :maths_and_physics)
+    create(:policy_configuration, :additional_payments)
+  end
+
   context "when signed in as a service operator" do
-    before { @signed_in_user = sign_in_as_service_operator }
+    before do
+      @signed_in_user = sign_in_as_service_operator
+    end
 
     describe "tasks#index" do
       it "shows a list of tasks for a claim" do
@@ -27,16 +35,12 @@ RSpec.describe "Admin tasks", type: :request do
     end
 
     # Compatible with claims from each policy
-    [MathsAndPhysics, StudentLoans].each do |policy|
+    [MathsAndPhysics, StudentLoans, EarlyCareerPayments, LevellingUpPremiumPayments].each do |policy|
       context "with a #{policy} claim" do
         let(:claim) { create(:claim, :submitted, policy: policy) }
 
         describe "tasks#show" do
           it "renders the requested page" do
-            get admin_claim_task_path(claim, "qualifications")
-            expect(response.body).to include(I18n.t("admin.qts_award_year"))
-            expect(response.body).to include(claim.eligibility.qts_award_year_answer)
-
             get admin_claim_task_path(claim, "employment")
             expect(response.body).to include(I18n.t("admin.current_school"))
             expect(response.body).to include(claim.eligibility.current_school.name)
@@ -44,7 +48,7 @@ RSpec.describe "Admin tasks", type: :request do
         end
 
         describe "tasks#create" do
-          it "creates a new passed task and redirects to the next task", if: policy == StudentLoans do
+          it "creates a new passed task and redirects to the next task", if: policy == "StudentLoans" do
             expect {
               post admin_claim_tasks_path(claim, params: {task: {name: "qualifications", passed: "true"}})
             }.to change { Task.count }.by(1)
@@ -55,7 +59,7 @@ RSpec.describe "Admin tasks", type: :request do
             expect(response).to redirect_to(admin_claim_task_path(claim, name: "census_subjects_taught"))
           end
 
-          it "creates a new passed task and redirects to the next task", if: policy == MathsAndPhysics do
+          it "creates a new passed task and redirects to the next task", if: policy == "MathsAndPhysics" do
             expect {
               post admin_claim_tasks_path(claim, params: {task: {name: "qualifications", passed: "true"}})
             }.to change { Task.count }.by(1)

@@ -1,8 +1,8 @@
 require "rails_helper"
 
 describe Admin::ClaimsHelper do
-  let(:claim_school) { schools(:penistone_grammar_school) }
-  let(:current_school) { create(:school, :student_loan_eligible) }
+  let(:claim_school) { create(:school) }
+  let(:current_school) { create(:school, :student_loans_eligible) }
 
   describe "#admin_personal_details" do
     let(:claim) do
@@ -76,7 +76,8 @@ describe Admin::ClaimsHelper do
       expect(helper.admin_submission_details(claim)).to eq([
         [I18n.t("admin.started_at"), l(claim.created_at)],
         [I18n.t("admin.submitted_at"), l(claim.submitted_at)],
-        [I18n.t("admin.decision_deadline"), l(claim.decision_deadline_date)]
+        [I18n.t("admin.decision_deadline"), l(claim.decision_deadline_date)],
+        [I18n.t("admin.decision_overdue"), I18n.t("admin.decision_overdue_not_applicable")]
       ])
     end
 
@@ -88,7 +89,7 @@ describe Admin::ClaimsHelper do
       end
 
       it "includes the deadline warning" do
-        expect(helper.admin_submission_details(claim)[2].last).to have_selector(".tag--information")
+        expect(helper.admin_submission_details(claim)[3].last).to have_selector(".tag--information")
       end
     end
   end
@@ -148,7 +149,7 @@ describe Admin::ClaimsHelper do
     context "when a claim is not near its deadline" do
       let(:claim) { build(:claim, :submitted, submitted_at: 1.day.ago) }
 
-      it { is_expected.to be_nil }
+      it { is_expected.to eq "N/A" }
     end
   end
 

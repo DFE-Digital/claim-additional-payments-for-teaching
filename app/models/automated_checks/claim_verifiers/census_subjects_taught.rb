@@ -132,7 +132,7 @@ module AutomatedChecks
           end
 
           <<~HTML
-            [School Workforce Census] - #{match == :none ? "Ine" : "E"}ligible:
+            [School Workforce Census] - #{(match == :none) ? "Ine" : "E"}ligible:
             <pre>#{swc_subjects}</pre>
           HTML
         end

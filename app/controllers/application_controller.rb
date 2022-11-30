@@ -1,4 +1,6 @@
 class ApplicationController < ActionController::Base
+  include HttpAuthConcern
+
   TIMEOUT_WARNING_LENGTH_IN_MINUTES = 2
 
   helper_method :timeout_warning_in_minutes

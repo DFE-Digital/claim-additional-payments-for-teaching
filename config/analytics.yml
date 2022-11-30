@@ -226,20 +226,6 @@ shared:
   - statutory_high_age
   - phone_number
   - open_date
-  :school_workforce_censuses:
-  - id
-  - teacher_reference_number
-  - subject_1
-  - subject_2
-  - subject_3
-  - subject_4
-  - subject_5
-  - subject_6
-  - subject_7
-  - subject_8
-  - subject_9
-  - created_at
-  - updated_at
   :support_tickets:
   - id
   - url
@@ -266,3 +252,11 @@ shared:
   - created_at
   - updated_at
   - role_codes
+  - deleted_at
+  :levelling_up_premium_payments_awards:
+  - id
+  - academic_year
+  - school_urn
+  - award_amount
+  - created_at
+  - updated_at

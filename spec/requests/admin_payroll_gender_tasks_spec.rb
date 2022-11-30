@@ -1,12 +1,15 @@
 require "rails_helper"
 
 RSpec.describe "Admin tasks", type: :request do
-  let(:claim) { create(:claim, :submitted) }
-
   context "when signed in as a service operator" do
-    before { @signed_in_user = sign_in_as_service_operator }
+    before do
+      create(:policy_configuration, :student_loans)
+      create(:policy_configuration, :maths_and_physics)
+      create(:policy_configuration, :additional_payments)
+      @signed_in_user = sign_in_as_service_operator
+    end
 
-    [MathsAndPhysics, StudentLoans].each do |policy|
+    [MathsAndPhysics, StudentLoans, EarlyCareerPayments, LevellingUpPremiumPayments].each do |policy|
       context "with a #{policy} claim" do
         describe "payroll_gender_tasks#create" do
           let(:claim) { create(:claim, :submitted, policy: policy, payroll_gender: :dont_know) }
@@ -67,6 +70,8 @@ RSpec.describe "Admin tasks", type: :request do
   end
 
   context "when signed in as a payroll operator or a support agent" do
+    let(:claim) { create(:claim, :submitted) }
+
     describe "payroll_gender_tasks#create" do
       [DfeSignIn::User::SUPPORT_AGENT_DFE_SIGN_IN_ROLE_CODE, DfeSignIn::User::PAYROLL_OPERATOR_DFE_SIGN_IN_ROLE_CODE].each do |role|
         it "does not allow the task to be created" do

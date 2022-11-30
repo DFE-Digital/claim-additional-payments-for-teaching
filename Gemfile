@@ -67,7 +67,7 @@ gem "daemons"
 gem "govuk_design_system_formbuilder", "~> 2.8.0"
 
 # See https://github.com/typhoeus/ethon/issues/185
-gem "ethon", "~> 0.15.0"
+gem "ethon", "~> 0.16.0"
 gem "typhoeus", "~> 1.4.0"
 
 # ROTP requried for Early Career Payments one-time password
@@ -84,7 +84,7 @@ gem "google-cloud-storage"
 gem "faraday_middleware"
 
 # required for prod due to Azure DEV/TEST all running as 'production'
-gem "faker", "~> 2.23", require: false
+gem "faker", "~> 3.0", require: false
 # speed up bulk imports
 gem "activerecord-copy", require: false
 
@@ -126,4 +126,4 @@ end
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem "tzinfo-data", platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 
-gem "dfe-analytics", github: "DFE-Digital/dfe-analytics", tag: "v1.5.2"
+gem "dfe-analytics", github: "DFE-Digital/dfe-analytics", tag: "v1.5.3"

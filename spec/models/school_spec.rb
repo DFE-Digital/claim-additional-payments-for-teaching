@@ -10,21 +10,27 @@ RSpec.describe School, type: :model do
   it { should validate_presence_of(:phase) }
 
   describe ".search" do
+    let(:school) { create(:school) }
+
     it "returns schools with a name matching the search term" do
-      expect(School.search("Penistone")).to match_array([schools(:penistone_grammar_school)])
+      expect(School.search(school.name.sub("The ", "").split(" ").first)).to match_array([school])
     end
 
     it "returns schools with a postcode matching the search term" do
-      expect(School.search("NW2 3RT")).to match_array([schools(:hampstead_school)])
+      expect(School.search(school.postcode)).to match_array([school])
     end
 
     it "raises an ArgumentError when the search term has fewer than 3 characters" do
       expect { School.search("Pe") }.to raise_error(ArgumentError, School::SEARCH_NOT_ENOUGH_CHARACTERS_ERROR)
     end
 
-    it "limits the results" do
-      stub_const("School::SEARCH_RESULTS_LIMIT", 1)
-      expect(School.search("School").count).to eql(1)
+    context "with multiple matching schools" do
+      before { create_list(:school, 5) }
+
+      it "limits the results" do
+        stub_const("School::SEARCH_RESULTS_LIMIT", 1)
+        expect(School.search("School").count).to eql(1)
+      end
     end
   end
 
@@ -161,56 +167,43 @@ RSpec.describe School, type: :model do
   end
 
   describe "#open?" do
-    # Both of these are the same physical school, but are different entities with unique URN's
-    # Oulder Hill Community School and Language College is proposed to close 2021-12-31
-    # Oulder Hill Leadership Academy is proposed to open 2022-01-01
-    let(:oulder_hill_school_closing_dec_2021) do
-      School.find(ActiveRecord::FixtureSet.identify(:oulder_hill_community_school_and_language_college, :uuid))
-    end
+    subject(:school) { build(:school, open_date: open_date, close_date: close_date) }
 
-    let(:oulder_hill_academy_opening_jan_2022) do
-      School.find(ActiveRecord::FixtureSet.identify(:oulder_hill_leadership_academy, :uuid))
-    end
+    context "when the school is closed or due to close" do
+      let(:open_date) { 100.days.ago }
 
-    context "with a close_date of 31-Dec-2021 that is today or in the past" do
-      it "is false" do
-        travel_to(Time.zone.local(2022, 9, 1)) do
-          expect(oulder_hill_school_closing_dec_2021.open?).to be false
-        end
+      context "with a close_date that is today or in the past" do
+        let(:close_date) { 10.days.ago }
+
+        it { is_expected.not_to be_open }
+      end
+
+      context "with a close_date that is in the future" do
+        let(:close_date) { 10.days.from_now }
+
+        it { is_expected.to be_open }
       end
     end
 
-    context "with a close_date of 31-Dec-2021 that is in the future" do
-      it "is true" do
-        travel_to Time.zone.local(2021, 9, 27) do
-          expect(oulder_hill_school_closing_dec_2021.open?).to be true
-        end
+    context "when the school is not closed" do
+      let(:close_date) { nil }
+
+      context "with a close_date that is nil" do
+        let(:open_date) { 100.days.ago }
+
+        it { is_expected.to be_open }
       end
-    end
 
-    context "with a close_date that is nil" do
-      it "is true" do
-        oulder_hill_school_closing_dec_2021.update(close_date: nil)
+      context "with a open_date in the future" do
+        let(:open_date) { 10.days.from_now }
 
-        travel_to Time.zone.local(2021, 9, 20) do
-          expect(oulder_hill_school_closing_dec_2021.open?).to be true
-        end
+        it { is_expected.not_to be_open }
       end
-    end
 
-    context "with a open_date of 1-Jan-2022 in the future" do
-      it "is false" do
-        travel_to Time.zone.local(2021, 9, 27) do
-          expect(oulder_hill_academy_opening_jan_2022.open?).to be false
-        end
-      end
-    end
+      context "with a open_date of today" do
+        let(:open_date) { Date.today }
 
-    context "with a open_date of 1-Jan-2022 in the future" do
-      it "is true" do
-        travel_to Time.zone.local(2022, 1, 1) do
-          expect(oulder_hill_academy_opening_jan_2022.open?).to be true
-        end
+        it { is_expected.to be_open }
       end
     end
   end

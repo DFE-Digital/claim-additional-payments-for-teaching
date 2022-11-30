@@ -1,7 +1,6 @@
 require "rails_helper"
 
 RSpec.describe StudentLoans::AdminTasksPresenter, type: :model do
-  let(:school) { schools(:penistone_grammar_school) }
   let(:eligibility) { claim.eligibility }
   let(:claim) do
     build(:claim,
@@ -9,9 +8,7 @@ RSpec.describe StudentLoans::AdminTasksPresenter, type: :model do
       student_loan_plan: StudentLoan::PLAN_1,
       eligibility: build(
         :student_loans_eligibility,
-        qts_award_year: "on_or_after_cut_off_date",
-        claim_school: school,
-        current_school: school,
+        :eligible,
         student_loan_repayment_amount: "670.99",
         chemistry_taught: true,
         physics_taught: nil,
@@ -46,9 +43,8 @@ RSpec.describe StudentLoans::AdminTasksPresenter, type: :model do
         student_loan_plan: StudentLoan::PLAN_1,
         eligibility: build(
           :student_loans_eligibility,
-          qts_award_year: "on_or_after_cut_off_date",
-          claim_school: school,
-          current_school: school
+          :eligible,
+          qts_award_year: "on_or_after_cut_off_date"
         ))
       presenter_2025 = described_class.new(claim_2025)
       expect(presenter_2025.employment[0][0]).to eq "6 April 2024 to 5 April 2025"
@@ -67,8 +63,8 @@ RSpec.describe StudentLoans::AdminTasksPresenter, type: :model do
   describe "#identity_confirmation" do
     it "returns an array of label and values for displaying information for the identity confirmation check" do
       expect(presenter.identity_confirmation).to eq [
-        ["Current school", school.name],
-        ["Contact number", school.phone_number]
+        ["Current school", eligibility.current_school.name],
+        ["Contact number", eligibility.current_school.phone_number]
       ]
     end
   end

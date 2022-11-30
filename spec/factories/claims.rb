@@ -7,14 +7,20 @@ FactoryBot.define do
     transient do
       policy { StudentLoans }
       eligibility_factory { "#{policy.to_s.underscore}_eligibility".to_sym }
+      eligibility_trait { nil }
+      eligibility_attributes { nil }
     end
 
     after(:build) do |claim, evaluator|
-      claim.eligibility = build(*evaluator.eligibility_factory) unless claim.eligibility
+      create(:policy_configuration, evaluator.policy.to_s.underscore) unless PolicyConfiguration.for(evaluator.policy).present?
+
+      claim.eligibility = build(evaluator.eligibility_factory, evaluator.eligibility_trait, **evaluator.eligibility_attributes || {}) unless claim.eligibility
+
+      raise "Policy of Claim (#{evaluator.policy}) must match Eligibility class (#{claim.eligibility.policy})" if evaluator.policy != claim.eligibility.policy
 
       claim_academic_year =
-        if claim.policy == EarlyCareerPayments
-          PolicyConfiguration.for(EarlyCareerPayments).current_academic_year
+        if [EarlyCareerPayments, LevellingUpPremiumPayments].include?(evaluator.policy)
+          PolicyConfiguration.for(evaluator.policy).current_academic_year
         else
           AcademicYear::Type.new.serialize(AcademicYear.new(2019))
         end
@@ -42,7 +48,7 @@ FactoryBot.define do
       payroll_gender { :female }
       provide_mobile_number { false }
 
-      eligibility_factory { ["#{policy.to_s.underscore}_eligibility".to_sym, :eligible] }
+      eligibility_trait { :eligible }
 
       after(:build) do |claim|
         if claim.has_ecp_or_lupp_policy?
@@ -109,6 +115,7 @@ FactoryBot.define do
     trait :rejected do
       submitted
       after(:build) do |claim|
+        claim.save
         create(:decision, claim: claim, result: "rejected")
       end
     end
@@ -116,7 +123,7 @@ FactoryBot.define do
     trait :ineligible do
       submittable
 
-      eligibility_factory { ["#{policy.to_s.underscore}_eligibility".to_sym, :ineligible] }
+      eligibility_trait { :ineligible }
     end
 
     trait :personal_data_removed do

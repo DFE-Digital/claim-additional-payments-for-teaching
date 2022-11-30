@@ -260,6 +260,8 @@ RSpec.feature "Teacher claiming Early-Career Payments uses the address auto-popu
       claim
     end
 
+    before { create(:policy_configuration, :additional_payments) }
+
     scenario "with Ordnance Survey API data" do
       expect(claim.valid?(:submit)).to eq false
       visit claim_path(claim.policy.routing_name, "postcode-search")

@@ -14,7 +14,10 @@ RSpec.feature "Admin checking a claim with inconsistent payroll information" do
     }
   end
 
-  before { sign_in_as_service_operator }
+  before do
+    create(:policy_configuration, :student_loans)
+    sign_in_as_service_operator
+  end
 
   scenario "cannot approve a second claim from an individual whilst the payroll information on the claims is inconsistent" do
     approved_claim = create(:claim, :approved, personal_details.merge(bank_sort_code: "112233", bank_account_number: "29482823"))

@@ -1,6 +1,7 @@
 require "rails_helper"
 
 RSpec.feature "Admin checking a Student Loans claim" do
+  let!(:policy_configuration) { create(:policy_configuration, :student_loans) }
   let!(:claim) {
     create(
       :claim,

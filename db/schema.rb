@@ -2,15 +2,15 @@
 # of editing this file, please use the migrations feature of Active Record to
 # incrementally modify your database, and then regenerate this schema definition.
 #
-# This file is the source Rails uses to define your schema when running `rails
-# db:schema:load`. When creating a new database, `rails db:schema:load` tends to
+# This file is the source Rails uses to define your schema when running `bin/rails
+# db:schema:load`. When creating a new database, `bin/rails db:schema:load` tends to
 # be faster and is potentially less error prone than running all of your
 # migrations from scratch. Old migrations may fail to apply correctly if those
 # migrations use external dependencies or application code.
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_07_07_120226) do
+ActiveRecord::Schema.define(version: 2022_11_24_114947) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -119,6 +119,8 @@ ActiveRecord::Schema.define(version: 2022_07_07_120226) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.string "role_codes", default: [], array: true
+    t.datetime "deleted_at"
+    t.index ["deleted_at"], name: "index_dfe_sign_in_users_on_deleted_at"
     t.index ["dfe_sign_in_id"], name: "index_dfe_sign_in_users_on_dfe_sign_in_id", unique: true
   end
 
@@ -138,6 +140,25 @@ ActiveRecord::Schema.define(version: 2022_07_07_120226) do
     t.uuid "current_school_id"
     t.decimal "award_amount", precision: 7, scale: 2
     t.index ["current_school_id"], name: "index_early_career_payments_eligibilities_on_current_school_id"
+  end
+
+  create_table "file_uploads", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "uploaded_by_id"
+    t.text "body"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "levelling_up_premium_payments_awards", force: :cascade do |t|
+    t.string "academic_year", limit: 9, null: false
+    t.integer "school_urn", null: false
+    t.decimal "award_amount", precision: 7, scale: 2
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["academic_year", "school_urn"], name: "lupp_award_by_year_and_urn"
+    t.index ["academic_year"], name: "lupp_award_by_year"
+    t.index ["award_amount"], name: "lupp_award_by_amount"
+    t.index ["school_urn"], name: "lupp_award_by_urn"
   end
 
   create_table "levelling_up_premium_payments_eligibilities", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -267,6 +288,12 @@ ActiveRecord::Schema.define(version: 2022_07_07_120226) do
     t.string "subject_9"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.string "subject_10"
+    t.string "subject_11"
+    t.string "subject_12"
+    t.string "subject_13"
+    t.string "subject_14"
+    t.string "subject_15"
   end
 
   create_table "schools", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|

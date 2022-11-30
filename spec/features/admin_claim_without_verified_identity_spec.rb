@@ -1,7 +1,10 @@
 require "rails_helper"
 
 RSpec.feature "Admin checking a claim without a verified identity" do
-  before { @signed_in_user = sign_in_as_service_operator }
+  before do
+    create(:policy_configuration, :student_loans)
+    @signed_in_user = sign_in_as_service_operator
+  end
 
   scenario "the service operator can do a manual identity check and approve the claim" do
     unverified_claim = create(:claim, :unverified)

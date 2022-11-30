@@ -1,12 +1,10 @@
 RSpec.shared_examples "Admin Edit Claim Feature" do |policy|
-  before { @signed_in_user = sign_in_as_service_operator }
-
   let(:signed_in_user_full_name) { @signed_in_user.full_name }
 
   let(:moment_of_submission) { 2.minutes.ago }
   let(:moment_of_submission_string) { I18n.l(moment_of_submission) }
 
-  let(:old_award_amount) { 3_000 }
+  let(:old_award_amount) { 2_000 }
 
   let(:eligibility) do
     build(
@@ -26,7 +24,9 @@ RSpec.shared_examples "Admin Edit Claim Feature" do |policy|
   end
 
   before do
+    create(:policy_configuration, policy.to_s.underscore)
     eligibility.update(eligible_degree_subject: false) if policy == LevellingUpPremiumPayments
+    @signed_in_user = sign_in_as_service_operator
   end
 
   context "non-claim attribute" do

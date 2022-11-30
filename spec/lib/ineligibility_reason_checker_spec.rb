@@ -2,11 +2,13 @@ require "rails_helper"
 require "ineligibility_reason_checker"
 
 RSpec.describe IneligibilityReasonChecker do
-  let(:ecp_claim) { build(:claim, academic_year: "2022/2023", eligibility: ecp_eligibility) }
-  let(:lup_claim) { build(:claim, academic_year: "2022/2023", eligibility: lup_eligibility) }
+  let(:ecp_claim) { build(:claim, policy: EarlyCareerPayments, academic_year: "2022/2023", eligibility: ecp_eligibility) }
+  let(:lup_claim) { build(:claim, policy: LevellingUpPremiumPayments, academic_year: "2022/2023", eligibility: lup_eligibility) }
 
   let(:school_eligible_for_ecp_but_not_lup) { build(:school, :early_career_payments_eligible) }
   let(:school_ineligible_for_both_ecp_and_lup) { build(:school, :early_career_payments_ineligible) }
+
+  before { create(:policy_configuration, :additional_payments) }
 
   # sanity check of factories
   specify { expect(EarlyCareerPayments::SchoolEligibility.new(school_eligible_for_ecp_but_not_lup)).to be_eligible }

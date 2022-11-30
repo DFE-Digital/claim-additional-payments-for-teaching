@@ -105,6 +105,7 @@ class ClaimsController < BasePublicController
   end
 
   def search_schools
+    @backlink_path = page_sequence.current_slug
     schools = ActiveModel::Type::Boolean.new.cast(params[:exclude_closed]) ? School.open : School
     @schools = schools.search(params[:school_search])
   rescue ArgumentError => e
@@ -168,8 +169,10 @@ class ClaimsController < BasePublicController
   def one_time_password
     case params[:slug]
     when "email-address"
-      ClaimMailer.email_verification(current_claim, otp.code).deliver_now if current_claim.valid?(:"email-address")
-      session[:sent_one_time_password_at] = Time.now
+      if current_claim.valid?(:"email-address")
+        ClaimMailer.email_verification(current_claim, otp.code).deliver_now
+        session[:sent_one_time_password_at] = Time.now
+      end
     when "mobile-number"
       if current_claim.valid?(:"mobile-number") && current_claim.mobile_number_changed?
         response = NotifySmsMessage.new(

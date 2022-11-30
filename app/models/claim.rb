@@ -253,6 +253,8 @@ class Claim < ApplicationRecord
   scope :by_policies, ->(policies) { where(eligibility_type: policies.map { |p| p::Eligibility.to_s }) }
   scope :by_academic_year, ->(academic_year) { where(academic_year: academic_year) }
   scope :by_claims_team_member, ->(service_operator_id) { where(assigned_to_id: service_operator_id) }
+  scope :unassigned, -> { where(assigned_to_id: nil) }
+  scope :current_academic_year, -> { by_academic_year(AcademicYear.current) }
 
   delegate :award_amount, to: :eligibility
   delegate :scheduled_payment_date, to: :payment, allow_nil: true

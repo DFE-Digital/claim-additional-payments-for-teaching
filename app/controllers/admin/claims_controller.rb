@@ -4,13 +4,14 @@ class Admin::ClaimsController < Admin::BaseAdminController
   before_action :ensure_service_operator
 
   def index
-    @claims = current_academic_year_claims.approved if params[:status] == "approved"
-    @claims = current_academic_year_claims.payrollable if params[:status] == "approved_awaiting_payroll"
-    @claims = current_academic_year_claims.rejected if params[:status] == "rejected"
+    @claims = Claim.current_academic_year.approved if params[:status] == "approved"
+    @claims = Claim.current_academic_year.payrollable if params[:status] == "approved_awaiting_payroll"
+    @claims = Claim.current_academic_year.rejected if params[:status] == "rejected"
     @claims ||= Claim.includes(:decisions).awaiting_decision
 
     @claims = @claims.by_policy(filtered_policy) if filtered_policy
     @claims = @claims.by_claims_team_member(filtered_team_member) if filtered_team_member
+    @claims = @claims.unassigned if filtered_unassigned
 
     @claims = @claims.includes(:tasks, eligibility: [:claim_school, :current_school])
     @claims = @claims.order(:submitted_at)
@@ -20,7 +21,14 @@ class Admin::ClaimsController < Admin::BaseAdminController
     @pagy, @claims = pagy(@claims)
 
     respond_to do |format|
-      format.html
+      format.html {
+        claims_backlink_path!(admin_claims_path(
+          team_member: params[:team_member],
+          policy: params[:policy],
+          status: params[:status],
+          commit: params[:commit]
+        ))
+      }
       format.csv {
         send_data Claim::DataReportRequest.new(all_claims).to_csv,
           filename: "dqt_report_request_#{Date.today.iso8601}.csv"
@@ -43,7 +51,10 @@ class Admin::ClaimsController < Admin::BaseAdminController
     if @claims.none?
       flash.now[:notice] = "Cannot find a claim for query \"#{params[:query]}\""
     elsif @claims.one?
+      claims_backlink_path!(search_admin_claims_path)
       redirect_to(admin_claim_tasks_url(@claims.first))
+    else
+      claims_backlink_path!(search_admin_claims_path(query: params[:query]))
     end
   end
 
@@ -54,13 +65,18 @@ class Admin::ClaimsController < Admin::BaseAdminController
   end
 
   def filtered_team_member
-    return if params[:team_member].blank?
+    return if params[:team_member].blank? || filtered_unassigned
 
     name = params[:team_member].split("-")
-    DfeSignIn::User.find_by(given_name: name.shift, family_name: name).id
+    DfeSignIn::User.not_deleted.find_by(given_name: name.shift, family_name: name).id
   end
 
-  def current_academic_year_claims
-    Claim.by_academic_year(AcademicYear.for(Date.today))
+  def filtered_unassigned
+    params[:team_member] == "unassigned"
+  end
+
+  # Stores where View Claim originated from, e.g. claims index or search results
+  def claims_backlink_path!(source_path)
+    session[:claims_backlink_path] = source_path
   end
 end

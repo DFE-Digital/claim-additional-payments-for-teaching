@@ -4,6 +4,9 @@ RSpec.feature "Switching policies" do
   include StudentLoansHelper
 
   before do
+    create(:policy_configuration, :student_loans)
+    create(:policy_configuration, :maths_and_physics)
+
     start_student_loans_claim
     visit new_claim_path(MathsAndPhysics.routing_name)
   end

@@ -56,15 +56,15 @@ RSpec.describe "TPS data upload" do
         end
       end
 
-      before do
-        PolicyConfiguration.for(EarlyCareerPayments).update!(current_academic_year: "2021/2022")
-      end
+      before { create(:policy_configuration, :additional_payments, current_academic_year: "2021/2022") }
 
       context "when the claim is not TSLR" do
+        let(:school) { create(:school, :early_career_payments_eligible) }
+        let(:current_school) { school }
         let(:csv) do
           <<~CSV
             Teacher reference number,NINO,Start Date,End Date,Annual salary,Monthly pay,N/A,LA URN,School URN
-            1000106,ZX043155C,01/07/2022,30/09/2022,24373,2031.08,5016,370,4027
+            1000106,ZX043155C,01/07/2022,30/09/2022,24373,2031.08,5016,#{school.local_authority.code},#{school.establishment_number}
             1000107,ZX043155C,01/07/2019,30/09/2019,24373,2031.08,5016,111,2222
             1000107,ZX043155C,01/07/2020,30/09/2020,24373,2031.08,5016,111,2222
             1000107,ZX043155C,01/07/2022,30/09/2022,24373,2031.08,5016,111,2222
@@ -78,7 +78,10 @@ RSpec.describe "TPS data upload" do
             policy: EarlyCareerPayments,
             teacher_reference_number: 1000106,
             submitted_at: Date.new(2022, 7, 15),
-            academic_year: AcademicYear::Type.new.serialize(AcademicYear.new(2021))
+            academic_year: AcademicYear::Type.new.serialize(AcademicYear.new(2021)),
+            eligibility_attributes: {
+              current_school: current_school
+            }
           )
         end
 
@@ -122,7 +125,7 @@ RSpec.describe "TPS data upload" do
             expect(claim_matched.tasks.last.claim_verifier_match).to eq "all"
             expect(claim_no_match.tasks.last.claim_verifier_match).to eq "none"
             expect(claim_no_data.tasks.last.claim_verifier_match).to be_nil
-            expect(claim_matched.notes.last[:body]).to eq "[Employment] - Eligible:\n<pre>Current school: LA Code: 370 / Establishment Number: 4027\n</pre>\n"
+            expect(claim_matched.notes.last[:body]).to eq "[Employment] - Eligible:\n<pre>Current school: LA Code: #{school.local_authority.code} / Establishment Number: #{school.establishment_number}\n</pre>\n"
             expect(claim_no_match.notes.last[:body]).to eq "[Employment] - Ineligible:\n<pre>Current school: LA Code: 111 / Establishment Number: 2222\n</pre>\n"
             expect(claim_no_data.notes.last[:body]).to eq "[Employment] - No data"
 
@@ -160,16 +163,18 @@ RSpec.describe "TPS data upload" do
       end
 
       context "when the claim is TSLR" do
-        before do
-          PolicyConfiguration.for(StudentLoans).update!(current_academic_year: "2021/2022")
-        end
+        before { create(:policy_configuration, :student_loans, current_academic_year: "2021/2022") }
+
+        let(:school) { create(:school, :student_loans_eligible) }
+        let(:claim_school) { school }
+        let(:current_school) { claim_school }
 
         let(:csv) do
           <<~CSV
             Teacher reference number,NINO,Start Date,End Date,Annual salary,Monthly pay,N/A,LA URN,School URN
-            1000106,ZX043155C,01/07/2022,30/09/2022,24373,2031.08,5016,370,4027
+            1000106,ZX043155C,01/07/2022,30/09/2022,24373,2031.08,5016,#{school.local_authority.code},#{school.establishment_number}
             1000107,ZX043155C,01/07/2022,30/09/2022,24373,2031.08,5016,111,2222
-            1000106,ZX043155C,01/07/2021,30/03/2022,24373,2031.08,5016,370,4027
+            1000106,ZX043155C,01/07/2021,30/03/2022,24373,2031.08,5016,#{school.local_authority.code},#{school.establishment_number}
           CSV
         end
 
@@ -180,7 +185,11 @@ RSpec.describe "TPS data upload" do
             policy: StudentLoans,
             teacher_reference_number: 1000106,
             submitted_at: Date.new(2022, 7, 15),
-            academic_year: AcademicYear::Type.new.serialize(AcademicYear.new(2021))
+            academic_year: AcademicYear::Type.new.serialize(AcademicYear.new(2021)),
+            eligibility_attributes: {
+              current_school: current_school,
+              claim_school: claim_school
+            }
           )
         end
 
@@ -221,7 +230,7 @@ RSpec.describe "TPS data upload" do
             expect(claim_matched.tasks.last.claim_verifier_match).to eq "all"
             expect(claim_no_match.tasks.last.claim_verifier_match).to eq "none"
             expect(claim_no_data.tasks.last.claim_verifier_match).to be_nil
-            expect(claim_matched.notes.last[:body]).to eq "[Employment] - Eligible:\n<pre>Current school: LA Code: 370 / Establishment Number: 4027\nClaim school: LA Code: 370 / Establishment Number: 4027\n</pre>\n"
+            expect(claim_matched.notes.last[:body]).to eq "[Employment] - Eligible:\n<pre>Current school: LA Code: #{school.local_authority.code} / Establishment Number: #{school.establishment_number}\nClaim school: LA Code: #{school.local_authority.code} / Establishment Number: #{school.establishment_number}\n</pre>\n"
             expect(claim_no_match.notes.last[:body]).to eq "[Employment] - Ineligible:\n<pre>Current school: LA Code: 111 / Establishment Number: 2222\nClaim school: LA Code: 111 / Establishment Number: 2222\n</pre>\n"
             expect(claim_no_data.notes.last[:body]).to eq "[Employment] - No data"
 
@@ -233,8 +242,8 @@ RSpec.describe "TPS data upload" do
           let(:csv) do
             <<~CSV
               Teacher reference number,NINO,Start Date,End Date,Annual salary,Monthly pay,N/A,LA URN,School URN
-              1000106,ZX043155C,01/07/2022,30/09/2022,24373,2031.08,5016,371,4027
-              1000106,ZX043155C,01/07/2021,30/03/2022,24373,2031.08,5016,370,4027
+              1000106,ZX043155C,01/07/2022,30/09/2022,24373,2031.08,5016,371,#{school.establishment_number}
+              1000106,ZX043155C,01/07/2021,30/03/2022,24373,2031.08,5016,#{school.local_authority.code},#{school.establishment_number}
             CSV
           end
 
@@ -249,7 +258,7 @@ RSpec.describe "TPS data upload" do
                 end
               )
               expect(claim_matched.tasks.last.claim_verifier_match).to eq "none"
-              expect(claim_matched.notes.last[:body]).to eq "[Employment] - Ineligible:\n<pre>Current school: LA Code: 371 / Establishment Number: 4027\nClaim school: LA Code: 371 / Establishment Number: 4027\nClaim school: LA Code: 370 / Establishment Number: 4027\n</pre>\n"
+              expect(claim_matched.notes.last[:body]).to eq "[Employment] - Ineligible:\n<pre>Current school: LA Code: 371 / Establishment Number: #{school.establishment_number}\nClaim school: LA Code: 371 / Establishment Number: #{school.establishment_number}\nClaim school: LA Code: #{school.local_authority.code} / Establishment Number: #{school.establishment_number}\n</pre>\n"
 
               expect(response).to redirect_to(admin_claims_path)
             end

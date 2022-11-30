@@ -1,6 +1,7 @@
 require "rails_helper"
 
 RSpec.feature "Admin checking a Maths & Physics claim" do
+  let!(:policy_configuration) { create(:policy_configuration, :maths_and_physics) }
   let!(:claim) { create(:claim, :submitted, policy: MathsAndPhysics) }
 
   before { @signed_in_user = sign_in_as_service_operator }

@@ -2,9 +2,12 @@ require "rails_helper"
 
 RSpec.feature "Choosing subjects taught during Teacher Student Loan Repayments claims" do
   include StudentLoansHelper
+
+  let!(:school) { create(:school, :student_loans_eligible) }
   before do
+    create(:policy_configuration, :student_loans)
     start_student_loans_claim
-    choose_school schools(:penistone_grammar_school)
+    choose_school school
   end
 
   context "with JS enabled", js: true do
@@ -40,7 +43,7 @@ RSpec.feature "Choosing subjects taught during Teacher Student Loan Repayments c
 
       click_on "Continue"
 
-      choose "Yes, at Penistone Grammar School"
+      choose "Yes, at #{school.name}"
       click_on "Continue"
 
       expect(page).to have_text(leadership_position_question)

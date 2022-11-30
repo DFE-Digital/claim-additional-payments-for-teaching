@@ -42,8 +42,11 @@ module LevellingUpPremiumPayments
     #   <AcademicYear:0x00007f7d87429210 @start_year=2021, @end_year=2022> => "2021/2022",
     #   <AcademicYear:0x00007f7d87428c98 @start_year=nil, @end_year=nil> => "None"
     # }
-    SELECTABLE_ITT_ACADEMIC_YEARS =
-      JourneySubjectEligibilityChecker.selectable_itt_years_for_claim_year(PolicyConfiguration.for(LevellingUpPremiumPayments).current_academic_year).each_with_object({}) do |year, hsh|
+    # Note: LUPP policy began in academic year 2022/23 so the persisted options
+    # should include 2017/18 onward.
+    # In test environment the policy configuration record may not exist
+    ITT_ACADEMIC_YEARS =
+      ((AcademicYear.new(2017)...(PolicyConfiguration.for(LevellingUpPremiumPayments)&.current_academic_year || AcademicYear.current))).each_with_object({}) do |year, hsh|
         hsh[year] = AcademicYear::Type.new.serialize(year)
       end.merge({AcademicYear.new => AcademicYear::Type.new.serialize(AcademicYear.new)})
 
@@ -63,7 +66,7 @@ module LevellingUpPremiumPayments
       computing: 5
     }, _prefix: :itt_subject
 
-    enum itt_academic_year: SELECTABLE_ITT_ACADEMIC_YEARS
+    enum itt_academic_year: ITT_ACADEMIC_YEARS
 
     before_save :set_qualification_if_trainee_teacher, if: :nqt_in_academic_year_after_itt_changed?
 
@@ -157,8 +160,7 @@ module LevellingUpPremiumPayments
     end
 
     def calculate_award_amount
-      # This doesn't need to be a BigDecimal but maintaining interface
-      BigDecimal LevellingUpPremiumPayments::Award.new(school: current_school, year: claim_year).amount_in_pounds if current_school.present?
+      current_school.levelling_up_premium_payments_awards.find_by(academic_year: claim_year.to_s).award_amount if current_school.present?
     end
 
     def set_qualification_if_trainee_teacher
@@ -168,7 +170,7 @@ module LevellingUpPremiumPayments
     end
 
     def award_amount_must_be_in_range
-      max = LevellingUpPremiumPayments::Award.max(claim_year)
+      max = LevellingUpPremiumPayments::Award.where(academic_year: claim_year.to_s).maximum(:award_amount)
 
       unless award_amount.between?(1, max)
         errors.add(:award_amount, "Enter a positive amount up to #{number_to_currency(max)} (inclusive)")

@@ -1,11 +1,14 @@
 require "rails_helper"
 
 RSpec.feature "Eligible now can set a reminder for next year." do
-  let(:eligibility_attributes) { attributes_for(:early_career_payments_eligibility, :eligible) }
+  let!(:policy_configuration) { create(:policy_configuration, :additional_payments) }
+  let(:eligibility_attributes) { attributes_for(:early_career_payments_eligibility, :eligible, current_school_id: school.id) }
+  let(:academic_year) { policy_configuration.current_academic_year }
+  let(:school) { create(:school, :early_career_payments_eligible) }
 
   it "auto-sets a reminders email and name from claim params and displays the correct year" do
     claim = start_early_career_payments_claim
-    reminder_year = (PolicyConfiguration.for(claim.policy).current_academic_year + 1).start_year
+    reminder_year = (academic_year + 1).start_year
 
     claim.update!(attributes_for(:claim, :submittable))
     claim.eligibility.update!(eligibility_attributes)
@@ -53,30 +56,25 @@ RSpec.feature "Completed Applications - Reminders" do
     }
   ].each do |policy|
     context "when accepting claims for AcademicYear #{policy[:policy_year]}" do
-      before do
-        @ecp_policy_date = PolicyConfiguration.for(EarlyCareerPayments).current_academic_year
-        PolicyConfiguration.for(EarlyCareerPayments).update(current_academic_year: policy[:policy_year])
-      end
-
-      after do
-        PolicyConfiguration.for(EarlyCareerPayments).update(current_academic_year: @ecp_policy_date)
-      end
+      let!(:policy_configuration) { create(:policy_configuration, :additional_payments, current_academic_year: policy[:policy_year]) }
+      let(:academic_year) { policy_configuration.current_academic_year }
+      let(:school) { create(:school, :early_career_payments_eligible) }
 
       let(:claim) do
         claim = start_early_career_payments_claim
         claim.update!(attributes_for(:claim, :submittable))
-        claim.eligibility.update!(attributes_for(:early_career_payments_eligibility, :eligible))
+        claim.eligibility.update!(attributes_for(:early_career_payments_eligibility, :eligible, current_school_id: school.id))
         claim
       end
 
       policy[:eligible_now].each do |scenario|
-        reminder_status = scenario[:invited_to_set_reminder] == true ? "CAN" : "CANNOT"
+        reminder_status = (scenario[:invited_to_set_reminder] == true) ? "CAN" : "CANNOT"
         scenario "with cohort ITT subject #{scenario[:itt_subject]} in ITT academic year #{scenario[:itt_academic_year]} - a reminder #{reminder_status} be set" do
           claim.eligibility.update(
             eligible_itt_subject: scenario[:itt_subject],
             itt_academic_year: scenario[:itt_academic_year]
           )
-          reminder_year = (PolicyConfiguration.for(claim.policy).current_academic_year + 1).start_year
+          reminder_year = (academic_year + 1).start_year
 
           visit claim_path(claim.policy.routing_name, "check-your-answers")
           expect(page).to have_text(claim.first_name)

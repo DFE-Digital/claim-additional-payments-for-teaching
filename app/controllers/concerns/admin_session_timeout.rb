@@ -6,6 +6,7 @@ module AdminSessionTimeout
       session.delete(:user_id)
       session.delete(:organisation_id)
       session.delete(:role_codes)
+      session.delete(:claims_backlink_path)
       flash[:notice] = "Your session has timed out due to inactivity, please sign-in again"
     end
   end

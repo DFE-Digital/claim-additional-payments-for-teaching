@@ -513,7 +513,10 @@ RSpec.describe Claim, type: :model do
     end
 
     context "with mobile number" do
-      before { claim.mobile_number = mobile_number }
+      before do
+        claim.provide_mobile_number = true
+        claim.mobile_number = mobile_number
+      end
 
       context "with UK number without spaces" do
         let(:mobile_number) { "07474000123" }
@@ -533,6 +536,11 @@ RSpec.describe Claim, type: :model do
       context "with international format number with spaces" do
         let(:mobile_number) { "+44 7474 000 123" }
         it { is_expected.to be_valid(:mobile_number) }
+      end
+
+      context "with international format non-UK number" do
+        let(:mobile_number) { "+33 12 34 56 78" }
+        it { is_expected.not_to be_valid(:mobile_number) }
       end
     end
   end
@@ -660,9 +668,11 @@ RSpec.describe Claim, type: :model do
   end
 
   describe "#school" do
+    let(:school) { build(:school) }
+
     it "returns the current_school of the claim eligiblity" do
-      claim = Claim.new(eligibility: StudentLoans::Eligibility.new(current_school: schools(:penistone_grammar_school)))
-      expect(claim.school).to eq schools(:penistone_grammar_school)
+      claim = Claim.new(eligibility: StudentLoans::Eligibility.new(current_school: school))
+      expect(claim.school).to eq school
     end
 
     it "returns nil if no eligibility is set" do
@@ -676,10 +686,13 @@ RSpec.describe Claim, type: :model do
     end
 
     context "when the claim is submittable" do
-      let(:claim) { build(:claim, :submittable, eligibility: eligibility) }
+      let(:claim) { build(:claim, :submittable, policy: LevellingUpPremiumPayments, eligibility: eligibility) }
       let(:eligibility) { build(:levelling_up_premium_payments_eligibility, :eligible) }
 
-      before { claim.submit! }
+      before do
+        create(:policy_configuration, :additional_payments)
+        claim.submit!
+      end
 
       it "sets submitted_at to now" do
         expect(claim.submitted_at).to eq Time.zone.now
@@ -848,14 +861,16 @@ RSpec.describe Claim, type: :model do
     context "Early-Career Payments claim" do
       let(:eligibility) { build(:early_career_payments_eligibility, :eligible) }
 
+      before { create(:policy_configuration, :additional_payments) }
+
       it "returns true when the claim is valid and has not been submitted" do
-        claim = build(:claim, :submittable, academic_year: AcademicYear.new(2021), first_name: "Dee", govuk_verify_fields: [], eligibility: eligibility)
+        claim = build(:claim, :submittable, policy: EarlyCareerPayments, academic_year: AcademicYear.new(2021), first_name: "Dee", govuk_verify_fields: [], eligibility: eligibility)
 
         expect(claim.submittable?).to eq true
       end
 
       it "returns false when it has already been submitted" do
-        claim = build(:claim, :unverified, eligibility: eligibility)
+        claim = build(:claim, :unverified, policy: EarlyCareerPayments, eligibility: eligibility)
 
         expect(claim.submittable?).to eq false
       end

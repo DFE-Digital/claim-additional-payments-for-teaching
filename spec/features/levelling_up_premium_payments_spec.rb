@@ -3,13 +3,16 @@ require "rails_helper"
 RSpec.feature "Levelling up premium payments claims" do
   let(:claim) { Claim.by_policy(LevellingUpPremiumPayments).order(:created_at).last }
   let(:eligibility) { claim.eligibility }
+  let!(:school) { create(:school, :levelling_up_premium_payments_eligible) }
+
+  before { create(:policy_configuration, :additional_payments) }
 
   def claim_up_to_itt_subject
     start_levelling_up_premium_payments_claim
 
     # - Which school do you teach at
     expect(page).to have_text(I18n.t("early_career_payments.questions.current_school_search"))
-    choose_school schools(:hampstead_school)
+    choose_school school
     click_on "Continue"
 
     # - Have you started your first year as a newly qualified teacher?

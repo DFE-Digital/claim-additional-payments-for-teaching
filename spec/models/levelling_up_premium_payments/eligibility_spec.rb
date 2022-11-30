@@ -13,6 +13,7 @@ RSpec.describe LevellingUpPremiumPayments::Eligibility, type: :model do
   end
 
   describe "#ineligible?" do
+    before { create(:policy_configuration, :additional_payments) }
     specify { expect(subject).to respond_to(:ineligible?) }
 
     context "when ITT year is 2017" do
@@ -41,6 +42,8 @@ RSpec.describe LevellingUpPremiumPayments::Eligibility, type: :model do
   end
 
   describe "#eligible_now?" do
+    before { create(:policy_configuration, :additional_payments) }
+
     context "eligible now" do
       subject { build(:levelling_up_premium_payments_eligibility, :eligible_now) }
 
@@ -55,6 +58,8 @@ RSpec.describe LevellingUpPremiumPayments::Eligibility, type: :model do
   end
 
   describe "#eligible_later?" do
+    before { create(:policy_configuration, :additional_payments) }
+
     context "eligible now" do
       subject { build(:levelling_up_premium_payments_eligibility, :eligible_now) }
 
@@ -69,13 +74,20 @@ RSpec.describe LevellingUpPremiumPayments::Eligibility, type: :model do
   end
 
   describe "#award_amount" do
+    before do
+      create(:policy_configuration, :additional_payments)
+      create(:levelling_up_premium_payments_award, award_amount: 3_000)
+    end
+
     it { should_not allow_values(0, nil).for(:award_amount).on(:amendment) }
     it { should validate_numericality_of(:award_amount).on(:amendment).is_greater_than(0).is_less_than_or_equal_to(3_000).with_message("Enter a positive amount up to £3,000.00 (inclusive)") }
   end
 
-  it_behaves_like "Eligibility status", :levelling_up_premium_payments_eligibility
+  it_behaves_like "Eligibility status", :levelling_up_premium_payments
 
   context "LUP-specific eligibility" do
+    before { create(:policy_configuration, :additional_payments) }
+
     subject { eligibility.status }
 
     context "ECP-only ITT subject" do

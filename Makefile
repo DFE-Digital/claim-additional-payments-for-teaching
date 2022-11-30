@@ -9,13 +9,6 @@ review:
 	$(eval BACKEND_KEY=-backend-config=key=${APP_NAME}.tfstate)
 	$(eval export TF_VAR_pr_number=${PR_NUMBER})
 
-dev:
-	$(eval AZ_SUBSCRIPTION=s118-teacherpaymentsservice-development)
-	$(eval RESOURCE_GROUP_NAME=s118d01-tfbackend)
-	$(eval STORAGE_ACCOUNT_NAME=s118d01tfbackendsa)
-	$(eval CONTAINER_NAME=s118d01conttfstate)
-	$(eval DEPLOY_ENV=development)
-
 test:
 	$(eval AZ_SUBSCRIPTION=s118-teacherpaymentsservice-test)
 	$(eval RESOURCE_GROUP_NAME=s118t01-tfbackend)

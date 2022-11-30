@@ -6,11 +6,13 @@ RSpec.describe EarlyCareerPayments::SlugSequence do
   let(:eligibility) { build(:early_career_payments_eligibility, :eligible) }
   let(:eligibility_lup) { build(:levelling_up_premium_payments_eligibility, :eligible) }
 
-  let(:claim) { build(:claim, academic_year: AcademicYear.new(2021), eligibility: eligibility) }
-  let(:lup_claim) { build(:claim, academic_year: AcademicYear.new(2021), eligibility: eligibility_lup) }
+  let(:claim) { build(:claim, policy: EarlyCareerPayments, academic_year: AcademicYear.new(2021), eligibility: eligibility) }
+  let(:lup_claim) { build(:claim, policy: LevellingUpPremiumPayments, academic_year: AcademicYear.new(2021), eligibility: eligibility_lup) }
   let(:current_claim) { CurrentClaim.new(claims: [claim, lup_claim]) }
 
   describe "The sequence as defined by #slugs" do
+    before { create(:policy_configuration, :additional_payments) }
+
     it "excludes the 'ineligible' slug if the claim's eligibility is undetermined" do
       expect(slug_sequence.slugs).not_to include("ineligible")
     end
@@ -291,31 +293,31 @@ RSpec.describe EarlyCareerPayments::SlugSequence do
   end
 
   describe "eligibility affect on slugs" do
-    let(:ecp_claim) { build(:claim, eligibility: ecp_eligibility) }
-    let(:lup_claim) { build(:claim, eligibility: lup_eligibility) }
+    let(:ecp_claim) { build(:claim, policy: EarlyCareerPayments, eligibility_trait: ecp_eligibility) }
+    let(:lup_claim) { build(:claim, policy: LevellingUpPremiumPayments, eligibility_trait: lup_eligibility) }
     let(:current_claim) { CurrentClaim.new(claims: [ecp_claim, lup_claim]) }
 
     subject { described_class.new(current_claim).slugs }
 
     context "current claim is :eligible_now" do
-      let(:ecp_eligibility) { build(:early_career_payments_eligibility, :eligible_later) }
-      let(:lup_eligibility) { build(:levelling_up_premium_payments_eligibility, :eligible_now) }
+      let(:ecp_eligibility) { :eligible_later }
+      let(:lup_eligibility) { :eligible_now }
 
       it { is_expected.to include("eligibility-confirmed") }
       it { is_expected.not_to include("eligible-later", "ineligible") }
     end
 
     context "current claim is :eligible_later" do
-      let(:ecp_eligibility) { build(:early_career_payments_eligibility, :ineligible) }
-      let(:lup_eligibility) { build(:levelling_up_premium_payments_eligibility, :eligible_later) }
+      let(:ecp_eligibility) { :ineligible }
+      let(:lup_eligibility) { :eligible_later }
 
       it { is_expected.to include("eligible-later") }
       it { is_expected.not_to include("eligibility-confirmed") }
     end
 
     context "current claim is :ineligible" do
-      let(:ecp_eligibility) { build(:early_career_payments_eligibility, :ineligible) }
-      let(:lup_eligibility) { build(:levelling_up_premium_payments_eligibility, :ineligible) }
+      let(:ecp_eligibility) { :ineligible }
+      let(:lup_eligibility) { :ineligible }
 
       it { is_expected.to include("ineligible") }
       it { is_expected.not_to include("eligibility-confirmed", "eligible-later") }

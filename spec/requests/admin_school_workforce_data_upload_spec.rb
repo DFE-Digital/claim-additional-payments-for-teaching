@@ -6,7 +6,7 @@ RSpec.describe "School workforce census data upload" do
   describe "school_workforce_census_data_upload#new" do
     it "shows the upload form" do
       get new_admin_school_workforce_census_data_upload_path
-      expect(response.body).to include("Choose and upload school workforce census data")
+      expect(response.body).to include("Choose and upload School Workforce Census data")
     end
   end
 

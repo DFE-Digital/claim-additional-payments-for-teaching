@@ -2,6 +2,8 @@ require "rails_helper"
 
 RSpec.describe "Claims", type: :request do
   describe "claims#new request" do
+    before { create(:policy_configuration, :student_loans) }
+
     context "the user has not already started a claim" do
       it "renders the first page in the sequence" do
         get new_claim_path(StudentLoans.routing_name)
@@ -10,39 +12,26 @@ RSpec.describe "Claims", type: :request do
       end
     end
 
-    it "redirects to the existing claim interruption page if a claim for another policy is already in progress" do
-      start_student_loans_claim
-      get new_claim_path(MathsAndPhysics.routing_name)
-
-      expect(response).to redirect_to(existing_session_path(MathsAndPhysics.routing_name))
-    end
-
     it "redirects to the existing claim interruption page if another claim for the same policy is already in progress" do
       start_student_loans_claim
       get new_claim_path(StudentLoans.routing_name)
 
       expect(response).to redirect_to(existing_session_path(StudentLoans.routing_name))
     end
+
+    context "switching claim policies" do
+      before { create(:policy_configuration, :maths_and_physics) }
+
+      it "redirects to the existing claim interruption page if a claim for another policy is already in progress" do
+        start_student_loans_claim
+        get new_claim_path(MathsAndPhysics.routing_name)
+
+        expect(response).to redirect_to(existing_session_path(MathsAndPhysics.routing_name))
+      end
+    end
   end
 
   describe "claims#create request" do
-    # TODO: When and if when PolicyConfigurations are using factory_bot no need for this before/after
-    before do
-      @student_loans_policy_date = PolicyConfiguration.for(StudentLoans).current_academic_year
-      @maths_and_physics_policy_date = PolicyConfiguration.for(MathsAndPhysics).current_academic_year
-      @ecp_lup_policy_date = PolicyConfiguration.for(EarlyCareerPayments).current_academic_year
-
-      PolicyConfiguration.for(StudentLoans).update(current_academic_year: policy_configurations(:student_loans).current_academic_year)
-      PolicyConfiguration.for(MathsAndPhysics).update(current_academic_year: policy_configurations(:maths_and_physics).current_academic_year)
-      PolicyConfiguration.for(EarlyCareerPayments).update(current_academic_year: policy_configurations(:early_career_payments).current_academic_year)
-    end
-
-    after do
-      PolicyConfiguration.for(StudentLoans).update(current_academic_year: @student_loans_policy_date)
-      PolicyConfiguration.for(MathsAndPhysics).update(current_academic_year: @maths_and_physics_policy_date)
-      PolicyConfiguration.for(EarlyCareerPayments).update(current_academic_year: @ecp_lup_policy_date)
-    end
-
     def check_claims_created
       expect { start_claim(@policy_configuration.routing_name) }.to change { Claim.count }.by(@policy_configuration.policies.count)
     end
@@ -63,7 +52,7 @@ RSpec.describe "Claims", type: :request do
 
     context "student loans claim" do
       it "created for the current academic year and redirects to the next question in the sequence" do
-        @policy_configuration = PolicyConfiguration.for(StudentLoans)
+        @policy_configuration = create(:policy_configuration, :student_loans)
 
         check_claims_created
         check_claims_eligibility_created
@@ -73,7 +62,7 @@ RSpec.describe "Claims", type: :request do
 
     context "maths and physics claim" do
       it "created for the current academic year and redirects to the next question in the sequence" do
-        @policy_configuration = PolicyConfiguration.for(MathsAndPhysics)
+        @policy_configuration = create(:policy_configuration, :maths_and_physics)
 
         check_claims_created
         check_claims_eligibility_created
@@ -83,7 +72,7 @@ RSpec.describe "Claims", type: :request do
 
     context "ecp and lup combined claim" do
       it "created for the current academic year and redirects to the next question in the sequence" do
-        @policy_configuration = PolicyConfiguration.for(EarlyCareerPayments)
+        @policy_configuration = create(:policy_configuration, :additional_payments)
 
         check_claims_created
         check_claims_eligibility_created
@@ -93,6 +82,8 @@ RSpec.describe "Claims", type: :request do
   end
 
   describe "claims#show request" do
+    before { create(:policy_configuration, :student_loans) }
+
     context "when a claim is already in progress" do
       before { start_student_loans_claim }
 
@@ -105,20 +96,23 @@ RSpec.describe "Claims", type: :request do
       end
 
       context "when searching for a school on the claim-school page" do
-        it "searches for schools using the search term" do
-          get claim_path(StudentLoans.routing_name, "claim-school"), params: {school_search: "Penistone"}
+        let!(:school_1) { create(:school) }
+        let!(:school_2) { create(:school) }
 
-          expect(response.body).to include schools(:penistone_grammar_school).name
-          expect(response.body).not_to include schools(:hampstead_school).name
+        it "searches for schools using the search term" do
+          get claim_path(StudentLoans.routing_name, "claim-school"), params: {school_search: school_1.name}
+
+          expect(response.body).to include school_1.name
+          expect(response.body).not_to include school_2.name
           expect(response.body).to include "Continue"
         end
 
         it "only returns results if the search term is more than two characters" do
-          get claim_path(StudentLoans.routing_name, "claim-school"), params: {school_search: "Pe"}
+          get claim_path(StudentLoans.routing_name, "claim-school"), params: {school_search: "ab"}
 
           expect(response.body).to include("There is a problem")
           expect(response.body).to include("Enter a school or postcode")
-          expect(response.body).not_to include(schools(:penistone_grammar_school).name)
+          expect(response.body).not_to include(school_1.name)
         end
 
         it "shows an appropriate message when there are no search results" do
@@ -138,6 +132,8 @@ RSpec.describe "Claims", type: :request do
   end
 
   describe "the claims ineligible page" do
+    before { create(:policy_configuration, :student_loans) }
+
     context "when a claim is already in progress" do
       before { start_student_loans_claim }
 
@@ -160,6 +156,8 @@ RSpec.describe "Claims", type: :request do
   end
 
   describe "claims#timeout" do
+    before { create(:policy_configuration, :student_loans) }
+
     it "displays session timeout content" do
       get timeout_claim_path(StudentLoans.routing_name)
       expect(response.body).to include("Your session has ended due to inactivity")
@@ -167,6 +165,8 @@ RSpec.describe "Claims", type: :request do
   end
 
   describe "claims#update request" do
+    before { create(:policy_configuration, :student_loans) }
+
     context "when a claim is already in progress" do
       let(:in_progress_claim) { Claim.by_policy(StudentLoans).order(:created_at).last }
 
@@ -201,19 +201,23 @@ RSpec.describe "Claims", type: :request do
       end
 
       context "having searched for a school but not selected a school from the results on the claim-school page" do
+        let!(:school) { create(:school) }
+
         it "re-renders the school search results with an error message" do
-          put claim_path(StudentLoans.routing_name, "claim-school"), params: {school_search: "peniston", claim: {eligibility_attributes: {claim_school_id: ""}}}
+          put claim_path(StudentLoans.routing_name, "claim-school"), params: {school_search: school.name, claim: {eligibility_attributes: {claim_school_id: ""}}}
 
           expect(response).to be_successful
           expect(response.body).to include("There is a problem")
           expect(response.body).to include("Select a school from the list")
-          expect(response.body).to include(schools(:penistone_grammar_school).name)
+          expect(response.body).to include(school.name)
         end
       end
 
       context "when the update makes the claim ineligible" do
+        let(:ineligible_school) { create(:school, :student_loans_ineligible) }
+
         it "redirects to the “ineligible” page" do
-          put claim_path(StudentLoans.routing_name, "claim-school"), params: {claim: {eligibility_attributes: {claim_school_id: schools(:hampstead_school).to_param}}}
+          put claim_path(StudentLoans.routing_name, "claim-school"), params: {claim: {eligibility_attributes: {claim_school_id: ineligible_school.to_param}}}
 
           expect(response).to redirect_to(claim_path(StudentLoans.routing_name, "ineligible"))
         end
