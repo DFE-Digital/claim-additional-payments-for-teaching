@@ -1536,6 +1536,12 @@ RSpec.describe Claim, type: :model do
       end
     end
 
+    context "when the claim cannot be held" do
+      subject(:claim) { build(:claim, :approved) }
+
+      it { is_expected.not_to be_held }
+    end
+
     context "when the claim is not already held" do
       subject(:claim) { build(:claim) }
 
@@ -1572,6 +1578,23 @@ RSpec.describe Claim, type: :model do
       it "does not add a note" do
         expect(claim.notes).to be_empty
       end
+    end
+  end
+
+  describe "#holdable?" do
+    context "when the claim has no approval decision" do
+      subject(:claim) { build(:claim, :submitted) }
+      it { is_expected.to be_holdable }
+    end
+
+    context "when the claim has is approved" do
+      subject(:claim) { build(:claim, :rejected) }
+      it { is_expected.not_to be_holdable }
+    end
+
+    context "when the claim has is rejected" do
+      subject(:claim) { build(:claim, :rejected) }
+      it { is_expected.not_to be_holdable }
     end
   end
 end

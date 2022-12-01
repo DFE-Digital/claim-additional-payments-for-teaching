@@ -243,6 +243,8 @@ class Claim < ApplicationRecord
 
   scope :unsubmitted, -> { where(submitted_at: nil) }
   scope :submitted, -> { where.not(submitted_at: nil) }
+  scope :held, -> { where(held: true) }
+  scope :not_held, -> { where(held: false) }
   scope :awaiting_decision, -> { submitted.joins("LEFT OUTER JOIN decisions ON decisions.claim_id = claims.id AND decisions.undone = false").where(decisions: {claim_id: nil}) }
   scope :awaiting_task, ->(task_name) { awaiting_decision.joins(sanitize_sql(["LEFT OUTER JOIN tasks ON tasks.claim_id = claims.id AND tasks.name = ?", task_name])).where(tasks: {claim_id: nil}) }
   scope :approved, -> { joins(:decisions).merge(Decision.active.approved) }
@@ -270,7 +272,7 @@ class Claim < ApplicationRecord
   end
 
   def hold!(reason:, user:)
-    unless held?
+    if holdable? && !held?
       self.class.transaction do
         update!(held: true)
         notes.create!(body: "Claim put on hold: #{reason}", created_by: user)
@@ -301,6 +303,10 @@ class Claim < ApplicationRecord
 
   def rejectable?
     !held?
+  end
+
+  def holdable?
+    !decision_made?
   end
 
   def latest_decision

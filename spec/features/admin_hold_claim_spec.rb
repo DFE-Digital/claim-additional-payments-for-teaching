@@ -10,6 +10,8 @@ RSpec.feature "Admin holds a claim" do
   scenario "Service operator amends a claim" do
     visit admin_claim_tasks_path(claim)
 
+    expect(page).to have_summary_item key: "Status", value: "Awaiting decision - not on hold"
+
     within ".app-task-list" do
       expect(page).not_to have_text "On Hold"
     end
@@ -18,8 +20,7 @@ RSpec.feature "Admin holds a claim" do
 
     click_button "Save on hold status"
 
-    expect(page).to have_text "There is a problem"
-    expect(page).to have_text "Enter why you are putting the claim on hold"
+    expect(page).to have_summary_error "Enter why you are putting the claim on hold"
 
     freeze_time do
       fill_in "On hold", with: "test"
@@ -27,6 +28,8 @@ RSpec.feature "Admin holds a claim" do
 
       expect(page).to have_text "Claim put on hold: test\nby #{@signed_in_user.full_name} on #{Time.zone.now.strftime("%-d %B %Y")}"
     end
+
+    expect(page).to have_summary_item key: "Status", value: "Awaiting decision - on hold"
 
     click_on "Tasks"
 
@@ -48,6 +51,8 @@ RSpec.feature "Admin holds a claim" do
       expect(page).to have_text "Claim hold removed\nby #{@signed_in_user.full_name} on #{Time.zone.now.strftime("%-d %B %Y")}"
     end
 
+    expect(page).to have_summary_item key: "Status", value: "Awaiting decision - not on hold"
+
     click_on "Tasks"
 
     within ".app-task-list" do
@@ -56,5 +61,13 @@ RSpec.feature "Admin holds a claim" do
     end
 
     expect(page).to have_button "Confirm decision"
+
+    choose "Approve"
+    click_button "Confirm decision"
+
+    visit admin_claim_tasks_path(claim)
+    click_on "Notes and support"
+
+    expect(page).not_to have_text "On hold"
   end
 end

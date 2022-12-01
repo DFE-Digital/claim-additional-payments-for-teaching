@@ -17,6 +17,7 @@ RSpec.feature "Admin claim filtering" do
   let!(:early_career_payments_claims_for_mary) { create_list(:claim, 2, :submitted, policy: EarlyCareerPayments, assigned_to: mary) }
   let!(:early_career_payments_claims_for_mette) { create_list(:claim, 8, :submitted, policy: EarlyCareerPayments, assigned_to: mette) }
   let!(:lup_claims_unassigned) { create_list(:claim, 2, :submitted, policy: LevellingUpPremiumPayments) }
+  let!(:held_claims) { create_list(:claim, 2, :submitted, :held) }
 
   scenario "the service operator can filter claims by policy" do
     maths_and_physics_claims = create_list(:claim, 3, :submitted, policy: MathsAndPhysics)
@@ -88,6 +89,41 @@ RSpec.feature "Admin claim filtering" do
       early_career_payments_claims_for_mette
     ].flatten.each do |c|
       expect(page).to_not have_content(c.reference)
+    end
+  end
+
+  scenario "filter claims by status" do
+    click_on "View claims"
+
+    held_claims.each do |c|
+      expect(page).to_not have_content(c.reference)
+    end
+
+    [
+      student_loans_claims_for_mette,
+      student_loans_claims_for_valentino,
+      early_career_payments_claims_for_mary,
+      early_career_payments_claims_for_mette,
+      lup_claims_unassigned
+    ].flatten.each do |c|
+      expect(page).to have_content(c.reference)
+    end
+
+    select "Awaiting decision - on hold", from: "Status:"
+    click_button "Apply filters"
+
+    held_claims.each do |c|
+      expect(page).to have_content(c.reference)
+    end
+
+    [
+      student_loans_claims_for_mette,
+      student_loans_claims_for_valentino,
+      early_career_payments_claims_for_mary,
+      early_career_payments_claims_for_mette,
+      lup_claims_unassigned
+    ].flatten.each do |c|
+      expect(page).not_to have_content(c.reference)
     end
   end
 end

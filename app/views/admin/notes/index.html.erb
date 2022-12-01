@@ -27,7 +27,7 @@
               <%= form.submit "Remove on hold status", class: "govuk-button" %>
             <% end %>
 
-          <% else %>
+          <% elsif @claim.holdable? %>
 
             <%= form_with model: @hold_note, url: admin_claim_hold_path(@claim), scope: :hold, method: :patch do |form| %>
               <%= form_group_tag @hold_note, :body do %>
