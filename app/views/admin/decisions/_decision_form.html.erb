@@ -17,6 +17,19 @@
   </div>
 <% end %>
 
+<% if claim.held? %>
+  <div class="govuk-warning-text">
+    <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
+    <strong class="govuk-warning-text__text">
+      <span class="govuk-warning-text__assistive">Warning</span>
+      <p class="govuk-!-margin-top-0">
+        You cannot approve or reject a claim that is on hold
+      </p>
+    </strong>
+  </div>
+
+<% end %>
+
 <%= form_for decision, url: admin_claim_decisions_path(claim), html: { id: "claim_decision_form" } do |form| %>
   <%= form_group_tag decision do %>
     <fieldset class="govuk-fieldset govuk-!-margin-bottom-6">
@@ -34,7 +47,7 @@
           <%= form.label "result_approved", "Approve", class: "govuk-label govuk-radios__label" %>
         </div>
         <div class="govuk-radios__item">
-          <%= form.radio_button(:result, "rejected", class: "govuk-radios__input") %>
+          <%= form.radio_button(:result, "rejected", class: "govuk-radios__input", disabled: !claim.rejectable?) %>
           <%= form.label "result_rejected", "Reject", class: "govuk-label govuk-radios__label" %>
         </div>
       </div>

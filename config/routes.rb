@@ -97,6 +97,8 @@ Rails.application.routes.draw do
       resources :notes, only: [:index, :create]
       resources :support_tickets, only: [:create]
       get "search", on: :collection
+      patch "hold"
+      patch "unhold"
     end
 
     resources :qualification_report_uploads, only: [:new, :create]

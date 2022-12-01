@@ -197,5 +197,9 @@ FactoryBot.define do
     trait :first_lup_claim_year do
       academic_year { AcademicYear::Type.new.serialize(AcademicYear.new(2022)) }
     end
+
+    trait :held do
+      held { true }
+    end
   end
 end

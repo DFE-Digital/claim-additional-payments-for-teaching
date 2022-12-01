@@ -4,6 +4,7 @@ class Decision < ApplicationRecord
 
   validates :result, :created_by, presence: {message: "Make a decision to approve or reject the claim"}
   validate :claim_must_be_approvable, if: :approved?, on: :create
+  validate :claim_must_be_rejectable, if: :rejected?, on: :create
   validate :claim_must_have_undoable_decision, if: :undone?, on: :update
 
   scope :active, -> { where(undone: false) }
@@ -26,6 +27,10 @@ class Decision < ApplicationRecord
 
   def claim_must_be_approvable
     errors.add(:base, "This claim cannot be approved") unless claim.approvable?
+  end
+
+  def claim_must_be_rejectable
+    errors.add(:base, "This claim cannot be rejected") unless claim.rejectable?
   end
 
   def claim_must_have_undoable_decision
