@@ -33,8 +33,9 @@ shared:
   - claimant_gender
   :school_workforce_censuses:
   - teacher_reference_number
-  :tps_data:
+  :teachers_pensions_service:
   - teacher_reference_number
+  - gender_digit
   :dfe_sign_in_users:
   - given_name
   - family_name

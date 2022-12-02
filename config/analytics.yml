@@ -243,6 +243,7 @@ shared:
   - school_urn
   - created_at
   - updated_at
+  - gender_digit
   :dfe_sign_in_users:
   - id
   - dfe_sign_in_id
