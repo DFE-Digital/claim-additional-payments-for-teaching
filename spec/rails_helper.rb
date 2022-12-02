@@ -70,6 +70,7 @@ RSpec.configure do |config|
   config.include OrdnanceSurveyHelpers
   config.include FixtureHelpers
   config.include IsExpectedWithBlock
+  config.include PageMatchers
 
   config.before :each do
     FactoryBot.rewind_sequences

@@ -95,7 +95,8 @@ class Claim < ApplicationRecord
     mobile_verified: false,
     one_time_password_category: false,
     assigned_to_id: true,
-    policy_options_provided: false
+    policy_options_provided: false,
+    held: false
   }.freeze
   DECISION_DEADLINE = 14.weeks
   DECISION_DEADLINE_WARNING_POINT = 2.weeks
@@ -242,6 +243,8 @@ class Claim < ApplicationRecord
 
   scope :unsubmitted, -> { where(submitted_at: nil) }
   scope :submitted, -> { where.not(submitted_at: nil) }
+  scope :held, -> { where(held: true) }
+  scope :not_held, -> { where(held: false) }
   scope :awaiting_decision, -> { submitted.joins("LEFT OUTER JOIN decisions ON decisions.claim_id = claims.id AND decisions.undone = false").where(decisions: {claim_id: nil}) }
   scope :awaiting_task, ->(task_name) { awaiting_decision.joins(sanitize_sql(["LEFT OUTER JOIN tasks ON tasks.claim_id = claims.id AND tasks.name = ?", task_name])).where(tasks: {claim_id: nil}) }
   scope :approved, -> { joins(:decisions).merge(Decision.active.approved) }
@@ -268,6 +271,24 @@ class Claim < ApplicationRecord
     save!
   end
 
+  def hold!(reason:, user:)
+    if holdable? && !held?
+      self.class.transaction do
+        update!(held: true)
+        notes.create!(body: "Claim put on hold: #{reason}", created_by: user)
+      end
+    end
+  end
+
+  def unhold!(user:)
+    if held?
+      self.class.transaction do
+        update!(held: false)
+        notes.create!(body: "Claim hold removed", created_by: user)
+      end
+    end
+  end
+
   def submitted?
     submitted_at.present?
   end
@@ -277,7 +298,15 @@ class Claim < ApplicationRecord
   end
 
   def approvable?
-    submitted? && !payroll_gender_missing? && !decision_made? && !payment_prevented_by_other_claims?
+    submitted? && !held? && !payroll_gender_missing? && !decision_made? && !payment_prevented_by_other_claims?
+  end
+
+  def rejectable?
+    !held?
+  end
+
+  def holdable?
+    !decision_made?
   end
 
   def latest_decision

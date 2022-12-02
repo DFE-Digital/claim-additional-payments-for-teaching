@@ -8,6 +8,8 @@ module Admin
       if @support_ticket.save
         redirect_to admin_claim_notes_url(@claim)
       else
+        @note = Note.new
+        @hold_note = Note.new
         render "admin/notes/index"
       end
     end

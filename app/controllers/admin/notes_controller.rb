@@ -5,13 +5,15 @@ module Admin
 
     def index
       @note = Note.new
+      @hold_note = Note.new
     end
 
     def create
       @note = Note.new(note_params)
-      if @note.save
+      if @note.save(context: :create_note)
         redirect_to admin_claim_notes_url(@claim)
       else
+        @hold_note = Note.new
         render :index
       end
     end

@@ -34,7 +34,7 @@
           <label class="govuk-label" for="status">
             Status:
           </label>
-          <%= form.select :status, options_for_select([["Approved awaiting payroll", "approved_awaiting_payroll"], ["Approved", "approved"], ["Rejected", "rejected"]], params[:status]), {include_blank: "Awaiting decision"}, class: "govuk-select" %>
+          <%= form.select :status, options_for_select([["Awaiting decision - on hold", "held"], ["Approved awaiting payroll", "approved_awaiting_payroll"], ["Approved", "approved"], ["Rejected", "rejected"]], params[:status]), {include_blank: "Awaiting decision - not on hold"}, class: "govuk-select" %>
         </div>
         <div>
           <%= form.submit "Apply filters", class: "govuk-button govuk-button--secondary admin-filter-group__button" %>

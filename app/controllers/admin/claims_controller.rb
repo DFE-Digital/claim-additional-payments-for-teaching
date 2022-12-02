@@ -7,7 +7,8 @@ class Admin::ClaimsController < Admin::BaseAdminController
     @claims = Claim.current_academic_year.approved if params[:status] == "approved"
     @claims = Claim.current_academic_year.payrollable if params[:status] == "approved_awaiting_payroll"
     @claims = Claim.current_academic_year.rejected if params[:status] == "rejected"
-    @claims ||= Claim.includes(:decisions).awaiting_decision
+    @claims = Claim.includes(:decisions).held.awaiting_decision if params[:status] == "held"
+    @claims ||= Claim.includes(:decisions).not_held.awaiting_decision
 
     @claims = @claims.by_policy(filtered_policy) if filtered_policy
     @claims = @claims.by_claims_team_member(filtered_team_member) if filtered_team_member
@@ -58,6 +59,25 @@ class Admin::ClaimsController < Admin::BaseAdminController
     end
   end
 
+  def hold
+    @claim = Claim.find(params[:claim_id])
+    @hold_note = Note.new(hold_params)
+
+    if @hold_note.valid?(:hold_claim)
+      @claim.hold!(reason: @hold_note.body, user: admin_user)
+      redirect_to admin_claim_notes_path(@claim)
+    else
+      @note = Note.new
+      render "admin/notes/index"
+    end
+  end
+
+  def unhold
+    @claim = Claim.find(params[:claim_id])
+    @claim.unhold!(user: admin_user)
+    redirect_to admin_claim_notes_path(@claim)
+  end
+
   private
 
   def filtered_policy
@@ -78,5 +98,9 @@ class Admin::ClaimsController < Admin::BaseAdminController
   # Stores where View Claim originated from, e.g. claims index or search results
   def claims_backlink_path!(source_path)
     session[:claims_backlink_path] = source_path
+  end
+
+  def hold_params
+    params.require(:hold).permit(:body).merge(claim: @claim)
   end
 end

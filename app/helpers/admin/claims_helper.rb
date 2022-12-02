@@ -163,8 +163,10 @@ module Admin
         "Approved awaiting payroll"
       elsif claim.latest_decision&.rejected?
         "Rejected"
+      elsif claim.held?
+        "Awaiting decision - on hold"
       else
-        "Awaiting decision"
+        "Awaiting decision - not on hold"
       end
     end
 

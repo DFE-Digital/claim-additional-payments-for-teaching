@@ -170,4 +170,26 @@ RSpec.describe "Admin claims", type: :request do
       expect(response.body).to include(expected_flash)
     end
   end
+
+  describe "claims#hold" do
+    let!(:claim) { create(:claim, :submitted) }
+
+    it "gracefully handles duplicate submissions" do
+      patch admin_claim_hold_path(claim, params: {hold: {body: "test"}})
+      patch admin_claim_hold_path(claim, params: {hold: {body: "test"}})
+
+      expect(claim.reload.notes.count).to eq(1)
+    end
+  end
+
+  describe "claims#unhold" do
+    let!(:claim) { create(:claim, :submitted, :held) }
+
+    it "gracefully handles duplicate submissions" do
+      patch admin_claim_unhold_path(claim)
+      patch admin_claim_unhold_path(claim)
+
+      expect(claim.reload.notes.count).to eq(1)
+    end
+  end
 end

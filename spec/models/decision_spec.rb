@@ -24,6 +24,14 @@ RSpec.describe Decision, type: :model do
     expect(decision.errors.messages[:base]).to eq(["This claim cannot be approved"])
   end
 
+  it "prevents an unrejectable claim from being rejected" do
+    claim = create(:claim, :held)
+    decision = build(:decision, claim: claim, result: "rejected")
+
+    expect(decision).not_to be_valid
+    expect(decision.errors.messages[:base]).to eq(["This claim cannot be rejected"])
+  end
+
   it "prevents a decision being marked as undone when a claim cannot have its decision undone" do
     claim = create(:claim, :submitted)
     decision = create(:decision, claim: claim, result: "approved")

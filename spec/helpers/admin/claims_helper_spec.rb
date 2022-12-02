@@ -455,7 +455,15 @@ describe Admin::ClaimsHelper do
       let(:claim) { create(:claim, :submitted) }
 
       it "returns a status of Awaiting decision" do
-        expect(status(claim)).to eq "Awaiting decision"
+        expect(status(claim)).to eq "Awaiting decision - not on hold"
+      end
+    end
+
+    context "claim held" do
+      let(:claim) { create(:claim, :submitted, :held) }
+
+      it "returns a status of Awaiting decision" do
+        expect(status(claim)).to eq "Awaiting decision - on hold"
       end
     end
 

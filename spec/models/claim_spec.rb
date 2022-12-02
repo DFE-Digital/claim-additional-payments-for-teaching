@@ -915,6 +915,23 @@ RSpec.describe Claim, type: :model do
 
       expect(create(:claim, :submitted, teacher_reference_number: teacher_reference_number, date_of_birth: 30.years.ago).approvable?).to eq false
     end
+
+    context "when the claim is held" do
+      subject(:claim) { create(:claim, :held) }
+      it { is_expected.not_to be_approvable }
+    end
+  end
+
+  describe "#rejectable?" do
+    context "when the claim is held" do
+      subject(:claim) { create(:claim, :held) }
+      it { is_expected.not_to be_rejectable }
+    end
+
+    context "when the claim is not held" do
+      subject(:claim) { create(:claim) }
+      it { is_expected.to be_rejectable }
+    end
   end
 
   describe "#decision" do
@@ -1500,6 +1517,84 @@ RSpec.describe Claim, type: :model do
       expect(Amendment.count).to be_zero
       expect(Decision.count).to be_zero
       expect(SupportTicket.count).to be_zero
+    end
+  end
+
+  describe "#hold!" do
+    let(:reason) { "test" }
+    let(:user) { build(:dfe_signin_user) }
+
+    before { claim.hold!(reason: reason, user: user) }
+
+    context "when the claim is already held" do
+      subject(:claim) { build(:claim, :held) }
+
+      it { is_expected.to be_held }
+
+      it "does not add a note" do
+        expect(claim.notes).to be_empty
+      end
+    end
+
+    context "when the claim cannot be held" do
+      subject(:claim) { build(:claim, :approved) }
+
+      it { is_expected.not_to be_held }
+    end
+
+    context "when the claim is not already held" do
+      subject(:claim) { build(:claim) }
+
+      it { is_expected.to be_held }
+
+      it "adds a note" do
+        expect(claim.notes.first.body).to eq "Claim put on hold: #{reason}"
+        expect(claim.notes.first.created_by).to eq user
+      end
+    end
+  end
+
+  describe "#unhold!" do
+    let(:user) { build(:dfe_signin_user) }
+
+    before { claim.unhold!(user: user) }
+
+    context "when the claim is held" do
+      subject(:claim) { build(:claim, :held) }
+
+      it { is_expected.not_to be_held }
+
+      it "adds a note" do
+        expect(claim.notes.first.body).to eq "Claim hold removed"
+        expect(claim.notes.first.created_by).to eq user
+      end
+    end
+
+    context "when the claim is not held" do
+      subject(:claim) { build(:claim) }
+
+      it { is_expected.not_to be_held }
+
+      it "does not add a note" do
+        expect(claim.notes).to be_empty
+      end
+    end
+  end
+
+  describe "#holdable?" do
+    context "when the claim has no approval decision" do
+      subject(:claim) { build(:claim, :submitted) }
+      it { is_expected.to be_holdable }
+    end
+
+    context "when the claim has is approved" do
+      subject(:claim) { build(:claim, :rejected) }
+      it { is_expected.not_to be_holdable }
+    end
+
+    context "when the claim has is rejected" do
+      subject(:claim) { build(:claim, :rejected) }
+      it { is_expected.not_to be_holdable }
     end
   end
 end
