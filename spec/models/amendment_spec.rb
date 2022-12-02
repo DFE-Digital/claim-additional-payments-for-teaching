@@ -224,6 +224,36 @@ RSpec.describe Amendment, type: :model do
         end
       end
 
+      context "when the claim would no longer be valid in the submit context" do
+        let(:claim) { create(:claim, :submitted, policy: StudentLoans) }
+        let(:ineligible_school) { create(:school, :student_loans_ineligible) }
+
+        let(:claim_attributes) do
+          {
+            eligibility_attributes: {
+              student_loan_repayment_amount: 555
+            }
+          }
+        end
+        let(:amendment_attributes) do
+          {
+            notes: "This is a change",
+            created_by: dfe_signin_user
+          }
+        end
+
+        before do
+          claim.eligibility.claim_school = ineligible_school
+          claim.eligibility.save!
+        end
+
+        subject(:amendment) { described_class.amend_claim(claim, claim_attributes, amendment_attributes) }
+
+        it "reports no errors" do
+          expect(amendment.errors).to be_empty
+        end
+      end
+
       context "with a Early Career Payments claim" do
         let(:note) do
           <<~NOTE_TEXT

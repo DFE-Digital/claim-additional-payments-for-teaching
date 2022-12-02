@@ -186,19 +186,19 @@ class Claim < ApplicationRecord
   validates :postcode, length: {maximum: 11, message: "Postcode must be 11 characters or less"}
   validate :postcode_is_valid, if: -> { postcode.present? }
 
-  validate :date_of_birth_criteria, on: [:"personal-details", :submit]
+  validate :date_of_birth_criteria, on: [:"personal-details", :submit, :amendment]
 
-  validates :teacher_reference_number, on: [:"teacher-reference-number", :submit], presence: {message: "Enter your teacher reference number"}
+  validates :teacher_reference_number, on: [:"teacher-reference-number", :submit, :amendment], presence: {message: "Enter your teacher reference number"}
   validate :trn_must_be_seven_digits
 
-  validates :national_insurance_number, on: [:"personal-details", :submit], presence: {message: "Enter a National Insurance number in the correct format"}
+  validates :national_insurance_number, on: [:"personal-details", :submit, :amendment], presence: {message: "Enter a National Insurance number in the correct format"}
   validate :ni_number_is_correct_format
 
   validates :has_student_loan, on: [:"student-loan", :submit], inclusion: {in: [true, false], message: "Select yes if you are currently repaying a student loan"}
   validates :student_loan_country, on: [:"student-loan-country"], presence: {message: "Select where your home address was when you applied for your student loan"}
   validates :student_loan_courses, on: [:"student-loan-how-many-courses"], presence: {message: "Select how many higher education courses you took out a student loan for"}
   validates :student_loan_start_date, on: [:"student-loan-start-date"], presence: {message: ->(object, data) { I18n.t("validation_errors.student_loan_start_date.#{object.student_loan_courses}") }}
-  validates :student_loan_plan, on: [:submit], presence: {message: "We have not been able determined your student loan repayment plan. Answer all questions about your student loan."}
+  validates :student_loan_plan, on: [:submit, :amendment], presence: {message: "We have not been able determined your student loan repayment plan. Answer all questions about your student loan."}
 
   validates :has_masters_doctoral_loan, on: [:"masters-doctoral-loan", :submit], inclusion: {in: [true, false], message: "Select yes if you have a postgraduate masters and/or doctoral loan"}, if: :no_student_loan?
   validates :postgraduate_masters_loan, on: [:"masters-loan", :submit], inclusion: {in: [true, false], message: "Select yes if you are currently repaying a Postgraduate Master’s Loan"}, unless: -> { no_masters_doctoral_loan? }
@@ -217,10 +217,10 @@ class Claim < ApplicationRecord
     }, if: -> { provide_mobile_number == true && mobile_number.present? && has_ecp_or_lupp_policy? }
 
   validates :bank_or_building_society, on: [:"bank-or-building-society", :submit], presence: {message: "Select if you want the money paid in to a personal bank account or building society"}
-  validates :banking_name, on: [:"personal-bank-account", :"building-society-account", :submit], presence: {message: "Enter a name on the account"}
-  validates :bank_sort_code, on: [:"personal-bank-account", :"building-society-account", :submit], presence: {message: "Enter a sort code"}
-  validates :bank_account_number, on: [:"personal-bank-account", :"building-society-account", :submit], presence: {message: "Enter an account number"}
-  validates :building_society_roll_number, on: [:"building-society-account", :submit], presence: {message: "Enter a roll number"}, if: -> { building_society? }
+  validates :banking_name, on: [:"personal-bank-account", :"building-society-account", :submit, :amendment], presence: {message: "Enter a name on the account"}
+  validates :bank_sort_code, on: [:"personal-bank-account", :"building-society-account", :submit, :amendment], presence: {message: "Enter a sort code"}
+  validates :bank_account_number, on: [:"personal-bank-account", :"building-society-account", :submit, :amendment], presence: {message: "Enter an account number"}
+  validates :building_society_roll_number, on: [:"building-society-account", :submit, :amendment], presence: {message: "Enter a roll number"}, if: -> { building_society? }
 
   validates :payroll_gender, on: [:"payroll-gender-task", :submit], presence: {message: "You must select a gender that will be passed to HMRC"}
 
