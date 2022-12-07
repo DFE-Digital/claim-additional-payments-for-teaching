@@ -85,7 +85,7 @@ locals {
     "Product"          = "Claim Additional Payments for teaching"
     "Service"          = "Teacher services"
     "Service Line"     = "Teaching Workforce"
-    "Service Offering" = "Claim Additional Payments (for teaching)"
+    "Service Offering" = "Claim Additional Payments for teaching"
   }
   input_region = "westeurope"
 }
