@@ -22,7 +22,7 @@
           <label class="govuk-label" for="team_member">
             Team member:
           </label>
-          <%= form.select :team_member, options_for_select(DfeSignIn::User.not_deleted.options_for_select_by_name.unshift(["Unassigned", "unassigned"]), params[:team_member]), {include_blank: "All"}, class: "govuk-select" %>
+          <%= form.select :team_member, options_for_select(DfeSignIn::User.options_for_select.unshift(["Unassigned", "unassigned"]), params[:team_member]), {include_blank: "All"}, class: "govuk-select" %>
         </div>
         <div>
           <label class="govuk-label" for="policy">

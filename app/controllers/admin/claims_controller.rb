@@ -86,9 +86,7 @@ class Admin::ClaimsController < Admin::BaseAdminController
 
   def filtered_team_member
     return if params[:team_member].blank? || filtered_unassigned
-
-    name = params[:team_member].split("-")
-    DfeSignIn::User.not_deleted.find_by(given_name: name.shift, family_name: name).id
+    DfeSignIn::User.not_deleted.find(params[:team_member]).id
   end
 
   def filtered_unassigned
