@@ -83,10 +83,11 @@ RSpec.describe DfeSignIn::User, type: :model do
   end
 
   describe ".options_for_select" do
-    let!(:davide) { create(:dfe_signin_user, given_name: "Davide", family_name: "Muzani", organisation_name: "Department for Education", role_codes: [DfeSignIn::User::SERVICE_OPERATOR_DFE_SIGN_IN_ROLE_CODE]) }
-    let!(:tina) { create(:dfe_signin_user, given_name: "Tina", family_name: "Dee", organisation_name: "Department for Education", role_codes: [DfeSignIn::User::SERVICE_OPERATOR_DFE_SIGN_IN_ROLE_CODE]) }
-    let!(:muhammad) { create(:dfe_signin_user, given_name: "Muhammad", family_name: "Khan", organisation_name: "Department for Education", role_codes: [DfeSignIn::User::SERVICE_OPERATOR_DFE_SIGN_IN_ROLE_CODE]) }
-    let!(:tripti) { create(:dfe_signin_user, given_name: "Tripti", family_name: "Kumar", organisation_name: "DfE Payroll", role_codes: [DfeSignIn::User::PAYROLL_OPERATOR_DFE_SIGN_IN_ROLE_CODE]) }
+    let!(:davide) { create(:dfe_signin_user, :service_operator, given_name: "Davide", family_name: "Muzani") }
+    let!(:tina) { create(:dfe_signin_user, :service_operator, given_name: "Tina", family_name: "Dee") }
+    let!(:muhammad) { create(:dfe_signin_user, :service_operator, given_name: "Muhammad", family_name: "Khan") }
+    let!(:tripti) { create(:dfe_signin_user, :payroll_operator, given_name: "Tripti", family_name: "Kumar") }
+    let!(:deleted_user) { create(:dfe_signin_user, :service_operator, :deleted) }
 
     it "returns an array of 'Service Operators' for use with select helper" do
       expect(described_class.options_for_select).to match_array(
@@ -101,26 +102,9 @@ RSpec.describe DfeSignIn::User, type: :model do
     it "does not include 'Payroll Operator' role" do
       expect(described_class.options_for_select).not_to include([tripti.full_name.titleize, tripti.id])
     end
-  end
 
-  describe ".options_for_select_by_name" do
-    let!(:florence) { create(:dfe_signin_user, given_name: "Florence", family_name: "Mani", organisation_name: "Department for Education", role_codes: [DfeSignIn::User::SERVICE_OPERATOR_DFE_SIGN_IN_ROLE_CODE]) }
-    let!(:rudi) { create(:dfe_signin_user, given_name: "Rudi", family_name: "Gogen-Swift", organisation_name: "Department for Education", role_codes: [DfeSignIn::User::SERVICE_OPERATOR_DFE_SIGN_IN_ROLE_CODE]) }
-    let!(:henrietta) { create(:dfe_signin_user, given_name: "henrietta", family_name: "krafstein", organisation_name: "Department for Education", role_codes: [DfeSignIn::User::SERVICE_OPERATOR_DFE_SIGN_IN_ROLE_CODE]) }
-    let!(:miguel) { create(:dfe_signin_user, given_name: "Miguel", family_name: "Hernández", organisation_name: "DfE Payroll", role_codes: [DfeSignIn::User::PAYROLL_OPERATOR_DFE_SIGN_IN_ROLE_CODE]) }
-
-    it "returns an array of 'Service Operators' for use with select helper" do
-      expect(described_class.options_for_select_by_name).to match_array(
-        [
-          [florence.full_name.titleize, "Florence-Mani"],
-          [rudi.full_name.titleize, "Rudi-Gogen-Swift"],
-          [henrietta.full_name.titleize, "henrietta-krafstein"]
-        ]
-      )
-    end
-
-    it "does not include 'Payroll Operator' role" do
-      expect(described_class.options_for_select_by_name).not_to include([miguel.full_name.titleize, "miguel-hernández"])
+    it "does not include deleted users" do
+      expect(described_class.options_for_select).not_to include([deleted_user.full_name.titleize, deleted_user.id])
     end
   end
 

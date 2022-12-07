@@ -16,5 +16,14 @@ FactoryBot.define do
     trait :deleted do
       deleted_at { Time.zone.now }
     end
+
+    trait :service_operator do
+      role_codes { [DfeSignIn::User::SERVICE_OPERATOR_DFE_SIGN_IN_ROLE_CODE] }
+    end
+
+    trait :payroll_operator do
+      role_codes { [DfeSignIn::User::PAYROLL_OPERATOR_DFE_SIGN_IN_ROLE_CODE] }
+      organisation_name { "DfE Payroll" }
+    end
   end
 end

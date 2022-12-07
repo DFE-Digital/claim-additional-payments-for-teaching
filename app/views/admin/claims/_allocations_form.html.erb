@@ -9,7 +9,7 @@
       <label class="govuk-label" for="allocate_to_team_member">
         Team members:
       </label>
-      <%= form.select :allocate_to_team_member, options_for_select(DfeSignIn::User.not_deleted.options_for_select, params[:allocate_to_team_member]), {}, class: "govuk-select" %>
+      <%= form.select :allocate_to_team_member, options_for_select(DfeSignIn::User.options_for_select, params[:allocate_to_team_member]), {}, class: "govuk-select" %>
     </div>
     <div>
       <label class="govuk-label" for="allocate_to_policy">
