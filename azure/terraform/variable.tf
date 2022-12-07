@@ -67,6 +67,12 @@ variable keyvault_cert_name {
   default     = null
 }
 
+variable statuscake_alerts {
+  type        = map
+  description = "External monitoring StatusCake checks"
+  default     = {}
+}
+
 locals {
   app_name = var.pr_number == null ? null : "pr-${var.pr_number}"
   db_name         = local.app_name == null ? var.environment : "${var.environment}-${local.app_name}"
