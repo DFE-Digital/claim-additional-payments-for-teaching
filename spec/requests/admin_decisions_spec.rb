@@ -75,7 +75,7 @@ RSpec.describe "Admin decisions", type: :request do
       end
 
       it "can reject a claim" do
-        post admin_claim_decisions_path(claim_id: claim.id, decision: {result: "rejected"})
+        post admin_claim_decisions_path(claim_id: claim.id, decision: {result: "rejected", rejected_reasons_ineligible_subject: "1"})
 
         follow_redirect!
 
@@ -110,7 +110,7 @@ RSpec.describe "Admin decisions", type: :request do
         let(:claim) { create(:claim, :submitted, payroll_gender: :dont_know, policy: MathsAndPhysics) }
 
         before do
-          post admin_claim_decisions_path(claim_id: claim.id, decision: {result: result})
+          post admin_claim_decisions_path(claim_id: claim.id, decision: {result: result, rejected_reasons_ineligible_subject: "1"})
           follow_redirect!
         end
 
@@ -149,7 +149,7 @@ RSpec.describe "Admin decisions", type: :request do
         let!(:approved_claim) { create(:claim, :approved, personal_details.merge(bank_sort_code: "112233", bank_account_number: "29482823", policy: MathsAndPhysics)) }
 
         before do
-          post admin_claim_decisions_path(claim_id: claim.id, decision: {result: result})
+          post admin_claim_decisions_path(claim_id: claim.id, decision: {result: result, rejected_reasons_ineligible_subject: "1"})
           follow_redirect!
         end
 

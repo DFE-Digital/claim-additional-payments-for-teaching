@@ -104,6 +104,16 @@ en:
       result: "Result"
       notes: "Notes"
       created_by: "Created by"
+      reasons: Reasons
+      rejected_reasons:
+        ineligible_subject: Ineligible subject
+        ineligible_year: Ineligible year
+        ineligible_school: Ineligible school
+        ineligible_qualification: Ineligible qualification
+        no_qts_or_qtls: No QTS or QTLS
+        duplicate: Duplicate
+        no_response: No response
+        other: Other
     duplicate_attributes_message:
       one: Details in this claim match another %{policy} claim
       other: Details in this claim match other %{policy} claims

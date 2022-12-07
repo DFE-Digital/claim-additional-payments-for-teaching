@@ -62,7 +62,11 @@ class Admin::DecisionsController < Admin::BaseAdminController
   end
 
   def decision_params
-    params.require(:decision).permit(:result, :notes)
+    params.require(:decision).permit(
+      :result,
+      :notes,
+      *Decision::REJECTED_REASONS.map { |r| "rejected_reasons_#{r}".to_sym }
+    )
   end
 
   def current_task_name
