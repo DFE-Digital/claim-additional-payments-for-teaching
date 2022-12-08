@@ -14,7 +14,7 @@ RSpec.describe TeachersPensionsServiceImporter do
     let(:csv) do
       <<~CSV
         Teacher reference number,NINO,Start Date,End Date,Annual salary,Monthly pay,N/A,LA URN,School URN
-        1234567,ZX043155C,01/09/2019,30/09/2019,24373,2031.08,5016,383,4026
+        12345672,ZX043155C,01/09/2019,30/09/2019,24373,2031.08,5016,383,4026
       CSV
     end
 
@@ -23,7 +23,7 @@ RSpec.describe TeachersPensionsServiceImporter do
       expect(subject.errors).to be_empty
 
       expect(subject.rows.count).to eq(1)
-      expect(subject.rows.first["Teacher reference number"]).to eq("1234567")
+      expect(subject.rows.first["Teacher reference number"]).to eq("12345672")
       expect(subject.rows.first["End Date"]).to eq("30/09/2019")
     end
   end
@@ -44,7 +44,7 @@ RSpec.describe TeachersPensionsServiceImporter do
     let(:csv) do
       <<~CSV
         Teacher reference number,Start Date,End Date,Annual salary,Monthly pay,N/A,LA URN,School URN
-        1234567,ZX043155C,01/09/2019,30/09/2019,24373,2031.08,5016,383,4026,
+        12345672,ZX043155C,01/09/2019,30/09/2019,24373,2031.08,5016,383,4026,
       CSV
     end
 
@@ -72,7 +72,7 @@ RSpec.describe TeachersPensionsServiceImporter do
     let(:csv) do
       <<~CSV
         Teacher reference number,NINO,Start Date,End Date,Annual salary,Monthly pay,N/A,LA URN,School URN
-        1234567,ZX043155C,01/09/2019,30/09/2019,24373,2031.08,5016,383,4026,
+        12345672,ZX043155C,01/09/2019,30/09/2019,24373,2031.08,5016,383,4026,
       CSV
     end
 
@@ -80,7 +80,7 @@ RSpec.describe TeachersPensionsServiceImporter do
       expect(subject.errors).to be_empty
 
       expect(subject.rows.count).to eq(1)
-      expect(subject.rows.first["Teacher reference number"]).to eq("1234567")
+      expect(subject.rows.first["Teacher reference number"]).to eq("12345672")
     end
   end
 
@@ -88,10 +88,10 @@ RSpec.describe TeachersPensionsServiceImporter do
     let(:csv) do
       <<~CSV
         Teacher reference number,NINO,Start Date,End Date,Annual salary,Monthly pay,N/A,LA URN,School URN
-        1234567,ZX043155C,01/09/2019,30/09/2019,24373,2031.08,5016,383,4026
-        1234567,ZX043155C,01/09/2019,30/09/2019,24373,2031.08,5016,383,4026
-        1234568,ZX043155C,01/09/2020,30/09/2020,24373,2031.08,5016,383,4026
-        1234568,ZX043155C,01/09/2020,30/09/2020,24373,2031.08,5016,383,4026
+        12345672,ZX043155C,01/09/2019,30/09/2019,24373,2031.08,5016,383,4026
+        12345672,ZX043155C,01/09/2019,30/09/2019,24373,2031.08,5016,383,4026
+        12345681,ZX043155C,01/09/2020,30/09/2020,24373,2031.08,5016,383,4026
+        12345681,ZX043155C,01/09/2020,30/09/2020,24373,2031.08,5016,383,4026
       CSV
     end
 
@@ -101,8 +101,10 @@ RSpec.describe TeachersPensionsServiceImporter do
       expect(subject.errors).to be_empty
       expect(subject.rows.count).to eq(4)
       expect(TeachersPensionsService.first[:teacher_reference_number]).to eq("1234567")
+      expect(TeachersPensionsService.first[:gender_digit]).to eq(2)
       expect(TeachersPensionsService.first[:start_date].to_date).to eq(Date.new(2019, 9, 1))
       expect(TeachersPensionsService.second[:teacher_reference_number]).to eq("1234568")
+      expect(TeachersPensionsService.second[:gender_digit]).to eq(1)
       expect(TeachersPensionsService.second[:start_date].to_date).to eq(Date.new(2020, 9, 1))
     end
   end
@@ -111,14 +113,14 @@ RSpec.describe TeachersPensionsServiceImporter do
     let(:csv) do
       <<~CSV
         Teacher reference number,NINO,Start Date,End Date,Annual salary,Monthly pay,N/A,LA URN,School URN
-        1234567,ZX043155C,01/04/2020,31/12/2021,24373,2031.08,5016,383,4026
+        12345672,ZX043155C,01/04/2020,31/12/2021,24373,2031.08,5016,383,4026
       CSV
     end
 
     it "has no errors and parses the CSV" do
       expect { subject.run }.to(change(TeachersPensionsService, :count).by(1))
 
-      expect(subject.rows.first["Teacher reference number"]).to eq("1234567")
+      expect(subject.rows.first["Teacher reference number"]).to eq("12345672")
       expect(subject.rows.first["End Date"]).to eq("31/12/2021")
     end
   end
@@ -127,14 +129,14 @@ RSpec.describe TeachersPensionsServiceImporter do
     let(:csv) do
       <<~CSV
         Teacher reference number,NINO,Start Date,End Date,Annual salary,Monthly pay,N/A,LA URN,School URN
-        1234567,ZX043155C,01/07/2021,01/09/2021,24373,2031.08,5016,383,4026
+        12345672,ZX043155C,01/07/2021,01/09/2021,24373,2031.08,5016,383,4026
       CSV
     end
 
     it "has no errors and parses the CSV" do
       expect { subject.run }.to(change(TeachersPensionsService, :count).by(1))
 
-      expect(subject.rows.first["Teacher reference number"]).to eq("1234567")
+      expect(subject.rows.first["Teacher reference number"]).to eq("12345672")
       expect(subject.rows.first["End Date"]).to eq("01/09/2021")
     end
   end
