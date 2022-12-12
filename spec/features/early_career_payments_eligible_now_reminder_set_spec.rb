@@ -13,7 +13,7 @@ RSpec.feature "Eligible now can set a reminder for next year." do
     claim.update!(attributes_for(:claim, :submittable))
     claim.eligibility.update!(eligibility_attributes)
 
-    visit claim_path(claim.policy.routing_name, "check-your-answers")
+    jump_to_claim_journey_page(claim, "check-your-answers")
     expect(page).to have_text(claim.first_name)
     click_on "Accept and send"
     expect(page).to have_text("Set a reminder to apply next year")
@@ -76,7 +76,7 @@ RSpec.feature "Completed Applications - Reminders" do
           )
           reminder_year = (academic_year + 1).start_year
 
-          visit claim_path(claim.policy.routing_name, "check-your-answers")
+          jump_to_claim_journey_page(claim, "check-your-answers")
           expect(page).to have_text(claim.first_name)
 
           click_on "Accept and send"

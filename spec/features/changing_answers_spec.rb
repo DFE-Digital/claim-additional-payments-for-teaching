@@ -18,7 +18,7 @@ RSpec.feature "Changing the answers on a submittable claim" do
     claim.update!(attributes_for(:claim, :submittable))
     claim.eligibility.update!(attributes_for(:maths_and_physics_eligibility, :eligible, initial_teacher_training_subject: "maths", current_school_id: maths_and_physics_school.id))
 
-    visit claim_path(MathsAndPhysics.routing_name, "check-your-answers")
+    jump_to_claim_journey_page(claim, "check-your-answers")
 
     find("a[href='#{claim_path(MathsAndPhysics.routing_name, "initial-teacher-training-subject")}']").click
 
@@ -36,7 +36,7 @@ RSpec.feature "Changing the answers on a submittable claim" do
     claim = start_student_loans_claim
     claim.update!(attributes_for(:claim, :submittable))
     claim.eligibility.update!(attributes_for(:student_loans_eligibility, :eligible, current_school_id: student_loans_school.id, claim_school_id: student_loans_school.id))
-    visit claim_path(StudentLoans.routing_name, "check-your-answers")
+    jump_to_claim_journey_page(claim, "check-your-answers")
 
     find("a[href='#{claim_path(StudentLoans.routing_name, "qts-year")}']").click
 
@@ -55,7 +55,7 @@ RSpec.feature "Changing the answers on a submittable claim" do
     claim = start_student_loans_claim
     claim.update!(attributes_for(:claim, :submittable))
     claim.eligibility.update!(attributes_for(:student_loans_eligibility, :eligible, current_school_id: student_loans_school.id, claim_school_id: student_loans_school.id))
-    visit claim_path(StudentLoans.routing_name, "check-your-answers")
+    jump_to_claim_journey_page(claim, "check-your-answers")
 
     new_claim_school = create(:school, :student_loans_eligible, name: "Claim School")
 
@@ -93,7 +93,7 @@ RSpec.feature "Changing the answers on a submittable claim" do
     claim = start_student_loans_claim
     claim.update!(attributes_for(:claim, :submittable))
     claim.eligibility.update!(attributes_for(:student_loans_eligibility, :eligible, had_leadership_position: false, current_school_id: student_loans_school.id, claim_school_id: student_loans_school.id))
-    visit claim_path(StudentLoans.routing_name, "check-your-answers")
+    jump_to_claim_journey_page(claim, "check-your-answers")
 
     find("a[href='#{claim_path(StudentLoans.routing_name, "leadership-position")}']").click
 
@@ -116,7 +116,7 @@ RSpec.feature "Changing the answers on a submittable claim" do
     claim = start_maths_and_physics_claim
     claim.update!(attributes_for(:claim, :submittable))
     claim.eligibility.update!(attributes_for(:maths_and_physics_eligibility, :eligible, employed_as_supply_teacher: true, has_entire_term_contract: true, employed_directly: true, current_school_id: maths_and_physics_school.id))
-    visit claim_path(MathsAndPhysics.routing_name, "check-your-answers")
+    jump_to_claim_journey_page(claim, "check-your-answers")
 
     find("a[href='#{claim_path(MathsAndPhysics.routing_name, "supply-teacher")}']").click
 
@@ -135,7 +135,7 @@ RSpec.feature "Changing the answers on a submittable claim" do
     claim = start_student_loans_claim
     claim.update!(attributes_for(:claim, :submittable))
     claim.eligibility.update!(attributes_for(:student_loans_eligibility, :eligible, student_loan_repayment_amount: 100.1, current_school_id: student_loans_school.id, claim_school_id: student_loans_school.id))
-    visit claim_path(StudentLoans.routing_name, "check-your-answers")
+    jump_to_claim_journey_page(claim, "check-your-answers")
 
     expect(page).to have_content("£100.10")
     find("a[href='#{claim_path(StudentLoans.routing_name, "student-loan-amount")}']").click
@@ -154,7 +154,7 @@ RSpec.feature "Changing the answers on a submittable claim" do
     before do
       claim.update!(attributes_for(:claim, :submittable))
       eligibility.update!(attributes_for(:student_loans_eligibility, :eligible, current_school_id: student_loans_school.id, claim_school_id: student_loans_school.id))
-      visit claim_path(StudentLoans.routing_name, "check-your-answers")
+      jump_to_claim_journey_page(claim, "check-your-answers")
     end
 
     scenario "Teacher can change a field that isn't related to eligibility" do
@@ -174,7 +174,7 @@ RSpec.feature "Changing the answers on a submittable claim" do
 
     context "when changing student loan answer to “No” resets the other" do
       scenario "student loan and postgraduate masters/doctoral loan related answers" do
-        visit claim_path(StudentLoans.routing_name, "check-your-answers")
+        jump_to_claim_journey_page(claim, "check-your-answers")
 
         find("a[href='#{claim_path(StudentLoans.routing_name, "student-loan")}']").click
 
@@ -203,7 +203,7 @@ RSpec.feature "Changing the answers on a submittable claim" do
     context "when changing student loan answer to “Yes” resets the other" do
       scenario "student loan and postgraduate masters/doctoral loan related answers" do
         claim.update!(attributes_for(:claim, :submittable, :with_no_student_loan))
-        visit claim_path(StudentLoans.routing_name, "check-your-answers")
+        jump_to_claim_journey_page(claim, "check-your-answers")
 
         find("a[href='#{claim_path(StudentLoans.routing_name, "student-loan")}']").click
 
@@ -224,7 +224,7 @@ RSpec.feature "Changing the answers on a submittable claim" do
 
       scenario "answer student loan and postgraduate masters/doctoral loans" do
         claim.update!(attributes_for(:claim, :submittable, :with_no_student_loan, :with_no_postgraduate_masters_doctoral_loan))
-        visit claim_path(StudentLoans.routing_name, "check-your-answers")
+        jump_to_claim_journey_page(claim, "check-your-answers")
 
         find("a[href='#{claim_path(StudentLoans.routing_name, "student-loan")}']").click
 
@@ -274,7 +274,7 @@ RSpec.feature "Changing the answers on a submittable claim" do
 
     scenario "changing student loan country forces dependent questions to be re-answered" do
       claim.update!(attributes_for(:claim, :submittable, :with_no_postgraduate_masters_doctoral_loan))
-      visit claim_path(StudentLoans.routing_name, "check-your-answers")
+      jump_to_claim_journey_page(claim, "check-your-answers")
 
       find("a[href='#{claim_path(StudentLoans.routing_name, "student-loan-country")}']").click
 
@@ -297,7 +297,7 @@ RSpec.feature "Changing the answers on a submittable claim" do
 
     scenario "user can change the answer to identity details" do
       claim.update!(govuk_verify_fields: [])
-      visit claim_path(StudentLoans.routing_name, "check-your-answers")
+      jump_to_claim_journey_page(claim, "check-your-answers")
 
       expect(page).to have_content(I18n.t("questions.name"))
       expect(page).to have_content(I18n.t("questions.address.generic.title"))
@@ -316,7 +316,7 @@ RSpec.feature "Changing the answers on a submittable claim" do
     end
 
     scenario "user can change the answer to payment details" do
-      visit claim_path(StudentLoans.routing_name, "check-your-answers")
+      jump_to_claim_journey_page(claim, "check-your-answers")
 
       expect(page).to have_content(I18n.t("questions.bank_or_building_society"))
       expect(page).to have_content("Personal bank account")
@@ -357,7 +357,7 @@ RSpec.feature "Changing the answers on a submittable claim" do
       eligibility.update!(attributes_for(:early_career_payments_eligibility, :eligible, current_school_id: ecp_school.id))
       claim.update!(personal_details_attributes)
 
-      visit claim_path(EarlyCareerPayments.routing_name, "check-your-answers")
+      jump_to_claim_journey_page(claim, "check-your-answers")
     end
 
     context "when email address" do

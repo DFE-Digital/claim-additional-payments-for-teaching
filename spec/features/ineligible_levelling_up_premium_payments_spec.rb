@@ -93,5 +93,16 @@ RSpec.feature "Ineligible Levelling up premium payments claims" do
 
     expect(page).to have_text(I18n.t("early_career_payments.ineligible.heading"))
     expect(page).to have_css("div#lack_both_valid_itt_subject_and_degree")
+
+    # Check we can go back and change the answer
+    visit claim_path(LevellingUpPremiumPayments.routing_name, "eligible-degree-subject")
+    expect(page).to have_current_path("/#{LevellingUpPremiumPayments.routing_name}/eligible-degree-subject")
+
+    choose "Yes"
+    click_on "Continue"
+
+    expect(eligibility.reload).not_to be_ineligible
+
+    expect(page).to have_current_path("/#{LevellingUpPremiumPayments.routing_name}/teaching-subject-now")
   end
 end

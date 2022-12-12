@@ -6,31 +6,47 @@ RSpec.describe PageSequence do
   let(:claim) { build(:claim) }
   let(:current_claim) { CurrentClaim.new(claims: [claim]) }
   let(:slug_sequence) { OpenStruct.new(slugs: ["first-slug", "second-slug", "third-slug"]) }
+  let(:completed_slugs) { [] }
+  let(:page_sequence) { PageSequence.new(current_claim, slug_sequence, completed_slugs, current_slug) }
 
   describe "#next_slug" do
-    it "assumes we're at the beginning of the sequence if no current_slug is specified" do
-      expect(PageSequence.new(current_claim, slug_sequence, nil).next_slug).to eq "second-slug"
+    subject(:next_slug) { page_sequence.next_slug }
+
+    context "with nil current_slug" do
+      let(:current_slug) { nil }
+      let(:completed_slugs) { ["first-slug"] }
+
+      it { is_expected.to eq("second-slug") }
     end
 
-    it "returns the next slug in the sequence" do
-      expect(PageSequence.new(current_claim, slug_sequence, "first-slug").next_slug).to eq "second-slug"
-      expect(PageSequence.new(current_claim, slug_sequence, "second-slug").next_slug).to eq "third-slug"
+    context "with current_slug equal to first slug" do
+      let(:current_slug) { "first-slug" }
+      let(:completed_slugs) { ["first-slug"] }
+
+      it { is_expected.to eq("second-slug") }
+    end
+
+    context "with current_slug equal to second slug" do
+      let(:current_slug) { "second-slug" }
+      let(:completed_slugs) { ["first-slug", "second-slug"] }
+
+      it { is_expected.to eq("third-slug") }
     end
 
     context "with an ineligible claim" do
       let(:claim) { build(:claim, eligibility: build(:student_loans_eligibility, employment_status: :no_school)) }
+      let(:current_slug) { "second-slug" }
+      let(:completed_slugs) { ["first-slug", "second-slug"] }
 
-      it "returns “ineligible” as the next slug" do
-        expect(PageSequence.new(current_claim, slug_sequence, ["second-slug"]).next_slug).to eq "ineligible"
-      end
+      it { is_expected.to eq("ineligible") }
     end
 
     context "when the claim is in a submittable state (i.e. all questions have been answered)" do
       let(:claim) { build(:claim, :submittable) }
+      let(:current_slug) { "third-slug" }
+      let(:completed_slugs) { ["first-slug", "second-slug", "third-slug"] }
 
-      it "returns “check-your-answers” as the next slug" do
-        expect(PageSequence.new(current_claim, slug_sequence, ["third-slug"]).next_slug).to eq "check-your-answers"
-      end
+      it { is_expected.to eq("check-your-answers") }
     end
 
     context "when address is populated from 'select-home-address'" do
@@ -39,41 +55,50 @@ RSpec.describe PageSequence do
         {policy: MathsAndPhysics, next_slug: "date-of-birth", slug_sequence: OpenStruct.new(slugs: ["postcode-search", "select-home-address", "address", "date-of-birth"])},
         {policy: StudentLoans, next_slug: "date-of-birth", slug_sequence: OpenStruct.new(slugs: ["postcode-search", "select-home-address", "address", "date-of-birth"])}
       ].each do |scenario|
-        let(:claim) { build(:claim, policy: scenario[:policy]) }
+        context "#{scenario[:policy]} claim" do
+          let(:claim) { build(:claim, policy: scenario[:policy], postcode: "AB12 3CD") }
+          let(:slug_sequence) { scenario[:slug_sequence] }
+          let(:current_slug) { "select-home-address" }
+          let(:completed_slugs) { ["postcode-search", "select-home-address"] }
 
-        scenario "with #{scenario[:policy]} policy returns #{scenario[:next_slug]} as the next slug (NOT 'address')" do
-          expect(PageSequence.new(current_claim, scenario[:slug_sequence], "address").next_slug).to eq scenario[:next_slug]
+          it { is_expected.to eq(scenario[:next_slug]) }
         end
       end
     end
   end
 
   describe "previous_slug" do
+    subject(:previous_slug) { page_sequence.previous_slug }
+
     context "first slug in wizard" do
-      specify { expect(PageSequence.new(current_claim, slug_sequence, "first-slug").previous_slug).to be_nil }
+      let(:current_slug) { "first-slug" }
+      it { is_expected.to be_nil }
     end
 
     context "second slug in wizard" do
-      specify { expect(PageSequence.new(current_claim, slug_sequence, "second-slug").previous_slug).to eq("first-slug") }
+      let(:current_slug) { "second-slug" }
+      it { is_expected.to eq("first-slug") }
     end
 
     context "third slug in wizard" do
-      specify { expect(PageSequence.new(current_claim, slug_sequence, "third-slug").previous_slug).to eq("second-slug") }
+      let(:current_slug) { "third-slug" }
+      it { is_expected.to eq("second-slug") }
     end
 
-    context "dead ends" do
-      let(:slug_sequence_with_dead_ends) { OpenStruct.new(slugs: ["first-slug", "complete", "existing-session", "eligible-now", "eligibility-confirmed", "eligible-later", "ineligible"]) }
+    context "sequence with dead ends" do
+      let(:slug_sequence) { OpenStruct.new(slugs: ["first-slug", "complete", "existing-session", "eligibility-confirmed", "eligible-later", "ineligible"]) }
 
-      specify { expect(PageSequence.new(current_claim, slug_sequence_with_dead_ends, "complete").previous_slug).to be_nil }
-      specify { expect(PageSequence.new(current_claim, slug_sequence_with_dead_ends, "existing-session").previous_slug).to be_nil }
-      specify { expect(PageSequence.new(current_claim, slug_sequence_with_dead_ends, "eligible-now").previous_slug).to be_nil }
-      specify { expect(PageSequence.new(current_claim, slug_sequence_with_dead_ends, "eligible-later").previous_slug).to be_nil }
-      specify { expect(PageSequence.new(current_claim, slug_sequence_with_dead_ends, "ineligible").previous_slug).to be_nil }
+      ["complete", "existing-session", "eligible-later", "ineligible"].each do |slug|
+        context "current_slug is #{slug}" do
+          let(:current_slug) { slug }
+          it { is_expected.to be_nil }
+        end
+      end
     end
   end
 
   describe "in_sequence?" do
-    let(:page_sequence) { PageSequence.new(current_claim, slug_sequence, "third-slug") }
+    let(:current_slug) { "third-slug" }
 
     it "returns true when the slug is part of the sequence" do
       expect(page_sequence.in_sequence?("first-slug")).to eq(true)
@@ -83,6 +108,69 @@ RSpec.describe PageSequence do
     it "returns false when the slug is not part of the sequence" do
       expect(page_sequence.in_sequence?("random-slug")).to eq(false)
       expect(page_sequence.in_sequence?("another-rando-slug")).to eq(false)
+    end
+  end
+
+  describe "#has_completed_journey_until?" do
+    let(:slug_sequence) { OpenStruct.new(slugs: ["first-slug", "postcode-search", "select-home-address", "address", "second-slug", "complete", "existing-session", "eligibility-confirmed", "eligible-later", "ineligible"]) }
+
+    subject(:has_completed_journey_until) { page_sequence.has_completed_journey_until?(current_slug) }
+
+    context "when the user has not completed required previous slugs" do
+      let(:current_slug) { "second-slug" }
+      it { is_expected.to eq(false) }
+    end
+
+    context "when the user has completed only required previous slugs" do
+      let(:current_slug) { "second-slug" }
+      let(:completed_slugs) { ["first-slug", "address"] }
+      it { is_expected.to eq(true) }
+    end
+
+    context "when the user has completed required and optional previous slugs" do
+      let(:current_slug) { "second-slug" }
+      let(:completed_slugs) { ["first-slug", "postcode-search", "select-home-address", "address"] }
+      it { is_expected.to eq(true) }
+    end
+
+    context "sequence with dead ends" do
+      let(:slug_sequence) { OpenStruct.new(slugs: ["first-slug", "complete", "existing-session", "eligibility-confirmed", "eligible-later", "ineligible"]) }
+
+      ["complete", "existing-session", "eligible-later", "ineligible"].each do |slug|
+        context "current_slug is #{slug}" do
+          let(:current_slug) { slug }
+          it { is_expected.to eq(true) }
+        end
+      end
+    end
+
+    context "when the address slug has not been completed" do
+      let(:current_slug) { "second-slug" }
+      let(:completed_slugs) { ["first-slug"] }
+
+      context "when claim has a postcode (selected from postcode search)" do
+        let(:claim) { build(:claim, postcode: "AB12 3CD") }
+        it { is_expected.to eq(true) }
+      end
+
+      context "when the claim does not have a postcode" do
+        it { is_expected.to eq(false) }
+      end
+
+      context "when the user is on the address page" do
+        let(:current_slug) { "address" }
+        it { is_expected.to eq(true) }
+      end
+    end
+  end
+
+  describe "#next_required_slug" do
+    let(:slug_sequence) { OpenStruct.new(slugs: ["first-slug", "postcode-search", "select-home-address", "address", "second-slug", "complete", "existing-session", "eligibility-confirmed", "eligible-later", "ineligible"]) }
+    let(:completed_slugs) { ["first-slug", "address"] }
+    let(:current_slug) { "address" }
+
+    it "returns the next required and incomplete slug" do
+      expect(page_sequence.next_required_slug).to eq("second-slug")
     end
   end
 end

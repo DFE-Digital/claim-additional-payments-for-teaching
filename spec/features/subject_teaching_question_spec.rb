@@ -12,19 +12,19 @@ RSpec.feature "Resetting dependant attributes when the claim is ineligible" do
 
   context "when ECP and LUP eligible" do
     it "has the correct subjects" do
-      visit claim_path(claim.policy.routing_name, "nqt-in-academic-year-after-itt")
+      jump_to_claim_journey_page(claim, "nqt-in-academic-year-after-itt")
       choose "Yes"
       click_on "Continue"
 
-      visit claim_path(claim.policy.routing_name, "itt-year")
+      jump_to_claim_journey_page(claim, "itt-year")
       choose "2020 to 2021"
       click_on "Continue"
 
-      visit claim_path(claim.policy.routing_name, "eligible-itt-subject")
+      jump_to_claim_journey_page(claim, "eligible-itt-subject")
       choose "Mathematics"
       click_on "Continue"
 
-      visit claim_path(claim.policy.routing_name, "teaching-subject-now")
+      jump_to_claim_journey_page(claim, "teaching-subject-now")
       expect(page).to have_text("chemistry, computing, languages, mathematics or physics")
 
       click_on "Continue"
@@ -40,22 +40,22 @@ RSpec.feature "Resetting dependant attributes when the claim is ineligible" do
     end
 
     it "has the correct subjects" do
-      visit claim_path(claim.policy.routing_name, "current-school")
+      jump_to_claim_journey_page(claim, "current-school")
       choose_school school
 
-      visit claim_path(claim.policy.routing_name, "nqt-in-academic-year-after-itt")
+      jump_to_claim_journey_page(claim, "nqt-in-academic-year-after-itt")
       choose "Yes"
       click_on "Continue"
 
-      visit claim_path(claim.policy.routing_name, "itt-year")
+      jump_to_claim_journey_page(claim, "itt-year")
       choose "2020 to 2021"
       click_on "Continue"
 
-      visit claim_path(claim.policy.routing_name, "eligible-itt-subject")
+      jump_to_claim_journey_page(claim, "eligible-itt-subject")
       choose "Mathematics"
       click_on "Continue"
 
-      visit claim_path(claim.policy.routing_name, "teaching-subject-now")
+      jump_to_claim_journey_page(claim, "teaching-subject-now")
       expect(page).to have_text("chemistry, languages, mathematics or physics.")
     end
   end
@@ -66,7 +66,7 @@ RSpec.feature "Resetting dependant attributes when the claim is ineligible" do
     end
 
     it "has the correct subjects" do
-      visit claim_path(claim.policy.routing_name, "teaching-subject-now")
+      jump_to_claim_journey_page(claim, "teaching-subject-now")
 
       expect(page).to have_text("chemistry, computing, mathematics or physics")
     end

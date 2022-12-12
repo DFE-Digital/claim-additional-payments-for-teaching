@@ -8,6 +8,7 @@ module ClaimSessionTimeout
     session.delete(:claim_address_line_1)
     session.delete(:no_address_selected)
     session.delete(:reminder_id)
+    session.delete(:slugs)
     @current_claim = nil
   end
 

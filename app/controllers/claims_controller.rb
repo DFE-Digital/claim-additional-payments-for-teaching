@@ -3,8 +3,9 @@ class ClaimsController < BasePublicController
   include AddressDetails
 
   skip_before_action :send_unstarted_claimants_to_the_start, only: [:new, :create, :timeout]
+  before_action :initialize_session_slug_history
   before_action :check_page_is_in_sequence, only: [:show, :update]
-  before_action :update_session_with_current_slug, only: [:show]
+  before_action :update_session_with_current_slug, only: [:update]
   before_action :set_backlink_path, only: [:show]
   before_action :check_claim_not_in_progress, only: [:new]
   before_action :clear_claim_session, only: [:new]
@@ -45,7 +46,7 @@ class ClaimsController < BasePublicController
     when "personal-details"
       check_date_params
     when "eligibility-confirmed"
-      return select_claim
+      return select_claim if current_policy_routing_name == "additional-payments"
     else
       current_claim.attributes = claim_params
     end
@@ -76,7 +77,7 @@ class ClaimsController < BasePublicController
       clear_claim_session
       redirect_to(new_claim_path(params[:policy]))
     else
-      redirect_to(claim_path(current_claim.policy.routing_name, slug: session[:current_slug]))
+      redirect_to(claim_path(current_claim.policy.routing_name, slug: slug_to_redirect_to))
     end
   end
 
@@ -136,14 +137,24 @@ class ClaimsController < BasePublicController
   def check_page_is_in_sequence
     unless correct_policy_namespace?
       clear_claim_session
-      redirect_to new_claim_path and return
+      return redirect_to new_claim_path
     end
 
     raise ActionController::RoutingError.new("Not Found") unless page_sequence.in_sequence?(params[:slug])
+
+    redirect_to claim_path(current_policy_routing_name, slug_to_redirect_to) unless page_sequence.has_completed_journey_until?(params[:slug])
+  end
+
+  def initialize_session_slug_history
+    session[:slugs] ||= []
   end
 
   def update_session_with_current_slug
-    session[:current_slug] = params[:slug]
+    session[:slugs] << params[:slug] unless PageSequence::DEAD_END_SLUGS.include?(params[:slug])
+  end
+
+  def slug_to_redirect_to
+    page_sequence.next_required_slug
   end
 
   def check_claim_not_in_progress
@@ -155,7 +166,7 @@ class ClaimsController < BasePublicController
   end
 
   def page_sequence
-    @page_sequence ||= PageSequence.new(current_claim, claim_slug_sequence, params[:slug])
+    @page_sequence ||= PageSequence.new(current_claim, claim_slug_sequence, session[:slugs], params[:slug])
   end
 
   def claim_slug_sequence

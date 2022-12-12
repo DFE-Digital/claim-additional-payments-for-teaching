@@ -24,7 +24,7 @@ RSpec.shared_examples "Eligible later" do |opts|
         itt_academic_year: itt_academic_year
       )
 
-      visit claim_path(claim.policy.routing_name, "check-your-answers-part-one")
+      jump_to_claim_journey_page(claim, "check-your-answers-part-one")
 
       expect(page).to have_text(I18n.t("early_career_payments.check_your_answers.part_one.primary_heading"))
       expect(page).to have_text(I18n.t("early_career_payments.check_your_answers.part_one.secondary_heading"))
