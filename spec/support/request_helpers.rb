@@ -37,6 +37,6 @@ module RequestHelpers
   end
 
   def set_session_data(data)
-    put ::RackSessionAccess.path, params: { data: ::RackSessionAccess.encode(data) }
+    put ::RackSessionAccess.path, params: {data: ::RackSessionAccess.encode(data)}
   end
 end
