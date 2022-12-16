@@ -8,6 +8,7 @@ FactoryBot.define do
 
     trait :rejected do
       result { :rejected }
+      rejected_reasons_ineligible_subject { "1" }
     end
 
     trait :undone do

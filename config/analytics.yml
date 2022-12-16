@@ -101,6 +101,7 @@ shared:
   - notes
   - created_by_id
   - undone
+  - rejected_reasons
   :local_authorities:
   - id
   - code

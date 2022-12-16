@@ -49,6 +49,7 @@ RSpec.shared_examples "Admin Check Claim Feature" do |policy|
       click_on "Approve or reject this claim"
 
       choose "Reject"
+      check "Other"
       fill_in "Decision notes", with: "TRN doesn't exist"
       perform_enqueued_jobs { click_on "Confirm decision" }
 

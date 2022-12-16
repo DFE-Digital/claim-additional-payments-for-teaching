@@ -116,7 +116,7 @@ FactoryBot.define do
       submitted
       after(:build) do |claim|
         claim.save
-        create(:decision, claim: claim, result: "rejected")
+        create(:decision, :rejected, claim: claim)
       end
     end
 
