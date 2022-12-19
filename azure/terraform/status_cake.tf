@@ -18,7 +18,7 @@ resource "statuscake_uptime_check" "alert" {
   name           = each.value.website_name
   check_interval = each.value.check_rate
   confirmation   = 2
-  trigger_rate   = 0
+  trigger_rate   = each.value.trigger_rate
   regions        = [ "london", "dublin" ]
   contact_groups = each.value.contact_group
 
