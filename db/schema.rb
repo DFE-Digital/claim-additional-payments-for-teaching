@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_12_02_154326) do
+ActiveRecord::Schema.define(version: 2022_12_05_175252) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -91,6 +91,7 @@ ActiveRecord::Schema.define(version: 2022_12_02_154326) do
     t.text "notes"
     t.uuid "created_by_id"
     t.boolean "undone", default: false
+    t.jsonb "rejected_reasons", default: {}
     t.index ["claim_id"], name: "index_decisions_on_claim_id"
     t.index ["created_at"], name: "index_decisions_on_created_at"
     t.index ["created_by_id"], name: "index_decisions_on_created_by_id"

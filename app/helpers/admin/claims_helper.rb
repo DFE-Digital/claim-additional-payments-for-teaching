@@ -64,9 +64,19 @@ module Admin
       [].tap do |a|
         a << [translate("admin.decision.created_at"), l(decision.created_at)]
         a << [translate("admin.decision.result"), decision.result.capitalize]
+        a << [translate("admin.decision.reasons"), rejected_reasons_list(decision)] if decision.rejected?
         a << [translate("admin.decision.notes"), simple_format(decision.notes, class: "govuk-body")] if decision.notes.present?
         a << [translate("admin.decision.created_by"), user_details(decision.created_by)]
       end
+    end
+
+    def rejected_reasons_list(decision)
+      decision.rejected_reasons
+        .select { |_, v| v == "1" }
+        .keys
+        .sort_by { |k| Decision::REJECTED_REASONS.index(k.to_sym) }
+        .map { |reason| t("admin.decision.rejected_reasons.#{reason}") }
+        .join(", ")
     end
 
     def decision_deadline_warning(claim)
