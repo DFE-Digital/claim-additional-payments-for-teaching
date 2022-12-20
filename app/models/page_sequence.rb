@@ -2,12 +2,16 @@
 
 # Used to model the sequence of pages that make up the claim process.
 class PageSequence
-  attr_reader :claim, :current_slug
+  attr_reader :claim, :current_slug, :completed_slugs
 
-  def initialize(claim, slug_sequence, current_slug)
+  DEAD_END_SLUGS = %w[complete existing-session eligible-later future-eligibility ineligible]
+  OPTIONAL_SLUGS = %w[postcode-search no-address-found select-home-address]
+
+  def initialize(claim, slug_sequence, completed_slugs, current_slug)
     @claim = claim
     @current_slug = current_slug
     @slug_sequence = slug_sequence
+    @completed_slugs = completed_slugs
   end
 
   def slugs
@@ -22,26 +26,41 @@ class PageSequence
     return "ineligible" if claim.ineligible?
     return "check-your-answers" if claim.submittable?
 
-    # This allows 'address' page to be skipped when the postcode is present
-    # Occurs when populated from 'postcode-search' and the subsequent 'select-home-address' screens
-    return slugs[slugs.index("select-home-address") + 2] if current_slug == "select-home-address" && claim.postcode.present?
+    return slugs[current_slug_index + 2] if can_skip_next_slug?
 
     slugs[current_slug_index + 1]
   end
 
   def previous_slug
-    slug_index = current_slug_index
-    dead_end_slugs = %w[complete existing-session eligible-now eligible-later ineligible]
-
-    return nil if slug_index.zero? || current_slug.in?(dead_end_slugs)
-    slugs[slug_index - 1]
+    return nil if current_slug_index.zero? || current_slug.in?(DEAD_END_SLUGS)
+    slugs[current_slug_index - 1]
   end
 
   def in_sequence?(slug)
     slugs.include?(slug)
   end
 
+  def has_completed_journey_until?(slug)
+    return true if DEAD_END_SLUGS.include?(slug)
+    return true if (slug == "address" || claim.postcode.present?) && incomplete_slugs == ["address"]
+    incomplete_slugs.empty?
+  end
+
+  def next_required_slug
+    (slugs - completed_slugs - OPTIONAL_SLUGS).first
+  end
+
   private
+
+  def incomplete_slugs
+    (slugs.slice(0, current_slug_index) - OPTIONAL_SLUGS - completed_slugs)
+  end
+
+  def can_skip_next_slug?
+    # This allows 'address' page to be skipped when the postcode is present
+    # Occurs when populated from 'postcode-search' and the subsequent 'select-home-address' screens
+    return true if current_slug == "select-home-address" && claim.postcode.present?
+  end
 
   def lup_policy_and_trainee_teacher_at_lup_school?
     LevellingUpPremiumPayments.in?(claim.policies) && lup_teacher_at_lup_school

@@ -5,7 +5,7 @@ module PartOfClaimJourney
     before_action :set_cache_headers
     before_action :check_whether_closed_for_submissions, if: :current_policy_routing_name
     before_action :send_unstarted_claimants_to_the_start
-    helper_method :current_claim
+    helper_method :current_claim, :submitted_claim
   end
 
   private
@@ -27,6 +27,11 @@ module PartOfClaimJourney
 
   def current_claim
     @current_claim ||= claim_from_session || build_new_claim
+  end
+
+  def submitted_claim
+    return unless session[:submitted_claim_id]
+    CurrentClaim.new(claims: Claim.where(id: session[:submitted_claim_id]))
   end
 
   def claim_from_session

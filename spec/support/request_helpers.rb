@@ -26,4 +26,17 @@ module RequestHelpers
     post admin_dfe_sign_in_path
     follow_redirect!
   end
+
+  def set_slug_sequence_in_session(claim, slug)
+    current_claim = CurrentClaim.new(claims: [claim])
+    slug_sequence = claim.policy::SlugSequence.new(current_claim).slugs
+    slug_index = slug_sequence.index(slug)
+    visited_slugs = slug_sequence.slice(0, slug_index)
+
+    set_session_data(slugs: visited_slugs)
+  end
+
+  def set_session_data(data)
+    put ::RackSessionAccess.path, params: {data: ::RackSessionAccess.encode(data)}
+  end
 end

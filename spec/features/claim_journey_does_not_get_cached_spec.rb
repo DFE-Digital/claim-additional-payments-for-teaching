@@ -9,7 +9,7 @@ RSpec.feature "Claim journey does not get cached", js: true do
     claim.eligibility = create(:student_loans_eligibility, :eligible)
     claim.save!
 
-    visit claim_path(claim.policy.routing_name, "check-your-answers")
+    jump_to_claim_journey_page(claim, "check-your-answers")
 
     expect(page).to have_text(claim.first_name)
 

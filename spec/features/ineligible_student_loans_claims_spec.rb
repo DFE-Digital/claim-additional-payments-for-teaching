@@ -17,6 +17,14 @@ RSpec.feature "Ineligible Teacher Student Loan Repayments claims" do
     expect(claim.eligibility.reload.qts_award_year).to eql("before_cut_off_date")
     expect(page).to have_text("You’re not eligible")
     expect(page).to have_text("You can only get this payment if you completed your initial teacher training in or after the academic year 2014 to 2015.")
+
+    # Check we can go back and change the answer
+    visit claim_path(StudentLoans.routing_name, "qts-year")
+    expect(page).to have_current_path("/#{StudentLoans.routing_name}/qts-year")
+
+    choose_qts_year
+
+    expect(page).to have_current_path("/#{StudentLoans.routing_name}/claim-school")
   end
 
   scenario "chooses an ineligible claim school" do

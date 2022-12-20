@@ -77,7 +77,7 @@ RSpec.feature "GOVUK Nofity SMS sends OTP" do
           claim.update!(maths_and_physics_personal_details_attributes)
         end
 
-        visit claim_path(claim.policy.routing_name, "mobile-number")
+        jump_to_claim_journey_page(claim, "mobile-number")
         expect(claim.reload.provide_mobile_number).to eql true
 
         # - Mobile number

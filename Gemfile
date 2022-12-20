@@ -120,6 +120,7 @@ end
 group :test do
   gem "selenium-webdriver"
   gem "launchy"
+  gem "rack_session_access"
   gem "simplecov", require: false
 end
 

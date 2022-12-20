@@ -23,7 +23,7 @@ RSpec.describe "Submissions", type: :request do
         )
       end
 
-      it "submits the claim, sends a confirmation email and redirects to the confirmation page" do
+      it "submits the claim, sends a confirmation email and redirects to the confirmation page and clears the session data" do
         perform_enqueued_jobs { post claim_submission_path(StudentLoans.routing_name) }
         expect(response).to redirect_to(claim_confirmation_path(StudentLoans.routing_name))
 
@@ -33,6 +33,10 @@ RSpec.describe "Submissions", type: :request do
         expect(email.to).to eql([in_progress_claim.email_address])
         expect(email[:personalisation].decoded).to include("ref_number")
         expect(email[:personalisation].decoded).to include(in_progress_claim.reference)
+
+        expect(session[:claim_id]).to be_nil
+        expect(session[:slugs]).to be_nil
+        expect(session[:submitted_claim_id]).to eq(in_progress_claim.id)
       end
 
       # TODO: one of these specs should be here, should be in features.
@@ -82,14 +86,24 @@ RSpec.describe "Submissions", type: :request do
       in_progress_claim.update!(attributes_for(:claim, :submittable))
     end
 
-    it "renders the claim confirmation screen, including identity checking content, and clears the session" do
-      in_progress_claim.update!(govuk_verify_fields: [])
+    context "when the user has followed the slug sequence" do
+      before { set_session_data(submitted_claim_id: in_progress_claim.id) }
 
-      get claim_confirmation_path(StudentLoans.routing_name)
+      it "renders the claim confirmation screen, including identity checking content" do
+        in_progress_claim.update!(govuk_verify_fields: [])
 
-      expect(response.body).to include("Claim submitted")
-      expect(response.body).to include("Your application will be reviewed by the Department for Education")
-      expect(session[:claim_id]).to be_nil
+        get claim_confirmation_path(StudentLoans.routing_name)
+
+        expect(response.body).to include("Claim submitted")
+        expect(response.body).to include("Your application will be reviewed by the Department for Education")
+      end
+    end
+
+    context "when the user has not followed the slug sequence" do
+      it "redirect to the start page" do
+        get claim_confirmation_path(StudentLoans.routing_name)
+        expect(response).to redirect_to(StudentLoans.start_page_url)
+      end
     end
   end
 end

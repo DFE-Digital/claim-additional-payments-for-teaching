@@ -12,7 +12,7 @@ RSpec.feature "Confirming Claimant Contact details" do
     expect(claim.reload.email_address).to eql("david.tau@gmail.com")
     expect(claim.email_address).not_to eql("david.tau1988@hotmail.co.uk")
 
-    visit claim_path(claim.policy.routing_name, "email-verification")
+    jump_to_claim_journey_page(claim, "email-verification")
 
     expect(page).to have_text("Enter the 6-digit passcode")
     expect(page).to have_link(href: claim_path(EarlyCareerPayments.routing_name, "email-address"))
