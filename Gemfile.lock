@@ -243,7 +243,7 @@ GEM
     listen (3.7.1)
       rb-fsevent (~> 0.10, >= 0.10.3)
       rb-inotify (~> 0.9, >= 0.9.10)
-    loofah (2.19.0)
+    loofah (2.19.1)
       crass (~> 1.0.2)
       nokogiri (>= 1.5.9)
     mail (2.7.1)
@@ -323,6 +323,9 @@ GEM
       rack
     rack-test (2.0.2)
       rack (>= 1.3)
+    rack_session_access (0.2.0)
+      builder (>= 2.0.0)
+      rack (>= 1.0.0)
     rails (6.1.7)
       actioncable (= 6.1.7)
       actionmailbox (= 6.1.7)
@@ -540,6 +543,7 @@ DEPENDENCIES
   pagy
   pg (>= 0.18, < 2.0)
   puma (~> 6.0)
+  rack_session_access
   rails (= 6.1.7)
   rails_semantic_logger
   rollbar

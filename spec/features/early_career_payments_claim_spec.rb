@@ -401,7 +401,7 @@ RSpec.feature "Teacher Early-Career Payments claims" do
     end
 
     scenario "when Assessment only" do
-      visit claim_path(claim.policy.routing_name, "qualification")
+      jump_to_claim_journey_page(claim, "qualification")
 
       # - What route into teaching did you take?
       expect(page).to have_text(I18n.t("early_career_payments.questions.qualification.heading"))
@@ -443,7 +443,7 @@ RSpec.feature "Teacher Early-Career Payments claims" do
     end
 
     scenario "when Overseas recognition" do
-      visit claim_path(claim.policy.routing_name, "qualification")
+      jump_to_claim_journey_page(claim, "qualification")
 
       # - What route into teaching did you take?
       expect(page).to have_text(I18n.t("early_career_payments.questions.qualification.heading"))
@@ -940,7 +940,7 @@ RSpec.feature "Teacher Early-Career Payments claims" do
 
     scenario "with Ordnance Survey data" do
       expect(claim.valid?(:submit)).to eq false
-      visit claim_path(claim.policy.routing_name, "check-your-answers-part-one")
+      jump_to_claim_journey_page(claim, "check-your-answers-part-one")
 
       # - Check your answers for eligibility
       expect(page).to have_text(I18n.t("early_career_payments.check_your_answers.part_one.primary_heading"))

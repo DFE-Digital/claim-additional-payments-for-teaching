@@ -85,40 +85,53 @@ RSpec.describe "Claims", type: :request do
     before { create(:policy_configuration, :student_loans) }
 
     context "when a claim is already in progress" do
+      let(:in_progress_claim) { Claim.by_policy(StudentLoans).order(:created_at).last }
+
       before { start_student_loans_claim }
 
-      it "renders the requested page in the sequence" do
-        get claim_path(StudentLoans.routing_name, "qts-year")
-        expect(response.body).to include(I18n.t("questions.qts_award_year"))
+      context "when the user has not completed the journey in the correct slug sequence" do
+        it "redirects to the correct page in the sequence" do
+          get claim_path(StudentLoans.routing_name, "qts-year")
+          expect(response.body).to include(I18n.t("questions.qts_award_year"))
 
-        get claim_path(StudentLoans.routing_name, "claim-school")
-        expect(response.body).to include("Which school were you employed to teach at")
+          get claim_path(StudentLoans.routing_name, "claim-school")
+          expect(response).to redirect_to(claim_path(StudentLoans.routing_name, "qts-year"))
+        end
       end
 
-      context "when searching for a school on the claim-school page" do
-        let!(:school_1) { create(:school) }
-        let!(:school_2) { create(:school) }
+      context "when the user has completed the journey in the correct slug sequence" do
+        before { set_slug_sequence_in_session(in_progress_claim, "claim-school") }
 
-        it "searches for schools using the search term" do
-          get claim_path(StudentLoans.routing_name, "claim-school"), params: {school_search: school_1.name}
-
-          expect(response.body).to include school_1.name
-          expect(response.body).not_to include school_2.name
-          expect(response.body).to include "Continue"
+        it "renders the requested page in the sequence" do
+          get claim_path(StudentLoans.routing_name, "claim-school")
+          expect(response.body).to include("Which school were you employed to teach at")
         end
 
-        it "only returns results if the search term is more than two characters" do
-          get claim_path(StudentLoans.routing_name, "claim-school"), params: {school_search: "ab"}
+        context "when searching for a school on the claim-school page" do
+          let!(:school_1) { create(:school) }
+          let!(:school_2) { create(:school) }
 
-          expect(response.body).to include("There is a problem")
-          expect(response.body).to include("Enter a school or postcode")
-          expect(response.body).not_to include(school_1.name)
-        end
+          it "searches for schools using the search term" do
+            get claim_path(StudentLoans.routing_name, "claim-school"), params: {school_search: school_1.name}
 
-        it "shows an appropriate message when there are no search results" do
-          get claim_path(StudentLoans.routing_name, "claim-school"), params: {school_search: "crocodile"}
+            expect(response.body).to include school_1.name
+            expect(response.body).not_to include school_2.name
+            expect(response.body).to include "Continue"
+          end
 
-          expect(response.body).to include("No results match that search term")
+          it "only returns results if the search term is more than two characters" do
+            get claim_path(StudentLoans.routing_name, "claim-school"), params: {school_search: "ab"}
+
+            expect(response.body).to include("There is a problem")
+            expect(response.body).to include("Enter a school or postcode")
+            expect(response.body).not_to include(school_1.name)
+          end
+
+          it "shows an appropriate message when there are no search results" do
+            get claim_path(StudentLoans.routing_name, "claim-school"), params: {school_search: "crocodile"}
+
+            expect(response.body).to include("No results match that search term")
+          end
         end
       end
     end
@@ -184,16 +197,28 @@ RSpec.describe "Claims", type: :request do
         expect(response.body).to include("Select when you completed your initial teacher training")
       end
 
-      it "resets dependent claim attributes when appropriate" do
-        in_progress_claim.update!(has_student_loan: false, student_loan_plan: Claim::NO_STUDENT_LOAN)
-        put claim_path(StudentLoans.routing_name, "student-loan"), params: {claim: {has_student_loan: true}}
+      context "when the user has not completed the journey in the correct slug sequence" do
+        it "redirects to the start of the journey" do
+          put claim_path(StudentLoans.routing_name, "student-loan"), params: {claim: {has_student_loan: true}}
+          expect(response).to redirect_to(claim_path(StudentLoans.routing_name, "qts-year"))
+        end
+      end
 
-        expect(response).to redirect_to(claim_path(StudentLoans.routing_name, "student-loan-country"))
-        expect(in_progress_claim.reload.student_loan_plan).to be_nil
+      context "when the user has completed the journey in the correct slug sequence" do
+        before { set_slug_sequence_in_session(in_progress_claim, "student-loan") }
+
+        it "resets dependent claim attributes when appropriate" do
+          in_progress_claim.update!(has_student_loan: false, student_loan_plan: Claim::NO_STUDENT_LOAN)
+          put claim_path(StudentLoans.routing_name, "student-loan"), params: {claim: {has_student_loan: true}}
+
+          expect(response).to redirect_to(claim_path(StudentLoans.routing_name, "student-loan-country"))
+          expect(in_progress_claim.reload.student_loan_plan).to be_nil
+        end
       end
 
       it "resets depenent eligibility attributes when appropriate" do
         in_progress_claim.update!(eligibility_attributes: {had_leadership_position: true, mostly_performed_leadership_duties: false})
+        set_slug_sequence_in_session(in_progress_claim, "leadership-position")
         put claim_path(StudentLoans.routing_name, "leadership-position"), params: {claim: {eligibility_attributes: {had_leadership_position: false}}}
 
         expect(response).to redirect_to(claim_path(StudentLoans.routing_name, "eligibility-confirmed"))
@@ -202,6 +227,8 @@ RSpec.describe "Claims", type: :request do
 
       context "having searched for a school but not selected a school from the results on the claim-school page" do
         let!(:school) { create(:school) }
+
+        before { set_slug_sequence_in_session(in_progress_claim, "claim-school") }
 
         it "re-renders the school search results with an error message" do
           put claim_path(StudentLoans.routing_name, "claim-school"), params: {school_search: school.name, claim: {eligibility_attributes: {claim_school_id: ""}}}
@@ -217,6 +244,7 @@ RSpec.describe "Claims", type: :request do
         let(:ineligible_school) { create(:school, :student_loans_ineligible) }
 
         it "redirects to the “ineligible” page" do
+          set_slug_sequence_in_session(in_progress_claim, "claim-school")
           put claim_path(StudentLoans.routing_name, "claim-school"), params: {claim: {eligibility_attributes: {claim_school_id: ineligible_school.to_param}}}
 
           expect(response).to redirect_to(claim_path(StudentLoans.routing_name, "ineligible"))

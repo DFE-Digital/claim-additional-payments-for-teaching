@@ -13,6 +13,15 @@ RSpec.feature "Teacher Student Loan Repayments claims" do
     js_status = javascript_enabled ? "enabled" : "disabled"
     scenario "Teacher claims back student loan repayments with javascript #{js_status}", js: javascript_enabled do
       visit new_claim_path(StudentLoans.routing_name)
+
+      # Check we can't skip ahead pages in the journey
+      visit claim_completion_path(StudentLoans.routing_name)
+      expect(page).to have_current_path("/#{StudentLoans.routing_name}/existing-session")
+      visit claim_path(StudentLoans.routing_name, "still-teaching")
+      expect(page).to have_current_path("/#{StudentLoans.routing_name}/qts-year")
+      visit claim_path(StudentLoans.routing_name, "leadership-position")
+      expect(page).to have_current_path("/#{StudentLoans.routing_name}/qts-year")
+
       expect(page).to have_text(I18n.t("questions.qts_award_year"))
       expect(page).to have_link(href: "mailto:#{StudentLoans.feedback_email}")
 
@@ -80,6 +89,13 @@ RSpec.feature "Teacher Student Loan Repayments claims" do
       expect(claim.reload.national_insurance_number).to eq("PX321499A")
 
       expect(page).to have_text(I18n.t("questions.address.home.title"))
+
+      # Check we can't skip to pages if address not entered
+      visit claim_path(StudentLoans.routing_name, "email-address")
+      expect(page).to have_current_path("/#{StudentLoans.routing_name}/address")
+
+      click_on "Back"
+
       expect(page).to have_link(href: claim_path(StudentLoans.routing_name, "address"))
 
       click_link(I18n.t("questions.address.home.link_to_manual_address"))
@@ -212,6 +228,10 @@ RSpec.feature "Teacher Student Loan Repayments claims" do
       expect(page).to have_text("Claim submitted")
       expect(page).to have_text(claim.reference)
       expect(page).to have_text(claim.email_address)
+
+      # Check we can't skip to pages in middle of page sequence after claim is submitted
+      visit claim_path(StudentLoans.routing_name, "still-teaching")
+      expect(page).to have_current_path("/#{StudentLoans.routing_name}/qts-year")
     end
   end
 

@@ -2,10 +2,13 @@ require "rails_helper"
 
 RSpec.describe "The QTS year question", type: :request do
   let(:maths_and_physics_configuration) { create(:policy_configuration, :maths_and_physics) }
+  let(:in_progress_claim) { Claim.by_policy(MathsAndPhysics).order(:created_at).last }
 
   it "changes the QTS year option labels based on the current academic year the policy is accepting claims for" do
     maths_and_physics_configuration.update!(current_academic_year: "2019/2020")
     start_claim(MathsAndPhysics.routing_name)
+
+    set_slug_sequence_in_session(in_progress_claim, "qts-year")
 
     get claim_path(MathsAndPhysics.routing_name, "qts-year")
 

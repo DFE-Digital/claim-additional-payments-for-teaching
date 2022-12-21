@@ -124,4 +124,24 @@ module FeatureHelpers
     ActionMailer::Base.deliveries
       .last[:personalisation].decoded.scan(/\b[0-9]{6}\b/).first
   end
+
+  # This is a workaround for some poorly written older feature specs which
+  # update claim attributes directly in order to skip pages in the user
+  # journey. It should not be used when writing new feature specs. Its purpose
+  # is to spoof the session's record of visited pages in the journey.
+  #
+  # TODO: refactor all old feature specs which use this method
+  def jump_to_claim_journey_page(claim, slug)
+    set_slug_sequence_in_session(claim, slug)
+    visit claim_path(claim.policy.routing_name, slug)
+  end
+
+  def set_slug_sequence_in_session(claim, slug)
+    current_claim = CurrentClaim.new(claims: [claim])
+    slug_sequence = claim.policy::SlugSequence.new(current_claim).slugs
+    slug_index = slug_sequence.index(slug)
+    visited_slugs = slug_sequence.slice(0, slug_index)
+
+    page.set_rack_session(slugs: visited_slugs)
+  end
 end

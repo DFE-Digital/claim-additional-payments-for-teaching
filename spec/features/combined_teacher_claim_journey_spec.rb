@@ -11,6 +11,14 @@ RSpec.feature "Levelling up premium payments and early-career payments combined 
 
     visit new_claim_path(EarlyCareerPayments.routing_name)
 
+    # Check we can't skip ahead pages in the journey
+    visit claim_completion_path(EarlyCareerPayments.routing_name)
+    expect(page).to have_current_path("/#{EarlyCareerPayments.routing_name}/landing-page")
+    visit claim_path(EarlyCareerPayments.routing_name, "nqt-in-academic-year-after-itt")
+    expect(page).to have_current_path("/#{EarlyCareerPayments.routing_name}/current-school")
+    visit claim_path(EarlyCareerPayments.routing_name, "qualification")
+    expect(page).to have_current_path("/#{EarlyCareerPayments.routing_name}/current-school")
+
     # - Which school do you teach at
     expect(page).to have_text(I18n.t("early_career_payments.questions.current_school_search"))
     choose_school school
@@ -104,6 +112,12 @@ RSpec.feature "Levelling up premium payments and early-career payments combined 
     # - What is your home address
     expect(page).to have_text(I18n.t("questions.address.home.title"))
     expect(page).to have_link(href: claim_path(EarlyCareerPayments.routing_name, "address"))
+
+    # Check we can't skip to pages if address not entered
+    visit claim_path(EarlyCareerPayments.routing_name, "email-address")
+    expect(page).to have_current_path("/#{EarlyCareerPayments.routing_name}/address")
+
+    click_on "Back"
 
     click_link(I18n.t("questions.address.home.link_to_manual_address"))
 
@@ -218,6 +232,10 @@ RSpec.feature "Levelling up premium payments and early-career payments combined 
     ]
 
     expect(claim.reload.policy_options_provided).to eq policy_options_provided
+
+    # Check we can't skip to pages in middle of page sequence after claim is submitted
+    visit claim_path(EarlyCareerPayments.routing_name, "qualification")
+    expect(page).to have_current_path("/#{EarlyCareerPayments.routing_name}/landing-page")
   end
 
   scenario "Eligible for only one" do
