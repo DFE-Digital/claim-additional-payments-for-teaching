@@ -20,8 +20,9 @@ class PayrollRun < ApplicationRecord
     claims.by_policy(policy).count
   end
 
+  # NOTE: Optimisation - purposely not using .by_policy(policy) causing N+1 queries
   def total_claim_amount_for_policy(policy)
-    claims.by_policy(policy).sum(&:award_amount)
+    claims.select { |c| c.eligibility_type == policy::Eligibility.to_s }.sum(&:award_amount)
   end
 
   def self.create_with_claims!(claims, attrs = {})

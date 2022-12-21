@@ -21,8 +21,9 @@ module Admin
       redirect_to new_admin_payroll_run_path, alert: e.message
     end
 
+    # NOTE: Optimisation - preload payments, claims and eligibility
     def show
-      @payroll_run = PayrollRun.find(params[:id])
+      @payroll_run = PayrollRun.where(id: params[:id]).includes({claims: [:eligibility]}, {payments: [{claims: [:eligibility]}]}).first
     end
   end
 end
