@@ -259,6 +259,14 @@ module AutomatedChecks
             end
           end
         end
+
+        context "when an employment task already exists" do
+          before { create(:task, name: "employment", claim: claim_arg) }
+
+          it "does not create duplicate tasks or notes" do
+            expect { perform }.not_to change { [claim_arg.reload.notes.count, claim_arg.tasks.count] }
+          end
+        end
       end
     end
   end
