@@ -8,7 +8,7 @@ module AutomatedChecks
       end
 
       def perform
-        return unless awaiting_task?("employment")
+        return unless awaiting_task?
 
         no_data || no_match || matched
       end
@@ -17,8 +17,8 @@ module AutomatedChecks
 
       attr_accessor :admin_user, :claim, :teachers_pensions_service
 
-      def awaiting_task?(task_name)
-        claim.tasks.none? { |task| task.name == task_name }
+      def awaiting_task?
+        claim.tasks.where(name: "employment").count.zero?
       end
 
       def teachers_pensions_service_schools
@@ -91,15 +91,11 @@ module AutomatedChecks
       end
 
       def create_task(match:, passed: nil)
-        task = claim.tasks.build(
-          {
-            name: "employment",
-            claim_verifier_match: match,
-            passed: passed,
-            manual: false,
-            created_by: admin_user
-          }
-        )
+        task = claim.tasks.find_or_initialize_by(name: "employment")
+        task.claim_verifier_match = match
+        task.passed = passed
+        task.manual = false
+        task.created_by = admin_user
 
         task.save!(context: :claim_verifier)
 
