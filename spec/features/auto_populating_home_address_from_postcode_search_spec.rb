@@ -246,6 +246,15 @@ RSpec.feature "Teacher claiming Early-Career Payments uses the address auto-popu
           "User-Agent" => "Typhoeus - https://github.com/typhoeus/typhoeus"
         }
       ).to_return(status: 200, body: body_results_for_postcode_se13_7un, headers: {})
+
+    stub_request(:get, "https://api.os.uk/search/places/v1/postcode?key=api-key-value&postcode=DA15FZ")
+      .with(
+        headers: {
+          "Content-Type" => "application/json",
+          "Expect" => "",
+          "User-Agent" => "Typhoeus - https://github.com/typhoeus/typhoeus"
+        }
+      ).to_return(status: 500, headers: {})
   end
 
   context "with a supplied postcode" do
@@ -417,6 +426,24 @@ RSpec.feature "Teacher claiming Early-Career Payments uses the address auto-popu
       click_link "Change"
 
       expect(page).to have_field("Postcode", with: "SO16 9FX")
+    end
+
+    scenario "Ordanance Survery Client raise a ResponseError" do
+      expect(claim.valid?(:submit)).to eq false
+      jump_to_claim_journey_page(claim, "postcode-search")
+
+      # - What is your home address
+      expect(page).to have_text(I18n.t("questions.address.home.title"))
+      expect(page).to have_link(href: claim_path(EarlyCareerPayments.routing_name, "address"))
+
+      fill_in "Postcode", with: "DA1 5FZ"
+      click_on "Search"
+
+      # Redirects to manual address page
+      expect(page).to have_text("What is your address?")
+
+      # Shows a flash message to enter address manually
+      expect(page).to have_text("Please enter your address manually")
     end
   end
 end
