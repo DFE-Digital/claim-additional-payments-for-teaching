@@ -13,7 +13,7 @@ RSpec.describe "admin/notes controller" do
 
       expect(response.body).to include("Notes")
       expect(response.body).to include("Need to verify the student loan amount")
-      expect(response.body).to include("by #{user.full_name}")
+      expect(response.body).to include(CGI.escapeHTML("by #{user.full_name}"))
     end
 
     it "refuses requests from users without the service operator role" do
