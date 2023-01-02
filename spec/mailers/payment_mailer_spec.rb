@@ -41,25 +41,52 @@ RSpec.describe PaymentMailer, type: :mailer do
           expect(mail.body.encoded).to include("You will receive £500.00 on Friday 1st January 2019")
         end
 
-        context "when user does not currently have a student loan" do
-          let(:payment) { create(:payment, :with_figures, student_loan_repayment: nil, claims: [claim]) }
+        context "when user does not currently have a student loan or a postgraduate loan" do
+          let(:payment) { create(:payment, :with_figures, student_loan_repayment: nil, postgraduate_loan_repayment: nil, claims: [claim]) }
 
           it "does not mention the content relating to student loan deductions" do
             expect(mail.body.encoded).to_not include("subject to a student loan contribution")
           end
         end
 
-        context "when user has a student loan" do
+        context "when user has a student loan and a postgraduate loan" do
           let(:payment) { create(:payment, :with_figures, student_loan_repayment: 10, postgraduate_loan_repayment: 8, claims: [claim]) }
 
           it "mentions the student loan deduction content and lists their contribution" do
             expect(mail.body.encoded).to include("This payment is treated as pay and is therefore subject to a student loan contribution, if applicable.")
             expect(mail.body.encoded).to include("Student loan contribution: £10.00")
+            expect(mail.body.encoded).to include("You told us you’re currently repaying a student loan. This amount is deducted from your payment and goes towards repaying your loan.")
           end
-
           it "mentions the postgraduate loan deduction content and lists their contribution" do
             expect(mail.body.encoded).to include("This payment is treated as pay and is therefore subject to a student loan contribution, if applicable.")
             expect(mail.body.encoded).to include("Postgraduate Master’s or PhD loan contribution: £8.00")
+            expect(mail.body.encoded).to include("You told us you’re currently repaying a Postgraduate Master’s Loan or Postgraduate Doctoral Loan. This amount is deducted from your payment and goes towards repaying your loan.")
+          end
+        end
+
+        context "when user has a student loan and no postgraduate loan" do
+          let(:payment) { create(:payment, :with_figures, student_loan_repayment: 10, postgraduate_loan_repayment: nil, claims: [claim]) }
+
+          it "mentions the student loan deduction content and lists their contribution" do
+            expect(mail.body.encoded).to include("Student loan contribution: £10.00")
+            expect(mail.body.encoded).to include("You told us you’re currently repaying a student loan. This amount is deducted from your payment and goes towards repaying your loan.")
+          end
+          it "does not include the postgraduate loan deduction content" do
+            expect(mail.body.encoded).not_to include("Postgraduate Master’s or PhD loan contribution")
+            expect(mail.body.encoded).not_to include("You told us you’re currently repaying a Postgraduate Master’s Loan or Postgraduate Doctoral Loan. This amount is deducted from your payment and goes towards repaying your loan.")
+          end
+        end
+
+        context "when user has no student loan and a postgraduate loan" do
+          let(:payment) { create(:payment, :with_figures, student_loan_repayment: nil, postgraduate_loan_repayment: 8, claims: [claim]) }
+
+          it "does not include the student loan deduction content" do
+            expect(mail.body.encoded).not_to include("Student loan contribution")
+            expect(mail.body.encoded).not_to include("You told us you’re currently repaying a student loan. This amount is deducted from your payment and goes towards repaying your loan.")
+          end
+          it "includes the postgraduate loan deduction content" do
+            expect(mail.body.encoded).to include("Postgraduate Master’s or PhD loan contribution: £8.00")
+            expect(mail.body.encoded).to include("You told us you’re currently repaying a Postgraduate Master’s Loan or Postgraduate Doctoral Loan. This amount is deducted from your payment and goes towards repaying your loan.")
           end
         end
       end
@@ -116,20 +143,51 @@ RSpec.describe PaymentMailer, type: :mailer do
         expect(mail.body.encoded).to include("Student loan repayments you’ve claimed back: £500.00")
       end
 
-      context "when user does not currently have a student loan" do
-        let(:payment) { create(:payment, :with_figures, student_loan_repayment: nil, claims: claims) }
+      context "when user does not currently have a student loan or a postgraduate loan" do
+        let(:payment) { create(:payment, :with_figures, student_loan_repayment: nil, postgraduate_loan_repayment: nil, claims: claims) }
 
         it "does not mention the content relating to student loan deductions" do
           expect(mail.body.encoded).to_not include("subject to a student loan contribution")
         end
       end
 
-      context "when user has a student loan" do
-        let(:payment) { create(:payment, :with_figures, student_loan_repayment: 10, claims: claims) }
+      context "when user has a student loan and a postgraduate loan" do
+        let(:payment) { create(:payment, :with_figures, student_loan_repayment: 10, postgraduate_loan_repayment: 8, claims: claims) }
 
         it "mentions the student loan deduction content and lists their contribution" do
           expect(mail.body.encoded).to include("This payment is treated as pay and is therefore subject to a student loan contribution, if applicable.")
           expect(mail.body.encoded).to include("Student loan contribution: £10.00")
+        end
+
+        it "includes the postgraduate loan deduction content" do
+          expect(mail.body.encoded).to include("Postgraduate Master’s or PhD loan contribution: £8.00")
+          expect(mail.body.encoded).to include("You told us you’re currently repaying a Postgraduate Master’s Loan or Postgraduate Doctoral Loan. This amount is deducted from your payment and goes towards repaying your loan.")
+        end
+      end
+
+      context "when user has a student loan and no postgraduate loan" do
+        let(:payment) { create(:payment, :with_figures, student_loan_repayment: 10, postgraduate_loan_repayment: nil, claims: claims) }
+
+        it "mentions the student loan deduction content and lists their contribution" do
+          expect(mail.body.encoded).to include("Student loan contribution: £10.00")
+          expect(mail.body.encoded).to include("You told us you’re currently repaying a student loan. This amount is deducted from your payment and goes towards repaying your loan.")
+        end
+        it "does not include the postgraduate loan deduction content" do
+          expect(mail.body.encoded).not_to include("Postgraduate Master’s or PhD loan contribution")
+          expect(mail.body.encoded).not_to include("You told us you’re currently repaying a Postgraduate Master’s Loan or Postgraduate Doctoral Loan. This amount is deducted from your payment and goes towards repaying your loan.")
+        end
+      end
+
+      context "when user has no student loan and a postgraduate loan" do
+        let(:payment) { create(:payment, :with_figures, student_loan_repayment: nil, postgraduate_loan_repayment: 8, claims: claims) }
+
+        it "does not include the student loan deduction content" do
+          expect(mail.body.encoded).not_to include("Student loan contribution")
+          expect(mail.body.encoded).not_to include("You told us you’re currently repaying a student loan. This amount is deducted from your payment and goes towards repaying your loan.")
+        end
+        it "includes the postgraduate loan deduction content" do
+          expect(mail.body.encoded).to include("Postgraduate Master’s or PhD loan contribution: £8.00")
+          expect(mail.body.encoded).to include("You told us you’re currently repaying a Postgraduate Master’s Loan or Postgraduate Doctoral Loan. This amount is deducted from your payment and goes towards repaying your loan.")
         end
       end
     end
