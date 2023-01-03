@@ -25,7 +25,7 @@ class Claim
     private
 
     def search_by(attribute)
-      Claim.where("LOWER(#{attribute}) = LOWER(?)", search_term)
+      Claim.submitted.where("LOWER(#{attribute}) = LOWER(?)", search_term)
     end
   end
 end
