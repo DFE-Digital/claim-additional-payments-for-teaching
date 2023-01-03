@@ -39,6 +39,10 @@ class ClaimsController < BasePublicController
     end
 
     render current_template
+  rescue OrdnanceSurvey::Client::ResponseError => e
+    Rollbar.error(e)
+    flash[:notice] = "Please enter your address manually"
+    redirect_to claim_path(current_policy_routing_name, "address")
   end
 
   def update
