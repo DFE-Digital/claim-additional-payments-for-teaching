@@ -236,7 +236,7 @@ GEM
       aes_key_wrap
       bindata
       httpclient
-    jwt (2.5.0)
+    jwt (2.6.0)
     language_server-protocol (3.17.0.2)
     launchy (2.5.2)
       addressable (~> 2.8)
