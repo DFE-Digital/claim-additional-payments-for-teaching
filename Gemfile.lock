@@ -372,7 +372,7 @@ GEM
     retriable (3.1.2)
     rexml (3.2.5)
     rollbar (3.3.3)
-    rotp (6.2.1)
+    rotp (6.2.2)
     rspec-core (3.11.0)
       rspec-support (~> 3.11.0)
     rspec-expectations (3.11.1)
