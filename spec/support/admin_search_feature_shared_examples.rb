@@ -6,6 +6,7 @@ RSpec.shared_examples "Admin Search Feature" do |policy|
 
   let!(:claim1) { create(:claim, :submitted, surname: "Wayne", policy: policy) }
   let!(:claim2) { create(:claim, :submitted, surname: "Wayne", policy: policy) }
+  let!(:unsubmitted_claim) { create(:claim, surname: "Smith", policy: policy) }
 
   scenario "redirects a service operator to the claim if there is only one match" do
     visit search_admin_claims_path
@@ -35,5 +36,14 @@ RSpec.shared_examples "Admin Search Feature" do |policy|
     expect(page).to have_no_content(claim2.reference)
     expect(page).to have_content(claim1.teacher_reference_number)
     expect(page).to have_content(policy.short_name)
+  end
+
+  scenario "unsubmitted claims filtered from search results" do
+    visit search_admin_claims_path
+
+    fill_in :reference, with: "Smith"
+    click_button "Search"
+
+    expect(page).to have_content("Cannot find a claim for query \"Smith\"")
   end
 end
