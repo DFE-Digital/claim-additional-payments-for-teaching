@@ -16,6 +16,7 @@ RSpec.describe "Admin session timing out", type: :request do
 
       expect(response).to redirect_to(admin_sign_in_path)
       expect(session[:user_id]).to be_nil
+      expect(session[:token]).to be_nil
 
       follow_redirect!
       expect(response.body).to include("Your session has timed out due to inactivity")
@@ -31,6 +32,7 @@ RSpec.describe "Admin session timing out", type: :request do
 
       expect(response).to redirect_to(admin_sign_in_path)
       expect(session[:user_id]).to be_nil
+      expect(session[:token]).to be_nil
 
       follow_redirect!
       expect(response.body).to include("Your session has timed out due to inactivity")
@@ -43,6 +45,7 @@ RSpec.describe "Admin session timing out", type: :request do
 
       expect(response.code).to eq("200")
       expect(session[:user_id]).to_not be_nil
+      expect(session[:token]).to_not be_nil
     end
   end
 end

@@ -18,7 +18,7 @@ module RequestHelpers
   def sign_in_as_service_operator
     user = create(:dfe_signin_user)
     sign_in_to_admin_with_role(DfeSignIn::User::SERVICE_OPERATOR_DFE_SIGN_IN_ROLE_CODE, user.dfe_sign_in_id)
-    user
+    user.reload
   end
 
   def sign_in_to_admin_with_role(*args)
