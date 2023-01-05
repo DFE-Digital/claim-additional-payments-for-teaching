@@ -43,7 +43,7 @@ RSpec.describe "Admin tasks", type: :request do
           it "renders the requested page" do
             get admin_claim_task_path(claim, "employment")
             expect(response.body).to include(I18n.t("admin.current_school"))
-            expect(response.body).to include(CGI.escapeHTML(claim.eligibility.current_school.name))
+            expect(response.body).to include(claim.eligibility.current_school.name)
           end
         end
 
