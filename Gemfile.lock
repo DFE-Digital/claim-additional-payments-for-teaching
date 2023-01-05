@@ -532,7 +532,7 @@ DEPENDENCIES
   dotenv-rails
   ethon (~> 0.16.0)
   factory_bot_rails
-  faker (~> 3.0)
+  faker (~> 3.1)
   faraday_middleware
   foreman
   google-cloud-storage

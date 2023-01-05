@@ -8,11 +8,21 @@
       <%= form.hidden_field :has_student_loan %>
         <%= form_group_tag current_claim do %>
           <fieldset class="govuk-fieldset" role="group">
-            <legend class="govuk-fieldset__legend govuk-fieldset__legend--<%= shared_view_css_class_size(current_claim) %>">
-              <span class="govuk-caption-xl">About your student loans</span>
-              <h1 class="govuk-fieldset__heading">
+            <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
+              <span class="govuk-caption-xl">Student loan details</span>
+              <h1 class="govuk-heading-l">Student loan</h1>
+
+              <p class="govuk-body">Tell us if you have a student loan that you have not already paid back.</p>
+
+              <p class="govuk-body">If you do, there’ll be a deduction from your payment. This goes towards repaying your student loan.</p>
+
+              <p class="govuk-body">You may have taken out a student loan for your undergraduate degree or teacher training.</p>
+
+              <p class="govuk-body">We’ll ask you about any Postgraduate Master’s Loans or Postgraduate Doctoral Loans later.</p>
+
+              <h2 class="govuk-fieldset__heading">
                 <%= t("questions.has_student_loan") %>
-              </h1>
+              </h2>
             </legend>
 
             <%= errors_tag current_claim, :has_student_loan %>
@@ -29,19 +39,6 @@
             </div>
           </fieldset>
         <% end %>
-
-        <details class="govuk-details" data-module="govuk-details">
-          <summary class="govuk-details__summary">
-            <span class="govuk-details__summary-text">
-              Why do you need to know about my student loans?
-            </span>
-          </summary>
-          <div class="govuk-details__text">
-            <p class="govuk-body">
-              We work out your student loan plan type using these questions so we make the correct student loan contributions to HMRC.
-            </p>
-          </div>
-        </details>
 
         <%= form.submit "Continue", class: "govuk-button" %>
       <% end %>
