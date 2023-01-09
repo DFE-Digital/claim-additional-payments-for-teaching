@@ -14,10 +14,12 @@ module Admin
     def callback
       dfe_sign_in_user = DfeSignIn::User.from_session(admin_session)
 
-      if dfe_sign_in_user.has_admin_access? && !dfe_sign_in_user.deleted?
+      if dfe_sign_in_user&.has_admin_access?
+        dfe_sign_in_user.regenerate_session_token
         dfe_sign_in_user.save
 
         session[:user_id] = dfe_sign_in_user.id
+        session[:token] = dfe_sign_in_user.session_token
 
         redirect_to session.delete(:requested_admin_path) || admin_root_path
       else

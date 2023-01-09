@@ -3,16 +3,13 @@ module AdminSessionTimeout
 
   def end_expired_admin_sessions
     if admin_session_timed_out?
-      session.delete(:user_id)
-      session.delete(:organisation_id)
-      session.delete(:role_codes)
-      session.delete(:claims_backlink_path)
+      clear_session
       flash[:notice] = "Your session has timed out due to inactivity, please sign-in again"
     end
   end
 
   def admin_signed_in?
-    session.key?(:user_id)
+    session.key?(:user_id) && admin_user.present?
   end
 
   def admin_session_timed_out?
