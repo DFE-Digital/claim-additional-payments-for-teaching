@@ -56,7 +56,7 @@ RSpec.describe "Admin payroll runs" do
 
         expect(response).to have_http_status(:ok)
         expect(response.body).to include(I18n.l(payroll_run.downloaded_at))
-        expect(response.body).to include(CGI.escapeHTML(payroll_run.downloaded_by.full_name))
+        expect(response.body).to include(payroll_run.downloaded_by.full_name)
       end
     end
   end
