@@ -177,6 +177,18 @@ data "azurerm_key_vault_secret" "BasicAuthPassword" {
   name         = "BasicAuthPassword"
   key_vault_id = data.azurerm_key_vault.secrets_kv.id
 }
+data "azurerm_key_vault_secret" "HMRCBaseURL" {
+  name         = "HMRCBaseURL"
+  key_vault_id = data.azurerm_key_vault.secrets_kv.id
+}
+data "azurerm_key_vault_secret" "HMRCClientID" {
+  name         = "HMRCClientID"
+  key_vault_id = data.azurerm_key_vault.secrets_kv.id
+}
+data "azurerm_key_vault_secret" "HMRCClientSecret" {
+  name         = "HMRCClientSecret"
+  key_vault_id = data.azurerm_key_vault.secrets_kv.id
+}
 
 data "azurerm_service_plan" "app" {
   name                = format("%s-%s", var.app_rg_name, "asp")

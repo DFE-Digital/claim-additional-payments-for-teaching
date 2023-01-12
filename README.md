@@ -103,6 +103,25 @@ ORDNANCE_SURVEY_API_BASE_URL=<paste url here>
 ORDNANCE_SURVEY_CLIENT_PARAMS={"key": <paste api key>}
 ```
 
+### HMRC Bank Account Validation
+
+During the claim user journey the user is prompted to enter their bank account
+details to receive their payment.
+
+Bank accounts are validated using the HMRC Bank Account API.
+
+To enable this to work, log in to the HMRC Developer Hub at
+https://developer.service.hmrc.gov.uk/, select the Sandbox application and then
+view the Client ID. Then create a client secret against the Sandbox application.
+
+Then set the following environment variables:
+
+```
+HMRC_API_BASE_URL
+HMRC_API_CLIENT_ID
+HMRC_API_CLIENT_SECRET
+```
+
 ### GOV.UK Notify
 
 We use Notify to send emails however it is turned off by default in development.
