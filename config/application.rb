@@ -14,6 +14,7 @@ require "sprockets/railtie"
 
 require_relative "../lib/student_loan"
 require_relative "../lib/dfe_sign_in"
+require_relative "../lib/hmrc"
 require_relative "../lib/ordnance_survey"
 require_relative "../lib/one_time_password"
 require_relative "../lib/send_analytics"
