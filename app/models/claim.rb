@@ -215,7 +215,7 @@ class Claim < ApplicationRecord
     format: {
       with: /\A(\+44\s?)?(?:\d\s?){10,11}\z/,
       message: "Enter a valid mobile number, like 07700 900 982 or +44 7700 900 982"
-    }, if: -> { provide_mobile_number == true && mobile_number.present? && has_ecp_or_lupp_policy? }
+    }, if: -> { provide_mobile_number == true && mobile_number.present? }
 
   validates :bank_or_building_society, on: [:"bank-or-building-society", :submit], presence: {message: "Select if you want the money paid in to a personal bank account or building society"}
   validates :banking_name, on: [:"personal-bank-account", :"building-society-account", :submit, :amendment], presence: {message: "Enter a name on the account"}
