@@ -29,6 +29,8 @@ RSpec.describe Claim::DataReportRequest do
         expect(report_request_csv[index].fields("Date of birth")).to include(claim.date_of_birth.to_s)
         expect(report_request_csv[index].fields("ITT subject")).to include(claim.eligibility.eligible_itt_subject)
         expect(report_request_csv[index].fields("Policy name")).to include(claim.policy.to_s)
+        expect(report_request_csv[index].fields("School name")).to include(claim.eligibility.current_school.name)
+        expect(report_request_csv[index].fields("School unique reference number")).to include(claim.eligibility.current_school.urn.to_s)
       end
     end
   end
