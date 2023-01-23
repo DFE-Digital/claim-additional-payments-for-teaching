@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+require "hmrc"
 
 class Claim < ApplicationRecord
   include ::OneTimePasswordCheckable
@@ -232,6 +233,7 @@ class Claim < ApplicationRecord
   validate :bank_sort_code_must_be_six_digits
   validate :building_society_roll_number_must_be_between_one_and_eighteen_digits
   validate :building_society_roll_number_must_be_in_a_valid_format
+  validate :bank_account_is_valid, on: [:"personal-bank-account", :"building-society-account"]
 
   validate :claim_must_not_be_ineligible, on: :submit
 
@@ -264,6 +266,8 @@ class Claim < ApplicationRecord
   delegate :award_amount, to: :eligibility
 
   scope :payrollable, -> { approved.left_joins(:payments).where(payments: nil) }
+
+  @@hmrc_client = Hmrc::Client.new
 
   def submit!
     raise NotSubmittable unless submittable?
@@ -527,6 +531,19 @@ class Claim < ApplicationRecord
   def bank_sort_code_must_be_six_digits
     errors.add(:bank_sort_code, "Sort code must be 6 digits") \
       if bank_sort_code.present? && normalised_bank_detail(bank_sort_code) !~ /\A\d{6}\z/
+  end
+
+  def bank_account_is_valid
+    return unless Hmrc.configuration.enabled? && banking_name.present? && bank_sort_code.present? && bank_account_number.present?
+
+    begin
+      response = @@hmrc_client.verify_personal_bank_account(bank_sort_code, bank_account_number, banking_name)
+
+      errors.add(:bank_sort_code, "Enter a valid sort code") unless response.sort_code_correct?
+      errors.add(:bank_account_number, "Enter the account number associated with the name on the account and/or sort code") if response.sort_code_correct? && !response.account_exists?
+      errors.add(:banking_name, "Enter a valid name on the account") if response.sort_code_correct? && response.account_exists? && !response.name_match?
+    rescue Hmrc::ResponseError
+    end
   end
 
   def unique_reference

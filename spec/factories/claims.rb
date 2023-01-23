@@ -31,6 +31,7 @@ FactoryBot.define do
     trait :submittable do
       with_student_loan
       with_postgraduate_masters_doctoral_loan
+      with_bank_details
 
       first_name { "Jo" }
       surname { "Bloggs" }
@@ -41,10 +42,6 @@ FactoryBot.define do
       national_insurance_number { generate(:national_insurance_number) }
       email_address { generate(:email_address) }
       email_verified { true }
-      bank_or_building_society { :personal_bank_account }
-      banking_name { "Jo Bloggs" }
-      bank_sort_code { rand(100000..999999) }
-      bank_account_number { rand(10000000..99999999) }
       payroll_gender { :female }
       provide_mobile_number { false }
 
@@ -199,6 +196,13 @@ FactoryBot.define do
 
     trait :held do
       held { true }
+    end
+
+    trait :with_bank_details do
+      bank_or_building_society { :personal_bank_account }
+      banking_name { "Jo Bloggs" }
+      bank_sort_code { rand(100000..999999) }
+      bank_account_number { rand(10000000..99999999) }
     end
   end
 end

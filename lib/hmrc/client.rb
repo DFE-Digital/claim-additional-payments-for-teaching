@@ -4,8 +4,8 @@ module Hmrc
       base_url: Hmrc.configuration.base_url,
       client_id: Hmrc.configuration.client_id,
       client_secret: Hmrc.configuration.client_secret,
-      http_client: Typhoeus,
-      logger: Rails.logger
+      http_client: Hmrc.configuration.http_client,
+      logger: Hmrc.configuration.logger
     )
       self.base_url = base_url
       self.client_id = client_id
