@@ -5,6 +5,7 @@ RSpec.describe Hmrc::Client do
   let(:client_id) { "test" }
   let(:client_secret) { "test" }
   let(:http_client) { double() }
+  let(:logger) { double(info: nil) }
   let(:token) { "test_token" }
   let(:token_expiry) { 99999 }
 
@@ -14,14 +15,14 @@ RSpec.describe Hmrc::Client do
       client_id: client_id,
       client_secret: client_secret
     }) do
-      double(code: 200, body: {
+      double(success?: true, code: 200, body: {
         "access_token" => token,
         "expires_in" => token_expiry
       }.to_json)
     end
   end
 
-  subject(:client) { described_class.new(base_url: base_url, client_id: "test", client_secret: "test", http_client: http_client) }
+  subject(:client) { described_class.new(base_url: base_url, client_id: "test", client_secret: "test", http_client: http_client, logger: logger) }
 
   describe "#initialize" do
     context "with parameters" do
@@ -30,6 +31,7 @@ RSpec.describe Hmrc::Client do
         expect(client.instance_variable_get(:@client_id)).to eq(client_id)
         expect(client.instance_variable_get(:@client_secret)).to eq(client_secret)
         expect(client.instance_variable_get(:@http_client)).to eq(http_client)
+        expect(client.instance_variable_get(:@logger)).to eq(logger)
       end
     end
 
@@ -45,6 +47,7 @@ RSpec.describe Hmrc::Client do
         expect(client.instance_variable_get(:@client_id)).to eq(ENV["HMRC_API_CLIENT_ID"])
         expect(client.instance_variable_get(:@client_secret)).to eq(ENV["HMRC_API_CLIENT_SECRET"])
         expect(client.instance_variable_get(:@http_client)).to eq(Typhoeus)
+        expect(client.instance_variable_get(:@logger)).to eq(Rails.logger)
       end
     end
   end
@@ -73,6 +76,7 @@ RSpec.describe Hmrc::Client do
       }
     end
     let(:response_code) { 200 }
+    let(:response_success) { true }
     let(:response_to_return) do
       {
         "sortCodeIsPresentOnEISCD": "yes",
@@ -84,7 +88,7 @@ RSpec.describe Hmrc::Client do
 
     before do
       http_client.stub(:post).with("#{base_url}/misc/bank-account/verify/personal", headers: expected_headers, body: expected_payload) do
-        double(code: response_code, body: response_to_return)
+        double(body: response_to_return, success?: response_success, code: response_code)
       end
     end
 
@@ -123,6 +127,7 @@ RSpec.describe Hmrc::Client do
 
     context "when there is a response error" do
       let(:response_code) { 429 }
+      let(:response_success) { false }
       let(:response_to_return) { "" }
 
       it "raises an error" do

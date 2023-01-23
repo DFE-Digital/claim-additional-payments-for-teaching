@@ -4,12 +4,14 @@ module Hmrc
       base_url: Hmrc.configuration.base_url,
       client_id: Hmrc.configuration.client_id,
       client_secret: Hmrc.configuration.client_secret,
-      http_client: Typhoeus
+      http_client: Typhoeus,
+      logger: Rails.logger
     )
       self.base_url = base_url
       self.client_id = client_id
       self.client_secret = client_secret
       self.http_client = http_client
+      self.logger = logger
     end
 
     def verify_personal_bank_account(sort_code, account_number, name)
@@ -32,7 +34,7 @@ module Hmrc
 
     private
 
-    attr_accessor :base_url, :client_id, :client_secret, :http_client, :token, :token_expiry
+    attr_accessor :base_url, :client_id, :client_secret, :http_client, :logger, :token, :token_expiry
 
     def refresh_token_if_required
       return unless token_invalid?
@@ -72,7 +74,10 @@ module Hmrc
         body: payload
       )
 
-      raise ResponseError.new(response) unless response.code == 200
+      if !response.success?
+        logger.info("HMRC API error: response code #{response.code}")
+        raise ResponseError.new(response)
+      end
 
       JSON.parse(response.body)
     end
