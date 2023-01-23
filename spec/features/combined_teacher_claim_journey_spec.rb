@@ -1,8 +1,9 @@
 require "rails_helper"
 
-RSpec.feature "Levelling up premium payments and early-career payments combined claim journey" do
+RSpec.feature "Levelling up premium payments and early-career payments combined claim journey", :with_stubbed_hmrc_client, :with_hmrc_bank_validation_enabled do
   let(:claim) { Claim.by_policy(LevellingUpPremiumPayments).order(:created_at).last }
   let(:eligibility) { claim.eligibility }
+  let(:hmrc_response) { double(name_match?: true, sort_code_correct?: true, account_exists?: false) }
 
   before { create(:policy_configuration, :additional_payments) }
 
@@ -178,10 +179,22 @@ RSpec.feature "Levelling up premium payments and early-career payments combined 
     fill_in "Name on your account", with: "Jo Bloggs"
     fill_in "Sort code", with: "123456"
     fill_in "Account number", with: "87654321"
+
+    click_on "Continue"
+
+    expect(page).to have_text "Enter the account number associated with the name on the account and/or sort code"
+
+    # HMRC API not working allows the user to continue
+    Hmrc.configure { |config| config.http_client = double(post: double(success?: false, code: 429)) }
+    Claim.class_variable_set(:@@hmrc_client, Hmrc::Client.new)
+
     click_on "Continue"
 
     # - What gender does your school's payroll system associate with you
     expect(page).to have_text(I18n.t("questions.payroll_gender"))
+
+    # Reset HMRC client config for other tests
+    Hmrc.configure { |config| config.http_client = Typhoeus }
 
     choose "Female"
     click_on "Continue"
