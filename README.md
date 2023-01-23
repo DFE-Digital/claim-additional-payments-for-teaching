@@ -122,6 +122,8 @@ HMRC_API_CLIENT_ID
 HMRC_API_CLIENT_SECRET
 ```
 
+Or disable the validation by setting `HMRC_API_BANK_VALIDATION_ENABLED=false`.
+
 ### GOV.UK Notify
 
 We use Notify to send emails however it is turned off by default in development.
