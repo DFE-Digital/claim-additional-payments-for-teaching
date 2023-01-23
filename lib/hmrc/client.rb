@@ -18,12 +18,12 @@ module Hmrc
       refresh_token_if_required
 
       payload = {
-        "account": {
-          "sortCode": sort_code,
-          "accountNumber": account_number
+        account: {
+          sortCode: sort_code,
+          accountNumber: account_number
         },
-        "subject": {
-          "name": name
+        subject: {
+          name: name
         }
       }.to_json
 

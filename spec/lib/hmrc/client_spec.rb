@@ -4,7 +4,7 @@ RSpec.describe Hmrc::Client do
   let(:base_url) { "test" }
   let(:client_id) { "test" }
   let(:client_secret) { "test" }
-  let(:http_client) { double() }
+  let(:http_client) { double }
   let(:logger) { double(info: nil) }
   let(:token) { "test_token" }
   let(:token_expiry) { 99999 }
@@ -58,12 +58,12 @@ RSpec.describe Hmrc::Client do
     let(:name) { Faker::Name.name }
     let(:expected_payload) do
       {
-        "account": {
-          "sortCode": sort_code,
-          "accountNumber": account_number
+        account: {
+          sortCode: sort_code,
+          accountNumber: account_number
         },
-        "subject": {
-          "name": name
+        subject: {
+          name: name
         }
       }.to_json
     end
@@ -79,10 +79,10 @@ RSpec.describe Hmrc::Client do
     let(:response_success) { true }
     let(:response_to_return) do
       {
-        "sortCodeIsPresentOnEISCD": "yes",
-        "accountNumberIsWellFormatted": "yes",
-        "nameMatches": "indeterminate",
-        "accountExists": "indeterminate"
+        sortCodeIsPresentOnEISCD: "yes",
+        accountNumberIsWellFormatted: "yes",
+        nameMatches: "indeterminate",
+        accountExists: "indeterminate"
       }.to_json
     end
 

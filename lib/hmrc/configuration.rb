@@ -12,7 +12,7 @@ module Hmrc
     end
 
     def enabled?
-      self.enabled == true
+      enabled == true
     end
   end
 end
