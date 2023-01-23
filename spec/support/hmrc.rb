@@ -6,11 +6,11 @@ RSpec.shared_context "with stubbed HMRC client", shared_context: :metadata do
   let(:sort_code_correct) { true }
 
   before do
-    @old_hmrc_client = Claim.class_variable_get("@@hmrc_client")
-    Claim.class_variable_set(:@@hmrc_client, hmrc_client)
+    @old_hmrc_client = Hmrc.client
+    Hmrc.client = hmrc_client
   end
 
-  after { Claim.class_variable_set(:@@hmrc_client, @old_hmrc_client) }
+  after { Hmrc.client = @old_hmrc_client }
 end
 
 RSpec.shared_context "with HMRC bank validation enabled", shared_context: :metadata do

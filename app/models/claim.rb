@@ -267,8 +267,6 @@ class Claim < ApplicationRecord
 
   scope :payrollable, -> { approved.left_joins(:payments).where(payments: nil) }
 
-  @@hmrc_client = Hmrc::Client.new
-
   def submit!
     raise NotSubmittable unless submittable?
 
@@ -537,7 +535,7 @@ class Claim < ApplicationRecord
     return unless Hmrc.configuration.enabled? && banking_name.present? && bank_sort_code.present? && bank_account_number.present?
 
     begin
-      response = @@hmrc_client.verify_personal_bank_account(bank_sort_code, bank_account_number, banking_name)
+      response = Hmrc.client.verify_personal_bank_account(bank_sort_code, bank_account_number, banking_name)
 
       errors.add(:bank_sort_code, "Enter a valid sort code") unless response.sort_code_correct?
       errors.add(:bank_account_number, "Enter the account number associated with the name on the account and/or sort code") if response.sort_code_correct? && !response.account_exists?

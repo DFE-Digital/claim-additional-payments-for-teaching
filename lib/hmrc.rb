@@ -3,6 +3,10 @@ module Hmrc
     @client ||= Client.new
   end
 
+  def self.client=(client)
+    @client = client
+  end
+
   def self.configuration
     @configuration ||= Configuration.new
   end

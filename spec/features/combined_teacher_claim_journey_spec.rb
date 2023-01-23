@@ -186,7 +186,7 @@ RSpec.feature "Levelling up premium payments and early-career payments combined 
 
     # HMRC API not working allows the user to continue
     Hmrc.configure { |config| config.http_client = double(post: double(success?: false, code: 429)) }
-    Claim.class_variable_set(:@@hmrc_client, Hmrc::Client.new)
+    Hmrc.client = Hmrc::Client.new
 
     click_on "Continue"
 
