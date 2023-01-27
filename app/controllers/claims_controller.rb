@@ -38,6 +38,8 @@ class ClaimsController < BasePublicController
       session[:claim_postcode] = nil
       session[:claim_address_line_1] = nil
       redirect_to claim_path(current_policy_routing_name, "postcode-search") and return
+    elsif ["personal-bank-account", "building-society-account"].include?(params[:slug])
+      @form ||= BankDetailsForm.new(claim: current_claim)
     end
 
     render current_template
@@ -53,6 +55,8 @@ class ClaimsController < BasePublicController
       check_date_params
     when "eligibility-confirmed"
       return select_claim if current_policy_routing_name == "additional-payments"
+    when "personal-bank-account", "building-society-account"
+      return bank_account
     else
       current_claim.attributes = claim_params
     end
@@ -229,6 +233,18 @@ class ClaimsController < BasePublicController
     session[:selected_claim_policy] = policy
 
     redirect_to claim_path(current_policy_routing_name, next_slug)
+  end
+
+  def bank_account
+    @form = BankDetailsForm.new(claim_params.merge(claim: current_claim))
+
+    current_claim.attributes = claim_params
+
+    if @form.valid? && current_claim.save(context: page_sequence.current_slug.to_sym)
+      redirect_to claim_path(current_policy_routing_name, next_slug)
+    else
+      show
+    end
   end
 
   def correct_policy_namespace?

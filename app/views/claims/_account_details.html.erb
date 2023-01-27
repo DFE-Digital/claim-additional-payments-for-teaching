@@ -9,45 +9,45 @@
       </h1>
     </legend>
 
-    <%= form_group_tag current_claim, :banking_name do %>
+    <%= form_group_tag @form, :banking_name do %>
       <%= form.label :banking_name, "Name on your account", class: "govuk-label" %>
       <div class="govuk-hint" id="name-on-the-account-hint">
         <%= t("questions.account_hint", bank_or_building_society: account_hint, card: account_card) %>
       </div>
-      <%= errors_tag current_claim, :banking_name %>
+      <%= errors_tag @form, :banking_name %>
       <%= form.text_field :banking_name,
-        class: css_classes_for_input(current_claim, :banking_name),
+        class: css_classes_for_input(@form, :banking_name),
         spellcheck: "false",
         "aria-describedby" => "name-on-the-account-hint" %>
     <% end %>
 
-    <%= form_group_tag current_claim, :bank_sort_code do %>
+    <%= form_group_tag @form, :bank_sort_code do %>
       <%= form.label :bank_sort_code, "Sort code", class: "govuk-label" %>
       <div id="sort-code-hint" class="govuk-hint">For example: 309430</div>
-      <%= errors_tag current_claim, :bank_sort_code %>
+      <%= errors_tag @form, :bank_sort_code %>
       <%= form.text_field :bank_sort_code,
-        class: css_classes_for_input(current_claim, :bank_sort_code, "govuk-!-width-one-quarter"),
+        class: css_classes_for_input(@form, :bank_sort_code, "govuk-!-width-one-quarter"),
         autocomplete: "off",
         "aria-describedby" => "sort-code-hint" %>
     <% end %>
 
-    <%= form_group_tag current_claim, :bank_account_number do %>
+    <%= form_group_tag @form, :bank_account_number do %>
       <%= form.label :bank_account_number, "Account number", class: "govuk-label" %>
       <div id="account-number-hint" class="govuk-hint">For example: 00733445</div>
-      <%= errors_tag current_claim, :bank_account_number %>
+      <%= errors_tag @form, :bank_account_number %>
       <%= form.text_field :bank_account_number,
-        class: css_classes_for_input(current_claim, :bank_account_number, "govuk-input--width-20"),
+        class: css_classes_for_input(@form, :bank_account_number, "govuk-input--width-20"),
         autocomplete: "off",
         "aria-describedby" => "account-number-hint" %>
     <% end %>
 
     <% if bank_or_building_society == "building society" %>
-      <%= form_group_tag current_claim, :building_society_roll_number do %>
+      <%= form_group_tag @form, :building_society_roll_number do %>
         <%= form.label :building_society_roll_number, "Building society roll number", class: "govuk-label" %>
         <div id="roll-number-hint" class="govuk-hint">You can find it on your card, statement or passbook</div>
-        <%= errors_tag current_claim, :building_society_roll_number %>
+        <%= errors_tag @form, :building_society_roll_number %>
         <%= form.text_field :building_society_roll_number,
-          class: css_classes_for_input(current_claim, :building_society_roll_number, "govuk-input--width-20"),
+          class: css_classes_for_input(@form, :building_society_roll_number, "govuk-input--width-20"),
           autocomplete: "off",
           spellcheck: "false",
           "aria-describedby" => "roll-number-hint" %>
