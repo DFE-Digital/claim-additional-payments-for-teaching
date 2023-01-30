@@ -3,11 +3,17 @@ class BankDetailsForm
   include ActiveModel::Attributes
   include ActiveModel::Serialization
 
+  # Only validate against HMRC API if number of attempts is below threshold
+  MAX_HMRC_API_VALIDATION_ATTEMPTS = 3
+
   attribute :claim
+  attribute :hmrc_validation_attempt_count
   attribute :banking_name, :string
   attribute :bank_sort_code, :string
   attribute :bank_account_number, :string
   attribute :building_society_roll_number, :string
+
+  attr_reader :hmrc_api_validation_attempted
 
   validates :banking_name, presence: {message: "Enter a name on the account"}
   validates :bank_sort_code, presence: {message: "Enter a sort code"}
@@ -19,6 +25,10 @@ class BankDetailsForm
   validate :building_society_roll_number_must_be_between_one_and_eighteen_digits
   validate :building_society_roll_number_must_be_in_a_valid_format
   validate :bank_account_is_valid
+
+  def hmrc_api_validation_attempted?
+    @hmrc_api_validation_attempted == true
+  end
 
   private
 
@@ -51,15 +61,21 @@ class BankDetailsForm
   end
 
   def bank_account_is_valid
-    return unless Hmrc.configuration.enabled? && banking_name.present? && bank_sort_code.present? && bank_account_number.present?
+    return unless can_validate_with_hmrc_api?
 
     begin
       response = Hmrc.client.verify_personal_bank_account(bank_sort_code, bank_account_number, banking_name)
+
+      @hmrc_api_validation_attempted = true
 
       errors.add(:bank_sort_code, "Enter a valid sort code") unless response.sort_code_correct?
       errors.add(:bank_account_number, "Enter the account number associated with the name on the account and/or sort code") if response.sort_code_correct? && !response.account_exists?
       errors.add(:banking_name, "Enter a valid name on the account") if response.sort_code_correct? && response.account_exists? && !response.name_match?
     rescue Hmrc::ResponseError
     end
+  end
+
+  def can_validate_with_hmrc_api?
+    Hmrc.configuration.enabled? && ((hmrc_validation_attempt_count || 1) < MAX_HMRC_API_VALIDATION_ATTEMPTS) && banking_name.present? && bank_sort_code.present? && bank_account_number.present?
   end
 end

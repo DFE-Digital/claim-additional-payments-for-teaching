@@ -6,8 +6,9 @@ RSpec.describe BankDetailsForm do
   let(:bank_account_number) { rand(10000000..99999999) }
   let(:building_society_roll_number) { nil }
   let(:claim) { build(:claim, :with_bank_details, policy: EarlyCareerPayments) }
+  let(:hmrc_validation_attempt_count) { nil }
 
-  subject(:form) { described_class.new(claim: claim, banking_name: banking_name, bank_account_number: bank_account_number, bank_sort_code: bank_sort_code, building_society_roll_number: building_society_roll_number) }
+  subject(:form) { described_class.new(claim: claim, hmrc_validation_attempt_count: hmrc_validation_attempt_count, banking_name: banking_name, bank_account_number: bank_account_number, bank_sort_code: bank_sort_code, building_society_roll_number: building_society_roll_number) }
 
   describe "#valid?", :with_stubbed_hmrc_client do
     context "with valid account number" do
@@ -66,6 +67,10 @@ RSpec.describe BankDetailsForm do
         expect(hmrc_client).to have_received(:verify_personal_bank_account)
       end
 
+      it "sets hmrc_api_validation_attempted" do
+        expect(form).to be_hmrc_api_validation_attempted
+      end
+
       context "when there is an error with the sort code" do
         let(:sort_code_correct) { false }
 
@@ -99,6 +104,26 @@ RSpec.describe BankDetailsForm do
 
         it "catches the exception" do
           expect { form.valid? }.not_to raise_error
+        end
+      end
+
+      context "when there have been three previous validation attempts" do
+        let(:hmrc_validation_attempt_count) { 3 }
+
+        before { form.valid? }
+
+        it "does not contact the HMRC API" do
+          expect(hmrc_client).not_to have_received(:verify_personal_bank_account)
+        end
+
+        it "does not add any errors" do
+          expect(form.errors[:bank_sort_code]).to be_empty
+          expect(form.errors[:bank_account_number]).to be_empty
+          expect(form.errors[:banking_name]).to be_empty
+        end
+
+        it "does not set hmrc_api_validation_attempted" do
+          expect(form).not_to be_hmrc_api_validation_attempted
         end
       end
     end
