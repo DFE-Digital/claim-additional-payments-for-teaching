@@ -66,7 +66,7 @@ RSpec.shared_examples "Admin View Claim Feature" do |policy|
   before do
     @signed_in_user = sign_in_as_service_operator
 
-    PayrollRun.create_with_claims!([approved_paid_claim], created_by: @signed_in_user)
+    PayrollRun.create_with_claims!([approved_paid_claim], [], created_by: @signed_in_user)
 
     # NOTE: mirror claims factory for academic_year attribute "hardcoding" of 2019
     current_academic_year =

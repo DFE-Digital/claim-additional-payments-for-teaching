@@ -9,21 +9,32 @@ RSpec.feature "Payroll" do
     create(:claim, :approved, policy: MathsAndPhysics)
     create(:claim, :approved, policy: StudentLoans)
     create(:claim, :approved, policy: StudentLoans)
+    create(:claim, :approved, policy: EarlyCareerPayments)
+    create(:claim, :approved, policy: LevellingUpPremiumPayments)
+
+    paid_lup_claim = nil
+    travel_to 2.months.ago do
+      paid_lup_claim = create(:claim, :approved, policy: LevellingUpPremiumPayments)
+      create(:payment, :with_figures, claims: [paid_lup_claim])
+    end
+
+    create(:topup, claim: paid_lup_claim, award_amount: 500)
 
     month_name = Date.today.strftime("%B")
 
     click_on "Run #{month_name} payroll"
 
-    expect(page).to have_content("Approved claims 3")
-    expect(page).to have_content("Total award amount £4,000")
+    expect(page).to have_content("Approved claims 5")
+    expect(page).to have_content("Top up payments 1")
+    expect(page).to have_content("Total award amount £11,500.00")
 
     click_on "Confirm and submit"
 
     payroll_run = PayrollRun.order(:created_at).last
 
-    expect(page).to have_content("Approved claims 3")
+    expect(page).to have_content("Approved claims 6")
     expect(page).to have_content("Created by #{@signed_in_user.full_name}")
-    expect(page).to have_content("Total award amount £4,000")
+    expect(page).to have_content("Total award amount £11,500.00")
     expect(page).to have_content("Payroll run created")
     expect(page).to have_field("payroll_run_download_link", with: new_admin_payroll_run_download_url(payroll_run))
   end
@@ -155,5 +166,14 @@ RSpec.feature "Payroll" do
       "We’re paying your claim to get back your student loan repayments, reference number: #{payroll_run.claims[0].reference}",
       "We’re paying your claim to get back your student loan repayments, reference number: #{payroll_run.claims[1].reference}"
     ])
+  end
+
+  scenario "There are no claims or topups" do
+    click_on "Payroll"
+    month_name = Date.today.strftime("%B")
+    click_on "Run #{month_name} payroll"
+    click_on "Confirm and submit"
+
+    expect(page).to have_content("Payroll not run, no claims or top ups")
   end
 end

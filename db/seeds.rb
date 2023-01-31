@@ -34,7 +34,7 @@ if Rails.env.development?
         claims_counts: {StudentLoans => 12, MathsAndPhysics => 7, [StudentLoans, MathsAndPhysics] => 1},
         created_at: 2.months.ago - 5.days)
       create(:payroll_run, :confirmation_report_uploaded,
-        claims_counts: {StudentLoans => 18, MathsAndPhysics => 8, [StudentLoans, MathsAndPhysics] => 2},
+        claims_counts: {StudentLoans => 18, MathsAndPhysics => 8, [StudentLoans, MathsAndPhysics] => 2, LevellingUpPremiumPayments => 2, [StudentLoans, LevellingUpPremiumPayments] => 2},
         created_at: 1.months.ago - 3.days)
 
       Policies.all.each do |policy|

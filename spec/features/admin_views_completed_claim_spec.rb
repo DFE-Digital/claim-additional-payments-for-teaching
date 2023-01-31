@@ -29,13 +29,11 @@ RSpec.feature "Admin can view completed claims" do
 
   scenario "Viewing an approved claim which has a payment" do
     payroll_run = create(:payroll_run, claims_counts: {StudentLoans => 1})
-    payroll_run_date = payroll_run.created_at.strftime("%B %Y")
     claim_with_payment = payroll_run.claims.first
 
     visit admin_claim_tasks_path(claim_with_payment)
 
-    expect(page).to have_content("Status #{payroll_run_date}")
-    expect(page).to have_link(payroll_run_date, href: admin_payroll_run_path(payroll_run))
+    expect(page).to have_content("Status Payrolled")
   end
 
   scenario "Viewing a payroll status for an approved claim which hasn't had a payment" do
