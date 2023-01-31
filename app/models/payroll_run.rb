@@ -20,17 +20,32 @@ class PayrollRun < ApplicationRecord
     claims.by_policy(policy).count
   end
 
-  # NOTE: Optimisation - purposely not using .by_policy(policy) causing N+1 queries
   def total_claim_amount_for_policy(policy)
-    claims.select { |c| c.eligibility_type == policy::Eligibility.to_s }.sum(&:award_amount)
+    items = []
+
+    payments.includes(claims: [:eligibility]).includes(:topups).map do |payment|
+      payment.claims.each do |claim|
+        if claim.eligibility_type == policy::Eligibility.to_s
+          items << (payment.topups.present? ? payment.topups.first : claim)
+        end
+      end
+    end
+
+    items.sum(&:award_amount)
   end
 
-  def self.create_with_claims!(claims, attrs = {})
+  def self.create_with_claims!(claims, topups, attrs = {})
     ActiveRecord::Base.transaction do
       PayrollRun.create!(attrs).tap do |payroll_run|
-        claims.group_by(&:teacher_reference_number).each_value do |grouped_claims|
-          award_amount = grouped_claims.sum(&:award_amount)
-          Payment.create!(payroll_run: payroll_run, claims: grouped_claims, award_amount: award_amount)
+        [claims, topups].reduce([], :concat).group_by(&:teacher_reference_number).each_value do |grouped_items|
+          # associates the claim to the payment, for Topup that's its associated claim
+          grouped_claims = grouped_items.map { |i| i.is_a?(Topup) ? i.claim : i }
+
+          # associates the payment to the Topup, so we know it's payrolled
+          group_topups = grouped_items.select { |i| i.is_a?(Topup) }
+
+          award_amount = grouped_items.sum(&:award_amount)
+          Payment.create!(payroll_run: payroll_run, claims: grouped_claims, topups: group_topups, award_amount: award_amount)
         end
       end
     end

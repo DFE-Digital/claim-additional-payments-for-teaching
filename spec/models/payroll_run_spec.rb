@@ -89,13 +89,14 @@ RSpec.describe PayrollRun, type: :model do
 
   describe ".create_with_claims!" do
     let(:claims) { Policies.all.map { |policy| create(:claim, :approved, policy: policy) } }
-    subject!(:payroll_run) { PayrollRun.create_with_claims!(claims, created_by: user) }
+    let(:topups) { [] }
+    subject!(:payroll_run) { PayrollRun.create_with_claims!(claims, topups, created_by: user) }
 
     it "creates a payroll run with payments and populates the award_amount" do
       expect(payroll_run.reload.created_by.id).to eq(user.id)
       expect(payroll_run.claims).to match_array(claims)
-      expect(claims[0].payment.award_amount).to eq(claims[0].award_amount)
-      expect(claims[1].payment.award_amount).to eq(claims[1].award_amount)
+      expect(claims[0].payments.first.award_amount).to eq(claims[0].award_amount)
+      expect(claims[1].payments.first.award_amount).to eq(claims[1].award_amount)
     end
 
     context "with multiple claims from the same teacher reference number" do
@@ -121,7 +122,7 @@ RSpec.describe PayrollRun, type: :model do
 
       it "groups them into a single payment and populates the award_amount" do
         expect(payroll_run.payments.map(&:claims)).to match_array([match_array(matching_claims), [other_claim]])
-        expect(matching_claims[0].reload.payment.award_amount).to eq(matching_claims.sum(&:award_amount))
+        expect(matching_claims[0].reload.payments.first.award_amount).to eq(matching_claims.sum(&:award_amount))
       end
     end
   end

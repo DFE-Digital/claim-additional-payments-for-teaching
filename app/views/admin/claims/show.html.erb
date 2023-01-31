@@ -17,7 +17,8 @@
       <%= @claim.reference %>
       <span class="govuk-body-m">
         <%= link_to "View tasks", admin_claim_tasks_path(claim_id: @claim.id), class: "govuk-link" %>
-        <%= link_to "Amend claim", new_admin_claim_amendment_url(@claim), class: "govuk-link" if @claim.amendable? %>
+        <%= link_to "Amend claim", new_admin_claim_amendment_path(@claim), class: "govuk-link" if @claim.amendable? %>
+        <%= link_to "Top up claim", new_admin_claim_topup_path(@claim), class: "govuk-link" if @claim.topupable? %>
       </span>
     </h1>
 

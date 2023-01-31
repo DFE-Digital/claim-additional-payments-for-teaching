@@ -36,6 +36,42 @@ RSpec.describe Claim::PersonalDataScrubber, type: :model do
     expect { Claim::PersonalDataScrubber.new.scrub_completed_claims }.not_to change { claim.reload.attributes }
   end
 
+  it "does not delete details from a claim that has a payment, but has a payrollable topup" do
+    claim = create(:claim, :approved, policy: LevellingUpPremiumPayments)
+    create(:payment, :with_figures, claims: [claim], scheduled_payment_date: last_academic_year)
+    create(:topup, payment: nil, claim: claim, award_amount: 500)
+
+    expect { Claim::PersonalDataScrubber.new.scrub_completed_claims }.not_to change { claim.reload.attributes }
+  end
+
+  it "does not delete details from a claim that has a payment, but has a payrolled topup without payment confirmation" do
+    claim = nil
+
+    travel_to 2.months.ago do
+      claim = create(:claim, :approved, policy: LevellingUpPremiumPayments)
+      create(:payment, :with_figures, claims: [claim], scheduled_payment_date: last_academic_year)
+    end
+
+    payment2 = create(:payment, :with_figures, claims: [claim], scheduled_payment_date: nil)
+    create(:topup, payment: payment2, claim: claim, award_amount: 500)
+
+    expect { Claim::PersonalDataScrubber.new.scrub_completed_claims }.not_to change { claim.reload.attributes }
+  end
+
+  it "deletes expected details from a claim with multiple payments all of which have been confirmed" do
+    claim = nil
+
+    travel_to 2.months.ago do
+      claim = create(:claim, :approved, policy: LevellingUpPremiumPayments)
+      create(:payment, :with_figures, claims: [claim], scheduled_payment_date: last_academic_year)
+    end
+
+    payment2 = create(:payment, :with_figures, claims: [claim], scheduled_payment_date: last_academic_year)
+    create(:topup, payment: payment2, claim: claim, award_amount: 500)
+
+    expect { Claim::PersonalDataScrubber.new.scrub_completed_claims }.to change { claim.reload.attributes }
+  end
+
   it "deletes expected details from an old rejected claim, setting a personal_data_removed_at timestamp" do
     freeze_time do
       claim = create(:claim, :submitted)

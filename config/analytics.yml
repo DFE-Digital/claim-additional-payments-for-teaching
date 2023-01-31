@@ -72,7 +72,7 @@ shared:
   - surname
   - banking_name
   - building_society_roll_number
-  - payment_id
+  - remove_column_payment_id
   - personal_data_removed_at
   - academic_year
   - bank_or_building_society
@@ -261,5 +261,18 @@ shared:
   - academic_year
   - school_urn
   - award_amount
+  - created_at
+  - updated_at
+  :claims_payments:
+  - id
+  - claim_id
+  - payment_id
+  - created_at
+  - updated_at
+  :topups:
+  - id
+  - claim_id
+  - award_amount
+  - payment_id
   - created_at
   - updated_at

@@ -56,8 +56,10 @@
       <% end %>
     </dl>
   </div>
+
   <div class="govuk-grid-column-full">
     <h2 class="govuk-heading-m">Summary of claim amounts by service</h2>
+
     <table class="govuk-table">
       <thead class="govuk-table__head">
         <tr class="govuk-table__row">
@@ -77,6 +79,7 @@
       </tbody>
     </table>
   </div>
+
   <% unless @payroll_run.download_triggered? %>
     <div class="govuk-grid-column-full">
       <div class="govuk-form-group">
@@ -89,7 +92,6 @@
   <% end %>
 
   <div class="govuk-grid-column-full">
-
     <h2 class="govuk-heading-l">Payments</h2>
 
     <table class="govuk-table">
@@ -107,9 +109,10 @@
       </tr>
     </thead>
     <tbody class="govuk-table__body">
-      <% @payroll_run.payments.each do |payment| %>
+      <% @payroll_run.payments.includes(claims: [:eligibility]).includes(:topups).each do |payment| %>
         <% payment.claims.each_with_index do |claim, index| %>
-          <% number_of_claims = payment.claims.length %>
+          <% number_of_claims = payment.claims.size %>
+          <% line_item = payment.topups.present? ? payment.topups.first : claim %>
 
           <tr class="govuk-table__row">
             <% if index == 0 %>
@@ -117,8 +120,8 @@
               <td class="govuk-table__cell" rowspan="<%= number_of_claims %>"><%= payment.banking_name %></td>
             <% end %>
             <td class="govuk-table__cell"><%= link_to claim.reference, admin_claim_path(claim), class: "govuk-link" %></td>
-            <td class="govuk-table__cell"><%= claim.policy.short_name %></td>
-            <td class="govuk-table__cell"><%= number_to_currency(claim.award_amount) %></td>
+            <td class="govuk-table__cell"><%= line_item.is_a?(Topup) ? "Levelling Up Premium Payments (top up)" : claim.policy.short_name %></td>
+            <td class="govuk-table__cell"><%= number_to_currency(line_item.award_amount) %></td>
             <% if index == 0 %>
               <td class="govuk-table__cell" rowspan="<%= number_of_claims %>"><%= number_to_currency(payment.award_amount) %></td>
               <% unless @payroll_run.confirmation_report_uploaded? %>
@@ -135,5 +138,4 @@
     </tbody>
     </table>
   </div>
-
 </div>

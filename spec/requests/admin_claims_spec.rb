@@ -133,7 +133,7 @@ RSpec.describe "Admin claims", type: :request do
 
         context "when the claim is not amendable" do
           let(:payment) { create(:payment, :with_figures) }
-          let(:claim) { create(:claim, :approved, payment: payment) }
+          let(:claim) { create(:claim, :approved, payments: [payment]) }
 
           it "does not display a link to amend the claim" do
             get admin_claim_path(claim)
