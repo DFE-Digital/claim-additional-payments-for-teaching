@@ -1,6 +1,8 @@
 require "rails_helper"
 
 RSpec.describe Claim::PersonalDataScrubber, type: :model do
+  let(:user) { create(:dfe_signin_user) }
+  let!(:policy_configuration) { create(:policy_configuration, :additional_payments) }
   let(:current_academic_year) { AcademicYear.current }
   let(:last_academic_year) { Time.zone.local(current_academic_year.start_year, 8, 1) }
 
@@ -34,6 +36,45 @@ RSpec.describe Claim::PersonalDataScrubber, type: :model do
     create(:decision, :rejected, :undone, claim: claim, created_at: last_academic_year)
 
     expect { Claim::PersonalDataScrubber.new.scrub_completed_claims }.not_to change { claim.reload.attributes }
+  end
+
+  it "does not delete details from a claim that has a payment, but has a payrollable topup" do
+    lup_eligibility = create(:levelling_up_premium_payments_eligibility, :eligible, award_amount: 1500.0)
+    claim = create(:claim, :approved, policy: LevellingUpPremiumPayments, eligibility: lup_eligibility)
+    create(:payment, :with_figures, claims: [claim], scheduled_payment_date: last_academic_year)
+    create(:topup, payment: nil, claim: claim, award_amount: 500, created_by: user)
+
+    expect { Claim::PersonalDataScrubber.new.scrub_completed_claims }.not_to change { claim.reload.attributes }
+  end
+
+  it "does not delete details from a claim that has a payment, but has a payrolled topup without payment confirmation" do
+    claim = nil
+
+    travel_to 2.months.ago do
+      lup_eligibility = create(:levelling_up_premium_payments_eligibility, :eligible, award_amount: 1500.0)
+      claim = create(:claim, :approved, policy: LevellingUpPremiumPayments, eligibility: lup_eligibility)
+      create(:payment, :with_figures, claims: [claim], scheduled_payment_date: last_academic_year)
+    end
+
+    payment2 = create(:payment, :with_figures, claims: [claim], scheduled_payment_date: nil)
+    create(:topup, payment: payment2, claim: claim, award_amount: 500, created_by: user)
+
+    expect { Claim::PersonalDataScrubber.new.scrub_completed_claims }.not_to change { claim.reload.attributes }
+  end
+
+  it "deletes expected details from a claim with multiple payments all of which have been confirmed" do
+    claim = nil
+
+    travel_to 2.months.ago do
+      lup_eligibility = create(:levelling_up_premium_payments_eligibility, :eligible, award_amount: 1500.0)
+      claim = create(:claim, :approved, policy: LevellingUpPremiumPayments, eligibility: lup_eligibility)
+      create(:payment, :with_figures, claims: [claim], scheduled_payment_date: last_academic_year)
+    end
+
+    payment2 = create(:payment, :with_figures, claims: [claim], scheduled_payment_date: last_academic_year)
+    create(:topup, payment: payment2, claim: claim, award_amount: 500, created_by: user)
+
+    expect { Claim::PersonalDataScrubber.new.scrub_completed_claims }.to change { claim.reload.attributes }
   end
 
   it "deletes expected details from an old rejected claim, setting a personal_data_removed_at timestamp" do

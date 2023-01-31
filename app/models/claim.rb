@@ -86,7 +86,7 @@ class Claim < ApplicationRecord
     bank_or_building_society: false,
     banking_name: true,
     building_society_roll_number: true,
-    payment_id: false,
+    remove_column_payment_id: false,
     academic_year: false,
     personal_data_removed_at: false,
     email_verified: false,
@@ -126,13 +126,16 @@ class Claim < ApplicationRecord
   has_many :decisions, dependent: :destroy
   has_many :tasks, dependent: :destroy
   has_many :amendments, dependent: :destroy
+  has_many :topups, dependent: :destroy
   has_many :notes, dependent: :destroy
   has_one :support_ticket, dependent: :destroy
 
   belongs_to :eligibility, polymorphic: true, inverse_of: :claim, dependent: :destroy
   accepts_nested_attributes_for :eligibility, update_only: true
 
-  belongs_to :payment, optional: true
+  has_many :claim_payments
+  has_many :payments, through: :claim_payments
+
   belongs_to :assigned_to, class_name: "DfeSignIn::User",
     inverse_of: :assigned_claims,
     optional: true
@@ -251,7 +254,6 @@ class Claim < ApplicationRecord
   scope :rejected, -> { joins(:decisions).merge(Decision.active.rejected) }
   scope :approaching_decision_deadline, -> { awaiting_decision.where("submitted_at < ? AND submitted_at > ?", DECISION_DEADLINE.ago + DECISION_DEADLINE_WARNING_POINT, DECISION_DEADLINE.ago) }
   scope :passed_decision_deadline, -> { awaiting_decision.where("submitted_at < ?", DECISION_DEADLINE.ago) }
-  scope :payrollable, -> { approved.where(payment: nil) }
   scope :by_policy, ->(policy) { where(eligibility_type: policy::Eligibility.to_s) }
   scope :by_policies, ->(policies) { where(eligibility_type: policies.map { |p| p::Eligibility.to_s }) }
   scope :by_academic_year, ->(academic_year) { where(academic_year: academic_year) }
@@ -260,7 +262,8 @@ class Claim < ApplicationRecord
   scope :current_academic_year, -> { by_academic_year(AcademicYear.current) }
 
   delegate :award_amount, to: :eligibility
-  delegate :scheduled_payment_date, to: :payment, allow_nil: true
+
+  scope :payrollable, -> { approved.left_joins(:payments).where(payments: nil) }
 
   def submit!
     raise NotSubmittable unless submittable?
@@ -375,11 +378,19 @@ class Claim < ApplicationRecord
   end
 
   def payrolled?
-    payment.present?
+    payments.present?
   end
 
-  def scheduled_for_payment?
-    scheduled_payment_date.present?
+  def all_payrolled?
+    if has_lupp_policy?
+      topups.all? { |t| t.payrolled? } && payrolled?
+    else
+      payrolled?
+    end
+  end
+
+  def topupable?
+    has_lupp_policy? && submitted? && all_payrolled?
   end
 
   def full_name
@@ -437,6 +448,10 @@ class Claim < ApplicationRecord
 
   def has_postgraduate_loan?
     [postgraduate_masters_loan, postgraduate_doctoral_loan].any?
+  end
+
+  def award_amount_with_topups
+    topups.sum(:award_amount) + award_amount
   end
 
   private

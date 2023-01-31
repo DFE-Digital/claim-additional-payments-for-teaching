@@ -6,7 +6,8 @@
     </span>
     <span class="govuk-body-m">
       <%= link_to "View full claim", admin_claim_path(claim), class: "govuk-link" %>
-      <%= link_to "Amend claim", new_admin_claim_amendment_url(claim), class: "govuk-link" if claim.amendable? %>
+      <%= link_to "Amend claim", new_admin_claim_amendment_path(claim), class: "govuk-link" if claim.amendable? %>
+      <%= link_to "Top up claim", new_admin_claim_topup_path(@claim), class: "govuk-link" if @claim.topupable? %>
     </span>
   </h1>
 </div>
@@ -130,7 +131,7 @@
       </dt>
 
       <dd class="govuk-summary-list__value">
-        <%= number_to_currency(claim.award_amount) %>
+        <%= number_to_currency(claim.award_amount_with_topups) %>
       </dd>
     </div>
   </dl>
