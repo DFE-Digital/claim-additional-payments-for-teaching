@@ -8,13 +8,20 @@ module Admin
 
     def new
       @claims = Claim.payrollable
-      @total_award_amount = @claims.sum(&:award_amount)
+      @topups = Topup.payrollable
+      @total_award_amount = @claims.sum(&:award_amount) + @topups.sum(&:award_amount)
     end
 
     def create
-      claims = Claim.find(params[:claim_ids])
+      claims = Claim.where(id: params[:claim_ids])
+      topups = Topup.where(id: params[:topup_ids])
 
-      payroll_run = PayrollRun.create_with_claims!(claims, created_by: admin_user)
+      if claims.empty? && topups.empty?
+        redirect_to new_admin_payroll_run_path, alert: "Payroll not run, no claims or top ups"
+        return
+      end
+
+      payroll_run = PayrollRun.create_with_claims!(claims, topups, created_by: admin_user)
 
       redirect_to [:admin, payroll_run], notice: "Payroll run created"
     rescue ActiveRecord::RecordInvalid => e

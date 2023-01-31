@@ -8,7 +8,7 @@
 
     <p class="govuk-body">
       Below is a preview of the payroll run for <%= Date.today.strftime("%B") %>.
-      You can see how many approved claims will be included and the total award amount.
+      You can see how many approved claims and top up payments will be included and the total award amount.
     </p>
 
     <dl class="govuk-summary-list govuk-!-margin-bottom-9">
@@ -21,6 +21,17 @@
           <%= @claims.size %>
         </dd>
       </div>
+
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+          Top up payments
+        </dt>
+
+        <dd class="govuk-summary-list__value">
+          <%= @topups.size %>
+        </dd>
+      </div>
+
       <div class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key">
           Total award amount
@@ -37,6 +48,9 @@
 <%= form_with url: admin_payroll_runs_path do |form| %>
   <% @claims.each do |claim| %>
     <%= hidden_field_tag "claim_ids[]", claim.id %>
+  <% end %>
+  <% @topups.each do |topup| %>
+    <%= hidden_field_tag "topup_ids[]", topup.id %>
   <% end %>
   <%= form.submit "Confirm and submit", class: "govuk-button", data: {module: "govuk-button"} %>
 <% end %>

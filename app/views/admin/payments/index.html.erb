@@ -1,0 +1,87 @@
+<% content_for(:page_title) { page_title("Claim #{@claim.reference} payments") } %>
+
+<%= link_to "Back", claims_backlink_path, class: "govuk-back-link" %>
+
+<%# render("shared/error_summary", instance: @note) if @note.errors.any? %>
+<%# render("shared/error_summary", instance: @hold_note, errored_field_id_overrides: {body: "hold_body"}) if @hold_note.errors.any? %>
+
+<div class="govuk-grid-row">
+  <%= render "admin/tasks/claim_summary", claim: @claim, heading: @claim.reference %>
+</div>
+
+<div class="govuk-grid-row">
+  <div class="govuk-tabs" data-module="govuk-tabs">
+    <h2 class="govuk-tabs__title">Contents</h2>
+
+    <%= render "admin/claims/tabs", claim: @claim %>
+
+    <div class="govuk-tabs__panel govuk-tabs__panel" >
+      <h2 class="govuk-heading-l">Payments</h2>
+      <div class="govuk-inset-text">
+        Payment amount might include other claims in the same payroll run. See payroll run for breakdown.
+      </div>
+      <table class="govuk-table">
+        <thead class="govuk-table__head">
+          <tr class="govuk-table__row">
+            <th scope="col" class="govuk-table__header">Payment ID</th>
+            <th scope="col" class="govuk-table__header">Payment Amount</th>
+            <th scope="col" class="govuk-table__header">Number of claims</th>
+            <th scope="col" class="govuk-table__header">Payroll Run</th>
+          </tr>
+        </thead>
+        <tbody class="govuk-table__body">
+          <% @claim.payments.each do |payment| %>
+            <tr class="govuk-table__row">
+              <td class="govuk-table__cell"><%= payment.id %></td>
+              <td class="govuk-table__cell"><%= number_to_currency(payment.award_amount) %></td>
+              <td class="govuk-table__cell"><%= payment.claims.size %></td>
+              <td class="govuk-table__cell"><%= link_to(payment.payroll_run.created_at.strftime("%B %Y"), admin_payroll_run_path(payment.payroll_run)) %></td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+
+    <% if @claim.topups.present? %>
+      <div class="govuk-tabs__panel govuk-tabs__panel" >
+        <h2 class="govuk-heading-l">Top ups</h2>
+        <div class="govuk-inset-text">
+          <ul>
+            <li>Payrolled top ups cannot be removed.</li>
+            <li>To edit an unpayrolled top up, remove and create a new top up.</li>
+          </ul>
+        </div>
+        <table class="govuk-table">
+          <thead class="govuk-table__head">
+            <tr class="govuk-table__row">
+              <th scope="col" class="govuk-table__header">Top Up Amount</th>
+              <th scope="col" class="govuk-table__header">Payment ID</th>
+              <th scope="col" class="govuk-table__header">Created by</th>
+              <th scope="col" class="govuk-table__header">Created</th>
+
+
+              <th scope="col" class="govuk-table__header"><span class="govuk-visually-hidden">Actions</span></th>
+            </tr>
+          </thead>
+          <tbody class="govuk-table__body">
+            <% @claim.topups.each do |topup| %>
+              <tr class="govuk-table__row">
+                <td class="govuk-table__cell"><%= number_to_currency(topup.award_amount) %></td>
+                <td class="govuk-table__cell"><%= topup.payment_id? ? topup.payment_id : "Awaiting payroll" %></td>
+                <td class="govuk-table__cell"><%= user_details(topup.created_by) %></td>
+                <td class="govuk-table__cell"><%= l(topup.created_at) %></td>
+                <td class="govuk-table__cell">
+                  <% unless topup.payrolled? %>
+                    <%= link_to remove_admin_claim_topup_path(claim_id: @claim.id, id: topup.id), class: "govuk-link" do %>
+                      Remove <span class="govuk-visually-hidden">top up</span>
+                    <% end %>
+                  <% end %>
+                </td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+    <% end %>
+  </div>
+</div>

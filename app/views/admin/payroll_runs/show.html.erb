@@ -13,7 +13,16 @@
         </dt>
 
         <dd class="govuk-summary-list__value">
-          <%= @payroll_run.claims.size %>
+          <%= @payroll_run.number_of_claims_for_policy(:all, filter: :claims) %>
+        </dd>
+      </div>
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+          Top ups
+        </dt>
+
+        <dd class="govuk-summary-list__value">
+          <%= @payroll_run.number_of_claims_for_policy(LevellingUpPremiumPayments, filter: :topups) %>
         </dd>
       </div>
       <div class="govuk-summary-list__row">
@@ -56,8 +65,10 @@
       <% end %>
     </dl>
   </div>
+
   <div class="govuk-grid-column-full">
     <h2 class="govuk-heading-m">Summary of claim amounts by service</h2>
+
     <table class="govuk-table">
       <thead class="govuk-table__head">
         <tr class="govuk-table__row">
@@ -68,15 +79,21 @@
         <% Policies.all.each do |policy| %>
           <tr class="govuk-table__row">
             <th scope="row" class="govuk-table__header"><%= policy.short_name %></th>
-            <td class="govuk-table__cell"><%= @payroll_run.number_of_claims_for_policy(policy) %></td>
-            <td class="govuk-table__cell"><%= number_to_currency(@payroll_run.total_claim_amount_for_policy(policy)) %></td>
+            <td class="govuk-table__cell"><%= @payroll_run.number_of_claims_for_policy(policy, filter: :claims) %></td>
+            <td class="govuk-table__cell"><%= number_to_currency(@payroll_run.total_claim_amount_for_policy(policy, filter: :claims)) %></td>
           </tr>
         <% end %>
+        <tr class="govuk-table__row">
+          <th scope="row" class="govuk-table__header">Levelling Up Premium Payments Top Ups</th>
+          <td class="govuk-table__cell"><%= @payroll_run.number_of_claims_for_policy(LevellingUpPremiumPayments, filter: :topups) %></td>
+          <td class="govuk-table__cell"><%= number_to_currency(@payroll_run.total_claim_amount_for_policy(LevellingUpPremiumPayments, filter: :topups)) %></td>
+          </tr>
       </thead>
       <tbody class="govuk-table__body">
       </tbody>
     </table>
   </div>
+
   <% unless @payroll_run.download_triggered? %>
     <div class="govuk-grid-column-full">
       <div class="govuk-form-group">
@@ -89,7 +106,6 @@
   <% end %>
 
   <div class="govuk-grid-column-full">
-
     <h2 class="govuk-heading-l">Payments</h2>
 
     <table class="govuk-table">
@@ -107,9 +123,11 @@
       </tr>
     </thead>
     <tbody class="govuk-table__body">
-      <% @payroll_run.payments.each do |payment| %>
+      <% @payroll_run.payments.includes(claims: [:eligibility]).includes(:topups).each do |payment| %>
         <% payment.claims.each_with_index do |claim, index| %>
-          <% number_of_claims = payment.claims.length %>
+          <% number_of_claims = payment.claims.size %>
+          <% topup_claim_ids = payment.topups.pluck(:claim_id) %>
+          <% line_item = topup_claim_ids.include?(claim.id) ? payment.topups.select { |t| t.claim_id == claim.id }.first : claim %>
 
           <tr class="govuk-table__row">
             <% if index == 0 %>
@@ -117,8 +135,8 @@
               <td class="govuk-table__cell" rowspan="<%= number_of_claims %>"><%= payment.banking_name %></td>
             <% end %>
             <td class="govuk-table__cell"><%= link_to claim.reference, admin_claim_path(claim), class: "govuk-link" %></td>
-            <td class="govuk-table__cell"><%= claim.policy.short_name %></td>
-            <td class="govuk-table__cell"><%= number_to_currency(claim.award_amount) %></td>
+            <td class="govuk-table__cell"><%= line_item.is_a?(Topup) ? "Levelling Up Premium Payments (top up)" : claim.policy.short_name %></td>
+            <td class="govuk-table__cell"><%= number_to_currency(line_item.award_amount) %></td>
             <% if index == 0 %>
               <td class="govuk-table__cell" rowspan="<%= number_of_claims %>"><%= number_to_currency(payment.award_amount) %></td>
               <% unless @payroll_run.confirmation_report_uploaded? %>
@@ -135,5 +153,4 @@
     </tbody>
     </table>
   </div>
-
 </div>
