@@ -25,11 +25,14 @@ end
 
 RSpec.shared_context "with failing HMRC bank validation API request", shared_context: :metadata do
   before do
+    @old_hmrc_client = Hmrc.client
     Hmrc.configure { |config| config.http_client = double(post: double(success?: false, code: 429)) }
+    Hmrc.client = Hmrc::Client.new
   end
 
   after do
     Hmrc.configure { |config| config.http_client = Typhoeus }
+    Hmrc.client = @old_hmrc_client
   end
 end
 

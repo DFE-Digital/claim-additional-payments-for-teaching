@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.feature "Levelling up premium payments and early-career payments combined claim journey", :with_stubbed_hmrc_client, :with_hmrc_bank_validation_enabled do
+RSpec.feature "Levelling up premium payments and early-career payments combined claim journey", :with_hmrc_bank_validation_enabled do
   let(:claim) { Claim.by_policy(LevellingUpPremiumPayments).order(:created_at).last }
   let(:eligibility) { claim.eligibility }
   let!(:school) { create(:school, :combined_journey_eligibile_for_all) }
@@ -96,29 +96,52 @@ RSpec.feature "Levelling up premium payments and early-career payments combined 
     click_on "Continue"
   end
 
-  context "HMRC API fails bank details match" do
-    let(:hmrc_response) { double(name_match?: true, sort_code_correct?: true, account_exists?: false) }
+  context "HMRC API returns a 200 response", :with_stubbed_hmrc_client do
+    context "HMRC API passes bank details match" do
+      let(:hmrc_response) { double(name_match?: true, sort_code_correct?: true, account_exists?: true) }
 
-    scenario "shows an error and allows through after three attempts" do
-      get_to_bank_details_page
+      scenario "redirects user to next page" do
+        get_to_bank_details_page
 
-      # - Enter bank account details
-      fill_in "Name on your account", with: bank_name
-      fill_in "Sort code", with: sort_code
-      fill_in "Account number", with: account_number
+        # - Enter bank account details
+        fill_in "Name on your account", with: bank_name
+        fill_in "Sort code", with: sort_code
+        fill_in "Account number", with: account_number
 
-      click_on "Continue"
+        click_on "Continue"
 
-      expect(page).to have_text "Enter the account number associated with the name on the account and/or sort code"
+        expect(page).to have_text(I18n.t("questions.payroll_gender"))
 
-      click_on "Continue"
+        expect(claim.reload).to be_hmrc_bank_validation_succeeded
+      end
+    end
 
-      expect(page).to have_text "Enter the account number associated with the name on the account and/or sort code"
+    context "HMRC API fails bank details match", :with_stubbed_hmrc_client do
+      let(:hmrc_response) { double(name_match?: true, sort_code_correct?: true, account_exists?: false) }
 
-      click_on "Continue"
+      scenario "shows an error and allows through after three attempts" do
+        get_to_bank_details_page
 
-      # Third attempt succeeds.
-      expect(page).to have_text(I18n.t("questions.payroll_gender"))
+        # - Enter bank account details
+        fill_in "Name on your account", with: bank_name
+        fill_in "Sort code", with: sort_code
+        fill_in "Account number", with: account_number
+
+        click_on "Continue"
+
+        expect(page).to have_text "Enter the account number associated with the name on the account and/or sort code"
+
+        click_on "Continue"
+
+        expect(page).to have_text "Enter the account number associated with the name on the account and/or sort code"
+
+        click_on "Continue"
+
+        # Third attempt succeeds.
+        expect(page).to have_text(I18n.t("questions.payroll_gender"))
+
+        expect(claim.reload).not_to be_hmrc_bank_validation_succeeded
+      end
     end
   end
 
@@ -134,6 +157,8 @@ RSpec.feature "Levelling up premium payments and early-career payments combined 
       click_on "Continue"
 
       expect(page).to have_text(I18n.t("questions.payroll_gender"))
+
+      expect(claim.reload).not_to be_hmrc_bank_validation_succeeded
     end
   end
 end

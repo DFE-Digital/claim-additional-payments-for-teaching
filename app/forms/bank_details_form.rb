@@ -14,6 +14,7 @@ class BankDetailsForm
   attribute :building_society_roll_number, :string
 
   attr_reader :hmrc_api_validation_attempted
+  attr_reader :hmrc_api_response_error
 
   validates :banking_name, presence: {message: "Enter a name on the account"}
   validates :bank_sort_code, presence: {message: "Enter a sort code"}
@@ -27,7 +28,7 @@ class BankDetailsForm
   validate :bank_account_is_valid
 
   def hmrc_api_validation_attempted?
-    @hmrc_api_validation_attempted == true
+    @hmrc_api_validation_attempted == true && @hmrc_api_response_error != true
   end
 
   private
@@ -72,6 +73,7 @@ class BankDetailsForm
       errors.add(:bank_account_number, "Enter the account number associated with the name on the account and/or sort code") if response.sort_code_correct? && !response.account_exists?
       errors.add(:banking_name, "Enter a valid name on the account") if response.sort_code_correct? && response.account_exists? && !response.name_match?
     rescue Hmrc::ResponseError
+      @hmrc_api_response_error = true
     end
   end
 
