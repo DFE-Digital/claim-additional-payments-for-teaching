@@ -72,8 +72,12 @@ class BankDetailsForm
       errors.add(:bank_sort_code, "Enter a valid sort code") unless response.sort_code_correct?
       errors.add(:bank_account_number, "Enter the account number associated with the name on the account and/or sort code") if response.sort_code_correct? && !response.account_exists?
       errors.add(:banking_name, "Enter a valid name on the account") if response.sort_code_correct? && response.account_exists? && !response.name_match?
-    rescue Hmrc::ResponseError
+    rescue Hmrc::ResponseError => e
+      response = e.response
       @hmrc_api_response_error = true
+    ensure
+      claim.hmrc_bank_validation_responses << { code: response.code, body: response.body }
+      claim.save!
     end
   end
 

@@ -1,5 +1,7 @@
 module Hmrc
   class BankAccountVerificationResponse
+    delegate :code, :body, to: :payload
+
     def initialize(payload)
       self.payload = payload
     end
@@ -18,6 +20,6 @@ module Hmrc
 
     private
 
-    attr_accessor :payload
+    attr_reader :payload
   end
 end
