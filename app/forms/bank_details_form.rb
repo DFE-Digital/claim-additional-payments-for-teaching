@@ -80,7 +80,8 @@ class BankDetailsForm
       response = e.response
       @hmrc_api_response_error = true
     ensure
-      claim.hmrc_bank_validation_responses << {code: response.code, body: response.body}
+      new_hmrc_bank_validation_responses_value = claim.hmrc_bank_validation_responses.dup << {code: response.code, body: response.body}
+      claim.attributes = {hmrc_bank_validation_responses: new_hmrc_bank_validation_responses_value}
       claim.save!
     end
   end
