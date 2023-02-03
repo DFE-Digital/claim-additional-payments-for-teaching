@@ -32,6 +32,7 @@ FactoryBot.define do
       with_student_loan
       with_postgraduate_masters_doctoral_loan
       with_bank_details
+      bank_details_validated
 
       first_name { "Jo" }
       surname { "Bloggs" }
@@ -203,6 +204,14 @@ FactoryBot.define do
       banking_name { "Jo Bloggs" }
       bank_sort_code { rand(100000..999999) }
       bank_account_number { rand(10000000..99999999) }
+    end
+
+    trait :bank_details_validated do
+      hmrc_bank_validation_succeeded { true }
+    end
+
+    trait :bank_details_not_validated do
+      hmrc_bank_validation_succeeded { false }
     end
   end
 end

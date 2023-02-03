@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "hmrc"
-
 class Claim < ApplicationRecord
   include ::OneTimePasswordCheckable
 
@@ -454,6 +452,10 @@ class Claim < ApplicationRecord
 
   def award_amount_with_topups
     topups.sum(:award_amount) + award_amount
+  end
+
+  def must_manually_validate_bank_details?
+    !hmrc_bank_validation_succeeded?
   end
 
   private

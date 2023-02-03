@@ -1,0 +1,46 @@
+<% content_for(:page_title) { page_title("Claim #{@claim.reference} payroll details check for #{policy_service_name(@claim.policy.routing_name)}") } %>
+<%= link_to "Back", admin_claim_tasks_path(claim_id: @claim.id), class: "govuk-back-link" %>
+<%= render "shared/error_summary", instance: @task, errored_field_id_overrides: { "passed": "task_passed_true" } if @task.errors.any? %>
+
+<div class="govuk-grid-row">
+
+  <%= render "claim_summary", claim: @claim, heading: "Payroll details" %>
+
+  <div class="govuk-grid-column-two-thirds">
+    <h2 class="govuk-heading-l"><%= @current_task_name.humanize %></h2>
+
+    <% if !@task.passed.nil? %>
+      <%= render "task_outcome", task: @task, notes: @notes do %>
+      <% end %>
+    <% else %>
+      <%= form_with model: [:admin, @claim, @claim.tasks.where(name: "payroll_details").first_or_initialize] do |f| %>
+        <div class="govuk-form-group">
+          <fieldset class="govuk-fieldset govuk-!-margin-bottom-6">
+            <legend class="govuk-fieldset__legend govuk-fieldset__legend--l ">
+              <h3 class="govuk-heading-m">
+                <%= I18n.t("#{@claim.policy.to_s.underscore}.admin.task_questions.payroll_details.title", bank_or_building_society: I18n.t("admin.#{@claim.bank_or_building_society}")) %>
+              </h3>
+            </legend>
+
+            <%= f.hidden_field :name, value: "payroll_details" %>
+
+            <div class="govuk-radios govuk-radios--inline">
+              <div class="govuk-radios__item">
+                <%= f.radio_button(:passed, 1, class: "govuk-radios__input") %>
+                <%= f.label :passed_1, "Yes", class: "govuk-label govuk-radios__label" %>
+              </div>
+              <div class="govuk-radios__item">
+                <%= f.radio_button(:passed, "", class: "govuk-radios__input") %>
+                <%= f.label :passed_, "No", class: "govuk-label govuk-radios__label" %>
+              </div>
+            </div>
+          </fieldset>
+          <%= f.submit "Save and continue", class: "govuk-button", data: {module: "govuk-button"} %>
+        </div>
+      <% end %>
+
+    <% end %>
+
+    <%= render partial: "admin/task_pagination" %>
+  </div>
+</div>

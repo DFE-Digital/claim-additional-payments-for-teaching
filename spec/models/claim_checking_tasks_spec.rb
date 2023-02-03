@@ -44,6 +44,11 @@ RSpec.describe ClaimCheckingTasks do
 
       expect(checking_tasks.applicable_task_names).to eq %w[identity_confirmation qualifications employment payroll_gender]
     end
+
+    it "includes a task for payroll details when the bank details have not been validated" do
+      claim.hmrc_bank_validation_succeeded = false
+      expect(checking_tasks.applicable_task_names).to eq %w[identity_confirmation qualifications employment payroll_details]
+    end
   end
 
   describe "#incomplete_task_names" do

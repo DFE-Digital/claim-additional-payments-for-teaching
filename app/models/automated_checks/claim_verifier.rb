@@ -18,6 +18,10 @@ module AutomatedChecks
         ClaimVerifiers::CensusSubjectsTaught.new(
           admin_user: admin_user,
           claim: claim
+        ),
+        ClaimVerifiers::PayrollDetails.new(
+          admin_user: admin_user,
+          claim: claim
         )
       ]
     )
