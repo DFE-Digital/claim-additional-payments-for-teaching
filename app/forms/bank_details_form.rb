@@ -71,9 +71,11 @@ class BankDetailsForm
 
       @hmrc_api_validation_attempted = true
 
-      errors.add(:bank_sort_code, "Enter a valid sort code") unless response.sort_code_correct?
-      errors.add(:bank_account_number, "Enter the account number associated with the name on the account and/or sort code") if response.sort_code_correct? && !response.account_exists?
-      errors.add(:banking_name, "Enter a valid name on the account") if response.sort_code_correct? && response.account_exists? && !response.name_match?
+      unless met_maximum_attempts?
+        errors.add(:bank_sort_code, "Enter a valid sort code") unless response.sort_code_correct?
+        errors.add(:bank_account_number, "Enter the account number associated with the name on the account and/or sort code") if response.sort_code_correct? && !response.account_exists?
+        errors.add(:banking_name, "Enter a valid name on the account") if response.sort_code_correct? && response.account_exists? && !response.name_match?
+      end
     rescue Hmrc::ResponseError => e
       response = e.response
       @hmrc_api_response_error = true
@@ -84,6 +86,14 @@ class BankDetailsForm
   end
 
   def can_validate_with_hmrc_api?
-    Hmrc.configuration.enabled? && ((hmrc_validation_attempt_count || 1) < MAX_HMRC_API_VALIDATION_ATTEMPTS) && banking_name.present? && bank_sort_code.present? && bank_account_number.present?
+    Hmrc.configuration.enabled? && within_maximum_attempts? && banking_name.present? && bank_sort_code.present? && bank_account_number.present?
+  end
+
+  def within_maximum_attempts?
+    (hmrc_validation_attempt_count || 1) <= MAX_HMRC_API_VALIDATION_ATTEMPTS
+  end
+
+  def met_maximum_attempts?
+    (hmrc_validation_attempt_count || 1) >= MAX_HMRC_API_VALIDATION_ATTEMPTS
   end
 end

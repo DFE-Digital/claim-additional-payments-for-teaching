@@ -105,23 +105,30 @@ RSpec.describe BankDetailsForm do
           end
         end
 
-        context "when there have been three previous validation attempts" do
+        context "when there have been three validation attempts" do
           let(:hmrc_validation_attempt_count) { 3 }
 
-          before { form.valid? }
-
-          it "does not contact the HMRC API" do
-            expect(hmrc_client).not_to have_received(:verify_personal_bank_account)
+          it "contacts the HMRC API" do
+            form.valid?
+            expect(hmrc_client).to have_received(:verify_personal_bank_account)
           end
 
           it "does not add any errors" do
+            form.valid?
             expect(form.errors[:bank_sort_code]).to be_empty
             expect(form.errors[:bank_account_number]).to be_empty
             expect(form.errors[:banking_name]).to be_empty
           end
 
-          it "does not set hmrc_api_validation_attempted" do
-            expect(form).not_to be_hmrc_api_validation_attempted
+          it "sets hmrc_api_validation_attempted" do
+            form.valid?
+            expect(form).to be_hmrc_api_validation_attempted
+          end
+
+          it "adds the response to the claim" do
+            expect { form.valid? }.to change { claim.reload.hmrc_bank_validation_responses }.from([]).to [
+              { "body" => "Test response", "code" => 200 }
+            ]
           end
         end
       end
