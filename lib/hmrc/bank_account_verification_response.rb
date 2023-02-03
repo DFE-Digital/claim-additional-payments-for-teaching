@@ -12,6 +12,10 @@ module Hmrc
       @body ||= JSON.parse(payload.body)
     end
 
+    def success?
+      name_match? && sort_code_correct? && account_exists?
+    end
+
     def name_match?
       ["yes", "partial"].include? body["nameMatches"]
     end

@@ -92,4 +92,20 @@ RSpec.describe Hmrc::BankAccountVerificationResponse do
       it { is_expected.not_to be_account_exists }
     end
   end
+
+  describe "#success?" do
+    context "when there are no errors" do
+      let(:name_matches_response) { "yes" }
+      let(:sort_code_present_response) { "yes" }
+      let(:account_exists_response) { "yes" }
+
+      it { is_expected.to be_success }
+    end
+
+    context "when there are errors" do
+      let(:account_exists_response) { "no" }
+
+      it { is_expected.not_to be_success }
+    end
+  end
 end

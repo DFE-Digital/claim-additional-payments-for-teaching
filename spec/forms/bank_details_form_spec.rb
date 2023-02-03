@@ -85,6 +85,11 @@ RSpec.describe BankDetailsForm do
             form.valid?
             expect(form.errors[:bank_sort_code].first).to eq("Enter a valid sort code")
           end
+
+          it "does not set hmrc_api_validation_succeeded" do
+            form.valid?
+            expect(form).not_to be_hmrc_api_validation_succeeded
+          end
         end
 
         context "when there is an error with the account name" do
@@ -93,6 +98,11 @@ RSpec.describe BankDetailsForm do
           it "adds an error" do
             form.valid?
             expect(form.errors[:banking_name].first).to eq("Enter a valid name on the account")
+          end
+
+          it "does not set hmrc_api_validation_succeeded" do
+            form.valid?
+            expect(form).not_to be_hmrc_api_validation_succeeded
           end
         end
 
@@ -103,10 +113,16 @@ RSpec.describe BankDetailsForm do
             form.valid?
             expect(form.errors[:bank_account_number].first).to eq("Enter the account number associated with the name on the account and/or sort code")
           end
+
+          it "does not set hmrc_api_validation_succeeded" do
+            form.valid?
+            expect(form).not_to be_hmrc_api_validation_succeeded
+          end
         end
 
-        context "when there have been three validation attempts" do
+        context "when the validation fails on the third attempt" do
           let(:hmrc_validation_attempt_count) { 3 }
+          let(:account_exists) { false }
 
           it "contacts the HMRC API" do
             form.valid?
@@ -123,6 +139,11 @@ RSpec.describe BankDetailsForm do
           it "sets hmrc_api_validation_attempted" do
             form.valid?
             expect(form).to be_hmrc_api_validation_attempted
+          end
+
+          it "does not set hmrc_api_validation_succeeded" do
+            form.valid?
+            expect(form).not_to be_hmrc_api_validation_succeeded
           end
 
           it "adds the response to the claim" do
@@ -145,6 +166,11 @@ RSpec.describe BankDetailsForm do
           expect(form.errors[:bank_account_number]).to be_empty
           expect(form.errors[:banking_name]).to be_empty
         end
+
+        it "does not set hmrc_api_validation_succeeded" do
+          form.valid?
+          expect(form).not_to be_hmrc_api_validation_succeeded
+        end
       end
     end
 
@@ -163,6 +189,11 @@ RSpec.describe BankDetailsForm do
       it "does not set hmrc_api_validation_attempted" do
         form.valid?
         expect(form).not_to be_hmrc_api_validation_attempted
+      end
+
+      it "does not set hmrc_api_validation_succeeded" do
+        form.valid?
+        expect(form).not_to be_hmrc_api_validation_succeeded
       end
 
       it "adds the response to the claim" do

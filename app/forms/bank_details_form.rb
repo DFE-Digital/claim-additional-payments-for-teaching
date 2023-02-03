@@ -13,8 +13,7 @@ class BankDetailsForm
   attribute :bank_account_number, :string
   attribute :building_society_roll_number, :string
 
-  attr_reader :hmrc_api_validation_attempted
-  attr_reader :hmrc_api_response_error
+  attr_reader :hmrc_api_validation_attempted, :hmrc_api_validation_succeeded, :hmrc_api_response_error
 
   validates :banking_name, presence: {message: "Enter a name on the account"}
   validates :bank_sort_code, presence: {message: "Enter a sort code"}
@@ -29,6 +28,10 @@ class BankDetailsForm
 
   def hmrc_api_validation_attempted?
     @hmrc_api_validation_attempted == true && @hmrc_api_response_error != true
+  end
+
+  def hmrc_api_validation_succeeded?
+    @hmrc_api_validation_succeeded == true && @hmrc_api_response_error != true
   end
 
   private
@@ -70,6 +73,7 @@ class BankDetailsForm
       response = Hmrc.client.verify_personal_bank_account(bank_sort_code, bank_account_number, banking_name)
 
       @hmrc_api_validation_attempted = true
+      @hmrc_api_validation_succeeded = true if response.success?
 
       unless met_maximum_attempts?
         errors.add(:bank_sort_code, "Enter a valid sort code") unless response.sort_code_correct?

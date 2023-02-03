@@ -242,7 +242,7 @@ class ClaimsController < BasePublicController
 
     @form.validate!
 
-    current_claim.attributes = {hmrc_bank_validation_succeeded: @form.hmrc_api_validation_attempted?}
+    current_claim.attributes = {hmrc_bank_validation_succeeded: @form.hmrc_api_validation_succeeded?}
     current_claim.save!(context: page_sequence.current_slug.to_sym)
 
     redirect_to claim_path(current_policy_routing_name, next_slug)
