@@ -208,10 +208,22 @@ FactoryBot.define do
 
     trait :bank_details_validated do
       hmrc_bank_validation_succeeded { true }
+      hmrc_bank_validation_responses do
+        [
+          { code: 200, body: "Test response" }
+        ]
+      end
     end
 
     trait :bank_details_not_validated do
       hmrc_bank_validation_succeeded { false }
+      hmrc_bank_validation_responses do
+        [
+          { code: 429, body: "Test failure" },
+          { code: 200, body: "Test response" },
+          { code: 200, body: "Test response" }
+        ]
+      end
     end
   end
 end

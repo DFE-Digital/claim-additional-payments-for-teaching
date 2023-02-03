@@ -1,25 +1,27 @@
 module Hmrc
   class BankAccountVerificationResponse
-    delegate :code, :body, to: :payload
+    attr_reader :payload
+
+    delegate :code, to: :payload
 
     def initialize(payload)
-      self.payload = payload
+      @payload = payload
+    end
+
+    def body
+      @body ||= JSON.parse(payload.body)
     end
 
     def name_match?
-      ["yes", "partial"].include? payload["nameMatches"]
+      ["yes", "partial"].include? body["nameMatches"]
     end
 
     def sort_code_correct?
-      payload["sortCodeIsPresentOnEISCD"] == "yes"
+      body["sortCodeIsPresentOnEISCD"] == "yes"
     end
 
     def account_exists?
-      payload["accountExists"] == "yes"
+      body["accountExists"] == "yes"
     end
-
-    private
-
-    attr_reader :payload
   end
 end

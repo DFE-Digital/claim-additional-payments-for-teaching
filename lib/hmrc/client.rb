@@ -42,8 +42,10 @@ module Hmrc
       request_time = Time.zone.now
       response = post_request("/oauth/token", token_request_payload)
 
-      self.token = response["access_token"]
-      self.token_expiry = request_time + response["expires_in"]
+      body = JSON.parse(response.body)
+
+      self.token = body["access_token"]
+      self.token_expiry = request_time + body["expires_in"]
     end
 
     def token_invalid?
@@ -79,7 +81,7 @@ module Hmrc
         raise ResponseError.new(response)
       end
 
-      JSON.parse(response.body)
+      response
     end
   end
 end

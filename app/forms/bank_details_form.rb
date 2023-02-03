@@ -64,6 +64,8 @@ class BankDetailsForm
   def bank_account_is_valid
     return unless can_validate_with_hmrc_api?
 
+    response = nil
+
     begin
       response = Hmrc.client.verify_personal_bank_account(bank_sort_code, bank_account_number, banking_name)
 

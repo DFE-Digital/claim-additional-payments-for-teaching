@@ -34,6 +34,12 @@ RSpec.feature "Admin checking a claim's payroll details" do
 
       expect(page).to have_content I18n.t("student_loans.admin.task_questions.payroll_details.title", bank_or_building_society: I18n.t("admin.#{claim.bank_or_building_society}"))
 
+      # Can't match entire payload due to whitespace mismatch
+      claim.hmrc_bank_validation_responses.each do |response|
+        expect(page.find(".hmrc_responses")).to have_text(response["code"])
+        expect(page.find(".hmrc_responses")).to have_text(response["body"])
+      end
+
       # Choosing 'Yes' should mark the task as passed
       choose "Yes"
       click_on "Save and continue"

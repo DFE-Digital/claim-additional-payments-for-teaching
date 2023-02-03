@@ -2,11 +2,14 @@ require "rails_helper"
 
 RSpec.describe Hmrc::BankAccountVerificationResponse do
   let(:payload) do
-    {
-      "sortCodeIsPresentOnEISCD" => sort_code_present_response,
-      "nameMatches" => name_matches_response,
-      "accountExists" => account_exists_response
-    }
+    double(
+      code: 200,
+      body: {
+        "sortCodeIsPresentOnEISCD" => sort_code_present_response,
+        "nameMatches" => name_matches_response,
+        "accountExists" => account_exists_response
+      }.to_json
+    )
   end
   let(:name_matches_response) { "indeterminate" }
   let(:account_exists_response) { "indeterminate" }
