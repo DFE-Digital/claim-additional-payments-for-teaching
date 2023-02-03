@@ -18,7 +18,7 @@ module AutomatedChecks
         ClaimVerifiers::CensusSubjectsTaught.new(
           admin_user: admin_user,
           claim: claim
-        ),
+        )
       ]
     )
       self.admin_user = admin_user

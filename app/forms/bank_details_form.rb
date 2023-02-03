@@ -80,7 +80,7 @@ class BankDetailsForm
       response = e.response
       @hmrc_api_response_error = true
     ensure
-      claim.hmrc_bank_validation_responses << { code: response.code, body: response.body }
+      claim.hmrc_bank_validation_responses << {code: response.code, body: response.body}
       claim.save!
     end
   end

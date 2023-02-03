@@ -74,7 +74,7 @@ RSpec.describe BankDetailsForm do
 
         it "adds the response to the claim" do
           expect { form.valid? }.to change { claim.reload.hmrc_bank_validation_responses }.from([]).to [
-            { "body" => "Test response", "code" => 200 }
+            {"body" => "Test response", "code" => 200}
           ]
         end
 
@@ -127,7 +127,7 @@ RSpec.describe BankDetailsForm do
 
           it "adds the response to the claim" do
             expect { form.valid? }.to change { claim.reload.hmrc_bank_validation_responses }.from([]).to [
-              { "body" => "Test response", "code" => 200 }
+              {"body" => "Test response", "code" => 200}
             ]
           end
         end
@@ -167,7 +167,7 @@ RSpec.describe BankDetailsForm do
 
       it "adds the response to the claim" do
         expect { form.valid? }.to change { claim.reload.hmrc_bank_validation_responses }.from([]).to [
-          { "body" => "Test failure", "code" => 429 }
+          {"body" => "Test failure", "code" => 429}
         ]
       end
     end

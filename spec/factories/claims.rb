@@ -210,7 +210,7 @@ FactoryBot.define do
       hmrc_bank_validation_succeeded { true }
       hmrc_bank_validation_responses do
         [
-          { code: 200, body: "Test response" }
+          {code: 200, body: "Test response"}
         ]
       end
     end
@@ -219,9 +219,9 @@ FactoryBot.define do
       hmrc_bank_validation_succeeded { false }
       hmrc_bank_validation_responses do
         [
-          { code: 429, body: "Test failure" },
-          { code: 200, body: "Test response" },
-          { code: 200, body: "Test response" }
+          {code: 429, body: "Test failure"},
+          {code: 200, body: "Test response"},
+          {code: 200, body: "Test response"}
         ]
       end
     end
