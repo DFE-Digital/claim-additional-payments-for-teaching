@@ -19,10 +19,6 @@ module AutomatedChecks
           admin_user: admin_user,
           claim: claim
         ),
-        ClaimVerifiers::PayrollDetails.new(
-          admin_user: admin_user,
-          claim: claim
-        )
       ]
     )
       self.admin_user = admin_user
