@@ -58,11 +58,13 @@ Rails.application.configure do
 
   config.action_mailer.perform_caching = false
 
-  config.action_mailer.delivery_method = :notify
-  config.action_mailer.delivery_job = "MailDeliveryJob"
-  config.action_mailer.notify_settings = {
-    api_key: ENV["NOTIFY_API_KEY"]
-  }
+  config.after_initialize do
+    config.action_mailer.delivery_method = :notify
+    config.action_mailer.delivery_job = "MailDeliveryJob"
+    config.action_mailer.notify_settings = {
+      api_key: ENV["NOTIFY_API_KEY"]
+    }
+  end
 
   # Ignore bad email addresses and do not raise email delivery errors.
   # Set this to true and configure the email server for immediate delivery to raise delivery errors.
