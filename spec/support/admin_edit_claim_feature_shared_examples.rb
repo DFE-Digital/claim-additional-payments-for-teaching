@@ -75,8 +75,8 @@ RSpec.shared_examples "Admin Edit Claim Feature" do |policy|
   context "claim attribute" do
     let(:old_value) { old_award_amount }
     let(:new_value) { old_value - 1 }
-    let(:old_value_string) { old_value.to_s(:currency) }
-    let(:new_value_string) { new_value.to_s(:currency) }
+    let(:old_value_string) { old_value.to_fs(:currency) }
+    let(:new_value_string) { new_value.to_fs(:currency) }
     let(:reason) { "Wrong amount" }
 
     scenario "amend" do
