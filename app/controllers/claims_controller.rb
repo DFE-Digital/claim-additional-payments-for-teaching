@@ -238,15 +238,14 @@ class ClaimsController < BasePublicController
   def bank_account
     @form = BankDetailsForm.new(claim_params.merge(claim: current_claim, hmrc_validation_attempt_count: session[:bank_validation_attempt_count]))
 
-    current_claim.attributes = claim_params
-
     @form.validate!
 
-    current_claim.attributes = {hmrc_bank_validation_succeeded: @form.hmrc_api_validation_succeeded?}
+    current_claim.attributes = claim_params.merge({hmrc_bank_validation_succeeded: @form.hmrc_api_validation_succeeded?})
     current_claim.save!(context: page_sequence.current_slug.to_sym)
 
     redirect_to claim_path(current_policy_routing_name, next_slug)
   rescue ActiveModel::ValidationError
+    current_claim.attributes = claim_params
     session[:bank_validation_attempt_count] = (session[:bank_validation_attempt_count] || 1) + 1 if @form.hmrc_api_validation_attempted?
     show
   end
