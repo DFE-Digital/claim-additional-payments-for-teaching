@@ -78,7 +78,18 @@ RSpec.describe BankDetailsForm do
           ]
         end
 
-        context "when there is an error with the sort code" do
+        context "when the sort code doesn't pass basic validation" do
+          let(:bank_sort_code) { 99 }
+
+          it { is_expected.to be_invalid }
+
+          it "does not contact the HMRC API" do
+            form.valid?
+            expect(hmrc_client).not_to have_received(:verify_personal_bank_account)
+          end
+        end
+
+        context "when there is an HMRC validation error with the sort code" do
           let(:sort_code_correct) { false }
 
           it "adds an error" do
@@ -92,7 +103,18 @@ RSpec.describe BankDetailsForm do
           end
         end
 
-        context "when there is an error with the account name" do
+        context "when the account number doesn't pass basic validation" do
+          let(:bank_account_number) { 99 }
+
+          it { is_expected.to be_invalid }
+
+          it "does not contact the HMRC API" do
+            form.valid?
+            expect(hmrc_client).not_to have_received(:verify_personal_bank_account)
+          end
+        end
+
+        context "when there is an HMRC validation error with the account name" do
           let(:name_match) { false }
 
           it "adds an error" do

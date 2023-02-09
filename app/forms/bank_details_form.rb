@@ -24,6 +24,8 @@ class BankDetailsForm
   validate :bank_sort_code_must_be_six_digits
   validate :building_society_roll_number_must_be_between_one_and_eighteen_digits
   validate :building_society_roll_number_must_be_in_a_valid_format
+
+  # This should be the last validation specified to prevent unnecessary API calls
   validate :bank_account_is_valid
 
   def hmrc_api_validation_attempted?
@@ -90,7 +92,7 @@ class BankDetailsForm
   end
 
   def can_validate_with_hmrc_api?
-    Hmrc.configuration.enabled? && within_maximum_attempts? && banking_name.present? && bank_sort_code.present? && bank_account_number.present?
+    errors.empty? && Hmrc.configuration.enabled? && within_maximum_attempts?
   end
 
   def within_maximum_attempts?
