@@ -22,6 +22,7 @@ class Claim
       :bank_account_number,
       :building_society_roll_number,
       :banking_name,
+      :hmrc_bank_validation_responses,
       :mobile_number
     ]
 
