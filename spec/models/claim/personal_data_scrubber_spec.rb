@@ -81,7 +81,7 @@ RSpec.describe Claim::PersonalDataScrubber, type: :model do
     freeze_time do
       claim = create(:claim, :submitted)
       create(:decision, :rejected, claim: claim, created_at: last_academic_year)
-      claim.update_attribute :hmrc_bank_validation_responses, ['test']
+      claim.update_attribute :hmrc_bank_validation_responses, ["test"]
 
       Claim::PersonalDataScrubber.new.scrub_completed_claims
       cleaned_claim = Claim.find(claim.id)
@@ -111,7 +111,7 @@ RSpec.describe Claim::PersonalDataScrubber, type: :model do
     freeze_time do
       claim = create(:claim, :approved)
       create(:payment, :with_figures, claims: [claim], scheduled_payment_date: last_academic_year)
-      claim.update_attribute :hmrc_bank_validation_responses, ['test']
+      claim.update_attribute :hmrc_bank_validation_responses, ["test"]
 
       Claim::PersonalDataScrubber.new.scrub_completed_claims
       cleaned_claim = Claim.find(claim.id)
