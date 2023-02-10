@@ -101,6 +101,9 @@ RSpec.feature "Searching for school during Teacher Student Loan Repayments claim
       expect(page).to have_text(school.name)
       expect(page).to have_button("Continue")
 
+      # First click simply removes focus from the autocomplete when JS is enabled - form is not submitted
+      click_button "Continue"
+
       click_button "Continue"
 
       expect(page).to have_text("Select your school from the search results.")

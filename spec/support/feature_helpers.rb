@@ -38,10 +38,14 @@ module FeatureHelpers
 
   def choose_school(school)
     fill_in :school_search, with: school.name.sub("The ", "").split(" ").first
-    click_on "Continue"
+
+    # Clears the autocomplete when JS is enabled
+    click_button "Continue" if RSpec.current_example.metadata[:js].present?
+
+    click_button "Continue"
 
     choose school.name
-    click_on "Continue"
+    click_button "Continue"
   end
 
   def choose_still_teaching(teaching_at = "Yes, at Penistone Grammar School")
