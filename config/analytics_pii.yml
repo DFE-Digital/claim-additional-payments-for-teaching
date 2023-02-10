@@ -23,6 +23,7 @@ shared:
   - email_address
   - payroll_gender
   - one_time_password
+  - hmrc_bank_validation_responses
   :reminders:
   - full_name
   - email_address
