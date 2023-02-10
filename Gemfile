@@ -91,7 +91,7 @@ gem "activerecord-copy", require: false
 gem "pagy"
 
 group :development, :test do
-  gem "debug"
+  gem "pry"
   gem "rspec-rails"
   gem "capybara"
   gem "brakeman", require: false

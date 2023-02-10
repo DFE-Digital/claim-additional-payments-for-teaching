@@ -107,13 +107,13 @@ GEM
       rack-test (>= 0.6.3)
       regexp_parser (>= 1.5, < 3.0)
       xpath (~> 3.2)
+    coderay (1.1.3)
     concurrent-ruby (1.2.0)
     crack (0.4.5)
       rexml
     crass (1.0.6)
     daemons (1.4.1)
     date (3.3.3)
-    debug (1.7.1)
     declarative (0.0.20)
     delayed_cron_job (0.9.0)
       fugit (>= 1.5)
@@ -315,6 +315,9 @@ GEM
     parser (3.2.0.0)
       ast (~> 2.4.1)
     pg (1.4.5)
+    pry (0.14.2)
+      coderay (~> 1.1)
+      method_source (~> 1.0)
     public_suffix (5.0.1)
     puma (6.0.2)
       nio4r (~> 2.0)
@@ -524,7 +527,6 @@ DEPENDENCIES
   bullet
   capybara
   daemons
-  debug
   delayed_cron_job
   delayed_job_active_record
   dfe-analytics!
@@ -548,6 +550,7 @@ DEPENDENCIES
   omniauth_openid_connect
   pagy
   pg (>= 0.18, < 2.0)
+  pry
   puma (~> 6.0)
   rack_session_access
   rails (= 7.0.4)
