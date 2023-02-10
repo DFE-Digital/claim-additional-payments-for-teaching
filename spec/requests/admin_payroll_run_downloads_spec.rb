@@ -56,7 +56,7 @@ RSpec.describe "Admin payroll run downloads" do
 
           get admin_payroll_run_download_path(payroll_run)
 
-          expect(response.body).to include CGI.escapeHTML(payroll_run.downloaded_by.full_name)
+          expect(response.body).to include payroll_run.downloaded_by.full_name
           expect(response.body).to include I18n.l(payroll_run.downloaded_at)
         end
 

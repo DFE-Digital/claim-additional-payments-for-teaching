@@ -62,3 +62,5 @@ shared:
   - subject_15
   - created_at
   - updated_at
+  :dfe_sign_in_users:
+  - session_token

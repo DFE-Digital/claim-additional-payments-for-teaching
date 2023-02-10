@@ -12,13 +12,14 @@ module Admin
 
     def ensure_authenticated_user
       unless admin_signed_in?
+        clear_session
         session[:requested_admin_path] = request.fullpath
         redirect_to admin_sign_in_path
       end
     end
 
     def admin_user
-      @admin_user ||= DfeSignIn::User.not_deleted.find(session[:user_id])
+      @admin_user ||= DfeSignIn::User.not_deleted.find_by(id: session[:user_id], session_token: session[:token])
     end
 
     def service_operator_signed_in?
@@ -47,6 +48,14 @@ module Admin
 
     def update_last_seen_at
       session[:admin_last_seen_at] = Time.zone.now
+    end
+
+    def clear_session
+      session.delete(:user_id)
+      session.delete(:token)
+      session.delete(:organisation_id)
+      session.delete(:role_codes)
+      session.delete(:claims_backlink_path)
     end
   end
 end

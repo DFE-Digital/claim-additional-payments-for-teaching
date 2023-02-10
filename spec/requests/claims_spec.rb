@@ -114,8 +114,8 @@ RSpec.describe "Claims", type: :request do
           it "searches for schools using the search term" do
             get claim_path(StudentLoans.routing_name, "claim-school"), params: {school_search: school_1.name}
 
-            expect(response.body).to include CGI.escapeHTML(school_1.name)
-            expect(response.body).not_to include CGI.escapeHTML(school_2.name)
+            expect(response.body).to include school_1.name
+            expect(response.body).not_to include school_2.name
             expect(response.body).to include "Continue"
           end
 
@@ -124,7 +124,7 @@ RSpec.describe "Claims", type: :request do
 
             expect(response.body).to include("There is a problem")
             expect(response.body).to include("Enter a school or postcode")
-            expect(response.body).not_to include(CGI.escapeHTML(school_1.name))
+            expect(response.body).not_to include(school_1.name)
           end
 
           it "shows an appropriate message when there are no search results" do
@@ -236,7 +236,7 @@ RSpec.describe "Claims", type: :request do
           expect(response).to be_successful
           expect(response.body).to include("There is a problem")
           expect(response.body).to include("Select a school from the list")
-          expect(response.body).to include(CGI.escapeHTML(school.name))
+          expect(response.body).to include(school.name)
         end
       end
 

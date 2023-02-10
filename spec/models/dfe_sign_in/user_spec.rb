@@ -22,6 +22,11 @@ RSpec.describe DfeSignIn::User, type: :model do
       expect(user.dfe_sign_in_id).to eq("123")
       expect(user.role_codes).to eq(["some-role"])
     end
+
+    it "does not match deleted users" do
+      create(:dfe_signin_user, :deleted, dfe_sign_in_id: session.user_id, role_codes: [])
+      expect(user).to be_nil
+    end
   end
 
   describe "#full_name" do

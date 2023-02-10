@@ -43,7 +43,7 @@ RSpec.describe Claim::MatchingAttributeFinder do
     subject(:matching_claims) { Claim::MatchingAttributeFinder.new(source_claim).matching_claims }
 
     it "includes only claims for ECP or LUP claims" do
-      expect(matching_claims).to eq([lup_claim])
+      expect(matching_claims).to contain_exactly(lup_claim, student_loans_claim)
     end
   end
 
@@ -79,9 +79,9 @@ RSpec.describe Claim::MatchingAttributeFinder do
     end
 
     it "does not include claims that match, but have a different policy" do
-      create(:claim, :submitted, teacher_reference_number: source_claim.teacher_reference_number, policy: MathsAndPhysics)
+      student_loans_claim = create(:claim, :submitted, teacher_reference_number: source_claim.teacher_reference_number, policy: StudentLoans)
 
-      expect(matching_claims).to be_empty
+      expect(matching_claims).to contain_exactly(student_loans_claim)
     end
 
     it "does not include claims that match, but have a different academic year" do

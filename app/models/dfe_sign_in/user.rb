@@ -6,6 +6,8 @@ module DfeSignIn
     SUPPORT_AGENT_DFE_SIGN_IN_ROLE_CODE = "teacher_payments_support"
     PAYROLL_OPERATOR_DFE_SIGN_IN_ROLE_CODE = "teacher_payments_payroll"
 
+    has_secure_token :session_token
+
     def self.table_name
       "dfe_sign_in_users"
     end
@@ -17,6 +19,9 @@ module DfeSignIn
 
     def self.from_session(session)
       user = where(dfe_sign_in_id: session.user_id).first_or_initialize
+
+      return if user.deleted?
+
       user.role_codes = session.role_codes
       user
     end
