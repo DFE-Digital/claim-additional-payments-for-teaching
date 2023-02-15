@@ -1,6 +1,8 @@
 require "rails_helper"
 
 RSpec.describe Claim::ClaimsPreventingPaymentFinder do
+  let(:user) { create(:dfe_signin_user) }
+  let!(:policy_configuration) { create(:policy_configuration, :additional_payments) }
   subject(:finder) { described_class.new(claim) }
 
   describe "#claims_preventing_payment" do
@@ -37,6 +39,15 @@ RSpec.describe Claim::ClaimsPreventingPaymentFinder do
         other_claim = create(:claim, :approved, inconsistent_personal_details)
         create(:payment, claims: [other_claim])
         expect(claims_preventing_payment).to be_empty
+      end
+
+      it "includes the other claim where a topup is payrollable" do
+        lup_eligibility = create(:levelling_up_premium_payments_eligibility, :eligible, award_amount: 1500.0)
+        other_claim = create(:claim, :approved, inconsistent_personal_details.merge(policy: LevellingUpPremiumPayments, eligibility: lup_eligibility))
+        create(:payment, claims: [other_claim])
+        other_claim.topups.create(award_amount: "500.00", created_by: user)
+
+        expect(claims_preventing_payment).to eq([other_claim])
       end
     end
 

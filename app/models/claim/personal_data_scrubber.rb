@@ -27,15 +27,20 @@ class Claim
 
     def scrub_completed_claims
       Claim.transaction do
-        old_claims_rejected_or_paid.includes(:amendments).each do |claim|
-          scrub_amendments_personal_data(claim)
-        end
-
-        old_claims_rejected_or_paid.update_all(attribute_values_to_set)
+        scrub_claims(old_rejected_claims)
+        scrub_claims(old_paid_claims)
       end
     end
 
     private
+
+    def scrub_claims(claims)
+      claims.includes(:amendments).each do |claim|
+        scrub_amendments_personal_data(claim)
+      end
+
+      claims.update_all(attribute_values_to_set)
+    end
 
     def attribute_values_to_set
       PERSONAL_DATA_ATTRIBUTES_TO_DELETE.map { |attr| [attr, nil] }.to_h.merge(
@@ -43,15 +48,24 @@ class Claim
       )
     end
 
-    def old_claims_rejected_or_paid
-      Claim.left_outer_joins(payment: [:payroll_run])
-        .joins(:decisions)
+    def old_rejected_claims
+      Claim.joins(:decisions)
         .where(personal_data_removed_at: nil)
         .where(
-          "(decisions.undone = false AND decisions.result = :rejected AND decisions.created_at < :minimum_time) OR scheduled_payment_date < :minimum_time",
+          "(decisions.undone = false AND decisions.result = :rejected AND decisions.created_at < :minimum_time)",
           minimum_time: minimum_time,
           rejected: Decision.results.fetch(:rejected)
         )
+    end
+
+    def old_paid_claims
+      claim_ids_with_payrollable_topups = Topup.payrollable.pluck(:claim_id)
+      claim_ids_with_payrolled_topups_without_payment_confirmation = Topup.joins(payment: [:payroll_run]).where("scheduled_payment_date IS NULL").pluck(:claim_id)
+
+      Claim.approved.joins(payments: [:payroll_run])
+        .where(personal_data_removed_at: nil)
+        .where.not(id: claim_ids_with_payrollable_topups + claim_ids_with_payrolled_topups_without_payment_confirmation)
+        .where("scheduled_payment_date < :minimum_time", minimum_time: minimum_time)
     end
 
     def minimum_time

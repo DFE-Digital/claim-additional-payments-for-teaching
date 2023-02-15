@@ -96,6 +96,10 @@ Rails.application.routes.draw do
       resources :amendments, only: [:index, :new, :create]
       resources :notes, only: [:index, :create]
       resources :support_tickets, only: [:create]
+      resources :topups, only: [:new, :create, :destroy] do
+        get :remove, on: :member
+      end
+      resources :payments, only: [:index]
       get "search", on: :collection
       patch "hold"
       patch "unhold"

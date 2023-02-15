@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_01_04_152622) do
+ActiveRecord::Schema.define(version: 2023_01_13_150436) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -28,6 +28,16 @@ ActiveRecord::Schema.define(version: 2023_01_04_152622) do
     t.index ["claim_id"], name: "index_amendments_on_claim_id"
     t.index ["created_by_id"], name: "index_amendments_on_created_by_id"
     t.index ["dfe_sign_in_users_id"], name: "index_amendments_on_dfe_sign_in_users_id"
+  end
+
+  create_table "claim_payments", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "claim_id"
+    t.uuid "payment_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["claim_id", "payment_id"], name: "index_claim_payments_on_claim_id_and_payment_id", unique: true
+    t.index ["claim_id"], name: "index_claim_payments_on_claim_id"
+    t.index ["payment_id"], name: "index_claim_payments_on_payment_id"
   end
 
   create_table "claims", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -51,16 +61,16 @@ ActiveRecord::Schema.define(version: 2023_01_04_152622) do
     t.integer "student_loan_courses"
     t.integer "student_loan_start_date"
     t.integer "student_loan_plan"
-    t.integer "payroll_gender"
-    t.text "govuk_verify_fields", default: [], array: true
     t.string "eligibility_type"
     t.uuid "eligibility_id"
+    t.integer "payroll_gender"
+    t.text "govuk_verify_fields", default: [], array: true
     t.string "first_name", limit: 100
     t.string "middle_name", limit: 100
     t.string "surname", limit: 100
     t.string "banking_name"
     t.string "building_society_roll_number"
-    t.uuid "payment_id"
+    t.uuid "remove_column_payment_id"
     t.datetime "personal_data_removed_at"
     t.string "academic_year", limit: 9
     t.integer "bank_or_building_society"
@@ -78,8 +88,8 @@ ActiveRecord::Schema.define(version: 2023_01_04_152622) do
     t.index ["created_at"], name: "index_claims_on_created_at"
     t.index ["eligibility_type", "eligibility_id"], name: "index_claims_on_eligibility_type_and_eligibility_id"
     t.index ["held"], name: "index_claims_on_held"
-    t.index ["payment_id"], name: "index_claims_on_payment_id"
     t.index ["reference"], name: "index_claims_on_reference", unique: true
+    t.index ["remove_column_payment_id"], name: "index_claims_on_remove_column_payment_id"
     t.index ["submitted_at"], name: "index_claims_on_submitted_at"
   end
 
@@ -126,7 +136,7 @@ ActiveRecord::Schema.define(version: 2023_01_04_152622) do
     t.string "session_token"
     t.index ["deleted_at"], name: "index_dfe_sign_in_users_on_deleted_at"
     t.index ["dfe_sign_in_id"], name: "index_dfe_sign_in_users_on_dfe_sign_in_id", unique: true
-    t.index ["session_token"], name: "index_dfe_sign_in_users_on_session_token"
+    t.index ["session_token"], name: "index_dfe_sign_in_users_on_session_token", unique: true
   end
 
   create_table "early_career_payments_eligibilities", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -385,10 +395,27 @@ ActiveRecord::Schema.define(version: 2023_01_04_152622) do
     t.index ["teacher_reference_number"], name: "index_teachers_pensions_service_on_teacher_reference_number"
   end
 
+  create_table "topups", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "claim_id"
+    t.decimal "award_amount", precision: 7, scale: 2
+    t.uuid "payment_id"
+    t.uuid "dfe_sign_in_users_id"
+    t.uuid "created_by_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["claim_id", "payment_id"], name: "index_topups_on_claim_id_and_payment_id", unique: true
+    t.index ["claim_id"], name: "index_topups_on_claim_id"
+    t.index ["created_by_id"], name: "index_topups_on_created_by_id"
+    t.index ["dfe_sign_in_users_id"], name: "index_topups_on_dfe_sign_in_users_id"
+    t.index ["payment_id"], name: "index_topups_on_payment_id"
+  end
+
   add_foreign_key "amendments", "claims"
   add_foreign_key "amendments", "dfe_sign_in_users", column: "created_by_id"
   add_foreign_key "amendments", "dfe_sign_in_users", column: "dfe_sign_in_users_id"
-  add_foreign_key "claims", "payments"
+  add_foreign_key "claim_payments", "claims"
+  add_foreign_key "claim_payments", "payments"
+  add_foreign_key "claims", "payments", column: "remove_column_payment_id"
   add_foreign_key "decisions", "dfe_sign_in_users", column: "created_by_id"
   add_foreign_key "early_career_payments_eligibilities", "schools", column: "current_school_id"
   add_foreign_key "levelling_up_premium_payments_eligibilities", "schools", column: "current_school_id"
@@ -406,6 +433,10 @@ ActiveRecord::Schema.define(version: 2023_01_04_152622) do
   add_foreign_key "support_tickets", "dfe_sign_in_users", column: "created_by_id"
   add_foreign_key "tasks", "claims"
   add_foreign_key "tasks", "dfe_sign_in_users", column: "created_by_id"
+  add_foreign_key "topups", "claims"
+  add_foreign_key "topups", "dfe_sign_in_users", column: "created_by_id"
+  add_foreign_key "topups", "dfe_sign_in_users", column: "dfe_sign_in_users_id"
+  add_foreign_key "topups", "payments"
 
   create_view "claim_decisions", sql_definition: <<-SQL
       WITH eligibilities AS (
@@ -495,12 +526,12 @@ ActiveRecord::Schema.define(version: 2023_01_04_152622) do
               ELSE NULL::text
           END AS result,
           CASE c.submitted_at
-              WHEN NULL::timestamp without time zone THEN NULL::double precision
-              ELSE date_part('epoch'::text, (c.submitted_at - c.created_at))
+              WHEN NULL::timestamp without time zone THEN NULL::numeric
+              ELSE EXTRACT(epoch FROM (c.submitted_at - c.created_at))
           END AS submission_length,
           CASE d.created_at
-              WHEN NULL::timestamp without time zone THEN NULL::double precision
-              ELSE date_part('epoch'::text, (d.created_at - c.submitted_at))
+              WHEN NULL::timestamp without time zone THEN NULL::numeric
+              ELSE EXTRACT(epoch FROM (d.created_at - c.submitted_at))
           END AS decision_length
      FROM (decisions d
        RIGHT JOIN claims c ON ((c.id = d.claim_id)))

@@ -109,7 +109,6 @@ FactoryBot.define do
 
     trait :payrollable do
       approved
-      payment { nil }
     end
 
     trait :rejected do

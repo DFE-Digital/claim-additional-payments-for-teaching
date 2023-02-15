@@ -1,0 +1,43 @@
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <span class="govuk-caption-xl"><%= @claim.policy.short_name %> (<%= @claim.academic_year %>)</span>
+    <h1 class="govuk-heading-xl">
+      Top up payment for claim <%= @claim.reference %>
+    </h1>
+
+    <%=
+      if @topup.errors.any?
+        render(
+          "shared/error_summary",
+          instance: @topup
+        )
+      end
+    %>
+  </div>
+</div>
+
+<%= form_with model: @topup, url: admin_claim_topups_path(@claim), html: { autocomplete: "off" } do |f| %>
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-one-third">
+      <%= form_group_tag(@topup, :award_amount) do %>
+        <%= f.label :award_amount, "Top up amount", class: "govuk-label" %>
+        <%= errors_tag @topup, :award_amount %>
+      <% end %>
+    </div>
+    <div class="govuk-grid-column-two-thirds">
+      <div class="govuk-form-group">
+        <div class="govuk-currency-input">
+          <span class="govuk-currency-input__unit">&pound;</span>
+          <%= f.text_field :award_amount, class: "govuk-input govuk-currency-input__input govuk-input--width-5" %>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-full">
+      <%= f.submit "Top up", class: "govuk-button", data: {module: "govuk-button"} %>
+      <%= link_to "Cancel", admin_claim_tasks_url(@claim), class: "govuk-button govuk-button--secondary", role: "button", data: {module: "govuk-button"} %>
+    </div>
+  </div>
+<% end %>

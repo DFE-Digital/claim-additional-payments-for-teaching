@@ -1038,25 +1038,6 @@ RSpec.describe Claim, type: :model do
     end
   end
 
-  describe "#scheduled_for_payment?" do
-    it "returns false if a claim has not been added to payroll" do
-      claim = create(:claim, :approved)
-      expect(claim.scheduled_for_payment?).to eq false
-    end
-
-    it "returns false if a claim has been added to payroll but is not yet paid" do
-      claim = create(:claim, :approved)
-      create(:payment, claims: [claim])
-      expect(claim.scheduled_for_payment?).to eq false
-    end
-
-    it "returns true if a claim has been scheduled for payment" do
-      claim = create(:claim, :approved)
-      create(:payment, :with_figures, claims: [claim])
-      expect(claim.scheduled_for_payment?).to eq true
-    end
-  end
-
   describe "#full_name" do
     it "joins the first name and surname together" do
       expect(Claim.new(first_name: "Isambard", surname: "Brunel").full_name).to eq "Isambard Brunel"
@@ -1226,25 +1207,6 @@ RSpec.describe Claim, type: :model do
 
     it "returns approved claims that are not associated with a payroll run" do
       expect(Claim.payrollable).to match_array([first_unpayrolled_claim, second_unpayrolled_claim])
-    end
-  end
-
-  describe "#scheduled_payment_date" do
-    let(:scheduled_payment_date) { Date.parse("2019-01-01") }
-    let(:claim) { create(:claim, :submitted) }
-
-    context "when a claim has a payroll run associated with it" do
-      let!(:payment) { create(:payment, :with_figures, claims: [claim], scheduled_payment_date: scheduled_payment_date) }
-
-      it "returns the payment date" do
-        expect(claim.scheduled_payment_date).to eq(scheduled_payment_date)
-      end
-    end
-
-    context "when a claim does not have a payroll run associated with it" do
-      it "returns nil" do
-        expect(claim.scheduled_payment_date).to be_nil
-      end
     end
   end
 

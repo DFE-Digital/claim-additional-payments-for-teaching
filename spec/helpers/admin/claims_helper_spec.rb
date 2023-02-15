@@ -490,8 +490,7 @@ describe Admin::ClaimsHelper do
 
       it "returns a status with a link to the payroll run" do
         freeze_time do
-          expect(status(claim)).to include(Time.zone.now.strftime("%B %Y"))
-          expect(status(claim)).to include(admin_payroll_run_path(claim.payment.payroll_run))
+          expect(status(claim)).to eq "Payrolled"
         end
       end
     end

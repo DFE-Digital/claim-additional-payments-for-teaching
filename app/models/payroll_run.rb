@@ -16,21 +16,26 @@ class PayrollRun < ApplicationRecord
     payments.sum(:award_amount)
   end
 
-  def number_of_claims_for_policy(policy)
-    claims.by_policy(policy).count
+  def number_of_claims_for_policy(policy, filter: :all)
+    line_items(policy, filter: filter).count
   end
 
-  # NOTE: Optimisation - purposely not using .by_policy(policy) causing N+1 queries
-  def total_claim_amount_for_policy(policy)
-    claims.select { |c| c.eligibility_type == policy::Eligibility.to_s }.sum(&:award_amount)
+  def total_claim_amount_for_policy(policy, filter: :all)
+    line_items(policy, filter: filter).sum(&:award_amount)
   end
 
-  def self.create_with_claims!(claims, attrs = {})
+  def self.create_with_claims!(claims, topups, attrs = {})
     ActiveRecord::Base.transaction do
       PayrollRun.create!(attrs).tap do |payroll_run|
-        claims.group_by(&:teacher_reference_number).each_value do |grouped_claims|
-          award_amount = grouped_claims.sum(&:award_amount)
-          Payment.create!(payroll_run: payroll_run, claims: grouped_claims, award_amount: award_amount)
+        [claims, topups].reduce([], :concat).group_by(&:teacher_reference_number).each_value do |grouped_items|
+          # associates the claim to the payment, for Topup that's its associated claim
+          grouped_claims = grouped_items.map { |i| i.is_a?(Topup) ? i.claim : i }
+
+          # associates the payment to the Topup, so we know it's payrolled
+          group_topups = grouped_items.select { |i| i.is_a?(Topup) }
+
+          award_amount = grouped_items.sum(&:award_amount)
+          Payment.create!(payroll_run: payroll_run, claims: grouped_claims, topups: group_topups, award_amount: award_amount)
         end
       end
     end
@@ -49,6 +54,29 @@ class PayrollRun < ApplicationRecord
   end
 
   private
+
+  def line_items(policy, filter: :all)
+    @items = []
+
+    payments.includes(claims: [:eligibility]).includes(:topups).map do |payment|
+      payment.claims.each do |claim|
+        if policy == :all || claim.eligibility_type == policy::Eligibility.to_s
+          topup_claim_ids = payment.topups.pluck(:claim_id)
+          line_item = topup_claim_ids.include?(claim.id) ? payment.topups.find { |t| t.claim_id == claim.id } : claim
+          case filter
+          when :all
+            @items << line_item
+          when :claims
+            @items << line_item if line_item.is_a?(Claim)
+          when :topups
+            @items << line_item if line_item.is_a?(Topup)
+          end
+        end
+      end
+    end
+
+    @items
+  end
 
   def ensure_no_payroll_run_this_month
     errors.add(:base, "There has already been a payroll run for #{Date.today.strftime("%B")}") if PayrollRun.this_month.any?

@@ -102,7 +102,8 @@ class DataImporter < BaseImporter
 
   def generate_payroll
     payrollable_claims ||= Claim.payrollable
+    topups = []
     logger.info "Generating payroll for #{payrollable_claims.size} payments"
-    PayrollRun.create_with_claims!(payrollable_claims, created_by: admin_approver)
+    PayrollRun.create_with_claims!(payrollable_claims, topups, created_by: admin_approver)
   end
 end

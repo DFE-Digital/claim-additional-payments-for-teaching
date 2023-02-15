@@ -1,5 +1,8 @@
 class Payment < ApplicationRecord
-  has_many :claims, dependent: :nullify
+  has_many :claim_payments, dependent: :destroy
+  has_many :claims, through: :claim_payments
+  has_many :topups, dependent: :nullify
+
   belongs_to :payroll_run
 
   validates :award_amount, presence: true
@@ -57,6 +60,6 @@ class Payment < ApplicationRecord
 
   # NOTE: Optimisation - purposely not using .order(:submitted_at) causing N+1 queries
   def claim_for_personal_details
-    @claim_for_personal_details ||= claims.max_by { |c| c.submitted_at }
+    @claim_for_personal_details ||= (claims.max_by { |c| c.submitted_at } || topups.first.claim)
   end
 end
