@@ -3,7 +3,8 @@ module Policies
     StudentLoans,
     MathsAndPhysics,
     EarlyCareerPayments,
-    LevellingUpPremiumPayments
+    LevellingUpPremiumPayments,
+    SimplePolicyPayments
   ].freeze
 
   AMENDABLE_ELIGIBILITY_ATTRIBUTES = POLICIES.map { |policy| policy::Eligibility::AMENDABLE_ATTRIBUTES }.flatten.freeze

@@ -75,6 +75,9 @@ Rails.application.routes.draw do
   # Redirect for Maths and Physics temporary start page
   get "maths-and-physics/start", to: redirect(MathsAndPhysics.start_page_url)
 
+  # Redirect for Maths and Physics temporary start page
+  get "simple-policy-payments/start", to: redirect(SimplePolicyPayments.start_page_url)
+
   namespace :admin do
     get "/", to: "page#index", as: :root
 

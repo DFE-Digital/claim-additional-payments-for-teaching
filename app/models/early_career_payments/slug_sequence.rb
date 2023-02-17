@@ -13,6 +13,7 @@ module EarlyCareerPayments
     SLUGS = [
       # eligibility phase of claim journey
       "current-school",
+
       "nqt-in-academic-year-after-itt",
       "supply-teacher",
       "entire-term-contract",
@@ -27,24 +28,32 @@ module EarlyCareerPayments
       "eligibility-confirmed",
       "eligible-later",
       "future-eligibility",
+
       # personal details phase of claim journey
       "information-provided",
+
       "personal-details",
+
       "postcode-search",
       "no-address-found",
       "select-home-address",
       "address",
+
       "email-address",
       "email-verification",
+
       "provide-mobile-number",
       "mobile-number",
       "mobile-verification",
+
       # payment details phase
       "bank-or-building-society",
       "personal-bank-account",
       "building-society-account",
       "gender",
+
       "teacher-reference-number",
+
       # student loans phase of claim journey
       "student-loan",
       "student-loan-country",
@@ -53,6 +62,7 @@ module EarlyCareerPayments
       "masters-doctoral-loan",
       "masters-loan",
       "doctoral-loan",
+
       "check-your-answers",
       "ineligible"
     ].freeze

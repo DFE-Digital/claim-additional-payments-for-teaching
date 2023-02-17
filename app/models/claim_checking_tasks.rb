@@ -11,7 +11,8 @@ class ClaimCheckingTasks
 
   def applicable_task_names
     @applicable_task_names ||= Task::NAMES.dup.tap do |task_names|
-      task_names.delete("census_subjects_taught") if claim.policy == MathsAndPhysics
+      task_names.delete("employment") if claim.policy == SimplePolicyPayments
+      task_names.delete("census_subjects_taught") if [MathsAndPhysics, SimplePolicyPayments].include? claim.policy
       task_names.delete("student_loan_amount") unless claim.policy == StudentLoans
       task_names.delete("payroll_details") unless claim.must_manually_validate_bank_details?
       task_names.delete("matching_details") unless matching_claims.exists?

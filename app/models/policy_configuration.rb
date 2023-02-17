@@ -32,6 +32,12 @@ class PolicyConfiguration < ApplicationRecord
       # view_path - folder where view templates are, unless folder is the same as routing-name
       view_path: "early_career_payments",
       i18n_namespace: "early_career_payments"
+    },
+    {
+      routing_name: "simple-policy-payments",
+      slugs: SimplePolicyPayments::SlugSequence::SLUGS,
+      policies: [SimplePolicyPayments],
+      i18n_namespace: "simple_policy_payments"
     }
   ].freeze
 
