@@ -8,7 +8,7 @@ module SimplePolicyPayments
   # column on `School`.
   class SchoolEligibilityCheck
     def initialize(school)
-      raise 'nil school' if school.nil?
+      raise "nil school" if school.nil?
 
       @school = school
     end

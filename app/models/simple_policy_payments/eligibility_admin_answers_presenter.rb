@@ -18,7 +18,7 @@ module SimplePolicyPayments
     # [1]: answer text;
     def answers
       [
-        [translate('admin.current_school'), display_school(eligibility.current_school)]
+        [translate("admin.current_school"), display_school(eligibility.current_school)]
       ]
     end
   end

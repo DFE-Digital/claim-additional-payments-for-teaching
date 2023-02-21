@@ -16,16 +16,15 @@ module SimplePolicyPayments
 
     def identity_confirmation
       [
-        ['Current school', eligibility.current_school.name],
-        ['Contact number', eligibility.current_school.phone_number]
+        ["Current school", eligibility.current_school.name],
+        ["Contact number", eligibility.current_school.phone_number]
       ]
     end
 
-  private
+    private
 
     def eligibility
       claim.eligibility
     end
-
   end
 end

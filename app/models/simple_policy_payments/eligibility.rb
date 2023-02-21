@@ -8,12 +8,12 @@ module SimplePolicyPayments
     AMENDABLE_ATTRIBUTES = [].freeze
     ATTRIBUTE_DEPENDENCIES = {}.freeze
 
-    self.table_name = 'simple_policy_payments_eligibilities'
+    self.table_name = "simple_policy_payments_eligibilities"
 
     has_one :claim, as: :eligibility, inverse_of: :eligibility
-    belongs_to :current_school, optional: true, class_name: 'School'
+    belongs_to :current_school, optional: true, class_name: "School"
 
-    validates :current_school, on: [:'current-school', :submit], presence: { message: 'Select the school you teach at' }
+    validates :current_school, on: [:"current-school", :submit], presence: {message: "Select the school you teach at"}
 
     delegate :name, to: :current_school, prefix: true, allow_nil: true
 
@@ -34,7 +34,7 @@ module SimplePolicyPayments
 
     def ineligibility_reason = []
 
-    def award_amount = BigDecimal('10.00')
+    def award_amount = BigDecimal("10.00")
 
     def reset_dependent_answers(reset_attrs = [])
       attrs = ineligible? ? changed.concat(reset_attrs) : changed

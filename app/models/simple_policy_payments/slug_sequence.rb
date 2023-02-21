@@ -13,49 +13,49 @@ module SimplePolicyPayments
   class SlugSequence
     SLUGS = [
       # email address
-      'email-address',
-      'email-verification',
+      "email-address",
+      "email-verification",
 
       # names, DoB, NINo
-      'personal-details',
+      "personal-details",
 
       # school is required
-      'current_school',
+      "current_school",
 
       # TRN for Qualifications, Pension and Workforce searches
-      'teacher-reference-number',
+      "teacher-reference-number",
       # should do DQT search here
 
       # personal address
-      'postcode-search',
-      'no-address-found',
-      'select-home-address',
-      'address',
+      "postcode-search",
+      "no-address-found",
+      "select-home-address",
+      "address",
 
       # payment details phase
-      'bank-or-building-society',
-      'personal-bank-account',
-      'building-society-account',
+      "bank-or-building-society",
+      "personal-bank-account",
+      "building-society-account",
       # should do bank checks here
 
-      'gender', # HMRC payroll requirement ??
+      "gender", # HMRC payroll requirement ??
 
       # loans checks
-      'student-loan',
-      'student-loan-country',
-      'student-loan-how-many-courses',
-      'student-loan-start-date',
-      'masters-doctoral-loan',
-      'masters-loan',
-      'doctoral-loan',
+      "student-loan",
+      "student-loan-country",
+      "student-loan-how-many-courses",
+      "student-loan-start-date",
+      "masters-doctoral-loan",
+      "masters-loan",
+      "doctoral-loan",
 
       # mobile number - optional
-      'provide-mobile-number',
-      'mobile-number',
-      'mobile-verification',
+      "provide-mobile-number",
+      "mobile-number",
+      "mobile-verification",
 
-      'check-your-answers',
-      'ineligible'
+      "check-your-answers",
+      "ineligible"
     ].freeze
 
     attr_reader :claim
@@ -66,22 +66,22 @@ module SimplePolicyPayments
 
     def slugs
       SLUGS.dup.tap do |sequence|
-        sequence.delete('personal-bank-account') if claim.bank_or_building_society == 'building_society'
-        sequence.delete('building-society-account') if claim.bank_or_building_society == 'personal_bank_account'
+        sequence.delete("personal-bank-account") if claim.bank_or_building_society == "building_society"
+        sequence.delete("building-society-account") if claim.bank_or_building_society == "personal_bank_account"
 
-        sequence.delete('mobile-number') if claim.provide_mobile_number == false
-        sequence.delete('mobile-verification') if claim.provide_mobile_number == false
+        sequence.delete("mobile-number") if claim.provide_mobile_number == false
+        sequence.delete("mobile-verification") if claim.provide_mobile_number == false
 
-        sequence.delete('student-loan-country') if claim.no_student_loan?
-        sequence.delete('student-loan-how-many-courses') if claim.no_student_loan?
-        sequence.delete('student-loan-start-date') if claim.no_student_loan?
+        sequence.delete("student-loan-country") if claim.no_student_loan?
+        sequence.delete("student-loan-how-many-courses") if claim.no_student_loan?
+        sequence.delete("student-loan-start-date") if claim.no_student_loan?
 
-        sequence.delete('masters-doctoral-loan') if claim.has_student_loan?
+        sequence.delete("masters-doctoral-loan") if claim.has_student_loan?
 
-        sequence.delete('masters-loan') if claim.has_masters_doctoral_loan == false
-        sequence.delete('doctoral-loan') if claim.has_masters_doctoral_loan == false
+        sequence.delete("masters-loan") if claim.has_masters_doctoral_loan == false
+        sequence.delete("doctoral-loan") if claim.has_masters_doctoral_loan == false
 
-        sequence.delete('ineligible') unless claim.ineligible?
+        sequence.delete("ineligible") unless claim.ineligible?
       end
     end
   end
