@@ -23,6 +23,10 @@ FactoryBot.define do
       additional_payments
     end
 
+    trait :simple_policy_payments do
+      policy_types { [SimplePolicyPayments] }
+    end
+
     trait :closed do
       open_for_submissions { false }
     end

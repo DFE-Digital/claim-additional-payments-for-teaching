@@ -81,6 +81,10 @@ FactoryBot.define do
       sequence(:urn, 170000)
     end
 
+    trait :simple_policy_payments_eligible do
+      open
+    end
+
     trait :combined_journey_eligibile_for_all do
       early_career_payments_eligible
       levelling_up_premium_payments_eligible

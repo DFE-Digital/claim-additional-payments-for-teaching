@@ -1,14 +1,14 @@
 # frozen_string_literal: true
 
 module SimplePolicyPayments
-  module_function
+  extend self
 
   ACADEMIC_YEARS_QUALIFIED_TEACHERS_CAN_CLAIM_FOR = 2
 
   def start_page_url
     if Rails.env.production?
       # TODO: provided by the GOV UK publishing team
-      "https://www.gov.uk/guidance/simple-policy-payments"
+      "https://www.example.com/guidance/simple-policy-payments"
     else
       "/#{routing_name}/claim"
     end
@@ -16,7 +16,7 @@ module SimplePolicyPayments
 
   def eligibility_page_url
     # TODO: provided by the GOV UK publishing team
-    "https://www.gov.uk/guidance/simple-policy-payments"
+    "https://www.example.com/guidance/simple-policy-payments"
   end
 
   def routing_name
@@ -43,7 +43,7 @@ module SimplePolicyPayments
 
   def feedback_email
     # TODO: setup a shared mailbox for this policy
-    "simple-policy-payments@digital.education.gov.uk"
+    "simple-policy-payments@example.com"
   end
 
   def first_eligible_qts_award_year(claim_year = nil)

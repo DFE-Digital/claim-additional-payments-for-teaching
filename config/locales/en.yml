@@ -429,8 +429,11 @@ en:
   simple_policy_payments:
     policy_acronym: "SPP"
     policy_name: "Simple policy payments for anyone"
-    policy_short_name: "Simple Policy"
+    policy_short_name: "Simple Policy Payments"
+    payment_name: "Simple Policy payment"
     claim_description: "for a simple policy payment to anyone"
+    claim_subject: "Simply Policy payment"
+    support_email_address: "simple-policy-payments@example.com"
     admin:
       task_questions:
         identity_confirmation:

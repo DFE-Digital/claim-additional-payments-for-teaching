@@ -98,7 +98,7 @@ RSpec.describe PolicyConfiguration do
 
   describe ".all_routing_names" do
     it "returns all the routing names" do
-      expect(described_class.all_routing_names).to eq ["student-loans", "maths-and-physics", "additional-payments"]
+      expect(described_class.all_routing_names).to eq ["student-loans", "maths-and-physics", "additional-payments", "simple-policy-payments"]
     end
   end
 

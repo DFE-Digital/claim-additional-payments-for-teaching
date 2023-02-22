@@ -76,7 +76,7 @@ RSpec.shared_examples "Admin Check Claim Feature" do |policy|
 
       expect(page).to have_content("Confirm the claimant made the claim Incomplete")
       expect(page).to have_content("Check qualification information Passed")
-      expect(page).to have_content("Check employment information Failed")
+      expect(page).to have_content("Check employment information Failed") unless policy == SimplePolicyPayments
       expect(page).to have_link("Approve or reject this claim", href: new_admin_claim_decision_path(claim_with_tasks))
 
       click_on "Check qualification information"
@@ -85,11 +85,13 @@ RSpec.shared_examples "Admin Check Claim Feature" do |policy|
       expect(page).to have_content(I18n.l(ten_minutes_ago))
       expect(page).not_to have_button("Save and continue")
 
-      click_on "Back"
-      click_on "Check employment information"
-      expect(page).to have_content("Failed")
-      expect(page).to have_content("This task was performed by #{checking_user.full_name}")
-      expect(page).to have_content(I18n.l(one_minute_ago))
+      unless policy == SimplePolicyPayments
+        click_on "Back"
+        click_on "Check employment information"
+        expect(page).to have_content("Failed")
+        expect(page).to have_content("This task was performed by #{checking_user.full_name}")
+        expect(page).to have_content(I18n.l(one_minute_ago))
+      end
     end
 
     scenario "User can see existing decision details" do
