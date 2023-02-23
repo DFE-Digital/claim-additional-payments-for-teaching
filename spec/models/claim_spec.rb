@@ -1559,4 +1559,16 @@ RSpec.describe Claim, type: :model do
       it { is_expected.not_to be_holdable }
     end
   end
+
+  describe "#must_manually_validate_bank_details?" do
+    context "when bank details have been validated" do
+      subject(:claim) { build(:claim, :bank_details_validated) }
+      it { is_expected.not_to be_must_manually_validate_bank_details }
+    end
+
+    context "when bank details have not been validated" do
+      subject(:claim) { build(:claim, :bank_details_not_validated) }
+      it { is_expected.to be_must_manually_validate_bank_details }
+    end
+  end
 end

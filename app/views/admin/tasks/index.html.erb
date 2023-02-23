@@ -37,7 +37,7 @@
               <span class="app-task-list__section-number"><%= index + 1 %>. </span> <%= task_name.humanize %>
             </h2>
             <ul class="app-task-list__items">
-              <li class="app-task-list__item">
+              <li class="app-task-list__item <%= task_name %>">
                 <span class="app-task-list__task-name">
                   <%= link_to I18n.t("admin.tasks.#{task_name}"), admin_claim_task_path(claim_id: @claim.id, name: task_name), class: "govuk-link" %>
                 </span>

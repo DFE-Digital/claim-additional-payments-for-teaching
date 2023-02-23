@@ -92,6 +92,8 @@ shared:
   - date_of_birth_month
   - date_of_birth_year
   - held
+  - hmrc_bank_validation_succeeded
+  - hmrc_bank_validation_responses
   :decisions:
   - id
   - result

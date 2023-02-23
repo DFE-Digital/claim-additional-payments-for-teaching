@@ -31,6 +31,8 @@ FactoryBot.define do
     trait :submittable do
       with_student_loan
       with_postgraduate_masters_doctoral_loan
+      with_bank_details
+      bank_details_validated
 
       first_name { "Jo" }
       surname { "Bloggs" }
@@ -41,10 +43,6 @@ FactoryBot.define do
       national_insurance_number { generate(:national_insurance_number) }
       email_address { generate(:email_address) }
       email_verified { true }
-      bank_or_building_society { :personal_bank_account }
-      banking_name { "Jo Bloggs" }
-      bank_sort_code { rand(100000..999999) }
-      bank_account_number { rand(10000000..99999999) }
       payroll_gender { :female }
       provide_mobile_number { false }
 
@@ -199,6 +197,33 @@ FactoryBot.define do
 
     trait :held do
       held { true }
+    end
+
+    trait :with_bank_details do
+      bank_or_building_society { :personal_bank_account }
+      banking_name { "Jo Bloggs" }
+      bank_sort_code { rand(100000..999999) }
+      bank_account_number { rand(10000000..99999999) }
+    end
+
+    trait :bank_details_validated do
+      hmrc_bank_validation_succeeded { true }
+      hmrc_bank_validation_responses do
+        [
+          {code: 200, body: "Test response"}
+        ]
+      end
+    end
+
+    trait :bank_details_not_validated do
+      hmrc_bank_validation_succeeded { false }
+      hmrc_bank_validation_responses do
+        [
+          {code: 429, body: "Test failure"},
+          {code: 200, body: "Test response"},
+          {code: 200, body: "Test response"}
+        ]
+      end
     end
   end
 end

@@ -94,6 +94,8 @@ en:
     teacher_reference_number: "Teacher reference number"
     national_insurance_number: "National Insurance number"
     email_address: "Email address"
+    building_society: "building society"
+    personal_bank_account: "bank account"
     started_at: "Started at"
     submitted_at: "Submitted at"
     decision_deadline: "Decision deadline"
@@ -126,6 +128,7 @@ en:
       identity_confirmation: "Confirm the claimant made the claim"
       payroll_gender: "Add a payroll gender for HMRC"
       student_loan_amount: "Check student loan amount"
+      payroll_details: "Check bank/building society account details"
       census_subjects_taught: "Check eligible subjects are taught"
     undo_decision:
       approved: "Undo approval"
@@ -232,6 +235,8 @@ en:
           title: "Does the claimant’s current school match the above information from their claim?"
         matching_details:
           title: "Is this claim still valid despite having matching details with other claims?"
+        payroll_details:
+          title: "The claimant’s %{bank_or_building_society} details have not been automatically validated. Has the claimant confirmed their %{bank_or_building_society} details?"
   student_loans:
     policy_name: "Teachers: claim back your student loan repayments"
     policy_short_name: "Student Loans"
@@ -279,6 +284,8 @@ en:
           title: "Does the claimant’s student loan amount and plan type match the information we hold about their loan?"
         matching_details:
           title: "Is this claim still valid despite having matching details with other claims?"
+        payroll_details:
+          title: "The claimant’s %{bank_or_building_society} details have not been automatically validated. Has the claimant confirmed their %{bank_or_building_society} details?"
   early_career_payments:
     check_your_answers:
       part_one:
@@ -359,6 +366,8 @@ en:
           title: Does the claimant's subject match the schools workforce census subjects
         matching_details:
           title: "Is this claim still valid despite having matching details with other claims?"
+        payroll_details:
+          title: "The claimant’s %{bank_or_building_society} details have not been automatically validated. Has the claimant confirmed their %{bank_or_building_society} details?"
     answers:
       qualification:
         postgraduate_itt: "Postgraduate initial teacher training (ITT)"
@@ -398,6 +407,8 @@ en:
           title: Does the claimant’s subject match the schools workforce census subjects
         matching_details:
           title: "Is this claim still valid despite having matching details with other claims?"
+        payroll_details:
+          title: "The claimant’s %{bank_or_building_society} details have not been automatically validated. Has the claimant confirmed their %{bank_or_building_society} details?"
   additional_payments:
     claim_description: "for an additional payment for teaching"
   activerecord:

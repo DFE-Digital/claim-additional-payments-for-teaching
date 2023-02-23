@@ -113,6 +113,10 @@ locals {
     "ENVIRONMENT_NAME"                               = var.environment
     "GOOGLE_ANALYTICS_ID"                            = ""
     "GTM_ANALYTICS"                                  = data.azurerm_key_vault_secret.GTMAnalytics.value
+    "HMRC_API_BASE_URL"                              = data.azurerm_key_vault_secret.HMRCBaseURL.value
+    "HMRC_API_CLIENT_ID"                             = data.azurerm_key_vault_secret.HMRCClientID.value
+    "HMRC_API_CLIENT_SECRET"                         = data.azurerm_key_vault_secret.HMRCClientSecret.value
+    "HMRC_API_BANK_VALIDATION_ENABLED"               = data.azurerm_key_vault_secret.HMRCBankValidationEnabled.value
     "LOGSTASH_HOST"                                  = data.azurerm_key_vault_secret.LogstashHost.value
     "LOGSTASH_PORT"                                  = local.stash_port
     "NOTIFY_API_KEY"                                 = data.azurerm_key_vault_secret.NotifyApiKey.value

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_01_13_150436) do
+ActiveRecord::Schema.define(version: 2023_02_03_174054) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -84,6 +84,8 @@ ActiveRecord::Schema.define(version: 2023_01_13_150436) do
     t.string "assigned_to_id"
     t.jsonb "policy_options_provided", default: []
     t.boolean "held", default: false
+    t.boolean "hmrc_bank_validation_succeeded", default: false
+    t.json "hmrc_bank_validation_responses", default: []
     t.index ["academic_year"], name: "index_claims_on_academic_year"
     t.index ["created_at"], name: "index_claims_on_created_at"
     t.index ["eligibility_type", "eligibility_id"], name: "index_claims_on_eligibility_type_and_eligibility_id"

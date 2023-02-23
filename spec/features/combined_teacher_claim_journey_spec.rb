@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.feature "Levelling up premium payments and early-career payments combined claim journey" do
+RSpec.feature "Levelling up premium payments and early-career payments combined claim journey", :with_stubbed_hmrc_client, :with_hmrc_bank_validation_enabled do
   let(:claim) { Claim.by_policy(LevellingUpPremiumPayments).order(:created_at).last }
   let(:eligibility) { claim.eligibility }
 
@@ -178,6 +178,7 @@ RSpec.feature "Levelling up premium payments and early-career payments combined 
     fill_in "Name on your account", with: "Jo Bloggs"
     fill_in "Sort code", with: "123456"
     fill_in "Account number", with: "87654321"
+
     click_on "Continue"
 
     # - What gender does your school's payroll system associate with you
