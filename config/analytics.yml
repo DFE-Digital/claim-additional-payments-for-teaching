@@ -280,3 +280,8 @@ shared:
   - created_by_id
   - created_at
   - updated_at
+  :simple_policy_payments_eligibilities:
+  - id
+  - created_at
+  - updated_at
+  - current_school_id
