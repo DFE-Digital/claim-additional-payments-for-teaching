@@ -59,7 +59,7 @@ class CurrentClaim
   end
 
   def method_missing(method_name, *args, **kwargs, &block)
-    if [:attributes=, :save!, :update, :update!, :reset_dependent_answers].include?(method_name)
+    if [:attributes=, :save!, :update, :update!, :reset_dependent_answers, :update_attribute].include?(method_name)
       claims.each do |c|
         c.send(method_name, *args, **kwargs, &block) unless c == main_claim
       end

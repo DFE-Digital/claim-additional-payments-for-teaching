@@ -119,6 +119,7 @@ RSpec.feature "Bank account validation on claim journey", :with_hmrc_bank_valida
         expect(page).to have_text(I18n.t("questions.payroll_gender"))
 
         expect(claim.reload).to be_hmrc_bank_validation_succeeded
+        expect(claim.hmrc_bank_validation_responses).not_to be_empty
       end
     end
 
@@ -147,6 +148,7 @@ RSpec.feature "Bank account validation on claim journey", :with_hmrc_bank_valida
         expect(page).to have_text(I18n.t("questions.payroll_gender"))
 
         expect(claim.reload).not_to be_hmrc_bank_validation_succeeded
+        expect(claim.hmrc_bank_validation_responses).not_to be_empty
       end
     end
   end
