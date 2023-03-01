@@ -32,8 +32,8 @@ module SimplePolicyPayments
   end
 
   def notify_reply_to_id
-    # TODO: found within the Notify application
-    "made-up-random-guid"
+    # TODO: found within the Notify application under settings > Reply-to email addresses
+    "29493350-ceec-4142-bd29-34ee363d5f62"
   end
 
   def feedback_url
@@ -42,8 +42,8 @@ module SimplePolicyPayments
   end
 
   def feedback_email
-    # TODO: setup a shared mailbox for this policy
-    "simple-policy-payments@example.com"
+    # TODO: setup a shared mailbox for this policy - note: notify checks it is a real email address
+    "mathsphysicsteacherpayment@digital.education.gov.uk"
   end
 
   def first_eligible_qts_award_year(claim_year = nil)
