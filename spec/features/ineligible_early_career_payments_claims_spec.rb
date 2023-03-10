@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.feature "Ineligible Teacher Early-Career Payments claims" do
+RSpec.feature "Ineligible Teacher Early-Career Payments claims", slow: true do
   include EarlyCareerPaymentsHelper
 
   let!(:eligible_school) { create(:school, :early_career_payments_eligible) }
