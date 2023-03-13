@@ -37,14 +37,12 @@ Rails.application.configure do
   config.action_mailer.raise_delivery_errors = false
   config.action_mailer.perform_caching = false
 
-  config.after_initialize do
-    if ENV["NOTIFY_API_KEY"].present?
-      config.action_mailer.delivery_method = :notify
-      config.action_mailer.delivery_job = "MailDeliveryJob"
-      config.action_mailer.notify_settings = {
-        api_key: ENV.fetch("NOTIFY_API_KEY")
-      }
-    end
+  if ENV["NOTIFY_API_KEY"].present?
+    config.action_mailer.delivery_method = :notify
+    config.action_mailer.delivery_job = "ActionMailer::MailDeliveryJob"
+    config.action_mailer.notify_settings = {
+      api_key: ENV.fetch("NOTIFY_API_KEY")
+    }
   end
 
   # Print deprecation notices to the Rails logger.
