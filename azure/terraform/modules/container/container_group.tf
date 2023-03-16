@@ -16,7 +16,7 @@ resource "azurerm_container_group" "cont_grp_01" {
     image = format("%s%s", "dfedigital/teacher-payments-service:", var.container_version)
 
     cpu    = "1"
-    memory = "1.5"
+    memory = "3.0"
 
     environment_variables = {
       "ADMIN_ALLOWED_IPS"                              = data.azurerm_key_vault_secret.AdminAllowedIPs.value
