@@ -29,6 +29,9 @@ module EarlyCareerPayments
 
     self.table_name = "early_career_payments_eligibilities"
 
+    FIRST_ITT_AY = "2016/2017"
+    LAST_POLICY_YEAR = "2024/2025"
+
     # Generates an object similar to
     # {
     #   <AcademicYear:0x00007f7d87429238 @start_year=2020, @end_year=2021> => "2020/2021",
@@ -37,11 +40,16 @@ module EarlyCareerPayments
     # }
     # Note: ECP policy began in academic year 2021/22 so the persisted options
     # should include 2016/17 onward.
-    # In test environment the policy configuration record may not exist
+    # In test environment the policy configuration record may not exist.
+    # This can't be dynamic on PolicyConfiguration current_academic_year because changing the year means the 5 year window changes
+    # and the enums would be stale until after a server restart.
+    # Make all valid ITT values based on the last known policy year.
     ITT_ACADEMIC_YEARS =
-      ((AcademicYear.new(2016)...(PolicyConfiguration.for(EarlyCareerPayments)&.current_academic_year || AcademicYear.current))).each_with_object({}) do |year, hsh|
+      (AcademicYear.new(FIRST_ITT_AY)...AcademicYear.new(LAST_POLICY_YEAR)).each_with_object({}) do |year, hsh|
         hsh[year] = AcademicYear::Type.new.serialize(year)
       end.merge({AcademicYear.new => AcademicYear::Type.new.serialize(AcademicYear.new)})
+
+    enum itt_academic_year: ITT_ACADEMIC_YEARS
 
     enum qualification: {
       postgraduate_itt: 0,
@@ -58,8 +66,6 @@ module EarlyCareerPayments
       none_of_the_above: 4,
       computing: 5
     }, _prefix: :itt_subject
-
-    enum itt_academic_year: ITT_ACADEMIC_YEARS
 
     def self.max_award_amount_in_pounds
       AwardAmountCalculator.max_award_amount_in_pounds
