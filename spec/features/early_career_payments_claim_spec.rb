@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.feature "Teacher Early-Career Payments claims" do
+RSpec.feature "Teacher Early-Career Payments claims", slow: true do
   include EarlyCareerPaymentsHelper
 
   # create a school eligible for ECP and LUP so can walk the whole journey

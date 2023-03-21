@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.feature "Ineligibility reason" do
+RSpec.feature "Ineligibility reason", slow: true do
   let!(:lup_and_ecp_school) { create(:school, :combined_journey_eligibile_for_all) }
   let!(:ecp_only_school) { create(:school, :early_career_payments_eligible) }
 

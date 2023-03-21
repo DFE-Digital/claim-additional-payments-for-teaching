@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.feature "ITT subject selection" do
+RSpec.feature "ITT subject selection", slow: true do
   before { create(:policy_configuration, :additional_payments) }
 
   # Note: If we ever change the UI to show all the options in all cases,
