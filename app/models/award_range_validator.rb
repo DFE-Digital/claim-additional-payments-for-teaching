@@ -5,7 +5,7 @@ class AwardRangeValidator < ActiveModel::EachValidator
       attributes: attributes,
       greater_than: 0,
       less_than_or_equal_to: max_award,
-      message: "Enter a positive amount up to #{max_award.to_s(:currency)} (inclusive)"
+      message: "Enter a positive amount up to #{max_award.to_fs(:currency)} (inclusive)"
     }).validate_each(record, attribute, value)
   end
 end

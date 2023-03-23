@@ -3,26 +3,26 @@
 
 
 a11y-dialog@^5.5.0:
-  version "5.5.0"
-  resolved "https://registry.yarnpkg.com/a11y-dialog/-/a11y-dialog-5.5.0.tgz#5c5cfd6c64fa471184fb34c7218df699a19d421b"
-  integrity sha512-dz0QBOOb/ASnxiYLFDrA1A9417besUmVjUt6Hi17KRLQfnk7dlaZOogkiWSpYWkdjXrWN6GGhSl+uuF9VawAjA==
+  version "5.5.2"
+  resolved "https://registry.yarnpkg.com/a11y-dialog/-/a11y-dialog-5.5.2.tgz#1072416076cdfe4337691d64ab87568f7413639c"
+  integrity sha512-1G7uP6z896DCBXyiwnaMze8YDoljtwgEPezgcJInq2f/chskPQooV505lHOtZpEvtI+ddDUPp0ECjHQjUIaPDw==
 
 accessible-autocomplete@^2.0.1:
-  version "2.0.1"
-  resolved "https://registry.yarnpkg.com/accessible-autocomplete/-/accessible-autocomplete-2.0.1.tgz#dbbe703d0b48cd37ec0fea97fe46f066528e8098"
-  integrity sha512-2Cq8uI+deZNGMS38MmzE+40yT1A2ZC+aRC80l4zazQeh9TrhTn7Ho1fZ0Den1F+WQBe8RNLZtufzGFrMVU8K8w==
+  version "2.0.4"
+  resolved "https://registry.yarnpkg.com/accessible-autocomplete/-/accessible-autocomplete-2.0.4.tgz#e295256c8d268b97c5ab456a1cb084b553ed3eb0"
+  integrity sha512-2p0txrSpvs5wXFUeQJHMheDPTZVSEmiUHWlEPb7vJnv2Dd1xPfoLnBQQMfNbTSit2pL/9sSQYESuD2Yyohd4Yw==
   dependencies:
     preact "^8.3.1"
 
 govuk-frontend@^4.3.1:
-  version "4.3.1"
-  resolved "https://registry.yarnpkg.com/govuk-frontend/-/govuk-frontend-4.3.1.tgz#d9c581aca3d23bbfe9bd27c25fee65322b276393"
-  integrity sha512-uD0KVFds7drOwLEvfp4zRBOXuHCxkWLYDQcYvlbG+2baZ9po2TGZz8WjfzhfueYjo9+Uwk+bM0NQT6g4cg/Q+A==
+  version "4.5.0"
+  resolved "https://registry.yarnpkg.com/govuk-frontend/-/govuk-frontend-4.5.0.tgz#64759e39efbaa81f9cb7a35cc6cff6fd9fa619ef"
+  integrity sha512-gZHDqf5vdlHjmx0NGJiNT12XLyR3d5KCS4AnlC3xTWOObJ0kQROrkIFyp3w4/PY3EQiYdgacVaJ6lizzygnzYw==
 
 preact@^8.3.1:
-  version "8.4.2"
-  resolved "https://registry.yarnpkg.com/preact/-/preact-8.4.2.tgz#1263b974a17d1ea80b66590e41ef786ced5d6a23"
-  integrity sha512-TsINETWiisfB6RTk0wh3/mvxbGRvx+ljeBccZ4Z6MPFKgu/KFGyf2Bmw3Z/jlXhL5JlNKY6QAbA9PVyzIy9//A==
+  version "8.5.3"
+  resolved "https://registry.yarnpkg.com/preact/-/preact-8.5.3.tgz#78c2a5562fcecb1fed1d0055fa4ac1e27bde17c1"
+  integrity sha512-O3kKP+1YdgqHOFsZF2a9JVdtqD+RPzCQc3rP+Ualf7V6rmRDchZ9MJbiGTT7LuyqFKZqlHSOyO/oMFmI2lVTsw==
 
 prettier@^2.8.4:
   version "2.8.4"

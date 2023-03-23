@@ -14,9 +14,12 @@ Rails.application.configure do
   # Show full error reports.
   config.consider_all_requests_local = true
 
+  # Enable server timing
+  config.server_timing = true
+
   # Enable/disable caching. By default caching is disabled.
   # Run rails dev:cache to toggle caching.
-  if Rails.root.join("tmp", "caching-dev.txt").exist?
+  if Rails.root.join("tmp/caching-dev.txt").exist?
     config.action_controller.perform_caching = true
     config.action_controller.enable_fragment_cache_logging = true
 
@@ -36,7 +39,7 @@ Rails.application.configure do
 
   if ENV["NOTIFY_API_KEY"].present?
     config.action_mailer.delivery_method = :notify
-    config.action_mailer.delivery_job = "MailDeliveryJob"
+    config.action_mailer.delivery_job = "ActionMailer::MailDeliveryJob"
     config.action_mailer.notify_settings = {
       api_key: ENV.fetch("NOTIFY_API_KEY")
     }
