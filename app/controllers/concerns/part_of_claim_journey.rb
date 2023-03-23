@@ -22,7 +22,7 @@ module PartOfClaimJourney
   end
 
   def send_unstarted_claimants_to_the_start
-    redirect_to current_policy.start_page_url unless current_claim.persisted?
+    redirect_to current_policy.start_page_url, allow_other_host: true unless current_claim.persisted?
   end
 
   def current_claim

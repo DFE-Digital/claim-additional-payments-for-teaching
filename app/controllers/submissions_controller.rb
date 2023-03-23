@@ -19,6 +19,6 @@ class SubmissionsController < BasePublicController
   end
 
   def show
-    return redirect_to current_policy.start_page_url unless submitted_claim
+    return redirect_to current_policy.start_page_url, allow_other_host: true unless submitted_claim
   end
 end
