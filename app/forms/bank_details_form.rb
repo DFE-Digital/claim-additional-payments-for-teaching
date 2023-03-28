@@ -72,7 +72,7 @@ class BankDetailsForm
     response = nil
 
     begin
-      response = Hmrc.client.verify_personal_bank_account(bank_sort_code, bank_account_number, banking_name)
+      response = Hmrc.client.verify_personal_bank_account(normalised_bank_detail(bank_sort_code), normalised_bank_detail(bank_account_number), banking_name)
 
       @hmrc_api_validation_attempted = true
       @hmrc_api_validation_succeeded = true if response.success?
