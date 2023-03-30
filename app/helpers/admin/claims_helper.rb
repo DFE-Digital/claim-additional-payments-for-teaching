@@ -209,5 +209,43 @@ module Admin
     def days_between(first_date, second_date)
       (second_date - first_date).to_i
     end
+
+    def code_msg(bank_account_verification_response, claim)
+      "Error #{bank_account_verification_response.code} - HMRC API failure. No checks have been completed on the claimant’s #{t("admin.#{claim.bank_or_building_society}")} details. Select yes to manually approve the claimant’s #{t("admin.#{claim.bank_or_building_society}")} details"
+    end
+
+    def sort_code_msg(bank_account_verification_response)
+      if bank_account_verification_response.sort_code_correct?
+        "Yes - sort code found"
+      else
+        "No - sort code not found"
+      end
+    end
+
+    def account_number_msg(bank_account_verification_response)
+      case bank_account_verification_response.account_exists
+      when "yes"
+        "Yes - sort code and account number match"
+      when "no"
+        "No - account number not valid for the given sort code"
+      when "indeterminate"
+        "Indeterminate - sort code and account number not found"
+      when "inapplicable"
+        "Inapplicable - sort code and/or account number failed initial validation, no further checks completed"
+      end
+    end
+
+    def name_matches_msg(bank_account_verification_response)
+      case bank_account_verification_response.name_matches
+      when "yes"
+        "Yes - name matches the account holder name"
+      when "partial"
+        "Partial - After normalisation, the provided name is a close match"
+      when "no"
+        "No - name does not match the account holder name"
+      when "inapplicable"
+        "Inapplicable - sort code and/or account number failed initial validation, no further checks completed"
+      end
+    end
   end
 end

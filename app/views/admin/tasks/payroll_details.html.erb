@@ -10,16 +10,32 @@
 
     <div class="hmcts-timeline hmrc_responses">
       <% @claim.hmrc_bank_validation_responses.each do |response| %>
+      <% bank_account_verification_response = Hmrc::BankAccountVerificationResponse.new(OpenStruct.new({code: response["code"], body: response["body"].to_json})) %>
 
-      <div class="hmcts-timeline__item">
-        <section>
-          <pre><%= JSON.pretty_generate(response) %></pre>
-        </section>
+        <div class="hmcts-timeline__item">
+          <section>
+            <h3 class="govuk-body">HMRC API response during claim journey</h3>
 
-        <p class="hmcts-timeline__description">
-          HMRC API response during claim journey
-        </p>
-      </div>
+            <% if bank_account_verification_response.code == 200 %>
+              <p class="hmcts-timeline__description">Sort code: <%= sort_code_msg(bank_account_verification_response) %></p>
+              <p class="hmcts-timeline__description">Account number: <%= account_number_msg(bank_account_verification_response) %></p>
+              <p class="hmcts-timeline__description">Name: <%= name_matches_msg(bank_account_verification_response) %></p>
+            <% else %>
+              <p class="hmcts-timeline__description"><%= code_msg(bank_account_verification_response, @claim) %></p>
+            <% end %>
+
+            <details class="govuk-details" data-module="govuk-details">
+              <summary class="govuk-details__summary">
+                <span class="govuk-details__summary-text">
+                  HMRC JSON response
+                </span>
+              </summary>
+              <div class="govuk-details__text">
+                <pre><%= JSON.pretty_generate(response) %></pre>
+              </div>
+            </details>
+          </section>
+        </div>
       <% end %>
     </div>
 
@@ -52,7 +68,6 @@
           <%= f.submit "Save and continue", class: "govuk-button", data: {module: "govuk-button"} %>
         </div>
       <% end %>
-
     <% end %>
 
     <%= render partial: "admin/task_pagination" %>

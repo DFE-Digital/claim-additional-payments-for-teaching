@@ -17,15 +17,27 @@ module Hmrc
     end
 
     def name_match?
-      ["yes", "partial"].include? body["nameMatches"]
+      ["yes", "partial"].include? name_matches
     end
 
     def sort_code_correct?
-      body["sortCodeIsPresentOnEISCD"] == "yes"
+      sort_code_present_on_eiscd == "yes"
     end
 
     def account_exists?
-      body["accountExists"] == "yes"
+      account_exists == "yes"
+    end
+
+    def sort_code_present_on_eiscd
+      body["sortCodeIsPresentOnEISCD"]
+    end
+
+    def account_exists
+      body["accountExists"]
+    end
+
+    def name_matches
+      body["nameMatches"]
     end
   end
 end
