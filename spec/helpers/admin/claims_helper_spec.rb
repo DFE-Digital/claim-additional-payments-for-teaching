@@ -535,4 +535,114 @@ describe Admin::ClaimsHelper do
       end
     end
   end
+
+  describe "#code_msg" do
+    context "400 error with bank account" do
+      let(:claim) { create(:claim, :submitted, bank_or_building_society: :personal_bank_account) }
+      let(:bank_account_verification_response) { Hmrc::BankAccountVerificationResponse.new(OpenStruct.new({code: 400, body: {}.to_json})) }
+
+      it "returns message with code and bank account" do
+        expect(code_msg(bank_account_verification_response, claim)).to eq "Error 400 - HMRC API failure. No checks have been completed on the claimant’s bank account details. Select yes to manually approve the claimant’s bank account details"
+      end
+    end
+
+    context "429 error with building society" do
+      let(:claim) { create(:claim, :submitted, bank_or_building_society: :building_society) }
+      let(:bank_account_verification_response) { Hmrc::BankAccountVerificationResponse.new(OpenStruct.new({code: 429, body: {}.to_json})) }
+
+      it "returns message with code and bank account" do
+        expect(code_msg(bank_account_verification_response, claim)).to eq "Error 429 - HMRC API failure. No checks have been completed on the claimant’s building society details. Select yes to manually approve the claimant’s building society details"
+      end
+    end
+  end
+
+  describe "#sort_code_msg" do
+    context "sort code correct" do
+      let(:bank_account_verification_response) { Hmrc::BankAccountVerificationResponse.new(OpenStruct.new({code: 200, body: {"sortCodeIsPresentOnEISCD" => "yes"}.to_json})) }
+
+      it "returns correct message" do
+        expect(sort_code_msg(bank_account_verification_response)).to eq "Yes - sort code found"
+      end
+    end
+
+    context "sort code incorrect" do
+      let(:bank_account_verification_response) { Hmrc::BankAccountVerificationResponse.new(OpenStruct.new({code: 200, body: {"sortCodeIsPresentOnEISCD" => "no"}.to_json})) }
+
+      it "returns incorrect message" do
+        expect(sort_code_msg(bank_account_verification_response)).to eq "No - sort code not found"
+      end
+    end
+  end
+
+  describe "#account_number_msg" do
+    let(:bank_account_verification_response) { Hmrc::BankAccountVerificationResponse.new(OpenStruct.new({code: 200, body: {"accountExists" => account_exists}.to_json})) }
+
+    context "yes" do
+      let(:account_exists) { "yes" }
+
+      it "returns yes message" do
+        expect(account_number_msg(bank_account_verification_response)).to eq "Yes - sort code and account number match"
+      end
+    end
+
+    context "no" do
+      let(:account_exists) { "no" }
+
+      it "returns no message" do
+        expect(account_number_msg(bank_account_verification_response)).to eq "No - account number not valid for the given sort code"
+      end
+    end
+
+    context "indeterminate" do
+      let(:account_exists) { "indeterminate" }
+
+      it "returns indeterminate message" do
+        expect(account_number_msg(bank_account_verification_response)).to eq "Indeterminate - sort code and account number not found"
+      end
+    end
+
+    context "inapplicable" do
+      let(:account_exists) { "inapplicable" }
+
+      it "returns inapplicable message" do
+        expect(account_number_msg(bank_account_verification_response)).to eq "Inapplicable - sort code and/or account number failed initial validation, no further checks completed"
+      end
+    end
+  end
+
+  describe "#name_matches_msg" do
+    let(:bank_account_verification_response) { Hmrc::BankAccountVerificationResponse.new(OpenStruct.new({code: 200, body: {"nameMatches" => name_matches}.to_json})) }
+
+    context "yes" do
+      let(:name_matches) { "yes" }
+
+      it "returns yes message" do
+        expect(name_matches_msg(bank_account_verification_response)).to eq "Yes - name matches the account holder name"
+      end
+    end
+
+    context "partial" do
+      let(:name_matches) { "partial" }
+
+      it "returns partial message" do
+        expect(name_matches_msg(bank_account_verification_response)).to eq "Partial - After normalisation, the provided name is a close match"
+      end
+    end
+
+    context "no" do
+      let(:name_matches) { "no" }
+
+      it "returns no message" do
+        expect(name_matches_msg(bank_account_verification_response)).to eq "No - name does not match the account holder name"
+      end
+    end
+
+    context "inapplicable" do
+      let(:name_matches) { "inapplicable" }
+
+      it "returns inapplicable message" do
+        expect(name_matches_msg(bank_account_verification_response)).to eq "Inapplicable - sort code and/or account number failed initial validation, no further checks completed"
+      end
+    end
+  end
 end
