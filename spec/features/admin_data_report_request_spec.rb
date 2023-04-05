@@ -11,30 +11,36 @@ RSpec.feature "Data report request" do
     claims = [
       create(:claim, :submitted, policy: StudentLoans),
       create(:claim, :submitted, policy: MathsAndPhysics),
-      create(:claim, :submitted, policy: EarlyCareerPayments)
+      create(:claim, :submitted, policy: EarlyCareerPayments),
+      create(:claim, :submitted, policy: LevellingUpPremiumPayments),
+      create(:claim, :submitted, :held, policy: LevellingUpPremiumPayments) # includes held claims
     ]
 
-    create_list(:claim, 100, :submitted) # Making sure CSV is not paginated at 50 claims/page
+    claims.concat create_list(:claim, 100, :submitted) # Making sure CSV is not paginated at 50 claims/page
+
+    create_list(:claim, 150, :approved) # Making sure CSV excludes approved claims in the download
+    create_list(:claim, 4, :rejected) # Making sure CSV excludes rejected claims in the download
 
     click_on "View claims"
-
     click_on "Download report request file"
 
     expect(page.response_headers["Content-Type"]).to eq("text/csv")
 
     csv = CSV.parse(body, headers: true)
 
-    expect(csv.count).to eq(103)
+    # 5 claims + the 100 submitted claims
+    expect(csv.count).to eq(105)
 
-    claims.each_with_index do |claim, index|
-      expect(csv[index].fields("Claim reference")).to include(claim.reference)
-      expect(csv[index].fields("Teacher reference number")).to include(claim.teacher_reference_number)
-      expect(csv[index].fields("NINO")).to include(claim.national_insurance_number)
-      expect(csv[index].fields("Full name")).to include(claim.full_name)
-      expect(csv[index].fields("Email")).to include(claim.email_address)
-      expect(csv[index].fields("Date of birth")).to include(claim.date_of_birth.to_s)
-      expect(csv[index].fields("ITT subject")).to include(claim.eligibility.eligible_itt_subject)
-      expect(csv[index].fields("Policy name")).to include(claim.policy.to_s)
+    csv.each_with_index do |row, i|
+      claim = claims.detect { |c| c.reference == row["Claim reference"] }
+      expect(claim).not_to be_nil
+      expect(row["Teacher reference number"]).to eq(claim.teacher_reference_number)
+      expect(row["NINO"]).to eq(claim.national_insurance_number)
+      expect(row["Full name"]).to eq(claim.full_name)
+      expect(row["Email"]).to eq(claim.email_address)
+      expect(row["Date of birth"]).to eq(claim.date_of_birth.to_s)
+      expect(row["ITT subject"]).to eq(claim.eligibility.eligible_itt_subject)
+      expect(row["Policy name"]).to eq(claim.policy.to_s)
     end
   end
 end
