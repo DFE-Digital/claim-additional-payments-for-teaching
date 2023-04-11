@@ -31,7 +31,9 @@ class Admin::ClaimsController < Admin::BaseAdminController
         ))
       }
       format.csv {
-        send_data Claim::DataReportRequest.new(all_claims).to_csv,
+        # "Download report request file" button (doesn't use the filters)
+        report_request_claims = Claim.includes(:decisions).awaiting_decision
+        send_data Claim::DataReportRequest.new(report_request_claims).to_csv,
           filename: "dqt_report_request_#{Date.today.iso8601}.csv"
       }
     end
