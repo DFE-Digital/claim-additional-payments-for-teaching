@@ -10,9 +10,12 @@ RSpec.feature "Admin claim support tickets" do
     claim = create(:claim, :submitted)
 
     visit admin_claims_path
+
     find("a[href='#{admin_claim_tasks_path(claim)}']").click
 
     click_on "Notes and support"
+
+    expect(page).to have_link("View all suppport tickets in Zendesk", href: "https://additional-teaching-payment.zendesk.com/agent/search/1?copy&type=ticket&q=person1%40example.com")
 
     fill_in "Support ticket", with: "https://account-sub-domain.zendesk.com/agent/tickets/1638"
     click_on "Save support ticket"
@@ -22,5 +25,6 @@ RSpec.feature "Admin claim support tickets" do
     expect(claim.support_ticket.created_by).to eq(@signed_in_user)
 
     expect(page).to have_link(href: "https://account-sub-domain.zendesk.com/agent/tickets/1638")
+    expect(page).to have_link("View all suppport tickets in Zendesk", href: "https://additional-teaching-payment.zendesk.com/agent/search/1?copy&type=ticket&q=person1%40example.com")
   end
 end

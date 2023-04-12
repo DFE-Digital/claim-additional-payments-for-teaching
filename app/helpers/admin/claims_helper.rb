@@ -247,5 +247,9 @@ module Admin
         "Inapplicable - sort code and/or account number failed initial validation, no further checks completed"
       end
     end
+
+    def zendesk_email_search_url(email_address)
+      "https://additional-teaching-payment.zendesk.com/agent/search/1?copy&type=ticket&q=#{CGI.escape(email_address)}"
+    end
   end
 end

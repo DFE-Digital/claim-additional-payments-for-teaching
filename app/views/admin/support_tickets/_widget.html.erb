@@ -1,9 +1,11 @@
 <% if support_ticket.persisted? %>
 
   <h2 class="govuk-heading-m">Support ticket</h2>
-  <p class="govuk-body-m">
-    <%= link_to claim.support_ticket.url, claim.support_ticket.url, class: "govuk-link" %>
-  </p>
+
+  <ul class="govuk-body">
+    <li><%= link_to "View all suppport tickets in Zendesk", zendesk_email_search_url(@claim.email_address), class: "govuk-link", target: "_blank" %></li>
+    <li><%= link_to claim.support_ticket.url, claim.support_ticket.url, class: "govuk-link", target: "_blank"  %></li>
+  </ul>
 
 <% else %>
 
@@ -11,6 +13,10 @@
     <%= form_group_tag support_ticket, :url do %>
       <%= errors_tag support_ticket, :url %>
       <%= form.label :url, "Support ticket", class: "govuk-label govuk-label--m" %>
+      <p class="govuk-body-m">
+        <%= link_to "View all suppport tickets in Zendesk", zendesk_email_search_url(@claim.email_address), class: "govuk-link" , target: "_blank" %>
+      </p>
+
       <div class="govuk-hint" id="ticket-hint">
         Create a ticket on Zendesk and enter the URL here.
       </div>
