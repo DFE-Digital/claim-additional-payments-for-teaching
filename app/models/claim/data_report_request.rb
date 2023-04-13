@@ -1,4 +1,5 @@
 require "csv"
+require "excel_utils"
 
 class Claim
   # Used to genearte a CSV of claims that includes: Claim reference, teacher
@@ -26,16 +27,16 @@ class Claim
       CSV.generate(write_headers: true, headers: HEADERS) do |csv|
         @claims.each do |claim|
           csv << [
-            claim.reference,
-            claim.teacher_reference_number,
-            claim.national_insurance_number,
-            claim.full_name,
-            claim.email_address,
-            claim.date_of_birth,
-            claim.eligibility.eligible_itt_subject,
-            claim.policy,
-            claim.eligibility.current_school.name,
-            claim.eligibility.current_school.urn
+            ExcelUtils.escape_formulas(claim.reference),
+            ExcelUtils.escape_formulas(claim.teacher_reference_number),
+            ExcelUtils.escape_formulas(claim.national_insurance_number),
+            ExcelUtils.escape_formulas(claim.full_name),
+            ExcelUtils.escape_formulas(claim.email_address),
+            ExcelUtils.escape_formulas(claim.date_of_birth),
+            ExcelUtils.escape_formulas(claim.eligibility.eligible_itt_subject),
+            ExcelUtils.escape_formulas(claim.policy),
+            ExcelUtils.escape_formulas(claim.eligibility.current_school.name),
+            ExcelUtils.escape_formulas(claim.eligibility.current_school.urn)
           ]
         end
       end
