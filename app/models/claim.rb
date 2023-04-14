@@ -112,6 +112,11 @@ class Claim < ApplicationRecord
     "email_address" => ["email_verified"]
   }.freeze
 
+  # The idea is to filter things that in a CSV export might be malicious in MS Excel
+  # A whitelist would be inappropiate as these fields could contain valid special letters e.g. accents and umlauts
+  NAME_REGEX_FILTER = /\A[^'"=$%#&*+\/\\()@?!<>0-9]*\z/
+  ADDRESS_REGEX_FILTER = /\A[^'"=$%#*+\/\\()@?!<>]*\z/
+
   # Use AcademicYear as custom ActiveRecord attribute type
   attribute :academic_year, AcademicYear::Type.new
 
@@ -159,6 +164,10 @@ class Claim < ApplicationRecord
       in: 2..30,
       message: "First name must be between 2 and 30 characters"
     },
+    format: {
+      with: NAME_REGEX_FILTER,
+      message: "First name cannot contain special characters"
+    },
     if: -> { first_name.present? }
 
   validates :middle_name,
@@ -166,6 +175,10 @@ class Claim < ApplicationRecord
     length: {
       maximum: 61,
       message: "Middle names must be less than 61 characters"
+    },
+    format: {
+      with: NAME_REGEX_FILTER,
+      message: "Middle names cannot contain special characters"
     },
     if: -> { middle_name.present? }
 
@@ -176,17 +189,25 @@ class Claim < ApplicationRecord
       in: 2..30,
       message: "Last name must be between 2 and 30 characters"
     },
+    format: {
+      with: NAME_REGEX_FILTER,
+      message: "Last name cannot contain special characters"
+    },
     if: -> { surname.present? }
 
   validates :address_line_1, on: [:address], presence: {message: "Enter a house number or name"}, if: :has_ecp_or_lupp_policy?
   validates :address_line_1, on: [:address, :submit], presence: {message: "Enter a building and street address"}, unless: :has_ecp_or_lupp_policy?
   validates :address_line_1, length: {maximum: 100, message: "Address lines must be 100 characters or less"}
+  validates :address_line_1, on: [:address], format: {with: ADDRESS_REGEX_FILTER, message: "Address lines cannot contain special characters"}
   validates :address_line_2, length: {maximum: 100, message: "Address lines must be 100 characters or less"}
   validates :address_line_2, on: [:address], presence: {message: "Enter a building and street address"}, if: :has_ecp_or_lupp_policy?
+  validates :address_line_2, on: [:address], format: {with: ADDRESS_REGEX_FILTER, message: "Address lines cannot contain special characters"}
   validates :address_line_3, length: {maximum: 100, message: "Address lines must be 100 characters or less"}
   validates :address_line_3, on: [:address], presence: {message: "Enter a town or city"}
+  validates :address_line_3, on: [:address], format: {with: ADDRESS_REGEX_FILTER, message: "Address lines cannot contain special characters"}
   validates :address_line_4, length: {maximum: 100, message: "Address lines must be 100 characters or less"}
   validates :address_line_4, on: [:address], presence: {message: "Enter a county"}
+  validates :address_line_4, on: [:address], format: {with: ADDRESS_REGEX_FILTER, message: "Address lines cannot contain special characters"}
 
   validates :postcode, on: [:address, :submit], presence: {message: "Enter a real postcode"}
   validates :postcode, length: {maximum: 11, message: "Postcode must be 11 characters or less"}
