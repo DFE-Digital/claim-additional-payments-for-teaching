@@ -23,7 +23,7 @@ module Claims
       hint_subject_symbols = Set[]
 
       if current_claim.eligibility.nqt_in_academic_year_after_itt
-        potentially_eligible_for_ecp = current_claim.for_policy(EarlyCareerPayments).eligibility.status != :ineligible
+        potentially_eligible_for_ecp = ![:ineligible, :eligible_later].include?(current_claim.for_policy(EarlyCareerPayments).eligibility.status)
         potentially_eligible_for_lup = current_claim.for_policy(LevellingUpPremiumPayments).eligibility.status != :ineligible
 
         hint_subject_symbols.merge(all_ecp_subjects) if potentially_eligible_for_ecp
