@@ -39,7 +39,8 @@ if Rails.env.development?
 
       Policies.all.each do |policy|
         create_list(:claim, 23, :approved, policy: policy)
-        create_list(:claim, 10, :submitted, policy: policy)
+        create_list(:claim, 8, :submitted, policy: policy)
+        create_list(:claim, 2, :submitted, :bank_details_not_validated, policy: policy)
         create_list(:claim, 5, :rejected, policy: policy)
         create_list(:claim, 1, :unverified, policy: policy)
       end

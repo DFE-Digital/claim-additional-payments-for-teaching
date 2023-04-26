@@ -283,6 +283,7 @@ class Claim < ApplicationRecord
   scope :by_claims_team_member, ->(service_operator_id) { where(assigned_to_id: service_operator_id) }
   scope :unassigned, -> { where(assigned_to_id: nil) }
   scope :current_academic_year, -> { by_academic_year(AcademicYear.current) }
+  scope :failed_bank_validation, -> { where(hmrc_bank_validation_succeeded: false) }
 
   delegate :award_amount, to: :eligibility
 

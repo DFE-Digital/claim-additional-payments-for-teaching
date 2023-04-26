@@ -8,6 +8,7 @@ class Admin::ClaimsController < Admin::BaseAdminController
     @claims = approved_awaiting_payroll if params[:status] == "approved_awaiting_payroll"
     @claims = Claim.current_academic_year.rejected if params[:status] == "rejected"
     @claims = Claim.includes(:decisions).held.awaiting_decision if params[:status] == "held"
+    @claims = Claim.includes(:decisions).failed_bank_validation.awaiting_decision if params[:status] == "failed_bank_validation"
     @claims ||= Claim.includes(:decisions).not_held.awaiting_decision
 
     @claims = @claims.by_policy(filtered_policy) if filtered_policy

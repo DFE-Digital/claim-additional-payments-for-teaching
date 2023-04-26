@@ -15,7 +15,8 @@ RSpec.feature "Admin claim filtering" do
   let!(:student_loans_claims_for_mette) { create_list(:claim, 4, :submitted, policy: StudentLoans, assigned_to: mette) }
   let!(:student_loans_claims_for_valentino) { create_list(:claim, 1, :submitted, policy: StudentLoans, assigned_to: valentino) }
   let!(:early_career_payments_claims_for_mary) { create_list(:claim, 2, :submitted, policy: EarlyCareerPayments, assigned_to: mary) }
-  let!(:early_career_payments_claims_for_mette) { create_list(:claim, 8, :submitted, policy: EarlyCareerPayments, assigned_to: mette) }
+  let!(:early_career_payments_claims_for_mette) { create_list(:claim, 6, :submitted, policy: EarlyCareerPayments, assigned_to: mette) }
+  let!(:early_career_payments_claims_failed_bank_validation) { create_list(:claim, 2, :submitted, :bank_details_not_validated, policy: EarlyCareerPayments, assigned_to: mette) }
   let!(:lup_claims_unassigned) { create_list(:claim, 2, :submitted, policy: LevellingUpPremiumPayments) }
   let!(:held_claims) { create_list(:claim, 2, :submitted, :held) }
 
@@ -57,7 +58,8 @@ RSpec.feature "Admin claim filtering" do
 
     [
       student_loans_claims_for_mette,
-      early_career_payments_claims_for_mette
+      early_career_payments_claims_for_mette,
+      early_career_payments_claims_failed_bank_validation
     ].flatten.each do |c|
       expect(page).to have_content(c.reference)
     end
@@ -86,7 +88,8 @@ RSpec.feature "Admin claim filtering" do
       student_loans_claims_for_mette,
       student_loans_claims_for_valentino,
       early_career_payments_claims_for_mary,
-      early_career_payments_claims_for_mette
+      early_career_payments_claims_for_mette,
+      early_career_payments_claims_failed_bank_validation
     ].flatten.each do |c|
       expect(page).to_not have_content(c.reference)
     end
@@ -104,6 +107,7 @@ RSpec.feature "Admin claim filtering" do
       student_loans_claims_for_valentino,
       early_career_payments_claims_for_mary,
       early_career_payments_claims_for_mette,
+      early_career_payments_claims_failed_bank_validation,
       lup_claims_unassigned
     ].flatten.each do |c|
       expect(page).to have_content(c.reference)
@@ -121,9 +125,17 @@ RSpec.feature "Admin claim filtering" do
       student_loans_claims_for_valentino,
       early_career_payments_claims_for_mary,
       early_career_payments_claims_for_mette,
+      early_career_payments_claims_failed_bank_validation,
       lup_claims_unassigned
     ].flatten.each do |c|
       expect(page).not_to have_content(c.reference)
+    end
+
+    select "Awaiting decision - failed bank details", from: "Status:"
+    click_button "Apply filters"
+
+    early_career_payments_claims_failed_bank_validation.each do |c|
+      expect(page).to have_content(c.reference)
     end
   end
 end
