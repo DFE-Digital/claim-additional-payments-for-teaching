@@ -10,7 +10,7 @@ module Admin
       @csv_upload = LevellingUpPremiumPayments::AwardCsvImporter.new(**upload_params.to_h.symbolize_keys)
 
       if @csv_upload.process
-        flash[:notice] = "Award amounts for #{policy_configuration.current_academic_year} successfully updated."
+        flash[:notice] = "Award amounts for #{@csv_upload.academic_year} successfully updated."
         return redirect_to edit_admin_policy_configuration_path(policy_configuration)
       end
 
