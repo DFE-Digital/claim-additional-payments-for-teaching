@@ -159,5 +159,15 @@ RSpec.describe IneligibilityReasonChecker do
 
       it { is_expected.to eq(:no_ecp_subjects_that_itt_year) }
     end
+
+    context "trainee teacher in last policy year" do
+      let(:school) { build(:school, :combined_journey_eligibile_for_all) }
+      let(:ecp_eligibility) { build(:early_career_payments_eligibility, :trainee_teacher, current_school: school) }
+      let(:lup_eligibility) { build(:levelling_up_premium_payments_eligibility, :trainee_teacher, current_school: school) }
+      let(:ecp_claim) { build(:claim, policy: EarlyCareerPayments, academic_year: "2024/2025", eligibility: ecp_eligibility) }
+      let(:lup_claim) { build(:claim, policy: LevellingUpPremiumPayments, academic_year: "2024/2025", eligibility: lup_eligibility) }
+
+      it { is_expected.to eq(:trainee_in_last_policy_year) }
+    end
   end
 end
