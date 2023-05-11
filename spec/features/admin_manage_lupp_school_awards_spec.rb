@@ -13,7 +13,7 @@ RSpec.feature "Managing Levelling Up Premium Payments school awards" do
 
     click_on "Manage services"
 
-    expect(page).to have_content("Claim Additional Payments for Teaching")
+    expect(page).to have_content("Claim additional payments for teaching")
     within(find("tr[data-policy-configuration-id=\"#{policy_configuration.id}\"]")) do
       click_on "Change"
     end
@@ -64,6 +64,17 @@ RSpec.feature "Managing Levelling Up Premium Payments school awards" do
     end
 
     expect(page).to have_text "Award amounts for #{policy_configuration.current_academic_year} successfully updated."
+
+    # Different academic year
+
+    within "#upload" do
+      select "2024/2025", from: "upload_academic_year"
+
+      attach_file("CSV file", csv_file)
+      click_button "Upload CSV"
+    end
+
+    expect(page).to have_text "Award amounts for 2024/2025 successfully updated."
 
     # CSV file with bad data
     within "#upload" do
