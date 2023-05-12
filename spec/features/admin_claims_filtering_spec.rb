@@ -19,6 +19,7 @@ RSpec.feature "Admin claim filtering" do
   let!(:early_career_payments_claims_failed_bank_validation) { create_list(:claim, 2, :submitted, :bank_details_not_validated, policy: EarlyCareerPayments, assigned_to: mette) }
   let!(:lup_claims_unassigned) { create_list(:claim, 2, :submitted, policy: LevellingUpPremiumPayments) }
   let!(:held_claims) { create_list(:claim, 2, :submitted, :held) }
+  let!(:approved_claim) { create(:claim, :approved, policy: LevellingUpPremiumPayments, assigned_to: mette, decision_creator: mary) }
 
   scenario "the service operator can filter claims by policy" do
     maths_and_physics_claims = create_list(:claim, 3, :submitted, policy: MathsAndPhysics)
@@ -71,6 +72,20 @@ RSpec.feature "Admin claim filtering" do
     ].flatten.each do |c|
       expect(page).to_not have_content(c.reference)
     end
+
+    # Assigned to Mette
+    select "Mette Jørgensen", from: "team_member"
+    select "Approved", from: "Status:"
+    click_on "Apply filters"
+    expect(page).to have_content("1 claim approved")
+    expect(page).to have_content(approved_claim.reference)
+
+    # Approved by Mary
+    select "Mary Wasu Wabi", from: "team_member"
+    select "Approved", from: "Status:"
+    click_on "Apply filters"
+    expect(page).to have_content("1 claim approved")
+    expect(page).to have_content(approved_claim.reference)
   end
 
   scenario "filter unassigned claims" do

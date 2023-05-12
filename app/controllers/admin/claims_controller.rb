@@ -12,7 +12,7 @@ class Admin::ClaimsController < Admin::BaseAdminController
     @claims ||= Claim.includes(:decisions).not_held.awaiting_decision
 
     @claims = @claims.by_policy(filtered_policy) if filtered_policy
-    @claims = @claims.by_claims_team_member(filtered_team_member) if filtered_team_member
+    @claims = @claims.by_claims_team_member(filtered_team_member, params[:status]) if filtered_team_member
     @claims = @claims.unassigned if filtered_unassigned
 
     @claims = @claims.includes(:tasks, eligibility: [:claim_school, :current_school])

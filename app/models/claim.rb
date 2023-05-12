@@ -280,7 +280,14 @@ class Claim < ApplicationRecord
   scope :by_policy, ->(policy) { where(eligibility_type: policy::Eligibility.to_s) }
   scope :by_policies, ->(policies) { where(eligibility_type: policies.map { |p| p::Eligibility.to_s }) }
   scope :by_academic_year, ->(academic_year) { where(academic_year: academic_year) }
-  scope :by_claims_team_member, ->(service_operator_id) { where(assigned_to_id: service_operator_id) }
+  scope :assigned_to_team_member, ->(service_operator_id) { where(assigned_to_id: service_operator_id) }
+  scope :by_claims_team_member, ->(service_operator_id, status) do
+    if %w[approved approved_awaiting_payroll rejected].include?(status)
+      assigned_to_team_member(service_operator_id).or(joins(:decisions).where(decisions: {created_by_id: service_operator_id}))
+    else
+      assigned_to_team_member(service_operator_id)
+    end
+  end
   scope :unassigned, -> { where(assigned_to_id: nil) }
   scope :current_academic_year, -> { by_academic_year(AcademicYear.current) }
   scope :failed_bank_validation, -> { where(hmrc_bank_validation_succeeded: false) }

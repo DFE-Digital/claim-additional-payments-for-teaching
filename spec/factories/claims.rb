@@ -9,6 +9,7 @@ FactoryBot.define do
       eligibility_factory { "#{policy.to_s.underscore}_eligibility".to_sym }
       eligibility_trait { nil }
       eligibility_attributes { nil }
+      decision_creator { nil }
     end
 
     after(:build) do |claim, evaluator|
@@ -100,8 +101,12 @@ FactoryBot.define do
 
     trait :approved do
       submitted
-      after(:build) do |claim|
-        create(:decision, claim: claim, result: "approved")
+      after(:build) do |claim, evaluator|
+        if evaluator.decision_creator
+          create(:decision, claim: claim, result: "approved", created_by: evaluator.decision_creator)
+        else
+          create(:decision, claim: claim, result: "approved")
+        end
       end
     end
 
