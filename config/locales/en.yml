@@ -146,6 +146,7 @@ en:
         success: "Assigned %{quantity} %{allocate_to_policy} %{pluralized_or_singular_claim} to %{dfe_user}"
         info: "No additional claims were assigned to %{dfe_user}. There are not any %{allocate_to_policy} awaiting assignment"
       bulk_deallocate:
+        confirmation: Are you sure you want to unassign %{allocate_to_policy} claims from %{dfe_user}?
         success: All %{allocate_to_policy} claims for %{dfe_user} have been unassigned
         info: There are not any %{allocate_to_policy} claims to unassign for %{dfe_user}
   answers:
