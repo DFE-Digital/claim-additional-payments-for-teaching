@@ -312,6 +312,33 @@ RSpec.feature "Claims awaiting a decision" do
       expect(page).to have_button "Allocate claims", disabled: false
     end
 
+    scenario "when deallocation is not confirmed" do
+      Claim.awaiting_decision.update_all(assigned_to_id: abdul.id)
+
+      click_on "View claims"
+
+      @submitted_claims.each do |claim|
+        expect(claim.reload.assigned_to.full_name).to eq "Abdul Rafiq"
+      end
+
+      expect(page).to have_button "Allocate claims", disabled: true
+
+      select "Abdul Rafiq", from: "allocate_to_team_member"
+      click_on "Unallocate"
+
+      expect(page).to have_text "Are you sure you want to unassign claims from Abdul Rafiq?"
+
+      click_on "Cancel"
+
+      expect(current_path).to eql(admin_claims_path)
+
+      @submitted_claims.each do |claim|
+        expect(claim.reload.assigned_to.full_name).to eq "Abdul Rafiq"
+      end
+
+      expect(page).to have_button "Allocate claims", disabled: true
+    end
+
     scenario "when zero claims for policy" do
       Claim.awaiting_decision.update_all(assigned_to_id: tripti.id)
 
