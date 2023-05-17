@@ -11,6 +11,10 @@ FactoryBot.define do
       rejected_reasons_ineligible_subject { "1" }
     end
 
+    trait :with_notes do
+      notes { "Some notes" }
+    end
+
     trait :undone do
       undone { true }
     end

@@ -110,27 +110,67 @@ RSpec.describe ClaimMailer, type: :mailer do
       end
 
       describe "#rejected" do
-        let(:claim) { build(:claim, :submitted, policy: policy) }
+        let(:claim) { build(:claim, :rejected, policy: policy) }
         let(:mail) { ClaimMailer.rejected(claim) }
 
         it_behaves_like "an email related to a claim using GOVUK Notify templates", policy
 
-        context "when EarlyCareerPayments", if: policy == EarlyCareerPayments do
-          it "uses the correct template" do
-            expect(mail[:template_id].decoded).to eq "49a25f3c-6dea-443f-a79f-58654363dc9a"
+        shared_examples "template id and personalisation keys" do
+          let(:expected_common_keys) do
+            {
+              first_name: claim.first_name,
+              ref_number: claim.reference,
+              support_email_address: I18n.t("#{claim.policy.locale_key}.support_email_address"),
+              current_financial_year: (policy == StudentLoans) ? StudentLoans.current_financial_year : ""
+            }
           end
+          let(:expected_rejected_reasons_keys) do
+            {
+              reason_ineligible_subject: "yes",
+              reason_ineligible_year: "no",
+              reason_ineligible_school: "no",
+              reason_ineligible_qualification: "no",
+              reason_no_qts_or_qtls: "no",
+              reason_duplicate: "no",
+              reason_no_response: "no",
+              reason_other: "no"
+            }
+          end
+          let(:all_expected_keys) { expected_common_keys.merge(expected_rejected_reasons_keys) }
+
+          it "uses the correct template" do
+            expect(mail[:template_id].decoded).to eq(expected_template_id)
+          end
+
+          it "passes common fields as personalisation keys" do
+            expect(mail[:personalisation].unparsed_value).to include(expected_common_keys)
+          end
+
+          it "passes rejected reasons as personalisation keys" do
+            expect(mail[:personalisation].unparsed_value).to include(expected_rejected_reasons_keys)
+          end
+
+          it "does not pass any other personalisation keys" do
+            expect(mail[:personalisation].unparsed_value).to match(all_expected_keys)
+          end
+        end
+
+        context "when EarlyCareerPayments", if: policy == EarlyCareerPayments do
+          let(:expected_template_id) { "b78ffea4-a3d7-4c4a-b0f7-066744c6e79f" }
+
+          include_examples "template id and personalisation keys"
         end
 
         context "when LevellingUpPremiumPayments", if: policy == LevellingUpPremiumPayments do
-          it "uses the correct template" do
-            expect(mail[:template_id].decoded).to eq "90089dbe-b75b-497b-8c0b-362d65395562"
-          end
+          let(:expected_template_id) { "c20e8d85-ef71-4395-8f8b-90fcbd824b86" }
+
+          include_examples "template id and personalisation keys"
         end
 
         context "when StudentLoans", if: policy == StudentLoans do
-          it "uses the correct template" do
-            expect(mail[:template_id].decoded).to eq "57ca138c-9536-4323-92ba-1876f7957360"
-          end
+          let(:expected_template_id) { "f719237d-6b2a-42d6-98f2-3d5b6585f32b" }
+
+          include_examples "template id and personalisation keys"
         end
       end
 
