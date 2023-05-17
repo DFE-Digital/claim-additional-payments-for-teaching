@@ -263,6 +263,10 @@ RSpec.feature "Claims awaiting a decision" do
       select "Abdul Rafiq", from: "allocate_to_team_member"
       click_on "Unallocate"
 
+      expect(page).to have_text "Are you sure you want to unassign claims from Abdul Rafiq?"
+
+      click_on "Unassign"
+
       within(".govuk-flash__notice") do
         expect(page).to have_text I18n.t("admin.allocations.bulk_deallocate.success", allocate_to_policy: "", dfe_user: abdul.full_name).squeeze(" ")
       end
@@ -289,6 +293,10 @@ RSpec.feature "Claims awaiting a decision" do
       select "Early-Career Payments", from: "allocate_to_policy"
       click_on "Unallocate"
 
+      expect(page).to have_text "Are you sure you want to unassign Early Career Payments claims from Frank Yee?"
+
+      click_on "Unassign"
+
       within(".govuk-flash__notice") do
         expect(page).to have_text I18n.t("admin.allocations.bulk_deallocate.success", allocate_to_policy: "Early Career Payments", dfe_user: frank.full_name)
       end
@@ -302,6 +310,33 @@ RSpec.feature "Claims awaiting a decision" do
       end
 
       expect(page).to have_button "Allocate claims", disabled: false
+    end
+
+    scenario "when deallocation is not confirmed" do
+      Claim.awaiting_decision.update_all(assigned_to_id: abdul.id)
+
+      click_on "View claims"
+
+      @submitted_claims.each do |claim|
+        expect(claim.reload.assigned_to.full_name).to eq "Abdul Rafiq"
+      end
+
+      expect(page).to have_button "Allocate claims", disabled: true
+
+      select "Abdul Rafiq", from: "allocate_to_team_member"
+      click_on "Unallocate"
+
+      expect(page).to have_text "Are you sure you want to unassign claims from Abdul Rafiq?"
+
+      click_on "Cancel"
+
+      expect(current_path).to eql(admin_claims_path)
+
+      @submitted_claims.each do |claim|
+        expect(claim.reload.assigned_to.full_name).to eq "Abdul Rafiq"
+      end
+
+      expect(page).to have_button "Allocate claims", disabled: true
     end
 
     scenario "when zero claims for policy" do
@@ -318,6 +353,10 @@ RSpec.feature "Claims awaiting a decision" do
       select "Abdul Rafiq", from: "allocate_to_team_member"
       select "Early-Career Payments", from: "allocate_to_policy"
       click_on "Unallocate"
+
+      expect(page).to have_text "Are you sure you want to unassign Early Career Payments claims from Abdul Rafiq?"
+
+      click_on "Unassign"
 
       within(".govuk-flash__notice") do
         expect(page).to have_text I18n.t("admin.allocations.bulk_deallocate.info", allocate_to_policy: "Early Career Payments", dfe_user: abdul.full_name)

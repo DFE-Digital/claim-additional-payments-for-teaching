@@ -6,6 +6,7 @@ class Admin::AllocationsController < Admin::BaseAdminController
   before_action :ensure_service_operator
   before_action :load_target_claim, only: %i[allocate deallocate]
   before_action :load_team_member, only: %i[bulk_allocate bulk_deallocate]
+  before_action :ensure_user_confirmed, only: :bulk_deallocate
 
   def allocate
     ClaimAllocator.new(claim_ids: @claim.id, admin_user_id: admin_user.id).call
@@ -63,5 +64,23 @@ class Admin::AllocationsController < Admin::BaseAdminController
 
   def filtered_policy
     Policies[params[:allocate_to_policy]]
+  end
+
+  def ensure_user_confirmed
+    return if user_confirmed?
+
+    render :bulk_deallocate, locals: {team_member_id:, policy_name:}
+  end
+
+  def team_member_id
+    params[:allocate_to_team_member]
+  end
+
+  def policy_name
+    params[:allocate_to_policy]
+  end
+
+  def user_confirmed?
+    params[:user_confirmation] == "yes"
   end
 end
