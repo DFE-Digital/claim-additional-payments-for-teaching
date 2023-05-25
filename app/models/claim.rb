@@ -131,6 +131,7 @@ class Claim < ApplicationRecord
   has_many :topups, dependent: :destroy
   has_many :notes, dependent: :destroy
   has_one :support_ticket, dependent: :destroy
+  has_many :school_workforce_census_enhanceds, foreign_key: :trn, primary_key: :teacher_reference_number
 
   belongs_to :eligibility, polymorphic: true, inverse_of: :claim, dependent: :destroy
   accepts_nested_attributes_for :eligibility, update_only: true

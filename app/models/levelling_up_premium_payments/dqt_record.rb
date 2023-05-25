@@ -20,21 +20,37 @@ module LevellingUpPremiumPayments
       @claim = claim
     end
 
+    def ineligible_reason
+      return :subject unless eligible_subject_and_none_of_the_above?
+      return :qualification unless eligible_qualification?
+      return :itt_year unless eligible_itt_year?
+      return :qts_award_date unless qts_award_date_after_itt_start_date?
+      return :ineligible unless eligible_qualification?
+    end
+
     def eligible?
-      return false unless eligible_subject_and_none_of_the_above? &&
+      return eligible_subject_and_none_of_the_above? &&
         eligible_qualification? &&
         eligible_itt_year? &&
-        qts_award_date_after_itt_start_date?
-
-      policy_year = PolicyConfiguration.for(claim.policy).current_academic_year
-      eligible_itt_years = JourneySubjectEligibilityChecker.selectable_itt_years_for_claim_year(policy_year)
-
-      (eligible_code?(itt_subject_codes) || eligible_code?(degree_codes)) && eligible_itt_years.include?(itt_year)
+        qts_award_date_after_itt_start_date? &&
+        eligible_qualification?
     end
 
     private
 
     attr_reader :record, :claim
+
+    def policy_year
+      PolicyConfiguration.for(claim.policy).current_academic_year
+    end
+
+    def eligible_itt_years
+      JourneySubjectEligibilityChecker.selectable_itt_years_for_claim_year(policy_year)
+    end
+
+    def eligible_qualification?
+      ((eligible_code?(itt_subject_codes) || eligible_code?(degree_codes)) && eligible_itt_years.include?(itt_year)) || super
+    end
 
     def eligible_code?(code)
       ((Dqt::Matchers::LevellingUpPremiumPayments::ELIGIBLE_JAC_CODES | Dqt::Matchers::LevellingUpPremiumPayments::ELIGIBLE_HECOS_CODES) & code).any?

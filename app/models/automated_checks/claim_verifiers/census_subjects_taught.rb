@@ -11,6 +11,12 @@ module AutomatedChecks
         self.school_workforce_census_subjects = school_workforce_census
       end
 
+      def result
+        return :no_data unless school_workforce_census.present?
+        return :no_match if school_workforce_census.nil? || !eligible?
+        return :any_match if eligible?
+      end
+
       def perform
         return if claim.policy == MathsAndPhysics
 

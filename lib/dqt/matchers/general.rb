@@ -75,7 +75,8 @@ module Dqt
       end
 
       def itt_year
-        @itt_year ||= AcademicYear.for(academic_date)
+        # @itt_year ||= AcademicYear.for(academic_date)
+        @itt_year ||= AcademicYear.for(academic_date ? academic_date + 2.weeks : nil)
       end
 
       def eligible_qualification?
@@ -83,7 +84,7 @@ module Dqt
       end
 
       def eligible_itt_year?
-        AcademicYear.new(itt_year).eql?(claim.eligibility.itt_academic_year)
+        AcademicYear.new(itt_year).eql?(claim.eligibility.itt_academic_year) || AcademicYear.for((academic_date || qts_award_date || itt_start_date) + 2.weeks).eql?(claim.eligibility.itt_academic_year)
       end
 
       def qts_award_date_after_itt_start_date?

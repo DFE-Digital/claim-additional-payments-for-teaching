@@ -13,6 +13,12 @@ module AutomatedChecks
         no_data || no_match || matched
       end
 
+      def result
+        return :no_data if teachers_pensions_service.empty?
+        return :no_match if !eligible?
+        return :matched if eligible?
+      end
+
       private
 
       attr_accessor :admin_user, :claim, :teachers_pensions_service

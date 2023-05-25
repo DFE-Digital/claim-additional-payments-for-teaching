@@ -28,6 +28,10 @@ module StudentLoans
       @record = record
     end
 
+    def ineligible_reason
+      return :qts_award_date unless eligible_qts_award_date?
+    end
+
     def eligible?
       eligible_qts_award_date?
     end
