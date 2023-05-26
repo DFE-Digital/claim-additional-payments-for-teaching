@@ -1,4 +1,5 @@
 class ClaimMailer < ApplicationMailer
+  include ClaimMailerHelper
   include EarlyCareerPaymentsHelper
   helper :application
 
@@ -45,7 +46,8 @@ class ClaimMailer < ApplicationMailer
         first_name: @claim.first_name,
         ref_number: @claim.reference,
         support_email_address: @support_email_address,
-        current_financial_year: (claim.policy == StudentLoans) ? StudentLoans.current_financial_year : ""
+        current_financial_year: (claim.policy == StudentLoans) ? StudentLoans.current_financial_year : "",
+        **rejected_reasons_personalisation(@claim.latest_decision&.rejected_reasons_hash)
       }
 
       send_mail(:notify, template_ids(claim)[:CLAIM_REJECTED_NOTIFY_TEMPLATE_ID], personalisation)
