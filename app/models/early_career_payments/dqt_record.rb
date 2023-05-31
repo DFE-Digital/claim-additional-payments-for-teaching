@@ -19,11 +19,18 @@ module EarlyCareerPayments
     end
 
     def eligible?
-      return false unless eligible_subject? &&
+      eligible_subject? &&
         eligible_qualification? &&
         eligible_itt_year? &&
-        qts_award_date_after_itt_start_date?
+        qts_award_date_after_itt_start_date? &&
+        award_due?
+    end
 
+    private
+
+    attr_reader :claim, :record
+
+    def award_due?
       award_args = {policy_year: claim.academic_year, itt_year: itt_year, subject_symbol: itt_subject_group}
 
       if award_args.values.any?(&:blank?)
@@ -33,25 +40,13 @@ module EarlyCareerPayments
       end
     end
 
-    private
-
-    attr_reader :claim, :record
-
     def itt_subject_group
-      [*itt_subject_codes, *degree_codes, *itt_subjects].each do |subject_code|
-        return ELIGIBLE_JAC_CODES.find { |key, values|
-          subject_code.start_with?(*values)
-        }&.first ||
-            ELIGIBLE_HECOS_CODES.find { |key, values|
-              values.include?(subject_code)
-            }&.first ||
-            ELIGIBLE_JAC_NAMES.find { |key, values|
-              values.include?(subject_code)
-            }&.first ||
-            ELIGIBLE_HECOS_NAMES.find { |key, values|
-              values.include?(subject_code)
-            }&.first
-      end
+      [*itt_subject_codes, *degree_codes, *itt_subjects].map do |subject_code|
+        ELIGIBLE_JAC_CODES.find { |key, values| subject_code.start_with?(*values) }&.first ||
+          ELIGIBLE_HECOS_CODES.find { |key, values| values.include?(subject_code) }&.first ||
+          ELIGIBLE_JAC_NAMES.find { |key, values| values.include?(subject_code) }&.first ||
+          ELIGIBLE_HECOS_NAMES.find { |key, values| values.include?(subject_code) }&.first
+      end.compact.uniq.first
     end
 
     def eligible_subject?
