@@ -46,7 +46,9 @@ module EarlyCareerPayments
           ELIGIBLE_HECOS_CODES.find { |key, values| values.include?(subject_code) }&.first ||
           ELIGIBLE_JAC_NAMES.find { |key, values| values.include?(subject_code) }&.first ||
           ELIGIBLE_HECOS_NAMES.find { |key, values| values.include?(subject_code) }&.first
-      end.compact.uniq.first
+      end.compact.uniq.find do |group|
+        group == claim.eligibility.eligible_itt_subject.to_sym
+      end
     end
 
     def eligible_subject?

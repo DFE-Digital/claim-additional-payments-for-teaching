@@ -1204,6 +1204,30 @@ RSpec.describe EarlyCareerPayments::DqtRecord do
         qualification: :overseas_recognition,
         itt_academic_year: AcademicYear::Type.new.serialize(AcademicYear.new(2020))
       },
+      {
+        claim_academic_year: AcademicYear.new(2022),
+        record_degree_codes: [],
+        record_itt_subjects: ["physics", "mathematics"],
+        record_itt_subject_codes: ["100425", "100403"],
+        record_itt_date: Date.parse("3/9/2019"),
+        record_qts_date: Date.parse("7/12/2020"),
+        record_qualification_name: "QTS Award",
+        eligible_itt_subject: :mathematics,
+        qualification: :postgraduate_itt,
+        itt_academic_year: AcademicYear::Type.new.serialize(AcademicYear.new(2019))
+      },
+      {
+        claim_academic_year: AcademicYear.new(2022),
+        record_degree_codes: [],
+        record_itt_subjects: ["mathematics"],
+        record_itt_subject_codes: ["100425", "100403"],
+        record_itt_date: Date.parse("3/9/2019"),
+        record_qts_date: Date.parse("7/12/2020"),
+        record_qualification_name: "QTS Award",
+        eligible_itt_subject: :mathematics,
+        qualification: :postgraduate_itt,
+        itt_academic_year: AcademicYear::Type.new.serialize(AcademicYear.new(2019))
+      },
       # end of multiple ITT subjects/codes with at least one valid
 
       # start of testing for HECOS/JAC Names for 2021
