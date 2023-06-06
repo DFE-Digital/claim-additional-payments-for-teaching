@@ -1155,6 +1155,81 @@ RSpec.describe EarlyCareerPayments::DqtRecord do
       },
       # end of foreign_languages for 2024
 
+      # start of multiple ITT subjects/codes with at least one valid
+      {
+        claim_academic_year: AcademicYear.new(2022),
+        record_degree_codes: [],
+        record_itt_subjects: ["biology", "chemistry"],
+        record_itt_subject_codes: ["100346", "100417"],
+        record_itt_date: Date.parse("3/9/2010"),
+        record_qts_date: Date.parse("6/10/2020"),
+        record_qualification_name: "Scotland",
+        eligible_itt_subject: :chemistry,
+        qualification: :overseas_recognition,
+        itt_academic_year: AcademicYear::Type.new.serialize(AcademicYear.new(2020))
+      },
+      {
+        claim_academic_year: AcademicYear.new(2022),
+        record_degree_codes: [],
+        record_itt_subjects: ["biology", "chemistry"],
+        record_itt_subject_codes: ["100417"],
+        record_itt_date: Date.parse("3/9/2010"),
+        record_qts_date: Date.parse("6/10/2020"),
+        record_qualification_name: "Scotland",
+        eligible_itt_subject: :chemistry,
+        qualification: :overseas_recognition,
+        itt_academic_year: AcademicYear::Type.new.serialize(AcademicYear.new(2020))
+      },
+      {
+        claim_academic_year: AcademicYear.new(2022),
+        record_degree_codes: [],
+        record_itt_subjects: ["biology", "chemistry"],
+        record_itt_subject_codes: ["100346"],
+        record_itt_date: Date.parse("3/9/2010"),
+        record_qts_date: Date.parse("6/10/2020"),
+        record_qualification_name: "Scotland",
+        eligible_itt_subject: :chemistry,
+        qualification: :overseas_recognition,
+        itt_academic_year: AcademicYear::Type.new.serialize(AcademicYear.new(2020))
+      },
+      {
+        claim_academic_year: AcademicYear.new(2022),
+        record_degree_codes: [],
+        record_itt_subjects: ["biology", "chemistry"],
+        record_itt_subject_codes: [],
+        record_itt_date: Date.parse("3/9/2010"),
+        record_qts_date: Date.parse("6/10/2020"),
+        record_qualification_name: "Scotland",
+        eligible_itt_subject: :chemistry,
+        qualification: :overseas_recognition,
+        itt_academic_year: AcademicYear::Type.new.serialize(AcademicYear.new(2020))
+      },
+      {
+        claim_academic_year: AcademicYear.new(2022),
+        record_degree_codes: [],
+        record_itt_subjects: ["physics", "mathematics"],
+        record_itt_subject_codes: ["100425", "100403"],
+        record_itt_date: Date.parse("3/9/2019"),
+        record_qts_date: Date.parse("7/12/2020"),
+        record_qualification_name: "QTS Award",
+        eligible_itt_subject: :mathematics,
+        qualification: :postgraduate_itt,
+        itt_academic_year: AcademicYear::Type.new.serialize(AcademicYear.new(2019))
+      },
+      {
+        claim_academic_year: AcademicYear.new(2022),
+        record_degree_codes: [],
+        record_itt_subjects: ["mathematics"],
+        record_itt_subject_codes: ["100425", "100403"],
+        record_itt_date: Date.parse("3/9/2019"),
+        record_qts_date: Date.parse("7/12/2020"),
+        record_qualification_name: "QTS Award",
+        eligible_itt_subject: :mathematics,
+        qualification: :postgraduate_itt,
+        itt_academic_year: AcademicYear::Type.new.serialize(AcademicYear.new(2019))
+      },
+      # end of multiple ITT subjects/codes with at least one valid
+
       # start of testing for HECOS/JAC Names for 2021
       {
         claim_academic_year: AcademicYear.new(2021),
