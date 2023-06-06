@@ -51,15 +51,84 @@ RSpec.describe LevellingUpPremiumPayments::DqtRecord do
   let(:qualification_name) { "Postgraduate Certificate in Education" }
 
   describe "#eligible?" do
-    context "without ITT and degree codes" do
-      it { is_expected.not_to be_eligible }
+    context "without ITT subject code" do
+      let(:itt_subject_codes) { [] }
+
+      context "without ITT subject name" do
+        let(:itt_subjects) { [] }
+
+        it { is_expected.not_to be_eligible }
+      end
+
+      context "with an invalid ITT subject name" do
+        let(:itt_subjects) { ["biology"] }
+
+        it { is_expected.not_to be_eligible }
+      end
+
+      context "with a valid ITT subject name" do
+        let(:itt_subjects) { ["mathematics"] }
+
+        it { is_expected.to be_eligible }
+
+        context "with an invalid degree code" do
+          let(:degree_codes) { ["X100"] }
+
+          it { is_expected.to be_eligible }
+        end
+
+        context "with a valid degree code" do
+          let(:degree_codes) { ["I100"] }
+
+          it { is_expected.to be_eligible }
+        end
+      end
+
+      context "with any valid ITT subject name" do
+        let(:itt_subjects) { ["mathematics", "biology"] }
+
+        it { is_expected.to be_eligible }
+      end
     end
 
-    context "with invalid ITT and degree codes" do
-      let(:itt_subject_codes) { ["123"] }
-      let(:degree_codes) { ["321"] }
+    context "with an invalid ITT subject code" do
+      let(:itt_subject_codes) { ["B100"] }
 
-      it { is_expected.not_to be_eligible }
+      context "without ITT subject name" do
+        let(:itt_subjects) { [] }
+
+        it { is_expected.not_to be_eligible }
+      end
+
+      context "with an invalid ITT subject name" do
+        let(:itt_subjects) { ["biology"] }
+
+        it { is_expected.not_to be_eligible }
+      end
+
+      context "with a valid ITT subject name" do
+        let(:itt_subjects) { ["mathematics"] }
+
+        it { is_expected.not_to be_eligible }
+
+        context "with an invalid degree code" do
+          let(:degree_codes) { ["X100"] }
+
+          it { is_expected.not_to be_eligible }
+        end
+
+        context "with a valid degree code" do
+          let(:degree_codes) { ["I100"] }
+
+          it { is_expected.to be_eligible }
+        end
+      end
+
+      context "with any valid ITT subject name" do
+        let(:itt_subjects) { ["mathematics", "biology"] }
+
+        it { is_expected.not_to be_eligible }
+      end
     end
 
     context "with valid ITT code" do
