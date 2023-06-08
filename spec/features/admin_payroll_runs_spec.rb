@@ -95,7 +95,7 @@ RSpec.feature "Payroll" do
     payroll_run = create(:payroll_run, claims_counts: {MathsAndPhysics => 1, StudentLoans => 1})
 
     click_on "Payroll"
-    click_on "View #{payroll_run.created_at.strftime("%B")} payroll run"
+    click_on "View #{I18n.l(payroll_run.created_at.to_date, format: :month_year)} payroll run"
 
     expect(page).to have_content("Created by #{payroll_run.created_by.full_name}")
     expect(page).to have_content payroll_run.claims.count
@@ -115,7 +115,7 @@ RSpec.feature "Payroll" do
     claim_reference = payment_to_delete.claims.first.reference
 
     click_on "Payroll"
-    click_on "View #{payroll_run.created_at.strftime("%B")} payroll run"
+    click_on "View #{I18n.l(payroll_run.created_at.to_date, format: :month_year)} payroll run"
 
     find("a[href='#{remove_admin_payroll_run_payment_path(id: payment_to_delete.id, payroll_run_id: payroll_run.id)}']").click
 
@@ -136,7 +136,7 @@ RSpec.feature "Payroll" do
 
     click_on "Payroll"
 
-    click_on "Upload"
+    click_on "Upload #{I18n.l(payroll_run.created_at.to_date, format: :month_year)} payment confirmation report"
 
     expect(page).to have_content("Upload Payment Confirmation Report")
 
