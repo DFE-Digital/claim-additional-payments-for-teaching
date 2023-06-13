@@ -10,6 +10,7 @@ module StudentLoans
   # reflects the sequence based on the claim's current state.
   class SlugSequence
     SLUGS = [
+      # eligibility phase of claim journey
       "qts-year",
       "claim-school",
       "subjects-taught",
@@ -18,14 +19,25 @@ module StudentLoans
       "leadership-position",
       "mostly-performed-leadership-duties",
       "eligibility-confirmed",
+      # personal details phase of claim journey
       "information-provided",
       "personal-details",
       "postcode-search",
       "no-address-found",
       "select-home-address",
       "address",
+      "email-address",
+      "email-verification",
+      "provide-mobile-number",
+      "mobile-number",
+      "mobile-verification",
+      # payment details phase
+      "bank-or-building-society",
+      "personal-bank-account",
+      "building-society-account",
       "gender",
       "teacher-reference-number",
+      # student loans phase of claim journey
       "student-loan",
       "student-loan-country",
       "student-loan-how-many-courses",
@@ -34,14 +46,6 @@ module StudentLoans
       "masters-loan",
       "doctoral-loan",
       "student-loan-amount",
-      "email-address",
-      "email-verification",
-      "provide-mobile-number",
-      "mobile-number",
-      "mobile-verification",
-      "bank-or-building-society",
-      "personal-bank-account",
-      "building-society-account",
       "check-your-answers",
       "ineligible"
     ].freeze

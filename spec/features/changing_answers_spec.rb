@@ -138,7 +138,7 @@ RSpec.feature "Changing the answers on a submittable claim" do
     jump_to_claim_journey_page(claim, "check-your-answers")
 
     expect(page).to have_content("£100.10")
-    find("a[href='#{claim_path(StudentLoans.routing_name, "student-loan-amount")}']").click
+    first("a[href='#{claim_path(StudentLoans.routing_name, "student-loan-amount")}']").click
 
     expect(find("#claim_eligibility_attributes_student_loan_repayment_amount").value).to eq("100.10")
     fill_in student_loan_amount_question, with: "150.20"

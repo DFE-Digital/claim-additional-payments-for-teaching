@@ -109,54 +109,6 @@ RSpec.feature "Teacher Student Loan Repayments claims" do
       expect(claim.address_line_4).to eql("Washington")
       expect(claim.postcode).to eql("M1 7HL")
 
-      expect(page).to have_text(I18n.t("questions.payroll_gender"))
-      choose "Male"
-      click_on "Continue"
-
-      expect(claim.reload.payroll_gender).to eq("male")
-
-      expect(page).to have_text(I18n.t("questions.teacher_reference_number"))
-      fill_in :claim_teacher_reference_number, with: "1234567"
-      click_on "Continue"
-
-      expect(claim.reload.teacher_reference_number).to eql("1234567")
-
-      expect(page).to have_text(I18n.t("questions.has_student_loan"))
-
-      answer_student_loan_plan_questions
-
-      expect(claim.reload).to have_student_loan
-      expect(claim.student_loan_country).to eq("england")
-      expect(claim.student_loan_courses).to eq("one_course")
-      expect(claim.student_loan_start_date).to eq(StudentLoan::BEFORE_1_SEPT_2012)
-      expect(claim.student_loan_plan).to eq(StudentLoan::PLAN_1)
-
-      # - Are you currently paying off your masters/doctoral loan
-      expect(page).not_to have_text(I18n.t("questions.has_masters_and_or_doctoral_loan"))
-      expect(claim.reload.has_masters_doctoral_loan).to be_nil
-
-      # - Did you take out a postgraduate masters loan on or after 1 August 2016
-      expect(page).to have_text(I18n.t("questions.postgraduate_masters_loan"))
-
-      choose "Yes"
-      click_on "Continue"
-
-      expect(claim.reload.postgraduate_masters_loan).to eql true
-
-      # - Did you take out a postgraduate doctoral loan on or after 1 August 2016
-      expect(page).to have_text(I18n.t("questions.postgraduate_doctoral_loan"))
-
-      choose "Yes"
-      click_on "Continue"
-
-      expect(claim.reload.postgraduate_doctoral_loan).to eql true
-
-      expect(page).to have_text(student_loan_amount_question)
-      fill_in student_loan_amount_question, with: "1100"
-      click_on "Continue"
-
-      expect(claim.eligibility.reload.student_loan_repayment_amount).to eql(1100.00)
-
       expect(page).to have_text(I18n.t("questions.email_address"))
       expect(page).to have_text(I18n.t("questions.email_address_hint1"))
       fill_in I18n.t("questions.email_address"), with: "name@example.tld"
@@ -204,6 +156,54 @@ RSpec.feature "Teacher Student Loan Repayments claims" do
       expect(claim.bank_sort_code).to eq("123456")
       expect(claim.bank_account_number).to eq("87654321")
       expect(claim.building_society_roll_number).to eq("1234/123456789")
+
+      expect(page).to have_text(I18n.t("questions.payroll_gender"))
+      choose "Male"
+      click_on "Continue"
+
+      expect(claim.reload.payroll_gender).to eq("male")
+
+      expect(page).to have_text(I18n.t("questions.teacher_reference_number"))
+      fill_in :claim_teacher_reference_number, with: "1234567"
+      click_on "Continue"
+
+      expect(claim.reload.teacher_reference_number).to eql("1234567")
+
+      expect(page).to have_text(I18n.t("questions.has_student_loan"))
+
+      answer_student_loan_plan_questions
+
+      expect(claim.reload).to have_student_loan
+      expect(claim.student_loan_country).to eq("england")
+      expect(claim.student_loan_courses).to eq("one_course")
+      expect(claim.student_loan_start_date).to eq(StudentLoan::BEFORE_1_SEPT_2012)
+      expect(claim.student_loan_plan).to eq(StudentLoan::PLAN_1)
+
+      # - Are you currently paying off your masters/doctoral loan
+      expect(page).not_to have_text(I18n.t("questions.has_masters_and_or_doctoral_loan"))
+      expect(claim.reload.has_masters_doctoral_loan).to be_nil
+
+      # - Did you take out a postgraduate masters loan on or after 1 August 2016
+      expect(page).to have_text(I18n.t("questions.postgraduate_masters_loan"))
+
+      choose "Yes"
+      click_on "Continue"
+
+      expect(claim.reload.postgraduate_masters_loan).to eql true
+
+      # - Did you take out a postgraduate doctoral loan on or after 1 August 2016
+      expect(page).to have_text(I18n.t("questions.postgraduate_doctoral_loan"))
+
+      choose "Yes"
+      click_on "Continue"
+
+      expect(claim.reload.postgraduate_doctoral_loan).to eql true
+
+      expect(page).to have_text(student_loan_amount_question)
+      fill_in student_loan_amount_question, with: "1100"
+      click_on "Continue"
+
+      expect(claim.eligibility.reload.student_loan_repayment_amount).to eql(1100.00)
 
       expect(page).to have_text("Check your answers before sending your application")
 
