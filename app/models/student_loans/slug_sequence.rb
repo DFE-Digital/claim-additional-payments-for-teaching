@@ -9,8 +9,7 @@ module StudentLoans
   # accounts for any changes that may have been made to the claim and always
   # reflects the sequence based on the claim's current state.
   class SlugSequence
-    SLUGS = [
-      # eligibility phase of claim journey
+    ELIGIBILITY_SLUGS = [
       "qts-year",
       "claim-school",
       "subjects-taught",
@@ -18,8 +17,10 @@ module StudentLoans
       "current-school",
       "leadership-position",
       "mostly-performed-leadership-duties",
-      "eligibility-confirmed",
-      # personal details phase of claim journey
+      "eligibility-confirmed"
+    ].freeze
+
+    PERSONAL_DETAILS_SLUGS = [
       "information-provided",
       "personal-details",
       "postcode-search",
@@ -30,14 +31,18 @@ module StudentLoans
       "email-verification",
       "provide-mobile-number",
       "mobile-number",
-      "mobile-verification",
-      # payment details phase
+      "mobile-verification"
+    ].freeze
+
+    PAYMENT_DETAILS_SLUGS = [
       "bank-or-building-society",
       "personal-bank-account",
       "building-society-account",
       "gender",
-      "teacher-reference-number",
-      # student loans phase of claim journey
+      "teacher-reference-number"
+    ].freeze
+
+    STUDENT_LOANS_SLUGS = [
       "student-loan",
       "student-loan-country",
       "student-loan-how-many-courses",
@@ -45,10 +50,21 @@ module StudentLoans
       "masters-doctoral-loan",
       "masters-loan",
       "doctoral-loan",
-      "student-loan-amount",
+      "student-loan-amount"
+    ].freeze
+
+    RESULTS_SLUGS = [
       "check-your-answers",
       "ineligible"
     ].freeze
+
+    SLUGS = (
+      ELIGIBILITY_SLUGS +
+      PERSONAL_DETAILS_SLUGS +
+      PAYMENT_DETAILS_SLUGS +
+      STUDENT_LOANS_SLUGS +
+      RESULTS_SLUGS
+    ).freeze
 
     attr_reader :claim
 
