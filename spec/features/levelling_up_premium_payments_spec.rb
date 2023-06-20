@@ -2,14 +2,45 @@ require "rails_helper"
 
 RSpec.feature "Levelling up premium payments claims" do
   let(:claim) { Claim.by_policy(LevellingUpPremiumPayments).order(:created_at).last }
-  let(:eligibility) { claim.eligibility }
   let!(:school) { create(:school, :levelling_up_premium_payments_eligible) }
+  let(:itt_subject) { "Mathematics" }
 
   before { create(:policy_configuration, :additional_payments) }
 
-  def claim_up_to_itt_subject
+  def check_eligibility_up_to_apply(expect_to_fail: false)
     start_levelling_up_premium_payments_claim
 
+    check_eligibility_up_to_itt_subject
+
+    select_itt_subject_and_degree
+
+    check_eligibility_after_itt_subject unless expect_to_fail
+  end
+
+  def select_itt_subject_and_degree
+    # - Which subject did you do your undergraduate ITT in
+    expect(page).to have_text("Which subject")
+
+    raise "`itt_subject` must be defined" unless defined?(itt_subject)
+
+    choose itt_subject
+    click_on "Continue"
+
+    if itt_subject == "None of the above"
+      raise "`eligible_degree?` must be defined" unless defined?(eligible_degree?)
+
+      # - Do you have an undergraduate or postgraduate degree in an eligible subject?
+      expect(page).to have_text(I18n.t("early_career_payments.questions.eligible_degree_subject"))
+      choose eligible_degree?
+      click_on "Continue"
+    end
+  end
+
+  def display_ineligibility_message
+    expect(page).to have_text("You are not eligible")
+  end
+
+  def check_eligibility_up_to_itt_subject
     # - Which school do you teach at
     expect(page).to have_text(I18n.t("early_career_payments.questions.current_school_search"))
     choose_school school
@@ -52,17 +83,7 @@ RSpec.feature "Levelling up premium payments claims" do
     expect(page).to have_text("Which subject")
   end
 
-  scenario "When subject 'none of the above' and user has an eligible degree" do
-    claim_up_to_itt_subject
-
-    choose "None of the above"
-    click_on "Continue"
-
-    # - Do you have an undergraduate or postgraduate degree in an eligible subject?
-    expect(page).to have_text(I18n.t("early_career_payments.questions.eligible_degree_subject"))
-    choose "Yes"
-    click_on "Continue"
-
+  def check_eligibility_after_itt_subject
     # - Do you spend at least half of your contracted hours teaching eligible subjects?
     expect(page).to have_text(I18n.t("early_career_payments.questions.teaching_subject_now"))
 
@@ -73,7 +94,10 @@ RSpec.feature "Levelling up premium payments claims" do
     expect(page).to have_text(I18n.t("early_career_payments.check_your_answers.part_one.primary_heading"))
     expect(page).to have_text(I18n.t("early_career_payments.check_your_answers.part_one.secondary_heading"))
     expect(page).to have_text(I18n.t("early_career_payments.check_your_answers.part_one.confirmation_notice"))
-    expect(page).to have_text(I18n.t("early_career_payments.questions.eligible_degree_subject"))
+
+    if itt_subject == "None of the above"
+      expect(page).to have_text(I18n.t("early_career_payments.questions.eligible_degree_subject"))
+    end
 
     ["Identity details", "Payment details", "Student loan details"].each do |section_heading|
       expect(page).not_to have_text section_heading
@@ -85,6 +109,10 @@ RSpec.feature "Levelling up premium payments claims" do
     expect(page).to have_text("levelling up premium payment of:\n£2,000")
 
     click_on("Apply now")
+  end
+
+  def claim_up_to_check_your_answers
+    check_eligibility_up_to_apply
 
     # - How will we use the information you provide
     expect(page).to have_text("How we will use the information you provide")
@@ -275,7 +303,9 @@ RSpec.feature "Levelling up premium payments claims" do
       expect(page).to have_text(I18n.t("questions.postgraduate_masters_loan"))
       expect(page).to have_text(I18n.t("questions.postgraduate_doctoral_loan"))
     end
+  end
 
+  def submit_application
     freeze_time do
       click_on "Accept and send"
 
@@ -297,22 +327,59 @@ RSpec.feature "Levelling up premium payments claims" do
     expect(claim.reload.policy_options_provided).to eq policy_options_provided
   end
 
-  scenario "When subject 'Computing'" do
-    claim_up_to_itt_subject
+  shared_examples "submittable claim" do
+    scenario "user can submit an application" do
+      claim_up_to_check_your_answers
+      submit_application
+    end
+  end
 
-    choose "Computing"
-    click_on "Continue"
+  shared_examples "ineligible claim" do
+    scenario "user cannot progress the application" do
+      check_eligibility_up_to_apply(expect_to_fail: true)
+      display_ineligibility_message
+    end
+  end
 
-    # - Do you spend at least half of your contracted hours teaching eligible subjects?
-    expect(page).to have_text(I18n.t("early_career_payments.questions.teaching_subject_now"))
+  context "when subject 'None of the above'" do
+    let(:itt_subject) { "None of the above" }
 
-    choose "Yes"
-    click_on "Continue"
+    context "with an eligible degree" do
+      let(:eligible_degree?) { "Yes" }
 
-    # - Check your answers for eligibility
-    expect(page).to have_text(I18n.t("early_career_payments.check_your_answers.part_one.primary_heading"))
-    expect(page).to have_text(I18n.t("early_career_payments.check_your_answers.part_one.secondary_heading"))
-    expect(page).to have_text(I18n.t("early_career_payments.check_your_answers.part_one.confirmation_notice"))
-    expect(page).not_to have_text(I18n.t("early_career_payments.questions.eligible_degree_subject"))
+      it_behaves_like "submittable claim"
+    end
+
+    context "without an eligible degree" do
+      let(:eligible_degree?) { "No" }
+
+      it_behaves_like "ineligible claim"
+    end
+  end
+
+  context "when subject 'Computing'" do
+    let(:itt_subject) { "Computing" }
+
+    it_behaves_like "submittable claim"
+  end
+
+  context "when updating personal details fields" do
+    let(:old_last_name) { claim.reload.surname }
+    let(:new_last_name) { "#{old_last_name}-McRandom" }
+
+    before do
+      claim_up_to_check_your_answers
+
+      first("a[href='#{claim_path(LevellingUpPremiumPayments.routing_name, "personal-details")}']", minimum: 1).click
+      fill_in "Last name", with: new_last_name
+    end
+
+    scenario "user is then redirected to check your answers" do
+      expect { click_on "Continue" }
+        .to change { claim.reload.surname }
+        .from(old_last_name).to(new_last_name)
+
+      expect(page).to have_content("Check your answers before sending your application")
+    end
   end
 end

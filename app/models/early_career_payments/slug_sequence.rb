@@ -80,6 +80,8 @@ module EarlyCareerPayments
       @claim = claim
     end
 
+    # Even though we are inside the ECP namespace, this method can modify the
+    # slug sequence of both LUP and ECP claims
     def slugs
       overall_eligibility_status = claim.eligibility_status
       lup_claim = claim.for_policy(LevellingUpPremiumPayments)
