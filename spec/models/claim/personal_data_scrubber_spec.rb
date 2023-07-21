@@ -26,7 +26,7 @@ RSpec.describe Claim::PersonalDataScrubber, type: :model do
 
   it "does not delete details from a newly paid claim" do
     claim = create(:claim, :approved)
-    create(:payment, :with_figures, claims: [claim])
+    create(:payment, :confirmed, :with_figures, claims: [claim])
 
     expect { Claim::PersonalDataScrubber.new.scrub_completed_claims }.not_to change { claim.reload.attributes }
   end
@@ -41,7 +41,7 @@ RSpec.describe Claim::PersonalDataScrubber, type: :model do
   it "does not delete details from a claim that has a payment, but has a payrollable topup" do
     lup_eligibility = create(:levelling_up_premium_payments_eligibility, :eligible, award_amount: 1500.0)
     claim = create(:claim, :approved, policy: LevellingUpPremiumPayments, eligibility: lup_eligibility)
-    create(:payment, :with_figures, claims: [claim], scheduled_payment_date: last_academic_year)
+    create(:payment, :confirmed, :with_figures, claims: [claim], scheduled_payment_date: last_academic_year)
     create(:topup, payment: nil, claim: claim, award_amount: 500, created_by: user)
 
     expect { Claim::PersonalDataScrubber.new.scrub_completed_claims }.not_to change { claim.reload.attributes }
@@ -53,7 +53,7 @@ RSpec.describe Claim::PersonalDataScrubber, type: :model do
     travel_to 2.months.ago do
       lup_eligibility = create(:levelling_up_premium_payments_eligibility, :eligible, award_amount: 1500.0)
       claim = create(:claim, :approved, policy: LevellingUpPremiumPayments, eligibility: lup_eligibility)
-      create(:payment, :with_figures, claims: [claim], scheduled_payment_date: last_academic_year)
+      create(:payment, :confirmed, :with_figures, claims: [claim], scheduled_payment_date: last_academic_year)
     end
 
     payment2 = create(:payment, :with_figures, claims: [claim], scheduled_payment_date: nil)
@@ -68,10 +68,10 @@ RSpec.describe Claim::PersonalDataScrubber, type: :model do
     travel_to 2.months.ago do
       lup_eligibility = create(:levelling_up_premium_payments_eligibility, :eligible, award_amount: 1500.0)
       claim = create(:claim, :approved, policy: LevellingUpPremiumPayments, eligibility: lup_eligibility)
-      create(:payment, :with_figures, claims: [claim], scheduled_payment_date: last_academic_year)
+      create(:payment, :confirmed, :with_figures, claims: [claim], scheduled_payment_date: last_academic_year)
     end
 
-    payment2 = create(:payment, :with_figures, claims: [claim], scheduled_payment_date: last_academic_year)
+    payment2 = create(:payment, :confirmed, :with_figures, claims: [claim], scheduled_payment_date: last_academic_year)
     create(:topup, payment: payment2, claim: claim, award_amount: 500, created_by: user)
 
     expect { Claim::PersonalDataScrubber.new.scrub_completed_claims }.to change { claim.reload.attributes }
@@ -110,7 +110,7 @@ RSpec.describe Claim::PersonalDataScrubber, type: :model do
   it "deletes expected details from an old paid claim, setting a personal_data_removed_at timestamp" do
     freeze_time do
       claim = create(:claim, :approved)
-      create(:payment, :with_figures, claims: [claim], scheduled_payment_date: last_academic_year)
+      create(:payment, :confirmed, :with_figures, claims: [claim], scheduled_payment_date: last_academic_year)
       claim.update_attribute :hmrc_bank_validation_responses, ["test"]
 
       Claim::PersonalDataScrubber.new.scrub_completed_claims
@@ -171,7 +171,7 @@ RSpec.describe Claim::PersonalDataScrubber, type: :model do
         "building_society_roll_number" => ["123456789/ABCD", claim.building_society_roll_number]
       })
       create(:decision, :approved, claim: claim, created_at: last_academic_year)
-      create(:payment, :with_figures, claims: [claim], scheduled_payment_date: last_academic_year)
+      create(:payment, :confirmed, :with_figures, claims: [claim], scheduled_payment_date: last_academic_year)
     end
 
     freeze_time do
