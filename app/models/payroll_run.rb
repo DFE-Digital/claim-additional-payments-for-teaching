@@ -3,9 +3,12 @@ class PayrollRun < ApplicationRecord
 
   has_many :payments, dependent: :destroy
   has_many :claims, through: :payments
+  has_many :payment_confirmations, dependent: :destroy
 
   belongs_to :created_by, class_name: "DfeSignIn::User"
   belongs_to :downloaded_by, class_name: "DfeSignIn::User", optional: true
+  # TODO: This relationship can be removed after a code migration is in place to
+  # backfill existing payroll runs and payments with a payment confirmation
   belongs_to :confirmation_report_uploaded_by, class_name: "DfeSignIn::User", optional: true
 
   validate :ensure_no_payroll_run_this_month, on: :create
@@ -32,6 +35,14 @@ class PayrollRun < ApplicationRecord
     (payments.count / MAX_BATCH_SIZE.to_f).ceil
   end
 
+  def total_confirmed_payments
+    payments.where.not(confirmation: nil).count
+  end
+
+  def all_payments_confirmed?
+    payment_confirmations.any? && total_confirmed_payments == payments.count
+  end
+
   def self.create_with_claims!(claims, topups, attrs = {})
     ActiveRecord::Base.transaction do
       PayrollRun.create!(attrs).tap do |payroll_run|
@@ -51,10 +62,6 @@ class PayrollRun < ApplicationRecord
 
   def download_triggered?
     downloaded_at.present? && downloaded_by.present?
-  end
-
-  def confirmation_report_uploaded?
-    confirmation_report_uploaded_by.present?
   end
 
   private

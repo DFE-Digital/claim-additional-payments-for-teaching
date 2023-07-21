@@ -18,19 +18,6 @@ RSpec.describe PayrollRun, type: :model do
     end
   end
 
-  it "can be updated in the same month as it was created" do
-    payroll_run = create(:payroll_run)
-    confirmation_report_uploaded_time = Time.zone.now.end_of_month
-    service_operator = build(:dfe_signin_user)
-
-    travel_to confirmation_report_uploaded_time do
-      payroll_run.confirmation_report_uploaded_by = service_operator
-
-      expect(payroll_run.save!).to be true
-      expect(payroll_run.confirmation_report_uploaded_by).eql? service_operator
-    end
-  end
-
   describe "#total_award_amount" do
     it "returns the sum of the award amounts of its claims" do
       payment_1 = build(:payment, claims: [build(:claim, :approved, eligibility: build(:student_loans_eligibility, :eligible, student_loan_repayment_amount: 1500))])
@@ -165,6 +152,51 @@ RSpec.describe PayrollRun, type: :model do
     end
 
     it { is_expected.to eq(3) }
+  end
+
+  describe "#total_confirmed_payments" do
+    subject(:total) { payroll_run.total_confirmed_payments }
+
+    let(:payroll_run) do
+      create(:payroll_run, :with_confirmations, confirmed_batches: 2, claims_counts: {
+        StudentLoans => 5
+      })
+    end
+    let(:batch_size) { 2 }
+
+    before do
+      stub_const("#{described_class}::MAX_BATCH_SIZE", batch_size)
+    end
+
+    it { is_expected.to eq(4) }
+  end
+
+  describe "#all_payments_confirmed?" do
+    subject { payroll_run.all_payments_confirmed? }
+
+    let(:payroll_run) do
+      create(:payroll_run,
+        :with_confirmations,
+        confirmed_batches: confirmed_batches,
+        claims_counts: {StudentLoans => 5})
+    end
+    let(:batch_size) { 2 }
+
+    before do
+      stub_const("#{described_class}::MAX_BATCH_SIZE", batch_size)
+    end
+
+    context "when some payments have not been confirmed" do
+      let(:confirmed_batches) { 2 }
+
+      it { is_expected.to eq(false) }
+    end
+
+    context "when all payments have been confirmed" do
+      let(:confirmed_batches) { 3 }
+
+      it { is_expected.to eq(true) }
+    end
   end
 
   describe "#download_triggered?" do

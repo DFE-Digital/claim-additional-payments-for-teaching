@@ -13,8 +13,8 @@ module Admin
     end
 
     def destroy
-      if @payroll_run.confirmation_report_uploaded?
-        redirect_to admin_payroll_run_path(@payroll_run), alert: "A payment cannot be removed from an already confirmed payroll run"
+      if @payment.confirmed?
+        redirect_to admin_payroll_run_path(@payroll_run), alert: "A payment cannot be removed once confirmed"
       else
         @claims = @payment.claims.to_a
         @payment.destroy

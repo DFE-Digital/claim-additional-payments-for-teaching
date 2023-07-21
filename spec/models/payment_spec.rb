@@ -215,4 +215,40 @@ RSpec.describe Payment do
       expect(payment.policies_in_payment).to eq("MathsAndPhysics StudentLoans")
     end
   end
+
+  describe "associations" do
+    it { is_expected.to have_many(:claim_payments).dependent(:destroy) }
+    it { is_expected.to have_many(:claims).through(:claim_payments) }
+    it { is_expected.to have_many(:topups).dependent(:nullify) }
+    it { is_expected.to belong_to(:payroll_run) }
+    it { is_expected.to belong_to(:confirmation).class_name("PaymentConfirmation").optional(true) }
+  end
+
+  describe "method delegations" do
+    it { is_expected.to delegate_method(:scheduled_payment_date).to(:confirmation).allow_nil }
+
+    described_class::PERSONAL_DETAILS_ATTRIBUTES_PERMITTING_DISCREPANCIES.each do |method|
+      it { is_expected.to delegate_method(method).to(:claim_for_personal_details) }
+    end
+
+    described_class::PERSONAL_DETAILS_ATTRIBUTES_FORBIDDING_DISCREPANCIES.each do |method|
+      it { is_expected.to delegate_method(method).to(:claim_for_personal_details) }
+    end
+  end
+
+  describe "#confirmed?" do
+    subject { payment.confirmed? }
+
+    context "when confirmation is not present" do
+      let(:payment) { create(:payment) }
+
+      it { is_expected.to eq(false) }
+    end
+
+    context "when confirmation is present" do
+      let(:payment) { create(:payment, :confirmed) }
+
+      it { is_expected.to eq(true) }
+    end
+  end
 end

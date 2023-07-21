@@ -4,6 +4,8 @@ class Payment < ApplicationRecord
   has_many :topups, dependent: :nullify
 
   belongs_to :payroll_run
+  belongs_to :confirmation, class_name: "PaymentConfirmation", optional: true
+
 
   validates :award_amount, presence: true
 
@@ -37,10 +39,14 @@ class Payment < ApplicationRecord
   ]
 
   delegate(*(PERSONAL_DETAILS_ATTRIBUTES_PERMITTING_DISCREPANCIES + PERSONAL_DETAILS_ATTRIBUTES_FORBIDDING_DISCREPANCIES), to: :claim_for_personal_details)
-  delegate :scheduled_payment_date, to: :payroll_run
+  delegate :scheduled_payment_date, to: :confirmation, allow_nil: true
 
   def policies_in_payment
     claims.map { |claim| claim.policy.to_s }.uniq.sort.join(" ")
+  end
+
+  def confirmed?
+    confirmation.present?
   end
 
   private

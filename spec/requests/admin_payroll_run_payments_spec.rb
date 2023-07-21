@@ -36,9 +36,9 @@ RSpec.describe "Admin payroll run payments" do
       expect(response.body).to include(claim.reference)
     end
 
-    it "cannot delete a payment from an already confirmed payroll run" do
-      payroll_run.confirmation_report_uploaded_by = @signed_in_user
-      payroll_run.save!
+    it "cannot delete a payment if already confirmed" do
+      payment.confirmation = build(:payment_confirmation, payroll_run: payroll_run)
+      payment.save!
 
       expect {
         delete admin_payroll_run_payment_path(
@@ -51,7 +51,7 @@ RSpec.describe "Admin payroll run payments" do
 
       expect(response).to redirect_to(admin_payroll_run_path(payroll_run))
 
-      expect(flash[:alert]).to eq("A payment cannot be removed from an already confirmed payroll run")
+      expect(flash[:alert]).to eq("A payment cannot be removed once confirmed")
     end
 
     it "shows an error if the payment has already been deleted" do

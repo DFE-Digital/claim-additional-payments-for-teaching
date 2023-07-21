@@ -10,8 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_02_03_174054) do
-
+ActiveRecord::Schema[7.0].define(version: 2023_07_17_120505) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -22,8 +21,8 @@ ActiveRecord::Schema.define(version: 2023_02_03_174054) do
     t.string "claim_changes"
     t.uuid "dfe_sign_in_users_id"
     t.uuid "created_by_id"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.datetime "personal_data_removed_at"
     t.index ["claim_id"], name: "index_amendments_on_claim_id"
     t.index ["created_by_id"], name: "index_amendments_on_created_by_id"
@@ -33,8 +32,8 @@ ActiveRecord::Schema.define(version: 2023_02_03_174054) do
   create_table "claim_payments", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.uuid "claim_id"
     t.uuid "payment_id"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["claim_id", "payment_id"], name: "index_claim_payments_on_claim_id_and_payment_id", unique: true
     t.index ["claim_id"], name: "index_claim_payments_on_claim_id"
     t.index ["payment_id"], name: "index_claim_payments_on_payment_id"
@@ -131,8 +130,8 @@ ActiveRecord::Schema.define(version: 2023_02_03_174054) do
     t.string "family_name"
     t.string "email"
     t.string "organisation_name"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.string "role_codes", default: [], array: true
     t.datetime "deleted_at"
     t.string "session_token"
@@ -143,8 +142,8 @@ ActiveRecord::Schema.define(version: 2023_02_03_174054) do
 
   create_table "early_career_payments_eligibilities", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.boolean "nqt_in_academic_year_after_itt"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.boolean "employed_as_supply_teacher"
     t.integer "qualification"
     t.boolean "has_entire_term_contract"
@@ -162,16 +161,16 @@ ActiveRecord::Schema.define(version: 2023_02_03_174054) do
   create_table "file_uploads", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.uuid "uploaded_by_id"
     t.text "body"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "levelling_up_premium_payments_awards", force: :cascade do |t|
     t.string "academic_year", limit: 9, null: false
     t.integer "school_urn", null: false
     t.decimal "award_amount", precision: 7, scale: 2
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["academic_year", "school_urn"], name: "lupp_award_by_year_and_urn"
     t.index ["academic_year"], name: "lupp_award_by_year"
     t.index ["award_amount"], name: "lupp_award_by_amount"
@@ -179,8 +178,8 @@ ActiveRecord::Schema.define(version: 2023_02_03_174054) do
   end
 
   create_table "levelling_up_premium_payments_eligibilities", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.boolean "nqt_in_academic_year_after_itt"
     t.boolean "employed_as_supply_teacher"
     t.integer "qualification"
@@ -231,11 +230,21 @@ ActiveRecord::Schema.define(version: 2023_02_03_174054) do
     t.string "body"
     t.uuid "claim_id"
     t.uuid "created_by_id"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.boolean "important"
     t.index ["claim_id"], name: "index_notes_on_claim_id"
     t.index ["created_by_id"], name: "index_notes_on_created_by_id"
+  end
+
+  create_table "payment_confirmations", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "payroll_run_id"
+    t.uuid "created_by_id"
+    t.date "scheduled_payment_date", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["created_by_id"], name: "index_payment_confirmations_on_created_by_id"
+    t.index ["payroll_run_id"], name: "index_payment_confirmations_on_payroll_run_id"
   end
 
   create_table "payments", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -252,6 +261,8 @@ ActiveRecord::Schema.define(version: 2023_02_03_174054) do
     t.decimal "net_pay", precision: 7, scale: 2
     t.decimal "gross_pay", precision: 7, scale: 2
     t.decimal "postgraduate_loan_repayment", precision: 7, scale: 2
+    t.uuid "confirmation_id"
+    t.index ["confirmation_id"], name: "index_payments_on_confirmation_id"
     t.index ["created_at"], name: "index_payments_on_created_at"
     t.index ["payroll_run_id"], name: "index_payments_on_payroll_run_id"
   end
@@ -284,8 +295,8 @@ ActiveRecord::Schema.define(version: 2023_02_03_174054) do
   create_table "reminders", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "full_name"
     t.string "email_address"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.boolean "email_verified", default: false
     t.datetime "email_sent_at"
     t.string "itt_academic_year", limit: 9
@@ -303,8 +314,8 @@ ActiveRecord::Schema.define(version: 2023_02_03_174054) do
     t.string "subject_7"
     t.string "subject_8"
     t.string "subject_9"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.string "subject_10"
     t.string "subject_11"
     t.string "subject_12"
@@ -364,8 +375,8 @@ ActiveRecord::Schema.define(version: 2023_02_03_174054) do
     t.string "url", null: false
     t.uuid "claim_id"
     t.uuid "created_by_id"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["claim_id"], name: "index_support_tickets_on_claim_id"
     t.index ["created_by_id"], name: "index_support_tickets_on_created_by_id"
   end
@@ -374,8 +385,8 @@ ActiveRecord::Schema.define(version: 2023_02_03_174054) do
     t.string "name"
     t.uuid "claim_id"
     t.uuid "created_by_id"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.boolean "passed"
     t.boolean "manual"
     t.integer "claim_verifier_match"
@@ -390,8 +401,8 @@ ActiveRecord::Schema.define(version: 2023_02_03_174054) do
     t.datetime "end_date"
     t.integer "la_urn"
     t.integer "school_urn"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.integer "gender_digit"
     t.index ["teacher_reference_number", "start_date"], name: "index_tps_data_on_teacher_reference_number_and_start_date", unique: true
     t.index ["teacher_reference_number"], name: "index_teachers_pensions_service_on_teacher_reference_number"
@@ -403,8 +414,8 @@ ActiveRecord::Schema.define(version: 2023_02_03_174054) do
     t.uuid "payment_id"
     t.uuid "dfe_sign_in_users_id"
     t.uuid "created_by_id"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["claim_id", "payment_id"], name: "index_topups_on_claim_id_and_payment_id", unique: true
     t.index ["claim_id"], name: "index_topups_on_claim_id"
     t.index ["created_by_id"], name: "index_topups_on_created_by_id"
@@ -424,6 +435,9 @@ ActiveRecord::Schema.define(version: 2023_02_03_174054) do
   add_foreign_key "maths_and_physics_eligibilities", "schools", column: "current_school_id"
   add_foreign_key "notes", "claims"
   add_foreign_key "notes", "dfe_sign_in_users", column: "created_by_id"
+  add_foreign_key "payment_confirmations", "dfe_sign_in_users", column: "created_by_id"
+  add_foreign_key "payment_confirmations", "payroll_runs"
+  add_foreign_key "payments", "payment_confirmations", column: "confirmation_id"
   add_foreign_key "payments", "payroll_runs"
   add_foreign_key "payroll_runs", "dfe_sign_in_users", column: "confirmation_report_uploaded_by_id"
   add_foreign_key "payroll_runs", "dfe_sign_in_users", column: "created_by_id"
