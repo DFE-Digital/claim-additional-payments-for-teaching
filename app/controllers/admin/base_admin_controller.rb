@@ -43,7 +43,7 @@ module Admin
     end
 
     def ensure_payroll_operator
-      render "admin/auth/failure", status: :unauthorized unless payroll_operator_signed_in?
+      render "admin/auth/failure", status: :unauthorized unless service_operator_signed_in? || payroll_operator_signed_in?
     end
 
     def update_last_seen_at

@@ -8,9 +8,13 @@
       This month's payroll file is ready for processing.
     </p>
 
-    <p class="govuk-body govuk-!-font-weight-bold">
-      NOTE: You will only be able to download this file once.
-    </p>
+    <% if @payroll_run.download_triggered? %>
+      <p class="govuk-body govuk-!-font-weight-bold">
+        NOTE: This month's payroll file was last downloaded on
+        <%= l(@payroll_run.downloaded_at) %> by
+        <%= user_details(@payroll_run.downloaded_by, include_line_break: false) %>.
+      </p>
+    <% end %>
 
     <%= form_with url: admin_payroll_run_download_path(@payroll_run) do %>
       <%= submit_tag "Download payroll file", class: "govuk-button" %>

@@ -40,13 +40,13 @@ RSpec.describe "Admin payroll runs" do
         expect(response.body).to include new_admin_payroll_run_download_url(payroll_run)
       end
 
-      it "does not show the link to the payroll run download once the download has been triggered" do
+      it "allows for multiple downloads" do
         payroll_run = create(:payroll_run, downloaded_at: Time.zone.now)
 
         get admin_payroll_run_path(payroll_run)
 
         expect(response).to have_http_status(:ok)
-        expect(response.body).not_to include new_admin_payroll_run_download_url(payroll_run)
+        expect(response.body).to include new_admin_payroll_run_download_url(payroll_run)
       end
 
       it "shows who downloaded the payroll run once the download has been triggered" do
