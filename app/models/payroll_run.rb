@@ -1,4 +1,5 @@
 class PayrollRun < ApplicationRecord
+  MAX_BATCH_SIZE = 1000
 
   has_many :payments, dependent: :destroy
   has_many :claims, through: :payments
@@ -21,6 +22,14 @@ class PayrollRun < ApplicationRecord
 
   def total_claim_amount_for_policy(policy, filter: :all)
     line_items(policy, filter: filter).sum(&:award_amount)
+  end
+
+  def payments_in_batches
+    payments.includes(:claims).find_in_batches(batch_size: MAX_BATCH_SIZE)
+  end
+
+  def total_batches
+    (payments.count / MAX_BATCH_SIZE.to_f).ceil
   end
 
   def self.create_with_claims!(claims, topups, attrs = {})
