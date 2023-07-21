@@ -31,9 +31,14 @@ FactoryBot.define do
       student_loan_repayment { 0 }
       tax { award_amount * 0.2 }
       net_pay { award_amount }
+    end
 
-      payroll_run do
-        create(:payroll_run, :confirmation_report_uploaded, scheduled_payment_date: scheduled_payment_date)
+    trait :confirmed do
+      after(:create) do |payment, evaluator|
+        create(:payment_confirmation,
+          payments: [payment],
+          payroll_run: payment.payroll_run,
+          scheduled_payment_date: evaluator.scheduled_payment_date)
       end
     end
   end

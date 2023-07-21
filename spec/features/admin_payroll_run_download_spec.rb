@@ -14,9 +14,10 @@ RSpec.feature "Payroll run download" do
 
     click_on "Download #{payroll_run.created_at.strftime("%B")} payroll file"
 
-    expect(page.response_headers["Content-Type"]).to eq("text/csv")
+    expect(page.response_headers["Content-Type"]).to eq("application/zip")
 
-    csv = CSV.parse(body, headers: true)
+    zip = Zip::InputStream.open(::StringIO.new(body))
+    csv = CSV.parse(zip.get_next_entry.get_input_stream.read, headers: true)
     expect(csv.count).to eq(3)
   end
 end

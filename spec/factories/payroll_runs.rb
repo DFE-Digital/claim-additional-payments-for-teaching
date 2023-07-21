@@ -17,6 +17,8 @@ FactoryBot.define do
       # - 5 payments each of which has two claims: one for StudentLoans and one for MathsAndPhysics.
       claims_counts { {StudentLoans => 0} }
       payment_traits { [] }
+      batch_size { 2 }
+      confirmed_batches { nil }
     end
 
     after(:create) do |payroll_run, evaluator|
@@ -30,6 +32,17 @@ FactoryBot.define do
       association :confirmation_report_uploaded_by, factory: :dfe_signin_user
       scheduled_payment_date { Date.today }
       payment_traits { %i[with_figures] }
+    end
+
+    trait :with_confirmations do
+      payment_traits { %i[with_figures] }
+
+      after(:create) do |payroll_run, evaluator|
+        payroll_run.payments.ordered.in_batches(of: evaluator.batch_size).each.with_index(1) do |batch, num|
+          break if evaluator.confirmed_batches && num > evaluator.confirmed_batches
+          create(:payment_confirmation, payments: batch, payroll_run: payroll_run)
+        end
+      end
     end
   end
 end

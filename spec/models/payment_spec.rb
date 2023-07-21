@@ -224,6 +224,22 @@ RSpec.describe Payment do
     it { is_expected.to belong_to(:confirmation).class_name("PaymentConfirmation").optional(true) }
   end
 
+  describe "scopes" do
+    describe ".ordered" do
+      it "runs a query with ORDER BY id ASC" do
+        expect(described_class.ordered.to_sql)
+          .to eq described_class.all.order(id: :asc).to_sql
+      end
+    end
+
+    describe ".unconfirmed" do
+      it "runs a query with WHERE confirmation_id IS NULL" do
+        expect(described_class.unconfirmed.to_sql)
+          .to eq described_class.all.where(confirmation_id: nil).to_sql
+      end
+    end
+  end
+
   describe "method delegations" do
     it { is_expected.to delegate_method(:scheduled_payment_date).to(:confirmation).allow_nil }
 

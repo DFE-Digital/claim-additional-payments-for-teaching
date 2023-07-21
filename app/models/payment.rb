@@ -6,6 +6,8 @@ class Payment < ApplicationRecord
   belongs_to :payroll_run
   belongs_to :confirmation, class_name: "PaymentConfirmation", optional: true
 
+  scope :ordered, -> { reorder(id: :asc) }
+  scope :unconfirmed, -> { where(confirmation_id: nil) }
 
   validates :award_amount, presence: true
 

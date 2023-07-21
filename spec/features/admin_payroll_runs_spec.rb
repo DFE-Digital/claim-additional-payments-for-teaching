@@ -131,8 +131,14 @@ RSpec.feature "Payroll" do
     expect(page).to have_content(claim_reference)
   end
 
-  scenario "Service operator can upload a Payment Confirmation Report against a payroll run" do
-    payroll_run = create(:payroll_run, claims_counts: {StudentLoans => 2})
+  scenario "Service operator can upload a Payment Confirmation Report multiple times against a payroll run" do
+    payroll_run = create(:payroll_run, claims_counts: {StudentLoans => 3})
+    first_payment = payroll_run.payments.ordered[0]
+    second_payment = payroll_run.payments.ordered[1]
+    third_payment = payroll_run.payments.ordered[2]
+    first_claim = first_payment.claims.first
+    second_claim = second_payment.claims.first
+    third_claim = third_payment.claims.first
 
     click_on "Payroll"
 
@@ -141,9 +147,9 @@ RSpec.feature "Payroll" do
     expect(page).to have_content("Upload Payment Confirmation Report")
 
     csv = <<~CSV
-      Payroll Reference,Gross Value,Payment ID,NI,Employers NI,Student Loans,Tax,Net Pay,Claim Policies,Postgraduate Loans
-      DFE00001,448.5,#{payroll_run.payments[0].id},33.9,38.98,0,89.6,325,StudentLoans,0.00
-      DFE00002,814.64,#{payroll_run.payments[1].id},77.84,89.51,40,162.8,534,StudentLoans,0.00
+      Payroll Reference,Gross Value,Payment ID,NI,Employers NI,Student Loans,Tax,Net Pay,Claim Policies,Postgraduate Loans,Payment Date
+      DFE00001,448.5,#{first_payment.id},33.9,38.98,0,89.6,325,StudentLoans,0.00,17/07/2023
+      DFE00002,814.64,#{second_payment.id},77.84,89.51,40,162.8,534,StudentLoans,0.00,17/07/2023
     CSV
 
     file = Tempfile.new
@@ -153,13 +159,14 @@ RSpec.feature "Payroll" do
     attach_file("Upload a Payment Confirmation Report CSV file", file.path)
     perform_enqueued_jobs { click_on "Upload file" }
 
-    expect(page).to have_content("Payment Confirmation Report successfully uploaded")
+    expect(page).to have_content("Payment Confirmation Report (2 payments) successfully uploaded")
 
-    expect(page.find("table")).to have_content("Uploaded")
+    expect(page.find("table")).to have_content("(2/3 uploaded)")
 
-    expect(payroll_run.reload.confirmation_report_uploaded_by).to eq(@signed_in_user)
-    expect(payroll_run.payments[0].reload.gross_value).to eq("448.5".to_d + "38.98".to_d)
-    expect(payroll_run.payments[0].reload.gross_pay).to eq("448.5".to_d)
+    expect(payroll_run.reload.payment_confirmations[0].created_by).to eq(@signed_in_user)
+    expect(payroll_run.payment_confirmations[0].payments).to eq([first_payment, second_payment])
+    expect(first_payment.reload.gross_value).to eq("448.5".to_d + "38.98".to_d)
+    expect(first_payment.reload.gross_pay).to eq("448.5".to_d)
 
     expect(ActionMailer::Base.deliveries.count).to eq(2)
 
@@ -167,14 +174,50 @@ RSpec.feature "Payroll" do
     addressees = ActionMailer::Base.deliveries.map { |delivery| delivery.to }
 
     expect(addressees).to match_array([
-      [payroll_run.claims[0].email_address],
-      [payroll_run.claims[1].email_address]
+      [first_payment.email_address],
+      [second_payment.email_address]
     ])
 
     expect(subjects).to match_array([
-      "We’re paying your claim to get back your student loan repayments, reference number: #{payroll_run.claims[0].reference}",
-      "We’re paying your claim to get back your student loan repayments, reference number: #{payroll_run.claims[1].reference}"
+      "We’re paying your claim to get back your student loan repayments, reference number: #{first_claim.reference}",
+      "We’re paying your claim to get back your student loan repayments, reference number: #{second_claim.reference}"
     ])
+
+    click_on "Payroll"
+
+    click_on "Upload #{I18n.l(payroll_run.created_at.to_date, format: :month_year)} payment confirmation report"
+
+    csv = <<~CSV
+      Payroll Reference,Gross Value,Payment ID,NI,Employers NI,Student Loans,Tax,Net Pay,Claim Policies,Postgraduate Loans,Payment Date
+      DFE00003,844.14,#{third_payment.id},7.44,19.11,30,132.9,533,StudentLoans,0.00,17/07/2023
+    CSV
+
+    file = Tempfile.new
+    file.write(csv)
+    file.rewind
+
+    attach_file("Upload a Payment Confirmation Report CSV file", file.path)
+    perform_enqueued_jobs { click_on "Upload file" }
+
+    expect(page).to have_content("Payment Confirmation Report (1 payment) successfully uploaded")
+
+    expect(page.find("table")).to have_content("Uploaded")
+
+    expect(payroll_run.reload.payment_confirmations[1].created_by).to eq(@signed_in_user)
+    expect(payroll_run.payment_confirmations[1].payments).to eq([third_payment])
+    expect(third_payment.reload.gross_value).to eq("844.14".to_d + "19.11".to_d)
+    expect(third_payment.reload.gross_pay).to eq("844.14".to_d)
+
+    expect(ActionMailer::Base.deliveries.count).to eq(3)
+
+    subject = ActionMailer::Base.deliveries.last.subject
+    address = ActionMailer::Base.deliveries.last.to
+
+    expect(address).to eq([third_payment.email_address])
+
+    expect(subject).to eq(
+      "We’re paying your claim to get back your student loan repayments, reference number: #{third_claim.reference}"
+    )
   end
 
   scenario "There are no claims or topups" do
