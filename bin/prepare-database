@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -e
 
 echo "Running migrations..."
 bundle exec rails db:setup_or_migrate
