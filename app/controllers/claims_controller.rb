@@ -20,9 +20,12 @@ class ClaimsController < BasePublicController
   end
 
   def show
+    cookies[:teacherId] = "Hg0aZZrIw/pn3AxPII48YtZ+vJ799oivSbScXWLfjpjA8"
     search_schools if params[:school_search]
     if params[:slug] == "teaching-subject-now" && !current_claim.eligibility.eligible_itt_subject
       return redirect_to claim_path(current_policy_routing_name, "eligible-itt-subject")
+    elsif params[:slug] == "teacher-reference-number" && cookies[:teacherId]
+      return redirect_to claim_path(current_policy_routing_name, "student-loan")
     elsif params[:slug] == "postcode-search" && postcode
       redirect_to claim_path(current_policy_routing_name, "select-home-address", {"claim[postcode]": params[:claim][:postcode], "claim[address_line_1]": params[:claim][:address_line_1]}) and return unless invalid_postcode?
     elsif params[:slug] == "select-home-address" && postcode
