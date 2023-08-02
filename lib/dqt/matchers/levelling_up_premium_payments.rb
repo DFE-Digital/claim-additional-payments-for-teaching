@@ -264,7 +264,6 @@ module Dqt
           "Computer Science",
           "Computer Studies",
           "Computing",
-          "Computing and Science",
           "Computing and Technology",
           "Computing Science",
           "Info Technlgy/Computing",
