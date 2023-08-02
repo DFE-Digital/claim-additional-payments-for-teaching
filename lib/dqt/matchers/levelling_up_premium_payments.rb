@@ -128,7 +128,6 @@ module Dqt
       ].freeze
 
       ELIGIBLE_HECOS_CODES = [
-        "100065",
         "100162",
         "100260",
         "100265",
