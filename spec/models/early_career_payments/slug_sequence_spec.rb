@@ -1,6 +1,9 @@
 require "rails_helper"
 
+require './app/models/concerns/session_accessor.rb'
 RSpec.describe EarlyCareerPayments::SlugSequence do
+  include SessionAccessor
+
   subject(:slug_sequence) { EarlyCareerPayments::SlugSequence.new(current_claim) }
 
   let(:eligibility) { build(:early_career_payments_eligibility, :eligible) }
@@ -11,7 +14,10 @@ RSpec.describe EarlyCareerPayments::SlugSequence do
   let(:current_claim) { CurrentClaim.new(claims: [claim, lup_claim]) }
 
   describe "The sequence as defined by #slugs" do
-    before { create(:policy_configuration, :additional_payments) }
+    before do  
+      SessionAccessor.session = { teacher_id: nil }
+      create(:policy_configuration, :additional_payments) 
+    end
 
     it "excludes the 'ineligible' slug if the claim's eligibility is undetermined" do
       expect(slug_sequence.slugs).not_to include("ineligible")
@@ -28,6 +34,19 @@ RSpec.describe EarlyCareerPayments::SlugSequence do
 
       expect(slug_sequence.slugs).to include("entire-term-contract", "employed-directly")
     end
+
+    
+    context "when the user is login using Teacher Id" do
+      it "includes 'teacher-reference-number' slug" do
+        expect(slug_sequence.slugs).to include("teacher-reference-number")
+      end
+
+      it "excludes 'teacher-reference-number' slug" do
+        SessionAccessor.session = { teacher_id: "token" } 
+        expect(slug_sequence.slugs).not_to include("teacher-reference-number")
+      end
+    end
+  
 
     context "when 'provide_mobile_number' is 'No'" do
       it "excludes the 'mobile-number' slug" do
@@ -293,6 +312,7 @@ RSpec.describe EarlyCareerPayments::SlugSequence do
   end
 
   describe "eligibility affect on slugs" do
+    SessionAccessor.session = { teacher_id: nil }
     let(:ecp_claim) { build(:claim, policy: EarlyCareerPayments, eligibility_trait: ecp_eligibility) }
     let(:lup_claim) { build(:claim, policy: LevellingUpPremiumPayments, eligibility_trait: lup_eligibility) }
     let(:current_claim) { CurrentClaim.new(claims: [ecp_claim, lup_claim]) }
