@@ -126,5 +126,7 @@ Rails.application.routes.draw do
     delete "allocate/:id", to: "allocations#deallocate", as: :deallocate
     patch "bulk_allocate", to: "allocations#bulk_allocate"
     patch "bulk_deallocate", to: "allocations#bulk_deallocate"
+
+    get "accessibility_statement", to: "static_pages#accessibility_statement"
   end
 end
