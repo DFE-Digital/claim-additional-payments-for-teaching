@@ -10,6 +10,8 @@ module EarlyCareerPayments
   # reflects the sequence based on the claim's current state.
   # There are 4 distinct phases of the claimant journey
   class SlugSequence
+    include SessionAccessor
+    
     ELIGIBILITY_SLUGS = [
       "current-school",
       "nqt-in-academic-year-after-itt",
@@ -98,6 +100,8 @@ module EarlyCareerPayments
 
         sequence.delete("personal-bank-account") if claim.bank_or_building_society == "building_society"
         sequence.delete("building-society-account") if claim.bank_or_building_society == "personal_bank_account"
+
+        sequence.delete("teacher-reference-number") if session[:teacher_id]
 
         if claim.provide_mobile_number == false
           sequence.delete("mobile-number")
