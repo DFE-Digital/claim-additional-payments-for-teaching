@@ -128,7 +128,6 @@ module Dqt
       ].freeze
 
       ELIGIBLE_HECOS_CODES = [
-        "100065",
         "100162",
         "100260",
         "100265",
@@ -264,7 +263,6 @@ module Dqt
           "Computer Science",
           "Computer Studies",
           "Computing",
-          "Computing and Science",
           "Computing and Technology",
           "Computing Science",
           "Info Technlgy/Computing",
