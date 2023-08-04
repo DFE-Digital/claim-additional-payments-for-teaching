@@ -68,7 +68,7 @@ class PaymentConfirmationUpload
   end
 
   def fetch_payment_by_id(id)
-    payment = payroll_run.payments.unconfirmed.detect { |payment| payment.id == id }
+    payment = payroll_run.payments.unconfirmed.find_by(id:)
 
     if payment
       payment
