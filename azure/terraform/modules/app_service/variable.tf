@@ -132,6 +132,11 @@ locals {
     "DOCKER_REGISTRY_SERVER_URL"                     = "https://${local.docker_registry}"
     "BYPASS_DFE_SIGN_IN"                             = var.bypass_dfe_sign_in
     "PR_NUMBER"                                      = var.pr_number
+    "TID_SIGN_IN_ISSUER"                             = data.azurerm_key_vault_secret.TidSignInIssuer.value
+    "TID_SIGN_IN_API_ENDPOINT"                       = data.azurerm_key_vault_secret.TidSignInApiEndpoint.value
+    "TID_BASE_URL"                                   = data.azurerm_key_vault_secret.TidBaseUrl.value
+    "TID_SIGN_IN_SECRET"                             = data.azurerm_key_vault_secret.TidSignInSecret.value
+    "TID_SIGN_IN_CLIENT_ID"                          = data.azurerm_key_vault_secret.TidSignInClientId.value
   }
 
   environment_variables = var.enable_basic_auth ? merge(local.default_environment_variables, {
