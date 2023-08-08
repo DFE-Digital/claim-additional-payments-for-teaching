@@ -184,3 +184,23 @@ data "azurerm_key_vault_secret" "HMRCBankValidationEnabled" {
   name         = "HMRCBankValidationEnabled"
   key_vault_id = data.azurerm_key_vault.secrets_kv.id
 }
+data "azurerm_key_vault_secret" "TidSignInClientId" {
+  name         = "TidSignInClientId"
+  key_vault_id = data.azurerm_key_vault.secrets_kv.id
+}
+data "azurerm_key_vault_secret" "TidSignInSecret" {
+  name         = "TidSignInSecret"
+  key_vault_id = data.azurerm_key_vault.secrets_kv.id
+}
+data "azurerm_key_vault_secret" "TidBaseUrl" {
+  name         = "TidBaseUrl"
+  key_vault_id = data.azurerm_key_vault.secrets_kv.id
+}
+data "azurerm_key_vault_secret" "TidSignInApiEndpoint" {
+  name         = "TidSignInApiEndpoint"
+  key_vault_id = data.azurerm_key_vault.secrets_kv.id
+}
+data "azurerm_key_vault_secret" "TidSignInIssuer" {
+  name         = "TidSignInIssuer"
+  key_vault_id = data.azurerm_key_vault.secrets_kv.id
+}

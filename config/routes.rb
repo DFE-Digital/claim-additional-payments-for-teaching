@@ -2,6 +2,8 @@ Rails.application.routes.draw do
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
   root to: redirect(Rails.application.config.guidance_url)
 
+  get "/claim/auth/tid/callback", to: "omniauth_callbacks#callback"
+
   # /early-career-payments is now /additional-payments - redirect old urls to a gov page
   get "early-career-payments(/*anything)", to: redirect("https://www.gov.uk/government/collections/additional-payments-for-teaching-eligibility-and-payment-details")
 
@@ -83,6 +85,7 @@ Rails.application.routes.draw do
 
     # DfE Sign-in OpenID routes
     post "/auth/dfe", as: :dfe_sign_in
+    post "/auth/tid", as: :tid_sign_in
     get "/auth/callback", to: "auth#callback"
     get "/auth/failure", to: "auth#failure"
     post "/auth/developer/callback", to: "auth#bypass_callback", as: :dfe_sign_in_bypass_callback
