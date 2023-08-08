@@ -103,6 +103,8 @@ module EarlyCareerPayments
 
         remove_qualification_questions_slugs(sequence) if claim.logged_in_with_tid?
 
+        remove_qualification_questions_slugs(sequence) if claim.logged_in_with_tid
+
         if claim.provide_mobile_number == false
           sequence.delete("mobile-number")
           sequence.delete("mobile-verification")
