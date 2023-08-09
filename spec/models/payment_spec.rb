@@ -18,7 +18,8 @@ RSpec.describe Payment do
           student_loan_repayment: 10,
           tax: 10,
           net_pay: 10,
-          gross_pay: 10)
+          gross_pay: 10,
+          scheduled_payment_date: Date.today)
       end
 
       it "is valid" do
@@ -36,11 +37,31 @@ RSpec.describe Payment do
           student_loan_repayment: nil,
           tax: 10,
           net_pay: 10,
-          gross_pay: 10)
+          gross_pay: 10,
+          scheduled_payment_date: Date.today)
       end
 
       it "is valid" do
         expect(subject).to be_valid(:upload)
+      end
+    end
+
+    context "with all required fields present and valid, with nil scheduled_payment_date" do
+      subject do
+        build(:payment,
+          payroll_reference: "DFE123",
+          gross_value: 10.25,
+          national_insurance: 15,
+          employers_national_insurance: 10,
+          student_loan_repayment: nil,
+          tax: 10,
+          net_pay: 10,
+          gross_pay: 10,
+          scheduled_payment_date: nil)
+      end
+
+      it "is invalid" do
+        expect(subject).not_to be_valid(:upload)
       end
     end
   end
@@ -241,8 +262,6 @@ RSpec.describe Payment do
   end
 
   describe "method delegations" do
-    it { is_expected.to delegate_method(:scheduled_payment_date).to(:confirmation).allow_nil }
-
     described_class::PERSONAL_DETAILS_ATTRIBUTES_PERMITTING_DISCREPANCIES.each do |method|
       it { is_expected.to delegate_method(method).to(:claim_for_personal_details) }
     end

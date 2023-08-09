@@ -2,7 +2,6 @@ FactoryBot.define do
   factory :payment do
     transient do
       claim_policies { [StudentLoans] }
-      scheduled_payment_date { Date.today }
     end
 
     claims do
@@ -34,11 +33,10 @@ FactoryBot.define do
     end
 
     trait :confirmed do
-      after(:create) do |payment, evaluator|
-        create(:payment_confirmation,
-          payments: [payment],
-          payroll_run: payment.payroll_run,
-          scheduled_payment_date: evaluator.scheduled_payment_date)
+      scheduled_payment_date { Date.today }
+
+      after(:create) do |payment, _evaluator|
+        create(:payment_confirmation, payments: [payment], payroll_run: payment.payroll_run)
       end
     end
   end

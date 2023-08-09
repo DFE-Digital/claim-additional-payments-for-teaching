@@ -240,7 +240,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_07_17_120505) do
   create_table "payment_confirmations", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.uuid "payroll_run_id"
     t.uuid "created_by_id"
-    t.date "scheduled_payment_date", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["created_by_id"], name: "index_payment_confirmations_on_created_by_id"
@@ -262,6 +261,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_07_17_120505) do
     t.decimal "gross_pay", precision: 7, scale: 2
     t.decimal "postgraduate_loan_repayment", precision: 7, scale: 2
     t.uuid "confirmation_id"
+    t.date "scheduled_payment_date"
     t.index ["confirmation_id"], name: "index_payments_on_confirmation_id"
     t.index ["created_at"], name: "index_payments_on_created_at"
     t.index ["payroll_run_id"], name: "index_payments_on_payroll_run_id"

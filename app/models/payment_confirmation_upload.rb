@@ -7,7 +7,6 @@ class PaymentConfirmationUpload
     @csv = PaymentConfirmationCsv.new(csv_file)
     @line_number = 1
     @updated_payment_ids = Set.new
-    @scheduled_payment_date = nil
     @admin_user = admin_user
     validate
   end
@@ -18,23 +17,18 @@ class PaymentConfirmationUpload
     ActiveRecord::Base.transaction do
       payments = []
 
+      confirmation = payroll_run.payment_confirmations.create!(created_by: admin_user)
+
       csv.rows.each do |row|
         @line_number += 1
         payment = fetch_payment_by_id(row["Payment ID"])
         if payment
-          update_payment_fields(payment, row)
-          parse_payment_date(row)
+          update_payment_fields(payment, confirmation, row)
           payments << payment
         end
       end
 
       raise ActiveRecord::Rollback if errors.any?
-
-      payroll_run.payment_confirmations.create!(
-        scheduled_payment_date: scheduled_payment_date,
-        payments: payments,
-        created_by: admin_user
-      )
 
       payments.each do |payment|
         PaymentMailer.confirmation(payment).deliver_later
@@ -44,7 +38,7 @@ class PaymentConfirmationUpload
 
   private
 
-  attr_reader :line_number, :scheduled_payment_date
+  attr_reader :line_number
 
   def validate
     if csv.errors.empty?
@@ -58,32 +52,21 @@ class PaymentConfirmationUpload
     errors.append("A Payment Confirmation Report for all payments has already been uploaded for this payroll run") if payroll_run.all_payments_confirmed?
   end
 
-  def parse_payment_date(row)
-    @scheduled_payment_date = begin
-      Date.strptime(row["Payment Date"], I18n.t("date.formats.day_month_year"))
-    rescue TypeError, Date::Error
-      errors.append("Payment Date is not in the DD/MM/YYYY format at line #{line_number}")
-      nil
-    end
-  end
-
   def fetch_payment_by_id(id)
     payment = payroll_run.payments.unconfirmed.find_by(id:)
 
-    if payment
-      payment
-    else
-      errors.append("The CSV file contains a payment that is already confirmed or not part of the payroll run at line #{line_number}")
-      nil
-    end
-  end
+    return payment if payment
 
-  def update_payment_fields(payment, row)
-    if updated_payment_ids.include?(payment.id)
-      errors.append("The payment with ID #{payment.id} is repeated at line #{line_number}")
+    if updated_payment_ids.include?(id)
+      errors.append("The payment with ID #{id} is repeated at line #{line_number}")
       return
     end
 
+    errors.append("The CSV file contains a payment that is already confirmed or not part of the payroll run at line #{line_number}")
+    nil
+  end
+
+  def update_payment_fields(payment, confirmation, row)
     payment.payroll_reference = row["Payroll Reference"]
     payment.gross_value = cast_as_numeric(row["Gross Value"]).to_d + cast_as_numeric(row["Employers NI"]).to_d
     payment.national_insurance = cast_as_numeric(row["NI"])
@@ -93,6 +76,9 @@ class PaymentConfirmationUpload
     payment.tax = cast_as_numeric(row["Tax"])
     payment.net_pay = cast_as_numeric(row["Net Pay"])
     payment.gross_pay = cast_as_numeric(row["Gross Value"])
+    payment.scheduled_payment_date = cast_as_date(row["Payment Date"])
+
+    payment.confirmation = confirmation
 
     if payment.save(context: :upload)
       updated_payment_ids.add(payment.id)
@@ -103,5 +89,11 @@ class PaymentConfirmationUpload
 
   def cast_as_numeric(number)
     number&.gsub(",", "")
+  end
+
+  def cast_as_date(string)
+    Date.strptime(string, I18n.t("date.formats.day_month_year"))
+  rescue TypeError, Date::Error
+    nil
   end
 end

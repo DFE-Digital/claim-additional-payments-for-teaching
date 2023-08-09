@@ -151,12 +151,13 @@ RSpec.describe PaymentConfirmationUpload do
 
           expect(confirmation).to have_attributes(
             payroll_run_id: payroll_run.id,
-            created_by_id: admin_user.id,
-            scheduled_payment_date: Date.parse("17/07/2023")
+            created_by_id: admin_user.id
           )
 
-          expect(confirmed_payments)
-            .to all(have_attributes(confirmation_id: confirmation.id))
+          expect(confirmed_payments).to all(have_attributes(
+            confirmation_id: confirmation.id,
+            scheduled_payment_date: Date.parse("17/07/2023")
+          ))
         end
       end
 

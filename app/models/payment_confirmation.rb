@@ -3,6 +3,4 @@ class PaymentConfirmation < ApplicationRecord
 
   belongs_to :payroll_run
   belongs_to :created_by, class_name: "DfeSignIn::User"
-
-  validates :scheduled_payment_date, presence: true
 end

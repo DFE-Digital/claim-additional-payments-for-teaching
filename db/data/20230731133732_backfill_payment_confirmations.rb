@@ -8,10 +8,9 @@ PayrollRun.where.not(confirmation_report_uploaded_by: nil).each do |payroll_run|
   batches.each.with_index(1) do |payment_batch, index|
     confirmation = PaymentConfirmation.create!(
       payroll_run: payroll_run,
-      scheduled_payment_date: payroll_run.scheduled_payment_date,
       created_by: payroll_run.confirmation_report_uploaded_by
     )
-    payment_batch.update_all(confirmation_id: confirmation.reload.id)
+    payment_batch.update_all(confirmation_id: confirmation.reload.id, scheduled_payment_date: payroll_run.scheduled_payment_date)
     puts "   Created confirmation #{index} of #{batches.count} for #{payment_batch.count} payments scheduled on #{payroll_run.scheduled_payment_date}"
   end
   puts

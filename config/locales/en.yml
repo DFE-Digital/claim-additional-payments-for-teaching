@@ -419,6 +419,10 @@ en:
   activerecord:
     errors:
       models:
+        payment:
+          attributes:
+            scheduled_payment_date:
+              blank: can't be blank or in a format other than DD/MM/YYYY
         early_career_payments_eligibilities:
           attributes:
             itt_academic_year:
