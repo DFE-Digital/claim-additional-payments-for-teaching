@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.describe "Admin static pages", type: :request do
-  describe "GET /admin/accessibility_statement" do
+  describe "GET /admin/accessibility-statement" do
     context "when unauthenticated" do
       it "redirects to the sign in page" do
         get admin_accessibility_statement_path

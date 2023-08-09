@@ -127,6 +127,6 @@ Rails.application.routes.draw do
     patch "bulk_allocate", to: "allocations#bulk_allocate"
     patch "bulk_deallocate", to: "allocations#bulk_deallocate"
 
-    get "accessibility_statement", to: "static_pages#accessibility_statement"
+    get "accessibility-statement", to: "static_pages#accessibility_statement"
   end
 end
