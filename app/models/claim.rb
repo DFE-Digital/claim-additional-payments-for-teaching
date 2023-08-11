@@ -98,7 +98,8 @@ class Claim < ApplicationRecord
     policy_options_provided: false,
     held: false,
     hmrc_bank_validation_responses: false,
-    hmrc_bank_validation_succeeded: false
+    hmrc_bank_validation_succeeded: false,
+    logged_in_with_tid: false
   }.freeze
   DECISION_DEADLINE = 14.weeks
   DECISION_DEADLINE_WARNING_POINT = 2.weeks
