@@ -82,7 +82,7 @@ module EarlyCareerPayments
 
     # Even though we are inside the ECP namespace, this method can modify the
     # slug sequence of both LUP and ECP claims
-    def slugs
+    def slugs(trn_present=false)
       overall_eligibility_status = claim.eligibility_status
       lup_claim = claim.for_policy(LevellingUpPremiumPayments)
       ecp_claim = claim.for_policy(EarlyCareerPayments)
@@ -101,7 +101,12 @@ module EarlyCareerPayments
 
         sequence.delete("teacher-reference-number") if claim.logged_in_with_tid && !claim.teacher_reference_number.nil?
 
-        remove_qualification_questions_slugs(sequence) if claim.logged_in_with_tid
+        if claim.logged_in_with_tid && !trn_present
+          remove_qualification_questions_slugs(sequence)
+        else
+          add_qualification_questions_slugs(sequence)
+        end
+
 
         if claim.provide_mobile_number == false
           sequence.delete("mobile-number")
@@ -133,6 +138,15 @@ module EarlyCareerPayments
         eligible-itt-subject
       ]
       slugs.each { |slug| sequence.delete(slug) }
+    end
+
+    def add_qualification_questions_slugs(sequence, slugs = nil)
+      slugs ||= %w[
+        qualification
+        itt-year
+        eligible-itt-subject
+      ]
+      slugs.each { |slug| sequence.push(slug) }
     end
 
     def remove_student_loan_slugs(sequence, slugs = nil)

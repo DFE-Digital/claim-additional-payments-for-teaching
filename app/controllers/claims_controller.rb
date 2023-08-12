@@ -20,6 +20,7 @@ class ClaimsController < BasePublicController
   end
 
   def show
+    call_api if params[:slug] == "poor-performance"
     search_schools if params[:school_search]
     if params[:slug] == "teaching-subject-now" && !current_claim.eligibility.eligible_itt_subject
       return redirect_to claim_path(current_policy_routing_name, "eligible-itt-subject")
@@ -92,7 +93,72 @@ class ClaimsController < BasePublicController
   end
 
   private
-
+  
+  def call_api
+    # Replace 'API_URL' with the actual URL of the API you want to call.
+    # byebug
+    # api_url = URI.parse("https://test-api-customerengagement.platform.education.gov.uk/dqt-crm/v1/teachers/1000335?nino=JC999999D")
+    # api_url.query = URI.encode_www_form(query_params)
+    # http = Net::HTTP.new(api_url.host, api_url.port)
+    # http.use_ssl = (api_url.scheme == 'https')
+    # request = Net::HTTP::Get.new(api_url)
+    # request["Authorization"] = "Bearer #{ENV["DQT_API_KEY"]}"
+    # response = http.request(request)
+    response = {
+      trn: "1000335",
+      ni_number: "null",
+      name: "Alan Davis",
+      dob: "1977-01-07",
+      active_alert: "false",
+      state: "0",
+      state_name: "Active",
+      qualified_teacher_status: {
+        name: "Qualified teacher (trained)",
+        qts_date: "2020-01-07T00:00:00Z",
+        state: "0",
+        state_name: "Active"
+      },
+      induction: {
+        completion_date: "null",
+        status: "In Progress",
+        state: "0",
+        state_name: "Active"
+      },
+      initial_teacher_training: {
+        programme_start_date: "2020-01-09T00:00:00Z",
+        programme_end_date: "2021-01-07T00:00:00Z",
+        programme_type: "HEI",
+        result: "Pass",
+        subject1: "foreign_languages",
+        subject2: "null",
+        subject3: "null",
+        qualification: "Bachelors of Arts",
+        state: "0",
+        state_name: "Active"
+      },
+      qualifications: []
+    }
+    data = response[:initial_teacher_training]
+    postgraduate_itt_array = ["Postgraduate Certificate in Education", "Teach First", "School Direct ITT", "School Centered IIT"]
+    undergraduate_itt_array = ["Bachelors of Arts", "Bachelors of Science"]
+    eligible_itt_subjects = ["chemistry", "foreign_languages", "mathematics", "physics", "computing"]
+    current_claim.eligibility.qualification = if postgraduate_itt_array.include?(data[:qualification])
+      "postgraduate_itt"
+    elsif undergraduate_itt_array.include?(data[:qualification])
+      "undergraduate_itt"
+    elsif data[:qualification] == "assessment_only"
+      "assessment_only"
+    else
+      "overseas_recognition"
+    end
+    current_claim.eligibility.eligible_itt_subject = if eligible_itt_subjects.include?(data[:subject1])
+      data[:subject1]
+    else
+      "none_of_the_above"
+    end
+    start_date = Time.parse(data[:programme_start_date])
+    current_claim.eligibility.update(itt_academic_year: AcademicYear.new(start_date.year))
+  end
   helper_method :next_slug
   def next_slug
     page_sequence.next_slug
@@ -176,9 +242,12 @@ class ClaimsController < BasePublicController
   end
 
   def page_sequence
-    @page_sequence ||= PageSequence.new(current_claim, claim_slug_sequence, session[:slugs], params[:slug])
+    set_session
+    default_params = [current_claim, claim_slug_sequence, session[:slugs], params[:slug]]
+  
+    @page_sequence = PageSequence.new(*default_params, true)
   end
-
+  
   def claim_slug_sequence
     current_claim.policy::SlugSequence.new(current_claim)
   end
@@ -253,4 +322,10 @@ class ClaimsController < BasePublicController
   def correct_policy_namespace?
     PolicyConfiguration.policies_for_routing_name(params[:policy]).include?(current_claim.policy)
   end
+
+  def set_session
+    session[:slugs] ||= []
+    session[:slugs].concat(["qualification", "itt-year", "eligible-itt-subject"]) if params[:test]
+  end 
 end
+

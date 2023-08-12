@@ -2,20 +2,21 @@
 
 # Used to model the sequence of pages that make up the claim process.
 class PageSequence
-  attr_reader :claim, :current_slug, :completed_slugs
+  attr_reader :claim, :current_slug, :completed_slugs, :trn_present
 
   DEAD_END_SLUGS = %w[complete existing-session eligible-later future-eligibility ineligible]
   OPTIONAL_SLUGS = %w[postcode-search no-address-found select-home-address]
 
-  def initialize(claim, slug_sequence, completed_slugs, current_slug)
+  def initialize(claim, slug_sequence, completed_slugs, current_slug, trn_present = false)
     @claim = claim
     @current_slug = current_slug
     @slug_sequence = slug_sequence
     @completed_slugs = completed_slugs
+    @trn_present = trn_present
   end
 
   def slugs
-    @slug_sequence.slugs
+    @slug_sequence.slugs(@trn_present)
   end
 
   def next_slug
