@@ -13,6 +13,7 @@ module EarlyCareerPayments
     ELIGIBILITY_SLUGS = [
       "current-school",
       "nqt-in-academic-year-after-itt",
+      "induction-completed",
       "supply-teacher",
       "entire-term-contract",
       "employed-directly",
