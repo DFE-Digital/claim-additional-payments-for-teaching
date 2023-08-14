@@ -7,6 +7,7 @@ FactoryBot.define do
     # Traits specific to ECP
     trait :eligible_now do
       common_eligible_attributes
+      induction_completed
       eligible_itt_subject_now
     end
 
@@ -84,6 +85,14 @@ FactoryBot.define do
 
     trait :newly_qualified_teacher do
       nqt_in_academic_year_after_itt { true }
+    end
+
+    trait :induction_completed do
+      induction_completed { true }
+    end
+
+    trait :induction_not_completed do
+      induction_completed { false }
     end
 
     trait :not_a_supply_teacher do
