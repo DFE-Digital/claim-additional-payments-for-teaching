@@ -200,6 +200,7 @@ shared:
   - itt_academic_year
   - current_school_id
   - award_amount
+  - induction_completed
   :levelling_up_premium_payments_eligibilities:
   - id
   - created_at
@@ -217,6 +218,7 @@ shared:
   - current_school_id
   - award_amount
   - eligible_degree_subject
+  - induction_completed
   :schools:
   - id
   - urn
