@@ -72,7 +72,7 @@ module StudentLoans
       @claim = claim
     end
 
-    def slugs
+    def slugs(trn_present = false)
       SLUGS.dup.tap do |sequence|
         sequence.delete("current-school") if claim.eligibility.employed_at_claim_school?
         sequence.delete("mostly-performed-leadership-duties") unless claim.eligibility.had_leadership_position?

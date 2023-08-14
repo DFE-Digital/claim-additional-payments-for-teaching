@@ -55,7 +55,7 @@ module MathsAndPhysics
       @claim = claim
     end
 
-    def slugs
+    def slugs(trn_present = false)
       SLUGS.dup.tap do |sequence|
         sequence.delete("initial-teacher-training-subject-specialism") unless claim.eligibility.itt_subject_science?
         sequence.delete("has-uk-maths-or-physics-degree") if claim.eligibility.initial_teacher_training_specialised_in_maths_or_physics?

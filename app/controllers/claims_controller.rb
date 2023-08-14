@@ -176,7 +176,10 @@ class ClaimsController < BasePublicController
   end
 
   def page_sequence
-    @page_sequence ||= PageSequence.new(current_claim, claim_slug_sequence, session[:slugs], params[:slug])
+    set_session
+    default_params = [current_claim, claim_slug_sequence, session[:slugs], params[:slug]]
+
+    @page_sequence = PageSequence.new(*default_params, params[:editible_answer].present?)
   end
 
   def claim_slug_sequence
@@ -252,5 +255,10 @@ class ClaimsController < BasePublicController
 
   def correct_policy_namespace?
     PolicyConfiguration.policies_for_routing_name(params[:policy]).include?(current_claim.policy)
+  end
+
+  def set_session
+    session[:slugs] ||= []
+    session[:slugs].concat(["qualification", "itt-year", "eligible-itt-subject"]) if params[:test]
   end
 end
