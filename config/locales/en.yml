@@ -373,6 +373,7 @@ en:
     admin:
       employed_as_supply_teacher: "Employed as a supply teacher?"
       nqt_in_academic_year_after_itt: "Teaching as a qualified teacher?"
+      induction_completed: "Has completed induction as an early-career teacher?"
       task_questions:
         employment:
           title: "Does the claimant’s current school match the above information from their claim?"

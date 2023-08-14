@@ -23,6 +23,7 @@ module EarlyCareerPayments
       [].tap do |a|
         a << current_school
         a << nqt_in_academic_year_after_itt
+        a << induction_completed
         a << employed_as_supply_teacher
         a << has_entire_term_contract if eligibility.employed_as_supply_teacher?
         a << employed_directly if eligibility.employed_as_supply_teacher?
@@ -59,6 +60,14 @@ module EarlyCareerPayments
         translate("early_career_payments.questions.nqt_in_academic_year_after_itt.heading"),
         (eligibility.nqt_in_academic_year_after_itt? ? "Yes" : "No"),
         "nqt-in-academic-year-after-itt"
+      ]
+    end
+
+    def induction_completed
+      [
+        translate("early_career_payments.questions.induction_completed.heading"),
+        (eligibility.induction_completed? ? "Yes" : "No"),
+        "induction-completed"
       ]
     end
 
