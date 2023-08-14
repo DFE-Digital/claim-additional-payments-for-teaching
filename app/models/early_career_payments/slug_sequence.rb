@@ -101,6 +101,8 @@ module EarlyCareerPayments
 
         sequence.delete("teacher-reference-number") if claim.logged_in_with_tid && claim.teacher_reference_number.present?
 
+        remove_qualification_questions_slugs(sequence) if claim.logged_in_with_tid?
+
         if claim.provide_mobile_number == false
           sequence.delete("mobile-number")
           sequence.delete("mobile-verification")
@@ -123,6 +125,15 @@ module EarlyCareerPayments
     end
 
     private
+
+    def remove_qualification_questions_slugs(sequence, slugs = nil)
+      slugs ||= %w[
+        qualification
+        itt-year
+        eligible-itt-subject
+      ]
+      slugs.each { |slug| sequence.delete(slug) }
+    end
 
     def remove_student_loan_slugs(sequence, slugs = nil)
       slugs ||= %w[
