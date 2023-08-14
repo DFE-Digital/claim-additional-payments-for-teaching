@@ -51,6 +51,12 @@ RSpec.feature "Levelling up premium payments claims" do
     choose "Yes"
     click_on "Continue"
 
+    # - Have you completed your induction as an early-career teacher?
+    expect(page).to have_text(I18n.t("early_career_payments.questions.induction_completed.heading"))
+
+    choose "No"
+    click_on "Continue"
+
     # - Are you currently employed as a supply teacher
     expect(page).to have_text(I18n.t("early_career_payments.questions.employed_as_supply_teacher"))
 
