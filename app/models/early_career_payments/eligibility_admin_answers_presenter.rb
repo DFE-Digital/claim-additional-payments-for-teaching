@@ -19,6 +19,7 @@ module EarlyCareerPayments
     def answers
       [].tap do |a|
         a << nqt_in_academic_year_after_itt
+        a << induction_completed
         a << employed_as_supply_teacher
       end
     end
@@ -29,6 +30,13 @@ module EarlyCareerPayments
       [
         translate("early_career_payments.admin.nqt_in_academic_year_after_itt"),
         (eligibility.nqt_in_academic_year_after_itt? ? "Yes" : "No")
+      ]
+    end
+
+    def induction_completed
+      [
+        translate("early_career_payments.admin.induction_completed"),
+        display_boolean(eligibility.induction_completed)
       ]
     end
 
