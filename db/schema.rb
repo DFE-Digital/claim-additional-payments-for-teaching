@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_07_17_120505) do
+ActiveRecord::Schema[7.0].define(version: 2023_08_03_173112) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -155,6 +155,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_07_17_120505) do
     t.string "itt_academic_year", limit: 9
     t.uuid "current_school_id"
     t.decimal "award_amount", precision: 7, scale: 2
+    t.boolean "induction_completed"
     t.index ["current_school_id"], name: "index_early_career_payments_eligibilities_on_current_school_id"
   end
 
@@ -193,6 +194,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_07_17_120505) do
     t.uuid "current_school_id"
     t.decimal "award_amount", precision: 7, scale: 2
     t.boolean "eligible_degree_subject"
+    t.boolean "induction_completed"
     t.index ["current_school_id"], name: "index_lup_payments_eligibilities_on_current_school_id"
   end
 
