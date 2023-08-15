@@ -21,7 +21,7 @@ RSpec.feature "Bank account validation on claim journey", :with_hmrc_bank_valida
     click_on "Continue"
 
     # - Have you completed your induction as an early-career teacher?
-    choose "No"
+    choose "Yes"
     click_on "Continue"
 
     # - Are you currently employed as a supply teacher
