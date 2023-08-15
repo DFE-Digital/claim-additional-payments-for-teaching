@@ -75,8 +75,8 @@ if DfESignIn.bypass?
   end
 else
   Rails.application.config.middleware.use OmniAuth::Strategies::OpenIDConnect, dfe_options
+end
 
-  Rails.application.config.middleware.use OmniAuth::Builder do
-    provider :openid_connect, tid_options
-  end
+Rails.application.config.middleware.use OmniAuth::Builder do
+  provider :openid_connect, tid_options
 end
