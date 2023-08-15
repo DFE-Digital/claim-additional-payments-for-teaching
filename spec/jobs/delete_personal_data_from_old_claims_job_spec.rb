@@ -10,7 +10,7 @@ RSpec.describe DeletePersonalDataFromOldClaimsJob do
       rejected_claim = create(:claim, :submitted)
       create(:decision, :rejected, claim: rejected_claim, created_at: last_academic_year)
       paid_claim = create(:claim, :approved)
-      create(:payment, :with_figures, claims: [paid_claim], scheduled_payment_date: last_academic_year)
+      create(:payment, :confirmed, :with_figures, claims: [paid_claim], scheduled_payment_date: last_academic_year)
 
       DeletePersonalDataFromOldClaimsJob.new.perform
 

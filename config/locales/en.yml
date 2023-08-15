@@ -150,6 +150,9 @@ en:
         confirmation: Are you sure you want to unassign %{allocate_to_policy} claims from %{dfe_user}?
         success: All %{allocate_to_policy} claims for %{dfe_user} have been unassigned
         info: There are not any %{allocate_to_policy} claims to unassign for %{dfe_user}
+    payment_confirmation_report_uploads:
+      create:
+        success: Payment Confirmation Report (%{counter}) successfully uploaded
   answers:
     qts_award_years:
       before_cut_off_date: "In or before the academic year %{year}"
@@ -416,6 +419,10 @@ en:
   activerecord:
     errors:
       models:
+        payment:
+          attributes:
+            scheduled_payment_date:
+              blank: can't be blank or in a format other than DD/MM/YYYY
         early_career_payments_eligibilities:
           attributes:
             itt_academic_year:

@@ -18,19 +18,6 @@ RSpec.describe PayrollRun, type: :model do
     end
   end
 
-  it "can be updated in the same month as it was created" do
-    payroll_run = create(:payroll_run)
-    confirmation_report_uploaded_time = Time.zone.now.end_of_month
-    service_operator = build(:dfe_signin_user)
-
-    travel_to confirmation_report_uploaded_time do
-      payroll_run.confirmation_report_uploaded_by = service_operator
-
-      expect(payroll_run.save!).to be true
-      expect(payroll_run.confirmation_report_uploaded_by).eql? service_operator
-    end
-  end
-
   describe "#total_award_amount" do
     it "returns the sum of the award amounts of its claims" do
       payment_1 = build(:payment, claims: [build(:claim, :approved, eligibility: build(:student_loans_eligibility, :eligible, student_loan_repayment_amount: 1500))])
@@ -136,20 +123,79 @@ RSpec.describe PayrollRun, type: :model do
     end
   end
 
-  describe "#download_available?" do
-    it "returns true when the download was triggered within the time limit" do
-      payroll_run = create(:payroll_run, downloaded_at: Time.zone.now, downloaded_by: user)
-      expect(payroll_run.download_available?).to eql true
+  describe "#payments_in_batches" do
+    subject(:batches) { payroll_run.payments_in_batches }
 
-      travel_to 31.seconds.from_now do
-        expect(payroll_run.download_available?).to eql false
-      end
+    let(:payroll_run) { create(:payroll_run, claims_counts: {StudentLoans => 5}) }
+    let(:batch_size) { 2 }
+    let(:expected_batches) { payroll_run.payments.ordered.each_slice(batch_size).to_a }
+
+    before do
+      stub_const("#{described_class}::MAX_BATCH_SIZE", batch_size)
     end
 
-    it "returns false when the download has not been tirggered" do
-      payroll_run = create(:payroll_run)
+    it { is_expected.to be_an(Enumerator) }
 
-      expect(payroll_run.download_available?).to eql false
+    it "returns payments in batches" do
+      expect(batches.to_a).to eq(expected_batches)
+    end
+  end
+
+  describe "#total_batches" do
+    subject(:total) { payroll_run.total_batches }
+
+    let(:payroll_run) { create(:payroll_run, claims_counts: {StudentLoans => 5}) }
+    let(:batch_size) { 2 }
+
+    before do
+      stub_const("#{described_class}::MAX_BATCH_SIZE", batch_size)
+    end
+
+    it { is_expected.to eq(3) }
+  end
+
+  describe "#total_confirmed_payments" do
+    subject(:total) { payroll_run.total_confirmed_payments }
+
+    let(:payroll_run) do
+      create(:payroll_run, :with_confirmations, confirmed_batches: 2, claims_counts: {
+        StudentLoans => 5
+      })
+    end
+    let(:batch_size) { 2 }
+
+    before do
+      stub_const("#{described_class}::MAX_BATCH_SIZE", batch_size)
+    end
+
+    it { is_expected.to eq(4) }
+  end
+
+  describe "#all_payments_confirmed?" do
+    subject { payroll_run.all_payments_confirmed? }
+
+    let(:payroll_run) do
+      create(:payroll_run,
+        :with_confirmations,
+        confirmed_batches: confirmed_batches,
+        claims_counts: {StudentLoans => 5})
+    end
+    let(:batch_size) { 2 }
+
+    before do
+      stub_const("#{described_class}::MAX_BATCH_SIZE", batch_size)
+    end
+
+    context "when some payments have not been confirmed" do
+      let(:confirmed_batches) { 2 }
+
+      it { is_expected.to eq(false) }
+    end
+
+    context "when all payments have been confirmed" do
+      let(:confirmed_batches) { 3 }
+
+      it { is_expected.to eq(true) }
     end
   end
 

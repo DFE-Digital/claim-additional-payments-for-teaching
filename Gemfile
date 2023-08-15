@@ -89,6 +89,7 @@ gem "faker", "~> 3.1", require: false
 gem "activerecord-copy", require: false
 
 gem "pagy"
+gem "rubyzip", require: "zip"
 
 group :development, :test do
   gem "pry"

@@ -37,11 +37,12 @@
             <td class="govuk-table__cell"><%= payroll_run.number_of_claims_for_policy(:all, filter: :claims) %></td>
             <td class="govuk-table__cell"><%= payroll_run.number_of_claims_for_policy(LevellingUpPremiumPayments, filter: :topups) %></td>
             <td class="govuk-table__cell">
-              <% if payroll_run.confirmation_report_uploaded? %>
+              <% if payroll_run.all_payments_confirmed? %>
                 Uploaded
               <% else %>
                 <%= link_to new_admin_payroll_run_payment_confirmation_report_upload_path(payroll_run), class: "govuk-link" do %>
-                  Upload <span class="govuk-visually-hidden"> <%= l(payroll_run.created_at.to_date, format: :month_year) %> payment confirmation report</span>
+                  Upload <span class="govuk-visually-hidden"> <%= l(payroll_run.created_at.to_date, format: :month_year) %> payment confirmation report </span>
+                  (<%= payroll_run.total_confirmed_payments %>/<%= payroll_run.payments.count %> uploaded)
                 <% end %>
               <% end %>
             </td>

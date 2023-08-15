@@ -135,6 +135,14 @@ shared:
   - net_pay
   - gross_pay
   - postgraduate_loan_repayment
+  - confirmation_id
+  - scheduled_payment_date
+  :payment_confirmations:
+  - id
+  - payroll_run_id
+  - created_by_id
+  - created_at
+  - updated_at
   :payroll_runs:
   - id
   - created_at

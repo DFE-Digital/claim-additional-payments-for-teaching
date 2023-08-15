@@ -7,7 +7,7 @@ RSpec.describe PaymentMailer, type: :mailer do
       before { create(:policy_configuration, policy.to_s.underscore) }
 
       describe "#confirmation" do
-        let(:payment) { create(:payment, :with_figures, net_pay: 500.00, student_loan_repayment: 60, postgraduate_loan_repayment: 40, claims: [claim], scheduled_payment_date: Date.parse("2019-01-01")) }
+        let(:payment) { create(:payment, :confirmed, :with_figures, net_pay: 500.00, student_loan_repayment: 60, postgraduate_loan_repayment: 40, claims: [claim], scheduled_payment_date: Date.parse("2019-01-01")) }
         let(:claim) { build(:claim, :submitted, policy: policy) }
         let(:mail) { PaymentMailer.confirmation(payment) }
 
@@ -42,7 +42,7 @@ RSpec.describe PaymentMailer, type: :mailer do
         end
 
         context "when user does not currently have a student loan or a postgraduate loan" do
-          let(:payment) { create(:payment, :with_figures, student_loan_repayment: 0, postgraduate_loan_repayment: 0, claims: [claim]) }
+          let(:payment) { create(:payment, :confirmed, :with_figures, student_loan_repayment: 0, postgraduate_loan_repayment: 0, claims: [claim]) }
 
           it "does not mention the content relating to student loan deductions" do
             expect(mail.body.encoded).to_not include("subject to a student loan contribution")
@@ -50,7 +50,7 @@ RSpec.describe PaymentMailer, type: :mailer do
         end
 
         context "when user has a student loan and a postgraduate loan" do
-          let(:payment) { create(:payment, :with_figures, student_loan_repayment: 10, postgraduate_loan_repayment: 8, claims: [claim]) }
+          let(:payment) { create(:payment, :confirmed, :with_figures, student_loan_repayment: 10, postgraduate_loan_repayment: 8, claims: [claim]) }
 
           it "mentions the student loan deduction content and lists their contribution" do
             expect(mail.body.encoded).to include("This payment is treated as pay and is therefore subject to a student loan contribution, if applicable.")
@@ -65,7 +65,7 @@ RSpec.describe PaymentMailer, type: :mailer do
         end
 
         context "when user has a student loan and no postgraduate loan" do
-          let(:payment) { create(:payment, :with_figures, student_loan_repayment: 10, postgraduate_loan_repayment: 0, claims: [claim]) }
+          let(:payment) { create(:payment, :confirmed, :with_figures, student_loan_repayment: 10, postgraduate_loan_repayment: 0, claims: [claim]) }
 
           it "mentions the student loan deduction content and lists their contribution" do
             expect(mail.body.encoded).to include("Student loan contribution: £10.00")
@@ -78,7 +78,7 @@ RSpec.describe PaymentMailer, type: :mailer do
         end
 
         context "when user has no student loan and a postgraduate loan" do
-          let(:payment) { create(:payment, :with_figures, student_loan_repayment: 0, postgraduate_loan_repayment: 8, claims: [claim]) }
+          let(:payment) { create(:payment, :confirmed, :with_figures, student_loan_repayment: 0, postgraduate_loan_repayment: 8, claims: [claim]) }
 
           it "does not include the student loan deduction content" do
             expect(mail.body.encoded).not_to include("Student loan contribution")
@@ -95,7 +95,7 @@ RSpec.describe PaymentMailer, type: :mailer do
 
   context "with a payment with multiple claims" do
     describe "#confirmation" do
-      let(:payment) { create(:payment, :with_figures, net_pay: 2500.00, student_loan_repayment: 60, claims: claims, scheduled_payment_date: Date.parse("2019-01-01")) }
+      let(:payment) { create(:payment, :confirmed, :with_figures, net_pay: 2500.00, student_loan_repayment: 60, claims: claims, scheduled_payment_date: Date.parse("2019-01-01")) }
       let(:student_loans_eligibility) { build(:student_loans_eligibility, :eligible, student_loan_repayment_amount: 500) }
       let(:claims) do
         personal_details = {
@@ -144,7 +144,7 @@ RSpec.describe PaymentMailer, type: :mailer do
       end
 
       context "when user does not currently have a student loan or a postgraduate loan" do
-        let(:payment) { create(:payment, :with_figures, student_loan_repayment: 0, postgraduate_loan_repayment: 0, claims: claims) }
+        let(:payment) { create(:payment, :confirmed, :with_figures, student_loan_repayment: 0, postgraduate_loan_repayment: 0, claims: claims) }
 
         it "does not mention the content relating to student loan deductions" do
           expect(mail.body.encoded).to_not include("subject to a student loan contribution")
@@ -152,7 +152,7 @@ RSpec.describe PaymentMailer, type: :mailer do
       end
 
       context "when user has a student loan and a postgraduate loan" do
-        let(:payment) { create(:payment, :with_figures, student_loan_repayment: 10, postgraduate_loan_repayment: 8, claims: claims) }
+        let(:payment) { create(:payment, :confirmed, :with_figures, student_loan_repayment: 10, postgraduate_loan_repayment: 8, claims: claims) }
 
         it "mentions the student loan deduction content and lists their contribution" do
           expect(mail.body.encoded).to include("This payment is treated as pay and is therefore subject to a student loan contribution, if applicable.")
@@ -166,7 +166,7 @@ RSpec.describe PaymentMailer, type: :mailer do
       end
 
       context "when user has a student loan and no postgraduate loan" do
-        let(:payment) { create(:payment, :with_figures, student_loan_repayment: 10, postgraduate_loan_repayment: 0, claims: claims) }
+        let(:payment) { create(:payment, :confirmed, :with_figures, student_loan_repayment: 10, postgraduate_loan_repayment: 0, claims: claims) }
 
         it "mentions the student loan deduction content and lists their contribution" do
           expect(mail.body.encoded).to include("Student loan contribution: £10.00")
@@ -179,7 +179,7 @@ RSpec.describe PaymentMailer, type: :mailer do
       end
 
       context "when user has no student loan and a postgraduate loan" do
-        let(:payment) { create(:payment, :with_figures, student_loan_repayment: 0, postgraduate_loan_repayment: 8, claims: claims) }
+        let(:payment) { create(:payment, :confirmed, :with_figures, student_loan_repayment: 0, postgraduate_loan_repayment: 8, claims: claims) }
 
         it "does not include the student loan deduction content" do
           expect(mail.body.encoded).not_to include("Student loan contribution")

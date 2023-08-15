@@ -2,8 +2,6 @@ class Admin::PayrollRunDownloadsController < Admin::BaseAdminController
   before_action :ensure_payroll_operator, :find_payroll_run
 
   before_action :ensure_download_has_been_triggered, only: :show
-  before_action :ensure_download_is_available, only: :show
-  before_action :ensure_download_not_already_triggered, only: [:new, :create]
 
   def new
   end
@@ -17,9 +15,9 @@ class Admin::PayrollRunDownloadsController < Admin::BaseAdminController
   def show
     respond_to do |format|
       format.html
-      format.csv do
-        csv = Payroll::PaymentsCsv.new(@payroll_run)
-        send_file csv.file, type: "text/csv", filename: csv.filename
+      format.zip do
+        out = Payroll::PaymentsCsv.new(@payroll_run)
+        send_data out.data, type: out.content_type, filename: out.filename
       end
     end
   end
@@ -30,16 +28,7 @@ class Admin::PayrollRunDownloadsController < Admin::BaseAdminController
     @payroll_run = PayrollRun.find(params[:payroll_run_id])
   end
 
-  def ensure_download_not_already_triggered
-    redirect_to admin_payroll_run_download_path(@payroll_run) if @payroll_run.download_triggered?
-  end
-
   def ensure_download_has_been_triggered
     redirect_to new_admin_payroll_run_download_path(@payroll_run) unless @payroll_run.download_triggered?
-  end
-
-  def ensure_download_is_available
-    return unless request.format.csv?
-    redirect_to admin_payroll_run_download_path(@payroll_run, format: :html) unless @payroll_run.download_available?
   end
 end

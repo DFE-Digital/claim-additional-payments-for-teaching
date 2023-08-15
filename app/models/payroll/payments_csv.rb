@@ -44,21 +44,43 @@ module Payroll
       @payroll_run = payroll_run
     end
 
-    def file
-      Tempfile.new.tap do |file|
-        file.write(header_row)
-        payroll_run.payments.includes(:claims).each do |payment|
-          file.write(Payroll::PaymentCsvRow.new(payment).to_s)
+    def data
+      buffer = ::StringIO.new
+      Zip::OutputStream.write_buffer(buffer) do |file|
+        payroll_run.payments_in_batches.each.with_index(1) do |batch, index|
+          file = write_csv(file, batch, index)
         end
-        file.rewind
       end
+      buffer.rewind
+      buffer.read
+    end
+
+    def content_type
+      "application/zip"
     end
 
     def filename
-      "payroll_data_#{payroll_run.created_at.to_date.iso8601}.csv"
+      "#{filename_base}.zip"
     end
 
     private
+
+    def write_csv(file, batch, index)
+      file.put_next_entry(filename_batch(index))
+      file.write(header_row)
+      batch.each do |payment|
+        file.write(Payroll::PaymentCsvRow.new(payment).to_s)
+      end
+      file
+    end
+
+    def filename_batch(index)
+      "#{filename_base}-batch_#{index}.csv"
+    end
+
+    def filename_base
+      "payroll_data_#{payroll_run.created_at.to_date.iso8601}"
+    end
 
     def header_row
       CSV.generate_line(csv_headers)

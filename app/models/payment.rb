@@ -4,12 +4,16 @@ class Payment < ApplicationRecord
   has_many :topups, dependent: :nullify
 
   belongs_to :payroll_run
+  belongs_to :confirmation, class_name: "PaymentConfirmation", optional: true
+
+  scope :ordered, -> { reorder(id: :asc) }
+  scope :unconfirmed, -> { where(confirmation_id: nil) }
 
   validates :award_amount, presence: true
 
   validates :payroll_reference, :gross_value, :national_insurance, :employers_national_insurance, :tax, :net_pay, :gross_pay, presence: true, on: :upload
   validates :gross_value, :national_insurance, :employers_national_insurance, :student_loan_repayment, :tax, :net_pay, :gross_pay, numericality: true, allow_nil: true
-
+  validates :scheduled_payment_date, presence: true, on: :upload
   validate :personal_details_must_be_consistent
 
   PERSONAL_DETAILS_ATTRIBUTES_PERMITTING_DISCREPANCIES = %i[
@@ -37,10 +41,13 @@ class Payment < ApplicationRecord
   ]
 
   delegate(*(PERSONAL_DETAILS_ATTRIBUTES_PERMITTING_DISCREPANCIES + PERSONAL_DETAILS_ATTRIBUTES_FORBIDDING_DISCREPANCIES), to: :claim_for_personal_details)
-  delegate :scheduled_payment_date, to: :payroll_run
 
   def policies_in_payment
     claims.map { |claim| claim.policy.to_s }.uniq.sort.join(" ")
+  end
+
+  def confirmed?
+    confirmation.present?
   end
 
   private

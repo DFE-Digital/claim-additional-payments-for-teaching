@@ -17,76 +17,52 @@ RSpec.describe "Admin payroll run downloads" do
       expect(response.body).to include("#{Date.today.strftime("%B")} payroll file")
     end
 
-    it "redirects to the show action if the download has already been triggered for the payroll run" do
-      payroll_run = create(:payroll_run, downloaded_at: Time.zone.now, downloaded_by: admin)
+    context "when the file has been downloaded before" do
+      it "shows who triggered the download and when" do
+        payroll_run = create(:payroll_run, downloaded_at: 1.minute.ago, downloaded_by: admin)
 
-      expect(get(new_admin_payroll_run_download_path(payroll_run))).to redirect_to admin_payroll_run_download_path(payroll_run)
+        get new_admin_payroll_run_download_path(payroll_run)
+
+        expect(response.body).to include payroll_run.downloaded_by.full_name
+        expect(response.body).to include I18n.l(payroll_run.downloaded_at)
+      end
+
+      it "shows the user ID of the user if the user has not name assigned" do
+        user = create(:dfe_signin_user, :without_data)
+        payroll_run = create(:payroll_run, downloaded_at: 1.minute.ago, downloaded_by: user)
+
+        get new_admin_payroll_run_download_path(payroll_run)
+
+        expect(response.body).to include payroll_run.downloaded_by.dfe_sign_in_id
+      end
     end
   end
 
   describe "downloads#show" do
-    it "redirects to the new action when payroll run download has not been triggered" do
+    it "redirects to the new action" do
       payroll_run = create(:payroll_run)
 
-      [:html, :csv].each do |format|
+      [:html, :zip].each do |format|
         expect(get(admin_payroll_run_download_path(payroll_run, format: format))).to redirect_to new_admin_payroll_run_download_path(payroll_run)
       end
     end
 
     context "when requesting html" do
-      context "and it is within the timeout" do
-        it "shows a link to download the payroll run file" do
-          payroll_run = create(:payroll_run, downloaded_at: Time.zone.now, downloaded_by: admin)
+      it "shows a link to download the payroll run file" do
+        payroll_run = create(:payroll_run, downloaded_at: Time.zone.now, downloaded_by: admin)
 
-          get admin_payroll_run_download_path(payroll_run)
+        get admin_payroll_run_download_path(payroll_run)
 
-          expect(response.body).to include admin_payroll_run_download_path(payroll_run, format: :csv)
-
-          travel_to 31.seconds.from_now do
-            get admin_payroll_run_download_path(payroll_run)
-
-            expect(response.body).not_to include admin_payroll_run_download_path(payroll_run, format: :csv)
-          end
-        end
-      end
-
-      context "and the timeout has been reached" do
-        it "shows who triggered the download and when" do
-          payroll_run = create(:payroll_run, downloaded_at: 31.seconds.ago, downloaded_by: admin)
-
-          get admin_payroll_run_download_path(payroll_run)
-
-          expect(response.body).to include payroll_run.downloaded_by.full_name
-          expect(response.body).to include I18n.l(payroll_run.downloaded_at)
-        end
-
-        it "shows the user ID of the user if the user has not name assigned" do
-          user = create(:dfe_signin_user, :without_data)
-          payroll_run = create(:payroll_run, downloaded_at: 31.seconds.ago, downloaded_by: user)
-
-          get admin_payroll_run_download_path(payroll_run)
-
-          expect(response.body).to include payroll_run.downloaded_by.dfe_sign_in_id
-        end
+        expect(response.body).to include admin_payroll_run_download_path(payroll_run, format: :zip)
       end
     end
 
-    context "when requesting csv" do
-      context "and it is within the timeout" do
-        it "allows the payroll run file to be downloaded within the time limit" do
-          payroll_run = create(:payroll_run, downloaded_at: Time.zone.now, downloaded_by: admin)
-          get admin_payroll_run_download_path(payroll_run, format: :csv)
+    context "when requesting zip" do
+      it "allows the payroll run file to be downloaded" do
+        payroll_run = create(:payroll_run, downloaded_at: Time.zone.now, downloaded_by: admin)
+        get admin_payroll_run_download_path(payroll_run, format: :zip)
 
-          expect(response.headers["Content-Type"]).to eq("text/csv")
-        end
-      end
-
-      context "and the timeout has been reached" do
-        it "redirects a request for the file once the timeout has been reached" do
-          payroll_run = create(:payroll_run, downloaded_at: 31.seconds.ago, downloaded_by: admin)
-
-          expect(get(admin_payroll_run_download_path(payroll_run, format: :csv))).to redirect_to admin_payroll_run_download_path(payroll_run, format: :html)
-        end
+        expect(response.headers["Content-Type"]).to eq("application/zip")
       end
     end
   end
@@ -124,9 +100,33 @@ RSpec.describe "Admin payroll run downloads" do
     end
   end
 
-  describe "When signed in as a service operator or a support agent, download routes" do
-    [DfeSignIn::User::SERVICE_OPERATOR_DFE_SIGN_IN_ROLE_CODE, DfeSignIn::User::SUPPORT_AGENT_DFE_SIGN_IN_ROLE_CODE].each do |role|
-      it "respond with not authorised" do
+  describe "access restriction" do
+    context "when signed is as service operator or a payroll operator" do
+      [DfeSignIn::User::SERVICE_OPERATOR_DFE_SIGN_IN_ROLE_CODE, DfeSignIn::User::PAYROLL_OPERATOR_DFE_SIGN_IN_ROLE_CODE].each do |role|
+        it "responds with success", :aggregate_failures do
+          payroll_run = create(:payroll_run)
+
+          sign_in_to_admin_with_role(role)
+
+          get new_admin_payroll_run_download_path(payroll_run)
+
+          expect(response.code).to eq("200")
+
+          get admin_payroll_run_download_path(payroll_run)
+
+          expect(response).to redirect_to(new_admin_payroll_run_download_path)
+
+          post admin_payroll_run_download_path(payroll_run)
+
+          expect(response).to redirect_to(admin_payroll_run_download_path)
+        end
+      end
+    end
+
+    context "when signed in as a support agent" do
+      let(:role) { DfeSignIn::User::SUPPORT_AGENT_DFE_SIGN_IN_ROLE_CODE }
+
+      it "responds with not authorised", :aggregate_failures do
         payroll_run = create(:payroll_run)
 
         sign_in_to_admin_with_role(role)

@@ -1,11 +1,14 @@
 class PayrollRun < ApplicationRecord
-  DOWNLOAD_FILE_TIMEOUT = 30
+  MAX_BATCH_SIZE = 1000
 
   has_many :payments, dependent: :destroy
   has_many :claims, through: :payments
+  has_many :payment_confirmations, dependent: :destroy
 
   belongs_to :created_by, class_name: "DfeSignIn::User"
   belongs_to :downloaded_by, class_name: "DfeSignIn::User", optional: true
+  # TODO: This relationship can be removed after a code migration is in place to
+  # backfill existing payroll runs and payments with a payment confirmation
   belongs_to :confirmation_report_uploaded_by, class_name: "DfeSignIn::User", optional: true
 
   validate :ensure_no_payroll_run_this_month, on: :create
@@ -22,6 +25,22 @@ class PayrollRun < ApplicationRecord
 
   def total_claim_amount_for_policy(policy, filter: :all)
     line_items(policy, filter: filter).sum(&:award_amount)
+  end
+
+  def payments_in_batches
+    payments.includes(:claims).find_in_batches(batch_size: MAX_BATCH_SIZE)
+  end
+
+  def total_batches
+    (payments.count / MAX_BATCH_SIZE.to_f).ceil
+  end
+
+  def total_confirmed_payments
+    payments.where.not(confirmation: nil).count
+  end
+
+  def all_payments_confirmed?
+    payment_confirmations.any? && total_confirmed_payments == payments.count
   end
 
   def self.create_with_claims!(claims, topups, attrs = {})
@@ -43,14 +62,6 @@ class PayrollRun < ApplicationRecord
 
   def download_triggered?
     downloaded_at.present? && downloaded_by.present?
-  end
-
-  def download_available?
-    download_triggered? && Time.zone.now - downloaded_at < DOWNLOAD_FILE_TIMEOUT.seconds
-  end
-
-  def confirmation_report_uploaded?
-    confirmation_report_uploaded_by.present?
   end
 
   private

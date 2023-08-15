@@ -61,12 +61,12 @@ class Claim
 
     def old_paid_claims
       claim_ids_with_payrollable_topups = Topup.payrollable.pluck(:claim_id)
-      claim_ids_with_payrolled_topups_without_payment_confirmation = Topup.joins(payment: [:payroll_run]).where("scheduled_payment_date IS NULL").pluck(:claim_id)
+      claim_ids_with_payrolled_topups_without_payment_confirmation = Topup.joins(payment: [:payroll_run]).where(payments: {scheduled_payment_date: nil}).pluck(:claim_id)
 
       Claim.approved.joins(payments: [:payroll_run])
         .where(personal_data_removed_at: nil)
         .where.not(id: claim_ids_with_payrollable_topups + claim_ids_with_payrolled_topups_without_payment_confirmation)
-        .where("scheduled_payment_date < :minimum_time", minimum_time: minimum_time)
+        .where("payments.scheduled_payment_date < :minimum_time", minimum_time: minimum_time)
     end
 
     def minimum_time

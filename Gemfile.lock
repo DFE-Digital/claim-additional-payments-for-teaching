@@ -558,6 +558,7 @@ DEPENDENCIES
   rollbar
   rotp
   rspec-rails
+  rubyzip
   sass-rails (~> 6.0)
   scenic
   selenium-webdriver
