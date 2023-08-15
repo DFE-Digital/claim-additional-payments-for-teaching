@@ -126,6 +126,7 @@ class ClaimsController < BasePublicController
   end
 
   def claim_params
+    params[:teacher_reference_number] = params[:trn] if params.has_key?(:trn)
     params.fetch(:claim, {}).permit(Claim::PermittedParameters.new(current_claim).keys)
   end
 
