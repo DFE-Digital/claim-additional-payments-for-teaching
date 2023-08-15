@@ -259,6 +259,6 @@ class ClaimsController < BasePublicController
 
   def set_session
     session[:slugs] ||= []
-    session[:slugs].concat(["qualification", "itt-year", "eligible-itt-subject"]) if params[:test]
+    session[:slugs].concat(["qualification", "itt-year", "eligible-itt-subject"]) if params[:trn]
   end
 end

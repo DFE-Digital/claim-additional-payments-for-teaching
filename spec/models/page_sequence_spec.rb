@@ -7,7 +7,8 @@ RSpec.describe PageSequence do
   let(:current_claim) { CurrentClaim.new(claims: [claim]) }
   let(:slug_sequence) { OpenStruct.new(slugs: ["first-slug", "second-slug", "third-slug"]) }
   let(:completed_slugs) { [] }
-  let(:page_sequence) { PageSequence.new(current_claim, slug_sequence, completed_slugs, current_slug) }
+  let(:trn_present) { false }
+  let(:page_sequence) { PageSequence.new(current_claim, slug_sequence, completed_slugs, current_slug, trn_present) }
 
   describe "#next_slug" do
     subject(:next_slug) { page_sequence.next_slug }

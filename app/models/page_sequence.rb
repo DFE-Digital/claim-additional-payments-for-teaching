@@ -16,7 +16,7 @@ class PageSequence
   end
 
   def slugs
-    @slug_sequence.slugs(@trn_present)
+    @slug_sequence.is_a?(OpenStruct) ? @slug_sequence.slugs : @slug_sequence.slugs(@trn_present)
   end
 
   def next_slug

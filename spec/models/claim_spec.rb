@@ -1188,7 +1188,8 @@ RSpec.describe Claim, type: :model do
         :banking_name,
         :building_society_roll_number,
         :one_time_password,
-        :assigned_to_id
+        :assigned_to_id,
+        :logged_in_with_tid
       ])
     end
   end
