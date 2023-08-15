@@ -140,6 +140,10 @@ module EarlyCareerPayments
       save!
     end
 
+    def induction_not_completed?
+      !induction_completed.nil? && !induction_completed?
+    end
+
     private
 
     def calculate_award_amount
@@ -155,7 +159,7 @@ module EarlyCareerPayments
     end
 
     def specific_eligible_now_attributes?
-      itt_subject_eligible_now?
+      induction_completed? && itt_subject_eligible_now?
     end
 
     def itt_subject_eligible_now?
@@ -168,7 +172,7 @@ module EarlyCareerPayments
     end
 
     def specific_ineligible_attributes?
-      trainee_teacher? or itt_subject_ineligible_now_and_in_the_future?
+      trainee_teacher? || (induction_not_completed? && !ecp_only_school?) || itt_subject_ineligible_now_and_in_the_future?
     end
 
     def itt_subject_ineligible_now_and_in_the_future?
@@ -181,7 +185,7 @@ module EarlyCareerPayments
     end
 
     def specific_eligible_later_attributes?
-      newly_qualified_teacher? and (!itt_subject_eligible_now? and itt_subject_eligible_later?)
+      newly_qualified_teacher? && ((induction_not_completed? && ecp_only_school?) || (!itt_subject_eligible_now? && itt_subject_eligible_later?))
     end
 
     def itt_subject_eligible_later?
