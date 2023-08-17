@@ -124,6 +124,7 @@ en:
       This claim cannot be approved, the payroll gender is missing and the claim will need to be referred
     tasks:
       qualifications: "Check qualification information"
+      induction_confirmation: "Check induction information"
       employment: "Check employment information"
       matching_details: "Review matching details from other claims"
       identity_confirmation: "Confirm the claimant made the claim"
@@ -383,6 +384,8 @@ en:
           notes: "notes"
         qualifications:
           title: "Does the claimant’s initial teacher training (ITT) start/end year and subject match the above information from their claim?"
+        induction_confirmation:
+          title: "Is the claimant’s induction data valid?"
         census_subjects_taught:
           title: Does the claimant's subject match the schools workforce census subjects
         matching_details:
