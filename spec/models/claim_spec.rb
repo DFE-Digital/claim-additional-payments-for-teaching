@@ -196,6 +196,10 @@ RSpec.describe Claim, type: :model do
       it "is valid when is between 2 and 30 characters in length" do
         expect(build(:claim, :submittable, policy: EarlyCareerPayments)).to be_valid(:"personal-details")
       end
+
+      it "allows user to enter ' in their surname and joins the first name and surname together" do
+        expect(build(:claim, :submittable, policy: EarlyCareerPayments, first_name: "O'Brian", surname: "Isambard")).to be_valid(:"personal-details")
+      end
     end
 
     describe "with middle names" do
@@ -203,6 +207,10 @@ RSpec.describe Claim, type: :model do
         expect(build(:claim, :submittable, policy: EarlyCareerPayments, middle_name: "ab" * 31)).not_to be_valid(:"personal-details")
         expect(build(:claim, :submittable, policy: EarlyCareerPayments, middle_name: "a" * 61)).to be_valid(:"personal-details")
         expect(build(:claim, middle_name: "Arnold")).to be_valid
+      end
+
+      it "allows user to enter ' in their middle name and joins the first name and surname together" do
+        expect(build(:claim, :submittable, policy: EarlyCareerPayments, first_name: "Isambard", middle_name: "O’Hara")).to be_valid(:"personal-details")
       end
     end
 
@@ -215,6 +223,10 @@ RSpec.describe Claim, type: :model do
 
       it "is valid when is between 2 and 30 characters in length" do
         expect(build(:claim, :submittable, policy: EarlyCareerPayments, surname: "Yu")).to be_valid(:"personal-details")
+      end
+
+      it "allows user to enter ' in thier middle_name and includes a surname when present" do
+        expect(build(:claim, :submittable, policy: EarlyCareerPayments, first_name: "Isambard", middle_name: "Brunel", surname: "O’Hara")).to be_valid(:"personal-details")
       end
     end
   end
