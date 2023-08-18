@@ -258,6 +258,10 @@ RSpec.feature "Ineligibility reason", slow: true do
     choose "Yes"
     click_on "Continue"
 
+    # - Have you completed your induction as an early-career teacher?
+    choose "Yes"
+    click_on "Continue"
+
     # - Are you currently employed as a supply teacher
     choose "Yes"
     click_on "Continue"
@@ -268,6 +272,11 @@ RSpec.feature "Ineligibility reason", slow: true do
     click_on "Continue"
 
     # - Have you started your first year as a newly qualified teacher?
+    choose "Yes"
+    click_on "Continue"
+
+    # - Have you completed your induction as an early-career teacher?
+
     choose "Yes"
     click_on "Continue"
 
@@ -282,6 +291,11 @@ RSpec.feature "Ineligibility reason", slow: true do
     click_on "Continue"
 
     # - Have you started your first year as a newly qualified teacher?
+    choose "Yes"
+    click_on "Continue"
+
+    # - Have you completed your induction as an early-career teacher?
+
     choose "Yes"
     click_on "Continue"
 
