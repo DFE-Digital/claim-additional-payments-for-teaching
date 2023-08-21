@@ -114,7 +114,7 @@ class Claim < ApplicationRecord
 
   # The idea is to filter things that in a CSV export might be malicious in MS Excel
   # A whitelist would be inappropiate as these fields could contain valid special letters e.g. accents and umlauts
-  NAME_REGEX_FILTER = /\A[^'"=$%#&*+\/\\()@?!<>0-9]*\z/
+  NAME_REGEX_FILTER = /\A[^"=$%#&*+\/\\()@?!<>0-9]*\z/
   ADDRESS_REGEX_FILTER = /\A[^'"=$%#*+\/\\()@?!<>]*\z/
 
   # Use AcademicYear as custom ActiveRecord attribute type
