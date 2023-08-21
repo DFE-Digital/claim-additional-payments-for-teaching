@@ -145,6 +145,11 @@ module EarlyCareerPayments
       !induction_completed.nil? && !induction_completed?
     end
 
+    def ecp_only_school?
+      EarlyCareerPayments::SchoolEligibility.new(claim.eligibility.current_school).eligible? &&
+        !LevellingUpPremiumPayments::SchoolEligibility.new(claim.eligibility.current_school).eligible?
+    end
+
     private
 
     def calculate_award_amount
