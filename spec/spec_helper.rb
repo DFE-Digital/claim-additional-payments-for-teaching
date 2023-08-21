@@ -113,8 +113,4 @@ RSpec.configure do |config|
   #   # test failures related to randomization by passing the same `--seed` value
   #   # as the one that triggered the failure.
   #   Kernel.srand config.seed
-
-  config.filter_run_excluding flaky: true unless ENV["RUN_FLAKY_SPECS"] == "true"
-  config.filter_run_excluding js: true unless ENV["RUN_JS_SPECS"] == "true"
-  config.filter_run_excluding slow: true unless ENV["RUN_SLOW_SPECS"] == "true"
 end

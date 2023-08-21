@@ -78,4 +78,8 @@ RSpec.configure do |config|
     ActionMailer::Base.deliveries.clear
     OmniAuth.config.mock_auth[:dfe] = nil
   end
+
+  config.filter_run_excluding flaky: true unless ENV["RUN_FLAKY_SPECS"] == "true"
+  config.filter_run_excluding js: true unless ENV["RUN_JS_SPECS"] == "true"
+  config.filter_run_excluding slow: true unless ENV["RUN_SLOW_SPECS"] == "true"
 end
