@@ -27,6 +27,8 @@ class Admin::TasksController < Admin::BaseAdminController
       @claim.notes.order(created_at: :desc).select { |note| note.body.include?("ligible") && note.body.include?("Subject 1") }
     elsif params[:name] == "employment"
       @claim.notes.order(created_at: :desc).select { |note| note.body.include?("ligible") && note.body.include?("[Employment]") }
+    elsif params[:name] == "induction_confirmation"
+      @claim.notes.order(created_at: :desc).select { |note| note.body.include?("ligible") && note.body.include?("Completion date") }.uniq { |n| n.body }
     else
       []
     end
