@@ -35,7 +35,8 @@ class Claim < ApplicationRecord
     :bank_account_number,
     :banking_name,
     :building_society_roll_number,
-    :one_time_password
+    :one_time_password,
+    :logged_in_with_tid
   ].freeze
   AMENDABLE_ATTRIBUTES = %i[
     teacher_reference_number
