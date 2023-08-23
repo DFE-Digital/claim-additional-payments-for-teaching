@@ -36,6 +36,10 @@ RSpec.feature "Teacher Early-Career Payments claims sequence slug" do
       valid?: true))
   end
 
+  after do
+    set_mock_auth(nil)
+  end
+
   scenario "When user is logged in with teacher_id" do
     visit landing_page_path(EarlyCareerPayments.routing_name)
     expect(page).to have_link("Claim additional payments for teaching", href: "/additional-payments/landing-page")

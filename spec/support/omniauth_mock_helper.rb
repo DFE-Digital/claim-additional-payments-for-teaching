@@ -1,12 +1,13 @@
 module OmniauthMockHelper
   def set_mock_auth(trn)
-    OmniAuth.config.mock_auth[:default] = OmniAuth::AuthHash.new(
+    omniauth_data = trn.nil? ? nil : OmniAuth::AuthHash.new(
       "extra" => {
         "raw_info" => {
           "trn" => trn
         }
       }
     )
-    Rails.application.env_config["omniauth.auth"] = OmniAuth.config.mock_auth[:default]
+    OmniAuth.config.mock_auth[:tid] = omniauth_data
+    Rails.application.env_config["omniauth.auth"] = omniauth_data
   end
 end
