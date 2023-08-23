@@ -10,6 +10,9 @@ module EarlyCareerPayments
       :itt_start_date,
       :degree_codes,
       :qualification_name,
+      :induction_start_date,
+      :induction_completion_date,
+      :induction_status,
       to: :record
     )
 
@@ -24,6 +27,10 @@ module EarlyCareerPayments
         eligible_itt_year? &&
         qts_award_date_after_itt_start_date? &&
         award_due?
+    end
+
+    def eligible_induction?
+      InductionData.new(itt_year:, induction_status:, induction_start_date:).eligible?
     end
 
     private

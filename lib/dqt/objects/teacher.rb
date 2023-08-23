@@ -16,6 +16,18 @@ module Dqt
       end
     end
 
+    def induction_start_date
+      date_reader(induction&.start_date)
+    end
+
+    def induction_completion_date
+      date_reader(induction&.completion_date)
+    end
+
+    def induction_status
+      string_reader(induction&.status)
+    end
+
     def qts_award_date
       date_reader(qualified_teacher_status&.qts_date)
     end

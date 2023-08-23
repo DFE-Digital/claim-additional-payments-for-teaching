@@ -1929,4 +1929,34 @@ RSpec.describe EarlyCareerPayments::DqtRecord do
       end
     end
   end
+
+  describe "#eligible_induction?" do
+    subject(:eligible_induction?) { dqt_record.eligible_induction? }
+
+    let(:record) do
+      OpenStruct.new(
+        itt_year: calculated_itt_year,
+        induction_start_date: Date.parse("1/9/2017"),
+        induction_completion_date: Date.parse("1/9/2018"),
+        induction_status: "Pass"
+      )
+    end
+    let(:calculated_itt_year) { AcademicYear.new(2021) }
+    let(:claim_academic_year) { AcademicYear.new(2023) }
+    let(:induction_data) do
+      instance_double(EarlyCareerPayments::InductionData, eligible?: "true_or_false")
+    end
+
+    let(:expected_attributes) { record.to_h.except(:induction_completion_date) }
+    let(:expected_result) { induction_data.eligible? }
+
+    before do
+      allow(dqt_record).to receive(:itt_year).and_return(calculated_itt_year)
+      allow(EarlyCareerPayments::InductionData).to receive(:new)
+        .with(expected_attributes)
+        .and_return(induction_data)
+    end
+
+    it { expect(eligible_induction?).to eq(expected_result) }
+  end
 end

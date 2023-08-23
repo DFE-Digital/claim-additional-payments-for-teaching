@@ -376,6 +376,24 @@ RSpec.describe Dqt::Teacher do
     end
   end
 
+  describe "#induction_start_date" do
+    subject(:induction_start_date) { qualified_teaching_status.induction_start_date }
+
+    it_behaves_like "date reader", "induction/start_date"
+  end
+
+  describe "#induction_completion_date" do
+    subject(:induction_completion_date) { qualified_teaching_status.induction_completion_date }
+
+    it_behaves_like "date reader", "induction/completion_date"
+  end
+
+  describe "#induction_status" do
+    subject(:induction_status) { qualified_teaching_status.induction_status }
+
+    it_behaves_like "string reader", "induction/status"
+  end
+
   describe "#date_of_birth" do
     subject(:date_of_birth) { qualified_teaching_status.date_of_birth }
 
