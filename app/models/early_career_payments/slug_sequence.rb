@@ -99,15 +99,9 @@ module EarlyCareerPayments
         sequence.delete("personal-bank-account") if claim.bank_or_building_society == "building_society"
         sequence.delete("building-society-account") if claim.bank_or_building_society == "personal_bank_account"
 
-<<<<<<< HEAD
-<<<<<<< HEAD
         sequence.delete("teacher-reference-number") if claim.logged_in_with_tid? && claim.teacher_reference_number.present?
-=======
-        sequence.delete("teacher-reference-number") if claim.logged_in_with_tid && !claim.teacher_reference_number.nil?
->>>>>>> 990f0eb1 (Incorporated Feedback.)
-=======
-        sequence.delete("teacher-reference-number") if claim.logged_in_with_tid && claim.teacher_reference_number.present?
->>>>>>> c701cd9b (Added specs and fixed build issues)
+
+        remove_qualification_questions_slugs(sequence) if claim.logged_in_with_tid?
 
         if claim.provide_mobile_number == false
           sequence.delete("mobile-number")
@@ -131,6 +125,15 @@ module EarlyCareerPayments
     end
 
     private
+
+    def remove_qualification_questions_slugs(sequence, slugs = nil)
+      slugs ||= %w[
+        qualification
+        itt-year
+        eligible-itt-subject
+      ]
+      slugs.each { |slug| sequence.delete(slug) }
+    end
 
     def remove_student_loan_slugs(sequence, slugs = nil)
       slugs ||= %w[
