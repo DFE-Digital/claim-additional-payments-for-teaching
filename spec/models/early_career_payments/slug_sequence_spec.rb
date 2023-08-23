@@ -61,6 +61,26 @@ RSpec.describe EarlyCareerPayments::SlugSequence do
       end
     end
 
+    context "when logged_in_with_tid is true" do
+      it "will remove the qualification questions from user's journey" do
+        claim.logged_in_with_tid = true
+
+        expect(slug_sequence.slugs).not_to include("qualification")
+        expect(slug_sequence.slugs).not_to include("itt-year")
+        expect(slug_sequence.slugs).not_to include("eligible-itt-subject")
+      end
+    end
+
+    context "when logged_in_with_tid is false" do
+      it "will not remove the qualification questions from user's journey" do
+        claim.logged_in_with_tid = false
+
+        expect(slug_sequence.slugs).to include("qualification")
+        expect(slug_sequence.slugs).to include("itt-year")
+        expect(slug_sequence.slugs).to include("eligible-itt-subject")
+      end
+    end
+
     context "when 'provide_mobile_number' is 'No'" do
       it "excludes the 'mobile-number' slug" do
         claim.provide_mobile_number = false
