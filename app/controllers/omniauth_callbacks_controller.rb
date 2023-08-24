@@ -9,6 +9,7 @@ class OmniauthCallbacksController < ApplicationController
     }
 
     session[:user_info] = auth.extra.raw_info
+    session[:page_sequence_flag] = false
 
     redirect_params[:trn] = trn if trn
 

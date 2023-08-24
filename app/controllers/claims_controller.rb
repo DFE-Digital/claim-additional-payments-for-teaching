@@ -20,6 +20,12 @@ class ClaimsController < BasePublicController
   end
 
   def show
+    if params[:slug] == "nqt-in-academic-year-after-itt" && current_claim.logged_in_with_tid?
+      response = DqtService.new(current_claim).request
+
+      session[:page_sequence_flag] = true if !response.code.eql?("200")
+    end
+
     search_schools if params[:school_search]
     if params[:slug] == "teaching-subject-now" && !current_claim.eligibility.eligible_itt_subject
       return redirect_to claim_path(current_policy_routing_name, "eligible-itt-subject")
@@ -128,9 +134,15 @@ class ClaimsController < BasePublicController
   def claim_params
     if session[:user_info]
       params[:claim] ||= {}
-      params[:claim].merge!(teacher_reference_number: session[:user_info]["trn"], logged_in_with_tid: true)
-      session.delete("user_info")
+      params[:claim].merge!(
+        teacher_reference_number: session[:user_info]["trn"],
+        date_of_birth: session[:user_info]["birthdate"],
+        logged_in_with_tid: true
+      )
+
+      session.delete(:user_info)
     end
+
     params.fetch(:claim, {}).permit(Claim::PermittedParameters.new(current_claim).keys)
   end
 

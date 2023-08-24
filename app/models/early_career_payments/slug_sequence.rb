@@ -10,6 +10,8 @@ module EarlyCareerPayments
   # reflects the sequence based on the claim's current state.
   # There are 4 distinct phases of the claimant journey
   class SlugSequence
+    include SessionAccessor
+
     ELIGIBILITY_SLUGS = [
       "current-school",
       "nqt-in-academic-year-after-itt",
@@ -101,7 +103,7 @@ module EarlyCareerPayments
 
         sequence.delete("teacher-reference-number") if claim.logged_in_with_tid? && claim.teacher_reference_number.present?
 
-        remove_qualification_questions_slugs(sequence) if claim.logged_in_with_tid?
+        remove_qualification_questions_slugs(sequence) if claim.logged_in_with_tid? && !session[:page_sequence_flag]
 
         if claim.provide_mobile_number == false
           sequence.delete("mobile-number")
