@@ -1,6 +1,8 @@
 require "rails_helper"
 
 RSpec.describe "Claims", type: :request do
+  include DqtApiHelper
+
   describe "claims#new request" do
     before { create(:policy_configuration, :student_loans) }
 
@@ -280,6 +282,148 @@ RSpec.describe "Claims", type: :request do
       it "redirects to the additional-payments gov page" do
         get "/early-career-payments/claim"
         expect(response).to redirect_to("https://www.gov.uk/government/collections/additional-payments-for-teaching-eligibility-and-payment-details")
+      end
+    end
+  end
+
+  describe "claims#show request" do
+    before { create(:policy_configuration, :additional_payments, current_academic_year: AcademicYear.new(2022)) }
+
+    context "when a claim is already in progress" do
+      let(:in_progress_claim) { Claim.by_policy(EarlyCareerPayments).order(:created_at).last }
+
+      before { start_claim(EarlyCareerPayments.routing_name) }
+
+      context "when the user has not completed the journey in the correct slug sequence" do
+        it "redirects to the correct page in the sequence" do
+          get claim_path(EarlyCareerPayments.routing_name, "landing-page")
+
+          expect(response.body).to include(I18n.t("early_career_payments.landing_page"))
+        end
+      end
+
+      context "when the user has completed the journey in the correct slug sequence" do
+        before { set_slug_sequence_in_session(in_progress_claim, "teaching-subject-now") }
+
+        it "renders the eligible-itt-subject in the sequence" do
+          get claim_path(EarlyCareerPayments.routing_name, "teaching-subject-now")
+
+          expect(response).to redirect_to(claim_path(EarlyCareerPayments.routing_name, "eligible-itt-subject"))
+        end
+      end
+
+      context "when the user has completed the journey in the correct slug sequence" do
+        before { set_slug_sequence_in_session(in_progress_claim, "postcode-search") }
+        let(:address_line_1) { "1 Test Road" }
+        let(:postcode) { "SO16 9FX" }
+
+        before do
+          allow(controller).to receive(:invalid_postcode?).and_return(false)
+        end
+
+        it "renders the requested page in the sequence" do
+          get claim_path(EarlyCareerPayments.routing_name, "postcode-search", claim: {postcode: postcode, address_line_1: address_line_1})
+
+          expect(response).to redirect_to(claim_path(EarlyCareerPayments.routing_name, "select-home-address", {"claim[postcode]": postcode, "claim[address_line_1]": address_line_1}))
+        end
+      end
+
+      context "when the user is on the select-home-address slug and postcode is not present" do
+        before do
+          set_slug_sequence_in_session(in_progress_claim, "select-home-address")
+        end
+
+        it "clears the session variables and redirects to the postcode-search page" do
+          get claim_path(EarlyCareerPayments.routing_name, "select-home-address")
+
+          expect(session[:claim_postcode]).to be_nil
+          expect(session[:claim_address_line_1]).to be_nil
+          expect(response).to redirect_to(claim_path(EarlyCareerPayments.routing_name, "postcode-search"))
+        end
+      end
+
+      context "when params[:slug] is select-home-address" do
+        let!(:claim) { build(:claim, :submittable, postcode: "SO16 9FX") }
+        let(:postcode) { "SO16 9FX" }
+        let(:address_line_1) { "1 Test Road" }
+        let(:claim_params) { {postcode: postcode, address_line_1: address_line_1} }
+
+        before do
+          stub_search_places_index(claim: claim)
+          stub_search_places_show(claim: claim)
+          set_slug_sequence_in_session(in_progress_claim, "select-home-address")
+        end
+
+        it "sets session variables and redirects correctly when address data is present" do
+          expect(session[:claim_postcode]).to be_nil
+          expect(session[:claim_address_line_1]).to be_nil
+          expect(OrdnanceSurvey.configuration.client.base_url).to eq("https://api.os.uk")
+
+          get claim_path(EarlyCareerPayments.routing_name, "select-home-address", claim: claim_params)
+
+          expect(session[:claim_postcode]).to eq(postcode)
+          expect(session[:claim_address_line_1]).to eq(address_line_1)
+          expect(OrdnanceSurvey.configuration.client.base_url).to eq("https://api.os.uk")
+          expect(response).to redirect_to(claim_path(EarlyCareerPayments.routing_name, "no-address-found"))
+        end
+      end
+
+      # For early career payments
+      context "when params[:slug] is 'current-school' and current_claim.logged_in_with_tid?" do
+        let(:eligibility) { build(:early_career_payments_eligibility) }
+        let(:claim) do
+          create(:claim, policy: EarlyCareerPayments, logged_in_with_tid: true, teacher_reference_number: "1886094", date_of_birth: "1993-07-25")
+        end
+
+        let!(:current_claim) { CurrentClaim.new(claims: [claim]) }
+
+        before do
+          allow_any_instance_of(PartOfClaimJourney).to receive(:current_claim).and_return(current_claim)
+
+          stub_dqt_request(current_claim.teacher_reference_number, current_claim.date_of_birth)
+
+          set_slug_sequence_in_session(in_progress_claim, "nqt-in-academic-year-after-itt")
+        end
+
+        it "update the claim attributes from dqt api" do
+          get claim_path(EarlyCareerPayments.routing_name, "nqt-in-academic-year-after-itt")
+
+          expect(response.status).to eq(200)
+          expect(current_claim.teacher_reference_number).to eq("1886094")
+          expect(current_claim.logged_in_with_tid).to eq(true)
+          expect(current_claim.eligibility.qualification).to eq("postgraduate_itt")
+          expect(current_claim.eligibility.eligible_itt_subject).to eq("mathematics")
+          expect(current_claim.eligibility.itt_academic_year).to eq(AcademicYear.new(2021))
+        end
+      end
+
+      # For levelling up premium payments
+      context "when params[:slug] is 'current-school' and current_claim.logged_in_with_tid?" do
+        let(:eligibility) { build(:levelling_up_premium_payments_eligibility) }
+        let(:claim) do
+          create(:claim, policy: LevellingUpPremiumPayments, logged_in_with_tid: true, teacher_reference_number: "1886094", date_of_birth: "1993-07-25")
+        end
+
+        let!(:current_claim) { CurrentClaim.new(claims: [claim]) }
+
+        before do
+          allow_any_instance_of(PartOfClaimJourney).to receive(:current_claim).and_return(current_claim)
+
+          stub_dqt_request(current_claim.teacher_reference_number, current_claim.date_of_birth)
+
+          set_slug_sequence_in_session(in_progress_claim, "nqt-in-academic-year-after-itt")
+        end
+
+        it "update the claim attributes from dqt api" do
+          get claim_path(LevellingUpPremiumPayments.routing_name, "nqt-in-academic-year-after-itt")
+
+          expect(response.status).to eq(200)
+          expect(current_claim.teacher_reference_number).to eq("1886094")
+          expect(current_claim.logged_in_with_tid).to eq(true)
+          expect(current_claim.eligibility.qualification).to eq("postgraduate_itt")
+          expect(current_claim.eligibility.eligible_itt_subject).to eq("mathematics")
+          expect(current_claim.eligibility.itt_academic_year).to eq(AcademicYear.new(2021))
+        end
       end
     end
   end
