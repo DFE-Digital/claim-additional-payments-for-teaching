@@ -2,6 +2,7 @@ require "rails_helper"
 
 RSpec.feature "Teacher Early-Career Payments claims sequence slug" do
   include OmniauthMockHelper
+  include DqtApiHelper
 
   subject(:slug_sequence) { EarlyCareerPayments::SlugSequence.new(current_claim) }
   let(:notify) { instance_double("NotifySmsMessage", deliver!: true) }
@@ -22,7 +23,11 @@ RSpec.feature "Teacher Early-Career Payments claims sequence slug" do
 
   before do
     set_mock_auth("1234567")
+
+    stub_dqt_request("1234567", "1993-07-25")
+
     allow_any_instance_of(PartOfClaimJourney).to receive(:current_claim).and_return(current_claim)
+
     allow(NotifySmsMessage).to receive(:new).with(
       phone_number: "07123456789",
       template_id: "86ae1fe4-4f98-460b-9d57-181804b4e218",
@@ -63,7 +68,6 @@ RSpec.feature "Teacher Early-Career Payments claims sequence slug" do
 
     # - NQT in Academic Year after ITT
     expect(page).to have_text(I18n.t("early_career_payments.questions.nqt_in_academic_year_after_itt.heading"))
-
     choose "Yes"
     click_on "Continue"
 
@@ -98,30 +102,6 @@ RSpec.feature "Teacher Early-Career Payments claims sequence slug" do
     expect(claim.eligibility.reload.subject_to_formal_performance_action).to eql false
     expect(claim.eligibility.reload.subject_to_disciplinary_action).to eql false
 
-    # - What route into teaching did you take?
-    expect(page).to have_text(I18n.t("early_career_payments.questions.qualification.heading"))
-
-    choose "Undergraduate initial teacher training (ITT)"
-    click_on "Continue"
-
-    expect(claim.eligibility.reload.qualification).to eq "undergraduate_itt"
-
-    # - In which academic year did you start your undergraduate ITT
-    expect(page).to have_text(I18n.t("early_career_payments.questions.itt_academic_year.qualification.#{claim.eligibility.qualification}"))
-    expect(page).to have_text("2017 to 2018")
-    expect(page).to have_text("2018 to 2019")
-    expect(page).to have_text("2019 to 2020")
-    expect(page).to have_text("2020 to 2021")
-    expect(page).to have_text("2021 to 2022")
-
-    choose "#{itt_year.start_year} to #{itt_year.end_year}"
-    click_on "Continue"
-
-    expect(page).to have_text("Which subject")
-
-    choose "Mathematics"
-    click_on "Continue"
-
     expect(page).to have_text(I18n.t("early_career_payments.questions.teaching_subject_now"))
 
     choose "Yes"
@@ -144,8 +124,7 @@ RSpec.feature "Teacher Early-Career Payments claims sequence slug" do
     click_on("Continue")
 
     # - You are eligible for an early career payment
-    expect(page).to have_text("£5,000 early-career payment")
-    choose "£5,000 early-career payment"
+    expect(page).to have_text("Based on what you told us, you can apply for an early-career payment of:\n£2,000")
     click_on "Apply now"
 
     # - How will we use the information you provide

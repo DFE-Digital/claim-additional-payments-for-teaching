@@ -15,7 +15,7 @@ module DqtApiHelper
         "initial_teacher_training": {
             "state": "Active",
             "state_code": "Active",
-            "programme_start_date": "2021-10-20T00:00:00Z",
+            "programme_start_date": "2020-10-20T00:00:00Z",
             "programme_end_date": null,
             "programme_type": null,
             "result": "Pass",

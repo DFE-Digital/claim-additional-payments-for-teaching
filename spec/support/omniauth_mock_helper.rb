@@ -3,7 +3,8 @@ module OmniauthMockHelper
     omniauth_data = trn.nil? ? nil : OmniAuth::AuthHash.new(
       "extra" => {
         "raw_info" => {
-          "trn" => trn
+          "trn" => trn,
+          "birthdate" => "1993-07-25"
         }
       }
     )

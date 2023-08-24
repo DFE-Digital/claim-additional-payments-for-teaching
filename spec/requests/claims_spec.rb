@@ -393,7 +393,7 @@ RSpec.describe "Claims", type: :request do
           expect(current_claim.logged_in_with_tid).to eq(true)
           expect(current_claim.eligibility.qualification).to eq("postgraduate_itt")
           expect(current_claim.eligibility.eligible_itt_subject).to eq("mathematics")
-          expect(current_claim.eligibility.itt_academic_year).to eq(AcademicYear.new(2021))
+          expect(current_claim.eligibility.itt_academic_year).to eq(AcademicYear.new(2020))
         end
       end
 
@@ -422,7 +422,7 @@ RSpec.describe "Claims", type: :request do
           expect(current_claim.logged_in_with_tid).to eq(true)
           expect(current_claim.eligibility.qualification).to eq("postgraduate_itt")
           expect(current_claim.eligibility.eligible_itt_subject).to eq("mathematics")
-          expect(current_claim.eligibility.itt_academic_year).to eq(AcademicYear.new(2021))
+          expect(current_claim.eligibility.itt_academic_year).to eq(AcademicYear.new(2020))
         end
       end
     end
