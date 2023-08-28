@@ -99,6 +99,8 @@ module EarlyCareerPayments
         sequence.delete("personal-bank-account") if claim.bank_or_building_society == "building_society"
         sequence.delete("building-society-account") if claim.bank_or_building_society == "personal_bank_account"
 
+        sequence.delete("teacher-reference-number") if claim.logged_in_with_tid? && claim.teacher_reference_number.present?
+
         if claim.provide_mobile_number == false
           sequence.delete("mobile-number")
           sequence.delete("mobile-verification")

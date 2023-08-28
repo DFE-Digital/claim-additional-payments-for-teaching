@@ -35,7 +35,8 @@ class Claim < ApplicationRecord
     :bank_account_number,
     :banking_name,
     :building_society_roll_number,
-    :one_time_password
+    :one_time_password,
+    :logged_in_with_tid
   ].freeze
   AMENDABLE_ATTRIBUTES = %i[
     teacher_reference_number
@@ -98,7 +99,8 @@ class Claim < ApplicationRecord
     policy_options_provided: false,
     held: false,
     hmrc_bank_validation_responses: false,
-    hmrc_bank_validation_succeeded: false
+    hmrc_bank_validation_succeeded: false,
+    logged_in_with_tid: false
   }.freeze
   DECISION_DEADLINE = 14.weeks
   DECISION_DEADLINE_WARNING_POINT = 2.weeks

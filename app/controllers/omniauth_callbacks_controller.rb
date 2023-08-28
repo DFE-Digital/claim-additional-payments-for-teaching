@@ -8,6 +8,8 @@ class OmniauthCallbacksController < ApplicationController
       slug: "current-school"
     }
 
+    session[:user_info] = auth.extra.raw_info
+
     redirect_params[:trn] = trn if trn
 
     redirect_to claim_path(redirect_params)

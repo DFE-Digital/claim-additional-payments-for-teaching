@@ -126,7 +126,11 @@ class ClaimsController < BasePublicController
   end
 
   def claim_params
-    params[:teacher_reference_number] = params[:trn] if params.has_key?(:trn)
+    if session[:user_info]
+      params[:claim] ||= {}
+      params[:claim].merge!(teacher_reference_number: session[:user_info]["trn"], logged_in_with_tid: true)
+      session.delete("user_info")
+    end
     params.fetch(:claim, {}).permit(Claim::PermittedParameters.new(current_claim).keys)
   end
 

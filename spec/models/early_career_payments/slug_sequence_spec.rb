@@ -29,6 +29,38 @@ RSpec.describe EarlyCareerPayments::SlugSequence do
       expect(slug_sequence.slugs).to include("entire-term-contract", "employed-directly")
     end
 
+    context "when logged_in_with_tid is true " do
+      it "includes teacher reference number slug if teacher reference number is nil" do
+        claim.logged_in_with_tid = true
+        claim.teacher_reference_number = nil
+
+        expect(slug_sequence.slugs).to include("teacher-reference-number")
+      end
+
+      it "does not include teacher reference number slug if teacher reference number is not nil" do
+        claim.logged_in_with_tid = true
+        claim.teacher_reference_number = "1234567"
+
+        expect(slug_sequence.slugs).not_to include("teacher-reference-number")
+      end
+    end
+
+    context "when logged_in_with_tid is false " do
+      it "includes teacher reference number slug if teacher reference number is nil" do
+        claim.logged_in_with_tid = false
+        claim.teacher_reference_number = nil
+
+        expect(slug_sequence.slugs).to include("teacher-reference-number")
+      end
+
+      it "includes teacher reference number slug if teacher reference number is not nil" do
+        claim.logged_in_with_tid = false
+        claim.teacher_reference_number = "1234567"
+
+        expect(slug_sequence.slugs).to include("teacher-reference-number")
+      end
+    end
+
     context "when 'provide_mobile_number' is 'No'" do
       it "excludes the 'mobile-number' slug" do
         claim.provide_mobile_number = false
