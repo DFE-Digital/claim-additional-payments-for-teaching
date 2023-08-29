@@ -309,23 +309,14 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_07_173112) do
 
   create_table "school_workforce_censuses", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "teacher_reference_number"
-    t.string "subject_1"
-    t.string "subject_2"
-    t.string "subject_3"
-    t.string "subject_4"
-    t.string "subject_5"
-    t.string "subject_6"
-    t.string "subject_7"
-    t.string "subject_8"
-    t.string "subject_9"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.string "subject_10"
-    t.string "subject_11"
-    t.string "subject_12"
-    t.string "subject_13"
-    t.string "subject_14"
-    t.string "subject_15"
+    t.string "urn"
+    t.string "contract_agreement_type"
+    t.string "totfte"
+    t.string "subject_description_sfr"
+    t.string "general_subject_code"
+    t.string "hours_taught"
   end
 
   create_table "schools", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
