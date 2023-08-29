@@ -1,24 +1,6 @@
 class SchoolWorkforceCensus < ApplicationRecord
   self.table_name = "school_workforce_censuses"
 
-  SUBJECT_ATTRIBUTES = [
-    :subject_1,
-    :subject_2,
-    :subject_3,
-    :subject_4,
-    :subject_5,
-    :subject_6,
-    :subject_7,
-    :subject_8,
-    :subject_9,
-    :subject_10,
-    :subject_11,
-    :subject_12,
-    :subject_13,
-    :subject_14,
-    :subject_15
-  ].freeze
-
   COMMON_ELIGIBLE_SUBJECTS = {
     chemistry: [
       "Chemistry",
@@ -115,7 +97,7 @@ class SchoolWorkforceCensus < ApplicationRecord
     ]
   }.freeze
 
-  def subjects
-    SUBJECT_ATTRIBUTES.map { |attr| send(attr) }.reject(&:blank?)
+  def self.subjects_by_trn(trn)
+    SchoolWorkforceCensus.where(teacher_reference_number: trn).pluck(:subject_description_sfr)
   end
 end
