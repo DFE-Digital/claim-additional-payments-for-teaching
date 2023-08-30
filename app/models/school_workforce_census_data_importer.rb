@@ -32,7 +32,7 @@ class SchoolWorkforceCensusDataImporter
       Rails.logger.info "Processing batch #{batch}"
 
       record_hashes = batch_rows.map do |row|
-        next if row.fetch("TRN").blank? || row.fetch("SubjectDescription_SFR") == "NULL"
+        next if row.fetch("TRN").blank? || row.fetch("SubjectDescription_SFR") == "NULL" || row.fetch("TRN") == "NULL"
 
         row_to_school_workforce_census_hash(row)
       end.compact
@@ -65,7 +65,7 @@ class SchoolWorkforceCensusDataImporter
 
     {
       teacher_reference_number: row.fetch("TRN"),
-      urn: row.fetch("URN"),
+      school_urn: row.fetch("URN"),
       contract_agreement_type: row.fetch("ContractAgreementType"),
       totfte: row.fetch("TotalFTE"),
       subject_description_sfr: row.fetch("SubjectDescription_SFR"),

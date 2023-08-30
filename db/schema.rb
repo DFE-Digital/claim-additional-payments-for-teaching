@@ -311,12 +311,13 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_07_173112) do
     t.string "teacher_reference_number"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.string "urn"
+    t.integer "school_urn"
     t.string "contract_agreement_type"
-    t.string "totfte"
+    t.integer "totfte"
     t.string "subject_description_sfr"
     t.string "general_subject_code"
-    t.string "hours_taught"
+    t.integer "hours_taught"
+    t.index ["teacher_reference_number"], name: "index_school_workforce_censuses_on_teacher_reference_number"
   end
 
   create_table "schools", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|

@@ -96,8 +96,4 @@ class SchoolWorkforceCensus < ApplicationRecord
       "Information and Communication Technology"
     ]
   }.freeze
-
-  def self.subjects_by_trn(trn)
-    SchoolWorkforceCensus.where(teacher_reference_number: trn).pluck(:subject_description_sfr)
-  end
 end
