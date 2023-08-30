@@ -28,6 +28,23 @@ RSpec.describe SchoolWorkforceCensusDataImporter do
       end
     end
 
+    context "The CSV is valid and has rows with TRN as NULL" do
+      let(:csv) do
+        <<~CSV
+          TRN,URN,ContractAgreementType,TotalFTE,SubjectDescription_SFR,GeneralSubjectCode,hours_taught,
+          NULL,,,,Design and Technlogy - Textiles,,,
+          ,,,,,,,,,,,,,,,
+        CSV
+      end
+
+      it "has no errors and parses the CSV" do
+        expect(subject.errors).to be_empty
+        expect(subject.rows.count).to eq(2)
+        expect(subject.rows.first["TRN"]).to eq("NULL")
+        expect(subject.rows.first["SubjectDescription_SFR"]).to eq("Design and Technlogy - Textiles")
+      end
+    end
+
     context "The CSV is malformed" do
       let(:csv) do
         <<~CSV
@@ -92,6 +109,7 @@ RSpec.describe SchoolWorkforceCensusDataImporter do
       <<~CSV
         TRN,URN,ContractAgreementType,TotalFTE,SubjectDescription_SFR,GeneralSubjectCode,hours_taught,
         1234567,1234567,Full time,19,Design and Technlogy - Textiles,DTT,34,
+        NULL,,,,Design and Technlogy - Textiles,,,
         ,,,,,,,,,,,,,,,
       CSV
     end
@@ -102,6 +120,11 @@ RSpec.describe SchoolWorkforceCensusDataImporter do
       it "imports all rows with TRNS" do
         subject
         expect(SchoolWorkforceCensus.find_by_teacher_reference_number("1234567")).to be_present
+      end
+
+      it "skips rows with TRNS as NULL" do
+        subject
+        expect(SchoolWorkforceCensus.count).to eq(1)
       end
 
       it "skips empty rows" do
