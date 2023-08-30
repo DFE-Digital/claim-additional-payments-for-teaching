@@ -34,7 +34,7 @@ module AutomatedChecks
       def school_workforce_census_subjects=(school_workforce_census)
         return if school_workforce_census.empty?
 
-        @school_workforce_census_subjects = SchoolWorkforceCensus.subjects_by_trn(claim.teacher_reference_number)
+        @school_workforce_census_subjects = school_workforce_census.map(&:subject_description_sfr)
       end
 
       def no_data
