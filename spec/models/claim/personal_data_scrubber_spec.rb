@@ -1,6 +1,8 @@
 require "rails_helper"
 
 RSpec.describe Claim::PersonalDataScrubber, type: :model do
+  subject(:personal_data_scrubber) { described_class.new.scrub_completed_claims }
+
   let(:user) { create(:dfe_signin_user) }
   let!(:policy_configuration) { create(:policy_configuration, :additional_payments) }
   let(:current_academic_year) { AcademicYear.current }
@@ -9,33 +11,46 @@ RSpec.describe Claim::PersonalDataScrubber, type: :model do
   it "does not delete details from a submitted claim" do
     claim = create(:claim, :submitted, updated_at: last_academic_year)
 
-    expect { Claim::PersonalDataScrubber.new.scrub_completed_claims }.not_to change { claim.reload.attributes }
+    expect { personal_data_scrubber }.not_to change { claim.reload.attributes }
+  end
+
+  it "does not delete details from a submitted but held claim" do
+    claim = create(:claim, :submitted, :held, updated_at: last_academic_year)
+
+    expect { personal_data_scrubber }.not_to change { claim.reload.attributes }
+  end
+
+  it "does not delete details from a claim with an approval, but undone" do
+    claim = create(:claim, :submitted, updated_at: last_academic_year)
+    create(:decision, :approved, :undone, claim: claim)
+
+    expect { personal_data_scrubber }.not_to change { claim.reload.attributes }
   end
 
   it "does not delete details from an approved but unpaid claim" do
     claim = create(:claim, :approved, updated_at: last_academic_year)
 
-    expect { Claim::PersonalDataScrubber.new.scrub_completed_claims }.not_to change { claim.reload.attributes }
+    expect { personal_data_scrubber }.not_to change { claim.reload.attributes }
   end
 
   it "does not delete details from a newly rejected claim" do
     claim = create(:claim, :rejected)
 
-    expect { Claim::PersonalDataScrubber.new.scrub_completed_claims }.not_to change { claim.reload.attributes }
+    expect { personal_data_scrubber }.not_to change { claim.reload.attributes }
   end
 
   it "does not delete details from a newly paid claim" do
     claim = create(:claim, :approved)
     create(:payment, :confirmed, :with_figures, claims: [claim])
 
-    expect { Claim::PersonalDataScrubber.new.scrub_completed_claims }.not_to change { claim.reload.attributes }
+    expect { personal_data_scrubber }.not_to change { claim.reload.attributes }
   end
 
   it "does not delete details from a claim with a rejection which is old but undone" do
     claim = create(:claim, :submitted)
     create(:decision, :rejected, :undone, claim: claim, created_at: last_academic_year)
 
-    expect { Claim::PersonalDataScrubber.new.scrub_completed_claims }.not_to change { claim.reload.attributes }
+    expect { personal_data_scrubber }.not_to change { claim.reload.attributes }
   end
 
   it "does not delete details from a claim that has a payment, but has a payrollable topup" do
@@ -44,7 +59,7 @@ RSpec.describe Claim::PersonalDataScrubber, type: :model do
     create(:payment, :confirmed, :with_figures, claims: [claim], scheduled_payment_date: last_academic_year)
     create(:topup, payment: nil, claim: claim, award_amount: 500, created_by: user)
 
-    expect { Claim::PersonalDataScrubber.new.scrub_completed_claims }.not_to change { claim.reload.attributes }
+    expect { personal_data_scrubber }.not_to change { claim.reload.attributes }
   end
 
   it "does not delete details from a claim that has a payment, but has a payrolled topup without payment confirmation" do
@@ -59,7 +74,7 @@ RSpec.describe Claim::PersonalDataScrubber, type: :model do
     payment2 = create(:payment, :with_figures, claims: [claim], scheduled_payment_date: nil)
     create(:topup, payment: payment2, claim: claim, award_amount: 500, created_by: user)
 
-    expect { Claim::PersonalDataScrubber.new.scrub_completed_claims }.not_to change { claim.reload.attributes }
+    expect { personal_data_scrubber }.not_to change { claim.reload.attributes }
   end
 
   it "deletes expected details from a claim with multiple payments all of which have been confirmed" do
@@ -74,7 +89,7 @@ RSpec.describe Claim::PersonalDataScrubber, type: :model do
     payment2 = create(:payment, :confirmed, :with_figures, claims: [claim], scheduled_payment_date: last_academic_year)
     create(:topup, payment: payment2, claim: claim, award_amount: 500, created_by: user)
 
-    expect { Claim::PersonalDataScrubber.new.scrub_completed_claims }.to change { claim.reload.attributes }
+    expect { personal_data_scrubber }.to change { claim.reload.attributes }
   end
 
   it "deletes expected details from an old rejected claim, setting a personal_data_removed_at timestamp" do
@@ -83,7 +98,7 @@ RSpec.describe Claim::PersonalDataScrubber, type: :model do
       create(:decision, :rejected, claim: claim, created_at: last_academic_year)
       claim.update_attribute :hmrc_bank_validation_responses, ["test"]
 
-      Claim::PersonalDataScrubber.new.scrub_completed_claims
+      personal_data_scrubber
       cleaned_claim = Claim.find(claim.id)
 
       expect(cleaned_claim.first_name).to be_nil
@@ -113,7 +128,7 @@ RSpec.describe Claim::PersonalDataScrubber, type: :model do
       create(:payment, :confirmed, :with_figures, claims: [claim], scheduled_payment_date: last_academic_year)
       claim.update_attribute :hmrc_bank_validation_responses, ["test"]
 
-      Claim::PersonalDataScrubber.new.scrub_completed_claims
+      personal_data_scrubber
       cleaned_claim = Claim.find(claim.id)
 
       expect(cleaned_claim.first_name).to be_nil
@@ -177,7 +192,7 @@ RSpec.describe Claim::PersonalDataScrubber, type: :model do
     freeze_time do
       original_trn_change = amendment.claim_changes["teacher_reference_number"]
 
-      Claim::PersonalDataScrubber.new.scrub_completed_claims
+      personal_data_scrubber
 
       cleaned_amendment = Amendment.find(amendment.id)
 
