@@ -1,7 +1,10 @@
 require "rails_helper"
 
 RSpec.feature "Payroll" do
-  before { @signed_in_user = sign_in_as_service_operator }
+  before do
+    create(:policy_configuration, :additional_payments, current_academic_year: AcademicYear.new(2022)) # The specs assume eligibility amounts based on claim made in the 2022 academic year
+    @signed_in_user = sign_in_as_service_operator
+  end
 
   scenario "Service operator creates a payroll run" do
     click_on "Payroll"
