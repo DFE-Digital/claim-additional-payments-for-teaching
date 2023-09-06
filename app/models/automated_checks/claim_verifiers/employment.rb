@@ -1,6 +1,9 @@
 module AutomatedChecks
   module ClaimVerifiers
     class Employment
+      TASK_NAME = "employment".freeze
+      private_constant :TASK_NAME
+
       def initialize(claim:, admin_user: nil)
         self.admin_user = admin_user
         self.claim = claim
@@ -18,7 +21,7 @@ module AutomatedChecks
       attr_accessor :admin_user, :claim, :teachers_pensions_service
 
       def awaiting_task?
-        claim.tasks.where(name: "employment").count.zero?
+        claim.tasks.where(name: TASK_NAME).count.zero?
       end
 
       def teachers_pensions_service_schools
@@ -91,7 +94,7 @@ module AutomatedChecks
       end
 
       def create_task(match:, passed: nil)
-        task = claim.tasks.find_or_initialize_by(name: "employment")
+        task = claim.tasks.find_or_initialize_by(name: TASK_NAME)
         task.claim_verifier_match = match
         task.passed = passed
         task.manual = false
@@ -126,6 +129,7 @@ module AutomatedChecks
         claim.notes.create!(
           {
             body: body,
+            label: TASK_NAME,
             created_by: admin_user
           }
         )

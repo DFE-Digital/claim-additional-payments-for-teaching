@@ -1,6 +1,9 @@
 module AutomatedChecks
   module ClaimVerifiers
     class CensusSubjectsTaught
+      TASK_NAME = "census_subjects_taught".freeze
+      private_constant :TASK_NAME
+
       def initialize(
         claim:,
         admin_user: nil
@@ -14,7 +17,7 @@ module AutomatedChecks
       def perform
         return if claim.policy == MathsAndPhysics
 
-        return unless awaiting_task?("census_subjects_taught")
+        return unless awaiting_task?(TASK_NAME)
 
         no_data || no_match || any_match
       end
@@ -107,7 +110,7 @@ module AutomatedChecks
       def create_task(match:, passed: nil)
         task = claim.tasks.build(
           {
-            name: "census_subjects_taught",
+            name: TASK_NAME,
             claim_verifier_match: match,
             passed: passed,
             manual: false,
@@ -140,6 +143,7 @@ module AutomatedChecks
         claim.notes.create!(
           {
             body: body,
+            label: TASK_NAME,
             created_by: admin_user
           }
         )

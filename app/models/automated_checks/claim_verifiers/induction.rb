@@ -87,6 +87,7 @@ module AutomatedChecks
         claim.notes.create!(
           {
             body: body,
+            label: TASK_NAME,
             created_by: admin_user
           }
         )

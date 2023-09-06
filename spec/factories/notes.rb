@@ -5,4 +5,8 @@ FactoryBot.define do
     association :claim, factory: [:claim, :submitted]
     association :created_by, factory: :dfe_signin_user
   end
+
+  trait :automated do
+    created_by { nil }
+  end
 end

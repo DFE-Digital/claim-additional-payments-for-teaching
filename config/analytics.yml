@@ -120,6 +120,7 @@ shared:
   - created_at
   - updated_at
   - important
+  - label
   :payments:
   - id
   - payroll_run_id
