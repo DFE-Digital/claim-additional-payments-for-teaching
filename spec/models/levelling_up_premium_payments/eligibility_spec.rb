@@ -13,29 +13,31 @@ RSpec.describe LevellingUpPremiumPayments::Eligibility, type: :model do
   end
 
   describe "#ineligible?" do
-    before { create(:policy_configuration, :additional_payments) }
-    specify { expect(subject).to respond_to(:ineligible?) }
+    context "when current academic year is 2022/23" do
+      before { create(:policy_configuration, :additional_payments, current_academic_year: AcademicYear.new(2022)) }
+      specify { expect(subject).to respond_to(:ineligible?) }
 
-    context "when ITT year is 2017" do
-      before do
-        subject.itt_academic_year = AcademicYear::Type.new.serialize(AcademicYear.new(2017))
+      context "when ITT year is 2017" do
+        before do
+          subject.itt_academic_year = AcademicYear::Type.new.serialize(AcademicYear.new(2017))
+        end
+
+        it "returns false" do
+          expect(subject.ineligible?).to eql false
+        end
       end
 
-      it "returns false" do
-        expect(subject.ineligible?).to eql false
-      end
-    end
+      describe "ITT subject" do
+        let(:eligible) { build(:levelling_up_premium_payments_eligibility, :eligible) }
 
-    describe "ITT subject" do
-      let(:eligible) { build(:levelling_up_premium_payments_eligibility, :eligible) }
+        context "without eligible degree" do
+          before { eligible.eligible_degree_subject = false }
 
-      context "without eligible degree" do
-        before { eligible.eligible_degree_subject = false }
-
-        it "is eligible then switches to ineligible with a non-LUP ITT subject" do
-          expect(eligible).not_to be_ineligible
-          eligible.itt_subject_foreign_languages!
-          expect(eligible).to be_ineligible
+          it "is eligible then switches to ineligible with a non-LUP ITT subject" do
+            expect(eligible).not_to be_ineligible
+            eligible.itt_subject_foreign_languages!
+            expect(eligible).to be_ineligible
+          end
         end
       end
     end

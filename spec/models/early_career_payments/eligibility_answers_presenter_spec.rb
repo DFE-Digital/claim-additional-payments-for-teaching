@@ -5,7 +5,7 @@ RSpec.describe EarlyCareerPayments::EligibilityAnswersPresenter do
     let(:policy_year) { AcademicYear.new(2022) }
     let(:policy) { EarlyCareerPayments }
     let(:claim) { build(:claim, policy: policy, academic_year: policy_year, eligibility: eligibility) }
-    let!(:policy_configuration) { create(:policy_configuration, :additional_payments) }
+    let!(:policy_configuration) { create(:policy_configuration, :additional_payments, current_academic_year: policy_year) }
 
     subject { described_class.new(claim.eligibility).answers }
 

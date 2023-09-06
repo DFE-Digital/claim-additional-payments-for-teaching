@@ -3,12 +3,11 @@ require "rails_helper"
 RSpec.feature "Bank account validation on claim journey", :with_hmrc_bank_validation_enabled do
   let(:claim) { Claim.by_policy(LevellingUpPremiumPayments).order(:created_at).last }
   let(:eligibility) { claim.eligibility }
+  let!(:policy_configuration) { create(:policy_configuration, :additional_payments) }
   let!(:school) { create(:school, :combined_journey_eligibile_for_all) }
   let(:bank_name) { "Jo Bloggs" }
   let(:sort_code) { "123456" }
   let(:account_number) { "87654321" }
-
-  before { create(:policy_configuration, :additional_payments) }
 
   def get_to_bank_details_page
     visit new_claim_path(EarlyCareerPayments.routing_name)

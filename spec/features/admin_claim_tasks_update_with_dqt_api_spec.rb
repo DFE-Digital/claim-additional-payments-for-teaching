@@ -53,7 +53,7 @@ RSpec.feature "Admin claim tasks update with DQT API" do
   before do
     create(:policy_configuration, :student_loans)
     create(:policy_configuration, :maths_and_physics)
-    create(:policy_configuration, :additional_payments)
+    create(:policy_configuration, :additional_payments, current_academic_year: AcademicYear.new(2022)) # Some of the specs asserting ECP eligiblity assume 2022
 
     sign_in_as_service_operator
 

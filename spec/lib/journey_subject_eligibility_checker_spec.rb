@@ -797,96 +797,98 @@ RSpec.describe JourneySubjectEligibilityChecker do
     let(:ineligible_ecp_claim) { build(:claim, :first_lup_claim_year, policy: EarlyCareerPayments, eligibility: ineligible_ecp_eligibility) }
     let(:ineligible_lup_claim) { build(:claim, :first_lup_claim_year, policy: LevellingUpPremiumPayments, eligibility: ineligible_lup_eligibility) }
 
-    before { create(:policy_configuration, :additional_payments) }
+    context "when academic year is 2022" do
+      before { create(:policy_configuration, :additional_payments, current_academic_year: AcademicYear.new(2022)) }
 
-    context "2022 claim year" do
-      let(:claim_year) { AcademicYear.new(2022) }
+      context "2022 claim year" do
+        let(:claim_year) { AcademicYear.new(2022) }
 
-      context "None of the above ITT year" do
-        let(:itt_year) { AcademicYear.new }
+        context "None of the above ITT year" do
+          let(:itt_year) { AcademicYear.new }
 
-        subject { described_class.new(claim_year: claim_year, itt_year: itt_year).selectable_subject_symbols(CurrentClaim.new(claims: [eligible_ecp_claim, eligible_lup_claim])) }
-
-        it { is_expected.to be_empty }
-      end
-
-      context "2017 ITT year" do
-        let(:itt_year) { AcademicYear.new(2017) }
-
-        context "ineligible LUP" do
-          subject { described_class.new(claim_year: claim_year, itt_year: itt_year).selectable_subject_symbols(CurrentClaim.new(claims: [eligible_ecp_claim, ineligible_lup_claim])) }
+          subject { described_class.new(claim_year: claim_year, itt_year: itt_year).selectable_subject_symbols(CurrentClaim.new(claims: [eligible_ecp_claim, eligible_lup_claim])) }
 
           it { is_expected.to be_empty }
         end
 
-        context "eligible LUP" do
-          subject { described_class.new(claim_year: claim_year, itt_year: itt_year).selectable_subject_symbols(CurrentClaim.new(claims: [eligible_ecp_claim, eligible_lup_claim])) }
+        context "2017 ITT year" do
+          let(:itt_year) { AcademicYear.new(2017) }
 
-          it { is_expected.to contain_exactly(:chemistry, :computing, :mathematics, :physics) }
-        end
-      end
+          context "ineligible LUP" do
+            subject { described_class.new(claim_year: claim_year, itt_year: itt_year).selectable_subject_symbols(CurrentClaim.new(claims: [eligible_ecp_claim, ineligible_lup_claim])) }
 
-      context "2018 ITT year" do
-        let(:itt_year) { AcademicYear.new(2018) }
+            it { is_expected.to be_empty }
+          end
 
-        context "ineligible LUP" do
-          subject { described_class.new(claim_year: claim_year, itt_year: itt_year).selectable_subject_symbols(CurrentClaim.new(claims: [eligible_ecp_claim, ineligible_lup_claim])) }
+          context "eligible LUP" do
+            subject { described_class.new(claim_year: claim_year, itt_year: itt_year).selectable_subject_symbols(CurrentClaim.new(claims: [eligible_ecp_claim, eligible_lup_claim])) }
 
-          it { is_expected.to contain_exactly(:mathematics) }
-        end
-
-        context "eligible LUP" do
-          subject { described_class.new(claim_year: claim_year, itt_year: itt_year).selectable_subject_symbols(CurrentClaim.new(claims: [eligible_ecp_claim, eligible_lup_claim])) }
-
-          it { is_expected.to contain_exactly(:chemistry, :computing, :mathematics, :physics) }
-        end
-      end
-
-      context "2019 ITT year" do
-        let(:itt_year) { AcademicYear.new(2019) }
-
-        context "ineligible LUP" do
-          subject { described_class.new(claim_year: claim_year, itt_year: itt_year).selectable_subject_symbols(CurrentClaim.new(claims: [eligible_ecp_claim, ineligible_lup_claim])) }
-
-          it { is_expected.to contain_exactly(:mathematics) }
+            it { is_expected.to contain_exactly(:chemistry, :computing, :mathematics, :physics) }
+          end
         end
 
-        context "eligible LUP" do
-          subject { described_class.new(claim_year: claim_year, itt_year: itt_year).selectable_subject_symbols(CurrentClaim.new(claims: [eligible_ecp_claim, eligible_lup_claim])) }
+        context "2018 ITT year" do
+          let(:itt_year) { AcademicYear.new(2018) }
 
-          it { is_expected.to contain_exactly(:chemistry, :computing, :mathematics, :physics) }
-        end
-      end
+          context "ineligible LUP" do
+            subject { described_class.new(claim_year: claim_year, itt_year: itt_year).selectable_subject_symbols(CurrentClaim.new(claims: [eligible_ecp_claim, ineligible_lup_claim])) }
 
-      context "2020 ITT year" do
-        let(:itt_year) { AcademicYear.new(2020) }
+            it { is_expected.to contain_exactly(:mathematics) }
+          end
 
-        context "ineligible LUP" do
-          subject { described_class.new(claim_year: claim_year, itt_year: itt_year).selectable_subject_symbols(CurrentClaim.new(claims: [eligible_ecp_claim, ineligible_lup_claim])) }
+          context "eligible LUP" do
+            subject { described_class.new(claim_year: claim_year, itt_year: itt_year).selectable_subject_symbols(CurrentClaim.new(claims: [eligible_ecp_claim, eligible_lup_claim])) }
 
-          it { is_expected.to contain_exactly(:chemistry, :foreign_languages, :mathematics, :physics) }
-        end
-
-        context "eligible LUP" do
-          subject { described_class.new(claim_year: claim_year, itt_year: itt_year).selectable_subject_symbols(CurrentClaim.new(claims: [eligible_ecp_claim, eligible_lup_claim])) }
-
-          it { is_expected.to contain_exactly(:chemistry, :computing, :foreign_languages, :mathematics, :physics) }
-        end
-      end
-
-      context "2021 ITT year" do
-        let(:itt_year) { AcademicYear.new(2021) }
-
-        context "ineligible LUP" do
-          subject { described_class.new(claim_year: claim_year, itt_year: itt_year).selectable_subject_symbols(CurrentClaim.new(claims: [eligible_ecp_claim, ineligible_lup_claim])) }
-
-          it { is_expected.to be_empty }
+            it { is_expected.to contain_exactly(:chemistry, :computing, :mathematics, :physics) }
+          end
         end
 
-        context "eligible LUP" do
-          subject { described_class.new(claim_year: claim_year, itt_year: itt_year).selectable_subject_symbols(CurrentClaim.new(claims: [eligible_ecp_claim, eligible_lup_claim])) }
+        context "2019 ITT year" do
+          let(:itt_year) { AcademicYear.new(2019) }
 
-          it { is_expected.to contain_exactly(:chemistry, :computing, :mathematics, :physics) }
+          context "ineligible LUP" do
+            subject { described_class.new(claim_year: claim_year, itt_year: itt_year).selectable_subject_symbols(CurrentClaim.new(claims: [eligible_ecp_claim, ineligible_lup_claim])) }
+
+            it { is_expected.to contain_exactly(:mathematics) }
+          end
+
+          context "eligible LUP" do
+            subject { described_class.new(claim_year: claim_year, itt_year: itt_year).selectable_subject_symbols(CurrentClaim.new(claims: [eligible_ecp_claim, eligible_lup_claim])) }
+
+            it { is_expected.to contain_exactly(:chemistry, :computing, :mathematics, :physics) }
+          end
+        end
+
+        context "2020 ITT year" do
+          let(:itt_year) { AcademicYear.new(2020) }
+
+          context "ineligible LUP" do
+            subject { described_class.new(claim_year: claim_year, itt_year: itt_year).selectable_subject_symbols(CurrentClaim.new(claims: [eligible_ecp_claim, ineligible_lup_claim])) }
+
+            it { is_expected.to contain_exactly(:chemistry, :foreign_languages, :mathematics, :physics) }
+          end
+
+          context "eligible LUP" do
+            subject { described_class.new(claim_year: claim_year, itt_year: itt_year).selectable_subject_symbols(CurrentClaim.new(claims: [eligible_ecp_claim, eligible_lup_claim])) }
+
+            it { is_expected.to contain_exactly(:chemistry, :computing, :foreign_languages, :mathematics, :physics) }
+          end
+        end
+
+        context "2021 ITT year" do
+          let(:itt_year) { AcademicYear.new(2021) }
+
+          context "ineligible LUP" do
+            subject { described_class.new(claim_year: claim_year, itt_year: itt_year).selectable_subject_symbols(CurrentClaim.new(claims: [eligible_ecp_claim, ineligible_lup_claim])) }
+
+            it { is_expected.to be_empty }
+          end
+
+          context "eligible LUP" do
+            subject { described_class.new(claim_year: claim_year, itt_year: itt_year).selectable_subject_symbols(CurrentClaim.new(claims: [eligible_ecp_claim, eligible_lup_claim])) }
+
+            it { is_expected.to contain_exactly(:chemistry, :computing, :mathematics, :physics) }
+          end
         end
       end
     end
