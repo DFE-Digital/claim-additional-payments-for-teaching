@@ -294,7 +294,7 @@ shared:
   - created_at
   - updated_at
   :school_workforce_censuses:
-  - urn
+  - school_urn
   - totfte
   - contract_agreement_type
   - subject_description_sfr
