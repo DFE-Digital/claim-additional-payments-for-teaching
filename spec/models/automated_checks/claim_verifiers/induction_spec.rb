@@ -52,6 +52,7 @@ module AutomatedChecks
           perform
 
           expect(saved_task).to have_attributes(
+            name: "induction_confirmation",
             passed: expected_to_pass?,
             manual: false,
             created_by_id: nil,
@@ -72,6 +73,7 @@ module AutomatedChecks
 
           expect(saved_note).to have_attributes(
             body: expected_note,
+            label: "induction_confirmation",
             created_by_id: nil
           )
         end

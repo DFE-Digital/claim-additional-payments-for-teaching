@@ -108,6 +108,12 @@ module AutomatedChecks
               end
             end
 
+            describe "#label" do
+              subject(:label) { note.label }
+
+              it { is_expected.to eq("employment") }
+            end
+
             describe "#created_by" do
               subject(:created_by) { note.created_by }
 
@@ -142,6 +148,18 @@ module AutomatedChecks
                 it "returns 'Eligible' with the schools of employment" do
                   expect(body).to eq("[Employment] - Eligible:\n<pre>Current school: LA Code: 202 / Establishment Number: 8091\nClaim school: LA Code: 202 / Establishment Number: 8091\nClaim school: LA Code: 370 / Establishment Number: 4027\n</pre>\n")
                 end
+              end
+
+              describe "#label" do
+                subject(:label) { note.label }
+
+                it { is_expected.to eq("employment") }
+              end
+
+              describe "#created_by" do
+                subject(:created_by) { note.created_by }
+
+                it { is_expected.to eq(nil) }
               end
             end
           end
@@ -200,6 +218,12 @@ module AutomatedChecks
               end
             end
 
+            describe "#label" do
+              subject(:label) { note.label }
+
+              it { is_expected.to eq("employment") }
+            end
+
             describe "#created_by" do
               subject(:created_by) { note.created_by }
 
@@ -250,6 +274,12 @@ module AutomatedChecks
               subject(:body) { note.body }
 
               it { is_expected.to eq("[Employment] - No data") }
+            end
+
+            describe "#label" do
+              subject(:label) { note.label }
+
+              it { is_expected.to eq("employment") }
             end
 
             describe "#created_by" do
