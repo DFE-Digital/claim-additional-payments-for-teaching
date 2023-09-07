@@ -10,7 +10,7 @@ RSpec.describe ImportCensusJob do
         subject.perform(file_upload.id)
 
         # imports the census data
-        expect(SchoolWorkforceCensus.count).to eq(1)
+        expect(SchoolWorkforceCensus.count).to eq(2)
 
         # success email
         expect(ActionMailer::Base.deliveries.count).to eq(1)

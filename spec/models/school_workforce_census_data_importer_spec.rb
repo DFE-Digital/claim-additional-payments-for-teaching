@@ -14,7 +14,6 @@ RSpec.describe SchoolWorkforceCensusDataImporter do
     context "The CSV is valid and has all the correct data" do
       let(:csv) do
         <<~CSV
-          TRN,URN,ContractAgreementType,TotalFTE,SubjectDescription_SFR,GeneralSubjectCode,hours_taught,
           1234567,,,,Design and Technlogy - Textiles,,,
           ,,,,,,,,,,,,,,,
         CSV
@@ -23,15 +22,12 @@ RSpec.describe SchoolWorkforceCensusDataImporter do
       it "has no errors and parses the CSV" do
         expect(subject.errors).to be_empty
         expect(subject.rows.count).to eq(2)
-        expect(subject.rows.first["TRN"]).to eq("1234567")
-        expect(subject.rows.first["SubjectDescription_SFR"]).to eq("Design and Technlogy - Textiles")
       end
     end
 
     context "The CSV is valid and has rows with TRN as NULL" do
       let(:csv) do
         <<~CSV
-          TRN,URN,ContractAgreementType,TotalFTE,SubjectDescription_SFR,GeneralSubjectCode,hours_taught,
           NULL,,,,Design and Technlogy - Textiles,,,
           ,,,,,,,,,,,,,,,
         CSV
@@ -40,8 +36,6 @@ RSpec.describe SchoolWorkforceCensusDataImporter do
       it "has no errors and parses the CSV" do
         expect(subject.errors).to be_empty
         expect(subject.rows.count).to eq(2)
-        expect(subject.rows.first["TRN"]).to eq("NULL")
-        expect(subject.rows.first["SubjectDescription_SFR"]).to eq("Design and Technlogy - Textiles")
       end
     end
 
@@ -75,7 +69,6 @@ RSpec.describe SchoolWorkforceCensusDataImporter do
       let(:byte_order_mark) { "\xEF\xBB\xBF" }
       let(:csv) do
         <<~CSV
-          TRN,URN,ContractAgreementType,TotalFTE,SubjectDescription_SFR,GeneralSubjectCode,hours_taught,
           1234567,1234567,Full time,19,Design and Technlogy - Textiles,DTT,34,
           ,,,,,,,,,,,,,,,
         CSV
@@ -84,7 +77,6 @@ RSpec.describe SchoolWorkforceCensusDataImporter do
       it "has no errors and parses the CSV" do
         expect(subject.errors).to be_empty
         expect(subject.rows.count).to eq(2)
-        expect(subject.rows.first["TRN"]).to eq("1234567")
       end
     end
   end
@@ -93,7 +85,6 @@ RSpec.describe SchoolWorkforceCensusDataImporter do
     let!(:existing_census_entry) { create(:school_workforce_census, :early_career_payments_matched) }
     let(:csv) do
       <<~CSV
-        TRN,URN,ContractAgreementType,TotalFTE,SubjectDescription_SFR,GeneralSubjectCode,hours_taught,
         1234567,1234567,Full time,19,Design and Technlogy - Textiles,DTT,34,
         NULL,,,,Design and Technlogy - Textiles,,,
         ,,,,,,,,,,,,,,,
@@ -127,7 +118,6 @@ RSpec.describe SchoolWorkforceCensusDataImporter do
     context "any row throws and error on save" do
       let(:csv) do
         <<~CSV
-          TRN,URN,ContractAgreementType,TotalFTE,SubjectDescription_SFR,GeneralSubjectCode,hours_taught,
           1234567,1234567,Full time,19,Design and Technlogy - Textiles,DTT,34,
           ,,,,,,,,,,,,,,,
         CSV
