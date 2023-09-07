@@ -407,6 +407,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_07_173112) do
     t.integer "school_urn"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "nino"
+    t.integer "employer_id"
     t.integer "gender_digit"
     t.index ["teacher_reference_number", "start_date"], name: "index_tps_data_on_teacher_reference_number_and_start_date", unique: true
     t.index ["teacher_reference_number"], name: "index_teachers_pensions_service_on_teacher_reference_number"
