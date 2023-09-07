@@ -152,7 +152,7 @@ RSpec.describe TeachersPensionsServiceImporter do
 
     it "has no errors, parses the CSV and skip the identical one" do
       expect { subject.run }.to(change(TeachersPensionsService, :count).by(1))
-      
+
       expect(subject.rows.first["Teacher reference number"]).to eq("12345672")
     end
   end
