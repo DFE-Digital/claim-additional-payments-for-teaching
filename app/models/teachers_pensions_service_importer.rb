@@ -9,9 +9,7 @@ class TeachersPensionsServiceImporter
     "NINO",
     "Start Date",
     "End Date",
-    "Annual salary",
-    "Monthly pay",
-    "N/A",
+    "Employer ID",
     "LA URN",
     "School URN"
   ].freeze
@@ -27,6 +25,7 @@ class TeachersPensionsServiceImporter
     ActiveRecord::Base.transaction do
       rows.each do |row|
         tps_data = row_to_tps(row)
+        next if record_exists?(tps_data)
         tps_data.save! if tps_data.valid?
       end
     end
@@ -59,8 +58,10 @@ class TeachersPensionsServiceImporter
     tps_data = TeachersPensionsService.new(teacher_reference_number: trn_without_gender_digit(trn_val))
     tps_data.start_date = row.fetch("Start Date")
     tps_data.end_date = row.fetch("End Date")
+    tps_data.employer_id = row.fetch("Employer ID")
     tps_data.la_urn = row.fetch("LA URN")
     tps_data.school_urn = row.fetch("School URN")
+    tps_data.nino = row.fetch("NINO")
     tps_data.gender_digit = gender_digit(trn_val)
     tps_data
   end
@@ -76,5 +77,18 @@ class TeachersPensionsServiceImporter
   # 2 = female
   def gender_digit(trn_str)
     trn_str&.strip&.[](7)
+  end
+
+  def record_exists?(tps_data)
+    TeachersPensionsService.find_by(
+      teacher_reference_number: tps_data.teacher_reference_number,
+      start_date: tps_data.start_date,
+      end_date: tps_data.end_date,
+      employer_id: tps_data.employer_id,
+      la_urn: tps_data.la_urn,
+      school_urn: tps_data.school_urn,
+      nino: tps_data.nino,
+      gender_digit: tps_data.gender_digit
+    )
   end
 end
