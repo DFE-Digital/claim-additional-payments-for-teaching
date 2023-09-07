@@ -13,8 +13,8 @@ RSpec.describe TeachersPensionsServiceImporter do
   context "The CSV is valid and has all the correct data" do
     let(:csv) do
       <<~CSV
-        Teacher reference number,NINO,Start Date,End Date,Annual salary,Monthly pay,N/A,LA URN,School URN
-        12345672,ZX043155C,01/09/2019,30/09/2019,24373,2031.08,5016,383,4026
+        Teacher reference number,NINO,Start Date,End Date,LA URN,School URN,Employer ID
+        12345672,ZX043155C,01/09/2019,30/09/2019,383,4026,1122
       CSV
     end
 
@@ -43,8 +43,8 @@ RSpec.describe TeachersPensionsServiceImporter do
   context "The CSV does not have the expected headers" do
     let(:csv) do
       <<~CSV
-        Teacher reference number,Start Date,End Date,Annual salary,Monthly pay,N/A,LA URN,School URN
-        12345672,ZX043155C,01/09/2019,30/09/2019,24373,2031.08,5016,383,4026,
+        Teacher reference number,Start Date,End Date,,LA URN,School URN,Employer ID
+        12345672,ZX043155C,01/09/2019,30/09/2019,24373,2031.08,5016,383,4026,1122
       CSV
     end
 
@@ -71,8 +71,8 @@ RSpec.describe TeachersPensionsServiceImporter do
     let(:byte_order_mark) { "\xEF\xBB\xBF" }
     let(:csv) do
       <<~CSV
-        Teacher reference number,NINO,Start Date,End Date,Annual salary,Monthly pay,N/A,LA URN,School URN
-        12345672,ZX043155C,01/09/2019,30/09/2019,24373,2031.08,5016,383,4026,
+        Teacher reference number,NINO,Start Date,End Date,LA URN,School URN,Employer ID
+        12345672,ZX043155C,01/09/2019,30/09/2019,24373,4026,1122
       CSV
     end
 
@@ -87,11 +87,11 @@ RSpec.describe TeachersPensionsServiceImporter do
   context "The CSV contains duplicates" do
     let(:csv) do
       <<~CSV
-        Teacher reference number,NINO,Start Date,End Date,Annual salary,Monthly pay,N/A,LA URN,School URN
-        12345672,ZX043155C,01/09/2019,30/09/2019,24373,2031.08,5016,383,4026
-        12345672,ZX043155C,01/09/2019,30/09/2019,24373,2031.08,5016,383,4026
-        12345681,ZX043155C,01/09/2020,30/09/2020,24373,2031.08,5016,383,4026
-        12345681,ZX043155C,01/09/2020,30/09/2020,24373,2031.08,5016,383,4026
+        Teacher reference number,NINO,Start Date,End Date,LA URN,School URN,Employer ID
+        12345672,ZX043155C,01/09/2019,30/09/2019,24373,4026,1122
+        12345672,ZX043155C,01/09/2019,30/09/2019,24373,4026,1122
+        12345681,ZX043155C,01/09/2020,30/09/2020,24373,4026,1122
+        12345681,ZX043155C,01/09/2020,30/09/2020,24373,4026,1122
       CSV
     end
 
@@ -112,8 +112,8 @@ RSpec.describe TeachersPensionsServiceImporter do
   context "The CSV contains data for entire claim year for single TRN" do
     let(:csv) do
       <<~CSV
-        Teacher reference number,NINO,Start Date,End Date,Annual salary,Monthly pay,N/A,LA URN,School URN
-        12345672,ZX043155C,01/04/2020,31/12/2021,24373,2031.08,5016,383,4026
+        Teacher reference number,NINO,Start Date,End Date,Annual salary,Monthly pay,N/A,LA URN,School URN,Employer ID
+        12345672,ZX043155C,01/04/2020,31/12/2021,24373,2031.08,5016,383,4026,1122
       CSV
     end
 
@@ -128,8 +128,8 @@ RSpec.describe TeachersPensionsServiceImporter do
   context "The CSV contains data for first two months of the current claim year" do
     let(:csv) do
       <<~CSV
-        Teacher reference number,NINO,Start Date,End Date,Annual salary,Monthly pay,N/A,LA URN,School URN
-        12345672,ZX043155C,01/07/2021,01/09/2021,24373,2031.08,5016,383,4026
+        Teacher reference number,NINO,Start Date,End Date,Annual salary,Monthly pay,N/A,LA URN,School URN,Employer ID
+        12345672,ZX043155C,01/07/2021,01/09/2021,24373,2031.08,5016,383,4026,1122
       CSV
     end
 
@@ -138,6 +138,22 @@ RSpec.describe TeachersPensionsServiceImporter do
 
       expect(subject.rows.first["Teacher reference number"]).to eq("12345672")
       expect(subject.rows.first["End Date"]).to eq("01/09/2021")
+    end
+  end
+
+  context "The CSV contains data with two identical rows" do
+    let(:csv) do
+      <<~CSV
+        Teacher reference number,NINO,Start Date,End Date,Annual salary,Monthly pay,N/A,LA URN,School URN,Employer ID
+        12345672,ZX043155C,01/07/2021,01/09/2021,24373,2031.08,5016,383,4026,1122
+        12345672,ZX043155C,01/07/2021,01/09/2021,24373,2031.08,5016,383,4026,1122
+      CSV
+    end
+
+    it "has no errors, parses the CSV and skip the identical one" do
+      expect { subject.run }.to(change(TeachersPensionsService, :count).by(1))
+      
+      expect(subject.rows.first["Teacher reference number"]).to eq("12345672")
     end
   end
 end

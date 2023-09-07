@@ -63,11 +63,11 @@ RSpec.describe "TPS data upload" do
         let(:current_school) { school }
         let(:csv) do
           <<~CSV
-            Teacher reference number,NINO,Start Date,End Date,Annual salary,Monthly pay,N/A,LA URN,School URN
-            1000106,ZX043155C,01/07/2022,30/09/2022,24373,2031.08,5016,#{school.local_authority.code},#{school.establishment_number}
-            1000107,ZX043155C,01/07/2019,30/09/2019,24373,2031.08,5016,111,2222
-            1000107,ZX043155C,01/07/2020,30/09/2020,24373,2031.08,5016,111,2222
-            1000107,ZX043155C,01/07/2022,30/09/2022,24373,2031.08,5016,111,2222
+            Teacher reference number,NINO,Start Date,End Date,LA URN,School URN,Employer ID
+            1000106,ZX043155C,01/07/2022,30/09/2022,#{school.local_authority.code},#{school.establishment_number},1122
+            1000107,ZX043155C,01/07/2019,30/09/2019,111,2222,1122
+            1000107,ZX043155C,01/07/2020,30/09/2020,111,2222,1122
+            1000107,ZX043155C,01/07/2022,30/09/2022,111,2222,1122
           CSV
         end
 
@@ -142,8 +142,8 @@ RSpec.describe "TPS data upload" do
 
           it "runs the employment task again for NO MATCH claims" do
             csv = <<~CSV
-              Teacher reference number,NINO,Start Date,End Date,Annual salary,Monthly pay,N/A,LA URN,School URN
-              #{claim_no_data.teacher_reference_number},ZX043155C,01/07/2022,30/09/2022,24373,2031.08,5016,#{claim_no_data.school.local_authority.code},#{claim_no_data.school.establishment_number}
+              Teacher reference number,NINO,Start Date,End Date,LA URN,School URN,Employer ID
+              #{claim_no_data.teacher_reference_number},ZX043155C,01/07/2022,30/09/2022,#{claim_no_data.school.local_authority.code},#{claim_no_data.school.establishment_number},1122
             CSV
 
             file = Rack::Test::UploadedFile.new(StringIO.new(csv), "text/csv", original_filename: "tps_data.csv")
@@ -171,10 +171,10 @@ RSpec.describe "TPS data upload" do
 
         let(:csv) do
           <<~CSV
-            Teacher reference number,NINO,Start Date,End Date,Annual salary,Monthly pay,N/A,LA URN,School URN
-            1000106,ZX043155C,01/07/2022,30/09/2022,24373,2031.08,5016,#{school.local_authority.code},#{school.establishment_number}
-            1000107,ZX043155C,01/07/2022,30/09/2022,24373,2031.08,5016,111,2222
-            1000106,ZX043155C,01/07/2021,30/03/2022,24373,2031.08,5016,#{school.local_authority.code},#{school.establishment_number}
+            Teacher reference number,NINO,Start Date,End Date,LA URN,School URN,Employer ID
+            1000106,ZX043155C,01/07/2022,30/09/2022,#{school.local_authority.code},#{school.establishment_number},1122
+            1000107,ZX043155C,01/07/2022,30/09/2022,111,2222,1122
+            1000106,ZX043155C,01/07/2021,30/03/2022,#{school.local_authority.code},#{school.establishment_number},1122
           CSV
         end
 
@@ -241,9 +241,9 @@ RSpec.describe "TPS data upload" do
         context "when a current school is ineligible and the claim school is eligible" do
           let(:csv) do
             <<~CSV
-              Teacher reference number,NINO,Start Date,End Date,Annual salary,Monthly pay,N/A,LA URN,School URN
-              1000106,ZX043155C,01/07/2022,30/09/2022,24373,2031.08,5016,371,#{school.establishment_number}
-              1000106,ZX043155C,01/07/2021,30/03/2022,24373,2031.08,5016,#{school.local_authority.code},#{school.establishment_number}
+              Teacher reference number,NINO,Start Date,End Date,LA URN,School URN,Employer ID
+              1000106,ZX043155C,01/07/2022,30/09/2022,371,#{school.establishment_number},1122
+              1000106,ZX043155C,01/07/2021,30/03/2022,#{school.local_authority.code},#{school.establishment_number},1122
             CSV
           end
 
