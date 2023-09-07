@@ -57,20 +57,6 @@ RSpec.describe SchoolWorkforceCensusDataImporter do
       end
     end
 
-    context "The CSV does not have the expected headers" do
-      let(:csv) do
-        <<~CSV
-          TRN,URN,ContractAgreementType,SubjectDescription_SFR,GeneralSubjectCode,hours_taught,
-          1234567,1234567,Full time,19,Design and Technlogy - Textiles,DTT,34,
-          ,,,,,,,,,,,,,,,
-        CSV
-      end
-
-      it "populates its errors" do
-        expect(subject.errors).to eq(["The selected file is missing some expected columns: TotalFTE"])
-      end
-    end
-
     context "The CSV is not present" do
       let(:file) { nil }
 

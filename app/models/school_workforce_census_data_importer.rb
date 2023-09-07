@@ -18,7 +18,6 @@ class SchoolWorkforceCensusDataImporter
     @errors = []
     if file.present?
       @rows = parse_csv_file(file)
-      check_headers
     else
       errors.append("Select a file")
     end
@@ -32,7 +31,7 @@ class SchoolWorkforceCensusDataImporter
       Rails.logger.info "Processing batch #{batch}"
 
       record_hashes = batch_rows.map do |row|
-        next if row.fetch("TRN").blank? || row.fetch("SubjectDescription_SFR") == "NULL" || row.fetch("TRN") == "NULL"
+        next if row[1].blank? || row[4] == "NULL" || row[1] == "NULL"
 
         row_to_school_workforce_census_hash(row)
       end.compact
@@ -45,15 +44,8 @@ class SchoolWorkforceCensusDataImporter
 
   private
 
-  def check_headers
-    if rows
-      missing_headers = EXPECTED_HEADERS - rows.headers
-      errors.append("The selected file is missing some expected columns: #{missing_headers.join(", ")}") if missing_headers.any?
-    end
-  end
-
   def parse_csv_file(file)
-    CSV.read(file.to_io, headers: true, encoding: "BOM|UTF-8")
+    CSV.read(file.to_io, headers: false, encoding: "BOM|UTF-8")
   rescue CSV::MalformedCSVError
     errors.append("The selected file must be a CSV")
     nil
@@ -64,13 +56,13 @@ class SchoolWorkforceCensusDataImporter
     now = Time.now.utc
 
     {
-      teacher_reference_number: row.fetch("TRN"),
-      school_urn: row.fetch("URN"),
-      contract_agreement_type: row.fetch("ContractAgreementType"),
-      totfte: row.fetch("TotalFTE"),
-      subject_description_sfr: row.fetch("SubjectDescription_SFR"),
-      general_subject_code: row.fetch("GeneralSubjectCode"),
-      hours_taught: row.fetch("hours_taught"),
+      school_urn: row[0],
+      teacher_reference_number: row[1],
+      contract_agreement_type: row[2],
+      totfte: row[3],
+      subject_description_sfr: row[4],
+      general_subject_code: row[5],
+      hours_taught: row[6],
       created_at: now,
       updated_at: now
     }
