@@ -1,0 +1,21 @@
+<%= form_with(url: claim_path(current_policy_routing_name, "current-school"), method: :get) do %>
+  <div class="govuk-radios govuk-radios">
+    <fieldset class="govuk-fieldset">
+      <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">Are these details correct?</legend>
+      <div class="govuk-radios govuk-radios--inline" data-module="govuk-radios">
+        <div class="govuk-radios__item">
+          <input class="govuk-radios__input" id="details-correct" name="details_correct" type="radio" value="yes">
+          <label class="govuk-label govuk-radios__label" for="details-correct">Yes</label>
+        </div>
+        <div class="govuk-radios__item">
+          <input class="govuk-radios__input" id="details-correct-2" name="details_correct" type="radio" value="no">
+          <label class="govuk-label govuk-radios__label" for="details-correct-2">No</label>
+        </div>
+      </div>
+    </fieldset>
+  </div>
+  <p class="govuk-body">By selecting yes you are confirming that, to the best of your knowledge, the details above are correct.</p>
+  <div class="govuk-form-group">
+  <input type="submit" name="commit" value="Continue" class="govuk-button" data-module="govuk-button" data-disable-with="Continue">
+  </div>
+<% end %>

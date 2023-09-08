@@ -10,6 +10,8 @@ class ClaimsController < BasePublicController
   before_action :check_claim_not_in_progress, only: [:new]
   before_action :clear_claim_session, only: [:new]
   before_action :prepend_view_path_for_policy
+  before_action :set_teacher_details, only: [:teacher_detail]
+  before_action :unset_session_claim, only: [:reset_claim]
 
   def new
     persist
@@ -21,7 +23,9 @@ class ClaimsController < BasePublicController
 
   def show
     search_schools if params[:school_search]
-    if params[:slug] == "teaching-subject-now" && !current_claim.eligibility.eligible_itt_subject
+    if params[:slug] == "current-school" && params[:details_correct] == "no"
+      return redirect_to reset_claim_path
+    elsif params[:slug] == "teaching-subject-now" && !current_claim.eligibility.eligible_itt_subject
       return redirect_to claim_path(current_policy_routing_name, "eligible-itt-subject")
     elsif params[:slug] == "sign-in-or-continue"
       update_session_with_current_slug
@@ -128,11 +132,6 @@ class ClaimsController < BasePublicController
   end
 
   def claim_params
-    if session[:user_info]
-      params[:claim] ||= {}
-      params[:claim].merge!(teacher_reference_number: session[:user_info]["trn"], logged_in_with_tid: true)
-      session.delete("user_info")
-    end
     params.fetch(:claim, {}).permit(Claim::PermittedParameters.new(current_claim).keys)
   end
 
@@ -259,5 +258,25 @@ class ClaimsController < BasePublicController
 
   def correct_policy_namespace?
     PolicyConfiguration.policies_for_routing_name(params[:policy]).include?(current_claim.policy)
+  end
+
+  def set_teacher_details
+    user_info = session[:user_info]
+    if user_info
+      current_claim.update(
+        first_name: user_info["given_name"],
+        surname: user_info["family_name"],
+        teacher_reference_number: user_info["trn"],
+        date_of_birth: user_info["birthdate"],
+        national_insurance_number: user_info["ni_number"],
+        logged_in_with_tid: true
+      )
+
+      session.delete("user_info")
+    end
+  end
+
+  def unset_session_claim
+    session[:claim_id] = nil
   end
 end
