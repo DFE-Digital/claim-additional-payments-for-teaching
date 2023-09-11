@@ -1,5 +1,7 @@
 module Admin
   class PayrollRunsController < BaseAdminController
+    include Pagy::Backend
+
     before_action :ensure_service_operator
 
     def index
@@ -31,6 +33,7 @@ module Admin
     # NOTE: Optimisation - preload payments, claims and eligibility
     def show
       @payroll_run = PayrollRun.where(id: params[:id]).includes({claims: [:eligibility]}, {payments: [{claims: [:eligibility]}]}).first
+      @pagy, @payments = pagy(@payroll_run.payments.ordered.includes(claims: [:eligibility]).includes(:topups))
     end
   end
 end
