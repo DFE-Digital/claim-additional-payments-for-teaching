@@ -1,18 +1,7 @@
 require "rails_helper"
 
 RSpec.feature "Teacher Identity Sign in" do
-  include EarlyCareerPaymentsHelper
-
-  def set_mock_auth(trn)
-    OmniAuth.config.mock_auth[:default] = OmniAuth::AuthHash.new(
-      "extra" => {
-        "raw_info" => {
-          "trn" => trn
-        }
-      }
-    )
-    Rails.application.env_config["omniauth.auth"] = OmniAuth.config.mock_auth[:default]
-  end
+  include OmniauthMockHelper
 
   # create a school eligible for ECP and LUP so can walk the whole journey
   let!(:policy_configuration) { create(:policy_configuration, :additional_payments) }
@@ -21,7 +10,7 @@ RSpec.feature "Teacher Identity Sign in" do
 
   let(:itt_year) { current_academic_year - 3 }
 
-  scenario "Teacher makes claim for 'Early-Career Payments' claim with trn present" do
+  scenario "Teacher makes claim for 'Early-Career Payments' claim and select continue without signing in" do
     visit landing_page_path(EarlyCareerPayments.routing_name)
     set_mock_auth("12345678")
     expect(page).to have_link("Claim additional payments for teaching", href: "/additional-payments/landing-page")
@@ -37,15 +26,12 @@ RSpec.feature "Teacher Identity Sign in" do
 
     # - Which school do you teach at
     expect(page).to have_text(I18n.t("early_career_payments.questions.current_school_search"))
-
-    # - Which school do you teach at
-    expect(page).to have_text(I18n.t("early_career_payments.questions.current_school_search"))
     expect(page.title).to have_text(I18n.t("questions.current_school"))
   end
 
-  scenario "Teacher makes claim for 'Early-Career Payments' claim with no trn" do
+  scenario "Teacher makes claim for 'Early-Career Payments' claim and select Sign in with teacher identity" do
     visit landing_page_path(EarlyCareerPayments.routing_name)
-    set_mock_auth(nil)
+    set_mock_auth("12345678")
     expect(page).to have_link("Claim additional payments for teaching", href: "/additional-payments/landing-page")
     expect(page).to have_link(href: "mailto:#{EarlyCareerPayments.feedback_email}")
 

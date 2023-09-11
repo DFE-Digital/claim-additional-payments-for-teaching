@@ -12,6 +12,10 @@ RSpec.feature "Bank account validation on claim journey", :with_hmrc_bank_valida
   def get_to_bank_details_page
     visit new_claim_path(EarlyCareerPayments.routing_name)
 
+    # - Sign in or continue page
+    expect(page).to have_text("You can use a DfE Identity account with this service")
+    click_on "Continue without signing in"
+
     # - Which school do you teach at
     choose_school school
     click_on "Continue"

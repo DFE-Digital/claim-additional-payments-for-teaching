@@ -9,6 +9,11 @@ RSpec.feature "Trainee teacher subjourney for LUP schools" do
     expect(LevellingUpPremiumPayments::SchoolEligibility.new(non_lup_school)).not_to be_eligible
 
     visit new_claim_path(LevellingUpPremiumPayments.routing_name)
+
+    # - Sign in or continue page
+    expect(page).to have_text("You can use a DfE Identity account with this service")
+    click_on "Continue without signing in"
+
     choose_school non_lup_school
 
     expect(page).to have_text(I18n.t("early_career_payments.questions.nqt_in_academic_year_after_itt.heading"))
@@ -107,6 +112,11 @@ RSpec.feature "Trainee teacher subjourney for LUP schools" do
     expect(LevellingUpPremiumPayments::SchoolEligibility.new(lup_school)).to be_eligible
 
     visit new_claim_path(EarlyCareerPayments.routing_name)
+
+    # - Sign in or continue page
+    expect(page).to have_text("You can use a DfE Identity account with this service")
+    click_on "Continue without signing in"
+
     choose_school lup_school
 
     expect(page).to have_text(I18n.t("early_career_payments.questions.nqt_in_academic_year_after_itt.heading"))
