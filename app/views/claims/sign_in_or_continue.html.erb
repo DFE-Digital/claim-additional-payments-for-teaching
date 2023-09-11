@@ -1,0 +1,21 @@
+<%= link_to "Back", landing_page_path, class: "govuk-back-link" %>
+<main class="govuk-main-wrapper govuk-main-wrapper--auto-spacing" id="main-content" role="main">
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds govuk-body">
+      <h1 class="govuk-heading-l">
+        You can use a DfE Identity account with this service
+      </h1>
+      <p>
+        To create an account, you will need to provide your personal details such as your National Insurance number and teacher reference number (TRN).
+      </p>
+      <p>
+        Once you have created an account, you'll be able to use the same account and personal details to claim additional payments in following years.
+      </p>
+
+      <div class="govuk-button-group">
+        <%= button_to "Sign in with teacher identity", admin_tid_sign_in_path, class: "govuk-button" %>
+        <%= button_to "Continue without signing in", claim_path(current_policy_routing_name, "current-school"), method: :get, class: "govuk-button govuk-button--secondary"%>
+      </div>
+    </div>
+  </div>
+</main>

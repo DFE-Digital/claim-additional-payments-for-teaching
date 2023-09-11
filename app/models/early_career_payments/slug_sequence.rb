@@ -11,6 +11,7 @@ module EarlyCareerPayments
   # There are 4 distinct phases of the claimant journey
   class SlugSequence
     ELIGIBILITY_SLUGS = [
+      "sign-in-or-continue",
       "current-school",
       "nqt-in-academic-year-after-itt",
       "supply-teacher",

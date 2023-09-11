@@ -146,6 +146,7 @@ RSpec.describe EarlyCareerPayments::SlugSequence do
         claim.has_student_loan = true
 
         expected_slugs = %w[
+          sign-in-or-continue
           current-school
           nqt-in-academic-year-after-itt
           supply-teacher
@@ -191,6 +192,7 @@ RSpec.describe EarlyCareerPayments::SlugSequence do
         claim.has_masters_doctoral_loan = true
 
         expected_slugs = %w[
+          sign-in-or-continue
           current-school
           nqt-in-academic-year-after-itt
           supply-teacher
@@ -231,6 +233,7 @@ RSpec.describe EarlyCareerPayments::SlugSequence do
     context "when the answer to 'student loan - home address ' is 'Scotland' OR 'Northern Ireland'" do
       let(:expected_slugs) do
         %w[
+          sign-in-or-continue
           current-school
           nqt-in-academic-year-after-itt
           supply-teacher
@@ -288,6 +291,7 @@ RSpec.describe EarlyCareerPayments::SlugSequence do
         claim.has_masters_doctoral_loan = false
 
         expected_slugs = %w[
+          sign-in-or-continue
           current-school
           nqt-in-academic-year-after-itt
           supply-teacher

@@ -49,8 +49,8 @@ RSpec.feature "Teacher Early-Career Payments claims sequence slug" do
     expect(page).to have_text(I18n.t("early_career_payments.landing_page"))
     click_on "Start now"
 
-    # - Which school do you teach at
-
+    # - Sign in or continue page
+    expect(page).to have_text("You can use a DfE Identity account with this service")
     click_on "Sign in with teacher identity"
     click_on "Continue"
 
@@ -108,7 +108,6 @@ RSpec.feature "Teacher Early-Career Payments claims sequence slug" do
 
     # - In which academic year did you start your undergraduate ITT
     expect(page).to have_text(I18n.t("early_career_payments.questions.itt_academic_year.qualification.#{claim.eligibility.qualification}"))
-    expect(page).to have_text("2017 to 2018")
     expect(page).to have_text("2018 to 2019")
     expect(page).to have_text("2019 to 2020")
     expect(page).to have_text("2020 to 2021")
@@ -144,13 +143,17 @@ RSpec.feature "Teacher Early-Career Payments claims sequence slug" do
     click_on("Continue")
 
     # - You are eligible for an early career payment
-    expect(page).to have_text("£5,000 early-career payment")
-    choose "£5,000 early-career payment"
-    click_on "Apply now"
+    expect(page).to have_text("You’re eligible for an additional payment")
+    expect(page).to have_field("£2,000 early-career payment")
+    expect(page).to have_field("£2,000 levelling up premium payment")
+    expect(page).to have_selector('input[type="radio"]', count: 2)
+
+    choose("£2,000 levelling up premium payment")
+
+    click_on("Apply now")
 
     # - How will we use the information you provide
     expect(page).to have_text("How we will use the information you provide")
-    expect(page).to have_text("For more details, you can read about payments and deductions for the early-career payment")
     click_on "Continue"
 
     # - Personal details
