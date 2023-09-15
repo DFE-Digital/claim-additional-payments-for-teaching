@@ -19,7 +19,7 @@ RSpec.describe "OmniauthCallbacksControllers", type: :request do
       end
 
       it "redirects to the claim path with correct parameters" do
-        get "/claim/auth/tid/callback"
+        get claim_auth_tid_callback_path
 
         expect(response).to redirect_to(
           teacher_detail_path(policy: "additional-payments")
@@ -33,7 +33,7 @@ RSpec.describe "OmniauthCallbacksControllers", type: :request do
       end
 
       it "redirects to the claim path with correct parameters" do
-        get "/claim/auth/tid/callback"
+        get claim_auth_tid_callback_path
 
         expect(response).to redirect_to(
           teacher_detail_path(policy: "additional-payments")

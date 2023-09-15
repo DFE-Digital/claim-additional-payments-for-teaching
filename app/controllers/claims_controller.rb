@@ -10,7 +10,7 @@ class ClaimsController < BasePublicController
   before_action :check_claim_not_in_progress, only: [:new]
   before_action :clear_claim_session, only: [:new]
   before_action :prepend_view_path_for_policy
-  before_action :set_teacher_details, only: [:teacher_detail]
+  before_action :set_teacher_detail, only: [:teacher_detail]
   before_action :unset_session_claim, only: [:reset_claim]
 
   def new
@@ -260,7 +260,7 @@ class ClaimsController < BasePublicController
     PolicyConfiguration.policies_for_routing_name(params[:policy]).include?(current_claim.policy)
   end
 
-  def set_teacher_details
+  def set_teacher_detail
     user_info = session[:user_info]
     if user_info
       current_claim.update(
