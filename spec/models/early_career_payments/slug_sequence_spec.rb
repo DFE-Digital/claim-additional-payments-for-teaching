@@ -148,8 +148,8 @@ RSpec.describe EarlyCareerPayments::SlugSequence do
         expected_slugs = %w[
           sign-in-or-continue
           current-school
-          nqt-in-academic-year-after-itt
           supply-teacher
+          nqt-in-academic-year-after-itt
           poor-performance
           qualification
           itt-year
@@ -194,8 +194,8 @@ RSpec.describe EarlyCareerPayments::SlugSequence do
         expected_slugs = %w[
           sign-in-or-continue
           current-school
-          nqt-in-academic-year-after-itt
           supply-teacher
+          nqt-in-academic-year-after-itt
           poor-performance
           qualification
           itt-year
@@ -235,8 +235,8 @@ RSpec.describe EarlyCareerPayments::SlugSequence do
         %w[
           sign-in-or-continue
           current-school
-          nqt-in-academic-year-after-itt
           supply-teacher
+          nqt-in-academic-year-after-itt
           poor-performance
           qualification
           itt-year
@@ -293,8 +293,8 @@ RSpec.describe EarlyCareerPayments::SlugSequence do
         expected_slugs = %w[
           sign-in-or-continue
           current-school
-          nqt-in-academic-year-after-itt
           supply-teacher
+          nqt-in-academic-year-after-itt
           poor-performance
           qualification
           itt-year

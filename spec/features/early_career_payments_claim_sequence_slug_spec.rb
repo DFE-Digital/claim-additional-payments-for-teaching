@@ -61,6 +61,12 @@ RSpec.feature "Teacher Early-Career Payments claims sequence slug" do
 
     click_on "Continue"
 
+    # - Are you currently employed as a supply teacher
+    expect(page).to have_text(I18n.t("early_career_payments.questions.employed_as_supply_teacher"))
+
+    choose "No"
+    click_on "Continue"
+
     # - NQT in Academic Year after ITT
     expect(page).to have_text(I18n.t("early_career_payments.questions.nqt_in_academic_year_after_itt.heading"))
 
@@ -70,12 +76,6 @@ RSpec.feature "Teacher Early-Career Payments claims sequence slug" do
     eligibility = claim.eligibility
 
     expect(eligibility.nqt_in_academic_year_after_itt).to eql true
-
-    # - Are you currently employed as a supply teacher
-    expect(page).to have_text(I18n.t("early_career_payments.questions.employed_as_supply_teacher"))
-
-    choose "No"
-    click_on "Continue"
 
     expect(claim.eligibility.reload.employed_as_supply_teacher).to eql false
 

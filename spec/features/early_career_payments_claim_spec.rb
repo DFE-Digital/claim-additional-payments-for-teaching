@@ -24,6 +24,12 @@ RSpec.feature "Teacher Early-Career Payments claims", slow: true do
 
     choose_school school
 
+    # - Are you currently employed as a supply teacher
+    expect(page).to have_text(I18n.t("early_career_payments.questions.employed_as_supply_teacher"))
+
+    choose "No"
+    click_on "Continue"
+
     # - NQT in Academic Year after ITT
     expect(page).to have_text(I18n.t("early_career_payments.questions.nqt_in_academic_year_after_itt.heading"))
 
@@ -346,6 +352,12 @@ RSpec.feature "Teacher Early-Career Payments claims", slow: true do
 
     choose_school school
 
+    # - Are you currently employed as a supply teacher
+    expect(page).to have_text(I18n.t("early_career_payments.questions.employed_as_supply_teacher"))
+
+    choose "No"
+    click_on "Continue"
+
     # - NQT in Academic Year after ITT
     expect(page).to have_text(I18n.t("early_career_payments.questions.nqt_in_academic_year_after_itt.heading"))
 
@@ -495,6 +507,12 @@ RSpec.feature "Teacher Early-Career Payments claims", slow: true do
     expect(page).to have_text(I18n.t("early_career_payments.questions.current_school_search"))
 
     choose_school school
+
+    # - Are you currently employed as a supply teacher
+    expect(page).to have_text(I18n.t("early_career_payments.questions.employed_as_supply_teacher"))
+
+    choose "No"
+    click_on "Continue"
 
     # - NQT in Academic Year after ITT
     expect(page).to have_text(I18n.t("early_career_payments.questions.nqt_in_academic_year_after_itt.heading"))
@@ -1176,6 +1194,12 @@ RSpec.feature "Teacher Early-Career Payments claims", slow: true do
 
       # - Which school do you teach at
       choose_school school
+
+      # - Are you currently employed as a supply teacher
+      expect(page).to have_text(I18n.t("early_career_payments.questions.employed_as_supply_teacher"))
+
+      choose "No"
+      click_on "Continue"
 
       # - NQT in Academic Year after ITT
       choose "Yes"

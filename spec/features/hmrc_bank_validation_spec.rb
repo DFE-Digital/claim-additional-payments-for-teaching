@@ -20,12 +20,12 @@ RSpec.feature "Bank account validation on claim journey", :with_hmrc_bank_valida
     choose_school school
     click_on "Continue"
 
-    # - Have you started your first year as a newly qualified teacher?
-    choose "Yes"
-    click_on "Continue"
-
     # - Are you currently employed as a supply teacher
     choose "No"
+    click_on "Continue"
+
+    # - Have you started your first year as a newly qualified teacher?
+    choose "Yes"
     click_on "Continue"
 
     # - Poor performance

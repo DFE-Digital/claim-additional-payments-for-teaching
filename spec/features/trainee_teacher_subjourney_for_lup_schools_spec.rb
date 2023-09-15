@@ -16,6 +16,12 @@ RSpec.feature "Trainee teacher subjourney for LUP schools" do
 
     choose_school non_lup_school
 
+    # - Are you currently employed as a supply teacher
+    expect(page).to have_text(I18n.t("early_career_payments.questions.employed_as_supply_teacher"))
+
+    choose "No"
+    click_on "Continue"
+
     expect(page).to have_text(I18n.t("early_career_payments.questions.nqt_in_academic_year_after_itt.heading"))
 
     choose "No"
@@ -118,6 +124,12 @@ RSpec.feature "Trainee teacher subjourney for LUP schools" do
     click_on "Continue without signing in"
 
     choose_school lup_school
+
+    # - Are you currently employed as a supply teacher
+    expect(page).to have_text(I18n.t("early_career_payments.questions.employed_as_supply_teacher"))
+
+    choose "No"
+    click_on "Continue"
 
     expect(page).to have_text(I18n.t("early_career_payments.questions.nqt_in_academic_year_after_itt.heading"))
 

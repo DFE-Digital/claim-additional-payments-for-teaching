@@ -34,6 +34,8 @@ RSpec.feature "Backlinking during a claim" do
     # go to deadend
     choose "No"
     click_on "Continue"
+    choose "No"
+    click_on "Continue"
     expect(page).to have_link("Back")
     choose "None of the above"
     click_on "Continue"
@@ -55,6 +57,8 @@ RSpec.feature "Backlinking during a claim" do
 
     choose_school lup_school
 
+    choose "No"
+    click_on "Continue"
     choose "No, I’m a trainee teacher"
     click_on "Continue"
     click_on "Back"

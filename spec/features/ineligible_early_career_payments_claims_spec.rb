@@ -26,16 +26,16 @@ RSpec.feature "Ineligible Teacher Early-Career Payments claims", slow: true do
 
     choose_school eligible_school
 
-    # - Have you started your first year as a newly qualified teacher?
-    expect(page).to have_text(I18n.t("early_career_payments.questions.nqt_in_academic_year_after_itt.heading"))
-
-    choose "Yes"
-    click_on "Continue"
-
     # - Are you currently employed as a supply teacher
     expect(page).to have_text(I18n.t("early_career_payments.questions.employed_as_supply_teacher"))
 
     choose "No"
+    click_on "Continue"
+
+    # - Have you started your first year as a newly qualified teacher?
+    expect(page).to have_text(I18n.t("early_career_payments.questions.nqt_in_academic_year_after_itt.heading"))
+
+    choose "Yes"
     click_on "Continue"
 
     # - Poor performance
@@ -58,16 +58,16 @@ RSpec.feature "Ineligible Teacher Early-Career Payments claims", slow: true do
 
     choose_school eligible_school
 
-    # - Have you started your first year as a newly qualified teacher?
-    expect(page).to have_text(I18n.t("early_career_payments.questions.nqt_in_academic_year_after_itt.heading"))
-
-    choose "Yes"
-    click_on "Continue"
-
     # - Are you currently employed as a supply teacher
     expect(page).to have_text(I18n.t("early_career_payments.questions.employed_as_supply_teacher"))
 
     choose "No"
+    click_on "Continue"
+
+    # - Have you started your first year as a newly qualified teacher?
+    expect(page).to have_text(I18n.t("early_career_payments.questions.nqt_in_academic_year_after_itt.heading"))
+
+    choose "Yes"
     click_on "Continue"
 
     # - Poor performance
@@ -90,16 +90,16 @@ RSpec.feature "Ineligible Teacher Early-Career Payments claims", slow: true do
 
     choose_school eligible_school
 
-    # - Have you started your first year as a newly qualified teacher?
-    expect(page).to have_text(I18n.t("early_career_payments.questions.nqt_in_academic_year_after_itt.heading"))
-
-    choose "Yes"
-    click_on "Continue"
-
     # - Are you currently employed as a supply teacher
     expect(page).to have_text(I18n.t("early_career_payments.questions.employed_as_supply_teacher"))
 
     choose "No"
+    click_on "Continue"
+
+    # - Have you started your first year as a newly qualified teacher?
+    expect(page).to have_text(I18n.t("early_career_payments.questions.nqt_in_academic_year_after_itt.heading"))
+
+    choose "Yes"
     click_on "Continue"
 
     # - Poor performance
@@ -123,14 +123,14 @@ RSpec.feature "Ineligible Teacher Early-Career Payments claims", slow: true do
 
     choose_school eligible_school
 
-    # - Have you started your first year as a newly qualified teacher?
-    expect(page).to have_text(I18n.t("early_career_payments.questions.nqt_in_academic_year_after_itt.heading"))
+    # - Are you currently employed as a supply teacher
+    expect(page).to have_text(I18n.t("early_career_payments.questions.employed_as_supply_teacher"))
 
     choose "Yes"
     click_on "Continue"
 
-    # - Are you currently employed as a supply teacher
-    expect(page).to have_text(I18n.t("early_career_payments.questions.employed_as_supply_teacher"))
+    # - Have you started your first year as a newly qualified teacher?
+    expect(page).to have_text(I18n.t("early_career_payments.questions.nqt_in_academic_year_after_itt.heading"))
 
     choose "Yes"
     click_on "Continue"
@@ -154,14 +154,14 @@ RSpec.feature "Ineligible Teacher Early-Career Payments claims", slow: true do
 
     choose_school eligible_school
 
-    # - Have you started your first year as a newly qualified teacher?
-    expect(page).to have_text(I18n.t("early_career_payments.questions.nqt_in_academic_year_after_itt.heading"))
+    # - Are you currently employed as a supply teacher
+    expect(page).to have_text(I18n.t("early_career_payments.questions.employed_as_supply_teacher"))
 
     choose "Yes"
     click_on "Continue"
 
-    # - Are you currently employed as a supply teacher
-    expect(page).to have_text(I18n.t("early_career_payments.questions.employed_as_supply_teacher"))
+    # - Have you started your first year as a newly qualified teacher?
+    expect(page).to have_text(I18n.t("early_career_payments.questions.nqt_in_academic_year_after_itt.heading"))
 
     choose "Yes"
     click_on "Continue"
@@ -191,16 +191,16 @@ RSpec.feature "Ineligible Teacher Early-Career Payments claims", slow: true do
 
     choose_school eligible_school
 
-    # - Have you started your first year as a newly qualified teacher?
-    expect(page).to have_text(I18n.t("early_career_payments.questions.nqt_in_academic_year_after_itt.heading"))
-
-    choose "Yes"
-    click_on "Continue"
-
     # - Are you currently employed as a supply teacher
     expect(page).to have_text(I18n.t("early_career_payments.questions.employed_as_supply_teacher"))
 
     choose "No"
+    click_on "Continue"
+
+    # - Have you started your first year as a newly qualified teacher?
+    expect(page).to have_text(I18n.t("early_career_payments.questions.nqt_in_academic_year_after_itt.heading"))
+
+    choose "Yes"
     click_on "Continue"
 
     # - Poor performance
@@ -247,16 +247,16 @@ RSpec.feature "Ineligible Teacher Early-Career Payments claims", slow: true do
     ecp_only_school = eligible_school
     choose_school ecp_only_school
 
-    # - Have you started your first year as a newly qualified teacher?
-    expect(page).to have_text(I18n.t("early_career_payments.questions.nqt_in_academic_year_after_itt.heading"))
-
-    choose "Yes"
-    click_on "Continue"
-
     # - Are you currently employed as a supply teacher
     expect(page).to have_text(I18n.t("early_career_payments.questions.employed_as_supply_teacher"))
 
     choose "No"
+    click_on "Continue"
+
+    # - Have you started your first year as a newly qualified teacher?
+    expect(page).to have_text(I18n.t("early_career_payments.questions.nqt_in_academic_year_after_itt.heading"))
+
+    choose "Yes"
     click_on "Continue"
 
     # - Poor performance
@@ -310,16 +310,16 @@ RSpec.feature "Ineligible Teacher Early-Career Payments claims", slow: true do
 
     choose_school eligible_school
 
-    # - Have you started your first year as a newly qualified teacher?
-    expect(page).to have_text(I18n.t("early_career_payments.questions.nqt_in_academic_year_after_itt.heading"))
-
-    choose "Yes"
-    click_on "Continue"
-
     # - Are you currently employed as a supply teacher
     expect(page).to have_text(I18n.t("early_career_payments.questions.employed_as_supply_teacher"))
 
     choose "No"
+    click_on "Continue"
+
+    # - Have you started your first year as a newly qualified teacher?
+    expect(page).to have_text(I18n.t("early_career_payments.questions.nqt_in_academic_year_after_itt.heading"))
+
+    choose "Yes"
     click_on "Continue"
 
     # - Poor performance
