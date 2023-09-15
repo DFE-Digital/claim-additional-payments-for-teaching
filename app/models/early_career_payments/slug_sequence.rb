@@ -13,8 +13,8 @@ module EarlyCareerPayments
     ELIGIBILITY_SLUGS = [
       "sign-in-or-continue",
       "current-school",
-      "nqt-in-academic-year-after-itt",
       "supply-teacher",
+      "nqt-in-academic-year-after-itt",
       "entire-term-contract",
       "employed-directly",
       "poor-performance",
