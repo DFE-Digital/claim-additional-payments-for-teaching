@@ -54,8 +54,8 @@ RSpec.feature "Teacher Early-Career Payments claims sequence slug" do
     click_on "Sign in with teacher identity"
 
     # - Teacher details page
-    expect(page).to have_text("Check and confirm your details")
-    expect(page).to have_text("Are these details correct?")
+    expect(page).to have_text(I18n.t("early_career_payments.questions.check_and_confirm_details"))
+    expect(page).to have_text(I18n.t("early_career_payments.questions.details_correct"))
 
     choose "Yes"
     click_on "Continue"

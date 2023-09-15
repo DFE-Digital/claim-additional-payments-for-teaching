@@ -319,6 +319,8 @@ en:
         trainee_teacher_future_eligibility: "You are not eligible this year"
         generic: "Based on the answers you have provided you are not eligible for an early-career payment"
     questions:
+      check_and_confirm_details: "Check and confirm your details"
+      details_correct: "Are these details correct?" 
       current_school_search: "Which school do you teach at?"
       current_school_results: "Select the school you teach at"
       employed_as_supply_teacher: "Are you currently employed as a supply teacher?"
