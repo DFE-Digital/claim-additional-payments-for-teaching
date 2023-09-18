@@ -306,7 +306,7 @@ class Claim < ApplicationRecord
   # be flagged for QA or not. These criteria need to be met for each academic year:
   #
   # 1. the first claim to be approved should always be flagged for QA
-  # 2. subsequently approved claims should be flagged for QA, 1 in MIN_QA_THRESHOLD.
+  # 2. subsequently approved claims should be flagged for QA, 1 in 100/MIN_QA_THRESHOLD.
   #
   # This method should be used every time a new approval decision is being made;
   # when used retrospectively, i.e. when several claims have been approved,
