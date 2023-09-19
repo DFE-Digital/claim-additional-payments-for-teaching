@@ -12,6 +12,7 @@ module EarlyCareerPayments
   class SlugSequence
     ELIGIBILITY_SLUGS = [
       "sign-in-or-continue",
+      "teacher-detail",
       "current-school",
       "nqt-in-academic-year-after-itt",
       "supply-teacher",

@@ -46,6 +46,7 @@ FactoryBot.define do
       email_verified { true }
       payroll_gender { :female }
       provide_mobile_number { false }
+      details_check { true }
 
       eligibility_trait { :eligible }
 

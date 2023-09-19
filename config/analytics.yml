@@ -95,6 +95,7 @@ shared:
   - hmrc_bank_validation_succeeded
   - hmrc_bank_validation_responses
   - logged_in_with_tid
+  - details_check
   :decisions:
   - id
   - result

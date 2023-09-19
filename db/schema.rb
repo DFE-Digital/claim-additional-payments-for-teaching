@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_08_08_113301) do
+ActiveRecord::Schema[7.0].define(version: 2023_09_18_161410) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -86,6 +86,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_08_08_113301) do
     t.boolean "hmrc_bank_validation_succeeded", default: false
     t.json "hmrc_bank_validation_responses", default: []
     t.boolean "logged_in_with_tid", default: false
+    t.boolean "details_check"
     t.index ["academic_year"], name: "index_claims_on_academic_year"
     t.index ["created_at"], name: "index_claims_on_created_at"
     t.index ["eligibility_type", "eligibility_id"], name: "index_claims_on_eligibility_type_and_eligibility_id"
@@ -543,12 +544,12 @@ ActiveRecord::Schema[7.0].define(version: 2023_08_08_113301) do
               ELSE NULL::text
           END AS result,
           CASE c.submitted_at
-              WHEN NULL::timestamp without time zone THEN NULL::numeric
-              ELSE EXTRACT(epoch FROM (c.submitted_at - c.created_at))
+          WHEN NULL::timestamp without time zone THEN NULL::numeric
+          ELSE EXTRACT(epoch FROM (c.submitted_at - c.created_at))
           END AS submission_length,
           CASE d.created_at
-              WHEN NULL::timestamp without time zone THEN NULL::numeric
-              ELSE EXTRACT(epoch FROM (d.created_at - c.submitted_at))
+          WHEN NULL::timestamp without time zone THEN NULL::numeric
+          ELSE EXTRACT(epoch FROM (d.created_at - c.submitted_at))
           END AS decision_length
      FROM (decisions d
        RIGHT JOIN claims c ON ((c.id = d.claim_id)))
