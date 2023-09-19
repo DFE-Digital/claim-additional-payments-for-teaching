@@ -4,6 +4,6 @@ class OmniauthCallbacksController < ApplicationController
 
     session[:user_info] = auth.extra.raw_info
 
-    redirect_to teacher_detail_path(policy: "additional-payments")
+    redirect_to claim_path(policy: "additional-payments", slug: "teacher-detail")
   end
 end

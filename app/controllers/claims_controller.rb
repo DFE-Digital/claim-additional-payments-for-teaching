@@ -10,7 +10,6 @@ class ClaimsController < BasePublicController
   before_action :check_claim_not_in_progress, only: [:new]
   before_action :clear_claim_session, only: [:new]
   before_action :prepend_view_path_for_policy
-  before_action :set_teacher_detail, only: [:teacher_detail]
   before_action :unset_session_claim, only: [:reset_claim]
 
   def new
@@ -23,8 +22,14 @@ class ClaimsController < BasePublicController
 
   def show
     search_schools if params[:school_search]
-    if params[:slug] == "current-school" && params[:details_correct] == "no"
+    if current_claim.details_check.nil? && current_claim.logged_in_with_tid?
+      claim_path(current_policy_routing_name, "teacher-detail")
+    elsif params[:slug] == "current-school" && !current_claim.details_check? && current_claim.logged_in_with_tid?
       return redirect_to reset_claim_path
+    elsif params[:slug] == "teacher-detail"
+      update_session_with_current_slug
+      return redirect_to claim_path(current_policy_routing_name, next_slug) unless session[:user_info].present?
+      set_teacher_detail
     elsif params[:slug] == "teaching-subject-now" && !current_claim.eligibility.eligible_itt_subject
       return redirect_to claim_path(current_policy_routing_name, "eligible-itt-subject")
     elsif params[:slug] == "sign-in-or-continue"
@@ -263,15 +268,19 @@ class ClaimsController < BasePublicController
   def set_teacher_detail
     user_info = session[:user_info]
     if user_info
-      current_claim.update(
+      claim_attributes = {
         first_name: user_info["given_name"],
         surname: user_info["family_name"],
         teacher_reference_number: user_info["trn"],
         date_of_birth: user_info["birthdate"],
-        national_insurance_number: user_info["ni_number"],
         logged_in_with_tid: true
-      )
+      }
 
+      if user_info["trn_match_ni_number"]
+        claim_attributes[:national_insurance_number] = user_info["ni_number"]
+      end
+
+      current_claim.update(claim_attributes)
       session.delete("user_info")
     end
   end
