@@ -147,6 +147,7 @@ RSpec.describe EarlyCareerPayments::SlugSequence do
 
         expected_slugs = %w[
           sign-in-or-continue
+          teacher-detail
           current-school
           nqt-in-academic-year-after-itt
           supply-teacher
@@ -193,6 +194,7 @@ RSpec.describe EarlyCareerPayments::SlugSequence do
 
         expected_slugs = %w[
           sign-in-or-continue
+          teacher-detail
           current-school
           nqt-in-academic-year-after-itt
           supply-teacher
@@ -234,6 +236,7 @@ RSpec.describe EarlyCareerPayments::SlugSequence do
       let(:expected_slugs) do
         %w[
           sign-in-or-continue
+          teacher-detail
           current-school
           nqt-in-academic-year-after-itt
           supply-teacher
@@ -292,6 +295,7 @@ RSpec.describe EarlyCareerPayments::SlugSequence do
 
         expected_slugs = %w[
           sign-in-or-continue
+          teacher-detail
           current-school
           nqt-in-academic-year-after-itt
           supply-teacher

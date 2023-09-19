@@ -544,12 +544,12 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_18_161410) do
               ELSE NULL::text
           END AS result,
           CASE c.submitted_at
-          WHEN NULL::timestamp without time zone THEN NULL::numeric
-          ELSE EXTRACT(epoch FROM (c.submitted_at - c.created_at))
+              WHEN NULL::timestamp without time zone THEN NULL::numeric
+              ELSE EXTRACT(epoch FROM (c.submitted_at - c.created_at))
           END AS submission_length,
           CASE d.created_at
-          WHEN NULL::timestamp without time zone THEN NULL::numeric
-          ELSE EXTRACT(epoch FROM (d.created_at - c.submitted_at))
+              WHEN NULL::timestamp without time zone THEN NULL::numeric
+              ELSE EXTRACT(epoch FROM (d.created_at - c.submitted_at))
           END AS decision_length
      FROM (decisions d
        RIGHT JOIN claims c ON ((c.id = d.claim_id)))

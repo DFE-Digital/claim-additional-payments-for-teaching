@@ -17,6 +17,7 @@ RSpec.feature "Maths & Physics claims" do
       click_on "Continue"
 
       claim = Claim.by_policy(MathsAndPhysics).order(:created_at).last
+      claim.update(details_check: true)
       eligibility = claim.eligibility
 
       expect(eligibility.teaching_maths_or_physics).to eql true

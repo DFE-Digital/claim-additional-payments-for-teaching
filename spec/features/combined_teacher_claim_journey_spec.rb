@@ -20,6 +20,7 @@ RSpec.feature "Levelling up premium payments and early-career payments combined 
     expect(page).to have_current_path("/#{EarlyCareerPayments.routing_name}/current-school")
 
     # - Which school do you teach at
+    claim.update(details_check: true)
     expect(page).to have_text(I18n.t("early_career_payments.questions.current_school_search"))
     choose_school school
     click_on "Continue"
