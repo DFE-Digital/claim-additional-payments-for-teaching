@@ -85,9 +85,9 @@ RSpec.describe SchoolWorkforceCensusDataImporter do
     let!(:existing_census_entry) { create(:school_workforce_census, :early_career_payments_matched) }
     let(:csv) do
       <<~CSV
-        1234567,1234567,Full time,19,Design and Technlogy - Textiles,DTT,34,
+        12345678,1234567,Full time,19,Design and Technlogy - Textiles,DTT,34,
+        123456,NULL,,,Design and Technlogy - Textiles,,,
         NULL,,,,Design and Technlogy - Textiles,,,
-        test,,,,Design and Technlogy - Textiles,,,
         12345678,,,,Design and Technlogy - Textiles,,,
         ,,,,,,,,,,,,,,,
       CSV
@@ -98,7 +98,7 @@ RSpec.describe SchoolWorkforceCensusDataImporter do
     context "no errors" do
       it "imports all rows with TRNS" do
         subject
-        expect(SchoolWorkforceCensus.find_by_teacher_reference_number("1234567")).to be_present
+        expect(SchoolWorkforceCensus.find_by_teacher_reference_number("123456")).to be_present
       end
 
       it "skips rows with TRNS as NULL" do
