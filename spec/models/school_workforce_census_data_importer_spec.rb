@@ -87,6 +87,8 @@ RSpec.describe SchoolWorkforceCensusDataImporter do
       <<~CSV
         1234567,1234567,Full time,19,Design and Technlogy - Textiles,DTT,34,
         NULL,,,,Design and Technlogy - Textiles,,,
+        test,,,,Design and Technlogy - Textiles,,,
+        12345678,,,,Design and Technlogy - Textiles,,,
         ,,,,,,,,,,,,,,,
       CSV
     end
@@ -100,6 +102,11 @@ RSpec.describe SchoolWorkforceCensusDataImporter do
       end
 
       it "skips rows with TRNS as NULL" do
+        subject
+        expect(SchoolWorkforceCensus.count).to eq(1)
+      end
+
+      it "skips rows with TRNS having length greater than 7" do
         subject
         expect(SchoolWorkforceCensus.count).to eq(1)
       end

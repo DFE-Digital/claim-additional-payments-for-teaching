@@ -4,7 +4,6 @@ FactoryBot.define do
 
     body do
       <<~CSV
-        TRN,URN,ContractAgreementType,TotalFTE,SubjectDescription_SFR,GeneralSubjectCode,hours_taught,
         1234567,1234567,Full time,19,Design and Technlogy - Textiles,DTT,34,
         ,,,,,,,,,,,,,,,
       CSV
