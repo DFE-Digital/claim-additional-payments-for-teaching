@@ -16,20 +16,8 @@ class Admin::TasksController < Admin::BaseAdminController
     @tasks_presenter = @claim.policy::AdminTasksPresenter.new(@claim)
     @task = @claim.tasks.find_or_initialize_by(name: params[:name])
     @current_task_name = current_task_name
+    @notes = @claim.notes.automated.by_label(params[:name])
     set_pagination
-    @notes = if params[:name] == "identity_confirmation"
-      @claim.notes.order(created_at: :desc).select do |note|
-        note.body =~ %r{National Insurance|Teacher reference|First name or surname|Date of birth|Not matched}
-      end
-    elsif params[:name] == "qualifications"
-      @claim.notes.order(created_at: :desc).select { |note| note.body.include?("ligible") && note.body.include?("ITT start date") }.uniq { |n| n.body }
-    elsif params[:name] == "census_subjects_taught"
-      @claim.notes.order(created_at: :desc).select { |note| note.body.include?("ligible") && note.body.include?("Subject 1") }
-    elsif params[:name] == "employment"
-      @claim.notes.order(created_at: :desc).select { |note| note.body.include?("ligible") && note.body.include?("[Employment]") }
-    else
-      []
-    end
 
     render @task.name
   end

@@ -11,18 +11,18 @@ RSpec.describe ClaimCheckingTasks do
       expect(checking_tasks.applicable_task_names).to eq %w[identity_confirmation qualifications employment]
     end
 
-    it "includes the a task for student loan amount for a StudentLoans claim" do
+    it "includes a task for student loan amount for a StudentLoans claim" do
       student_loan_claim = build(:claim, :submitted, :verified, policy: StudentLoans)
       student_loan_tasks = ClaimCheckingTasks.new(student_loan_claim)
 
       expect(student_loan_tasks.applicable_task_names).to eq %w[identity_confirmation qualifications census_subjects_taught employment student_loan_amount]
     end
 
-    it "includes the a task for school workforce census check for a EarlyCareerPayments claim" do
+    it "includes tasks for induction and school workforce census check for a EarlyCareerPayments claim" do
       ecp_claim = build(:claim, :submitted, :verified, policy: EarlyCareerPayments)
       ecp_tasks = ClaimCheckingTasks.new(ecp_claim)
 
-      expect(ecp_tasks.applicable_task_names).to eq %w[identity_confirmation qualifications census_subjects_taught employment]
+      expect(ecp_tasks.applicable_task_names).to eq %w[identity_confirmation qualifications induction_confirmation census_subjects_taught employment]
     end
 
     it "includes the matching details task when there are claims with matching details" do

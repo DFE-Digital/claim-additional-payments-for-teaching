@@ -1,6 +1,9 @@
 module AutomatedChecks
   module ClaimVerifiers
     class Qualifications
+      TASK_NAME = "qualifications".freeze
+      private_constant :TASK_NAME
+
       def initialize(
         claim:,
         dqt_teacher_status:,
@@ -12,7 +15,7 @@ module AutomatedChecks
       end
 
       def perform
-        return unless awaiting_task?("qualifications")
+        return unless awaiting_task?(TASK_NAME)
 
         no_match || complete_match
       end
@@ -52,6 +55,7 @@ module AutomatedChecks
         claim.notes.create!(
           {
             body: body,
+            label: TASK_NAME,
             created_by: admin_user
           }
         )
@@ -60,7 +64,7 @@ module AutomatedChecks
       def create_task(match:, passed: nil)
         task = claim.tasks.build(
           {
-            name: "qualifications",
+            name: TASK_NAME,
             claim_verifier_match: match,
             passed: passed,
             manual: false,

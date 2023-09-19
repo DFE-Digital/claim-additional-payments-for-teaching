@@ -10,6 +10,7 @@ class Task < ApplicationRecord
   NAMES = %w[
     identity_confirmation
     qualifications
+    induction_confirmation
     census_subjects_taught
     employment
     student_loan_amount

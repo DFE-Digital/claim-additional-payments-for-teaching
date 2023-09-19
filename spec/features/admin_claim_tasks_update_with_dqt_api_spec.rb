@@ -867,7 +867,7 @@ RSpec.feature "Admin claim tasks update with DQT API" do
                 reference: "AB123456",
                 surname: "ELIGIBLE",
                 tasks: [build(:task, name: "qualifications")], # manual: true in factory!
-                notes: [build(:note, body: note_body)],
+                notes: [build(:note, :automated, body: note_body, label: "qualifications")],
                 teacher_reference_number: "1234567"
               }
             )
@@ -1692,7 +1692,7 @@ RSpec.feature "Admin claim tasks update with DQT API" do
                 reference: "AB123456",
                 surname: "ELIGIBLE",
                 tasks: [build(:task, name: "qualifications")],
-                notes: [build(:note, body: note_body)],
+                notes: [build(:note, :automated, body: note_body, label: "qualifications")],
                 teacher_reference_number: "1234567"
               }
             )
@@ -2469,7 +2469,7 @@ RSpec.feature "Admin claim tasks update with DQT API" do
                 reference: "AB123456",
                 surname: "ELIGIBLE",
                 tasks: [build(:task, name: "qualifications")],
-                notes: [build(:note, body: note_body)],
+                notes: [build(:note, :automated, body: note_body, label: "qualifications")],
                 teacher_reference_number: "1234567"
               }
             )

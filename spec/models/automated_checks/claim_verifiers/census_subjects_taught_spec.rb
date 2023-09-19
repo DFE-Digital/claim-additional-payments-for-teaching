@@ -191,6 +191,12 @@ module AutomatedChecks
                   end
                 end
 
+                describe "#label" do
+                  subject(:label) { note.label }
+
+                  it { is_expected.to eq("census_subjects_taught") }
+                end
+
                 describe "#created_by" do
                   subject(:created_by) { note.created_by }
 
@@ -255,6 +261,12 @@ module AutomatedChecks
                   end
                 end
 
+                describe "#label" do
+                  subject(:label) { note.label }
+
+                  it { is_expected.to eq("census_subjects_taught") }
+                end
+
                 describe "#created_by" do
                   subject(:created_by) { note.created_by }
 
@@ -305,6 +317,12 @@ module AutomatedChecks
                   subject(:body) { note.body }
 
                   it { is_expected.to eq("[School Workforce Census] - No data") }
+                end
+
+                describe "#label" do
+                  subject(:label) { note.label }
+
+                  it { is_expected.to eq("census_subjects_taught") }
                 end
 
                 describe "#created_by" do
