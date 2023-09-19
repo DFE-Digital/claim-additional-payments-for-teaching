@@ -921,6 +921,34 @@ RSpec.describe Claim, type: :model do
       expect(claim_with_decision.approvable?).to eq false
     end
 
+    it "returns true for a claim that has already been approved and awaiting QA" do
+      claim_with_decision = create(:claim, :submitted, :flagged_for_qa)
+      create(:decision, :approved, claim: claim_with_decision)
+
+      expect(claim_with_decision.approvable?).to eq true
+    end
+
+    it "returns true for a claim that has already been rejected and awaiting QA" do
+      claim_with_decision = create(:claim, :submitted, :flagged_for_qa)
+      create(:decision, :rejected, claim: claim_with_decision)
+
+      expect(claim_with_decision.approvable?).to eq true
+    end
+
+    it "returns false for a claim that has already been approved and QA'd" do
+      claim_with_decision = create(:claim, :submitted, :qa_completed)
+      create(:decision, :approved, claim: claim_with_decision)
+
+      expect(claim_with_decision.approvable?).to eq false
+    end
+
+    it "returns false for a claim that has already been rejected and QA'd" do
+      claim_with_decision = create(:claim, :submitted, :qa_completed)
+      create(:decision, :rejected, claim: claim_with_decision)
+
+      expect(claim_with_decision.approvable?).to eq false
+    end
+
     it "returns false when there exists another payrollable claim with the same teacher reference number but with inconsistent attributes that would prevent us from running payroll" do
       teacher_reference_number = generate(:teacher_reference_number)
       create(:claim, :approved, teacher_reference_number: teacher_reference_number, date_of_birth: 20.years.ago)
@@ -943,6 +971,94 @@ RSpec.describe Claim, type: :model do
     context "when the claim is not held" do
       subject(:claim) { create(:claim) }
       it { is_expected.to be_rejectable }
+    end
+  end
+
+  describe "#flaggable_for_qa?" do
+    subject { claim.flaggable_for_qa? }
+
+    context "when a decision has not been made" do
+      let(:claim) { create(:claim, :submitted) }
+
+      it { is_expected.to eq(false) }
+    end
+
+    context "when the claim has been rejected" do
+      let(:claim) { create(:claim, :rejected) }
+
+      it { is_expected.to eq(false) }
+    end
+
+    context "when the claim has been approved" do
+      let(:claim) { create(:claim, :approved) }
+
+      context "when above the min QA threshold" do
+        before do
+          allow(Claim).to receive(:below_min_qa_threshold?).and_return(false)
+        end
+
+        it { is_expected.to eq(false) }
+      end
+
+      context "when below the min QA threshold" do
+        before do
+          allow(Claim).to receive(:below_min_qa_threshold?).and_return(true)
+        end
+
+        it { is_expected.to eq(true) }
+      end
+    end
+
+    context "when the claim has been flagged for QA already" do
+      let(:claim) { create(:claim, :approved, :flagged_for_qa) }
+
+      it { is_expected.to eq(false) }
+    end
+
+    context "when a QA decision has been made already" do
+      let(:claim) { create(:claim, :approved, :qa_completed) }
+
+      it { is_expected.to eq(false) }
+    end
+  end
+
+  describe "qa_completed?" do
+    subject { claim.qa_completed? }
+
+    context "when the qa_completed_at is set" do
+      let(:claim) { build_stubbed(:claim, :qa_completed) }
+
+      it { is_expected.to eq(true) }
+    end
+
+    context "when the qa_completed_at is not set" do
+      let(:claim) { build_stubbed(:claim, :flagged_for_qa) }
+
+      it { is_expected.to eq(false) }
+    end
+  end
+
+  describe "awaiting_qa?" do
+    subject { claim.awaiting_qa? }
+
+    context "when the qa_required is false" do
+      let(:claim) { build_stubbed(:claim, qa_required: false) }
+
+      it { is_expected.to eq(false) }
+    end
+
+    context "when the qa_required is true" do
+      context "when the qa_completed_at is not set" do
+        let(:claim) { build_stubbed(:claim, qa_required: true, qa_completed_at: nil) }
+
+        it { is_expected.to eq(true) }
+      end
+
+      context "when the qa_completed_at is set" do
+        let(:claim) { build_stubbed(:claim, qa_required: true, qa_completed_at: Time.zone.now) }
+
+        it { is_expected.to eq(false) }
+      end
     end
   end
 
@@ -1202,6 +1318,69 @@ RSpec.describe Claim, type: :model do
         :one_time_password,
         :assigned_to_id
       ])
+    end
+  end
+
+  describe ".below_min_qa_threshold?" do
+    subject { described_class.below_min_qa_threshold? }
+
+    context "when the MIN_QA_THRESHOLD is set to zero" do
+      before do
+        stub_const("Claim::MIN_QA_THRESHOLD", 0)
+      end
+
+      it { is_expected.to eq(false) }
+    end
+
+    context "when the MIN_QA_THRESHOLD is set to 10" do
+      before do
+        stub_const("Claim::MIN_QA_THRESHOLD", 10) unless described_class::MIN_QA_THRESHOLD == 10
+      end
+
+      context "with no previously approved claims" do
+        it { is_expected.to eq(true) }
+      end
+
+      context "with 1 previously approved claim (1 flagged for QA)" do
+        let!(:claims_flagged_for_qa) { create_list(:claim, 1, :approved, :flagged_for_qa, academic_year: AcademicYear.current) }
+
+        it { is_expected.to eq(false) }
+      end
+
+      context "with 2 previously approved claim (1 flagged for QA)" do
+        let!(:claims_flagged_for_qa) { create_list(:claim, 1, :approved, :flagged_for_qa, academic_year: AcademicYear.current) }
+        let!(:claims_not_flagged_for_qa) { create_list(:claim, 1, :approved, academic_year: AcademicYear.current) }
+
+        it { is_expected.to eq(false) }
+      end
+
+      context "with 9 previously approved claims (1 flagged for QA)" do
+        let!(:claims_flagged_for_qa) { create_list(:claim, 1, :approved, :flagged_for_qa, academic_year: AcademicYear.current) }
+        let!(:claims_not_flagged_for_qa) { create_list(:claim, 8, :approved, academic_year: AcademicYear.current) }
+
+        it { is_expected.to eq(false) }
+      end
+
+      context "with 10 previously approved claims (1 flagged for QA)" do
+        let!(:claims_flagged_for_qa) { create_list(:claim, 1, :approved, :flagged_for_qa, academic_year: AcademicYear.current) }
+        let!(:claims_not_flagged_for_qa) { create_list(:claim, 9, :approved, academic_year: AcademicYear.current) }
+
+        it { is_expected.to eq(true) }
+      end
+
+      context "with 11 previously approved claims (2 flagged for QA)" do
+        let!(:claims_flagged_for_qa) { create_list(:claim, 2, :approved, :flagged_for_qa, academic_year: AcademicYear.current) }
+        let!(:claims_not_flagged_for_qa) { create_list(:claim, 10, :approved, academic_year: AcademicYear.current) }
+
+        it { is_expected.to eq(false) }
+      end
+
+      context "with 21 previously approved claims (2 flagged for QA)" do
+        let!(:claims_flagged_for_qa) { create_list(:claim, 2, :approved, :flagged_for_qa, academic_year: AcademicYear.current) }
+        let!(:claims_not_flagged_for_qa) { create_list(:claim, 19, :approved, academic_year: AcademicYear.current) }
+
+        it { is_expected.to eq(true) }
+      end
     end
   end
 

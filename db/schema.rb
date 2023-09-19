@@ -86,6 +86,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_25_163438) do
     t.boolean "held", default: false
     t.boolean "hmrc_bank_validation_succeeded", default: false
     t.json "hmrc_bank_validation_responses", default: []
+    t.boolean "qa_required", default: false
+    t.datetime "qa_completed_at"
     t.index ["academic_year"], name: "index_claims_on_academic_year"
     t.index ["created_at"], name: "index_claims_on_created_at"
     t.index ["eligibility_type", "eligibility_id"], name: "index_claims_on_eligibility_type_and_eligibility_id"

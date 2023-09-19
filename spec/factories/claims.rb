@@ -204,6 +204,16 @@ FactoryBot.define do
       held { true }
     end
 
+    trait :flagged_for_qa do
+      qa_required { true }
+      qa_completed_at { nil }
+    end
+
+    trait :qa_completed do
+      qa_required { true }
+      qa_completed_at { Time.zone.now }
+    end
+
     trait :with_bank_details do
       bank_or_building_society { :personal_bank_account }
       banking_name { "Jo Bloggs" }

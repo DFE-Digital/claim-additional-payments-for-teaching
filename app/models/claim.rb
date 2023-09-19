@@ -3,6 +3,7 @@
 class Claim < ApplicationRecord
   include ::OneTimePasswordCheckable
 
+  MIN_QA_THRESHOLD = 10
   TRN_LENGTH = 7
   NO_STUDENT_LOAN = "not_applicable"
   STUDENT_LOAN_PLAN_OPTIONS = StudentLoan::PLANS.dup << NO_STUDENT_LOAN
@@ -98,7 +99,9 @@ class Claim < ApplicationRecord
     policy_options_provided: false,
     held: false,
     hmrc_bank_validation_responses: false,
-    hmrc_bank_validation_succeeded: false
+    hmrc_bank_validation_succeeded: false,
+    qa_required: false,
+    qa_completed_at: false
   }.freeze
   DECISION_DEADLINE = 14.weeks
   DECISION_DEADLINE_WARNING_POINT = 2.weeks
@@ -295,6 +298,17 @@ class Claim < ApplicationRecord
   delegate :award_amount, to: :eligibility
 
   scope :payrollable, -> { approved.left_joins(:payments).where(payments: nil) }
+  scope :awaiting_qa, -> { approved.qa_required.where(qa_completed_at: nil) }
+  scope :qa_required, -> { where(qa_required: true) }
+
+  def self.below_min_qa_threshold?
+    return false if MIN_QA_THRESHOLD.zero?
+
+    claims_approved_so_far = current_academic_year.approved.count
+    return true if claims_approved_so_far.zero?
+
+    (current_academic_year.approved.qa_required.count.to_f / claims_approved_so_far) * 100 <= MIN_QA_THRESHOLD
+  end
 
   def submit!
     raise NotSubmittable unless submittable?
@@ -332,7 +346,7 @@ class Claim < ApplicationRecord
   end
 
   def approvable?
-    submitted? && !held? && !payroll_gender_missing? && !decision_made? && !payment_prevented_by_other_claims?
+    submitted? && !held? && !payroll_gender_missing? && (!decision_made? || awaiting_qa?) && !payment_prevented_by_other_claims?
   end
 
   def rejectable?
@@ -343,8 +357,24 @@ class Claim < ApplicationRecord
     !decision_made?
   end
 
+  def flaggable_for_qa?
+    decision_made? && latest_decision.approved? && Claim.below_min_qa_threshold? && !awaiting_qa? && !qa_completed?
+  end
+
+  def qa_completed?
+    qa_completed_at?
+  end
+
+  def awaiting_qa?
+    qa_required? && !qa_completed?
+  end
+
   def latest_decision
     decisions.active.last
+  end
+
+  def previous_decision
+    decisions.last(2).first
   end
 
   def decision_made?
