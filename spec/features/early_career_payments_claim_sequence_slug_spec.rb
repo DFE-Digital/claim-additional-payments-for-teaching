@@ -41,7 +41,7 @@ RSpec.feature "Teacher Early-Career Payments claims sequence slug" do
   end
 
   # Rename this file to a tid specific spec later
-  xscenario "When user is logged in with teacher_id" do
+  xscenario "When user is logged in with teacher_id and select email coming from teacher id" do
     visit landing_page_path(EarlyCareerPayments.routing_name)
     expect(page).to have_link("Claim additional payments for teaching", href: "/additional-payments/landing-page")
     expect(page).to have_link(href: "mailto:#{EarlyCareerPayments.feedback_email}")
@@ -125,12 +125,10 @@ RSpec.feature "Teacher Early-Career Payments claims sequence slug" do
     click_on "Continue"
 
     expect(page).to have_text("Which subject")
-
     choose "Mathematics"
     click_on "Continue"
 
     expect(page).to have_text(I18n.t("early_career_payments.questions.teaching_subject_now"))
-
     choose "Yes"
     click_on "Continue"
 
@@ -211,16 +209,11 @@ RSpec.feature "Teacher Early-Career Payments claims sequence slug" do
 
     # - Email address
     expect(page).to have_text(I18n.t("questions.email_address"))
+    click_on "Back"
 
-    fill_in "Email address", with: "david.tau1988@hotmail.co.uk"
+    expect(page).to have_text(I18n.t("early_career_payments.questions.select_email.heading"))
+    find('input[type="radio"][value="test@gmail.com"]', wait: 10).choose
     click_on "Continue"
-
-    expect(claim.reload.email_address).to eql("david.tau1988@hotmail.co.uk")
-
-    expect(page).to have_text("Email address verification")
-    expect(page).to have_text("Enter the 6-digit passcode")
-    fill_in "claim_one_time_password", with: "097543"
-    click_on "Confirm"
 
     expect(page).to have_text(I18n.t("questions.provide_mobile_number"))
 

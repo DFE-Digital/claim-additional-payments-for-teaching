@@ -39,6 +39,7 @@ module EarlyCareerPayments
       "no-address-found",
       "select-home-address",
       "address",
+      "select-email",
       "email-address",
       "email-verification",
       "provide-mobile-number",
@@ -107,6 +108,14 @@ module EarlyCareerPayments
         sequence.delete("building-society-account") if claim.bank_or_building_society == "personal_bank_account"
 
         sequence.delete("teacher-reference-number") if claim.logged_in_with_tid? && claim.teacher_reference_number.present?
+        sequence.delete("select-email") unless claim.logged_in_with_tid?
+
+        if claim.logged_in_with_tid? && !claim.email_address.nil? && claim.email_address != "new@example.com"
+          sequence.delete("email-address")
+          sequence.delete("email-verification")
+        elsif !claim.logged_in_with_tid? && claim.email_address.nil? && claim.email_address == "new@example.com"
+          sequence.push("email-address", "email-verification")
+        end
 
         if claim.provide_mobile_number == false
           sequence.delete("mobile-number")
@@ -143,6 +152,18 @@ module EarlyCareerPayments
       ]
 
       slugs.each { |slug| sequence.delete(slug) }
+    end
+
+    def should_reset_sequence?(claim)
+      logged_in_with_tid = claim.logged_in_with_tid?
+      email_address = claim.email_address
+
+      if logged_in_with_tid && email_address && email_address != "new@example.com"
+        sequence.delete("email-address")
+        sequence.delete("email-verification")
+      elsif !logged_in_with_tid && !email_address
+        sequence.push("email-address", "email-verification")
+      end
     end
 
     def remove_masters_doctoral_loan_slugs(sequence, slugs = nil)

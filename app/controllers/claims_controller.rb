@@ -28,6 +28,9 @@ class ClaimsController < BasePublicController
       return redirect_to claim_path(current_policy_routing_name, "eligible-itt-subject")
     elsif params[:slug] == "sign-in-or-continue"
       update_session_with_current_slug
+    elsif params[:slug] == "email-address" && current_claim.logged_in_with_tid? && current_claim.email_address != "new@example.com"
+      update_session_with_current_slug
+      return redirect_to claim_path(current_policy_routing_name, "provide-mobile-number")
     elsif params[:slug] == "postcode-search" && postcode
       redirect_to claim_path(current_policy_routing_name, "select-home-address", {"claim[postcode]": params[:claim][:postcode], "claim[address_line_1]": params[:claim][:address_line_1]}) and return unless invalid_postcode?
     elsif params[:slug] == "select-home-address" && postcode
@@ -135,6 +138,12 @@ class ClaimsController < BasePublicController
   end
 
   def claim_params
+    if session[:user_info]
+      session[:email_address] = session[:user_info]["email"]
+      params[:claim] ||= {}
+      params[:claim].merge!(teacher_reference_number: session[:user_info]["trn"], logged_in_with_tid: true)
+      session.delete("user_info")
+    end
     params.fetch(:claim, {}).permit(Claim::PermittedParameters.new(current_claim).keys)
   end
 

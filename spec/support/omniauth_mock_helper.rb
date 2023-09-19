@@ -4,6 +4,7 @@ module OmniauthMockHelper
       "extra" => {
         "raw_info" => {
           "trn" => trn,
+          "email" => "test@gmail.com",
           "birthdate" => "1940-01-01",
           "given_name" => "Kelsie",
           "family_name" => "Oberbrunner",

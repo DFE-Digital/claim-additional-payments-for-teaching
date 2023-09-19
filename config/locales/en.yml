@@ -120,8 +120,7 @@ en:
     duplicate_attributes_message:
       one: Details in this claim match another %{policy} claim
       other: Details in this claim match other %{policy} claims
-    unknown_payroll_gender_preventing_approval_message:
-      This claim cannot be approved, the payroll gender is missing and the claim will need to be referred
+    unknown_payroll_gender_preventing_approval_message: This claim cannot be approved, the payroll gender is missing and the claim will need to be referred
     tasks:
       qualifications: "Check qualification information"
       induction_confirmation: "Check induction information"
@@ -165,8 +164,7 @@ en:
         on_or_after_first_september_2012: "On or after 1 September 2012"
       two_or_more_courses:
         before_first_september_2012: "All started before 1 September 2012"
-        some_before_some_after_first_september_2012:
-          "Some before 1 September 2012, some after 1 September 2012"
+        some_before_some_after_first_september_2012: "Some before 1 September 2012, some after 1 September 2012"
         on_or_after_first_september_2012: "All started after 1 September 2012"
     payroll_gender:
       male: "Male"
@@ -321,7 +319,7 @@ en:
         generic: "Based on the answers you have provided you are not eligible for an early-career payment"
     questions:
       check_and_confirm_details: "Check and confirm your details"
-      details_correct: "Are these details correct?" 
+      details_correct: "Are these details correct?"
       current_school_search: "Which school do you teach at?"
       current_school_results: "Select the school you teach at"
       employed_as_supply_teacher: "Are you currently employed as a supply teacher?"
@@ -346,6 +344,10 @@ en:
               Select yes if you have more than 2 years experience as a teacher.<br/>
               Select no if you have less than 2 years experience as a teacher.<br/>
               Further information can be found at <a href="https://www.gov.uk/government/publications/apply-for-qualified-teacher-status-qts-if-you-teach-outside-the-uk/routes-to-qualified-teacher-status-qts-for-teachers-and-those-with-teaching-experience-outside-the-uk#early-career-teacher-ect-induction" class="govuk-link govuk-link--no-visited-state" target="_blank">early-career teacher (ECT) induction periods for teachers who qualified overseas</a>
+      select_email:
+        heading: "Which email address should we use to contact you?"
+        hint: "We recommend you use a non-work email address in case your circumstances change while we process your payment."
+        different_email: "A different email address"
       poor_performance: Tell us if you are currently under any performance measures or disciplinary action
       disciplinary_action: "Are you currently subject to disciplinary action?"
       disciplinary_action_hint: "This is more serious than performance measures and could be because of misconduct. It is something we may check with your school as it will affect your eligibility."
