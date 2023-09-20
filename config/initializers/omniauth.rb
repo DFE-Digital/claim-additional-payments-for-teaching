@@ -2,7 +2,6 @@
 
 OmniAuth.configure do |config|
   config.logger = Rails.logger
-  config.path_prefix = "/admin/auth"
 end
 
 dfe_sign_in_issuer = ENV["DFE_SIGN_IN_ISSUER"]
@@ -69,14 +68,13 @@ module ::DfESignIn
   end
 end
 
-if DfESignIn.bypass?
-  Rails.application.config.middleware.use OmniAuth::Builder do
-    provider :developer
-  end
-else
-  Rails.application.config.middleware.use OmniAuth::Strategies::OpenIDConnect, dfe_options
-end
 
 Rails.application.config.middleware.use OmniAuth::Builder do
+  if DfESignIn.bypass?
+    provider :developer
+  else
+    provider :openid_connect, dfe_options
+  end
+
   provider :openid_connect, tid_options
 end

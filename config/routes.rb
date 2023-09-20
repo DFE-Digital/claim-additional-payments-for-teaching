@@ -85,8 +85,6 @@ Rails.application.routes.draw do
     delete "/auth/sign-out" => "auth#sign_out", :as => :sign_out
 
     # DfE Sign-in OpenID routes
-    post "/auth/dfe", as: :dfe_sign_in
-    post "/auth/tid", as: :tid_sign_in
     get "/auth/callback", to: "auth#callback"
     get "/auth/failure", to: "auth#failure"
     post "/auth/developer/callback", to: "auth#bypass_callback", as: :dfe_sign_in_bypass_callback
