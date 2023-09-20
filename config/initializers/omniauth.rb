@@ -69,7 +69,6 @@ module ::DfESignIn
   end
 end
 
-
 Rails.application.config.middleware.use OmniAuth::Builder do
   if DfESignIn.bypass?
     provider :developer
