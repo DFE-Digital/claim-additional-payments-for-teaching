@@ -18,7 +18,7 @@ RSpec.describe "Admin authentication", type: :request do
       it "creates a DfeSignIn::User record for the user and redirects to the admin root, setting the session ID" do
         expect {
           stub_dfe_sign_in_with_role(DfeSignIn::User::SERVICE_OPERATOR_DFE_SIGN_IN_ROLE_CODE, dfe_sign_in_user_id)
-          post admin_dfe_sign_in_path
+          post "/admin/auth/dfe"
           expect(response).to redirect_to(admin_auth_callback_path)
           follow_redirect!
         }.to change { DfeSignIn::User.count }.by(1)
@@ -41,7 +41,7 @@ RSpec.describe "Admin authentication", type: :request do
 
       it "updates the existing DfeSignIn::User record and redirects to the admin root, setting the session ID" do
         stub_dfe_sign_in_with_role(DfeSignIn::User::SERVICE_OPERATOR_DFE_SIGN_IN_ROLE_CODE, user.dfe_sign_in_id)
-        post admin_dfe_sign_in_path
+        post "/admin/auth/dfe"
         expect(response).to redirect_to(admin_auth_callback_path)
         follow_redirect!
 
@@ -60,7 +60,7 @@ RSpec.describe "Admin authentication", type: :request do
 
       it "redirects the user to their originally requested page after they sign in" do
         stub_dfe_sign_in_with_role(DfeSignIn::User::SERVICE_OPERATOR_DFE_SIGN_IN_ROLE_CODE)
-        post admin_dfe_sign_in_path
+        post "/admin/auth/dfe"
         expect(response).to redirect_to(admin_auth_callback_path)
         follow_redirect!
 
@@ -71,7 +71,7 @@ RSpec.describe "Admin authentication", type: :request do
     context "when the user does not have an authorised role" do
       it "returns an Unauthorised response and doesn’t set a session" do
         stub_dfe_sign_in_with_role("not-the-role-code-we-expect")
-        post admin_dfe_sign_in_path
+        post "/admin/auth/dfe"
         expect(response).to redirect_to(admin_auth_callback_path)
         follow_redirect!
 
@@ -88,7 +88,7 @@ RSpec.describe "Admin authentication", type: :request do
 
       it "returns an Unauthorised response and doesn’t set a session" do
         stub_dfe_sign_in_with_role(DfeSignIn::User::SERVICE_OPERATOR_DFE_SIGN_IN_ROLE_CODE, user.dfe_sign_in_id)
-        post admin_dfe_sign_in_path
+        post "/admin/auth/dfe"
         expect(response).to redirect_to(admin_auth_callback_path)
         follow_redirect!
 
@@ -103,7 +103,7 @@ RSpec.describe "Admin authentication", type: :request do
     context "when the callback from DfE Sign-in is for invalid credentials" do
       it "redirects to the auth failure page and doesn’t set a session" do
         OmniAuth.config.mock_auth[:dfe] = :invalid_credentials
-        post admin_dfe_sign_in_path
+        post "/admin/auth/dfe"
         expect(response).to redirect_to(admin_auth_callback_path)
         follow_redirect!
 

@@ -21,6 +21,7 @@ dfe_options = {
   response_type: :code,
   scope: %i[openid email organisation],
   callback_path: "/admin/auth/callback",
+  path_prefix: "/admin/auth",
   client_options: {
     port: dfe_sign_in_issuer_uri&.port,
     scheme: dfe_sign_in_issuer_uri&.scheme,
