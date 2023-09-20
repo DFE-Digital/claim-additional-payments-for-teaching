@@ -23,7 +23,7 @@ module RequestHelpers
 
   def sign_in_to_admin_with_role(*args)
     stub_dfe_sign_in_with_role(*args)
-    post admin_dfe_sign_in_path
+    post "/admin/auth/dfe"
     follow_redirect!
   end
 
