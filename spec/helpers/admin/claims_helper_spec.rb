@@ -125,6 +125,18 @@ describe Admin::ClaimsHelper do
         expect(user_id_details[1]).to match("DfE Sign-in ID - #{user.dfe_sign_in_id}")
       end
     end
+
+    context "when the decision is automated" do
+      let(:decision) { create(:decision, :auto_approved, claim: claim) }
+
+      it "includes an array of details about the decision" do
+        expect(helper.admin_decision_details(decision)).to eq([
+          [I18n.t("admin.decision.created_at"), l(decision.created_at)],
+          [I18n.t("admin.decision.result"), decision.result.capitalize],
+          [I18n.t("admin.decision.notes"), simple_format(decision.notes, class: "govuk-body")]
+        ])
+      end
+    end
   end
 
   describe "#decision_deadline_warning" do

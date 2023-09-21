@@ -20,8 +20,10 @@ FactoryBot.define do
       undone { true }
     end
 
-    trait :automated do
+    trait :auto_approved do
+      approved
       created_by_id { nil }
+      notes { "Auto-approved" }
     end
   end
 end
