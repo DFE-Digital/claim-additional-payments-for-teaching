@@ -37,11 +37,17 @@ dfe_options = {
 tid_sign_issuer = ENV["TID_SIGN_IN_ISSUER"]
 tid_sign_in_secret = ENV["TID_SIGN_IN_SECRET"]
 tid_sign_in_endpoint = ENV["TID_SIGN_IN_API_ENDPOINT"]
-tid_base_url = ENV["TID_BASE_URL"]
 
 tid_sign_in_endpoint_uri = tid_sign_in_endpoint.present? ? URI(tid_sign_in_endpoint) : nil
 
-tid_sign_in_redirect_uri = tid_base_url.present? ? URI.join(tid_base_url, "/claim/auth/tid/callback").to_s : nil
+if ENV["TID_BASE_URL"].present?
+  tid_sign_in_redirect_uri = URI.parse(ENV["TID_BASE_URL"])
+  tid_sign_in_redirect_uri.path = "/claim/auth/tid/callback"
+
+  if ENV["ENVIRONMENT_NAME"] == "review"
+    tid_sign_in_redirect_uri.host = ENV["CANONICAL_HOSTNAME"]
+  end
+end
 
 tid_options = {
   name: :tid,
@@ -52,7 +58,7 @@ tid_options = {
     host: tid_sign_in_endpoint_uri&.host,
     identifier: ENV["TID_SIGN_IN_CLIENT_ID"],
     port: tid_sign_in_endpoint_uri&.port,
-    redirect_uri: tid_sign_in_redirect_uri,
+    redirect_uri: tid_sign_in_redirect_uri&.to_s,
     scheme: tid_sign_in_endpoint_uri&.scheme || "https",
     secret: tid_sign_in_secret
   },
