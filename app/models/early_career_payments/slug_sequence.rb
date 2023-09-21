@@ -13,6 +13,7 @@ module EarlyCareerPayments
     ELIGIBILITY_SLUGS = [
       "current-school",
       "nqt-in-academic-year-after-itt",
+      "induction-completed",
       "supply-teacher",
       "entire-term-contract",
       "employed-directly",
@@ -117,6 +118,10 @@ module EarlyCareerPayments
           sequence.delete("future-eligibility")
           sequence.delete("eligible-degree-subject") unless ecp_claim&.eligibility&.status == :ineligible && lup_claim&.eligibility&.indicated_ineligible_itt_subject?
         end
+
+        if ecp_claim.eligibility.induction_not_completed? && ecp_claim.eligibility.ecp_only_school?
+          replace_ecp_only_induction_not_completed_slugs(sequence)
+        end
       end
     end
 
@@ -153,6 +158,17 @@ module EarlyCareerPayments
       ].include?(claim.student_loan_country)
         remove_student_loan_slugs(sequence, slugs)
       end
+    end
+
+    def replace_ecp_only_induction_not_completed_slugs(sequence)
+      slugs = %w[
+        current-school
+        nqt-in-academic-year-after-itt
+        induction-completed
+        eligible-later
+      ]
+
+      sequence.replace(slugs)
     end
 
     # This method swaps out the entire slug sequence and replaces it with this tiny

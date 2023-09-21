@@ -116,6 +116,7 @@ RSpec.describe EarlyCareerPayments::SlugSequence do
         expected_slugs = %w[
           current-school
           nqt-in-academic-year-after-itt
+          induction-completed
           supply-teacher
           poor-performance
           qualification
@@ -161,6 +162,7 @@ RSpec.describe EarlyCareerPayments::SlugSequence do
         expected_slugs = %w[
           current-school
           nqt-in-academic-year-after-itt
+          induction-completed
           supply-teacher
           poor-performance
           qualification
@@ -201,6 +203,7 @@ RSpec.describe EarlyCareerPayments::SlugSequence do
         %w[
           current-school
           nqt-in-academic-year-after-itt
+          induction-completed
           supply-teacher
           poor-performance
           qualification
@@ -258,6 +261,7 @@ RSpec.describe EarlyCareerPayments::SlugSequence do
         expected_slugs = %w[
           current-school
           nqt-in-academic-year-after-itt
+          induction-completed
           supply-teacher
           poor-performance
           qualification

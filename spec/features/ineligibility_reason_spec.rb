@@ -1,11 +1,11 @@
 require "rails_helper"
 
 RSpec.feature "Ineligibility reason", slow: true do
+  let!(:policy_configuration) { create(:policy_configuration, :additional_payments, current_academic_year: AcademicYear.new(2022)) }
   let!(:lup_and_ecp_school) { create(:school, :combined_journey_eligibile_for_all) }
   let!(:ecp_only_school) { create(:school, :early_career_payments_eligible) }
 
   before do
-    create(:policy_configuration, :additional_payments)
     visit new_claim_path(LevellingUpPremiumPayments.routing_name)
   end
 
@@ -258,6 +258,10 @@ RSpec.feature "Ineligibility reason", slow: true do
     choose "Yes"
     click_on "Continue"
 
+    # - Have you completed your induction as an early-career teacher?
+    choose "Yes"
+    click_on "Continue"
+
     # - Are you currently employed as a supply teacher
     choose "Yes"
     click_on "Continue"
@@ -268,6 +272,11 @@ RSpec.feature "Ineligibility reason", slow: true do
     click_on "Continue"
 
     # - Have you started your first year as a newly qualified teacher?
+    choose "Yes"
+    click_on "Continue"
+
+    # - Have you completed your induction as an early-career teacher?
+
     choose "Yes"
     click_on "Continue"
 
@@ -282,6 +291,11 @@ RSpec.feature "Ineligibility reason", slow: true do
     click_on "Continue"
 
     # - Have you started your first year as a newly qualified teacher?
+    choose "Yes"
+    click_on "Continue"
+
+    # - Have you completed your induction as an early-career teacher?
+
     choose "Yes"
     click_on "Continue"
 

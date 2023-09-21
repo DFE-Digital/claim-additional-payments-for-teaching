@@ -323,6 +323,7 @@ RSpec.describe CurrentClaim, type: :model do
       expected = [
         :nqt_in_academic_year_after_itt,
         :current_school_id,
+        :induction_completed,
         :employed_as_supply_teacher,
         :has_entire_term_contract,
         :employed_directly,
@@ -344,6 +345,7 @@ RSpec.describe CurrentClaim, type: :model do
       expected = [
         :nqt_in_academic_year_after_itt,
         :current_school_id,
+        :induction_completed,
         :employed_as_supply_teacher,
         :has_entire_term_contract,
         :employed_directly,
@@ -364,6 +366,7 @@ RSpec.describe CurrentClaim, type: :model do
       expected = [
         :nqt_in_academic_year_after_itt,
         :current_school_id,
+        :induction_completed,
         :employed_as_supply_teacher,
         :has_entire_term_contract,
         :employed_directly,

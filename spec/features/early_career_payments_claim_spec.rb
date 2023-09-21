@@ -4,7 +4,7 @@ RSpec.feature "Teacher Early-Career Payments claims", slow: true do
   include EarlyCareerPaymentsHelper
 
   # create a school eligible for ECP and LUP so can walk the whole journey
-  let!(:policy_configuration) { create(:policy_configuration, :additional_payments) }
+  let!(:policy_configuration) { create(:policy_configuration, :additional_payments, current_academic_year: AcademicYear.new(2022)) }
   let!(:school) { create(:school, :combined_journey_eligibile_for_all) }
   let(:current_academic_year) { policy_configuration.current_academic_year }
 
@@ -34,6 +34,12 @@ RSpec.feature "Teacher Early-Career Payments claims", slow: true do
     eligibility = claim.eligibility
 
     expect(eligibility.nqt_in_academic_year_after_itt).to eql true
+
+    # - Have you completed your induction as an early-career teacher?
+    expect(page).to have_text(I18n.t("early_career_payments.questions.induction_completed.heading"))
+
+    choose "Yes"
+    click_on "Continue"
 
     # - Are you currently employed as a supply teacher
     expect(page).to have_text(I18n.t("early_career_payments.questions.employed_as_supply_teacher"))
@@ -357,6 +363,12 @@ RSpec.feature "Teacher Early-Career Payments claims", slow: true do
 
     expect(eligibility.nqt_in_academic_year_after_itt).to eql true
 
+    # - Have you completed your induction as an early-career teacher?
+    expect(page).to have_text(I18n.t("early_career_payments.questions.induction_completed.heading"))
+
+    choose "Yes"
+    click_on "Continue"
+
     # - Are you currently employed as a supply teacher
     expect(page).to have_text(I18n.t("early_career_payments.questions.employed_as_supply_teacher"))
 
@@ -506,6 +518,12 @@ RSpec.feature "Teacher Early-Career Payments claims", slow: true do
     eligibility = claim.eligibility
 
     expect(eligibility.nqt_in_academic_year_after_itt).to eql true
+
+    # - Have you completed your induction as an early-career teacher?
+    expect(page).to have_text(I18n.t("early_career_payments.questions.induction_completed.heading"))
+
+    choose "Yes"
+    click_on "Continue"
 
     # - Are you currently employed as a supply teacher
     expect(page).to have_text(I18n.t("early_career_payments.questions.employed_as_supply_teacher"))
@@ -1178,6 +1196,10 @@ RSpec.feature "Teacher Early-Career Payments claims", slow: true do
       choose_school school
 
       # - NQT in Academic Year after ITT
+      choose "Yes"
+      click_on "Continue"
+
+      # - Completed induction as an early-career teacher?
       choose "Yes"
       click_on "Continue"
 

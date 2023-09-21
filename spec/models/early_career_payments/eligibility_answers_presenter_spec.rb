@@ -25,6 +25,7 @@ RSpec.describe EarlyCareerPayments::EligibilityAnswersPresenter do
           expect(questions(subject)).to eq([
             "Which school do you teach at?",
             "Are you currently teaching as a qualified teacher?",
+            "Have you completed your induction as an early-career teacher?",
             "Are you currently employed as a supply teacher?",
             "Do you have a contract to teach at the same school for an entire term or longer?",
             "Are you employed directly by your school?",
@@ -54,6 +55,7 @@ RSpec.describe EarlyCareerPayments::EligibilityAnswersPresenter do
           expect(questions(subject)).to eq([
             "Which school do you teach at?",
             "Are you currently teaching as a qualified teacher?",
+            "Have you completed your induction as an early-career teacher?",
             "Are you currently employed as a supply teacher?",
             "Have any performance measures been started against you?",
             "Are you currently subject to disciplinary action?",
@@ -92,6 +94,7 @@ RSpec.describe EarlyCareerPayments::EligibilityAnswersPresenter do
             [
               ["Which school do you teach at?", eligibility.current_school.name, "current-school"],
               ["Are you currently teaching as a qualified teacher?", "Yes", "nqt-in-academic-year-after-itt"],
+              ["Have you completed your induction as an early-career teacher?", "No", "induction-completed"],
               ["Are you currently employed as a supply teacher?", "Yes", "supply-teacher"],
               ["Do you have a contract to teach at the same school for an entire term or longer?", "Yes", "entire-term-contract"],
               ["Are you employed directly by your school?", "Yes", "employed-directly"],
@@ -117,6 +120,7 @@ RSpec.describe EarlyCareerPayments::EligibilityAnswersPresenter do
           expect(questions(subject)).to eq([
             "Which school do you teach at?",
             "Are you currently teaching as a qualified teacher?",
+            "Have you completed your induction as an early-career teacher?",
             "Are you currently employed as a supply teacher?",
             "Have any performance measures been started against you?",
             "Are you currently subject to disciplinary action?",
@@ -142,6 +146,7 @@ RSpec.describe EarlyCareerPayments::EligibilityAnswersPresenter do
           expect(questions(subject)).to eq([
             "Which school do you teach at?",
             "Are you currently teaching as a qualified teacher?",
+            "Have you completed your induction as an early-career teacher?",
             "Are you currently employed as a supply teacher?",
             "Have any performance measures been started against you?",
             "Are you currently subject to disciplinary action?",
