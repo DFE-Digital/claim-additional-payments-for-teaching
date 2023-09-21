@@ -26,6 +26,14 @@ FactoryBot.define do
       itt_academic_year { PolicyConfiguration.for(EarlyCareerPayments).current_academic_year - 3 }
     end
 
+    trait :eligible_school_ecp_only do
+      association :current_school, factory: [:school, :early_career_payments_eligible, :levelling_up_premium_payments_ineligible]
+    end
+
+    trait :eligible_school_ecp_and_lup do
+      association :current_school, factory: [:school, :combined_journey_eligibile_for_all]
+    end
+
     trait :eligible_school do
       association :current_school, factory: [:school, :early_career_payments_eligible]
     end
