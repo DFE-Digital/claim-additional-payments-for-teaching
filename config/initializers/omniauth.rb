@@ -2,66 +2,24 @@
 
 OmniAuth.configure do |config|
   config.logger = Rails.logger
-  config.path_prefix = "/admin/auth"
 end
 
-dfe_sign_in_issuer = ENV["DFE_SIGN_IN_ISSUER"]
-dfe_sign_in_redirect_base_url = ENV["DFE_SIGN_IN_REDIRECT_BASE_URL"]
-dfe_sign_in_identifier = ENV["DFE_SIGN_IN_IDENTIFIER"]
-dfe_sign_in_secret = ENV["DFE_SIGN_IN_SECRET"]
+dfe_sign_in_issuer_uri = ENV["DFE_SIGN_IN_ISSUER"].present? ? URI(ENV["DFE_SIGN_IN_ISSUER"]) : nil
 
-dfe_sign_in_issuer_uri = dfe_sign_in_issuer.present? ? URI(dfe_sign_in_issuer) : nil
-dfe_sign_in_redirect_uri = if dfe_sign_in_redirect_base_url.present?
-  URI.join(dfe_sign_in_redirect_base_url,
-    "/admin/auth/callback")
+if ENV["DFE_SIGN_IN_REDIRECT_BASE_URL"].present?
+  dfe_sign_in_redirect_uri = URI.join(ENV["DFE_SIGN_IN_REDIRECT_BASE_URL"], "/admin/auth/callback")
 end
 
-dfe_options = {
-  name: :dfe,
-  discovery: true,
-  response_type: :code,
-  scope: %i[openid email organisation],
-  callback_path: "/admin/auth/callback",
-  client_options: {
-    port: dfe_sign_in_issuer_uri&.port,
-    scheme: dfe_sign_in_issuer_uri&.scheme,
-    host: dfe_sign_in_issuer_uri&.host,
-    identifier: dfe_sign_in_identifier,
-    secret: dfe_sign_in_secret,
-    redirect_uri: dfe_sign_in_redirect_uri&.to_s
-  },
-  issuer:
-    ("#{dfe_sign_in_issuer_uri}:#{dfe_sign_in_issuer_uri.port}" if dfe_sign_in_issuer_uri.present?)
-}
+tid_sign_in_endpoint_uri = ENV["TID_SIGN_IN_API_ENDPOINT"].present? ? URI(ENV["TID_SIGN_IN_API_ENDPOINT"]) : nil
 
-tid_sign_issuer = ENV["TID_SIGN_IN_ISSUER"]
-tid_sign_in_secret = ENV["TID_SIGN_IN_SECRET"]
-tid_sign_in_endpoint = ENV["TID_SIGN_IN_API_ENDPOINT"]
-tid_base_url = ENV["TID_BASE_URL"]
+if ENV["TID_BASE_URL"].present?
+  tid_sign_in_redirect_uri = URI.parse(ENV["TID_BASE_URL"])
+  tid_sign_in_redirect_uri.path = "/claim/auth/tid/callback"
 
-tid_sign_in_endpoint_uri = tid_sign_in_endpoint.present? ? URI(tid_sign_in_endpoint) : nil
-
-tid_sign_in_redirect_uri = tid_base_url.present? ? URI.join(tid_base_url, "/claim/auth/tid/callback").to_s : nil
-
-tid_options = {
-  name: :tid,
-  provider_ignores_state: true,
-  allow_authorize_params: %i[session_id trn_token],
-  callback_path: "/claim/auth/tid/callback",
-  client_options: {
-    host: tid_sign_in_endpoint_uri&.host,
-    identifier: ENV["TID_SIGN_IN_CLIENT_ID"],
-    port: tid_sign_in_endpoint_uri&.port,
-    redirect_uri: tid_sign_in_redirect_uri,
-    scheme: tid_sign_in_endpoint_uri&.scheme || "https",
-    secret: tid_sign_in_secret
-  },
-  discovery: true,
-  issuer: tid_sign_issuer,
-  pkce: true,
-  response_type: :code,
-  scope: ["email", "openid", "profile", "dqt:read"]
-}
+  if ENV["ENVIRONMENT_NAME"] == "review"
+    tid_sign_in_redirect_uri.host = ENV["CANONICAL_HOSTNAME"]
+  end
+end
 
 module ::DfESignIn
   def self.bypass?
@@ -69,14 +27,47 @@ module ::DfESignIn
   end
 end
 
-if DfESignIn.bypass?
-  Rails.application.config.middleware.use OmniAuth::Builder do
-    provider :developer
-  end
-else
-  Rails.application.config.middleware.use OmniAuth::Strategies::OpenIDConnect, dfe_options
-end
-
 Rails.application.config.middleware.use OmniAuth::Builder do
-  provider :openid_connect, tid_options
+  if DfESignIn.bypass?
+    provider :developer
+  else
+    provider :openid_connect, {
+      name: :dfe,
+      discovery: true,
+      response_type: :code,
+      scope: %i[openid email organisation],
+      callback_path: "/admin/auth/callback",
+      path_prefix: "/admin/auth",
+      client_options: {
+        port: dfe_sign_in_issuer_uri&.port,
+        scheme: dfe_sign_in_issuer_uri&.scheme,
+        host: dfe_sign_in_issuer_uri&.host,
+        identifier: ENV["DFE_SIGN_IN_IDENTIFIER"],
+        secret: ENV["DFE_SIGN_IN_SECRET"],
+        redirect_uri: dfe_sign_in_redirect_uri&.to_s
+      },
+      issuer:
+        ("#{dfe_sign_in_issuer_uri}:#{dfe_sign_in_issuer_uri.port}" if dfe_sign_in_issuer_uri.present?)
+    }
+  end
+
+  provider :openid_connect, {
+    name: :tid,
+    provider_ignores_state: true,
+    allow_authorize_params: %i[session_id trn_token],
+    callback_path: "/claim/auth/tid/callback",
+    client_options: {
+      host: tid_sign_in_endpoint_uri&.host,
+      identifier: ENV["TID_SIGN_IN_CLIENT_ID"],
+      port: tid_sign_in_endpoint_uri&.port,
+      redirect_uri: tid_sign_in_redirect_uri&.to_s,
+      scheme: tid_sign_in_endpoint_uri&.scheme || "https",
+      secret: ENV["TID_SIGN_IN_SECRET"]
+    },
+    discovery: true,
+    issuer: ENV["TID_SIGN_IN_ISSUER"],
+    pkce: true,
+    response_type: :code,
+    scope: ["email", "openid", "profile", "dqt:read"]
+  }
 end
