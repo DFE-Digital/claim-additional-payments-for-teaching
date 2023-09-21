@@ -4,7 +4,7 @@ RSpec.feature "Teacher Early-Career Payments claims", slow: true do
   include EarlyCareerPaymentsHelper
 
   # create a school eligible for ECP and LUP so can walk the whole journey
-  let!(:policy_configuration) { create(:policy_configuration, :additional_payments) }
+  let!(:policy_configuration) { create(:policy_configuration, :additional_payments, current_academic_year: AcademicYear.new(2022)) }
   let!(:school) { create(:school, :combined_journey_eligibile_for_all) }
   let(:current_academic_year) { policy_configuration.current_academic_year }
 

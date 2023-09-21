@@ -1,11 +1,11 @@
 require "rails_helper"
 
 RSpec.feature "Ineligibility reason", slow: true do
+  let!(:policy_configuration) { create(:policy_configuration, :additional_payments, current_academic_year: AcademicYear.new(2022)) }
   let!(:lup_and_ecp_school) { create(:school, :combined_journey_eligibile_for_all) }
   let!(:ecp_only_school) { create(:school, :early_career_payments_eligible) }
 
   before do
-    create(:policy_configuration, :additional_payments)
     visit new_claim_path(LevellingUpPremiumPayments.routing_name)
   end
 

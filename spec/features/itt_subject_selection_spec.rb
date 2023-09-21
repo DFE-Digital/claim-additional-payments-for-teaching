@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.feature "ITT subject selection", slow: true do
-  before { create(:policy_configuration, :additional_payments) }
+  before { create(:policy_configuration, :additional_payments, current_academic_year: AcademicYear.new(2022)) }
 
   # Note: If we ever change the UI to show all the options in all cases,
   # you *should* choose a subject instead of "None of the above" in the specs below.
