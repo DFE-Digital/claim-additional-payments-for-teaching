@@ -7,6 +7,7 @@ FactoryBot.define do
     # Traits specific to ECP
     trait :eligible_now do
       common_eligible_attributes
+      induction_completed
       eligible_itt_subject_now
     end
 
@@ -23,6 +24,14 @@ FactoryBot.define do
     trait :eligible_now_and_again_but_two_years_later do
       eligible_now_with_mathematics
       itt_academic_year { PolicyConfiguration.for(EarlyCareerPayments).current_academic_year - 3 }
+    end
+
+    trait :eligible_school_ecp_only do
+      association :current_school, factory: [:school, :early_career_payments_eligible, :levelling_up_premium_payments_ineligible]
+    end
+
+    trait :eligible_school_ecp_and_lup do
+      association :current_school, factory: [:school, :combined_journey_eligibile_for_all]
     end
 
     trait :eligible_school do
@@ -84,6 +93,14 @@ FactoryBot.define do
 
     trait :newly_qualified_teacher do
       nqt_in_academic_year_after_itt { true }
+    end
+
+    trait :induction_completed do
+      induction_completed { true }
+    end
+
+    trait :induction_not_completed do
+      induction_completed { false }
     end
 
     trait :not_a_supply_teacher do

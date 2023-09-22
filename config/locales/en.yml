@@ -329,6 +329,21 @@ en:
       nqt_in_academic_year_after_itt:
         heading: Are you currently teaching as a qualified teacher?
         hint: Your induction years count as long as you have your qualified teacher status (QTS).
+      induction_completed:
+        heading: Have you completed your induction as an early-career teacher?
+        hint:
+          qualified:
+            title: If you qualified as a teacher in the 2020 to 2021 academic year
+            text_html: >
+              Select yes if you have completed at least 1 year of your induction period as an early-career teacher.<br/>
+              Select no if you have not completed 1 year of your induction period.<br/>
+              Further information about induction periods can be found at <a href="https://www.gov.uk/guidance/early-career-payments-guidance-for-teachers-and-schools" class="govuk-link govuk-link--no-visited-state" target="_blank">Early-career payments guidance for teachers and schools</a>
+          overseas:
+            title: If you qualified overseas
+            text_html: >
+              Select yes if you have more than 2 years experience as a teacher.<br/>
+              Select no if you have less than 2 years experience as a teacher.<br/>
+              Further information can be found at <a href="https://www.gov.uk/government/publications/apply-for-qualified-teacher-status-qts-if-you-teach-outside-the-uk/routes-to-qualified-teacher-status-qts-for-teachers-and-those-with-teaching-experience-outside-the-uk#early-career-teacher-ect-induction" class="govuk-link govuk-link--no-visited-state" target="_blank">early-career teacher (ECT) induction periods for teachers who qualified overseas</a>
       poor_performance: Tell us if you are currently under any performance measures or disciplinary action
       disciplinary_action: "Are you currently subject to disciplinary action?"
       disciplinary_action_hint: "This is more serious than performance measures and could be because of misconduct. It is something we may check with your school as it will affect your eligibility."
@@ -359,6 +374,7 @@ en:
     admin:
       employed_as_supply_teacher: "Employed as a supply teacher?"
       nqt_in_academic_year_after_itt: "Teaching as a qualified teacher?"
+      induction_completed: "Has completed induction as an early-career teacher?"
       task_questions:
         employment:
           title: "Does the claimant’s current school match the above information from their claim?"

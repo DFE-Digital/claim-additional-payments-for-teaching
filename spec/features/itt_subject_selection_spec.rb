@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.feature "ITT subject selection", slow: true do
-  before { create(:policy_configuration, :additional_payments) }
+  before { create(:policy_configuration, :additional_payments, current_academic_year: AcademicYear.new(2022)) }
 
   # Note: If we ever change the UI to show all the options in all cases,
   # you *should* choose a subject instead of "None of the above" in the specs below.
@@ -221,6 +221,12 @@ RSpec.feature "ITT subject selection", slow: true do
 
     # - Have you started your first year as a newly qualified teacher?
     expect(page).to have_text(I18n.t("early_career_payments.questions.nqt_in_academic_year_after_itt.heading"))
+
+    choose "Yes"
+    click_on "Continue"
+
+    # - Have you completed your induction as an early-career teacher?
+    expect(page).to have_text(I18n.t("early_career_payments.questions.induction_completed.heading"))
 
     choose "Yes"
     click_on "Continue"

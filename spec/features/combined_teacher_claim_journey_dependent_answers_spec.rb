@@ -17,6 +17,11 @@ RSpec.feature "Combined claim journey dependent answers" do
     choose "Yes"
     click_on "Continue"
 
+    # - Have you completed your induction as an early-career teacher?
+    expect(page).to have_text(I18n.t("early_career_payments.questions.induction_completed.heading"))
+    choose "Yes"
+    click_on "Continue"
+
     # - Are you currently employed as a supply teacher
     expect(page).to have_text(I18n.t("early_career_payments.questions.employed_as_supply_teacher"))
     choose "No"

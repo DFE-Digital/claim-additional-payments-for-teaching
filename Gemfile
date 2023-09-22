@@ -115,7 +115,6 @@ group :development do
   gem "spring-watcher-listen", "~> 2.1.0"
 
   gem "foreman"
-  gem "webdrivers"
 end
 
 group :test do
