@@ -1401,6 +1401,30 @@ RSpec.describe Claim, type: :model do
     end
   end
 
+  describe ".awaiting_qa" do
+    subject { described_class.awaiting_qa }
+
+    let!(:claim_approved) { create(:claim, :approved) }
+    let!(:claim_awaiting_qa) { create(:claim, :approved, :flagged_for_qa) }
+    let!(:claim_with_qa_completed) { create(:claim, :approved, :qa_completed) }
+
+    it "returns approved claims that are awaiting QA" do
+      is_expected.to match_array([claim_awaiting_qa])
+    end
+  end
+
+  describe ".qa_required" do
+    subject { described_class.qa_required }
+
+    let!(:claim_approved) { create(:claim, :approved) }
+    let!(:claim_awaiting_qa) { create(:claim, :approved, :flagged_for_qa) }
+    let!(:claim_with_qa_completed) { create(:claim, :approved, :qa_completed) }
+
+    it "returns approved claims that are flagged for QA" do
+      is_expected.to match_array([claim_awaiting_qa, claim_with_qa_completed])
+    end
+  end
+
   describe "#amendable?" do
     it "returns false for a claim that hasn’t been submitted" do
       claim = build(:claim, :submittable)

@@ -19,6 +19,7 @@ RSpec.feature "Admin claim filtering" do
   let!(:early_career_payments_claims_failed_bank_validation) { create_list(:claim, 2, :submitted, :bank_details_not_validated, policy: EarlyCareerPayments, assigned_to: mette) }
   let!(:lup_claims_unassigned) { create_list(:claim, 2, :submitted, policy: LevellingUpPremiumPayments) }
   let!(:held_claims) { create_list(:claim, 2, :submitted, :held) }
+  let!(:approved_awaiting_qa_claims) { create_list(:claim, 2, :approved, :flagged_for_qa, policy: LevellingUpPremiumPayments) }
   let!(:approved_claim) { create(:claim, :approved, policy: LevellingUpPremiumPayments, assigned_to: mette, decision_creator: mary) }
 
   scenario "the service operator can filter claims by policy" do
@@ -141,6 +142,7 @@ RSpec.feature "Admin claim filtering" do
       early_career_payments_claims_for_mary,
       early_career_payments_claims_for_mette,
       early_career_payments_claims_failed_bank_validation,
+      approved_awaiting_qa_claims,
       lup_claims_unassigned
     ].flatten.each do |c|
       expect(page).not_to have_content(c.reference)
@@ -151,6 +153,25 @@ RSpec.feature "Admin claim filtering" do
 
     early_career_payments_claims_failed_bank_validation.each do |c|
       expect(page).to have_content(c.reference)
+    end
+
+    select "Approved awaiting QA", from: "Status:"
+    click_button "Apply filters"
+
+    approved_awaiting_qa_claims.each do |c|
+      expect(page).to have_content(c.reference)
+    end
+
+    [
+      student_loans_claims_for_mette,
+      student_loans_claims_for_valentino,
+      early_career_payments_claims_for_mary,
+      early_career_payments_claims_for_mette,
+      early_career_payments_claims_failed_bank_validation,
+      held_claims,
+      lup_claims_unassigned
+    ].flatten.each do |c|
+      expect(page).not_to have_content(c.reference)
     end
   end
 end
