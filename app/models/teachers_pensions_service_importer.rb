@@ -23,7 +23,7 @@ class TeachersPensionsServiceImporter
   # NOTE: Duplicate trn with same start_dates are skipped
   def run
     batch = 1
-    rows.each_slice(500) do |batch_rows|
+    rows.each_slice(2000) do |batch_rows|
       Rails.logger.info "Processing TPS upload batch #{batch}"
 
       record_hashes = batch_rows.map do |row|
