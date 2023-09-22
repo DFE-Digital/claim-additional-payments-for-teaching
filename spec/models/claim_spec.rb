@@ -1390,14 +1390,37 @@ RSpec.describe Claim, type: :model do
     end
   end
 
-  describe "payrollable" do
+  describe ".payrollable" do
+    subject { described_class.payrollable }
+
     let(:payroll_run) { create(:payroll_run, claims_counts: {StudentLoans => 1}) }
     let!(:submitted_claim) { create(:claim, :submitted) }
     let!(:first_unpayrolled_claim) { create(:claim, :approved) }
     let!(:second_unpayrolled_claim) { create(:claim, :approved) }
+    let(:claim_awaiting_qa) { create(:claim, :approved, :flagged_for_qa) }
+    let(:claim_with_qa_completed) { create(:claim, :approved, :qa_completed) }
 
     it "returns approved claims that are not associated with a payroll run" do
-      expect(Claim.payrollable).to match_array([first_unpayrolled_claim, second_unpayrolled_claim])
+      is_expected.to match_array([first_unpayrolled_claim, second_unpayrolled_claim])
+    end
+
+    it "excludes claims that are awaiting QA" do
+      claim_awaiting_qa
+      claim_with_qa_completed
+
+      is_expected.to match_array([first_unpayrolled_claim, second_unpayrolled_claim, claim_with_qa_completed])
+    end
+  end
+
+  describe ".not_awaiting_qa" do
+    subject { described_class.not_awaiting_qa }
+
+    let!(:claim_approved) { create(:claim, :approved) }
+    let!(:claim_awaiting_qa) { create(:claim, :approved, :flagged_for_qa) }
+    let!(:claim_with_qa_completed) { create(:claim, :approved, :qa_completed) }
+
+    it "returns approved claims that are approved and with QA completed" do
+      is_expected.to match_array([claim_approved, claim_with_qa_completed])
     end
   end
 

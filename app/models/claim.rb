@@ -297,7 +297,8 @@ class Claim < ApplicationRecord
 
   delegate :award_amount, to: :eligibility
 
-  scope :payrollable, -> { approved.left_joins(:payments).where(payments: nil) }
+  scope :payrollable, -> { approved.not_awaiting_qa.left_joins(:payments).where(payments: nil) }
+  scope :not_awaiting_qa, -> { approved.where("qa_required = false OR (qa_required = true AND qa_completed_at IS NOT NULL)") }
   scope :awaiting_qa, -> { approved.qa_required.where(qa_completed_at: nil) }
   scope :qa_required, -> { where(qa_required: true) }
 
