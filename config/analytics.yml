@@ -255,6 +255,8 @@ shared:
   - end_date
   - la_urn
   - school_urn
+  - employer_id
+  - nino
   - created_at
   - updated_at
   - gender_digit
