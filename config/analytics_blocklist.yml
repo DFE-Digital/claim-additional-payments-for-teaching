@@ -1,5 +1,5 @@
 ---
-shared:
+:shared:
   :delayed_jobs:
   - id
   - priority
@@ -14,6 +14,45 @@ shared:
   - created_at
   - updated_at
   - cron
+  :dfe_sign_in_users:
+  - session_token
+  :school_workforce_censuses:
+  - id
+  - teacher_reference_number
+  - subject_1
+  - subject_2
+  - subject_3
+  - subject_4
+  - subject_5
+  - subject_6
+  - subject_7
+  - subject_8
+  - subject_9
+  - created_at
+  - updated_at
+  - subject_10
+  - subject_11
+  - subject_12
+  - subject_13
+  - subject_14
+  - subject_15
+  :schools:
+  - postcode_sanitised
+  :file_uploads:
+  - id
+  - uploaded_by_id
+  - body
+  - created_at
+  - updated_at
+  :claim_stats:
+  - claim_id
+  - policy
+  - claim_started_at
+  - claim_submitted_at
+  - decision_made_at
+  - result
+  - submission_length
+  - decision_length
   :claim_decisions:
   - application_id
   - decision_date
@@ -27,40 +66,3 @@ shared:
   - claimant_age
   - claimant_gender
   - claimant_year_qualified
-  :claim_stats:
-  - claim_id
-  - policy
-  - claim_started_at
-  - claim_submitted_at
-  - decision_made_at
-  - result
-  - submission_length
-  - decision_length
-  :file_uploads:
-  - id
-  - uploaded_by_id
-  - body
-  - created_at
-  - updated_at
-  :school_workforce_censuses:
-  - id
-  - teacher_reference_number
-  - subject_1
-  - subject_2
-  - subject_3
-  - subject_4
-  - subject_5
-  - subject_6
-  - subject_7
-  - subject_8
-  - subject_9
-  - subject_10
-  - subject_11
-  - subject_12
-  - subject_13
-  - subject_14
-  - subject_15
-  - created_at
-  - updated_at
-  :dfe_sign_in_users:
-  - session_token
