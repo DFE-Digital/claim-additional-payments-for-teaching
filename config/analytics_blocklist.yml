@@ -64,3 +64,5 @@ shared:
   - updated_at
   :dfe_sign_in_users:
   - session_token
+  :schools:
+  - postcode_sanitised
