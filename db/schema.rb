@@ -313,7 +313,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_07_173112) do
     t.datetime "updated_at", null: false
     t.integer "school_urn"
     t.string "contract_agreement_type"
-    t.integer "totfte"
+    t.float "totfte"
     t.string "subject_description_sfr"
     t.string "general_subject_code"
     t.integer "hours_taught"
