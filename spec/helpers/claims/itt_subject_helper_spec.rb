@@ -72,5 +72,12 @@ RSpec.describe Claims::IttSubjectHelper do
 
       it { is_expected.to eq("chemistry, computing, mathematics or physics") }
     end
+
+    context "LUP ineligible and ECP eligible_later" do
+      let(:ecp_eligibility) { build(:early_career_payments_eligibility, :eligible_later) }
+      let(:lup_eligibility) { build(:levelling_up_premium_payments_eligibility, :ineligible) }
+
+      it { is_expected.to eq("chemistry, languages, mathematics or physics") }
+    end
   end
 end
