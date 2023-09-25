@@ -4,51 +4,26 @@ class SchoolWorkforceCensus < ApplicationRecord
   COMMON_ELIGIBLE_SUBJECTS = {
     chemistry: [
       "Chemistry",
-      "Combined/General Science - Chemistry",
-      "Applied Science",
-      "Other Sciences",
-      "Science"
+      "Combined/General science",
+      "Other Sciences"
     ],
     foreign_languages: [
-      "Arabic",
-      "Bengali",
-      "Chinese",
-      "Danish",
+      "Spanish",
       "French",
       "German",
-      "Greek (Classical)",
-      "Greek (Modern)",
-      "Gujerati",
-      "Hebrew (Biblical)",
-      "Hebrew (Modern)",
-      "Hindi",
-      "Italian",
-      "Japanese",
-      "Latin",
-      "Modern Foreign Language",
-      "Other Language Subject",
-      "Panjabi",
-      "Portuguese",
-      "Russian",
-      "Spanish",
-      "Turkish",
-      "Urdu"
+      "Other Modern Languages"
     ],
     physics: [
-      "Combined/General Science - Physics",
+      "Combined/General science",
       "Physics",
-      "Applied Science",
-      "Other Sciences",
-      "Science"
+      "Other Sciences"
     ]
   }.freeze
 
   ECP_ELIGIBLE_SUBJECTS = {
     mathematics: [
-      "Economics",
-      "Other Mathematical Subject",
-      "Statistics",
-      "Mathematics / Mathematical Development (Early Years)"
+      "Mathematics",
+      "Business / Economics"
     ],
     none_of_the_above: []
   }.freeze
@@ -56,44 +31,33 @@ class SchoolWorkforceCensus < ApplicationRecord
   LUP_ELIGIBLE_SUBJECTS = {
     chemistry: [
       "Chemistry",
-      "Combined/General Science - Chemistry",
-      "Applied Science",
-      "Other Sciences",
-      "Science"
+      "Combined/General science",
+      "Other Sciences"
     ],
     computing: [
-      "Applied ICT",
-      "Computer Science",
-      "Information and Communication Technology"
+      "ICT",
+      "Computing"
     ],
     mathematics: [
-      "Economics",
-      "Other Mathematical Subject",
-      "Statistics",
-      "Mathematics / Mathematical Development (Early Years)"
+      "Mathematics",
+      "Business / Economics"
     ],
     physics: [
-      "Combined/General Science - Physics",
+      "Combined/General science",
       "Physics",
-      "Applied Science",
-      "Other Sciences",
-      "Science"
+      "Other Sciences"
     ],
     none_of_the_above: []
   }.freeze
 
   TSLR_ELIGIBLE_SUBJECTS = {
     biology: [
-      "Biology / Botany / Zoology / Ecology",
-      "Combined/General Science - Biology",
-      "Applied Science",
-      "Other Sciences",
-      "Science"
+      "Biology",
+      "Combined/General science"
     ],
     computing: [
-      "Applied ICT",
-      "Computer Science",
-      "Information and Communication Technology"
+      "ICT",
+      "Computing"
     ]
   }.freeze
 end

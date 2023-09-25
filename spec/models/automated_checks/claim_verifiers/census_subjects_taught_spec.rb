@@ -180,15 +180,15 @@ module AutomatedChecks
                   subject(:body) { note.body }
 
                   it "returns 'Eligible' with the school workforce census subjects", if: policy == EarlyCareerPayments do
-                    expect(subject).to eq("[School Workforce Census] - Eligible:\n<pre>Subject 1: Mathematics / Mathematical Development (Early Years)\nSubject 2: Mathematics / Mathematical Development (Early Years)\n</pre>\n")
+                    expect(subject).to eq("[School Workforce Census] - Eligible:\n<pre>Subject 1: Mathematics\nSubject 2: Mathematics\n</pre>\n")
                   end
 
                   it "returns 'Eligible' with the school workforce census subjects", if: policy == LevellingUpPremiumPayments do
-                    expect(subject).to eq("[School Workforce Census] - Eligible:\n<pre>Subject 1: Computer Science\nSubject 2: Computer Science\n</pre>\n")
+                    expect(subject).to eq("[School Workforce Census] - Eligible:\n<pre>Subject 1: ICT\nSubject 2: ICT\n</pre>\n")
                   end
 
                   it "returns 'Eligible' with the school workforce census subjects", if: policy == StudentLoans do
-                    expect(subject).to eq("[School Workforce Census] - Eligible:\n<pre>Subject 1: Science\nSubject 2: Science\n</pre>\n")
+                    expect(subject).to eq("[School Workforce Census] - Eligible:\n<pre>Subject 1: Biology\nSubject 2: Biology\n</pre>\n")
                   end
                 end
 
