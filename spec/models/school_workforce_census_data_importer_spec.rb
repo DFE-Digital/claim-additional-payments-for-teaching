@@ -22,6 +22,8 @@ RSpec.describe SchoolWorkforceCensusDataImporter do
       it "has no errors and parses the CSV" do
         expect(subject.errors).to be_empty
         expect(subject.rows.count).to eq(2)
+        expect(subject.rows.first[0]).to eq("1234567")
+        expect(subject.rows.first[4]).to eq("Design and Technlogy - Textiles")
       end
     end
 
