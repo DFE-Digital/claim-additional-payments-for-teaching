@@ -10,8 +10,9 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_09_07_173112) do
+ActiveRecord::Schema[7.0].define(version: 2023_09_25_095916) do
   # These are extensions that must be enabled in order to support this database
+  enable_extension "pg_trgm"
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
 
@@ -348,9 +349,12 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_07_173112) do
     t.integer "statutory_high_age"
     t.string "phone_number", limit: 20
     t.date "open_date"
+    t.string "postcode_sanitised"
     t.index ["created_at"], name: "index_schools_on_created_at"
     t.index ["local_authority_district_id"], name: "index_schools_on_local_authority_district_id"
     t.index ["local_authority_id"], name: "index_schools_on_local_authority_id"
+    t.index ["name"], name: "index_schools_on_name", opclass: :gin_trgm_ops, using: :gin
+    t.index ["postcode_sanitised"], name: "index_schools_on_postcode_sanitised", opclass: :gin_trgm_ops, using: :gin
     t.index ["urn"], name: "index_schools_on_urn", unique: true
   end
 
