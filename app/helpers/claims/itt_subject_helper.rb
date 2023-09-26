@@ -23,11 +23,22 @@ module Claims
       hint_subject_symbols = Set[]
 
       if current_claim.eligibility.nqt_in_academic_year_after_itt
-        potentially_eligible_for_ecp = ![:ineligible, :eligible_later].include?(current_claim.for_policy(EarlyCareerPayments).eligibility.status)
-        potentially_eligible_for_lup = current_claim.for_policy(LevellingUpPremiumPayments).eligibility.status != :ineligible
+        ecp_eligibility_status = current_claim.for_policy(EarlyCareerPayments).eligibility.status
+        lup_eligibility_status = current_claim.for_policy(LevellingUpPremiumPayments).eligibility.status
+
+        potentially_eligible_for_lup = lup_eligibility_status != :ineligible
+        potentially_eligible_for_ecp = ecp_eligibility_status != :ineligible
 
         hint_subject_symbols.merge(all_ecp_subjects) if potentially_eligible_for_ecp
         hint_subject_symbols.merge(all_lup_subjects) if potentially_eligible_for_lup
+
+        # When ITT 19/20 and Maths are selected, the ECP eligibility status is "eligible_later",
+        # even though we still need to display a list of subjects.
+        # In this case we need to selectively replace the entire list of subjects based on whether
+        # the other claim (LUP) is ineligible or not.
+        if ecp_eligibility_status == :eligible_later
+          hint_subject_symbols.replace(potentially_eligible_for_lup ? all_lup_subjects : all_ecp_subjects)
+        end
       else
         hint_subject_symbols.merge(all_lup_subjects)
       end
