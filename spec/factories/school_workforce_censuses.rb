@@ -2,44 +2,37 @@ FactoryBot.define do
   factory :school_workforce_census do
     trait :early_career_payments_matched do
       teacher_reference_number { 9855512 }
-      subject_1 { "Mathematics / Mathematical Development (Early Years)" }
-      subject_2 { "Statistics" }
+      subject_description_sfr { "Mathematics" }
     end
 
     trait :early_career_payments_unmatched do
       teacher_reference_number { 9855512 }
-      subject_1 { "Problem Solving, Reasoning and Numeracy" }
-      subject_2 { "Design and Technology - Electronics" }
+      subject_description_sfr { "Problem Solving, Reasoning and Numeracy" }
     end
 
     trait :levelling_up_premium_payments_matched do
       teacher_reference_number { 1560179 }
-      subject_1 { "Computer Science" }
-      subject_2 { "Statistics" }
+      subject_description_sfr { "ICT" }
     end
 
     trait :levelling_up_premium_payments_unmatched do
       teacher_reference_number { 1560179 }
-      subject_1 { "Problem Solving, Reasoning and Numeracy" }
-      subject_2 { "Design and Technology - Electronics" }
+      subject_description_sfr { "Problem Solving, Reasoning and Numeracy" }
     end
 
     trait :student_loans_matched do
       teacher_reference_number { 2109438 }
-      subject_1 { "Science" }
-      subject_2 { "Biology / Botany / Zoology / Ecology" }
-      subject_3 { "Computer Science" }
+      subject_description_sfr { "Biology" }
     end
 
     trait :student_loans_matched_languages_only do
       teacher_reference_number { 3403431 }
-      subject_1 { "French" }
+      subject_description_sfr { "French" }
     end
 
     trait :student_loans_unmatched do
       teacher_reference_number { 2109438 }
-      subject_1 { "Other Mathematical Subject" }
-      subject_2 { "Design and Technology - Electronics" }
+      subject_description_sfr { "Other Mathematical Subject" }
     end
   end
 end

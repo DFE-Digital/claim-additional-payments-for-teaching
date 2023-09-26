@@ -293,3 +293,10 @@ shared:
   - created_by_id
   - created_at
   - updated_at
+  :school_workforce_censuses:
+  - school_urn
+  - totfte
+  - contract_agreement_type
+  - subject_description_sfr
+  - general_subject_code
+  - hours_taught

@@ -10,7 +10,7 @@ module AutomatedChecks
       )
         self.admin_user = admin_user
         self.claim = claim
-        self.school_workforce_census = SchoolWorkforceCensus.find_by(teacher_reference_number: claim.teacher_reference_number)
+        self.school_workforce_census = SchoolWorkforceCensus.where(teacher_reference_number: claim.teacher_reference_number)
         self.school_workforce_census_subjects = school_workforce_census
       end
 
@@ -32,9 +32,9 @@ module AutomatedChecks
       end
 
       def school_workforce_census_subjects=(school_workforce_census)
-        return if school_workforce_census.nil?
+        return if school_workforce_census.empty?
 
-        @school_workforce_census_subjects = school_workforce_census.subjects
+        @school_workforce_census_subjects = school_workforce_census.map(&:subject_description_sfr)
       end
 
       def no_data
@@ -44,7 +44,7 @@ module AutomatedChecks
       end
 
       def no_match
-        return unless school_workforce_census.nil? || !eligible?
+        return unless school_workforce_census.empty? || !eligible?
 
         create_task(match: :none)
       end
@@ -56,7 +56,7 @@ module AutomatedChecks
       end
 
       def eligible?
-        return false if school_workforce_census.nil?
+        return false if school_workforce_census.empty?
 
         match_against = case claim.policy
         when EarlyCareerPayments
@@ -126,7 +126,7 @@ module AutomatedChecks
       end
 
       def create_note(match:)
-        body = if school_workforce_census.nil?
+        body = if school_workforce_census.empty?
           "[School Workforce Census] - No data"
         else
           swc_subjects = ""

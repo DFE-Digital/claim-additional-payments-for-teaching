@@ -137,6 +137,7 @@ module AutomatedChecks
 
             context "with any eligible subject matched" do
               let!(:matched) { create(:school_workforce_census, :"#{policy_underscored}_matched") }
+              let!(:matched1) { create(:school_workforce_census, :"#{policy_underscored}_matched") }
 
               it { is_expected.to be_an_instance_of(Task) }
 
@@ -179,15 +180,15 @@ module AutomatedChecks
                   subject(:body) { note.body }
 
                   it "returns 'Eligible' with the school workforce census subjects", if: policy == EarlyCareerPayments do
-                    expect(subject).to eq("[School Workforce Census] - Eligible:\n<pre>Subject 1: Mathematics / Mathematical Development (Early Years)\nSubject 2: Statistics\n</pre>\n")
+                    expect(subject).to eq("[School Workforce Census] - Eligible:\n<pre>Subject 1: Mathematics\nSubject 2: Mathematics\n</pre>\n")
                   end
 
                   it "returns 'Eligible' with the school workforce census subjects", if: policy == LevellingUpPremiumPayments do
-                    expect(subject).to eq("[School Workforce Census] - Eligible:\n<pre>Subject 1: Computer Science\nSubject 2: Statistics\n</pre>\n")
+                    expect(subject).to eq("[School Workforce Census] - Eligible:\n<pre>Subject 1: ICT\nSubject 2: ICT\n</pre>\n")
                   end
 
                   it "returns 'Eligible' with the school workforce census subjects", if: policy == StudentLoans do
-                    expect(subject).to eq("[School Workforce Census] - Eligible:\n<pre>Subject 1: Science\nSubject 2: Biology / Botany / Zoology / Ecology\nSubject 3: Computer Science\n</pre>\n")
+                    expect(subject).to eq("[School Workforce Census] - Eligible:\n<pre>Subject 1: Biology\nSubject 2: Biology\n</pre>\n")
                   end
                 end
 
@@ -249,15 +250,15 @@ module AutomatedChecks
                   subject(:body) { note.body }
 
                   it "returns 'Ineligible' with the school workforce census subjects", if: policy == EarlyCareerPayments do
-                    expect(subject).to eq("[School Workforce Census] - Ineligible:\n<pre>Subject 1: Problem Solving, Reasoning and Numeracy\nSubject 2: Design and Technology - Electronics\n</pre>\n")
+                    expect(subject).to eq("[School Workforce Census] - Ineligible:\n<pre>Subject 1: Problem Solving, Reasoning and Numeracy\n</pre>\n")
                   end
 
                   it "returns 'Ineligible' with the school workforce census subjects", if: policy == LevellingUpPremiumPayments do
-                    expect(subject).to eq("[School Workforce Census] - Ineligible:\n<pre>Subject 1: Problem Solving, Reasoning and Numeracy\nSubject 2: Design and Technology - Electronics\n</pre>\n")
+                    expect(subject).to eq("[School Workforce Census] - Ineligible:\n<pre>Subject 1: Problem Solving, Reasoning and Numeracy\n</pre>\n")
                   end
 
                   it "returns 'Ineligible' with the school workforce census subjects", if: policy == StudentLoans do
-                    expect(subject).to eq("[School Workforce Census] - Ineligible:\n<pre>Subject 1: Other Mathematical Subject\nSubject 2: Design and Technology - Electronics\n</pre>\n")
+                    expect(subject).to eq("[School Workforce Census] - Ineligible:\n<pre>Subject 1: Other Mathematical Subject\n</pre>\n")
                   end
                 end
 
