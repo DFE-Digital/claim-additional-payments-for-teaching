@@ -207,4 +207,26 @@ RSpec.describe School, type: :model do
       end
     end
   end
+
+  describe "callbacks" do
+    before { expect(school.postcode_sanitised).to be_nil }
+
+    context "when the school has no postcode" do
+      subject(:school) { build(:school, postcode: nil) }
+
+      it "does not set postcode_sanitised" do
+        school.save!
+        expect(school.postcode_sanitised).to be_nil
+      end
+    end
+
+    context "when the school has a postcode" do
+      subject(:school) { build(:school, postcode: "AB12 3CD") }
+
+      it "strips space characters and saves it to postcode_sanitised" do
+        school.save!
+        expect(school.postcode_sanitised).to eq("AB123CD")
+      end
+    end
+  end
 end
