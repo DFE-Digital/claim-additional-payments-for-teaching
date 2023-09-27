@@ -44,5 +44,13 @@ FactoryBot.define do
         end
       end
     end
+
+    trait :with_payments do
+      transient do
+        count { 0 }
+      end
+
+      payments { build_list(:payment, count) }
+    end
   end
 end
