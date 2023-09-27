@@ -84,7 +84,7 @@ gem "google-cloud-storage"
 gem "faraday_middleware"
 
 # required for prod due to Azure DEV/TEST all running as 'production'
-gem "faker", "~> 3.1", require: false
+gem "faker", "~> 3.2", require: false
 # speed up bulk imports
 gem "activerecord-copy", require: false
 
