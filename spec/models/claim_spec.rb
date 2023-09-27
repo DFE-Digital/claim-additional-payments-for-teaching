@@ -1022,7 +1022,7 @@ RSpec.describe Claim, type: :model do
     end
   end
 
-  describe "qa_completed?" do
+  describe "#qa_completed?" do
     subject { claim.qa_completed? }
 
     context "when the qa_completed_at is set" do
@@ -1038,7 +1038,7 @@ RSpec.describe Claim, type: :model do
     end
   end
 
-  describe "awaiting_qa?" do
+  describe "#awaiting_qa?" do
     subject { claim.awaiting_qa? }
 
     context "when the qa_required is false" do
@@ -1347,7 +1347,7 @@ RSpec.describe Claim, type: :model do
         it { is_expected.to eq(false) }
       end
 
-      context "with 2 previously approved claim (1 flagged for QA)" do
+      context "with 2 previously approved claims (1 flagged for QA)" do
         let!(:claims_flagged_for_qa) { create_list(:claim, 1, :approved, :flagged_for_qa, academic_year: AcademicYear.current) }
         let!(:claims_not_flagged_for_qa) { create_list(:claim, 1, :approved, academic_year: AcademicYear.current) }
 
@@ -1400,15 +1400,18 @@ RSpec.describe Claim, type: :model do
     let(:claim_awaiting_qa) { create(:claim, :approved, :flagged_for_qa) }
     let(:claim_with_qa_completed) { create(:claim, :approved, :qa_completed) }
 
-    it "returns approved claims that are not associated with a payroll run" do
-      is_expected.to match_array([first_unpayrolled_claim, second_unpayrolled_claim])
+    let!(:first_unpayrolled_claim) { create(:claim, :approved, submitted_at: 2.days.ago) }
+    let!(:second_unpayrolled_claim) { create(:claim, :approved, submitted_at: 1.day.ago) }
+
+    it "returns approved claims not associated with a payroll run and ordered by submission date" do
+      is_expected.to eq([first_unpayrolled_claim, second_unpayrolled_claim])
     end
 
     it "excludes claims that are awaiting QA" do
       claim_awaiting_qa
       claim_with_qa_completed
 
-      is_expected.to match_array([first_unpayrolled_claim, second_unpayrolled_claim, claim_with_qa_completed])
+      is_expected.to eq([first_unpayrolled_claim, second_unpayrolled_claim, claim_with_qa_completed])
     end
   end
 
