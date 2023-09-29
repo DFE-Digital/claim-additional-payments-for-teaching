@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_09_25_163438) do
+ActiveRecord::Schema[7.0].define(version: 2023_09_29_123743) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_trgm"
   enable_extension "pgcrypto"
@@ -92,6 +92,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_25_163438) do
     t.index ["created_at"], name: "index_claims_on_created_at"
     t.index ["eligibility_type", "eligibility_id"], name: "index_claims_on_eligibility_type_and_eligibility_id"
     t.index ["held"], name: "index_claims_on_held"
+    t.index ["qa_required", "qa_completed_at"], name: "index_claims_on_qa_required_and_qa_completed_at", where: "qa_required"
     t.index ["reference"], name: "index_claims_on_reference", unique: true
     t.index ["remove_column_payment_id"], name: "index_claims_on_remove_column_payment_id"
     t.index ["submitted_at"], name: "index_claims_on_submitted_at"
