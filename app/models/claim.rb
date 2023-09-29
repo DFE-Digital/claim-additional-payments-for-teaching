@@ -302,6 +302,22 @@ class Claim < ApplicationRecord
   scope :awaiting_qa, -> { approved.qa_required.where(qa_completed_at: nil) }
   scope :qa_required, -> { where(qa_required: true) }
 
+  # This method's intention is to help make a decision on whether a claim should
+  # be flagged for QA or not. These criteria need to be met for each academic year:
+  #
+  # 1. the first claim to be approved should always be flagged for QA
+  # 2. subsequently approved claims should be flagged for QA, 1 in MIN_QA_THRESHOLD.
+  #
+  # This method should be used every time a new approval decision is being made;
+  # when used retrospectively, i.e. when several claims have been approved,
+  # the method returns:
+  #
+  # 1. `true` if none of then claims have been flagged for QA
+  # 2. `true` if some claims have been flagged for QA using a lower MIN_QA_THRESHOLD
+  # 3. `false` if some claims have been flagged for QA using a higher MIN_QA_THRESHOLD
+  #
+  # Newly approved claims should not be flagged for QA for as long as the method
+  # returns `false`; they should be flagged for QA otherwise.
   def self.below_min_qa_threshold?
     return false if MIN_QA_THRESHOLD.zero?
 
