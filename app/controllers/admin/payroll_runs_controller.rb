@@ -18,7 +18,7 @@ module Admin
       # Ideally, we should limit topups as well, as some may be related to claims
       # paid in a previous payroll run, but we wouldn't have any topups at the beginning.
       #
-      # This capping is expected to be removed by the opening of the next window.
+      # TODO: Remove this capping once the payroll software is upgraded.
       if @claims.size > PayrollRun::MAX_MONTHLY_PAYMENTS
         flash[:notice] = "The number of payments entering this payrun will be capped to #{PayrollRun::MAX_MONTHLY_PAYMENTS}"
         @claims = @claims.limit(PayrollRun::MAX_MONTHLY_PAYMENTS)
