@@ -1,13 +1,15 @@
 require "rails_helper"
 
 RSpec.feature "Admin checking a claim with matching details" do
-  before { create(:policy_configuration, :student_loans) }
+  before do
+    create(:policy_configuration, :student_loans)
+    disable_claim_qa_flagging
+    sign_in_as_service_operator
+  end
 
   scenario "service operator can check a claim with matching details" do
     claim = create(:claim, :submitted, policy: StudentLoans)
     claim_with_matching_details = create(:claim, :submitted, teacher_reference_number: claim.teacher_reference_number)
-
-    sign_in_as_service_operator
 
     click_on "View claims"
     find("a[href='#{admin_claim_tasks_path(claim)}']").click

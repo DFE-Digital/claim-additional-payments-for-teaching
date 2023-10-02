@@ -4,6 +4,7 @@ RSpec.feature "Admin rejects a claim" do
   let!(:claim) { create(:claim, :submitted) }
 
   before do
+    disable_claim_qa_flagging
     @signed_in_user = sign_in_as_service_operator
   end
 

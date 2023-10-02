@@ -58,14 +58,36 @@
               </span>
               <% if @claim.held? %>
                 <strong class="govuk-tag app-task-list__task-completed govuk-tag--warning">On Hold</strong>
-              <% elsif @claim.latest_decision&.approved? %>
+              <% elsif (@claim.qa_completed? && @claim.previous_decision&.approved?) || @claim.latest_decision&.approved? %>
                 <strong class="govuk-tag app-task-list__task-completed">Approved</strong>
-              <% elsif @claim.latest_decision&.rejected? %>
+                <% elsif (@claim.qa_completed? && @claim.previous_decision&.rejected?) || @claim.latest_decision&.rejected? %>
                 <strong class="govuk-tag app-task-list__task-completed govuk-tag--alert">Rejected</strong>
               <% end %>
             </li>
           </ul>
         </li>
+
+        <% if @claim.qa_required? %>
+          <li>
+            <h2 class="app-task-list__section">
+              <span class="app-task-list__section-number"><%= @claim_checking_tasks.applicable_task_names.size + 2 %>. </span> Quality assurance decision
+            </h2>
+            <ul class="app-task-list__items">
+              <li class="app-task-list__item">
+                <span class="app-task-list__task-name">
+                  <%= link_to "Approve or reject quality assurance of this claim", new_admin_claim_decision_path(@claim, qa: true), class: "govuk-link" %>
+                </span>
+                <% unless @claim.awaiting_qa? %>
+                  <% if @claim.latest_decision&.approved? %>
+                    <strong class="govuk-tag app-task-list__task-completed">Approved</strong>
+                  <% elsif @claim.latest_decision&.rejected? %>
+                    <strong class="govuk-tag app-task-list__task-completed govuk-tag--alert">Rejected</strong>
+                  <% end %>
+                <% end %>
+              </li>
+            </ul>
+          </li>
+        <% end %>
       </ol>
     </section>
   </div>

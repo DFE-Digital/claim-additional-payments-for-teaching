@@ -316,15 +316,19 @@ RSpec.describe Amendment, type: :model do
   end
 
   describe ".undo_decision" do
+    subject(:amendment) { described_class.undo_decision(decision, notes: "Here are some notes", created_by: dfe_signin_user) }
+
     let(:dfe_signin_user) { create(:dfe_signin_user) }
     let(:claim) { create(:claim, :approved) }
-    let(:decision) { claim.latest_decision }
+    let(:decision) { claim.reload.latest_decision }
 
-    let(:amendment) { Amendment.undo_decision(decision, notes: "Here are some notes", created_by: dfe_signin_user) }
-
-    context "when the decision can be undone" do
-      it "undoes the decision and creates an Amendment record" do
+    shared_examples "undoing a decision" do
+      it "returns an Amendment record", :aggregate_failures do
+        expect(amendment).to be_a(described_class)
         expect(amendment).to be_persisted
+      end
+
+      it "stores the claim changes on the amendment", :aggregate_failures do
         expect(amendment.claim).to eq(claim)
         expect(amendment.claim_changes).to eq({
           decision: [
@@ -332,8 +336,26 @@ RSpec.describe Amendment, type: :model do
             "undecided"
           ]
         })
+      end
 
-        expect(decision.reload.undone).to eq(true)
+      it "undoes the decision" do
+        expect { amendment }.to change { decision.undone }.from(false).to(true)
+      end
+    end
+
+    context "when a decision exists for the claim" do
+      let(:claim) { create(:claim, :approved) }
+
+      include_examples "undoing a decision"
+    end
+
+    context "when QA has been completed for the claim" do
+      let(:claim) { create(:claim, :approved, :qa_completed) }
+
+      include_examples "undoing a decision"
+
+      it "unsets the QA date on the claim" do
+        expect { amendment }.to change { claim.reload.qa_completed_at }.from(claim.qa_completed_at).to(nil)
       end
     end
 

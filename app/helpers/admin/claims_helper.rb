@@ -169,6 +169,8 @@ module Admin
     def status(claim)
       if claim.all_payrolled?
         "Payrolled"
+      elsif claim.awaiting_qa?
+        "Approved awaiting QA"
       elsif claim.latest_decision&.approved?
         "Approved awaiting payroll"
       elsif claim.latest_decision&.rejected?
@@ -188,6 +190,7 @@ module Admin
     end
 
     NO_CLAIMS = {
+      "approved_awaiting_qa" => "There are currently no approved claims awaiting QA.",
       "approved_awaiting_payroll" => "There are currently no approved claims awaiting payroll.",
       "approved" => "There are currently no approved claims.",
       "rejected" => "There are currently no rejected claims."

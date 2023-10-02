@@ -3,7 +3,7 @@ class Admin::DecisionsController < Admin::BaseAdminController
 
   before_action :ensure_service_operator
   before_action :load_claim
-  before_action :reject_decided_claims
+  before_action :reject_decided_claims, unless: -> { qa_decision_task? }
   before_action :reject_missing_payroll_gender, only: [:create]
   before_action :reject_if_claims_preventing_payment, only: [:create]
 
@@ -17,14 +17,13 @@ class Admin::DecisionsController < Admin::BaseAdminController
   def create
     @decision = @claim.decisions.build(decision_params.merge(created_by: admin_user))
     @claim_checking_tasks = ClaimCheckingTasks.new(@claim)
-    if @decision.save
-      send_claim_result_email
-      redirect_to admin_claims_path, notice: "Claim has been #{@claim.latest_decision.result} successfully"
-    else
-      @claims_preventing_payment = claims_preventing_payment_finder.claims_preventing_payment
-      set_pagination
-      render "new"
-    end
+    save_decision!
+    send_claim_result_email
+    redirect_after_decision
+  rescue ActiveRecord::RecordInvalid
+    @claims_preventing_payment = claims_preventing_payment_finder.claims_preventing_payment
+    set_pagination
+    render "new"
   end
 
   private
@@ -56,7 +55,32 @@ class Admin::DecisionsController < Admin::BaseAdminController
     end
   end
 
+  def save_decision!
+    ActiveRecord::Base.transaction do
+      @decision.save!
+
+      if qa_decision_task?
+        @claim.previous_decision.update!(undone: true)
+        @claim.update!(qa_completed_at: Time.zone.now)
+      elsif @claim.flaggable_for_qa?
+        @claim.update!(qa_required: true)
+        @claim.notes.create!(body: "This claim has been marked for a quality assurance review")
+      end
+    end
+  end
+
+  def redirect_after_decision
+    if @claim.awaiting_qa?
+      redirect_to admin_claim_tasks_path(@claim), notice: "Claim has been #{@claim.latest_decision.result} successfully",
+        alert: "This claim has been marked for a quality assurance review"
+    else
+      redirect_to admin_claims_path, notice: "Claim has been #{@claim.latest_decision.result} successfully"
+    end
+  end
+
   def send_claim_result_email
+    return if @claim.awaiting_qa?
+
     ClaimMailer.approved(@claim).deliver_later if @claim.latest_decision.result == "approved"
     ClaimMailer.rejected(@claim).deliver_later if @claim.latest_decision.result == "rejected"
   end
@@ -67,6 +91,10 @@ class Admin::DecisionsController < Admin::BaseAdminController
       :notes,
       *Decision::REJECTED_REASONS.map { |r| "rejected_reasons_#{r}".to_sym }
     )
+  end
+
+  def qa_decision_task?
+    @qa_decision_task ||= params[:qa] == "true" && @claim.awaiting_qa?
   end
 
   def current_task_name

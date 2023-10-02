@@ -5,6 +5,7 @@ class Admin::ClaimsController < Admin::BaseAdminController
 
   def index
     @claims = Claim.current_academic_year.approved if params[:status] == "approved"
+    @claims = Claim.current_academic_year.approved.awaiting_qa if params[:status] == "approved_awaiting_qa"
     @claims = approved_awaiting_payroll if params[:status] == "approved_awaiting_payroll"
     @claims = Claim.current_academic_year.rejected if params[:status] == "rejected"
     @claims = Claim.includes(:decisions).held.awaiting_decision if params[:status] == "held"
