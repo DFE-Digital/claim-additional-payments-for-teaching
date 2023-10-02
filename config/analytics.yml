@@ -94,6 +94,8 @@ shared:
   - held
   - hmrc_bank_validation_succeeded
   - hmrc_bank_validation_responses
+  - qa_required
+  - qa_completed_at
   :decisions:
   - id
   - result

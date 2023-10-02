@@ -2,6 +2,7 @@ RSpec.shared_examples "Admin Check Claim Feature" do |policy|
   context "User is logged in as a service operator" do
     before do
       create(:policy_configuration, policy.to_s.underscore)
+      disable_claim_qa_flagging
       @signed_in_user = sign_in_as_service_operator
     end
 

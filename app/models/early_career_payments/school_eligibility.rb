@@ -58,6 +58,10 @@ module EarlyCareerPayments
       "E06000058", # Bournemouth, Christchurch and Poole
       "E06000059", # Dorset
       "E06000060", # Buckinghamshire
+      "E06000063", # Cumbria (Allerdale, Carlisle, Copeland)
+      "E06000064", # Cumbria (Barrow-in-Furness, Eden, South Lakeland)
+      "E06000065", # North Yorkshire (Craven, Hambleton, Harrogate, Richmondshire, Ryedale, Scarborough, Selby)
+      "E06000066", # Somerset (Somerset West and Taunton, South Somerset, Sedgemoor, Mendip)
       "E07000004", # Aylesbury Vale
       "E07000005", # Chiltern
       "E07000006", # South Bucks
@@ -67,12 +71,6 @@ module EarlyCareerPayments
       "E07000010", # Fenland
       "E07000011", # Huntingdonshire
       "E07000012", # South Cambridgeshire
-      "E07000026", # Allerdale
-      "E07000027", # Barrow-in-Furness
-      "E07000028", # Carlisle
-      "E07000029", # Copeland
-      "E07000030", # Eden
-      "E07000031", # South Lakeland
       "E07000032", # Amber Valley
       "E07000033", # Bolsover
       "E07000034", # Chesterfield
@@ -182,13 +180,6 @@ module EarlyCareerPayments
       "E06000061", # North Northamptonshire (North Northants)
       "E06000062", # West Northamptonshire (West Northants)
       "E07000156", # Wellingborough
-      "E07000163", # Craven
-      "E07000164", # Hambleton
-      "E07000165", # Harrogate
-      "E07000166", # Richmondshire
-      "E07000167", # Ryedale
-      "E07000168", # Scarborough
-      "E07000169", # Selby
       "E07000170", # Ashfield
       "E07000171", # Bassetlaw
       "E07000172", # Broxtowe
@@ -201,9 +192,6 @@ module EarlyCareerPayments
       "E07000179", # South Oxfordshire
       "E07000180", # Vale of White Horse
       "E07000181", # West Oxfordshire
-      "E07000187", # Mendip
-      "E07000188", # Sedgemoor
-      "E07000189", # South Somerset
       "E07000192", # Cannock Chase
       "E07000193", # East Staffordshire
       "E07000194", # Lichfield
@@ -250,7 +238,6 @@ module EarlyCareerPayments
       "E07000243", # Stevenage
       "E07000244", # East Suffolk
       "E07000245", # West Suffolk
-      "E07000246", # Somerset West and Taunton
       "E08000001", # Bolton
       "E08000002", # Bury
       "E08000003", # Manchester
