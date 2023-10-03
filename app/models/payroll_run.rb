@@ -1,5 +1,6 @@
 class PayrollRun < ApplicationRecord
   MAX_BATCH_SIZE = 1000
+  MAX_MONTHLY_PAYMENTS = 3000
 
   has_many :payments, dependent: :destroy
   has_many :claims, through: :payments
@@ -12,6 +13,7 @@ class PayrollRun < ApplicationRecord
   belongs_to :confirmation_report_uploaded_by, class_name: "DfeSignIn::User", optional: true
 
   validate :ensure_no_payroll_run_this_month, on: :create
+  validate :ensure_within_max_monthly_payments, on: :create
 
   scope :this_month, -> { where(created_at: DateTime.now.all_month) }
 
@@ -91,5 +93,9 @@ class PayrollRun < ApplicationRecord
 
   def ensure_no_payroll_run_this_month
     errors.add(:base, "There has already been a payroll run for #{Date.today.strftime("%B")}") if PayrollRun.this_month.any?
+  end
+
+  def ensure_within_max_monthly_payments
+    errors.add(:base, "This payroll run exceeds #{MAX_MONTHLY_PAYMENTS} payments") if payments.size > MAX_MONTHLY_PAYMENTS
   end
 end
