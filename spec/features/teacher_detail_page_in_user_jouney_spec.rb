@@ -36,6 +36,10 @@ RSpec.feature "Teacher Identity Sign in" do
 
     expect(page).to have_text(I18n.t("early_career_payments.questions.current_school_search"))
     expect(page).to have_text("Enter the school name or postcode. Use at least three characters.")
+
+    # check the teacher_id_user_info details are saved to the claim
+    claim = Claim.order(:created_at).last
+    expect(claim.teacher_id_user_info).to eq({"trn"=>"1234567", "birthdate"=>"1940-01-01", "given_name"=>"Kelsie", "family_name"=>"Oberbrunner"})
   end
 
   scenario "Teacher makes claim for 'Early-Career Payments' by logging in with teacher_id and selects no to details confirm" do

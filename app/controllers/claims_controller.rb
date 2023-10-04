@@ -286,14 +286,14 @@ class ClaimsController < BasePublicController
       surname: user_info["family_name"],
       teacher_reference_number: user_info["trn"],
       date_of_birth: user_info["birthdate"],
-      logged_in_with_tid: true
+      logged_in_with_tid: true,
+      teacher_id_user_info: user_info,
     }
 
     claim_attributes[:national_insurance_number] = user_info["ni_number"] if user_info["trn_match_ni_number"]
 
     current_claim.update(claim_attributes)
     session.delete("user_info")
-    end
   end
 
   def unset_session_claim

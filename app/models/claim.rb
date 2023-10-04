@@ -103,6 +103,7 @@ class Claim < ApplicationRecord
     hmrc_bank_validation_responses: false,
     hmrc_bank_validation_succeeded: false,
     logged_in_with_tid: false,
+    teacher_id_user_info: false,
     details_check: true,
     qa_required: false,
     qa_completed_at: false
