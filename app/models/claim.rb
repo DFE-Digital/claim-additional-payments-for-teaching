@@ -146,6 +146,7 @@ class Claim < ApplicationRecord
 
   belongs_to :eligibility, polymorphic: true, inverse_of: :claim, dependent: :destroy
   accepts_nested_attributes_for :eligibility, update_only: true
+  delegate :eligible_itt_subject, to: :eligibility, allow_nil: true
 
   has_many :claim_payments
   has_many :payments, through: :claim_payments

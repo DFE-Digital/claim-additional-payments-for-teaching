@@ -98,6 +98,7 @@ shared:
     - qa_required
     - qa_completed_at
     - details_check
+  - teacher_id_user_info
   :decisions:
     - id
     - result

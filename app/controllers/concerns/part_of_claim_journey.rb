@@ -4,7 +4,7 @@ module PartOfClaimJourney
   included do
     before_action :set_cache_headers
     before_action :check_whether_closed_for_submissions, if: :current_policy_routing_name
-    before_action :send_unstarted_claimants_to_the_start
+    before_action :send_unstarted_claimants_to_the_start, if: :send_to_start?
     helper_method :current_claim, :submitted_claim
   end
 
@@ -22,7 +22,19 @@ module PartOfClaimJourney
   end
 
   def send_unstarted_claimants_to_the_start
-    redirect_to current_policy.start_page_url, allow_other_host: true unless current_claim.persisted?
+    redirect_to current_policy.start_page_url, allow_other_host: true
+  end
+
+  def current_claim_persisted?
+    current_claim.persisted?
+  end
+
+  def skip_landing_page?
+    params[:skip_landing_page] == "true"
+  end
+
+  def send_to_start?
+    !skip_landing_page? && !current_claim_persisted?
   end
 
   def current_claim

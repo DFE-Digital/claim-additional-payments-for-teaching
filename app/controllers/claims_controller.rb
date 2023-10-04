@@ -2,7 +2,7 @@ class ClaimsController < BasePublicController
   include PartOfClaimJourney
   include AddressDetails
 
-  skip_before_action :send_unstarted_claimants_to_the_start, only: [:new, :create, :timeout]
+  skip_before_action :send_unstarted_claimants_to_the_start, only: [:new, :create, :timeout, :reset_claim]
   before_action :initialize_session_slug_history
   before_action :check_page_is_in_sequence, only: [:show, :update]
   before_action :update_session_with_current_slug, only: [:update]
@@ -22,15 +22,15 @@ class ClaimsController < BasePublicController
 
   def show
     search_schools if params[:school_search]
-    if current_claim.details_check.nil? && current_claim.logged_in_with_tid?
+    if new_claim_with_teacher_id?
       claim_path(current_policy_routing_name, "teacher-detail")
-    elsif params[:slug] == "current-school" && !current_claim.details_check? && current_claim.logged_in_with_tid?
+    elsif params[:slug] == "current-school" && failed_details_check_with_teacher_id?
       return redirect_to reset_claim_path
     elsif params[:slug] == "teacher-detail"
       update_session_with_current_slug
       return redirect_to claim_path(current_policy_routing_name, next_slug) unless session[:user_info].present?
       set_teacher_detail
-    elsif params[:slug] == "teaching-subject-now" && !current_claim.eligibility.eligible_itt_subject
+    elsif params[:slug] == "teaching-subject-now" && no_eligible_itt_subject?
       return redirect_to claim_path(current_policy_routing_name, "eligible-itt-subject")
     elsif params[:slug] == "sign-in-or-continue"
       update_session_with_current_slug
@@ -265,23 +265,34 @@ class ClaimsController < BasePublicController
     PolicyConfiguration.policies_for_routing_name(params[:policy]).include?(current_claim.policy)
   end
 
+  def new_claim_with_teacher_id?
+    current_claim.details_check.nil? && current_claim.logged_in_with_tid?
+  end
+
+  def failed_details_check_with_teacher_id?
+    !current_claim.details_check? && current_claim.logged_in_with_tid?
+  end
+
+  def no_eligible_itt_subject?
+    !current_claim.eligible_itt_subject
+  end
+
   def set_teacher_detail
     user_info = session[:user_info]
-    if user_info
-      claim_attributes = {
-        first_name: user_info["given_name"],
-        surname: user_info["family_name"],
-        teacher_reference_number: user_info["trn"],
-        date_of_birth: user_info["birthdate"],
-        logged_in_with_tid: true
-      }
+    return unless user_info
 
-      if user_info["trn_match_ni_number"]
-        claim_attributes[:national_insurance_number] = user_info["ni_number"]
-      end
+    claim_attributes = {
+      first_name: user_info["given_name"],
+      surname: user_info["family_name"],
+      teacher_reference_number: user_info["trn"],
+      date_of_birth: user_info["birthdate"],
+      logged_in_with_tid: true
+    }
 
-      current_claim.update(claim_attributes)
-      session.delete("user_info")
+    claim_attributes[:national_insurance_number] = user_info["ni_number"] if user_info["trn_match_ni_number"]
+
+    current_claim.update(claim_attributes)
+    session.delete("user_info")
     end
   end
 
