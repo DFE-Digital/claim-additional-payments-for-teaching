@@ -2,14 +2,9 @@ class Admin::ClaimsController < Admin::BaseAdminController
   include Pagy::Backend
 
   before_action :ensure_service_operator
+  before_action :filter_claims_by_status, only: :index
 
   def index
-    @claims = Claim.current_academic_year.approved if params[:status] == "approved"
-    @claims = Claim.current_academic_year.approved.awaiting_qa if params[:status] == "approved_awaiting_qa"
-    @claims = approved_awaiting_payroll if params[:status] == "approved_awaiting_payroll"
-    @claims = Claim.current_academic_year.rejected if params[:status] == "rejected"
-    @claims = Claim.includes(:decisions).held.awaiting_decision if params[:status] == "held"
-    @claims = Claim.includes(:decisions).failed_bank_validation.awaiting_decision if params[:status] == "failed_bank_validation"
     @claims ||= Claim.includes(:decisions).not_held.awaiting_decision
 
     @claims = @claims.by_policy(filtered_policy) if filtered_policy
@@ -104,6 +99,26 @@ class Admin::ClaimsController < Admin::BaseAdminController
 
   def hold_params
     params.require(:hold).permit(:body).merge(claim: @claim)
+  end
+
+  def filter_claims_by_status
+    @claims =
+      case params[:status]
+      when "approved"
+        Claim.current_academic_year.approved
+      when "approved_awaiting_qa"
+        Claim.approved.awaiting_qa
+      when "approved_awaiting_payroll"
+        approved_awaiting_payroll
+      when "automatically_approved_awaiting_payroll"
+        Claim.current_academic_year.payrollable.auto_approved
+      when "rejected"
+        Claim.current_academic_year.rejected
+      when "held"
+        Claim.includes(:decisions).held.awaiting_decision
+      when "failed_bank_validation"
+        Claim.includes(:decisions).failed_bank_validation.awaiting_decision
+      end
   end
 
   def approved_awaiting_payroll

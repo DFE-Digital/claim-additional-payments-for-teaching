@@ -99,6 +99,13 @@ FactoryBot.define do
       govuk_verify_fields { [] }
     end
 
+    trait :auto_approved do
+      submitted
+      after(:build) do |claim, _|
+        create(:decision, :auto_approved, claim: claim)
+      end
+    end
+
     trait :approved do
       submitted
       after(:build) do |claim, evaluator|

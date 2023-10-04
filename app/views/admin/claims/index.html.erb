@@ -34,7 +34,7 @@
           <label class="govuk-label" for="status">
             Status:
           </label>
-          <%= form.select :status, options_for_select([["Awaiting decision - on hold", "held"], ["Awaiting decision - failed bank details", "failed_bank_validation"], ["Approved awaiting QA", "approved_awaiting_qa"], ["Approved awaiting payroll", "approved_awaiting_payroll"], ["Approved", "approved"], ["Rejected", "rejected"]], params[:status]), {include_blank: "Awaiting decision - not on hold"}, class: "govuk-select" %>
+          <%= form.select :status, options_for_select(claim_status_filters, params[:status]), {include_blank: "Awaiting decision - not on hold"}, class: "govuk-select" %>
         </div>
         <div>
           <%= form.submit "Apply filters", class: "govuk-button govuk-button--secondary admin-filter-group__button" %>
