@@ -61,6 +61,25 @@ RSpec.feature "Payroll" do
     end
   end
 
+  scenario "Limiting the maximum number of claims entering payroll" do
+    click_on "Payroll"
+
+    expected_claims = create_list(:claim, 3, :approved)
+    stubbed_max_payments = stub_const("PayrollRun::MAX_MONTHLY_PAYMENTS", 2)
+
+    month_name = Date.today.strftime("%B")
+    click_on "Run #{month_name} payroll"
+
+    expect(page).to have_content("The number of payments entering this payrun will be capped to #{stubbed_max_payments}")
+
+    click_on "Confirm and submit"
+
+    expect(page).to have_content("Approved claims 2")
+
+    payroll_run = PayrollRun.order(:created_at).last
+    expect(payroll_run.claims).to match_array(expected_claims.first(stubbed_max_payments))
+  end
+
   scenario "Any claims approved in the meantime are not included" do
     click_on "Payroll"
 
@@ -230,5 +249,45 @@ RSpec.feature "Payroll" do
     click_on "Confirm and submit"
 
     expect(page).to have_content("Payroll not run, no claims or top ups")
+  end
+
+  scenario "Payments can be browsed using pagination" do
+    payroll_run = create(:payroll_run, claims_counts: {StudentLoans => 7})
+
+    stub_const("Pagy::DEFAULT", Pagy::DEFAULT.merge(items: 5))
+
+    first_page_payments = payroll_run.payments.ordered[0..Pagy::DEFAULT[:items] - 1]
+    second_page_payments = payroll_run.payments.ordered[Pagy::DEFAULT[:items]..]
+
+    click_on "Payroll"
+    click_on "View #{I18n.l(payroll_run.created_at.to_date, format: :month_year)} payroll run"
+
+    aggregate_failures "first page payments only" do
+      first_page_payments.map { |payment| expect(page).to have_content payment.id }
+      second_page_payments.map { |payment| expect(page).not_to have_content payment.id }
+
+      expect(page).not_to have_content "Previous"
+      expect(page).to have_content "Next"
+    end
+
+    click_on "Next"
+
+    aggregate_failures "second page payments only" do
+      first_page_payments.map { |payment| expect(page).not_to have_content payment.id }
+      second_page_payments.map { |payment| expect(page).to have_content payment.id }
+
+      expect(page).to have_content "Previous"
+      expect(page).not_to have_content "Next"
+    end
+
+    click_on "Previous"
+
+    aggregate_failures "first page payments only" do
+      first_page_payments.map { |payment| expect(page).to have_content payment.id }
+      second_page_payments.map { |payment| expect(page).not_to have_content payment.id }
+
+      expect(page).not_to have_content "Previous"
+      expect(page).to have_content "Next"
+    end
   end
 end

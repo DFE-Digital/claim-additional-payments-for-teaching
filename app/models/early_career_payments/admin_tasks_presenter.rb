@@ -50,6 +50,17 @@ module EarlyCareerPayments
       end
     end
 
+    def induction_confirmation
+      year_type = eligibility.postgraduate_itt? ? "start" : "end"
+
+      [
+        [
+          "ITT #{year_type} year",
+          I18n.t("answers.qts_award_years.on_date", year: eligibility.itt_academic_year.to_s(:long))
+        ]
+      ]
+    end
+
     private
 
     def eligibility

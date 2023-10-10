@@ -6,28 +6,36 @@
 
     <h2 class="govuk-heading-m">You are not eligible this year</h2>
 
-    <% if current_claim.eligibility.undergraduate_itt? %>
+    <% if current_claim.for_policy(EarlyCareerPayments)&.eligibility&.induction_not_completed? %>
       <p class="govuk-body">
         You are not eligible for the
         <%= link_to "early-career payment (opens in new tab)", "https://www.gov.uk/guidance/early-career-payments-guidance-for-teachers-and-schools", class: "govuk-link govuk-link--no-visited-state", target: "_blank" %>
-        because you completed your undergraduate initial teacher training in the <%= current_claim.eligibility.itt_academic_year.to_s(:long) -%> academic year.
+        because you have not completed your induction.
       </p>
-    <% end %>
+    <% else %>
+      <% if current_claim.eligibility.undergraduate_itt? %>
+        <p class="govuk-body">
+          You are not eligible for the
+          <%= link_to "early-career payment (opens in new tab)", "https://www.gov.uk/guidance/early-career-payments-guidance-for-teachers-and-schools", class: "govuk-link govuk-link--no-visited-state", target: "_blank" %>
+          because you completed your undergraduate initial teacher training in the <%= current_claim.eligibility.itt_academic_year.to_s(:long) -%> academic year.
+        </p>
+      <% end %>
 
-    <% if current_claim.eligibility.postgraduate_itt? %>
-      <p class="govuk-body">
-        You are not eligible for the
-        <%= link_to "early-career payment (opens in new tab)", "https://www.gov.uk/guidance/early-career-payments-guidance-for-teachers-and-schools", class: "govuk-link govuk-link--no-visited-state", target: "_blank" %>
-        because you started your postgraduate initial teacher training in the <%= current_claim.eligibility.itt_academic_year.to_s(:long) -%> academic year.
-      </p>
-    <% end %>
+      <% if current_claim.eligibility.postgraduate_itt? %>
+        <p class="govuk-body">
+          You are not eligible for the
+          <%= link_to "early-career payment (opens in new tab)", "https://www.gov.uk/guidance/early-career-payments-guidance-for-teachers-and-schools", class: "govuk-link govuk-link--no-visited-state", target: "_blank" %>
+          because you started your postgraduate initial teacher training in the <%= current_claim.eligibility.itt_academic_year.to_s(:long) -%> academic year.
+        </p>
+      <% end %>
 
-    <% if current_claim.eligibility.assessment_only? || current_claim.eligibility.overseas_recognition? %>
-      <p class="govuk-body">
-        You are not eligible for the
-        <%= link_to "early-career payment (opens in new tab)", "https://www.gov.uk/guidance/early-career-payments-guidance-for-teachers-and-schools", class: "govuk-link govuk-link--no-visited-state", target: "_blank" %>
-        because you earned your qualified teacher status in the <%= current_claim.eligibility.itt_academic_year.to_s(:long) -%> academic year.
-      </p>
+      <% if current_claim.eligibility.assessment_only? || current_claim.eligibility.overseas_recognition? %>
+        <p class="govuk-body">
+          You are not eligible for the
+          <%= link_to "early-career payment (opens in new tab)", "https://www.gov.uk/guidance/early-career-payments-guidance-for-teachers-and-schools", class: "govuk-link govuk-link--no-visited-state", target: "_blank" %>
+          because you earned your qualified teacher status in the <%= current_claim.eligibility.itt_academic_year.to_s(:long) -%> academic year.
+        </p>
+      <% end %>
     <% end %>
 
     <p class="govuk-body">
@@ -39,7 +47,12 @@
     <h2 class="govuk-heading-m">You may be eligible next year</h2>
 
     <p class="govuk-body">
-      So long as your circumstances stay the same, you could claim for an early-career payment in the <%= (current_claim.academic_year + 1).to_s(:long)  -%> academic year.
+      <% if current_claim.for_policy(EarlyCareerPayments)&.eligibility&.induction_not_completed? %>
+        If you have completed your induction,
+      <% else %>
+        So long as your circumstances stay the same,
+      <% end %>
+      you could claim for an early-career payment in the <%= (current_claim.academic_year + 1).to_s(:long)  -%> academic year.
     </p>
 
     <h3 class="govuk-heading-s">Set a reminder to apply next year</h3>

@@ -73,6 +73,7 @@ class Amendment < ApplicationRecord
       }
 
       decision.update!(undone: true)
+      amendment.claim.update!(qa_completed_at: nil)
       amendment.save!
     end
 

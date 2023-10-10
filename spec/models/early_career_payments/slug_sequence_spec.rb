@@ -149,6 +149,7 @@ RSpec.describe EarlyCareerPayments::SlugSequence do
           sign-in-or-continue
           current-school
           nqt-in-academic-year-after-itt
+          induction-completed
           supply-teacher
           poor-performance
           qualification
@@ -195,6 +196,7 @@ RSpec.describe EarlyCareerPayments::SlugSequence do
           sign-in-or-continue
           current-school
           nqt-in-academic-year-after-itt
+          induction-completed
           supply-teacher
           poor-performance
           qualification
@@ -236,6 +238,7 @@ RSpec.describe EarlyCareerPayments::SlugSequence do
           sign-in-or-continue
           current-school
           nqt-in-academic-year-after-itt
+          induction-completed
           supply-teacher
           poor-performance
           qualification
@@ -294,6 +297,7 @@ RSpec.describe EarlyCareerPayments::SlugSequence do
           sign-in-or-continue
           current-school
           nqt-in-academic-year-after-itt
+          induction-completed
           supply-teacher
           poor-performance
           qualification

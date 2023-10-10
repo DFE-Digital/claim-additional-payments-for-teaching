@@ -63,26 +63,95 @@ RSpec.describe "Admin decisions", type: :request do
     end
 
     describe "decisions#create" do
-      it "can approve a claim" do
-        post admin_claim_decisions_path(claim_id: claim.id, decision: {result: "approved"})
-
-        follow_redirect!
-
-        expect(response.body).to include("Claim has been approved successfully")
-
-        expect(claim.latest_decision.created_by).to eq(@signed_in_user)
-        expect(claim.latest_decision.result).to eq("approved")
+      before do
+        deliver_mock = double(deliver_later: nil)
+        allow(ClaimMailer).to receive(:approved).and_return(deliver_mock)
+        allow(ClaimMailer).to receive(:rejected).and_return(deliver_mock)
       end
 
-      it "can reject a claim" do
-        post admin_claim_decisions_path(claim_id: claim.id, decision: {result: "rejected", rejected_reasons_ineligible_subject: "1"})
+      context "when a claim is being flagged for QA" do
+        it "can approve the claim and flag it for QA", :aggregate_failures do
+          post admin_claim_decisions_path(claim_id: claim.id, decision: {result: "approved"})
 
-        follow_redirect!
+          follow_redirect!
 
-        expect(response.body).to include("Claim has been rejected successfully")
+          expect(response.body).to include("This claim has been marked for a quality assurance review")
+          expect(response.body).to include("Claim has been approved successfully")
 
-        expect(claim.latest_decision.created_by).to eq(@signed_in_user)
-        expect(claim.latest_decision.result).to eq("rejected")
+          expect(ClaimMailer).not_to have_received(:approved).with(claim)
+
+          expect(claim.latest_decision.created_by).to eq(@signed_in_user)
+          expect(claim.latest_decision.result).to eq("approved")
+
+          expect(claim.reload.qa_required).to eq(true)
+          expect(claim.reload.qa_completed_at).to be_nil
+          expect(claim.reload.notes.last.body).to eq("This claim has been marked for a quality assurance review")
+        end
+
+        context "when adding a QA decision" do
+          let(:claim) { create(:claim, :approved, :flagged_for_qa, policy: StudentLoans) }
+
+          it "can undo the previous decision and approve the claim", :aggregate_failures do
+            post admin_claim_decisions_path(qa: true, claim_id: claim.id, decision: {result: "approved"})
+
+            follow_redirect!
+
+            expect(response.body).not_to include("This claim has been marked for a quality assurance review")
+            expect(response.body).to include("Claim has been approved successfully")
+
+            expect(ClaimMailer).to have_received(:approved).with(claim)
+
+            expect(claim.previous_decision.undone).to eq(true)
+            expect(claim.latest_decision.created_by).to eq(@signed_in_user)
+            expect(claim.latest_decision.result).to eq("approved")
+            expect(claim.reload.qa_completed_at).not_to be_nil
+          end
+
+          it "can undo the previous decision and reject a claim", :aggregate_failures do
+            post admin_claim_decisions_path(qa: true, claim_id: claim.id, decision: {result: "rejected", rejected_reasons_ineligible_subject: "1"})
+
+            follow_redirect!
+
+            expect(response.body).to include("Claim has been rejected successfully")
+
+            expect(ClaimMailer).to have_received(:rejected).with(claim)
+
+            expect(claim.previous_decision.undone).to eq(true)
+            expect(claim.latest_decision.created_by).to eq(@signed_in_user)
+            expect(claim.latest_decision.result).to eq("rejected")
+            expect(claim.reload.qa_completed_at).not_to be_nil
+          end
+        end
+      end
+
+      context "when a claim is not being flagged for QA" do
+        before { disable_claim_qa_flagging }
+
+        it "can approve the claim", :aggregate_failures do
+          post admin_claim_decisions_path(claim_id: claim.id, decision: {result: "approved"})
+
+          follow_redirect!
+
+          expect(response.body).to include("Claim has been approved successfully")
+
+          expect(ClaimMailer).to have_received(:approved).with(claim)
+
+          expect(claim.latest_decision.created_by).to eq(@signed_in_user)
+          expect(claim.latest_decision.result).to eq("approved")
+        end
+
+        it "can reject the claim", :aggregate_failures do
+          post admin_claim_decisions_path(claim_id: claim.id, decision: {result: "rejected", rejected_reasons_ineligible_subject: "1"})
+
+          follow_redirect!
+
+          expect(response.body).to include("Claim has been rejected successfully")
+
+          expect(ClaimMailer).to have_received(:rejected).with(claim)
+
+          expect(claim.latest_decision.created_by).to eq(@signed_in_user)
+          expect(claim.latest_decision.result).to eq("rejected")
+        end
       end
 
       context "when no result is selected" do
@@ -99,6 +168,18 @@ RSpec.describe "Admin decisions", type: :request do
 
         it "shows an error" do
           post admin_claim_decisions_path(claim_id: claim.id, decision: {result: "approved"})
+
+          follow_redirect!
+
+          expect(response.body).to include("Claim outcome already decided")
+        end
+      end
+
+      context "when a QA decision has already been made" do
+        let(:claim) { create(:claim, :approved, :qa_completed, policy: MathsAndPhysics) }
+
+        it "shows an error" do
+          post admin_claim_decisions_path(qa: true, claim_id: claim.id, decision: {result: "approved"})
 
           follow_redirect!
 

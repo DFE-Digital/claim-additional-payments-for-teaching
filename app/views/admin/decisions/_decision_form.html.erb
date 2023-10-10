@@ -30,11 +30,13 @@
 <% end %>
 
 <%= form_for decision, url: admin_claim_decisions_path(claim), html: { id: "claim_decision_form" } do |form| %>
+  <%= hidden_field_tag :qa, params[:qa] %>
+
   <%= form_group_tag decision do %>
     <fieldset class="govuk-fieldset govuk-!-margin-bottom-6">
       <legend class="govuk-fieldset__legend govuk-fieldset__legend--l govuk-!-margin-bottom-6">
         <h2 class="govuk-fieldset__heading">
-          Claim decision
+          <%= @qa_decision_task ? "Quality assurance" : "Claim" %> decision
         </h2>
       </legend>
 

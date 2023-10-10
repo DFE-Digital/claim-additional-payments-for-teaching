@@ -95,6 +95,8 @@ shared:
   - hmrc_bank_validation_succeeded
   - hmrc_bank_validation_responses
   - logged_in_with_tid
+  - qa_required
+  - qa_completed_at
   :decisions:
   - id
   - result
@@ -121,6 +123,7 @@ shared:
   - created_at
   - updated_at
   - important
+  - label
   :payments:
   - id
   - payroll_run_id
@@ -201,6 +204,7 @@ shared:
   - itt_academic_year
   - current_school_id
   - award_amount
+  - induction_completed
   :levelling_up_premium_payments_eligibilities:
   - id
   - created_at
@@ -218,6 +222,7 @@ shared:
   - current_school_id
   - award_amount
   - eligible_degree_subject
+  - induction_completed
   :schools:
   - id
   - urn
@@ -253,6 +258,8 @@ shared:
   - end_date
   - la_urn
   - school_urn
+  - employer_id
+  - nino
   - created_at
   - updated_at
   - gender_digit
@@ -289,3 +296,10 @@ shared:
   - created_by_id
   - created_at
   - updated_at
+  :school_workforce_censuses:
+  - school_urn
+  - totfte
+  - contract_agreement_type
+  - subject_description_sfr
+  - general_subject_code
+  - hours_taught

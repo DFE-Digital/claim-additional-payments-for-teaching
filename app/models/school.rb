@@ -112,11 +112,13 @@ class School < ApplicationRecord
   scope :open, -> { where("(open_date IS NULL OR open_date <= ?) AND (close_date IS NULL OR close_date >= ?)", Date.current, Date.current) }
   scope :closed, -> { where.not("(open_date IS NULL OR open_date <= ?) AND (close_date IS NULL OR close_date >= ?)", Date.current, Date.current) }
 
+  before_save :sanitise_postcode_search_index
+
   def self.search(search_term)
     raise ArgumentError, SEARCH_NOT_ENOUGH_CHARACTERS_ERROR if search_term.length < SEARCH_MINIMUM_LENGTH
 
     where("name ILIKE ?", "%#{sanitize_sql_like(search_term)}%")
-      .or(where("REPLACE(postcode, ' ', '') ILIKE ?", "%#{sanitize_sql_like(search_term.tr(" ", ""))}%"))
+      .or(where("postcode_sanitised ILIKE ?", "%#{sanitize_sql_like(search_term.tr(" ", ""))}%"))
       .order(:name, close_date: :desc).limit(SEARCH_RESULTS_LIMIT)
   end
 
@@ -200,5 +202,9 @@ class School < ApplicationRecord
 
   def special?
     SPECIAL_SCHOOL_TYPES.include?(school_type)
+  end
+
+  def sanitise_postcode_search_index
+    self.postcode_sanitised = postcode.delete(" ") if postcode.present?
   end
 end

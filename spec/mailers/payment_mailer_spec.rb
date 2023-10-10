@@ -38,7 +38,7 @@ RSpec.describe PaymentMailer, type: :mailer do
         end
 
         it "includes the NET pay amount and payment date in the body" do
-          expect(mail.body.encoded).to include("You will receive £500.00 on Friday 1st January 2019")
+          expect(mail.body.encoded).to include("You will receive £500.00 on Tuesday 1st January 2019")
         end
 
         context "when user does not currently have a student loan or a postgraduate loan" do
@@ -125,7 +125,7 @@ RSpec.describe PaymentMailer, type: :mailer do
       end
 
       it "includes the NET pay amount and payment date in the body" do
-        expect(mail.body.encoded).to include("You will receive £2,500.00 on Friday 1st January 2019")
+        expect(mail.body.encoded).to include("You will receive £2,500.00 on Tuesday 1st January 2019")
       end
 
       it "mentions the type of claim in the body" do

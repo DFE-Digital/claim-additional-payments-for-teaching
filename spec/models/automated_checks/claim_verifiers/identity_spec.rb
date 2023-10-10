@@ -178,6 +178,12 @@ module AutomatedChecks
                     end
                   end
 
+                  describe "#label" do
+                    subject(:label) { note.label }
+
+                    it { is_expected.to eq("identity_confirmation") }
+                  end
+
                   describe "#created_by" do
                     subject(:created_by) { note.created_by }
 
@@ -246,6 +252,12 @@ module AutomatedChecks
                         HTML
                       )
                     end
+                  end
+
+                  describe "#label" do
+                    subject(:label) { note.label }
+
+                    it { is_expected.to eq("identity_confirmation") }
                   end
 
                   describe "#created_by" do
@@ -318,6 +330,12 @@ module AutomatedChecks
                     end
                   end
 
+                  describe "#label" do
+                    subject(:label) { note.label }
+
+                    it { is_expected.to eq("identity_confirmation") }
+                  end
+
                   describe "#created_by" do
                     subject(:created_by) { note.created_by }
 
@@ -386,6 +404,12 @@ module AutomatedChecks
                         HTML
                       )
                     end
+                  end
+
+                  describe "#label" do
+                    subject(:label) { note.label }
+
+                    it { is_expected.to eq("identity_confirmation") }
                   end
 
                   describe "#created_by" do
@@ -498,6 +522,12 @@ module AutomatedChecks
                         HTML
                       )
                     end
+                  end
+
+                  describe "#label" do
+                    subject(:label) { note.label }
+
+                    it { is_expected.to eq("identity_confirmation") }
                   end
 
                   describe "#created_by" do
@@ -614,6 +644,12 @@ module AutomatedChecks
                     subject(:body) { note.body }
 
                     it { is_expected.to eq("IMPORTANT: Teacher’s identity has an active alert. Speak to manager before checking this claim.") }
+                  end
+
+                  describe "#label" do
+                    subject(:label) { note.label }
+
+                    it { is_expected.to eq("identity_confirmation") }
                   end
 
                   describe "#created_by" do
@@ -755,6 +791,12 @@ module AutomatedChecks
                     end
                   end
 
+                  describe "#label" do
+                    subject(:label) { note.label }
+
+                    it { is_expected.to eq("identity_confirmation") }
+                  end
+
                   describe "#created_by" do
                     subject(:created_by) { note.created_by }
 
@@ -787,6 +829,12 @@ module AutomatedChecks
                         HTML
                       )
                     end
+                  end
+
+                  describe "#label" do
+                    subject(:label) { note.label }
+
+                    it { is_expected.to eq("identity_confirmation") }
                   end
 
                   describe "#created_by" do
@@ -848,6 +896,12 @@ module AutomatedChecks
                   subject(:body) { note.body }
 
                   it { is_expected.to eq("[DQT Identity] - Not matched") }
+                end
+
+                describe "#label" do
+                  subject(:label) { note.label }
+
+                  it { is_expected.to eq("identity_confirmation") }
                 end
 
                 describe "#created_by" do

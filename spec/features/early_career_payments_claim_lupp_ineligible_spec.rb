@@ -5,7 +5,7 @@ RSpec.feature "Early-Career Payments claims with school ineligible for Levelling
 
   # create a school eligible for ECP and ineligible LUPP
   let!(:school) { create(:school, :early_career_payments_eligible, :levelling_up_premium_payments_ineligible) }
-  let!(:policy_configuration) { create(:policy_configuration, :additional_payments) }
+  let!(:policy_configuration) { create(:policy_configuration, :additional_payments, current_academic_year: AcademicYear.new(2022)) }
   let(:current_academic_year) { policy_configuration.current_academic_year }
 
   let(:itt_year) do
@@ -31,6 +31,12 @@ RSpec.feature "Early-Career Payments claims with school ineligible for Levelling
     click_on "Continue"
 
     claim = Claim.by_policy(EarlyCareerPayments).order(:created_at).last
+
+    # - Have you completed your induction as an early-career teacher?
+    expect(page).to have_text(I18n.t("early_career_payments.questions.induction_completed.heading"))
+
+    choose "Yes"
+    click_on "Continue"
 
     # - Are you currently employed as a supply teacher
     expect(page).to have_text(I18n.t("early_career_payments.questions.employed_as_supply_teacher"))

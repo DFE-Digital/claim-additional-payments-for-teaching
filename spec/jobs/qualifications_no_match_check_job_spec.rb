@@ -84,7 +84,7 @@ RSpec.describe QualificationsNoMatchCheckJob do
                 </pre>
               HTML
 
-            claim.notes = [build(:note, body: note_body)]
+            claim.notes = [build(:note, body: note_body, label: "qualifications")]
             claim.eligibility.qualification = :undergraduate_itt
             claim.save
           end

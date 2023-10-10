@@ -12,6 +12,7 @@
 
 ActiveRecord::Schema[7.0].define(version: 2023_08_08_113301) do
   # These are extensions that must be enabled in order to support this database
+  enable_extension "pg_trgm"
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
 
@@ -23,7 +24,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_08_08_113301) do
     t.uuid "created_by_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.datetime "personal_data_removed_at"
+    t.datetime "personal_data_removed_at", precision: nil
     t.index ["claim_id"], name: "index_amendments_on_claim_id"
     t.index ["created_by_id"], name: "index_amendments_on_created_by_id"
     t.index ["dfe_sign_in_users_id"], name: "index_amendments_on_dfe_sign_in_users_id"
@@ -40,8 +41,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_08_08_113301) do
   end
 
   create_table "claims", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.string "address_line_1", limit: 100
     t.string "address_line_2", limit: 100
     t.string "address_line_3", limit: 100
@@ -53,7 +54,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_08_08_113301) do
     t.string "email_address", limit: 256
     t.string "bank_sort_code", limit: 6
     t.string "bank_account_number", limit: 8
-    t.datetime "submitted_at"
+    t.datetime "submitted_at", precision: nil
     t.string "reference", limit: 8
     t.boolean "has_student_loan"
     t.integer "student_loan_country"
@@ -70,7 +71,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_08_08_113301) do
     t.string "banking_name"
     t.string "building_society_roll_number"
     t.uuid "remove_column_payment_id"
-    t.datetime "personal_data_removed_at"
+    t.datetime "personal_data_removed_at", precision: nil
     t.string "academic_year", limit: 9
     t.integer "bank_or_building_society"
     t.boolean "provide_mobile_number"
@@ -86,10 +87,13 @@ ActiveRecord::Schema[7.0].define(version: 2023_08_08_113301) do
     t.boolean "hmrc_bank_validation_succeeded", default: false
     t.json "hmrc_bank_validation_responses", default: []
     t.boolean "logged_in_with_tid", default: false
+    t.boolean "qa_required", default: false
+    t.datetime "qa_completed_at"
     t.index ["academic_year"], name: "index_claims_on_academic_year"
     t.index ["created_at"], name: "index_claims_on_created_at"
     t.index ["eligibility_type", "eligibility_id"], name: "index_claims_on_eligibility_type_and_eligibility_id"
     t.index ["held"], name: "index_claims_on_held"
+    t.index ["qa_required", "qa_completed_at"], name: "index_claims_on_qa_required_and_qa_completed_at", where: "qa_required"
     t.index ["reference"], name: "index_claims_on_reference", unique: true
     t.index ["remove_column_payment_id"], name: "index_claims_on_remove_column_payment_id"
     t.index ["submitted_at"], name: "index_claims_on_submitted_at"
@@ -98,8 +102,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_08_08_113301) do
   create_table "decisions", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.integer "result"
     t.uuid "claim_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.text "notes"
     t.uuid "created_by_id"
     t.boolean "undone", default: false
@@ -114,13 +118,13 @@ ActiveRecord::Schema[7.0].define(version: 2023_08_08_113301) do
     t.integer "attempts", default: 0, null: false
     t.text "handler", null: false
     t.text "last_error"
-    t.datetime "run_at"
-    t.datetime "locked_at"
-    t.datetime "failed_at"
+    t.datetime "run_at", precision: nil
+    t.datetime "locked_at", precision: nil
+    t.datetime "failed_at", precision: nil
     t.string "locked_by"
     t.string "queue"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", precision: nil
+    t.datetime "updated_at", precision: nil
     t.string "cron"
     t.index ["priority", "run_at"], name: "delayed_jobs_priority"
   end
@@ -134,7 +138,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_08_08_113301) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "role_codes", default: [], array: true
-    t.datetime "deleted_at"
+    t.datetime "deleted_at", precision: nil
     t.string "session_token"
     t.index ["deleted_at"], name: "index_dfe_sign_in_users_on_deleted_at"
     t.index ["dfe_sign_in_id"], name: "index_dfe_sign_in_users_on_dfe_sign_in_id", unique: true
@@ -156,6 +160,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_08_08_113301) do
     t.string "itt_academic_year", limit: 9
     t.uuid "current_school_id"
     t.decimal "award_amount", precision: 7, scale: 2
+    t.boolean "induction_completed"
     t.index ["current_school_id"], name: "index_early_career_payments_eligibilities_on_current_school_id"
   end
 
@@ -194,6 +199,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_08_08_113301) do
     t.uuid "current_school_id"
     t.decimal "award_amount", precision: 7, scale: 2
     t.boolean "eligible_degree_subject"
+    t.boolean "induction_completed"
     t.index ["current_school_id"], name: "index_lup_payments_eligibilities_on_current_school_id"
   end
 
@@ -211,8 +217,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_08_08_113301) do
 
   create_table "maths_and_physics_eligibilities", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.boolean "teaching_maths_or_physics"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.uuid "current_school_id"
     t.integer "has_uk_maths_or_physics_degree"
     t.integer "qts_award_year"
@@ -234,8 +240,10 @@ ActiveRecord::Schema[7.0].define(version: 2023_08_08_113301) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.boolean "important"
+    t.string "label"
     t.index ["claim_id"], name: "index_notes_on_claim_id"
     t.index ["created_by_id"], name: "index_notes_on_created_by_id"
+    t.index ["label", "claim_id"], name: "index_notes_on_label_and_claim_id"
   end
 
   create_table "payment_confirmations", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -250,8 +258,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_08_08_113301) do
   create_table "payments", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.uuid "payroll_run_id"
     t.decimal "award_amount", precision: 7, scale: 2
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.string "payroll_reference"
     t.decimal "gross_value", precision: 7, scale: 2
     t.decimal "national_insurance", precision: 7, scale: 2
@@ -269,9 +277,9 @@ ActiveRecord::Schema[7.0].define(version: 2023_08_08_113301) do
   end
 
   create_table "payroll_runs", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.datetime "downloaded_at"
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
+    t.datetime "downloaded_at", precision: nil
     t.uuid "created_by_id"
     t.uuid "downloaded_by_id"
     t.date "scheduled_payment_date"
@@ -286,8 +294,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_08_08_113301) do
   create_table "policy_configurations", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.boolean "open_for_submissions", default: true, null: false
     t.string "availability_message"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.string "current_academic_year", limit: 9
     t.text "policy_types", default: [], array: true
     t.index ["created_at"], name: "index_policy_configurations_on_created_at"
@@ -299,30 +307,22 @@ ActiveRecord::Schema[7.0].define(version: 2023_08_08_113301) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.boolean "email_verified", default: false
-    t.datetime "email_sent_at"
+    t.datetime "email_sent_at", precision: nil
     t.string "itt_academic_year", limit: 9
     t.string "itt_subject"
   end
 
   create_table "school_workforce_censuses", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "teacher_reference_number"
-    t.string "subject_1"
-    t.string "subject_2"
-    t.string "subject_3"
-    t.string "subject_4"
-    t.string "subject_5"
-    t.string "subject_6"
-    t.string "subject_7"
-    t.string "subject_8"
-    t.string "subject_9"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.string "subject_10"
-    t.string "subject_11"
-    t.string "subject_12"
-    t.string "subject_13"
-    t.string "subject_14"
-    t.string "subject_15"
+    t.integer "school_urn"
+    t.string "contract_agreement_type"
+    t.float "totfte"
+    t.string "subject_description_sfr"
+    t.string "general_subject_code"
+    t.integer "hours_taught"
+    t.index ["teacher_reference_number"], name: "index_school_workforce_censuses_on_teacher_reference_number"
   end
 
   create_table "schools", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -337,23 +337,28 @@ ActiveRecord::Schema[7.0].define(version: 2023_08_08_113301) do
     t.integer "school_type_group", null: false
     t.integer "school_type", null: false
     t.uuid "local_authority_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.uuid "local_authority_district_id"
     t.date "close_date"
     t.integer "establishment_number"
     t.integer "statutory_high_age"
     t.string "phone_number", limit: 20
     t.date "open_date"
+    t.string "postcode_sanitised"
+    t.index ["close_date"], name: "index_schools_on_close_date"
     t.index ["created_at"], name: "index_schools_on_created_at"
     t.index ["local_authority_district_id"], name: "index_schools_on_local_authority_district_id"
     t.index ["local_authority_id"], name: "index_schools_on_local_authority_id"
+    t.index ["name"], name: "index_schools_on_name", opclass: :gin_trgm_ops, using: :gin
+    t.index ["open_date"], name: "index_schools_on_open_date"
+    t.index ["postcode_sanitised"], name: "index_schools_on_postcode_sanitised", opclass: :gin_trgm_ops, using: :gin
     t.index ["urn"], name: "index_schools_on_urn", unique: true
   end
 
   create_table "student_loans_eligibilities", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.integer "qts_award_year"
     t.uuid "claim_school_id"
     t.uuid "current_school_id"
@@ -398,13 +403,16 @@ ActiveRecord::Schema[7.0].define(version: 2023_08_08_113301) do
 
   create_table "teachers_pensions_service", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "teacher_reference_number"
-    t.datetime "start_date"
-    t.datetime "end_date"
+    t.datetime "start_date", precision: nil
+    t.datetime "end_date", precision: nil
     t.integer "la_urn"
     t.integer "school_urn"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "gender_digit"
+    t.string "nino"
+    t.integer "employer_id"
+    t.index ["employer_id"], name: "index_teachers_pensions_service_on_employer_id"
     t.index ["teacher_reference_number", "start_date"], name: "index_tps_data_on_teacher_reference_number_and_start_date", unique: true
     t.index ["teacher_reference_number"], name: "index_teachers_pensions_service_on_teacher_reference_number"
   end

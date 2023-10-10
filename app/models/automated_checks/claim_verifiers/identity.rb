@@ -1,6 +1,9 @@
 module AutomatedChecks
   module ClaimVerifiers
     class Identity
+      TASK_NAME = "identity_confirmation".freeze
+      private_constant :TASK_NAME
+
       def initialize(
         claim:,
         dqt_teacher_status:,
@@ -12,7 +15,7 @@ module AutomatedChecks
       end
 
       def perform
-        return unless awaiting_task?("identity_confirmation")
+        return unless awaiting_task?(TASK_NAME)
 
         # Order of matching matters so that subsequent conditions in methods fall through to execute the right thing
         no_match ||
@@ -71,6 +74,7 @@ module AutomatedChecks
         claim.notes.create!(
           {
             body: body,
+            label: TASK_NAME,
             created_by: admin_user,
             important: important
           }
@@ -80,7 +84,7 @@ module AutomatedChecks
       def create_task(match:, passed: nil)
         task = claim.tasks.build(
           {
-            name: "identity_confirmation",
+            name: TASK_NAME,
             claim_verifier_match: match,
             passed: passed,
             manual: false,

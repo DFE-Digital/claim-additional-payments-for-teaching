@@ -200,6 +200,47 @@ RSpec.describe EarlyCareerPayments::Eligibility, type: :model do
     end
   end
 
+  describe "#induction_not_completed?" do
+    subject { eligibility.induction_not_completed? }
+    let(:eligibility) { build_stubbed(:early_career_payments_eligibility, induction_completed:) }
+
+    context "when the induction_completed attribute is nil" do
+      let(:induction_completed) { nil }
+
+      it { is_expected.to eq(false) }
+    end
+
+    context "when the induction_completed attribute is false" do
+      let(:induction_completed) { false }
+
+      it { is_expected.to eq(true) }
+    end
+
+    context "when the induction_completed attribute is true" do
+      let(:induction_completed) { true }
+
+      it { is_expected.to eq(false) }
+    end
+  end
+
+  describe "#ecp_only_school?" do
+    subject { eligibility.ecp_only_school? }
+    let!(:policy_config) { create(:policy_configuration, :additional_payments) }
+    let!(:claim) { build_stubbed(:claim, eligibility: eligibility) }
+
+    context "when the current school is eligible for ECP and LUP" do
+      let(:eligibility) { create(:early_career_payments_eligibility, :eligible_school_ecp_and_lup) }
+
+      it { is_expected.to eq(false) }
+    end
+
+    context "when the current school is eligible for ECP only" do
+      let(:eligibility) { create(:early_career_payments_eligibility, :eligible_school_ecp_only) }
+
+      it { is_expected.to eq(true) }
+    end
+  end
+
   describe "validation contexts" do
     context "award_amount attribute" do
       it "validates the award_amount is numerical" do
@@ -346,6 +387,28 @@ RSpec.describe EarlyCareerPayments::Eligibility, type: :model do
       let(:eligibility) { build(:early_career_payments_eligibility, :eligible_now, :trainee_teacher) }
 
       it { is_expected.to eq(:ineligible) }
+    end
+
+    context "induction completed" do
+      let(:eligibility) { build(:early_career_payments_eligibility, :eligible_now, :induction_completed) }
+
+      it { is_expected.to eq(:eligible_now) }
+    end
+
+    context "induction not completed" do
+      let!(:claim) { build_stubbed(:claim, eligibility: eligibility) }
+
+      context "with an ECP-only eligible school" do
+        let(:eligibility) { create(:early_career_payments_eligibility, :eligible_now, :induction_not_completed, :eligible_school_ecp_only) }
+
+        it { is_expected.to eq(:eligible_later) }
+      end
+
+      context "with an ECP and LUP eligible school" do
+        let(:eligibility) { create(:early_career_payments_eligibility, :eligible_now, :induction_not_completed, :eligible_school_ecp_and_lup) }
+
+        it { is_expected.to eq(:ineligible) }
+      end
     end
   end
 end

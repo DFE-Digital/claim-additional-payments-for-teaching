@@ -4,4 +4,7 @@ class Note < ApplicationRecord
 
   validates :body, presence: {message: "Enter a note"}, on: :create_note
   validates :body, presence: {message: "Enter why you are putting the claim on hold"}, on: :hold_claim
+
+  scope :automated, -> { where(created_by_id: nil) }
+  scope :by_label, ->(label) { order(created_at: :desc).where(label: label) }
 end

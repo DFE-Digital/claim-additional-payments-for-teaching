@@ -5,6 +5,7 @@ module EarlyCareerPayments
     EDITABLE_ATTRIBUTES = [
       :nqt_in_academic_year_after_itt,
       :current_school_id,
+      :induction_completed,
       :employed_as_supply_teacher,
       :has_entire_term_contract,
       :employed_directly,
@@ -76,6 +77,7 @@ module EarlyCareerPayments
 
     validates :nqt_in_academic_year_after_itt, on: [:"nqt-in-academic-year-after-itt", :submit], inclusion: {in: [true, false], message: "Select yes if you are currently teaching as a qualified teacher"}
     validates :current_school, on: [:"current-school", :submit], presence: {message: "Select the school you teach at"}
+    validates :induction_completed, on: [:"induction-completed", :submit], inclusion: {in: [true, false], message: "Select yes if you have completed your induction"}
     validates :employed_as_supply_teacher, on: [:"supply-teacher", :submit], inclusion: {in: [true, false], message: "Select yes if you are a supply teacher"}
     validates :has_entire_term_contract, on: [:"entire-term-contract", :submit], inclusion: {in: [true, false], message: "Select yes if you have a contract to teach at the same school for an entire term or longer"}, if: :employed_as_supply_teacher?
     validates :employed_directly, on: [:"employed-directly", :submit], inclusion: {in: [true, false], message: "Select yes if you are directly employed by your school"}, if: :employed_as_supply_teacher?
@@ -139,6 +141,15 @@ module EarlyCareerPayments
       save!
     end
 
+    def induction_not_completed?
+      !induction_completed.nil? && !induction_completed?
+    end
+
+    def ecp_only_school?
+      EarlyCareerPayments::SchoolEligibility.new(claim.eligibility.current_school).eligible? &&
+        !LevellingUpPremiumPayments::SchoolEligibility.new(claim.eligibility.current_school).eligible?
+    end
+
     private
 
     def calculate_award_amount
@@ -154,7 +165,7 @@ module EarlyCareerPayments
     end
 
     def specific_eligible_now_attributes?
-      itt_subject_eligible_now?
+      induction_completed? && itt_subject_eligible_now?
     end
 
     def itt_subject_eligible_now?
@@ -167,7 +178,7 @@ module EarlyCareerPayments
     end
 
     def specific_ineligible_attributes?
-      trainee_teacher? or itt_subject_ineligible_now_and_in_the_future?
+      trainee_teacher? || (induction_not_completed? && !ecp_only_school?) || itt_subject_ineligible_now_and_in_the_future?
     end
 
     def itt_subject_ineligible_now_and_in_the_future?
@@ -180,7 +191,7 @@ module EarlyCareerPayments
     end
 
     def specific_eligible_later_attributes?
-      newly_qualified_teacher? and (!itt_subject_eligible_now? and itt_subject_eligible_later?)
+      newly_qualified_teacher? && ((induction_not_completed? && ecp_only_school?) || (!itt_subject_eligible_now? && itt_subject_eligible_later?))
     end
 
     def itt_subject_eligible_later?

@@ -8,7 +8,7 @@ gem "rails", "7.0.4"
 # Use postgresql as the database for Active Record
 gem "pg", ">= 0.18", "< 2.0"
 # Use Puma as the app server
-gem "puma", "~> 6.0"
+gem "puma", "~> 6.4"
 # Use SCSS for stylesheets
 gem "sass-rails", "~> 6.0"
 # Use Uglifier as compressor for JavaScript assets
@@ -84,7 +84,7 @@ gem "google-cloud-storage"
 gem "faraday_middleware"
 
 # required for prod due to Azure DEV/TEST all running as 'production'
-gem "faker", "~> 3.1", require: false
+gem "faker", "~> 3.2", require: false
 # speed up bulk imports
 gem "activerecord-copy", require: false
 
@@ -115,7 +115,6 @@ group :development do
   gem "spring-watcher-listen", "~> 2.1.0"
 
   gem "foreman"
-  gem "webdrivers"
 end
 
 group :test do
@@ -128,4 +127,4 @@ end
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem "tzinfo-data", platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 
-gem "dfe-analytics", github: "DFE-Digital/dfe-analytics", tag: "v1.5.3"
+gem "dfe-analytics", github: "DFE-Digital/dfe-analytics", tag: "v1.11.0"

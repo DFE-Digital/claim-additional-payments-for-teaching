@@ -459,6 +459,14 @@ describe Admin::ClaimsHelper do
       end
     end
 
+    context "claim approved and flagged for QA" do
+      let(:claim) { create(:claim, :approved, :flagged_for_qa) }
+
+      it "returns a status of Approved awaiting QA" do
+        expect(status(claim)).to eq "Approved awaiting QA"
+      end
+    end
+
     context "claim held" do
       let(:claim) { create(:claim, :submitted, :held) }
 

@@ -9,9 +9,7 @@ class TeachersPensionsServiceImporter
     "NINO",
     "Start Date",
     "End Date",
-    "Annual salary",
-    "Monthly pay",
-    "N/A",
+    "Employer ID",
     "LA URN",
     "School URN"
   ].freeze
@@ -24,15 +22,42 @@ class TeachersPensionsServiceImporter
 
   # NOTE: Duplicate trn with same start_dates are skipped
   def run
-    ActiveRecord::Base.transaction do
-      rows.each do |row|
-        tps_data = row_to_tps(row)
-        tps_data.save! if tps_data.valid?
-      end
+    batch = 1
+    rows.each_slice(2000) do |batch_rows|
+      Rails.logger.info "Processing TPS upload batch #{batch}"
+
+      record_hashes = batch_rows.map do |row|
+        next if row.fetch("Teacher reference number").blank?
+
+        row_to_tps_hash(row)
+      end.compact
+
+      TeachersPensionsService.insert_all(record_hashes) unless record_hashes.empty?
+
+      batch += 1
     end
   end
 
   private
+
+  # NOTE: since there will be lots of rows, avoid instantiating model object
+  def row_to_tps_hash(row)
+    now = Time.now.utc
+    trn = row.fetch("Teacher reference number")
+
+    {
+      teacher_reference_number: trn_without_gender_digit(trn),
+      start_date: row.fetch("Start Date"),
+      end_date: row.fetch("End Date"),
+      employer_id: row.fetch("Employer ID"),
+      la_urn: row.fetch("LA URN"),
+      school_urn: row.fetch("School URN"),
+      nino: row.fetch("NINO"),
+      gender_digit: gender_digit(trn),
+      created_at: now,
+      updated_at: now
+    }
+  end
 
   def check_headers
     return unless rows
@@ -51,18 +76,6 @@ class TeachersPensionsServiceImporter
   rescue CSV::MalformedCSVError
     errors.append("The selected file must be a CSV")
     nil
-  end
-
-  def row_to_tps(row)
-    trn_val = row.fetch("Teacher reference number")
-
-    tps_data = TeachersPensionsService.new(teacher_reference_number: trn_without_gender_digit(trn_val))
-    tps_data.start_date = row.fetch("Start Date")
-    tps_data.end_date = row.fetch("End Date")
-    tps_data.la_urn = row.fetch("LA URN")
-    tps_data.school_urn = row.fetch("School URN")
-    tps_data.gender_digit = gender_digit(trn_val)
-    tps_data
   end
 
   # First 7 digits
