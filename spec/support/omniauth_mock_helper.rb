@@ -6,7 +6,9 @@ module OmniauthMockHelper
           "trn" => trn,
           "birthdate" => "1940-01-01",
           "given_name" => "Kelsie",
-          "family_name" => "Oberbrunner"
+          "family_name" => "Oberbrunner",
+          "ni_number" => "AB123456C",
+          "trn_match_ni_number" => "true"
         }
       }
     )

@@ -241,5 +241,31 @@ FactoryBot.define do
         ]
       end
     end
+
+    trait :with_valid_teacher_id_user_info do
+      teacher_id_user_info do
+        {
+          "given_name" => "John",
+          "family_name" => "Doe",
+          "trn" => "123456",
+          "birthdate" => "1990-01-01",
+          "ni_number" => "AB123456C",
+          "trn_match_ni_number" => "true"
+        }
+      end
+    end
+
+    trait :with_invalid_teacher_id_user_info do
+      teacher_id_user_info do
+        {
+          "given_name" => "John",
+          "family_name" => "Doe",
+          "trn" => "123456",
+          "birthdate" => "1990-01-01",
+          "ni_number" => "AB123456C",
+          "trn_match_ni_number" => "false"
+        }
+      end
+    end
   end
 end

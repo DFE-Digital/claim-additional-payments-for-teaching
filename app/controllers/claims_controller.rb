@@ -10,7 +10,8 @@ class ClaimsController < BasePublicController
   before_action :check_claim_not_in_progress, only: [:new]
   before_action :clear_claim_session, only: [:new]
   before_action :prepend_view_path_for_policy
-  before_action :unset_session_claim, only: [:reset_claim]
+  before_action :clear_teacher_detail, only: [:reset_claim]
+  before_action :set_teacher_id_user_info, only: [:show]
 
   def new
     persist
@@ -22,14 +23,10 @@ class ClaimsController < BasePublicController
 
   def show
     search_schools if params[:school_search]
-    if new_claim_with_teacher_id?
-      claim_path(current_policy_routing_name, "teacher-detail")
-    elsif params[:slug] == "current-school" && failed_details_check_with_teacher_id?
+    if params[:slug] == "current-school" && failed_details_check_with_teacher_id?
       return redirect_to reset_claim_path
     elsif params[:slug] == "teacher-detail"
-      update_session_with_current_slug
-      return redirect_to claim_path(current_policy_routing_name, next_slug) unless session[:user_info].present?
-      set_teacher_detail
+      save_and_set_teacher_id_user_info
     elsif params[:slug] == "teaching-subject-now" && no_eligible_itt_subject?
       return redirect_to claim_path(current_policy_routing_name, "eligible-itt-subject")
     elsif params[:slug] == "sign-in-or-continue"
@@ -62,6 +59,8 @@ class ClaimsController < BasePublicController
 
   def update
     case params[:slug]
+    when "teacher-details"
+      save_details_check
     when "personal-details"
       check_date_params
     when "eligibility-confirmed"
@@ -265,10 +264,6 @@ class ClaimsController < BasePublicController
     PolicyConfiguration.policies_for_routing_name(params[:policy]).include?(current_claim.policy)
   end
 
-  def new_claim_with_teacher_id?
-    current_claim.details_check.nil? && current_claim.logged_in_with_tid?
-  end
-
   def failed_details_check_with_teacher_id?
     !current_claim.details_check? && current_claim.logged_in_with_tid?
   end
@@ -277,26 +272,40 @@ class ClaimsController < BasePublicController
     !current_claim.eligible_itt_subject
   end
 
-  def set_teacher_detail
-    user_info = session[:user_info]
-    return unless user_info
-
-    claim_attributes = {
-      first_name: user_info["given_name"],
-      surname: user_info["family_name"],
-      teacher_reference_number: user_info["trn"],
-      date_of_birth: user_info["birthdate"],
-      logged_in_with_tid: true,
-      teacher_id_user_info: user_info,
-    }
-
-    claim_attributes[:national_insurance_number] = user_info["ni_number"] if user_info["trn_match_ni_number"]
-
-    current_claim.update(claim_attributes)
-    session.delete("user_info")
+  def save_and_set_teacher_id_user_info
+    @teacher_id_user_info = session[:user_info]
+    if @teacher_id_user_info
+      current_claim.update!(teacher_id_user_info: @teacher_id_user_info)
+      session.delete("user_info")
+    end
+    set_teacher_id_user_info
   end
 
-  def unset_session_claim
-    session[:claim_id] = nil
+  def set_teacher_id_user_info
+    @teacher_id_user_info ||= current_claim.teacher_id_user_info
+  end
+
+  def set_teacher_detail_from_teacher_id
+    DfeIdentity::ClaimUserDetailsUpdater.call(current_claim)
+  end
+
+  def clear_teacher_detail
+    current_claim.update(
+      first_name: "",
+      surname: "",
+      teacher_reference_number: "",
+      national_insurance_number: "",
+      date_of_birth: nil,
+      logged_in_with_tid: nil,
+      details_check: false
+    )
+  end
+
+  def save_details_check
+    return if params.dig(:claim, :details_check).nil?
+
+    current_claim.update(details_check: params[:claim][:details_check])
+
+    set_teacher_detail_from_teacher_id if current_claim.details_check?
   end
 end
