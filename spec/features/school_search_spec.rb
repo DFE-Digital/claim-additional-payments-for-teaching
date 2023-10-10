@@ -120,16 +120,12 @@ RSpec.feature "Searching for school during Teacher Student Loan Repayments claim
       fill_in :school_search, with: search_keywords(school)
       find("li", text: school.name).click
 
-      expect(page).to have_button("Continue")
-
-      fill_in :school_search, with: another_search_keywords(school)
-      expect(page).to have_text(another_school.name)
-      expect(page).to have_button("Continue")
+      fill_in :school_search, with: search_keywords(another_school)
+      find("li", text: another_school.name).click
 
       click_button "Continue"
 
-      expect(page).to have_text("Select your school from the search results.")
-      expect(page).to have_text(another_school.name)
+      expect(page).to have_text("Which of the following subjects did you teach at #{another_school.name}")
     end
 
     context "with a closed school" do
