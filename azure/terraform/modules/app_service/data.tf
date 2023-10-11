@@ -89,16 +89,6 @@ data "azurerm_key_vault_secret" "ordnancesurveyclientparms" {
   key_vault_id = data.azurerm_key_vault.secrets_kv.id
 }
 
-data "azurerm_key_vault_secret" "StorageBucket" {
-  name         = "StorageBucket"
-  key_vault_id = data.azurerm_key_vault.secrets_kv.id
-}
-
-data "azurerm_key_vault_secret" "StorageCredentials" {
-  name         = "StorageCredentials"
-  key_vault_id = data.azurerm_key_vault.secrets_kv.id
-}
-
 data "azurerm_key_vault_secret" "DQTBearerBaseUrl" {
   name         = "DQTBearerBaseUrl"
   key_vault_id = data.azurerm_key_vault.secrets_kv.id
