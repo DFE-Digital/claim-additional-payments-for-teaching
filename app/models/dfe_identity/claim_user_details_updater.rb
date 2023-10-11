@@ -20,8 +20,6 @@ module DfeIdentity
         national_insurance_number: user_info["ni_number"],
         logged_in_with_tid: true
       )
-
-      @claim.save
     end
   end
 end

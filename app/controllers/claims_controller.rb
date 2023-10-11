@@ -2,7 +2,7 @@ class ClaimsController < BasePublicController
   include PartOfClaimJourney
   include AddressDetails
 
-  skip_before_action :send_unstarted_claimants_to_the_start, only: [:new, :create, :timeout, :reset_claim]
+  skip_before_action :send_unstarted_claimants_to_the_start, only: [:new, :create, :timeout]
   before_action :initialize_session_slug_history
   before_action :check_page_is_in_sequence, only: [:show, :update]
   before_action :update_session_with_current_slug, only: [:update]
@@ -10,8 +10,6 @@ class ClaimsController < BasePublicController
   before_action :check_claim_not_in_progress, only: [:new]
   before_action :clear_claim_session, only: [:new]
   before_action :prepend_view_path_for_policy
-  before_action :clear_teacher_detail, only: [:reset_claim]
-  before_action :set_teacher_id_user_info, only: [:show]
 
   def new
     persist
@@ -59,7 +57,7 @@ class ClaimsController < BasePublicController
 
   def update
     case params[:slug]
-    when "teacher-details"
+    when "teacher-detail"
       save_details_check
     when "personal-details"
       check_date_params
@@ -285,27 +283,10 @@ class ClaimsController < BasePublicController
     @teacher_id_user_info ||= current_claim.teacher_id_user_info
   end
 
-  def set_teacher_detail_from_teacher_id
-    DfeIdentity::ClaimUserDetailsUpdater.call(current_claim)
-  end
-
-  def clear_teacher_detail
-    current_claim.update(
-      first_name: "",
-      surname: "",
-      teacher_reference_number: "",
-      national_insurance_number: "",
-      date_of_birth: nil,
-      logged_in_with_tid: nil,
-      details_check: false
-    )
-  end
-
   def save_details_check
-    return if params.dig(:claim, :details_check).nil?
+    details_check = params.dig(:claim, :details_check)
+    return if details_check.nil?
 
-    current_claim.update(details_check: params[:claim][:details_check])
-
-    set_teacher_detail_from_teacher_id if current_claim.details_check?
+    DfeIdentity::ClaimUserDetailsCheck.call(current_claim, details_check)
   end
 end
