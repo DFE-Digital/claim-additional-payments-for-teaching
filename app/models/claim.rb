@@ -101,7 +101,7 @@ class Claim < ApplicationRecord
     held: false,
     hmrc_bank_validation_responses: false,
     hmrc_bank_validation_succeeded: false,
-    logged_in_with_tid: false
+    logged_in_with_tid: false,
     qa_required: false,
     qa_completed_at: false
   }.freeze
