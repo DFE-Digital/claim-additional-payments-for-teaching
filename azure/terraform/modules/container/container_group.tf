@@ -62,8 +62,6 @@ resource "azurerm_container_group" "cont_grp_01" {
       "RAILS_SERVE_STATIC_FILES"                       = "true"
       "ROLLBAR_ACCESS_TOKEN"                           = data.azurerm_key_vault_secret.RollbarInfraToken.value
       "SECRET_KEY_BASE"                                = data.azurerm_key_vault_secret.SecretKeyBase.value
-      "STORAGE_BUCKET"                                 = data.azurerm_key_vault_secret.StorageBucket.value
-      "STORAGE_CREDENTIALS"                            = data.azurerm_key_vault_secret.StorageCredentials.value
       "WORKER_COUNT"                                   = "4"
       "BYPASS_DFE_SIGN_IN"                             = var.bypass_dfe_sign_in
       "SUPPRESS_DFE_ANALYTICS_INIT"                    = var.suppress_dfe_analytics_init
@@ -141,8 +139,6 @@ resource "azurerm_container_group" "cont_grp_02" {
       "RAILS_SERVE_STATIC_FILES"                       = "true"
       "ROLLBAR_ACCESS_TOKEN"                           = data.azurerm_key_vault_secret.RollbarInfraToken.value
       "SECRET_KEY_BASE"                                = data.azurerm_key_vault_secret.SecretKeyBase.value
-      "STORAGE_BUCKET"                                 = data.azurerm_key_vault_secret.StorageBucket.value
-      "STORAGE_CREDENTIALS"                            = data.azurerm_key_vault_secret.StorageCredentials.value
       "WORKER_COUNT"                                   = "4"
       "BYPASS_DFE_SIGN_IN"                             = var.bypass_dfe_sign_in
       "SUPPRESS_DFE_ANALYTICS_INIT"                    = var.suppress_dfe_analytics_init

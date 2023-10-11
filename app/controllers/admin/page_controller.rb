@@ -13,8 +13,8 @@ module Admin
       @claims_approaching_deadline = Claim.approaching_decision_deadline.count
       @claims_passed_decision_deadline = Claim.passed_decision_deadline.count
 
-      @no_data_census_subjects_taught_count = ClaimStats::SchoolWorkforceCensus.no_data_census_subjects_taught_count
-      @any_match_count = ClaimStats::SchoolWorkforceCensus.any_match_count
+      @no_data_census_subjects_taught_count = SchoolWorkforceCensus.no_data_census_subjects_taught_count
+      @any_match_count = SchoolWorkforceCensus.any_match_count
     end
   end
 end

@@ -75,12 +75,6 @@ gem "rotp"
 
 gem "uk_postcode"
 
-# for db views
-gem "scenic"
-
-# for uploads of CSVs
-gem "google-cloud-storage"
-
 gem "faraday_middleware"
 
 # required for prod due to Azure DEV/TEST all running as 'production'
