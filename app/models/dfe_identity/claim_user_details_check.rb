@@ -17,7 +17,7 @@ module DfeIdentity
       if @result == "true"
         ClaimUserDetailsUpdater.call(@claim)
       else
-        ClaimUserDetailsReset.call(@claim)
+        ClaimUserDetailsReset.call(@claim, :details_incorrect)
       end
 
       @result == "true"
