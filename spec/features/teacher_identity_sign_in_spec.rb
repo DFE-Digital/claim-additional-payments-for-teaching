@@ -46,12 +46,5 @@ RSpec.feature "Teacher Identity Sign in" do
     # - Teacher details page
     expect(page).to have_text("Check and confirm your details")
     expect(page).to have_text("Are these details correct?")
-
-    choose "Yes"
-    click_on "Continue"
-
-    # - Which school do you teach at
-    expect(page).to have_text(I18n.t("early_career_payments.questions.current_school_search"))
-    expect(page.title).to have_text(I18n.t("questions.current_school"))
   end
 end

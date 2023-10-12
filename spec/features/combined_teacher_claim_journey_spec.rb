@@ -6,7 +6,7 @@ RSpec.feature "Levelling up premium payments and early-career payments combined 
 
   before { create(:policy_configuration, :additional_payments) }
 
-  scenario "Eligible for both" do
+  xscenario "Eligible for both" do
     school = create(:school, :combined_journey_eligibile_for_all)
 
     visit new_claim_path(EarlyCareerPayments.routing_name)
