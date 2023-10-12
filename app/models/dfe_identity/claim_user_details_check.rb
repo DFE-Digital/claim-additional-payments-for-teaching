@@ -19,6 +19,8 @@ module DfeIdentity
       else
         ClaimUserDetailsReset.call(@claim)
       end
+
+      @result == "true"
     end
   end
 end

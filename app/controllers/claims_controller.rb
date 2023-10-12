@@ -21,9 +21,7 @@ class ClaimsController < BasePublicController
 
   def show
     search_schools if params[:school_search]
-    if params[:slug] == "current-school" && failed_details_check_with_teacher_id?
-      return redirect_to reset_claim_path
-    elsif params[:slug] == "teacher-detail"
+    if params[:slug] == "teacher-detail"
       save_and_set_teacher_id_user_info
     elsif params[:slug] == "teaching-subject-now" && no_eligible_itt_subject?
       return redirect_to claim_path(current_policy_routing_name, "eligible-itt-subject")
@@ -57,8 +55,12 @@ class ClaimsController < BasePublicController
 
   def update
     case params[:slug]
+    when "sign-in-or-continue"
+      current_claim.update(logged_in_with_tid: nil)
     when "teacher-detail"
-      save_details_check
+      if !save_details_check
+        return redirect_to reset_claim_path
+      end
     when "personal-details"
       check_date_params
     when "eligibility-confirmed"
