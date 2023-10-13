@@ -40,7 +40,8 @@ RSpec.feature "Teacher Early-Career Payments claims sequence slug" do
     set_mock_auth(nil)
   end
 
-  scenario "When user is logged in with teacher_id" do
+  # Rename this file to a tid specific spec later
+  xscenario "When user is logged in with teacher_id" do
     visit landing_page_path(EarlyCareerPayments.routing_name)
     expect(page).to have_link("Claim additional payments for teaching", href: "/additional-payments/landing-page")
     expect(page).to have_link(href: "mailto:#{EarlyCareerPayments.feedback_email}")

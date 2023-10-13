@@ -19,6 +19,8 @@ RSpec.feature "Teacher Early-Career Payments claims", slow: true do
     expect(page).to have_text(I18n.t("early_career_payments.landing_page"))
     click_on "Start now"
 
+    skip_tid
+
     # - Which school do you teach at
     expect(page).to have_text(I18n.t("early_career_payments.questions.current_school_search"))
 
@@ -347,6 +349,8 @@ RSpec.feature "Teacher Early-Career Payments claims", slow: true do
     expect(page).to have_text(I18n.t("early_career_payments.landing_page"))
     click_on "Start now"
 
+    skip_tid
+
     # - Which school do you teach at
     expect(page).to have_text(I18n.t("early_career_payments.questions.current_school_search"))
 
@@ -502,6 +506,8 @@ RSpec.feature "Teacher Early-Career Payments claims", slow: true do
     # - Landing (start)
     expect(page).to have_text(I18n.t("early_career_payments.landing_page"))
     click_on "Start now"
+
+    skip_tid
 
     # - Which school do you teach at
     expect(page).to have_text(I18n.t("early_career_payments.questions.current_school_search"))
@@ -1191,6 +1197,8 @@ RSpec.feature "Teacher Early-Career Payments claims", slow: true do
     scenario "Prevent eligible itt subject page loading form from browser Back navigation causing errors", js: true, flaky: true do
       visit landing_page_path(EarlyCareerPayments.routing_name)
       click_on "Start now"
+
+      skip_tid
 
       # - Which school do you teach at
       choose_school school

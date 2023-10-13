@@ -204,7 +204,7 @@ class Claim < ApplicationRecord
     },
     if: -> { surname.present? }
 
-  validates :details_check, on: [:"teacher-detail", :submit], inclusion: {in: [true, false], message: "Select an option to whether the details are correct or not"}
+  validates :details_check, on: [:"teacher-detail"], inclusion: {in: [true, false], message: "Select an option to whether the details are correct or not"}
   validates :address_line_1, on: [:address], presence: {message: "Enter a house number or name"}, if: :has_ecp_or_lupp_policy?
   validates :address_line_1, on: [:address, :submit], presence: {message: "Enter a building and street address"}, unless: :has_ecp_or_lupp_policy?
   validates :address_line_1, length: {maximum: 100, message: "Address lines must be 100 characters or less"}

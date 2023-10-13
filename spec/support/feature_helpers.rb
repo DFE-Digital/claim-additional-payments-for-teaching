@@ -129,6 +129,11 @@ module FeatureHelpers
       .last[:personalisation].decoded.scan(/\b[0-9]{6}\b/).first
   end
 
+  def skip_tid
+    expect(page).to have_text("You can use a DfE Identity account with this service")
+    click_on "Continue without signing in"
+  end
+
   # This is a workaround for some poorly written older feature specs which
   # update claim attributes directly in order to skip pages in the user
   # journey. It should not be used when writing new feature specs. Its purpose

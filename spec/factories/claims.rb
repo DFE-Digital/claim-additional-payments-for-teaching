@@ -267,5 +267,11 @@ FactoryBot.define do
         }
       end
     end
+
+    trait :skipped_tid do
+      teacher_id_user_info { {} }
+      details_check { nil }
+      logged_in_with_tid { nil }
+    end
   end
 end

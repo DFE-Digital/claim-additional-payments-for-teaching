@@ -3,6 +3,7 @@ class ClaimsController < BasePublicController
   include AddressDetails
 
   skip_before_action :send_unstarted_claimants_to_the_start, only: [:new, :create, :timeout]
+  before_action :check_and_reset_if_new_tid_user_info
   before_action :initialize_session_slug_history
   before_action :check_page_is_in_sequence, only: [:show, :update]
   before_action :update_session_with_current_slug, only: [:update]
@@ -56,11 +57,9 @@ class ClaimsController < BasePublicController
   def update
     case params[:slug]
     when "sign-in-or-continue"
-      current_claim.update(logged_in_with_tid: nil)
+      DfeIdentity::ClaimUserDetailsReset.call(current_claim, :skipped_tid)
     when "teacher-detail"
-      if !save_details_check
-        return redirect_to reset_claim_path
-      end
+      save_details_check
     when "personal-details"
       check_date_params
     when "eligibility-confirmed"
@@ -272,11 +271,20 @@ class ClaimsController < BasePublicController
     !current_claim.eligible_itt_subject
   end
 
+  # NOTE: needs to be done before the slug_sequence is generated.
+  # `logged_in_with_tid: nil` means the user had pressed "Continue without signing in", reset it to `false`.
+  # `logged_in_with_tid: nil` is used to reject "teacher-details" from the slug_sequence.
+  # Handles user somehow using Back button to go back and choose "Sign in with teacher identity" option.
+  # Or they sign in a second time, `details_check` needs resetting in case details are different.
+  def check_and_reset_if_new_tid_user_info
+    DfeIdentity::ClaimUserDetailsReset.call(current_claim, :new_user_info) if session[:user_info]
+  end
+
   def save_and_set_teacher_id_user_info
     @teacher_id_user_info = session[:user_info]
     if @teacher_id_user_info
-      current_claim.update!(teacher_id_user_info: @teacher_id_user_info)
-      session.delete("user_info")
+      current_claim.update(teacher_id_user_info: @teacher_id_user_info)
+      session.delete(:user_info)
     end
     set_teacher_id_user_info
   end
@@ -287,8 +295,6 @@ class ClaimsController < BasePublicController
 
   def save_details_check
     details_check = params.dig(:claim, :details_check)
-    return if details_check.nil?
-
     DfeIdentity::ClaimUserDetailsCheck.call(current_claim, details_check)
   end
 end

@@ -40,10 +40,7 @@ RSpec.feature "Levelling up premium payments claims" do
   end
 
   def check_eligibility_up_to_itt_subject
-    claim.update(details_check: true)
-    # - Sign in or continue page
-    expect(page).to have_text("You can use a DfE Identity account with this service")
-    click_on "Continue without signing in"
+    skip_tid
 
     # - Which school do you teach at
     expect(page).to have_text(I18n.t("early_career_payments.questions.current_school_search"))
