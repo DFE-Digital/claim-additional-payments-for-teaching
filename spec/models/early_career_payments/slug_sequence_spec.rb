@@ -6,8 +6,8 @@ RSpec.describe EarlyCareerPayments::SlugSequence do
   let(:eligibility) { build(:early_career_payments_eligibility, :eligible) }
   let(:eligibility_lup) { build(:levelling_up_premium_payments_eligibility, :eligible) }
 
-  let(:claim) { build(:claim, policy: EarlyCareerPayments, academic_year: AcademicYear.new(2021), eligibility: eligibility) }
-  let(:lup_claim) { build(:claim, policy: LevellingUpPremiumPayments, academic_year: AcademicYear.new(2021), eligibility: eligibility_lup) }
+  let(:claim) { build(:claim, :skipped_tid, policy: EarlyCareerPayments, academic_year: AcademicYear.new(2021), eligibility: eligibility) }
+  let(:lup_claim) { build(:claim, :skipped_tid, policy: LevellingUpPremiumPayments, academic_year: AcademicYear.new(2021), eligibility: eligibility_lup) }
   let(:current_claim) { CurrentClaim.new(claims: [claim, lup_claim]) }
 
   describe "The sequence as defined by #slugs" do
@@ -147,7 +147,6 @@ RSpec.describe EarlyCareerPayments::SlugSequence do
 
         expected_slugs = %w[
           sign-in-or-continue
-          teacher-detail
           current-school
           nqt-in-academic-year-after-itt
           induction-completed
@@ -195,7 +194,6 @@ RSpec.describe EarlyCareerPayments::SlugSequence do
 
         expected_slugs = %w[
           sign-in-or-continue
-          teacher-detail
           current-school
           nqt-in-academic-year-after-itt
           induction-completed
@@ -238,7 +236,6 @@ RSpec.describe EarlyCareerPayments::SlugSequence do
       let(:expected_slugs) do
         %w[
           sign-in-or-continue
-          teacher-detail
           current-school
           nqt-in-academic-year-after-itt
           induction-completed
@@ -298,7 +295,6 @@ RSpec.describe EarlyCareerPayments::SlugSequence do
 
         expected_slugs = %w[
           sign-in-or-continue
-          teacher-detail
           current-school
           nqt-in-academic-year-after-itt
           induction-completed

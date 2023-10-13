@@ -15,9 +15,19 @@ RSpec.feature "Levelling up premium payments and early-career payments combined 
     visit claim_completion_path(EarlyCareerPayments.routing_name)
     expect(page).to have_current_path("/#{EarlyCareerPayments.routing_name}/landing-page")
 
+    click_on "Start now"
+    expect(page).to have_current_path("/#{EarlyCareerPayments.routing_name}/existing-session")
+
+    choose "Yes, start claim for an additional payment for teaching and lose my progress on my first claim"
+    click_on "Submit"
+
+    skip_tid
+
+    # Check we can't skip ahead pages in the journey
     visit claim_path(EarlyCareerPayments.routing_name, "nqt-in-academic-year-after-itt")
     expect(page).to have_current_path("/#{EarlyCareerPayments.routing_name}/current-school")
 
+    # Check we can't skip ahead pages in the journey
     visit claim_path(EarlyCareerPayments.routing_name, "qualification")
     expect(page).to have_current_path("/#{EarlyCareerPayments.routing_name}/current-school")
 
