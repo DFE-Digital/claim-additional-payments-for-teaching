@@ -2,6 +2,8 @@ require "simplecov"
 require "faker"
 require "rack_session_access/capybara"
 
+Faker::Config.locale = "en-GB"
+
 SimpleCov.start do
   add_filter %r{^/spec/.*$}
   add_filter %r{^/db/migrate/.*$}
