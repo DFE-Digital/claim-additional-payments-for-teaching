@@ -92,7 +92,7 @@ module EarlyCareerPayments
       ecp_claim = claim.for_policy(EarlyCareerPayments)
 
       SLUGS.dup.tap do |sequence|
-        sequence.delete("teacher-detail") if claim.logged_in_with_tid.nil?
+        sequence.delete("teacher-detail") if claim.logged_in_with_tid.nil? || claim.teacher_id_user_info.blank?
         sequence.delete("reset-claim") if [nil, true].include?(claim.logged_in_with_tid)
 
         unless claim.eligibility.employed_as_supply_teacher?
