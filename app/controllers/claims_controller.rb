@@ -3,6 +3,7 @@ class ClaimsController < BasePublicController
   include AddressDetails
 
   skip_before_action :send_unstarted_claimants_to_the_start, only: [:new, :create, :timeout]
+  before_action :check_and_reset_if_new_tid_user_info
   before_action :initialize_session_slug_history
   before_action :check_page_is_in_sequence, only: [:show, :update]
   before_action :update_session_with_current_slug, only: [:update]
@@ -21,7 +22,9 @@ class ClaimsController < BasePublicController
 
   def show
     search_schools if params[:school_search]
-    if params[:slug] == "teaching-subject-now" && !current_claim.eligibility.eligible_itt_subject
+    if params[:slug] == "teacher-detail"
+      save_and_set_teacher_id_user_info
+    elsif params[:slug] == "teaching-subject-now" && no_eligible_itt_subject?
       return redirect_to claim_path(current_policy_routing_name, "eligible-itt-subject")
     elsif params[:slug] == "sign-in-or-continue"
       update_session_with_current_slug
@@ -53,6 +56,10 @@ class ClaimsController < BasePublicController
 
   def update
     case params[:slug]
+    when "sign-in-or-continue"
+      DfeIdentity::ClaimUserDetailsReset.call(current_claim, :skipped_tid)
+    when "teacher-detail"
+      save_details_check
     when "personal-details"
       check_date_params
     when "eligibility-confirmed"
@@ -128,11 +135,6 @@ class ClaimsController < BasePublicController
   end
 
   def claim_params
-    if session[:user_info]
-      params[:claim] ||= {}
-      params[:claim].merge!(teacher_reference_number: session[:user_info]["trn"], logged_in_with_tid: true)
-      session.delete("user_info")
-    end
     params.fetch(:claim, {}).permit(Claim::PermittedParameters.new(current_claim).keys)
   end
 
@@ -259,5 +261,40 @@ class ClaimsController < BasePublicController
 
   def correct_policy_namespace?
     PolicyConfiguration.policies_for_routing_name(params[:policy]).include?(current_claim.policy)
+  end
+
+  def failed_details_check_with_teacher_id?
+    !current_claim.details_check? && current_claim.logged_in_with_tid?
+  end
+
+  def no_eligible_itt_subject?
+    !current_claim.eligible_itt_subject
+  end
+
+  # NOTE: needs to be done before the slug_sequence is generated.
+  # `logged_in_with_tid: nil` means the user had pressed "Continue without signing in", reset it to `false`.
+  # `logged_in_with_tid: nil` is used to reject "teacher-details" from the slug_sequence.
+  # Handles user somehow using Back button to go back and choose "Sign in with teacher identity" option.
+  # Or they sign in a second time, `details_check` needs resetting in case details are different.
+  def check_and_reset_if_new_tid_user_info
+    DfeIdentity::ClaimUserDetailsReset.call(current_claim, :new_user_info) if session[:user_info]
+  end
+
+  def save_and_set_teacher_id_user_info
+    @teacher_id_user_info = session[:user_info]
+    if @teacher_id_user_info
+      current_claim.update(teacher_id_user_info: @teacher_id_user_info)
+      session.delete(:user_info)
+    end
+    set_teacher_id_user_info
+  end
+
+  def set_teacher_id_user_info
+    @teacher_id_user_info ||= current_claim.teacher_id_user_info
+  end
+
+  def save_details_check
+    details_check = params.dig(:claim, :details_check)
+    DfeIdentity::ClaimUserDetailsCheck.call(current_claim, details_check)
   end
 end

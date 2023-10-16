@@ -1,0 +1,30 @@
+<div class="personal-details-section">
+  <h2 class="govuk-heading-m">Personal details</h2>
+  <dl class="govuk-summary-list govuk-!-margin-bottom-9">
+    <div class="govuk-summary-list__row">
+      <dt class="govuk-summary-list__key">Name</dt>
+      <dd class="govuk-summary-list__value">
+        <%= @teacher_id_user_info["given_name"] %>
+          <%= @teacher_id_user_info["family_name"] %>
+      </dd>
+    </div>
+    <div class="govuk-summary-list__row">
+      <dt class="govuk-summary-list__key">Date of birth</dt>
+      <dd class="govuk-summary-list__value">
+        <%= @teacher_id_user_info["birthdate"] %>
+      </dd>
+    </div>
+    <div class="govuk-summary-list__row">
+      <dt class="govuk-summary-list__key">Teacher reference number (TRN)</dt>
+      <dd class="govuk-summary-list__value">
+        <%= @teacher_id_user_info["trn"] %>
+      </dd>
+    </div>
+    <div class="govuk-summary-list__row">
+      <dt class="govuk-summary-list__key">National Insurance number</dt>
+      <dd class="govuk-summary-list__value">
+        <%= @teacher_id_user_info["ni_number"] %>
+      </dd>
+    </div>
+  </dl>
+</div>

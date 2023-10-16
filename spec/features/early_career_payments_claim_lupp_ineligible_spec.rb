@@ -19,6 +19,8 @@ RSpec.feature "Early-Career Payments claims with school ineligible for Levelling
     visit landing_page_path(EarlyCareerPayments.routing_name)
     click_on "Start now"
 
+    skip_tid
+
     # - Which school do you teach at
     expect(page).to have_text(I18n.t("early_career_payments.questions.current_school_search"))
 

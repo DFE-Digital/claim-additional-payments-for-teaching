@@ -7,6 +7,7 @@ RSpec.feature "Ineligibility reason", slow: true do
 
   before do
     visit new_claim_path(LevellingUpPremiumPayments.routing_name)
+    skip_tid
   end
 
   context "supply teacher" do

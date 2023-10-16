@@ -34,6 +34,7 @@ RSpec.describe Claim::PermittedParameters do
       :building_society_roll_number,
       :one_time_password,
       :logged_in_with_tid,
+      :details_check,
       eligibility_attributes: [
         :qts_award_year,
         :claim_school_id,

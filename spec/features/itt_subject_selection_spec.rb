@@ -213,6 +213,7 @@ RSpec.feature "ITT subject selection", slow: true do
 
   def navigate_to_year_selection(school)
     start_levelling_up_premium_payments_claim
+    skip_tid
 
     # - Which school do you teach at
     expect(page).to have_text(I18n.t("early_career_payments.questions.current_school_search"))

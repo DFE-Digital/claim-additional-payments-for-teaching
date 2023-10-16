@@ -37,7 +37,8 @@ class Claim < ApplicationRecord
     :banking_name,
     :building_society_roll_number,
     :one_time_password,
-    :logged_in_with_tid
+    :logged_in_with_tid,
+    :details_check
   ].freeze
   AMENDABLE_ATTRIBUTES = %i[
     teacher_reference_number
@@ -102,6 +103,8 @@ class Claim < ApplicationRecord
     hmrc_bank_validation_responses: false,
     hmrc_bank_validation_succeeded: false,
     logged_in_with_tid: false,
+    teacher_id_user_info: false,
+    details_check: true,
     qa_required: false,
     qa_completed_at: false
   }.freeze
@@ -144,6 +147,7 @@ class Claim < ApplicationRecord
 
   belongs_to :eligibility, polymorphic: true, inverse_of: :claim, dependent: :destroy
   accepts_nested_attributes_for :eligibility, update_only: true
+  delegate :eligible_itt_subject, to: :eligibility, allow_nil: true
 
   has_many :claim_payments
   has_many :payments, through: :claim_payments
@@ -200,6 +204,7 @@ class Claim < ApplicationRecord
     },
     if: -> { surname.present? }
 
+  validates :details_check, on: [:"teacher-detail"], inclusion: {in: [true, false], message: "Select an option to whether the details are correct or not"}
   validates :address_line_1, on: [:address], presence: {message: "Enter a house number or name"}, if: :has_ecp_or_lupp_policy?
   validates :address_line_1, on: [:address, :submit], presence: {message: "Enter a building and street address"}, unless: :has_ecp_or_lupp_policy?
   validates :address_line_1, length: {maximum: 100, message: "Address lines must be 100 characters or less"}

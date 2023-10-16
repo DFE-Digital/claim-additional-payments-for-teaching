@@ -12,6 +12,8 @@ module EarlyCareerPayments
   class SlugSequence
     ELIGIBILITY_SLUGS = [
       "sign-in-or-continue",
+      "teacher-detail",
+      "reset-claim",
       "current-school",
       "nqt-in-academic-year-after-itt",
       "induction-completed",
@@ -90,6 +92,9 @@ module EarlyCareerPayments
       ecp_claim = claim.for_policy(EarlyCareerPayments)
 
       SLUGS.dup.tap do |sequence|
+        sequence.delete("teacher-detail") if claim.logged_in_with_tid.nil?
+        sequence.delete("reset-claim") if [nil, true].include?(claim.logged_in_with_tid)
+
         unless claim.eligibility.employed_as_supply_teacher?
           sequence.delete("entire-term-contract")
           sequence.delete("employed-directly")

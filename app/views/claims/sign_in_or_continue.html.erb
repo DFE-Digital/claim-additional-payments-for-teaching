@@ -14,7 +14,7 @@
 
       <div class="govuk-button-group">
         <%= button_to "Sign in with teacher identity", "/auth/tid", class: "govuk-button" %>
-        <%= button_to "Continue without signing in", claim_path(current_policy_routing_name, "current-school"), method: :get, class: "govuk-button govuk-button--secondary"%>
+        <%= button_to "Continue without signing in", claim_path(current_policy_routing_name, "sign-in-or-continue"), method: :patch, class: "govuk-button govuk-button--secondary"%>
       </div>
     </div>
   </div>
