@@ -6,6 +6,7 @@ module EarlyCareerPayments
       :nqt_in_academic_year_after_itt,
       :current_school_id,
       :induction_completed,
+      :school_somewhere_else,
       :employed_as_supply_teacher,
       :has_entire_term_contract,
       :employed_directly,
@@ -77,6 +78,7 @@ module EarlyCareerPayments
 
     validates :nqt_in_academic_year_after_itt, on: [:"nqt-in-academic-year-after-itt", :submit], inclusion: {in: [true, false], message: "Select yes if you are currently teaching as a qualified teacher"}
     validates :current_school, on: [:"current-school", :submit], presence: {message: "Select the school you teach at"}
+    validates :current_school, on: [:"correct-school"], presence: {message: "Select the school you teach at or choose somewhere else"}, unless: :school_somewhere_else?
     validates :induction_completed, on: [:"induction-completed", :submit], inclusion: {in: [true, false], message: "Select yes if you have completed your induction"}
     validates :employed_as_supply_teacher, on: [:"supply-teacher", :submit], inclusion: {in: [true, false], message: "Select yes if you are a supply teacher"}
     validates :has_entire_term_contract, on: [:"entire-term-contract", :submit], inclusion: {in: [true, false], message: "Select yes if you have a contract to teach at the same school for an entire term or longer"}, if: :employed_as_supply_teacher?

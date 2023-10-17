@@ -1,0 +1,38 @@
+<%= render("shared/error_summary", instance: current_claim.eligibility) if current_claim.eligibility.errors.any? %>
+<% shared_view_css_size = current_claim.policy == EarlyCareerPayments ? "l" : "xl" %>
+
+<%= form_for current_claim, url: claim_path(current_policy_routing_name) do |form| %>
+  <%= form_group_tag current_claim do %>
+    <fieldset class="govuk-fieldset" aria-describedby="school-search-result-hint">
+
+    <legend class="govuk-fieldset__legend govuk-fieldset__legend--<%= shared_view_css_size %>">
+      <h1 class="govuk-fieldset__heading">
+        <%= t("early_career_payments.questions.current_school_search") %>
+      </h1>
+    </legend>
+
+    <%= errors_tag current_claim.eligibility, :current_school %>
+
+    <div class="govuk-radios">
+      <%= form.fields_for :eligibility, include_id: false do |fields| %>
+        <div class="govuk-radios__item">
+          <%= fields.radio_button(:current_school_id, session[:tps_school_id], class: "govuk-radios__input") %>
+          <%= fields.label "current_school_id_#{session[:tps_school_id]}", session[:tps_school_name], class: "govuk-label govuk-radios__label" %>
+          <div id="school-checker-item-hint" class="govuk-hint govuk-radios__hint">
+            <%= session[:tps_school_address] %>
+          </div>
+        </div>
+        <div class="govuk-radios__divider">or</div>
+        <div class="govuk-radios__item">
+          <%= fields.radio_button(:current_school_id, "somewhere_else", checked: current_claim.eligibility.school_somewhere_else?, class: "govuk-radios__input") %>
+          <%= fields.label "current_school_id_somewhere_else", "Somewhere else", class: "govuk-label govuk-radios__label" %>
+        </div>
+      <% end %>
+    </div>
+
+
+    </fieldset>
+  <% end %>
+
+  <%= form.submit "Continue", class: "govuk-button" %>
+<% end %>

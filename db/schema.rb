@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_10_10_110119) do
+ActiveRecord::Schema[7.0].define(version: 2023_10_16_115534) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_trgm"
   enable_extension "pgcrypto"
@@ -163,6 +163,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_10_10_110119) do
     t.uuid "current_school_id"
     t.decimal "award_amount", precision: 7, scale: 2
     t.boolean "induction_completed"
+    t.boolean "school_somewhere_else"
     t.index ["current_school_id"], name: "index_early_career_payments_eligibilities_on_current_school_id"
   end
 
@@ -202,6 +203,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_10_10_110119) do
     t.decimal "award_amount", precision: 7, scale: 2
     t.boolean "eligible_degree_subject"
     t.boolean "induction_completed"
+    t.boolean "school_somewhere_else"
     t.index ["current_school_id"], name: "index_lup_payments_eligibilities_on_current_school_id"
   end
 
