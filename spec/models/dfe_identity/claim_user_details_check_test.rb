@@ -10,7 +10,7 @@ RSpec.describe DfeIdentity::ClaimUserDetailsCheck do
       "trn" => "123456",
       "birthdate" => "1990-01-01",
       "ni_number" => "AB123456C",
-      "trn_match_ni_number" => "true"
+      "trn_match_ni_number" => "True"
     }
   }
 

@@ -250,7 +250,7 @@ FactoryBot.define do
           "trn" => "123456",
           "birthdate" => "1990-01-01",
           "ni_number" => "AB123456C",
-          "trn_match_ni_number" => "true"
+          "trn_match_ni_number" => "True"
         }
       end
     end
@@ -263,7 +263,7 @@ FactoryBot.define do
           "trn" => "123456",
           "birthdate" => "1990-01-01",
           "ni_number" => "AB123456C",
-          "trn_match_ni_number" => "false"
+          "trn_match_ni_number" => "False"
         }
       end
     end
