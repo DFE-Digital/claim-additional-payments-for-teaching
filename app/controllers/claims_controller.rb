@@ -314,8 +314,7 @@ class ClaimsController < BasePublicController
   end
 
   def check_correct_school_params
-    updated_claim_params = claim_params
-    CorrectSchoolFormChecker.call(updated_claim_params, change_school: params[:change_school])
+    updated_claim_params = CorrectSchoolForm.extract_params(claim_params, change_school: params[:change_school])
 
     current_claim.attributes = updated_claim_params
   end

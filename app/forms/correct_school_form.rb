@@ -1,6 +1,6 @@
-class CorrectSchoolFormChecker
-  def self.call(claim_params, change_school:)
-    new(claim_params, change_school).check_correct_school_params
+class CorrectSchoolForm
+  def self.extract_params(claim_params, change_school:)
+    new(claim_params, change_school).extract_params
   end
 
   def initialize(claim_params, change_school)
@@ -8,7 +8,7 @@ class CorrectSchoolFormChecker
     @change_school = change_school
   end
 
-  def check_correct_school_params
+  def extract_params
     if @change_school == "true"
       ineligible_school_choose_change_school
     elsif @updated_claim_params.dig(:eligibility_attributes, :current_school_id) == "somewhere_else"
@@ -16,7 +16,11 @@ class CorrectSchoolFormChecker
     elsif @updated_claim_params[:eligibility_attributes]
       selected_suggested_school
     end
+
+    @updated_claim_params
   end
+
+  private
 
   # User was suggested a school, but turns out the school is ineligible.
   # `Change school` button clears the `current_school_id`` and set `school_somewhere_else` to true.

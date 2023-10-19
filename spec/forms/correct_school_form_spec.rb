@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe CorrectSchoolFormChecker do
+RSpec.describe CorrectSchoolForm do
   context "change school" do
     it "updates school_somewhere_else to true and current_school_id to nil" do
       expected_claim_params = {
@@ -11,9 +11,9 @@ RSpec.describe CorrectSchoolFormChecker do
       }
 
       claim_params = {}
-      CorrectSchoolFormChecker.call(claim_params, change_school: "true")
+      updated_claim_params = CorrectSchoolForm.extract_params(claim_params, change_school: "true")
 
-      expect(claim_params).to eq(expected_claim_params)
+      expect(updated_claim_params).to eq(expected_claim_params)
     end
   end
 
@@ -26,9 +26,9 @@ RSpec.describe CorrectSchoolFormChecker do
       }
 
       claim_params = {eligibility_attributes: {current_school_id: "somewhere_else"}}
-      CorrectSchoolFormChecker.call(claim_params, change_school: nil)
+      updated_claim_params = CorrectSchoolForm.extract_params(claim_params, change_school: nil)
 
-      expect(claim_params).to eq(expected_claim_params)
+      expect(updated_claim_params).to eq(expected_claim_params)
     end
   end
 
@@ -42,9 +42,9 @@ RSpec.describe CorrectSchoolFormChecker do
       }
 
       claim_params = {eligibility_attributes: {current_school_id: "1"}}
-      CorrectSchoolFormChecker.call(claim_params, change_school: nil)
+      updated_claim_params = CorrectSchoolForm.extract_params(claim_params, change_school: nil)
 
-      expect(claim_params).to eq(expected_claim_params)
+      expect(updated_claim_params).to eq(expected_claim_params)
     end
   end
 end
