@@ -70,7 +70,15 @@ module Dqt
         when :undergraduate_itt, :assessment_only, :overseas_recognition
           qts_award_date
         when :postgraduate_itt
-          itt_start_date
+          # For Postgraduate programs, the ITT start date is sometimes recorded a few days before the beginning of the
+          # new academic year, which makes it fall, mistakenly, within the *previous* academic year. Based on the
+          # situation, this can also cause the qualifications and induction checks to pass or fail automatically when
+          # they shouldn't. One way around it is to assume that the new academic year can start up to 2 weeks earlier.
+          if itt_start_date.between?(Date.new(itt_start_date.year, 8, 18), Date.new(itt_start_date.year, 8, 31))
+            Date.new(itt_start_date.year, 9, 1)
+          else
+            itt_start_date
+          end
         end
       end
 

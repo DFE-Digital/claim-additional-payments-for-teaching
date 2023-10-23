@@ -1281,8 +1281,118 @@ RSpec.describe EarlyCareerPayments::DqtRecord do
         eligible_itt_subject: :mathematics,
         qualification: :undergraduate_itt,
         itt_academic_year: AcademicYear::Type.new.serialize(AcademicYear.new(2018))
-      }
+      },
       # end of QTS award date is before ITT start date for non postgrad
+
+      # start of PG ITT year 2-week allowance: ITT start date treated as falling inside following AY (2023)
+      {
+        claim_academic_year: AcademicYear.new(2023),
+        record_degree_codes: [],
+        record_itt_subjects: ["mathematics"],
+        record_itt_subject_codes: ["100403"],
+        record_itt_date: Date.parse("18/8/2018"), # deemed to fall within 2018/19 AY rather than 2017/18
+        record_qts_date: Date.parse("31/12/2018"),
+        record_qualification_name: "Degree",
+        eligible_itt_subject: :mathematics,
+        qualification: :postgraduate_itt,
+        # user selects the following and eligible ITT AY that matches our ITT year calculation as well:
+        itt_academic_year: AcademicYear::Type.new.serialize(AcademicYear.new(2018))
+      },
+      {
+        claim_academic_year: AcademicYear.new(2023),
+        record_degree_codes: [],
+        record_itt_subjects: ["mathematics"],
+        record_itt_subject_codes: ["100403"],
+        record_itt_date: Date.parse("31/8/2018"), # deemed to fall within 2018/19 AY rather than 2017/18
+        record_qts_date: Date.parse("31/12/2018"),
+        record_qualification_name: "Degree",
+        eligible_itt_subject: :mathematics,
+        qualification: :postgraduate_itt,
+        # user selects the following and eligible ITT AY that matches our ITT year calculation as well:
+        itt_academic_year: AcademicYear::Type.new.serialize(AcademicYear.new(2018))
+      },
+      {
+        claim_academic_year: AcademicYear.new(2023),
+        record_degree_codes: [],
+        record_itt_subjects: ["mathematics"],
+        record_itt_subject_codes: ["100403"],
+        record_itt_date: Date.parse("18/8/2020"), # deemed to fall within 2020/21 AY rather than 2019/20
+        record_qts_date: Date.parse("31/12/2020"),
+        record_qualification_name: "Degree",
+        eligible_itt_subject: :mathematics,
+        qualification: :postgraduate_itt,
+        # user selects the following and eligible ITT AY that matches our ITT year calculation as well:
+        itt_academic_year: AcademicYear::Type.new.serialize(AcademicYear.new(2020))
+      },
+      {
+        claim_academic_year: AcademicYear.new(2023),
+        record_degree_codes: [],
+        record_itt_subjects: ["mathematics"],
+        record_itt_subject_codes: ["100403"],
+        record_itt_date: Date.parse("31/8/2020"), # deemed to fall within 2020/21 AY rather than 2019/20
+        record_qts_date: Date.parse("31/12/2020"),
+        record_qualification_name: "Degree",
+        eligible_itt_subject: :mathematics,
+        qualification: :postgraduate_itt,
+        # user selects the following and eligible ITT AY that matches our ITT year calculation as well:
+        itt_academic_year: AcademicYear::Type.new.serialize(AcademicYear.new(2020))
+      },
+      # end of PG ITT year 2-week allowance: ITT start date treated as falling inside following AY (2023)
+
+      # start of PG ITT year 2-week allowance: ITT start date treated as falling inside following AY (2024)
+      {
+        claim_academic_year: AcademicYear.new(2024),
+        record_degree_codes: [],
+        record_itt_subjects: ["mathematics"],
+        record_itt_subject_codes: ["100403"],
+        record_itt_date: Date.parse("18/8/2019"), # deemed to fall within 2019/20 AY rather than 2018/19
+        record_qts_date: Date.parse("31/12/2019"),
+        record_qualification_name: "Degree",
+        eligible_itt_subject: :mathematics,
+        qualification: :postgraduate_itt,
+        # user selects the following and eligible ITT AY that matches our ITT year calculation as well:
+        itt_academic_year: AcademicYear::Type.new.serialize(AcademicYear.new(2019))
+      },
+      {
+        claim_academic_year: AcademicYear.new(2024),
+        record_degree_codes: [],
+        record_itt_subjects: ["mathematics"],
+        record_itt_subject_codes: ["100403"],
+        record_itt_date: Date.parse("31/8/2019"), # deemed to fall within 2019/20 AY rather than 2018/19
+        record_qts_date: Date.parse("31/12/2019"),
+        record_qualification_name: "Degree",
+        eligible_itt_subject: :mathematics,
+        qualification: :postgraduate_itt,
+        # user selects the following and eligible ITT AY that matches our ITT year calculation as well:
+        itt_academic_year: AcademicYear::Type.new.serialize(AcademicYear.new(2019))
+      },
+      {
+        claim_academic_year: AcademicYear.new(2024),
+        record_degree_codes: [],
+        record_itt_subjects: ["mathematics"],
+        record_itt_subject_codes: ["100403"],
+        record_itt_date: Date.parse("18/8/2020"), # deemed to fall within 2019/20 AY rather than 2018/19
+        record_qts_date: Date.parse("31/12/2020"),
+        record_qualification_name: "Degree",
+        eligible_itt_subject: :mathematics,
+        qualification: :postgraduate_itt,
+        # user selects the following and eligible ITT AY that matches our ITT year calculation as well:
+        itt_academic_year: AcademicYear::Type.new.serialize(AcademicYear.new(2020))
+      },
+      {
+        claim_academic_year: AcademicYear.new(2024),
+        record_degree_codes: [],
+        record_itt_subjects: ["mathematics"],
+        record_itt_subject_codes: ["100403"],
+        record_itt_date: Date.parse("31/8/2020"), # deemed to fall within 2019/20 AY rather than 2018/19
+        record_qts_date: Date.parse("31/12/2020"),
+        record_qualification_name: "Degree",
+        eligible_itt_subject: :mathematics,
+        qualification: :postgraduate_itt,
+        # user selects the following and eligible ITT AY that matches our ITT year calculation as well:
+        itt_academic_year: AcademicYear::Type.new.serialize(AcademicYear.new(2020))
+      }
+      # end of PG ITT year 2-week allowance: ITT start date treated as falling inside following AY (2024)
     ].each do |context|
       context "when claim academic year #{context[:claim_academic_year]}" do
         let(:claim_academic_year) { context[:claim_academic_year] }
@@ -1892,8 +2002,118 @@ RSpec.describe EarlyCareerPayments::DqtRecord do
         eligible_itt_subject: :mathematics,
         qualification: :postgraduate_itt,
         itt_academic_year: AcademicYear::Type.new.serialize(AcademicYear.new(2018))
-      }
+      },
       # end of QTS award date is equal to ITT start date for postgrad
+
+      # start of PG ITT year 2-week allowance: ITT start date treated as falling inside following AY (2023)
+      {
+        claim_academic_year: AcademicYear.new(2023),
+        record_degree_codes: [],
+        record_itt_subjects: ["mathematics"],
+        record_itt_subject_codes: ["100403"],
+        record_itt_date: Date.parse("18/8/2019"), # deemed to fall within 2019/20 AY rather than 2018/19
+        record_qts_date: Date.parse("31/12/2019"),
+        record_qualification_name: "Degree",
+        eligible_itt_subject: :mathematics,
+        qualification: :postgraduate_itt,
+        # user selects the previous and eligible ITT AY that does NOT match our ITT year calculation:
+        itt_academic_year: AcademicYear::Type.new.serialize(AcademicYear.new(2018))
+      },
+      {
+        claim_academic_year: AcademicYear.new(2023),
+        record_degree_codes: [],
+        record_itt_subjects: ["mathematics"],
+        record_itt_subject_codes: ["100403"],
+        record_itt_date: Date.parse("31/8/2019"), # deemed to fall within 2019/20 AY rather than 2018/19
+        record_qts_date: Date.parse("31/12/2019"),
+        record_qualification_name: "Degree",
+        eligible_itt_subject: :mathematics,
+        qualification: :postgraduate_itt,
+        # user selects the previous and eligible ITT AY that does NOT match our ITT year calculation:
+        itt_academic_year: AcademicYear::Type.new.serialize(AcademicYear.new(2018))
+      },
+      {
+        claim_academic_year: AcademicYear.new(2023),
+        record_degree_codes: [],
+        record_itt_subjects: ["mathematics"],
+        record_itt_subject_codes: ["100403"],
+        record_itt_date: Date.parse("18/8/2021"), # deemed to fall within 2021/22 AY rather than 2020/21
+        record_qts_date: Date.parse("31/12/2021"),
+        record_qualification_name: "Degree",
+        eligible_itt_subject: :mathematics,
+        qualification: :postgraduate_itt,
+        # user selects the previous and eligible ITT AY that does NOT match our ITT year calculation:
+        itt_academic_year: AcademicYear::Type.new.serialize(AcademicYear.new(2020))
+      },
+      {
+        claim_academic_year: AcademicYear.new(2023),
+        record_degree_codes: [],
+        record_itt_subjects: ["mathematics"],
+        record_itt_subject_codes: ["100403"],
+        record_itt_date: Date.parse("31/8/2021"), # deemed to fall within 2021/22 AY rather than 2020/21
+        record_qts_date: Date.parse("31/12/2021"),
+        record_qualification_name: "Degree",
+        eligible_itt_subject: :mathematics,
+        qualification: :postgraduate_itt,
+        # user selects the previous and eligible ITT AY that does NOT match our ITT year calculation:
+        itt_academic_year: AcademicYear::Type.new.serialize(AcademicYear.new(2020))
+      },
+      # end of PG ITT year 2-week allowance: ITT start date treated as falling inside following AY (2023)
+
+      # start of PG ITT year 2-week allowance: ITT start date treated as falling inside following AY (2024)
+      {
+        claim_academic_year: AcademicYear.new(2024),
+        record_degree_codes: [],
+        record_itt_subjects: ["mathematics"],
+        record_itt_subject_codes: ["100403"],
+        record_itt_date: Date.parse("18/8/2020"), # deemed to fall within 2020/21 AY rather than 2019/20
+        record_qts_date: Date.parse("31/12/2020"),
+        record_qualification_name: "Degree",
+        eligible_itt_subject: :mathematics,
+        qualification: :postgraduate_itt,
+        # user selects the previous and eligible ITT AY that does NOT match our ITT year calculation:
+        itt_academic_year: AcademicYear::Type.new.serialize(AcademicYear.new(2019))
+      },
+      {
+        claim_academic_year: AcademicYear.new(2024),
+        record_degree_codes: [],
+        record_itt_subjects: ["mathematics"],
+        record_itt_subject_codes: ["100403"],
+        record_itt_date: Date.parse("31/8/2020"), # deemed to fall within 2020/21 AY rather than 2019/20
+        record_qts_date: Date.parse("31/12/2020"),
+        record_qualification_name: "Degree",
+        eligible_itt_subject: :mathematics,
+        qualification: :postgraduate_itt,
+        # user selects the previous and eligible ITT AY that does NOT match our ITT year calculation:
+        itt_academic_year: AcademicYear::Type.new.serialize(AcademicYear.new(2019))
+      },
+      {
+        claim_academic_year: AcademicYear.new(2024),
+        record_degree_codes: [],
+        record_itt_subjects: ["mathematics"],
+        record_itt_subject_codes: ["100403"],
+        record_itt_date: Date.parse("18/8/2021"), # deemed to fall within 2021/22 AY rather than 2020/21
+        record_qts_date: Date.parse("31/12/2021"),
+        record_qualification_name: "Degree",
+        eligible_itt_subject: :mathematics,
+        qualification: :postgraduate_itt,
+        # user selects the previous and eligible ITT AY that does NOT match our ITT year calculation:
+        itt_academic_year: AcademicYear::Type.new.serialize(AcademicYear.new(2020))
+      },
+      {
+        claim_academic_year: AcademicYear.new(2024),
+        record_degree_codes: [],
+        record_itt_subjects: ["mathematics"],
+        record_itt_subject_codes: ["100403"],
+        record_itt_date: Date.parse("31/8/2021"), # deemed to fall within 2021/22 AY rather than 2020/21
+        record_qts_date: Date.parse("31/12/2021"),
+        record_qualification_name: "Degree",
+        eligible_itt_subject: :mathematics,
+        qualification: :postgraduate_itt,
+        # user selects the previous and eligible ITT AY that does NOT match our ITT year calculation:
+        itt_academic_year: AcademicYear::Type.new.serialize(AcademicYear.new(2020))
+      }
+      # end of PG ITT year 2-week allowance: ITT start date treated as falling inside following AY (2024)
     ].each do |context|
       context "when claim academic year #{context[:claim_academic_year]}" do
         let(:claim_academic_year) { context[:claim_academic_year] }
