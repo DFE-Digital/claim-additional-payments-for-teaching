@@ -38,7 +38,7 @@ RSpec.feature "Teacher Identity Sign in" do
 
     # check the teacher_id_user_info details are saved to the claim
     claim = Claim.order(:created_at).last
-    expect(claim.teacher_id_user_info).to eq({"trn" => "1234567", "birthdate" => "1940-01-01", "given_name" => "Kelsie", "family_name" => "Oberbrunner", "ni_number" => "AB123456C", "trn_match_ni_number" => "True"})
+    expect(claim.teacher_id_user_info).to eq({"trn" => "1234567", "birthdate" => "1940-01-01", "email" => "kelsie.oberbrunner@example.com", "given_name" => "Kelsie", "family_name" => "Oberbrunner", "ni_number" => "AB123456C", "trn_match_ni_number" => "True"})
   end
 
   scenario "Teacher makes claim for 'Early-Career Payments' by logging in with teacher_id and selects no to details confirm" do

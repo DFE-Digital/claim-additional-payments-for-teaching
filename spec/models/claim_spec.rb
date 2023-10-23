@@ -1317,7 +1317,8 @@ RSpec.describe Claim, type: :model do
         :building_society_roll_number,
         :one_time_password,
         :assigned_to_id,
-        :details_check
+        :details_check,
+        :email_address_check
       ])
     end
   end

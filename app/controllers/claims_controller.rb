@@ -29,6 +29,8 @@ class ClaimsController < BasePublicController
       return redirect_to claim_path(current_policy_routing_name, "eligible-itt-subject")
     elsif params[:slug] == "sign-in-or-continue"
       update_session_with_current_slug
+    elsif params[:slug] == "select-email"
+      session[:email_address] = current_claim.teacher_id_user_info["email"]
     elsif params[:slug] == "correct-school"
       update_session_with_tps_school
     elsif params[:slug] == "nqt-in-academic-year-after-itt" && page_sequence.in_sequence?("correct-school")
@@ -73,11 +75,13 @@ class ClaimsController < BasePublicController
       return bank_account
     when "correct-school"
       check_correct_school_params
+    when "select-email"
+      check_email_params
     else
       current_claim.attributes = claim_params
     end
 
-    current_claim.reset_dependent_answers
+    current_claim.reset_dependent_answers unless params[:slug] == "select-email"
     current_claim.reset_eligibility_dependent_answers(reset_attrs)
     one_time_password
 
@@ -303,6 +307,10 @@ class ClaimsController < BasePublicController
   def save_details_check
     details_check = params.dig(:claim, :details_check)
     DfeIdentity::ClaimUserDetailsCheck.call(current_claim, details_check)
+  end
+
+  def check_email_params
+    current_claim.attributes = SelectEmailForm.extract_attributes(current_claim, email_address_check: params.dig(:claim, :email_address_check))
   end
 
   def update_session_with_tps_school
