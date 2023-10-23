@@ -81,6 +81,38 @@ RSpec.describe ClaimAutoApproval do
 
       it { is_expected.to eq(false) }
     end
+
+    context "when the census subjects taught task failed with NO DATA" do
+      let(:failed_tasks) { %w[census_subjects_taught] }
+
+      before do
+        applicable_task_names.excluding(failed_tasks).each do |task|
+          create(:task, :automated, :passed, name: task, claim:)
+        end
+
+        failed_tasks.each do |task|
+          create(:task, :automated, :failed, name: task, claim:, claim_verifier_match: nil)
+        end
+      end
+
+      it { is_expected.to eq(true) }
+    end
+
+    context "when the census subjects taught task failed with NO MATCH" do
+      let(:failed_tasks) { %w[census_subjects_taught] }
+
+      before do
+        applicable_task_names.excluding(failed_tasks).each do |task|
+          create(:task, :automated, :passed, name: task, claim:)
+        end
+
+        failed_tasks.each do |task|
+          create(:task, :automated, :failed, name: task, claim:, claim_verifier_match: :none)
+        end
+      end
+
+      it { is_expected.to eq(false) }
+    end
   end
 
   describe "#auto_approve!" do

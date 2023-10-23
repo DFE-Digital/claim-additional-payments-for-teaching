@@ -6,7 +6,7 @@ class ClaimAutoApproval
   end
 
   def eligible?
-    approvable? && all_tasks_passed_automatically?
+    approvable? && auto_approvable?
   end
 
   def auto_approve!
@@ -37,7 +37,16 @@ class ClaimAutoApproval
   attr_reader :claim
 
   delegate :approvable?, to: :claim
-  delegate :all_tasks_passed_automatically?, :passed_automatically_task_names, to: :claim_checking_tasks
+  delegate :all_tasks_passed_automatically?, :applicable_task_names, :passed_automatically_task_names, to: :claim_checking_tasks
+
+  def auto_approvable?
+    return true if all_tasks_passed_automatically?
+    return false unless (applicable_task_names - passed_automatically_task_names) == ["census_subjects_taught"]
+
+    # We can still auto-approve a claim when the "census_subjects_taught" task is the only
+    # applicable one that didn't pass automatically and the outcome is "NO DATA"
+    claim.tasks.automated.no_data_census_subjects_taught.exists?
+  end
 
   def claim_checking_tasks
     @claim_checking_tasks ||= ClaimCheckingTasks.new(claim)

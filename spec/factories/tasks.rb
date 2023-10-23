@@ -12,6 +12,15 @@ FactoryBot.define do
 
     trait :failed do
       passed { false }
+
+      after(:create) do |task, _evaluator|
+        # When failing checks automatically, the `passed` attribute is saved as `nil`;
+        # a validation would normally prevent it when saved in a default context instead.
+        if !task.manual?
+          task.passed = nil
+          task.save!(context: :claim_verifier)
+        end
+      end
     end
 
     trait :manual do

@@ -37,5 +37,21 @@ RSpec.describe Task, type: :model do
         is_expected.to eq([task_passed_automatically, another_task_passed_automatically])
       end
     end
+
+    describe ".no_data_census_subjects_taught" do
+      subject { described_class.no_data_census_subjects_taught }
+
+      let!(:employment_task_failed_automatically_no_data) { create(:task, :automated, :failed, claim_verifier_match: nil, name: "employment") }
+
+      let!(:census_task_failed_automatically_no_data) { create(:task, :automated, :failed, claim_verifier_match: nil, name: "census_subjects_taught") }
+      let!(:another_census_task_failed_automatically_no_data) { create(:task, :automated, :failed, claim_verifier_match: nil, name: "census_subjects_taught") }
+
+      let!(:census_task_failed_automatically_no_match) { create(:task, :automated, :failed, claim_verifier_match: :none, name: "census_subjects_taught") }
+      let!(:census_task_passed_automatically_any_match) { create(:task, :automated, :passed, claim_verifier_match: :any, name: "census_subjects_taught") }
+
+      it "returns census subjects taught tasks that didn't pass because the outcome was NO DATA" do
+        is_expected.to match_array([census_task_failed_automatically_no_data, another_census_task_failed_automatically_no_data])
+      end
+    end
   end
 end
