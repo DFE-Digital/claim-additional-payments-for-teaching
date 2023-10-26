@@ -68,6 +68,7 @@ Rails.application.config.middleware.use OmniAuth::Builder do
     issuer: ENV["TID_SIGN_IN_ISSUER"],
     pkce: true,
     response_type: :code,
-    scope: ["email", "openid", "profile", "dqt:read"]
+    scope: ["email", "openid", "profile", "dqt:read"],
+    send_scope_to_token_endpoint: false
   }
 end
