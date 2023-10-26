@@ -23,8 +23,8 @@ RSpec.feature "Teacher Identity Sign in" do
     expect(page).to have_text(I18n.t("early_career_payments.landing_page"))
     click_on "Start now"
 
-    expect(page).to have_text("You can use a DfE Identity account with this service")
-    click_on "Sign in with teacher identity"
+    expect(page).to have_text("Use DfE Identity to sign in")
+    click_on "Continue with DfE Identity"
 
     # - Teacher details page
     expect(page).to have_text(I18n.t("early_career_payments.questions.check_and_confirm_details"))
@@ -48,8 +48,8 @@ RSpec.feature "Teacher Identity Sign in" do
     expect(page).to have_text(I18n.t("early_career_payments.landing_page"))
     click_on "Start now"
 
-    expect(page).to have_text("You can use a DfE Identity account with this service")
-    click_on "Sign in with teacher identity"
+    expect(page).to have_text("Use DfE Identity to sign in")
+    click_on "Continue with DfE Identity"
 
     # - Teacher details page
     expect(page).to have_text(I18n.t("early_career_payments.questions.check_and_confirm_details"))
