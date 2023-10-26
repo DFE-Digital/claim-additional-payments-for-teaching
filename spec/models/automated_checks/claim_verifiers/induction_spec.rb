@@ -107,6 +107,37 @@ module AutomatedChecks
           it_behaves_like :successful_execution
         end
 
+        context "with incomplete induction data" do
+          let(:data) do
+            {
+              induction: {
+                start_date: nil,
+                completion_date: nil,
+                status: "Pass"
+              },
+              initial_teacher_training: {
+                programme_start_date: "2020-09-01T00:00:00Z",
+                qualification: "Degree"
+              }
+            }
+          end
+
+          let(:expected_to_pass?) { nil }
+          let(:expected_match_value) { nil }
+          let(:expected_note) do
+            <<~HTML
+              [DQT Induction] - No data:
+              <pre>
+                Start date:      N/A
+                Completion date: N/A
+                Status:          Pass
+              </pre>
+            HTML
+          end
+
+          it_behaves_like :successful_execution
+        end
+
         context "with ineligible induction data from the DQT response" do
           let(:data) do
             {

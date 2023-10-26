@@ -26,12 +26,19 @@ module AutomatedChecks
       attr_accessor :admin_user, :claim
       attr_reader :dqt_teacher_status
 
+      delegate :itt_year, :induction_status, :induction_start_date, :induction_completion_date, to: :dqt_teacher_status
+      delegate :eligible?, :incomplete?, to: :induction_data
+
+      def induction_data
+        @induction_data ||= EarlyCareerPayments::InductionData.new(itt_year:, induction_status:, induction_start_date:)
+      end
+
       def awaiting_task?
         claim.tasks.where(name: TASK_NAME).count.zero?
       end
 
       def no_data
-        return if dqt_teacher_status.present?
+        return if dqt_teacher_status.present? && !incomplete?
 
         create_task(match: nil)
       end
@@ -46,10 +53,6 @@ module AutomatedChecks
         return unless eligible?
 
         create_task(match: :all, passed: true)
-      end
-
-      def eligible?
-        dqt_teacher_status.eligible_induction?
       end
 
       def create_task(match:, passed: nil)
@@ -71,17 +74,23 @@ module AutomatedChecks
       end
 
       def create_note(match:)
-        body = if dqt_teacher_status.nil?
+        header = if match.nil?
           "[DQT Induction] - No data"
         else
+          "[DQT Induction] - #{(match == :none) ? "Ineligible" : "Eligible"}"
+        end
+
+        body = if dqt_teacher_status.present?
           <<~HTML
-            [DQT Induction] - #{(match == :none) ? "Ine" : "E"}ligible:
+            #{header}:
             <pre>
-              Start date:      #{dqt_teacher_status.induction_start_date || "N/A"}
-              Completion date: #{dqt_teacher_status.induction_completion_date || "N/A"}
-              Status:          #{dqt_teacher_status.induction_status || "N/A"}
+              Start date:      #{induction_start_date || "N/A"}
+              Completion date: #{induction_completion_date || "N/A"}
+              Status:          #{induction_status || "N/A"}
             </pre>
           HTML
+        else
+          header
         end
 
         claim.notes.create!(

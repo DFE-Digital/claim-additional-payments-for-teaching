@@ -2,6 +2,8 @@ class School < ApplicationRecord
   SEARCH_RESULTS_LIMIT = 50
   SEARCH_MINIMUM_LENGTH = 3
   SEARCH_NOT_ENOUGH_CHARACTERS_ERROR = "search term must have a minimum of #{SEARCH_MINIMUM_LENGTH} characters".freeze
+  # UK postcodes start with 1-2 word characters followed by 1-2 numbers, enough to infer a postcode search in most cases
+  POSTCODE_SEARCH_REGEX = /^[A-Za-z]{1,2}[0-9]{1,2}/
 
   belongs_to :local_authority
   belongs_to :local_authority_district
@@ -117,9 +119,19 @@ class School < ApplicationRecord
   def self.search(search_term)
     raise ArgumentError, SEARCH_NOT_ENOUGH_CHARACTERS_ERROR if search_term.length < SEARCH_MINIMUM_LENGTH
 
-    where("name ILIKE ?", "%#{sanitize_sql_like(search_term)}%")
-      .or(where("postcode_sanitised ILIKE ?", "%#{sanitize_sql_like(search_term.tr(" ", ""))}%"))
-      .order(:name, close_date: :desc).limit(SEARCH_RESULTS_LIMIT)
+    search_field = :name
+    sanitised_search_term = search_term.delete(" ")
+
+    # Some school names may start with a postcode-resembling pattern, so the following check is not meant
+    # to provide 100% accurate inference, but rather cover most cases and still allow partial-postcode search.
+    if sanitised_search_term.length.between?(3, 7) && sanitised_search_term.match?(POSTCODE_SEARCH_REGEX)
+      search_field, search_term = [:postcode_sanitised, sanitised_search_term]
+    end
+
+    where("#{search_field} ILIKE ?", "%#{sanitize_sql_like(search_term)}%")
+      .order(sanitize_sql_for_order([Arel.sql("similarity(#{search_field}, ?) DESC"), search_term]))
+      .order(:name, close_date: :desc)
+      .limit(SEARCH_RESULTS_LIMIT)
   end
 
   def address
