@@ -130,7 +130,7 @@ module FeatureHelpers
   end
 
   def skip_tid
-    expect(page).to have_text("You can use a DfE Identity account with this service")
+    expect(page).to have_text("Use DfE Identity to sign in")
     click_on "Continue without signing in"
   end
 

@@ -11,7 +11,7 @@ RSpec.feature "Trainee teacher subjourney for LUP schools" do
     visit new_claim_path(LevellingUpPremiumPayments.routing_name)
 
     # - Sign in or continue page
-    expect(page).to have_text("You can use a DfE Identity account with this service")
+    expect(page).to have_text("Use DfE Identity to sign in")
     click_on "Continue without signing in"
 
     choose_school non_lup_school
@@ -114,7 +114,7 @@ RSpec.feature "Trainee teacher subjourney for LUP schools" do
     visit new_claim_path(EarlyCareerPayments.routing_name)
 
     # - Sign in or continue page
-    expect(page).to have_text("You can use a DfE Identity account with this service")
+    expect(page).to have_text("Use DfE Identity to sign in")
     click_on "Continue without signing in"
 
     choose_school lup_school

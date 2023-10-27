@@ -23,7 +23,7 @@ RSpec.feature "Backlinking during a claim" do
 
     visit new_claim_path(EarlyCareerPayments.routing_name)
     # - Sign in or continue page
-    expect(page).to have_text("You can use a DfE Identity account with this service")
+    expect(page).to have_text("Use DfE Identity to sign in")
     expect(page).to have_link("Back")
     click_on "Continue without signing in"
 
@@ -49,7 +49,7 @@ RSpec.feature "Backlinking during a claim" do
     visit new_claim_path(EarlyCareerPayments.routing_name)
 
     # - Sign in or continue page
-    expect(page).to have_text("You can use a DfE Identity account with this service")
+    expect(page).to have_text("Use DfE Identity to sign in")
     expect(page).to have_link("Back")
     click_on "Continue without signing in"
 
