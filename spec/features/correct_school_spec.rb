@@ -95,9 +95,9 @@ RSpec.feature "Logs in with TID, confirms teacher details and displays school fr
 
     case tps
     when :inside_window
-      create(:teachers_pensions_service, teacher_reference_number: trn, end_date: recent_tps_full_months.ago, school_urn: school.urn)
+      create(:teachers_pensions_service, teacher_reference_number: trn, end_date: recent_tps_full_months.ago, school_urn: school.establishment_number)
     when :outside_window
-      create(:teachers_pensions_service, teacher_reference_number: trn, end_date: (recent_tps_full_months + 2.months).ago, school_urn: school.urn)
+      create(:teachers_pensions_service, teacher_reference_number: trn, end_date: (recent_tps_full_months + 2.months).ago, school_urn: school.establishment_number)
     end
 
     visit landing_page_path(EarlyCareerPayments.routing_name)
@@ -107,7 +107,7 @@ RSpec.feature "Logs in with TID, confirms teacher details and displays school fr
     click_on "Start now"
 
     expect(page).to have_text("Use DfE Identity to sign in")
-    click_on "Sign in with teacher identity"
+    click_on "Continue with DfE Identity"
 
     # - Teacher details page
     expect(page).to have_text(I18n.t("early_career_payments.questions.check_and_confirm_details"))
