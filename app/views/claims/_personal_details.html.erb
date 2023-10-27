@@ -11,7 +11,7 @@
     <div class="govuk-summary-list__row">
       <dt class="govuk-summary-list__key">Date of birth</dt>
       <dd class="govuk-summary-list__value">
-        <%= @teacher_id_user_info["birthdate"] %>
+        <%= l(Date.parse(@teacher_id_user_info["birthdate"])) %>
       </dd>
     </div>
     <div class="govuk-summary-list__row">
