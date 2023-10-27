@@ -10,7 +10,7 @@ RSpec.feature "Ineligible Levelling up premium payments claims" do
     start_levelling_up_premium_payments_claim
 
     # - Sign in or continue page
-    expect(page).to have_text("You can use a DfE Identity account with this service")
+    expect(page).to have_text("Use DfE Identity to sign in")
     click_on "Continue without signing in"
 
     # - Which school do you teach at
@@ -28,7 +28,7 @@ RSpec.feature "Ineligible Levelling up premium payments claims" do
     start_levelling_up_premium_payments_claim
 
     # - Sign in or continue page
-    expect(page).to have_text("You can use a DfE Identity account with this service")
+    expect(page).to have_text("Use DfE Identity to sign in")
     click_on "Continue without signing in"
 
     # - Which school do you teach at
@@ -47,7 +47,7 @@ RSpec.feature "Ineligible Levelling up premium payments claims" do
     start_levelling_up_premium_payments_claim
 
     # - Sign in or continue page
-    expect(page).to have_text("You can use a DfE Identity account with this service")
+    expect(page).to have_text("Use DfE Identity to sign in")
     click_on "Continue without signing in"
 
     # - Which school do you teach at

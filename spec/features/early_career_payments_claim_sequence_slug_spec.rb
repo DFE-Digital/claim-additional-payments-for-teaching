@@ -51,8 +51,8 @@ RSpec.feature "Teacher Early-Career Payments claims sequence slug" do
     click_on "Start now"
 
     # - Sign in or continue page
-    expect(page).to have_text("You can use a DfE Identity account with this service")
-    click_on "Sign in with teacher identity"
+    expect(page).to have_text("Use DfE Identity to sign in")
+    click_on "Continue with DfE Identity"
 
     # - Teacher details page
     expect(page).to have_text(I18n.t("early_career_payments.questions.check_and_confirm_details"))
