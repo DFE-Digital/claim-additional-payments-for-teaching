@@ -43,21 +43,18 @@ module Dqt
           "BSc (Hons) with Intercalated PGCE",
           "BSc/Certificate in Education (QTS)",
           "BSc/Education (QTS)",
-          "QTS Award",
           "RTP",
           "Troops to Teach",
           "Undergraduate Master of Teaching"
         ],
         assessment_only: [
           "Assessment Only Route",
-          "QTS Award",
           "QTS Assessment only",
           "QTS Award only"
         ],
         overseas_recognition: [
           "EEA",
           "Northern Ireland",
-          "QTS Award",
           "Qualification gained in Europe",
           "OTT",
           "OTT Recognition",
@@ -102,9 +99,12 @@ module Dqt
       end
 
       def route_into_teaching
-        @route_into_teaching ||= QUALIFICATION_MATCHING_TYPE.find { |_key, values|
-          values.include?(qualification_name)
-        }&.first
+        @route_into_teaching ||= begin
+          # All the categories need to be browsed in order to estabilish the uniqueness of a match.
+          # We cannot infer the correct category if a qualification is present in more than one category.
+          match = QUALIFICATION_MATCHING_TYPE.select { |_, category| category.include?(qualification_name) }.keys
+          (match.count == 1) ? match.first : nil
+        end
       end
     end
   end
