@@ -1819,10 +1819,10 @@ RSpec.describe Claim, type: :model do
     after { travel_back }
 
     let(:trn) { "7654321" }
-    let(:urn) { 1234 }
+    let(:establishment_number) { 1234 }
 
     let!(:claim) { create(:claim, teacher_reference_number: trn, created_at: Time.zone.now) }
-    let!(:school) { create(:school, urn: urn) }
+    let!(:school) { create(:school, establishment_number:) }
 
     context "when there is a tps record within 2 full months" do
       it "returns a school" do
@@ -1830,9 +1830,9 @@ RSpec.describe Claim, type: :model do
         start_date = (Time.zone.now - 2.months).beginning_of_month
         end_date = start_date.end_of_month.beginning_of_day
 
-        create(:teachers_pensions_service, start_date: start_date, end_date: end_date, school_urn: urn, teacher_reference_number: trn)
+        create(:teachers_pensions_service, start_date: start_date, end_date: end_date, school_urn: establishment_number, teacher_reference_number: trn)
 
-        expect(claim.recent_tps_school.urn).to be(urn)
+        expect(claim.recent_tps_school.establishment_number).to be(establishment_number)
       end
     end
 
@@ -1842,7 +1842,7 @@ RSpec.describe Claim, type: :model do
         start_date = (Time.zone.now - 3.months).beginning_of_month
         end_date = start_date.end_of_month.beginning_of_day
 
-        create(:teachers_pensions_service, start_date: start_date, end_date: end_date, school_urn: urn, teacher_reference_number: trn)
+        create(:teachers_pensions_service, start_date: start_date, end_date: end_date, school_urn: establishment_number, teacher_reference_number: trn)
 
         expect(claim.recent_tps_school).to be_nil
       end
