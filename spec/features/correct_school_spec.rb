@@ -106,7 +106,7 @@ RSpec.feature "Logs in with TID, confirms teacher details and displays school fr
     expect(page).to have_text(I18n.t("early_career_payments.landing_page"))
     click_on "Start now"
 
-    expect(page).to have_text("You can use a DfE Identity account with this service")
+    expect(page).to have_text("Use DfE Identity to sign in")
     click_on "Sign in with teacher identity"
 
     # - Teacher details page
