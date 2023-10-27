@@ -21,7 +21,7 @@ RSpec.feature "Teacher Identity Sign in" do
     click_on "Start now"
 
     # - Sign in or continue page
-    expect(page).to have_text("You can use a DfE Identity account with this service")
+    expect(page).to have_text("Use DfE Identity to sign in")
     click_on "Continue without signing in"
 
     # - Which school do you teach at
@@ -40,8 +40,8 @@ RSpec.feature "Teacher Identity Sign in" do
     click_on "Start now"
 
     # - Sign in or continue page
-    expect(page).to have_text("You can use a DfE Identity account with this service")
-    click_on "Sign in with teacher identity"
+    expect(page).to have_text("Use DfE Identity to sign in")
+    click_on "Continue with DfE Identity"
 
     # - Teacher details page
     expect(page).to have_text("Check and confirm your details")

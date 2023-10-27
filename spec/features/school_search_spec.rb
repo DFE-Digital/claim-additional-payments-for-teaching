@@ -193,7 +193,7 @@ RSpec.feature "Searching for school during Teacher Student Loan Repayments claim
       visit new_claim_path(LevellingUpPremiumPayments.routing_name)
 
       # - Sign in or continue page
-      expect(page).to have_text("You can use a DfE Identity account with this service")
+      expect(page).to have_text("Use DfE Identity to sign in")
       click_on "Continue without signing in"
 
       # Creates a duplicate school to test whether the school search shows closed schools

@@ -264,7 +264,7 @@ RSpec.feature "Levelling up premium payments and early-career payments combined 
     visit new_claim_path(EarlyCareerPayments.routing_name)
 
     # - Sign in or continue page
-    expect(page).to have_text("You can use a DfE Identity account with this service")
+    expect(page).to have_text("Use DfE Identity to sign in")
     click_on "Continue without signing in"
 
     # - Which school do you teach at

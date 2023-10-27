@@ -15,7 +15,7 @@ RSpec.feature "Trainee Teacher - Early Career Payments - journey" do
       click_on "Start now"
 
       # - Sign in or continue page
-      expect(page).to have_text("You can use a DfE Identity account with this service")
+      expect(page).to have_text("Use DfE Identity to sign in")
       click_on "Continue without signing in"
 
       # - Which school do you teach at
