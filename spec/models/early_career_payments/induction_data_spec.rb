@@ -51,6 +51,14 @@ RSpec.describe EarlyCareerPayments::InductionData do
         include_examples :eligible?, ["in progress", "not yet completed", "induction extended"], false
         include_examples :eligible?, ["required to complete", "failed"], false
       end
+
+      context "when the start date is missing" do
+        let(:induction_start_date) { nil }
+
+        include_examples :eligible?, ["pass", "exempt"], false
+        include_examples :eligible?, ["in progress", "not yet completed", "induction extended"], false
+        include_examples :eligible?, ["required to complete", "failed"], false
+      end
     end
 
     context "when the ITT year is after 2020" do
@@ -59,6 +67,65 @@ RSpec.describe EarlyCareerPayments::InductionData do
       include_examples :eligible?, ["pass", "exempt"], false
       include_examples :eligible?, ["in progress", "not yet completed", "induction extended"], false
       include_examples :eligible?, ["required to complete", "failed"], false
+    end
+  end
+
+  describe "#incomplete?" do
+    subject { super().incomplete? }
+
+    context "when the status is missing" do
+      let(:induction_status) { nil }
+
+      context "with ITT year 2018" do
+        let(:itt_year) { AcademicYear.new(2018) }
+
+        it { is_expected.to eq(true) }
+      end
+
+      context "with ITT year 2019" do
+        let(:itt_year) { AcademicYear.new(2019) }
+
+        it { is_expected.to eq(true) }
+      end
+
+      context "with ITT year 2020" do
+        let(:itt_year) { AcademicYear.new(2020) }
+
+        it { is_expected.to eq(true) }
+      end
+    end
+
+    context "when the status is present but the start date is missing" do
+      let(:induction_status) { "Pass" }
+      let(:induction_start_date) { nil }
+
+      context "with ITT year 2018" do
+        let(:itt_year) { AcademicYear.new(2018) }
+
+        it { is_expected.to eq(false) }
+      end
+
+      context "with ITT year 2019" do
+        let(:itt_year) { AcademicYear.new(2019) }
+
+        it { is_expected.to eq(false) }
+      end
+
+      context "with ITT year 2020" do
+        let(:itt_year) { AcademicYear.new(2020) }
+
+        context "when the status is valid" do
+          let(:induction_status) { "Pass" }
+
+          it { is_expected.to eq(true) }
+        end
+
+        context "when the status is not valid" do
+          let(:induction_status) { "Failed" }
+
+          it { is_expected.to eq(false) }
+        end
+      end
     end
   end
 end

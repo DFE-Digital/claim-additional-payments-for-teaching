@@ -10,27 +10,33 @@ RSpec.describe School, type: :model do
   it { should validate_presence_of(:phase) }
 
   describe ".search" do
-    let(:school) { create(:school) }
+    let!(:first_school) { create(:school, name: "Community School London", postcode: "SW1P 3BT") }
+    let!(:second_school) { create(:school, name: "Unity School London", postcode: "SW1P 3BT") }
+    let!(:third_school) { create(:school, name: "The Unity College Manchester", postcode: "M1 2WD") }
 
     it "returns schools with a name matching the search term" do
-      expect(School.search(school.name.sub("The ", "").split(" ").first)).to match_array([school])
+      expect(School.search("School")).to match_array([first_school, second_school])
     end
 
     it "returns schools with a postcode matching the search term" do
-      expect(School.search(school.postcode)).to match_array([school])
+      expect(School.search("M1 2WD")).to match_array([third_school])
+    end
+
+    it "returns schools with a postcode that starts with the search term" do
+      expect(School.search("SW1")).to match_array([first_school, second_school])
     end
 
     it "raises an ArgumentError when the search term has fewer than 3 characters" do
       expect { School.search("Pe") }.to raise_error(ArgumentError, School::SEARCH_NOT_ENOUGH_CHARACTERS_ERROR)
     end
 
-    context "with multiple matching schools" do
-      before { create_list(:school, 5) }
+    it "limits the results" do
+      stub_const("School::SEARCH_RESULTS_LIMIT", 1)
+      expect(School.search("School").count).to eql(1)
+    end
 
-      it "limits the results" do
-        stub_const("School::SEARCH_RESULTS_LIMIT", 1)
-        expect(School.search("School").count).to eql(1)
-      end
+    it "orders the results by similarity" do
+      expect(School.search("Unity School")).to eq([second_school, first_school])
     end
   end
 
