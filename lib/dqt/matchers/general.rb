@@ -71,7 +71,7 @@ module Dqt
           # new academic year, which makes it fall, mistakenly, within the *previous* academic year. Based on the
           # situation, this can also cause the qualifications and induction checks to pass or fail automatically when
           # they shouldn't. One way around it is to assume that the new academic year can start up to 2 weeks earlier.
-          if itt_start_date.between?(Date.new(itt_start_date.year, 8, 18), Date.new(itt_start_date.year, 8, 31))
+          if itt_start_date&.between?(Date.new(itt_start_date.year, 8, 18), Date.new(itt_start_date.year, 8, 31))
             Date.new(itt_start_date.year, 9, 1)
           else
             itt_start_date

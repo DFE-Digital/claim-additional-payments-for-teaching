@@ -74,31 +74,47 @@ RSpec.describe Dqt::Matchers::General do
       end
     end
 
+    shared_context :itt_start_date_nil do
+      context "when the ITT start date is nil" do
+        let(:itt_start_date) { nil }
+
+        it "returns nil" do
+          is_expected.to be_nil
+        end
+      end
+    end
+
     context "when the route is Postgraduate ITT" do
       let(:qualification_name) { "Degree" }
 
-      context "when the ITT start date is before the 18th of August" do
+      context "when the ITT Start date is before the 18th of August" do
         let(:itt_start_date) { Date.parse("17/8/2019") }
 
         it "returns the ITT Start date" do
           is_expected.to eq(itt_start_date)
         end
+
+        include_context :itt_start_date_nil
       end
 
-      context "when the ITT start date is between the 18th and 31st of August" do
+      context "when the ITT Start date is between the 18th and 31st of August" do
         let(:itt_start_date) { Date.parse("18/8/2019") }
 
         it "returns the ITT Start date shifted to the 1st of September" do
           is_expected.to eq(itt_start_date.next_month.beginning_of_month)
         end
+
+        include_context :itt_start_date_nil
       end
 
-      context "when the ITT start date is on or after the 1st of September" do
+      context "when the ITT Start date is on or after the 1st of September" do
         let(:itt_start_date) { Date.parse("2/9/2019") }
 
         it "returns the ITT Start date" do
           is_expected.to eq(itt_start_date)
         end
+
+        include_context :itt_start_date_nil
       end
     end
 
