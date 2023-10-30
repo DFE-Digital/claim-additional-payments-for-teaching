@@ -7,8 +7,6 @@ RSpec.feature "Logs in with TID, confirms teacher details and displays email fro
   let!(:policy_configuration) { create(:policy_configuration, :additional_payments) }
   let!(:school) { create(:school, :combined_journey_eligibile_for_all) }
   let(:trn) { "1234567" }
-  let(:recent_tps_full_months) { TeachersPensionsService::RECENT_TPS_FULL_MONTHS }
-  let!(:inside_tps_window) { create(:teachers_pensions_service, teacher_reference_number: trn, end_date: recent_tps_full_months.ago, school_urn: school.urn) }
   let(:email) { "kelsie.oberbrunner@example.com" }
   let(:new_email) { "new.email@example" }
 
@@ -45,7 +43,7 @@ RSpec.feature "Logs in with TID, confirms teacher details and displays email fro
   scenario "Select a different email address" do
     navigate_to_check_email_page(school:)
 
-    # - current-school page
+    # - select-email page
     expect(page).to have_text("A different email address")
 
     # - Select A different email address
@@ -112,8 +110,8 @@ RSpec.feature "Logs in with TID, confirms teacher details and displays email fro
     expect(page).to have_text(I18n.t("early_career_payments.landing_page"))
     click_on "Start now"
 
-    expect(page).to have_text("You can use a DfE Identity account with this service")
-    click_on "Sign in with teacher identity"
+    expect(page).to have_text("Use DfE Identity to sign in")
+    click_on "Continue with DfE Identity"
 
     # - Teacher details page
     expect(page).to have_text(I18n.t("early_career_payments.questions.check_and_confirm_details"))
@@ -122,12 +120,9 @@ RSpec.feature "Logs in with TID, confirms teacher details and displays email fro
     choose "Yes"
     click_on "Continue"
 
-    # - correct-school page
-    expect(page).to have_text(school.name)
-    expect(page).not_to have_text("Enter the school name or postcode. Use at least three characters.")
-
-    # - Select the suggested school
-    choose(school.name)
+    # - Which school do you teach at
+    expect(page).to have_text(I18n.t("early_career_payments.questions.current_school_search"))
+    choose_school school
     click_on "Continue"
 
     # - Have you started your first year as a newly qualified teacher?
