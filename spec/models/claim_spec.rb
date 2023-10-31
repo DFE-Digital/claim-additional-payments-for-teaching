@@ -1830,7 +1830,7 @@ RSpec.describe Claim, type: :model do
         start_date = (Time.zone.now - 2.months).beginning_of_month
         end_date = start_date.end_of_month.beginning_of_day
 
-        create(:teachers_pensions_service, start_date: start_date, end_date: end_date, school_urn: establishment_number, teacher_reference_number: trn)
+        create(:teachers_pensions_service, start_date: start_date, end_date: end_date, school_urn: establishment_number, la_urn: school.local_authority.code, teacher_reference_number: trn)
 
         expect(claim.recent_tps_school.establishment_number).to be(establishment_number)
       end

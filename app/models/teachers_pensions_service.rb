@@ -15,12 +15,10 @@ class TeachersPensionsService < ApplicationRecord
   scope :claim_dates_interval, ->(latest_start_date, earliest_end_date) { where(start_date: ..latest_start_date).or(where(end_date: earliest_end_date..)) }
   scope :ended_on_or_after, ->(earliest_end_date) { where(end_date: earliest_end_date..) }
 
-  # TODO: Add specs
   def self.has_recent_tps_school?(claim)
     recent_tps_school(claim).present?
   end
 
-  # TODO: Add specs
   def self.recent_tps_school(claim)
     earliest_end_date = (claim.created_at - RECENT_TPS_FULL_MONTHS).beginning_of_month
 
@@ -32,7 +30,7 @@ class TeachersPensionsService < ApplicationRecord
 
     return nil unless tps_record&.school_urn
 
-    # The TPS data is labelled 'School URN' but is actually the DfE establishment number
-    School.find_by(establishment_number: tps_record.school_urn)
+    # The TPS data is labelled 'URN' but is actually the DfE establishment number
+    School.joins(:local_authority).find_by(establishment_number: tps_record.school_urn, local_authority: {code: tps_record.la_urn})
   end
 end
