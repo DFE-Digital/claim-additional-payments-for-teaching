@@ -19,7 +19,7 @@ RSpec.feature "Logs in with TID, confirms teacher details and displays school fr
     travel_back
   end
 
-  scenario "Selects suggested school" do
+  scenario "Selects suggested school and then changes selection" do
     navigate_to_correct_school_page(tps: :inside_window, school: eligible_school)
 
     # - correct-school page
@@ -36,10 +36,8 @@ RSpec.feature "Logs in with TID, confirms teacher details and displays school fr
       expect(c.school.id).to eq(eligible_school.id)
       expect(c.eligibility.school_somewhere_else).to eq(false)
     end
-  end
 
-  scenario "Select somewhere else" do
-    navigate_to_correct_school_page(tps: :inside_window, school: eligible_school)
+    click_on "Back"
 
     # - current-school page
     expect(page).to have_text(eligible_school.name)
@@ -50,6 +48,7 @@ RSpec.feature "Logs in with TID, confirms teacher details and displays school fr
     click_on "Continue"
 
     expect(page).to have_text(I18n.t("early_career_payments.questions.current_school_search"))
+    expect(page).not_to have_text(eligible_school.name)
 
     Claim.order(created_at: :desc).limit(2).each do |c|
       expect(c.school).to be_nil

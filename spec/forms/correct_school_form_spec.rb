@@ -21,6 +21,7 @@ RSpec.describe CorrectSchoolForm do
     it "updates school_somewhere_else to true" do
       expected_claim_params = {
         eligibility_attributes: {
+          current_school_id: nil,
           school_somewhere_else: true
         }
       }

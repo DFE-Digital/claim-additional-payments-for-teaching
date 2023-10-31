@@ -31,8 +31,7 @@ class CorrectSchoolForm
 
   def choose_somewhere_else
     # This removes "somewhere_else" passed in as the current_school_id
-    @updated_claim_params[:eligibility_attributes].delete(:current_school_id)
-
+    @updated_claim_params[:eligibility_attributes][:current_school_id] = nil
     @updated_claim_params[:eligibility_attributes][:school_somewhere_else] = true
   end
 
