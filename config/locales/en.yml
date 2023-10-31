@@ -322,6 +322,8 @@ en:
         trainee_teacher_future_eligibility: "You are not eligible this year"
         generic: "Based on the answers you have provided you are not eligible for an early-career payment"
     questions:
+      check_and_confirm_details: "Check and confirm your personal details"
+      details_correct: "Are these details correct?"
       current_school_search: "Which school do you teach at?"
       current_school_results: "Select the school you teach at"
       employed_as_supply_teacher: "Are you currently employed as a supply teacher?"
@@ -335,6 +337,11 @@ en:
         heading: "Which email address should we use to contact you?"
         hint: "We recommend you use a non-work email address in case your circumstances change while we process your payment."
         different_email: "A different email address"
+      select_phone_number:
+        heading: "Which mobile number should we use to contact you?"
+        hint: "We will only use this number if we are unable to contact you via email. It may slow down your application if we are unable to reach you."
+        alternative: "A different mobile number"
+        decline: "I do not want to be contacted by mobile"
       induction_completed:
         heading: Have you completed your induction as an early-career teacher?
         hint:

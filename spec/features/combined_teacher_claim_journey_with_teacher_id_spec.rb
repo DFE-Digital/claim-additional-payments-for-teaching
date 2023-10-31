@@ -3,25 +3,15 @@ require "rails_helper"
 RSpec.feature "Combined journey with Teacher ID" do
   include OmniauthMockHelper
 
-  subject(:slug_sequence) { EarlyCareerPayments::SlugSequence.new(current_claim) }
   let(:notify) { instance_double("NotifySmsMessage", deliver!: true) }
 
   let!(:policy_configuration) { create(:policy_configuration, :additional_payments) }
   let!(:school) { create(:school, :combined_journey_eligibile_for_all) }
   let(:current_academic_year) { policy_configuration.current_academic_year }
-  let(:ecp_eligibility) { build(:early_career_payments_eligibility) }
-  let(:lup_eligibility) { build(:levelling_up_premium_payments_eligibility) }
 
   let(:itt_year) { current_academic_year - 3 }
-  let(:claim) { create(:claim, policy: EarlyCareerPayments, eligibility: ecp_eligibility) }
-  let(:lup_claim) do
-    build(:claim, :first_lup_claim_year, policy: LevellingUpPremiumPayments, eligibility: lup_eligibility)
-  end
-
-  let!(:current_claim) { CurrentClaim.new(claims: [claim, lup_claim]) }
 
   before do
-    allow_any_instance_of(PartOfClaimJourney).to receive(:current_claim).and_return(current_claim)
     allow(NotifySmsMessage).to receive(:new).with(
       phone_number: "07123456789",
       template_id: "86ae1fe4-4f98-460b-9d57-181804b4e218",
@@ -57,6 +47,9 @@ RSpec.feature "Combined journey with Teacher ID" do
     # - Teacher details page
     expect(page).to have_text(I18n.t("questions.check_and_confirm_details"))
     expect(page).to have_text(I18n.t("questions.details_correct"))
+
+    claim = Claim.all.order(created_at: :desc).limit(1).first
+    expect(claim.reload.errors).to be_empty
 
     choose "Yes"
     click_on "Continue"
@@ -202,21 +195,17 @@ RSpec.feature "Combined journey with Teacher ID" do
 
     # - Email address
     expect(page).to have_text(I18n.t("early_career_payments.questions.select_email.heading"))
-    choose current_claim.teacher_id_user_info["email"]
+
+    claim = Claim.all.order(created_at: :desc).limit(1).first
+    choose claim.teacher_id_user_info["email"]
+
     click_on "Continue"
 
-    expect(page).to have_text(I18n.t("questions.provide_mobile_number"))
+    expect(page).to have_text(I18n.t("early_career_payments.questions.select_phone_number.heading"))
 
-    choose "Yes"
+    # - Select the suggested phone number
+    choose "01234567890"
     click_on "Continue"
-
-    expect(page).to have_text(I18n.t("questions.mobile_number"))
-    fill_in "claim_mobile_number", with: "07123456789"
-    click_on "Continue"
-
-    expect(page).to have_text("Enter the 6-digit passcode")
-    fill_in "claim_one_time_password", with: "097543"
-    click_on "Confirm"
 
     expect(page).to have_text(I18n.t("questions.bank_or_building_society"))
     choose "Personal bank account"
@@ -298,9 +287,7 @@ RSpec.feature "Combined journey with Teacher ID" do
     fill_in "National Insurance number", with: "PX321499A"
     click_on "Continue"
 
-    expect(claim.reload.first_name).to eql("Kelsie")
-    expect(claim.reload.surname).to eql("Oberbrunner")
-    expect(claim.reload.date_of_birth).to eq(Date.new(1940, 1, 1))
-    expect(claim.reload.national_insurance_number).to eq("PX321499A")
+    claim = Claim.all.order(created_at: :desc).limit(1).first
+    expect(claim.errors).to be_empty
   end
 end

@@ -36,6 +36,7 @@ RSpec.describe Claim::PermittedParameters do
       :logged_in_with_tid,
       :details_check,
       :email_address_check,
+      :mobile_check,
       eligibility_attributes: [
         :qts_award_year,
         :claim_school_id,

@@ -43,6 +43,7 @@ module EarlyCareerPayments
       "select-email",
       "email-address",
       "email-verification",
+      "select-mobile",
       "provide-mobile-number",
       "mobile-number",
       "mobile-verification"
@@ -101,6 +102,16 @@ module EarlyCareerPayments
         if claim.logged_in_with_tid? && claim.email_address_check
           sequence.delete("email-address")
           sequence.delete("email-verification")
+        end
+
+        if [nil, false].include?(claim.logged_in_with_tid) || claim.teacher_id_user_info["phone_number"].nil?
+          sequence.delete("select-mobile")
+        else
+          sequence.delete("provide-mobile-number")
+        end
+        if claim.logged_in_with_tid? && (claim.mobile_check == "use" || claim.mobile_check == "declined")
+          sequence.delete("mobile-number")
+          sequence.delete("mobile-verification")
         end
 
         unless claim.eligibility.employed_as_supply_teacher?

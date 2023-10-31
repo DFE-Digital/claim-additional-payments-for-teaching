@@ -2,6 +2,7 @@ require "rails_helper"
 
 RSpec.feature "Logs in with TID, confirms teacher details and displays email from DfE Identity" do
   include OmniauthMockHelper
+  include ClaimsControllerHelper
 
   # create a school eligible for ECP and LUP so can walk the whole journey
   let!(:policy_configuration) { create(:policy_configuration, :additional_payments) }
@@ -13,7 +14,7 @@ RSpec.feature "Logs in with TID, confirms teacher details and displays email fro
   before do
     freeze_time
     set_mock_auth(trn)
-    mock_address_details_address_data
+    mock_claims_controller_address_data
   end
 
   after do
@@ -31,7 +32,7 @@ RSpec.feature "Logs in with TID, confirms teacher details and displays email fro
     find("#claim_email_address_check_true").click
     click_on "Continue"
 
-    expect(page).to have_text(I18n.t("questions.provide_mobile_number"))
+    expect(page).to have_text(I18n.t("early_career_payments.questions.select_phone_number.heading"))
 
     Claim.order(created_at: :desc).limit(2).each do |c|
       expect(c.email_address).to eq("kelsie.oberbrunner@example.com")
@@ -198,40 +199,5 @@ RSpec.feature "Logs in with TID, confirms teacher details and displays email fro
 
     choose "flat_11_millbrook_tower_windermere_avenue_southampton_so16_9fx"
     click_on "Continue"
-  end
-
-  private
-
-  def mock_address_details_address_data
-    allow_any_instance_of(ClaimsController).to receive(:address_data) do |controller|
-      controller.instance_variable_set(:@address_data, address_data)
-      address_data
-    end
-  end
-
-  def address_data
-    [
-      {
-        address: "Flat 1, Millbrook Tower, Windermere Avenue, Southampton, SO16 9FX",
-        address_line_1: "FLAT 1, MILLBROOK TOWER",
-        address_line_2: "WINDERMERE AVENUE",
-        address_line_3: "SOUTHAMPTON",
-        postcode: "SO16 9FX"
-      },
-      {
-        address: "Flat 10, Millbrook Tower, Windermere Avenue, Southampton, SO16 9FX",
-        address_line_1: "FLAT 10, MILLBROOK TOWER",
-        address_line_2: "WINDERMERE AVENUE",
-        address_line_3: "SOUTHAMPTON",
-        postcode: "SO16 9FX"
-      },
-      {
-        address: "Flat 11, Millbrook Tower, Windermere Avenue, Southampton, SO16 9FX",
-        address_line_1: "FLAT 11, MILLBROOK TOWER",
-        address_line_2: "WINDERMERE AVENUE",
-        address_line_3: "SOUTHAMPTON",
-        postcode: "SO16 9FX"
-      }
-    ]
   end
 end
