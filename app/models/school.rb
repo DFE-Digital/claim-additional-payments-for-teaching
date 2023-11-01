@@ -37,7 +37,8 @@ class School < ApplicationRecord
     welsh_schools: 6,
     other: 9,
     academies: 10,
-    free_schools: 11
+    free_schools: 11,
+    online: 13
   }.freeze
 
   STATE_FUNDED_SCHOOL_TYPE_GROUPS = %w[
@@ -85,7 +86,9 @@ class School < ApplicationRecord
     academy_special_converter: 44,
     academy_16_to_19_converter: 45,
     academy_16_to_19_sponsor_led: 46,
-    institution_funded_by_other_government_department: 56
+    online_provider: 49,
+    institution_funded_by_other_government_department: 56,
+    academy_secure_16_to_19: 57
   }.freeze
 
   SPECIAL_SCHOOL_TYPES = %w[
