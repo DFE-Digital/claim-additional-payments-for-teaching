@@ -12,7 +12,7 @@ RSpec.feature "Teacher Identity Sign in" do
 
   scenario "Teacher makes claim for 'Early-Career Payments' claim and select continue without signing in" do
     visit landing_page_path(EarlyCareerPayments.routing_name)
-    set_mock_auth("12345678")
+    set_mock_auth("1234567")
     expect(page).to have_link("Claim additional payments for teaching", href: "/additional-payments/landing-page")
     expect(page).to have_link(href: "mailto:#{EarlyCareerPayments.feedback_email}")
 
@@ -31,7 +31,7 @@ RSpec.feature "Teacher Identity Sign in" do
 
   scenario "Teacher makes claim for 'Early-Career Payments' claim and select Continue with DfE Identity" do
     visit landing_page_path(EarlyCareerPayments.routing_name)
-    set_mock_auth("12345678")
+    set_mock_auth("1234567")
     expect(page).to have_link("Claim additional payments for teaching", href: "/additional-payments/landing-page")
     expect(page).to have_link(href: "mailto:#{EarlyCareerPayments.feedback_email}")
 
@@ -46,5 +46,12 @@ RSpec.feature "Teacher Identity Sign in" do
     # - Teacher details page
     expect(page).to have_text(I18n.t("early_career_payments.questions.check_and_confirm_details"))
     expect(page).to have_text(I18n.t("early_career_payments.questions.details_correct"))
+
+    choose "Yes"
+    click_on "Continue"
+
+    # - Which school do you teach at
+    expect(page).to have_text(I18n.t("early_career_payments.questions.current_school_search"))
+    expect(page.title).to have_text(I18n.t("questions.current_school"))
   end
 end

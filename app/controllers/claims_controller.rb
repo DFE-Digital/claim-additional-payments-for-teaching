@@ -22,12 +22,17 @@ class ClaimsController < BasePublicController
 
   def show
     search_schools if params[:school_search]
+
     if params[:slug] == "teacher-detail"
       save_and_set_teacher_id_user_info
     elsif params[:slug] == "teaching-subject-now" && no_eligible_itt_subject?
       return redirect_to claim_path(current_policy_routing_name, "eligible-itt-subject")
     elsif params[:slug] == "sign-in-or-continue"
       update_session_with_current_slug
+    elsif params[:slug] == "correct-school"
+      update_session_with_tps_school
+    elsif params[:slug] == "nqt-in-academic-year-after-itt" && page_sequence.in_sequence?("correct-school")
+      @backlink_path = claim_path(current_policy_routing_name, "correct-school")
     elsif params[:slug] == "postcode-search" && postcode
       redirect_to claim_path(current_policy_routing_name, "select-home-address", {"claim[postcode]": params[:claim][:postcode], "claim[address_line_1]": params[:claim][:address_line_1]}) and return unless invalid_postcode?
     elsif params[:slug] == "select-home-address" && postcode
@@ -66,6 +71,8 @@ class ClaimsController < BasePublicController
       return select_claim if current_policy_routing_name == "additional-payments"
     when "personal-bank-account", "building-society-account"
       return bank_account
+    when "correct-school"
+      check_correct_school_params
     else
       current_claim.attributes = claim_params
     end
@@ -296,5 +303,18 @@ class ClaimsController < BasePublicController
   def save_details_check
     details_check = params.dig(:claim, :details_check)
     DfeIdentity::ClaimUserDetailsCheck.call(current_claim, details_check)
+  end
+
+  def update_session_with_tps_school
+    if (school = current_claim.recent_tps_school)
+      session[:tps_school_id] = school.id
+      session[:tps_school_name] = school.name
+      session[:tps_school_address] = school.address
+    end
+  end
+
+  def check_correct_school_params
+    updated_claim_params = CorrectSchoolForm.extract_params(claim_params, change_school: params[:change_school])
+    current_claim.attributes = updated_claim_params
   end
 end

@@ -2,10 +2,6 @@
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-    <% if @trn.present? %>
-      <span>You are signed in using Teacher ID and your TRN is <%= @trn %></span>
-    <% end %>
-    <br></br>
     <% if @schools.blank? %>
 
     <%= render "school_search",

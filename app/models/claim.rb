@@ -543,6 +543,14 @@ class Claim < ApplicationRecord
     !hmrc_bank_validation_succeeded?
   end
 
+  def has_recent_tps_school?
+    TeachersPensionsService.has_recent_tps_school?(self)
+  end
+
+  def recent_tps_school
+    TeachersPensionsService.recent_tps_school(self)
+  end
+
   private
 
   def normalise_trn

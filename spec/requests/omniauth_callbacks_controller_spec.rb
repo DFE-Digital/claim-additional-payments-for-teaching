@@ -15,7 +15,7 @@ RSpec.describe "OmniauthCallbacksControllers", type: :request do
 
     context "when trn is not nil" do
       before do
-        set_mock_auth("12345678")
+        set_mock_auth("1234567")
       end
 
       it "redirects to the claim path with correct parameters" do

@@ -11,6 +11,61 @@ RSpec.describe EarlyCareerPayments::Eligibility, type: :model do
     end
   end
 
+  describe "correct-school submit" do
+    let(:school) { create(:school, :early_career_payments_eligible) }
+
+    context "current_school not set and school_somewhere_else is not set return one is required error" do
+      it "returns an error" do
+        eligibility = EarlyCareerPayments::Eligibility.new(current_school: nil, school_somewhere_else: nil)
+
+        expect(eligibility).not_to be_valid(:"correct-school")
+        expect(eligibility.errors.messages[:current_school]).to eq(["Select the school you teach at or choose somewhere else"])
+      end
+    end
+
+    context "selects a school suggested from TPS" do
+      it "sets current_school and sets school_somewhere_else to false" do
+        eligibility = EarlyCareerPayments::Eligibility.new(current_school: school, school_somewhere_else: false)
+
+        expect(eligibility).to be_valid(:"correct-school")
+      end
+    end
+
+    context "selects somewhere else and not the suggested school" do
+      it "sets school_somewhere_else to true and current_school stays nil" do
+        eligibility = EarlyCareerPayments::Eligibility.new(current_school: nil, school_somewhere_else: true)
+
+        expect(eligibility).to be_valid(:"correct-school")
+      end
+
+      # e.g. the teacher presses the backlink a school is already set
+      it "sets school_somewhere_else to true and current_school stays remains if already set" do
+        eligibility = EarlyCareerPayments::Eligibility.new(current_school: school, school_somewhere_else: true)
+
+        expect(eligibility).to be_valid(:"correct-school")
+      end
+    end
+  end
+
+  describe "current-school submit" do
+    let(:school) { create(:school, :early_career_payments_eligible) }
+
+    context "school_somewhere_else is already true and set a school" do
+      it "is valid" do
+        eligibility = EarlyCareerPayments::Eligibility.new(current_school: school, school_somewhere_else: true)
+
+        expect(eligibility).to be_valid(:"current-school")
+      end
+
+      it "returns an error if current_school is not set" do
+        eligibility = EarlyCareerPayments::Eligibility.new(current_school: nil, school_somewhere_else: true)
+
+        expect(eligibility).not_to be_valid(:"current-school")
+        expect(eligibility.errors.messages[:current_school]).to eq(["Select the school you teach at"])
+      end
+    end
+  end
+
   describe "qualification attribute" do
     it "rejects invalid values" do
       expect { EarlyCareerPayments::Eligibility.new(qualification: "non-existance") }.to raise_error(ArgumentError)
