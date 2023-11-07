@@ -38,10 +38,6 @@ class Decision < ApplicationRecord
     persisted? && !undone
   end
 
-  def number_of_days_since_claim_submitted
-    (created_at.to_date - claim.submitted_at.to_date).to_i
-  end
-
   def rejected_reasons_hash
     REJECTED_REASONS.reduce({}) do |memo, reason|
       memo.merge("reason_#{reason}".to_sym => public_send("rejected_reasons_#{reason}".to_sym) || "0")

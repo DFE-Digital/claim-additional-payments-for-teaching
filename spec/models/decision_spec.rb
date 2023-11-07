@@ -57,13 +57,6 @@ RSpec.describe Decision, type: :model do
     expect(decision.errors.messages[:base]).to eq(["This claim cannot be approved"])
   end
 
-  it "returns the number of days between the claim being submitted and the claim being decisioned" do
-    claim = create(:claim, :submitted, submitted_at: 12.days.ago)
-    decision = build(:decision, claim: claim, created_at: DateTime.now)
-
-    expect(decision.number_of_days_since_claim_submitted).to eq(12)
-  end
-
   describe "#rejected_reasons_hash" do
     subject { decision.rejected_reasons_hash }
     let(:decision) { create(:decision, :rejected, **rejected_reasons) }
