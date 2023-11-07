@@ -38,7 +38,8 @@ class Claim < ApplicationRecord
     :building_society_roll_number,
     :one_time_password,
     :logged_in_with_tid,
-    :details_check
+    :details_check,
+    :email_address_check
   ].freeze
   AMENDABLE_ATTRIBUTES = %i[
     teacher_reference_number
@@ -105,6 +106,7 @@ class Claim < ApplicationRecord
     logged_in_with_tid: false,
     teacher_id_user_info: false,
     details_check: true,
+    email_address_check: true,
     qa_required: false,
     qa_completed_at: false
   }.freeze
@@ -205,6 +207,7 @@ class Claim < ApplicationRecord
     if: -> { surname.present? }
 
   validates :details_check, on: [:"teacher-detail"], inclusion: {in: [true, false], message: "Select an option to whether the details are correct or not"}
+  validates :email_address_check, on: [:"select-email"], inclusion: {in: [true, false], message: "Select an option to indicate whether the email is correct or not"}
   validates :address_line_1, on: [:address], presence: {message: "Enter a house number or name"}, if: :has_ecp_or_lupp_policy?
   validates :address_line_1, on: [:address, :submit], presence: {message: "Enter a building and street address"}, unless: :has_ecp_or_lupp_policy?
   validates :address_line_1, length: {maximum: 100, message: "Address lines must be 100 characters or less"}

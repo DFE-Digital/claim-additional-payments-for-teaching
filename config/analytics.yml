@@ -99,6 +99,7 @@ shared:
     - qa_completed_at
     - details_check
     - teacher_id_user_info
+    - email_address_check
   :decisions:
     - id
     - result

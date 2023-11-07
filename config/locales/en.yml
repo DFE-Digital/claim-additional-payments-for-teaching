@@ -331,6 +331,10 @@ en:
       nqt_in_academic_year_after_itt:
         heading: Are you currently teaching as a qualified teacher?
         hint: Your induction years count as long as you have your qualified teacher status (QTS).
+      select_email:
+        heading: "Which email address should we use to contact you?"
+        hint: "We recommend you use a non-work email address in case your circumstances change while we process your payment."
+        different_email: "A different email address"
       induction_completed:
         heading: Have you completed your induction as an early-career teacher?
         hint:

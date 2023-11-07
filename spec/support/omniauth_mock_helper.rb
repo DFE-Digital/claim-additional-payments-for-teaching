@@ -8,7 +8,8 @@ module OmniauthMockHelper
           "given_name" => "Kelsie",
           "family_name" => "Oberbrunner",
           "ni_number" => "AB123456C",
-          "trn_match_ni_number" => "True"
+          "trn_match_ni_number" => "True",
+          "email" => "kelsie.oberbrunner@example.com"
         }
       }
     )

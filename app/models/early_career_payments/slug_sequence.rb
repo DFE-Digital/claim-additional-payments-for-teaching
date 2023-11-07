@@ -40,6 +40,7 @@ module EarlyCareerPayments
       "no-address-found",
       "select-home-address",
       "address",
+      "select-email",
       "email-address",
       "email-verification",
       "provide-mobile-number",
@@ -95,6 +96,12 @@ module EarlyCareerPayments
       SLUGS.dup.tap do |sequence|
         sequence.delete("teacher-detail") if claim.logged_in_with_tid.nil?
         sequence.delete("reset-claim") if [nil, true].include?(claim.logged_in_with_tid)
+
+        sequence.delete("select-email") if [nil, false].include?(claim.logged_in_with_tid) || claim.teacher_id_user_info["email"].nil?
+        if claim.logged_in_with_tid? && claim.email_address_check
+          sequence.delete("email-address")
+          sequence.delete("email-verification")
+        end
 
         unless claim.eligibility.employed_as_supply_teacher?
           sequence.delete("entire-term-contract")
