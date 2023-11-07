@@ -71,10 +71,8 @@ module Admin
     end
 
     def rejected_reasons_list(decision)
-      decision.rejected_reasons
-        .select { |_, v| v == "1" }
-        .keys
-        .sort_by { |k| Decision::REJECTED_REASONS.index(k.to_sym) }
+      decision.selected_rejected_reasons
+        .sort_by { |k| Decision::REJECTED_REASONS.index(k) }
         .map { |reason| t("admin.decision.rejected_reasons.#{reason}") }
         .join(", ")
     end

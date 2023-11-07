@@ -89,7 +89,7 @@ class Admin::DecisionsController < Admin::BaseAdminController
     params.require(:decision).permit(
       :result,
       :notes,
-      *Decision::REJECTED_REASONS.map { |r| "rejected_reasons_#{r}".to_sym }
+      *Decision.rejected_reasons_for(@claim.policy, prefix: "rejected_reasons_")
     )
   end
 

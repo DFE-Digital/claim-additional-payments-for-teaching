@@ -65,7 +65,7 @@
             <%= errors_tag decision, :rejected_reasons %>
 
             <div class="govuk-checkboxes govuk-checkboxes--small" data-module="govuk-checkboxes">
-              <% Decision::REJECTED_REASONS.each do |reason| %>
+              <% Decision.rejected_reasons_for(claim.policy).each do |reason| %>
                 <% reason_prefixed = "rejected_reasons_#{reason}" %>
                 <div class="govuk-checkboxes__item">
                   <%= form.hidden_field reason_prefixed, value: false %>
