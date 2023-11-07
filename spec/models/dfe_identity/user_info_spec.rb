@@ -7,7 +7,6 @@ RSpec.describe DfeIdentity::UserInfo, type: :model do
   it { is_expected.to validate_presence_of(:birthdate) }
   it { is_expected.to validate_presence_of(:given_name) }
   it { is_expected.to validate_presence_of(:family_name) }
-  it { is_expected.to validate_presence_of(:ni_number) }
 
   describe ".validated?" do
     context "when all required attribute values are present" do
@@ -61,23 +60,6 @@ RSpec.describe DfeIdentity::UserInfo, type: :model do
       end
     end
 
-    context "when trn_match_ni_number is not true" do
-      subject(:user_info) do
-        described_class.validated?(
-          "trn" => "1234567",
-          "birthdate" => "1940-01-01",
-          "given_name" => "Kelsie",
-          "family_name" => "Oberbrunner",
-          "ni_number" => "AB123456C",
-          "trn_match_ni_number" => "False"
-        )
-      end
-
-      it "returns false" do
-        expect(subject).to be false
-      end
-    end
-
     context "when trn_match_ni_number is not true - boolean params are case insensitive" do
       subject(:user_info) do
         described_class.validated?(
@@ -90,8 +72,8 @@ RSpec.describe DfeIdentity::UserInfo, type: :model do
         )
       end
 
-      it "returns false" do
-        expect(subject).to be false
+      it "returns true" do
+        expect(subject).to be true
       end
     end
 

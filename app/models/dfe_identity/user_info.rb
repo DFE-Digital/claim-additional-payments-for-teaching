@@ -8,11 +8,10 @@ module DfeIdentity
     validates :birthdate, presence: true
     validates :given_name, presence: true
     validates :family_name, presence: true
-    validates :ni_number, presence: true
     validates_format_of :trn_match_ni_number, with: /(true|false)/i
 
     def self.validated?(user_info)
-      new(from_params(user_info)).validated?
+      new(from_params(user_info)).valid?
     rescue ActiveModel::UnknownAttributeError
       false
     end
@@ -23,10 +22,6 @@ module DfeIdentity
 
     def self.from_params(params)
       (params || {}).slice(*attributes)
-    end
-
-    def validated?
-      !!(valid? && trn_match_ni_number =~ /true/i)
     end
   end
 end
