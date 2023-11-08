@@ -64,22 +64,22 @@ class CurrentClaim
     end
   end
 
-  def method_missing(method_name, *args, **kwargs, &block)
+  def method_missing(method_name, ...)
     if [:attributes=, :save!, :update, :update!, :reset_dependent_answers, :update_attribute].include?(method_name)
       claims.each do |c|
-        c.send(method_name, *args, **kwargs, &block) unless c == main_claim
+        c.send(method_name, ...) unless c == main_claim
       end
     end
 
-    main_claim.send(method_name, *args, **kwargs, &block)
+    main_claim.send(method_name, ...)
   end
 
-  def save(*args, **kwargs)
-    claims.map { |c| c.save(*args, **kwargs) }.all?
+  def save(*, **)
+    claims.map { |c| c.save(*, **) }.all?
   end
 
-  def respond_to_missing?(method_name, *args, **kwargs)
-    main_claim.respond_to?(method_name, *args, **kwargs)
+  def respond_to_missing?(method_name, *, **)
+    main_claim.respond_to?(method_name, *, **)
   end
 
   # Always give precedence to returning `:eligible_now` over `:eligible_later`
