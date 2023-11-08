@@ -88,7 +88,7 @@ class PaymentConfirmationUpload
   end
 
   def cast_as_numeric(number)
-    number&.gsub(",", "")
+    number&.delete(",")
   end
 
   def cast_as_date(string)

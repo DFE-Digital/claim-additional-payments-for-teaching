@@ -21,9 +21,9 @@ module RequestHelpers
     user.reload
   end
 
-  def sign_in_to_admin_with_role(*args)
-    stub_dfe_sign_in_with_role(*args)
-    post "/admin/auth/dfe"
+  def sign_in_to_admin_with_role(*)
+    stub_dfe_sign_in_with_role(*)
+    post admin_dfe_sign_in_path
     follow_redirect!
   end
 

@@ -60,7 +60,7 @@ class PageSequence
   def can_skip_next_slug?
     # This allows 'address' page to be skipped when the postcode is present
     # Occurs when populated from 'postcode-search' and the subsequent 'select-home-address' screens
-    return true if current_slug == "select-home-address" && claim.postcode.present?
+    true if current_slug == "select-home-address" && claim.postcode.present?
   end
 
   def lup_policy_and_trainee_teacher_at_lup_school?

@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.describe LevellingUpPremiumPayments::DqtRecord do
-  before { create(:policy_configuration, :additional_payments, current_academic_year: AcademicYear.new(2022)) }
+  before { create(:policy_configuration, :additional_payments, current_academic_year: claim_year) }
 
   subject(:dqt_record) do
     described_class.new(
@@ -29,6 +29,8 @@ RSpec.describe LevellingUpPremiumPayments::DqtRecord do
     )
   end
 
+  let(:claim_year) { AcademicYear.new(2022) }
+
   let(:eligible_itt_subject) { :mathematics }
   let(:qualification) { :postgraduate_itt }
   let(:itt_academic_year) { AcademicYear::Type.new.serialize(AcademicYear.new(2019)) }
@@ -39,7 +41,7 @@ RSpec.describe LevellingUpPremiumPayments::DqtRecord do
         degree_codes: degree_codes,
         itt_subjects: itt_subjects,
         itt_subject_codes: itt_subject_codes,
-        itt_start_date: Date.parse("1/9/2019"),
+        itt_start_date: itt_start_date,
         qts_award_date: qts_award_date,
         qualification_name: qualification_name
       }
@@ -49,7 +51,8 @@ RSpec.describe LevellingUpPremiumPayments::DqtRecord do
   let(:itt_subjects) { ["mathematics"] }
   let(:itt_subject_codes) { [] }
   let(:degree_codes) { [] }
-  let(:qts_award_date) { Date.parse("30/9/2019") }
+  let(:itt_start_date) { Date.parse("1/9/2019") }
+  let(:qts_award_date) { itt_start_date.end_of_month }
   let(:qualification_name) { "Postgraduate Certificate in Education" }
 
   describe "#eligible?" do
@@ -203,6 +206,71 @@ RSpec.describe LevellingUpPremiumPayments::DqtRecord do
         let(:itt_academic_year) { AcademicYear::Type.new.serialize(AcademicYear.new(2018)) }
 
         it { is_expected.to be_eligible }
+      end
+    end
+
+    shared_examples :itt_start_date_pg_allowance do |itt_calendar_year, previous_itt_year = (itt_calendar_year - 1)|
+      context "with ITT start date before the 18th of August #{itt_calendar_year}" do
+        let(:itt_start_date) { Date.new(itt_calendar_year, 8, 17) }
+
+        context "when the user selected ITT start year previous to #{itt_calendar_year} (that is: #{previous_itt_year})" do
+          let(:itt_academic_year) { AcademicYear::Type.new.serialize(AcademicYear.new(previous_itt_year)) }
+          let(:eligible_scenario?) { previous_itt_year >= claim_year.start_year - 5 }
+
+          it { eligible_scenario? ? is_expected.to(be_eligible) : is_expected.not_to(be_eligible) }
+        end
+
+        context "when the user selected ITT start year same as #{itt_calendar_year}" do
+          let(:itt_academic_year) { AcademicYear::Type.new.serialize(AcademicYear.new(itt_calendar_year)) }
+
+          it { is_expected.not_to be_eligible }
+        end
+      end
+
+      context "with ITT start date on or after the 18th of August #{itt_calendar_year}" do
+        let(:itt_start_date) { Date.new(itt_calendar_year, 8, 18) }
+
+        context "when the user selected ITT start year previous to #{itt_calendar_year} (that is: #{previous_itt_year})" do
+          let(:itt_academic_year) { AcademicYear::Type.new.serialize(AcademicYear.new(previous_itt_year)) }
+
+          it { is_expected.not_to be_eligible }
+        end
+
+        context "when the user selected ITT start year same as #{itt_calendar_year}" do
+          let(:itt_academic_year) { AcademicYear::Type.new.serialize(AcademicYear.new(itt_calendar_year)) }
+
+          it { is_expected.to be_eligible }
+        end
+      end
+
+      context "with ITT start date on or after the 1st of September #{itt_calendar_year}" do
+        let(:itt_start_date) { Date.new(itt_calendar_year, 9, 1) }
+
+        context "when the user selected ITT start year previous to #{itt_calendar_year} (that is: #{previous_itt_year})" do
+          let(:itt_academic_year) { AcademicYear::Type.new.serialize(AcademicYear.new(previous_itt_year)) }
+
+          it { is_expected.not_to be_eligible }
+        end
+
+        context "when the user selected ITT start year same as #{itt_calendar_year}" do
+          let(:itt_academic_year) { AcademicYear::Type.new.serialize(AcademicYear.new(itt_calendar_year)) }
+
+          it { is_expected.to be_eligible }
+        end
+      end
+    end
+
+    context "when the ITT start date falls close to the beginning of a new academic year for the PG route" do
+      let(:qualification) { :postgraduate_itt }
+
+      [AcademicYear.new(2023), AcademicYear.new(2024)].each do |current_year|
+        context "with claim year #{current_year}" do
+          let(:claim_year) { current_year }
+
+          (current_year - 5...current_year).each do |itt_year|
+            include_examples :itt_start_date_pg_allowance, itt_year.start_year
+          end
+        end
       end
     end
   end
