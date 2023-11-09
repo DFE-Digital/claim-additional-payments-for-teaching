@@ -10,7 +10,7 @@ RSpec.feature "Teacher Identity Sign in" do
 
   let(:itt_year) { current_academic_year - 3 }
 
-  scenario "Teacher makes claim for 'Early-Career Payments' claim with trn present" do
+  scenario "Teacher makes claim without signing in" do
     visit landing_page_path(EarlyCareerPayments.routing_name)
     set_mock_auth("1234567")
     expect(page).to have_link("Claim additional payments for teaching", href: "/additional-payments/landing-page")
@@ -29,7 +29,7 @@ RSpec.feature "Teacher Identity Sign in" do
     expect(page.title).to have_text(I18n.t("questions.current_school"))
   end
 
-  scenario "Teacher makes claim for 'Early-Career Payments' claim with no trn" do
+  scenario "Teacher makes claim after signing in" do
     visit landing_page_path(EarlyCareerPayments.routing_name)
     set_mock_auth("1234567")
     expect(page).to have_link("Claim additional payments for teaching", href: "/additional-payments/landing-page")
