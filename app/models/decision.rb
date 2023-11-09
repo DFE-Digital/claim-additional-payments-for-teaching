@@ -35,10 +35,10 @@ class Decision < ApplicationRecord
     rejected: 1
   }
 
-  def self.rejected_reasons_for(policy, prefix: nil)
+  def self.rejected_reasons_for(policy)
     REJECTED_REASONS.dup.tap do |reasons|
       reasons.delete(:induction) unless policy == EarlyCareerPayments
-    end.map { |reason| :"#{prefix}#{reason}" }
+    end
   end
 
   def readonly?
