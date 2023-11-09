@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.feature "Teacher Early-Career Payments claims sequence slug" do
+RSpec.feature "Combined journey with Teacher ID" do
   include OmniauthMockHelper
 
   subject(:slug_sequence) { EarlyCareerPayments::SlugSequence.new(current_claim) }
@@ -40,8 +40,7 @@ RSpec.feature "Teacher Early-Career Payments claims sequence slug" do
     set_mock_auth(nil)
   end
 
-  # Rename this file to a tid specific spec later
-  xscenario "When user is logged in with teacher_id" do
+  scenario "When user is logged in with Teacher ID" do
     visit landing_page_path(EarlyCareerPayments.routing_name)
     expect(page).to have_link("Claim additional payments for teaching", href: "/additional-payments/landing-page")
     expect(page).to have_link(href: "mailto:#{EarlyCareerPayments.feedback_email}")
@@ -78,6 +77,12 @@ RSpec.feature "Teacher Early-Career Payments claims sequence slug" do
     eligibility = claim.eligibility
 
     expect(eligibility.nqt_in_academic_year_after_itt).to eql true
+
+    # - Have you completed your induction as an early-career teacher
+    expect(page).to have_text(I18n.t("early_career_payments.questions.induction_completed.heading"))
+
+    choose "Yes"
+    click_on "Continue"
 
     # - Are you currently employed as a supply teacher
     expect(page).to have_text(I18n.t("early_career_payments.questions.employed_as_supply_teacher"))
@@ -210,17 +215,9 @@ RSpec.feature "Teacher Early-Career Payments claims sequence slug" do
     expect(claim.postcode).to eql("DE22 4BS")
 
     # - Email address
-    expect(page).to have_text(I18n.t("questions.email_address"))
-
-    fill_in "Email address", with: "david.tau1988@hotmail.co.uk"
+    expect(page).to have_text(I18n.t("early_career_payments.questions.select_email.heading"))
+    choose current_claim.teacher_id_user_info["email"]
     click_on "Continue"
-
-    expect(claim.reload.email_address).to eql("david.tau1988@hotmail.co.uk")
-
-    expect(page).to have_text("Email address verification")
-    expect(page).to have_text("Enter the 6-digit passcode")
-    fill_in "claim_one_time_password", with: "097543"
-    click_on "Confirm"
 
     expect(page).to have_text(I18n.t("questions.provide_mobile_number"))
 
@@ -262,7 +259,11 @@ RSpec.feature "Teacher Early-Career Payments claims sequence slug" do
 
     expect(claim.reload.payroll_gender).to eq("male")
 
-    # - What it removes teacher-reference-number from user journey and displays student loan page
+    # - teacher-reference-number slug removed from user journey
     expect(page).to have_text(I18n.t("questions.has_student_loan"))
+
+    click_link "Back"
+
+    expect(page).to have_text(I18n.t("questions.payroll_gender"))
   end
 end

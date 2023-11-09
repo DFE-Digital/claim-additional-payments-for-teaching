@@ -27,12 +27,12 @@
 
             <div class="govuk-radios__item">
               <%= form.radio_button(:email_address_check, true, class: "govuk-radios__input", required: true) %>
-              <%= form.label :email_address_true, session[:email_address], class: "govuk-label govuk-radios__label" %>
+              <%= form.label :email_address_check_true, session[:email_address], class: "govuk-label govuk-radios__label" %>
             </div>
             <div class="govuk-radios__divider">or</div>
             <div class="govuk-radios__item">
                 <%= form.radio_button(:email_address_check, false, class: "govuk-radios__input", required: true) %>
-              <%= form.label :email_address_false, "A different email address", class: "govuk-label govuk-radios__label" %>
+              <%= form.label :email_address_check_false, "A different email address", class: "govuk-label govuk-radios__label" %>
             </div>
 
           </div>
