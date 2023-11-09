@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.feature "Teacher Early-Career Payments claims sequence slug" do
+RSpec.feature "Combined journey with Teacher ID" do
   include OmniauthMockHelper
 
   subject(:slug_sequence) { EarlyCareerPayments::SlugSequence.new(current_claim) }
@@ -40,8 +40,7 @@ RSpec.feature "Teacher Early-Career Payments claims sequence slug" do
     set_mock_auth(nil)
   end
 
-  # Rename this file to a tid specific spec later
-  scenario "When user is logged in with teacher_id" do
+  scenario "When user is logged in with Teacher ID" do
     visit landing_page_path(EarlyCareerPayments.routing_name)
     expect(page).to have_link("Claim additional payments for teaching", href: "/additional-payments/landing-page")
     expect(page).to have_link(href: "mailto:#{EarlyCareerPayments.feedback_email}")
@@ -262,5 +261,9 @@ RSpec.feature "Teacher Early-Career Payments claims sequence slug" do
 
     # - teacher-reference-number slug removed from user journey
     expect(page).to have_text(I18n.t("questions.has_student_loan"))
+
+    click_link "Back"
+
+    expect(page).to have_text(I18n.t("questions.payroll_gender"))
   end
 end
