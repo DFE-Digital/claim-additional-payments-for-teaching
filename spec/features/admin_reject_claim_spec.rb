@@ -39,6 +39,23 @@ RSpec.feature "Admin rejects a claim" do
     expect(page).to have_content("Reasons Ineligible subject, Duplicate")
   end
 
+  scenario "Rejecting an ECP claim with Induction - ECP only" do
+    claim = create(:claim, :submitted, policy: EarlyCareerPayments)
+
+    visit admin_claim_tasks_path(claim)
+    click_on "Approve or reject this claim"
+    choose "Reject"
+    check "Induction - ECP only"
+    click_button "Confirm decision"
+
+    expect(page).to have_content("Claim has been rejected successfully")
+
+    visit admin_claim_path(claim)
+
+    expect(page).to have_content("Result Rejected")
+    expect(page).to have_content("Reasons Induction - ECP only")
+  end
+
   scenario "Rejecting a claim with Other with a note" do
     visit admin_claim_tasks_path(claim)
     click_on "Approve or reject this claim"

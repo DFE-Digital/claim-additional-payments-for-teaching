@@ -130,6 +130,7 @@ RSpec.describe ClaimMailer, type: :mailer do
               reason_ineligible_year: "no",
               reason_ineligible_school: "no",
               reason_ineligible_qualification: "no",
+              reason_induction: "no",
               reason_no_qts_or_qtls: "no",
               reason_duplicate: "no",
               reason_no_response: "no",
