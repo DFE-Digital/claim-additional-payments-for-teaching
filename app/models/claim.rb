@@ -168,11 +168,11 @@ class Claim < ApplicationRecord
 
   validates :payroll_gender, on: [:gender, :submit], presence: {message: "Select the gender recorded on your school’s payroll system or select whether you do not know"}
 
-  validates :first_name, on: [:"personal-details", :submit], presence: {message: "Enter your first name"}
+  validates :first_name, on: [:"personal-details-name", :"personal-details", :submit], presence: {message: "Enter your first name"}
   validates :first_name,
-    on: [:"personal-details", :submit],
+    on: [:"personal-details-name", :"personal-details", :submit],
     length: {
-      in: 2..30,
+      in: 1..100,
       message: "First name must be between 2 and 30 characters"
     },
     format: {
@@ -193,11 +193,11 @@ class Claim < ApplicationRecord
     },
     if: -> { middle_name.present? }
 
-  validates :surname, on: [:"personal-details", :submit], presence: {message: "Enter your last name"}
+  validates :surname, on: [:"personal-details-name", :"personal-details", :submit], presence: {message: "Enter your last name"}
   validates :surname,
-    on: [:"personal-details", :submit],
+    on: [:"personal-details-name", :"personal-details", :submit],
     length: {
-      in: 2..30,
+      in: 1..100,
       message: "Last name must be between 2 and 30 characters"
     },
     format: {
@@ -226,12 +226,12 @@ class Claim < ApplicationRecord
   validates :postcode, length: {maximum: 11, message: "Postcode must be 11 characters or less"}
   validate :postcode_is_valid, if: -> { postcode.present? }
 
-  validate :date_of_birth_criteria, on: [:"personal-details", :submit, :amendment]
+  validate :date_of_birth_criteria, on: [:"personal-details-dob", :"personal-details", :submit, :amendment]
 
   validates :teacher_reference_number, on: [:"teacher-reference-number", :submit, :amendment], presence: {message: "Enter your teacher reference number"}
   validate :trn_must_be_seven_digits
 
-  validates :national_insurance_number, on: [:"personal-details", :submit, :amendment], presence: {message: "Enter a National Insurance number in the correct format"}
+  validates :national_insurance_number, on: [:"personal-details-nino", :"personal-details", :submit, :amendment], presence: {message: "Enter a National Insurance number in the correct format"}
   validate :ni_number_is_correct_format
 
   validates :has_student_loan, on: [:"student-loan", :submit], inclusion: {in: [true, false], message: "Select yes if you are currently repaying a student loan"}
@@ -552,6 +552,54 @@ class Claim < ApplicationRecord
 
   def recent_tps_school
     TeachersPensionsService.recent_tps_school(self)
+  end
+
+  # dup - because we don't want to pollute the claim.errors by calling this method
+  # Used to not show the personal-details page if everything is all valid
+  def has_all_valid_personal_details?
+    dup.valid?(:"personal-details") && all_personal_details_same_as_tid?
+  end
+
+  # This is used to ensure we still show the forms if the personal-details are valid
+  # but are valid because they were susequently provided/changed from what was in TID
+  def all_personal_details_same_as_tid?
+    name_same_as_tid? && dob_same_as_tid? && nino_same_as_tid?
+  end
+
+  def name_same_as_tid?
+    teacher_id_user_info["given_name"] == first_name && teacher_id_user_info["family_name"] == surname
+  end
+
+  def dob_same_as_tid?
+    teacher_id_user_info["birthdate"] == date_of_birth.to_s
+  end
+
+  def nino_same_as_tid?
+    teacher_id_user_info["ni_number"] == national_insurance_number
+  end
+
+  # dup - because we don't want to pollute the claim.errors by calling this method
+  # Check errors hash for key because we don't care about the non-context validation errors
+  def has_valid_name?
+    claim_dup = dup
+    claim_dup.valid?(:"personal-details-name")
+    !(claim_dup.errors.include?(:first_name) || claim_dup.errors.include?(:surname))
+  end
+
+  # dup - because we don't want to pollute the claim.errors by calling this method
+  # Check errors hash for key because we don't care about the non-context validation errors
+  def has_valid_date_of_birth?
+    claim_dup = dup
+    claim_dup.valid?(:"personal-details-dob")
+    !claim_dup.errors.include?(:date_of_birth)
+  end
+
+  # dup - because we don't want to pollute the claim.errors by calling this method
+  # Check errors hash for key because we don't care about the non-context validation errors
+  def has_valid_nino?
+    claim_dup = dup
+    claim_dup.valid?(:"personal-details-nino")
+    !claim_dup.errors.include?(:national_insurance_number)
   end
 
   private

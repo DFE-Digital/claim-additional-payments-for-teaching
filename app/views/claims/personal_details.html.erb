@@ -8,6 +8,7 @@
         <%= t("questions.personal_details") %>
       </h1>
 
+      <% unless current_claim.logged_in_with_tid? && current_claim.has_valid_name? && current_claim.name_same_as_tid? %>
       <div class="govuk-form-group govuk-!-padding-bottom-6">
         <fieldset class="govuk-fieldset" role="group" aria-describedby="full-name-hint" id="full-name-fieldset">
           <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
@@ -33,7 +34,9 @@
           <% end %>
         </fieldset>
       </div>
+      <% end %>
 
+      <% unless current_claim.logged_in_with_tid? && current_claim.has_valid_date_of_birth? && current_claim.dob_same_as_tid? %>
       <div class="govuk-!-padding-bottom-6">
         <%= form_group_tag current_claim, :date_of_birth do %>
           <fieldset class="govuk-fieldset" role="group" aria-describedby="date-of-birth-hint" id="date-of-birth-fieldset">
@@ -74,7 +77,9 @@
           </fieldset>
         <% end %>
       </div>
+      <% end %>
 
+      <% unless current_claim.logged_in_with_tid? && current_claim.has_valid_nino? && current_claim.nino_same_as_tid? %>
       <div class="govuk-!-padding-bottom-6">
         <%= form_group_tag current_claim, :national_insurance_number do %>
           <h2 class="govuk-label-wrapper">
@@ -94,6 +99,7 @@
                 "aria-describedby" => "national_insurance_number-hint" %>
           <% end %>
       </div>
+      <% end %>
 
       <%= form.submit "Continue", class: "govuk-button" %>
     <% end %>

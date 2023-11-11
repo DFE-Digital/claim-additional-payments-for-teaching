@@ -21,7 +21,6 @@ RSpec.feature "Combined journey with Teacher ID" do
   let!(:current_claim) { CurrentClaim.new(claims: [claim, lup_claim]) }
 
   before do
-    set_mock_auth("1234567")
     allow_any_instance_of(PartOfClaimJourney).to receive(:current_claim).and_return(current_claim)
     allow(NotifySmsMessage).to receive(:new).with(
       phone_number: "07123456789",
@@ -41,6 +40,8 @@ RSpec.feature "Combined journey with Teacher ID" do
   end
 
   scenario "When user is logged in with Teacher ID" do
+    set_mock_auth("1234567")
+
     visit landing_page_path(EarlyCareerPayments.routing_name)
     expect(page).to have_link("Claim additional payments for teaching", href: "/additional-payments/landing-page")
     expect(page).to have_link(href: "mailto:#{EarlyCareerPayments.feedback_email}")
@@ -169,28 +170,13 @@ RSpec.feature "Combined journey with Teacher ID" do
     expect(page).to have_text("How we will use the information you provide")
     click_on "Continue"
 
-    # - Personal details
-    expect(page).to have_text(I18n.t("questions.personal_details"))
-    expect(page).to have_text(I18n.t("questions.name"))
+    # - Personal details - skipped as TID data all provided for
+    expect(page).not_to have_text(I18n.t("questions.personal_details"))
 
-    fill_in "claim_first_name", with: "Sam"
-    fill_in "claim_surname", with: "Harris"
-
-    expect(page).to have_text(I18n.t("questions.date_of_birth"))
-
-    fill_in "Day", with: "28"
-    fill_in "Month", with: "2"
-    fill_in "Year", with: "1988"
-
-    expect(page).to have_text(I18n.t("questions.national_insurance_number"))
-
-    fill_in "National Insurance number", with: "PX321499A"
-    click_on "Continue"
-
-    expect(claim.reload.first_name).to eql("Sam")
-    expect(claim.reload.surname).to eql("Harris")
-    expect(claim.reload.date_of_birth).to eq(Date.new(1988, 2, 28))
-    expect(claim.reload.national_insurance_number).to eq("PX321499A")
+    expect(claim.reload.first_name).to eql("Kelsie")
+    expect(claim.reload.surname).to eql("Oberbrunner")
+    expect(claim.reload.date_of_birth).to eq(Date.new(1940, 1, 1))
+    expect(claim.reload.national_insurance_number).to eq("AB123456C")
 
     # - What is your home address
     expect(page).to have_text(I18n.t("questions.address.home.title"))
@@ -265,5 +251,56 @@ RSpec.feature "Combined journey with Teacher ID" do
     click_link "Back"
 
     expect(page).to have_text(I18n.t("questions.payroll_gender"))
+  end
+
+  scenario "When user is logged in with Teacher ID and NINO is not supplied" do
+    set_mock_auth("1234567", {nino: nil})
+
+    visit landing_page_path(EarlyCareerPayments.routing_name)
+    click_on "Start now"
+    click_on "Continue with DfE Identity"
+    choose "Yes"
+    click_on "Continue"
+    choose_school school
+    click_on "Continue"
+    choose "Yes"
+    click_on "Continue"
+    choose "Yes"
+    click_on "Continue"
+    choose "No"
+    click_on "Continue"
+    choose "claim_eligibility_attributes_subject_to_formal_performance_action_false"
+    choose "claim_eligibility_attributes_subject_to_disciplinary_action_false"
+    click_on "Continue"
+    choose "Undergraduate initial teacher training (ITT)"
+    click_on "Continue"
+    choose "#{itt_year.start_year} to #{itt_year.end_year}"
+    click_on "Continue"
+    choose "Mathematics"
+    click_on "Continue"
+    choose "Yes"
+    click_on "Continue"
+    click_on "Continue"
+    choose "£2,000 levelling up premium payment"
+    click_on "Apply now"
+    click_on "Continue"
+
+    # - Personal details
+    expect(page).to have_text(I18n.t("questions.personal_details"))
+
+    # - not shown
+    expect(page).not_to have_text(I18n.t("questions.name"))
+    expect(page).not_to have_text(I18n.t("questions.date_of_birth"))
+
+    # - shown
+    expect(page).to have_text(I18n.t("questions.national_insurance_number"))
+
+    fill_in "National Insurance number", with: "PX321499A"
+    click_on "Continue"
+
+    expect(claim.reload.first_name).to eql("Kelsie")
+    expect(claim.reload.surname).to eql("Oberbrunner")
+    expect(claim.reload.date_of_birth).to eq(Date.new(1940, 1, 1))
+    expect(claim.reload.national_insurance_number).to eq("PX321499A")
   end
 end

@@ -183,23 +183,8 @@ RSpec.feature "Logs in with TID, confirms teacher details and displays email fro
     expect(page).to have_text("How we will use the information you provide")
     click_on "Continue"
 
-    # - Personal details
-    expect(page).to have_text(I18n.t("questions.personal_details"))
-    expect(page).to have_text(I18n.t("questions.name"))
-
-    fill_in "claim_first_name", with: "Russell"
-    fill_in "claim_surname", with: "Wong"
-
-    expect(page).to have_text(I18n.t("questions.date_of_birth"))
-
-    fill_in "Day", with: "28"
-    fill_in "Month", with: "2"
-    fill_in "Year", with: "1988"
-
-    expect(page).to have_text(I18n.t("questions.national_insurance_number"))
-
-    fill_in "National Insurance number", with: "PX321499A"
-    click_on "Continue"
+    # - Personal details - skipped as all details from TID are valid
+    expect(page).not_to have_text(I18n.t("questions.personal_details"))
 
     # - What is your home address
     expect(page).to have_text(I18n.t("questions.address.home.title"))

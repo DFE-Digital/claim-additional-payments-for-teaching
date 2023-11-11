@@ -43,6 +43,52 @@ RSpec.describe EarlyCareerPayments::SlugSequence do
 
         expect(slug_sequence.slugs).not_to include("teacher-reference-number")
       end
+
+      it "skips personal-details page if all details were provided and valid from TID" do
+        dob = 30.years.ago.to_date
+        claim.logged_in_with_tid = true
+        claim.teacher_id_user_info = {"given_name" => "John", "family_name" => "Doe", "birthdate" => dob.to_s, "ni_number" => "JH001234D"}
+
+        claim.first_name = "John"
+        claim.surname = "Doe"
+        claim.date_of_birth = dob
+        claim.national_insurance_number = "JH001234D"
+
+        expect(slug_sequence.slugs).not_to include("personal-details")
+      end
+
+      it "includes personal-details page if nino is missing" do
+        claim.logged_in_with_tid = true
+
+        claim.first_name = "John"
+        claim.surname = "Doe"
+        claim.date_of_birth = 30.years.ago.to_date
+        claim.national_insurance_number = nil
+
+        expect(slug_sequence.slugs).to include("personal-details")
+      end
+
+      it "includes personal-details page if name is missing" do
+        claim.logged_in_with_tid = true
+
+        claim.first_name = nil
+        claim.surname = nil
+        claim.date_of_birth = 30.years.ago.to_date
+        claim.national_insurance_number = "JH001234D"
+
+        expect(slug_sequence.slugs).to include("personal-details")
+      end
+
+      it "includes personal-details page if dob is missing" do
+        claim.logged_in_with_tid = true
+
+        claim.first_name = "John"
+        claim.surname = "Doe"
+        claim.date_of_birth = nil
+        claim.national_insurance_number = "JH001234D"
+
+        expect(slug_sequence.slugs).to include("personal-details")
+      end
     end
 
     context "when logged_in_with_tid is false " do
