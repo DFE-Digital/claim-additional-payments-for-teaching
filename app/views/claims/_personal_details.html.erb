@@ -8,12 +8,14 @@
           <%= @teacher_id_user_info["family_name"] %>
       </dd>
     </div>
-    <div class="govuk-summary-list__row">
-      <dt class="govuk-summary-list__key">Date of birth</dt>
-      <dd class="govuk-summary-list__value">
-        <%= l(Date.parse(@teacher_id_user_info["birthdate"])) %>
-      </dd>
-    </div>
+    <% if @teacher_id_user_info["birthdate"] %>
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">Date of birth</dt>
+        <dd class="govuk-summary-list__value">
+          <%= l(Date.parse(@teacher_id_user_info["birthdate"])) %>
+        </dd>
+      </div>
+    <% end %>
     <div class="govuk-summary-list__row">
       <dt class="govuk-summary-list__key">Teacher reference number (TRN)</dt>
       <dd class="govuk-summary-list__value">

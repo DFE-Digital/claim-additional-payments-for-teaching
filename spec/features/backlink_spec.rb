@@ -4,9 +4,9 @@ RSpec.feature "Backlinking during a claim" do
   scenario "Student Loans journey" do
     create(:policy_configuration, :student_loans)
     school = create(:school, :student_loans_eligible)
-
     visit new_claim_path(StudentLoans.routing_name)
-    expect(page).to have_no_link("Back")
+    skip_tid
+    expect(page).to have_link("Back")
     choose_qts_year
     expect(page).to have_link("Back")
     choose_school school
@@ -14,7 +14,10 @@ RSpec.feature "Backlinking during a claim" do
     expect(page).to have_current_path("/student-loans/claim-school", ignore_query: true)
     click_on "Back"
     expect(page).to have_text(I18n.t("questions.qts_award_year"))
-    expect(page).to have_no_link("Back")
+    click_on "Back"
+    expect(page).to have_text("Use DfE Identity to sign in")
+    expect(page).to have_link("Back")
+    # TODO: CAPT-1353 loading the landing-page won't work until we have a landing page for student loans
   end
 
   scenario "ECP/LUP journey" do

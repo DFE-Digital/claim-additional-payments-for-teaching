@@ -27,6 +27,7 @@ module FeatureHelpers
 
   def start_student_loans_claim
     visit new_claim_path(StudentLoans.routing_name)
+    skip_tid
     choose_qts_year
     Claim.by_policy(StudentLoans).order(:created_at).last
   end
