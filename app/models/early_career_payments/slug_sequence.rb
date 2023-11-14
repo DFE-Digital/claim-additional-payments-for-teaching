@@ -141,6 +141,8 @@ module EarlyCareerPayments
         if ecp_claim.eligibility.induction_not_completed? && ecp_claim.eligibility.ecp_only_school?
           replace_ecp_only_induction_not_completed_slugs(sequence)
         end
+
+        sequence.delete("personal-details") if claim.logged_in_with_tid? && claim.has_all_valid_personal_details?
       end
     end
 
