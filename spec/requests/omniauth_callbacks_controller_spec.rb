@@ -16,8 +16,8 @@ RSpec.describe "OmniauthCallbacksControllers", type: :request do
     context "when trn is not nil" do
       before do
         set_mock_auth("1234567")
-        claim = create(:claim, policy: EarlyCareerPayments)
-        OmniauthCallbacksController.any_instance.stub(:claim_id).and_return(claim.id)
+
+        allow_any_instance_of(OmniauthCallbacksController).to receive(:policy).and_return(EarlyCareerPayments)
       end
 
       it "redirects to the claim path with correct parameters" do
@@ -32,8 +32,8 @@ RSpec.describe "OmniauthCallbacksControllers", type: :request do
     context "when trn is nil" do
       before do
         set_mock_auth(nil)
-        claim = create(:claim)
-        OmniauthCallbacksController.any_instance.stub(:claim_id).and_return(claim.id)
+
+        allow_any_instance_of(OmniauthCallbacksController).to receive(:policy).and_return(StudentLoans)
       end
 
       it "redirects to the claim path with correct parameters" do

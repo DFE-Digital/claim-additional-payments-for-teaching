@@ -1,4 +1,8 @@
 class OmniauthCallbacksController < ApplicationController
+  include PartOfClaimJourney
+  skip_before_action :check_whether_closed_for_submissions
+  skip_before_action :send_unstarted_claimants_to_the_start
+
   def callback
     auth = request.env["omniauth.auth"]
 
@@ -8,14 +12,6 @@ class OmniauthCallbacksController < ApplicationController
   end
 
   private
-
-  def claim_id
-    @claim_id = session["claim_id"]
-  end
-
-  def current_claim
-    @current_claim ||= Claim.find_by(id: claim_id)
-  end
 
   def policy
     @policy ||= current_claim.policy
