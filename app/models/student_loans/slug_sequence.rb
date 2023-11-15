@@ -92,6 +92,7 @@ module StudentLoans
         sequence.delete("mobile-number") if claim.provide_mobile_number == false
         sequence.delete("mobile-verification") if claim.provide_mobile_number == false
         sequence.delete("ineligible") unless claim.eligibility&.ineligible?
+        sequence.delete("personal-details") if claim.logged_in_with_tid? && claim.has_all_valid_personal_details?
       end
     end
   end
