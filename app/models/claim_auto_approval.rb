@@ -26,7 +26,6 @@ class ClaimAutoApproval
       end
 
       ClaimMailer.approved(claim).deliver_later unless claim.awaiting_qa?
-
     rescue ActiveRecord::RecordInvalid => e
       raise AutoApprovalFailed, e
     end
