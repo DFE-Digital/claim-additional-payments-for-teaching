@@ -41,7 +41,7 @@ Rails.application.routes.draw do
     end
   end
   # Define the generic routes that aren't specific to any given policy
-  scope path: ":policy", constraints: {policy: %r{#{PolicyConfiguration.all_routing_names.join('|')}}} do
+  scope path: ":policy", constraints: {policy: %r{#{PolicyConfiguration.all_routing_names.join("|")}}} do
     get "claim", as: :new_claim, to: "claims#new"
     post "claim", as: :claims, to: "claims#create"
     post "claim/submit", as: :claim_submission, to: "submissions#create"

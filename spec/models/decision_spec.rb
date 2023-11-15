@@ -27,6 +27,21 @@ RSpec.describe Decision, type: :model do
     expect(build(:decision, :automated, result: "approved", notes: nil)).not_to be_valid
   end
 
+  it "validates that at least one rejected reason is selected when rejecting a claim" do
+    decision = build(:decision, :rejected, rejected_reasons: {})
+
+    expect(decision).not_to be_valid
+    expect(decision.errors.messages[:rejected_reasons]).to eq(["At least one reason is required"])
+  end
+
+  it "validates that the selected rejected reasons are valid when rejecting a claim" do
+    claim = create(:claim, :submitted, policy: EarlyCareerPayments)
+    decision = build(:decision, :rejected, claim: claim, rejected_reasons: {invalid: "1"})
+
+    expect(decision).not_to be_valid
+    expect(decision.errors.messages[:rejected_reasons]).to eq(["One or more reasons are not selectable for this claim"])
+  end
+
   it "prevents an unapprovable claim from being approved" do
     claim = create(:claim, :ineligible)
     decision = build(:decision, claim: claim, result: "approved")
@@ -68,15 +83,71 @@ RSpec.describe Decision, type: :model do
     expect(decision.errors.messages[:base]).to eq(["This claim cannot be approved"])
   end
 
-  it "returns the number of days between the claim being submitted and the claim being decisioned" do
-    claim = create(:claim, :submitted, submitted_at: 12.days.ago)
-    decision = build(:decision, claim: claim, created_at: DateTime.now)
+  context "`rejected_reasons` store accessor" do
+    let(:decision) { build_stubbed(:decision) }
+    let(:prefix) { "rejected_reasons" }
 
-    expect(decision.number_of_days_since_claim_submitted).to eq(12)
+    described_class::REJECTED_REASONS.each do |reason|
+      let(:reader) { "#{prefix}_#{reason}" }
+      let(:setter) { "#{prefix}_#{reason}=" }
+
+      it "can set and read the value of `#{reason}`" do
+        expect { decision.public_send(setter, "1") }.to change { decision.public_send(reader) }.to("1")
+      end
+    end
+  end
+
+  describe ".rejected_reasons_for" do
+    subject { described_class.rejected_reasons_for(policy) }
+
+    let(:expected_reasons_ecp) do
+      [
+        :ineligible_subject,
+        :ineligible_year,
+        :ineligible_school,
+        :ineligible_qualification,
+        :induction,
+        :no_qts_or_qtls,
+        :duplicate,
+        :no_response,
+        :other
+      ]
+    end
+    let(:expected_reasons_non_ecp) do
+      [
+        :ineligible_subject,
+        :ineligible_year,
+        :ineligible_school,
+        :ineligible_qualification,
+        :no_qts_or_qtls,
+        :duplicate,
+        :no_response,
+        :other
+      ]
+    end
+
+    context "when the claim policy is ECP" do
+      let(:policy) { EarlyCareerPayments }
+
+      it { is_expected.to eq(expected_reasons_ecp) }
+    end
+
+    context "when the claim policy is LUP" do
+      let(:policy) { LevellingUpPremiumPayments }
+
+      it { is_expected.to eq(expected_reasons_non_ecp) }
+    end
+
+    context "when the claim policy is TSLR" do
+      let(:policy) { StudentLoans }
+
+      it { is_expected.to eq(expected_reasons_non_ecp) }
+    end
   end
 
   describe "#rejected_reasons_hash" do
     subject { decision.rejected_reasons_hash }
+
     let(:decision) { create(:decision, :rejected, **rejected_reasons) }
     let(:rejected_reasons) do
       {
@@ -92,6 +163,7 @@ RSpec.describe Decision, type: :model do
         reason_ineligible_qualification: "0",
         reason_no_qts_or_qtls: "1",
         reason_duplicate: "0",
+        reason_induction: "0",
         reason_no_response: "0",
         reason_other: "0"
       }
@@ -99,6 +171,22 @@ RSpec.describe Decision, type: :model do
 
     it "returns the complete hash of rejected reasons" do
       is_expected.to eq(expected_hash)
+    end
+  end
+
+  describe "#selected_rejected_reasons" do
+    subject { decision.selected_rejected_reasons }
+
+    let(:decision) { create(:decision, :rejected, **rejected_reasons) }
+    let(:rejected_reasons) do
+      {
+        rejected_reasons_ineligible_subject: "1",
+        rejected_reasons_no_qts_or_qtls: "1"
+      }
+    end
+
+    it "returns the rejected reasons that have been selected" do
+      is_expected.to eq([:ineligible_subject, :no_qts_or_qtls])
     end
   end
 end
