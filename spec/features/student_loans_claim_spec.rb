@@ -22,13 +22,13 @@ RSpec.feature "Teacher Student Loan Repayments claims" do
       visit claim_path(StudentLoans.routing_name, "leadership-position")
       expect(page).to have_current_path("/#{StudentLoans.routing_name}/qts-year")
 
-      expect(page).to have_text(I18n.t("questions.qts_award_year"))
+      expect(page).to have_text(I18n.t("student_loans.questions.qts_award_year"))
       expect(page).to have_link(href: "mailto:#{StudentLoans.feedback_email}")
 
       choose_qts_year
       claim = Claim.by_policy(StudentLoans).order(:created_at).last
 
-      expect(claim.eligibility.reload.qts_award_year).to eql("on_or_after_cut_off_date")
+      expect(claim.eligibility.reload.qts_award_year).to eql("between_2013_and_2020")
 
       expect(page).to have_text(claim_school_question)
 
@@ -245,13 +245,13 @@ RSpec.feature "Teacher Student Loan Repayments claims" do
 
       scenario "Teacher claims back student loan repayments" do
         visit new_claim_path(StudentLoans.routing_name)
-        expect(page).to have_text(I18n.t("questions.qts_award_year"))
+        expect(page).to have_text(I18n.t("student_loans.questions.qts_award_year"))
         expect(page).to have_link(href: "mailto:#{StudentLoans.feedback_email}")
 
         choose_qts_year
         claim = Claim.by_policy(StudentLoans).order(:created_at).last
 
-        expect(claim.eligibility.reload.qts_award_year).to eql("on_or_after_cut_off_date")
+        expect(claim.eligibility.reload.qts_award_year).to eql("between_2013_and_2020")
 
         expect(page).to have_text(claim_school_question)
 

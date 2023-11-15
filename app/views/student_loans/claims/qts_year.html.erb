@@ -1,0 +1,46 @@
+<% content_for(:page_title, page_title(t("student_loans.questions.qts_award_year"), policy: current_policy_routing_name, show_error: current_claim.errors.any?)) %>
+<% path_for_form = current_claim.persisted? ? claim_path(current_policy_routing_name) : claims_path(current_policy_routing_name) %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <%= render("shared/error_summary", instance: current_claim, errored_field_id_overrides: { "eligibility.qts_award_year": "claim_eligibility_attributes_qts_award_year_#{current_claim.eligibility.class.qts_award_years.keys.first}" }) if current_claim.errors.any? %>
+    <%= form_for current_claim, url: path_for_form  do |form| %>
+      <%= form_group_tag current_claim do %>
+        <fieldset class="govuk-fieldset">
+          <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl">
+            <h1 class="govuk-fieldset__heading">
+              <%= t("student_loans.questions.qts_award_year") %>
+            </h1>
+          </legend>
+
+          <div class="govuk-hint" id="qts_year-hint">
+            The academic year runs from 1 September to 31 August.
+          </div>
+
+          <%= form.fields_for :eligibility, include_id: false do |fields| %>
+            <%= errors_tag current_claim.eligibility, :qts_award_year %>
+
+            <div class="govuk-radios">
+              <%= fields.hidden_field :qts_award_year %>
+              <div class="govuk-radios__item">
+                <%= fields.radio_button(:qts_award_year, :between_2013_and_2020, class: "govuk-radios__input") %>
+                <%= fields.label "qts_award_year_between_2013_and_2020",
+                      t("student_loans.answers.qts_award_years.between_2013_and_2020", year: current_policy.first_eligible_qts_award_year.to_s(:long)),
+                      class: "govuk-label govuk-radios__label" %>
+              </div>
+
+              <div class="govuk-radios__item">
+                <%= fields.radio_button(:qts_award_year, :before_2013_or_after_2020, class: "govuk-radios__input") %>
+                <%= fields.label "qts_award_year_before_2013_or_after_2020",
+                      t("student_loans.answers.qts_award_years.before_2013_or_after_2020"),
+                      class: "govuk-label govuk-radios__label" %>
+              </div>
+            </div>
+          <% end %>
+
+        </fieldset>
+      <% end %>
+      <%= form.submit "Continue", class: "govuk-button" %>
+    <% end %>
+  </div>
+</div>

@@ -31,7 +31,7 @@ module FeatureHelpers
     Claim.by_policy(StudentLoans).order(:created_at).last
   end
 
-  def choose_qts_year(option = :on_or_after_cut_off_date)
+  def choose_qts_year(option = :between_2013_and_2020)
     choose "claim_eligibility_attributes_qts_award_year_#{option}"
     click_on "Continue"
   end

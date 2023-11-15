@@ -29,8 +29,8 @@ module StudentLoans
     self.table_name = "student_loans_eligibilities"
 
     enum qts_award_year: {
-      before_cut_off_date: 0,
-      on_or_after_cut_off_date: 1
+      before_2013_or_after_2020: 0,
+      between_2013_and_2020: 1
     }, _prefix: :awarded_qualified_status
 
     enum employment_status: {

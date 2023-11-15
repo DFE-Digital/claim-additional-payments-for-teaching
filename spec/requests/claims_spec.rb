@@ -8,7 +8,7 @@ RSpec.describe "Claims", type: :request do
       it "renders the first page in the sequence" do
         get new_claim_path(StudentLoans.routing_name)
         follow_redirect!
-        expect(response.body).to include(I18n.t("questions.qts_award_year"))
+        expect(response.body).to include(I18n.t("student_loans.questions.qts_award_year"))
       end
     end
 
@@ -92,7 +92,7 @@ RSpec.describe "Claims", type: :request do
       context "when the user has not completed the journey in the correct slug sequence" do
         it "redirects to the correct page in the sequence" do
           get claim_path(StudentLoans.routing_name, "qts-year")
-          expect(response.body).to include(I18n.t("questions.qts_award_year"))
+          expect(response.body).to include(I18n.t("student_loans.questions.qts_award_year"))
 
           get claim_path(StudentLoans.routing_name, "claim-school")
           expect(response).to redirect_to(claim_path(StudentLoans.routing_name, "qts-year"))
@@ -186,9 +186,9 @@ RSpec.describe "Claims", type: :request do
       before { start_student_loans_claim }
 
       it "updates the claim with the submitted form data" do
-        put claim_path(StudentLoans.routing_name, "qts-year"), params: {claim: {eligibility_attributes: {qts_award_year: "on_or_after_cut_off_date"}}}
+        put claim_path(StudentLoans.routing_name, "qts-year"), params: {claim: {eligibility_attributes: {qts_award_year: "between_2013_and_2020"}}}
 
-        expect(in_progress_claim.eligibility.qts_award_year).to eq "on_or_after_cut_off_date"
+        expect(in_progress_claim.eligibility.qts_award_year).to eq "between_2013_and_2020"
       end
 
       it "makes sure validations appropriate to the context are run" do
@@ -254,7 +254,7 @@ RSpec.describe "Claims", type: :request do
 
     context "when a claim hasn’t been started yet" do
       it "redirects to the start page indicated by the routing" do
-        put claim_path(StudentLoans.routing_name, "qts-year"), params: {claim: {eligibility_attributes: {qts_award_year: "on_or_after_cut_off_date"}}}
+        put claim_path(StudentLoans.routing_name, "qts-year"), params: {claim: {eligibility_attributes: {qts_award_year: "between_2013_and_2020"}}}
         expect(response).to redirect_to(StudentLoans.start_page_url)
       end
     end

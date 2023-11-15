@@ -4,7 +4,7 @@ FactoryBot.define do
   factory :student_loans_eligibility, class: "StudentLoans::Eligibility" do
     trait :eligible do
       association :current_school, factory: [:school, :student_loans_eligible]
-      qts_award_year { :on_or_after_cut_off_date }
+      qts_award_year { :between_2013_and_2020 }
       employment_status { :claim_school }
       claim_school { current_school }
       physics_taught { true }
