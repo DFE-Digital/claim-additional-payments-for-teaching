@@ -7,7 +7,7 @@ describe ClaimsHelper do
       build(
         :student_loans_eligibility,
         :eligible,
-        qts_award_year: "on_or_after_cut_off_date"
+        qts_award_year: "between_2013_and_2020"
       )
     end
     let(:claim) do
@@ -18,7 +18,7 @@ describe ClaimsHelper do
 
     it "returns the correct answers for the eligibility's policy" do
       answers = helper.eligibility_answers(current_claim)
-      expect(answers.first).to eq [I18n.t("questions.qts_award_year"), "In or after the academic year 2013 to 2014", "qts-year"]
+      expect(answers.first).to eq [I18n.t("student_loans.questions.qts_award_year"), "Between the start of the 2013 to 2014 academic year and the end of the 2020 to 2021 academic year", "qts-year"]
     end
   end
 

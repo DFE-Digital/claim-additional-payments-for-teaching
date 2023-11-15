@@ -380,4 +380,20 @@ RSpec.describe StudentLoans::Eligibility, type: :model do
       expect(described_class.new.eligible_itt_subject).to be(nil)
     end
   end
+
+  describe "#ineligible_qts_award_year?" do
+    subject { described_class.new(qts_award_year:).ineligible_qts_award_year? }
+
+    context "when the qts award year is between 2013 and 2020" do
+      let(:qts_award_year) { "between_2013_and_2020" }
+
+      it { is_expected.to eq(false) }
+    end
+
+    context "when the qts award year is before 2013 or after 2020" do
+      let(:qts_award_year) { "before_2013_or_after_2020" }
+
+      it { is_expected.to eq(true) }
+    end
+  end
 end

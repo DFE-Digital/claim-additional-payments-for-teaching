@@ -20,6 +20,6 @@ RSpec.feature "Claim journey does not get cached", js: true do
     page.evaluate_script("window.history.back()")
 
     expect(page).to_not have_text(claim.first_name)
-    expect(page).to have_text(I18n.t("questions.qts_award_year"))
+    expect(page).to have_text(I18n.t("student_loans.questions.qts_award_year"))
   end
 end
