@@ -14,7 +14,7 @@ module StudentLoans
 
     def qualifications
       [
-        ["Award year", eligibility.qts_award_year_answer]
+        ["Award year", qts_award_year_answer(eligibility)]
       ]
     end
 
@@ -47,9 +47,7 @@ module StudentLoans
 
     private
 
-    def eligibility
-      claim.eligibility
-    end
+    delegate :eligibility, to: :claim
 
     def financial_year_for_academic_year(academic_year)
       end_year = academic_year.start_year
