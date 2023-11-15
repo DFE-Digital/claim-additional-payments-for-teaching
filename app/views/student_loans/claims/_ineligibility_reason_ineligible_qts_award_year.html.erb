@@ -1,0 +1,14 @@
+<h1 class="govuk-heading-xl">
+  You’re not eligible for this payment
+</h1>
+
+<p class="govuk-body">
+  You can only get this payment if you completed your initial teacher training
+  <%= t("student_loans.answers.qts_award_years.between_2013_and_2020", year: current_policy.first_eligible_qts_award_year.to_s(:long)).downcase %>.
+</p>
+
+<p class="govuk-body">
+  For more information, including eligibility criteria for this payment, visit the
+  <%= link_to "‘#{policy_service_name(current_policy.routing_name)}’", "#{current_policy.eligibility_page_url}#eligible-teachers", class: "govuk-link" %>
+  guidance.
+</p>
