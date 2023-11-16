@@ -114,8 +114,10 @@ RSpec.describe "Claims", type: :request do
           it "searches for schools using the search term" do
             get claim_path(StudentLoans.routing_name, "claim-school"), params: {school_search: school_1.name}
 
-            expect(response.body).to include school_1.name
-            expect(response.body).not_to include school_2.name
+            # Issues with e.g. "O&#39;Kon and Sons School" matching "O'Kon and Sons School", quickfix escape html
+            expect(response.body).to include CGI.escapeHTML(school_1.name)
+            expect(response.body).not_to include CGI.escapeHTML(school_2.name)
+
             expect(response.body).to include "Continue"
           end
 

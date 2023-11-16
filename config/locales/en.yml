@@ -104,6 +104,9 @@ en:
     decision_deadline: "Decision deadline"
     decision_overdue: "Overdue"
     decision_overdue_not_applicable: "N/A"
+    claim_route: "Claim route"
+    claim_route_not_tid: "Not signed in with DfE Identify"
+    claim_route_with_tid: "Signed in with DfE Identify"
     decision:
       created_at: "Created at"
       result: "Result"
