@@ -66,7 +66,7 @@ module Admin
         a << [translate("admin.decision.result"), decision.result.capitalize]
         a << [translate("admin.decision.reasons"), rejected_reasons_list(decision)] if decision.rejected?
         a << [translate("admin.decision.notes"), simple_format(decision.notes, class: "govuk-body")] if decision.notes.present?
-        a << [translate("admin.decision.created_by"), user_details(decision.created_by)]
+        a << [translate("admin.decision.created_by"), user_details(decision.created_by)] if decision.created_by_id?
       end
     end
 
@@ -167,7 +167,7 @@ module Admin
     def status(claim)
       if claim.all_payrolled?
         "Payrolled"
-      elsif claim.awaiting_qa?
+      elsif claim.latest_decision&.approved? && claim.awaiting_qa? && !claim.held?
         "Approved awaiting QA"
       elsif claim.latest_decision&.approved?
         "Approved awaiting payroll"
@@ -180,16 +180,30 @@ module Admin
       end
     end
 
-    def index_status_filter(status)
-      return "approved awaiting payroll" if status == "approved_awaiting_payroll"
-      return status if ["approved", "rejected"].include?(status)
+    STATUS_FILTERS = [
+      ["Awaiting decision - on hold", "held"],
+      ["Awaiting decision - failed bank details", "failed_bank_validation"],
+      ["Approved awaiting QA", "approved_awaiting_qa"],
+      ["Approved awaiting payroll", "approved_awaiting_payroll"],
+      ["Automatically approved awaiting payroll", "automatically_approved_awaiting_payroll"],
+      ["Approved", "approved"],
+      ["Rejected", "rejected"]
+    ]
 
-      "awaiting a decision"
+    def claim_status_filters
+      STATUS_FILTERS
+    end
+
+    def index_status_filter(status)
+      return "awaiting a decision" unless status.present?
+
+      status.humanize.downcase
     end
 
     NO_CLAIMS = {
       "approved_awaiting_qa" => "There are currently no approved claims awaiting QA.",
       "approved_awaiting_payroll" => "There are currently no approved claims awaiting payroll.",
+      "automatically_approved_awaiting_payroll" => "There are currently no automatically approved claims awaiting payroll.",
       "approved" => "There are currently no approved claims.",
       "rejected" => "There are currently no rejected claims."
     }

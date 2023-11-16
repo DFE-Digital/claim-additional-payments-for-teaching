@@ -125,6 +125,18 @@ describe Admin::ClaimsHelper do
         expect(user_id_details[1]).to match("DfE Sign-in ID - #{user.dfe_sign_in_id}")
       end
     end
+
+    context "when the decision is automated" do
+      let(:decision) { create(:decision, :auto_approved, claim: claim) }
+
+      it "includes an array of details about the decision" do
+        expect(helper.admin_decision_details(decision)).to eq([
+          [I18n.t("admin.decision.created_at"), l(decision.created_at)],
+          [I18n.t("admin.decision.result"), decision.result.capitalize],
+          [I18n.t("admin.decision.notes"), simple_format(decision.notes, class: "govuk-body")]
+        ])
+      end
+    end
   end
 
   describe "#decision_deadline_warning" do
@@ -501,6 +513,72 @@ describe Admin::ClaimsHelper do
           expect(status(claim)).to eq "Payrolled"
         end
       end
+    end
+  end
+
+  describe "#claim_status_filters" do
+    subject { helper.claim_status_filters }
+
+    it "returns the list of status filters available" do
+      is_expected.to eq(described_class::STATUS_FILTERS)
+    end
+  end
+
+  describe "#index_status_filter" do
+    subject { helper.index_status_filter(status) }
+
+    context "when status is blank" do
+      let(:status) { "" }
+
+      it { is_expected.to eq("awaiting a decision") }
+    end
+
+    context "when status is present" do
+      let(:status) { "approved_awaiting_payroll" }
+
+      it "returns a human readable version of the status in lower case" do
+        is_expected.to eq("approved awaiting payroll")
+      end
+    end
+  end
+
+  describe "#no_claims" do
+    subject { helper.no_claims(status) }
+
+    context "when status is 'approved_awaiting_qa'" do
+      let(:status) { "approved_awaiting_qa" }
+
+      it { is_expected.to eq("There are currently no approved claims awaiting QA.") }
+    end
+
+    context "when status is 'approved_awaiting_payroll'" do
+      let(:status) { "approved_awaiting_payroll" }
+
+      it { is_expected.to eq("There are currently no approved claims awaiting payroll.") }
+    end
+
+    context "when status is 'automatically_approved_awaiting_payroll'" do
+      let(:status) { "automatically_approved_awaiting_payroll" }
+
+      it { is_expected.to eq("There are currently no automatically approved claims awaiting payroll.") }
+    end
+
+    context "when status is 'approved'" do
+      let(:status) { "approved" }
+
+      it { is_expected.to eq("There are currently no approved claims.") }
+    end
+
+    context "when status is 'rejected'" do
+      let(:status) { "rejected" }
+
+      it { is_expected.to eq("There are currently no rejected claims.") }
+    end
+
+    context "when status is not present" do
+      let(:status) { "" }
+
+      it { is_expected.to eq("There are currently no claims to approve.") }
     end
   end
 

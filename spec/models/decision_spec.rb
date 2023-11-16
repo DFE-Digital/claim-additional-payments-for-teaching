@@ -1,19 +1,30 @@
 require "rails_helper"
 
 RSpec.describe Decision, type: :model do
+  let(:user) { create(:dfe_signin_user) }
+
+  describe "associations" do
+    it { is_expected.to belong_to(:claim) }
+    it { is_expected.to belong_to(:created_by).class_name("DfeSignIn::User").optional(true) }
+  end
+
   it "should not permit changes after creation" do
     claim = create(:claim, :submitted)
-    user = create(:dfe_signin_user)
     decision = Decision.create!(claim: claim, created_by: user, result: :approved)
 
-    expect { decision.update(created_by: build(:dfe_signin_user)) }.to raise_error(ActiveRecord::ReadOnlyRecord)
+    expect { decision.update(created_by: user) }.to raise_error(ActiveRecord::ReadOnlyRecord)
 
     expect(decision.reload.created_by).to eq(user)
   end
 
   it "validates the decision has a result" do
-    expect(build(:decision, result: "approved")).to be_valid
-    expect(build(:decision, result: nil)).not_to be_valid
+    expect(build(:decision, result: "approved", created_by: user)).to be_valid
+    expect(build(:decision, result: nil, created_by: user)).not_to be_valid
+  end
+
+  it "validates the decision has notes when it's automated" do
+    expect(build(:decision, :automated, result: "approved", notes: "Auto-approved")).to be_valid
+    expect(build(:decision, :automated, result: "approved", notes: nil)).not_to be_valid
   end
 
   it "validates that at least one rejected reason is selected when rejecting a claim" do

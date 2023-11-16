@@ -2,6 +2,7 @@ FactoryBot.define do
   factory :decision do
     association :created_by, factory: :dfe_signin_user
     claim { build(:claim, :submitted) }
+
     trait :approved do
       result { :approved }
     end
@@ -17,6 +18,12 @@ FactoryBot.define do
 
     trait :undone do
       undone { true }
+    end
+
+    trait :auto_approved do
+      approved
+      created_by_id { nil }
+      notes { "Auto-approved" }
     end
   end
 end

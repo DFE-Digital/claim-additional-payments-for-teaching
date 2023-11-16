@@ -25,10 +25,18 @@ class ClaimCheckingTasks
     applicable_task_names - task_names_for_claim
   end
 
+  def passed_automatically_task_names
+    claim.tasks.passed_automatically.pluck(:name)
+  end
+
+  def all_tasks_passed_automatically?
+    (applicable_task_names - passed_automatically_task_names).empty?
+  end
+
   private
 
   def task_names_for_claim
-    claim.tasks.map(&:name)
+    claim.tasks.pluck(:name)
   end
 
   def matching_claims

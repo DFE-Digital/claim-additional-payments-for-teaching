@@ -22,4 +22,36 @@ RSpec.describe Task, type: :model do
     expect(task).not_to be_valid
     expect(task.errors.messages[:name]).to include("name not recognised")
   end
+
+  describe "scopes" do
+    describe ".passed_automatically" do
+      subject { described_class.passed_automatically }
+
+      let!(:task_failed_manually) { create(:task, :manual, :failed) }
+      let!(:task_passed_manually) { create(:task, :manual, :passed) }
+      let!(:task_failed_automatically) { create(:task, :automated, :failed) }
+      let!(:task_passed_automatically) { create(:task, :automated, :passed) }
+      let!(:another_task_passed_automatically) { create(:task, :automated, :passed) }
+
+      it "returns taks that passed automatically" do
+        is_expected.to eq([task_passed_automatically, another_task_passed_automatically])
+      end
+    end
+
+    describe ".no_data_census_subjects_taught" do
+      subject { described_class.no_data_census_subjects_taught }
+
+      let!(:employment_task_failed_automatically_no_data) { create(:task, :automated, :failed, claim_verifier_match: nil, name: "employment") }
+
+      let!(:census_task_failed_automatically_no_data) { create(:task, :automated, :failed, claim_verifier_match: nil, name: "census_subjects_taught") }
+      let!(:another_census_task_failed_automatically_no_data) { create(:task, :automated, :failed, claim_verifier_match: nil, name: "census_subjects_taught") }
+
+      let!(:census_task_failed_automatically_no_match) { create(:task, :automated, :failed, claim_verifier_match: :none, name: "census_subjects_taught") }
+      let!(:census_task_passed_automatically_any_match) { create(:task, :automated, :passed, claim_verifier_match: :any, name: "census_subjects_taught") }
+
+      it "returns census subjects taught tasks that didn't pass because the outcome was NO DATA" do
+        is_expected.to match_array([census_task_failed_automatically_no_data, another_census_task_failed_automatically_no_data])
+      end
+    end
+  end
 end

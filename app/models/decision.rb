@@ -1,6 +1,6 @@
 class Decision < ApplicationRecord
   belongs_to :claim
-  belongs_to :created_by, class_name: "DfeSignIn::User"
+  belongs_to :created_by, class_name: "DfeSignIn::User", optional: true
 
   # NOTE: remember en.yml -> admin.decision.rejected_reasons
   REJECTED_REASONS = [
@@ -20,13 +20,14 @@ class Decision < ApplicationRecord
   # NOTE: Don't store the rejected_reasons data params from the form when Approve is selected
   before_validation :clear_rejected_reasons, unless: :rejected?
 
-  validates :result, :created_by, presence: {message: "Make a decision to approve or reject the claim"}
+  validates :result, presence: {message: "Make a decision to approve or reject the claim"}
   validate :claim_must_be_approvable, if: :approved?, on: :create
   validate :claim_must_be_rejectable, if: :rejected?, on: :create
   validate :claim_must_have_undoable_decision, if: :undone?, on: :update
   validate :rejected_reasons_required, if: -> { !undone? && rejected? }
   validate :rejected_reasons_selectable, if: :rejected?
   validates :notes, if: -> { rejected? && rejected_reasons_other? }, presence: {message: "You must enter a reason for rejecting this claim in the decision note"}
+  validates :notes, if: -> { !created_by_id? }, presence: {message: "You must add a note when the decision is automated"}
 
   scope :active, -> { where(undone: false) }
 

@@ -20,6 +20,7 @@ RSpec.feature "Admin claim filtering" do
   let!(:lup_claims_unassigned) { create_list(:claim, 2, :submitted, policy: LevellingUpPremiumPayments) }
   let!(:held_claims) { create_list(:claim, 2, :submitted, :held) }
   let!(:approved_awaiting_qa_claims) { create_list(:claim, 2, :approved, :flagged_for_qa, policy: LevellingUpPremiumPayments) }
+  let!(:auto_approved_awaiting_payroll_claims) { create_list(:claim, 2, :auto_approved, policy: LevellingUpPremiumPayments) }
   let!(:approved_claim) { create(:claim, :approved, policy: LevellingUpPremiumPayments, assigned_to: mette, decision_creator: mary) }
 
   scenario "the service operator can filter claims by policy" do
@@ -143,6 +144,7 @@ RSpec.feature "Admin claim filtering" do
       early_career_payments_claims_for_mette,
       early_career_payments_claims_failed_bank_validation,
       approved_awaiting_qa_claims,
+      auto_approved_awaiting_payroll_claims,
       lup_claims_unassigned
     ].flatten.each do |c|
       expect(page).not_to have_content(c.reference)
@@ -159,6 +161,26 @@ RSpec.feature "Admin claim filtering" do
     click_button "Apply filters"
 
     approved_awaiting_qa_claims.each do |c|
+      expect(page).to have_content(c.reference)
+    end
+
+    [
+      student_loans_claims_for_mette,
+      student_loans_claims_for_valentino,
+      early_career_payments_claims_for_mary,
+      early_career_payments_claims_for_mette,
+      early_career_payments_claims_failed_bank_validation,
+      auto_approved_awaiting_payroll_claims,
+      held_claims,
+      lup_claims_unassigned
+    ].flatten.each do |c|
+      expect(page).not_to have_content(c.reference)
+    end
+
+    select "Automatically approved awaiting payroll", from: "Status:"
+    click_button "Apply filters"
+
+    auto_approved_awaiting_payroll_claims.each do |c|
       expect(page).to have_content(c.reference)
     end
 
