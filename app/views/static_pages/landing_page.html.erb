@@ -27,7 +27,7 @@
 
     <h2 class="govuk-heading-m govuk-!-margin-top-6">How to apply</h2>
 
-    <% if additional_payments_open?(current_policy) %>
+    <% if additional_payments_open? %>
       <p class="govuk-body">
         The application checks your eligibility before you apply. Once you start the application you cannot save your progress.
       </p>
@@ -53,7 +53,7 @@
 
     <h2 class="govuk-heading-m govuk-!-margin-top-4">Further information</h2>
 
-    <% if additional_payments_open?(current_policy) %>
+    <% if additional_payments_open? %>
       <p class="govuk-body">
         You must apply between September <%= @academic_year.start_year.to_s %> and March <%= @academic_year.end_year.to_s %>.
       </p>

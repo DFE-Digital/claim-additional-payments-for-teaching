@@ -51,7 +51,8 @@ module ClaimsHelper
     claim.date_of_birth && l(claim.date_of_birth)
   end
 
-  def additional_payments_open?(current_policy)
-    PolicyConfiguration.for(current_policy).open_for_submissions?
+  def additional_payments_open?
+    policy = PolicyConfiguration.policy_for_routing_name("additional-payments")
+    PolicyConfiguration.for(policy).open_for_submissions?
   end
 end

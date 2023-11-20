@@ -9,6 +9,7 @@ RSpec.feature "Teacher Identity Sign in for TSLR" do
 
   before do
     set_mock_auth("1234567")
+    create(:policy_configuration, :additional_payments) # TODO: CAPT-1353 remove with new landing page
   end
 
   after do
