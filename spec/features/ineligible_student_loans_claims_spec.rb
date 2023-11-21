@@ -11,6 +11,7 @@ RSpec.feature "Ineligible Teacher Student Loan Repayments claims" do
     policy_configuration.update!(current_academic_year: "2025/2026")
 
     visit new_claim_path(StudentLoans.routing_name)
+    skip_tid
     choose_qts_year(:before_cut_off_date)
     claim = Claim.by_policy(StudentLoans).order(:created_at).last
 
@@ -101,6 +102,8 @@ RSpec.feature "Ineligible Teacher Student Loan Repayments claims" do
     visit new_claim_path(StudentLoans.routing_name)
 
     expect(page).to_not have_content("You have a claim in progress")
+
+    skip_tid
 
     expect(page).to have_content("When did you complete your initial teacher training?")
     expect(page).not_to have_css("input[checked]")

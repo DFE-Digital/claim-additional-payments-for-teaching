@@ -10,6 +10,9 @@ module StudentLoans
   # reflects the sequence based on the claim's current state.
   class SlugSequence
     ELIGIBILITY_SLUGS = [
+      "sign-in-or-continue",
+      "teacher-detail",
+      "reset-claim",
       "qts-year",
       "claim-school",
       "subjects-taught",
@@ -74,6 +77,8 @@ module StudentLoans
 
     def slugs
       SLUGS.dup.tap do |sequence|
+        sequence.delete("teacher-detail") if claim.logged_in_with_tid.nil?
+        sequence.delete("reset-claim") if [nil, true].include?(claim.logged_in_with_tid)
         sequence.delete("current-school") if claim.eligibility.employed_at_claim_school?
         sequence.delete("mostly-performed-leadership-duties") unless claim.eligibility.had_leadership_position?
         sequence.delete("student-loan-country") if claim.no_student_loan?
@@ -86,7 +91,7 @@ module StudentLoans
         sequence.delete("building-society-account") if claim.bank_or_building_society == "personal_bank_account"
         sequence.delete("mobile-number") if claim.provide_mobile_number == false
         sequence.delete("mobile-verification") if claim.provide_mobile_number == false
-        sequence.delete("ineligible") unless claim.ineligible?
+        sequence.delete("ineligible") unless claim.eligibility&.ineligible?
       end
     end
   end

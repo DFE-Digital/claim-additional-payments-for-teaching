@@ -12,6 +12,7 @@ class BasePublicController < ApplicationController
   def current_policy
     PolicyConfiguration.policy_for_routing_name(current_policy_routing_name)
   end
+  helper_method :current_policy
 
   def current_policy_routing_name
     params[:policy]

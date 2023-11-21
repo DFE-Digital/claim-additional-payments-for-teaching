@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_10_20_160015) do
+ActiveRecord::Schema[7.0].define(version: 2023_11_14_094829) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_trgm"
   enable_extension "pgcrypto"
@@ -86,7 +86,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_10_20_160015) do
     t.boolean "held", default: false
     t.boolean "hmrc_bank_validation_succeeded", default: false
     t.json "hmrc_bank_validation_responses", default: []
-    t.boolean "logged_in_with_tid", default: false
+    t.boolean "logged_in_with_tid"
     t.boolean "details_check"
     t.jsonb "teacher_id_user_info", default: {}
     t.boolean "qa_required", default: false
