@@ -9,7 +9,6 @@ RSpec.feature "Teacher Identity Sign in for TSLR" do
 
   before do
     set_mock_auth("1234567")
-    create(:policy_configuration, :additional_payments) # TODO: CAPT-1353 remove with new landing page
   end
 
   after do
@@ -20,7 +19,7 @@ RSpec.feature "Teacher Identity Sign in for TSLR" do
     visit landing_page_path(StudentLoans.routing_name)
 
     # - Landing (start)
-    expect(page).to have_text(I18n.t("early_career_payments.landing_page")) # TODO: CAPT-1353 change with new landing page
+    expect(page).to have_text(I18n.t("student_loans.landing_page"))
     click_on "Start now"
 
     expect(page).to have_text("Use DfE Identity to sign in")
@@ -53,7 +52,7 @@ RSpec.feature "Teacher Identity Sign in for TSLR" do
     visit landing_page_path(StudentLoans.routing_name)
 
     # - Landing (start)
-    expect(page).to have_text(I18n.t("early_career_payments.landing_page")) # TODO: CAPT-1353 change with new landing page
+    expect(page).to have_text(I18n.t("student_loans.landing_page"))
     click_on "Start now"
 
     expect(page).to have_text("Use DfE Identity to sign in")
@@ -91,7 +90,7 @@ RSpec.feature "Teacher Identity Sign in for TSLR" do
     visit landing_page_path(StudentLoans.routing_name)
 
     # - Landing (start)
-    expect(page).to have_text(I18n.t("early_career_payments.landing_page")) # TODO: CAPT-1353 change with new landing page
+    expect(page).to have_text(I18n.t("student_loans.landing_page"))
     click_on "Start now"
 
     expect(page).to have_text("Use DfE Identity to sign in")
