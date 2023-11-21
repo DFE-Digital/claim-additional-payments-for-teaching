@@ -88,7 +88,7 @@ RSpec.describe PolicyConfiguration do
     end
 
     it "returns nil for no overriding view path for student-loans" do
-      expect(described_class.view_path("student-loans")).to be_nil
+      expect(described_class.view_path("student-loans")).to eq "student_loans"
     end
 
     it "returns nil for no overriding view path for maths-and-physics" do

@@ -17,7 +17,8 @@ RSpec.feature "Backlinking during a claim" do
     click_on "Back"
     expect(page).to have_text("Use DfE Identity to sign in")
     expect(page).to have_link("Back")
-    # TODO: CAPT-1353 loading the landing-page won't work until we have a landing page for student loans
+    click_on "Back"
+    expect(page).to have_text("Claim back student loan repayments if you're a teacher")
   end
 
   scenario "ECP/LUP journey" do

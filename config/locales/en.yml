@@ -255,6 +255,7 @@ en:
     claim_action: "claim back student loan repayments"
     award_description: "claim payment"
     support_email_address: "studentloanteacherpayment@digital.education.gov.uk"
+    landing_page: "Claim back student loan repayments if you're a teacher"
     questions:
       claim_school: "Which school were you employed to teach at between %{financial_year}?"
       additional_school: "Which additional school were you employed to teach at between %{financial_year}?"
