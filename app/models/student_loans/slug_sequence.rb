@@ -30,6 +30,7 @@ module StudentLoans
       "no-address-found",
       "select-home-address",
       "address",
+      "select-email",
       "email-address",
       "email-verification",
       "provide-mobile-number",
@@ -93,6 +94,11 @@ module StudentLoans
         sequence.delete("mobile-verification") if claim.provide_mobile_number == false
         sequence.delete("ineligible") unless claim.eligibility&.ineligible?
         sequence.delete("personal-details") if claim.logged_in_with_tid? && claim.has_all_valid_personal_details?
+        sequence.delete("select-email") if [nil, false].include?(claim.logged_in_with_tid) || claim.teacher_id_user_info["email"].nil?
+        if claim.logged_in_with_tid? && claim.email_address_check?
+          sequence.delete("email-address")
+          sequence.delete("email-verification")
+        end
       end
     end
   end

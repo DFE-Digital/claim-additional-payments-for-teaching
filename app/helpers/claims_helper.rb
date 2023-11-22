@@ -16,7 +16,7 @@ module ClaimsHelper
 
       a << [translate("questions.national_insurance_number"), claim.national_insurance_number, "personal-details"]
 
-      a << [translate("questions.email_address"), claim.email_address, "email-address"]
+      a << [translate("questions.email_address"), claim.email_address, claim.email_address_check? ? "select-email" : "email-address"]
 
       a << [translate("questions.provide_mobile_number"), (claim.provide_mobile_number ? "Yes" : "No"), "provide-mobile-number"] if claim.has_ecp_or_lupp_policy?
       a << [translate("questions.mobile_number"), claim.mobile_number, "mobile-number"] if claim.has_ecp_or_lupp_policy? && claim.provide_mobile_number?
