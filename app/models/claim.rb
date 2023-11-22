@@ -289,6 +289,7 @@ class Claim < ApplicationRecord
   scope :not_held, -> { where(held: false) }
   scope :awaiting_decision, -> { submitted.joins("LEFT OUTER JOIN decisions ON decisions.claim_id = claims.id AND decisions.undone = false").where(decisions: {claim_id: nil}) }
   scope :awaiting_task, ->(task_name) { awaiting_decision.joins(sanitize_sql(["LEFT OUTER JOIN tasks ON tasks.claim_id = claims.id AND tasks.name = ?", task_name])).where(tasks: {claim_id: nil}) }
+  scope :auto_approved, -> { approved.where(decisions: {created_by: nil}) }
   scope :approved, -> { joins(:decisions).merge(Decision.active.approved) }
   scope :rejected, -> { joins(:decisions).merge(Decision.active.rejected) }
   scope :approaching_decision_deadline, -> { awaiting_decision.where("submitted_at < ? AND submitted_at > ?", DECISION_DEADLINE.ago + DECISION_DEADLINE_WARNING_POINT, DECISION_DEADLINE.ago) }
@@ -319,7 +320,7 @@ class Claim < ApplicationRecord
   # be flagged for QA or not. These criteria need to be met for each academic year:
   #
   # 1. the first claim to be approved should always be flagged for QA
-  # 2. subsequently approved claims should be flagged for QA, 1 in MIN_QA_THRESHOLD.
+  # 2. subsequently approved claims should be flagged for QA, 1 in 100/MIN_QA_THRESHOLD.
   #
   # This method should be used every time a new approval decision is being made;
   # when used retrospectively, i.e. when several claims have been approved,

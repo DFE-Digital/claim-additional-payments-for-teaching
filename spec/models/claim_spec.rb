@@ -1454,6 +1454,18 @@ RSpec.describe Claim, type: :model do
     end
   end
 
+  describe ".auto_approved" do
+    subject { described_class.auto_approved }
+
+    let!(:claim_approved) { create(:claim, :approved) }
+    let!(:claim_auto_approved) { create(:claim, :auto_approved) }
+    let!(:another_claim_auto_approved) { create(:claim, :auto_approved) }
+
+    it "returns claims that have been auto-approved" do
+      is_expected.to match_array([claim_auto_approved, another_claim_auto_approved])
+    end
+  end
+
   describe "#amendable?" do
     it "returns false for a claim that hasn’t been submitted" do
       claim = build(:claim, :submittable)

@@ -86,11 +86,11 @@ class Admin::DecisionsController < Admin::BaseAdminController
   end
 
   def decision_params
-    params.require(:decision).permit(
-      :result,
-      :notes,
-      *Decision::REJECTED_REASONS.map { |r| "rejected_reasons_#{r}".to_sym }
-    )
+    params.require(:decision).permit(:result, :notes, *rejected_reasons_params)
+  end
+
+  def rejected_reasons_params
+    Decision.rejected_reasons_for(@claim.policy).map { |r| "rejected_reasons_#{r}".to_sym }
   end
 
   def qa_decision_task?
