@@ -107,6 +107,7 @@ Rails.application.routes.draw do
 
     resources :qualification_report_uploads, only: [:new, :create]
     resources :school_workforce_census_data_uploads, only: [:new, :create]
+    resources :student_loans_data_uploads, only: [:new, :create]
     resources :tps_data_uploads, only: [:new, :create]
 
     resources :payroll_runs, only: [:index, :new, :create, :show] do
