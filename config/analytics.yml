@@ -100,6 +100,7 @@ shared:
     - details_check
     - teacher_id_user_info
     - email_address_check
+    - mobile_check
   :decisions:
     - id
     - result

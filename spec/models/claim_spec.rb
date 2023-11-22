@@ -1318,7 +1318,8 @@ RSpec.describe Claim, type: :model do
         :one_time_password,
         :assigned_to_id,
         :details_check,
-        :email_address_check
+        :email_address_check,
+        :mobile_check
       ])
     end
   end

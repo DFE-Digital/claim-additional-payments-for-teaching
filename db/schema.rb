@@ -92,6 +92,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_11_14_094829) do
     t.boolean "qa_required", default: false
     t.datetime "qa_completed_at"
     t.boolean "email_address_check"
+    t.string "mobile_check"
     t.index ["academic_year"], name: "index_claims_on_academic_year"
     t.index ["created_at"], name: "index_claims_on_created_at"
     t.index ["eligibility_type", "eligibility_id"], name: "index_claims_on_eligibility_type_and_eligibility_id"

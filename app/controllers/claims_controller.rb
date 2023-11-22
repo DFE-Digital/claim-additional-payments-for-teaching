@@ -35,6 +35,8 @@ class ClaimsController < BasePublicController
       update_session_with_tps_school
     elsif params[:slug] == "nqt-in-academic-year-after-itt" && page_sequence.in_sequence?("correct-school")
       @backlink_path = claim_path(current_policy_routing_name, "correct-school")
+    elsif params[:slug] == "select-mobile"
+      session[:phone_number] = current_claim.teacher_id_user_info["phone_number"]
     elsif params[:slug] == "postcode-search" && postcode
       redirect_to claim_path(current_policy_routing_name, "select-home-address", {"claim[postcode]": params[:claim][:postcode], "claim[address_line_1]": params[:claim][:address_line_1]}) and return unless invalid_postcode?
     elsif params[:slug] == "select-home-address" && postcode
@@ -77,11 +79,13 @@ class ClaimsController < BasePublicController
       check_correct_school_params
     when "select-email"
       check_email_params
+    when "select-mobile"
+      check_mobile_number_params
     else
       current_claim.attributes = claim_params
     end
 
-    current_claim.reset_dependent_answers unless params[:slug] == "select-email"
+    current_claim.reset_dependent_answers unless params[:slug] == "select-email" || params[:slug] == "select-mobile"
     current_claim.reset_eligibility_dependent_answers(reset_attrs)
     one_time_password
 
@@ -311,6 +315,10 @@ class ClaimsController < BasePublicController
 
   def check_email_params
     current_claim.attributes = SelectEmailForm.extract_attributes(current_claim, email_address_check: params.dig(:claim, :email_address_check))
+  end
+
+  def check_mobile_number_params
+    current_claim.attributes = SelectMobileNumberForm.extract_attributes(current_claim, mobile_check: params.dig(:claim, :mobile_check))
   end
 
   def update_session_with_tps_school

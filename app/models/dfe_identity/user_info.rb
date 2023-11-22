@@ -2,7 +2,7 @@ module DfeIdentity
   class UserInfo
     include ActiveModel::Model
 
-    attr_accessor :trn, :birthdate, :given_name, :family_name, :ni_number, :trn_match_ni_number, :email
+    attr_accessor :trn, :birthdate, :given_name, :family_name, :ni_number, :trn_match_ni_number, :email, :phone_number
 
     validates :trn, presence: true
     validates :birthdate, presence: true
@@ -10,6 +10,7 @@ module DfeIdentity
     validates :family_name, presence: true
     validates_format_of :trn_match_ni_number, with: /(true|false)/i
     validates :email, presence: false
+    validates :phone_number, presence: false
 
     def self.validated?(user_info)
       new(from_params(user_info)).valid?
