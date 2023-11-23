@@ -108,23 +108,14 @@ module StudentLoans
       self.current_school = inferred_current_school if employment_status_changed?
     end
 
-    # Returns a String that is the human-readable answer given for the QTS
-    # question when the claim was made.
-    def qts_award_year_answer
-      year_for_answer = StudentLoans.first_eligible_qts_award_year(claim.academic_year)
-      year_for_answer -= 1 if awarded_qualified_status_before_cut_off_date?
-
-      I18n.t("answers.qts_award_years.#{qts_award_year}", year: year_for_answer.to_s(:long))
-    end
-
     def submit!
     end
-
-    private
 
     def ineligible_qts_award_year?
       awarded_qualified_status_before_cut_off_date?
     end
+
+    private
 
     def ineligible_claim_school?
       claim_school.present? && !claim_school.eligible_for_student_loans_as_claim_school?
