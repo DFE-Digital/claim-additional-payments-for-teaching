@@ -19,14 +19,14 @@ RSpec.describe StudentLoans::AdminTasksPresenter, type: :model do
 
   describe "#qualifications" do
     it "returns an array of label and values for displaying information for qualification checks" do
-      expect(presenter.qualifications).to eq [["Award year", "In or after the academic year 2013 to 2014"]]
+      expect(presenter.qualifications).to eq [["Award year", "Between the start of the 2013 to 2014 academic year and the end of the 2020 to 2021 academic year"]]
     end
 
     it "sets the “Award year” value based on the academic year the claim was made in" do
       claim.academic_year = "2030/2031"
 
       expected_qts_answer = presenter.qualifications[0][1]
-      expect(expected_qts_answer).to eq "In or after the academic year 2019 to 2020"
+      expect(expected_qts_answer).to eq "Between the start of the 2019 to 2020 academic year and the end of the 2020 to 2021 academic year"
     end
   end
 

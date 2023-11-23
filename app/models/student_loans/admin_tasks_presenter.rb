@@ -14,7 +14,7 @@ module StudentLoans
 
     def qualifications
       [
-        ["Award year", eligibility.qts_award_year_answer]
+        ["Award year", qts_award_year_answer(eligibility)]
       ]
     end
 
