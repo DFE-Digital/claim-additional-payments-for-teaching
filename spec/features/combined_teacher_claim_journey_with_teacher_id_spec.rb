@@ -194,14 +194,14 @@ RSpec.feature "Combined journey with Teacher ID" do
     expect(claim.postcode).to eql("DE22 4BS")
 
     # - Email address
-    expect(page).to have_text(I18n.t("early_career_payments.questions.select_email.heading"))
+    expect(page).to have_text(I18n.t("questions.select_email.heading"))
 
     claim = Claim.all.order(created_at: :desc).limit(1).first
     choose claim.teacher_id_user_info["email"]
 
     click_on "Continue"
 
-    expect(page).to have_text(I18n.t("early_career_payments.questions.select_phone_number.heading"))
+    expect(page).to have_text(I18n.t("questions.select_phone_number.heading"))
 
     # - Select the suggested phone number
     choose "01234567890"

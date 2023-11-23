@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.feature "Logs in with TID, confirms teacher details and displays phone number from DfE Identity" do
+RSpec.feature "Combined journey with Teacher ID mobile check" do
   include OmniauthMockHelper
   include ClaimsControllerHelper
 
@@ -22,9 +22,9 @@ RSpec.feature "Logs in with TID, confirms teacher details and displays phone num
   end
 
   scenario "Selects suggested phone number" do
-    navigate_to_check_phone_number_page(school:)
+    navigate_to_check_mobile_page(school:)
 
-    expect(page).to have_text(I18n.t("early_career_payments.questions.select_phone_number.heading"))
+    expect(page).to have_text(I18n.t("questions.select_phone_number.heading"))
     expect(page).to have_text(phone_number)
 
     # - Select the suggested phone number
@@ -42,9 +42,9 @@ RSpec.feature "Logs in with TID, confirms teacher details and displays phone num
   end
 
   scenario "Select to use an alternative phone number" do
-    navigate_to_check_phone_number_page(school:)
+    navigate_to_check_mobile_page(school:)
 
-    expect(page).to have_text(I18n.t("early_career_payments.questions.select_phone_number.alternative"))
+    expect(page).to have_text(I18n.t("questions.select_phone_number.alternative"))
 
     # - Select A different mobile number
     find("#claim_mobile_check_alternative").click
@@ -61,9 +61,9 @@ RSpec.feature "Logs in with TID, confirms teacher details and displays phone num
   end
 
   scenario "Choose not to be contacted by phone" do
-    navigate_to_check_phone_number_page(school:)
+    navigate_to_check_mobile_page(school:)
 
-    expect(page).to have_text(I18n.t("early_career_payments.questions.select_phone_number.decline"))
+    expect(page).to have_text(I18n.t("questions.select_phone_number.decline"))
 
     # - Choose not to be contacted by mobile
     find("#claim_mobile_check_declined").click
@@ -80,7 +80,7 @@ RSpec.feature "Logs in with TID, confirms teacher details and displays phone num
   end
 
   scenario "Selects suggested phone number and then changes to an alternative phone number" do
-    navigate_to_check_phone_number_page(school:)
+    navigate_to_check_mobile_page(school:)
 
     # - Select the suggested phone number
     find("#claim_mobile_check_use").click
@@ -100,7 +100,7 @@ RSpec.feature "Logs in with TID, confirms teacher details and displays phone num
   end
 
   scenario "Selects suggested phone number and then changes to decline to be contacted by phone" do
-    navigate_to_check_phone_number_page(school:)
+    navigate_to_check_mobile_page(school:)
 
     # - Select the suggested phone number
     find("#claim_mobile_check_use").click
@@ -120,7 +120,7 @@ RSpec.feature "Logs in with TID, confirms teacher details and displays phone num
   end
 
   scenario "Selects an alternative phone number and then changes to use the suggested phone number" do
-    navigate_to_check_phone_number_page(school:)
+    navigate_to_check_mobile_page(school:)
 
     # - Select A different mobile number
     find("#claim_mobile_check_alternative").click
@@ -140,7 +140,7 @@ RSpec.feature "Logs in with TID, confirms teacher details and displays phone num
   end
 
   scenario "Selects an alternative phone number and then changes to decline to be contacted by phone" do
-    navigate_to_check_phone_number_page(school:)
+    navigate_to_check_mobile_page(school:)
 
     # - Select A different mobile number
     find("#claim_mobile_check_alternative").click
@@ -160,7 +160,7 @@ RSpec.feature "Logs in with TID, confirms teacher details and displays phone num
   end
 
   scenario "Declines to be contacted by phone and then changes to use the suggested phone number" do
-    navigate_to_check_phone_number_page(school:)
+    navigate_to_check_mobile_page(school:)
 
     # - Choose not to be contacted by mobile
     find("#claim_mobile_check_declined").click
@@ -180,7 +180,7 @@ RSpec.feature "Logs in with TID, confirms teacher details and displays phone num
   end
 
   scenario "Declines to be contacted by phone and then changes to an alternative phone number" do
-    navigate_to_check_phone_number_page(school:)
+    navigate_to_check_mobile_page(school:)
 
     # - Choose not to be contacted by mobile
     find("#claim_mobile_check_declined").click
@@ -199,7 +199,7 @@ RSpec.feature "Logs in with TID, confirms teacher details and displays phone num
     end
   end
 
-  def navigate_to_check_phone_number_page(school:)
+  def navigate_to_check_mobile_page(school:)
     visit landing_page_path(EarlyCareerPayments.routing_name)
 
     # - Landing (start)
