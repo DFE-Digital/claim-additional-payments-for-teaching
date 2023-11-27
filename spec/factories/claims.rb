@@ -281,5 +281,9 @@ FactoryBot.define do
       details_check { nil }
       logged_in_with_tid { nil }
     end
+
+    trait :logged_in_with_tid do
+      logged_in_with_tid { true }
+    end
   end
 end

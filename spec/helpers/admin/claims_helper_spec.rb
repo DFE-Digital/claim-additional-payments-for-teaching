@@ -163,6 +163,13 @@ describe Admin::ClaimsHelper do
 
       it { is_expected.to eq "N/A" }
     end
+
+    context "when a claim is not near its deadline and N/A is not shown" do
+      subject { helper.decision_deadline_warning(claim, {na_text: ""}) }
+      let(:claim) { build(:claim, :submitted, submitted_at: 1.day.ago) }
+
+      it { is_expected.to eq "" }
+    end
   end
 
   describe "#matching_attributes" do
