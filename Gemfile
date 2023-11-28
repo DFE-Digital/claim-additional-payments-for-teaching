@@ -68,7 +68,7 @@ gem "govuk_design_system_formbuilder", "~> 3.3.0"
 
 # See https://github.com/typhoeus/ethon/issues/185
 gem "ethon", "~> 0.16.0"
-gem "typhoeus", "~> 1.4.0"
+gem "typhoeus", "~> 1.4.1"
 
 # ROTP requried for Early Career Payments one-time password
 gem "rotp"
