@@ -33,7 +33,7 @@ module StudentLoans
     def qts_award_year
       [
         translate("admin.qts_award_year"),
-        eligibility.qts_award_year_answer
+        qts_award_year_answer(eligibility)
       ]
     end
 

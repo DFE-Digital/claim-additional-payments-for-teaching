@@ -8,7 +8,7 @@ RSpec.describe "Claims", type: :request do
       it "renders the first page in the sequence" do
         get new_claim_path(StudentLoans.routing_name)
         follow_redirect!
-        expect(response.body).to include(I18n.t("questions.qts_award_year"))
+        expect(response.body).to include(I18n.t("student_loans.questions.qts_award_year"))
       end
     end
 
@@ -92,7 +92,7 @@ RSpec.describe "Claims", type: :request do
       context "when the user has not completed the journey in the correct slug sequence" do
         it "redirects to the correct page in the sequence" do
           get claim_path(StudentLoans.routing_name, "qts-year")
-          expect(response.body).to include(I18n.t("questions.qts_award_year"))
+          expect(response.body).to include(I18n.t("student_loans.questions.qts_award_year"))
 
           get claim_path(StudentLoans.routing_name, "claim-school")
           expect(response).to redirect_to(claim_path(StudentLoans.routing_name, "qts-year"))
