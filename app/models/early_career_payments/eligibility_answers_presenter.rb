@@ -51,7 +51,7 @@ module EarlyCareerPayments
       [
         translate("early_career_payments.questions.current_school_search"),
         eligibility.current_school_name,
-        "current-school"
+        (eligibility.school_somewhere_else == false) ? "correct-school" : "current-school"
       ]
     end
 
