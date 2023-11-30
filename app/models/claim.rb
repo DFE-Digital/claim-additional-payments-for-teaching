@@ -103,7 +103,7 @@ class Claim < ApplicationRecord
     qa_required: false,
     qa_completed_at: false
   }.freeze
-  DECISION_DEADLINE = 14.weeks
+  DECISION_DEADLINE = 12.weeks
   DECISION_DEADLINE_WARNING_POINT = 2.weeks
   ATTRIBUTE_DEPENDENCIES = {
     "has_student_loan" => ["student_loan_country", "has_masters_doctoral_loan", "postgraduate_masters_loan", "postgraduate_doctoral_loan"],
