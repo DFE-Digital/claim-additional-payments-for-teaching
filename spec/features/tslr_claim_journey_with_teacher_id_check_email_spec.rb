@@ -32,7 +32,7 @@ RSpec.feature "TSLR journey with Teacher ID email check" do
     find("#claim_email_address_check_true").click
     click_on "Continue"
 
-    expect(page).to have_text(I18n.t("questions.provide_mobile_number"))
+    expect(page).to have_text(I18n.t("questions.select_phone_number.heading"))
 
     Claim.order(created_at: :desc).limit(2).each do |c|
       expect(c.email_address).to eq("kelsie.oberbrunner@example.com")

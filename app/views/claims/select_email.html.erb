@@ -1,4 +1,4 @@
-<% content_for(:page_title, page_title(t("early_career_payments.questions.select_email.heading"), policy: current_policy_routing_name, show_error: current_claim.errors.any?)) %>
+<% content_for(:page_title, page_title(t("questions.select_email.heading"), policy: current_policy_routing_name, show_error: current_claim.errors.any?)) %>
 <% path_for_form = current_claim.persisted? ? claim_path(current_policy_routing_name) : claims_path(current_policy_routing_name) %>
 <% shared_view_css_size = current_claim.policy == EarlyCareerPayments ? "l" : "xl" %>
 
@@ -13,12 +13,12 @@
 
           <legend class="govuk-fieldset__legend govuk-fieldset__legend--<%= shared_view_css_size %>">
             <h1 class="govuk-fieldset__heading">
-              <%= t("early_career_payments.questions.select_email.heading") %>
+              <%= t("questions.select_email.heading") %>
             </h1>
           </legend>
 
           <div class="govuk-hint" id="email-address-hint">
-              <%= t("early_career_payments.questions.select_email.hint") %>
+              <%= t("questions.select_email.hint") %>
           </div>
 
           <%= errors_tag current_claim, :email_address %>
