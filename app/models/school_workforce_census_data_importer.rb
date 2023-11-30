@@ -1,55 +1,17 @@
-require "file_download"
-require "csv"
-
-class SchoolWorkforceCensusDataImporter
+class SchoolWorkforceCensusDataImporter < CsvImporter::Base
   include ::TrnValidation
-  attr_reader :errors, :rows
 
-  EXPECTED_HEADERS = [
-    "TRN",
-    "URN",
-    "ContractAgreementType",
-    "TotalFTE",
-    "SubjectDescription_SFR",
-    "GeneralSubjectCode",
-    "hours_taught"
-  ].freeze
-
-  def initialize(file)
-    @errors = []
-    if file.present?
-      @rows = parse_csv_file(file)
-    else
-      errors.append("Select a file")
-    end
-  end
-
-  def run
-    SchoolWorkforceCensus.delete_all
-
-    batch = 1
-    rows.each_slice(500) do |batch_rows|
-      Rails.logger.info "Processing batch #{batch}"
-
-      record_hashes = batch_rows.map do |row|
-        next if row[0].blank? || row[4] == "NULL" || row[0] == "NULL" || !valid_trn?(row[0])
-
-        row_to_school_workforce_census_hash(row)
-      end.compact
-
-      SchoolWorkforceCensus.insert_all(record_hashes) unless record_hashes.empty?
-
-      batch += 1
-    end
-  end
+  import_options(
+    target_data_model: SchoolWorkforceCensus,
+    transform_rows_with: :row_to_hash,
+    skip_row_if: :skip_row_conditions?,
+    parse_headers: false # Note: The CSV does not contain the header row
+  )
 
   private
 
-  def parse_csv_file(file)
-    CSV.read(file.to_io, headers: false, encoding: "BOM|UTF-8")
-  rescue CSV::MalformedCSVError
-    errors.append("The selected file must be a CSV")
-    nil
+  def skip_row_conditions?(row)
+    row[0].blank? || row[4] == "NULL" || row[0] == "NULL" || !valid_trn?(row[0])
   end
 
   def valid_trn?(trn)
@@ -57,10 +19,7 @@ class SchoolWorkforceCensusDataImporter
     valid_trn_length?(trn)
   end
 
-  # NOTE: since there will be lots of rows, avoid instantiating model object
-  def row_to_school_workforce_census_hash(row)
-    now = Time.now.utc
-
+  def row_to_hash(row)
     {
       teacher_reference_number: row[0],
       school_urn: row[1],
@@ -68,9 +27,7 @@ class SchoolWorkforceCensusDataImporter
       totfte: row[3],
       subject_description_sfr: row[4],
       general_subject_code: row[5],
-      hours_taught: row[6],
-      created_at: now,
-      updated_at: now
+      hours_taught: row[6]
     }
   end
 end

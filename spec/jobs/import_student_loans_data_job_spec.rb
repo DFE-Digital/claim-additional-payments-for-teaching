@@ -1,0 +1,42 @@
+require "rails_helper"
+
+RSpec.describe ImportStudentLoansDataJob do
+  describe "#perform" do
+    subject(:upload) { described_class.new.perform(file_upload.id) }
+    let(:file_upload) { create(:file_upload, body: csv) }
+    let(:csv) do
+      <<~CSV
+        Claim reference,NINO,Full name,Date of birth,Policy name,No of Plans Currently Repaying,Plan Type of Deduction,Amount
+        TESTREF01,QQ123456A,,,,,,
+      CSV
+    end
+
+    context "csv data processes successfully" do
+      it "imports student loans data" do
+        expect { upload }.to change(StudentLoansData, :count).by(1)
+      end
+
+      it "deletes the file upload" do
+        upload
+
+        expect(FileUpload.find_by_id(file_upload.id)).to be_nil
+      end
+    end
+
+    context "csv data encounters an error" do
+      before do
+        allow(StudentLoansData).to receive(:insert_all).and_raise(ActiveRecord::RecordInvalid)
+      end
+
+      it "does not import census data" do
+        expect { upload }.not_to change(StudentLoansData, :count)
+      end
+
+      it "keeps the file upload" do
+        upload
+
+        expect(FileUpload.find_by_id(file_upload.id)).to be_present
+      end
+    end
+  end
+end

@@ -36,6 +36,18 @@
   - subject_13
   - subject_14
   - subject_15
+  :student_loans_data:
+  - id
+  - claim_reference
+  - nino
+  - full_name
+  - date_of_birth
+  - policy_name
+  - no_of_plans_currently_repaying
+  - plan_type_of_deduction
+  - amount
+  - created_at
+  - updated_at
   :schools:
   - postcode_sanitised
   :file_uploads:

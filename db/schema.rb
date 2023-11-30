@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_10_10_110119) do
+ActiveRecord::Schema[7.0].define(version: 2023_11_21_114436) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_trgm"
   enable_extension "pgcrypto"
@@ -353,6 +353,21 @@ ActiveRecord::Schema[7.0].define(version: 2023_10_10_110119) do
     t.index ["open_date"], name: "index_schools_on_open_date"
     t.index ["postcode_sanitised"], name: "index_schools_on_postcode_sanitised", opclass: :gin_trgm_ops, using: :gin
     t.index ["urn"], name: "index_schools_on_urn", unique: true
+  end
+
+  create_table "student_loans_data", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "claim_reference"
+    t.string "nino"
+    t.string "full_name"
+    t.date "date_of_birth"
+    t.string "policy_name"
+    t.integer "no_of_plans_currently_repaying"
+    t.integer "plan_type_of_deduction"
+    t.float "amount"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["claim_reference"], name: "index_student_loans_data_on_claim_reference"
+    t.index ["nino"], name: "index_student_loans_data_on_nino"
   end
 
   create_table "student_loans_eligibilities", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
