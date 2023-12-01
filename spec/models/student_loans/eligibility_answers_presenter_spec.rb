@@ -12,7 +12,7 @@ RSpec.describe StudentLoans::EligibilityAnswersPresenter, type: :model do
   it "returns an array of questions, answers, and slugs for displaying to the user for review" do
     create(:policy_configuration, :student_loans)
     expected_answers = [
-      [I18n.t("questions.qts_award_year"), "In or after the academic year 2013 to 2014", "qts-year"],
+      [I18n.t("student_loans.questions.qts_award_year"), "Between the start of the 2013 to 2014 academic year and the end of the 2020 to 2021 academic year", "qts-year"],
       [claim_school_question, eligibility.claim_school.name, "claim-school"],
       [I18n.t("questions.current_school"), eligibility.current_school.name, "still-teaching"],
       [subjects_taught_question(school_name: eligibility.current_school.name), "Chemistry and Physics", "subjects-taught"],
@@ -27,11 +27,11 @@ RSpec.describe StudentLoans::EligibilityAnswersPresenter, type: :model do
     claim.academic_year = "2027/2028"
 
     qts_answer = presenter.answers[0][1]
-    expect(qts_answer).to eq("In or after the academic year 2016 to 2017")
+    expect(qts_answer).to eq("Between the start of the 2016 to 2017 academic year and the end of the 2020 to 2021 academic year")
 
     eligibility.qts_award_year = :before_cut_off_date
     qts_answer = presenter.answers[0][1]
-    expect(qts_answer).to eq("In or before the academic year 2015 to 2016")
+    expect(qts_answer).to eq("A different academic year")
   end
 
   it "excludes questions skipped from the flow" do

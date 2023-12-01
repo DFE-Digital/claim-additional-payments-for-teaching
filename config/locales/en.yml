@@ -270,6 +270,7 @@ en:
     support_email_address: "studentloanteacherpayment@digital.education.gov.uk"
     landing_page: "Claim back student loan repayments if you're a teacher"
     questions:
+      qts_award_year: "When did you complete your initial teacher training (ITT)?"
       claim_school: "Which school were you employed to teach at between %{financial_year}?"
       additional_school: "Which additional school were you employed to teach at between %{financial_year}?"
       employment_status: "Are you still employed to teach at a school in England?"
@@ -284,6 +285,10 @@ en:
         languages_taught: "Languages"
         none_taught: "I did not teach any of these subjects"
       student_loan_amount: "Exactly how much student loan did you repay in the %{financial_year} financial year?"
+    answers:
+      qts_award_years:
+        before_cut_off_date: A different academic year
+        on_or_after_cut_off_date: Between the start of the %{year} academic year and the end of the 2020 to 2021 academic year
     admin:
       claim_school: "Claim school"
       subjects_taught: "Subjects taught"

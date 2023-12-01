@@ -1,0 +1,53 @@
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <h1 class="govuk-heading-xl">
+      Choose and upload SLC data
+    </h1>
+    <dl class="govuk-summary-list govuk-!-margin-bottom-9">
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+          Number of rows currently uploaded
+        </dt>
+
+        <dd class="govuk-summary-list__value">
+          <%= StudentLoansData.count %>
+        </dd>
+      </div>
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+          Number of unique NINOs
+        </dt>
+
+        <dd class="govuk-summary-list__value">
+          <%= StudentLoansData.distinct.count(:nino) %>
+        </dd>
+      </div>
+    </dl>
+
+    <p class="govuk-body">
+      Before uploading please note the following:
+    </p>
+
+    <ul class="govuk-list govuk-list--bullet">
+      <li>All previously uploaded SLC data will be wiped.</li>
+      <li>Previously uploaded data will remain wiped if there are any errors processing the uploaded file.</li>
+      <li>Do not upload another file until an email has been received of success or failure.</li>
+      <li>You can wipe all data by uploading a CSV file with just the header row and no data rows.</li>
+    </ul>
+
+    <%= form_with url: admin_student_loans_data_uploads_path, multipart: true do |f| %>
+      <div class="govuk-form-group">
+        <%= f.label "file", "Upload a CSV file", class: "govuk-label" %>
+
+        <% @importer && @importer.errors.each do |error| %>
+          <span class="govuk-error-message">
+            <span class="govuk-visually-hidden">Error:</span> <%= error %>
+          </span>
+        <% end %>
+
+        <%= f.file_field "file", class: "govuk-file-upload" %>
+      </div>
+      <%= f.submit "Upload", class: "govuk-button", data: {module: "govuk-button"} %>
+    <% end %>
+  </div>
+</div>

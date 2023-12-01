@@ -24,7 +24,7 @@ RSpec.feature "Teacher Student Loan Repayments claims" do
       visit claim_path(StudentLoans.routing_name, "leadership-position")
       expect(page).to have_current_path("/#{StudentLoans.routing_name}/qts-year")
 
-      expect(page).to have_text(I18n.t("questions.qts_award_year"))
+      expect(page).to have_text(I18n.t("student_loans.questions.qts_award_year"))
       expect(page).to have_link(href: "mailto:#{StudentLoans.feedback_email}")
 
       choose_qts_year

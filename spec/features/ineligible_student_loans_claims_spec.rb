@@ -17,7 +17,7 @@ RSpec.feature "Ineligible Teacher Student Loan Repayments claims" do
 
     expect(claim.eligibility.reload.qts_award_year).to eql("before_cut_off_date")
     expect(page).to have_text("You’re not eligible")
-    expect(page).to have_text("You can only get this payment if you completed your initial teacher training in or after the academic year 2014 to 2015.")
+    expect(page).to have_text("You can only get this payment if you completed your initial teacher training between the start of the 2014 to 2015 academic year and the end of the 2020 to 2021 academic year.")
 
     # Check we can go back and change the answer
     visit claim_path(StudentLoans.routing_name, "qts-year")
@@ -105,7 +105,7 @@ RSpec.feature "Ineligible Teacher Student Loan Repayments claims" do
 
     skip_tid
 
-    expect(page).to have_content("When did you complete your initial teacher training?")
+    expect(page).to have_content("When did you complete your initial teacher training (ITT)?")
     expect(page).not_to have_css("input[checked]")
     choose_qts_year
 

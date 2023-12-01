@@ -169,7 +169,7 @@ RSpec.shared_examples "Admin Checks" do |policy|
 
     expect(page).to have_content(I18n.t("student_loans.admin.task_questions.qualifications.title"))
     expect(page).to have_content("Award year")
-    expect(page).to have_content(claim.eligibility.qts_award_year_answer)
+    expect(page).to have_content(I18n.t("student_loans.answers.qts_award_years.#{claim.eligibility.qts_award_year}", year: StudentLoans.first_eligible_qts_award_year(claim.academic_year).to_s(:long)))
     expect(page).to have_link("Next: Census subjects taught")
     expect(page).to have_link("Previous: Identity confirmation")
 
