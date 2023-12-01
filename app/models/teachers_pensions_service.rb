@@ -31,6 +31,6 @@ class TeachersPensionsService < ApplicationRecord
     return nil unless tps_record&.school_urn
 
     # The TPS data is labelled 'URN' but is actually the DfE establishment number
-    School.joins(:local_authority).find_by(establishment_number: tps_record.school_urn, local_authority: {code: tps_record.la_urn})
+    School.open.joins(:local_authority).find_by(establishment_number: tps_record.school_urn, local_authority: {code: tps_record.la_urn})
   end
 end
