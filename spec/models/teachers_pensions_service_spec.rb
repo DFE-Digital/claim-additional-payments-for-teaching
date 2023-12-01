@@ -30,6 +30,7 @@ RSpec.describe TeachersPensionsService do
     subject(:recent_tps_school) { described_class.recent_tps_school(claim) }
 
     context "when there is a TPS record matching the TRN" do
+      let!(:closed_school) { create(:school, :closed, local_authority:, establishment_number:) }
       let!(:tps_record) { create(:teachers_pensions_service, teacher_reference_number:, la_urn:, school_urn:, start_date:, end_date:) }
 
       context "when the end date is within the permitted window" do
