@@ -56,7 +56,7 @@ en:
     check_and_confirm_details: "Check and confirm your personal details"
     details_correct: "Are these details correct?"
     current_school: "Which school are you currently employed to teach at?"
-    qts_award_year: "When did you complete your initial teacher training?"
+    qts_award_year: "When did you complete your initial teacher training (ITT)?"
     name: "What is your full name?"
     address:
       generic:
