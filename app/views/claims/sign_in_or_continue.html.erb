@@ -13,7 +13,7 @@
       </p>
 
       <div class="govuk-button-group">
-        <%= button_to "Continue with DfE Identity", "/auth/tid", class: "govuk-button" %>
+        <%= button_to "Continue with DfE Identity", "/auth/tid", class: "govuk-button", method: :post %>
         <%= button_to "Continue without signing in", claim_path(current_policy_routing_name, "sign-in-or-continue"), method: :patch, class: "govuk-button govuk-button--secondary"%>
       </div>
     </div>
