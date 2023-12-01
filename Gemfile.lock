@@ -296,7 +296,7 @@ GEM
       validate_url
       webfinger (~> 1.2)
     os (1.1.4)
-    pagy (6.0.2)
+    pagy (6.2.0)
     parallel (1.23.0)
     parser (3.2.2.4)
       ast (~> 2.4.1)
