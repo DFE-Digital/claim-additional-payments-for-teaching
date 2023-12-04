@@ -441,6 +441,7 @@ class Claim < ApplicationRecord
   end
 
   # Returns true if the claim has a verified identity received from GOV.UK Verify.
+  # TODO: We no longer use GOV.UK Verify these verified? methods aren't used anymore.
   def identity_verified?
     govuk_verify_fields.any?
   end
@@ -600,6 +601,10 @@ class Claim < ApplicationRecord
     claim_dup = dup
     claim_dup.valid?(:"personal-details-nino")
     !claim_dup.errors.include?(:national_insurance_number)
+  end
+
+  def trn_same_as_tid?
+    teacher_id_user_info["trn"] == teacher_reference_number
   end
 
   private
