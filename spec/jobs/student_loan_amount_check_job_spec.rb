@@ -16,7 +16,7 @@ RSpec.describe StudentLoanAmountCheckJob do
       end
     end
 
-    context "when the student loan amount check outcome was NO DATA" do
+    context "when the previous student loan amount check outcome was NO DATA" do
       let!(:previous_task) { create(:task, claim: claim, name: "student_loan_amount", claim_verifier_match: nil, manual: false) }
 
       it "re-runs the task" do
@@ -27,7 +27,23 @@ RSpec.describe StudentLoanAmountCheckJob do
       end
     end
 
-    context "when the student loan amount check outcome was PASSED" do
+    context "when the previous student loan amount check outcome was FAIL" do
+      let!(:previous_task) { create(:task, claim: claim, name: "student_loan_amount", claim_verifier_match: :none, passed: false, manual: false) }
+
+      it "does not update the student loan details" do
+        expect(ClaimStudentLoanDetailsUpdater).not_to receive(:call)
+        perform_job
+      end
+
+      it "does not re-run the task" do
+        expect { perform_job }
+          .to not_change { claim.reload.notes.count }
+          .and not_change { claim.tasks.last.updated_at }
+          .and not_change { claim.reload.tasks.count }
+      end
+    end
+
+    context "when the previous student loan amount check outcome was PASS" do
       let!(:previous_task) { create(:task, claim: claim, name: "student_loan_amount", claim_verifier_match: :all, manual: false) }
 
       it "does not re-run the task" do
