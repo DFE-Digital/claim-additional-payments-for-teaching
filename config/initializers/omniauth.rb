@@ -53,7 +53,6 @@ Rails.application.config.middleware.use OmniAuth::Builder do
 
   provider :openid_connect, {
     name: :tid,
-    provider_ignores_state: true,
     allow_authorize_params: %i[session_id trn_token],
     callback_path: "/claim/auth/tid/callback",
     client_options: {
