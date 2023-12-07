@@ -53,7 +53,6 @@ Rails.application.config.middleware.use OmniAuth::Builder do
 
   provider :openid_connect, {
     name: :tid,
-    allow_authorize_params: %i[session_id trn_token],
     callback_path: "/claim/auth/tid/callback",
     client_options: {
       host: tid_sign_in_endpoint_uri&.host,
@@ -66,7 +65,6 @@ Rails.application.config.middleware.use OmniAuth::Builder do
     discovery: true,
     issuer: ENV["TID_SIGN_IN_ISSUER"],
     pkce: true,
-    response_type: :code,
     scope: ["email", "openid", "profile", "dqt:read"],
     send_scope_to_token_endpoint: false
   }
