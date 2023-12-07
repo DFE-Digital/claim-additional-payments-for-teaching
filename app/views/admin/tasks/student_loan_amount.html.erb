@@ -13,7 +13,7 @@
   </div>
 
   <div class="govuk-grid-column-two-thirds">
-    <% if @task.persisted? %>
+    <% if !@task.passed.nil? %>
       <%= render "task_outcome", task: @task %>
     <% else %>
       <%= render "form", task_name: "student_loan_amount", claim: @claim %>
