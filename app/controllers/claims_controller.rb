@@ -32,9 +32,13 @@ class ClaimsController < BasePublicController
     elsif params[:slug] == "select-email"
       session[:email_address] = current_claim.teacher_id_user_info["email"]
     elsif params[:slug] == "correct-school"
-      update_session_with_tps_school
+      update_session_with_tps_school(current_claim.recent_tps_school)
     elsif params[:slug] == "nqt-in-academic-year-after-itt" && page_sequence.in_sequence?("correct-school")
       @backlink_path = claim_path(current_policy_routing_name, "correct-school")
+    elsif params[:slug] == "select-claim-school"
+      update_session_with_tps_school(current_claim.tps_school_for_student_loan_in_previous_financial_year)
+    elsif params[:slug] == "subjects-taught" && page_sequence.in_sequence?("select-claim-school")
+      @backlink_path = claim_path(current_policy_routing_name, "select-claim-school")
     elsif params[:slug] == "select-mobile"
       session[:phone_number] = current_claim.teacher_id_user_info["phone_number"]
     elsif params[:slug] == "postcode-search" && postcode
@@ -77,6 +81,8 @@ class ClaimsController < BasePublicController
       return bank_account
     when "correct-school"
       check_correct_school_params
+    when "select-claim-school"
+      check_select_claim_school_params
     when "select-email"
       check_email_params
     when "select-mobile"
@@ -321,8 +327,8 @@ class ClaimsController < BasePublicController
     current_claim.attributes = SelectMobileNumberForm.extract_attributes(current_claim, mobile_check: params.dig(:claim, :mobile_check))
   end
 
-  def update_session_with_tps_school
-    if (school = current_claim.recent_tps_school)
+  def update_session_with_tps_school(school)
+    if school
       session[:tps_school_id] = school.id
       session[:tps_school_name] = school.name
       session[:tps_school_address] = school.address
@@ -331,6 +337,11 @@ class ClaimsController < BasePublicController
 
   def check_correct_school_params
     updated_claim_params = CorrectSchoolForm.extract_params(claim_params, change_school: params[:change_school])
+    current_claim.attributes = updated_claim_params
+  end
+
+  def check_select_claim_school_params
+    updated_claim_params = SelectClaimSchoolForm.extract_params(claim_params, change_school: params[:additional_school])
     current_claim.attributes = updated_claim_params
   end
 end

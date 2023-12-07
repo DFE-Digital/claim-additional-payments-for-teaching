@@ -177,6 +177,7 @@ shared:
     - student_loan_repayment_amount
     - had_leadership_position
     - mostly_performed_leadership_duties
+    - claim_school_somewhere_else
   :maths_and_physics_eligibilities:
     - id
     - teaching_maths_or_physics
