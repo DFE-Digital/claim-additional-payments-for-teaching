@@ -4,7 +4,8 @@ class StudentLoanAmountCheckJob < ApplicationJob
     claims = current_year_tslr_claims.awaiting_task("student_loan_amount")
 
     claims.each do |claim|
-      AutomatedChecks::ClaimVerifiers::StudentLoanAmount.new(claim: claim).perform
+      ClaimStudentLoanDetailsUpdater.call(claim)
+      AutomatedChecks::ClaimVerifiers::StudentLoanAmount.new(claim:).perform
     end
   end
 
