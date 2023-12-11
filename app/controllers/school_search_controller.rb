@@ -1,4 +1,4 @@
-class SchoolSearchController < ApplicationController
+class SchoolSearchController < BasePublicController
   def create
     search_schools
     render status: errors.blank? ? :ok : :bad_request

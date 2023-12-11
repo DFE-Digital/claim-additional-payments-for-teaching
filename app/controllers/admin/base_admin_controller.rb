@@ -1,6 +1,7 @@
 module Admin
   class BaseAdminController < ApplicationController
     include AdminSessionTimeout
+    include HttpAuthConcern
 
     layout "admin"
 
