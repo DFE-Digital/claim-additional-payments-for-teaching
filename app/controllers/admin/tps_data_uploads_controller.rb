@@ -15,7 +15,7 @@ module Admin
         if @tps_data_importer.errors.any?
           render :new and return
         end
-        EmploymentCheckJob.perform_later(AutomatedChecks::ClaimVerifiers::Employment)
+        EmploymentCheckJob.perform_later
         redirect_to admin_claims_path, notice: "Teachers Pensions Service data uploaded successfully"
       end
     rescue ActiveRecord::RecordInvalid => e
