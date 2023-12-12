@@ -5,37 +5,40 @@ RSpec.describe EmploymentCheckJob do
 
   describe "#perform" do
     subject(:job) { described_class.new }
-    let(:verifier) { double("verifier", new: verifier_instance) }
     let(:verifier_instance) { instance_double("AutomatedChecks::ClaimVerifiers::Employment", perform: true) }
     let(:policy) { EarlyCareerPayments }
+
+    before do
+      allow(AutomatedChecks::ClaimVerifiers::Employment).to receive(:new).with(claim:).and_return(verifier_instance)
+    end
 
     let(:claim) { create(:claim, :submitted, policy:) }
 
     context "when there is a recent claim with a passed check" do
       let!(:passed_check) { create(:task, :passed, :automated, name: "employment", claim:) }
 
-      before { job.perform(verifier) }
+      before { job.perform }
 
       it "does not delete the existing check on that claim" do
         expect { passed_check.reload }.not_to raise_error
       end
 
       it "does not create a new employment check" do
-        expect(verifier).not_to have_received(:new)
+        expect(AutomatedChecks::ClaimVerifiers::Employment).not_to have_received(:new)
       end
     end
 
     context "when there is a recent claim with a failed check" do
       let!(:failed_check) { create(:task, :failed, :automated, name: "employment", claim:) }
 
-      before { job.perform(verifier) }
+      before { job.perform }
 
       it "deletes the old check on that claim" do
         expect { failed_check.reload }.to raise_error(ActiveRecord::RecordNotFound)
       end
 
       it "creates a new employment check on that claim" do
-        expect(verifier).to have_received(:new).with(claim:)
+        expect(AutomatedChecks::ClaimVerifiers::Employment).to have_received(:new).with(claim:)
       end
     end
 
@@ -46,7 +49,7 @@ RSpec.describe EmploymentCheckJob do
       let!(:failed_check) { create(:task, :failed, :automated, name: "employment", claim:, created_at: past_date, updated_at: past_date) }
 
       before do
-        travel_to(Time.zone.local(academic_year.end_year, 8, 31)) { job.perform(verifier) }
+        travel_to(Time.zone.local(academic_year.end_year, 8, 31)) { job.perform }
       end
 
       it "deletes the existing check on that claim" do
@@ -54,7 +57,7 @@ RSpec.describe EmploymentCheckJob do
       end
 
       it "does not create a new employment check" do
-        expect(verifier).not_to have_received(:new)
+        expect(AutomatedChecks::ClaimVerifiers::Employment).not_to have_received(:new)
       end
     end
   end
