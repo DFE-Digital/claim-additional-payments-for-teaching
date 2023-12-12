@@ -127,7 +127,7 @@ module EarlyCareerPayments
 
         sequence.delete("teacher-reference-number") if claim.logged_in_with_tid? && claim.teacher_reference_number.present?
 
-        sequence.delete("correct-school") unless claim.logged_in_with_tid? && claim.teacher_reference_number.present? && claim.has_recent_tps_school?
+        sequence.delete("correct-school") unless claim.logged_in_with_tid_and_has_recent_tps_school?
         sequence.delete("current-school") if claim.eligibility.school_somewhere_else == false
 
         if claim.provide_mobile_number == false

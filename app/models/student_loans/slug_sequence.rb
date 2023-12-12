@@ -82,7 +82,7 @@ module StudentLoans
       SLUGS.dup.tap do |sequence|
         sequence.delete("teacher-detail") if claim.logged_in_with_tid.nil?
         sequence.delete("reset-claim") if [nil, true].include?(claim.logged_in_with_tid)
-        sequence.delete("current-school") if claim.eligibility.employed_at_claim_school?
+        sequence.delete("current-school") if claim.eligibility.employed_at_claim_school? || claim.eligibility.employed_at_recent_tps_school?
         sequence.delete("mostly-performed-leadership-duties") unless claim.eligibility.had_leadership_position?
         sequence.delete("student-loan-country") if claim.no_student_loan?
         sequence.delete("student-loan-how-many-courses") if claim.no_student_loan? || claim.student_loan_country_with_one_plan?
