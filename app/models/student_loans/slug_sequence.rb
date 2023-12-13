@@ -115,6 +115,7 @@ module StudentLoans
           sequence.delete("select-claim-school")
         end
         sequence.delete("claim-school") if claim.eligibility.claim_school_somewhere_else == false
+        sequence.delete("teacher-reference-number") if claim.logged_in_with_tid? && claim.teacher_reference_number.present?
       end
     end
   end
