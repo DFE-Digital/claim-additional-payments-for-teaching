@@ -304,7 +304,7 @@ en:
         computing_taught: "Computing"
         languages_taught: "Languages"
         none_taught: "I did not teach any of these subjects"
-      student_loan_amount: "Exactly how much student loan did you repay in the %{financial_year} financial year?"
+      student_loan_amount: Student loan amount
     answers:
       qts_award_years:
         before_cut_off_date: A different academic year

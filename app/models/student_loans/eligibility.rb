@@ -17,7 +17,6 @@ module StudentLoans
       :had_leadership_position,
       :taught_eligible_subjects,
       :mostly_performed_leadership_duties,
-      :student_loan_repayment_amount,
       SUBJECT_ATTRIBUTES
     ].flatten.freeze
     AMENDABLE_ATTRIBUTES = %i[student_loan_repayment_amount].freeze
@@ -56,8 +55,7 @@ module StudentLoans
     validate :one_subject_must_be_selected, on: [:"subjects-taught", :submit], unless: :not_taught_eligible_subjects?
     validates :had_leadership_position, on: [:"leadership-position", :submit], inclusion: {in: [true, false], message: "Select yes if you were employed in a leadership position"}
     validates :mostly_performed_leadership_duties, on: [:"mostly-performed-leadership-duties", :submit], inclusion: {in: [true, false], message: "Select yes if you spent more than half your working hours on leadership duties"}, if: :had_leadership_position?
-    validates :student_loan_repayment_amount, on: [:"student-loan-amount", :submit], presence: {message: "Enter your student loan repayment amount"}
-    validates_numericality_of :student_loan_repayment_amount, message: "Enter a valid monetary amount", allow_nil: true, greater_than: 0, less_than_or_equal_to: 99999
+    validates_numericality_of :student_loan_repayment_amount, message: "Enter a valid monetary amount", allow_nil: true, greater_than_or_equal_to: 0, less_than_or_equal_to: 99999
     validates :student_loan_repayment_amount, on: :amendment, award_range: {max: 5_000}
 
     delegate :name, to: :claim_school, prefix: true, allow_nil: true
