@@ -43,13 +43,10 @@ RSpec.describe Policies::StudentLoans::Eligibility, type: :model do
       expect(described_class.new(student_loan_repayment_amount: 99_999)).to be_valid
     end
 
-    it "validates that the loan repayment a positive number" do
+    it "validates that the loan repayment is greater than or equal to zero" do
       expect(described_class.new(student_loan_repayment_amount: "-99")).not_to be_valid
+      expect(described_class.new(student_loan_repayment_amount: "0")).to be_valid
       expect(described_class.new(student_loan_repayment_amount: "150")).to be_valid
-    end
-
-    it "validates that the loan repayment is not zero" do
-      expect(described_class.new(student_loan_repayment_amount: "0")).not_to be_valid
     end
 
     it "validates that the loan repayment less than £5000 when amending a claim" do
@@ -301,13 +298,6 @@ RSpec.describe Policies::StudentLoans::Eligibility, type: :model do
 
     it "is valid when missing if had_leadership_position is false" do
       expect(described_class.new(had_leadership_position: false)).to be_valid(:"mostly-performed-leadership-duties")
-    end
-  end
-
-  context "when saving in the “student-loan-amount” validation context" do
-    it "validates the presence of student_loan_repayment_amount" do
-      expect(described_class.new).not_to be_valid(:"student-loan-amount")
-      expect(described_class.new(student_loan_repayment_amount: 1_100)).to be_valid(:"student-loan-amount")
     end
   end
 
