@@ -1,78 +1,21 @@
-<% content_for(:page_title, page_title(student_loan_amount_question, policy: current_policy_routing_name, show_error: current_claim.errors.any?)) %>
+<% content_for(:page_title, page_title(t("student_loans.questions.student_loan_amount"), policy: current_policy_routing_name, show_error: current_claim.errors.any?)) %>
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
     <%= render("shared/error_summary", instance: current_claim) if current_claim.errors.any? %>
 
-    <%= form_for current_claim, url: claim_path(current_policy_routing_name) do |form| %>
-      <%= form_group_tag current_claim do %>
-        <%= form.fields_for :eligibility, include_id: false do |fields| %>
-          <fieldset class="govuk-fieldset" role="group">
-            <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl">
-              <span class="govuk-caption-xl">About your student loans</span>
-              <h1 class="govuk-fieldset__heading">
-                <%= fields.label :student_loan_repayment_amount, student_loan_amount_question, class: "govuk-label govuk-label--xl" %>
-              </h1>
-            </legend>
+    <% if current_claim.has_student_loan? %>
+      <h1 class="govuk-heading-l">Your student loan repayment amount is <%= number_to_currency(current_claim.award_amount, precision: 2, strip_insignificant_zeros: true) %> for the <%= StudentLoans.configuration.current_academic_year.to_s(:long) %> financial year</h1>
+      <p class="govuk-body">This information is provided by the Student Loans Company (SLC).</p>
 
-            <p class="govuk-hint" id="student_loan_repayment_amount-hint">
-              This will relate to the period you were employed as a teacher between <%= StudentLoans.current_financial_year %>.
-              <% if current_claim.postgraduate_masters_loan == true || current_claim.postgraduate_doctoral_loan == true %>
-                You must include any postgraduate masters and doctoral loans when calculating the amount you have repaid.
-              <% end %>
-            </p>
+      <p class="govuk-body">If it is not what you expected you can still complete your application and then contact SLC.</p>
+    <% else %>
+      <h1 class="govuk-heading-l">We don’t currently have your student loan repayment amount</h1>
+      <p class="govuk-body">We haven’t received this information from the Student Loans Company yet. We will contact them on your behalf and ask them to send it to us.</p>
 
-            <%= errors_tag current_claim.eligibility, :student_loan_repayment_amount %>
-
-            <div class="govuk-currency-input">
-              <span class="govuk-currency-input__unit">&pound;</span>
-              <%= fields.number_field(
-                    :student_loan_repayment_amount,
-                    class: css_classes_for_input(current_claim, :student_loan_repayment_amount, "govuk-currency-input__input govuk-input--width-5"),
-                    step: 'any',
-                    min: 1,
-                    max: 99999,
-                    value: currency_value_for_number_field(fields.object.student_loan_repayment_amount),
-                    "aria-describedby" => "student_loan_repayment_amount-hint"
-                  )
-              %>
-            </div>
-
-            <br>
-            <div class="govuk-currency-hint">
-              <details class="govuk-details" data-module="govuk-details">
-                <summary class="govuk-details__summary">
-                  <span class="govuk-details__summary-text">
-                    Help me calculate my student loan repayments
-                  </span>
-                </summary>
-                <div class="govuk-details__text">
-                  <p class="govuk-body">
-                    You can calculate the amount you have repaid by:
-                  </p>
-                  <ul class="govuk-list govuk-list--bullet">
-                    <li>logging into your <%= link_to "student loan account",
-                      StudentLoans.student_loan_balance_url,
-                        class: "govuk-link",
-                        title: "govuk-link (opens in new tab)",
-                        rel: "noreferrer noopener",
-                        target: "_blank"
-                      %>
-                      and checking your balance
-                    </li>
-                    <li>checking your P60 if you’ve only had one employer</li>
-                    <li>
-                      adding up your student loan contributions from your payslip (the
-                      amounts on each payslip might be different)
-                    </li>
-                  </ul>
-                </div>
-              </details>
-            </div>
-          </fieldset>
-        <% end %>
-      <% end %>
-      <%= form.submit "Continue", class: "govuk-button" %>
+      <p class="govuk-body">You can still complete the rest of your application.</p>
     <% end %>
+
+    <%= button_to "Continue", claim_path(current_policy_routing_name), method: :patch, class: "govuk-button", role: :button, data: { module: "govuk-button"} %>
   </div>
 </div>

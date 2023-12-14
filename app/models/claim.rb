@@ -21,7 +21,7 @@ class Claim < ApplicationRecord
     :payroll_gender,
     :teacher_reference_number,
     :national_insurance_number,
-    :has_student_loan,
+    :has_student_loan, # TODO: remove this and remaining student loan attribtues with CAPT-1415
     :student_loan_country,
     :student_loan_courses,
     :student_loan_start_date,
@@ -482,7 +482,7 @@ class Claim < ApplicationRecord
         write_attribute(dependent_attribute_name, nil) if changed.include?(attribute_name)
       end
     end
-    self.student_loan_plan = determine_student_loan_plan
+    self.student_loan_plan = determine_student_loan_plan unless policy == StudentLoans
   end
 
   def policy
