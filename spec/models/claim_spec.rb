@@ -1187,7 +1187,7 @@ RSpec.describe Claim, type: :model do
   end
 
   describe "#reset_dependent_answers" do
-    let(:claim) { create(:claim, :submittable, :with_no_postgraduate_masters_doctoral_loan, bank_or_building_society: "building_society") }
+    let(:claim) { create(:claim, :submittable, :with_no_postgraduate_masters_doctoral_loan, policy: LevellingUpPremiumPayments, bank_or_building_society: "building_society") }
 
     it "redetermines the student_loan_plan and resets loan plan answers when has_student_loan changes" do
       claim.has_student_loan = true
