@@ -87,6 +87,8 @@ class ClaimsController < BasePublicController
       check_email_params
     when "select-mobile"
       check_mobile_number_params
+    when "still-teaching"
+      check_still_teaching_params
     else
       current_claim.attributes = claim_params
     end
@@ -342,6 +344,11 @@ class ClaimsController < BasePublicController
 
   def check_select_claim_school_params
     updated_claim_params = SelectClaimSchoolForm.extract_params(claim_params, change_school: params[:additional_school])
+    current_claim.attributes = updated_claim_params
+  end
+
+  def check_still_teaching_params
+    updated_claim_params = StillTeachingForm.extract_params(claim_params)
     current_claim.attributes = updated_claim_params
   end
 end

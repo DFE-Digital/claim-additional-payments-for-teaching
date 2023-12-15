@@ -22,7 +22,7 @@ module StudentLoans
     ].flatten.freeze
     AMENDABLE_ATTRIBUTES = %i[student_loan_repayment_amount].freeze
     ATTRIBUTE_DEPENDENCIES = {
-      "claim_school_id" => ["taught_eligible_subjects", *SUBJECT_ATTRIBUTES, "employment_status"],
+      "claim_school_id" => ["taught_eligible_subjects", *SUBJECT_ATTRIBUTES, "employment_status", "current_school_id"],
       "had_leadership_position" => ["mostly_performed_leadership_duties"]
     }.freeze
 
@@ -40,7 +40,8 @@ module StudentLoans
     enum employment_status: {
       claim_school: 0,
       different_school: 1,
-      no_school: 2
+      no_school: 2,
+      recent_tps_school: 3
     }, _prefix: :employed_at
 
     has_one :claim, as: :eligibility, inverse_of: :eligibility
@@ -106,7 +107,6 @@ module StudentLoans
           write_attribute(dependent_attribute_name, nil) if attrs.include?(attribute_name)
         end
       end
-      self.current_school = inferred_current_school if employment_status_changed?
     end
 
     def submit!
@@ -140,10 +140,6 @@ module StudentLoans
 
     def ineligible_current_school?
       current_school.present? && !current_school.eligible_for_student_loans_as_current_school?
-    end
-
-    def inferred_current_school
-      employed_at_claim_school? ? claim_school : nil
     end
   end
 end

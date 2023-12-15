@@ -615,6 +615,10 @@ class Claim < ApplicationRecord
     teacher_id_user_info["trn"] == teacher_reference_number
   end
 
+  def logged_in_with_tid_and_has_recent_tps_school?
+    logged_in_with_tid? && teacher_reference_number.present? && has_recent_tps_school?
+  end
+
   private
 
   def normalise_trn

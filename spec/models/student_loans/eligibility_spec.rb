@@ -194,6 +194,16 @@ RSpec.describe StudentLoans::Eligibility, type: :model do
         .from("different_school").to(nil)
     end
 
+    it "resets the current_school_id to nil when the value of claim_school changes" do
+      eligibility.claim_school = eligibility.claim_school
+      expect { eligibility.reset_dependent_answers }.not_to change { eligibility.attributes }
+
+      eligibility.claim_school = eligibility.current_school
+      expect { eligibility.reset_dependent_answers }
+        .to change { eligibility.current_school_id }
+        .from(eligibility.current_school.id).to(nil)
+    end
+
     it "resets the subject fields when the value of the claim_school changes" do
       eligibility.claim_school = eligibility.current_school
       eligibility.reset_dependent_answers
@@ -214,34 +224,6 @@ RSpec.describe StudentLoans::Eligibility, type: :model do
       expect { eligibility.reset_dependent_answers }
         .to change { eligibility.mostly_performed_leadership_duties }
         .from(false).to(nil)
-    end
-
-    it "sets current_school to the claim_school when employment_status changes to :claim_school" do
-      eligibility.employment_status = :claim_school
-      expect { eligibility.reset_dependent_answers }
-        .to change { eligibility.current_school }
-        .from(eligibility.current_school).to(eligibility.claim_school)
-    end
-
-    it "clears current_school when employment_status changes from :claim_school to :different_school" do
-      eligibility.update!(employment_status: :claim_school, current_school: eligibility.claim_school)
-
-      eligibility.employment_status = :different_school
-      expect { eligibility.reset_dependent_answers }
-        .to change { eligibility.current_school }
-        .from(eligibility.claim_school).to(nil)
-    end
-
-    it "clears current_school when employment_status changes to :no_school" do
-      eligibility.employment_status = :no_school
-      expect { eligibility.reset_dependent_answers }
-        .to change { eligibility.current_school }
-        .from(eligibility.current_school).to(nil)
-    end
-
-    it "doesn't change current_school if employment_status is unchanged" do
-      eligibility.employment_status = :different_school
-      expect { eligibility.reset_dependent_answers }.not_to change { eligibility.current_school }
     end
   end
 
