@@ -555,6 +555,14 @@ class Claim < ApplicationRecord
     TeachersPensionsService.recent_tps_school(self)
   end
 
+  def has_tps_school_for_student_loan_in_previous_financial_year?
+    TeachersPensionsService.has_tps_school_for_student_loan_in_previous_financial_year?(self)
+  end
+
+  def tps_school_for_student_loan_in_previous_financial_year
+    TeachersPensionsService.tps_school_for_student_loan_in_previous_financial_year(self)
+  end
+
   # dup - because we don't want to pollute the claim.errors by calling this method
   # Used to not show the personal-details page if everything is all valid
   def has_all_valid_personal_details?

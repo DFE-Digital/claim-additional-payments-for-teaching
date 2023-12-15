@@ -14,6 +14,7 @@ module StudentLoans
       "teacher-detail",
       "reset-claim",
       "qts-year",
+      "select-claim-school",
       "claim-school",
       "subjects-taught",
       "still-teaching",
@@ -110,6 +111,10 @@ module StudentLoans
           sequence.delete("mobile-number")
           sequence.delete("mobile-verification")
         end
+        unless claim.logged_in_with_tid? && claim.teacher_reference_number.present? && claim.has_tps_school_for_student_loan_in_previous_financial_year?
+          sequence.delete("select-claim-school")
+        end
+        sequence.delete("claim-school") if claim.eligibility.claim_school_somewhere_else == false
       end
     end
   end

@@ -65,4 +65,57 @@ RSpec.describe TeachersPensionsService do
       end
     end
   end
+
+  describe ".tps_school_for_student_loan_in_previous_financial_year" do
+    let(:previous_academic_year) { AcademicYear.current - 1 }
+    let!(:eligible_school) { create(:school, :student_loans_eligible) }
+    let!(:eligible_school2) { create(:school, :student_loans_eligible) }
+    let!(:ineligible_school) { create(:school, :student_loans_ineligible) }
+    let!(:ineligible_school2) { create(:school, :student_loans_ineligible) }
+    let(:trn) { "1234567" }
+    let(:claim) { create(:claim, teacher_reference_number: trn) }
+
+    context "previous financial year has eligible school and ineligible school" do
+      it "returns most recent eligible school" do
+        # least recent eligible
+        beginning_of_month = Date.new(previous_academic_year.start_year, 9, 1)
+        end_of_month = Date.new(previous_academic_year.start_year, 9, 30)
+        create(:teachers_pensions_service, teacher_reference_number: trn, start_date: beginning_of_month, end_date: end_of_month, school_urn: eligible_school.establishment_number, la_urn: eligible_school.local_authority.code)
+
+        # most recent eligible
+        beginning_of_month = Date.new(previous_academic_year.start_year, 10, 1)
+        end_of_month = Date.new(previous_academic_year.start_year, 10, 31)
+        create(:teachers_pensions_service, teacher_reference_number: trn, start_date: beginning_of_month, end_date: end_of_month, school_urn: eligible_school2.establishment_number, la_urn: eligible_school2.local_authority.code)
+
+        # most most recent, but ineligible
+        beginning_of_month = Date.new(previous_academic_year.start_year, 11, 1)
+        end_of_month = Date.new(previous_academic_year.start_year, 11, 30)
+        create(:teachers_pensions_service, teacher_reference_number: trn, start_date: beginning_of_month, end_date: end_of_month, school_urn: ineligible_school.establishment_number, la_urn: ineligible_school.local_authority.code)
+
+        expect(described_class.tps_school_for_student_loan_in_previous_financial_year(claim)).to eq eligible_school2
+      end
+    end
+
+    context "previous financial year has ineligible schools only" do
+      it "returns the most recent one" do
+        # least recent ineligible
+        beginning_of_month = Date.new(previous_academic_year.start_year, 9, 1)
+        end_of_month = Date.new(previous_academic_year.start_year, 9, 30)
+        create(:teachers_pensions_service, teacher_reference_number: trn, start_date: beginning_of_month, end_date: end_of_month, school_urn: ineligible_school.establishment_number, la_urn: ineligible_school.local_authority.code)
+
+        # most recent ineligible
+        beginning_of_month = Date.new(previous_academic_year.start_year, 10, 1)
+        end_of_month = Date.new(previous_academic_year.start_year, 10, 31)
+        create(:teachers_pensions_service, teacher_reference_number: trn, start_date: beginning_of_month, end_date: end_of_month, school_urn: ineligible_school2.establishment_number, la_urn: ineligible_school2.local_authority.code)
+
+        expect(described_class.tps_school_for_student_loan_in_previous_financial_year(claim)).to eq ineligible_school2
+      end
+    end
+
+    context "previous financial year no tps records" do
+      it "returns nil" do
+        expect(described_class.tps_school_for_student_loan_in_previous_financial_year(claim)).to be_nil
+      end
+    end
+  end
 end

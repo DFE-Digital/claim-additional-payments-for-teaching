@@ -44,7 +44,7 @@ module StudentLoans
       [
         claim_school_question,
         eligibility.claim_school_name,
-        "claim-school"
+        (eligibility.claim_school_somewhere_else == false) ? "select-claim-school" : "claim-school"
       ]
     end
 
