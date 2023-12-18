@@ -2,7 +2,7 @@ require "rails_helper"
 
 RSpec.describe ClaimStudentLoanDetailsUpdater do
   let(:updater) { described_class.new(claim) }
-  let(:claim) { create(:claim, :with_no_student_loan) }
+  let(:claim) { create(:claim) }
 
   describe ".call" do
     let(:updater_mock) { instance_double(described_class) }
@@ -21,12 +21,14 @@ RSpec.describe ClaimStudentLoanDetailsUpdater do
     subject(:call) { updater.update_claim_with_latest_data }
 
     context "when no existing SLC data is found for the claimant" do
-      it "returns false" do
-        expect(call).to eq(false)
+      it "returns true" do
+        expect(call).to eq(true)
       end
 
-      it "does not update the claim" do
-        expect { call }.to not_change { claim }.and not_change { claim.eligibility }
+      it "updates the claim with no student plan and zero repayment total" do
+        expect { call }.to change { claim.has_student_loan }.to(false)
+          .and change { claim.student_loan_plan }.to(Claim::NO_STUDENT_LOAN)
+          .and change { claim.eligibility.student_loan_repayment_amount }.to(0)
       end
     end
 
