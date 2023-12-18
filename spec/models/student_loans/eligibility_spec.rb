@@ -140,6 +140,28 @@ RSpec.describe Policies::StudentLoans::Eligibility, type: :model do
       expect(described_class.new(mostly_performed_leadership_duties: true).ineligible?).to eql true
       expect(described_class.new(mostly_performed_leadership_duties: false).ineligible?).to eql false
     end
+
+    context "student_loan_repayment_amount eligibility" do
+      subject(:eligibility) { described_class.new(student_loan_repayment_amount: 0, claim:) }
+
+      context "when the has_student_loan claim flag is true" do
+        let(:claim) { build(:claim, has_student_loan: true) }
+
+        it { is_expected.to be_ineligible }
+      end
+
+      context "when the has_student_loan claim flag is false" do
+        let(:claim) { build(:claim, has_student_loan: false) }
+
+        it { is_expected.not_to be_ineligible }
+      end
+
+      context "when the has_student_loan claim flag is nil" do
+        let(:claim) { build(:claim, has_student_loan: nil) }
+
+        it { is_expected.not_to be_ineligible }
+      end
+    end
   end
 
   describe "#ineligibility_reason" do
@@ -154,6 +176,7 @@ RSpec.describe Policies::StudentLoans::Eligibility, type: :model do
       expect(described_class.new(current_school: ineligible_school).ineligibility_reason).to eq :ineligible_current_school
       expect(described_class.new(taught_eligible_subjects: false).ineligibility_reason).to eq :not_taught_eligible_subjects
       expect(described_class.new(mostly_performed_leadership_duties: true).ineligibility_reason).to eq :not_taught_enough
+      expect(described_class.new(student_loan_repayment_amount: 0, claim: Claim.new(has_student_loan: true)).ineligibility_reason).to eq :made_zero_repayments
     end
   end
 

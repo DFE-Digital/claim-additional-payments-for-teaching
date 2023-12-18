@@ -5,7 +5,7 @@
     <%= render("shared/error_summary", instance: current_claim) if current_claim.errors.any? %>
 
     <% if current_claim.has_student_loan? %>
-      <h1 class="govuk-heading-l">Your student loan repayment amount is <%= number_to_currency(current_claim.award_amount, precision: 2, strip_insignificant_zeros: true) %> for the <%= StudentLoans.configuration.current_academic_year.to_s(:long) %> financial year</h1>
+      <h1 class="govuk-heading-l">Your student loan repayment amount is <%= number_to_currency(current_claim.award_amount, precision: 2, strip_insignificant_zeros: true) %> for the <%= Policies::StudentLoans.current_financial_year %> financial year</h1>
       <p class="govuk-body">This information is provided by the Student Loans Company (SLC).</p>
 
       <p class="govuk-body">If it is not what you expected you can still complete your application and then contact SLC.</p>
