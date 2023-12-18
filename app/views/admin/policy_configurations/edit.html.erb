@@ -77,6 +77,23 @@
         </fieldset>
       </div>
 
+      <div class="govuk-form-group">
+        <fieldset class="govuk-fieldset">
+          <legend class="govuk-fieldset__legend">
+            Sign in with DfE Identity
+          </legend>
+          <div class="govuk-radios govuk-radios--conditional" data-module="govuk-radios">
+            <div class="govuk-radios__item">
+              <%= f.radio_button :teacher_id_enabled, true, class: "govuk-radios__input" %>
+              <%= f.label :teacher_id_enabled, "Enabled", value: true, class: "govuk-label govuk-radios__label" %>
+            </div>
+            <div class="govuk-radios__item">
+              <%= f.radio_button :teacher_id_enabled, false, class: "govuk-radios__input" %>
+              <%= f.label :teacher_id_enabled, "Disabled", value: false, class: "govuk-label govuk-radios__label" %>
+            </div>
+          </div>
+        </fieldset>
+      </div>
       <%= f.submit "Save", class: "govuk-button", data: { module: "govuk-button" } %>
     <% end %>
   </div>

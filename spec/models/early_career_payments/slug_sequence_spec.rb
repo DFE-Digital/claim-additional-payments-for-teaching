@@ -9,9 +9,10 @@ RSpec.describe EarlyCareerPayments::SlugSequence do
   let(:claim) { create(:claim, :skipped_tid, policy: EarlyCareerPayments, academic_year: AcademicYear.new(2021), eligibility: eligibility) }
   let(:lup_claim) { create(:claim, :skipped_tid, policy: LevellingUpPremiumPayments, academic_year: AcademicYear.new(2021), eligibility: eligibility_lup) }
   let(:current_claim) { CurrentClaim.new(claims: [claim, lup_claim]) }
+  let(:teacher_id_enabled) { true }
 
   describe "The sequence as defined by #slugs" do
-    before { create(:policy_configuration, :additional_payments) }
+    before { create(:policy_configuration, :additional_payments, teacher_id_enabled:) }
 
     it "excludes the 'ineligible' slug if the claim's eligibility is undetermined" do
       expect(slug_sequence.slugs).not_to include("ineligible")
@@ -374,6 +375,15 @@ RSpec.describe EarlyCareerPayments::SlugSequence do
         ]
 
         expect(slug_sequence.slugs).to eq expected_slugs
+      end
+    end
+
+    context "when Teacher ID is disabled on the policy configuration" do
+      let(:teacher_id_enabled) { false }
+
+      it "removes the Teacher ID-dependant slugs" do
+        slugs = %w[sign-in-or-continue teacher-detail reset-claim correct-school select-email select-mobile]
+        expect(slug_sequence.slugs).not_to include(*slugs)
       end
     end
   end
