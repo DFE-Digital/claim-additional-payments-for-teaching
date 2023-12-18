@@ -100,7 +100,7 @@ RSpec.shared_examples "Admin View Claim Feature" do |policy|
 
       expect(page).to have_content("– Approved")
       expect(page).to have_content("Approved awaiting payroll")
-      expect(page).to have_content("Not signed in with DfE Identify")
+      expect(page).to have_content("Not signed in with DfE Identity")
     end
   end
 
@@ -162,7 +162,7 @@ RSpec.shared_examples "Admin View Claim Feature" do |policy|
       find("a[href='#{admin_claim_tasks_path(claim_logged_in_with_tid)}']").click
 
       expect(page).to have_content("Claim route")
-      expect(page).to have_content("Signed in with DfE Identify")
+      expect(page).to have_content("Signed in with DfE Identity")
     end
   end
 
