@@ -77,7 +77,8 @@ module Policies
           employed_at_no_school? ||
           ineligible_current_school? ||
           not_taught_eligible_subjects? ||
-          not_taught_enough?
+          not_taught_enough? ||
+          made_zero_repayments?
       end
 
       def ineligibility_reason
@@ -87,7 +88,8 @@ module Policies
           :employed_at_no_school,
           :ineligible_current_school,
           :not_taught_eligible_subjects,
-          :not_taught_enough
+          :not_taught_enough,
+          :made_zero_repayments
         ].find { |eligibility_check| send(:"#{eligibility_check}?") }
       end
 
@@ -137,6 +139,10 @@ module Policies
 
       def not_taught_enough?
         mostly_performed_leadership_duties == true
+      end
+
+      def made_zero_repayments?
+        claim.present? && claim.has_student_loan == true && student_loan_repayment_amount == 0
       end
 
       def one_subject_must_be_selected
