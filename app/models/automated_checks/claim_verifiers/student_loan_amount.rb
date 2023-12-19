@@ -20,12 +20,15 @@ module AutomatedChecks
 
       attr_accessor :admin_user, :claim
 
-      delegate :eligibility, :student_loan_plan, to: :claim, prefix: :claim
-      delegate :student_loan_repayment_amount, to: :claim_eligibility, prefix: :claim
+      delegate :national_insurance_number, :date_of_birth, :eligibility, to: :claim
+      delegate :student_loan_plan, to: :claim, prefix: :claim
+      delegate :student_loan_repayment_amount, to: :eligibility, prefix: :claim
       delegate :repaying_plan_types, :total_repayment_amount, to: :student_loans_data, prefix: :slc
 
+      alias_method :nino, :national_insurance_number
+
       def student_loans_data
-        @student_loans_data ||= StudentLoansData.by_nino(claim.national_insurance_number)
+        @student_loans_data ||= StudentLoansData.where(nino:, date_of_birth:)
       end
 
       def awaiting_task?
