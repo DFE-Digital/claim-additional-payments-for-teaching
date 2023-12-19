@@ -95,6 +95,15 @@ module EarlyCareerPayments
       ecp_claim = claim.for_policy(EarlyCareerPayments)
 
       SLUGS.dup.tap do |sequence|
+        if !PolicyConfiguration.for(claim.policy).teacher_id_enabled?
+          sequence.delete("sign-in-or-continue")
+          sequence.delete("teacher-detail")
+          sequence.delete("reset-claim")
+          sequence.delete("correct-school")
+          sequence.delete("select-email")
+          sequence.delete("select-mobile")
+        end
+
         sequence.delete("teacher-detail") if claim.logged_in_with_tid.nil?
         sequence.delete("reset-claim") if [nil, true].include?(claim.logged_in_with_tid)
 

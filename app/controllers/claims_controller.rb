@@ -29,6 +29,8 @@ class ClaimsController < BasePublicController
       return redirect_to claim_path(current_policy_routing_name, "eligible-itt-subject")
     elsif params[:slug] == "sign-in-or-continue"
       update_session_with_current_slug
+
+      return skip_teacher_id if !policy_configuration.teacher_id_enabled?
     elsif params[:slug] == "select-email"
       session[:email_address] = current_claim.teacher_id_user_info["email"]
     elsif params[:slug] == "correct-school"
@@ -70,7 +72,7 @@ class ClaimsController < BasePublicController
   def update
     case params[:slug]
     when "sign-in-or-continue"
-      DfeIdentity::ClaimUserDetailsReset.call(current_claim, :skipped_tid)
+      return skip_teacher_id
     when "teacher-detail"
       save_details_check
     when "personal-details"
@@ -350,5 +352,14 @@ class ClaimsController < BasePublicController
   def check_still_teaching_params
     updated_claim_params = StillTeachingForm.extract_params(claim_params)
     current_claim.attributes = updated_claim_params
+  end
+
+  def skip_teacher_id
+    DfeIdentity::ClaimUserDetailsReset.call(current_claim, :skipped_tid)
+    redirect_to claim_path(current_policy_routing_name, next_slug)
+  end
+
+  def policy_configuration
+    PolicyConfiguration.for_routing_name(current_policy_routing_name)
   end
 end

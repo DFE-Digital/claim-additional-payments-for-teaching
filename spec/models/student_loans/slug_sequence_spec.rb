@@ -109,5 +109,14 @@ RSpec.describe StudentLoans::SlugSequence do
         expect(slug_sequence.slugs).to include("mobile-verification")
       end
     end
+
+    context "when Teacher ID is disabled on the policy configuration" do
+      before { create(:policy_configuration, :student_loans, teacher_id_enabled: false) }
+
+      it "removes the Teacher ID-dependant slugs" do
+        slugs = %w[sign-in-or-continue teacher-detail reset-claim select-email select-mobile]
+        expect(slug_sequence.slugs).not_to include(*slugs)
+      end
+    end
   end
 end

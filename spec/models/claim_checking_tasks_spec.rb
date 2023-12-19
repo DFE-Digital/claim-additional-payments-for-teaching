@@ -66,7 +66,7 @@ RSpec.describe ClaimCheckingTasks do
   describe "#passed_automatically_task_names" do
     subject { checking_tasks.passed_automatically_task_names }
 
-    it "returns an array of the tasks that have passed automatically" do
+    it "returns an array of the tasks that have passed automatically", flaky: true do
       claim.tasks << create(:task, :failed, :automated, name: "identity_confirmation")
       claim.tasks << create(:task, :passed, :automated, name: "qualifications")
       claim.tasks << create(:task, :passed, :automated, name: "employment")

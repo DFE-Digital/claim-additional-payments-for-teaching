@@ -80,6 +80,14 @@ module StudentLoans
 
     def slugs
       SLUGS.dup.tap do |sequence|
+        if !PolicyConfiguration.for(claim.policy).teacher_id_enabled?
+          sequence.delete("sign-in-or-continue")
+          sequence.delete("teacher-detail")
+          sequence.delete("reset-claim")
+          sequence.delete("select-email")
+          sequence.delete("select-mobile")
+        end
+
         sequence.delete("teacher-detail") if claim.logged_in_with_tid.nil?
         sequence.delete("reset-claim") if [nil, true].include?(claim.logged_in_with_tid)
         sequence.delete("current-school") if claim.eligibility.employed_at_claim_school? || claim.eligibility.employed_at_recent_tps_school?
