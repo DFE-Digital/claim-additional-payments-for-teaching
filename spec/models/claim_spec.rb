@@ -1157,7 +1157,8 @@ RSpec.describe Claim, type: :model do
   end
 
   describe "#reset_dependent_answers" do
-    let(:claim) { create(:claim, :submittable, :with_no_postgraduate_masters_doctoral_loan, policy: Policies::LevellingUpPremiumPayments, bank_or_building_society: "building_society") }
+    let(:claim) { create(:claim, :submittable, :with_no_postgraduate_masters_doctoral_loan, policy:, bank_or_building_society: "building_society") }
+    let(:policy) { Policies::LevellingUpPremiumPayments }
 
     it "redetermines the student_loan_plan and resets loan plan answers when has_student_loan changes" do
       claim.has_student_loan = true
@@ -1258,6 +1259,38 @@ RSpec.describe Claim, type: :model do
 
       expect(claim.mobile_number).to eq "07425999124"
       expect(claim.mobile_verified).to be_nil
+    end
+
+    context "when the policy is StudentLoans" do
+      let(:policy) { Policies::StudentLoans }
+
+      before do
+        claim.has_student_loan = true
+        claim.student_loan_plan = StudentLoan::PLAN_1
+        claim.eligibility.student_loan_repayment_amount = 100
+      end
+
+      it "resets student loan attributes when the value of national_insurance_number changes" do
+        expect { claim.reset_dependent_answers }.not_to change { claim.attributes }
+
+        claim.national_insurance_number = "AB123456X"
+        claim.reset_dependent_answers
+
+        expect(claim.has_student_loan).to be_nil
+        expect(claim.student_loan_plan).to be_nil
+        expect(claim.eligibility.student_loan_repayment_amount).to be_nil
+      end
+
+      it "resets student loan attributes when the value of date_of_birth changes" do
+        expect { claim.reset_dependent_answers }.not_to change { claim.attributes }
+
+        claim.date_of_birth = "1/1/1991"
+        claim.reset_dependent_answers
+
+        expect(claim.has_student_loan).to be_nil
+        expect(claim.student_loan_plan).to be_nil
+        expect(claim.eligibility.student_loan_repayment_amount).to be_nil
+      end
     end
   end
 
@@ -1554,7 +1587,7 @@ RSpec.describe Claim, type: :model do
   end
 
   describe "#has_ecp_policy?" do
-    let(:claim) { create(:claim, policy: policy) }
+    let(:claim) { create(:claim, policy:) }
 
     context "with student loans policy" do
       let(:policy) { Policies::StudentLoans }
@@ -1574,7 +1607,7 @@ RSpec.describe Claim, type: :model do
   end
 
   describe "#has_tslr_policy?" do
-    let(:claim) { create(:claim, policy: policy) }
+    let(:claim) { create(:claim, policy:) }
 
     context "with student loans policy" do
       let(:policy) { Policies::StudentLoans }
@@ -1595,7 +1628,7 @@ RSpec.describe Claim, type: :model do
 
   describe "#has_lupp_policy?" do
     subject(:result) { claim.has_lupp_policy? }
-    let(:claim) { create(:claim, policy: policy) }
+    let(:claim) { create(:claim, policy:) }
 
     context "with student loans policy" do
       let(:policy) { Policies::StudentLoans }
@@ -1618,7 +1651,7 @@ RSpec.describe Claim, type: :model do
 
   describe "#has_ecp_or_lupp_policy?" do
     subject(:result) { claim.has_ecp_or_lupp_policy? }
-    let(:claim) { create(:claim, policy: policy) }
+    let(:claim) { create(:claim, policy:) }
 
     context "with student loans policy" do
       let(:policy) { Policies::StudentLoans }
