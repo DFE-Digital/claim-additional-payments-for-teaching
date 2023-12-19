@@ -24,15 +24,17 @@ class ClaimStudentLoanDetailsUpdater
   attr_reader :claim
 
   delegate :eligibility, to: :claim
-  delegate :national_insurance_number, to: :claim
-  delegate :repaying_plan_types, :total_repayment_amount, to: :slc_data
+  delegate :national_insurance_number, :date_of_birth, to: :claim
+  delegate :repaying_plan_types, :total_repayment_amount, to: :student_loans_data
 
-  def slc_data
-    @slc_data ||= StudentLoansData.by_nino(national_insurance_number)
+  alias_method :nino, :national_insurance_number
+
+  def student_loans_data
+    @student_loans_data ||= StudentLoansData.where(nino:, date_of_birth:)
   end
 
   def found_data?
-    slc_data.any?
+    student_loans_data.any?
   end
 
   def with_reload_on_failure

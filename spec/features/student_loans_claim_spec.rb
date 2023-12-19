@@ -5,7 +5,7 @@ RSpec.feature "Teacher Student Loan Repayments claims" do
 
   let!(:policy_configuration) { create(:policy_configuration, :student_loans) }
   let!(:school) { create(:school, :student_loans_eligible) }
-  let(:imported_slc_data) { create(:student_loans_data, nino: "PX321499A", plan_type_of_deduction: 1, amount: 1_100) }
+  let(:imported_slc_data) { create(:student_loans_data, nino: "PX321499A", date_of_birth: "28/2/1988", plan_type_of_deduction: 1, amount: 1_100) }
 
   def answer_eligibility_questions_and_fill_in_personal_details
     visit new_claim_path(StudentLoans.routing_name)
