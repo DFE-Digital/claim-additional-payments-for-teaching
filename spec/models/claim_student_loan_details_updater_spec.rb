@@ -34,8 +34,8 @@ RSpec.describe ClaimStudentLoanDetailsUpdater do
 
     context "when existing SLC data is found for the claimant" do
       before do
-        create(:student_loans_data, nino: claim.national_insurance_number, plan_type_of_deduction: 1, amount: 50)
-        create(:student_loans_data, nino: claim.national_insurance_number, plan_type_of_deduction: 2, amount: 60)
+        create(:student_loans_data, nino: claim.national_insurance_number, date_of_birth: claim.date_of_birth, plan_type_of_deduction: 1, amount: 50)
+        create(:student_loans_data, nino: claim.national_insurance_number, date_of_birth: claim.date_of_birth, plan_type_of_deduction: 2, amount: 60)
       end
 
       it "returns true" do
