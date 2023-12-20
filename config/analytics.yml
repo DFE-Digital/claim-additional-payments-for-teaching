@@ -8,6 +8,7 @@ shared:
     - updated_at
     - current_academic_year
     - policy_types
+    - teacher_id_enabled
   :reminders:
     - id
     - full_name
