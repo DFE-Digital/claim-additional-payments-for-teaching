@@ -102,7 +102,7 @@ RSpec.feature "Teacher Identity Sign in for TSLR" do
     choose "No"
     click_on "Continue"
 
-    expect(page).to have_text("You cannot use your DfE Identify account with this service")
+    expect(page).to have_text("You cannot use your DfE Identity account with this service")
     expect(page).to have_text("You can continue to complete an application to check your eligibility and apply for a payment.")
 
     click_on "Continue"

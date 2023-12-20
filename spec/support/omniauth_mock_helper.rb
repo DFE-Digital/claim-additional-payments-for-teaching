@@ -6,7 +6,7 @@ module OmniauthMockHelper
       OmniAuth::AuthHash.new(
         "extra" => {
           "raw_info" => {
-            "trn" => trn,
+            "trn" => opts.key?(:returned_trn) ? opts[:returned_trn] : trn,
             "birthdate" => "1940-01-01",
             "given_name" => "Kelsie",
             "family_name" => "Oberbrunner",

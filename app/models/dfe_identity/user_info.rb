@@ -25,5 +25,10 @@ module DfeIdentity
     def self.from_params(params)
       (params || {}).slice(*attributes)
     end
+
+    def self.trn_missing?(user_info)
+      new(from_params(user_info))
+        .trn.blank?
+    end
   end
 end

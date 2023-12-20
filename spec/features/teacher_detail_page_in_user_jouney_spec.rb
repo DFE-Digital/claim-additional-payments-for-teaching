@@ -8,15 +8,13 @@ RSpec.feature "Teacher Identity Sign in" do
   let!(:school) { create(:school, :combined_journey_eligibile_for_all) }
   let(:current_academic_year) { policy_configuration.current_academic_year }
 
-  before do
-    set_mock_auth("1234567")
-  end
-
   after do
     set_mock_auth(nil)
   end
 
   scenario "Teacher makes claim for 'Early-Career Payments' by logging in with teacher_id and selects yes to details confirm" do
+    set_mock_auth("1234567")
+
     visit landing_page_path(EarlyCareerPayments.routing_name)
 
     # - Landing (start)
@@ -42,6 +40,8 @@ RSpec.feature "Teacher Identity Sign in" do
   end
 
   scenario "Teacher makes claim for 'Early-Career Payments' by logging in with teacher_id and selects no to details confirm" do
+    set_mock_auth("1234567")
+
     visit landing_page_path(EarlyCareerPayments.routing_name)
 
     # - Landing (start)
@@ -58,7 +58,8 @@ RSpec.feature "Teacher Identity Sign in" do
     choose "No"
     click_on "Continue"
 
-    expect(page).to have_text("You cannot use your DfE Identify account with this service")
+    expect(page).to have_text("You cannot use your DfE Identity account with this service")
+    expect(page).to have_text("As you have told us that the information we’ve received using your DfE Identity account is not correct, you cannot use your DfE Identity account with this service.")
     expect(page).to have_text("You can continue to complete an application to check your eligibility and apply for a payment.")
 
     click_on "Continue"
@@ -68,5 +69,18 @@ RSpec.feature "Teacher Identity Sign in" do
     # check the teacher_id_user_info details are saved to the claim
     claim = Claim.order(:created_at).last
     expect(claim.teacher_id_user_info).to eq({"trn" => "1234567", "birthdate" => "1940-01-01", "given_name" => "Kelsie", "family_name" => "Oberbrunner", "ni_number" => "AB123456C", "phone_number" => "01234567890", "trn_match_ni_number" => "True", "email" => "kelsie.oberbrunner@example.com"})
+  end
+
+  scenario "Teacher makes claim for 'Early-Career Payments' by logging in with teacher_id and selects yes to details confirm but trn missing" do
+    set_mock_auth("1234567", {returned_trn: nil})
+
+    visit landing_page_path(EarlyCareerPayments.routing_name)
+    click_on "Start now"
+    click_on "Continue with DfE Identity"
+    choose "Yes"
+    click_on "Continue"
+
+    expect(page).to have_text("You cannot use your DfE Identity account with this service")
+    expect(page).to have_text("You don’t currently have a teacher reference number (TRN) assigned to your DfE Identity account.")
   end
 end
