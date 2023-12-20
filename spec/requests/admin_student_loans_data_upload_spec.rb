@@ -1,6 +1,8 @@
 require "rails_helper"
 
 RSpec.describe "SLC (Student Loans Company) data upload " do
+  let!(:policy_configuration) { create(:policy_configuration, :student_loans) }
+
   before { @signed_in_user = sign_in_as_service_operator }
 
   describe "#new" do
@@ -106,7 +108,7 @@ RSpec.describe "SLC (Student Loans Company) data upload " do
 
       it "parses the rows and saves them as student loans data records" do
         aggregate_failures do
-          expect { perform_enqueued_jobs { upload } }.to change(StudentLoansData, :count).by(2)
+          expect { upload_slc_data_file(file) }.to change(StudentLoansData, :count).by(2)
           expect(StudentLoansData.by_nino("QQ123456A").first).to have_attributes(expected_records[0])
           expect(StudentLoansData.by_nino("QQ123456B").first).to have_attributes(expected_records[1])
         end

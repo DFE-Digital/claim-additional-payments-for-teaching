@@ -21,6 +21,10 @@ RSpec.describe FileImporterJob do
     it "sets the importer class" do
       expect { dummy_job.import_with(importer_class) }.to change { dummy_job.importer_class }.to(importer_class)
     end
+
+    it "sets the post import block to execute" do
+      expect { dummy_job.import_with(importer_class) {} }.to change { dummy_job.post_import_block }
+    end
   end
 
   describe ".rescue_with" do
@@ -40,10 +44,11 @@ RSpec.describe FileImporterJob do
 
   describe "#perform" do
     let(:importer_mock) { instance_double(importer_class, run: nil) }
+    let(:post_import_mock) { double("block", call: nil) }
     let(:file_upload_id) { file&.id }
 
     def apply_config(dummy_job, importer_class, rescue_with_class = nil, notify_with_mailer = nil)
-      dummy_job.import_with(importer_class)
+      dummy_job.import_with(importer_class) { post_import_mock.call }
       dummy_job.rescue_with(rescue_with_class)
       dummy_job.new
     end
@@ -70,6 +75,10 @@ RSpec.describe FileImporterJob do
         expect(rescue_with_lambda).to have_received(:call)
       end
 
+      it "does not execute the post import block" do
+        expect(post_import_mock).not_to have_received(:call)
+      end
+
       it "sends the exception to Rollbar" do
         expect(Rollbar).to have_received(:error).with(ActiveRecord::RecordNotFound)
       end
@@ -88,6 +97,10 @@ RSpec.describe FileImporterJob do
         expect(importer_class).to have_received(:new)
         expect(importer_mock).to have_received(:run)
         expect(file.body).to eq(tempfile.read)
+      end
+
+      it "executes the post import block" do
+        expect(post_import_mock).to have_received(:call)
       end
 
       it "deletes the original file upload" do

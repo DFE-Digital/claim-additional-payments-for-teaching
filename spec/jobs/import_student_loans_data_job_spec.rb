@@ -21,6 +21,10 @@ RSpec.describe ImportStudentLoansDataJob do
 
         expect(FileUpload.find_by_id(file_upload.id)).to be_nil
       end
+
+      it "enqueues StudentLoanAmountCheckJob" do
+        expect { upload }.to have_enqueued_job(StudentLoanAmountCheckJob)
+      end
     end
 
     context "csv data encounters an error" do
@@ -36,6 +40,10 @@ RSpec.describe ImportStudentLoansDataJob do
         upload
 
         expect(FileUpload.find_by_id(file_upload.id)).to be_present
+      end
+
+      it "does not enqueue StudentLoanAmountCheckJob" do
+        expect { upload }.not_to have_enqueued_job(StudentLoanAmountCheckJob)
       end
     end
   end

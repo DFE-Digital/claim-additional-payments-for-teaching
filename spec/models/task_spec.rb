@@ -34,7 +34,7 @@ RSpec.describe Task, type: :model do
       let!(:another_task_passed_automatically) { create(:task, :automated, :passed) }
 
       it "returns taks that passed automatically" do
-        is_expected.to eq([task_passed_automatically, another_task_passed_automatically])
+        is_expected.to match_array([task_passed_automatically, another_task_passed_automatically])
       end
     end
 

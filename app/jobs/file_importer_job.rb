@@ -2,6 +2,7 @@ class FileImporterJob < ApplicationJob
   class InvalidImporterError < StandardError; end
 
   class_attribute :importer_class
+  class_attribute :post_import_block
   class_attribute :rescue_with_lambda
   class_attribute :notify_with_mailer
   class_attribute :success_mailer_method
@@ -15,6 +16,7 @@ class FileImporterJob < ApplicationJob
       raise InvalidImporterError unless importer_class.is_a?(Class) && importer_class.method_defined?(:run)
 
       self.importer_class = importer_class
+      self.post_import_block = block if block
     end
 
     def rescue_with(func)
@@ -36,6 +38,7 @@ class FileImporterJob < ApplicationJob
 
     ingest!
     send_success_email if uploaded_by_email
+    post_import_block&.call
   rescue => e
     Rollbar.error(e)
     rescue_with_lambda&.call
