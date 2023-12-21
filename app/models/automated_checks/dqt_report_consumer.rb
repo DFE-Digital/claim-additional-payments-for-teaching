@@ -29,9 +29,26 @@ module AutomatedChecks
 
           if claim
             @completed_tasks += ClaimVerifier.new(
-              claim: claim,
+              claim:,
               admin_user: @admin_user,
-              dqt_teacher_status: [record]
+              dqt_teacher_status: [record],
+              verifiers: [
+                ClaimVerifiers::Identity.new(
+                  admin_user: @admin_user,
+                  claim:,
+                  dqt_teacher_status: [record]
+                ),
+                ClaimVerifiers::Qualifications.new(
+                  admin_user: @admin_user,
+                  claim:,
+                  dqt_teacher_status: [record]
+                ),
+                ClaimVerifiers::Induction.new(
+                  admin_user: @admin_user,
+                  claim: claim,
+                  dqt_teacher_status: [record]
+                )
+              ]
             ).perform
           end
         end
