@@ -20,13 +20,16 @@ module StudentLoan
   PLANS = [
     PLAN_1 = "plan_1",
     PLAN_2 = "plan_2",
-    PLAN_1_AND_2 = "plan_1_and_2",
-    PLAN_4 = "plan_4",
     PLAN_3 = "plan_3",
+    PLAN_4 = "plan_4",
+    PLAN_1_AND_2 = "plan_1_and_2",
     PLAN_1_AND_3 = "plan_1_and_3",
-    PLAN_2_AND_3 = "plan_2_and_3",
     PLAN_1_AND_2_AND_3 = "plan_1_and_2_and_3",
-    PLAN_4_AND_3 = "plan_4_and_3"
+    PLAN_1_AND_4 = "plan_1_and_4",
+    PLAN_2_AND_3 = "plan_2_and_3",
+    PLAN_2_AND_4 = "plan_2_and_4",
+    PLAN_3_AND_4 = "plan_3_and_4",
+    PLAN_4_AND_3 = "plan_4_and_3" # TODO: remove PLAN_4_AND_3 when `determine_plan` is removed (replaced with PLAN_3_AND_4)
   ].freeze
 
   DATES_TO_PLANS_MAP = {
