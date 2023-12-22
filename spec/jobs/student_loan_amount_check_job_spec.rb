@@ -3,13 +3,43 @@ require "rails_helper"
 RSpec.describe StudentLoanAmountCheckJob do
   subject(:perform_job) { described_class.new.perform }
 
-  let(:claim) { create(:claim, :submitted, academic_year: academic_year, policy: Policies::StudentLoans) }
+  let!(:claim) { create(:claim, claim_status, academic_year:, policy: Policies::StudentLoans) }
+  let(:claim_status) { :submitted }
+
   let(:academic_year) { journey_configuration.current_academic_year }
   let!(:journey_configuration) { create(:journey_configuration, :student_loans) }
 
   describe "#perform" do
     before do
       allow(ClaimStudentLoanDetailsUpdater).to receive(:call)
+    end
+
+    context "when the previous student loan amount check was run manually" do
+      let!(:previous_task) { create(:task, claim: claim, name: "student_loan_amount", claim_verifier_match: nil, manual: true) }
+
+      before do
+        allow(AutomatedChecks::ClaimVerifiers::StudentLoanAmount).to receive(:new)
+      end
+
+      it "excludes the claim from the check", :aggregate_failures do
+        expect(ClaimStudentLoanDetailsUpdater).not_to receive(:call).with(claim)
+        expect(AutomatedChecks::ClaimVerifiers::StudentLoanAmount).not_to receive(:new).with(claim: claim)
+        perform_job
+      end
+    end
+
+    context "when a claim is not awaiting decision" do
+      let(:claim_status) { :approved }
+
+      before do
+        allow(AutomatedChecks::ClaimVerifiers::StudentLoanAmount).to receive(:new)
+      end
+
+      it "excludes the claim from the check", :aggregate_failures do
+        expect(ClaimStudentLoanDetailsUpdater).not_to receive(:call).with(claim)
+        expect(AutomatedChecks::ClaimVerifiers::StudentLoanAmount).not_to receive(:new).with(claim: claim)
+        perform_job
+      end
     end
 
     context "when the student loan amount check did not run before" do
@@ -41,7 +71,7 @@ RSpec.describe StudentLoanAmountCheckJob do
       end
     end
 
-    context "when the previous student loan amount check outcome was FAIL" do
+    context "when the previous student loan amount check outcome was FAILED" do
       let!(:previous_task) { create(:task, claim: claim, name: "student_loan_amount", claim_verifier_match: :none, passed: false, manual: false) }
 
       it "does not update the student loan details" do
@@ -57,7 +87,7 @@ RSpec.describe StudentLoanAmountCheckJob do
       end
     end
 
-    context "when the previous student loan amount check outcome was PASS" do
+    context "when the previous student loan amount check outcome was PASSED" do
       let!(:previous_task) { create(:task, claim: claim, name: "student_loan_amount", claim_verifier_match: :all, manual: false) }
 
       it "does not update the student loan details" do
