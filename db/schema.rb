@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_12_18_102954) do
+ActiveRecord::Schema[7.0].define(version: 2023_12_24_180838) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_trgm"
   enable_extension "pgcrypto"
@@ -93,6 +93,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_12_18_102954) do
     t.jsonb "teacher_id_user_info", default: {}
     t.boolean "email_address_check"
     t.string "mobile_check"
+    t.jsonb "dqt_teacher_status"
+    t.boolean "qualifications_details_check"
     t.index ["academic_year"], name: "index_claims_on_academic_year"
     t.index ["created_at"], name: "index_claims_on_created_at"
     t.index ["eligibility_type", "eligibility_id"], name: "index_claims_on_eligibility_type_and_eligibility_id"

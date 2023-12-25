@@ -25,6 +25,9 @@ class ClaimsController < BasePublicController
 
     if params[:slug] == "teacher-detail"
       save_and_set_teacher_id_user_info
+    elsif params[:slug] == "qualification-details"
+      save_and_set_dqt_teacher_status
+      redirect_to claim_path(current_policy_routing_name, "qualification") if current_claim.has_no_dqt_record? and return
     elsif params[:slug] == "teaching-subject-now" && no_eligible_itt_subject?
       return redirect_to claim_path(current_policy_routing_name, "eligible-itt-subject")
     elsif params[:slug] == "sign-in-or-continue"
@@ -316,6 +319,30 @@ class ClaimsController < BasePublicController
 
   def set_teacher_id_user_info
     @teacher_id_user_info ||= current_claim.teacher_id_user_info
+  end
+
+  def save_and_set_dqt_teacher_status
+    # TODO: move all this to another service object
+    unless current_claim.dqt_teacher_status
+      response = Dqt::Client.new.teacher.find_raw(
+        current_claim.teacher_reference_number,
+        birthdate: current_claim.date_of_birth.to_s
+      )
+
+      # Might need a timeout check here?
+      begin
+        if response.nil?
+          # {} would indicate nothing was found in DQT but also truthy to prevent further requests
+          current_claim.update(dqt_teacher_status: {})
+        else
+          current_claim.update(dqt_teacher_status: response)
+        end
+      rescue
+        # Something went wrong with the DQT call, just assume no result returned and continue
+        # Should log this or maybe raise an alert?
+        current_claim.update(dqt_teacher_status: {})
+      end
+    end
   end
 
   def save_details_check

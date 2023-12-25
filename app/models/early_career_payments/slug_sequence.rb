@@ -22,6 +22,7 @@ module EarlyCareerPayments
       "entire-term-contract",
       "employed-directly",
       "poor-performance",
+      "qualification-details",
       "qualification",
       "itt-year",
       "eligible-itt-subject",
@@ -163,6 +164,11 @@ module EarlyCareerPayments
         end
 
         sequence.delete("personal-details") if claim.logged_in_with_tid? && claim.has_all_valid_personal_details?
+
+        sequence.delete("qualification-details") if !claim.logged_in_with_tid? || claim.has_no_dqt_record?
+
+        # TODO: "qualification", "itt-year", "eligible-itt-subject", "eligible-degree-subject" will need deleting if DQT has that information from "qualification-details" step
+        # Not too sure on "eligible-degree-subject" with the trainee option.
       end
     end
 
