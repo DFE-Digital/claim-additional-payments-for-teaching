@@ -165,12 +165,16 @@ module EarlyCareerPayments
 
         sequence.delete("personal-details") if claim.logged_in_with_tid? && claim.has_all_valid_personal_details?
 
-        if claim.logged_in_with_tid? && claim.qualifications_details_check
-          sequence.delete("qualification") if claim.eligibility.qualification
-          sequence.delete("itt-year") if claim.eligibility.itt_academic_year
-          sequence.delete("eligible-itt-subject") if claim.eligibility.eligible_itt_subject
-          sequence.delete("eligible-degree-subject") if claim.eligibility.respond_to?(:eligible_degree_subject) && claim.eligibility.eligible_degree_subject
-        elsif claim.dqt_teacher_status && claim.dqt_teacher_status.empty?
+        if claim.logged_in_with_tid?
+          if claim.qualifications_details_check
+            sequence.delete("qualification") if claim.eligibility.qualification
+            sequence.delete("itt-year") if claim.eligibility.itt_academic_year
+            sequence.delete("eligible-itt-subject") if claim.eligibility.eligible_itt_subject
+            sequence.delete("eligible-degree-subject") if claim.eligibility.respond_to?(:eligible_degree_subject) && claim.eligibility.eligible_degree_subject
+          elsif claim.dqt_teacher_status && claim.dqt_teacher_status.empty?
+            sequence.delete("qualification-details")
+          end
+        elsif claim.logged_in_with_tid == false
           sequence.delete("qualification-details")
         end
       end

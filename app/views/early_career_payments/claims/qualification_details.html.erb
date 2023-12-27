@@ -51,11 +51,11 @@
         <div class="govuk-radios govuk-radios--inline" data-module="govuk-radios">
           <div class="govuk-radios__item">
             <%= form.radio_button(:qualifications_details_check, true, class: "govuk-radios__input") %>
-            <%= form.label :qualifications_details_check_true, t("questions.yes"), class: "govuk-label govuk-radios__label" %>
+            <%= form.label :qualifications_details_check_true, t("questions.radio_yes"), class: "govuk-label govuk-radios__label" %>
           </div>
           <div class="govuk-radios__item">
           <%= form.radio_button(:qualifications_details_check, false, class: "govuk-radios__input") %>
-          <%= form.label :qualifications_details_check_false, t("questions.no"), class: "govuk-label govuk-radios__label" %>
+          <%= form.label :qualifications_details_check_false, t("questions.radio_no"), class: "govuk-label govuk-radios__label" %>
           </div>
         </div>
       </fieldset>

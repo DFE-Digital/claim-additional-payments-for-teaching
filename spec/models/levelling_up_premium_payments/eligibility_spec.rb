@@ -138,4 +138,42 @@ RSpec.describe LevellingUpPremiumPayments::Eligibility, type: :model do
       end
     end
   end
+
+  describe "#set_qualifications_from_dqt_record" do
+    let(:eligibility) { build(:levelling_up_premium_payments_eligibility, claim:, itt_academic_year:, eligible_itt_subject:, qualification:, eligible_degree_subject:) }
+    let(:claim) { build(:claim, policy: LevellingUpPremiumPayments, qualifications_details_check:) }
+    let(:itt_academic_year) { AcademicYear.new(2021) }
+    let(:eligible_itt_subject) { :mathematics }
+    let(:qualification) { :postgraduate_itt }
+    let(:eligible_degree_subject) { false }
+
+    context "when user has confirmed their qualification details" do
+      let(:qualifications_details_check) { true }
+      let(:dbl) { double(itt_academic_year_for_claim:, eligible_itt_subject_for_claim:, route_into_teaching:, eligible_degree_code?: eligible_degree_code) }
+      let(:itt_academic_year_for_claim) { AcademicYear.new(2022) }
+      let(:eligible_itt_subject_for_claim) { :computing }
+      let(:route_into_teaching) { :undergraduate_itt }
+      let(:eligible_degree_code) { true }
+
+      before { allow(claim).to receive(:dqt_teacher_record).and_return(dbl) }
+
+      it "sets the qualification answers to those returned by LevellingUpPremiumPayments::DqtRecord" do
+        expect { eligibility.set_qualifications_from_dqt_record }.to change { eligibility.itt_academic_year }.from(itt_academic_year).to(itt_academic_year_for_claim)
+          .and change { eligibility.eligible_itt_subject }.from(eligible_itt_subject.to_s).to(eligible_itt_subject_for_claim.to_s)
+          .and change { eligibility.qualification }.from(qualification.to_s).to(route_into_teaching.to_s)
+          .and change { eligibility.eligible_degree_subject }.from(eligible_degree_subject).to(eligible_degree_code)
+      end
+    end
+
+    context "when user has not confirmed their qualification details" do
+      let(:qualifications_details_check) { false }
+
+      it "sets the qualification answers to nil" do
+        expect { eligibility.set_qualifications_from_dqt_record }.to change { eligibility.itt_academic_year }.from(itt_academic_year).to(nil)
+          .and change { eligibility.eligible_itt_subject }.from(eligible_itt_subject.to_s).to(nil)
+          .and change { eligibility.qualification }.from(qualification.to_s).to(nil)
+          .and change { eligibility.eligible_degree_subject }.from(eligible_degree_subject).to(nil)
+      end
+    end
+  end
 end

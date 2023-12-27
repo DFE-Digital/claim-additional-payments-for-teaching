@@ -2179,4 +2179,101 @@ RSpec.describe EarlyCareerPayments::DqtRecord do
 
     it { expect(eligible_induction?).to eq(expected_result) }
   end
+
+  describe "#eligible_itt_subject_for_claim" do
+    let(:record) { OpenStruct.new(itt_subjects:) }
+
+    context "with a valid ITT year" do
+      before do
+        allow(JourneySubjectEligibilityChecker).to receive(:new)
+          .and_return(double(current_and_future_subject_symbols: eligible_subjects))
+      end
+
+      let(:claim_academic_year) { AcademicYear.new(2023) }
+
+      context "when the record returns a valid subject" do
+        let(:itt_subjects) { ["mathematics"] }
+        let(:eligible_subjects) { [:mathematics] }
+
+        it "returns the valid subject" do
+          expect(dqt_record.eligible_itt_subject_for_claim).to eq(:mathematics)
+        end
+      end
+
+      context "when the record returns multiple valid subjects" do
+        let(:itt_subjects) { ["mathematics", "physics"] }
+        let(:eligible_subjects) { [:physics, :mathematics, :computing] }
+
+        it "returns the first valid subject" do
+          expect(dqt_record.eligible_itt_subject_for_claim).to eq(:mathematics)
+        end
+      end
+
+      context "when the record returns an invalid subject" do
+        let(:itt_subjects) { ["test"] }
+        let(:eligible_subjects) { [:mathematics] }
+
+        it "returns none_of_the_above" do
+          expect(dqt_record.eligible_itt_subject_for_claim).to eq(:none_of_the_above)
+        end
+      end
+
+      context "when the record returns valid and invalid subjects" do
+        let(:itt_subjects) { ["invalid", "mathematics", "test", "physics"] }
+        let(:eligible_subjects) { [:mathematics] }
+
+        it "returns the first valid subject" do
+          expect(dqt_record.eligible_itt_subject_for_claim).to eq(:mathematics)
+        end
+      end
+    end
+
+    context "with an invalid ITT year" do
+      let(:claim_academic_year) { AcademicYear.for(Date.new(1666,1,1)) }
+      let(:itt_subjects) { ["mathematics"] }
+
+      before do
+        allow(JourneySubjectEligibilityChecker).to receive(:new)
+          .and_raise(StandardError.new("ITT year"))
+      end
+
+      it "returns none_of_the_above" do
+        expect(dqt_record.eligible_itt_subject_for_claim).to eq(:none_of_the_above)
+      end
+    end
+  end
+
+  describe "#itt_academic_year_for_claim" do
+    before do
+      allow(JourneySubjectEligibilityChecker).to receive(:new)
+        .and_return(double(selectable_itt_years_for_claim_year: eligible_years))
+    end
+
+    let(:record) do
+      OpenStruct.new(
+        qualification_name: "BA",
+        qts_award_date:)
+    end
+
+    let(:claim_year) { 2023 }
+    let(:claim_academic_year) { AcademicYear.new(claim_year) }
+
+    let(:eligible_years) { (AcademicYear.new(claim_year - 5)...AcademicYear.new(claim_year)).to_a }
+
+    context "when the record returns an eligible date" do
+      let(:qts_award_date) { Date.new(claim_year,1,1) }
+
+      it "returns the academic year" do
+        expect(dqt_record.itt_academic_year_for_claim).to eq(AcademicYear.for(qts_award_date))
+      end
+    end
+
+    context "when the record returns an ineligible date" do
+      let(:qts_award_date) { Date.new(claim_year - 10,12,1) }
+
+      it "returns a blank academic year" do
+        expect(dqt_record.itt_academic_year_for_claim).to eq(AcademicYear.new)
+      end
+    end
+  end
 end

@@ -6,14 +6,14 @@ module OmniauthMockHelper
       OmniAuth::AuthHash.new(
         "extra" => {
           "raw_info" => {
-            "trn" => opts.key?(:returned_trn) ? opts[:returned_trn] : trn,
-            "birthdate" => "1940-01-01",
+            "trn" => opts.key?(:returned_trn) ? opts[:returned_trn].to_s : trn.to_s,
+            "birthdate" => opts.key?(:date_of_birth) ? opts[:date_of_birth].to_s : "1940-01-01",
             "given_name" => "Kelsie",
             "family_name" => "Oberbrunner",
-            "ni_number" => opts.key?(:nino) ? opts[:nino] : "AB123456C",
+            "ni_number" => opts.key?(:nino) ? opts[:nino].to_s : "AB123456C",
             "trn_match_ni_number" => "True",
             "email" => "kelsie.oberbrunner@example.com",
-            "phone_number" => phone_number
+            "phone_number" => phone_number.to_s
           }
         }
       )

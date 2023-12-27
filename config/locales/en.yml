@@ -114,8 +114,8 @@ en:
       overseas_recognition: Subject you did you teaching qualification in
     select_yes_confirm: By selecting yes you are confirming that, to the best of your knowledge, the details above are correct.
     continue: Continue
-    yes: Yes
-    no: No
+    radio_yes: "Yes"
+    radio_no: "No"
   admin:
     qts_award_year: "Award year"
     current_school: "Current school"

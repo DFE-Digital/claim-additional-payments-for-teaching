@@ -123,6 +123,10 @@ RSpec.describe EarlyCareerPayments::SlugSequence do
     context "when logged_in_with_tid is false" do
       let(:logged_in_with_tid) { false }
 
+      it "removes the qualification details page" do
+        expect(slug_sequence.slugs).not_to include("qualification-details")
+      end
+
       it "includes teacher reference number slug if teacher reference number is nil" do
         claim.teacher_reference_number = nil
 
@@ -133,6 +137,14 @@ RSpec.describe EarlyCareerPayments::SlugSequence do
         claim.teacher_reference_number = "1234567"
 
         expect(slug_sequence.slugs).to include("teacher-reference-number")
+      end
+    end
+
+    context "when logged_in_with_tid is nil" do
+      let(:logged_in_with_tid) { nil }
+
+      it "adds the qualification details page" do
+        expect(slug_sequence.slugs).to include("qualification-details")
       end
     end
 

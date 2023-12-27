@@ -152,6 +152,14 @@ module EarlyCareerPayments
         !LevellingUpPremiumPayments::SchoolEligibility.new(claim.eligibility.current_school).eligible?
     end
 
+    def set_qualifications_from_dqt_record
+      self.attributes = {
+        itt_academic_year: claim.qualifications_details_check ? claim.dqt_teacher_record.itt_academic_year_for_claim : nil,
+        eligible_itt_subject: claim.qualifications_details_check ? claim.dqt_teacher_record.eligible_itt_subject_for_claim : nil,
+        qualification: claim.qualifications_details_check ? claim.dqt_teacher_record.route_into_teaching : nil,
+      }
+    end
+
     private
 
     def calculate_award_amount

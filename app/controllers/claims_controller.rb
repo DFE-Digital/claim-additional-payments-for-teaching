@@ -26,8 +26,9 @@ class ClaimsController < BasePublicController
     if params[:slug] == "teacher-detail"
       save_and_set_teacher_id_user_info
     elsif params[:slug] == "qualification-details"
-      save_and_set_dqt_teacher_status
-      redirect_to claim_path(current_policy_routing_name, "qualification") if current_claim.has_no_dqt_record? and return
+      redirect_slug = next_slug
+      Dqt::RetrieveClaimQualificationsData.call(current_claim)
+      return redirect_to claim_path(current_policy_routing_name, redirect_slug) if !current_claim.has_dqt_record?
     elsif params[:slug] == "teaching-subject-now" && no_eligible_itt_subject?
       return redirect_to claim_path(current_policy_routing_name, "eligible-itt-subject")
     elsif params[:slug] == "sign-in-or-continue"
@@ -78,6 +79,8 @@ class ClaimsController < BasePublicController
       return skip_teacher_id
     when "teacher-detail"
       save_details_check
+    when "qualification-details"
+      set_dqt_data_as_answers
     when "personal-details"
       check_date_params
     when "eligibility-confirmed"
@@ -99,7 +102,7 @@ class ClaimsController < BasePublicController
     end
 
     current_claim.reset_dependent_answers unless params[:slug] == "select-email" || params[:slug] == "select-mobile"
-    current_claim.reset_eligibility_dependent_answers(reset_attrs)
+    current_claim.reset_eligibility_dependent_answers(reset_attrs) unless params[:slug] == "qualification-details"
     one_time_password
 
     if current_claim.save(context: page_sequence.current_slug.to_sym)
@@ -321,30 +324,6 @@ class ClaimsController < BasePublicController
     @teacher_id_user_info ||= current_claim.teacher_id_user_info
   end
 
-  def save_and_set_dqt_teacher_status
-    # TODO: move all this to another service object
-    unless current_claim.dqt_teacher_status
-      response = Dqt::Client.new.teacher.find_raw(
-        current_claim.teacher_reference_number,
-        birthdate: current_claim.date_of_birth.to_s
-      )
-
-      # Might need a timeout check here?
-      begin
-        if response.nil?
-          # {} would indicate nothing was found in DQT but also truthy to prevent further requests
-          current_claim.update(dqt_teacher_status: {})
-        else
-          current_claim.update(dqt_teacher_status: response)
-        end
-      rescue
-        # Something went wrong with the DQT call, just assume no result returned and continue
-        # Should log this or maybe raise an alert?
-        current_claim.update(dqt_teacher_status: {})
-      end
-    end
-  end
-
   def save_details_check
     details_check = params.dig(:claim, :details_check)
     DfeIdentity::ClaimUserDetailsCheck.call(current_claim, details_check)
@@ -384,6 +363,11 @@ class ClaimsController < BasePublicController
   def skip_teacher_id
     DfeIdentity::ClaimUserDetailsReset.call(current_claim, :skipped_tid)
     redirect_to claim_path(current_policy_routing_name, next_slug)
+  end
+
+  def set_dqt_data_as_answers
+    current_claim.attributes = claim_params
+    current_claim.claims.each {|claim| claim.eligibility.set_qualifications_from_dqt_record }
   end
 
   def policy_configuration

@@ -112,7 +112,8 @@ class Claim < ApplicationRecord
     mobile_check: true,
     qa_required: false,
     qa_completed_at: false,
-    qualifications_details_check: true
+    qualifications_details_check: true,
+    dqt_teacher_status: false
   }.freeze
   DECISION_DEADLINE = 12.weeks
   DECISION_DEADLINE_WARNING_POINT = 2.weeks
@@ -622,8 +623,12 @@ class Claim < ApplicationRecord
     logged_in_with_tid? && teacher_reference_number.present? && has_recent_tps_school?
   end
 
-  def has_no_dqt_record?
-    dqt_teacher_status == {}
+  def has_dqt_record?
+    !dqt_teacher_status.blank?
+  end
+
+  def dqt_teacher_record
+    policy::DqtRecord.new(Dqt::Teacher.new(dqt_teacher_status), self) if has_dqt_record?
   end
 
   private
