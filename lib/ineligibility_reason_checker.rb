@@ -6,6 +6,8 @@ class IneligibilityReasonChecker
   def reason
     if current_school?
       :current_school
+    elsif dqt_data_ineligible?
+      :dqt_data_ineligible
     elsif generic?
       :generic
     elsif trainee_teacher_last_policy_year?
@@ -41,6 +43,17 @@ class IneligibilityReasonChecker
       !EarlyCareerPayments::SchoolEligibility.new(school).eligible?,
       !LevellingUpPremiumPayments::SchoolEligibility.new(school).eligible?
     ].all?
+  end
+
+  def dqt_data_ineligible?
+    @current_claim.logged_in_with_tid? && @current_claim.qualifications_details_check && [
+      @current_claim.eligibility.itt_academic_year == AcademicYear.new,
+      bad_itt_year_for_ecp?,
+      bad_itt_subject_for_ecp?,
+      no_ecp_subjects_that_itt_year?,
+      lack_both_valid_itt_subject_and_degree?,
+      trainee_teaching_lacking_both_valid_itt_subject_and_degree?
+    ].any?
   end
 
   def generic?
