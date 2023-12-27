@@ -29,10 +29,14 @@ module EarlyCareerPayments
         a << employed_directly if eligibility.employed_as_supply_teacher?
         a << subject_to_formal_performance_action
         a << subject_to_disciplinary_action
-        a << qualification
-        a << itt_academic_year
-        a << eligible_itt_subject
-        a << eligible_degree_subject
+
+        unless eligibility.claim.qualifications_details_check
+          a << qualification
+          a << itt_academic_year
+          a << eligible_itt_subject
+          a << eligible_degree_subject
+        end
+
         a << teaching_subject_now
       end.compact
     end

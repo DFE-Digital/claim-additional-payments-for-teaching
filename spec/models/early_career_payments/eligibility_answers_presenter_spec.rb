@@ -4,8 +4,9 @@ RSpec.describe EarlyCareerPayments::EligibilityAnswersPresenter do
   describe "#answers" do
     let(:policy_year) { AcademicYear.new(2022) }
     let(:policy) { EarlyCareerPayments }
-    let(:claim) { build(:claim, policy: policy, academic_year: policy_year, eligibility: eligibility) }
+    let(:claim) { build(:claim, policy: policy, academic_year: policy_year, eligibility: eligibility, qualifications_details_check:) }
     let!(:policy_configuration) { create(:policy_configuration, :additional_payments, current_academic_year: policy_year) }
+    let(:qualifications_details_check) { false }
 
     subject { described_class.new(claim.eligibility).answers }
 
@@ -80,6 +81,19 @@ RSpec.describe EarlyCareerPayments::EligibilityAnswersPresenter do
 
         it { is_expected.to include(["Which subject did you do your postgraduate initial teacher training (ITT) in?", "Mathematics", "eligible-itt-subject"]) }
       end
+
+      context "qualifications retrieved from DQT" do
+        let(:qualifications_details_check) { true }
+        let(:eligibility) { build(:early_career_payments_eligibility, :eligible) }
+
+        specify {
+          expect(questions(subject)).not_to include(
+            "Which route into teaching did you take?",
+            "In which academic year did you start your postgraduate initial teacher training (ITT)?",
+            "Did you do your postgraduate initial teacher training (ITT) in mathematics?",
+          )
+        }
+      end
     end
 
     context "LUP" do
@@ -106,6 +120,20 @@ RSpec.describe EarlyCareerPayments::EligibilityAnswersPresenter do
               ["Do you have a degree in an eligible subject?", "Yes", "eligible-degree-subject"],
               ["Do you spend at least half of your contracted hours teaching eligible subjects?", "Yes", "teaching-subject-now"]
             ]
+          )
+        }
+      end
+
+      context "qualifications retrieved from DQT" do
+        let(:qualifications_details_check) { true }
+        let(:eligibility) { build(:levelling_up_premium_payments_eligibility, :eligible, :long_term_directly_employed_supply_teacher, :ineligible_itt_subject, :relevant_degree) }
+
+        specify {
+          expect(questions(subject)).not_to include(
+            "Which route into teaching did you take?",
+            "In which academic year did you start your postgraduate initial teacher training (ITT)?",
+            "Which subject did you do your postgraduate initial teacher training (ITT) in?",
+            "Do you have a degree in an eligible subject?",
           )
         }
       end
