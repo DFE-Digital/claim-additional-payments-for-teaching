@@ -7,27 +7,27 @@
 <div class="govuk-body" id="main-content" role="main">
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
-      <h1 class="govuk-heading-l">Check and confirm your qualification details</h1>
+      <h1 class="govuk-heading-l"><%= t("questions.check_and_confirm_qualification_details") %></h1>
 
       <div class="personal-details-section">
-        <h2 class="govuk-heading-m">Qualification details</h2>
+        <h2 class="govuk-heading-m"><%= t("questions.qualification_details") %></h2>
         <dl class="govuk-summary-list govuk-!-margin-bottom-9">
           <div class="govuk-summary-list__row">
-            <dt class="govuk-summary-list__key">Teacher route taken</dt>
+            <dt class="govuk-summary-list__key"><%= t("questions.teacher_route") %></dt>
             <dd class="govuk-summary-list__value">
-              [PLACEHOLDER] Undergraduate initial teacher training (ITT)
+              <%= t("#{current_claim.policy.locale_key}.answers.qualification.#{current_claim.dqt_teacher_record.route_into_teaching}") %>
             </dd>
           </div>
           <div class="govuk-summary-list__row">
-            <dt class="govuk-summary-list__key">Academic year you completed your undergraduate initial teacher training (ITT)</dt>
+            <dt class="govuk-summary-list__key"><%= t("questions.academic_year.#{current_claim.dqt_teacher_record.route_into_teaching}") %></dt>
             <dd class="govuk-summary-list__value">
-              [PLACEHOLDER] 2021-2022
+              <%= AcademicYear.for(current_claim.dqt_teacher_record.academic_date) %>
             </dd>
           </div>
           <div class="govuk-summary-list__row">
-            <dt class="govuk-summary-list__key">Subject you did your undergraduate initial teacher training (ITT) in</dt>
+            <dt class="govuk-summary-list__key"><%= t("questions.itt_subject.#{current_claim.dqt_teacher_record.route_into_teaching}") %></dt>
             <dd class="govuk-summary-list__value">
-              [PLACEHOLDER] Mathematics
+              <%= dqt_subjects_playback(current_claim) %>
             </dd>
           </div>
         </dl>
@@ -44,18 +44,18 @@
 
     <div class="govuk-radios">
       <fieldset class="govuk-fieldset">
-        <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">Are these details correct?</legend>
+        <legend class="govuk-fieldset__legend govuk-fieldset__legend--m"><%= t("questions.details_correct") %></legend>
 
         <%= errors_tag current_claim, :qualifications_details_check %>
 
         <div class="govuk-radios govuk-radios--inline" data-module="govuk-radios">
           <div class="govuk-radios__item">
             <%= form.radio_button(:qualifications_details_check, true, class: "govuk-radios__input") %>
-            <%= form.label :qualifications_details_check_true, "Yes", class: "govuk-label govuk-radios__label" %>
+            <%= form.label :qualifications_details_check_true, t("questions.yes"), class: "govuk-label govuk-radios__label" %>
           </div>
           <div class="govuk-radios__item">
           <%= form.radio_button(:qualifications_details_check, false, class: "govuk-radios__input") %>
-          <%= form.label :qualifications_details_check_false, "No", class: "govuk-label govuk-radios__label" %>
+          <%= form.label :qualifications_details_check_false, t("questions.no"), class: "govuk-label govuk-radios__label" %>
           </div>
         </div>
       </fieldset>
@@ -63,9 +63,9 @@
 
   <% end %>
 
-  <p class="govuk-body">By selecting yes you are confirming that, to the best of your knowledge, the details above are correct.</p>
+  <p class="govuk-body"><%= t("questions.select_yes_confirm") %></p>
 
   <div class="govuk-form-group">
-    <%= form.submit "Continue", class: "govuk-button", data: {module: "govuk-button"} %>
+    <%= form.submit t("questions.continue"), class: "govuk-button", data: {module: "govuk-button"} %>
   </div>
 <% end %>

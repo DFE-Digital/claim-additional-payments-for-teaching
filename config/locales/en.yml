@@ -99,6 +99,23 @@ en:
     account_details: Enter your %{bank_or_building_society} details
     account_hint: "For example: your name as it appears on your %{bank_or_building_society} statement or %{card} card."
     check_your_account_details: Incorrect details will cause a delay to your payment.
+    check_and_confirm_qualification_details: Check and confirm your qualification details
+    qualification_details: Qualification details
+    academic_year:
+      postgraduate_itt: Academic year you started your postgraduate initial teacher training (ITT)
+      undergraduate_itt: Academic year you completed your undergraduate initial teacher training (ITT)
+      assessment_only: Academic year you earned your qualified teacher status (QTS)
+      overseas_recognition: Academic year you earned your qualified teacher status (QTS)
+    teacher_route: Teacher route taken
+    itt_subject:
+      postgraduate_itt: Subject you did your postgraduate initial teacher training (ITT) in
+      undergraduate_itt: Subject you did your undergraduate initial teacher training (ITT) in
+      assessment_only: Subject you did you teaching qualification in
+      overseas_recognition: Subject you did you teaching qualification in
+    select_yes_confirm: By selecting yes you are confirming that, to the best of your knowledge, the details above are correct.
+    continue: Continue
+    yes: Yes
+    no: No
   admin:
     qts_award_year: "Award year"
     current_school: "Current school"
