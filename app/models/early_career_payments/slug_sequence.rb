@@ -165,10 +165,14 @@ module EarlyCareerPayments
 
         sequence.delete("personal-details") if claim.logged_in_with_tid? && claim.has_all_valid_personal_details?
 
-        sequence.delete("qualification-details") if !claim.logged_in_with_tid? || claim.has_no_dqt_record?
-
-        # TODO: "qualification", "itt-year", "eligible-itt-subject", "eligible-degree-subject" will need deleting if DQT has that information from "qualification-details" step
-        # Not too sure on "eligible-degree-subject" with the trainee option.
+        if claim.logged_in_with_tid? && claim.qualifications_details_check
+          sequence.delete("qualification") if claim.eligibility.qualification
+          sequence.delete("itt-year") if claim.eligibility.itt_academic_year
+          sequence.delete("eligible-itt-subject") if claim.eligibility.eligible_itt_subject
+          sequence.delete("eligible-degree-subject") if claim.eligibility.respond_to?(:eligible_degree_subject) && claim.eligibility.eligible_degree_subject
+        elsif claim.dqt_teacher_status && claim.dqt_teacher_status.empty?
+          sequence.delete("qualification-details")
+        end
       end
     end
 
