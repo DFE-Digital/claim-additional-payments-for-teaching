@@ -18,7 +18,8 @@ module DfeIdentity
         teacher_reference_number: user_info["trn"],
         date_of_birth: user_info["birthdate"],
         national_insurance_number: user_info["ni_number"],
-        logged_in_with_tid: true
+        logged_in_with_tid: true,
+        dqt_teacher_status: nil
       )
     end
   end

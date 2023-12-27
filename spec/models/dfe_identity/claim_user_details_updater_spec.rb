@@ -2,7 +2,7 @@ require "rails_helper"
 
 RSpec.describe DfeIdentity::ClaimUserDetailsUpdater do
   describe ".call" do
-    let(:claim) { create(:claim) }
+    let(:claim) { create(:claim, dqt_teacher_status: {}) }
 
     it "updates the claim with teacher ID user info" do
       teacher_id_user_info = {
@@ -11,7 +11,7 @@ RSpec.describe DfeIdentity::ClaimUserDetailsUpdater do
         "trn" => "123456",
         "birthdate" => "1990-01-01",
         "ni_number" => "AB123456C",
-        "trn_match_ni_number" => "True"
+        "trn_match_ni_number" => "True",
       }
       allow(claim).to receive(:teacher_id_user_info).and_return(teacher_id_user_info)
 
@@ -23,10 +23,11 @@ RSpec.describe DfeIdentity::ClaimUserDetailsUpdater do
         .and change { claim.date_of_birth }.to(Date.new(1990, 1, 1))
         .and change { claim.national_insurance_number }.to("AB123456C")
         .and change { claim.logged_in_with_tid }.to(true)
+        .and change { claim.dqt_teacher_status }.to(nil)
     end
 
     it "updates the claim with the saved teacher ID user info" do
-      claim = create(:claim, :with_valid_teacher_id_user_info)
+      claim = create(:claim, :with_valid_teacher_id_user_info, dqt_teacher_status: {})
 
       expect {
         described_class.call(claim)
@@ -36,6 +37,7 @@ RSpec.describe DfeIdentity::ClaimUserDetailsUpdater do
         .and change { claim.date_of_birth }.to(Date.new(1990, 1, 1))
         .and change { claim.national_insurance_number }.to("AB123456C")
         .and change { claim.logged_in_with_tid }.to(true)
+        .and change { claim.dqt_teacher_status }.to(nil)
     end
 
     it "does not update the claim if user info is not validated" do
