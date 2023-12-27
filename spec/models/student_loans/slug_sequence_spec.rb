@@ -3,8 +3,12 @@ require "rails_helper"
 RSpec.describe StudentLoans::SlugSequence do
   subject(:slug_sequence) { StudentLoans::SlugSequence.new(current_claim) }
 
-  let(:claim) { build(:claim) }
+  let(:eligibility) { create(:student_loans_eligibility, :eligible) }
+  let(:claim) { build(:claim, eligibility:, logged_in_with_tid:, qualifications_details_check:, dqt_teacher_status:) }
   let(:current_claim) { CurrentClaim.new(claims: [claim]) }
+  let(:logged_in_with_tid) { nil }
+  let(:qualifications_details_check) { nil }
+  let(:dqt_teacher_status) { nil }
 
   describe "The sequence as defined by #slugs" do
     it "excludes the “ineligible” slug if the claim is not actually ineligible" do
@@ -116,6 +120,58 @@ RSpec.describe StudentLoans::SlugSequence do
       it "removes the Teacher ID-dependant slugs" do
         slugs = %w[sign-in-or-continue teacher-detail reset-claim select-email select-mobile]
         expect(slug_sequence.slugs).not_to include(*slugs)
+      end
+    end
+
+    context "when logged_in_with_tid is true" do
+      let(:logged_in_with_tid) { true }
+
+      context "when DQT returns some data" do
+        let(:dqt_teacher_status) { {test: true} }
+
+        it "adds the qualification details page" do
+          expect(slug_sequence.slugs).to include("qualification-details")
+        end
+      end
+
+      context "when the DQT payload is empty" do
+        let(:dqt_teacher_status) { {} }
+
+        it "removes the qualification details page" do
+          expect(slug_sequence.slugs).not_to include("qualification-details")
+        end
+      end
+
+      context "when the user confirmed DQT data is correct" do
+        let(:qualifications_details_check) { true }
+
+        it "removes the qualification questions" do
+          expect(slug_sequence.slugs).not_to include("qts-year")
+        end
+      end
+
+      context "when the user confirmed DQT data is incorrect" do
+        let(:qualifications_details_check) { false }
+
+        it "adds the qualification questions" do
+          expect(slug_sequence.slugs).to include("qts-year")
+        end
+      end
+    end
+
+    context "when logged_in_with_tid is false" do
+      let(:logged_in_with_tid) { false }
+
+      it "removes the qualification details page" do
+        expect(slug_sequence.slugs).not_to include("qualification-details")
+      end
+    end
+
+    context "when logged_in_with_tid is nil" do
+      let(:logged_in_with_tid) { nil }
+
+      it "adds the qualification details page" do
+        expect(slug_sequence.slugs).to include("qualification-details")
       end
     end
   end

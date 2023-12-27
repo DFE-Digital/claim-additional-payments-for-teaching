@@ -8,7 +8,9 @@ RSpec.feature "TSLR journey with Teacher ID still teaching school playback" do
   let!(:eligible_claim_school) { create(:school, :student_loans_eligible) }
   let!(:eligible_school) { create(:school, :student_loans_eligible) }
   let!(:ineligible_school) { create(:school, :student_loans_ineligible) }
-  let(:trn) { "1234567" }
+  let(:trn) { 1234567 }
+  let(:date_of_birth) { "1981-01-01" }
+  let(:nino) { "AB123123A" }
 
   before do
     freeze_time
@@ -24,7 +26,8 @@ RSpec.feature "TSLR journey with Teacher ID still teaching school playback" do
     recent_tps_full_months = TeachersPensionsService::RECENT_TPS_FULL_MONTHS
     create(:teachers_pensions_service, teacher_reference_number: trn, end_date: recent_tps_full_months.ago, school_urn: eligible_school.establishment_number, la_urn: eligible_school.local_authority.code)
 
-    set_mock_auth(trn)
+    set_mock_auth(trn, {date_of_birth:, nino:})
+    stub_dqt_empty_response(trn:, params: {birthdate: date_of_birth, nino:})
   end
 
   after do

@@ -21,7 +21,7 @@ module StudentLoans
     # [2]: slug for changing the answer.
     def answers
       [].tap do |a|
-        a << qts_award_year
+        a << qts_award_year unless eligibility.claim.qualifications_details_check
         a << claim_school
         a << current_school
         a << subjects_taught

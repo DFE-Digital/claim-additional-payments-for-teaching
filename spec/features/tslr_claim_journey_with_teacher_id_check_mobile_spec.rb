@@ -7,12 +7,15 @@ RSpec.feature "TSLR journey with Teacher ID email check" do
   # create a school eligible for ECP and LUP so can walk the whole journey
   let!(:policy_configuration) { create(:policy_configuration, :student_loans) }
   let!(:school) { create(:school, :student_loans_eligible) }
-  let(:trn) { "1234567" }
+  let(:trn) { 1234567 }
+  let(:date_of_birth) { "1981-01-01" }
+  let(:nino) { "AB123123A" }
   let(:phone_number) { "01234567890" }
 
   before do
     freeze_time
-    set_mock_auth(trn)
+    set_mock_auth(trn, {date_of_birth:, nino:})
+    stub_dqt_empty_response(trn:, params: {birthdate: date_of_birth, nino:})
     mock_address_details_address_data
   end
 

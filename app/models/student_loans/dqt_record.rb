@@ -11,6 +11,8 @@ module StudentLoans
   #   qts_award_date: The date the teacher achieved qualified
   #                   teacher status.
   class DqtRecord
+    include Dqt::Matchers::General
+
     delegate(
       :qts_award_date,
       :itt_subjects,

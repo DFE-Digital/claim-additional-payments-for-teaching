@@ -13,6 +13,7 @@ module StudentLoans
       "sign-in-or-continue",
       "teacher-detail",
       "reset-claim",
+      "qualification-details",
       "qts-year",
       "select-claim-school",
       "claim-school",
@@ -124,6 +125,16 @@ module StudentLoans
         end
         sequence.delete("claim-school") if claim.eligibility.claim_school_somewhere_else == false
         sequence.delete("teacher-reference-number") if claim.logged_in_with_tid? && claim.teacher_reference_number.present?
+
+        if claim.logged_in_with_tid?
+          if claim.qualifications_details_check
+            sequence.delete("qts-year") if claim.eligibility.qts_award_year
+          elsif claim.dqt_teacher_status && !claim.has_dqt_record?
+            sequence.delete("qualification-details")
+          end
+        elsif claim.logged_in_with_tid == false
+          sequence.delete("qualification-details")
+        end
       end
     end
   end
