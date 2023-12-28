@@ -85,6 +85,7 @@ module StudentLoans
           sequence.delete("sign-in-or-continue")
           sequence.delete("teacher-detail")
           sequence.delete("reset-claim")
+          sequence.delete("qualification-details")
           sequence.delete("select-email")
           sequence.delete("select-mobile")
         end

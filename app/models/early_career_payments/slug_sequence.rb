@@ -100,6 +100,7 @@ module EarlyCareerPayments
           sequence.delete("sign-in-or-continue")
           sequence.delete("teacher-detail")
           sequence.delete("reset-claim")
+          sequence.delete("qualification-details")
           sequence.delete("correct-school")
           sequence.delete("select-email")
           sequence.delete("select-mobile")

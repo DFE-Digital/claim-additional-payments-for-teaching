@@ -118,7 +118,7 @@ RSpec.describe StudentLoans::SlugSequence do
       before { create(:policy_configuration, :student_loans, teacher_id_enabled: false) }
 
       it "removes the Teacher ID-dependant slugs" do
-        slugs = %w[sign-in-or-continue teacher-detail reset-claim select-email select-mobile]
+        slugs = %w[sign-in-or-continue teacher-detail reset-claim qualification-details select-email select-mobile]
         expect(slug_sequence.slugs).not_to include(*slugs)
       end
     end
