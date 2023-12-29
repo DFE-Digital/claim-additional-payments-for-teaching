@@ -367,7 +367,7 @@ class ClaimsController < BasePublicController
 
   def set_dqt_data_as_answers
     current_claim.attributes = claim_params
-    current_claim.claims.each {|claim| claim.eligibility.set_qualifications_from_dqt_record }
+    current_claim.claims.each { |claim| claim.eligibility.set_qualifications_from_dqt_record }
   end
 
   def policy_configuration

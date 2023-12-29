@@ -2039,7 +2039,7 @@ RSpec.describe Claim, type: :model do
     end
 
     context "when dqt_teacher_status value is not empty" do
-      let(:dqt_teacher_status) { { "test" => "test" } }
+      let(:dqt_teacher_status) { {"test" => "test"} }
       it { is_expected.to be true }
     end
   end
@@ -2059,7 +2059,7 @@ RSpec.describe Claim, type: :model do
     end
 
     context "when dqt_teacher_status value is not empty" do
-      let(:dqt_teacher_status) { { "test" => "test" } }
+      let(:dqt_teacher_status) { {"test" => "test"} }
       it { is_expected.to be_a(claim.policy::DqtRecord) }
     end
   end

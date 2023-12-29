@@ -1,7 +1,7 @@
 module Dqt
   class TeacherResource < Resource
-    def find(trn, **params)
-      response = find_raw(trn, **params)
+    def find(trn, **)
+      response = find_raw(trn, **)
       return unless response
 
       Teacher.new(response)

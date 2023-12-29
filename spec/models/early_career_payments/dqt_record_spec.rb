@@ -2229,7 +2229,7 @@ RSpec.describe EarlyCareerPayments::DqtRecord do
     end
 
     context "with an invalid ITT year" do
-      let(:claim_academic_year) { AcademicYear.for(Date.new(1666,1,1)) }
+      let(:claim_academic_year) { AcademicYear.for(Date.new(1666, 1, 1)) }
       let(:itt_subjects) { ["mathematics"] }
 
       before do
@@ -2252,7 +2252,8 @@ RSpec.describe EarlyCareerPayments::DqtRecord do
     let(:record) do
       OpenStruct.new(
         qualification_name: "BA",
-        qts_award_date:)
+        qts_award_date:
+      )
     end
 
     let(:claim_year) { 2023 }
@@ -2261,7 +2262,7 @@ RSpec.describe EarlyCareerPayments::DqtRecord do
     let(:eligible_years) { (AcademicYear.new(claim_year - 5)...AcademicYear.new(claim_year)).to_a }
 
     context "when the record returns an eligible date" do
-      let(:qts_award_date) { Date.new(claim_year,1,1) }
+      let(:qts_award_date) { Date.new(claim_year, 1, 1) }
 
       it "returns the academic year" do
         expect(dqt_record.itt_academic_year_for_claim).to eq(AcademicYear.for(qts_award_date))
@@ -2269,7 +2270,7 @@ RSpec.describe EarlyCareerPayments::DqtRecord do
     end
 
     context "when the record returns an ineligible date" do
-      let(:qts_award_date) { Date.new(claim_year - 10,12,1) }
+      let(:qts_award_date) { Date.new(claim_year - 10, 12, 1) }
 
       it "returns a blank academic year" do
         expect(dqt_record.itt_academic_year_for_claim).to eq(AcademicYear.new)

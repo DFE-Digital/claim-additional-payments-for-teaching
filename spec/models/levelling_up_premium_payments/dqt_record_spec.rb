@@ -354,7 +354,8 @@ RSpec.describe LevellingUpPremiumPayments::DqtRecord do
     let(:record) do
       OpenStruct.new(
         qualification_name: "BA",
-        qts_award_date:)
+        qts_award_date:
+      )
     end
 
     let(:year) { 2023 }
@@ -363,7 +364,7 @@ RSpec.describe LevellingUpPremiumPayments::DqtRecord do
     let(:eligible_years) { (AcademicYear.new(year - 5)...AcademicYear.new(year)).to_a }
 
     context "when the record returns an eligible date" do
-      let(:qts_award_date) { Date.new(year,1,1) }
+      let(:qts_award_date) { Date.new(year, 1, 1) }
 
       it "returns the academic year" do
         expect(dqt_record.itt_academic_year_for_claim).to eq(AcademicYear.for(qts_award_date))
@@ -371,7 +372,7 @@ RSpec.describe LevellingUpPremiumPayments::DqtRecord do
     end
 
     context "when the record returns an ineligible date" do
-      let(:qts_award_date) { Date.new(year - 10,12,1) }
+      let(:qts_award_date) { Date.new(year - 10, 12, 1) }
 
       it "returns a blank academic year" do
         expect(dqt_record.itt_academic_year_for_claim).to eq(AcademicYear.new)

@@ -90,7 +90,7 @@ RSpec.describe EarlyCareerPayments::EligibilityAnswersPresenter do
           expect(questions(subject)).not_to include(
             "Which route into teaching did you take?",
             "In which academic year did you start your postgraduate initial teacher training (ITT)?",
-            "Did you do your postgraduate initial teacher training (ITT) in mathematics?",
+            "Did you do your postgraduate initial teacher training (ITT) in mathematics?"
           )
         }
       end
@@ -133,7 +133,7 @@ RSpec.describe EarlyCareerPayments::EligibilityAnswersPresenter do
             "Which route into teaching did you take?",
             "In which academic year did you start your postgraduate initial teacher training (ITT)?",
             "Which subject did you do your postgraduate initial teacher training (ITT) in?",
-            "Do you have a degree in an eligible subject?",
+            "Do you have a degree in an eligible subject?"
           )
         }
       end

@@ -5,7 +5,7 @@ RSpec.describe ClaimVerifierJob do
     let(:claim) { build(:claim, dqt_teacher_status:) }
     let(:dbl) { double(find: mock_payload) }
     let(:verifier) { double(perform: true) }
-    let(:mock_payload) { Dqt::Teacher.new({ "mock" => "mock" }) }
+    let(:mock_payload) { Dqt::Teacher.new({"mock" => "mock"}) }
 
     before do
       allow(Dqt::TeacherResource).to receive(:new).and_return(dbl)
@@ -13,7 +13,7 @@ RSpec.describe ClaimVerifierJob do
     end
 
     context "when the claim has a DQT record payload" do
-      let(:dqt_teacher_status) { { "test" => "test" } }
+      let(:dqt_teacher_status) { {"test" => "test"} }
 
       it "does not request a new DQT payload" do
         expect(dbl).not_to receive(:find)

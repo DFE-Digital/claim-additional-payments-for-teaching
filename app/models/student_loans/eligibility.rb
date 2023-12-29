@@ -123,8 +123,6 @@ module StudentLoans
     def set_qualifications_from_dqt_record
       self.qts_award_year = if claim.qualifications_details_check
         claim.dqt_teacher_record.eligible_qts_award_date? ? :on_or_after_cut_off_date : :before_cut_off_date
-      else
-        nil
       end
     end
 

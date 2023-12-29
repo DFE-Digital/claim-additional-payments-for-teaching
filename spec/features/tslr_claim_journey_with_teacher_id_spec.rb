@@ -7,7 +7,7 @@ RSpec.feature "TSLR journey with Teacher ID" do
   let!(:policy_configuration) { create(:policy_configuration, :student_loans) }
   let!(:school) { create(:school, :student_loans_eligible) }
   let(:eligible_itt_years) { JourneySubjectEligibilityChecker.selectable_itt_years_for_claim_year(policy_configuration.current_academic_year) }
-  let(:academic_date) { Date.new(eligible_itt_years.first.start_year,12,1) }
+  let(:academic_date) { Date.new(eligible_itt_years.first.start_year, 12, 1) }
   let(:itt_year) { AcademicYear.for(academic_date) }
   let(:trn) { 1234567 }
   let(:date_of_birth) { "1981-01-01" }
@@ -25,8 +25,8 @@ RSpec.feature "TSLR journey with Teacher ID" do
   end
 
   scenario "When user is logged in with Teacher ID and there is a matching DQT record" do
-    set_mock_auth(trn, { date_of_birth:, nino: })
-    stub_qualified_teaching_statuses_show(trn:, params: { birthdate: date_of_birth, nino: }, body: eligible_dqt_body)
+    set_mock_auth(trn, {date_of_birth:, nino:})
+    stub_qualified_teaching_statuses_show(trn:, params: {birthdate: date_of_birth, nino:}, body: eligible_dqt_body)
 
     navigate_past_teacher_details_page
 
@@ -72,7 +72,7 @@ RSpec.feature "TSLR journey with Teacher ID" do
 
   scenario "When user is logged in with Teacher ID and the qualifications are not eligible" do
     set_mock_auth("1234567", {nino:, date_of_birth:})
-    stub_qualified_teaching_statuses_show(trn:, params: { birthdate: date_of_birth, nino: })
+    stub_qualified_teaching_statuses_show(trn:, params: {birthdate: date_of_birth, nino:})
 
     navigate_past_teacher_details_page
 

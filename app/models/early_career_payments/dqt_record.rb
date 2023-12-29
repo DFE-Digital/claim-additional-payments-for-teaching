@@ -40,8 +40,8 @@ module EarlyCareerPayments
       itt_subjects.delete_if do |itt_subject|
         !itt_subject.to_sym.in?(itt_subject_checker.current_and_future_subject_symbols(claim.policy))
       end.first.to_sym
-    rescue StandardError # JourneySubjectEligibilityChecker can also raise an exception if itt_year is out of eligible range
-      return :none_of_the_above
+    rescue # JourneySubjectEligibilityChecker can also raise an exception if itt_year is out of eligible range
+      :none_of_the_above
     end
 
     def itt_academic_year_for_claim

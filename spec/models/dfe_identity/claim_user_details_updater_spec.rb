@@ -11,7 +11,7 @@ RSpec.describe DfeIdentity::ClaimUserDetailsUpdater do
         "trn" => "123456",
         "birthdate" => "1990-01-01",
         "ni_number" => "AB123456C",
-        "trn_match_ni_number" => "True",
+        "trn_match_ni_number" => "True"
       }
       allow(claim).to receive(:teacher_id_user_info).and_return(teacher_id_user_info)
 

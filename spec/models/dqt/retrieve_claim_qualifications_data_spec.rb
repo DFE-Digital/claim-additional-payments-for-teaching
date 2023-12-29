@@ -2,7 +2,7 @@ require "rails_helper"
 
 RSpec.describe Dqt::RetrieveClaimQualificationsData do
   let(:dbl) { double(find_raw: response) }
-  let(:response) { { "mock" => "mock" } }
+  let(:response) { {"mock" => "mock"} }
   let(:claim) { build(:claim, :submittable, dqt_teacher_status:) }
 
   before do
@@ -13,7 +13,7 @@ RSpec.describe Dqt::RetrieveClaimQualificationsData do
     subject(:service) { described_class.new(claim) }
 
     context "when the claim already has a saved DQT payload" do
-      let(:dqt_teacher_status) { { "test" => "test" } }
+      let(:dqt_teacher_status) { {"test" => "test"} }
 
       it "does not retrieve a new DQT payload" do
         expect(dbl).not_to receive(:find_raw)
