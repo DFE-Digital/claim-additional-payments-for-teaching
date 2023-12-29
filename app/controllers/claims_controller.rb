@@ -303,8 +303,8 @@ class ClaimsController < BasePublicController
   end
 
   # NOTE: needs to be done before the slug_sequence is generated.
-  # `logged_in_with_tid: nil` means the user had pressed "Continue without signing in", reset it to `false`.
-  # `logged_in_with_tid: nil` is used to reject "teacher-details" from the slug_sequence.
+  # `logged_in_with_tid: false` means the user had pressed "Continue without signing in", reset it to `true`.
+  # `logged_in_with_tid: false` is used to reject "teacher-details" and "qualification-details" from the slug_sequence.
   # Handles user somehow using Back button to go back and choose "Continue with DfE Identity" option.
   # Or they sign in a second time, `details_check` needs resetting in case details are different.
   def check_and_reset_if_new_tid_user_info

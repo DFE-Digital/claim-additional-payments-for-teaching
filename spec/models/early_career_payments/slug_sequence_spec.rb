@@ -143,8 +143,8 @@ RSpec.describe EarlyCareerPayments::SlugSequence do
     context "when logged_in_with_tid is nil" do
       let(:logged_in_with_tid) { nil }
 
-      it "adds the qualification details page" do
-        expect(slug_sequence.slugs).to include("qualification-details")
+      it "removes the qualification details page" do
+        expect(slug_sequence.slugs).not_to include("qualification-details")
       end
     end
 
@@ -239,7 +239,6 @@ RSpec.describe EarlyCareerPayments::SlugSequence do
           induction-completed
           supply-teacher
           poor-performance
-          qualification-details
           qualification
           itt-year
           eligible-itt-subject
@@ -287,7 +286,6 @@ RSpec.describe EarlyCareerPayments::SlugSequence do
           induction-completed
           supply-teacher
           poor-performance
-          qualification-details
           qualification
           itt-year
           eligible-itt-subject
@@ -330,7 +328,6 @@ RSpec.describe EarlyCareerPayments::SlugSequence do
           induction-completed
           supply-teacher
           poor-performance
-          qualification-details
           qualification
           itt-year
           eligible-itt-subject
@@ -390,7 +387,6 @@ RSpec.describe EarlyCareerPayments::SlugSequence do
           induction-completed
           supply-teacher
           poor-performance
-          qualification-details
           qualification
           itt-year
           eligible-itt-subject

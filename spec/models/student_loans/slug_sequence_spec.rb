@@ -170,8 +170,8 @@ RSpec.describe StudentLoans::SlugSequence do
     context "when logged_in_with_tid is nil" do
       let(:logged_in_with_tid) { nil }
 
-      it "adds the qualification details page" do
-        expect(slug_sequence.slugs).to include("qualification-details")
+      it "does not add the qualification details page" do
+        expect(slug_sequence.slugs).not_to include("qualification-details")
       end
     end
   end
