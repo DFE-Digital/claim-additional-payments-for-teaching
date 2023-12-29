@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.feature "TSLR journey with Teacher ID email check" do
+RSpec.feature "TSLR journey with Teacher ID mobile check" do
   include OmniauthMockHelper
   include StudentLoansHelper
 
@@ -169,7 +169,11 @@ RSpec.feature "TSLR journey with Teacher ID email check" do
     find("#claim_mobile_check_declined").click
     click_on "Continue"
 
+    expect(page).to have_text(I18n.t("questions.bank_or_building_society"))
+
     click_on "Back"
+
+    expect(page).to have_text(I18n.t("questions.select_phone_number.heading"))
 
     # - Select the suggested phone number
     find("#claim_mobile_check_use").click
@@ -189,7 +193,11 @@ RSpec.feature "TSLR journey with Teacher ID email check" do
     find("#claim_mobile_check_declined").click
     click_on "Continue"
 
+    expect(page).to have_text(I18n.t("questions.bank_or_building_society"))
+
     click_on "Back"
+
+    expect(page).to have_text(I18n.t("questions.select_phone_number.heading"))
 
     # - Select A different mobile number
     find("#claim_mobile_check_alternative").click
