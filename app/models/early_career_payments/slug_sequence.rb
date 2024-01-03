@@ -172,8 +172,6 @@ module EarlyCareerPayments
             sequence.delete("itt-year") if claim.eligibility.itt_academic_year
             sequence.delete("eligible-itt-subject") if claim.eligibility.eligible_itt_subject
             sequence.delete("eligible-degree-subject") if claim.eligibility.respond_to?(:eligible_degree_subject) && claim.eligibility.eligible_degree_subject
-          elsif claim.dqt_teacher_status && claim.dqt_teacher_status.empty?
-            sequence.delete("qualification-details")
           end
         else
           sequence.delete("qualification-details")

@@ -47,8 +47,8 @@ RSpec.describe EarlyCareerPayments::SlugSequence do
       context "when the DQT payload is empty" do
         let(:dqt_teacher_status) { {} }
 
-        it "removes the qualification details page" do
-          expect(slug_sequence.slugs).not_to include("qualification-details")
+        it "adds the qualification details page" do
+          expect(slug_sequence.slugs).to include("qualification-details")
         end
       end
 

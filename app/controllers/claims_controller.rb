@@ -26,9 +26,12 @@ class ClaimsController < BasePublicController
     if params[:slug] == "teacher-detail"
       save_and_set_teacher_id_user_info
     elsif params[:slug] == "qualification-details"
-      redirect_slug = next_slug
       Dqt::RetrieveClaimQualificationsData.call(current_claim)
-      return redirect_to claim_path(current_policy_routing_name, redirect_slug) if !current_claim.has_dqt_record?
+
+      unless current_claim.has_dqt_record?
+        update_session_with_current_slug
+        return redirect_to claim_path(current_policy_routing_name, next_slug)
+      end
     elsif params[:slug] == "teaching-subject-now" && no_eligible_itt_subject?
       return redirect_to claim_path(current_policy_routing_name, "eligible-itt-subject")
     elsif params[:slug] == "sign-in-or-continue"

@@ -130,8 +130,6 @@ module StudentLoans
         if claim.logged_in_with_tid?
           if claim.qualifications_details_check
             sequence.delete("qts-year") if claim.eligibility.qts_award_year
-          elsif claim.dqt_teacher_status && !claim.has_dqt_record?
-            sequence.delete("qualification-details")
           end
         else
           sequence.delete("qualification-details")
