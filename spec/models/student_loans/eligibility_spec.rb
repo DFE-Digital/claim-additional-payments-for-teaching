@@ -386,8 +386,9 @@ RSpec.describe StudentLoans::Eligibility, type: :model do
 
     context "when user has confirmed their qualification details" do
       let(:qualifications_details_check) { true }
+      let(:qts_award_date) { Date.new(1981, 1, 1) }
 
-      before { allow(claim).to receive(:dqt_teacher_record).and_return(double(eligible_qts_award_date?: eligible)) }
+      before { allow(claim).to receive(:dqt_teacher_record).and_return(double(eligible_qts_award_date?: eligible, qts_award_date:)) }
 
       context "when the DQT payload QTS award date is eligible" do
         let(:eligible) { true }
@@ -402,6 +403,15 @@ RSpec.describe StudentLoans::Eligibility, type: :model do
 
         it "sets the qts_award_year to before_cut_off_date" do
           expect { eligibility.set_qualifications_from_dqt_record }.to change { eligibility.qts_award_year }.from(qts_award_year).to("before_cut_off_date")
+        end
+      end
+
+      context "when the DQT payload QTS award date is nil" do
+        let(:eligible) { nil }
+        let(:qts_award_date) { nil }
+
+        it "does not change the qts_award_year" do
+          expect { eligibility.set_qualifications_from_dqt_record }.not_to change { eligibility.qts_award_year }
         end
       end
     end

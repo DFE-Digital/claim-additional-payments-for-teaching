@@ -8,7 +8,7 @@ RSpec.describe EarlyCareerPayments::EligibilityAnswersPresenter do
     let!(:policy_configuration) { create(:policy_configuration, :additional_payments, current_academic_year: policy_year) }
     let(:qualifications_details_check) { false }
 
-    subject { described_class.new(claim.eligibility).answers }
+    subject(:answers) { described_class.new(claim.eligibility).answers }
 
     context "ECP" do
       context "long-term directly employed supply teacher" do
@@ -85,14 +85,40 @@ RSpec.describe EarlyCareerPayments::EligibilityAnswersPresenter do
       context "qualifications retrieved from DQT" do
         let(:qualifications_details_check) { true }
         let(:eligibility) { build(:early_career_payments_eligibility, :eligible) }
-
-        specify {
-          expect(questions(subject)).not_to include(
-            "Which route into teaching did you take?",
-            "In which academic year did you start your postgraduate initial teacher training (ITT)?",
-            "Did you do your postgraduate initial teacher training (ITT) in mathematics?"
+        let(:dbl) do
+          double(
+            itt_academic_year_for_claim:,
+            eligible_itt_subject_for_claim:,
+            route_into_teaching:
           )
-        }
+        end
+        let(:itt_academic_year_for_claim) { AcademicYear.for(Date.new(1981, 1, 1)) }
+        let(:eligible_itt_subject_for_claim) { :mathematics }
+        let(:route_into_teaching) { :postgraduate_itt }
+
+        before { allow(claim).to receive(:dqt_teacher_record).and_return(dbl) }
+
+        context "all data is present" do
+          it { is_expected.not_to include(["Which route into teaching did you take?", "Postgraduate initial teacher training (ITT)", "qualification"]) }
+          it { is_expected.not_to include(["In which academic year did you start your postgraduate initial teacher training (ITT)?", "2019 - 2020", "itt-year"]) }
+          it { is_expected.not_to include(["Did you do your postgraduate initial teacher training (ITT) in mathematics?", "Yes", "eligible-itt-subject"]) }
+          it { is_expected.not_to include(["Do you have a degree in an eligible subject?", "Yes", "eligible-degree-subject"]) }
+        end
+
+        context "qualification was missing" do
+          let(:route_into_teaching) { nil }
+          it { is_expected.to include(["Which route into teaching did you take?", "Postgraduate initial teacher training (ITT)", "qualification"]) }
+        end
+
+        context "subject was missing" do
+          let(:eligible_itt_subject_for_claim) { nil }
+          it { is_expected.to include(["Did you do your postgraduate initial teacher training (ITT) in mathematics?", "Yes", "eligible-itt-subject"]) }
+        end
+
+        context "academic year was missing" do
+          let(:itt_academic_year_for_claim) { nil }
+          it { is_expected.to include(["In which academic year did you start your postgraduate initial teacher training (ITT)?", "2019 - 2020", "itt-year"]) }
+        end
       end
     end
 
@@ -126,16 +152,48 @@ RSpec.describe EarlyCareerPayments::EligibilityAnswersPresenter do
 
       context "qualifications retrieved from DQT" do
         let(:qualifications_details_check) { true }
-        let(:eligibility) { build(:levelling_up_premium_payments_eligibility, :eligible, :long_term_directly_employed_supply_teacher, :ineligible_itt_subject, :relevant_degree) }
-
-        specify {
-          expect(questions(subject)).not_to include(
-            "Which route into teaching did you take?",
-            "In which academic year did you start your postgraduate initial teacher training (ITT)?",
-            "Which subject did you do your postgraduate initial teacher training (ITT) in?",
-            "Do you have a degree in an eligible subject?"
+        let(:eligibility) { build(:levelling_up_premium_payments_eligibility, :eligible, :relevant_degree) }
+        let(:dbl) do
+          double(
+            itt_academic_year_for_claim:,
+            eligible_itt_subject_for_claim:,
+            route_into_teaching:,
+            eligible_degree_code?: eligible_degree_code
           )
-        }
+        end
+        let(:itt_academic_year_for_claim) { AcademicYear.for(Date.new(1981, 1, 1)) }
+        let(:eligible_itt_subject_for_claim) { :mathematics }
+        let(:route_into_teaching) { :postgraduate_itt }
+        let(:eligible_degree_code) { true }
+
+        before { allow(claim).to receive(:dqt_teacher_record).and_return(dbl) }
+
+        context "all data is present" do
+          it { is_expected.not_to include(["Which route into teaching did you take?", "Postgraduate initial teacher training (ITT)", "qualification"]) }
+          it { is_expected.not_to include(["In which academic year did you start your postgraduate initial teacher training (ITT)?", "2021 - 2022", "itt-year"]) }
+          it { is_expected.not_to include(["Which subject did you do your postgraduate initial teacher training (ITT) in?", "Mathematics", "eligible-itt-subject"]) }
+          it { is_expected.not_to include(["Do you have a degree in an eligible subject?", "Yes", "eligible-degree-subject"]) }
+        end
+
+        context "qualification was missing" do
+          let(:route_into_teaching) { nil }
+          it { is_expected.to include(["Which route into teaching did you take?", "Postgraduate initial teacher training (ITT)", "qualification"]) }
+        end
+
+        context "subject was missing" do
+          let(:eligible_itt_subject_for_claim) { nil }
+          it { is_expected.to include(["Which subject did you do your postgraduate initial teacher training (ITT) in?", "Mathematics", "eligible-itt-subject"]) }
+        end
+
+        context "academic year was missing" do
+          let(:itt_academic_year_for_claim) { nil }
+          it { is_expected.to include(["In which academic year did you start your postgraduate initial teacher training (ITT)?", "2021 - 2022", "itt-year"]) }
+        end
+
+        context "degree code was missing" do
+          let(:eligible_degree_code) { nil }
+          it { is_expected.to include(["Do you have a degree in an eligible subject?", "Yes", "eligible-degree-subject"]) }
+        end
       end
 
       context "eligible ITT" do

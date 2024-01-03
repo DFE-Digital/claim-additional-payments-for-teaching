@@ -71,7 +71,7 @@ RSpec.feature "TSLR journey with Teacher ID" do
   end
 
   scenario "When user is logged in with Teacher ID and the qualifications are not eligible" do
-    set_mock_auth("1234567", {nino:, date_of_birth:})
+    set_mock_auth(trn, {nino:, date_of_birth:})
     stub_qualified_teaching_statuses_show(trn:, params: {birthdate: date_of_birth, nino:})
 
     navigate_past_teacher_details_page
@@ -82,6 +82,23 @@ RSpec.feature "TSLR journey with Teacher ID" do
 
     # Qualification pages are skipped
     expect(page).to have_text("You’re not eligible for this payment")
+  end
+
+  scenario "When user is logged in with Teacher ID and the qualifications data is incomplete" do
+    set_mock_auth(trn, {nino:, date_of_birth:})
+    missing_qts_date_body = {
+      qualified_teacher_status: {
+        qts_date: nil
+      }
+    }
+    stub_qualified_teaching_statuses_show(trn:, params: {birthdate: date_of_birth, nino:}, body: missing_qts_date_body)
+
+    navigate_past_teacher_details_page
+
+    # Qualification pages are not skipped
+
+    # - Select qts year
+    expect(page).to have_text(I18n.t("questions.qts_award_year"))
   end
 
   def navigate_past_teacher_details_page

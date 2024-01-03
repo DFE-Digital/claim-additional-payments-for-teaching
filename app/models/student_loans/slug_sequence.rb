@@ -127,10 +127,10 @@ module StudentLoans
         sequence.delete("claim-school") if claim.eligibility.claim_school_somewhere_else == false
         sequence.delete("teacher-reference-number") if claim.logged_in_with_tid? && claim.teacher_reference_number.present?
 
-        if claim.logged_in_with_tid?
+        if claim.logged_in_with_tid? && claim.details_check?
           if claim.qualifications_details_check
-            sequence.delete("qts-year") if claim.eligibility.qts_award_year
-          elsif claim.dqt_teacher_status && !claim.has_dqt_record?
+            sequence.delete("qts-year") if claim.dqt_teacher_record&.qts_award_date
+          elsif claim.dqt_teacher_status && (!claim.has_dqt_record? || claim.has_no_dqt_data_for_claim?)
             sequence.delete("qualification-details")
           end
         else

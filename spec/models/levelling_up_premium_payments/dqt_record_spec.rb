@@ -300,6 +300,8 @@ RSpec.describe LevellingUpPremiumPayments::DqtRecord do
   end
 
   describe "#eligible_itt_subject_for_claim" do
+    let(:eligible_subjects) { [:mathematics] }
+
     before do
       allow(JourneySubjectEligibilityChecker).to receive(:fixed_lup_subject_symbols)
         .and_return(eligible_subjects)
@@ -310,7 +312,6 @@ RSpec.describe LevellingUpPremiumPayments::DqtRecord do
 
     context "when the record returns a valid subject" do
       let(:itt_subjects) { ["mathematics"] }
-      let(:eligible_subjects) { [:mathematics] }
 
       it "returns the valid subject" do
         expect(dqt_record.eligible_itt_subject_for_claim).to eq(:mathematics)
@@ -328,7 +329,6 @@ RSpec.describe LevellingUpPremiumPayments::DqtRecord do
 
     context "when the record returns an invalid subject" do
       let(:itt_subjects) { ["test"] }
-      let(:eligible_subjects) { [:mathematics] }
 
       it "returns none_of_the_above" do
         expect(dqt_record.eligible_itt_subject_for_claim).to eq(:none_of_the_above)
@@ -337,10 +337,17 @@ RSpec.describe LevellingUpPremiumPayments::DqtRecord do
 
     context "when the record returns valid and invalid subjects" do
       let(:itt_subjects) { ["invalid", "mathematics", "test", "physics"] }
-      let(:eligible_subjects) { [:mathematics] }
 
       it "returns the first valid subject" do
         expect(dqt_record.eligible_itt_subject_for_claim).to eq(:mathematics)
+      end
+    end
+
+    context "when the record returns empty" do
+      let(:itt_subjects) { [] }
+
+      it "returns the first valid subject" do
+        expect(dqt_record.eligible_itt_subject_for_claim).to be_nil
       end
     end
   end
@@ -377,6 +384,33 @@ RSpec.describe LevellingUpPremiumPayments::DqtRecord do
       it "returns a blank academic year" do
         expect(dqt_record.itt_academic_year_for_claim).to eq(AcademicYear.new)
       end
+    end
+
+    context "when the record returns nil" do
+      let(:qts_award_date) { nil }
+
+      it "returns nil" do
+        expect(dqt_record.itt_academic_year_for_claim).to be_nil
+      end
+    end
+  end
+
+  describe "#has_no_data_for_claim?" do
+    context "when one or more required data are present" do
+      before { allow(dqt_record).to receive(:eligible_itt_subject_for_claim).and_return("test") }
+
+      it { is_expected.not_to be_has_no_data_for_claim }
+    end
+
+    context "when all required data are not present" do
+      before do
+        allow(dqt_record).to receive(:eligible_itt_subject_for_claim).and_return(nil)
+        allow(dqt_record).to receive(:itt_academic_year_for_claim).and_return(nil)
+        allow(dqt_record).to receive(:route_into_teaching).and_return(nil)
+        allow(dqt_record).to receive(:eligible_degree_code?).and_return(nil)
+      end
+
+      it { is_expected.to be_has_no_data_for_claim }
     end
   end
 end

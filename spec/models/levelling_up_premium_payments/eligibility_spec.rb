@@ -163,6 +163,17 @@ RSpec.describe LevellingUpPremiumPayments::Eligibility, type: :model do
           .and change { eligibility.qualification }.from(qualification.to_s).to(route_into_teaching.to_s)
           .and change { eligibility.eligible_degree_subject }.from(eligible_degree_subject).to(eligible_degree_code)
       end
+
+      context "when the DQT record is missing data" do
+        let(:itt_academic_year_for_claim) { nil }
+        let(:eligible_itt_subject_for_claim) { nil }
+        let(:route_into_teaching) { nil }
+        let(:eligible_degree_code) { nil }
+
+        it "does not change the answers" do
+          expect(eligibility.set_qualifications_from_dqt_record).to eq(eligibility.attributes.symbolize_keys.slice(:itt_academic_year, :eligible_itt_subject, :qualification, :eligible_degree_subject).transform_values { |v| (v == false) ? v : v.to_s })
+        end
+      end
     end
 
     context "when user has not confirmed their qualification details" do

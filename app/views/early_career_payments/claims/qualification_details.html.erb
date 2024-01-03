@@ -12,24 +12,32 @@
       <div class="personal-details-section">
         <h2 class="govuk-heading-m"><%= t("questions.qualification_details") %></h2>
         <dl class="govuk-summary-list govuk-!-margin-bottom-9">
-          <div class="govuk-summary-list__row">
-            <dt class="govuk-summary-list__key"><%= t("questions.teacher_route") %></dt>
-            <dd class="govuk-summary-list__value">
-              <%= t("#{current_claim.policy.locale_key}.answers.qualification.#{current_claim.dqt_teacher_record.route_into_teaching}") %>
-            </dd>
-          </div>
-          <div class="govuk-summary-list__row">
-            <dt class="govuk-summary-list__key"><%= t("questions.academic_year.#{current_claim.dqt_teacher_record.route_into_teaching}") %></dt>
-            <dd class="govuk-summary-list__value">
-              <%= AcademicYear.for(current_claim.dqt_teacher_record.academic_date) %>
-            </dd>
-          </div>
-          <div class="govuk-summary-list__row">
-            <dt class="govuk-summary-list__key"><%= t("questions.itt_subject.#{current_claim.dqt_teacher_record.route_into_teaching}") %></dt>
-            <dd class="govuk-summary-list__value">
-              <%= dqt_subjects_playback(current_claim) %>
-            </dd>
-          </div>
+          <% if current_claim.dqt_teacher_record.route_into_teaching %>
+            <div class="govuk-summary-list__row">
+              <dt class="govuk-summary-list__key"><%= t("questions.teacher_route") %></dt>
+              <dd class="govuk-summary-list__value">
+                <%= t("#{current_claim.policy.locale_key}.answers.qualification.#{current_claim.dqt_teacher_record.route_into_teaching}") %>
+              </dd>
+            </div>
+          <% end %>
+
+          <% if current_claim.dqt_teacher_record.academic_date %>
+            <div class="govuk-summary-list__row">
+              <dt class="govuk-summary-list__key"><%= t("questions.academic_year.#{current_claim.dqt_teacher_record.route_into_teaching}") %></dt>
+              <dd class="govuk-summary-list__value">
+                <%= AcademicYear.for(current_claim.dqt_teacher_record.academic_date) %>
+              </dd>
+            </div>
+          <% end %>
+
+          <% unless current_claim.dqt_teacher_record.itt_subjects.empty? %>
+            <div class="govuk-summary-list__row">
+              <dt class="govuk-summary-list__key"><%= t("questions.itt_subject.#{current_claim.dqt_teacher_record.route_into_teaching}") %></dt>
+              <dd class="govuk-summary-list__value">
+                <%= dqt_subjects_playback(current_claim) %>
+              </dd>
+            </div>
+          <% end %>
         </dl>
       </div>
     </div>

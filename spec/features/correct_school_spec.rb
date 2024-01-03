@@ -7,11 +7,14 @@ RSpec.feature "Logs in with TID, confirms teacher details and displays school fr
   let!(:policy_configuration) { create(:policy_configuration, :additional_payments) }
   let!(:eligible_school) { create(:school, :combined_journey_eligibile_for_all) }
   let!(:ineligible_school) { create(:school, :early_career_payments_ineligible, :levelling_up_premium_payments_ineligible) }
-  let(:trn) { "1234567" }
+  let(:trn) { 1234567 }
+  let(:date_of_birth) { "1981-01-01" }
+  let(:nino) { "AB123123A" }
 
   before do
     freeze_time
-    set_mock_auth(trn)
+    set_mock_auth(trn, {date_of_birth:, nino:})
+    stub_dqt_empty_response(trn:, params: {birthdate: date_of_birth, nino:})
   end
 
   after do

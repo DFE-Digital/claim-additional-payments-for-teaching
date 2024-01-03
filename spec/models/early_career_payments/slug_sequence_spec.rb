@@ -6,11 +6,12 @@ RSpec.describe EarlyCareerPayments::SlugSequence do
   let(:eligibility) { create(:early_career_payments_eligibility, :eligible) }
   let(:eligibility_lup) { create(:levelling_up_premium_payments_eligibility, :eligible) }
 
-  let(:claim) { create(:claim, :skipped_tid, policy: EarlyCareerPayments, academic_year: AcademicYear.new(2021), eligibility: eligibility, logged_in_with_tid:, dqt_teacher_status:, qualifications_details_check:) }
+  let(:claim) { create(:claim, :skipped_tid, policy: EarlyCareerPayments, academic_year: AcademicYear.new(2021), eligibility: eligibility, logged_in_with_tid:, details_check:, dqt_teacher_status:, qualifications_details_check:) }
   let(:lup_claim) { create(:claim, :skipped_tid, policy: LevellingUpPremiumPayments, academic_year: AcademicYear.new(2021), eligibility: eligibility_lup) }
   let(:current_claim) { CurrentClaim.new(claims: [claim, lup_claim]) }
   let(:teacher_id_enabled) { true }
   let(:logged_in_with_tid) { nil }
+  let(:details_check) { nil }
   let(:dqt_teacher_status) { nil }
   let(:qualifications_details_check) { nil }
 
@@ -33,14 +34,38 @@ RSpec.describe EarlyCareerPayments::SlugSequence do
       expect(slug_sequence.slugs).to include("entire-term-contract", "employed-directly")
     end
 
-    context "when logged_in_with_tid is true" do
+    context "when logged_in_with_tid and details_check are true" do
       let(:logged_in_with_tid) { true }
+      let(:details_check) { true }
+      let(:itt_academic_year_for_claim) { "test" }
+      let(:route_into_teaching) { "test" }
+      let(:eligible_itt_subject_for_claim) { "test" }
+      let(:eligible_degree_code) { true }
+
+      before do
+        allow(claim).to receive(:dqt_teacher_record).and_return(double(itt_academic_year_for_claim:, route_into_teaching:, eligible_itt_subject_for_claim:, has_no_data_for_claim?: false))
+        allow(lup_claim).to receive(:dqt_teacher_record).and_return(double(itt_academic_year_for_claim:, route_into_teaching:, eligible_itt_subject_for_claim:, eligible_degree_code?: eligible_degree_code, has_no_data_for_claim?: false))
+      end
 
       context "when DQT returns some data" do
-        let(:dqt_teacher_status) { {test: true} }
+        let(:dqt_teacher_status) { {"test" => "test"} }
 
         it "adds the qualification details page" do
           expect(slug_sequence.slugs).to include("qualification-details")
+        end
+
+        context "when the DQT payload is missing all required data" do
+          before { allow(current_claim).to receive(:has_no_dqt_data_for_claim?).and_return(true) }
+
+          it "removes the qualification details page" do
+            expect(slug_sequence.slugs).not_to include("qualification-details")
+          end
+
+          it "does not remove the relevant pages" do
+            expect(slug_sequence.slugs).to include("qualification")
+            expect(slug_sequence.slugs).to include("eligible-itt-subject")
+            expect(slug_sequence.slugs).to include("itt-year")
+          end
         end
       end
 
@@ -55,8 +80,20 @@ RSpec.describe EarlyCareerPayments::SlugSequence do
       context "when the user confirmed DQT data is correct" do
         let(:qualifications_details_check) { true }
 
-        it "removes the qualification questions" do
-          expect(slug_sequence.slugs).not_to include("qualification", "itt-year", "eligible-itt-subject", "eligible-degree-subject")
+        context "when the DQT record contains all required data" do
+          it "removes the qualification questions" do
+            expect(slug_sequence.slugs).not_to include("qualification", "itt-year", "eligible-itt-subject", "eligible-degree-subject")
+          end
+        end
+
+        context "when the DQT payload is missing some data" do
+          let(:itt_academic_year_for_claim) { nil }
+
+          it "does not remove the relevant pages" do
+            expect(slug_sequence.slugs).not_to include("qualification")
+            expect(slug_sequence.slugs).not_to include("eligible-itt-subject")
+            expect(slug_sequence.slugs).to include("itt-year")
+          end
         end
       end
 

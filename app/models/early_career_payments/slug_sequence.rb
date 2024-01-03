@@ -166,13 +166,13 @@ module EarlyCareerPayments
 
         sequence.delete("personal-details") if claim.logged_in_with_tid? && claim.has_all_valid_personal_details?
 
-        if claim.logged_in_with_tid?
+        if claim.logged_in_with_tid? && claim.details_check?
           if claim.qualifications_details_check
-            sequence.delete("qualification") if claim.eligibility.qualification
-            sequence.delete("itt-year") if claim.eligibility.itt_academic_year
-            sequence.delete("eligible-itt-subject") if claim.eligibility.eligible_itt_subject
-            sequence.delete("eligible-degree-subject") if claim.eligibility.respond_to?(:eligible_degree_subject) && claim.eligibility.eligible_degree_subject
-          elsif claim.dqt_teacher_status && claim.dqt_teacher_status.empty?
+            sequence.delete("qualification") if claim.dqt_teacher_record&.route_into_teaching
+            sequence.delete("itt-year") if claim.dqt_teacher_record&.itt_academic_year_for_claim
+            sequence.delete("eligible-itt-subject") if claim.dqt_teacher_record&.eligible_itt_subject_for_claim
+            sequence.delete("eligible-degree-subject") if claim.for_policy(LevellingUpPremiumPayments)&.dqt_teacher_record&.eligible_degree_code?
+          elsif claim.dqt_teacher_status && (!claim.has_dqt_record? || claim.has_no_dqt_data_for_claim?)
             sequence.delete("qualification-details")
           end
         else

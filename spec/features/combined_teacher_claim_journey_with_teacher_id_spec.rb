@@ -117,6 +117,7 @@ RSpec.feature "Combined journey with Teacher ID" do
     expect(claim.eligibility.reload.subject_to_disciplinary_action).to eql false
 
     expect(page).to have_text(I18n.t("questions.check_and_confirm_qualification_details"))
+    expect(page).to have_text(I18n.t("questions.academic_year.undergraduate_itt"))
     choose "Yes"
     click_on "Continue"
 
@@ -438,5 +439,62 @@ RSpec.feature "Combined journey with Teacher ID" do
     click_on "Continue"
 
     expect(page).to have_text("You are not eligible for the early-career payment or the levelling up premium payment because of the subject you studied or the year you studied.")
+  end
+
+  scenario "When user is logged in with Teacher ID and the qualifications data is incomplete" do
+    set_mock_auth("1234567", {nino:, date_of_birth:})
+    missing_qts_date_body = {
+      qualified_teacher_status: {
+        qts_date: nil
+      }
+    }
+    stub_qualified_teaching_statuses_show(trn:, params: {birthdate: date_of_birth, nino:}, body: missing_qts_date_body)
+
+    visit landing_page_path(EarlyCareerPayments.routing_name)
+    click_on "Start now"
+    click_on "Continue with DfE Identity"
+    choose "Yes"
+    click_on "Continue"
+    choose_school school
+    click_on "Continue"
+    choose "Yes"
+    click_on "Continue"
+    choose "Yes"
+    click_on "Continue"
+    choose "No"
+    click_on "Continue"
+    choose "claim_eligibility_attributes_subject_to_formal_performance_action_false"
+    choose "claim_eligibility_attributes_subject_to_disciplinary_action_false"
+    click_on "Continue"
+
+    expect(page).to have_text(I18n.t("questions.check_and_confirm_qualification_details"))
+
+    # ITT year is not shown as it is blank
+    expect(page).not_to have_text(I18n.t("questions.academic_year.undergraduate_itt"))
+    choose "Yes"
+    click_on "Continue"
+
+    # Asks user for the missing information
+    expect(page).to have_text(I18n.t("early_career_payments.questions.itt_academic_year.qualification.undergraduate_itt"))
+
+    choose "2020 to 2021"
+    click_on "Continue"
+
+    # Skips subject question as supplied by DQT
+
+    # - Do you teach subject now?
+    expect(page).to have_text(I18n.t("early_career_payments.questions.teaching_subject_now"))
+
+    choose "Yes"
+    click_on "Continue"
+
+    # - Check your answers for eligibility
+    expect(page).to have_text(I18n.t("early_career_payments.check_your_answers.part_one.primary_heading"))
+
+    # Check your answers page only includes missing qualifications questions
+    expect(page).not_to have_text(I18n.t("early_career_payments.questions.qualification.heading"))
+    expect(page).not_to have_text(I18n.t("early_career_payments.questions.eligible_itt_subject", qualification: "undergraduate initial teacher training (ITT)"))
+    expect(page).to have_text(I18n.t("early_career_payments.questions.itt_academic_year.qualification.undergraduate_itt"))
+    expect(page).not_to have_text(I18n.t("early_career_payments.questions.eligible_degree_subject"))
   end
 end

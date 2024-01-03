@@ -2190,10 +2190,10 @@ RSpec.describe EarlyCareerPayments::DqtRecord do
       end
 
       let(:claim_academic_year) { AcademicYear.new(2023) }
+      let(:eligible_subjects) { [:mathematics] }
 
       context "when the record returns a valid subject" do
         let(:itt_subjects) { ["mathematics"] }
-        let(:eligible_subjects) { [:mathematics] }
 
         it "returns the valid subject" do
           expect(dqt_record.eligible_itt_subject_for_claim).to eq(:mathematics)
@@ -2211,7 +2211,6 @@ RSpec.describe EarlyCareerPayments::DqtRecord do
 
       context "when the record returns an invalid subject" do
         let(:itt_subjects) { ["test"] }
-        let(:eligible_subjects) { [:mathematics] }
 
         it "returns none_of_the_above" do
           expect(dqt_record.eligible_itt_subject_for_claim).to eq(:none_of_the_above)
@@ -2220,10 +2219,36 @@ RSpec.describe EarlyCareerPayments::DqtRecord do
 
       context "when the record returns valid and invalid subjects" do
         let(:itt_subjects) { ["invalid", "mathematics", "test", "physics"] }
-        let(:eligible_subjects) { [:mathematics] }
 
         it "returns the first valid subject" do
           expect(dqt_record.eligible_itt_subject_for_claim).to eq(:mathematics)
+        end
+      end
+
+      context "when the record returns nil" do
+        let(:itt_subjects) { nil }
+
+        it "returns nil" do
+          expect(dqt_record.eligible_itt_subject_for_claim).to be_nil
+        end
+      end
+
+      context "when the record has no ITT year" do
+        let(:record_qts_date) { nil }
+        let(:itt_subjects) { ["mathematics"] }
+
+        context "when the Claim has no ITT year" do
+          let(:itt_academic_year) { nil }
+
+          it "returns nil" do
+            expect(dqt_record.eligible_itt_subject_for_claim).to be_nil
+          end
+        end
+
+        context "when the Claim has an ITT year" do
+          it "returns a subject based on the claim academic year" do
+            expect(dqt_record.eligible_itt_subject_for_claim).to eq(:mathematics)
+          end
         end
       end
     end
@@ -2275,6 +2300,40 @@ RSpec.describe EarlyCareerPayments::DqtRecord do
       it "returns a blank academic year" do
         expect(dqt_record.itt_academic_year_for_claim).to eq(AcademicYear.new)
       end
+    end
+
+    context "when the record returns nil" do
+      let(:qts_award_date) { nil }
+
+      it "returns nil" do
+        expect(dqt_record.itt_academic_year_for_claim).to be_nil
+      end
+    end
+  end
+
+  describe "#has_no_data_for_claim?" do
+    let(:record) do
+      OpenStruct.new(
+        qualification_name: "BA"
+      )
+    end
+    let(:claim_year) { 2023 }
+    let(:claim_academic_year) { AcademicYear.new(claim_year) }
+
+    context "when one or more required data are present" do
+      before { allow(dqt_record).to receive(:eligible_itt_subject_for_claim).and_return("test") }
+
+      it { is_expected.not_to be_has_no_data_for_claim }
+    end
+
+    context "when all required data are not present" do
+      before do
+        allow(dqt_record).to receive(:eligible_itt_subject_for_claim).and_return(nil)
+        allow(dqt_record).to receive(:itt_academic_year_for_claim).and_return(nil)
+        allow(dqt_record).to receive(:route_into_teaching).and_return(nil)
+      end
+
+      it { is_expected.to be_has_no_data_for_claim }
     end
   end
 end

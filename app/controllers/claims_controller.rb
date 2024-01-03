@@ -26,9 +26,7 @@ class ClaimsController < BasePublicController
     if params[:slug] == "teacher-detail"
       save_and_set_teacher_id_user_info
     elsif params[:slug] == "qualification-details"
-      redirect_slug = next_slug
-      Dqt::RetrieveClaimQualificationsData.call(current_claim)
-      return redirect_to claim_path(current_policy_routing_name, redirect_slug) if !current_claim.has_dqt_record?
+      return redirect_to claim_path(current_policy_routing_name, next_slug) if current_claim.has_no_dqt_data_for_claim?
     elsif params[:slug] == "teaching-subject-now" && no_eligible_itt_subject?
       return redirect_to claim_path(current_policy_routing_name, "eligible-itt-subject")
     elsif params[:slug] == "sign-in-or-continue"
@@ -79,6 +77,7 @@ class ClaimsController < BasePublicController
       return skip_teacher_id
     when "teacher-detail"
       save_details_check
+      Dqt::RetrieveClaimQualificationsData.call(current_claim) if current_claim.details_check?
     when "qualification-details"
       set_dqt_data_as_answers
     when "personal-details"
@@ -99,6 +98,10 @@ class ClaimsController < BasePublicController
       check_still_teaching_params
     else
       current_claim.attributes = claim_params
+
+      # If some DQT data was missing and the user fills them manually we need
+      # to re-populate those answers which depend on the manually-entered answer
+      set_dqt_data_as_answers if current_claim.qualifications_details_check
     end
 
     current_claim.reset_dependent_answers unless params[:slug] == "select-email" || params[:slug] == "select-mobile"

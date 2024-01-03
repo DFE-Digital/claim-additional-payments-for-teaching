@@ -38,6 +38,10 @@ module StudentLoans
       qts_award_date.present? && AcademicYear.for(qts_award_date) >= StudentLoans.first_eligible_qts_award_year
     end
 
+    def has_no_data_for_claim?
+      !qts_award_date
+    end
+
     private
 
     attr_reader :record

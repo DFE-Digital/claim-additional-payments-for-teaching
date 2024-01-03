@@ -39,12 +39,20 @@ module LevellingUpPremiumPayments
     end
 
     def eligible_itt_subject_for_claim
+      return nil if itt_subjects.empty?
+
       (JourneySubjectEligibilityChecker.fixed_lup_subject_symbols & itt_subjects.map(&:to_sym)).first || :none_of_the_above
     end
 
     def itt_academic_year_for_claim
+      return nil unless academic_date
+
       year = AcademicYear.for(academic_date)
       itt_year_within_allowed_range?(year) ? year : AcademicYear.new
+    end
+
+    def has_no_data_for_claim?
+      !eligible_itt_subject_for_claim && !itt_academic_year_for_claim && !route_into_teaching && !eligible_degree_code?
     end
 
     private
