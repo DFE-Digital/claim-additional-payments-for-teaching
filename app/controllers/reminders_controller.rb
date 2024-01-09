@@ -122,7 +122,7 @@ class RemindersController < BasePublicController
     return @current_claim if @current_claim
     return unless session.key?(:claim_id) || session.key?(:submitted_claim_id)
 
-    claims = Claim.where(id: (session[:claim_id] || session[:submitted_claim_id]))
+    claims = Claim.where(id: session[:claim_id] || session[:submitted_claim_id])
     @current_claim = claims.present? ? CurrentClaim.new(claims: claims) : nil
   end
 

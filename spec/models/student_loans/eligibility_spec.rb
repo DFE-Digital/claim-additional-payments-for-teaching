@@ -185,7 +185,7 @@ RSpec.describe StudentLoans::Eligibility, type: :model do
     end
 
     it "resets employment_status when the value of claim_school changes" do
-      eligibility.claim_school = eligibility.claim_school
+      eligibility.claim_school = eligibility.claim_school # standard:disable Lint/SelfAssignment
       expect { eligibility.reset_dependent_answers }.not_to change { eligibility.attributes }
 
       eligibility.claim_school = eligibility.current_school
