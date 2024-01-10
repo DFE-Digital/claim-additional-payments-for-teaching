@@ -3,6 +3,7 @@ Rails.application.routes.draw do
   root to: redirect(Rails.application.config.guidance_url)
 
   get "/claim/auth/tid/callback", to: "omniauth_callbacks#callback"
+  get "/auth/failure", to: "omniauth_callbacks#failure"
 
   # /early-career-payments is now /additional-payments - redirect old urls to a gov page
   get "early-career-payments(/*anything)", to: redirect("https://www.gov.uk/government/collections/additional-payments-for-teaching-eligibility-and-payment-details")

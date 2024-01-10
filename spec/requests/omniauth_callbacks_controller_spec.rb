@@ -44,5 +44,17 @@ RSpec.describe "OmniauthCallbacksControllers", type: :request do
         )
       end
     end
+
+    context "auth failure csrf detected" do
+      it "redirects to /auth/failure" do
+        OmniAuth.config.mock_auth[:default] = :csrf_detected
+
+        get claim_auth_tid_callback_path
+
+        expect(response).to redirect_to(
+          auth_failure_path(message: "csrf_detected", strategy: "tid")
+        )
+      end
+    end
   end
 end
