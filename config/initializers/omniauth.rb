@@ -4,6 +4,11 @@ OmniAuth.configure do |config|
   config.logger = Rails.logger
 end
 
+OmniAuth.config.on_failure = proc { |env|
+  # redirects to `/auth/failure`, check routes.rb
+  OmniAuth::FailureEndpoint.new(env).redirect_to_failure
+}
+
 dfe_sign_in_issuer_uri = ENV["DFE_SIGN_IN_ISSUER"].present? ? URI(ENV["DFE_SIGN_IN_ISSUER"]) : nil
 
 if ENV["DFE_SIGN_IN_REDIRECT_BASE_URL"].present?
