@@ -129,26 +129,6 @@ RSpec.feature "Ineligible Teacher Student Loan Repayments claims" do
     fill_in "National Insurance number", with: "PX321499A"
     click_on "Continue"
 
-    click_link(I18n.t("questions.address.home.link_to_manual_address"))
-
-    fill_in_address
-
-    fill_in I18n.t("questions.email_address"), with: "name@example.tld"
-    click_on "Continue"
-
-    # - One time password
-
-    mail = ActionMailer::Base.deliveries.last
-    otp_in_mail_sent = mail[:personalisation].decoded.scan(/\b[0-9]{6}\b/).first
-
-    fill_in "claim_one_time_password", with: otp_in_mail_sent
-
-    click_on "Confirm"
-
-    # - Provide mobile number
-    choose "No"
-    click_on "Continue"
-
     expect(page).to have_text("Your student loan repayment amount is £0.00")
     expect(page).to have_text("you are not eligible to claim back any repayments")
   end
