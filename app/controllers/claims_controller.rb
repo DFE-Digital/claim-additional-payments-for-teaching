@@ -39,8 +39,13 @@ class ClaimsController < BasePublicController
       session[:claim_address_line_1] = nil
       redirect_to claim_path(current_policy_routing_name, "postcode-search") and return
     elsif params[:slug] == "student-loan-amount" && params[:policy] == "student-loans"
-      ClaimStudentLoanDetailsUpdater.call(current_claim)
-      redirect_to claim_path(current_policy_routing_name, "ineligible") and return if current_claim.ineligible?
+      update_session_with_student_loan_details
+      # When the total repayment is present and equal to zero, we should persist this information
+      # on the current claim immediately and redirect to the next slug (which should be "ineligible")
+      if session[:student_loan_repayment_amount].presence&.zero?
+        save_student_loan_details
+        redirect_to claim_path(current_policy_routing_name, next_slug) and return
+      end
     elsif ["personal-bank-account", "building-society-account"].include?(params[:slug])
       @form ||= BankDetailsForm.new(claim: current_claim)
     end
@@ -58,6 +63,8 @@ class ClaimsController < BasePublicController
       check_date_params
     when "eligibility-confirmed"
       return select_claim if current_policy_routing_name == "additional-payments"
+    when "student-loan-amount"
+      save_student_loan_details if params[:policy] == "student-loans"
     when "personal-bank-account", "building-society-account"
       return bank_account
     else
@@ -255,5 +262,14 @@ class ClaimsController < BasePublicController
 
   def correct_policy_namespace?
     PolicyConfiguration.policies_for_routing_name(params[:policy]).include?(current_claim.policy)
+  end
+
+  def update_session_with_student_loan_details
+    student_loan_details = ClaimStudentLoanDetailsFetcher.call(current_claim)
+    session[:student_loan_repayment_amount] = student_loan_details.fetch(:student_loan_repayment_amount)
+  end
+
+  def save_student_loan_details
+    ClaimStudentLoanDetailsUpdater.call(current_claim)
   end
 end

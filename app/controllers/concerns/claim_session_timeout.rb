@@ -10,6 +10,7 @@ module ClaimSessionTimeout
     session.delete(:reminder_id)
     session.delete(:slugs)
     session.delete(:bank_validation_attempt_count)
+    session.delete(:student_loan_repayment_amount)
     @current_claim = nil
   end
 
