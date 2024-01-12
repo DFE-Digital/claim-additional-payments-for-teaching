@@ -33,7 +33,9 @@ module StudentLoans
     end
 
     def eligible_qts_award_date?
-      qts_award_date.present? && AcademicYear.for(qts_award_date) >= StudentLoans.first_eligible_qts_award_year
+      qts_award_date.present? &&
+        (AcademicYear.for(qts_award_date) >= StudentLoans.first_eligible_qts_award_year) &&
+        (AcademicYear.for(qts_award_date) <= StudentLoans.last_eligible_qts_award_year)
     end
 
     private
