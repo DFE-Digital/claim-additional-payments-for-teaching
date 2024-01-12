@@ -7,12 +7,19 @@ RSpec.feature "Teacher Identity Sign in" do
   let!(:policy_configuration) { create(:policy_configuration, :additional_payments) }
   let!(:school) { create(:school, :combined_journey_eligibile_for_all) }
   let(:current_academic_year) { policy_configuration.current_academic_year }
+  let(:trn) { 1234567 }
+  let(:date_of_birth) { "1981-01-01" }
+  let(:nino) { "AB123123A" }
 
   let(:itt_year) { current_academic_year - 3 }
 
+  before do
+    set_mock_auth(trn, {date_of_birth:, nino:})
+    stub_dqt_empty_response(trn:, params: {birthdate: date_of_birth, nino:})
+  end
+
   scenario "Teacher makes claim for 'Early-Career Payments' claim and select continue without signing in" do
     visit landing_page_path(EarlyCareerPayments.routing_name)
-    set_mock_auth("1234567")
     expect(page).to have_link("Claim additional payments for teaching", href: "/additional-payments/landing-page")
     expect(page).to have_link(href: "mailto:#{EarlyCareerPayments.feedback_email}")
 
@@ -31,7 +38,6 @@ RSpec.feature "Teacher Identity Sign in" do
 
   scenario "Teacher makes claim for 'Early-Career Payments' claim and select Continue with DfE Identity" do
     visit landing_page_path(EarlyCareerPayments.routing_name)
-    set_mock_auth("1234567")
     expect(page).to have_link("Claim additional payments for teaching", href: "/additional-payments/landing-page")
     expect(page).to have_link(href: "mailto:#{EarlyCareerPayments.feedback_email}")
 

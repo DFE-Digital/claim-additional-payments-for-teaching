@@ -13,6 +13,7 @@ module StudentLoans
       "sign-in-or-continue",
       "teacher-detail",
       "reset-claim",
+      "qualification-details",
       "qts-year",
       "select-claim-school",
       "claim-school",
@@ -84,12 +85,13 @@ module StudentLoans
           sequence.delete("sign-in-or-continue")
           sequence.delete("teacher-detail")
           sequence.delete("reset-claim")
+          sequence.delete("qualification-details")
           sequence.delete("select-email")
           sequence.delete("select-mobile")
         end
 
-        sequence.delete("teacher-detail") if claim.logged_in_with_tid.nil?
-        sequence.delete("reset-claim") if [nil, true].include?(claim.logged_in_with_tid)
+        sequence.delete("teacher-detail") unless claim.logged_in_with_tid?
+        sequence.delete("reset-claim") if (!claim.logged_in_with_tid? && claim.details_check.nil?) || claim.details_check?
         sequence.delete("current-school") if claim.eligibility.employed_at_claim_school? || claim.eligibility.employed_at_recent_tps_school?
         sequence.delete("mostly-performed-leadership-duties") unless claim.eligibility.had_leadership_position?
         sequence.delete("student-loan-country") if claim.no_student_loan?
@@ -104,13 +106,13 @@ module StudentLoans
         sequence.delete("mobile-verification") if claim.provide_mobile_number == false
         sequence.delete("ineligible") unless claim.eligibility&.ineligible?
         sequence.delete("personal-details") if claim.logged_in_with_tid? && claim.has_all_valid_personal_details?
-        sequence.delete("select-email") if [nil, false].include?(claim.logged_in_with_tid) || claim.teacher_id_user_info["email"].nil?
+        sequence.delete("select-email") if (claim.logged_in_with_tid == false) || claim.teacher_id_user_info["email"].nil?
         if claim.logged_in_with_tid? && claim.email_address_check?
           sequence.delete("email-address")
           sequence.delete("email-verification")
         end
 
-        if [nil, false].include?(claim.logged_in_with_tid) || claim.teacher_id_user_info["phone_number"].nil?
+        if (claim.logged_in_with_tid == false) || claim.teacher_id_user_info["phone_number"].nil?
           sequence.delete("select-mobile")
         else
           sequence.delete("provide-mobile-number")
@@ -124,6 +126,16 @@ module StudentLoans
         end
         sequence.delete("claim-school") if claim.eligibility.claim_school_somewhere_else == false
         sequence.delete("teacher-reference-number") if claim.logged_in_with_tid? && claim.teacher_reference_number.present?
+
+        if claim.logged_in_with_tid? && claim.details_check?
+          if claim.qualifications_details_check
+            sequence.delete("qts-year") if claim.dqt_teacher_record&.qts_award_date
+          elsif claim.dqt_teacher_status && (!claim.has_dqt_record? || claim.has_no_dqt_data_for_claim?)
+            sequence.delete("qualification-details")
+          end
+        else
+          sequence.delete("qualification-details")
+        end
       end
     end
   end

@@ -274,4 +274,143 @@ RSpec.describe LevellingUpPremiumPayments::DqtRecord do
       end
     end
   end
+
+  describe "#eligible_degree_code?" do
+    subject(:result) { dqt_record.eligible_degree_code? }
+
+    context "with a valid code" do
+      let(:degree_codes) { [described_class::ELIGIBLE_CODES.sample] }
+      it { is_expected.to be true }
+    end
+
+    context "with an invalid code" do
+      let(:degree_codes) { ["invalid"] }
+      it { is_expected.to be false }
+    end
+
+    context "with a valid and invalid code" do
+      let(:degree_codes) { ["invalid", described_class::ELIGIBLE_CODES.sample] }
+      it { is_expected.to be true }
+    end
+
+    context "with no code" do
+      let(:degree_codes) { [] }
+      it { is_expected.to be false }
+    end
+  end
+
+  describe "#eligible_itt_subject_for_claim" do
+    let(:eligible_subjects) { [:mathematics] }
+
+    before do
+      allow(JourneySubjectEligibilityChecker).to receive(:fixed_lup_subject_symbols)
+        .and_return(eligible_subjects)
+    end
+
+    let(:record) { OpenStruct.new(itt_subjects:) }
+    let(:claim_academic_year) { AcademicYear.new(2023) }
+
+    context "when the record returns a valid subject" do
+      let(:itt_subjects) { ["mathematics"] }
+
+      it "returns the valid subject" do
+        expect(dqt_record.eligible_itt_subject_for_claim).to eq(:mathematics)
+      end
+    end
+
+    context "when the record returns multiple valid subjects" do
+      let(:itt_subjects) { ["mathematics", "physics"] }
+      let(:eligible_subjects) { [:physics, :mathematics, :computing] }
+
+      it "returns the first valid subject" do
+        expect(dqt_record.eligible_itt_subject_for_claim).to eq(:physics)
+      end
+    end
+
+    context "when the record returns an invalid subject" do
+      let(:itt_subjects) { ["test"] }
+
+      it "returns none_of_the_above" do
+        expect(dqt_record.eligible_itt_subject_for_claim).to eq(:none_of_the_above)
+      end
+    end
+
+    context "when the record returns valid and invalid subjects" do
+      let(:itt_subjects) { ["invalid", "mathematics", "test", "physics"] }
+
+      it "returns the first valid subject" do
+        expect(dqt_record.eligible_itt_subject_for_claim).to eq(:mathematics)
+      end
+    end
+
+    context "when the record returns empty" do
+      let(:itt_subjects) { [] }
+
+      it "returns the first valid subject" do
+        expect(dqt_record.eligible_itt_subject_for_claim).to be_nil
+      end
+    end
+  end
+
+  describe "#itt_academic_year_for_claim" do
+    before do
+      allow(JourneySubjectEligibilityChecker).to receive(:new)
+        .and_return(double(selectable_itt_years_for_claim_year: eligible_years))
+    end
+
+    let(:record) do
+      OpenStruct.new(
+        qualification_name: "BA",
+        qts_award_date:
+      )
+    end
+
+    let(:year) { 2023 }
+    let(:claim_year) { AcademicYear.new(year) }
+
+    let(:eligible_years) { (AcademicYear.new(year - 5)...AcademicYear.new(year)).to_a }
+
+    context "when the record returns an eligible date" do
+      let(:qts_award_date) { Date.new(year, 1, 1) }
+
+      it "returns the academic year" do
+        expect(dqt_record.itt_academic_year_for_claim).to eq(AcademicYear.for(qts_award_date))
+      end
+    end
+
+    context "when the record returns an ineligible date" do
+      let(:qts_award_date) { Date.new(year - 10, 12, 1) }
+
+      it "returns a blank academic year" do
+        expect(dqt_record.itt_academic_year_for_claim).to eq(AcademicYear.new)
+      end
+    end
+
+    context "when the record returns nil" do
+      let(:qts_award_date) { nil }
+
+      it "returns nil" do
+        expect(dqt_record.itt_academic_year_for_claim).to be_nil
+      end
+    end
+  end
+
+  describe "#has_no_data_for_claim?" do
+    context "when one or more required data are present" do
+      before { allow(dqt_record).to receive(:eligible_itt_subject_for_claim).and_return("test") }
+
+      it { is_expected.not_to be_has_no_data_for_claim }
+    end
+
+    context "when all required data are not present" do
+      before do
+        allow(dqt_record).to receive(:eligible_itt_subject_for_claim).and_return(nil)
+        allow(dqt_record).to receive(:itt_academic_year_for_claim).and_return(nil)
+        allow(dqt_record).to receive(:route_into_teaching).and_return(nil)
+        allow(dqt_record).to receive(:eligible_degree_code?).and_return(nil)
+      end
+
+      it { is_expected.to be_has_no_data_for_claim }
+    end
+  end
 end

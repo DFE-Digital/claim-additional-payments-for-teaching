@@ -7,13 +7,17 @@ RSpec.feature "Teacher Identity Sign in for TSLR" do
   let!(:policy_configuration) { create(:policy_configuration, :student_loans) }
   let!(:school) { create(:school, :student_loans_eligible) }
   let(:current_academic_year) { policy_configuration.current_academic_year }
+  let(:trn) { 1234567 }
+  let(:date_of_birth) { "1981-01-01" }
+  let(:nino) { "AB123123A" }
 
   after do
     set_mock_auth(nil)
   end
 
   scenario "Teacher makes claim for 'Student Loans' by logging in with teacher_id and selects yes to details confirm" do
-    set_mock_auth("1234567")
+    set_mock_auth(trn, {date_of_birth:, nino:})
+    stub_dqt_empty_response(trn:, params: {birthdate: date_of_birth, nino:})
 
     visit landing_page_path(StudentLoans.routing_name)
 
@@ -64,13 +68,13 @@ RSpec.feature "Teacher Identity Sign in for TSLR" do
 
     # check the teacher_id_user_info details are saved to the claim
     claim = Claim.order(:created_at).last
-    expect(claim.teacher_id_user_info).to eq({"trn" => "1234567", "birthdate" => "1940-01-01", "given_name" => "Kelsie", "family_name" => "Oberbrunner", "ni_number" => "AB123456C", "phone_number" => "01234567890", "trn_match_ni_number" => "True", "email" => "kelsie.oberbrunner@example.com"})
+    expect(claim.teacher_id_user_info).to eq({"trn" => "1234567", "birthdate" => date_of_birth, "given_name" => "Kelsie", "family_name" => "Oberbrunner", "ni_number" => nino, "phone_number" => "01234567890", "trn_match_ni_number" => "True", "email" => "kelsie.oberbrunner@example.com"})
 
     # check the user_info details from teacher id are saved to the claim
     expect(claim.first_name).to eq("Kelsie")
     expect(claim.surname).to eq("Oberbrunner")
-    expect(claim.date_of_birth).to eq(Date.parse("1940-01-01"))
-    expect(claim.national_insurance_number).to eq("AB123456C")
+    expect(claim.date_of_birth).to eq(Date.parse(date_of_birth))
+    expect(claim.national_insurance_number).to eq(nino)
     expect(claim.teacher_reference_number).to eq("1234567")
     expect(claim.logged_in_with_tid?).to eq(true)
     expect(claim.details_check).to eq(true)
@@ -84,7 +88,7 @@ RSpec.feature "Teacher Identity Sign in for TSLR" do
   end
 
   scenario "Teacher makes claim for 'Student Loans' by logging in with teacher_id and selects no to details confirm" do
-    set_mock_auth("1234567")
+    set_mock_auth(trn, {date_of_birth:, nino:})
 
     visit landing_page_path(StudentLoans.routing_name)
 
@@ -111,7 +115,7 @@ RSpec.feature "Teacher Identity Sign in for TSLR" do
 
     # check the teacher_id_user_info details are saved to the claim
     claim = Claim.order(:created_at).last
-    expect(claim.teacher_id_user_info).to eq({"trn" => "1234567", "birthdate" => "1940-01-01", "given_name" => "Kelsie", "family_name" => "Oberbrunner", "ni_number" => "AB123456C", "phone_number" => "01234567890", "trn_match_ni_number" => "True", "email" => "kelsie.oberbrunner@example.com"})
+    expect(claim.teacher_id_user_info).to eq({"trn" => "1234567", "birthdate" => date_of_birth, "given_name" => "Kelsie", "family_name" => "Oberbrunner", "ni_number" => nino, "phone_number" => "01234567890", "trn_match_ni_number" => "True", "email" => "kelsie.oberbrunner@example.com"})
 
     # check the user_info details from teacher id are not saved to the claim
     expect(claim.first_name).to eq("")
@@ -150,7 +154,8 @@ RSpec.feature "Teacher Identity Sign in for TSLR" do
   end
 
   scenario "When user is logged in with Teacher ID and NINO is not supplied" do
-    set_mock_auth("1234567", {nino: nil})
+    set_mock_auth(trn, {date_of_birth:, nino: nil})
+    stub_dqt_empty_response(trn:, params: {birthdate: date_of_birth, nino: ""})
 
     visit landing_page_path(StudentLoans.routing_name)
     click_on "Start now"
@@ -186,12 +191,12 @@ RSpec.feature "Teacher Identity Sign in for TSLR" do
 
     # check the teacher_id_user_info details are saved to the claim
     claim = Claim.order(:created_at).last
-    expect(claim.teacher_id_user_info).to eq({"trn" => "1234567", "birthdate" => "1940-01-01", "given_name" => "Kelsie", "family_name" => "Oberbrunner", "ni_number" => nil, "phone_number" => "01234567890", "trn_match_ni_number" => "True", "email" => "kelsie.oberbrunner@example.com"})
+    expect(claim.teacher_id_user_info).to eq({"trn" => "1234567", "birthdate" => date_of_birth, "given_name" => "Kelsie", "family_name" => "Oberbrunner", "ni_number" => "", "phone_number" => "01234567890", "trn_match_ni_number" => "True", "email" => "kelsie.oberbrunner@example.com"})
 
     # check the user_info details from teacher id are saved to the claim
     expect(claim.first_name).to eq("Kelsie")
     expect(claim.surname).to eq("Oberbrunner")
-    expect(claim.date_of_birth).to eq(Date.parse("1940-01-01"))
+    expect(claim.date_of_birth).to eq(Date.parse(date_of_birth))
     expect(claim.national_insurance_number).to eq(updated_nino)
     expect(claim.teacher_reference_number).to eq("1234567")
     expect(claim.logged_in_with_tid?).to eq(true)

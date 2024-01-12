@@ -25,6 +25,8 @@ class ClaimsController < BasePublicController
 
     if params[:slug] == "teacher-detail"
       save_and_set_teacher_id_user_info
+    elsif params[:slug] == "qualification-details"
+      return redirect_to claim_path(current_policy_routing_name, next_slug) if current_claim.has_no_dqt_data_for_claim?
     elsif params[:slug] == "teaching-subject-now" && no_eligible_itt_subject?
       return redirect_to claim_path(current_policy_routing_name, "eligible-itt-subject")
     elsif params[:slug] == "sign-in-or-continue"
@@ -75,6 +77,9 @@ class ClaimsController < BasePublicController
       return skip_teacher_id
     when "teacher-detail"
       save_details_check
+      Dqt::RetrieveClaimQualificationsData.call(current_claim) if current_claim.details_check?
+    when "qualification-details"
+      set_dqt_data_as_answers
     when "personal-details"
       check_date_params
     when "eligibility-confirmed"
@@ -93,10 +98,14 @@ class ClaimsController < BasePublicController
       check_still_teaching_params
     else
       current_claim.attributes = claim_params
+
+      # If some DQT data was missing and the user fills them manually we need
+      # to re-populate those answers which depend on the manually-entered answer
+      set_dqt_data_as_answers if current_claim.qualifications_details_check
     end
 
     current_claim.reset_dependent_answers unless params[:slug] == "select-email" || params[:slug] == "select-mobile"
-    current_claim.reset_eligibility_dependent_answers(reset_attrs)
+    current_claim.reset_eligibility_dependent_answers(reset_attrs) unless params[:slug] == "qualification-details"
     one_time_password
 
     if current_claim.save(context: page_sequence.current_slug.to_sym)
@@ -297,8 +306,8 @@ class ClaimsController < BasePublicController
   end
 
   # NOTE: needs to be done before the slug_sequence is generated.
-  # `logged_in_with_tid: nil` means the user had pressed "Continue without signing in", reset it to `false`.
-  # `logged_in_with_tid: nil` is used to reject "teacher-details" from the slug_sequence.
+  # `logged_in_with_tid: false` means the user had pressed "Continue without signing in", reset it to `true`.
+  # `logged_in_with_tid: false` is used to reject "teacher-details" and "qualification-details" from the slug_sequence.
   # Handles user somehow using Back button to go back and choose "Continue with DfE Identity" option.
   # Or they sign in a second time, `details_check` needs resetting in case details are different.
   def check_and_reset_if_new_tid_user_info
@@ -357,6 +366,11 @@ class ClaimsController < BasePublicController
   def skip_teacher_id
     DfeIdentity::ClaimUserDetailsReset.call(current_claim, :skipped_tid)
     redirect_to claim_path(current_policy_routing_name, next_slug)
+  end
+
+  def set_dqt_data_as_answers
+    current_claim.attributes = claim_params
+    current_claim.claims.each { |claim| claim.eligibility.set_qualifications_from_dqt_record }
   end
 
   def policy_configuration

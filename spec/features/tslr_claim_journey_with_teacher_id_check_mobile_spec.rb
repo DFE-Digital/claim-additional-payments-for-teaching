@@ -1,18 +1,21 @@
 require "rails_helper"
 
-RSpec.feature "TSLR journey with Teacher ID email check" do
+RSpec.feature "TSLR journey with Teacher ID mobile check" do
   include OmniauthMockHelper
   include StudentLoansHelper
 
   # create a school eligible for ECP and LUP so can walk the whole journey
   let!(:policy_configuration) { create(:policy_configuration, :student_loans) }
   let!(:school) { create(:school, :student_loans_eligible) }
-  let(:trn) { "1234567" }
+  let(:trn) { 1234567 }
+  let(:date_of_birth) { "1981-01-01" }
+  let(:nino) { "AB123123A" }
   let(:phone_number) { "01234567890" }
 
   before do
     freeze_time
-    set_mock_auth(trn)
+    set_mock_auth(trn, {date_of_birth:, nino:})
+    stub_dqt_empty_response(trn:, params: {birthdate: date_of_birth, nino:})
     mock_address_details_address_data
   end
 
@@ -166,7 +169,11 @@ RSpec.feature "TSLR journey with Teacher ID email check" do
     find("#claim_mobile_check_declined").click
     click_on "Continue"
 
+    expect(page).to have_text(I18n.t("questions.bank_or_building_society"))
+
     click_on "Back"
+
+    expect(page).to have_text(I18n.t("questions.select_phone_number.heading"))
 
     # - Select the suggested phone number
     find("#claim_mobile_check_use").click
@@ -186,7 +193,11 @@ RSpec.feature "TSLR journey with Teacher ID email check" do
     find("#claim_mobile_check_declined").click
     click_on "Continue"
 
+    expect(page).to have_text(I18n.t("questions.bank_or_building_society"))
+
     click_on "Back"
+
+    expect(page).to have_text(I18n.t("questions.select_phone_number.heading"))
 
     # - Select A different mobile number
     find("#claim_mobile_check_alternative").click

@@ -58,6 +58,19 @@ module DqtHelpers
       )
   end
 
+  def stub_dqt_empty_response(
+    trn: 1231234,
+    params: {}
+  )
+    stub_request(:get, "#{ENV["DQT_API_URL"]}teachers/#{trn}")
+      .with(query: WebMock::API.hash_including(params))
+      .to_return(
+        body: {}.to_json,
+        status: 404,
+        headers: {"Content-Type" => "application/json"}
+      )
+  end
+
   private
 
   def merge_recursively(a, b)

@@ -40,7 +40,8 @@ class Claim < ApplicationRecord
     :logged_in_with_tid,
     :details_check,
     :email_address_check,
-    :mobile_check
+    :mobile_check,
+    :qualifications_details_check
   ].freeze
   AMENDABLE_ATTRIBUTES = %i[
     teacher_reference_number
@@ -110,7 +111,9 @@ class Claim < ApplicationRecord
     email_address_check: true,
     mobile_check: true,
     qa_required: false,
-    qa_completed_at: false
+    qa_completed_at: false,
+    qualifications_details_check: true,
+    dqt_teacher_status: false
   }.freeze
   DECISION_DEADLINE = 12.weeks
   DECISION_DEADLINE_WARNING_POINT = 2.weeks
@@ -209,6 +212,7 @@ class Claim < ApplicationRecord
     if: -> { surname.present? }
 
   validates :details_check, on: [:"teacher-detail"], inclusion: {in: [true, false], message: "Select an option to whether the details are correct or not"}
+  validates :qualifications_details_check, on: [:"qualification-details"], inclusion: {in: [true, false], message: "Select yes if your qualification details are correct"}
   validates :email_address_check, on: [:"select-email"], inclusion: {in: [true, false], message: "Select an option to indicate whether the email is correct or not"}
   validates :mobile_check, on: [:"select-mobile"], inclusion: {in: ["use", "alternative", "declined"], message: "Select an option to indicate whether the mobile number is correct or not"}
   validates :address_line_1, on: [:address], presence: {message: "Enter a house number or name"}, if: :has_ecp_or_lupp_policy?
@@ -617,6 +621,14 @@ class Claim < ApplicationRecord
 
   def logged_in_with_tid_and_has_recent_tps_school?
     logged_in_with_tid? && teacher_reference_number.present? && has_recent_tps_school?
+  end
+
+  def has_dqt_record?
+    !dqt_teacher_status.blank?
+  end
+
+  def dqt_teacher_record
+    policy::DqtRecord.new(Dqt::Teacher.new(dqt_teacher_status), self) if has_dqt_record?
   end
 
   private

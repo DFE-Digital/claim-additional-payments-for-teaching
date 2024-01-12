@@ -34,6 +34,27 @@ module LevellingUpPremiumPayments
       eligible_codes? || (eligible_subject? && no_invalid_subject_codes?)
     end
 
+    def eligible_degree_code?
+      eligible_code?(degree_codes)
+    end
+
+    def eligible_itt_subject_for_claim
+      return nil if itt_subjects.empty?
+
+      (JourneySubjectEligibilityChecker.fixed_lup_subject_symbols & itt_subjects.map(&:to_sym)).first || :none_of_the_above
+    end
+
+    def itt_academic_year_for_claim
+      return nil unless academic_date
+
+      year = AcademicYear.for(academic_date)
+      itt_year_within_allowed_range?(year) ? year : AcademicYear.new
+    end
+
+    def has_no_data_for_claim?
+      !eligible_itt_subject_for_claim && !itt_academic_year_for_claim && !route_into_teaching && !eligible_degree_code?
+    end
+
     private
 
     attr_reader :record, :claim
@@ -43,7 +64,7 @@ module LevellingUpPremiumPayments
     end
 
     def eligible_codes?
-      eligible_code?(itt_subject_codes) || eligible_code?(degree_codes)
+      eligible_code?(itt_subject_codes) || eligible_degree_code?
     end
 
     def eligible_subject_and_none_of_the_above?
@@ -59,12 +80,6 @@ module LevellingUpPremiumPayments
       itt_year_within_allowed_range?
     end
 
-    def itt_year_within_allowed_range?
-      policy_year = PolicyConfiguration.for(claim.policy).current_academic_year
-      eligible_itt_years = JourneySubjectEligibilityChecker.selectable_itt_years_for_claim_year(policy_year)
-      eligible_itt_years.include?(itt_year)
-    end
-
     def applicable_eligible_subjects
       return ELIGIBLE_ITT_SUBJECTS.values.flatten if claim.eligibility.itt_subject_none_of_the_above?
 
@@ -77,6 +92,12 @@ module LevellingUpPremiumPayments
 
     def no_invalid_subject_codes?
       (itt_subject_codes - ELIGIBLE_CODES).empty?
+    end
+
+    def itt_year_within_allowed_range?(year = itt_year)
+      policy_year = PolicyConfiguration.for(claim.policy).current_academic_year
+      eligible_itt_years = JourneySubjectEligibilityChecker.selectable_itt_years_for_claim_year(policy_year)
+      eligible_itt_years.include?(year)
     end
   end
 end

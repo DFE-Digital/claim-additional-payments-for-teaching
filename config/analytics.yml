@@ -102,6 +102,8 @@ shared:
     - teacher_id_user_info
     - email_address_check
     - mobile_check
+    - qualifications_details_check
+    - dqt_teacher_status
   :decisions:
     - id
     - result

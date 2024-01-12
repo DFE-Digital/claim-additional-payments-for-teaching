@@ -7,14 +7,20 @@ RSpec.feature "Teacher Identity Sign in" do
   let!(:policy_configuration) { create(:policy_configuration, :additional_payments) }
   let!(:school) { create(:school, :combined_journey_eligibile_for_all) }
   let(:current_academic_year) { policy_configuration.current_academic_year }
+  let(:trn) { 1234567 }
+  let(:date_of_birth) { "1981-01-01" }
+  let(:nino) { "AB123123A" }
+
+  before do
+    set_mock_auth(trn, {date_of_birth:, nino:})
+    stub_dqt_empty_response(trn:, params: {birthdate: date_of_birth, nino:})
+  end
 
   after do
     set_mock_auth(nil)
   end
 
   scenario "Teacher makes claim for 'Early-Career Payments' by logging in with teacher_id and selects yes to details confirm" do
-    set_mock_auth("1234567")
-
     visit landing_page_path(EarlyCareerPayments.routing_name)
 
     # - Landing (start)
@@ -36,12 +42,10 @@ RSpec.feature "Teacher Identity Sign in" do
 
     # check the teacher_id_user_info details are saved to the claim
     claim = Claim.order(:created_at).last
-    expect(claim.teacher_id_user_info).to eq({"trn" => "1234567", "birthdate" => "1940-01-01", "email" => "kelsie.oberbrunner@example.com", "phone_number" => "01234567890", "given_name" => "Kelsie", "family_name" => "Oberbrunner", "ni_number" => "AB123456C", "trn_match_ni_number" => "True"})
+    expect(claim.teacher_id_user_info).to eq({"trn" => "1234567", "birthdate" => "1981-01-01", "email" => "kelsie.oberbrunner@example.com", "phone_number" => "01234567890", "given_name" => "Kelsie", "family_name" => "Oberbrunner", "ni_number" => "AB123123A", "trn_match_ni_number" => "True"})
   end
 
   scenario "Teacher makes claim for 'Early-Career Payments' by logging in with teacher_id and selects no to details confirm" do
-    set_mock_auth("1234567")
-
     visit landing_page_path(EarlyCareerPayments.routing_name)
 
     # - Landing (start)
@@ -68,7 +72,7 @@ RSpec.feature "Teacher Identity Sign in" do
 
     # check the teacher_id_user_info details are saved to the claim
     claim = Claim.order(:created_at).last
-    expect(claim.teacher_id_user_info).to eq({"trn" => "1234567", "birthdate" => "1940-01-01", "given_name" => "Kelsie", "family_name" => "Oberbrunner", "ni_number" => "AB123456C", "phone_number" => "01234567890", "trn_match_ni_number" => "True", "email" => "kelsie.oberbrunner@example.com"})
+    expect(claim.teacher_id_user_info).to eq({"trn" => "1234567", "birthdate" => "1981-01-01", "given_name" => "Kelsie", "family_name" => "Oberbrunner", "ni_number" => "AB123123A", "phone_number" => "01234567890", "trn_match_ni_number" => "True", "email" => "kelsie.oberbrunner@example.com"})
   end
 
   scenario "Teacher makes claim for 'Early-Career Payments' by logging in with teacher_id and selects yes to details confirm but trn missing" do

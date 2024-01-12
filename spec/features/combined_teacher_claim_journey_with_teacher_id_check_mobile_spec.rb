@@ -7,12 +7,15 @@ RSpec.feature "Combined journey with Teacher ID mobile check" do
   # create a school eligible for ECP and LUP so can walk the whole journey
   let!(:policy_configuration) { create(:policy_configuration, :additional_payments) }
   let!(:school) { create(:school, :combined_journey_eligibile_for_all) }
-  let(:trn) { "1234567" }
+  let(:trn) { 1234567 }
+  let(:date_of_birth) { "1981-01-01" }
+  let(:nino) { "AB123123A" }
   let(:phone_number) { "01234567890" }
 
   before do
     freeze_time
-    set_mock_auth(trn, phone_number:)
+    set_mock_auth(trn, {date_of_birth:, nino:, phone_number:})
+    stub_dqt_empty_response(trn:, params: {birthdate: date_of_birth, nino:})
     mock_claims_controller_address_data
   end
 

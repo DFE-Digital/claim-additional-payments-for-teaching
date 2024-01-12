@@ -22,6 +22,7 @@ module EarlyCareerPayments
       "entire-term-contract",
       "employed-directly",
       "poor-performance",
+      "qualification-details",
       "qualification",
       "itt-year",
       "eligible-itt-subject",
@@ -99,21 +100,22 @@ module EarlyCareerPayments
           sequence.delete("sign-in-or-continue")
           sequence.delete("teacher-detail")
           sequence.delete("reset-claim")
+          sequence.delete("qualification-details")
           sequence.delete("correct-school")
           sequence.delete("select-email")
           sequence.delete("select-mobile")
         end
 
-        sequence.delete("teacher-detail") if claim.logged_in_with_tid.nil?
-        sequence.delete("reset-claim") if [nil, true].include?(claim.logged_in_with_tid)
+        sequence.delete("teacher-detail") unless claim.logged_in_with_tid?
+        sequence.delete("reset-claim") if (!claim.logged_in_with_tid? && claim.details_check.nil?) || claim.details_check?
 
-        sequence.delete("select-email") if [nil, false].include?(claim.logged_in_with_tid) || claim.teacher_id_user_info["email"].nil?
+        sequence.delete("select-email") if (claim.logged_in_with_tid == false) || claim.teacher_id_user_info["email"].nil?
         if claim.logged_in_with_tid? && claim.email_address_check
           sequence.delete("email-address")
           sequence.delete("email-verification")
         end
 
-        if [nil, false].include?(claim.logged_in_with_tid) || claim.teacher_id_user_info["phone_number"].nil?
+        if (claim.logged_in_with_tid == false) || claim.teacher_id_user_info["phone_number"].nil?
           sequence.delete("select-mobile")
         else
           sequence.delete("provide-mobile-number")
@@ -163,6 +165,19 @@ module EarlyCareerPayments
         end
 
         sequence.delete("personal-details") if claim.logged_in_with_tid? && claim.has_all_valid_personal_details?
+
+        if claim.logged_in_with_tid? && claim.details_check?
+          if claim.qualifications_details_check
+            sequence.delete("qualification") if claim.dqt_teacher_record&.route_into_teaching
+            sequence.delete("itt-year") if claim.dqt_teacher_record&.itt_academic_year_for_claim
+            sequence.delete("eligible-itt-subject") if claim.dqt_teacher_record&.eligible_itt_subject_for_claim
+            sequence.delete("eligible-degree-subject") if claim.for_policy(LevellingUpPremiumPayments)&.dqt_teacher_record&.eligible_degree_code?
+          elsif claim.dqt_teacher_status && (!claim.has_dqt_record? || claim.has_no_dqt_data_for_claim?)
+            sequence.delete("qualification-details")
+          end
+        else
+          sequence.delete("qualification-details")
+        end
       end
     end
 

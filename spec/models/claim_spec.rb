@@ -1319,7 +1319,8 @@ RSpec.describe Claim, type: :model do
         :assigned_to_id,
         :details_check,
         :email_address_check,
-        :mobile_check
+        :mobile_check,
+        :qualifications_details_check
       ])
     end
   end
@@ -2020,6 +2021,46 @@ RSpec.describe Claim, type: :model do
       it "returns false" do
         expect(claim.has_valid_nino?).to be false
       end
+    end
+  end
+
+  describe "#has_dqt_record?" do
+    let(:claim) { build(:claim, dqt_teacher_status:) }
+    subject(:result) { claim.has_dqt_record? }
+
+    context "when dqt_teacher_status value is nil" do
+      let(:dqt_teacher_status) { nil }
+      it { is_expected.to be false }
+    end
+
+    context "when dqt_teacher_status value is empty" do
+      let(:dqt_teacher_status) { {} }
+      it { is_expected.to be false }
+    end
+
+    context "when dqt_teacher_status value is not empty" do
+      let(:dqt_teacher_status) { {"test" => "test"} }
+      it { is_expected.to be true }
+    end
+  end
+
+  describe "#dqt_teacher_record" do
+    let(:claim) { build(:claim, dqt_teacher_status:) }
+    subject(:result) { claim.dqt_teacher_record }
+
+    context "when dqt_teacher_status value is nil" do
+      let(:dqt_teacher_status) { nil }
+      it { is_expected.to be nil }
+    end
+
+    context "when dqt_teacher_status value is empty" do
+      let(:dqt_teacher_status) { {} }
+      it { is_expected.to be nil }
+    end
+
+    context "when dqt_teacher_status value is not empty" do
+      let(:dqt_teacher_status) { {"test" => "test"} }
+      it { is_expected.to be_a(claim.policy::DqtRecord) }
     end
   end
 end
