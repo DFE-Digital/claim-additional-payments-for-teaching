@@ -13,7 +13,7 @@
         <h2 class="govuk-heading-m"><%= t("questions.qualification_details") %></h2>
         <dl class="govuk-summary-list govuk-!-margin-bottom-9">
           <div class="govuk-summary-list__row">
-            <dt class="govuk-summary-list__key"><%= t("questions.academic_year.#{current_claim.dqt_teacher_record.route_into_teaching}") %></dt>
+            <dt class="govuk-summary-list__key"><%= t("student_loans.questions.academic_year") %></dt>
             <dd class="govuk-summary-list__value">
               <%= AcademicYear.for(current_claim.dqt_teacher_record.qts_award_date) %>
             </dd>

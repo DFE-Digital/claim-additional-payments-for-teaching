@@ -31,6 +31,8 @@ RSpec.feature "TSLR journey with Teacher ID" do
     navigate_past_teacher_details_page
 
     expect(page).to have_text(I18n.t("questions.check_and_confirm_qualification_details"))
+    expect(page).to have_text(I18n.t("student_loans.questions.academic_year"))
+    expect(page).to have_text(itt_year.to_s)
     choose "Yes"
     click_on "Continue"
 
