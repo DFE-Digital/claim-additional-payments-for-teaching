@@ -313,3 +313,5 @@ shared:
     - subject_description_sfr
     - general_subject_code
     - hours_taught
+    - created_at
+    - updated_at

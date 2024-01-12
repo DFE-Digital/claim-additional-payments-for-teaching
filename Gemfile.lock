@@ -1,9 +1,9 @@
 GIT
   remote: https://github.com/DFE-Digital/dfe-analytics.git
-  revision: e6443cbf0efd46c1d46772efab3bdb1c0d1da5eb
-  tag: v1.11.3
+  revision: fdfd7f0bdbe5c6b6677d7502afb8691ae08bedeb
+  tag: v1.11.5
   specs:
-    dfe-analytics (1.11.3)
+    dfe-analytics (1.11.5)
       google-cloud-bigquery (~> 1.38)
       request_store_rails (~> 2)
 
@@ -266,7 +266,7 @@ GEM
       timeout
     net-smtp (0.4.0)
       net-protocol
-    nio4r (2.5.9)
+    nio4r (2.7.0)
     nokogiri (1.15.5)
       mini_portile2 (~> 2.8.2)
       racc (~> 1.4)
@@ -306,7 +306,7 @@ GEM
       coderay (~> 1.1)
       method_source (~> 1.0)
     public_suffix (5.0.4)
-    puma (6.4.0)
+    puma (6.4.2)
       nio4r (~> 2.0)
     raabro (1.4.0)
     racc (1.7.3)
@@ -370,7 +370,7 @@ GEM
       concurrent-ruby (~> 1.0)
     retriable (3.1.2)
     rexml (3.2.6)
-    rollbar (3.4.1)
+    rollbar (3.4.2)
     rotp (6.3.0)
     rspec-core (3.12.2)
       rspec-support (~> 3.12.0)
@@ -380,7 +380,7 @@ GEM
     rspec-mocks (3.12.6)
       diff-lcs (>= 1.2.0, < 2.0)
       rspec-support (~> 3.12.0)
-    rspec-rails (6.0.3)
+    rspec-rails (6.1.0)
       actionpack (>= 6.1)
       activesupport (>= 6.1)
       railties (>= 6.1)
@@ -418,7 +418,7 @@ GEM
       sprockets (> 3.0)
       sprockets-rails
       tilt
-    selenium-webdriver (4.15.0)
+    selenium-webdriver (4.16.0)
       rexml (~> 3.2, >= 3.2.5)
       rubyzip (>= 1.2.2, < 3.0)
       websocket (~> 1.0)
