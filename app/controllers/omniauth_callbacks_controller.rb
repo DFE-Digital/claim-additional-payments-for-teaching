@@ -11,6 +11,10 @@ class OmniauthCallbacksController < ApplicationController
     redirect_to claim_path(policy: policy.routing_name, slug: "teacher-detail")
   end
 
+  def failure
+    render layout: false
+  end
+
   private
 
   def policy
