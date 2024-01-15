@@ -194,19 +194,19 @@ RSpec.describe "Claims", type: :request do
 
       context "when the user has not completed the journey in the correct slug sequence" do
         it "redirects to the start of the journey" do
-          put claim_path(Journeys::TeacherStudentLoanReimbursement::ROUTING_NAME, "student-loan"), params: {claim: {has_student_loan: true}}
+          put claim_path(Journeys::TeacherStudentLoanReimbursement::ROUTING_NAME, "student-loan-amount"), params: {claim: {has_student_loan: true}}
           expect(response).to redirect_to(claim_path(Journeys::TeacherStudentLoanReimbursement::ROUTING_NAME, "qts-year"))
         end
       end
 
       context "when the user has completed the journey in the correct slug sequence" do
-        before { set_slug_sequence_in_session(in_progress_claim, "student-loan") }
+        before { set_slug_sequence_in_session(in_progress_claim, "provide-mobile-number") }
 
         it "resets dependent claim attributes when appropriate" do
-          in_progress_claim.update!(has_student_loan: false, student_loan_plan: Claim::NO_STUDENT_LOAN)
-          put claim_path(Journeys::TeacherStudentLoanReimbursement::ROUTING_NAME, "student-loan"), params: {claim: {has_student_loan: true}}
+          in_progress_claim.update!(provide_mobile_number: false, mobile_number: nil)
+          put claim_path(Journeys::TeacherStudentLoanReimbursement::ROUTING_NAME, "provide-mobile-number"), params: {claim: {provide_mobile_number: true}}
 
-          expect(response).to redirect_to(claim_path(Journeys::TeacherStudentLoanReimbursement::ROUTING_NAME, "student-loan-country"))
+          expect(response).to redirect_to(claim_path(Journeys::TeacherStudentLoanReimbursement::ROUTING_NAME, "mobile-number"))
           expect(in_progress_claim.reload.student_loan_plan).to be_nil
         end
       end

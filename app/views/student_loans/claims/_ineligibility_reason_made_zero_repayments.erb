@@ -1,0 +1,19 @@
+<h1 class="govuk-heading-l">
+  Your student loan repayment amount is £0.00 for the
+  <%= Policies::StudentLoans.current_financial_year %> financial year
+</h1>
+
+<p class="govuk-body">
+  This information is provided by the Student Loans Company (SLC).
+</p>
+
+<p class="govuk-body">
+  As no repayments were made in the <%= Policies::StudentLoans.current_financial_year %> financial year,
+  you are not eligible to claim back any repayments.
+</p>
+
+<p class="govuk-body">
+  If it is not what you expected you can log into
+  <%= link_to "your student loan account", "https://www.gov.uk/sign-in-to-manage-your-student-loan-balance", class: "govuk-link" %>
+  to check your balance and contact the SLC.
+</p>
