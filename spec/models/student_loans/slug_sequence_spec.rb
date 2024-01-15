@@ -27,50 +27,6 @@ RSpec.describe StudentLoans::SlugSequence do
       expect(slug_sequence.slugs).not_to include("current-school")
     end
 
-    it "excludes student loan plan slugs if the claimant is not paying off a student loan" do
-      claim.has_student_loan = false
-      expect(slug_sequence.slugs).not_to include("student-loan-country")
-      expect(slug_sequence.slugs).not_to include("student-loan-how-many-courses")
-      expect(slug_sequence.slugs).not_to include("student-loan-start-date")
-    end
-
-    it "includes student loan plan slugs if the claimant is paying off a student loan" do
-      claim.has_student_loan = true
-      expect(slug_sequence.slugs).to include("student-loan-country")
-      expect(slug_sequence.slugs).to include("student-loan-how-many-courses")
-      expect(slug_sequence.slugs).to include("student-loan-start-date")
-    end
-
-    it "excludes the remaining student loan plan slugs if the claimant received their student loan in a Plan 1 country" do
-      claim.has_student_loan = true
-
-      StudentLoan::PLAN_1_COUNTRIES.each do |plan_1_country|
-        claim.student_loan_country = plan_1_country
-        expect(slug_sequence.slugs).to include("student-loan-country")
-        expect(slug_sequence.slugs).not_to include("student-loan-how-many-courses")
-        expect(slug_sequence.slugs).not_to include("student-loan-start-date")
-      end
-
-      %w[england wales].each do |variable_plan_country|
-        claim.student_loan_country = variable_plan_country
-        expect(slug_sequence.slugs).to include("student-loan-country")
-        expect(slug_sequence.slugs).to include("student-loan-how-many-courses")
-        expect(slug_sequence.slugs).to include("student-loan-start-date")
-      end
-    end
-
-    it "excludes postgradute masters and postgraduate doctoral loan slugs if the claimant does not have a postgradute masters and/or doctoral loan" do
-      claim.has_masters_doctoral_loan = false
-      expect(slug_sequence.slugs).not_to include("masters-loan")
-      expect(slug_sequence.slugs).not_to include("doctoral-loan")
-    end
-
-    it "includes postgradute masters and postgraduate doctoral loan slugs if the claimant has a postgradute masters and/or doctoral loan" do
-      claim.has_masters_doctoral_loan = true
-      expect(slug_sequence.slugs).to include("masters-loan")
-      expect(slug_sequence.slugs).to include("doctoral-loan")
-    end
-
     context "when claim payment details are 'personal bank account'" do
       it "excludes the 'building-society-account' slug" do
         claim.bank_or_building_society = :personal_bank_account

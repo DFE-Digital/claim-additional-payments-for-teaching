@@ -21,7 +21,7 @@ class Claim < ApplicationRecord
     :payroll_gender,
     :teacher_reference_number,
     :national_insurance_number,
-    :has_student_loan,
+    :has_student_loan, # TODO: remove this and remaining student loan attribtues with CAPT-1415
     :student_loan_country,
     :student_loan_courses,
     :student_loan_start_date,
@@ -118,6 +118,8 @@ class Claim < ApplicationRecord
   DECISION_DEADLINE = 12.weeks
   DECISION_DEADLINE_WARNING_POINT = 2.weeks
   ATTRIBUTE_DEPENDENCIES = {
+    "national_insurance_number" => ["has_student_loan", "student_loan_plan", "eligibility.student_loan_repayment_amount"],
+    "date_of_birth" => ["has_student_loan", "student_loan_plan", "eligibility.student_loan_repayment_amount"],
     "has_student_loan" => ["student_loan_country", "has_masters_doctoral_loan", "postgraduate_masters_loan", "postgraduate_doctoral_loan"],
     "student_loan_country" => ["student_loan_courses"],
     "student_loan_courses" => ["student_loan_start_date"],
@@ -497,10 +499,17 @@ class Claim < ApplicationRecord
   def reset_dependent_answers
     ATTRIBUTE_DEPENDENCIES.each do |attribute_name, dependent_attribute_names|
       dependent_attribute_names.each do |dependent_attribute_name|
-        write_attribute(dependent_attribute_name, nil) if changed.include?(attribute_name)
+        next unless changed.include?(attribute_name)
+
+        target_model, dependent_attribute_name = dependent_attribute_name.split(".") if dependent_attribute_name.include?(".")
+        target_model ||= "itself"
+
+        next unless send(target_model).has_attribute?(dependent_attribute_name)
+
+        send(target_model).write_attribute(dependent_attribute_name, nil)
       end
     end
-    self.student_loan_plan = determine_student_loan_plan
+    self.student_loan_plan = determine_student_loan_plan unless policy == StudentLoans
   end
 
   def policy

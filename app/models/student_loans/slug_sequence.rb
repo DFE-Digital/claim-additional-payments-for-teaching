@@ -41,23 +41,16 @@ module StudentLoans
       "mobile-verification"
     ].freeze
 
+    STUDENT_LOANS_SLUGS = [
+      "student-loan-amount"
+    ]
+
     PAYMENT_DETAILS_SLUGS = [
       "bank-or-building-society",
       "personal-bank-account",
       "building-society-account",
       "gender",
       "teacher-reference-number"
-    ].freeze
-
-    STUDENT_LOANS_SLUGS = [
-      "student-loan",
-      "student-loan-country",
-      "student-loan-how-many-courses",
-      "student-loan-start-date",
-      "masters-doctoral-loan",
-      "masters-loan",
-      "doctoral-loan",
-      "student-loan-amount"
     ].freeze
 
     RESULTS_SLUGS = [
@@ -68,8 +61,8 @@ module StudentLoans
     SLUGS = (
       ELIGIBILITY_SLUGS +
       PERSONAL_DETAILS_SLUGS +
-      PAYMENT_DETAILS_SLUGS +
       STUDENT_LOANS_SLUGS +
+      PAYMENT_DETAILS_SLUGS +
       RESULTS_SLUGS
     ).freeze
 
@@ -94,12 +87,6 @@ module StudentLoans
         sequence.delete("reset-claim") if (!claim.logged_in_with_tid? && claim.details_check.nil?) || claim.details_check?
         sequence.delete("current-school") if claim.eligibility.employed_at_claim_school? || claim.eligibility.employed_at_recent_tps_school?
         sequence.delete("mostly-performed-leadership-duties") unless claim.eligibility.had_leadership_position?
-        sequence.delete("student-loan-country") if claim.no_student_loan?
-        sequence.delete("student-loan-how-many-courses") if claim.no_student_loan? || claim.student_loan_country_with_one_plan?
-        sequence.delete("student-loan-start-date") if claim.no_student_loan? || claim.student_loan_country_with_one_plan?
-        sequence.delete("masters-doctoral-loan") if claim.has_student_loan?
-        sequence.delete("masters-loan") if claim.has_masters_doctoral_loan == false
-        sequence.delete("doctoral-loan") if claim.has_masters_doctoral_loan == false
         sequence.delete("personal-bank-account") if claim.bank_or_building_society == "building_society"
         sequence.delete("building-society-account") if claim.bank_or_building_society == "personal_bank_account"
         sequence.delete("mobile-number") if claim.provide_mobile_number == false
