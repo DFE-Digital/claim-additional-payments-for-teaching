@@ -34,10 +34,4 @@ describe StudentLoansHelper do
       expect(helper.leadership_position_question).to eq "Were you employed in a leadership position between 6 April #{current_academic_year.start_year - 1} and 5 April #{current_academic_year.end_year - 1}?"
     end
   end
-
-  describe "#student_loan_amount_question" do
-    it "returns the question for the student laon amount question in the Student Loans journey, based on the configured current academic year" do
-      expect(helper.student_loan_amount_question).to eq "Exactly how much student loan did you repay in the #{current_academic_year.start_year - 1}/#{current_academic_year.end_year - 1} financial year?"
-    end
-  end
 end

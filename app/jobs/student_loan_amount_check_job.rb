@@ -1,10 +1,11 @@
 class StudentLoanAmountCheckJob < ApplicationJob
   def perform
     delete_no_data_student_loan_amount_tasks
-    claims = current_year_tslr_claims.awaiting_task("student_loan_amount")
+    claims = current_year_tslr_claims_awaiting_decision.awaiting_task("student_loan_amount")
 
     claims.each do |claim|
-      AutomatedChecks::ClaimVerifiers::StudentLoanAmount.new(claim: claim).perform
+      ClaimStudentLoanDetailsUpdater.call(claim)
+      AutomatedChecks::ClaimVerifiers::StudentLoanAmount.new(claim:).perform
     end
   end
 
@@ -14,16 +15,16 @@ class StudentLoanAmountCheckJob < ApplicationJob
     claim_ids = current_year_tslr_claims_with_no_data_tasks.pluck(:id)
 
     claim_ids.each_slice(500) do |ids|
-      Task.where(claim_id: ids, name: "student_loan_amount", claim_verifier_match: nil).delete_all
+      Task.where(claim_id: ids, name: "student_loan_amount", claim_verifier_match: nil, manual: false).delete_all
     end
   end
 
   def current_year_tslr_claims_with_no_data_tasks
-    current_year_tslr_claims.joins(:tasks).where(tasks: {name: "student_loan_amount", claim_verifier_match: nil})
+    current_year_tslr_claims_awaiting_decision.joins(:tasks).where(tasks: {name: "student_loan_amount", claim_verifier_match: nil, manual: false})
   end
 
-  def current_year_tslr_claims
-    Claim.by_academic_year(current_academic_year).by_policy(Policies::StudentLoans)
+  def current_year_tslr_claims_awaiting_decision
+    Claim.by_academic_year(current_academic_year).by_policy(Policies::StudentLoans).awaiting_decision
   end
 
   def current_academic_year
