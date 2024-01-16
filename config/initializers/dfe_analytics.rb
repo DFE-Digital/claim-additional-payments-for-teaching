@@ -43,6 +43,10 @@ DfE::Analytics.configure do |config|
   #
   config.enable_analytics = proc { Rails.env.production? }
 
+  # Enable entity table check job
+  #
+  config.entity_table_checks_enabled = true
+
   # The environment we’re running in. This value will be attached
   # to all events we send to BigQuery.
   #
