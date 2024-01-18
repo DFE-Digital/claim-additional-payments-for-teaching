@@ -10,7 +10,7 @@ class ClaimStudentLoanDetailsUpdater
   def update_claim_with_latest_data
     with_reload_on_failure do
       claim.transaction do
-        eligibility.update(student_loan_repayment_amount: total_repayment_amount)
+        eligibility.update(student_loan_repayment_amount: total_repayment_amount) if claim.has_tslr_policy?
         claim.update(has_student_loan: found_data?, student_loan_plan: repaying_plan_types || Claim::NO_STUDENT_LOAN)
         # The following flags are irrelevant now, as we don't need to differentiate between student loan types
         # TODO: remove the update when all the student loan questions and validations are removed from all journeys
