@@ -59,7 +59,7 @@ class ClaimsController < BasePublicController
     elsif params[:slug] == "select-home-address" && !postcode.present?
       session[:claim_postcode] = nil
       session[:claim_address_line_1] = nil
-      redirect_to claim_path(current_policy_routing_name, "postcode-search") and return
+      redirect_to claim_path(current_journey_routing_name, "postcode-search") and return
     elsif ["personal-bank-account", "building-society-account"].include?(params[:slug])
       @form ||= BankDetailsForm.new(claim: current_claim)
     end
