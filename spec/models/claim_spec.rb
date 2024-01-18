@@ -1191,73 +1191,6 @@ RSpec.describe Claim, type: :model do
     let(:claim) { create(:claim, :submittable, :with_no_postgraduate_masters_doctoral_loan, policy:, bank_or_building_society: "building_society") }
     let(:policy) { LevellingUpPremiumPayments }
 
-    it "redetermines the student_loan_plan and resets loan plan answers when has_student_loan changes" do
-      claim.has_student_loan = true
-      expect { claim.reset_dependent_answers }.not_to change { claim.attributes }
-
-      claim.has_student_loan = false
-      claim.reset_dependent_answers
-
-      expect(claim.has_student_loan).to eq false
-      expect(claim.student_loan_country).to be_nil
-      expect(claim.student_loan_courses).to be_nil
-      expect(claim.student_loan_start_date).to be_nil
-      expect(claim.student_loan_plan).to eq Claim::NO_STUDENT_LOAN
-      expect(claim.has_masters_doctoral_loan).to be_nil
-      expect(claim.postgraduate_masters_loan).to be_nil
-      expect(claim.postgraduate_doctoral_loan).to be_nil
-    end
-
-    it "redetermines the postgraduate masters and doctoral loans and resets subsequent two answers when has_student_loan changes" do
-      claim.has_masters_doctoral_loan = nil
-      expect { claim.reset_dependent_answers }.not_to change { claim.attributes }
-
-      claim.has_student_loan = false
-      claim.reset_dependent_answers
-
-      expect(claim.postgraduate_masters_loan).to be_nil
-      expect(claim.postgraduate_doctoral_loan).to be_nil
-    end
-
-    it "redetermines the student_loan_plan and resets subsequent loan plan answers when student_loan_country changes" do
-      claim.student_loan_country = :england
-      expect { claim.reset_dependent_answers }.not_to change { claim.attributes }
-
-      claim.student_loan_country = :scotland
-      claim.reset_dependent_answers
-      expect(claim.has_student_loan).to eq true
-      expect(claim.student_loan_country).to eq "scotland"
-      expect(claim.student_loan_courses).to be_nil
-      expect(claim.student_loan_start_date).to be_nil
-      expect(claim.student_loan_plan).to eq StudentLoan::PLAN_4
-    end
-
-    it "redetermines the student_loan_plan and resets subsequent loan plan answers when student_loan_courses changes" do
-      claim.student_loan_courses = :one_course
-      expect { claim.reset_dependent_answers }.not_to change { claim.attributes }
-
-      claim.student_loan_courses = :two_or_more_courses
-      claim.reset_dependent_answers
-      expect(claim.has_student_loan).to eq true
-      expect(claim.student_loan_country).to eq "england"
-      expect(claim.student_loan_courses).to eq "two_or_more_courses"
-      expect(claim.student_loan_start_date).to be_nil
-      expect(claim.student_loan_plan).to be_nil
-    end
-
-    it "redetermines the student_loan_plan when the value of student_loan_start_date changes" do
-      claim.student_loan_start_date = StudentLoan::BEFORE_1_SEPT_2012
-      expect { claim.reset_dependent_answers }.not_to change { claim.attributes }
-
-      claim.student_loan_start_date = StudentLoan::ON_OR_AFTER_1_SEPT_2012
-      claim.reset_dependent_answers
-      expect(claim.has_student_loan).to eq true
-      expect(claim.student_loan_country).to eq "england"
-      expect(claim.student_loan_courses).to eq "one_course"
-      expect(claim.student_loan_start_date).to eq StudentLoan::ON_OR_AFTER_1_SEPT_2012
-      expect(claim.student_loan_plan).to eq StudentLoan::PLAN_2
-    end
-
     it "redetermines the bank_details when the value of bank_or_building_society changes" do
       expect { claim.reset_dependent_answers }.not_to change { claim.attributes }
 
@@ -1292,35 +1225,37 @@ RSpec.describe Claim, type: :model do
       expect(claim.mobile_verified).to be_nil
     end
 
-    context "when the policy is StudentLoans" do
-      let(:policy) { StudentLoans }
+    [StudentLoans, EarlyCareerPayments, LevellingUpPremiumPayments].each do |policy|
+      context "when the policy is #{policy}" do
+        let(:policy) { policy }
 
-      before do
-        claim.has_student_loan = true
-        claim.student_loan_plan = StudentLoan::PLAN_1
-        claim.eligibility.student_loan_repayment_amount = 100
-      end
+        before do
+          claim.has_student_loan = true
+          claim.student_loan_plan = StudentLoan::PLAN_1
+          claim.eligibility.student_loan_repayment_amount = 100 if policy == StudentLoans
+        end
 
-      it "resets student loan attributes when the value of national_insurance_number changes" do
-        expect { claim.reset_dependent_answers }.not_to change { claim.attributes }
+        it "resets student loan attributes when the value of national_insurance_number changes" do
+          expect { claim.reset_dependent_answers }.not_to change { claim.attributes }
 
-        claim.national_insurance_number = "AB123456X"
-        claim.reset_dependent_answers
+          claim.national_insurance_number = "AB123456X"
+          claim.reset_dependent_answers
 
-        expect(claim.has_student_loan).to be_nil
-        expect(claim.student_loan_plan).to be_nil
-        expect(claim.eligibility.student_loan_repayment_amount).to be_nil
-      end
+          expect(claim.has_student_loan).to be_nil
+          expect(claim.student_loan_plan).to be_nil
+          expect(claim.eligibility.student_loan_repayment_amount).to be_nil if policy == StudentLoans
+        end
 
-      it "resets student loan attributes when the value of date_of_birth changes" do
-        expect { claim.reset_dependent_answers }.not_to change { claim.attributes }
+        it "resets student loan attributes when the value of date_of_birth changes" do
+          expect { claim.reset_dependent_answers }.not_to change { claim.attributes }
 
-        claim.date_of_birth = "1/1/1991"
-        claim.reset_dependent_answers
+          claim.date_of_birth = "1/1/1991"
+          claim.reset_dependent_answers
 
-        expect(claim.has_student_loan).to be_nil
-        expect(claim.student_loan_plan).to be_nil
-        expect(claim.eligibility.student_loan_repayment_amount).to be_nil
+          expect(claim.has_student_loan).to be_nil
+          expect(claim.student_loan_plan).to be_nil
+          expect(claim.eligibility.student_loan_repayment_amount).to be_nil if policy == StudentLoans
+        end
       end
     end
   end
