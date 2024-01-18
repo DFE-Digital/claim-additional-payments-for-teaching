@@ -59,16 +59,6 @@ module Journeys
         "teacher-reference-number"
       ].freeze
 
-      STUDENT_LOANS_SLUGS = [
-        "student-loan",
-        "student-loan-country",
-        "student-loan-how-many-courses",
-        "student-loan-start-date",
-        "masters-doctoral-loan",
-        "masters-loan",
-        "doctoral-loan"
-      ].freeze
-
       RESULTS_SLUGS = [
         "check-your-answers",
         "ineligible"
@@ -78,7 +68,6 @@ module Journeys
         ELIGIBILITY_SLUGS +
         PERSONAL_DETAILS_SLUGS +
         PAYMENT_DETAILS_SLUGS +
-        STUDENT_LOANS_SLUGS +
         RESULTS_SLUGS
       ).freeze
 
@@ -147,11 +136,6 @@ module Journeys
             sequence.delete("mobile-verification")
           end
 
-          remove_student_loan_slugs(sequence) if claim.no_student_loan?
-          sequence.delete("masters-doctoral-loan") if claim.has_student_loan?
-          remove_masters_doctoral_loan_slugs(sequence) if claim.has_masters_doctoral_loan == false
-          remove_student_loan_country_slugs(sequence)
-
           if claim.eligibility.trainee_teacher?
             trainee_teacher_slugs(sequence)
             sequence.delete("eligible-degree-subject") unless lup_claim&.eligibility&.indicated_ineligible_itt_subject?
@@ -189,39 +173,6 @@ module Journeys
       end
 
       private
-
-      def remove_student_loan_slugs(sequence, slugs = nil)
-        slugs ||= %w[
-          student-loan-country
-          student-loan-how-many-courses
-          student-loan-start-date
-        ]
-
-        slugs.each { |slug| sequence.delete(slug) }
-      end
-
-      def remove_masters_doctoral_loan_slugs(sequence, slugs = nil)
-        slugs ||= %w[
-          masters-loan
-          doctoral-loan
-        ]
-
-        slugs.each { |slug| sequence.delete(slug) }
-      end
-
-      def remove_student_loan_country_slugs(sequence)
-        slugs = %w[
-          student-loan-how-many-courses
-          student-loan-start-date
-        ]
-
-        if [
-          StudentLoan::NORTHERN_IRELAND,
-          StudentLoan::SCOTLAND
-        ].include?(claim.student_loan_country)
-          remove_student_loan_slugs(sequence, slugs)
-        end
-      end
 
       def replace_ecp_only_induction_not_completed_slugs(sequence)
         slugs = %w[

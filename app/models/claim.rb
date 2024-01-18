@@ -508,7 +508,6 @@ class Claim < ApplicationRecord
         send(target_model).write_attribute(dependent_attribute_name, nil)
       end
     end
-    self.student_loan_plan = determine_student_loan_plan unless policy == Policies::StudentLoans
   end
 
   def policy
