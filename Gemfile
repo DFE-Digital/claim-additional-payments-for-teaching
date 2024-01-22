@@ -88,6 +88,7 @@ gem "rubyzip", require: "zip"
 group :development, :test do
   gem "pry"
   gem "rspec-rails"
+  gem "turbo_tests"
   gem "capybara"
   gem "brakeman", require: false
   gem "standard"
