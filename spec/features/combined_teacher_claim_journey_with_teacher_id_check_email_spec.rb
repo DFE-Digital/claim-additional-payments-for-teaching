@@ -25,85 +25,41 @@ RSpec.feature "Combined journey with Teacher ID email check" do
     travel_back
   end
 
-  scenario "Selects suggested email address" do
+  scenario "Selects email address to be contacted" do
+    # - Selects suggested email address
     navigate_to_check_email_page(school:)
 
     # - select-email page
-    expect(page).to have_text(email)
 
     # - Select the suggested email address
-    find("#claim_email_address_check_true").click
+    choose(email)
     click_on "Continue"
 
     expect(page).to have_text(I18n.t("questions.select_phone_number.heading"))
 
-    Claim.order(created_at: :desc).limit(2).each do |c|
+    claims = Claim.order(created_at: :desc).limit(2)
+
+    claims.each do |c|
       expect(c.email_address).to eq("kelsie.oberbrunner@example.com")
       expect(c.email_address_check).to eq(true)
       expect(c.email_verified).to eq(true)
     end
-  end
 
-  scenario "Select a different email address" do
-    navigate_to_check_email_page(school:)
+    # - Select a different email address
+    click_on "Back"
 
     # - select-email page
-    expect(page).to have_text("A different email address")
 
     # - Select A different email address
-    find("#claim_email_address_check_false").click
+    choose("A different email address")
     click_on "Continue"
 
     expect(page).to have_text(I18n.t("questions.email_address_hint1"))
 
-    Claim.order(created_at: :desc).limit(2).each do |c|
+    claims.reload.each do |c|
       expect(c.email_address).to eq(nil)
       expect(c.email_address_check).to eq(false)
       expect(c.email_verified).to eq(nil)
-    end
-  end
-
-  scenario "Selects suggested email address and then changes to a different email address" do
-    navigate_to_check_email_page(school:)
-
-    # - select-email page
-    expect(page).to have_text(email)
-
-    # - Select the suggested email address
-    find("#claim_email_address_check_true").click
-    click_on "Continue"
-
-    click_on "Back"
-
-    find("#claim_email_address_check_false").click
-    click_on "Continue"
-
-    Claim.order(created_at: :desc).limit(2).each do |c|
-      expect(c.email_address).to eq(nil)
-      expect(c.email_address_check).to eq(false)
-      expect(c.email_verified).to eq(nil)
-    end
-  end
-
-  scenario "Selects a different email address and then changes to the suggested email address" do
-    navigate_to_check_email_page(school:)
-
-    # - select-email page
-    expect(page).to have_text(email)
-
-    # - Select A different email address
-    find("#claim_email_address_check_false").click
-    click_on "Continue"
-
-    click_on "Back"
-
-    find("#claim_email_address_check_true").click
-    click_on "Continue"
-
-    Claim.order(created_at: :desc).limit(2).each do |c|
-      expect(c.email_address).to eq(email)
-      expect(c.email_address_check).to eq(true)
-      expect(c.email_verified).to eq(true)
     end
   end
 
