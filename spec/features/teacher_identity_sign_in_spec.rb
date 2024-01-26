@@ -18,7 +18,8 @@ RSpec.feature "Teacher Identity Sign in" do
     stub_dqt_empty_response(trn:, params: {birthdate: date_of_birth, nino:})
   end
 
-  scenario "Teacher makes claim without signing in" do
+  scenario "Teacher makes claim" do
+    # - Teacher makes claim without signing in
     visit landing_page_path(EarlyCareerPayments.routing_name)
     expect(page).to have_link("Claim additional payments for teaching", href: "/additional-payments/landing-page")
     expect(page).to have_link(href: "mailto:#{EarlyCareerPayments.feedback_email}")
@@ -28,25 +29,15 @@ RSpec.feature "Teacher Identity Sign in" do
     click_on "Start now"
 
     # - Sign in or continue page
-    expect(page).to have_text("Use DfE Identity to sign in")
     click_on "Continue without signing in"
 
     # - Which school do you teach at
     expect(page).to have_text(I18n.t("early_career_payments.questions.current_school_search"))
     expect(page.title).to have_text(I18n.t("questions.current_school"))
-  end
 
-  scenario "Teacher makes claim after signing in" do
-    visit landing_page_path(EarlyCareerPayments.routing_name)
-    expect(page).to have_link("Claim additional payments for teaching", href: "/additional-payments/landing-page")
-    expect(page).to have_link(href: "mailto:#{EarlyCareerPayments.feedback_email}")
+    # - Teacher makes claim after signing in
+    click_on "Back"
 
-    # - Landing (start)
-    expect(page).to have_text(I18n.t("early_career_payments.landing_page"))
-    click_on "Start now"
-
-    # - Sign in or continue page
-    expect(page).to have_text("Use DfE Identity to sign in")
     click_on "Continue with DfE Identity"
 
     # - Teacher details page
