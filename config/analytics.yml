@@ -96,6 +96,7 @@ shared:
   - hmrc_bank_validation_responses
   - qa_required
   - qa_completed_at
+  - submitted_using_slc_data
   :decisions:
   - id
   - result
