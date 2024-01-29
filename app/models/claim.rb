@@ -112,7 +112,8 @@ class Claim < ApplicationRecord
     qa_required: false,
     qa_completed_at: false,
     qualifications_details_check: true,
-    dqt_teacher_status: false
+    dqt_teacher_status: false,
+    submitted_using_slc_data: false
   }.freeze
   DECISION_DEADLINE = 12.weeks
   DECISION_DEADLINE_WARNING_POINT = 2.weeks
