@@ -146,7 +146,7 @@ module Admin
       elsif task.claim_verifier_match_none?
         status = "No match"
         status_colour = "red"
-      elsif task.claim_verifier_match.nil? && %w[census_subjects_taught employment induction_confirmation student_loan_amount].include?(task_name)
+      elsif task.claim_verifier_match.nil? && %w[census_subjects_taught employment induction_confirmation student_loan_amount student_loan_plan].include?(task_name)
         status = "No data"
         status_colour = "red"
       end

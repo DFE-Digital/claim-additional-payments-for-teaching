@@ -27,6 +27,10 @@ module AutomatedChecks
         ClaimVerifiers::StudentLoanAmount.new(
           admin_user: admin_user,
           claim: claim
+        ),
+        ClaimVerifiers::StudentLoanPlan.new(
+          admin_user: admin_user,
+          claim: claim
         )
       ]
     )

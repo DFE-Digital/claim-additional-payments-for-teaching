@@ -542,6 +542,10 @@ class Claim < ApplicationRecord
     !hmrc_bank_validation_succeeded?
   end
 
+  def submitted_without_slc_data?
+    submitted_using_slc_data == false
+  end
+
   private
 
   def normalise_trn

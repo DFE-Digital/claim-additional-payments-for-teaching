@@ -1787,4 +1787,24 @@ RSpec.describe Claim, type: :model do
       it { is_expected.to be_must_manually_validate_bank_details }
     end
   end
+
+  describe "#submitted_without_slc_data?" do
+    context "when `submitted_using_slc_data` is `true`" do
+      subject(:claim) { build(:claim, submitted_using_slc_data: true) }
+
+      it { is_expected.not_to be_submitted_without_slc_data }
+    end
+
+    context "when `submitted_using_slc_data` is `false`" do
+      subject(:claim) { build(:claim, submitted_using_slc_data: false) }
+
+      it { is_expected.to be_submitted_without_slc_data }
+    end
+
+    context "when `submitted_using_slc_data` is `nil`" do
+      subject(:claim) { build(:claim, submitted_using_slc_data: nil) }
+
+      it { is_expected.not_to be_submitted_without_slc_data }
+    end
+  end
 end
