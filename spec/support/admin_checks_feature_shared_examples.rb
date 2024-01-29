@@ -58,7 +58,7 @@ RSpec.shared_examples "Admin Checks" do |policy|
     expect(page).to have_content(I18n.t("#{claim.policy.to_s.underscore}.admin.task_questions.employment.title"))
     expect(page).to have_content("Current school")
     expect(page).to have_link(claim.eligibility.current_school.name)
-    expect(page).to have_link("Next: Decision")
+    expect(page).to have_link("Next: Student loan plan")
     expect(page).to have_link("Previous: Census subjects taught")
 
     choose "Yes"
@@ -66,9 +66,19 @@ RSpec.shared_examples "Admin Checks" do |policy|
 
     expect(claim.tasks.find_by!(name: "employment").passed?).to eq(true)
 
+    expect(page).to have_content(I18n.t("#{claim.policy.to_s.underscore}.admin.task_questions.student_loan_plan.title"))
+    expect(page).to have_content("Student loan plan")
+    expect(page).to have_link("Next: Decision")
+    expect(page).to have_link("Previous: Employment")
+
+    choose "Yes"
+    click_on "Save and continue"
+
+    expect(claim.tasks.find_by!(name: "student_loan_plan").passed?).to eq(true)
+
     expect(page).to have_content("Claim decision")
     expect(page).not_to have_link("Next")
-    expect(page).to have_link("Previous: Employment")
+    expect(page).to have_link("Previous: Student loan plan")
 
     choose "Approve"
     fill_in "Decision notes", with: "All checks passed!"
@@ -131,7 +141,7 @@ RSpec.shared_examples "Admin Checks" do |policy|
     expect(page).to have_content(I18n.t("#{claim.policy.to_s.underscore}.admin.task_questions.employment.title"))
     expect(page).to have_content("Current school")
     expect(page).to have_link(claim.eligibility.current_school.name)
-    expect(page).to have_link("Next: Decision")
+    expect(page).to have_link("Next: Student loan plan")
     expect(page).to have_link("Previous: Census subjects taught")
 
     choose "Yes"
@@ -139,9 +149,19 @@ RSpec.shared_examples "Admin Checks" do |policy|
 
     expect(claim.tasks.find_by!(name: "employment").passed?).to eq(true)
 
+    expect(page).to have_content(I18n.t("#{claim.policy.to_s.underscore}.admin.task_questions.student_loan_plan.title"))
+    expect(page).to have_content("Student loan plan")
+    expect(page).to have_link("Next: Decision")
+    expect(page).to have_link("Previous: Employment")
+
+    choose "Yes"
+    click_on "Save and continue"
+
+    expect(claim.tasks.find_by!(name: "student_loan_plan").passed?).to eq(true)
+
     expect(page).to have_content("Claim decision")
     expect(page).not_to have_link("Next")
-    expect(page).to have_link("Previous: Employment")
+    expect(page).to have_link("Previous: Student loan plan")
 
     choose "Approve"
     fill_in "Decision notes", with: "All checks passed!"

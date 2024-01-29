@@ -173,9 +173,9 @@ RSpec.shared_examples "Admin View Claim Feature" do |policy|
     when MathsAndPhysics
       ["Identity confirmation", "Qualifications", "Employment", "Decision"]
     when LevellingUpPremiumPayments
-      ["Identity confirmation", "Qualifications", "Census subjects taught", "Employment", "Decision"]
+      ["Identity confirmation", "Qualifications", "Census subjects taught", "Employment", "Student loan plan", "Decision"]
     when EarlyCareerPayments
-      ["Identity confirmation", "Qualifications", "Induction confirmation", "Census subjects taught", "Employment", "Decision"]
+      ["Identity confirmation", "Qualifications", "Induction confirmation", "Census subjects taught", "Employment", "Student loan plan", "Decision"]
     else
       raise "Unimplemented policy: #{policy}"
     end

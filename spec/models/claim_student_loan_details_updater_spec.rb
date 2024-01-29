@@ -12,7 +12,7 @@ RSpec.describe ClaimStudentLoanDetailsUpdater do
       allow(described_class).to receive(:new).with(claim).and_return(updater_mock)
     end
 
-    it "invokes the update_claim_with_latest_data instance method" do
+    it "invokes the `update_claim_with_latest_data` instance method" do
       expect(updater_mock).to receive(:update_claim_with_latest_data)
       described_class.call(claim)
     end
@@ -28,9 +28,13 @@ RSpec.describe ClaimStudentLoanDetailsUpdater do
 
       context "when the policy is StudentLoans" do
         it "updates the claim with no student plan and zero repayment total" do
-          expect { call }.to change { claim.has_student_loan }.to(false)
+          expect { call }.to change { claim.reload.has_student_loan }.to(false)
             .and change { claim.student_loan_plan }.to(Claim::NO_STUDENT_LOAN)
             .and change { claim.eligibility.student_loan_repayment_amount }.to(0)
+        end
+
+        it "keeps the `submitted_using_slc_data` flag to `false` (default)" do
+          expect { call }.not_to change { claim.submitted_using_slc_data }.from(false)
         end
       end
 
@@ -39,8 +43,12 @@ RSpec.describe ClaimStudentLoanDetailsUpdater do
           let(:policy) { policy }
 
           it "updates the claim with no student plan" do
-            expect { call }.to change { claim.has_student_loan }.to(false)
+            expect { call }.to change { claim.reload.has_student_loan }.to(false)
               .and change { claim.student_loan_plan }.to(Claim::NO_STUDENT_LOAN)
+          end
+
+          it "keeps the `submitted_using_slc_data` flag to `false` (default)" do
+            expect { call }.not_to change { claim.submitted_using_slc_data }.from(false)
           end
         end
       end
@@ -58,9 +66,13 @@ RSpec.describe ClaimStudentLoanDetailsUpdater do
 
       context "when the policy is StudentLoans" do
         it "updates the claim with the student plan and the repayment total" do
-          expect { call }.to change { claim.has_student_loan }.to(true)
+          expect { call }.to change { claim.reload.has_student_loan }.to(true)
             .and change { claim.student_loan_plan }.to(StudentLoan::PLAN_1_AND_2)
             .and change { claim.eligibility.student_loan_repayment_amount }.to(110)
+        end
+
+        it "sets the `submitted_using_slc_data` flag to `true`" do
+          expect { call }.to change { claim.reload.submitted_using_slc_data }.to(true)
         end
       end
 
@@ -69,10 +81,57 @@ RSpec.describe ClaimStudentLoanDetailsUpdater do
           let(:policy) { policy }
 
           it "updates the claim with the student plan only" do
-            expect { call }.to change { claim.has_student_loan }.to(true)
+            expect { call }.to change { claim.reload.has_student_loan }.to(true)
               .and change { claim.student_loan_plan }.to(StudentLoan::PLAN_1_AND_2)
           end
+
+          it "sets the `submitted_using_slc_data` flag to `true`" do
+            expect { call }.to change { claim.reload.submitted_using_slc_data }.to(true)
+          end
         end
+      end
+    end
+
+    context "when an error occurs while updating" do
+      let(:exception) { ActiveRecord::RecordInvalid }
+
+      before do
+        allow(claim).to receive_message_chain(:assign_attributes, :assign_attributes, :save!) { raise(exception) }
+        allow(Rollbar).to receive(:error)
+      end
+
+      it "suppresses the exception" do
+        expect { call }.not_to raise_error
+      end
+
+      it "logs the exception" do
+        call
+
+        expect(Rollbar).to have_received(:error).with(exception)
+      end
+
+      it "does not update the student loan details" do
+        expect { call }.to not_change { claim.reload.has_student_loan }
+          .and not_change { claim.student_loan_plan }
+          .and not_change { claim.eligibility.student_loan_repayment_amount }
+      end
+    end
+
+    context "when updating a claim after submission" do
+      let(:claim) { create(:claim, :submitted, :with_no_student_loan, policy:) }
+
+      before do
+        create(:student_loans_data, nino: claim.national_insurance_number, date_of_birth: claim.date_of_birth, plan_type_of_deduction: 1, amount: 50)
+      end
+
+      it "updates the claim with the student plan and the repayment total" do
+        expect { call }.to change { claim.reload.has_student_loan }.to(true)
+          .and change { claim.student_loan_plan }.to(StudentLoan::PLAN_1)
+          .and change { claim.eligibility.student_loan_repayment_amount }.to(50)
+      end
+
+      it "does not change the `submitted_using_slc_data` flag" do
+        expect { call }.to not_change { claim.submitted_using_slc_data }
       end
     end
   end
