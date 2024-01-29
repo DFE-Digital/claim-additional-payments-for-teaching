@@ -25,6 +25,10 @@ RSpec.describe ImportStudentLoansDataJob do
       it "enqueues StudentLoanAmountCheckJob" do
         expect { upload }.to have_enqueued_job(StudentLoanAmountCheckJob)
       end
+
+      it "enqueues StudentLoanPlanCheckJob" do
+        expect { upload }.to have_enqueued_job(StudentLoanPlanCheckJob)
+      end
     end
 
     context "csv data encounters an error" do
@@ -44,6 +48,10 @@ RSpec.describe ImportStudentLoansDataJob do
 
       it "does not enqueue StudentLoanAmountCheckJob" do
         expect { upload }.not_to have_enqueued_job(StudentLoanAmountCheckJob)
+      end
+
+      it "does not enqueue StudentLoanPlanCheckJob" do
+        expect { upload }.not_to have_enqueued_job(StudentLoanPlanCheckJob)
       end
     end
   end
