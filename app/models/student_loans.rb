@@ -11,6 +11,7 @@ module StudentLoans
   extend self
 
   POLICY_START_YEAR = AcademicYear.new(2013).freeze
+  POLICY_END_YEAR = AcademicYear.new(2020).freeze
   ACADEMIC_YEARS_QUALIFIED_TEACHERS_CAN_CLAIM_FOR = 11
 
   def start_page_url
@@ -79,6 +80,10 @@ module StudentLoans
       POLICY_START_YEAR,
       (claim_year - ACADEMIC_YEARS_QUALIFIED_TEACHERS_CAN_CLAIM_FOR)
     ].max
+  end
+
+  def last_eligible_qts_award_year
+    POLICY_END_YEAR
   end
 
   # Returns human-friendly String for the financial year that Student Loans
