@@ -1,7 +1,8 @@
 require "rails_helper"
 
 RSpec.describe "SLC (Student Loans Company) data upload " do
-  let!(:journey_configuration) { create(:journey_configuration, :student_loans) }
+  let!(:journey_configuration_tslr) { create(:journey_configuration, :student_loans) }
+  let!(:journey_configuration_ecp_lupp) { create(:journey_configuration, :additional_payments) }
 
   before { @signed_in_user = sign_in_as_service_operator }
 
@@ -96,19 +97,13 @@ RSpec.describe "SLC (Student Loans Company) data upload " do
         end
       end
 
-      def upload_slc_data_file(file)
-        perform_enqueued_jobs do
-          post admin_student_loans_data_uploads_path, params: {file: file}
-        end
-      end
-
       it "enqueues a job to import the file asynchronously" do
         expect { upload }.to have_enqueued_job(ImportStudentLoansDataJob)
       end
 
       it "parses the rows and saves them as student loans data records" do
         aggregate_failures do
-          expect { upload_slc_data_file(file) }.to change(StudentLoansData, :count).by(2)
+          expect { perform_enqueued_jobs { upload } }.to change(StudentLoansData, :count).by(2)
           expect(StudentLoansData.where(nino: "QQ123456A").first).to have_attributes(expected_records[0])
           expect(StudentLoansData.where(nino: "QQ123456B").first).to have_attributes(expected_records[1])
         end
