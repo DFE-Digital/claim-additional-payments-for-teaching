@@ -36,7 +36,7 @@ RSpec.shared_examples "ECP and LUP Combined Journey Admin Tasks Presenter" do |p
             academic_year: AcademicYear::Type.new.serialize(AcademicYear.new(2023)),
             policy: policy,
             eligibility: build(
-              "#{policy.to_s.underscore}_eligibility".to_sym,
+              :"#{policy.to_s.underscore}_eligibility",
               eligible_itt_subject: spec[:subject_text],
               itt_academic_year: AcademicYear::Type.new.serialize(AcademicYear.new(2020)),
               qualification: qualification

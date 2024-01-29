@@ -6,7 +6,7 @@ RSpec.feature "Admin claim tasks update with DQT API" do
 
     in_browser(:claimant) do
       policy_underscored = claim_attributes[:policy].to_s.underscore
-      claim = send("start_#{policy_underscored}_claim")
+      claim = send(:"start_#{policy_underscored}_claim")
 
       claim.update!(
         attributes_for(

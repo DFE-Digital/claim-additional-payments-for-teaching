@@ -3,7 +3,7 @@
 module Dqt
   class Object < OpenStruct
     def initialize(attributes)
-      super to_ostruct(attributes)
+      super(to_ostruct(attributes))
     end
 
     def to_ostruct(obj)

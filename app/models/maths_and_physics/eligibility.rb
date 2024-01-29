@@ -89,7 +89,7 @@ module MathsAndPhysics
         :not_employed_directly,
         :subject_to_disciplinary_action,
         :subject_to_formal_performance_action
-      ].find { |eligibility_check| send("#{eligibility_check}?") }
+      ].find { |eligibility_check| send(:"#{eligibility_check}?") }
     end
 
     def award_amount

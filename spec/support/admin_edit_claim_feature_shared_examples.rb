@@ -8,7 +8,7 @@ RSpec.shared_examples "Admin Edit Claim Feature" do |policy|
 
   let(:eligibility) do
     build(
-      "#{policy.to_s.underscore}_eligibility".to_sym,
+      :"#{policy.to_s.underscore}_eligibility",
       :eligible,
       award_amount: old_award_amount
     )

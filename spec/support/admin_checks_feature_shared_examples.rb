@@ -9,7 +9,7 @@ RSpec.shared_examples "Admin Checks" do |policy|
       :submitted,
       :with_student_loan,
       policy: policy,
-      eligibility: build("#{policy.to_s.underscore}_eligibility".to_sym, :eligible)
+      eligibility: build(:"#{policy.to_s.underscore}_eligibility", :eligible)
     )
   }
 
