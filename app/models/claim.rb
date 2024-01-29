@@ -559,6 +559,10 @@ class Claim < ApplicationRecord
     !hmrc_bank_validation_succeeded?
   end
 
+  def submitted_without_slc_data?
+    submitted_using_slc_data == false
+  end
+
   def has_recent_tps_school?
     TeachersPensionsService.has_recent_tps_school?(self)
   end

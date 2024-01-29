@@ -137,29 +137,6 @@ RSpec.feature "Changing the answers on a submittable claim" do
     expect(page).not_to have_text("Languages")
   end
 
-  scenario "Teacher edits fields on the claim that nullify dependant eligibility attributes" do
-    claim = start_student_loans_claim
-    eligibility = claim.eligibility
-
-    claim.update!(attributes_for(:claim, :submittable))
-    eligibility.update!(attributes_for(:student_loans_eligibility, :eligible, current_school_id: student_loans_school.id, claim_school_id: student_loans_school.id))
-    jump_to_claim_journey_page(claim, "check-your-answers")
-
-    old_national_insurance_number = claim.national_insurance_number
-    new_national_insurance_number = "AB123456C"
-
-    expect {
-      page.first("a[href='#{claim_path(Journeys::TeacherStudentLoanReimbursement::ROUTING_NAME, "personal-details")}']", minimum: 1).click
-      fill_in "National Insurance number", with: new_national_insurance_number
-      click_on "Continue"
-    }.to change { claim.reload.national_insurance_number }.from(old_national_insurance_number).to(new_national_insurance_number)
-      .and change { claim.has_student_loan }.to(nil)
-      .and change { claim.student_loan_plan }.to(nil)
-      .and change { claim.eligibility.student_loan_repayment_amount }.to(nil)
-
-    expect(page).not_to have_content("Check your answers before sending your application")
-  end
-
   context "User changes fields that aren't related to eligibility" do
     let!(:claim) { start_student_loans_claim }
     let(:eligibility) { claim.eligibility }

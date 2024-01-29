@@ -62,6 +62,12 @@ module Policies
         ]
       end
 
+      def student_loan_plan
+        [
+          ["Student loan plan", claim.student_loan_plan&.humanize]
+        ]
+      end
+
       private
 
       def eligibility
