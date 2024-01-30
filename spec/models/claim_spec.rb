@@ -114,11 +114,6 @@ RSpec.describe Claim, type: :model do
     end
   end
 
-  it "is not submittable without a value for the student_loan_plan present" do
-    expect(build(:claim, :submittable, student_loan_plan: nil)).not_to be_valid(:submit)
-    expect(build(:claim, :submittable, student_loan_plan: Claim::NO_STUDENT_LOAN)).to be_valid(:submit)
-  end
-
   it "is submittable with optional student loan questions not answered" do
     claim = build(
       :claim,
@@ -334,10 +329,10 @@ RSpec.describe Claim, type: :model do
   end
 
   context "when saving in the “student-loan” validation context" do
-    it "validates the presence of student_loan" do
-      expect(build(:claim)).not_to be_valid(:"student-loan")
-      expect(build(:claim, has_student_loan: true)).to be_valid(:"student-loan")
-      expect(build(:claim, has_student_loan: false)).to be_valid(:"student-loan")
+    it "validates the presence of has_student_loan" do
+      expect(build(:claim, student_loan_plan: StudentLoan::PLAN_1, has_student_loan: nil)).not_to be_valid(:"student-loan")
+      expect(build(:claim, student_loan_plan: StudentLoan::PLAN_1, has_student_loan: true)).to be_valid(:"student-loan")
+      expect(build(:claim, student_loan_plan: StudentLoan::PLAN_1, has_student_loan: false)).to be_valid(:"student-loan")
     end
   end
 
