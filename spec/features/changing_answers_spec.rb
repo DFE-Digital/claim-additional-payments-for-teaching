@@ -137,6 +137,28 @@ RSpec.feature "Changing the answers on a submittable claim" do
     expect(page).not_to have_text("Languages")
   end
 
+  scenario "Teacher edits personal details, triggering the update of student loan details" do
+    claim = start_student_loans_claim
+    eligibility = claim.eligibility
+
+    claim.update!(attributes_for(:claim, :submittable))
+    eligibility.update!(attributes_for(:student_loans_eligibility, :eligible, current_school_id: student_loans_school.id, claim_school_id: student_loans_school.id, student_loan_repayment_amount: 100))
+    jump_to_claim_journey_page(claim, "check-your-answers")
+
+    # Add student loans data for the applicant's NINO and DoB
+    create(:student_loans_data, nino: "AB123456C", date_of_birth: claim.date_of_birth, plan_type_of_deduction: 1, amount: 50)
+
+    page.first("a[href='#{claim_path(Journeys::TeacherStudentLoanReimbursement::ROUTING_NAME, "personal-details")}']", minimum: 1).click
+    fill_in "National Insurance number", with: "AB123456C"
+    click_on "Continue"
+
+    # - student-loan-amount is re-displayed for TSLR
+    expect(page).to have_content("Your student loan repayment amount is £50")
+    click_on "Continue"
+
+    expect(page).to have_content("Check your answers before sending your application")
+  end
+
   context "User changes fields that aren't related to eligibility" do
     let!(:claim) { start_student_loans_claim }
     let(:eligibility) { claim.eligibility }
@@ -159,6 +181,9 @@ RSpec.feature "Changing the answers on a submittable claim" do
         claim.reload.middle_name
       }.from(old_middle_name).to(new_middle_name)
 
+      # - student-loan-amount is re-displayed for TSLR
+      click_on "Continue"
+
       expect(page).to have_content("Check your answers before sending your application")
     end
 
@@ -176,6 +201,9 @@ RSpec.feature "Changing the answers on a submittable claim" do
 
       page.first("a[href='#{claim_path(Journeys::TeacherStudentLoanReimbursement::ROUTING_NAME, "personal-details")}']", minimum: 1).click
       fill_in "First name", with: "Bobby"
+      click_on "Continue"
+
+      # - student-loan-amount is re-displayed for TSLR
       click_on "Continue"
 
       expect(current_path).to eq(claim_path(Journeys::TeacherStudentLoanReimbursement::ROUTING_NAME, "check-your-answers"))
