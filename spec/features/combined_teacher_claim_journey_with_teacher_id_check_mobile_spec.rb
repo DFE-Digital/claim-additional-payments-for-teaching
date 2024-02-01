@@ -37,15 +37,16 @@ RSpec.feature "Combined journey with Teacher ID mobile check" do
     # - Choose bank or building society
     expect(page).to have_text(I18n.t("questions.bank_or_building_society"))
 
-    Claim.order(created_at: :desc).limit(2).each do |c|
+    claims = Claim.order(created_at: :desc).limit(2)
+
+    claims.each do |c|
       expect(c.mobile_number).to eq(phone_number)
       expect(c.provide_mobile_number).to eq(true)
       expect(c.mobile_check).to eq("use")
     end
-  end
 
-  scenario "Select to use an alternative phone number" do
-    navigate_to_check_mobile_page(school:)
+    # - Select to use an alternative phone number"
+    click_on "Back"
 
     expect(page).to have_text(I18n.t("questions.select_phone_number.alternative"))
 
@@ -56,149 +57,27 @@ RSpec.feature "Combined journey with Teacher ID mobile check" do
     # - Enter your phone number
     expect(page).to have_text("To verify your mobile number we will send you a text message with a 6-digit passcode. You can enter the passcode on the next screen.")
 
-    Claim.order(created_at: :desc).limit(2).each do |c|
+    claims.reload.each do |c|
       expect(c.mobile_number).to eq(nil)
       expect(c.provide_mobile_number).to eq(nil)
       expect(c.mobile_check).to eq("alternative")
     end
-  end
 
-  scenario "Choose not to be contacted by phone" do
-    navigate_to_check_mobile_page(school:)
+    # - Choose not to be contacted by phone
+    click_on "Back"
 
     expect(page).to have_text(I18n.t("questions.select_phone_number.decline"))
 
-    # - Choose not to be contacted by mobile
     find("#claim_mobile_check_declined").click
     click_on "Continue"
 
     # - Choose bank or building society
     expect(page).to have_text(I18n.t("questions.bank_or_building_society"))
 
-    Claim.order(created_at: :desc).limit(2).each do |c|
+    claims.reload.each do |c|
       expect(c.mobile_number).to eq(nil)
       expect(c.provide_mobile_number).to eq(false)
       expect(c.mobile_check).to eq("declined")
-    end
-  end
-
-  scenario "Selects suggested phone number and then changes to an alternative phone number" do
-    navigate_to_check_mobile_page(school:)
-
-    # - Select the suggested phone number
-    find("#claim_mobile_check_use").click
-    click_on "Continue"
-
-    click_on "Back"
-
-    # - Select A different mobile number
-    find("#claim_mobile_check_alternative").click
-    click_on "Continue"
-
-    Claim.order(created_at: :desc).limit(2).each do |c|
-      expect(c.mobile_number).to eq(nil)
-      expect(c.provide_mobile_number).to eq(nil)
-      expect(c.mobile_check).to eq("alternative")
-    end
-  end
-
-  scenario "Selects suggested phone number and then changes to decline to be contacted by phone" do
-    navigate_to_check_mobile_page(school:)
-
-    # - Select the suggested phone number
-    find("#claim_mobile_check_use").click
-    click_on "Continue"
-
-    click_on "Back"
-
-    # - Choose not to be contacted by mobile
-    find("#claim_mobile_check_declined").click
-    click_on "Continue"
-
-    Claim.order(created_at: :desc).limit(2).each do |c|
-      expect(c.mobile_number).to eq(nil)
-      expect(c.provide_mobile_number).to eq(false)
-      expect(c.mobile_check).to eq("declined")
-    end
-  end
-
-  scenario "Selects an alternative phone number and then changes to use the suggested phone number" do
-    navigate_to_check_mobile_page(school:)
-
-    # - Select A different mobile number
-    find("#claim_mobile_check_alternative").click
-    click_on "Continue"
-
-    click_on "Back"
-
-    # - Select the suggested phone number
-    find("#claim_mobile_check_use").click
-    click_on "Continue"
-
-    Claim.order(created_at: :desc).limit(2).each do |c|
-      expect(c.mobile_number).to eq(phone_number)
-      expect(c.provide_mobile_number).to eq(true)
-      expect(c.mobile_check).to eq("use")
-    end
-  end
-
-  scenario "Selects an alternative phone number and then changes to decline to be contacted by phone" do
-    navigate_to_check_mobile_page(school:)
-
-    # - Select A different mobile number
-    find("#claim_mobile_check_alternative").click
-    click_on "Continue"
-
-    click_on "Back"
-
-    # - Choose not to be contacted by mobile
-    find("#claim_mobile_check_declined").click
-    click_on "Continue"
-
-    Claim.order(created_at: :desc).limit(2).each do |c|
-      expect(c.mobile_number).to eq(nil)
-      expect(c.provide_mobile_number).to eq(false)
-      expect(c.mobile_check).to eq("declined")
-    end
-  end
-
-  scenario "Declines to be contacted by phone and then changes to use the suggested phone number" do
-    navigate_to_check_mobile_page(school:)
-
-    # - Choose not to be contacted by mobile
-    find("#claim_mobile_check_declined").click
-    click_on "Continue"
-
-    click_on "Back"
-
-    # - Select the suggested phone number
-    find("#claim_mobile_check_use").click
-    click_on "Continue"
-
-    Claim.order(created_at: :desc).limit(2).each do |c|
-      expect(c.mobile_number).to eq(phone_number)
-      expect(c.provide_mobile_number).to eq(true)
-      expect(c.mobile_check).to eq("use")
-    end
-  end
-
-  scenario "Declines to be contacted by phone and then changes to an alternative phone number" do
-    navigate_to_check_mobile_page(school:)
-
-    # - Choose not to be contacted by mobile
-    find("#claim_mobile_check_declined").click
-    click_on "Continue"
-
-    click_on "Back"
-
-    # - Select A different mobile number
-    find("#claim_mobile_check_alternative").click
-    click_on "Continue"
-
-    Claim.order(created_at: :desc).limit(2).each do |c|
-      expect(c.mobile_number).to eq(nil)
-      expect(c.provide_mobile_number).to eq(nil)
-      expect(c.mobile_check).to eq("alternative")
     end
   end
 

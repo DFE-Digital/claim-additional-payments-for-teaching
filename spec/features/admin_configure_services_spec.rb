@@ -72,7 +72,7 @@ RSpec.feature "Service configuration" do
       create(:reminder, email_verified: false, itt_academic_year: AcademicYear.current)
     end
 
-    scenario "Service operator opens an ECP service for submissions", js: true do
+    scenario "Service operator opens an ECP service for submissions" do
       policy_configuration.update(open_for_submissions: false)
       sign_in_as_service_operator
 
@@ -84,7 +84,11 @@ RSpec.feature "Service configuration" do
         expect(page).not_to have_content("Open")
         click_on "Change"
       end
-      expect(page).to_not have_content(I18n.t("admin.policy_configuration.reminder_warning", count: count))
+
+      within(".govuk-radios__conditional--hidden#reminders-warning-message") do
+        expect(page).to have_content(I18n.t("admin.policy_configuration.reminder_warning", count: count))
+      end
+
       within_fieldset("Service status") { choose("Open") }
       expect(page).to have_content(I18n.t("admin.policy_configuration.reminder_warning", count: count))
       # make sure email reminder jobjob is queued

@@ -35,7 +35,8 @@ RSpec.feature "TSLR journey with Teacher ID still teaching school playback" do
     travel_back
   end
 
-  scenario "Selects suggested school retrieved from TPS" do
+  scenario "Selects school" do
+    # - "Selects suggested school retrieved from TPS" do
     navigate_to_still_teaching_page
 
     choose(eligible_school.name)
@@ -47,11 +48,10 @@ RSpec.feature "TSLR journey with Teacher ID still teaching school playback" do
     expect(eligibility.claim_school_id).to eq eligible_claim_school.id
     expect(eligibility.current_school_id).to eq eligible_school.id
     expect(eligibility.employment_status).to eq "recent_tps_school"
-  end
 
-  scenario "Selects somewhere else" do
-    navigate_to_still_teaching_page
+    # - Selects somewhere else
 
+    click_on "Back"
     choose("Somewhere else")
     click_on "Continue"
 
@@ -61,10 +61,9 @@ RSpec.feature "TSLR journey with Teacher ID still teaching school playback" do
     expect(eligibility.claim_school_id).to eq eligible_claim_school.id
     expect(eligibility.current_school_id).to be_nil
     expect(eligibility.employment_status).to eq "different_school"
-  end
 
-  scenario "Selects No..." do
-    navigate_to_still_teaching_page
+    # - Selects No...
+    click_on "Back"
 
     choose("I'm no longer employed to teach at a state-funded secondary school in England")
     click_on "Continue"
