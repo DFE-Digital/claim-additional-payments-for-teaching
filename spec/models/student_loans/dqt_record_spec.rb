@@ -4,50 +4,72 @@ RSpec.describe StudentLoans::DqtRecord do
   let!(:policy_configuration) { create(:policy_configuration, :student_loans) }
 
   describe "#eligble?" do
-    it "returns true if the given QTS award date is after the first eligible academic year" do
-      expect(StudentLoans::DqtRecord.new(OpenStruct.new({qts_award_date: Date.parse("19/3/2017")})).eligible?).to eql true
+    subject(:result) { StudentLoans::DqtRecord.new(OpenStruct.new({qts_award_date:})).eligible? }
+
+    context "QTS award date is after the first eligible academic year" do
+      let(:qts_award_date) { Date.new(2017, 3, 19) }
+      it { is_expected.to eq true }
     end
 
-    it "returns true if the given QTS award date is in the first eligible academic year" do
-      expect(StudentLoans::DqtRecord.new(OpenStruct.new({qts_award_date: Date.parse("1/10/2014")})).eligible?).to eql true
+    context "QTS award date is in the first eligible academic year" do
+      let(:qts_award_date) { Date.new(2014, 10, 1) }
+      it { is_expected.to eq true }
     end
 
-    it "returns false if the given QTS award date is not an eligible year" do
-      expect(StudentLoans::DqtRecord.new(OpenStruct.new({qts_award_date: Date.parse("8/3/2000")})).eligible?).to eql false
+    context "QTS award date is not an eligible year" do
+      let(:qts_award_date) { Date.new(2000, 3, 8) }
+      it { is_expected.to eq false }
     end
 
-    it "returns false if the given QTS award date is blank" do
-      expect(StudentLoans::DqtRecord.new(OpenStruct.new({qts_award_date: ""})).eligible?).to eql false
+    context "QTS award date is blank" do
+      let(:qts_award_date) { "" }
+      it { is_expected.to eq false }
+    end
+
+    context "when the date is after academic year 2020/21" do
+      let(:qts_award_date) { Date.new(2021, 9, 30) }
+      it { is_expected.to eq false }
     end
   end
 
   describe "#eligible_qts_award_date?" do
-    it "returns true if the given QTS award date is after the first eligible academic year" do
-      expect(StudentLoans::DqtRecord.new(OpenStruct.new({qts_award_date: Date.parse("19/3/2017")})).eligible_qts_award_date?).to eql true
+    subject(:result) { StudentLoans::DqtRecord.new(OpenStruct.new({qts_award_date:})).eligible_qts_award_date? }
+
+    context "QTS award date is after the first eligible academic year" do
+      let(:qts_award_date) { Date.new(2017, 3, 19) }
+      it { is_expected.to eq true }
     end
 
-    it "returns true if the given QTS award date is in the first eligible academic year" do
-      expect(StudentLoans::DqtRecord.new(OpenStruct.new({qts_award_date: Date.parse("1/10/2014")})).eligible_qts_award_date?).to eql true
+    context "QTS award date is in the first eligible academic year" do
+      let(:qts_award_date) { Date.new(2014, 10, 1) }
+      it { is_expected.to eq true }
     end
 
-    it "returns false if the given QTS award date is not an eligible year" do
-      expect(StudentLoans::DqtRecord.new(OpenStruct.new({qts_award_date: Date.parse("8/3/2000")})).eligible_qts_award_date?).to eql false
+    context "QTS award date is not an eligible year" do
+      let(:qts_award_date) { Date.new(2000, 3, 8) }
+      it { is_expected.to eq false }
     end
 
-    it "returns false if the given QTS award date is not an eligible year" do
-      expect(StudentLoans::DqtRecord.new(OpenStruct.new({qts_award_date: Date.parse("15/8/2013")})).eligible_qts_award_date?).to eql false
+    context "QTS award date is not an eligible year" do
+      let(:qts_award_date) { Date.new(2013, 8, 15) }
+      it { is_expected.to eq false }
     end
 
     context "in academic year 2029/30" do
+      let(:qts_award_date) { Date.new(2018, 7, 1) }
       let!(:policy_configuration) { create(:policy_configuration, :student_loans, current_academic_year: "2029/2030") }
 
-      it "returns false if the given QTS award date is not an eligible year" do
-        expect(StudentLoans::DqtRecord.new(OpenStruct.new({qts_award_date: Date.parse("1/7/2018")})).eligible_qts_award_date?).to eql false
-      end
+      it { is_expected.to eq false }
     end
 
-    it "returns false if the given QTS award date is blank" do
-      expect(StudentLoans::DqtRecord.new(OpenStruct.new({qts_award_date: ""})).eligible_qts_award_date?).to eql false
+    context "QTS award date is blank" do
+      let(:qts_award_date) { "" }
+      it { is_expected.to eq false }
+    end
+
+    context "when the date is after academic year 2020/21" do
+      let(:qts_award_date) { Date.new(2021, 9, 30) }
+      it { is_expected.to eq false }
     end
   end
 

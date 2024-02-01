@@ -23,6 +23,11 @@ RSpec.describe StudentLoans, type: :model do
     end
   end
 
+  describe ".last_eligible_qts_award_year" do
+    subject(:year) { described_class.last_eligible_qts_award_year }
+    it { is_expected.to eq(AcademicYear.new(2020)) }
+  end
+
   describe ".current_financial_year" do
     it "returns a human-friendly string for the financial year the policy is currently accepting claims for" do
       policy_configuration.update!(current_academic_year: "2020/2021")
