@@ -45,13 +45,11 @@ RSpec.feature "Admin claim filtering" do
     end
   end
 
-  scenario "the service operater can filter by themselves or other team members" do
+  scenario "the service operator can filter by themselves or other team members" do
     click_on "View claims"
 
     expect(page.find("table")).to have_content("TSLR").exactly(5).times
     expect(page.find("table")).to have_content("ECP").exactly(10).times
-
-    click_on "View claims"
 
     # Excludes payroll users and deleted users
     expect(page).to have_select("team_member", options: ["All", "Unassigned", "#{user.given_name} #{user.family_name}", "Mary Wasu Wabi", "Valentino Ricci", "Mette Jørgensen"])
