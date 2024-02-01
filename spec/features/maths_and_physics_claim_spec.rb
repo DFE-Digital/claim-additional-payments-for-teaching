@@ -112,13 +112,15 @@ RSpec.feature "Maths & Physics claims" do
 
       expect(page).to have_text(I18n.t("questions.has_student_loan"))
 
+      # These answers are useless as the student loan details are fetched when answering the personal details questions.
+      # Nevertherless, we shall keep these tests from going red until completely removed with CAPT-1421
       answer_student_loan_plan_questions
 
       expect(claim.reload).to have_student_loan
       expect(claim.student_loan_country).to eq("england")
       expect(claim.student_loan_courses).to eq("one_course")
       expect(claim.student_loan_start_date).to eq(StudentLoan::BEFORE_1_SEPT_2012)
-      expect(claim.student_loan_plan).to eq(StudentLoan::PLAN_1)
+      expect(claim.student_loan_plan).to eq(Claim::NO_STUDENT_LOAN)
 
       # - Are you currently paying off your masters/doctoral loan
       expect(page).not_to have_text(I18n.t("questions.has_masters_and_or_doctoral_loan"))
