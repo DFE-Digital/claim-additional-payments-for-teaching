@@ -15,8 +15,6 @@ module AutomatedChecks
       end
 
       def perform
-        return if claim.policy == MathsAndPhysics
-
         return unless awaiting_task?(TASK_NAME)
 
         no_data || no_match || any_match

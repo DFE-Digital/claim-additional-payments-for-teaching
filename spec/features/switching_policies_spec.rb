@@ -5,20 +5,20 @@ RSpec.feature "Switching policies" do
 
   before do
     create(:policy_configuration, :student_loans)
-    create(:policy_configuration, :maths_and_physics)
+    create(:policy_configuration, :early_career_payments)
 
     start_student_loans_claim
-    visit new_claim_path(MathsAndPhysics.routing_name)
+    visit new_claim_path(EarlyCareerPayments.routing_name)
   end
 
   scenario "a user can switch to a different policy after starting a claim on another" do
-    expect(page.title).to have_text(I18n.t("maths_and_physics.policy_name"))
-    expect(page.find("header")).to have_text(I18n.t("maths_and_physics.policy_name"))
+    expect(page.title).to have_text(I18n.t("early_career_payments.policy_name"))
+    expect(page.find("header")).to have_text(I18n.t("early_career_payments.policy_name"))
 
-    choose "Yes, start claim for a payment for teaching maths or physics and lose my progress on my first claim"
+    choose "Yes, start claim for an additional payment for teaching and lose my progress on my first claim"
     click_on "Submit"
 
-    expect(page).to have_text(I18n.t("maths_and_physics.questions.teaching_maths_or_physics"))
+    expect(page).to have_text("You can sign in or set up a DfE Identity account to make it easier to claim additional payments.")
   end
 
   scenario "a user can choose to continue their claim" do
@@ -31,6 +31,6 @@ RSpec.feature "Switching policies" do
   scenario "a user does not select an option" do
     click_on "Submit"
 
-    expect(page).to have_text("Select yes if you want to start a claim for a payment for teaching maths or physics")
+    expect(page).to have_text("Select yes if you want to start a claim for an additional payment for teaching")
   end
 end

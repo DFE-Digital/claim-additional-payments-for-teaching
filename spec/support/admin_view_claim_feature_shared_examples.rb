@@ -170,8 +170,6 @@ RSpec.shared_examples "Admin View Claim Feature" do |policy|
     sections = case policy
     when StudentLoans
       ["Identity confirmation", "Qualifications", "Census subjects taught", "Employment", "Student loan amount", "Decision"]
-    when MathsAndPhysics
-      ["Identity confirmation", "Qualifications", "Employment", "Decision"]
     when LevellingUpPremiumPayments
       ["Identity confirmation", "Qualifications", "Census subjects taught", "Employment", "Decision"]
     when EarlyCareerPayments

@@ -43,7 +43,6 @@ class BaseImporter
     Claim.delete_all
     EarlyCareerPayments::Eligibility.delete_all
     StudentLoans::Eligibility.delete_all
-    MathsAndPhysics::Eligibility.delete_all
     Payment.delete_all
     PayrollRun.delete_all
     Reminder.delete_all

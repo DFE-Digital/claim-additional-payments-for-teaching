@@ -38,11 +38,6 @@ FactoryBot.define do
       association :local_authority_district, :maths_and_physics_ineligible
     end
 
-    trait :maths_and_physics_explicitly_eligible do
-      maths_and_physics_ineligible
-      urn { MathsAndPhysics::SchoolEligibility::SCHOOL_URNS_CONSIDERED_AS_ELIGIBLE_LOCAL_AUTHORITY_DISTRICT.sample }
-    end
-
     trait :early_career_payments_eligible do
       association :local_authority_district, :early_career_payments_no_uplift
       state_funded

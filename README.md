@@ -62,7 +62,6 @@ Architecture decision records can be found in the
    policy:
 
 - **Student Loans:** https://localhost:3000/student-loans/claim
-- **Maths and Physics:** https://localhost:3000/maths-and-physics/claim
 - **Additional Payments:** https://localhost:3000/additional-payments/claim
 
 ### How to set up DfE Sign-In locally
@@ -378,3 +377,34 @@ the user IP address as part of the payload data sent to Application Insights in
 [`lib/application_insights`](lib/application_insights). See
 [`config/initializers/application_insights.rb`](config/initializers/application_insights.rb)
 for how to mixin this code to your Rails application.
+
+## Removing Maths and Physics
+
+- Drop or remove all rows in `maths_and_physics_eligibilities`
+- Delete claims
+- Delete payments and join tables
+- Questions on deleting rows vs dropping tables
+
+- Specs
+- Remove policy_configuration - migration needed
+- Factories
+- ClaimMailer
+- `app/models/claim_checking_tasks.rb`
+- `app/models/page_sequence.rb`
+- `app/models/policies.rb`
+- `app/models/policy_configuration.rb`
+- `app/models/school.rb`
+- `app/models/automated_checks/claim_verifiers/census_subjects_taught.rb`
+- `app/views/claim_mailer/rejection_reasons/_maths_and_physics.text.erb`
+- `spec/factories/maths_and_physics`
+- `spec/factories/maths_and_physics/eligibilities.rb`
+- do migrations still run without the models
+- dfe analytics tables
+
+- removed `app/models/maths_and_physics/*`
+- removed `app/views/maths_and_physics/*`
+- removed `spec/models/maths_and_physics/*`
+- removed `spec/features/admin_checks_maths_and_physics_claim_spec.rb`
+- removed `spec/features/maths_and_physics_claim_spec.rb`
+- removed `spec/features/ineligible_maths_and_physics_claims_spec.rb`
+- removed `spec/models/maths_and_physics_spec.rb`

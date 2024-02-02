@@ -68,7 +68,6 @@ module AutomatedChecks
 
         [
           EarlyCareerPayments,
-          MathsAndPhysics,
           StudentLoans
         ].each do |policy|
           context "with policy #{policy}" do
@@ -677,14 +676,15 @@ module AutomatedChecks
                     reference: "AB123456",
                     surname: "ELIGIBLE ",
                     teacher_reference_number: " 1234567   ",
-                    policy: MathsAndPhysics
+                    policy: policy
                   )
+
+                  policy_underscored = policy.to_s.underscore
 
                   claim.eligibility.update!(
                     attributes_for(
-                      :maths_and_physics_eligibility,
-                      :eligible,
-                      initial_teacher_training_subject: :maths
+                      :"#{policy_underscored}_eligibility",
+                      :eligible
                     )
                   )
 

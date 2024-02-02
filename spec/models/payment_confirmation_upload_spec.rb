@@ -8,7 +8,7 @@ RSpec.describe PaymentConfirmationUpload do
   let(:admin_user) { build(:dfe_signin_user) }
   let(:payroll_run) do
     create(:payroll_run, claims_counts: {
-      [MathsAndPhysics, StudentLoans] => 1,
+      [EarlyCareerPayments, StudentLoans] => 1,
       StudentLoans => 1,
       EarlyCareerPayments => 2
     })
@@ -23,7 +23,7 @@ RSpec.describe PaymentConfirmationUpload do
     <<~CSV
       Payroll Reference,Gross Value,Payment ID,NI,Employers NI,Student Loans,Tax,Net Pay,Claim Policies,Postgraduate Loans,Payment Date
       DFE00001,448.5,#{first_payment.id},33.9,38.98,0,89.6,325,StudentLoans,0,17/07/2023
-      DFE00002,814.64,#{second_payment.id},77.84,89.51,40,162.8,534,"MathsAndPhysics,StudentLoans",0,17/07/2023
+      DFE00002,814.64,#{second_payment.id},77.84,89.51,40,162.8,534,"EarlyCareerPayments,StudentLoans",0,17/07/2023
       DFE00003,9710.83,#{third_payment.id},268.84,1316.63,839,1942,6660.99,EarlyCareerPayments,9710.83,17/07/2023
     CSV
   end
@@ -255,7 +255,7 @@ RSpec.describe PaymentConfirmationUpload do
       let(:csv) do
         <<~CSV
           Payroll Reference,Gross Value,Payment ID,NI,Employers NI,Student Loans,Tax,Net Pay,Claim Policies,Postgraduate Loans,Payment Date
-          DFE00001,448.5,#{first_payment.id},33.9,38.98,0,89.6,325,MathsAndPhysics,,17/07/2023
+          DFE00001,448.5,#{first_payment.id},33.9,38.98,0,89.6,325,EarlyCareerPayments,,17/07/2023
           DFE00003,9710.83,#{third_payment.id},268.84,1316.63,839,1942,6660.99,EarlyCareerPayments,9710.83,17/07/2023
         CSV
       end

@@ -24,23 +24,29 @@ RSpec.feature "Admin claim filtering" do
   let!(:approved_claim) { create(:claim, :approved, policy: LevellingUpPremiumPayments, assigned_to: mette, decision_creator: mary) }
 
   scenario "the service operator can filter claims by policy" do
-    maths_and_physics_claims = create_list(:claim, 3, :submitted, policy: MathsAndPhysics)
-    student_loan_claims = create_list(:claim, 2, :submitted, policy: StudentLoans)
+    student_loan_claims = create_list(:claim, 2, :submitted, policy: StudentLoans) + student_loans_claims_for_mette + student_loans_claims_for_valentino
+    ecp_claims = early_career_payments_claims_for_mary + early_career_payments_claims_for_mette + early_career_payments_claims_failed_bank_validation
+    lup_claims = lup_claims_unassigned
 
     click_on "View claims"
 
-    expect(page.find("table")).to have_content("Maths and Physics").exactly(3).times
+    expect(page.find("table")).to have_content("ECP").exactly(10).times
     expect(page.find("table")).to have_content("TSLR").exactly(7).times
+    expect(page.find("table")).to have_content("LUP").exactly(2).times
 
     click_on "View claims"
-    select "Maths and Physics", from: "policy"
+    select "Student Loans", from: "policy"
     click_on "Apply filters"
 
-    maths_and_physics_claims.each do |c|
+    student_loan_claims.each do |c|
       expect(page).to have_content(c.reference)
     end
 
-    student_loan_claims.each do |c|
+    ecp_claims.each do |c|
+      expect(page).to_not have_content(c.reference)
+    end
+
+    lup_claims.each do |c|
       expect(page).to_not have_content(c.reference)
     end
   end
