@@ -38,6 +38,15 @@
               </dd>
             </div>
           <% end %>
+
+          <% if current_claim.claims.any? { |c| c.dqt_teacher_record.eligible_itt_subject_for_claim == :none_of_the_above } && current_claim.dqt_teacher_record.degree_names.any? %>
+            <div class="govuk-summary-list__row">
+              <dt class="govuk-summary-list__key"><%= t("questions.degree_subject") %></dt>
+              <dd class="govuk-summary-list__value">
+                <%= dqt_degree_subjects_playback(current_claim) %>
+              </dd>
+            </div>
+          <% end %>
         </dl>
       </div>
     </div>

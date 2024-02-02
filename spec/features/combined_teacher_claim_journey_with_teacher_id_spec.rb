@@ -497,4 +497,44 @@ RSpec.feature "Combined journey with Teacher ID" do
     expect(page).to have_text(I18n.t("early_career_payments.questions.itt_academic_year.qualification.undergraduate_itt"))
     expect(page).not_to have_text(I18n.t("early_career_payments.questions.eligible_degree_subject"))
   end
+
+  scenario "When user is logged in with Teacher ID and the ITT subject is ineligible" do
+    set_mock_auth("1234567", {nino:, date_of_birth:})
+    missing_qts_date_body = {
+      initial_teacher_training: {
+        subject1: "philosophy",
+        subject1_code: "TEST"
+      },
+      qualifications: [
+        {
+          he_subject1: "mathematics"
+        }
+      ]
+    }
+    stub_qualified_teaching_statuses_show(trn:, params: {birthdate: date_of_birth, nino:}, body: missing_qts_date_body)
+
+    visit landing_page_path(EarlyCareerPayments.routing_name)
+    click_on "Start now"
+    click_on "Continue with DfE Identity"
+    choose "Yes"
+    click_on "Continue"
+    choose_school school
+    click_on "Continue"
+    choose "Yes"
+    click_on "Continue"
+    choose "Yes"
+    click_on "Continue"
+    choose "No"
+    click_on "Continue"
+    choose "claim_eligibility_attributes_subject_to_formal_performance_action_false"
+    choose "claim_eligibility_attributes_subject_to_disciplinary_action_false"
+    click_on "Continue"
+
+    # Degree subject is shown because the ITT is ineligible
+    expect(page).to have_text(I18n.t("questions.check_and_confirm_qualification_details"))
+    expect(page).to have_text(I18n.t("questions.itt_subject.undergraduate_itt"))
+    expect(page).to have_text("Philosophy")
+    expect(page).to have_text(I18n.t("questions.degree_subject"))
+    expect(page).to have_text("Mathematics")
+  end
 end
