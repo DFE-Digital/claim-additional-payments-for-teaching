@@ -97,7 +97,7 @@ RSpec.feature "Claims awaiting a decision" do
 
       within("#allocations") do
         expect(page).to have_select("allocate_to_team_member", options: ["Aaron Admin", "Sarah Strawbridge", "Frank Yee", "Abdul Rafiq"])
-        expect(page).to have_select("allocate_to_policy", options: ["All", "Student Loans", "Maths and Physics", "Early-Career Payments", "Levelling Up Premium Payments"])
+        expect(page).to have_select("allocate_to_policy", options: ["All", "Student Loans", "Early-Career Payments", "Levelling Up Premium Payments"])
         expect(page).to have_button("Allocate claims", disabled: false)
         expect(page).to have_button("Unallocate claims")
       end
@@ -175,7 +175,7 @@ RSpec.feature "Claims awaiting a decision" do
 
       within("#allocations") do
         expect(page).to have_select("allocate_to_team_member", options: ["Aaron Admin", "Sarah Strawbridge", "Frank Yee", "Abdul Rafiq"])
-        expect(page).to have_select("allocate_to_policy", options: ["All", "Student Loans", "Maths and Physics", "Early-Career Payments", "Levelling Up Premium Payments"])
+        expect(page).to have_select("allocate_to_policy", options: ["All", "Student Loans", "Early-Career Payments", "Levelling Up Premium Payments"])
         expect(page).to have_button("Allocate claims", disabled: false)
         expect(page).to have_button("Unallocate claims")
       end

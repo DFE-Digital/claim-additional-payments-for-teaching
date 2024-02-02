@@ -1,6 +1,11 @@
 require "rails_helper"
 
 RSpec.describe PayrollRun, type: :model do
+  before do
+    create(:policy_configuration, :student_loans)
+    create(:policy_configuration, :additional_payments)
+  end
+
   let(:user) { create(:dfe_signin_user) }
 
   it "cannot be created when another PayrollRun has occurred in same month" do
@@ -64,16 +69,17 @@ RSpec.describe PayrollRun, type: :model do
         build(:claim, :approved, eligibility: build(:student_loans_eligibility, :eligible, student_loan_repayment_amount: 1500))
       ])
       payment_2 = build(:payment, claims: [
-        build(:claim, :approved, policy: MathsAndPhysics, eligibility: build(:maths_and_physics_eligibility, :eligible))
+        build(:claim, :approved, policy: EarlyCareerPayments, eligibility: build(:early_career_payments_eligibility, :eligible))
       ])
       payment_3 = build(:payment, claims: [
-        build(:claim, :approved, policy: MathsAndPhysics, eligibility: build(:maths_and_physics_eligibility, :eligible))
+        build(:claim, :approved, policy: LevellingUpPremiumPayments, eligibility: build(:levelling_up_premium_payments_eligibility, :eligible))
       ])
 
       payroll_run = PayrollRun.create!(created_by: user, payments: [payment_1, payment_2, payment_3])
 
       expect(payroll_run.number_of_claims_for_policy(StudentLoans)).to eq(1)
-      expect(payroll_run.number_of_claims_for_policy(MathsAndPhysics)).to eq(2)
+      expect(payroll_run.number_of_claims_for_policy(EarlyCareerPayments)).to eq(1)
+      expect(payroll_run.number_of_claims_for_policy(LevellingUpPremiumPayments)).to eq(1)
     end
   end
 
@@ -83,23 +89,24 @@ RSpec.describe PayrollRun, type: :model do
         build(:claim, :approved, eligibility: build(:student_loans_eligibility, :eligible, student_loan_repayment_amount: 1500))
       ])
       payment_2 = build(:payment, claims: [
-        build(:claim, :approved, policy: MathsAndPhysics, eligibility: build(:maths_and_physics_eligibility, :eligible))
+        build(:claim, :approved, policy: EarlyCareerPayments, eligibility: build(:early_career_payments_eligibility, :eligible))
       ])
       payment_3 = build(:payment, claims: [
-        build(:claim, :approved, policy: MathsAndPhysics, eligibility: build(:maths_and_physics_eligibility, :eligible))
+        build(:claim, :approved, policy: EarlyCareerPayments, eligibility: build(:early_career_payments_eligibility, :eligible))
       ])
       payment_4 = build(:payment, claims: [
         build(:claim, :approved, eligibility: build(:student_loans_eligibility, :eligible, student_loan_repayment_amount: 1000))
       ])
       payment_5 = build(:payment, claims: [
-        build(:claim, :approved, policy: MathsAndPhysics, teacher_reference_number: "1234567", bank_sort_code: "123456", bank_account_number: "12345678", eligibility: build(:maths_and_physics_eligibility, :eligible)),
+        build(:claim, :approved, policy: LevellingUpPremiumPayments, teacher_reference_number: "1234567", bank_sort_code: "123456", bank_account_number: "12345678", eligibility: build(:levelling_up_premium_payments_eligibility, :eligible)),
         build(:claim, :approved, teacher_reference_number: "1234567", bank_sort_code: "123456", bank_account_number: "12345678", eligibility: build(:student_loans_eligibility, :eligible, student_loan_repayment_amount: 1000))
       ])
 
       payroll_run = PayrollRun.create!(created_by: user, payments: [payment_1, payment_2, payment_3, payment_4, payment_5])
 
       expect(payroll_run.total_claim_amount_for_policy(StudentLoans)).to eq(3500)
-      expect(payroll_run.total_claim_amount_for_policy(MathsAndPhysics)).to eq(6000)
+      expect(payroll_run.total_claim_amount_for_policy(EarlyCareerPayments)).to eq(4000)
+      expect(payroll_run.total_claim_amount_for_policy(LevellingUpPremiumPayments)).to eq(2000)
     end
   end
 
@@ -130,7 +137,7 @@ RSpec.describe PayrollRun, type: :model do
       let(:matching_claims) do
         [
           create(:claim, :approved, personal_details.merge(policy: StudentLoans)),
-          create(:claim, :approved, personal_details.merge(policy: MathsAndPhysics))
+          create(:claim, :approved, personal_details.merge(policy: EarlyCareerPayments))
         ]
       end
       let(:other_claim) { create(:claim, :approved) }

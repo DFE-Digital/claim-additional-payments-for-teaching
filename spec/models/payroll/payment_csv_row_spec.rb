@@ -1,6 +1,11 @@
 require "rails_helper"
 
 RSpec.describe Payroll::PaymentCsvRow do
+  before do
+    create(:policy_configuration, :student_loans)
+    create(:policy_configuration, :additional_payments)
+  end
+
   subject { described_class.new(payment) }
 
   describe "#to_s" do
@@ -8,7 +13,7 @@ RSpec.describe Payroll::PaymentCsvRow do
     let(:payment_award_amount) { BigDecimal("1234.56") }
     let(:payment) { create(:payment, award_amount: payment_award_amount, claims: claims) }
 
-    let(:personal_details_for_student_loans_and_maths_physics_claim) do
+    let(:personal_details_for_student_loans_and_early_career_payments_claim) do
       {
         national_insurance_number: generate(:national_insurance_number),
         teacher_reference_number: generate(:teacher_reference_number),
@@ -35,8 +40,8 @@ RSpec.describe Payroll::PaymentCsvRow do
 
     let(:claims) do
       [
-        create(:claim, :approved, personal_details_for_student_loans_and_maths_physics_claim.merge(policy: StudentLoans)),
-        create(:claim, :approved, personal_details_for_student_loans_and_maths_physics_claim.merge(policy: MathsAndPhysics))
+        create(:claim, :approved, personal_details_for_student_loans_and_early_career_payments_claim.merge(policy: StudentLoans)),
+        create(:claim, :approved, personal_details_for_student_loans_and_early_career_payments_claim.merge(policy: EarlyCareerPayments))
       ]
     end
 
@@ -47,7 +52,7 @@ RSpec.describe Payroll::PaymentCsvRow do
     # ADDR_LINE_4 - Town *
     # ADDR_LINE_5 - County *
     # ADDR_LINE_6 - Postcode *
-    context "with a StudentLoans and MathsAndPhysics claim" do
+    context "with a StudentLoans and EarlyCareerPayments claim" do
       context "with a four part address" do
         it "generates a csv row formatted to match DfE Payroll address" do
           travel_to Date.new(2019, 9, 26) do

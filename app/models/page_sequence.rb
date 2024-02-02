@@ -43,7 +43,6 @@ class PageSequence
   def has_completed_journey_until?(slug)
     return true if DEAD_END_SLUGS.include?(slug)
     return true if (slug == "address" || claim.postcode.present?) && incomplete_slugs == ["address"]
-    return true if claim.policies.include?(MathsAndPhysics) && incomplete_slugs == ["eligibility-confirmed"]
     incomplete_slugs.empty?
   end
 

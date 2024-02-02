@@ -1,7 +1,6 @@
 module Policies
   POLICIES = [
     StudentLoans,
-    MathsAndPhysics,
     EarlyCareerPayments,
     LevellingUpPremiumPayments
   ].freeze

@@ -3,7 +3,6 @@ require "rails_helper"
 RSpec.describe "Admin claims", type: :request do
   before do
     create(:policy_configuration, :student_loans)
-    create(:policy_configuration, :maths_and_physics)
     create(:policy_configuration, :additional_payments)
     sign_in_as_service_operator
   end
@@ -27,10 +26,10 @@ RSpec.describe "Admin claims", type: :request do
     end
 
     it "can filter by policy" do
-      maths_and_physics_claims = create_list(:claim, 3, :submitted, policy: MathsAndPhysics)
-      get admin_claims_path, params: {policy: "maths-and-physics"}
+      early_career_payments_claims = create_list(:claim, 3, :submitted, policy: EarlyCareerPayments)
+      get admin_claims_path, params: {policy: "early-career-payments"}
 
-      maths_and_physics_claims.each do |c|
+      early_career_payments_claims.each do |c|
         expect(response.body).to include(c.reference)
       end
 
@@ -40,11 +39,11 @@ RSpec.describe "Admin claims", type: :request do
     end
 
     it "returns all claims if a policy does not exist" do
-      maths_and_physics_claims = create_list(:claim, 3, :submitted, policy: MathsAndPhysics)
+      early_career_payments_claims = create_list(:claim, 3, :submitted, policy: EarlyCareerPayments)
 
       get admin_claims_path, params: {policy: "non-existent-policy"}
 
-      maths_and_physics_claims.each do |c|
+      early_career_payments_claims.each do |c|
         expect(response.body).to include(c.reference)
       end
 
@@ -96,7 +95,7 @@ RSpec.describe "Admin claims", type: :request do
   end
 
   # Compatible with claims from each policy
-  [MathsAndPhysics, StudentLoans, EarlyCareerPayments, LevellingUpPremiumPayments].each do |policy|
+  [StudentLoans, EarlyCareerPayments, LevellingUpPremiumPayments].each do |policy|
     context "with a #{policy} claim" do
       describe "claims#show" do
         let(:claim) { create(:claim, :submitted, policy: policy) }

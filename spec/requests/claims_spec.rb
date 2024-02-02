@@ -20,13 +20,13 @@ RSpec.describe "Claims", type: :request do
     end
 
     context "switching claim policies" do
-      before { create(:policy_configuration, :maths_and_physics) }
+      before { create(:policy_configuration, :additional_payments) }
 
       it "redirects to the existing claim interruption page if a claim for another policy is already in progress" do
         start_student_loans_claim
-        get new_claim_path(MathsAndPhysics.routing_name)
+        get new_claim_path(EarlyCareerPayments.routing_name)
 
-        expect(response).to redirect_to(existing_session_path(MathsAndPhysics.routing_name))
+        expect(response).to redirect_to(existing_session_path(EarlyCareerPayments.routing_name))
       end
     end
   end
@@ -53,16 +53,6 @@ RSpec.describe "Claims", type: :request do
     context "student loans claim" do
       it "created for the current academic year and redirects to the next question in the sequence" do
         @policy_configuration = create(:policy_configuration, :student_loans)
-
-        check_claims_created
-        check_claims_eligibility_created
-        check_slug_redirection
-      end
-    end
-
-    context "maths and physics claim" do
-      it "created for the current academic year and redirects to the next question in the sequence" do
-        @policy_configuration = create(:policy_configuration, :maths_and_physics)
 
         check_claims_created
         check_claims_eligibility_created
