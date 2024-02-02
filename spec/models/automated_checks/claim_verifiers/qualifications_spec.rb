@@ -2,10 +2,10 @@ require "rails_helper"
 
 module AutomatedChecks
   module ClaimVerifiers
-    RSpec.describe Qualifications do
-      before do
-        create(:policy_configuration, :maths_and_physics)
+    describe Qualifications do
+      let(:policy_configuration) { create(:policy_configuration, :additional_payments) }
 
+      before do
         if data
           body = data
 
@@ -39,14 +39,14 @@ module AutomatedChecks
           reference: "AB123456",
           surname: "ELIGIBLE",
           teacher_reference_number: "1234567",
-          policy: MathsAndPhysics
+          policy: EarlyCareerPayments
         )
 
         claim.eligibility.update!(
           attributes_for(
-            :maths_and_physics_eligibility,
+            :early_career_payments_eligibility,
             :eligible,
-            initial_teacher_training_subject: :maths
+            qualification: :undergraduate_itt
           )
         )
 
@@ -71,17 +71,13 @@ module AutomatedChecks
           let(:data) do
             {
               initial_teacher_training: {
-                programme_start_date: Date.new(2015, 9, 1),
+                programme_start_date: Date.new(claim_arg.eligibility.itt_academic_year.start_year, 9, 1),
                 subject1: "mathematics",
-                subject1_code: MathsAndPhysics::DqtRecord::ELIGIBLE_MATHS_HECOS_CODES.first,
+                subject1_code: "G100",
                 qualification: "BA"
               },
               qualified_teacher_status: {
-                qts_date: Date.new(
-                  MathsAndPhysics.first_eligible_qts_award_year.start_year,
-                  9,
-                  1
-                )
+                qts_date: Date.new(claim_arg.eligibility.itt_academic_year.start_year, 9, 2)
               }
             }
           end
@@ -129,11 +125,7 @@ module AutomatedChecks
               super().merge(
                 {
                   qualified_teacher_status: {
-                    qts_date: Date.new(
-                      MathsAndPhysics.first_eligible_qts_award_year.start_year - 1,
-                      9,
-                      1
-                    )
+                    qts_date: Date.new(claim_arg.eligibility.itt_academic_year.start_year - 1, 9, 2)
                   }
                 }
               )
@@ -185,10 +177,10 @@ module AutomatedChecks
                       [DQT Qualification] - Ineligible:
                       <pre>
                         ITT subjects: ["mathematics"]
-                        ITT subject codes:  ["100400"]
+                        ITT subject codes:  ["G100"]
                         Degree codes:       []
-                        ITT start date:     2015-09-01
-                        QTS award date:     2014-09-01
+                        ITT start date:     2020-09-01
+                        QTS award date:     2019-09-02
                         Qualification name: BA
                       </pre>
                     HTML
@@ -216,10 +208,10 @@ module AutomatedChecks
                         [DQT Qualification] - Ineligible:
                         <pre>
                           ITT subjects: ["mathematics"]
-                          ITT subject codes:  ["100400"]
+                          ITT subject codes:  ["G100"]
                           Degree codes:       ["100403", "100105"]
-                          ITT start date:     2015-09-01
-                          QTS award date:     2014-09-01
+                          ITT start date:     2020-09-01
+                          QTS award date:     2019-09-02
                           Qualification name: BA
                         </pre>
                       HTML
@@ -304,8 +296,8 @@ module AutomatedChecks
                         ITT subjects: []
                         ITT subject codes:  ["NoCode"]
                         Degree codes:       []
-                        ITT start date:     2015-09-01
-                        QTS award date:     2015-09-01
+                        ITT start date:     2020-09-01
+                        QTS award date:     2020-09-02
                         Qualification name: BA
                       </pre>
                     HTML
@@ -332,7 +324,7 @@ module AutomatedChecks
               create(
                 :claim,
                 :submitted,
-                policy: MathsAndPhysics,
+                policy: EarlyCareerPayments,
                 date_of_birth: Date.new(1990, 8, 23),
                 first_name: "Fred",
                 national_insurance_number: "QQ100000C",
@@ -395,11 +387,7 @@ module AutomatedChecks
                     programme_start_date: super().dig(:initial_teacher_training, :programme_start_date)
                   },
                   qualified_teacher_status: {
-                    qts_date: Date.new(
-                      MathsAndPhysics.first_eligible_qts_award_year.start_year - 1,
-                      9,
-                      1
-                    )
+                    qts_date: Date.new(claim_arg.eligibility.itt_academic_year.start_year - 1, 9, 2)
                   }
                 }
               )
@@ -453,8 +441,8 @@ module AutomatedChecks
                         ITT subjects: []
                         ITT subject codes:  ["NoCode"]
                         Degree codes:       []
-                        ITT start date:     2015-09-01
-                        QTS award date:     2014-09-01
+                        ITT start date:     2020-09-01
+                        QTS award date:     2019-09-02
                         Qualification name: BA
                       </pre>
                     HTML

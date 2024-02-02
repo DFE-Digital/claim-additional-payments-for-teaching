@@ -26,9 +26,9 @@ RSpec.describe "Maintenance Mode", type: :request do
     end
 
     it "still allows access to a different policy" do
-      create(:policy_configuration, :maths_and_physics)
+      create(:policy_configuration, :additional_payments)
 
-      get new_claim_path(MathsAndPhysics.routing_name)
+      get new_claim_path(EarlyCareerPayments.routing_name)
       follow_redirect!
       expect(response).to have_http_status(:ok)
     end

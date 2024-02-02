@@ -149,10 +149,6 @@ class School < ApplicationRecord
     StudentLoans::SchoolEligibility.new(self).eligible_current_school?
   end
 
-  def eligible_for_maths_and_physics?
-    MathsAndPhysics::SchoolEligibility.new(self).eligible_current_school?
-  end
-
   def eligible_for_early_career_payments?
     EarlyCareerPayments::SchoolEligibility.new(self).eligible?
   end

@@ -5,7 +5,6 @@ RSpec.describe "Admin tasks", type: :request do
 
   before do
     create(:policy_configuration, :student_loans)
-    create(:policy_configuration, :maths_and_physics)
     create(:policy_configuration, :additional_payments)
   end
 
@@ -35,7 +34,7 @@ RSpec.describe "Admin tasks", type: :request do
     end
 
     # Compatible with claims from each policy
-    [MathsAndPhysics, StudentLoans, EarlyCareerPayments, LevellingUpPremiumPayments].each do |policy|
+    [StudentLoans, EarlyCareerPayments, LevellingUpPremiumPayments].each do |policy|
       context "with a #{policy} claim" do
         let(:claim) { create(:claim, :submitted, policy: policy) }
 
@@ -57,17 +56,6 @@ RSpec.describe "Admin tasks", type: :request do
             expect(claim.tasks.last.passed?).to eql(true)
             expect(claim.tasks.last.created_by).to eql(@signed_in_user)
             expect(response).to redirect_to(admin_claim_task_path(claim, name: "census_subjects_taught"))
-          end
-
-          it "creates a new passed task and redirects to the next task", if: policy == "MathsAndPhysics" do
-            expect {
-              post admin_claim_tasks_path(claim, params: {task: {name: "qualifications", passed: "true"}})
-            }.to change { Task.count }.by(1)
-
-            expect(claim.tasks.last.name).to eql("qualifications")
-            expect(claim.tasks.last.passed?).to eql(true)
-            expect(claim.tasks.last.created_by).to eql(@signed_in_user)
-            expect(response).to redirect_to(admin_claim_task_path(claim, name: "employment"))
           end
 
           it "creates a new failed task" do

@@ -21,12 +21,6 @@ class PolicyConfiguration < ApplicationRecord
       i18n_namespace: "student_loans"
     },
     {
-      routing_name: "maths-and-physics",
-      slugs: MathsAndPhysics::SlugSequence::SLUGS,
-      policies: [MathsAndPhysics],
-      i18n_namespace: "maths_and_physics"
-    },
-    {
       routing_name: "additional-payments",
       slugs: EarlyCareerPayments::SlugSequence::SLUGS,
       policies: [EarlyCareerPayments, LevellingUpPremiumPayments],

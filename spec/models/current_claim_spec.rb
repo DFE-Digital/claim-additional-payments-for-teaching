@@ -5,7 +5,6 @@ RSpec.describe CurrentClaim, type: :model do
 
   let(:ecp_policy) { EarlyCareerPayments }
   let(:lup_policy) { LevellingUpPremiumPayments }
-  let(:maths_and_physics_policy) { MathsAndPhysics }
   let(:student_loans_policy) { StudentLoans }
 
   let(:school) { create(:school) }
@@ -13,7 +12,6 @@ RSpec.describe CurrentClaim, type: :model do
   let(:ecp_claim) { build(:claim, academic_year: "2022/2023", policy: ecp_policy) }
   let(:lup_claim) { build(:claim, academic_year: "2022/2023", policy: lup_policy) }
 
-  let(:maths_and_physics_claim) { build(:claim, academic_year: "2022/2023", policy: maths_and_physics_policy) }
   let(:student_loans_claim) { build(:claim, academic_year: "2022/2023", policy: student_loans_policy) }
 
   let(:claims) { [ecp_claim, lup_claim] }
@@ -100,15 +98,6 @@ RSpec.describe CurrentClaim, type: :model do
   describe "#for_policy" do
     subject(:for_policy) { current_claim.for_policy(policy) }
 
-    context "maths and physics claim" do
-      let(:policy) { maths_and_physics_policy }
-      let(:claims) { [maths_and_physics_claim] }
-
-      it "returns the single maths and physics claim" do
-        is_expected.to eq(maths_and_physics_claim)
-      end
-    end
-
     context "student loans claim" do
       let(:policy) { student_loans_policy }
       let(:claims) { [student_loans_claim] }
@@ -145,27 +134,6 @@ RSpec.describe CurrentClaim, type: :model do
 
   describe "#main_claim" do
     subject(:main_claim) { current_claim.main_claim }
-
-    context "maths and physics claim" do
-      let(:policy) { maths_and_physics_policy }
-      let(:claims) { [maths_and_physics_claim] }
-
-      context "when no policy is selected" do
-        let(:selected_policy) { nil }
-
-        it "returns the single maths and physics" do
-          is_expected.to eq(maths_and_physics_claim)
-        end
-      end
-
-      context "when maths and physics is selected as a policy" do
-        let(:selected_policy) { maths_and_physics_policy }
-
-        it "returns the single maths and physics claim" do
-          is_expected.to eq(maths_and_physics_claim)
-        end
-      end
-    end
 
     context "student loans claim" do
       let(:policy) { student_loans_policy }

@@ -9,7 +9,6 @@ RSpec.feature "Payroll" do
   scenario "Service operator creates a payroll run" do
     click_on "Payroll"
 
-    create(:claim, :approved, policy: MathsAndPhysics)
     create(:claim, :approved, policy: StudentLoans)
     create(:claim, :approved, policy: StudentLoans)
     create(:claim, :approved, policy: EarlyCareerPayments)
@@ -29,23 +28,22 @@ RSpec.feature "Payroll" do
 
     click_on "Run #{month_name} payroll"
 
-    expect(page).to have_content("Approved claims 5")
+    expect(page).to have_content("Approved claims 4")
     expect(page).to have_content("Top up payments 1")
-    expect(page).to have_content("Total award amount £11,500.00")
+    expect(page).to have_content("Total award amount £9,500.00")
 
     click_on "Confirm and submit"
 
     payroll_run = PayrollRun.order(:created_at).last
 
-    expect(page).to have_content("Approved claims 5")
+    expect(page).to have_content("Approved claims 4")
     expect(page).to have_content("Top ups 1")
     expect(page).to have_content("Created by #{@signed_in_user.full_name}")
-    expect(page).to have_content("Total award amount £11,500.00")
+    expect(page).to have_content("Total award amount £9,500.00")
     expect(page).to have_content("Payroll run created")
     expect(page).to have_field("payroll_run_download_link", with: new_admin_payroll_run_download_url(payroll_run))
 
     expect(page).to have_content("Student Loans 2 £2,000.00")
-    expect(page).to have_content("Maths and Physics 1 £2,000.00")
     expect(page).to have_content("Early-Career Payments 1 £5,000.00")
     expect(page).to have_content("Levelling Up Premium Payments 1 £2,000.00")
     expect(page).to have_content("Levelling Up Premium Payments Top Ups 1 £500.00")
@@ -114,7 +112,7 @@ RSpec.feature "Payroll" do
   end
 
   scenario "Service operator can view a payroll run" do
-    payroll_run = create(:payroll_run, claims_counts: {MathsAndPhysics => 1, StudentLoans => 1})
+    payroll_run = create(:payroll_run, claims_counts: {EarlyCareerPayments => 1, StudentLoans => 1})
 
     click_on "Payroll"
     click_on "View #{I18n.l(payroll_run.created_at.to_date, format: :month_year)} payroll run"
@@ -132,7 +130,7 @@ RSpec.feature "Payroll" do
   end
 
   scenario "Service operator can remove a payment from a payroll run" do
-    payroll_run = create(:payroll_run, claims_counts: {MathsAndPhysics => 1, StudentLoans => 1})
+    payroll_run = create(:payroll_run, claims_counts: {EarlyCareerPayments => 1, StudentLoans => 1})
     payment_to_delete = payroll_run.payments.first
     claim_reference = payment_to_delete.claims.first.reference
 

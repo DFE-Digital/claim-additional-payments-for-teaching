@@ -2,10 +2,10 @@ require "rails_helper"
 
 RSpec.describe "Admin decisions", type: :request do
   context "when signed in as a service operator" do
-    let(:claim) { create(:claim, :submitted, policy: MathsAndPhysics) }
+    let(:claim) { create(:claim, :submitted, policy: EarlyCareerPayments) }
 
     before do
-      create(:policy_configuration, :maths_and_physics)
+      create(:policy_configuration, :early_career_payments)
       @signed_in_user = sign_in_as_service_operator
     end
 
@@ -21,6 +21,7 @@ RSpec.describe "Admin decisions", type: :request do
         before do
           create(:task, name: "identity_confirmation", claim: claim)
           create(:task, name: "qualifications", claim: claim)
+          create(:task, name: "induction_confirmation", claim: claim)
           create(:task, name: "census_subjects_taught", claim: claim)
           create(:task, name: "employment", claim: claim)
         end
@@ -35,7 +36,7 @@ RSpec.describe "Admin decisions", type: :request do
 
       context "when some tasks have not been completed" do
         let(:claim) {
-          create(:claim, :submitted, policy: MathsAndPhysics, tasks: [
+          create(:claim, :submitted, policy: EarlyCareerPayments, tasks: [
             build(:task, name: "qualifications")
           ])
         }
@@ -51,7 +52,7 @@ RSpec.describe "Admin decisions", type: :request do
       end
 
       context "when a decision has already been made" do
-        let(:claim) { create(:claim, :approved, policy: MathsAndPhysics) }
+        let(:claim) { create(:claim, :approved, policy: EarlyCareerPayments) }
 
         it "redirects and shows an error" do
           get new_admin_claim_decision_path(claim)
@@ -164,7 +165,7 @@ RSpec.describe "Admin decisions", type: :request do
       end
 
       context "when a decision has already been made" do
-        let(:claim) { create(:claim, :approved, policy: MathsAndPhysics) }
+        let(:claim) { create(:claim, :approved, policy: EarlyCareerPayments) }
 
         it "shows an error" do
           post admin_claim_decisions_path(claim_id: claim.id, decision: {result: "approved"})
@@ -176,7 +177,7 @@ RSpec.describe "Admin decisions", type: :request do
       end
 
       context "when a QA decision has already been made" do
-        let(:claim) { create(:claim, :approved, :qa_completed, policy: MathsAndPhysics) }
+        let(:claim) { create(:claim, :approved, :qa_completed, policy: EarlyCareerPayments) }
 
         it "shows an error" do
           post admin_claim_decisions_path(qa: true, claim_id: claim.id, decision: {result: "approved"})
@@ -188,7 +189,7 @@ RSpec.describe "Admin decisions", type: :request do
       end
 
       context "when the claim is missing a payroll gender" do
-        let(:claim) { create(:claim, :submitted, payroll_gender: :dont_know, policy: MathsAndPhysics) }
+        let(:claim) { create(:claim, :submitted, payroll_gender: :dont_know, policy: EarlyCareerPayments) }
 
         before do
           post admin_claim_decisions_path(claim_id: claim.id, decision: {result: result, rejected_reasons_ineligible_subject: "1"})
@@ -226,8 +227,8 @@ RSpec.describe "Admin decisions", type: :request do
             building_society_roll_number: nil
           }
         end
-        let(:claim) { create(:claim, :submitted, personal_details.merge(bank_sort_code: "582939", bank_account_number: "74727752", policy: MathsAndPhysics)) }
-        let!(:approved_claim) { create(:claim, :approved, personal_details.merge(bank_sort_code: "112233", bank_account_number: "29482823", policy: MathsAndPhysics)) }
+        let(:claim) { create(:claim, :submitted, personal_details.merge(bank_sort_code: "582939", bank_account_number: "74727752", policy: EarlyCareerPayments)) }
+        let!(:approved_claim) { create(:claim, :approved, personal_details.merge(bank_sort_code: "112233", bank_account_number: "29482823", policy: EarlyCareerPayments)) }
 
         before do
           post admin_claim_decisions_path(claim_id: claim.id, decision: {result: result, rejected_reasons_ineligible_subject: "1"})

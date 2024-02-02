@@ -107,7 +107,7 @@ RSpec.describe PaymentMailer, type: :mailer do
         }
         [
           build(:claim, :approved, personal_details.merge(eligibility: student_loans_eligibility)),
-          build(:claim, :approved, personal_details.merge(policy: MathsAndPhysics))
+          build(:claim, :approved, personal_details.merge(policy: EarlyCareerPayments))
         ]
       end
       let(:mail) { PaymentMailer.confirmation(payment) }
@@ -139,7 +139,7 @@ RSpec.describe PaymentMailer, type: :mailer do
       end
 
       it "includes the amount claimed for each claim" do
-        expect(mail.body.encoded).to include("Payment for teaching maths or physics: £2,000.00")
+        expect(mail.body.encoded).to include("Additional payment for teaching: £2,000.00")
         expect(mail.body.encoded).to include("Student loan repayments you’ve claimed back: £500.00")
       end
 

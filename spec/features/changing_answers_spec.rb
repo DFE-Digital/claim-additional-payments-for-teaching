@@ -5,32 +5,11 @@ RSpec.feature "Changing the answers on a submittable claim" do
 
   before do
     create(:policy_configuration, :student_loans)
-    create(:policy_configuration, :maths_and_physics)
     create(:policy_configuration, :additional_payments)
   end
 
-  let(:maths_and_physics_school) { create(:school, :maths_and_physics_eligible) }
   let(:student_loans_school) { create(:school, :student_loans_eligible) }
   let(:ecp_school) { create(:school, :early_career_payments_eligible) }
-
-  scenario "Teacher changes an answer which is not a dependency of any of the other answers they've given, remaining eligible" do
-    claim = start_maths_and_physics_claim
-    claim.update!(attributes_for(:claim, :submittable))
-    claim.eligibility.update!(attributes_for(:maths_and_physics_eligibility, :eligible, initial_teacher_training_subject: "maths", current_school_id: maths_and_physics_school.id))
-
-    jump_to_claim_journey_page(claim, "check-your-answers")
-
-    find("a[href='#{claim_path(MathsAndPhysics.routing_name, "initial-teacher-training-subject")}']").click
-
-    expect(find("#claim_eligibility_attributes_initial_teacher_training_subject_maths").checked?).to eq(true)
-
-    choose "Physics"
-    click_on "Continue"
-
-    expect(claim.eligibility.reload.initial_teacher_training_subject).to eq("physics")
-
-    expect(current_path).to eq(claim_path(MathsAndPhysics.routing_name, "check-your-answers"))
-  end
 
   scenario "Teacher changes an answer which is not a dependency of any of the other answers they've given, becoming ineligible" do
     claim = start_student_loans_claim
@@ -110,25 +89,6 @@ RSpec.feature "Changing the answers on a submittable claim" do
 
     expect(page).to have_text("You’re not eligible")
     expect(page).to have_text("You can only get this payment if you spent less than half your working hours performing leadership duties between #{StudentLoans.current_financial_year}.")
-  end
-
-  scenario "Teacher edits but does not change an answer which is a dependency of some of the subsequent answers they've given" do
-    claim = start_maths_and_physics_claim
-    claim.update!(attributes_for(:claim, :submittable))
-    claim.eligibility.update!(attributes_for(:maths_and_physics_eligibility, :eligible, employed_as_supply_teacher: true, has_entire_term_contract: true, employed_directly: true, current_school_id: maths_and_physics_school.id))
-    jump_to_claim_journey_page(claim, "check-your-answers")
-
-    find("a[href='#{claim_path(MathsAndPhysics.routing_name, "supply-teacher")}']").click
-
-    expect(find("#claim_eligibility_attributes_employed_as_supply_teacher_true").checked?).to eq(true)
-
-    click_on "Continue"
-
-    expect(claim.eligibility.reload.employed_as_supply_teacher).to eq(true)
-    expect(claim.eligibility.has_entire_term_contract).to eq(true)
-    expect(claim.eligibility.employed_directly).to eq(true)
-
-    expect(current_path).to eq(claim_path(MathsAndPhysics.routing_name, "check-your-answers"))
   end
 
   scenario "when changing the student loan repayment amount the user can change answer and it preserves two decimal places" do
