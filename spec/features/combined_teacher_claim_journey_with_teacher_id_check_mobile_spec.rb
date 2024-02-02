@@ -158,7 +158,7 @@ RSpec.feature "Combined journey with Teacher ID mobile check" do
     click_on("Apply now")
 
     # - How will we use the information you provide
-   expect(page).to have_text("How we will use the information you provide")
+    expect(page).to have_text("How we will use the information you provide")
     click_on "Continue"
 
     # - What is your home address
