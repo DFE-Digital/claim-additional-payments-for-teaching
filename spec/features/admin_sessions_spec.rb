@@ -6,12 +6,11 @@ RSpec.feature "Admin session management" do
 
     expect(page).to have_link("Sign out")
     expect(current_path).to eql(admin_root_path)
-  end
 
-  scenario "A signed in user can sign out" do
-    sign_in_as_service_operator
+    # - A signed in user can sign out
 
     click_on "Sign out"
+
     expect(page).to have_content("You've been signed out")
     expect(current_path).to eql(admin_sign_in_path)
   end

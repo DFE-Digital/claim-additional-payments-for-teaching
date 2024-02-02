@@ -6,7 +6,7 @@ RSpec.feature "Current school with closed claim school" do
   before { create(:policy_configuration, :student_loans) }
 
   scenario "Still teaching only has two options" do
-    start_student_loans_claim
+    claim = start_student_loans_claim
     choose_school claim_school
     check "Physics"
     click_on "Continue"
@@ -15,14 +15,8 @@ RSpec.feature "Current school with closed claim school" do
     expect(page).to have_text("No")
     expect(page).not_to have_text("Yes, at #{claim_school.name}")
     expect(page).not_to have_text("Yes, at another school")
-  end
 
-  scenario "Choosing yes to still teaching prompts to search for a school" do
-    claim = start_student_loans_claim
-    choose_school claim_school
-    check "Physics"
-    click_on "Continue"
-
+    # - Choosing yes to still teaching prompts to search for a school
     choose_still_teaching "Yes"
 
     expect(claim.eligibility.employment_status).to eq("different_school")
