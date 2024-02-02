@@ -110,6 +110,8 @@ group :development do
   gem "spring-watcher-listen", "~> 2.1.0"
 
   gem "foreman"
+
+  gem "lefthook"
 end
 
 group :test do

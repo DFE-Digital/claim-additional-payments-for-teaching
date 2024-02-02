@@ -202,6 +202,11 @@ Code linting is performed using:
 - [ShellCheck](https://www.shellcheck.net/) for shell scripts
 - [Prettier](https://prettier.io/) for everything else
 
+**Optionally, enable automatic linting checks on pre-commit with
+[lefthook](https://github.com/evilmartians/lefthook)**
+
+> `lefthook install`
+
 ### N+1 query detection
 
 [Bullet](https://github.com/flyerhzm/bullet) runs around each spec. If it
