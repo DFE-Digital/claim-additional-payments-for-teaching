@@ -20,7 +20,8 @@ RSpec.feature "Teacher Identity Sign in" do
     set_mock_auth(nil)
   end
 
-  scenario "Teacher makes claim for 'Early-Career Payments' by logging in with teacher_id and selects yes to details confirm" do
+  scenario "Teacher makes claim for 'Early-Career Payments' by logging in with teacher_id" do
+    # - Teacher selects yes to details confirm
     visit landing_page_path(EarlyCareerPayments.routing_name)
 
     # - Landing (start)
@@ -43,21 +44,9 @@ RSpec.feature "Teacher Identity Sign in" do
     # check the teacher_id_user_info details are saved to the claim
     claim = Claim.order(:created_at).last
     expect(claim.teacher_id_user_info).to eq({"trn" => "1234567", "birthdate" => "1981-01-01", "email" => "kelsie.oberbrunner@example.com", "phone_number" => "01234567890", "given_name" => "Kelsie", "family_name" => "Oberbrunner", "ni_number" => "AB123123A", "trn_match_ni_number" => "True"})
-  end
 
-  scenario "Teacher makes claim for 'Early-Career Payments' by logging in with teacher_id and selects no to details confirm" do
-    visit landing_page_path(EarlyCareerPayments.routing_name)
-
-    # - Landing (start)
-    expect(page).to have_text(I18n.t("early_career_payments.landing_page"))
-    click_on "Start now"
-
-    expect(page).to have_text("Use DfE Identity to sign in")
-    click_on "Continue with DfE Identity"
-
-    # - Teacher details page
-    expect(page).to have_text(I18n.t("questions.check_and_confirm_details"))
-    expect(page).to have_text(I18n.t("questions.details_correct"))
+    # - Teacher selects no to details confirm
+    click_on "Back"
 
     choose "No"
     click_on "Continue"

@@ -170,7 +170,7 @@ class CurrentClaim
   private
 
   def single_claim?
-    claims.count == 1
+    claims.one?
   end
 
   def ecp_or_lupp_claims?
