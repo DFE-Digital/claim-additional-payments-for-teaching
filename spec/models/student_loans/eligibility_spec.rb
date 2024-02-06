@@ -195,7 +195,6 @@ RSpec.describe StudentLoans::Eligibility, type: :model do
     end
 
     it "resets the current_school_id to nil when the value of claim_school changes" do
-      eligibility.claim_school = eligibility.claim_school
       expect { eligibility.reset_dependent_answers }.not_to change { eligibility.attributes }
 
       eligibility.claim_school = eligibility.current_school

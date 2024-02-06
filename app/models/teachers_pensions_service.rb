@@ -62,6 +62,6 @@ class TeachersPensionsService < ApplicationRecord
 
   def self.school_for_tps_record(tps_record)
     # The TPS data is labelled 'URN' but is actually the DfE establishment number
-    School.open.joins(:local_authority).find_by(establishment_number: tps_record.school_urn, local_authority: {code: tps_record.la_urn})
+    School.joins(:local_authority).find_by(establishment_number: tps_record.school_urn, local_authority: {code: tps_record.la_urn})
   end
 end

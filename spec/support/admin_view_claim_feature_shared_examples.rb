@@ -13,7 +13,7 @@ RSpec.shared_examples "Admin View Claim Feature" do |policy|
   }
 
   let!(:claim_logged_in_with_tid) {
-    eligibility = create("#{policy.to_s.underscore}_eligibility".to_sym, :eligible)
+    eligibility = create(:"#{policy.to_s.underscore}_eligibility", :eligible)
     create(
       :claim,
       :submitted,
