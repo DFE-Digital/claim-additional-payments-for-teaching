@@ -42,7 +42,7 @@ module LevellingUpPremiumPayments
     def eligible_itt_subject_for_claim
       return nil if itt_subjects.empty?
 
-      (JourneySubjectEligibilityChecker.fixed_lup_subject_symbols & itt_subjects.map(&:to_sym)).first || :none_of_the_above
+      ELIGIBLE_ITT_SUBJECTS.detect { |k, v| !(v & itt_subjects).empty? }&.first || :none_of_the_above
     end
 
     def itt_academic_year_for_claim

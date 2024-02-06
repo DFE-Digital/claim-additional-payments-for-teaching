@@ -300,7 +300,7 @@ RSpec.describe LevellingUpPremiumPayments::DqtRecord do
   end
 
   describe "#eligible_itt_subject_for_claim" do
-    let(:eligible_subjects) { [:mathematics] }
+    let(:eligible_subjects) { [:computing] }
 
     before do
       allow(JourneySubjectEligibilityChecker).to receive(:fixed_lup_subject_symbols)
@@ -311,19 +311,19 @@ RSpec.describe LevellingUpPremiumPayments::DqtRecord do
     let(:claim_academic_year) { AcademicYear.new(2023) }
 
     context "when the record returns a valid subject" do
-      let(:itt_subjects) { ["mathematics"] }
+      let(:itt_subjects) { ["computer science"] }
 
       it "returns the valid subject" do
-        expect(dqt_record.eligible_itt_subject_for_claim).to eq(:mathematics)
+        expect(dqt_record.eligible_itt_subject_for_claim).to eq(:computing)
       end
     end
 
     context "when the record returns multiple valid subjects" do
-      let(:itt_subjects) { ["mathematics", "physics"] }
+      let(:itt_subjects) { ["Applied Mathematics", "Chemical Physics"] }
       let(:eligible_subjects) { [:physics, :mathematics, :computing] }
 
       it "returns the first valid subject" do
-        expect(dqt_record.eligible_itt_subject_for_claim).to eq(:physics)
+        expect(dqt_record.eligible_itt_subject_for_claim).to eq(:mathematics)
       end
     end
 
