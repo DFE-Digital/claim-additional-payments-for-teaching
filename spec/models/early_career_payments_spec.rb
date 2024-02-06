@@ -1,6 +1,8 @@
 require "rails_helper"
 
 RSpec.describe EarlyCareerPayments, type: :model do
+  it { expect(subject.const_defined?(:VERIFIERS)).to eq(true) }
+
   specify {
     expect(subject).to have_attributes(routing_name: "additional-payments",
       short_name: "Early-Career Payments",

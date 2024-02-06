@@ -10,6 +10,8 @@
 module MathsAndPhysics
   extend self
 
+  include AutomatedChecks::ClaimVerifiers::Shared
+
   ELIGIBLE_CAREER_LENGTH = 5
 
   def start_page_url

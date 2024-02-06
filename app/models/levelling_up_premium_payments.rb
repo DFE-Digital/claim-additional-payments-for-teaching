@@ -1,6 +1,8 @@
 module LevellingUpPremiumPayments
   extend self
 
+  include AutomatedChecks::ClaimVerifiers::Shared
+
   def short_name
     I18n.t("levelling_up_premium_payments.policy_short_name")
   end

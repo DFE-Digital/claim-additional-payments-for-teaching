@@ -10,6 +10,8 @@
 module EarlyCareerPayments
   extend self
 
+  include AutomatedChecks::ClaimVerifiers::Shared
+
   POLICY_START_YEAR = AcademicYear.new(2021).freeze
 
   def start_page_url

@@ -3,6 +3,8 @@ require "rails_helper"
 RSpec.describe StudentLoans, type: :model do
   let!(:policy_configuration) { create(:policy_configuration, :student_loans) }
 
+  it { expect(subject.const_defined?(:VERIFIERS)).to eq(true) }
+
   describe ".first_eligible_qts_award_year" do
     it "returns 11 years prior to the currently configured academic year, with a floor of the 2013/2014 academic year" do
       policy_configuration.update!(current_academic_year: "2031/2032")
