@@ -49,7 +49,7 @@ class Decision < ApplicationRecord
 
   def rejected_reasons_hash
     REJECTED_REASONS.reduce({}) do |memo, reason|
-      memo.merge("reason_#{reason}".to_sym => public_send("rejected_reasons_#{reason}".to_sym) || "0")
+      memo.merge("reason_#{reason}": public_send(:"rejected_reasons_#{reason}") || "0")
     end
   end
 
@@ -93,7 +93,7 @@ class Decision < ApplicationRecord
 
   def clear_rejected_reasons
     REJECTED_REASONS.each do |r|
-      send("rejected_reasons_#{r}=".to_sym, nil)
+      send(:"rejected_reasons_#{r}=", nil)
     end
   end
 end

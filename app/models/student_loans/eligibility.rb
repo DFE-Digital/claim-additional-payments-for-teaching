@@ -69,7 +69,7 @@ module StudentLoans
     end
 
     def subjects_taught
-      SUBJECT_ATTRIBUTES.select { |attribute_name| public_send("#{attribute_name}?") }
+      SUBJECT_ATTRIBUTES.select { |attribute_name| public_send(:"#{attribute_name}?") }
     end
 
     def ineligible?
@@ -89,7 +89,7 @@ module StudentLoans
         :ineligible_current_school,
         :not_taught_eligible_subjects,
         :not_taught_enough
-      ].find { |eligibility_check| send("#{eligibility_check}?") }
+      ].find { |eligibility_check| send(:"#{eligibility_check}?") }
     end
 
     def award_amount

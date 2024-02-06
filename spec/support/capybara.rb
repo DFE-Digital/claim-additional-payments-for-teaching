@@ -7,7 +7,7 @@ end
 
 view_mode = (ENV.fetch("VIEW", false) == "true") ? :chrome : :headless_chrome
 args = %w[disable-dev-shm-usage no-sandbox window-size=1280x1280]
-args = args << "headless" unless view_mode == :chrome
+args <<= "headless" unless view_mode == :chrome
 
 Capybara.register_driver view_mode do |app|
   Capybara::Selenium::Driver.new(

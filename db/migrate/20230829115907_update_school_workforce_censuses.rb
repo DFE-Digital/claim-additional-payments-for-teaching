@@ -8,7 +8,7 @@ class UpdateSchoolWorkforceCensuses < ActiveRecord::Migration[7.0]
     add_column :school_workforce_censuses, :hours_taught, :integer
 
     (1..15).each do |n|
-      remove_column :school_workforce_censuses, "subject_#{n}".to_sym, :string
+      remove_column :school_workforce_censuses, :"subject_#{n}", :string
     end
 
     add_index :school_workforce_censuses, :teacher_reference_number

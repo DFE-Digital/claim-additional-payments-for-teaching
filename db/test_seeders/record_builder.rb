@@ -77,7 +77,7 @@ class RecordBuilder
   end
 
   def first_name(gender)
-    Faker::Name.send("#{gender}_first_name")
+    Faker::Name.send(:"#{gender}_first_name")
   end
 
   def surname

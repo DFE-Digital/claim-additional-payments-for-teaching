@@ -67,6 +67,6 @@ class Payment < ApplicationRecord
 
   # NOTE: Optimisation - purposely not using .order(:submitted_at) causing N+1 queries
   def claim_for_personal_details
-    @claim_for_personal_details ||= (claims.max_by { |c| c.submitted_at } || topups.first.claim)
+    @claim_for_personal_details ||= claims.max_by { |c| c.submitted_at } || topups.first.claim
   end
 end

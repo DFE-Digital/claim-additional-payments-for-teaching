@@ -3,7 +3,7 @@ RSpec.shared_examples "Admin View Claim Feature" do |policy|
   let(:academic_year) { policy_configuration.current_academic_year }
 
   let!(:claim) {
-    eligibility = create("#{policy.to_s.underscore}_eligibility".to_sym, :eligible)
+    eligibility = create(:"#{policy.to_s.underscore}_eligibility", :eligible)
     create(
       :claim,
       :submitted,
@@ -24,7 +24,7 @@ RSpec.shared_examples "Admin View Claim Feature" do |policy|
   }
 
   let!(:multiple_claim) {
-    eligibility = create("#{policy.to_s.underscore}_eligibility".to_sym, :eligible)
+    eligibility = create(:"#{policy.to_s.underscore}_eligibility", :eligible)
     create(
       :claim,
       :submitted,
@@ -34,7 +34,7 @@ RSpec.shared_examples "Admin View Claim Feature" do |policy|
   }
 
   let!(:similar_claim) {
-    eligibility = create("#{policy.to_s.underscore}_eligibility".to_sym, :eligible)
+    eligibility = create(:"#{policy.to_s.underscore}_eligibility", :eligible)
     create(
       :claim,
       :submitted,
@@ -45,7 +45,7 @@ RSpec.shared_examples "Admin View Claim Feature" do |policy|
   }
 
   let!(:approved_awaiting_payroll_claim) {
-    eligibility = create("#{policy.to_s.underscore}_eligibility".to_sym, :eligible)
+    eligibility = create(:"#{policy.to_s.underscore}_eligibility", :eligible)
     create(
       :claim,
       :payrollable,
@@ -55,7 +55,7 @@ RSpec.shared_examples "Admin View Claim Feature" do |policy|
   }
 
   let!(:approved_paid_claim) {
-    eligibility = create("#{policy.to_s.underscore}_eligibility".to_sym, :eligible)
+    eligibility = create(:"#{policy.to_s.underscore}_eligibility", :eligible)
     create(
       :claim,
       :approved,
@@ -65,7 +65,7 @@ RSpec.shared_examples "Admin View Claim Feature" do |policy|
   }
 
   let!(:rejected_claim) {
-    eligibility = create("#{policy.to_s.underscore}_eligibility".to_sym, :eligible)
+    eligibility = create(:"#{policy.to_s.underscore}_eligibility", :eligible)
     create(
       :claim,
       :rejected,

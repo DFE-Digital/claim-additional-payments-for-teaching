@@ -6,7 +6,7 @@ FactoryBot.define do
   factory :claim do
     transient do
       policy { StudentLoans }
-      eligibility_factory { "#{policy.to_s.underscore}_eligibility".to_sym }
+      eligibility_factory { :"#{policy.to_s.underscore}_eligibility" }
       eligibility_trait { nil }
       eligibility_attributes { nil }
       decision_creator { nil }
