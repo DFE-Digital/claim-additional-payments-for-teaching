@@ -110,8 +110,9 @@ en:
     itt_subject:
       postgraduate_itt: Subject you did your postgraduate initial teacher training (ITT) in
       undergraduate_itt: Subject you did your undergraduate initial teacher training (ITT) in
-      assessment_only: Subject you did you teaching qualification in
-      overseas_recognition: Subject you did you teaching qualification in
+      assessment_only: Subject you did your teaching qualification in
+      overseas_recognition: Subject you did your teaching qualification in
+    degree_subject: Subject you did your degree in
     select_yes_confirm: By selecting yes you are confirming that, to the best of your knowledge, the details above are correct.
     continue: Continue
     radio_yes: "Yes"

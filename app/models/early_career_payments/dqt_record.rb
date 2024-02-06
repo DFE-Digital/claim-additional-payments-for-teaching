@@ -9,6 +9,7 @@ module EarlyCareerPayments
       :itt_subject_codes,
       :itt_start_date,
       :degree_codes,
+      :degree_names,
       :qualification_name,
       :induction_start_date,
       :induction_completion_date,

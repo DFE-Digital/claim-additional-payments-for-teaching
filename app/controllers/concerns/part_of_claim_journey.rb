@@ -50,7 +50,7 @@ module PartOfClaimJourney
     return unless session.key?(:claim_id)
 
     selected_policy = session[:selected_claim_policy].presence&.constantize
-    claims = Claim.where(id: session[:claim_id])
+    claims = Claim.includes(:eligibility).where(id: session[:claim_id])
     claims.present? ? CurrentClaim.new(claims: claims, selected_policy: selected_policy) : nil
   end
 
