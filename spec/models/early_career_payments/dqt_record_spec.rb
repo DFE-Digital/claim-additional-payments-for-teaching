@@ -2193,7 +2193,7 @@ RSpec.describe EarlyCareerPayments::DqtRecord do
       let(:eligible_subjects) { [:mathematics] }
 
       context "when the record returns a valid subject" do
-        let(:itt_subjects) { ["mathematics"] }
+        let(:itt_subjects) { ["Applied Mathematics"] }
 
         it "returns the valid subject" do
           expect(dqt_record.eligible_itt_subject_for_claim).to eq(:mathematics)
@@ -2201,7 +2201,7 @@ RSpec.describe EarlyCareerPayments::DqtRecord do
       end
 
       context "when the record returns multiple valid subjects" do
-        let(:itt_subjects) { ["mathematics", "physics"] }
+        let(:itt_subjects) { ["Applied Mathematics", "Applied Physics"] }
         let(:eligible_subjects) { [:physics, :mathematics, :computing] }
 
         it "returns the first valid subject" do
@@ -2218,7 +2218,7 @@ RSpec.describe EarlyCareerPayments::DqtRecord do
       end
 
       context "when the record returns valid and invalid subjects" do
-        let(:itt_subjects) { ["invalid", "mathematics", "test", "physics"] }
+        let(:itt_subjects) { ["invalid", "Applied Mathematics", "test", "Applied Physics"] }
 
         it "returns the first valid subject" do
           expect(dqt_record.eligible_itt_subject_for_claim).to eq(:mathematics)
@@ -2229,19 +2229,19 @@ RSpec.describe EarlyCareerPayments::DqtRecord do
         let(:itt_subjects) { nil }
 
         it "returns nil" do
-          expect(dqt_record.eligible_itt_subject_for_claim).to be_nil
+          expect(dqt_record.eligible_itt_subject_for_claim).to eq(:none_of_the_above)
         end
       end
 
       context "when the record has no ITT year" do
         let(:record_qts_date) { nil }
-        let(:itt_subjects) { ["mathematics"] }
+        let(:itt_subjects) { ["Applied Mathematics"] }
 
         context "when the Claim has no ITT year" do
           let(:itt_academic_year) { nil }
 
           it "returns nil" do
-            expect(dqt_record.eligible_itt_subject_for_claim).to be_nil
+            expect(dqt_record.eligible_itt_subject_for_claim).to eq(:none_of_the_above)
           end
         end
 
