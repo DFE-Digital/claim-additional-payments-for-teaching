@@ -6,10 +6,8 @@ module AutomatedChecks
       VERIFIERS = [
         AutomatedChecks::ClaimVerifiers::Identity,
         AutomatedChecks::ClaimVerifiers::Qualifications,
-        AutomatedChecks::ClaimVerifiers::Induction,
         AutomatedChecks::ClaimVerifiers::CensusSubjectsTaught,
-        AutomatedChecks::ClaimVerifiers::Employment,
-        AutomatedChecks::ClaimVerifiers::StudentLoanAmount
+        AutomatedChecks::ClaimVerifiers::Employment
       ].freeze
     end
   end

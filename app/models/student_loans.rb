@@ -10,7 +10,13 @@
 module StudentLoans
   extend self
 
-  include AutomatedChecks::ClaimVerifiers::Shared
+  VERIFIERS = [
+    AutomatedChecks::ClaimVerifiers::Identity,
+    AutomatedChecks::ClaimVerifiers::Qualifications,
+    AutomatedChecks::ClaimVerifiers::CensusSubjectsTaught,
+    AutomatedChecks::ClaimVerifiers::Employment,
+    AutomatedChecks::ClaimVerifiers::StudentLoanAmount
+  ].freeze
 
   POLICY_START_YEAR = AcademicYear.new(2013).freeze
   POLICY_END_YEAR = AcademicYear.new(2020).freeze

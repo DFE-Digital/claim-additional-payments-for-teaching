@@ -52,7 +52,6 @@ RSpec.describe AutomatedChecks::ClaimVerifier do
             double(perform: Task.new),
             double(perform: Task.new),
             double(perform: Task.new),
-            double(perform: Task.new),
             double(perform: Object.new),
             double(perform: nil)
           ]
@@ -64,7 +63,7 @@ RSpec.describe AutomatedChecks::ClaimVerifier do
           end
         end
 
-        it { is_expected.to eq(4) }
+        it { is_expected.to eq(3) }
 
         it "performs verifications based on the Policy::VERIFIERS" do
           perform
@@ -76,12 +75,6 @@ RSpec.describe AutomatedChecks::ClaimVerifier do
           )
 
           expect(AutomatedChecks::ClaimVerifiers::Qualifications).to have_received(:new).with(
-            claim:,
-            dqt_teacher_status:,
-            admin_user:
-          )
-
-          expect(AutomatedChecks::ClaimVerifiers::Induction).to have_received(:new).with(
             claim:,
             dqt_teacher_status:,
             admin_user:

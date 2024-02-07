@@ -10,7 +10,13 @@
 module EarlyCareerPayments
   extend self
 
-  include AutomatedChecks::ClaimVerifiers::Shared
+  VERIFIERS = [
+    AutomatedChecks::ClaimVerifiers::Identity,
+    AutomatedChecks::ClaimVerifiers::Qualifications,
+    AutomatedChecks::ClaimVerifiers::Induction,
+    AutomatedChecks::ClaimVerifiers::CensusSubjectsTaught,
+    AutomatedChecks::ClaimVerifiers::Employment
+  ].freeze
 
   POLICY_START_YEAR = AcademicYear.new(2021).freeze
 

@@ -1,7 +1,14 @@
 require "rails_helper"
 
 RSpec.describe LevellingUpPremiumPayments, type: :model do
-  it { expect(subject.const_defined?(:VERIFIERS)).to eq(true) }
+  it do
+    expect(subject::VERIFIERS).to eq([
+      AutomatedChecks::ClaimVerifiers::Identity,
+      AutomatedChecks::ClaimVerifiers::Qualifications,
+      AutomatedChecks::ClaimVerifiers::CensusSubjectsTaught,
+      AutomatedChecks::ClaimVerifiers::Employment
+    ])
+  end
 
   specify {
     expect(subject).to have_attributes(routing_name: "additional-payments",
