@@ -36,11 +36,9 @@ module EarlyCareerPayments
 
     # TODO: May need to prioritise subject chosen by highest award amount?
     def eligible_itt_subject_for_claim
-      raise if !itt_subject_groups || itt_subject_groups.empty?
-
       year = itt_year || claim.eligibility.itt_academic_year # The user may have supplied this manually if it was missing from the DQT record
 
-      raise unless year
+      return :none_of_the_above if itt_subject_groups.empty? || !year
 
       itt_subject_checker = JourneySubjectEligibilityChecker.new(claim_year: claim.policy.configuration.current_academic_year, itt_year: year)
 
