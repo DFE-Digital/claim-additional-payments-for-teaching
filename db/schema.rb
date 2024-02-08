@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_01_22_114800) do
+ActiveRecord::Schema[7.0].define(version: 2024_02_01_104539) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_trgm"
   enable_extension "pgcrypto"
@@ -60,9 +60,9 @@ ActiveRecord::Schema[7.0].define(version: 2024_01_22_114800) do
     t.integer "student_loan_country"
     t.integer "student_loan_courses"
     t.integer "student_loan_start_date"
-    t.integer "student_loan_plan"
     t.string "eligibility_type"
     t.uuid "eligibility_id"
+    t.string "student_loan_plan"
     t.integer "payroll_gender"
     t.text "govuk_verify_fields", default: [], array: true
     t.string "first_name", limit: 100

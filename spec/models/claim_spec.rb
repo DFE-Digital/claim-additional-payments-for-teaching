@@ -109,8 +109,9 @@ RSpec.describe Claim, type: :model do
   context "that has a student loan plan" do
     it "validates the plan" do
       expect(build(:claim, student_loan_plan: StudentLoan::PLAN_1)).to be_valid
+      expect(build(:claim, student_loan_plan: nil)).to be_valid
 
-      expect { build(:claim, student_loan_plan: "plan_42") }.to raise_error(ArgumentError)
+      expect(build(:claim, student_loan_plan: "plan_42")).not_to be_valid
     end
   end
 
