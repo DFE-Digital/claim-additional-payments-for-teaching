@@ -2,9 +2,9 @@
   "name": "dfe-teachers-payment-service",
   "private": true,
   "dependencies": {
-    "a11y-dialog": "^5.5.0",
+    "a11y-dialog": "^8.0.4",
     "accessible-autocomplete": "^2.0.1",
-    "govuk-frontend": "^4.3.1"
+    "govuk-frontend": "^5.1.0"
   },
   "devDependencies": {
     "prettier": "^3.2.5"

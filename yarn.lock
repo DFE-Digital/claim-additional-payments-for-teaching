@@ -2,10 +2,12 @@
 # yarn lockfile v1
 
 
-a11y-dialog@^5.5.0:
-  version "5.5.2"
-  resolved "https://registry.yarnpkg.com/a11y-dialog/-/a11y-dialog-5.5.2.tgz#1072416076cdfe4337691d64ab87568f7413639c"
-  integrity sha512-1G7uP6z896DCBXyiwnaMze8YDoljtwgEPezgcJInq2f/chskPQooV505lHOtZpEvtI+ddDUPp0ECjHQjUIaPDw==
+a11y-dialog@^8.0.4:
+  version "8.0.4"
+  resolved "https://registry.yarnpkg.com/a11y-dialog/-/a11y-dialog-8.0.4.tgz#731a983d38d059665ff7e62daccedf5214131be8"
+  integrity sha512-MQrLxqLPx4E8+ynGwulBs6OjtxQT/XemgnlNPb+cR8K/qdwHBQv1WZQZpBuTVhlWGpAwWmSYffUZ/78anhcD3w==
+  dependencies:
+    focusable-selectors "^0.8.0"
 
 accessible-autocomplete@^2.0.1:
   version "2.0.4"
@@ -14,10 +16,15 @@ accessible-autocomplete@^2.0.1:
   dependencies:
     preact "^8.3.1"
 
-govuk-frontend@^4.3.1:
-  version "4.5.0"
-  resolved "https://registry.yarnpkg.com/govuk-frontend/-/govuk-frontend-4.5.0.tgz#64759e39efbaa81f9cb7a35cc6cff6fd9fa619ef"
-  integrity sha512-gZHDqf5vdlHjmx0NGJiNT12XLyR3d5KCS4AnlC3xTWOObJ0kQROrkIFyp3w4/PY3EQiYdgacVaJ6lizzygnzYw==
+focusable-selectors@^0.8.0:
+  version "0.8.4"
+  resolved "https://registry.yarnpkg.com/focusable-selectors/-/focusable-selectors-0.8.4.tgz#2ee34129b29371766ce201499e3b88c6f79ea4c1"
+  integrity sha512-0XxbkD0KhOnX10qmnfF9U8DkDD8N/e4M77wMYw2Itoi4vdcoRjSkqXLZFIzkrLIOxzmzCGy88fNG1EbeXMD/zw==
+
+govuk-frontend@^5.1.0:
+  version "5.1.0"
+  resolved "https://registry.yarnpkg.com/govuk-frontend/-/govuk-frontend-5.1.0.tgz#55e520940b587ddd023e96251efaa076acc9bd5f"
+  integrity sha512-Dc3J+uOI4i2VR3BVyfxbf6qVjTT4n4bBqbD0/Io6feP8pt/4IfKdP1vWimZf+BwMKKMXacw10hmdy5UcD6Cr8w==
 
 preact@^8.3.1:
   version "8.5.3"
