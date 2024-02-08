@@ -1,4 +1,4 @@
-@import "govuk-frontend/govuk/all";
+@import "govuk-frontend/dist/govuk/all";
 
 // Don't know why we're redefining tag styles here but unfortunately we have to because of the tag rule in gds_kit_tweaks.scss.
 
@@ -28,8 +28,8 @@
   }
 
   &--grey {
-    color: govuk-shade(govuk-colour("dark-grey", $legacy: "grey-1"), 30);
-    background: govuk-tint(govuk-colour("dark-grey", $legacy: "grey-1"), 90);
+    color: govuk-shade(govuk-colour("dark-grey"), 30);
+    background: govuk-tint(govuk-colour("dark-grey"), 90);
   }
 
   &--red {
