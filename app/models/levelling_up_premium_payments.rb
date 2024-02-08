@@ -1,7 +1,12 @@
 module LevellingUpPremiumPayments
   extend self
 
-  include AutomatedChecks::ClaimVerifiers::Shared
+  VERIFIERS = [
+    AutomatedChecks::ClaimVerifiers::Identity,
+    AutomatedChecks::ClaimVerifiers::Qualifications,
+    AutomatedChecks::ClaimVerifiers::CensusSubjectsTaught,
+    AutomatedChecks::ClaimVerifiers::Employment
+  ].freeze
 
   def short_name
     I18n.t("levelling_up_premium_payments.policy_short_name")
