@@ -5,7 +5,6 @@ RSpec.describe MathsAndPhysics, type: :model do
     expect(subject::VERIFIERS).to eq([
       AutomatedChecks::ClaimVerifiers::Identity,
       AutomatedChecks::ClaimVerifiers::Qualifications,
-      AutomatedChecks::ClaimVerifiers::CensusSubjectsTaught,
       AutomatedChecks::ClaimVerifiers::Employment
     ])
   end

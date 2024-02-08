@@ -10,7 +10,11 @@
 module MathsAndPhysics
   extend self
 
-  include AutomatedChecks::ClaimVerifiers::Shared
+  VERIFIERS = [
+    AutomatedChecks::ClaimVerifiers::Identity,
+    AutomatedChecks::ClaimVerifiers::Qualifications,
+    AutomatedChecks::ClaimVerifiers::Employment
+  ].freeze
 
   ELIGIBLE_CAREER_LENGTH = 5
 
