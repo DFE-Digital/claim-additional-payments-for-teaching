@@ -130,7 +130,6 @@ class Claim < ApplicationRecord
   enum student_loan_country: StudentLoan::COUNTRIES
   enum student_loan_start_date: StudentLoan::COURSE_START_DATES
   enum student_loan_courses: {one_course: 0, two_or_more_courses: 1}
-  enum student_loan_plan: STUDENT_LOAN_PLAN_OPTIONS
   enum bank_or_building_society: {personal_bank_account: 0, building_society: 1}
 
   has_many :decisions, dependent: :destroy
@@ -229,6 +228,7 @@ class Claim < ApplicationRecord
   validates :student_loan_courses, on: [:"student-loan-how-many-courses"], presence: {message: "Select how many higher education courses you took out a student loan for"}
   validates :student_loan_start_date, on: [:"student-loan-start-date"], presence: {message: ->(object, data) { I18n.t("validation_errors.student_loan_start_date.#{object.student_loan_courses}") }}
   validates :student_loan_plan, on: [:submit, :amendment], presence: {message: "We have not been able determined your student loan repayment plan. Answer all questions about your student loan."}
+  validates :student_loan_plan, inclusion: {in: STUDENT_LOAN_PLAN_OPTIONS}, allow_nil: true
 
   validates :has_masters_doctoral_loan, on: [:"masters-doctoral-loan", :submit], inclusion: {in: [true, false], message: "Select yes if you have a postgraduate masters and/or doctoral loan"}, if: :no_student_loan?
   validates :postgraduate_masters_loan, on: [:"masters-loan", :submit], inclusion: {in: [true, false], message: "Select yes if you are currently repaying a Postgraduate Master’s Loan"}, unless: -> { no_masters_doctoral_loan? }
