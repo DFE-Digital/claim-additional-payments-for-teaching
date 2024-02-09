@@ -8,6 +8,8 @@
 # Full details of the eligibility criteria can be found at the URL
 # defined by `EarlyCareerPayments.eligibility_page_url`.
 module EarlyCareerPayments
+  include BasePolicy
+
   extend self
 
   VERIFIERS = [
@@ -32,18 +34,6 @@ module EarlyCareerPayments
     eligibility_page_url + "#eligibility-criteria"
   end
 
-  def routing_name
-    PolicyConfiguration.routing_name_for_policy(self)
-  end
-
-  def policy_type
-    name.underscore.dasherize
-  end
-
-  def locale_key
-    name.underscore
-  end
-
   def notify_reply_to_id
     "3f85a1f7-9400-4b48-9a31-eaa643d6b977"
   end
@@ -56,10 +46,6 @@ module EarlyCareerPayments
     "earlycareerteacherpayments@digital.education.gov.uk"
   end
 
-  def short_name
-    I18n.t("early_career_payments.policy_short_name")
-  end
-
   def first_eligible_qts_award_year(claim_year = nil)
     POLICY_START_YEAR
   end
@@ -70,9 +56,5 @@ module EarlyCareerPayments
 
   def student_loan_balance_url
     "https://www.gov.uk/sign-in-to-manage-your-student-loan-balance"
-  end
-
-  def configuration
-    PolicyConfiguration.for(self)
   end
 end

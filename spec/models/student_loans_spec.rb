@@ -3,6 +3,8 @@ require "rails_helper"
 RSpec.describe StudentLoans, type: :model do
   let!(:policy_configuration) { create(:policy_configuration, :student_loans) }
 
+  it { is_expected.to include(BasePolicy) }
+
   it do
     expect(subject::VERIFIERS).to eq([
       AutomatedChecks::ClaimVerifiers::Identity,

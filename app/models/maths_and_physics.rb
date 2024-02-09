@@ -8,6 +8,8 @@
 # authorities. Full details of the eligibility criteria can be found at the URL
 # defined by `MathsAndPhysics.eligibility_page_url`.
 module MathsAndPhysics
+  include BasePolicy
+
   extend self
 
   VERIFIERS = [
@@ -30,18 +32,6 @@ module MathsAndPhysics
     "https://www.gov.uk/government/publications/additional-payments-for-teaching-eligibility-and-payment-details/claim-a-payment-for-teaching-maths-or-physics-eligibility-and-payment-details"
   end
 
-  def routing_name
-    PolicyConfiguration.routing_name_for_policy(self)
-  end
-
-  def policy_type
-    name.underscore.dasherize
-  end
-
-  def locale_key
-    routing_name.underscore
-  end
-
   def notify_reply_to_id
     "29493350-ceec-4142-bd29-34ee363d5f62"
   end
@@ -52,10 +42,6 @@ module MathsAndPhysics
 
   def feedback_email
     "mathsphysicsteacherpayment@digital.education.gov.uk"
-  end
-
-  def short_name
-    I18n.t("maths_and_physics.policy_short_name")
   end
 
   # Returns the AcademicYear during or after which teachers must have completed
@@ -72,9 +58,5 @@ module MathsAndPhysics
 
   def last_ineligible_qts_award_year
     first_eligible_qts_award_year - 1
-  end
-
-  def configuration
-    PolicyConfiguration.for(self)
   end
 end
