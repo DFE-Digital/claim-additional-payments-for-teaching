@@ -436,6 +436,8 @@ en:
           notes: "notes"
         qualifications:
           title: "Does the claimant’s ITT start/end year and subject match the above information from their claim, or do they have an eligible degree?"
+        student_loan_plan:
+          title: "Does the claimant’s student loan plan match the information we hold about their loan?"
         census_subjects_taught:
           title: Does the claimant’s subject match the schools workforce census subjects
         matching_details:
