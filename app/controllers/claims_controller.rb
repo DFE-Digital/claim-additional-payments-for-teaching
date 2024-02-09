@@ -257,7 +257,7 @@ class ClaimsController < BasePublicController
 
   def retrieve_student_loan_details
     # student loan details are retrieved every time the user confirms their details
-    return unless ["personal-details", "teacher-detail"].include?(params[:slug])
+    return unless page_sequence.updating_personal_details?
 
     ClaimStudentLoanDetailsUpdater.call(current_claim)
   end

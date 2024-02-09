@@ -56,6 +56,10 @@ class PageSequence
     (slugs - completed_slugs - OPTIONAL_SLUGS).first
   end
 
+  def updating_personal_details?
+    PERSONAL_DETAILS_SLUGS.include?(current_slug)
+  end
+
   private
 
   def incomplete_slugs
@@ -103,9 +107,5 @@ class PageSequence
 
   def current_slug_index
     slugs.index(current_slug) || 0
-  end
-
-  def updating_personal_details?
-    PERSONAL_DETAILS_SLUGS.include?(current_slug)
   end
 end
