@@ -7,7 +7,7 @@ RSpec.describe PageSequence do
   let(:current_claim) { CurrentClaim.new(claims: [claim]) }
   let(:slug_sequence) { OpenStruct.new(slugs: ["first-slug", "second-slug", "third-slug"]) }
   let(:completed_slugs) { [] }
-  let(:page_sequence) { PageSequence.new(current_claim, slug_sequence, completed_slugs, current_slug) }
+  subject(:page_sequence) { PageSequence.new(current_claim, slug_sequence, completed_slugs, current_slug) }
 
   describe "#next_slug" do
     subject(:next_slug) { page_sequence.next_slug }
@@ -170,6 +170,22 @@ RSpec.describe PageSequence do
 
     it "returns the next required and incomplete slug" do
       expect(page_sequence.next_required_slug).to eq("second-slug")
+    end
+  end
+
+  describe "#updating_personal_details?" do
+    ["personal-details", "teacher-detail"].each do |slug|
+      context "when the current slug is #{slug}" do
+        let(:current_slug) { slug }
+
+        it { is_expected.to be_updating_personal_details }
+      end
+    end
+
+    context "when the current slug is something else" do
+      let(:current_slug) { "something-else" }
+
+      it { is_expected.not_to be_updating_personal_details }
     end
   end
 end
