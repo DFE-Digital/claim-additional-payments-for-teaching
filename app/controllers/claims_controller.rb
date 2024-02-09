@@ -408,6 +408,8 @@ class ClaimsController < BasePublicController
   end
 
   def retrieve_student_loan_details
+    # student loan details are currently retrieved for TSLR and ECP/LUPP journeys only
+    return unless ["student-loans", "additional-payments"].include?(current_policy_routing_name)
     # student loan details are retrieved every time the user confirms their details
     return unless page_sequence.updating_personal_details?
 
