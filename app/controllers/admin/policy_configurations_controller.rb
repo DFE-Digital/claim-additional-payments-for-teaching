@@ -26,7 +26,7 @@ module Admin
     end
 
     def policy_configuration_params
-      params.require(:policy_configuration).permit(:availability_message, :open_for_submissions, :current_academic_year)
+      params.require(:policy_configuration).permit(:availability_message, :open_for_submissions, :current_academic_year, :teacher_id_enabled)
     end
 
     def send_reminders

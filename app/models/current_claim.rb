@@ -102,6 +102,10 @@ class CurrentClaim
     claims.all? { |c| c.persisted? }
   end
 
+  def has_no_dqt_data_for_claim?
+    claims.all? { |c| !c.has_dqt_record? || c.dqt_teacher_record&.has_no_data_for_claim? }
+  end
+
   # Non-combined journey code like Student Loans should really
   # be using `eligibility_status` instead of this.
   def ineligible?
@@ -166,7 +170,7 @@ class CurrentClaim
   private
 
   def single_claim?
-    claims.count == 1
+    claims.one?
   end
 
   def ecp_or_lupp_claims?

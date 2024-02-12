@@ -186,6 +186,14 @@ To disable, just set `VIEW=false` (or anything but `true`) once.
 
 _be = bundle exec_
 
+**Optionally you may run the specs in parallel with
+[parallel_tests](https://github.com/grosser/parallel_tests) and
+[turbo_tests](https://github.com/serpapi/turbo_tests)**
+
+1. Setup the extra test databases with
+   `PARALLEL_TEST_FIRST_IS_1=true rails parallel:setup`
+2. Execute `bundle exec turbo_tests`
+
 ### Code linting rules
 
 Code linting is performed using:

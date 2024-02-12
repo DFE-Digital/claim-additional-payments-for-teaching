@@ -6,6 +6,7 @@ class Hash
 
     # steps is empty in the "name" example, in that case, we are operating on
     # the root (self) hash, not a subhash
+    steps.map! { |s| /\A\d+\z/.match?(s.to_s) ? s.to_s.to_i : s }
     hash = steps.empty? ? self : dig(*steps)
     # note that `hash` here doesn't _have_ to be a Hash, but it needs to
     # respond to `[]=`
@@ -452,5 +453,14 @@ RSpec.describe Dqt::Teacher do
     subject(:itt_start_date) { qualified_teaching_status.itt_start_date }
 
     it_behaves_like "date reader", "initial_teacher_training/programme_start_date"
+  end
+
+  describe "#degree_names" do
+    subject(:degree_names) { qualified_teaching_status.degree_names }
+
+    it_behaves_like(
+      "string reader",
+      (1..3).map { |n| "qualifications/0/he_subject#{n}" }
+    )
   end
 end

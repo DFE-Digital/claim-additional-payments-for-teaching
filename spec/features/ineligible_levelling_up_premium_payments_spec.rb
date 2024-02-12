@@ -9,6 +9,10 @@ RSpec.feature "Ineligible Levelling up premium payments claims" do
     school = create(:school, :early_career_payments_eligible, :levelling_up_premium_payments_ineligible)
     start_levelling_up_premium_payments_claim
 
+    # - Sign in or continue page
+    expect(page).to have_text("Use DfE Identity to sign in")
+    click_on "Continue without signing in"
+
     # - Which school do you teach at
     expect(page).to have_text(I18n.t("early_career_payments.questions.current_school_search"))
     expect(eligibility.ineligible?).to be false
@@ -22,6 +26,10 @@ RSpec.feature "Ineligible Levelling up premium payments claims" do
   scenario "When the school selected is both ECP and LUP ineligible" do
     school = create(:school, :early_career_payments_ineligible, :levelling_up_premium_payments_ineligible)
     start_levelling_up_premium_payments_claim
+
+    # - Sign in or continue page
+    expect(page).to have_text("Use DfE Identity to sign in")
+    click_on "Continue without signing in"
 
     # - Which school do you teach at
     expect(page).to have_text(I18n.t("early_career_payments.questions.current_school_search"))
@@ -37,6 +45,10 @@ RSpec.feature "Ineligible Levelling up premium payments claims" do
     school = create(:school, :levelling_up_premium_payments_eligible)
 
     start_levelling_up_premium_payments_claim
+
+    # - Sign in or continue page
+    expect(page).to have_text("Use DfE Identity to sign in")
+    click_on "Continue without signing in"
 
     # - Which school do you teach at
     expect(page).to have_text(I18n.t("early_career_payments.questions.current_school_search"))

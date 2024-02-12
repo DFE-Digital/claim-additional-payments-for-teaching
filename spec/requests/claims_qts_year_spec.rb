@@ -12,7 +12,7 @@ RSpec.describe "The QTS year question", type: :request do
 
     get claim_path(MathsAndPhysics.routing_name, "qts-year")
 
-    expect(response.body).to include("When did you complete your initial teacher training?")
+    expect(response.body).to include("When did you complete your initial teacher training (ITT)?")
     expect(response.body).to include("In or before the academic year 2013 to 2014")
     expect(response.body).to include("In or after the academic year 2014 to 2015")
 

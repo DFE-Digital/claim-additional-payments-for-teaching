@@ -46,6 +46,7 @@ FactoryBot.define do
       email_verified { true }
       payroll_gender { :female }
       provide_mobile_number { false }
+      details_check { true }
 
       eligibility_trait { :eligible }
 
@@ -246,6 +247,43 @@ FactoryBot.define do
           {code: 200, body: "Test response"}
         ]
       end
+    end
+
+    trait :with_valid_teacher_id_user_info do
+      teacher_id_user_info do
+        {
+          "given_name" => "John",
+          "family_name" => "Doe",
+          "trn" => "123456",
+          "birthdate" => "1990-01-01",
+          "ni_number" => "AB123456C",
+          "trn_match_ni_number" => "True",
+          "email" => "john.doe@example.com"
+        }
+      end
+    end
+
+    trait :with_invalid_teacher_id_user_info do
+      teacher_id_user_info do
+        {
+          "given_name" => "John",
+          "family_name" => "Doe",
+          "trn" => "123456",
+          "birthdate" => "1990-01-01",
+          "ni_number" => "AB123456C",
+          "trn_match_ni_number" => "False"
+        }
+      end
+    end
+
+    trait :skipped_tid do
+      teacher_id_user_info { {} }
+      details_check { nil }
+      logged_in_with_tid { nil }
+    end
+
+    trait :logged_in_with_tid do
+      logged_in_with_tid { true }
     end
   end
 end

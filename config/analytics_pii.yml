@@ -24,6 +24,7 @@ shared:
   - payroll_gender
   - one_time_password
   - hmrc_bank_validation_responses
+  - dqt_teacher_status
   :reminders:
   - full_name
   - email_address

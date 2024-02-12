@@ -3,6 +3,7 @@ class ClaimsController < BasePublicController
   include AddressDetails
 
   skip_before_action :send_unstarted_claimants_to_the_start, only: [:new, :create, :timeout]
+  before_action :check_and_reset_if_new_tid_user_info
   before_action :initialize_session_slug_history
   before_action :check_page_is_in_sequence, only: [:show, :update]
   before_action :update_session_with_current_slug, only: [:update]
@@ -21,8 +22,29 @@ class ClaimsController < BasePublicController
 
   def show
     search_schools if params[:school_search]
-    if params[:slug] == "teaching-subject-now" && !current_claim.eligibility.eligible_itt_subject
+
+    if params[:slug] == "teacher-detail"
+      save_and_set_teacher_id_user_info
+    elsif params[:slug] == "qualification-details"
+      return redirect_to claim_path(current_policy_routing_name, next_slug) if current_claim.has_no_dqt_data_for_claim?
+    elsif params[:slug] == "teaching-subject-now" && no_eligible_itt_subject?
       return redirect_to claim_path(current_policy_routing_name, "eligible-itt-subject")
+    elsif params[:slug] == "sign-in-or-continue"
+      update_session_with_current_slug
+
+      return skip_teacher_id if !policy_configuration.teacher_id_enabled?
+    elsif params[:slug] == "select-email"
+      session[:email_address] = current_claim.teacher_id_user_info["email"]
+    elsif params[:slug] == "correct-school"
+      update_session_with_tps_school(current_claim.recent_tps_school)
+    elsif params[:slug] == "nqt-in-academic-year-after-itt" && page_sequence.in_sequence?("correct-school")
+      @backlink_path = claim_path(current_policy_routing_name, "correct-school")
+    elsif params[:slug] == "select-claim-school"
+      update_session_with_tps_school(current_claim.tps_school_for_student_loan_in_previous_financial_year)
+    elsif params[:slug] == "subjects-taught" && page_sequence.in_sequence?("select-claim-school")
+      @backlink_path = claim_path(current_policy_routing_name, "select-claim-school")
+    elsif params[:slug] == "select-mobile"
+      session[:phone_number] = current_claim.teacher_id_user_info["phone_number"]
     elsif params[:slug] == "postcode-search" && postcode
       redirect_to claim_path(current_policy_routing_name, "select-home-address", {"claim[postcode]": params[:claim][:postcode], "claim[address_line_1]": params[:claim][:address_line_1]}) and return unless invalid_postcode?
     elsif params[:slug] == "select-home-address" && postcode
@@ -51,18 +73,39 @@ class ClaimsController < BasePublicController
 
   def update
     case params[:slug]
+    when "sign-in-or-continue"
+      return skip_teacher_id
+    when "teacher-detail"
+      save_details_check
+      Dqt::RetrieveClaimQualificationsData.call(current_claim) if current_claim.details_check?
+    when "qualification-details"
+      set_dqt_data_as_answers
     when "personal-details"
       check_date_params
     when "eligibility-confirmed"
       return select_claim if current_policy_routing_name == "additional-payments"
     when "personal-bank-account", "building-society-account"
       return bank_account
+    when "correct-school"
+      check_correct_school_params
+    when "select-claim-school"
+      check_select_claim_school_params
+    when "select-email"
+      check_email_params
+    when "select-mobile"
+      check_mobile_number_params
+    when "still-teaching"
+      check_still_teaching_params
     else
       current_claim.attributes = claim_params
+
+      # If some DQT data was missing and the user fills them manually we need
+      # to re-populate those answers which depend on the manually-entered answer
+      set_dqt_data_as_answers if current_claim.qualifications_details_check
     end
 
-    current_claim.reset_dependent_answers
-    current_claim.reset_eligibility_dependent_answers(reset_attrs)
+    current_claim.reset_dependent_answers unless params[:slug] == "select-email" || params[:slug] == "select-mobile"
+    current_claim.reset_eligibility_dependent_answers(reset_attrs) unless params[:slug] == "qualification-details"
     one_time_password
 
     if current_claim.save(context: page_sequence.current_slug.to_sym)
@@ -252,5 +295,85 @@ class ClaimsController < BasePublicController
 
   def correct_policy_namespace?
     PolicyConfiguration.policies_for_routing_name(params[:policy]).include?(current_claim.policy)
+  end
+
+  def failed_details_check_with_teacher_id?
+    !current_claim.details_check? && current_claim.logged_in_with_tid?
+  end
+
+  def no_eligible_itt_subject?
+    !current_claim.eligible_itt_subject
+  end
+
+  # NOTE: needs to be done before the slug_sequence is generated.
+  # `logged_in_with_tid: false` means the user had pressed "Continue without signing in", reset it to `true`.
+  # `logged_in_with_tid: false` is used to reject "teacher-details" and "qualification-details" from the slug_sequence.
+  # Handles user somehow using Back button to go back and choose "Continue with DfE Identity" option.
+  # Or they sign in a second time, `details_check` needs resetting in case details are different.
+  def check_and_reset_if_new_tid_user_info
+    DfeIdentity::ClaimUserDetailsReset.call(current_claim, :new_user_info) if session[:user_info]
+  end
+
+  def save_and_set_teacher_id_user_info
+    @teacher_id_user_info = session[:user_info]
+    if @teacher_id_user_info
+      current_claim.update(teacher_id_user_info: @teacher_id_user_info)
+      session.delete(:user_info)
+    end
+    set_teacher_id_user_info
+  end
+
+  def set_teacher_id_user_info
+    @teacher_id_user_info ||= current_claim.teacher_id_user_info
+  end
+
+  def save_details_check
+    details_check = params.dig(:claim, :details_check)
+    DfeIdentity::ClaimUserDetailsCheck.call(current_claim, details_check)
+  end
+
+  def check_email_params
+    current_claim.attributes = SelectEmailForm.extract_attributes(current_claim, email_address_check: params.dig(:claim, :email_address_check))
+  end
+
+  def check_mobile_number_params
+    current_claim.attributes = SelectMobileNumberForm.extract_attributes(current_claim, mobile_check: params.dig(:claim, :mobile_check))
+  end
+
+  def update_session_with_tps_school(school)
+    if school
+      session[:tps_school_id] = school.id
+      session[:tps_school_name] = school.name
+      session[:tps_school_address] = school.address
+    end
+  end
+
+  def check_correct_school_params
+    updated_claim_params = CorrectSchoolForm.extract_params(claim_params, change_school: params[:change_school])
+    current_claim.attributes = updated_claim_params
+  end
+
+  def check_select_claim_school_params
+    updated_claim_params = SelectClaimSchoolForm.extract_params(claim_params, change_school: params[:additional_school])
+    current_claim.attributes = updated_claim_params
+  end
+
+  def check_still_teaching_params
+    updated_claim_params = StillTeachingForm.extract_params(claim_params)
+    current_claim.attributes = updated_claim_params
+  end
+
+  def skip_teacher_id
+    DfeIdentity::ClaimUserDetailsReset.call(current_claim, :skipped_tid)
+    redirect_to claim_path(current_policy_routing_name, next_slug)
+  end
+
+  def set_dqt_data_as_answers
+    current_claim.attributes = claim_params
+    current_claim.claims.each { |claim| claim.eligibility.set_qualifications_from_dqt_record }
+  end
+
+  def policy_configuration
+    PolicyConfiguration.for_routing_name(current_policy_routing_name)
   end
 end

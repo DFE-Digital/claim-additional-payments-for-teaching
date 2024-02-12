@@ -194,6 +194,15 @@ RSpec.describe StudentLoans::Eligibility, type: :model do
         .from("different_school").to(nil)
     end
 
+    it "resets the current_school_id to nil when the value of claim_school changes" do
+      expect { eligibility.reset_dependent_answers }.not_to change { eligibility.attributes }
+
+      eligibility.claim_school = eligibility.current_school
+      expect { eligibility.reset_dependent_answers }
+        .to change { eligibility.current_school_id }
+        .from(eligibility.current_school.id).to(nil)
+    end
+
     it "resets the subject fields when the value of the claim_school changes" do
       eligibility.claim_school = eligibility.current_school
       eligibility.reset_dependent_answers
@@ -214,34 +223,6 @@ RSpec.describe StudentLoans::Eligibility, type: :model do
       expect { eligibility.reset_dependent_answers }
         .to change { eligibility.mostly_performed_leadership_duties }
         .from(false).to(nil)
-    end
-
-    it "sets current_school to the claim_school when employment_status changes to :claim_school" do
-      eligibility.employment_status = :claim_school
-      expect { eligibility.reset_dependent_answers }
-        .to change { eligibility.current_school }
-        .from(eligibility.current_school).to(eligibility.claim_school)
-    end
-
-    it "clears current_school when employment_status changes from :claim_school to :different_school" do
-      eligibility.update!(employment_status: :claim_school, current_school: eligibility.claim_school)
-
-      eligibility.employment_status = :different_school
-      expect { eligibility.reset_dependent_answers }
-        .to change { eligibility.current_school }
-        .from(eligibility.claim_school).to(nil)
-    end
-
-    it "clears current_school when employment_status changes to :no_school" do
-      eligibility.employment_status = :no_school
-      expect { eligibility.reset_dependent_answers }
-        .to change { eligibility.current_school }
-        .from(eligibility.current_school).to(nil)
-    end
-
-    it "doesn't change current_school if employment_status is unchanged" do
-      eligibility.employment_status = :different_school
-      expect { eligibility.reset_dependent_answers }.not_to change { eligibility.current_school }
     end
   end
 
@@ -394,6 +375,53 @@ RSpec.describe StudentLoans::Eligibility, type: :model do
       let(:qts_award_year) { "before_cut_off_date" }
 
       it { is_expected.to eq(true) }
+    end
+  end
+
+  describe "#set_qualifications_from_dqt_record" do
+    let(:eligibility) { build(:student_loans_eligibility, claim:, qts_award_year:) }
+    let(:claim) { build(:claim, policy: StudentLoans, qualifications_details_check:) }
+    let(:qts_award_year) { nil }
+
+    context "when user has confirmed their qualification details" do
+      let(:qualifications_details_check) { true }
+      let(:qts_award_date) { Date.new(1981, 1, 1) }
+
+      before { allow(claim).to receive(:dqt_teacher_record).and_return(double(eligible_qts_award_date?: eligible, qts_award_date:)) }
+
+      context "when the DQT payload QTS award date is eligible" do
+        let(:eligible) { true }
+
+        it "sets the qts_award_year to on_or_after_cut_off_date" do
+          expect { eligibility.set_qualifications_from_dqt_record }.to change { eligibility.qts_award_year }.from(qts_award_year).to("on_or_after_cut_off_date")
+        end
+      end
+
+      context "when the DQT payload QTS award date is not eligible" do
+        let(:eligible) { false }
+
+        it "sets the qts_award_year to before_cut_off_date" do
+          expect { eligibility.set_qualifications_from_dqt_record }.to change { eligibility.qts_award_year }.from(qts_award_year).to("before_cut_off_date")
+        end
+      end
+
+      context "when the DQT payload QTS award date is nil" do
+        let(:eligible) { nil }
+        let(:qts_award_date) { nil }
+
+        it "does not change the qts_award_year" do
+          expect { eligibility.set_qualifications_from_dqt_record }.not_to change { eligibility.qts_award_year }
+        end
+      end
+    end
+
+    context "when user has not confirmed their qualification details" do
+      let(:qualifications_details_check) { false }
+      let(:qts_award_year) { :on_or_after_cut_off_date }
+
+      it "sets the qts_award_year to nil" do
+        expect { eligibility.set_qualifications_from_dqt_record }.to change { eligibility.qts_award_year }.from(qts_award_year.to_s).to(nil)
+      end
     end
   end
 end

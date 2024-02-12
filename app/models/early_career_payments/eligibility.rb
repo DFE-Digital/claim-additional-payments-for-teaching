@@ -6,6 +6,7 @@ module EarlyCareerPayments
       :nqt_in_academic_year_after_itt,
       :current_school_id,
       :induction_completed,
+      :school_somewhere_else,
       :employed_as_supply_teacher,
       :has_entire_term_contract,
       :employed_directly,
@@ -77,6 +78,7 @@ module EarlyCareerPayments
 
     validates :nqt_in_academic_year_after_itt, on: [:"nqt-in-academic-year-after-itt", :submit], inclusion: {in: [true, false], message: "Select yes if you are currently teaching as a qualified teacher"}
     validates :current_school, on: [:"current-school", :submit], presence: {message: "Select the school you teach at"}
+    validates :current_school, on: [:"correct-school"], presence: {message: "Select the school you teach at or choose somewhere else"}, unless: :school_somewhere_else?
     validates :induction_completed, on: [:"induction-completed", :submit], inclusion: {in: [true, false], message: "Select yes if you have completed your induction"}
     validates :employed_as_supply_teacher, on: [:"supply-teacher", :submit], inclusion: {in: [true, false], message: "Select yes if you are a supply teacher"}
     validates :has_entire_term_contract, on: [:"entire-term-contract", :submit], inclusion: {in: [true, false], message: "Select yes if you have a contract to teach at the same school for an entire term or longer"}, if: :employed_as_supply_teacher?
@@ -129,7 +131,16 @@ module EarlyCareerPayments
     def reset_dependent_answers(reset_attrs = [])
       attrs = ineligible? ? changed.concat(reset_attrs) : changed
 
-      ATTRIBUTE_DEPENDENCIES.each do |attribute_name, dependent_attribute_names|
+      dependencies = ATTRIBUTE_DEPENDENCIES.dup
+
+      # If some data was derived from DQT we do not want to reset these.
+      if claim.qualifications_details_check
+        dependencies.delete("qualification")
+        dependencies.delete("eligible_itt_subject")
+        dependencies.delete("itt_academic_year")
+      end
+
+      dependencies.each do |attribute_name, dependent_attribute_names|
         dependent_attribute_names.each do |dependent_attribute_name|
           write_attribute(dependent_attribute_name, nil) if attrs.include?(attribute_name)
         end
@@ -148,6 +159,14 @@ module EarlyCareerPayments
     def ecp_only_school?
       EarlyCareerPayments::SchoolEligibility.new(claim.eligibility.current_school).eligible? &&
         !LevellingUpPremiumPayments::SchoolEligibility.new(claim.eligibility.current_school).eligible?
+    end
+
+    def set_qualifications_from_dqt_record
+      self.attributes = {
+        itt_academic_year: claim.qualifications_details_check ? (claim.dqt_teacher_record&.itt_academic_year_for_claim || itt_academic_year) : nil,
+        eligible_itt_subject: claim.qualifications_details_check ? (claim.dqt_teacher_record&.eligible_itt_subject_for_claim || eligible_itt_subject) : nil,
+        qualification: claim.qualifications_details_check ? (claim.dqt_teacher_record&.route_into_teaching || qualification) : nil
+      }
     end
 
     private

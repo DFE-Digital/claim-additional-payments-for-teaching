@@ -17,6 +17,7 @@ class PolicyConfiguration < ApplicationRecord
       routing_name: "student-loans",
       slugs: StudentLoans::SlugSequence::SLUGS,
       policies: [StudentLoans],
+      view_path: "student_loans",
       i18n_namespace: "student_loans"
     },
     {

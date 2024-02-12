@@ -188,13 +188,13 @@ RSpec.describe Claim, type: :model do
 
   context "when validating in the 'personal-details' context" do
     describe "with first_name" do
-      it "is not valid without a value between 2 and 30 characters" do
+      it "is not valid without a value between 1 and 100 characters" do
         expect(build(:claim, policy: EarlyCareerPayments)).not_to be_valid(:"personal-details")
-        expect(build(:claim, :submittable, policy: EarlyCareerPayments, first_name: "E")).not_to be_valid(:"personal-details")
-        expect(build(:claim, :submittable, policy: EarlyCareerPayments, first_name: "ET_whose_called_ET_because_their_name_is_more_than_thirty_characters")).not_to be_valid(:"personal-details")
+        expect(build(:claim, :submittable, policy: EarlyCareerPayments, first_name: "")).not_to be_valid(:"personal-details")
+        expect(build(:claim, :submittable, policy: EarlyCareerPayments, first_name: "A" * 101)).not_to be_valid(:"personal-details")
       end
 
-      it "is valid when is between 2 and 30 characters in length" do
+      it "is valid when is between 1 and 100 characters in length" do
         expect(build(:claim, :submittable, policy: EarlyCareerPayments)).to be_valid(:"personal-details")
       end
 
@@ -216,17 +216,17 @@ RSpec.describe Claim, type: :model do
     end
 
     describe "with surname" do
-      it "is not valid without a value between 2 and 30 characters" do
+      it "is not valid without a value between 1 and 100 characters" do
         expect(build(:claim, policy: EarlyCareerPayments)).not_to be_valid(:"personal-details")
-        expect(build(:claim, :submittable, policy: EarlyCareerPayments, surname: "U")).not_to be_valid(:"personal-details")
-        expect(build(:claim, :submittable, policy: EarlyCareerPayments, surname: "Jo_U_whose_name_is_more_than_thirty_characters")).not_to be_valid(:"personal-details")
+        expect(build(:claim, :submittable, policy: EarlyCareerPayments, surname: "")).not_to be_valid(:"personal-details")
+        expect(build(:claim, :submittable, policy: EarlyCareerPayments, surname: "A" * 101)).not_to be_valid(:"personal-details")
       end
 
-      it "is valid when is between 2 and 30 characters in length" do
-        expect(build(:claim, :submittable, policy: EarlyCareerPayments, surname: "Yu")).to be_valid(:"personal-details")
+      it "is valid when is between 1 and 100 characters in length" do
+        expect(build(:claim, :submittable, policy: EarlyCareerPayments, surname: "A")).to be_valid(:"personal-details")
       end
 
-      it "allows user to enter ' in thier middle_name and includes a surname when present" do
+      it "allows user to enter ' in their middle_name and includes a surname when present" do
         expect(build(:claim, :submittable, policy: EarlyCareerPayments, first_name: "Isambard", middle_name: "Brunel", surname: "O’Hara")).to be_valid(:"personal-details")
       end
     end
@@ -1317,7 +1317,11 @@ RSpec.describe Claim, type: :model do
         :banking_name,
         :building_society_roll_number,
         :one_time_password,
-        :assigned_to_id
+        :assigned_to_id,
+        :details_check,
+        :email_address_check,
+        :mobile_check,
+        :qualifications_details_check
       ])
     end
   end
@@ -1823,6 +1827,241 @@ RSpec.describe Claim, type: :model do
     context "when bank details have not been validated" do
       subject(:claim) { build(:claim, :bank_details_not_validated) }
       it { is_expected.to be_must_manually_validate_bank_details }
+    end
+  end
+
+  describe "#recent_tps_school" do
+    before { freeze_time }
+    after { travel_back }
+
+    let(:trn) { "7654321" }
+    let(:establishment_number) { 1234 }
+
+    let!(:claim) { create(:claim, teacher_reference_number: trn, created_at: Time.zone.now) }
+    let!(:school) { create(:school, establishment_number:) }
+
+    context "when there is a tps record within 2 full months" do
+      it "returns a school" do
+        # This is how it's stored in imported TPS records!
+        start_date = (Time.zone.now - 2.months).beginning_of_month
+        end_date = start_date.end_of_month.beginning_of_day
+
+        create(:teachers_pensions_service, start_date: start_date, end_date: end_date, school_urn: establishment_number, la_urn: school.local_authority.code, teacher_reference_number: trn)
+
+        expect(claim.recent_tps_school.establishment_number).to be(establishment_number)
+      end
+    end
+
+    context "when the last tps record is earlier than 2 full months ago" do
+      it "returns nil" do
+        # This is how it's stored in imported TPS records!
+        start_date = (Time.zone.now - 3.months).beginning_of_month
+        end_date = start_date.end_of_month.beginning_of_day
+
+        create(:teachers_pensions_service, start_date: start_date, end_date: end_date, school_urn: establishment_number, teacher_reference_number: trn)
+
+        expect(claim.recent_tps_school).to be_nil
+      end
+    end
+  end
+
+  describe "#has_all_valid_personal_details?" do
+    context "first_name, surname, dob and nino are the same as tid" do
+      let(:claim) {
+        create(
+          :claim,
+          :submitted,
+          first_name: "John", surname: "Doe",
+          date_of_birth: Date.new(1980, 1, 11),
+          national_insurance_number: "JH001234D",
+          teacher_id_user_info: {"given_name" => "John", "family_name" => "Doe", "birthdate" => "1980-01-11", "ni_number" => "JH001234D"}
+        )
+      }
+
+      it "returns true" do
+        expect(claim.has_all_valid_personal_details?).to be true
+      end
+    end
+
+    context "nino is empty" do
+      let(:claim) {
+        create(
+          :claim,
+          :submitted,
+          first_name: "John", surname: "Doe",
+          date_of_birth: Date.new(1980, 1, 11),
+          national_insurance_number: "JH001234D",
+          teacher_id_user_info: {"given_name" => "John", "family_name" => "Doe", "birthdate" => "1980-01-11", "ni_number" => nil}
+        )
+      }
+
+      it "returns false" do
+        expect(claim.has_all_valid_personal_details?).to be false
+      end
+    end
+
+    context "first_name and surname is invalid" do
+      let(:claim) {
+        create(
+          :claim,
+          :submitted,
+          first_name: "J@hn", surname: "D@e",
+          date_of_birth: Date.new(1980, 1, 11),
+          national_insurance_number: "JH001234D",
+          teacher_id_user_info: {"given_name" => "John", "family_name" => "Doe", "birthdate" => "1980-01-11", "ni_number" => "JH001234D"}
+        )
+      }
+
+      it "returns false" do
+        expect(claim.has_all_valid_personal_details?).to be false
+      end
+    end
+  end
+
+  describe "#has_valid_name?" do
+    let(:claim) {
+      create(
+        :claim,
+        :submitted,
+        first_name: first_name, surname: surname,
+        date_of_birth: Date.new(1980, 1, 11),
+        national_insurance_number: "JH001234D",
+        teacher_id_user_info: {"given_name" => "John", "family_name" => "Doe", "birthdate" => "1980-01-11", "ni_number" => "JH001234D"}
+      )
+    }
+
+    context "valid" do
+      let(:first_name) { "John" }
+      let(:surname) { "Doe" }
+
+      it "returns true" do
+        expect(claim.has_valid_name?).to be true
+      end
+    end
+
+    context "invalid first_name" do
+      let(:first_name) { "J@hn" }
+      let(:surname) { "Doe" }
+
+      it "returns false" do
+        expect(claim.has_valid_name?).to be false
+      end
+    end
+
+    context "invalid surname" do
+      let(:first_name) { "John" }
+      let(:surname) { "D@e" }
+
+      it "returns false" do
+        expect(claim.has_valid_name?).to be false
+      end
+    end
+
+    context "blank" do
+      let(:first_name) { "" }
+      let(:surname) { "" }
+
+      it "returns false" do
+        expect(claim.has_valid_name?).to be false
+      end
+    end
+  end
+
+  describe "#has_valid_date_of_birth?" do
+    let(:claim) {
+      create(
+        :claim,
+        :submitted,
+        first_name: "John", surname: "Doe",
+        date_of_birth: dob,
+        national_insurance_number: "JH001234D",
+        teacher_id_user_info: {"given_name" => "John", "family_name" => "Doe", "birthdate" => "1980-01-11", "ni_number" => "JH001234D"}
+      )
+    }
+
+    context "valid" do
+      let(:dob) { Date.new(1980, 1, 11) }
+
+      it "returns true" do
+        expect(claim.has_valid_date_of_birth?).to be true
+      end
+    end
+
+    context "nil" do
+      let(:dob) { nil }
+
+      it "returns false" do
+        expect(claim.has_valid_date_of_birth?).to be false
+      end
+    end
+  end
+
+  describe "#has_valid_nino?" do
+    let(:claim) {
+      create(
+        :claim,
+        :submitted,
+        first_name: "John", surname: "Doe",
+        date_of_birth: Date.new(1980, 1, 11),
+        national_insurance_number: nino,
+        teacher_id_user_info: {"given_name" => "John", "family_name" => "Doe", "birthdate" => "1980-01-11", "ni_number" => "JH001234D"}
+      )
+    }
+
+    context "valid" do
+      let(:nino) { "JH001234D" }
+
+      it "returns true" do
+        expect(claim.has_valid_nino?).to be true
+      end
+    end
+
+    context "nil" do
+      let(:nino) { nil }
+
+      it "returns false" do
+        expect(claim.has_valid_nino?).to be false
+      end
+    end
+  end
+
+  describe "#has_dqt_record?" do
+    let(:claim) { build(:claim, dqt_teacher_status:) }
+    subject(:result) { claim.has_dqt_record? }
+
+    context "when dqt_teacher_status value is nil" do
+      let(:dqt_teacher_status) { nil }
+      it { is_expected.to be false }
+    end
+
+    context "when dqt_teacher_status value is empty" do
+      let(:dqt_teacher_status) { {} }
+      it { is_expected.to be false }
+    end
+
+    context "when dqt_teacher_status value is not empty" do
+      let(:dqt_teacher_status) { {"test" => "test"} }
+      it { is_expected.to be true }
+    end
+  end
+
+  describe "#dqt_teacher_record" do
+    let(:claim) { build(:claim, dqt_teacher_status:) }
+    subject(:result) { claim.dqt_teacher_record }
+
+    context "when dqt_teacher_status value is nil" do
+      let(:dqt_teacher_status) { nil }
+      it { is_expected.to be nil }
+    end
+
+    context "when dqt_teacher_status value is empty" do
+      let(:dqt_teacher_status) { {} }
+      it { is_expected.to be nil }
+    end
+
+    context "when dqt_teacher_status value is not empty" do
+      let(:dqt_teacher_status) { {"test" => "test"} }
+      it { is_expected.to be_a(claim.policy::DqtRecord) }
     end
   end
 end

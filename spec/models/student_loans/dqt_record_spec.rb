@@ -72,4 +72,20 @@ RSpec.describe StudentLoans::DqtRecord do
       it { is_expected.to eq false }
     end
   end
+
+  describe "#has_no_data_for_claim?" do
+    subject(:dqt_record) { described_class.new(nil) }
+
+    context "when one or more required data are present" do
+      before { allow(dqt_record).to receive(:qts_award_date).and_return("test") }
+
+      it { is_expected.not_to be_has_no_data_for_claim }
+    end
+
+    context "when all required data are not present" do
+      before { allow(dqt_record).to receive(:qts_award_date).and_return(nil) }
+
+      it { is_expected.to be_has_no_data_for_claim }
+    end
+  end
 end

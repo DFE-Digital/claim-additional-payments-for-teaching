@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.feature "Claim journey does not get cached", js: true do
+RSpec.feature "Claim journey does not get cached" do
   before { create(:policy_configuration, :student_loans) }
 
   it "redirects the user to the start of the claim journey if they go back after the claim is completed" do
@@ -17,9 +17,9 @@ RSpec.feature "Claim journey does not get cached", js: true do
 
     expect(current_path).to eq(claim_confirmation_path(claim.policy.routing_name))
 
-    page.evaluate_script("window.history.back()")
+    jump_to_claim_journey_page(claim, "check-your-answers")
 
     expect(page).to_not have_text(claim.first_name)
-    expect(page).to have_text(I18n.t("student_loans.questions.qts_award_year"))
+    expect(page).to have_text("Use DfE Identity to sign in")
   end
 end

@@ -7,6 +7,10 @@ RSpec.feature "Combined claim journey dependent answers" do
   scenario "Dependent answers reset" do
     visit new_claim_path(EarlyCareerPayments.routing_name)
 
+    # - Sign in or continue page
+    expect(page).to have_text("Use DfE Identity to sign in")
+    click_on "Continue without signing in"
+
     # - Which school do you teach at
     expect(page).to have_text(I18n.t("early_career_payments.questions.current_school_search"))
     choose_school school

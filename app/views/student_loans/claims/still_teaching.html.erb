@@ -8,45 +8,25 @@
       <%= form_group_tag current_claim do %>
         <%= form.fields_for :eligibility, include_id: false do |fields| %>
           <fieldset class="govuk-fieldset">
-
             <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl">
-              <h1 class="govuk-fieldset__heading"><%= t("student_loans.questions.employment_status") %></h1>
+              <% if current_claim.logged_in_with_tid_and_has_recent_tps_school? %>
+                <h1 class="govuk-fieldset__heading"><%= t("questions.current_school") %></h1>
+              <% else %>
+                <h1 class="govuk-fieldset__heading"><%= t("student_loans.questions.employment_status") %></h1>
+              <% end %>
             </legend>
 
             <%= errors_tag current_claim.eligibility, :employment_status %>
 
             <div class="govuk-radios">
-
               <%= fields.hidden_field :employment_status %>
 
-              <% if current_claim.eligibility.claim_school.open? %>
-
-                <div class="govuk-radios__item">
-                  <%= fields.radio_button(:employment_status, :claim_school, class: "govuk-radios__input") %>
-                  <%= fields.label :employment_status_claim_school, "Yes, at #{current_claim.eligibility.claim_school_name}", class: "govuk-label govuk-radios__label" %>
-                </div>
-
-                <div class="govuk-radios__item">
-                  <%= fields.radio_button(:employment_status, :different_school, class: "govuk-radios__input") %>
-                  <%= fields.label :employment_status_different_school, "Yes, at another school", class: "govuk-label govuk-radios__label" %>
-                </div>
-
+              <% if current_claim.logged_in_with_tid_and_has_recent_tps_school? %>
+                <%= render partial: "still_teaching_with_tps_school", locals: { current_claim: current_claim, fields: fields, current_school: current_claim.recent_tps_school }  %>
               <% else %>
-
-                <div class="govuk-radios__item">
-                  <%= fields.radio_button(:employment_status, :different_school, class: "govuk-radios__input") %>
-                  <%= fields.label :employment_status_different_school, "Yes", class: "govuk-label govuk-radios__label" %>
-                </div>
-
+                <%= render partial: "still_teaching_with_claim_school", locals: { current_claim: current_claim, fields: fields, claim_school: current_claim.eligibility.claim_school }  %>
               <% end %>
-
-              <div class="govuk-radios__item">
-                <%= fields.radio_button(:employment_status, :no_school, class: "govuk-radios__input") %>
-                <%= fields.label :employment_status_no_school, "No", class: "govuk-label govuk-radios__label" %>
-              </div>
-
             </div>
-
           </fieldset>
         <% end %>
       <% end %>

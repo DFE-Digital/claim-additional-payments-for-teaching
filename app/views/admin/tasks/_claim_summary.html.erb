@@ -103,16 +103,7 @@
 
       <dd class="govuk-summary-list__value">
         <%= l(claim.decision_deadline_date) %>
-      </dd>
-    </div>
-
-    <div class="govuk-summary-list__row">
-      <dt class="govuk-summary-list__key">
-        <%= t("admin.decision_overdue") %>
-      </dt>
-
-      <dd class="govuk-summary-list__value">
-        <%= decision_deadline_warning(claim) %>
+        <%= decision_deadline_warning(claim, {na_text: ""}) %>
       </dd>
     </div>
 
@@ -125,6 +116,7 @@
         <%= status(claim) %>
       </dd>
     </div>
+
     <div class="govuk-summary-list__row">
       <dt class="govuk-summary-list__key">
         Claim amount
@@ -132,6 +124,16 @@
 
       <dd class="govuk-summary-list__value">
         <%= number_to_currency(claim.award_amount_with_topups) %>
+      </dd>
+    </div>
+
+    <div class="govuk-summary-list__row">
+      <dt class="govuk-summary-list__key">
+        <%= t("admin.claim_route") %>
+      </dt>
+
+      <dd class="govuk-summary-list__value">
+        <%= claim_route(claim) %>
       </dd>
     </div>
   </dl>

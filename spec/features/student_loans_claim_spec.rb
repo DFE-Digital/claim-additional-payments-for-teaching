@@ -14,6 +14,8 @@ RSpec.feature "Teacher Student Loan Repayments claims" do
     scenario "Teacher claims back student loan repayments with javascript #{js_status}", js: javascript_enabled do
       visit new_claim_path(StudentLoans.routing_name)
 
+      skip_tid
+
       # Check we can't skip ahead pages in the journey
       visit claim_completion_path(StudentLoans.routing_name)
       expect(page).to have_current_path("/#{StudentLoans.routing_name}/existing-session")
@@ -27,6 +29,7 @@ RSpec.feature "Teacher Student Loan Repayments claims" do
 
       choose_qts_year
       claim = Claim.by_policy(StudentLoans).order(:created_at).last
+      claim.update(details_check: true)
 
       expect(claim.eligibility.reload.qts_award_year).to eql("on_or_after_cut_off_date")
 
@@ -231,7 +234,7 @@ RSpec.feature "Teacher Student Loan Repayments claims" do
 
       # Check we can't skip to pages in middle of page sequence after claim is submitted
       visit claim_path(StudentLoans.routing_name, "still-teaching")
-      expect(page).to have_current_path("/#{StudentLoans.routing_name}/qts-year")
+      expect(page).to have_current_path("/#{StudentLoans.routing_name}/sign-in-or-continue")
     end
   end
 
@@ -245,7 +248,8 @@ RSpec.feature "Teacher Student Loan Repayments claims" do
 
       scenario "Teacher claims back student loan repayments" do
         visit new_claim_path(StudentLoans.routing_name)
-        expect(page).to have_text(I18n.t("student_loans.questions.qts_award_year"))
+        skip_tid
+        expect(page).to have_text(I18n.t("questions.qts_award_year"))
         expect(page).to have_link(href: "mailto:#{StudentLoans.feedback_email}")
 
         choose_qts_year

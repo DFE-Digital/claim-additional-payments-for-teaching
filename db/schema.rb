@@ -86,8 +86,15 @@ ActiveRecord::Schema[7.0].define(version: 2024_02_01_104539) do
     t.boolean "held", default: false
     t.boolean "hmrc_bank_validation_succeeded", default: false
     t.json "hmrc_bank_validation_responses", default: []
+    t.boolean "logged_in_with_tid"
     t.boolean "qa_required", default: false
     t.datetime "qa_completed_at"
+    t.boolean "details_check"
+    t.jsonb "teacher_id_user_info", default: {}
+    t.boolean "email_address_check"
+    t.string "mobile_check"
+    t.jsonb "dqt_teacher_status"
+    t.boolean "qualifications_details_check"
     t.index ["academic_year"], name: "index_claims_on_academic_year"
     t.index ["created_at"], name: "index_claims_on_created_at"
     t.index ["eligibility_type", "eligibility_id"], name: "index_claims_on_eligibility_type_and_eligibility_id"
@@ -160,6 +167,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_02_01_104539) do
     t.uuid "current_school_id"
     t.decimal "award_amount", precision: 7, scale: 2
     t.boolean "induction_completed"
+    t.boolean "school_somewhere_else"
     t.index ["current_school_id"], name: "index_early_career_payments_eligibilities_on_current_school_id"
   end
 
@@ -199,6 +207,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_02_01_104539) do
     t.decimal "award_amount", precision: 7, scale: 2
     t.boolean "eligible_degree_subject"
     t.boolean "induction_completed"
+    t.boolean "school_somewhere_else"
     t.index ["current_school_id"], name: "index_lup_payments_eligibilities_on_current_school_id"
   end
 
@@ -297,7 +306,9 @@ ActiveRecord::Schema[7.0].define(version: 2024_02_01_104539) do
     t.datetime "updated_at", precision: nil, null: false
     t.string "current_academic_year", limit: 9
     t.text "policy_types", default: [], array: true
+    t.boolean "teacher_id_enabled", default: true
     t.index ["created_at"], name: "index_policy_configurations_on_created_at"
+    t.index ["policy_types"], name: "index_policy_configurations_on_policy_types"
   end
 
   create_table "reminders", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -386,6 +397,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_02_01_104539) do
     t.decimal "student_loan_repayment_amount", precision: 7, scale: 2
     t.boolean "had_leadership_position"
     t.boolean "mostly_performed_leadership_duties"
+    t.boolean "claim_school_somewhere_else"
     t.index ["claim_school_id"], name: "index_student_loans_eligibilities_on_claim_school_id"
     t.index ["created_at"], name: "index_student_loans_eligibilities_on_created_at"
     t.index ["current_school_id"], name: "index_student_loans_eligibilities_on_current_school_id"

@@ -48,5 +48,12 @@ module Claims
         .to_sentence(last_word_connector: " or ")
         .downcase
     end
+
+    # Often the DQT record will represent subject names in all lowercase
+    def dqt_subjects_playback(claim)
+      claim.dqt_teacher_record.itt_subjects.map do |subject|
+        (subject.downcase == subject) ? subject.titleize : subject
+      end.join(", ")
+    end
   end
 end

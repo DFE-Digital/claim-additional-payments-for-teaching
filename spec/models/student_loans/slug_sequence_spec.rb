@@ -3,8 +3,13 @@ require "rails_helper"
 RSpec.describe StudentLoans::SlugSequence do
   subject(:slug_sequence) { StudentLoans::SlugSequence.new(current_claim) }
 
-  let(:claim) { build(:claim) }
+  let(:eligibility) { create(:student_loans_eligibility, :eligible) }
+  let(:claim) { build(:claim, eligibility:, logged_in_with_tid:, details_check:, qualifications_details_check:, dqt_teacher_status:) }
   let(:current_claim) { CurrentClaim.new(claims: [claim]) }
+  let(:logged_in_with_tid) { nil }
+  let(:details_check) { nil }
+  let(:qualifications_details_check) { nil }
+  let(:dqt_teacher_status) { nil }
 
   describe "The sequence as defined by #slugs" do
     it "excludes the “ineligible” slug if the claim is not actually ineligible" do
@@ -107,6 +112,95 @@ RSpec.describe StudentLoans::SlugSequence do
         claim.provide_mobile_number = true
 
         expect(slug_sequence.slugs).to include("mobile-verification")
+      end
+    end
+
+    context "when Teacher ID is disabled on the policy configuration" do
+      before { create(:policy_configuration, :student_loans, teacher_id_enabled: false) }
+
+      it "removes the Teacher ID-dependant slugs" do
+        slugs = %w[sign-in-or-continue teacher-detail reset-claim qualification-details select-email select-mobile]
+        expect(slug_sequence.slugs).not_to include(*slugs)
+      end
+    end
+
+    context "when logged_in_with_tid and details_check are true" do
+      let(:logged_in_with_tid) { true }
+      let(:details_check) { true }
+      let(:qts_award_date) { "test" }
+
+      before do
+        allow(claim).to receive(:dqt_teacher_record).and_return(double(qts_award_date:, has_no_data_for_claim?: false))
+      end
+
+      context "when DQT returns some data" do
+        let(:dqt_teacher_status) { {test: true} }
+
+        it "adds the qualification details page" do
+          expect(slug_sequence.slugs).to include("qualification-details")
+        end
+
+        context "when the DQT payload is missing all required data" do
+          before { allow(current_claim).to receive(:has_no_dqt_data_for_claim?).and_return(true) }
+
+          it "removes the qualification details page" do
+            expect(slug_sequence.slugs).not_to include("qualification-details")
+          end
+
+          it "does not remove the relevant pages" do
+            expect(slug_sequence.slugs).to include("qts-year")
+          end
+        end
+      end
+
+      context "when the DQT payload is empty" do
+        let(:dqt_teacher_status) { {} }
+
+        it "removes the qualification details page" do
+          expect(slug_sequence.slugs).not_to include("qualification-details")
+        end
+      end
+
+      context "when the user confirmed DQT data is correct" do
+        let(:qualifications_details_check) { true }
+
+        context "when the DQT record contains all required data" do
+          it "removes the qualification questions" do
+            expect(slug_sequence.slugs).not_to include("qts-year")
+          end
+        end
+
+        context "when the DQT payload is missing some data" do
+          let(:qts_award_date) { nil }
+
+          it "does not remove the relevant pages" do
+            expect(slug_sequence.slugs).to include("qts-year")
+          end
+        end
+      end
+
+      context "when the user confirmed DQT data is incorrect" do
+        let(:qualifications_details_check) { false }
+
+        it "adds the qualification questions" do
+          expect(slug_sequence.slugs).to include("qts-year")
+        end
+      end
+    end
+
+    context "when logged_in_with_tid is false" do
+      let(:logged_in_with_tid) { false }
+
+      it "removes the qualification details page" do
+        expect(slug_sequence.slugs).not_to include("qualification-details")
+      end
+    end
+
+    context "when logged_in_with_tid is nil" do
+      let(:logged_in_with_tid) { nil }
+
+      it "does not add the qualification details page" do
+        expect(slug_sequence.slugs).not_to include("qualification-details")
       end
     end
   end

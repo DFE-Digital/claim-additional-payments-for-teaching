@@ -1,6 +1,7 @@
 class BasePublicController < ApplicationController
   include DfE::Analytics::Requests
   include ClaimSessionTimeout
+  include HttpAuthConcern
 
   helper_method :current_policy, :current_policy_routing_name, :claim_timeout_in_minutes
   before_action :add_view_paths
@@ -12,6 +13,7 @@ class BasePublicController < ApplicationController
   def current_policy
     PolicyConfiguration.policy_for_routing_name(current_policy_routing_name)
   end
+  helper_method :current_policy
 
   def current_policy_routing_name
     params[:policy]

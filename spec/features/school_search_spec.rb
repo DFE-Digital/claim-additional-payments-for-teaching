@@ -192,6 +192,10 @@ RSpec.feature "Searching for school during Teacher Student Loan Repayments claim
     scenario "doesn't select a school from the search results the first time around" do
       visit new_claim_path(LevellingUpPremiumPayments.routing_name)
 
+      # - Sign in or continue page
+      expect(page).to have_text("Use DfE Identity to sign in")
+      click_on "Continue without signing in"
+
       # Creates a duplicate school to test whether the school search shows closed schools
       duplicate_school = create(:school, :student_loans_eligible, :closed, name: "#{school.name} Duplicate")
 

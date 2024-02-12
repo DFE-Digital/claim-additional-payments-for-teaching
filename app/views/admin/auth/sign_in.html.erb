@@ -7,7 +7,7 @@
     <% if DfESignIn.bypass? %>
       <%= button_to 'Sign in (bypass DfE Sign-in)', admin_dfe_sign_in_bypass_callback_path, class: 'govuk-button' %>
     <% else %>
-      <%= button_to "Sign in", admin_dfe_sign_in_path, class: "govuk-button" %>
+      <%= button_to "Sign in", "/admin/auth/dfe", class: "govuk-button" %>
     <% end %>
   </div>
 </div>

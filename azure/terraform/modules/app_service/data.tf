@@ -188,3 +188,24 @@ data "azurerm_service_plan" "app" {
   name                = format("%s-%s", var.app_rg_name, "asp")
   resource_group_name = var.app_rg_name
 }
+data "azurerm_key_vault_secret" "TidSignInClientId" {
+  name         = "TidSignInClientId"
+  key_vault_id = data.azurerm_key_vault.secrets_kv.id
+}
+data "azurerm_key_vault_secret" "TidSignInSecret" {
+  name         = "TidSignInSecret"
+  key_vault_id = data.azurerm_key_vault.secrets_kv.id
+}
+data "azurerm_key_vault_secret" "TidBaseUrl" {
+  name         = "TidBaseUrl"
+  key_vault_id = data.azurerm_key_vault.secrets_kv.id
+}
+data "azurerm_key_vault_secret" "TidSignInApiEndpoint" {
+  name         = "TidSignInApiEndpoint"
+  key_vault_id = data.azurerm_key_vault.secrets_kv.id
+}
+data "azurerm_key_vault_secret" "TidSignInIssuer" {
+  name         = "TidSignInIssuer"
+  key_vault_id = data.azurerm_key_vault.secrets_kv.id
+}
+

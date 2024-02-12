@@ -61,7 +61,7 @@ RSpec.feature "GOVUK Nofity SMS sends OTP" do
       end
       let(:mobile_number) { scenario[:mobile_number] }
 
-      scenario "when making a #{scenario[:policy]} claim", js: true do
+      scenario "when making a #{scenario[:policy]} claim" do
         claim = send(:"start_#{scenario[:policy].to_s.underscore}_claim")
         if scenario[:policy] == EarlyCareerPayments
           claim.eligibility = EarlyCareerPayments::Eligibility.new

@@ -1,0 +1,10 @@
+<p class="govuk-body">
+  You are not eligible for the
+  <%= link_to("early-career payment", EarlyCareerPayments.eligibility_criteria_url, class: "govuk-link") %> or the
+  <%= link_to("levelling up premium payment", LevellingUpPremiumPayments.eligibility_criteria_url, class: "govuk-link") %>
+  because of the subject you studied or the year you studied.
+</p>
+
+<p class="govuk-body">
+  For more information, check the eligibility criteria for <%= link_to("early-career payments", EarlyCareerPayments.eligibility_criteria_url, class: "govuk-link") %> and <%= link_to("levelling up premium payments", LevellingUpPremiumPayments.eligibility_criteria_url, class: "govuk-link") %>.
+</p>

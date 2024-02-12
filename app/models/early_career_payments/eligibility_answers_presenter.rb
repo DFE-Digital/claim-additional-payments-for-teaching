@@ -29,10 +29,12 @@ module EarlyCareerPayments
         a << employed_directly if eligibility.employed_as_supply_teacher?
         a << subject_to_formal_performance_action
         a << subject_to_disciplinary_action
+
         a << qualification
         a << itt_academic_year
         a << eligible_itt_subject
         a << eligible_degree_subject
+
         a << teaching_subject_now
       end.compact
     end
@@ -51,7 +53,7 @@ module EarlyCareerPayments
       [
         translate("early_career_payments.questions.current_school_search"),
         eligibility.current_school_name,
-        "current-school"
+        (eligibility.school_somewhere_else == false) ? "correct-school" : "current-school"
       ]
     end
 
@@ -104,6 +106,8 @@ module EarlyCareerPayments
     end
 
     def qualification
+      return if eligibility.claim.qualifications_details_check && eligibility.claim.dqt_teacher_record&.route_into_teaching
+
       [
         translate("early_career_payments.questions.qualification.heading"),
         translate("early_career_payments.answers.qualification.#{eligibility.qualification}"),
@@ -112,6 +116,8 @@ module EarlyCareerPayments
     end
 
     def eligible_itt_subject
+      return if eligibility.claim.qualifications_details_check && eligibility.claim.dqt_teacher_record&.eligible_itt_subject_for_claim
+
       [
         eligible_itt_subject_translation(CurrentClaim.new(claims: [eligibility.claim])),
         text_for_subject_answer,
@@ -120,7 +126,7 @@ module EarlyCareerPayments
     end
 
     def eligible_degree_subject
-      return unless (eligibility.respond_to? :eligible_degree_subject) && eligibility.eligible_degree_subject?
+      return if !eligibility.respond_to?(:eligible_degree_subject) || !eligibility.eligible_degree_subject? || (eligibility.claim.qualifications_details_check && eligibility.claim.dqt_teacher_record&.eligible_degree_code?)
 
       [
         translate("early_career_payments.questions.eligible_degree_subject"),
@@ -138,6 +144,8 @@ module EarlyCareerPayments
     end
 
     def itt_academic_year
+      return if eligibility.claim.qualifications_details_check && eligibility.claim.dqt_teacher_record&.itt_academic_year_for_claim
+
       [
         I18n.t("early_career_payments.questions.itt_academic_year.qualification.#{eligibility.qualification}"),
         eligibility.itt_academic_year.to_s.gsub("/", " - "),

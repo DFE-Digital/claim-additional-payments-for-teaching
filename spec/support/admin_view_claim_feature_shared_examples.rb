@@ -12,6 +12,17 @@ RSpec.shared_examples "Admin View Claim Feature" do |policy|
     )
   }
 
+  let!(:claim_logged_in_with_tid) {
+    eligibility = create(:"#{policy.to_s.underscore}_eligibility", :eligible)
+    create(
+      :claim,
+      :submitted,
+      :logged_in_with_tid,
+      policy: policy,
+      eligibility: eligibility
+    )
+  }
+
   let!(:multiple_claim) {
     eligibility = create(:"#{policy.to_s.underscore}_eligibility", :eligible)
     create(
@@ -89,6 +100,7 @@ RSpec.shared_examples "Admin View Claim Feature" do |policy|
 
       expect(page).to have_content("– Approved")
       expect(page).to have_content("Approved awaiting payroll")
+      expect(page).to have_content("Not signed in with DfE Identity")
     end
   end
 
@@ -140,6 +152,17 @@ RSpec.shared_examples "Admin View Claim Feature" do |policy|
       find("a[href='#{admin_claim_tasks_path(multiple_claim)}']").click
 
       expect(page).to have_content("Multiple claims with matching details have been made in this claim window.")
+    end
+  end
+
+  scenario "#{policy} view claim logged in with tid" do
+    travel_to(@within_academic_year) do
+      visit admin_claims_path
+
+      find("a[href='#{admin_claim_tasks_path(claim_logged_in_with_tid)}']").click
+
+      expect(page).to have_content("Claim route")
+      expect(page).to have_content("Signed in with DfE Identity")
     end
   end
 

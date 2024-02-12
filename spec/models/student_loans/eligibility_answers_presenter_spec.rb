@@ -5,7 +5,8 @@ RSpec.describe StudentLoans::EligibilityAnswersPresenter, type: :model do
 
   let(:subject_attributes) { {chemistry_taught: true, physics_taught: true} }
   let(:eligibility) { claim.eligibility }
-  let(:claim) { build(:claim, eligibility: build(:student_loans_eligibility, :eligible, subject_attributes)) }
+  let(:claim) { build(:claim, eligibility: build(:student_loans_eligibility, :eligible, subject_attributes), qualifications_details_check:) }
+  let(:qualifications_details_check) { false }
 
   subject(:presenter) { described_class.new(eligibility) }
 
@@ -45,6 +46,14 @@ RSpec.describe StudentLoans::EligibilityAnswersPresenter, type: :model do
 
     it "separates the subjects with commas and a final 'and'" do
       expect(presenter.answers[3][1]).to eq("Biology, Chemistry and Physics")
+    end
+  end
+
+  context "qualifications retrieved from DQT" do
+    let(:qualifications_details_check) { true }
+
+    it "removes the QTS question" do
+      expect(presenter.answers).not_to include([I18n.t("student_loans.questions.qts_award_year"), "Between the start of the 2013 to 2014 academic year and the end of the 2020 to 2021 academic year", "qts-year"])
     end
   end
 end

@@ -3,15 +3,20 @@ require "rails_helper"
 RSpec.describe EarlyCareerPayments::SlugSequence do
   subject(:slug_sequence) { EarlyCareerPayments::SlugSequence.new(current_claim) }
 
-  let(:eligibility) { build(:early_career_payments_eligibility, :eligible) }
-  let(:eligibility_lup) { build(:levelling_up_premium_payments_eligibility, :eligible) }
+  let(:eligibility) { create(:early_career_payments_eligibility, :eligible) }
+  let(:eligibility_lup) { create(:levelling_up_premium_payments_eligibility, :eligible) }
 
-  let(:claim) { build(:claim, policy: EarlyCareerPayments, academic_year: AcademicYear.new(2021), eligibility: eligibility) }
-  let(:lup_claim) { build(:claim, policy: LevellingUpPremiumPayments, academic_year: AcademicYear.new(2021), eligibility: eligibility_lup) }
+  let(:claim) { create(:claim, :skipped_tid, policy: EarlyCareerPayments, academic_year: AcademicYear.new(2021), eligibility: eligibility, logged_in_with_tid:, details_check:, dqt_teacher_status:, qualifications_details_check:) }
+  let(:lup_claim) { create(:claim, :skipped_tid, policy: LevellingUpPremiumPayments, academic_year: AcademicYear.new(2021), eligibility: eligibility_lup) }
   let(:current_claim) { CurrentClaim.new(claims: [claim, lup_claim]) }
+  let(:teacher_id_enabled) { true }
+  let(:logged_in_with_tid) { nil }
+  let(:details_check) { nil }
+  let(:dqt_teacher_status) { nil }
+  let(:qualifications_details_check) { nil }
 
   describe "The sequence as defined by #slugs" do
-    before { create(:policy_configuration, :additional_payments) }
+    before { create(:policy_configuration, :additional_payments, teacher_id_enabled:) }
 
     it "excludes the 'ineligible' slug if the claim's eligibility is undetermined" do
       expect(slug_sequence.slugs).not_to include("ineligible")
@@ -27,6 +32,157 @@ RSpec.describe EarlyCareerPayments::SlugSequence do
       claim.eligibility.employed_as_supply_teacher = true
 
       expect(slug_sequence.slugs).to include("entire-term-contract", "employed-directly")
+    end
+
+    context "when logged_in_with_tid and details_check are true" do
+      let(:logged_in_with_tid) { true }
+      let(:details_check) { true }
+      let(:itt_academic_year_for_claim) { "test" }
+      let(:route_into_teaching) { "test" }
+      let(:eligible_itt_subject_for_claim) { "test" }
+      let(:eligible_degree_code) { true }
+
+      before do
+        allow(claim).to receive(:dqt_teacher_record).and_return(double(itt_academic_year_for_claim:, route_into_teaching:, eligible_itt_subject_for_claim:, has_no_data_for_claim?: false))
+        allow(lup_claim).to receive(:dqt_teacher_record).and_return(double(itt_academic_year_for_claim:, route_into_teaching:, eligible_itt_subject_for_claim:, eligible_degree_code?: eligible_degree_code, has_no_data_for_claim?: false))
+      end
+
+      context "when DQT returns some data" do
+        let(:dqt_teacher_status) { {"test" => "test"} }
+
+        it "adds the qualification details page" do
+          expect(slug_sequence.slugs).to include("qualification-details")
+        end
+
+        context "when the DQT payload is missing all required data" do
+          before { allow(current_claim).to receive(:has_no_dqt_data_for_claim?).and_return(true) }
+
+          it "removes the qualification details page" do
+            expect(slug_sequence.slugs).not_to include("qualification-details")
+          end
+
+          it "does not remove the relevant pages" do
+            expect(slug_sequence.slugs).to include("qualification")
+            expect(slug_sequence.slugs).to include("eligible-itt-subject")
+            expect(slug_sequence.slugs).to include("itt-year")
+          end
+        end
+      end
+
+      context "when the DQT payload is empty" do
+        let(:dqt_teacher_status) { {} }
+
+        it "removes the qualification details page" do
+          expect(slug_sequence.slugs).not_to include("qualification-details")
+        end
+      end
+
+      context "when the user confirmed DQT data is correct" do
+        let(:qualifications_details_check) { true }
+
+        context "when the DQT record contains all required data" do
+          it "removes the qualification questions" do
+            expect(slug_sequence.slugs).not_to include("qualification", "itt-year", "eligible-itt-subject", "eligible-degree-subject")
+          end
+        end
+
+        context "when the DQT payload is missing some data" do
+          let(:itt_academic_year_for_claim) { nil }
+
+          it "does not remove the relevant pages" do
+            expect(slug_sequence.slugs).not_to include("qualification")
+            expect(slug_sequence.slugs).not_to include("eligible-itt-subject")
+            expect(slug_sequence.slugs).to include("itt-year")
+          end
+        end
+      end
+
+      context "when the user confirmed DQT data is incorrect" do
+        let(:qualifications_details_check) { false }
+
+        it "adds the qualification questions" do
+          expect(slug_sequence.slugs).to include("qualification", "itt-year", "eligible-itt-subject")
+        end
+      end
+
+      it "includes teacher reference number slug if teacher reference number is nil" do
+        claim.teacher_reference_number = nil
+
+        expect(slug_sequence.slugs).to include("teacher-reference-number")
+      end
+
+      it "does not include teacher reference number slug if teacher reference number is not nil" do
+        claim.teacher_reference_number = "1234567"
+
+        expect(slug_sequence.slugs).not_to include("teacher-reference-number")
+      end
+
+      it "skips personal-details page if all details were provided and valid from TID" do
+        dob = 30.years.ago.to_date
+        claim.teacher_id_user_info = {"given_name" => "John", "family_name" => "Doe", "birthdate" => dob.to_s, "ni_number" => "JH001234D"}
+
+        claim.first_name = "John"
+        claim.surname = "Doe"
+        claim.date_of_birth = dob
+        claim.national_insurance_number = "JH001234D"
+
+        expect(slug_sequence.slugs).not_to include("personal-details")
+      end
+
+      it "includes personal-details page if nino is missing" do
+        claim.first_name = "John"
+        claim.surname = "Doe"
+        claim.date_of_birth = 30.years.ago.to_date
+        claim.national_insurance_number = nil
+
+        expect(slug_sequence.slugs).to include("personal-details")
+      end
+
+      it "includes personal-details page if name is missing" do
+        claim.first_name = nil
+        claim.surname = nil
+        claim.date_of_birth = 30.years.ago.to_date
+        claim.national_insurance_number = "JH001234D"
+
+        expect(slug_sequence.slugs).to include("personal-details")
+      end
+
+      it "includes personal-details page if dob is missing" do
+        claim.first_name = "John"
+        claim.surname = "Doe"
+        claim.date_of_birth = nil
+        claim.national_insurance_number = "JH001234D"
+
+        expect(slug_sequence.slugs).to include("personal-details")
+      end
+    end
+
+    context "when logged_in_with_tid is false" do
+      let(:logged_in_with_tid) { false }
+
+      it "removes the qualification details page" do
+        expect(slug_sequence.slugs).not_to include("qualification-details")
+      end
+
+      it "includes teacher reference number slug if teacher reference number is nil" do
+        claim.teacher_reference_number = nil
+
+        expect(slug_sequence.slugs).to include("teacher-reference-number")
+      end
+
+      it "includes teacher reference number slug if teacher reference number is not nil" do
+        claim.teacher_reference_number = "1234567"
+
+        expect(slug_sequence.slugs).to include("teacher-reference-number")
+      end
+    end
+
+    context "when logged_in_with_tid is nil" do
+      let(:logged_in_with_tid) { nil }
+
+      it "removes the qualification details page" do
+        expect(slug_sequence.slugs).not_to include("qualification-details")
+      end
     end
 
     context "when 'provide_mobile_number' is 'No'" do
@@ -114,6 +270,7 @@ RSpec.describe EarlyCareerPayments::SlugSequence do
         claim.has_student_loan = true
 
         expected_slugs = %w[
+          sign-in-or-continue
           current-school
           nqt-in-academic-year-after-itt
           induction-completed
@@ -160,6 +317,7 @@ RSpec.describe EarlyCareerPayments::SlugSequence do
         claim.has_masters_doctoral_loan = true
 
         expected_slugs = %w[
+          sign-in-or-continue
           current-school
           nqt-in-academic-year-after-itt
           induction-completed
@@ -201,6 +359,7 @@ RSpec.describe EarlyCareerPayments::SlugSequence do
     context "when the answer to 'student loan - home address ' is 'Scotland' OR 'Northern Ireland'" do
       let(:expected_slugs) do
         %w[
+          sign-in-or-continue
           current-school
           nqt-in-academic-year-after-itt
           induction-completed
@@ -259,6 +418,7 @@ RSpec.describe EarlyCareerPayments::SlugSequence do
         claim.has_masters_doctoral_loan = false
 
         expected_slugs = %w[
+          sign-in-or-continue
           current-school
           nqt-in-academic-year-after-itt
           induction-completed
@@ -292,6 +452,15 @@ RSpec.describe EarlyCareerPayments::SlugSequence do
         ]
 
         expect(slug_sequence.slugs).to eq expected_slugs
+      end
+    end
+
+    context "when Teacher ID is disabled on the policy configuration" do
+      let(:teacher_id_enabled) { false }
+
+      it "removes the Teacher ID-dependant slugs" do
+        slugs = %w[sign-in-or-continue teacher-detail reset-claim qualification-details correct-school select-email select-mobile]
+        expect(slug_sequence.slugs).not_to include(*slugs)
       end
     end
   end

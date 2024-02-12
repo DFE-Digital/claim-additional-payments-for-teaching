@@ -8,7 +8,7 @@ RSpec.describe "Claims", type: :request do
       it "renders the first page in the sequence" do
         get new_claim_path(StudentLoans.routing_name)
         follow_redirect!
-        expect(response.body).to include(I18n.t("student_loans.questions.qts_award_year"))
+        expect(response.body).to include("Use DfE Identity to sign in")
       end
     end
 
@@ -91,8 +91,8 @@ RSpec.describe "Claims", type: :request do
 
       context "when the user has not completed the journey in the correct slug sequence" do
         it "redirects to the correct page in the sequence" do
-          get claim_path(StudentLoans.routing_name, "qts-year")
-          expect(response.body).to include(I18n.t("student_loans.questions.qts_award_year"))
+          get claim_path(StudentLoans.routing_name, "sign-in-or-continue")
+          expect(response.body).to include("Use DfE Identity to sign in")
 
           get claim_path(StudentLoans.routing_name, "claim-school")
           expect(response).to redirect_to(claim_path(StudentLoans.routing_name, "qts-year"))
@@ -114,8 +114,10 @@ RSpec.describe "Claims", type: :request do
           it "searches for schools using the search term" do
             get claim_path(StudentLoans.routing_name, "claim-school"), params: {school_search: school_1.name}
 
-            expect(response.body).to include school_1.name
-            expect(response.body).not_to include school_2.name
+            # Issues with e.g. "O&#39;Kon and Sons School" matching "O'Kon and Sons School", quickfix escape html
+            expect(response.body).to include CGI.escapeHTML(school_1.name)
+            expect(response.body).not_to include CGI.escapeHTML(school_2.name)
+
             expect(response.body).to include "Continue"
           end
 
@@ -183,17 +185,20 @@ RSpec.describe "Claims", type: :request do
     context "when a claim is already in progress" do
       let(:in_progress_claim) { Claim.by_policy(StudentLoans).order(:created_at).last }
 
-      before { start_student_loans_claim }
+      before {
+        start_student_loans_claim
+        set_slug_sequence_in_session(in_progress_claim, "qts-year")
+      }
 
       it "updates the claim with the submitted form data" do
         put claim_path(StudentLoans.routing_name, "qts-year"), params: {claim: {eligibility_attributes: {qts_award_year: "on_or_after_cut_off_date"}}}
 
-        expect(in_progress_claim.eligibility.qts_award_year).to eq "on_or_after_cut_off_date"
+        expect(response).to redirect_to(claim_path(StudentLoans.routing_name, "claim-school"))
+        expect(in_progress_claim.reload.eligibility.qts_award_year).to eq "on_or_after_cut_off_date"
       end
 
       it "makes sure validations appropriate to the context are run" do
         put claim_path(StudentLoans.routing_name, "qts-year"), params: {claim: {eligibility_attributes: {qts_award_year: nil}}}
-
         expect(response.body).to include("Select when you completed your initial teacher training")
       end
 

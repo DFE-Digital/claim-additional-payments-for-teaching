@@ -36,7 +36,12 @@ class Claim < ApplicationRecord
     :bank_account_number,
     :banking_name,
     :building_society_roll_number,
-    :one_time_password
+    :one_time_password,
+    :logged_in_with_tid,
+    :details_check,
+    :email_address_check,
+    :mobile_check,
+    :qualifications_details_check
   ].freeze
   AMENDABLE_ATTRIBUTES = %i[
     teacher_reference_number
@@ -100,8 +105,15 @@ class Claim < ApplicationRecord
     held: false,
     hmrc_bank_validation_responses: false,
     hmrc_bank_validation_succeeded: false,
+    logged_in_with_tid: false,
+    teacher_id_user_info: false,
+    details_check: true,
+    email_address_check: true,
+    mobile_check: true,
     qa_required: false,
-    qa_completed_at: false
+    qa_completed_at: false,
+    qualifications_details_check: true,
+    dqt_teacher_status: false
   }.freeze
   DECISION_DEADLINE = 12.weeks
   DECISION_DEADLINE_WARNING_POINT = 2.weeks
@@ -141,6 +153,7 @@ class Claim < ApplicationRecord
 
   belongs_to :eligibility, polymorphic: true, inverse_of: :claim, dependent: :destroy
   accepts_nested_attributes_for :eligibility, update_only: true
+  delegate :eligible_itt_subject, to: :eligibility, allow_nil: true
 
   has_many :claim_payments
   has_many :payments, through: :claim_payments
@@ -159,11 +172,11 @@ class Claim < ApplicationRecord
 
   validates :payroll_gender, on: [:gender, :submit], presence: {message: "Select the gender recorded on your school’s payroll system or select whether you do not know"}
 
-  validates :first_name, on: [:"personal-details", :submit], presence: {message: "Enter your first name"}
+  validates :first_name, on: [:"personal-details-name", :"personal-details", :submit], presence: {message: "Enter your first name"}
   validates :first_name,
-    on: [:"personal-details", :submit],
+    on: [:"personal-details-name", :"personal-details", :submit],
     length: {
-      in: 2..30,
+      in: 1..100,
       message: "First name must be between 2 and 30 characters"
     },
     format: {
@@ -184,11 +197,11 @@ class Claim < ApplicationRecord
     },
     if: -> { middle_name.present? }
 
-  validates :surname, on: [:"personal-details", :submit], presence: {message: "Enter your last name"}
+  validates :surname, on: [:"personal-details-name", :"personal-details", :submit], presence: {message: "Enter your last name"}
   validates :surname,
-    on: [:"personal-details", :submit],
+    on: [:"personal-details-name", :"personal-details", :submit],
     length: {
-      in: 2..30,
+      in: 1..100,
       message: "Last name must be between 2 and 30 characters"
     },
     format: {
@@ -197,6 +210,10 @@ class Claim < ApplicationRecord
     },
     if: -> { surname.present? }
 
+  validates :details_check, on: [:"teacher-detail"], inclusion: {in: [true, false], message: "Select an option to whether the details are correct or not"}
+  validates :qualifications_details_check, on: [:"qualification-details"], inclusion: {in: [true, false], message: "Select yes if your qualification details are correct"}
+  validates :email_address_check, on: [:"select-email"], inclusion: {in: [true, false], message: "Select an option to indicate whether the email is correct or not"}
+  validates :mobile_check, on: [:"select-mobile"], inclusion: {in: ["use", "alternative", "declined"], message: "Select an option to indicate whether the mobile number is correct or not"}
   validates :address_line_1, on: [:address], presence: {message: "Enter a house number or name"}, if: :has_ecp_or_lupp_policy?
   validates :address_line_1, on: [:address, :submit], presence: {message: "Enter a building and street address"}, unless: :has_ecp_or_lupp_policy?
   validates :address_line_1, length: {maximum: 100, message: "Address lines must be 100 characters or less"}
@@ -215,12 +232,12 @@ class Claim < ApplicationRecord
   validates :postcode, length: {maximum: 11, message: "Postcode must be 11 characters or less"}
   validate :postcode_is_valid, if: -> { postcode.present? }
 
-  validate :date_of_birth_criteria, on: [:"personal-details", :submit, :amendment]
+  validate :date_of_birth_criteria, on: [:"personal-details-dob", :"personal-details", :submit, :amendment]
 
   validates :teacher_reference_number, on: [:"teacher-reference-number", :submit, :amendment], presence: {message: "Enter your teacher reference number"}
   validate :trn_must_be_seven_digits
 
-  validates :national_insurance_number, on: [:"personal-details", :submit, :amendment], presence: {message: "Enter a National Insurance number in the correct format"}
+  validates :national_insurance_number, on: [:"personal-details-nino", :"personal-details", :submit, :amendment], presence: {message: "Enter a National Insurance number in the correct format"}
   validate :ni_number_is_correct_format
 
   validates :has_student_loan, on: [:"student-loan", :submit], inclusion: {in: [true, false], message: "Select yes if you are currently repaying a student loan"}
@@ -428,6 +445,7 @@ class Claim < ApplicationRecord
   end
 
   # Returns true if the claim has a verified identity received from GOV.UK Verify.
+  # TODO: We no longer use GOV.UK Verify these verified? methods aren't used anymore.
   def identity_verified?
     govuk_verify_fields.any?
   end
@@ -531,6 +549,86 @@ class Claim < ApplicationRecord
 
   def must_manually_validate_bank_details?
     !hmrc_bank_validation_succeeded?
+  end
+
+  def has_recent_tps_school?
+    TeachersPensionsService.has_recent_tps_school?(self)
+  end
+
+  def recent_tps_school
+    TeachersPensionsService.recent_tps_school(self)
+  end
+
+  def has_tps_school_for_student_loan_in_previous_financial_year?
+    TeachersPensionsService.has_tps_school_for_student_loan_in_previous_financial_year?(self)
+  end
+
+  def tps_school_for_student_loan_in_previous_financial_year
+    TeachersPensionsService.tps_school_for_student_loan_in_previous_financial_year(self)
+  end
+
+  # dup - because we don't want to pollute the claim.errors by calling this method
+  # Used to not show the personal-details page if everything is all valid
+  def has_all_valid_personal_details?
+    dup.valid?(:"personal-details") && all_personal_details_same_as_tid?
+  end
+
+  # This is used to ensure we still show the forms if the personal-details are valid
+  # but are valid because they were susequently provided/changed from what was in TID
+  def all_personal_details_same_as_tid?
+    name_same_as_tid? && dob_same_as_tid? && nino_same_as_tid?
+  end
+
+  def name_same_as_tid?
+    teacher_id_user_info["given_name"] == first_name && teacher_id_user_info["family_name"] == surname
+  end
+
+  def dob_same_as_tid?
+    teacher_id_user_info["birthdate"] == date_of_birth.to_s
+  end
+
+  def nino_same_as_tid?
+    teacher_id_user_info["ni_number"] == national_insurance_number
+  end
+
+  # dup - because we don't want to pollute the claim.errors by calling this method
+  # Check errors hash for key because we don't care about the non-context validation errors
+  def has_valid_name?
+    claim_dup = dup
+    claim_dup.valid?(:"personal-details-name")
+    !(claim_dup.errors.include?(:first_name) || claim_dup.errors.include?(:surname))
+  end
+
+  # dup - because we don't want to pollute the claim.errors by calling this method
+  # Check errors hash for key because we don't care about the non-context validation errors
+  def has_valid_date_of_birth?
+    claim_dup = dup
+    claim_dup.valid?(:"personal-details-dob")
+    !claim_dup.errors.include?(:date_of_birth)
+  end
+
+  # dup - because we don't want to pollute the claim.errors by calling this method
+  # Check errors hash for key because we don't care about the non-context validation errors
+  def has_valid_nino?
+    claim_dup = dup
+    claim_dup.valid?(:"personal-details-nino")
+    !claim_dup.errors.include?(:national_insurance_number)
+  end
+
+  def trn_same_as_tid?
+    teacher_id_user_info["trn"] == teacher_reference_number
+  end
+
+  def logged_in_with_tid_and_has_recent_tps_school?
+    logged_in_with_tid? && teacher_reference_number.present? && has_recent_tps_school?
+  end
+
+  def has_dqt_record?
+    !dqt_teacher_status.blank?
+  end
+
+  def dqt_teacher_record
+    policy::DqtRecord.new(Dqt::Teacher.new(dqt_teacher_status), self) if has_dqt_record?
   end
 
   private

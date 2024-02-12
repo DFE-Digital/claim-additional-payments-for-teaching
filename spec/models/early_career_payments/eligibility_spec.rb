@@ -11,6 +11,61 @@ RSpec.describe EarlyCareerPayments::Eligibility, type: :model do
     end
   end
 
+  describe "correct-school submit" do
+    let(:school) { create(:school, :early_career_payments_eligible) }
+
+    context "current_school not set and school_somewhere_else is not set return one is required error" do
+      it "returns an error" do
+        eligibility = EarlyCareerPayments::Eligibility.new(current_school: nil, school_somewhere_else: nil)
+
+        expect(eligibility).not_to be_valid(:"correct-school")
+        expect(eligibility.errors.messages[:current_school]).to eq(["Select the school you teach at or choose somewhere else"])
+      end
+    end
+
+    context "selects a school suggested from TPS" do
+      it "sets current_school and sets school_somewhere_else to false" do
+        eligibility = EarlyCareerPayments::Eligibility.new(current_school: school, school_somewhere_else: false)
+
+        expect(eligibility).to be_valid(:"correct-school")
+      end
+    end
+
+    context "selects somewhere else and not the suggested school" do
+      it "sets school_somewhere_else to true and current_school stays nil" do
+        eligibility = EarlyCareerPayments::Eligibility.new(current_school: nil, school_somewhere_else: true)
+
+        expect(eligibility).to be_valid(:"correct-school")
+      end
+
+      # e.g. the teacher presses the backlink a school is already set
+      it "sets school_somewhere_else to true and current_school stays remains if already set" do
+        eligibility = EarlyCareerPayments::Eligibility.new(current_school: school, school_somewhere_else: true)
+
+        expect(eligibility).to be_valid(:"correct-school")
+      end
+    end
+  end
+
+  describe "current-school submit" do
+    let(:school) { create(:school, :early_career_payments_eligible) }
+
+    context "school_somewhere_else is already true and set a school" do
+      it "is valid" do
+        eligibility = EarlyCareerPayments::Eligibility.new(current_school: school, school_somewhere_else: true)
+
+        expect(eligibility).to be_valid(:"current-school")
+      end
+
+      it "returns an error if current_school is not set" do
+        eligibility = EarlyCareerPayments::Eligibility.new(current_school: nil, school_somewhere_else: true)
+
+        expect(eligibility).not_to be_valid(:"current-school")
+        expect(eligibility.errors.messages[:current_school]).to eq(["Select the school you teach at"])
+      end
+    end
+  end
+
   describe "qualification attribute" do
     it "rejects invalid values" do
       expect { EarlyCareerPayments::Eligibility.new(qualification: "non-existance") }.to raise_error(ArgumentError)
@@ -408,6 +463,50 @@ RSpec.describe EarlyCareerPayments::Eligibility, type: :model do
         let(:eligibility) { create(:early_career_payments_eligibility, :eligible_now, :induction_not_completed, :eligible_school_ecp_and_lup) }
 
         it { is_expected.to eq(:ineligible) }
+      end
+    end
+  end
+
+  describe "#set_qualifications_from_dqt_record" do
+    let(:eligibility) { build(:early_career_payments_eligibility, claim:, itt_academic_year:, eligible_itt_subject:, qualification:) }
+    let(:claim) { build(:claim, policy: EarlyCareerPayments, qualifications_details_check:) }
+    let(:itt_academic_year) { AcademicYear.new(2021) }
+    let(:eligible_itt_subject) { :mathematics }
+    let(:qualification) { :postgraduate_itt }
+
+    context "when user has confirmed their qualification details" do
+      let(:qualifications_details_check) { true }
+      let(:dbl) { double(itt_academic_year_for_claim:, eligible_itt_subject_for_claim:, route_into_teaching:) }
+      let(:itt_academic_year_for_claim) { AcademicYear.new(2022) }
+      let(:eligible_itt_subject_for_claim) { :computing }
+      let(:route_into_teaching) { :undergraduate_itt }
+
+      before { allow(claim).to receive(:dqt_teacher_record).and_return(dbl) }
+
+      it "sets the qualification answers to those returned by LevellingUpPremiumPayments::DqtRecord" do
+        expect { eligibility.set_qualifications_from_dqt_record }.to change { eligibility.itt_academic_year }.from(itt_academic_year).to(itt_academic_year_for_claim)
+          .and change { eligibility.eligible_itt_subject }.from(eligible_itt_subject.to_s).to(eligible_itt_subject_for_claim.to_s)
+          .and change { eligibility.qualification }.from(qualification.to_s).to(route_into_teaching.to_s)
+      end
+
+      context "when the DQT record is missing data" do
+        let(:itt_academic_year_for_claim) { nil }
+        let(:eligible_itt_subject_for_claim) { nil }
+        let(:route_into_teaching) { nil }
+
+        it "does not change the answers" do
+          expect(eligibility.set_qualifications_from_dqt_record).to eq(eligibility.attributes.symbolize_keys.slice(:itt_academic_year, :eligible_itt_subject, :qualification).transform_values(&:to_s))
+        end
+      end
+    end
+
+    context "when user has not confirmed their qualification details" do
+      let(:qualifications_details_check) { false }
+
+      it "sets the qualification answers to nil" do
+        expect { eligibility.set_qualifications_from_dqt_record }.to change { eligibility.itt_academic_year }.from(itt_academic_year).to(nil)
+          .and change { eligibility.eligible_itt_subject }.from(eligible_itt_subject.to_s).to(nil)
+          .and change { eligibility.qualification }.from(qualification.to_s).to(nil)
       end
     end
   end

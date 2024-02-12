@@ -77,12 +77,23 @@ module Admin
         .join(", ")
     end
 
-    def decision_deadline_warning(claim)
+    def decision_deadline_warning(claim, opts = {})
       days_until_decision_deadline = days_between(Date.today, claim.decision_deadline_date)
-      return I18n.t("admin.decision_overdue_not_applicable") if days_until_decision_deadline.days > Claim::DECISION_DEADLINE_WARNING_POINT
 
+      if days_until_decision_deadline.days > Claim::DECISION_DEADLINE_WARNING_POINT
+        return opts.key?(:na_text) ? opts[:na_text] : I18n.t("admin.decision_overdue_not_applicable")
+      end
+
+      decision_deadline_warning_lozenge(days_until_decision_deadline)
+    end
+
+    def decision_deadline_warning_lozenge(days_until_decision_deadline)
       decision_deadline_warning_class = (days_until_decision_deadline < 0) ? "tag--alert" : "tag--information"
       content_tag(:strong, pluralize(days_until_decision_deadline, "day"), class: "govuk-tag #{decision_deadline_warning_class}")
+    end
+
+    def claim_route(claim)
+      claim.logged_in_with_tid? ? I18n.t("admin.claim_route_with_tid") : I18n.t("admin.claim_route_not_tid")
     end
 
     def matching_attributes(first_claim, second_claim)

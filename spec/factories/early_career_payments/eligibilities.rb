@@ -83,6 +83,7 @@ FactoryBot.define do
 
     # Traits common to both ECP and LUP
     trait :common_eligible_attributes do
+      school_somewhere_else { nil }
       eligible_school
       newly_qualified_teacher
       not_a_supply_teacher

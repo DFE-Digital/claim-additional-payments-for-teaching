@@ -22,7 +22,7 @@ module StudentLoans
     ].flatten.freeze
     AMENDABLE_ATTRIBUTES = %i[student_loan_repayment_amount].freeze
     ATTRIBUTE_DEPENDENCIES = {
-      "claim_school_id" => ["taught_eligible_subjects", *SUBJECT_ATTRIBUTES, "employment_status"],
+      "claim_school_id" => ["taught_eligible_subjects", *SUBJECT_ATTRIBUTES, "employment_status", "current_school_id"],
       "had_leadership_position" => ["mostly_performed_leadership_duties"]
     }.freeze
 
@@ -40,7 +40,8 @@ module StudentLoans
     enum employment_status: {
       claim_school: 0,
       different_school: 1,
-      no_school: 2
+      no_school: 2,
+      recent_tps_school: 3
     }, _prefix: :employed_at
 
     has_one :claim, as: :eligibility, inverse_of: :eligibility
@@ -49,6 +50,7 @@ module StudentLoans
 
     validates :qts_award_year, on: [:"qts-year", :submit], presence: {message: "Select when you completed your initial teacher training"}
     validates :claim_school, on: [:"claim-school", :submit], presence: {message: "Select a school from the list or search again for a different school"}
+    validates :claim_school, on: [:"select-claim-school"], presence: {message: ->(object, _data) { object.select_claim_school_presence_error_message }}, unless: :claim_school_somewhere_else?
     validates :employment_status, on: [:"still-teaching", :submit], presence: {message: ->(object, _data) { "Select if you still work at #{object.claim_school_name}, another school or no longer teach in England" }}
     validates :current_school, on: [:"current-school", :submit], presence: {message: "Select a school from the list"}
     validate :one_subject_must_be_selected, on: [:"subjects-taught", :submit], unless: :not_taught_eligible_subjects?
@@ -105,7 +107,6 @@ module StudentLoans
           write_attribute(dependent_attribute_name, nil) if attrs.include?(attribute_name)
         end
       end
-      self.current_school = inferred_current_school if employment_status_changed?
     end
 
     def submit!
@@ -113,6 +114,16 @@ module StudentLoans
 
     def ineligible_qts_award_year?
       awarded_qualified_status_before_cut_off_date?
+    end
+
+    def select_claim_school_presence_error_message
+      I18n.t("student_loans.questions.claim_school_select_error", financial_year: StudentLoans.current_financial_year)
+    end
+
+    def set_qualifications_from_dqt_record
+      self.qts_award_year = if claim.qualifications_details_check && claim.dqt_teacher_record&.qts_award_date
+        claim.dqt_teacher_record.eligible_qts_award_date? ? :on_or_after_cut_off_date : :before_cut_off_date
+      end
     end
 
     private
@@ -135,10 +146,6 @@ module StudentLoans
 
     def ineligible_current_school?
       current_school.present? && !current_school.eligible_for_student_loans_as_current_school?
-    end
-
-    def inferred_current_school
-      employed_at_claim_school? ? claim_school : nil
     end
   end
 end

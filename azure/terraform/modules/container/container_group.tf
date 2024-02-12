@@ -65,6 +65,11 @@ resource "azurerm_container_group" "cont_grp_01" {
       "WORKER_COUNT"                                   = "4"
       "BYPASS_DFE_SIGN_IN"                             = var.bypass_dfe_sign_in
       "SUPPRESS_DFE_ANALYTICS_INIT"                    = var.suppress_dfe_analytics_init
+      "TID_SIGN_IN_ISSUER"                             = data.azurerm_key_vault_secret.TidSignInIssuer.value
+      "TID_SIGN_IN_API_ENDPOINT"                       = data.azurerm_key_vault_secret.TidSignInApiEndpoint.value
+      "TID_BASE_URL"                                   = data.azurerm_key_vault_secret.TidBaseUrl.value
+      "TID_SIGN_IN_SECRET"                             = data.azurerm_key_vault_secret.TidSignInSecret.value
+      "TID_SIGN_IN_CLIENT_ID"                          = data.azurerm_key_vault_secret.TidSignInClientId.value
     }
 
     ports {

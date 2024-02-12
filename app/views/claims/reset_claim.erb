@@ -1,0 +1,27 @@
+<main class="govuk-main-wrapper govuk-main-wrapper--auto-spacing govuk-body" id="main-content" role="main">
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <h1 class="govuk-heading-l">
+        You cannot use your DfE Identity account with this service
+      </h1>
+
+      <%# Teacher selected YES however TRN was missing %>
+      <% if !current_claim.details_check? && DfeIdentity::UserInfo.trn_missing?(current_claim.teacher_id_user_info) %>
+        <%= render partial: "claims/reset_claim_trn_missing" %>
+      <% else %>
+        <%= render partial: "claims/reset_claim_default" %>
+      <% end %>
+
+      <p>
+        You can continue to complete an application to check your eligibility and apply for a payment.
+      </p>
+
+      <%= form_with(url: claim_path(current_policy_routing_name, "current-school"), method: :get) do %>
+        <div class="govuk-form-group">
+          <%= hidden_field_tag :skip_landing_page, 'true' %>
+          <%= submit_tag 'Continue', class: 'govuk-button', data: { module: 'govuk-button' }, 'data-disable-with' => 'Continue' %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</main>

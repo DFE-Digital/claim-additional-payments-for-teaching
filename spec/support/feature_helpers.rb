@@ -27,6 +27,7 @@ module FeatureHelpers
 
   def start_student_loans_claim
     visit new_claim_path(StudentLoans.routing_name)
+    skip_tid
     choose_qts_year
     Claim.by_policy(StudentLoans).order(:created_at).last
   end
@@ -127,6 +128,11 @@ module FeatureHelpers
   def get_otp_from_email
     ActionMailer::Base.deliveries
       .last[:personalisation].decoded.scan(/\b[0-9]{6}\b/).first
+  end
+
+  def skip_tid
+    expect(page).to have_text("Use DfE Identity to sign in")
+    click_on "Continue without signing in"
   end
 
   # This is a workaround for some poorly written older feature specs which
