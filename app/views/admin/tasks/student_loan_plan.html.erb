@@ -1,0 +1,24 @@
+<% content_for(:page_title) { page_title("Claim #{@claim.reference} student loan amount check for #{policy_service_name(@claim.policy.routing_name)}") } %>
+
+<%= link_to "Back", admin_claim_tasks_path(claim_id: @claim.id), class: "govuk-back-link" %>
+
+<div class="govuk-grid-row">
+
+  <%= render "claim_summary", claim: @claim, heading: "Student loan plan type" %>
+
+  <div class="govuk-grid-column-two-thirds">
+    <h2 class="govuk-heading-l"><%= @current_task_name.humanize %></h2>
+
+    <%= render "admin/claims/answers", answers: @tasks_presenter.student_loan_plan %>
+  </div>
+
+  <div class="govuk-grid-column-two-thirds">
+    <% if !@task.passed.nil? %>
+      <%= render "task_outcome", task: @task %>
+    <% else %>
+      <%= render "form", task_name: "student_loan_plan", claim: @claim %>
+    <% end %>
+
+    <%= render partial: "admin/task_pagination" %>
+  </div>
+</div>

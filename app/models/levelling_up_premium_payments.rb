@@ -5,7 +5,8 @@ module LevellingUpPremiumPayments
     AutomatedChecks::ClaimVerifiers::Identity,
     AutomatedChecks::ClaimVerifiers::Qualifications,
     AutomatedChecks::ClaimVerifiers::CensusSubjectsTaught,
-    AutomatedChecks::ClaimVerifiers::Employment
+    AutomatedChecks::ClaimVerifiers::Employment,
+    AutomatedChecks::ClaimVerifiers::StudentLoanPlan
   ].freeze
 
   def short_name

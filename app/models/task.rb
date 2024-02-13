@@ -14,6 +14,7 @@ class Task < ApplicationRecord
     census_subjects_taught
     employment
     student_loan_amount
+    student_loan_plan
     payroll_details
     matching_details
     payroll_gender

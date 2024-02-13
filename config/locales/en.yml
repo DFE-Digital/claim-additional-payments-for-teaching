@@ -163,6 +163,7 @@ en:
       identity_confirmation: "Confirm the claimant made the claim"
       payroll_gender: "Add a payroll gender for HMRC"
       student_loan_amount: "Check student loan amount"
+      student_loan_plan: "Check student loan plan"
       payroll_details: "Check bank/building society account details"
       census_subjects_taught: "Check eligible subjects are taught"
     undo_decision:
@@ -429,6 +430,8 @@ en:
           title: "Does the claimant’s initial teacher training (ITT) start/end year and subject match the above information from their claim?"
         induction_confirmation:
           title: "Is the claimant’s induction data valid?"
+        student_loan_plan:
+          title: "Does the claimant’s student loan plan match the information we hold about their loan?"
         census_subjects_taught:
           title: Does the claimant's subject match the schools workforce census subjects
         matching_details:
@@ -470,6 +473,8 @@ en:
           notes: "notes"
         qualifications:
           title: "Does the claimant’s ITT start/end year and subject match the above information from their claim, or do they have an eligible degree?"
+        student_loan_plan:
+          title: "Does the claimant’s student loan plan match the information we hold about their loan?"
         census_subjects_taught:
           title: Does the claimant’s subject match the schools workforce census subjects
         matching_details:

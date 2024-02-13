@@ -131,27 +131,26 @@ RSpec.feature "Changing the answers on a submittable claim" do
     expect(current_path).to eq(claim_path(MathsAndPhysics.routing_name, "check-your-answers"))
   end
 
-  scenario "Teacher edits fields on the claim that nullify dependant eligibility attributes" do
+  scenario "Teacher edits personal details, triggering the update of student loan details" do
     claim = start_student_loans_claim
     eligibility = claim.eligibility
 
     claim.update!(attributes_for(:claim, :submittable))
-    eligibility.update!(attributes_for(:student_loans_eligibility, :eligible, current_school_id: student_loans_school.id, claim_school_id: student_loans_school.id))
+    eligibility.update!(attributes_for(:student_loans_eligibility, :eligible, current_school_id: student_loans_school.id, claim_school_id: student_loans_school.id, student_loan_repayment_amount: 100))
     jump_to_claim_journey_page(claim, "check-your-answers")
 
-    old_national_insurance_number = claim.national_insurance_number
-    new_national_insurance_number = "AB123456C"
+    # Add student loans data for the applicant's NINO and DoB
+    create(:student_loans_data, nino: "AB123456C", date_of_birth: claim.date_of_birth, plan_type_of_deduction: 1, amount: 50)
 
-    expect {
-      page.first("a[href='#{claim_path(StudentLoans.routing_name, "personal-details")}']", minimum: 1).click
-      fill_in "National Insurance number", with: new_national_insurance_number
-      click_on "Continue"
-    }.to change { claim.reload.national_insurance_number }.from(old_national_insurance_number).to(new_national_insurance_number)
-      .and change { claim.has_student_loan }.to(nil)
-      .and change { claim.student_loan_plan }.to(nil)
-      .and change { claim.eligibility.student_loan_repayment_amount }.to(nil)
+    page.first("a[href='#{claim_path(StudentLoans.routing_name, "personal-details")}']", minimum: 1).click
+    fill_in "National Insurance number", with: "AB123456C"
+    click_on "Continue"
 
-    expect(page).not_to have_content("Check your answers before sending your application")
+    # - student-loan-amount is re-displayed for TSLR
+    expect(page).to have_content("Your student loan repayment amount is £50")
+    click_on "Continue"
+
+    expect(page).to have_content("Check your answers before sending your application")
   end
 
   context "User changes fields that aren't related to eligibility" do
@@ -176,6 +175,9 @@ RSpec.feature "Changing the answers on a submittable claim" do
         claim.reload.middle_name
       }.from(old_middle_name).to(new_middle_name)
 
+      # - student-loan-amount is re-displayed for TSLR
+      click_on "Continue"
+
       expect(page).to have_content("Check your answers before sending your application")
     end
 
@@ -193,6 +195,9 @@ RSpec.feature "Changing the answers on a submittable claim" do
 
       page.first("a[href='#{claim_path(StudentLoans.routing_name, "personal-details")}']", minimum: 1).click
       fill_in "First name", with: "Bobby"
+      click_on "Continue"
+
+      # - student-loan-amount is re-displayed for TSLR
       click_on "Continue"
 
       expect(current_path).to eq(claim_path(StudentLoans.routing_name, "check-your-answers"))

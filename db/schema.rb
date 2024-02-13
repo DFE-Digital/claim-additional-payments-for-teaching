@@ -60,9 +60,9 @@ ActiveRecord::Schema[7.0].define(version: 2024_02_01_104539) do
     t.integer "student_loan_country"
     t.integer "student_loan_courses"
     t.integer "student_loan_start_date"
+    t.string "student_loan_plan"
     t.string "eligibility_type"
     t.uuid "eligibility_id"
-    t.string "student_loan_plan"
     t.integer "payroll_gender"
     t.text "govuk_verify_fields", default: [], array: true
     t.string "first_name", limit: 100
@@ -95,6 +95,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_02_01_104539) do
     t.string "mobile_check"
     t.jsonb "dqt_teacher_status"
     t.boolean "qualifications_details_check"
+    t.boolean "submitted_using_slc_data", default: false
     t.index ["academic_year"], name: "index_claims_on_academic_year"
     t.index ["created_at"], name: "index_claims_on_created_at"
     t.index ["eligibility_type", "eligibility_id"], name: "index_claims_on_eligibility_type_and_eligibility_id"

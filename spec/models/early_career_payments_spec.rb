@@ -7,7 +7,8 @@ RSpec.describe EarlyCareerPayments, type: :model do
       AutomatedChecks::ClaimVerifiers::Qualifications,
       AutomatedChecks::ClaimVerifiers::Induction,
       AutomatedChecks::ClaimVerifiers::CensusSubjectsTaught,
-      AutomatedChecks::ClaimVerifiers::Employment
+      AutomatedChecks::ClaimVerifiers::Employment,
+      AutomatedChecks::ClaimVerifiers::StudentLoanPlan
     ])
   end
 
