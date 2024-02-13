@@ -112,14 +112,10 @@ RSpec.feature "Teacher Early-Career Payments claims", slow: true do
     expect(page).to have_text(I18n.t("additional_payments.check_your_answers.part_one.confirmation_notice"))
     expect(page).not_to have_text(I18n.t("additional_payments.questions.eligible_degree_subject"))
 
-    %w[Identity\ details Payment\ details Student\ loan\ details].each do |section_heading|
+    %w[Identity\ details Payment\ details].each do |section_heading|
       expect(page).not_to have_text section_heading
     end
 
-    within(".govuk-summary-list") do
-      expect(page).not_to have_text(I18n.t("questions.postgraduate_masters_loan"))
-      expect(page).not_to have_text(I18n.t("questions.postgraduate_doctoral_loan"))
-    end
     click_on("Continue")
 
     # - You are eligible for an early career payment
@@ -254,69 +250,11 @@ RSpec.feature "Teacher Early-Career Payments claims", slow: true do
 
     expect(claim.reload.teacher_reference_number).to eql("1234567")
 
-    # - Are you currently paying off your student loan
-    expect(page).to have_text(I18n.t("questions.has_student_loan"))
-
-    choose "Yes"
-    click_on "Continue"
-
-    expect(claim.reload.has_student_loan).to eql true
-
-    # - When you applied for your student loan where was your address
-    expect(page).to have_text(I18n.t("questions.student_loan_country"))
-
-    choose "England"
-    click_on "Continue"
-
-    expect(claim.reload.student_loan_country).to eql("england")
-
-    # - How many higher education courses did you take a student loan out for
-    expect(page).to have_text(I18n.t("questions.student_loan_how_many_courses"))
-
-    choose "1"
-    click_on "Continue"
-
-    expect(claim.reload.student_loan_courses).to eql("one_course")
-
-    # - When did the first year of your higher education course start
-    expect(page).to have_text(I18n.t("questions.student_loan_start_date.one_course"))
-
-    choose "Before 1 September 2012"
-    click_on "Continue"
-
-    expect(claim.reload.student_loan_start_date).to eq(StudentLoan::BEFORE_1_SEPT_2012)
-    expect(claim.student_loan_plan).to eq(StudentLoan::PLAN_1)
-
-    # - Are you currently paying off your masters/doctoral loan
-    expect(page).not_to have_text(I18n.t("questions.has_masters_and_or_doctoral_loan"))
-    expect(claim.reload.has_masters_doctoral_loan).to be_nil
-
-    # - Did you take out a postgraduate masters loan on or after 1 August 2016
-    expect(page).to have_text(I18n.t("questions.postgraduate_masters_loan"))
-
-    choose "Yes"
-    click_on "Continue"
-
-    expect(claim.reload.postgraduate_masters_loan).to eql true
-
-    # - Did you take out a postgraduate doctoral loan on or after 1 August 2016
-    expect(page).to have_text(I18n.t("questions.postgraduate_doctoral_loan"))
-
-    choose "Yes"
-    click_on "Continue"
-
-    expect(claim.reload.postgraduate_doctoral_loan).to eql true
-
     # - Check your answers before sending your application
     expect(page).to have_text("Check your answers before sending your application")
     expect(page).not_to have_text("Eligibility details")
-    %w[Identity\ details Payment\ details Student\ loan\ details].each do |section_heading|
+    %w[Identity\ details Payment\ details].each do |section_heading|
       expect(page).to have_text section_heading
-    end
-
-    within(".govuk-summary-list:nth-of-type(3)") do
-      expect(page).to have_text(I18n.t("questions.postgraduate_masters_loan"))
-      expect(page).to have_text(I18n.t("questions.postgraduate_doctoral_loan"))
     end
 
     freeze_time do
@@ -598,13 +536,8 @@ RSpec.feature "Teacher Early-Career Payments claims", slow: true do
     expect(page).to have_text(I18n.t("additional_payments.check_your_answers.part_one.secondary_heading"))
     expect(page).to have_text(I18n.t("additional_payments.check_your_answers.part_one.confirmation_notice"))
 
-    %w[Identity\ details Payment\ details Student\ loan\ details].each do |section_heading|
+    %w[Identity\ details Payment\ details].each do |section_heading|
       expect(page).not_to have_text section_heading
-    end
-
-    within(".govuk-summary-list") do
-      expect(page).not_to have_text(I18n.t("questions.postgraduate_masters_loan"))
-      expect(page).not_to have_text(I18n.t("questions.postgraduate_doctoral_loan"))
     end
 
     click_on("Continue")
@@ -734,67 +667,11 @@ RSpec.feature "Teacher Early-Career Payments claims", slow: true do
 
     expect(claim.reload.teacher_reference_number).to eql("1234567")
 
-    # - Are you currently paying off your student loan
-    expect(page).to have_text(I18n.t("questions.has_student_loan"))
-
-    choose "Yes"
-    click_on "Continue"
-
-    expect(claim.reload.has_student_loan).to eql true
-
-    # - When you applied for your student loan where was your address
-    expect(page).to have_text(I18n.t("questions.student_loan_country"))
-
-    choose "England"
-    click_on "Continue"
-
-    expect(claim.reload.student_loan_country).to eql("england")
-    # - How many higher education courses did you take a student loan out for
-    expect(page).to have_text(I18n.t("questions.student_loan_how_many_courses"))
-
-    choose "1"
-    click_on "Continue"
-
-    expect(claim.reload.student_loan_courses).to eql("one_course")
-    # - When did the first year of your higher education course start
-    expect(page).to have_text(I18n.t("questions.student_loan_start_date.one_course"))
-
-    choose "Before 1 September 2012"
-    click_on "Continue"
-
-    expect(claim.reload.student_loan_start_date).to eq(StudentLoan::BEFORE_1_SEPT_2012)
-    expect(claim.student_loan_plan).to eq(StudentLoan::PLAN_1)
-
-    # - Are you currently paying off your masters/doctoral loan
-    expect(page).not_to have_text(I18n.t("questions.has_masters_and_or_doctoral_loan"))
-    expect(claim.reload.has_masters_doctoral_loan).to be_nil
-
-    # - Did you take out a postgraduate masters loan on or after 1 August 2016
-    expect(page).to have_text(I18n.t("questions.postgraduate_masters_loan"))
-
-    choose "Yes"
-    click_on "Continue"
-
-    expect(claim.reload.postgraduate_masters_loan).to eql true
-
-    # - Did you take out a postgraduate doctoral loan on or after 1 August 2016
-    expect(page).to have_text(I18n.t("questions.postgraduate_doctoral_loan"))
-
-    choose "Yes"
-    click_on "Continue"
-
-    expect(claim.reload.postgraduate_doctoral_loan).to eql true
-
     # - Check your answers before sending your application
     expect(page).to have_text("Check your answers before sending your application")
     expect(page).not_to have_text("Eligibility details")
-    %w[Identity\ details Payment\ details Student\ loan\ details].each do |section_heading|
+    %w[Identity\ details Payment\ details].each do |section_heading|
       expect(page).to have_text section_heading
-    end
-
-    within(".govuk-summary-list:nth-of-type(3)") do
-      expect(page).to have_text(I18n.t("questions.postgraduate_masters_loan"))
-      expect(page).to have_text(I18n.t("questions.postgraduate_doctoral_loan"))
     end
 
     freeze_time do
@@ -971,13 +848,8 @@ RSpec.feature "Teacher Early-Career Payments claims", slow: true do
       expect(page).to have_text(I18n.t("additional_payments.check_your_answers.part_one.secondary_heading"))
       expect(page).to have_text(I18n.t("additional_payments.check_your_answers.part_one.confirmation_notice"))
 
-      %w[Identity\ details Payment\ details Student\ loan\ details].each do |section_heading|
+      %w[Identity\ details Payment\ details].each do |section_heading|
         expect(page).not_to have_text section_heading
-      end
-
-      within(".govuk-summary-list") do
-        expect(page).not_to have_text(I18n.t("questions.postgraduate_masters_loan"))
-        expect(page).not_to have_text(I18n.t("questions.postgraduate_doctoral_loan"))
       end
 
       click_on("Continue")
@@ -1106,67 +978,11 @@ RSpec.feature "Teacher Early-Career Payments claims", slow: true do
 
       expect(claim.reload.teacher_reference_number).to eql("1234567")
 
-      # - Are you currently paying off your student loan
-      expect(page).to have_text(I18n.t("questions.has_student_loan"))
-
-      choose "Yes"
-      click_on "Continue"
-
-      expect(claim.reload.has_student_loan).to eql true
-
-      # - When you applied for your student loan where was your address
-      expect(page).to have_text(I18n.t("questions.student_loan_country"))
-
-      choose "England"
-      click_on "Continue"
-
-      expect(claim.reload.student_loan_country).to eql("england")
-      # - How many higher education courses did you take a student loan out for
-      expect(page).to have_text(I18n.t("questions.student_loan_how_many_courses"))
-
-      choose "1"
-      click_on "Continue"
-
-      expect(claim.reload.student_loan_courses).to eql("one_course")
-      # - When did the first year of your higher education course start
-      expect(page).to have_text(I18n.t("questions.student_loan_start_date.one_course"))
-
-      choose "Before 1 September 2012"
-      click_on "Continue"
-
-      expect(claim.reload.student_loan_start_date).to eq(StudentLoan::BEFORE_1_SEPT_2012)
-      expect(claim.student_loan_plan).to eq(StudentLoan::PLAN_1)
-
-      # - Are you currently paying off your masters/doctoral loan
-      expect(page).not_to have_text(I18n.t("questions.has_masters_and_or_doctoral_loan"))
-      expect(claim.reload.has_masters_doctoral_loan).to be_nil
-
-      # - Did you take out a postgraduate masters loan on or after 1 August 2016
-      expect(page).to have_text(I18n.t("questions.postgraduate_masters_loan"))
-
-      choose "Yes"
-      click_on "Continue"
-
-      expect(claim.reload.postgraduate_masters_loan).to eql true
-
-      # - Did you take out a postgraduate doctoral loan on or after 1 August 2016
-      expect(page).to have_text(I18n.t("questions.postgraduate_doctoral_loan"))
-
-      choose "Yes"
-      click_on "Continue"
-
-      expect(claim.reload.postgraduate_doctoral_loan).to eql true
-
       # - Check your answers before sending your application
       expect(page).to have_text("Check your answers before sending your application")
       expect(page).not_to have_text("Eligibility details")
-      %w[Identity\ details Payment\ details Student\ loan\ details].each do |section_heading|
+      %w[Identity\ details Payment\ details].each do |section_heading|
         expect(page).to have_text section_heading
-      end
-
-      within(".govuk-summary-list:nth-of-type(3)") do
-        expect(page).to have_text(I18n.t("questions.postgraduate_masters_loan"))
-        expect(page).to have_text(I18n.t("questions.postgraduate_doctoral_loan"))
       end
 
       freeze_time do

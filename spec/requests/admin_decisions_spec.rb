@@ -24,6 +24,7 @@ RSpec.describe "Admin decisions", type: :request do
           create(:task, name: "induction_confirmation", claim: claim)
           create(:task, name: "census_subjects_taught", claim: claim)
           create(:task, name: "employment", claim: claim)
+          create(:task, name: "student_loan_plan", claim: claim)
         end
 
         it "does not warn the service operator about incomplete tasks" do
