@@ -23,7 +23,9 @@ class Claim
       :building_society_roll_number,
       :banking_name,
       :hmrc_bank_validation_responses,
-      :mobile_number
+      :mobile_number,
+      :teacher_id_user_info,
+      :dqt_teacher_status
     ]
 
     def scrub_completed_claims
