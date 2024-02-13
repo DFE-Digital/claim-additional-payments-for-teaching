@@ -25,6 +25,7 @@ shared:
   - one_time_password
   - hmrc_bank_validation_responses
   - dqt_teacher_status
+  - teacher_id_user_info
   :reminders:
   - full_name
   - email_address
