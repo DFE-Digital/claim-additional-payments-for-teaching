@@ -3,56 +3,102 @@
 require "rails_helper"
 
 RSpec.describe ClaimCheckingTasks do
-  let(:claim) { create(:claim, :submitted, :verified, policy: Policies::StudentLoans) }
-  let(:checking_tasks) { ClaimCheckingTasks.new(claim) }
+  let(:checking_tasks) { described_class.new(claim) }
+  let(:claim) { create(:claim, :submitted, :verified, policy:) }
+  let(:policy) { Policies::LevellingUpPremiumPayments }
+  let(:base_tasks) { %w[identity_confirmation qualifications employment census_subjects_taught] }
+  let(:ecp_tasks) { base_tasks + %w[induction_confirmation student_loan_plan] }
+  let(:lup_tasks) { base_tasks + %w[student_loan_plan] }
+  let(:tslr_tasks) { base_tasks + %w[student_loan_amount] }
+  let(:applicable_tasks) { [] }
 
   describe "#applicable_task_names" do
-    it "includes a task for student loan amount for a StudentLoans claim" do
-      expect(checking_tasks.applicable_task_names).to eq %w[identity_confirmation qualifications census_subjects_taught employment student_loan_amount]
+    shared_examples :payroll_gender_task do
+      it "includes a task for payroll gender when the claim does not have a binary value for it" do
+        claim.payroll_gender = :dont_know
+
+        expect(checking_tasks.applicable_task_names).to match_array(applicable_tasks + %w[payroll_gender])
+      end
+
+      it "includes a task for payroll gender when a payroll gender task has previously been completed" do
+        claim.tasks << create(:task, name: "payroll_gender")
+
+        expect(checking_tasks.applicable_task_names).to match_array(applicable_tasks + %w[payroll_gender])
+      end
     end
 
-    it "includes tasks for induction and school workforce census check for a EarlyCareerPayments claim" do
-      ecp_claim = create(:claim, :submitted, :verified, policy: Policies::EarlyCareerPayments)
-      ecp_tasks = ClaimCheckingTasks.new(ecp_claim)
+    shared_examples :matching_details_task do
+      it "includes a task for matching details when there are claims with matching details" do
+        create(:claim, :submitted, policy:, teacher_reference_number: claim.teacher_reference_number)
 
-      expect(ecp_tasks.applicable_task_names).to eq %w[identity_confirmation qualifications induction_confirmation census_subjects_taught employment]
+        expect(checking_tasks.applicable_task_names).to match_array(applicable_tasks + %w[matching_details])
+      end
     end
 
-    it "includes the matching details task when there are claims with matching details" do
-      create(:claim, :submitted,
-        policy: Policies::StudentLoans,
-        teacher_reference_number: claim.teacher_reference_number)
+    shared_examples :payroll_details_task do
+      it "includes a task for payroll details when the bank details have not been validated" do
+        claim.hmrc_bank_validation_succeeded = false
 
-      expect(checking_tasks.applicable_task_names).to eq %w[identity_confirmation qualifications census_subjects_taught employment student_loan_amount matching_details]
+        expect(checking_tasks.applicable_task_names).to match_array(applicable_tasks + %w[payroll_details])
+      end
     end
 
-    it "includes a task for payroll gender when the claim does not have a binary value for it" do
-      claim.payroll_gender = :dont_know
+    shared_examples :student_loan_plan_task do
+      it "does not include a task for student loan plan when the claim was submitted using SLC data" do
+        claim.submitted_using_slc_data = true
 
-      expect(checking_tasks.applicable_task_names).to eq %w[identity_confirmation qualifications census_subjects_taught employment student_loan_amount payroll_gender]
+        expect(checking_tasks.applicable_task_names).to match_array(applicable_tasks - %w[student_loan_plan])
+      end
     end
 
-    it "includes a task for payroll gender when a payroll gender task has previously been completed" do
-      claim.tasks << create(:task, name: "payroll_gender")
-
-      expect(checking_tasks.applicable_task_names).to eq %w[identity_confirmation qualifications census_subjects_taught employment student_loan_amount payroll_gender]
+    shared_examples :common_tasks do
+      it "returns all the tasks that apply to the claim" do
+        expect(checking_tasks.applicable_task_names).to match_array(applicable_tasks)
+      end
     end
 
-    it "includes a task for payroll details when the bank details have not been validated" do
-      claim.hmrc_bank_validation_succeeded = false
-      expect(checking_tasks.applicable_task_names).to eq %w[identity_confirmation qualifications census_subjects_taught employment student_loan_amount payroll_details]
+    context "StudentLoans claim" do
+      let(:policy) { Policies::StudentLoans }
+      let(:applicable_tasks) { tslr_tasks }
+
+      include_examples :common_tasks
+      include_examples :payroll_gender_task
+      include_examples :matching_details_task
+      include_examples :payroll_details_task
+    end
+
+    context "EarlyCareerPayments claim" do
+      let(:policy) { Policies::EarlyCareerPayments }
+      let(:applicable_tasks) { ecp_tasks }
+
+      include_examples :common_tasks
+      include_examples :payroll_gender_task
+      include_examples :matching_details_task
+      include_examples :payroll_details_task
+      include_examples :student_loan_plan_task
+    end
+
+    context "LevellingUpPremiumPayments claim" do
+      let(:policy) { Policies::LevellingUpPremiumPayments }
+      let(:applicable_tasks) { lup_tasks }
+
+      include_examples :common_tasks
+      include_examples :payroll_gender_task
+      include_examples :matching_details_task
+      include_examples :payroll_details_task
+      include_examples :student_loan_plan_task
     end
   end
 
   describe "#incomplete_task_names" do
     it "returns an array of the tasks that haven’t been completed on the claim" do
-      expect(checking_tasks.incomplete_task_names).to eq %w[identity_confirmation qualifications census_subjects_taught employment student_loan_amount]
+      expect(checking_tasks.incomplete_task_names).to match_array(lup_tasks)
 
       claim.tasks << create(:task, name: "qualifications")
-      expect(checking_tasks.incomplete_task_names).to eq %w[identity_confirmation census_subjects_taught employment student_loan_amount]
+      expect(checking_tasks.incomplete_task_names).to match_array(%w[identity_confirmation employment census_subjects_taught student_loan_plan])
 
       claim.tasks << create(:task, name: "employment")
-      expect(checking_tasks.incomplete_task_names).to eq %w[identity_confirmation census_subjects_taught student_loan_amount]
+      expect(checking_tasks.incomplete_task_names).to match_array(%w[identity_confirmation census_subjects_taught student_loan_plan])
     end
   end
 
@@ -65,7 +111,7 @@ RSpec.describe ClaimCheckingTasks do
       claim.tasks << create(:task, :passed, :automated, name: "employment")
       claim.tasks << create(:task, :passed, :manual, name: "payroll_gender")
 
-      is_expected.to eq %w[qualifications employment]
+      is_expected.to match_array(%w[qualifications employment])
     end
   end
 
@@ -74,11 +120,9 @@ RSpec.describe ClaimCheckingTasks do
 
     context "when all tasks passed automatically" do
       before do
-        claim.tasks << create(:task, :passed, :automated, name: "identity_confirmation")
-        claim.tasks << create(:task, :passed, :automated, name: "qualifications")
-        claim.tasks << create(:task, :passed, :automated, name: "census_subjects_taught")
-        claim.tasks << create(:task, :passed, :automated, name: "employment")
-        claim.tasks << create(:task, :passed, :automated, name: "student_loan_amount")
+        lup_tasks.each do |task|
+          claim.tasks << create(:task, :passed, :automated, name: task)
+        end
       end
 
       it { is_expected.to eq(true) }
@@ -86,12 +130,12 @@ RSpec.describe ClaimCheckingTasks do
 
     context "when all tasks automatically passed but there is a duplicate claim" do
       before do
-        claim.tasks << create(:task, :passed, :automated, name: "identity_confirmation")
-        claim.tasks << create(:task, :passed, :automated, name: "qualifications")
-        claim.tasks << create(:task, :passed, :automated, name: "employment")
+        lup_tasks.each do |task|
+          claim.tasks << create(:task, :passed, :automated, name: task)
+        end
       end
 
-      let!(:previous_claim) { create(:claim, :submitted, teacher_reference_number: claim.teacher_reference_number) }
+      let!(:previous_claim) { create(:claim, :submitted, policy:, teacher_reference_number: claim.teacher_reference_number) }
 
       it { is_expected.to eq(false) }
     end

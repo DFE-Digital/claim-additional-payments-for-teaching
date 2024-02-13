@@ -60,9 +60,6 @@ class ClaimsController < BasePublicController
       session[:claim_postcode] = nil
       session[:claim_address_line_1] = nil
       redirect_to claim_path(current_journey_routing_name, "postcode-search") and return
-    elsif params[:slug] == "student-loan-amount" && current_journey_routing_name == "student-loans"
-      ClaimStudentLoanDetailsUpdater.call(current_claim)
-      redirect_to claim_path(current_journey_routing_name, "ineligible") and return if current_claim.ineligible?
     elsif ["personal-bank-account", "building-society-account"].include?(params[:slug])
       @form ||= BankDetailsForm.new(claim: current_claim)
     end
@@ -115,6 +112,7 @@ class ClaimsController < BasePublicController
     one_time_password
 
     if current_claim.save(context: page_sequence.current_slug.to_sym)
+      retrieve_student_loan_details
       redirect_to claim_path(current_journey_routing_name, next_slug)
     else
       show
@@ -407,5 +405,14 @@ class ClaimsController < BasePublicController
 
   def journey_configuration
     journey.configuration
+  end
+
+  def retrieve_student_loan_details
+    # student loan details are currently retrieved for TSLR and ECP/LUPP journeys only
+    return unless ["student-loans", "additional-payments"].include?(current_policy_routing_name)
+    # student loan details are retrieved every time the user confirms their details
+    return unless page_sequence.updating_personal_details?
+
+    ClaimStudentLoanDetailsUpdater.call(current_claim)
   end
 end
