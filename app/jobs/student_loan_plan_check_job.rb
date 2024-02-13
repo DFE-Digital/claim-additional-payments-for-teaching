@@ -24,10 +24,10 @@ class StudentLoanPlanCheckJob < ApplicationJob
   end
 
   def current_year_ecp_lup_claims_awaiting_decision
-    Claim.by_academic_year(current_academic_year).by_policies([EarlyCareerPayments, LevellingUpPremiumPayments]).awaiting_decision.where(submitted_using_slc_data: false)
+    Claim.by_academic_year(current_academic_year).by_policies([Policies::EarlyCareerPayments, Policies::LevellingUpPremiumPayments]).awaiting_decision.where(submitted_using_slc_data: false)
   end
 
   def current_academic_year
-    JourneyConfiguration.for(EarlyCareerPayments).current_academic_year
+    Journeys.for_policy(Policies::EarlyCareerPayments).configuration.current_academic_year
   end
 end

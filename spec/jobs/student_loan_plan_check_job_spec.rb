@@ -3,7 +3,7 @@ require "rails_helper"
 RSpec.describe StudentLoanPlanCheckJob do
   subject(:perform_job) { described_class.new.perform }
 
-  let!(:claim) { create(:claim, claim_status, academic_year:, policy: LevellingUpPremiumPayments) }
+  let!(:claim) { create(:claim, claim_status, academic_year:, policy: Policies::LevellingUpPremiumPayments) }
   let(:claim_status) { :submitted }
 
   let(:academic_year) { journey_configuration.current_academic_year }

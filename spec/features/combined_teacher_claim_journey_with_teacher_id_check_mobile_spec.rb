@@ -122,6 +122,9 @@ RSpec.feature "Combined journey with Teacher ID mobile check" do
   end
 
   def fill_in_remaining_details_and_submit_claim
+    # - student-loan-amount page
+    click_on "Continue"
+
     choose "Building society"
     click_on "Continue"
 
@@ -133,14 +136,6 @@ RSpec.feature "Combined journey with Teacher ID mobile check" do
 
     # - What gender does your school's payroll system associate with you
     choose "Male"
-    click_on "Continue"
-
-    # - Are you currently repaying a student loan?
-    choose "No"
-    click_on "Continue"
-
-    # - Did you take out a Postgraduate Masters or a Postgraduate Doctoral loan?
-    choose "No"
     click_on "Continue"
 
     click_on "Accept and send"

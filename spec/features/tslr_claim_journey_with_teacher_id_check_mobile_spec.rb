@@ -89,7 +89,7 @@ RSpec.feature "TSLR journey with Teacher ID mobile check" do
     choose "No"
     click_on "Continue"
 
-    # - Information provided
+    # - Eligibility confirmed
     click_on "Continue"
 
     # - How we will use the information you provide
