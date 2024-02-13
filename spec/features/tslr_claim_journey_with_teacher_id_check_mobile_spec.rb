@@ -36,8 +36,8 @@ RSpec.feature "TSLR journey with Teacher ID mobile check" do
 
     click_on "Continue"
 
-    # - Choose bank or building society
-    expect(page).to have_text(I18n.t("questions.bank_or_building_society"))
+    # -  Student loan amount details
+    expect(page).to have_title(I18n.t("student_loans.questions.student_loan_amount"))
 
     claims = Claim.order(created_at: :desc).limit(2)
 
@@ -72,8 +72,8 @@ RSpec.feature "TSLR journey with Teacher ID mobile check" do
     choose(I18n.t("questions.select_phone_number.decline"))
     click_on "Continue"
 
-    # - Choose bank or building society
-    expect(page).to have_text(I18n.t("questions.bank_or_building_society"))
+    # - Student loan amount details
+    expect(page).to have_title(I18n.t("student_loans.questions.student_loan_amount"))
 
     claims.reload.each do |c|
       expect(c.mobile_number).to eq(nil)

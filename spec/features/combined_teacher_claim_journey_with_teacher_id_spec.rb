@@ -293,9 +293,6 @@ RSpec.feature "Combined journey with Teacher ID" do
 
     expect(claim.reload.payroll_gender).to eq("male")
 
-    # - teacher-reference-number slug removed from user journey
-    expect(page).to have_text(I18n.t("questions.has_student_loan"))
-
     click_link "Back"
 
     expect(page).to have_text(I18n.t("questions.payroll_gender"))
