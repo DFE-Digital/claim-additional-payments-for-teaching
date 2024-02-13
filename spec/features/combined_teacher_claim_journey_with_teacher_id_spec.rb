@@ -175,8 +175,11 @@ RSpec.feature "Combined journey with Teacher ID" do
     choose "Male"
     click_on "Continue"
 
-    # - teacher-reference-number slug removed from user journey
-    expect(page).not_to have_text(I18n.t("questions.teacher_reference_number"))
+    expect(claim.reload.payroll_gender).to eq("male")
+
+    click_link "Back"
+
+    expect(page).to have_text(I18n.t("questions.payroll_gender"))
   end
 
   scenario "When user is logged in with Teacher ID and there is no matching DQT record" do

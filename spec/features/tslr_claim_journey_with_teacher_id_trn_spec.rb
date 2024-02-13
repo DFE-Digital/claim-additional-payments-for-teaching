@@ -107,7 +107,7 @@ RSpec.feature "TSLR journey with Teacher ID teacher reference number page remova
     find("#claim_mobile_check_use").click
     click_on "Continue"
 
-    # - student-loan-amount page
+    # - Student loan amount details
     click_on "Continue"
 
     # - Choose bank or building society
