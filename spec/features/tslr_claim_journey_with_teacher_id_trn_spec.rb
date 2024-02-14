@@ -81,6 +81,9 @@ RSpec.feature "TSLR journey with Teacher ID teacher reference number page remova
 
     # - Personal details - skipped
 
+    # - Student loan amount details
+    click_on "Continue"
+
     # - What is your home address
     expect(page).to have_text(I18n.t("questions.address.home.title"))
     expect(page).to have_link(href: claim_path(Journeys::TeacherStudentLoanReimbursement::ROUTING_NAME, "address"))
@@ -105,9 +108,6 @@ RSpec.feature "TSLR journey with Teacher ID teacher reference number page remova
 
     # - Select the suggested phone number
     find("#claim_mobile_check_use").click
-    click_on "Continue"
-
-    # - Student loan amount details
     click_on "Continue"
 
     # - Choose bank or building society

@@ -29,6 +29,7 @@ module Journeys
       PERSONAL_DETAILS_SLUGS = [
         "information-provided",
         "personal-details",
+        "student-loan-amount",
         "postcode-search",
         "no-address-found",
         "select-home-address",
@@ -40,10 +41,6 @@ module Journeys
         "provide-mobile-number",
         "mobile-number",
         "mobile-verification"
-      ].freeze
-
-      STUDENT_LOANS_SLUGS = [
-        "student-loan-amount"
       ].freeze
 
       PAYMENT_DETAILS_SLUGS = [
@@ -62,7 +59,6 @@ module Journeys
       SLUGS = (
         ELIGIBILITY_SLUGS +
         PERSONAL_DETAILS_SLUGS +
-        STUDENT_LOANS_SLUGS +
         PAYMENT_DETAILS_SLUGS +
         RESULTS_SLUGS
       ).freeze
