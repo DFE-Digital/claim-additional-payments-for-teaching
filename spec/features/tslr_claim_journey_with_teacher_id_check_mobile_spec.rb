@@ -97,6 +97,10 @@ RSpec.feature "TSLR journey with Teacher ID mobile check" do
 
     # - Personal details - skipped
 
+    # - Student loan amount details
+    expect(page).to have_title(I18n.t("student_loans.questions.student_loan_amount"))
+    click_on "Continue"
+
     # - What is your home address
     click_link(I18n.t("questions.address.home.link_to_manual_address"))
     fill_in_address
