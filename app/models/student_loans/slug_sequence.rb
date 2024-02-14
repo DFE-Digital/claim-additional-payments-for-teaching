@@ -28,6 +28,7 @@ module StudentLoans
     PERSONAL_DETAILS_SLUGS = [
       "information-provided",
       "personal-details",
+      "student-loan-amount",
       "postcode-search",
       "no-address-found",
       "select-home-address",
@@ -40,10 +41,6 @@ module StudentLoans
       "mobile-number",
       "mobile-verification"
     ].freeze
-
-    STUDENT_LOANS_SLUGS = [
-      "student-loan-amount"
-    ]
 
     PAYMENT_DETAILS_SLUGS = [
       "bank-or-building-society",
@@ -61,7 +58,6 @@ module StudentLoans
     SLUGS = (
       ELIGIBILITY_SLUGS +
       PERSONAL_DETAILS_SLUGS +
-      STUDENT_LOANS_SLUGS +
       PAYMENT_DETAILS_SLUGS +
       RESULTS_SLUGS
     ).freeze

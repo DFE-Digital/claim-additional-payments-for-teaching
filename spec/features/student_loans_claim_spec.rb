@@ -85,6 +85,10 @@ RSpec.feature "Teacher Student Loan Repayments claims" do
     expect(claim.reload.surname).to eql("Wong")
     expect(claim.reload.date_of_birth).to eq(Date.new(1988, 2, 28))
     expect(claim.reload.national_insurance_number).to eq("PX321499A")
+  end
+
+  def fill_in_remaining_personal_details_and_submit
+    claim = Claim.by_policy(StudentLoans).order(:created_at).last
 
     expect(page).to have_text(I18n.t("questions.address.home.title"))
 
@@ -134,10 +138,6 @@ RSpec.feature "Teacher Student Loan Repayments claims" do
 
     # - Mobile number
     expect(page).not_to have_text(I18n.t("questions.mobile_number"))
-  end
-
-  def fill_in_payment_information_and_submit
-    claim = Claim.by_policy(StudentLoans).order(:created_at).last
 
     expect(page).to have_text(I18n.t("questions.bank_or_building_society"))
 
@@ -224,7 +224,7 @@ RSpec.feature "Teacher Student Loan Repayments claims" do
       expect(claim.has_masters_doctoral_loan).to eq(false)
       expect(claim.postgraduate_masters_loan).to eq(false)
 
-      fill_in_payment_information_and_submit
+      fill_in_remaining_personal_details_and_submit
     end
 
     scenario "Teacher claims back student loan repayments with javascript #{js_status} (no SLC data present)", js: javascript_enabled do
@@ -243,7 +243,7 @@ RSpec.feature "Teacher Student Loan Repayments claims" do
       expect(claim.has_masters_doctoral_loan).to eq(false)
       expect(claim.postgraduate_masters_loan).to eq(false)
 
-      fill_in_payment_information_and_submit
+      fill_in_remaining_personal_details_and_submit
     end
   end
 

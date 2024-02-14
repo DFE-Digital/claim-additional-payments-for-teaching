@@ -40,17 +40,6 @@ RSpec.feature "GOVUK Nofity SMS sends OTP" do
     }
   end
 
-  def post_otp_screen_title(policy)
-    case policy
-    when EarlyCareerPayments, MathsAndPhysics
-      # Payment to Bank or Building Society
-      I18n.t("questions.bank_or_building_society")
-    when StudentLoans
-      # Student loan amount details
-      I18n.t("student_loans.questions.student_loan_amount")
-    end
-  end
-
   [
     {policy: EarlyCareerPayments, mobile_number: "07123456789", otp_code: "097543"},
     {policy: StudentLoans, mobile_number: "07723190022", otp_code: "123347"},
@@ -106,7 +95,7 @@ RSpec.feature "GOVUK Nofity SMS sends OTP" do
         fill_in "claim_one_time_password", with: scenario[:otp_code]
         click_on "Confirm"
 
-        expect(page).to have_title(post_otp_screen_title(scenario[:policy]))
+        expect(page).to have_title(I18n.t("questions.bank_or_building_society"))
       end
     end
   end

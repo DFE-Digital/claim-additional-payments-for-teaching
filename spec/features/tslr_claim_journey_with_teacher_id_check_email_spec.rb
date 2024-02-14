@@ -161,6 +161,10 @@ RSpec.feature "TSLR journey with Teacher ID email check" do
 
     # - Personal details - skipped
 
+    # - Student loan amount details
+    expect(page).to have_title(I18n.t("student_loans.questions.student_loan_amount"))
+    click_on "Continue"
+
     # - What is your home address
     expect(page).to have_text(I18n.t("questions.address.home.title"))
     expect(page).to have_link(href: claim_path(StudentLoans.routing_name, "address"))
