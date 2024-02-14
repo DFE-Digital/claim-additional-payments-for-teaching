@@ -1,6 +1,16 @@
 require "rails_helper"
 
 RSpec.describe EarlyCareerPayments, type: :model do
+  it do
+    expect(subject::VERIFIERS).to eq([
+      AutomatedChecks::ClaimVerifiers::Identity,
+      AutomatedChecks::ClaimVerifiers::Qualifications,
+      AutomatedChecks::ClaimVerifiers::Induction,
+      AutomatedChecks::ClaimVerifiers::CensusSubjectsTaught,
+      AutomatedChecks::ClaimVerifiers::Employment
+    ])
+  end
+
   specify {
     expect(subject).to have_attributes(routing_name: "additional-payments",
       short_name: "Early-Career Payments",

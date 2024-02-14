@@ -1,6 +1,14 @@
 require "rails_helper"
 
 RSpec.describe MathsAndPhysics, type: :model do
+  it do
+    expect(subject::VERIFIERS).to eq([
+      AutomatedChecks::ClaimVerifiers::Identity,
+      AutomatedChecks::ClaimVerifiers::Qualifications,
+      AutomatedChecks::ClaimVerifiers::Employment
+    ])
+  end
+
   describe ".first_eligible_qts_award_year" do
     let!(:policy_configuration) { create(:policy_configuration, :maths_and_physics) }
 

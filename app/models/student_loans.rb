@@ -10,6 +10,14 @@
 module StudentLoans
   extend self
 
+  VERIFIERS = [
+    AutomatedChecks::ClaimVerifiers::Identity,
+    AutomatedChecks::ClaimVerifiers::Qualifications,
+    AutomatedChecks::ClaimVerifiers::CensusSubjectsTaught,
+    AutomatedChecks::ClaimVerifiers::Employment,
+    AutomatedChecks::ClaimVerifiers::StudentLoanAmount
+  ].freeze
+
   POLICY_START_YEAR = AcademicYear.new(2013).freeze
   POLICY_END_YEAR = AcademicYear.new(2020).freeze
   ACADEMIC_YEARS_QUALIFIED_TEACHERS_CAN_CLAIM_FOR = 11

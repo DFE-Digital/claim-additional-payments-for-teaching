@@ -10,6 +10,12 @@
 module MathsAndPhysics
   extend self
 
+  VERIFIERS = [
+    AutomatedChecks::ClaimVerifiers::Identity,
+    AutomatedChecks::ClaimVerifiers::Qualifications,
+    AutomatedChecks::ClaimVerifiers::Employment
+  ].freeze
+
   ELIGIBLE_CAREER_LENGTH = 5
 
   def start_page_url
