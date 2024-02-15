@@ -14,7 +14,7 @@ module Dqt
       begin
         # {} would indicate nothing was found in DQT but also truthy to prevent further requests
         @claim.update(dqt_teacher_status: response || {})
-      rescue
+      rescue => e
         # Something went wrong with the DQT call, just assume no result returned and continue
         Rollbar.error(e)
         @claim.update(dqt_teacher_status: {})
