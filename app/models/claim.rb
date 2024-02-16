@@ -92,7 +92,6 @@ class Claim < ApplicationRecord
     bank_or_building_society: false,
     banking_name: true,
     building_society_roll_number: true,
-    remove_column_payment_id: false,
     academic_year: false,
     personal_data_removed_at: false,
     email_verified: false,
@@ -155,7 +154,7 @@ class Claim < ApplicationRecord
   accepts_nested_attributes_for :eligibility, update_only: true
   delegate :eligible_itt_subject, to: :eligibility, allow_nil: true
 
-  has_many :claim_payments
+  has_many :claim_payments, dependent: :destroy
   has_many :payments, through: :claim_payments
 
   belongs_to :assigned_to, class_name: "DfeSignIn::User",

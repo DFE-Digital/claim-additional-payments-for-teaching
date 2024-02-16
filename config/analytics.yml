@@ -73,7 +73,6 @@ shared:
     - surname
     - banking_name
     - building_society_roll_number
-    - remove_column_payment_id
     - personal_data_removed_at
     - academic_year
     - bank_or_building_society
