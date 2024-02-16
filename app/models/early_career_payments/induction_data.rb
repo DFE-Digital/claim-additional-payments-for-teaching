@@ -1,7 +1,7 @@
 module EarlyCareerPayments
   class InductionData
-    VALID_INDUCTION_STATUSES_2018_2019 = ["pass", "exempt"]
-    VALID_INDUCTION_STATUSES_2020 = ["pass", "exempt", "in progress", "not yet completed", "induction extended"]
+    VALID_INDUCTION_STATUSES_2018_2019 = ["pass", "exempt"].freeze
+    VALID_INDUCTION_STATUSES_2020 = ["pass", "exempt", "in progress", "not yet completed", "induction extended"].freeze
     private_constant :VALID_INDUCTION_STATUSES_2018_2019, :VALID_INDUCTION_STATUSES_2020
 
     def initialize(itt_year:, induction_status:, induction_start_date:)
@@ -14,14 +14,14 @@ module EarlyCareerPayments
       if itt_year_2018_or_2019?
         valid_status?
       elsif itt_year_2020?
-        valid_status? && induction_start_date.present? && induction_start_date.before?(1.year.ago)
+        valid_status? && (exempt? || induction_started_more_than_a_year_ago?)
       else
         false
       end
     end
 
     def incomplete?
-      induction_status.nil? || (itt_year_2020? && valid_status? && induction_start_date.nil?)
+      induction_status.nil? || (itt_year_2020? && valid_status? && !exempt? && induction_start_date.nil?)
     end
 
     private
@@ -33,6 +33,14 @@ module EarlyCareerPayments
       return valid_induction_status?(VALID_INDUCTION_STATUSES_2020) if itt_year_2020?
 
       false
+    end
+
+    def exempt?
+      induction_status&.strip&.downcase == "exempt"
+    end
+
+    def induction_started_more_than_a_year_ago?
+      induction_start_date.present? && induction_start_date.before?(1.year.ago)
     end
 
     def itt_year_2018_or_2019?

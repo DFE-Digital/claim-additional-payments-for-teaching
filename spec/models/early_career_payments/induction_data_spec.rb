@@ -47,7 +47,8 @@ RSpec.describe EarlyCareerPayments::InductionData do
       context "when the start date is less than 1 year old" do
         let(:induction_start_date) { 1.year.ago + 1.day }
 
-        include_examples :eligible?, ["pass", "exempt"], false
+        include_examples :eligible?, ["exempt"], true
+        include_examples :eligible?, ["pass"], false
         include_examples :eligible?, ["in progress", "not yet completed", "induction extended"], false
         include_examples :eligible?, ["required to complete", "failed"], false
       end
@@ -55,7 +56,8 @@ RSpec.describe EarlyCareerPayments::InductionData do
       context "when the start date is missing" do
         let(:induction_start_date) { nil }
 
-        include_examples :eligible?, ["pass", "exempt"], false
+        include_examples :eligible?, ["exempt"], true
+        include_examples :eligible?, ["pass"], false
         include_examples :eligible?, ["in progress", "not yet completed", "induction extended"], false
         include_examples :eligible?, ["required to complete", "failed"], false
       end
@@ -118,6 +120,12 @@ RSpec.describe EarlyCareerPayments::InductionData do
           let(:induction_status) { "Pass" }
 
           it { is_expected.to eq(true) }
+        end
+
+        context "when the status is valid but it's 'exempt'" do
+          let(:induction_status) { "Exempt" }
+
+          it { is_expected.to eq(false) }
         end
 
         context "when the status is not valid" do
