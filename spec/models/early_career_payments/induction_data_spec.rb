@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe EarlyCareerPayments::InductionData do
+RSpec.describe Policies::EarlyCareerPayments::InductionData do
   subject { described_class.new(itt_year:, induction_status:, induction_start_date:) }
   let(:induction_start_date) { nil }
 
