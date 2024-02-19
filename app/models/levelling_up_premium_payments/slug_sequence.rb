@@ -1,4 +1,4 @@
 module LevellingUpPremiumPayments
-  class SlugSequence < EarlyCareerPayments::SlugSequence
+  class SlugSequence < Policies::EarlyCareerPayments::SlugSequence
   end
 end
