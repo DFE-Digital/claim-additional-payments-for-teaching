@@ -103,6 +103,19 @@ module AutomatedChecks
             it_behaves_like :execution_with_an_outcome
           end
 
+          context "when the amount on the claim is equal to the SLC value but it's zero" do
+            before { imported_slc_data }
+
+            let(:claim_student_loan_repayment_amount) { 0 }
+            let(:slc_student_loan_repayment_amount) { 0 }
+
+            let(:expected_to_pass?) { nil }
+            let(:expected_match_value) { "none" }
+            let(:expected_note) { "[SLC Student loan amount] - The total SLC repayment amount is £0" }
+
+            it_behaves_like :execution_with_an_outcome
+          end
+
           context "when the amount on the claim is less than the SLC value" do
             before { imported_slc_data }
 
