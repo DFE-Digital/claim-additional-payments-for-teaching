@@ -10,7 +10,7 @@ RSpec.describe PaymentConfirmationUpload do
     create(:payroll_run, claims_counts: {
       [EarlyCareerPayments, StudentLoans] => 1,
       StudentLoans => 1,
-      EarlyCareerPayments => 2
+      Policies::EarlyCareerPayments => 2
     })
   end
 
@@ -214,7 +214,7 @@ RSpec.describe PaymentConfirmationUpload do
     context "when the payments in the CSV have all been confirmed already" do
       let!(:payroll_run) do
         create(:payroll_run, :with_confirmations, claims_counts: {
-          StudentLoans => 2, EarlyCareerPayments => 1
+          StudentLoans => 2, Policies::EarlyCareerPayments => 1
         })
       end
 
@@ -228,7 +228,7 @@ RSpec.describe PaymentConfirmationUpload do
     context "when some payments in the CSV that have been confirmed already" do
       let!(:payroll_run) do
         create(:payroll_run, :with_confirmations, confirmed_batches: 1, claims_counts: {
-          StudentLoans => 2, EarlyCareerPayments => 1
+          StudentLoans => 2, Policies::EarlyCareerPayments => 1
         })
       end
 

@@ -53,7 +53,7 @@ RSpec.describe Claim, type: :model do
   end
 
   context "that has bank details" do
-    let(:claim) { build(:claim, policy: EarlyCareerPayments) }
+    let(:claim) { build(:claim, policy: Policies::EarlyCareerPayments) }
 
     it "validates which type of payment account was specified" do
       expect(claim).not_to be_valid(:"bank-or-building-society")
@@ -170,7 +170,7 @@ RSpec.describe Claim, type: :model do
   end
 
   context "with early-career payments policy eligibility" do
-    let(:claim) { build(:claim, policy: EarlyCareerPayments) }
+    let(:claim) { build(:claim, policy: Policies::EarlyCareerPayments) }
 
     # Tests a single attribute, possibly should test multiple attributes
     it "validates eligibility" do
@@ -189,45 +189,45 @@ RSpec.describe Claim, type: :model do
   context "when validating in the 'personal-details' context" do
     describe "with first_name" do
       it "is not valid without a value between 1 and 100 characters" do
-        expect(build(:claim, policy: EarlyCareerPayments)).not_to be_valid(:"personal-details")
-        expect(build(:claim, :submittable, policy: EarlyCareerPayments, first_name: "")).not_to be_valid(:"personal-details")
-        expect(build(:claim, :submittable, policy: EarlyCareerPayments, first_name: "A" * 101)).not_to be_valid(:"personal-details")
+        expect(build(:claim, policy: Policies::EarlyCareerPayments)).not_to be_valid(:"personal-details")
+        expect(build(:claim, :submittable, policy: Policies::EarlyCareerPayments, first_name: "")).not_to be_valid(:"personal-details")
+        expect(build(:claim, :submittable, policy: Policies::EarlyCareerPayments, first_name: "A" * 101)).not_to be_valid(:"personal-details")
       end
 
       it "is valid when is between 1 and 100 characters in length" do
-        expect(build(:claim, :submittable, policy: EarlyCareerPayments)).to be_valid(:"personal-details")
+        expect(build(:claim, :submittable, policy: Policies::EarlyCareerPayments)).to be_valid(:"personal-details")
       end
 
       it "allows user to enter ' in their surname and joins the first name and surname together" do
-        expect(build(:claim, :submittable, policy: EarlyCareerPayments, first_name: "O'Brian", surname: "Isambard")).to be_valid(:"personal-details")
+        expect(build(:claim, :submittable, policy: Policies::EarlyCareerPayments, first_name: "O'Brian", surname: "Isambard")).to be_valid(:"personal-details")
       end
     end
 
     describe "with middle names" do
       it "validates the length of middle name is 61 characters or less" do
-        expect(build(:claim, :submittable, policy: EarlyCareerPayments, middle_name: "ab" * 31)).not_to be_valid(:"personal-details")
-        expect(build(:claim, :submittable, policy: EarlyCareerPayments, middle_name: "a" * 61)).to be_valid(:"personal-details")
+        expect(build(:claim, :submittable, policy: Policies::EarlyCareerPayments, middle_name: "ab" * 31)).not_to be_valid(:"personal-details")
+        expect(build(:claim, :submittable, policy: Policies::EarlyCareerPayments, middle_name: "a" * 61)).to be_valid(:"personal-details")
         expect(build(:claim, middle_name: "Arnold")).to be_valid
       end
 
       it "allows user to enter ' in their middle name and joins the first name and surname together" do
-        expect(build(:claim, :submittable, policy: EarlyCareerPayments, first_name: "Isambard", middle_name: "O’Hara")).to be_valid(:"personal-details")
+        expect(build(:claim, :submittable, policy: Policies::EarlyCareerPayments, first_name: "Isambard", middle_name: "O’Hara")).to be_valid(:"personal-details")
       end
     end
 
     describe "with surname" do
       it "is not valid without a value between 1 and 100 characters" do
-        expect(build(:claim, policy: EarlyCareerPayments)).not_to be_valid(:"personal-details")
-        expect(build(:claim, :submittable, policy: EarlyCareerPayments, surname: "")).not_to be_valid(:"personal-details")
-        expect(build(:claim, :submittable, policy: EarlyCareerPayments, surname: "A" * 101)).not_to be_valid(:"personal-details")
+        expect(build(:claim, policy: Policies::EarlyCareerPayments)).not_to be_valid(:"personal-details")
+        expect(build(:claim, :submittable, policy: Policies::EarlyCareerPayments, surname: "")).not_to be_valid(:"personal-details")
+        expect(build(:claim, :submittable, policy: Policies::EarlyCareerPayments, surname: "A" * 101)).not_to be_valid(:"personal-details")
       end
 
       it "is valid when is between 1 and 100 characters in length" do
-        expect(build(:claim, :submittable, policy: EarlyCareerPayments, surname: "A")).to be_valid(:"personal-details")
+        expect(build(:claim, :submittable, policy: Policies::EarlyCareerPayments, surname: "A")).to be_valid(:"personal-details")
       end
 
       it "allows user to enter ' in their middle_name and includes a surname when present" do
-        expect(build(:claim, :submittable, policy: EarlyCareerPayments, first_name: "Isambard", middle_name: "Brunel", surname: "O’Hara")).to be_valid(:"personal-details")
+        expect(build(:claim, :submittable, policy: Policies::EarlyCareerPayments, first_name: "Isambard", middle_name: "Brunel", surname: "O’Hara")).to be_valid(:"personal-details")
       end
     end
   end
@@ -243,19 +243,19 @@ RSpec.describe Claim, type: :model do
 
   context "with early-career payments policy validates 'date_of_birth' in the 'personal-details' context" do
     it "is on or after 1st Jan 1900" do
-      expect(build(:claim, first_name: "Martha", surname: "Stevens", national_insurance_number: "AB755003B", policy: EarlyCareerPayments, date_of_birth: Date.new(1899, 12, 31))).not_to be_valid(:"personal-details")
+      expect(build(:claim, first_name: "Martha", surname: "Stevens", national_insurance_number: "AB755003B", policy: Policies::EarlyCareerPayments, date_of_birth: Date.new(1899, 12, 31))).not_to be_valid(:"personal-details")
     end
 
     it "must be in the past" do
-      expect(build(:claim, first_name: "Matthew", surname: "Cook", national_insurance_number: "EF755003B", policy: EarlyCareerPayments, date_of_birth: Date.today + 5)).not_to be_valid(:"personal-details")
+      expect(build(:claim, first_name: "Matthew", surname: "Cook", national_insurance_number: "EF755003B", policy: Policies::EarlyCareerPayments, date_of_birth: Date.today + 5)).not_to be_valid(:"personal-details")
     end
 
     it "must include day/month/year" do
-      expect { build(:claim, first_name: "Wayne", surname: "Lee", national_insurance_number: "TX551003B", policy: EarlyCareerPayments, date_of_birth: Date.new(2021, 31)) }.to raise_error(ArgumentError)
+      expect { build(:claim, first_name: "Wayne", surname: "Lee", national_insurance_number: "TX551003B", policy: Policies::EarlyCareerPayments, date_of_birth: Date.new(2021, 31)) }.to raise_error(ArgumentError)
     end
 
     it "must be in the right format" do
-      expect { build(:claim, first_name: "Hannah", surname: "Clay-Simmones", national_insurance_number: "TX661003C", policy: EarlyCareerPayments, date_of_birth: Date.new(1998, 14, 12)) }.to raise_error("invalid date")
+      expect { build(:claim, first_name: "Hannah", surname: "Clay-Simmones", national_insurance_number: "TX661003C", policy: Policies::EarlyCareerPayments, date_of_birth: Date.new(1998, 14, 12)) }.to raise_error("invalid date")
     end
   end
 
@@ -383,7 +383,7 @@ RSpec.describe Claim, type: :model do
 
   context "with early-career payments policy" do
     describe "when saving in the 'postgraduate_masters_loan' context" do
-      let(:claim) { build(:claim, :submittable, postgraduate_masters_loan: nil, policy: EarlyCareerPayments) }
+      let(:claim) { build(:claim, :submittable, postgraduate_masters_loan: nil, policy: Policies::EarlyCareerPayments) }
 
       context "with claim having a masters and/or doctoral loan(s)" do
         it "is not valid without a value for 'postgraduate_masters_loan'" do
@@ -403,7 +403,7 @@ RSpec.describe Claim, type: :model do
     end
 
     describe "when saving in the 'postgraduate_doctoral_loan' context" do
-      let(:claim) { build(:claim, :submittable, postgraduate_doctoral_loan: nil, policy: EarlyCareerPayments) }
+      let(:claim) { build(:claim, :submittable, postgraduate_doctoral_loan: nil, policy: Policies::EarlyCareerPayments) }
 
       context "with claim having a masters and/or doctoral loan(s)" do
         it "is not valid without a value for 'postgraduate_doctoral_loan'" do
@@ -473,7 +473,7 @@ RSpec.describe Claim, type: :model do
   end
 
   context "with early-career payments policy" do
-    subject(:claim) { build(:claim, policy: EarlyCareerPayments) }
+    subject(:claim) { build(:claim, policy: Policies::EarlyCareerPayments) }
 
     context "when saving in the “provide-mobile-number” validation context" do
       it "validates the presence of provide_mobile_number" do
@@ -802,7 +802,7 @@ RSpec.describe Claim, type: :model do
     end
 
     context "with early-career payments policy eligibility" do
-      let(:policy) { EarlyCareerPayments }
+      let(:policy) { Policies::EarlyCareerPayments }
 
       context "when submittable" do
         subject(:claim) { build(:claim, :submittable, policy:) }
@@ -1530,7 +1530,7 @@ RSpec.describe Claim, type: :model do
     end
 
     context "with early-career payments policy" do
-      let(:policy) { EarlyCareerPayments }
+      let(:policy) { Policies::EarlyCareerPayments }
 
       it "returns true" do
         expect(claim.has_ecp_policy?).to eq(true)
@@ -1550,7 +1550,7 @@ RSpec.describe Claim, type: :model do
     end
 
     context "with early-career payments policy" do
-      let(:policy) { EarlyCareerPayments }
+      let(:policy) { Policies::EarlyCareerPayments }
 
       it "returns false" do
         expect(claim.has_tslr_policy?).to eq(false)
@@ -1569,7 +1569,7 @@ RSpec.describe Claim, type: :model do
     end
 
     context "with early-career payments policy" do
-      let(:policy) { EarlyCareerPayments }
+      let(:policy) { Policies::EarlyCareerPayments }
 
       it { is_expected.to be false }
     end
@@ -1592,7 +1592,7 @@ RSpec.describe Claim, type: :model do
     end
 
     context "with early-career payments policy" do
-      let(:policy) { EarlyCareerPayments }
+      let(:policy) { Policies::EarlyCareerPayments }
 
       it { is_expected.to be true }
     end
@@ -1625,7 +1625,7 @@ RSpec.describe Claim, type: :model do
   end
 
   describe "#destroy" do
-    let(:claim) { create(:claim, :submitted, policy: EarlyCareerPayments) }
+    let(:claim) { create(:claim, :submitted, policy: Policies::EarlyCareerPayments) }
 
     before do
       create(:note, claim: claim)

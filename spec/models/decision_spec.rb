@@ -35,7 +35,7 @@ RSpec.describe Decision, type: :model do
   end
 
   it "validates that the selected rejected reasons are valid when rejecting a claim" do
-    claim = create(:claim, :submitted, policy: EarlyCareerPayments)
+    claim = create(:claim, :submitted, policy: Policies::EarlyCareerPayments)
     decision = build(:decision, :rejected, claim: claim, rejected_reasons: {invalid: "1"})
 
     expect(decision).not_to be_valid
@@ -127,7 +127,7 @@ RSpec.describe Decision, type: :model do
     end
 
     context "when the claim policy is ECP" do
-      let(:policy) { EarlyCareerPayments }
+      let(:policy) { Policies::EarlyCareerPayments }
 
       it { is_expected.to eq(expected_reasons_ecp) }
     end

@@ -267,7 +267,7 @@ RSpec.describe Amendment, type: :model do
           build(:early_career_payments_eligibility, :eligible, award_amount: 7_500)
         end
         let(:claim) do
-          create(:claim, :submitted, policy: EarlyCareerPayments, eligibility: eligibility)
+          create(:claim, :submitted, policy: Policies::EarlyCareerPayments, eligibility: eligibility)
         end
         let(:claim_attributes) do
           {

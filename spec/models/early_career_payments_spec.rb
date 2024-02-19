@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe EarlyCareerPayments, type: :model do
+RSpec.describe Policies::EarlyCareerPayments, type: :model do
   it { is_expected.to include(BasePolicy) }
 
   it do
@@ -45,7 +45,7 @@ RSpec.describe EarlyCareerPayments, type: :model do
 
   describe ".first_eligible_qts_award_year" do
     it "can return the AcademicYear based on a passed-in academic year" do
-      expect(EarlyCareerPayments.first_eligible_qts_award_year(AcademicYear.new(2024))).to eq AcademicYear.new(2021)
+      expect(described_class.first_eligible_qts_award_year(AcademicYear.new(2024))).to eq AcademicYear.new(2021)
     end
   end
 
