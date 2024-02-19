@@ -15,7 +15,7 @@ module AutomatedChecks
       end
 
       def perform
-        return unless claim.policy == EarlyCareerPayments
+        return unless claim.policy == Policies::EarlyCareerPayments
         return unless awaiting_task?
 
         no_data || no_match || matched
@@ -30,7 +30,7 @@ module AutomatedChecks
       delegate :eligible?, :incomplete?, to: :induction_data
 
       def induction_data
-        @induction_data ||= EarlyCareerPayments::InductionData.new(itt_year:, induction_status:, induction_start_date:)
+        @induction_data ||= Policies::EarlyCareerPayments::InductionData.new(itt_year:, induction_status:, induction_start_date:)
       end
 
       def awaiting_task?
