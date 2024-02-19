@@ -13,7 +13,7 @@ module AutomatedChecks
         return unless claim.policy == Policies::StudentLoans
         return unless awaiting_task?
 
-        no_data || invalid_match || complete_match
+        no_data || no_match || invalid_match || complete_match
       end
 
       private
@@ -39,6 +39,12 @@ module AutomatedChecks
         return if student_loans_data.any?
 
         create_task(match: nil)
+      end
+
+      def no_match
+        return unless slc_total_repayment_amount&.zero?
+
+        create_task(match: :none)
       end
 
       def invalid_match
@@ -92,9 +98,13 @@ module AutomatedChecks
         when nil
           "[SLC Student loan amount] - No data"
         when :none
-          sprintf "[SLC Student loan amount] - The amount on the claim (%.2f) exceeded the SLC value (%.2f)",
-            claim_student_loan_repayment_amount,
-            slc_total_repayment_amount
+          if slc_total_repayment_amount&.zero?
+            "[SLC Student loan amount] - The total SLC repayment amount is £0"
+          elsif student_loan_repayment_amount_greater_than_actual?
+            sprintf "[SLC Student loan amount] - The amount on the claim (%.2f) exceeded the SLC value (%.2f)",
+              claim_student_loan_repayment_amount,
+              slc_total_repayment_amount
+          end
         when :all
           "[SLC Student loan amount] - Matched"
         end
