@@ -30,7 +30,7 @@ class ClaimStudentLoanDetailsUpdater
 
   delegate :eligibility, to: :claim
   delegate :national_insurance_number, :date_of_birth, to: :claim
-  delegate :repaying_plan_types, :total_repayment_amount, to: :student_loans_data
+  delegate :repaying_plan_types, :total_repayment_amount, to: :student_loans_data, prefix: :slc
 
   alias_method :nino, :national_insurance_number
 
@@ -43,18 +43,13 @@ class ClaimStudentLoanDetailsUpdater
   end
 
   def eligibility_student_loan_attributes
-    {student_loan_repayment_amount: total_repayment_amount}
+    {student_loan_repayment_amount: slc_total_repayment_amount}
   end
 
   def claim_student_loan_attributes
     {
       has_student_loan: found_data?,
-      student_loan_plan: repaying_plan_types || Claim::NO_STUDENT_LOAN,
-      # The following flags are irrelevant now, as it was used only to determine the plan type
-      # TODO: remove the update when all the student loan questions and validations are removed from all journeys
-      has_masters_doctoral_loan: false,
-      postgraduate_masters_loan: false,
-      postgraduate_doctoral_loan: false
+      student_loan_plan: slc_repaying_plan_types || Claim::NO_STUDENT_LOAN
     }
   end
 end
