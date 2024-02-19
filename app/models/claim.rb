@@ -250,9 +250,9 @@ class Claim < ApplicationRecord
   validates :student_loan_plan, inclusion: {in: STUDENT_LOAN_PLAN_OPTIONS}, allow_nil: true
   validates :student_loan_plan, on: [:"student-loan", :amendment], presence: {message: "Enter a valid student loan plan"}
 
-  validates :has_masters_doctoral_loan, on: [:"masters-doctoral-loan", :submit], inclusion: {in: [true, false], message: "Select yes if you have a postgraduate masters and/or doctoral loan"}, if: :no_student_loan?
-  validates :postgraduate_masters_loan, on: [:"masters-loan", :submit], inclusion: {in: [true, false], message: "Select yes if you are currently repaying a Postgraduate Master’s Loan"}, unless: -> { no_masters_doctoral_loan? }
-  validates :postgraduate_doctoral_loan, on: [:"doctoral-loan", :submit], inclusion: {in: [true, false], message: "Select yes if you are currently repaying a Postgraduate Doctoral Loan"}, unless: -> { no_masters_doctoral_loan? }
+  validates :has_masters_doctoral_loan, on: [:"masters-doctoral-loan"], inclusion: {in: [true, false], message: "Select yes if you have a postgraduate masters and/or doctoral loan"}, if: :no_student_loan?
+  validates :postgraduate_masters_loan, on: [:"masters-loan"], inclusion: {in: [true, false], message: "Select yes if you are currently repaying a Postgraduate Master’s Loan"}, unless: -> { no_masters_doctoral_loan? }
+  validates :postgraduate_doctoral_loan, on: [:"doctoral-loan"], inclusion: {in: [true, false], message: "Select yes if you are currently repaying a Postgraduate Doctoral Loan"}, unless: -> { no_masters_doctoral_loan? }
 
   validates :email_address, on: [:"email-address", :submit], presence: {message: "Enter an email address"}
   validates :email_address, format: {with: Rails.application.config.email_regexp, message: "Enter an email address in the correct format, like name@example.com"},
