@@ -6,7 +6,7 @@ module FactoryHelpers
   end
 
   def self.reset_factory_registry
-    Thread.current[:factory_registry].register :local_authority_district_ecp_uplift_codes, EarlyCareerPayments::SchoolEligibility::UPLIFT_LOCAL_AUTHORITY_DISTRICT_CODES
-    Thread.current[:factory_registry].register :local_authority_district_ecp_eligible_codes, EarlyCareerPayments::SchoolEligibility::ELIGIBLE_LOCAL_AUTHORITY_DISTRICT_CODES
+    Thread.current[:factory_registry].register :local_authority_district_ecp_uplift_codes, Policies::EarlyCareerPayments::SchoolEligibility::UPLIFT_LOCAL_AUTHORITY_DISTRICT_CODES
+    Thread.current[:factory_registry].register :local_authority_district_ecp_eligible_codes, Policies::EarlyCareerPayments::SchoolEligibility::ELIGIBLE_LOCAL_AUTHORITY_DISTRICT_CODES
   end
 end

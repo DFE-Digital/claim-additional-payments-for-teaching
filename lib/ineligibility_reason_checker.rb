@@ -40,7 +40,7 @@ class IneligibilityReasonChecker
 
     [
       school.present?,
-      !EarlyCareerPayments::SchoolEligibility.new(school).eligible?,
+      !Policies::EarlyCareerPayments::SchoolEligibility.new(school).eligible?,
       !LevellingUpPremiumPayments::SchoolEligibility.new(school).eligible?
     ].all?
   end
@@ -146,7 +146,7 @@ class IneligibilityReasonChecker
   end
 
   def school_eligible_for_ecp_but_not_lup?(school)
-    EarlyCareerPayments::SchoolEligibility.new(school).eligible? && !LevellingUpPremiumPayments::SchoolEligibility.new(school).eligible?
+    Policies::EarlyCareerPayments::SchoolEligibility.new(school).eligible? && !LevellingUpPremiumPayments::SchoolEligibility.new(school).eligible?
   end
 
   def bad_itt_subject_for_ecp?

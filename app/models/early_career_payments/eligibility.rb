@@ -157,7 +157,7 @@ module EarlyCareerPayments
     end
 
     def ecp_only_school?
-      EarlyCareerPayments::SchoolEligibility.new(claim.eligibility.current_school).eligible? &&
+      Policies::EarlyCareerPayments::SchoolEligibility.new(claim.eligibility.current_school).eligible? &&
         !LevellingUpPremiumPayments::SchoolEligibility.new(claim.eligibility.current_school).eligible?
     end
 
