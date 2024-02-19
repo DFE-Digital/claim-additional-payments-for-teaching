@@ -70,7 +70,7 @@ module EarlyCareerPayments
     }, _prefix: :itt_subject
 
     def self.max_award_amount_in_pounds
-      AwardAmountCalculator.max_award_amount_in_pounds
+      Policies::EarlyCareerPayments::AwardAmountCalculator.max_award_amount_in_pounds
     end
 
     has_one :claim, as: :eligibility, inverse_of: :eligibility
@@ -179,7 +179,7 @@ module EarlyCareerPayments
       if args.values.any?(&:blank?)
         0
       else
-        AwardAmountCalculator.new(**args).amount_in_pounds
+        Policies::EarlyCareerPayments::AwardAmountCalculator.new(**args).amount_in_pounds
       end
     end
 
