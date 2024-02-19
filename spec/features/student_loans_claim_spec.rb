@@ -221,8 +221,8 @@ RSpec.feature "Teacher Student Loan Repayments claims" do
       expect(claim.eligibility.reload.student_loan_repayment_amount).to eql(1_100)
       expect(claim.student_loan_plan).to eq(StudentLoan::PLAN_1)
 
-      expect(claim.has_masters_doctoral_loan).to eq(false)
-      expect(claim.postgraduate_masters_loan).to eq(false)
+      expect(claim.has_masters_doctoral_loan).to be_nil
+      expect(claim.postgraduate_masters_loan).to be_nil
 
       fill_in_remaining_personal_details_and_submit
     end
@@ -240,8 +240,8 @@ RSpec.feature "Teacher Student Loan Repayments claims" do
       expect(claim.eligibility.reload.student_loan_repayment_amount).to eql(0)
       expect(claim.student_loan_plan).to eql(Claim::NO_STUDENT_LOAN)
 
-      expect(claim.has_masters_doctoral_loan).to eq(false)
-      expect(claim.postgraduate_masters_loan).to eq(false)
+      expect(claim.has_masters_doctoral_loan).to be_nil
+      expect(claim.postgraduate_masters_loan).to be_nil
 
       fill_in_remaining_personal_details_and_submit
     end
