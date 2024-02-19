@@ -202,6 +202,95 @@ RSpec.describe "Claims", type: :request do
         expect(response.body).to include("Select when you completed your initial teacher training")
       end
 
+      context "when initiating the request from personal-details" do
+        let(:params) do
+          {
+            claim: {
+              first_name: "John",
+              surname: "Doe",
+              "date_of_birth(3i)": "1", "date_of_birth(2i)": "1", "date_of_birth(1i)": "1990",
+              national_insurance_number: "QQ123456C"
+            }
+          }
+        end
+        let(:request) { put claim_path(StudentLoans.routing_name, "personal-details"), params: }
+
+        before do
+          set_slug_sequence_in_session(in_progress_claim, "personal-details")
+        end
+
+        it "updates the student loan details" do
+          expect { request }.to change { in_progress_claim.reload.has_student_loan }
+            .and change { in_progress_claim.student_loan_plan }
+        end
+      end
+
+      context "when initiating the request from information-provided" do
+        let(:request) { put claim_path(StudentLoans.routing_name, "information-provided"), params: {} }
+
+        before do
+          in_progress_claim.update!(logged_in_with_tid: true) if tid_journey?
+          set_slug_sequence_in_session(in_progress_claim, "information-provided")
+        end
+
+        context "within the non-TID journey" do
+          let(:tid_journey?) { false }
+
+          it "does not update the student loan details" do
+            expect { request }.to not_change { in_progress_claim.reload.has_student_loan }
+              .and not_change { in_progress_claim.student_loan_plan }
+          end
+        end
+
+        context "within the TID journey" do
+          let(:tid_journey?) { true }
+
+          context "when the claim has all valid personal details" do
+            before do
+              in_progress_claim.update!(
+                first_name: "John",
+                surname: "Doe",
+                date_of_birth: "1/1/1990",
+                national_insurance_number: "QQ123456C",
+                teacher_id_user_info: {
+                  "given_name" => "John",
+                  "family_name" => "Doe",
+                  "birthdate" => "1990-01-01",
+                  "ni_number" => "QQ123456C"
+                }
+              )
+            end
+
+            it "updates the student loan details" do
+              expect { request }.to change { in_progress_claim.reload.has_student_loan }
+                .and change { in_progress_claim.student_loan_plan }
+            end
+          end
+
+          context "when the claim does not have all valid personal details" do
+            before do
+              in_progress_claim.update!(
+                first_name: "John",
+                surname: "Doe",
+                date_of_birth: "1/1/1990",
+                national_insurance_number: "QQ123456C",
+                teacher_id_user_info: {
+                  "given_name" => "Not John",
+                  "family_name" => "Doe",
+                  "birthdate" => "1990-01-01",
+                  "ni_number" => "QQ123456C"
+                }
+              )
+            end
+
+            it "does not update the student loan details" do
+              expect { request }.to not_change { in_progress_claim.reload.has_student_loan }
+                .and not_change { in_progress_claim.student_loan_plan }
+            end
+          end
+        end
+      end
+
       context "when the user has not completed the journey in the correct slug sequence" do
         it "redirects to the start of the journey" do
           put claim_path(StudentLoans.routing_name, "student-loan-amount"), params: {claim: {has_student_loan: true}}

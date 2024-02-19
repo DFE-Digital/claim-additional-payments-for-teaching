@@ -6,7 +6,6 @@ class PageSequence
 
   DEAD_END_SLUGS = %w[complete existing-session eligible-later future-eligibility ineligible]
   OPTIONAL_SLUGS = %w[postcode-search no-address-found select-home-address reset-claim]
-  PERSONAL_DETAILS_SLUGS = %w[personal-details teacher-detail]
 
   def initialize(claim, slug_sequence, completed_slugs, current_slug)
     @claim = claim
@@ -56,11 +55,11 @@ class PageSequence
     (slugs - completed_slugs - OPTIONAL_SLUGS).first
   end
 
-  def updating_personal_details?
-    PERSONAL_DETAILS_SLUGS.include?(current_slug)
-  end
-
   private
+
+  def updating_personal_details?
+    current_slug == "personal-details"
+  end
 
   def incomplete_slugs
     (slugs.slice(0, current_slug_index) - OPTIONAL_SLUGS - completed_slugs)
