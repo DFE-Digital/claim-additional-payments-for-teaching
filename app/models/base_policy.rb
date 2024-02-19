@@ -1,8 +1,12 @@
 # frozen_string_literal: true
 
 module BasePolicy
+  def to_s
+    super.demodulize
+  end
+
   def policy_type
-    name.underscore.dasherize
+    locale_key.dasherize
   end
 
   def short_name
@@ -10,7 +14,7 @@ module BasePolicy
   end
 
   def locale_key
-    name.underscore
+    to_s.underscore
   end
 
   def routing_name

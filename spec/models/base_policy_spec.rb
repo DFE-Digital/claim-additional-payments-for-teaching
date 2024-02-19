@@ -1,15 +1,23 @@
 require "rails_helper"
 
-module TestPolicy
-  include BasePolicy
+module Policies
+  module TestPolicy
+    include BasePolicy
 
-  extend self
+    extend self
+  end
 end
 
 RSpec.describe BasePolicy, type: :model do
+  describe "::to_s" do
+    it do
+      expect(Policies::TestPolicy.to_s).to eq("TestPolicy")
+    end
+  end
+
   describe "::policy_type" do
     it do
-      expect(TestPolicy.policy_type).to eq("test-policy")
+      expect(Policies::TestPolicy.policy_type).to eq("test-policy")
     end
   end
 
@@ -19,7 +27,7 @@ RSpec.describe BasePolicy, type: :model do
     end
 
     it do
-      TestPolicy.short_name
+      Policies::TestPolicy.short_name
 
       expect(I18n).to have_received(:t).with("test_policy.policy_short_name")
     end
@@ -27,7 +35,7 @@ RSpec.describe BasePolicy, type: :model do
 
   describe "::locale_key" do
     it do
-      expect(TestPolicy.locale_key).to eq("test_policy")
+      expect(Policies::TestPolicy.locale_key).to eq("test_policy")
     end
   end
 
@@ -37,10 +45,10 @@ RSpec.describe BasePolicy, type: :model do
     end
 
     it do
-      TestPolicy.routing_name
+      Policies::TestPolicy.routing_name
 
       expect(PolicyConfiguration).to have_received(:routing_name_for_policy)
-        .with(TestPolicy)
+        .with(Policies::TestPolicy)
     end
   end
 
@@ -50,9 +58,9 @@ RSpec.describe BasePolicy, type: :model do
     end
 
     it do
-      TestPolicy.configuration
+      Policies::TestPolicy.configuration
 
-      expect(PolicyConfiguration).to have_received(:for).with(TestPolicy)
+      expect(PolicyConfiguration).to have_received(:for).with(Policies::TestPolicy)
     end
   end
 end
