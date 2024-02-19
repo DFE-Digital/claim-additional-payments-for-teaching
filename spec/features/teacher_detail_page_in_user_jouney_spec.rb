@@ -22,7 +22,7 @@ RSpec.feature "Teacher Identity Sign in" do
 
   scenario "Teacher makes claim for 'Early-Career Payments' by logging in with teacher_id" do
     # - Teacher selects yes to details confirm
-    visit landing_page_path(EarlyCareerPayments.routing_name)
+    visit landing_page_path(Policies::EarlyCareerPayments.routing_name)
 
     # - Landing (start)
     expect(page).to have_text(I18n.t("early_career_payments.landing_page"))
@@ -67,7 +67,7 @@ RSpec.feature "Teacher Identity Sign in" do
   scenario "Teacher makes claim for 'Early-Career Payments' by logging in with teacher_id and selects yes to details confirm but trn missing" do
     set_mock_auth("1234567", {returned_trn: nil})
 
-    visit landing_page_path(EarlyCareerPayments.routing_name)
+    visit landing_page_path(Policies::EarlyCareerPayments.routing_name)
     click_on "Start now"
     click_on "Continue with DfE Identity"
     choose "Yes"

@@ -11,7 +11,7 @@ RSpec.feature "Payroll" do
 
     create(:claim, :approved, policy: StudentLoans)
     create(:claim, :approved, policy: StudentLoans)
-    create(:claim, :approved, policy: EarlyCareerPayments)
+    create(:claim, :approved, policy: Policies::EarlyCareerPayments)
     create(:claim, :approved, policy: LevellingUpPremiumPayments)
 
     paid_lup_claim = nil

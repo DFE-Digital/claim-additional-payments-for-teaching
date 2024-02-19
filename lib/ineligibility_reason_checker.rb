@@ -134,7 +134,7 @@ class IneligibilityReasonChecker
   end
 
   def ecp_subject_options
-    JourneySubjectEligibilityChecker.new(claim_year: @current_claim.policy_year, itt_year: @current_claim.eligibility.itt_academic_year).current_and_future_subject_symbols(EarlyCareerPayments)
+    JourneySubjectEligibilityChecker.new(claim_year: @current_claim.policy_year, itt_year: @current_claim.eligibility.itt_academic_year).current_and_future_subject_symbols(Policies::EarlyCareerPayments)
   end
 
   def bad_itt_year_for_ecp?

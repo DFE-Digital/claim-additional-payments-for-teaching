@@ -110,8 +110,8 @@ module FeatureHelpers
 
   # Early-Career Payment Policy specific helpers
   def start_early_career_payments_claim
-    visit new_claim_path(EarlyCareerPayments.routing_name)
-    Claim.by_policy(EarlyCareerPayments).order(:created_at).last
+    visit new_claim_path(Policies::EarlyCareerPayments.routing_name)
+    Claim.by_policy(Policies::EarlyCareerPayments).order(:created_at).last
   end
 
   def start_levelling_up_premium_payments_claim

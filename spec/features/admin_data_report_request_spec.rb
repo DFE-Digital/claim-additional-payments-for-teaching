@@ -9,7 +9,7 @@ RSpec.feature "Data report request" do
 
     claims = [
       create(:claim, :submitted, policy: StudentLoans),
-      create(:claim, :submitted, policy: EarlyCareerPayments),
+      create(:claim, :submitted, policy: Policies::EarlyCareerPayments),
       create(:claim, :submitted, policy: LevellingUpPremiumPayments),
       create(:claim, :submitted, :held, policy: LevellingUpPremiumPayments) # includes held claims
     ]

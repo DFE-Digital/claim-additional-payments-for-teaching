@@ -98,7 +98,7 @@ module EarlyCareerPayments
     delegate :name, to: :current_school, prefix: true, allow_nil: true
 
     def policy
-      EarlyCareerPayments
+      Policies::EarlyCareerPayments
     end
 
     # Rescues from errors for assignments coming from LUP-only fields

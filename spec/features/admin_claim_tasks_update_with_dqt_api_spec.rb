@@ -21,7 +21,7 @@ RSpec.feature "Admin claim tasks update with DQT API" do
 
       jump_to_claim_journey_page(claim, "check-your-answers")
 
-      (claim_attributes[:policy] == EarlyCareerPayments) ? click_on("Accept and send") : click_on("Confirm and send")
+      (claim_attributes[:policy] == Policies::EarlyCareerPayments) ? click_on("Accept and send") : click_on("Confirm and send")
     end
 
     claim
@@ -131,7 +131,7 @@ RSpec.feature "Admin claim tasks update with DQT API" do
   end
 
   context "with EarlyCareerPayments policy" do
-    let(:policy) { EarlyCareerPayments }
+    let(:policy) { Policies::EarlyCareerPayments }
 
     context "with submitted claim" do
       let(:claim) do

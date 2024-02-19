@@ -19,9 +19,9 @@ RSpec.feature "Teacher Identity Sign in" do
   end
 
   scenario "Teacher makes claim for 'Early-Career Payments' claim and select continue without signing in" do
-    visit landing_page_path(EarlyCareerPayments.routing_name)
+    visit landing_page_path(Policies::EarlyCareerPayments.routing_name)
     expect(page).to have_link("Claim additional payments for teaching", href: "/additional-payments/landing-page")
-    expect(page).to have_link(href: "mailto:#{EarlyCareerPayments.feedback_email}")
+    expect(page).to have_link(href: "mailto:#{Policies::EarlyCareerPayments.feedback_email}")
 
     # - Landing (start)
     expect(page).to have_text(I18n.t("early_career_payments.landing_page"))
@@ -37,9 +37,9 @@ RSpec.feature "Teacher Identity Sign in" do
   end
 
   scenario "Teacher makes claim for 'Early-Career Payments' claim and select Continue with DfE Identity" do
-    visit landing_page_path(EarlyCareerPayments.routing_name)
+    visit landing_page_path(Policies::EarlyCareerPayments.routing_name)
     expect(page).to have_link("Claim additional payments for teaching", href: "/additional-payments/landing-page")
-    expect(page).to have_link(href: "mailto:#{EarlyCareerPayments.feedback_email}")
+    expect(page).to have_link(href: "mailto:#{Policies::EarlyCareerPayments.feedback_email}")
 
     # - Landing (start)
     expect(page).to have_text(I18n.t("early_career_payments.landing_page"))

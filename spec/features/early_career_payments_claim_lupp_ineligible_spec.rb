@@ -16,7 +16,7 @@ RSpec.feature "Early-Career Payments claims with school ineligible for Levelling
   end
 
   scenario "where only Mathematics is a valid ITT subject option" do
-    visit landing_page_path(EarlyCareerPayments.routing_name)
+    visit landing_page_path(Policies::EarlyCareerPayments.routing_name)
     click_on "Start now"
 
     skip_tid

@@ -23,7 +23,7 @@ class PolicyConfiguration < ApplicationRecord
     {
       routing_name: "additional-payments",
       slugs: EarlyCareerPayments::SlugSequence::SLUGS,
-      policies: [EarlyCareerPayments, LevellingUpPremiumPayments],
+      policies: [Policies::EarlyCareerPayments, LevellingUpPremiumPayments],
       # view_path - folder where view templates are, unless folder is the same as routing-name
       view_path: "early_career_payments",
       i18n_namespace: "early_career_payments"
@@ -74,7 +74,13 @@ class PolicyConfiguration < ApplicationRecord
   end
 
   def policies
-    policy_types.map(&:constantize)
+    policy_types.map do |policy_type|
+      if %w[EarlyCareerPayments].include?(policy_type)
+        "Policies::#{policy_type}"
+      else
+        policy_type
+      end.constantize
+    end
   end
 
   def routing_name

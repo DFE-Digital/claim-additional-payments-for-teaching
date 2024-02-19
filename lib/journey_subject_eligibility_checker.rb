@@ -111,7 +111,7 @@ class JourneySubjectEligibilityChecker
     raise "Unsupported policy: #{policy}" unless policy.in?(PolicyConfiguration.policies_for_routing_name("additional-payments"))
 
     case policy
-    when EarlyCareerPayments
+    when Policies::EarlyCareerPayments
       case claim_year
       when AcademicYear.new(2022), AcademicYear.new(2024)
         case itt_year

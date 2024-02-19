@@ -12,19 +12,19 @@ RSpec.feature "Claims awaiting a decision" do
     submitted_claims << create_list(:claim, 2, :submitted, policy: StudentLoans)
 
     # index: 2-14
-    submitted_claims << create_list(:claim, 13, :submitted, policy: EarlyCareerPayments)
+    submitted_claims << create_list(:claim, 13, :submitted, policy: Policies::EarlyCareerPayments)
 
     # index: 15-18
     submitted_claims << create_list(:claim, 4, :submitted, policy: StudentLoans)
 
     # index: 19
-    submitted_claims << create_list(:claim, 1, :submitted, policy: EarlyCareerPayments)
+    submitted_claims << create_list(:claim, 1, :submitted, policy: Policies::EarlyCareerPayments)
 
     # index: 20-22
     submitted_claims << create_list(:claim, 3, :submitted, policy: StudentLoans)
 
     # index: 23-34
-    submitted_claims << create_list(:claim, 12, :submitted, policy: EarlyCareerPayments)
+    submitted_claims << create_list(:claim, 12, :submitted, policy: Policies::EarlyCareerPayments)
 
     # index: 35-38
     submitted_claims << create_list(:claim, 4, :submitted, policy: LevellingUpPremiumPayments)

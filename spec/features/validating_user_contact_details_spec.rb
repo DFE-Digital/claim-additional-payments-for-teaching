@@ -15,7 +15,7 @@ RSpec.feature "Confirming Claimant Contact details" do
     jump_to_claim_journey_page(claim, "email-verification")
 
     expect(page).to have_text("Enter the 6-digit passcode")
-    expect(page).to have_link(href: claim_path(EarlyCareerPayments.routing_name, "email-address"))
+    expect(page).to have_link(href: claim_path(Policies::EarlyCareerPayments.routing_name, "email-address"))
 
     click_link("Change email address")
 

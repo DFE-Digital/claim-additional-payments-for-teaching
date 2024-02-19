@@ -61,7 +61,7 @@ module PartOfClaimJourney
   def build_new_claims
     policy_configuration.policies.map do |policy|
       Claim.new(
-        eligibility: policy::Eligibility.new,
+        eligibility: "#{policy}::Eligibility".constantize.new,
         academic_year: policy_configuration.current_academic_year
       )
     end

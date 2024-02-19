@@ -43,7 +43,7 @@ FactoryBot.define do
     end
 
     trait :eligible_itt_subject_now do
-      itt_academic_year { PolicyConfiguration.for(EarlyCareerPayments).current_academic_year - 3 }
+      itt_academic_year { PolicyConfiguration.for(Policies::EarlyCareerPayments).current_academic_year - 3 }
       eligible_itt_subject { :mathematics }
     end
 
