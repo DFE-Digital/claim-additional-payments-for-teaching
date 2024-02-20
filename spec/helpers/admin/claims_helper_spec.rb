@@ -591,7 +591,7 @@ describe Admin::ClaimsHelper do
 
   describe "#admin_policy_options_provided" do
     context "Eligible for ECP and LUP" do
-      let(:claim) { create(:claim, :submitted, :policy_options_provided_with_both, policy: EarlyCareerPayments) }
+      let(:claim) { create(:claim, :submitted, :policy_options_provided_with_both, policy: Policies::EarlyCareerPayments) }
 
       it "returns both polices" do
         answers = [["Early-career payment", "£2,000"], ["Levelling up premium payment", "£2,000"]]
@@ -601,7 +601,7 @@ describe Admin::ClaimsHelper do
     end
 
     context "Eligible for ECP only" do
-      let(:claim) { create(:claim, :submitted, :policy_options_provided_ecp_only, policy: EarlyCareerPayments) }
+      let(:claim) { create(:claim, :submitted, :policy_options_provided_ecp_only, policy: Policies::EarlyCareerPayments) }
 
       it "returns ECP only" do
         answers = [["Early-career payment", "£2,000"]]

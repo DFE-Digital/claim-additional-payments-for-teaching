@@ -13,7 +13,7 @@ RSpec.describe Claims::EmailAddressHelper do
     end
 
     context "with a EarlyCareerPayments policy" do
-      let(:policy) { EarlyCareerPayments }
+      let(:policy) { Policies::EarlyCareerPayments }
 
       it "generates the correct hint based on translation for 'email_address_hint1' and 'email_address_hint2'" do
         expect(helper.email_govuk_hint(claim)).to include(I18n.t("questions.email_address_hint1"), I18n.t("questions.email_address_hint2"), "email-address-hint", "govuk-hint")
@@ -31,7 +31,7 @@ RSpec.describe Claims::EmailAddressHelper do
     end
 
     context "with EarlyCareerPayments policy" do
-      let(:policy) { EarlyCareerPayments }
+      let(:policy) { Policies::EarlyCareerPayments }
 
       it "generates the correct text to display" do
         expect(helper.personal_details_caption(claim)).to include(I18n.t("questions.personal_details"), "govuk-caption-xl")
