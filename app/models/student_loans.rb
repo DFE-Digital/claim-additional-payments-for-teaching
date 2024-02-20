@@ -8,6 +8,8 @@
 # authorities. Full details of the eligibility criteria can be found at the URL
 # defined by `StudentLoans.eligibility_page_url`.
 module StudentLoans
+  include BasePolicy
+
   extend self
 
   VERIFIERS = [
@@ -38,18 +40,6 @@ module StudentLoans
     "https://www.gov.uk/sign-in-to-manage-your-student-loan-balance"
   end
 
-  def routing_name
-    PolicyConfiguration.routing_name_for_policy(self)
-  end
-
-  def policy_type
-    name.underscore.dasherize
-  end
-
-  def locale_key
-    routing_name.underscore
-  end
-
   def notify_reply_to_id
     "962b3044-cdd4-4dbe-b6ea-c461530b3dc6"
   end
@@ -60,10 +50,6 @@ module StudentLoans
 
   def feedback_email
     "studentloanteacherpayment@digital.education.gov.uk"
-  end
-
-  def short_name
-    I18n.t("student_loans.policy_short_name")
   end
 
   # Returns the AcademicYear during or after which teachers must have completed
@@ -108,9 +94,5 @@ module StudentLoans
     else
       "6 April #{start_year} and 5 April #{end_year}"
     end
-  end
-
-  def configuration
-    PolicyConfiguration.for(self)
   end
 end

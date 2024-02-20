@@ -1,6 +1,8 @@
 require "rails_helper"
 
 RSpec.describe MathsAndPhysics, type: :model do
+  it { is_expected.to include(BasePolicy) }
+
   it do
     expect(subject::VERIFIERS).to eq([
       AutomatedChecks::ClaimVerifiers::Identity,
