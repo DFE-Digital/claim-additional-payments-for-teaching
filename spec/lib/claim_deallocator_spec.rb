@@ -2,8 +2,8 @@ require "rails_helper"
 require "claim_deallocator"
 
 RSpec.describe ClaimDeallocator do
-  let(:ecp_claim_1) { create(:claim, :submitted, policy: EarlyCareerPayments) }
-  let(:ecp_claim_2) { create(:claim, :submitted, policy: EarlyCareerPayments) }
+  let(:ecp_claim_1) { create(:claim, :submitted, policy: Policies::EarlyCareerPayments) }
+  let(:ecp_claim_2) { create(:claim, :submitted, policy: Policies::EarlyCareerPayments) }
   let(:tslr_claim) { create(:claim, :submitted, policy: StudentLoans) }
   let(:anhe) { create(:dfe_signin_user, given_name: "Anhe", family_name: "Huang-Zhang", organisation_name: "Department for Education", role_codes: [DfeSignIn::User::SERVICE_OPERATOR_DFE_SIGN_IN_ROLE_CODE]) }
   let(:betje) { create(:dfe_signin_user, given_name: "Betje", family_name: "Van de Berg", organisation_name: "Department for Education", role_codes: [DfeSignIn::User::SERVICE_OPERATOR_DFE_SIGN_IN_ROLE_CODE]) }
