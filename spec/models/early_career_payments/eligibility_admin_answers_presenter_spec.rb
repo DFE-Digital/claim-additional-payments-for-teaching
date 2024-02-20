@@ -1,7 +1,7 @@
 require "rails_helper"
 
-RSpec.describe EarlyCareerPayments::EligibilityAdminAnswersPresenter, type: :model do
-  let(:claim) { build(:claim, :submittable, policy: EarlyCareerPayments, academic_year: "2021/2022") }
+RSpec.describe Policies::EarlyCareerPayments::EligibilityAdminAnswersPresenter, type: :model do
+  let(:claim) { build(:claim, :submittable, policy: Policies::EarlyCareerPayments, academic_year: "2021/2022") }
 
   subject(:presenter) { described_class.new(claim.eligibility) }
 

@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe EarlyCareerPayments::SchoolEligibility do
+RSpec.describe Policies::EarlyCareerPayments::SchoolEligibility do
   subject(:eligibility) { described_class.new(school) }
 
   describe "#eligible?" do

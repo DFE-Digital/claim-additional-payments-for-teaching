@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe EarlyCareerPayments::DqtRecord do
+RSpec.describe Policies::EarlyCareerPayments::DqtRecord do
   subject(:dqt_record) do
     described_class.new(
       record,
@@ -11,7 +11,7 @@ RSpec.describe EarlyCareerPayments::DqtRecord do
   let(:claim) do
     build(
       :claim,
-      policy: EarlyCareerPayments,
+      policy: Policies::EarlyCareerPayments,
       academic_year: claim_academic_year,
       eligibility: eligibility
     )
@@ -2164,7 +2164,7 @@ RSpec.describe EarlyCareerPayments::DqtRecord do
     let(:calculated_itt_year) { AcademicYear.new(2021) }
     let(:claim_academic_year) { AcademicYear.new(2023) }
     let(:induction_data) do
-      instance_double(EarlyCareerPayments::InductionData, eligible?: "true_or_false")
+      instance_double(Policies::EarlyCareerPayments::InductionData, eligible?: "true_or_false")
     end
 
     let(:expected_attributes) { record.to_h.except(:induction_completion_date) }
@@ -2172,7 +2172,7 @@ RSpec.describe EarlyCareerPayments::DqtRecord do
 
     before do
       allow(dqt_record).to receive(:itt_year).and_return(calculated_itt_year)
-      allow(EarlyCareerPayments::InductionData).to receive(:new)
+      allow(Policies::EarlyCareerPayments::InductionData).to receive(:new)
         .with(expected_attributes)
         .and_return(induction_data)
     end

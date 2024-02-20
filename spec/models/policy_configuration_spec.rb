@@ -12,7 +12,7 @@ RSpec.describe PolicyConfiguration do
         expect(described_class.for(StudentLoans)).to eq student_loans
 
         # Same PolicyConfiguration for ECP and LUP
-        expect(described_class.for(EarlyCareerPayments)).to eq additional_payments
+        expect(described_class.for(Policies::EarlyCareerPayments)).to eq additional_payments
         expect(described_class.for(LevellingUpPremiumPayments)).to eq additional_payments
       end
     end
@@ -29,7 +29,7 @@ RSpec.describe PolicyConfiguration do
     describe "#policies" do
       it "returns the policies" do
         expect(described_class.for(StudentLoans).policies).to eq [StudentLoans]
-        expect(described_class.for(EarlyCareerPayments).policies).to eq [EarlyCareerPayments, LevellingUpPremiumPayments]
+        expect(described_class.for(Policies::EarlyCareerPayments).policies).to eq [Policies::EarlyCareerPayments, LevellingUpPremiumPayments]
       end
     end
 
@@ -38,7 +38,7 @@ RSpec.describe PolicyConfiguration do
         expect(described_class.for(StudentLoans).routing_name).to eq "student-loans"
 
         # Same routing_name for ECP and LUP
-        expect(described_class.for(EarlyCareerPayments).routing_name).to eq "additional-payments"
+        expect(described_class.for(Policies::EarlyCareerPayments).routing_name).to eq "additional-payments"
         expect(described_class.for(LevellingUpPremiumPayments).routing_name).to eq "additional-payments"
       end
     end
@@ -63,14 +63,14 @@ RSpec.describe PolicyConfiguration do
   describe ".policy_for_routing_name" do
     it "returns the first policy for that routing name" do
       expect(described_class.policy_for_routing_name("student-loans")).to eq StudentLoans
-      expect(described_class.policy_for_routing_name("additional-payments")).to eq EarlyCareerPayments
+      expect(described_class.policy_for_routing_name("additional-payments")).to eq Policies::EarlyCareerPayments
     end
   end
 
   describe ".policies_for_routing_name" do
     it "returns the policies for that routing name" do
       expect(described_class.policies_for_routing_name("student-loans")).to eq [StudentLoans]
-      expect(described_class.policies_for_routing_name("additional-payments")).to eq [EarlyCareerPayments, LevellingUpPremiumPayments]
+      expect(described_class.policies_for_routing_name("additional-payments")).to eq [Policies::EarlyCareerPayments, LevellingUpPremiumPayments]
     end
   end
 
@@ -95,7 +95,7 @@ RSpec.describe PolicyConfiguration do
       expect(described_class.routing_name_for_policy(StudentLoans)).to eq "student-loans"
 
       # Same routing_name for ECP and LUP
-      expect(described_class.routing_name_for_policy(EarlyCareerPayments)).to eq "additional-payments"
+      expect(described_class.routing_name_for_policy(Policies::EarlyCareerPayments)).to eq "additional-payments"
       expect(described_class.routing_name_for_policy(LevellingUpPremiumPayments)).to eq "additional-payments"
     end
   end

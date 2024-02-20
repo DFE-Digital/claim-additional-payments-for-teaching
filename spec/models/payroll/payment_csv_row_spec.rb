@@ -126,7 +126,7 @@ RSpec.describe Payroll::PaymentCsvRow do
         end
         let(:claims) do
           [
-            create(:claim, :approved, personal_details_for_ecp_claim_1.merge(policy: EarlyCareerPayments))
+            create(:claim, :approved, personal_details_for_ecp_claim_1.merge(policy: Policies::EarlyCareerPayments))
           ]
         end
 
@@ -199,7 +199,7 @@ RSpec.describe Payroll::PaymentCsvRow do
         end
         let(:claims) do
           [
-            create(:claim, :approved, personal_details_for_ecp_claim_2.merge(policy: EarlyCareerPayments))
+            create(:claim, :approved, personal_details_for_ecp_claim_2.merge(policy: Policies::EarlyCareerPayments))
           ]
         end
 
