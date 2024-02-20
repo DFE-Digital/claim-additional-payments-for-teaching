@@ -21,7 +21,7 @@ RSpec.describe QualificationsNoMatchCheckJob do
       :claim,
       :submitted,
       academic_year: academic_year,
-      policy: EarlyCareerPayments
+      policy: Policies::EarlyCareerPayments
     )
   end
 
