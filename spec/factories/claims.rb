@@ -10,6 +10,7 @@ FactoryBot.define do
       eligibility_trait { nil }
       eligibility_attributes { nil }
       decision_creator { nil }
+      using_mobile_number_from_tid { false }
     end
 
     after(:build) do |claim, evaluator|
@@ -50,11 +51,16 @@ FactoryBot.define do
 
       eligibility_trait { :eligible }
 
-      after(:build) do |claim|
+      after(:build) do |claim, evaluator|
         if claim.has_ecp_or_lupp_policy?
           claim.provide_mobile_number = true
           claim.mobile_number = "07474000123"
           claim.mobile_verified = true
+          if evaluator.using_mobile_number_from_tid
+            claim.mobile_check = "use"
+            claim.mobile_verified = false
+            claim.logged_in_with_tid = true
+          end
         end
       end
     end

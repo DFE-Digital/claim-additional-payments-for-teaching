@@ -772,8 +772,13 @@ class Claim < ApplicationRecord
     errors[:date_of_birth].empty?
   end
 
+  def using_mobile_number_from_tid?
+    logged_in_with_tid? && mobile_check == "use" && provide_mobile_number && mobile_number.present?
+  end
+
   def submittable_mobile_details?
     return true unless has_ecp_or_lupp_policy?
+    return true if using_mobile_number_from_tid?
     return true if provide_mobile_number && mobile_number.present? && mobile_verified == true
     return true if provide_mobile_number == false && mobile_number.nil? && mobile_verified == false
     return true if provide_mobile_number == false && mobile_verified.nil?
