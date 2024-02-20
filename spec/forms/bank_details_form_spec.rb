@@ -43,7 +43,7 @@ RSpec.describe BankDetailsForm do
       end
 
       context "when building society" do
-        let(:claim) { build(:claim, :with_bank_details, bank_or_building_society: :building_society, policy: EarlyCareerPayments) }
+        let(:claim) { build(:claim, :with_bank_details, bank_or_building_society: :building_society, policy: Policies::EarlyCareerPayments) }
 
         context "with valid building society roll number" do
           let(:building_society_roll_number) { "CXJ-K6 897/98X" }
