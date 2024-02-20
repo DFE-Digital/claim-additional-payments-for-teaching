@@ -55,8 +55,8 @@ RSpec.describe "Admin claims", type: :request do
     it "can filter by team member" do
       student_loans_claims_for_mette = create_list(:claim, 3, :submitted, policy: StudentLoans)
       student_loans_claims_for_valentino = create_list(:claim, 2, :submitted, policy: StudentLoans)
-      early_career_payments_claims_for_mary = create_list(:claim, 4, :submitted, policy: EarlyCareerPayments)
-      early_career_payments_claims_for_mette = create_list(:claim, 6, :submitted, policy: EarlyCareerPayments)
+      early_career_payments_claims_for_mary = create_list(:claim, 4, :submitted, policy: Policies::EarlyCareerPayments)
+      early_career_payments_claims_for_mette = create_list(:claim, 6, :submitted, policy: Policies::EarlyCareerPayments)
 
       student_loans_claims_for_mette.each { |c|
         c.assigned_to = mette
@@ -95,7 +95,7 @@ RSpec.describe "Admin claims", type: :request do
   end
 
   # Compatible with claims from each policy
-  [StudentLoans, EarlyCareerPayments, LevellingUpPremiumPayments].each do |policy|
+  [StudentLoans, Policies::EarlyCareerPayments, LevellingUpPremiumPayments].each do |policy|
     context "with a #{policy} claim" do
       describe "claims#show" do
         let(:claim) { create(:claim, :submitted, policy: policy) }

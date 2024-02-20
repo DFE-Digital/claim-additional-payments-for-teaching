@@ -104,7 +104,7 @@ RSpec.describe "Admin claim allocations", type: :request do
           create_list(:claim, 3, :submitted, policy: StudentLoans, assigned_to: team_member)
         end
         let!(:early_career_payments_assigned_claims) do
-          create_list(:claim, 3, :submitted, policy: EarlyCareerPayments, assigned_to: team_member)
+          create_list(:claim, 3, :submitted, policy: Policies::EarlyCareerPayments, assigned_to: team_member)
         end
 
         before { call_endpoint }
