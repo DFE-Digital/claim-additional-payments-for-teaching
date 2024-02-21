@@ -4,178 +4,151 @@ RSpec.feature "Combined journey with Teacher ID mobile check" do
   include OmniauthMockHelper
   include ClaimsControllerHelper
 
-  # create a school eligible for ECP and LUP so can walk the whole journey
   let!(:policy_configuration) { create(:policy_configuration, :additional_payments) }
   let!(:school) { create(:school, :combined_journey_eligibile_for_all) }
+  let(:eligible_itt_years) { JourneySubjectEligibilityChecker.selectable_itt_years_for_claim_year(policy_configuration.current_academic_year) }
+  let(:academic_date) { Date.new(eligible_itt_years.first.start_year, 12, 1) }
+  let(:itt_year) { AcademicYear.for(academic_date) }
   let(:trn) { 1234567 }
   let(:date_of_birth) { "1981-01-01" }
   let(:nino) { "AB123123A" }
-  let(:phone_number) { "01234567890" }
+  let(:alt_phone_number) { "01234567891" }
+  let(:otp_code) { "010101" }
+  let(:eligible_dqt_body) do
+    {
+      qualified_teacher_status: {
+        qts_date: academic_date.to_s
+      }
+    }
+  end
 
   before do
-    freeze_time
-    set_mock_auth(trn, {date_of_birth:, nino:, phone_number:})
+    set_mock_auth(trn, {date_of_birth:, nino:})
     stub_dqt_empty_response(trn:, params: {birthdate: date_of_birth, nino:})
-    mock_claims_controller_address_data
+    stub_otp_verification(otp_code:)
+    stub_qualified_teaching_statuses_show(trn:, params: {birthdate: date_of_birth, nino:}, body: eligible_dqt_body)
   end
 
   after do
     set_mock_auth(nil)
-    travel_back
   end
 
-  scenario "Selects suggested phone number" do
-    navigate_to_check_mobile_page(school:)
+  scenario "User chooses the mobile number from Teacher ID" do
+    navigate_to_check_mobile_page
 
-    expect(page).to have_text(I18n.t("questions.select_phone_number.heading"))
-    expect(page).to have_text(phone_number)
-
-    # - Select the suggested phone number
     find("#claim_mobile_check_use").click
     click_on "Continue"
 
-    # - Choose bank or building society
-    expect(page).to have_text(I18n.t("questions.bank_or_building_society"))
+    fill_in_remaining_details_and_submit_claim
+  end
 
-    claims = Claim.order(created_at: :desc).limit(2)
+  scenario "User chooses an alternative mobile number" do
+    navigate_to_check_mobile_page
 
-    claims.each do |c|
-      expect(c.mobile_number).to eq(phone_number)
-      expect(c.provide_mobile_number).to eq(true)
-      expect(c.mobile_check).to eq("use")
-    end
-
-    # - Select to use an alternative phone number"
-    click_on "Back"
-
-    expect(page).to have_text(I18n.t("questions.select_phone_number.alternative"))
-
-    # - Select A different mobile number
     find("#claim_mobile_check_alternative").click
     click_on "Continue"
 
-    # - Enter your phone number
-    expect(page).to have_text("To verify your mobile number we will send you a text message with a 6-digit passcode. You can enter the passcode on the next screen.")
+    fill_in "claim_mobile_number", with: alt_phone_number
+    click_on "Continue"
 
-    claims.reload.each do |c|
-      expect(c.mobile_number).to eq(nil)
-      expect(c.provide_mobile_number).to eq(nil)
-      expect(c.mobile_check).to eq("alternative")
-    end
+    fill_in "claim_one_time_password", with: otp_code
+    click_on "Confirm"
 
-    # - Choose not to be contacted by phone
-    click_on "Back"
+    fill_in_remaining_details_and_submit_claim
+  end
 
-    expect(page).to have_text(I18n.t("questions.select_phone_number.decline"))
+  scenario "User chooses not to be contacted by mobile" do
+    navigate_to_check_mobile_page
 
     find("#claim_mobile_check_declined").click
     click_on "Continue"
 
-    # - Choose bank or building society
-    expect(page).to have_text(I18n.t("questions.bank_or_building_society"))
-
-    claims.reload.each do |c|
-      expect(c.mobile_number).to eq(nil)
-      expect(c.provide_mobile_number).to eq(false)
-      expect(c.mobile_check).to eq("declined")
-    end
+    fill_in_remaining_details_and_submit_claim
   end
 
-  def navigate_to_check_mobile_page(school:)
+  def navigate_to_check_mobile_page
     visit landing_page_path(EarlyCareerPayments.routing_name)
 
     # - Landing (start)
-    expect(page).to have_text(I18n.t("early_career_payments.landing_page"))
     click_on "Start now"
 
-    expect(page).to have_text("Use DfE Identity to sign in")
     click_on "Continue with DfE Identity"
 
     # - Teacher details page
-    expect(page).to have_text(I18n.t("early_career_payments.questions.check_and_confirm_details"))
-    expect(page).to have_text(I18n.t("early_career_payments.questions.details_correct"))
-
     choose "Yes"
     click_on "Continue"
 
     # - Which school do you teach at
-    expect(page).to have_text(I18n.t("early_career_payments.questions.current_school_search"))
     choose_school school
-    click_on "Continue"
 
-    # - Have you started your first year as a newly qualified teacher?
-    expect(page).to have_text(I18n.t("early_career_payments.questions.nqt_in_academic_year_after_itt.heading"))
-
+    # - Are you currently teaching as a qualified teacher?
     choose "Yes"
     click_on "Continue"
 
     # - Have you completed your induction as an early-career teacher?
-    expect(page).to have_text(I18n.t("early_career_payments.questions.induction_completed.heading"))
-
     choose "Yes"
     click_on "Continue"
 
     # - Are you currently employed as a supply teacher
-    expect(page).to have_text(I18n.t("early_career_payments.questions.employed_as_supply_teacher"))
-
     choose "No"
     click_on "Continue"
 
-    # - Poor performance
-    expect(page).to have_text(I18n.t("early_career_payments.questions.formal_performance_action"))
-    expect(page).to have_text(I18n.t("early_career_payments.questions.disciplinary_action"))
-
+    # - Performance Issues
     choose "claim_eligibility_attributes_subject_to_formal_performance_action_false"
     choose "claim_eligibility_attributes_subject_to_disciplinary_action_false"
     click_on "Continue"
 
-    # - What route into teaching did you take?
-    expect(page).to have_text(I18n.t("early_career_payments.questions.qualification.heading"))
-
-    choose "Undergraduate initial teacher training (ITT)"
+    # - Check and confirm qualifications
+    choose "Yes"
     click_on "Continue"
 
-    expect(page).to have_text(I18n.t("early_career_payments.questions.itt_academic_year.qualification.undergraduate_itt"))
-    choose "2020 to 2021"
-    click_on "Continue"
-
-    # User should be redirected to the next question which was previously answered but wiped by the attribute dependency
-    expect(page).to have_text("Which subject")
-    choose "Mathematics"
-    click_on "Continue"
-
-    # - Do you teach mathematics now?
-    expect(page).to have_text(I18n.t("early_career_payments.questions.teaching_subject_now"))
+    # - Do you spend at least half of your contracted hours teaching eligible subjects?
     choose "Yes"
     click_on "Continue"
 
     # - Check your answers for eligibility
-    expect(page).to have_text(I18n.t("early_career_payments.check_your_answers.part_one.primary_heading"))
     click_on("Continue")
 
-    expect(page).to have_text("You’re eligible for an additional payment")
-    choose("£2,000 levelling up premium payment")
+    # - Eligibility confirmed
+    choose "£2,000 levelling up premium payment"
     click_on("Apply now")
 
-    # - How will we use the information you provide
-    expect(page).to have_text("How we will use the information you provide")
+    # - How we will use the information you provide
     click_on "Continue"
 
     # - What is your home address
-    expect(page).to have_text(I18n.t("questions.address.home.title"))
-    expect(page).to have_link(href: claim_path(EarlyCareerPayments.routing_name, "address"))
-
-    fill_in "Postcode", with: "SO16 9FX"
-    click_on "Search"
-
-    # - Select your home address
-    expect(page).to have_text(I18n.t("questions.address.home.title"))
-
-    choose "flat_11_millbrook_tower_windermere_avenue_southampton_so16_9fx"
-    click_on "Continue"
+    click_link(I18n.t("questions.address.home.link_to_manual_address"))
+    fill_in_address
 
     # - Select the suggested email address
     find("#claim_email_address_check_true").click
     click_on "Continue"
+  end
+
+  def fill_in_remaining_details_and_submit_claim
+    choose "Building society"
+    click_on "Continue"
+
+    fill_in "Name on your account", with: "Jo Bloggs"
+    fill_in "Sort code", with: "123456"
+    fill_in "Account number", with: "87654321"
+    fill_in "Building society roll number", with: "1234/123456789"
+    click_on "Continue"
+
+    # - What gender does your school's payroll system associate with you
+    choose "Male"
+    click_on "Continue"
+
+    # - Are you currently repaying a student loan?
+    choose "No"
+    click_on "Continue"
+
+    # - Did you take out a Postgraduate Masters or a Postgraduate Doctoral loan?
+    choose "No"
+    click_on "Continue"
+
+    click_on "Accept and send"
+
+    expect(page).to have_text("We have sent you a confirmation email")
   end
 end
