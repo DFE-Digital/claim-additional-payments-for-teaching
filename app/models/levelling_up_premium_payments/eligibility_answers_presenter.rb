@@ -1,4 +1,4 @@
 module LevellingUpPremiumPayments
-  class EligibilityAnswersPresenter < EarlyCareerPayments::EligibilityAnswersPresenter
+  class EligibilityAnswersPresenter < Policies::EarlyCareerPayments::EligibilityAnswersPresenter
   end
 end
