@@ -19,7 +19,7 @@ class SelectMobileNumberForm
     when "alternative"
       {
         mobile_number: nil,
-        provide_mobile_number: nil,
+        provide_mobile_number: true,
         mobile_check: @mobile_check
       }
     when "declined"

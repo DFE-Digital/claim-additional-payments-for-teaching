@@ -19,10 +19,10 @@ RSpec.describe SelectMobileNumberForm do
     context "when mobile_check is 'alternative'" do
       let(:form) { SelectMobileNumberForm.new(claim, "alternative") }
 
-      it "returns nil for mobile_number and provide_mobile_number, and sets mobile_check to 'alternative'" do
+      it "returns nil for mobile_number and sets provide_mobile_number to true, and sets mobile_check to 'alternative'" do
         expect(form.extract_attributes).to eq({
           mobile_number: nil,
-          provide_mobile_number: nil,
+          provide_mobile_number: true,
           mobile_check: "alternative"
         })
       end
