@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.describe NotifySmsMessage do
-  let(:claim) { build_stubbed(:claim, mobile_number: "07773335643", policy: EarlyCareerPayments) }
+  let(:claim) { build_stubbed(:claim, mobile_number: "07773335643", policy: Policies::EarlyCareerPayments) }
   let(:message) do
     described_class.new(
       phone_number: claim.mobile_number,

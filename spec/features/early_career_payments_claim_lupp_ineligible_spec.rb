@@ -32,7 +32,7 @@ RSpec.feature "Early-Career Payments claims with school ineligible for Levelling
     choose "Yes"
     click_on "Continue"
 
-    claim = Claim.by_policy(EarlyCareerPayments).order(:created_at).last
+    claim = Claim.by_policy(Policies::EarlyCareerPayments).order(:created_at).last
 
     # - Have you completed your induction as an early-career teacher?
     expect(page).to have_text(I18n.t("early_career_payments.questions.induction_completed.heading"))

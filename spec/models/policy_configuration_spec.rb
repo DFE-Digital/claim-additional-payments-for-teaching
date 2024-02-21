@@ -55,7 +55,7 @@ RSpec.describe PolicyConfiguration do
 
     describe "validations" do
       it "prevents saving a record for a policy already configured" do
-        expect { create(:policy_configuration, policy_types: [EarlyCareerPayments]) }.to raise_error(ActiveRecord::RecordInvalid)
+        expect { create(:policy_configuration, policy_types: [Policies::EarlyCareerPayments]) }.to raise_error(ActiveRecord::RecordInvalid)
       end
     end
   end

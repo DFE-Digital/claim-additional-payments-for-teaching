@@ -32,7 +32,7 @@ RSpec.feature "Teacher Early-Career Payments claims", slow: true do
     choose "Yes"
     click_on "Continue"
 
-    claim = Claim.by_policy(EarlyCareerPayments).order(:created_at).last
+    claim = Claim.by_policy(Policies::EarlyCareerPayments).order(:created_at).last
     eligibility = claim.eligibility
 
     expect(eligibility.nqt_in_academic_year_after_itt).to eql true
@@ -362,7 +362,7 @@ RSpec.feature "Teacher Early-Career Payments claims", slow: true do
     choose "Yes"
     click_on "Continue"
 
-    claim = Claim.by_policy(EarlyCareerPayments).order(:created_at).last
+    claim = Claim.by_policy(Policies::EarlyCareerPayments).order(:created_at).last
     eligibility = claim.eligibility
 
     expect(eligibility.nqt_in_academic_year_after_itt).to eql true
@@ -520,7 +520,7 @@ RSpec.feature "Teacher Early-Career Payments claims", slow: true do
     choose "Yes"
     click_on "Continue"
 
-    claim = Claim.by_policy(EarlyCareerPayments).order(:created_at).last
+    claim = Claim.by_policy(Policies::EarlyCareerPayments).order(:created_at).last
     eligibility = claim.eligibility
 
     expect(eligibility.nqt_in_academic_year_after_itt).to eql true
