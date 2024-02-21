@@ -2,7 +2,7 @@
 <% translated_eligible_itt_subject = t("early_career_payments.answers.eligible_itt_subject.#{eligible_itt_subject}").downcase %>
 <% content_for(:page_title, page_title(t("early_career_payments.questions.teaching_subject_now", eligible_itt_subject: eligible_itt_subject), policy: current_policy_routing_name, show_error: current_claim.errors.any?)) %>
 <% path_for_form = current_claim.persisted? ? claim_path(current_policy_routing_name) : claims_path(current_policy_routing_name) %>
-<% shared_view_css_size = current_claim.policy == EarlyCareerPayments ? "l" : "xl" %>
+<% shared_view_css_size = current_claim.policy == Policies::EarlyCareerPayments ? "l" : "xl" %>
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
