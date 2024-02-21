@@ -157,7 +157,7 @@ module Policies
       def text_for_subject_answer
         policy = eligibility.policy
         subjects = JourneySubjectEligibilityChecker.new(claim_year: PolicyConfiguration.for(policy).current_academic_year,
-                                                        itt_year: eligibility.itt_academic_year).current_and_future_subject_symbols(policy)
+          itt_year: eligibility.itt_academic_year).current_and_future_subject_symbols(policy)
 
         if subjects.many?
           translate("early_career_payments.answers.eligible_itt_subject.#{eligibility.eligible_itt_subject}")

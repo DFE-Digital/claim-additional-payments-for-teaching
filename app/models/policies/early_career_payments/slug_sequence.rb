@@ -187,9 +187,9 @@ module Policies
 
       def remove_student_loan_slugs(sequence, slugs = nil)
         slugs ||= %w[
-        student-loan-country
-        student-loan-how-many-courses
-        student-loan-start-date
+          student-loan-country
+          student-loan-how-many-courses
+          student-loan-start-date
         ]
 
         slugs.each { |slug| sequence.delete(slug) }
@@ -197,8 +197,8 @@ module Policies
 
       def remove_masters_doctoral_loan_slugs(sequence, slugs = nil)
         slugs ||= %w[
-        masters-loan
-        doctoral-loan
+          masters-loan
+          doctoral-loan
         ]
 
         slugs.each { |slug| sequence.delete(slug) }
@@ -206,13 +206,13 @@ module Policies
 
       def remove_student_loan_country_slugs(sequence)
         slugs = %w[
-        student-loan-how-many-courses
-        student-loan-start-date
+          student-loan-how-many-courses
+          student-loan-start-date
         ]
 
         if [
-            StudentLoan::NORTHERN_IRELAND,
-            StudentLoan::SCOTLAND
+          StudentLoan::NORTHERN_IRELAND,
+          StudentLoan::SCOTLAND
         ].include?(claim.student_loan_country)
           remove_student_loan_slugs(sequence, slugs)
         end
@@ -220,10 +220,10 @@ module Policies
 
       def replace_ecp_only_induction_not_completed_slugs(sequence)
         slugs = %w[
-        current-school
-        nqt-in-academic-year-after-itt
-        induction-completed
-        eligible-later
+          current-school
+          nqt-in-academic-year-after-itt
+          induction-completed
+          eligible-later
         ]
 
         sequence.replace(slugs)
@@ -233,12 +233,12 @@ module Policies
       # journey.
       def trainee_teacher_slugs(sequence)
         trainee_slugs = %w[
-        current-school
-        nqt-in-academic-year-after-itt
-        eligible-itt-subject
-        eligible-degree-subject
-        future-eligibility
-        ineligible
+          current-school
+          nqt-in-academic-year-after-itt
+          eligible-itt-subject
+          eligible-degree-subject
+          future-eligibility
+          ineligible
         ]
 
         [sequence.dup - trainee_slugs].flatten.each { |slug| sequence.delete(slug) }

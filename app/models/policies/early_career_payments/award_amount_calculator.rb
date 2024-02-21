@@ -27,82 +27,82 @@ module Policies
         return 0 unless @policy_year.in?(AcademicYear.new(2021)..AcademicYear.new(2024))
 
         amount = case @policy_year
-                 when AcademicYear.new(2021)
-                   case @itt_year
-                   when AcademicYear.new(2018)
-                     case @subject_symbol
-                     when :mathematics
-                       if @school.eligible_for_early_career_payments_as_uplift?
-                         7_500
-                       else
-                         5_000
-                       end
-                     end
-                   end
-                 when AcademicYear.new(2022)
-                   case @itt_year
-                   when AcademicYear.new(2019)
-                     case @subject_symbol
-                     when :mathematics
-                       if @school.eligible_for_early_career_payments_as_uplift?
-                         7_500
-                       else
-                         5_000
-                       end
-                     end
-                   when AcademicYear.new(2020)
-                     case @subject_symbol
-                     when :chemistry, :foreign_languages, :mathematics, :physics
-                       if @school.eligible_for_early_career_payments_as_uplift?
-                         3_000
-                       else
-                         2_000
-                       end
-                     end
-                   end
-                 when AcademicYear.new(2023)
-                   case @itt_year
-                   when AcademicYear.new(2018)
-                     case @subject_symbol
-                     when :mathematics
-                       if @school.eligible_for_early_career_payments_as_uplift?
-                         7_500
-                       else
-                         5_000
-                       end
-                     end
-                   when AcademicYear.new(2020)
-                     case @subject_symbol
-                     when :chemistry, :foreign_languages, :mathematics, :physics
-                       if @school.eligible_for_early_career_payments_as_uplift?
-                         3_000
-                       else
-                         2_000
-                       end
-                     end
-                   end
-                 when AcademicYear.new(2024)
-                   case @itt_year
-                   when AcademicYear.new(2019)
-                     case @subject_symbol
-                     when :mathematics
-                       if @school.eligible_for_early_career_payments_as_uplift?
-                         7_500
-                       else
-                         5_000
-                       end
-                     end
-                   when AcademicYear.new(2020)
-                     case @subject_symbol
-                     when :chemistry, :foreign_languages, :mathematics, :physics
-                       if @school.eligible_for_early_career_payments_as_uplift?
-                         3_000
-                       else
-                         2_000
-                       end
-                     end
-                   end
-                 end
+        when AcademicYear.new(2021)
+          case @itt_year
+          when AcademicYear.new(2018)
+            case @subject_symbol
+            when :mathematics
+              if @school.eligible_for_early_career_payments_as_uplift?
+                7_500
+              else
+                5_000
+              end
+            end
+          end
+        when AcademicYear.new(2022)
+          case @itt_year
+          when AcademicYear.new(2019)
+            case @subject_symbol
+            when :mathematics
+              if @school.eligible_for_early_career_payments_as_uplift?
+                7_500
+              else
+                5_000
+              end
+            end
+          when AcademicYear.new(2020)
+            case @subject_symbol
+            when :chemistry, :foreign_languages, :mathematics, :physics
+              if @school.eligible_for_early_career_payments_as_uplift?
+                3_000
+              else
+                2_000
+              end
+            end
+          end
+        when AcademicYear.new(2023)
+          case @itt_year
+          when AcademicYear.new(2018)
+            case @subject_symbol
+            when :mathematics
+              if @school.eligible_for_early_career_payments_as_uplift?
+                7_500
+              else
+                5_000
+              end
+            end
+          when AcademicYear.new(2020)
+            case @subject_symbol
+            when :chemistry, :foreign_languages, :mathematics, :physics
+              if @school.eligible_for_early_career_payments_as_uplift?
+                3_000
+              else
+                2_000
+              end
+            end
+          end
+        when AcademicYear.new(2024)
+          case @itt_year
+          when AcademicYear.new(2019)
+            case @subject_symbol
+            when :mathematics
+              if @school.eligible_for_early_career_payments_as_uplift?
+                7_500
+              else
+                5_000
+              end
+            end
+          when AcademicYear.new(2020)
+            case @subject_symbol
+            when :chemistry, :foreign_languages, :mathematics, :physics
+              if @school.eligible_for_early_career_payments_as_uplift?
+                3_000
+              else
+                2_000
+              end
+            end
+          end
+        end
 
         amount.nil? ? 0 : amount
       end
