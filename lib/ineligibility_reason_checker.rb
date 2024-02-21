@@ -95,7 +95,7 @@ class IneligibilityReasonChecker
   end
 
   def would_be_eligible_for_one_policy_only_except_for_insufficient_teaching?(policy)
-    other_policy = (policy == EarlyCareerPayments) ? LevellingUpPremiumPayments : EarlyCareerPayments
+    other_policy = (policy == Policies::EarlyCareerPayments) ? LevellingUpPremiumPayments : Policies::EarlyCareerPayments
 
     [
       eligible_with_sufficient_teaching?(policy),
@@ -119,12 +119,12 @@ class IneligibilityReasonChecker
   end
 
   def would_be_eligible_for_ecp_only_except_for_insufficient_teaching?
-    would_be_eligible_for_one_policy_only_except_for_insufficient_teaching?(EarlyCareerPayments)
+    would_be_eligible_for_one_policy_only_except_for_insufficient_teaching?(Policies::EarlyCareerPayments)
   end
 
   def would_be_eligible_for_both_ecp_and_lup_except_for_insufficient_teaching?
     [
-      eligible_with_sufficient_teaching?(EarlyCareerPayments),
+      eligible_with_sufficient_teaching?(Policies::EarlyCareerPayments),
       eligible_with_sufficient_teaching?(LevellingUpPremiumPayments)
     ].all?
   end

@@ -92,7 +92,7 @@ class PolicyConfiguration < ApplicationRecord
   end
 
   def additional_payments?
-    policies.include?(EarlyCareerPayments) || policies.include?(LevellingUpPremiumPayments)
+    policies.include?(Policies::EarlyCareerPayments) || policies.include?(LevellingUpPremiumPayments)
   end
 
   private
