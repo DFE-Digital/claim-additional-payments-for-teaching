@@ -92,7 +92,7 @@ GEM
     base64 (0.2.0)
     bindata (2.4.15)
     bindex (0.8.1)
-    bootsnap (1.17.0)
+    bootsnap (1.18.3)
       msgpack (~> 1.2)
     brakeman (6.1.2)
       racc
