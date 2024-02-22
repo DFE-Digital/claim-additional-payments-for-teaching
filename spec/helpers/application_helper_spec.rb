@@ -75,7 +75,7 @@ describe ApplicationHelper do
       expect(policy_description("student-loans")).to eq t("student_loans.claim_description")
     end
 
-    it "returns description for student loans" do
+    it "returns description for early career payments" do
       expect(policy_description("additional-payments")).to eq t("early_career_payments.claim_description")
     end
   end
