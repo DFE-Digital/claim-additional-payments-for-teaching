@@ -11,6 +11,29 @@ RSpec.feature "Changing the answers on a submittable claim" do
   let(:student_loans_school) { create(:school, :student_loans_eligible) }
   let(:ecp_school) { create(:school, :early_career_payments_eligible) }
 
+  scenario "Teacher changes an answer which is not a dependency of any of the other answers they've given, remaining eligible" do
+    claim = start_student_loans_claim
+    claim.update!(attributes_for(:claim, :submittable))
+    claim.eligibility.update!(attributes_for(:student_loans_eligibility, :eligible, current_school_id: student_loans_school.id, claim_school_id: student_loans_school.id))
+
+    jump_to_claim_journey_page(claim, "check-your-answers")
+
+    find("a[href='#{claim_path(StudentLoans.routing_name, "subjects-taught")}']").click
+
+    expect(find("#eligible_subjects_physics_taught").checked?).to eq(true)
+
+    check "Biology"
+    click_on "Continue"
+
+    expect(current_path).to eq(claim_path(StudentLoans.routing_name, "check-your-answers"))
+
+    expect(page).to have_text("Biology and Physics")
+
+    expect(page).not_to have_text("Chemistry")
+    expect(page).not_to have_text("Computing")
+    expect(page).not_to have_text("Languages")
+  end
+
   scenario "Teacher changes an answer which is not a dependency of any of the other answers they've given, becoming ineligible" do
     claim = start_student_loans_claim
     claim.update!(attributes_for(:claim, :submittable))
@@ -89,6 +112,29 @@ RSpec.feature "Changing the answers on a submittable claim" do
 
     expect(page).to have_text("You’re not eligible")
     expect(page).to have_text("You can only get this payment if you spent less than half your working hours performing leadership duties between #{StudentLoans.current_financial_year}.")
+  end
+
+  scenario "Teacher edits but does not change an answer which is a dependency of some of the subsequent answers they've given" do
+    claim = start_student_loans_claim
+    claim.update!(attributes_for(:claim, :submittable))
+    claim.eligibility.update!(attributes_for(:student_loans_eligibility, :eligible, current_school_id: student_loans_school.id, claim_school_id: student_loans_school.id))
+
+    jump_to_claim_journey_page(claim, "check-your-answers")
+
+    find("a[href='#{claim_path(StudentLoans.routing_name, "subjects-taught")}']").click
+
+    expect(find("#eligible_subjects_physics_taught").checked?).to eq(true)
+
+    click_on "Continue"
+
+    expect(current_path).to eq(claim_path(StudentLoans.routing_name, "check-your-answers"))
+
+    expect(page).to have_text("Physics")
+
+    expect(page).not_to have_text("Biology")
+    expect(page).not_to have_text("Chemistry")
+    expect(page).not_to have_text("Computing")
+    expect(page).not_to have_text("Languages")
   end
 
   scenario "when changing the student loan repayment amount the user can change answer and it preserves two decimal places" do
