@@ -19,7 +19,7 @@ module TestSeeders
       data[:row] = idx + 1 # as 1st row is header
       data[:csv_trn] = record["Trn"]
       trn_mismatch(data, claim, record)
-      if eligibility.policy == EarlyCareerPayments
+      if eligibility.policy == Policies::EarlyCareerPayments
         route_into_teaching_mismatch(data, eligibility, record)
         eligible_itt_subject_mismatch(data, eligibility, record)
         itt_academic_year_mismatch(data, eligibility, record)

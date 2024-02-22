@@ -49,7 +49,7 @@ class BaseImporter
   end
 
   def filename
-    if policy == EarlyCareerPayments
+    if policy == Policies::EarlyCareerPayments
       if ENV["ENVIRONMENT_NAME"] == "local"
         Rails.root.join("db", "test_seeders", "data", "dqt_testing", "ecp_test_seed_data_five_records.csv")
       elsif ENV["ENVIRONMENT_NAME"] == "development" || ENV["ENVIRONMENT_NAME"] == "test"

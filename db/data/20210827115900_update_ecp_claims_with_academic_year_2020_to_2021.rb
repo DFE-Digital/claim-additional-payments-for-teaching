@@ -9,12 +9,12 @@ puts <<~BACKGROUND
     - update:
       - academic_year: AcademicYear.new(2021)
 BACKGROUND
-cecp = Claim.by_policy(EarlyCareerPayments).where(academic_year: "2020/2021")
+cecp = Claim.by_policy(Policies::EarlyCareerPayments).where(academic_year: "2020/2021")
 puts "No. records: #{cecp.size}"
 
 cecp.update_all(academic_year: AcademicYear.new(2021))
-cecp_2020_after = Claim.by_policy(EarlyCareerPayments).where(academic_year: "2020/2021")
-cecp_2021_after = Claim.by_policy(EarlyCareerPayments).where(academic_year: "2021/2022")
+cecp_2020_after = Claim.by_policy(Policies::EarlyCareerPayments).where(academic_year: "2020/2021")
+cecp_2021_after = Claim.by_policy(Policies::EarlyCareerPayments).where(academic_year: "2021/2022")
 
 puts <<~AFTER
   No. records
