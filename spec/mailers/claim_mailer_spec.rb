@@ -1,5 +1,7 @@
 require "rails_helper"
 
+class SomePolicy; end
+
 RSpec.describe ClaimMailer, type: :mailer do
   shared_examples "an email related to a claim using the generic template" do |policy|
     let(:claim_description) { I18n.t("#{policy.locale_key}.claim_description") }
@@ -198,6 +200,54 @@ RSpec.describe ClaimMailer, type: :mailer do
             expect(mail[:template_id].decoded).to eq "c43bac94-67ff-4440-8f26-506eb4c232e8"
           end
         end
+      end
+    end
+  end
+
+  context "unknown claim policy" do
+    let(:claim) { instance_double("Claim") }
+
+    before do
+      allow(claim).to receive(:policy).and_return(SomePolicy)
+    end
+
+    describe "#submitted" do
+      it "raises error" do
+        expect {
+          ClaimMailer.submitted(claim).deliver!
+        }.to raise_error(ArgumentError, "Unknown claim policy: SomePolicy")
+      end
+    end
+
+    describe "#approved" do
+      it "raises error" do
+        expect {
+          ClaimMailer.approved(claim).deliver!
+        }.to raise_error(ArgumentError, "Unknown claim policy: SomePolicy")
+      end
+    end
+
+    describe "#rejected" do
+      it "raises error" do
+        expect {
+          ClaimMailer.rejected(claim).deliver!
+        }.to raise_error(ArgumentError, "Unknown claim policy: SomePolicy")
+      end
+    end
+
+    describe "#update_after_three_weeks" do
+      it "raises error" do
+        expect {
+          ClaimMailer.update_after_three_weeks(claim).deliver!
+        }.to raise_error(ArgumentError, "Unknown claim policy: SomePolicy")
+      end
+    end
+
+    describe "#email_verification" do
+      it "raises error" do
+        expect {
+          ClaimMailer.email_verification(claim, nil).deliver!
+        }.to raise_error(ArgumentError, "Unknown claim policy: SomePolicy")
       end
     end
   end

@@ -4,7 +4,9 @@ class ClaimMailer < ApplicationMailer
   helper :application
 
   def submitted(claim)
+    unknown_policy_check(claim)
     set_common_instance_variables(claim)
+
     if [StudentLoans, EarlyCareerPayments, LevellingUpPremiumPayments].include?(claim.policy)
       personalisation = {
         first_name: @claim.first_name,
@@ -17,6 +19,7 @@ class ClaimMailer < ApplicationMailer
   end
 
   def approved(claim)
+    unknown_policy_check(claim)
     set_common_instance_variables(claim)
 
     if [StudentLoans, EarlyCareerPayments, LevellingUpPremiumPayments].include?(claim.policy)
@@ -31,6 +34,7 @@ class ClaimMailer < ApplicationMailer
   end
 
   def rejected(claim)
+    unknown_policy_check(claim)
     set_common_instance_variables(claim)
 
     if [StudentLoans, EarlyCareerPayments, LevellingUpPremiumPayments].include?(claim.policy)
@@ -47,6 +51,7 @@ class ClaimMailer < ApplicationMailer
   end
 
   def update_after_three_weeks(claim)
+    unknown_policy_check(claim)
     set_common_instance_variables(claim)
 
     if [StudentLoans, EarlyCareerPayments, LevellingUpPremiumPayments].include?(claim.policy)
@@ -62,6 +67,7 @@ class ClaimMailer < ApplicationMailer
   end
 
   def email_verification(claim, one_time_password)
+    unknown_policy_check(claim)
     set_common_instance_variables(claim)
     @subject = "#{@claim_subject} email verification"
     @one_time_password = one_time_password
@@ -108,5 +114,10 @@ class ClaimMailer < ApplicationMailer
         personalisation: personalisation
       )
     end
+  end
+
+  def unknown_policy_check(claim)
+    return if [StudentLoans, EarlyCareerPayments, LevellingUpPremiumPayments].include?(claim.policy)
+    raise ArgumentError, "Unknown claim policy: #{claim.policy}"
   end
 end
