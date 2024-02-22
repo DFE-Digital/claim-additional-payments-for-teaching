@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_02_01_104539) do
+ActiveRecord::Schema[7.0].define(version: 2024_02_22_121855) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_trgm"
   enable_extension "pgcrypto"
@@ -60,9 +60,9 @@ ActiveRecord::Schema[7.0].define(version: 2024_02_01_104539) do
     t.integer "student_loan_country"
     t.integer "student_loan_courses"
     t.integer "student_loan_start_date"
+    t.string "student_loan_plan"
     t.string "eligibility_type"
     t.uuid "eligibility_id"
-    t.string "student_loan_plan"
     t.integer "payroll_gender"
     t.text "govuk_verify_fields", default: [], array: true
     t.string "first_name", limit: 100
@@ -221,24 +221,6 @@ ActiveRecord::Schema[7.0].define(version: 2024_02_01_104539) do
     t.string "name"
     t.string "code"
     t.index ["code"], name: "index_local_authority_districts_on_code", unique: true
-  end
-
-  create_table "maths_and_physics_eligibilities", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.boolean "teaching_maths_or_physics"
-    t.datetime "created_at", precision: nil, null: false
-    t.datetime "updated_at", precision: nil, null: false
-    t.uuid "current_school_id"
-    t.integer "has_uk_maths_or_physics_degree"
-    t.integer "qts_award_year"
-    t.boolean "employed_as_supply_teacher"
-    t.boolean "has_entire_term_contract"
-    t.boolean "employed_directly"
-    t.boolean "subject_to_disciplinary_action"
-    t.boolean "subject_to_formal_performance_action"
-    t.integer "initial_teacher_training_subject"
-    t.integer "initial_teacher_training_subject_specialism"
-    t.index ["created_at"], name: "index_maths_and_physics_eligibilities_on_created_at"
-    t.index ["current_school_id"], name: "index_maths_and_physics_eligibilities_on_current_school_id"
   end
 
   create_table "notes", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -467,7 +449,6 @@ ActiveRecord::Schema[7.0].define(version: 2024_02_01_104539) do
   add_foreign_key "decisions", "dfe_sign_in_users", column: "created_by_id"
   add_foreign_key "early_career_payments_eligibilities", "schools", column: "current_school_id"
   add_foreign_key "levelling_up_premium_payments_eligibilities", "schools", column: "current_school_id"
-  add_foreign_key "maths_and_physics_eligibilities", "schools", column: "current_school_id"
   add_foreign_key "notes", "claims"
   add_foreign_key "notes", "dfe_sign_in_users", column: "created_by_id"
   add_foreign_key "payment_confirmations", "dfe_sign_in_users", column: "created_by_id"
