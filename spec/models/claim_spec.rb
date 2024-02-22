@@ -827,65 +827,41 @@ RSpec.describe Claim, type: :model do
   end
 
   describe "#submittable?" do
-    let(:claim) { build(:claim, trait, academic_year: AcademicYear.new(2021), first_name: first_name, policy: policy) }
-
     context "with student loans policy eligibility" do
       let(:policy) { StudentLoans }
-      let(:first_name) { "Jo" }
 
       context "when submittable" do
-        let(:trait) { :submittable }
+        subject(:claim) { build(:claim, :submittable, policy:) }
 
-        it "returns true" do
-          expect(claim.submittable?).to eq true
-        end
+        it { is_expected.to be_submittable }
       end
 
       context "when submitted" do
-        let(:trait) { :submitted }
+        subject(:claim) { build(:claim, :submitted, policy:) }
 
-        it "returns false" do
-          expect(claim.submittable?).to eq false
-        end
+        it { is_expected.not_to be_submittable }
       end
     end
 
     context "with early-career payments policy eligibility" do
       let(:policy) { EarlyCareerPayments }
-      let(:first_name) { "Tania" }
 
       context "when submittable" do
-        let(:trait) { :submittable }
+        subject(:claim) { build(:claim, :submittable, policy:) }
 
-        it "returns true" do
-          expect(claim.submittable?).to eq true
-        end
+        it { is_expected.to be_submittable }
+      end
+
+      context "when using the mobile number from Teacher ID" do
+        subject(:claim) { build(:claim, :submittable, using_mobile_number_from_tid: true, policy:) }
+
+        it { is_expected.to be_submittable }
       end
 
       context "when submitted" do
-        let(:trait) { :submitted }
+        subject(:claim) { build(:claim, :submitted, policy:) }
 
-        it "returns false" do
-          expect(claim.submittable?).to eq false
-        end
-      end
-    end
-
-    context "Early-Career Payments claim" do
-      let(:eligibility) { build(:early_career_payments_eligibility, :eligible) }
-
-      before { create(:policy_configuration, :additional_payments) }
-
-      it "returns true when the claim is valid and has not been submitted" do
-        claim = build(:claim, :submittable, policy: EarlyCareerPayments, academic_year: AcademicYear.new(2021), first_name: "Dee", govuk_verify_fields: [], eligibility: eligibility)
-
-        expect(claim.submittable?).to eq true
-      end
-
-      it "returns false when it has already been submitted" do
-        claim = build(:claim, :unverified, policy: EarlyCareerPayments, eligibility: eligibility)
-
-        expect(claim.submittable?).to eq false
+        it { is_expected.not_to be_submittable }
       end
     end
   end
