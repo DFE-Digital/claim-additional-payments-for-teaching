@@ -26,7 +26,7 @@ RSpec.feature "Data report request" do
 
     csv = CSV.parse(body, headers: true)
 
-    # 5 claims + the 100 submitted claims
+    # 4 claims + the 100 submitted claims
     expect(csv.count).to eq(104)
 
     csv.each_with_index do |row, i|
