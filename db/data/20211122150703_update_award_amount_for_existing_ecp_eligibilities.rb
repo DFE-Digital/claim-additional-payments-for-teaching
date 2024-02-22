@@ -91,11 +91,11 @@ def backfill_claims(claims, status)
   end
 end
 
-approved_claims = Claim.by_policy(EarlyCareerPayments).approved
+approved_claims = Claim.by_policy(Policies::EarlyCareerPayments).approved
 payed_claims = approved_claims.where.not(payment: nil)
 payable_claims = approved_claims.where(payment: nil)
-rejected_claims = Claim.by_policy(EarlyCareerPayments).rejected
-claims_awaiting_decisions = Claim.by_policy(EarlyCareerPayments).awaiting_decision
+rejected_claims = Claim.by_policy(Policies::EarlyCareerPayments).rejected
+claims_awaiting_decisions = Claim.by_policy(Policies::EarlyCareerPayments).awaiting_decision
 
 raise BackfillError if payed_claims.size + payable_claims.size != approved_claims.size
 
@@ -118,7 +118,7 @@ backfill_claims(claims_awaiting_decisions, "awaiting decision")
 backfill_claims(rejected_claims, "rejected")
 
 puts "\n\nCompleted Back-filling"
-claims_requiring_attention = Claim.by_policy(EarlyCareerPayments).select { |claim| claim.eligibility.reload.read_attribute(:award_amount).nil? }
+claims_requiring_attention = Claim.by_policy(Policies::EarlyCareerPayments).select { |claim| claim.eligibility.reload.read_attribute(:award_amount).nil? }
 puts "ECP claims requiring attention (should be 0): #{claims_requiring_attention.size}"
 if claims_requiring_attention.size > 0
   puts " - claim ID's"

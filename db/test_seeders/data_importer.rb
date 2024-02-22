@@ -19,7 +19,7 @@ class DataImporter < BaseImporter
   def run
     policies.each do |policy|
       logger.info BOLD_LINE
-      if [EarlyCareerPayments, StudentLoans].include?(policy)
+      if [Policies::EarlyCareerPayments, StudentLoans].include?(policy)
         @policy = policy
         logger.info policy.to_s
       else
@@ -55,7 +55,7 @@ class DataImporter < BaseImporter
 
   def insert_eligibilities
     case policy
-    when EarlyCareerPayments
+    when Policies::EarlyCareerPayments
       if test_type == :dqt_csv
         TestSeeders::Eligibilities::EarlyCareerPayments::Importer.new(records).run
       elsif test_type == :volume
@@ -76,7 +76,7 @@ class DataImporter < BaseImporter
     return unless test_type == :dqt_csv
 
     case policy
-    when EarlyCareerPayments
+    when Policies::EarlyCareerPayments
       TestSeeders::Eligibilities::EarlyCareerPayments::CsvImportValidator.new(records, policy).run
     when StudentLoans
       TestSeeders::Eligibilities::StudentLoans::CsvImportValidator.new(records, policy).run
