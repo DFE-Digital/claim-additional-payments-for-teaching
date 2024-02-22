@@ -74,13 +74,7 @@ class PolicyConfiguration < ApplicationRecord
   end
 
   def policies
-    policy_types.map do |policy_type|
-      if %w[EarlyCareerPayments].include?(policy_type)
-        "Policies::#{policy_type}"
-      else
-        policy_type
-      end.constantize
-    end
+    policy_types.map(&Policies.method(:constantize))
   end
 
   def routing_name

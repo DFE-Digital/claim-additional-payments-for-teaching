@@ -28,4 +28,14 @@ module Policies
   def self.[](policy_type)
     POLICIES.find { |policy| policy.policy_type == policy_type }
   end
+
+  # Map PolicyConfiguration.policy_types and Claim.policy_options_provided to the Policies namespace
+  #
+  def self.constantize(policy)
+    if %w[EarlyCareerPayments].include?(policy)
+      "Policies::#{policy}"
+    else
+      policy
+    end.constantize
+  end
 end

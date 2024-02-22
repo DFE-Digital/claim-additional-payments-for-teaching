@@ -22,14 +22,8 @@ module Admin
 
     def admin_policy_options_provided(claim)
       claim.policy_options_provided.map do |option|
-        policy = option["policy"]
-        scope = if %w[EarlyCareerPayments].include?(policy)
-          "Policies::#{policy}"
-        else
-          policy
-        end
-
-        label = t(:payment_name, scope: scope.constantize.locale_key)
+        policy = Policies.constantize(option["policy"])
+        label = t(:payment_name, scope: policy.locale_key)
         answer = number_to_currency(option["award_amount"], precision: 0)
 
         [label, answer]
