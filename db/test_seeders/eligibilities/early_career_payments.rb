@@ -19,10 +19,10 @@ module TestSeeders
       end
 
       def find_eligible_itt_subject(subject_code)
-        ::EarlyCareerPayments::DqtRecord::ELIGIBLE_JAC_CODES.find { |key, values|
+        Policies::EarlyCareerPayments::DqtRecord::ELIGIBLE_JAC_CODES.find { |key, values|
           subject_code.start_with?(*values)
         }&.first ||
-          ::EarlyCareerPayments::DqtRecord::ELIGIBLE_HECOS_CODES.find { |key, values|
+          Policies::EarlyCareerPayments::DqtRecord::ELIGIBLE_HECOS_CODES.find { |key, values|
             values.include?(subject_code)
           }&.first
       end

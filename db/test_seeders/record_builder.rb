@@ -58,8 +58,8 @@ class RecordBuilder
   # as this was the valid cohort for ECP
   def subject
     [
-      EarlyCareerPayments::DqtRecord::ELIGIBLE_JAC_CODES[:mathematics],
-      EarlyCareerPayments::DqtRecord::ELIGIBLE_HECOS_CODES[:mathematics]
+      Policies::EarlyCareerPayments::DqtRecord::ELIGIBLE_JAC_CODES[:mathematics],
+      Policies::EarlyCareerPayments::DqtRecord::ELIGIBLE_HECOS_CODES[:mathematics]
     ].flatten.sample
   end
 
