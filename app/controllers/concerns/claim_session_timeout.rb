@@ -14,6 +14,7 @@ module ClaimSessionTimeout
     session.delete(:tps_school_id)
     session.delete(:tps_school_name)
     session.delete(:tps_school_address)
+    session.delete(:phone_number)
     @current_claim = nil
   end
 
