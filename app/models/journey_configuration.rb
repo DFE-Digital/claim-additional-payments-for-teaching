@@ -24,9 +24,8 @@ class JourneyConfiguration < ApplicationRecord
       routing_name: "additional-payments",
       slugs: Policies::EarlyCareerPayments::SlugSequence::SLUGS,
       policies: [Policies::EarlyCareerPayments, LevellingUpPremiumPayments],
-      # view_path - folder where view templates are, unless folder is the same as routing-name
-      view_path: "early_career_payments",
-      i18n_namespace: "early_career_payments"
+      view_path: "additional_payments",
+      i18n_namespace: "additional_payments"
     }
   ].freeze
 

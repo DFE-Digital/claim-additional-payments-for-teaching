@@ -38,7 +38,7 @@ module ApplicationHelper
     return t("service_name") unless routing_name
 
     namespace = JourneyConfiguration.i18n_namespace_for_routing_name(routing_name)
-    t("#{namespace}.policy_name")
+    t("#{namespace}.journey_name")
   end
 
   def policy_description(routing_name)

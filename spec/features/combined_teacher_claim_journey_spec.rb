@@ -33,45 +33,45 @@ RSpec.feature "Levelling up premium payments and early-career payments combined 
 
     # - Which school do you teach at
     claim.update(details_check: true)
-    expect(page).to have_text(I18n.t("early_career_payments.questions.current_school_search"))
+    expect(page).to have_text(I18n.t("additional_payments.questions.current_school_search"))
     choose_school school
     click_on "Continue"
 
     # - Have you started your first year as a newly qualified teacher?
-    expect(page).to have_text(I18n.t("early_career_payments.questions.nqt_in_academic_year_after_itt.heading"))
+    expect(page).to have_text(I18n.t("additional_payments.questions.nqt_in_academic_year_after_itt.heading"))
 
     choose "Yes"
     click_on "Continue"
 
     # - Have you completed your induction as an early-career teacher?
-    expect(page).to have_text(I18n.t("early_career_payments.questions.induction_completed.heading"))
+    expect(page).to have_text(I18n.t("additional_payments.questions.induction_completed.heading"))
 
     choose "Yes"
     click_on "Continue"
 
     # - Are you currently employed as a supply teacher
-    expect(page).to have_text(I18n.t("early_career_payments.questions.employed_as_supply_teacher"))
+    expect(page).to have_text(I18n.t("additional_payments.questions.employed_as_supply_teacher"))
 
     choose "No"
     click_on "Continue"
 
     # - Poor performance
-    expect(page).to have_text(I18n.t("early_career_payments.questions.formal_performance_action"))
-    expect(page).to have_text(I18n.t("early_career_payments.questions.disciplinary_action"))
+    expect(page).to have_text(I18n.t("additional_payments.questions.formal_performance_action"))
+    expect(page).to have_text(I18n.t("additional_payments.questions.disciplinary_action"))
 
     choose "claim_eligibility_attributes_subject_to_formal_performance_action_false"
     choose "claim_eligibility_attributes_subject_to_disciplinary_action_false"
     click_on "Continue"
 
     # - What route into teaching did you take?
-    expect(page).to have_text(I18n.t("early_career_payments.questions.qualification.heading"))
+    expect(page).to have_text(I18n.t("additional_payments.questions.qualification.heading"))
 
     choose "Postgraduate initial teacher training (ITT)"
 
     click_on "Continue"
 
     # - In which academic year did you complete your postgraduate ITT?
-    expect(page).to have_text(I18n.t("early_career_payments.questions.itt_academic_year.qualification.postgraduate_itt"))
+    expect(page).to have_text(I18n.t("additional_payments.questions.itt_academic_year.qualification.postgraduate_itt"))
 
     choose "2020 to 2021"
     click_on "Continue"
@@ -82,14 +82,14 @@ RSpec.feature "Levelling up premium payments and early-career payments combined 
     click_on "Continue"
 
     # - Do you teach mathematics now?
-    expect(page).to have_text(I18n.t("early_career_payments.questions.teaching_subject_now"))
+    expect(page).to have_text(I18n.t("additional_payments.questions.teaching_subject_now"))
     choose "Yes"
     click_on "Continue"
 
     # - Check your answers for eligibility
-    expect(page).to have_text(I18n.t("early_career_payments.check_your_answers.part_one.primary_heading"))
-    expect(page).to have_text(I18n.t("early_career_payments.check_your_answers.part_one.secondary_heading"))
-    expect(page).to have_text(I18n.t("early_career_payments.check_your_answers.part_one.confirmation_notice"))
+    expect(page).to have_text(I18n.t("additional_payments.check_your_answers.part_one.primary_heading"))
+    expect(page).to have_text(I18n.t("additional_payments.check_your_answers.part_one.secondary_heading"))
+    expect(page).to have_text(I18n.t("additional_payments.check_your_answers.part_one.confirmation_notice"))
 
     ["Identity details", "Payment details", "Student loan details"].each do |section_heading|
       expect(page).not_to have_text section_heading
@@ -268,45 +268,45 @@ RSpec.feature "Levelling up premium payments and early-career payments combined 
     click_on "Continue without signing in"
 
     # - Which school do you teach at
-    expect(page).to have_text(I18n.t("early_career_payments.questions.current_school_search"))
+    expect(page).to have_text(I18n.t("additional_payments.questions.current_school_search"))
     choose_school school
     click_on "Continue"
 
     # - Have you started your first year as a newly qualified teacher?
-    expect(page).to have_text(I18n.t("early_career_payments.questions.nqt_in_academic_year_after_itt.heading"))
+    expect(page).to have_text(I18n.t("additional_payments.questions.nqt_in_academic_year_after_itt.heading"))
 
     choose "Yes"
     click_on "Continue"
 
     # - Have you completed your induction as an early-career teacher?
-    expect(page).to have_text(I18n.t("early_career_payments.questions.induction_completed.heading"))
+    expect(page).to have_text(I18n.t("additional_payments.questions.induction_completed.heading"))
 
     choose "Yes"
     click_on "Continue"
 
     # - Are you currently employed as a supply teacher
-    expect(page).to have_text(I18n.t("early_career_payments.questions.employed_as_supply_teacher"))
+    expect(page).to have_text(I18n.t("additional_payments.questions.employed_as_supply_teacher"))
 
     choose "No"
     click_on "Continue"
 
     # - Poor performance
-    expect(page).to have_text(I18n.t("early_career_payments.questions.formal_performance_action"))
-    expect(page).to have_text(I18n.t("early_career_payments.questions.disciplinary_action"))
+    expect(page).to have_text(I18n.t("additional_payments.questions.formal_performance_action"))
+    expect(page).to have_text(I18n.t("additional_payments.questions.disciplinary_action"))
 
     choose "claim_eligibility_attributes_subject_to_formal_performance_action_false"
     choose "claim_eligibility_attributes_subject_to_disciplinary_action_false"
     click_on "Continue"
 
     # - What route into teaching did you take?
-    expect(page).to have_text(I18n.t("early_career_payments.questions.qualification.heading"))
+    expect(page).to have_text(I18n.t("additional_payments.questions.qualification.heading"))
 
     choose "Postgraduate initial teacher training (ITT)"
 
     click_on "Continue"
 
     # - In which academic year did you complete your postgraduate ITT?
-    expect(page).to have_text(I18n.t("early_career_payments.questions.itt_academic_year.qualification.postgraduate_itt"))
+    expect(page).to have_text(I18n.t("additional_payments.questions.itt_academic_year.qualification.postgraduate_itt"))
 
     choose "2020 to 2021"
     click_on "Continue"
@@ -316,14 +316,14 @@ RSpec.feature "Levelling up premium payments and early-career payments combined 
     click_on "Continue"
 
     # - Do you teach mathematics now?
-    expect(page).to have_text(I18n.t("early_career_payments.questions.teaching_subject_now"))
+    expect(page).to have_text(I18n.t("additional_payments.questions.teaching_subject_now"))
     choose "Yes"
     click_on "Continue"
 
     # - Check your answers for eligibility
-    expect(page).to have_text(I18n.t("early_career_payments.check_your_answers.part_one.primary_heading"))
-    expect(page).to have_text(I18n.t("early_career_payments.check_your_answers.part_one.secondary_heading"))
-    expect(page).to have_text(I18n.t("early_career_payments.check_your_answers.part_one.confirmation_notice"))
+    expect(page).to have_text(I18n.t("additional_payments.check_your_answers.part_one.primary_heading"))
+    expect(page).to have_text(I18n.t("additional_payments.check_your_answers.part_one.secondary_heading"))
+    expect(page).to have_text(I18n.t("additional_payments.check_your_answers.part_one.confirmation_notice"))
 
     ["Identity details", "Payment details", "Student loan details"].each do |section_heading|
       expect(page).not_to have_text section_heading

@@ -76,7 +76,7 @@ RSpec.describe JourneyConfiguration do
 
   describe ".view_paths" do
     it "returns any extra view paths" do
-      expect(described_class.view_path("additional-payments")).to eq "early_career_payments"
+      expect(described_class.view_path("additional-payments")).to eq "additional_payments"
     end
 
     it "returns nil for no overriding view path for student-loans" do

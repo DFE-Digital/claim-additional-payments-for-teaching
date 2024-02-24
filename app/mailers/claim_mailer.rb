@@ -1,6 +1,6 @@
 class ClaimMailer < ApplicationMailer
   include ClaimMailerHelper
-  include EarlyCareerPaymentsHelper
+  include AdditionalPaymentsHelper
   helper :application
 
   def submitted(claim)

@@ -33,7 +33,7 @@ RSpec.feature "Logs in with TID, confirms teacher details and displays school fr
     choose(eligible_school.name)
     click_on "Continue"
 
-    expect(page).to have_text(I18n.t("early_career_payments.questions.nqt_in_academic_year_after_itt.heading"))
+    expect(page).to have_text(I18n.t("additional_payments.questions.nqt_in_academic_year_after_itt.heading"))
 
     Claim.order(created_at: :desc).limit(2).each do |c|
       expect(c.school.id).to eq(eligible_school.id)
@@ -50,7 +50,7 @@ RSpec.feature "Logs in with TID, confirms teacher details and displays school fr
     choose("Somewhere else")
     click_on "Continue"
 
-    expect(page).to have_text(I18n.t("early_career_payments.questions.current_school_search"))
+    expect(page).to have_text(I18n.t("additional_payments.questions.current_school_search"))
     expect(page).not_to have_text(eligible_school.name)
 
     Claim.order(created_at: :desc).limit(2).each do |c|
@@ -62,7 +62,7 @@ RSpec.feature "Logs in with TID, confirms teacher details and displays school fr
   scenario "Most recent TPS is outside window - skips directly to current-school" do
     navigate_to_correct_school_page(tps: :outside_window, school: eligible_school)
 
-    expect(page).to have_text(I18n.t("early_career_payments.questions.current_school_search"))
+    expect(page).to have_text(I18n.t("additional_payments.questions.current_school_search"))
     expect(page).to have_text("Enter the school name or postcode. Use at least three characters.")
   end
 
@@ -83,7 +83,7 @@ RSpec.feature "Logs in with TID, confirms teacher details and displays school fr
     click_on "Change school"
 
     # - Goes to current-school
-    expect(page).to have_text(I18n.t("early_career_payments.questions.current_school_search"))
+    expect(page).to have_text(I18n.t("additional_payments.questions.current_school_search"))
     expect(page).to have_text("Enter the school name or postcode. Use at least three characters.")
 
     Claim.order(created_at: :desc).limit(2).each do |c|
@@ -105,7 +105,7 @@ RSpec.feature "Logs in with TID, confirms teacher details and displays school fr
     visit landing_page_path(Policies::EarlyCareerPayments.routing_name)
 
     # - Landing (start)
-    expect(page).to have_text(I18n.t("early_career_payments.landing_page"))
+    expect(page).to have_text(I18n.t("additional_payments.landing_page"))
     click_on "Start now"
 
     expect(page).to have_text("Use DfE Identity to sign in")

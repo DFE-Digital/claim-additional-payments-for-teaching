@@ -60,7 +60,7 @@ RSpec.shared_examples "ECP and LUP Combined Journey Admin Tasks Presenter" do |p
 
         it "returns array with subject #{spec[:subject_text]}" do
           expect(presenter.qualifications).to include(
-            ["ITT subject", I18n.t("early_career_payments.answers.eligible_itt_subject.#{spec[:subject_text]}")]
+            ["ITT subject", I18n.t("additional_payments.answers.eligible_itt_subject.#{spec[:subject_text]}")]
           )
         end
       end

@@ -1,4 +1,4 @@
-<% content_for(:page_title, page_title(t("early_career_payments.questions.poor_performance"), policy: current_policy_routing_name, show_error: current_claim.errors.any?)) %>
+<% content_for(:page_title, page_title(t("additional_payments.questions.poor_performance"), policy: current_policy_routing_name, show_error: current_claim.errors.any?)) %>
 <% path_for_form = current_claim.persisted? ? claim_path(current_policy_routing_name) : claims_path(current_policy_routing_name) %>
 
 <div class="govuk-grid-row">
@@ -9,7 +9,7 @@
     }) if current_claim.errors.any? %>
     <%= form_for current_claim, url: path_for_form do |form| %>
       <h1 class="govuk-heading-l">
-        <%= t("early_career_payments.questions.poor_performance") %>
+        <%= t("additional_payments.questions.poor_performance") %>
       </h1>
       <%= form_group_tag current_claim.eligibility, :subject_to_formal_performance_action do %>
         <%= form.fields_for :eligibility, include_id: false do |fields| %>
@@ -20,14 +20,14 @@
 
             <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
               <h2 class="govuk-fieldset__heading">
-                <%= t("early_career_payments.questions.formal_performance_action") %>
+                <%= t("additional_payments.questions.formal_performance_action") %>
               </h2>
             </legend>
 
             <%= errors_tag current_claim.eligibility, :subject_to_formal_performance_action %>
 
             <div id="formal_performance_action-hint" class="govuk-hint">
-              <%= t("early_career_payments.questions.formal_performance_action_hint") %>
+              <%= t("additional_payments.questions.formal_performance_action_hint") %>
             </div>
             
             <div class="govuk-radios">
@@ -58,14 +58,14 @@
 
             <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
               <h2 class="govuk-fieldset__heading">
-                <%= t("early_career_payments.questions.disciplinary_action") %>
+                <%= t("additional_payments.questions.disciplinary_action") %>
               </h2>
             </legend>
 
             <%= errors_tag current_claim.eligibility, :subject_to_disciplinary_action %>
 
             <div id="disciplinary_action-hint" class="govuk-hint">
-              <%= t("early_career_payments.questions.disciplinary_action_hint") %>
+              <%= t("additional_payments.questions.disciplinary_action_hint") %>
             </div>
 
             <div class="govuk-radios">

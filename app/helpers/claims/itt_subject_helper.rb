@@ -43,7 +43,7 @@ module Claims
         hint_subject_symbols.merge(all_lup_subjects)
       end
 
-      hint_subject_symbols.map { |sub| t("early_career_payments.answers.eligible_itt_subject.#{sub}") }
+      hint_subject_symbols.map { |sub| t("additional_payments.answers.eligible_itt_subject.#{sub}") }
         .sort
         .to_sentence(last_word_connector: " or ")
         .downcase

@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.feature "Teacher Early-Career Payments claims", slow: true do
-  include EarlyCareerPaymentsHelper
+  include AdditionalPaymentsHelper
 
   # create a school eligible for ECP and LUP so can walk the whole journey
   let!(:journey_configuration) { create(:journey_configuration, :additional_payments, current_academic_year: AcademicYear.new(2022)) }
@@ -16,18 +16,18 @@ RSpec.feature "Teacher Early-Career Payments claims", slow: true do
     expect(page).to have_link(href: "mailto:#{Policies::EarlyCareerPayments.feedback_email}")
 
     # - Landing (start)
-    expect(page).to have_text(I18n.t("early_career_payments.landing_page"))
+    expect(page).to have_text(I18n.t("additional_payments.landing_page"))
     click_on "Start now"
 
     skip_tid
 
     # - Which school do you teach at
-    expect(page).to have_text(I18n.t("early_career_payments.questions.current_school_search"))
+    expect(page).to have_text(I18n.t("additional_payments.questions.current_school_search"))
 
     choose_school school
 
     # - NQT in Academic Year after ITT
-    expect(page).to have_text(I18n.t("early_career_payments.questions.nqt_in_academic_year_after_itt.heading"))
+    expect(page).to have_text(I18n.t("additional_payments.questions.nqt_in_academic_year_after_itt.heading"))
 
     choose "Yes"
     click_on "Continue"
@@ -38,13 +38,13 @@ RSpec.feature "Teacher Early-Career Payments claims", slow: true do
     expect(eligibility.nqt_in_academic_year_after_itt).to eql true
 
     # - Have you completed your induction as an early-career teacher?
-    expect(page).to have_text(I18n.t("early_career_payments.questions.induction_completed.heading"))
+    expect(page).to have_text(I18n.t("additional_payments.questions.induction_completed.heading"))
 
     choose "Yes"
     click_on "Continue"
 
     # - Are you currently employed as a supply teacher
-    expect(page).to have_text(I18n.t("early_career_payments.questions.employed_as_supply_teacher"))
+    expect(page).to have_text(I18n.t("additional_payments.questions.employed_as_supply_teacher"))
 
     choose "No"
     click_on "Continue"
@@ -52,15 +52,15 @@ RSpec.feature "Teacher Early-Career Payments claims", slow: true do
     expect(claim.eligibility.reload.employed_as_supply_teacher).to eql false
 
     # - Performance Issues
-    expect(page).to have_text(I18n.t("early_career_payments.questions.poor_performance"))
-    expect(page).to have_text(I18n.t("early_career_payments.questions.formal_performance_action"))
-    expect(page).to have_text(I18n.t("early_career_payments.questions.formal_performance_action_hint"))
+    expect(page).to have_text(I18n.t("additional_payments.questions.poor_performance"))
+    expect(page).to have_text(I18n.t("additional_payments.questions.formal_performance_action"))
+    expect(page).to have_text(I18n.t("additional_payments.questions.formal_performance_action_hint"))
 
     # No
     choose "claim_eligibility_attributes_subject_to_formal_performance_action_false"
 
-    expect(page).to have_text(I18n.t("early_career_payments.questions.disciplinary_action"))
-    expect(page).to have_text(I18n.t("early_career_payments.questions.disciplinary_action_hint"))
+    expect(page).to have_text(I18n.t("additional_payments.questions.disciplinary_action"))
+    expect(page).to have_text(I18n.t("additional_payments.questions.disciplinary_action_hint"))
 
     # "No"
     choose "claim_eligibility_attributes_subject_to_disciplinary_action_false"
@@ -71,7 +71,7 @@ RSpec.feature "Teacher Early-Career Payments claims", slow: true do
     expect(claim.eligibility.reload.subject_to_disciplinary_action).to eql false
 
     # - What route into teaching did you take?
-    expect(page).to have_text(I18n.t("early_career_payments.questions.qualification.heading"))
+    expect(page).to have_text(I18n.t("additional_payments.questions.qualification.heading"))
 
     choose "Undergraduate initial teacher training (ITT)"
     click_on "Continue"
@@ -79,7 +79,7 @@ RSpec.feature "Teacher Early-Career Payments claims", slow: true do
     expect(claim.eligibility.reload.qualification).to eq "undergraduate_itt"
 
     # - In which academic year did you start your undergraduate ITT
-    expect(page).to have_text(I18n.t("early_career_payments.questions.itt_academic_year.qualification.#{claim.eligibility.qualification}"))
+    expect(page).to have_text(I18n.t("additional_payments.questions.itt_academic_year.qualification.#{claim.eligibility.qualification}"))
     expect(page).to have_text("2017 to 2018")
     expect(page).to have_text("2018 to 2019")
     expect(page).to have_text("2019 to 2020")
@@ -97,7 +97,7 @@ RSpec.feature "Teacher Early-Career Payments claims", slow: true do
     expect(claim.eligibility.reload.eligible_itt_subject).to eql "mathematics"
 
     # - Do you teach maths now
-    expect(page).to have_text(I18n.t("early_career_payments.questions.teaching_subject_now"))
+    expect(page).to have_text(I18n.t("additional_payments.questions.teaching_subject_now"))
 
     choose "Yes"
     click_on "Continue"
@@ -107,10 +107,10 @@ RSpec.feature "Teacher Early-Career Payments claims", slow: true do
     expect(claim.eligibility.reload.itt_academic_year).to eql itt_year
 
     # - Check your answers for eligibility
-    expect(page).to have_text(I18n.t("early_career_payments.check_your_answers.part_one.primary_heading"))
-    expect(page).to have_text(I18n.t("early_career_payments.check_your_answers.part_one.secondary_heading"))
-    expect(page).to have_text(I18n.t("early_career_payments.check_your_answers.part_one.confirmation_notice"))
-    expect(page).not_to have_text(I18n.t("early_career_payments.questions.eligible_degree_subject"))
+    expect(page).to have_text(I18n.t("additional_payments.check_your_answers.part_one.primary_heading"))
+    expect(page).to have_text(I18n.t("additional_payments.check_your_answers.part_one.secondary_heading"))
+    expect(page).to have_text(I18n.t("additional_payments.check_your_answers.part_one.confirmation_notice"))
+    expect(page).not_to have_text(I18n.t("additional_payments.questions.eligible_degree_subject"))
 
     %w[Identity\ details Payment\ details Student\ loan\ details].each do |section_heading|
       expect(page).not_to have_text section_heading
@@ -346,18 +346,18 @@ RSpec.feature "Teacher Early-Career Payments claims", slow: true do
     expect(page).to have_link(href: "mailto:#{Policies::EarlyCareerPayments.feedback_email}")
 
     # - Landing (start)
-    expect(page).to have_text(I18n.t("early_career_payments.landing_page"))
+    expect(page).to have_text(I18n.t("additional_payments.landing_page"))
     click_on "Start now"
 
     skip_tid
 
     # - Which school do you teach at
-    expect(page).to have_text(I18n.t("early_career_payments.questions.current_school_search"))
+    expect(page).to have_text(I18n.t("additional_payments.questions.current_school_search"))
 
     choose_school school
 
     # - NQT in Academic Year after ITT
-    expect(page).to have_text(I18n.t("early_career_payments.questions.nqt_in_academic_year_after_itt.heading"))
+    expect(page).to have_text(I18n.t("additional_payments.questions.nqt_in_academic_year_after_itt.heading"))
 
     choose "Yes"
     click_on "Continue"
@@ -368,13 +368,13 @@ RSpec.feature "Teacher Early-Career Payments claims", slow: true do
     expect(eligibility.nqt_in_academic_year_after_itt).to eql true
 
     # - Have you completed your induction as an early-career teacher?
-    expect(page).to have_text(I18n.t("early_career_payments.questions.induction_completed.heading"))
+    expect(page).to have_text(I18n.t("additional_payments.questions.induction_completed.heading"))
 
     choose "Yes"
     click_on "Continue"
 
     # - Are you currently employed as a supply teacher
-    expect(page).to have_text(I18n.t("early_career_payments.questions.employed_as_supply_teacher"))
+    expect(page).to have_text(I18n.t("additional_payments.questions.employed_as_supply_teacher"))
 
     choose "Yes"
     click_on "Continue"
@@ -382,7 +382,7 @@ RSpec.feature "Teacher Early-Career Payments claims", slow: true do
     expect(claim.eligibility.reload.employed_as_supply_teacher).to eql true
 
     # - Do you have a contract to teach at the same school for an entire term or longer
-    expect(page).to have_text(I18n.t("early_career_payments.questions.has_entire_term_contract"))
+    expect(page).to have_text(I18n.t("additional_payments.questions.has_entire_term_contract"))
 
     choose "Yes"
     click_on "Continue"
@@ -390,7 +390,7 @@ RSpec.feature "Teacher Early-Career Payments claims", slow: true do
     expect(claim.eligibility.reload.has_entire_term_contract).to eql true
 
     # - Are you employed directly by your school
-    expect(page).to have_text(I18n.t("early_career_payments.questions.employed_directly"))
+    expect(page).to have_text(I18n.t("additional_payments.questions.employed_directly"))
 
     choose "Yes, I'm employed by my school"
     click_on "Continue"
@@ -398,7 +398,7 @@ RSpec.feature "Teacher Early-Career Payments claims", slow: true do
     expect(claim.eligibility.reload.employed_directly).to eql true
 
     # - Are you currently subject to action for poor performance
-    expect(page).to have_text(I18n.t("early_career_payments.questions.formal_performance_action"))
+    expect(page).to have_text(I18n.t("additional_payments.questions.formal_performance_action"))
   end
 
   context "Route into teaching" do
@@ -420,7 +420,7 @@ RSpec.feature "Teacher Early-Career Payments claims", slow: true do
       jump_to_claim_journey_page(claim, "qualification")
 
       # - What route into teaching did you take?
-      expect(page).to have_text(I18n.t("early_career_payments.questions.qualification.heading"))
+      expect(page).to have_text(I18n.t("additional_payments.questions.qualification.heading"))
 
       choose "Assessment only"
       click_on "Continue"
@@ -428,7 +428,7 @@ RSpec.feature "Teacher Early-Career Payments claims", slow: true do
       expect(claim.eligibility.reload.qualification).to eq "assessment_only"
 
       # - In which academic year did you earn your qualified teacher status (QTS)
-      expect(page).to have_text(I18n.t("early_career_payments.questions.itt_academic_year.qualification.#{claim.eligibility.qualification}"))
+      expect(page).to have_text(I18n.t("additional_payments.questions.itt_academic_year.qualification.#{claim.eligibility.qualification}"))
       expect(page).to have_text("2017 to 2018")
       expect(page).to have_text("2018 to 2019")
       expect(page).to have_text("2019 to 2020")
@@ -446,7 +446,7 @@ RSpec.feature "Teacher Early-Career Payments claims", slow: true do
       expect(claim.eligibility.reload.eligible_itt_subject).to eql "mathematics"
 
       # - Do you teach maths now
-      expect(page).to have_text(I18n.t("early_career_payments.questions.teaching_subject_now"))
+      expect(page).to have_text(I18n.t("additional_payments.questions.teaching_subject_now"))
 
       choose "Yes"
       click_on "Continue"
@@ -462,7 +462,7 @@ RSpec.feature "Teacher Early-Career Payments claims", slow: true do
       jump_to_claim_journey_page(claim, "qualification")
 
       # - What route into teaching did you take?
-      expect(page).to have_text(I18n.t("early_career_payments.questions.qualification.heading"))
+      expect(page).to have_text(I18n.t("additional_payments.questions.qualification.heading"))
 
       choose "Overseas recognition"
       click_on "Continue"
@@ -470,7 +470,7 @@ RSpec.feature "Teacher Early-Career Payments claims", slow: true do
       expect(claim.eligibility.reload.qualification).to eq "overseas_recognition"
 
       # - In which academic year did you you earn your qualified teacher status (QTS)?
-      expect(page).to have_text(I18n.t("early_career_payments.questions.itt_academic_year.qualification.#{claim.eligibility.qualification}"))
+      expect(page).to have_text(I18n.t("additional_payments.questions.itt_academic_year.qualification.#{claim.eligibility.qualification}"))
       expect(page).to have_text("2017 to 2018")
       expect(page).to have_text("2018 to 2019")
       expect(page).to have_text("2019 to 2020")
@@ -488,7 +488,7 @@ RSpec.feature "Teacher Early-Career Payments claims", slow: true do
       expect(claim.eligibility.reload.eligible_itt_subject).to eql "mathematics"
 
       # - Do you teach maths now
-      expect(page).to have_text(I18n.t("early_career_payments.questions.teaching_subject_now"))
+      expect(page).to have_text(I18n.t("additional_payments.questions.teaching_subject_now"))
 
       choose "Yes"
       click_on "Continue"
@@ -504,18 +504,18 @@ RSpec.feature "Teacher Early-Career Payments claims", slow: true do
     expect(page).to have_link(href: "mailto:#{Policies::EarlyCareerPayments.feedback_email}")
 
     # - Landing (start)
-    expect(page).to have_text(I18n.t("early_career_payments.landing_page"))
+    expect(page).to have_text(I18n.t("additional_payments.landing_page"))
     click_on "Start now"
 
     skip_tid
 
     # - Which school do you teach at
-    expect(page).to have_text(I18n.t("early_career_payments.questions.current_school_search"))
+    expect(page).to have_text(I18n.t("additional_payments.questions.current_school_search"))
 
     choose_school school
 
     # - NQT in Academic Year after ITT
-    expect(page).to have_text(I18n.t("early_career_payments.questions.nqt_in_academic_year_after_itt.heading"))
+    expect(page).to have_text(I18n.t("additional_payments.questions.nqt_in_academic_year_after_itt.heading"))
 
     choose "Yes"
     click_on "Continue"
@@ -526,13 +526,13 @@ RSpec.feature "Teacher Early-Career Payments claims", slow: true do
     expect(eligibility.nqt_in_academic_year_after_itt).to eql true
 
     # - Have you completed your induction as an early-career teacher?
-    expect(page).to have_text(I18n.t("early_career_payments.questions.induction_completed.heading"))
+    expect(page).to have_text(I18n.t("additional_payments.questions.induction_completed.heading"))
 
     choose "Yes"
     click_on "Continue"
 
     # - Are you currently employed as a supply teacher
-    expect(page).to have_text(I18n.t("early_career_payments.questions.employed_as_supply_teacher"))
+    expect(page).to have_text(I18n.t("additional_payments.questions.employed_as_supply_teacher"))
 
     choose "No"
     click_on "Continue"
@@ -540,15 +540,15 @@ RSpec.feature "Teacher Early-Career Payments claims", slow: true do
     expect(claim.eligibility.reload.employed_as_supply_teacher).to eql false
 
     # - Performance Issues
-    expect(page).to have_text(I18n.t("early_career_payments.questions.poor_performance"))
-    expect(page).to have_text(I18n.t("early_career_payments.questions.formal_performance_action"))
-    expect(page).to have_text(I18n.t("early_career_payments.questions.formal_performance_action_hint"))
+    expect(page).to have_text(I18n.t("additional_payments.questions.poor_performance"))
+    expect(page).to have_text(I18n.t("additional_payments.questions.formal_performance_action"))
+    expect(page).to have_text(I18n.t("additional_payments.questions.formal_performance_action_hint"))
 
     # No
     choose "claim_eligibility_attributes_subject_to_formal_performance_action_false"
 
-    expect(page).to have_text(I18n.t("early_career_payments.questions.disciplinary_action"))
-    expect(page).to have_text(I18n.t("early_career_payments.questions.disciplinary_action_hint"))
+    expect(page).to have_text(I18n.t("additional_payments.questions.disciplinary_action"))
+    expect(page).to have_text(I18n.t("additional_payments.questions.disciplinary_action_hint"))
 
     # "No"
     choose "claim_eligibility_attributes_subject_to_disciplinary_action_false"
@@ -558,7 +558,7 @@ RSpec.feature "Teacher Early-Career Payments claims", slow: true do
     expect(claim.eligibility.reload.subject_to_disciplinary_action).to eql false
 
     # - What route into teaching did you take?
-    expect(page).to have_text(I18n.t("early_career_payments.questions.qualification.heading"))
+    expect(page).to have_text(I18n.t("additional_payments.questions.qualification.heading"))
 
     choose "Postgraduate initial teacher training (ITT)"
     click_on "Continue"
@@ -566,7 +566,7 @@ RSpec.feature "Teacher Early-Career Payments claims", slow: true do
     expect(claim.eligibility.reload.qualification).to eq "postgraduate_itt"
 
     # - In which academic year did you start your postgraduate ITT
-    expect(page).to have_text(I18n.t("early_career_payments.questions.itt_academic_year.qualification.#{claim.eligibility.qualification}"))
+    expect(page).to have_text(I18n.t("additional_payments.questions.itt_academic_year.qualification.#{claim.eligibility.qualification}"))
     expect(page).to have_text("2017 to 2018")
     expect(page).to have_text("2018 to 2019")
     expect(page).to have_text("2019 to 2020")
@@ -584,7 +584,7 @@ RSpec.feature "Teacher Early-Career Payments claims", slow: true do
     expect(claim.eligibility.reload.eligible_itt_subject).to eql "mathematics"
 
     # - Do you teach maths now
-    expect(page).to have_text(I18n.t("early_career_payments.questions.teaching_subject_now"))
+    expect(page).to have_text(I18n.t("additional_payments.questions.teaching_subject_now"))
 
     choose "Yes"
     click_on "Continue"
@@ -594,9 +594,9 @@ RSpec.feature "Teacher Early-Career Payments claims", slow: true do
     expect(claim.eligibility.reload.itt_academic_year).to eql itt_year
 
     # - Check your answers for eligibility
-    expect(page).to have_text(I18n.t("early_career_payments.check_your_answers.part_one.primary_heading"))
-    expect(page).to have_text(I18n.t("early_career_payments.check_your_answers.part_one.secondary_heading"))
-    expect(page).to have_text(I18n.t("early_career_payments.check_your_answers.part_one.confirmation_notice"))
+    expect(page).to have_text(I18n.t("additional_payments.check_your_answers.part_one.primary_heading"))
+    expect(page).to have_text(I18n.t("additional_payments.check_your_answers.part_one.secondary_heading"))
+    expect(page).to have_text(I18n.t("additional_payments.check_your_answers.part_one.confirmation_notice"))
 
     %w[Identity\ details Payment\ details Student\ loan\ details].each do |section_heading|
       expect(page).not_to have_text section_heading
@@ -967,9 +967,9 @@ RSpec.feature "Teacher Early-Career Payments claims", slow: true do
       jump_to_claim_journey_page(claim, "check-your-answers-part-one")
 
       # - Check your answers for eligibility
-      expect(page).to have_text(I18n.t("early_career_payments.check_your_answers.part_one.primary_heading"))
-      expect(page).to have_text(I18n.t("early_career_payments.check_your_answers.part_one.secondary_heading"))
-      expect(page).to have_text(I18n.t("early_career_payments.check_your_answers.part_one.confirmation_notice"))
+      expect(page).to have_text(I18n.t("additional_payments.check_your_answers.part_one.primary_heading"))
+      expect(page).to have_text(I18n.t("additional_payments.check_your_answers.part_one.secondary_heading"))
+      expect(page).to have_text(I18n.t("additional_payments.check_your_answers.part_one.confirmation_notice"))
 
       %w[Identity\ details Payment\ details Student\ loan\ details].each do |section_heading|
         expect(page).not_to have_text section_heading

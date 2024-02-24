@@ -28,14 +28,14 @@ module LevellingUpPremiumPayments
 
     def nqt_in_academic_year_after_itt
       [
-        translate("early_career_payments.admin.nqt_in_academic_year_after_itt"),
+        translate("levelling_up_premium_payments.admin.nqt_in_academic_year_after_itt"),
         (eligibility.nqt_in_academic_year_after_itt? ? "Yes" : "No")
       ]
     end
 
     def employed_as_supply_teacher
       [
-        translate("early_career_payments.admin.employed_as_supply_teacher"),
+        translate("levelling_up_premium_payments.admin.employed_as_supply_teacher"),
         (eligibility.employed_as_supply_teacher? ? "Yes" : "No")
       ]
     end

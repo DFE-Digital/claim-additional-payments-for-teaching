@@ -12,8 +12,8 @@ RSpec.feature "Switching policies" do
   end
 
   scenario "a user can switch to a different policy after starting a claim on another" do
-    expect(page.title).to have_text(I18n.t("early_career_payments.policy_name"))
-    expect(page.find("header")).to have_text(I18n.t("early_career_payments.policy_name"))
+    expect(page.title).to have_text(I18n.t("additional_payments.journey_name"))
+    expect(page.find("header")).to have_text(I18n.t("additional_payments.journey_name"))
 
     choose "Yes, start claim for an additional payment for teaching and lose my progress on my first claim"
     click_on "Submit"

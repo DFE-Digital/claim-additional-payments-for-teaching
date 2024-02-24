@@ -32,7 +32,7 @@ RSpec.feature "Set Reminder when Eligible Later for an Early Career Payment" do
           click_on "Continue"
 
           # - Which subject did you do your postgraduate initial teacher training (ITT) in?
-          choose I18n.t("early_career_payments.answers.eligible_itt_subject.#{args[:subject]}")
+          choose I18n.t("additional_payments.answers.eligible_itt_subject.#{args[:subject]}")
           click_on "Continue"
 
           # - Do you teach subject now?
@@ -42,9 +42,9 @@ RSpec.feature "Set Reminder when Eligible Later for an Early Career Payment" do
           expect(claim.eligibility.reload.itt_academic_year).to eql args[:academic_year]
 
           # - Check your answers for eligibility
-          expect(page).to have_text(I18n.t("early_career_payments.check_your_answers.part_one.primary_heading"))
-          expect(page).to have_text(I18n.t("early_career_payments.check_your_answers.part_one.secondary_heading"))
-          expect(page).to have_text(I18n.t("early_career_payments.check_your_answers.part_one.confirmation_notice"))
+          expect(page).to have_text(I18n.t("additional_payments.check_your_answers.part_one.primary_heading"))
+          expect(page).to have_text(I18n.t("additional_payments.check_your_answers.part_one.secondary_heading"))
+          expect(page).to have_text(I18n.t("additional_payments.check_your_answers.part_one.confirmation_notice"))
 
           expect(claim.eligibility.itt_academic_year).to eq args[:academic_year]
           expect(claim.errors.messages).to be_empty
@@ -105,7 +105,7 @@ RSpec.feature "Set Reminder when Eligible Later for an Early Career Payment" do
 
           expect(claim.eligibility.reload.itt_academic_year).to eql args[:academic_year]
 
-          choose I18n.t("early_career_payments.answers.eligible_itt_subject.#{args[:subject]}")
+          choose I18n.t("additional_payments.answers.eligible_itt_subject.#{args[:subject]}")
           click_on "Continue"
 
           # - Do you teach subject now?
@@ -113,9 +113,9 @@ RSpec.feature "Set Reminder when Eligible Later for an Early Career Payment" do
           click_on "Continue"
 
           # - Check your answers for eligibility
-          expect(page).to have_text(I18n.t("early_career_payments.check_your_answers.part_one.primary_heading"))
-          expect(page).to have_text(I18n.t("early_career_payments.check_your_answers.part_one.secondary_heading"))
-          expect(page).to have_text(I18n.t("early_career_payments.check_your_answers.part_one.confirmation_notice"))
+          expect(page).to have_text(I18n.t("additional_payments.check_your_answers.part_one.primary_heading"))
+          expect(page).to have_text(I18n.t("additional_payments.check_your_answers.part_one.secondary_heading"))
+          expect(page).to have_text(I18n.t("additional_payments.check_your_answers.part_one.confirmation_notice"))
 
           expect(claim.eligibility.itt_academic_year).to eq args[:academic_year]
           expect(claim.errors.messages).to be_empty

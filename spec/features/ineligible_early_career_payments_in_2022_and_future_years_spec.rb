@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.feature "Ineligible Teacher Early-Career Payments claims by cohort" do
-  include EarlyCareerPaymentsHelper
+  include AdditionalPaymentsHelper
 
   [
     {
@@ -44,7 +44,7 @@ RSpec.feature "Ineligible Teacher Early-Career Payments claims by cohort" do
           jump_to_claim_journey_page(claim, "itt-year")
 
           # - In which academic year did you start your undergraduate ITT
-          expect(page).to have_text(I18n.t("early_career_payments.questions.itt_academic_year.qualification.#{claim.eligibility.qualification}"))
+          expect(page).to have_text(I18n.t("additional_payments.questions.itt_academic_year.qualification.#{claim.eligibility.qualification}"))
           choose scenario[:itt_academic_year].to_s(:long)
           click_on "Continue"
 

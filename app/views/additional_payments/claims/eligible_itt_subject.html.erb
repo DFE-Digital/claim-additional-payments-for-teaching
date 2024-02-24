@@ -21,7 +21,7 @@
 
             <% if current_claim.eligibility.nqt_in_academic_year_after_itt && subject_symbols.many? %>
               <div class="govuk-hint">
-                <%= t("early_career_payments.questions.eligible_itt_subject_hint") %>
+                <%= t("additional_payments.questions.eligible_itt_subject_hint") %>
               </div>
             <% end %>
 
@@ -32,7 +32,7 @@
                 <% subject_symbols.each do |option| %>
                   <div class="govuk-radios__item">
                     <%= fields.radio_button(:eligible_itt_subject, option, class: "govuk-radios__input") %>
-                    <%= fields.label "eligible_itt_subject_#{option}", t("early_career_payments.answers.eligible_itt_subject.#{option}"), class: "govuk-label govuk-radios__label" %>
+                    <%= fields.label "eligible_itt_subject_#{option}", t("additional_payments.answers.eligible_itt_subject.#{option}"), class: "govuk-label govuk-radios__label" %>
                   </div>
                 <% end %>
 
@@ -40,7 +40,7 @@
 
                 <div class="govuk-radios__item">
                   <%= fields.radio_button(:eligible_itt_subject, :none_of_the_above, class: "govuk-radios__input") %>
-                  <%= fields.label "eligible_itt_subject_none_of_the_above", t("early_career_payments.answers.eligible_itt_subject.none_of_the_above"), class: "govuk-label govuk-radios__label" %>
+                  <%= fields.label "eligible_itt_subject_none_of_the_above", t("additional_payments.answers.eligible_itt_subject.none_of_the_above"), class: "govuk-label govuk-radios__label" %>
                 </div>
               <% else %>
                 <% subject_symbol = subject_symbols.first %>

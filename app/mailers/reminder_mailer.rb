@@ -1,15 +1,15 @@
 class ReminderMailer < ApplicationMailer
-  include EarlyCareerPaymentsHelper
+  include AdditionalPaymentsHelper
 
   helper :application
-  helper :early_career_payments
+  helper :additional_payments
 
   def email_verification(reminder, one_time_password)
     @reminder = reminder
     @one_time_password = one_time_password
     @display_name = reminder.full_name
     @subject = "Please verify your reminder email"
-    support_email_address = translate("early_career_payments.support_email_address")
+    support_email_address = translate("additional_payments.support_email_address")
     personalisation = {
       email_subject: @subject,
       first_name: @display_name,
@@ -23,7 +23,7 @@ class ReminderMailer < ApplicationMailer
 
   def reminder_set(reminder)
     @reminder = reminder
-    support_email_address = translate("early_career_payments.support_email_address")
+    support_email_address = translate("additional_payments.support_email_address")
 
     personalisation = {
       first_name: extract_first_name(@reminder.full_name),
@@ -36,7 +36,7 @@ class ReminderMailer < ApplicationMailer
 
   def reminder(reminder)
     @reminder = reminder
-    support_email_address = translate("early_career_payments.support_email_address")
+    support_email_address = translate("additional_payments.support_email_address")
     service_start_page_url = Policies::EarlyCareerPayments.start_page_url
     personalisation = {
       first_name: extract_first_name(@reminder.full_name),
