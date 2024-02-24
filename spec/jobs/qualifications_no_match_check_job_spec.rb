@@ -13,8 +13,8 @@ RSpec.describe QualificationsNoMatchCheckJob do
     create(:task, claim: claim, name: "qualifications", claim_verifier_match: claim_verifier_match, manual: false)
   end
 
-  let!(:policy_configuration) { create(:policy_configuration, :additional_payments) }
-  let(:academic_year) { policy_configuration.current_academic_year }
+  let!(:journey_configuration) { create(:journey_configuration, :additional_payments) }
+  let(:academic_year) { journey_configuration.current_academic_year }
 
   let(:claim) do
     create(

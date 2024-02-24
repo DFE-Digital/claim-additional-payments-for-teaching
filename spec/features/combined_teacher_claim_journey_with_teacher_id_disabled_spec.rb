@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.feature "Combined journey" do
-  let!(:policy_configuration) { create(:policy_configuration, :additional_payments, teacher_id_enabled: false) }
+  let!(:journey_configuration) { create(:journey_configuration, :additional_payments, teacher_id_enabled: false) }
 
   scenario "Teacher ID is disabled on the policy configuration" do
     visit landing_page_path(Policies::EarlyCareerPayments.routing_name)

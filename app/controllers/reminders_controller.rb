@@ -80,8 +80,8 @@ class RemindersController < BasePublicController
     "additional-payments"
   end
 
-  def policy_configuration
-    @policy_configuration ||= PolicyConfiguration.for_routing_name(current_policy_routing_name)
+  def journey_configuration
+    @journey_configuration ||= JourneyConfiguration.for_routing_name(current_policy_routing_name)
   end
 
   def current_reminder
@@ -115,7 +115,7 @@ class RemindersController < BasePublicController
   end
 
   def next_academic_year
-    policy_configuration.current_academic_year + 1
+    journey_configuration.current_academic_year + 1
   end
 
   def current_claim

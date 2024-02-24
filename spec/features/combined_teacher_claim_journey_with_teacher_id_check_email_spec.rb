@@ -5,7 +5,7 @@ RSpec.feature "Combined journey with Teacher ID email check" do
   include ClaimsControllerHelper
 
   # create a school eligible for ECP and LUP so can walk the whole journey
-  let!(:policy_configuration) { create(:policy_configuration, :additional_payments) }
+  let!(:journey_configuration) { create(:journey_configuration, :additional_payments) }
   let!(:school) { create(:school, :combined_journey_eligibile_for_all) }
   let(:trn) { 1234567 }
   let(:date_of_birth) { "1981-01-01" }

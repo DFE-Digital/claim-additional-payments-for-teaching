@@ -1,15 +1,15 @@
-# Policy-specific configuration, managed through the service operator's admin
+# Journey-specific configuration, managed through the service operator's admin
 # interface.
 #
 # Things that are currently configurable:
 #
-# * open_for_submissions: defines whether the policy is currently accepting
+# * open_for_submissions: defines whether the journey is currently accepting
 #   claims or not
 # * availability_message: an optional message that is shown to users when the
-#   policy is closed for submissions
+#   journey is closed for submissions
 # * current_academic_year: the academic year the service is currently accepting
 #   claims for.
-class PolicyConfiguration < ApplicationRecord
+class JourneyConfiguration < ApplicationRecord
   ACADEMIC_YEAR_REGEXP = /\A20\d{2}\/20\d{2}\z/
 
   SERVICES = [

@@ -3,7 +3,7 @@ require "rails_helper"
 RSpec.feature "Landing page - Early Career Payments - journey" do
   let!(:school) { create(:school, :early_career_payments_eligible) }
 
-  before { create(:policy_configuration, :additional_payments) }
+  before { create(:journey_configuration, :additional_payments) }
 
   scenario "navigate to first page in ECP journey" do
     visit landing_page_path(Policies::EarlyCareerPayments.routing_name)

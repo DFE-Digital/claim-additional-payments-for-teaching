@@ -32,7 +32,7 @@ class ClaimsController < BasePublicController
     elsif params[:slug] == "sign-in-or-continue"
       update_session_with_current_slug
 
-      return skip_teacher_id if !policy_configuration.teacher_id_enabled?
+      return skip_teacher_id if !journey_configuration.teacher_id_enabled?
     elsif params[:slug] == "select-email"
       session[:email_address] = current_claim.teacher_id_user_info["email"]
     elsif params[:slug] == "correct-school"
@@ -294,7 +294,7 @@ class ClaimsController < BasePublicController
   end
 
   def correct_policy_namespace?
-    PolicyConfiguration.policies_for_routing_name(params[:policy]).include?(current_claim.policy)
+    JourneyConfiguration.policies_for_routing_name(params[:policy]).include?(current_claim.policy)
   end
 
   def failed_details_check_with_teacher_id?
@@ -373,7 +373,7 @@ class ClaimsController < BasePublicController
     current_claim.claims.each { |claim| claim.eligibility.set_qualifications_from_dqt_record }
   end
 
-  def policy_configuration
-    PolicyConfiguration.for_routing_name(current_policy_routing_name)
+  def journey_configuration
+    @journey_configuration ||= JourneyConfiguration.for_routing_name(current_policy_routing_name)
   end
 end

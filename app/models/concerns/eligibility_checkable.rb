@@ -82,7 +82,7 @@ module EligibilityCheckable
   end
 
   def claim_year
-    PolicyConfiguration.for(policy).current_academic_year
+    JourneyConfiguration.for(policy).current_academic_year
   end
 
   def insufficient_teaching?

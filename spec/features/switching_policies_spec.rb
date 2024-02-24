@@ -4,8 +4,8 @@ RSpec.feature "Switching policies" do
   include StudentLoansHelper
 
   before do
-    create(:policy_configuration, :student_loans)
-    create(:policy_configuration, :early_career_payments)
+    create(:journey_configuration, :student_loans)
+    create(:journey_configuration, :early_career_payments)
 
     start_student_loans_claim
     visit new_claim_path(Policies::EarlyCareerPayments.routing_name)

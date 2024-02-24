@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.feature "Claim journey does not get cached" do
-  before { create(:policy_configuration, :student_loans) }
+  before { create(:journey_configuration, :student_loans) }
 
   it "redirects the user to the start of the claim journey if they go back after the claim is completed" do
     claim = start_student_loans_claim

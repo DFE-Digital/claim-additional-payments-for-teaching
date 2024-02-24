@@ -234,7 +234,7 @@ describe ClaimsHelper do
       let(:eligibility) { build(:student_loans_eligibility, student_loan_repayment_amount: 1987.65) }
       let(:masters_doctoral_trait) { :with_postgraduate_masters_loan_without_postgraduate_doctoral_loan_when_has_student_loan }
 
-      before { create(:policy_configuration, :student_loans) }
+      before { create(:journey_configuration, :student_loans) }
 
       it "returns an array of question and answers for the student loan and postgraduate masters and doctoral loan questions" do
         expected_answers = [

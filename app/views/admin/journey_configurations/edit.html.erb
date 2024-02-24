@@ -1,18 +1,18 @@
-<% content_for(:page_title) { page_title("Manage #{policy_service_name(policy_configuration.routing_name)}") } %>
+<% content_for(:page_title) { page_title("Manage #{policy_service_name(journey_configuration.routing_name)}") } %>
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
     <h1 class="govuk-heading-xl">
       <span class="govuk-caption-xl">Manage services</span>
-      <%= policy_service_name(policy_configuration.routing_name) %>
+      <%= policy_service_name(journey_configuration.routing_name) %>
     </h1>
 
     <div class="govuk-panel govuk-panel--informational govuk-panel--small">
-      <% if policy_configuration.open_for_submissions? %>
+      <% if journey_configuration.open_for_submissions? %>
         <h2 class="govuk-panel__title">Service open</h2>
         <p class="govuk-panel__body">
           This service is currently open and accepting claims for the
-          <%= policy_configuration.current_academic_year%> academic year.
+          <%= journey_configuration.current_academic_year%> academic year.
         </p>
       <% else %>
         <h2 class="govuk-panel__title">Service closed</h2>
@@ -22,21 +22,21 @@
       <% end %>
     </div>
 
-    <% if policy_configuration.additional_payments? %>
+    <% if journey_configuration.additional_payments? %>
       <div class="govuk-panel govuk-panel--informational govuk-panel--small">
         <% if lupp_awards_last_updated_at %>
           <p class="govuk-panel__body">
-            The Levelling Up Premium Payments school award amounts for academic year <%= policy_configuration.current_academic_year %> were updated on <%= l(lupp_awards_last_updated_at) %>.
+            The Levelling Up Premium Payments school award amounts for academic year <%= journey_configuration.current_academic_year %> were updated on <%= l(lupp_awards_last_updated_at) %>.
           </p>
         <% else %>
           <p class="govuk-panel__body">
-            No Levelling Up Premium Payments school award data has been uploaded for academic year <%= policy_configuration.current_academic_year %>.
+            No Levelling Up Premium Payments school award data has been uploaded for academic year <%= journey_configuration.current_academic_year %>.
           </p>
         <% end %>
       </div>
     <% end %>
 
-    <%= form_with model: [:admin, policy_configuration] do |f| %>
+    <%= form_with model: [:admin, journey_configuration] do |f| %>
 
       <div class="govuk-form-group">
         <%= f.label :current_academic_year, "Accepting claims for academic year", class: "govuk-label" %>
@@ -53,7 +53,7 @@
               <%= f.radio_button :open_for_submissions, true, class: "govuk-radios__input", data: { aria_controls: "reminders-warning-message" } %>
               <%= f.label :open_for_submissions, "Open", value: true, class: "govuk-label govuk-radios__label" %>
             </div>
-            <%= render 'admin/policy_configurations/ecp_reminder_warning' %>
+            <%= render 'admin/journey_configurations/ecp_reminder_warning' %>
             <div class="govuk-radios__item">
               <%= f.radio_button :open_for_submissions, false, class: "govuk-radios__input", data: { aria_controls: "conditional-availability-message-conditional" } %>
               <%= f.label :open_for_submissions, "Closed", value: false, class: "govuk-label govuk-radios__label" %>
@@ -101,7 +101,7 @@
 
 <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
 
-<% if policy_configuration.additional_payments? %>
+<% if journey_configuration.additional_payments? %>
   <div class="govuk-grid-row" id="download">
     <div class="govuk-grid-column-two-thirds">
       <h2 class="govuk-heading-m">

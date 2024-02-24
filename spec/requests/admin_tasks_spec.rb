@@ -4,8 +4,8 @@ RSpec.describe "Admin tasks", type: :request do
   let(:claim) { create(:claim, :submitted) }
 
   before do
-    create(:policy_configuration, :student_loans)
-    create(:policy_configuration, :additional_payments)
+    create(:journey_configuration, :student_loans)
+    create(:journey_configuration, :additional_payments)
   end
 
   context "when signed in as a service operator" do

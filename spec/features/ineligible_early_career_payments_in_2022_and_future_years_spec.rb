@@ -28,7 +28,7 @@ RSpec.feature "Ineligible Teacher Early-Career Payments claims by cohort" do
     }
   ].each do |policy|
     context "when accepting claims for AcademicYear #{policy[:policy_year]}" do
-      before { create(:policy_configuration, :additional_payments, current_academic_year: policy[:policy_year]) }
+      before { create(:journey_configuration, :additional_payments, current_academic_year: policy[:policy_year]) }
 
       let(:claim) do
         claim = start_early_career_payments_claim

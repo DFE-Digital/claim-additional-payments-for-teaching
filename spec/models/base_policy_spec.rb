@@ -41,26 +41,25 @@ RSpec.describe BasePolicy, type: :model do
 
   describe "::routing_name" do
     before do
-      allow(PolicyConfiguration).to receive(:routing_name_for_policy)
+      allow(JourneyConfiguration).to receive(:routing_name_for_policy)
     end
 
     it do
       Policies::TestPolicy.routing_name
 
-      expect(PolicyConfiguration).to have_received(:routing_name_for_policy)
+      expect(JourneyConfiguration).to have_received(:routing_name_for_policy)
         .with(Policies::TestPolicy)
     end
   end
 
   describe "::configuration" do
     before do
-      allow(PolicyConfiguration).to receive(:for)
+      allow(JourneyConfiguration).to receive(:for)
     end
 
     it do
       Policies::TestPolicy.configuration
-
-      expect(PolicyConfiguration).to have_received(:for).with(Policies::TestPolicy)
+      expect(JourneyConfiguration).to have_received(:for).with(Policies::TestPolicy)
     end
   end
 end

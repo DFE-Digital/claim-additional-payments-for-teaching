@@ -42,8 +42,8 @@ module EarlyCareerPayments
     # }
     # Note: ECP policy began in academic year 2021/22 so the persisted options
     # should include 2016/17 onward.
-    # In test environment the policy configuration record may not exist.
-    # This can't be dynamic on PolicyConfiguration current_academic_year because changing the year means the 5 year window changes
+    # In test environment the journey configuration record may not exist.
+    # This can't be dynamic on JourneyConfiguration current_academic_year because changing the year means the 5 year window changes
     # and the enums would be stale until after a server restart.
     # Make all valid ITT values based on the last known policy year.
     ITT_ACADEMIC_YEARS =

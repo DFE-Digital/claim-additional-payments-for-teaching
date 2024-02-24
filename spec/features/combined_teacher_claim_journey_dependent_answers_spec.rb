@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.feature "Combined claim journey dependent answers" do
-  before { create(:policy_configuration, :additional_payments) }
+  before { create(:journey_configuration, :additional_payments) }
   let!(:school) { create(:school, :combined_journey_eligibile_for_all) }
 
   scenario "Dependent answers reset" do

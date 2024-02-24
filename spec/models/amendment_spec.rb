@@ -283,7 +283,7 @@ RSpec.describe Amendment, type: :model do
           }
         end
 
-        before { create(:policy_configuration, :additional_payments) }
+        before { create(:journey_configuration, :additional_payments) }
 
         it "stores the value in the amendment’s claim_changes" do
           amendment = described_class.amend_claim(claim, claim_attributes, amendment_attributes)

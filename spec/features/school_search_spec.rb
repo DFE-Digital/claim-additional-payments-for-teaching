@@ -8,7 +8,7 @@ RSpec.feature "Searching for school during Teacher Student Loan Repayments claim
   end
 
   context "Student Loans claim" do
-    before { create(:policy_configuration, :student_loans) }
+    before { create(:journey_configuration, :student_loans) }
     let!(:school) { create(:school, :student_loans_eligible) }
 
     scenario "doesn't select a school from the search results the first time around" do
@@ -185,7 +185,7 @@ RSpec.feature "Searching for school during Teacher Student Loan Repayments claim
   end
 
   context "combined ECP/LUPP journey claim" do
-    before { create(:policy_configuration, :additional_payments) }
+    before { create(:journey_configuration, :additional_payments) }
     let!(:school) { create(:school, :combined_journey_eligibile_for_all) }
     let!(:closed_school) { create(:school, :combined_journey_eligibile_for_all, :closed) }
 

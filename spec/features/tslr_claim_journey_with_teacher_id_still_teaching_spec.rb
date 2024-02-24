@@ -4,7 +4,7 @@ RSpec.feature "TSLR journey with Teacher ID still teaching school playback" do
   include OmniauthMockHelper
   include StudentLoansHelper
 
-  let!(:policy_configuration) { create(:policy_configuration, :student_loans) }
+  let!(:journey_configuration) { create(:journey_configuration, :student_loans) }
   let!(:eligible_claim_school) { create(:school, :student_loans_eligible) }
   let!(:eligible_school) { create(:school, :student_loans_eligible) }
   let!(:ineligible_school) { create(:school, :student_loans_ineligible) }
@@ -15,7 +15,7 @@ RSpec.feature "TSLR journey with Teacher ID still teaching school playback" do
   before do
     freeze_time
 
-    previous_academic_year = policy_configuration.current_academic_year - 1
+    previous_academic_year = journey_configuration.current_academic_year - 1
     within_beginning_of_month = Date.new(previous_academic_year.start_year, 10, 1)
     within_end_of_month = Date.new(previous_academic_year.start_year, 10, 31)
 

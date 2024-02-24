@@ -36,7 +36,7 @@ RSpec.describe Claims::IttSubjectHelper do
 
     subject { helper.subjects_to_sentence_for_hint_text(CurrentClaim.new(claims: [ecp_claim, lup_claim])) }
 
-    before { create(:policy_configuration, :additional_payments) }
+    before { create(:journey_configuration, :additional_payments) }
 
     context "trainee teacher" do
       let(:ecp_eligibility) { build(:early_career_payments_eligibility, :trainee_teacher) }

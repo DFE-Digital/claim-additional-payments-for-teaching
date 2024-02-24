@@ -1,14 +1,14 @@
 require "rails_helper"
 
 describe StudentLoansHelper do
-  let!(:policy_configuration) { create(:policy_configuration, :student_loans) }
+  let!(:journey_configuration) { create(:journey_configuration, :student_loans) }
   let(:current_academic_year) { AcademicYear.current }
 
   describe "#claim_school_question" do
     it "returns the question for claim school question in the Student Loans journey, based on the configured current academic year" do
       expect(helper.claim_school_question).to eq "Which school were you employed to teach at between 6 April #{current_academic_year.start_year - 1} and 5 April #{current_academic_year.end_year - 1}?"
 
-      policy_configuration.update!(current_academic_year: "2019/2020")
+      journey_configuration.update!(current_academic_year: "2019/2020")
       expect(helper.claim_school_question).to eq "Which school were you employed to teach at between 6 April 2018 and 5 April 2019?"
     end
 

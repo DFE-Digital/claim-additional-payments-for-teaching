@@ -2,16 +2,16 @@
 
 require "rails_helper"
 
-RSpec.describe PolicyConfiguration do
-  context "with policy configuration records" do
-    let!(:student_loans) { create(:policy_configuration, :student_loans) }
-    let!(:additional_payments) { create(:policy_configuration, :additional_payments) }
+RSpec.describe JourneyConfiguration do
+  context "with journey configuration records" do
+    let!(:student_loans) { create(:journey_configuration, :student_loans) }
+    let!(:additional_payments) { create(:journey_configuration, :additional_payments) }
 
     describe ".for" do
       it "returns the configuration for a given policy" do
         expect(described_class.for(StudentLoans)).to eq student_loans
 
-        # Same PolicyConfiguration for ECP and LUP
+        # Same JourneyConfiguration for ECP and LUP
         expect(described_class.for(Policies::EarlyCareerPayments)).to eq additional_payments
         expect(described_class.for(LevellingUpPremiumPayments)).to eq additional_payments
       end
@@ -21,7 +21,7 @@ RSpec.describe PolicyConfiguration do
       it "returns the configuration for a given routing name" do
         expect(described_class.for_routing_name("student-loans")).to eq student_loans
 
-        # ECP and LUP use the same routing name and share the same PolicyConfiguration
+        # ECP and LUP use the same routing name and share the same JourneyConfiguration
         expect(described_class.for_routing_name("additional-payments")).to eq additional_payments
       end
     end
@@ -34,7 +34,7 @@ RSpec.describe PolicyConfiguration do
     end
 
     describe "#routing_name" do
-      it "returns routing for PolicyConfiguration" do
+      it "returns routing for JourneyConfiguration" do
         expect(described_class.for(StudentLoans).routing_name).to eq "student-loans"
 
         # Same routing_name for ECP and LUP
@@ -55,7 +55,7 @@ RSpec.describe PolicyConfiguration do
 
     describe "validations" do
       it "prevents saving a record for a policy already configured" do
-        expect { create(:policy_configuration, policy_types: [Policies::EarlyCareerPayments]) }.to raise_error(ActiveRecord::RecordInvalid)
+        expect { create(:journey_configuration, policy_types: [Policies::EarlyCareerPayments]) }.to raise_error(ActiveRecord::RecordInvalid)
       end
     end
   end

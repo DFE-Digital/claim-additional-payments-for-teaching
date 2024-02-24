@@ -5,7 +5,7 @@ RSpec.feature "TSLR journey with Teacher ID email check" do
   include StudentLoansHelper
 
   # create a school eligible for ECP and LUP so can walk the whole journey
-  let!(:policy_configuration) { create(:policy_configuration, :student_loans) }
+  let!(:journey_configuration) { create(:journey_configuration, :student_loans) }
   let!(:school) { create(:school, :student_loans_eligible) }
   let(:trn) { 1234567 }
   let(:date_of_birth) { "1981-01-01" }

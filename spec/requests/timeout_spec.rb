@@ -3,7 +3,7 @@ require "rails_helper"
 RSpec.describe "Claim session timing out", type: :request do
   let(:timeout_length_in_minutes) { BasePublicController::CLAIM_TIMEOUT_LENGTH_IN_MINUTES }
   let(:current_claim) { CurrentClaim.new(claims: [Claim.by_policy(StudentLoans).order(:created_at).last]) }
-  before { create(:policy_configuration, :student_loans) }
+  before { create(:journey_configuration, :student_loans) }
 
   context "no actions performed for more than the timeout period" do
     before do

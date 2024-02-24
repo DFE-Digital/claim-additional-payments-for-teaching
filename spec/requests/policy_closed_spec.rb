@@ -2,7 +2,7 @@ require "rails_helper"
 
 RSpec.describe "Maintenance Mode", type: :request do
   context "when a policy configuration is closed for submissions" do
-    let!(:policy_configuration) { create(:policy_configuration, :student_loans, :closed) }
+    let!(:journey_configuration) { create(:journey_configuration, :student_loans, :closed) }
 
     it "shows the policy closed page for GET requests" do
       get new_claim_path(StudentLoans.routing_name)
@@ -26,7 +26,7 @@ RSpec.describe "Maintenance Mode", type: :request do
     end
 
     it "still allows access to a different policy" do
-      create(:policy_configuration, :additional_payments)
+      create(:journey_configuration, :additional_payments)
 
       get new_claim_path(Policies::EarlyCareerPayments.routing_name)
       follow_redirect!
@@ -40,7 +40,7 @@ RSpec.describe "Maintenance Mode", type: :request do
 
     context "when the availability message is set" do
       let(:availability_message) { "You will be able to use the service from 2pm today" }
-      before { policy_configuration.update(availability_message: availability_message) }
+      before { journey_configuration.update(availability_message: availability_message) }
 
       it "shows the time it will be available from" do
         get new_claim_path(StudentLoans.routing_name)

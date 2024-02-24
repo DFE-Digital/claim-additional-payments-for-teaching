@@ -2,7 +2,7 @@ require "rails_helper"
 
 RSpec.feature "Levelling up premium payments claims" do
   let(:claim) { Claim.by_policy(LevellingUpPremiumPayments).order(:created_at).last }
-  let!(:policy_configuration) { create(:policy_configuration, :additional_payments, current_academic_year: AcademicYear.new(2022)) }
+  let!(:journey_configuration) { create(:journey_configuration, :additional_payments, current_academic_year: AcademicYear.new(2022)) }
   let!(:school) { create(:school, :levelling_up_premium_payments_eligible) }
   let(:itt_subject) { "Mathematics" }
 

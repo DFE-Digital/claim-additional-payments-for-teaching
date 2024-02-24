@@ -4,7 +4,7 @@ RSpec.feature "Trainee Teacher - Early Career Payments - journey" do
   context "when Claim AcademicYear is 2022/2023" do
     let(:ecp_only_school) { create(:school, :early_career_payments_eligible) }
 
-    before { create(:policy_configuration, :additional_payments) }
+    before { create(:journey_configuration, :additional_payments) }
 
     scenario "ECP-only school with trainee teacher" do
       visit landing_page_path(Policies::EarlyCareerPayments.routing_name)

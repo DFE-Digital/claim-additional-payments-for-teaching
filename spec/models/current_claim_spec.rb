@@ -209,7 +209,7 @@ RSpec.describe CurrentClaim, type: :model do
   describe "#ineligible?" do
     subject { current_claim.ineligible? }
 
-    let!(:policy_configuration_ecp_lupp) { create(:policy_configuration, :additional_payments) }
+    let!(:journey_configuration_ecp_lupp) { create(:journey_configuration, :additional_payments) }
 
     let(:ecp_claim) { build(:claim, academic_year: "2022/2023", policy: ecp_policy, eligibility: ecp_eligibility) }
     let(:lup_claim) { build(:claim, academic_year: "2022/2023", policy: lup_policy, eligibility: lup_eligibility) }
@@ -244,7 +244,7 @@ RSpec.describe CurrentClaim, type: :model do
   describe "#eligible_now?" do
     subject { current_claim.eligible_now? }
 
-    let!(:policy_configuration) { create(:policy_configuration, :additional_payments) }
+    let!(:journey_configuration) { create(:journey_configuration, :additional_payments) }
 
     let(:ecp_eligibility) { build(:early_career_payments_eligibility, :eligible) }
     let(:lup_eligibility) { build(:levelling_up_premium_payments_eligibility, :eligible) }
@@ -279,7 +279,7 @@ RSpec.describe CurrentClaim, type: :model do
   describe "#editable_attributes" do
     subject { current_claim.editable_attributes }
 
-    let!(:policy_configuration) { create(:policy_configuration, :additional_payments) }
+    let!(:journey_configuration) { create(:journey_configuration, :additional_payments) }
 
     let(:ecp_eligibility) { build(:early_career_payments_eligibility, :eligible) }
     let(:lup_eligibility) { build(:levelling_up_premium_payments_eligibility, :eligible) }
@@ -357,7 +357,7 @@ RSpec.describe CurrentClaim, type: :model do
   describe "#eligible_now" do
     subject(:eligible_now) { current_claim.eligible_now }
 
-    let!(:policy_configuration) { create(:policy_configuration, :additional_payments) }
+    let!(:journey_configuration) { create(:journey_configuration, :additional_payments) }
 
     let(:ecp_eligibility) { build(:early_career_payments_eligibility, :ineligible) }
     let(:lup_eligibility) { build(:levelling_up_premium_payments_eligibility, :eligible) }
@@ -389,7 +389,7 @@ RSpec.describe CurrentClaim, type: :model do
   describe "#eligible_now_and_sorted" do
     subject(:eligible_now_and_sorted) { current_claim.eligible_now_and_sorted }
 
-    let!(:policy_configuration) { create(:policy_configuration, :additional_payments) }
+    let!(:journey_configuration) { create(:journey_configuration, :additional_payments) }
 
     let(:ecp_claim) { create(:claim, policy: Policies::EarlyCareerPayments, eligibility: ecp_eligibility) }
     let(:lup_claim) { create(:claim, policy: LevellingUpPremiumPayments, eligibility: lup_eligibility) }
@@ -427,7 +427,7 @@ RSpec.describe CurrentClaim, type: :model do
   describe "#submit!" do
     subject(:submit!) { current_claim.submit!(policy) }
 
-    let!(:policy_configuration) { create(:policy_configuration, :additional_payments) }
+    let!(:journey_configuration) { create(:journey_configuration, :additional_payments) }
     let!(:ecp_claim) { create(:claim, :submittable, policy: ecp_policy, eligibility: ecp_eligibility) }
     let!(:lup_claim) { create(:claim, :submittable, policy: lup_policy, eligibility: lup_eligibility) }
 

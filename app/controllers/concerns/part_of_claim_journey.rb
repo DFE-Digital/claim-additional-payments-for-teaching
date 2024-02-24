@@ -15,8 +15,8 @@ module PartOfClaimJourney
   end
 
   def check_whether_closed_for_submissions
-    unless policy_configuration.open_for_submissions?
-      @availability_message = policy_configuration.availability_message
+    unless journey_configuration.open_for_submissions?
+      @availability_message = journey_configuration.availability_message
       render "static_pages/closed_for_submissions", status: :service_unavailable
     end
   end
@@ -62,16 +62,16 @@ module PartOfClaimJourney
   end
 
   def build_new_claims
-    policy_configuration.policies.map do |policy|
+    journey_configuration.policies.map do |policy|
       Claim.new(
         eligibility: "#{policy}::Eligibility".constantize.new,
-        academic_year: policy_configuration.current_academic_year
+        academic_year: journey_configuration.current_academic_year
       )
     end
   end
 
-  def policy_configuration
-    @policy_configuration ||= PolicyConfiguration.for_routing_name(current_policy_routing_name)
+  def journey_configuration
+    @journey_configuration ||= JourneyConfiguration.for_routing_name(current_policy_routing_name)
   end
 
   def set_cache_headers

@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.describe StudentLoans::DqtRecord do
-  let!(:policy_configuration) { create(:policy_configuration, :student_loans) }
+  let!(:journey_configuration) { create(:journey_configuration, :student_loans) }
 
   describe "#eligble?" do
     subject(:result) { StudentLoans::DqtRecord.new(OpenStruct.new({qts_award_date:})).eligible? }
@@ -57,7 +57,7 @@ RSpec.describe StudentLoans::DqtRecord do
 
     context "in academic year 2029/30" do
       let(:qts_award_date) { Date.new(2018, 7, 1) }
-      let!(:policy_configuration) { create(:policy_configuration, :student_loans, current_academic_year: "2029/2030") }
+      let!(:journey_configuration) { create(:journey_configuration, :student_loans, current_academic_year: "2029/2030") }
 
       it { is_expected.to eq false }
     end

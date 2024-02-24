@@ -4,7 +4,7 @@ RSpec.shared_examples "Eligibility status" do |policy|
 
     subject { eligibility.status }
 
-    before { create(:policy_configuration, policy) }
+    before { create(:journey_configuration, policy) }
 
     context "ineligible" do
       let(:eligibility) { build(eligibility_factory_symbol, :ineligible) }

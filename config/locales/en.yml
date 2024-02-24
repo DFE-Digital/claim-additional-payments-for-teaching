@@ -168,7 +168,7 @@ en:
     undo_decision:
       approved: "Undo approval"
       rejected: "Undo rejection"
-    policy_configuration:
+    journey_configuration:
       reminder_warning: "Setting the service status to open will send %{count} reminder emails."
     assigned_user_banner:
       assigned_to_self: You are currently assigned this claim

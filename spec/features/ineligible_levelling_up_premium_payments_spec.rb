@@ -3,7 +3,7 @@ require "rails_helper"
 RSpec.feature "Ineligible Levelling up premium payments claims" do
   let(:eligibility) { LevellingUpPremiumPayments::Eligibility.order(:created_at).last }
 
-  before { create(:policy_configuration, :additional_payments) }
+  before { create(:journey_configuration, :additional_payments) }
 
   scenario "When the school selected is LUP ineligible" do
     school = create(:school, :early_career_payments_eligible, :levelling_up_premium_payments_ineligible)

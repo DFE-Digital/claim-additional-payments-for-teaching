@@ -11,7 +11,7 @@ RSpec.describe IneligibilityReasonChecker do
   let(:school_eligible_for_ecp_but_not_lup) { build(:school, :early_career_payments_eligible) }
   let(:school_ineligible_for_both_ecp_and_lup) { build(:school, :early_career_payments_ineligible) }
 
-  before { create(:policy_configuration, :additional_payments, current_academic_year: academic_year) }
+  before { create(:journey_configuration, :additional_payments, current_academic_year: academic_year) }
 
   # sanity check of factories
   specify { expect(Policies::EarlyCareerPayments::SchoolEligibility.new(school_eligible_for_ecp_but_not_lup)).to be_eligible }

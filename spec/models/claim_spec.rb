@@ -661,7 +661,7 @@ RSpec.describe Claim, type: :model do
       let(:eligibility) { build(:levelling_up_premium_payments_eligibility, :eligible) }
 
       before do
-        create(:policy_configuration, :additional_payments)
+        create(:journey_configuration, :additional_payments)
         claim.submit!
       end
 

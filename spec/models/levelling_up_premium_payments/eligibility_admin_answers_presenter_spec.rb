@@ -13,7 +13,7 @@ RSpec.describe LevellingUpPremiumPayments::EligibilityAdminAnswersPresenter, typ
 
   subject(:presenter) { described_class.new(eligibility) }
 
-  before { create(:policy_configuration, :additional_payments) }
+  before { create(:journey_configuration, :additional_payments) }
 
   describe "#answers" do
     it "returns an array of questions and answers for displaying to service operator" do

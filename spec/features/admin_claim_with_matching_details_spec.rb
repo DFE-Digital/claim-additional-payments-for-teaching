@@ -2,7 +2,7 @@ require "rails_helper"
 
 RSpec.feature "Admin checking a claim with matching details" do
   before do
-    create(:policy_configuration, :student_loans)
+    create(:journey_configuration, :student_loans)
     disable_claim_qa_flagging
     sign_in_as_service_operator
   end

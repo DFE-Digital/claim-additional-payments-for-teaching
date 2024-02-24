@@ -16,7 +16,7 @@ RSpec.describe Policies::EarlyCareerPayments::SlugSequence do
   let(:qualifications_details_check) { nil }
 
   describe "The sequence as defined by #slugs" do
-    before { create(:policy_configuration, :additional_payments, teacher_id_enabled:) }
+    before { create(:journey_configuration, :additional_payments, teacher_id_enabled:) }
 
     it "excludes the 'ineligible' slug if the claim's eligibility is undetermined" do
       expect(slug_sequence.slugs).not_to include("ineligible")

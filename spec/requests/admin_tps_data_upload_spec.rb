@@ -56,7 +56,7 @@ RSpec.describe "TPS data upload" do
         end
       end
 
-      before { create(:policy_configuration, :additional_payments, current_academic_year: "2021/2022") }
+      before { create(:journey_configuration, :additional_payments, current_academic_year: "2021/2022") }
 
       context "when the claim is not TSLR" do
         let(:school) { create(:school, :early_career_payments_eligible) }
@@ -164,7 +164,7 @@ RSpec.describe "TPS data upload" do
       end
 
       context "when the claim is TSLR" do
-        before { create(:policy_configuration, :student_loans, current_academic_year: "2021/2022") }
+        before { create(:journey_configuration, :student_loans, current_academic_year: "2021/2022") }
 
         let(:school) { create(:school, :student_loans_eligible) }
         let(:claim_school) { school }

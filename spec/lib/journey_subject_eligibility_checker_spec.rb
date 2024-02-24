@@ -798,7 +798,7 @@ RSpec.describe JourneySubjectEligibilityChecker do
     let(:ineligible_lup_claim) { build(:claim, :first_lup_claim_year, policy: LevellingUpPremiumPayments, eligibility: ineligible_lup_eligibility) }
 
     context "when academic year is 2022" do
-      before { create(:policy_configuration, :additional_payments, current_academic_year: AcademicYear.new(2022)) }
+      before { create(:journey_configuration, :additional_payments, current_academic_year: AcademicYear.new(2022)) }
 
       context "2022 claim year" do
         let(:claim_year) { AcademicYear.new(2022) }
@@ -895,7 +895,7 @@ RSpec.describe JourneySubjectEligibilityChecker do
   end
 
   describe "#next_eligible_claim_year_after_current_claim_year" do
-    before { create(:policy_configuration, :additional_payments) }
+    before { create(:journey_configuration, :additional_payments) }
 
     context "2022 claim year" do
       let(:claim_year) { AcademicYear.new(2022) }

@@ -3,7 +3,7 @@ require "rails_helper"
 RSpec.feature "Admin checks a claim" do
   context "User is logged in as a service operator" do
     before do
-      create(:policy_configuration)
+      create(:journey_configuration)
       disable_claim_qa_flagging
       @signed_in_user = sign_in_as_service_operator
     end

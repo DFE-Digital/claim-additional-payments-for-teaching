@@ -5,7 +5,7 @@ RSpec.feature "Ineligible Teacher Early-Career Payments claims", slow: true do
 
   let!(:eligible_school) { create(:school, :early_career_payments_eligible) }
 
-  before { create(:policy_configuration, :additional_payments) }
+  before { create(:journey_configuration, :additional_payments) }
 
   scenario "When the school selected is ineligible" do
     ineligible_school = create(:school, :early_career_payments_ineligible)

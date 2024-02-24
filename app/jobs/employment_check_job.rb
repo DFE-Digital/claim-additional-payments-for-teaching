@@ -29,7 +29,7 @@ class EmploymentCheckJob < ApplicationJob
   end
 
   def policies_open_for_submissions
-    PolicyConfiguration.where(open_for_submissions: true)
+    JourneyConfiguration.where(open_for_submissions: true)
   end
 
   def current_academic_year

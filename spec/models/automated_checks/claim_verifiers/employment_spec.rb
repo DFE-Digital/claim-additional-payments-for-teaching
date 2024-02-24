@@ -5,7 +5,7 @@ module AutomatedChecks
     RSpec.describe Employment do
       subject(:employment) { described_class.new(**employment_args) }
 
-      let!(:policy_configuration) { create(:policy_configuration, policy.to_s.underscore) }
+      let!(:journey_configuration) { create(:journey_configuration, policy.to_s.underscore) }
       let!(:local_authority_barnsley) { create(:local_authority, code: "370", name: "Barnsley") }
       let!(:local_authority_camden) { create(:local_authority, code: "202", name: "Camden") }
       let!(:school) do
@@ -138,7 +138,7 @@ module AutomatedChecks
 
             describe "#note" do
               subject(:note) { claim_arg.notes.last }
-              let!(:policy_configuration) { create(:policy_configuration, policy.to_s.underscore, current_academic_year: "2022/2023") }
+              let!(:journey_configuration) { create(:journey_configuration, policy.to_s.underscore, current_academic_year: "2022/2023") }
 
               before { perform }
 

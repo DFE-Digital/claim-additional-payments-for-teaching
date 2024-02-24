@@ -4,8 +4,8 @@ RSpec.describe StudentLoanAmountCheckJob do
   subject(:job) { described_class.new.perform }
 
   let(:claim) { create(:claim, :submitted, academic_year: academic_year, policy: StudentLoans) }
-  let(:academic_year) { policy_configuration.current_academic_year }
-  let!(:policy_configuration) { create(:policy_configuration, :student_loans) }
+  let(:academic_year) { journey_configuration.current_academic_year }
+  let!(:journey_configuration) { create(:journey_configuration, :student_loans) }
 
   describe "#perform" do
     context "when the student loan amount check did not run before" do

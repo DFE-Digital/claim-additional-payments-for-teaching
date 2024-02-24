@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.describe "SLC (Student Loans Company) data upload " do
-  let!(:policy_configuration) { create(:policy_configuration, :student_loans) }
+  let!(:journey_configuration) { create(:journey_configuration, :student_loans) }
 
   before { @signed_in_user = sign_in_as_service_operator }
 
