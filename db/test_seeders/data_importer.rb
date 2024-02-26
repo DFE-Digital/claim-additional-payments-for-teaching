@@ -61,7 +61,7 @@ class DataImporter < BaseImporter
       elsif test_type == :volume
         TestSeeders::Eligibilities::EarlyCareerPayments::Importer.new(records, test_type: test_type, quantity: quantity).run
       end
-      @eligibilities = EarlyCareerPayments::Eligibility.order(created_at: :asc).to_a
+      @eligibilities = Policies::EarlyCareerPayments::Eligibility.order(created_at: :asc).to_a
     when StudentLoans
       TestSeeders::Eligibilities::StudentLoans::Importer.new(records).run
       @eligibilities = StudentLoans::Eligibility.order(created_at: :asc).to_a

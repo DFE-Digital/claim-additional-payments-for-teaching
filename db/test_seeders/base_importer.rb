@@ -41,7 +41,7 @@ class BaseImporter
     Decision.delete_all
     SupportTicket.delete_all
     Claim.delete_all
-    EarlyCareerPayments::Eligibility.delete_all
+    Policies::EarlyCareerPayments::Eligibility.delete_all
     StudentLoans::Eligibility.delete_all
     Payment.delete_all
     PayrollRun.delete_all
