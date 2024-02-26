@@ -1637,7 +1637,7 @@ RSpec.describe Claim, type: :model do
 
     it "destroys associated records" do
       claim.reload.destroy!
-      expect(EarlyCareerPayments::Eligibility.count).to be_zero
+      expect(Policies::EarlyCareerPayments::Eligibility.count).to be_zero
       expect(Note.count).to be_zero
       expect(Task.count).to be_zero
       expect(Amendment.count).to be_zero

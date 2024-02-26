@@ -511,7 +511,7 @@ RSpec.describe CurrentClaim, type: :model do
       let(:policy) { "not_found" }
 
       it "raises an Exception" do
-        expect { submit! }.to raise_error(NoMethodError)
+        expect { submit! }.to raise_error(NameError)
       end
     end
   end
