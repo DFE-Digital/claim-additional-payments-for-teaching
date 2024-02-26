@@ -23,7 +23,12 @@ class CurrentClaim
   end
 
   def for_policy(policy)
-    claims.find { |c| c.eligibility_type == "#{policy}::Eligibility" }
+    claims.find do |c|
+      [
+        Policies.constantize(policy.to_s)::Eligibility.to_s,
+        "#{policy}::Eligibility"
+      ].include?(c.eligibility_type)
+    end
   end
 
   def policies
@@ -160,7 +165,7 @@ class CurrentClaim
   end
 
   def eligible_eligibility
-    claims.sort_by(&:eligibility_type).each do |claim|
+    claims.sort_by { |c| c.eligibility_type.gsub("Policies::", "") }.each do |claim|
       return claim.eligibility unless claim.eligibility.ineligible?
     end
 

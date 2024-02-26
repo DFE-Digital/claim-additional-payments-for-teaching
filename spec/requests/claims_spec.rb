@@ -41,7 +41,7 @@ RSpec.describe "Claims", type: :request do
       current_claim = CurrentClaim.new(claims: claims)
 
       current_claim.claims.each_with_index do |claim, i|
-        expect(claim.eligibility).to be_kind_of("#{@journey_configuration.policies[i]}::Eligibility".constantize)
+        expect(claim.eligibility).to be_kind_of(@journey_configuration.policies[i]::Eligibility)
         expect(claim.academic_year).to eq(@journey_configuration.current_academic_year)
       end
     end
