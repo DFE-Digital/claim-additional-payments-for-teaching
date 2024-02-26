@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_02_01_104539) do
+ActiveRecord::Schema[7.0].define(version: 2024_02_15_155002) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_trgm"
   enable_extension "pgcrypto"
@@ -60,9 +60,9 @@ ActiveRecord::Schema[7.0].define(version: 2024_02_01_104539) do
     t.integer "student_loan_country"
     t.integer "student_loan_courses"
     t.integer "student_loan_start_date"
+    t.string "student_loan_plan"
     t.string "eligibility_type"
     t.uuid "eligibility_id"
-    t.string "student_loan_plan"
     t.integer "payroll_gender"
     t.text "govuk_verify_fields", default: [], array: true
     t.string "first_name", limit: 100
@@ -70,7 +70,6 @@ ActiveRecord::Schema[7.0].define(version: 2024_02_01_104539) do
     t.string "surname", limit: 100
     t.string "banking_name"
     t.string "building_society_roll_number"
-    t.uuid "remove_column_payment_id"
     t.datetime "personal_data_removed_at", precision: nil
     t.string "academic_year", limit: 9
     t.integer "bank_or_building_society"
@@ -101,7 +100,6 @@ ActiveRecord::Schema[7.0].define(version: 2024_02_01_104539) do
     t.index ["held"], name: "index_claims_on_held"
     t.index ["qa_required", "qa_completed_at"], name: "index_claims_on_qa_required_and_qa_completed_at", where: "qa_required"
     t.index ["reference"], name: "index_claims_on_reference", unique: true
-    t.index ["remove_column_payment_id"], name: "index_claims_on_remove_column_payment_id"
     t.index ["submitted_at"], name: "index_claims_on_submitted_at"
   end
 
@@ -463,7 +461,6 @@ ActiveRecord::Schema[7.0].define(version: 2024_02_01_104539) do
   add_foreign_key "amendments", "dfe_sign_in_users", column: "dfe_sign_in_users_id"
   add_foreign_key "claim_payments", "claims"
   add_foreign_key "claim_payments", "payments"
-  add_foreign_key "claims", "payments", column: "remove_column_payment_id"
   add_foreign_key "decisions", "dfe_sign_in_users", column: "created_by_id"
   add_foreign_key "early_career_payments_eligibilities", "schools", column: "current_school_id"
   add_foreign_key "levelling_up_premium_payments_eligibilities", "schools", column: "current_school_id"

@@ -291,5 +291,31 @@ FactoryBot.define do
     trait :logged_in_with_tid do
       logged_in_with_tid { true }
     end
+
+    trait :has_amendments do
+      after(:create) do |claim, _|
+        create_list(:amendment, 2, claim:)
+      end
+    end
+
+    trait :has_all_passed_tasks do
+      after(:create) do |claim, _|
+        ClaimCheckingTasks.new(claim).applicable_task_names.map do |task|
+          create(:task, :automated, :passed, name: task, claim:)
+        end
+      end
+    end
+
+    trait :has_notes do
+      after(:create) do |claim, _|
+        create_list(:note, 2, claim:)
+      end
+    end
+
+    trait :has_support_ticket do
+      after(:create) do |claim, _|
+        create(:support_ticket, claim:)
+      end
+    end
   end
 end
