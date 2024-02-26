@@ -24,7 +24,10 @@ class CurrentClaim
 
   def for_policy(policy)
     claims.find do |c|
-      c.eligibility_type == Policies.constantize(policy.to_s)::Eligibility.to_s
+      [
+        Policies.constantize(policy.to_s)::Eligibility.to_s,
+        "#{policy}::Eligibility"
+      ].include?(c.eligibility_type)
     end
   end
 
