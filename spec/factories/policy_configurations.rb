@@ -6,11 +6,6 @@ FactoryBot.define do
       policy_types { [StudentLoans] }
     end
 
-    trait :maths_and_physics do
-      policy_types { [MathsAndPhysics] }
-      current_academic_year { AcademicYear.new("2020/2021") } # Maths and Physics policy was discontinued after 2021
-    end
-
     trait :additional_payments do
       policy_types { [EarlyCareerPayments, LevellingUpPremiumPayments] }
     end

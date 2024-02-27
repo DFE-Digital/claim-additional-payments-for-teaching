@@ -21,9 +21,6 @@ describe ApplicationHelper do
     it "returns a title for the page that follows the guidance of the design system" do
       expected_title = page_title("Title", policy: "student-loans")
       expect(expected_title).to eq("Title — Teachers: claim back your student loan repayments — GOV.UK")
-
-      expected_title = page_title("Title", policy: "maths-and-physics")
-      expect(expected_title).to eq("Title — Claim a payment for teaching maths or physics — GOV.UK")
     end
 
     it "uses the generic service name if a specific policy isn't available" do
@@ -43,7 +40,6 @@ describe ApplicationHelper do
 
     it "returns a policy-specific email address based on routing path" do
       expect(support_email_address("student-loans")).to eq t("student_loans.support_email_address")
-      expect(support_email_address("maths-and-physics")).to eq t("maths_and_physics.support_email_address")
       expect(support_email_address("additional-payments")).to eq t("early_career_payments.support_email_address")
     end
   end
@@ -69,10 +65,6 @@ describe ApplicationHelper do
       expect(policy_service_name("student-loans")).to eq t("student_loans.policy_name")
     end
 
-    it "returns a policy-specific service name for maths and physics" do
-      expect(policy_service_name("maths-and-physics")).to eq t("maths_and_physics.policy_name")
-    end
-
     it "returns a policy-specific service name for additional payments" do
       expect(policy_service_name("additional-payments")).to eq t("early_career_payments.policy_name")
     end
@@ -83,11 +75,7 @@ describe ApplicationHelper do
       expect(policy_description("student-loans")).to eq t("student_loans.claim_description")
     end
 
-    it "returns description for student loans" do
-      expect(policy_description("maths-and-physics")).to eq t("maths_and_physics.claim_description")
-    end
-
-    it "returns description for student loans" do
+    it "returns description for early career payments" do
       expect(policy_description("additional-payments")).to eq t("early_career_payments.claim_description")
     end
   end

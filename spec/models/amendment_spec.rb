@@ -29,7 +29,7 @@ RSpec.describe Amendment, type: :model do
   end
 
   describe ".amend_claim" do
-    let(:claim) { create(:claim, :submitted, teacher_reference_number: "1234567", bank_sort_code: "111213", bank_account_number: "12345678", building_society_roll_number: nil, policy: MathsAndPhysics) }
+    let(:claim) { create(:claim, :submitted, teacher_reference_number: "1234567", bank_sort_code: "111213", bank_account_number: "12345678", building_society_roll_number: nil, policy: EarlyCareerPayments) }
     let(:dfe_signin_user) { create(:dfe_signin_user) }
 
     context "given valid claim attributes and valid amendment attributes" do

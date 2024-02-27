@@ -344,40 +344,6 @@ class Claim < ApplicationRecord
     (current_academic_year.approved.qa_required.count.to_f / claims_approved_so_far) * 100 <= MIN_QA_THRESHOLD
   end
 
-  # This is be used EXCLUSIVELY MathsAndPhysics
-  # Execute in a rails console
-  # Usage: Claim.destroy_all_for_policy(MathsAndPhysics)
-  # Payments are deleted first due to HABTM (claims -< claim_payments >- payments)
-  # Also a payment might encompass 2 claims from multiple policies, those payments are NOT deleted
-  def self.destroy_all_for_policy(policy)
-    raise "Claims for policy #{policy} cannot be destroyed" unless policy == MathsAndPhysics
-
-    # Load all claims that are to be deleted
-    claims = Claim.by_policy(policy)
-    claim_ids = claims.map(&:id)
-
-    # Load all the payments linked to those claims
-    payment_ids = ClaimPayment.where(claim_id: claim_ids).select(:payment_id).map(&:payment_id)
-    payments = Payment.includes(:claim_payments).where(id: payment_ids)
-
-    # Exclude payments that linked to another claim
-    payments_with_just_one_policy = payments.reject { |p| p.claim_payments.size > 1 }
-    filtered_payment_ids = payments_with_just_one_policy.map(&:id)
-    filtered_payments = Payment.where(id: filtered_payment_ids)
-
-    # Delete payments that are just linked with a single claim via claim_payments
-    filtered_payments.destroy_all
-
-    # Delete all the claims and all dependent models
-    claims.destroy_all
-
-    # Delete the PolicyConfiguration
-    policy_configuration = PolicyConfiguration.where(policy_types: [policy.to_s])
-    policy_configuration.destroy_all
-
-    nil
-  end
-
   def submit!
     raise NotSubmittable unless submittable?
 

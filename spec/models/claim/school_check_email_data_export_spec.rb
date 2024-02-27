@@ -6,8 +6,7 @@ RSpec.describe Claim::SchoolCheckEmailDataExport do
     eligibility = create(:student_loans_eligibility, :eligible, biology_taught: true, chemistry_taught: true, computing_taught: false, languages_taught: false, physics_taught: true)
     create(:claim, :submitted, eligibility: eligibility, first_name: "John", middle_name: "Herbert", surname: "Adams")
   end
-  let(:submitted_maths_and_physics_claim) { create(:claim, :submitted, policy: MathsAndPhysics) }
-  let!(:submitted_claims) { [submitted_student_loans_claim, submitted_maths_and_physics_claim] }
+  let!(:submitted_claims) { [submitted_student_loans_claim] }
   let!(:submittable_claims) { create_list(:claim, 4, :submittable) }
   let!(:excluded_claims) { create_list(:claim, 3, :submitted) }
   let!(:approved_claims) { create_list(:claim, 2, :approved) }
@@ -41,19 +40,6 @@ RSpec.describe Claim::SchoolCheckEmailDataExport do
       row = csv.find { |row| row["Claim reference"] == submitted_student_loans_claim.reference }
 
       expect(row["Subject"]).to eq("biology, chemistry and physics")
-    end
-
-    it "includes a blank subject for a Maths and Physics claim" do
-      row = csv.find { |row| row["Claim reference"] == submitted_maths_and_physics_claim.reference }
-
-      expect(row["Subject"]).to eq("")
-    end
-
-    it "includes a blank claim school for a Maths and Physics claim" do
-      row = csv.find { |row| row["Claim reference"] == submitted_maths_and_physics_claim.reference }
-
-      expect(row["Claim school urn"]).to eq(nil)
-      expect(row["Claim school name"]).to eq(nil)
     end
   end
 end

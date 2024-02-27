@@ -217,65 +217,6 @@ en:
     payroll_gender: "gender"
     address: "address"
     full_name: "Full name"
-  maths_and_physics:
-    policy_name: "Claim a payment for teaching maths or physics"
-    policy_short_name: "Maths and Physics"
-    policy_acronym: "Maths and Physics"
-    claim_description: "for a payment for teaching maths or physics"
-    claim_subject: "Maths and Physics"
-    claim_amount_description: "Payment for teaching maths or physics"
-    claim_action: "claim £2,000 for teaching maths or physics"
-    award_description: "£2,000 payment"
-    support_email_address: "mathsphysicsteacherpayment@digital.education.gov.uk"
-    questions:
-      teaching_maths_or_physics: "Do you currently teach any maths or physics?"
-      initial_teacher_training_subject: "Which subject did you complete your initial teacher training in?"
-      initial_teacher_training_subject_specialism: "Which science subject did your initial teacher training specialise in?"
-      has_uk_maths_or_physics_degree: "Do you have a UK undergraduate or postgraduate degree in maths or physics?"
-      employed_as_supply_teacher: "Are you currently employed as a supply teacher?"
-      has_entire_term_contract: "Do you have a contract to teach at the same school for an entire term or longer?"
-      employed_directly: "Are you employed directly by your school?"
-      disciplinary_action: "Are you currently subject to disciplinary action?"
-      formal_performance_action: "Are you currently subject to formal action for poor performance at work?"
-    answers:
-      initial_teacher_training_subject:
-        maths: "Maths"
-        physics: "Physics"
-        science: "Science (physics, biology and chemistry)"
-        none_of_the_subjects: "None of these subjects"
-      initial_teacher_training_subject_specialism:
-        physics: "Physics"
-        biology: "Biology"
-        chemistry: "Chemistry"
-        not_sure: "I’m not sure"
-      has_uk_maths_or_physics_degree:
-        has_non_uk: "I have a non-UK degree in Maths or Physics"
-      employed_directly:
-        "yes": "Yes, I’m employed by my school"
-        "no": "No, I’m employed by a private agency"
-    admin:
-      teaching_maths_or_physics: "Teaches any maths or physics?"
-      initial_teacher_training_subject: "ITT subject"
-      initial_teacher_training_subject_specialism: "ITT subject specialism"
-      has_uk_maths_or_physics_degree: "UK degree in maths or physics?"
-      employed_as_supply_teacher: "Employed as a supply teacher?"
-      has_entire_term_contract: "Has entire term contract?"
-      employed_directly: "Employed directly by school?"
-      disciplinary_action: "Subject to disciplinary action?"
-      formal_performance_action: "Subject to formal performance action?"
-      task_questions:
-        identity_confirmation:
-          title: "Did %{claim_full_name} submit the claim?"
-          body: "The claimant’s identity matches DQT records. See %{link}."
-          notes: "notes"
-        qualifications:
-          title: "Does the claimant’s initial teacher training (ITT) qualification year and specialist subject match the above information from their claim?"
-        employment:
-          title: "Does the claimant’s current school match the above information from their claim?"
-        matching_details:
-          title: "Is this claim still valid despite having matching details with other claims?"
-        payroll_details:
-          title: "The claimant’s %{bank_or_building_society} details have not been automatically validated. Has the claimant confirmed their %{bank_or_building_society} details?"
   student_loans:
     policy_name: "Teachers: claim back your student loan repayments"
     policy_short_name: "Student Loans"

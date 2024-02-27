@@ -62,12 +62,6 @@ RSpec.describe Claims::ShowHelper do
       it { is_expected.to eq "early-career payment" }
     end
 
-    context "with a MathsAndPhysics policy" do
-      let(:policy) { MathsAndPhysics }
-
-      it { is_expected.to eq "maths and physic" } # Not a bug; a feature ;)
-    end
-
     context "with a LevellingUpPremiumPayments policy" do
       let(:policy) { LevellingUpPremiumPayments }
 

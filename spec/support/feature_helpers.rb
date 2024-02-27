@@ -1,10 +1,4 @@
 module FeatureHelpers
-  def start_maths_and_physics_claim
-    visit new_claim_path(MathsAndPhysics.routing_name)
-    choose_teaching_maths_or_physics
-    Claim.by_policy(MathsAndPhysics).order(:created_at).last
-  end
-
   def choose_teaching_maths_or_physics(response = "Yes")
     choose response
     click_on "Continue"

@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.describe "Admin payroll run payments" do
-  let(:payroll_run) { create(:payroll_run, claims_counts: {MathsAndPhysics => 1, StudentLoans => 1}) }
+  let(:payroll_run) { create(:payroll_run, claims_counts: {EarlyCareerPayments => 1, StudentLoans => 1}) }
   let(:payment) { payroll_run.payments.first }
 
   before { @signed_in_user = sign_in_as_service_operator }

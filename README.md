@@ -62,7 +62,6 @@ Architecture decision records can be found in the
    policy:
 
 - **Student Loans:** https://localhost:3000/student-loans/claim
-- **Maths and Physics:** https://localhost:3000/maths-and-physics/claim
 - **Additional Payments:** https://localhost:3000/additional-payments/claim
 
 ### How to set up DfE Sign-In locally

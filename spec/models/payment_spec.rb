@@ -230,10 +230,10 @@ RSpec.describe Payment do
     it "returns the correct string for a payment with multiple claims under different policies" do
       payment = create(:payment, claims: [
         create(:claim, :approved, personal_details.merge(policy: StudentLoans)),
-        create(:claim, :approved, personal_details.merge(policy: MathsAndPhysics))
+        create(:claim, :approved, personal_details.merge(policy: EarlyCareerPayments))
       ])
 
-      expect(payment.policies_in_payment).to eq("MathsAndPhysics StudentLoans")
+      expect(payment.policies_in_payment).to eq("EarlyCareerPayments StudentLoans")
     end
   end
 

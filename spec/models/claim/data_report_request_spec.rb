@@ -6,7 +6,6 @@ RSpec.describe Claim::DataReportRequest do
     let(:claims) do
       [
         create(:claim, :submitted, policy: StudentLoans),
-        create(:claim, :submitted, policy: MathsAndPhysics),
         create(:claim, :submitted, policy: EarlyCareerPayments)
       ]
     end

@@ -1,5 +1,7 @@
 require "rails_helper"
 
+class SomePolicy; end
+
 RSpec.describe ClaimMailer, type: :mailer do
   shared_examples "an email related to a claim using the generic template" do |policy|
     let(:claim_description) { I18n.t("#{policy.locale_key}.claim_description") }
@@ -202,69 +204,50 @@ RSpec.describe ClaimMailer, type: :mailer do
     end
   end
 
-  [MathsAndPhysics].each do |policy|
-    context "with a #{policy} claim" do
-      let!(:policy_configuration) { create(:policy_configuration, policy.to_s.underscore) }
+  context "unknown claim policy" do
+    let(:claim) { instance_double("Claim") }
 
-      describe "#submitted" do
-        let(:claim) { build(:claim, :submitted, policy: policy) }
-        let(:mail) { ClaimMailer.submitted(claim) }
+    before do
+      allow(claim).to receive(:policy).and_return(SomePolicy)
+    end
 
-        it_behaves_like "an email related to a claim using the generic template", policy
-
-        it "mentions that claim has been received in the subject and body" do
-          expect(mail.subject).to include("been received")
-          expect(mail.body.encoded).to include("We've received your application")
-        end
+    describe "#submitted" do
+      it "raises error" do
+        expect {
+          ClaimMailer.submitted(claim).deliver!
+        }.to raise_error(ArgumentError, "Unknown claim policy: SomePolicy")
       end
+    end
 
-      describe "#approved" do
-        let(:claim) { build(:claim, :approved, policy: policy) }
-        let(:mail) { ClaimMailer.approved(claim) }
-
-        it_behaves_like "an email related to a claim using the generic template", policy
-
-        it "mentions that claim has been approved in the subject and body" do
-          expect(mail.subject).to include("approved")
-          expect(mail.body.encoded).to include("been approved")
-        end
+    describe "#approved" do
+      it "raises error" do
+        expect {
+          ClaimMailer.approved(claim).deliver!
+        }.to raise_error(ArgumentError, "Unknown claim policy: SomePolicy")
       end
+    end
 
-      describe "#rejected" do
-        let(:claim) { build(:claim, :submitted, policy: policy) }
-        let(:mail) { ClaimMailer.rejected(claim) }
-
-        it_behaves_like "an email related to a claim using the generic template", policy
-
-        it "mentions that claim has been rejected in the subject and body" do
-          expect(mail.subject).to include("rejected")
-          expect(mail.body.encoded).to include("not been able to approve")
-
-          expect(mail.body.encoded)
-            .to include("We have not been able to approve your application")
-        end
-
-        context "with future academic year" do
-          let(:current_year) { AcademicYear.current }
-          let!(:policy_configuration) { create(:policy_configuration, policy.to_s.underscore, current_academic_year: current_year + 4) }
-
-          it "changes the ITT reason based on the policy's configured current_academic_year" do
-            expect(mail.body.encoded)
-              .to include("We have not been able to approve your application")
-          end
-        end
+    describe "#rejected" do
+      it "raises error" do
+        expect {
+          ClaimMailer.rejected(claim).deliver!
+        }.to raise_error(ArgumentError, "Unknown claim policy: SomePolicy")
       end
+    end
 
-      describe "#update_after_three_weeks" do
-        let(:claim) { build(:claim, :submitted, policy: policy) }
-        let(:mail) { ClaimMailer.update_after_three_weeks(claim) }
+    describe "#update_after_three_weeks" do
+      it "raises error" do
+        expect {
+          ClaimMailer.update_after_three_weeks(claim).deliver!
+        }.to raise_error(ArgumentError, "Unknown claim policy: SomePolicy")
+      end
+    end
 
-        it_behaves_like "an email related to a claim using the generic template", policy
-
-        it "mentions that the claim is still being reviewed in the subject and body" do
-          expect(mail.subject).to include("still reviewing your application")
-          expect(mail.body.encoded).to include("We're still reviewing your application")
-        end
+    describe "#email_verification" do
+      it "raises error" do
+        expect {
+          ClaimMailer.email_verification(claim, nil).deliver!
+        }.to raise_error(ArgumentError, "Unknown claim policy: SomePolicy")
       end
     end
   end

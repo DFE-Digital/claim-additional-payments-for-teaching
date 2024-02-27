@@ -5,7 +5,7 @@
 # All references to `current_claim` used to be on a Claim model, this acts as a wrapper to delegate
 # to multiple claims for different policies if a `PolicyConfiguration` specifies multiple policies.
 #
-# Existing single policy journeys will work as they were (StudentLoans, MathsAndPhysics).
+# Existing single policy journeys will work as they were.
 #
 # ECP will no longer be a single policy journey. This is being upgraded to handle ECP and LUP in a single journey.
 #

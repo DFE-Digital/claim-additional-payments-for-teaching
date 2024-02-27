@@ -3,14 +3,12 @@ require "rails_helper"
 RSpec.feature "Data report request" do
   scenario "Service operator can download an external data report request file" do
     create(:policy_configuration, :student_loans)
-    create(:policy_configuration, :maths_and_physics)
     create(:policy_configuration, :additional_payments)
 
     sign_in_as_service_operator
 
     claims = [
       create(:claim, :submitted, policy: StudentLoans),
-      create(:claim, :submitted, policy: MathsAndPhysics),
       create(:claim, :submitted, policy: EarlyCareerPayments),
       create(:claim, :submitted, policy: LevellingUpPremiumPayments),
       create(:claim, :submitted, :held, policy: LevellingUpPremiumPayments) # includes held claims
@@ -28,8 +26,8 @@ RSpec.feature "Data report request" do
 
     csv = CSV.parse(body, headers: true)
 
-    # 5 claims + the 100 submitted claims
-    expect(csv.count).to eq(105)
+    # 4 claims + the 100 submitted claims
+    expect(csv.count).to eq(104)
 
     csv.each_with_index do |row, i|
       claim = claims.detect { |c| c.reference == row["Claim reference"] }

@@ -465,48 +465,6 @@ RSpec.describe Claim, type: :model do
     end
   end
 
-  context "with maths and physics policy" do
-    describe "when saving in the 'postgraduate_masters_loan' context" do
-      let(:claim) { build(:claim, :submittable, postgraduate_masters_loan: nil, policy: MathsAndPhysics) }
-
-      context "with claim having a masters and/or doctoral loan(s)" do
-        it "is not valid without a value for 'postgraduate_masters_loan'" do
-          expect(claim.has_masters_doctoral_loan?).to eql false
-          expect(claim).not_to be_valid(:"masters-loan")
-          expect(build(:claim, postgraduate_masters_loan: true)).to be_valid(:"masters-loan")
-          expect(build(:claim, postgraduate_masters_loan: false)).to be_valid(:"masters-loan")
-        end
-      end
-
-      context "with claim having no masters and/or doctoral loan(s)" do
-        it "is valid without a value for 'postgraduate_masters_loan'" do
-          subject.validate(on: :"masters-loan")
-          expect(subject.errors[:"masters-loan"]).to be_empty
-        end
-      end
-    end
-
-    describe "when saving in the 'postgraduate_doctoral_loan' context" do
-      let(:claim) { build(:claim, :submittable, postgraduate_doctoral_loan: nil, policy: MathsAndPhysics) }
-
-      context "with claim having a masters and/or doctoral loan(s)" do
-        it "is not valid without a value for 'postgraduate_doctoral_loan'" do
-          expect(claim.has_masters_doctoral_loan?).to eql false
-          expect(claim).not_to be_valid(:"doctoral-loan")
-          expect(build(:claim, postgraduate_doctoral_loan: true)).to be_valid(:"doctoral-loan")
-          expect(build(:claim, postgraduate_doctoral_loan: false)).to be_valid(:"doctoral-loan")
-        end
-      end
-
-      context "with claim having no masters and/or doctoral loan(s)" do
-        it "is valid without a value for 'postgraduate_doctoral_loan'" do
-          subject.validate(on: :"doctoral-loan")
-          expect(subject.errors[:"doctoral-loan"]).to be_empty
-        end
-      end
-    end
-  end
-
   context "when saving in the “email-address” validation context" do
     it "validates the presence of email_address" do
       expect(build(:claim)).not_to be_valid(:"email-address")
@@ -1571,14 +1529,6 @@ RSpec.describe Claim, type: :model do
       end
     end
 
-    context "with maths and physics policy" do
-      let(:policy) { MathsAndPhysics }
-
-      it "returns false" do
-        expect(claim.has_ecp_policy?).to eq(false)
-      end
-    end
-
     context "with early-career payments policy" do
       let(:policy) { EarlyCareerPayments }
 
@@ -1599,14 +1549,6 @@ RSpec.describe Claim, type: :model do
       end
     end
 
-    context "with maths and physics policy" do
-      let(:policy) { MathsAndPhysics }
-
-      it "returns false" do
-        expect(claim.has_tslr_policy?).to eq(false)
-      end
-    end
-
     context "with early-career payments policy" do
       let(:policy) { EarlyCareerPayments }
 
@@ -1622,12 +1564,6 @@ RSpec.describe Claim, type: :model do
 
     context "with student loans policy" do
       let(:policy) { StudentLoans }
-
-      it { is_expected.to be false }
-    end
-
-    context "with maths and physics policy" do
-      let(:policy) { MathsAndPhysics }
 
       it { is_expected.to be false }
     end
@@ -1651,12 +1587,6 @@ RSpec.describe Claim, type: :model do
 
     context "with student loans policy" do
       let(:policy) { StudentLoans }
-
-      it { is_expected.to be false }
-    end
-
-    context "with maths and physics policy" do
-      let(:policy) { MathsAndPhysics }
 
       it { is_expected.to be false }
     end

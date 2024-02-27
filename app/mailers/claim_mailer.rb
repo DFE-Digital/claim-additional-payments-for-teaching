@@ -4,7 +4,9 @@ class ClaimMailer < ApplicationMailer
   helper :application
 
   def submitted(claim)
+    unknown_policy_check(claim)
     set_common_instance_variables(claim)
+
     if [StudentLoans, EarlyCareerPayments, LevellingUpPremiumPayments].include?(claim.policy)
       personalisation = {
         first_name: @claim.first_name,
@@ -13,14 +15,11 @@ class ClaimMailer < ApplicationMailer
       }
 
       send_mail(:notify, template_ids(claim)[:CLAIM_RECEIVED_NOTIFY_TEMPLATE_ID], personalisation)
-    else # MathsAndPhysics
-      @subject = "Your application #{@claim_description} has been received, reference number: #{claim.reference}"
-
-      send_mail(:rails)
     end
   end
 
   def approved(claim)
+    unknown_policy_check(claim)
     set_common_instance_variables(claim)
 
     if [StudentLoans, EarlyCareerPayments, LevellingUpPremiumPayments].include?(claim.policy)
@@ -31,14 +30,11 @@ class ClaimMailer < ApplicationMailer
       }
 
       send_mail(:notify, template_ids(claim)[:CLAIM_APPROVED_NOTIFY_TEMPLATE_ID], personalisation)
-    else # MathsAndPhysics
-      @subject = "Your application #{@claim_description} has been approved, reference number: #{claim.reference}"
-
-      send_mail(:rails)
     end
   end
 
   def rejected(claim)
+    unknown_policy_check(claim)
     set_common_instance_variables(claim)
 
     if [StudentLoans, EarlyCareerPayments, LevellingUpPremiumPayments].include?(claim.policy)
@@ -51,15 +47,11 @@ class ClaimMailer < ApplicationMailer
       }
 
       send_mail(:notify, template_ids(claim)[:CLAIM_REJECTED_NOTIFY_TEMPLATE_ID], personalisation)
-    else # MathsAndPhysics
-      @subject = "Your claim #{@claim_description} has been rejected, reference number: #{claim.reference}"
-      @ineligible_qts_year = @claim.policy.last_ineligible_qts_award_year
-
-      send_mail(:rails)
     end
   end
 
   def update_after_three_weeks(claim)
+    unknown_policy_check(claim)
     set_common_instance_variables(claim)
 
     if [StudentLoans, EarlyCareerPayments, LevellingUpPremiumPayments].include?(claim.policy)
@@ -71,14 +63,11 @@ class ClaimMailer < ApplicationMailer
       }
 
       send_mail(:notify, template_ids(claim)[:CLAIM_UPDATE_AFTER_THREE_WEEKS_NOTIFY_TEMPLATE_ID], personalisation)
-    else # MathsAndPhysics
-      @subject = "We are still reviewing your application #{@claim_description}, reference number: #{claim.reference}"
-
-      send_mail(:rails)
     end
   end
 
   def email_verification(claim, one_time_password)
+    unknown_policy_check(claim)
     set_common_instance_variables(claim)
     @subject = "#{@claim_subject} email verification"
     @one_time_password = one_time_password
@@ -125,5 +114,10 @@ class ClaimMailer < ApplicationMailer
         personalisation: personalisation
       )
     end
+  end
+
+  def unknown_policy_check(claim)
+    return if [StudentLoans, EarlyCareerPayments, LevellingUpPremiumPayments].include?(claim.policy)
+    raise ArgumentError, "Unknown claim policy: #{claim.policy}"
   end
 end
