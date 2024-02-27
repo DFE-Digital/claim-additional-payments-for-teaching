@@ -410,9 +410,15 @@ class ClaimsController < BasePublicController
   def retrieve_student_loan_details
     # student loan details are currently retrieved for TSLR and ECP/LUPP journeys only
     return unless ["student-loans", "additional-payments"].include?(current_journey_routing_name)
-    # student loan details are retrieved every time the user confirms their details
-    return unless page_sequence.updating_personal_details?
 
-    ClaimStudentLoanDetailsUpdater.call(current_claim)
+    # Applicants' student loan details must be retrieved any time their personal details are
+    # updated using the `personal-details` page. This is normally the case when using the non-TID
+    # route, or when using the TID-route but not all personal details came through/are valid.
+    # For claims being submitted using the TID-route and where all personal details came through/are
+    # valid, the student loan details must be retrieved after the `information-provided` page instead.
+    if params[:slug] == "personal-details" || (params[:slug] == "information-provided" &&
+        current_claim.logged_in_with_tid? && current_claim.has_all_valid_personal_details?)
+      ClaimStudentLoanDetailsUpdater.call(current_claim)
+    end
   end
 end
