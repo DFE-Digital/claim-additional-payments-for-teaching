@@ -5,7 +5,6 @@ RSpec.describe Policies, type: :model do
     it do
       expect(described_class::POLICIES).to eq([
         StudentLoans,
-        MathsAndPhysics,
         Policies::EarlyCareerPayments,
         LevellingUpPremiumPayments
       ])
@@ -30,7 +29,6 @@ RSpec.describe Policies, type: :model do
     it do
       expect(described_class.options_for_select).to eq([
         ["Student Loans", "student-loans"],
-        ["Maths and Physics", "maths-and-physics"],
         ["Early-Career Payments", "early-career-payments"],
         ["Levelling Up Premium Payments", "levelling-up-premium-payments"]
       ])
@@ -54,7 +52,7 @@ RSpec.describe Policies, type: :model do
       end
     end
 
-    [StudentLoans, MathsAndPhysics, LevellingUpPremiumPayments].each do |policy|
+    [StudentLoans, LevellingUpPremiumPayments].each do |policy|
       context "when #{policy}" do
         it do
           expect(described_class.constantize(policy.to_s)).to eq(policy)

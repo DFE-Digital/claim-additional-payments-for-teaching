@@ -42,7 +42,7 @@ RSpec.feature "GOVUK Nofity SMS sends OTP" do
 
   [
     {policy: Policies::EarlyCareerPayments, mobile_number: "07123456789", otp_code: "097543"},
-    {policy: StudentLoans, mobile_number: "07723190022", otp_code: "123347"},
+    {policy: StudentLoans, mobile_number: "07723190022", otp_code: "123347"}
   ].each do |scenario|
     context "when claimant opts to provide a mobile number" do
       before do

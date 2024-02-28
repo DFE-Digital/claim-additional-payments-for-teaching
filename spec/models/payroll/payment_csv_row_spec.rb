@@ -41,7 +41,7 @@ RSpec.describe Payroll::PaymentCsvRow do
     let(:claims) do
       [
         create(:claim, :approved, personal_details_for_student_loans_and_early_career_payments_claim.merge(policy: StudentLoans)),
-        create(:claim, :approved, personal_details_for_student_loans_and_early_career_payments_claim.merge(policy: EarlyCareerPayments))
+        create(:claim, :approved, personal_details_for_student_loans_and_early_career_payments_claim.merge(policy: Policies::EarlyCareerPayments))
       ]
     end
 

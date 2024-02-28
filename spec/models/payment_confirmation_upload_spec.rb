@@ -8,7 +8,7 @@ RSpec.describe PaymentConfirmationUpload do
   let(:admin_user) { build(:dfe_signin_user) }
   let(:payroll_run) do
     create(:payroll_run, claims_counts: {
-      [EarlyCareerPayments, StudentLoans] => 1,
+      [Policies::EarlyCareerPayments, StudentLoans] => 1,
       StudentLoans => 1,
       Policies::EarlyCareerPayments => 2
     })

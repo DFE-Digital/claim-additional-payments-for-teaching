@@ -26,7 +26,7 @@ RSpec.describe "Admin claims", type: :request do
     end
 
     it "can filter by policy" do
-      early_career_payments_claims = create_list(:claim, 3, :submitted, policy: EarlyCareerPayments)
+      early_career_payments_claims = create_list(:claim, 3, :submitted, policy: Policies::EarlyCareerPayments)
       get admin_claims_path, params: {policy: "early-career-payments"}
 
       early_career_payments_claims.each do |c|
@@ -39,7 +39,7 @@ RSpec.describe "Admin claims", type: :request do
     end
 
     it "returns all claims if a policy does not exist" do
-      early_career_payments_claims = create_list(:claim, 3, :submitted, policy: EarlyCareerPayments)
+      early_career_payments_claims = create_list(:claim, 3, :submitted, policy: Policies::EarlyCareerPayments)
 
       get admin_claims_path, params: {policy: "non-existent-policy"}
 

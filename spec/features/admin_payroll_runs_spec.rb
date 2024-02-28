@@ -112,7 +112,7 @@ RSpec.feature "Payroll" do
   end
 
   scenario "Service operator can view a payroll run" do
-    payroll_run = create(:payroll_run, claims_counts: {EarlyCareerPayments => 1, StudentLoans => 1})
+    payroll_run = create(:payroll_run, claims_counts: {Policies::EarlyCareerPayments => 1, StudentLoans => 1})
 
     click_on "Payroll"
     click_on "View #{I18n.l(payroll_run.created_at.to_date, format: :month_year)} payroll run"
@@ -130,7 +130,7 @@ RSpec.feature "Payroll" do
   end
 
   scenario "Service operator can remove a payment from a payroll run" do
-    payroll_run = create(:payroll_run, claims_counts: {EarlyCareerPayments => 1, StudentLoans => 1})
+    payroll_run = create(:payroll_run, claims_counts: {Policies::EarlyCareerPayments => 1, StudentLoans => 1})
     payment_to_delete = payroll_run.payments.first
     claim_reference = payment_to_delete.claims.first.reference
 
